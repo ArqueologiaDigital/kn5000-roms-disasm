@@ -375,9 +375,9 @@ sub_F0017D:
 	ldda32	xwa, (12288)	; F0018C  ld XWA,(0x3000)
 	cp	xwa, 0	; F00190  cp XWA,0x00000000
 	jr	z, 18	; F00196  jr Z,0xf001aa
-	.byte 0xC2, 0x1B, 0x50, 0x60, 0x3E, 0x01	; F00198  or (0x60501b),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB24, 0x60501b, 0x01	; F00198  or (0x60501b),0x01
 	call	15994392	; F0019E  call 0xf40e18
-	.byte 0xC2, 0x1B, 0x50, 0x60, 0x3C, 0xFE	; F001A2  and (0x60501b),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB24, 0x60501b, 0xfe	; F001A2  and (0x60501b),0xfe
 	jr	3	; F001A8  jr T,0xf001ad
 	calr	65292	; F001AA  calr 0xf000b9
 	ret	; F001AD  ret
@@ -447,7 +447,7 @@ sub_F001C9:
 	call	15993408	; F001DF  call 0xf40a40
 	call	15993220	; F001E3  call 0xf40984
 	ldio	148, 128	; F001E7  ld (0x94),0x80
-	.byte 0xC1, 0xD9, 0x34, 0x3E, 0x04	; F001EA  or (0x34d9),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d9, 0x04	; F001EA  or (0x34d9),0x04
 	jr	25	; F001EF  jr T,0xf0020a
 	ldio	149, 1	; F001F1  ld (0x95),0x01
 	calr	253	; F001F4  calr 0xf002f4
@@ -467,9 +467,9 @@ sub_F001C9:
 	ldda32	xwa, (12288)	; F0021A  ld XWA,(0x3000)
 	cp	xwa, 0	; F0021E  cp XWA,0x00000000
 	jr	z, 18	; F00224  jr Z,0xf00238
-	.byte 0xC2, 0x1B, 0x50, 0x60, 0x3E, 0x01	; F00226  or (0x60501b),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB24, 0x60501b, 0x01	; F00226  or (0x60501b),0x01
 	call	15994392	; F0022C  call 0xf40e18
-	.byte 0xC2, 0x1B, 0x50, 0x60, 0x3C, 0xFE	; F00230  and (0x60501b),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB24, 0x60501b, 0xfe	; F00230  and (0x60501b),0xfe
 	jr	3	; F00236  jr T,0xf0023b
 	calr	65150	; F00238  calr 0xf000b9
 	ret	; F0023B  ret
@@ -488,7 +488,7 @@ sub_F001C9:
 	call	15993408	; F0025A  call 0xf40a40
 	call	15993220	; F0025E  call 0xf40984
 	ldio	148, 128	; F00262  ld (0x94),0x80
-	.byte 0xC1, 0xD9, 0x34, 0x3E, 0x04	; F00265  or (0x34d9),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d9, 0x04	; F00265  or (0x34d9),0x04
 	jr	19	; F0026A  jr T,0xf0027f
 	ldio	149, 1	; F0026C  ld (0x95),0x01
 	calr	174	; F0026F  calr 0xf00320
@@ -572,9 +572,9 @@ sub_F002F4:
 	ei	6	; F00326  ei 0x06
 	m_bit 3, MD16, 0x34bb	; F00328  bit 3,(0x34bb)
 	jr	z, 6	; F0032C  jr Z,0xf00334
-	.byte 0xC0, 0xA0, 0x3E, 0x04	; F0032E  or (0xa0),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0xa0, 0x04	; F0032E  or (0xa0),0x04
 	jr	4	; F00332  jr T,0xf00338
-	.byte 0xC0, 0xA0, 0x3E, 0x02	; F00334  or (0xa0),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0xa0, 0x02	; F00334  or (0xa0),0x02
 	call	15992612	; F00338  call 0xf40724
 	di	; F0033C  ei 0x00
 	ret	; F0033E  ret
@@ -735,18 +735,18 @@ sub_F00800:
 	popw	bc	; F00981  pop BC
 	popw	wa	; F00982  pop WA
 	ret	; F00983  ret
-	.byte 0xC1, 0xD4, 0x20, 0x3E, 0x40	; F00984  or (0x20d4),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x20d4, 0x40	; F00984  or (0x20d4),0x40
 	m_bit 7, MD16, 0x20d4	; F00989  bit 7,(0x20d4)
 	jr	z, 5	; F0098D  jr Z,0xf00994
-	.byte 0xC1, 0xD4, 0x20, 0x3C, 0x7F	; F0098F  and (0x20d4),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x20d4, 0x7f	; F0098F  and (0x20d4),0x7f
 	ret	; F00994  ret
 	m_bit 6, MD16, 0x20d4	; F00995  bit 6,(0x20d4)
 	jr	nz, 7	; F00999  jr NZ,0xf009a2
-	.byte 0xC1, 0xD4, 0x20, 0x3E, 0x80	; F0099B  or (0x20d4),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x20d4, 0x80	; F0099B  or (0x20d4),0x80
 	jr	5	; F009A0  jr T,0xf009a7
-	.byte 0xC1, 0xD4, 0x20, 0x3C, 0x7F	; F009A2  and (0x20d4),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x20d4, 0x7f	; F009A2  and (0x20d4),0x7f
 	ret	; F009A7  ret
-	.byte 0xC1, 0xD4, 0x20, 0x3C, 0x3F	; F009A8  and (0x20d4),0x3f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x20d4, 0x3f	; F009A8  and (0x20d4),0x3f
 	ret	; F009AD  ret
 	ldl_da	xix, (6311941)	; F009AE  ld XIX,(0x605005)
 	.byte 0x8C, 0x00, 0x21	; F009B3  ld A,(XIX+0x00)   [llvm-mc cannot encode this]
@@ -14084,7 +14084,7 @@ sub_F0ADD4:
 	push	xbc	; F0ADDF  push XBC
 	pushw	0	; F0ADE0  push 0x0000
 	call	16608379	; F0ADE3  call 0xfd6c7b
-	.byte 0x8E, 0xFE, 0x3C, 0x0F	; F0ADE7  and (XIZ+0xfe),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xfe, 0x0f	; F0ADE7  and (XIZ+0xfe),0x0f
 	push	xix	; F0ADEB  push XIX
 	pushw	1	; F0ADEC  push 0x0001
 	call	16608379	; F0ADEF  call 0xfd6c7b
@@ -14216,7 +14216,7 @@ sub_F0AE9B:
 	push	xbc	; F0AEA6  push XBC
 	pushw	0	; F0AEA7  push 0x0000
 	call	16608379	; F0AEAA  call 0xfd6c7b
-	.byte 0x8E, 0xFE, 0x3C, 0x0F	; F0AEAE  and (XIZ+0xfe),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xfe, 0x0f	; F0AEAE  and (XIZ+0xfe),0x0f
 	push	xix	; F0AEB2  push XIX
 	pushw	2	; F0AEB3  push 0x0002
 	call	16608379	; F0AEB6  call 0xfd6c7b
@@ -14349,7 +14349,7 @@ sub_F0AF66:
 	push	xbc	; F0AF71  push XBC
 	pushw	0	; F0AF72  push 0x0000
 	call	16608379	; F0AF75  call 0xfd6c7b
-	.byte 0x8E, 0xFE, 0x3C, 0x0F	; F0AF79  and (XIZ+0xfe),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xfe, 0x0f	; F0AF79  and (XIZ+0xfe),0x0f
 	push	xix	; F0AF7D  push XIX
 	pushw	3	; F0AF7E  push 0x0003
 	call	16608379	; F0AF81  call 0xfd6c7b
@@ -14511,7 +14511,7 @@ sub_F0B041:
 	push	xbc	; F0B04C  push XBC
 	pushw	0	; F0B04D  push 0x0000
 	call	16608379	; F0B050  call 0xfd6c7b
-	.byte 0x8E, 0xFE, 0x3C, 0x0F	; F0B054  and (XIZ+0xfe),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xfe, 0x0f	; F0B054  and (XIZ+0xfe),0x0f
 	push	xix	; F0B058  push XIX
 	pushw	4	; F0B059  push 0x0004
 	call	16608379	; F0B05C  call 0xfd6c7b
@@ -14641,7 +14641,7 @@ sub_F0B0FF:
 	push	xbc	; F0B10A  push XBC
 	pushw	0	; F0B10B  push 0x0000
 	call	16608379	; F0B10E  call 0xfd6c7b
-	.byte 0x8E, 0xFE, 0x3C, 0x0F	; F0B112  and (XIZ+0xfe),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xfe, 0x0f	; F0B112  and (XIZ+0xfe),0x0f
 	push	xix	; F0B116  push XIX
 	pushw	5	; F0B117  push 0x0005
 	call	16608379	; F0B11A  call 0xfd6c7b
@@ -14753,7 +14753,7 @@ sub_F0B1A9:
 	push	xbc	; F0B1B4  push XBC
 	pushw	0	; F0B1B5  push 0x0000
 	call	16608379	; F0B1B8  call 0xfd6c7b
-	.byte 0x8E, 0xFE, 0x3C, 0x0F	; F0B1BC  and (XIZ+0xfe),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xfe, 0x0f	; F0B1BC  and (XIZ+0xfe),0x0f
 	push	xix	; F0B1C0  push XIX
 	pushw	6	; F0B1C1  push 0x0006
 	call	16608379	; F0B1C4  call 0xfd6c7b
@@ -14812,7 +14812,7 @@ sub_F0B228:
 	push	xbc	; F0B233  push XBC
 	pushw	0	; F0B234  push 0x0000
 	call	16608379	; F0B237  call 0xfd6c7b
-	.byte 0x8E, 0xFE, 0x3C, 0x0F	; F0B23B  and (XIZ+0xfe),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xfe, 0x0f	; F0B23B  and (XIZ+0xfe),0x0f
 	push	xix	; F0B23F  push XIX
 	pushw	7	; F0B240  push 0x0007
 	call	16608379	; F0B243  call 0xfd6c7b
@@ -14928,7 +14928,7 @@ sub_F0B2E2:
 	push	xbc	; F0B2ED  push XBC
 	pushw	0	; F0B2EE  push 0x0000
 	call	16608379	; F0B2F1  call 0xfd6c7b
-	.byte 0x8E, 0xFE, 0x3C, 0x0F	; F0B2F5  and (XIZ+0xfe),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xfe, 0x0f	; F0B2F5  and (XIZ+0xfe),0x0f
 	push	xix	; F0B2F9  push XIX
 	pushw	8	; F0B2FA  push 0x0008
 	call	16608379	; F0B2FD  call 0xfd6c7b
@@ -15043,9 +15043,9 @@ sub_F0B39C:
 	jrl	ugt, 150	; F0B3C4  jrl UGT,0xf0b45d
 	ld	l, h	; F0B3C7  ld L,H
 	inc	1, l	; F0B3C9  inc 1,L
-	.byte 0x8E, 0xFF, 0x3C, 0xF0	; F0B3CB  and (XIZ+0xff),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xff, 0xf0	; F0B3CB  and (XIZ+0xff),0xf0
 	ld	h, l	; F0B3CF  ld H,L
-	.byte 0x8E, 0xFF, 0xE6	; F0B3D1  or H,(XIZ+0xff)   [llvm-mc cannot encode this]
+	m_or_rm MBD+r6, 0xff, 6	; F0B3D1  or H,(XIZ+0xff)
 	ld	(xiz-1), h	; F0B3D4  ld (XIZ+0xff),H
 	ld	c, h	; F0B3D7  ld C,H
 	extz	bc	; F0B3D9  extz BC
@@ -15128,9 +15128,9 @@ sub_F0B462:
 	jrl	ugt, 140	; F0B487  jrl UGT,0xf0b516
 	ld	l, h	; F0B48A  ld L,H
 	dec	1, l	; F0B48C  dec 1,L
-	.byte 0x8E, 0xFF, 0x3C, 0xF0	; F0B48E  and (XIZ+0xff),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r6, 0xff, 0xf0	; F0B48E  and (XIZ+0xff),0xf0
 	ld	h, l	; F0B492  ld H,L
-	.byte 0x8E, 0xFF, 0xE6	; F0B494  or H,(XIZ+0xff)   [llvm-mc cannot encode this]
+	m_or_rm MBD+r6, 0xff, 6	; F0B494  or H,(XIZ+0xff)
 	ld	(xiz-1), h	; F0B497  ld (XIZ+0xff),H
 	ld	c, h	; F0B49A  ld C,H
 	extz	bc	; F0B49C  extz BC
@@ -19047,11 +19047,11 @@ Blink_SetEnable:
 	jr	z, 11	; F0E80E  jr Z,0xf0e81b
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0E810  cp (XIZ+0x08),0x00
 	jr	nz, 17	; F0E814  jr NZ,0xf0e827
-	.byte 0x84, 0x3C, 0xFD	; F0E816  and (XIX),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xfd	; F0E816  and (XIX),0xfd
 	jr	9	; F0E819  jr T,0xf0e824
 	m_cp_mi8 MBD+r6, 0x08, 0x00	; F0E81B  cp (XIZ+0x08),0x00
 	jr	z, 6	; F0E81F  jr Z,0xf0e827
-	.byte 0x84, 0x3E, 0x02	; F0E821  or (XIX),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x02	; F0E821  or (XIX),0x02
 	calr	4	; F0E824  calr 0xf0e82b
 	pop	xix	; F0E827  pop XIX
 	.byte 0xEE, 0x0D	; F0E828  unlk XIZ   [llvm-mc cannot encode this]
@@ -20398,7 +20398,7 @@ sub_F0F105:		; <- T_F42F4C
 	ldb_d8	c, (8316)	; F0F12C  ld C,(0x207c)
 	m_cp_rm MB16, 0x207d, 3	; F0F130  cp C,(0x207d)
 	jr	z, 3	; F0F134  jr Z,0xf0f139
-	.byte 0x84, 0x3E, 0x80	; F0F136  or (XIX),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x80	; F0F136  or (XIX),0x80
 	ldw_d16	bc, (10128)	; F0F139  ld BC,(0x2790)
 	extz	bc	; F0F13D  extz BC
 	extz	xbc	; F0F13F  extz XBC
@@ -20536,7 +20536,7 @@ sub_F0F17C:		; <- T_F42F50
 	and	c, 1	; F0F1AE  and C,0x01
 	jr	z, 4	; F0F1B1  jr Z,0xf0f1b7
 	call	15803482	; F0F1B3  call 0xf1245a
-	.byte 0x84, 0x3C, 0xFE	; F0F1B7  and (XIX),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xfe	; F0F1B7  and (XIX),0xfe
 	pop	xix	; F0F1BA  pop XIX
 	.byte 0xEE, 0x0D	; F0F1BB  unlk XIZ   [llvm-mc cannot encode this]
 	ret	; F0F1BD  ret
@@ -20623,15 +20623,15 @@ DispatchTable_F0F1E8:
 sub_F0F200:
 	m_cp_mi8 MB16, 0x2076, 0x01	; F0F200  cp (0x2076),0x01
 	jr	nz, 8	; F0F205  jr NZ,0xf0f20f
-	.byte 0x84, 0x3E, 0x80	; F0F207  or (XIX),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x80	; F0F207  or (XIX),0x80
 	stdi8	(8304), 163	; F0F20A  ld (0x2070),0xa3
 	m_cp_mi8 MB16, 0x2076, 0x09	; F0F20F  cp (0x2076),0x09
 	jr	nz, 8	; F0F214  jr NZ,0xf0f21e
-	.byte 0x84, 0x3E, 0x80	; F0F216  or (XIX),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x80	; F0F216  or (XIX),0x80
 	stdi8	(8304), 176	; F0F219  ld (0x2070),0xb0
 	m_cp_mi8 MB16, 0x2076, 0x0a	; F0F21E  cp (0x2076),0x0a
 	jr	nz, 8	; F0F223  jr NZ,0xf0f22d
-	.byte 0x84, 0x3E, 0x80	; F0F225  or (XIX),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x80	; F0F225  or (XIX),0x80
 	stdi8	(8304), 96	; F0F228  ld (0x2070),0x60
 	m_cp_mi8 MB16, 0x2076, 0x17	; F0F22D  cp (0x2076),0x17
 	jr	nz, 40	; F0F232  jr NZ,0xf0f25c
@@ -20639,17 +20639,17 @@ sub_F0F200:
 	jr	nz, 25	; F0F239  jr NZ,0xf0f254
 	call	16002668	; F0F23B  call 0xf42e6c
 	ld	h, a	; F0F23F  ld H,A
-	.byte 0x84, 0x3E, 0x80	; F0F241  or (XIX),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x80	; F0F241  or (XIX),0x80
 	stdi8	(8304), 128	; F0F244  ld (0x2070),0x80
 	cps	h, 2	; F0F249  cp H,2
 	jr	nz, 15	; F0F24B  jr NZ,0xf0f25c
 	stdi8	(8304), 203	; F0F24D  ld (0x2070),0xcb
 	jr	8	; F0F252  jr T,0xf0f25c
-	.byte 0x84, 0x3E, 0x80	; F0F254  or (XIX),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x80	; F0F254  or (XIX),0x80
 	stdi8	(8304), 163	; F0F257  ld (0x2070),0xa3
 	m_cp_mi8 MB16, 0x2076, 0x16	; F0F25C  cp (0x2076),0x16
 	jr	nz, 27	; F0F261  jr NZ,0xf0f27e
-	.byte 0x84, 0x3E, 0x80	; F0F263  or (XIX),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x80	; F0F263  or (XIX),0x80
 	stdi8	(8304), 51	; F0F266  ld (0x2070),0x33
 	jr	17	; F0F26B  jr T,0xf0f27e
 
@@ -21287,7 +21287,7 @@ DispatchTable_F0F40A:
 ; --------------------------------------------------------------------------
 sub_F0F422:
 	calr	4725	; F0F422  calr 0xf1069a
-	.byte 0x84, 0x3E, 0x01	; F0F425  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F0F425  or (XIX),0x01
 	jr	23	; F0F428  jr T,0xf0f441
 
 ; --------------------------------------------------------------------------
@@ -21310,7 +21310,7 @@ sub_F0F42A:
 	pushw	19	; F0F42A  push 0x0013
 	pushw	1	; F0F42D  push 0x0001
 	calr	3615	; F0F430  calr 0xf10252
-	.byte 0x84, 0x3E, 0x01	; F0F433  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F0F433  or (XIX),0x01
 	stdi8	(8347), 132	; F0F436  ld (0x209b),0x84  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi8	(8348), 4	; F0F43B  ld (0x209c),0x04  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xiy	; F0F440  pop XIY
@@ -21433,7 +21433,7 @@ sub_F0F479:
 ; --------------------------------------------------------------------------
 sub_F0F485:
 	calr	4626	; F0F485  calr 0xf1069a
-	.byte 0x84, 0x3E, 0x01	; F0F488  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F0F488  or (XIX),0x01
 	jr	23	; F0F48B  jr T,0xf0f4a4
 
 ; --------------------------------------------------------------------------
@@ -21457,7 +21457,7 @@ sub_F0F48D:
 	pushw	1	; F0F490  push 0x0001
 	calr	3861	; F0F493  calr 0xf103ab
 	pop	xiy	; F0F496  pop XIY
-	.byte 0x84, 0x3E, 0x01	; F0F497  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F0F497  or (XIX),0x01
 	stdi8	(8347), 133	; F0F49A  ld (0x209b),0x85  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi8	(8348), 5	; F0F49F  ld (0x209c),0x05  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xix	; F0F4A4  pop XIX
@@ -21542,7 +21542,7 @@ sub_F0F4DC:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F4DC  cp (0x2798),0x00
 	jr	nz, 24	; F0F4E1  jr NZ,0xf0f4fb
 	calr	3329	; F0F4E3  calr 0xf101e7
-	.byte 0x84, 0x3E, 0x01	; F0F4E6  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F0F4E6  or (XIX),0x01
 	stdi8	(8347), 134	; F0F4E9  ld (0x209b),0x86  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi8	(8348), 6	; F0F4EE  ld (0x209c),0x06  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	jr	6	; F0F4F3  jr T,0xf0f4fb
@@ -21565,7 +21565,7 @@ sub_F0F4DC:
 ; --------------------------------------------------------------------------
 sub_F0F4F5:
 	calr	4514	; F0F4F5  calr 0xf1069a
-	.byte 0x84, 0x3E, 0x01	; F0F4F8  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F0F4F8  or (XIX),0x01
 
 ; --------------------------------------------------------------------------
 ; sub_F0F4FB
@@ -22497,7 +22497,7 @@ sub_F0F788:
 	ld	c, (xix)	; F0F7BD  ld C,(XIX)
 	and	c, 1	; F0F7BF  and C,0x01
 	jr	nz, 22	; F0F7C2  jr NZ,0xf0f7da
-	.byte 0x84, 0x3E, 0x01	; F0F7C4  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F0F7C4  or (XIX),0x01
 	lda_24	xbc, (15792160)	; F0F7C7  lda XBC,0xf0f820
 	push	xbc	; F0F7CC  push XBC
 	call	16002692	; F0F7CD  call 0xf42e84
@@ -22507,8 +22507,8 @@ sub_F0F788:
 	ld	c, (xix)	; F0F7DA  ld C,(XIX)
 	and	c, 2	; F0F7DC  and C,0x02
 	jr	nz, 25	; F0F7DF  jr NZ,0xf0f7fa
-	.byte 0x84, 0x3E, 0x02	; F0F7E1  or (XIX),0x02   [llvm-mc cannot encode this]
-	.byte 0x84, 0x3C, 0xFB	; F0F7E4  and (XIX),0xfb   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x02	; F0F7E1  or (XIX),0x02
+	m_and_mi8 MBI+r4, 0, 0xfb	; F0F7E4  and (XIX),0xfb
 	lda_24	xbc, (15792412)	; F0F7E7  lda XBC,0xf0f91c
 	push	xbc	; F0F7EC  push XBC
 	call	16002692	; F0F7ED  call 0xf42e84
@@ -22518,7 +22518,7 @@ sub_F0F788:
 	ld	c, (xix)	; F0F7FA  ld C,(XIX)
 	and	c, 4	; F0F7FC  and C,0x04
 	jr	nz, 22	; F0F7FF  jr NZ,0xf0f817
-	.byte 0x84, 0x3E, 0x04	; F0F801  or (XIX),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x04	; F0F801  or (XIX),0x04
 	lda_24	xbc, (15792625)	; F0F804  lda XBC,0xf0f9f1
 	push	xbc	; F0F809  push XBC
 	call	16002692	; F0F80A  call 0xf42e84
@@ -23041,7 +23041,7 @@ sub_F0FD5F:
 	ld	c, (xix)	; F0FD8B  ld C,(XIX)
 	and	c, 8	; F0FD8D  and C,0x08
 	jr	nz, 22	; F0FD90  jr NZ,0xf0fda8
-	.byte 0x84, 0x3E, 0x08	; F0FD92  or (XIX),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x08	; F0FD92  or (XIX),0x08
 	lda_24	xbc, (15793614)	; F0FD95  lda XBC,0xf0fdce
 	push	xbc	; F0FD9A  push XBC
 	call	16002692	; F0FD9B  call 0xf42e84
@@ -23051,7 +23051,7 @@ sub_F0FD5F:
 	ld	c, (xix)	; F0FDA8  ld C,(XIX)
 	and	c, 16	; F0FDAA  and C,0x10
 	jr	nz, 22	; F0FDAD  jr NZ,0xf0fdc5
-	.byte 0x84, 0x3E, 0x10	; F0FDAF  or (XIX),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x10	; F0FDAF  or (XIX),0x10
 	lda_24	xbc, (15793878)	; F0FDB2  lda XBC,0xf0fed6
 	push	xbc	; F0FDB7  push XBC
 	call	16002692	; F0FDB8  call 0xf42e84
@@ -23379,7 +23379,7 @@ sub_F1008E:
 	ld	c, (xix)	; F10111  ld C,(XIX)
 	and	c, 32	; F10113  and C,0x20
 	jr	nz, 22	; F10116  jr NZ,0xf1012e
-	.byte 0x84, 0x3E, 0x20	; F10118  or (XIX),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x20	; F10118  or (XIX),0x20
 	lda_24	xbc, (15797602)	; F1011B  lda XBC,0xf10d62
 	push	xbc	; F10120  push XBC
 	call	16002692	; F10121  call 0xf42e84
@@ -23389,8 +23389,8 @@ sub_F1008E:
 	ld	c, (xix)	; F1012E  ld C,(XIX)
 	and	c, 64	; F10130  and C,0x40
 	jr	nz, 25	; F10133  jr NZ,0xf1014e
-	.byte 0x84, 0x3E, 0x40	; F10135  or (XIX),0x40   [llvm-mc cannot encode this]
-	.byte 0x84, 0x3C, 0x7F	; F10138  and (XIX),0x7f   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x40	; F10135  or (XIX),0x40
+	m_and_mi8 MBI+r4, 0, 0x7f	; F10138  and (XIX),0x7f
 	lda_24	xbc, (15797944)	; F1013B  lda XBC,0xf10eb8
 	push	xbc	; F10140  push XBC
 	call	16002692	; F10141  call 0xf42e84
@@ -23400,7 +23400,7 @@ sub_F1008E:
 	ld	c, (xix)	; F1014E  ld C,(XIX)
 	and	c, 128	; F10150  and C,0x80
 	jr	nz, 22	; F10153  jr NZ,0xf1016b
-	.byte 0x84, 0x3E, 0x80	; F10155  or (XIX),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x80	; F10155  or (XIX),0x80
 	lda_24	xbc, (15797978)	; F10158  lda XBC,0xf10eda
 	push	xbc	; F1015D  push XBC
 	call	16002692	; F1015E  call 0xf42e84
@@ -23429,7 +23429,7 @@ sub_F1008E:
 ; --------------------------------------------------------------------------
 sub_F10175:
 	pushw	1	; F10175  push 0x0001
-	.byte 0xC1, 0x34, 0x76, 0x3D, 0x01	; F10178  xor (0x7634),0x01   [llvm-mc cannot encode this]
+	m_xor_mi8 MB16, 0x7634, 0x01	; F10178  xor (0x7634),0x01
 	ldb_d8	c, (30260)	; F1017D  ld C,(0x7634)
 	pushw	bc	; F10181  push BC
 	pushw	0	; F10182  push 0x0000
@@ -23461,7 +23461,7 @@ sub_F1018F:
 	ld	xix, xiy	; F1019F  ld XIX,XIY
 	add	xix, 23	; F101A1  add XIX,0x00000017
 	pushw	255	; F101A7  push 0x00ff
-	.byte 0x84, 0x3D, 0x01	; F101AA  xor (XIX),0x01   [llvm-mc cannot encode this]
+	m_xor_mi8 MBI+r4, 0, 0x01	; F101AA  xor (XIX),0x01
 	ld	c, (xix)	; F101AD  ld C,(XIX)
 	pushw	bc	; F101AF  push BC
 	pushw	23	; F101B0  push 0x0017
@@ -23692,7 +23692,7 @@ sub_F10252:
 	extz	bc	; F10348  extz BC
 	ld	de, bc	; F1034A  ld DE,BC
 	sll	de, 6	; F1034C  sll 0x06,DE
-	.byte 0x9E, 0xFC, 0x3C, 0x3F, 0xF8	; F1034F  and (XIZ+0xfc),0xf83f   [llvm-mc cannot encode this]
+	m_and_mi16 MWD+r6, 0xfc, 0xf83f	; F1034F  and (XIZ+0xfc),0xf83f
 	ld	bc, (xiz-4)	; F10354  ld BC,(XIZ+0xfc)
 	or	bc, de	; F10357  or BC,DE
 	ld	(xiz-6), bc	; F10359  ld (XIZ+0xfa),BC
@@ -23794,9 +23794,9 @@ sub_F103AB:
 	ld	c, h	; F10417  ld C,H
 	extz	bc	; F10419  extz BC
 	ld	(xiz-4), bc	; F1041B  ld (XIZ+0xfc),BC
-	.byte 0x9E, 0xFE, 0x3C, 0xC0, 0xFF	; F1041E  and (XIZ+0xfe),0xffc0   [llvm-mc cannot encode this]
+	m_and_mi16 MWD+r6, 0xfe, 0xffc0	; F1041E  and (XIZ+0xfe),0xffc0
 	ld	bc, (xiz-2)	; F10423  ld BC,(XIZ+0xfe)
-	.byte 0x9E, 0xFC, 0xE1	; F10426  or BC,(XIZ+0xfc)   [llvm-mc cannot encode this]
+	m_or_rm MWD+r6, 0xfc, 1	; F10426  or BC,(XIZ+0xfc)
 	ld	(xiz-6), bc	; F10429  ld (XIZ+0xfa),BC
 	ld	(xiz-2), bc	; F1042C  ld (XIZ+0xfe),BC
 	ld	bc, (xiz-6)	; F1042F  ld BC,(XIZ+0xfa)
@@ -24537,7 +24537,7 @@ sub_F10985:
 	extz	bc	; F10A34  extz BC
 	ld	de, bc	; F10A36  ld DE,BC
 	sll	de, 6	; F10A38  sll 0x06,DE
-	.byte 0x9E, 0xFC, 0x3C, 0x3F, 0xF8	; F10A3B  and (XIZ+0xfc),0xf83f   [llvm-mc cannot encode this]
+	m_and_mi16 MWD+r6, 0xfc, 0xf83f	; F10A3B  and (XIZ+0xfc),0xf83f
 	ld	bc, (xiz-4)	; F10A40  ld BC,(XIZ+0xfc)
 	or	bc, de	; F10A43  or BC,DE
 	ld	(xiz-6), bc	; F10A45  ld (XIZ+0xfa),BC
@@ -24663,7 +24663,7 @@ sub_F10A97:
 	extz	bc	; F10B46  extz BC
 	ld	de, bc	; F10B48  ld DE,BC
 	sll	de, 11	; F10B4A  sll 0x0b,DE
-	.byte 0x9E, 0xFC, 0x3C, 0xFF, 0x07	; F10B4D  and (XIZ+0xfc),0x07ff   [llvm-mc cannot encode this]
+	m_and_mi16 MWD+r6, 0xfc, 0x07ff	; F10B4D  and (XIZ+0xfc),0x07ff
 	ld	bc, (xiz-4)	; F10B52  ld BC,(XIZ+0xfc)
 	or	bc, de	; F10B55  or BC,DE
 	ld	(xiz-6), bc	; F10B57  ld (XIZ+0xfa),BC
@@ -24785,7 +24785,7 @@ sub_F10BA9:
 	ld	c, h	; F10C4D  ld C,H
 	extz	bc	; F10C4F  extz BC
 	ld	de, bc	; F10C51  ld DE,BC
-	.byte 0x9E, 0xFC, 0x3C, 0xC0, 0xFF	; F10C53  and (XIZ+0xfc),0xffc0   [llvm-mc cannot encode this]
+	m_and_mi16 MWD+r6, 0xfc, 0xffc0	; F10C53  and (XIZ+0xfc),0xffc0
 	ld	bc, (xiz-4)	; F10C58  ld BC,(XIZ+0xfc)
 	or	bc, de	; F10C5B  or BC,DE
 	ld	(xiz-6), bc	; F10C5D  ld (XIZ+0xfa),BC
@@ -25038,7 +25038,7 @@ Data_F10E0F:
 	m_cp_mi8 MB16, 0x2792, 0x00	; F10F63  cp (0x2792),0x00
 	jr	z, 6	; F10F68  jr Z,0xf10f70
 	extz	xix	; F10F6A  extz XIX
-	.byte 0x8C, 0x02, 0x3E, 0x01	; F10F6C  or (XIX+0x02),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBD+r4, 0x02, 0x01	; F10F6C  or (XIX+0x02),0x01
 	ldb	c, 4	; F10F70  ld C,0x04
 	.byte 0xC1, 0x92, 0x27, 0x43	; F10F72  mul BC,(0x2792)   [llvm-mc cannot encode this]
 	extz	xbc	; F10F76  extz XBC
@@ -25058,7 +25058,7 @@ Data_F10E0F:
 	m_cp_mi8 MB16, 0x2797, 0x02	; F10F9F  cp (0x2797),0x02
 	jr	z, 6	; F10FA4  jr Z,0xf10fac
 	extz	xix	; F10FA6  extz XIX
-	.byte 0x8C, 0x02, 0x3E, 0x02	; F10FA8  or (XIX+0x02),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MBD+r4, 0x02, 0x02	; F10FA8  or (XIX+0x02),0x02
 	lda_24	xbc, (15812370)	; F10FAC  lda XBC,0xf14712
 	push	xbc	; F10FB1  push XBC
 	lda_24	xwa, (15812336)	; F10FB2  lda XWA,0xf146f0
@@ -25407,7 +25407,7 @@ sub_F11200:
 	pushw	bc	; F11230  push BC
 	call	16002192	; F11231  call 0xf42c90
 	ld	(xix+1), a	; F11235  ld (XIX+0x01),A
-	.byte 0x94, 0x3C, 0xC0, 0x07	; F11238  and (XIX),0x07c0   [llvm-mc cannot encode this]
+	m_and_mi16 MWI+r4, 0, 0x07c0	; F11238  and (XIX),0x07c0
 	ld	bc, (xix)	; F1123C  ld BC,(XIX)
 	srl	bc, 6	; F1123E  srl 0x06,BC
 	stb_d8	(9792), c	; F11241  ld (0x2640),C
@@ -25454,7 +25454,7 @@ sub_F1124B:
 	pushw	bc	; F1127B  push BC
 	call	16002192	; F1127C  call 0xf42c90
 	ld	(xix+1), a	; F11280  ld (XIX+0x01),A
-	.byte 0x94, 0x3C, 0x00, 0xF8	; F11283  and (XIX),0xf800   [llvm-mc cannot encode this]
+	m_and_mi16 MWI+r4, 0, 0xf800	; F11283  and (XIX),0xf800
 	ld	bc, (xix)	; F11287  ld BC,(XIX)
 	srl	bc, 11	; F11289  srl 0x0b,BC
 	stb_d8	(9792), c	; F1128C  ld (0x2640),C
@@ -26588,7 +26588,7 @@ sub_F11A61:
 	ld	wa, (xbc)	; F11AB9  ld WA,(XBC)
 	ld	hl, wa	; F11ABB  ld HL,WA
 	and	hl, 1984	; F11ABD  and HL,0x07c0
-	.byte 0x84, 0x3C, 0x3F	; F11AC1  and (XIX),0x3f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x3f	; F11AC1  and (XIX),0x3f
 	ld	d, (xix)	; F11AC4  ld D,(XIX)
 	ld	c, l	; F11AC6  ld C,L
 	and	c, 255	; F11AC8  and C,0xff
@@ -26597,7 +26597,7 @@ sub_F11A61:
 	ld	xbc, xix	; F11ACF  ld XBC,XIX
 	inc	1, xbc	; F11AD1  inc 1,XBC
 	ld	(xiz-4), xbc	; F11AD3  ld (XIZ+0xfc),XBC
-	.byte 0x81, 0x3C, 0xF8	; F11AD6  and (XBC),0xf8   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r1, 0, 0xf8	; F11AD6  and (XBC),0xf8
 	ld	xbc, (xiz-4)	; F11AD9  ld XBC,(XIZ+0xfc)
 	ld	d, (xbc)	; F11ADC  ld D,(XBC)
 	ld	iy, hl	; F11ADE  ld IY,HL
@@ -26667,7 +26667,7 @@ sub_F11AF3:
 	ld	wa, (xbc)	; F11B4B  ld WA,(XBC)
 	ld	hl, wa	; F11B4D  ld HL,WA
 	and	hl, 63488	; F11B4F  and HL,0xf800
-	.byte 0x84, 0x3C, 0xFF	; F11B53  and (XIX),0xff   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xff	; F11B53  and (XIX),0xff
 	ld	d, (xix)	; F11B56  ld D,(XIX)
 	ld	c, l	; F11B58  ld C,L
 	and	c, 255	; F11B5A  and C,0xff
@@ -26676,7 +26676,7 @@ sub_F11AF3:
 	ld	xbc, xix	; F11B61  ld XBC,XIX
 	inc	1, xbc	; F11B63  inc 1,XBC
 	ld	(xiz-4), xbc	; F11B65  ld (XIZ+0xfc),XBC
-	.byte 0x81, 0x3C, 0x07	; F11B68  and (XBC),0x07   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r1, 0, 0x07	; F11B68  and (XBC),0x07
 	ld	xbc, (xiz-4)	; F11B6B  ld XBC,(XIZ+0xfc)
 	ld	d, (xbc)	; F11B6E  ld D,(XBC)
 	ld	iy, hl	; F11B70  ld IY,HL
@@ -26743,7 +26743,7 @@ sub_F11B85:
 	ld	wa, (xbc)	; F11BD6  ld WA,(XBC)
 	ld	hl, wa	; F11BD8  ld HL,WA
 	and	hl, 63	; F11BDA  and HL,0x003f
-	.byte 0x84, 0x3C, 0xC0	; F11BDE  and (XIX),0xc0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xc0	; F11BDE  and (XIX),0xc0
 	ld	d, (xix)	; F11BE1  ld D,(XIX)
 	ld	c, l	; F11BE3  ld C,L
 	and	c, 255	; F11BE5  and C,0xff
@@ -26752,7 +26752,7 @@ sub_F11B85:
 	ld	xbc, xix	; F11BEC  ld XBC,XIX
 	inc	1, xbc	; F11BEE  inc 1,XBC
 	ld	(xiz-4), xbc	; F11BF0  ld (XIZ+0xfc),XBC
-	.byte 0x81, 0x3C, 0xFF	; F11BF3  and (XBC),0xff   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r1, 0, 0xff	; F11BF3  and (XBC),0xff
 	ld	xbc, (xiz-4)	; F11BF6  ld XBC,(XIZ+0xfc)
 	ld	d, (xbc)	; F11BF9  ld D,(XBC)
 	ld	iy, hl	; F11BFB  ld IY,HL
@@ -26946,7 +26946,7 @@ sub_F11C30:		; <- T_F434A0
 	ld	xbc, (xiz-10)	; F11DBA  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc)	; F11DBD  ld A,(XBC)
 	ld	h, a	; F11DBF  ld H,A
-	.byte 0x8E, 0x0A, 0xE6	; F11DC1  or H,(XIZ+0x0a)   [llvm-mc cannot encode this]
+	m_or_rm MBD+r6, 0x0a, 6	; F11DC1  or H,(XIZ+0x0a)
 	ld	(xbc), h	; F11DC4  ld (XBC),H
 	push	0	; F11DC6  push 0x00
 	push	h	; F11DC8  push H
@@ -26991,7 +26991,7 @@ sub_F11C30:		; <- T_F434A0
 	and	(xbc), a	; F11E29  and (XBC),A
 	ld	xbc, (xiz-10)	; F11E2B  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc)	; F11E2E  ld A,(XBC)
-	.byte 0x8E, 0x0A, 0xE1	; F11E30  or A,(XIZ+0x0a)   [llvm-mc cannot encode this]
+	m_or_rm MBD+r6, 0x0a, 1	; F11E30  or A,(XIZ+0x0a)
 	ld	(xiz-82), a	; F11E33  ld (XIZ+0xae),A
 	ld	(xbc), a	; F11E36  ld (XBC),A
 	ld	c, (xix+2)	; F11E38  ld C,(XIX+0x02)
@@ -27016,7 +27016,7 @@ sub_F11C30:		; <- T_F434A0
 	ld	xbc, (xiz-10)	; F11E65  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc)	; F11E68  ld A,(XBC)
 	ld	h, a	; F11E6A  ld H,A
-	.byte 0x8E, 0x0A, 0xE6	; F11E6C  or H,(XIZ+0x0a)   [llvm-mc cannot encode this]
+	m_or_rm MBD+r6, 0x0a, 6	; F11E6C  or H,(XIZ+0x0a)
 	ld	(xbc), h	; F11E6F  ld (XBC),H
 	ld	c, (xix+2)	; F11E71  ld C,(XIX+0x02)
 	pushw	bc	; F11E74  push BC
@@ -27221,7 +27221,7 @@ sub_F11C30:		; <- T_F434A0
 	and	(xbc), h	; F1206C  and (XBC),H
 	ld	xbc, (xiz-10)	; F1206E  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc)	; F12071  ld A,(XBC)
-	.byte 0x8E, 0x0A, 0xE1	; F12073  or A,(XIZ+0x0a)   [llvm-mc cannot encode this]
+	m_or_rm MBD+r6, 0x0a, 1	; F12073  or A,(XIZ+0x0a)
 	ld	(xbc), a	; F12076  ld (XBC),A
 	jrl	213	; F12078  jrl T,0xf12150
 	.byte 0x8E, 0x08, 0x19, 0x9A, 0x27	; F1207B  ld (0x279a),(XIZ+0x08)   [llvm-mc cannot encode this]
@@ -27293,7 +27293,7 @@ sub_F11C30:		; <- T_F434A0
 	and	(xbc), a	; F12126  and (XBC),A
 	ld	xbc, (xiz-10)	; F12128  ld XBC,(XIZ+0xf6)
 	ld	a, (xbc)	; F1212B  ld A,(XBC)
-	.byte 0x8E, 0x0A, 0xE1	; F1212D  or A,(XIZ+0x0a)   [llvm-mc cannot encode this]
+	m_or_rm MBD+r6, 0x0a, 1	; F1212D  or A,(XIZ+0x0a)
 	ld	(xbc), a	; F12130  ld (XBC),A
 	sub	xbc, xbc	; F12132  sub XBC,XBC
 	inc	1, xbc	; F12134  inc 1,XBC
@@ -27507,7 +27507,7 @@ sub_F122C5:		; <- T_F42F68
 	ld	a, (xix)	; F122F8  ld A,(XIX)
 	and	a, 8	; F122FA  and A,0x08
 	jr	nz, 22	; F122FD  jr NZ,0xf12315
-	.byte 0x84, 0x3E, 0x08	; F122FF  or (XIX),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x08	; F122FF  or (XIX),0x08
 	lda_24	xbc, (15803330)	; F12302  lda XBC,0xf123c2
 	push	xbc	; F12307  push XBC
 	call	16002692	; F12308  call 0xf42e84
@@ -27517,7 +27517,7 @@ sub_F122C5:		; <- T_F42F68
 	ld	c, (xix)	; F12315  ld C,(XIX)
 	and	c, 16	; F12317  and C,0x10
 	jr	nz, 22	; F1231A  jr NZ,0xf12332
-	.byte 0x84, 0x3E, 0x10	; F1231C  or (XIX),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x10	; F1231C  or (XIX),0x10
 	lda_24	xbc, (15803380)	; F1231F  lda XBC,0xf123f4
 	push	xbc	; F12324  push XBC
 	call	16002692	; F12325  call 0xf42e84
@@ -57904,7 +57904,7 @@ Pack3x7BitFields_Bytes6To8:
 	extz	bc	; F36877  extz BC
 	extz	xbc	; F36879  extz XBC
 	ld	xix, xbc	; F3687B  ld XIX,XBC
-	.byte 0xAE, 0xFC, 0xE0	; F3687D  or XWA,(XIZ+0xfc)   [llvm-mc cannot encode this]
+	m_or_rm MLD+r6, 0xfc, 0	; F3687D  or XWA,(XIZ+0xfc)
 	or	xwa, xbc	; F36880  or XWA,XBC
 	ld	xiy, xwa	; F36882  ld XIY,XWA
 	pop	xix	; F36884  pop XIX
@@ -58727,7 +58727,7 @@ sub_F36F8C:		; <- T_F41254
 	cp	xwa, 19608	; F3700A  cp XWA,0x00004c98
 	jr	ugt, 12	; F37010  jr UGT,0xf3701e
 	ldw	hl, 0	; F37012  ld HL,0x0000
-	.byte 0xD2, 0x00, 0x0A, 0x00, 0x3E, 0x05, 0x00	; F37015  or (0x000a00),0x0005   [llvm-mc cannot encode this]
+	m_or_mi16 MW24, 0x000a00, 0x0005	; F37015  or (0x000a00),0x0005
 	jr	10	; F3701C  jr T,0xf37028
 	ldw	hl, 1	; F3701E  ld HL,0x0001
 	stiw_da	(2560), 0	; F37021  ld (0x000a00),0x0000
@@ -58760,7 +58760,7 @@ ClampFieldToRange:
 	pushw	hl	; F37033  push HL
 	pushw	de	; F37034  push DE
 	ld	de, (xiz+10)	; F37035  ld DE,(XIZ+0x0a)
-	.byte 0x9E, 0x08, 0xC2	; F37038  and DE,(XIZ+0x08)   [llvm-mc cannot encode this]
+	m_and_rm MWD+r6, 0x08, 2	; F37038  and DE,(XIZ+0x08)
 	ld	c, (xiz+12)	; F3703B  ld C,(XIZ+0x0c)
 	pushw	bc	; F3703E  push BC
 	pushw	de	; F3703F  push DE
@@ -58775,7 +58775,7 @@ ClampFieldToRange:
 	ld	hl, (xiz+16)	; F37055  ld HL,(XIZ+0x10)
 	ld	bc, (xiz+10)	; F37058  ld BC,(XIZ+0x0a)
 	cpl	bc	; F3705B  cpl BC
-	.byte 0x9E, 0x08, 0xC1	; F3705D  and BC,(XIZ+0x08)   [llvm-mc cannot encode this]
+	m_and_rm MWD+r6, 0x08, 1	; F3705D  and BC,(XIZ+0x08)
 	or	bc, hl	; F37060  or BC,HL
 	ld	a, c	; F37062  ld A,C
 	popw	de	; F37064  pop DE
@@ -60514,7 +60514,7 @@ sub_F37E1C:		; <- T_F41264
 	inc	4, xsp	; F37F14  inc 4,XSP
 	m_cp_mi16 MW24, 0x000a07, 0x0000	; F37F16  cp (0x000a07),0x0000
 	jr	le, 14	; F37F1D  jr LE,0xf37f2d
-	.byte 0xD2, 0x00, 0x0A, 0x00, 0x3C, 0xFD, 0xFC	; F37F1F  and (0x000a00),0xfcfd   [llvm-mc cannot encode this]
+	m_and_mi16 MW24, 0x000a00, 0xfcfd	; F37F1F  and (0x000a00),0xfcfd
 	m_set 2, MD24, 0x000a00	; F37F26  set 2,(0x000a00)
 	jr	7	; F37F2B  jr T,0xf37f34
 	stiw_da	(2560), 0	; F37F2D  ld (0x000a00),0x0000
@@ -70447,7 +70447,7 @@ sub_F440C4:		; <- T_F4400C
 	calr	4932	; F440E6  calr 0xf4542d
 	m_bit 0, MD16, 0x34d3	; F440E9  bit 0,(0x34d3)
 	jr	z, 5	; F440ED  jr Z,0xf440f4
-	.byte 0xC1, 0xD3, 0x34, 0x3E, 0x04	; F440EF  or (0x34d3),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d3, 0x04	; F440EF  or (0x34d3),0x04
 	call	16001020	; F440F4  call 0xf427fc
 	call	16000952	; F440F8  call 0xf427b8
 	call	16001168	; F440FC  call 0xf42890
@@ -70612,7 +70612,7 @@ sub_F44237:
 	stdi16	(13856), 1	; F4423D  ld (0x3620),0x0001
 	stdi16	(13858), 1	; F44243  ld (0x3622),0x0001
 	stdi16	(13860), 1	; F44249  ld (0x3624),0x0001
-	.byte 0xC1, 0x0B, 0x36, 0x3C, 0xFC	; F4424F  and (0x360b),0xfc   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x360b, 0xfc	; F4424F  and (0x360b),0xfc
 	stdi8	(13863), 0	; F44254  ld (0x3627),0x00
 	stdi8	(14030), 0	; F44259  ld (0x36ce),0x00
 	ret	; F4425E  ret
@@ -70667,7 +70667,7 @@ sub_F44260:
 	calr	65146	; F442B4  calr 0xf44131
 	calr	65405	; F442B7  calr 0xf44237
 	call	15991552	; F442BA  call 0xf40300
-	.byte 0xC1, 0xA9, 0x20, 0x3C, 0xFE	; F442BE  and (0x20a9),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x20a9, 0xfe	; F442BE  and (0x20a9),0xfe
 	ret	; F442C3  ret
 
 ; --------------------------------------------------------------------------
@@ -70888,9 +70888,9 @@ sub_F444E4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F44505:
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F44505  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F44505  and (0x34bb),0xf7
 	calr	5324	; F4450A  calr 0xf459d9
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFE	; F4450D  and (0x34bb),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfe	; F4450D  and (0x34bb),0xfe
 	calr	1	; F44512  calr 0xf44516
 	ret	; F44515  ret
 
@@ -70977,8 +70977,8 @@ sub_F44582:		; <- T_F409C8
 	jr	z, 16	; F445AA  jr Z,0xf445bc
 	m_bit 0, MD16, 0x34d9	; F445AC  bit 0,(0x34d9)
 	jr	z, 10	; F445B0  jr Z,0xf445bc
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0xFE	; F445B2  and (0x34d9),0xfe   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F445B7  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d9, 0xfe	; F445B2  and (0x34d9),0xfe
+	m_or_mi8 MB16, 0x2095, 0x10	; F445B7  or (0x2095),0x10
 	calr	100	; F445BC  calr 0xf44623
 	calr	583	; F445BF  calr 0xf44809
 	calr	855	; F445C2  calr 0xf4491c
@@ -70986,7 +70986,7 @@ sub_F44582:		; <- T_F409C8
 	calr	911	; F445C8  calr 0xf4495a
 	call	15994132	; F445CB  call 0xf40d14
 	calr	6648	; F445CF  calr 0xf45fca
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0x7F	; F445D2  and (0x34d4),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0x7f	; F445D2  and (0x34d4),0x7f
 	calr	147	; F445D7  calr 0xf4466d
 	calr	903	; F445DA  calr 0xf44964
 	call	15993808	; F445DD  call 0xf40bd0
@@ -71051,7 +71051,7 @@ sub_F44623:
 	st_dd8b	a, 147	; F44659  ld (0x93),A
 	.byte 0xD0, 0x91, 0x20	; F4465C  ld WA,(0x91)   [llvm-mc cannot encode this]
 	stda16	(13398), wa	; F4465F  ld (0x3456),WA
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xF7	; F44663  and (0x34d4),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0xf7	; F44663  and (0x34d4),0xf7
 	call	15995320	; F44668  call 0xf411b8
 	ret	; F4466C  ret
 
@@ -71147,12 +71147,12 @@ sub_F4466D:
 	ldda32	xwa, (13466)	; F44759  ld XWA,(0x349a)
 	cp	xwa, 0	; F4475D  cp XWA,0x00000000
 	jr	z, 18	; F44763  jr Z,0xf44777
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x08	; F44765  or (0x34bb),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4476A  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x08	; F44765  or (0x34bb),0x08
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4476A  or (0x34d4),0x10
 	call	16007216	; F4476F  call 0xf44030
 	call	16007225	; F44773  call 0xf44039
 	ldio	168, 0	; F44777  ld (0xa8),0x00
-	.byte 0xC0, 0xA5, 0x3C, 0x7F	; F4477A  and (0xa5),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0xa5, 0x7f	; F4477A  and (0xa5),0x7f
 	ret	; F4477E  ret
 
 ; --------------------------------------------------------------------------
@@ -71235,7 +71235,7 @@ sub_F4477F:
 sub_F44809:
 	m_bit 0, MD16, 0x34d3	; F44809  bit 0,(0x34d3)
 	jrl	z, 146	; F4480D  jrl Z,0xf448a2
-	.byte 0xC1, 0xD3, 0x34, 0x3C, 0xFE	; F44810  and (0x34d3),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d3, 0xfe	; F44810  and (0x34d3),0xfe
 	bit_dd8	2, 150	; F44815  bit 2,(0x96)
 	jrl	nz, 135	; F44818  jrl NZ,0xf448a2
 	ldda32	xwa, (12288)	; F4481B  ld XWA,(0x3000)
@@ -71254,19 +71254,19 @@ sub_F44809:
 	m_cp_mr MW16, 0x3552, 0	; F44845  cp (0x3552),WA
 	jr	le, 42	; F44849  jr LE,0xf44875
 	stda16	(13650), wa	; F4484B  ld (0x3552),WA
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F4484F  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F4484F  or (0x2095),0x10
 	m_set 7, MD16, 0x0c05	; F44854  set 7,(0x0c05)
 	call	16007228	; F44858  call 0xf4403c
 	jr	68	; F4485C  jr T,0xf448a2
 	ldw_d16	wa, (13858)	; F4485E  ld WA,(0x3622)
 	stda16	(13650), wa	; F44862  ld (0x3552),WA
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F44866  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F44866  or (0x2095),0x10
 	m_set 7, MD16, 0x0c05	; F4486B  set 7,(0x0c05)
 	call	16007228	; F4486F  call 0xf4403c
 	jr	45	; F44873  jr T,0xf448a2
 	m_bit 2, MD16, 0x34d3	; F44875  bit 2,(0x34d3)
 	jr	z, 7	; F44879  jr Z,0xf44882
-	.byte 0xC1, 0xD3, 0x34, 0x3C, 0xFB	; F4487B  and (0x34d3),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d3, 0xfb	; F4487B  and (0x34d3),0xfb
 	jr	4	; F44880  jr T,0xf44886
 	call	16000376	; F44882  call 0xf42578
 	m_cp_mi8 MB16, 0x207a, 0x0d	; F44886  cp (0x207a),0x0d
@@ -71275,7 +71275,7 @@ sub_F44809:
 	calr	4748	; F44890  calr 0xf45b1f
 	calr	1041	; F44893  calr 0xf44ca7
 	ldio	168, 0	; F44896  ld (0xa8),0x00
-	.byte 0xC1, 0xD8, 0x34, 0x3C, 0x7F	; F44899  and (0x34d8),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d8, 0x7f	; F44899  and (0x34d8),0x7f
 	call	15992708	; F4489E  call 0xf40784
 	ret	; F448A2  ret
 
@@ -71379,7 +71379,7 @@ sub_F4491C:
 	bit_dd8	2, 149	; F4492F  bit 2,(0x95)
 	jr	nz, 9	; F44932  jr NZ,0xf4493d
 	call	16000376	; F44934  call 0xf42578
-	.byte 0xC1, 0xD2, 0x34, 0x3C, 0xFE	; F44938  and (0x34d2),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d2, 0xfe	; F44938  and (0x34d2),0xfe
 	ret	; F4493D  ret
 
 ; --------------------------------------------------------------------------
@@ -71399,7 +71399,7 @@ sub_F4493E:
 	m_cp_mi8 MB16, 0x3550, 0x80	; F44948  cp (0x3550),0x80
 	jr	nz, 10	; F4494D  jr NZ,0xf44959
 	stdi8	(13648), 0	; F4494F  ld (0x3550),0x00
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F44954  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F44954  and (0x34bb),0xfb
 	ret	; F44959  ret
 
 ; --------------------------------------------------------------------------
@@ -71436,12 +71436,12 @@ sub_F44964:
 	ei	6	; F44967  ei 0x06
 	ld_sd8b	a, 150	; F44969  ld A,(0x96)
 	stb_d8	(13402), a	; F4496C  ld (0x345a),A
-	.byte 0xC0, 0x96, 0x3C, 0xED	; F44970  and (0x96),0xed   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x96, 0xed	; F44970  and (0x96),0xed
 	di	; F44974  ei 0x00
 	ldda32	xwa, (12288)	; F44976  ld XWA,(0x3000)
 	cp	xwa, 0	; F4497A  cp XWA,0x00000000
 	jr	nz, 8	; F44980  jr NZ,0xf4498a
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0xFD	; F44982  and (0x34d9),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d9, 0xfd	; F44982  and (0x34d9),0xfd
 	jrl	173	; F44987  jrl T,0xf44a37
 	ldda32	xwa, (12292)	; F4498A  ld XWA,(0x3004)
 	cp	xwa, 0	; F4498E  cp XWA,0x00000000
@@ -71451,29 +71451,29 @@ sub_F44964:
 	calr	2473	; F4499C  calr 0xf45348
 	m_bit 0, MD16, 0x34d9	; F4499F  bit 0,(0x34d9)
 	jrl	z, 145	; F449A3  jrl Z,0xf44a37
-	.byte 0xC1, 0xD9, 0x34, 0x3E, 0x02	; F449A6  or (0x34d9),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d9, 0x02	; F449A6  or (0x34d9),0x02
 	jrl	137	; F449AB  jrl T,0xf44a37
 	ldb_d8	a, (13529)	; F449AE  ld A,(0x34d9)
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0xFD	; F449B2  and (0x34d9),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d9, 0xfd	; F449B2  and (0x34d9),0xfd
 	m_bit 0, MD16, 0x34d9	; F449B7  bit 0,(0x34d9)
 	jr	z, 5	; F449BB  jr Z,0xf449c2
-	.byte 0xC1, 0xD9, 0x34, 0x3E, 0x02	; F449BD  or (0x34d9),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d9, 0x02	; F449BD  or (0x34d9),0x02
 	xorda8	a, (13529)	; F449C2  xor A,(0x34d9)
 	bit	1, a	; F449C6  bit 0x01,A
 	jr	z, 31	; F449C9  jr Z,0xf449ea
 	m_bit 1, MD16, 0x360b	; F449CB  bit 1,(0x360b)
 	jr	nz, 5	; F449CF  jr NZ,0xf449d6
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F449D1  or (0x34d4),0x10   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xF7	; F449D6  and (0x34d4),0xf7   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F449D1  or (0x34d4),0x10
+	m_and_mi8 MB16, 0x34d4, 0xf7	; F449D6  and (0x34d4),0xf7
 	m_bit 1, MD16, 0x34d9	; F449DB  bit 1,(0x34d9)
 	jr	z, 5	; F449DF  jr Z,0xf449e6
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x08	; F449E1  or (0x34d4),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x08	; F449E1  or (0x34d4),0x08
 	call	15995320	; F449E6  call 0xf411b8
 	m_cp_mi16 MW16, 0x3552, 0x8001	; F449EA  cp (0x3552),0x8001
 	jr	z, 15	; F449F0  jr Z,0xf44a01
 	m_bit 1, MD16, 0x360b	; F449F2  bit 1,(0x360b)
 	jr	z, 9	; F449F6  jr Z,0xf44a01
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x08	; F449F8  or (0x34d4),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x08	; F449F8  or (0x34d4),0x08
 	call	15995320	; F449FD  call 0xf411b8
 	m_bit 1, MD16, 0x345a	; F44A01  bit 1,(0x345a)
 	jr	z, 33	; F44A05  jr Z,0xf44a28
@@ -71482,13 +71482,13 @@ sub_F44964:
 	ldl_da	xwa, (6304798)	; F44A0D  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44A12  cp XWA,0x00000000
 	jr	z, 9	; F44A18  jr Z,0xf44a23
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xF7	; F44A1A  and (0x34d4),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0xf7	; F44A1A  and (0x34d4),0xf7
 	call	15995320	; F44A1F  call 0xf411b8
 	calr	180	; F44A23  calr 0xf44ada
 	jr	15	; F44A26  jr T,0xf44a37
 	m_bit 6, MD16, 0x225a	; F44A28  bit 6,(0x225a)
 	jr	z, 9	; F44A2C  jr Z,0xf44a37
-	.byte 0xC1, 0x5A, 0x22, 0x3C, 0xBF	; F44A2E  and (0x225a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x225a, 0xbf	; F44A2E  and (0x225a),0xbf
 	call	16000372	; F44A33  call 0xf42574
 	calr	1	; F44A37  calr 0xf44a3b
 	ret	; F44A3A  ret
@@ -71514,7 +71514,7 @@ sub_F44A3B:
 	m_bit 1, MD16, 0x345a	; F44A4B  bit 1,(0x345a)
 	jr	z, 3	; F44A4F  jr Z,0xf44a54
 	calr	449	; F44A51  calr 0xf44c15
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xEF	; F44A54  and (0x34bb),0xef   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xef	; F44A54  and (0x34bb),0xef
 	ldda32	xwa, (12296)	; F44A59  ld XWA,(0x3008)
 	cp	xwa, 0	; F44A5D  cp XWA,0x00000000
 	jr	z, 9	; F44A63  jr Z,0xf44a6e
@@ -71536,7 +71536,7 @@ sub_F44A3B:
 	jr	65	; F44A96  jr T,0xf44ad9
 	m_bit 2, MD16, 0x34d4	; F44A98  bit 2,(0x34d4)
 	jr	z, 59	; F44A9C  jr Z,0xf44ad9
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xFB	; F44A9E  and (0x34d4),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0xfb	; F44A9E  and (0x34d4),0xfb
 	call	16003108	; F44AA3  call 0xf43024
 	m_bit 2, MD16, 0x34d0	; F44AA7  bit 2,(0x34d0)
 	jr	z, 44	; F44AAB  jr Z,0xf44ad9
@@ -71571,7 +71571,7 @@ sub_F44A3B:
 ; --------------------------------------------------------------------------
 sub_F44ADA:
 	calr	5329	; F44ADA  calr 0xf45fae
-	.byte 0xC1, 0x14, 0x36, 0x3E, 0x01	; F44ADD  or (0x3614),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x3614, 0x01	; F44ADD  or (0x3614),0x01
 	calr	3196	; F44AE2  calr 0xf45761
 	m_bit 1, MD16, 0x34d9	; F44AE5  bit 1,(0x34d9)
 	jr	z, 2	; F44AE9  jr Z,0xf44aed
@@ -71629,8 +71629,8 @@ sub_F44B2D:		; <- T_F40AAC
 	ldl_da	xwa, (6304798)	; F44B2D  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44B32  cp XWA,0x00000000
 	jr	nz, 12	; F44B38  jr NZ,0xf44b46
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F44B3A  and (0x34bb),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xEF	; F44B3F  and (0x34d4),0xef   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F44B3A  and (0x34bb),0xf7
+	m_and_mi8 MB16, 0x34d4, 0xef	; F44B3F  and (0x34d4),0xef
 	jr	78	; F44B44  jr T,0xf44b94
 	m_bit 0, MD16, 0x34d2	; F44B46  bit 0,(0x34d2)
 	jr	nz, 72	; F44B4A  jr NZ,0xf44b94
@@ -71640,7 +71640,7 @@ sub_F44B2D:		; <- T_F40AAC
 	jr	nz, 61	; F44B55  jr NZ,0xf44b94
 	m_bit 4, MD16, 0x34d4	; F44B57  bit 4,(0x34d4)
 	jr	z, 55	; F44B5B  jr Z,0xf44b94
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xEF	; F44B5D  and (0x34d4),0xef   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0xef	; F44B5D  and (0x34d4),0xef
 	m_bit 3, MD16, 0x34bb	; F44B62  bit 3,(0x34bb)
 	jr	z, 41	; F44B66  jr Z,0xf44b91
 	ld_sd8b	a, 147	; F44B68  ld A,(0x93)
@@ -71653,7 +71653,7 @@ sub_F44B2D:		; <- T_F40AAC
 	djnz16	bc, -6	; F44B7E  djnz BC,0xf44b7b
 	ldio	168, 0	; F44B81  ld (0xa8),0x00
 	calr	3971	; F44B84  calr 0xf45b0a
-	.byte 0xC1, 0x5A, 0x35, 0x3E, 0x02	; F44B87  or (0x355a),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x355a, 0x02	; F44B87  or (0x355a),0x02
 	calr	89	; F44B8C  calr 0xf44be8
 	jr	3	; F44B8F  jr T,0xf44b94
 	calr	1	; F44B91  calr 0xf44b95
@@ -71691,7 +71691,7 @@ sub_F44B95:
 	calr	3895	; F44BD0  calr 0xf45b0a
 	calr	4549	; F44BD3  calr 0xf45d9b
 	ldio	168, 0	; F44BD6  ld (0xa8),0x00
-	.byte 0xC1, 0xD0, 0x34, 0x3E, 0x10	; F44BD9  or (0x34d0),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d0, 0x10	; F44BD9  or (0x34d0),0x10
 	calr	3497	; F44BDE  calr 0xf4598a
 	calr	63794	; F44BE1  calr 0xf44516
 	calr	1	; F44BE4  calr 0xf44be8
@@ -71717,8 +71717,8 @@ sub_F44BE8:
 	call	15993672	; F44BF8  call 0xf40b48
 	pop	xwa	; F44BFC  pop XWA
 	stda32	(12296), xwa	; F44BFD  ld (0x3008),XWA
-	.byte 0xC1, 0xD0, 0x34, 0x3C, 0xEF	; F44C01  and (0x34d0),0xef   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x5A, 0x35, 0x3C, 0xFD	; F44C06  and (0x355a),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d0, 0xef	; F44C01  and (0x34d0),0xef
+	m_and_mi8 MB16, 0x355a, 0xfd	; F44C06  and (0x355a),0xfd
 	ldb_d8	a, (13499)	; F44C0B  ld A,(0x34bb)
 	bit	3, a	; F44C0F  bit 0x03,A
 	jr	nz, 0	; F44C12  jr NZ,0xf44c14
@@ -71741,9 +71741,9 @@ sub_F44C15:
 	calr	22	; F44C1E  calr 0xf44c37
 	ldda32	xwa, (13466)	; F44C21  ld XWA,(0x349a)
 	stda32	(12296), xwa	; F44C25  ld (0x3008),XWA
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xFB	; F44C29  and (0x34d4),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0xfb	; F44C29  and (0x34d4),0xfb
 	calr	5092	; F44C2E  calr 0xf46015
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x08	; F44C31  or (0x34bb),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x08	; F44C31  or (0x34bb),0x08
 	ret	; F44C36  ret
 
 ; --------------------------------------------------------------------------
@@ -71782,11 +71782,11 @@ sub_F44C37:
 sub_F44C51:
 	m_bit 7, MD16, 0x34d8	; F44C51  bit 7,(0x34d8)
 	jr	nz, 5	; F44C55  jr NZ,0xf44c5c
-	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xBF	; F44C57  and (0x34d1),0xbf   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD8, 0x34, 0x3C, 0x7F	; F44C5C  and (0x34d8),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d1, 0xbf	; F44C57  and (0x34d1),0xbf
+	m_and_mi8 MB16, 0x34d8, 0x7f	; F44C5C  and (0x34d8),0x7f
 	call	15995848	; F44C61  call 0xf413c8
 	call	15998744	; F44C65  call 0xf41f18
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x08	; F44C69  or (0x34d2),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d2, 0x08	; F44C69  or (0x34d2),0x08
 	ldda32	xwa, (12296)	; F44C6E  ld XWA,(0x3008)
 	stda32	(13466), xwa	; F44C72  ld (0x349a),XWA
 	m_cp_mi8 MB16, 0x207a, 0x13	; F44C76  cp (0x207a),0x13
@@ -71794,10 +71794,10 @@ sub_F44C51:
 	jr	18	; F44C7D  jr T,0xf44c91
 	m_bit 2, MD16, 0x34bb	; F44C7F  bit 2,(0x34bb)
 	jr	nz, 10	; F44C83  jr NZ,0xf44c8f
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F44C85  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F44C85  or (0x34bb),0x04
 	stdi8	(13648), 130	; F44C8A  ld (0x3550),0x82
 	jr	11	; F44C8F  jr T,0xf44c9c
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x10	; F44C91  or (0x34bb),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x10	; F44C91  or (0x34bb),0x10
 	xor	xwa, xwa	; F44C96  xor XWA,XWA
 	stda32	(12296), xwa	; F44C98  ld (0x3008),XWA
 	calr	8	; F44C9C  calr 0xf44ca7
@@ -71901,10 +71901,10 @@ sub_F44CEA:
 	jr	z, 8	; F44D70  jr Z,0xf44d7a
 	ldw_d16	wa, (14036)	; F44D72  ld WA,(0x36d4)
 	stda16	(13650), wa	; F44D76  ld (0x3552),WA
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0x7F	; F44D7A  and (0x34d9),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d9, 0x7f	; F44D7A  and (0x34d9),0x7f
 	m_bit 1, MD16, 0x34d9	; F44D7F  bit 1,(0x34d9)
 	jr	z, 5	; F44D83  jr Z,0xf44d8a
-	.byte 0xC1, 0xD9, 0x34, 0x3E, 0x80	; F44D85  or (0x34d9),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d9, 0x80	; F44D85  or (0x34d9),0x80
 	ldb_da	a, (6311938)	; F44D8A  ld A,(0x605002)
 	stb_d8	(13401), a	; F44D8F  ld (0x3459),A
 	ret	; F44D93  ret
@@ -71927,9 +71927,9 @@ sub_F44D94:
 	jr	z, 3	; F44D9E  jr Z,0xf44da3
 	jrl	167	; F44DA0  jrl T,0xf44e4a
 	ldda32	xbc, (12300)	; F44DA3  ld XBC,(0x300c)
-	.byte 0xE2, 0x1E, 0x34, 0x60, 0xC1	; F44DA7  and XBC,(0x60341e)   [llvm-mc cannot encode this]
+	m_and_rm ML24, 0x60341e, 1	; F44DA7  and XBC,(0x60341e)
 	ldda32	xde, (12296)	; F44DAC  ld XDE,(0x3008)
-	.byte 0xE2, 0x1E, 0x34, 0x60, 0xC2	; F44DB0  and XDE,(0x60341e)   [llvm-mc cannot encode this]
+	m_and_rm ML24, 0x60341e, 2	; F44DB0  and XDE,(0x60341e)
 	cp	xbc, 0	; F44DB5  cp XBC,0x00000000
 	jrl	z, 140	; F44DBB  jrl Z,0xf44e4a
 	cp	xde, 0	; F44DBE  cp XDE,0x00000000
@@ -71939,7 +71939,7 @@ sub_F44D94:
 	stda32	(12296), xwa	; F44DCD  ld (0x3008),XWA
 	m_bit 4, MD16, 0x34bb	; F44DD1  bit 4,(0x34bb)
 	jr	nz, 5	; F44DD5  jr NZ,0xf44ddc
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x04	; F44DD7  or (0x34d4),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x04	; F44DD7  or (0x34d4),0x04
 	bit_dd8	3, 148	; F44DDC  bit 3,(0x94)
 	jr	nz, 5	; F44DDF  jr NZ,0xf44de6
 	bit_dd8	2, 148	; F44DE1  bit 2,(0x94)
@@ -71963,19 +71963,19 @@ sub_F44D94:
 	m_cp_rm MW16, 0x3624, 0	; F44E1A  cp WA,(0x3624)
 	jr	ugt, 2	; F44E1E  jr UGT,0xf44e22
 	jr	40	; F44E20  jr T,0xf44e4a
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F44E22  or (0x34d4),0x10   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F44E27  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F44E22  or (0x34d4),0x10
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F44E27  and (0x34bb),0xf7
 	m_bit 3, MD16, 0x34d2	; F44E2C  bit 3,(0x34d2)
 	jr	nz, 10	; F44E30  jr NZ,0xf44e3c
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x40	; F44E32  or (0x34d4),0x40   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD0, 0x34, 0x3E, 0x02	; F44E37  or (0x34d0),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x40	; F44E32  or (0x34d4),0x40
+	m_or_mi8 MB16, 0x34d0, 0x02	; F44E37  or (0x34d0),0x02
 	calr	25	; F44E3C  calr 0xf44e58
 	jr	0	; F44E3F  jr T,0xf44e41
-	.byte 0xC1, 0xD8, 0x34, 0x3C, 0x7F	; F44E41  and (0x34d8),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d8, 0x7f	; F44E41  and (0x34d8),0x7f
 	call	15992708	; F44E46  call 0xf40784
 	ldda32	xwa, (12296)	; F44E4A  ld XWA,(0x3008)
 	stda32	(12300), xwa	; F44E4E  ld (0x300c),XWA
-	.byte 0xC1, 0xD2, 0x34, 0x3C, 0xF7	; F44E52  and (0x34d2),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d2, 0xf7	; F44E52  and (0x34d2),0xf7
 	ret	; F44E57  ret
 
 ; --------------------------------------------------------------------------
@@ -72014,7 +72014,7 @@ sub_F44E58:
 sub_F44E6B:
 	m_bit 1, MD16, 0x34d2	; F44E6B  bit 1,(0x34d2)
 	jr	z, 28	; F44E6F  jr Z,0xf44e8d
-	.byte 0xC1, 0xD2, 0x34, 0x3C, 0xFD	; F44E71  and (0x34d2),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d2, 0xfd	; F44E71  and (0x34d2),0xfd
 	call	15995848	; F44E76  call 0xf413c8
 	call	15998744	; F44E7A  call 0xf41f18
 	xor	xwa, xwa	; F44E7E  xor XWA,XWA
@@ -72063,7 +72063,7 @@ sub_F44E8E:		; <- T_F40AA0
 	jrl	nz, 142	; F44ED5  jrl NZ,0xf44f66
 	xor	xwa, xwa	; F44ED8  xor XWA,XWA
 	stda32	(12296), xwa	; F44EDA  ld (0x3008),XWA
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x02	; F44EDE  or (0x34d2),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d2, 0x02	; F44EDE  or (0x34d2),0x02
 	ld	xwa, 4294967295	; F44EE3  ld XWA,0xffffffff
 	stl_da	(6304798), xwa	; F44EE8  ld (0x60341e),XWA
 	calr	65403	; F44EED  calr 0xf44e6b
@@ -72078,7 +72078,7 @@ sub_F44E8E:		; <- T_F40AA0
 	jr	nz, 42	; F44F0D  jr NZ,0xf44f39
 	xor	xwa, xwa	; F44F0F  xor XWA,XWA
 	stda32	(12296), xwa	; F44F11  ld (0x3008),XWA
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x02	; F44F15  or (0x34d2),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d2, 0x02	; F44F15  or (0x34d2),0x02
 	ld	xwa, 4294967295	; F44F1A  ld XWA,0xffffffff
 	stl_da	(6304798), xwa	; F44F1F  ld (0x60341e),XWA
 	calr	65348	; F44F24  calr 0xf44e6b
@@ -72147,7 +72147,7 @@ sub_F44F67:		; <- T_F40ABC
 	jrl	nz, 139	; F44FAE  jrl NZ,0xf4503c
 	xor	xwa, xwa	; F44FB1  xor XWA,XWA
 	stda32	(12296), xwa	; F44FB3  ld (0x3008),XWA
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x02	; F44FB7  or (0x34d2),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d2, 0x02	; F44FB7  or (0x34d2),0x02
 	ld	xwa, 4294967295	; F44FBC  ld XWA,0xffffffff
 	stl_da	(6304798), xwa	; F44FC1  ld (0x60341e),XWA
 	calr	65186	; F44FC6  calr 0xf44e6b
@@ -72162,7 +72162,7 @@ sub_F44F67:		; <- T_F40ABC
 	jr	nz, 42	; F44FE6  jr NZ,0xf45012
 	xor	xwa, xwa	; F44FE8  xor XWA,XWA
 	stda32	(12296), xwa	; F44FEA  ld (0x3008),XWA
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x02	; F44FEE  or (0x34d2),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d2, 0x02	; F44FEE  or (0x34d2),0x02
 	ld	xwa, 4294967295	; F44FF3  ld XWA,0xffffffff
 	stl_da	(6304798), xwa	; F44FF8  ld (0x60341e),XWA
 	calr	65131	; F44FFD  calr 0xf44e6b
@@ -72294,8 +72294,8 @@ sub_F450F7:		; <- T_F409CC
 	stda32	(12296), xwa	; F450F9  ld (0x3008),XWA
 	stda32	(12300), xwa	; F450FD  ld (0x300c),XWA
 	calr	21	; F45101  calr 0xf45119
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F45104  and (0x34bb),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xFB	; F45109  and (0x34d4),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F45104  and (0x34bb),0xf7
+	m_and_mi8 MB16, 0x34d4, 0xfb	; F45109  and (0x34d4),0xfb
 	calr	64132	; F4510E  calr 0xf44b95
 	calr	2166	; F45111  calr 0xf4598a
 	call	15995320	; F45114  call 0xf411b8
@@ -72313,7 +72313,7 @@ sub_F450F7:		; <- T_F409CC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45119:
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F45119  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F45119  and (0x34bb),0xf7
 	calr	2153	; F4511E  calr 0xf4598a
 	call	15994036	; F45121  call 0xf40cb4
 	ldl_da	xwa, (6304798)	; F45125  ld XWA,(0x60341e)
@@ -72327,9 +72327,9 @@ sub_F45119:
 	calr	63324	; F45144  calr 0xf448a3
 	m_cp_mi8 MB24, 0x6034c6, 0xff	; F45147  cp (0x6034c6),0xff
 	jr	z, 7	; F4514D  jr Z,0xf45156
-	.byte 0xC1, 0x4D, 0x7F, 0x3C, 0xFB	; F4514F  and (0x7f4d),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x7f4d, 0xfb	; F4514F  and (0x7f4d),0xfb
 	jr	5	; F45154  jr T,0xf4515b
-	.byte 0xC1, 0x4D, 0x7F, 0x3E, 0x04	; F45156  or (0x7f4d),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x7f4d, 0x04	; F45156  or (0x7f4d),0x04
 	stdi8	(4684), 1	; F4515B  ld (0x124c),0x01
 	ldb	e, 145	; F45160  ld E,0x91
 	ldb	d, 3	; F45162  ld D,0x03
@@ -72409,20 +72409,20 @@ sub_F451E6:		; <- T_F409D0
 	xor	xwa, xwa	; F451E9  xor XWA,XWA
 	stda32	(12296), xwa	; F451EB  ld (0x3008),XWA
 	stdi16	(13650), 1	; F451EF  ld (0x3552),0x0001
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xF7	; F451F5  and (0x34d4),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0x79	; F451FA  and (0x34d9),0x79   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0xf7	; F451F5  and (0x34d4),0xf7
+	m_and_mi8 MB16, 0x34d9, 0x79	; F451FA  and (0x34d9),0x79
 	m_bit 0, MD16, 0x34d9	; F451FF  bit 0,(0x34d9)
 	jr	z, 18	; F45203  jr Z,0xf45217
-	.byte 0xC1, 0xD9, 0x34, 0x3E, 0x02	; F45205  or (0x34d9),0x02   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x08	; F4520A  or (0x34d4),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d9, 0x02	; F45205  or (0x34d9),0x02
+	m_or_mi8 MB16, 0x34d4, 0x08	; F4520A  or (0x34d4),0x08
 	ldw_d16	wa, (13650)	; F4520F  ld WA,(0x3552)
 	stda16	(14036), wa	; F45213  ld (0x36d4),WA
 	m_bit 1, MD16, 0x360b	; F45217  bit 1,(0x360b)
 	jr	z, 5	; F4521B  jr Z,0xf45222
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x08	; F4521D  or (0x34d4),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x08	; F4521D  or (0x34d4),0x08
 	stdi16	(13398), 0	; F45222  ld (0x3456),0x0000
 	calr	3514	; F45228  calr 0xf45fe5
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F4522B  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F4522B  and (0x34bb),0xf7
 	ldwio	145, 0	; F45230  ld (0x91),0x0000
 	ldio	147, 0	; F45234  ld (0x93),0x00
 	ldb_da	a, (6311936)	; F45237  ld A,(0x605000)
@@ -72430,7 +72430,7 @@ sub_F451E6:		; <- T_F409D0
 	ldl_da	xwa, (6304798)	; F45240  ld XWA,(0x60341e)
 	cp	xwa, 0	; F45245  cp XWA,0x00000000
 	jr	z, 7	; F4524B  jr Z,0xf45254
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x18	; F4524D  or (0x34d4),0x18   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x18	; F4524D  or (0x34d4),0x18
 	jr	3	; F45252  jr T,0xf45257
 	calr	2227	; F45254  calr 0xf45b0a
 	call	15995320	; F45257  call 0xf411b8
@@ -72505,15 +72505,15 @@ sub_F452D3:		; <- T_F409D4
 	jr	nz, 50	; F452D6  jr NZ,0xf4530a
 	cpl	wa	; F452D8  cpl WA
 	cpl	qwa	; F452DA  cpl QWA
-	.byte 0xE1, 0x08, 0x30, 0xC8	; F452DD  and (0x3008),XWA   [llvm-mc cannot encode this]
-	.byte 0xE1, 0x0C, 0x30, 0xC8	; F452E1  and (0x300c),XWA   [llvm-mc cannot encode this]
+	m_and_mr ML16, 0x3008, 0	; F452DD  and (0x3008),XWA
+	m_and_mr ML16, 0x300c, 0	; F452E1  and (0x300c),XWA
 	ldl_da	xwa, (6304798)	; F452E5  ld XWA,(0x60341e)
 	cp	xwa, 0	; F452EA  cp XWA,0x00000000
 	jr	nz, 18	; F452F0  jr NZ,0xf45304
 	xor	xwa, xwa	; F452F2  xor XWA,XWA
 	stda32	(12296), xwa	; F452F4  ld (0x3008),XWA
 	stda32	(12300), xwa	; F452F8  ld (0x300c),XWA
-	.byte 0xC1, 0xD1, 0x34, 0x3C, 0x7F	; F452FC  and (0x34d1),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d1, 0x7f	; F452FC  and (0x34d1),0x7f
 	calr	2054	; F45301  calr 0xf45b0a
 	call	15995320	; F45304  call 0xf411b8
 	jr	61	; F45308  jr T,0xf45347
@@ -72568,9 +72568,9 @@ sub_F45348:		; <- T_F409D8
 	ldda32	xwa, (12292)	; F4535C  ld XWA,(0x3004)
 	cp	xwa, 0	; F45360  cp XWA,0x00000000
 	jr	nz, 54	; F45366  jr NZ,0xf4539e
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0x79	; F45368  and (0x34d9),0x79   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xF7	; F4536D  and (0x34d4),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD0, 0x34, 0x3E, 0x02	; F45372  or (0x34d0),0x02   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d9, 0x79	; F45368  and (0x34d9),0x79
+	m_and_mi8 MB16, 0x34d4, 0xf7	; F4536D  and (0x34d4),0xf7
+	m_or_mi8 MB16, 0x34d0, 0x02	; F45372  or (0x34d0),0x02
 	xor	xwa, xwa	; F45377  xor XWA,XWA
 	stda32	(12296), xwa	; F45379  ld (0x3008),XWA
 	stda32	(12300), xwa	; F4537D  ld (0x300c),XWA
@@ -72590,15 +72590,15 @@ sub_F45348:		; <- T_F409D8
 	jr	7	; F453A9  jr T,0xf453b2
 	call	15993804	; F453AB  call 0xf40bcc
 	calr	55	; F453AF  calr 0xf453e9
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xF7	; F453B2  and (0x34d4),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0xf7	; F453B2  and (0x34d4),0xf7
 	calr	1416	; F453B7  calr 0xf45942
 	calr	1564	; F453BA  calr 0xf459d9
 	xor	xwa, xwa	; F453BD  xor XWA,XWA
 	stda32	(12296), xwa	; F453BF  ld (0x3008),XWA
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x08	; F453C3  or (0x34d2),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD0, 0x34, 0x3E, 0x02	; F453C8  or (0x34d0),0x02   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0x79	; F453CD  and (0x34d9),0x79   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x01	; F453D2  or (0x34d2),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d2, 0x08	; F453C3  or (0x34d2),0x08
+	m_or_mi8 MB16, 0x34d0, 0x02	; F453C8  or (0x34d0),0x02
+	m_and_mi8 MB16, 0x34d9, 0x79	; F453CD  and (0x34d9),0x79
+	m_or_mi8 MB16, 0x34d2, 0x01	; F453D2  or (0x34d2),0x01
 	call	15993260	; F453D7  call 0xf409ac
 	m_bit 1, MD16, 0x3614	; F453DB  bit 1,(0x3614)
 	jr	nz, 3	; F453DF  jr NZ,0xf453e4
@@ -72660,7 +72660,7 @@ sub_F4542D:		; <- T_F409E0
 	jr	z, 10	; F45438  jr Z,0xf45444
 	bit_dd8	2, 150	; F4543A  bit 2,(0x96)
 	jr	nz, 5	; F4543D  jr NZ,0xf45444
-	.byte 0xC1, 0xD3, 0x34, 0x3E, 0x01	; F4543F  or (0x34d3),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d3, 0x01	; F4543F  or (0x34d3),0x01
 	ret	; F45444  ret
 
 ; --------------------------------------------------------------------------
@@ -72680,7 +72680,7 @@ sub_F45445:		; <- T_F409E4
 	cp	xwa, 0	; F4544A  cp XWA,0x00000000
 	jr	z, 3	; F45450  jr Z,0xf45455
 	calr	1738	; F45452  calr 0xf45b1f
-	.byte 0xC1, 0xD0, 0x34, 0x3C, 0xDF	; F45455  and (0x34d0),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d0, 0xdf	; F45455  and (0x34d0),0xdf
 	ret	; F4545A  ret
 
 ; --------------------------------------------------------------------------
@@ -72988,7 +72988,7 @@ sub_F455CC:
 	stda32	(12296), xwa	; F455D2  ld (0x3008),XWA
 	stda32	(12300), xwa	; F455D6  ld (0x300c),XWA
 	calr	1325	; F455DA  calr 0xf45b0a
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x02	; F455DD  or (0x34d2),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d2, 0x02	; F455DD  or (0x34d2),0x02
 	ldio	168, 0	; F455E2  ld (0xa8),0x00
 	ret	; F455E5  ret
 
@@ -73050,11 +73050,11 @@ sub_F455E6:		; <- T_F40AA8
 	inc	1, a	; F45649  inc 1,A
 	ld	w, a	; F4564B  ld W,A
 	stb_d8	(3665), w	; F4564D  ld (0x0e51),W
-	.byte 0xC1, 0x4F, 0x0E, 0x3E, 0x01	; F45651  or (0x0e4f),0x01   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x04	; F45656  or (0x0c8a),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4f, 0x01	; F45651  or (0x0e4f),0x01
+	m_or_mi8 MB16, 0x0c8a, 0x04	; F45656  or (0x0c8a),0x04
 	jr	12	; F4565B  jr T,0xf45669
-	.byte 0xC1, 0x4F, 0x0E, 0x3C, 0xFE	; F4565D  and (0x0e4f),0xfe   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F45662  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0e4f, 0xfe	; F4565D  and (0x0e4f),0xfe
+	m_and_mi8 MB16, 0x0c8a, 0xfb	; F45662  and (0x0c8a),0xfb
 	xor	w, w	; F45667  xor W,W
 	ret	; F45669  ret
 
@@ -73117,11 +73117,11 @@ sub_F4566A:		; <- T_F40A70
 	inc	1, a	; F456CB  inc 1,A
 	ld	w, a	; F456CD  ld W,A
 	stb_d8	(3665), w	; F456CF  ld (0x0e51),W
-	.byte 0xC1, 0x4F, 0x0E, 0x3E, 0x01	; F456D3  or (0x0e4f),0x01   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x04	; F456D8  or (0x0c8a),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4f, 0x01	; F456D3  or (0x0e4f),0x01
+	m_or_mi8 MB16, 0x0c8a, 0x04	; F456D8  or (0x0c8a),0x04
 	jr	12	; F456DD  jr T,0xf456eb
-	.byte 0xC1, 0x4F, 0x0E, 0x3C, 0xFE	; F456DF  and (0x0e4f),0xfe   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F456E4  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0e4f, 0xfe	; F456DF  and (0x0e4f),0xfe
+	m_and_mi8 MB16, 0x0c8a, 0xfb	; F456E4  and (0x0c8a),0xfb
 	xor	w, w	; F456E9  xor W,W
 	ret	; F456EB  ret
 
@@ -73166,17 +73166,17 @@ sub_F456F0:
 	ldda32	xwa, (12292)	; F45713  ld XWA,(0x3004)
 	cp	xwa, 0	; F45717  cp XWA,0x00000000
 	jr	nz, 65	; F4571D  jr NZ,0xf45760
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xFD	; F4571F  and (0x34d4),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0xfd	; F4571F  and (0x34d4),0xfd
 	call	15998352	; F45724  call 0xf41d90
 	cps	wa, 0	; F45728  cp WA,0
 	jr	z, 52	; F4572A  jr Z,0xf45760
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x02	; F4572C  or (0x34d4),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x02	; F4572C  or (0x34d4),0x02
 	calr	45	; F45731  calr 0xf45761
 	ldda32	xwa, (12292)	; F45734  ld XWA,(0x3004)
 	cp	xwa, 0	; F45738  cp XWA,0x00000000
 	jr	z, 32	; F4573E  jr Z,0xf45760
 	calr	2155	; F45740  calr 0xf45fae
-	.byte 0xC1, 0x14, 0x36, 0x3E, 0x01	; F45743  or (0x3614),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x3614, 0x01	; F45743  or (0x3614),0x01
 	ei	6	; F45748  ei 0x06
 	ldwio	145, 0	; F4574A  ld (0x91),0x0000
 	ldio	147, 0	; F4574E  ld (0x93),0x00
@@ -73209,7 +73209,7 @@ sub_F45761:
 	jr	nz, 3	; F45778  jr NZ,0xf4577d
 	ldw	wa, 1	; F4577A  ld WA,0x0001
 	stda16	(13840), wa	; F4577D  ld (0x3610),WA
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x80	; F45781  or (0x34d2),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d2, 0x80	; F45781  or (0x34d2),0x80
 	ldda32	xwa, (12288)	; F45786  ld XWA,(0x3000)
 	stda32	(12292), xwa	; F4578A  ld (0x3004),XWA
 	stdi8	(13471), 0	; F4578E  ld (0x349f),0x00
@@ -73240,7 +73240,7 @@ sub_F45761:
 	jr	c, -67	; F457D4  jr C,0xf45793
 	call	15994112	; F457D6  call 0xf40d00
 	calr	53	; F457DA  calr 0xf45812
-	.byte 0xC1, 0xD0, 0x34, 0x3C, 0xF7	; F457DD  and (0x34d0),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d0, 0xf7	; F457DD  and (0x34d0),0xf7
 	ldb_d8	a, (14038)	; F457E2  ld A,(0x36d6)
 	stb_d8	(13471), a	; F457E6  ld (0x349f),A
 	call	15993828	; F457EA  call 0xf40be4
@@ -73253,7 +73253,7 @@ sub_F45761:
 	jr	13	; F45802  jr T,0xf45811
 	m_cp_mi16 MW16, 0x3552, 0x0001	; F45804  cp (0x3552),0x0001
 	jr	nz, 5	; F4580A  jr NZ,0xf45811
-	.byte 0xC1, 0xD0, 0x34, 0x3E, 0x08	; F4580C  or (0x34d0),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d0, 0x08	; F4580C  or (0x34d0),0x08
 	ret	; F45811  ret
 
 ; --------------------------------------------------------------------------
@@ -73310,12 +73310,12 @@ sub_F45812:
 	pushw	wa	; F4586B  push WA
 	ld	hl, wa	; F4586C  ld HL,WA
 	call	15993988	; F4586E  call 0xf40c84
-	.byte 0x83, 0x3E, 0x80	; F45872  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F45872  or (XHL),0x80
 	.byte 0xBB, 0x01, 0x02, 0x00, 0x00	; F45875  ld (XHL+0x01),0x0000   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F4587A  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
 	popw	wa	; F4587F  pop WA
 	ld	xhl, 6305024	; F45880  ld XHL,0x00603500
-	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3E, 0x80	; F45885  or (XHL+IY),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_HL, ra_IY, 0x80	; F45885  or (XHL+IY),0x80
 	ld	xiz, xhl	; F4588B  ld XIZ,XHL
 	.byte 0xF3, 0x07, 0xF8, 0xF4, 0x36	; F4588D  lda XIZ,XIZ+IY   [llvm-mc cannot encode this]
 	ld	(xiz+1), wa	; F45892  ld (XIZ+0x01),WA
@@ -73340,8 +73340,8 @@ sub_F45812:
 	call	15995320	; F458D4  call 0xf411b8
 	call	15993800	; F458D8  call 0xf40bc8
 	calr	1765	; F458DC  calr 0xf45fc4
-	.byte 0xC1, 0xA9, 0x20, 0x3C, 0xFE	; F458DF  and (0x20a9),0xfe   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD1, 0x34, 0x3E, 0x10	; F458E4  or (0x34d1),0x10   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x20a9, 0xfe	; F458DF  and (0x20a9),0xfe
+	m_or_mi8 MB16, 0x34d1, 0x10	; F458E4  or (0x34d1),0x10
 	ret	; F458E9  ret
 
 ; --------------------------------------------------------------------------
@@ -73409,16 +73409,16 @@ sub_F458FE:
 ; --------------------------------------------------------------------------
 sub_F45942:
 	ldda32	xwa, (12288)	; F45942  ld XWA,(0x3000)
-	.byte 0xE2, 0x1E, 0x34, 0x60, 0xE8	; F45946  or (0x60341e),XWA   [llvm-mc cannot encode this]
+	m_or_mr ML24, 0x60341e, 0	; F45946  or (0x60341e),XWA
 	call	15994036	; F4594B  call 0xf40cb4
 	xor	xwa, xwa	; F4594F  xor XWA,XWA
 	stda32	(12288), xwa	; F45951  ld (0x3000),XWA
 	stda32	(12292), xwa	; F45955  ld (0x3004),XWA
-	.byte 0xC1, 0xD2, 0x34, 0x3E, 0x01	; F45959  or (0x34d2),0x01   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4595E  or (0x34d4),0x10   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F45963  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d2, 0x01	; F45959  or (0x34d2),0x01
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4595E  or (0x34d4),0x10
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F45963  and (0x34bb),0xf7
 	calr	415	; F45968  calr 0xf45b0a
-	.byte 0xC1, 0xD0, 0x34, 0x3E, 0x02	; F4596B  or (0x34d0),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d0, 0x02	; F4596B  or (0x34d0),0x02
 	call	15995320	; F45970  call 0xf411b8
 	ret	; F45974  ret
 
@@ -73454,8 +73454,8 @@ sub_F45975:		; <- T_F40A10
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4598A:
-	.byte 0xC0, 0x95, 0x3C, 0xED	; F4598A  and (0x95),0xed   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x94, 0x3C, 0xED	; F4598E  and (0x94),0xed   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x95, 0xed	; F4598A  and (0x95),0xed
+	m_and_mi8 MB8, 0x94, 0xed	; F4598E  and (0x94),0xed
 	m_bit 5, MD16, 0x34d0	; F45992  bit 5,(0x34d0)
 	jr	nz, 14	; F45996  jr NZ,0xf459a6
 	bit_dd8	2, 150	; F45998  bit 2,(0x96)
@@ -73486,11 +73486,11 @@ sub_F459AA:
 	jr	28	; F459BA  jr T,0xf459d8
 	xor	xwa, xwa	; F459BC  xor XWA,XWA
 	stda32	(13466), xwa	; F459BE  ld (0x349a),XWA
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFE	; F459C2  and (0x34bb),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfe	; F459C2  and (0x34bb),0xfe
 	ldda32	xde, (12288)	; F459C7  ld XDE,(0x3000)
 	cp	xde, 0	; F459CB  cp XDE,0x00000000
 	jr	z, 5	; F459D1  jr Z,0xf459d8
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x01	; F459D3  or (0x34bb),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x01	; F459D3  or (0x34bb),0x01
 	ret	; F459D8  ret
 
 ; --------------------------------------------------------------------------
@@ -73508,15 +73508,15 @@ sub_F459AA:
 sub_F459D9:
 	m_bit 3, MD16, 0x34bb	; F459D9  bit 3,(0x34bb)
 	jr	z, 26	; F459DD  jr Z,0xf459f9
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFE	; F459DF  and (0x34bb),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfe	; F459DF  and (0x34bb),0xfe
 	ldda32	xde, (13466)	; F459E4  ld XDE,(0x349a)
 	cp	xde, 0	; F459E8  cp XDE,0x00000000
 	jrl	z, 169	; F459EE  jrl Z,0xf45a9a
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x01	; F459F1  or (0x34bb),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x01	; F459F1  or (0x34bb),0x01
 	jrl	161	; F459F6  jrl T,0xf45a9a
 	xor	xwa, xwa	; F459F9  xor XWA,XWA
 	stda32	(13466), xwa	; F459FB  ld (0x349a),XWA
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x01	; F459FF  or (0x34bb),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x01	; F459FF  or (0x34bb),0x01
 	ld	xix, 6305024	; F45A04  ld XIX,0x00603500
 	ldb	c, 0	; F45A09  ld C,0x00
 	ld	a, (xix)	; F45A0B  ld A,(XIX)
@@ -73556,16 +73556,16 @@ sub_F459D9:
 	jr	c, -88	; F45A61  jr C,0xf45a0b
 	ldda32	xwa, (12288)	; F45A63  ld XWA,(0x3000)
 	xor	xwa, 4294967295	; F45A67  xor XWA,0xffffffff
-	.byte 0xE1, 0x9A, 0x34, 0xC0	; F45A6D  and XWA,(0x349a)   [llvm-mc cannot encode this]
+	m_and_rm ML16, 0x349a, 0	; F45A6D  and XWA,(0x349a)
 	and	xwa, 131071	; F45A71  and XWA,0x0001ffff
-	.byte 0xC2, 0x1E, 0x34, 0x60, 0x3C, 0xFF	; F45A77  and (0x60341e),0xff   [llvm-mc cannot encode this]
+	m_and_mi8 MB24, 0x60341e, 0xff	; F45A77  and (0x60341e),0xff
 	stda32	(13466), xwa	; F45A7D  ld (0x349a),XWA
 	ldda32	xde, (12288)	; F45A81  ld XDE,(0x3000)
 	cp	xde, 0	; F45A85  cp XDE,0x00000000
 	jr	nz, 13	; F45A8B  jr NZ,0xf45a9a
 	cp	xwa, 0	; F45A8D  cp XWA,0x00000000
 	jr	nz, 5	; F45A93  jr NZ,0xf45a9a
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFE	; F45A95  and (0x34bb),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfe	; F45A95  and (0x34bb),0xfe
 	ldda32	xwa, (12288)	; F45A9A  ld XWA,(0x3000)
 	cp	xwa, 0	; F45A9E  cp XWA,0x00000000
 	jr	z, 99	; F45AA4  jr Z,0xf45b09
@@ -73653,7 +73653,7 @@ sub_F45B1F:
 	xor	xwa, xwa	; F45B30  xor XWA,XWA
 	stda32	(12300), xwa	; F45B32  ld (0x300c),XWA
 	stda32	(12296), xwa	; F45B36  ld (0x3008),XWA
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F45B3A  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F45B3A  and (0x34bb),0xf7
 	calr	65128	; F45B3F  calr 0xf459aa
 	jr	0	; F45B42  jr T,0xf45b44
 	calr	61518	; F45B44  calr 0xf44b95
@@ -73680,7 +73680,7 @@ sub_F45B48:
 	xor	xwa, xwa	; F45B59  xor XWA,XWA
 	stda32	(12300), xwa	; F45B5B  ld (0x300c),XWA
 	stda32	(12296), xwa	; F45B5F  ld (0x3008),XWA
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F45B63  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F45B63  and (0x34bb),0xf7
 	calr	65087	; F45B68  calr 0xf459aa
 	jr	0	; F45B6B  jr T,0xf45b6d
 	ret	; F45B6D  ret
@@ -73829,18 +73829,18 @@ sub_F45BD3:		; <- T_F409DC
 	incdi8	1, (13471)	; F45C83  inc 1,(0x349f)
 	m_cp_mi8 MB16, 0x349f, 0x11	; F45C87  cp (0x349f),0x11
 	jr	c, -115	; F45C8C  jr C,0xf45c1b
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x08	; F45C8E  or (0x34bb),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x08	; F45C8E  or (0x34bb),0x08
 	calr	61457	; F45C93  calr 0xf44ca7
 	ldio	168, 0	; F45C96  ld (0xa8),0x00
 	ldda32	xwa, (13466)	; F45C99  ld XWA,(0x349a)
 	cp	xwa, 0	; F45C9D  cp XWA,0x00000000
 	jr	z, 17	; F45CA3  jr Z,0xf45cb6
 	calr	65122	; F45CA5  calr 0xf45b0a
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F45CA8  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F45CA8  or (0x34d4),0x10
 	m_bit 0, MD16, 0x3735	; F45CAD  bit 0,(0x3735)
 	jr	nz, 3	; F45CB1  jr NZ,0xf45cb6
 	calr	78	; F45CB3  calr 0xf45d04
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F45CB6  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F45CB6  and (0x34bb),0xfb
 	ldda32	xwa, (13466)	; F45CBB  ld XWA,(0x349a)
 	stda32	(14022), xwa	; F45CBF  ld (0x36c6),XWA
 	ret	; F45CC3  ret
@@ -73875,7 +73875,7 @@ sub_F45CC4:		; <- T_F40A9C
 	incdi8	1, (13471)	; F45CF3  inc 1,(0x349f)
 	m_cp_mi8 MB16, 0x349f, 0x11	; F45CF7  cp (0x349f),0x11
 	jr	c, -42	; F45CFC  jr C,0xf45cd4
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F45CFE  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F45CFE  and (0x34bb),0xfb
 	ret	; F45D03  ret
 
 ; --------------------------------------------------------------------------
@@ -74110,9 +74110,9 @@ sub_F45E14:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45E49:
-	.byte 0xC2, 0xC7, 0x34, 0x60, 0x3C, 0xFD	; F45E49  and (0x6034c7),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB24, 0x6034c7, 0xfd	; F45E49  and (0x6034c7),0xfd
 	jr	0	; F45E4F  jr T,0xf45e51
-	.byte 0xC2, 0xC7, 0x34, 0x60, 0x3E, 0x02	; F45E51  or (0x6034c7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB24, 0x6034c7, 0x02	; F45E51  or (0x6034c7),0x02
 	ret	; F45E57  ret
 
 ; --------------------------------------------------------------------------
@@ -74386,7 +74386,7 @@ sub_F45F4B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45FAE:		; <- T_F40A58
-	.byte 0xC1, 0xA9, 0x20, 0x3E, 0x01	; F45FAE  or (0x20a9),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x20a9, 0x01	; F45FAE  or (0x20a9),0x01
 	ret	; F45FB3  ret
 
 ; --------------------------------------------------------------------------
@@ -74403,7 +74403,7 @@ sub_F45FAE:		; <- T_F40A58
 sub_F45FB4:		; <- T_F40A5C
 	stdi8	(10368), 14	; F45FB4  ld (0x2880),0x0e
 	stdi8	(8304), 171	; F45FB9  ld (0x2070),0xab
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x40	; F45FBE  or (0x2071),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x40	; F45FBE  or (0x2071),0x40
 	ret	; F45FC3  ret
 
 ; --------------------------------------------------------------------------
@@ -74418,7 +74418,7 @@ sub_F45FB4:		; <- T_F40A5C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45FC4:		; <- T_F40A08
-	.byte 0xC1, 0xD1, 0x34, 0x3E, 0x20	; F45FC4  or (0x34d1),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d1, 0x20	; F45FC4  or (0x34d1),0x20
 	ret	; F45FC9  ret
 
 ; --------------------------------------------------------------------------
@@ -74434,10 +74434,10 @@ sub_F45FC4:		; <- T_F40A08
 sub_F45FCA:
 	m_bit 5, MD16, 0x34d1	; F45FCA  bit 5,(0x34d1)
 	jr	z, 20	; F45FCE  jr Z,0xf45fe4
-	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xDF	; F45FD0  and (0x34d1),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d1, 0xdf	; F45FD0  and (0x34d1),0xdf
 	stdi8	(10368), 15	; F45FD5  ld (0x2880),0x0f
 	stdi8	(8304), 171	; F45FDA  ld (0x2070),0xab
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x40	; F45FDF  or (0x2071),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x40	; F45FDF  or (0x2071),0x40
 	ret	; F45FE4  ret
 
 ; --------------------------------------------------------------------------
@@ -74482,10 +74482,10 @@ sub_F45FE5:		; <- T_F40AB4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F46015:		; <- T_F40A54
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F46015  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F46015  or (0x2095),0x10
 	ret	; F4601A  ret
 	stdi8	(8304), 1	; F4601B  ld (0x2070),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x02	; F46020  or (0x2071),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x02	; F46020  or (0x2071),0x02
 	ret	; F46025  ret
 
 ; --------------------------------------------------------------------------
@@ -74500,7 +74500,7 @@ sub_F46015:		; <- T_F40A54
 ; --------------------------------------------------------------------------
 sub_F46026:
 	stdi8	(8304), 8	; F46026  ld (0x2070),0x08
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x02	; F4602B  or (0x2071),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x02	; F4602B  or (0x2071),0x02
 	ret	; F46030  ret
 
 ; --------------------------------------------------------------------------
@@ -74534,7 +74534,7 @@ sub_F46031:		; <- T_F40A40
 sub_F4603C:		; <- T_F40AC0
 	m_bit 7, MD16, 0x3754	; F4603C  bit 7,(0x3754)
 	jr	z, 49	; F46040  jr Z,0xf46073
-	.byte 0xC1, 0x54, 0x37, 0x3C, 0x7F	; F46042  and (0x3754),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x3754, 0x7f	; F46042  and (0x3754),0x7f
 	ldb_d8	a, (14164)	; F46047  ld A,(0x3754)
 	inc	1, a	; F4604B  inc 1,A
 	stb_da	(6311936), a	; F4604D  ld (0x605000),A
@@ -74818,7 +74818,7 @@ sub_F47816:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4783A:
-	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xFB	; F4783A  and (0x34d1),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d1, 0xfb	; F4783A  and (0x34d1),0xfb
 	ei	6	; F4783F  ei 0x06
 	.byte 0xD0, 0x91, 0x20	; F47841  ld WA,(0x91)   [llvm-mc cannot encode this]
 	stda16	(13394), wa	; F47844  ld (0x3452),WA
@@ -74915,7 +74915,7 @@ sub_F4783A:
 	ldb_d8	a, (14169)	; F47967  ld A,(0x3759)
 	dec	1, a	; F4796B  dec 1,A
 	stb_d8	(14164), a	; F4796D  ld (0x3754),A
-	.byte 0xC1, 0x54, 0x37, 0x3E, 0x80	; F47971  or (0x3754),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x3754, 0x80	; F47971  or (0x3754),0x80
 	jr	38	; F47976  jr T,0xf4799e
 	m_bit 2, MD16, 0x34d1	; F47978  bit 2,(0x34d1)
 	jr	nz, 32	; F4797C  jr NZ,0xf4799e
@@ -74970,7 +74970,7 @@ sub_F479AD:
 	stb_d8	(13471), c	; F479B6  ld (0x349f),C
 	ldb_d8	c, (13471)	; F479BA  ld C,(0x349f)
 	ldl_da	xwa, (6304798)	; F479BE  ld XWA,(0x60341e)
-	.byte 0xE1, 0x08, 0x30, 0xC0	; F479C3  and XWA,(0x3008)   [llvm-mc cannot encode this]
+	m_and_rm ML16, 0x3008, 0	; F479C3  and XWA,(0x3008)
 	cp	c, 16	; F479C7  cp C,0x10
 	jr	nc, 13	; F479CA  jr NC,0xf479d9
 	ld	de, wa	; F479CC  ld DE,WA
@@ -75090,7 +75090,7 @@ sub_F47A73:
 	stdi8	(13471), 0	; F47A85  ld (0x349f),0x00
 	ldb_d8	c, (13471)	; F47A8A  ld C,(0x349f)
 	ldl_da	xwa, (6304798)	; F47A8E  ld XWA,(0x60341e)
-	.byte 0xE1, 0x08, 0x30, 0xC0	; F47A93  and XWA,(0x3008)   [llvm-mc cannot encode this]
+	m_and_rm ML16, 0x3008, 0	; F47A93  and XWA,(0x3008)
 	cp	c, 16	; F47A97  cp C,0x10
 	jr	nc, 13	; F47A9A  jr NC,0xf47aa9
 	ld	de, wa	; F47A9C  ld DE,WA
@@ -75505,7 +75505,7 @@ sub_F47C7C:
 	jrl	-518	; F47E8B  jrl T,0xf47c88
 	ldb_d8	a, (13477)	; F47E8E  ld A,(0x34a5)
 	stb_d8	(14164), a	; F47E92  ld (0x3754),A
-	.byte 0xC1, 0x54, 0x37, 0x3E, 0x80	; F47E96  or (0x3754),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x3754, 0x80	; F47E96  or (0x3754),0x80
 	m_bit 4, MD16, 0x34d0	; F47E9B  bit 4,(0x34d0)
 	jr	z, 11	; F47E9F  jr Z,0xf47eac
 	m_cp_mi8 MB16, 0x34a4, 0x00	; F47EA1  cp (0x34a4),0x00
@@ -75528,7 +75528,7 @@ sub_F47C7C:
 	jr	z, 12	; F47ED7  jr Z,0xf47ee5
 	m_cp_mi8 MB16, 0x34a4, 0x00	; F47ED9  cp (0x34a4),0x00
 	jr	nz, 5	; F47EDE  jr NZ,0xf47ee5
-	.byte 0xC1, 0xD1, 0x34, 0x3E, 0x40	; F47EE0  or (0x34d1),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d1, 0x40	; F47EE0  or (0x34d1),0x40
 	calr	1057	; F47EE5  calr 0xf48309
 	jrl	-611	; F47EE8  jrl T,0xf47c88
 	call	16023401	; F47EEB  call 0xf47f69
@@ -76303,7 +76303,7 @@ sub_F48464:		; <- T_F40B5C
 	jr	4	; F48476  jr T,0xf4847c
 	ldw_d16	wa, (13858)	; F48478  ld WA,(0x3622)
 	stda16	(13650), wa	; F4847C  ld (0x3552),WA
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F48480  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F48480  or (0x2095),0x10
 	calr	593	; F48485  calr 0xf486d9
 	ldl_da	xwa, (6304798)	; F48488  ld XWA,(0x60341e)
 	push	xwa	; F4848D  push XWA
@@ -76383,7 +76383,7 @@ sub_F48464:		; <- T_F40B5C
 	call	15993488	; F4856E  call 0xf40a90
 	call	15995848	; F48572  call 0xf413c8
 	call	15998744	; F48576  call 0xf41f18
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4857A  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4857A  or (0x34d4),0x10
 	ret	; F4857F  ret
 
 ; --------------------------------------------------------------------------
@@ -77070,7 +77070,7 @@ sub_F48F19:
 	pushw	hl	; F48F1D  push HL
 	push	xix	; F48F1E  push XIX
 	lda_d16	xix, (8648)	; F48F1F  lda XIX,0x21c8
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0xA0	; F48F23  or (0x21e7),0xa0   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0xa0	; F48F23  or (0x21e7),0xa0
 	m_cp_mi8 MB16, 0x207c, 0x54	; F48F28  cp (0x207c),0x54
 	jr	nz, 16	; F48F2D  jr NZ,0xf48f3f
 	extz	xix	; F48F2F  extz XIX
@@ -77111,10 +77111,10 @@ sub_F48F75:
 	pushw	hl	; F48F75  push HL
 	push	xix	; F48F76  push XIX
 	lda_d16	xix, (8679)	; F48F77  lda XIX,0x21e7
-	.byte 0x84, 0x3E, 0x02	; F48F7B  or (XIX),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x02	; F48F7B  or (XIX),0x02
 	call	16000424	; F48F7E  call 0xf425a8
 	ld	h, a	; F48F82  ld H,A
-	.byte 0x84, 0x3C, 0xFD	; F48F84  and (XIX),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xfd	; F48F84  and (XIX),0xfd
 	ld	a, h	; F48F87  ld A,H
 	pop	xix	; F48F89  pop XIX
 	popw	hl	; F48F8A  pop HL
@@ -77788,20 +77788,20 @@ sub_F49861:
 	ldb	a, 8	; F49861  ld A,0x08
 	call	15994912	; F49863  call 0xf41020
 	ret	; F49867  ret
-	.byte 0xC1, 0xDD, 0x34, 0x3E, 0x02	; F49868  or (0x34dd),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34dd, 0x02	; F49868  or (0x34dd),0x02
 	calr	48	; F4986D  calr 0xf498a0
-	.byte 0xC1, 0xDD, 0x34, 0x3C, 0xFD	; F49870  and (0x34dd),0xfd   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xFD	; F49875  and (0x34d4),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34dd, 0xfd	; F49870  and (0x34dd),0xfd
+	m_and_mi8 MB16, 0x34d4, 0xfd	; F49875  and (0x34d4),0xfd
 	ret	; F4987A  ret
 	ldda32	xwa, (12292)	; F4987B  ld XWA,(0x3004)
 	cp	xwa, 0	; F4987F  cp XWA,0x00000000
 	jr	z, 14	; F49885  jr Z,0xf49895
 	m_bit 3, MD16, 0x34d0	; F49887  bit 3,(0x34d0)
 	jr	z, 5	; F4988B  jr Z,0xf49892
-	.byte 0xC1, 0xD0, 0x34, 0x3C, 0xF7	; F4988D  and (0x34d0),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d0, 0xf7	; F4988D  and (0x34d0),0xf7
 	calr	11	; F49892  calr 0xf498a0
-	.byte 0xC1, 0xDD, 0x34, 0x3C, 0xFD	; F49895  and (0x34dd),0xfd   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xFD	; F4989A  and (0x34d4),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34dd, 0xfd	; F49895  and (0x34dd),0xfd
+	m_and_mi8 MB16, 0x34d4, 0xfd	; F4989A  and (0x34d4),0xfd
 	ret	; F4989F  ret
 
 ; --------------------------------------------------------------------------
@@ -79221,7 +79221,7 @@ sub_F4A4F6:
 	calr	13	; F4A4FE  calr 0xf4a50e
 	calr	62301	; F4A501  calr 0xf49861
 	call	15993472	; F4A504  call 0xf40a80
-	.byte 0xC1, 0xD1, 0x34, 0x3E, 0x10	; F4A508  or (0x34d1),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d1, 0x10	; F4A508  or (0x34d1),0x10
 	ret	; F4A50D  ret
 
 ; --------------------------------------------------------------------------
@@ -79429,7 +79429,7 @@ sub_F4A5B5:		; <- T_F40C00
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F4A64D  cp (0x0d4a),0x00
 	jr	nz, 12	; F4A652  jr NZ,0xf4a660
 	calr	168	; F4A654  calr 0xf4a6ff
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4A657  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4A657  or (0x34d4),0x10
 	call	15993516	; F4A65C  call 0xf40aac
 	ret	; F4A660  ret
 
@@ -79450,7 +79450,7 @@ sub_F4A661:		; <- T_F40BE0
 	calr	128	; F4A664  calr 0xf4a6e7
 	m_bit 1, MD16, 0x34d9	; F4A667  bit 1,(0x34d9)
 	jr	nz, 5	; F4A66B  jr NZ,0xf4a672
-	.byte 0xC1, 0xD4, 0x34, 0x3C, 0xF7	; F4A66D  and (0x34d4),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d4, 0xf7	; F4A66D  and (0x34d4),0xf7
 	xor	wa, wa	; F4A672  xor WA,WA
 	cp	a, 17	; F4A674  cp A,0x11
 	jr	nc, 72	; F4A677  jr NC,0xf4a6c1
@@ -79484,7 +79484,7 @@ sub_F4A661:		; <- T_F40BE0
 	.byte 0xDA, 0x2C	; F4A6B9  stcf A,DE   [llvm-mc cannot encode this]
 	stw_da	(6304800), de	; F4A6BB  ld (0x603420),DE
 	popw	wa	; F4A6C0  pop WA
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4A6C1  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4A6C1  or (0x34d4),0x10
 	call	15993296	; F4A6C6  call 0xf409d0
 	call	15995320	; F4A6CA  call 0xf411b8
 	ret	; F4A6CE  ret
@@ -79656,7 +79656,7 @@ sub_F4A7FE:
 	calr	65249	; F4A803  calr 0xf4a6e7
 	calr	65222	; F4A806  calr 0xf4a6cf
 	call	15993352	; F4A809  call 0xf40a08
-	.byte 0xC1, 0xD1, 0x34, 0x3E, 0x10	; F4A80D  or (0x34d1),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d1, 0x10	; F4A80D  or (0x34d1),0x10
 	ret	; F4A812  ret
 
 ; --------------------------------------------------------------------------
@@ -79699,7 +79699,7 @@ sub_F4A82C:
 	stda16	(14076), ix	; F4A83E  ld (0x36fc),IX
 	ld	hl, ix	; F4A842  ld HL,IX
 	call	15993988	; F4A844  call 0xf40c84
-	.byte 0x83, 0x3E, 0x80	; F4A848  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F4A848  or (XHL),0x80
 	.byte 0xBB, 0x01, 0x02, 0x00, 0x00	; F4A84B  ld (XHL+0x01),0x0000   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F4A850  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
 	add	xhl, 5	; F4A855  add XHL,0x00000005
@@ -80145,7 +80145,7 @@ sub_F4AB8A:
 	stda16	(14074), ix	; F4AB9C  ld (0x36fa),IX
 	ld	hl, ix	; F4ABA0  ld HL,IX
 	call	15993988	; F4ABA2  call 0xf40c84
-	.byte 0x83, 0x3E, 0x80	; F4ABA6  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F4ABA6  or (XHL),0x80
 	.byte 0xBB, 0x01, 0x02, 0x00, 0x00	; F4ABA9  ld (XHL+0x01),0x0000   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F4ABAE  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
 	add	xhl, 5	; F4ABB3  add XHL,0x00000005
@@ -80690,7 +80690,7 @@ sub_F4AFD5:
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F4B077  cp (0x0d4a),0x00
 	jr	nz, 12	; F4B07C  jr NZ,0xf4b08a
 	calr	63102	; F4B07E  calr 0xf4a6ff
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4B081  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4B081  or (0x34d4),0x10
 	call	15993516	; F4B086  call 0xf40aac
 	ret	; F4B08A  ret
 
@@ -81400,7 +81400,7 @@ sub_F4B69F:
 	call	15993992	; F4B6D3  call 0xf40c88
 	ld	hl, ix	; F4B6D7  ld HL,IX
 	call	15993988	; F4B6D9  call 0xf40c84
-	.byte 0x83, 0x3E, 0x80	; F4B6DD  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F4B6DD  or (XHL),0x80
 	ldw_d16	wa, (14142)	; F4B6E0  ld WA,(0x373e)
 	ld	(xhl+1), wa	; F4B6E4  ld (XHL+0x01),WA
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F4B6E7  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
@@ -81761,7 +81761,7 @@ sub_F4C3F2:		; <- T_F434F0
 	and	c, 194	; F4C41B  and C,0xc2
 	jr	nz, 12	; F4C41E  jr NZ,0xf4c42c
 	m_set 7, MD16, 0x2075	; F4C420  set 7,(0x2075)
-	.byte 0x84, 0x3E, 0x40	; F4C424  or (XIX),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x40	; F4C424  or (XIX),0x40
 	stdi8	(8304), 173	; F4C427  ld (0x2070),0xad
 	pop	xix	; F4C42C  pop XIX
 	ret	; F4C42D  ret
@@ -82378,7 +82378,7 @@ sub_F4C901:
 	ldw	bc, 256	; F4C904  ld BC,0x0100
 	.byte 0x85, 0x11	; F4C907  ldir   [llvm-mc cannot encode this]
 	pop	xiy	; F4C909  pop XIY
-	.byte 0x8D, 0x00, 0x3C, 0x7F	; F4C90A  and (XIY+0x00),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r5, 0x00, 0x7f	; F4C90A  and (XIY+0x00),0x7f
 	pop	xix	; F4C90E  pop XIX
 	popw	bc	; F4C90F  pop BC
 	ret	; F4C910  ret
@@ -82522,7 +82522,7 @@ sub_F4C9B4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4CA0A:
-	.byte 0x8B, 0x00, 0x3C, 0x7F	; F4CA0A  and (XHL+0x00),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r3, 0x00, 0x7f	; F4CA0A  and (XHL+0x00),0x7f
 	incdi16_24	1, (6304954)	; F4CA0E  incw 1,(0x6034ba)
 	ld	(xhl+1), iy	; F4CA13  ld (XHL+0x01),IY
 	ld	(xhl+3), ix	; F4CA16  ld (XHL+0x03),IX
@@ -82583,7 +82583,7 @@ sub_F4CA64:		; <- T_F414B8
 	xor	xwa, xwa	; F4CA7C  xor XWA,XWA
 	stl_da	(6304977), xwa	; F4CA7E  ld (0x6034d1),XWA
 	stdi16	(13650), 1	; F4CA83  ld (0x3552),0x0001
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F4CA89  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F4CA89  and (0x34bb),0xf7
 	calr	64883	; F4CA8E  calr 0xf4c804
 	ret	; F4CA91  ret
 
@@ -82643,7 +82643,7 @@ sub_F4CADA:		; <- T_F414C0
 	xor	xwa, xwa	; F4CAFD  xor XWA,XWA
 	ld	(xde), xwa	; F4CAFF  ld (XDE),XWA
 	stdi16	(13650), 1	; F4CB01  ld (0x3552),0x0001
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F4CB07  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F4CB07  and (0x34bb),0xf7
 	ret	; F4CB0C  ret
 
 ; --------------------------------------------------------------------------
@@ -83048,12 +83048,12 @@ sub_F4D0FB:		; <- T_F40C58
 	ld	xhl, 6293504	; F4D14C  ld XHL,0x00600800
 	ld	(xhl+2), iy	; F4D151  ld (XHL+0x02),IY
 	ret	; F4D154  ret
-	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xFB	; F4D155  and (0x34d1),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d1, 0xfb	; F4D155  and (0x34d1),0xfb
 	ld	xhl, 6293504	; F4D15A  ld XHL,0x00600800
 	ld	wa, (xhl+8)	; F4D15F  ld WA,(XHL+0x08)
 	cp	wa, 10	; F4D162  cp WA,0x000a
 	jr	ugt, 5	; F4D166  jr UGT,0xf4d16d
-	.byte 0xC1, 0xD1, 0x34, 0x3E, 0x04	; F4D168  or (0x34d1),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d1, 0x04	; F4D168  or (0x34d1),0x04
 	ret	; F4D16D  ret
 	xor	xwa, xwa	; F4D16E  xor XWA,XWA
 	stda32	(12304), xwa	; F4D170  ld (0x3010),XWA
@@ -83065,7 +83065,7 @@ sub_F4D0FB:		; <- T_F40C58
 	cp	a, 17	; F4D180  cp A,0x11
 	jr	ugt, 24	; F4D183  jr UGT,0xf4d19d
 	ld	xix, 6305024	; F4D185  ld XIX,0x00603500
-	.byte 0xC3, 0x07, 0xF0, 0xF4, 0x3C, 0x7F	; F4D18A  and (XIX+IY),0x7f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_IX, ra_IY, 0x7f	; F4D18A  and (XIX+IY),0x7f
 	inc	1, iy	; F4D190  inc 1,IY
 	.byte 0xF3, 0x07, 0xF0, 0xF4, 0x02, 0xFF, 0xFF	; F4D192  ld (XIX+IY),0xffff   [llvm-mc cannot encode this]
 	inc	2, iy	; F4D199  inc 2,IY
@@ -83294,7 +83294,7 @@ sub_F4D346:
 	ld	xix, 6305024	; F4D3B1  ld XIX,0x00603500
 	mx_bit 7, MXD, ra_IX, ra_IY	; F4D3B6  bit 7,(XIX+IY)
 	jr	z, 35	; F4D3BB  jr Z,0xf4d3e0
-	.byte 0xC3, 0x07, 0xF0, 0xF4, 0x3C, 0x7F	; F4D3BD  and (XIX+IY),0x7f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_IX, ra_IY, 0x7f	; F4D3BD  and (XIX+IY),0x7f
 	inc	1, iy	; F4D3C3  inc 1,IY
 	.byte 0xD3, 0x07, 0xF0, 0xF4, 0x20	; F4D3C5  ld WA,(XIX+IY)   [llvm-mc cannot encode this]
 	cp	wa, 65535	; F4D3CA  cp WA,0xffff
@@ -83753,7 +83753,7 @@ sub_F4D7BD:
 	ldw_d16	bc, (13832)	; F4D7D1  ld BC,(0x3608)
 	stw_da	(6304954), bc	; F4D7D5  ld (0x6034ba),BC
 	dec	1, bc	; F4D7DA  dec 1,BC
-	.byte 0x85, 0x3C, 0x7F	; F4D7DC  and (XIY),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r5, 0, 0x7f	; F4D7DC  and (XIY),0x7f
 	ld	(xiy+1), hl	; F4D7DF  ld (XIY+0x01),HL
 	ld	(xiy+3), de	; F4D7E2  ld (XIY+0x03),DE
 	ld	(xiy+5), 130	; F4D7E5  ld (XIY+0x05),0x82
@@ -83761,7 +83761,7 @@ sub_F4D7BD:
 	inc	1, de	; F4D7EB  inc 1,DE
 	add	xiy, 256	; F4D7ED  add XIY,0x00000100
 	djnz16	bc, -26	; F4D7F3  djnz BC,0xf4d7dc
-	.byte 0x85, 0x3C, 0x7F	; F4D7F6  and (XIY),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r5, 0, 0x7f	; F4D7F6  and (XIY),0x7f
 	ld	(xiy+1), hl	; F4D7F9  ld (XIY+0x01),HL
 	.byte 0xBD, 0x03, 0x02, 0xFF, 0xFF	; F4D7FC  ld (XIY+0x03),0xffff   [llvm-mc cannot encode this]
 	ld	(xiy+5), 130	; F4D801  ld (XIY+0x05),0x82
@@ -83819,7 +83819,7 @@ sub_F4D861:
 	.byte 0xBB, 0x01, 0x02, 0x00, 0x00	; F4D884  ld (XHL+0x01),0x0000   [llvm-mc cannot encode this]
 	ld	iy, ix	; F4D889  ld IY,IX
 	calr	167	; F4D88B  calr 0xf4d935
-	.byte 0x83, 0x3E, 0x80	; F4D88E  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F4D88E  or (XHL),0x80
 	decdi16_24	1, (6304954)	; F4D891  decw 1,(0x6034ba)
 	ldb	w, 0	; F4D896  ld W,0x00
 	ret	; F4D898  ret
@@ -83857,7 +83857,7 @@ sub_F4D89D:
 	ld	iy, (xhl+3)	; F4D8CD  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F4D8D0  cp IY,0xffff
 	jr	z, 23	; F4D8D4  jr Z,0xf4d8ed
-	.byte 0x83, 0x3C, 0x7F	; F4D8D6  and (XHL),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r3, 0, 0x7f	; F4D8D6  and (XHL),0x7f
 	ld	(xhl+5), 130	; F4D8D9  ld (XHL+0x05),0x82
 	inc	1, wa	; F4D8DD  inc 1,WA
 	m_cp_rm MW16, 0x0c88, 0	; F4D8DF  cp WA,(0x0c88)
@@ -83874,7 +83874,7 @@ sub_F4D89D:
 	ld	(xhl+3), iy	; F4D8F8  ld (XHL+0x03),IY
 	ld	iy, ix	; F4D8FB  ld IY,IX
 	calr	53	; F4D8FD  calr 0xf4d935
-	.byte 0x83, 0x3C, 0x7F	; F4D900  and (XHL),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r3, 0, 0x7f	; F4D900  and (XHL),0x7f
 	ld	(xhl+5), 130	; F4D903  ld (XHL+0x05),0x82
 	ld	(xhl+3), bc	; F4D907  ld (XHL+0x03),BC
 	ld	iy, bc	; F4D90A  ld IY,BC
@@ -83890,7 +83890,7 @@ sub_F4D89D:
 	jr	nz, -82	; F4D926  jr NZ,0xf4d8d6
 	stdi16	(3208), 0	; F4D928  ld (0x0c88),0x0000
 	ld	iy, ix	; F4D92E  ld IY,IX
-	.byte 0x83, 0x3C, 0x7F	; F4D930  and (XHL),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r3, 0, 0x7f	; F4D930  and (XHL),0x7f
 	jr	-78	; F4D933  jr T,0xf4d8e7
 
 ; --------------------------------------------------------------------------
@@ -84179,7 +84179,7 @@ sub_F4E1B2:		; <- T_F40CC0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4E1B6:
-	.byte 0xC1, 0xB5, 0x0D, 0x3C, 0xFE	; F4E1B6  and (0x0db5),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0db5, 0xfe	; F4E1B6  and (0x0db5),0xfe
 	xor	bc, bc	; F4E1BB  xor BC,BC
 	xor	xwa, xwa	; F4E1BD  xor XWA,XWA
 	ldda32	xwa, (12288)	; F4E1BF  ld XWA,(0x3000)
@@ -84236,7 +84236,7 @@ sub_F4E1B6:
 	ld	xix, 16049628	; F4E234  ld XIX,0x00f4e5dc
 	.byte 0xC3, 0x07, 0xF0, 0xF4, 0x21	; F4E239  ld A,(XIX+IY)   [llvm-mc cannot encode this]
 	stb_d8	(8784), a	; F4E23E  ld (0x2250),A
-	.byte 0xC1, 0xB5, 0x0D, 0x3E, 0x01	; F4E242  or (0x0db5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0db5, 0x01	; F4E242  or (0x0db5),0x01
 	ldb	w, 255	; F4E247  ld W,0xff
 	ldw	de, 4240	; F4E249  ld DE,0x1090
 	call	15994684	; F4E24C  call 0xf40f3c
@@ -84264,7 +84264,7 @@ sub_F4E259:
 	ldda32	xwa, (12288)	; F4E25D  ld XWA,(0x3000)
 	cp	xwa, 0	; F4E261  cp XWA,0x00000000
 	jr	nz, 5	; F4E267  jr NZ,0xf4e26e
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F4E269  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F4E269  and (0x34bb),0xfb
 	m_cp_mi8 MB16, 0x207a, 0x06	; F4E26E  cp (0x207a),0x06
 	jr	nz, 12	; F4E273  jr NZ,0xf4e281
 	m_bit 1, MD16, 0x360b	; F4E275  bit 1,(0x360b)
@@ -84306,7 +84306,7 @@ sub_F4E259:
 	stdi8	(3077), 228	; F4E2DC  ld (0x0c05),0xe4
 	call	15993364	; F4E2E1  call 0xf40a14
 	jr	24	; F4E2E5  jr T,0xf4e2ff
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4E2E7  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4E2E7  or (0x34d4),0x10
 	call	15993296	; F4E2EC  call 0xf409d0
 	calr	28	; F4E2F0  calr 0xf4e30f
 	cps	a, 0	; F4E2F3  cp A,0
@@ -84373,7 +84373,7 @@ sub_F4E32A:		; <- T_F40D64
 	.byte 0xDA, 0x2C	; F4E34F  stcf A,DE   [llvm-mc cannot encode this]
 	stw_da	(6304800), de	; F4E351  ld (0x603420),DE
 	call	15994384	; F4E356  call 0xf40e10
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4E35A  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4E35A  or (0x34d4),0x10
 	pushw	bc	; F4E35F  push BC
 	call	15995320	; F4E360  call 0xf411b8
 	popw	bc	; F4E364  pop BC
@@ -84445,7 +84445,7 @@ sub_F4E390:		; <- T_F40D6C
 	jr	nz, 12	; F4E3ED  jr NZ,0xf4e3fb
 	m_cp_mi8 MB16, 0x2078, 0x08	; F4E3EF  cp (0x2078),0x08
 	jr	nz, 5	; F4E3F4  jr NZ,0xf4e3fb
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F4E3F6  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F4E3F6  or (0x2071),0x10
 	ldb_d8	c, (14134)	; F4E3FB  ld C,(0x3736)
 	xor	xwa, xwa	; F4E3FF  xor XWA,XWA
 	cp	c, 16	; F4E401  cp C,0x10
@@ -84483,11 +84483,11 @@ sub_F4E426:		; <- T_F40D60
 	ldl_da	xwa, (6304798)	; F4E426  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E42B  cp XWA,0x00000000
 	jr	nz, 11	; F4E431  jr NZ,0xf4e43e
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F4E433  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F4E433  and (0x34bb),0xf7
 	pushw	bc	; F4E438  push BC
 	call	15993260	; F4E439  call 0xf409ac
 	popw	bc	; F4E43D  pop BC
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4E43E  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4E43E  or (0x34d4),0x10
 	ldb_d8	c, (14134)	; F4E443  ld C,(0x3736)
 	cp	c, 16	; F4E447  cp C,0x10
 	jr	nc, 17	; F4E44A  jr NC,0xf4e45d
@@ -84524,8 +84524,8 @@ sub_F4E478:		; <- T_F40D68
 	ldl_da	xwa, (6304798)	; F4E47C  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E481  cp XWA,0x00000000
 	jr	nz, 10	; F4E487  jr NZ,0xf4e493
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F4E489  and (0x34bb),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4E48E  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F4E489  and (0x34bb),0xf7
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4E48E  or (0x34d4),0x10
 	cp	c, 16	; F4E493  cp C,0x10
 	jr	nc, 17	; F4E496  jr NC,0xf4e4a9
 	ldw_da	de, (6304798)	; F4E498  ld DE,(0x60341e)
@@ -84582,7 +84582,7 @@ sub_F4E4C8:
 	stb_d8	(3675), a	; F4E4E6  ld (0x0e5b),A
 	inc	1, e	; F4E4EA  inc 1,E
 	stb_d8	(3676), e	; F4E4EC  ld (0x0e5c),E
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F4E4F0  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F4E4F0  or (0x2095),0x10
 	ret	; F4E4F5  ret
 
 ; --------------------------------------------------------------------------
@@ -84620,8 +84620,8 @@ sub_F4E50B:
 	sla	hl, 1	; F4E50D  sla 0x01,HL
 	ld	xix, 16049660	; F4E510  ld XIX,0x00f4e5fc
 	.byte 0xD3, 0x07, 0xF0, 0xEC, 0x23	; F4E515  ld HL,(XIX+HL)   [llvm-mc cannot encode this]
-	.byte 0xD1, 0xBE, 0x0D, 0xDB	; F4E51A  xor (0x0dbe),HL   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F4E51E  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_xor_mr MW16, 0x0dbe, 3	; F4E51A  xor (0x0dbe),HL
+	m_or_mi8 MB16, 0x2095, 0x10	; F4E51E  or (0x2095),0x10
 	ret	; F4E523  ret
 
 ; --------------------------------------------------------------------------
@@ -84867,7 +84867,7 @@ sub_F4EC00:		; <- T_F40CE0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4EC25:		; <- T_F40CE4
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F4EC25  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F4EC25  and (0x34bb),0xfb
 	ret	; F4EC2A  ret
 
 ; --------------------------------------------------------------------------
@@ -84899,12 +84899,12 @@ sub_F4EC2B:		; <- T_F40CE8
 ; --------------------------------------------------------------------------
 sub_F4EC2F:
 	stdi16	(13650), 1	; F4EC2F  ld (0x3552),0x0001
-	.byte 0xC1, 0xD3, 0x34, 0x3E, 0x02	; F4EC35  or (0x34d3),0x02   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x08	; F4EC3A  or (0x34bb),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d3, 0x02	; F4EC35  or (0x34d3),0x02
+	m_or_mi8 MB16, 0x34bb, 0x08	; F4EC3A  or (0x34bb),0x08
 	m_cp_mi16 MW16, 0x3552, 0x0001	; F4EC3F  cp (0x3552),0x0001
 	jr	nz, 5	; F4EC45  jr NZ,0xf4ec4c
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F4EC47  and (0x34bb),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4EC4C  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F4EC47  and (0x34bb),0xf7
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4EC4C  or (0x34d4),0x10
 	call	15993260	; F4EC51  call 0xf409ac
 	ret	; F4EC55  ret
 
@@ -84931,8 +84931,8 @@ sub_F4EC56:		; <- T_F40CEC
 	call	15993304	; F4EC6F  call 0xf409d8
 	call	15993260	; F4EC73  call 0xf409ac
 	call	15994036	; F4EC77  call 0xf40cb4
-	.byte 0xC1, 0xB5, 0x0D, 0x3C, 0xFE	; F4EC7B  and (0x0db5),0xfe   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD3, 0x34, 0x3C, 0xFD	; F4EC80  and (0x34d3),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0db5, 0xfe	; F4EC7B  and (0x0db5),0xfe
+	m_and_mi8 MB16, 0x34d3, 0xfd	; F4EC80  and (0x34d3),0xfd
 	call	15993360	; F4EC85  call 0xf40a10
 	ret	; F4EC89  ret
 
@@ -84948,7 +84948,7 @@ sub_F4EC56:		; <- T_F40CEC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4EC8A:		; <- T_F40CF0
-	.byte 0xC1, 0xD2, 0x34, 0x3C, 0x7F	; F4EC8A  and (0x34d2),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d2, 0x7f	; F4EC8A  and (0x34d2),0x7f
 	stdi8	(13498), 255	; F4EC8F  ld (0x34ba),0xff
 	stdi8	(3074), 0	; F4EC94  ld (0x0c02),0x00
 	ret	; F4EC99  ret
@@ -85013,7 +85013,7 @@ sub_F4ECA9:		; <- T_F40CF8
 	inc	1, c	; F4ECF4  inc 1,C
 	cps	c, 4	; F4ECF6  cp C,4
 	jr	ule, -52	; F4ECF8  jr ULE,0xf4ecc6
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F4ECFA  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F4ECFA  or (0x34d4),0x10
 	call	15993296	; F4ECFF  call 0xf409d0
 	call	15995320	; F4ED03  call 0xf411b8
 	call	15994048	; F4ED07  call 0xf40cc0
@@ -85057,7 +85057,7 @@ sub_F4ED10:
 	jr	z, 2	; F4ED23  jr Z,0xf4ed27
 	jr	64	; F4ED25  jr T,0xf4ed67
 	ldw_d16	wa, (8328)	; F4ED27  ld WA,(0x2088)
-	.byte 0xD1, 0x84, 0x20, 0xC0	; F4ED2B  and WA,(0x2084)   [llvm-mc cannot encode this]
+	m_and_rm MW16, 0x2084, 0	; F4ED2B  and WA,(0x2084)
 	bit	8, wa	; F4ED2F  bit 0x08,WA
 	jr	nz, 41	; F4ED32  jr NZ,0xf4ed5d
 	bit	9, wa	; F4ED34  bit 0x09,WA
@@ -85075,7 +85075,7 @@ sub_F4ED10:
 	jr	nz, 2	; F4ED59  jr NZ,0xf4ed5d
 	jr	10	; F4ED5B  jr T,0xf4ed67
 	stdi8	(3077), 228	; F4ED5D  ld (0x0c05),0xe4
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F4ED62  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F4ED62  or (0x34bb),0x04
 	m_bit 7, MD16, 0x0c05	; F4ED67  bit 7,(0x0c05)
 	jr	z, 22	; F4ED6B  jr Z,0xf4ed83
 	m_cp_mi8 MB16, 0x0c05, 0x80	; F4ED6D  cp (0x0c05),0x80
@@ -85118,7 +85118,7 @@ sub_F4ED84:		; <- T_F40D00
 	jr	c, 3	; F4EDB7  jr C,0xf4edbc
 	ldw	wa, 99	; F4EDB9  ld WA,0x0063
 	stda16	(3080), wa	; F4EDBC  ld (0x0c08),WA
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F4EDC0  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F4EDC0  or (0x2095),0x10
 	ret	; F4EDC5  ret
 
 ; --------------------------------------------------------------------------
@@ -85177,11 +85177,11 @@ sub_F4EDC6:
 	stdi16	(13650), 999	; F4EE4A  ld (0x3552),0x03e7
 	stdi8	(3077), 228	; F4EE50  ld (0x0c05),0xe4
 	call	15993364	; F4EE55  call 0xf40a14
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F4EE59  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F4EE59  or (0x2075),0x09
 	stdi16	(8347), 34953	; F4EE5E  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	bit_dd8	2, 150	; F4EE64  bit 2,(0x96)
 	jr	z, 5	; F4EE67  jr Z,0xf4ee6e
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F4EE69  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F4EE69  and (0x2075),0xf6
 	ret	; F4EE6E  ret
 
 ; --------------------------------------------------------------------------
@@ -85226,9 +85226,9 @@ sub_F4EE73:
 	jr	z, 18	; F4EE98  jr Z,0xf4eeac
 	m_bit 0, MD16, 0x34d9	; F4EE9A  bit 0,(0x34d9)
 	jr	z, 7	; F4EE9E  jr Z,0xf4eea7
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0xFE	; F4EEA0  and (0x34d9),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d9, 0xfe	; F4EEA0  and (0x34d9),0xfe
 	jr	5	; F4EEA5  jr T,0xf4eeac
-	.byte 0xC1, 0xD9, 0x34, 0x3E, 0x01	; F4EEA7  or (0x34d9),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d9, 0x01	; F4EEA7  or (0x34d9),0x01
 	ret	; F4EEAC  ret
 
 ; --------------------------------------------------------------------------
@@ -85337,7 +85337,7 @@ sub_F4EEF3:		; <- T_F40D18
 	jr	z, 7	; F4EF20  jr Z,0xf4ef29
 	m_cp_mi8 MB16, 0x207a, 0x09	; F4EF22  cp (0x207a),0x09
 	jr	nz, 5	; F4EF27  jr NZ,0xf4ef2e
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F4EF29  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F4EF29  or (0x2095),0x10
 	ret	; F4EF2E  ret
 
 ; --------------------------------------------------------------------------
@@ -88171,7 +88171,7 @@ LcdKeyRow1_DrawbarScreen:
 	jr	13	; F53152  jr T,0xf53161
 	m_cp_mi8 MB16, 0x289e, 0x00	; F53154  cp (0x289e),0x00
 	jr	nz, 6	; F53159  jr NZ,0xf53161
-	.byte 0x84, 0x3C, 0xFE	; F5315B  and (XIX),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xfe	; F5315B  and (XIX),0xfe
 	calr	221	; F5315E  calr 0xf5323e
 	pop	xix	; F53161  pop XIX
 	ret	; F53162  ret
@@ -88232,7 +88232,7 @@ LcdKeyRow2_DrawbarScreen:
 	jr	24	; F53172  jr T,0xf5318c
 	m_cp_mi8 MB16, 0x289e, 0x00	; F53174  cp (0x289e),0x00
 	jr	nz, 8	; F53179  jr NZ,0xf53183
-	.byte 0x84, 0x3E, 0x01	; F5317B  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F5317B  or (XIX),0x01
 	calr	189	; F5317E  calr 0xf5323e
 	jr	9	; F53181  jr T,0xf5318c
 	m_set 7, MD16, 0x2071	; F53183  set 7,(0x2071)
@@ -88294,11 +88294,11 @@ LcdKeyRow4_DrawbarScreen:
 	ld	c, (xix)	; F5319A  ld C,(XIX)
 	and	c, 1	; F5319C  and C,0x01
 	jr	z, 8	; F5319F  jr Z,0xf531a9
-	.byte 0x84, 0x3C, 0xFE	; F531A1  and (XIX),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xfe	; F531A1  and (XIX),0xfe
 	calr	78	; F531A4  calr 0xf531f5
 	jr	10	; F531A7  jr T,0xf531b3
 	m_set 0, MD16, 0x2075	; F531A9  set 0,(0x2075)
-	.byte 0x84, 0x3C, 0xFE	; F531AD  and (XIX),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xfe	; F531AD  and (XIX),0xfe
 	calr	41	; F531B0  calr 0xf531dc
 	pop	xix	; F531B3  pop XIX
 	ret	; F531B4  ret
@@ -88355,11 +88355,11 @@ LcdKeyRow5_DrawbarScreen:
 	ld	c, (xix)	; F531C1  ld C,(XIX)
 	and	c, 1	; F531C3  and C,0x01
 	jr	z, 8	; F531C6  jr Z,0xf531d0
-	.byte 0x84, 0x3E, 0x01	; F531C8  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F531C8  or (XIX),0x01
 	calr	39	; F531CB  calr 0xf531f5
 	jr	10	; F531CE  jr T,0xf531da
 	m_set 0, MD16, 0x2075	; F531D0  set 0,(0x2075)
-	.byte 0x84, 0x3E, 0x01	; F531D4  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F531D4  or (XIX),0x01
 	calr	2	; F531D7  calr 0xf531dc
 	pop	xix	; F531DA  pop XIX
 	ret	; F531DB  ret
@@ -88452,9 +88452,9 @@ sub_F5323E:
 	ldb_d8	c, (10416)	; F53243  ld C,(0x28b0)
 	and	c, 1	; F53247  and C,0x01
 	jr	z, 5	; F5324A  jr Z,0xf53251
-	.byte 0x84, 0x3D, 0x10	; F5324C  xor (XIX),0x10   [llvm-mc cannot encode this]
+	m_xor_mi8 MBI+r4, 0, 0x10	; F5324C  xor (XIX),0x10
 	jr	3	; F5324F  jr T,0xf53254
-	.byte 0x84, 0x3D, 0x20	; F53251  xor (XIX),0x20   [llvm-mc cannot encode this]
+	m_xor_mi8 MBI+r4, 0, 0x20	; F53251  xor (XIX),0x20
 	push	0	; F53254  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F53256  push (0x289c)   [llvm-mc cannot encode this]
 	calr	3889	; F5325A  calr 0xf5418e
@@ -88487,7 +88487,7 @@ sub_F53264:
 	dec	1, c	; F53281  dec 1,C
 	sll	c, 4	; F53283  sll 0x04,C
 	and	c, 240	; F53286  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53289  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53289  and (XIX),0x0f
 	or	(xix), c	; F5328C  or (XIX),C
 	jr	27	; F5328E  jr T,0xf532ab
 	ld	c, (xix)	; F53290  ld C,(XIX)
@@ -88499,7 +88499,7 @@ sub_F53264:
 	inc	1, c	; F5329E  inc 1,C
 	sll	c, 4	; F532A0  sll 0x04,C
 	and	c, 240	; F532A3  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F532A6  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F532A6  and (XIX),0x0f
 	or	(xix), c	; F532A9  or (XIX),C
 	m_set 3, MD16, 0x2075	; F532AB  set 3,(0x2075)
 	push	0	; F532AF  push 0x00
@@ -88535,7 +88535,7 @@ sub_F532BF:
 	sra	c, 4	; F532DF  sra 0x04,C
 	dec	1, c	; F532E2  dec 1,C
 	and	c, 15	; F532E4  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F532E7  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F532E7  and (XIX),0xf0
 	or	(xix), c	; F532EA  or (XIX),C
 	jr	30	; F532EC  jr T,0xf5330c
 	ld	c, (xix)	; F532EE  ld C,(XIX)
@@ -88548,7 +88548,7 @@ sub_F532BF:
 	sra	c, 4	; F532FF  sra 0x04,C
 	inc	1, c	; F53302  inc 1,C
 	and	c, 15	; F53304  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53307  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53307  and (XIX),0xf0
 	or	(xix), c	; F5330A  or (XIX),C
 	m_set 3, MD16, 0x2075	; F5330C  set 3,(0x2075)
 	push	0	; F53310  push 0x00
@@ -88584,7 +88584,7 @@ sub_F53320:
 	sra	c, 4	; F53340  sra 0x04,C
 	dec	1, c	; F53343  dec 1,C
 	and	c, 15	; F53345  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53348  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53348  and (XIX),0xf0
 	or	(xix), c	; F5334B  or (XIX),C
 	jr	30	; F5334D  jr T,0xf5336d
 	ld	c, (xix)	; F5334F  ld C,(XIX)
@@ -88597,7 +88597,7 @@ sub_F53320:
 	sra	c, 4	; F53360  sra 0x04,C
 	inc	1, c	; F53363  inc 1,C
 	and	c, 15	; F53365  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53368  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53368  and (XIX),0xf0
 	or	(xix), c	; F5336B  or (XIX),C
 	m_set 3, MD16, 0x2075	; F5336D  set 3,(0x2075)
 	push	0	; F53371  push 0x00
@@ -88632,7 +88632,7 @@ sub_F53381:
 	dec	1, c	; F5339E  dec 1,C
 	sll	c, 4	; F533A0  sll 0x04,C
 	and	c, 240	; F533A3  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F533A6  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F533A6  and (XIX),0x0f
 	or	(xix), c	; F533A9  or (XIX),C
 	jr	27	; F533AB  jr T,0xf533c8
 	ld	c, (xix)	; F533AD  ld C,(XIX)
@@ -88644,7 +88644,7 @@ sub_F53381:
 	inc	1, c	; F533BB  inc 1,C
 	sll	c, 4	; F533BD  sll 0x04,C
 	and	c, 240	; F533C0  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F533C3  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F533C3  and (XIX),0x0f
 	or	(xix), c	; F533C6  or (XIX),C
 	m_set 3, MD16, 0x2075	; F533C8  set 3,(0x2075)
 	push	0	; F533CC  push 0x00
@@ -88754,7 +88754,7 @@ SoftKeyCol1_DrawbarScreen:
 	cp	a, c	; F53424  cp A,C
 	jr	z, 36	; F53426  jr Z,0xf5344c
 	and	a, 15	; F53428  and A,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F5342B  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F5342B  and (XIX),0xf0
 	or	(xix), a	; F5342E  or (XIX),A
 	push	0	; F53430  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F53432  push (0x289c)   [llvm-mc cannot encode this]
@@ -88836,7 +88836,7 @@ SoftKeyCol2_DrawbarScreen:
 	cp	a, c	; F53466  cp A,C
 	jr	z, 36	; F53468  jr Z,0xf5348e
 	and	a, 15	; F5346A  and A,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F5346D  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F5346D  and (XIX),0xf0
 	or	(xix), a	; F53470  or (XIX),A
 	push	0	; F53472  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F53474  push (0x289c)   [llvm-mc cannot encode this]
@@ -88921,7 +88921,7 @@ SoftKeyCol3_DrawbarScreen:
 	jr	z, 39	; F534B0  jr Z,0xf534d9
 	sll	a, 4	; F534B2  sll 0x04,A
 	and	a, 240	; F534B5  and A,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F534B8  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F534B8  and (XIX),0x0f
 	or	(xix), a	; F534BB  or (XIX),A
 	push	0	; F534BD  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F534BF  push (0x289c)   [llvm-mc cannot encode this]
@@ -89006,7 +89006,7 @@ SoftKeyCol4_DrawbarScreen:
 	jr	z, 39	; F534FB  jr Z,0xf53524
 	sll	a, 4	; F534FD  sll 0x04,A
 	and	a, 240	; F53500  and A,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53503  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53503  and (XIX),0x0f
 	or	(xix), a	; F53506  or (XIX),A
 	push	0	; F53508  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F5350A  push (0x289c)   [llvm-mc cannot encode this]
@@ -89086,7 +89086,7 @@ SoftKeyCol5_DrawbarScreen:
 	cp	a, c	; F5353E  cp A,C
 	jr	z, 36	; F53540  jr Z,0xf53566
 	and	a, 15	; F53542  and A,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53545  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53545  and (XIX),0xf0
 	or	(xix), a	; F53548  or (XIX),A
 	push	0	; F5354A  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F5354C  push (0x289c)   [llvm-mc cannot encode this]
@@ -89169,7 +89169,7 @@ SoftKeyCol6_DrawbarScreen:
 	jr	z, 39	; F53588  jr Z,0xf535b1
 	sll	a, 4	; F5358A  sll 0x04,A
 	and	a, 240	; F5358D  and A,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53590  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53590  and (XIX),0x0f
 	or	(xix), a	; F53593  or (XIX),A
 	push	0	; F53595  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F53597  push (0x289c)   [llvm-mc cannot encode this]
@@ -89249,7 +89249,7 @@ SoftKeyCol7_DrawbarScreen:
 	cp	a, c	; F535CB  cp A,C
 	jr	z, 36	; F535CD  jr Z,0xf535f3
 	and	a, 15	; F535CF  and A,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F535D2  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F535D2  and (XIX),0xf0
 	or	(xix), a	; F535D5  or (XIX),A
 	push	0	; F535D7  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F535D9  push (0x289c)   [llvm-mc cannot encode this]
@@ -89332,7 +89332,7 @@ SoftKeyCol8_DrawbarScreen:
 	jr	z, 39	; F53615  jr Z,0xf5363e
 	sll	a, 4	; F53617  sll 0x04,A
 	and	a, 240	; F5361A  and A,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F5361D  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F5361D  and (XIX),0x0f
 	or	(xix), a	; F53620  or (XIX),A
 	push	0	; F53622  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F53624  push (0x289c)   [llvm-mc cannot encode this]
@@ -89378,7 +89378,7 @@ PageKey_DrawbarScreen:
 	cp	a, c	; F53658  cp A,C
 	jr	z, 36	; F5365A  jr Z,0xf53680
 	and	a, 15	; F5365C  and A,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F5365F  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F5365F  and (XIX),0xf0
 	or	(xix), a	; F53662  or (XIX),A
 	push	0	; F53664  push 0x00
 	.byte 0xC1, 0x9C, 0x28, 0x04	; F53666  push (0x289c)   [llvm-mc cannot encode this]
@@ -89428,7 +89428,7 @@ ExitKey_DrawbarScreen:
 	stdi8	(8304), 1	; F536AB  ld (0x2070),0x01
 	jr	8	; F536B0  jr T,0xf536ba
 	stdi8	(10398), 0	; F536B2  ld (0x289e),0x00
-	.byte 0x84, 0x3E, 0x10	; F536B7  or (XIX),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x10	; F536B7  or (XIX),0x10
 	pop	xix	; F536BA  pop XIX
 	ret	; F536BB  ret
 
@@ -89745,14 +89745,14 @@ Drawbar1_16ft_Update:
 	and	c, 15	; F53978  and C,0x0f
 	inc	1, c	; F5397B  inc 1,C
 	and	c, 15	; F5397D  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53980  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53980  and (XIX),0xf0
 	or	(xix), c	; F53983  or (XIX),C
 	jr	15	; F53985  jr T,0xf53996
 	ld	c, (xix)	; F53987  ld C,(XIX)
 	and	c, 15	; F53989  and C,0x0f
 	dec	1, c	; F5398C  dec 1,C
 	and	c, 15	; F5398E  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53991  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53991  and (XIX),0xf0
 	or	(xix), c	; F53994  or (XIX),C
 	lda_24	xbc, (16070988)	; F53996  lda XBC,0xf5394c
 	push	xbc	; F5399B  push XBC
@@ -89818,14 +89818,14 @@ Drawbar2_5_1_3ft_Update:
 	and	c, 15	; F539EC  and C,0x0f
 	inc	1, c	; F539EF  inc 1,C
 	and	c, 15	; F539F1  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F539F4  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F539F4  and (XIX),0xf0
 	or	(xix), c	; F539F7  or (XIX),C
 	jr	15	; F539F9  jr T,0xf53a0a
 	ld	c, (xix)	; F539FB  ld C,(XIX)
 	and	c, 15	; F539FD  and C,0x0f
 	dec	1, c	; F53A00  dec 1,C
 	and	c, 15	; F53A02  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53A05  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53A05  and (XIX),0xf0
 	or	(xix), c	; F53A08  or (XIX),C
 	lda_24	xbc, (16071104)	; F53A0A  lda XBC,0xf539c0
 	push	xbc	; F53A0F  push XBC
@@ -89897,7 +89897,7 @@ Drawbar3_8ft_Update:
 	inc	1, c	; F53A72  inc 1,C
 	sll	c, 4	; F53A74  sll 0x04,C
 	and	c, 240	; F53A77  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53A7A  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53A7A  and (XIX),0x0f
 	or	(xix), c	; F53A7D  or (XIX),C
 	jr	21	; F53A7F  jr T,0xf53a96
 	ld	c, (xix)	; F53A81  ld C,(XIX)
@@ -89906,7 +89906,7 @@ Drawbar3_8ft_Update:
 	dec	1, c	; F53A89  dec 1,C
 	sll	c, 4	; F53A8B  sll 0x04,C
 	and	c, 240	; F53A8E  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53A91  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53A91  and (XIX),0x0f
 	or	(xix), c	; F53A94  or (XIX),C
 	lda_24	xbc, (16071220)	; F53A96  lda XBC,0xf53a34
 	push	xbc	; F53A9B  push XBC
@@ -89979,7 +89979,7 @@ Drawbar4_4ft_Update:
 	inc	1, c	; F53B01  inc 1,C
 	sll	c, 4	; F53B03  sll 0x04,C
 	and	c, 240	; F53B06  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53B09  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53B09  and (XIX),0x0f
 	or	(xix), c	; F53B0C  or (XIX),C
 	jr	21	; F53B0E  jr T,0xf53b25
 	ld	c, (xix)	; F53B10  ld C,(XIX)
@@ -89988,7 +89988,7 @@ Drawbar4_4ft_Update:
 	dec	1, c	; F53B18  dec 1,C
 	sll	c, 4	; F53B1A  sll 0x04,C
 	and	c, 240	; F53B1D  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53B20  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53B20  and (XIX),0x0f
 	or	(xix), c	; F53B23  or (XIX),C
 	lda_24	xbc, (16071363)	; F53B25  lda XBC,0xf53ac3
 	push	xbc	; F53B2A  push XBC
@@ -90055,14 +90055,14 @@ Drawbar5_2_2_3ft_Update:
 	and	c, 15	; F53B7E  and C,0x0f
 	inc	1, c	; F53B81  inc 1,C
 	and	c, 15	; F53B83  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53B86  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53B86  and (XIX),0xf0
 	or	(xix), c	; F53B89  or (XIX),C
 	jr	15	; F53B8B  jr T,0xf53b9c
 	ld	c, (xix)	; F53B8D  ld C,(XIX)
 	and	c, 15	; F53B8F  and C,0x0f
 	dec	1, c	; F53B92  dec 1,C
 	and	c, 15	; F53B94  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53B97  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53B97  and (XIX),0xf0
 	or	(xix), c	; F53B9A  or (XIX),C
 	lda_24	xbc, (16071506)	; F53B9C  lda XBC,0xf53b52
 	push	xbc	; F53BA1  push XBC
@@ -90134,7 +90134,7 @@ Drawbar6_2ft_Update:
 	inc	1, c	; F53C04  inc 1,C
 	sll	c, 4	; F53C06  sll 0x04,C
 	and	c, 240	; F53C09  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53C0C  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53C0C  and (XIX),0x0f
 	or	(xix), c	; F53C0F  or (XIX),C
 	jr	21	; F53C11  jr T,0xf53c28
 	ld	c, (xix)	; F53C13  ld C,(XIX)
@@ -90143,7 +90143,7 @@ Drawbar6_2ft_Update:
 	dec	1, c	; F53C1B  dec 1,C
 	sll	c, 4	; F53C1D  sll 0x04,C
 	and	c, 240	; F53C20  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53C23  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53C23  and (XIX),0x0f
 	or	(xix), c	; F53C26  or (XIX),C
 	lda_24	xbc, (16071622)	; F53C28  lda XBC,0xf53bc6
 	push	xbc	; F53C2D  push XBC
@@ -90210,14 +90210,14 @@ Drawbar7_1_3_5ft_Update:
 	and	c, 15	; F53C81  and C,0x0f
 	inc	1, c	; F53C84  inc 1,C
 	and	c, 15	; F53C86  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53C89  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53C89  and (XIX),0xf0
 	or	(xix), c	; F53C8C  or (XIX),C
 	jr	15	; F53C8E  jr T,0xf53c9f
 	ld	c, (xix)	; F53C90  ld C,(XIX)
 	and	c, 15	; F53C92  and C,0x0f
 	dec	1, c	; F53C95  dec 1,C
 	and	c, 15	; F53C97  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53C9A  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53C9A  and (XIX),0xf0
 	or	(xix), c	; F53C9D  or (XIX),C
 	lda_24	xbc, (16071765)	; F53C9F  lda XBC,0xf53c55
 	push	xbc	; F53CA4  push XBC
@@ -90289,7 +90289,7 @@ Drawbar8_1_1_3ft_Update:
 	inc	1, c	; F53D07  inc 1,C
 	sll	c, 4	; F53D09  sll 0x04,C
 	and	c, 240	; F53D0C  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53D0F  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53D0F  and (XIX),0x0f
 	or	(xix), c	; F53D12  or (XIX),C
 	jr	21	; F53D14  jr T,0xf53d2b
 	ld	c, (xix)	; F53D16  ld C,(XIX)
@@ -90298,7 +90298,7 @@ Drawbar8_1_1_3ft_Update:
 	dec	1, c	; F53D1E  dec 1,C
 	sll	c, 4	; F53D20  sll 0x04,C
 	and	c, 240	; F53D23  and C,0xf0
-	.byte 0x84, 0x3C, 0x0F	; F53D26  and (XIX),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0x0f	; F53D26  and (XIX),0x0f
 	or	(xix), c	; F53D29  or (XIX),C
 	lda_24	xbc, (16071881)	; F53D2B  lda XBC,0xf53cc9
 	push	xbc	; F53D30  push XBC
@@ -90365,14 +90365,14 @@ Drawbar9_1ft_Update:
 	and	c, 15	; F53D84  and C,0x0f
 	inc	1, c	; F53D87  inc 1,C
 	and	c, 15	; F53D89  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53D8C  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53D8C  and (XIX),0xf0
 	or	(xix), c	; F53D8F  or (XIX),C
 	jr	15	; F53D91  jr T,0xf53da2
 	ld	c, (xix)	; F53D93  ld C,(XIX)
 	and	c, 15	; F53D95  and C,0x0f
 	dec	1, c	; F53D98  dec 1,C
 	and	c, 15	; F53D9A  and C,0x0f
-	.byte 0x84, 0x3C, 0xF0	; F53D9D  and (XIX),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r4, 0, 0xf0	; F53D9D  and (XIX),0xf0
 	or	(xix), c	; F53DA0  or (XIX),C
 	lda_24	xbc, (16072024)	; F53DA2  lda XBC,0xf53d58
 	push	xbc	; F53DA7  push XBC
@@ -90510,7 +90510,7 @@ sub_F53E04:		; <- T_F42E64
 	ld	c, (xix+7)	; F53EBF  ld C,(XIX+0x07)
 	and	c, 15	; F53EC2  and C,0x0f
 	and	c, 15	; F53EC5  and C,0x0f
-	.byte 0xC1, 0x95, 0x28, 0x3C, 0xF0	; F53EC8  and (0x2895),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2895, 0xf0	; F53EC8  and (0x2895),0xf0
 	orddm8	(10389), c	; F53ECD  or (0x2895),C
 	ld	c, (xix+6)	; F53ED1  ld C,(XIX+0x06)
 	stb_d8	(10386), c	; F53ED4  ld (0x2892),C
@@ -90535,20 +90535,20 @@ sub_F53E04:		; <- T_F42E64
 	ld	c, (xix+7)	; F53F11  ld C,(XIX+0x07)
 	and	c, 15	; F53F14  and C,0x0f
 	and	c, 15	; F53F17  and C,0x0f
-	.byte 0xC1, 0x96, 0x28, 0x3C, 0xF0	; F53F1A  and (0x2896),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2896, 0xf0	; F53F1A  and (0x2896),0xf0
 	orddm8	(10390), c	; F53F1F  or (0x2896),C
 	ld	c, (xix+6)	; F53F23  ld C,(XIX+0x06)
 	srl	c, 4	; F53F26  srl 0x04,C
 	and	c, 15	; F53F29  and C,0x0f
 	sll	c, 4	; F53F2C  sll 0x04,C
 	and	c, 240	; F53F2F  and C,0xf0
-	.byte 0xC1, 0x94, 0x28, 0x3C, 0x0F	; F53F32  and (0x2894),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2894, 0x0f	; F53F32  and (0x2894),0x0f
 	orddm8	(10388), c	; F53F37  or (0x2894),C
 	ld	c, (xix+6)	; F53F3B  ld C,(XIX+0x06)
 	and	c, 15	; F53F3E  and C,0x0f
 	sll	c, 4	; F53F41  sll 0x04,C
 	and	c, 240	; F53F44  and C,0xf0
-	.byte 0xC1, 0x93, 0x28, 0x3C, 0x0F	; F53F47  and (0x2893),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2893, 0x0f	; F53F47  and (0x2893),0x0f
 	orddm8	(10387), c	; F53F4C  or (0x2893),C
 	m_cp_mi8 MB16, 0x207c, 0xa3	; F53F50  cp (0x207c),0xa3
 	jr	nz, 57	; F53F55  jr NZ,0xf53f90
@@ -90583,18 +90583,18 @@ sub_F53E04:		; <- T_F42E64
 	and	c, 15	; F53FAA  and C,0x0f
 	sll	c, 4	; F53FAD  sll 0x04,C
 	and	c, 240	; F53FB0  and C,0xf0
-	.byte 0xC1, 0x95, 0x28, 0x3C, 0x0F	; F53FB3  and (0x2895),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2895, 0x0f	; F53FB3  and (0x2895),0x0f
 	orddm8	(10389), c	; F53FB8  or (0x2895),C
 	ld	c, (xix+6)	; F53FBC  ld C,(XIX+0x06)
 	srl	c, 4	; F53FBF  srl 0x04,C
 	and	c, 15	; F53FC2  and C,0x0f
 	and	c, 15	; F53FC5  and C,0x0f
-	.byte 0xC1, 0x94, 0x28, 0x3C, 0xF0	; F53FC8  and (0x2894),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2894, 0xf0	; F53FC8  and (0x2894),0xf0
 	orddm8	(10388), c	; F53FCD  or (0x2894),C
 	ld	c, (xix+6)	; F53FD1  ld C,(XIX+0x06)
 	and	c, 15	; F53FD4  and C,0x0f
 	and	c, 15	; F53FD7  and C,0x0f
-	.byte 0xC1, 0x93, 0x28, 0x3C, 0xF0	; F53FDA  and (0x2893),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2893, 0xf0	; F53FDA  and (0x2893),0xf0
 	orddm8	(10387), c	; F53FDF  or (0x2893),C
 	m_cp_mi8 MB16, 0x207c, 0xa3	; F53FE3  cp (0x207c),0xa3
 	jr	nz, 101	; F53FE8  jr NZ,0xf5404f
@@ -91912,14 +91912,14 @@ PanelCode_ToSlotAndFlags:
 	extz	xbc	; F5504B  extz XBC
 	add	xbc, 16078677	; F5504D  add XBC,0x00f55755
 	ld	xbc, (xbc)	; F55053  ld XBC,(XBC)
-	.byte 0xE1, 0x8C, 0x20, 0xC1	; F55055  and XBC,(0x208c)   [llvm-mc cannot encode this]
+	m_and_rm ML16, 0x208c, 1	; F55055  and XBC,(0x208c)
 	jr	z, 3	; F55059  jr Z,0xf5505e
-	.byte 0x84, 0x3E, 0x02	; F5505B  or (XIX),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x02	; F5505B  or (XIX),0x02
 	m_cp_mi8 MB16, 0x28b1, 0x11	; F5505E  cp (0x28b1),0x11
 	jr	c, 21	; F55063  jr C,0xf5507a
 	m_cp_mi8 MB16, 0x28b1, 0x19	; F55065  cp (0x28b1),0x19
 	jr	ugt, 14	; F5506A  jr UGT,0xf5507a
-	.byte 0x84, 0x3E, 0x04	; F5506C  or (XIX),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x04	; F5506C  or (XIX),0x04
 	ldw_d16	hl, (10417)	; F5506F  ld HL,(0x28b1)
 	extz	hl	; F55073  extz HL
 	ldw	bc, 17	; F55075  ld BC,0x0011
@@ -91934,7 +91934,7 @@ PanelCode_ToSlotAndFlags:
 	jr	nz, 10	; F55091  jr NZ,0xf5509d
 	m_cp_mi8 MB16, 0x2267, 0x0f	; F55093  cp (0x2267),0x0f
 	jr	nz, 3	; F55098  jr NZ,0xf5509d
-	.byte 0x84, 0x3E, 0x20	; F5509A  or (XIX),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x20	; F5509A  or (XIX),0x20
 	ld	c, l	; F5509D  ld C,L
 	ld	a, c	; F5509F  ld A,C
 	pop	xix	; F550A1  pop XIX
@@ -94329,7 +94329,7 @@ sub_F55D90:		; <- T_F40E10
 	sla	wa, 1	; F55E0F  sla 0x01,WA
 	jr	nc, -81	; F55E12  jr NC,0xf55dc3
 	ldw_d16	hl, (14144)	; F55E14  ld HL,(0x3740)
-	.byte 0xD1, 0x00, 0x30, 0xE3	; F55E18  or HL,(0x3000)   [llvm-mc cannot encode this]
+	m_or_rm MW16, 0x3000, 3	; F55E18  or HL,(0x3000)
 	calr	1	; F55E1C  calr 0xf55e20
 	ret	; F55E1F  ret
 
@@ -94348,7 +94348,7 @@ sub_F55D90:		; <- T_F40E10
 ; --------------------------------------------------------------------------
 sub_F55E20:
 	stdi8	(9536), 1	; F55E20  ld (0x2540),0x01
-	.byte 0xC0, 0xC6, 0x3E, 0x01	; F55E25  or (0xc6),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0xc6, 0x01	; F55E25  or (0xc6),0x01
 	ld	xiy, 15944858	; F55E29  ld XIY,0x00f34c9a
 	ld	xix, 15944866	; F55E2E  ld XIX,0x00f34ca2
 	pushw	hl	; F55E33  push HL
@@ -94381,7 +94381,7 @@ sub_F55E20:
 	inc	1, c	; F55E71  inc 1,C
 	sla	wa, 1	; F55E73  sla 0x01,WA
 	jr	nc, -52	; F55E76  jr NC,0xf55e44
-	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F55E78  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0xc6, 0xfe	; F55E78  and (0xc6),0xfe
 	ret	; F55E7C  ret
 	calr	64943	; F55E7D  calr 0xf55c2f
 	ld	xiy, 15946248	; F55E80  ld XIY,0x00f35208
@@ -94390,7 +94390,7 @@ sub_F55E20:
 	ret	; F55E8E  ret
 	calr	5754	; F55E8F  calr 0xf5750c
 	stdi8	(9536), 0	; F55E92  ld (0x2540),0x00
-	.byte 0xC0, 0xC6, 0x3E, 0x01	; F55E97  or (0xc6),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0xc6, 0x01	; F55E97  or (0xc6),0x01
 	ld	xiy, 15946489	; F55E9B  ld XIY,0x00f352f9
 	ld	xix, 15946556	; F55EA0  ld XIX,0x00f3533c
 	call	15996916	; F55EA5  call 0xf417f4
@@ -94403,7 +94403,7 @@ sub_F55E20:
 	stb_d8	(4854), a	; F55EC3  ld (0x12f6),A
 	ld	xiy, 15945759	; F55EC7  ld XIY,0x00f3501f
 	call	15996956	; F55ECC  call 0xf4181c
-	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F55ED0  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0xc6, 0xfe	; F55ED0  and (0xc6),0xfe
 	calr	64870	; F55ED4  calr 0xf55c3d
 	ret	; F55ED7  ret
 	calr	64852	; F55ED8  calr 0xf55c2f
@@ -94413,7 +94413,7 @@ sub_F55E20:
 	ret	; F55EE9  ret
 	calr	5617	; F55EEA  calr 0xf574de
 	stdi8	(9536), 0	; F55EED  ld (0x2540),0x00
-	.byte 0xC0, 0xC6, 0x3E, 0x01	; F55EF2  or (0xc6),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0xc6, 0x01	; F55EF2  or (0xc6),0x01
 	ld	xiy, 15945714	; F55EF6  ld XIY,0x00f34ff2
 	ld	xix, 15945781	; F55EFB  ld XIX,0x00f35035
 	call	15996916	; F55F00  call 0xf417f4
@@ -94426,7 +94426,7 @@ sub_F55E20:
 	stb_d8	(4854), a	; F55F1E  ld (0x12f6),A
 	ld	xiy, 15945759	; F55F22  ld XIY,0x00f3501f
 	call	15996956	; F55F27  call 0xf4181c
-	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F55F2B  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0xc6, 0xfe	; F55F2B  and (0xc6),0xfe
 	calr	64779	; F55F2F  calr 0xf55c3d
 	ret	; F55F32  ret
 	calr	64761	; F55F33  calr 0xf55c2f
@@ -94436,7 +94436,7 @@ sub_F55E20:
 	ret	; F55F44  ret
 	calr	5615	; F55F45  calr 0xf57537
 	stdi8	(9536), 0	; F55F48  ld (0x2540),0x00
-	.byte 0xC0, 0xC6, 0x3E, 0x01	; F55F4D  or (0xc6),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0xc6, 0x01	; F55F4D  or (0xc6),0x01
 	ld	xiy, 15946151	; F55F51  ld XIY,0x00f351a7
 	ld	xix, 15946233	; F55F56  ld XIX,0x00f351f9
 	call	15996916	; F55F5B  call 0xf417f4
@@ -94453,7 +94453,7 @@ sub_F55E20:
 	stb_d8	(4854), a	; F55F8A  ld (0x12f6),A
 	ld	xiy, 15945759	; F55F8E  ld XIY,0x00f3501f
 	call	15996956	; F55F93  call 0xf4181c
-	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F55F97  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0xc6, 0xfe	; F55F97  and (0xc6),0xfe
 	calr	64671	; F55F9B  calr 0xf55c3d
 	ret	; F55F9E  ret
 	stdi8	(9536), 0	; F55F9F  ld (0x2540),0x00
@@ -94526,13 +94526,13 @@ sub_F5602C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5603C:
-	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xEF	; F5603C  and (0x34d1),0xef   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d1, 0xef	; F5603C  and (0x34d1),0xef
 	call	15994092	; F56041  call 0xf40cec
 	xor	xwa, xwa	; F56045  xor XWA,XWA
 	stda32	(14026), xwa	; F56047  ld (0x36ca),XWA
 	stda32	(14022), xwa	; F5604B  ld (0x36c6),XWA
 	calr	5105	; F5604F  calr 0xf57443
-	.byte 0xC1, 0x58, 0x37, 0x3C, 0xFE	; F56052  and (0x3758),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x3758, 0xfe	; F56052  and (0x3758),0xfe
 	ret	; F56057  ret
 
 ; --------------------------------------------------------------------------
@@ -94574,20 +94574,20 @@ sub_F56058:
 	jr	z, 20	; F560A5  jr Z,0xf560bb
 	stdi8	(8304), 1	; F560A7  ld (0x2070),0x01
 	stdi8	(8305), 2	; F560AC  ld (0x2071),0x02
-	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xEF	; F560B1  and (0x34d1),0xef   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x14, 0x36, 0x3C, 0xFE	; F560B6  and (0x3614),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d1, 0xef	; F560B1  and (0x34d1),0xef
+	m_and_mi8 MB16, 0x3614, 0xfe	; F560B6  and (0x3614),0xfe
 	m_bit 0, MD16, 0x3758	; F560BB  bit 0,(0x3758)
 	jr	z, 26	; F560BF  jr Z,0xf560db
 	ldb_d8	a, (14167)	; F560C1  ld A,(0x3757)
 	stb_d8	(8784), a	; F560C5  ld (0x2250),A
-	.byte 0xC1, 0x58, 0x37, 0x3C, 0xFE	; F560C9  and (0x3758),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x3758, 0xfe	; F560C9  and (0x3758),0xfe
 	ldb	w, 255	; F560CE  ld W,0xff
 	ldw	de, 4240	; F560D0  ld DE,0x1090
 	call	15994684	; F560D3  call 0xf40f3c
 	call	15995324	; F560D7  call 0xf411bc
 	m_bit 2, MD16, 0x7f32	; F560DB  bit 2,(0x7f32)
 	jr	z, 5	; F560DF  jr Z,0xf560e6
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0xFE	; F560E1  and (0x34d9),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d9, 0xfe	; F560E1  and (0x34d9),0xfe
 	m_bit 1, MD16, 0x360b	; F560E6  bit 1,(0x360b)
 	jr	nz, 20	; F560EA  jr NZ,0xf56100
 	ld	xwa, 16080146	; F560EC  ld XWA,0x00f55d12
@@ -94628,7 +94628,7 @@ sub_F56129:
 	jr	12	; F56133  jr T,0xf56141
 	m_cp_mi8 MB16, 0x2078, 0x08	; F56135  cp (0x2078),0x08
 	jr	z, 5	; F5613A  jr Z,0xf56141
-	.byte 0xC1, 0xA9, 0x20, 0x3C, 0xFE	; F5613C  and (0x20a9),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x20a9, 0xfe	; F5613C  and (0x20a9),0xfe
 	ret	; F56141  ret
 
 ; --------------------------------------------------------------------------
@@ -95243,7 +95243,7 @@ sub_F56474:
 	jr	19	; F5647C  jr T,0xf56491
 	ldb_d8	a, (8784)	; F5647E  ld A,(0x2250)
 	stb_d8	(14167), a	; F56482  ld (0x3757),A
-	.byte 0xC1, 0x58, 0x37, 0x3E, 0x01	; F56486  or (0x3758),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x3758, 0x01	; F56486  or (0x3758),0x01
 	stdi16	(8304), 16567	; F5648B  ld (0x2070),0x40b7
 	ret	; F56491  ret
 
@@ -95379,12 +95379,12 @@ sub_F56525:		; <- T_F40E18
 	jr	z, 19	; F56542  jr Z,0xf56557
 	m_set 1, MD16, 0x34d3	; F56544  set 1,(0x34d3)
 	call	15993816	; F56548  call 0xf40bd8
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F5654C  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F5654C  or (0x34d4),0x10
 	call	15995320	; F56551  call 0xf411b8
 	jr	29	; F56555  jr T,0xf56574
 	m_set 1, MD16, 0x34d3	; F56557  set 1,(0x34d3)
 	call	15993816	; F5655B  call 0xf40bd8
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F5655F  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F5655F  or (0x34d4),0x10
 	call	15993696	; F56564  call 0xf40b60
 	call	15993692	; F56568  call 0xf40b5c
 	call	15993540	; F5656C  call 0xf40ac4
@@ -95456,7 +95456,7 @@ sub_F5658C:
 sub_F565BD:
 	bit	7, w	; F565BD  bit 0x07,W
 	jr	nz, 28	; F565C0  jr NZ,0xf565de
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F565C2  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F565C2  or (0x2075),0x08
 	calr	21	; F565C7  calr 0xf565df
 	ld	xwa, 16080072	; F565CA  ld XWA,0x00f55cc8
 	push	xwa	; F565CF  push XWA
@@ -95504,7 +95504,7 @@ sub_F565DF:
 sub_F565FD:
 	bit	7, w	; F565FD  bit 0x07,W
 	jr	nz, 28	; F56600  jr NZ,0xf5661e
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F56602  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F56602  or (0x2075),0x08
 	calr	21	; F56607  calr 0xf5661f
 	ld	xwa, 16080072	; F5660A  ld XWA,0x00f55cc8
 	push	xwa	; F5660F  push XWA
@@ -95612,11 +95612,11 @@ sub_F5664A:
 	jr	z, 20	; F56693  jr Z,0xf566a9
 	stdi8	(8304), 1	; F56695  ld (0x2070),0x01
 	stdi8	(8305), 2	; F5669A  ld (0x2071),0x02
-	.byte 0xC1, 0xD1, 0x34, 0x3C, 0xEF	; F5669F  and (0x34d1),0xef   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x14, 0x36, 0x3C, 0xFE	; F566A4  and (0x3614),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d1, 0xef	; F5669F  and (0x34d1),0xef
+	m_and_mi8 MB16, 0x3614, 0xfe	; F566A4  and (0x3614),0xfe
 	m_bit 2, MD16, 0x7f32	; F566A9  bit 2,(0x7f32)
 	jr	z, 5	; F566AD  jr Z,0xf566b4
-	.byte 0xC1, 0xD9, 0x34, 0x3C, 0xFE	; F566AF  and (0x34d9),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d9, 0xfe	; F566AF  and (0x34d9),0xfe
 	ld	xwa, 16080691	; F566B4  ld XWA,0x00f55f33
 	push	xwa	; F566B9  push XWA
 	call	16002692	; F566BA  call 0xf42e84
@@ -95674,7 +95674,7 @@ sub_F5670C:
 	m_cp_rm MB16, 0x207b, 1	; F56710  cp A,(0x207b)
 	jr	nz, 2	; F56714  jr NZ,0xf56718
 	jr	17	; F56716  jr T,0xf56729
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F56718  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F56718  and (0x34bb),0xfb
 	m_cp_mi8 MB16, 0x3628, 0x00	; F5671D  cp (0x3628),0x00
 	jr	z, 5	; F56722  jr Z,0xf56729
 	stdi8	(13864), 0	; F56724  ld (0x3628),0x00
@@ -95721,7 +95721,7 @@ sub_F5672B:
 	call	16002596	; F5673E  call 0xf42e24
 	call	15994108	; F56742  call 0xf40cfc
 	call	16000772	; F56746  call 0xf42704
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F5674A  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F5674A  or (0x2095),0x10
 	jr	0	; F5674F  jr T,0xf56751
 	ret	; F56751  ret
 
@@ -95812,7 +95812,7 @@ sub_F5679B:
 	stdi16	(8304), 32774	; F567A7  ld (0x2070),0x8006
 	jr	24	; F567AD  jr T,0xf567c7
 	call	16002596	; F567AF  call 0xf42e24
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F567B3  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F567B3  or (0x2095),0x10
 	bit_dd8	2, 150	; F567B8  bit 2,(0x96)
 	jr	nz, 6	; F567BB  jr NZ,0xf567c3
 	m_bit 2, MD16, 0x34d9	; F567BD  bit 2,(0x34d9)
@@ -96004,7 +96004,7 @@ Select36CE_F568AB:
 	stb_d8	(14165), a	; F568B6  ld (0x3755),A
 	stdi8	(14030), 0	; F568BA  ld (0x36ce),0x00
 	call	16002596	; F568BF  call 0xf42e24
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F568C3  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F568C3  or (0x2095),0x10
 	ret	; F568C8  ret
 	stdi8	(9536), 1	; F568C9  ld (0x2540),0x01
 	ld	xiy, 15945770	; F568CE  ld XIY,0x00f3502a
@@ -96037,7 +96037,7 @@ Select36CE_F568E9:
 	stb_d8	(14165), a	; F568F4  ld (0x3755),A
 	stdi8	(14030), 1	; F568F8  ld (0x36ce),0x01
 	call	16002596	; F568FD  call 0xf42e24
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F56901  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F56901  or (0x2095),0x10
 	ret	; F56906  ret
 
 ; --------------------------------------------------------------------------
@@ -96062,7 +96062,7 @@ Select36CE_F56907:
 	stb_d8	(14165), a	; F56912  ld (0x3755),A
 	stdi8	(14030), 2	; F56916  ld (0x36ce),0x02
 	call	16002596	; F5691B  call 0xf42e24
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F5691F  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F5691F  or (0x2095),0x10
 	ret	; F56924  ret
 
 ; --------------------------------------------------------------------------
@@ -96080,7 +96080,7 @@ Select36CE_F56907:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 DispatchState36CE_F56925:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F56925  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F56925  or (0x2075),0x08
 	xor	xwa, xwa	; F5692A  xor XWA,XWA
 	ld	xix, 16083263	; F5692C  ld XIX,0x00f5693f
 	ldb_d8	a, (14030)	; F56931  ld A,(0x36ce)
@@ -96204,12 +96204,12 @@ sub_F569AF:
 	jr	ule, 28	; F569B7  jr ULE,0xf569d5
 	ldw_d16	wa, (13858)	; F569B9  ld WA,(0x3622)
 	stda16	(13860), wa	; F569BD  ld (0x3624),WA
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F569C1  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F569C1  or (0x34bb),0x04
 	stdi8	(13864), 131	; F569C6  ld (0x3628),0x83
 	stdi8	(13865), 2	; F569CB  ld (0x3629),0x02
 	calr	39	; F569D0  calr 0xf569fa
 	jr	36	; F569D3  jr T,0xf569f9
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F569D5  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F569D5  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F569DA  cp (0x3628),0x00
 	jr	z, 14	; F569DF  jr Z,0xf569ef
 	m_cp_mi8 MB16, 0x3629, 0x02	; F569E1  cp (0x3629),0x02
@@ -96265,7 +96265,7 @@ sub_F56A1D:
 	jr	43	; F56A31  jr T,0xf56a5e
 	incdi16	1, (13860)	; F56A33  incw 1,(0x3624)
 	calr	65472	; F56A37  calr 0xf569fa
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F56A3A  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F56A3A  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56A3F  cp (0x3628),0x00
 	jr	z, 14	; F56A44  jr Z,0xf56a54
 	m_cp_mi8 MB16, 0x3629, 0x02	; F56A46  cp (0x3629),0x02
@@ -96291,7 +96291,7 @@ sub_F56A1D:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 DispatchState36CE_F56A5F:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F56A5F  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F56A5F  or (0x2075),0x08
 	xor	xwa, xwa	; F56A64  xor XWA,XWA
 	ld	xix, 16083577	; F56A66  ld XIX,0x00f56a79
 	ldb_d8	a, (14030)	; F56A6B  ld A,(0x36ce)
@@ -96376,7 +96376,7 @@ sub_F56AB1:
 	jr	43	; F56AC5  jr T,0xf56af2
 	decdi16	1, (13858)	; F56AC7  decw 1,(0x3622)
 	calr	65324	; F56ACB  calr 0xf569fa
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F56ACE  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F56ACE  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56AD3  cp (0x3628),0x00
 	jr	z, 14	; F56AD8  jr Z,0xf56ae8
 	m_cp_mi8 MB16, 0x3629, 0x02	; F56ADA  cp (0x3629),0x02
@@ -96427,12 +96427,12 @@ sub_F56B14:
 	jr	ule, 28	; F56B1C  jr ULE,0xf56b3a
 	ldw_d16	wa, (13860)	; F56B1E  ld WA,(0x3624)
 	stda16	(13858), wa	; F56B22  ld (0x3622),WA
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F56B26  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F56B26  or (0x34bb),0x04
 	stdi8	(13864), 131	; F56B2B  ld (0x3628),0x83
 	stdi8	(13865), 2	; F56B30  ld (0x3629),0x02
 	calr	65218	; F56B35  calr 0xf569fa
 	jr	36	; F56B38  jr T,0xf56b5e
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F56B3A  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F56B3A  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56B3F  cp (0x3628),0x00
 	jr	z, 14	; F56B44  jr Z,0xf56b54
 	m_cp_mi8 MB16, 0x3629, 0x02	; F56B46  cp (0x3629),0x02
@@ -96477,7 +96477,7 @@ sub_F56B67:
 	jr	z, 26	; F56B78  jr Z,0xf56b94
 	ldb_d8	a, (14167)	; F56B7A  ld A,(0x3757)
 	stb_d8	(8784), a	; F56B7E  ld (0x2250),A
-	.byte 0xC1, 0x58, 0x37, 0x3C, 0xFE	; F56B82  and (0x3758),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x3758, 0xfe	; F56B82  and (0x3758),0xfe
 	ldb	w, 255	; F56B87  ld W,0xff
 	ldw	de, 4240	; F56B89  ld DE,0x1090
 	call	15994684	; F56B8C  call 0xf40f3c
@@ -96514,7 +96514,7 @@ sub_F56B95:
 	jr	z, 24	; F56BC2  jr Z,0xf56bdc
 	bit_dd8	2, 150	; F56BC4  bit 2,(0x96)
 	jr	z, 7	; F56BC7  jr Z,0xf56bd0
-	.byte 0xC1, 0x0B, 0x36, 0x3C, 0xFE	; F56BC9  and (0x360b),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x360b, 0xfe	; F56BC9  and (0x360b),0xfe
 	jr	12	; F56BCE  jr T,0xf56bdc
 	call	15993696	; F56BD0  call 0xf40b60
 	call	15993692	; F56BD4  call 0xf40b5c
@@ -96526,7 +96526,7 @@ sub_F56B95:
 	jr	z, 26	; F56BF0  jr Z,0xf56c0c
 	ldb_d8	a, (14167)	; F56BF2  ld A,(0x3757)
 	stb_d8	(8784), a	; F56BF6  ld (0x2250),A
-	.byte 0xC1, 0x58, 0x37, 0x3C, 0xFE	; F56BFA  and (0x3758),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x3758, 0xfe	; F56BFA  and (0x3758),0xfe
 	ldb	w, 255	; F56BFF  ld W,0xff
 	ldw	de, 4240	; F56C01  ld DE,0x1090
 	call	15994684	; F56C04  call 0xf40f3c
@@ -96563,7 +96563,7 @@ sub_F56C35:
 	jr	21	; F56C3F  jr T,0xf56c56
 	m_cp_mi8 MB16, 0x2078, 0x01	; F56C41  cp (0x2078),0x01
 	jr	z, 5	; F56C46  jr Z,0xf56c4d
-	.byte 0xC1, 0xA9, 0x20, 0x3C, 0xFE	; F56C48  and (0x20a9),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x20a9, 0xfe	; F56C48  and (0x20a9),0xfe
 	bit_dd8	2, 150	; F56C4D  bit 2,(0x96)
 	jr	nz, 4	; F56C50  jr NZ,0xf56c56
 	call	15994136	; F56C52  call 0xf40d18
@@ -96584,7 +96584,7 @@ sub_F56C35:
 sub_F56C57:
 	bit	7, w	; F56C57  bit 0x07,W
 	jr	nz, 84	; F56C5A  jr NZ,0xf56cb0
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F56C5C  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F56C5C  and (0x2075),0xf6
 	m_bit 0, MD16, 0x360b	; F56C61  bit 0,(0x360b)
 	jr	nz, 22	; F56C65  jr NZ,0xf56c7d
 	bit_dd8	2, 150	; F56C67  bit 2,(0x96)
@@ -96609,7 +96609,7 @@ sub_F56C57:
 	ldb	a, 1	; F56CA8  ld A,0x01
 	call	16002440	; F56CAA  call 0xf42d88
 	jr	37	; F56CAE  jr T,0xf56cd5
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F56CB0  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F56CB0  or (0x2075),0x09
 	stdi16	(8347), 34953	; F56CB5  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	15994124	; F56CBB  call 0xf40d0c
 	call	16000772	; F56CBF  call 0xf42704
@@ -96635,7 +96635,7 @@ sub_F56C57:
 sub_F56CD6:
 	bit	7, w	; F56CD6  bit 0x07,W
 	jr	nz, 28	; F56CD9  jr NZ,0xf56cf7
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F56CDB  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F56CDB  and (0x2075),0xf6
 	bit_dd8	2, 150	; F56CE0  bit 2,(0x96)
 	jr	nz, 55	; F56CE3  jr NZ,0xf56d1c
 	xor	xwa, xwa	; F56CE5  xor XWA,XWA
@@ -96643,7 +96643,7 @@ sub_F56CD6:
 	stda32	(12300), xwa	; F56CEB  ld (0x300c),XWA
 	stdi16	(8304), 517	; F56CEF  ld (0x2070),0x0205
 	jr	37	; F56CF5  jr T,0xf56d1c
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F56CF7  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F56CF7  or (0x2075),0x09
 	stdi16	(8347), 34953	; F56CFC  ld (0x209b),0x8889  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	call	15994128	; F56D02  call 0xf40d10
 	call	16000772	; F56D06  call 0xf42704
@@ -96677,7 +96677,7 @@ sub_F56D1D:
 	jr	19	; F56D30  jr T,0xf56d45
 	ldb_d8	a, (8784)	; F56D32  ld A,(0x2250)
 	stb_d8	(14167), a	; F56D36  ld (0x3757),A
-	.byte 0xC1, 0x58, 0x37, 0x3E, 0x01	; F56D3A  or (0x3758),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x3758, 0x01	; F56D3A  or (0x3758),0x01
 	stdi16	(8304), 16567	; F56D3F  ld (0x2070),0x40b7
 	ret	; F56D45  ret
 
@@ -96725,7 +96725,7 @@ sub_F56D46:
 sub_F56D7E:
 	stdi8	(14162), 1	; F56D7E  ld (0x3752),0x01
 	ld	xwa, 65536	; F56D83  ld XWA,0x00010000
-	.byte 0xE1, 0x0C, 0x36, 0xE8	; F56D88  or (0x360c),XWA   [llvm-mc cannot encode this]
+	m_or_mr ML16, 0x360c, 0	; F56D88  or (0x360c),XWA
 	bit_dd8	2, 150	; F56D8C  bit 2,(0x96)
 	jr	z, 12	; F56D8F  jr Z,0xf56d9d
 	ldb	c, 16	; F56D91  ld C,0x10
@@ -96751,7 +96751,7 @@ sub_F56DA8:
 	stdi8	(14162), 0	; F56DA8  ld (0x3752),0x00
 	ld	xwa, 65536	; F56DAD  ld XWA,0x00010000
 	xor	xwa, 4294967295	; F56DB2  xor XWA,0xffffffff
-	.byte 0xE1, 0x0C, 0x36, 0xC8	; F56DB8  and (0x360c),XWA   [llvm-mc cannot encode this]
+	m_and_mr ML16, 0x360c, 0	; F56DB8  and (0x360c),XWA
 	bit_dd8	2, 150	; F56DBC  bit 2,(0x96)
 	jr	z, 12	; F56DBF  jr Z,0xf56dcd
 	ldb	c, 16	; F56DC1  ld C,0x10
@@ -96914,7 +96914,7 @@ sub_F56E99:
 	m_cp_rm MB16, 0x207b, 1	; F56E9D  cp A,(0x207b)
 	jr	nz, 2	; F56EA1  jr NZ,0xf56ea5
 	jr	17	; F56EA3  jr T,0xf56eb6
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F56EA5  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F56EA5  and (0x34bb),0xfb
 	m_cp_mi8 MB16, 0x3628, 0x00	; F56EAA  cp (0x3628),0x00
 	jr	z, 5	; F56EAF  jr Z,0xf56eb6
 	stdi8	(13864), 0	; F56EB1  ld (0x3628),0x00
@@ -97193,7 +97193,7 @@ sub_F56FD6:
 	stb_d8	(14166), a	; F56FE1  ld (0x3756),A
 	stdi8	(13863), 0	; F56FE5  ld (0x3627),0x00
 	call	16002596	; F56FEA  call 0xf42e24
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F56FEE  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F56FEE  or (0x2095),0x10
 	ret	; F56FF3  ret
 	stdi8	(9536), 1	; F56FF4  ld (0x2540),0x01
 	ld	xiy, 15945770	; F56FF9  ld XIY,0x00f3502a
@@ -97221,7 +97221,7 @@ sub_F57014:
 	stb_d8	(14166), a	; F5701F  ld (0x3756),A
 	stdi8	(13863), 1	; F57023  ld (0x3627),0x01
 	call	16002596	; F57028  call 0xf42e24
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F5702C  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F5702C  or (0x2095),0x10
 	ret	; F57031  ret
 
 ; --------------------------------------------------------------------------
@@ -97241,7 +97241,7 @@ sub_F57032:
 	stb_d8	(14166), a	; F5703D  ld (0x3756),A
 	stdi8	(13863), 2	; F57041  ld (0x3627),0x02
 	call	16002596	; F57046  call 0xf42e24
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F5704A  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F5704A  or (0x2095),0x10
 	ret	; F5704F  ret
 
 ; --------------------------------------------------------------------------
@@ -97259,7 +97259,7 @@ sub_F57032:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 DispatchState3627_F57050:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F57050  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F57050  or (0x2075),0x08
 	xor	xwa, xwa	; F57055  xor XWA,XWA
 	ld	xix, 16085098	; F57057  ld XIX,0x00f5706a
 	ldb_d8	a, (13863)	; F5705C  ld A,(0x3627)
@@ -97384,12 +97384,12 @@ sub_F570DC:
 	jr	ule, 28	; F570E4  jr ULE,0xf57102
 	ldw_d16	wa, (13854)	; F570E6  ld WA,(0x361e)
 	stda16	(13856), wa	; F570EA  ld (0x3620),WA
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F570EE  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F570EE  or (0x34bb),0x04
 	stdi8	(13864), 131	; F570F3  ld (0x3628),0x83
 	stdi8	(13865), 2	; F570F8  ld (0x3629),0x02
 	calr	39	; F570FD  calr 0xf57127
 	jr	36	; F57100  jr T,0xf57126
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F57102  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F57102  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F57107  cp (0x3628),0x00
 	jr	z, 14	; F5710C  jr Z,0xf5711c
 	m_cp_mi8 MB16, 0x3629, 0x02	; F5710E  cp (0x3629),0x02
@@ -97445,7 +97445,7 @@ sub_F5714A:
 	jr	43	; F5715E  jr T,0xf5718b
 	incdi16	1, (13856)	; F57160  incw 1,(0x3620)
 	calr	65472	; F57164  calr 0xf57127
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F57167  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F57167  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F5716C  cp (0x3628),0x00
 	jr	z, 14	; F57171  jr Z,0xf57181
 	m_cp_mi8 MB16, 0x3629, 0x02	; F57173  cp (0x3629),0x02
@@ -97471,7 +97471,7 @@ sub_F5714A:
 ;          something nobody has named.
 ; --------------------------------------------------------------------------
 DispatchState3627_F5718C:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F5718C  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F5718C  or (0x2075),0x08
 	xor	xwa, xwa	; F57191  xor XWA,XWA
 	ld	xix, 16085414	; F57193  ld XIX,0x00f571a6
 	ldb_d8	a, (13863)	; F57198  ld A,(0x3627)
@@ -97555,7 +97555,7 @@ sub_F571D8:
 	jr	43	; F571EC  jr T,0xf57219
 	decdi16	1, (13854)	; F571EE  decw 1,(0x361e)
 	calr	65330	; F571F2  calr 0xf57127
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F571F5  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F571F5  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F571FA  cp (0x3628),0x00
 	jr	z, 14	; F571FF  jr Z,0xf5720f
 	m_cp_mi8 MB16, 0x3629, 0x02	; F57201  cp (0x3629),0x02
@@ -97606,12 +97606,12 @@ sub_F5723B:
 	jr	ule, 28	; F57243  jr ULE,0xf57261
 	ldw_d16	wa, (13856)	; F57245  ld WA,(0x3620)
 	stda16	(13854), wa	; F57249  ld (0x361e),WA
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F5724D  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F5724D  or (0x34bb),0x04
 	stdi8	(13864), 131	; F57252  ld (0x3628),0x83
 	stdi8	(13865), 2	; F57257  ld (0x3629),0x02
 	calr	65224	; F5725C  calr 0xf57127
 	jr	36	; F5725F  jr T,0xf57285
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F57261  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F57261  or (0x34bb),0x04
 	m_cp_mi8 MB16, 0x3628, 0x00	; F57266  cp (0x3628),0x00
 	jr	z, 14	; F5726B  jr Z,0xf5727b
 	m_cp_mi8 MB16, 0x3629, 0x02	; F5726D  cp (0x3629),0x02
@@ -97910,7 +97910,7 @@ sub_F5739C:
 	stb_d8	(14166), a	; F573A7  ld (0x3756),A
 	stdi8	(13863), 3	; F573AB  ld (0x3627),0x03
 	call	16002596	; F573B0  call 0xf42e24
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F573B4  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F573B4  or (0x2095),0x10
 	ret	; F573B9  ret
 
 ; --------------------------------------------------------------------------
@@ -102161,18 +102161,18 @@ SC1_ConfigurePort:
 	and	a, 199	; F5A89D  and A,0xc7
 	stb_d8	(10886), a	; F5A8A0  ld (0x2a86),A
 	st_dd8b	a, 26	; F5A8A4  ld (0x1a),A
-	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5A8A7  and (0x18),0xdf   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x58, 0x3C, 0xFD	; F5A8AB  and (0x58),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x18, 0xdf	; F5A8A7  and (0x18),0xdf
+	m_and_mi8 MB8, 0x58, 0xfd	; F5A8AB  and (0x58),0xfd
 	ldio	86, 0	; F5A8AF  ld (0x56),0x00
 	ldio	87, 34	; F5A8B2  ld (0x57),0x22
 	ldio	85, 1	; F5A8B5  ld (0x55),0x01
 	ldio	120, 255	; F5A8B8  ld (0x78),0xff
 	ldio	114, 143	; F5A8BB  ld (0x72),0x8f
 	ldio	72, 2	; F5A8BE  ld (0x48),0x02
-	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x08	; F5A8C1  or (0x2a82),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a82, 0x08	; F5A8C1  or (0x2a82),0x08
 	stdi8	(10881), 0	; F5A8C6  ld (0x2a81),0x00
 	stdi8	(10883), 2	; F5A8CB  ld (0x2a83),0x02
-	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFC	; F5A8D0  and (0x2a82),0xfc   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a82, 0xfc	; F5A8D0  and (0x2a82),0xfc
 	stdi16	(10976), 0	; F5A8D5  ld (0x2ae0),0x0000
 	stdi16	(10978), 0	; F5A8DB  ld (0x2ae2),0x0000
 	stdi16	(10896), 0	; F5A8E1  ld (0x2a90),0x0000
@@ -102209,7 +102209,7 @@ SC1_ConfigurePort:
 	ldio	114, 133	; F5A947  ld (0x72),0x85
 	stdi16	(10896), 0	; F5A94A  ld (0x2a90),0x0000
 	stdi16	(10898), 0	; F5A950  ld (0x2a92),0x0000
-	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5A956  and (0x56),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x56, 0xdf	; F5A956  and (0x56),0xdf
 	di	; F5A95A  ei 0x00
 	ret	; F5A95C  ret
 ; ---------------------------------------------------------------------
@@ -102229,13 +102229,13 @@ SC1_ConfigurePort:
 ; ---------------------------------------------------------------------
 SC1_SendWord_Polled:
 	stda16	(10980), wa	; F5A95D  ld (0x2ae4),WA
-	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5A961  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a87, 0xdf	; F5A961  and (0x2a87),0xdf
 	ldb_d8	a, (10887)	; F5A966  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5A96A  ld (0x1b),A
 	ldio	120, 255	; F5A96D  ld (0x78),0xff
 	ldio	114, 143	; F5A970  ld (0x72),0x8f
-	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5A973  and (0x18),0xdf   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x20	; F5A977  or (0x2a86),0x20   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x18, 0xdf	; F5A973  and (0x18),0xdf
+	m_or_mi8 MB16, 0x2a86, 0x20	; F5A977  or (0x2a86),0x20
 	ldb_d8	a, (10886)	; F5A97C  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5A980  ld (0x1a),A
 	calr	196	; F5A983  calr 0xf5aa4a
@@ -102248,18 +102248,18 @@ SC1_SendWord_Polled:
 	m_cp_mi8 MB16, 0x2a83, 0x03	; F5A99A  cp (0x2a83),0x03
 	jr	z, 3	; F5A99F  jr Z,0xf5a9a4
 	calr	166	; F5A9A1  calr 0xf5aa4a
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xDF	; F5A9A4  and (0x2a86),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a86, 0xdf	; F5A9A4  and (0x2a86),0xdf
 	ldb_d8	a, (10886)	; F5A9A9  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5A9AD  ld (0x1a),A
 	calr	151	; F5A9B0  calr 0xf5aa4a
 	calr	148	; F5A9B3  calr 0xf5aa4a
-	.byte 0xC1, 0x87, 0x2A, 0x3E, 0x28	; F5A9B6  or (0x2a87),0x28   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a87, 0x28	; F5A9B6  or (0x2a87),0x28
 	ldb_d8	a, (10887)	; F5A9BB  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5A9BF  ld (0x1b),A
-	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x28	; F5A9C2  or (0x2a86),0x28   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a86, 0x28	; F5A9C2  or (0x2a86),0x28
 	ldb_d8	a, (10886)	; F5A9C7  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5A9CB  ld (0x1a),A
-	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5A9CE  and (0x55),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x55, 0xfe	; F5A9CE  and (0x55),0xfe
 	ldio	120, 255	; F5A9D2  ld (0x78),0xff
 	ld	xiy, 10980	; F5A9D5  ld XIY,0x00002ae4
 	.byte 0xD1, 0xE0, 0x2A, 0x85	; F5A9DA  add IY,(0x2ae0)   [llvm-mc cannot encode this]
@@ -102275,12 +102275,12 @@ SC1_SendWord_Polled:
 	st_dd8b	a, 84	; F5A9FC  ld (0x54),A
 	calr	72	; F5A9FF  calr 0xf5aa4a
 	calr	69	; F5AA02  calr 0xf5aa4a
-	.byte 0xC0, 0x55, 0x3E, 0x01	; F5AA05  or (0x55),0x01   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x55, 0x3C, 0xFD	; F5AA09  and (0x55),0xfd   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xD7	; F5AA0D  and (0x2a86),0xd7   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0x55, 0x01	; F5AA05  or (0x55),0x01
+	m_and_mi8 MB8, 0x55, 0xfd	; F5AA09  and (0x55),0xfd
+	m_and_mi8 MB16, 0x2a86, 0xd7	; F5AA0D  and (0x2a86),0xd7
 	ldb_d8	a, (10886)	; F5AA12  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AA16  ld (0x1a),A
-	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xD7	; F5AA19  and (0x2a87),0xd7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a87, 0xd7	; F5AA19  and (0x2a87),0xd7
 	ldb_d8	a, (10887)	; F5AA1E  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AA22  ld (0x1b),A
 	ret	; F5AA25  ret
@@ -102404,7 +102404,7 @@ SC1_Cmd_E0_ReadStatus:
 	calr	65458	; F5AAC4  calr 0xf5aa79
 	m_cp_mi16 MW16, 0x2a92, 0x0000	; F5AAC7  cp (0x2a92),0x0000
 	jr	z, 5	; F5AACD  jr Z,0xf5aad4
-	.byte 0xC1, 0x85, 0x2A, 0x3E, 0x08	; F5AACF  or (0x2a85),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a85, 0x08	; F5AACF  or (0x2a85),0x08
 	ldb_d8	a, (10885)	; F5AAD4  ld A,(0x2a85)
 	ret	; F5AAD8  ret
 ; ---------------------------------------------------------------------
@@ -102533,19 +102533,19 @@ SC1_StartWordTx:
 	stdi16	(10978), 0	; F5ABBC  ld (0x2ae2),0x0000
 	stda16	(10980), wa	; F5ABC2  ld (0x2ae4),WA
 	.byte 0xD1, 0xE2, 0x2A, 0x38, 0x02, 0x00	; F5ABC6  add (0x2ae2),0x0002   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x02	; F5ABCC  or (0x2a82),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a82, 0x02	; F5ABCC  or (0x2a82),0x02
 	stdi8	(10880), 4	; F5ABD1  ld (0x2a80),0x04
 	ldio	114, 143	; F5ABD6  ld (0x72),0x8f
 	ldio	87, 40	; F5ABD9  ld (0x57),0x28
-	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5ABDC  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a87, 0xdf	; F5ABDC  and (0x2a87),0xdf
 	ldb_d8	a, (10887)	; F5ABE1  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5ABE5  ld (0x1b),A
-	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5ABE8  and (0x18),0xdf   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x20	; F5ABEC  or (0x2a86),0x20   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x18, 0xdf	; F5ABE8  and (0x18),0xdf
+	m_or_mi8 MB16, 0x2a86, 0x20	; F5ABEC  or (0x2a86),0x20
 	ldb_d8	a, (10886)	; F5ABF1  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5ABF5  ld (0x1a),A
-	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5ABF8  and (0x56),0xdf   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5ABFC  and (0x55),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x56, 0xdf	; F5ABF8  and (0x56),0xdf
+	m_and_mi8 MB8, 0x55, 0xfe	; F5ABFC  and (0x55),0xfe
 	ldio	120, 80	; F5AC00  ld (0x78),0x50
 	st_dd8b	a, 84	; F5AC03  ld (0x54),A
 	di	; F5AC06  ei 0x00
@@ -102574,23 +102574,23 @@ INT6_SC1_PeerRequest:
 	push	xwa	; F5AC0A  push XWA
 	m_cp_mi8 MB16, 0x2a81, 0x00	; F5AC0B  cp (0x2a81),0x00
 	jr	nz, 42	; F5AC10  jr NZ,0xf5ac3c
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xCF	; F5AC12  and (0x2a86),0xcf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a86, 0xcf	; F5AC12  and (0x2a86),0xcf
 	ldb_d8	a, (10886)	; F5AC17  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AC1B  ld (0x1a),A
-	.byte 0xC0, 0x55, 0x3E, 0x01	; F5AC1E  or (0x55),0x01   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x55, 0x3C, 0xFD	; F5AC22  and (0x55),0xfd   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0x55, 0x01	; F5AC1E  or (0x55),0x01
+	m_and_mi8 MB8, 0x55, 0xfd	; F5AC22  and (0x55),0xfd
 	ldio	114, 133	; F5AC26  ld (0x72),0x85
 	ldio	120, 5	; F5AC29  ld (0x78),0x05
-	.byte 0xC0, 0x56, 0x3E, 0x20	; F5AC2C  or (0x56),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0x56, 0x20	; F5AC2C  or (0x56),0x20
 	stdi8	(10880), 32	; F5AC30  ld (0x2a80),0x20
-	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x01	; F5AC35  or (0x2a82),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a82, 0x01	; F5AC35  or (0x2a82),0x01
 	jr	28	; F5AC3A  jr T,0xf5ac58
 	m_cp_mi16 MW16, 0x2a92, 0x0000	; F5AC3C  cp (0x2a92),0x0000
 	jr	nz, 6	; F5AC42  jr NZ,0xf5ac4a
 	stdi16	(10898), 76	; F5AC44  ld (0x2a92),0x004c
 	decdi16	1, (10898)	; F5AC4A  decw 1,(0x2a92)
-	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x40	; F5AC4E  or (0x2a84),0x40   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFD	; F5AC53  and (0x2a82),0xfd   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a84, 0x40	; F5AC4E  or (0x2a84),0x40
+	m_and_mi8 MB16, 0x2a82, 0xfd	; F5AC53  and (0x2a82),0xfd
 ; ---------------------------------------------------------------------
 ; SC1_Irq_Exit_1 / SC1_Irq_Exit_1_Delayed -- INT6's exit stubs
 ;
@@ -102618,9 +102618,9 @@ SC1_Irq_Exit_1:
 	pop	xwa	; F5AC58  pop XWA
 	reti	; F5AC59  reti
 SC1_Irq_Exit_1_Delayed:
-	.byte 0xC0, 0x0D, 0x3C, 0xF7	; F5AC5A  and (0x0d),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x0d, 0xf7	; F5AC5A  and (0x0d),0xf7
 	calr	64989	; F5AC5E  calr 0xf5aa3e
-	.byte 0xC0, 0x0D, 0x3E, 0x08	; F5AC61  or (0x0d),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0x0d, 0x08	; F5AC61  or (0x0d),0x08
 	pop	xwa	; F5AC65  pop XWA
 	reti	; F5AC66  reti
 ; ---------------------------------------------------------------------
@@ -102743,9 +102743,9 @@ SC1_Irq_Exit_3:
 ;          `reti`, so no fall-through either.  UNREACHABLE.
 ; ---------------------------------------------------------------------
 SC1_Irq_Exit_3_Delayed:
-	.byte 0xC0, 0x0D, 0x3C, 0xF7	; F5ACAC  and (0x0d),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x0d, 0xf7	; F5ACAC  and (0x0d),0xf7
 	calr	64895	; F5ACB0  calr 0xf5aa32
-	.byte 0xC0, 0x0D, 0x3E, 0x08	; F5ACB3  or (0x0d),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0x0d, 0x08	; F5ACB3  or (0x0d),0x08
 	pop	xiy	; F5ACB7  pop XIY
 	pop	xhl	; F5ACB8  pop XHL
 	pop	xwa	; F5ACB9  pop XWA
@@ -102796,9 +102796,9 @@ SC1_Irq_Exit_3b:
 ;          UNREACHABLE.
 ; ---------------------------------------------------------------------
 SC1_Irq_Exit_3b_Delayed:
-	.byte 0xC0, 0x0D, 0x3C, 0xF7	; F5ACD4  and (0x0d),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x0d, 0xf7	; F5ACD4  and (0x0d),0xf7
 	calr	64855	; F5ACD8  calr 0xf5aa32
-	.byte 0xC0, 0x0D, 0x3E, 0x08	; F5ACDB  or (0x0d),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0x0d, 0x08	; F5ACDB  or (0x0d),0x08
 	pop	xiy	; F5ACDF  pop XIY
 	pop	xhl	; F5ACE0  pop XHL
 	pop	xwa	; F5ACE1  pop XWA
@@ -102863,13 +102863,13 @@ SC1_Irq_Exit_3b_Delayed:
 ;          pins is not established.
 ; ---------------------------------------------------------------------
 SC1_State04_TxByte1:
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xDF	; F5ACE3  and (0x2a86),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a86, 0xdf	; F5ACE3  and (0x2a86),0xdf
 	ldb_d8	a, (10886)	; F5ACE8  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5ACEC  ld (0x1a),A
 	ldio	87, 36	; F5ACEF  ld (0x57),0x24
 	ldio	114, 143	; F5ACF2  ld (0x72),0x8f
 	ldio	120, 80	; F5ACF5  ld (0x78),0x50
-	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5ACF8  and (0x55),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x55, 0xfe	; F5ACF8  and (0x55),0xfe
 	st_dd8b	a, 84	; F5ACFC  ld (0x54),A
 	incdi8	4, (10880)	; F5ACFF  inc 4,(0x2a80)
 	mul	a, 1	; F5AD03  mul A,0x01
@@ -102878,51 +102878,51 @@ SC1_State04_TxByte1:
 	jr	nz, -102	; F5AD0C  jr NZ,0xf5aca8
 	stdi8	(10881), 0	; F5AD0E  ld (0x2a81),0x00
 	stdi8	(10880), 0	; F5AD13  ld (0x2a80),0x00
-	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x02	; F5AD18  or (0x2a84),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a84, 0x02	; F5AD18  or (0x2a84),0x02
 	ldio	114, 133	; F5AD1D  ld (0x72),0x85
 	ldio	120, 255	; F5AD20  ld (0x78),0xff
 	ldio	87, 36	; F5AD23  ld (0x57),0x24
-	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFD	; F5AD26  and (0x2a82),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a82, 0xfd	; F5AD26  and (0x2a82),0xfd
 	jrl	-134	; F5AD2B  jrl T,0xf5aca8
 SC1_State0C:
 	calr	64781	; F5AD2E  calr 0xf5aa3e
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xD7	; F5AD31  and (0x2a86),0xd7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a86, 0xd7	; F5AD31  and (0x2a86),0xd7
 	ldb_d8	a, (10886)	; F5AD36  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AD3A  ld (0x1a),A
-	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xD7	; F5AD3D  and (0x2a87),0xd7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a87, 0xd7	; F5AD3D  and (0x2a87),0xd7
 	ldb_d8	a, (10887)	; F5AD42  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AD46  ld (0x1b),A
 	ldio	87, 36	; F5AD49  ld (0x57),0x24
 	ldio	120, 80	; F5AD4C  ld (0x78),0x50
-	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5AD4F  and (0x55),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x55, 0xfe	; F5AD4F  and (0x55),0xfe
 	st_dd8b	a, 84	; F5AD53  ld (0x54),A
 	incdi8	4, (10880)	; F5AD56  inc 4,(0x2a80)
 	jrl	-181	; F5AD5A  jrl T,0xf5aca8
 SC1_State14:
 	calr	64734	; F5AD5D  calr 0xf5aa3e
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xD7	; F5AD60  and (0x2a86),0xd7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a86, 0xd7	; F5AD60  and (0x2a86),0xd7
 	ldb_d8	a, (10886)	; F5AD65  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AD69  ld (0x1a),A
-	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xD7	; F5AD6C  and (0x2a87),0xd7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a87, 0xd7	; F5AD6C  and (0x2a87),0xd7
 	ldb_d8	a, (10887)	; F5AD71  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AD75  ld (0x1b),A
 	ldio	87, 36	; F5AD78  ld (0x57),0x24
 	st_dd8b	a, 84	; F5AD7B  ld (0x54),A
 	ldio	114, 133	; F5AD7E  ld (0x72),0x85
 	ldio	120, 80	; F5AD81  ld (0x78),0x50
-	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5AD84  and (0x55),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x55, 0xfe	; F5AD84  and (0x55),0xfe
 	st_dd8b	a, 84	; F5AD88  ld (0x54),A
 	incdi8	4, (10880)	; F5AD8B  inc 4,(0x2a80)
 	jrl	-234	; F5AD8F  jrl T,0xf5aca8
 SC1_State08_TxFromRing:
 	ldio	87, 34	; F5AD92  ld (0x57),0x22
-	.byte 0xC1, 0x87, 0x2A, 0x3E, 0x28	; F5AD95  or (0x2a87),0x28   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a87, 0x28	; F5AD95  or (0x2a87),0x28
 	ldb_d8	a, (10887)	; F5AD9A  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AD9E  ld (0x1b),A
-	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x28	; F5ADA1  or (0x2a86),0x28   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a86, 0x28	; F5ADA1  or (0x2a86),0x28
 	ldb_d8	a, (10886)	; F5ADA6  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5ADAA  ld (0x1a),A
-	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5ADAD  and (0x55),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x55, 0xfe	; F5ADAD  and (0x55),0xfe
 	ldio	114, 133	; F5ADB1  ld (0x72),0x85
 	ldio	120, 80	; F5ADB4  ld (0x78),0x50
 	ld	xiy, 10980	; F5ADB7  ld XIY,0x00002ae4
@@ -102945,13 +102945,13 @@ SC1_State08_TxFromRing:
 	jrl	-335	; F5ADF4  jrl T,0xf5aca8
 SC1_State10_TxFromRing:
 	ldio	87, 34	; F5ADF7  ld (0x57),0x22
-	.byte 0xC1, 0x87, 0x2A, 0x3E, 0x28	; F5ADFA  or (0x2a87),0x28   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a87, 0x28	; F5ADFA  or (0x2a87),0x28
 	ldb_d8	a, (10887)	; F5ADFF  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AE03  ld (0x1b),A
-	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x28	; F5AE06  or (0x2a86),0x28   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a86, 0x28	; F5AE06  or (0x2a86),0x28
 	ldb_d8	a, (10886)	; F5AE0B  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AE0F  ld (0x1a),A
-	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5AE12  and (0x55),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x55, 0xfe	; F5AE12  and (0x55),0xfe
 	ldio	114, 133	; F5AE16  ld (0x72),0x85
 	ldio	120, 80	; F5AE19  ld (0x78),0x50
 	ld	xiy, 10980	; F5AE1C  ld XIY,0x00002ae4
@@ -102979,37 +102979,37 @@ SC1_State18_TxDone:
 	cps	wa, 2	; F5AE6E  cp WA,2
 	jr	c, 57	; F5AE70  jr C,0xf5aeab
 	stdi8	(10880), 4	; F5AE72  ld (0x2a80),0x04
-	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5AE77  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a87, 0xdf	; F5AE77  and (0x2a87),0xdf
 	ldb_d8	a, (10887)	; F5AE7C  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AE80  ld (0x1b),A
-	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5AE83  and (0x18),0xdf   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x20	; F5AE87  or (0x2a86),0x20   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x18, 0xdf	; F5AE83  and (0x18),0xdf
+	m_or_mi8 MB16, 0x2a86, 0x20	; F5AE87  or (0x2a86),0x20
 	ldb_d8	a, (10886)	; F5AE8C  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AE90  ld (0x1a),A
 	ldio	87, 40	; F5AE93  ld (0x57),0x28
 	ldio	114, 143	; F5AE96  ld (0x72),0x8f
-	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5AE99  and (0x55),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x55, 0xfe	; F5AE99  and (0x55),0xfe
 	ldio	120, 80	; F5AE9D  ld (0x78),0x50
 	st_dd8b	a, 84	; F5AEA0  ld (0x54),A
-	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x02	; F5AEA3  or (0x2a82),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a82, 0x02	; F5AEA3  or (0x2a82),0x02
 	jrl	-515	; F5AEA8  jrl T,0xf5aca8
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xDF	; F5AEAB  and (0x2a86),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a86, 0xdf	; F5AEAB  and (0x2a86),0xdf
 	ldb_d8	a, (10886)	; F5AEB0  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AEB4  ld (0x1a),A
-	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5AEB7  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a87, 0xdf	; F5AEB7  and (0x2a87),0xdf
 	ldb_d8	a, (10887)	; F5AEBC  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AEC0  ld (0x1b),A
 	ldio	114, 133	; F5AEC3  ld (0x72),0x85
 	ldio	120, 255	; F5AEC6  ld (0x78),0xff
 	ldio	87, 36	; F5AEC9  ld (0x57),0x24
-	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFD	; F5AECC  and (0x2a82),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a82, 0xfd	; F5AECC  and (0x2a82),0xfd
 	jrl	-556	; F5AED1  jrl T,0xf5aca8
 SC1_State20_RxFirstByte:
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xCF	; F5AED4  and (0x2a86),0xcf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a86, 0xcf	; F5AED4  and (0x2a86),0xcf
 	ldb_d8	a, (10886)	; F5AED9  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AEDD  ld (0x1a),A
-	.byte 0xC0, 0x55, 0x3E, 0x01	; F5AEE0  or (0x55),0x01   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x55, 0x3C, 0xFD	; F5AEE4  and (0x55),0xfd   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0x55, 0x01	; F5AEE0  or (0x55),0x01
+	m_and_mi8 MB8, 0x55, 0xfd	; F5AEE4  and (0x55),0xfd
 	ldio	114, 133	; F5AEE8  ld (0x72),0x85
 	ldio	120, 5	; F5AEEB  ld (0x78),0x05
 	ld_sd8b	a, 84	; F5AEEE  ld A,(0x54)
@@ -103026,9 +103026,9 @@ SC1_State20_RxFirstByte:
 	sub	iy, hl	; F5AF0F  sub IY,HL
 	cps	iy, 3	; F5AF11  cp IY,3
 	jr	nc, 7	; F5AF13  jr NC,0xf5af1c
-	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x01	; F5AF15  or (0x2a84),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a84, 0x01	; F5AF15  or (0x2a84),0x01
 	jr	23	; F5AF1A  jr T,0xf5af33
-	.byte 0xC1, 0x84, 0x2A, 0x3C, 0xFE	; F5AF1C  and (0x2a84),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a84, 0xfe	; F5AF1C  and (0x2a84),0xfe
 	incdi16	1, (10898)	; F5AF21  incw 1,(0x2a92)
 	m_cp_mi16 MW16, 0x2a92, 0x004c	; F5AF25  cp (0x2a92),0x004c
 	jr	c, 6	; F5AF2B  jr C,0xf5af33
@@ -103057,23 +103057,23 @@ SC1_State24_RxNextByte:
 	m_cp_mi8 MB16, 0x2a81, 0x01	; F5AF7B  cp (0x2a81),0x01
 	jr	nz, 52	; F5AF80  jr NZ,0xf5afb6
 	stdi8	(10881), 0	; F5AF82  ld (0x2a81),0x00
-	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFE	; F5AF87  and (0x2a82),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a82, 0xfe	; F5AF87  and (0x2a82),0xfe
 	stdi8	(10880), 0	; F5AF8C  ld (0x2a80),0x00
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xCF	; F5AF91  and (0x2a86),0xcf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a86, 0xcf	; F5AF91  and (0x2a86),0xcf
 	ldb_d8	a, (10886)	; F5AF96  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AF9A  ld (0x1a),A
-	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5AF9D  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a87, 0xdf	; F5AF9D  and (0x2a87),0xdf
 	ldb_d8	a, (10887)	; F5AFA2  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5AFA6  ld (0x1b),A
 	ldio	114, 133	; F5AFA9  ld (0x72),0x85
 	ldio	120, 5	; F5AFAC  ld (0x78),0x05
-	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5AFAF  and (0x56),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x56, 0xdf	; F5AFAF  and (0x56),0xdf
 	jrl	-742	; F5AFB3  jrl T,0xf5acd0
-	.byte 0xC1, 0x86, 0x2A, 0x3C, 0xCF	; F5AFB6  and (0x2a86),0xcf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a86, 0xcf	; F5AFB6  and (0x2a86),0xcf
 	ldb_d8	a, (10886)	; F5AFBB  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5AFBF  ld (0x1a),A
-	.byte 0xC0, 0x55, 0x3E, 0x01	; F5AFC2  or (0x55),0x01   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x55, 0x3C, 0xFD	; F5AFC6  and (0x55),0xfd   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0x55, 0x01	; F5AFC2  or (0x55),0x01
+	m_and_mi8 MB8, 0x55, 0xfd	; F5AFC6  and (0x55),0xfd
 	ldio	114, 133	; F5AFCA  ld (0x72),0x85
 	ldio	120, 5	; F5AFCD  ld (0x78),0x05
 	jrl	-771	; F5AFD0  jrl T,0xf5acd0
@@ -103087,7 +103087,7 @@ SC1_State24_RxNextByte:
 ; Evidence: `or (0x2A84),0x80` and a jump, five bytes in total.
 ; ---------------------------------------------------------------------
 SC1_State_Unexpected:
-	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x80	; F5AFD3  or (0x2a84),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a84, 0x80	; F5AFD3  or (0x2a84),0x80
 	jrl	-779	; F5AFD8  jrl T,0xf5acd0
 ; ---------------------------------------------------------------------
 ; SC1_AbortToIdle -- clear both busy flags, disable the receiver, RETI
@@ -103103,9 +103103,9 @@ SC1_State_Unexpected:
 ;          converted.  Left with a positional name for that reason.
 ; ---------------------------------------------------------------------
 SC1_AbortToIdle:
-	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFC	; F5AFDB  and (0x2a82),0xfc   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x04	; F5AFE0  or (0x2a84),0x04   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5AFE5  and (0x56),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a82, 0xfc	; F5AFDB  and (0x2a82),0xfc
+	m_or_mi8 MB16, 0x2a84, 0x04	; F5AFE0  or (0x2a84),0x04
+	m_and_mi8 MB8, 0x56, 0xdf	; F5AFE5  and (0x56),0xdf
 	ldio	120, 15	; F5AFE9  ld (0x78),0x0f
 	ldio	114, 143	; F5AFEC  ld (0x72),0x8f
 	jr	0	; F5AFEF  jr T,0xf5aff1
@@ -103143,19 +103143,19 @@ SC1_TxFlush_Body:
 	sub	a, w	; F5B01D  sub A,W
 	cps	a, 2	; F5B01F  cp A,2
 	jr	c, 58	; F5B021  jr C,0xf5b05d
-	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x02	; F5B023  or (0x2a82),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a82, 0x02	; F5B023  or (0x2a82),0x02
 	stdi8	(10880), 4	; F5B028  ld (0x2a80),0x04
 	ldio	114, 143	; F5B02D  ld (0x72),0x8f
 	ldio	87, 40	; F5B030  ld (0x57),0x28
-	.byte 0xC1, 0x87, 0x2A, 0x3C, 0xDF	; F5B033  and (0x2a87),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a87, 0xdf	; F5B033  and (0x2a87),0xdf
 	ldb_d8	a, (10887)	; F5B038  ld A,(0x2a87)
 	st_dd8b	a, 27	; F5B03C  ld (0x1b),A
-	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5B03F  and (0x18),0xdf   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x86, 0x2A, 0x3E, 0x20	; F5B043  or (0x2a86),0x20   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x18, 0xdf	; F5B03F  and (0x18),0xdf
+	m_or_mi8 MB16, 0x2a86, 0x20	; F5B043  or (0x2a86),0x20
 	ldb_d8	a, (10886)	; F5B048  ld A,(0x2a86)
 	st_dd8b	a, 26	; F5B04C  ld (0x1a),A
-	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5B04F  and (0x56),0xdf   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x55, 0x3C, 0xFE	; F5B053  and (0x55),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x56, 0xdf	; F5B04F  and (0x56),0xdf
+	m_and_mi8 MB8, 0x55, 0xfe	; F5B053  and (0x55),0xfe
 	ldio	120, 80	; F5B057  ld (0x78),0x50
 	st_dd8b	a, 84	; F5B05A  ld (0x54),A
 ; ---------------------------------------------------------------------
@@ -103195,10 +103195,10 @@ SC1_TxFlush_Exit:
 ;          dispatches on `(byte & 0x38) >> 1` through SC1_RxOpTable.
 ; ---------------------------------------------------------------------
 SC1_Service_SetBit2:
-	.byte 0xC1, 0x82, 0x2A, 0x3E, 0x04	; F5B060  or (0x2a82),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a82, 0x04	; F5B060  or (0x2a82),0x04
 	jr	5	; F5B065  jr T,0xf5b06c
 SC1_Service_ClearBit2:
-	.byte 0xC1, 0x82, 0x2A, 0x3C, 0xFB	; F5B067  and (0x2a82),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2a82, 0xfb	; F5B067  and (0x2a82),0xfb
 SC1_RxDecode:
 	ld	xiz, 11072	; F5B06C  ld XIZ,0x00002b40
 	ld	ix, (xiz+4)	; F5B071  ld IX,(XIZ+0x04)
@@ -103315,7 +103315,7 @@ SC1_RxOp0_ThreeByte:
 	sub	w, 48	; F5B10A  sub W,0x30
 	add	l, w	; F5B10D  add L,W
 	.byte 0x83, 0x31	; F5B10F  ex (XHL),A   [llvm-mc cannot encode this]
-	.byte 0x83, 0xD1	; F5B111  xor A,(XHL)   [llvm-mc cannot encode this]
+	m_xor_rm MBI+r3, 0, 1	; F5B111  xor A,(XHL)
 	.byte 0xF3, 0x07, 0xF8, 0xF0, 0x41	; F5B113  ld (XIZ+IX),A   [llvm-mc cannot encode this]
 	calr	537	; F5B118  calr 0xf5b334
 	stb_d8	(10890), a	; F5B11B  ld (0x2a8a),A
@@ -103430,7 +103430,7 @@ SC1_RxOp6_Run:
 	bit	4, w	; F5B1E4  bit 0x04,W
 	jr	nz, 24	; F5B1E7  jr NZ,0xf5b201
 	.byte 0x83, 0x31	; F5B1E9  ex (XHL),A   [llvm-mc cannot encode this]
-	.byte 0x83, 0xD1	; F5B1EB  xor A,(XHL)   [llvm-mc cannot encode this]
+	m_xor_rm MBI+r3, 0, 1	; F5B1EB  xor A,(XHL)
 	inc	1, hl	; F5B1ED  inc 1,HL
 	m_bit 4, MD16, 0x2a82	; F5B1EF  bit 4,(0x2a82)
 	jr	z, 14	; F5B1F3  jr Z,0xf5b203
@@ -103478,7 +103478,7 @@ SC1_RxOp3_Discard:
 	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x21	; F5B22E  ld A,(XDE+IY)   [llvm-mc cannot encode this]
 	calr	230	; F5B233  calr 0xf5b31c
 	stda16	(10896), iy	; F5B236  ld (0x2a90),IY
-	.byte 0xC1, 0x84, 0x2A, 0x3E, 0x08	; F5B23A  or (0x2a84),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2a84, 0x08	; F5B23A  or (0x2a84),0x08
 	jrl	-453	; F5B23F  jrl T,0xf5b07d
 ; ---------------------------------------------------------------------
 ; SC1_RxDecode_Ret -- the receive decoder's only exit
@@ -103745,7 +103745,7 @@ SC1_DeadTail:
 	and	a, 223	; F5B378  and A,0xdf
 	stb_d8	(10886), a	; F5B37B  ld (0x2a86),A
 	st_dd8b	a, 26	; F5B37F  ld (0x1a),A
-	.byte 0xC0, 0x18, 0x3C, 0xDF	; F5B382  and (0x18),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x18, 0xdf	; F5B382  and (0x18),0xdf
 	ldio	87, 34	; F5B386  ld (0x57),0x22
 	stdi16	(10976), 0	; F5B389  ld (0x2ae0),0x0000
 	stdi16	(10978), 0	; F5B38F  ld (0x2ae2),0x0000
@@ -103780,7 +103780,7 @@ SC1_DeadTail:
 	.byte 0xBB, 0x04, 0x02, 0x0A, 0x00	; F5B3F6  ld (XHL+0x04),0x000a   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x06, 0x02, 0x0A, 0x00	; F5B3FB  ld (XHL+0x06),0x000a   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x08, 0x02, 0x56, 0x00	; F5B400  ld (XHL+0x08),0x0056   [llvm-mc cannot encode this]
-	.byte 0xC0, 0x56, 0x3C, 0xDF	; F5B405  and (0x56),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0x56, 0xdf	; F5B405  and (0x56),0xdf
 	di	; F5B409  ei 0x00
 	stdi16	(10976), 0	; F5B40B  ld (0x2ae0),0x0000
 	stdi16	(10978), 0	; F5B411  ld (0x2ae2),0x0000
@@ -104222,7 +104222,7 @@ Dispatch_Code80:
 	sla	hl, 2	; F5B9E1  sla 0x02,HL
 	.byte 0xE3, 0x07, 0xF4, 0xEC, 0x25	; F5B9E4  ld XIY,(XIY+HL)   [llvm-mc cannot encode this]
 	call	(xiy)	; F5B9E9  call T,XIY
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F5B9EB  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F5B9EB  or (0x2075),0x08
 	pop	xiy	; F5B9F0  pop XIY
 	pop	xix	; F5B9F1  pop XIX
 	pop	xhl	; F5B9F2  pop XHL
@@ -107448,7 +107448,7 @@ sub_F5DAA2:		; <- T_F42700
 	stdi8	(3402), 3	; F5DAF8  ld (0x0d4a),0x03
 	jrl	681	; F5DAFD  jrl T,0xf5dda9
 	stdi8	(3402), 0	; F5DB00  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F5DB05  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F5DB05  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F5DB0A  cp (0x0c70),0x7f
 	jr	z, 47	; F5DB0F  jr Z,0xf5db40
 	xor	hl, hl	; F5DB11  xor HL,HL
@@ -107586,7 +107586,7 @@ sub_F5DBD0:
 	jrl	z, 419	; F5DC02  jrl Z,0xf5dda8
 	xor	bc, bc	; F5DC05  xor BC,BC
 	xor	wa, wa	; F5DC07  xor WA,WA
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFE	; F5DC09  and (0x0c8a),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xfe	; F5DC09  and (0x0c8a),0xfe
 	stda16	(3338), iy	; F5DC0E  ld (0x0d0a),IY
 	push	xhl	; F5DC12  push XHL
 	ldda32	xhl, (4718)	; F5DC13  ld XHL,(0x126e)
@@ -107690,7 +107690,7 @@ sub_F5DBD0:
 	ld	l, a	; F5DD3A  ld L,A
 	cp	l, 127	; F5DD3C  cp L,0x7f
 	jr	nz, 5	; F5DD3F  jr NZ,0xf5dd46
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x01	; F5DD41  or (0x0c8a),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x01	; F5DD41  or (0x0c8a),0x01
 	push	xix	; F5DD46  push XIX
 	ldda32	xix, (4718)	; F5DD47  ld XIX,(0x126e)
 	.byte 0xF3, 0x07, 0xF0, 0xF4, 0x47	; F5DD4B  ld (XIX+IY),L   [llvm-mc cannot encode this]
@@ -108388,7 +108388,7 @@ sub_F5E3DA:		; <- T_F426EC
 	stdi8	(3402), 3	; F5E40D  ld (0x0d4a),0x03
 	jrl	338	; F5E412  jrl T,0xf5e567
 	stdi8	(3402), 0	; F5E415  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F5E41A  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F5E41A  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F5E41F  cp (0x0c70),0x7f
 	jr	nz, 3	; F5E424  jr NZ,0xf5e429
 	jrl	116	; F5E426  jrl T,0xf5e49d
@@ -108401,7 +108401,7 @@ sub_F5E3DA:		; <- T_F426EC
 	pop	xix	; F5E43C  pop XIX
 	cp	a, 32	; F5E43D  cp A,0x20
 	jr	nz, 23	; F5E440  jr NZ,0xf5e459
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x40	; F5E442  or (0x0c8a),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x40	; F5E442  or (0x0c8a),0x40
 	ldb_d8	a, (3184)	; F5E447  ld A,(0x0c70)
 	call	16000912	; F5E44B  call 0xf42790
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F5E44F  cp (0x0d4a),0x00
@@ -108437,7 +108437,7 @@ sub_F5E3DA:		; <- T_F426EC
 	pop	xix	; F5E4B0  pop XIX
 	cp	a, 32	; F5E4B1  cp A,0x20
 	jr	nz, 25	; F5E4B4  jr NZ,0xf5e4cf
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x40	; F5E4B6  or (0x0c8a),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x40	; F5E4B6  or (0x0c8a),0x40
 	push	xhl	; F5E4BB  push XHL
 	ld	wa, hl	; F5E4BC  ld WA,HL
 	inc	1, wa	; F5E4BE  inc 1,WA
@@ -108675,7 +108675,7 @@ sub_F5E708:		; <- T_F426F0
 	stdi8	(3402), 3	; F5E74B  ld (0x0d4a),0x03
 	jrl	222	; F5E750  jrl T,0xf5e831
 	stdi8	(3402), 0	; F5E753  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F5E758  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F5E758  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F5E75D  cp (0x0c70),0x7f
 	jr	nz, 2	; F5E762  jr NZ,0xf5e766
 	jr	67	; F5E764  jr T,0xf5e7a9
@@ -108688,7 +108688,7 @@ sub_F5E708:		; <- T_F426F0
 	pop	xix	; F5E779  pop XIX
 	cp	a, 32	; F5E77A  cp A,0x20
 	jr	nz, 23	; F5E77D  jr NZ,0xf5e796
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x40	; F5E77F  or (0x0c8a),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x40	; F5E77F  or (0x0c8a),0x40
 	ldb_d8	a, (3184)	; F5E784  ld A,(0x0c70)
 	call	16000912	; F5E788  call 0xf42790
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F5E78C  cp (0x0d4a),0x00
@@ -108708,7 +108708,7 @@ sub_F5E708:		; <- T_F426F0
 	pop	xix	; F5E7BC  pop XIX
 	cp	a, 32	; F5E7BD  cp A,0x20
 	jr	nz, 24	; F5E7C0  jr NZ,0xf5e7da
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x40	; F5E7C2  or (0x0c8a),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x40	; F5E7C2  or (0x0c8a),0x40
 	pushw	hl	; F5E7C7  push HL
 	ld	wa, hl	; F5E7C8  ld WA,HL
 	inc	1, wa	; F5E7CA  inc 1,WA
@@ -109172,8 +109172,8 @@ sub_F5EC0E:		; <- T_F42710
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5EC12:		; <- T_F426F4
-	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F5EC12  and (0x0d45),0xfc   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFA	; F5EC17  and (0x0d46),0xfa   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d45, 0xfc	; F5EC12  and (0x0d45),0xfc
+	m_and_mi8 MB16, 0x0d46, 0xfa	; F5EC17  and (0x0d46),0xfa
 	call	16000964	; F5EC1C  call 0xf427c4
 	ldb_d8	a, (3184)	; F5EC20  ld A,(0x0c70)
 	cps	a, 1	; F5EC24  cp A,1
@@ -109205,7 +109205,7 @@ sub_F5EC12:		; <- T_F426F4
 	stdi8	(3402), 3	; F5EC6B  ld (0x0d4a),0x03
 	jrl	495	; F5EC70  jrl T,0xf5ee62
 	stdi8	(3402), 0	; F5EC73  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F5EC78  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F5EC78  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F5EC7D  cp (0x0c70),0x7f
 	jrl	z, 290	; F5EC82  jrl Z,0xf5eda7
 	xor	hl, hl	; F5EC85  xor HL,HL
@@ -109239,7 +109239,7 @@ sub_F5EC12:		; <- T_F426F4
 	pop	xix	; F5ECD8  pop XIX
 	cp	a, 32	; F5ECD9  cp A,0x20
 	jr	nz, 25	; F5ECDC  jr NZ,0xf5ecf7
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x40	; F5ECDE  or (0x0c8a),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x40	; F5ECDE  or (0x0c8a),0x40
 	xor	wa, wa	; F5ECE3  xor WA,WA
 	ldb_d8	a, (3184)	; F5ECE5  ld A,(0x0c70)
 	call	16000912	; F5ECE9  call 0xf42790
@@ -109310,7 +109310,7 @@ sub_F5EC12:		; <- T_F426F4
 	pop	xix	; F5EDBA  pop XIX
 	cp	a, 32	; F5EDBB  cp A,0x20
 	jr	nz, 25	; F5EDBE  jr NZ,0xf5edd9
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x40	; F5EDC0  or (0x0c8a),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x40	; F5EDC0  or (0x0c8a),0x40
 	pushw	hl	; F5EDC5  push HL
 	ld	wa, hl	; F5EDC6  ld WA,HL
 	inc	1, wa	; F5EDC8  inc 1,WA
@@ -109366,8 +109366,8 @@ sub_F5EC12:		; <- T_F426F4
 	stb_d8	(3402), a	; F5EE5E  ld (0x0d4a),A
 	call	16001044	; F5EE62  call 0xf42814
 	call	15993372	; F5EE66  call 0xf40a1c
-	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F5EE6A  and (0x0d45),0xfc   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFA	; F5EE6F  and (0x0d46),0xfa   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d45, 0xfc	; F5EE6A  and (0x0d45),0xfc
+	m_and_mi8 MB16, 0x0d46, 0xfa	; F5EE6F  and (0x0d46),0xfa
 	ret	; F5EE74  ret
 
 ; --------------------------------------------------------------------------
@@ -109429,7 +109429,7 @@ sub_F5EE95:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5EE9A:
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xF7	; F5EE9A  and (0x0c8a),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xf7	; F5EE9A  and (0x0c8a),0xf7
 	stdi8	(3402), 0	; F5EE9F  ld (0x0d4a),0x00
 	xor	wa, wa	; F5EEA4  xor WA,WA
 	ldb_d8	a, (3215)	; F5EEA6  ld A,(0x0c8f)
@@ -109467,7 +109467,7 @@ sub_F5EE9A:
 	jr	z, 18	; F5EF25  jr Z,0xf5ef39
 	m_cp_mi8 MB16, 0x0d4a, 0x07	; F5EF27  cp (0x0d4a),0x07
 	jrl	nz, 252	; F5EF2C  jrl NZ,0xf5f02b
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x08	; F5EF2F  or (0x0c8a),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x08	; F5EF2F  or (0x0c8a),0x08
 	stdi8	(3402), 0	; F5EF34  ld (0x0d4a),0x00
 	stda16	(3282), iy	; F5EF39  ld (0x0cd2),IY
 	ldw_d16	wa, (13404)	; F5EF3D  ld WA,(0x345c)
@@ -109557,7 +109557,7 @@ sub_F5F02C:
 	jr	ugt, 6	; F5F036  jr UGT,0xf5f03e
 	calr	65119	; F5F038  calr 0xf5ee9a
 	jrl	482	; F5F03B  jrl T,0xf5f220
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xF7	; F5F03E  and (0x0c8a),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xf7	; F5F03E  and (0x0c8a),0xf7
 	stdi8	(3402), 0	; F5F043  ld (0x0d4a),0x00
 	xor	wa, wa	; F5F048  xor WA,WA
 	ldb_d8	a, (3215)	; F5F04A  ld A,(0x0c8f)
@@ -109595,7 +109595,7 @@ sub_F5F02C:
 	jr	z, 18	; F5F0C9  jr Z,0xf5f0dd
 	m_cp_mi8 MB16, 0x0d4a, 0x07	; F5F0CB  cp (0x0d4a),0x07
 	jrl	nz, 333	; F5F0D0  jrl NZ,0xf5f220
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x08	; F5F0D3  or (0x0c8a),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x08	; F5F0D3  or (0x0c8a),0x08
 	stdi8	(3402), 0	; F5F0D8  ld (0x0d4a),0x00
 	stda16	(3282), iy	; F5F0DD  ld (0x0cd2),IY
 	ldw_d16	wa, (13404)	; F5F0E1  ld WA,(0x345c)
@@ -109702,8 +109702,8 @@ sub_F5F02C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5F221:		; <- T_F426F8
-	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F5F221  and (0x0d45),0xfc   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFA	; F5F226  and (0x0d46),0xfa   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d45, 0xfc	; F5F221  and (0x0d45),0xfc
+	m_and_mi8 MB16, 0x0d46, 0xfa	; F5F226  and (0x0d46),0xfa
 	call	16000964	; F5F22B  call 0xf427c4
 	ldb_d8	a, (3184)	; F5F22F  ld A,(0x0c70)
 	cps	a, 1	; F5F233  cp A,1
@@ -109735,7 +109735,7 @@ sub_F5F221:		; <- T_F426F8
 	stdi8	(3402), 3	; F5F27A  ld (0x0d4a),0x03
 	jrl	491	; F5F27F  jrl T,0xf5f46d
 	stdi8	(3402), 0	; F5F282  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F5F287  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F5F287  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F5F28C  cp (0x0c70),0x7f
 	jr	nz, 3	; F5F291  jr NZ,0xf5f296
 	jrl	284	; F5F293  jrl T,0xf5f3b2
@@ -109752,7 +109752,7 @@ sub_F5F221:		; <- T_F426F8
 	pop	xix	; F5F2B3  pop XIX
 	cp	a, 32	; F5F2B4  cp A,0x20
 	jr	nz, 23	; F5F2B7  jr NZ,0xf5f2d0
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x40	; F5F2B9  or (0x0c8a),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x40	; F5F2B9  or (0x0c8a),0x40
 	xor	wa, wa	; F5F2BE  xor WA,WA
 	ldb_d8	a, (3184)	; F5F2C0  ld A,(0x0c70)
 	call	16000912	; F5F2C4  call 0xf42790
@@ -109837,7 +109837,7 @@ sub_F5F221:		; <- T_F426F8
 	pop	xix	; F5F3C5  pop XIX
 	cp	a, 32	; F5F3C6  cp A,0x20
 	jr	nz, 25	; F5F3C9  jr NZ,0xf5f3e4
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x40	; F5F3CB  or (0x0c8a),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x40	; F5F3CB  or (0x0c8a),0x40
 	pushw	hl	; F5F3D0  push HL
 	ld	wa, hl	; F5F3D1  ld WA,HL
 	inc	1, wa	; F5F3D3  inc 1,WA
@@ -109910,9 +109910,9 @@ sub_F5F221:		; <- T_F426F8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F5F476:
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xF7	; F5F476  and (0x0c8a),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xEF	; F5F47B  and (0x0c8a),0xef   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0x7F	; F5F480  and (0x0c8a),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xf7	; F5F476  and (0x0c8a),0xf7
+	m_and_mi8 MB16, 0x0c8a, 0xef	; F5F47B  and (0x0c8a),0xef
+	m_and_mi8 MB16, 0x0c8a, 0x7f	; F5F480  and (0x0c8a),0x7f
 	stdi8	(3402), 0	; F5F485  ld (0x0d4a),0x00
 	xor	wa, wa	; F5F48A  xor WA,WA
 	ldb_d8	a, (3215)	; F5F48C  ld A,(0x0c8f)
@@ -109943,7 +109943,7 @@ sub_F5F476:
 	ld	hl, wa	; F5F4EA  ld HL,WA
 	muls	hl, 3	; F5F4EC  muls HL,0x0003
 	ld	xde, 6305024	; F5F4F0  ld XDE,0x00603500
-	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x3E, 0x80	; F5F4F5  or (XDE+HL),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_DE, ra_HL, 0x80	; F5F4F5  or (XDE+HL),0x80
 	inc	1, hl	; F5F4FB  inc 1,HL
 	.byte 0xF3, 0x07, 0xE8, 0xEC, 0x54	; F5F4FD  ld (XDE+HL),IX   [llvm-mc cannot encode this]
 	pop	xde	; F5F502  pop XDE
@@ -109952,7 +109952,7 @@ sub_F5F476:
 	ldda32	xhl, (4718)	; F5F509  ld XHL,(0x126e)
 	.byte 0xBB, 0x01, 0x02, 0x00, 0x00	; F5F50D  ld (XHL+0x01),0x0000   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F5F512  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x80	; F5F517  or (0x0c8a),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x80	; F5F517  or (0x0c8a),0x80
 	xor	hl, hl	; F5F51C  xor HL,HL
 	xor	wa, wa	; F5F51E  xor WA,WA
 	ldb_d8	a, (3215)	; F5F520  ld A,(0x0c8f)
@@ -109991,14 +109991,14 @@ sub_F5F476:
 	jr	z, 18	; F5F59A  jr Z,0xf5f5ae
 	m_cp_mi8 MB16, 0x0d4a, 0x07	; F5F59C  cp (0x0d4a),0x07
 	jrl	nz, 1026	; F5F5A1  jrl NZ,0xf5f9a6
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x08	; F5F5A4  or (0x0c8a),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x08	; F5F5A4  or (0x0c8a),0x08
 	stdi8	(3402), 0	; F5F5A9  ld (0x0d4a),0x00
 	stda16	(3282), iy	; F5F5AE  ld (0x0cd2),IY
 	ldw_d16	wa, (13404)	; F5F5B2  ld WA,(0x345c)
 	stda16	(3280), wa	; F5F5B6  ld (0x0cd0),WA
 	ldw_d16	wa, (3246)	; F5F5BA  ld WA,(0x0cae)
 	stda16	(3406), wa	; F5F5BE  ld (0x0d4e),WA
-	.byte 0xC1, 0x90, 0x0D, 0x3C, 0xFE	; F5F5C2  and (0x0d90),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d90, 0xfe	; F5F5C2  and (0x0d90),0xfe
 	ldb_d8	w, (3357)	; F5F5C7  ld W,(0x0d1d)
 	ldb_d8	a, (3215)	; F5F5CB  ld A,(0x0c8f)
 	ldw_d16	de, (3189)	; F5F5CF  ld DE,(0x0c75)
@@ -110015,7 +110015,7 @@ sub_F5F476:
 	jrl	939	; F5F5F8  jrl T,0xf5f9a6
 	ldw_d16	wa, (3260)	; F5F5FB  ld WA,(0x0cbc)
 	stda16	(13404), wa	; F5F5FF  ld (0x345c),WA
-	.byte 0xC1, 0x90, 0x0D, 0x3E, 0x01	; F5F603  or (0x0d90),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0d90, 0x01	; F5F603  or (0x0d90),0x01
 	xor	hl, hl	; F5F608  xor HL,HL
 	ldb_d8	l, (3215)	; F5F60A  ld L,(0x0c8f)
 	dec	1, hl	; F5F60E  dec 1,HL
@@ -110039,7 +110039,7 @@ sub_F5F476:
 	jr	z, 18	; F5F64E  jr Z,0xf5f662
 	m_cp_mi8 MB16, 0x0d4a, 0x07	; F5F650  cp (0x0d4a),0x07
 	jrl	nz, 846	; F5F655  jrl NZ,0xf5f9a6
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x10	; F5F658  or (0x0c8a),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x10	; F5F658  or (0x0c8a),0x10
 	stdi8	(3402), 0	; F5F65D  ld (0x0d4a),0x00
 	stda16	(3286), iy	; F5F662  ld (0x0cd6),IY
 	ldw_d16	wa, (13404)	; F5F666  ld WA,(0x345c)
@@ -110472,9 +110472,9 @@ sub_F5FB04:
 	stda16	(3216), de	; F5FB49  ld (0x0c90),DE
 	call	16000884	; F5FB4D  call 0xf42774
 	jrl	1213	; F5FB51  jrl T,0xf60011
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xF7	; F5FB54  and (0x0c8a),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xEF	; F5FB59  and (0x0c8a),0xef   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0x7F	; F5FB5E  and (0x0c8a),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xf7	; F5FB54  and (0x0c8a),0xf7
+	m_and_mi8 MB16, 0x0c8a, 0xef	; F5FB59  and (0x0c8a),0xef
+	m_and_mi8 MB16, 0x0c8a, 0x7f	; F5FB5E  and (0x0c8a),0x7f
 	stdi8	(3402), 0	; F5FB63  ld (0x0d4a),0x00
 	xor	wa, wa	; F5FB68  xor WA,WA
 	ldb_d8	a, (3215)	; F5FB6A  ld A,(0x0c8f)
@@ -110502,7 +110502,7 @@ sub_F5FB04:
 	jr	z, 18	; F5FBC1  jr Z,0xf5fbd5
 	m_cp_mi8 MB16, 0x0d4a, 0x07	; F5FBC3  cp (0x0d4a),0x07
 	jrl	nz, 1094	; F5FBC8  jrl NZ,0xf60011
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x08	; F5FBCB  or (0x0c8a),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x08	; F5FBCB  or (0x0c8a),0x08
 	stdi8	(3402), 0	; F5FBD0  ld (0x0d4a),0x00
 	stda16	(3282), iy	; F5FBD5  ld (0x0cd2),IY
 	ldw_d16	wa, (13404)	; F5FBD9  ld WA,(0x345c)
@@ -110527,7 +110527,7 @@ sub_F5FB04:
 	jr	z, 18	; F5FC22  jr Z,0xf5fc36
 	m_cp_mi8 MB16, 0x0d4a, 0x07	; F5FC24  cp (0x0d4a),0x07
 	jrl	nz, 997	; F5FC29  jrl NZ,0xf60011
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x10	; F5FC2C  or (0x0c8a),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x10	; F5FC2C  or (0x0c8a),0x10
 	stdi8	(3402), 0	; F5FC31  ld (0x0d4a),0x00
 	stda16	(3286), iy	; F5FC36  ld (0x0cd6),IY
 	ldw_d16	wa, (13404)	; F5FC3A  ld WA,(0x345c)
@@ -110844,7 +110844,7 @@ sub_F60012:		; <- T_F426E8
 	jrl	528	; F6004B  jrl T,0xf6025e
 	xor	hl, hl	; F6004E  xor HL,HL
 	stdi8	(3402), 0	; F60050  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F60055  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F60055  and (0x0c8a),0xbf
 	ldb_d8	l, (3184)	; F6005A  ld L,(0x0c70)
 	dec	1, hl	; F6005E  dec 1,HL
 	push	xix	; F60060  push XIX
@@ -110959,7 +110959,7 @@ sub_F60012:		; <- T_F426E8
 	muls	hl, 3	; F601BE  muls HL,0x0003
 	push	xiy	; F601C2  push XIY
 	ld	xiy, 6305024	; F601C3  ld XIY,0x00603500
-	.byte 0xC3, 0x07, 0xF4, 0xEC, 0x3E, 0x80	; F601C8  or (XIY+HL),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_IY, ra_HL, 0x80	; F601C8  or (XIY+HL),0x80
 	inc	1, hl	; F601CE  inc 1,HL
 	.byte 0xF3, 0x07, 0xF4, 0xEC, 0x54	; F601D0  ld (XIY+HL),IX   [llvm-mc cannot encode this]
 	pop	xiy	; F601D5  pop XIY
@@ -111103,7 +111103,7 @@ sub_F6027D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F602F0:
-	.byte 0xC1, 0x8B, 0x0C, 0x3C, 0xFD	; F602F0  and (0x0c8b),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8b, 0xfd	; F602F0  and (0x0c8b),0xfd
 	ldw_d16	iy, (3328)	; F602F5  ld IY,(0x0d00)
 	push	xix	; F602F9  push XIX
 	ld	xix, 6332672	; F602FA  ld XIX,0x0060a100
@@ -111113,7 +111113,7 @@ sub_F602F0:
 	jr	z, 5	; F60308  jr Z,0xf6030f
 	cp	b, 129	; F6030A  cp B,0x81
 	jr	nz, 7	; F6030D  jr NZ,0xf60316
-	.byte 0xC1, 0x8B, 0x0C, 0x3E, 0x02	; F6030F  or (0x0c8b),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8b, 0x02	; F6030F  or (0x0c8b),0x02
 	jr	33	; F60314  jr T,0xf60337
 	pushw	bc	; F60316  push BC
 	push	xix	; F60317  push XIX
@@ -111142,7 +111142,7 @@ sub_F602F0:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F60338:
-	.byte 0xC1, 0x8B, 0x0C, 0x3C, 0xFE	; F60338  and (0x0c8b),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8b, 0xfe	; F60338  and (0x0c8b),0xfe
 	ldw_d16	iy, (3322)	; F6033D  ld IY,(0x0cfa)
 	push	xix	; F60341  push XIX
 	ld	xix, 6332416	; F60342  ld XIX,0x0060a000
@@ -111152,7 +111152,7 @@ sub_F60338:
 	jr	z, 5	; F60350  jr Z,0xf60357
 	cp	c, 129	; F60352  cp C,0x81
 	jr	nz, 7	; F60355  jr NZ,0xf6035e
-	.byte 0xC1, 0x8B, 0x0C, 0x3E, 0x01	; F60357  or (0x0c8b),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8b, 0x01	; F60357  or (0x0c8b),0x01
 	jr	33	; F6035C  jr T,0xf6037f
 	pushw	bc	; F6035E  push BC
 	push	xix	; F6035F  push XIX
@@ -111406,7 +111406,7 @@ sub_F60548:
 	muls	iy, 3	; F6054C  muls IY,0x0003
 	push	xix	; F60550  push XIX
 	ld	xix, 6305024	; F60551  ld XIX,0x00603500
-	.byte 0xC3, 0x07, 0xF0, 0xF4, 0x3C, 0x7F	; F60556  and (XIX+IY),0x7f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_IX, ra_IY, 0x7f	; F60556  and (XIX+IY),0x7f
 	inc	1, iy	; F6055C  inc 1,IY
 	.byte 0xF3, 0x07, 0xF0, 0xF4, 0x02, 0xFF, 0xFF	; F6055E  ld (XIX+IY),0xffff   [llvm-mc cannot encode this]
 	ld	xix, 13442	; F60565  ld XIX,0x00003482
@@ -111469,7 +111469,7 @@ sub_F60598:		; <- T_F426FC
 	stdi8	(3402), 3	; F605ED  ld (0x0d4a),0x03
 	jrl	412	; F605F2  jrl T,0xf60791
 	stdi8	(3402), 0	; F605F5  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F605FA  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F605FA  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x7f	; F605FF  cp (0x0c70),0x7f
 	jr	nz, 2	; F60604  jr NZ,0xf60608
 	jr	47	; F60606  jr T,0xf60637
@@ -111688,7 +111688,7 @@ sub_F6079E:
 	jr	z, 50	; F60807  jr Z,0xf6083b
 	push	xde	; F60809  push XDE
 	ld	xde, 6305024	; F6080A  ld XDE,0x00603500
-	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x3C, 0x7F	; F6080F  and (XDE+IY),0x7f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_DE, ra_IY, 0x7f	; F6080F  and (XDE+IY),0x7f
 	inc	1, iy	; F60815  inc 1,IY
 	.byte 0xD3, 0x07, 0xE8, 0xF4, 0x20	; F60817  ld WA,(XDE+IY)   [llvm-mc cannot encode this]
 	pop	xde	; F6081C  pop XDE
@@ -111731,7 +111731,7 @@ sub_F6079E:
 	sla	a, 1	; F6088E  sla 0x01,A
 	add	a, w	; F60891  add A,W
 	xor	w, w	; F60893  xor W,W
-	.byte 0xC3, 0x07, 0xE8, 0xE0, 0x3C, 0x7F	; F60895  and (XDE+WA),0x7f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_DE, ra_WA, 0x7f	; F60895  and (XDE+WA),0x7f
 	inc	1, wa	; F6089B  inc 1,WA
 	.byte 0xF3, 0x07, 0xE8, 0xE0, 0x02, 0xFF, 0xFF	; F6089D  ld (XDE+WA),0xffff   [llvm-mc cannot encode this]
 	ld	xde, 126	; F608A4  ld XDE,0x0000007e
@@ -111787,7 +111787,7 @@ sub_F608D0:		; <- T_F426E0
 	ld	xiy, 6356992	; F60913  ld XIY,0x00610000
 	add	xiy, xwa	; F60918  add XIY,XWA
 	add	xiy, xde	; F6091A  add XIY,XDE
-	.byte 0xC3, 0x07, 0xF4, 0xF0, 0x3C, 0x7F	; F6091C  and (XIY+IX),0x7f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_IY, ra_IX, 0x7f	; F6091C  and (XIY+IX),0x7f
 	inc	1, ix	; F60922  inc 1,IX
 	.byte 0xE7, 0x38, 0x9D	; F60924  ld XDE3,XIY   [llvm-mc cannot encode this]
 	.byte 0xF3, 0x07, 0xF4, 0xF0, 0x35	; F60927  lda XIY,XIY+IX   [llvm-mc cannot encode this]
@@ -111809,7 +111809,7 @@ sub_F608D0:		; <- T_F426E0
 	jrl	ugt, 60	; F6095C  jrl UGT,0xf6099b
 	push	xde	; F6095F  push XDE
 	ld	xde, 6305024	; F60960  ld XDE,0x00603500
-	.byte 0xC3, 0x07, 0xE8, 0xF4, 0x3C, 0x7F	; F60965  and (XDE+IY),0x7f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_DE, ra_IY, 0x7f	; F60965  and (XDE+IY),0x7f
 	inc	1, iy	; F6096B  inc 1,IY
 	.byte 0xF3, 0x07, 0xE8, 0xF4, 0x02, 0xFF, 0xFF	; F6096D  ld (XDE+IY),0xffff   [llvm-mc cannot encode this]
 	pop	xde	; F60974  pop XDE
@@ -112772,7 +112772,7 @@ sub_F6119A:		; <- T_F4271C
 	ld	hl, ix	; F613BE  ld HL,IX
 	call	16000956	; F613C0  call 0xf427bc
 	ldda32	xhl, (4718)	; F613C4  ld XHL,(0x126e)
-	.byte 0x83, 0x3E, 0x80	; F613C8  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F613C8  or (XHL),0x80
 	ldw_d16	wa, (13404)	; F613CB  ld WA,(0x345c)
 	ld	(xhl+1), wa	; F613CF  ld (XHL+0x01),WA
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F613D2  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
@@ -113017,7 +113017,7 @@ sub_F615C2:
 	ld	hl, ix	; F61682  ld HL,IX
 	call	16000956	; F61684  call 0xf427bc
 	ldda32	xhl, (4718)	; F61688  ld XHL,(0x126e)
-	.byte 0x83, 0x3E, 0x80	; F6168C  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F6168C  or (XHL),0x80
 	ldw_d16	wa, (13404)	; F6168F  ld WA,(0x345c)
 	ld	(xhl+1), wa	; F61693  ld (XHL+0x01),WA
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F61696  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
@@ -113205,7 +113205,7 @@ sub_F61880:
 	ld	hl, ix	; F61891  ld HL,IX
 	call	16000956	; F61893  call 0xf427bc
 	ldda32	xhl, (4718)	; F61897  ld XHL,(0x126e)
-	.byte 0x83, 0x3E, 0x80	; F6189B  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F6189B  or (XHL),0x80
 	.byte 0xBB, 0x01, 0x02, 0x00, 0x00	; F6189E  ld (XHL+0x01),0x0000   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F618A3  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
 	ld	xde, 6356992	; F618A8  ld XDE,0x00610000
@@ -113228,7 +113228,7 @@ sub_F61880:
 	sla	w, 1	; F618D4  sla 0x01,W
 	add	a, w	; F618D7  add A,W
 	xor	w, w	; F618D9  xor W,W
-	.byte 0xC3, 0x07, 0xE8, 0xE0, 0x3E, 0x80	; F618DB  or (XDE+WA),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_DE, ra_WA, 0x80	; F618DB  or (XDE+WA),0x80
 	inc	1, wa	; F618E1  inc 1,WA
 	.byte 0xF3, 0x07, 0xE8, 0xE0, 0x54	; F618E3  ld (XDE+WA),IX   [llvm-mc cannot encode this]
 	ldb_d8	c, (3597)	; F618E8  ld C,(0x0e0d)
@@ -113238,7 +113238,7 @@ sub_F61880:
 	ld	xde, 6305024	; F618F4  ld XDE,0x00603500
 	.byte 0xF3, 0x07, 0xE8, 0xE0, 0x54	; F618F9  ld (XDE+WA),IX   [llvm-mc cannot encode this]
 	dec	1, wa	; F618FE  dec 1,WA
-	.byte 0xC3, 0x07, 0xE8, 0xE0, 0x3E, 0x80	; F61900  or (XDE+WA),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_DE, ra_WA, 0x80	; F61900  or (XDE+WA),0x80
 	ret	; F61906  ret
 
 ; --------------------------------------------------------------------------
@@ -113377,7 +113377,7 @@ sub_F61A16:		; <- T_F42720
 	stdi8	(3402), 3	; F61A50  ld (0x0d4a),0x03
 	jrl	150	; F61A55  jrl T,0xf61aee
 	stdi8	(3402), 0	; F61A58  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F61A5D  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F61A5D  and (0x0c8a),0xbf
 	m_cp_mi8 MB16, 0x0c70, 0x11	; F61A62  cp (0x0c70),0x11
 	jr	z, 48	; F61A67  jr Z,0xf61a99
 	xor	hl, hl	; F61A69  xor HL,HL
@@ -113459,7 +113459,7 @@ sub_F61AF7:
 	xor	wa, wa	; F61B22  xor WA,WA
 	stb_d8	(3611), a	; F61B24  ld (0x0e1b),A
 	stb_d8	(3613), a	; F61B28  ld (0x0e1d),A
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFE	; F61B2C  and (0x0c8a),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xfe	; F61B2C  and (0x0c8a),0xfe
 	stda16	(3338), iy	; F61B31  ld (0x0d0a),IY
 	push	xhl	; F61B35  push XHL
 	ldda32	xhl, (4718)	; F61B36  ld XHL,(0x126e)
@@ -113491,7 +113491,7 @@ sub_F61AF7:
 	jr	nz, 5	; F61B8D  jr NZ,0xf61b94
 	cp	a, 96	; F61B8F  cp A,0x60
 	jr	c, 5	; F61B92  jr C,0xf61b99
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x01	; F61B94  or (0x0c8a),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x01	; F61B94  or (0x0c8a),0x01
 	call	16000924	; F61B99  call 0xf4279c
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F61B9D  cp (0x0d4a),0x00
 	jr	nz, 80	; F61BA2  jr NZ,0xf61bf4
@@ -113654,7 +113654,7 @@ sub_F61C24:
 	ldda32	xwa, (3348)	; F61CE2  ld XWA,(0x0d14)
 	stda32	(3615), xwa	; F61CE6  ld (0x0e1f),XWA
 	pop	xwa	; F61CEA  pop XWA
-	.byte 0xC1, 0x1B, 0x0E, 0x3E, 0x01	; F61CEB  or (0x0e1b),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e1b, 0x01	; F61CEB  or (0x0e1b),0x01
 	ldda32	xhl, (4718)	; F61CF0  ld XHL,(0x126e)
 	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x21	; F61CF4  ld A,(XHL+IY)   [llvm-mc cannot encode this]
 	sub	a, 96	; F61CF9  sub A,0x60
@@ -113832,7 +113832,7 @@ sub_F61D65:
 	ldda32	xwa, (3348)	; F61EB7  ld XWA,(0x0d14)
 	stda32	(3615), xwa	; F61EBB  ld (0x0e1f),XWA
 	pop	xwa	; F61EBF  pop XWA
-	.byte 0xC1, 0x1B, 0x0E, 0x3E, 0x01	; F61EC0  or (0x0e1b),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e1b, 0x01	; F61EC0  or (0x0e1b),0x01
 	xor	a, a	; F61EC5  xor A,A
 	m_bit 0, MD16, 0x0e1c	; F61EC7  bit 0,(0x0e1c)
 	jr	nz, 12	; F61ECB  jr NZ,0xf61ed9
@@ -114178,7 +114178,7 @@ sub_F620AF:
 	ldda32	xwa, (3348)	; F62174  ld XWA,(0x0d14)
 	stda32	(3615), xwa	; F62178  ld (0x0e1f),XWA
 	pop	xwa	; F6217C  pop XWA
-	.byte 0xC1, 0x1B, 0x0E, 0x3E, 0x01	; F6217D  or (0x0e1b),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e1b, 0x01	; F6217D  or (0x0e1b),0x01
 	ldda32	xhl, (4718)	; F62182  ld XHL,(0x126e)
 	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x21	; F62186  ld A,(XHL+IY)   [llvm-mc cannot encode this]
 	ldb	a, 95	; F6218B  ld A,0x5f
@@ -115424,7 +115424,7 @@ sub_F6353E:		; <- T_F42798
 	xor	c, c	; F63540  xor C,C
 	xor	wa, wa	; F63542  xor WA,WA
 	stdi16	(3246), 1	; F63544  ld (0x0cae),0x0001
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFD	; F6354A  and (0x0c8a),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xfd	; F6354A  and (0x0c8a),0xfd
 	calr	1628	; F6354F  calr 0xf63bae
 	m_cp_rm MW16, 0x0c77, 2	; F63552  cp DE,(0x0c77)
 	jrl	z, 111	; F63556  jrl Z,0xf635c8
@@ -115437,7 +115437,7 @@ sub_F6353E:		; <- T_F42798
 	calr	91	; F6356B  calr 0xf635c9
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F6356E  cp (0x0d4a),0x00
 	jrl	nz, 82	; F63573  jrl NZ,0xf635c8
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x02	; F63576  or (0x0c8a),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x02	; F63576  or (0x0c8a),0x02
 	ldda32	xhl, (4718)	; F6357B  ld XHL,(0x126e)
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F6357F  cp (XHL+IY),0x82
 	jr	nz, 8	; F63585  jr NZ,0xf6358f
@@ -115521,7 +115521,7 @@ BStore_CursorAdvance:		; <- T_BStore_CursorAdvance
 	ret	; F6360D  ret
 sub_F6360E:		; <- T_F427A0
 	xor	w, w	; F6360E  xor W,W
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F63610  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xfb	; F63610  and (0x0c8a),0xfb
 	xor	hl, hl	; F63615  xor HL,HL
 	m_bit 6, MD16, 0x0c8a	; F63617  bit 6,(0x0c8a)
 	jr	nz, 3	; F6361B  jr NZ,0xf63620
@@ -115538,7 +115538,7 @@ sub_F6360E:		; <- T_F427A0
 	jr	nz, 17	; F63635  jr NZ,0xf63648
 	m_bit 0, MD16, 0x360e	; F63637  bit 0,(0x360e)
 	jr	z, 15	; F6363B  jr Z,0xf6364c
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x04	; F6363D  or (0x0c8a),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x04	; F6363D  or (0x0c8a),0x04
 	ld	w, l	; F63642  ld W,L
 	inc	1, w	; F63644  inc 1,W
 	jr	4	; F63646  jr T,0xf6364c
@@ -115547,7 +115547,7 @@ sub_F6360E:		; <- T_F427A0
 	ret	; F6364C  ret
 sub_F6364D:		; <- T_F427A4
 	.byte 0xD1, 0x5C, 0x34, 0x04	; F6364D  pushw (0x345c)   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xDF	; F63651  and (0x0c8a),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xdf	; F63651  and (0x0c8a),0xdf
 	ldb_da	a, (6304983)	; F63656  ld A,(0x6034d7)
 	stb_d8	(3356), a	; F6365B  ld (0x0d1c),A
 	m_bit 2, MD16, 0x0c8a	; F6365F  bit 2,(0x0c8a)
@@ -115556,7 +115556,7 @@ sub_F6364D:		; <- T_F427A4
 	calr	590	; F6366A  calr 0xf638bb
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F6366D  cp (0x0d4a),0x00
 	jr	z, 13	; F63672  jr Z,0xf63681
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F63674  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xfb	; F63674  and (0x0c8a),0xfb
 	stdi8	(3402), 0	; F63679  ld (0x0d4a),0x00
 	jrl	195	; F6367E  jrl T,0xf63744
 	xor	hl, hl	; F63681  xor HL,HL
@@ -115622,7 +115622,7 @@ sub_F6364D:		; <- T_F427A4
 	stdi8	(3402), 0	; F63731  ld (0x0d4a),0x00
 	ldb_da	a, (6304983)	; F63736  ld A,(0x6034d7)
 	stb_d8	(3356), a	; F6373B  ld (0x0d1c),A
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F6373F  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x20	; F6373F  or (0x0c8a),0x20
 	.byte 0xF1, 0x5C, 0x34, 0x06	; F63744  popw (0x345c)   [llvm-mc cannot encode this]
 	ret	; F63748  ret
 sub_F63749:		; <- T_F427A8
@@ -115641,7 +115641,7 @@ sub_F63749:		; <- T_F427A8
 	jr	z, 51	; F63773  jr Z,0xf637a8
 	cp	w, 130	; F63775  cp W,0x82
 	jr	nz, 8	; F63778  jr NZ,0xf63782
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F6377A  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x20	; F6377A  or (0x0c8a),0x20
 	jrl	159	; F6377F  jrl T,0xf63821
 	cp	w, 132	; F63782  cp W,0x84
 	jr	nz, 9	; F63785  jr NZ,0xf63790
@@ -115706,7 +115706,7 @@ sub_F6382B:
 	ldda32	xhl, (4718)	; F63833  ld XHL,(0x126e)
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F63837  cp (XHL+IY),0x82
 	jr	nz, 8	; F6383D  jr NZ,0xf63847
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F6383F  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x20	; F6383F  or (0x0c8a),0x20
 	jrl	115	; F63844  jrl T,0xf638ba
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x81	; F63847  cp (XHL+IY),0x81
 	jr	z, 33	; F6384D  jr Z,0xf63870
@@ -115728,7 +115728,7 @@ sub_F6382B:
 	ldda32	xhl, (4718)	; F6387E  ld XHL,(0x126e)
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x82	; F63882  cp (XHL+IY),0x82
 	jr	nz, 7	; F63888  jr NZ,0xf63891
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F6388A  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x20	; F6388A  or (0x0c8a),0x20
 	jr	41	; F6388F  jr T,0xf638ba
 	mx_cp_mi8 MXB, ra_HL, ra_IY, 0x84	; F63891  cp (XHL+IY),0x84
 	jr	nz, 7	; F63897  jr NZ,0xf638a0
@@ -115740,7 +115740,7 @@ sub_F6382B:
 	stda32	(3312), xwa	; F638A9  ld (0x0cf0),XWA
 	pop	xwa	; F638AD  pop XWA
 	jr	10	; F638AE  jr T,0xf638ba
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x20	; F638B0  or (0x0c8a),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x20	; F638B0  or (0x0c8a),0x20
 	stdi8	(3402), 0	; F638B5  ld (0x0d4a),0x00
 	ret	; F638BA  ret
 
@@ -116146,7 +116146,7 @@ sub_F63C02:		; <- T_F427C8
 	ret	; F63C05  ret
 sub_F63C06:		; <- T_F4280C
 	stdi8	(3402), 0	; F63C06  ld (0x0d4a),0x00
-	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F63C0B  and (0x0d45),0xfc   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d45, 0xfc	; F63C0B  and (0x0d45),0xfc
 	calr	65490	; F63C10  calr 0xf63be5
 	ldb_d8	a, (3203)	; F63C13  ld A,(0x0c83)
 	cp	a, 16	; F63C17  cp A,0x10
@@ -116162,10 +116162,10 @@ sub_F63C06:		; <- T_F4280C
 	inc	1, a	; F63C32  inc 1,A
 	calr	169	; F63C34  calr 0xf63ce0
 	call	15993372	; F63C37  call 0xf40a1c
-	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F63C3B  and (0x0d45),0xfc   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d45, 0xfc	; F63C3B  and (0x0d45),0xfc
 	ret	; F63C40  ret
 sub_F63C41:		; <- T_F427CC
-	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F63C41  and (0x0d45),0xfc   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d45, 0xfc	; F63C41  and (0x0d45),0xfc
 	calr	65436	; F63C46  calr 0xf63be5
 	ldb_d8	a, (3203)	; F63C49  ld A,(0x0c83)
 	cp	a, 16	; F63C4D  cp A,0x10
@@ -116174,7 +116174,7 @@ sub_F63C41:		; <- T_F427CC
 	cp	a, 31	; F63C56  cp A,0x1f
 	jr	ugt, 91	; F63C59  jr UGT,0xf63cb6
 	stdi8	(3402), 0	; F63C5B  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F63C60  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F63C60  and (0x0c8a),0xbf
 	xor	hl, hl	; F63C65  xor HL,HL
 	ldb_d8	l, (3203)	; F63C67  ld L,(0x0c83)
 	push	xde	; F63C6B  push XDE
@@ -116204,7 +116204,7 @@ sub_F63C41:		; <- T_F427CC
 	popw	wa	; F63CB1  pop WA
 	call	16137440	; F63CB2  call 0xf63ce0
 	call	15993372	; F63CB6  call 0xf40a1c
-	.byte 0xC1, 0x45, 0x0D, 0x3C, 0xFC	; F63CBA  and (0x0d45),0xfc   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d45, 0xfc	; F63CBA  and (0x0d45),0xfc
 	ret	; F63CBF  ret
 
 ; --- BStore_Map32: 32 bytes at 0xF63CC0 ---
@@ -116225,7 +116225,7 @@ BStore_Map32:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; +0x00
 	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F	; +0x10
 sub_F63CE0:
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F63CE0  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xfb	; F63CE0  and (0x0c8a),0xfb
 	xor	w, w	; F63CE5  xor W,W
 	stdi8	(3402), 0	; F63CE7  ld (0x0d4a),0x00
 	stda16	(3354), wa	; F63CEC  ld (0x0d1a),WA
@@ -116353,7 +116353,7 @@ sub_F63CE0:
 	pop	xde	; F63E47  pop XDE
 	jr	-76	; F63E48  jr T,0xf63dfe
 	stb_d8	(3401), a	; F63E4A  ld (0x0d49),A
-	.byte 0xC1, 0x49, 0x0D, 0x3C, 0x02	; F63E4E  and (0x0d49),0x02   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d49, 0x02	; F63E4E  and (0x0d49),0x02
 	.byte 0xC7, 0x3C, 0xAE	; F63E53  ld RL3,6   [llvm-mc cannot encode this]
 	.byte 0xC1, 0x49, 0x0D, 0x7C	; F63E56  sla (0x0d49)   [llvm-mc cannot encode this]
 	.byte 0xC7, 0x3C, 0x1C, 0xF8	; F63E5A  djnz RL3,0xf63e56   [llvm-mc cannot encode this]
@@ -116485,7 +116485,7 @@ sub_F63F90:
 	and	a, 127	; F63FB8  and A,0x7f
 	cp	a, 72	; F63FBB  cp A,0x48
 	jrl	z, 218	; F63FBE  jrl Z,0xf6409b
-	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFB	; F63FC1  and (0x0d46),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d46, 0xfb	; F63FC1  and (0x0d46),0xfb
 	ldb_d8	l, (3078)	; F63FC6  ld L,(0x0c06)
 	ldb_d8	l, (3078)	; F63FCA  ld L,(0x0c06)
 	push	xde	; F63FCE  push XDE
@@ -116518,8 +116518,8 @@ sub_F63F90:
 	.byte 0xC3, 0x07, 0xE8, 0xEC, 0x27	; F64021  ld L,(XDE+HL)   [llvm-mc cannot encode this]
 	pop	xde	; F64026  pop XDE
 	stb_d8	(3537), l	; F64027  ld (0x0dd1),L
-	.byte 0xC1, 0x46, 0x0D, 0x3E, 0x01	; F6402B  or (0x0d46),0x01   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD2, 0x0D, 0x3C, 0xFE	; F64030  and (0x0dd2),0xfe   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0d46, 0x01	; F6402B  or (0x0d46),0x01
+	m_and_mi8 MB16, 0x0dd2, 0xfe	; F64030  and (0x0dd2),0xfe
 	jrl	227	; F64035  jrl T,0xf6411b
 	xor	h, h	; F64038  xor H,H
 	push	xde	; F6403A  push XDE
@@ -116547,11 +116547,11 @@ sub_F63F90:
 	ldb	c, 3	; F64079  ld C,0x03
 	cp	a, c	; F6407B  cp A,C
 	jr	nz, 17	; F6407D  jr NZ,0xf64090
-	.byte 0xC1, 0x46, 0x0D, 0x3E, 0x01	; F6407F  or (0x0d46),0x01   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xD2, 0x0D, 0x3C, 0xFE	; F64084  and (0x0dd2),0xfe   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0d46, 0x01	; F6407F  or (0x0d46),0x01
+	m_and_mi8 MB16, 0x0dd2, 0xfe	; F64084  and (0x0dd2),0xfe
 	stb_d8	(3537), a	; F64089  ld (0x0dd1),A
 	jrl	139	; F6408D  jrl T,0xf6411b
-	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFA	; F64090  and (0x0d46),0xfa   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d46, 0xfa	; F64090  and (0x0d46),0xfa
 	jrl	131	; F64095  jrl T,0xf6411b
 	jrl	128	; F64098  jrl T,0xf6411b
 	call	16000780	; F6409B  call 0xf4270c
@@ -116563,7 +116563,7 @@ sub_F63F90:
 	pop	xde	; F640B1  pop XDE
 	cps	a, 5	; F640B2  cp A,5
 	jr	nz, 70	; F640B4  jr NZ,0xf640fc
-	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFE	; F640B6  and (0x0d46),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d46, 0xfe	; F640B6  and (0x0d46),0xfe
 	call	16000780	; F640BB  call 0xf4270c
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F640BF  cp (0x0d4a),0x00
 	jr	nz, 85	; F640C4  jr NZ,0xf6411b
@@ -116580,11 +116580,11 @@ sub_F63F90:
 	and	a, 252	; F640E6  and A,0xfc
 	.byte 0xC7, 0x3C, 0x89	; F640E9  ld A,RL3   [llvm-mc cannot encode this]
 	jr	nz, 7	; F640EC  jr NZ,0xf640f5
-	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFB	; F640EE  and (0x0d46),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d46, 0xfb	; F640EE  and (0x0d46),0xfb
 	jr	38	; F640F3  jr T,0xf6411b
-	.byte 0xC1, 0x46, 0x0D, 0x3E, 0x04	; F640F5  or (0x0d46),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0d46, 0x04	; F640F5  or (0x0d46),0x04
 	jr	31	; F640FA  jr T,0xf6411b
-	.byte 0xC1, 0x46, 0x0D, 0x3C, 0xFB	; F640FC  and (0x0d46),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d46, 0xfb	; F640FC  and (0x0d46),0xfb
 	m_cp_mi8 MB16, 0x0c06, 0x0f	; F64101  cp (0x0c06),0x0f
 	jr	nz, -120	; F64106  jr NZ,0xf64090
 	push	xde	; F64108  push XDE
@@ -116799,7 +116799,7 @@ sub_F6418E:		; <- T_F42804
 	pop	xde	; F64331  pop XDE
 	jr	-85	; F64332  jr T,0xf642df
 	stb_d8	(3401), a	; F64334  ld (0x0d49),A
-	.byte 0xC1, 0x49, 0x0D, 0x3C, 0x02	; F64338  and (0x0d49),0x02   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0d49, 0x02	; F64338  and (0x0d49),0x02
 	.byte 0xC7, 0x3C, 0xAE	; F6433D  ld RL3,6   [llvm-mc cannot encode this]
 	.byte 0xC1, 0x49, 0x0D, 0x7C	; F64340  sla (0x0d49)   [llvm-mc cannot encode this]
 	.byte 0xC7, 0x3C, 0x1C, 0xF8	; F64344  djnz RL3,0xf64340   [llvm-mc cannot encode this]
@@ -117078,8 +117078,8 @@ sub_F64594:		; <- T_F427D4
 	jrl	-201	; F6466A  jrl T,0xf645a4
 	ret	; F6466D  ret
 sub_F6466E:		; <- T_F427D8
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xF7	; F6466E  and (0x0c8a),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xEF	; F64673  and (0x0c8a),0xef   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xf7	; F6466E  and (0x0c8a),0xf7
+	m_and_mi8 MB16, 0x0c8a, 0xef	; F64673  and (0x0c8a),0xef
 	ldw_da	wa, (6304954)	; F64678  ld WA,(0x6034ba)
 	stda16	(3392), wa	; F6467D  ld (0x0d40),WA
 	stdi8	(3402), 0	; F64681  ld (0x0d4a),0x00
@@ -117124,7 +117124,7 @@ sub_F6466E:		; <- T_F427D8
 	m_cp_mi8 MB16, 0x0d4a, 0x07	; F6470A  cp (0x0d4a),0x07
 	jr	z, 3	; F6470F  jr Z,0xf64714
 	jrl	200	; F64711  jrl T,0xf647dc
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x10	; F64714  or (0x0c8a),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x10	; F64714  or (0x0c8a),0x10
 	stdi8	(3402), 0	; F64719  ld (0x0d4a),0x00
 	ldw_d16	wa, (3246)	; F6471E  ld WA,(0x0cae)
 	stda16	(3394), wa	; F64722  ld (0x0d42),WA
@@ -117146,7 +117146,7 @@ sub_F6466E:		; <- T_F427D8
 	m_cp_mi8 MB16, 0x0d4a, 0x07	; F6475E  cp (0x0d4a),0x07
 	jr	z, 3	; F64763  jr Z,0xf64768
 	jrl	116	; F64765  jrl T,0xf647dc
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x08	; F64768  or (0x0c8a),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x08	; F64768  or (0x0c8a),0x08
 	stdi8	(3402), 0	; F6476D  ld (0x0d4a),0x00
 	ldw_d16	wa, (3394)	; F64772  ld WA,(0x0d42)
 	m_cp_rm MW16, 0x0cae, 0	; F64776  cp WA,(0x0cae)
@@ -117465,19 +117465,19 @@ sub_F64A7A:		; <- T_F42824
 	jr	63	; F64AD9  jr T,0xf64b1a
 	m_bit 0, MD16, 0x124c	; F64ADB  bit 0,(0x124c)
 	jr	z, 7	; F64ADF  jr Z,0xf64ae8
-	.byte 0xC1, 0x4C, 0x12, 0x3C, 0xFE	; F64AE1  and (0x124c),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x124c, 0xfe	; F64AE1  and (0x124c),0xfe
 	jr	50	; F64AE6  jr T,0xf64b1a
 	and	a, w	; F64AE8  and A,W
 	and	a, 4	; F64AEA  and A,0x04
 	bit	2, a	; F64AED  bit 0x02,A
 	jr	z, 21	; F64AF0  jr Z,0xf64b07
 	call	15993376	; F64AF2  call 0xf40a20
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F64AF6  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F64AF6  or (0x34d4),0x10
 	call	15994036	; F64AFB  call 0xf40cb4
 	stib_da	(6304966), 255	; F64AFF  ld (0x6034c6),0xff
 	jr	19	; F64B05  jr T,0xf64b1a
 	call	15993376	; F64B07  call 0xf40a20
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F64B0B  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F64B0B  or (0x34d4),0x10
 	call	15994036	; F64B10  call 0xf40cb4
 	stib_da	(6304966), 0	; F64B14  ld (0x6034c6),0x00
 	ret	; F64B1A  ret
@@ -117489,7 +117489,7 @@ sub_F64B1B:		; <- T_F4282C
 	calr	13	; F64B2D  calr 0xf64b3d
 	calr	71	; F64B30  calr 0xf64b7a
 	call	15993544	; F64B33  call 0xf40ac8
-	.byte 0xC1, 0x0B, 0x36, 0x3C, 0xFE	; F64B37  and (0x360b),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x360b, 0xfe	; F64B37  and (0x360b),0xfe
 	ret	; F64B3C  ret
 
 ; --------------------------------------------------------------------------
@@ -117540,12 +117540,12 @@ sub_F64B7A:
 	jr	z, 15	; F64B80  jr Z,0xf64b91
 	m_bit 2, MD16, 0x7f4d	; F64B82  bit 2,(0x7f4d)
 	jr	z, 41	; F64B86  jr Z,0xf64bb1
-	.byte 0xC1, 0x4D, 0x7F, 0x3C, 0xFB	; F64B88  and (0x7f4d),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x7f4d, 0xfb	; F64B88  and (0x7f4d),0xfb
 	xor	a, a	; F64B8D  xor A,A
 	jr	13	; F64B8F  jr T,0xf64b9e
 	m_bit 2, MD16, 0x7f4d	; F64B91  bit 2,(0x7f4d)
 	jr	nz, 26	; F64B95  jr NZ,0xf64bb1
-	.byte 0xC1, 0x4D, 0x7F, 0x3E, 0x04	; F64B97  or (0x7f4d),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x7f4d, 0x04	; F64B97  or (0x7f4d),0x04
 	ldb	a, 4	; F64B9C  ld A,0x04
 	stdi8	(4684), 1	; F64B9E  ld (0x124c),0x01
 	ldb	e, 145	; F64BA3  ld E,0x91
@@ -118460,7 +118460,7 @@ Data_F657B2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F65C00:		; <- T_F42BB4
-	.byte 0xD1, 0x30, 0x21, 0x3E, 0x00, 0x01	; F65C00  or (0x2130),0x0100   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x2130, 0x0100	; F65C00  or (0x2130),0x0100
 	stdi16	(8542), 0	; F65C06  ld (0x215e),0x0000
 	ret	; F65C0C  ret
 
@@ -118477,8 +118477,8 @@ sub_F65C00:		; <- T_F42BB4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F65C0D:		; <- T_F42BB8
-	.byte 0xD1, 0x30, 0x21, 0x3C, 0xFF, 0xFE	; F65C0D  and (0x2130),0xfeff   [llvm-mc cannot encode this]
-	.byte 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01	; F65C13  or (0x212e),0x0100   [llvm-mc cannot encode this]
+	m_and_mi16 MW16, 0x2130, 0xfeff	; F65C0D  and (0x2130),0xfeff
+	m_or_mi16 MW16, 0x212e, 0x0100	; F65C13  or (0x212e),0x0100
 	stdi16	(8544), 0	; F65C19  ld (0x2160),0x0000
 	calr	2449	; F65C1F  calr 0xf665b3
 	call	16145447	; F65C22  call 0xf65c27
@@ -118621,12 +118621,12 @@ sub_F65CD6:		; <- T_F42B94
 	ret	; F65CE2  ret
 	calr	64	; F65CE3  calr 0xf65d26
 	stdi8	(3520), 0	; F65CE6  ld (0x0dc0),0x00
-	.byte 0xC1, 0x07, 0x0C, 0x3C, 0xFE	; F65CEB  and (0x0c07),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c07, 0xfe	; F65CEB  and (0x0c07),0xfe
 	stdi8	(3075), 0	; F65CF0  ld (0x0c03),0x00
 	jr	13	; F65CF5  jr T,0xf65d04
 	calr	44	; F65CF7  calr 0xf65d26
 	stdi8	(3520), 0	; F65CFA  ld (0x0dc0),0x00
-	.byte 0xC1, 0x07, 0x0C, 0x3E, 0x01	; F65CFF  or (0x0c07),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c07, 0x01	; F65CFF  or (0x0c07),0x01
 	m_bit 0, MD16, 0x0c07	; F65D04  bit 0,(0x0c07)
 	jr	z, 5	; F65D08  jr Z,0xf65d0f
 	stdi8	(3075), 8	; F65D0A  ld (0x0c03),0x08
@@ -118805,7 +118805,7 @@ sub_F65DF8:		; <- T_F42BA0
 	bit_dd8	2, 150	; F65DF8  bit 2,(0x96)
 	jr	z, 1	; F65DFB  jr Z,0xf65dfe
 	ret	; F65DFD  ret
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F65DFE  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F65DFE  or (0x2075),0x08
 	ldb_d8	a, (3078)	; F65E03  ld A,(0x0c06)
 	bit	7, w	; F65E07  bit 0x07,W
 	jr	z, 26	; F65E0A  jr Z,0xf65e26
@@ -118905,7 +118905,7 @@ sub_F65E94:		; <- T_F42BA4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F65E98:
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF7	; F65E98  and (0x2075),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf7	; F65E98  and (0x2075),0xf7
 	bit_dd8	2, 149	; F65E9D  bit 2,(0x95)
 	jr	z, 1	; F65EA0  jr Z,0xf65ea3
 	ret	; F65EA2  ret
@@ -118948,7 +118948,7 @@ sub_F65E98:
 	pop	xde	; F65F13  pop XDE
 	stb_d8	(3085), a	; F65F14  ld (0x0c0d),A
 	stdi8	(8318), 1	; F65F18  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F65F1D  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F65F1D  or (0x2071),0x10
 	ret	; F65F22  ret
 	ld	xhl, 6304802	; F65F23  ld XHL,0x00603422
 	xor	wa, wa	; F65F28  xor WA,WA
@@ -119041,7 +119041,7 @@ sub_F65F7C:		; <- T_F42BA8
 	.byte 0xC7, 0x3C, 0x89	; F65FC8  ld A,RL3   [llvm-mc cannot encode this]
 	stw_da	(6304852), de	; F65FCB  ld (0x603454),DE
 	.byte 0xD7, 0x3E, 0x8A	; F65FD0  ld DE,QHL3   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF7	; F65FD3  and (0x2075),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf7	; F65FD3  and (0x2075),0xf7
 	call	15995320	; F65FD8  call 0xf411b8
 	ret	; F65FDC  ret
 
@@ -119078,7 +119078,7 @@ sub_F65FDD:		; <- T_F42BAC
 	inc	1, c	; F6600D  inc 1,C
 	.byte 0xF3, 0x07, 0xEC, 0xF4, 0x43	; F6600F  ld (XHL+IY),C   [llvm-mc cannot encode this]
 	jr	0	; F66014  jr T,0xf66016
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F66016  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F66016  or (0x2075),0x08
 	call	15995320	; F6601B  call 0xf411b8
 	ret	; F6601F  ret
 
@@ -119096,7 +119096,7 @@ sub_F65FDD:		; <- T_F42BAC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66020:		; <- T_F42BB0
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF7	; F66020  and (0x2075),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf7	; F66020  and (0x2075),0xf7
 	bit_dd8	2, 149	; F66025  bit 2,(0x95)
 	jr	z, 1	; F66028  jr Z,0xf6602b
 	ret	; F6602A  ret
@@ -119111,7 +119111,7 @@ sub_F66020:		; <- T_F42BB0
 	stl_da	(6304798), xwa	; F6604B  ld (0x60341e),XWA
 	call	15994036	; F66050  call 0xf40cb4
 	stda16	(8542), wa	; F66054  ld (0x215e),WA
-	.byte 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01	; F66058  or (0x212e),0x0100   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x212e, 0x0100	; F66058  or (0x212e),0x0100
 	xor	wa, wa	; F6605E  xor WA,WA
 	ldb_d8	a, (3075)	; F66060  ld A,(0x0c03)
 	ld	iy, wa	; F66064  ld IY,WA
@@ -119121,7 +119121,7 @@ sub_F66020:		; <- T_F42BB0
 	.byte 0xF3, 0x07, 0xE8, 0xF4, 0x41	; F66070  ld (XDE+IY),A   [llvm-mc cannot encode this]
 	pop	xde	; F66075  pop XDE
 	stdi8	(8318), 0	; F66076  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F6607B  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F6607B  or (0x2071),0x10
 	ret	; F66080  ret
 
 ; --------------------------------------------------------------------------
@@ -119136,13 +119136,13 @@ sub_F66020:		; <- T_F42BB0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66081:		; <- T_F42BC0
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF7	; F66081  and (0x2075),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf7	; F66081  and (0x2075),0xf7
 	bit_dd8	2, 149	; F66086  bit 2,(0x95)
 	jr	z, 1	; F66089  jr Z,0xf6608c
 	ret	; F6608B  ret
 	stdi8	(3520), 0	; F6608C  ld (0x0dc0),0x00
 	stdi8	(8318), 0	; F66091  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F66096  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F66096  or (0x2071),0x10
 	ret	; F6609B  ret
 
 ; --------------------------------------------------------------------------
@@ -119235,7 +119235,7 @@ sub_F660ED:		; <- T_F42BCC
 	xor	a, a	; F660FF  xor A,A
 	stb_d8	(3521), a	; F66101  ld (0x0dc1),A
 	stb_d8	(8912), a	; F66105  ld (0x22d0),A
-	.byte 0xD2, 0x68, 0x50, 0x60, 0x3E, 0x00, 0x80	; F66109  or (0x605068),0x8000   [llvm-mc cannot encode this]
+	m_or_mi16 MW24, 0x605068, 0x8000	; F66109  or (0x605068),0x8000
 	call	16146723	; F66110  call 0xf66123
 	call	16000016	; F66114  call 0xf42410
 	m_cp_mi8 MB16, 0x0dc1, 0x01	; F66118  cp (0x0dc1),0x01
@@ -119286,9 +119286,9 @@ sub_F6614E:		; <- T_F42BD0
 	jr	z, 59	; F66153  jr Z,0xf66190
 	call	16146945	; F66155  call 0xf66201
 	call	16000496	; F66159  call 0xf425f0
-	.byte 0xC1, 0xD0, 0x34, 0x3C, 0xFB	; F6615D  and (0x34d0),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34d0, 0xfb	; F6615D  and (0x34d0),0xfb
 	stdi8	(8912), 0	; F66162  ld (0x22d0),0x00
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F66167  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F66167  and (0x34bb),0xfb
 	stiw_da	(6312040), 0	; F6616C  ld (0x605068),0x0000
 	m_bit 2, MD16, 0x0e48	; F66173  bit 2,(0x0e48)
 	jr	z, 6	; F66177  jr Z,0xf6617f
@@ -119315,7 +119315,7 @@ sub_F6614E:		; <- T_F42BD0
 sub_F66191:		; <- T_F42BD4
 	m_cp_mi8 MB16, 0x0dc1, 0x00	; F66191  cp (0x0dc1),0x00
 	jr	nz, 90	; F66196  jr NZ,0xf661f2
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF7	; F66198  and (0x2075),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf7	; F66198  and (0x2075),0xf7
 	stdi8	(10368), 255	; F6619D  ld (0x2880),0xff
 	ldb_d8	a, (8715)	; F661A2  ld A,(0x220b)
 	cps	a, 0	; F661A6  cp A,0
@@ -119330,7 +119330,7 @@ sub_F66191:		; <- T_F42BD4
 	call	16002708	; F661C3  call 0xf42e94
 	m_cp_mi8 MB16, 0x2880, 0x04	; F661C7  cp (0x2880),0x04
 	jr	ugt, 21	; F661CC  jr UGT,0xf661e3
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F661CE  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F661CE  or (0x2071),0x10
 	jr	14	; F661D3  jr T,0xf661e3
 	stdi8	(3521), 1	; F661D5  ld (0x0dc1),0x01
 	stdi8	(3638), 0	; F661DA  ld (0x0e36),0x00
@@ -119509,7 +119509,7 @@ sub_F66294:
 	jr	z, 4	; F662C8  jr Z,0xf662ce
 	incdi8	1, (8712)	; F662CA  inc 1,(0x2208)
 	calr	6	; F662CE  calr 0xf662d7
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F662D1  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F662D1  or (0x2075),0x08
 	ret	; F662D6  ret
 
 ; --------------------------------------------------------------------------
@@ -119571,7 +119571,7 @@ sub_F662F7:
 	jr	z, 4	; F6632B  jr Z,0xf66331
 	incdi8	1, (8713)	; F6632D  inc 1,(0x2209)
 	calr	65443	; F66331  calr 0xf662d7
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F66334  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F66334  or (0x2075),0x08
 	ret	; F66339  ret
 
 ; --------------------------------------------------------------------------
@@ -119811,12 +119811,12 @@ sub_F664D5:		; <- T_F42BC4
 	m_cp_rm MB16, 0x207b, 1	; F664E2  cp A,(0x207b)
 	jr	z, 33	; F664E6  jr Z,0xf66509
 	stdi8	(3676), 0	; F664E8  ld (0x0e5c),0x00
-	.byte 0xD1, 0x30, 0x21, 0x3E, 0x00, 0x01	; F664ED  or (0x2130),0x0100   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x2130, 0x0100	; F664ED  or (0x2130),0x0100
 	stdi16	(8544), 65535	; F664F3  ld (0x2160),0xffff
 	stdi16	(8542), 0	; F664F9  ld (0x215e),0x0000
 	stdi16	(3072), 0	; F664FF  ld (0x0c00),0x0000
 	call	15993260	; F66505  call 0xf409ac
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F66509  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F66509  or (0x34bb),0x04
 	ret	; F6650E  ret
 
 ; --------------------------------------------------------------------------
@@ -119835,7 +119835,7 @@ sub_F6650F:		; <- T_F42BC8
 	ldda32	xwa, (12304)	; F6650F  ld XWA,(0x3010)
 	stl_da	(6304798), xwa	; F66513  ld (0x60341e),XWA
 	call	15994036	; F66518  call 0xf40cb4
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F6651C  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F6651C  and (0x34bb),0xfb
 	ret	; F66521  ret
 
 ; --------------------------------------------------------------------------
@@ -119850,7 +119850,7 @@ sub_F6650F:		; <- T_F42BC8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66522:		; <- T_F42BDC
-	.byte 0xC1, 0x07, 0x0C, 0x3C, 0xFE	; F66522  and (0x0c07),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c07, 0xfe	; F66522  and (0x0c07),0xfe
 	stdi8	(3075), 0	; F66527  ld (0x0c03),0x00
 
 ; --------------------------------------------------------------------------
@@ -119868,10 +119868,10 @@ sub_F66522:		; <- T_F42BDC
 sub_F6652C:		; <- T_F42BE4
 	m_cp_mi8 MB16, 0x207b, 0x10	; F6652C  cp (0x207b),0x10
 	jr	z, 19	; F66531  jr Z,0xf66546
-	.byte 0xC1, 0x07, 0x0C, 0x3C, 0xFE	; F66533  and (0x0c07),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c07, 0xfe	; F66533  and (0x0c07),0xfe
 	stdi8	(3075), 0	; F66538  ld (0x0c03),0x00
 	call	15993260	; F6653D  call 0xf409ac
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F66541  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F66541  or (0x34bb),0x04
 	ld	xhl, 6304802	; F66546  ld XHL,0x00603422
 	xor	wa, wa	; F6654B  xor WA,WA
 	ldb_d8	a, (3075)	; F6654D  ld A,(0x0c03)
@@ -119896,7 +119896,7 @@ sub_F6655D:		; <- T_F42BE8
 	m_cp_mi8 MB16, 0x207a, 0x10	; F6655D  cp (0x207a),0x10
 	jr	z, 8	; F66562  jr Z,0xf6656c
 	calr	63423	; F66564  calr 0xf65d26
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F66567  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F66567  and (0x34bb),0xfb
 	ret	; F6656C  ret
 
 ; --------------------------------------------------------------------------
@@ -119948,9 +119948,9 @@ sub_F6657A:		; <- T_F42BEC
 	jr	z, 13	; F66583  jr Z,0xf66592
 	cp	bc, 11	; F66585  cp BC,0x000b
 	jr	nz, 12	; F66589  jr NZ,0xf66597
-	.byte 0xC1, 0xC2, 0x7F, 0x3C, 0xFE	; F6658B  and (0x7fc2),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x7fc2, 0xfe	; F6658B  and (0x7fc2),0xfe
 	jr	5	; F66590  jr T,0xf66597
-	.byte 0xC1, 0xC2, 0x7F, 0x3E, 0x01	; F66592  or (0x7fc2),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x7fc2, 0x01	; F66592  or (0x7fc2),0x01
 	ret	; F66597  ret
 
 ; --------------------------------------------------------------------------
@@ -119971,7 +119971,7 @@ sub_F66598:		; <- T_F42BF0
 	jr	z, 7	; F665A4  jr Z,0xf665ad
 	m_cp_mi8 MB16, 0x207a, 0x09	; F665A6  cp (0x207a),0x09
 	jr	nz, 5	; F665AB  jr NZ,0xf665b2
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F665AD  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F665AD  or (0x2095),0x10
 	ret	; F665B2  ret
 
 ; --------------------------------------------------------------------------
@@ -120002,7 +120002,7 @@ sub_F665B3:
 sub_F665B4:		; <- T_F42BF8
 	m_cp_mi8 MB16, 0x207b, 0x11	; F665B4  cp (0x207b),0x11
 	jr	z, 40	; F665B9  jr Z,0xf665e3
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F665BB  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F665BB  or (0x34bb),0x04
 	stdi8	(10368), 0	; F665C0  ld (0x2880),0x00
 	ldb	a, 1	; F665C5  ld A,0x01
 	stb_d8	(3581), a	; F665C7  ld (0x0dfd),A
@@ -120098,8 +120098,8 @@ sub_F6660C:		; <- T_F42C08
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66619:		; <- T_F42C0C
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F66619  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xFE	; F6661E  and (0x2075),0xfe   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F66619  or (0x2075),0x08
+	m_and_mi8 MB16, 0x2075, 0xfe	; F6661E  and (0x2075),0xfe
 	ldb_d8	a, (3582)	; F66623  ld A,(0x0dfe)
 	cp	a, 10	; F66627  cp A,0x0a
 	jr	z, 2	; F6662A  jr Z,0xf6662e
@@ -120121,8 +120121,8 @@ sub_F66619:		; <- T_F42C0C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F66639:		; <- T_F42C10
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F66639  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xFE	; F6663E  and (0x2075),0xfe   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F66639  or (0x2075),0x08
+	m_and_mi8 MB16, 0x2075, 0xfe	; F6663E  and (0x2075),0xfe
 	ldb_d8	a, (3582)	; F66643  ld A,(0x0dfe)
 	cps	a, 0	; F66647  cp A,0
 	jr	z, 2	; F66649  jr Z,0xf6664d
@@ -120263,12 +120263,12 @@ sub_F66668:
 	jr	z, 15	; F66796  jr Z,0xf667a7
 	m_bit 2, MD16, 0x7f4d	; F66798  bit 2,(0x7f4d)
 	jr	z, 41	; F6679C  jr Z,0xf667c7
-	.byte 0xC1, 0x4D, 0x7F, 0x3C, 0xFB	; F6679E  and (0x7f4d),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x7f4d, 0xfb	; F6679E  and (0x7f4d),0xfb
 	xor	a, a	; F667A3  xor A,A
 	jr	13	; F667A5  jr T,0xf667b4
 	m_bit 2, MD16, 0x7f4d	; F667A7  bit 2,(0x7f4d)
 	jr	nz, 26	; F667AB  jr NZ,0xf667c7
-	.byte 0xC1, 0x4D, 0x7F, 0x3E, 0x04	; F667AD  or (0x7f4d),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x7f4d, 0x04	; F667AD  or (0x7f4d),0x04
 	ldb	a, 4	; F667B2  ld A,0x04
 	ldb	e, 145	; F667B4  ld E,0x91
 	ldb	d, 3	; F667B6  ld D,0x03
@@ -120405,12 +120405,12 @@ sub_F6682C:
 	jr	z, 15	; F6691E  jr Z,0xf6692f
 	m_bit 2, MD16, 0x7f4d	; F66920  bit 2,(0x7f4d)
 	jr	z, 41	; F66924  jr Z,0xf6694f
-	.byte 0xC1, 0x4D, 0x7F, 0x3C, 0xFB	; F66926  and (0x7f4d),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x7f4d, 0xfb	; F66926  and (0x7f4d),0xfb
 	xor	a, a	; F6692B  xor A,A
 	jr	13	; F6692D  jr T,0xf6693c
 	m_bit 2, MD16, 0x7f4d	; F6692F  bit 2,(0x7f4d)
 	jr	nz, 26	; F66933  jr NZ,0xf6694f
-	.byte 0xC1, 0x4D, 0x7F, 0x3E, 0x04	; F66935  or (0x7f4d),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x7f4d, 0x04	; F66935  or (0x7f4d),0x04
 	ldb	a, 4	; F6693A  ld A,0x04
 	ldb	e, 145	; F6693C  ld E,0x91
 	ldb	d, 3	; F6693E  ld D,0x03
@@ -120909,12 +120909,12 @@ sub_F67488:		; <- T_F42F00
 	call	16174190	; F67488  call 0xf6cc6e
 	ret	; F6748C  ret
 	stdi8	(4205), 0	; F6748D  ld (0x106d),0x00
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F67492  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F67492  or (0x2075),0x08
 	ldb	w, 1	; F67497  ld W,0x01
 	calr	17	; F67499  calr 0xf674ad
 	ret	; F6749C  ret
 	stdi8	(4205), 0	; F6749D  ld (0x106d),0x00
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F674A2  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F674A2  or (0x2075),0x08
 	ldb	w, 2	; F674A7  ld W,0x02
 	calr	1	; F674A9  calr 0xf674ad
 	ret	; F674AC  ret
@@ -121002,7 +121002,7 @@ DispatchTable_F674CE:
 	jr	ule, 5	; F67535  jr ULE,0xf6753c
 	calr	20988	; F67537  calr 0xf6c736
 	jr	8	; F6753A  jr T,0xf67544
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F6753C  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F6753C  or (0x0ed5),0x01
 	calr	10096	; F67541  calr 0xf69cb4
 	calr	5513	; F67544  calr 0xf68ad0
 	ret	; F67547  ret
@@ -121065,7 +121065,7 @@ DispatchTable_F67548:
 	jr	ule, 5	; F675AB  jr ULE,0xf675b2
 	calr	20870	; F675AD  calr 0xf6c736
 	jr	8	; F675B0  jr T,0xf675ba
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F675B2  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F675B2  or (0x0ed5),0x01
 	calr	9978	; F675B7  calr 0xf69cb4
 	ret	; F675BA  ret
 
@@ -121151,7 +121151,7 @@ DispatchTable_F675F3:
 	.long	0x00F6776F	; F675FF  [3] -> 0xF6776F
 
 	ret	; F67603  ret
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F67604  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F67604  or (0x2075),0x08
 	bit	7, w	; F67609  bit 0x07,W
 	jr	z, 4	; F6760C  jr Z,0xf67612
 	calr	15302	; F6760E  calr 0xf6b1d7
@@ -121227,14 +121227,14 @@ DispatchTable_F67616:
 
 	bit	7, w	; F67696  bit 0x07,W
 	jr	nz, 26	; F67699  jr NZ,0xf676b5
-	.byte 0xC1, 0x14, 0x36, 0x3C, 0xFE	; F6769B  and (0x3614),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x3614, 0xfe	; F6769B  and (0x3614),0xfe
 	m_cp_mi8 MB16, 0x0e63, 0x02	; F676A0  cp (0x0e63),0x02
 	jr	z, 8	; F676A5  jr Z,0xf676af
 	stdi16	(8304), 32783	; F676A7  ld (0x2070),0x800f
 	jr	6	; F676AD  jr T,0xf676b5
 	stdi16	(8304), 515	; F676AF  ld (0x2070),0x0203
 	ret	; F676B5  ret
-	.byte 0xC1, 0xD5, 0x0E, 0x3C, 0xFE	; F676B6  and (0x0ed5),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0ed5, 0xfe	; F676B6  and (0x0ed5),0xfe
 	ldb_d8	e, (3829)	; F676BB  ld E,(0x0ef5)
 	xor	d, d	; F676BF  xor D,D
 	sla	de, 2	; F676C1  sla 0x02,DE
@@ -121246,11 +121246,11 @@ DispatchTable_F67616:
 	call	(xiy)	; F676D2  call T,XIY
 	m_cp_mi8 MB16, 0x0ef5, 0x12	; F676D4  cp (0x0ef5),0x12
 	jr	z, 63	; F676D9  jr Z,0xf6771a
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F676DB  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F676DB  or (0x0ed5),0x01
 	ldw_d16	bc, (3344)	; F676E0  ld BC,(0x0d10)
 	cps	bc, 0	; F676E4  cp BC,0
 	jr	z, 5	; F676E6  jr Z,0xf676ed
-	.byte 0xC1, 0x71, 0x10, 0x3C, 0xFE	; F676E8  and (0x1071),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x1071, 0xfe	; F676E8  and (0x1071),0xfe
 	m_bit 0, MD16, 0x1071	; F676ED  bit 0,(0x1071)
 	jr	nz, 39	; F676F1  jr NZ,0xf6771a
 	ldb_d8	a, (3829)	; F676F3  ld A,(0x0ef5)
@@ -121271,7 +121271,7 @@ DispatchTable_F67616:
 	cps	bc, 4	; F67714  cp BC,4
 	jr	z, 2	; F67716  jr Z,0xf6771a
 	jr	5	; F67718  jr T,0xf6771f
-	.byte 0xC1, 0xD5, 0x0E, 0x3C, 0xFE	; F6771A  and (0x0ed5),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0ed5, 0xfe	; F6771A  and (0x0ed5),0xfe
 	calr	9618	; F6771F  calr 0xf69cb4
 	ret	; F67722  ret
 
@@ -121445,7 +121445,7 @@ DispatchTable_F677EF:
 	.long	0x00F675CB	; F67867  [30] -> ret stub
 	.long	0x00F675CB	; F6786B  [31] -> ret stub
 
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F6786F  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F6786F  or (0x2075),0x08
 	ldb_d8	a, (4780)	; F67874  ld A,(0x12ac)
 	ldb	l, 1	; F67878  ld L,0x01
 	ldb	h, 13	; F6787A  ld H,0x0d
@@ -121454,7 +121454,7 @@ DispatchTable_F677EF:
 	call	16178169	; F67883  call 0xf6dbf9
 	call	16003508	; F67887  call 0xf431b4
 	ret	; F6788B  ret
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F6788C  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F6788C  or (0x2075),0x08
 	ldb_d8	a, (4781)	; F67891  ld A,(0x12ad)
 	ldb	l, 0	; F67895  ld L,0x00
 	ldb	h, 12	; F67897  ld H,0x0c
@@ -121463,7 +121463,7 @@ DispatchTable_F677EF:
 	call	16178169	; F678A0  call 0xf6dbf9
 	call	16003508	; F678A4  call 0xf431b4
 	ret	; F678A8  ret
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F678A9  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F678A9  or (0x2075),0x08
 	ldb_d8	a, (4782)	; F678AE  ld A,(0x12ae)
 	ldb	l, 0	; F678B2  ld L,0x00
 	ldb	h, 3	; F678B4  ld H,0x03
@@ -121542,7 +121542,7 @@ sub_F678C6:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6791E:
-	.byte 0xC1, 0x71, 0x10, 0x3E, 0x01	; F6791E  or (0x1071),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x1071, 0x01	; F6791E  or (0x1071),0x01
 	stdi8	(4205), 1	; F67923  ld (0x106d),0x01
 	stb_d8	(3534), w	; F67928  ld (0x0dce),W
 	bit	7, w	; F6792C  bit 0x07,W
@@ -122219,7 +122219,7 @@ DispatchTable_F67DE9:
 	.long	0x00F675CB	; F67E61  [30] -> ret stub
 	.long	0x00F675CB	; F67E65  [31] -> ret stub
 
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F67E69  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F67E69  or (0x2075),0x08
 	ldb_d8	a, (4113)	; F67E6E  ld A,(0x1011)
 	ldb	l, 0	; F67E72  ld L,0x00
 	ldb	h, 127	; F67E74  ld H,0x7f
@@ -122578,7 +122578,7 @@ DispatchTable_F67F96:
 	call	16179730	; F681FF  call 0xf6e212
 	jr	0	; F68203  jr T,0xf68205
 	call	16003508	; F68205  call 0xf431b4
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F68209  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F68209  or (0x2075),0x08
 	ret	; F6820E  ret
 
 ; --------------------------------------------------------------------------
@@ -122797,7 +122797,7 @@ sub_F6833E:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F68354:
-	.byte 0xC1, 0x6C, 0x10, 0x3C, 0xFC	; F68354  and (0x106c),0xfc   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x106c, 0xfc	; F68354  and (0x106c),0xfc
 	stdi16	(3934), 0	; F68359  ld (0x0f5e),0x0000
 	calr	531	; F6835F  calr 0xf68575
 	ldw_d16	wa, (4786)	; F68362  ld WA,(0x12b2)
@@ -122851,7 +122851,7 @@ sub_F68354:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F683D4:
-	.byte 0xC1, 0x6C, 0x10, 0x3C, 0xF3	; F683D4  and (0x106c),0xf3   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x106c, 0xf3	; F683D4  and (0x106c),0xf3
 	calr	7731	; F683D9  calr 0xf6a20f
 	ldw_d16	wa, (4786)	; F683DC  ld WA,(0x12b2)
 	cp	wa, 1000	; F683E0  cp WA,0x03e8
@@ -122913,7 +122913,7 @@ sub_F683D4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F68473:
-	.byte 0xC1, 0x6C, 0x10, 0x3C, 0xCF	; F68473  and (0x106c),0xcf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x106c, 0xcf	; F68473  and (0x106c),0xcf
 	calr	268	; F68478  calr 0xf68587
 	ldw_d16	wa, (4786)	; F6847B  ld WA,(0x12b2)
 	inc	1, wa	; F6847F  inc 1,WA
@@ -122968,7 +122968,7 @@ sub_F68473:
 ; --------------------------------------------------------------------------
 sub_F684FA:
 	ldb_d8	w, (4104)	; F684FA  ld W,(0x1008)
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x04	; F684FE  or (0x0c8a),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x04	; F684FE  or (0x0c8a),0x04
 	ret	; F68503  ret
 
 ; --------------------------------------------------------------------------
@@ -123598,10 +123598,10 @@ sub_F6890D:
 	stdi8	(4715), 1	; F68922  ld (0x126b),0x01
 	calr	8377	; F68927  calr 0xf6a9e3
 	stdi8	(4715), 0	; F6892A  ld (0x126b),0x00
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F6892F  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F6892F  and (0x2075),0x6f
 	stdi8	(10368), 35	; F68934  ld (0x2880),0x23
 	stdi16	(8304), 16555	; F68939  ld (0x2070),0x40ab
-	.byte 0xC1, 0xA9, 0x20, 0x3E, 0x01	; F6893F  or (0x20a9),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x20a9, 0x01	; F6893F  or (0x20a9),0x01
 	ret	; F68944  ret
 
 ; --------------------------------------------------------------------------
@@ -123682,7 +123682,7 @@ DispatchTable_F68972:
 	jr	nz, 18	; F68998  jr NZ,0xf689ac
 	m_bit 0, MD16, 0x1071	; F6899A  bit 0,(0x1071)
 	jr	z, 5	; F6899E  jr Z,0xf689a5
-	.byte 0xC1, 0x71, 0x10, 0x3C, 0xFE	; F689A0  and (0x1071),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x1071, 0xfe	; F689A0  and (0x1071),0xfe
 	calr	4876	; F689A5  calr 0xf69cb4
 	calr	74	; F689A8  calr 0xf689f5
 	ret	; F689AB  ret
@@ -123729,7 +123729,7 @@ sub_F689F5:
 	ld	xiy, 3662	; F689F5  ld XIY,0x00000e4e
 	m_bit 0, MDI+r5, 0	; F689FA  bit 0,(XIY)
 	jr	z, 54	; F689FC  jr Z,0xf68a34
-	.byte 0x85, 0x3C, 0xFE	; F689FE  and (XIY),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r5, 0, 0xfe	; F689FE  and (XIY),0xfe
 	ld	xiy, 4810	; F68A01  ld XIY,0x000012ca
 	ldb_d8	c, (4775)	; F68A06  ld C,(0x12a7)
 	dec	1, c	; F68A0A  dec 1,C
@@ -123752,7 +123752,7 @@ sub_F689F5:
 	calr	11909	; F68A35  calr 0xf6b8bd
 	cp	a, 144	; F68A38  cp A,0x90
 	jrl	nz, 140	; F68A3B  jrl NZ,0xf68aca
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x40	; F68A3E  or (0x34d4),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x40	; F68A3E  or (0x34d4),0x40
 	ldb	a, 1	; F68A43  ld A,0x01
 	calr	14410	; F68A45  calr 0xf6c292
 	ld	xhl, 6293514	; F68A48  ld XHL,0x0060080a
@@ -123863,8 +123863,8 @@ sub_F68AD0:
 	inc	2, xsp	; F68B28  inc 2,XSP
 	xor	a, a	; F68B2A  xor A,A
 	calr	14262	; F68B2C  calr 0xf6c2e5
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x40	; F68B2F  or (0x34d4),0x40   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x6E, 0x10, 0x3E, 0x01	; F68B34  or (0x106e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x40	; F68B2F  or (0x34d4),0x40
+	m_or_mi8 MB16, 0x106e, 0x01	; F68B34  or (0x106e),0x01
 	ret	; F68B39  ret
 
 ; --------------------------------------------------------------------------
@@ -124035,7 +124035,7 @@ sub_F68B91:
 	ldb	w, 104	; F68C76  ld W,0x68
 	calr	59398	; F68C78  calr 0xf67481
 	ret	; F68C7B  ret
-	.byte 0xC1, 0x4E, 0x0E, 0x3C, 0xFB	; F68C7C  and (0x0e4e),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0e4e, 0xfb	; F68C7C  and (0x0e4e),0xfb
 	calr	262	; F68C81  calr 0xf68d8a
 	m_cp_mi8 MB16, 0x0ecd, 0xff	; F68C84  cp (0x0ecd),0xff
 	jr	nz, 118	; F68C89  jr NZ,0xf68d01
@@ -124060,7 +124060,7 @@ sub_F68B91:
 	pop	xwa	; F68CAA  pop XWA
 	m_cp_mi8 MB16, 0x0ec0, 0x53	; F68CAB  cp (0x0ec0),0x53
 	jr	ule, 15	; F68CB0  jr ULE,0xf68cc1
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x04	; F68CB2  or (0x0e4e),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x04	; F68CB2  or (0x0e4e),0x04
 	m_cp_mi8 MB16, 0x0e44, 0xff	; F68CB7  cp (0x0e44),0xff
 	jr	nz, 3	; F68CBC  jr NZ,0xf68cc1
 	calr	9602	; F68CBE  calr 0xf6b243
@@ -124253,7 +124253,7 @@ sub_F68DBE:
 	stdi8	(4205), 0	; F68E03  ld (0x106d),0x00
 	calr	2566	; F68E08  calr 0xf69811
 	m_res 2, MD16, 0x0e4f	; F68E0B  res 2,(0x0e4f)
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F68E0F  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F68E0F  or (0x0ed5),0x01
 	calr	3741	; F68E14  calr 0xf69cb4
 	call	16176860	; F68E17  call 0xf6d6dc
 	calr	10911	; F68E1B  calr 0xf6b8bd
@@ -124495,7 +124495,7 @@ sub_F68F67:
 	m_cp_rm MB16, 0x0e53, 1	; F68F80  cp A,(0x0e53)
 	jr	nz, 45	; F68F84  jr NZ,0xf68fb3
 	calr	1133	; F68F86  calr 0xf693f6
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F68F89  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F68F89  or (0x0ed5),0x01
 	ldb_d8	l, (3683)	; F68F8E  ld L,(0x0e63)
 	and	hl, 3	; F68F92  and HL,0x0003
 	sla	hl, 2	; F68F96  sla 0x02,HL
@@ -124506,7 +124506,7 @@ sub_F68F67:
 	call	(xhl)	; F68FA5  call T,XHL
 	calr	58498	; F68FA7  calr 0xf6742c
 	m_res 2, MD16, 0x0e4f	; F68FAA  res 2,(0x0e4f)
-	.byte 0xC1, 0xA9, 0x20, 0x3E, 0x01	; F68FAE  or (0x20a9),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x20a9, 0x01	; F68FAE  or (0x20a9),0x01
 	ret	; F68FB3  ret
 
 ; --------------------------------------------------------------------------
@@ -124615,7 +124615,7 @@ sub_F69019:
 	calr	58271	; F69072  calr 0xf67414
 	ldb	w, 1	; F69075  ld W,0x01
 	jr	-87	; F69077  jr T,0xf69022
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F69079  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F69079  and (0x2075),0x6f
 	stdi8	(10368), 25	; F6907E  ld (0x2880),0x19
 	stdi16	(8304), 16555	; F69083  ld (0x2070),0x40ab
 	jr	-22	; F69089  jr T,0xf69075
@@ -124686,7 +124686,7 @@ sub_F690B5:
 	ld	xiy, 4846	; F690F7  ld XIY,0x000012ee
 	calr	8840	; F690FC  calr 0xf6b387
 	jr	18	; F690FF  jr T,0xf69113
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F69101  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F69101  and (0x2075),0x6f
 	stdi8	(10368), 25	; F69106  ld (0x2880),0x19
 	stdi16	(8304), 16555	; F6910B  ld (0x2070),0x40ab
 	jr	0	; F69111  jr T,0xf69113
@@ -124725,7 +124725,7 @@ sub_F69116:
 	calr	58057	; F69148  calr 0xf67414
 	ldb	w, 0	; F6914B  ld W,0x00
 	jr	18	; F6914D  jr T,0xf69161
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F6914F  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F6914F  and (0x2075),0x6f
 	stdi8	(10368), 25	; F69154  ld (0x2880),0x19
 	stdi16	(8304), 16555	; F69159  ld (0x2070),0x40ab
 	ldb	w, 1	; F6915F  ld W,0x01
@@ -125119,7 +125119,7 @@ sub_F693F6:		; <- T_F42F04
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6940B:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F6940B  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F6940B  or (0x2075),0x08
 	ldw_d16	hl, (3670)	; F69410  ld HL,(0x0e56)
 	push	xhl	; F69414  push XHL
 	calr	3575	; F69415  calr 0xf6a20f
@@ -125150,7 +125150,7 @@ sub_F6940B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F69442:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F69442  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F69442  or (0x2075),0x08
 	calr	3525	; F69447  calr 0xf6a20f
 	cp	w, 255	; F6944A  cp W,0xff
 	jr	z, 31	; F6944D  jr Z,0xf6946e
@@ -125275,7 +125275,7 @@ sub_F694DF:
 	ldb_d8	w, (3796)	; F694FE  ld W,(0x0ed4)
 	ld	xiy, 3726	; F69502  ld XIY,0x00000e8e
 	calr	7805	; F69507  calr 0xf6b387
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F6950A  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F6950A  or (0x0ed5),0x01
 	xor	a, a	; F6950F  xor A,A
 	stb_d8	(3796), a	; F69511  ld (0x0ed4),A
 	stdi8	(3664), 255	; F69515  ld (0x0e50),0xff
@@ -125384,7 +125384,7 @@ sub_F69597:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F695B7:
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F695B7  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F695B7  or (0x0ed5),0x01
 	calr	8958	; F695BC  calr 0xf6b8bd
 	ld	w, a	; F695BF  ld W,A
 	and	w, 240	; F695C1  and W,0xf0
@@ -125409,7 +125409,7 @@ sub_F695B7:
 	jr	nz, -44	; F695FE  jr NZ,0xf695d4
 	m_bit 4, MD16, 0x0e4e	; F69600  bit 4,(0x0e4e)
 	jr	nz, 0	; F69604  jr NZ,0xf69606
-	.byte 0xC1, 0x4E, 0x0E, 0x3C, 0xEF	; F69606  and (0x0e4e),0xef   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0e4e, 0xef	; F69606  and (0x0e4e),0xef
 	m_cp_mi8 MB16, 0x0e50, 0xff	; F6960B  cp (0x0e50),0xff
 	jr	nz, 0	; F69610  jr NZ,0xf69612
 	ret	; F69612  ret
@@ -125599,7 +125599,7 @@ sub_F69780:
 	m_cp_mi8 MB16, 0x12e8, 0x00	; F697A5  cp (0x12e8),0x00
 	jr	nz, 2	; F697AA  jr NZ,0xf697ae
 	jr	69	; F697AC  jr T,0xf697f3
-	.byte 0xC1, 0xD5, 0x0E, 0x3C, 0xFE	; F697AE  and (0x0ed5),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0ed5, 0xfe	; F697AE  and (0x0ed5),0xfe
 	push	xhl	; F697B3  push XHL
 	push	xiy	; F697B4  push XIY
 	ldb_d8	l, (3798)	; F697B5  ld L,(0x0ed6)
@@ -125630,7 +125630,7 @@ sub_F69780:
 	cps	a, 0	; F69803  cp A,0
 	jr	nz, 9	; F69805  jr NZ,0xf69810
 	m_set 1, MD16, 0x0e4f	; F69807  set 1,(0x0e4f)
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F6980B  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F6980B  or (0x0ed5),0x01
 	ret	; F69810  ret
 
 ; --------------------------------------------------------------------------
@@ -125669,7 +125669,7 @@ sub_F69814:
 	pop	xhl	; F69828  pop XHL
 	jr	-13	; F69829  jr T,0xf6981e
 	ldb_d8	l, (3792)	; F6982B  ld L,(0x0ed0)
-	.byte 0xC1, 0x4E, 0x0E, 0x3C, 0xFB	; F6982F  and (0x0e4e),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0e4e, 0xfb	; F6982F  and (0x0e4e),0xfb
 	ldb_d8	h, (3667)	; F69834  ld H,(0x0e53)
 	cps	h, 0	; F69838  cp H,0
 	jr	nz, 8	; F6983A  jr NZ,0xf69844
@@ -125791,7 +125791,7 @@ sub_F69887:
 	xor	a, a	; F698FD  xor A,A
 	calr	10723	; F698FF  calr 0xf6c2e5
 	call	16178455	; F69902  call 0xf6dd17
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F69906  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F69906  or (0x2075),0x08
 	call	16003508	; F6990B  call 0xf431b4
 	ret	; F6990F  ret
 
@@ -125868,7 +125868,7 @@ sub_F69960:
 	calr	42	; F6996B  calr 0xf69998
 	call	16177582	; F6996E  call 0xf6d9ae
 	call	16003508	; F69972  call 0xf431b4
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F69976  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F69976  or (0x2075),0x08
 	ret	; F6997B  ret
 
 ; --------------------------------------------------------------------------
@@ -125888,7 +125888,7 @@ sub_F6997C:
 	calr	14	; F69987  calr 0xf69998
 	call	16177582	; F6998A  call 0xf6d9ae
 	call	16003508	; F6998E  call 0xf431b4
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F69992  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F69992  or (0x2075),0x08
 	ret	; F69997  ret
 
 ; --------------------------------------------------------------------------
@@ -125993,7 +125993,7 @@ sub_F69A1E:
 	calr	231	; F69A56  calr 0xf69b40
 	call	16177296	; F69A59  call 0xf6d890
 	call	16003508	; F69A5D  call 0xf431b4
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F69A61  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F69A61  or (0x2075),0x08
 	ret	; F69A66  ret
 
 ; --------------------------------------------------------------------------
@@ -126032,7 +126032,7 @@ sub_F69A67:
 	calr	158	; F69A9F  calr 0xf69b40
 	call	16177296	; F69AA2  call 0xf6d890
 	call	16003508	; F69AA6  call 0xf431b4
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F69AAA  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F69AAA  or (0x2075),0x08
 	ret	; F69AAF  ret
 	bit	7, w	; F69AB0  bit 0x07,W
 	jr	nz, 5	; F69AB3  jr NZ,0xf69aba
@@ -126070,7 +126070,7 @@ sub_F69ABE:
 	pop	xhl	; F69AED  pop XHL
 	calr	79	; F69AEE  calr 0xf69b40
 	call	16178455	; F69AF1  call 0xf6dd17
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F69AF5  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F69AF5  or (0x2075),0x08
 	call	16003508	; F69AFA  call 0xf431b4
 	ret	; F69AFE  ret
 
@@ -126103,7 +126103,7 @@ sub_F69AFF:
 	pop	xhl	; F69B2E  pop XHL
 	calr	14	; F69B2F  calr 0xf69b40
 	call	16178455	; F69B32  call 0xf6dd17
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F69B36  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F69B36  or (0x2075),0x08
 	call	16003508	; F69B3B  call 0xf431b4
 	ret	; F69B3F  ret
 
@@ -126331,7 +126331,7 @@ sub_F69CB4:
 	jr	z, 2	; F69CB8  jr Z,0xf69cbc
 	jr	1	; F69CBA  jr T,0xf69cbd
 	ret	; F69CBC  ret
-	.byte 0xC1, 0xD5, 0x0E, 0x3C, 0xFE	; F69CBD  and (0x0ed5),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0ed5, 0xfe	; F69CBD  and (0x0ed5),0xfe
 	calr	1354	; F69CC2  calr 0xf6a20f
 	calr	10862	; F69CC5  calr 0xf6c736
 	xor	a, a	; F69CC8  xor A,A
@@ -126816,7 +126816,7 @@ sub_F6A097:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6A1C2:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F6A1C2  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F6A1C2  or (0x2075),0x08
 	calr	69	; F6A1C7  calr 0xf6a20f
 	calr	53823	; F6A1CA  calr 0xf6740c
 	xor	a, a	; F6A1CD  xor A,A
@@ -126844,7 +126844,7 @@ sub_F6A1C2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6A1F1:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F6A1F1  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F6A1F1  or (0x2075),0x08
 	calr	22	; F6A1F6  calr 0xf6a20f
 	calr	59764	; F6A1F9  calr 0xf68b70
 	xor	a, a	; F6A1FC  xor A,A
@@ -126871,7 +126871,7 @@ sub_F6A1F1:
 sub_F6A20F:
 	m_bit 0, MD16, 0x0e4f	; F6A20F  bit 0,(0x0e4f)
 	jr	z, 72	; F6A213  jr Z,0xf6a25d
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x04	; F6A215  or (0x0c8a),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x04	; F6A215  or (0x0c8a),0x04
 	ldb_d8	w, (3665)	; F6A21A  ld W,(0x0e51)
 	ldb_d8	a, (4104)	; F6A21E  ld A,(0x1008)
 	m_cp_mi8 MB16, 0x0e63, 0x00	; F6A222  cp (0x0e63),0x00
@@ -126883,7 +126883,7 @@ sub_F6A20F:
 	m_cp_mi8 MB16, 0x0e63, 0x02	; F6A237  cp (0x0e63),0x02
 	jr	nz, 7	; F6A23C  jr NZ,0xf6a245
 	ld	w, a	; F6A23E  ld W,A
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x04	; F6A240  or (0x0c8a),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x04	; F6A240  or (0x0c8a),0x04
 	call	15993952	; F6A245  call 0xf40c60
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F6A249  cp (0x0d4a),0x00
 	jr	nz, 20	; F6A24E  jr NZ,0xf6a264
@@ -126891,7 +126891,7 @@ sub_F6A20F:
 	stb_d8	(3672), c	; F6A254  ld (0x0e58),C
 	stb_d8	(3673), a	; F6A258  ld (0x0e59),A
 	ret	; F6A25C  ret
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F6A25D  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xfb	; F6A25D  and (0x0c8a),0xfb
 	jr	-74	; F6A262  jr T,0xf6a21a
 	ldb	w, 104	; F6A264  ld W,0x68
 	calr	53784	; F6A266  calr 0xf67481
@@ -126923,7 +126923,7 @@ sub_F6A26C:		; <- T_F42ED4
 	push	xix	; F6A27C  push XIX
 	push	xiy	; F6A27D  push XIY
 	push	xiz	; F6A27E  push XIZ
-	.byte 0xC1, 0x4E, 0x0E, 0x3C, 0xFD	; F6A27F  and (0x0e4e),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0e4e, 0xfd	; F6A27F  and (0x0e4e),0xfd
 	xor	a, a	; F6A284  xor A,A
 	calr	8201	; F6A286  calr 0xf6c292
 	calr	3501	; F6A289  calr 0xf6b039
@@ -126952,9 +126952,9 @@ sub_F6A26C:		; <- T_F42ED4
 	cp	a, 134	; F6A2CE  cp A,0x86
 	jr	z, 9	; F6A2D1  jr Z,0xf6a2dc
 	jr	-63	; F6A2D3  jr T,0xf6a296
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x02	; F6A2D5  or (0x0e4e),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x02	; F6A2D5  or (0x0e4e),0x02
 	jr	-70	; F6A2DA  jr T,0xf6a296
-	.byte 0xC1, 0x4E, 0x0E, 0x3C, 0xFD	; F6A2DC  and (0x0e4e),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0e4e, 0xfd	; F6A2DC  and (0x0e4e),0xfd
 	jr	-77	; F6A2E1  jr T,0xf6a296
 	xor	a, a	; F6A2E3  xor A,A
 	calr	8189	; F6A2E5  calr 0xf6c2e5
@@ -126997,7 +126997,7 @@ sub_F6A2FC:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6A2FF:
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x20	; F6A2FF  or (0x0e4e),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x20	; F6A2FF  or (0x0e4e),0x20
 
 ; --------------------------------------------------------------------------
 ; sub_F6A304
@@ -127013,7 +127013,7 @@ sub_F6A2FF:
 sub_F6A304:
 	push	xhl	; F6A304  push XHL
 	pushw	wa	; F6A305  push WA
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x40	; F6A306  or (0x34d4),0x40   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x40	; F6A306  or (0x34d4),0x40
 	ld	xhl, 6293514	; F6A30B  ld XHL,0x0060080a
 	ldb	a, 144	; F6A310  ld A,0x90
 	pushw	wa	; F6A312  push WA
@@ -127153,7 +127153,7 @@ sub_F6A406:
 	ldb	a, 28	; F6A432  ld A,0x1c
 	jr	5	; F6A434  jr T,0xf6a43b
 	stdi8	(3674), 0	; F6A436  ld (0x0e5a),0x00
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6A43B  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6A43B  or (0x0e4e),0x01
 	exts	wa	; F6A440  exts WA
 	ld	xhl, 3694	; F6A442  ld XHL,0x00000e6e
 	.byte 0xF3, 0x07, 0xEC, 0xE0, 0x33	; F6A447  lda XHL,XHL+WA   [llvm-mc cannot encode this]
@@ -127290,7 +127290,7 @@ sub_F6A4D9:
 	and	e, 1	; F6A4EE  and E,0x01
 	rrc	e	; F6A4F1  rrc 0x01,E
 	stb_d8	(4110), a	; F6A4F4  ld (0x100e),A
-	.byte 0xC1, 0x0E, 0x10, 0x3C, 0x04	; F6A4F8  and (0x100e),0x04   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x100e, 0x04	; F6A4F8  and (0x100e),0x04
 	call	15998340	; F6A4FD  call 0xf41d84
 	ldb_d8	a, (3667)	; F6A501  ld A,(0x0e53)
 	ld	(xiy+1), a	; F6A505  ld (XIY+0x01),A
@@ -127432,7 +127432,7 @@ sub_F6A5FF:
 	rrc	w	; F6A635  rrc 0x01,W
 	and	w, 1	; F6A638  and W,0x01
 	stda16	(4108), wa	; F6A63B  ld (0x100c),WA
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x10	; F6A63F  or (0x0e4e),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x10	; F6A63F  or (0x0e4e),0x10
 	stdi8	(3796), 4	; F6A644  ld (0x0ed4),0x04
 	ld	xhl, 3829	; F6A649  ld XHL,0x00000ef5
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6A64E  cp (0x0e63),0x03
@@ -127835,7 +127835,7 @@ sub_F6A8AD:
 	call	15993348	; F6A8E0  call 0xf40a04
 	m_res 7, MD16, 0x0e4f	; F6A8E4  res 7,(0x0e4f)
 	calr	248	; F6A8E8  calr 0xf6a9e3
-	.byte 0xC1, 0xA9, 0x20, 0x3E, 0x01	; F6A8EB  or (0x20a9),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x20a9, 0x01	; F6A8EB  or (0x20a9),0x01
 	pop	xiz	; F6A8F0  pop XIZ
 	pop	xiy	; F6A8F1  pop XIY
 	pop	xix	; F6A8F2  pop XIX
@@ -128096,7 +128096,7 @@ sub_F6A9E3:
 	stda16	(12304), de	; F6AB02  ld (0x3010),DE
 	.byte 0xD7, 0x3E, 0x8A	; F6AB06  ld DE,QHL3   [llvm-mc cannot encode this]
 	stdi16	(8542), 0	; F6AB09  ld (0x215e),0x0000
-	.byte 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01	; F6AB0F  or (0x212e),0x0100   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x212e, 0x0100	; F6AB0F  or (0x212e),0x0100
 	stdi16	(4210), 65535	; F6AB15  ld (0x1072),0xffff
 	call	15995320	; F6AB1B  call 0xf411b8
 	calr	6531	; F6AB1F  calr 0xf6c4a5
@@ -128112,10 +128112,10 @@ sub_F6A9E3:
 	jr	z, 4	; F6AB3A  jr Z,0xf6ab40
 	call	15993376	; F6AB3C  call 0xf40a20
 	calr	7235	; F6AB40  calr 0xf6c786
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F6AB43  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34bb, 0x04	; F6AB43  or (0x34bb),0x04
 	ld	xiy, 3662	; F6AB48  ld XIY,0x00000e4e
-	.byte 0x85, 0x3E, 0x08	; F6AB4D  or (XIY),0x08   [llvm-mc cannot encode this]
-	.byte 0x85, 0x3C, 0xDF	; F6AB50  and (XIY),0xdf   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r5, 0, 0x08	; F6AB4D  or (XIY),0x08
+	m_and_mi8 MBI+r5, 0, 0xdf	; F6AB50  and (XIY),0xdf
 	calr	63161	; F6AB53  calr 0xf6a20f
 	m_set 1, MD16, 0x0ed5	; F6AB56  set 1,(0x0ed5)
 	stdi8	(4800), 0	; F6AB5A  ld (0x12c0),0x00
@@ -128229,7 +128229,7 @@ DispatchTable_F6ABD2:
 	.long	0x00F6ABE2	; F6ABDA  [2] -> 0xF6ABE2
 	.long	0x00F6ABF5	; F6ABDE  [3] -> 0xF6ABF5
 
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F6ABE2  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F6ABE2  or (0x0ed5),0x01
 	calr	61642	; F6ABE7  calr 0xf69cb4
 	calr	51263	; F6ABEA  calr 0xf6742c
 	calr	59526	; F6ABED  calr 0xf69476
@@ -128617,7 +128617,7 @@ sub_F6AE4B:		; <- T_F42EC4
 	stdi8	(4775), 0	; F6AE4B  ld (0x12a7),0x00
 	call	16176854	; F6AE50  call 0xf6d6d6
 	stdi8	(3664), 255	; F6AE54  ld (0x0e50),0xff
-	.byte 0xC1, 0x71, 0x10, 0x3C, 0xFE	; F6AE59  and (0x1071),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x1071, 0xfe	; F6AE59  and (0x1071),0xfe
 	stdi8	(3527), 0	; F6AE5E  ld (0x0dc7),0x00
 	ldb_d8	a, (8315)	; F6AE63  ld A,(0x207b)
 	cpdm8	(8314), a	; F6AE67  cp (0x207a),A
@@ -128625,7 +128625,7 @@ sub_F6AE4B:		; <- T_F42EC4
 	m_bit 0, MD16, 0x106e	; F6AE6E  bit 0,(0x106e)
 	jr	z, 3	; F6AE72  jr Z,0xf6ae77
 	calr	62605	; F6AE74  calr 0xf6a304
-	.byte 0xC1, 0x6E, 0x10, 0x3C, 0xFE	; F6AE77  and (0x106e),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x106e, 0xfe	; F6AE77  and (0x106e),0xfe
 	calr	64137	; F6AE7C  calr 0xf6a908
 	ldw_d16	de, (12304)	; F6AE7F  ld DE,(0x3010)
 	ldw_d16	de, (13836)	; F6AE83  ld DE,(0x360c)
@@ -128679,10 +128679,10 @@ sub_F6AE4B:		; <- T_F42EC4
 	call	15993372	; F6AF21  call 0xf40a1c
 	ldda32	xwa, (13836)	; F6AF25  ld XWA,(0x360c)
 	stl_da	(6304798), xwa	; F6AF29  ld (0x60341e),XWA
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F6AF2E  or (0x34d4),0x10   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F6AF33  and (0x34bb),0xf7   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F6AF38  and (0x34bb),0xfb   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x4E, 0x0E, 0x3C, 0xF7	; F6AF3D  and (0x0e4e),0xf7   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F6AF2E  or (0x34d4),0x10
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F6AF33  and (0x34bb),0xf7
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F6AF38  and (0x34bb),0xfb
+	m_and_mi8 MB16, 0x0e4e, 0xf7	; F6AF3D  and (0x0e4e),0xf7
 	ldb_d8	a, (3683)	; F6AF42  ld A,(0x0e63)
 	cps	a, 3	; F6AF46  cp A,3
 	jr	nz, 5	; F6AF48  jr NZ,0xf6af4f
@@ -128723,7 +128723,7 @@ sub_F6AF58:		; <- T_F42EDC
 	ld	xiy, 3688	; F6AF58  ld XIY,0x00000e68
 	m_cp_mi8 MBI+r5, 0, 0x18	; F6AF5D  cp (XIY),0x18
 	jr	nz, 27	; F6AF60  jr NZ,0xf6af7d
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F6AF62  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F6AF62  and (0x2075),0x6f
 	pushw	wa	; F6AF67  push WA
 	push	xiy	; F6AF68  push XIY
 	ldb	w, 104	; F6AF69  ld W,0x68
@@ -128754,7 +128754,7 @@ sub_F6AF58:		; <- T_F42EDC
 	.byte 0xD7, 0x3E, 0x8A	; F6AFAE  ld DE,QHL3   [llvm-mc cannot encode this]
 	.byte 0xC7, 0x3C, 0x89	; F6AFB1  ld A,RL3   [llvm-mc cannot encode this]
 	jr	nc, 8	; F6AFB4  jr NC,0xf6afbe
-	.byte 0xC1, 0x6E, 0x10, 0x3C, 0xFE	; F6AFB6  and (0x106e),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x106e, 0xfe	; F6AFB6  and (0x106e),0xfe
 	calr	62278	; F6AFBB  calr 0xf6a304
 	ld	xiy, 3674	; F6AFBE  ld XIY,0x00000e5a
 	m_cp_mi8 MBI+r5, 0, 0x00	; F6AFC3  cp (XIY),0x00
@@ -128769,9 +128769,9 @@ sub_F6AF58:		; <- T_F42EDC
 	jr	nz, 14	; F6AFDD  jr NZ,0xf6afed
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6AFDF  cp (0x0e63),0x03
 	jr	nz, 7	; F6AFE4  jr NZ,0xf6afed
-	.byte 0xC1, 0x70, 0x10, 0x3E, 0x02	; F6AFE6  or (0x1070),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x1070, 0x02	; F6AFE6  or (0x1070),0x02
 	jr	23	; F6AFEB  jr T,0xf6b004
-	.byte 0xC1, 0x70, 0x10, 0x3C, 0xFD	; F6AFED  and (0x1070),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x1070, 0xfd	; F6AFED  and (0x1070),0xfd
 	m_cp_mi8 MB16, 0x207a, 0x0d	; F6AFF2  cp (0x207a),0x0d
 	jr	nz, 11	; F6AFF7  jr NZ,0xf6b004
 	m_cp_mi8 MB16, 0x0e45, 0x00	; F6AFF9  cp (0x0e45),0x00
@@ -128823,7 +128823,7 @@ Data_F6B006:
 sub_F6B01E:
 	calr	455	; F6B01E  calr 0xf6b1e8
 	ld	xiz, 3662	; F6B021  ld XIZ,0x00000e4e
-	.byte 0x86, 0x3C, 0xBF	; F6B026  and (XIZ),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r6, 0, 0xbf	; F6B026  and (XIZ),0xbf
 	calr	13	; F6B029  calr 0xf6b039
 	calr	64915	; F6B02C  calr 0xf6adc2
 	m_cp_mi8 MB16, 0x0e63, 0x00	; F6B02F  cp (0x0e63),0x00
@@ -128906,7 +128906,7 @@ sub_F6B075:
 	calr	4657	; F6B0B1  calr 0xf6c2e5
 	calr	125	; F6B0B4  calr 0xf6b134
 	ldb	w, 255	; F6B0B7  ld W,0xff
-	.byte 0xC1, 0xA9, 0x20, 0x3E, 0x01	; F6B0B9  or (0x20a9),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x20a9, 0x01	; F6B0B9  or (0x20a9),0x01
 	ret	; F6B0BE  ret
 	calr	1662	; F6B0BF  calr 0xf6b740
 	jr	-50	; F6B0C2  jr T,0xf6b092
@@ -128962,7 +128962,7 @@ sub_F6B0C4:
 	calr	4549	; F6B11D  calr 0xf6c2e5
 	calr	17	; F6B120  calr 0xf6b134
 	ldb	w, 255	; F6B123  ld W,0xff
-	.byte 0xC1, 0xA9, 0x20, 0x3E, 0x01	; F6B125  or (0x20a9),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x20a9, 0x01	; F6B125  or (0x20a9),0x01
 	ret	; F6B12A  ret
 	ldb	w, 129	; F6B12B  ld W,0x81
 	jr	-34	; F6B12D  jr T,0xf6b10d
@@ -129124,7 +129124,7 @@ sub_F6B1EA:
 	stdi8	(4800), 0	; F6B1EA  ld (0x12c0),0x00
 	call	16176648	; F6B1EF  call 0xf6d608
 	stdi8	(8304), 8	; F6B1F3  ld (0x2070),0x08
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x02	; F6B1F8  or (0x2071),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x02	; F6B1F8  or (0x2071),0x02
 	ret	; F6B1FD  ret
 
 ; --------------------------------------------------------------------------
@@ -129395,8 +129395,8 @@ sub_F6B2EE:
 sub_F6B387:
 	ldb_d8	a, (4104)	; F6B387  ld A,(0x1008)
 	calr	11	; F6B38B  calr 0xf6b399
-	.byte 0xC1, 0xA9, 0x20, 0x3E, 0x01	; F6B38E  or (0x20a9),0x01   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x14, 0x36, 0x3E, 0x01	; F6B393  or (0x3614),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x20a9, 0x01	; F6B38E  or (0x20a9),0x01
+	m_or_mi8 MB16, 0x3614, 0x01	; F6B393  or (0x3614),0x01
 	ret	; F6B398  ret
 
 ; --------------------------------------------------------------------------
@@ -129536,7 +129536,7 @@ sub_F6B399:
 	ret	; F6B4F4  ret
 	ldb	w, 104	; F6B4F5  ld W,0x68
 	calr	49031	; F6B4F7  calr 0xf67481
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F6B4FA  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F6B4FA  and (0x2075),0x6f
 	stdi8	(10368), 15	; F6B4FF  ld (0x2880),0x0f
 	stdi16	(8304), 16555	; F6B504  ld (0x2070),0x40ab
 	popw	bc	; F6B50A  pop BC
@@ -129653,7 +129653,7 @@ sub_F6B50C:
 	xor	w, w	; F6B622  xor W,W
 	ld	iz, wa	; F6B624  ld IZ,WA
 	ld	xix, 6305024	; F6B626  ld XIX,0x00603500
-	.byte 0xC3, 0x07, 0xF0, 0xF8, 0x3E, 0x80	; F6B62B  or (XIX+IZ),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_IX, ra_IZ, 0x80	; F6B62B  or (XIX+IZ),0x80
 	.byte 0xE7, 0x38, 0x9C	; F6B631  ld XDE3,XIX   [llvm-mc cannot encode this]
 	.byte 0xF3, 0x07, 0xF0, 0xF8, 0x34	; F6B634  lda XIX,XIX+IZ   [llvm-mc cannot encode this]
 	ld	(xix+1), iy	; F6B639  ld (XIX+0x01),IY
@@ -130376,7 +130376,7 @@ sub_F6BAFA:
 	ld	iy, (xhl+3)	; F6BB44  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F6BB47  cp IY,0xffff
 	jr	z, 27	; F6BB4B  jr Z,0xf6bb68
-	.byte 0x83, 0x3C, 0x7F	; F6BB4D  and (XHL),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r3, 0, 0x7f	; F6BB4D  and (XHL),0x7f
 	ld	(xhl+5), 130	; F6BB50  ld (XHL+0x05),0x82
 	inc	1, wa	; F6BB54  inc 1,WA
 	m_cp_rm MW16, 0x0c88, 0	; F6BB56  cp WA,(0x0c88)
@@ -130396,7 +130396,7 @@ sub_F6BAFA:
 	ld	iy, ix	; F6BB7A  ld IY,IX
 	calr	65	; F6BB7C  calr 0xf6bbc0
 	ldda32	xhl, (4718)	; F6BB7F  ld XHL,(0x126e)
-	.byte 0x83, 0x3C, 0x7F	; F6BB83  and (XHL),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r3, 0, 0x7f	; F6BB83  and (XHL),0x7f
 	ld	(xhl+5), 130	; F6BB86  ld (XHL+0x05),0x82
 	ld	(xhl+3), bc	; F6BB8A  ld (XHL+0x03),BC
 	ld	iy, bc	; F6BB8D  ld IY,BC
@@ -130414,7 +130414,7 @@ sub_F6BAFA:
 	jr	nz, -102	; F6BBB1  jr NZ,0xf6bb4d
 	stdi16	(3208), 0	; F6BBB3  ld (0x0c88),0x0000
 	ld	iy, ix	; F6BBB9  ld IY,IX
-	.byte 0x83, 0x3C, 0x7F	; F6BBBB  and (XHL),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r3, 0, 0x7f	; F6BBBB  and (XHL),0x7f
 	jr	-98	; F6BBBE  jr T,0xf6bb5e
 
 ; --------------------------------------------------------------------------
@@ -131761,7 +131761,7 @@ sub_F6C625:		; <- T_F42EF4
 	push	xix	; F6C635  push XIX
 	push	xiy	; F6C636  push XIY
 	push	xiz	; F6C637  push XIZ
-	.byte 0xC1, 0x70, 0x10, 0x3C, 0xFE	; F6C638  and (0x1070),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x1070, 0xfe	; F6C638  and (0x1070),0xfe
 	ldb	a, 4	; F6C63D  ld A,0x04
 	calr	64592	; F6C63F  calr 0xf6c292
 	calr	62072	; F6C642  calr 0xf6b8bd
@@ -131806,9 +131806,9 @@ sub_F6C625:		; <- T_F42EF4
 	cps	a, 2	; F6C6B1  cp A,2
 	jr	z, 9	; F6C6B3  jr Z,0xf6c6be
 	jr	-72	; F6C6B5  jr T,0xf6c66f
-	.byte 0xC1, 0x70, 0x10, 0x3E, 0x01	; F6C6B7  or (0x1070),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x1070, 0x01	; F6C6B7  or (0x1070),0x01
 	jr	-79	; F6C6BC  jr T,0xf6c66f
-	.byte 0xC1, 0x70, 0x10, 0x3C, 0xFE	; F6C6BE  and (0x1070),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x1070, 0xfe	; F6C6BE  and (0x1070),0xfe
 	jr	-86	; F6C6C3  jr T,0xf6c66f
 	ldb	a, 4	; F6C6C5  ld A,0x04
 	calr	64539	; F6C6C7  calr 0xf6c2e5
@@ -131938,7 +131938,7 @@ sub_F6C786:
 	ld	xix, 16173047	; F6C7A7  ld XIX,0x00f6c7f7
 	.byte 0xE3, 0x07, 0xF0, 0xF4, 0x21	; F6C7AC  ld XBC,(XIX+IY)   [llvm-mc cannot encode this]
 	pop	xix	; F6C7B1  pop XIX
-	.byte 0xE1, 0x0C, 0x36, 0xC1	; F6C7B2  and XBC,(0x360c)   [llvm-mc cannot encode this]
+	m_and_rm ML16, 0x360c, 1	; F6C7B2  and XBC,(0x360c)
 	cp	xbc, 0	; F6C7B6  cp XBC,0x00000000
 	jr	z, 44	; F6C7BC  jr Z,0xf6c7ea
 	pushw	wa	; F6C7BE  push WA
@@ -131955,11 +131955,11 @@ sub_F6C786:
 	inc	1, a	; F6C7D7  inc 1,A
 	ld	w, a	; F6C7D9  ld W,A
 	stb_d8	(3665), w	; F6C7DB  ld (0x0e51),W
-	.byte 0xC1, 0x4F, 0x0E, 0x3E, 0x01	; F6C7DF  or (0x0e4f),0x01   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x04	; F6C7E4  or (0x0c8a),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4f, 0x01	; F6C7DF  or (0x0e4f),0x01
+	m_or_mi8 MB16, 0x0c8a, 0x04	; F6C7E4  or (0x0c8a),0x04
 	ret	; F6C7E9  ret
-	.byte 0xC1, 0x4F, 0x0E, 0x3C, 0xFE	; F6C7EA  and (0x0e4f),0xfe   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F6C7EF  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0e4f, 0xfe	; F6C7EA  and (0x0e4f),0xfe
+	m_and_mi8 MB16, 0x0c8a, 0xfb	; F6C7EF  and (0x0c8a),0xfb
 	xor	w, w	; F6C7F4  xor W,W
 	ret	; F6C7F6  ret
 
@@ -132134,13 +132134,13 @@ sub_F6C935:
 	ld	(xix), 176	; F6C940  ld (XIX),0xb0
 	m_cp_mi8 MB16, 0x12ec, 0x02	; F6C943  cp (0x12ec),0x02
 	jr	nz, 3	; F6C948  jr NZ,0xf6c94d
-	.byte 0x84, 0x3E, 0x02	; F6C94A  or (XIX),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x02	; F6C94A  or (XIX),0x02
 	ld	(xix+4), a	; F6C94D  ld (XIX+0x04),A
-	.byte 0x8C, 0x04, 0x3C, 0x7F	; F6C950  and (XIX+0x04),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBD+r4, 0x04, 0x7f	; F6C950  and (XIX+0x04),0x7f
 	ld	(xix+5), 127	; F6C954  ld (XIX+0x05),0x7f
 	bit	7, a	; F6C958  bit 0x07,A
 	jr	z, 3	; F6C95B  jr Z,0xf6c960
-	.byte 0x84, 0x3E, 0x01	; F6C95D  or (XIX),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r4, 0, 0x01	; F6C95D  or (XIX),0x01
 	ldb_d8	a, (3667)	; F6C960  ld A,(0x0e53)
 	ld	(xix+1), a	; F6C964  ld (XIX+0x01),A
 	ldb_d8	a, (8784)	; F6C967  ld A,(0x2250)
@@ -132329,7 +132329,7 @@ RamPtrTable_F6CA63:
 	call	16173511	; F6CB0A  call 0xf6c9c7
 	call	16173365	; F6CB0E  call 0xf6c935
 	ret	; F6CB12  ret
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F6CB13  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F6CB13  or (0x2075),0x08
 	ldb_d8	a, (4845)	; F6CB18  ld A,(0x12ed)
 	xor	l, l	; F6CB1C  xor L,L
 	ldb	h, 127	; F6CB1E  ld H,0x7f
@@ -132383,7 +132383,7 @@ sub_F6CB52:
 	ldb	w, 6	; F6CB74  ld W,0x06
 	ld	xiy, 4846	; F6CB76  ld XIY,0x000012ee
 	calr	59401	; F6CB7B  calr 0xf6b387
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F6CB7E  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F6CB7E  or (0x0ed5),0x01
 	xor	a, a	; F6CB83  xor A,A
 	stb_d8	(3796), a	; F6CB85  ld (0x0ed4),A
 	stdi8	(3664), 255	; F6CB89  ld (0x0e50),0xff
@@ -132529,7 +132529,7 @@ sub_F6CC6E:
 	stdi8	(3527), 0	; F6CCA9  ld (0x0dc7),0x00
 	m_bit 7, MD16, 0x0dce	; F6CCAE  bit 7,(0x0dce)
 	jr	z, 69	; F6CCB2  jr Z,0xf6ccf9
-	.byte 0xC1, 0x71, 0x10, 0x3C, 0xFE	; F6CCB4  and (0x1071),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x1071, 0xfe	; F6CCB4  and (0x1071),0xfe
 	call	16003504	; F6CCB9  call 0xf431b0
 	calr	60413	; F6CCBD  calr 0xf6b8bd
 	cp	a, 129	; F6CCC0  cp A,0x81
@@ -132544,11 +132544,11 @@ sub_F6CC6E:
 	jr	9	; F6CCDC  jr T,0xf6cce7
 	stdi8	(4783), 255	; F6CCDE  ld (0x12af),0xff
 	call	16161795	; F6CCE3  call 0xf69c03
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F6CCE7  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F6CCE7  or (0x0ed5),0x01
 	stdi16	(3344), 0	; F6CCEC  ld (0x0d10),0x0000
 	call	16161972	; F6CCF2  call 0xf69cb4
 	jrl	67	; F6CCF6  jrl T,0xf6cd3c
-	.byte 0xC1, 0x71, 0x10, 0x3C, 0xFE	; F6CCF9  and (0x1071),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x1071, 0xfe	; F6CCF9  and (0x1071),0xfe
 	call	16003504	; F6CCFE  call 0xf431b0
 	call	16169149	; F6CD02  call 0xf6b8bd
 	cp	a, 129	; F6CD06  cp A,0x81
@@ -132563,7 +132563,7 @@ sub_F6CC6E:
 	jr	9	; F6CD22  jr T,0xf6cd2d
 	stdi8	(4783), 255	; F6CD24  ld (0x12af),0xff
 	call	16161795	; F6CD29  call 0xf69c03
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F6CD2D  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F6CD2D  or (0x0ed5),0x01
 	stdi16	(3344), 0	; F6CD32  ld (0x0d10),0x0000
 	call	16161972	; F6CD38  call 0xf69cb4
 	ret	; F6CD3C  ret
@@ -132612,7 +132612,7 @@ sub_F6CD74:
 	ld	(xix+1), a	; F6CD87  ld (XIX+0x01),A
 	pop	xix	; F6CD8A  pop XIX
 	ret	; F6CD8B  ret
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F6CD8C  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F6CD8C  or (0x2075),0x08
 	push	xix	; F6CD91  push XIX
 	ld	xix, 4846	; F6CD92  ld XIX,0x000012ee
 	ld	a, (xix+2)	; F6CD97  ld A,(XIX+0x02)
@@ -132637,7 +132637,7 @@ sub_F6CD74:
 	ldb	w, 3	; F6CDC6  ld W,0x03
 	ld	xiy, 4846	; F6CDC8  ld XIY,0x000012ee
 	calr	58807	; F6CDCD  calr 0xf6b387
-	.byte 0xC1, 0xD5, 0x0E, 0x3E, 0x01	; F6CDD0  or (0x0ed5),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0ed5, 0x01	; F6CDD0  or (0x0ed5),0x01
 	xor	a, a	; F6CDD5  xor A,A
 	stb_d8	(3796), a	; F6CDD7  ld (0x0ed4),A
 	stdi8	(3664), 255	; F6CDDB  ld (0x0e50),0xff
@@ -132704,7 +132704,7 @@ sub_F6CE26:
 	call	16181050	; F6CE66  call 0xf6e73a
 	pop	xiy	; F6CE6A  pop XIY
 	ldb	a, 1	; F6CE6B  ld A,0x01
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6CE6D  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6CE6D  or (0x0e4e),0x01
 	jr	2	; F6CE72  jr T,0xf6ce76
 	ldb	a, 0	; F6CE74  ld A,0x00
 	ret	; F6CE76  ret
@@ -132788,7 +132788,7 @@ sub_F6CED0:
 	call	16181143	; F6CF10  call 0xf6e797
 	pop	xiy	; F6CF14  pop XIY
 	ldb	a, 1	; F6CF15  ld A,0x01
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6CF17  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6CF17  or (0x0e4e),0x01
 	jr	2	; F6CF1C  jr T,0xf6cf20
 	ldb	a, 0	; F6CF1E  ld A,0x00
 	ret	; F6CF20  ret
@@ -132872,7 +132872,7 @@ sub_F6CF7A:
 	call	16181235	; F6CFBA  call 0xf6e7f3
 	pop	xiy	; F6CFBE  pop XIY
 	ldb	a, 1	; F6CFBF  ld A,0x01
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6CFC1  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6CFC1  or (0x0e4e),0x01
 	jr	2	; F6CFC6  jr T,0xf6cfca
 	ldb	a, 0	; F6CFC8  ld A,0x00
 	ret	; F6CFCA  ret
@@ -133136,7 +133136,7 @@ sub_F6D024:
 	call	16181321	; F6D064  call 0xf6e849
 	pop	xiy	; F6D068  pop XIY
 	ldb	a, 1	; F6D069  ld A,0x01
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6D06B  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6D06B  or (0x0e4e),0x01
 	jr	2	; F6D070  jr T,0xf6d074
 	ldb	a, 0	; F6D072  ld A,0x00
 	ret	; F6D074  ret
@@ -133234,7 +133234,7 @@ sub_F6D0CE:
 	call	16181414	; F6D10E  call 0xf6e8a6
 	pop	xiy	; F6D112  pop XIY
 	ldb	a, 1	; F6D113  ld A,0x01
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6D115  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6D115  or (0x0e4e),0x01
 	jr	2	; F6D11A  jr T,0xf6d11e
 	ldb	a, 0	; F6D11C  ld A,0x00
 	ret	; F6D11E  ret
@@ -133332,7 +133332,7 @@ sub_F6D178:
 	call	16181507	; F6D1B8  call 0xf6e903
 	pop	xiy	; F6D1BC  pop XIY
 	ldb	a, 1	; F6D1BD  ld A,0x01
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6D1BF  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6D1BF  or (0x0e4e),0x01
 	jr	2	; F6D1C4  jr T,0xf6d1c8
 	ldb	a, 0	; F6D1C6  ld A,0x00
 	ret	; F6D1C8  ret
@@ -133430,7 +133430,7 @@ sub_F6D222:
 	call	16181599	; F6D262  call 0xf6e95f
 	pop	xiy	; F6D266  pop XIY
 	ldb	a, 1	; F6D267  ld A,0x01
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6D269  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6D269  or (0x0e4e),0x01
 	jr	2	; F6D26E  jr T,0xf6d272
 	ldb	a, 0	; F6D270  ld A,0x00
 	ret	; F6D272  ret
@@ -133529,7 +133529,7 @@ sub_F6D2CC:
 	call	16179898	; F6D30F  call 0xf6e2ba
 	pop	xiy	; F6D313  pop XIY
 	ldb	a, 1	; F6D314  ld A,0x01
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6D316  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6D316  or (0x0e4e),0x01
 	jr	2	; F6D31B  jr T,0xf6d31f
 	ldb	a, 0	; F6D31D  ld A,0x00
 	ret	; F6D31F  ret
@@ -133623,7 +133623,7 @@ sub_F6D36C:
 	call	16179730	; F6D3AF  call 0xf6e212
 	pop	xiy	; F6D3B3  pop XIY
 	ldb	a, 1	; F6D3B4  ld A,0x01
-	.byte 0xC1, 0x4E, 0x0E, 0x3E, 0x01	; F6D3B6  or (0x0e4e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0e4e, 0x01	; F6D3B6  or (0x0e4e),0x01
 	jr	2	; F6D3BB  jr T,0xf6d3bf
 	ldb	a, 0	; F6D3BD  ld A,0x00
 	ret	; F6D3BF  ret
@@ -137632,9 +137632,9 @@ sub_F6EC6A:
 	jr	11	; F6EC8D  jr T,0xf6ec9a
 	inc	1, hl	; F6EC8F  inc 1,HL
 	jr	-31	; F6EC91  jr T,0xf6ec74
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xFB	; F6EC93  and (0x0c8a),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xfb	; F6EC93  and (0x0c8a),0xfb
 	jr	5	; F6EC98  jr T,0xf6ec9f
-	.byte 0xC1, 0x8A, 0x0C, 0x3E, 0x04	; F6EC9A  or (0x0c8a),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8a, 0x04	; F6EC9A  or (0x0c8a),0x04
 
 	.fill	865, 1, 0x0E	; F6EC9F-F6EFFF  `ret` padding (asserted pure 0x0E, and maximal)
 
@@ -137643,11 +137643,11 @@ sub_F6EC6A:
 	call	15993336	; F6F004  call 0xf409f8
 	stdi8	(8318), 0	; F6F008  ld (0x207e),0x00
 	stdi16	(8542), 0	; F6F00D  ld (0x215e),0x0000
-	.byte 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01	; F6F013  or (0x212e),0x0100   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F6F019  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x212e, 0x0100	; F6F013  or (0x212e),0x0100
+	m_or_mi8 MB16, 0x34bb, 0x04	; F6F019  or (0x34bb),0x04
 	ret	; F6F01E  ret
 	call	15993332	; F6F01F  call 0xf409f4
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F6F023  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F6F023  and (0x34bb),0xfb
 	ret	; F6F028  ret
 	m_cp_mi8 MB16, 0x207b, 0x1b	; F6F029  cp (0x207b),0x1b
 	jr	z, 25	; F6F02E  jr Z,0xf6f049
@@ -137661,7 +137661,7 @@ sub_F6EC6A:
 	m_cp_mi8 MB16, 0x2880, 0x23	; F6F049  cp (0x2880),0x23
 	jr	nz, 13	; F6F04E  jr NZ,0xf6f05d
 	stdi16	(8304), 513	; F6F050  ld (0x2070),0x0201
-	.byte 0xC1, 0xA9, 0x20, 0x3C, 0xFE	; F6F056  and (0x20a9),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x20a9, 0xfe	; F6F056  and (0x20a9),0xfe
 	jr	0	; F6F05B  jr T,0xf6f05d
 	ret	; F6F05D  ret
 
@@ -137698,7 +137698,7 @@ sub_F6F05E:
 	ret	; F6F088  ret
 	m_cp_mi8 MB16, 0x207e, 0x01	; F6F089  cp (0x207e),0x01
 	jr	z, 30	; F6F08E  jr Z,0xf6f0ae
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F6F090  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F6F090  or (0x2075),0x09
 	ldb_d8	a, (3586)	; F6F095  ld A,(0x0e02)
 	cp	a, 10	; F6F099  cp A,0x0a
 	jr	z, 16	; F6F09C  jr Z,0xf6f0ae
@@ -137710,7 +137710,7 @@ sub_F6F05E:
 	ret	; F6F0AE  ret
 	m_cp_mi8 MB16, 0x207e, 0x01	; F6F0AF  cp (0x207e),0x01
 	jr	z, 38	; F6F0B4  jr Z,0xf6f0dc
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F6F0B6  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F6F0B6  or (0x2075),0x09
 	ldb_d8	a, (3586)	; F6F0BB  ld A,(0x0e02)
 	cps	a, 0	; F6F0BF  cp A,0
 	jr	z, 25	; F6F0C1  jr Z,0xf6f0dc
@@ -137729,11 +137729,11 @@ sub_F6F05E:
 	stdi8	(8318), 0	; F6F0E4  ld (0x207e),0x00
 	stdi16	(8304), 32794	; F6F0E9  ld (0x2070),0x801a
 	ret	; F6F0EF  ret
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F6F0F0  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F6F0F0  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F6F0F5  cp (0x207e),0x01
 	jr	z, 12	; F6F0FA  jr Z,0xf6f108
 	stdi8	(8318), 1	; F6F0FC  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F6F101  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F6F101  or (0x2071),0x10
 	jr	54	; F6F106  jr T,0xf6f13e
 	stdi8	(10368), 255	; F6F108  ld (0x2880),0xff
 	stdi8	(3402), 0	; F6F10D  ld (0x0d4a),0x00
@@ -137936,7 +137936,7 @@ sub_F6F408:
 	call	16184614	; F6F42A  call 0xf6f526
 	call	15998572	; F6F42E  call 0xf41e6c
 	call	15998356	; F6F432  call 0xf41d94
-	.byte 0xC1, 0x0B, 0x36, 0x3C, 0xFE	; F6F436  and (0x360b),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x360b, 0xfe	; F6F436  and (0x360b),0xfe
 	pop	xde	; F6F43B  pop XDE
 	pop	xhl	; F6F43C  pop XHL
 	pop	xix	; F6F43D  pop XIX
@@ -138065,10 +138065,10 @@ sub_F6F4F2:
 	call	15993312	; F6F4F2  call 0xf409e0
 	m_cp_mi8 MB24, 0x6034c6, 0xff	; F6F4F6  cp (0x6034c6),0xff
 	jr	z, 9	; F6F4FC  jr Z,0xf6f507
-	.byte 0xC1, 0x4D, 0x7F, 0x3C, 0xFB	; F6F4FE  and (0x7f4d),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x7f4d, 0xfb	; F6F4FE  and (0x7f4d),0xfb
 	xor	a, a	; F6F503  xor A,A
 	jr	7	; F6F505  jr T,0xf6f50e
-	.byte 0xC1, 0x4D, 0x7F, 0x3E, 0x04	; F6F507  or (0x7f4d),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x7f4d, 0x04	; F6F507  or (0x7f4d),0x04
 	ldb	a, 4	; F6F50C  ld A,0x04
 	stdi8	(4684), 1	; F6F50E  ld (0x124c),0x01
 	ldb	e, 145	; F6F513  ld E,0x91
@@ -138113,7 +138113,7 @@ sub_F6F526:
 Data_F6F528:
 	.byte	0x4D, 0x54, 0x68, 0x64, 0x4D, 0x54, 0x72, 0x6B	; F6F528  [0..7]
 
-	.byte 0xC1, 0xE8, 0x21, 0x3E, 0x80	; F6F530  or (0x21e8),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e8, 0x80	; F6F530  or (0x21e8),0x80
 	xor	a, a	; F6F535  xor A,A
 	stb_d8	(4664), a	; F6F537  ld (0x1238),A
 	stb_d8	(4665), a	; F6F53B  ld (0x1239),A
@@ -138336,12 +138336,12 @@ Data_F6F528:
 	m_cp_mi8 MB16, 0x1239, 0xff	; F6F7F6  cp (0x1239),0xff
 	jr	z, 15	; F6F7FB  jr Z,0xf6f80c
 	ldb	c, 0	; F6F7FD  ld C,0x00
-	.byte 0xC1, 0x4D, 0x7F, 0x3C, 0xFB	; F6F7FF  and (0x7f4d),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x7f4d, 0xfb	; F6F7FF  and (0x7f4d),0xfb
 	stib_da	(6304966), 0	; F6F804  ld (0x6034c6),0x00
 	jr	16	; F6F80A  jr T,0xf6f81c
 	or	a, 4	; F6F80C  or A,0x04
 	ldb	c, 255	; F6F80F  ld C,0xff
-	.byte 0xC1, 0x4D, 0x7F, 0x3E, 0x04	; F6F811  or (0x7f4d),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x7f4d, 0x04	; F6F811  or (0x7f4d),0x04
 	stib_da	(6304966), 255	; F6F816  ld (0x6034c6),0xff
 	calr	134	; F6F81C  calr 0xf6f8a5
 	stdi8	(4684), 1	; F6F81F  ld (0x124c),0x01
@@ -138374,13 +138374,13 @@ Data_F6F528:
 	stdi8	(14162), 1	; F6F876  ld (0x3752),0x01
 	jr	5	; F6F87B  jr T,0xf6f882
 	stdi8	(14162), 0	; F6F87D  ld (0x3752),0x00
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xF7	; F6F882  and (0x34bb),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xf7	; F6F882  and (0x34bb),0xf7
 	call	15993312	; F6F887  call 0xf409e0
 	calr	57	; F6F88B  calr 0xf6f8c7
 	stiw_da	(6304796), 0	; F6F88E  ld (0x60341c),0x0000
 	call	15995320	; F6F895  call 0xf411b8
 	stdi16	(8304), 520	; F6F899  ld (0x2070),0x0208
-	.byte 0xC1, 0xE8, 0x21, 0x3C, 0x7F	; F6F89F  and (0x21e8),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e8, 0x7f	; F6F89F  and (0x21e8),0x7f
 	ret	; F6F8A4  ret
 
 ; --------------------------------------------------------------------------
@@ -138611,12 +138611,12 @@ sub_F6F9DE:
 	ld	hl, wa	; F6FA08  ld HL,WA
 	calr	13565	; F6FA0A  calr 0xf72f0a
 	ldda32	xhl, (4718)	; F6FA0D  ld XHL,(0x126e)
-	.byte 0x83, 0x3E, 0x80	; F6FA11  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F6FA11  or (XHL),0x80
 	.byte 0xBB, 0x01, 0x02, 0x00, 0x00	; F6FA14  ld (XHL+0x01),0x0000   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F6FA19  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
 	popw	wa	; F6FA1E  pop WA
 	ld	xhl, 6305024	; F6FA1F  ld XHL,0x00603500
-	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3E, 0x80	; F6FA24  or (XHL+IY),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_HL, ra_IY, 0x80	; F6FA24  or (XHL+IY),0x80
 	push	xhl	; F6FA2A  push XHL
 	.byte 0xF3, 0x07, 0xEC, 0xF4, 0x33	; F6FA2B  lda XHL,XHL+IY   [llvm-mc cannot encode this]
 	.byte 0xE7, 0x38, 0x9B	; F6FA30  ld XDE3,XHL   [llvm-mc cannot encode this]
@@ -138679,7 +138679,7 @@ sub_F6FA70:
 	m_cp_mi8 MB16, 0x1238, 0x00	; F6FA95  cp (0x1238),0x00
 	jr	nz, 16	; F6FA9A  jr NZ,0xf6faac
 	djnz16	bc, -22	; F6FA9C  djnz BC,0xf6fa89
-	.byte 0xC1, 0x0E, 0x36, 0x3E, 0x01	; F6FA9F  or (0x360e),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x360e, 0x01	; F6FA9F  or (0x360e),0x01
 	calr	6094	; F6FAA4  calr 0xf71275
 	stdi8	(4664), 0	; F6FAA7  ld (0x1238),0x00
 	pop	xiz	; F6FAAC  pop XIZ
@@ -141217,7 +141217,7 @@ sub_F70CBA:
 	ldb_d8	c, (4304)	; F70CD7  ld C,(0x10d0)
 	and	c, 15	; F70CDB  and C,0x0f
 	ldw_d16	wa, (4532)	; F70CDE  ld WA,(0x11b4)
-	.byte 0xD1, 0xB6, 0x11, 0xC0	; F70CE2  and WA,(0x11b6)   [llvm-mc cannot encode this]
+	m_and_rm MW16, 0x11b6, 0	; F70CE2  and WA,(0x11b6)
 	.byte 0xD7, 0x3E, 0x98	; F70CE6  ld QHL3,WA   [llvm-mc cannot encode this]
 	ld	a, c	; F70CE9  ld A,C
 	scf	; F70CEB  scf
@@ -141279,7 +141279,7 @@ sub_F70D42:
 	ldb_d8	c, (4304)	; F70D5F  ld C,(0x10d0)
 	and	c, 15	; F70D63  and C,0x0f
 	ldw_d16	wa, (4532)	; F70D66  ld WA,(0x11b4)
-	.byte 0xD1, 0xB6, 0x11, 0xC0	; F70D6A  and WA,(0x11b6)   [llvm-mc cannot encode this]
+	m_and_rm MW16, 0x11b6, 0	; F70D6A  and WA,(0x11b6)
 	.byte 0xD7, 0x3E, 0x98	; F70D6E  ld QHL3,WA   [llvm-mc cannot encode this]
 	ld	a, c	; F70D71  ld A,C
 	scf	; F70D73  scf
@@ -141464,7 +141464,7 @@ sub_F70ED5:
 	jr	ule, -22	; F70EEE  jr ULE,0xf70eda
 	stdi8	(4664), 0	; F70EF0  ld (0x1238),0x00
 	jrl	225	; F70EF5  jrl T,0xf70fd9
-	.byte 0xC1, 0xB1, 0x11, 0x3E, 0x01	; F70EF8  or (0x11b1),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x11b1, 0x01	; F70EF8  or (0x11b1),0x01
 	m_bit 0, MD16, 0x124b	; F70EFD  bit 0,(0x124b)
 	jr	nz, 25	; F70F01  jr NZ,0xf70f1c
 	stdi8	(4665), 255	; F70F03  ld (0x1239),0xff
@@ -141651,7 +141651,7 @@ sub_F71023:
 	ldb_d8	l, (4305)	; F7103D  ld L,(0x10d1)
 	cp	(xiy+1), l	; F71041  cp (XIY+0x01),L
 	jr	nz, 100	; F71044  jr NZ,0xf710aa
-	.byte 0x85, 0x3C, 0x7F	; F71046  and (XIY),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r5, 0, 0x7f	; F71046  and (XIY),0x7f
 	ld	ix, (xiy+2)	; F71049  ld IX,(XIY+0x02)
 	ld	hl, (xiy+3)	; F7104C  ld HL,(XIY+0x03)
 	and	xix, 255	; F7104F  and XIX,0x000000ff
@@ -141899,7 +141899,7 @@ sub_F71203:
 	jr	nz, 16	; F7121C  jr NZ,0xf7122e
 	djnz16	bc, -19	; F7121E  djnz BC,0xf7120e
 	calr	81	; F71221  calr 0xf71275
-	.byte 0xC1, 0xB1, 0x11, 0x3E, 0x01	; F71224  or (0x11b1),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x11b1, 0x01	; F71224  or (0x11b1),0x01
 	stdi8	(4664), 0	; F71229  ld (0x1238),0x00
 	ret	; F7122E  ret
 
@@ -142420,13 +142420,13 @@ sub_F71525:
 	dec	1, hl	; F7157D  dec 1,HL
 	cps	a, 1	; F7157F  cp A,1
 	jrl	nz, 16	; F71581  jrl NZ,0xf71594
-	.byte 0xC1, 0x4B, 0x12, 0x3E, 0x01	; F71584  or (0x124b),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x124b, 0x01	; F71584  or (0x124b),0x01
 	stdi8	(4665), 255	; F71589  ld (0x1239),0xff
 	calr	65158	; F7158E  calr 0xf71417
 	jrl	18	; F71591  jrl T,0xf715a6
 	cps	a, 2	; F71594  cp A,2
 	jrl	nz, 13	; F71596  jrl NZ,0xf715a6
-	.byte 0xC1, 0x4B, 0x12, 0x3E, 0x01	; F71599  or (0x124b),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x124b, 0x01	; F71599  or (0x124b),0x01
 	stdi8	(4665), 0	; F7159E  ld (0x1239),0x00
 	calr	65137	; F715A3  calr 0xf71417
 	stda16	(4504), hl	; F715A6  ld (0x1198),HL
@@ -143643,7 +143643,7 @@ ByteMap_F7207D:
 	stdi8	(4665), 0	; F720BD  ld (0x1239),0x00
 	stdi8	(4683), 1	; F720C2  ld (0x124b),0x01
 	call	16192535	; F720C7  call 0xf71417
-	.byte 0xC1, 0xB1, 0x11, 0x3E, 0x01	; F720CB  or (0x11b1),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x11b1, 0x01	; F720CB  or (0x11b1),0x01
 	ldw_d16	iy, (4530)	; F720D0  ld IY,(0x11b2)
 	extz	xiy	; F720D4  extz XIY
 	calr	2085	; F720D6  calr 0xf728fe
@@ -143761,7 +143761,7 @@ sub_F721A3:
 	ldb_d8	l, (4305)	; F721BC  ld L,(0x10d1)
 	cp	(xiy+1), l	; F721C0  cp (XIY+0x01),L
 	jr	nz, 90	; F721C3  jr NZ,0xf7221f
-	.byte 0x85, 0x3C, 0x7F	; F721C5  and (XIY),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r5, 0, 0x7f	; F721C5  and (XIY),0x7f
 	ld	ix, (xiy+2)	; F721C8  ld IX,(XIY+0x02)
 	ld	hl, (xiy+3)	; F721CB  ld HL,(XIY+0x03)
 	and	ix, 255	; F721CE  and IX,0x00ff
@@ -144674,7 +144674,7 @@ sub_F72822:
 	ld	hl, wa	; F7284B  ld HL,WA
 	calr	1722	; F7284D  calr 0xf72f0a
 	ldda32	xhl, (4718)	; F72850  ld XHL,(0x126e)
-	.byte 0x83, 0x3E, 0x80	; F72854  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F72854  or (XHL),0x80
 	.byte 0xBB, 0x01, 0x02, 0x00, 0x00	; F72857  ld (XHL+0x01),0x0000   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F7285C  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
 	popw	wa	; F72861  pop WA
@@ -144682,7 +144682,7 @@ sub_F72822:
 	sla	iy, 1	; F72864  sla 0x01,IY
 	add	iy, hl	; F72867  add IY,HL
 	ld	xhl, 6305024	; F72869  ld XHL,0x00603500
-	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3E, 0x80	; F7286E  or (XHL+IY),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_HL, ra_IY, 0x80	; F7286E  or (XHL+IY),0x80
 	.byte 0xE7, 0x38, 0x9B	; F72874  ld XDE3,XHL   [llvm-mc cannot encode this]
 	.byte 0xF3, 0x07, 0xEC, 0xF4, 0x33	; F72877  lda XHL,XHL+IY   [llvm-mc cannot encode this]
 	ld	(xhl+1), wa	; F7287C  ld (XHL+0x01),WA
@@ -144967,7 +144967,7 @@ sub_F72A2B:
 	jrl	326	; F72A69  jrl T,0xf72bb2
 	xor	hl, hl	; F72A6C  xor HL,HL
 	stdi8	(3402), 0	; F72A6E  ld (0x0d4a),0x00
-	.byte 0xC1, 0x8A, 0x0C, 0x3C, 0xBF	; F72A73  and (0x0c8a),0xbf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8a, 0xbf	; F72A73  and (0x0c8a),0xbf
 	ldb_d8	a, (3184)	; F72A78  ld A,(0x0c70)
 	call	16001016	; F72A7C  call 0xf427f8
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F72A80  cp (0x0d4a),0x00
@@ -145022,7 +145022,7 @@ sub_F72A2B:
 	muls	l, 3	; F72B22  muls L,0x03
 	push	xiy	; F72B25  push XIY
 	ld	xiy, 6305024	; F72B26  ld XIY,0x00603500
-	.byte 0xC3, 0x07, 0xF4, 0xEC, 0x3E, 0x80	; F72B2B  or (XIY+HL),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_IY, ra_HL, 0x80	; F72B2B  or (XIY+HL),0x80
 	inc	1, xhl	; F72B31  inc 1,XHL
 	.byte 0xF3, 0x07, 0xF4, 0xEC, 0x54	; F72B33  ld (XIY+HL),IX   [llvm-mc cannot encode this]
 	pop	xiy	; F72B38  pop XIY
@@ -145207,7 +145207,7 @@ sub_F72C36:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F72C74:
-	.byte 0xC1, 0x8B, 0x0C, 0x3C, 0xFD	; F72C74  and (0x0c8b),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8b, 0xfd	; F72C74  and (0x0c8b),0xfd
 	ldw_d16	iy, (3328)	; F72C79  ld IY,(0x0d00)
 	push	xix	; F72C7D  push XIX
 	ld	xix, 6332672	; F72C7E  ld XIX,0x0060a100
@@ -145217,7 +145217,7 @@ sub_F72C74:
 	jr	z, 5	; F72C8C  jr Z,0xf72c93
 	cp	b, 129	; F72C8E  cp B,0x81
 	jr	nz, 7	; F72C91  jr NZ,0xf72c9a
-	.byte 0xC1, 0x8B, 0x0C, 0x3E, 0x02	; F72C93  or (0x0c8b),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8b, 0x02	; F72C93  or (0x0c8b),0x02
 	jr	33	; F72C98  jr T,0xf72cbb
 	pushw	bc	; F72C9A  push BC
 	push	xix	; F72C9B  push XIX
@@ -145248,7 +145248,7 @@ sub_F72C74:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F72CBC:
-	.byte 0xC1, 0x8B, 0x0C, 0x3C, 0xFE	; F72CBC  and (0x0c8b),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c8b, 0xfe	; F72CBC  and (0x0c8b),0xfe
 	ldw_d16	iy, (3322)	; F72CC1  ld IY,(0x0cfa)
 	push	xix	; F72CC5  push XIX
 	ld	xix, 6332416	; F72CC6  ld XIX,0x0060a000
@@ -145258,7 +145258,7 @@ sub_F72CBC:
 	jr	z, 5	; F72CD4  jr Z,0xf72cdb
 	cp	c, 129	; F72CD6  cp C,0x81
 	jr	nz, 7	; F72CD9  jr NZ,0xf72ce2
-	.byte 0xC1, 0x8B, 0x0C, 0x3E, 0x01	; F72CDB  or (0x0c8b),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c8b, 0x01	; F72CDB  or (0x0c8b),0x01
 	jr	33	; F72CE0  jr T,0xf72d03
 	pushw	bc	; F72CE2  push BC
 	push	xix	; F72CE3  push XIX
@@ -145522,7 +145522,7 @@ sub_F72EBA:
 	.byte 0xC7, 0xF4, 0x09, 0x03	; F72EBE  muls IYL,0x03   [llvm-mc cannot encode this]
 	push	xix	; F72EC2  push XIX
 	ld	xix, 6305024	; F72EC3  ld XIX,0x00603500
-	.byte 0xC3, 0x07, 0xF0, 0xF4, 0x3C, 0x7F	; F72EC8  and (XIX+IY),0x7f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_IX, ra_IY, 0x7f	; F72EC8  and (XIX+IY),0x7f
 	inc	1, iy	; F72ECE  inc 1,IY
 	.byte 0xF3, 0x07, 0xF0, 0xF4, 0x02, 0xFF, 0xFF	; F72ED0  ld (XIX+IY),0xffff   [llvm-mc cannot encode this]
 	ld	xix, 13442	; F72ED7  ld XIX,0x00003482
@@ -145702,7 +145702,7 @@ sub_F72F5C:
 	jrl	408	; F73007  jrl T,0xf731a2
 	ldw_d16	iy, (4504)	; F7300A  ld IY,(0x1198)
 	and	iy, 15	; F7300E  and IY,0x000f
-	.byte 0xC1, 0x98, 0x11, 0x3C, 0xF0	; F73012  and (0x1198),0xf0   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x1198, 0xf0	; F73012  and (0x1198),0xf0
 	pushw	iy	; F73017  push IY
 	calr	1061	; F73018  calr 0xf73440
 	ldw	bc, 6	; F7301B  ld BC,0x0006
@@ -145841,7 +145841,7 @@ sub_F72F5C:
 	calr	714	; F7319C  calr 0xf73469
 	jrl	-512	; F7319F  jrl T,0xf72fa2
 	calr	854	; F731A2  calr 0xf734fb
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F731A5  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F731A5  or (0x34d4),0x10
 	ret	; F731AA  ret
 
 ; --------------------------------------------------------------------------
@@ -146143,7 +146143,7 @@ sub_F7330A:
 	ld	iy, hl	; F7330D  ld IY,HL
 	.byte 0xC7, 0xF4, 0x09, 0x03	; F7330F  muls IYL,0x03   [llvm-mc cannot encode this]
 	ld	xix, 6305024	; F73313  ld XIX,0x00603500
-	.byte 0xC3, 0x07, 0xF0, 0xF4, 0x3C, 0x7F	; F73318  and (XIX+IY),0x7f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_IX, ra_IY, 0x7f	; F73318  and (XIX+IY),0x7f
 	inc	1, iy	; F7331E  inc 1,IY
 	.byte 0xF3, 0x07, 0xF0, 0xF4, 0x02, 0xFF, 0xFF	; F73320  ld (XIX+IY),0xffff   [llvm-mc cannot encode this]
 	ld	xix, 13442	; F73327  ld XIX,0x00003482
@@ -146504,12 +146504,12 @@ sub_F73566:
 	ld	hl, wa	; F73590  ld HL,WA
 	calr	63861	; F73592  calr 0xf72f0a
 	ldda32	xhl, (4718)	; F73595  ld XHL,(0x126e)
-	.byte 0x83, 0x3E, 0x80	; F73599  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F73599  or (XHL),0x80
 	.byte 0xBB, 0x01, 0x02, 0x00, 0x00	; F7359C  ld (XHL+0x01),0x0000   [llvm-mc cannot encode this]
 	.byte 0xBB, 0x03, 0x02, 0xFF, 0xFF	; F735A1  ld (XHL+0x03),0xffff   [llvm-mc cannot encode this]
 	popw	wa	; F735A6  pop WA
 	ld	xhl, 6305024	; F735A7  ld XHL,0x00603500
-	.byte 0xC3, 0x07, 0xEC, 0xF4, 0x3E, 0x80	; F735AC  or (XHL+IY),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_HL, ra_IY, 0x80	; F735AC  or (XHL+IY),0x80
 	.byte 0xE7, 0x38, 0x9B	; F735B2  ld XDE3,XHL   [llvm-mc cannot encode this]
 	.byte 0xF3, 0x07, 0xEC, 0xF4, 0x33	; F735B5  lda XHL,XHL+IY   [llvm-mc cannot encode this]
 	ld	(xhl+1), wa	; F735BA  ld (XHL+0x01),WA
@@ -146613,7 +146613,7 @@ sub_F73664:
 	stb_d8	(4298), c	; F7366B  ld (0x10ca),C
 	xor	b, b	; F7366F  xor B,B
 	ld	iy, bc	; F73671  ld IY,BC
-	.byte 0xC1, 0x4D, 0x12, 0x3C, 0xFE	; F73673  and (0x124d),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x124d, 0xfe	; F73673  and (0x124d),0xfe
 	stdi8	(4665), 0	; F73678  ld (0x1239),0x00
 	m_bit 2, MD16, 0x7f4d	; F7367D  bit 2,(0x7f4d)
 	jr	z, 5	; F73681  jr Z,0xf73688
@@ -146883,7 +146883,7 @@ sub_F7385F:
 	jr	z, 8	; F7386B  jr Z,0xf73875
 	stdi8	(10368), 9	; F7386D  ld (0x2880),0x09
 	jrl	3973	; F73872  jrl T,0xf747fa
-	.byte 0xC1, 0xE8, 0x21, 0x3E, 0x80	; F73875  or (0x21e8),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e8, 0x80	; F73875  or (0x21e8),0x80
 	xor	wa, wa	; F7387A  xor WA,WA
 	stb_d8	(4529), a	; F7387C  ld (0x11b1),A
 	stda16	(4716), wa	; F73880  ld (0x126c),WA
@@ -147145,7 +147145,7 @@ sub_F7385F:
 	stb_d8	(4944), a	; F73B9F  ld (0x1350),A
 	ld	a, (xiy+9)	; F73BA3  ld A,(XIY+0x09)
 	stb_d8	(4686), a	; F73BA6  ld (0x124e),A
-	.byte 0xC1, 0x70, 0x0C, 0x3C, 0x0F	; F73BAA  and (0x0c70),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c70, 0x0f	; F73BAA  and (0x0c70),0x0f
 	ldb_d8	l, (3184)	; F73BAF  ld L,(0x0c70)
 	xor	h, h	; F73BB3  xor H,H
 	push	xix	; F73BB5  push XIX
@@ -147612,7 +147612,7 @@ sub_F7385F:
 	cp	hl, 160	; F740C7  cp HL,0x00a0
 	jr	ule, -24	; F740CB  jr ULE,0xf740b5
 	jrl	-466	; F740CD  jrl T,0xf73efe
-	.byte 0xC1, 0xB1, 0x11, 0x3E, 0x01	; F740D0  or (0x11b1),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x11b1, 0x01	; F740D0  or (0x11b1),0x01
 	pushw	hl	; F740D5  push HL
 	ldb_d8	c, (4505)	; F740D6  ld C,(0x1199)
 	calr	2455	; F740DA  calr 0xf74a74
@@ -148201,7 +148201,7 @@ sub_F7385F:
 	call	15996416	; F7477D  call 0xf41600
 	calr	59292	; F74781  calr 0xf72f20
 	stdi8	(8745), 0	; F74784  ld (0x2229),0x00
-	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F74789  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x34d4, 0x10	; F74789  or (0x34d4),0x10
 	jr	106	; F7478E  jr T,0xf747fa
 	m_cp_mi8 MB16, 0x2880, 0x02	; F74790  cp (0x2880),0x02
 	jr	z, 44	; F74795  jr Z,0xf747c3
@@ -148234,10 +148234,10 @@ sub_F7385F:
 	stb_d8	(10368), l	; F747EF  ld (0x2880),L
 	jr	5	; F747F3  jr T,0xf747fa
 	stdi8	(8745), 2	; F747F5  ld (0x2229),0x02
-	.byte 0xC1, 0xE8, 0x21, 0x3C, 0x7F	; F747FA  and (0x21e8),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e8, 0x7f	; F747FA  and (0x21e8),0x7f
 	popw	wa	; F747FF  pop WA
 	stb_d8	(10021), a	; F74800  ld (0x2725),A
-	.byte 0xC1, 0x71, 0x20, 0x3C, 0xFD	; F74804  and (0x2071),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2071, 0xfd	; F74804  and (0x2071),0xfd
 	ret	; F74809  ret
 
 ; --------------------------------------------------------------------------
@@ -149003,7 +149003,7 @@ sub_F74CF2:
 	pop	xhl	; F74D59  pop XHL
 	push	xde	; F74D5A  push XDE
 	ld	xde, 12378	; F74D5B  ld XDE,0x0000305a
-	.byte 0xC3, 0x07, 0xE8, 0xF0, 0x3C, 0x3F	; F74D60  and (XDE+IX),0x3f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_DE, ra_IX, 0x3f	; F74D60  and (XDE+IX),0x3f
 	pop	xde	; F74D66  pop XDE
 	add	hl, 3	; F74D67  add HL,0x0003
 	cp	hl, 96	; F74D6B  cp HL,0x0060
@@ -149727,7 +149727,7 @@ sub_F75685:
 	stb_d8	(4944), a	; F7581D  ld (0x1350),A
 	ld	a, (xiy+9)	; F75821  ld A,(XIY+0x09)
 	stb_d8	(4686), a	; F75824  ld (0x124e),A
-	.byte 0xC1, 0x70, 0x0C, 0x3C, 0x0F	; F75828  and (0x0c70),0x0f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c70, 0x0f	; F75828  and (0x0c70),0x0f
 	m_cp_mi8 MB16, 0x1239, 0xff	; F7582D  cp (0x1239),0xff
 	jr	nz, 97	; F75832  jr NZ,0xf75895
 	ldb_d8	a, (3184)	; F75834  ld A,(0x0c70)
@@ -150131,7 +150131,7 @@ sub_F75685:
 	cp	hl, 160	; F75C56  cp HL,0x00a0
 	jr	ule, -24	; F75C5A  jr ULE,0xf75c44
 	jrl	-397	; F75C5C  jrl T,0xf75ad2
-	.byte 0xC1, 0xB1, 0x11, 0x3E, 0x01	; F75C5F  or (0x11b1),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x11b1, 0x01	; F75C5F  or (0x11b1),0x01
 	pushw	hl	; F75C64  push HL
 	ldb_d8	c, (4505)	; F75C65  ld C,(0x1199)
 	calr	1453	; F75C69  calr 0xf76219
@@ -151020,7 +151020,7 @@ sub_F763D7:
 	popw	bc	; F7643A  pop BC
 	pop	xhl	; F7643B  pop XHL
 	ld	xde, 12378	; F7643C  ld XDE,0x0000305a
-	.byte 0xC3, 0x07, 0xE8, 0xF0, 0x3C, 0x3F	; F76441  and (XDE+IX),0x3f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_DE, ra_IX, 0x3f	; F76441  and (XDE+IX),0x3f
 	pop	xde	; F76447  pop XDE
 	add	hl, 3	; F76448  add HL,0x0003
 	cp	hl, 96	; F7644C  cp HL,0x0060
@@ -151217,7 +151217,7 @@ sub_F76567:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7659B:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x80	; F7659B  or (0x21e7),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x80	; F7659B  or (0x21e7),0x80
 	cps	l, 1	; F765A0  cp L,1
 	jr	z, 15	; F765A2  jr Z,0xf765b3
 	stdi8	(8656), 77	; F765A4  ld (0x21d0),0x4d
@@ -151227,9 +151227,9 @@ sub_F7659B:
 	stda32	(8659), xwa	; F765B8  ld (0x21d3),XWA
 	ld	xwa, 6335232	; F765BC  ld XWA,0x0060ab00
 	stda32	(8663), xwa	; F765C1  ld (0x21d7),XWA
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x20	; F765C5  or (0x21e7),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x20	; F765C5  or (0x21e7),0x20
 	call	16000424	; F765CA  call 0xf425a8
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xDF	; F765CE  and (0x21e7),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xdf	; F765CE  and (0x21e7),0xdf
 	ret	; F765D3  ret
 
 ; --------------------------------------------------------------------------
@@ -151246,7 +151246,7 @@ sub_F7659B:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F765D4:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x02	; F765D4  or (0x21e7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x02	; F765D4  or (0x21e7),0x02
 	call	16000424	; F765D9  call 0xf425a8
 	ret	; F765DD  ret
 
@@ -151264,7 +151264,7 @@ sub_F765D4:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F765DE:
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xFD	; F765DE  and (0x21e7),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xfd	; F765DE  and (0x21e7),0xfd
 	ldb	w, 1	; F765E3  ld W,0x01
 	ret	; F765E5  ret
 
@@ -151327,7 +151327,7 @@ Data_F765FA:
 	stdi8	(8657), 73	; F76623  ld (0x21d1),0x49
 	stdi8	(8658), 68	; F76628  ld (0x21d2),0x44
 	call	16000432	; F7662D  call 0xf425b0
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x80	; F76631  or (0x21e7),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x80	; F76631  or (0x21e7),0x80
 	stdi8	(8656), 77	; F76636  ld (0x21d0),0x4d
 	stdi8	(8657), 73	; F7663B  ld (0x21d1),0x49
 	stdi8	(8658), 68	; F76640  ld (0x21d2),0x44
@@ -151350,10 +151350,10 @@ Data_F765FA:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7664E:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x20	; F7664E  or (0x21e7),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x20	; F7664E  or (0x21e7),0x20
 	call	16000428	; F76653  call 0xf425ac
 	ldb_d8	a, (8771)	; F76657  ld A,(0x2243)
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xDF	; F7665B  and (0x21e7),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xdf	; F7665B  and (0x21e7),0xdf
 	ret	; F76660  ret
 
 ; --------------------------------------------------------------------------
@@ -151370,7 +151370,7 @@ sub_F7664E:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F76661:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x02	; F76661  or (0x21e7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x02	; F76661  or (0x21e7),0x02
 	call	16000428	; F76666  call 0xf425ac
 	ldb_d8	a, (8771)	; F7666A  ld A,(0x2243)
 	ret	; F7666E  ret
@@ -151391,9 +151391,9 @@ sub_F76661:
 sub_F7666F:
 	m_cp_mi16 MW16, 0x126c, 0x0000	; F7666F  cp (0x126c),0x0000
 	jr	z, 9	; F76675  jr Z,0xf76680
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x02	; F76677  or (0x21e7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x02	; F76677  or (0x21e7),0x02
 	call	16000428	; F7667C  call 0xf425ac
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xFD	; F76680  and (0x21e7),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xfd	; F76680  and (0x21e7),0xfd
 	call	16000484	; F76685  call 0xf425e4
 	ret	; F76689  ret
 
@@ -152171,7 +152171,7 @@ sub_F77B42:
 	popw	bc	; F77BA5  pop BC
 	pop	xhl	; F77BA6  pop XHL
 	ld	xde, 12378	; F77BA7  ld XDE,0x0000305a
-	.byte 0xC3, 0x07, 0xE8, 0xF0, 0x3C, 0x3F	; F77BAC  and (XDE+IX),0x3f   [llvm-mc cannot encode this]
+	mx_and_mi8 MXB, ra_DE, ra_IX, 0x3f	; F77BAC  and (XDE+IX),0x3f
 	pop	xde	; F77BB2  pop XDE
 	add	hl, 3	; F77BB3  add HL,0x0003
 	jr	-108	; F77BB7  jr T,0xf77b4d
@@ -152323,7 +152323,7 @@ sub_F77C92:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F77D00:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x80	; F77D00  or (0x21e7),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x80	; F77D00  or (0x21e7),0x80
 	cps	l, 1	; F77D05  cp L,1
 	jr	z, 15	; F77D07  jr Z,0xf77d18
 	stdi8	(8656), 77	; F77D09  ld (0x21d0),0x4d
@@ -152333,9 +152333,9 @@ sub_F77D00:
 	stda32	(8659), xwa	; F77D1D  ld (0x21d3),XWA
 	ld	xwa, 6335232	; F77D21  ld XWA,0x0060ab00
 	stda32	(8663), xwa	; F77D26  ld (0x21d7),XWA
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x20	; F77D2A  or (0x21e7),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x20	; F77D2A  or (0x21e7),0x20
 	call	16000424	; F77D2F  call 0xf425a8
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xDF	; F77D33  and (0x21e7),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xdf	; F77D33  and (0x21e7),0xdf
 	ret	; F77D38  ret
 
 ; --------------------------------------------------------------------------
@@ -152352,7 +152352,7 @@ sub_F77D00:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F77D39:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x02	; F77D39  or (0x21e7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x02	; F77D39  or (0x21e7),0x02
 	call	16000424	; F77D3E  call 0xf425a8
 	ret	; F77D42  ret
 
@@ -152369,7 +152369,7 @@ sub_F77D39:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F77D43:
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xFD	; F77D43  and (0x21e7),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xfd	; F77D43  and (0x21e7),0xfd
 	ldb	w, 1	; F77D48  ld W,0x01
 	ret	; F77D4A  ret
 	xor	de, de	; F77D4B  xor DE,DE
@@ -152417,7 +152417,7 @@ Data_F77D5F:
 	stdi8	(8657), 73	; F77D88  ld (0x21d1),0x49
 	stdi8	(8658), 68	; F77D8D  ld (0x21d2),0x44
 	call	16000432	; F77D92  call 0xf425b0
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x80	; F77D96  or (0x21e7),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x80	; F77D96  or (0x21e7),0x80
 	stdi8	(8656), 77	; F77D9B  ld (0x21d0),0x4d
 	stdi8	(8657), 73	; F77DA0  ld (0x21d1),0x49
 	stdi8	(8658), 68	; F77DA5  ld (0x21d2),0x44
@@ -152440,20 +152440,20 @@ Data_F77D5F:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F77DB3:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x20	; F77DB3  or (0x21e7),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x20	; F77DB3  or (0x21e7),0x20
 	call	16000428	; F77DB8  call 0xf425ac
 	ldb_d8	a, (8771)	; F77DBC  ld A,(0x2243)
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xDF	; F77DC0  and (0x21e7),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xdf	; F77DC0  and (0x21e7),0xdf
 	ret	; F77DC5  ret
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x02	; F77DC6  or (0x21e7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x02	; F77DC6  or (0x21e7),0x02
 	call	16000428	; F77DCB  call 0xf425ac
 	ldb_d8	a, (8771)	; F77DCF  ld A,(0x2243)
 	ret	; F77DD3  ret
 	m_cp_mi16 MW16, 0x126c, 0x0000	; F77DD4  cp (0x126c),0x0000
 	jr	z, 9	; F77DDA  jr Z,0xf77de5
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x02	; F77DDC  or (0x21e7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x02	; F77DDC  or (0x21e7),0x02
 	call	16000428	; F77DE1  call 0xf425ac
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xFD	; F77DE5  and (0x21e7),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xfd	; F77DE5  and (0x21e7),0xfd
 	call	16000484	; F77DEA  call 0xf425e4
 	ret	; F77DEE  ret
 
@@ -152575,7 +152575,7 @@ sub_F77DEF:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F77EE7:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x80	; F77EE7  or (0x21e7),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x80	; F77EE7  or (0x21e7),0x80
 	cps	l, 1	; F77EEC  cp L,1
 	jr	z, 15	; F77EEE  jr Z,0xf77eff
 	stdi8	(8656), 77	; F77EF0  ld (0x21d0),0x4d
@@ -152585,9 +152585,9 @@ sub_F77EE7:
 	stda32	(8659), xwa	; F77F04  ld (0x21d3),XWA
 	ld	xwa, 6335232	; F77F08  ld XWA,0x0060ab00
 	stda32	(8663), xwa	; F77F0D  ld (0x21d7),XWA
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x20	; F77F11  or (0x21e7),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x20	; F77F11  or (0x21e7),0x20
 	call	16000424	; F77F16  call 0xf425a8
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xDF	; F77F1A  and (0x21e7),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xdf	; F77F1A  and (0x21e7),0xdf
 	ret	; F77F1F  ret
 
 ; --------------------------------------------------------------------------
@@ -152604,7 +152604,7 @@ sub_F77EE7:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F77F20:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x02	; F77F20  or (0x21e7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x02	; F77F20  or (0x21e7),0x02
 	call	16000424	; F77F25  call 0xf425a8
 	ret	; F77F29  ret
 
@@ -152623,7 +152623,7 @@ sub_F77F20:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F77F2A:
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xFD	; F77F2A  and (0x21e7),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xfd	; F77F2A  and (0x21e7),0xfd
 	ldb	w, 1	; F77F2F  ld W,0x01
 	ret	; F77F31  ret
 	xor	de, de	; F77F32  xor DE,DE
@@ -152648,7 +152648,7 @@ sub_F77F2A:
 	stdi8	(8657), 73	; F77F6F  ld (0x21d1),0x49
 	stdi8	(8658), 68	; F77F74  ld (0x21d2),0x44
 	call	16000432	; F77F79  call 0xf425b0
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x80	; F77F7D  or (0x21e7),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x80	; F77F7D  or (0x21e7),0x80
 	stdi8	(8656), 77	; F77F82  ld (0x21d0),0x4d
 	stdi8	(8657), 73	; F77F87  ld (0x21d1),0x49
 	stdi8	(8658), 68	; F77F8C  ld (0x21d2),0x44
@@ -152671,20 +152671,20 @@ sub_F77F2A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F77F9A:
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x20	; F77F9A  or (0x21e7),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x20	; F77F9A  or (0x21e7),0x20
 	call	16000428	; F77F9F  call 0xf425ac
 	ldb_d8	a, (8771)	; F77FA3  ld A,(0x2243)
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xDF	; F77FA7  and (0x21e7),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xdf	; F77FA7  and (0x21e7),0xdf
 	ret	; F77FAC  ret
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x02	; F77FAD  or (0x21e7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x02	; F77FAD  or (0x21e7),0x02
 	call	16000428	; F77FB2  call 0xf425ac
 	ldb_d8	a, (8771)	; F77FB6  ld A,(0x2243)
 	ret	; F77FBA  ret
 	m_cp_mi16 MW16, 0x126c, 0x0000	; F77FBB  cp (0x126c),0x0000
 	jr	z, 9	; F77FC1  jr Z,0xf77fcc
-	.byte 0xC1, 0xE7, 0x21, 0x3E, 0x02	; F77FC3  or (0x21e7),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x21e7, 0x02	; F77FC3  or (0x21e7),0x02
 	call	16000428	; F77FC8  call 0xf425ac
-	.byte 0xC1, 0xE7, 0x21, 0x3C, 0xFD	; F77FCC  and (0x21e7),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x21e7, 0xfd	; F77FCC  and (0x21e7),0xfd
 	call	16000484	; F77FD1  call 0xf425e4
 	ret	; F77FD5  ret
 
@@ -154184,7 +154184,7 @@ BStore_FreeList_Init:
 	ldw_d16	bc, (13832)	; F7A44B  ld BC,(0x3608)
 	stw_da	(6304954), bc	; F7A44F  ld (0x6034ba),BC
 	dec	1, bc	; F7A454  dec 1,BC
-	.byte 0x85, 0x3C, 0x7F	; F7A456  and (XIY),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r5, 0, 0x7f	; F7A456  and (XIY),0x7f
 	ld	(xiy+1), hl	; F7A459  ld (XIY+0x01),HL
 	ld	(xiy+3), de	; F7A45C  ld (XIY+0x03),DE
 	ld	(xiy+5), 130	; F7A45F  ld (XIY+0x05),0x82
@@ -154192,7 +154192,7 @@ BStore_FreeList_Init:
 	inc	1, de	; F7A465  inc 1,DE
 	add	xiy, 256	; F7A467  add XIY,0x00000100
 	djnz16	bc, -26	; F7A46D  djnz BC,0xf7a456
-	.byte 0x85, 0x3C, 0x7F	; F7A470  and (XIY),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r5, 0, 0x7f	; F7A470  and (XIY),0x7f
 	ld	(xiy+1), hl	; F7A473  ld (XIY+0x01),HL
 	ld	(xiy+5), 130	; F7A476  ld (XIY+0x05),0x82
 	.byte 0xBD, 0x03, 0x02, 0xFF, 0xFF	; F7A47A  ld (XIY+0x03),0xffff   [llvm-mc cannot encode this]
@@ -154268,7 +154268,7 @@ BStore_AllocBlock:
 	ld	iy, ix	; F7A51D  ld IY,IX
 	calr	221	; F7A51F  calr 0xf7a5ff
 	ldda32	xhl, (4718)	; F7A522  ld XHL,(0x126e)
-	.byte 0x83, 0x3E, 0x80	; F7A526  or (XHL),0x80   [llvm-mc cannot encode this]
+	m_or_mi8 MBI+r3, 0, 0x80	; F7A526  or (XHL),0x80
 	decdi16_24	1, (6304954)	; F7A529  decw 1,(0x6034ba)
 	pop	xde	; F7A52E  pop XDE
 	stda32	(4718), xde	; F7A52F  ld (0x126e),XDE
@@ -154322,7 +154322,7 @@ BStore_FreeChain:
 	ld	iy, (xhl+3)	; F7A583  ld IY,(XHL+0x03)
 	cp	iy, 65535	; F7A586  cp IY,0xffff
 	jr	z, 27	; F7A58A  jr Z,0xf7a5a7
-	.byte 0x83, 0x3C, 0x7F	; F7A58C  and (XHL),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r3, 0, 0x7f	; F7A58C  and (XHL),0x7f
 	ld	(xhl+5), 130	; F7A58F  ld (XHL+0x05),0x82
 	inc	1, wa	; F7A593  inc 1,WA
 	m_cp_rm MW16, 0x0c88, 0	; F7A595  cp WA,(0x0c88)
@@ -154342,7 +154342,7 @@ BStore_FreeChain:
 	ld	iy, ix	; F7A5B9  ld IY,IX
 	calr	65	; F7A5BB  calr 0xf7a5ff
 	ldda32	xhl, (4718)	; F7A5BE  ld XHL,(0x126e)
-	.byte 0x83, 0x3C, 0x7F	; F7A5C2  and (XHL),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r3, 0, 0x7f	; F7A5C2  and (XHL),0x7f
 	ld	(xhl+5), 130	; F7A5C5  ld (XHL+0x05),0x82
 	ld	(xhl+3), bc	; F7A5C9  ld (XHL+0x03),BC
 	ld	iy, bc	; F7A5CC  ld IY,BC
@@ -154360,7 +154360,7 @@ BStore_FreeChain:
 	jr	nz, -102	; F7A5F0  jr NZ,0xf7a58c
 	stdi16	(3208), 0	; F7A5F2  ld (0x0c88),0x0000
 	ld	iy, ix	; F7A5F8  ld IY,IX
-	.byte 0x83, 0x3C, 0x7F	; F7A5FA  and (XHL),0x7f   [llvm-mc cannot encode this]
+	m_and_mi8 MBI+r3, 0, 0x7f	; F7A5FA  and (XHL),0x7f
 	jr	-98	; F7A5FD  jr T,0xf7a59d
 
 ; --------------------------------------------------------------------------
@@ -154574,7 +154574,7 @@ BStore_AppendBytes:
 	ret	; F7A769  ret
 	ldb	w, 104	; F7A76A  ld W,0x68
 	call	15994912	; F7A76C  call 0xf41020
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7A770  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7A770  and (0x2075),0x6f
 	stdi8	(10368), 15	; F7A775  ld (0x2880),0x0f
 	stdi16	(8304), 16555	; F7A77A  ld (0x2070),0x40ab
 	popw	bc	; F7A780  pop BC
@@ -154603,7 +154603,7 @@ BStore_AppendBytes:
 	xor	w, w	; F7A7B5  xor W,W
 	ld	iz, wa	; F7A7B7  ld IZ,WA
 	ld	xix, 6305024	; F7A7B9  ld XIX,0x00603500
-	.byte 0xC3, 0x07, 0xF0, 0xF8, 0x3E, 0x80	; F7A7BE  or (XIX+IZ),0x80   [llvm-mc cannot encode this]
+	mx_or_mi8 MXB, ra_IX, ra_IZ, 0x80	; F7A7BE  or (XIX+IZ),0x80
 	.byte 0xE7, 0x38, 0x9C	; F7A7C4  ld XDE3,XIX   [llvm-mc cannot encode this]
 	.byte 0xF3, 0x07, 0xF0, 0xF8, 0x34	; F7A7C7  lda XIX,XIX+IZ   [llvm-mc cannot encode this]
 	.byte 0xF3, 0x39, 0x01, 0x00, 0x55	; F7A7CC  ld (XDE3+0x0001),IY   [llvm-mc cannot encode this]
@@ -154650,11 +154650,11 @@ sub_F7AA02:		; <- T_F428B4
 	call	15993336	; F7AA04  call 0xf409f8
 	stdi8	(8318), 0	; F7AA08  ld (0x207e),0x00
 	stdi16	(8542), 0	; F7AA0D  ld (0x215e),0x0000
-	.byte 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01	; F7AA13  or (0x212e),0x0100   [llvm-mc cannot encode this]
-	.byte 0xC1, 0xBB, 0x34, 0x3E, 0x04	; F7AA19  or (0x34bb),0x04   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x212e, 0x0100	; F7AA13  or (0x212e),0x0100
+	m_or_mi8 MB16, 0x34bb, 0x04	; F7AA19  or (0x34bb),0x04
 	ret	; F7AA1E  ret
 	call	15993332	; F7AA1F  call 0xf409f4
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F7AA23  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F7AA23  and (0x34bb),0xfb
 	ret	; F7AA28  ret
 
 ; --------------------------------------------------------------------------
@@ -154682,7 +154682,7 @@ sub_F7AA29:		; <- T_F428B8
 	m_cp_mi8 MB16, 0x2880, 0x23	; F7AA49  cp (0x2880),0x23
 	jr	nz, 13	; F7AA4E  jr NZ,0xf7aa5d
 	stdi16	(8304), 513	; F7AA50  ld (0x2070),0x0201
-	.byte 0xC1, 0xA9, 0x20, 0x3C, 0xFE	; F7AA56  and (0x20a9),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x20a9, 0xfe	; F7AA56  and (0x20a9),0xfe
 	jr	0	; F7AA5B  jr T,0xf7aa5d
 	ret	; F7AA5D  ret
 
@@ -154751,7 +154751,7 @@ sub_F7AA88:		; <- T_F428BC
 sub_F7AA89:		; <- T_F428C0
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7AA89  cp (0x207e),0x01
 	jr	z, 30	; F7AA8E  jr Z,0xf7aaae
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7AA90  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7AA90  or (0x2075),0x09
 	ldb_d8	a, (3586)	; F7AA95  ld A,(0x0e02)
 	cp	a, 10	; F7AA99  cp A,0x0a
 	jr	z, 16	; F7AA9C  jr Z,0xf7aaae
@@ -154777,7 +154777,7 @@ sub_F7AA89:		; <- T_F428C0
 sub_F7AAAF:		; <- T_F428C4
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7AAAF  cp (0x207e),0x01
 	jr	z, 38	; F7AAB4  jr Z,0xf7aadc
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7AAB6  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7AAB6  or (0x2075),0x09
 	ldb_d8	a, (3586)	; F7AABB  ld A,(0x0e02)
 	cps	a, 0	; F7AABF  cp A,0
 	jr	z, 25	; F7AAC1  jr Z,0xf7aadc
@@ -154824,11 +154824,11 @@ sub_F7AADD:		; <- T_F428C8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AAF0:		; <- T_F428CC
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7AAF0  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7AAF0  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7AAF5  cp (0x207e),0x01
 	jr	z, 12	; F7AAFA  jr Z,0xf7ab08
 	stdi8	(8318), 1	; F7AAFC  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7AB01  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7AB01  or (0x2071),0x10
 	jr	54	; F7AB06  jr T,0xf7ab3e
 	stdi8	(10368), 255	; F7AB08  ld (0x2880),0xff
 	stdi8	(3402), 0	; F7AB0D  ld (0x0d4a),0x00
@@ -154912,7 +154912,7 @@ sub_F7AB9C:		; <- T_F428D0
 	jr	z, 18	; F7ABA4  jr Z,0xf7abb8
 	stdi16	(3518), 0	; F7ABA6  ld (0x0dbe),0x0000
 	stdi16	(8542), 0	; F7ABAC  ld (0x215e),0x0000
-	.byte 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01	; F7ABB2  or (0x212e),0x0100   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x212e, 0x0100	; F7ABB2  or (0x212e),0x0100
 	ret	; F7ABB8  ret
 
 ; --------------------------------------------------------------------------
@@ -154932,7 +154932,7 @@ sub_F7ABB9:		; <- T_F428D4
 	jr	z, 27	; F7ABBE  jr Z,0xf7abdb
 	ldw_d16	wa, (3654)	; F7ABC0  ld WA,(0x0e46)
 	xor	wa, 65535	; F7ABC4  xor WA,0xffff
-	.byte 0xD1, 0x0C, 0x36, 0xC8	; F7ABC8  and (0x360c),WA   [llvm-mc cannot encode this]
+	m_and_mr MW16, 0x360c, 0	; F7ABC8  and (0x360c),WA
 	stw_da	(6304798), wa	; F7ABCC  ld (0x60341e),WA
 	xor	xwa, xwa	; F7ABD1  xor XWA,XWA
 	stda32	(12304), xwa	; F7ABD3  ld (0x3010),XWA
@@ -154951,15 +154951,15 @@ sub_F7ABB9:		; <- T_F428D4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7ABDC:		; <- T_F428D8
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7ABDC  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7ABDC  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7ABE1  cp (0x207e),0x01
 	jr	z, 2	; F7ABE6  jr Z,0xf7abea
 	jr	28	; F7ABE8  jr T,0xf7ac06
 	stdi8	(8318), 0	; F7ABEA  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7ABEF  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7ABEF  or (0x2071),0x10
 	stdi16	(3518), 0	; F7ABF4  ld (0x0dbe),0x0000
 	stdi16	(8542), 0	; F7ABFA  ld (0x215e),0x0000
-	.byte 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01	; F7AC00  or (0x212e),0x0100   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x212e, 0x0100	; F7AC00  or (0x212e),0x0100
 	ret	; F7AC06  ret
 
 ; --------------------------------------------------------------------------
@@ -154976,16 +154976,16 @@ sub_F7ABDC:		; <- T_F428D8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AC07:		; <- T_F428DC
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7AC07  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7AC07  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7AC0C  cp (0x207e),0x01
 	jr	z, 11	; F7AC11  jr Z,0xf7ac1e
 	stdi8	(8318), 1	; F7AC13  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7AC18  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7AC18  or (0x2071),0x10
 	ret	; F7AC1D  ret
 	m_cp_mi16 MW16, 0x0dbe, 0x0000	; F7AC1E  cp (0x0dbe),0x0000
 	jr	nz, 12	; F7AC24  jr NZ,0xf7ac32
 	stdi8	(8318), 0	; F7AC26  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7AC2B  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7AC2B  or (0x2071),0x10
 	jr	106	; F7AC30  jr T,0xf7ac9c
 	xor	c, c	; F7AC32  xor C,C
 	ldw_d16	hl, (3518)	; F7AC34  ld HL,(0x0dbe)
@@ -155010,12 +155010,12 @@ sub_F7AC07:		; <- T_F428DC
 	ldw_d16	bc, (3518)	; F7AC64  ld BC,(0x0dbe)
 	ldw_d16	wa, (12304)	; F7AC68  ld WA,(0x3010)
 	and	bc, wa	; F7AC6C  and BC,WA
-	.byte 0xD1, 0x10, 0x30, 0xD9	; F7AC6E  xor (0x3010),BC   [llvm-mc cannot encode this]
+	m_xor_mr MW16, 0x3010, 1	; F7AC6E  xor (0x3010),BC
 	ldw_d16	wa, (3518)	; F7AC72  ld WA,(0x0dbe)
 	stda16	(3654), wa	; F7AC76  ld (0x0e46),WA
 	stdi16	(3518), 0	; F7AC7A  ld (0x0dbe),0x0000
 	stdi16	(8542), 0	; F7AC80  ld (0x215e),0x0000
-	.byte 0xD1, 0x2E, 0x21, 0x3E, 0x00, 0x01	; F7AC86  or (0x212e),0x0100   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x212e, 0x0100	; F7AC86  or (0x212e),0x0100
 	stdi8	(8318), 0	; F7AC8C  ld (0x207e),0x00
 	stdi8	(10368), 35	; F7AC91  ld (0x2880),0x23
 	stdi16	(8304), 16555	; F7AC96  ld (0x2070),0x40ab
@@ -155054,7 +155054,7 @@ sub_F7ACA6:		; <- T_F4293C
 	m_cp_mi8 MB16, 0x207a, 0x1f	; F7ACA6  cp (0x207a),0x1f
 	jr	z, 23	; F7ACAB  jr Z,0xf7acc4
 	ldda32	xwa, (12304)	; F7ACAD  ld XWA,(0x3010)
-	.byte 0xE1, 0x0C, 0x36, 0xE8	; F7ACB1  or (0x360c),XWA   [llvm-mc cannot encode this]
+	m_or_mr ML16, 0x360c, 0	; F7ACB1  or (0x360c),XWA
 	stl_da	(6304798), xwa	; F7ACB5  ld (0x60341e),XWA
 	xor	xwa, xwa	; F7ACBA  xor XWA,XWA
 	stda32	(12304), xwa	; F7ACBC  ld (0x3010),XWA
@@ -155074,7 +155074,7 @@ sub_F7ACA6:		; <- T_F4293C
 ; --------------------------------------------------------------------------
 sub_F7ACC5:		; <- T_F42940
 	stdi8	(3514), 1	; F7ACC5  ld (0x0dba),0x01
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7ACCA  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7ACCA  or (0x2075),0x09
 	ret	; F7ACCF  ret
 
 ; --------------------------------------------------------------------------
@@ -155090,7 +155090,7 @@ sub_F7ACC5:		; <- T_F42940
 ; --------------------------------------------------------------------------
 sub_F7ACD0:		; <- T_F42944
 	stdi8	(3514), 2	; F7ACD0  ld (0x0dba),0x02
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7ACD5  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7ACD5  or (0x2075),0x09
 	ret	; F7ACDA  ret
 
 ; --------------------------------------------------------------------------
@@ -155106,7 +155106,7 @@ sub_F7ACD0:		; <- T_F42944
 ; --------------------------------------------------------------------------
 sub_F7ACDB:		; <- T_F42948
 	stdi8	(3514), 3	; F7ACDB  ld (0x0dba),0x03
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7ACE0  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7ACE0  or (0x2075),0x09
 	ret	; F7ACE5  ret
 
 ; --------------------------------------------------------------------------
@@ -155178,7 +155178,7 @@ sub_F7AD14:		; <- T_F42950
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AD42:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7AD42  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7AD42  or (0x2075),0x09
 	ldb_d8	a, (3091)	; F7AD47  ld A,(0x0c13)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7AD4B  cp (0x0c4f),0x80
 	jr	z, 25	; F7AD50  jr Z,0xf7ad6b
@@ -155217,7 +155217,7 @@ sub_F7AD42:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AD8F:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7AD8F  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7AD8F  or (0x2075),0x09
 	ldb_d8	a, (3092)	; F7AD94  ld A,(0x0c14)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7AD98  cp (0x0c4f),0x80
 	jr	z, 25	; F7AD9D  jr Z,0xf7adb8
@@ -155280,9 +155280,9 @@ sub_F7ADDC:
 sub_F7ADF5:		; <- T_F42954
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7ADF5  cp (0x207e),0x01
 	jr	nz, 15	; F7ADFA  jr NZ,0xf7ae0b
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7ADFC  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7ADFC  and (0x2075),0xf6
 	stdi8	(8318), 0	; F7AE01  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7AE06  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7AE06  or (0x2071),0x10
 	ret	; F7AE0B  ret
 
 ; --------------------------------------------------------------------------
@@ -155299,11 +155299,11 @@ sub_F7ADF5:		; <- T_F42954
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AE0C:		; <- T_F42958
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7AE0C  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7AE0C  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7AE11  cp (0x207e),0x01
 	jr	z, 13	; F7AE16  jr Z,0xf7ae25
 	stdi8	(8318), 1	; F7AE18  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7AE1D  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7AE1D  or (0x2071),0x10
 	jrl	308	; F7AE22  jrl T,0xf7af59
 	ldb_d8	a, (3091)	; F7AE25  ld A,(0x0c13)
 	stb_d8	(3184), a	; F7AE29  ld (0x0c70),A
@@ -155344,7 +155344,7 @@ sub_F7AE0C:		; <- T_F42958
 	sla	c, 2	; F7AEA3  sla 0x02,C
 	.byte 0xE3, 0x07, 0xF0, 0xE4, 0x20	; F7AEA6  ld XWA,(XIX+BC)   [llvm-mc cannot encode this]
 	xor	xwa, 4294967295	; F7AEAB  xor XWA,0xffffffff
-	.byte 0xE1, 0x0C, 0x36, 0xC8	; F7AEB1  and (0x360c),XWA   [llvm-mc cannot encode this]
+	m_and_mr ML16, 0x360c, 0	; F7AEB1  and (0x360c),XWA
 	ldb_d8	c, (3185)	; F7AEB5  ld C,(0x0c71)
 	dec	1, c	; F7AEB9  dec 1,C
 	.byte 0xC7, 0x3C, 0x99	; F7AEBB  ld RL3,A   [llvm-mc cannot encode this]
@@ -155369,7 +155369,7 @@ sub_F7AE0C:		; <- T_F42958
 	sla	c, 2	; F7AEF2  sla 0x02,C
 	.byte 0xE3, 0x07, 0xF0, 0xE4, 0x20	; F7AEF5  ld XWA,(XIX+BC)   [llvm-mc cannot encode this]
 	xor	xwa, 4294967295	; F7AEFA  xor XWA,0xffffffff
-	.byte 0xE1, 0x0C, 0x36, 0xC8	; F7AF00  and (0x360c),XWA   [llvm-mc cannot encode this]
+	m_and_mr ML16, 0x360c, 0	; F7AF00  and (0x360c),XWA
 	ldb_d8	c, (3186)	; F7AF04  ld C,(0x0c72)
 	dec	1, c	; F7AF08  dec 1,C
 	.byte 0xC7, 0x3C, 0x99	; F7AF0A  ld RL3,A   [llvm-mc cannot encode this]
@@ -155393,10 +155393,10 @@ sub_F7AE0C:		; <- T_F42958
 	ld	xix, 16232282	; F7AF3C  ld XIX,0x00f7af5a
 	sla	c, 2	; F7AF41  sla 0x02,C
 	.byte 0xE3, 0x07, 0xF0, 0xE4, 0x20	; F7AF44  ld XWA,(XIX+BC)   [llvm-mc cannot encode this]
-	.byte 0xE1, 0x0C, 0x36, 0xE8	; F7AF49  or (0x360c),XWA   [llvm-mc cannot encode this]
+	m_or_mr ML16, 0x360c, 0	; F7AF49  or (0x360c),XWA
 	jr	10	; F7AF4D  jr T,0xf7af59
 	stdi8	(8318), 0	; F7AF4F  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7AF54  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7AF54  or (0x2071),0x10
 	ret	; F7AF59  ret
 
 ; SongStore_BitMask32 -- 32-bit single-bit masks, and it is TWO BYTES SHORT
@@ -155520,7 +155520,7 @@ sub_F7B00E:		; <- T_F42960
 ; --------------------------------------------------------------------------
 sub_F7B01A:		; <- T_F42964
 	stdi8	(3540), 1	; F7B01A  ld (0x0dd4),0x01
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7B01F  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7B01F  or (0x2075),0x09
 	ret	; F7B024  ret
 
 ; --------------------------------------------------------------------------
@@ -155536,8 +155536,8 @@ sub_F7B01A:		; <- T_F42964
 ; --------------------------------------------------------------------------
 sub_F7B025:		; <- T_F42968
 	stdi8	(3540), 2	; F7B025  ld (0x0dd4),0x02
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B02A  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B02F  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B02A  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B02F  or (0x2075),0x01
 	ret	; F7B034  ret
 
 ; --------------------------------------------------------------------------
@@ -155553,8 +155553,8 @@ sub_F7B025:		; <- T_F42968
 ; --------------------------------------------------------------------------
 sub_F7B035:		; <- T_F4296C
 	stdi8	(3540), 3	; F7B035  ld (0x0dd4),0x03
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B03A  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B03F  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B03A  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B03F  or (0x2075),0x01
 	ret	; F7B044  ret
 
 ; --------------------------------------------------------------------------
@@ -155600,9 +155600,9 @@ sub_F7B045:		; <- T_F42970
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B07A:		; <- T_F4297C
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7B07A  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7B07A  and (0x2075),0xf6
 	stdi8	(8318), 0	; F7B07F  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B084  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B084  or (0x2071),0x10
 	jr	-18	; F7B089  jr T,0xf7b079
 
 ; --------------------------------------------------------------------------
@@ -155654,12 +155654,12 @@ sub_F7B0B7:
 	stb_d8	(3091), a	; F7B0C7  ld (0x0c13),A
 	stb_da	(6304860), a	; F7B0CB  ld (0x60345c),A
 	stb_d8	(3541), a	; F7B0D0  ld (0x0dd5),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xFE	; F7B0D4  and (0x0c35),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xfe	; F7B0D4  and (0x0c35),0xfe
 	jr	18	; F7B0D9  jr T,0xf7b0ed
 	stb_d8	(3541), a	; F7B0DB  ld (0x0dd5),A
 	stb_d8	(3091), a	; F7B0DF  ld (0x0c13),A
 	stb_da	(6304860), a	; F7B0E3  ld (0x60345c),A
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x01	; F7B0E8  or (0x0c35),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x01	; F7B0E8  or (0x0c35),0x01
 	stb_d8	(4854), a	; F7B0ED  ld (0x12f6),A
 	ret	; F7B0F1  ret
 
@@ -155734,11 +155734,11 @@ sub_F7B128:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B162:		; <- T_F42978
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7B162  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7B162  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7B167  cp (0x207e),0x01
 	jr	z, 12	; F7B16C  jr Z,0xf7b17a
 	stdi8	(8318), 1	; F7B16E  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B173  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B173  or (0x2071),0x10
 	jr	86	; F7B178  jr T,0xf7b1d0
 	ldb_d8	a, (3091)	; F7B17A  ld A,(0x0c13)
 	m_bit 0, MD16, 0x0c35	; F7B17E  bit 0,(0x0c35)
@@ -155761,7 +155761,7 @@ sub_F7B162:		; <- T_F42978
 	stdi8	(8318), 0	; F7B1BF  ld (0x207e),0x00
 	jr	10	; F7B1C4  jr T,0xf7b1d0
 	stdi8	(8318), 0	; F7B1C6  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B1CB  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B1CB  or (0x2071),0x10
 	ret	; F7B1D0  ret
 
 ; --------------------------------------------------------------------------
@@ -155794,10 +155794,10 @@ sub_F7B1D1:
 	inc	1, wa	; F7B20F  inc 1,WA
 	stw_da	(6304863), wa	; F7B211  ld (0x60345f),WA
 	stda16	(3100), wa	; F7B216  ld (0x0c1c),WA
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xFE	; F7B21A  and (0x0c35),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xfe	; F7B21A  and (0x0c35),0xfe
 	m_cp_mi8 MB16, 0x0c13, 0x12	; F7B21F  cp (0x0c13),0x12
 	jr	nz, 5	; F7B224  jr NZ,0xf7b22b
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x01	; F7B226  or (0x0c35),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x01	; F7B226  or (0x0c35),0x01
 	ret	; F7B22B  ret
 
 ; --------------------------------------------------------------------------
@@ -155849,7 +155849,7 @@ sub_F7B23A:		; <- T_F42984
 ; --------------------------------------------------------------------------
 sub_F7B246:		; <- T_F42988
 	stdi8	(3515), 1	; F7B246  ld (0x0dbb),0x01
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7B24B  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7B24B  or (0x2075),0x09
 	ret	; F7B250  ret
 
 ; --------------------------------------------------------------------------
@@ -155865,8 +155865,8 @@ sub_F7B246:		; <- T_F42988
 ; --------------------------------------------------------------------------
 sub_F7B251:		; <- T_F4298C
 	stdi8	(3515), 2	; F7B251  ld (0x0dbb),0x02
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B256  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B25B  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B256  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B25B  or (0x2075),0x01
 	ret	; F7B260  ret
 
 ; --------------------------------------------------------------------------
@@ -155882,8 +155882,8 @@ sub_F7B251:		; <- T_F4298C
 ; --------------------------------------------------------------------------
 sub_F7B261:		; <- T_F42990
 	stdi8	(3515), 3	; F7B261  ld (0x0dbb),0x03
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B266  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B26B  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B266  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B26B  or (0x2075),0x01
 	ret	; F7B270  ret
 
 ; --------------------------------------------------------------------------
@@ -155899,7 +155899,7 @@ sub_F7B261:		; <- T_F42990
 ; --------------------------------------------------------------------------
 sub_F7B271:		; <- T_F42994
 	stdi8	(3515), 4	; F7B271  ld (0x0dbb),0x04
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7B276  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7B276  or (0x2075),0x09
 	ret	; F7B27B  ret
 
 ; --------------------------------------------------------------------------
@@ -155949,9 +155949,9 @@ sub_F7B27C:		; <- T_F42998
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B2BD:		; <- T_F429A4
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7B2BD  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7B2BD  and (0x2075),0xf6
 	stdi8	(8318), 0	; F7B2C2  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B2C7  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B2C7  or (0x2071),0x10
 	jr	-18	; F7B2CC  jr T,0xf7b2bc
 
 ; --------------------------------------------------------------------------
@@ -156007,12 +156007,12 @@ sub_F7B306:
 	stb_d8	(3091), a	; F7B316  ld (0x0c13),A
 	stb_da	(6304865), a	; F7B31A  ld (0x603461),A
 	stb_d8	(3118), a	; F7B31F  ld (0x0c2e),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xFD	; F7B323  and (0x0c35),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xfd	; F7B323  and (0x0c35),0xfd
 	jr	18	; F7B328  jr T,0xf7b33c
 	stb_d8	(3118), a	; F7B32A  ld (0x0c2e),A
 	stb_d8	(3091), a	; F7B32E  ld (0x0c13),A
 	stb_da	(6304865), a	; F7B332  ld (0x603461),A
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x02	; F7B337  or (0x0c35),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x02	; F7B337  or (0x0c35),0x02
 	stb_d8	(4854), a	; F7B33C  ld (0x12f6),A
 	ret	; F7B340  ret
 
@@ -156117,11 +156117,11 @@ sub_F7B3B1:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B3E0:		; <- T_F429A0
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7B3E0  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7B3E0  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7B3E5  cp (0x207e),0x01
 	jr	z, 12	; F7B3EA  jr Z,0xf7b3f8
 	stdi8	(8318), 1	; F7B3EC  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B3F1  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B3F1  or (0x2071),0x10
 	jr	94	; F7B3F6  jr T,0xf7b456
 	ldb_d8	a, (3091)	; F7B3F8  ld A,(0x0c13)
 	m_bit 1, MD16, 0x0c35	; F7B3FC  bit 1,(0x0c35)
@@ -156146,7 +156146,7 @@ sub_F7B3E0:		; <- T_F429A0
 	stdi8	(8318), 0	; F7B445  ld (0x207e),0x00
 	jr	10	; F7B44A  jr T,0xf7b456
 	stdi8	(8318), 0	; F7B44C  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B451  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B451  or (0x2071),0x10
 	ret	; F7B456  ret
 
 ; --------------------------------------------------------------------------
@@ -156182,10 +156182,10 @@ sub_F7B457:
 	ldb_da	a, (6304870)	; F7B4A0  ld A,(0x603466)
 	stb_d8	(3094), a	; F7B4A5  ld (0x0c16),A
 	stb_d8	(4859), a	; F7B4A9  ld (0x12fb),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xFD	; F7B4AD  and (0x0c35),0xfd   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xfd	; F7B4AD  and (0x0c35),0xfd
 	m_cp_mi8 MB16, 0x0c13, 0x12	; F7B4B2  cp (0x0c13),0x12
 	jr	nz, 5	; F7B4B7  jr NZ,0xf7b4be
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x02	; F7B4B9  or (0x0c35),0x02   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x02	; F7B4B9  or (0x0c35),0x02
 	ret	; F7B4BE  ret
 
 ; --------------------------------------------------------------------------
@@ -156223,7 +156223,7 @@ sub_F7B4CD:		; <- T_F429AC
 	m_cp_mi8 MB16, 0x207a, 0x22	; F7B4CD  cp (0x207a),0x22
 	jr	z, 23	; F7B4D2  jr Z,0xf7b4eb
 	ldda32	xwa, (12304)	; F7B4D4  ld XWA,(0x3010)
-	.byte 0xE1, 0x0C, 0x36, 0xE8	; F7B4D8  or (0x360c),XWA   [llvm-mc cannot encode this]
+	m_or_mr ML16, 0x360c, 0	; F7B4D8  or (0x360c),XWA
 	stl_da	(6304798), xwa	; F7B4DC  ld (0x60341e),XWA
 	xor	xwa, xwa	; F7B4E1  xor XWA,XWA
 	stda32	(12304), xwa	; F7B4E3  ld (0x3010),XWA
@@ -156243,7 +156243,7 @@ sub_F7B4CD:		; <- T_F429AC
 ; --------------------------------------------------------------------------
 sub_F7B4EC:		; <- T_F429B0
 	stdi8	(3546), 1	; F7B4EC  ld (0x0dda),0x01
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7B4F1  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7B4F1  or (0x2075),0x09
 	ret	; F7B4F6  ret
 
 ; --------------------------------------------------------------------------
@@ -156259,8 +156259,8 @@ sub_F7B4EC:		; <- T_F429B0
 ; --------------------------------------------------------------------------
 sub_F7B4F7:		; <- T_F429B4
 	stdi8	(3546), 2	; F7B4F7  ld (0x0dda),0x02
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B4FC  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B501  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B4FC  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B501  or (0x2075),0x01
 	ret	; F7B506  ret
 
 ; --------------------------------------------------------------------------
@@ -156276,8 +156276,8 @@ sub_F7B4F7:		; <- T_F429B4
 ; --------------------------------------------------------------------------
 sub_F7B507:		; <- T_F429B8
 	stdi8	(3546), 3	; F7B507  ld (0x0dda),0x03
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B50C  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B511  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B50C  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B511  or (0x2075),0x01
 	ret	; F7B516  ret
 
 ; --------------------------------------------------------------------------
@@ -156293,7 +156293,7 @@ sub_F7B507:		; <- T_F429B8
 ; --------------------------------------------------------------------------
 sub_F7B517:		; <- T_F429BC
 	stdi8	(3546), 4	; F7B517  ld (0x0dda),0x04
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7B51C  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7B51C  or (0x2075),0x09
 	ret	; F7B521  ret
 
 ; --------------------------------------------------------------------------
@@ -156309,8 +156309,8 @@ sub_F7B517:		; <- T_F429BC
 ; --------------------------------------------------------------------------
 sub_F7B522:		; <- T_F429C0
 	stdi8	(3546), 5	; F7B522  ld (0x0dda),0x05
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B527  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B52C  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B527  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B52C  or (0x2075),0x01
 	ret	; F7B531  ret
 
 ; --------------------------------------------------------------------------
@@ -156326,7 +156326,7 @@ sub_F7B522:		; <- T_F429C0
 ; --------------------------------------------------------------------------
 sub_F7B532:		; <- T_F429C4
 	stdi8	(3546), 6	; F7B532  ld (0x0dda),0x06
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7B537  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7B537  or (0x2075),0x09
 	ret	; F7B53C  ret
 
 ; --------------------------------------------------------------------------
@@ -156409,9 +156409,9 @@ sub_F7B58C:		; <- T_F429CC
 	jr	nz, 4	; F7B5DD  jr NZ,0xf7b5e3
 	call	16234316	; F7B5DF  call 0xf7b74c
 	ret	; F7B5E3  ret
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7B5E4  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7B5E4  and (0x2075),0xf6
 	stdi8	(8318), 0	; F7B5E9  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B5EE  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B5EE  or (0x2071),0x10
 	jr	-18	; F7B5F3  jr T,0xf7b5e3
 
 ; --------------------------------------------------------------------------
@@ -156443,7 +156443,7 @@ sub_F7B5F5:
 	stb_da	(6304871), a	; F7B622  ld (0x603467),A
 	stb_d8	(3547), a	; F7B627  ld (0x0ddb),A
 	stb_d8	(4854), a	; F7B62B  ld (0x12f6),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xFB	; F7B62F  and (0x0c35),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xfb	; F7B62F  and (0x0c35),0xfb
 	jr	39	; F7B634  jr T,0xf7b65d
 	stb_d8	(3547), a	; F7B636  ld (0x0ddb),A
 	stb_d8	(3091), a	; F7B63A  ld (0x0c13),A
@@ -156453,7 +156453,7 @@ sub_F7B5F5:
 	stb_d8	(3092), a	; F7B64B  ld (0x0c14),A
 	stb_da	(6304876), a	; F7B64F  ld (0x60346c),A
 	stb_d8	(4859), a	; F7B654  ld (0x12fb),A
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x04	; F7B658  or (0x0c35),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x04	; F7B658  or (0x0c35),0x04
 	ret	; F7B65D  ret
 
 ; --------------------------------------------------------------------------
@@ -156542,7 +156542,7 @@ sub_F7B6CE:
 	stb_da	(6304876), a	; F7B6FB  ld (0x60346c),A
 	stb_d8	(3552), a	; F7B700  ld (0x0de0),A
 	stb_d8	(4859), a	; F7B704  ld (0x12fb),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xFB	; F7B708  and (0x0c35),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xfb	; F7B708  and (0x0c35),0xfb
 	jr	39	; F7B70D  jr T,0xf7b736
 	stb_d8	(3552), a	; F7B70F  ld (0x0de0),A
 	stb_d8	(3092), a	; F7B713  ld (0x0c14),A
@@ -156552,7 +156552,7 @@ sub_F7B6CE:
 	stb_d8	(3091), a	; F7B724  ld (0x0c13),A
 	stb_da	(6304871), a	; F7B728  ld (0x603467),A
 	stb_d8	(4854), a	; F7B72D  ld (0x12f6),A
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x04	; F7B731  or (0x0c35),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x04	; F7B731  or (0x0c35),0x04
 	ret	; F7B736  ret
 
 ; --------------------------------------------------------------------------
@@ -156606,9 +156606,9 @@ sub_F7B74C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B761:		; <- T_F429D0
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7B761  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7B761  and (0x2075),0xf6
 	stdi8	(8318), 0	; F7B766  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B76B  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B76B  or (0x2071),0x10
 	ret	; F7B770  ret
 
 ; --------------------------------------------------------------------------
@@ -156625,11 +156625,11 @@ sub_F7B761:		; <- T_F429D0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B771:		; <- T_F429D4
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7B771  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7B771  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7B776  cp (0x207e),0x01
 	jr	z, 13	; F7B77B  jr Z,0xf7b78a
 	stdi8	(8318), 1	; F7B77D  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B782  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B782  or (0x2071),0x10
 	jrl	199	; F7B787  jrl T,0xf7b851
 	ldw_d16	wa, (3096)	; F7B78A  ld WA,(0x0c18)
 	stda16	(3187), wa	; F7B78E  ld (0x0c73),WA
@@ -156686,7 +156686,7 @@ sub_F7B771:		; <- T_F429D4
 	.byte 0xD7, 0x3E, 0x8A	; F7B842  ld DE,QHL3   [llvm-mc cannot encode this]
 	jr	10	; F7B845  jr T,0xf7b851
 	stdi8	(8318), 0	; F7B847  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7B84C  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7B84C  or (0x2071),0x10
 	ret	; F7B851  ret
 
 ; --------------------------------------------------------------------------
@@ -156731,10 +156731,10 @@ sub_F7B852:
 	stda16	(4860), wa	; F7B8BE  ld (0x12fc),WA
 	ldb_d8	a, (3607)	; F7B8C2  ld A,(0x0e17)
 	stb_d8	(4862), a	; F7B8C6  ld (0x12fe),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xFB	; F7B8CA  and (0x0c35),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xfb	; F7B8CA  and (0x0c35),0xfb
 	m_cp_mi8 MB16, 0x0c13, 0x12	; F7B8CF  cp (0x0c13),0x12
 	jr	nz, 5	; F7B8D4  jr NZ,0xf7b8db
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x04	; F7B8D6  or (0x0c35),0x04   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x04	; F7B8D6  or (0x0c35),0x04
 	ret	; F7B8DB  ret
 
 ; --------------------------------------------------------------------------
@@ -156772,7 +156772,7 @@ sub_F7B8EA:		; <- T_F429DC
 	m_cp_mi8 MB16, 0x207a, 0x21	; F7B8EA  cp (0x207a),0x21
 	jr	z, 23	; F7B8EF  jr Z,0xf7b908
 	ldda32	xwa, (12304)	; F7B8F1  ld XWA,(0x3010)
-	.byte 0xE1, 0x0C, 0x36, 0xE8	; F7B8F5  or (0x360c),XWA   [llvm-mc cannot encode this]
+	m_or_mr ML16, 0x360c, 0	; F7B8F5  or (0x360c),XWA
 	stl_da	(6304798), xwa	; F7B8F9  ld (0x60341e),XWA
 	xor	xwa, xwa	; F7B8FE  xor XWA,XWA
 	stda32	(12304), xwa	; F7B900  ld (0x3010),XWA
@@ -156792,7 +156792,7 @@ sub_F7B8EA:		; <- T_F429DC
 ; --------------------------------------------------------------------------
 sub_F7B909:		; <- T_F429E0
 	stdi8	(3516), 1	; F7B909  ld (0x0dbc),0x01
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7B90E  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7B90E  or (0x2075),0x09
 	ret	; F7B913  ret
 
 ; --------------------------------------------------------------------------
@@ -156808,8 +156808,8 @@ sub_F7B909:		; <- T_F429E0
 ; --------------------------------------------------------------------------
 sub_F7B914:		; <- T_F429E4
 	stdi8	(3516), 2	; F7B914  ld (0x0dbc),0x02
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B919  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B91E  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B919  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B91E  or (0x2075),0x01
 	ret	; F7B923  ret
 
 ; --------------------------------------------------------------------------
@@ -156825,8 +156825,8 @@ sub_F7B914:		; <- T_F429E4
 ; --------------------------------------------------------------------------
 sub_F7B924:		; <- T_F429E8
 	stdi8	(3516), 3	; F7B924  ld (0x0dbc),0x03
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B929  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B92E  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B929  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B92E  or (0x2075),0x01
 	ret	; F7B933  ret
 
 ; --------------------------------------------------------------------------
@@ -156842,7 +156842,7 @@ sub_F7B924:		; <- T_F429E8
 ; --------------------------------------------------------------------------
 sub_F7B934:		; <- T_F429EC
 	stdi8	(3516), 4	; F7B934  ld (0x0dbc),0x04
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7B939  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7B939  or (0x2075),0x09
 	ret	; F7B93E  ret
 
 ; --------------------------------------------------------------------------
@@ -156858,8 +156858,8 @@ sub_F7B934:		; <- T_F429EC
 ; --------------------------------------------------------------------------
 sub_F7B93F:		; <- T_F429F0
 	stdi8	(3516), 5	; F7B93F  ld (0x0dbc),0x05
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7B944  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7B949  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7B944  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7B949  or (0x2075),0x01
 	ret	; F7B94E  ret
 
 ; --------------------------------------------------------------------------
@@ -156875,7 +156875,7 @@ sub_F7B93F:		; <- T_F429F0
 ; --------------------------------------------------------------------------
 sub_F7B94F:		; <- T_F429F4
 	stdi8	(3516), 6	; F7B94F  ld (0x0dbc),0x06
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7B954  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7B954  or (0x2075),0x09
 	ret	; F7B959  ret
 
 ; --------------------------------------------------------------------------
@@ -156960,9 +156960,9 @@ sub_F7B9AB:		; <- T_F429FC
 	jr	nz, 4	; F7B9FE  jr NZ,0xf7ba04
 	call	16235373	; F7BA00  call 0xf7bb6d
 	ret	; F7BA04  ret
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7BA05  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7BA05  and (0x2075),0xf6
 	stdi8	(8318), 0	; F7BA0A  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7BA0F  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7BA0F  or (0x2071),0x10
 	jr	-18	; F7BA14  jr T,0xf7ba04
 
 ; --------------------------------------------------------------------------
@@ -156994,7 +156994,7 @@ sub_F7BA16:
 	stb_da	(6304879), a	; F7BA43  ld (0x60346f),A
 	stb_d8	(3119), a	; F7BA48  ld (0x0c2f),A
 	stb_d8	(4854), a	; F7BA4C  ld (0x12f6),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xF7	; F7BA50  and (0x0c35),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xf7	; F7BA50  and (0x0c35),0xf7
 	jr	39	; F7BA55  jr T,0xf7ba7e
 	stb_d8	(3119), a	; F7BA57  ld (0x0c2f),A
 	stb_d8	(3091), a	; F7BA5B  ld (0x0c13),A
@@ -157004,7 +157004,7 @@ sub_F7BA16:
 	stb_d8	(3092), a	; F7BA6C  ld (0x0c14),A
 	stb_da	(6304884), a	; F7BA70  ld (0x603474),A
 	stb_d8	(4859), a	; F7BA75  ld (0x12fb),A
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x08	; F7BA79  or (0x0c35),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x08	; F7BA79  or (0x0c35),0x08
 	ret	; F7BA7E  ret
 
 ; --------------------------------------------------------------------------
@@ -157093,7 +157093,7 @@ sub_F7BAEF:
 	stb_da	(6304884), a	; F7BB1C  ld (0x603474),A
 	stb_d8	(3124), a	; F7BB21  ld (0x0c34),A
 	stb_d8	(4859), a	; F7BB25  ld (0x12fb),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xF7	; F7BB29  and (0x0c35),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xf7	; F7BB29  and (0x0c35),0xf7
 	jr	39	; F7BB2E  jr T,0xf7bb57
 	stb_d8	(3124), a	; F7BB30  ld (0x0c34),A
 	stb_d8	(3092), a	; F7BB34  ld (0x0c14),A
@@ -157103,7 +157103,7 @@ sub_F7BAEF:
 	stb_d8	(3091), a	; F7BB45  ld (0x0c13),A
 	stb_da	(6304879), a	; F7BB49  ld (0x60346f),A
 	stb_d8	(4854), a	; F7BB4E  ld (0x12f6),A
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x08	; F7BB52  or (0x0c35),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x08	; F7BB52  or (0x0c35),0x08
 	ret	; F7BB57  ret
 
 ; --------------------------------------------------------------------------
@@ -157157,9 +157157,9 @@ sub_F7BB6D:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BB82:		; <- T_F42A00
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7BB82  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7BB82  and (0x2075),0xf6
 	stdi8	(8318), 0	; F7BB87  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7BB8C  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7BB8C  or (0x2071),0x10
 	ret	; F7BB91  ret
 
 ; --------------------------------------------------------------------------
@@ -157176,11 +157176,11 @@ sub_F7BB82:		; <- T_F42A00
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BB92:		; <- T_F42A04
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7BB92  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7BB92  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7BB97  cp (0x207e),0x01
 	jr	z, 13	; F7BB9C  jr Z,0xf7bbab
 	stdi8	(8318), 1	; F7BB9E  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7BBA3  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7BBA3  or (0x2071),0x10
 	jrl	199	; F7BBA8  jrl T,0xf7bc72
 	ldw_d16	wa, (3096)	; F7BBAB  ld WA,(0x0c18)
 	stda16	(3187), wa	; F7BBAF  ld (0x0c73),WA
@@ -157237,7 +157237,7 @@ sub_F7BB92:		; <- T_F42A04
 	.byte 0xD7, 0x3E, 0x8A	; F7BC63  ld DE,QHL3   [llvm-mc cannot encode this]
 	jr	10	; F7BC66  jr T,0xf7bc72
 	stdi8	(8318), 0	; F7BC68  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7BC6D  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7BC6D  or (0x2071),0x10
 	ret	; F7BC72  ret
 
 ; --------------------------------------------------------------------------
@@ -157282,10 +157282,10 @@ sub_F7BC73:
 	stda16	(4860), wa	; F7BCDF  ld (0x12fc),WA
 	ldb_d8	a, (3606)	; F7BCE3  ld A,(0x0e16)
 	stb_d8	(4862), a	; F7BCE7  ld (0x12fe),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xF7	; F7BCEB  and (0x0c35),0xf7   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xf7	; F7BCEB  and (0x0c35),0xf7
 	m_cp_mi8 MB16, 0x0c13, 0x12	; F7BCF0  cp (0x0c13),0x12
 	jr	nz, 5	; F7BCF5  jr NZ,0xf7bcfc
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x08	; F7BCF7  or (0x0c35),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x08	; F7BCF7  or (0x0c35),0x08
 	ret	; F7BCFC  ret
 
 ; --------------------------------------------------------------------------
@@ -157344,7 +157344,7 @@ sub_F7BD24:		; <- T_F428E4
 sub_F7BD30:		; <- T_F428E8
 	stdi8	(3512), 1	; F7BD30  ld (0x0db8),0x01
 	stdi8	(4860), 1	; F7BD35  ld (0x12fc),0x01
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7BD3A  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7BD3A  or (0x2075),0x09
 	ret	; F7BD3F  ret
 
 ; --------------------------------------------------------------------------
@@ -157361,8 +157361,8 @@ sub_F7BD30:		; <- T_F428E8
 sub_F7BD40:		; <- T_F428EC
 	stdi8	(3512), 2	; F7BD40  ld (0x0db8),0x02
 	stdi8	(4860), 2	; F7BD45  ld (0x12fc),0x02
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7BD4A  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7BD4F  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7BD4A  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7BD4F  or (0x2075),0x01
 	ret	; F7BD54  ret
 
 ; --------------------------------------------------------------------------
@@ -157379,8 +157379,8 @@ sub_F7BD40:		; <- T_F428EC
 sub_F7BD55:		; <- T_F428F0
 	stdi8	(3512), 3	; F7BD55  ld (0x0db8),0x03
 	stdi8	(4860), 3	; F7BD5A  ld (0x12fc),0x03
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7BD5F  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7BD64  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7BD5F  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7BD64  or (0x2075),0x01
 	ret	; F7BD69  ret
 
 ; --------------------------------------------------------------------------
@@ -157397,8 +157397,8 @@ sub_F7BD55:		; <- T_F428F0
 sub_F7BD6A:		; <- T_F428F4
 	stdi8	(3512), 4	; F7BD6A  ld (0x0db8),0x04
 	stdi8	(4860), 4	; F7BD6F  ld (0x12fc),0x04
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7BD74  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7BD79  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7BD74  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7BD79  or (0x2075),0x01
 	ret	; F7BD7E  ret
 
 ; --------------------------------------------------------------------------
@@ -157449,10 +157449,10 @@ sub_F7BD7F:		; <- T_F428F8
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BDC0:		; <- T_F42904
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7BDC0  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7BDC0  and (0x2075),0xf6
 	calr	428	; F7BDC5  calr 0xf7bf74
 	stdi8	(8318), 0	; F7BDC8  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7BDCD  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7BDCD  or (0x2071),0x10
 	jr	-21	; F7BDD2  jr T,0xf7bdbf
 
 ; --------------------------------------------------------------------------
@@ -157508,12 +157508,12 @@ sub_F7BE0C:
 	stb_d8	(3091), a	; F7BE1C  ld (0x0c13),A
 	stb_da	(6304945), a	; F7BE20  ld (0x6034b1),A
 	stb_d8	(4854), a	; F7BE25  ld (0x12f6),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xDF	; F7BE29  and (0x0c35),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xdf	; F7BE29  and (0x0c35),0xdf
 	jr	18	; F7BE2E  jr T,0xf7be42
 	stb_d8	(3091), a	; F7BE30  ld (0x0c13),A
 	stb_da	(6304945), a	; F7BE34  ld (0x6034b1),A
 	stb_d8	(4854), a	; F7BE39  ld (0x12f6),A
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x20	; F7BE3D  or (0x0c35),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x20	; F7BE3D  or (0x0c35),0x20
 	ret	; F7BE42  ret
 
 ; --------------------------------------------------------------------------
@@ -157584,7 +157584,7 @@ sub_F7BE79:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BEB3:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7BEB3  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7BEB3  or (0x2075),0x09
 	ldb_d8	a, (3102)	; F7BEB8  ld A,(0x0c1e)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7BEBC  cp (0x0c4f),0x80
 	jr	z, 11	; F7BEC1  jr Z,0xf7bece
@@ -157621,11 +157621,11 @@ sub_F7BEB3:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BEF4:		; <- T_F42900
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7BEF4  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7BEF4  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7BEF9  cp (0x207e),0x01
 	jr	z, 12	; F7BEFE  jr Z,0xf7bf0c
 	stdi8	(8318), 1	; F7BF00  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7BF05  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7BF05  or (0x2071),0x10
 	jr	103	; F7BF0A  jr T,0xf7bf73
 	ldb_d8	a, (3091)	; F7BF0C  ld A,(0x0c13)
 	m_bit 5, MD16, 0x0c35	; F7BF10  bit 5,(0x0c35)
@@ -157652,7 +157652,7 @@ sub_F7BEF4:		; <- T_F42900
 	stdi8	(8318), 0	; F7BF62  ld (0x207e),0x00
 	jr	10	; F7BF67  jr T,0xf7bf73
 	stdi8	(8318), 0	; F7BF69  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7BF6E  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7BF6E  or (0x2071),0x10
 	ret	; F7BF73  ret
 
 ; --------------------------------------------------------------------------
@@ -157691,10 +157691,10 @@ sub_F7BF74:
 	stb_d8	(3108), a	; F7BFCB  ld (0x0c24),A
 	ldb_da	a, (6304957)	; F7BFCF  ld A,(0x6034bd)
 	stb_d8	(3103), a	; F7BFD4  ld (0x0c1f),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xDF	; F7BFD8  and (0x0c35),0xdf   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xdf	; F7BFD8  and (0x0c35),0xdf
 	m_cp_mi8 MB16, 0x0c13, 0x11	; F7BFDD  cp (0x0c13),0x11
 	jr	nz, 5	; F7BFE2  jr NZ,0xf7bfe9
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x20	; F7BFE4  or (0x0c35),0x20   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x20	; F7BFE4  or (0x0c35),0x20
 	ret	; F7BFE9  ret
 
 ; --------------------------------------------------------------------------
@@ -157744,10 +157744,10 @@ sub_F7BFEA:		; <- T_F42908
 	stb_d8	(4860), a	; F7C065  ld (0x12fc),A
 	ldb_d8	a, (3589)	; F7C069  ld A,(0x0e05)
 	stb_d8	(4861), a	; F7C06D  ld (0x12fd),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xEF	; F7C071  and (0x0c35),0xef   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xef	; F7C071  and (0x0c35),0xef
 	m_cp_mi8 MB24, 0x603477, 0x11	; F7C076  cp (0x603477),0x11
 	jr	nz, 5	; F7C07C  jr NZ,0xf7c083
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x10	; F7C07E  or (0x0c35),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x10	; F7C07E  or (0x0c35),0x10
 	m_cp_mi8 MB16, 0x2880, 0x23	; F7C083  cp (0x2880),0x23
 	jr	nz, 36	; F7C088  jr NZ,0xf7c0ae
 	m_cp_mi8 MB16, 0x133f, 0x1a	; F7C08A  cp (0x133f),0x1a
@@ -157793,7 +157793,7 @@ sub_F7C0AF:		; <- T_F4290C
 ; --------------------------------------------------------------------------
 sub_F7C0BB:		; <- T_F42910
 	stdi8	(3513), 1	; F7C0BB  ld (0x0db9),0x01
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C0C0  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C0C0  or (0x2075),0x09
 	ret	; F7C0C5  ret
 
 ; --------------------------------------------------------------------------
@@ -157809,8 +157809,8 @@ sub_F7C0BB:		; <- T_F42910
 ; --------------------------------------------------------------------------
 sub_F7C0C6:		; <- T_F42914
 	stdi8	(3513), 2	; F7C0C6  ld (0x0db9),0x02
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C0CB  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7C0D0  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C0CB  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7C0D0  or (0x2075),0x01
 	ret	; F7C0D5  ret
 
 ; --------------------------------------------------------------------------
@@ -157826,8 +157826,8 @@ sub_F7C0C6:		; <- T_F42914
 ; --------------------------------------------------------------------------
 sub_F7C0D6:		; <- T_F42918
 	stdi8	(3513), 3	; F7C0D6  ld (0x0db9),0x03
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C0DB  or (0x2075),0x08   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7C0E0  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C0DB  or (0x2075),0x08
+	m_or_mi8 MB16, 0x2075, 0x01	; F7C0E0  or (0x2075),0x01
 	ret	; F7C0E5  ret
 
 ; --------------------------------------------------------------------------
@@ -157843,7 +157843,7 @@ sub_F7C0D6:		; <- T_F42918
 ; --------------------------------------------------------------------------
 sub_F7C0E6:		; <- T_F4291C
 	stdi8	(3513), 4	; F7C0E6  ld (0x0db9),0x04
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C0EB  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C0EB  or (0x2075),0x09
 	ret	; F7C0F0  ret
 
 ; --------------------------------------------------------------------------
@@ -157903,7 +157903,7 @@ sub_F7C0F1:		; <- T_F42928
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C13E:		; <- T_F42934
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7C13E  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7C13E  and (0x2075),0xf6
 	ldb_d8	a, (3126)	; F7C143  ld A,(0x0c36)
 	stb_da	(6304887), a	; F7C147  ld (0x603477),A
 	inc	1, a	; F7C14C  inc 1,A
@@ -157916,7 +157916,7 @@ sub_F7C13E:		; <- T_F42934
 	ldb_da	a, (6304892)	; F7C168  ld A,(0x60347c)
 	stb_d8	(3127), a	; F7C16D  ld (0x0c37),A
 	stdi8	(8318), 0	; F7C171  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7C176  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7C176  or (0x2071),0x10
 	jr	-64	; F7C17B  jr T,0xf7c13d
 
 ; --------------------------------------------------------------------------
@@ -157985,7 +157985,7 @@ sub_F7C1C1:
 	inc	1, a	; F7C1DF  inc 1,A
 	stb_d8	(3109), a	; F7C1E1  ld (0x0c25),A
 	stb_d8	(4854), a	; F7C1E5  ld (0x12f6),A
-	.byte 0xC1, 0x35, 0x0C, 0x3C, 0xEF	; F7C1E9  and (0x0c35),0xef   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0c35, 0xef	; F7C1E9  and (0x0c35),0xef
 	jr	26	; F7C1EE  jr T,0xf7c20a
 	dec	1, a	; F7C1F0  dec 1,A
 	stb_da	(6304887), a	; F7C1F2  ld (0x603477),A
@@ -157993,7 +157993,7 @@ sub_F7C1C1:
 	inc	1, a	; F7C1FB  inc 1,A
 	stb_d8	(3109), a	; F7C1FD  ld (0x0c25),A
 	stb_d8	(4854), a	; F7C201  ld (0x12f6),A
-	.byte 0xC1, 0x35, 0x0C, 0x3E, 0x10	; F7C205  or (0x0c35),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x0c35, 0x10	; F7C205  or (0x0c35),0x10
 	ret	; F7C20A  ret
 
 ; --------------------------------------------------------------------------
@@ -158220,11 +158220,11 @@ sub_F7C31B:		; <- T_F42924
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C326:		; <- T_F42930
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7C326  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7C326  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7C32B  cp (0x207e),0x01
 	jr	z, 13	; F7C330  jr Z,0xf7c33f
 	stdi8	(8318), 1	; F7C332  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7C337  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7C337  or (0x2071),0x10
 	jrl	114	; F7C33C  jrl T,0xf7c3b1
 	ldb_da	a, (6304887)	; F7C33F  ld A,(0x603477)
 	m_bit 4, MD16, 0x0c35	; F7C344  bit 4,(0x0c35)
@@ -158253,7 +158253,7 @@ sub_F7C326:		; <- T_F42930
 	stdi16	(8304), 16555	; F7C39A  ld (0x2070),0x40ab
 	stdi8	(8318), 0	; F7C3A0  ld (0x207e),0x00
 	jr	10	; F7C3A5  jr T,0xf7c3b1
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7C3A7  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7C3A7  or (0x2071),0x10
 	stdi8	(8318), 0	; F7C3AC  ld (0x207e),0x00
 	ret	; F7C3B1  ret
 
@@ -158319,7 +158319,7 @@ sub_F7C3EE:		; <- T_F42A0C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C3FA:		; <- T_F42A14
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C3FA  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C3FA  or (0x2075),0x08
 	ldb_d8	a, (3596)	; F7C3FF  ld A,(0x0e0c)
 	ldb	l, 1	; F7C403  ld L,0x01
 	cp	a, l	; F7C405  cp A,L
@@ -158344,7 +158344,7 @@ sub_F7C3FA:		; <- T_F42A14
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C41D:		; <- T_F42A10
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C41D  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C41D  or (0x2075),0x08
 	ldb_d8	a, (3596)	; F7C422  ld A,(0x0e0c)
 	ldb	l, 10	; F7C426  ld L,0x0a
 	cp	a, l	; F7C428  cp A,L
@@ -158394,7 +158394,7 @@ sub_F7C440:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C463:		; <- T_F42A1C
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C463  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C463  or (0x2075),0x08
 	ldb_d8	a, (3598)	; F7C468  ld A,(0x0e0e)
 	ldb	l, 1	; F7C46C  ld L,0x01
 	cp	a, l	; F7C46E  cp A,L
@@ -158420,7 +158420,7 @@ sub_F7C463:		; <- T_F42A1C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C48C:		; <- T_F42A18
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C48C  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C48C  or (0x2075),0x08
 	ldb_d8	a, (3598)	; F7C491  ld A,(0x0e0e)
 	ldb	l, 18	; F7C495  ld L,0x12
 	cp	a, l	; F7C497  cp A,L
@@ -158449,7 +158449,7 @@ sub_F7C48C:		; <- T_F42A18
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C4B9:		; <- T_F42A24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C4B9  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C4B9  or (0x2075),0x08
 	ldb_d8	a, (3597)	; F7C4BE  ld A,(0x0e0d)
 	ldb	l, 1	; F7C4C2  ld L,0x01
 	cp	a, l	; F7C4C4  cp A,L
@@ -158474,7 +158474,7 @@ sub_F7C4B9:		; <- T_F42A24
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C4DC:		; <- T_F42A20
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C4DC  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C4DC  or (0x2075),0x08
 	ldb_d8	a, (3597)	; F7C4E1  ld A,(0x0e0d)
 	ldb	l, 10	; F7C4E5  ld L,0x0a
 	cp	a, l	; F7C4E7  cp A,L
@@ -158498,7 +158498,7 @@ sub_F7C4DC:		; <- T_F42A20
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C4FF:		; <- T_F42A2C
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C4FF  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C4FF  or (0x2075),0x08
 	ldb_d8	a, (3599)	; F7C504  ld A,(0x0e0f)
 	ldb	l, 1	; F7C508  ld L,0x01
 	cp	a, l	; F7C50A  cp A,L
@@ -158524,7 +158524,7 @@ sub_F7C4FF:		; <- T_F42A2C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C528:		; <- T_F42A28
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C528  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C528  or (0x2075),0x08
 	ldb_d8	a, (3599)	; F7C52D  ld A,(0x0e0f)
 	ldb	l, 18	; F7C531  ld L,0x12
 	cp	a, l	; F7C533  cp A,L
@@ -158580,7 +158580,7 @@ sub_F7C555:		; <- T_F42A30
 	dec	1, c	; F7C59D  dec 1,C
 	.byte 0xC3, 0x07, 0xEC, 0xE4, 0x21	; F7C59F  ld A,(XHL+BC)   [llvm-mc cannot encode this]
 	stdi8	(8318), 1	; F7C5A4  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7C5A9  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7C5A9  or (0x2071),0x10
 	jr	15	; F7C5AE  jr T,0xf7c5bf
 	call	16000796	; F7C5B0  call 0xf4271c
 	stdi16	(8304), 16555	; F7C5B4  ld (0x2070),0x40ab
@@ -158600,7 +158600,7 @@ sub_F7C555:		; <- T_F42A30
 ; --------------------------------------------------------------------------
 sub_F7C5C0:		; <- T_F42A34
 	stdi8	(8318), 0	; F7C5C0  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7C5C5  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7C5C5  or (0x2071),0x10
 	ret	; F7C5CA  ret
 
 ; --------------------------------------------------------------------------
@@ -158745,7 +158745,7 @@ sub_F7C666:		; <- T_F42A3C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C672:		; <- T_F42A40
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7C672  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x01	; F7C672  or (0x2075),0x01
 	ldb	a, 1	; F7C677  ld A,0x01
 	stb_d8	(3574), a	; F7C679  ld (0x0df6),A
 	stb_d8	(4860), a	; F7C67D  ld (0x12fc),A
@@ -158763,7 +158763,7 @@ sub_F7C672:		; <- T_F42A40
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C682:		; <- T_F42A44
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7C682  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x01	; F7C682  or (0x2075),0x01
 	ldb	a, 2	; F7C687  ld A,0x02
 	stb_d8	(3574), a	; F7C689  ld (0x0df6),A
 	stb_d8	(4860), a	; F7C68D  ld (0x12fc),A
@@ -158781,7 +158781,7 @@ sub_F7C682:		; <- T_F42A44
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C692:		; <- T_F42A48
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7C692  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x01	; F7C692  or (0x2075),0x01
 	ldb	a, 3	; F7C697  ld A,0x03
 	stb_d8	(3574), a	; F7C699  ld (0x0df6),A
 	stb_d8	(4860), a	; F7C69D  ld (0x12fc),A
@@ -158799,7 +158799,7 @@ sub_F7C692:		; <- T_F42A48
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C6A2:		; <- T_F42A4C
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7C6A2  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x01	; F7C6A2  or (0x2075),0x01
 	ldb	a, 4	; F7C6A7  ld A,0x04
 	stb_d8	(3574), a	; F7C6A9  ld (0x0df6),A
 	stb_d8	(4860), a	; F7C6AD  ld (0x12fc),A
@@ -158817,7 +158817,7 @@ sub_F7C6A2:		; <- T_F42A4C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C6B2:		; <- T_F42A50
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7C6B2  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7C6B2  or (0x2075),0x08
 	stb_d8	(3150), w	; F7C6B7  ld (0x0c4e),W
 	and	w, 128	; F7C6BB  and W,0x80
 	stb_d8	(3151), w	; F7C6BE  ld (0x0c4f),W
@@ -158897,7 +158897,7 @@ sub_F7C6FA:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C6FB:		; <- T_F42A54
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C6FB  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C6FB  or (0x2075),0x09
 	stb_d8	(3150), w	; F7C700  ld (0x0c4e),W
 	and	w, 128	; F7C704  and W,0x80
 	stb_d8	(3151), w	; F7C707  ld (0x0c4f),W
@@ -158962,7 +158962,7 @@ SongStore_DispatchA_2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C743:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C743  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C743  or (0x2075),0x09
 	ldb_d8	a, (3575)	; F7C748  ld A,(0x0df7)
 	ldb	l, 1	; F7C74C  ld L,0x01
 	ldb	h, 17	; F7C74E  ld H,0x11
@@ -159042,7 +159042,7 @@ sub_F7C78C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C7BC:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C7BC  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C7BC  or (0x2075),0x09
 	ldb_d8	a, (3580)	; F7C7C1  ld A,(0x0dfc)
 	m_cp_mi8 MB16, 0x0c4f, 0x80	; F7C7C5  cp (0x0c4f),0x80
 	jr	z, 11	; F7C7CA  jr Z,0xf7c7d7
@@ -159075,11 +159075,11 @@ sub_F7C7BC:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C7F0:		; <- T_F42A58
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7C7F0  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7C7F0  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7C7F5  cp (0x207e),0x01
 	jr	z, 12	; F7C7FA  jr Z,0xf7c808
 	stdi8	(8318), 1	; F7C7FC  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7C801  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7C801  or (0x2071),0x10
 	jr	58	; F7C806  jr T,0xf7c842
 	ldb_d8	a, (3575)	; F7C808  ld A,(0x0df7)
 	stb_d8	(3184), a	; F7C80C  ld (0x0c70),A
@@ -159094,7 +159094,7 @@ sub_F7C7F0:		; <- T_F42A58
 	stdi16	(8304), 16555	; F7C830  ld (0x2070),0x40ab
 	jr	10	; F7C836  jr T,0xf7c842
 	stdi8	(8318), 0	; F7C838  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7C83D  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7C83D  or (0x2071),0x10
 	ret	; F7C842  ret
 
 ; --------------------------------------------------------------------------
@@ -159109,9 +159109,9 @@ sub_F7C7F0:		; <- T_F42A58
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C843:		; <- T_F42A5C
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7C843  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7C843  and (0x2075),0xf6
 	stdi8	(8318), 0	; F7C848  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7C84D  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7C84D  or (0x2071),0x10
 	ret	; F7C852  ret
 
 ; --------------------------------------------------------------------------
@@ -159203,7 +159203,7 @@ sub_F7C8BC:		; <- T_F42A8C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C8C8:		; <- T_F42A90
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C8C8  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C8C8  or (0x2075),0x09
 	ldb	a, 1	; F7C8CD  ld A,0x01
 	stb_d8	(3565), a	; F7C8CF  ld (0x0ded),A
 	stb_d8	(4865), a	; F7C8D3  ld (0x1301),A
@@ -159221,7 +159221,7 @@ sub_F7C8C8:		; <- T_F42A90
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C8D8:		; <- T_F42A94
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C8D8  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C8D8  or (0x2075),0x09
 	ldb	a, 2	; F7C8DD  ld A,0x02
 	stb_d8	(3565), a	; F7C8DF  ld (0x0ded),A
 	stb_d8	(4865), a	; F7C8E3  ld (0x1301),A
@@ -159239,7 +159239,7 @@ sub_F7C8D8:		; <- T_F42A94
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C8E8:		; <- T_F42A98
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C8E8  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C8E8  or (0x2075),0x09
 	ldb	a, 3	; F7C8ED  ld A,0x03
 	stb_d8	(3565), a	; F7C8EF  ld (0x0ded),A
 	stb_d8	(4865), a	; F7C8F3  ld (0x1301),A
@@ -159257,7 +159257,7 @@ sub_F7C8E8:		; <- T_F42A98
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C8F8:		; <- T_F42A9C
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C8F8  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C8F8  or (0x2075),0x09
 	ldb	a, 4	; F7C8FD  ld A,0x04
 	stb_d8	(3565), a	; F7C8FF  ld (0x0ded),A
 	stb_d8	(4865), a	; F7C903  ld (0x1301),A
@@ -159275,7 +159275,7 @@ sub_F7C8F8:		; <- T_F42A9C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C908:		; <- T_F42AA0
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C908  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C908  or (0x2075),0x09
 	ldb	a, 5	; F7C90D  ld A,0x05
 	stb_d8	(3565), a	; F7C90F  ld (0x0ded),A
 	stb_d8	(4865), a	; F7C913  ld (0x1301),A
@@ -159293,7 +159293,7 @@ sub_F7C908:		; <- T_F42AA0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C918:		; <- T_F42AA4
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C918  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C918  or (0x2075),0x09
 	stb_d8	(3150), w	; F7C91D  ld (0x0c4e),W
 	and	w, 128	; F7C921  and W,0x80
 	stb_d8	(3151), w	; F7C924  ld (0x0c4f),W
@@ -159357,7 +159357,7 @@ SongStore_DispatchB_1:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C964:		; <- T_F42AA8
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C964  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C964  or (0x2075),0x09
 	stb_d8	(3150), w	; F7C969  ld (0x0c4e),W
 	and	w, 128	; F7C96D  and W,0x80
 	stb_d8	(3151), w	; F7C970  ld (0x0c4f),W
@@ -159423,7 +159423,7 @@ SongStore_DispatchB_2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C9B0:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7C9B0  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7C9B0  or (0x2075),0x09
 	ldb_d8	a, (3566)	; F7C9B5  ld A,(0x0dee)
 	ldb	l, 1	; F7C9B9  ld L,0x01
 	ldb	h, 17	; F7C9BB  ld H,0x11
@@ -159502,7 +159502,7 @@ sub_F7C9F5:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CA21:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7CA21  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7CA21  or (0x2075),0x09
 	ldb_d8	a, (3572)	; F7CA26  ld A,(0x0df4)
 	ldb	l, 0	; F7CA2A  ld L,0x00
 	ldb	h, 127	; F7CA2C  ld H,0x7f
@@ -159530,7 +159530,7 @@ sub_F7CA21:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CA48:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7CA48  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7CA48  or (0x2075),0x09
 	ldb_d8	a, (3573)	; F7CA4D  ld A,(0x0df5)
 	ldb	l, 0	; F7CA51  ld L,0x00
 	ldb	h, 127	; F7CA53  ld H,0x7f
@@ -159558,11 +159558,11 @@ sub_F7CA48:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CA6F:		; <- T_F42AAC
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7CA6F  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7CA6F  and (0x2075),0xf6
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7CA74  cp (0x207e),0x01
 	jr	z, 12	; F7CA79  jr Z,0xf7ca87
 	stdi8	(8318), 1	; F7CA7B  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7CA80  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7CA80  or (0x2071),0x10
 	jr	58	; F7CA85  jr T,0xf7cac1
 	ldb_d8	a, (3566)	; F7CA87  ld A,(0x0dee)
 	stb_d8	(3184), a	; F7CA8B  ld (0x0c70),A
@@ -159577,7 +159577,7 @@ sub_F7CA6F:		; <- T_F42AAC
 	stdi16	(8304), 16555	; F7CAAF  ld (0x2070),0x40ab
 	jr	10	; F7CAB5  jr T,0xf7cac1
 	stdi8	(8318), 0	; F7CAB7  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7CABC  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7CABC  or (0x2071),0x10
 	ret	; F7CAC1  ret
 
 ; --------------------------------------------------------------------------
@@ -159592,9 +159592,9 @@ sub_F7CA6F:		; <- T_F42AAC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CAC2:		; <- T_F42AB0
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7CAC2  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7CAC2  and (0x2075),0xf6
 	stdi8	(8318), 0	; F7CAC7  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7CACC  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7CACC  or (0x2071),0x10
 	ret	; F7CAD1  ret
 
 ; --------------------------------------------------------------------------
@@ -159729,7 +159729,7 @@ sub_F7CB3F:		; <- T_F42A74
 sub_F7CB4A:		; <- T_F42A78
 	stb_d8	(3150), w	; F7CB4A  ld (0x0c4e),W
 	stdi8	(3151), 0	; F7CB4E  ld (0x0c4f),0x00
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7CB53  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7CB53  or (0x2075),0x09
 	ldb_d8	l, (3557)	; F7CB58  ld L,(0x0de5)
 	cps	l, 1	; F7CB5C  cp L,1
 	.byte 0xF2, 0x7B, 0xCB, 0xF7, 0xD7	; F7CB5E  jp C,0xf7cb7b   [llvm-mc cannot encode this]
@@ -159791,7 +159791,7 @@ SongStore_DispatchC_1:
 sub_F7CB90:		; <- T_F42A7C
 	stb_d8	(3150), w	; F7CB90  ld (0x0c4e),W
 	stdi8	(3151), 128	; F7CB94  ld (0x0c4f),0x80
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7CB99  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7CB99  or (0x2075),0x09
 	stb_d8	(3150), w	; F7CB9E  ld (0x0c4e),W
 	and	w, 128	; F7CBA2  and W,0x80
 	stb_d8	(3151), w	; F7CBA5  ld (0x0c4f),W
@@ -159856,7 +159856,7 @@ SongStore_DispatchC_2:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CBE1:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7CBE1  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7CBE1  or (0x2075),0x09
 	ldb_d8	a, (3558)	; F7CBE6  ld A,(0x0de6)
 	ldb	l, 1	; F7CBEA  ld L,0x01
 	ldb	h, 17	; F7CBEC  ld H,0x11
@@ -159969,7 +159969,7 @@ sub_F7CC7C:		; <- T_F42A80
 	m_cp_mi8 MB16, 0x207e, 0x01	; F7CC7C  cp (0x207e),0x01
 	jr	z, 12	; F7CC81  jr Z,0xf7cc8f
 	stdi8	(8318), 1	; F7CC83  ld (0x207e),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7CC88  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7CC88  or (0x2071),0x10
 	jr	58	; F7CC8D  jr T,0xf7ccc9
 	ldb_d8	a, (3558)	; F7CC8F  ld A,(0x0de6)
 	stb_d8	(3184), a	; F7CC93  ld (0x0c70),A
@@ -159982,7 +159982,7 @@ sub_F7CC7C:		; <- T_F42A80
 	m_cp_mi8 MB16, 0x2880, 0xff	; F7CCB0  cp (0x2880),0xff
 	jr	nz, 12	; F7CCB5  jr NZ,0xf7ccc3
 	stdi8	(8318), 0	; F7CCB7  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7CCBC  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7CCBC  or (0x2071),0x10
 	jr	6	; F7CCC1  jr T,0xf7ccc9
 	stdi16	(8304), 16555	; F7CCC3  ld (0x2070),0x40ab
 	ret	; F7CCC9  ret
@@ -160000,9 +160000,9 @@ sub_F7CC7C:		; <- T_F42A80
 ; --------------------------------------------------------------------------
 sub_F7CCCA:		; <- T_F42A84
 	stdi8	(8318), 0	; F7CCCA  ld (0x207e),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7CCCF  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7CCCF  or (0x2071),0x10
 	ret	; F7CCD4  ret
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0xF6	; F7CCD5  and (0x2075),0xf6   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0xf6	; F7CCD5  and (0x2075),0xf6
 	ret	; F7CCDA  ret
 
 ; --------------------------------------------------------------------------
@@ -160113,7 +160113,7 @@ sub_F7CD30:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7CD5F:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7CD5F  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7CD5F  or (0x2075),0x09
 	ldb_d8	l, (3150)	; F7CD64  ld L,(0x0c4e)
 	ldb_d8	l, (3608)	; F7CD68  ld L,(0x0e18)
 	xor	h, h	; F7CD6C  xor H,H
@@ -163020,8 +163020,8 @@ sub_F7E2ED:
 ; Evidence: reached from call from prom_b 0xF7E57C; calr from prom_b
 ;           0xF7E4A4, and from nothing else the scans see.
 sub_F7E2FC:
-	.byte 0xC0, 0xC6, 0x3E, 0x01	; F7E2FC  or (0xc6),0x01   [llvm-mc cannot encode this]
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7E300  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0xc6, 0x01	; F7E2FC  or (0xc6),0x01
+	m_or_mi8 MB16, 0x2075, 0x08	; F7E300  or (0x2075),0x08
 	stdi8	(9536), 0	; F7E305  ld (0x2540),0x00
 	ldb_d8	a, (3078)	; F7E30A  ld A,(0x0c06)
 	stb_d8	(4859), a	; F7E30E  ld (0x12fb),A
@@ -163071,7 +163071,7 @@ sub_F7E354:
 	ld	xiy, 15966671	; F7E38A  ld XIY,0x00f3a1cf
 	ld	xix, 15966911	; F7E38F  ld XIX,0x00f3a2bf
 	call	15996916	; F7E394  call 0xf417f4
-	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F7E398  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0xc6, 0xfe	; F7E398  and (0xc6),0xfe
 	ret	; F7E39C  ret
 	ret	; F7E39D  ret
 	ret	; F7E39E  ret
@@ -163183,7 +163183,7 @@ Paint_TrackAssign:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7E453  cp (0x207e),0x00
 	jr	nz, 33	; F7E458  jr NZ,0xf7e47b
 	call	16002020	; F7E45A  call 0xf42be4
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7E45E  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x01	; F7E45E  or (0x2075),0x01
 	stdi16	(8347), 35208	; F7E463  ld (0x209b),0x8988  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7E469  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7E46F  ld (0x266a),0xffff
@@ -163240,7 +163240,7 @@ Paint_TrackAssign:
 ; ---------------------------------------------------------------------
 ScreenLeaveBody_TrackAssign:
 	stdi8	(8318), 0	; F7E4F9  ld (0x207e),0x00
-	.byte 0xC1, 0xC0, 0x0D, 0x3C, 0xFE	; F7E4FE  and (0x0dc0),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x0dc0, 0xfe	; F7E4FE  and (0x0dc0),0xfe
 	call	16002024	; F7E503  call 0xf42be8
 	ret	; F7E507  ret
 	ret	; F7E508  ret   <- button table 0xF7D558 entry 0 (TRACK ASSIGN)
@@ -163401,7 +163401,7 @@ SoftKeyCol5_TrackAssign_207EZero:
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
 SoftKeyCol7_TrackAssign_207EZero:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7E536  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7E536  or (0x2075),0x08
 	call	16001964	; F7E53B  call 0xf42bac
 	calr	582	; F7E53F  calr 0xf7e788
 	calr	64951	; F7E542  calr 0xf7e2fc
@@ -163449,7 +163449,7 @@ LcdKeyRow1_TrackAssign_207EZero:
 	jr	z, 22	; F7E54A  jr Z,0xf7e562
 	m_cp_mi8 MB16, 0x0c03, 0x00	; F7E54C  cp (0x0c03),0x00
 	jr	z, 12	; F7E551  jr Z,0xf7e55f
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7E553  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7E553  or (0x2075),0x09
 	call	16001936	; F7E558  call 0xf42b90
 	calr	553	; F7E55C  calr 0xf7e788
 	calr	64922	; F7E55F  calr 0xf7e2fc
@@ -163496,7 +163496,7 @@ LcdKeyRow2_TrackAssign_207EZero:
 	jr	z, 24	; F7E566  jr Z,0xf7e580
 	m_cp_mi8 MB16, 0x0c03, 0x0f	; F7E568  cp (0x0c03),0x0f
 	jr	z, 17	; F7E56D  jr Z,0xf7e580
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7E56F  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7E56F  or (0x2075),0x09
 	call	16001932	; F7E574  call 0xf42b8c
 	call	16246664	; F7E578  call 0xf7e788
 	call	16245500	; F7E57C  call 0xf7e2fc
@@ -163706,7 +163706,7 @@ ExitKey_TrackAssign_207EZero:
 LcdKeyRow2_TrackAssign_207ENonZero:
 	bit	7, w	; F7E5D5  bit 0x07,W
 	jr	nz, 11	; F7E5D8  jr NZ,0xf7e5e5
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7E5DA  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7E5DA  and (0x2075),0x6f
 	call	16001968	; F7E5DF  call 0xf42bb0
 	jr	0	; F7E5E3  jr T,0xf7e5e5
 	ret	; F7E5E5  ret
@@ -163848,7 +163848,7 @@ Paint_TrackAssignPresets:
 ScreenLeaveBody_TrackAssignPresets:
 	m_cp_mi8 MB16, 0x207a, 0x11	; F7E67A  cp (0x207a),0x11
 	jr	z, 5	; F7E67F  jr Z,0xf7e686
-	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F7E681  and (0x34bb),0xfb   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x34bb, 0xfb	; F7E681  and (0x34bb),0xfb
 	ret	; F7E686  ret
 
 ; ---------------------------------------------------------------------
@@ -163946,7 +163946,7 @@ SoftKeyCol2_TrackAssignPresets:
 	jr	nz, 2	; F7E692  jr NZ,0xf7e696
 	jr	0	; F7E694  jr T,0xf7e696
 	call	16002064	; F7E696  call 0xf42c10
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7E69A  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F7E69A  or (0x2095),0x10
 	ret	; F7E69F  ret
 
 ; ---------------------------------------------------------------------
@@ -163996,7 +163996,7 @@ SoftKeyCol3_TrackAssignPresets:
 	jr	nz, 2	; F7E6A3  jr NZ,0xf7e6a7
 	jr	0	; F7E6A5  jr T,0xf7e6a7
 	call	16002060	; F7E6A7  call 0xf42c0c
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7E6AB  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F7E6AB  or (0x2095),0x10
 	ret	; F7E6B0  ret
 
 ; ---------------------------------------------------------------------
@@ -164553,7 +164553,7 @@ sub_F7E770:
 ; Evidence: reached from call from prom_b 0xF7E578; call from prom_b
 ;           0xF7E5A0, and from nothing else the scans see.
 sub_F7E788:
-	.byte 0xC0, 0xC6, 0x3E, 0x01	; F7E788  or (0xc6),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB8, 0xc6, 0x01	; F7E788  or (0xc6),0x01
 	calr	64329	; F7E78C  calr 0xf7e2d8
 	ldb_d8	a, (13834)	; F7E78F  ld A,(0x360a)
 	inc	1, a	; F7E793  inc 1,A
@@ -164594,7 +164594,7 @@ sub_F7E788:
 	ld	xiy, 15964272	; F7E80C  ld XIY,0x00f39870
 	ld	xix, 15964282	; F7E811  ld XIX,0x00f3987a
 	call	15996912	; F7E816  call 0xf417f0
-	.byte 0xC0, 0xC6, 0x3C, 0xFE	; F7E81A  and (0xc6),0xfe   [llvm-mc cannot encode this]
+	m_and_mi8 MB8, 0xc6, 0xfe	; F7E81A  and (0xc6),0xfe
 	ret	; F7E81E  ret
 
 ; Evidence: reached from calr from prom_b 0xF7E7CF; calr from prom_b
@@ -164764,14 +164764,14 @@ sub_F7E941:
 ; Evidence: screen 0xF43040's Enter method body; that screen's Enter draws
 ;           no titled list, so it has no name.
 sub_F7E971:
-	.byte 0xD1, 0x34, 0x21, 0x3E, 0x02, 0x00	; F7E971  or (0x2134),0x0002   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x2134, 0x0002	; F7E971  or (0x2134),0x0002
 	call	16001200	; F7E977  call 0xf428b0
 	ret	; F7E97B  ret
 
 ; Evidence: screen 0xF43040's Leave method body; that screen's Enter draws
 ;           no titled list, so it has no name.
 sub_F7E97C:
-	.byte 0xD1, 0x34, 0x21, 0x3E, 0x02, 0x00	; F7E97C  or (0x2134),0x0002   [llvm-mc cannot encode this]
+	m_or_mi16 MW16, 0x2134, 0x0002	; F7E97C  or (0x2134),0x0002
 	call	16001204	; F7E982  call 0xf428b4
 	ret	; F7E986  ret
 
@@ -165097,7 +165097,7 @@ PageKey_Edit_0C10Zero:
 	m_cp_mi8 MB16, 0x0c10, 0x01	; F7EA42  cp (0x0c10),0x01
 	jr	z, 10	; F7EA47  jr Z,0xf7ea53
 	stdi8	(3088), 1	; F7EA49  ld (0x0c10),0x01
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7EA4E  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7EA4E  or (0x2071),0x10
 	ret	; F7EA53  ret
 	ret	; F7EA54  ret   <- button table 0xF7D2D8 entry 17 (EDIT) and 13 more slot(s)
 	ret	; F7EA55  ret
@@ -165389,7 +165389,7 @@ PageKey_Edit_0C10NonZero:
 	m_cp_mi8 MB16, 0x0c10, 0x00	; F7EABD  cp (0x0c10),0x00
 	jr	z, 10	; F7EAC2  jr Z,0xf7eace
 	stdi8	(3088), 0	; F7EAC4  ld (0x0c10),0x00
-	.byte 0xC1, 0x71, 0x20, 0x3E, 0x10	; F7EAC9  or (0x2071),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2071, 0x10	; F7EAC9  or (0x2071),0x10
 	ret	; F7EACE  ret
 	ret	; F7EACF  ret   <- button table 0xF7D358 entry 17 (EDIT) and 13 more slot(s)
 
@@ -165417,7 +165417,7 @@ Paint_SongClear:
 	calr	63472	; F7EAE6  calr 0xf7e2d9
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7EAE9  cp (0x207e),0x00
 	jrl	nz, 137	; F7EAEE  jrl NZ,0xf7eb7a
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7EAF1  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7EAF1  or (0x2075),0x09
 	stdi16	(8347), 770	; F7EAF6  ld (0x209b),0x0302  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7EAFC  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7EB02  ld (0x266a),0xffff
@@ -165550,7 +165550,7 @@ SoftKeyCol3_SongClear:
 	stda16	(4862), wa	; F7EBFE  ld (0x12fe),WA
 	ldb_d8	a, (3633)	; F7EC02  ld A,(0x0e31)
 	stb_d8	(4861), a	; F7EC06  ld (0x12fd),A
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7EC0A  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F7EC0A  or (0x2095),0x10
 	ret	; F7EC0F  ret
 
 ; ---------------------------------------------------------------------
@@ -165612,7 +165612,7 @@ SoftKeyCol4_SongClear:
 	stda16	(4862), wa	; F7EC30  ld (0x12fe),WA
 	ldb_d8	a, (3633)	; F7EC34  ld A,(0x0e31)
 	stb_d8	(4861), a	; F7EC38  ld (0x12fd),A
-	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7EC3C  or (0x2095),0x10   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2095, 0x10	; F7EC3C  or (0x2095),0x10
 	ret	; F7EC41  ret
 	ret	; F7EC42  ret   <- button table 0xF7D3D8 entry 4 (SONG CLEAR) and 6 more slot(s)
 
@@ -165655,7 +165655,7 @@ SoftKeyCol4_SongClear:
 LcdKeyRow4_SongClear:
 	bit	7, w	; F7EC43  bit 0x07,W
 	jr	nz, 11	; F7EC46  jr NZ,0xf7ec53
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7EC48  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7EC48  and (0x2075),0x6f
 	call	16001228	; F7EC4D  call 0xf428cc
 	jr	0	; F7EC51  jr T,0xf7ec53
 	ret	; F7EC53  ret
@@ -166350,7 +166350,7 @@ ExitKey_TrackClear_207EZero:
 LcdKeyRow2_TrackClear_207ENonZero:
 	bit	7, w	; F7EDE3  bit 0x07,W
 	jr	nz, 9	; F7EDE6  jr NZ,0xf7edf1
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7EDE8  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7EDE8  and (0x2075),0x6f
 	call	16001244	; F7EDED  call 0xf428dc
 	ret	; F7EDF1  ret
 
@@ -166442,7 +166442,7 @@ Paint_TrackMerge:
 	call	16002688	; F7EE08  call 0xf42e80
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7EE0C  cp (0x207e),0x00
 	jr	nz, 35	; F7EE11  jr NZ,0xf7ee36
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7EE13  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7EE13  or (0x2075),0x09
 	stdi16	(8347), 1156	; F7EE18  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7EE1E  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7EE24  ld (0x266a),0xffff
@@ -166535,7 +166535,7 @@ ScreenLeaveBody_TrackMerge:
 ;           notes/wave7_panel_event_index.py (layer 2).
 ; ---------------------------------------------------------------------
 SoftKeyCol5_TrackMerge_207EZero:
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7EE9F  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7EE9F  or (0x2075),0x08
 	bit	7, w	; F7EEA4  bit 0x07,W
 	jr	z, 6	; F7EEA7  jr Z,0xf7eeaf
 	call	16001360	; F7EEA9  call 0xf42950
@@ -166781,7 +166781,7 @@ ExitKey_TrackMerge_207EZero:
 LcdKeyRow2_TrackMerge_207ENonZero:
 	bit	7, w	; F7EF54  bit 0x07,W
 	jr	nz, 9	; F7EF57  jr NZ,0xf7ef62
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7EF59  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7EF59  and (0x2075),0x6f
 	call	16001368	; F7EF5E  call 0xf42958
 	ret	; F7EF62  ret
 	ret	; F7EF63  ret   <- button table 0xF7D758 entry 10 (TRACK MERGE)
@@ -166877,7 +166877,7 @@ Paint_MeasureDelete:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7EF80  cp (0x207e),0x00
 	jr	nz, 27	; F7EF85  jr NZ,0xf7efa2
 	call	16001372	; F7EF87  call 0xf4295c
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7EF8B  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7EF8B  or (0x2075),0x09
 	stdi16	(8347), 1156	; F7EF90  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7EF96  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7EF9C  ld (0x266a),0xffff
@@ -166991,7 +166991,7 @@ SoftKeyCol5_MeasureDelete_207EZero:
 	m_bit 1, MD16, 0x2075	; F7F03A  bit 1,(0x2075)
 	jr	z, 4	; F7F03E  jr Z,0xf7f044
 	call	16002596	; F7F040  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F044  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7F044  or (0x2075),0x08
 	stdi8	(3608), 1	; F7F049  ld (0x0e18),0x01
 	bit	7, w	; F7F04E  bit 0x07,W
 	jr	z, 6	; F7F051  jr Z,0xf7f059
@@ -167207,7 +167207,7 @@ sub_F7F0E7:
 	m_bit 1, MD16, 0x2075	; F7F0E7  bit 1,(0x2075)
 	jr	z, 4	; F7F0EB  jr Z,0xf7f0f1
 	call	16002596	; F7F0ED  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F0F1  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7F0F1  or (0x2075),0x08
 	stdi8	(3608), 4	; F7F0F6  ld (0x0e18),0x04
 	bit	7, w	; F7F0FB  bit 0x07,W
 	jr	z, 6	; F7F0FE  jr Z,0xf7f106
@@ -167402,7 +167402,7 @@ BlinkArgPtrs_F7F1F5:
 LcdKeyRow3_MeasureDelete_207ENonZero:
 	bit	7, w	; F7F20E  bit 0x07,W
 	jr	nz, 9	; F7F211  jr NZ,0xf7f21c
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7F213  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7F213  and (0x2075),0x6f
 	call	16001400	; F7F218  call 0xf42978
 	ret	; F7F21C  ret
 
@@ -167517,7 +167517,7 @@ Paint_MeasureErase:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7F258  cp (0x207e),0x00
 	jr	nz, 27	; F7F25D  jr NZ,0xf7f27a
 	call	16001408	; F7F25F  call 0xf42980
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x09	; F7F263  or (0x2075),0x09   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x09	; F7F263  or (0x2075),0x09
 	stdi16	(8347), 1156	; F7F268  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7F26E  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7F274  ld (0x266a),0xffff
@@ -167609,7 +167609,7 @@ SoftKeyCol5_MeasureErase_207EZero:
 	m_bit 1, MD16, 0x2075	; F7F2DE  bit 1,(0x2075)
 	jr	z, 4	; F7F2E2  jr Z,0xf7f2e8
 	call	16002596	; F7F2E4  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F2E8  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7F2E8  or (0x2075),0x08
 	stdi8	(3608), 1	; F7F2ED  ld (0x0e18),0x01
 	bit	7, w	; F7F2F2  bit 0x07,W
 	jr	nz, 6	; F7F2F5  jr NZ,0xf7f2fd
@@ -167895,7 +167895,7 @@ sub_F7F3E2:
 	m_bit 1, MD16, 0x2075	; F7F3E2  bit 1,(0x2075)
 	jr	z, 4	; F7F3E6  jr Z,0xf7f3ec
 	call	16002596	; F7F3E8  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F3EC  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7F3EC  or (0x2075),0x08
 	stdi8	(3608), 4	; F7F3F1  ld (0x0e18),0x04
 	bit	7, w	; F7F3F6  bit 0x07,W
 	jr	nz, 6	; F7F3F9  jr NZ,0xf7f401
@@ -167980,7 +167980,7 @@ NumberPadKey_MeasureErase_207EZero:
 LcdKeyRow2_MeasureErase_207ENonZero:
 	bit	7, w	; F7F418  bit 0x07,W
 	jr	nz, 9	; F7F41B  jr NZ,0xf7f426
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7F41D  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7F41D  and (0x2075),0x6f
 	call	16001440	; F7F422  call 0xf429a0
 	ret	; F7F426  ret
 
@@ -168249,7 +168249,7 @@ Paint_Quantize:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7F586  cp (0x207e),0x00
 	jr	nz, 27	; F7F58B  jr NZ,0xf7f5a8
 	call	16001288	; F7F58D  call 0xf42908
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7F591  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x01	; F7F591  or (0x2075),0x01
 	stdi16	(8347), 1156	; F7F596  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7F59C  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7F5A2  ld (0x266a),0xffff
@@ -168341,7 +168341,7 @@ SoftKeyCol5_Quantize_207EZero:
 	m_bit 1, MD16, 0x2075	; F7F60C  bit 1,(0x2075)
 	jr	z, 4	; F7F610  jr Z,0xf7f616
 	call	16002596	; F7F612  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F616  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7F616  or (0x2075),0x08
 	stdi8	(3608), 1	; F7F61B  ld (0x0e18),0x01
 	bit	7, w	; F7F620  bit 0x07,W
 	jr	z, 6	; F7F623  jr Z,0xf7f62b
@@ -168645,7 +168645,7 @@ sub_F7F74E:
 	m_bit 1, MD16, 0x2075	; F7F74E  bit 1,(0x2075)
 	jr	z, 4	; F7F752  jr Z,0xf7f758
 	call	16002596	; F7F754  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F758  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7F758  or (0x2075),0x08
 	stdi8	(3608), 4	; F7F75D  ld (0x0e18),0x04
 	bit	7, w	; F7F762  bit 0x07,W
 	jr	z, 6	; F7F765  jr Z,0xf7f76d
@@ -168730,7 +168730,7 @@ NumberPadKey_Quantize_207EZero:
 LcdKeyRow3_Quantize_207ENonZero:
 	bit	7, w	; F7F784  bit 0x07,W
 	jr	nz, 9	; F7F787  jr NZ,0xf7f792
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7F789  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7F789  and (0x2075),0x6f
 	call	16001328	; F7F78E  call 0xf42930
 	ret	; F7F792  ret
 
@@ -168939,7 +168939,7 @@ Paint_Vel0cityChange:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7F8AD  cp (0x207e),0x00
 	jr	nz, 27	; F7F8B2  jr NZ,0xf7f8cf
 	call	16001248	; F7F8B4  call 0xf428e0
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7F8B8  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x01	; F7F8B8  or (0x2075),0x01
 	stdi16	(8347), 1156	; F7F8BD  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7F8C3  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7F8C9  ld (0x266a),0xffff
@@ -169047,7 +169047,7 @@ SoftKeyCol5_Vel0cityChange_207EZero:
 	m_bit 1, MD16, 0x2075	; F7F958  bit 1,(0x2075)
 	jr	z, 4	; F7F95C  jr Z,0xf7f962
 	call	16002596	; F7F95E  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7F962  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7F962  or (0x2075),0x08
 	stdi8	(3608), 1	; F7F967  ld (0x0e18),0x01
 	bit	7, w	; F7F96C  bit 0x07,W
 	jr	z, 6	; F7F96F  jr Z,0xf7f977
@@ -169328,7 +169328,7 @@ sub_F7FA43:
 	m_bit 1, MD16, 0x2075	; F7FA43  bit 1,(0x2075)
 	jr	z, 4	; F7FA47  jr Z,0xf7fa4d
 	call	16002596	; F7FA49  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7FA4D  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7FA4D  or (0x2075),0x08
 	stdi8	(3608), 4	; F7FA52  ld (0x0e18),0x04
 	bit	7, w	; F7FA57  bit 0x07,W
 	jr	z, 6	; F7FA5A  jr Z,0xf7fa62
@@ -169413,7 +169413,7 @@ NumberPadKey_Vel0cityChange_207EZero:
 LcdKeyRow2_Vel0cityChange_207ENonZero:
 	bit	7, w	; F7FA79  bit 0x07,W
 	jr	nz, 9	; F7FA7C  jr NZ,0xf7fa87
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7FA7E  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7FA7E  and (0x2075),0x6f
 	call	16001280	; F7FA83  call 0xf42900
 	ret	; F7FA87  ret
 
@@ -169649,7 +169649,7 @@ Paint_Transp0se:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7FBFC  cp (0x207e),0x00
 	jr	nz, 51	; F7FC01  jr NZ,0xf7fc36
 	call	16001592	; F7FC03  call 0xf42a38
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7FC07  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x01	; F7FC07  or (0x2075),0x01
 	stdi16	(8347), 1156	; F7FC0C  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7FC12  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7FC18  ld (0x266a),0xffff
@@ -169753,7 +169753,7 @@ SoftKeyCol5_Transp0se_207EZero:
 	m_bit 1, MD16, 0x2075	; F7FCA2  bit 1,(0x2075)
 	jr	z, 4	; F7FCA6  jr Z,0xf7fcac
 	call	16002596	; F7FCA8  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7FCAC  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7FCAC  or (0x2075),0x08
 	stdi8	(3608), 1	; F7FCB1  ld (0x0e18),0x01
 	bit	7, w	; F7FCB6  bit 0x07,W
 	jr	z, 6	; F7FCB9  jr Z,0xf7fcc1
@@ -170032,7 +170032,7 @@ sub_F7FD8A:
 	m_bit 1, MD16, 0x2075	; F7FD8A  bit 1,(0x2075)
 	jr	z, 4	; F7FD8E  jr Z,0xf7fd94
 	call	16002596	; F7FD90  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7FD94  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7FD94  or (0x2075),0x08
 	stdi8	(3608), 4	; F7FD99  ld (0x0e18),0x04
 	bit	7, w	; F7FD9E  bit 0x07,W
 	jr	z, 6	; F7FDA1  jr Z,0xf7fda9
@@ -170117,7 +170117,7 @@ NumberPadKey_Transp0se_207EZero:
 LcdKeyRow2_Transp0se_207ENonZero:
 	bit	7, w	; F7FDC0  bit 0x07,W
 	jr	nz, 9	; F7FDC3  jr NZ,0xf7fdce
-	.byte 0xC1, 0x75, 0x20, 0x3C, 0x6F	; F7FDC5  and (0x2075),0x6f   [llvm-mc cannot encode this]
+	m_and_mi8 MB16, 0x2075, 0x6f	; F7FDC5  and (0x2075),0x6f
 	call	16001624	; F7FDCA  call 0xf42a58
 	ret	; F7FDCE  ret
 
@@ -170349,7 +170349,7 @@ Paint_AdvanceDelay:
 	m_cp_mi8 MB16, 0x207e, 0x00	; F7FF2B  cp (0x207e),0x00
 	jr	nz, 51	; F7FF30  jr NZ,0xf7ff65
 	call	16001632	; F7FF32  call 0xf42a60
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x01	; F7FF36  or (0x2075),0x01   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x01	; F7FF36  or (0x2075),0x01
 	stdi16	(8347), 1156	; F7FF3B  ld (0x209b),0x0484  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	stdi16	(9830), 65535	; F7FF41  ld (0x2666),0xffff
 	stdi16	(9834), 65535	; F7FF47  ld (0x266a),0xffff
@@ -170453,7 +170453,7 @@ SoftKeyCol5_AdvanceDelay_207EZero:
 	m_bit 1, MD16, 0x2075	; F7FFD1  bit 1,(0x2075)
 	jr	z, 4	; F7FFD5  jr Z,0xf7ffdb
 	call	16002596	; F7FFD7  call 0xf42e24
-	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7FFDB  or (0x2075),0x08   [llvm-mc cannot encode this]
+	m_or_mi8 MB16, 0x2075, 0x08	; F7FFDB  or (0x2075),0x08
 	stdi8	(3608), 1	; F7FFE0  ld (0x0e18),0x01
 	bit	7, w	; F7FFE5  bit 0x07,W
 	jr	z, 6	; F7FFE8  jr Z,0xf7fff0
