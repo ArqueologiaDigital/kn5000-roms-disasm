@@ -63,6 +63,8 @@ import sys
 from collections import Counter, OrderedDict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 
 OFFSET = 0x12B65                      # prom_c address - prom_a address, every pair
 
@@ -199,8 +201,13 @@ def src(rel):
 
 
 def now(rel):
-    """The file as it stands in the working tree."""
-    return open(os.path.join(ROOT, rel)).read().split("\n")
+    """The IMAGE as it stands in the working tree.
+
+    ⚠ image_path, not os.path.join: prom_c's primary is a 2,517-line header
+    since the per-subject split, and the kernel body it is asked about is in
+    kernel/kernel.s, which the primary `.include`s.
+    """
+    return open(image_path(ROOT, rel)).read().split("\n")
 
 
 def rom(which):

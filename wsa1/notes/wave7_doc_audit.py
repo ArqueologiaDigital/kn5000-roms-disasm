@@ -59,6 +59,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 OVERLAY_GAPS = os.path.expanduser(
     "~/compartilhado/kn7000_mame/notes/WSA1-EMULATION-DISASM-GAPS.md")
 
@@ -166,7 +168,9 @@ def docs():
 
 
 def readlines(rel):
-    return open(os.path.join(ROOT, rel)).read().split("\n")
+    # ⚠ image_path, not os.path.join: for prom_c and prom_d the primary is a
+    # 2,517- and a 494-line header, and the body is in included sources.
+    return open(image_path(ROOT, rel)).read().split("\n")
 
 
 # --------------------------------------------------------------------------

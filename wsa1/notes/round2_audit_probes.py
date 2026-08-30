@@ -22,6 +22,8 @@ WHAT EACH SECTION READS
 import os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 SIB  = "/home/fsanches/compartilhado/kn5000-roms-disasm"
 NM   = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm"
 OBJCOPY = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-objcopy"
@@ -58,7 +60,9 @@ def sec1():
     for path in ("prom_c/wsa1_prom_c.s",
                  "notes/FINDINGS-prom_c-voice-module.md",
                  "notes/prom_c_voice_module_check.py"):
-        lines = open(os.path.join(ROOT, path)).read().splitlines()
+        # ⚠ image_path: the first of these three paths is prom_c's primary,
+        # which is a 2,517-line header since the per-subject split.
+        lines = open(image_path(ROOT, path)).read().splitlines()
         hits = [i+1 for i, l in enumerate(lines) if "0x00003BCF-0x0000456E" in l]
         check(not hits, f"{path} is free of the wrong extent",
               "carries it at line " + ",".join(map(str, hits)) if hits else "")

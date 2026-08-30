@@ -51,11 +51,20 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_lines  # noqa: E402  (the image, not the master)
 PRE_MERGE = "8ff84e5"
 A_SRC = "prom_a/wsa1_prom_a.s"
 C_SRC = "prom_c/wsa1_prom_c.s"
 KERNEL = "kernel/kernel.s"
 INCS = ["kernel/kernel_maincpu.inc", "kernel/kernel_subcpu.inc"]
+# What nowlines() does NOT expand: the kernel sources this script counts
+# separately, and the DEFINITIONS includes.  The latter matter for
+# nowlines(KERNEL) -- kernel/kernel.s `.include`s include/tlcs900_mem_ops.inc,
+# and inlining its 92 comment lines makes them read as prose the kernel join
+# introduced, which it did not.
+SKIP = [KERNEL] + INCS + ["include/tlcs900_mem_ops.inc",
+                          "include/tmp95c061_sfr.inc"]
 
 # ⚠ The leading dot is IN the class: `.L` compiler locals must be matched so we
 # can EXCLUDE them deliberately rather than by an accident of the regex.  The
@@ -80,7 +89,19 @@ def at(commit, rel):
 
 
 def nowlines(rel):
-    return open(os.path.join(ROOT, rel), encoding="utf-8").read().split("\n")
+    """The IMAGE `rel` names -- minus the kernel sources, which this script
+    counts SEPARATELY.
+
+    ⚠ TWO WAYS TO GET THIS WRONG, and this file hit both.
+      * Reading the primary with os.path.join sees 2% of prom_c since the
+        per-subject split: "no label NAME is lost tree-wide" then FAILED,
+        naming ten prom_c labels that had not gone anywhere.
+      * Expanding the image WITHOUT skip= inlines kernel/kernel.s into prom_a
+        and into prom_c, and this script then adds nowlines(KERNEL) on top --
+        the same 4,148 lines three times.  "definitions removed equals names
+        de-duplicated" went to -123, which is not a count of anything.
+    """
+    return image_lines(ROOT, rel, skip=SKIP)
 
 
 def deleted_lines(rel):

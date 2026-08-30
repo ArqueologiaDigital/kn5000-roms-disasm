@@ -108,17 +108,25 @@ def image_files(root, primary):
     return out
 
 
-def image_lines(root, primary, expand=True):
+def image_lines(root, primary, expand=True, skip=()):
     """The image's lines, newline-stripped, with each .include replaced INLINE
     by the lines of the file it names -- the token stream the assembler sees.
 
     expand=False returns the primary's own lines only, which is what every
     caller used to get by accident.  It exists so a test can show the two differ.
+
+    ★ skip = ROOT-relative paths NOT to expand.  A caller that already accounts
+    for a shared source separately -- kernel/kernel.s belongs to prom_a AND
+    prom_c, and a tree-wide label census that expands both counts it twice --
+    names it here.  The `.include` LINE IS KEPT: deleting it would join the
+    comment block above it to the label below, which moved two header counts by
+    three each the one time it was tried.
     """
     files = image_files(root, primary) if expand else [
         os.path.join(root, primary)]
     if not expand:
         return open(files[0], encoding="utf-8").read().split("\n")
+    skip = {os.path.normpath(os.path.join(root, s)) for s in skip}
     text = {p: open(p, encoding="utf-8").read().split("\n") for p in files}
     root_file = files[0]
 
@@ -132,7 +140,11 @@ def image_lines(root, primary, expand=True):
         for ln in text[path]:
             m = INCLUDE_RE.match(ln)
             if m:
-                out.extend(emit(_resolve(root, m.group(1), path)))
+                target = _resolve(root, m.group(1), path)
+                if target in skip:
+                    out.append(ln)      # keep the directive, drop the content
+                else:
+                    out.extend(emit(target))
             else:
                 out.append(ln)
         return out
@@ -412,6 +424,22 @@ def _selftest():
                   "image is split" % tag,
                   os.path.realpath(pth) != os.path.realpath(
                       os.path.join(ROOT, primary)))
+
+    # ---- skip: a shared source a caller accounts for separately ----------
+    for tag, primary in IMAGES:
+        if not os.path.isfile(os.path.join(ROOT, primary)):
+            continue
+        full = image_lines(ROOT, primary)
+        cut = image_lines(ROOT, primary, skip=("kernel/kernel.s",))
+        if any(f.endswith("kernel/kernel.s") for f in image_files(ROOT, primary)):
+            check("%-7s skip= removes the shared kernel's lines" % tag,
+                  len(cut) < len(full))
+            check("%-7s ...and KEEPS the .include directive that named it" % tag,
+                  sum(1 for l in cut if INCLUDE_RE.match(l)
+                      and "kernel/kernel.s" in l) == 1)
+        else:
+            check("%-7s skip= of a source this image does not include is a "
+                  "no-op" % tag, cut == full)
 
     # ---- the same image, at a git revision -------------------------------
     for tag, primary in IMAGES:

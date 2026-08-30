@@ -39,6 +39,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path  # noqa: E402  (the image, not the master)
 
 # (source dir, .s basename, incbin filename, load base, frontier tool)
 IMAGES = [
@@ -55,7 +57,9 @@ def spans(image):
     in the order they appear -- which is also address order, and the selftest
     checks that it is."""
     d, s, inc, _base, _f = image
-    text = open(os.path.join(ROOT, d, s)).read()
+    # ⚠ image_path: prom_c and prom_d keep their bodies in included sources,
+    # so a scan of the primary finds none of their .incbin spans.
+    text = open(image_path(ROOT, "%s/%s" % (d, s))).read()
     rx = re.compile(r'^\t\.incbin "original_ROMs/%s", (0x[0-9A-Fa-f]+), (0x[0-9A-Fa-f]+)\s*$'
                     % re.escape(inc), re.M)
     return [(int(a, 16), int(b, 16)) for a, b in rx.findall(text)]
@@ -84,7 +88,7 @@ def meaning_counts():
     subs, ev = set(), 0
     rx_sub = re.compile(r'^(sub_[0-9A-Fa-f]{6}):', re.M)
     for d, s, _i, _b, _f in IMAGES:
-        text = open(os.path.join(ROOT, d, s)).read()
+        text = open(image_path(ROOT, "%s/%s" % (d, s))).read()
         subs.update(rx_sub.findall(text))
         ev += text.count("Evidence:")
     return len(subs), ev
@@ -161,7 +165,7 @@ def selftest():
     for image in IMAGES:
         d, s, inc, base, _t = image
         sp = spans(image)
-        text = open(os.path.join(ROOT, d, s)).read()
+        text = open(image_path(ROOT, "%s/%s" % (d, s))).read()
         if not sp:
             check("%s: no .incbin remains, and none in the text either" % d,
                   ('.incbin "original_ROMs/%s"' % inc) not in text)
