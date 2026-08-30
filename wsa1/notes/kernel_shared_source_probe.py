@@ -62,22 +62,40 @@ A_BASE = C_BASE = 0xF80000
 BLOCK_END_C = 0xF989EF
 
 
+# ⚠ UPDATED 2026-08-30, when the two kernels became ONE SOURCE.  The routine
+# labels used to be read out of prom_c/wsa1_prom_c.s; prom_c now `.include`s
+# kernel/kernel.s and no longer writes the block out, so reading prom_c found
+# ZERO routines and this file's selftest crashed.  The labels are read from the
+# shared file instead.  Its lines carry BOTH addresses -- `; F85606/F9816B` --
+# and the second is prom_c's, which is what the rest of this script wants.
+KERNEL_SRC = "kernel/kernel.s"
+
+
 def kernel_pairs():
-    """[(name, prom_c lo, prom_c hi)] for the kernel routines, read from prom_c's
-    own source. prom_a's address is always prom_c's minus OFFSET -- that is the
+    """[(name, prom_c lo, prom_c hi)] for the kernel routines, read from the
+    SHARED source. prom_a's address is always prom_c's minus OFFSET -- that is the
     kernel map's central finding and it is asserted, not assumed, in --selftest."""
-    lines = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read().split("\n")
-    marks = []
+    lines = open(os.path.join(ROOT, KERNEL_SRC)).read().split("\n")
+    marks, seen = [], set()
     for i, l in enumerate(lines):
         m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', l)
         if m:
             for l2 in lines[i + 1:i + 40]:
-                mm = re.search(r';\s*([0-9A-F]{6})\s', l2)
+                mm = re.search(r';\s*[0-9A-F]{6}/([0-9A-F]{6})\b', l2)
                 if mm:
-                    marks.append((int(mm.group(1), 16), m.group(1)))
+                    a = int(mm.group(1), 16)
+                    # the shared file carries prom_a's name for an address as a
+                    # second label under prom_c's; count each address once
+                    if a not in seen:
+                        seen.add(a)
+                        marks.append((a, m.group(1)))
                     break
-                if re.match(r'^[A-Za-z_][A-Za-z0-9_]*:', l2):
-                    break
+                # ⚠ do NOT stop at another label: in the shared file prom_c's
+                # name and prom_a's name for the SAME address sit on consecutive
+                # lines, and stopping here dropped 11 routines.  `seen` keeps the
+                # first name for an address, which is prom_c's.
+                if re.match(r'^[A-Za-z_.][A-Za-z0-9_.]*:', l2):
+                    continue
     marks.sort()
     names = set()
     for _a, n in marks:
@@ -120,7 +138,7 @@ def decode(which, lo, hi):
 
 def main():
     pairs = kernel_pairs()
-    print("kernel routines paired from prom_c's own labels: %d\n" % len(pairs))
+    print("kernel routines paired from the shared source's labels: %d\n" % len(pairs))
     same = reloc = other = 0
     skipped = 0
     deltas = Counter()
@@ -184,7 +202,7 @@ def selftest():
         ok, fail = ok + (1 if cond else 0), fail + (0 if cond else 1)
 
     pairs = kernel_pairs()
-    check("kernel routines found in prom_c's source", len(pairs) > 20, "%d" % len(pairs))
+    check("kernel routines found in the shared kernel source", len(pairs) > 20, "%d" % len(pairs))
     agree = 0
     for name, clo, chi in pairs:
         if len(decode("c", clo, chi)) == len(decode("a", clo - OFFSET, chi - OFFSET)):

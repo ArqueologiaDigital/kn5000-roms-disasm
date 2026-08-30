@@ -34,9 +34,19 @@ IMAGES = [("a", "wsa1_prom_a.ic12"), ("b", "wsa1_prom_b.ic13"),
           ("c", "wsa1_prom_c.ic28"), ("d", "wsa1_prom_d.bin")]
 
 
+# ⚠ prom_a and prom_c no longer hold their whole image in one file: both
+# `.include "kernel/kernel.s"`, the ONE source for the kernel they share.  The
+# figures below happen to be unaffected today because kernel.s has no `.incbin`
+# and no `.fill` -- but a measurement whose input silently moved is exactly the
+# failure this script was written to stop, so the included file is scanned too.
+INCLUDED = {"a": ["kernel/kernel.s"], "c": ["kernel/kernel.s"]}
+
+
 def measure(key):
     src = os.path.join(ROOT, f"prom_{key}", f"wsa1_prom_{key}.s")
     text = open(src).read()
+    for extra in INCLUDED.get(key, []):
+        text += "\n" + open(os.path.join(ROOT, extra)).read()
     inc = sum(int(m.group(2), 16) for m in
               re.finditer(r'\.incbin\s+"[^"]+",\s*(0x[0-9A-Fa-f]+),\s*(0x[0-9A-Fa-f]+)', text))
     whole = re.findall(r'\.incbin\s+"[^"]+"\s*$', text, re.M)

@@ -15,12 +15,20 @@ LLVM_OBJCOPY=$(LLVM_BIN)/llvm-objcopy
 
 PROMS = a b c d
 
+# ⚠ EVERY FILE AN IMAGE PULLS IN IS A PREREQUISITE.  The gate rebuilds before it
+# compares, but `make` only rebuilds what it knows is stale: while these were
+# missing, an edit to kernel/kernel.s left prom_c's object untouched and the gate
+# passed on a stale build.  It was caught by a six-byte failure that survived the
+# fix -- the fix had never been assembled.
+KERNEL_SRC = kernel/kernel.s kernel/kernel_maincpu.inc kernel/kernel_subcpu.inc
+COMMON_INC = include/tmp95c061_sfr.inc
+
 .PHONY: all clean
 .SECONDARY:
 
 all: rebuilt_ROMs/wsa1_prom_a.llvm.rom rebuilt_ROMs/wsa1_prom_b.llvm.rom rebuilt_ROMs/wsa1_prom_c.llvm.rom rebuilt_ROMs/wsa1_prom_d.llvm.rom
 
-rebuilt_ROMs/wsa1_prom_a.llvm.o: prom_a/wsa1_prom_a.s
+rebuilt_ROMs/wsa1_prom_a.llvm.o: prom_a/wsa1_prom_a.s $(COMMON_INC) $(KERNEL_SRC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_a -o $@ $<
 
@@ -30,7 +38,7 @@ rebuilt_ROMs/wsa1_prom_a.llvm.elf: rebuilt_ROMs/wsa1_prom_a.llvm.o prom_a/prom_a
 rebuilt_ROMs/wsa1_prom_a.llvm.rom: rebuilt_ROMs/wsa1_prom_a.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-rebuilt_ROMs/wsa1_prom_b.llvm.o: prom_b/wsa1_prom_b.s
+rebuilt_ROMs/wsa1_prom_b.llvm.o: prom_b/wsa1_prom_b.s $(COMMON_INC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_b -o $@ $<
 
@@ -40,7 +48,7 @@ rebuilt_ROMs/wsa1_prom_b.llvm.elf: rebuilt_ROMs/wsa1_prom_b.llvm.o prom_b/prom_b
 rebuilt_ROMs/wsa1_prom_b.llvm.rom: rebuilt_ROMs/wsa1_prom_b.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-rebuilt_ROMs/wsa1_prom_c.llvm.o: prom_c/wsa1_prom_c.s
+rebuilt_ROMs/wsa1_prom_c.llvm.o: prom_c/wsa1_prom_c.s $(COMMON_INC) $(KERNEL_SRC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_c -o $@ $<
 
@@ -50,7 +58,7 @@ rebuilt_ROMs/wsa1_prom_c.llvm.elf: rebuilt_ROMs/wsa1_prom_c.llvm.o prom_c/prom_c
 rebuilt_ROMs/wsa1_prom_c.llvm.rom: rebuilt_ROMs/wsa1_prom_c.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-rebuilt_ROMs/wsa1_prom_d.llvm.o: prom_d/wsa1_prom_d.s
+rebuilt_ROMs/wsa1_prom_d.llvm.o: prom_d/wsa1_prom_d.s $(COMMON_INC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_d -o $@ $<
 

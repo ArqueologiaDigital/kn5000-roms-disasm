@@ -25,6 +25,39 @@ Every commit must keep the gate green, and every commit message must carry the
 | `prom_c/` | `wsa1_prom_c.ic28` | `0xF80000` **established** | program, boot image of CPU 2 |
 | `prom_d/` | `wsa1_prom_d.bin` | **not established** | data only |
 
+## The fifth source, which is not an image
+
+| source | included by | contents |
+|---|---|---|
+| `kernel/kernel.s` | `prom_a` **and** `prom_c` | the multitasking kernel both CPUs run |
+| `kernel/kernel_maincpu.inc` | `prom_a` | the 21 values that are CPU 1's |
+| `kernel/kernel_subcpu.inc` | `prom_c` | the same 21 values for CPU 2 |
+
+The two processors run **the same 2,180-byte kernel**, at `0xF85606` on CPU 1 and
+`0xF9816B` on CPU 2 — every pair of addresses differing by exactly `0x12B65`. It
+is written once. Everything that genuinely differs between the two copies is a
+`.equ` in one of the two `.inc` files: a stack top, two low-RAM cells, nine array
+bases and their sizes, and three ROM pointers.
+
+★ **The byte gate is what makes that a proof.** One source assembling to bytes
+identical to *both* EPROMs is not a claim that two listings look alike; if a
+single equate were wrong, both images would stop rebuilding.
+
+    python3 notes/kernel_join_probe.py --pairs     # how the two blocks compare
+    python3 notes/kernel_join_probe.py --symbols   # the 21 values, per CPU
+    python3 notes/kernel_join_probe.py --selftest  # + proves the merge lost nothing
+    python3 notes/kernel_join_probe.py --metrics   # header/label figures, before and after
+    python3 notes/kernel_join_probe.py --reachability  # coverage tool's inputs, before and after
+
+⚠ Its lines carry **both** images' addresses — `; F85788/F982ED` — which is a
+line shape no `prom_*.s` file uses. **Any tool that scans a source by address has
+to be told about it**, or it silently measures a tree with no kernel in it. These
+already know: `notes/reachability.py`, `notes/wave7_documentation_metrics.py`,
+`notes/prom_a_byte_checks.py`, `notes/kernel_shared_source_probe.py`,
+`notes/kernel_three_way.py`, `scripts/analysis/source_coverage.py`. Older
+round-specific probes under `notes/` do not, and read the two images as if the
+kernel were absent.
+
 Base addresses for A and C: 33 of 64 words at file offset `0x7FF00` point into
 `0xF00000-0xFFFFFF`, which is where a TMP95C061 fetches its reset PC
 (`0xFFFF00`), and both reset words land on real boot blocks — now converted to

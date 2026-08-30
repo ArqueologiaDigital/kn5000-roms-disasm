@@ -82,7 +82,11 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IMAGES = [("prom_a", "wsa1_prom_a.s", 0xF80000), ("prom_b", "wsa1_prom_b.s", 0xF00000),
-          ("prom_c", "wsa1_prom_c.s", 0xF80000), ("prom_d", "wsa1_prom_d.s", 0x000000)]
+          ("prom_c", "wsa1_prom_c.s", 0xF80000), ("prom_d", "wsa1_prom_d.s", 0x000000),
+          # ⚠ NOT AN IMAGE.  kernel/kernel.s is ONE source that prom_a and prom_c
+          # both `.include`; without this row its 96 labels and 37 headers would
+          # be invisible here and the totals would read as a loss.
+          ("kernel", "kernel.s", 0xF80000)]
 
 EV_ADDRS = {}
 # ★★ AN INTERNAL BRANCH TARGET IS NOT A DOCUMENTATION DEBT.
@@ -246,7 +250,11 @@ def selftest():
               not any(n.startswith(".L") for n, _a in named + unnamed))
     # agrees with the independent grep the handoff documents
     import subprocess
-    g = subprocess.run("grep -rhoE '^sub_[0-9A-Fa-f]{6}:' prom_*/*.s | sort -u | wc -l",
+    # ⚠ kernel/ is in the pattern because the shared kernel source moved 11
+    # sub_XXXXXX labels out of prom_a; scanning prom_*/*.s alone made this check
+    # fail by exactly those 11.
+    g = subprocess.run("grep -rhoE '^sub_[0-9A-Fa-f]{6}:' prom_*/*.s kernel/*.s"
+                       " | sort -u | wc -l",
                        shell=True, cwd=ROOT, capture_output=True, text=True).stdout.strip()
     # ⚠ The documented grep pipes through `sort -u`, so it counts DISTINCT NAMES.
     # prom_a and prom_c are BOTH based at 0xF80000, so the same sub_XXXXXX name can

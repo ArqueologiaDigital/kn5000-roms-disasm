@@ -1212,7 +1212,14 @@ check("DSP_WriteChannelRegs_FromTable is ALSO published, at 0xF42DE0",
 # --- ROUND 3: the banner's `.fill` claim (round-1 audit F1) ------------------
 import re as _re
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
-_SRC = open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
+# ⚠ AND WHAT prom_a INCLUDES.  Since 2026-08-30 the kernel at 0xF85606-0xF85E89
+# is `kernel/kernel.s`, shared with prom_c.  Reading only wsa1_prom_a.s made the
+# span-banner check below VACUOUS -- its one standing failure ("0 of 1") turned
+# into a pass because the banner had moved out of the file, not because anyone
+# had fixed it.  A check that cannot fail is not a check.
+_SRC = (open(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"), encoding="utf-8").read()
+        + "\n"
+        + open(os.path.join(ROOT, "kernel", "kernel.s"), encoding="utf-8").read())
 _FILLS = [(int(m.group(1), 0), int(m.group(2)))
           for m in _re.finditer(r"^\t\.fill\s+(0x[0-9A-Fa-f]+|\d+)\s*,\s*(\d+)\s*,",
                                 _SRC, _re.M)]

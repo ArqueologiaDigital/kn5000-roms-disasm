@@ -105,6 +105,19 @@ def rom(img):
     return open(os.path.join(ROOT, "original_ROMs", img), "rb").read()
 
 
+# ⚠⚠ A FOURTH LINE SHAPE, and it is not in any prom_*.s file.
+# prom_a and prom_c no longer write their shared multitasking kernel out: both
+# `.include "kernel/kernel.s"`, ONE source assembled into both CPUs.  Its lines
+# carry BOTH images' addresses --
+#     m_ld_rm MWD+r4, 0x00, r0    ; F85788/F982ED  9c 00 20   ld WA,(XIX+0x00)
+# -- so SRC_LINE, which expects ONE address followed by whitespace, matches none
+# of them.  Reading only prom_a/prom_c would drop 941 PROVEN instruction
+# addresses per image and quietly change every figure downstream.  The shared
+# file is appended to each image's lines with its own address column selected.
+SHARED_SOURCES = {"prom_a": ("kernel/kernel.s", 1), "prom_c": ("kernel/kernel.s", 2)}
+SHARED_ADDR = re.compile(r';\s*([0-9A-F]{6})/([0-9A-F]{6})\b')
+
+
 ROMS = {tag: rom(f) for tag, _s, f, _b in IMAGES}
 BASES = {tag: b for tag, _s, _f, b in IMAGES}
 
@@ -141,6 +154,12 @@ def _fingerprint(tag=None):
     for t_, s, _f, _b in IMAGES:
         if tag is None or t_ == tag:
             h.update(open(os.path.join(ROOT, s), "rb").read())
+            # ⚠ AND WHAT THAT IMAGE INCLUDES.  prom_a and prom_c both pull in
+            # kernel/kernel.s; hashing only the .s would let an edit to the
+            # shared kernel validate a stale entry -- the same failure the
+            # docstring above describes, one indirection further out.
+            for rel, _col in [SHARED_SOURCES[t_]] if t_ in SHARED_SOURCES else []:
+                h.update(open(os.path.join(ROOT, rel), "rb").read())
     h.update(open(os.path.abspath(__file__), "rb").read())
     return h.hexdigest()
 
@@ -269,9 +288,19 @@ LONG_DIR = re.compile(r'^\t\.long\s+0x([0-9A-Fa-f]{8})')
 INCBIN = re.compile(r'^\t\.incbin "original_ROMs/(\S+?)", (0x[0-9A-Fa-f]+), (0x[0-9A-Fa-f]+)\s*$')
 
 
+
+
 def source_lines(tag):
     path = dict((t, s) for t, s, _f, _b in IMAGES)[tag]
-    return open(os.path.join(ROOT, path)).read().split("\n")
+    lines = open(os.path.join(ROOT, path)).read().split("\n")
+    if tag in SHARED_SOURCES:
+        rel, col = SHARED_SOURCES[tag]
+        for ln in open(os.path.join(ROOT, rel)).read().split("\n"):
+            m = SHARED_ADDR.search(ln)
+            if m:
+                ln = ln[:m.start()] + "; " + m.group(col) + " " + ln[m.end():]
+            lines.append(ln)
+    return lines
 
 
 def proven_and_incbin(tag):

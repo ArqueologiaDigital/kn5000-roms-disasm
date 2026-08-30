@@ -45,11 +45,31 @@ def kn_images():
     return out
 
 
+# ⚠⚠ REPOINTED 2026-08-30, AND IT FIXES A DEFECT THAT WAS BEING READ AS A RESULT.
+# These three helpers used to read prom_c/wsa1_prom_c.s.  Two things changed:
+#
+#   1. prom_c no longer writes the kernel out -- it `.include`s kernel/kernel.s,
+#      the ONE source both CPUs share -- so reading prom_c found 35 marked
+#      routines where it used to find 93.
+#   2. ★ MORE IMPORTANTLY, extent() below wants the instruction's HEX BYTES after
+#      the address, and PROM_C NEVER WROTE ANY.  Its line shape is
+#      `<asm> ; ADDR <MAME text>`; only prom_a carries hex.  So extent() returned
+#      None for nearly every routine, which is why this tool reported "32 too
+#      short to count (<24 B)" and its own docstring calls the test underpowered.
+#      The shared file carries BOTH addresses AND the bytes, so the extents are
+#      real now.  The `<24 B` misses that remain are genuinely short routines.
+#
+# ⚠ The line shape here is a THIRD one: `; AAAAAA/CCCCCC  <bytes>` for a slot the
+#   two CPUs agree on and `; AAAAAA/CCCCCC  a=<bytes> c=<bytes>` for one they do
+#   not.  A is prom_a's address, C is prom_c's, and this file works in prom_c's.
+KSRC = os.path.join("kernel", "kernel.s")
+KADDR = r';\s*[0-9A-F]{6}/([0-9A-F]{6})\s+(?:a=)?((?:[0-9a-f]{2} )*[0-9a-f]{2})'
+
+
 def kernel_routines():
-    """The kernel block's routines, read from prom_c's own source: every label
-    whose header this tree marked as a kernel pair. Falls back to the documented
-    block bounds if the marker is absent."""
-    src = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read()
+    """The kernel block's routines, read from the SHARED kernel source: every
+    label whose header this tree marked as a kernel pair."""
+    src = open(os.path.join(ROOT, KSRC)).read()
     out = []
     for m in re.finditer(r'^([A-Za-z_][A-Za-z0-9_]*):.*?\n', src, re.M):
         name = m.group(1)
@@ -59,23 +79,29 @@ def kernel_routines():
 
 
 def addr_of(name):
-    src = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read()
-    m = re.search(r'^%s:\s*\n(?:.*\n)*?\t\S.*?;\s*([0-9A-F]{6})\s' % re.escape(name), src, re.M)
+    src = open(os.path.join(ROOT, KSRC)).read()
+    m = re.search(r'^%s:.*\n(?:.*\n)*?\t\S.*?;\s*[0-9A-F]{6}/([0-9A-F]{6})\s'
+                  % re.escape(name), src, re.M)
     return int(m.group(1), 16) if m else None
 
 
 def extent(name):
     """[start, end) of the routine: from its label's first instruction to the
     next top-level label."""
-    lines = open(os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")).read().split("\n")
+    lines = open(os.path.join(ROOT, KSRC)).read().split("\n")
     i = next((k for k, l in enumerate(lines) if l.startswith(name + ":")), None)
     if i is None:
         return None
     lo = hi = None
     for l in lines[i + 1:]:
-        if re.match(r'^[A-Za-z_][A-Za-z0-9_]*:', l):
-            break
-        m = re.search(r';\s*([0-9A-F]{6})\s+((?:[0-9a-f]{2} )*[0-9a-f]{2})', l)
+        # ⚠ a label here does NOT always start the next routine: the shared file
+        # emits prom_c's name and prom_a's name for the same address on
+        # consecutive lines.  Stop only once this routine has produced a byte.
+        if re.match(r'^[A-Za-z_.][A-Za-z0-9_.]*:', l):
+            if lo is not None:
+                break
+            continue
+        m = re.search(KADDR, l)
         if m:
             a = int(m.group(1), 16)
             n = len(m.group(2).split())
