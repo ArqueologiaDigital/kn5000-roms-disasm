@@ -39387,7 +39387,7 @@ sub_FA72B3__FA72E4:
 	unlk32 xiz                                 ; FA72E6  unlk XIZ
 	ret                                        ; FA72E8  ret
 ; --------------------------------------------------------------------------
-; sub_FA72E9 -- 0xFA72E9..0xFA738E (166 bytes)
+; Voice_GetOctaveShift -- 0xFA72E9..0xFA738E (166 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFA7F7A in Voice_ComputePitch
@@ -39399,10 +39399,27 @@ sub_FA72B3__FA72E4:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     returns a part's whole-octave pitch offset, in 8.8 semitones
+; Evidence: its ONE caller is Voice_ComputePitch (0xFA7F7A). With bit 0 of
+;           (0x14FF) set it reads directory slot +0x6C (ToneDB_BankMap) at
+;           the part record's byte +28 (0xFA7311 `add IY,0x001C` then
+;           0xFA7317 `ld C,(XIY+0x1523)`), uses the row number that returns
+;           as a 128-entry stride into slot +0xA8
+;           (ToneDB_OctaveShiftByProgram, 0xFA7332 and 0xFA7351 `sll
+;           0x07,BC`) indexed by the part record's byte +27 (0xFA733B /
+;           0xFA7341), and returns that byte shifted left 8 (0xFA735F).
+;           prom_d's table holds only 0x00, 0xF4 and 0x0C -- 0, -12 and +12
+;           -- so the shift makes the result semitones in 8.8. The third arm
+;           (0xFA7372) reads Instrument_OctaveShift_Semitones at 0xFDF22A,
+;           whose sixteen bytes ARE 12*k for k = -8..+7, sign-extends and
+;           shifts by the same 8: two independent tables, one unit. ★ This
+;           also confirms from the CONSUMER side what prom_d's own note left
+;           open -- that the byte at voice record +27 is a program number
+;           and +28 a bank selector
+; Unknown:  what bit 0 and bit 1 of (0x14FF) select between the three arms
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FA72E9`.
 ; --------------------------------------------------------------------------
-sub_FA72E9:
+Voice_GetOctaveShift:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FA72E9  link XIZ,0xfffc
 	pushw	hl                                   ; FA72ED  push HL
 	pushw	de                                   ; FA72EE  push DE
@@ -39410,7 +39427,7 @@ sub_FA72E9:
 	ldw_d16	hl, (0x14FF)                       ; FA72F0  ld HL,(0x14ff)
 	ld	bc, hl                                  ; FA72F4  ld BC,HL
 	and	bc, 1                                  ; FA72F6  and BC,0x0001
-	jr z, sub_FA72E9__FA7366                   ; FA72FA  jr Z,0xfa7366
+	jr z, Voice_GetOctaveShift__FA7366                   ; FA72FA  jr Z,0xfa7366
 	ldl_da	xbc, (0xD7F1)                       ; FA72FC  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x6C)                         ; FA7301  ld XWA,(XBC+0x6c)
 	ld	xix, xwa                                ; FA7304  ld XIX,XWA
@@ -39447,14 +39464,14 @@ sub_FA72E9:
 	ld	bc, (xiy)                               ; FA735D  ld BC,(XIY)
 	sll	bc, 8                                  ; FA735F  sll 0x08,BC
 	ld	wa, bc                                  ; FA7362  ld WA,BC
-	jr sub_FA72E9__FA7389                      ; FA7364  jr T,0xfa7389
-sub_FA72E9__FA7366:
+	jr Voice_GetOctaveShift__FA7389                      ; FA7364  jr T,0xfa7389
+Voice_GetOctaveShift__FA7366:
 	ld	bc, hl                                  ; FA7366  ld BC,HL
 	and	bc, 2                                  ; FA7368  and BC,0x0002
-	jr z, sub_FA72E9__FA7372                   ; FA736C  jr Z,0xfa7372
+	jr z, Voice_GetOctaveShift__FA7372                   ; FA736C  jr Z,0xfa7372
 	sub	wa, wa                                 ; FA736E  sub WA,WA
-	jr sub_FA72E9__FA7389                      ; FA7370  jr T,0xfa7389
-sub_FA72E9__FA7372:
+	jr Voice_GetOctaveShift__FA7389                      ; FA7370  jr T,0xfa7389
+Voice_GetOctaveShift__FA7372:
 	ld	c, (xiz+10)                             ; FA7372  ld C,(XIZ+0x0a)
 	and	c, 15                                  ; FA7375  and C,0x0f
 	extz	bc                                    ; FA7378  extz BC
@@ -39463,7 +39480,7 @@ sub_FA72E9__FA7372:
 	ld	a, (xbc)                                ; FA7382  ld A,(XBC)
 	exts	wa                                    ; FA7384  exts WA
 	sll	wa, 8                                  ; FA7386  sll 0x08,WA
-sub_FA72E9__FA7389:
+Voice_GetOctaveShift__FA7389:
 	pop	xix                                    ; FA7389  pop XIX
 	popw	de                                    ; FA738A  pop DE
 	popw	hl                                    ; FA738B  pop HL
@@ -41783,7 +41800,7 @@ Rand_FromTickSquared:
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x0014FF, 0x001505, 0x00150A
-; Calls:   0xFA72E9 = sub_FA72E9, 0xFA738F = sub_FA738F
+; Calls:   0xFA72E9 = Voice_GetOctaveShift, 0xFA738F = sub_FA738F
 ;          0xFA73EB = sub_FA73EB, 0xFA7570 = Sat16_0_to_7FFF
 ;          0xFA7F04 = Rand_FromTickSquared, 0xFCAA2F = Shift16_ArithRight
 ; Evidence: the listing below is the byte-identical round-trip of 0xFA7F28-0xFA814B
@@ -55231,7 +55248,7 @@ MidiCtrl_Int9C:
 ;   +00  0x14FE   1  ExtBoard_ProbeAndInstallBases       Toggle14FE_AndDispatch
 ;                    (0xFB05E0, = 0)                     (0xFB05F1, then xor 0xFF)
 ;   +01  0x14FF   2  the FLAG WORD, bit by bit:
-;                    bit 0  sub_FADA7C          (arm 0x09)  sub_FA72E9 0xFA72F0,
+;                    bit 0  sub_FADA7C          (arm 0x09)  Voice_GetOctaveShift 0xFA72F0,
 ;                                                           Voice_StageRegs_0800_A 0xFAA4DB
 ;                    bit 1  sub_FADBFC          (arm 0x99)  only with bit 0, as `and 0x0003`:
 ;                                                           MidiCtrl_CC07 0xFAD700,
@@ -55300,7 +55317,7 @@ MidiCtrl_Int9C:
 ;          so v == 1 SETS global-setup flag bit 0 and anything else clears it -- and it
 ;          then re-runs VoiceSubsystem_Init with the same 0/1, sub_FB6CEE and sub_FB029E.
 ;          It is arm 0x09 of GlobalSetup_Dispatch (0xFB0409).
-; Refused: bit 0 has two readers and neither says what it MEANS.  sub_FA72E9 tests it
+; Refused: bit 0 has two readers and neither says what it MEANS.  Voice_GetOctaveShift tests it
 ;          (`ld HL,(0x14ff) / and BC,0x0001 / jr Z` at 0xFA72F0) and so does
 ;          Voice_StageRegs_0800_A (0xFAA4DB, branching the other way), and both are
 ;          themselves unnamed or named for their register rather than their purpose.
@@ -68891,7 +68908,7 @@ sub_FB4103__FB411C:
 	unlk32 xiz                                 ; FB4121  unlk XIZ
 	ret                                        ; FB4123  ret
 ; --------------------------------------------------------------------------
-; sub_FB4124 -- 0xFB4124..0xFB42AF (396 bytes)
+; ToneDB_ResolveToneRecord -- 0xFB4124..0xFB42AF (396 bytes)
 ;
 ; Called from: 13 site(s) outside this module:
 ;          0xFB2FB7 in sub_FB2F74, 0xFB3201 in VoiceParams_Compute_D
@@ -68911,10 +68928,28 @@ sub_FB4103__FB411C:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     resolves (bank selector, program) to a TONE RECORD pointer, from
+;           prom_d or from the expansion board
+; Evidence: prom_d's Q4a decodes the internal arm of this body from the ROM
+;           bytes, 15 instructions at 0xFB4266-0xFB429F: directory slot
+;           +0x04 (ToneDB_ToneNumBanks) indexed by row*128 + program as
+;           LE16, that value scaled by 4 into slot +0x08
+;           (ToneDB_ToneOffsetTable), and the LE32 it finds there added to
+;           the base a SECOND time (0xFB429F) -- which is also the whole
+;           argument for prom_d's offsets being file-relative. The
+;           0x0010-0x001F and 0x0030+ arms run the same two-level walk
+;           through 0x00D811/0x00D80D, the EXPANSION BOARD's copy of the
+;           same directory (0xFB418D-0xFB41E7), selected by `ld
+;           XBC,(0x00D80D) / or XBC,XBC` at 0xFB4137 and 0xFB4184 -- so the
+;           board's image has prom_d's layout. Slot +0xB0
+;           (ToneRec_Template_Clear) is the no-board fallback at 0xFB41F1
+; Unknown:  what the caller's second argument SELECTS. The body compares it
+;           against 0x08, 0x10, 0x20, 0x28 and 0x30 and takes five different
+;           paths; the ranges are instruction operands and their meaning is
+;           not established here
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB4124`.
 ; --------------------------------------------------------------------------
-sub_FB4124:
+ToneDB_ResolveToneRecord:
 	link32 0xEE, 0x0C, 0xF4, 0xFF              ; FB4124  link XIZ,0xfff4
 	pushw	hl                                   ; FB4128  push HL
 	pushw	de                                   ; FB4129  push DE
@@ -68922,14 +68957,14 @@ sub_FB4124:
 	ld	de, (xiz+8)                             ; FB412B  ld DE,(XIZ+0x08)
 	ld	hl, (xiz+10)                            ; FB412E  ld HL,(XIZ+0x0a)
 	cp	hl, 48                                  ; FB4131  cp HL,0x0030
-	jr c, sub_FB4124__FB4143                   ; FB4135  jr C,0xfb4143
+	jr c, ToneDB_ResolveToneRecord__FB4143                   ; FB4135  jr C,0xfb4143
 	ldl_da	xbc, (0xD80D)                       ; FB4137  ld XBC,(0x00d80d)
 	or	xbc, xbc                                ; FB413C  or XBC,XBC
-	jrl z, sub_FB4124__FB41EC                  ; FB413E  jrl Z,0xfb41ec
-	jr sub_FB4124__FB418D                      ; FB4141  jr T,0xfb418d
-sub_FB4124__FB4143:
+	jrl z, ToneDB_ResolveToneRecord__FB41EC                  ; FB413E  jrl Z,0xfb41ec
+	jr ToneDB_ResolveToneRecord__FB418D                      ; FB4141  jr T,0xfb418d
+ToneDB_ResolveToneRecord__FB4143:
 	cp	hl, 40                                  ; FB4143  cp HL,0x0028
-	jr c, sub_FB4124__FB4176                   ; FB4147  jr C,0xfb4176
+	jr c, ToneDB_ResolveToneRecord__FB4176                   ; FB4147  jr C,0xfb4176
 	ld	bc, hl                                  ; FB4149  ld BC,HL
 	sub	bc, 40                                 ; FB414B  sub BC,0x0028
 	add	bc, bc                                 ; FB414F  add BC,BC
@@ -68943,16 +68978,16 @@ sub_FB4124__FB4143:
 	ld	xbc, (xbc)                              ; FB4169  ld XBC,(XBC)
 	add	xbc, 0xB2D0                            ; FB416B  add XBC,0x0000b2d0
 	ld	xix, xbc                                ; FB4171  ld XIX,XBC
-	jrl sub_FB4124__FB42A6                     ; FB4173  jrl T,0xfb42a6
-sub_FB4124__FB4176:
+	jrl ToneDB_ResolveToneRecord__FB42A6                     ; FB4173  jrl T,0xfb42a6
+ToneDB_ResolveToneRecord__FB4176:
 	cp	hl, 32                                  ; FB4176  cp HL,0x0020
-	jrl nc, sub_FB4124__FB424A                 ; FB417A  jrl NC,0xfb424a
+	jrl nc, ToneDB_ResolveToneRecord__FB424A                 ; FB417A  jrl NC,0xfb424a
 	cp	hl, 16                                  ; FB417D  cp HL,0x0010
-	jrl c, sub_FB4124__FB4205                  ; FB4181  jrl C,0xfb4205
+	jrl c, ToneDB_ResolveToneRecord__FB4205                  ; FB4181  jrl C,0xfb4205
 	ldl_da	xbc, (0xD80D)                       ; FB4184  ld XBC,(0x00d80d)
 	or	xbc, xbc                                ; FB4189  or XBC,XBC
-	jr z, sub_FB4124__FB41EC                   ; FB418B  jr Z,0xfb41ec
-sub_FB4124__FB418D:
+	jr z, ToneDB_ResolveToneRecord__FB41EC                   ; FB418B  jr Z,0xfb41ec
+ToneDB_ResolveToneRecord__FB418D:
 	ldl_da	xbc, (0xD811)                       ; FB418D  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x6C)                         ; FB4192  ld XWA,(XBC+0x6c)
 	ld	(xiz-4), xwa                            ; FB4195  ld (XIZ+0xfc),XWA
@@ -68984,18 +69019,18 @@ sub_FB4124__FB418D:
 	ld	xwa, (xiy)                              ; FB41E0  ld XWA,(XIY)
 	addda32_24	xwa, (0xD80D)                   ; FB41E2  add XWA,(0x00d80d)
 	ld	xix, xwa                                ; FB41E7  ld XIX,XWA
-	jrl sub_FB4124__FB42A6                     ; FB41E9  jrl T,0xfb42a6
-sub_FB4124__FB41EC:
+	jrl ToneDB_ResolveToneRecord__FB42A6                     ; FB41E9  jrl T,0xfb42a6
+ToneDB_ResolveToneRecord__FB41EC:
 	ldl_da	xbc, (0xD7F1)                       ; FB41EC  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0xB0)                         ; FB41F1  ld XWA,(XBC+0x00b0)
 	ld	(xiz-4), xwa                            ; FB41F6  ld (XIZ+0xfc),XWA
 	ldl_da	xiy, (0xD7ED)                       ; FB41F9  ld XIY,(0x00d7ed)
 	ld	xix, xwa                                ; FB41FE  ld XIX,XWA
 	add	xix, xiy                               ; FB4200  add XIX,XIY
-	jrl sub_FB4124__FB42A6                     ; FB4202  jrl T,0xfb42a6
-sub_FB4124__FB4205:
+	jrl ToneDB_ResolveToneRecord__FB42A6                     ; FB4202  jrl T,0xfb42a6
+ToneDB_ResolveToneRecord__FB4205:
 	cp	hl, 8                                   ; FB4205  cp HL,0x0008
-	jr c, sub_FB4124__FB424A                   ; FB4209  jr C,0xfb424a
+	jr c, ToneDB_ResolveToneRecord__FB424A                   ; FB4209  jr C,0xfb424a
 	ld	bc, hl                                  ; FB420B  ld BC,HL
 	dec	8, bc                                  ; FB420D  dec 0,BC
 	add	bc, bc                                 ; FB420F  add BC,BC
@@ -69016,8 +69051,8 @@ sub_FB4124__FB4205:
 	ld	xbc, (xbc)                              ; FB4242  ld XBC,(XBC)
 	add	xbc, xwa                               ; FB4244  add XBC,XWA
 	ld	xix, xbc                                ; FB4246  ld XIX,XBC
-	jr sub_FB4124__FB42A6                      ; FB4248  jr T,0xfb42a6
-sub_FB4124__FB424A:
+	jr ToneDB_ResolveToneRecord__FB42A6                      ; FB4248  jr T,0xfb42a6
+ToneDB_ResolveToneRecord__FB424A:
 	ldl_da	xbc, (0xD7F1)                       ; FB424A  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x6C)                         ; FB424F  ld XWA,(XBC+0x6c)
 	ld	(xiz-4), xwa                            ; FB4252  ld (XIZ+0xfc),XWA
@@ -69049,7 +69084,7 @@ sub_FB4124__FB424A:
 	ld	xwa, (xiy)                              ; FB429D  ld XWA,(XIY)
 	addda32_24	xwa, (0xD7ED)                   ; FB429F  add XWA,(0x00d7ed)
 	ld	xix, xwa                                ; FB42A4  ld XIX,XWA
-sub_FB4124__FB42A6:
+ToneDB_ResolveToneRecord__FB42A6:
 	ld	xbc, xix                                ; FB42A6  ld XBC,XIX
 	ld	xiy, xbc                                ; FB42A8  ld XIY,XBC
 	pop	xix                                    ; FB42AA  pop XIX
@@ -69066,7 +69101,7 @@ sub_FB4124__FB42A6:
 ;          0xFB47DC
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB4103 = sub_FB4103, 0xFB4124 = sub_FB4124
+; Calls:   0xFB4103 = sub_FB4103, 0xFB4124 = ToneDB_ResolveToneRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB42B0-0xFB42E2
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -69143,7 +69178,7 @@ sub_FB42E3__FB431C:
 	unlk32 xiz                                 ; FB4321  unlk XIZ
 	ret                                        ; FB4323  ret
 ; --------------------------------------------------------------------------
-; sub_FB4324 -- 0xFB4324..0xFB4382 (95 bytes)
+; ToneRec_GetElementBlock -- 0xFB4324..0xFB4382 (95 bytes)
 ;
 ; Called from: 3 site(s) outside this module:
 ;          0xFB9C9D in sub_FB9B69__FB9C91, 0xFB9EBE in sub_FB9B69__FB9EB2
@@ -69159,19 +69194,30 @@ sub_FB42E3__FB431C:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     returns the 81-byte ELEMENT BLOCK of a tone record, or the
+;           default block at directory slot +0xAC when the element index is
+;           0xFF
+; Evidence: prom_d's Q4b decodes 8 instructions at 0xFB4356-0xFB4379: `ld
+;           C,0x51` (81, the element-block stride) multiplied by the element
+;           index, plus 0x000000D9 (217, the record head) added to the
+;           record pointer at (XIZ+0x08). The other arm, reached by `cp
+;           A,0xFF / jr NZ` at 0xFB4351, takes directory slot +0xAC
+;           (ToneDB_DefaultLayerParams) instead, which is what makes that
+;           slot a FALLBACK. 217 + 81*N + 43*N is exactly prom_d's melodic
+;           record size for N = 1..4
+; Unknown:  nothing here says what any field of the element block IS
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB4324`.
 ; --------------------------------------------------------------------------
-sub_FB4324:
+ToneRec_GetElementBlock:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB4324  link XIZ,0x0000
 	pushw	hl                                   ; FB4328  push HL
 	push	xix                                   ; FB4329  push XIX
 	cpw (xiz+14), 0x0020                       ; FB432A  cp (XIZ+0x0e),0x0020
-	jr c, sub_FB4324__FB433A                   ; FB432F  jr C,0xfb433a
+	jr c, ToneRec_GetElementBlock__FB433A                   ; FB432F  jr C,0xfb433a
 	lda_24	xbc, (0x8C33)                       ; FB4331  lda XBC,0x008c33
 	ld	xiy, xbc                                ; FB4336  ld XIY,XBC
-	jr sub_FB4324__FB437E                      ; FB4338  jr T,0xfb437e
-sub_FB4324__FB433A:
+	jr ToneRec_GetElementBlock__FB437E                      ; FB4338  jr T,0xfb437e
+ToneRec_GetElementBlock__FB433A:
 	ld	xbc, (xiz+8)                            ; FB433A  ld XBC,(XIZ+0x08)
 	ld	a, (xbc+17)                             ; FB433D  ld A,(XBC+0x11)
 	pushw	wa                                   ; FB4340  push WA
@@ -69183,22 +69229,22 @@ sub_FB4324__FB433A:
 	ld	h, a                                    ; FB434D  ld H,A
 	inc	6, xsp                                 ; FB434F  inc 6,XSP
 	cp	a, 0xFF                                 ; FB4351  cp A,0xff
-	jr nz, sub_FB4324__FB436D                  ; FB4354  jr NZ,0xfb436d
+	jr nz, ToneRec_GetElementBlock__FB436D                  ; FB4354  jr NZ,0xfb436d
 	ldl_da	xbc, (0xD7F1)                       ; FB4356  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0xAC)                         ; FB435B  ld XWA,(XBC+0x00ac)
 	ld	xix, xwa                                ; FB4360  ld XIX,XWA
 	ldl_da	xiy, (0xD7ED)                       ; FB4362  ld XIY,(0x00d7ed)
 	add	xwa, xiy                               ; FB4367  add XWA,XIY
 	ld	xiy, xwa                                ; FB4369  ld XIY,XWA
-	jr sub_FB4324__FB437E                      ; FB436B  jr T,0xfb437e
-sub_FB4324__FB436D:
+	jr ToneRec_GetElementBlock__FB437E                      ; FB436B  jr T,0xfb437e
+ToneRec_GetElementBlock__FB436D:
 	ldb	c, 81                                  ; FB436D  ld C,0x51
 	mul8rr	c, h                                ; FB436F  mul BC,H
 	extz	xbc                                   ; FB4371  extz XBC
 	add	xbc, 0xD9                              ; FB4373  add XBC,0x000000d9
 	extpfx3 0xAE, 0x08, 0x81                   ; FB4379  add XBC,(XIZ+0x08)
 	ld	xiy, xbc                                ; FB437C  ld XIY,XBC
-sub_FB4324__FB437E:
+ToneRec_GetElementBlock__FB437E:
 	pop	xix                                    ; FB437E  pop XIX
 	popw	hl                                    ; FB437F  pop HL
 	unlk32 xiz                                 ; FB4380  unlk XIZ
@@ -69211,7 +69257,7 @@ sub_FB4324__FB437E:
 ;          0xFB4837 0xFB48AD
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB42E3 = sub_FB42E3, 0xFB4324 = sub_FB4324
+; Calls:   0xFB42E3 = sub_FB42E3, 0xFB4324 = ToneRec_GetElementBlock
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB4383-0xFB43CA
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -69270,6 +69316,9 @@ sub_FB4383__FB43C6:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; Refused:  REFUSED round 11.  reads slot +0xAC like ToneRec_GetElementBlock but is 82
+;           instructions to its 37 and shares none of the arithmetic; a name
+;           borrowed from the slot would claim a twin the diff denies.
 ; --------------------------------------------------------------------------
 sub_FB43CB:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; FB43CB  link XIZ,0xfffc
@@ -69790,7 +69839,7 @@ sub_FB474E:
 ; sub_FB477B -- 0xFB477B..0xFB47C3 (73 bytes)
 ;
 ; Called from: 7 site(s) outside this module:
-;          0xFB91DB in sub_FB90B3__FB91CD, 0xFB936E in sub_FB9281__FB92D2
+;          0xFB91DB in ToneDB_SourceNameList1_SelectEntry__FB91CD, 0xFB936E in ToneDB_SourceNameList2_SelectEntry__FB92D2
 ;          0xFBC064 in sub_FBBFFB__FBC055, 0xFBC9CC in sub_FBC958__FBC9BF
 ;          0xFBC9E2 in sub_FBC958__FBC9D5, 0xFBC9F8 in sub_FBC958__FBC9EB
 ;          0xFBCA0E in sub_FBC958__FBCA01
@@ -69853,7 +69902,7 @@ sub_FB477B:
 ; Outputs: no absolute-addressed write.
 ; Calls:   0xFB42B0 = sub_FB42B0, 0xFB4383 = sub_FB4383
 ;          0xFB44EC = sub_FB44EC, 0xFB477B = sub_FB477B
-;          0xFC2930 = sub_FC2930, 0xFC295B = sub_FC295B
+;          0xFC2930 = sub_FC2930, 0xFC295B = DrawbarPreset_GetDescriptor
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB47C4-0xFB48F6
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -69993,12 +70042,12 @@ sub_FB47C4__FB48F1:
 	unlk32 xiz                                 ; FB48F4  unlk XIZ
 	ret                                        ; FB48F6  ret
 ; --------------------------------------------------------------------------
-; sub_FB48F7 -- 0xFB48F7..0xFB49EA (244 bytes)
+; DrumKit_ResolveInstrumentRecord -- 0xFB48F7..0xFB49EA (244 bytes)
 ;
 ; Called from: 9 site(s) outside this module:
 ;          0xFB3001 in sub_FB2F74, 0xFB324B in VoiceParams_Compute_D
 ;          0xFB344F in VoiceParams_Compute_D__FB33CE, 0xFB85D5 in sub_FB857E
-;          0xFB8970 in sub_FB86BB__FB890E, 0xFB9651 in sub_FB9541__FB95B3
+;          0xFB8970 in sub_FB86BB__FB890E, 0xFB9651 in ToneDB_DrumSourceNameList_SelectEntry__FB95B3
 ;          0xFBA41C in sub_FB9B69__FBA3C6, 0xFBC8CB in sub_FBC80E
 ;          0xFBCC19 in sub_FBCBA7
 ;          1 site(s) inside this module:
@@ -70011,10 +70060,18 @@ sub_FB47C4__FB48F1:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     resolves (kit, note) to a 150-byte DRUM-INSTRUMENT RECORD
+; Evidence: prom_d's Q4d decodes 9 instructions at 0xFB48FE-0xFB495A:
+;           directory slot +0x74 (DrumKit_NoteMapA) indexed by kit*128 +
+;           note as LE16, and the index it yields multiplied by the tail
+;           scalar at +0xEE (150) into slot +0x78 (PercInst_000_Silent, the
+;           record array). prom_d's own geometry confirms the stride
+;           independently: 0x2EF5C + 504*150 = 0x416AC, which is exactly the
+;           next slot, +0x20
+; Unknown:  what a drum-instrument record's 150 bytes contain
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB48F7`.
 ; --------------------------------------------------------------------------
-sub_FB48F7:
+DrumKit_ResolveInstrumentRecord:
 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FB48F7  link XIZ,0xfff2
 	pushw	hl                                   ; FB48FB  push HL
 	pushw	de                                   ; FB48FC  push DE
@@ -70027,15 +70084,15 @@ sub_FB48F7:
 	ld	bc, (xiz+10)                            ; FB4911  ld BC,(XIZ+0x0a)
 	and	bc, 48                                 ; FB4914  and BC,0x0030
 	cps	bc, 0                                  ; FB4918  cp BC,0
-	jr z, sub_FB48F7__FB4931                   ; FB491A  jr Z,0xfb4931
+	jr z, DrumKit_ResolveInstrumentRecord__FB4931                   ; FB491A  jr Z,0xfb4931
 	cp	bc, 16                                  ; FB491C  cp BC,0x0010
-	jr z, sub_FB48F7__FB4967                   ; FB4920  jr Z,0xfb4967
+	jr z, DrumKit_ResolveInstrumentRecord__FB4967                   ; FB4920  jr Z,0xfb4967
 	cp	bc, 32                                  ; FB4922  cp BC,0x0020
-	jr z, sub_FB48F7__FB498C                   ; FB4926  jr Z,0xfb498c
+	jr z, DrumKit_ResolveInstrumentRecord__FB498C                   ; FB4926  jr Z,0xfb498c
 	cp	bc, 48                                  ; FB4928  cp BC,0x0030
-	jr z, sub_FB48F7__FB498C                   ; FB492C  jr Z,0xfb498c
-	jrl sub_FB48F7__FB49E2                     ; FB492E  jrl T,0xfb49e2
-sub_FB48F7__FB4931:
+	jr z, DrumKit_ResolveInstrumentRecord__FB498C                   ; FB492C  jr Z,0xfb498c
+	jrl DrumKit_ResolveInstrumentRecord__FB49E2                     ; FB492E  jrl T,0xfb49e2
+DrumKit_ResolveInstrumentRecord__FB4931:
 	ld	xbc, (xix+0x74)                         ; FB4931  ld XBC,(XIX+0x74)
 	ld	(xiz-8), xbc                            ; FB4934  ld (XIZ+0xf8),XBC
 	ld	xwa, (xix+0x78)                         ; FB4937  ld XWA,(XIX+0x78)
@@ -70052,8 +70109,8 @@ sub_FB48F7__FB4931:
 	mul	xiy, xwa                               ; FB495A  mul XIY,WA
 	extpfx3 0xAE, 0xF4, 0x85                   ; FB495C  add XIY,(XIZ+0xf4)
 	addda32_24	xiy, (0xD7ED)                   ; FB495F  add XIY,(0x00d7ed)
-	jrl sub_FB48F7__FB49E5                     ; FB4964  jrl T,0xfb49e5
-sub_FB48F7__FB4967:
+	jrl DrumKit_ResolveInstrumentRecord__FB49E5                     ; FB4964  jrl T,0xfb49e5
+DrumKit_ResolveInstrumentRecord__FB4967:
 	ldb	c, 0x96                                ; FB4967  ld C,0x96
 	extpfx3 0x8E, 0x0E, 0x43                   ; FB4969  mul BC,(XIZ+0x0e)
 	extz	xbc                                   ; FB496C  extz XBC
@@ -70066,11 +70123,11 @@ sub_FB48F7__FB4967:
 	ld	xwa, (xwa)                              ; FB4984  ld XWA,(XWA)
 	add	xwa, xbc                               ; FB4986  add XWA,XBC
 	ld	xiy, xwa                                ; FB4988  ld XIY,XWA
-	jr sub_FB48F7__FB49E5                      ; FB498A  jr T,0xfb49e5
-sub_FB48F7__FB498C:
+	jr DrumKit_ResolveInstrumentRecord__FB49E5                      ; FB498A  jr T,0xfb49e5
+DrumKit_ResolveInstrumentRecord__FB498C:
 	ldl_da	xbc, (0xD80D)                       ; FB498C  ld XBC,(0x00d80d)
 	or	xbc, xbc                                ; FB4991  or XBC,XBC
-	jr z, sub_FB48F7__FB49CF                   ; FB4993  jr Z,0xfb49cf
+	jr z, DrumKit_ResolveInstrumentRecord__FB49CF                   ; FB4993  jr Z,0xfb49cf
 	ldl_da	xbc, (0xD811)                       ; FB4995  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x74)                         ; FB499A  ld XWA,(XBC+0x74)
 	ld	(xiz-8), xwa                            ; FB499D  ld (XIZ+0xf8),XWA
@@ -70088,18 +70145,18 @@ sub_FB48F7__FB498C:
 	extpfx3 0x9E, 0xF2, 0x40                   ; FB49C3  mul XWA,(XIZ+0xf2)
 	add	xiy, xwa                               ; FB49C6  add XIY,XWA
 	addda32_24	xiy, (0xD80D)                   ; FB49C8  add XIY,(0x00d80d)
-	jr sub_FB48F7__FB49E5                      ; FB49CD  jr T,0xfb49e5
-sub_FB48F7__FB49CF:
+	jr DrumKit_ResolveInstrumentRecord__FB49E5                      ; FB49CD  jr T,0xfb49e5
+DrumKit_ResolveInstrumentRecord__FB49CF:
 	ld	xbc, (xix+0x78)                         ; FB49CF  ld XBC,(XIX+0x78)
 	ld	(xiz-8), xbc                            ; FB49D2  ld (XIZ+0xf8),XBC
 	sub	xwa, xwa                               ; FB49D5  sub XWA,XWA
 	add	xbc, xwa                               ; FB49D7  add XBC,XWA
 	addda32_24	xbc, (0xD7ED)                   ; FB49D9  add XBC,(0x00d7ed)
 	ld	xiy, xbc                                ; FB49DE  ld XIY,XBC
-	jr sub_FB48F7__FB49E5                      ; FB49E0  jr T,0xfb49e5
-sub_FB48F7__FB49E2:
+	jr DrumKit_ResolveInstrumentRecord__FB49E5                      ; FB49E0  jr T,0xfb49e5
+DrumKit_ResolveInstrumentRecord__FB49E2:
 	ld	xiy, (xiz-4)                            ; FB49E2  ld XIY,(XIZ+0xfc)
-sub_FB48F7__FB49E5:
+DrumKit_ResolveInstrumentRecord__FB49E5:
 	pop	xix                                    ; FB49E5  pop XIX
 	popw	de                                    ; FB49E6  pop DE
 	popw	hl                                    ; FB49E7  pop HL
@@ -70116,7 +70173,7 @@ sub_FB48F7__FB49E5:
 ;          0xFC254E in sub_FC24F6__FC252F
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB48F7 = sub_FB48F7
+; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB49EB-0xFB4A9E
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -78505,7 +78562,7 @@ sub_FB8550:
 ;          0xFB893B 0xFB95DF 0xFBCBC1
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB48F7 = sub_FB48F7, 0xFB828E = sub_FB828E
+; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB828E = sub_FB828E
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB857E-0xFB8602
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -78679,7 +78736,7 @@ sub_FB8668:
 ; Inputs:  frame `link XIZ,-22`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x0087F5, 0x0087F6, 0x008ABB, 0x008ABC
 ;          reads 0x0088A2, 0x00D734
-; Calls:   0xFB47C4 = sub_FB47C4, 0xFB48F7 = sub_FB48F7
+; Calls:   0xFB47C4 = sub_FB47C4, 0xFB48F7 = DrumKit_ResolveInstrumentRecord
 ;          0xFB64C8 = sub_FB64C8, 0xFB6681 = sub_FB6681
 ;          0xFB68DD = sub_FB68DD, 0xFB84CB = sub_FB84CB
 ;          0xFB8550 = sub_FB8550, 0xFB857E = sub_FB857E
@@ -79761,7 +79818,7 @@ sub_FB8CEC__FB90AF:
 	unlk32 xiz                                 ; FB90B0  unlk XIZ
 	ret                                        ; FB90B2  ret
 ; --------------------------------------------------------------------------
-; sub_FB90B3 -- 0xFB90B3..0xFB9280 (462 bytes)
+; ToneDB_SourceNameList1_SelectEntry -- 0xFB90B3..0xFB9280 (462 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -79776,10 +79833,26 @@ sub_FB8CEC__FB90AF:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     applies one entry of ToneDB_SourceNameList1 to a part element,
+;           spanning the internal catalogue and the expansion board's
+; Evidence: prom_d's Q4c byte-checks the bound: 0xFB90BD loads directory
+;           slot +0x54 (ToneDB_SourceList1_Footer), 0xFB90D0 reads its
+;           leading LE16, 0xFB90D2 compares the caller's entry index against
+;           it and only then does 0xFB90D7 address slot +0x50
+;           (ToneDB_SourceNameList1) -- and that LE16 is 307, which IS the
+;           catalogue's row count measured from prom_d's image. When the
+;           index is at or above the count the routine takes the board's
+;           copy of slot +0x50 through 0x00D811/0x00D80D and SUBTRACTS the
+;           internal count (0xFB90FF), so the two catalogues are one index
+;           space. It then reads bytes 14 and 15 of the 16-byte row
+;           (0xFB911A, 0xFB912E) and stores them at +0x02 and +0x03 of the
+;           part element record at 0x1523 + 0x012C*part + 0x29*element +
+;           0x88
+; Unknown:  what row bytes 14 and 15 ARE. The rows' first 13 bytes are the
+;           ASCII name; nothing in either image gives the last two a meaning
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB90B3`.
 ; --------------------------------------------------------------------------
-sub_FB90B3:
+ToneDB_SourceNameList1_SelectEntry:
 	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FB90B3  link XIZ,0xffee
 	pushw	hl                                   ; FB90B7  push HL
 	ldl_da	xbc, (0xD7F1)                       ; FB90B8  ld XBC,(0x00d7f1)
@@ -79791,13 +79864,13 @@ sub_FB90B3:
 	ld	(xiz-8), xwa                            ; FB90CD  ld (XIZ+0xf8),XWA
 	ld	iy, (xwa)                               ; FB90D0  ld IY,(XWA)
 	cp	(xiz+10), iy                            ; FB90D2  cp (XIZ+0x0a),IY
-	jr nc, sub_FB90B3__FB90E7                  ; FB90D5  jr NC,0xfb90e7
+	jr nc, ToneDB_SourceNameList1_SelectEntry__FB90E7                  ; FB90D5  jr NC,0xfb90e7
 	ld	xiy, (xbc+80)                           ; FB90D7  ld XIY,(XBC+0x50)
 	ld	(xiz-12), xiy                           ; FB90DA  ld (XIZ+0xf4),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FB90DD  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FB90E2  ld (XIZ+0xfc),XIY
-	jr sub_FB90B3__FB9102                      ; FB90E5  jr T,0xfb9102
-sub_FB90B3__FB90E7:
+	jr ToneDB_SourceNameList1_SelectEntry__FB9102                      ; FB90E5  jr T,0xfb9102
+ToneDB_SourceNameList1_SelectEntry__FB90E7:
 	ldl_da	xbc, (0xD811)                       ; FB90E7  ld XBC,(0x00d811)
 	ld	xwa, (xbc+80)                           ; FB90EC  ld XWA,(XBC+0x50)
 	ld	(xiz-12), xwa                           ; FB90EF  ld (XIZ+0xf4),XWA
@@ -79806,7 +79879,7 @@ sub_FB90B3__FB90E7:
 	ld	xiy, (xiz-8)                            ; FB90FA  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FB90FD  ld BC,(XIY)
 	sub	(xiz+10), bc                           ; FB90FF  sub (XIZ+0x0a),BC
-sub_FB90B3__FB9102:
+ToneDB_SourceNameList1_SelectEntry__FB9102:
 	ld	c, (xiz+12)                             ; FB9102  ld C,(XIZ+0x0c)
 	and	c, 15                                  ; FB9105  and C,0x0f
 	ld	(xiz-15), c                             ; FB9108  ld (XIZ+0xf1),C
@@ -79868,14 +79941,14 @@ sub_FB90B3__FB9102:
 	ld	(xbc), a                                ; FB91B6  ld (XBC),A
 	ldw (xiz-14), 0x0000                       ; FB91B8  ld (XIZ+0xf2),0x0000
 	inc	6, xsp                                 ; FB91BD  inc 6,XSP
-sub_FB90B3__FB91BF:
+ToneDB_SourceNameList1_SelectEntry__FB91BF:
 	cpw (xiz-14), 0x0004                       ; FB91BF  cp (XIZ+0xf2),0x0004
-	jr nc, sub_FB90B3__FB91E3                  ; FB91C4  jr NC,0xfb91e3
-	jr sub_FB90B3__FB91CD                      ; FB91C6  jr T,0xfb91cd
-sub_FB90B3__FB91C8:
+	jr nc, ToneDB_SourceNameList1_SelectEntry__FB91E3                  ; FB91C4  jr NC,0xfb91e3
+	jr ToneDB_SourceNameList1_SelectEntry__FB91CD                      ; FB91C6  jr T,0xfb91cd
+ToneDB_SourceNameList1_SelectEntry__FB91C8:
 	incm	1, (xiz-14)                           ; FB91C8  incw 1,(XIZ+0xf2)
-	jr sub_FB90B3__FB91BF                      ; FB91CB  jr T,0xfb91bf
-sub_FB90B3__FB91CD:
+	jr ToneDB_SourceNameList1_SelectEntry__FB91BF                      ; FB91CB  jr T,0xfb91bf
+ToneDB_SourceNameList1_SelectEntry__FB91CD:
 	ld	c, (xiz-14)                             ; FB91CD  ld C,(XIZ+0xf2)
 	pushw	bc                                   ; FB91D0  push BC
 	push	0                                     ; FB91D1  push 0x00
@@ -79884,8 +79957,8 @@ sub_FB90B3__FB91CD:
 	extpfx3 0x8E, 0x08, 0x04                   ; FB91D8  push (XIZ+0x08)
 	call	0xFB477B                              ; FB91DB  call 0xfb477b
 	inc	6, xsp                                 ; FB91DF  inc 6,XSP
-	jr sub_FB90B3__FB91C8                      ; FB91E1  jr T,0xfb91c8
-sub_FB90B3__FB91E3:
+	jr ToneDB_SourceNameList1_SelectEntry__FB91C8                      ; FB91E1  jr T,0xfb91c8
+ToneDB_SourceNameList1_SelectEntry__FB91E3:
 	ld	bc, (xiz+8)                             ; FB91E3  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB91E6  extz BC
 	mul	bc, 0x12C                              ; FB91E8  mul BC,0x012c
@@ -79898,7 +79971,7 @@ sub_FB90B3__FB91E3:
 	add	xbc, 0xFDE695                          ; FB91FC  add XBC,0x00fde695
 	ld	bc, (xbc)                               ; FB9202  ld BC,(XBC)
 	and	bc, hl                                 ; FB9204  and BC,HL
-	jr z, sub_FB90B3__FB923D                   ; FB9206  jr Z,0xfb923d
+	jr z, ToneDB_SourceNameList1_SelectEntry__FB923D                   ; FB9206  jr Z,0xfb923d
 	pushw	1                                    ; FB9208  push 0x0001
 	ldb	c, 41                                  ; FB920B  ld C,0x29
 	extpfx3 0x8E, 0xF1, 0x43                   ; FB920D  mul BC,(XIZ+0xf1)
@@ -79918,8 +79991,8 @@ sub_FB90B3__FB91E3:
 	call	0xFC6803                              ; FB9233  call 0xfc6803
 	inc	8, xsp                                 ; FB9237  inc 0,XSP
 	inc	2, xsp                                 ; FB9239  inc 2,XSP
-	jr sub_FB90B3__FB9270                      ; FB923B  jr T,0xfb9270
-sub_FB90B3__FB923D:
+	jr ToneDB_SourceNameList1_SelectEntry__FB9270                      ; FB923B  jr T,0xfb9270
+ToneDB_SourceNameList1_SelectEntry__FB923D:
 	pushw	0                                    ; FB923D  push 0x0000
 	ldb	c, 41                                  ; FB9240  ld C,0x29
 	extpfx3 0x8E, 0xF1, 0x43                   ; FB9242  mul BC,(XIZ+0xf1)
@@ -79939,7 +80012,7 @@ sub_FB90B3__FB923D:
 	call	0xFC6803                              ; FB9268  call 0xfc6803
 	inc	8, xsp                                 ; FB926C  inc 0,XSP
 	inc	2, xsp                                 ; FB926E  inc 2,XSP
-sub_FB90B3__FB9270:
+ToneDB_SourceNameList1_SelectEntry__FB9270:
 	pushw	0                                    ; FB9270  push 0x0000
 	push	0                                     ; FB9273  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9275  push (XIZ+0x08)
@@ -79949,7 +80022,7 @@ sub_FB90B3__FB9270:
 	unlk32 xiz                                 ; FB927E  unlk XIZ
 	ret                                        ; FB9280  ret
 ; --------------------------------------------------------------------------
-; sub_FB9281 -- 0xFB9281..0xFB9413 (403 bytes)
+; ToneDB_SourceNameList2_SelectEntry -- 0xFB9281..0xFB9413 (403 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -79964,10 +80037,21 @@ sub_FB90B3__FB9270:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     the same, for ToneDB_SourceNameList2
+; Evidence: prom_d's Q4c: 0xFB928D loads slot +0x68
+;           (ToneDB_SourceList2_Footer), 0xFB92A0 reads its LE16, 0xFB92A2
+;           compares, 0xFB92A7 addresses slot +0x64
+;           (ToneDB_SourceNameList2); the count is 314 and that IS list 2's
+;           measured row count. The board arm at 0xFB92B7 and the
+;           subtraction at 0xFB92CF are the same two instructions as list
+;           1's. It differs from list 1 in taking a SECOND index out of the
+;           caller's high nibble (0xFB92DE `and A,0xF0` / 0xFB92E1 `srl
+;           0x04,A`) and using it to pick the pair of bytes it writes
+; Unknown:  what the high nibble selects, and what the row's trailing bytes
+;           are
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB9281`.
 ; --------------------------------------------------------------------------
-sub_FB9281:
+ToneDB_SourceNameList2_SelectEntry:
 	link32 0xEE, 0x0C, 0xF2, 0xFF              ; FB9281  link XIZ,0xfff2
 	pushw	hl                                   ; FB9285  push HL
 	pushw	de                                   ; FB9286  push DE
@@ -79981,13 +80065,13 @@ sub_FB9281:
 	ld	(xiz-8), xwa                            ; FB929D  ld (XIZ+0xf8),XWA
 	ld	iy, (xwa)                               ; FB92A0  ld IY,(XWA)
 	cp	(xiz+10), iy                            ; FB92A2  cp (XIZ+0x0a),IY
-	jr nc, sub_FB9281__FB92B7                  ; FB92A5  jr NC,0xfb92b7
+	jr nc, ToneDB_SourceNameList2_SelectEntry__FB92B7                  ; FB92A5  jr NC,0xfb92b7
 	ld	xiy, (xbc+0x64)                         ; FB92A7  ld XIY,(XBC+0x64)
 	ld	(xiz-12), xiy                           ; FB92AA  ld (XIZ+0xf4),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FB92AD  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FB92B2  ld (XIZ+0xfc),XIY
-	jr sub_FB9281__FB92D2                      ; FB92B5  jr T,0xfb92d2
-sub_FB9281__FB92B7:
+	jr ToneDB_SourceNameList2_SelectEntry__FB92D2                      ; FB92B5  jr T,0xfb92d2
+ToneDB_SourceNameList2_SelectEntry__FB92B7:
 	ldl_da	xbc, (0xD811)                       ; FB92B7  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x64)                         ; FB92BC  ld XWA,(XBC+0x64)
 	ld	(xiz-12), xwa                           ; FB92BF  ld (XIZ+0xf4),XWA
@@ -79996,7 +80080,7 @@ sub_FB9281__FB92B7:
 	ld	xiy, (xiz-8)                            ; FB92CA  ld XIY,(XIZ+0xf8)
 	ld	bc, (xiy)                               ; FB92CD  ld BC,(XIY)
 	sub	(xiz+10), bc                           ; FB92CF  sub (XIZ+0x0a),BC
-sub_FB9281__FB92D2:
+ToneDB_SourceNameList2_SelectEntry__FB92D2:
 	ld	c, (xiz+12)                             ; FB92D2  ld C,(XIZ+0x0c)
 	and	c, 15                                  ; FB92D5  and C,0x0f
 	ld	(xiz-13), c                             ; FB92D8  ld (XIZ+0xf3),C
@@ -80067,7 +80151,7 @@ sub_FB9281__FB92D2:
 	ld	bc, (xbc)                               ; FB9391  ld BC,(XBC)
 	and	bc, hl                                 ; FB9393  and BC,HL
 	inc	6, xsp                                 ; FB9395  inc 6,XSP
-	jr z, sub_FB9281__FB93CE                   ; FB9397  jr Z,0xfb93ce
+	jr z, ToneDB_SourceNameList2_SelectEntry__FB93CE                   ; FB9397  jr Z,0xfb93ce
 	pushw	1                                    ; FB9399  push 0x0001
 	ldb	c, 41                                  ; FB939C  ld C,0x29
 	extpfx3 0x8E, 0xF3, 0x43                   ; FB939E  mul BC,(XIZ+0xf3)
@@ -80087,8 +80171,8 @@ sub_FB9281__FB92D2:
 	call	0xFC6803                              ; FB93C4  call 0xfc6803
 	inc	8, xsp                                 ; FB93C8  inc 0,XSP
 	inc	2, xsp                                 ; FB93CA  inc 2,XSP
-	jr sub_FB9281__FB9401                      ; FB93CC  jr T,0xfb9401
-sub_FB9281__FB93CE:
+	jr ToneDB_SourceNameList2_SelectEntry__FB9401                      ; FB93CC  jr T,0xfb9401
+ToneDB_SourceNameList2_SelectEntry__FB93CE:
 	pushw	0                                    ; FB93CE  push 0x0000
 	ldb	c, 41                                  ; FB93D1  ld C,0x29
 	extpfx3 0x8E, 0xF3, 0x43                   ; FB93D3  mul BC,(XIZ+0xf3)
@@ -80108,7 +80192,7 @@ sub_FB9281__FB93CE:
 	call	0xFC6803                              ; FB93F9  call 0xfc6803
 	inc	8, xsp                                 ; FB93FD  inc 0,XSP
 	inc	2, xsp                                 ; FB93FF  inc 2,XSP
-sub_FB9281__FB9401:
+ToneDB_SourceNameList2_SelectEntry__FB9401:
 	pushw	0                                    ; FB9401  push 0x0000
 	push	0                                     ; FB9404  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9406  push (XIZ+0x08)
@@ -80252,7 +80336,7 @@ sub_FB9414__FB952F:
 	unlk32 xiz                                 ; FB953E  unlk XIZ
 	ret                                        ; FB9540  ret
 ; --------------------------------------------------------------------------
-; sub_FB9541 -- 0xFB9541..0xFB978A (586 bytes)
+; ToneDB_DrumSourceNameList_SelectEntry -- 0xFB9541..0xFB978A (586 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -80260,7 +80344,7 @@ sub_FB9414__FB952F:
 ; Inputs:  frame `link XIZ,-37`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D735, 0x00D7ED, 0x00D7F1, 0x00D80D, 0x00D811
-; Calls:   0xFB48F7 = sub_FB48F7, 0xFB857E = sub_FB857E
+; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB857E = sub_FB857E
 ;          0xFB8668 = sub_FB8668, 0xFC6803 = sub_FC6803
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB9541-0xFB978A
@@ -80268,10 +80352,20 @@ sub_FB9414__FB952F:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     the same bounded lookup on ToneDB_DrumSourceNameList, applied to
+;           a DRUM-INSTRUMENT record rather than a part element
+; Evidence: prom_d's Q4c: 0xFB9568 loads slot +0x84
+;           (ToneDB_DrumList_Footer), 0xFB957D reads its LE16, 0xFB957F
+;           compares, 0xFB9584 addresses slot +0x80
+;           (ToneDB_DrumSourceNameList); the count is 503, the measured row
+;           count. Its destination is NOT the part record: 0xFB9547 reads
+;           (0x00D735) and 0xFB954F multiplies it by 0x96 = 150 -- the
+;           drum-instrument record stride prom_d's +0xEE names -- into the
+;           RAM array at 0x87D2 + 0x461
+; Unknown:  what the two bytes it stores are, and what (0x00D735) counts
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB9541`.
 ; --------------------------------------------------------------------------
-sub_FB9541:
+ToneDB_DrumSourceNameList_SelectEntry:
 	link32 0xEE, 0x0C, 0xDB, 0xFF              ; FB9541  link XIZ,0xffdb
 	pushw	hl                                   ; FB9545  push HL
 	push	xix                                   ; FB9546  push XIX
@@ -80291,13 +80385,13 @@ sub_FB9541:
 	ld	(xiz-28), xiy                           ; FB957A  ld (XIZ+0xe4),XIY
 	ld	bc, (xiy)                               ; FB957D  ld BC,(XIY)
 	cp	(xiz+10), bc                            ; FB957F  cp (XIZ+0x0a),BC
-	jr nc, sub_FB9541__FB9596                  ; FB9582  jr NC,0xfb9596
+	jr nc, ToneDB_DrumSourceNameList_SelectEntry__FB9596                  ; FB9582  jr NC,0xfb9596
 	ld	xbc, (xwa+0x80)                         ; FB9584  ld XBC,(XWA+0x0080)
 	ld	(xiz-32), xbc                           ; FB9589  ld (XIZ+0xe0),XBC
 	addda32_24	xbc, (0xD7ED)                   ; FB958C  add XBC,(0x00d7ed)
 	ld	(xiz-24), xbc                           ; FB9591  ld (XIZ+0xe8),XBC
-	jr sub_FB9541__FB95B3                      ; FB9594  jr T,0xfb95b3
-sub_FB9541__FB9596:
+	jr ToneDB_DrumSourceNameList_SelectEntry__FB95B3                      ; FB9594  jr T,0xfb95b3
+ToneDB_DrumSourceNameList_SelectEntry__FB9596:
 	ldl_da	xbc, (0xD811)                       ; FB9596  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x80)                         ; FB959B  ld XWA,(XBC+0x0080)
 	ld	(xiz-32), xwa                           ; FB95A0  ld (XIZ+0xe0),XWA
@@ -80306,7 +80400,7 @@ sub_FB9541__FB9596:
 	ld	xiy, (xiz-28)                           ; FB95AB  ld XIY,(XIZ+0xe4)
 	ld	bc, (xiy)                               ; FB95AE  ld BC,(XIY)
 	sub	(xiz+10), bc                           ; FB95B0  sub (XIZ+0x0a),BC
-sub_FB9541__FB95B3:
+ToneDB_DrumSourceNameList_SelectEntry__FB95B3:
 	push	0                                     ; FB95B3  push 0x00
 	extpfx3 0x8E, 0xDD, 0x04                   ; FB95B5  push (XIZ+0xdd)
 	ldw	bc, 16                                 ; FB95B8  ld BC,0x0010
@@ -80367,14 +80461,14 @@ sub_FB9541__FB95B3:
 	ld	(xiz-12), xiy                           ; FB9655  ld (XIZ+0xf4),XIY
 	ld	(xiz-36), 0                             ; FB9658  ld (XIZ+0xdc),0x00
 	inc	8, xsp                                 ; FB965C  inc 0,XSP
-sub_FB9541__FB965E:
+ToneDB_DrumSourceNameList_SelectEntry__FB965E:
 	cp (xiz-36), 0x02                          ; FB965E  cp (XIZ+0xdc),0x02
-	jr nc, sub_FB9541__FB969E                  ; FB9662  jr NC,0xfb969e
-	jr sub_FB9541__FB966B                      ; FB9664  jr T,0xfb966b
-sub_FB9541__FB9666:
+	jr nc, ToneDB_DrumSourceNameList_SelectEntry__FB969E                  ; FB9662  jr NC,0xfb969e
+	jr ToneDB_DrumSourceNameList_SelectEntry__FB966B                      ; FB9664  jr T,0xfb966b
+ToneDB_DrumSourceNameList_SelectEntry__FB9666:
 	incm8	1, (xiz-36)                          ; FB9666  inc 1,(XIZ+0xdc)
-	jr sub_FB9541__FB965E                      ; FB9669  jr T,0xfb965e
-sub_FB9541__FB966B:
+	jr ToneDB_DrumSourceNameList_SelectEntry__FB965E                      ; FB9669  jr T,0xfb965e
+ToneDB_DrumSourceNameList_SelectEntry__FB966B:
 	push	0                                     ; FB966B  push 0x00
 	extpfx3 0x8E, 0xDD, 0x04                   ; FB966D  push (XIZ+0xdd)
 	ld	xbc, (xiz-12)                           ; FB9670  ld XBC,(XIZ+0xf4)
@@ -80392,8 +80486,8 @@ sub_FB9541__FB966B:
 	ld	xbc, (xiz-16)                           ; FB9693  ld XBC,(XIZ+0xf0)
 	extpfx4 0x89, 0x03, 0x3E, 0x50             ; FB9696  or (XBC+0x03),0x50
 	inc	8, xsp                                 ; FB969A  inc 0,XSP
-	jr sub_FB9541__FB9666                      ; FB969C  jr T,0xfb9666
-sub_FB9541__FB969E:
+	jr ToneDB_DrumSourceNameList_SelectEntry__FB9666                      ; FB969C  jr T,0xfb9666
+ToneDB_DrumSourceNameList_SelectEntry__FB969E:
 	lda_24	xbc, (0x8A9B)                       ; FB969E  lda XBC,0x008a9b
 	ld	(xiz-4), xbc                            ; FB96A3  ld (XIZ+0xfc),XBC
 	ldw	wa, 16                                 ; FB96A6  ld WA,0x0010
@@ -80423,14 +80517,14 @@ sub_FB9541__FB969E:
 	extpfx3 0xAE, 0xFC, 0x81                   ; FB96F2  add XBC,(XIZ+0xfc)
 	ld	(xbc), a                                ; FB96F5  ld (XBC),A
 	ld	(xiz-36), 0                             ; FB96F7  ld (XIZ+0xdc),0x00
-sub_FB9541__FB96FB:
+ToneDB_DrumSourceNameList_SelectEntry__FB96FB:
 	cp (xiz-36), 0x02                          ; FB96FB  cp (XIZ+0xdc),0x02
-	jrl nc, sub_FB9541__FB9779                 ; FB96FF  jrl NC,0xfb9779
-	jr sub_FB9541__FB9709                      ; FB9702  jr T,0xfb9709
-sub_FB9541__FB9704:
+	jrl nc, ToneDB_DrumSourceNameList_SelectEntry__FB9779                 ; FB96FF  jrl NC,0xfb9779
+	jr ToneDB_DrumSourceNameList_SelectEntry__FB9709                      ; FB9702  jr T,0xfb9709
+ToneDB_DrumSourceNameList_SelectEntry__FB9704:
 	incm8	1, (xiz-36)                          ; FB9704  inc 1,(XIZ+0xdc)
-	jr sub_FB9541__FB96FB                      ; FB9707  jr T,0xfb96fb
-sub_FB9541__FB9709:
+	jr ToneDB_DrumSourceNameList_SelectEntry__FB96FB                      ; FB9707  jr T,0xfb96fb
+ToneDB_DrumSourceNameList_SelectEntry__FB9709:
 	ldb	c, 43                                  ; FB9709  ld C,0x2b
 	extpfx3 0x8E, 0xDC, 0x43                   ; FB970B  mul BC,(XIZ+0xdc)
 	extz	xbc                                   ; FB970E  extz XBC
@@ -80450,7 +80544,7 @@ sub_FB9541__FB9709:
 	ld	xbc, (xiz-8)                            ; FB9739  ld XBC,(XIZ+0xf8)
 	ld	a, (xbc+13)                             ; FB973C  ld A,(XBC+0x0d)
 	and	a, h                                   ; FB973F  and A,H
-	jr z, sub_FB9541__FB975E                   ; FB9741  jr Z,0xfb975e
+	jr z, ToneDB_DrumSourceNameList_SelectEntry__FB975E                   ; FB9741  jr Z,0xfb975e
 	pushw	1                                    ; FB9743  push 0x0001
 	ld	xwa, (xiz-20)                           ; FB9746  ld XWA,(XIZ+0xec)
 	push	xwa                                   ; FB9749  push XWA
@@ -80461,8 +80555,8 @@ sub_FB9541__FB9709:
 	call	0xFC6803                              ; FB9754  call 0xfc6803
 	inc	8, xsp                                 ; FB9758  inc 0,XSP
 	inc	2, xsp                                 ; FB975A  inc 2,XSP
-	jr sub_FB9541__FB9777                      ; FB975C  jr T,0xfb9777
-sub_FB9541__FB975E:
+	jr ToneDB_DrumSourceNameList_SelectEntry__FB9777                      ; FB975C  jr T,0xfb9777
+ToneDB_DrumSourceNameList_SelectEntry__FB975E:
 	pushw	0                                    ; FB975E  push 0x0000
 	ld	xbc, (xiz-20)                           ; FB9761  ld XBC,(XIZ+0xec)
 	push	xbc                                   ; FB9764  push XBC
@@ -80473,9 +80567,9 @@ sub_FB9541__FB975E:
 	call	0xFC6803                              ; FB976F  call 0xfc6803
 	inc	8, xsp                                 ; FB9773  inc 0,XSP
 	inc	2, xsp                                 ; FB9775  inc 2,XSP
-sub_FB9541__FB9777:
-	jr sub_FB9541__FB9704                      ; FB9777  jr T,0xfb9704
-sub_FB9541__FB9779:
+ToneDB_DrumSourceNameList_SelectEntry__FB9777:
+	jr ToneDB_DrumSourceNameList_SelectEntry__FB9704                      ; FB9777  jr T,0xfb9704
+ToneDB_DrumSourceNameList_SelectEntry__FB9779:
 	pushw	0                                    ; FB9779  push 0x0000
 	push	0                                     ; FB977C  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB977E  push (XIZ+0x08)
@@ -80486,7 +80580,7 @@ sub_FB9541__FB9779:
 	unlk32 xiz                                 ; FB9788  unlk XIZ
 	ret                                        ; FB978A  ret
 ; --------------------------------------------------------------------------
-; sub_FB978B -- 0xFB978B..0xFB994D (451 bytes)
+; ToneDB_PercSourceNameList1_SelectEntry -- 0xFB978B..0xFB994D (451 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -80501,10 +80595,17 @@ sub_FB9541__FB9779:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     the same, for ToneDB_PercSourceNameList1
+; Evidence: prom_d's Q4c: 0xFB979D loads slot +0x90
+;           (ToneDB_PercList1_Footer), 0xFB97B2 reads its LE16, 0xFB97B4
+;           compares, 0xFB97B9 addresses slot +0x8C
+;           (ToneDB_PercSourceNameList1); the count is 208, the measured row
+;           count, and the board arm at 0xFB97CB is the same shape as list
+;           1's
+; Unknown:  what the row's trailing bytes are
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB978B`.
 ; --------------------------------------------------------------------------
-sub_FB978B:
+ToneDB_PercSourceNameList1_SelectEntry:
 	link32 0xEE, 0x0C, 0xE6, 0xFF              ; FB978B  link XIZ,0xffe6
 	push	xix                                   ; FB978F  push XIX
 	ldb_da	c, (0xD735)                         ; FB9790  ld C,(0x00d735)
@@ -80518,13 +80619,13 @@ sub_FB978B:
 	ld	(xiz-16), xwa                           ; FB97AF  ld (XIZ+0xf0),XWA
 	ld	iy, (xwa)                               ; FB97B2  ld IY,(XWA)
 	cp	(xiz+10), iy                            ; FB97B4  cp (XIZ+0x0a),IY
-	jr nc, sub_FB978B__FB97CB                  ; FB97B7  jr NC,0xfb97cb
+	jr nc, ToneDB_PercSourceNameList1_SelectEntry__FB97CB                  ; FB97B7  jr NC,0xfb97cb
 	ld	xiy, (xbc+0x8C)                         ; FB97B9  ld XIY,(XBC+0x008c)
 	ld	(xiz-20), xiy                           ; FB97BE  ld (XIZ+0xec),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FB97C1  add XIY,(0x00d7ed)
 	ld	(xiz-12), xiy                           ; FB97C6  ld (XIZ+0xf4),XIY
-	jr sub_FB978B__FB97E8                      ; FB97C9  jr T,0xfb97e8
-sub_FB978B__FB97CB:
+	jr ToneDB_PercSourceNameList1_SelectEntry__FB97E8                      ; FB97C9  jr T,0xfb97e8
+ToneDB_PercSourceNameList1_SelectEntry__FB97CB:
 	ldl_da	xbc, (0xD811)                       ; FB97CB  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x8C)                         ; FB97D0  ld XWA,(XBC+0x008c)
 	ld	(xiz-20), xwa                           ; FB97D5  ld (XIZ+0xec),XWA
@@ -80533,7 +80634,7 @@ sub_FB978B__FB97CB:
 	ld	xiy, (xiz-16)                           ; FB97E0  ld XIY,(XIZ+0xf0)
 	ld	bc, (xiy)                               ; FB97E3  ld BC,(XIY)
 	sub	(xiz+10), bc                           ; FB97E5  sub (XIZ+0x0a),BC
-sub_FB978B__FB97E8:
+ToneDB_PercSourceNameList1_SelectEntry__FB97E8:
 	ld	c, (xiz+12)                             ; FB97E8  ld C,(XIZ+0x0c)
 	and	c, 15                                  ; FB97EB  and C,0x0f
 	ld	(xiz-22), c                             ; FB97EE  ld (XIZ+0xea),C
@@ -80608,14 +80709,14 @@ sub_FB978B__FB97E8:
 	ld	(xiz-25), a                             ; FB98BE  ld (XIZ+0xe7),A
 	ld	(xiz-22), 0                             ; FB98C1  ld (XIZ+0xea),0x00
 	inc	8, xsp                                 ; FB98C5  inc 0,XSP
-sub_FB978B__FB98C7:
+ToneDB_PercSourceNameList1_SelectEntry__FB98C7:
 	cp (xiz-22), 0x02                          ; FB98C7  cp (XIZ+0xea),0x02
-	jrl nc, sub_FB978B__FB993D                 ; FB98CB  jrl NC,0xfb993d
-	jr sub_FB978B__FB98D5                      ; FB98CE  jr T,0xfb98d5
-sub_FB978B__FB98D0:
+	jrl nc, ToneDB_PercSourceNameList1_SelectEntry__FB993D                 ; FB98CB  jrl NC,0xfb993d
+	jr ToneDB_PercSourceNameList1_SelectEntry__FB98D5                      ; FB98CE  jr T,0xfb98d5
+ToneDB_PercSourceNameList1_SelectEntry__FB98D0:
 	incm8	1, (xiz-22)                          ; FB98D0  inc 1,(XIZ+0xea)
-	jr sub_FB978B__FB98C7                      ; FB98D3  jr T,0xfb98c7
-sub_FB978B__FB98D5:
+	jr ToneDB_PercSourceNameList1_SelectEntry__FB98C7                      ; FB98D3  jr T,0xfb98c7
+ToneDB_PercSourceNameList1_SelectEntry__FB98D5:
 	ldb	c, 43                                  ; FB98D5  ld C,0x2b
 	extpfx3 0x8E, 0xEA, 0x43                   ; FB98D7  mul BC,(XIZ+0xea)
 	extz	xbc                                   ; FB98DA  extz XBC
@@ -80633,7 +80734,7 @@ sub_FB978B__FB98D5:
 	add	xbc, 0xFDE69D                          ; FB98FD  add XBC,0x00fde69d
 	ld	b, (xbc)                                ; FB9903  ld B,(XBC)
 	extpfx3 0x8E, 0xE7, 0xC2                   ; FB9905  and B,(XIZ+0xe7)
-	jr z, sub_FB978B__FB9922                   ; FB9908  jr Z,0xfb9922
+	jr z, ToneDB_PercSourceNameList1_SelectEntry__FB9922                   ; FB9908  jr Z,0xfb9922
 	pushw	1                                    ; FB990A  push 0x0001
 	push	xwa                                   ; FB990D  push XWA
 	push	0                                     ; FB990E  push 0x00
@@ -80643,8 +80744,8 @@ sub_FB978B__FB98D5:
 	call	0xFC6803                              ; FB9918  call 0xfc6803
 	inc	8, xsp                                 ; FB991C  inc 0,XSP
 	inc	2, xsp                                 ; FB991E  inc 2,XSP
-	jr sub_FB978B__FB993B                      ; FB9920  jr T,0xfb993b
-sub_FB978B__FB9922:
+	jr ToneDB_PercSourceNameList1_SelectEntry__FB993B                      ; FB9920  jr T,0xfb993b
+ToneDB_PercSourceNameList1_SelectEntry__FB9922:
 	pushw	0                                    ; FB9922  push 0x0000
 	ld	xbc, (xiz-8)                            ; FB9925  ld XBC,(XIZ+0xf8)
 	push	xbc                                   ; FB9928  push XBC
@@ -80655,9 +80756,9 @@ sub_FB978B__FB9922:
 	call	0xFC6803                              ; FB9933  call 0xfc6803
 	inc	8, xsp                                 ; FB9937  inc 0,XSP
 	inc	2, xsp                                 ; FB9939  inc 2,XSP
-sub_FB978B__FB993B:
-	jr sub_FB978B__FB98D0                      ; FB993B  jr T,0xfb98d0
-sub_FB978B__FB993D:
+ToneDB_PercSourceNameList1_SelectEntry__FB993B:
+	jr ToneDB_PercSourceNameList1_SelectEntry__FB98D0                      ; FB993B  jr T,0xfb98d0
+ToneDB_PercSourceNameList1_SelectEntry__FB993D:
 	pushw	0                                    ; FB993D  push 0x0000
 	push	0                                     ; FB9940  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9942  push (XIZ+0x08)
@@ -80667,7 +80768,7 @@ sub_FB978B__FB993D:
 	unlk32 xiz                                 ; FB994B  unlk XIZ
 	ret                                        ; FB994D  ret
 ; --------------------------------------------------------------------------
-; sub_FB994E -- 0xFB994E..0xFB9AC1 (372 bytes)
+; ToneDB_PercSourceNameList2_SelectEntry -- 0xFB994E..0xFB9AC1 (372 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -80681,10 +80782,16 @@ sub_FB978B__FB993D:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     the same, for ToneDB_PercSourceNameList2
+; Evidence: prom_d's Q4c: 0xFB9961 loads slot +0x98
+;           (ToneDB_PercList2_Footer), 0xFB9976 reads its LE16, 0xFB9978
+;           compares, 0xFB997D addresses slot +0x94
+;           (ToneDB_PercSourceNameList2); the count is 161, the measured row
+;           count
+; Unknown:  what the row's trailing bytes are
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FB994E`.
 ; --------------------------------------------------------------------------
-sub_FB994E:
+ToneDB_PercSourceNameList2_SelectEntry:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FB994E  link XIZ,0xffec
 	pushw	hl                                   ; FB9952  push HL
 	push	xix                                   ; FB9953  push XIX
@@ -80699,13 +80806,13 @@ sub_FB994E:
 	ld	(xiz-12), xwa                           ; FB9973  ld (XIZ+0xf4),XWA
 	ld	iy, (xwa)                               ; FB9976  ld IY,(XWA)
 	cp	(xiz+10), iy                            ; FB9978  cp (XIZ+0x0a),IY
-	jr nc, sub_FB994E__FB998F                  ; FB997B  jr NC,0xfb998f
+	jr nc, ToneDB_PercSourceNameList2_SelectEntry__FB998F                  ; FB997B  jr NC,0xfb998f
 	ld	xiy, (xbc+0x94)                         ; FB997D  ld XIY,(XBC+0x0094)
 	ld	(xiz-16), xiy                           ; FB9982  ld (XIZ+0xf0),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FB9985  add XIY,(0x00d7ed)
 	ld	(xiz-8), xiy                            ; FB998A  ld (XIZ+0xf8),XIY
-	jr sub_FB994E__FB99AC                      ; FB998D  jr T,0xfb99ac
-sub_FB994E__FB998F:
+	jr ToneDB_PercSourceNameList2_SelectEntry__FB99AC                      ; FB998D  jr T,0xfb99ac
+ToneDB_PercSourceNameList2_SelectEntry__FB998F:
 	ldl_da	xbc, (0xD811)                       ; FB998F  ld XBC,(0x00d811)
 	ld	xwa, (xbc+0x94)                         ; FB9994  ld XWA,(XBC+0x0094)
 	ld	(xiz-16), xwa                           ; FB9999  ld (XIZ+0xf0),XWA
@@ -80714,7 +80821,7 @@ sub_FB994E__FB998F:
 	ld	xiy, (xiz-12)                           ; FB99A4  ld XIY,(XIZ+0xf4)
 	ld	bc, (xiy)                               ; FB99A7  ld BC,(XIY)
 	sub	(xiz+10), bc                           ; FB99A9  sub (XIZ+0x0a),BC
-sub_FB994E__FB99AC:
+ToneDB_PercSourceNameList2_SelectEntry__FB99AC:
 	ld	c, (xiz+12)                             ; FB99AC  ld C,(XIZ+0x0c)
 	and	c, 15                                  ; FB99AF  and C,0x0f
 	ld	(xiz-18), c                             ; FB99B2  ld (XIZ+0xee),C
@@ -80762,14 +80869,14 @@ sub_FB994E__FB99AC:
 	ld	a, (xbc)                                ; FB9A31  ld A,(XBC)
 	ld	(xiz-20), a                             ; FB9A33  ld (XIZ+0xec),A
 	ld	(xiz-18), 0                             ; FB9A36  ld (XIZ+0xee),0x00
-sub_FB994E__FB9A3A:
+ToneDB_PercSourceNameList2_SelectEntry__FB9A3A:
 	cp (xiz-18), 0x02                          ; FB9A3A  cp (XIZ+0xee),0x02
-	jrl nc, sub_FB994E__FB9AB0                 ; FB9A3E  jrl NC,0xfb9ab0
-	jr sub_FB994E__FB9A48                      ; FB9A41  jr T,0xfb9a48
-sub_FB994E__FB9A43:
+	jrl nc, ToneDB_PercSourceNameList2_SelectEntry__FB9AB0                 ; FB9A3E  jrl NC,0xfb9ab0
+	jr ToneDB_PercSourceNameList2_SelectEntry__FB9A48                      ; FB9A41  jr T,0xfb9a48
+ToneDB_PercSourceNameList2_SelectEntry__FB9A43:
 	incm8	1, (xiz-18)                          ; FB9A43  inc 1,(XIZ+0xee)
-	jr sub_FB994E__FB9A3A                      ; FB9A46  jr T,0xfb9a3a
-sub_FB994E__FB9A48:
+	jr ToneDB_PercSourceNameList2_SelectEntry__FB9A3A                      ; FB9A46  jr T,0xfb9a3a
+ToneDB_PercSourceNameList2_SelectEntry__FB9A48:
 	ldb	c, 43                                  ; FB9A48  ld C,0x2b
 	extpfx3 0x8E, 0xEE, 0x43                   ; FB9A4A  mul BC,(XIZ+0xee)
 	extz	xbc                                   ; FB9A4D  extz XBC
@@ -80787,7 +80894,7 @@ sub_FB994E__FB9A48:
 	add	xbc, 0xFDE69D                          ; FB9A70  add XBC,0x00fde69d
 	ld	b, (xbc)                                ; FB9A76  ld B,(XBC)
 	extpfx3 0x8E, 0xEC, 0xC2                   ; FB9A78  and B,(XIZ+0xec)
-	jr z, sub_FB994E__FB9A95                   ; FB9A7B  jr Z,0xfb9a95
+	jr z, ToneDB_PercSourceNameList2_SelectEntry__FB9A95                   ; FB9A7B  jr Z,0xfb9a95
 	pushw	1                                    ; FB9A7D  push 0x0001
 	push	xwa                                   ; FB9A80  push XWA
 	push	0                                     ; FB9A81  push 0x00
@@ -80797,8 +80904,8 @@ sub_FB994E__FB9A48:
 	call	0xFC6803                              ; FB9A8B  call 0xfc6803
 	inc	8, xsp                                 ; FB9A8F  inc 0,XSP
 	inc	2, xsp                                 ; FB9A91  inc 2,XSP
-	jr sub_FB994E__FB9AAE                      ; FB9A93  jr T,0xfb9aae
-sub_FB994E__FB9A95:
+	jr ToneDB_PercSourceNameList2_SelectEntry__FB9AAE                      ; FB9A93  jr T,0xfb9aae
+ToneDB_PercSourceNameList2_SelectEntry__FB9A95:
 	pushw	0                                    ; FB9A95  push 0x0000
 	ld	xbc, (xiz-4)                            ; FB9A98  ld XBC,(XIZ+0xfc)
 	push	xbc                                   ; FB9A9B  push XBC
@@ -80809,9 +80916,9 @@ sub_FB994E__FB9A95:
 	call	0xFC6803                              ; FB9AA6  call 0xfc6803
 	inc	8, xsp                                 ; FB9AAA  inc 0,XSP
 	inc	2, xsp                                 ; FB9AAC  inc 2,XSP
-sub_FB994E__FB9AAE:
-	jr sub_FB994E__FB9A43                      ; FB9AAE  jr T,0xfb9a43
-sub_FB994E__FB9AB0:
+ToneDB_PercSourceNameList2_SelectEntry__FB9AAE:
+	jr ToneDB_PercSourceNameList2_SelectEntry__FB9A43                      ; FB9AAE  jr T,0xfb9a43
+ToneDB_PercSourceNameList2_SelectEntry__FB9AB0:
 	pushw	0                                    ; FB9AB0  push 0x0000
 	push	0                                     ; FB9AB3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FB9AB5  push (XIZ+0x08)
@@ -80951,9 +81058,9 @@ Field2Bit_CopyField:
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D733, 0x00D735, 0x00D7ED, 0x00D7F1
 ; Calls:   0xF9A038 = MemCopyWords, 0xFB4103 = sub_FB4103
-;          0xFB4124 = sub_FB4124, 0xFB42E3 = sub_FB42E3
-;          0xFB4324 = sub_FB4324, 0xFB44A5 = sub_FB44A5
-;          0xFB454C = sub_FB454C, 0xFB48F7 = sub_FB48F7
+;          0xFB4124 = ToneDB_ResolveToneRecord, 0xFB42E3 = sub_FB42E3
+;          0xFB4324 = ToneRec_GetElementBlock, 0xFB44A5 = sub_FB44A5
+;          0xFB454C = sub_FB454C, 0xFB48F7 = DrumKit_ResolveInstrumentRecord
 ;          0xFB9AC2 = sub_FB9AC2, 0xFB9B11 = Field2Bit_CopyField
 ; Evidence: the listing below is the byte-identical round-trip of 0xFB9B69-0xFBAAA1
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -82535,10 +82642,10 @@ sub_FBAAA2__FBAC20:
 ;          0xFC2626
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D733, 0x00D734
-; Calls:   0xFB8CEC = sub_FB8CEC, 0xFB90B3 = sub_FB90B3
-;          0xFB9281 = sub_FB9281, 0xFB9414 = sub_FB9414
-;          0xFB9541 = sub_FB9541, 0xFB978B = sub_FB978B
-;          0xFB994E = sub_FB994E, 0xFB9B69 = sub_FB9B69
+; Calls:   0xFB8CEC = sub_FB8CEC, 0xFB90B3 = ToneDB_SourceNameList1_SelectEntry
+;          0xFB9281 = ToneDB_SourceNameList2_SelectEntry, 0xFB9414 = sub_FB9414
+;          0xFB9541 = ToneDB_DrumSourceNameList_SelectEntry, 0xFB978B = ToneDB_PercSourceNameList1_SelectEntry
+;          0xFB994E = ToneDB_PercSourceNameList2_SelectEntry, 0xFB9B69 = sub_FB9B69
 ;          0xFBAAA2 = sub_FBAAA2, 0xFC2DA3 = sub_FC2DA3
 ;          0xFC2E4B = sub_FC2E4B, 0xFC2F1A = sub_FC2F1A
 ;          0xFC2FE9 = sub_FC2FE9, 0xFC30B7 = sub_FC30B7
@@ -85579,7 +85686,7 @@ sub_FBC39D__FBC720:
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7ED, 0x00D7F1
-; Calls:   0xFB4124 = sub_FB4124, 0xFB44A5 = sub_FB44A5
+; Calls:   0xFB4124 = ToneDB_ResolveToneRecord, 0xFB44A5 = sub_FB44A5
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBC725-0xFBC80D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -85688,8 +85795,8 @@ sub_FBC725__FBC809:
 ; Inputs:  frame `link XIZ,-26`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7ED, 0x00D7F1
-; Calls:   0xFB4124 = sub_FB4124, 0xFB454C = sub_FB454C
-;          0xFB48F7 = sub_FB48F7
+; Calls:   0xFB4124 = ToneDB_ResolveToneRecord, 0xFB454C = sub_FB454C
+;          0xFB48F7 = DrumKit_ResolveInstrumentRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBC80E-0xFBC957
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -85697,6 +85804,9 @@ sub_FBC725__FBC809:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; Refused:  REFUSED round 11.  reads slot +0x40, which prom_d records as an ALIAS of +0x3C, and
+;           the tail scalar +0xF0, which prom_d explicitly does NOT claim as
+;           a stride. Naming it from an alias would name it twice over.
 ; --------------------------------------------------------------------------
 sub_FBC80E:
 	link32 0xEE, 0x0C, 0xE6, 0xFF              ; FBC80E  link XIZ,0xffe6
@@ -86069,7 +86179,7 @@ sub_FBC958__FBCB96:
 ;          0xFBD098
 ; Inputs:  frame `link XIZ,-16`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C), (XIZ+0x0E)
 ; Outputs: no absolute-addressed write.
-; Calls:   0xFB48F7 = sub_FB48F7, 0xFB857E = sub_FB857E
+; Calls:   0xFB48F7 = DrumKit_ResolveInstrumentRecord, 0xFB857E = sub_FB857E
 ;          0xFB8668 = sub_FB8668, 0xFC6803 = sub_FC6803
 ;          0xFC7A1F = sub_FC7A1F
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBCBA7-0xFBCD16
@@ -92000,7 +92110,7 @@ sub_FBFFD4__FC02EF:
 ;          0xFC1C8C
 ; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D75C, 0x00D75D
-; Calls:   0xFB4124 = sub_FB4124
+; Calls:   0xFB4124 = ToneDB_ResolveToneRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC02FF-0xFC035D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -93462,7 +93572,7 @@ sub_FC0F83__FC10B6:
 ;          0xFC1D61
 ; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: writes 0x00D94B
-; Calls:   0xFB4124 = sub_FB4124
+; Calls:   0xFB4124 = ToneDB_ResolveToneRecord
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC10BE-0xFC10DF
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -93713,6 +93823,8 @@ sub_FC11D8__FC12E5:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; Refused:  REFUSED round 11.  reads the same three slots as sub_FC10E0 (+0x7C, +0x80, +0x84),
+;           same objection.
 ; --------------------------------------------------------------------------
 sub_FC12ED:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FC12ED  link XIZ,0xffec
@@ -93962,7 +94074,7 @@ sub_FC13B6__FC1516:
 	unlk32 xiz                                 ; FC1552  unlk XIZ
 	ret                                        ; FC1554  ret
 ; --------------------------------------------------------------------------
-; sub_FC1555 -- 0xFC1555..0xFC164C (248 bytes)
+; ToneDB_PercSourceIndexMapB_Lookup -- 0xFC1555..0xFC164C (248 bytes)
 ;
 ; Called from: no site outside this module.
 ;          1 site(s) inside this module:
@@ -93975,10 +94087,20 @@ sub_FC13B6__FC1516:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     maps (row, column) through ToneDB_PercSourceIndexMapB to a row
+;           of ToneDB_PercSourceNameList1
+; Evidence: prom_d's Q4g decodes 16 instructions at 0xFC1568-0xFC1648:
+;           directory slot +0x4C (ToneDB_PercSourceIndexMapB) indexed by
+;           row*128 + column as LE16, 0xFFFF tested as NO ENTRY (0xFC1589),
+;           and the value used at 0xFC1642 as a row number into slot +0x8C
+;           (ToneDB_PercSourceNameList1) with `ld BC,0x0010` -- 16, the
+;           catalogue row stride -- as the multiplier. That chain is what
+;           establishes, for every index map in prom_d, that a map value is
+;           a CATALOGUE ROW NUMBER and not an offset
+; Unknown:  what the map's row and column ARE
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FC1555`.
 ; --------------------------------------------------------------------------
-sub_FC1555:
+ToneDB_PercSourceIndexMapB_Lookup:
 	link32 0xEE, 0x0C, 0xEE, 0xFF              ; FC1555  link XIZ,0xffee
 	extpfx5 0x9E, 0x08, 0x3C, 0x7F, 0x00       ; FC1559  and (XIZ+0x08),0x007f
 	ld	bc, (xiz+10)                            ; FC155E  ld BC,(XIZ+0x0a)
@@ -93995,18 +94117,18 @@ sub_FC1555:
 	ld	bc, (xiy)                               ; FC1584  ld BC,(XIY)
 	ld	(xiz-16), bc                            ; FC1586  ld (XIZ+0xf0),BC
 	cp	bc, 0xFFFF                              ; FC1589  cp BC,0xffff
-	jr z, sub_FC1555__FC15AC                   ; FC158D  jr Z,0xfc15ac
+	jr z, ToneDB_PercSourceIndexMapB_Lookup__FC15AC                   ; FC158D  jr Z,0xfc15ac
 	ldl_da	xwa, (0xD7F1)                       ; FC158F  ld XWA,(0x00d7f1)
 	ld	xiy, (xwa+0x8C)                         ; FC1594  ld XIY,(XWA+0x008c)
 	ld	(xiz-12), xiy                           ; FC1599  ld (XIZ+0xf4),XIY
 	addda32_24	xiy, (0xD7ED)                   ; FC159C  add XIY,(0x00d7ed)
 	ld	(xiz-4), xiy                            ; FC15A1  ld (XIZ+0xfc),XIY
 	ldw (xiz-18), 0x0000                       ; FC15A4  ld (XIZ+0xee),0x0000
-	jrl sub_FC1555__FC1634                     ; FC15A9  jrl T,0xfc1634
-sub_FC1555__FC15AC:
+	jrl ToneDB_PercSourceIndexMapB_Lookup__FC1634                     ; FC15A9  jrl T,0xfc1634
+ToneDB_PercSourceIndexMapB_Lookup__FC15AC:
 	ldl_da	xbc, (0xD80D)                       ; FC15AC  ld XBC,(0x00d80d)
 	cp	xbc, 0                                  ; FC15B1  cp XBC,0x00000000
-	jr z, sub_FC1555__FC160A                   ; FC15B7  jr Z,0xfc160a
+	jr z, ToneDB_PercSourceIndexMapB_Lookup__FC160A                   ; FC15B7  jr Z,0xfc160a
 	ldl_da	xbc, (0xD811)                       ; FC15B9  ld XBC,(0x00d811)
 	ld	xwa, (xbc+76)                           ; FC15BE  ld XWA,(XBC+0x4c)
 	ld	(xiz-12), xwa                           ; FC15C1  ld (XIZ+0xf4),XWA
@@ -94029,8 +94151,8 @@ sub_FC1555__FC15AC:
 	ld	(xiz-8), xwa                            ; FC1600  ld (XIZ+0xf8),XWA
 	ld	bc, (xwa)                               ; FC1603  ld BC,(XWA)
 	ld	(xiz-18), bc                            ; FC1605  ld (XIZ+0xee),BC
-	jr sub_FC1555__FC1634                      ; FC1608  jr T,0xfc1634
-sub_FC1555__FC160A:
+	jr ToneDB_PercSourceIndexMapB_Lookup__FC1634                      ; FC1608  jr T,0xfc1634
+ToneDB_PercSourceIndexMapB_Lookup__FC160A:
 	ldl_da	xbc, (0xD7F1)                       ; FC160A  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+76)                           ; FC160F  ld XWA,(XBC+0x4c)
 	ld	(xiz-12), xwa                           ; FC1612  ld (XIZ+0xf4),XWA
@@ -94042,7 +94164,7 @@ sub_FC1555__FC160A:
 	addda32_24	xwa, (0xD7ED)                   ; FC1627  add XWA,(0x00d7ed)
 	ld	(xiz-4), xwa                            ; FC162C  ld (XIZ+0xfc),XWA
 	ldw (xiz-18), 0x0000                       ; FC162F  ld (XIZ+0xee),0x0000
-sub_FC1555__FC1634:
+ToneDB_PercSourceIndexMapB_Lookup__FC1634:
 	ld	bc, (xiz-16)                            ; FC1634  ld BC,(XIZ+0xf0)
 	extpfx3 0x9E, 0xEE, 0x81                   ; FC1637  add BC,(XIZ+0xee)
 	ld	xwa, (xiz+12)                           ; FC163A  ld XWA,(XIZ+0x0c)
@@ -94069,6 +94191,10 @@ sub_FC1555__FC1634:
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
+; Refused:  REFUSED round 11.  reads the same three slots as ToneDB_PercSourceIndexMapB_Lookup
+;           (+0x4C, +0x8C, +0x90) but is a different body -- 63 of its first
+;           64 instructions differ once addresses are blanked -- and nothing
+;           in this pass says which of the two roles is which.
 ; --------------------------------------------------------------------------
 sub_FC164D:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; FC164D  link XIZ,0xffec
@@ -94151,7 +94277,7 @@ sub_FC164D__FC170E:
 ; Inputs:  frame `link XIZ,-35`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7ED, 0x00D7F1
-; Calls:   0xFB49EB = sub_FB49EB, 0xFC1555 = sub_FC1555
+; Calls:   0xFB49EB = sub_FB49EB, 0xFC1555 = ToneDB_PercSourceIndexMapB_Lookup
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC1716-0xFC1844
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -94515,8 +94641,8 @@ sub_FC1845__FC1A37:
 ; Inputs:  frame `link XIZ,-15`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
 ; Outputs: no absolute-addressed write.
 ;          reads 0x00D7F1
-; Calls:   0xF9A038 = MemCopyWords, 0xFB4124 = sub_FB4124
-;          0xFB4324 = sub_FB4324, 0xFB44A5 = sub_FB44A5
+; Calls:   0xF9A038 = MemCopyWords, 0xFB4124 = ToneDB_ResolveToneRecord
+;          0xFB4324 = ToneRec_GetElementBlock, 0xFB44A5 = sub_FB44A5
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC1AA1-0xFC1B6D
 ;          (notes/gen_prom_c_block.py, cleared by
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
@@ -94669,7 +94795,7 @@ sub_FC1B6E:
 ; Inputs:  frame `link XIZ,-14`; argument slots read: (XIZ+0x08)
 ; Outputs: writes 0x00D946, 0x00D948
 ;          reads 0x00D733, 0x00D735, 0x00D75C, 0x00D75D
-; Calls:   0xF98B20 = converted, 0xFB4124 = sub_FB4124
+; Calls:   0xF98B20 = converted, 0xFB4124 = ToneDB_ResolveToneRecord
 ;          0xFBAAA2 = sub_FBAAA2, 0xFBD858 = sub_FBD858
 ;          0xFBFFD4 = sub_FBFFD4, 0xFC02FF = sub_FC02FF
 ;          0xFC035E = sub_FC035E, 0xFC04EC = sub_FC04EC
@@ -96381,7 +96507,7 @@ sub_FC2930:
 	unlk32 xiz                                 ; FC2958  unlk XIZ
 	ret                                        ; FC295A  ret
 ; --------------------------------------------------------------------------
-; sub_FC295B -- 0xFC295B..0xFC29BE (100 bytes)
+; DrawbarPreset_GetDescriptor -- 0xFC295B..0xFC29BE (100 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFB48DC in sub_FB47C4__FB489E
@@ -96393,10 +96519,23 @@ sub_FC2930:
 ;          notes/prom_c_verify_fragment.py before insertion).  Every field above
 ;          is an instruction operand, listed by notes/gen_prom_c_block_headers.py;
 ;          the call sites are notes/prom_c_module_map.py's image-wide scan.
-; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
-;          so the name is an address.
+; Name:     returns one 14-byte descriptor of the drawbar-preset table at
+;           directory slot +0x70
+; Evidence: prom_d's Q4e decodes 6 instructions at 0xFC2990-0xFC29A5: slot
+;           +0x70 (DrawbarPreset_EnvDescTable) with the tail scalar at +0xEC
+;           (14) used AS A MULTIPLIER (`mul XBC,HL` at 0xFC299F) -- the only
+; ⚠ CORRECTED IN ROUND 11: this said "the only place in prom_c where +0xEC is a
+;           stride rather than a datum". It is NOT the only place -- sub_FB45C0
+;           loads (XBC+0xEC) at 0xFB4679 and 0xFB46C4 and multiplies by it at
+;           0xFB46EB. The claim was hand-written prose with no script behind it,
+;           which is how a false uniqueness survived. 14
+;           is what notes/prom_d_structures_round2.py derived for that array
+;           from the descriptors' own 32-bit offsets, without looking at
+;           prom_c
+; Unknown:  what a descriptor's 14 bytes mean
+; Named:   ROUND 11, by notes/prom_c_inventory_round8.py -- it was `sub_FC295B`.
 ; --------------------------------------------------------------------------
-sub_FC295B:
+DrawbarPreset_GetDescriptor:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC295B  link XIZ,0x0000
 	pushw	hl                                   ; FC295F  push HL
 	pushw	de                                   ; FC2960  push DE
@@ -98594,7 +98733,7 @@ sub_FC382A__FC3867:
 ;          0xFC3A24 0xFC3B4E
 ; Inputs:  frame `link XIZ,-40`; no positive frame slot is read
 ; Outputs: no absolute-addressed write.
-; Calls:   0xF9A038 = MemCopyWords, 0xFB4124 = sub_FB4124
+; Calls:   0xF9A038 = MemCopyWords, 0xFB4124 = ToneDB_ResolveToneRecord
 ;          0xFC876C = Flash_ReprogramSector, 0xFC89AF = Flash_ReadSectorToBuffer
 ; Evidence: the listing below is the byte-identical round-trip of 0xFC386C-0xFC39F9
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -104723,12 +104862,12 @@ sub_FC6712__FC67FD:
 ;          0xFB2E25 in VoiceParams_Compute_C__FB2E0B, 0xFB319D in sub_FB2F74__FB3194
 ;          0xFB33AE in VoiceParams_Compute_D__FB33A5, 0xFB35AF in VoiceParams_Compute_D__FB35A6
 ;          0xFB68AA in sub_FB6681__FB6891, 0xFB6B29 in sub_FB68DD__FB6B0F
-;          0xFB9233 in sub_FB90B3__FB91E3, 0xFB9268 in sub_FB90B3__FB923D
-;          0xFB93C4 in sub_FB9281__FB92D2, 0xFB93F9 in sub_FB9281__FB93CE
+;          0xFB9233 in ToneDB_SourceNameList1_SelectEntry__FB91E3, 0xFB9268 in ToneDB_SourceNameList1_SelectEntry__FB923D
+;          0xFB93C4 in ToneDB_SourceNameList2_SelectEntry__FB92D2, 0xFB93F9 in ToneDB_SourceNameList2_SelectEntry__FB93CE
 ;          0xFB94F0 in sub_FB9414__FB94AF, 0xFB9524 in sub_FB9414__FB94FA
-;          0xFB9754 in sub_FB9541__FB9709, 0xFB976F in sub_FB9541__FB975E
-;          0xFB9918 in sub_FB978B__FB98D5, 0xFB9933 in sub_FB978B__FB9922
-;          0xFB9A8B in sub_FB994E__FB9A48, 0xFB9AA6 in sub_FB994E__FB9A95
+;          0xFB9754 in ToneDB_DrumSourceNameList_SelectEntry__FB9709, 0xFB976F in ToneDB_DrumSourceNameList_SelectEntry__FB975E
+;          0xFB9918 in ToneDB_PercSourceNameList1_SelectEntry__FB98D5, 0xFB9933 in ToneDB_PercSourceNameList1_SelectEntry__FB9922
+;          0xFB9A8B in ToneDB_PercSourceNameList2_SelectEntry__FB9A48, 0xFB9AA6 in ToneDB_PercSourceNameList2_SelectEntry__FB9A95
 ;          0xFBBB34 in sub_FBB793__FBBAE4, 0xFBBB69 in sub_FBB793__FBBB3E
 ;          0xFBBD6F in sub_FBB793__FBBD1F, 0xFBBDA4 in sub_FBB793__FBBD79
 ;          0xFBC0BC in sub_FBBFFB__FBC06C, 0xFBC0F1 in sub_FBBFFB__FBC0C6
@@ -106105,7 +106244,7 @@ sub_FC723F__FC741F:
 ;
 ; Called from: 8 site(s) outside this module:
 ;          0xFB68C8 in sub_FB6681__FB6891, 0xFB6B45 in sub_FB68DD__FB6B0F
-;          0xFB9278 in sub_FB90B3__FB9270, 0xFB9409 in sub_FB9281__FB9401
+;          0xFB9278 in ToneDB_SourceNameList1_SelectEntry__FB9270, 0xFB9409 in ToneDB_SourceNameList2_SelectEntry__FB9401
 ;          0xFBBB7C in sub_FBB793__FBBB74, 0xFBBDB7 in sub_FBB793__FBBDAF
 ;          0xFBC101 in sub_FBBFFB__FBC0F9, 0xFBCB9E in sub_FBC958__FBCB96
 ; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
@@ -106685,8 +106824,8 @@ sub_FC7481__FC7A19:
 ;
 ; Called from: 9 site(s) outside this module:
 ;          0xFB6CD9 in sub_FB6BA8__FB6CD1, 0xFB9537 in sub_FB9414__FB952F
-;          0xFB9781 in sub_FB9541__FB9779, 0xFB9945 in sub_FB978B__FB993D
-;          0xFB9AB8 in sub_FB994E__FB9AB0, 0xFBCD0D in sub_FBCBA7__FBCD05
+;          0xFB9781 in ToneDB_DrumSourceNameList_SelectEntry__FB9779, 0xFB9945 in ToneDB_PercSourceNameList1_SelectEntry__FB993D
+;          0xFB9AB8 in ToneDB_PercSourceNameList2_SelectEntry__FB9AB0, 0xFBCD0D in sub_FBCBA7__FBCD05
 ;          0xFBD1CA in sub_FBD0A2__FBD1C2, 0xFBD569 in sub_FBD46B__FBD561
 ;          0xFBD84E in sub_FBD6FC__FBD846
 ; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)
@@ -115522,7 +115661,7 @@ unexplained_FCC5BE:
 ; ⚠ TWO CORRECTIONS, 2026-08-25.
 ;   * "a symmetric +-12 trim curve" is wrong: the range is -12..+10, not -12..+12,
 ;     and the zero run is five entries wide (indices 22..26), not a crossing.
-;   * "Referenced once, from 0xF99874" cites the LITERAL, not the instruction.
+;   * "Referenced once, from 0xF99872" cites the LITERAL, not the instruction.
 ;     The instruction is `add XBC,0x00FCC5C9` and it starts at 0xF99872.  (This
 ;     tree has made that off-by-two systematically; the xref tool prints the
 ;     literal's address and the instruction begins one or two bytes earlier.)
@@ -115750,7 +115889,7 @@ fp_constant_pool_FCC81A:
 ;   come out as exactly the ISO third-octave series 40, 50, 63, 80 ... 12500,
 ;   16000.  A one-byte error in the base, or a wrong element size, turns that
 ;   into denormals.  The decoded value is written beside every entry below.
-; Referenced four times: 0xF9E292, 0xF9E9A6, 0xF9ED8B, 0xF9F246.
+; Referenced four times: 0xF9E290, 0xF9E9A4, 0xF9ED89, 0xF9F244.
 ; Byte-identical to kn5000 0x012397 (v142/subcpu/subcpu_data_tables.s:2510).
 ; ----------------------------------------------------------------------------
 DSP_EQ_FreqHz_Table:
@@ -115787,7 +115926,7 @@ DSP_EQ_FreqHz_Table:
 ;
 ; 32 x f32: parametric-EQ Q / bandwidth values -- 0.1..0.9 by 0.1, then 1.0..4.0
 ; by 0.5, then 5..20 by 1.  Same self-proving decode as the frequency table.
-; Referenced from 0xF9E203.  Byte-identical to kn5000 0x012403 (v142/subcpu/subcpu_data_tables.s:2520).
+; Referenced from 0xF9E201.  Byte-identical to kn5000 0x012403 (v142/subcpu/subcpu_data_tables.s:2520).
 ; ----------------------------------------------------------------------------
 DSP_EQ_Q_Table:
 	.long	0x3dcccccd	; [ 0] = 0.1
@@ -124886,6 +125025,22 @@ PoolDir_FieldRec_PtrTable:
 ;      with no reference to the sibling project at all.  The reference sites are
 ;      quoted in each header.
 ;
+; ⚠ ROUND 11 CORRECTION -- 70 CITATIONS IN THIS ZONE AND ITS NEIGHBOUR NAMED THE
+; WRONG ADDRESS, and they now name the right one.  Every "Referenced from"/
+; "References:" line above was written by hand in this generator, and 70 of them
+; cited the address of the ADDRESS OPERAND rather than of the instruction that
+; carries it -- 0xFA737E for `add XBC,0x00FDF22A`, which starts at 0xFA737C.  The
+; deltas are +2 for `add Xrr,imm32` and +1 for `lda_24`.  This is the THIRD time
+; this tree has shipped a systematic off-by-N in call-site citations, and the
+; second time in prom_c: notes/FINDINGS-prom_c-keyboard-and-touch.md already
+; diagnosed exactly this for ONE table ("cited its reference as 0xF99874, which
+; is the address of the literal") and said the header had been corrected -- the
+; correction never reached the file.  Both are corrected here, in the generator
+; as well as in the listing, so a regeneration cannot put it back.  Each fix is
+; accepted only if the instruction at the corrected address literally carries the
+; table's own start address as an operand, so a blind -2 could not pass:
+;     python3 notes/prom_c_inventory_round8.py --cites
+;
 ; ⚠ WHAT THIS DOES NOT ESTABLISH.  Byte identity establishes that the DATA is the
 ; same.  It does NOT establish that the WSA1 routine reading a table does what the
 ; KN5000 routine of that name does.  Three readers HAVE been disassembled here and
@@ -124910,7 +125065,7 @@ PoolDir_FieldRec_PtrTable:
 ; take the zone record's own bits.  Byte-identical to the KN5000 table, and the
 ; closed form the sibling proves there holds here too, all 128 entries, no
 ; exceptions:   T[n] = floor(2 * (n mod 12) / 3) << 12
-; -- an eight-step staircase per octave.  Referenced from 0xFA7E14.
+; -- an eight-step staircase per octave.  Referenced from 0xFA7E12.
 ; Sibling: kn5000 sub-CPU 0x00FBE4, v142/subcpu/subcpu_data_tables.s:931
 ; ----------------------------------------------------------------------------
 Voice_Reg080_NoteField_Table:
@@ -125024,7 +125179,7 @@ Voice_KeyBend_Curve_3:
 ; 128 bytes, the exact mirror i -> 0x7F - i.  Byte-identical to the KN5000 table
 ; of this name (v142/subcpu/subcpu_data_tables.s:1010), where two users are documented: negative pitch-bend
 ; depths are re-mapped through it, and the normal note mapping feeds table[note]
-; into the colour lookup.  Referenced here from 0xFA75D4, 0xFAB5DB, 0xFAB6FD.
+; into the colour lookup.  Referenced here from 0xFA75D2, 0xFAB5D9, 0xFAB6FB.
 ; Sibling: kn5000 sub-CPU 0x00FEE4, v142/subcpu/subcpu_data_tables.s:1010
 ; ----------------------------------------------------------------------------
 Voice_DepthMirror_Table:
@@ -125061,7 +125216,7 @@ PitchBend_ScaleCoeff_Table:
 ; 7 rows x 256 bytes.  Byte [(group << 8) + row], where the row index comes from
 ; Voice_Colour_RowOffset_Table below.  Each row is a monotone 0x00..0xFF transfer
 ; curve and higher groups bow it harder -- a brightness/colour response.
-; Referenced from 0xFA7CF7.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1058.
+; Referenced from 0xFA7CF5.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1058.
 ; ⚠ The sibling notes the group selector is 3 bits but only 7 rows exist; row 7
 ; would run into the table that follows.  The same is true here.
 ; Sibling: kn5000 sub-CPU 0x00FFE4, v142/subcpu/subcpu_data_tables.s:1058
@@ -125192,7 +125347,7 @@ Voice_Colour_TransferCurves:
 ;
 ; 128 bytes.  First stage of the colour lookup: row = table[control value], then
 ; the byte at Voice_Colour_TransferCurves[(group << 8) + row] is the answer.
-; Referenced from 0xFA7CE6.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1296.
+; Referenced from 0xFA7CE4.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1296.
 ; Sibling: kn5000 sub-CPU 0x0106E4, v142/subcpu/subcpu_data_tables.s:1296
 ; ----------------------------------------------------------------------------
 Voice_Colour_RowOffset_Table:
@@ -125210,7 +125365,7 @@ Voice_Colour_RowOffset_Table:
 ;
 ; 256 u16, monotone 0x0000..0x07FA.  Output-level curve; the sibling records that
 ; the index is a clamped byte and the result is doubled again by the caller.
-; Referenced from 0xFA7DD3 and 0xFAC32C.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1317.
+; Referenced from 0xFA7DD1 and 0xFAC32A.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1317.
 ; Sibling: kn5000 sub-CPU 0x010764, v142/subcpu/subcpu_data_tables.s:1317
 ; ----------------------------------------------------------------------------
 Voice_OutputLevel_Table:
@@ -125279,7 +125434,7 @@ EGEnv_ValueCurve_Simple:
 ; EGEnv_BaseCurve_A -- 0xFDE12B..0xFDE22A  (256 bytes)
 ;
 ; 128 u16, 0x0000..0x1FFF, 0x10 per step then bowing.  Envelope BASE curve A.
-; References: 0xFA798D, 0xFBDA8A, 0xFBDAC0.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1378.
+; References: 0xFA798B, 0xFBDA88, 0xFBDABE.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1378.
 ; Sibling: kn5000 sub-CPU 0x010A64, v142/subcpu/subcpu_data_tables.s:1378
 ; ----------------------------------------------------------------------------
 EGEnv_BaseCurve_A:
@@ -125304,7 +125459,7 @@ EGEnv_BaseCurve_A:
 ; EGEnv_BaseCurve_B -- 0xFDE22B..0xFDE32A  (256 bytes)
 ;
 ; 128 u16.  Envelope BASE curve B -- the sibling records it as a pure linear ramp
-; of 0x40 per step.  References: 0xFA7A6F, 0xFBDAFB, 0xFBDB31.  Byte-identical to
+; of 0x40 per step.  References: 0xFA7A6D, 0xFBDAF9, 0xFBDB2F.  Byte-identical to
 ; v142/subcpu/subcpu_data_tables.s:1399.
 ; Sibling: kn5000 sub-CPU 0x010B64, v142/subcpu/subcpu_data_tables.s:1399
 ; ----------------------------------------------------------------------------
@@ -125356,7 +125511,7 @@ Voice_FreqWrite_BaseCurve:
 ; Voice_ToneRampPitch_Curve -- 0xFDE42B..0xFDE47A  (80 bytes)
 ;
 ; 80 bytes, an ease-out curve 0x00..0xFF indexed by the pitch ramp position.
-; References: 0xFAC829, 0xFAC92A, 0xFAC955, 0xFAC9D8.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1442.
+; References: 0xFAC827, 0xFAC928, 0xFAC953, 0xFAC9D6.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1442.
 ; Sibling: kn5000 sub-CPU 0x010D64, v142/subcpu/subcpu_data_tables.s:1442
 ; ----------------------------------------------------------------------------
 Voice_ToneRampPitch_Curve:
@@ -125369,7 +125524,7 @@ Voice_ToneRampPitch_Curve:
 ; ----------------------------------------------------------------------------
 ; Voice_ToneRampFilter_Curve -- 0xFDE47B..0xFDE494  (26 bytes)
 ;
-; 26 bytes, a linear 0x00..0xFF filter-ramp curve.  References: 0xFAC867,
+; 26 bytes, a linear 0x00..0xFF filter-ramp curve.  References: 0xFAC865,
 ; 0xFAC93A, 0xFAC97D, 0xFAC9C5, and four 24-bit forms.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1457.
 ; ⚠ The sibling documents a shipped quirk: two of its indexing paths run past 26
 ; entries into the next table.  Not re-checked for the WSA1 readers.
@@ -125383,7 +125538,7 @@ Voice_ToneRampFilter_Curve:
 ; Voice_PitchDepth_Scale -- 0xFDE495..0xFDE594  (256 bytes)
 ;
 ; 256 bytes, a slow-rising 0x20..0xF8 scale curve (pitch half of the output-list
-; build in the sibling).  Referenced from 0xFAC4B5.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1469.
+; build in the sibling).  Referenced from 0xFAC4B3.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1469.
 ; Sibling: kn5000 sub-CPU 0x010DCE, v142/subcpu/subcpu_data_tables.s:1469
 ; ----------------------------------------------------------------------------
 Voice_PitchDepth_Scale:
@@ -125407,7 +125562,7 @@ Voice_PitchDepth_Scale:
 ; ----------------------------------------------------------------------------
 ; Voice_FilterDepth_Scale -- 0xFDE595..0xFDE694  (256 bytes)
 ;
-; 256 bytes, 0x40..0xFF (filter half).  Referenced from 0xFAC618.
+; 256 bytes, 0x40..0xFF (filter half).  Referenced from 0xFAC616.
 ; Byte-identical to v142/subcpu/subcpu_data_tables.s:1506.
 ; Sibling: kn5000 sub-CPU 0x010ECE, v142/subcpu/subcpu_data_tables.s:1506
 ; ----------------------------------------------------------------------------
@@ -125503,7 +125658,7 @@ DSP_AlgoChannel_SelectorRecords:
 ;
 ; 12 rows x 51 u16, stride 0x66.  One contiguous pool of ascending frequency /
 ; coefficient curves addressed with three different row bases in the sibling; row 7
-; is the constant 0x0B4D there and here.  References: 0xFB5AA4, 0xFB5AD8, 0xFB5B2D,
+; is the constant 0x0B4D there and here.  References: 0xFB5AA2, 0xFB5AD6, 0xFB5B2B,
 ; 0xFB5CE0.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1565.
 ; Sibling: kn5000 sub-CPU 0x011016, v142/subcpu/subcpu_data_tables.s:1565
 ; ----------------------------------------------------------------------------
@@ -125609,7 +125764,7 @@ DSP_ChanFreq_CurvePool:
 ; DSP_ChanFreq_IndexMap -- 0xFDEBB9..0xFDEBEB  (51 bytes)
 ;
 ; 51 bytes: identity through 0x15, then bowing up to 0x7F -- a 51-step
-; exponential bend used to index the pool above.  References: 0xFB6332, 0xFB6358,
+; exponential bend used to index the pool above.  References: 0xFB6330, 0xFB6356,
 ; 0xFB6372.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1679.
 ; Sibling: kn5000 sub-CPU 0x0114DE, v142/subcpu/subcpu_data_tables.s:1679
 ; ----------------------------------------------------------------------------
@@ -125624,7 +125779,7 @@ DSP_ChanFreq_IndexMap:
 ;
 ; 4 u16 {0x0000, 0xC000, 0x4000, 0x8000} -- a 2-bit envelope/format mode field
 ; pre-shifted into bits 15..14, ORed into the computed envelope word.
-; References: 0xFA79E4, 0xFA7AC6, 0xFA7BB4, 0xFA7C27.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1692.
+; References: 0xFA79E2, 0xFA7AC4, 0xFA7BB2, 0xFA7C25.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1692.
 ; Sibling: kn5000 sub-CPU 0x011511, v142/subcpu/subcpu_data_tables.s:1692
 ; ----------------------------------------------------------------------------
 EGEnv_ModeBits_Table:
@@ -125635,7 +125790,7 @@ EGEnv_ModeBits_Table:
 ;
 ; 7 curves x 128 SIGNED bytes (0xC0..0x00, i.e. -64..0).  TVF cutoff key-follow:
 ; a 3-bit selector picks the curve, key & 0x7F indexes inside it, and the signed
-; byte is scaled by the key-follow depth.  References: 0xFA7718, 0xFA77D1.
+; byte is scaled by the key-follow depth.  References: 0xFA7716, 0xFA77CF.
 ; Byte-identical to v142/subcpu/subcpu_data_tables.s:1700.
 ; ⚠ Same shipped quirk as the sibling: the selector is 3 bits but only 7 curves
 ; exist, so selector 7 reads into the table that follows.
@@ -125710,7 +125865,7 @@ TVF_KeyFollow_Curves:
 ; Voice_LevelPair_AttackCurve -- 0xFDEF74..0xFDEFD8  (101 bytes)
 ;
 ; 101 bytes, descending 0xFF..0x09, indexed by a level clamped to 0..100.
-; References: 0xFAA56D, 0xFAA9EB, 0xFAADA5, 0xFAB152.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1827.
+; References: 0xFAA56B, 0xFAA9E9, 0xFAADA3, 0xFAB150.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1827.
 ; Sibling: kn5000 sub-CPU 0x011899, v142/subcpu/subcpu_data_tables.s:1827
 ; ----------------------------------------------------------------------------
 Voice_LevelPair_AttackCurve:
@@ -125779,7 +125934,7 @@ Ramp_0_to_100_Curve:
 ; Detune_Scale_Curve -- 0xFDF123..0xFDF155  (51 bytes)
 ;
 ; 51 bytes, piecewise-linear 0x00..0x7F with knees at [16] and [32].  Detune
-; scaling, symmetric about 0 in the sibling.  References: 0xFA7629, 0xFA7648,
+; scaling, symmetric about 0 in the sibling.  References: 0xFA7627, 0xFA7646,
 ; 0xFA7661.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1889.
 ; Sibling: kn5000 sub-CPU 0x0119C8, v142/subcpu/subcpu_data_tables.s:1889
 ; ----------------------------------------------------------------------------
@@ -125833,7 +125988,7 @@ TVF_DepthRecords_A:
 ; TVF_DepthRecords_B -- 0xFDF180..0xFDF1A9  (42 bytes)
 ;
 ; 14 records x 3 bytes, the mirror image of set A (the flag column moves from the
-; negative arm to the positive arm).  References 0xFA7836, 0xFA785A, and 0xFA7846
+; negative arm to the positive arm).  References 0xFA7834, 0xFA7858, and 0xFA7845
 ; for the +1 column.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1922.
 ; Sibling: kn5000 sub-CPU 0x011A25, v142/subcpu/subcpu_data_tables.s:1922
 ; ----------------------------------------------------------------------------
@@ -125871,7 +126026,7 @@ TVF_DepthRecords_B:
 ; Voice_FineTune_Curve -- 0xFDF1AA..0xFDF229  (128 bytes)
 ;
 ; 128 signed bytes, a +-8 fine-tune dip curve (0 at both ends, -8 mid-scale),
-; added into the pitch accumulator.  References: 0xFAB656, 0xFAB75B.
+; added into the pitch accumulator.  References: 0xFAB654, 0xFAB759.
 ; Byte-identical to v142/subcpu/subcpu_data_tables.s:1941.
 ; Sibling: kn5000 sub-CPU 0x011A4F, v142/subcpu/subcpu_data_tables.s:1941
 ; ----------------------------------------------------------------------------
@@ -125889,7 +126044,7 @@ Voice_FineTune_Curve:
 ; Instrument_OctaveShift_Semitones -- 0xFDF22A..0xFDF239  (16 bytes)
 ;
 ; 16 signed bytes = 12*k semitones for k = -8..+7, i.e. -96, -84 ... 0 ... +84.
-; Whole-octave transpose offsets.  Referenced from 0xFA737E.
+; Whole-octave transpose offsets.  Referenced from 0xFA737C.
 ; Byte-identical to v142/subcpu/subcpu_data_tables.s:1962.
 ; Sibling: kn5000 sub-CPU 0x011ACF, v142/subcpu/subcpu_data_tables.s:1962
 ; ----------------------------------------------------------------------------
@@ -125901,7 +126056,7 @@ Instrument_OctaveShift_Semitones:
 ;
 ; 9 bytes {0x31,0x31,0x35,0x39,0x3D,0x41,0x45,0x49,0x4D} -- an index INTO
 ; Voice_EnvelopeLevel_Curve above, so the pair is read as curve[map[n]].
-; References: 0xFAB96B, 0xFABA74, 0xFABB43, 0xFABC39.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1971.
+; References: 0xFAB969, 0xFABA72, 0xFABB41, 0xFABC37.  Byte-identical to v142/subcpu/subcpu_data_tables.s:1971.
 ; Sibling: kn5000 sub-CPU 0x011ADF, v142/subcpu/subcpu_data_tables.s:1971
 ; ----------------------------------------------------------------------------
 Voice_EnvLevel_IndexMap:
@@ -125912,7 +126067,7 @@ Voice_EnvLevel_IndexMap:
 ;
 ; 128 bytes, every entry 0x96 except [49] = 0x88 -- shipped that way in BOTH
 ; machines, which is itself the strongest possible check that the two tables are
-; the same object.  Referenced from 0xFAB847 (and 0xFAB85B, 24-bit).
+; the same object.  Referenced from 0xFAB845 (and 0xFAB85A, 24-bit).
 ; Byte-identical to v142/subcpu/subcpu_data_tables.s:1979.
 ; Sibling: kn5000 sub-CPU 0x011AE8, v142/subcpu/subcpu_data_tables.s:1979
 ; ----------------------------------------------------------------------------
@@ -126006,7 +126161,7 @@ Voice_KeyShiftRamp_Steps:
 ;
 ; 128 u16, a non-linear attenuation curve 0xFF01 .. 0x0000 indexed by a 0..0x7F
 ; controller value (CC 7 volume / CC 11 expression in the sibling).
-; References: 0xFAD712, 0xFAD7A9.  Byte-identical to v142/subcpu/subcpu_data_tables.s:2062.
+; References: 0xFAD710, 0xFAD7A7.  Byte-identical to v142/subcpu/subcpu_data_tables.s:2062.
 ; ★ NOTE THE ALIGNMENT STEP HERE.  Between Voice_KeyShiftRamp_Steps and this table
 ;   the WSA1-to-KN5000 offset moves by exactly 0x80, because the KN5000's 128-byte
 ;   Voice_AltNoteMap_Curve (v142/subcpu/subcpu_data_tables.s:2040) has NO counterpart in the WSA1 image.
@@ -126042,7 +126197,7 @@ Voice_CC_VolumeCurve:
 ; Field offsets located by the sibling, not re-verified here: +0x00/+0x01/+0x1A
 ; copied to a part record; +0x02 top two bits index EGEnv_ModeBits_Table; +0x06 a
 ; packet sub-index; +0x0D bit 7 selects the +0x0E byte; +0x13 + 5*channel a
-; per-channel flag.  References: 0xFB5994, 0xFB5B15, 0xFB5C39, 0xFB5DC2.
+; per-channel flag.  References: 0xFB5992, 0xFB5B13, 0xFB5C37, 0xFB5DC0.
 ; Sibling: kn5000 sub-CPU 0x011E16, v142/subcpu/subcpu_data_tables.s:2084
 ; ----------------------------------------------------------------------------
 DSP_AlgoDescriptor_Records:
@@ -126098,7 +126253,7 @@ DSP_AlgoDescriptor_Records:
 ; ----------------------------------------------------------------------------
 ; Voice_SecondaryParam_Curve -- 0xFDF6C5..0xFDF6E3  (31 bytes)
 ;
-; 31 bytes descending 0x46..0x00 (70..0).  References: 0xFB0D42, 0xFB0FD8,
+; 31 bytes descending 0x46..0x00 (70..0).  References: 0xFB0D40, 0xFB0FD6,
 ; 0xFB11E7, 0xFB146C.  Byte-identical to v142/subcpu/subcpu_data_tables.s:2198.
 ; Sibling: kn5000 sub-CPU 0x012038, v142/subcpu/subcpu_data_tables.s:2198
 ; ----------------------------------------------------------------------------
@@ -126110,7 +126265,7 @@ Voice_SecondaryParam_Curve:
 ; Voice_SecondaryParam_WordCurveA -- 0xFDF6E4..0xFDF721  (62 bytes)
 ;
 ; 31 s16: 0xFF00 then -62..0.  Indexed by a parameter byte * 2.
-; References: 0xFB0D5F, 0xFB0D99, 0xFB0FF2, 0xFB1026.  Byte-identical to v142/subcpu/subcpu_data_tables.s:2208.
+; References: 0xFB0D5D, 0xFB0D97, 0xFB0FF0, 0xFB1024.  Byte-identical to v142/subcpu/subcpu_data_tables.s:2208.
 ; Sibling: kn5000 sub-CPU 0x012057, v142/subcpu/subcpu_data_tables.s:2208
 ; ----------------------------------------------------------------------------
 Voice_SecondaryParam_WordCurveA:
@@ -126122,7 +126277,7 @@ Voice_SecondaryParam_WordCurveA:
 ; ----------------------------------------------------------------------------
 ; Voice_SecondaryParam_WordCurveB -- 0xFDF722..0xFDF75F  (62 bytes)
 ;
-; 31 s16: 0xFF00 then -116..0 in steps of 4.  References: 0xFB0D7C, 0xFB100C,
+; 31 s16: 0xFF00 then -116..0 in steps of 4.  References: 0xFB0D7A, 0xFB100A,
 ; 0xFB121B, 0xFB14B4.  Byte-identical to v142/subcpu/subcpu_data_tables.s:2217.
 ; Sibling: kn5000 sub-CPU 0x012095, v142/subcpu/subcpu_data_tables.s:2217
 ; ----------------------------------------------------------------------------

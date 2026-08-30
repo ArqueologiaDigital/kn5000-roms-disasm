@@ -138,9 +138,9 @@
 ;
 ;     python3 notes/prom_d_finish_round7.py
 ;
-;   witnessed  3,421   the name has a route: the object's own ASCII, an
+;   witnessed  3,429   the name has a route: the object's own ASCII, an
 ;                      Evidence: line, or a witnessed object it is part of
-;   nameless     243   NOT named -- and the reason is stated PER OBJECT, in
+;   nameless     235   NOT named -- and the reason is stated PER OBJECT, in
 ;                      this file, next to the object it is about
 ;   boundary       1   prom_d_end, a zero-length end marker, not an object
 ;   ★ NO WITNESS AT ALL: 0
@@ -148,24 +148,24 @@
 ; ⚠ AND GRADED BY PROVENANCE, WHICH IS WHAT A PERCENTAGE HIDES.  A name can
 ; rest on very different things, and this image's rest mostly on two:
 ;   self-named        1,708  the object's own 13- or 16-byte ASCII field
-;   KN5000 transplant 1,327  ⚠ the name is the SIBLING MACHINE'S, and NO prom_c
+;   KN5000 transplant 1,335  ⚠ the name is the SIBLING MACHINE'S, and NO prom_c
 ;                            instruction reads the directory slot the region
 ;                            it sits in hangs off.  The slots, in full:
 ;                            +0x0C +0x10 +0x14 +0x18 +0x20 +0x24
 ;                            +0x28 +0x2C +0x30 +0x38 +0x48 +0x5C
 ;   image-internal      337  a relation measured inside this image
 ;   reader-backed        49  prom_c reads the slot and the read says what it is
-;   nameless            243  the 243 above, kept in the same denominator
+;   nameless            235  the 235 above, kept in the same denominator
 ; So a reader who wants only what THIS machine's firmware confirms should
-; discount 1,327 of the 3,665 labels below.  That is the number, said once, here.
+; discount 1,335 of the 3,665 labels below.  That is the number, said once, here.
 ;
-; ⚠ AND THE 93.4% CONTENT FIGURE THIS FILE SCORES ON
+; ⚠ AND THE 93.6% CONTENT FIGURE THIS FILE SCORES ON
 ; notes/wave7_documentation_metrics.py IS NOT ROBUST TO SPELLING.  491 of the
 ; labels it grades CONTENT are <stem>_<Word><digits> whose digits run 0..n-1
 ; over three or more siblings with no self-named ancestor -- the same shape as
 ; `PercInst_17`, which the same metric grades FRAMED.  The difference is an
 ; underscore before the number.  Counting those as framed instead, this file
-; reads 80.0%.  Both are true of a stated rule and neither is quoted without
+; reads 80.2%.  Both are true of a stated rule and neither is quoted without
 ; the other.  notes/prom_d_finish_round7.py Q1, Q2, Q8; 56 checks.
 ;
 ; ------------------------------------------------------------------------------
@@ -178,10 +178,10 @@
 ;     B  does a prom_c READER reach the region it is in?
 ;     C  does anything POINT AT it -- a stored index, one of this image's
 ;        own 1,281 pointer fields, or an address spelling?
-; 3,422 NAMED, 243 NAMELESS -- and every nameless object carries all three
+; 3,430 NAMED, 235 NAMELESS -- and every nameless object carries all three
 ; answers below, not one mechanism's failure.
 ;
-; ⚠ AND THE TABLE ADMITS ITS OWN GAP: 847 objects are NAMED while answering
+; ⚠ AND THE TABLE ADMITS ITS OWN GAP: 854 objects are NAMED while answering
 ; NO to all three.  They are named by round 6's fourth route -- the object
 ; CONTAINS A COPY of a named object's bytes -- which is why the three answers
 ; are printed as facts about routes and NOT as a verdict.
@@ -231,10 +231,10 @@
 ;
 ; ★★ AND IT PUBLISHES A HARSHER NUMBER THAN THE GOAL METRIC'S UPPER BOUND
 ; OF 100 PER CENT:
-;       2,886 of 3,665 labels have their NAME re-derived from this image's own
+;       2,894 of 3,665 labels have their NAME re-derived from this image's own
 ;       bytes -- a record's ASCII name field, a measured byte identity, a
 ;       curve's own run lengths, a descriptor's own 32-bit offsets;
-;       779 have only their ADDRESS derived.  Those names are structural
+;       771 have only their ADDRESS derived.  Those names are structural
 ;       or transplanted and this image does not spell them.
 ;     Framing is not naming, and that split is the honest reading of a
 ;     file with zero sub_XXXXXX.
@@ -277,13 +277,96 @@
 ;   is WHICH PHYSICAL PART this is -- a document question, not a disassembly
 ;   one, and no census of these bytes can answer it.
 ;
+;
+; ------------------------------------------------------------------------------
+; ★★ WAVE 7 ROUND 11 -- THE SOUND GROUP: WHAT THE PANEL CALLS TONE k
+; ------------------------------------------------------------------------------
+;
+; Every round from 4 to 10 asked this image about itself, or about prom_c,
+; which is the only image that READS it.  Round 11 asked the two images
+; nobody had opened: prom_a, which paints the panel, and prom_b, which
+; stores the panel's text.  They settle a sentence that had stood over this
+; image's tone table since round 4 -- that its index order is `a Technics-
+; internal ordering; nothing here identifies which panel control it
+; corresponds to`.
+;
+; ★★ THE TONE INDEX IS 8*GROUP + MEMBER, and it is a proof rather than an
+; alignment:
+;   * prom_a addresses prom_b's group/member table at 0xF06EF4 as 0xFC230C
+;     `mul WA,0x0010` + 0xFC2317 `mul BC,0x0002` + 0xFC231D `add XBC,
+;     0x00F06EF4` -- 16 bytes per group over 2 bytes per member, so a
+;     group's row holds 8 members.  prom_b's own
+;     GroupMaxMemberIndex_ToneGroups at 0xF06EB4 holds 0x07 in all 16 of its
+;     bytes, which is the same number said a second way.
+;   * entry k of that table is a (program, bank-select) pair, and resolving
+;     it through THIS image's own ToneDB_BankMap (+0x6C) and
+;     ToneDB_ToneNumBanks (+0x04) gives tone k -- 272 consecutive entries,
+;     entry 0 and entry 271 both checked, and entry 272 is the first that is
+;     not its own index.  So the table is the INVERSE of this image's
+;     program map and is indexed by TONE INDEX.
+;   * 272 / 8 = 34 groups, and prom_b's 16-byte name table at 0xF068B4 has
+;     EXACTLY 34 named rows before row 34 turns into `----------------`:
+;     PIANO, E.PIANO, HARPSI. & MALLET ... PERCUSSION, EFFECT, DRUMS 1,
+;     DRUMS 2.
+;
+; ⚠ WHICH NAME GOES WITH WHICH OCTET is a SEPARATE claim from that, and it
+;   has two independent witnesses rather than an assertion: 23 of the 34
+;   group names share a word of >=3 letters with one of the 8 tone names
+;   their octet holds, where rotating the numbering scores at most 7 -- and
+;   the +/-1 shifts are NOT independent nulls, because the list has runs like
+;   GUITAR 1/2/3, which Q21 states rather than hides.  And at the END of the
+;   table, where a rule that stops early shows, the 16 tone names ending in
+;   `Kit` occupy exactly groups [32, 33], which are exactly the rows whose text
+;   spells DRUM.  11 groups share no word and are listed by name in Q21.
+;
+; ⚠ WHAT IT DOES NOT SAY: it names no BYTE of a tone record and says
+;   nothing about what a group means to the synthesis.  It says what the
+;   PANEL calls tone k, and every banner below claims only that.
+;
+; ★ WHAT IT NAMED: 8 framed records of ToneDB_MixerDefaultTable, as
+;   `_SelectedForGroup_<GROUP>` -- the records whose map columns ALL lie in
+;   one group.  The bound is 1 and not round 8's 3 because a group already
+;   names 8 tones; the sweep to 5 is printed in Q22.  Two of the 8 are the
+;   records round 10 refused because the only tone name there CamelCases to
+;   `161`, and one is the LAST record of the array, which round 10 refused
+;   for carrying four names.
+;   ⚠ AND THE RULE COSTS ONE NAME, printed rather than left implicit:
+;   round 10 never labels a record that HAS a byte twin, so that no derived
+;   name can contradict another, and M10 keeps that rule.
+;    record 67's map columns are all STRINGS 1, while the tone blocks that
+;    carry its bytes reach STRINGS 1 and STRINGS 2.
+;   That is the record the rule is for.  (Q22f)
+;
+; ⚠ AND WHAT IT REFUSED, measured rather than skipped:
+;   * the 64 records of ToneDB_WaveSelTailPresets.  The 7 presets anything
+;     selects at all are selected by records of the +0x18 array, and none
+;     reaches one group by either route.  The nearest miss is preset 4, ALL
+;     16 of whose records are identified and which spans BRASS, TRUMPET and
+;     DEEP BRASS -- three groups, 24 tones.  (Q24)
+;   * the 37 framed records of ToneDB_PercMixerDefaultTable: a drum record's
+;     group can only be one of the 2 rows spelling DRUM, so the coarser
+;     question is coarser than the array itself.  (Q25)
+;   * tone record 0x05D, whose own 16 bytes are the drawbar registration
+;     this tree's CamelCase rule turns into `161`.  It is member 5 of group
+;     11 'ORGAN' -- so the object is PLACED -- and it KEEPS the `161` label,
+;     because spelling the apostrophes would invent a morpheme.  (Q26)
+;
+; ★★ AND A CENSUS ROUND 10 RAN ON ONE MAP, RUN ON ALL TEN.  Of the ten
+;   1,024-entry maps whose range fits the 322-record array, ONLY slot +0x0C
+;   is a selector: it agrees with the byte rule on 69.9% of its asked
+;   positions and the best of the other 9 reaches 3.3%, each within a
+;   few points of its own shuffled null.  It reaches 0 of the 111 unreached
+;   records, while the maps that DO reach them are exactly the ones that
+;   fail the test.  So `unreached` is now a statement about the only map
+;   that IS a selector, not about the only map anyone tried.  (Q23)
+;
 ; Reproduce every number quoted in this file:
 ;     python3 scripts/analysis/prom_d_tone_database.py
 ;     python3 notes/prom_d_structures_round2.py        # the record framing, 78 checks
 ;     python3 notes/prom_d_documentation_round3.py     # who READS it, 62 checks
 ;     python3 notes/prom_d_base_checks.py              # the base, 12 checks
 ;     python3 notes/prom_d_finish_round7.py --selftest # the inventory, 56 checks
-;     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, 97 checks
+;     python3 notes/prom_d_inventory_round8.py --selftest # ★ THE WHOLE IMAGE, 129 checks
 ; Regenerate this file:
 ;     python3 scripts/analysis/gen_prom_d_asm.py
 ; Then, always:
@@ -2046,6 +2129,42 @@ ToneNumBank_SpecialSound:
 ; Same structure and same directory slot as the KN5000's table of the same
 ; name (629 entries there).
 ; 
+; ★★ WAVE 7 ROUND 11 -- THE INDEX ORDER IS THE PANEL'S SOUND GROUP ORDER.
+; Rounds 4-10 left this table's ORDER unexplained.  It is 34 groups of 8:
+; tone index k is group k/8, member k%8, and the group's displayed name is
+; prom_b's 16 ASCII bytes at 0xF068B4 + 16*group.  The 34 groups, in this
+; table's own order:
+;      0 PIANO               1 E.PIANO             2 HARPSI. & MALLET 
+;      3 SPECIAL MALLET      4 SPECIAL PERC.       5 GUITAR 1         
+;      6 GUITAR 2            7 GUITAR 3            8 STRINGS 1        
+;      9 STRINGS 2          10 VOCAL              11 ORGAN            
+;     12 PIPE & ACCORDION   13 BASS 1             14 BASS 2           
+;     15 BASS 3             16 BRASS              17 TRUMPET          
+;     18 DEEP BRASS         19 SAXOPHONE          20 REED             
+;     21 FLUTE              22 OTHER FLUTE&REED   23 ETHNIC PERC.     
+;     24 SYNTH LEAD 1       25 SYNTH LEAD 2       26 SYNTH LEAD 3     
+;     27 SYNTH PAD 1        28 SYNTH PAD 2        29 SYNTH PAD 3      
+;     30 PERCUSSION         31 EFFECT             32 DRUMS 1          
+;     33 DRUMS 2          
+; 
+; Evidence: prom_a 0xFC231D `add XBC,0x00F06EF4` reaches prom_b's
+; group/member table after 0xFC230C `mul WA,0x0010` (group) and 0xFC2317
+; `mul BC,0x0002` (member), so a group's row holds 16/2 = 8 entries; entry
+; k of that table is a (program, bank-select) pair which THIS image's own
+; ToneDB_BankMap and ToneDB_ToneNumBanks resolve to tone k, for 272
+; consecutive entries k = 0..271 (entry 272 is the first that is not its own
+; index); 272/8 = 34, and prom_b's name table has exactly 34 named rows
+; before row 34 becomes `----------------`.
+; ⚠ WHICH NAME GOES WITH WHICH OCTET is a separate claim and is witnessed
+; twice: 23 of the 34 group names share a word with one of the 8 tone names
+; in their octet against a best rotation of 7, and the 16 tone names ending
+; in `Kit` occupy exactly the groups whose names spell DRUM.  11 groups
+; share no word; Q21 lists them.
+; ⚠ AND THE PROGRAM ORDER OF ToneDB_ToneNumBanks IS A DIFFERENT THING and is
+; still unexplained -- it is not General MIDI (round 9 Q14) and this finding
+; says nothing about it.
+; notes/prom_d_inventory_round8.py Q21.
+; 
 ; Evidence: prom_c reads directory slot +0x08 at 1 site.  The first is
 ; 0xFB4283 `ld XBC,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
 ; 0xFB4288 by `ld XWA,(XBC+0x08)`.  All 1: 0xFB4288.
@@ -2660,6 +2779,13 @@ ToneDB_OctaveShiftByProgram_Bank7:
 ; file 0x00B80; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 0 'PIANO', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*0.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_000_Piano:
 	.ascii "     Piano      "	; 013C8
 	; common part
@@ -2707,6 +2833,13 @@ ToneRec_000_Piano_WaveSel1:
 ; file 0x00B84; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 0 'PIANO', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*0.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_001_WSAPiano:
 	.ascii "   WSA Piano    "	; 01599
 	; common part
@@ -2754,6 +2887,13 @@ ToneRec_001_WSAPiano_WaveSel1:
 ; file 0x00B88; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 0 'PIANO', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*0.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_002_RockPiano:
 	.ascii "   Rock Piano   "	; 0176A
 	; common part
@@ -2801,6 +2941,13 @@ ToneRec_002_RockPiano_WaveSel1:
 ; file 0x00B8C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 0 'PIANO', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*0.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_003_HonkyTonkPiano:
 	.ascii "Honky-Tonk Piano"	; 0193B
 	; common part
@@ -2848,6 +2995,13 @@ ToneRec_003_HonkyTonkPiano_WaveSel1:
 ; file 0x00B90; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 0 'PIANO', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*0.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_004_ElectricGrand:
 	.ascii " Electric Grand "	; 01B0C
 	; common part
@@ -2895,6 +3049,13 @@ ToneRec_004_ElectricGrand_WaveSel1:
 ; file 0x00B94; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 0 'PIANO', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*0.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_005_MidiGrand1:
 	.ascii "  Midi Grand 1  "	; 01CDD
 	; common part
@@ -2953,6 +3114,13 @@ ToneRec_005_MidiGrand1_WaveSel2:
 ; file 0x00B98; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 0 'PIANO', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*0.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_006_MidiGrand2:
 	.ascii "  Midi Grand 2  "	; 01F2A
 	; common part
@@ -3011,6 +3179,13 @@ ToneRec_006_MidiGrand2_WaveSel2:
 ; file 0x00B9C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 0 'PIANO', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*0.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_007_JanglePiano:
 	.ascii "  Jangle Piano  "	; 02177
 	; common part
@@ -3069,6 +3244,13 @@ ToneRec_007_JanglePiano_WaveSel2:
 ; file 0x00BA0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 1 'E.PIANO', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*1.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_008_EPiano1:
 	.ascii "   E.Piano 1    "	; 023C4
 	; common part
@@ -3105,6 +3287,13 @@ ToneRec_008_EPiano1_WaveSel0:
 ; file 0x00BA4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 1 'E.PIANO', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*1.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_009_EPiano2:
 	.ascii "   E.Piano 2    "	; 02519
 	; common part
@@ -3141,6 +3330,13 @@ ToneRec_009_EPiano2_WaveSel0:
 ; file 0x00BA8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 1 'E.PIANO', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*1.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_00A_SuitcaseEP:
 	.ascii " Suitcase E.P.  "	; 0266E
 	; common part
@@ -3177,6 +3373,13 @@ ToneRec_00A_SuitcaseEP_WaveSel0:
 ; file 0x00BAC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 1 'E.PIANO', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*1.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_00B_TremoloEPiano:
 	.ascii "Tremolo E.Piano "	; 027C3
 	; common part
@@ -3213,6 +3416,13 @@ ToneRec_00B_TremoloEPiano_WaveSel0:
 ; file 0x00BB0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 1 'E.PIANO', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*1.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_00C_ModernEP1:
 	.ascii "  Modern E.P.1  "	; 02918
 	; common part
@@ -3249,6 +3459,13 @@ ToneRec_00C_ModernEP1_WaveSel0:
 ; file 0x00BB4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 1 'E.PIANO', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*1.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_00D_ModernEP2:
 	.ascii "  Modern E.P.2  "	; 02A6D
 	; common part
@@ -3296,6 +3513,13 @@ ToneRec_00D_ModernEP2_WaveSel1:
 ; file 0x00BB8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 1 'E.PIANO', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*1.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_00E_ModernEP3:
 	.ascii "  Modern E.P.3  "	; 02C3E
 	; common part
@@ -3354,6 +3578,13 @@ ToneRec_00E_ModernEP3_WaveSel2:
 ; file 0x00BBC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 1 'E.PIANO', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*1.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_00F_BellPiano:
 	.ascii "   Bell Piano   "	; 02E8B
 	; common part
@@ -3412,6 +3643,13 @@ ToneRec_00F_BellPiano_WaveSel2:
 ; file 0x00BC0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 2 'HARPSI. & MALLET', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*2.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_010_Harpsichord:
 	.ascii "  Harpsichord   "	; 030D8
 	; common part
@@ -3470,6 +3708,13 @@ ToneRec_010_Harpsichord_WaveSel2:
 ; file 0x00BC4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 2 'HARPSI. & MALLET', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*2.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_011_Clavi:
 	.ascii "     Clavi      "	; 03325
 	; common part
@@ -3517,6 +3762,13 @@ ToneRec_011_Clavi_WaveSel1:
 ; file 0x00BC8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 2 'HARPSI. & MALLET', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*2.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_012_SynthClavi:
 	.ascii "  Synth Clavi   "	; 034F6
 	; common part
@@ -3553,6 +3805,13 @@ ToneRec_012_SynthClavi_WaveSel0:
 ; file 0x00BCC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 2 'HARPSI. & MALLET', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*2.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_013_Glockenspiel:
 	.ascii "  Glockenspiel  "	; 0364B
 	; common part
@@ -3600,6 +3859,13 @@ ToneRec_013_Glockenspiel_WaveSel1:
 ; file 0x00BD0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 2 'HARPSI. & MALLET', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*2.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_014_Vibraphone:
 	.ascii "   Vibraphone   "	; 0381C
 	; common part
@@ -3647,6 +3913,13 @@ ToneRec_014_Vibraphone_WaveSel1:
 ; file 0x00BD4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 2 'HARPSI. & MALLET', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*2.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_015_Marimba:
 	.ascii "    Marimba     "	; 039ED
 	; common part
@@ -3683,6 +3956,13 @@ ToneRec_015_Marimba_WaveSel0:
 ; file 0x00BD8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 2 'HARPSI. & MALLET', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*2.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_016_Xylophone:
 	.ascii "   Xylophone    "	; 03B42
 	; common part
@@ -3719,6 +3999,13 @@ ToneRec_016_Xylophone_WaveSel0:
 ; file 0x00BDC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 2 'HARPSI. & MALLET', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*2.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_017_Celesta:
 	.ascii "    Celesta     "	; 03C97
 	; common part
@@ -3755,6 +4042,13 @@ ToneRec_017_Celesta_WaveSel0:
 ; file 0x00BE0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 3 'SPECIAL MALLET', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*3.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_018_SteelDrum:
 	.ascii "   Steel Drum   "	; 03DEC
 	; common part
@@ -3802,6 +4096,13 @@ ToneRec_018_SteelDrum_WaveSel1:
 ; file 0x00BE4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 3 'SPECIAL MALLET', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*3.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_019_PowerSteelDrum:
 	.ascii "Power Steel Drum"	; 03FBD
 	; common part
@@ -3849,6 +4150,13 @@ ToneRec_019_PowerSteelDrum_WaveSel1:
 ; file 0x00BE8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 3 'SPECIAL MALLET', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*3.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_01A_TubularBells:
 	.ascii " Tubular Bells  "	; 0418E
 	; common part
@@ -3885,6 +4193,13 @@ ToneRec_01A_TubularBells_WaveSel0:
 ; file 0x00BEC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 3 'SPECIAL MALLET', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*3.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_01B_TinkleBell:
 	.ascii "  Tinkle Bell   "	; 042E3
 	; common part
@@ -3932,6 +4247,13 @@ ToneRec_01B_TinkleBell_WaveSel1:
 ; file 0x00BF0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 3 'SPECIAL MALLET', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*3.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_01C_BottleMarimba:
 	.ascii " Bottle Marimba "	; 044B4
 	; common part
@@ -3968,6 +4290,13 @@ ToneRec_01C_BottleMarimba_WaveSel0:
 ; file 0x00BF4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 3 'SPECIAL MALLET', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*3.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_01D_AfricanMallet:
 	.ascii " African Mallet "	; 04609
 	; common part
@@ -4015,6 +4344,13 @@ ToneRec_01D_AfricanMallet_WaveSel1:
 ; file 0x00BF8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 3 'SPECIAL MALLET', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*3.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_01E_CaribbeanMallet:
 	.ascii "Caribbean Mallet"	; 047DA
 	; common part
@@ -4073,6 +4409,13 @@ ToneRec_01E_CaribbeanMallet_WaveSel2:
 ; file 0x00BFC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 3 'SPECIAL MALLET', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*3.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_01F_SynthGlocken:
 	.ascii " Synth Glocken  "	; 04A27
 	; common part
@@ -4131,6 +4474,13 @@ ToneRec_01F_SynthGlocken_WaveSel2:
 ; file 0x00C00; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 4 'SPECIAL PERC.', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*4.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_020_Banjo:
 	.ascii "     Banjo      "	; 04C74
 	; common part
@@ -4167,6 +4517,13 @@ ToneRec_020_Banjo_WaveSel0:
 ; file 0x00C04; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 4 'SPECIAL PERC.', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*4.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_021_Mandolin:
 	.ascii "    Mandolin    "	; 04DC9
 	; common part
@@ -4203,6 +4560,13 @@ ToneRec_021_Mandolin_WaveSel0:
 ; file 0x00C08; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 4 'SPECIAL PERC.', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*4.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_022_Harp:
 	.ascii "      Harp      "	; 04F1E
 	; common part
@@ -4250,6 +4614,13 @@ ToneRec_022_Harp_WaveSel1:
 ; file 0x00C0C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 4 'SPECIAL PERC.', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*4.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_023_OrchestraHit1:
 	.ascii "Orchestra Hit 1 "	; 050EF
 	; common part
@@ -4286,6 +4657,13 @@ ToneRec_023_OrchestraHit1_WaveSel0:
 ; file 0x00C10; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 4 'SPECIAL PERC.', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*4.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_024_OrchestraHit2:
 	.ascii "Orchestra Hit 2 "	; 05244
 	; common part
@@ -4344,6 +4722,13 @@ ToneRec_024_OrchestraHit2_WaveSel2:
 ; file 0x00C14; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 4 'SPECIAL PERC.', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*4.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_025_Timpani:
 	.ascii "    Timpani     "	; 05491
 	; common part
@@ -4380,6 +4765,13 @@ ToneRec_025_Timpani_WaveSel0:
 ; file 0x00C18; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 4 'SPECIAL PERC.', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*4.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_026_MusicBox:
 	.ascii "   Music Box    "	; 055E6
 	; common part
@@ -4416,6 +4808,13 @@ ToneRec_026_MusicBox_WaveSel0:
 ; file 0x00C1C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 4 'SPECIAL PERC.', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*4.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_027_ChristmasPiano:
 	.ascii "Christmas Piano "	; 0573B
 	; common part
@@ -4463,6 +4862,13 @@ ToneRec_027_ChristmasPiano_WaveSel1:
 ; file 0x00C20; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 5 'GUITAR 1', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*5.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_028_ClassicalGuitar:
 	.ascii "Classical Guitar"	; 0590C
 	; common part
@@ -4499,6 +4905,13 @@ ToneRec_028_ClassicalGuitar_WaveSel0:
 ; file 0x00C24; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 5 'GUITAR 1', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*5.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_029_SpanishGuitar:
 	.ascii " Spanish Guitar "	; 05A61
 	; common part
@@ -4535,6 +4948,13 @@ ToneRec_029_SpanishGuitar_WaveSel0:
 ; file 0x00C28; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 5 'GUITAR 1', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*5.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_02A_JazzAcGuitar:
 	.ascii " Jazz Ac.Guitar "	; 05BB6
 	; common part
@@ -4571,6 +4991,13 @@ ToneRec_02A_JazzAcGuitar_WaveSel0:
 ; file 0x00C2C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 5 'GUITAR 1', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*5.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_02B_GuitarHarmonics:
 	.ascii "Guitar Harmonics"	; 05D0B
 	; common part
@@ -4618,6 +5045,13 @@ ToneRec_02B_GuitarHarmonics_WaveSel1:
 ; file 0x00C30; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 5 'GUITAR 1', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*5.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_02C_FolkGuitar:
 	.ascii "  Folk Guitar   "	; 05EDC
 	; common part
@@ -4665,6 +5099,13 @@ ToneRec_02C_FolkGuitar_WaveSel1:
 ; file 0x00C34; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 5 'GUITAR 1', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*5.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_02D_12StringGuitar:
 	.ascii "12 String Guitar"	; 060AD
 	; common part
@@ -4734,6 +5175,13 @@ ToneRec_02D_12StringGuitar_WaveSel3:
 ; file 0x00C38; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 5 'GUITAR 1', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*5.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_02E_ElectroAcGuitar:
 	.ascii "ElectroAc.Guitar"	; 06376
 	; common part
@@ -4770,6 +5218,13 @@ ToneRec_02E_ElectroAcGuitar_WaveSel0:
 ; file 0x00C3C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 5 'GUITAR 1', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*5.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_02F_SquareGuitar:
 	.ascii " Square Guitar  "	; 064CB
 	; common part
@@ -4806,6 +5261,13 @@ ToneRec_02F_SquareGuitar_WaveSel0:
 ; file 0x00C40; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 6 'GUITAR 2', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*6.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_030_JazzGuitar1:
 	.ascii " Jazz Guitar 1  "	; 06620
 	; common part
@@ -4842,6 +5304,13 @@ ToneRec_030_JazzGuitar1_WaveSel0:
 ; file 0x00C44; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 6 'GUITAR 2', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*6.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_031_JazzGuitar2:
 	.ascii " Jazz Guitar 2  "	; 06775
 	; common part
@@ -4889,6 +5358,13 @@ ToneRec_031_JazzGuitar2_WaveSel1:
 ; file 0x00C48; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 6 'GUITAR 2', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*6.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_032_BrightSolidGtr:
 	.ascii "Bright Solid Gtr"	; 06946
 	; common part
@@ -4936,6 +5412,13 @@ ToneRec_032_BrightSolidGtr_WaveSel1:
 ; file 0x00C4C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 6 'GUITAR 2', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*6.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_033_MellowSolidGtr:
 	.ascii "Mellow Solid Gtr"	; 06B17
 	; common part
@@ -4972,6 +5455,13 @@ ToneRec_033_MellowSolidGtr_WaveSel0:
 ; file 0x00C50; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 6 'GUITAR 2', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*6.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_034_CleanSolidGtr:
 	.ascii "Clean Solid Gtr "	; 06C6C
 	; common part
@@ -5008,6 +5498,13 @@ ToneRec_034_CleanSolidGtr_WaveSel0:
 ; file 0x00C54; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 6 'GUITAR 2', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*6.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_035_FusionSolidGtr:
 	.ascii "Fusion Solid Gtr"	; 06DC1
 	; common part
@@ -5044,6 +5541,13 @@ ToneRec_035_FusionSolidGtr_WaveSel0:
 ; file 0x00C58; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 6 'GUITAR 2', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*6.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_036_MuteGuitar:
 	.ascii "  Mute Guitar   "	; 06F16
 	; common part
@@ -5102,6 +5606,13 @@ ToneRec_036_MuteGuitar_WaveSel2:
 ; file 0x00C5C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 6 'GUITAR 2', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*6.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_037_FunkMuteGuitar:
 	.ascii "Funk Mute Guitar"	; 07163
 	; common part
@@ -5149,6 +5660,13 @@ ToneRec_037_FunkMuteGuitar_WaveSel1:
 ; file 0x00C60; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 7 'GUITAR 3', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*7.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_038_DistortionGtr1:
 	.ascii "Distortion Gtr 1"	; 07334
 	; common part
@@ -5185,6 +5703,13 @@ ToneRec_038_DistortionGtr1_WaveSel0:
 ; file 0x00C64; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 7 'GUITAR 3', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*7.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_039_DistortionGtr2:
 	.ascii "Distortion Gtr 2"	; 07489
 	; common part
@@ -5221,6 +5746,13 @@ ToneRec_039_DistortionGtr2_WaveSel0:
 ; file 0x00C68; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 7 'GUITAR 3', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*7.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_03A_OverdriveGuitar:
 	.ascii "Overdrive Guitar"	; 075DE
 	; common part
@@ -5268,6 +5800,13 @@ ToneRec_03A_OverdriveGuitar_WaveSel1:
 ; file 0x00C6C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 7 'GUITAR 3', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*7.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_03B_RockHarmonics:
 	.ascii " Rock Harmonics "	; 077AF
 	; common part
@@ -5315,6 +5854,13 @@ ToneRec_03B_RockHarmonics_WaveSel1:
 ; file 0x00C70; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 7 'GUITAR 3', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*7.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_03C_SynthSolidGtr:
 	.ascii "Synth Solid Gtr "	; 07980
 	; common part
@@ -5362,6 +5908,13 @@ ToneRec_03C_SynthSolidGtr_WaveSel1:
 ; file 0x00C74; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 7 'GUITAR 3', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*7.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_03D_CountryGuitar:
 	.ascii " Country Guitar "	; 07B51
 	; common part
@@ -5398,6 +5951,13 @@ ToneRec_03D_CountryGuitar_WaveSel0:
 ; file 0x00C78; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 7 'GUITAR 3', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*7.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_03E_HawaiianGuitar1:
 	.ascii "Hawaiian Guitar1"	; 07CA6
 	; common part
@@ -5434,6 +5994,13 @@ ToneRec_03E_HawaiianGuitar1_WaveSel0:
 ; file 0x00C7C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 7 'GUITAR 3', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*7.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_03F_HawaiianGuitar2:
 	.ascii "Hawaiian Guitar2"	; 07DFB
 	; common part
@@ -5470,6 +6037,13 @@ ToneRec_03F_HawaiianGuitar2_WaveSel0:
 ; file 0x00C80; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 8 'STRINGS 1', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*8.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_040_SymphonicStrings:
 	.ascii "SymphonicStrings"	; 07F50
 	; common part
@@ -5517,6 +6091,13 @@ ToneRec_040_SymphonicStrings_WaveSel1:
 ; file 0x00C84; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 8 'STRINGS 1', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*8.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_041_ClassicalStrings:
 	.ascii "ClassicalStrings"	; 08121
 	; common part
@@ -5553,6 +6134,13 @@ ToneRec_041_ClassicalStrings_WaveSel0:
 ; file 0x00C88; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 8 'STRINGS 1', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*8.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_042_MarcatoStrings:
 	.ascii "Marcato Strings "	; 08276
 	; common part
@@ -5589,6 +6177,13 @@ ToneRec_042_MarcatoStrings_WaveSel0:
 ; file 0x00C8C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 8 'STRINGS 1', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*8.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_043_SlowStrings:
 	.ascii "  Slow Strings  "	; 083CB
 	; common part
@@ -5625,6 +6220,13 @@ ToneRec_043_SlowStrings_WaveSel0:
 ; file 0x00C90; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 8 'STRINGS 1', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*8.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_044_OctaveStrings:
 	.ascii " Octave Strings "	; 08520
 	; common part
@@ -5672,6 +6274,13 @@ ToneRec_044_OctaveStrings_WaveSel1:
 ; file 0x00C94; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 8 'STRINGS 1', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*8.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_045_BassStrings:
 	.ascii "  Bass Strings  "	; 086F1
 	; common part
@@ -5719,6 +6328,13 @@ ToneRec_045_BassStrings_WaveSel1:
 ; file 0x00C98; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 8 'STRINGS 1', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*8.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_046_TremoloStrings:
 	.ascii "Tremolo Strings "	; 088C2
 	; common part
@@ -5766,6 +6382,13 @@ ToneRec_046_TremoloStrings_WaveSel1:
 ; file 0x00C9C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 8 'STRINGS 1', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*8.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_047_PizzicatoStr:
 	.ascii " Pizzicato Str. "	; 08A93
 	; common part
@@ -5813,6 +6436,13 @@ ToneRec_047_PizzicatoStr_WaveSel1:
 ; file 0x00CA0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 9 'STRINGS 2', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*9.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_048_SynthStrings1:
 	.ascii "Synth Strings 1 "	; 08C64
 	; common part
@@ -5871,6 +6501,13 @@ ToneRec_048_SynthStrings1_WaveSel2:
 ; file 0x00CA4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 9 'STRINGS 2', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*9.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_049_SynthStrings2:
 	.ascii "Synth Strings 2 "	; 08EB1
 	; common part
@@ -5918,6 +6555,13 @@ ToneRec_049_SynthStrings2_WaveSel1:
 ; file 0x00CA8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 9 'STRINGS 2', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*9.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_04A_Violin:
 	.ascii "     Violin     "	; 09082
 	; common part
@@ -5954,6 +6598,13 @@ ToneRec_04A_Violin_WaveSel0:
 ; file 0x00CAC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 9 'STRINGS 2', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*9.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_04B_JazzViolin:
 	.ascii "  Jazz Violin   "	; 091D7
 	; common part
@@ -5990,6 +6641,13 @@ ToneRec_04B_JazzViolin_WaveSel0:
 ; file 0x00CB0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 9 'STRINGS 2', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*9.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_04C_Fiddle:
 	.ascii "     Fiddle     "	; 0932C
 	; common part
@@ -6037,6 +6695,13 @@ ToneRec_04C_Fiddle_WaveSel1:
 ; file 0x00CB4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 9 'STRINGS 2', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*9.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_04D_Viola:
 	.ascii "     Viola      "	; 094FD
 	; common part
@@ -6073,6 +6738,13 @@ ToneRec_04D_Viola_WaveSel0:
 ; file 0x00CB8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 9 'STRINGS 2', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*9.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_04E_Cello:
 	.ascii "     Cello      "	; 09652
 	; common part
@@ -6109,6 +6781,13 @@ ToneRec_04E_Cello_WaveSel0:
 ; file 0x00CBC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 9 'STRINGS 2', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*9.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_04F_BowedBass:
 	.ascii "   Bowed Bass   "	; 097A7
 	; common part
@@ -6145,6 +6824,13 @@ ToneRec_04F_BowedBass_WaveSel0:
 ; file 0x00CC0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 10 'VOCAL', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*10.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_050_VocalAh:
 	.ascii "    Vocal Ah    "	; 098FC
 	; common part
@@ -6181,6 +6867,13 @@ ToneRec_050_VocalAh_WaveSel0:
 ; file 0x00CC4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 10 'VOCAL', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*10.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_051_PopVocalAh:
 	.ascii "  Pop Vocal Ah  "	; 09A51
 	; common part
@@ -6217,6 +6910,13 @@ ToneRec_051_PopVocalAh_WaveSel0:
 ; file 0x00CC8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 10 'VOCAL', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*10.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_052_StereoVocalAh:
 	.ascii "Stereo Vocal Ah "	; 09BA6
 	; common part
@@ -6264,6 +6964,13 @@ ToneRec_052_StereoVocalAh_WaveSel1:
 ; file 0x00CCC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 10 'VOCAL', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*10.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_053_VocalOoh:
 	.ascii "   Vocal Ooh    "	; 09D77
 	; common part
@@ -6300,6 +7007,13 @@ ToneRec_053_VocalOoh_WaveSel0:
 ; file 0x00CD0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 10 'VOCAL', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*10.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_054_Humming:
 	.ascii "    Humming     "	; 09ECC
 	; common part
@@ -6347,6 +7061,13 @@ ToneRec_054_Humming_WaveSel1:
 ; file 0x00CD4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 10 'VOCAL', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*10.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_055_VocalDoo:
 	.ascii "   Vocal Doo    "	; 0A09D
 	; common part
@@ -6394,6 +7115,13 @@ ToneRec_055_VocalDoo_WaveSel1:
 ; file 0x00CD8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 10 'VOCAL', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*10.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_056_VocalDaa:
 	.ascii "   Vocal Daa    "	; 0A26E
 	; common part
@@ -6441,6 +7169,13 @@ ToneRec_056_VocalDaa_WaveSel1:
 ; file 0x00CDC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 10 'VOCAL', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*10.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_057_VocalMmm:
 	.ascii "   Vocal Mmm    "	; 0A43F
 	; common part
@@ -6477,6 +7212,13 @@ ToneRec_057_VocalMmm_WaveSel0:
 ; file 0x00CE8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 11 'ORGAN', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*11.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_05A_JazzOrgan:
 	.ascii "   Jazz Organ   "	; 0A594
 	; common part
@@ -6513,6 +7255,13 @@ ToneRec_05A_JazzOrgan_WaveSel0:
 ; file 0x00CEC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 11 'ORGAN', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*11.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_05B_FullDrawbars:
 	.ascii " Full Drawbars  "	; 0A6E9
 	; common part
@@ -6549,6 +7298,13 @@ ToneRec_05B_FullDrawbars_WaveSel0:
 ; file 0x00CF0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 11 'ORGAN', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*11.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_05C_JazzDrawbars:
 	.ascii " Jazz Drawbars  "	; 0A83E
 	; common part
@@ -6585,6 +7341,13 @@ ToneRec_05C_JazzDrawbars_WaveSel0:
 ; file 0x00CF4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 11 'ORGAN', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*11.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_05D_161:
 	.ascii "    16' & 1'    "	; 0A993
 	; common part
@@ -6621,6 +7384,13 @@ ToneRec_05D_161_WaveSel0:
 ; file 0x00CF8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 11 'ORGAN', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*11.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_05E_PopOrgan:
 	.ascii "   Pop Organ    "	; 0AAE8
 	; common part
@@ -6679,6 +7449,13 @@ ToneRec_05E_PopOrgan_WaveSel2:
 ; file 0x00CFC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 11 'ORGAN', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*11.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_05F_RockOrgan:
 	.ascii "   Rock Organ   "	; 0AD35
 	; common part
@@ -6737,6 +7514,13 @@ ToneRec_05F_RockOrgan_WaveSel2:
 ; file 0x00D00; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 12 'PIPE & ACCORDION', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*12.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_060_PipeOrgan1:
 	.ascii "  Pipe Organ 1  "	; 0AF82
 	; common part
@@ -6784,6 +7568,13 @@ ToneRec_060_PipeOrgan1_WaveSel1:
 ; file 0x00D04; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 12 'PIPE & ACCORDION', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*12.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_061_PipeOrgan2:
 	.ascii "  Pipe Organ 2  "	; 0B153
 	; common part
@@ -6831,6 +7622,13 @@ ToneRec_061_PipeOrgan2_WaveSel1:
 ; file 0x00D08; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 12 'PIPE & ACCORDION', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*12.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_062_TheatreOrgan:
 	.ascii " Theatre Organ  "	; 0B324
 	; common part
@@ -6889,6 +7687,13 @@ ToneRec_062_TheatreOrgan_WaveSel2:
 ; file 0x00D0C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 12 'PIPE & ACCORDION', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*12.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_063_Harmonium:
 	.ascii "   Harmonium    "	; 0B571
 	; common part
@@ -6936,6 +7741,13 @@ ToneRec_063_Harmonium_WaveSel1:
 ; file 0x00D10; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 12 'PIPE & ACCORDION', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*12.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_064_BrightAccordion:
 	.ascii "Bright Accordion"	; 0B742
 	; common part
@@ -6972,6 +7784,13 @@ ToneRec_064_BrightAccordion_WaveSel0:
 ; file 0x00D14; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 12 'PIPE & ACCORDION', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*12.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_065_MellowAccordion:
 	.ascii "Mellow Accordion"	; 0B897
 	; common part
@@ -7008,6 +7827,13 @@ ToneRec_065_MellowAccordion_WaveSel0:
 ; file 0x00D18; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 12 'PIPE & ACCORDION', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*12.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_066_Musette:
 	.ascii "    Musette     "	; 0B9EC
 	; common part
@@ -7055,6 +7881,13 @@ ToneRec_066_Musette_WaveSel1:
 ; file 0x00D1C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 12 'PIPE & ACCORDION', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*12.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_067_Bandoneon:
 	.ascii "   Bandoneon    "	; 0BBBD
 	; common part
@@ -7102,6 +7935,13 @@ ToneRec_067_Bandoneon_WaveSel1:
 ; file 0x00D20; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 13 'BASS 1', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*13.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_068_AcousticBass:
 	.ascii " Acoustic Bass  "	; 0BD8E
 	; common part
@@ -7138,6 +7978,13 @@ ToneRec_068_AcousticBass_WaveSel0:
 ; file 0x00D24; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 13 'BASS 1', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*13.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_069_MellowAcBass:
 	.ascii " Mellow Ac.Bass "	; 0BEE3
 	; common part
@@ -7174,6 +8021,13 @@ ToneRec_069_MellowAcBass_WaveSel0:
 ; file 0x00D28; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 13 'BASS 1', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*13.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_06A_ElectricBass:
 	.ascii " Electric Bass  "	; 0C038
 	; common part
@@ -7210,6 +8064,13 @@ ToneRec_06A_ElectricBass_WaveSel0:
 ; file 0x00D2C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 13 'BASS 1', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*13.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_06B_BrightEBass:
 	.ascii " Bright E.Bass  "	; 0C18D
 	; common part
@@ -7246,6 +8107,13 @@ ToneRec_06B_BrightEBass_WaveSel0:
 ; file 0x00D30; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 13 'BASS 1', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*13.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_06C_FusionEBass:
 	.ascii " Fusion E.Bass  "	; 0C2E2
 	; common part
@@ -7282,6 +8150,13 @@ ToneRec_06C_FusionEBass_WaveSel0:
 ; file 0x00D34; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 13 'BASS 1', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*13.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_06D_FunkyEBass:
 	.ascii "  Funky E.Bass  "	; 0C437
 	; common part
@@ -7318,6 +8193,13 @@ ToneRec_06D_FunkyEBass_WaveSel0:
 ; file 0x00D38; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 13 'BASS 1', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*13.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_06E_FretlessBass1:
 	.ascii "Fretless Bass 1 "	; 0C58C
 	; common part
@@ -7354,6 +8236,13 @@ ToneRec_06E_FretlessBass1_WaveSel0:
 ; file 0x00D3C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 13 'BASS 1', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*13.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_06F_FretlessBass2:
 	.ascii "Fretless Bass 2 "	; 0C6E1
 	; common part
@@ -7390,6 +8279,13 @@ ToneRec_06F_FretlessBass2_WaveSel0:
 ; file 0x00D40; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 14 'BASS 2', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*14.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_070_PickedEBass:
 	.ascii " Picked E.Bass  "	; 0C836
 	; common part
@@ -7426,6 +8322,13 @@ ToneRec_070_PickedEBass_WaveSel0:
 ; file 0x00D44; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 14 'BASS 2', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*14.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_071_MuteBass:
 	.ascii "   Mute Bass    "	; 0C98B
 	; common part
@@ -7462,6 +8365,13 @@ ToneRec_071_MuteBass_WaveSel0:
 ; file 0x00D48; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 14 'BASS 2', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*14.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_072_SlapBass1:
 	.ascii "  Slap Bass 1   "	; 0CAE0
 	; common part
@@ -7509,6 +8419,13 @@ ToneRec_072_SlapBass1_WaveSel1:
 ; file 0x00D4C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 14 'BASS 2', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*14.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_073_SlapBass2:
 	.ascii "  Slap Bass 2   "	; 0CCB1
 	; common part
@@ -7556,6 +8473,13 @@ ToneRec_073_SlapBass2_WaveSel1:
 ; file 0x00D50; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 14 'BASS 2', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*14.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_074_SlapBass3:
 	.ascii "  Slap Bass 3   "	; 0CE82
 	; common part
@@ -7603,6 +8527,13 @@ ToneRec_074_SlapBass3_WaveSel1:
 ; file 0x00D54; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 14 'BASS 2', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*14.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_075_AnalogBass:
 	.ascii "  Analog Bass   "	; 0D053
 	; common part
@@ -7639,6 +8570,13 @@ ToneRec_075_AnalogBass_WaveSel0:
 ; file 0x00D58; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 14 'BASS 2', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*14.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_076_SoulBass:
 	.ascii "   Soul Bass    "	; 0D1A8
 	; common part
@@ -7675,6 +8613,13 @@ ToneRec_076_SoulBass_WaveSel0:
 ; file 0x00D5C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 14 'BASS 2', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*14.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_077_SynthChopper:
 	.ascii " Synth Chopper  "	; 0D2FD
 	; common part
@@ -7711,6 +8656,13 @@ ToneRec_077_SynthChopper_WaveSel0:
 ; file 0x00D60; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 15 'BASS 3', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*15.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_078_WowBass1:
 	.ascii "   Wow Bass 1   "	; 0D452
 	; common part
@@ -7747,6 +8699,13 @@ ToneRec_078_WowBass1_WaveSel0:
 ; file 0x00D64; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 15 'BASS 3', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*15.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_079_WowBass2:
 	.ascii "   Wow Bass 2   "	; 0D5A7
 	; common part
@@ -7783,6 +8742,13 @@ ToneRec_079_WowBass2_WaveSel0:
 ; file 0x00D68; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 15 'BASS 3', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*15.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_07A_CrossfadeBass:
 	.ascii " Crossfade Bass "	; 0D6FC
 	; common part
@@ -7830,6 +8796,13 @@ ToneRec_07A_CrossfadeBass_WaveSel1:
 ; file 0x00D6C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 15 'BASS 3', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*15.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_07B_DanceBass:
 	.ascii "   Dance Bass   "	; 0D8CD
 	; common part
@@ -7866,6 +8839,13 @@ ToneRec_07B_DanceBass_WaveSel0:
 ; file 0x00D70; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 15 'BASS 3', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*15.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_07C_HouseBass:
 	.ascii "   House Bass   "	; 0DA22
 	; common part
@@ -7902,6 +8882,13 @@ ToneRec_07C_HouseBass_WaveSel0:
 ; file 0x00D74; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 15 'BASS 3', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*15.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_07D_MetallicBass:
 	.ascii " Metallic Bass  "	; 0DB77
 	; common part
@@ -7938,6 +8925,13 @@ ToneRec_07D_MetallicBass_WaveSel0:
 ; file 0x00D78; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 15 'BASS 3', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*15.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_07E_PlasticBass:
 	.ascii "  Plastic Bass  "	; 0DCCC
 	; common part
@@ -7974,6 +8968,13 @@ ToneRec_07E_PlasticBass_WaveSel0:
 ; file 0x00D7C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 15 'BASS 3', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*15.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_07F_DrMBass:
 	.ascii "   Dr.M Bass    "	; 0DE21
 	; common part
@@ -8021,6 +9022,13 @@ ToneRec_07F_DrMBass_WaveSel1:
 ; file 0x00D80; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 16 'BRASS', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*16.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_080_Brass:
 	.ascii "     Brass      "	; 0DFF2
 	; common part
@@ -8068,6 +9076,13 @@ ToneRec_080_Brass_WaveSel1:
 ; file 0x00D84; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 16 'BRASS', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*16.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_081_BrassSynth:
 	.ascii " Brass & Synth  "	; 0E1C3
 	; common part
@@ -8126,6 +9141,13 @@ ToneRec_081_BrassSynth_WaveSel2:
 ; file 0x00D88; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 16 'BRASS', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*16.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_082_OctaveBrass:
 	.ascii "  Octave Brass  "	; 0E410
 	; common part
@@ -8184,6 +9206,13 @@ ToneRec_082_OctaveBrass_WaveSel2:
 ; file 0x00D8C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 16 'BRASS', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*16.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_083_MuteBrassEns:
 	.ascii "Mute Brass Ens. "	; 0E65D
 	; common part
@@ -8242,6 +9271,13 @@ ToneRec_083_MuteBrassEns_WaveSel2:
 ; file 0x00D90; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 16 'BRASS', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*16.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_084_SynthBrass1:
 	.ascii " Synth Brass 1  "	; 0E8AA
 	; common part
@@ -8289,6 +9325,13 @@ ToneRec_084_SynthBrass1_WaveSel1:
 ; file 0x00D94; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 16 'BRASS', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*16.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_085_SynthBrass2:
 	.ascii " Synth Brass 2  "	; 0EA7B
 	; common part
@@ -8336,6 +9379,13 @@ ToneRec_085_SynthBrass2_WaveSel1:
 ; file 0x00D98; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 16 'BRASS', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*16.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_086_SynthBrass3:
 	.ascii " Synth Brass 3  "	; 0EC4C
 	; common part
@@ -8372,6 +9422,13 @@ ToneRec_086_SynthBrass3_WaveSel0:
 ; file 0x00D9C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 16 'BRASS', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*16.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_087_SynthBrass4:
 	.ascii " Synth Brass 4  "	; 0EDA1
 	; common part
@@ -8419,6 +9476,13 @@ ToneRec_087_SynthBrass4_WaveSel1:
 ; file 0x00DA0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 17 'TRUMPET', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*17.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_088_Trumpet1:
 	.ascii "   Trumpet 1    "	; 0EF72
 	; common part
@@ -8455,6 +9519,13 @@ ToneRec_088_Trumpet1_WaveSel0:
 ; file 0x00DA4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 17 'TRUMPET', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*17.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_089_Trumpet2:
 	.ascii "   Trumpet 2    "	; 0F0C7
 	; common part
@@ -8491,6 +9562,13 @@ ToneRec_089_Trumpet2_WaveSel0:
 ; file 0x00DA8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 17 'TRUMPET', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*17.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_08A_MellowTrumpet:
 	.ascii " Mellow Trumpet "	; 0F21C
 	; common part
@@ -8527,6 +9605,13 @@ ToneRec_08A_MellowTrumpet_WaveSel0:
 ; file 0x00DAC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 17 'TRUMPET', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*17.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_08B_OrchestTrumpet:
 	.ascii "Orchest.Trumpet "	; 0F371
 	; common part
@@ -8563,6 +9648,13 @@ ToneRec_08B_OrchestTrumpet_WaveSel0:
 ; file 0x00DB0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 17 'TRUMPET', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*17.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_08C_HarmonMuteTpt:
 	.ascii "Harmon Mute Tpt "	; 0F4C6
 	; common part
@@ -8599,6 +9691,13 @@ ToneRec_08C_HarmonMuteTpt_WaveSel0:
 ; file 0x00DB4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 17 'TRUMPET', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*17.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_08D_StraightMuteTpt:
 	.ascii "Straight MuteTpt"	; 0F61B
 	; common part
@@ -8635,6 +9734,13 @@ ToneRec_08D_StraightMuteTpt_WaveSel0:
 ; file 0x00DB8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 17 'TRUMPET', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*17.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_08E_FlugelHorn:
 	.ascii "  Flugel Horn   "	; 0F770
 	; common part
@@ -8671,6 +9777,13 @@ ToneRec_08E_FlugelHorn_WaveSel0:
 ; file 0x00DBC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 17 'TRUMPET', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*17.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_08F_Cornet:
 	.ascii "     Cornet     "	; 0F8C5
 	; common part
@@ -8707,6 +9820,13 @@ ToneRec_08F_Cornet_WaveSel0:
 ; file 0x00DC0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 18 'DEEP BRASS', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*18.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_090_BrightTrombone:
 	.ascii "Bright Trombone "	; 0FA1A
 	; common part
@@ -8743,6 +9863,13 @@ ToneRec_090_BrightTrombone_WaveSel0:
 ; file 0x00DC4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 18 'DEEP BRASS', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*18.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_091_MellowTrombone:
 	.ascii "Mellow Trombone "	; 0FB6F
 	; common part
@@ -8779,6 +9906,13 @@ ToneRec_091_MellowTrombone_WaveSel0:
 ; file 0x00DC8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 18 'DEEP BRASS', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*18.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_092_CupMuteTrombone:
 	.ascii "CupMuteTrombone "	; 0FCC4
 	; common part
@@ -8815,6 +9949,13 @@ ToneRec_092_CupMuteTrombone_WaveSel0:
 ; file 0x00DCC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 18 'DEEP BRASS', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*18.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_093_ClosedFrHorn:
 	.ascii " Closed Fr.Horn "	; 0FE19
 	; common part
@@ -8851,6 +9992,13 @@ ToneRec_093_ClosedFrHorn_WaveSel0:
 ; file 0x00DD0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 18 'DEEP BRASS', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*18.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_094_OpenFrHorn:
 	.ascii "  Open Fr.Horn  "	; 0FF6E
 	; common part
@@ -8887,6 +10035,13 @@ ToneRec_094_OpenFrHorn_WaveSel0:
 ; file 0x00DD4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 18 'DEEP BRASS', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*18.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_095_FrHornEns:
 	.ascii "  Fr.Horn Ens.  "	; 100C3
 	; common part
@@ -8934,6 +10089,13 @@ ToneRec_095_FrHornEns_WaveSel1:
 ; file 0x00DD8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 18 'DEEP BRASS', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*18.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_096_OrchestralTuba:
 	.ascii "Orchestral Tuba "	; 10294
 	; common part
@@ -8970,6 +10132,13 @@ ToneRec_096_OrchestralTuba_WaveSel0:
 ; file 0x00DDC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 18 'DEEP BRASS', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*18.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_097_MarchingTuba:
 	.ascii " Marching Tuba  "	; 103E9
 	; common part
@@ -9017,6 +10186,13 @@ ToneRec_097_MarchingTuba_WaveSel1:
 ; file 0x00DE0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 19 'SAXOPHONE', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*19.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_098_SopranoSax:
 	.ascii "  Soprano Sax   "	; 105BA
 	; common part
@@ -9064,6 +10240,13 @@ ToneRec_098_SopranoSax_WaveSel1:
 ; file 0x00DE4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 19 'SAXOPHONE', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*19.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_099_AltoSax:
 	.ascii "    Alto Sax    "	; 1078B
 	; common part
@@ -9111,6 +10294,13 @@ ToneRec_099_AltoSax_WaveSel1:
 ; file 0x00DE8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 19 'SAXOPHONE', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*19.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_09A_MellowAltoSax:
 	.ascii "Mellow Alto Sax "	; 1095C
 	; common part
@@ -9158,6 +10348,13 @@ ToneRec_09A_MellowAltoSax_WaveSel1:
 ; file 0x00DEC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 19 'SAXOPHONE', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*19.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_09B_TenorSax:
 	.ascii "   Tenor Sax    "	; 10B2D
 	; common part
@@ -9205,6 +10402,13 @@ ToneRec_09B_TenorSax_WaveSel1:
 ; file 0x00DF0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 19 'SAXOPHONE', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*19.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_09C_BreathyTenor:
 	.ascii " Breathy Tenor  "	; 10CFE
 	; common part
@@ -9263,6 +10467,13 @@ ToneRec_09C_BreathyTenor_WaveSel2:
 ; file 0x00DF4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 19 'SAXOPHONE', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*19.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_09D_RockTenorSax:
 	.ascii " Rock Tenor Sax "	; 10F4B
 	; common part
@@ -9310,6 +10521,13 @@ ToneRec_09D_RockTenorSax_WaveSel1:
 ; file 0x00DF8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 19 'SAXOPHONE', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*19.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_09E_BaritoneSax:
 	.ascii "  Baritone Sax  "	; 1111C
 	; common part
@@ -9368,6 +10586,13 @@ ToneRec_09E_BaritoneSax_WaveSel2:
 ; file 0x00DFC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 19 'SAXOPHONE', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*19.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_09F_DistortionSax:
 	.ascii " Distortion Sax "	; 11369
 	; common part
@@ -9426,6 +10651,13 @@ ToneRec_09F_DistortionSax_WaveSel2:
 ; file 0x00E00; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 20 'REED', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*20.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A0_JazzClarinet1:
 	.ascii "Jazz Clarinet 1 "	; 115B6
 	; common part
@@ -9473,6 +10705,13 @@ ToneRec_0A0_JazzClarinet1_WaveSel1:
 ; file 0x00E04; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 20 'REED', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*20.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A1_JazzClarinet2:
 	.ascii "Jazz Clarinet 2 "	; 11787
 	; common part
@@ -9531,6 +10770,13 @@ ToneRec_0A1_JazzClarinet2_WaveSel2:
 ; file 0x00E08; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 20 'REED', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*20.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A2_ClassicClarinet:
 	.ascii "Classic Clarinet"	; 119D4
 	; common part
@@ -9567,6 +10813,13 @@ ToneRec_0A2_ClassicClarinet_WaveSel0:
 ; file 0x00E0C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 20 'REED', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*20.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A3_Oboe:
 	.ascii "      Oboe      "	; 11B29
 	; common part
@@ -9603,6 +10856,13 @@ ToneRec_0A3_Oboe_WaveSel0:
 ; file 0x00E10; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 20 'REED', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*20.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A4_EnglishHorn:
 	.ascii "  English Horn  "	; 11C7E
 	; common part
@@ -9639,6 +10899,13 @@ ToneRec_0A4_EnglishHorn_WaveSel0:
 ; file 0x00E14; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 20 'REED', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*20.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A5_Bassoon:
 	.ascii "    Bassoon     "	; 11DD3
 	; common part
@@ -9675,6 +10942,13 @@ ToneRec_0A5_Bassoon_WaveSel0:
 ; file 0x00E18; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 20 'REED', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*20.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A6_Harmonica:
 	.ascii "   Harmonica    "	; 11F28
 	; common part
@@ -9711,6 +10985,13 @@ ToneRec_0A6_Harmonica_WaveSel0:
 ; file 0x00E1C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 20 'REED', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*20.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A7_BluesHarmonica:
 	.ascii "Blues Harmonica "	; 1207D
 	; common part
@@ -9747,6 +11028,13 @@ ToneRec_0A7_BluesHarmonica_WaveSel0:
 ; file 0x00E20; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 21 'FLUTE', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*21.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A8_Piccolo:
 	.ascii "    Piccolo     "	; 121D2
 	; common part
@@ -9783,6 +11071,13 @@ ToneRec_0A8_Piccolo_WaveSel0:
 ; file 0x00E24; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 21 'FLUTE', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*21.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0A9_JazzFlute:
 	.ascii "   Jazz Flute   "	; 12327
 	; common part
@@ -9819,6 +11114,13 @@ ToneRec_0A9_JazzFlute_WaveSel0:
 ; file 0x00E28; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 21 'FLUTE', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*21.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0AA_ClassicalFlute:
 	.ascii "Classical Flute "	; 1247C
 	; common part
@@ -9866,6 +11168,13 @@ ToneRec_0AA_ClassicalFlute_WaveSel1:
 ; file 0x00E2C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 21 'FLUTE', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*21.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0AB_AltoFlute:
 	.ascii "   Alto Flute   "	; 1264D
 	; common part
@@ -9913,6 +11222,13 @@ ToneRec_0AB_AltoFlute_WaveSel1:
 ; file 0x00E30; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 21 'FLUTE', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*21.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0AC_FlatterFlute:
 	.ascii " Flatter Flute  "	; 1281E
 	; common part
@@ -9960,6 +11276,13 @@ ToneRec_0AC_FlatterFlute_WaveSel1:
 ; file 0x00E34; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 21 'FLUTE', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*21.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0AD_PanFlute:
 	.ascii "   Pan Flute    "	; 129EF
 	; common part
@@ -9996,6 +11319,13 @@ ToneRec_0AD_PanFlute_WaveSel0:
 ; file 0x00E38; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 21 'FLUTE', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*21.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0AE_SynthCalliope:
 	.ascii " Synth Calliope "	; 12B44
 	; common part
@@ -10054,6 +11384,13 @@ ToneRec_0AE_SynthCalliope_WaveSel2:
 ; file 0x00E3C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 21 'FLUTE', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*21.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0AF_Recorder:
 	.ascii "    Recorder    "	; 12D91
 	; common part
@@ -10090,6 +11427,13 @@ ToneRec_0AF_Recorder_WaveSel0:
 ; file 0x00E40; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 22 'OTHER FLUTE&REED', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*22.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B0_Ocarina:
 	.ascii "    Ocarina     "	; 12EE6
 	; common part
@@ -10126,6 +11470,13 @@ ToneRec_0B0_Ocarina_WaveSel0:
 ; file 0x00E44; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 22 'OTHER FLUTE&REED', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*22.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B1_BlownBottle:
 	.ascii "  Blown Bottle  "	; 1303B
 	; common part
@@ -10184,6 +11535,13 @@ ToneRec_0B1_BlownBottle_WaveSel2:
 ; file 0x00E48; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 22 'OTHER FLUTE&REED', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*22.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B2_Whistle:
 	.ascii "    Whistle     "	; 13288
 	; common part
@@ -10220,6 +11578,13 @@ ToneRec_0B2_Whistle_WaveSel0:
 ; file 0x00E4C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 22 'OTHER FLUTE&REED', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*22.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B3_Shakuhachi:
 	.ascii "   Shakuhachi   "	; 133DD
 	; common part
@@ -10256,6 +11621,13 @@ ToneRec_0B3_Shakuhachi_WaveSel0:
 ; file 0x00E50; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 22 'OTHER FLUTE&REED', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*22.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B4_Quena:
 	.ascii "     Quena      "	; 13532
 	; common part
@@ -10314,6 +11686,13 @@ ToneRec_0B4_Quena_WaveSel2:
 ; file 0x00E54; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 22 'OTHER FLUTE&REED', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*22.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B5_Ney:
 	.ascii "      Ney       "	; 1377F
 	; common part
@@ -10361,6 +11740,13 @@ ToneRec_0B5_Ney_WaveSel1:
 ; file 0x00E58; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 22 'OTHER FLUTE&REED', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*22.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B6_Shanai:
 	.ascii "     Shanai     "	; 13950
 	; common part
@@ -10419,6 +11805,13 @@ ToneRec_0B6_Shanai_WaveSel2:
 ; file 0x00E5C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 22 'OTHER FLUTE&REED', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*22.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B7_Bagpipe:
 	.ascii "    Bagpipe     "	; 13B9D
 	; common part
@@ -10466,6 +11859,13 @@ ToneRec_0B7_Bagpipe_WaveSel1:
 ; file 0x00E60; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 23 'ETHNIC PERC.', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*23.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B8_Koto:
 	.ascii "      Koto      "	; 13D6E
 	; common part
@@ -10502,6 +11902,13 @@ ToneRec_0B8_Koto_WaveSel0:
 ; file 0x00E64; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 23 'ETHNIC PERC.', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*23.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0B9_Shamisen:
 	.ascii "    Shamisen    "	; 13EC3
 	; common part
@@ -10538,6 +11945,13 @@ ToneRec_0B9_Shamisen_WaveSel0:
 ; file 0x00E68; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 23 'ETHNIC PERC.', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*23.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0BA_Kalimba:
 	.ascii "    Kalimba     "	; 14018
 	; common part
@@ -10585,6 +11999,13 @@ ToneRec_0BA_Kalimba_WaveSel1:
 ; file 0x00E6C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 23 'ETHNIC PERC.', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*23.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0BB_MetalKalimba:
 	.ascii " Metal Kalimba  "	; 141E9
 	; common part
@@ -10632,6 +12053,13 @@ ToneRec_0BB_MetalKalimba_WaveSel1:
 ; file 0x00E70; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 23 'ETHNIC PERC.', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*23.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0BC_Sitar:
 	.ascii "     Sitar      "	; 143BA
 	; common part
@@ -10668,6 +12096,13 @@ ToneRec_0BC_Sitar_WaveSel0:
 ; file 0x00E74; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 23 'ETHNIC PERC.', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*23.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0BD_Gamelan1:
 	.ascii "   Gamelan 1    "	; 1450F
 	; common part
@@ -10726,6 +12161,13 @@ ToneRec_0BD_Gamelan1_WaveSel2:
 ; file 0x00E78; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 23 'ETHNIC PERC.', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*23.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0BE_Gamelan2:
 	.ascii "   Gamelan 2    "	; 1475C
 	; common part
@@ -10784,6 +12226,13 @@ ToneRec_0BE_Gamelan2_WaveSel2:
 ; file 0x00E7C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 23 'ETHNIC PERC.', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*23.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0BF_Dulcimer:
 	.ascii "    Dulcimer    "	; 149A9
 	; common part
@@ -10831,6 +12280,13 @@ ToneRec_0BF_Dulcimer_WaveSel1:
 ; file 0x00E80; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 24 'SYNTH LEAD 1', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*24.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C0_SquareLead:
 	.ascii "  Square Lead   "	; 14B7A
 	; common part
@@ -10878,6 +12334,13 @@ ToneRec_0C0_SquareLead_WaveSel1:
 ; file 0x00E84; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 24 'SYNTH LEAD 1', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*24.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C1_SawLead:
 	.ascii "    Saw Lead    "	; 14D4B
 	; common part
@@ -10925,6 +12388,13 @@ ToneRec_0C1_SawLead_WaveSel1:
 ; file 0x00E88; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 24 'SYNTH LEAD 1', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*24.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C2_SineLead:
 	.ascii "   Sine Lead    "	; 14F1C
 	; common part
@@ -10972,6 +12442,13 @@ ToneRec_0C2_SineLead_WaveSel1:
 ; file 0x00E8C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 24 'SYNTH LEAD 1', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*24.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C3_AirVox:
 	.ascii "    Air Vox     "	; 150ED
 	; common part
@@ -11019,6 +12496,13 @@ ToneRec_0C3_AirVox_WaveSel1:
 ; file 0x00E90; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 24 'SYNTH LEAD 1', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*24.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C4_ChifferLead:
 	.ascii "  Chiffer Lead  "	; 152BE
 	; common part
@@ -11077,6 +12561,13 @@ ToneRec_0C4_ChifferLead_WaveSel2:
 ; file 0x00E94; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 24 'SYNTH LEAD 1', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*24.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C5_Charang:
 	.ascii "    Charang     "	; 1550B
 	; common part
@@ -11135,6 +12626,13 @@ ToneRec_0C5_Charang_WaveSel2:
 ; file 0x00E98; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 24 'SYNTH LEAD 1', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*24.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C6_MetallicaSolo:
 	.ascii " Metallica Solo "	; 15758
 	; common part
@@ -11193,6 +12691,13 @@ ToneRec_0C6_MetallicaSolo_WaveSel2:
 ; file 0x00E9C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 24 'SYNTH LEAD 1', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*24.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C7_TalkingLead:
 	.ascii "  Talking Lead  "	; 159A5
 	; common part
@@ -11251,6 +12756,13 @@ ToneRec_0C7_TalkingLead_WaveSel2:
 ; file 0x00EA0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 25 'SYNTH LEAD 2', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*25.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C8_DigiStack:
 	.ascii "   Digi Stack   "	; 15BF2
 	; common part
@@ -11309,6 +12821,13 @@ ToneRec_0C8_DigiStack_WaveSel2:
 ; file 0x00EA4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 25 'SYNTH LEAD 2', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*25.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0C9_80SSolo:
 	.ascii "   80's Solo    "	; 15E3F
 	; common part
@@ -11367,6 +12886,13 @@ ToneRec_0C9_80SSolo_WaveSel2:
 ; file 0x00EA8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 25 'SYNTH LEAD 2', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*25.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0CA_SteamyKeys:
 	.ascii "  Steamy Keys   "	; 1608C
 	; common part
@@ -11425,6 +12951,13 @@ ToneRec_0CA_SteamyKeys_WaveSel2:
 ; file 0x00EAC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 25 'SYNTH LEAD 2', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*25.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0CB_OlympSynth:
 	.ascii "  Olymp Synth   "	; 162D9
 	; common part
@@ -11483,6 +13016,13 @@ ToneRec_0CB_OlympSynth_WaveSel2:
 ; file 0x00EB0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 25 'SYNTH LEAD 2', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*25.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0CC_VocoSynth:
 	.ascii "   Voco Synth   "	; 16526
 	; common part
@@ -11541,6 +13081,13 @@ ToneRec_0CC_VocoSynth_WaveSel2:
 ; file 0x00EB4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 25 'SYNTH LEAD 2', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*25.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0CD_5thWave:
 	.ascii "    5th Wave    "	; 16773
 	; common part
@@ -11588,6 +13135,13 @@ ToneRec_0CD_5thWave_WaveSel1:
 ; file 0x00EB8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 25 'SYNTH LEAD 2', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*25.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0CE_BassLead:
 	.ascii "  Bass & Lead   "	; 16944
 	; common part
@@ -11635,6 +13189,13 @@ ToneRec_0CE_BassLead_WaveSel1:
 ; file 0x00EBC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 25 'SYNTH LEAD 2', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*25.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0CF_SleighSynth:
 	.ascii "  Sleigh Synth  "	; 16B15
 	; common part
@@ -11682,6 +13243,13 @@ ToneRec_0CF_SleighSynth_WaveSel1:
 ; file 0x00EC0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 26 'SYNTH LEAD 3', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*26.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D0_TalkingSynth:
 	.ascii " Talking Synth  "	; 16CE6
 	; common part
@@ -11729,6 +13297,13 @@ ToneRec_0D0_TalkingSynth_WaveSel1:
 ; file 0x00EC4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 26 'SYNTH LEAD 3', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*26.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D1_SynthHarp:
 	.ascii "   Synth Harp   "	; 16EB7
 	; common part
@@ -11776,6 +13351,13 @@ ToneRec_0D1_SynthHarp_WaveSel1:
 ; file 0x00EC8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 26 'SYNTH LEAD 3', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*26.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D2_AfroDance:
 	.ascii "   Afro Dance   "	; 17088
 	; common part
@@ -11823,6 +13405,13 @@ ToneRec_0D2_AfroDance_WaveSel1:
 ; file 0x00ECC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 26 'SYNTH LEAD 3', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*26.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D3_DigiBells:
 	.ascii "   Digi Bells   "	; 17259
 	; common part
@@ -11881,6 +13470,13 @@ ToneRec_0D3_DigiBells_WaveSel2:
 ; file 0x00ED0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 26 'SYNTH LEAD 3', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*26.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D4_FusionLead1:
 	.ascii " Fusion Lead 1  "	; 174A6
 	; common part
@@ -11928,6 +13524,13 @@ ToneRec_0D4_FusionLead1_WaveSel1:
 ; file 0x00ED4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 26 'SYNTH LEAD 3', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*26.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D5_FusionLead2:
 	.ascii " Fusion Lead 2  "	; 17677
 	; common part
@@ -11975,6 +13578,13 @@ ToneRec_0D5_FusionLead2_WaveSel1:
 ; file 0x00ED8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 26 'SYNTH LEAD 3', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*26.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D6_FunkyLead:
 	.ascii "   Funky Lead   "	; 17848
 	; common part
@@ -12022,6 +13632,13 @@ ToneRec_0D6_FunkyLead_WaveSel1:
 ; file 0x00EDC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 26 'SYNTH LEAD 3', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*26.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D7_Sweppy:
 	.ascii "     Sweppy     "	; 17A19
 	; common part
@@ -12069,6 +13686,13 @@ ToneRec_0D7_Sweppy_WaveSel1:
 ; file 0x00EE0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 27 'SYNTH PAD 1', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*27.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D8_MellowEnsemble:
 	.ascii "Mellow Ensemble "	; 17BEA
 	; common part
@@ -12116,6 +13740,13 @@ ToneRec_0D8_MellowEnsemble_WaveSel1:
 ; file 0x00EE4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 27 'SYNTH PAD 1', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*27.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0D9_WarmSynthPad:
 	.ascii " Warm Synth Pad "	; 17DBB
 	; common part
@@ -12163,6 +13794,13 @@ ToneRec_0D9_WarmSynthPad_WaveSel1:
 ; file 0x00EE8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 27 'SYNTH PAD 1', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*27.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0DA_SynthVocal:
 	.ascii "  Synth Vocal   "	; 17F8C
 	; common part
@@ -12210,6 +13848,13 @@ ToneRec_0DA_SynthVocal_WaveSel1:
 ; file 0x00EEC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 27 'SYNTH PAD 1', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*27.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0DB_SpacyPad:
 	.ascii "   Spacy Pad    "	; 1815D
 	; common part
@@ -12257,6 +13902,13 @@ ToneRec_0DB_SpacyPad_WaveSel1:
 ; file 0x00EF0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 27 'SYNTH PAD 1', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*27.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0DC_MetalPad:
 	.ascii "   Metal Pad    "	; 1832E
 	; common part
@@ -12304,6 +13956,13 @@ ToneRec_0DC_MetalPad_WaveSel1:
 ; file 0x00EF4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 27 'SYNTH PAD 1', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*27.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0DD_StarTheme:
 	.ascii "   Star Theme   "	; 184FF
 	; common part
@@ -12362,6 +14021,13 @@ ToneRec_0DD_StarTheme_WaveSel2:
 ; file 0x00EF8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 27 'SYNTH PAD 1', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*27.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0DE_BowedGlass:
 	.ascii "  Bowed Glass   "	; 1874C
 	; common part
@@ -12409,6 +14075,13 @@ ToneRec_0DE_BowedGlass_WaveSel1:
 ; file 0x00EFC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 27 'SYNTH PAD 1', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*27.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0DF_Atmosphere:
 	.ascii "   Atmosphere   "	; 1891D
 	; common part
@@ -12456,6 +14129,13 @@ ToneRec_0DF_Atmosphere_WaveSel1:
 ; file 0x00F00; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 28 'SYNTH PAD 2', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*28.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E0_Fantasia:
 	.ascii "    Fantasia    "	; 18AEE
 	; common part
@@ -12514,6 +14194,13 @@ ToneRec_0E0_Fantasia_WaveSel2:
 ; file 0x00F04; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 28 'SYNTH PAD 2', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*28.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E1_BellPad:
 	.ascii "    Bell Pad    "	; 18D3B
 	; common part
@@ -12561,6 +14248,13 @@ ToneRec_0E1_BellPad_WaveSel1:
 ; file 0x00F08; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 28 'SYNTH PAD 2', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*28.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E2_Dream:
 	.ascii "     Dream      "	; 18F0C
 	; common part
@@ -12619,6 +14313,13 @@ ToneRec_0E2_Dream_WaveSel2:
 ; file 0x00F0C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 28 'SYNTH PAD 2', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*28.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E3_Mist:
 	.ascii "      Mist      "	; 19159
 	; common part
@@ -12677,6 +14378,13 @@ ToneRec_0E3_Mist_WaveSel2:
 ; file 0x00F10; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 28 'SYNTH PAD 2', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*28.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E4_SweepPad:
 	.ascii "   Sweep Pad    "	; 193A6
 	; common part
@@ -12724,6 +14432,13 @@ ToneRec_0E4_SweepPad_WaveSel1:
 ; file 0x00F14; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 28 'SYNTH PAD 2', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*28.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E5_HaloPad:
 	.ascii "    Halo Pad    "	; 19577
 	; common part
@@ -12782,6 +14497,13 @@ ToneRec_0E5_HaloPad_WaveSel2:
 ; file 0x00F18; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 28 'SYNTH PAD 2', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*28.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E6_EchoDrops:
 	.ascii "   Echo Drops   "	; 197C4
 	; common part
@@ -12829,6 +14551,13 @@ ToneRec_0E6_EchoDrops_WaveSel1:
 ; file 0x00F1C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 28 'SYNTH PAD 2', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*28.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E7_HappyEnsemble:
 	.ascii " Happy Ensemble "	; 19995
 	; common part
@@ -12876,6 +14605,13 @@ ToneRec_0E7_HappyEnsemble_WaveSel1:
 ; file 0x00F20; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 29 'SYNTH PAD 3', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*29.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E8_PolySynth:
 	.ascii "   Poly Synth   "	; 19B66
 	; common part
@@ -12934,6 +14670,13 @@ ToneRec_0E8_PolySynth_WaveSel2:
 ; file 0x00F24; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 29 'SYNTH PAD 3', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*29.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0E9_Voxmosphere:
 	.ascii "  Voxmosphere   "	; 19DB3
 	; common part
@@ -12992,6 +14735,13 @@ ToneRec_0E9_Voxmosphere_WaveSel2:
 ; file 0x00F28; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 29 'SYNTH PAD 3', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*29.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0EA_WideWindow:
 	.ascii "  Wide Window   "	; 1A000
 	; common part
@@ -13039,6 +14789,13 @@ ToneRec_0EA_WideWindow_WaveSel1:
 ; file 0x00F2C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 29 'SYNTH PAD 3', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*29.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0EB_DarkUniverse:
 	.ascii " Dark Universe  "	; 1A1D1
 	; common part
@@ -13108,6 +14865,13 @@ ToneRec_0EB_DarkUniverse_WaveSel3:
 ; file 0x00F30; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 29 'SYNTH PAD 3', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*29.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0EC_IceRain:
 	.ascii "    Ice Rain    "	; 1A49A
 	; common part
@@ -13166,6 +14930,13 @@ ToneRec_0EC_IceRain_WaveSel2:
 ; file 0x00F34; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 29 'SYNTH PAD 3', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*29.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0ED_Soundtrack:
 	.ascii "   Soundtrack   "	; 1A6E7
 	; common part
@@ -13224,6 +14995,13 @@ ToneRec_0ED_Soundtrack_WaveSel2:
 ; file 0x00F38; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 29 'SYNTH PAD 3', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*29.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0EE_Goblins:
 	.ascii "    Goblins     "	; 1A934
 	; common part
@@ -13282,6 +15060,13 @@ ToneRec_0EE_Goblins_WaveSel2:
 ; file 0x00F3C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 29 'SYNTH PAD 3', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*29.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0EF_WindySweep:
 	.ascii "  Windy Sweep   "	; 1AB81
 	; common part
@@ -13340,6 +15125,13 @@ ToneRec_0EF_WindySweep_WaveSel2:
 ; file 0x00F40; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 30 'PERCUSSION', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*30.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F0_Agogo:
 	.ascii "     Agogo      "	; 1ADCE
 	; common part
@@ -13376,6 +15168,13 @@ ToneRec_0F0_Agogo_WaveSel0:
 ; file 0x00F44; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 30 'PERCUSSION', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*30.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F1_WoodBlock:
 	.ascii "   Wood Block   "	; 1AF23
 	; common part
@@ -13412,6 +15211,13 @@ ToneRec_0F1_WoodBlock_WaveSel0:
 ; file 0x00F48; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 30 'PERCUSSION', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*30.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F2_TaikoDrum:
 	.ascii "   Taiko Drum   "	; 1B078
 	; common part
@@ -13448,6 +15254,13 @@ ToneRec_0F2_TaikoDrum_WaveSel0:
 ; file 0x00F4C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 30 'PERCUSSION', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*30.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F3_MelodicTom:
 	.ascii "  Melodic Tom   "	; 1B1CD
 	; common part
@@ -13484,6 +15297,13 @@ ToneRec_0F3_MelodicTom_WaveSel0:
 ; file 0x00F50; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 30 'PERCUSSION', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*30.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F4_SynthDrum:
 	.ascii "   Synth Drum   "	; 1B322
 	; common part
@@ -13520,6 +15340,13 @@ ToneRec_0F4_SynthDrum_WaveSel0:
 ; file 0x00F54; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 30 'PERCUSSION', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*30.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F5_ReverseCymbal:
 	.ascii " Reverse Cymbal "	; 1B477
 	; common part
@@ -13556,6 +15383,13 @@ ToneRec_0F5_ReverseCymbal_WaveSel0:
 ; file 0x00F58; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 30 'PERCUSSION', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*30.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F6_TalkingDrum:
 	.ascii "  Talking Drum  "	; 1B5CC
 	; common part
@@ -13592,6 +15426,13 @@ ToneRec_0F6_TalkingDrum_WaveSel0:
 ; file 0x00F5C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 30 'PERCUSSION', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*30.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F7_Berimbau:
 	.ascii "    Berimbau    "	; 1B721
 	; common part
@@ -13628,6 +15469,13 @@ ToneRec_0F7_Berimbau_WaveSel0:
 ; file 0x00F60; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 31 'EFFECT', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*31.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F8_FretNoise:
 	.ascii "   Fret Noise   "	; 1B876
 	; common part
@@ -13664,6 +15512,13 @@ ToneRec_0F8_FretNoise_WaveSel0:
 ; file 0x00F64; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 31 'EFFECT', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*31.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0F9_BreathNoise:
 	.ascii "  Breath Noise  "	; 1B9CB
 	; common part
@@ -13700,6 +15555,13 @@ ToneRec_0F9_BreathNoise_WaveSel0:
 ; file 0x00F68; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 31 'EFFECT', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*31.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0FA_Seashore:
 	.ascii "    Seashore    "	; 1BB20
 	; common part
@@ -13747,6 +15609,13 @@ ToneRec_0FA_Seashore_WaveSel1:
 ; file 0x00F6C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 31 'EFFECT', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*31.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0FB_BirdTweet:
 	.ascii "   Bird Tweet   "	; 1BCF1
 	; common part
@@ -13794,6 +15663,13 @@ ToneRec_0FB_BirdTweet_WaveSel1:
 ; file 0x00F70; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 31 'EFFECT', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*31.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0FC_Telephone:
 	.ascii "   Telephone    "	; 1BEC2
 	; common part
@@ -13830,6 +15706,13 @@ ToneRec_0FC_Telephone_WaveSel0:
 ; file 0x00F74; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 31 'EFFECT', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*31.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0FD_Helicopter:
 	.ascii "   Helicopter   "	; 1C017
 	; common part
@@ -13866,6 +15749,13 @@ ToneRec_0FD_Helicopter_WaveSel0:
 ; file 0x00F78; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 31 'EFFECT', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*31.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0FE_Applause:
 	.ascii "    Applause    "	; 1C16C
 	; common part
@@ -13913,6 +15803,13 @@ ToneRec_0FE_Applause_WaveSel1:
 ; file 0x00F7C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 31 'EFFECT', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*31.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_0FF_GunShot:
 	.ascii "    Gun Shot    "	; 1C33D
 	; common part
@@ -14637,7 +16534,7 @@ ToneDB_ToneIndexMapB:
 ;          Measured, it leaves exactly one candidate 0 times: where the
 ;          order holds every candidate is inside the interval, and where it
 ;          does not, none is.  Refuted by its own measurement.
-;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 97 checks.
+;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 129 checks.
 ; 
 ;   4b. ★ AND THREE MECHANISMS ROUND 7 MEASURED AND REJECTED, recorded
 ;      next to the records they would have named so they are not
@@ -14717,7 +16614,7 @@ ToneDB_ToneIndexMapB:
 ;      refused rather than spelled some other way.
 ;      ★ AND THE SAME RULE ON THE PERCUSSION ARRAY IS REFUSED: see that
 ;      array's own banner.
-;   notes/prom_d_inventory_round8.py Q16-Q20, and 97 checks in that file.
+;   notes/prom_d_inventory_round8.py Q16-Q20, and 129 checks in that file.
 ; 
 ;   5. WHAT WOULD SETTLE IT: a prom_c instruction that reaches a record of
 ;      THIS array with an index whose meaning is known -- exactly what
@@ -14993,7 +16890,18 @@ ToneDB_MixerDefaultTable_018_SameAs_PopOrgan_WaveSel2:
 ; digits reads as positional, so the name is refused
 ; rather than spelled some other way -- inventing a
 ; morpheme is round 3's `Home` failure.  round 10 Q19e.
-ToneDB_MixerDefaultTable_019:
+; ★ ROUND 11 ASKS THE SAME COLUMNS A COARSER QUESTION and gets an
+; answer: every tone above lies in ONE sound group, 'ORGAN' --
+; number 11 of the 34 groups the panel selects with.  That is what
+; `_SelectedForGroup_` claims, and it claims nothing else: the group
+; holds 8 tones and this label does not say which.
+; Evidence: tone index = 8*group + member (prom_a 0xFC230C `mul
+; WA,0x0010` and 0xFC2317 `mul BC,0x0002` over the table at
+; 0xF06EF4, whose entry k is the (program, bank) pair prom_d's own
+; BankMap and ToneNumBanks resolve to tone k, 272 of 272); the group's
+; name is prom_b's own 16 ASCII bytes at 0xF068B4 + 16*11.
+; notes/prom_d_inventory_round8.py Q21, Q22.
+ToneDB_MixerDefaultTable_019_SelectedForGroup_ORGAN:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x01, 0x5B, 0x01, 0x5B, 0x01, 0x5B, 0x01, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1DC96  |...[.[.[.[...}.T....d0...B$`...0.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_020 -- file 0x1DCC1..0x1DCEB
@@ -15009,7 +16917,18 @@ ToneDB_MixerDefaultTable_019:
 ; digits reads as positional, so the name is refused
 ; rather than spelled some other way -- inventing a
 ; morpheme is round 3's `Home` failure.  round 10 Q19e.
-ToneDB_MixerDefaultTable_020:
+; ★ ROUND 11 ASKS THE SAME COLUMNS A COARSER QUESTION and gets an
+; answer: every tone above lies in ONE sound group, 'ORGAN' --
+; number 11 of the 34 groups the panel selects with.  That is what
+; `_SelectedForGroup_` claims, and it claims nothing else: the group
+; holds 8 tones and this label does not say which.
+; Evidence: tone index = 8*group + member (prom_a 0xFC230C `mul
+; WA,0x0010` and 0xFC2317 `mul BC,0x0002` over the table at
+; 0xF06EF4, whose entry k is the (program, bank) pair prom_d's own
+; BankMap and ToneNumBanks resolve to tone k, 272 of 272); the group's
+; name is prom_b's own 16 ASCII bytes at 0xF068B4 + 16*11.
+; notes/prom_d_inventory_round8.py Q21, Q22.
+ToneDB_MixerDefaultTable_020_SelectedForGroup_ORGAN:
 	.byte 0x7F, 0x7F, 0x7F, 0x5B, 0x02, 0x5B, 0x02, 0x5B, 0x02, 0x5B, 0x02, 0x03, 0x03, 0x7D, 0x00, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1DCC1  |...[.[.[.[...}.T....d0...B$`...0.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_021 -- file 0x1DCEC..0x1DD16
@@ -15023,6 +16942,10 @@ ToneDB_MixerDefaultTable_020:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
+; ★ AND ROUND 11's COARSER QUESTION IS ASKED TOO, and refuses: those
+; columns span 2 sound groups (PIANO, SPECIAL MALLET), above
+; M10's bound of 1.  A label naming 2 groups would claim 16 tones.
+; notes/prom_d_inventory_round8.py Q22.
 ToneDB_MixerDefaultTable_021:
 	.byte 0x7F, 0x7F, 0x7F, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCC, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00, 0x30, 0xCC, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x60, 0x08, 0x00, 0x00	; 1DCEC  |.............}.T....d0...B.`...0.d...B.`...|
 
@@ -15130,6 +17053,10 @@ ToneDB_MixerDefaultTable_026_SameAs_BellPiano_WaveSel1:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
+; ★ AND ROUND 11's COARSER QUESTION IS ASKED TOO, and refuses: those
+; columns span 3 sound groups (E.PIANO, SYNTH LEAD 2, SYNTH PAD 2), above
+; M10's bound of 1.  A label naming 3 groups would claim 24 tones.
+; notes/prom_d_inventory_round8.py Q22.
 ToneDB_MixerDefaultTable_027:
 	.byte 0x7F, 0x7F, 0x7F, 0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x74, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xCE, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00, 0x30, 0xCE, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x03, 0x00, 0x00	; 1DDEE  |...t.t.t.t...}.T....d0...B$`...0.d...B$`...|
 
@@ -15306,6 +17233,10 @@ ToneDB_MixerDefaultTable_040_SelectedFor_AfricanMallet:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
+; ★ AND ROUND 11's COARSER QUESTION IS ASKED TOO, and refuses: those
+; columns span 4 sound groups (E.PIANO, SPECIAL MALLET, SYNTH LEAD 2, SYNTH PAD 2), above
+; M10's bound of 1.  A label naming 4 groups would claim 32 tones.
+; notes/prom_d_inventory_round8.py Q22.
 ToneDB_MixerDefaultTable_041:
 	.byte 0x7F, 0x7F, 0x7F, 0x70, 0x02, 0x70, 0x02, 0x70, 0x02, 0x70, 0x02, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x28, 0x80, 0x7F, 0x64, 0x3C, 0xD5, 0xEC, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x3C, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1E048  |...p.p.p.p...}.T.(..d<...Z0l...<.d...Z0l...|
 
@@ -15543,6 +17474,10 @@ ToneDB_MixerDefaultTable_059_SameAs_Celesta_WaveSel0:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
+; ★ AND ROUND 11's COARSER QUESTION IS ASKED TOO, and refuses: those
+; columns span 3 sound groups (SPECIAL MALLET, ETHNIC PERC., SYNTH LEAD 3), above
+; M10's bound of 1.  A label naming 3 groups would claim 24 tones.
+; notes/prom_d_inventory_round8.py Q22.
 ToneDB_MixerDefaultTable_060:
 	.byte 0x7F, 0x7F, 0x7F, 0x0E, 0x01, 0x0E, 0x01, 0x0E, 0x01, 0x0E, 0x01, 0x05, 0x05, 0x7D, 0x80, 0x54, 0x00, 0x28, 0x80, 0x7F, 0x64, 0x3C, 0xD5, 0xEC, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00, 0x3C, 0xD5, 0x64, 0xEC, 0x00, 0x00, 0x5A, 0x30, 0x6C, 0x03, 0x00, 0x00	; 1E379  |.............}.T.(..d<...Z0l...<.d...Z0l...|
 
@@ -15605,7 +17540,18 @@ ToneDB_MixerDefaultTable_064_SameAs_ClassicalStrings_Or_SlowStrings_Or_Symphonic
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
-ToneDB_MixerDefaultTable_065:
+; ★ ROUND 11 ASKS THE SAME COLUMNS A COARSER QUESTION and gets an
+; answer: every tone above lies in ONE sound group, 'STRINGS 1' --
+; number 8 of the 34 groups the panel selects with.  That is what
+; `_SelectedForGroup_` claims, and it claims nothing else: the group
+; holds 8 tones and this label does not say which.
+; Evidence: tone index = 8*group + member (prom_a 0xFC230C `mul
+; WA,0x0010` and 0xFC2317 `mul BC,0x0002` over the table at
+; 0xF06EF4, whose entry k is the (program, bank) pair prom_d's own
+; BankMap and ToneNumBanks resolve to tone k, 272 of 272); the group's
+; name is prom_b's own 16 ASCII bytes at 0xF068B4 + 16*8.
+; notes/prom_d_inventory_round8.py Q21, Q22.
+ToneDB_MixerDefaultTable_065_SelectedForGroup_STRINGS1:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x02, 0x64, 0x02, 0x64, 0x02, 0x64, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E450  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_066 -- file 0x1E47B..0x1E4A5
@@ -15631,6 +17577,14 @@ ToneDB_MixerDefaultTable_066:
 ; bound of 3, so a disjunction would enumerate a family
 ; rather than name an object.  round 6 Q1, verdict
 ; NAMELESS-AMBIGUOUS; round 8 Q3.
+; ★ AND ROUND 11's COARSER QUESTION SPLITS THE TWO WITNESSES, which is
+; why this record keeps its number.  The map's columns all lie in sound
+; group 8 'STRINGS 1', so M10's bound of 1 is met -- but the 5 blocks that
+; carry these bytes span groups 8 'STRINGS 1', 9 'STRINGS 2'.
+; Round 10's rule is never to label a record that HAS a twin, so that no
+; derived name can contradict another,
+; and this is the record that rule is for.
+; notes/prom_d_inventory_round8.py Q22f.
 ToneDB_MixerDefaultTable_067:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x04, 0x64, 0x04, 0x64, 0x04, 0x64, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E4A6  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
 
@@ -15645,7 +17599,18 @@ ToneDB_MixerDefaultTable_067:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
-ToneDB_MixerDefaultTable_068:
+; ★ ROUND 11 ASKS THE SAME COLUMNS A COARSER QUESTION and gets an
+; answer: every tone above lies in ONE sound group, 'STRINGS 1' --
+; number 8 of the 34 groups the panel selects with.  That is what
+; `_SelectedForGroup_` claims, and it claims nothing else: the group
+; holds 8 tones and this label does not say which.
+; Evidence: tone index = 8*group + member (prom_a 0xFC230C `mul
+; WA,0x0010` and 0xFC2317 `mul BC,0x0002` over the table at
+; 0xF06EF4, whose entry k is the (program, bank) pair prom_d's own
+; BankMap and ToneNumBanks resolve to tone k, 272 of 272); the group's
+; name is prom_b's own 16 ASCII bytes at 0xF068B4 + 16*8.
+; notes/prom_d_inventory_round8.py Q21, Q22.
+ToneDB_MixerDefaultTable_068_SelectedForGroup_STRINGS1:
 	.byte 0x7F, 0x7F, 0x7F, 0x64, 0x05, 0x64, 0x05, 0x64, 0x05, 0x64, 0x05, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xD4, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00, 0x30, 0xD4, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x04, 0x00, 0x00	; 1E4D1  |...d.d.d.d...}.T....d0...B$`...0.d...B$`...|
 
 ; ToneDB_MixerDefaultTable_069 -- file 0x1E4FC..0x1E526
@@ -16400,6 +18365,10 @@ ToneDB_MixerDefaultTable_124_SelectedFor_BowedGlass_Or_StarTheme:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
+; ★ AND ROUND 11's COARSER QUESTION IS ASKED TOO, and refuses: those
+; columns span 2 sound groups (PERCUSSION, EFFECT), above
+; M10's bound of 1.  A label naming 2 groups would claim 16 tones.
+; notes/prom_d_inventory_round8.py Q22.
 ToneDB_MixerDefaultTable_125:
 	.byte 0x7F, 0x7F, 0x7F, 0x7B, 0x00, 0x7B, 0x00, 0x7B, 0x00, 0x7B, 0x00, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE64  |...{.{.{.{...}.T....d....B.x.....d...B.x...|
 
@@ -16414,6 +18383,10 @@ ToneDB_MixerDefaultTable_125:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
+; ★ AND ROUND 11's COARSER QUESTION IS ASKED TOO, and refuses: those
+; columns span 2 sound groups (PERCUSSION, EFFECT), above
+; M10's bound of 1.  A label naming 2 groups would claim 16 tones.
+; notes/prom_d_inventory_round8.py Q22.
 ToneDB_MixerDefaultTable_126:
 	.byte 0x7F, 0x7F, 0x7F, 0x7B, 0x01, 0x7B, 0x01, 0x7B, 0x01, 0x7B, 0x01, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EE8F  |...{.{.{.{...}.T....d....B.x.....d...B.x...|
 
@@ -16428,6 +18401,10 @@ ToneDB_MixerDefaultTable_126:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
+; ★ AND ROUND 11's COARSER QUESTION IS ASKED TOO, and refuses: those
+; columns span 2 sound groups (PERCUSSION, EFFECT), above
+; M10's bound of 1.  A label naming 2 groups would claim 16 tones.
+; notes/prom_d_inventory_round8.py Q22.
 ToneDB_MixerDefaultTable_127:
 	.byte 0x7F, 0x7F, 0x7F, 0x7B, 0x02, 0x7B, 0x02, 0x7B, 0x02, 0x7B, 0x02, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 1EEBA  |...{.{.{.{...}.T....d....B.x.....d...B.x...|
 
@@ -16455,6 +18432,10 @@ ToneDB_MixerDefaultTable_128:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
+; ★ AND ROUND 11's COARSER QUESTION IS ASKED TOO, and refuses: those
+; columns span 3 sound groups (SYNTH LEAD 1, SYNTH LEAD 2, SYNTH LEAD 3), above
+; M10's bound of 1.  A label naming 3 groups would claim 24 tones.
+; notes/prom_d_inventory_round8.py Q22.
 ToneDB_MixerDefaultTable_129:
 	.byte 0x7F, 0x7F, 0x7F, 0x76, 0x04, 0x76, 0x04, 0x76, 0x04, 0x76, 0x04, 0x01, 0x01, 0x7D, 0x80, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x30, 0xC6, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00, 0x30, 0xC6, 0x64, 0x00, 0x00, 0x00, 0x42, 0x24, 0x60, 0x10, 0x00, 0x00	; 1EF10  |...v.v.v.v...}.T....d0...B$`...0.d...B$`...|
 
@@ -18990,7 +20971,18 @@ ToneDB_MixerDefaultTable_317_SameAs_Piano_WaveSel1:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
-ToneDB_MixerDefaultTable_318:
+; ★ ROUND 11 ASKS THE SAME COLUMNS A COARSER QUESTION and gets an
+; answer: every tone above lies in ONE sound group, 'PERCUSSION' --
+; number 30 of the 34 groups the panel selects with.  That is what
+; `_SelectedForGroup_` claims, and it claims nothing else: the group
+; holds 8 tones and this label does not say which.
+; Evidence: tone index = 8*group + member (prom_a 0xFC230C `mul
+; WA,0x0010` and 0xFC2317 `mul BC,0x0002` over the table at
+; 0xF06EF4, whose entry k is the (program, bank) pair prom_d's own
+; BankMap and ToneNumBanks resolve to tone k, 272 of 272); the group's
+; name is prom_b's own 16 ASCII bytes at 0xF068B4 + 16*30.
+; notes/prom_d_inventory_round8.py Q21, Q22.
+ToneDB_MixerDefaultTable_318_SelectedForGroup_PERCUSSION:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x96, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20ECF  |...x.x.x.x.....T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_319 -- file 0x20EFA..0x20F24
@@ -19004,7 +20996,18 @@ ToneDB_MixerDefaultTable_318:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
-ToneDB_MixerDefaultTable_319:
+; ★ ROUND 11 ASKS THE SAME COLUMNS A COARSER QUESTION and gets an
+; answer: every tone above lies in ONE sound group, 'PERCUSSION' --
+; number 30 of the 34 groups the panel selects with.  That is what
+; `_SelectedForGroup_` claims, and it claims nothing else: the group
+; holds 8 tones and this label does not say which.
+; Evidence: tone index = 8*group + member (prom_a 0xFC230C `mul
+; WA,0x0010` and 0xFC2317 `mul BC,0x0002` over the table at
+; 0xF06EF4, whose entry k is the (program, bank) pair prom_d's own
+; BankMap and ToneNumBanks resolve to tone k, 272 of 272); the group's
+; name is prom_b's own 16 ASCII bytes at 0xF068B4 + 16*30.
+; notes/prom_d_inventory_round8.py Q21, Q22.
+ToneDB_MixerDefaultTable_319_SelectedForGroup_PERCUSSION:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x64, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20EFA  |...x.x.x.x...d.T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_320 -- file 0x20F25..0x20F4F
@@ -19018,7 +21021,18 @@ ToneDB_MixerDefaultTable_319:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
-ToneDB_MixerDefaultTable_320:
+; ★ ROUND 11 ASKS THE SAME COLUMNS A COARSER QUESTION and gets an
+; answer: every tone above lies in ONE sound group, 'PERCUSSION' --
+; number 30 of the 34 groups the panel selects with.  That is what
+; `_SelectedForGroup_` claims, and it claims nothing else: the group
+; holds 8 tones and this label does not say which.
+; Evidence: tone index = 8*group + member (prom_a 0xFC230C `mul
+; WA,0x0010` and 0xFC2317 `mul BC,0x0002` over the table at
+; 0xF06EF4, whose entry k is the (program, bank) pair prom_d's own
+; BankMap and ToneNumBanks resolve to tone k, 272 of 272); the group's
+; name is prom_b's own 16 ASCII bytes at 0xF068B4 + 16*30.
+; notes/prom_d_inventory_round8.py Q21, Q22.
+ToneDB_MixerDefaultTable_320_SelectedForGroup_PERCUSSION:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x32, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20F25  |...x.x.x.x...2.T....d....B.x.....d...B.x...|
 
 ; ToneDB_MixerDefaultTable_321 -- file 0x20F50..0x20F7A
@@ -19032,7 +21046,18 @@ ToneDB_MixerDefaultTable_320:
 ; names -- more than round 8's bound of 3, so a
 ; disjunction would enumerate a family rather than name
 ; an object.  round 10 Q19.
-ToneDB_MixerDefaultTable_321:
+; ★ ROUND 11 ASKS THE SAME COLUMNS A COARSER QUESTION and gets an
+; answer: every tone above lies in ONE sound group, 'PERCUSSION' --
+; number 30 of the 34 groups the panel selects with.  That is what
+; `_SelectedForGroup_` claims, and it claims nothing else: the group
+; holds 8 tones and this label does not say which.
+; Evidence: tone index = 8*group + member (prom_a 0xFC230C `mul
+; WA,0x0010` and 0xFC2317 `mul BC,0x0002` over the table at
+; 0xF06EF4, whose entry k is the (program, bank) pair prom_d's own
+; BankMap and ToneNumBanks resolve to tone k, 272 of 272); the group's
+; name is prom_b's own 16 ASCII bytes at 0xF068B4 + 16*30.
+; notes/prom_d_inventory_round8.py Q21, Q22.
+ToneDB_MixerDefaultTable_321_SelectedForGroup_PERCUSSION:
 	.byte 0x7F, 0x7F, 0x7F, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x78, 0x00, 0x01, 0x01, 0x19, 0xFF, 0x54, 0x00, 0x00, 0x06, 0x7F, 0x64, 0x00, 0xC0, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00, 0x00, 0xC0, 0x64, 0x00, 0x00, 0x00, 0x42, 0x18, 0x78, 0x00, 0x00, 0x00	; 20F50  |...x.x.x.x.....T....d....B.x.....d...B.x...|
 
 ; ==========================================================================
@@ -29537,6 +31562,13 @@ ToneDB_EnvDescTable_317_ElemArray:
 ; file 0x00F8C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 32 'DRUMS 1', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*32.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_103_StandardKit:
 	.ascii " Standard Kit   "	; 2B2AC
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2B2BC  |.U.@U.@U.@U.@U.@|
@@ -29686,6 +31718,13 @@ DrumKit_103_StandardKit_NoteMap:
 ; file 0x00F90; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 32 'DRUMS 1', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*32.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_104_RoomKit:
 	.ascii "   Room Kit     "	; 2B444
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2B454  |.U.@U.@U.@U.@U.@|
@@ -29835,6 +31874,13 @@ DrumKit_104_RoomKit_NoteMap:
 ; file 0x00F98; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 32 'DRUMS 1', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*32.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_106_PowerKit:
 	.ascii "   Power Kit    "	; 2B5DC
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2B5EC  |.U.@U.@U.@U.@U.@|
@@ -29984,6 +32030,13 @@ DrumKit_106_PowerKit_NoteMap:
 ; file 0x00F94; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 32 'DRUMS 1', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*32.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_105_LightRockKit:
 	.ascii " Light Rock Kit "	; 2B774
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2B784  |.U.@U.@U.@U.@U.@|
@@ -30133,6 +32186,13 @@ DrumKit_105_LightRockKit_NoteMap:
 ; file 0x00F9C; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 32 'DRUMS 1', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*32.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_107_FunkKit:
 	.ascii "   Funk Kit     "	; 2B90C
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2B91C  |.U.@U.@U.@U.@U.@|
@@ -30282,6 +32342,13 @@ DrumKit_107_FunkKit_NoteMap:
 ; file 0x00F80; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 32 'DRUMS 1', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*32.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_100_JazzKit:
 	.ascii "   Jazz Kit     "	; 2BAA4
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2BAB4  |.U.@U.@U.@U.@U.@|
@@ -30431,6 +32498,13 @@ DrumKit_100_JazzKit_NoteMap:
 ; file 0x00F88; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 32 'DRUMS 1', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*32.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_102_TradKit:
 	.ascii "   Trad Kit     "	; 2BC3C
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2BC4C  |.U.@U.@U.@U.@U.@|
@@ -30580,6 +32654,13 @@ DrumKit_102_TradKit_NoteMap:
 ; file 0x00F84; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 32 'DRUMS 1', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*32.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_101_BrushKit:
 	.ascii "  Brush Kit     "	; 2BDD4
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2BDE4  |.U.@U.@U.@U.@U.@|
@@ -30729,6 +32810,13 @@ DrumKit_101_BrushKit_NoteMap:
 ; file 0x00FA0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 33 'DRUMS 2', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*33.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_108_DanceKit:
 	.ascii "   Dance Kit    "	; 2BF6C
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2BF7C  |.U.@U.@U.@U.@U.@|
@@ -30878,6 +32966,13 @@ DrumKit_108_DanceKit_NoteMap:
 ; file 0x00FA4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 33 'DRUMS 2', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*33.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_109_HouseKit:
 	.ascii "   House Kit    "	; 2C104
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2C114  |.U.@U.@U.@U.@U.@|
@@ -31027,6 +33122,13 @@ DrumKit_109_HouseKit_NoteMap:
 ; file 0x00FA8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 33 'DRUMS 2', member 2 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*33.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_10A_SoulKit:
 	.ascii "   Soul Kit     "	; 2C29C
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2C2AC  |.U.@U.@U.@U.@U.@|
@@ -31176,6 +33278,13 @@ DrumKit_10A_SoulKit_NoteMap:
 ; file 0x00FAC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 33 'DRUMS 2', member 3 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*33.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_10B_ElectricKit:
 	.ascii " Electric Kit   "	; 2C434
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2C444  |.U.@U.@U.@U.@U.@|
@@ -31325,6 +33434,13 @@ DrumKit_10B_ElectricKit_NoteMap:
 ; file 0x00FB8; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 33 'DRUMS 2', member 6 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*33.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_10E_OrchestraKit:
 	.ascii " Orchestra Kit  "	; 2C5CC
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2C5DC  |.U.@U.@U.@U.@U.@|
@@ -31474,6 +33590,13 @@ DrumKit_10E_OrchestraKit_NoteMap:
 ; file 0x00FBC; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 33 'DRUMS 2', member 7 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*33.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_10F_SoundEffectKit:
 	.ascii "Sound Effect Kit"	; 2C764
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2C774  |.U.@U.@U.@U.@U.@|
@@ -31623,6 +33746,13 @@ DrumKit_10F_SoundEffectKit_NoteMap:
 ; file 0x00FB4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 33 'DRUMS 2', member 5 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*33.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_10D_ModelingKit:
 	.ascii " Modeling Kit   "	; 2C8FC
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2C90C  |.U.@U.@U.@U.@U.@|
@@ -31772,6 +33902,13 @@ DrumKit_10D_ModelingKit_NoteMap:
 ; file 0x00FB0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 33 'DRUMS 2', member 4 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*33.  notes/prom_d_inventory_round8.py Q21.
 DrumKit_10C_SynthKit:
 	.ascii "   Synth Kit    "	; 2CA94
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2CAA4  |.U.@U.@U.@U.@U.@|
@@ -31921,6 +34058,8 @@ DrumKit_10C_SynthKit_NoteMap:
 ; file 0x00FC0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ⚠ NO SOUND GROUP: tone index 272 is past the 272-entry run of prom_b's
+; group/member table, so nothing in that table places it.  Q21.
 DrumKit_110_SpecialSound:
 	.ascii " Special sound  "	; 2CC2C
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2CC3C  |.U.@U.@U.@U.@U.@|
@@ -32070,6 +34209,8 @@ DrumKit_110_SpecialSound_NoteMap:
 ; file 0x00FC4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ⚠ NO SOUND GROUP: tone index 273 is past the 272-entry run of prom_b's
+; group/member table, so nothing in that table places it.  Q21.
 DrumKit_111_GMOrchestraKit:
 	.ascii "GM Orchestra Kit"	; 2CDC4
 	.byte 0x80, 0x55, 0x81, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x9D, 0x40, 0x55, 0x80, 0x40	; 2CDD4  |.U.@U.@U.@U.@U.@|
@@ -42151,7 +44292,7 @@ PercInst_503_SlapShot:
 ;          Measured, it leaves exactly one candidate 0 times: where the
 ;          order holds every candidate is inside the interval, and where it
 ;          does not, none is.  Refuted by its own measurement.
-;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 97 checks.
+;   notes/prom_d_inventory_round8.py Q3, Q4, Q5; 129 checks.
 ; 
 ;   6. ★★ ROUND 10 -- THE MECHANISM THAT NAMED 29 RECORDS AT SLOT +0x18
 ;      WAS RUN HERE AND IS REFUSED.  The shape is there: a 1,024-entry
@@ -48549,6 +50690,13 @@ ToneDB_EnvDescTable_Perc_160_ElemArray:
 ; file 0x00CE0; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 11 'ORGAN', member 0 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*11.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_058_Drawbar1:
 	.ascii "<<< Drawbar 1>>>"	; 446B4
 	.byte 0x71, 0x55, 0x00, 0x00, 0x55, 0x81, 0x40, 0x55, 0x30, 0x40, 0x55, 0x00, 0x40, 0x55, 0x83, 0x28	; 446C4  |qU..U.@U0@U.@U.(|
@@ -48601,6 +50749,13 @@ ToneRec_058_Drawbar1_Elem3:		; 81-byte element block
 ; file 0x00CE4; the program map holds no 0xFFFF and its values run
 ; 0..273 over that table's 274 entries, so the count above is the
 ; number of times this record's index appears in it.  round 4 Q6a-Q6c.
+; ★ SOUND GROUP 11 'ORGAN', member 1 of 8 -- what the panel calls this
+; tone.  Evidence: prom_b's group/member table at 0xF06EF4, entry k of
+; which is the (program, bank) pair that this image's own BankMap and
+; ToneNumBanks resolve to tone k (272 of 272 consecutive entries); prom_a
+; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,
+; so the index is 8*group + member; the name is prom_b's own 16 ASCII
+; bytes at 0xF068B4 + 16*11.  notes/prom_d_inventory_round8.py Q21.
 ToneRec_059_Drawbar2:
 	.ascii "<<< Drawbar 2>>>"	; 448D1
 	.byte 0x71, 0x55, 0x00, 0x00, 0x55, 0x81, 0x40, 0x55, 0x30, 0x40, 0x55, 0x00, 0x40, 0x55, 0x83, 0x28	; 448E1  |qU..U.@U0@U.@U.(|

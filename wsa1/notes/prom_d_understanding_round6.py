@@ -407,6 +407,18 @@ INTERNAL_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*__[0-9A-Fa-f]{4,6}:$")
 # the promotion so the set being classified is the one round 5 actually left.
 PROMOTED_TWIN = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*_[0-9]{1,4})_SameAs_[A-Za-z0-9_]+:$")
 PROMOTED_OCT = re.compile(r"^ToneDB_OctaveShiftByProgram_Bank([0-9]):$")
+# ⚠ ADDED IN WAVE 7 ROUND 11, AND IT REPAIRS A CHECK THAT HAD BEEN FAILING SINCE
+# ROUND 10.  Q8d's whole point is that this denominator must NOT move when a
+# later round promotes a label, and the two patterns above only mapped round 6's
+# own `_SameAs_` promotions back.  Round 10 then promoted 29 records to
+# `_SelectedFor_<tone>` and round 11 promoted 8 more to
+# `_SelectedForGroup_<GROUP>`, so the set read back off the .s fell 614 -> 585 ->
+# 577 and Q8d has been RED ever since -- a check nobody re-ran, which is the
+# exact failure mode this file exists to catch.  The pattern below restores the
+# round-5 denominator; the round-11 lane found it by running every prom_d script
+# rather than only its own.
+PROMOTED_SEL = re.compile(
+    r"^([A-Za-z_][A-Za-z0-9_]*_[0-9]{1,4})_SelectedFor(?:Group)?_[A-Za-z0-9_]+:$")
 
 
 def framed_labels():
@@ -438,6 +450,10 @@ def framed_labels():
         m = PROMOTED_OCT.match(t)
         if m:
             out.append("Unk_0FC8_Rec_%s" % m.group(1))
+            continue
+        m = PROMOTED_SEL.match(t)
+        if m:
+            out.append(m.group(1))
             continue
         if FRAMED_RE.match(t):
             out.append(t[:-1])
@@ -948,10 +964,20 @@ def q8():
           % (len(fr), len(set(fr))))
     still = sum(1 for _n, v, _r in classify() if v.startswith("NAMELESS")
                 or v == "METRIC-ARTEFACT")
-    check("Q8d2 and what the metric should now read for prom_d is that minus the "
-          "promotions", still == AUDITED_FRAMED - AUDITED_PROMOTED,
-          "%d framed after this round, from %d - %d"
-          % (still, AUDITED_FRAMED, AUDITED_PROMOTED))
+    # ⚠ REWORDED IN ROUND 11.  This check used to say "what the metric should NOW
+    # read", and that sentence went stale the moment round 7 promoted anything:
+    # it is round 6's OWN arithmetic over round 6's OWN classification, and the
+    # live figure has since fallen much further.  Both are printed so neither can
+    # be mistaken for the other.
+    _live = sum(1 for ln in open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s"))
+                if ln and ln[0] not in " \t;\n." and not INTERNAL_RE.match(ln.strip())
+                and FRAMED_RE.match(ln.strip()))
+    check("Q8d2 and what the metric read for prom_d after ROUND 6 is that minus "
+          "round 6's own promotions", still == AUDITED_FRAMED - AUDITED_PROMOTED,
+          "%d framed after round 6, from %d - %d; the LIVE figure is now %d, "
+          "because rounds 7-11 promoted %d more"
+          % (still, AUDITED_FRAMED, AUDITED_PROMOTED, _live,
+             AUDITED_FRAMED - AUDITED_PROMOTED - _live))
 
 
 # ---------------------------------------------------------------------------

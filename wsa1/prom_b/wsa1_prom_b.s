@@ -26707,6 +26707,17 @@ Data_F135F6:
 ;              rule that finds it stops at the first word that is not an
 ;              0x00F0xxxx-0x00F7xxxx address; that word is at 0xF13659.
 ;              Entry 22, the last, is 0x00F42C70.
+;              ★ AND SOMETHING BOUNDS THE INDEX, round 11: the dispatcher
+;              calls PanelCode_ToSlotAndFlags (0xF55019) through T_F42C74
+;              before `mul A,4`, and that routine rejects a raw index above
+;              0x1F (`cp HL,0x001f` at 0xF55026) and folds what is left --
+;              0x11..0x19 lose 0x11, 0x1A..0x1F lose 9 -- so the index space
+;              is 0..22 and 23 is a MEASUREMENT, not only a reading.  ★ The
+;              table agrees: the five slots whose raw codes NOTHING delivers
+;              (14, 17, 19, 20, 22 <- panel codes 0x0E, 0x1A, 0x1C, 0x1D,
+;              0x1F) hold the default thunk here, and in all four of this
+;              file's 23-entry tables -- 20 of 20.
+;              notes/prom_b_panel_names_round11.py --selftest.
 ; Evidence: every one of the 23 words is re-read and range-asserted on every
 ;           emit.  The PTRTAB rule at this window fires ZERO times over the
 ;           proven prom_b instruction text (`python3
@@ -26971,6 +26982,17 @@ Data_F13874:
 ;              rule that finds it stops at the first word that is not an
 ;              0x00F0xxxx-0x00F7xxxx address; that word is at 0xF139AB.
 ;              Entry 22, the last, is 0x00F42C70.
+;              ★ AND SOMETHING BOUNDS THE INDEX, round 11: the dispatcher
+;              calls PanelCode_ToSlotAndFlags (0xF55019) through T_F42C74
+;              before `mul A,4`, and that routine rejects a raw index above
+;              0x1F (`cp HL,0x001f` at 0xF55026) and folds what is left --
+;              0x11..0x19 lose 0x11, 0x1A..0x1F lose 9 -- so the index space
+;              is 0..22 and 23 is a MEASUREMENT, not only a reading.  ★ The
+;              table agrees: the five slots whose raw codes NOTHING delivers
+;              (14, 17, 19, 20, 22 <- panel codes 0x0E, 0x1A, 0x1C, 0x1D,
+;              0x1F) hold the default thunk here, and in all four of this
+;              file's 23-entry tables -- 20 of 20.
+;              notes/prom_b_panel_names_round11.py --selftest.
 ; Evidence: every one of the 23 words is re-read and range-asserted on every
 ;           emit.  The PTRTAB rule at this window fires ZERO times over the
 ;           proven prom_b instruction text (`python3
@@ -77425,9 +77447,18 @@ DL_F4C000:
 ;           to be an address in prom_b's own 0xF00000-0xFFFFFF window; the
 ;           three non-default targets are additionally asserted to be
 ;           instruction boundaries of this transcription.
-; Unknown: what indexes it.  15 of the 23 slots being the default stub says
-;          the index space is sparse, but nothing decoded here gives its
-;          bound.
+; ⚠ ANSWERED round 11, and the old text -- "nothing decoded here gives its
+;          bound" -- is struck.  The PANEL BUTTON CODE indexes it, through
+;          PanelCode_ToSlotAndFlags (0xF55019, thunk T_F42C74), which the
+;          reader calls before `mul A,4`: it rejects a raw index above 0x1F
+;          and folds 0x11..0x19 onto 0..8 and 0x1A..0x1F onto 17..22, so the
+;          index space is 0..22.  ★ And the sparseness has a cause: the five
+;          slots whose raw codes NOTHING delivers (14, 17, 19, 20, 22 <-
+;          codes 0x0E, 0x1A, 0x1C, 0x1D, 0x1F) are the default stub here and
+;          in all four of this file's 23-entry tables, 20 of 20, while slot
+;          15 -- the EXIT key, raw code 0x0F -- is filled in all four.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F4C38D:
 	.long	0x00F42C70	; F4C38D  [0] -> default stub
@@ -83741,7 +83772,7 @@ sub_F53029:		; <- T_F42E48
 ; What it does: `link XIZ,0 / pushw (XIZ+0x0A) / pushw (XIZ+0x08) / call
 ;               0xf42c74 / mul A,4 / add XWA,0x00f54248 / ld XBC,(XWA) / jp
 ;               (XBC)` -- the image-wide message-dispatch idiom, here
-;               through DispatchTable_F54248.
+;               through PanelButtonTable_DrawbarScreen.
 ; Evidence: the byte-identical idiom appears at sub_F0F17C, sub_F4C4B5 and
 ;           0xF1233E in this same file, each with its own table; the only
 ;           thing this file adds is WHICH table.  The name states the
@@ -83857,7 +83888,7 @@ sub_F53052:
 
 ; --------------------------------------------------------------------------
 ; sub_F53136
-; Called from: DispatchTable_F54248[8]
+; Called from: PanelButtonTable_DrawbarScreen[8]
 ; Evidence: 0xF53136 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -83884,7 +83915,7 @@ sub_F53136:
 
 ; --------------------------------------------------------------------------
 ; sub_F53163
-; Called from: DispatchTable_F54248[9]
+; Called from: PanelButtonTable_DrawbarScreen[9]
 ; Evidence: 0xF53163 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -83911,7 +83942,7 @@ sub_F53163:
 
 ; --------------------------------------------------------------------------
 ; sub_F5318E
-; Called from: DispatchTable_F54248[11]
+; Called from: PanelButtonTable_DrawbarScreen[11]
 ; Evidence: 0xF5318E is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -83937,7 +83968,7 @@ sub_F5318E:
 
 ; --------------------------------------------------------------------------
 ; sub_F531B5
-; Called from: DispatchTable_F54248[12]
+; Called from: PanelButtonTable_DrawbarScreen[12]
 ; Evidence: 0xF531B5 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -84286,7 +84317,7 @@ sub_F533DC:
 
 ; --------------------------------------------------------------------------
 ; sub_F5340D
-; Called from: DispatchTable_F54248[0]
+; Called from: PanelButtonTable_DrawbarScreen[0]
 ; Evidence: 0xF5340D is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -84325,7 +84356,7 @@ sub_F5340D:
 
 ; --------------------------------------------------------------------------
 ; sub_F5344F
-; Called from: DispatchTable_F54248[1]
+; Called from: PanelButtonTable_DrawbarScreen[1]
 ; Evidence: 0xF5344F is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -84364,7 +84395,7 @@ sub_F5344F:
 
 ; --------------------------------------------------------------------------
 ; sub_F53491
-; Called from: DispatchTable_F54248[2]
+; Called from: PanelButtonTable_DrawbarScreen[2]
 ; Evidence: 0xF53491 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -84406,7 +84437,7 @@ sub_F53491:
 
 ; --------------------------------------------------------------------------
 ; sub_F534DC
-; Called from: DispatchTable_F54248[3]
+; Called from: PanelButtonTable_DrawbarScreen[3]
 ; Evidence: 0xF534DC is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -84448,7 +84479,7 @@ sub_F534DC:
 
 ; --------------------------------------------------------------------------
 ; sub_F53527
-; Called from: DispatchTable_F54248[4]
+; Called from: PanelButtonTable_DrawbarScreen[4]
 ; Evidence: 0xF53527 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -84487,7 +84518,7 @@ sub_F53527:
 
 ; --------------------------------------------------------------------------
 ; sub_F53569
-; Called from: DispatchTable_F54248[5]
+; Called from: PanelButtonTable_DrawbarScreen[5]
 ; Evidence: 0xF53569 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -84529,7 +84560,7 @@ sub_F53569:
 
 ; --------------------------------------------------------------------------
 ; sub_F535B4
-; Called from: DispatchTable_F54248[6]
+; Called from: PanelButtonTable_DrawbarScreen[6]
 ; Evidence: 0xF535B4 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -84568,7 +84599,7 @@ sub_F535B4:
 
 ; --------------------------------------------------------------------------
 ; sub_F535F6
-; Called from: DispatchTable_F54248[7]
+; Called from: PanelButtonTable_DrawbarScreen[7]
 ; Evidence: 0xF535F6 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
@@ -84609,15 +84640,22 @@ sub_F535F6:
 	ret	; F53640  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53641
-; Called from: DispatchTable_F54248[16]
-; Evidence: 0xF53641 is an instruction boundary of this transcription, re-
-;           asserted on every emit, and the reference above names it.  That
-;           is ALL the name rests on -- the name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; PageKey_DrawbarScreen
+; Called from: PanelButtonTable_DrawbarScreen[16]
+; Evidence: it is entry 16 of this screen's button table, and slot 16 is the
+;           REMAPPED slot of raw panel code 0x10, whose only fitted producers
+;           are SW21 "PAGE v" (pair position 0) and SW22 "PAGE ^" (position 1),
+;           segment 2 bits 4 and 5.  Variant 1 sources the same code from
+;           SW79/SW80, which no diode list fits, so the pair is the same under
+;           both wire maps.  The remap is PanelCode_ToSlotAndFlags, which leaves
+;           0x00..0x10 alone.  notes/prom_b_panel_names_round11.py --selftest.
+; ⚠ NOT named in the 0xF7D2D8 family.  There the two slot-0x10 handlers are
+;           ALSO installed at slot 0x19, the code the action handlers write over
+;           a soft-key base, so nothing there names them.  Here slot 16 is not
+;           shared.
+; Unknown: what (0x2896) holds -- the nibble this routine pages through.
 ; --------------------------------------------------------------------------
-sub_F53641:
+PageKey_DrawbarScreen:
 	pushw	hl	; F53641  push HL
 	push	xix	; F53642  push XIX
 	lda_d16	xix, (10390)	; F53643  lda XIX,0x2896
@@ -84648,15 +84686,24 @@ sub_F53641:
 	ret	; F53682  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53683
-; Called from: DispatchTable_F54248[15]
-; Evidence: 0xF53683 is an instruction boundary of this transcription, re-
-;           asserted on every emit, and the reference above names it.  That
-;           is ALL the name rests on -- the name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; ExitKey_DrawbarScreen
+; Called from: PanelButtonTable_DrawbarScreen[15]
+; What it does: reads flag bit 0 of (0x28B0) -- the pair position
+;          PanelCode_ToSlotAndFlags copied there from bit 7 of the code -- and on
+;          the position-1 arm sets (0x2071) and requests screen 1 in (0x2070),
+;          the screen-request pair prom_a documents at 0xF86055.
+; Evidence: it is entry 15 of this screen's button table, and slot 15 is the
+;           REMAPPED slot of raw panel code 0x0F, whose only fitted producer is
+;           SW32 EXIT under both wire maps (segment 3 bit 7, service manual page
+;           32).  The remap is PanelCode_ToSlotAndFlags, which leaves 0x00..0x10
+;           alone; slot 15 is filled in all four of this file's 23-entry
+;           dispatch tables and slot 0x0F is filled in all 32 of the 0xF7D2D8
+;           button tables, which is what a key every screen must handle looks
+;           like.  notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: which screen the request lands on -- (0x2070) is set to 1 here and
+;          nothing in this file says what screen 1 is.
 ; --------------------------------------------------------------------------
-sub_F53683:
+ExitKey_DrawbarScreen:
 	push	xix	; F53683  push XIX
 	lda_d16	xix, (8305)	; F53684  lda XIX,0x2071
 	ldb_d8	c, (10416)	; F53688  ld C,(0x28b0)
@@ -86148,7 +86195,7 @@ sub_F54210:		; <- T_F42E6C
 ; --- 0xF54248-0xF542A3  romtab (92 bytes) ---
 
 ; --------------------------------------------------------------------------
-; DispatchTable_F54248 -- 23 pointers, the module's message table
+; PanelButtonTable_DrawbarScreen -- 23 pointers, the module's message table
 ; Read by: prom_b 0xF5303D `add XWA,0x00f54248`, after `mul A,4` in
 ;          DrawbarScreen_Dispatch.
 ; Entries: 23, 15 distinct.  9 of them are the image-wide default thunk slot
@@ -86156,15 +86203,25 @@ sub_F54210:		; <- T_F42E6C
 ;          pointing at a bare `ret`; ⚠ only the last 6 are a trailing run --
 ;          the other 3 sit at indices 10, 13, 14, INSIDE the live entries,
 ;          so the table is sparse and not merely short.
-; Entry count: 23 is where the layout's chain rule stops, because entry 23
-;              is a zero word and a zero is not an address.  ⚠ Nothing in
-;              the code bounds the index, so 23 is a READING of the data,
-;              not a measurement of the table.
+; Entry count: 23, and ⚠ CORRECTED round 11 -- this paragraph used to end
+;              "Nothing in the code bounds the index, so 23 is a READING of
+;              the data, not a measurement of the table."  SOMETHING BOUNDS
+;              IT.  DrawbarScreen_Dispatch calls PanelCode_ToSlotAndFlags
+;              (0xF55019) before `mul A,4`, and that routine rejects a raw
+;              index above 0x1F (`cp HL,0x001f` at 0xF55026) and then folds
+;              what is left -- 0x11..0x19 lose 0x11, 0x1A..0x1F lose 9 -- so
+;              the index space really is 0..22.  ★ And the table agrees: the
+;              five slots whose raw codes NOTHING delivers (14, 17, 19, 20,
+;              22 <- codes 0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the default
+;              thunk here and in all four of this file's 23-entry tables --
+;              20 of 20 -- while slot 15, raw code 0x0F, the EXIT key, is
+;              filled in all four.  notes/prom_b_panel_names_round11.py
+;              --selftest.
 ; Evidence: the reader above; and every one of the 14 in-span entries lands
 ;           on an instruction boundary of this transcription (--selftest
 ;           check B), which a mis-framed table would not do.
 ; --------------------------------------------------------------------------
-DispatchTable_F54248:
+PanelButtonTable_DrawbarScreen:
 	.long 0x00F5340D                       ; F54248  [0]   -> sub_F5340D
 	.long 0x00F5344F                       ; F5424C  [1]   -> sub_F5344F
 	.long 0x00F53491                       ; F54250  [2]   -> sub_F53491
@@ -86180,8 +86237,8 @@ DispatchTable_F54248:
 	.long 0x00F531B5                       ; F54278  [12]   -> sub_F531B5
 	.long 0x00F42C70                       ; F5427C  [13]   -> prom_b 0xF42C70
 	.long 0x00F42C70                       ; F54280  [14]   -> prom_b 0xF42C70
-	.long 0x00F53683                       ; F54284  [15]   -> sub_F53683
-	.long 0x00F53641                       ; F54288  [16]   -> sub_F53641
+	.long 0x00F53683                       ; F54284  [15]   -> ExitKey_DrawbarScreen
+	.long 0x00F53641                       ; F54288  [16]   -> PageKey_DrawbarScreen
 	.long 0x00F42C70                       ; F5428C  [17]   -> prom_b 0xF42C70
 	.long 0x00F42C70                       ; F54290  [18]   -> prom_b 0xF42C70
 	.long 0x00F42C70                       ; F54294  [19]   -> prom_b 0xF42C70
@@ -86193,10 +86250,20 @@ DispatchTable_F54248:
 
 ; --------------------------------------------------------------------------
 ; Table_F542A4 -- nine 32-bit words of zero in front of DrawbarRowOffsets
-; Evidence: read from the ROM.  If they are empty slots of
-;           DispatchTable_F54248 that table would have 32 entries and end at
-;           0xF542C8; nothing in the code bounds the index, so the layout
-;           stops the table at 23 and this stays a separate object.
+; Evidence: read from the ROM.  If they were empty slots of
+;           PanelButtonTable_DrawbarScreen that table would have 32 entries and end at
+;           0xF542C8.
+; ⚠ CORRECTED, round 11.  This paragraph used to read "nothing in the code
+;           bounds the index, so the layout stops the table at 23".  SOMETHING
+;           BOUNDS IT: the dispatcher calls PanelCode_ToSlotAndFlags (0xF55019)
+;           first, which rejects a raw index above 0x1F (`cp HL,0x001f` at
+;           0xF55026) and then REMAPS what is left -- 0x11..0x19 lose 0x11
+;           (0xF5506F-0xF55078) and 0x1A..0x1F lose 9 (0xF55081-0xF5508A) --
+;           so what reaches `mul A,0x04` is 0..22.  Twenty-three slots is the
+;           INDEX SPACE, not a layout accident, and these nine words are below
+;           it.  Checked by notes/wave7-verify-probes/
+;           wave7_r10_screen_table_entry_count.py and by
+;           notes/prom_b_panel_names_round11.py --selftest.
 ; Unknown: whether they belong to the table before them.
 ; --------------------------------------------------------------------------
 Table_F542A4:
@@ -87071,8 +87138,12 @@ Stub_Ret_F55018:
 	ret	; F55018  ret
 
 ; ---------------------------------------------------------------------
-; sub_F55019 -- normalise a selector index and rebuild the flag byte (0x28B0)
-; Called from: not yet traced to a specific caller
+; PanelCode_ToSlotAndFlags -- normalise a selector index and rebuild the flag byte (0x28B0)
+; Called from: thunk T_F42C74 (0xF42C74), which four screen-module
+;              dispatchers call before `mul A,4 / add XWA,<their table>`:
+;              sub_F0F17C (0xF0F194), sub_F12334 (0xF12347), sub_F4C4B5 and
+;              DrawbarScreen_Dispatch (0xF5303D).  prom_a's Screen_*_Button
+;              methods reach it the same way.
 ; Inputs:  (XIZ+8) = 16-bit index, (XIZ+0x0A) = 16-bit flags
 ; Outputs: A = the adjusted index; (0x28B1) = the original index;
 ;          (0x28B0) = a freshly built flag byte
@@ -87083,7 +87154,23 @@ Stub_Ret_F55018:
 ;             bit 2 <- index in 0x11..0x19, and the index has 0x11 subtracted
 ;             bit 5 <- index == 0x1B and (0x2267) == 0x0F
 ;           an index >= 0x1A additionally has 9 subtracted.
-; Unknown:  what the index enumerates, and what 0x208C and 0x2267 hold.
+; ★ WHAT THE INDEX ENUMERATES, answered round 11: it is the PANEL BUTTON
+;           CODE, the five bits prom_a PanelButton_Route masks out at 0xF861AE.
+;           This routine is the far end of the panel chain, and each flag bit
+;           says which link the event came down:
+;             bit 0 = the PAIR POSITION -- bit 7 of the code byte, which selects
+;                     which member of a two-switch pair moved;
+;             bit 2 = the event was REWRITTEN by the action handlers 0xF8AE68/
+;                     0xF8AEDB (`add (XIX-1),0x11`), and the fold that sets it
+;                     is the exact inverse of that rewrite;
+;             bit 5 = the number-pad code 0x1B with (0x2267) == 0x0F, the same
+;                     two constants the five number-pad handlers in the 0xF7E2D8
+;                     span open with (`ld A,(0x2267) / cp A,0x0f`).
+;           So 0..22 is a SLOT, not a code: the 23-entry dispatch tables are not
+;           indexed by the raw event code.
+;           notes/prom_b_panel_names_round11.py --selftest;
+;           notes/wave7_panel_event_index.py; notes/wave7_panel_button_codes.py.
+; Unknown:  what 0x208C and 0x2267 hold.
 ; ⚠ CORRECTED 2026-08-30.  This paragraph used to end "...and what the 32-bit
 ;           mask table at 0xF55755 is.  That table is NOT converted here:
 ;           nothing bounds its length."  BOTH halves are now wrong.  The table
@@ -87096,7 +87183,7 @@ Stub_Ret_F55018:
 ;           0..31 and the table is 32 words = 128 bytes.  Measured and emitted by
 ;           notes/gen_prom_b_f5553f_module.py (--selftest re-reads all 32 words).
 ; ---------------------------------------------------------------------
-sub_F55019:
+PanelCode_ToSlotAndFlags:
 	.byte 0xEE, 0x0C, 0x00, 0x00	; F55019  link XIZ,0x0000   [llvm-mc cannot encode this]
 	pushw	hl	; F5501D  push HL
 	push	xix	; F5501E  push XIX
@@ -88229,7 +88316,7 @@ sub_F556EA:		; <- T_F42CA0
 ; --------------------------------------------------------------------------
 ; Bit32MaskTable -- 32 32-bit words, and word i is EXACTLY 1 << i.  A power-
 ;                   of-two mask indexed by a 5-bit selector.
-; Read by: sub_F55019 at 0xF55047, in the already-converted block above this
+; Read by: PanelCode_ToSlotAndFlags at 0xF55047, in the already-converted block above this
 ;          span: `ld C,0x04 / mul BC,(0x28b1) / extz XBC / add XBC,0x00F55755
 ;          / ld XBC,(XBC) / and XBC,(0x208c)` -- word (0x28B1) of this table
 ;          is AND-ed with the 32-bit word at (0x208C) and the result sets bit
@@ -116382,7 +116469,19 @@ DispatchTable_F675F3:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67616:
 	.long	0x00F67604	; F67616  [0] -> 0xF67604
@@ -116590,7 +116689,19 @@ DispatchTable_F67789:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F677EF:
 	.long	0x00F678F8	; F677EF  [0] -> 0xF678F8
@@ -116751,7 +116862,19 @@ sub_F6791E:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67939:
 	.long	0x00F678F8	; F67939  [0] -> 0xF678F8
@@ -116816,7 +116939,19 @@ DispatchTable_F67939:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F679D3:
 	.long	0x00F678F8	; F679D3  [0] -> 0xF678F8
@@ -116887,7 +117022,19 @@ DispatchTable_F679D3:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67A7A:
 	.long	0x00F678F8	; F67A7A  [0] -> 0xF678F8
@@ -116952,7 +117099,19 @@ DispatchTable_F67A7A:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67B14:
 	.long	0x00F678F8	; F67B14  [0] -> 0xF678F8
@@ -117017,7 +117176,19 @@ DispatchTable_F67B14:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67BAE:
 	.long	0x00F678F8	; F67BAE  [0] -> 0xF678F8
@@ -117088,7 +117259,19 @@ DispatchTable_F67BAE:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67C55:
 	.long	0x00F678F8	; F67C55  [0] -> 0xF678F8
@@ -117153,7 +117336,19 @@ DispatchTable_F67C55:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67CEF:
 	.long	0x00F678F8	; F67CEF  [0] -> 0xF678F8
@@ -117268,7 +117463,19 @@ sub_F67D8C:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67DE9:
 	.long	0x00F678F8	; F67DE9  [0] -> 0xF678F8
@@ -117460,7 +117667,19 @@ sub_F67F68:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67F96:
 	.long	0x00F678F8	; F67F96  [0] -> 0xF678F8
@@ -117757,7 +117976,19 @@ sub_F68271:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F6828B:
 	.long	0x00F6830B	; F6828B  [0] -> sub_F6830B
@@ -118214,7 +118445,19 @@ sub_F6859F:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F685C1:
 	.long	0x00F6830B	; F685C1  [0] -> sub_F6830B
@@ -118279,7 +118522,19 @@ DispatchTable_F685C1:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F6865B:
 	.long	0x00F6830B	; F6865B  [0] -> sub_F6830B
@@ -118344,7 +118599,19 @@ DispatchTable_F6865B:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F686F5:
 	.long	0x00F675CB	; F686F5  [0] -> ret stub
@@ -127467,7 +127734,19 @@ sub_F6CB52:
 ;           fires ZERO times over the 54,814 bytes of already-proven prom_b
 ;           instruction text (`python3 notes/prom_b_f65000_layout.py
 ;           --null`).
-; Unknown: what indexes it, and what the handlers do.
+; ⚠ ANSWERED, round 11: THE PANEL BUTTON CODE indexes it, five bits of it.
+;          The reader is `ld HL,BC / cp HL,0x1F / jr UGT,<ret> / sla 2,HL /
+;          ld XIX,<this table> / ld XHL,(XIX+HL) / call XHL` -- prom_a
+;          0xF8BDC5's shape inlined, e.g. at 0xF677D5 for 0xF677EF -- and the
+;          same five-bit mask prom_a PanelButton_Route applies at 0xF861AE.
+;          ★ The tables pass a test that could have failed: in all 16 of this
+;          module's 32-entry tables, the five slots whose codes NO WIRE EMITS
+;          (0x0E, 0x1A, 0x1C, 0x1D, 0x1F) hold the module's own do-nothing
+;          stub -- 80 of 80 -- while slot 0x0F, the EXIT key, holds one shared
+;          handler in 15 of the 16, and that handler writes the screen-request
+;          byte (0x2070) exactly as the twenty named ExitKey_* routines do.
+;          notes/prom_b_panel_names_round11.py --selftest.
+; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F6CBEE:
 	.long	0x00F678F8	; F6CBEE  [0] -> 0xF678F8
@@ -157892,18 +158171,63 @@ ButtonTable_SequencerMedley:
 ; differing -- and 0xF7E2E7 to LCD_ScreenRedraw_End (0xF999FE), 6 bytes, 0
 ; differing.  They keep prom_a's spelling so the pair reads as one object.
 ;
-; ⚠ 180 OF THE 210 ROUTINES KEEP sub_XXXXXX, AND THE REASON IS ONE FACT.
-; The 32 tables at 0xF7D2D8 are indexed by the PANEL BUTTON NUMBER (round 7
-; established that: two independent 5-bit masks over a 128-byte table).  So
-; what distinguishes one handler from the next is a bare number, and a name
-; built on it -- ScreenBtn_Quantize_11 -- would grade as content while
-; stating nothing.  Round 6 refused exactly that shape (Write3602_Index5)
-; and this block refuses it again.  The ROM names only THREE of the 32
-; codes, in prom_a's PanelButton_Route: 0x0D the data dial, 0x0E and 0x0F.
+; ★★ ROUND 11: THE BUTTON NUMBER NOW HAS A VOCABULARY, AND IT NAMES 26 OF
+; THE 124 HANDLERS -- NOT 124.  The chain is SW -> wire -> group ->
+; event-list record -> 5-bit code -> table slot -> handler, and every link is
+; read from the ROM by notes/prom_b_panel_names_round11.py.
+;
+; ★ WHICH WIRE MAP BELONGS TO THIS PANEL, measured, not assumed.  prom_a picks
+; between two maps at 0xF8A851 (`cp (0xC4),0x01`; variant 1 on equal, variant 2
+; otherwise).  Over the matrix wires 0xC0-0xCF, variant 2's event lists claim
+; 58 matrix bits and the set of switches they name is EQUAL to the 58 the
+; service manual's two diode lists fit -- a bijection.  Variant 1 claims 87,
+; of which 29 sit at positions with no switch (all of segment 6, and a segment
+; 10 the manual's numbering never reaches), and it has three pairs of
+; byte-identical group lists where variant 2 has none.
+; ⚠ That does NOT prove variant 1 is never selected -- nothing here reads
+; (0xC4).  It licences something narrower: for the codes named below the
+; FITTED producers are identical under both maps, because every extra producer
+; variant 1 adds for them has no switch behind it.
+;
+; ★ THE FOUR CODES THAT SURVIVE EVERY REFUSAL
+;   0x0F  EXIT (SW32).  Slot 0x0F is the ONLY one of the 32 slots that holds a
+;         real routine in ALL 32 tables, and its 32 handlers are 32 DISTINCT
+;         routines -- every screen must handle EXIT.  (In the 23-entry
+;         dispatch family its slot 15 is also filled in all four tables, but
+;         so are slots 1, 2, 4 and 5, so that family proves nothing extra.)
+;   0x1B  the NUMBER PAD (SW9-SW20), delivered as whole fields.
+;   0x0D  the -1/+1 pair (SW30, SW31).  ⚠ NOT the rotary DATA dial: that is
+;         code 0x21 on wire 0xD7, split off before any table lookup.  The
+;         paragraph this replaces called 0x0D "the data dial" and was wrong.
+;   0x10  PAGE (SW21, SW22) -- named only in the 23-entry dispatch family,
+;         because in THIS family its two handlers also sit at slot 0x19.
+;
+; ⚠ AND THE 98 REFUSALS, each stated in its own header rather than left blank:
+;   * 62 are the LCD SIDE KEYS (codes 0x08-0x0C).  The class is solid and the
+;     five siblings differ only by ROW -- a bare number, which is the shape
+;     round 6 refused (Write3602_Index5).
+;   * 22 are codes 0x04-0x07 and their base+0x11 twins -- round 10's
+;     COLLISION.  Under variant 1 two byte-identical group lists send an
+;     LCD-RIGHT key and a SOFT KEY to one code, and both switches are fitted,
+;     so the collision is not a variant artefact.
+;   * 11 are codes 0x00-0x03 and their twins: SOFT KEYS under both maps,
+;     but variant 1 puts code 0x00 on column 5 and variant 2 on column 1, and
+;     the column is the only thing that would separate four sibling names.
+;   * 1 is code 0x0E, WHICH NO WIRE PRODUCES in either map.  Of the 1,024
+;     slots here it is the only slot-0x0E entry that is not a bare `ret`, and
+;     both its branches reach the same `ret`.
+;   * 2 are the {0x10, 0x19} pair -- one routine serving PAGE and also
+;     the code the action handlers write over a held soft-key base.
+;
+; ★ A CONFIRMATION ROUND 10 COULD NOT MAKE.  It read `add (XIX-1),0x11` at
+; 0xF8AE7E and predicted an alternate code set; it never checked a consumer.
+; Here, 13 routines are installed at exactly two slots and those two are
+; exactly {n, n+0x11}; no routine is installed at two slots in any other
+; relation except the {0x10, 0x19} pair.
+;
 ; The service screen that would be the natural place for a switch list,
 ; Paint_PanelSwLedCheck, draws "Please push a any button." and no per-switch
-; text.  There is nothing to map an index onto, so the gap is stated instead
-; of filled.  Each handler's own Evidence line names its screen and index.
+; text; the vocabulary came from the service manual's page 32 instead.
 ;
 ; ⚠ 190 ADDRESSES IN HERE ARE ENTRY POINTS AND CARRY NO LABEL, ON PURPOSE.
 ; 510 of the 649 button-table slots that land in this span (78.6%) point at a
@@ -158214,8 +158538,33 @@ ScreenLeaveBody_TrackAssign:
 	ret	; F7E508  ret   <- button table 0xF7D558 entry 0 (TRACK ASSIGN)
 	ret	; F7E509  ret   <- button table 0xF7D558 entry 1 (TRACK ASSIGN) and 1 more slot(s)
 
-; Evidence: table 0xF7D558 entry 3, screen TRACK ASSIGN (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E50A -- panel button slot 0x03 and 0x14 of TrackAssign_207EZero
+; Reached by: code 0x03 from SW39 SOFT KEY col 4 lower (segment 4 bit 6, wire
+;           0xC4, pair position 0); SW40 SOFT KEY col 4 upper (segment 4 bit
+;           7, wire 0xC4, pair position 1); SW47 SOFT KEY col 8 lower (segment
+;           5 bit 6, wire 0xC5, pair position 0); SW48 SOFT KEY col 8 upper
+;           (segment 5 bit 7, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x03 of the
+;           screen's button table.
+; Reached by: code 0x14, which no wire emits. It is base 0x03 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x03 on column 8 and
+;           variant 2 on column 4. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5). This routine is installed at BOTH slot 0x03
+;           and slot 0x14, its base+0x11 alternate, so it is one routine for
+;           the first press and the repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E50A:
 	bit	7, w	; F7E50A  bit 0x07,W
 	jr	nz, 9	; F7E50D  jr NZ,0xf7e518
@@ -158229,8 +158578,34 @@ sub_F7E50A:
 	calr	64979	; F7E526  calr 0xf7e2fc
 	ret	; F7E529  ret
 
-; Evidence: table 0xF7D558 entry 4, screen TRACK ASSIGN (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E52A -- panel button slot 0x04 and 0x15 of TrackAssign_207EZero
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Reached by: code 0x15, which no wire emits. It is base 0x04 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted, so it is not a variant artefact. This routine
+;           is installed at BOTH slot 0x04 and slot 0x15, its base+0x11
+;           alternate, so it is one routine for the first press and the
+;           repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E52A:
 	call	16001960	; F7E52A  call 0xf42ba8
 	calr	599	; F7E52E  calr 0xf7e788
@@ -158238,8 +158613,34 @@ sub_F7E52A:
 	ret	; F7E534  ret
 	ret	; F7E535  ret   <- button table 0xF7D558 entry 5 (TRACK ASSIGN) and 1 more slot(s)
 
-; Evidence: table 0xF7D558 entry 6, screen TRACK ASSIGN (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E536 -- panel button slot 0x06 and 0x17 of TrackAssign_207EZero
+; Reached by: code 0x06 from SW45 SOFT KEY col 7 lower (segment 5 bit 4, wire
+;           0xC5, pair position 0); SW46 SOFT KEY col 7 upper (segment 5 bit
+;           5, wire 0xC5, pair position 1); SW29 LCD RIGHT 5 (bottom) (segment
+;           3 bit 4, wire 0xC3, pair position 0); SW30 -1 (segment 3 bit 5,
+;           wire 0xC3, pair position 1); SW37 SOFT KEY col 3 lower (segment 4
+;           bit 4, wire 0xC4, pair position 0); SW38 SOFT KEY col 3 upper
+;           (segment 4 bit 5, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x06 of the
+;           screen's button table.
+; Reached by: code 0x17, which no wire emits. It is base 0x06 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x06 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted, so it is not a variant artefact. This routine
+;           is installed at BOTH slot 0x06 and slot 0x17, its base+0x11
+;           alternate, so it is one routine for the first press and the
+;           repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E536:
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7E536  or (0x2075),0x08   [llvm-mc cannot encode this]
 	call	16001964	; F7E53B  call 0xf42bac
@@ -158248,8 +158649,24 @@ sub_F7E536:
 	ret	; F7E545  ret
 	ret	; F7E546  ret   <- button table 0xF7D558 entry 7 (TRACK ASSIGN)
 
-; Evidence: table 0xF7D558 entry 8, screen TRACK ASSIGN. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E547 -- panel button slot 0x08 of TrackAssign_207EZero
+; Reached by: code 0x08 from SW25 LCD RIGHT 1 (top) (segment 3 bit 0, wire
+;           0xC3, pair position 1); SW73 LCD LEFT 1 (top) (segment 9 bit 0,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x08 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E547:
 	bit	7, w	; F7E547  bit 0x07,W
 	jr	z, 22	; F7E54A  jr Z,0xf7e562
@@ -158261,8 +158678,24 @@ sub_F7E547:
 	calr	64922	; F7E55F  calr 0xf7e2fc
 	ret	; F7E562  ret
 
-; Evidence: table 0xF7D558 entry 9, screen TRACK ASSIGN. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E563 -- panel button slot 0x09 of TrackAssign_207EZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E563:
 	bit	7, w	; F7E563  bit 0x07,W
 	jr	z, 24	; F7E566  jr Z,0xf7e580
@@ -158274,8 +158707,24 @@ sub_F7E563:
 	call	16245500	; F7E57C  call 0xf7e2fc
 	ret	; F7E580  ret
 
-; Evidence: table 0xF7D558 entry 10, screen TRACK ASSIGN. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E581 -- panel button slot 0x0A of TrackAssign_207EZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E581:
 	bit	7, w	; F7E581  bit 0x07,W
 	jr	nz, 15	; F7E584  jr NZ,0xf7e595
@@ -158290,8 +158739,24 @@ sub_F7E581:
 	call	16246664	; F7E5A0  call 0xf7e788
 	ret	; F7E5A4  ret
 
-; Evidence: table 0xF7D558 entry 11, screen TRACK ASSIGN. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E5A5 -- panel button slot 0x0B of TrackAssign_207EZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E5A5:
 	bit	7, w	; F7E5A5  bit 0x07,W
 	jr	z, 15	; F7E5A8  jr Z,0xf7e5b9
@@ -158301,8 +158766,24 @@ sub_F7E5A5:
 	call	16246664	; F7E5B5  call 0xf7e788
 	ret	; F7E5B9  ret
 
-; Evidence: table 0xF7D558 entry 12, screen TRACK ASSIGN. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E5BA -- panel button slot 0x0C of TrackAssign_207EZero
+; Reached by: code 0x0C from SW29 LCD RIGHT 5 (bottom) (segment 3 bit 4, wire
+;           0xC3, pair position 1); SW77 LCD LEFT 5 (bottom) (segment 9 bit 4,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x0C of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E5BA:
 	bit	7, w	; F7E5BA  bit 0x07,W
 	jr	z, 4	; F7E5BD  jr Z,0xf7e5c3
@@ -158310,9 +158791,27 @@ sub_F7E5BA:
 	ret	; F7E5C3  ret
 	ret	; F7E5C4  ret   <- button table 0xF7D558 entry 13 (TRACK ASSIGN) and 1 more slot(s)
 
-; Evidence: table 0xF7D558 entry 15, screen TRACK ASSIGN. A bare button
-;           number, so no name; see the banner.
-sub_F7E5C5:
+; ---------------------------------------------------------------------
+; ExitKey_TrackAssign_207EZero -- the EXIT key on the TrackAssign_207EZero
+;           screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_TrackAssign_207EZero:
 	bit	7, w	; F7E5C5  bit 0x07,W
 	jr	nz, 8	; F7E5C8  jr NZ,0xf7e5d2
 	stdi16	(8304), 32772	; F7E5CA  ld (0x2070),0x8004
@@ -158321,8 +158820,24 @@ sub_F7E5C5:
 	ret	; F7E5D3  ret   <- button table 0xF7D558 entry 16 (TRACK ASSIGN) and 11 more slot(s)
 	ret	; F7E5D4  ret   <- button table 0xF7D5D8 entry 0 (TRACK ASSIGN) and 8 more slot(s)
 
-; Evidence: table 0xF7D5D8 entry 9, screen TRACK ASSIGN. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E5D5 -- panel button slot 0x09 of TrackAssign_207ENonZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E5D5:
 	bit	7, w	; F7E5D5  bit 0x07,W
 	jr	nz, 11	; F7E5D8  jr NZ,0xf7e5e5
@@ -158331,8 +158846,24 @@ sub_F7E5D5:
 	jr	0	; F7E5E3  jr T,0xf7e5e5
 	ret	; F7E5E5  ret
 
-; Evidence: table 0xF7D5D8 entry 10, screen TRACK ASSIGN. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E5E6 -- panel button slot 0x0A of TrackAssign_207ENonZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E5E6:
 	bit	7, w	; F7E5E6  bit 0x07,W
 	jr	nz, 6	; F7E5E9  jr NZ,0xf7e5f1
@@ -158341,9 +158872,27 @@ sub_F7E5E6:
 	ret	; F7E5F1  ret
 	ret	; F7E5F2  ret   <- button table 0xF7D5D8 entry 11 (TRACK ASSIGN) and 3 more slot(s)
 
-; Evidence: table 0xF7D5D8 entry 15, screen TRACK ASSIGN. A bare button
-;           number, so no name; see the banner.
-sub_F7E5F3:
+; ---------------------------------------------------------------------
+; ExitKey_TrackAssign_207ENonZero -- the EXIT key on the
+;           TrackAssign_207ENonZero screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_TrackAssign_207ENonZero:
 	bit	7, w	; F7E5F3  bit 0x07,W
 	jr	nz, 6	; F7E5F6  jr NZ,0xf7e5fe
 	call	16001984	; F7E5F8  call 0xf42bc0
@@ -158419,16 +158968,52 @@ ScreenLeaveBody_TrackAssignPresets:
 	.byte 0xC1, 0xBB, 0x34, 0x3C, 0xFB	; F7E681  and (0x34bb),0xfb   [llvm-mc cannot encode this]
 	ret	; F7E686  ret
 
-; Evidence: table 0xF7D658 entry 0, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E687 -- panel button slot 0x00 of TrackAssignPresets
+; Reached by: code 0x00 from SW33 SOFT KEY col 1 lower (segment 4 bit 0, wire
+;           0xC4, pair position 0); SW34 SOFT KEY col 1 upper (segment 4 bit
+;           1, wire 0xC4, pair position 1); SW41 SOFT KEY col 5 lower (segment
+;           5 bit 0, wire 0xC5, pair position 0); SW42 SOFT KEY col 5 upper
+;           (segment 5 bit 1, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x00 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x00 on column 5 and
+;           variant 2 on column 1. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5).
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E687:
 	bit	7, w	; F7E687  bit 0x07,W
 	jr	nz, 2	; F7E68A  jr NZ,0xf7e68e
 	jr	0	; F7E68C  jr T,0xf7e68e
 	ret	; F7E68E  ret
 
-; Evidence: table 0xF7D658 entry 1, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E68F -- panel button slot 0x01 of TrackAssignPresets
+; Reached by: code 0x01 from SW35 SOFT KEY col 2 lower (segment 4 bit 2, wire
+;           0xC4, pair position 0); SW36 SOFT KEY col 2 upper (segment 4 bit
+;           3, wire 0xC4, pair position 1); SW43 SOFT KEY col 6 lower (segment
+;           5 bit 2, wire 0xC5, pair position 0); SW44 SOFT KEY col 6 upper
+;           (segment 5 bit 3, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x01 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x01 on column 6 and
+;           variant 2 on column 2. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5).
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E68F:
 	bit	7, w	; F7E68F  bit 0x07,W
 	jr	nz, 2	; F7E692  jr NZ,0xf7e696
@@ -158437,8 +159022,26 @@ sub_F7E68F:
 	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7E69A  or (0x2095),0x10   [llvm-mc cannot encode this]
 	ret	; F7E69F  ret
 
-; Evidence: table 0xF7D658 entry 2, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E6A0 -- panel button slot 0x02 of TrackAssignPresets
+; Reached by: code 0x02 from SW37 SOFT KEY col 3 lower (segment 4 bit 4, wire
+;           0xC4, pair position 0); SW38 SOFT KEY col 3 upper (segment 4 bit
+;           5, wire 0xC4, pair position 1); SW45 SOFT KEY col 7 lower (segment
+;           5 bit 4, wire 0xC5, pair position 0); SW46 SOFT KEY col 7 upper
+;           (segment 5 bit 5, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x02 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x02 on column 7 and
+;           variant 2 on column 3. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5).
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E6A0:
 	bit	7, w	; F7E6A0  bit 0x07,W
 	jr	nz, 2	; F7E6A3  jr NZ,0xf7e6a7
@@ -158447,24 +159050,82 @@ sub_F7E6A0:
 	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7E6AB  or (0x2095),0x10   [llvm-mc cannot encode this]
 	ret	; F7E6B0  ret
 
-; Evidence: table 0xF7D658 entry 3, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E6B1 -- panel button slot 0x03 of TrackAssignPresets
+; Reached by: code 0x03 from SW39 SOFT KEY col 4 lower (segment 4 bit 6, wire
+;           0xC4, pair position 0); SW40 SOFT KEY col 4 upper (segment 4 bit
+;           7, wire 0xC4, pair position 1); SW47 SOFT KEY col 8 lower (segment
+;           5 bit 6, wire 0xC5, pair position 0); SW48 SOFT KEY col 8 upper
+;           (segment 5 bit 7, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x03 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x03 on column 8 and
+;           variant 2 on column 4. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5).
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E6B1:
 	bit	7, w	; F7E6B1  bit 0x07,W
 	jr	nz, 2	; F7E6B4  jr NZ,0xf7e6b8
 	jr	0	; F7E6B6  jr T,0xf7e6b8
 	ret	; F7E6B8  ret
 
-; Evidence: table 0xF7D658 entry 4, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E6B9 -- panel button slot 0x04 of TrackAssignPresets
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E6B9:
 	bit	7, w	; F7E6B9  bit 0x07,W
 	jr	nz, 2	; F7E6BC  jr NZ,0xf7e6c0
 	jr	0	; F7E6BE  jr T,0xf7e6c0
 	ret	; F7E6C0  ret
 
-; Evidence: table 0xF7D658 entry 5, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E6C1 -- panel button slot 0x05 of TrackAssignPresets
+; Reached by: code 0x05 from SW43 SOFT KEY col 6 lower (segment 5 bit 2, wire
+;           0xC5, pair position 0); SW44 SOFT KEY col 6 upper (segment 5 bit
+;           3, wire 0xC5, pair position 1); SW27 LCD RIGHT 3 (segment 3 bit 2,
+;           wire 0xC3, pair position 0); SW28 LCD RIGHT 4 (segment 3 bit 3,
+;           wire 0xC3, pair position 1); SW35 SOFT KEY col 2 lower (segment 4
+;           bit 2, wire 0xC4, pair position 0); SW36 SOFT KEY col 2 upper
+;           (segment 4 bit 3, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x05 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x05 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E6C1:
 	bit	7, w	; F7E6C1  bit 0x07,W
 	jr	nz, 2	; F7E6C4  jr NZ,0xf7e6c8
@@ -158472,24 +159133,80 @@ sub_F7E6C1:
 	call	16002068	; F7E6C8  call 0xf42c14
 	ret	; F7E6CC  ret
 
-; Evidence: table 0xF7D658 entry 6, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E6CD -- panel button slot 0x06 of TrackAssignPresets
+; Reached by: code 0x06 from SW45 SOFT KEY col 7 lower (segment 5 bit 4, wire
+;           0xC5, pair position 0); SW46 SOFT KEY col 7 upper (segment 5 bit
+;           5, wire 0xC5, pair position 1); SW29 LCD RIGHT 5 (bottom) (segment
+;           3 bit 4, wire 0xC3, pair position 0); SW30 -1 (segment 3 bit 5,
+;           wire 0xC3, pair position 1); SW37 SOFT KEY col 3 lower (segment 4
+;           bit 4, wire 0xC4, pair position 0); SW38 SOFT KEY col 3 upper
+;           (segment 4 bit 5, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x06 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x06 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E6CD:
 	bit	7, w	; F7E6CD  bit 0x07,W
 	jr	nz, 2	; F7E6D0  jr NZ,0xf7e6d4
 	jr	0	; F7E6D2  jr T,0xf7e6d4
 	ret	; F7E6D4  ret
 
-; Evidence: table 0xF7D658 entry 7, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E6D5 -- panel button slot 0x07 of TrackAssignPresets
+; Reached by: code 0x07 from SW47 SOFT KEY col 8 lower (segment 5 bit 6, wire
+;           0xC5, pair position 0); SW48 SOFT KEY col 8 upper (segment 5 bit
+;           7, wire 0xC5, pair position 1); SW31 +1 (segment 3 bit 6, wire
+;           0xC3, pair position 0); SW32 EXIT (segment 3 bit 7, wire 0xC3,
+;           pair position 1); SW39 SOFT KEY col 4 lower (segment 4 bit 6, wire
+;           0xC4, pair position 0); SW40 SOFT KEY col 4 upper (segment 4 bit
+;           7, wire 0xC4, pair position 1) -- then prom_a PanelButton_Route
+;           `and L,0x1f` at 0xF861AE, then slot 0x07 of the screen's button
+;           table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x07 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E6D5:
 	bit	7, w	; F7E6D5  bit 0x07,W
 	jr	nz, 2	; F7E6D8  jr NZ,0xf7e6dc
 	jr	0	; F7E6DA  jr T,0xf7e6dc
 	ret	; F7E6DC  ret
 
-; Evidence: table 0xF7D658 entry 8, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E6DD -- panel button slot 0x08 of TrackAssignPresets
+; Reached by: code 0x08 from SW25 LCD RIGHT 1 (top) (segment 3 bit 0, wire
+;           0xC3, pair position 1); SW73 LCD LEFT 1 (top) (segment 9 bit 0,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x08 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E6DD:
 	bit	7, w	; F7E6DD  bit 0x07,W
 	jr	nz, 2	; F7E6E0  jr NZ,0xf7e6e4
@@ -158503,8 +159220,24 @@ sub_F7E6DD:
 	call	16246640	; F7E6F9  call 0xf7e770
 	ret	; F7E6FD  ret
 
-; Evidence: table 0xF7D658 entry 9, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E6FE -- panel button slot 0x09 of TrackAssignPresets
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E6FE:
 	bit	7, w	; F7E6FE  bit 0x07,W
 	jr	nz, 2	; F7E701  jr NZ,0xf7e705
@@ -158518,8 +159251,24 @@ sub_F7E6FE:
 	call	16246640	; F7E71A  call 0xf7e770
 	ret	; F7E71E  ret
 
-; Evidence: table 0xF7D658 entry 10, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E71F -- panel button slot 0x0A of TrackAssignPresets
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E71F:
 	bit	7, w	; F7E71F  bit 0x07,W
 	jr	nz, 2	; F7E722  jr NZ,0xf7e726
@@ -158533,41 +159282,119 @@ sub_F7E71F:
 	call	16246640	; F7E73B  call 0xf7e770
 	ret	; F7E73F  ret
 
-; Evidence: table 0xF7D658 entry 11, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E740 -- panel button slot 0x0B of TrackAssignPresets
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E740:
 	bit	7, w	; F7E740  bit 0x07,W
 	jr	nz, 2	; F7E743  jr NZ,0xf7e747
 	jr	0	; F7E745  jr T,0xf7e747
 	ret	; F7E747  ret
 
-; Evidence: table 0xF7D658 entry 12, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E748 -- panel button slot 0x0C of TrackAssignPresets
+; Reached by: code 0x0C from SW29 LCD RIGHT 5 (bottom) (segment 3 bit 4, wire
+;           0xC3, pair position 1); SW77 LCD LEFT 5 (bottom) (segment 9 bit 4,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x0C of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E748:
 	bit	7, w	; F7E748  bit 0x07,W
 	jr	nz, 2	; F7E74B  jr NZ,0xf7e74f
 	jr	0	; F7E74D  jr T,0xf7e74f
 	ret	; F7E74F  ret
 
-; Evidence: table 0xF7D658 entry 13, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
-sub_F7E750:
+; ---------------------------------------------------------------------
+; MinusPlusKey_TrackAssignPresets -- the "-1" / "+1" key pair on the
+;           TrackAssignPresets screen
+; Reached by: code 0x0D from SW30 -1 (segment 3 bit 5, wire 0xC3, pair
+;           position 0); SW31 +1 (segment 3 bit 6, wire 0xC3, pair position 1)
+;           -- then prom_a PanelButton_Route `and L,0x1f` at 0xF861AE, then
+;           slot 0x0D of the screen's button table.
+; Evidence: code 0x0D's only fitted producers are SW30 (-1) and SW31 (+1),
+;           segment 3 bits 5 and 6, at pair positions 0 and 1; variant 1
+;           sources the same code from segment 10, unfitted. ⚠ This is NOT the
+;           rotary DATA dial: that is code 0x21 on wire 0xD7, which prom_a
+;           PanelButton_Route splits off (`A == 0x21`) before any table
+;           lookup. ⚠ Both branches of this body reach the same `ret`, so this
+;           screen accepts the key and does nothing with it. Re-derived by
+;           notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+MinusPlusKey_TrackAssignPresets:
 	bit	7, w	; F7E750  bit 0x07,W
 	jr	nz, 2	; F7E753  jr NZ,0xf7e757
 	jr	0	; F7E755  jr T,0xf7e757
 	ret	; F7E757  ret
 
-; Evidence: table 0xF7D658 entry 14, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E758 -- panel button slot 0x0E of TrackAssignPresets
+; Reached by: nothing. No wire in either map emits code 0x0E, and no rewrite
+;           produces it either.
+; Unknown: NO NAME, and the reason is exact -- NO WIRE PRODUCES CODE 0x0E, in
+;           either map, yet prom_a PanelButton_Route has an 0x0E arm. Of the
+;           1,024 slots in the 32 tables this is the only slot-0x0E entry that
+;           is not a bare `ret`, and both of its branches fall into the same
+;           `ret`; in the 23-entry dispatch family the corresponding slot 14
+;           is the do-nothing stub in all four tables. The likely producers
+;           are the seven non-wire appenders at 0xF8A2D6..0xF8A3AE, which
+;           nobody has read.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E758:
 	bit	7, w	; F7E758  bit 0x07,W
 	jr	nz, 2	; F7E75B  jr NZ,0xf7e75f
 	jr	0	; F7E75D  jr T,0xf7e75f
 	ret	; F7E75F  ret
 
-; Evidence: table 0xF7D658 entry 15, screen TRACK ASSIGN PRESETS. A bare
-;           button number, so no name; see the banner.
-sub_F7E760:
+; ---------------------------------------------------------------------
+; ExitKey_TrackAssignPresets -- the EXIT key on the TrackAssignPresets screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_TrackAssignPresets:
 	bit	7, w	; F7E760  bit 0x07,W
 	jr	nz, 8	; F7E763  jr NZ,0xf7e76d
 	stdi16	(8304), 32784	; F7E765  ld (0x2070),0x8010
@@ -158844,8 +159671,24 @@ Paint_Edit:
 	ret	; F7E9C6  ret
 	ret	; F7E9C7  ret   <- button table 0xF7D2D8 entry 0 (EDIT) and 7 more slot(s)
 
-; Evidence: table 0xF7D2D8 entry 8, screen EDIT. A bare button number, so no
-;           name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E9C8 -- panel button slot 0x08 of Edit_0C10Zero
+; Reached by: code 0x08 from SW25 LCD RIGHT 1 (top) (segment 3 bit 0, wire
+;           0xC3, pair position 1); SW73 LCD LEFT 1 (top) (segment 9 bit 0,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x08 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E9C8:
 	bit	7, w	; F7E9C8  bit 0x07,W
 	jr	nz, 8	; F7E9CB  jr NZ,0xf7e9d5
@@ -158854,8 +159697,24 @@ sub_F7E9C8:
 	stdi16	(8304), 32804	; F7E9D5  ld (0x2070),0x8024
 	ret	; F7E9DB  ret
 
-; Evidence: table 0xF7D2D8 entry 9, screen EDIT. A bare button number, so no
-;           name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E9DC -- panel button slot 0x09 of Edit_0C10Zero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E9DC:
 	bit	7, w	; F7E9DC  bit 0x07,W
 	jr	nz, 8	; F7E9DF  jr NZ,0xf7e9e9
@@ -158864,8 +159723,24 @@ sub_F7E9DC:
 	stdi16	(8304), 32807	; F7E9E9  ld (0x2070),0x8027
 	ret	; F7E9EF  ret
 
-; Evidence: table 0xF7D2D8 entry 10, screen EDIT. A bare button number, so
-;           no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7E9F0 -- panel button slot 0x0A of Edit_0C10Zero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7E9F0:
 	bit	7, w	; F7E9F0  bit 0x07,W
 	jr	nz, 8	; F7E9F3  jr NZ,0xf7e9fd
@@ -158874,8 +159749,24 @@ sub_F7E9F0:
 	stdi16	(8304), 32798	; F7E9FD  ld (0x2070),0x801e
 	ret	; F7EA03  ret
 
-; Evidence: table 0xF7D2D8 entry 11, screen EDIT. A bare button number, so
-;           no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EA04 -- panel button slot 0x0B of Edit_0C10Zero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EA04:
 	bit	7, w	; F7EA04  bit 0x07,W
 	jr	nz, 8	; F7EA07  jr NZ,0xf7ea11
@@ -158884,8 +159775,24 @@ sub_F7EA04:
 	stdi16	(8304), 32811	; F7EA11  ld (0x2070),0x802b
 	ret	; F7EA17  ret
 
-; Evidence: table 0xF7D2D8 entry 12, screen EDIT. A bare button number, so
-;           no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EA18 -- panel button slot 0x0C of Edit_0C10Zero
+; Reached by: code 0x0C from SW29 LCD RIGHT 5 (bottom) (segment 3 bit 4, wire
+;           0xC3, pair position 1); SW77 LCD LEFT 5 (bottom) (segment 9 bit 4,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x0C of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EA18:
 	bit	7, w	; F7EA18  bit 0x07,W
 	jr	nz, 8	; F7EA1B  jr NZ,0xf7ea25
@@ -158895,17 +159802,55 @@ sub_F7EA18:
 	ret	; F7EA2B  ret
 	ret	; F7EA2C  ret   <- button table 0xF7D2D8 entry 13 (EDIT) and 1 more slot(s)
 
-; Evidence: table 0xF7D2D8 entry 15, screen EDIT. A bare button number, so
-;           no name; see the banner.
-sub_F7EA2D:
+; ---------------------------------------------------------------------
+; ExitKey_Edit_0C10Zero -- the EXIT key on the Edit_0C10Zero screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_Edit_0C10Zero:
 	bit	7, w	; F7EA2D  bit 0x07,W
 	jr	nz, 8	; F7EA30  jr NZ,0xf7ea3a
 	stdi16	(8304), 515	; F7EA32  ld (0x2070),0x0203
 	jr	0	; F7EA38  jr T,0xf7ea3a
 	ret	; F7EA3A  ret
 
-; Evidence: table 0xF7D2D8 entry 16, screen EDIT (+1 more slots). A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EA3B -- panel button slot 0x10 and 0x19 of Edit_0C10Zero
+; Reached by: code 0x10 from SW21 PAGE v (segment 2 bit 4, wire 0xC2, pair
+;           position 0); SW22 PAGE ^ (segment 2 bit 5, wire 0xC2, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x10 of the screen's button table.
+; Reached by: code 0x19, which no wire emits. It is what the action handlers
+;           0xF8AE68/0xF8AEDB write over a base in 0x00..0x07 (`ld
+;           (XIX-1),0x19` at 0xF8AE8A and 0xF8AEFD) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) (`and XWA,XDE / jr Z` at 0xF8AE7A) AND two left
+;           shifts of that bit leave zero (`sla 0,XDE / sla 1,XDE / jr NZ` at
+;           0xF8AE82).
+; Unknown: NO NAME, and the reason is exact -- this routine is installed at
+;           slot 0x10 (PAGE v / PAGE ^) AND at slot 0x19, the code the action
+;           handlers write when a soft-key base in 0x00..0x07 is pressed with
+;           its partner already down (`ld (XIX-1),0x19` at 0xF8AE8A/0xF8AEFD).
+;           Two unrelated controls reach one routine, so neither names it.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EA3B:
 	bit	7, w	; F7EA3B  bit 0x07,W
 	jr	nz, 2	; F7EA3E  jr NZ,0xf7ea42
@@ -158919,8 +159864,24 @@ sub_F7EA3B:
 	ret	; F7EA55  ret
 	ret	; F7EA56  ret   <- button table 0xF7D358 entry 0 (EDIT) and 7 more slot(s)
 
-; Evidence: table 0xF7D358 entry 8, screen EDIT. A bare button number, so no
-;           name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EA57 -- panel button slot 0x08 of Edit_0C10NonZero
+; Reached by: code 0x08 from SW25 LCD RIGHT 1 (top) (segment 3 bit 0, wire
+;           0xC3, pair position 1); SW73 LCD LEFT 1 (top) (segment 9 bit 0,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x08 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EA57:
 	bit	7, w	; F7EA57  bit 0x07,W
 	jr	nz, 8	; F7EA5A  jr NZ,0xf7ea64
@@ -158929,8 +159890,24 @@ sub_F7EA57:
 	stdi16	(8304), 32810	; F7EA64  ld (0x2070),0x802a
 	ret	; F7EA6A  ret
 
-; Evidence: table 0xF7D358 entry 9, screen EDIT. A bare button number, so no
-;           name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EA6B -- panel button slot 0x09 of Edit_0C10NonZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EA6B:
 	bit	7, w	; F7EA6B  bit 0x07,W
 	jr	nz, 8	; F7EA6E  jr NZ,0xf7ea78
@@ -158938,8 +159915,24 @@ sub_F7EA6B:
 	jr	0	; F7EA76  jr T,0xf7ea78
 	ret	; F7EA78  ret
 
-; Evidence: table 0xF7D358 entry 10, screen EDIT. A bare button number, so
-;           no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EA79 -- panel button slot 0x0A of Edit_0C10NonZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EA79:
 	bit	7, w	; F7EA79  bit 0x07,W
 	jr	nz, 8	; F7EA7C  jr NZ,0xf7ea86
@@ -158948,8 +159941,24 @@ sub_F7EA79:
 	stdi16	(8304), 32799	; F7EA86  ld (0x2070),0x801f
 	ret	; F7EA8C  ret
 
-; Evidence: table 0xF7D358 entry 11, screen EDIT. A bare button number, so
-;           no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EA8D -- panel button slot 0x0B of Edit_0C10NonZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EA8D:
 	bit	7, w	; F7EA8D  bit 0x07,W
 	jr	nz, 8	; F7EA90  jr NZ,0xf7ea9a
@@ -158957,8 +159966,24 @@ sub_F7EA8D:
 	jr	0	; F7EA98  jr T,0xf7ea9a
 	ret	; F7EA9A  ret
 
-; Evidence: table 0xF7D358 entry 12, screen EDIT. A bare button number, so
-;           no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EA9B -- panel button slot 0x0C of Edit_0C10NonZero
+; Reached by: code 0x0C from SW29 LCD RIGHT 5 (bottom) (segment 3 bit 4, wire
+;           0xC3, pair position 1); SW77 LCD LEFT 5 (bottom) (segment 9 bit 4,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x0C of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EA9B:
 	bit	7, w	; F7EA9B  bit 0x07,W
 	jr	nz, 2	; F7EA9E  jr NZ,0xf7eaa2
@@ -158966,9 +159991,26 @@ sub_F7EA9B:
 	ret	; F7EAA2  ret
 	ret	; F7EAA3  ret   <- button table 0xF7D358 entry 13 (EDIT) and 1 more slot(s)
 
-; Evidence: table 0xF7D358 entry 15, screen EDIT. A bare button number, so
-;           no name; see the banner.
-sub_F7EAA4:
+; ---------------------------------------------------------------------
+; ExitKey_Edit_0C10NonZero -- the EXIT key on the Edit_0C10NonZero screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_Edit_0C10NonZero:
 	bit	7, w	; F7EAA4  bit 0x07,W
 	jr	nz, 12	; F7EAA7  jr NZ,0xf7eab5
 	stdi8	(3088), 0	; F7EAA9  ld (0x0c10),0x00
@@ -158976,8 +160018,29 @@ sub_F7EAA4:
 	jr	0	; F7EAB3  jr T,0xf7eab5
 	ret	; F7EAB5  ret
 
-; Evidence: table 0xF7D358 entry 16, screen EDIT (+1 more slots). A bare
-;           button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EAB6 -- panel button slot 0x10 and 0x19 of Edit_0C10NonZero
+; Reached by: code 0x10 from SW21 PAGE v (segment 2 bit 4, wire 0xC2, pair
+;           position 0); SW22 PAGE ^ (segment 2 bit 5, wire 0xC2, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x10 of the screen's button table.
+; Reached by: code 0x19, which no wire emits. It is what the action handlers
+;           0xF8AE68/0xF8AEDB write over a base in 0x00..0x07 (`ld
+;           (XIX-1),0x19` at 0xF8AE8A and 0xF8AEFD) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) (`and XWA,XDE / jr Z` at 0xF8AE7A) AND two left
+;           shifts of that bit leave zero (`sla 0,XDE / sla 1,XDE / jr NZ` at
+;           0xF8AE82).
+; Unknown: NO NAME, and the reason is exact -- this routine is installed at
+;           slot 0x10 (PAGE v / PAGE ^) AND at slot 0x19, the code the action
+;           handlers write when a soft-key base in 0x00..0x07 is pressed with
+;           its partner already down (`ld (XIX-1),0x19` at 0xF8AE8A/0xF8AEFD).
+;           Two unrelated controls reach one routine, so neither names it.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EAB6:
 	bit	7, w	; F7EAB6  bit 0x07,W
 	jr	nz, 2	; F7EAB9  jr NZ,0xf7eabd
@@ -159087,8 +160150,33 @@ ScreenLeaveBody_SongClear:
 	ret	; F7EBDC  ret
 	ret	; F7EBDD  ret   <- button table 0xF7D3D8 entry 0 (SONG CLEAR) and 1 more slot(s)
 
-; Evidence: table 0xF7D3D8 entry 2, screen SONG CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EBDE -- panel button slot 0x02 and 0x13 of SongClear
+; Reached by: code 0x02 from SW37 SOFT KEY col 3 lower (segment 4 bit 4, wire
+;           0xC4, pair position 0); SW38 SOFT KEY col 3 upper (segment 4 bit
+;           5, wire 0xC4, pair position 1); SW45 SOFT KEY col 7 lower (segment
+;           5 bit 4, wire 0xC5, pair position 0); SW46 SOFT KEY col 7 upper
+;           (segment 5 bit 5, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x02 of the
+;           screen's button table.
+; Reached by: code 0x13, which no wire emits. It is base 0x02 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x02 on column 7 and
+;           variant 2 on column 3. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5). This routine is installed at BOTH slot 0x02
+;           and slot 0x13, its base+0x11 alternate, so it is one routine for
+;           the first press and the repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EBDE:
 	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EBDE  cp (0x207e),0x00   [llvm-mc cannot encode this]
 	jr	nz, 42	; F7EBE3  jr NZ,0xf7ec0f
@@ -159105,8 +160193,33 @@ sub_F7EBDE:
 	.byte 0xC1, 0x95, 0x20, 0x3E, 0x10	; F7EC0A  or (0x2095),0x10   [llvm-mc cannot encode this]
 	ret	; F7EC0F  ret
 
-; Evidence: table 0xF7D3D8 entry 3, screen SONG CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EC10 -- panel button slot 0x03 and 0x14 of SongClear
+; Reached by: code 0x03 from SW39 SOFT KEY col 4 lower (segment 4 bit 6, wire
+;           0xC4, pair position 0); SW40 SOFT KEY col 4 upper (segment 4 bit
+;           7, wire 0xC4, pair position 1); SW47 SOFT KEY col 8 lower (segment
+;           5 bit 6, wire 0xC5, pair position 0); SW48 SOFT KEY col 8 upper
+;           (segment 5 bit 7, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x03 of the
+;           screen's button table.
+; Reached by: code 0x14, which no wire emits. It is base 0x03 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x03 on column 8 and
+;           variant 2 on column 4. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5). This routine is installed at BOTH slot 0x03
+;           and slot 0x14, its base+0x11 alternate, so it is one routine for
+;           the first press and the repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EC10:
 	.byte 0xC1, 0x7E, 0x20, 0x3F, 0x00	; F7EC10  cp (0x207e),0x00   [llvm-mc cannot encode this]
 	jr	nz, 42	; F7EC15  jr NZ,0xf7ec41
@@ -159124,8 +160237,24 @@ sub_F7EC10:
 	ret	; F7EC41  ret
 	ret	; F7EC42  ret   <- button table 0xF7D3D8 entry 4 (SONG CLEAR) and 6 more slot(s)
 
-; Evidence: table 0xF7D3D8 entry 11, screen SONG CLEAR. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EC43 -- panel button slot 0x0B of SongClear
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EC43:
 	bit	7, w	; F7EC43  bit 0x07,W
 	jr	nz, 11	; F7EC46  jr NZ,0xf7ec53
@@ -159134,8 +160263,24 @@ sub_F7EC43:
 	jr	0	; F7EC51  jr T,0xf7ec53
 	ret	; F7EC53  ret
 
-; Evidence: table 0xF7D3D8 entry 12, screen SONG CLEAR. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EC54 -- panel button slot 0x0C of SongClear
+; Reached by: code 0x0C from SW29 LCD RIGHT 5 (bottom) (segment 3 bit 4, wire
+;           0xC3, pair position 1); SW77 LCD LEFT 5 (bottom) (segment 9 bit 4,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x0C of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EC54:
 	bit	7, w	; F7EC54  bit 0x07,W
 	jr	nz, 6	; F7EC57  jr NZ,0xf7ec5f
@@ -159144,9 +160289,26 @@ sub_F7EC54:
 	ret	; F7EC5F  ret
 	ret	; F7EC60  ret   <- button table 0xF7D3D8 entry 13 (SONG CLEAR) and 1 more slot(s)
 
-; Evidence: table 0xF7D3D8 entry 15, screen SONG CLEAR. A bare button
-;           number, so no name; see the banner.
-sub_F7EC61:
+; ---------------------------------------------------------------------
+; ExitKey_SongClear -- the EXIT key on the SongClear screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_SongClear:
 	bit	7, w	; F7EC61  bit 0x07,W
 	jr	nz, 8	; F7EC64  jr NZ,0xf7ec6e
 	stdi16	(8304), 32794	; F7EC66  ld (0x2070),0x801a
@@ -159223,8 +160385,33 @@ ScreenLeaveBody_TrackClear:
 	call	16001236	; F7ECFA  call 0xf428d4
 	ret	; F7ECFE  ret
 
-; Evidence: table 0xF7D458 entry 0, screen TRACK CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7ECFF -- panel button slot 0x00 and 0x11 of TrackClear_207EZero
+; Reached by: code 0x00 from SW33 SOFT KEY col 1 lower (segment 4 bit 0, wire
+;           0xC4, pair position 0); SW34 SOFT KEY col 1 upper (segment 4 bit
+;           1, wire 0xC4, pair position 1); SW41 SOFT KEY col 5 lower (segment
+;           5 bit 0, wire 0xC5, pair position 0); SW42 SOFT KEY col 5 upper
+;           (segment 5 bit 1, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x00 of the
+;           screen's button table.
+; Reached by: code 0x11, which no wire emits. It is base 0x00 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x00 on column 5 and
+;           variant 2 on column 1. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5). This routine is installed at BOTH slot 0x00
+;           and slot 0x11, its base+0x11 alternate, so it is one routine for
+;           the first press and the repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7ECFF:
 	bit	7, w	; F7ECFF  bit 0x07,W
 	jr	nz, 7	; F7ED02  jr NZ,0xf7ed0b
@@ -159235,8 +160422,33 @@ sub_F7ECFF:
 	call	15994052	; F7ED13  call 0xf40cc4
 	ret	; F7ED17  ret
 
-; Evidence: table 0xF7D458 entry 1, screen TRACK CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7ED18 -- panel button slot 0x01 and 0x12 of TrackClear_207EZero
+; Reached by: code 0x01 from SW35 SOFT KEY col 2 lower (segment 4 bit 2, wire
+;           0xC4, pair position 0); SW36 SOFT KEY col 2 upper (segment 4 bit
+;           3, wire 0xC4, pair position 1); SW43 SOFT KEY col 6 lower (segment
+;           5 bit 2, wire 0xC5, pair position 0); SW44 SOFT KEY col 6 upper
+;           (segment 5 bit 3, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x01 of the
+;           screen's button table.
+; Reached by: code 0x12, which no wire emits. It is base 0x01 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x01 on column 6 and
+;           variant 2 on column 2. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5). This routine is installed at BOTH slot 0x01
+;           and slot 0x12, its base+0x11 alternate, so it is one routine for
+;           the first press and the repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7ED18:
 	bit	7, w	; F7ED18  bit 0x07,W
 	jr	nz, 7	; F7ED1B  jr NZ,0xf7ed24
@@ -159247,8 +160459,33 @@ sub_F7ED18:
 	call	15994052	; F7ED2C  call 0xf40cc4
 	ret	; F7ED30  ret
 
-; Evidence: table 0xF7D458 entry 2, screen TRACK CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7ED31 -- panel button slot 0x02 and 0x13 of TrackClear_207EZero
+; Reached by: code 0x02 from SW37 SOFT KEY col 3 lower (segment 4 bit 4, wire
+;           0xC4, pair position 0); SW38 SOFT KEY col 3 upper (segment 4 bit
+;           5, wire 0xC4, pair position 1); SW45 SOFT KEY col 7 lower (segment
+;           5 bit 4, wire 0xC5, pair position 0); SW46 SOFT KEY col 7 upper
+;           (segment 5 bit 5, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x02 of the
+;           screen's button table.
+; Reached by: code 0x13, which no wire emits. It is base 0x02 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x02 on column 7 and
+;           variant 2 on column 3. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5). This routine is installed at BOTH slot 0x02
+;           and slot 0x13, its base+0x11 alternate, so it is one routine for
+;           the first press and the repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7ED31:
 	bit	7, w	; F7ED31  bit 0x07,W
 	jr	nz, 7	; F7ED34  jr NZ,0xf7ed3d
@@ -159259,8 +160496,33 @@ sub_F7ED31:
 	call	15994052	; F7ED45  call 0xf40cc4
 	ret	; F7ED49  ret
 
-; Evidence: table 0xF7D458 entry 3, screen TRACK CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7ED4A -- panel button slot 0x03 and 0x14 of TrackClear_207EZero
+; Reached by: code 0x03 from SW39 SOFT KEY col 4 lower (segment 4 bit 6, wire
+;           0xC4, pair position 0); SW40 SOFT KEY col 4 upper (segment 4 bit
+;           7, wire 0xC4, pair position 1); SW47 SOFT KEY col 8 lower (segment
+;           5 bit 6, wire 0xC5, pair position 0); SW48 SOFT KEY col 8 upper
+;           (segment 5 bit 7, wire 0xC5, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x03 of the
+;           screen's button table.
+; Reached by: code 0x14, which no wire emits. It is base 0x03 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- every fitted producer is a SOFT
+;           KEY under both maps, but variant 1 puts code 0x03 on column 8 and
+;           variant 2 on column 4. The class is established and the COLUMN is
+;           not, and the column is the only thing that would separate four
+;           sibling names -- a bare number, the shape round 6 refused
+;           (Write3602_Index5). This routine is installed at BOTH slot 0x03
+;           and slot 0x14, its base+0x11 alternate, so it is one routine for
+;           the first press and the repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7ED4A:
 	bit	7, w	; F7ED4A  bit 0x07,W
 	jr	nz, 7	; F7ED4D  jr NZ,0xf7ed56
@@ -159271,8 +160533,34 @@ sub_F7ED4A:
 	call	15994052	; F7ED5E  call 0xf40cc4
 	ret	; F7ED62  ret
 
-; Evidence: table 0xF7D458 entry 4, screen TRACK CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7ED63 -- panel button slot 0x04 and 0x15 of TrackClear_207EZero
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Reached by: code 0x15, which no wire emits. It is base 0x04 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted, so it is not a variant artefact. This routine
+;           is installed at BOTH slot 0x04 and slot 0x15, its base+0x11
+;           alternate, so it is one routine for the first press and the
+;           repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7ED63:
 	bit	7, w	; F7ED63  bit 0x07,W
 	jr	nz, 7	; F7ED66  jr NZ,0xf7ed6f
@@ -159283,8 +160571,34 @@ sub_F7ED63:
 	call	15994052	; F7ED77  call 0xf40cc4
 	ret	; F7ED7B  ret
 
-; Evidence: table 0xF7D458 entry 5, screen TRACK CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7ED7C -- panel button slot 0x05 and 0x16 of TrackClear_207EZero
+; Reached by: code 0x05 from SW43 SOFT KEY col 6 lower (segment 5 bit 2, wire
+;           0xC5, pair position 0); SW44 SOFT KEY col 6 upper (segment 5 bit
+;           3, wire 0xC5, pair position 1); SW27 LCD RIGHT 3 (segment 3 bit 2,
+;           wire 0xC3, pair position 0); SW28 LCD RIGHT 4 (segment 3 bit 3,
+;           wire 0xC3, pair position 1); SW35 SOFT KEY col 2 lower (segment 4
+;           bit 2, wire 0xC4, pair position 0); SW36 SOFT KEY col 2 upper
+;           (segment 4 bit 3, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x05 of the
+;           screen's button table.
+; Reached by: code 0x16, which no wire emits. It is base 0x05 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x05 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted, so it is not a variant artefact. This routine
+;           is installed at BOTH slot 0x05 and slot 0x16, its base+0x11
+;           alternate, so it is one routine for the first press and the
+;           repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7ED7C:
 	bit	7, w	; F7ED7C  bit 0x07,W
 	jr	nz, 7	; F7ED7F  jr NZ,0xf7ed88
@@ -159295,8 +160609,34 @@ sub_F7ED7C:
 	call	15994052	; F7ED90  call 0xf40cc4
 	ret	; F7ED94  ret
 
-; Evidence: table 0xF7D458 entry 6, screen TRACK CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7ED95 -- panel button slot 0x06 and 0x17 of TrackClear_207EZero
+; Reached by: code 0x06 from SW45 SOFT KEY col 7 lower (segment 5 bit 4, wire
+;           0xC5, pair position 0); SW46 SOFT KEY col 7 upper (segment 5 bit
+;           5, wire 0xC5, pair position 1); SW29 LCD RIGHT 5 (bottom) (segment
+;           3 bit 4, wire 0xC3, pair position 0); SW30 -1 (segment 3 bit 5,
+;           wire 0xC3, pair position 1); SW37 SOFT KEY col 3 lower (segment 4
+;           bit 4, wire 0xC4, pair position 0); SW38 SOFT KEY col 3 upper
+;           (segment 4 bit 5, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x06 of the
+;           screen's button table.
+; Reached by: code 0x17, which no wire emits. It is base 0x06 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x06 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted, so it is not a variant artefact. This routine
+;           is installed at BOTH slot 0x06 and slot 0x17, its base+0x11
+;           alternate, so it is one routine for the first press and the
+;           repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7ED95:
 	bit	7, w	; F7ED95  bit 0x07,W
 	jr	nz, 7	; F7ED98  jr NZ,0xf7eda1
@@ -159307,8 +160647,34 @@ sub_F7ED95:
 	call	15994052	; F7EDA9  call 0xf40cc4
 	ret	; F7EDAD  ret
 
-; Evidence: table 0xF7D458 entry 7, screen TRACK CLEAR (+1 more slots). A
-;           bare button number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EDAE -- panel button slot 0x07 and 0x18 of TrackClear_207EZero
+; Reached by: code 0x07 from SW47 SOFT KEY col 8 lower (segment 5 bit 6, wire
+;           0xC5, pair position 0); SW48 SOFT KEY col 8 upper (segment 5 bit
+;           7, wire 0xC5, pair position 1); SW31 +1 (segment 3 bit 6, wire
+;           0xC3, pair position 0); SW32 EXIT (segment 3 bit 7, wire 0xC3,
+;           pair position 1); SW39 SOFT KEY col 4 lower (segment 4 bit 6, wire
+;           0xC4, pair position 0); SW40 SOFT KEY col 4 upper (segment 4 bit
+;           7, wire 0xC4, pair position 1) -- then prom_a PanelButton_Route
+;           `and L,0x1f` at 0xF861AE, then slot 0x07 of the screen's button
+;           table.
+; Reached by: code 0x18, which no wire emits. It is base 0x07 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x07 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted, so it is not a variant artefact. This routine
+;           is installed at BOTH slot 0x07 and slot 0x18, its base+0x11
+;           alternate, so it is one routine for the first press and the
+;           repeat.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EDAE:
 	bit	7, w	; F7EDAE  bit 0x07,W
 	jr	nz, 7	; F7EDB1  jr NZ,0xf7edba
@@ -159320,8 +160686,24 @@ sub_F7EDAE:
 	ret	; F7EDC6  ret
 	ret	; F7EDC7  ret   <- button table 0xF7D458 entry 8 (TRACK CLEAR)
 
-; Evidence: table 0xF7D458 entry 9, screen TRACK CLEAR. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EDC8 -- panel button slot 0x09 of TrackClear_207EZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EDC8:
 	bit	7, w	; F7EDC8  bit 0x07,W
 	jr	nz, 4	; F7EDCB  jr NZ,0xf7edd1
@@ -159329,9 +160711,27 @@ sub_F7EDC8:
 	ret	; F7EDD1  ret
 	ret	; F7EDD2  ret   <- button table 0xF7D458 entry 10 (TRACK CLEAR) and 4 more slot(s)
 
-; Evidence: table 0xF7D458 entry 15, screen TRACK CLEAR. A bare button
-;           number, so no name; see the banner.
-sub_F7EDD3:
+; ---------------------------------------------------------------------
+; ExitKey_TrackClear_207EZero -- the EXIT key on the TrackClear_207EZero
+;           screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_TrackClear_207EZero:
 	bit	7, w	; F7EDD3  bit 0x07,W
 	jr	nz, 8	; F7EDD6  jr NZ,0xf7ede0
 	stdi16	(8304), 32794	; F7EDD8  ld (0x2070),0x801a
@@ -159340,8 +160740,24 @@ sub_F7EDD3:
 	ret	; F7EDE1  ret   <- button table 0xF7D458 entry 16 (TRACK CLEAR) and 7 more slot(s)
 	ret	; F7EDE2  ret   <- button table 0xF7D4D8 entry 0 (TRACK CLEAR) and 8 more slot(s)
 
-; Evidence: table 0xF7D4D8 entry 9, screen TRACK CLEAR. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EDE3 -- panel button slot 0x09 of TrackClear_207ENonZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EDE3:
 	bit	7, w	; F7EDE3  bit 0x07,W
 	jr	nz, 9	; F7EDE6  jr NZ,0xf7edf1
@@ -159349,8 +160765,24 @@ sub_F7EDE3:
 	call	16001244	; F7EDED  call 0xf428dc
 	ret	; F7EDF1  ret
 
-; Evidence: table 0xF7D4D8 entry 10, screen TRACK CLEAR. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EDF2 -- panel button slot 0x0A of TrackClear_207ENonZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EDF2:
 	bit	7, w	; F7EDF2  bit 0x07,W
 	jr	nz, 4	; F7EDF5  jr NZ,0xf7edfb
@@ -159358,9 +160790,27 @@ sub_F7EDF2:
 	ret	; F7EDFB  ret
 	ret	; F7EDFC  ret   <- button table 0xF7D4D8 entry 11 (TRACK CLEAR) and 3 more slot(s)
 
-; Evidence: table 0xF7D4D8 entry 15, screen TRACK CLEAR. A bare button
-;           number, so no name; see the banner.
-sub_F7EDFD:
+; ---------------------------------------------------------------------
+; ExitKey_TrackClear_207ENonZero -- the EXIT key on the TrackClear_207ENonZero
+;           screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_TrackClear_207ENonZero:
 	bit	7, w	; F7EDFD  bit 0x07,W
 	jr	nz, 4	; F7EE00  jr NZ,0xf7ee06
 	call	16001240	; F7EE02  call 0xf428d8
@@ -159437,8 +160887,28 @@ ScreenLeaveBody_TrackMerge:
 	ret	; F7EE9D  ret   <- button table 0xF7D6D8 entry 2 (TRACK MERGE)
 	ret	; F7EE9E  ret   <- button table 0xF7D6D8 entry 3 (TRACK MERGE)
 
-; Evidence: table 0xF7D6D8 entry 4, screen TRACK MERGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EE9F -- panel button slot 0x04 of TrackMerge_207EZero
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EE9F:
 	.byte 0xC1, 0x75, 0x20, 0x3E, 0x08	; F7EE9F  or (0x2075),0x08   [llvm-mc cannot encode this]
 	bit	7, w	; F7EEA4  bit 0x07,W
@@ -159456,8 +160926,24 @@ sub_F7EE9F:
 	ret	; F7EECB  ret   <- button table 0xF7D6D8 entry 6 (TRACK MERGE)
 	ret	; F7EECC  ret   <- button table 0xF7D6D8 entry 7 (TRACK MERGE) and 1 more slot(s)
 
-; Evidence: table 0xF7D6D8 entry 9, screen TRACK MERGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EECD -- panel button slot 0x09 of TrackMerge_207EZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EECD:
 	bit	7, w	; F7EECD  bit 0x07,W
 	jr	z, 24	; F7EED0  jr Z,0xf7eeea
@@ -159480,8 +160966,24 @@ sub_F7EEEF:
 	call	15996956	; F7EEFD  call 0xf4181c
 	ret	; F7EF01  ret
 
-; Evidence: table 0xF7D6D8 entry 10, screen TRACK MERGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EF02 -- panel button slot 0x0A of TrackMerge_207EZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EF02:
 	bit	7, w	; F7EF02  bit 0x07,W
 	jr	nz, 22	; F7EF05  jr NZ,0xf7ef1d
@@ -159493,8 +160995,24 @@ sub_F7EF02:
 	calr	65490	; F7EF1A  calr 0xf7eeef
 	ret	; F7EF1D  ret
 
-; Evidence: table 0xF7D6D8 entry 11, screen TRACK MERGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EF1E -- panel button slot 0x0B of TrackMerge_207EZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EF1E:
 	bit	7, w	; F7EF1E  bit 0x07,W
 	jr	z, 22	; F7EF21  jr Z,0xf7ef39
@@ -159509,9 +161027,27 @@ sub_F7EF1E:
 	ret	; F7EF3B  ret   <- button table 0xF7D6D8 entry 13 (TRACK MERGE)
 	ret	; F7EF3C  ret   <- button table 0xF7D6D8 entry 14 (TRACK MERGE)
 
-; Evidence: table 0xF7D6D8 entry 15, screen TRACK MERGE. A bare button
-;           number, so no name; see the banner.
-sub_F7EF3D:
+; ---------------------------------------------------------------------
+; ExitKey_TrackMerge_207EZero -- the EXIT key on the TrackMerge_207EZero
+;           screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_TrackMerge_207EZero:
 	bit	7, w	; F7EF3D  bit 0x07,W
 	jr	z, 2	; F7EF40  jr Z,0xf7ef44
 	jr	6	; F7EF42  jr T,0xf7ef4a
@@ -159527,8 +161063,24 @@ sub_F7EF3D:
 	ret	; F7EF52  ret   <- button table 0xF7D758 entry 6 (TRACK MERGE)
 	ret	; F7EF53  ret   <- button table 0xF7D758 entry 7 (TRACK MERGE) and 1 more slot(s)
 
-; Evidence: table 0xF7D758 entry 9, screen TRACK MERGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EF54 -- panel button slot 0x09 of TrackMerge_207ENonZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EF54:
 	bit	7, w	; F7EF54  bit 0x07,W
 	jr	nz, 9	; F7EF57  jr NZ,0xf7ef62
@@ -159537,8 +161089,24 @@ sub_F7EF54:
 	ret	; F7EF62  ret
 	ret	; F7EF63  ret   <- button table 0xF7D758 entry 10 (TRACK MERGE)
 
-; Evidence: table 0xF7D758 entry 11, screen TRACK MERGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7EF64 -- panel button slot 0x0B of TrackMerge_207ENonZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7EF64:
 	bit	7, w	; F7EF64  bit 0x07,W
 	jr	nz, 4	; F7EF67  jr NZ,0xf7ef6d
@@ -159548,9 +161116,27 @@ sub_F7EF64:
 	ret	; F7EF6F  ret   <- button table 0xF7D758 entry 13 (TRACK MERGE)
 	ret	; F7EF70  ret   <- button table 0xF7D758 entry 14 (TRACK MERGE)
 
-; Evidence: table 0xF7D758 entry 15, screen TRACK MERGE. A bare button
-;           number, so no name; see the banner.
-sub_F7EF71:
+; ---------------------------------------------------------------------
+; ExitKey_TrackMerge_207ENonZero -- the EXIT key on the TrackMerge_207ENonZero
+;           screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_TrackMerge_207ENonZero:
 	bit	7, w	; F7EF71  bit 0x07,W
 	jr	nz, 4	; F7EF74  jr NZ,0xf7ef7a
 	call	16001364	; F7EF76  call 0xf42954
@@ -159646,8 +161232,28 @@ ScreenLeaveBody_MeasureDelete:
 	ret	; F7F038  ret   <- button table 0xF7D7D8 entry 2 (MEASURE DELETE)
 	ret	; F7F039  ret   <- button table 0xF7D7D8 entry 3 (MEASURE DELETE)
 
-; Evidence: table 0xF7D7D8 entry 4, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F03A -- panel button slot 0x04 of MeasureDelete_207EZero
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F03A:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F03A  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7F03E  jr Z,0xf7f044
@@ -159665,8 +161271,24 @@ sub_F7F03A:
 	ret	; F7F062  ret   <- button table 0xF7D7D8 entry 6 (MEASURE DELETE)
 	ret	; F7F063  ret   <- button table 0xF7D7D8 entry 7 (MEASURE DELETE) and 1 more slot(s)
 
-; Evidence: table 0xF7D7D8 entry 9, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F064 -- panel button slot 0x09 of MeasureDelete_207EZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F064:
 	bit	7, w	; F7F064  bit 0x07,W
 	jr	z, 30	; F7F067  jr Z,0xf7f087
@@ -159681,8 +161303,24 @@ sub_F7F064:
 	jr	0	; F7F085  jr T,0xf7f087
 	ret	; F7F087  ret
 
-; Evidence: table 0xF7D7D8 entry 10, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F088 -- panel button slot 0x0A of MeasureDelete_207EZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F088:
 	bit	7, w	; F7F088  bit 0x07,W
 	jr	z, 30	; F7F08B  jr Z,0xf7f0ab
@@ -159699,8 +161337,24 @@ sub_F7F088:
 	call	16001400	; F7F0AE  call 0xf42978
 	ret	; F7F0B2  ret
 
-; Evidence: table 0xF7D7D8 entry 11, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F0B3 -- panel button slot 0x0B of MeasureDelete_207EZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F0B3:
 	bit	7, w	; F7F0B3  bit 0x07,W
 	jr	z, 28	; F7F0B6  jr Z,0xf7f0d4
@@ -159717,9 +161371,27 @@ sub_F7F0B3:
 	ret	; F7F0D6  ret   <- button table 0xF7D7D8 entry 13 (MEASURE DELETE)
 	ret	; F7F0D7  ret   <- button table 0xF7D7D8 entry 14 (MEASURE DELETE)
 
-; Evidence: table 0xF7D7D8 entry 15, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
-sub_F7F0D8:
+; ---------------------------------------------------------------------
+; ExitKey_MeasureDelete_207EZero -- the EXIT key on the MeasureDelete_207EZero
+;           screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_MeasureDelete_207EZero:
 	bit	7, w	; F7F0D8  bit 0x07,W
 	jr	z, 2	; F7F0DB  jr Z,0xf7f0df
 	jr	6	; F7F0DD  jr T,0xf7f0e5
@@ -159727,8 +161399,22 @@ sub_F7F0D8:
 	ret	; F7F0E5  ret
 	ret	; F7F0E6  ret   <- button table 0xF7D7D8 entry 16 (MEASURE DELETE) and 4 more slot(s)
 
-; Evidence: table 0xF7D7D8 entry 21, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F0E7 -- panel button slot 0x15 of MeasureDelete_207EZero
+; Reached by: code 0x15, which no wire emits. It is base 0x04 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- slot 0x15 is reachable only as
+;           base 0x04 rewritten (+0x11), and code 0x04 is the COLLIDING code:
+;           under variant 1 it is produced by SW25/SW26 (LCD RIGHT) and by
+;           SW33/SW34 (SOFT KEY), from two byte-identical group lists.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F0E7:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F0E7  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7F0EB  jr Z,0xf7f0f1
@@ -159744,9 +161430,28 @@ sub_F7F0E7:
 	ret	; F7F10D  ret
 	ret	; F7F10E  ret   <- button table 0xF7D7D8 entry 22 (MEASURE DELETE) and 4 more slot(s)
 
-; Evidence: table 0xF7D7D8 entry 27, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
-sub_F7F10F:
+; ---------------------------------------------------------------------
+; NumberPadKey_MeasureDelete_207EZero -- the NUMBER PAD on the
+;           MeasureDelete_207EZero screen
+; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
+;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
+;           SW17..SW20 NUMBER PAD "8"..ENTER (segment 2 bits 0-3, wire 0xC2,
+;           one 4-bit field, no pair position) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x1B of the
+;           screen's button table.
+; Evidence: code 0x1B is emitted only by PanelGroupEventLists_Variant2, from
+;           the two number-pad wires, as WHOLE FIELDS with no pair position;
+;           variant 1 sends those same wires as class 0xA8 code 0x08, a
+;           different event class that never reaches a button table, so no
+;           other control can reach this slot under either map. 0x1B - 0x11 =
+;           0x0A is not a rewritable base. ★ And the body this forwards to
+;           opens `ld A,(0x2267) / cp A,0x0f` -- the same two constants
+;           prom_b's own PanelCode_ToSlotAndFlags pairs at 0xF5508C-0xF5509A
+;           when it sets flag bit 5 for index 0x1B. All five in-span slot-0x1B
+;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
+;           --selftest.
+; ---------------------------------------------------------------------
+NumberPadKey_MeasureDelete_207EZero:
 	calr	2	; F7F10F  calr 0xf7f114
 	ret	; F7F112  ret
 	ret	; F7F113  ret   <- button table 0xF7D7D8 entry 28 (MEASURE DELETE) and 3 more slot(s)
@@ -159870,8 +161575,24 @@ BlinkArgPtrs_F7F1F5:
 	ret	; F7F20C  ret   <- button table 0xF7D858 entry 7 (MEASURE DELETE)
 	ret	; F7F20D  ret   <- button table 0xF7D858 entry 8 (MEASURE DELETE) and 1 more slot(s)
 
-; Evidence: table 0xF7D858 entry 10, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F20E -- panel button slot 0x0A of MeasureDelete_207ENonZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F20E:
 	bit	7, w	; F7F20E  bit 0x07,W
 	jr	nz, 9	; F7F211  jr NZ,0xf7f21c
@@ -159879,8 +161600,24 @@ sub_F7F20E:
 	call	16001400	; F7F218  call 0xf42978
 	ret	; F7F21C  ret
 
-; Evidence: table 0xF7D858 entry 11, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F21D -- panel button slot 0x0B of MeasureDelete_207ENonZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F21D:
 	bit	7, w	; F7F21D  bit 0x07,W
 	jr	nz, 6	; F7F220  jr NZ,0xf7f228
@@ -159891,9 +161628,27 @@ sub_F7F21D:
 	ret	; F7F22A  ret   <- button table 0xF7D858 entry 13 (MEASURE DELETE)
 	ret	; F7F22B  ret   <- button table 0xF7D858 entry 14 (MEASURE DELETE)
 
-; Evidence: table 0xF7D858 entry 15, screen MEASURE DELETE. A bare button
-;           number, so no name; see the banner.
-sub_F7F22C:
+; ---------------------------------------------------------------------
+; ExitKey_MeasureDelete_207ENonZero -- the EXIT key on the
+;           MeasureDelete_207ENonZero screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_MeasureDelete_207ENonZero:
 	bit	7, w	; F7F22C  bit 0x07,W
 	jr	nz, 4	; F7F22F  jr NZ,0xf7f235
 	call	16001392	; F7F231  call 0xf42970
@@ -159986,8 +161741,28 @@ ScreenLeaveBody_MeasureErase:
 	ret	; F7F2DC  ret   <- button table 0xF7D8D8 entry 2 (MEASURE ERASE)
 	ret	; F7F2DD  ret   <- button table 0xF7D8D8 entry 3 (MEASURE ERASE)
 
-; Evidence: table 0xF7D8D8 entry 4, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F2DE -- panel button slot 0x04 of MeasureErase_207EZero
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F2DE:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F2DE  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7F2E2  jr Z,0xf7f2e8
@@ -160005,8 +161780,24 @@ sub_F7F2DE:
 	ret	; F7F306  ret   <- button table 0xF7D8D8 entry 6 (MEASURE ERASE)
 	ret	; F7F307  ret   <- button table 0xF7D8D8 entry 7 (MEASURE ERASE)
 
-; Evidence: table 0xF7D8D8 entry 8, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F308 -- panel button slot 0x08 of MeasureErase_207EZero
+; Reached by: code 0x08 from SW25 LCD RIGHT 1 (top) (segment 3 bit 0, wire
+;           0xC3, pair position 1); SW73 LCD LEFT 1 (top) (segment 9 bit 0,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x08 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F308:
 	bit	7, w	; F7F308  bit 0x07,W
 	jr	z, 28	; F7F30B  jr Z,0xf7f329
@@ -160032,8 +161823,24 @@ sub_F7F32A:
 	call	15996956	; F7F345  call 0xf4181c
 	ret	; F7F349  ret
 
-; Evidence: table 0xF7D8D8 entry 9, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F34A -- panel button slot 0x09 of MeasureErase_207EZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F34A:
 	bit	7, w	; F7F34A  bit 0x07,W
 	jr	z, 30	; F7F34D  jr Z,0xf7f36d
@@ -160050,8 +161857,24 @@ sub_F7F34A:
 	call	16001440	; F7F370  call 0xf429a0
 	ret	; F7F374  ret
 
-; Evidence: table 0xF7D8D8 entry 10, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F375 -- panel button slot 0x0A of MeasureErase_207EZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F375:
 	bit	7, w	; F7F375  bit 0x07,W
 	jr	z, 28	; F7F378  jr Z,0xf7f396
@@ -160075,8 +161898,24 @@ sub_F7F397:
 	call	15996916	; F7F3A9  call 0xf417f4
 	ret	; F7F3AD  ret
 
-; Evidence: table 0xF7D8D8 entry 11, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F3AE -- panel button slot 0x0B of MeasureErase_207EZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F3AE:
 	bit	7, w	; F7F3AE  bit 0x07,W
 	jr	z, 28	; F7F3B1  jr Z,0xf7f3cf
@@ -160093,9 +161932,27 @@ sub_F7F3AE:
 	ret	; F7F3D1  ret   <- button table 0xF7D8D8 entry 13 (MEASURE ERASE)
 	ret	; F7F3D2  ret   <- button table 0xF7D8D8 entry 14 (MEASURE ERASE)
 
-; Evidence: table 0xF7D8D8 entry 15, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
-sub_F7F3D3:
+; ---------------------------------------------------------------------
+; ExitKey_MeasureErase_207EZero -- the EXIT key on the MeasureErase_207EZero
+;           screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_MeasureErase_207EZero:
 	bit	7, w	; F7F3D3  bit 0x07,W
 	jr	z, 2	; F7F3D6  jr Z,0xf7f3da
 	jr	6	; F7F3D8  jr T,0xf7f3e0
@@ -160103,8 +161960,22 @@ sub_F7F3D3:
 	ret	; F7F3E0  ret
 	ret	; F7F3E1  ret   <- button table 0xF7D8D8 entry 16 (MEASURE ERASE) and 4 more slot(s)
 
-; Evidence: table 0xF7D8D8 entry 21, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F3E2 -- panel button slot 0x15 of MeasureErase_207EZero
+; Reached by: code 0x15, which no wire emits. It is base 0x04 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- slot 0x15 is reachable only as
+;           base 0x04 rewritten (+0x11), and code 0x04 is the COLLIDING code:
+;           under variant 1 it is produced by SW25/SW26 (LCD RIGHT) and by
+;           SW33/SW34 (SOFT KEY), from two byte-identical group lists.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F3E2:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F3E2  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7F3E6  jr Z,0xf7f3ec
@@ -160120,9 +161991,28 @@ sub_F7F3E2:
 	ret	; F7F408  ret
 	ret	; F7F409  ret   <- button table 0xF7D8D8 entry 22 (MEASURE ERASE) and 4 more slot(s)
 
-; Evidence: table 0xF7D8D8 entry 27, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
-sub_F7F40A:
+; ---------------------------------------------------------------------
+; NumberPadKey_MeasureErase_207EZero -- the NUMBER PAD on the
+;           MeasureErase_207EZero screen
+; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
+;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
+;           SW17..SW20 NUMBER PAD "8"..ENTER (segment 2 bits 0-3, wire 0xC2,
+;           one 4-bit field, no pair position) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x1B of the
+;           screen's button table.
+; Evidence: code 0x1B is emitted only by PanelGroupEventLists_Variant2, from
+;           the two number-pad wires, as WHOLE FIELDS with no pair position;
+;           variant 1 sends those same wires as class 0xA8 code 0x08, a
+;           different event class that never reaches a button table, so no
+;           other control can reach this slot under either map. 0x1B - 0x11 =
+;           0x0A is not a rewritable base. ★ And the body this forwards to
+;           opens `ld A,(0x2267) / cp A,0x0f` -- the same two constants
+;           prom_b's own PanelCode_ToSlotAndFlags pairs at 0xF5508C-0xF5509A
+;           when it sets flag bit 5 for index 0x1B. All five in-span slot-0x1B
+;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
+;           --selftest.
+; ---------------------------------------------------------------------
+NumberPadKey_MeasureErase_207EZero:
 	calr	51	; F7F40A  calr 0xf7f440
 	ret	; F7F40D  ret
 	ret	; F7F40E  ret   <- button table 0xF7D8D8 entry 28 (MEASURE ERASE) and 3 more slot(s)
@@ -160136,8 +162026,24 @@ sub_F7F40A:
 	ret	; F7F416  ret   <- button table 0xF7D958 entry 7 (MEASURE ERASE)
 	ret	; F7F417  ret   <- button table 0xF7D958 entry 8 (MEASURE ERASE)
 
-; Evidence: table 0xF7D958 entry 9, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F418 -- panel button slot 0x09 of MeasureErase_207ENonZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F418:
 	bit	7, w	; F7F418  bit 0x07,W
 	jr	nz, 9	; F7F41B  jr NZ,0xf7f426
@@ -160145,8 +162051,24 @@ sub_F7F418:
 	call	16001440	; F7F422  call 0xf429a0
 	ret	; F7F426  ret
 
-; Evidence: table 0xF7D958 entry 10, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F427 -- panel button slot 0x0A of MeasureErase_207ENonZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F427:
 	bit	7, w	; F7F427  bit 0x07,W
 	jr	nz, 4	; F7F42A  jr NZ,0xf7f430
@@ -160157,9 +162079,27 @@ sub_F7F427:
 	ret	; F7F433  ret   <- button table 0xF7D958 entry 13 (MEASURE ERASE)
 	ret	; F7F434  ret   <- button table 0xF7D958 entry 14 (MEASURE ERASE)
 
-; Evidence: table 0xF7D958 entry 15, screen MEASURE ERASE. A bare button
-;           number, so no name; see the banner.
-sub_F7F435:
+; ---------------------------------------------------------------------
+; ExitKey_MeasureErase_207ENonZero -- the EXIT key on the
+;           MeasureErase_207ENonZero screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_MeasureErase_207ENonZero:
 	bit	7, w	; F7F435  bit 0x07,W
 	jr	nz, 4	; F7F438  jr NZ,0xf7f43e
 	call	16001432	; F7F43A  call 0xf42998
@@ -160406,8 +162346,28 @@ ScreenLeaveBody_Quantize:
 	ret	; F7F60A  ret   <- button table 0xF7D9D8 entry 2 (QUANTIZE)
 	ret	; F7F60B  ret   <- button table 0xF7D9D8 entry 3 (QUANTIZE)
 
-; Evidence: table 0xF7D9D8 entry 4, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F60C -- panel button slot 0x04 of Quantize_207EZero
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F60C:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F60C  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7F610  jr Z,0xf7f616
@@ -160425,8 +162385,24 @@ sub_F7F60C:
 	ret	; F7F634  ret   <- button table 0xF7D9D8 entry 6 (QUANTIZE)
 	ret	; F7F635  ret   <- button table 0xF7D9D8 entry 7 (QUANTIZE)
 
-; Evidence: table 0xF7D9D8 entry 8, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F636 -- panel button slot 0x08 of Quantize_207EZero
+; Reached by: code 0x08 from SW25 LCD RIGHT 1 (top) (segment 3 bit 0, wire
+;           0xC3, pair position 1); SW73 LCD LEFT 1 (top) (segment 9 bit 0,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x08 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F636:
 	bit	7, w	; F7F636  bit 0x07,W
 	jr	z, 16	; F7F639  jr Z,0xf7f64b
@@ -160457,8 +162433,24 @@ sub_F7F668:
 	call	15996956	; F7F683  call 0xf4181c
 	ret	; F7F687  ret
 
-; Evidence: table 0xF7D9D8 entry 9, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F688 -- panel button slot 0x09 of Quantize_207EZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F688:
 	bit	7, w	; F7F688  bit 0x07,W
 	jr	z, 16	; F7F68B  jr Z,0xf7f69d
@@ -160477,8 +162469,24 @@ sub_F7F688:
 	calr	65455	; F7F6B6  calr 0xf7f668
 	ret	; F7F6B9  ret
 
-; Evidence: table 0xF7D9D8 entry 10, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F6BA -- panel button slot 0x0A of Quantize_207EZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F6BA:
 	bit	7, w	; F7F6BA  bit 0x07,W
 	jr	z, 30	; F7F6BD  jr Z,0xf7f6dd
@@ -160505,8 +162513,24 @@ sub_F7F6E5:
 	call	15996916	; F7F6F7  call 0xf417f4
 	ret	; F7F6FB  ret
 
-; Evidence: table 0xF7D9D8 entry 11, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F6FC -- panel button slot 0x0B of Quantize_207EZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F6FC:
 	bit	7, w	; F7F6FC  bit 0x07,W
 	jr	z, 28	; F7F6FF  jr Z,0xf7f71d
@@ -160523,9 +162547,26 @@ sub_F7F6FC:
 	ret	; F7F71F  ret   <- button table 0xF7D9D8 entry 13 (QUANTIZE)
 	ret	; F7F720  ret   <- button table 0xF7D9D8 entry 14 (QUANTIZE)
 
-; Evidence: table 0xF7D9D8 entry 15, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
-sub_F7F721:
+; ---------------------------------------------------------------------
+; ExitKey_Quantize_207EZero -- the EXIT key on the Quantize_207EZero screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_Quantize_207EZero:
 	bit	7, w	; F7F721  bit 0x07,W
 	jr	z, 2	; F7F724  jr Z,0xf7f728
 	jr	36	; F7F726  jr T,0xf7f74c
@@ -160542,8 +162583,22 @@ sub_F7F721:
 	ret	; F7F74C  ret
 	ret	; F7F74D  ret   <- button table 0xF7D9D8 entry 16 (QUANTIZE) and 4 more slot(s)
 
-; Evidence: table 0xF7D9D8 entry 21, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F74E -- panel button slot 0x15 of Quantize_207EZero
+; Reached by: code 0x15, which no wire emits. It is base 0x04 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- slot 0x15 is reachable only as
+;           base 0x04 rewritten (+0x11), and code 0x04 is the COLLIDING code:
+;           under variant 1 it is produced by SW25/SW26 (LCD RIGHT) and by
+;           SW33/SW34 (SOFT KEY), from two byte-identical group lists.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F74E:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F74E  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7F752  jr Z,0xf7f758
@@ -160559,9 +162614,28 @@ sub_F7F74E:
 	ret	; F7F774  ret
 	ret	; F7F775  ret   <- button table 0xF7D9D8 entry 22 (QUANTIZE) and 4 more slot(s)
 
-; Evidence: table 0xF7D9D8 entry 27, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
-sub_F7F776:
+; ---------------------------------------------------------------------
+; NumberPadKey_Quantize_207EZero -- the NUMBER PAD on the Quantize_207EZero
+;           screen
+; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
+;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
+;           SW17..SW20 NUMBER PAD "8"..ENTER (segment 2 bits 0-3, wire 0xC2,
+;           one 4-bit field, no pair position) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x1B of the
+;           screen's button table.
+; Evidence: code 0x1B is emitted only by PanelGroupEventLists_Variant2, from
+;           the two number-pad wires, as WHOLE FIELDS with no pair position;
+;           variant 1 sends those same wires as class 0xA8 code 0x08, a
+;           different event class that never reaches a button table, so no
+;           other control can reach this slot under either map. 0x1B - 0x11 =
+;           0x0A is not a rewritable base. ★ And the body this forwards to
+;           opens `ld A,(0x2267) / cp A,0x0f` -- the same two constants
+;           prom_b's own PanelCode_ToSlotAndFlags pairs at 0xF5508C-0xF5509A
+;           when it sets flag bit 5 for index 0x1B. All five in-span slot-0x1B
+;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
+;           --selftest.
+; ---------------------------------------------------------------------
+NumberPadKey_Quantize_207EZero:
 	calr	51	; F7F776  calr 0xf7f7ac
 	ret	; F7F779  ret
 	ret	; F7F77A  ret   <- button table 0xF7D9D8 entry 28 (QUANTIZE) and 3 more slot(s)
@@ -160575,8 +162649,24 @@ sub_F7F776:
 	ret	; F7F782  ret   <- button table 0xF7DA58 entry 7 (QUANTIZE)
 	ret	; F7F783  ret   <- button table 0xF7DA58 entry 8 (QUANTIZE) and 1 more slot(s)
 
-; Evidence: table 0xF7DA58 entry 10, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F784 -- panel button slot 0x0A of Quantize_207ENonZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F784:
 	bit	7, w	; F7F784  bit 0x07,W
 	jr	nz, 9	; F7F787  jr NZ,0xf7f792
@@ -160584,8 +162674,24 @@ sub_F7F784:
 	call	16001328	; F7F78E  call 0xf42930
 	ret	; F7F792  ret
 
-; Evidence: table 0xF7DA58 entry 11, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F793 -- panel button slot 0x0B of Quantize_207ENonZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F793:
 	bit	7, w	; F7F793  bit 0x07,W
 	jr	nz, 4	; F7F796  jr NZ,0xf7f79c
@@ -160595,9 +162701,27 @@ sub_F7F793:
 	ret	; F7F79E  ret   <- button table 0xF7DA58 entry 13 (QUANTIZE)
 	ret	; F7F79F  ret   <- button table 0xF7DA58 entry 14 (QUANTIZE)
 
-; Evidence: table 0xF7DA58 entry 15, screen QUANTIZE. A bare button number,
-;           so no name; see the banner.
-sub_F7F7A0:
+; ---------------------------------------------------------------------
+; ExitKey_Quantize_207ENonZero -- the EXIT key on the Quantize_207ENonZero
+;           screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_Quantize_207ENonZero:
 	bit	7, w	; F7F7A0  bit 0x07,W
 	jr	nz, 4	; F7F7A3  jr NZ,0xf7f7a9
 	call	16001320	; F7F7A5  call 0xf42928
@@ -160801,8 +162925,28 @@ ScreenLeaveBody_Vel0cityChange:
 	ret	; F7F956  ret   <- button table 0xF7DAD8 entry 2 (VEL0CITY CHANGE)
 	ret	; F7F957  ret   <- button table 0xF7DAD8 entry 3 (VEL0CITY CHANGE)
 
-; Evidence: table 0xF7DAD8 entry 4, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F958 -- panel button slot 0x04 of Vel0cityChange_207EZero
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F958:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7F958  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7F95C  jr Z,0xf7f962
@@ -160820,8 +162964,24 @@ sub_F7F958:
 	ret	; F7F980  ret   <- button table 0xF7DAD8 entry 6 (VEL0CITY CHANGE)
 	ret	; F7F981  ret   <- button table 0xF7DAD8 entry 7 (VEL0CITY CHANGE)
 
-; Evidence: table 0xF7DAD8 entry 8, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F982 -- panel button slot 0x08 of Vel0cityChange_207EZero
+; Reached by: code 0x08 from SW25 LCD RIGHT 1 (top) (segment 3 bit 0, wire
+;           0xC3, pair position 1); SW73 LCD LEFT 1 (top) (segment 9 bit 0,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x08 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F982:
 	bit	7, w	; F7F982  bit 0x07,W
 	jr	z, 20	; F7F985  jr Z,0xf7f99b
@@ -160845,8 +163005,24 @@ sub_F7F99C:
 	call	15996956	; F7F9B7  call 0xf4181c
 	ret	; F7F9BB  ret
 
-; Evidence: table 0xF7DAD8 entry 9, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F9BC -- panel button slot 0x09 of Vel0cityChange_207EZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F9BC:
 	bit	7, w	; F7F9BC  bit 0x07,W
 	jr	z, 22	; F7F9BF  jr Z,0xf7f9d7
@@ -160861,8 +163037,24 @@ sub_F7F9BC:
 	call	16001280	; F7F9DA  call 0xf42900
 	ret	; F7F9DE  ret
 
-; Evidence: table 0xF7DAD8 entry 10, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7F9DF -- panel button slot 0x0A of Vel0cityChange_207EZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7F9DF:
 	bit	7, w	; F7F9DF  bit 0x07,W
 	jr	z, 22	; F7F9E2  jr Z,0xf7f9fa
@@ -160886,8 +163078,24 @@ sub_F7F9FB:
 	call	15996916	; F7FA10  call 0xf417f4
 	ret	; F7FA14  ret
 
-; Evidence: table 0xF7DAD8 entry 11, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FA15 -- panel button slot 0x0B of Vel0cityChange_207EZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FA15:
 	bit	7, w	; F7FA15  bit 0x07,W
 	jr	z, 22	; F7FA18  jr Z,0xf7fa30
@@ -160903,9 +163111,27 @@ sub_F7FA15:
 	ret	; F7FA32  ret   <- button table 0xF7DAD8 entry 13 (VEL0CITY CHANGE)
 	ret	; F7FA33  ret   <- button table 0xF7DAD8 entry 14 (VEL0CITY CHANGE)
 
-; Evidence: table 0xF7DAD8 entry 15, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
-sub_F7FA34:
+; ---------------------------------------------------------------------
+; ExitKey_Vel0cityChange_207EZero -- the EXIT key on the
+;           Vel0cityChange_207EZero screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_Vel0cityChange_207EZero:
 	bit	7, w	; F7FA34  bit 0x07,W
 	jr	z, 2	; F7FA37  jr Z,0xf7fa3b
 	jr	6	; F7FA39  jr T,0xf7fa41
@@ -160913,8 +163139,22 @@ sub_F7FA34:
 	ret	; F7FA41  ret
 	ret	; F7FA42  ret   <- button table 0xF7DAD8 entry 16 (VEL0CITY CHANGE) and 4 more slot(s)
 
-; Evidence: table 0xF7DAD8 entry 21, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FA43 -- panel button slot 0x15 of Vel0cityChange_207EZero
+; Reached by: code 0x15, which no wire emits. It is base 0x04 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- slot 0x15 is reachable only as
+;           base 0x04 rewritten (+0x11), and code 0x04 is the COLLIDING code:
+;           under variant 1 it is produced by SW25/SW26 (LCD RIGHT) and by
+;           SW33/SW34 (SOFT KEY), from two byte-identical group lists.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FA43:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FA43  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7FA47  jr Z,0xf7fa4d
@@ -160930,9 +163170,28 @@ sub_F7FA43:
 	ret	; F7FA69  ret
 	ret	; F7FA6A  ret   <- button table 0xF7DAD8 entry 22 (VEL0CITY CHANGE) and 4 more slot(s)
 
-; Evidence: table 0xF7DAD8 entry 27, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
-sub_F7FA6B:
+; ---------------------------------------------------------------------
+; NumberPadKey_Vel0cityChange_207EZero -- the NUMBER PAD on the
+;           Vel0cityChange_207EZero screen
+; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
+;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
+;           SW17..SW20 NUMBER PAD "8"..ENTER (segment 2 bits 0-3, wire 0xC2,
+;           one 4-bit field, no pair position) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x1B of the
+;           screen's button table.
+; Evidence: code 0x1B is emitted only by PanelGroupEventLists_Variant2, from
+;           the two number-pad wires, as WHOLE FIELDS with no pair position;
+;           variant 1 sends those same wires as class 0xA8 code 0x08, a
+;           different event class that never reaches a button table, so no
+;           other control can reach this slot under either map. 0x1B - 0x11 =
+;           0x0A is not a rewritable base. ★ And the body this forwards to
+;           opens `ld A,(0x2267) / cp A,0x0f` -- the same two constants
+;           prom_b's own PanelCode_ToSlotAndFlags pairs at 0xF5508C-0xF5509A
+;           when it sets flag bit 5 for index 0x1B. All five in-span slot-0x1B
+;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
+;           --selftest.
+; ---------------------------------------------------------------------
+NumberPadKey_Vel0cityChange_207EZero:
 	calr	52	; F7FA6B  calr 0xf7faa2
 	ret	; F7FA6E  ret
 	ret	; F7FA6F  ret   <- button table 0xF7DAD8 entry 28 (VEL0CITY CHANGE) and 3 more slot(s)
@@ -160946,8 +163205,24 @@ sub_F7FA6B:
 	ret	; F7FA77  ret   <- button table 0xF7DB58 entry 7 (VEL0CITY CHANGE)
 	ret	; F7FA78  ret   <- button table 0xF7DB58 entry 8 (VEL0CITY CHANGE)
 
-; Evidence: table 0xF7DB58 entry 9, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FA79 -- panel button slot 0x09 of Vel0cityChange_207ENonZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FA79:
 	bit	7, w	; F7FA79  bit 0x07,W
 	jr	nz, 9	; F7FA7C  jr NZ,0xf7fa87
@@ -160955,8 +163230,24 @@ sub_F7FA79:
 	call	16001280	; F7FA83  call 0xf42900
 	ret	; F7FA87  ret
 
-; Evidence: table 0xF7DB58 entry 10, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FA88 -- panel button slot 0x0A of Vel0cityChange_207ENonZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FA88:
 	bit	7, w	; F7FA88  bit 0x07,W
 	jr	nz, 4	; F7FA8B  jr NZ,0xf7fa91
@@ -160967,9 +163258,27 @@ sub_F7FA88:
 	ret	; F7FA94  ret   <- button table 0xF7DB58 entry 13 (VEL0CITY CHANGE)
 	ret	; F7FA95  ret   <- button table 0xF7DB58 entry 14 (VEL0CITY CHANGE)
 
-; Evidence: table 0xF7DB58 entry 15, screen VEL0CITY CHANGE. A bare button
-;           number, so no name; see the banner.
-sub_F7FA96:
+; ---------------------------------------------------------------------
+; ExitKey_Vel0cityChange_207ENonZero -- the EXIT key on the
+;           Vel0cityChange_207ENonZero screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_Vel0cityChange_207ENonZero:
 	bit	7, w	; F7FA96  bit 0x07,W
 	jr	nz, 4	; F7FA99  jr NZ,0xf7fa9f
 	call	16001272	; F7FA9B  call 0xf428f8
@@ -161195,8 +163504,28 @@ ScreenLeaveBody_Transp0se:
 	ret	; F7FCA0  ret   <- button table 0xF7DBD8 entry 2 (TRANSP0SE)
 	ret	; F7FCA1  ret   <- button table 0xF7DBD8 entry 3 (TRANSP0SE)
 
-; Evidence: table 0xF7DBD8 entry 4, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FCA2 -- panel button slot 0x04 of Transp0se_207EZero
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FCA2:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FCA2  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7FCA6  jr Z,0xf7fcac
@@ -161214,8 +163543,24 @@ sub_F7FCA2:
 	ret	; F7FCCA  ret   <- button table 0xF7DBD8 entry 6 (TRANSP0SE)
 	ret	; F7FCCB  ret   <- button table 0xF7DBD8 entry 7 (TRANSP0SE)
 
-; Evidence: table 0xF7DBD8 entry 8, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FCCC -- panel button slot 0x08 of Transp0se_207EZero
+; Reached by: code 0x08 from SW25 LCD RIGHT 1 (top) (segment 3 bit 0, wire
+;           0xC3, pair position 1); SW73 LCD LEFT 1 (top) (segment 9 bit 0,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x08 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FCCC:
 	bit	7, w	; F7FCCC  bit 0x07,W
 	jr	z, 20	; F7FCCF  jr Z,0xf7fce5
@@ -161239,8 +163584,24 @@ sub_F7FCE6:
 	call	15996956	; F7FD01  call 0xf4181c
 	ret	; F7FD05  ret
 
-; Evidence: table 0xF7DBD8 entry 9, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FD06 -- panel button slot 0x09 of Transp0se_207EZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FD06:
 	bit	7, w	; F7FD06  bit 0x07,W
 	jr	z, 22	; F7FD09  jr Z,0xf7fd21
@@ -161255,8 +163616,24 @@ sub_F7FD06:
 	call	16001624	; F7FD24  call 0xf42a58
 	ret	; F7FD28  ret
 
-; Evidence: table 0xF7DBD8 entry 10, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FD29 -- panel button slot 0x0A of Transp0se_207EZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FD29:
 	bit	7, w	; F7FD29  bit 0x07,W
 	jr	z, 22	; F7FD2C  jr Z,0xf7fd44
@@ -161279,8 +163656,24 @@ sub_F7FD45:
 	call	15996916	; F7FD57  call 0xf417f4
 	ret	; F7FD5B  ret
 
-; Evidence: table 0xF7DBD8 entry 11, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FD5C -- panel button slot 0x0B of Transp0se_207EZero
+; Reached by: code 0x0B from SW28 LCD RIGHT 4 (segment 3 bit 3, wire 0xC3,
+;           pair position 1); SW76 LCD LEFT 4 (segment 9 bit 3, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0B of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FD5C:
 	bit	7, w	; F7FD5C  bit 0x07,W
 	jr	z, 22	; F7FD5F  jr Z,0xf7fd77
@@ -161296,9 +163689,26 @@ sub_F7FD5C:
 	ret	; F7FD79  ret   <- button table 0xF7DBD8 entry 13 (TRANSP0SE)
 	ret	; F7FD7A  ret   <- button table 0xF7DBD8 entry 14 (TRANSP0SE)
 
-; Evidence: table 0xF7DBD8 entry 15, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
-sub_F7FD7B:
+; ---------------------------------------------------------------------
+; ExitKey_Transp0se_207EZero -- the EXIT key on the Transp0se_207EZero screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_Transp0se_207EZero:
 	bit	7, w	; F7FD7B  bit 0x07,W
 	jr	z, 2	; F7FD7E  jr Z,0xf7fd82
 	jr	6	; F7FD80  jr T,0xf7fd88
@@ -161306,8 +163716,22 @@ sub_F7FD7B:
 	ret	; F7FD88  ret
 	ret	; F7FD89  ret   <- button table 0xF7DBD8 entry 16 (TRANSP0SE) and 4 more slot(s)
 
-; Evidence: table 0xF7DBD8 entry 21, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FD8A -- panel button slot 0x15 of Transp0se_207EZero
+; Reached by: code 0x15, which no wire emits. It is base 0x04 plus 0x11,
+;           written by the action handlers 0xF8AE68/0xF8AEDB (`add
+;           (XIX-1),0x11` at 0xF8AE7E and 0xF8AEF1) on the arm reached when
+;           this code's bit is already set in the held-code set
+;           (0x2252)/(0x2256) -- `and XWA,XDE / jr Z` at 0xF8AE7A.
+; Unknown: NO NAME, and the reason is exact -- slot 0x15 is reachable only as
+;           base 0x04 rewritten (+0x11), and code 0x04 is the COLLIDING code:
+;           under variant 1 it is produced by SW25/SW26 (LCD RIGHT) and by
+;           SW33/SW34 (SOFT KEY), from two byte-identical group lists.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FD8A:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FD8A  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7FD8E  jr Z,0xf7fd94
@@ -161323,9 +163747,28 @@ sub_F7FD8A:
 	ret	; F7FDB0  ret
 	ret	; F7FDB1  ret   <- button table 0xF7DBD8 entry 22 (TRANSP0SE) and 4 more slot(s)
 
-; Evidence: table 0xF7DBD8 entry 27, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
-sub_F7FDB2:
+; ---------------------------------------------------------------------
+; NumberPadKey_Transp0se_207EZero -- the NUMBER PAD on the Transp0se_207EZero
+;           screen
+; Reached by: code 0x1B from SW9..SW16 NUMBER PAD "0"..NUMBER PAD "7" (segment
+;           1 bits 0-7, wire 0xC1, one 8-bit field, no pair position);
+;           SW17..SW20 NUMBER PAD "8"..ENTER (segment 2 bits 0-3, wire 0xC2,
+;           one 4-bit field, no pair position) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x1B of the
+;           screen's button table.
+; Evidence: code 0x1B is emitted only by PanelGroupEventLists_Variant2, from
+;           the two number-pad wires, as WHOLE FIELDS with no pair position;
+;           variant 1 sends those same wires as class 0xA8 code 0x08, a
+;           different event class that never reaches a button table, so no
+;           other control can reach this slot under either map. 0x1B - 0x11 =
+;           0x0A is not a rewritable base. ★ And the body this forwards to
+;           opens `ld A,(0x2267) / cp A,0x0f` -- the same two constants
+;           prom_b's own PanelCode_ToSlotAndFlags pairs at 0xF5508C-0xF5509A
+;           when it sets flag bit 5 for index 0x1B. All five in-span slot-0x1B
+;           handlers do it. Re-derived by notes/prom_b_panel_names_round11.py
+;           --selftest.
+; ---------------------------------------------------------------------
+NumberPadKey_Transp0se_207EZero:
 	calr	52	; F7FDB2  calr 0xf7fde9
 	ret	; F7FDB5  ret
 	ret	; F7FDB6  ret   <- button table 0xF7DBD8 entry 28 (TRANSP0SE) and 3 more slot(s)
@@ -161339,8 +163782,24 @@ sub_F7FDB2:
 	ret	; F7FDBE  ret   <- button table 0xF7DC58 entry 7 (TRANSP0SE)
 	ret	; F7FDBF  ret   <- button table 0xF7DC58 entry 8 (TRANSP0SE)
 
-; Evidence: table 0xF7DC58 entry 9, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FDC0 -- panel button slot 0x09 of Transp0se_207ENonZero
+; Reached by: code 0x09 from SW26 LCD RIGHT 2 (segment 3 bit 1, wire 0xC3,
+;           pair position 1); SW74 LCD LEFT 2 (segment 9 bit 1, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x09 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FDC0:
 	bit	7, w	; F7FDC0  bit 0x07,W
 	jr	nz, 9	; F7FDC3  jr NZ,0xf7fdce
@@ -161348,8 +163807,24 @@ sub_F7FDC0:
 	call	16001624	; F7FDCA  call 0xf42a58
 	ret	; F7FDCE  ret
 
-; Evidence: table 0xF7DC58 entry 10, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FDCF -- panel button slot 0x0A of Transp0se_207ENonZero
+; Reached by: code 0x0A from SW27 LCD RIGHT 3 (segment 3 bit 2, wire 0xC3,
+;           pair position 1); SW75 LCD LEFT 3 (segment 9 bit 2, wire 0xC9,
+;           pair position 0) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0A of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FDCF:
 	bit	7, w	; F7FDCF  bit 0x07,W
 	jr	nz, 4	; F7FDD2  jr NZ,0xf7fdd8
@@ -161360,9 +163835,27 @@ sub_F7FDCF:
 	ret	; F7FDDB  ret   <- button table 0xF7DC58 entry 13 (TRANSP0SE)
 	ret	; F7FDDC  ret   <- button table 0xF7DC58 entry 14 (TRANSP0SE)
 
-; Evidence: table 0xF7DC58 entry 15, screen TRANSP0SE. A bare button number,
-;           so no name; see the banner.
-sub_F7FDDD:
+; ---------------------------------------------------------------------
+; ExitKey_Transp0se_207ENonZero -- the EXIT key on the Transp0se_207ENonZero
+;           screen
+; Reached by: code 0x0F from SW32 EXIT (segment 3 bit 7, wire 0xC3, pair
+;           position 1) -- then prom_a PanelButton_Route `and L,0x1f` at
+;           0xF861AE, then slot 0x0F of the screen's button table.
+; Evidence: code 0x0F's ONLY fitted producer is SW32 EXIT, under BOTH wire
+;           maps -- variant 1 sources it from segment 10 bit 7 = SW88, a
+;           position no diode list fits -- and no rewrite can reach it,
+;           because the action handlers only add 0x11 to a base or clamp to
+;           0x19. On the consumer side slot 0x0F is the ONLY one of the 32
+;           slots that holds a real routine in ALL 32 tables (32 distinct
+;           handlers, 0 `ret` stubs); in the 23-entry dispatch family its slot
+;           15 is filled in all four too, though there slots 1, 2, 4 and 5 are
+;           as well, so the universality argument is the 32-table one. This
+;           body opens `bit 0x07,W` and runs only when that bit is CLEAR,
+;           which is pair position 1 -- the only position code 0x0F is ever
+;           delivered at; 20 of 20 in-span EXIT handlers do the same.
+;           Re-derived by notes/prom_b_panel_names_round11.py --selftest.
+; ---------------------------------------------------------------------
+ExitKey_Transp0se_207ENonZero:
 	bit	7, w	; F7FDDD  bit 0x07,W
 	jr	nz, 4	; F7FDE0  jr NZ,0xf7fde6
 	call	16001628	; F7FDE2  call 0xf42a5c
@@ -161584,8 +164077,28 @@ ScreenLeaveBody_AdvanceDelay:
 	ret	; F7FFCF  ret   <- button table 0xF7DCD8 entry 2 (ADVANCE/DELAY)
 	ret	; F7FFD0  ret   <- button table 0xF7DCD8 entry 3 (ADVANCE/DELAY)
 
-; Evidence: table 0xF7DCD8 entry 4, screen ADVANCE/DELAY. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FFD1 -- panel button slot 0x04 of AdvanceDelay_207EZero
+; Reached by: code 0x04 from SW41 SOFT KEY col 5 lower (segment 5 bit 0, wire
+;           0xC5, pair position 0); SW42 SOFT KEY col 5 upper (segment 5 bit
+;           1, wire 0xC5, pair position 1); SW25 LCD RIGHT 1 (top) (segment 3
+;           bit 0, wire 0xC3, pair position 0); SW26 LCD RIGHT 2 (segment 3
+;           bit 1, wire 0xC3, pair position 1); SW33 SOFT KEY col 1 lower
+;           (segment 4 bit 0, wire 0xC4, pair position 0); SW34 SOFT KEY col 1
+;           upper (segment 4 bit 1, wire 0xC4, pair position 1) -- then prom_a
+;           PanelButton_Route `and L,0x1f` at 0xF861AE, then slot 0x04 of the
+;           screen's button table.
+; Unknown: NO NAME, and the reason is exact -- COLLISION. Under variant 1 code
+;           0x04 is produced by two different legends -- an LCD-RIGHT key and
+;           a SOFT KEY -- from two byte-identical group lists, and both
+;           switches are fitted. Round 10 forbade naming from a colliding code
+;           and the fitted union shows the collision is not a variant
+;           artefact.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FFD1:
 	.byte 0xF1, 0x75, 0x20, 0xC9	; F7FFD1  bit 1,(0x2075)   [llvm-mc cannot encode this]
 	jr	z, 4	; F7FFD5  jr Z,0xf7ffdb
@@ -161603,8 +164116,24 @@ sub_F7FFD1:
 	ret	; F7FFF9  ret   <- button table 0xF7DCD8 entry 6 (ADVANCE/DELAY)
 	ret	; F7FFFA  ret   <- button table 0xF7DCD8 entry 7 (ADVANCE/DELAY)
 
-; Evidence: table 0xF7DCD8 entry 8, screen ADVANCE/DELAY. A bare button
-;           number, so no name; see the banner.
+; ---------------------------------------------------------------------
+; sub_F7FFFB -- panel button slot 0x08 of AdvanceDelay_207EZero
+; Reached by: code 0x08 from SW25 LCD RIGHT 1 (top) (segment 3 bit 0, wire
+;           0xC3, pair position 1); SW73 LCD LEFT 1 (top) (segment 9 bit 0,
+;           wire 0xC9, pair position 0) -- then prom_a PanelButton_Route `and
+;           L,0x1f` at 0xF861AE, then slot 0x08 of the screen's button table.
+; Unknown: NO NAME, and the reason is exact -- the control CLASS is
+;           established -- the LCD side keys, with bit 7 of the code selecting
+;           the LEFT column over the RIGHT -- but the five siblings differ
+;           only by ROW, and a bare row number in a name grades as content
+;           while stating nothing (round 6's refusal of Write3602_Index5).
+;           This is the largest single refusal of the round: 62 of the span's
+;           124 button handlers.
+; Evidence: the table slot and the screen above are re-read from the ROM, the
+;           producers from PanelWireGroupMap_Variant1/2 and
+;           PanelGroupEventLists_Variant1/2, by
+;           notes/prom_b_panel_names_round11.py --chain --refusals --selftest.
+; ---------------------------------------------------------------------
 sub_F7FFFB:
 	bit	7, w	; F7FFFB  bit 0x07,W
 	jr	z, 25	; F7FFFE  jr Z,0xf80019

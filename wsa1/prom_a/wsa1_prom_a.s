@@ -18811,12 +18811,41 @@ Dispatch_F8A05F:
 	stda16 (0x2197), wa                                  ; F8A073  f1 97 21 50
 	m_cp_mi8 MB16, 0x207a, 0xdb                          ; F8A077  c1 7a 20 3f db
 	jr z, .LF8A087                                       ; F8A07C  66 09
-	calr sub_F8A088                                      ; F8A07E  1e 07 00
+	calr PanelWireQueue_DrainToGroupQueue                                      ; F8A07E  1e 07 00
 	calr 0x0185                                          ; F8A081  1e 85 01
 	calr 0x027c                                          ; F8A084  1e 7c 02
 .LF8A087:
 	ret                                                  ; F8A087  0e
-sub_F8A088:
+; ---------------------------------------------------------------------
+; PanelWireQueue_DrainToGroupQueue -- drain the CP1 wire queue at RAM 0x2B40
+; and re-post each change as a GROUP record on the queue at RAM 0x2000.
+;
+; Called from: 0xF8A07E (`calr`), inside the arm that Dispatch_F8A05F slot 0
+;          and slot 2 reach.
+; Produces: it is the FIRST of the eight producers that call
+;          PanelGroupQueue_Append; the other seven are the six fixed-group
+;          appenders in PanelGroupQueue_AppendFlaggedGroups and the run-time
+;          one at 0xF8A2D6.
+; Body:    XIZ = 0x2B40, a ring whose put/get cursors are at +0x04/+0x06 and
+;          whose wrap limit is at +0x02.  Per THREE-byte record it reads
+;          [wire][new value][old XOR new], computes the map index
+;          (wire & 0x1F) | ((wire & 0xC0) >> 1), reads
+;          PanelWireGroupMap_Variant1/2 for the GROUP, and -- only when the
+;          change byte is non-zero -- calls PanelGroupQueue_Append.
+; Refuses: `cp (0x219A),0x07` at 0xF8A090 stops the drain when the group
+;          queue already holds seven records; the wire queue keeps its
+;          unread bytes and the drain resumes next tick.
+; Sibling: prom_b SC1_RxOp0_ThreeByte (0xF5B0D5) is what FILLS 0x2B40.
+; ⚠ prom_b's comments at :98479 and :156427, and two notes scripts, still
+;          cite this routine as `prom_a sub_F8A088`; those files belong to
+;          other lanes and were not edited.
+; Evidence: `ld XIZ,0x00002B40` at 0xF8A088, `cp (0x219A),0x07` at 0xF8A090,
+;          the index expression `and L,0x1F` / `and A,0xC0` / `srl A,1` /
+;          `or L,A` at 0xF8A0A3-0xF8A0AC, `ld XIY,0x00F8A109` at 0xF8A0AE,
+;          `calr` to 0xF8A3B2 at 0xF8A0F2, `ld (XIZ+0x06),IX` at 0xF8A103.
+; ---------------------------------------------------------------------
+
+PanelWireQueue_DrainToGroupQueue:
 	ld XIZ,0x00002b40                                    ; F8A088  46 40 2b 00 00
 	ld IX,(XIZ+0x06)                                     ; F8A08D  9e 06 24
 .LF8A090:
@@ -18898,7 +18927,15 @@ sub_F8A088:
 ;     wire 0xD2 -> group 0x0D
 ;     wire 0xD3 -> group 0x0E
 ;     wire 0xD7 -> group 0x0F
-; ⚠ What a GROUP id then selects is NOT established here.
+; ★ WHAT A GROUP ID SELECTS -- established in round 10, applied in round 11:
+;   it indexes PanelGroupEventLists_Variant1 (0xF8B446) or _Variant2
+;   (0xF8B4B2), whose list says which UI event class and code that wire
+;   raises.  PanelGroupQueue_ExpandToEvents does the indexing at 0xF8A846.
+; ⚠ AND THE TWO NUMBERINGS DISAGREE FOR THE DIAL.  The physical map in
+;   notes/wave7_panel_button_codes.py puts the -1/+1 pair at matrix SEGMENT
+;   3; the event table puts its code (0x0D) at GROUP 0x0A, and group ==
+;   segment for wires 0xC0-0xCA.  One of the two is wrong; neither has been
+;   edited to hide it.
 ; ---------------------------------------------------------------------
 
 PanelWireGroupMap_Variant1:
@@ -18934,7 +18971,15 @@ PanelWireGroupMap_Variant1:
 ;     wire 0xC9 -> group 0x08
 ;     wire 0xD3 -> group 0x0E
 ;     wire 0xD7 -> group 0x0F
-; ⚠ What a GROUP id then selects is NOT established here.
+; ★ WHAT A GROUP ID SELECTS -- established in round 10, applied in round 11:
+;   it indexes PanelGroupEventLists_Variant1 (0xF8B446) or _Variant2
+;   (0xF8B4B2), whose list says which UI event class and code that wire
+;   raises.  PanelGroupQueue_ExpandToEvents does the indexing at 0xF8A846.
+; ⚠ AND THE TWO NUMBERINGS DISAGREE FOR THE DIAL.  The physical map in
+;   notes/wave7_panel_button_codes.py puts the -1/+1 pair at matrix SEGMENT
+;   3; the event table puts its code (0x0D) at GROUP 0x0A, and group ==
+;   segment for wires 0xC0-0xCA.  One of the two is wrong; neither has been
+;   edited to hide it.
 ; ---------------------------------------------------------------------
 
 PanelWireGroupMap_Variant2:
@@ -19049,7 +19094,37 @@ sub_F8A24A:
 	jrl nz, -131                                         ; F8A2FD  7e 7d ff
 	unlk XIZ                                             ; F8A300  ee 0d
 	ret                                                  ; F8A302  0e
-sub_F8A303:
+; ---------------------------------------------------------------------
+; PanelGroupQueue_AppendFlaggedGroups -- raise a group event for each of six
+; RAM FLAG BYTES whose bit 7 is set, then clear that bit.
+;
+; ★★ THESE ARE SIX OF THE SEVEN NON-WIRE PRODUCERS round 10 located and did
+; not read.  Each arm is the same five steps: test bit 7 of the flag byte,
+; check the group queue has room, clear bit 7, and call
+; PanelGroupQueue_Append with a FIXED group id in E, the flag byte ITSELF
+; as the value (A), and 0x7F as the change mask (W).  The six pairs are
+;   (0x28EE) -> group 0x10    (0x28F1) -> group 0x13
+;   (0x28EF) -> group 0x11    (0x28EC) -> group 0x14
+;   (0x28F0) -> group 0x12    (0x28ED) -> group 0x15
+; and the variant-1 lists for groups 0x10-0x15 emit classes BA, BB, B4, BD,
+; B8, B9 -- every one with CODE 0x00 and a 0x7F whole-field mask.  So the
+; delivered event carries the flag byte's LOW SEVEN BITS as a value: six
+; continuous-controller-shaped events, not buttons.
+; ★ SO SIX OF THE SEVEN CANNOT BE THE MISSING PRODUCER OF CODE 0x0E.
+;   UiEvent_RouteByCode has an 0x0E arm that nothing found raises; the last
+;   remaining non-wire suspect is 0xF8A2D6, which takes its group from
+;   (0x219C) at RUN TIME and therefore cannot be enumerated statically.
+; ⚠ Groups 0x16, 0x17 and 0x18 have no producer this tree has found.
+; Variant: `cp (0xC4),0x02` at 0xF8A303 skips the whole routine on one
+;          model strap.
+; Evidence: the six `ldb E,imm8` at 0xF8A31E/0xF8A33A/0xF8A356/0xF8A372/
+;          0xF8A38E/0xF8A3AA, the six `and (flag),0x7F` at 0xF8A319/0xF8A335/
+;          0xF8A351/0xF8A36D/0xF8A389/0xF8A3A5, the six `cp (0x219A),0x07`
+;          guards, and the six `calr` to 0xF8A3B2 at 0xF8A322/0xF8A33E/
+;          0xF8A35A/0xF8A376/0xF8A392/0xF8A3AE.
+; ---------------------------------------------------------------------
+
+PanelGroupQueue_AppendFlaggedGroups:
 	m_cp_mi8 MB8, 0xc4, 0x02                             ; F8A303  c0 c4 3f 02
 	jr z, 0x70                                           ; F8A307  66 70
 	ldb_d8 a, (0x28ee)                                   ; F8A309  c1 ee 28 21
@@ -19113,7 +19188,30 @@ sub_F8A303:
 	calr 0x01                                            ; F8A3AE  1e 01 00
 .LF8A3B1:
 	ret                                                  ; F8A3B1  0e
-sub_F8A3B2:
+; ---------------------------------------------------------------------
+; PanelGroupQueue_Append -- append [group][value][change mask] to the group
+; queue at RAM 0x2000 and bump the count at (0x219A).
+;
+; Called from: eight sites, all `calr` -- 0xF8A0F2 (the wire drain), 0xF8A2D6
+;          (the run-time-group producer) and the six fixed-group arms of
+;          PanelGroupQueue_AppendFlaggedGroups.
+; Capacity: SEVEN records.  `cp (XIY),0x07` at 0xF8A3C4 refuses when the
+;          count is already 7; the record offset is count*3 (`muls HL,3` at
+;          0xF8A3CE), so the queue occupies 0x2000-0x2014 and the terminator
+;          one byte past the last record.
+; Body:    stores E, W and A in that order through XIX+HL, writes a 0xFF
+;          terminator after them, and increments (0x219A).
+; Read by: PanelGroupQueue_ExpandToEvents, which is the only consumer.
+; ⚠ It also has a variant gate (`cp (0x207A),0xDB` at 0xF8A3B2) and, on one
+;          path, calls prom_b through the thunk 0xF434D4 before storing; what
+;          that call does is not established here.
+; Evidence: `ld XIY,0x0000219A` at 0xF8A3BA, `ld XIX,0x00002000` at 0xF8A3BF,
+;          `cp (XIY),0x07` at 0xF8A3C4, `muls HL,0x0003` at 0xF8A3CE, the
+;          three stores at 0xF8A42D/0xF8A434/0xF8A43B, the 0xFF terminator at
+;          0xF8A442 and `inc (XIY)` at 0xF8A448.
+; ---------------------------------------------------------------------
+
+PanelGroupQueue_Append:
 	m_cp_mi8 MB16, 0x207a, 0xdb                          ; F8A3B2  c1 7a 20 3f db
 	jrl z, 0x90                                          ; F8A3B7  76 90 00
 	ld XIY,0x0000219a                                    ; F8A3BA  45 9a 21 00 00
@@ -19188,6 +19286,45 @@ sub_F8A3B2:
 	incm8 0x01, (xiy)                                    ; F8A448  85 61
 .LF8A44A:
 	ret                                                  ; F8A44A  0e
+; ---------------------------------------------------------------------
+; PanelGroupQueue_ExpandToEvents_DeadCopy -- 0xF8A44B-0xF8A4C5, 123 bytes: a
+; NEVER-RELOCATED, UNREACHABLE second copy of the live list walker at
+; 0xF8A84B, exactly 0x400 bytes lower.
+;
+; ★★ THIS IS DEAD CODE, and three independent measurements say so.
+;   1. ITS TABLE POINTERS POINT AT NOTHING.  The two copies differ in exactly
+;      9 of their first 123 bytes, and all 9 are inside three `imm32` operands
+;      or the selector between them.  The live copy's immediates are
+;      0xF8B446 / 0xF8B4B2 / 0xF8B74A, whose first four words are 4-of-4
+;      in-image pointers.  This copy's are 0xF8ADDD / 0xF8AD71 / 0xF8AF9F,
+;      whose first four words are 0-of-4 in-image pointers -- they land in the
+;      middle of the action HANDLERS, not in a table.
+;   2. ITS BACK EDGE LANDS MID-INSTRUCTION.  The `68 A6` at 0xF8A486 resolves
+;      to 0xF8A42E, the SECOND byte of the 5-byte instruction at 0xF8A42D; no
+;      linear decode starting anywhere in 0xF8A100-0xF8A42D puts a boundary
+;      there (814 starts tried).  The live copy's identical `68 A6` at
+;      0xF8A886 resolves to 0xF8A82E, which IS its loop head.
+;   3. NOTHING NAMES IT.  A scan of both of CPU 1's ROMs for the 24-bit value
+;      0xF8A44B returns ZERO hits; the live entry 0xF8A81D is named by
+;      prom_b's routine directory at 0xF40635.
+;
+; ★ THE TWO RUNS EVEN CARRY LABELS AT THE SAME OFFSETS: sub_F8A49D and
+;   sub_F8A4A1 sit at +0x52 and +0x56, exactly where the live run carries
+;   sub_F8A89D and PanelEvent_ShiftThenRunAction.  They are their dead twins.
+;   ⚠ The twinning stops at +0x7B: 0xF8A4C6 onward is NOT a copy of 0xF8A8C6
+;   onward, so sub_F8A4A1 shares only its first 37 bytes with the live one and
+;   is NOT renamed here.
+;
+; The likely history is a relocated build in which this copy's operands were
+; never re-pointed; nothing here proves that, and it is offered as a guess,
+; not as a finding.
+; Evidence: the nine differing bytes are at 0xF8A44D, 0xF8A44E, 0xF8A451-
+;          0xF8A455, 0xF8A458 and 0xF8A459; the in-image-pointer counts and
+;          the reference scan are reproduced by
+;          notes/prom_a_panel_names_round11.py --stale.
+; ---------------------------------------------------------------------
+
+PanelGroupQueue_ExpandToEvents_DeadCopy:
 	push XIX                                             ; F8A44B  3c
 	ld XIX,0x00f8addd                                    ; F8A44C  44 dd ad f8 00
 	m_bit 2, MD16, 0x7f37                                ; F8A451  f1 37 7f ca
@@ -19698,7 +19835,38 @@ sub_F8A81D:
 	calr 0x04                                            ; F8A81D  1e 04 00
 	calr 0x0aa1                                          ; F8A820  1e a1 0a
 	ret                                                  ; F8A823  0e
-sub_F8A824:
+; ---------------------------------------------------------------------
+; PanelGroupQueue_ExpandToEvents -- turn the group queue at RAM 0x2000 into
+; UI events in the fixed list at RAM 0x2030.  ★★ THIS IS THE ROUTINE THAT
+; READS THE LAYER-2 TABLES.
+;
+; Called from: sub_F8A81D (`calr` at 0xF8A81D), which prom_b's routine
+;          directory publishes as slot 0xF40634.  No 24-bit reference to
+;          0xF8A824 itself exists in either of CPU 1's ROMs.
+; Body:    XIY = 0x2000, XIX = 0x2030.  Per queue record it reads the GROUP
+;          byte, stops on 0xFF or 0xFE, REJECTS a group above 0x18, stores
+;          the group to (0x2251) for the action-table lookup, and indexes
+;          PanelGroupEventLists_Variant1/2 with group*4.  It then walks that
+;          list: [class] and [code] are copied straight into the event,
+;          [mask] selects which bits of the wire byte the record owns, and
+;          [shift] normalises those bits down to positions 0-1.  A record
+;          whose masked CHANGE is zero is discarded (`dec 2,XIX`).
+; Bounds:  `cp XIX,0x0000206C` at 0xF8A86D is the 15-record capacity of the
+;          0x2030 list -- the same ceiling List2030_AppendRegs enforces.  On
+;          exit it writes 0xFF to (XIX), 0xFF to (0x2000) and 0 to (0x219A),
+;          emptying the group queue.
+; Variant: `cp (0xC4),0x01` at 0xF8A851 picks variant 1 or 2; (0xC4) is the
+;          MODEL STRAP that prom_a 0xF82882 loads from PB bit 0.
+; ⚠ A NEVER-RELOCATED COPY of this routine's list walker sits 0x400 lower at
+;          PanelGroupQueue_ExpandToEvents_DeadCopy (0xF8A44B).
+; Evidence: `ld XIY,0x00002000` at 0xF8A824, `ld XIX,0x00002030` at 0xF8A829,
+;          `cp A,0x18` at 0xF8A83B, `ld (0x2251),A` at 0xF8A840,
+;          `ld XIX,0x00F8B446` at 0xF8A84C, `ld XIX,0x00F8B4B2` at 0xF8A857,
+;          `cp (XHL),0xff` at 0xF8A862, `cp XIX,0x0000206C` at 0xF8A86D,
+;          `ld (XIX+),DE` at 0xF8A90B.
+; ---------------------------------------------------------------------
+
+PanelGroupQueue_ExpandToEvents:
 	ld XIY,0x00002000                                    ; F8A824  45 00 20 00 00
 	ld XIX,0x00002030                                    ; F8A829  44 30 20 00 00
 .LF8A82E:
@@ -19753,7 +19921,35 @@ sub_F8A89D:
 	nop                                                  ; F8A89E  00
 	nop                                                  ; F8A89F  00
 	ret                                                  ; F8A8A0  0e
-sub_F8A8A1:
+; ---------------------------------------------------------------------
+; PanelEvent_ShiftThenRunAction -- normalise one event-list record's two bits,
+; then give the per-group ACTION list a chance to intercept before the value
+; pair is committed.
+;
+; Called from: PanelGroupQueue_ExpandToEvents, `calr` at 0xF8A87F, once per
+;          surviving list record.
+; Body, in order:
+;   1. read the record's SHIFT byte; a zero shift skips to the action lookup;
+;   2. `bit 4` picks direction and `and A,0x07` the count, then D (the masked
+;      change) and E (the masked value) are shifted together;
+;   3. if D is now zero the event is DROPPED -- `dec 2,XIX` at 0xF8A8C3 backs
+;      the event pointer up over the class/code pair already written;
+;   4. otherwise index PanelGroupActionTable_Variant1/2 by (0x2251), walk its
+;      6-byte records for a matching (mask, group) pair, and `jp (XBC)` to the
+;      handler if one matches;
+;   5. with no match, fall through to 0xF8A90B, which commits `ld (XIX+),DE`.
+; ★ A HANDLER MAY REWRITE THE CODE the walker already stored -- `add
+;   (XIX-1),0x11` at 0xF8AE7E/0xF8AEF1 and `ld (XIX-1),0x19` at
+;   0xF8AE8A/0xF8AEFD -- or drop the event by ending at 0xF8A90F.
+; ⚠ WHICH BRANCH RUNS is a run-time property; nothing here establishes it.
+; Evidence: `ld A,(XHL-1)` at 0xF8A8A1, `bit 0x04,A` at 0xF8A8AA, `and A,0x07`
+;          at 0xF8A8AF and 0xF8A8B8, `dec 2,XIX` at 0xF8A8C3,
+;          `ld L,(0x2251)` at 0xF8A8DC, `ld XIY,0x00F8B74A` at 0xF8A8CC,
+;          `cp C,0xff` at 0xF8A8F1, `cp WA,BC` at 0xF8A8F6, `jp (XBC)` at
+;          0xF8A909.
+; ---------------------------------------------------------------------
+
+PanelEvent_ShiftThenRunAction:
 	ld a, (xhl-1)                                        ; F8A8A1  8b ff 21
 	inc 1,XHL                                            ; F8A8A4  eb 61
 	cps a, 0x00                                          ; F8A8A6  c9 d8
@@ -19811,7 +20007,19 @@ sub_F8A90B:
 sub_F8A90F:
 	dec 2,XIX                                            ; F8A90F  ec 6a
 	jr -5                                                ; F8A911  68 fb
-sub_F8A913:
+; ---------------------------------------------------------------------
+; LowestSetBitIndex1Based -- E := 1-based position of E's lowest set bit.
+;
+; E = 0 returns 0 unchanged (`cps E,0x00` / `jr z` at 0xF8A913).  Otherwise C is
+; counted up from 0 while E is shifted right until the carry comes out set,
+; so bit 0 gives 1 and bit 7 gives 8; C is copied back into E.  C is saved
+; and restored, so the only register the caller sees changed is E.
+; ★ IT IS THE INVERSE OF IndexToBitMask8, 20 bytes above it.
+; Evidence: `cps E,0x00` at 0xF8A913, `inc 1,C` at 0xF8A91B, `srl E,1` at
+;          0xF8A91D, `jr nc,-7` at 0xF8A920, `ld E,C` at 0xF8A922.
+; ---------------------------------------------------------------------
+
+LowestSetBitIndex1Based:
 	cps e, 0x00                                          ; F8A913  cd d8
 	jr z, 0x0f                                           ; F8A915  66 0f
 	push C                                               ; F8A917  cb 04
@@ -19824,7 +20032,20 @@ sub_F8A913:
 	pop C                                                ; F8A924  cb 05
 .LF8A926:
 	ret                                                  ; F8A926  0e
-sub_F8A927:
+; ---------------------------------------------------------------------
+; IndexToBitMask8 -- E (0..8) -> E = one-hot 8-bit mask, by table lookup.
+;
+; `cp E,0x08` / `jr ule` at 0xF8A928 lets 0..8 through and forces anything
+; larger to 0, which selects entry 0 -- the ZERO mask, not the top entry.
+; The table is BitMask8ByIndex immediately below.
+; ★ It is the inverse of LowestSetBitIndex1Based, and the two sit 20 bytes
+;   apart, which is what makes the pairing more than a coincidence of shape.
+; Evidence: `cp E,0x08` at 0xF8A928, `xor E,E` at 0xF8A92D,
+;          `ld XIX,0x00F8A93B` at 0xF8A92F, `ld E,(XIX+E)` at 0xF8A934 --
+;          the result lands in E, the same register the index arrived in.
+; ---------------------------------------------------------------------
+
+IndexToBitMask8:
 	push XIX                                             ; F8A927  3c
 	cp E,0x08                                            ; F8A928  cd cf 08
 	jr ule, 0x02                                         ; F8A92B  63 02
@@ -19834,156 +20055,91 @@ sub_F8A927:
 	mx8_ld_rm MXB, ra_IX, rb_E, r5                       ; F8A934  c3 03 f0 e8 25
 	pop XIX                                              ; F8A939  5c
 	ret                                                  ; F8A93A  0e
-	nop                                                  ; F8A93B  00
-	normal                                               ; F8A93C  01
-	push SR                                              ; F8A93D  02
-	max                                                  ; F8A93E  04
-	ldio 0x10, 0x20                                      ; F8A93F  08 10 20
-	ld XWA,0xcfcd3c80                                    ; F8A942  40 80 3c cd cf
-	rcf                                                  ; F8A947  10
-	jr ule, 0x02                                         ; F8A948  63 02
-	xor E,E                                              ; F8A94A  cd d5
+; ---------------------------------------------------------------------
+; THE THREE BIT-MASK LOOKUP SIBLINGS -- 0xF8A93B-0xF8AA17.
+;
+; ⚠ THIS RANGE WAS MIS-DECODED UNTIL ROUND 11.  Three DATA tables were
+; emitted as instructions, and because a table byte pair like `40 80`
+; starts a 5-byte `ld XWA,imm32`, the decode ran PAST the end of each
+; table and swallowed the entry of the routine that follows it.  Two
+; routine entry points -- 0xF8A944 and 0xF8A97D -- were inside a bogus
+; operand and had no label.  The bytes were always right; the gate
+; cannot see a wrong decode, which is exactly why this was invisible.
+;
+; Each routine converts an INDEX to a ONE-HOT MASK by table lookup:
+;   IndexToBitMask8   `cp E,0x08` clamps,  9 x u8  -> E
+;   IndexToBitMask16  `cp E,0x10` clamps, 17 x u16 -> DE
+;   IndexToBitMask32  `cp E,0x20` clamps, 33 x u32 -> XDE
+; and the result always lands in the E/DE/XDE register the index
+; arrived in (`r5`, `r2`, `r2` at 0xF8A934, 0xF8A954 and 0xF8A98D).
+; and index 0 maps to 0 in all three, so entry i is 1 << (i-1).  An
+; out-of-range index is forced to 0 (`xor E,E`), i.e. to the zero mask,
+; not clamped to the top entry.
+; ★ LowestSetBitIndex1Based (0xF8A913) is the INVERSE of the 8-bit one:
+;   it returns the 1-based position of the lowest set bit, which is the
+;   index this table turns back into a mask.
+; Evidence: the clamp `cp E,0x08` at 0xF8A928, 0xF8A945 and 0xF8A97E; the
+;          table loads `ld XIX,imm32` at 0xF8A92F, 0xF8A94F and 0xF8A988;
+;          the last entry of each table is 0x80, 0x8000 and 0x80000000.
+; ---------------------------------------------------------------------
+
+BitMask8ByIndex:
+	.byte 0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80 ; F8A93B  [ 0.. 8]  index -> 1 << (index-1), 0 for 0
+
+; ---------------------------------------------------------------------
+; IndexToBitMask16 -- E (0..16) -> DE = one-hot 16-bit mask.
+; Entry was HIDDEN inside a mis-decoded table until round 11.
+; Evidence: `push XIX` at 0xF8A944, `cp E,0x10` at 0xF8A945, `xor E,E` at
+;          0xF8A94A, `sla E,1` at 0xF8A94C, `ld XIX,0x00F8A95B` at 0xF8A94F.
+; ---------------------------------------------------------------------
+
+IndexToBitMask16:
+	push XIX                                      ; F8A944  3c
+	cp E,0x10                                     ; F8A945  cd cf 10
+	jr ule, .LF8A94C                              ; F8A948  63 02
+	xor E,E                                       ; F8A94A  cd d5
 .LF8A94C:
-	sla e, 0x01                                          ; F8A94C  cd ec 01
-	ld XIX,0x00f8a95b                                    ; F8A94F  44 5b a9 f8 00
-sub_F8A954:
-	mx8_ld_rm MXW, ra_IX, rb_E, r2                       ; F8A954  d3 03 f0 e8 22
-	pop XIX                                              ; F8A959  5c
-	ret                                                  ; F8A95A  0e
-	nop                                                  ; F8A95B  00
-	nop                                                  ; F8A95C  00
-	normal                                               ; F8A95D  01
-	nop                                                  ; F8A95E  00
-	push SR                                              ; F8A95F  02
-	nop                                                  ; F8A960  00
-	max                                                  ; F8A961  04
-	nop                                                  ; F8A962  00
-	ldio 0x00, 0x10                                      ; F8A963  08 00 10
-	nop                                                  ; F8A966  00
-	ldb w, 0x00                                          ; F8A967  20 00
-	ld XWA,0x00008000                                    ; F8A969  40 00 80 00 00
-	normal                                               ; F8A96E  01
-	nop                                                  ; F8A96F  00
-	push SR                                              ; F8A970  02
-	nop                                                  ; F8A971  00
-	max                                                  ; F8A972  04
-	nop                                                  ; F8A973  00
-	ldio 0x00, 0x10                                      ; F8A974  08 00 10
-	nop                                                  ; F8A977  00
-	ldb w, 0x00                                          ; F8A978  20 00
-	ld XWA,0xcd3c8000                                    ; F8A97A  40 00 80 3c cd
-	.byte 0xcf, 0x20, 0x63                               ; F8A97F  cf 20 63   andcf 0x63,L
-	push SR                                              ; F8A982  02
-	xor E,E                                              ; F8A983  cd d5
-	sla e, 0x02                                          ; F8A985  cd ec 02
-	ld XIX,0x00f8a994                                    ; F8A988  44 94 a9 f8 00
-	mx8_ld_rm MXL, ra_IX, rb_E, r2                       ; F8A98D  e3 03 f0 e8 22
-	pop XIX                                              ; F8A992  5c
-	ret                                                  ; F8A993  0e
-	nop                                                  ; F8A994  00
-	nop                                                  ; F8A995  00
-	nop                                                  ; F8A996  00
-	nop                                                  ; F8A997  00
-	normal                                               ; F8A998  01
-	nop                                                  ; F8A999  00
-	nop                                                  ; F8A99A  00
-	nop                                                  ; F8A99B  00
-	push SR                                              ; F8A99C  02
-	nop                                                  ; F8A99D  00
-	nop                                                  ; F8A99E  00
-	nop                                                  ; F8A99F  00
-	max                                                  ; F8A9A0  04
-	nop                                                  ; F8A9A1  00
-	nop                                                  ; F8A9A2  00
-	nop                                                  ; F8A9A3  00
-	ldio 0x00, 0x00                                      ; F8A9A4  08 00 00
-	nop                                                  ; F8A9A7  00
-	rcf                                                  ; F8A9A8  10
-	nop                                                  ; F8A9A9  00
-	nop                                                  ; F8A9AA  00
-	nop                                                  ; F8A9AB  00
-	ldb w, 0x00                                          ; F8A9AC  20 00
-	nop                                                  ; F8A9AE  00
-	nop                                                  ; F8A9AF  00
-	ld XWA,0x80000000                                    ; F8A9B0  40 00 00 00 80
-	nop                                                  ; F8A9B5  00
-	nop                                                  ; F8A9B6  00
-	nop                                                  ; F8A9B7  00
-	nop                                                  ; F8A9B8  00
-	normal                                               ; F8A9B9  01
-	nop                                                  ; F8A9BA  00
-	nop                                                  ; F8A9BB  00
-	nop                                                  ; F8A9BC  00
-	push SR                                              ; F8A9BD  02
-	nop                                                  ; F8A9BE  00
-	nop                                                  ; F8A9BF  00
-	nop                                                  ; F8A9C0  00
-	max                                                  ; F8A9C1  04
-	nop                                                  ; F8A9C2  00
-	nop                                                  ; F8A9C3  00
-	nop                                                  ; F8A9C4  00
-	ldio 0x00, 0x00                                      ; F8A9C5  08 00 00
-	nop                                                  ; F8A9C8  00
-	rcf                                                  ; F8A9C9  10
-	nop                                                  ; F8A9CA  00
-	nop                                                  ; F8A9CB  00
-	nop                                                  ; F8A9CC  00
-	ldb w, 0x00                                          ; F8A9CD  20 00
-	nop                                                  ; F8A9CF  00
-	nop                                                  ; F8A9D0  00
-	ld XWA,0x80000000                                    ; F8A9D1  40 00 00 00 80
-	nop                                                  ; F8A9D6  00
-	nop                                                  ; F8A9D7  00
-	nop                                                  ; F8A9D8  00
-	nop                                                  ; F8A9D9  00
-	normal                                               ; F8A9DA  01
-	nop                                                  ; F8A9DB  00
-	nop                                                  ; F8A9DC  00
-	nop                                                  ; F8A9DD  00
-	push SR                                              ; F8A9DE  02
-	nop                                                  ; F8A9DF  00
-	nop                                                  ; F8A9E0  00
-	nop                                                  ; F8A9E1  00
-	max                                                  ; F8A9E2  04
-	nop                                                  ; F8A9E3  00
-	nop                                                  ; F8A9E4  00
-	nop                                                  ; F8A9E5  00
-	ldio 0x00, 0x00                                      ; F8A9E6  08 00 00
-	nop                                                  ; F8A9E9  00
-	rcf                                                  ; F8A9EA  10
-	nop                                                  ; F8A9EB  00
-	nop                                                  ; F8A9EC  00
-	nop                                                  ; F8A9ED  00
-	ldb w, 0x00                                          ; F8A9EE  20 00
-	nop                                                  ; F8A9F0  00
-	nop                                                  ; F8A9F1  00
-	ld XWA,0x80000000                                    ; F8A9F2  40 00 00 00 80
-	nop                                                  ; F8A9F7  00
-	nop                                                  ; F8A9F8  00
-	nop                                                  ; F8A9F9  00
-	nop                                                  ; F8A9FA  00
-	normal                                               ; F8A9FB  01
-	nop                                                  ; F8A9FC  00
-	nop                                                  ; F8A9FD  00
-	nop                                                  ; F8A9FE  00
-	push SR                                              ; F8A9FF  02
-	nop                                                  ; F8AA00  00
-	nop                                                  ; F8AA01  00
-	nop                                                  ; F8AA02  00
-	max                                                  ; F8AA03  04
-	nop                                                  ; F8AA04  00
-	nop                                                  ; F8AA05  00
-	nop                                                  ; F8AA06  00
-	ldio 0x00, 0x00                                      ; F8AA07  08 00 00
-	nop                                                  ; F8AA0A  00
-	rcf                                                  ; F8AA0B  10
-	nop                                                  ; F8AA0C  00
-	nop                                                  ; F8AA0D  00
-	nop                                                  ; F8AA0E  00
-	ldb w, 0x00                                          ; F8AA0F  20 00
-	nop                                                  ; F8AA11  00
-	nop                                                  ; F8AA12  00
-	ld XWA,0x80000000                                    ; F8AA13  40 00 00 00 80
+	sla e, 0x01                                   ; F8A94C  cd ec 01
+	ld XIX,0x00f8a95b                             ; F8A94F  44 5b a9 f8 00
+IndexToBitMask16__F8A954:
+	mx8_ld_rm MXW, ra_IX, rb_E, r2                ; F8A954  d3 03 f0 e8 22
+	pop XIX                                       ; F8A959  5c
+	ret                                           ; F8A95A  0e
+
+BitMask16ByIndex:
+	.short 0x0000, 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040 ; F8A95B  [ 0.. 7]  index -> 1 << (index-1), 0 for 0
+	.short 0x0080, 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000 ; F8A96B  [ 8..15]
+	.short 0x8000                                              ; F8A97B  [16..16]
+
+; ---------------------------------------------------------------------
+; IndexToBitMask32 -- E (0..32) -> XDE = one-hot 32-bit mask.
+; Entry was HIDDEN inside a mis-decoded table until round 11.
+; Evidence: `push XIX` at 0xF8A97D, `cp E,0x20` at 0xF8A97E, `xor E,E` at
+;          0xF8A983, `sla E,2` at 0xF8A985, `ld XIX,0x00F8A994` at 0xF8A988.
+; ---------------------------------------------------------------------
+
+IndexToBitMask32:
+	push XIX                                      ; F8A97D  3c
+	cp E,0x20                                     ; F8A97E  cd cf 20
+	jr ule, .LF8A985                              ; F8A981  63 02
+	xor E,E                                       ; F8A983  cd d5
+.LF8A985:
+	sla e, 0x02                                   ; F8A985  cd ec 02
+	ld XIX,0x00f8a994                             ; F8A988  44 94 a9 f8 00
+	mx8_ld_rm MXL, ra_IX, rb_E, r2                ; F8A98D  e3 03 f0 e8 22
+	pop XIX                                       ; F8A992  5c
+	ret                                           ; F8A993  0e
+
+BitMask32ByIndex:
+	.long 0x00000000, 0x00000001, 0x00000002, 0x00000004       ; F8A994  [ 0.. 3]  index -> 1 << (index-1), 0 for 0
+	.long 0x00000008, 0x00000010, 0x00000020, 0x00000040       ; F8A9A4  [ 4.. 7]
+	.long 0x00000080, 0x00000100, 0x00000200, 0x00000400       ; F8A9B4  [ 8..11]
+	.long 0x00000800, 0x00001000, 0x00002000, 0x00004000       ; F8A9C4  [12..15]
+	.long 0x00008000, 0x00010000, 0x00020000, 0x00040000       ; F8A9D4  [16..19]
+	.long 0x00080000, 0x00100000, 0x00200000, 0x00400000       ; F8A9E4  [20..23]
+	.long 0x00800000, 0x01000000, 0x02000000, 0x04000000       ; F8A9F4  [24..27]
+	.long 0x08000000, 0x10000000, 0x20000000, 0x40000000       ; F8AA04  [28..31]
+	.long 0x80000000                                           ; F8AA14  [32..32]
 	cps e, 0x00                                          ; F8AA18  cd d8
 	jr z, 0x04                                           ; F8AA1A  66 04
 	jp sub_F8A90B                                        ; F8AA1C  1b 0b a9 f8
@@ -20980,175 +21136,832 @@ sub_F8B307:
 .LF8B324:
 	ret                                                  ; F8B324  0e
 ; ---------------------------------------------------------------------
-; PanelTables_F8B325 -- 2,191 bytes of tables.  PARTLY decoded.
+; THE PANEL LAYER-2 TABLES -- 0xF8B325-0xF8BBB3, 2,191 bytes, NINE objects.
 ;
-; It is DATA, not code, and the test is a decode: a linear disassembly
-; from 0xF8B325 produces 176 bytes llvm-mc cannot spell in 2 KiB, against
-; 19 in the 4.6 KiB of code around it, and the run at 0xF8B812 -- which a
-; pointer table below points AT -- disassembles as `nop / normal /
-; ld XDE,0x0000f8ab`, which is what a 6-byte record looks like when it is
-; decoded as instructions.
+; This block was one undifferentiated `.byte` region called
+; PanelTables_F8B325 until round 11.  It is the table half of the panel
+; event pipeline, and the pipeline is now readable end to end:
 ;
-; WHAT IS FRAMED, each by an `ld XIX/XIY,imm32` in the code above:
-;   0xF8B325  33 bytes  0x00..0x1F then 0xFF -- an identity map with a
-;             terminator.  Loaded at 0xF8B2EE and 0xF8B30F.
-;   0xF8B346  32 x LE32 RAM pointers, 0x000076A2 step 0x40 -- the SAME
-;             RAM records RecordPtrs_RAM76A2 (0xFEB330) points into.
-;   0xF8B3C6  32 x LE32, the same records at +0x20.  Loaded at 0xF8AA31.
-;   0xF8B446  27 x LE32 into this module.  Loaded at 0xF8A84C; the
-;             sibling 0xF8B4B2 is loaded at 0xF8A857, 108 bytes later.
-;   0xF8B51E  4-byte records terminated by 0xFF -- lists, not an array.
-;   0xF8B74A  25 x LE32 list heads.  Loaded at 0xF8A8CC; the sibling
-;             0xF8B7AE is loaded at 0xF8A8D7, 100 bytes later.
-;   0xF8B812  6-byte records, `<u16> <LE32>`, terminated by 0xFF 0xFF --
-;             the lists the 0xF8B74A table points at.
+;   CP1 panel MCU  --3 bytes-->  prom_b SC1_RxOp0_ThreeByte (0xF5B0D5)
+;      queues [wire][new value][old XOR new] at RAM 0x2B40
+;   PanelWireQueue_DrainToGroupQueue (0xF8A088) drains it, maps the wire
+;      through PanelWireGroupMap_Variant1/2 to a GROUP id, and calls
+;   PanelGroupQueue_Append (0xF8A3B2), which appends
+;      [group][value][change mask] to a second queue at RAM 0x2000
+;      (count in (0x219A), hard limit 7 records)
+;   PanelGroupQueue_ExpandToEvents (0xF8A824) walks that queue and, PER
+;      GROUP, fetches ONE LIST from the tables below and writes UI events
+;      to the fixed list at RAM 0x2030
+;   UiEvent_RouteByCode (0xF8659B) then dispatches on the event's code.
 ;
-; ⚠ WHAT IS NOT: what any of it MEANS, and where each sub-table ends.
-;   The boundaries above come from the loads and from the 0xFF sentinels,
-;   not from a bound in a reader, so the block is emitted as ONE `.byte`
-;   region rather than as seven objects with invented extents.  Splitting
-;   it is the next pass's job and it needs the readers traced, not the
-;   bytes stared at.
+; ★ WHY THE BOUNDARIES ARE NOT GUESSES.  Six of the nine objects are the
+;   operand of an `ld XIX/XIY,imm32` in the code above -- 0xF8B2EE and
+;   0xF8B30F (accept list), 0xF8AA31, 0xF8A84C, 0xF8A857, 0xF8A8CC,
+;   0xF8A8D7.  The other three are pinned by ABUTMENT: each pointer
+;   table's length is exactly (next load - this load), and each pool runs
+;   from its lowest list to the byte before the next loaded table.  The
+;   nine tile the block with no byte left over, and
+;   notes/prom_a_panel_names_round11.py asserts that tiling on every run.
+;
+; ★ RECORD SHAPES, both pinned by GEOMETRY, not by a stride that looked
+;   plausible: an event-list record is 4 bytes and all 39 gaps between
+;   consecutive lists in the event pool are 1 mod 4; an action-list record
+;   is 6 bytes; both pools end on the byte before the next object.
+;
+; ⚠ WHAT IS STILL NOT KNOWN, stated rather than smoothed over:
+;   * NOBODY FOUND PRODUCES EVENT CODE 0x0E, though UiEvent_RouteByCode
+;     has an 0x0E arm.  The six fixed-group producers in
+;     PanelGroupQueue_AppendFlaggedGroups emit code 0x00 only, and the
+;     seventh producer (0xF8A2D6) takes its group from RAM (0x219C) at
+;     run time, so no static read can enumerate it.
+;   * THREE PAIRS OF VARIANT-1 LISTS ARE BYTE-IDENTICAL -- groups
+;     0x01/0x02, 0x03/0x04 and 0x05/0x06 -- so identical (class, code,
+;     position) triples arrive from two different wires.  NO ROUTINE IN
+;     THIS MODULE IS NAMED FROM A COLLIDING CODE.
+;   * THE GROUP NUMBERING AND THE PHYSICAL SEGMENT NUMBERING DISAGREE FOR
+;     THE DIAL.  notes/wave7_panel_button_codes.py puts the -1/+1 pair at
+;     matrix segment 3; the table below puts code 0x0D (proven to be that
+;     pair by the sign argument in notes/wave7_panel_event_index.py) at
+;     GROUP 0x0A, and group == segment for wires 0xC0-0xCA.  One of the
+;     two maps is wrong.  Neither has been edited to hide it.
+;   * WHAT (0x2250) HOLDS.  Two objects here are named for that cell
+;     because it is the only thing established about them.
+;
+; Evidence: the seven framing loads listed above, `cp A,0x18` at 0xF8A83B,
+;          `cp (XHL),0xff` at 0xF8A862, `ld WA,(XHL+)`/`ld (XIX+),WA` at
+;          0xF8A867/0xF8A86A, `ld W,(XHL)` + `and D,W`/`and E,W` at
+;          0xF8A877-0xF8A87D, `ld (XIX+),DE` at 0xF8A90B.
 ; ---------------------------------------------------------------------
 
-PanelTables_F8B325:
-	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f  ; F8B325
-	.byte 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f  ; F8B335
-	.byte 0xff, 0xa2, 0x76, 0x00, 0x00, 0xe2, 0x76, 0x00, 0x00, 0x22, 0x77, 0x00, 0x00, 0x62, 0x77, 0x00  ; F8B345
-	.byte 0x00, 0xa2, 0x77, 0x00, 0x00, 0xe2, 0x77, 0x00, 0x00, 0x22, 0x78, 0x00, 0x00, 0x62, 0x78, 0x00  ; F8B355
-	.byte 0x00, 0xe2, 0x78, 0x00, 0x00, 0x22, 0x79, 0x00, 0x00, 0x62, 0x79, 0x00, 0x00, 0xa2, 0x79, 0x00  ; F8B365
-	.byte 0x00, 0xe2, 0x79, 0x00, 0x00, 0x22, 0x7a, 0x00, 0x00, 0x62, 0x7a, 0x00, 0x00, 0xa2, 0x7a, 0x00  ; F8B375
-	.byte 0x00, 0xe2, 0x7a, 0x00, 0x00, 0x22, 0x7b, 0x00, 0x00, 0x62, 0x7b, 0x00, 0x00, 0xa2, 0x7b, 0x00  ; F8B385
-	.byte 0x00, 0xe2, 0x7b, 0x00, 0x00, 0x22, 0x7c, 0x00, 0x00, 0x62, 0x7c, 0x00, 0x00, 0xa2, 0x7c, 0x00  ; F8B395
-	.byte 0x00, 0xe2, 0x7c, 0x00, 0x00, 0x22, 0x7d, 0x00, 0x00, 0x62, 0x7d, 0x00, 0x00, 0xa2, 0x7d, 0x00  ; F8B3A5
-	.byte 0x00, 0xe2, 0x7d, 0x00, 0x00, 0x22, 0x7e, 0x00, 0x00, 0x62, 0x7e, 0x00, 0x00, 0xa2, 0x7e, 0x00  ; F8B3B5
-	.byte 0x00, 0xc2, 0x76, 0x00, 0x00, 0x02, 0x77, 0x00, 0x00, 0x42, 0x77, 0x00, 0x00, 0x82, 0x77, 0x00  ; F8B3C5
-	.byte 0x00, 0xc2, 0x77, 0x00, 0x00, 0x02, 0x78, 0x00, 0x00, 0x42, 0x78, 0x00, 0x00, 0x82, 0x78, 0x00  ; F8B3D5
-	.byte 0x00, 0x02, 0x79, 0x00, 0x00, 0x42, 0x79, 0x00, 0x00, 0x82, 0x79, 0x00, 0x00, 0xc2, 0x79, 0x00  ; F8B3E5
-	.byte 0x00, 0x02, 0x7a, 0x00, 0x00, 0x42, 0x7a, 0x00, 0x00, 0x82, 0x7a, 0x00, 0x00, 0xc2, 0x7a, 0x00  ; F8B3F5
-	.byte 0x00, 0x02, 0x7b, 0x00, 0x00, 0x42, 0x7b, 0x00, 0x00, 0x82, 0x7b, 0x00, 0x00, 0xc2, 0x7b, 0x00  ; F8B405
-	.byte 0x00, 0x02, 0x7c, 0x00, 0x00, 0x42, 0x7c, 0x00, 0x00, 0x82, 0x7c, 0x00, 0x00, 0xc2, 0x7c, 0x00  ; F8B415
-	.byte 0x00, 0x02, 0x7d, 0x00, 0x00, 0x42, 0x7d, 0x00, 0x00, 0x82, 0x7d, 0x00, 0x00, 0xc2, 0x7d, 0x00  ; F8B425
-	.byte 0x00, 0x02, 0x7e, 0x00, 0x00, 0x42, 0x7e, 0x00, 0x00, 0x82, 0x7e, 0x00, 0x00, 0xc2, 0x7e, 0x00  ; F8B435
-	.byte 0x00, 0x1e, 0xb5, 0xf8, 0x00, 0x37, 0xb5, 0xf8, 0x00, 0x3c, 0xb5, 0xf8, 0x00, 0x41, 0xb5, 0xf8  ; F8B445
-	.byte 0x00, 0x62, 0xb5, 0xf8, 0x00, 0x83, 0xb5, 0xf8, 0x00, 0xa4, 0xb5, 0xf8, 0x00, 0xc5, 0xb5, 0xf8  ; F8B455
-	.byte 0x00, 0xe6, 0xb5, 0xf8, 0x00, 0xef, 0xb5, 0xf8, 0x00, 0x10, 0xb6, 0xf8, 0x00, 0x31, 0xb6, 0xf8  ; F8B465
-	.byte 0x00, 0x36, 0xb6, 0xf8, 0x00, 0x3b, 0xb6, 0xf8, 0x00, 0x40, 0xb6, 0xf8, 0x00, 0x45, 0xb6, 0xf8  ; F8B475
-	.byte 0x00, 0x4a, 0xb6, 0xf8, 0x00, 0x4f, 0xb6, 0xf8, 0x00, 0x54, 0xb6, 0xf8, 0x00, 0x59, 0xb6, 0xf8  ; F8B485
-	.byte 0x00, 0x5e, 0xb6, 0xf8, 0x00, 0x63, 0xb6, 0xf8, 0x00, 0x68, 0xb6, 0xf8, 0x00, 0x6d, 0xb6, 0xf8  ; F8B495
-	.byte 0x00, 0x72, 0xb6, 0xf8, 0x00, 0x49, 0xb7, 0xf8, 0x00, 0x49, 0xb7, 0xf8, 0x00, 0x73, 0xb6, 0xf8  ; F8B4A5
-	.byte 0x00, 0x8c, 0xb6, 0xf8, 0x00, 0x91, 0xb6, 0xf8, 0x00, 0xa2, 0xb6, 0xf8, 0x00, 0xc3, 0xb6, 0xf8  ; F8B4B5
-	.byte 0x00, 0xe4, 0xb6, 0xf8, 0x00, 0x05, 0xb7, 0xf8, 0x00, 0x16, 0xb7, 0xf8, 0x00, 0x1f, 0xb7, 0xf8  ; F8B4C5
-	.byte 0x00, 0x48, 0xb7, 0xf8, 0x00, 0x48, 0xb7, 0xf8, 0x00, 0x48, 0xb7, 0xf8, 0x00, 0x48, 0xb7, 0xf8  ; F8B4D5
-	.byte 0x00, 0x48, 0xb7, 0xf8, 0x00, 0x34, 0xb7, 0xf8, 0x00, 0x39, 0xb7, 0xf8, 0x00, 0x48, 0xb7, 0xf8  ; F8B4E5
-	.byte 0x00, 0x48, 0xb7, 0xf8, 0x00, 0x48, 0xb7, 0xf8, 0x00, 0x48, 0xb7, 0xf8, 0x00, 0x3e, 0xb7, 0xf8  ; F8B4F5
-	.byte 0x00, 0x43, 0xb7, 0xf8, 0x00, 0x48, 0xb7, 0xf8, 0x00, 0x48, 0xb7, 0xf8, 0x00, 0x48, 0xb7, 0xf8  ; F8B505
-	.byte 0x00, 0x49, 0xb7, 0xf8, 0x00, 0x49, 0xb7, 0xf8, 0x00, 0xa9, 0x20, 0x00, 0x01, 0xa9, 0x20, 0x00  ; F8B515
-	.byte 0x02, 0xa9, 0x20, 0x00, 0x04, 0xa9, 0x20, 0x00, 0x08, 0xa8, 0x07, 0x04, 0x70, 0xa8, 0x07, 0x00  ; F8B525
-	.byte 0x80, 0xff, 0xa8, 0x08, 0x00, 0xff, 0xff, 0xa8, 0x08, 0x00, 0xff, 0xff, 0xa9, 0x04, 0x00, 0x01  ; F8B535
-	.byte 0xa9, 0x04, 0x00, 0x02, 0xa9, 0x05, 0x02, 0x04, 0xa9, 0x05, 0x02, 0x08, 0xa9, 0x06, 0x04, 0x10  ; F8B545
-	.byte 0xa9, 0x06, 0x04, 0x20, 0xa9, 0x07, 0x06, 0x40, 0xa9, 0x07, 0x06, 0x80, 0xff, 0xa9, 0x04, 0x00  ; F8B555
-	.byte 0x01, 0xa9, 0x04, 0x00, 0x02, 0xa9, 0x05, 0x02, 0x04, 0xa9, 0x05, 0x02, 0x08, 0xa9, 0x06, 0x04  ; F8B565
-	.byte 0x10, 0xa9, 0x06, 0x04, 0x20, 0xa9, 0x07, 0x06, 0x40, 0xa9, 0x07, 0x06, 0x80, 0xff, 0xa9, 0x00  ; F8B575
-	.byte 0x00, 0x01, 0xa9, 0x00, 0x00, 0x02, 0xa9, 0x01, 0x02, 0x04, 0xa9, 0x01, 0x02, 0x08, 0xa9, 0x02  ; F8B585
-	.byte 0x04, 0x10, 0xa9, 0x02, 0x04, 0x20, 0xa9, 0x03, 0x06, 0x40, 0xa9, 0x03, 0x06, 0x80, 0xff, 0xa9  ; F8B595
-	.byte 0x00, 0x00, 0x01, 0xa9, 0x00, 0x00, 0x02, 0xa9, 0x01, 0x02, 0x04, 0xa9, 0x01, 0x02, 0x08, 0xa9  ; F8B5A5
-	.byte 0x02, 0x04, 0x10, 0xa9, 0x02, 0x04, 0x20, 0xa9, 0x03, 0x06, 0x40, 0xa9, 0x03, 0x06, 0x80, 0xff  ; F8B5B5
-	.byte 0xa9, 0x20, 0x00, 0x01, 0xa9, 0x20, 0x00, 0x02, 0xa9, 0x20, 0x00, 0x04, 0xa9, 0x20, 0x00, 0x08  ; F8B5C5
-	.byte 0xa9, 0x20, 0x00, 0x10, 0xa9, 0x20, 0x00, 0x20, 0xa8, 0x11, 0x05, 0x40, 0xa8, 0x11, 0x07, 0x80  ; F8B5D5
-	.byte 0xff, 0xb8, 0x00, 0x00, 0x40, 0x20, 0x19, 0x00, 0x3f, 0xff, 0xa9, 0x08, 0x00, 0x01, 0xa9, 0x09  ; F8B5E5
-	.byte 0x01, 0x02, 0xa9, 0x0a, 0x02, 0x04, 0xa9, 0x0b, 0x03, 0x08, 0xa9, 0x0c, 0x04, 0x10, 0xa9, 0x1e  ; F8B5F5
-	.byte 0x04, 0x20, 0xa9, 0x10, 0x06, 0x40, 0xa9, 0x10, 0x06, 0x80, 0xff, 0xa9, 0x08, 0x11, 0x01, 0xa9  ; F8B605
-	.byte 0x09, 0x00, 0x02, 0xa9, 0x0a, 0x01, 0x04, 0xa9, 0x0b, 0x02, 0x08, 0xa9, 0x0c, 0x03, 0x10, 0xa9  ; F8B615
-	.byte 0x0d, 0x05, 0x20, 0xa9, 0x0d, 0x05, 0x40, 0xa9, 0x0f, 0x06, 0x80, 0xff, 0xb2, 0x00, 0x00, 0x7f  ; F8B625
-	.byte 0xff, 0xb1, 0x00, 0x00, 0xff, 0xff, 0xbc, 0x00, 0x00, 0x7f, 0xff, 0xb0, 0x00, 0x00, 0x7f, 0xff  ; F8B635
-	.byte 0xa9, 0x21, 0x00, 0xff, 0xff, 0xba, 0x00, 0x00, 0x7f, 0xff, 0xbb, 0x00, 0x00, 0x7f, 0xff, 0xb4  ; F8B645
-	.byte 0x00, 0x00, 0x7f, 0xff, 0xbd, 0x00, 0x00, 0x7f, 0xff, 0xb8, 0x00, 0x00, 0x7f, 0xff, 0xb9, 0x00  ; F8B655
-	.byte 0x00, 0x7f, 0xff, 0xa9, 0x32, 0x00, 0x01, 0xff, 0xa9, 0x33, 0x00, 0x01, 0xff, 0xff, 0xa9, 0x20  ; F8B665
-	.byte 0x00, 0x01, 0xa9, 0x20, 0x00, 0x02, 0xa9, 0x20, 0x00, 0x04, 0xa9, 0x20, 0x00, 0x08, 0xa8, 0x07  ; F8B675
-	.byte 0x04, 0x70, 0xa8, 0x07, 0x00, 0x80, 0xff, 0xa9, 0x1b, 0x00, 0xff, 0xff, 0xa9, 0x1b, 0x00, 0x0f  ; F8B685
-	.byte 0xa9, 0x10, 0x04, 0x10, 0xa9, 0x10, 0x04, 0x20, 0xa9, 0x1e, 0x05, 0x40, 0xff, 0xa9, 0x08, 0x11  ; F8B695
-	.byte 0x01, 0xa9, 0x09, 0x00, 0x02, 0xa9, 0x0a, 0x01, 0x04, 0xa9, 0x0b, 0x02, 0x08, 0xa9, 0x0c, 0x03  ; F8B6A5
-	.byte 0x10, 0xa9, 0x0d, 0x05, 0x20, 0xa9, 0x0d, 0x05, 0x40, 0xa9, 0x0f, 0x06, 0x80, 0xff, 0xa9, 0x00  ; F8B6B5
-	.byte 0x00, 0x01, 0xa9, 0x00, 0x00, 0x02, 0xa9, 0x01, 0x02, 0x04, 0xa9, 0x01, 0x02, 0x08, 0xa9, 0x02  ; F8B6C5
-	.byte 0x04, 0x10, 0xa9, 0x02, 0x04, 0x20, 0xa9, 0x03, 0x06, 0x40, 0xa9, 0x03, 0x06, 0x80, 0xff, 0xa9  ; F8B6D5
-	.byte 0x04, 0x00, 0x01, 0xa9, 0x04, 0x00, 0x02, 0xa9, 0x05, 0x02, 0x04, 0xa9, 0x05, 0x02, 0x08, 0xa9  ; F8B6E5
-	.byte 0x06, 0x04, 0x10, 0xa9, 0x06, 0x04, 0x20, 0xa9, 0x07, 0x06, 0x40, 0xa9, 0x07, 0x06, 0x80, 0xff  ; F8B6F5
-	.byte 0xa9, 0x20, 0x00, 0x01, 0xa9, 0x20, 0x00, 0x02, 0xa9, 0x20, 0x00, 0x04, 0xa9, 0x20, 0x00, 0x08  ; F8B705
-	.byte 0xff, 0xa8, 0x05, 0x12, 0x01, 0xb8, 0x00, 0x00, 0x02, 0xff, 0xa9, 0x08, 0x00, 0x01, 0xa9, 0x09  ; F8B715
-	.byte 0x01, 0x02, 0xa9, 0x0a, 0x02, 0x04, 0xa9, 0x0b, 0x03, 0x08, 0xa9, 0x0c, 0x04, 0x10, 0xff, 0xb0  ; F8B725
-	.byte 0x00, 0x00, 0x7f, 0xff, 0xa9, 0x21, 0x00, 0xff, 0xff, 0xb8, 0x00, 0x00, 0x7f, 0xff, 0xb9, 0x00  ; F8B735
-	.byte 0x00, 0x7f, 0xff, 0xff, 0xff, 0x12, 0xb8, 0xf8, 0x00, 0x3c, 0xb8, 0xf8, 0x00, 0x48, 0xb8, 0xf8  ; F8B745
-	.byte 0x00, 0x54, 0xb8, 0xf8, 0x00, 0x8a, 0xb8, 0xf8, 0x00, 0xc0, 0xb8, 0xf8, 0x00, 0xf6, 0xb8, 0xf8  ; F8B755
-	.byte 0x00, 0x2c, 0xb9, 0xf8, 0x00, 0x56, 0xb9, 0xf8, 0x00, 0x68, 0xb9, 0xf8, 0x00, 0x98, 0xb9, 0xf8  ; F8B765
-	.byte 0x00, 0xce, 0xb9, 0xf8, 0x00, 0xda, 0xb9, 0xf8, 0x00, 0xe6, 0xb9, 0xf8, 0x00, 0xf2, 0xb9, 0xf8  ; F8B775
-	.byte 0x00, 0xf8, 0xb9, 0xf8, 0x00, 0xfe, 0xb9, 0xf8, 0x00, 0x0a, 0xba, 0xf8, 0x00, 0x16, 0xba, 0xf8  ; F8B785
-	.byte 0x00, 0x1c, 0xba, 0xf8, 0x00, 0x28, 0xba, 0xf8, 0x00, 0x34, 0xba, 0xf8, 0x00, 0x40, 0xba, 0xf8  ; F8B795
-	.byte 0x00, 0x4c, 0xba, 0xf8, 0x00, 0x58, 0xba, 0xf8, 0x00, 0x5e, 0xba, 0xf8, 0x00, 0x88, 0xba, 0xf8  ; F8B7A5
-	.byte 0x00, 0x94, 0xba, 0xf8, 0x00, 0xac, 0xba, 0xf8, 0x00, 0xdc, 0xba, 0xf8, 0x00, 0x12, 0xbb, 0xf8  ; F8B7B5
-	.byte 0x00, 0x48, 0xbb, 0xf8, 0x00, 0x66, 0xbb, 0xf8, 0x00, 0x72, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8  ; F8B7C5
-	.byte 0x00, 0xae, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8  ; F8B7D5
-	.byte 0x00, 0xae, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8  ; F8B7E5
-	.byte 0x00, 0xae, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8, 0x00, 0x96, 0xbb, 0xf8, 0x00, 0xa2, 0xbb, 0xf8  ; F8B7F5
-	.byte 0x00, 0xae, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8, 0x00, 0xae, 0xbb, 0xf8, 0x00, 0x00, 0x01, 0x42  ; F8B805
-	.byte 0xab, 0xf8, 0x00, 0x00, 0x02, 0x42, 0xab, 0xf8, 0x00, 0x00, 0x04, 0x42, 0xab, 0xf8, 0x00, 0x00  ; F8B815
-	.byte 0x08, 0x42, 0xab, 0xf8, 0x00, 0x00, 0x70, 0xfd, 0xab, 0xf8, 0x00, 0x00, 0x80, 0x70, 0xab, 0xf8  ; F8B825
-	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x01, 0xff, 0xe8, 0xac, 0xf8, 0x00, 0xff, 0xff, 0xff  ; F8B835
-	.byte 0xff, 0xff, 0xff, 0x02, 0xff, 0xe8, 0xac, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x03  ; F8B845
-	.byte 0x01, 0x68, 0xae, 0xf8, 0x00, 0x03, 0x02, 0xdb, 0xae, 0xf8, 0x00, 0x03, 0x04, 0x68, 0xae, 0xf8  ; F8B855
-	.byte 0x00, 0x03, 0x08, 0xdb, 0xae, 0xf8, 0x00, 0x03, 0x10, 0x68, 0xae, 0xf8, 0x00, 0x03, 0x20, 0xdb  ; F8B865
-	.byte 0xae, 0xf8, 0x00, 0x03, 0x40, 0x68, 0xae, 0xf8, 0x00, 0x03, 0x80, 0xdb, 0xae, 0xf8, 0x00, 0xff  ; F8B875
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x04, 0x01, 0x68, 0xae, 0xf8, 0x00, 0x04, 0x02, 0xdb, 0xae, 0xf8  ; F8B885
-	.byte 0x00, 0x04, 0x04, 0x68, 0xae, 0xf8, 0x00, 0x04, 0x08, 0xdb, 0xae, 0xf8, 0x00, 0x04, 0x10, 0x68  ; F8B895
-	.byte 0xae, 0xf8, 0x00, 0x04, 0x20, 0xdb, 0xae, 0xf8, 0x00, 0x04, 0x40, 0x68, 0xae, 0xf8, 0x00, 0x04  ; F8B8A5
-	.byte 0x80, 0xdb, 0xae, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x05, 0x01, 0x68, 0xae, 0xf8  ; F8B8B5
-	.byte 0x00, 0x05, 0x02, 0xdb, 0xae, 0xf8, 0x00, 0x05, 0x04, 0x68, 0xae, 0xf8, 0x00, 0x05, 0x08, 0xdb  ; F8B8C5
-	.byte 0xae, 0xf8, 0x00, 0x05, 0x10, 0x68, 0xae, 0xf8, 0x00, 0x05, 0x20, 0xdb, 0xae, 0xf8, 0x00, 0x05  ; F8B8D5
-	.byte 0x40, 0x68, 0xae, 0xf8, 0x00, 0x05, 0x80, 0xdb, 0xae, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff  ; F8B8E5
-	.byte 0xff, 0x06, 0x01, 0x68, 0xae, 0xf8, 0x00, 0x06, 0x02, 0xdb, 0xae, 0xf8, 0x00, 0x06, 0x04, 0x68  ; F8B8F5
-	.byte 0xae, 0xf8, 0x00, 0x06, 0x08, 0xdb, 0xae, 0xf8, 0x00, 0x06, 0x10, 0x68, 0xae, 0xf8, 0x00, 0x06  ; F8B905
-	.byte 0x20, 0xdb, 0xae, 0xf8, 0x00, 0x06, 0x40, 0x68, 0xae, 0xf8, 0x00, 0x06, 0x80, 0xdb, 0xae, 0xf8  ; F8B915
-	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x07, 0x01, 0x08, 0xab, 0xf8, 0x00, 0x07, 0x02, 0x08  ; F8B925
-	.byte 0xab, 0xf8, 0x00, 0x07, 0x04, 0x08, 0xab, 0xf8, 0x00, 0x07, 0x08, 0x08, 0xab, 0xf8, 0x00, 0x07  ; F8B935
-	.byte 0x10, 0x08, 0xab, 0xf8, 0x00, 0x07, 0x20, 0x08, 0xab, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff  ; F8B945
-	.byte 0xff, 0x08, 0x40, 0x57, 0xaa, 0xf8, 0x00, 0x08, 0x3f, 0x24, 0xaa, 0xf8, 0x00, 0xff, 0xff, 0xff  ; F8B955
-	.byte 0xff, 0xff, 0xff, 0x09, 0x01, 0x4e, 0xaf, 0xf8, 0x00, 0x09, 0x02, 0x4e, 0xaf, 0xf8, 0x00, 0x09  ; F8B965
-	.byte 0x04, 0x4e, 0xaf, 0xf8, 0x00, 0x09, 0x08, 0x4e, 0xaf, 0xf8, 0x00, 0x09, 0x10, 0x4e, 0xaf, 0xf8  ; F8B975
-	.byte 0x00, 0x09, 0x40, 0x4e, 0xaf, 0xf8, 0x00, 0x09, 0x80, 0x81, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff  ; F8B985
-	.byte 0xff, 0xff, 0xff, 0x0a, 0x01, 0x81, 0xaf, 0xf8, 0x00, 0x0a, 0x02, 0x81, 0xaf, 0xf8, 0x00, 0x0a  ; F8B995
-	.byte 0x04, 0x81, 0xaf, 0xf8, 0x00, 0x0a, 0x08, 0x81, 0xaf, 0xf8, 0x00, 0x0a, 0x10, 0x81, 0xaf, 0xf8  ; F8B9A5
-	.byte 0x00, 0x0a, 0x20, 0x4e, 0xaf, 0xf8, 0x00, 0x0a, 0x40, 0x81, 0xaf, 0xf8, 0x00, 0x0a, 0x80, 0x81  ; F8B9B5
-	.byte 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x0b, 0x7f, 0xd0, 0xaf, 0xf8, 0x00, 0xff  ; F8B9C5
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x0c, 0xff, 0xb4, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff  ; F8B9D5
-	.byte 0xff, 0x0d, 0x7f, 0xd0, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff  ; F8B9E5
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x10, 0x7f, 0xd0, 0xaf, 0xf8, 0x00, 0xff  ; F8B9F5
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0x11, 0x7f, 0xd0, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff  ; F8BA05
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x13, 0x7f, 0xd0, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff  ; F8BA15
-	.byte 0xff, 0xff, 0xff, 0x14, 0x7f, 0xd0, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x15  ; F8BA25
-	.byte 0x7f, 0xd0, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x16, 0x01, 0x8b, 0xb0, 0xf8  ; F8BA35
-	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x17, 0x01, 0x8b, 0xb0, 0xf8, 0x00, 0xff, 0xff, 0xff  ; F8BA45
-	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x01, 0x42, 0xab, 0xf8, 0x00, 0x00  ; F8BA55
-	.byte 0x02, 0x42, 0xab, 0xf8, 0x00, 0x00, 0x04, 0x42, 0xab, 0xf8, 0x00, 0x00, 0x08, 0x42, 0xab, 0xf8  ; F8BA65
-	.byte 0x00, 0x00, 0x70, 0xfd, 0xab, 0xf8, 0x00, 0x00, 0x80, 0x70, 0xab, 0xf8, 0x00, 0xff, 0xff, 0xff  ; F8BA75
-	.byte 0xff, 0xff, 0xff, 0x01, 0xff, 0xde, 0xad, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x02  ; F8BA85
-	.byte 0x0f, 0xde, 0xad, 0xf8, 0x00, 0x02, 0x10, 0x4e, 0xaf, 0xf8, 0x00, 0x02, 0x20, 0x81, 0xaf, 0xf8  ; F8BA95
-	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x03, 0x01, 0x81, 0xaf, 0xf8, 0x00, 0x03, 0x02, 0x81  ; F8BAA5
-	.byte 0xaf, 0xf8, 0x00, 0x03, 0x04, 0x81, 0xaf, 0xf8, 0x00, 0x03, 0x08, 0x81, 0xaf, 0xf8, 0x00, 0x03  ; F8BAB5
-	.byte 0x10, 0x81, 0xaf, 0xf8, 0x00, 0x03, 0x20, 0x4e, 0xaf, 0xf8, 0x00, 0x03, 0x40, 0x81, 0xaf, 0xf8  ; F8BAC5
-	.byte 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x04, 0x01, 0x4e, 0xaf, 0xf8, 0x00, 0x04, 0x02, 0x81  ; F8BAD5
-	.byte 0xaf, 0xf8, 0x00, 0x04, 0x04, 0x4e, 0xaf, 0xf8, 0x00, 0x04, 0x08, 0x81, 0xaf, 0xf8, 0x00, 0x04  ; F8BAE5
-	.byte 0x10, 0x4e, 0xaf, 0xf8, 0x00, 0x04, 0x20, 0x81, 0xaf, 0xf8, 0x00, 0x04, 0x40, 0x4e, 0xaf, 0xf8  ; F8BAF5
-	.byte 0x00, 0x04, 0x80, 0x81, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x05, 0x01, 0x4e  ; F8BB05
-	.byte 0xaf, 0xf8, 0x00, 0x05, 0x02, 0x81, 0xaf, 0xf8, 0x00, 0x05, 0x04, 0x4e, 0xaf, 0xf8, 0x00, 0x05  ; F8BB15
-	.byte 0x08, 0x81, 0xaf, 0xf8, 0x00, 0x05, 0x10, 0x4e, 0xaf, 0xf8, 0x00, 0x05, 0x20, 0x81, 0xaf, 0xf8  ; F8BB25
-	.byte 0x00, 0x05, 0x40, 0x4e, 0xaf, 0xf8, 0x00, 0x05, 0x80, 0x81, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff  ; F8BB35
-	.byte 0xff, 0xff, 0xff, 0x06, 0x01, 0x08, 0xab, 0xf8, 0x00, 0x06, 0x02, 0x08, 0xab, 0xf8, 0x00, 0x06  ; F8BB45
-	.byte 0x04, 0x08, 0xab, 0xf8, 0x00, 0x06, 0x08, 0x08, 0xab, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff  ; F8BB55
-	.byte 0xff, 0x07, 0x02, 0x57, 0xaa, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x08, 0x01, 0x4e  ; F8BB65
-	.byte 0xaf, 0xf8, 0x00, 0x08, 0x02, 0x4e, 0xaf, 0xf8, 0x00, 0x08, 0x04, 0x4e, 0xaf, 0xf8, 0x00, 0x08  ; F8BB75
-	.byte 0x08, 0x4e, 0xaf, 0xf8, 0x00, 0x08, 0x10, 0x4e, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff  ; F8BB85
-	.byte 0xff, 0x14, 0x7f, 0xd0, 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x15, 0x7f, 0xd0  ; F8BB95
-	.byte 0xaf, 0xf8, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff  ; F8BBA5
+; ---------------------------------------------------------------------
+; Var2250_AcceptList -- 33 bytes: 0x00..0x1F then a 0xFF terminator.
+;
+; It is a MEMBERSHIP LIST, not an identity map.  Two routines scan it
+; for the byte in (0x2250) and CLAMP on a miss:
+;   sub_F8B2EA  miss -> C = 0x20, then `or C,0x20`, then store to (XIX)
+;   sub_F8B307  miss -> C = 0x00, then store to (XIX)
+; ★ AND THE RANGE IS NOT ARBITRARY.  0xF8AA31 uses the SAME cell as an
+;   index into RecordFieldPtrs_RAM76A2_Plus20, which has exactly 32
+;   entries -- so this list is the valid-index test for that table.
+; ⚠ What (0x2250) MEANS is not established; the name states the cell.
+; Evidence: `ld XIY,0x00F8B325` at 0xF8B2EE and 0xF8B30F, the scan
+;          `ld A,(XIY+)` / `cp A,C` / `cp A,0xFF` at 0xF8B2F3-0xF8B2FD,
+;          `ld C,(0x2250)` at 0xF8B2EA and 0xF8B30B, and
+;          `ld A,(0x2250)` / `sla A,2` at 0xF8AA36-0xF8AA3A.
+; ---------------------------------------------------------------------
+
+Var2250_AcceptList:
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f ; F8B325
+	.byte 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f ; F8B335
+	.byte 0xff                                                 ; F8B345
+; ---------------------------------------------------------------------
+; RecordPtrs_RAM76A2_Panel -- 32 x LE32 into the 64-byte RAM records
+; at 0x76A2.  A THIRD COPY of a pointer array this tree already knows,
+; and the agreement is EXACT, not approximate: the first 32 of
+; RecordPtrs_RAM76A2's 35 entries (0xFEB330) are byte-identical to these
+; 32, and 0xFF4251's 16 entries are these same bases plus 13.
+; ★ THE STEP IS NOT UNIFORM, and the header this replaced said it was.
+;   Thirty of the thirty-one steps are 0x40; step 7 is 0x80, so the
+;   record at 0x78A2 is SKIPPED (entry 7 is 0x7862, entry 8 is 0x78E2).
+;   The 0xFEB330 header records the same single 0x80 step in the same
+;   place, from a different module -- three witnesses, one layout.
+; ⚠ NO READER FOUND.  A scan of both of CPU 1's ROMs for `ld XRR,imm32`,
+;   `call`, `jp` and a bare LE32 pointer naming 0xF8B346 returns NOTHING,
+;   while the sibling below is loaded at 0xF8AA31.  The bound of the
+;   reader that would use it is therefore unknown; 32 is the ABUTMENT
+;   against 0xF8B3C6, not a count read off a reader.
+; Evidence: the abutment 0xF8B3C6 - 0xF8B346 = 0x80 = 32 x 4; the 
+;          entry-by-entry difference to the sibling is 0x20 for all 32.
+; ---------------------------------------------------------------------
+
+RecordPtrs_RAM76A2_Panel:
+	.long 0x000076a2                                    ; F8B346  [ 0] RAM record 0
+	.long 0x000076e2                                    ; F8B34A  [ 1] RAM record 1
+	.long 0x00007722                                    ; F8B34E  [ 2] RAM record 2
+	.long 0x00007762                                    ; F8B352  [ 3] RAM record 3
+	.long 0x000077a2                                    ; F8B356  [ 4] RAM record 4
+	.long 0x000077e2                                    ; F8B35A  [ 5] RAM record 5
+	.long 0x00007822                                    ; F8B35E  [ 6] RAM record 6
+	.long 0x00007862                                    ; F8B362  [ 7] RAM record 7
+	.long 0x000078e2                                    ; F8B366  [ 8] RAM record 8
+	.long 0x00007922                                    ; F8B36A  [ 9] RAM record 9
+	.long 0x00007962                                    ; F8B36E  [10] RAM record 10
+	.long 0x000079a2                                    ; F8B372  [11] RAM record 11
+	.long 0x000079e2                                    ; F8B376  [12] RAM record 12
+	.long 0x00007a22                                    ; F8B37A  [13] RAM record 13
+	.long 0x00007a62                                    ; F8B37E  [14] RAM record 14
+	.long 0x00007aa2                                    ; F8B382  [15] RAM record 15
+	.long 0x00007ae2                                    ; F8B386  [16] RAM record 16
+	.long 0x00007b22                                    ; F8B38A  [17] RAM record 17
+	.long 0x00007b62                                    ; F8B38E  [18] RAM record 18
+	.long 0x00007ba2                                    ; F8B392  [19] RAM record 19
+	.long 0x00007be2                                    ; F8B396  [20] RAM record 20
+	.long 0x00007c22                                    ; F8B39A  [21] RAM record 21
+	.long 0x00007c62                                    ; F8B39E  [22] RAM record 22
+	.long 0x00007ca2                                    ; F8B3A2  [23] RAM record 23
+	.long 0x00007ce2                                    ; F8B3A6  [24] RAM record 24
+	.long 0x00007d22                                    ; F8B3AA  [25] RAM record 25
+	.long 0x00007d62                                    ; F8B3AE  [26] RAM record 26
+	.long 0x00007da2                                    ; F8B3B2  [27] RAM record 27
+	.long 0x00007de2                                    ; F8B3B6  [28] RAM record 28
+	.long 0x00007e22                                    ; F8B3BA  [29] RAM record 29
+	.long 0x00007e62                                    ; F8B3BE  [30] RAM record 30
+	.long 0x00007ea2                                    ; F8B3C2  [31] RAM record 31
+; ---------------------------------------------------------------------
+; RecordFieldPtrs_RAM76A2_Plus20 -- 32 x LE32, each pointing 0x20 bytes
+; into the same record the table above points at the base of.  The
+; difference is 0x20 for every one of the 32 entries.
+; Read by: 0xF8AA31 `ld XIX,0x00F8B3C6`, then `ld A,(0x2250)` /
+;          `sla A,2` / `ld XIX,(XIX+A)` at 0xF8AA36-0xF8AA3D, then
+;          `ld A,(XIX+0x18)` and `bit 0,A` at 0xF8AA42-0xF8AA46.
+;          So the caller reads bit 0 of the record byte at +0x38.
+; Evidence: the load at 0xF8AA31; the index cell (0x2250) is the same
+;          cell Var2250_AcceptList validates.
+; ---------------------------------------------------------------------
+
+RecordFieldPtrs_RAM76A2_Plus20:
+	.long 0x000076c2                                    ; F8B3C6  [ 0] RAM record 0 + 0x20
+	.long 0x00007702                                    ; F8B3CA  [ 1] RAM record 1 + 0x20
+	.long 0x00007742                                    ; F8B3CE  [ 2] RAM record 2 + 0x20
+	.long 0x00007782                                    ; F8B3D2  [ 3] RAM record 3 + 0x20
+	.long 0x000077c2                                    ; F8B3D6  [ 4] RAM record 4 + 0x20
+	.long 0x00007802                                    ; F8B3DA  [ 5] RAM record 5 + 0x20
+	.long 0x00007842                                    ; F8B3DE  [ 6] RAM record 6 + 0x20
+	.long 0x00007882                                    ; F8B3E2  [ 7] RAM record 7 + 0x20
+	.long 0x00007902                                    ; F8B3E6  [ 8] RAM record 8 + 0x20
+	.long 0x00007942                                    ; F8B3EA  [ 9] RAM record 9 + 0x20
+	.long 0x00007982                                    ; F8B3EE  [10] RAM record 10 + 0x20
+	.long 0x000079c2                                    ; F8B3F2  [11] RAM record 11 + 0x20
+	.long 0x00007a02                                    ; F8B3F6  [12] RAM record 12 + 0x20
+	.long 0x00007a42                                    ; F8B3FA  [13] RAM record 13 + 0x20
+	.long 0x00007a82                                    ; F8B3FE  [14] RAM record 14 + 0x20
+	.long 0x00007ac2                                    ; F8B402  [15] RAM record 15 + 0x20
+	.long 0x00007b02                                    ; F8B406  [16] RAM record 16 + 0x20
+	.long 0x00007b42                                    ; F8B40A  [17] RAM record 17 + 0x20
+	.long 0x00007b82                                    ; F8B40E  [18] RAM record 18 + 0x20
+	.long 0x00007bc2                                    ; F8B412  [19] RAM record 19 + 0x20
+	.long 0x00007c02                                    ; F8B416  [20] RAM record 20 + 0x20
+	.long 0x00007c42                                    ; F8B41A  [21] RAM record 21 + 0x20
+	.long 0x00007c82                                    ; F8B41E  [22] RAM record 22 + 0x20
+	.long 0x00007cc2                                    ; F8B422  [23] RAM record 23 + 0x20
+	.long 0x00007d02                                    ; F8B426  [24] RAM record 24 + 0x20
+	.long 0x00007d42                                    ; F8B42A  [25] RAM record 25 + 0x20
+	.long 0x00007d82                                    ; F8B42E  [26] RAM record 26 + 0x20
+	.long 0x00007dc2                                    ; F8B432  [27] RAM record 27 + 0x20
+	.long 0x00007e02                                    ; F8B436  [28] RAM record 28 + 0x20
+	.long 0x00007e42                                    ; F8B43A  [29] RAM record 29 + 0x20
+	.long 0x00007e82                                    ; F8B43E  [30] RAM record 30 + 0x20
+	.long 0x00007ec2                                    ; F8B442  [31] RAM record 31 + 0x20
+; ---------------------------------------------------------------------
+; PanelGroupEventLists_Variant1 -- 27 x LE32 list heads.
+;
+; ★★ THIS IS THE LAYER-2 TABLE: the map from a panel GROUP id to the
+; UI EVENTS that group's wire raises.  It is a TABLE, not a
+; computation, which is why a search for an `ld DE,0x00A9`-shaped
+; event post found nothing anywhere in the four images -- the class
+; byte 0xA9 is a DATA BYTE in the lists below, copied to the event.
+;
+; Read by: PanelGroupQueue_ExpandToEvents.  `ld XIX,0x00F8B446` at
+;          0xF8A84C and `ld XIX,0x00F8B4B2` at 0xF8A857; `cp (0xC4),
+;          0x01` at 0xF8A851 picks between them -- (0xC4) is the
+;          MODEL STRAP, the same byte PanelWireGroupMap picks on.
+;          The index is the group id, `sla WA,2` at 0xF8A846.
+; ENTRY COUNT 27 is the ABUTMENT (0xF8B4B2 - 0xF8B446) / 4, NOT a bound
+;          in the reader.  The reader's bound is LOWER: `cp A,0x18` /
+;          `jr ugt` at 0xF8A83B rejects any group above 0x18, so
+;          slots 0x19 and 0x1A CANNOT BE REACHED.  24 of the 27
+;          reachable slots have a non-empty list.
+; Evidence: the load at 0xF8A84C; the terminator test `cp (XHL),0xff`
+;          at 0xF8A862; `ld WA,(XHL+)` / `ld (XIX+),WA` at
+;          0xF8A867/0xF8A86A copy [class][code] into the event.
+; ---------------------------------------------------------------------
+
+PanelGroupEventLists_Variant1:
+	.long 0x00f8b51e                                    ; F8B446  [0x00] 6 records
+	.long 0x00f8b537                                    ; F8B44A  [0x01] 1 record
+	.long 0x00f8b53c                                    ; F8B44E  [0x02] 1 record
+	.long 0x00f8b541                                    ; F8B452  [0x03] 8 records
+	.long 0x00f8b562                                    ; F8B456  [0x04] 8 records
+	.long 0x00f8b583                                    ; F8B45A  [0x05] 8 records
+	.long 0x00f8b5a4                                    ; F8B45E  [0x06] 8 records
+	.long 0x00f8b5c5                                    ; F8B462  [0x07] 8 records
+	.long 0x00f8b5e6                                    ; F8B466  [0x08] 2 records
+	.long 0x00f8b5ef                                    ; F8B46A  [0x09] 8 records
+	.long 0x00f8b610                                    ; F8B46E  [0x0A] 8 records
+	.long 0x00f8b631                                    ; F8B472  [0x0B] 1 record
+	.long 0x00f8b636                                    ; F8B476  [0x0C] 1 record
+	.long 0x00f8b63b                                    ; F8B47A  [0x0D] 1 record
+	.long 0x00f8b640                                    ; F8B47E  [0x0E] 1 record
+	.long 0x00f8b645                                    ; F8B482  [0x0F] 1 record
+	.long 0x00f8b64a                                    ; F8B486  [0x10] 1 record
+	.long 0x00f8b64f                                    ; F8B48A  [0x11] 1 record
+	.long 0x00f8b654                                    ; F8B48E  [0x12] 1 record
+	.long 0x00f8b659                                    ; F8B492  [0x13] 1 record
+	.long 0x00f8b65e                                    ; F8B496  [0x14] 1 record
+	.long 0x00f8b663                                    ; F8B49A  [0x15] 1 record
+	.long 0x00f8b668                                    ; F8B49E  [0x16] 1 record
+	.long 0x00f8b66d                                    ; F8B4A2  [0x17] 1 record
+	.long 0x00f8b672                                    ; F8B4A6  [0x18] 0 records  (empty)
+	.long 0x00f8b749                                    ; F8B4AA  [0x19] 0 records  UNREACHABLE (group > 0x18)
+	.long 0x00f8b749                                    ; F8B4AE  [0x1A] 0 records  UNREACHABLE (group > 0x18)
+; ---------------------------------------------------------------------
+; PanelGroupEventLists_Variant2 -- 27 x LE32 list heads.
+;
+; ★★ THIS IS THE LAYER-2 TABLE: the map from a panel GROUP id to the
+; UI EVENTS that group's wire raises.  It is a TABLE, not a
+; computation, which is why a search for an `ld DE,0x00A9`-shaped
+; event post found nothing anywhere in the four images -- the class
+; byte 0xA9 is a DATA BYTE in the lists below, copied to the event.
+;
+; Read by: PanelGroupQueue_ExpandToEvents.  `ld XIX,0x00F8B446` at
+;          0xF8A84C and `ld XIX,0x00F8B4B2` at 0xF8A857; `cp (0xC4),
+;          0x01` at 0xF8A851 picks between them -- (0xC4) is the
+;          MODEL STRAP, the same byte PanelWireGroupMap picks on.
+;          The index is the group id, `sla WA,2` at 0xF8A846.
+; ENTRY COUNT 27 is the ABUTMENT (0xF8B51E - 0xF8B4B2) / 4, NOT a bound
+;          in the reader.  The reader's bound is LOWER: `cp A,0x18` /
+;          `jr ugt` at 0xF8A83B rejects any group above 0x18, so
+;          slots 0x19 and 0x1A CANNOT BE REACHED.  13 of the 27
+;          reachable slots have a non-empty list.
+; Evidence: the load at 0xF8A857; the terminator test `cp (XHL),0xff`
+;          at 0xF8A862; `ld WA,(XHL+)` / `ld (XIX+),WA` at
+;          0xF8A867/0xF8A86A copy [class][code] into the event.
+; ---------------------------------------------------------------------
+
+PanelGroupEventLists_Variant2:
+	.long 0x00f8b673                                    ; F8B4B2  [0x00] 6 records
+	.long 0x00f8b68c                                    ; F8B4B6  [0x01] 1 record
+	.long 0x00f8b691                                    ; F8B4BA  [0x02] 4 records
+	.long 0x00f8b6a2                                    ; F8B4BE  [0x03] 8 records
+	.long 0x00f8b6c3                                    ; F8B4C2  [0x04] 8 records
+	.long 0x00f8b6e4                                    ; F8B4C6  [0x05] 8 records
+	.long 0x00f8b705                                    ; F8B4CA  [0x06] 4 records
+	.long 0x00f8b716                                    ; F8B4CE  [0x07] 2 records
+	.long 0x00f8b71f                                    ; F8B4D2  [0x08] 5 records
+	.long 0x00f8b748                                    ; F8B4D6  [0x09] 0 records  (empty)
+	.long 0x00f8b748                                    ; F8B4DA  [0x0A] 0 records  (empty)
+	.long 0x00f8b748                                    ; F8B4DE  [0x0B] 0 records  (empty)
+	.long 0x00f8b748                                    ; F8B4E2  [0x0C] 0 records  (empty)
+	.long 0x00f8b748                                    ; F8B4E6  [0x0D] 0 records  (empty)
+	.long 0x00f8b734                                    ; F8B4EA  [0x0E] 1 record
+	.long 0x00f8b739                                    ; F8B4EE  [0x0F] 1 record
+	.long 0x00f8b748                                    ; F8B4F2  [0x10] 0 records  (empty)
+	.long 0x00f8b748                                    ; F8B4F6  [0x11] 0 records  (empty)
+	.long 0x00f8b748                                    ; F8B4FA  [0x12] 0 records  (empty)
+	.long 0x00f8b748                                    ; F8B4FE  [0x13] 0 records  (empty)
+	.long 0x00f8b73e                                    ; F8B502  [0x14] 1 record
+	.long 0x00f8b743                                    ; F8B506  [0x15] 1 record
+	.long 0x00f8b748                                    ; F8B50A  [0x16] 0 records  (empty)
+	.long 0x00f8b748                                    ; F8B50E  [0x17] 0 records  (empty)
+	.long 0x00f8b748                                    ; F8B512  [0x18] 0 records  (empty)
+	.long 0x00f8b749                                    ; F8B516  [0x19] 0 records  UNREACHABLE (group > 0x18)
+	.long 0x00f8b749                                    ; F8B51A  [0x1A] 0 records  UNREACHABLE (group > 0x18)
+; ---------------------------------------------------------------------
+; PanelGroupEventListPool -- 556 bytes, the lists both tables point into.
+;
+; A RECORD IS FOUR BYTES:
+;   [0] event CLASS   copied to the event's +0
+;   [1] event CODE    copied to the event's +1  (a BASE -- an action
+;                     handler may rewrite it, see the action tables)
+;   [2] SHIFT byte    bit 4 = direction, bits 0-2 = count (0xF8A8AA,
+;                     `and A,0x07` at 0xF8A8AF and 0xF8A8B8)
+;   [3] BIT MASK      which bits of this wire byte the record owns
+; and a list ends on 0xFF in byte 0 -- a ONE-byte terminator, because
+; `cp (XHL),0xff` at 0xF8A862 tests byte 0 only.
+;
+; ★ ONE CODE COVERS A PAIR OF MATRIX BITS.  Most button records carry a
+; single-bit mask and a shift that lands that bit on position 0 or 1 of a
+; two-bit field, so two records share a code and differ only in position;
+; `bit 0,(0x20B9)` at 0xF866C7 and 0xF86708 sets bit 7 of the delivered
+; code for position 0.  That is how 32 codes reach 58 switches.
+;
+; Evidence: the pool runs from the lowest list head (0xF8B51E) to the byte
+;          before PanelGroupActionTable_Variant1 (0xF8B74A), and the 54
+;          list walks tile it with no byte left over.
+; ---------------------------------------------------------------------
+
+PanelGroupEventListPool:
+	; -- v1 g00
+	.byte 0xa9, 0x20, 0x00, 0x01                               ; F8B51E  class A9 code 20 shift 00 mask 01
+	.byte 0xa9, 0x20, 0x00, 0x02                               ; F8B522  class A9 code 20 shift 00 mask 02
+	.byte 0xa9, 0x20, 0x00, 0x04                               ; F8B526  class A9 code 20 shift 00 mask 04
+	.byte 0xa9, 0x20, 0x00, 0x08                               ; F8B52A  class A9 code 20 shift 00 mask 08
+	.byte 0xa8, 0x07, 0x04, 0x70                               ; F8B52E  class A8 code 07 shift 04 mask 70
+	.byte 0xa8, 0x07, 0x00, 0x80                               ; F8B532  class A8 code 07 shift 00 mask 80
+	.byte 0xff                                                 ; F8B536  end of list
+	; -- v1 g01
+	.byte 0xa8, 0x08, 0x00, 0xff                               ; F8B537  class A8 code 08 shift 00 mask FF
+	.byte 0xff                                                 ; F8B53B  end of list
+	; -- v1 g02
+	.byte 0xa8, 0x08, 0x00, 0xff                               ; F8B53C  class A8 code 08 shift 00 mask FF
+	.byte 0xff                                                 ; F8B540  end of list
+	; -- v1 g03
+	.byte 0xa9, 0x04, 0x00, 0x01                               ; F8B541  class A9 code 04 shift 00 mask 01
+	.byte 0xa9, 0x04, 0x00, 0x02                               ; F8B545  class A9 code 04 shift 00 mask 02
+	.byte 0xa9, 0x05, 0x02, 0x04                               ; F8B549  class A9 code 05 shift 02 mask 04
+	.byte 0xa9, 0x05, 0x02, 0x08                               ; F8B54D  class A9 code 05 shift 02 mask 08
+	.byte 0xa9, 0x06, 0x04, 0x10                               ; F8B551  class A9 code 06 shift 04 mask 10
+	.byte 0xa9, 0x06, 0x04, 0x20                               ; F8B555  class A9 code 06 shift 04 mask 20
+	.byte 0xa9, 0x07, 0x06, 0x40                               ; F8B559  class A9 code 07 shift 06 mask 40
+	.byte 0xa9, 0x07, 0x06, 0x80                               ; F8B55D  class A9 code 07 shift 06 mask 80
+	.byte 0xff                                                 ; F8B561  end of list
+	; -- v1 g04
+	.byte 0xa9, 0x04, 0x00, 0x01                               ; F8B562  class A9 code 04 shift 00 mask 01
+	.byte 0xa9, 0x04, 0x00, 0x02                               ; F8B566  class A9 code 04 shift 00 mask 02
+	.byte 0xa9, 0x05, 0x02, 0x04                               ; F8B56A  class A9 code 05 shift 02 mask 04
+	.byte 0xa9, 0x05, 0x02, 0x08                               ; F8B56E  class A9 code 05 shift 02 mask 08
+	.byte 0xa9, 0x06, 0x04, 0x10                               ; F8B572  class A9 code 06 shift 04 mask 10
+	.byte 0xa9, 0x06, 0x04, 0x20                               ; F8B576  class A9 code 06 shift 04 mask 20
+	.byte 0xa9, 0x07, 0x06, 0x40                               ; F8B57A  class A9 code 07 shift 06 mask 40
+	.byte 0xa9, 0x07, 0x06, 0x80                               ; F8B57E  class A9 code 07 shift 06 mask 80
+	.byte 0xff                                                 ; F8B582  end of list
+	; -- v1 g05
+	.byte 0xa9, 0x00, 0x00, 0x01                               ; F8B583  class A9 code 00 shift 00 mask 01
+	.byte 0xa9, 0x00, 0x00, 0x02                               ; F8B587  class A9 code 00 shift 00 mask 02
+	.byte 0xa9, 0x01, 0x02, 0x04                               ; F8B58B  class A9 code 01 shift 02 mask 04
+	.byte 0xa9, 0x01, 0x02, 0x08                               ; F8B58F  class A9 code 01 shift 02 mask 08
+	.byte 0xa9, 0x02, 0x04, 0x10                               ; F8B593  class A9 code 02 shift 04 mask 10
+	.byte 0xa9, 0x02, 0x04, 0x20                               ; F8B597  class A9 code 02 shift 04 mask 20
+	.byte 0xa9, 0x03, 0x06, 0x40                               ; F8B59B  class A9 code 03 shift 06 mask 40
+	.byte 0xa9, 0x03, 0x06, 0x80                               ; F8B59F  class A9 code 03 shift 06 mask 80
+	.byte 0xff                                                 ; F8B5A3  end of list
+	; -- v1 g06
+	.byte 0xa9, 0x00, 0x00, 0x01                               ; F8B5A4  class A9 code 00 shift 00 mask 01
+	.byte 0xa9, 0x00, 0x00, 0x02                               ; F8B5A8  class A9 code 00 shift 00 mask 02
+	.byte 0xa9, 0x01, 0x02, 0x04                               ; F8B5AC  class A9 code 01 shift 02 mask 04
+	.byte 0xa9, 0x01, 0x02, 0x08                               ; F8B5B0  class A9 code 01 shift 02 mask 08
+	.byte 0xa9, 0x02, 0x04, 0x10                               ; F8B5B4  class A9 code 02 shift 04 mask 10
+	.byte 0xa9, 0x02, 0x04, 0x20                               ; F8B5B8  class A9 code 02 shift 04 mask 20
+	.byte 0xa9, 0x03, 0x06, 0x40                               ; F8B5BC  class A9 code 03 shift 06 mask 40
+	.byte 0xa9, 0x03, 0x06, 0x80                               ; F8B5C0  class A9 code 03 shift 06 mask 80
+	.byte 0xff                                                 ; F8B5C4  end of list
+	; -- v1 g07
+	.byte 0xa9, 0x20, 0x00, 0x01                               ; F8B5C5  class A9 code 20 shift 00 mask 01
+	.byte 0xa9, 0x20, 0x00, 0x02                               ; F8B5C9  class A9 code 20 shift 00 mask 02
+	.byte 0xa9, 0x20, 0x00, 0x04                               ; F8B5CD  class A9 code 20 shift 00 mask 04
+	.byte 0xa9, 0x20, 0x00, 0x08                               ; F8B5D1  class A9 code 20 shift 00 mask 08
+	.byte 0xa9, 0x20, 0x00, 0x10                               ; F8B5D5  class A9 code 20 shift 00 mask 10
+	.byte 0xa9, 0x20, 0x00, 0x20                               ; F8B5D9  class A9 code 20 shift 00 mask 20
+	.byte 0xa8, 0x11, 0x05, 0x40                               ; F8B5DD  class A8 code 11 shift 05 mask 40
+	.byte 0xa8, 0x11, 0x07, 0x80                               ; F8B5E1  class A8 code 11 shift 07 mask 80
+	.byte 0xff                                                 ; F8B5E5  end of list
+	; -- v1 g08
+	.byte 0xb8, 0x00, 0x00, 0x40                               ; F8B5E6  class B8 code 00 shift 00 mask 40
+	.byte 0x20, 0x19, 0x00, 0x3f                               ; F8B5EA  class 20 code 19 shift 00 mask 3F
+	.byte 0xff                                                 ; F8B5EE  end of list
+	; -- v1 g09
+	.byte 0xa9, 0x08, 0x00, 0x01                               ; F8B5EF  class A9 code 08 shift 00 mask 01
+	.byte 0xa9, 0x09, 0x01, 0x02                               ; F8B5F3  class A9 code 09 shift 01 mask 02
+	.byte 0xa9, 0x0a, 0x02, 0x04                               ; F8B5F7  class A9 code 0A shift 02 mask 04
+	.byte 0xa9, 0x0b, 0x03, 0x08                               ; F8B5FB  class A9 code 0B shift 03 mask 08
+	.byte 0xa9, 0x0c, 0x04, 0x10                               ; F8B5FF  class A9 code 0C shift 04 mask 10
+	.byte 0xa9, 0x1e, 0x04, 0x20                               ; F8B603  class A9 code 1E shift 04 mask 20
+	.byte 0xa9, 0x10, 0x06, 0x40                               ; F8B607  class A9 code 10 shift 06 mask 40
+	.byte 0xa9, 0x10, 0x06, 0x80                               ; F8B60B  class A9 code 10 shift 06 mask 80
+	.byte 0xff                                                 ; F8B60F  end of list
+	; -- v1 g0A
+	.byte 0xa9, 0x08, 0x11, 0x01                               ; F8B610  class A9 code 08 shift 11 mask 01
+	.byte 0xa9, 0x09, 0x00, 0x02                               ; F8B614  class A9 code 09 shift 00 mask 02
+	.byte 0xa9, 0x0a, 0x01, 0x04                               ; F8B618  class A9 code 0A shift 01 mask 04
+	.byte 0xa9, 0x0b, 0x02, 0x08                               ; F8B61C  class A9 code 0B shift 02 mask 08
+	.byte 0xa9, 0x0c, 0x03, 0x10                               ; F8B620  class A9 code 0C shift 03 mask 10
+	.byte 0xa9, 0x0d, 0x05, 0x20                               ; F8B624  class A9 code 0D shift 05 mask 20
+	.byte 0xa9, 0x0d, 0x05, 0x40                               ; F8B628  class A9 code 0D shift 05 mask 40
+	.byte 0xa9, 0x0f, 0x06, 0x80                               ; F8B62C  class A9 code 0F shift 06 mask 80
+	.byte 0xff                                                 ; F8B630  end of list
+	; -- v1 g0B
+	.byte 0xb2, 0x00, 0x00, 0x7f                               ; F8B631  class B2 code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B635  end of list
+	; -- v1 g0C
+	.byte 0xb1, 0x00, 0x00, 0xff                               ; F8B636  class B1 code 00 shift 00 mask FF
+	.byte 0xff                                                 ; F8B63A  end of list
+	; -- v1 g0D
+	.byte 0xbc, 0x00, 0x00, 0x7f                               ; F8B63B  class BC code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B63F  end of list
+	; -- v1 g0E
+	.byte 0xb0, 0x00, 0x00, 0x7f                               ; F8B640  class B0 code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B644  end of list
+	; -- v1 g0F
+	.byte 0xa9, 0x21, 0x00, 0xff                               ; F8B645  class A9 code 21 shift 00 mask FF
+	.byte 0xff                                                 ; F8B649  end of list
+	; -- v1 g10
+	.byte 0xba, 0x00, 0x00, 0x7f                               ; F8B64A  class BA code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B64E  end of list
+	; -- v1 g11
+	.byte 0xbb, 0x00, 0x00, 0x7f                               ; F8B64F  class BB code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B653  end of list
+	; -- v1 g12
+	.byte 0xb4, 0x00, 0x00, 0x7f                               ; F8B654  class B4 code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B658  end of list
+	; -- v1 g13
+	.byte 0xbd, 0x00, 0x00, 0x7f                               ; F8B659  class BD code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B65D  end of list
+	; -- v1 g14
+	.byte 0xb8, 0x00, 0x00, 0x7f                               ; F8B65E  class B8 code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B662  end of list
+	; -- v1 g15
+	.byte 0xb9, 0x00, 0x00, 0x7f                               ; F8B663  class B9 code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B667  end of list
+	; -- v1 g16
+	.byte 0xa9, 0x32, 0x00, 0x01                               ; F8B668  class A9 code 32 shift 00 mask 01
+	.byte 0xff                                                 ; F8B66C  end of list
+	; -- v1 g17
+	.byte 0xa9, 0x33, 0x00, 0x01                               ; F8B66D  class A9 code 33 shift 00 mask 01
+	.byte 0xff                                                 ; F8B671  end of list
+	; -- v1 g18
+	.byte 0xff                                                 ; F8B672  end of list
+	; -- v2 g00
+	.byte 0xa9, 0x20, 0x00, 0x01                               ; F8B673  class A9 code 20 shift 00 mask 01
+	.byte 0xa9, 0x20, 0x00, 0x02                               ; F8B677  class A9 code 20 shift 00 mask 02
+	.byte 0xa9, 0x20, 0x00, 0x04                               ; F8B67B  class A9 code 20 shift 00 mask 04
+	.byte 0xa9, 0x20, 0x00, 0x08                               ; F8B67F  class A9 code 20 shift 00 mask 08
+	.byte 0xa8, 0x07, 0x04, 0x70                               ; F8B683  class A8 code 07 shift 04 mask 70
+	.byte 0xa8, 0x07, 0x00, 0x80                               ; F8B687  class A8 code 07 shift 00 mask 80
+	.byte 0xff                                                 ; F8B68B  end of list
+	; -- v2 g01
+	.byte 0xa9, 0x1b, 0x00, 0xff                               ; F8B68C  class A9 code 1B shift 00 mask FF
+	.byte 0xff                                                 ; F8B690  end of list
+	; -- v2 g02
+	.byte 0xa9, 0x1b, 0x00, 0x0f                               ; F8B691  class A9 code 1B shift 00 mask 0F
+	.byte 0xa9, 0x10, 0x04, 0x10                               ; F8B695  class A9 code 10 shift 04 mask 10
+	.byte 0xa9, 0x10, 0x04, 0x20                               ; F8B699  class A9 code 10 shift 04 mask 20
+	.byte 0xa9, 0x1e, 0x05, 0x40                               ; F8B69D  class A9 code 1E shift 05 mask 40
+	.byte 0xff                                                 ; F8B6A1  end of list
+	; -- v2 g03
+	.byte 0xa9, 0x08, 0x11, 0x01                               ; F8B6A2  class A9 code 08 shift 11 mask 01
+	.byte 0xa9, 0x09, 0x00, 0x02                               ; F8B6A6  class A9 code 09 shift 00 mask 02
+	.byte 0xa9, 0x0a, 0x01, 0x04                               ; F8B6AA  class A9 code 0A shift 01 mask 04
+	.byte 0xa9, 0x0b, 0x02, 0x08                               ; F8B6AE  class A9 code 0B shift 02 mask 08
+	.byte 0xa9, 0x0c, 0x03, 0x10                               ; F8B6B2  class A9 code 0C shift 03 mask 10
+	.byte 0xa9, 0x0d, 0x05, 0x20                               ; F8B6B6  class A9 code 0D shift 05 mask 20
+	.byte 0xa9, 0x0d, 0x05, 0x40                               ; F8B6BA  class A9 code 0D shift 05 mask 40
+	.byte 0xa9, 0x0f, 0x06, 0x80                               ; F8B6BE  class A9 code 0F shift 06 mask 80
+	.byte 0xff                                                 ; F8B6C2  end of list
+	; -- v2 g04
+	.byte 0xa9, 0x00, 0x00, 0x01                               ; F8B6C3  class A9 code 00 shift 00 mask 01
+	.byte 0xa9, 0x00, 0x00, 0x02                               ; F8B6C7  class A9 code 00 shift 00 mask 02
+	.byte 0xa9, 0x01, 0x02, 0x04                               ; F8B6CB  class A9 code 01 shift 02 mask 04
+	.byte 0xa9, 0x01, 0x02, 0x08                               ; F8B6CF  class A9 code 01 shift 02 mask 08
+	.byte 0xa9, 0x02, 0x04, 0x10                               ; F8B6D3  class A9 code 02 shift 04 mask 10
+	.byte 0xa9, 0x02, 0x04, 0x20                               ; F8B6D7  class A9 code 02 shift 04 mask 20
+	.byte 0xa9, 0x03, 0x06, 0x40                               ; F8B6DB  class A9 code 03 shift 06 mask 40
+	.byte 0xa9, 0x03, 0x06, 0x80                               ; F8B6DF  class A9 code 03 shift 06 mask 80
+	.byte 0xff                                                 ; F8B6E3  end of list
+	; -- v2 g05
+	.byte 0xa9, 0x04, 0x00, 0x01                               ; F8B6E4  class A9 code 04 shift 00 mask 01
+	.byte 0xa9, 0x04, 0x00, 0x02                               ; F8B6E8  class A9 code 04 shift 00 mask 02
+	.byte 0xa9, 0x05, 0x02, 0x04                               ; F8B6EC  class A9 code 05 shift 02 mask 04
+	.byte 0xa9, 0x05, 0x02, 0x08                               ; F8B6F0  class A9 code 05 shift 02 mask 08
+	.byte 0xa9, 0x06, 0x04, 0x10                               ; F8B6F4  class A9 code 06 shift 04 mask 10
+	.byte 0xa9, 0x06, 0x04, 0x20                               ; F8B6F8  class A9 code 06 shift 04 mask 20
+	.byte 0xa9, 0x07, 0x06, 0x40                               ; F8B6FC  class A9 code 07 shift 06 mask 40
+	.byte 0xa9, 0x07, 0x06, 0x80                               ; F8B700  class A9 code 07 shift 06 mask 80
+	.byte 0xff                                                 ; F8B704  end of list
+	; -- v2 g06
+	.byte 0xa9, 0x20, 0x00, 0x01                               ; F8B705  class A9 code 20 shift 00 mask 01
+	.byte 0xa9, 0x20, 0x00, 0x02                               ; F8B709  class A9 code 20 shift 00 mask 02
+	.byte 0xa9, 0x20, 0x00, 0x04                               ; F8B70D  class A9 code 20 shift 00 mask 04
+	.byte 0xa9, 0x20, 0x00, 0x08                               ; F8B711  class A9 code 20 shift 00 mask 08
+	.byte 0xff                                                 ; F8B715  end of list
+	; -- v2 g07
+	.byte 0xa8, 0x05, 0x12, 0x01                               ; F8B716  class A8 code 05 shift 12 mask 01
+	.byte 0xb8, 0x00, 0x00, 0x02                               ; F8B71A  class B8 code 00 shift 00 mask 02
+	.byte 0xff                                                 ; F8B71E  end of list
+	; -- v2 g08
+	.byte 0xa9, 0x08, 0x00, 0x01                               ; F8B71F  class A9 code 08 shift 00 mask 01
+	.byte 0xa9, 0x09, 0x01, 0x02                               ; F8B723  class A9 code 09 shift 01 mask 02
+	.byte 0xa9, 0x0a, 0x02, 0x04                               ; F8B727  class A9 code 0A shift 02 mask 04
+	.byte 0xa9, 0x0b, 0x03, 0x08                               ; F8B72B  class A9 code 0B shift 03 mask 08
+	.byte 0xa9, 0x0c, 0x04, 0x10                               ; F8B72F  class A9 code 0C shift 04 mask 10
+	.byte 0xff                                                 ; F8B733  end of list
+	; -- v2 g0E
+	.byte 0xb0, 0x00, 0x00, 0x7f                               ; F8B734  class B0 code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B738  end of list
+	; -- v2 g0F
+	.byte 0xa9, 0x21, 0x00, 0xff                               ; F8B739  class A9 code 21 shift 00 mask FF
+	.byte 0xff                                                 ; F8B73D  end of list
+	; -- v2 g14
+	.byte 0xb8, 0x00, 0x00, 0x7f                               ; F8B73E  class B8 code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B742  end of list
+	; -- v2 g15
+	.byte 0xb9, 0x00, 0x00, 0x7f                               ; F8B743  class B9 code 00 shift 00 mask 7F
+	.byte 0xff                                                 ; F8B747  end of list
+	; -- v2 g09, v2 g0A, v2 g0B, v2 g0C, v2 g0D, v2 g10, v2 g11, v2 g12, v2 g13, v2 g16, v2 g17, v2 g18
+	.byte 0xff                                                 ; F8B748  end of list
+	; -- v1 g19, v1 g1A, v2 g19, v2 g1A
+	.byte 0xff                                                 ; F8B749  end of list
+; ---------------------------------------------------------------------
+; PanelGroupActionTable_Variant1 -- 25 x LE32 list heads.
+;
+; An ACTION list lets a handler intercept a (group, mask) pair AFTER
+; the class/code pair has been written to the event but BEFORE the
+; value pair is.  Two of the handlers REWRITE the code byte in place
+; -- `add (XIX-1),0x11` at 0xF8AE7E/0xF8AEF1 and `ld (XIX-1),0x19` at
+; 0xF8AE8A/0xF8AEFD -- and any handler may end at 0xF8A90F
+; (`dec 2,XIX`), which DROPS the event.  So a code in the event pool
+; is a BASE, and the delivered code can be base, base+0x11 or 0x19.
+; ⚠ WHICH BRANCH IS TAKEN AT RUN TIME IS NOT ESTABLISHED.
+;
+; Read by: PanelEvent_ShiftThenRunAction.  `ld XIY,0x00F8B74A` at
+;          0xF8A8CC and `ld XIY,0x00F8B7AE` at 0xF8A8D7, the same
+;          (0xC4) strap test at 0xF8A8D1; the index is (0x2251), the
+;          group the walker stored at 0xF8A840, `sla L,2` at 0xF8A8E0.
+; ENTRY COUNT 25 is the abutment (0xF8B7AE - 0xF8B74A) / 4, and here it
+;          AGREES with the reader: groups 0x00-0x18 inclusive is
+;          exactly 25 slots.
+; Evidence: the load at 0xF8A8CC; the record walk `ld BC,(XIY+HL)` /
+;          `cp C,0xff` / `cp WA,BC` at 0xF8A8EA-0xF8A8F8 and the
+;          handler fetch `ld XBC,(XIY+HL)` / `jp (XBC)` at
+;          0xF8A902-0xF8A909.
+; ---------------------------------------------------------------------
+
+PanelGroupActionTable_Variant1:
+	.long 0x00f8b812                                    ; F8B74A  [0x00] 6 records
+	.long 0x00f8b83c                                    ; F8B74E  [0x01] 1 record
+	.long 0x00f8b848                                    ; F8B752  [0x02] 1 record
+	.long 0x00f8b854                                    ; F8B756  [0x03] 8 records
+	.long 0x00f8b88a                                    ; F8B75A  [0x04] 8 records
+	.long 0x00f8b8c0                                    ; F8B75E  [0x05] 8 records
+	.long 0x00f8b8f6                                    ; F8B762  [0x06] 8 records
+	.long 0x00f8b92c                                    ; F8B766  [0x07] 6 records
+	.long 0x00f8b956                                    ; F8B76A  [0x08] 2 records
+	.long 0x00f8b968                                    ; F8B76E  [0x09] 7 records
+	.long 0x00f8b998                                    ; F8B772  [0x0A] 8 records
+	.long 0x00f8b9ce                                    ; F8B776  [0x0B] 1 record
+	.long 0x00f8b9da                                    ; F8B77A  [0x0C] 1 record
+	.long 0x00f8b9e6                                    ; F8B77E  [0x0D] 1 record
+	.long 0x00f8b9f2                                    ; F8B782  [0x0E] 0 records  (empty)
+	.long 0x00f8b9f8                                    ; F8B786  [0x0F] 0 records  (empty)
+	.long 0x00f8b9fe                                    ; F8B78A  [0x10] 1 record
+	.long 0x00f8ba0a                                    ; F8B78E  [0x11] 1 record
+	.long 0x00f8ba16                                    ; F8B792  [0x12] 0 records  (empty)
+	.long 0x00f8ba1c                                    ; F8B796  [0x13] 1 record
+	.long 0x00f8ba28                                    ; F8B79A  [0x14] 1 record
+	.long 0x00f8ba34                                    ; F8B79E  [0x15] 1 record
+	.long 0x00f8ba40                                    ; F8B7A2  [0x16] 1 record
+	.long 0x00f8ba4c                                    ; F8B7A6  [0x17] 1 record
+	.long 0x00f8ba58                                    ; F8B7AA  [0x18] 0 records  (empty)
+; ---------------------------------------------------------------------
+; PanelGroupActionTable_Variant2 -- 25 x LE32 list heads.
+;
+; An ACTION list lets a handler intercept a (group, mask) pair AFTER
+; the class/code pair has been written to the event but BEFORE the
+; value pair is.  Two of the handlers REWRITE the code byte in place
+; -- `add (XIX-1),0x11` at 0xF8AE7E/0xF8AEF1 and `ld (XIX-1),0x19` at
+; 0xF8AE8A/0xF8AEFD -- and any handler may end at 0xF8A90F
+; (`dec 2,XIX`), which DROPS the event.  So a code in the event pool
+; is a BASE, and the delivered code can be base, base+0x11 or 0x19.
+; ⚠ WHICH BRANCH IS TAKEN AT RUN TIME IS NOT ESTABLISHED.
+;
+; Read by: PanelEvent_ShiftThenRunAction.  `ld XIY,0x00F8B74A` at
+;          0xF8A8CC and `ld XIY,0x00F8B7AE` at 0xF8A8D7, the same
+;          (0xC4) strap test at 0xF8A8D1; the index is (0x2251), the
+;          group the walker stored at 0xF8A840, `sla L,2` at 0xF8A8E0.
+; ENTRY COUNT 25 is the abutment (0xF8B812 - 0xF8B7AE) / 4, and here it
+;          AGREES with the reader: groups 0x00-0x18 inclusive is
+;          exactly 25 slots.
+; Evidence: the load at 0xF8A8D7; the record walk `ld BC,(XIY+HL)` /
+;          `cp C,0xff` / `cp WA,BC` at 0xF8A8EA-0xF8A8F8 and the
+;          handler fetch `ld XBC,(XIY+HL)` / `jp (XBC)` at
+;          0xF8A902-0xF8A909.
+; ---------------------------------------------------------------------
+
+PanelGroupActionTable_Variant2:
+	.long 0x00f8ba5e                                    ; F8B7AE  [0x00] 6 records
+	.long 0x00f8ba88                                    ; F8B7B2  [0x01] 1 record
+	.long 0x00f8ba94                                    ; F8B7B6  [0x02] 3 records
+	.long 0x00f8baac                                    ; F8B7BA  [0x03] 7 records
+	.long 0x00f8badc                                    ; F8B7BE  [0x04] 8 records
+	.long 0x00f8bb12                                    ; F8B7C2  [0x05] 8 records
+	.long 0x00f8bb48                                    ; F8B7C6  [0x06] 4 records
+	.long 0x00f8bb66                                    ; F8B7CA  [0x07] 1 record
+	.long 0x00f8bb72                                    ; F8B7CE  [0x08] 5 records
+	.long 0x00f8bbae                                    ; F8B7D2  [0x09] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7D6  [0x0A] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7DA  [0x0B] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7DE  [0x0C] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7E2  [0x0D] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7E6  [0x0E] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7EA  [0x0F] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7EE  [0x10] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7F2  [0x11] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7F6  [0x12] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B7FA  [0x13] 0 records  (empty)
+	.long 0x00f8bb96                                    ; F8B7FE  [0x14] 1 record
+	.long 0x00f8bba2                                    ; F8B802  [0x15] 1 record
+	.long 0x00f8bbae                                    ; F8B806  [0x16] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B80A  [0x17] 0 records  (empty)
+	.long 0x00f8bbae                                    ; F8B80E  [0x18] 0 records  (empty)
+; ---------------------------------------------------------------------
+; PanelGroupActionListPool -- 930 bytes, the lists both action tables
+; point into.
+;
+; A RECORD IS SIX BYTES: [group][mask][LE32 handler], and a list ends on
+; a record whose group byte is 0xFF.  The terminator is a WHOLE SIX-BYTE
+; record, not one byte, because the walk steps by 6 (`inc 4,HL` after an
+; `inc 2,HL` at 0xF8A8EF/0xF8A8FA) -- which is also why several empty
+; lists share the single terminator at the end of the pool.
+; The key compared is the 16-bit (mask:group) pair: `cp WA,BC` at
+; 0xF8A8F6 with BC loaded from the record and WA holding (mask, group).
+;
+; Evidence: the pool runs from the lowest list head (0xF8B812) to the last
+;          byte of the block (0xF8BBB3), and the 50 list walks tile it
+;          with no byte left over.
+; ---------------------------------------------------------------------
+
+PanelGroupActionListPool:
+	; -- v1 g00
+	.byte 0x00, 0x01, 0x42, 0xab, 0xf8, 0x00                   ; F8B812  group 00 mask 01 -> 0xF8AB42
+	.byte 0x00, 0x02, 0x42, 0xab, 0xf8, 0x00                   ; F8B818  group 00 mask 02 -> 0xF8AB42
+	.byte 0x00, 0x04, 0x42, 0xab, 0xf8, 0x00                   ; F8B81E  group 00 mask 04 -> 0xF8AB42
+	.byte 0x00, 0x08, 0x42, 0xab, 0xf8, 0x00                   ; F8B824  group 00 mask 08 -> 0xF8AB42
+	.byte 0x00, 0x70, 0xfd, 0xab, 0xf8, 0x00                   ; F8B82A  group 00 mask 70 -> 0xF8ABFD
+	.byte 0x00, 0x80, 0x70, 0xab, 0xf8, 0x00                   ; F8B830  group 00 mask 80 -> 0xF8AB70
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B836  end of list
+	; -- v1 g01
+	.byte 0x01, 0xff, 0xe8, 0xac, 0xf8, 0x00                   ; F8B83C  group 01 mask FF -> 0xF8ACE8
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B842  end of list
+	; -- v1 g02
+	.byte 0x02, 0xff, 0xe8, 0xac, 0xf8, 0x00                   ; F8B848  group 02 mask FF -> 0xF8ACE8
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B84E  end of list
+	; -- v1 g03
+	.byte 0x03, 0x01, 0x68, 0xae, 0xf8, 0x00                   ; F8B854  group 03 mask 01 -> 0xF8AE68
+	.byte 0x03, 0x02, 0xdb, 0xae, 0xf8, 0x00                   ; F8B85A  group 03 mask 02 -> 0xF8AEDB
+	.byte 0x03, 0x04, 0x68, 0xae, 0xf8, 0x00                   ; F8B860  group 03 mask 04 -> 0xF8AE68
+	.byte 0x03, 0x08, 0xdb, 0xae, 0xf8, 0x00                   ; F8B866  group 03 mask 08 -> 0xF8AEDB
+	.byte 0x03, 0x10, 0x68, 0xae, 0xf8, 0x00                   ; F8B86C  group 03 mask 10 -> 0xF8AE68
+	.byte 0x03, 0x20, 0xdb, 0xae, 0xf8, 0x00                   ; F8B872  group 03 mask 20 -> 0xF8AEDB
+	.byte 0x03, 0x40, 0x68, 0xae, 0xf8, 0x00                   ; F8B878  group 03 mask 40 -> 0xF8AE68
+	.byte 0x03, 0x80, 0xdb, 0xae, 0xf8, 0x00                   ; F8B87E  group 03 mask 80 -> 0xF8AEDB
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B884  end of list
+	; -- v1 g04
+	.byte 0x04, 0x01, 0x68, 0xae, 0xf8, 0x00                   ; F8B88A  group 04 mask 01 -> 0xF8AE68
+	.byte 0x04, 0x02, 0xdb, 0xae, 0xf8, 0x00                   ; F8B890  group 04 mask 02 -> 0xF8AEDB
+	.byte 0x04, 0x04, 0x68, 0xae, 0xf8, 0x00                   ; F8B896  group 04 mask 04 -> 0xF8AE68
+	.byte 0x04, 0x08, 0xdb, 0xae, 0xf8, 0x00                   ; F8B89C  group 04 mask 08 -> 0xF8AEDB
+	.byte 0x04, 0x10, 0x68, 0xae, 0xf8, 0x00                   ; F8B8A2  group 04 mask 10 -> 0xF8AE68
+	.byte 0x04, 0x20, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8A8  group 04 mask 20 -> 0xF8AEDB
+	.byte 0x04, 0x40, 0x68, 0xae, 0xf8, 0x00                   ; F8B8AE  group 04 mask 40 -> 0xF8AE68
+	.byte 0x04, 0x80, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8B4  group 04 mask 80 -> 0xF8AEDB
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B8BA  end of list
+	; -- v1 g05
+	.byte 0x05, 0x01, 0x68, 0xae, 0xf8, 0x00                   ; F8B8C0  group 05 mask 01 -> 0xF8AE68
+	.byte 0x05, 0x02, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8C6  group 05 mask 02 -> 0xF8AEDB
+	.byte 0x05, 0x04, 0x68, 0xae, 0xf8, 0x00                   ; F8B8CC  group 05 mask 04 -> 0xF8AE68
+	.byte 0x05, 0x08, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8D2  group 05 mask 08 -> 0xF8AEDB
+	.byte 0x05, 0x10, 0x68, 0xae, 0xf8, 0x00                   ; F8B8D8  group 05 mask 10 -> 0xF8AE68
+	.byte 0x05, 0x20, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8DE  group 05 mask 20 -> 0xF8AEDB
+	.byte 0x05, 0x40, 0x68, 0xae, 0xf8, 0x00                   ; F8B8E4  group 05 mask 40 -> 0xF8AE68
+	.byte 0x05, 0x80, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8EA  group 05 mask 80 -> 0xF8AEDB
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B8F0  end of list
+	; -- v1 g06
+	.byte 0x06, 0x01, 0x68, 0xae, 0xf8, 0x00                   ; F8B8F6  group 06 mask 01 -> 0xF8AE68
+	.byte 0x06, 0x02, 0xdb, 0xae, 0xf8, 0x00                   ; F8B8FC  group 06 mask 02 -> 0xF8AEDB
+	.byte 0x06, 0x04, 0x68, 0xae, 0xf8, 0x00                   ; F8B902  group 06 mask 04 -> 0xF8AE68
+	.byte 0x06, 0x08, 0xdb, 0xae, 0xf8, 0x00                   ; F8B908  group 06 mask 08 -> 0xF8AEDB
+	.byte 0x06, 0x10, 0x68, 0xae, 0xf8, 0x00                   ; F8B90E  group 06 mask 10 -> 0xF8AE68
+	.byte 0x06, 0x20, 0xdb, 0xae, 0xf8, 0x00                   ; F8B914  group 06 mask 20 -> 0xF8AEDB
+	.byte 0x06, 0x40, 0x68, 0xae, 0xf8, 0x00                   ; F8B91A  group 06 mask 40 -> 0xF8AE68
+	.byte 0x06, 0x80, 0xdb, 0xae, 0xf8, 0x00                   ; F8B920  group 06 mask 80 -> 0xF8AEDB
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B926  end of list
+	; -- v1 g07
+	.byte 0x07, 0x01, 0x08, 0xab, 0xf8, 0x00                   ; F8B92C  group 07 mask 01 -> 0xF8AB08
+	.byte 0x07, 0x02, 0x08, 0xab, 0xf8, 0x00                   ; F8B932  group 07 mask 02 -> 0xF8AB08
+	.byte 0x07, 0x04, 0x08, 0xab, 0xf8, 0x00                   ; F8B938  group 07 mask 04 -> 0xF8AB08
+	.byte 0x07, 0x08, 0x08, 0xab, 0xf8, 0x00                   ; F8B93E  group 07 mask 08 -> 0xF8AB08
+	.byte 0x07, 0x10, 0x08, 0xab, 0xf8, 0x00                   ; F8B944  group 07 mask 10 -> 0xF8AB08
+	.byte 0x07, 0x20, 0x08, 0xab, 0xf8, 0x00                   ; F8B94A  group 07 mask 20 -> 0xF8AB08
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B950  end of list
+	; -- v1 g08
+	.byte 0x08, 0x40, 0x57, 0xaa, 0xf8, 0x00                   ; F8B956  group 08 mask 40 -> 0xF8AA57
+	.byte 0x08, 0x3f, 0x24, 0xaa, 0xf8, 0x00                   ; F8B95C  group 08 mask 3F -> 0xF8AA24
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B962  end of list
+	; -- v1 g09
+	.byte 0x09, 0x01, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B968  group 09 mask 01 -> 0xF8AF4E
+	.byte 0x09, 0x02, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B96E  group 09 mask 02 -> 0xF8AF4E
+	.byte 0x09, 0x04, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B974  group 09 mask 04 -> 0xF8AF4E
+	.byte 0x09, 0x08, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B97A  group 09 mask 08 -> 0xF8AF4E
+	.byte 0x09, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B980  group 09 mask 10 -> 0xF8AF4E
+	.byte 0x09, 0x40, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B986  group 09 mask 40 -> 0xF8AF4E
+	.byte 0x09, 0x80, 0x81, 0xaf, 0xf8, 0x00                   ; F8B98C  group 09 mask 80 -> 0xF8AF81
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B992  end of list
+	; -- v1 g0A
+	.byte 0x0a, 0x01, 0x81, 0xaf, 0xf8, 0x00                   ; F8B998  group 0A mask 01 -> 0xF8AF81
+	.byte 0x0a, 0x02, 0x81, 0xaf, 0xf8, 0x00                   ; F8B99E  group 0A mask 02 -> 0xF8AF81
+	.byte 0x0a, 0x04, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9A4  group 0A mask 04 -> 0xF8AF81
+	.byte 0x0a, 0x08, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9AA  group 0A mask 08 -> 0xF8AF81
+	.byte 0x0a, 0x10, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9B0  group 0A mask 10 -> 0xF8AF81
+	.byte 0x0a, 0x20, 0x4e, 0xaf, 0xf8, 0x00                   ; F8B9B6  group 0A mask 20 -> 0xF8AF4E
+	.byte 0x0a, 0x40, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9BC  group 0A mask 40 -> 0xF8AF81
+	.byte 0x0a, 0x80, 0x81, 0xaf, 0xf8, 0x00                   ; F8B9C2  group 0A mask 80 -> 0xF8AF81
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9C8  end of list
+	; -- v1 g0B
+	.byte 0x0b, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8B9CE  group 0B mask 7F -> 0xF8AFD0
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9D4  end of list
+	; -- v1 g0C
+	.byte 0x0c, 0xff, 0xb4, 0xaf, 0xf8, 0x00                   ; F8B9DA  group 0C mask FF -> 0xF8AFB4
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9E0  end of list
+	; -- v1 g0D
+	.byte 0x0d, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8B9E6  group 0D mask 7F -> 0xF8AFD0
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9EC  end of list
+	; -- v1 g0E
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9F2  end of list
+	; -- v1 g0F
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8B9F8  end of list
+	; -- v1 g10
+	.byte 0x10, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8B9FE  group 10 mask 7F -> 0xF8AFD0
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA04  end of list
+	; -- v1 g11
+	.byte 0x11, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BA0A  group 11 mask 7F -> 0xF8AFD0
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA10  end of list
+	; -- v1 g12
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA16  end of list
+	; -- v1 g13
+	.byte 0x13, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BA1C  group 13 mask 7F -> 0xF8AFD0
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA22  end of list
+	; -- v1 g14
+	.byte 0x14, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BA28  group 14 mask 7F -> 0xF8AFD0
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA2E  end of list
+	; -- v1 g15
+	.byte 0x15, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BA34  group 15 mask 7F -> 0xF8AFD0
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA3A  end of list
+	; -- v1 g16
+	.byte 0x16, 0x01, 0x8b, 0xb0, 0xf8, 0x00                   ; F8BA40  group 16 mask 01 -> 0xF8B08B
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA46  end of list
+	; -- v1 g17
+	.byte 0x17, 0x01, 0x8b, 0xb0, 0xf8, 0x00                   ; F8BA4C  group 17 mask 01 -> 0xF8B08B
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA52  end of list
+	; -- v1 g18
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA58  end of list
+	; -- v2 g00
+	.byte 0x00, 0x01, 0x42, 0xab, 0xf8, 0x00                   ; F8BA5E  group 00 mask 01 -> 0xF8AB42
+	.byte 0x00, 0x02, 0x42, 0xab, 0xf8, 0x00                   ; F8BA64  group 00 mask 02 -> 0xF8AB42
+	.byte 0x00, 0x04, 0x42, 0xab, 0xf8, 0x00                   ; F8BA6A  group 00 mask 04 -> 0xF8AB42
+	.byte 0x00, 0x08, 0x42, 0xab, 0xf8, 0x00                   ; F8BA70  group 00 mask 08 -> 0xF8AB42
+	.byte 0x00, 0x70, 0xfd, 0xab, 0xf8, 0x00                   ; F8BA76  group 00 mask 70 -> 0xF8ABFD
+	.byte 0x00, 0x80, 0x70, 0xab, 0xf8, 0x00                   ; F8BA7C  group 00 mask 80 -> 0xF8AB70
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA82  end of list
+	; -- v2 g01
+	.byte 0x01, 0xff, 0xde, 0xad, 0xf8, 0x00                   ; F8BA88  group 01 mask FF -> 0xF8ADDE
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BA8E  end of list
+	; -- v2 g02
+	.byte 0x02, 0x0f, 0xde, 0xad, 0xf8, 0x00                   ; F8BA94  group 02 mask 0F -> 0xF8ADDE
+	.byte 0x02, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BA9A  group 02 mask 10 -> 0xF8AF4E
+	.byte 0x02, 0x20, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAA0  group 02 mask 20 -> 0xF8AF81
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BAA6  end of list
+	; -- v2 g03
+	.byte 0x03, 0x01, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAAC  group 03 mask 01 -> 0xF8AF81
+	.byte 0x03, 0x02, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAB2  group 03 mask 02 -> 0xF8AF81
+	.byte 0x03, 0x04, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAB8  group 03 mask 04 -> 0xF8AF81
+	.byte 0x03, 0x08, 0x81, 0xaf, 0xf8, 0x00                   ; F8BABE  group 03 mask 08 -> 0xF8AF81
+	.byte 0x03, 0x10, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAC4  group 03 mask 10 -> 0xF8AF81
+	.byte 0x03, 0x20, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BACA  group 03 mask 20 -> 0xF8AF4E
+	.byte 0x03, 0x40, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAD0  group 03 mask 40 -> 0xF8AF81
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BAD6  end of list
+	; -- v2 g04
+	.byte 0x04, 0x01, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BADC  group 04 mask 01 -> 0xF8AF4E
+	.byte 0x04, 0x02, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAE2  group 04 mask 02 -> 0xF8AF81
+	.byte 0x04, 0x04, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BAE8  group 04 mask 04 -> 0xF8AF4E
+	.byte 0x04, 0x08, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAEE  group 04 mask 08 -> 0xF8AF81
+	.byte 0x04, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BAF4  group 04 mask 10 -> 0xF8AF4E
+	.byte 0x04, 0x20, 0x81, 0xaf, 0xf8, 0x00                   ; F8BAFA  group 04 mask 20 -> 0xF8AF81
+	.byte 0x04, 0x40, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB00  group 04 mask 40 -> 0xF8AF4E
+	.byte 0x04, 0x80, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB06  group 04 mask 80 -> 0xF8AF81
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB0C  end of list
+	; -- v2 g05
+	.byte 0x05, 0x01, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB12  group 05 mask 01 -> 0xF8AF4E
+	.byte 0x05, 0x02, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB18  group 05 mask 02 -> 0xF8AF81
+	.byte 0x05, 0x04, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB1E  group 05 mask 04 -> 0xF8AF4E
+	.byte 0x05, 0x08, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB24  group 05 mask 08 -> 0xF8AF81
+	.byte 0x05, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB2A  group 05 mask 10 -> 0xF8AF4E
+	.byte 0x05, 0x20, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB30  group 05 mask 20 -> 0xF8AF81
+	.byte 0x05, 0x40, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB36  group 05 mask 40 -> 0xF8AF4E
+	.byte 0x05, 0x80, 0x81, 0xaf, 0xf8, 0x00                   ; F8BB3C  group 05 mask 80 -> 0xF8AF81
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB42  end of list
+	; -- v2 g06
+	.byte 0x06, 0x01, 0x08, 0xab, 0xf8, 0x00                   ; F8BB48  group 06 mask 01 -> 0xF8AB08
+	.byte 0x06, 0x02, 0x08, 0xab, 0xf8, 0x00                   ; F8BB4E  group 06 mask 02 -> 0xF8AB08
+	.byte 0x06, 0x04, 0x08, 0xab, 0xf8, 0x00                   ; F8BB54  group 06 mask 04 -> 0xF8AB08
+	.byte 0x06, 0x08, 0x08, 0xab, 0xf8, 0x00                   ; F8BB5A  group 06 mask 08 -> 0xF8AB08
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB60  end of list
+	; -- v2 g07
+	.byte 0x07, 0x02, 0x57, 0xaa, 0xf8, 0x00                   ; F8BB66  group 07 mask 02 -> 0xF8AA57
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB6C  end of list
+	; -- v2 g08
+	.byte 0x08, 0x01, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB72  group 08 mask 01 -> 0xF8AF4E
+	.byte 0x08, 0x02, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB78  group 08 mask 02 -> 0xF8AF4E
+	.byte 0x08, 0x04, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB7E  group 08 mask 04 -> 0xF8AF4E
+	.byte 0x08, 0x08, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB84  group 08 mask 08 -> 0xF8AF4E
+	.byte 0x08, 0x10, 0x4e, 0xaf, 0xf8, 0x00                   ; F8BB8A  group 08 mask 10 -> 0xF8AF4E
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB90  end of list
+	; -- v2 g14
+	.byte 0x14, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BB96  group 14 mask 7F -> 0xF8AFD0
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BB9C  end of list
+	; -- v2 g15
+	.byte 0x15, 0x7f, 0xd0, 0xaf, 0xf8, 0x00                   ; F8BBA2  group 15 mask 7F -> 0xF8AFD0
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BBA8  end of list
+	; -- v2 g09, v2 g0A, v2 g0B, v2 g0C, v2 g0D, v2 g0E, v2 g0F, v2 g10, v2 g11, v2 g12, v2 g13, v2 g16, v2 g17, v2 g18
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff                   ; F8BBAE  end of list
 
 ; 0xF8BBB4-0xF8BBFF -- 76 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: notes/gen_prom_a_block.py refuses to
@@ -32488,7 +33301,19 @@ sub_F926E3:
 	call 0xf40f3c                                        ; F9270B  1d 3c 0f f4
 .LF9270F:
 	ret                                                  ; F9270F  0e
-sub_F92710:
+; ---------------------------------------------------------------------
+; InstallPainter_SoundGroupMenu_Entry -- a PURE WRAPPER for InstallPainter_SoundGroupMenu: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xF92714, where the next top-level label begins.
+; Evidence: the `calr` at 0xF92710 targets 0xF927A6, which carries the
+;          label InstallPainter_SoundGroupMenu.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+InstallPainter_SoundGroupMenu_Entry:
 	calr 0x93                                            ; F92710  1e 93 00
 	ret                                                  ; F92713  0e
 sub_F92714:
@@ -33027,7 +33852,19 @@ sub_F92B83:
 	ret                                                  ; F92C4E  0e
 sub_F92C4F:
 	ret                                                  ; F92C4F  0e
-sub_F92C50:
+; ---------------------------------------------------------------------
+; InstallPainter_GroupSoundDisplayHold_Entry -- a PURE WRAPPER for InstallPainter_GroupSoundDisplayHold: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xF92C54, where the next top-level label begins.
+; Evidence: the `calr` at 0xF92C50 targets 0xF92CE7, which carries the
+;          label InstallPainter_GroupSoundDisplayHold.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+InstallPainter_GroupSoundDisplayHold_Entry:
 	calr 0x94                                            ; F92C50  1e 94 00
 	ret                                                  ; F92C53  0e
 sub_F92C54:
@@ -34094,7 +34931,19 @@ sub_F9352D:
 	ld XIX,0x00f2be35                                    ; F93537  44 35 be f2 00
 	call 0xf417f0                                        ; F9353C  1d f0 17 f4
 	ret                                                  ; F93540  0e
-sub_F93541:
+; ---------------------------------------------------------------------
+; InstallPainter_CombinationGroupMenu_Entry -- a PURE WRAPPER for InstallPainter_CombinationGroupMenu: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xF93545, where the next top-level label begins.
+; Evidence: the `calr` at 0xF93541 targets 0xF935D7, which carries the
+;          label InstallPainter_CombinationGroupMenu.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+InstallPainter_CombinationGroupMenu_Entry:
 	calr 0x93                                            ; F93541  1e 93 00
 	ret                                                  ; F93544  0e
 sub_F93545:
@@ -34397,7 +35246,19 @@ sub_F937F4:
 	ret                                                  ; F93821  0e
 sub_F93822:
 	ret                                                  ; F93822  0e
-sub_F93823:
+; ---------------------------------------------------------------------
+; InstallPainter_GroupCombiDisplayHold_Entry -- a PURE WRAPPER for InstallPainter_GroupCombiDisplayHold: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xF93827, where the next top-level label begins.
+; Evidence: the `calr` at 0xF93823 targets 0xF938B9, which carries the
+;          label InstallPainter_GroupCombiDisplayHold.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+InstallPainter_GroupCombiDisplayHold_Entry:
 	calr 0x93                                            ; F93823  1e 93 00
 	ret                                                  ; F93826  0e
 sub_F93827:
@@ -38588,7 +39449,19 @@ sub_F9982B:
 	ret                                                  ; F9982B  0e
 sub_F9982C:
 	ret                                                  ; F9982C  0e
-sub_F9982D:
+; ---------------------------------------------------------------------
+; Paint_SysexBulkDump_Entry -- a PURE WRAPPER for Paint_SysexBulkDump: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xF99831, where the next top-level label begins.
+; Evidence: the `calr` at 0xF9982D targets 0xF99A04, which carries the
+;          label Paint_SysexBulkDump.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Paint_SysexBulkDump_Entry:
 	calr 0x01d4                                          ; F9982D  1e d4 01
 	ret                                                  ; F99830  0e
 sub_F99831:
@@ -38601,7 +39474,19 @@ sub_F99835:
 	ret                                                  ; F99842  0e
 sub_F99843:
 	ret                                                  ; F99843  0e
-sub_F99844:
+; ---------------------------------------------------------------------
+; Paint_GeneralMidiMode_Entry -- a PURE WRAPPER for Paint_GeneralMidiMode: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xF99848, where the next top-level label begins.
+; Evidence: the `calr` at 0xF99844 targets 0xF99D0C, which carries the
+;          label Paint_GeneralMidiMode.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Paint_GeneralMidiMode_Entry:
 	calr 0x04c5                                          ; F99844  1e c5 04
 	ret                                                  ; F99847  0e
 sub_F99848:
@@ -38614,10 +39499,34 @@ sub_F9984C:
 	ret                                                  ; F99859  0e
 sub_F9985A:
 	ret                                                  ; F9985A  0e
-sub_F9985B:
+; ---------------------------------------------------------------------
+; Paint_Sending_Entry -- a PURE WRAPPER for Paint_Sending: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xF9985F, where the next top-level label begins.
+; Evidence: the `calr` at 0xF9985B targets 0xF99B82, which carries the
+;          label Paint_Sending.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Paint_Sending_Entry:
 	calr 0x0324                                          ; F9985B  1e 24 03
 	ret                                                  ; F9985E  0e
-sub_F9985F:
+; ---------------------------------------------------------------------
+; Paint_SystemExclusivePleaseWait_Entry -- a PURE WRAPPER for Paint_SystemExclusivePleaseWait: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xF99863, where the next top-level label begins.
+; Evidence: the `calr` at 0xF9985F targets 0xF99CA1, which carries the
+;          label Paint_SystemExclusivePleaseWait.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Paint_SystemExclusivePleaseWait_Entry:
 	calr 0x043f                                          ; F9985F  1e 3f 04
 	ret                                                  ; F99862  0e
 sub_F99863:
@@ -85912,7 +86821,19 @@ sub_FBC5BC:
 sub_FBC5BD:
 	calr 0x38f9                                          ; FBC5BD  1e f9 38
 	ret                                                  ; FBC5C0  0e
-sub_FBC5C1:
+; ---------------------------------------------------------------------
+; Var2075_ClrBit7_Entry -- a PURE WRAPPER for Var2075_ClrBit7: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xFBC5C5, where the next top-level label begins.
+; Evidence: the `calr` at 0xFBC5C1 targets 0xFBFED5, which carries the
+;          label Var2075_ClrBit7.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Var2075_ClrBit7_Entry:
 	calr 0x3911                                          ; FBC5C1  1e 11 39
 	ret                                                  ; FBC5C4  0e
 sub_FBC5C5:
@@ -92382,7 +93303,19 @@ sub_FBFFA6:
 ; 0x0E and the runs they sit in are shorter than the pad floor, so they stay as
 ; `ret` instructions in the listing and DO take labels.  A slot count is not a
 ; count of routines.
-sub_FC0000:
+; ---------------------------------------------------------------------
+; Msg0716_InitAllRecords_Entry -- a PURE WRAPPER for Msg0716_InitAllRecords: it IS that
+; routine, so it is named for it.  Its whole extent is
+; a single unconditional `jp`, which cannot fall through,
+; so the routine is that one instruction.
+; Evidence: the `jp` at 0xFC0000 targets 0xFC0018, which carries the
+;          label Msg0716_InitAllRecords.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Msg0716_InitAllRecords_Entry:
 	jp Msg0716_InitAllRecords                            ; FC0000  1b 18 00 fc
 	ret                                                  ; FC0004  0e
 	nop                                                  ; FC0005  00
@@ -92852,7 +93785,28 @@ sub_FC0430:
 	ld XIZ,0x00fc0980                                    ; FC0430  46 80 09 fc 00
 	ld XIY,0x00fc09ce                                    ; FC0435  45 ce 09 fc 00
 	ldb a, 0x0d                                          ; FC043A  21 0d
-sub_FC043C:
+; ---------------------------------------------------------------------
+; Msg0716_DispatchIndex_Entry -- a PURE WRAPPER for Msg0716_DispatchIndex: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xFC0440, where the next top-level label begins.
+; Evidence: the `calr` at 0xFC043C targets 0xFC0990, which is
+;          Msg0716_DispatchIndex -- confirmed by disassembling the site
+;          (`calr 0xfc0990`) and by this file's own header 500 lines below,
+;          which states that a 33rd object record "would start at 0xFC0990,
+;          which is Msg0716_DispatchIndex, reached by 64 calrs".
+; ⚠ CORRECTED IN ROUND 11: this wrapper was called Msg0716_DispatchIndex_Entry
+;          and its Evidence line asserted that 0xFC0990 "carries the label
+;          Msg0716_ObjectRecords". It does not -- Msg0716_ObjectRecords is the
+;          DATA TABLE that ENDS at 0xFC0990, and the wrapper never calls it. The
+;          tree's own header contradicted the name, and a parser bug that reads
+;          the label BEFORE a target rather than AT it is what produced it.
+;          The extent is measured to the next top-level label, never to a source
+;          line -- notes/wave7-verify-probes/wave7_r5_prom_a_painter_scope.py
+;          records what scoping to a source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Msg0716_DispatchIndex_Entry:
 	calr 0x0551                                          ; FC043C  1e 51 05
 	ret                                                  ; FC043F  0e
 sub_FC0440:
@@ -98828,7 +99782,19 @@ MixedTables_FC6626:
 ; is recorded as one rather than left out.)  The byte gate is indifferent --
 ; whatever is decoded is re-assembled -- but a reader should not take 0xFCC06B
 ; for a routine entry.
-sub_FC8000:
+; ---------------------------------------------------------------------
+; Ram3800_Start_Entry -- a PURE WRAPPER for Ram3800_Start: it IS that
+; routine, so it is named for it.  Its whole extent is
+; a single unconditional `jp`, which cannot fall through,
+; so the routine is that one instruction.
+; Evidence: the `jp` at 0xFC8000 targets 0xFC8018, which carries the
+;          label Ram3800_Start.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Ram3800_Start_Entry:
 	jp Ram3800_Start                                     ; FC8000  1b 18 80 fc
 	ret                                                  ; FC8004  0e
 	nop                                                  ; FC8005  00
@@ -135550,7 +136516,19 @@ sub_FE1CB3:
 sub_FE1CC0:
 	calr 0xebfa                                          ; FE1CC0  1e fa eb
 	ret                                                  ; FE1CC3  0e
-sub_FE1CC4:
+; ---------------------------------------------------------------------
+; Disk_PortA3_Release_Entry -- a PURE WRAPPER for Disk_PortA3_Release: it IS that
+; routine, so it is named for it.  Its whole extent is
+; one `calr` and the `ret` that follows it, and the routine
+; ends at 0xFE1CC8, where the next top-level label begins.
+; Evidence: the `calr` at 0xFE1CC4 targets 0xFE18F7, which carries the
+;          label Disk_PortA3_Release.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Disk_PortA3_Release_Entry:
 	calr 0xfc30                                          ; FE1CC4  1e 30 fc
 	ret                                                  ; FE1CC7  0e
 sub_FE1CC8:
@@ -137723,7 +138701,19 @@ sub_FE3004:
 ; ---------------------------------------------------------------------
 INT5_Dev7B_Receive_Alias:
 	jp 0xfe6866                                          ; FE3008  1b 66 68 fe
-sub_FE300C:
+; ---------------------------------------------------------------------
+; Fdc_ServiceDataByte_Isr_Entry -- a PURE WRAPPER for Fdc_ServiceDataByte_Isr: it IS that
+; routine, so it is named for it.  Its whole extent is
+; a single unconditional `jp`, which cannot fall through,
+; so the routine is that one instruction.
+; Evidence: the `jp` at 0xFE300C targets 0xFE30D8, which carries the
+;          label Fdc_ServiceDataByte_Isr.  The extent is measured to the next top-level
+;          label, never to a source line -- notes/wave7-verify-probes/
+;          wave7_r5_prom_a_painter_scope.py records what scoping to a
+;          source line cost the round-5 pass.
+; ---------------------------------------------------------------------
+
+Fdc_ServiceDataByte_Isr_Entry:
 	jp Fdc_ServiceDataByte_Isr                                        ; FE300C  1b d8 30 fe
 ; ---------------------------------------------------------------------
 ; INTTC0_uDMA0Done_Alias -- a one-instruction jump slot that enters INTTC0_uDMA0Done

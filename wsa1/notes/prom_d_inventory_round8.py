@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""prom_d -- THE STANDING WHOLE-IMAGE INVENTORY (wave 7 rounds 8 and 9).
+"""prom_d -- THE STANDING WHOLE-IMAGE INVENTORY (wave 7 rounds 8, 9, 10 and 11).
 
 ★★ ONE COMMAND RE-CHECKS THE WHOLE IMAGE.  `python3 notes/prom_d_inventory_round8.py
    --selftest` re-derives every one of prom_d's 3,665 labels from the ROM, asks
@@ -7,7 +7,31 @@
    has measured and refused, and re-reads the generated prose for a sentence its
    own number refutes.  That is what "finished" means for prom_d, and this file
    is the whole of it.  The filename says round 8 because a lane owns a filename;
-   round 9's sections are Q10-Q15 and its selftest is the second block.
+   round 9's sections are Q10-Q15, round 10's are Q16-Q20 and round 11's are
+   Q21-Q27; each round's selftest is its own block.
+
+★★ ROUND 11 -- THE SOUND GROUP, and it is the first prom_d finding that comes
+   from OUTSIDE this image.  Rounds 4-10 asked prom_d about itself, or asked
+   prom_c, which is the only image that READS it.  Round 11 asked prom_a, which
+   paints the panel, and prom_b, which stores the panel's text, and they settle
+   the tone table's index ORDER: it is 34 groups of 8, tone index k is group
+   k//8 member k mod 8, and the group's displayed name is prom_b's own 16 ASCII
+   bytes.  Neither number is typed anywhere it is USED -- Q21 derives both.
+   The proof is an identity, not an alignment -- entry k of prom_b's group/member
+   table is the (program, bank) pair that prom_d's OWN BankMap and ToneNumBanks
+   resolve to tone k, for 272 consecutive entries -- and prom_a's address
+   arithmetic (16 bytes per group over 2 per member) is what makes that index
+   8*group + member.  Q21.
+   ⚠ AND THE MORPHEMES IN ROUND 11's LABELS ARE prom_b's ASCII, NOT prom_d's.
+   That is a first for this image and it is stated everywhere it matters, because
+   the standing name check (round 6's reviewer, R6z) tests against prom_d's own
+   fields and would be right to refuse them.  T27/T28.
+
+★ ROUND 11's REPAIR OF ALREADY-COMMITTED WORK: round 6 Q8d pins the framed
+  denominator at 614 and exists precisely so that it does NOT move when a later
+  round promotes a label -- and it had been RED since round 10, because its
+  mapping-back patterns covered `_SameAs_` only.  Found by running every prom_d
+  script rather than only this one; fixed in notes/prom_d_understanding_round6.py.
 
 ★ ROUND 9's ONE FIND, and it is the argument for the audit existing: a generated
   comment stated 108 entries over a 132-byte object.  Four rounds of self-checks
@@ -334,7 +358,7 @@ def _r8_shape(slot):
 
 
 AUDITED_R8 = {0x18: (152, 163), 0x20: (151, 171)}
-AUDITED_CHECKS = 97          # rounds 8, 9 and 10 together
+AUDITED_CHECKS = 129         # rounds 8, 9, 10 and 11 together
 
 
 # ---------------------------------------------------------------------------
@@ -1347,7 +1371,11 @@ _AUDIT_GRADES = collections.Counter()
 # ⚠ MOVED IN ROUND 10, and the move is the round's whole result: M9 re-derives
 # 29 labels that were ADDRESS-only, so DERIVED goes 2857 -> 2886 and ADDRESS
 # 808 -> 779.  The pair still sums to 3,665.
-AUDITED_R9 = {"DERIVED": 2886, "ADDRESS": 779, "REFUTED": 0, "RESIDUE": 0}
+# ⚠ MOVED AGAIN IN ROUND 11 by M10's 8 sound-group labels: 2886 -> 2894 and
+# 779 -> 771.  Every move of this pair so far has been a PROMOTION, and the
+# constant is updated in the same commit as the rule that moved it, which is
+# what stops the assembly quoting a number no measurement produces any more.
+AUDITED_R9 = {"DERIVED": 2894, "ADDRESS": 771, "REFUTED": 0, "RESIDUE": 0}
 
 
 def boundary_stem(names, lim=4):
@@ -1524,7 +1552,8 @@ def audit_labels(rename=None):
             continue
 
         m = re.match(r"^(ToneDB_(?:Perc)?MixerDefaultTable|ToneDB_WaveSelTailPresets)"
-                     r"_(\d{3})(?:_SameAs_(.+)|_SelectedFor_(.+))?$", n)
+                     r"_(\d{3})(?:_SameAs_(.+)|_SelectedForGroup_(.+)"
+                     r"|_SelectedFor_(.+))?$", n)
         if m:
             slot = arr_slot[m.group(1)]
             i = int(m.group(2))
@@ -1533,6 +1562,23 @@ def audit_labels(rename=None):
             det = "0x%05X = 0x%05X + %d*%d" % (base + WAVESEL_STRIDE * i, base,
                                                WAVESEL_STRIDE, i)
             if m.group(4):
+                # ★ ROUND 11.  M10's label, re-derived the same way: the map's own
+                # entries, the program map's own words, and the SOUND GROUP the
+                # tone index falls in -- with the same insistence that the record
+                # has no twin, so one object makes one claim.
+                gs = selector_groups().get(i, [])
+                cols = selector_columns().get(i, [])
+                ok = (ok and slot == SELECTOR_ARRAY and gs
+                      and "_Or_".join(group_label(g) for g in gs) == m.group(4)
+                      and len(gs) <= GROUP_BOUND
+                      and not twins.get(slot, {}).get(i))
+                put(l.name, "DERIVED" if ok else "REFUTED",
+                    "wave-select record, named by the SOUND GROUP that selects it",
+                    det + "; ToneDB_ToneIndexMapA holds %d at program column(s) %s, "
+                    "whose tones lie in group(s) %s across the %d melodic rows"
+                    % (i, cols, [group_name(g).strip() for g in gs], MELODIC_ROWS))
+                continue
+            if m.group(5):
                 # ★ ROUND 10.  M9's label, re-derived: the map's own entries, the
                 # program map's own words, and the tone records' own ASCII.  The
                 # relation is DIFFERENT from `_SameAs_`, so the audit also insists
@@ -1540,7 +1586,7 @@ def audit_labels(rename=None):
                 want = selector_names().get(i, ())
                 cols = selector_columns().get(i, [])
                 ok = (ok and slot == SELECTOR_ARRAY
-                      and "_Or_".join(want) == m.group(4)
+                      and "_Or_".join(want) == m.group(5)
                       and not twins.get(slot, {}).get(i))
                 put(l.name, "DERIVED" if ok else "REFUTED",
                     "wave-select record, named by what SELECTS it",
@@ -2655,6 +2701,810 @@ def selftest_round10():
           "%d labels compared" % len(got))
 
 
+# ---------------------------------------------------------------------------
+# ★★ WAVE 7 ROUND 11.  THE SOUND GROUP -- prom_d's tone index order, named.
+#
+# Every earlier round asked this image about itself, or about prom_c, which is
+# the only image that READS it.  Round 11 asks the two images nobody had asked:
+# prom_a, which paints the panel, and prom_b, which stores the panel's text.
+# They answer a question rounds 4-10 all left open -- what prom_d's tone INDEX
+# order is -- and the answer is a proof rather than an alignment: the tone index
+# is 8*group + member, the group is the SOUND GROUP the panel selects with, and
+# its name is prom_b's own 16 ASCII bytes.
+#
+# ⚠ NOTHING BELOW IS TYPED.  Every base address is the 32-bit immediate of a
+# NAMED prom_a instruction, read at the INSTRUCTION address with its opcode byte
+# asserted -- this tree has shipped ~31 citations one byte past the instruction
+# and the assertion is what stops the 32nd.  Every stride is that instruction's
+# own multiplier.  The group COUNT is not typed either: it is where the identity
+# below stops holding, divided by the members-per-group the strides give.
+# ---------------------------------------------------------------------------
+PROM_A_BASE = 0xF80000
+PROM_B_BASE = 0xF00000
+A_IMG = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
+B_IMG = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13"), "rb").read()
+
+
+def a_operand(addr, opcode, width):
+    """The little-endian operand of the prom_a instruction AT `addr`.
+
+    `opcode` is the instruction's own opening bytes and is ASSERTED, so a
+    citation that has drifted off the instruction start fails here instead of
+    reaching the assembly.  Returns the `width`-byte immediate that follows.
+    """
+    off = addr - PROM_A_BASE
+    got = A_IMG[off:off + len(opcode)]
+    assert got == bytes(opcode), ("prom_a 0x%06X is %s, not %s"
+                                  % (addr, got.hex(), bytes(opcode).hex()))
+    return int.from_bytes(A_IMG[off + len(opcode):off + len(opcode) + width], "little")
+
+
+# prom_a SoundGroup_MaxMemberIndex_Get and the group-name fetch beside it.
+# 0xFC2070  ld XIY,0x00F068B4     the 16-byte SOUND GROUP NAME rows
+# 0xFC208D  mul WA,0x0010         * the group number  -> the row
+# 0xFC225C  ld XIX,0x00F06EB4     GroupMaxMemberIndex_ToneGroups
+# 0xFC230C  mul WA,0x0010         group * 16 -- the row of the member table
+# 0xFC2317  mul BC,0x0002         member * 2 -- the entry inside the row
+# 0xFC231D  add XBC,0x00F06EF4    SoundCodeByGroupMember_ModeOffsetGroup
+GROUP_NAME_ADDR = a_operand(0xFC2070, (0x45,), 4)
+GROUP_NAME_STRIDE = a_operand(0xFC208D, (0xD8, 0x08), 2)
+GROUP_MAXMEM_ADDR = a_operand(0xFC225C, (0x44,), 4)
+GROUP_MEMBER_ADDR = a_operand(0xFC231D, (0xE9, 0xC8), 4)
+GROUP_ROW_STRIDE = a_operand(0xFC230C, (0xD8, 0x08), 2)
+GROUP_ENTRY_STRIDE = a_operand(0xFC2317, (0xD9, 0x08), 2)
+# ★ 8 MEMBERS PER GROUP, DERIVED: prom_a strides the member table by 16 bytes
+# per group and 2 bytes per member, so a group's row holds 16/2 entries.
+GROUP_MEMBERS = GROUP_ROW_STRIDE // GROUP_ENTRY_STRIDE
+
+
+def group_name(g):
+    """Group g's own 16 ASCII bytes, out of prom_b."""
+    o = GROUP_NAME_ADDR - PROM_B_BASE + GROUP_NAME_STRIDE * g
+    return B_IMG[o:o + GROUP_NAME_STRIDE].decode("latin1")
+
+
+def group_member_entry(k):
+    """(program, bank-select) -- entry k of prom_b's group/member table."""
+    o = GROUP_MEMBER_ADDR - PROM_B_BASE + GROUP_ENTRY_STRIDE * k
+    return B_IMG[o], B_IMG[o + 1]
+
+
+def group_member_tone(k):
+    """The tone entry k selects, resolved THROUGH prom_d's own two tables.
+
+    bank-select -> ToneDB_BankMap (slot +0x6C) -> a row of ToneDB_ToneNumBanks
+    (slot +0x04) -> the LE16 at that row and program.  Returns None when the
+    pair is not a legal (bank, program) for this image.
+    """
+    p, b = group_member_entry(k)
+    if p >= R6.PROG_COLS or b >= 0x80:
+        return None
+    row = D[S(0x6C) + b]
+    if row >= R6.PROG_ROWS:
+        return None
+    return u16(R6.PROG_BASE + 0x100 * row + 2 * p)
+
+
+def group_identity_run():
+    """How many CONSECUTIVE entries k satisfy group_member_tone(k) == k.
+
+    This is the whole derivation.  The table is the INVERSE of prom_d's program
+    map, so entry k naming tone k says the table is indexed by tone index; and
+    prom_a addressing it as 16*group + 2*member says that index IS
+    GROUP_MEMBERS*group + member.  Where the run stops is where the table stops
+    being a per-group listing, and that is how the group COUNT is derived.
+    """
+    k = 0
+    while group_member_tone(k) == k:
+        k += 1
+    return k
+
+
+GROUP_RUN = group_identity_run()
+GROUP_COUNT = GROUP_RUN // GROUP_MEMBERS
+
+
+def tone_group(t):
+    """(group, member) for a tone index inside the run, else None."""
+    return (t // GROUP_MEMBERS, t % GROUP_MEMBERS) if 0 <= t < GROUP_RUN else None
+
+
+def group_label(g):
+    """The label-safe form of a group's own ASCII, by round 6's camel() rule."""
+    return R6.camel(group_name(g))
+
+
+def _words(s):
+    """Alphabetic words of >=3 letters, upper-cased -- for the alignment test."""
+    return set(w.upper() for w in re.findall(r"[A-Za-z]+", s) if len(w) >= 3)
+
+
+def group_word_alignment(shift=0, groups=None):
+    """Groups whose NAME shares a word with one of the tone names it heads.
+
+    The corroboration for the NAME table's alignment.  `shift` rotates the group
+    numbering against the tone octets, so the same statistic is its own null.
+    """
+    n = GROUP_COUNT if groups is None else groups
+    hit = []
+    for g in range(n):
+        gg = (g + shift) % n
+        tt = set()
+        for m in range(GROUP_MEMBERS):
+            t = gg * GROUP_MEMBERS + m
+            tt |= _words(D[R6.TONE_PTRS[t]:R6.TONE_PTRS[t] + 16].decode("latin1"))
+        if _words(group_name(g)) & tt:
+            hit.append(g)
+    return hit
+
+
+def group_kit_witness():
+    """(tones ending in 'Kit', the groups they fall in, the rows spelling DRUM).
+
+    ★ THE ALIGNMENT WITNESS AT THE END OF THE TABLE, which is where a rule that
+    stops early shows.  It is independent of the word test above: it uses a
+    suffix of the TONE names and a substring of the GROUP names.
+    """
+    kits = [t for t in range(GROUP_RUN)
+            if D[R6.TONE_PTRS[t]:R6.TONE_PTRS[t] + 16].decode("latin1").strip()
+            .endswith("Kit")]
+    rows = [g for g in range(GROUP_COUNT) if "DRUM" in group_name(g).upper()]
+    return kits, sorted(set(t // GROUP_MEMBERS for t in kits)), rows
+
+
+# ---------------------------------------------------------------------------
+# M10.  THE SINGLE-GROUP SELECTOR NAME.
+# ---------------------------------------------------------------------------
+def selector_groups(slot=SELECTOR_SLOT):
+    """{record index: sorted sound groups of every tone in its columns}.
+
+    Round 10's selector_names() with the tone replaced by its GROUP.  The column
+    reading is round 10's and is invariant under all eight row rotations for the
+    same reason (T17); collapsing to the group can only make it more so.
+    """
+    out = {}
+    for k, cols in selector_columns(slot).items():
+        gs = set()
+        for c in cols:
+            for r in range(MELODIC_ROWS):
+                g = tone_group(program_tone(r, c))
+                if g is not None:
+                    gs.add(g[0])
+        out[k] = sorted(gs)
+    return out
+
+
+GROUP_BOUND = 1          # M10's bound, swept 1..5 in Q22 and argued there
+
+
+def group_labels(bound=GROUP_BOUND):
+    """{record index: label suffix} -- M10's names, for the FRAMED records only.
+
+    A record already named by round 6/7/8 (a byte identity) or round 10 (a tone
+    the map puts it under) is never touched.  At bound 1 the label names ONE
+    object -- a sound group prom_b spells and prom_a paints -- and claims only
+    that every program column reaching this record lies in it.
+    """
+    have = dict(wavesel_labels_r8(SELECTOR_ARRAY))
+    have.update(selector_labels())
+    twins = R6.wavesel_twins(SELECTOR_ARRAY)
+    _a, n, _r = R6.array_records(SELECTOR_ARRAY)
+    out = {}
+    for k, gs in selector_groups().items():
+        if k >= n or k in have or not 1 <= len(gs) <= bound:
+            continue
+        # ★ ROUND 10's DISCIPLINE, KEPT: never label a record that HAS a byte
+        # twin.  M9 skipped them so that no derived name could contradict
+        # another derived name, and the one record this costs M10 is the one
+        # where the two witnesses really do disagree -- record 67, whose map
+        # columns are all STRINGS 1 while its twins reach STRINGS 2 as well.
+        # group_twin_conflicts() prints it rather than leaving it implicit.
+        if twins.get(k):
+            continue
+        out[k] = "_Or_".join(group_label(g) for g in gs)
+    return out
+
+
+def group_twin_conflicts():
+    """[(record, map groups, twin groups)] -- what the twin exclusion costs.
+
+    The records M10's bound would reach but which HAVE a byte twin, with the
+    groups each of the two routes gives.  A record here is NOT labelled.
+    """
+    twins = R6.wavesel_twins(SELECTOR_ARRAY)
+    have = dict(wavesel_labels_r8(SELECTOR_ARRAY))
+    have.update(selector_labels())
+    _a, n, _r = R6.array_records(SELECTOR_ARRAY)
+    out = []
+    for k, gs in sorted(selector_groups().items()):
+        if k >= n or k in have or not 1 <= len(gs) <= GROUP_BOUND or not twins.get(k):
+            continue
+        tg = sorted(set(tone_group(t)[0] for t, _j, _nm in twins[k]
+                        if tone_group(t) is not None))
+        out.append((k, gs, tg))
+    return out
+
+
+def _r11_shape():
+    """(records named by M10, first, last) -- the constant the generator refuses on."""
+    lab = group_labels()
+    ks = sorted(lab)
+    return (len(lab), "%d:%s" % (ks[0], lab[ks[0]]), "%d:%s" % (ks[-1], lab[ks[-1]]))
+
+
+AUDITED_R11 = (8, "19:ORGAN", "321:PERCUSSION")
+
+
+# ---------------------------------------------------------------------------
+# Q23.  IS +0x0C THE ONLY MAP THAT INDEXES THE +0x18 ARRAY?
+# ---------------------------------------------------------------------------
+def map_selector_census(array=SELECTOR_ARRAY, draws=20, seed=20260901):
+    """[(slot, min, max, readers, asked, hits, null mean, null max, reached,
+        reached-of-the-unreached)] for every 1,024-entry map whose range fits.
+
+    ★ THE CENSUS ROUND 10 RAN ON ONE MAP.  Q20 tested slot +0x10 against the
+    +0x18 array and reported a weak negative.  Ten maps have a range that fits
+    that array; this asks all ten the same question on the same statistic with
+    the same null, so `the 111 are unreached` is a statement about the ONE map
+    that is a selector rather than about the one map somebody tried.
+    """
+    _a, n, _r = R6.array_records(array)
+    lab = wavesel_labels_r8(array)
+    unreached = set(k for k in range(n) if k not in lab) - set(selector_names())
+    out = []
+    for slot, _ents, mn, mx, rd in index_maps():
+        if mx >= n:
+            continue
+        vals = selector_map(slot)
+        tot, ok = selector_byte_agreement(vals)
+        rnd = random.Random(seed)
+        nl = []
+        for _t in range(draws):
+            perm = vals[:]
+            rnd.shuffle(perm)
+            nl.append(selector_byte_agreement(perm)[1])
+        reach = set(vals)
+        out.append((slot, mn, mx, rd, tot, ok, sum(nl) / len(nl), max(nl),
+                    len(reach & set(range(n))), len(reach & unreached), len(unreached)))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Q24.  M10 ON THE PRESET ARRAY -- measured, and refused.
+# ---------------------------------------------------------------------------
+def preset_group_routes():
+    """{preset: (records, identified-by-twin, groups-by-twin, identified-by-map,
+                 groups-by-map)}.
+
+    The two routes from a preset record to a sound group.  A preset is selected
+    only by field +0x0B of another wave-select record, and in this image the only
+    records that ever select one other than preset 0 are the +0x18 array's, so
+    both routes go through that array: by the twin a record's BYTES are, and by
+    the columns the map puts it under.
+    """
+    _a, n18, recs = R6.array_records(SELECTOR_ARRAY)
+    twins = R6.wavesel_twins(SELECTOR_ARRAY)
+    grp = selector_groups()
+    out = {}
+    for p in sorted(set(r[PRESET_FIELD] & 0x3F for r in recs)):
+        ks = [k for k in range(n18) if recs[k][PRESET_FIELD] & 0x3F == p]
+        gt, gm, nt, nm = set(), set(), 0, 0
+        for k in ks:
+            tw = set(tone_group(t)[0] for t, _j, _n in twins.get(k, [])
+                     if tone_group(t) is not None)
+            if tw:
+                nt += 1
+                gt |= tw
+            if grp.get(k):
+                nm += 1
+                gm |= set(grp[k])
+        out[p] = (len(ks), nt, sorted(gt), nm, sorted(gm))
+    return out
+
+
+def q21():
+    say("\n=== Q21.  ★★ THE SOUND GROUP -- prom_d's tone index order, PROVEN ===\n")
+    say("  Rounds 4-10 all left one sentence standing over this image's tone")
+    say("  table: the index order is `a Technics-internal ordering; nothing here")
+    say("  identifies which panel control it corresponds to`.  It does now, and")
+    say("  the evidence is in the two images no prom_d round had opened.")
+    say("")
+    say("  (a) THE THREE OBJECTS, each read as a NAMED prom_a instruction's own")
+    say("      32-bit immediate, with the opcode byte at the cited address")
+    say("      asserted before the operand is taken:")
+    say("        prom_a 0xFC2070  ld XIY,0x%06X   the 16-byte SOUND GROUP NAME rows"
+        % GROUP_NAME_ADDR)
+    say("        prom_a 0xFC225C  ld XIX,0x%06X   GroupMaxMemberIndex_ToneGroups"
+        % GROUP_MAXMEM_ADDR)
+    say("        prom_a 0xFC231D  add XBC,0x%06X  the group/member table"
+        % GROUP_MEMBER_ADDR)
+    say("      and the strides are the same instructions' multipliers:")
+    say("        0xFC208D  mul WA,0x%04x   the name row              (%d bytes)"
+        % (GROUP_NAME_STRIDE, GROUP_NAME_STRIDE))
+    say("        0xFC230C  mul WA,0x%04x   the member table's ROW    (%d bytes)"
+        % (GROUP_ROW_STRIDE, GROUP_ROW_STRIDE))
+    say("        0xFC2317  mul BC,0x%04x   one member inside the row (%d bytes)"
+        % (GROUP_ENTRY_STRIDE, GROUP_ENTRY_STRIDE))
+    say("      ★ so a group's row holds %d/%d = %d MEMBERS, and that number is"
+        % (GROUP_ROW_STRIDE, GROUP_ENTRY_STRIDE, GROUP_MEMBERS))
+    say("        prom_a's arithmetic, not this round's reading of a table.")
+    check("Q21a the three bases are operands of the instruction AT the cited address",
+          (GROUP_NAME_ADDR, GROUP_MAXMEM_ADDR, GROUP_MEMBER_ADDR)
+          == (0xF068B4, 0xF06EB4, 0xF06EF4),
+          "0x%06X / 0x%06X / 0x%06X" % (GROUP_NAME_ADDR, GROUP_MAXMEM_ADDR,
+                                        GROUP_MEMBER_ADDR))
+    mm = B_IMG[GROUP_MAXMEM_ADDR - PROM_B_BASE:
+               GROUP_MAXMEM_ADDR - PROM_B_BASE + GROUP_NAME_STRIDE]
+    check("Q21b and prom_b's own max-member byte agrees with that %d" % GROUP_MEMBERS,
+          set(mm) == {GROUP_MEMBERS - 1},
+          "all %d bytes of GroupMaxMemberIndex_ToneGroups are 0x%02X, i.e. members "
+          "0..%d" % (len(mm), GROUP_MEMBERS - 1, GROUP_MEMBERS - 1))
+    say("")
+    say("  (b) ★★ THE IDENTITY.  Entry k of the group/member table is a")
+    say("      (program, bank-select) pair.  Resolve it THROUGH prom_d's own two")
+    say("      tables -- ToneDB_BankMap (slot +0x6C) turns the bank-select into a")
+    say("      row of ToneDB_ToneNumBanks (slot +0x04), and that row at that")
+    say("      program holds a tone index -- and the answer is k itself:")
+    p0, b0 = group_member_entry(0)
+    pl, bl = group_member_entry(GROUP_RUN - 1)
+    pn, bn = group_member_entry(GROUP_RUN)
+    say("        entry   0 = (program %3d, bank 0x%02X) -> tone %3d" % (p0, b0, 0))
+    say("        entry %3d = (program %3d, bank 0x%02X) -> tone %3d"
+        % (GROUP_RUN - 1, pl, bl, GROUP_RUN - 1))
+    say("        entry %3d = (program %3d, bank 0x%02X) -> tone %3s  <- the run ENDS"
+        % (GROUP_RUN, pn, bn, group_member_tone(GROUP_RUN)))
+    say("      %d consecutive entries, no exception.  So the table is the INVERSE"
+        % GROUP_RUN)
+    say("      of prom_d's program map and is indexed by TONE INDEX -- and since")
+    say("      prom_a addresses it as %d*group + %d*member, THE TONE INDEX IS"
+        % (GROUP_ROW_STRIDE, GROUP_ENTRY_STRIDE))
+    say("      %d*group + member." % GROUP_MEMBERS)
+    check("Q21c ★ the identity holds over its whole run, first entry and last",
+          GROUP_RUN > 0 and group_member_tone(0) == 0
+          and group_member_tone(GROUP_RUN - 1) == GROUP_RUN - 1,
+          "%d of %d, and entry %d is the first that is not its own index"
+          % (GROUP_RUN, GROUP_RUN, GROUP_RUN))
+    say("")
+    say("  (c) ★ AND THE GROUP COUNT IS NOT TYPED EITHER.  %d / %d = %d groups,"
+        % (GROUP_RUN, GROUP_MEMBERS, GROUP_COUNT))
+    say("      and prom_b's name table has EXACTLY that many named rows: row %d"
+        % GROUP_COUNT)
+    say("      reads %r." % group_name(GROUP_COUNT).strip())
+    check("Q21d the name table stops exactly where the identity run stops",
+          set(group_name(GROUP_COUNT).strip()) == {"-"}
+          and all(_words(group_name(g)) for g in range(GROUP_COUNT)),
+          "rows 0..%d all carry letters; row %d is %r"
+          % (GROUP_COUNT - 1, GROUP_COUNT, group_name(GROUP_COUNT).strip()))
+    for g0 in range(0, GROUP_COUNT, 4):
+        say("      " + "".join("%2d %-18s" % (g, group_name(g).strip())
+                               for g in range(g0, min(g0 + 4, GROUP_COUNT))))
+    say("")
+    say("  (d) ★★ WHICH NAME GOES WITH WHICH OCTET is a SEPARATE claim from (b),")
+    say("      and it is the one a reviewer should attack: (b) pins the layout,")
+    say("      not the name table's origin.  Two independent witnesses.")
+    hit = group_word_alignment()
+    nulls = [(s, len(group_word_alignment(s))) for s in range(1, GROUP_COUNT)]
+    adj = [n for s, n in nulls if s in (1, GROUP_COUNT - 1)]
+    far = [n for s, n in nulls if s not in (1, GROUP_COUNT - 1)]
+    say("      WITNESS 1, the word test: %d of the %d groups share a word of >=3"
+        % (len(hit), GROUP_COUNT))
+    say("      letters with one of the %d tone names their octet holds.  Rotating"
+        % GROUP_MEMBERS)
+    say("      the numbering scores %d..%d at every shift except +/-1."
+        % (min(far), max(far)))
+    say("      ⚠ AND +/-1 SCORE %s, said here rather than left to a reviewer: this"
+        % "/".join(str(x) for x in adj))
+    say("      list has adjacent numbered runs (GUITAR 1/2/3, BASS 1/2/3, SYNTH")
+    say("      PAD 1/2/3), so a one-step rotation is not an independent null.")
+    check("Q21e the word test beats every rotation, including its worst null",
+          len(hit) > max(n for _s, n in nulls),
+          "aligned %d of %d; best rotation %d; best non-adjacent rotation %d"
+          % (len(hit), GROUP_COUNT, max(n for _s, n in nulls), max(far)))
+    miss = [g for g in range(GROUP_COUNT) if g not in hit]
+    say("      THE GAP, per group: %d share no word -- %s."
+        % (len(miss), ", ".join(group_name(g).strip() for g in miss)))
+    kits, kitgroups, drumrows = group_kit_witness()
+    say("      WITNESS 2, the END of the table, which is where a rule that stops")
+    say("      early shows: %d tone names end in 'Kit', they occupy exactly groups"
+        % len(kits))
+    say("      %s, and those are exactly the %d rows of the name table whose text"
+        % (kitgroups, len(drumrows)))
+    say("      contains 'DRUM' (%s)."
+        % ", ".join(group_name(g).strip() for g in drumrows))
+    check("Q21f ★ the kit witness pins the name table's origin independently",
+          kitgroups == drumrows and len(kits) == len(drumrows) * GROUP_MEMBERS,
+          "%d kits in groups %s; DRUM rows %s" % (len(kits), kitgroups, drumrows))
+    say("")
+    say("  ⚠ WHAT THIS DOES NOT SAY.  It does not name a single BYTE of a tone")
+    say("    record, and it does not say what a group means to the synthesis.  It")
+    say("    says what the panel calls tone k, which is a fact about the machine's")
+    say("    user interface, and every label and banner below claims only that.")
+
+
+def q22():
+    say("\n=== Q22.  ★ M10 -- THE SOUND GROUP AS A NAME, AND ITS BOUND ===\n")
+    say("  Round 10's M9 names a record of ToneDB_MixerDefaultTable by the TONE")
+    say("  its map columns carry, and refuses when the columns carry more than %d."
+        % MAX_NAMES)
+    say("  M10 asks the same columns a coarser question -- which sound GROUP -- and")
+    say("  a group is a real object with a real name, not a disjunction.")
+    grp = selector_groups()
+    have = dict(wavesel_labels_r8(SELECTOR_ARRAY))
+    have.update(selector_labels())
+    _a, n, _r = R6.array_records(SELECTOR_ARRAY)
+    framed = [k for k in range(n) if k not in have]
+    say("")
+    say("  THE BOUND, SWEPT, and the reason it is %d and not round 8's %d:"
+        % (GROUP_BOUND, MAX_NAMES))
+    for b in range(1, 6):
+        got = [k for k in framed if 1 <= len(grp.get(k, [])) <= b]
+        say("      bound %d -> %2d names, each claiming up to %3d tones"
+            % (b, len(got), b * GROUP_MEMBERS))
+    say("  ★ A GROUP ALREADY NAMES %d TONES.  At bound 1 a label says `every"
+        % GROUP_MEMBERS)
+    say("    program column that reaches this record lies in ONE named group`,")
+    say("    which is a statement about one object.  At bound 2 it enumerates %d"
+        % (2 * GROUP_MEMBERS))
+    say("    tones -- wider than the six-name disjunction round 8 refused as `a")
+    say("    whole drum family` -- so the bound is 1 and the sweep is printed so")
+    say("    a later round can attack it.")
+    lab = group_labels()
+    say("")
+    say("  ★ THE %d M10 NAMES, IN FULL:" % len(lab))
+    for k in sorted(lab):
+        say("      record %3d  <- program columns %-22s %s"
+            % (k, str(selector_columns()[k])[:22], lab[k]))
+    check("Q22a M10 never touches a record round 6/7/8 or round 10 named",
+          not (set(lab) & set(have)), "%d M10 names, %d already-named records"
+          % (len(lab), len(have)))
+    check("Q22b every morpheme is a group's own ASCII, not a coinage",
+          all(all(x in [group_label(g) for g in range(GROUP_COUNT)]
+                  for x in v.split("_Or_")) for v in lab.values()),
+          "%d distinct group names used"
+          % len(set(x for v in lab.values() for x in v.split("_Or_"))))
+    lastk = max(lab) if lab else None
+    check("Q22c ★ checked on the LAST record of the array, which round 10 REFUSED",
+          lastk == n - 1,
+          "record %d: round 10 found %d tone names (>%d) and refused; M10 finds "
+          "%d group -> %s" % (n - 1, len(selector_names().get(n - 1, ())), MAX_NAMES,
+                              len(grp.get(n - 1, [])), lab.get(n - 1)))
+    dig = [k for k in framed if k in selector_names()
+           and 1 <= len(selector_names()[k]) <= MAX_NAMES
+           and not all(_has_letter(x) for x in selector_names()[k])]
+    check("Q22d ★ and it resolves round 10's two `161` refusals with real letters",
+          dig and all(k in lab for k in dig),
+          "records %s -> %s" % (dig, sorted(set(lab[k] for k in dig if k in lab))))
+    conf = group_twin_conflicts()
+    say("")
+    say("  ⚠ AND WHAT THE `NO TWIN` RULE COSTS, printed rather than left implicit.")
+    say("    Round 10's M9 never labels a record that HAS a byte twin, so that no")
+    say("    derived name can contradict another; M10 keeps that rule.  The records")
+    say("    the bound would otherwise have reached:")
+    for k, gs, tg in conf:
+        say("      record %3d  the map says %-14s the twins reach %s"
+            % (k, ", ".join(group_name(g).strip() for g in gs),
+               ", ".join(group_name(g).strip() for g in tg)))
+    check("Q22f ★ and on the one it costs, the two routes really do DISAGREE",
+          bool(conf) and all(set(gs) != set(tg) for _k, gs, tg in conf),
+          "%d record%s excluded, %d of them with a twin group the map does not give"
+          % (len(conf), "" if len(conf) == 1 else "s",
+             sum(1 for _k, gs, tg in conf if set(gs) != set(tg))))
+    check("Q22e the shape the generator refuses on still matches",
+          _r11_shape() == AUDITED_R11, "%s" % (_r11_shape(),))
+
+
+def q23():
+    say("\n=== Q23.  ★★ IS +0x0C THE ONLY MAP THAT INDEXES THE ARRAY? ===\n")
+    say("  Round 10 left records of ToneDB_MixerDefaultTable framed because no")
+    say("  entry of the map at slot +0x%02X names them.  That is a census result --"
+        % SELECTOR_SLOT)
+    say("  but over ONE map.  Ten of this image's 1,024-entry maps have a range")
+    say("  that fits the 322-record array, and Q20 tested one of them.  Here are")
+    say("  all ten, on round 10's own statistic with its own shuffled null.")
+    say("")
+    say("      slot   range     rdrs   agree/asked   null mean/max   reaches   of the")
+    say("                                                            the array unreached")
+    rows = map_selector_census()
+    for slot, mn, mx, rd, tot, ok, nm, nx, reach, hitunr, nunr in rows:
+        say("      +0x%02X  %3d..%-3d    %d    %4d/%4d      %5.1f / %-3d      %3d      %3d of %d"
+            % (slot, mn, mx, rd, ok, tot, nm, nx, reach, hitunr, nunr))
+    sel = [r for r in rows if r[0] == SELECTOR_SLOT][0]
+    others = [r for r in rows if r[0] != SELECTOR_SLOT]
+    say("")
+    say("  ★ ONE MAP IS A SELECTOR AND THE OTHER %d ARE NOT.  Slot +0x%02X scores"
+        % (len(others), SELECTOR_SLOT))
+    say("    %d of %d against a shuffled %.1f; the best of the others is %d of %d,"
+        % (sel[5], sel[4], sel[6], max(r[5] for r in others),
+           [r[4] for r in others if r[5] == max(x[5] for x in others)][0]))
+    say("    and every one of them sits within a few points of its OWN null.")
+    check("Q23a only the selector scores anywhere near its asked positions",
+          100.0 * sel[5] / sel[4] > 50.0
+          and all(100.0 * r[5] / r[4] < 5.0 for r in others),
+          "selector %.1f%%; the best of the other %d is %.1f%%"
+          % (100.0 * sel[5] / sel[4], len(others),
+             max(100.0 * r[5] / r[4] for r in others)))
+    check("Q23b ★ and the selector reaches NONE of the unreached records",
+          sel[9] == 0, "%d of the %d" % (sel[9], sel[10]))
+    best = max(others, key=lambda r: r[9])
+    check("Q23c ★ while the maps that DO touch them are the ones that fail the test",
+          best[5] == 0,
+          "slot +0x%02X touches %d of the %d unreached and scores %d of %d"
+          % (best[0], best[9], best[10], best[5], best[4]))
+    say("")
+    say("  ⚠ SO THE REASON THE %d ARE NAMELESS IS NOW A STATEMENT ABOUT THE ONLY"
+        % sel[10])
+    say("    MAP THAT IS A SELECTOR, not about the only map anyone tried.  They")
+    say("    have no byte twin and no entry of it; the other %d maps reach them,"
+        % len(others))
+    say("    and none of the %d is a selector of this array." % len(others))
+
+
+def q24():
+    say("\n=== Q24.  M10 ON THE PRESET ARRAY -- measured, and REFUSED ===\n")
+    say("  ToneDB_WaveSelTailPresets' %d records are the largest framed block left."
+        % R6.array_records(0x3C)[1])
+    say("  Round 8 Q2 found the ONE stored field that selects one and stopped at")
+    say("  the count.  M10 goes one step further: the records that select a preset")
+    say("  are the +0x18 array's, and those now have a sound GROUP, so a preset")
+    say("  could be named by the groups that share it.  Two routes, both measured:")
+    say("")
+    say("      preset  records  by TWIN: recs  groups   by MAP: recs  groups")
+    routes = preset_group_routes()
+    for p, (nk, nt, gt, nm, gm) in sorted(routes.items()):
+        say("        %2d      %4d        %4d     %2d              %4d     %2d"
+            % (p, nk, nt, len(gt), nm, len(gm)))
+    say("")
+    say("  ★ NO PRESET REACHES ONE GROUP ON EITHER ROUTE, so M10 names none of")
+    say("    them.  The nearest miss, in full because a refusal has to be visible:")
+    full = [kv for kv in routes.items() if kv[1][0] > 1 and kv[1][1] == kv[1][0]]
+    near = min(full, key=lambda kv: len(kv[1][2]))
+    say("      preset %d: %d records, ALL %d identified, %d groups -- %s"
+        % (near[0], near[1][0], near[1][1], len(near[1][2]),
+           ", ".join(group_name(g).strip() for g in near[1][2])))
+    say("      A label naming three groups claims %d tones.  Round 8 refused a"
+        % (3 * GROUP_MEMBERS))
+    say("      six-NAME disjunction as `a whole drum family`; this is four times")
+    say("      that, and it is refused for the same reason.")
+    check("Q24a M10 reaches no preset record at the bound that names elsewhere",
+          not any(len(v[2]) == GROUP_BOUND and v[1] * 2 >= v[0] for v in routes.values()),
+          "smallest group set on the twin route is %d, over %d of %d records"
+          % (len(near[1][2]), near[1][1], near[1][0]))
+    one = [p for p, v in routes.items() if len(v[2]) == 1]
+    check("Q24b ★ and the ONE preset that does reach a single group is refused on "
+          "COVERAGE",
+          all(routes[p][1] * 4 < routes[p][0] for p in one),
+          "preset %s: %d of %d records identified"
+          % (one, routes[one[0]][1], routes[one[0]][0]) if one else "none")
+    _b, n3c, _r = R6.array_records(0x3C)
+    say("")
+    say("  ⚠ SO ALL %d STAY FRAMED, and the reason per object is unchanged and" % n3c)
+    say("    still derived: round 8's stored-index census (%d selected by nothing"
+        % len([k for k in range(n3c) if k not in preset_referrers()]))
+    say("    stored anywhere in this image), round 9 Q12's twin test (0 carried),")
+    say("    and now M10 (0 of %d reach one group)." % len(routes))
+
+
+def q25():
+    say("\n=== Q25.  M10 ON THE PERCUSSION ARRAY -- refused, and why it is easy ===\n")
+    _a, n20, _r = R6.array_records(0x20)
+    say("  The %d records of ToneDB_PercMixerDefaultTable keep their %d framed"
+        % (n20, sum(1 for k in range(n20) if k not in wavesel_labels_r8(0x20))))
+    say("  labels.  Round 10 Q18 refused M9 there because the map scores at its own")
+    say("  shuffled null.  M10 inherits that refusal AND adds one of its own that")
+    say("  needs no measurement at all: a drum record's sound group can only be one")
+    _kits, kitgroups, drumrows = group_kit_witness()
+    say("  of the %d rows %s, so the coarser question this round asks is COARSER"
+        % (len(drumrows), [group_name(g).strip() for g in drumrows]))
+    say("  THAN THE ARRAY -- %d records over %d possible answers." % (n20, len(drumrows)))
+    check("Q25a the group route cannot discriminate on the drum side",
+          len(drumrows) * GROUP_MEMBERS < n20,
+          "%d records, %d drum groups, %d kits between them"
+          % (n20, len(drumrows), len(drumrows) * GROUP_MEMBERS))
+
+
+def q26():
+    say("\n=== Q26.  ★★ WHAT IS STILL FRAMED, PER OBJECT AND FOR A DERIVED REASON ===\n")
+    src = open(SRC).read()
+    fr = collections.Counter()
+    for m in re.finditer(r"^([A-Za-z_][A-Za-z0-9_]*):", src, re.M):
+        nm = m.group(1)
+        if re.match(r"^[A-Za-z_][A-Za-z0-9_]*_(?:[0-9A-Fa-f]{4,6}|[0-9]{1,4})$", nm):
+            fr[re.sub(r"_(?:[0-9A-Fa-f]{4,6}|[0-9]{1,4})$", "", nm)] += 1
+    say("  Read back OUT of prom_d/wsa1_prom_d.s, not out of the code that wrote it,")
+    say("  by the goal metric's own FRAMED rule:")
+    say("")
+    for stem, k in fr.most_common():
+        say("      %4d  %s" % (k, stem))
+    say("      %4d  TOTAL" % sum(fr.values()))
+    say("")
+    say("  AND THE REASON, PER BLOCK, every one of them a census result:")
+    grp = selector_groups()
+    have = dict(wavesel_labels_r8(SELECTOR_ARRAY))
+    have.update(selector_labels())
+    have.update(group_labels())
+    _a, n18, _r = R6.array_records(SELECTOR_ARRAY)
+    fr18 = [k for k in range(n18) if k not in have]
+    unr = [k for k in fr18 if k not in selector_names()]
+    brd = [k for k in fr18 if k in grp and len(grp[k]) > GROUP_BOUND]
+    twn = [k for k, _g, _t in group_twin_conflicts()]
+    say("    ToneDB_MixerDefaultTable  %d framed: %d have NO byte twin and no entry"
+        % (len(fr18), len(unr)))
+    say("      of the one map that indexes this array (Q23 tests all %d candidates);"
+        % len(map_selector_census()))
+    say("      %d are reached but their columns span %d..%d sound groups, above the"
+        % (len(brd), min(len(grp[k]) for k in brd), max(len(grp[k]) for k in brd)))
+    say("      bound of %d; and %s reaches the bound but HAS a byte twin that spans"
+        % (GROUP_BOUND, "record %d" % twn[0] if len(twn) == 1
+           else "%d records" % len(twn)))
+    say("      a group the map does not give, which round 10's rule refuses (Q22f).")
+    check("Q26a the three reasons account for every framed record of that array",
+          len(unr) + len(brd) + len(twn) == len(fr18),
+          "%d + %d + %d = %d" % (len(unr), len(brd), len(twn), len(fr18)))
+    _b, n3c, _r3 = R6.array_records(0x3C)
+    refs = preset_referrers()
+    say("    ToneDB_WaveSelTailPresets %d framed: %d are selected by nothing stored"
+        % (n3c, len([k for k in range(n3c) if k not in refs])))
+    say("      in this image (round 8 Q2), 0 carry another record's bytes (round 9")
+    say("      Q12), and 0 of the %d that ARE selected reach one sound group (Q24)."
+        % len(refs))
+    _c, n20, _r20 = R6.array_records(0x20)
+    fr20 = [k for k in range(n20) if k not in wavesel_labels_r8(0x20)]
+    say("    ToneDB_PercMixerDefault.. %d framed: the map that would name them all"
+        % len(fr20))
+    say("      scores at its own shuffled null (round 10 Q18), and the group route")
+    say("      has %d possible answers for %d records (Q25)."
+        % (len(group_kit_witness()[2]), n20))
+    say("    ToneNumBank_Melodic       %d framed: the rows are not nested (Q6), do"
+        % (R6.PROG_ROWS - 2))
+    say("      not align to General MIDI (Q14), and the BankMap index that reaches")
+    say("      one says only what the suffix says (Q1).")
+    say("    DrawbarPreset_EnvDesc..   3 framed: the block's own framing is not")
+    say("      established -- directory slot +0x70, %d descriptors over a pool whose"
+        % R2.desc_layout(0x70)[0])
+    say("      role no reader states.  Round 2's refusal, kept.")
+    say("    ToneRec_05D               1 framed: a METRIC ARTEFACT.  The record's")
+    say("      own 16 bytes are \"    16' & 1'    \" and the CamelCase rule this file")
+    say("      uses everywhere turns that into `161`.  ★ ROUND 11 ADDS ONE DERIVED")
+    say("      FACT AND STILL DOES NOT RENAME IT: it is member %d of sound group %d"
+        % (tone_group(0x5D)[1], tone_group(0x5D)[0]))
+    say("      %r, so the object is placed -- but a label spelling the"
+        % group_name(tone_group(0x5D)[0]).strip())
+    say("      apostrophes would invent a morpheme, which is round 3's `Home`")
+    say("      failure with a different word.")
+    check("Q26b the tone whose name is unspellable is placed by the group instead",
+          tone_group(0x5D) is not None,
+          "tone 0x05D -> group %d %r, member %d"
+          % (tone_group(0x5D)[0], group_name(tone_group(0x5D)[0]).strip(),
+             tone_group(0x5D)[1]))
+
+
+def q27():
+    say("\n=== Q27.  THE BASE ADDRESS -- a fourth attack, and the same answer ===\n")
+    say("  Round 3 established it, round 8 Q7 attacked it from this image's own")
+    say("  %s pointer fields (0 absolute), round 9 Q15 restated it.  Round 11 can"
+        % format(len(pointer_fields()), ","))
+    say("  attack it from OUTSIDE for the first time, because it now has an image")
+    say("  that names prom_d's contents: prom_b's group/member table.")
+    kinds = collections.Counter()
+    for k in range(GROUP_RUN):
+        p, b = group_member_entry(k)
+        kinds["(program, bank) pair"] += 1
+    say("      %d of %d entries are a (program, bank-select) PAIR resolved through"
+        % (kinds["(program, bank) pair"], GROUP_RUN))
+    say("      prom_d's own two tables; 0 are an address of any width.")
+    say("  ★ So the one image that names a prom_d object from outside names it by")
+    say("    an INDEX, exactly as prom_c does.  Nothing outside this image spells a")
+    say("    prom_d address, so nothing outside it constrains ORIGIN either.")
+    check("Q27a the outside reference is an index, not an address",
+          kinds["(program, bank) pair"] == GROUP_RUN,
+          "%d of %d" % (kinds["(program, bank) pair"], GROUP_RUN))
+    ld = open(os.path.join(ROOT, "prom_d", "prom_d.ld")).read()
+    org = re.search(r"ORIGIN\s*=\s*(0x[0-9A-Fa-f]+|\d+)", ld)
+    check("Q27b ⚠ ORIGIN in prom_d/prom_d.ld is UNCHANGED by this round",
+          org is not None and int(org.group(1), 0) == 0,
+          "ORIGIN = %s; round 11 proposes no change, and the open question stays "
+          "WHICH PART this is" % (org.group(1) if org else "?"))
+
+
+def selftest_round11():
+    """★ THE NEGATIVE CONTROLS FOR ROUND 11.  A rule that cannot fail is not a rule."""
+    say("\n=== SELFTEST -- ROUND 11's SOUND GROUP, ATTACKED ===\n")
+    # T20: the identity is not an artefact of a table full of zeroes.
+    ent = [group_member_entry(k) for k in range(GROUP_RUN)]
+    check("T20 the identity is over DISTINCT pairs, not a degenerate table",
+          len(set(ent)) == GROUP_RUN,
+          "%d distinct (program, bank) pairs over %d entries"
+          % (len(set(ent)), GROUP_RUN))
+    # T21: shift the table by one entry and the identity must die.
+    saved = globals()["group_member_entry"]
+    globals()["group_member_entry"] = lambda k, _s=saved: _s(k + 1)
+    try:
+        shifted = group_identity_run()
+    finally:
+        globals()["group_member_entry"] = saved
+    check("T21 ★ CONTROL: reading the table one entry late destroys the identity",
+          shifted == 0, "run of %d against %d at the true offset"
+          % (shifted, GROUP_RUN))
+    # T22: the opcode assertion really fires.
+    bad = False
+    try:
+        a_operand(0xFC2071, (0x45,), 4)          # one byte PAST the instruction
+    except AssertionError:
+        bad = True
+    check("T22 ★ the citation guard fires one byte past the instruction",
+          bad, "0xFC2071 is the first operand byte, and taking it as an opcode fails")
+    # T23: every M10 label is read back OUT of the emitted assembly.
+    src = open(SRC).read()
+    got = re.findall(r"^ToneDB_MixerDefaultTable_(\d{3})_SelectedForGroup_"
+                     r"([A-Za-z0-9_]+):", src, re.M)
+    check("T23 ★ the .s agrees with the rule record for record",
+          dict((int(k), "_Or_".join(v.split("_Or_"))) for k, v in got)
+          == group_labels(),
+          "%d labels in the .s, %d from the rule" % (len(got), len(group_labels())))
+    field = set(group_label(g) for g in range(GROUP_COUNT))
+    check("T23' and every morpheme in one is a group's own ASCII",
+          all(w in field for _k, s in got for w in s.split("_Or_")),
+          "%d distinct morphemes, all in prom_b's name table"
+          % len(set(w for _k, s in got for w in s.split("_Or_"))))
+    # T24: M10 is invariant under all eight row rotations, as M9's is.
+    inv = True
+    base = selector_groups()
+    for off in range(1, MELODIC_ROWS):
+        alt = {}
+        for k, cols in selector_columns().items():
+            gs = set()
+            for c in cols:
+                for r in range(MELODIC_ROWS):
+                    g = tone_group(program_tone((r + off) % MELODIC_ROWS, c))
+                    if g is not None:
+                        gs.add(g[0])
+            alt[k] = sorted(gs)
+        if any(alt.get(k) != base.get(k) for k in group_labels()):
+            inv = False
+    check("T24 ★★ every M10 label is invariant under all %d row rotations"
+          % MELODIC_ROWS, inv, "the row half of the map index is loose (Q16d)")
+    # T25: rotating the map must move the labels.
+    m = selector_map()
+    rot = [m[(i + 1) % 1024] for i in range(1024)]
+    saved = globals()["selector_map"]
+    globals()["selector_map"] = lambda slot=SELECTOR_SLOT, _s=saved: (
+        rot if slot == SELECTOR_SLOT else _s(slot))
+    try:
+        moved = group_labels()
+    finally:
+        globals()["selector_map"] = saved
+    check("T25 rotating the map by one program CHANGES the M10 labels",
+          moved != group_labels(), "%d before, %d after, %d in common"
+          % (len(group_labels()), len(moved),
+             len(set(group_labels().items()) & set(moved.items()))))
+    # T27: ⚠ THE INSTRUMENT THIS ROUND BREAKS, declared rather than left to a
+    # reviewer, exactly as round 10 declared the same gap for `_SelectedFor_`.
+    # notes/wave7_round6_review_wd3_prom_d.py R6z requires every morpheme in a
+    # label to be the CamelCase of an ASCII field IN prom_d.  M10's morphemes are
+    # prom_b's group names, so that rule would refute them by construction -- and
+    # in fact R6z never sees them, because it parses `_SameAs_` labels only.
+    rev = os.path.join(ROOT, "notes", "wave7_round6_review_wd3_prom_d.py")
+    rsrc = open(rev).read() if os.path.exists(rev) else ""
+    check("T27 ⚠ the round-6 reviewer is BLIND to M10's labels, and it is said here",
+          "_SameAs_" in rsrc and "_SelectedForGroup_" not in rsrc,
+          "R6z parses `_SameAs_` only; T23' is the check that does read M10's "
+          "morphemes, and it matches them against prom_b's name table, not prom_d's")
+    # T28: and the morphemes really are NOT prom_d's own ASCII -- so a checker
+    # that assumed they were would be right to refuse them.
+    dfields = set(R6.camel(D[p_:p_ + 16].decode("latin1")) for p_ in R6.TONE_PTRS)
+    used = set(x for v in group_labels().values() for x in v.split("_Or_"))
+    check("T28 ★ M10's morphemes come from prom_b and are NOT prom_d tone names",
+          used and not (used & dfields),
+          "%s -- none of them is any of prom_d's %d tone name fields"
+          % (sorted(used), len(dfields)))
+    # T26: the word test is not vacuous -- it must FAIL on a group it should fail on.
+    check("T26 the word test reports its own gap rather than scoring 100%",
+          len(group_word_alignment()) < GROUP_COUNT,
+          "%d of %d groups share a word; %d do not and are listed by name"
+          % (len(group_word_alignment()), GROUP_COUNT,
+             GROUP_COUNT - len(group_word_alignment())))
+
+
 def nameless_report(nameless):
     say("\n  ★ THE NAMELESS, IN FULL -- %d objects, three answers each:" % len(nameless))
     for r in nameless:
@@ -2685,10 +3535,18 @@ def main():
     q18()
     q19()
     q20()
+    q21()
+    q22()
+    q23()
+    q24()
+    q25()
+    q26()
+    q27()
     if "--selftest" in _ARGV:
         selftest()
         selftest_round9()
         selftest_round10()
+        selftest_round11()
     if "--nameless" in _ARGV:
         nameless_report(nameless)
     say("")
@@ -2703,9 +3561,11 @@ def main():
     say("     re-derived from this image's own bytes and %d have only their ADDRESS."
         % _AUDIT_GRADES.get("ADDRESS", 0))
     say("     ⚠ THOSE TWO NUMBERS ARE LIVE AND HAVE MOVED: round 9 published them as")
-    say("     2857 / 808 and promoted nothing; round 10's %d selector labels are the"
+    say("     2857 / 808 and promoted nothing; round 10's %d `_SelectedFor_` labels"
         % selector_buckets()[0])
-    say("     whole of the difference, and AUDITED_R9 was updated with them.")
+    say("     and round 11's %d `_SelectedForGroup_` ones are the whole of the"
+        % len(group_labels()))
+    say("     difference, and AUDITED_R9 was updated with each of them.")
     say("     ROUND 9's own result stands as it was: every mechanism that could have")
     say("     moved that")
     say("     number this round was measured and refused: the twin rule on the")

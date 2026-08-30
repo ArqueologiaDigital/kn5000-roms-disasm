@@ -99,6 +99,98 @@ RUN
     python3 notes/prom_c_inventory_round8.py --framed     # 8: what `framed` really is
     python3 notes/prom_c_inventory_round8.py --refused9   # 9: round 9's refusals
 
+★★ ROUND 11 (2026-08-30) APPENDED TWO MORE SECTIONS, and its headline is not a
+  new inference at all -- it is that THE TREE ALREADY KNEW.
+
+    python3 notes/prom_c_inventory_round8.py --tonedb   # 10: the ToneDB readers
+    python3 notes/prom_c_inventory_round8.py --cites    # 11: the citation defect
+    python3 notes/prom_c_inventory_round8.py --twins11  # 12: a lever, measured
+                                                        #     and DECLINED
+    python3 notes/prom_c_inventory_round8.py --apply11  #     apply (idempotent)
+    python3 notes/prom_c_inventory_round8.py --verify11
+
+  1. ELEVEN prom_c ROUTINES WERE DECODED, BYTE FOR BYTE, IN prom_d's SOURCE, AND
+     prom_c NEVER RECEIVED THE NAMES.  prom_d's base is 0x00F00000 on CPU 2's bus
+     and prom_c reaches it through the four base pointers ExtBoard_ProbeAndInstall
+     Bases writes at 0x00D7ED/0x00D7F1 (prom_d) and 0x00D80D/0x00D811 (the
+     expansion board).  --tonedb censuses every slot read through them: 120 reads,
+     32 slots, 35 routines, EVERY ONE of which was sub_XXXXXX.  And eleven of the
+     35 are decoded instruction by instruction in notes/prom_d_documentation_round3
+     .py --q4 -- a committed script that PASSES today -- while their prom_c headers
+     said "what the routine is FOR: unknown".  Q4a is ToneDB_ResolveToneRecord,
+     Q4b ToneRec_GetElementBlock, Q4c the five catalogue selectors, Q4d
+     DrumKit_ResolveInstrumentRecord, Q4e DrawbarPreset_GetDescriptor, Q4g
+     ToneDB_PercSourceIndexMapB_Lookup.  Nothing new is claimed about the
+     hardware; what is new is that the two images now agree.
+     ★ The twelfth, Voice_GetOctaveShift (sub_FA72E9), is this round's own decode
+     and it repays prom_d: its one caller is Voice_ComputePitch, it returns the
+     table byte shifted left 8, and prom_c's OWN table on the other arm
+     (Instrument_OctaveShift_Semitones, 12*k for k = -8..+7) fixes the unit as 8.8
+     semitones -- which confirms from the CONSUMER side that voice record +27 is a
+     program number and +28 a bank selector, something prom_d's note left open.
+     FOUR REFUSALS with derived arithmetic (--tonedb marks them; sibling_diff()
+     reproduces every count they quote).
+
+  2. SEVENTY CITATIONS IN prom_c NAMED THE OPERAND, NOT THE INSTRUCTION -- the
+     third time this tree has shipped a systematic off-by-N in call-site
+     citations.  "Referenced from 0xFA737E" for `add XBC,0x00FDF22A`, which starts
+     at 0xFA737C: +2 for `add Xrr,imm32`, +1 for `lda_24`.  ⚠ AND THE DEFECT WAS
+     ALREADY DIAGNOSED: notes/FINDINGS-prom_c-keyboard-and-touch.md says, of one
+     table, "cited its reference as 0xF99874, which is the address of the literal"
+     and reports the header corrected.  It was not; that citation was still wrong
+     today, and so were 69 others.  Corrected in the listing AND in
+     notes/gen_prom_c_tables.py, which is where the prose is authored.
+     ★ THE FIX IS SELF-VERIFYING, not arithmetic: a correction is accepted only if
+     the instruction at the corrected address literally carries, as an operand,
+     the START ADDRESS OF THE TABLE whose header the citation sits in.  70 of 70.
+     A blind `- 2` would pass on a wrong address; this cannot.
+
+  ⚠ WHAT THE INSTRUMENT SEES AND WHAT IT DOES NOT.  prom_c content 835 -> 846,
+  sub_XXXXXX 409 -> 398, LOWER 48.0%% -> 48.7%%, UPPER 76.5%% -> 77.1%%.  The
+  `headers` and `evidence` columns do NOT move, for the same reason round 8 gave:
+  every one of these routines already had a header and an Evidence line, and the
+  instrument counts their PRESENCE.  What actually changed is +151 comment lines
+  with the blank-line count UNCHANGED at 712 -- stated with its control because
+  "+35 headers that were 35 removed blank lines" is a mistake this wave published.
+  FRAMED -> CONTENT PROMOTIONS: ZERO, and round 9's --framed is why: prom_c's
+  framed column is one declared-blob region, one declared-shape-only region, 85
+  names whose number IS the meaning, and 7 individually adjudicated leftovers.
+
+  AND THREE REPAIRS TO THINGS THAT WERE NOT RUNNING:
+    * `--selftest` DIED before any round-10 check: selftest10 referenced an
+      undefined S_A and then called check() in the argument order (message,
+      condition), which this file's check() has never had.  Not one round-10
+      check had ever executed.  Both fixed; the checks are otherwise untouched.
+    * one of them was FALSE.  "The three MIDI injectors ... differ in exactly two"
+      is six and five on a raw line diff, and two and ONE once the three return-
+      address literals and the loop label are blanked -- injectors 1 and 3 share
+      their second pushed word.  The prom_a HEADER was right and the check was
+      wrong; the check now states what is true.
+    * ⚠ REPORTED, NOT REPAIRED: notes/gen_prom_c_tables.py's output no longer
+      reproduces its zone in the listing.  Prose was hand-added to the .s after
+      round 3 and never went back into the generator, so "regenerate" would LOSE
+      text.  Asserted in selftest11 so it cannot be forgotten.
+
+  A LEVER MEASURED AND DECLINED (--twins11).  Round 7 swept prom_c against ITSELF
+  for byte-identical twins; nobody had swept it against prom_a's content names,
+  and prom_a and prom_c really do share a kernel.  Every one of prom_c's 398
+  sub_XXXXXX that has a derivable extent (393 of them) against every same-length
+  prom_a content name -- 1,125 as this was written, and the count MOVES because a
+  sibling lane is naming prom_a in the same round, which is why --twins11 prints
+  it rather than this paragraph fixing it --
+  byte for byte: TWO candidates, both 14-byte `link / store the argument at
+  an absolute address / ret` bodies whose only distinguishing content IS the
+  address they store.  Zero names taken.  The kernel sharing is already spent --
+  it is in the routines prom_c has NAMED -- and this section says so instead of a
+  later round re-discovering it.
+
+  STALE BRIEF ITEMS, re-measured rather than re-answered: gap A (0x0440, 0x0480,
+  0x04C0, 0x0500) was closed by round 4 and reported closed by round 7
+  (prom_c_finish_round7.py --gapA); and "most named routines are a name and
+  nothing else" is answered by --depth: 134 of prom_c's content labels have no
+  header, 127 of them PresetBank_* records and the other 7 interrupt stubs that
+  carry an Evidence line anyway.
+
   ROUND 9's ANSWER, in one line: round 8 shipped ZERO framed->content promotions and
   said the honest count might be zero.  It was six -- the note pool's five tables and
   its 68-byte device image, every one named from what READS it -- and after them
@@ -111,11 +203,18 @@ RUN
 import collections
 import os
 import re
+import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "prom_c", "wsa1_prom_c.s")
 ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
+# ROUND 11 FIX: round 10 appended the prom_a ATA section (ata_sites, apply10,
+# verify10, selftest10) to this file but never defined the prom_a source path it
+# reads and writes, so `--selftest` died with NameError: S_A before reaching a
+# single round-10 check.  The section itself is fine; only the constant was
+# missing.  Reproduce the old failure by commenting the next line out.
+S_A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
 BASE = 0xF80000
 
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
@@ -1949,34 +2048,44 @@ def mode_applied10():
             print("      %s" % c)
 
 
+def check10(msg, cond, extra=None):
+    """ROUND 11 FIX: round 10 wrote every one of its checks in the argument order
+    (message, condition[, detail]) while this file's check() has always taken
+    (condition, message) -- `git log -S "def check(msg, cond"` over the file finds
+    no commit where the other order existed.  So selftest10 raised TypeError on its
+    FIRST call and not one round-10 check has ever executed.  This adapter runs
+    them in the order they were written; the checks themselves are unmodified."""
+    check(bool(cond), msg if extra is None else "%s [%s]" % (msg, extra))
+
+
 def selftest10():
     """Round 10's checks. Every list is tested on its LAST element too."""
     rows = ata_sites()
-    check("--ata finds accessor calls with a literal bank and register",
+    check10("--ata finds accessor calls with a literal bank and register",
           len(rows) == 41, len(rows))
     # the register-9 trap: no row may name a register a 3-bit field cannot hold
-    check("no row names a register above 7 (the 0xFE5360/0xFE53C2 four-argument "
+    check10("no row names a register above 7 (the 0xFE5360/0xFE53C2 four-argument "
           "calls into the sector writer are excluded by the accessor guard)",
           all(r[3] <= 7 for r in rows), max(r[3] for r in rows))
     cmds = {}
     for _l, site, blk, reg, val, _k in rows:
         if blk == 0 and reg == 7 and val is not None:
             cmds.setdefault(val, []).append(site)
-    check("the command register takes exactly seven distinct opcodes",
+    check10("the command register takes exactly seven distinct opcodes",
           sorted(cmds) == [0x20, 0x30, 0x91, 0x94, 0x95, 0xEC, 0xEF],
           ["0x%02X" % c for c in sorted(cmds)])
-    check("0x30 is written at 0xFE4DCE, in Dev7E_WriteOneSector's body",
+    check10("0x30 is written at 0xFE4DCE, in Dev7E_WriteOneSector's body",
           cmds.get(0x30) == [0xFE4DCE], ["0x%06X" % s for s in cmds.get(0x30, [])])
-    check("0x20 is written at 0xFE4F3A, in Dev7E_ReadOneSector's body",
+    check10("0x20 is written at 0xFE4F3A, in Dev7E_ReadOneSector's body",
           cmds.get(0x20) == [0xFE4F3A])
-    check("0x94, the LAST opcode in address order, is written once, at 0xFE5498",
+    check10("0x94, the LAST opcode in address order, is written once, at 0xFE5498",
           cmds.get(0x94) == [0xFE5498], ["0x%06X" % s for s in cmds.get(0x94, [])])
     bank1 = [(s, r, v) for _l, s, b, r, v, _k in rows if b == 1]
-    check("bank 1 is written exactly twice in all of prom_a, both to register 6, "
+    check10("bank 1 is written exactly twice in all of prom_a, both to register 6, "
           "with 0x0C then 0x08",
           bank1 == [(0xFE50E9, 6, 0x0C), (0xFE50F5, 6, 0x08)], bank1)
     devhead = [(s, v) for _l, s, b, r, v, _k in rows if b == 0 and r == 6]
-    check("every literal device/head write is 0xA0 or the 0x0E of INITIALIZE "
+    check10("every literal device/head write is 0xA0 or the 0x0E of INITIALIZE "
           "DEVICE PARAMETERS", sorted(set(v for _s, v in devhead)) == [0x0E, 0xA0],
           ["0x%02X" % v for _s, v in devhead])
     # the read/write twins differ in exactly one instruction
@@ -1990,43 +2099,768 @@ def selftest10():
         return out
     w, r = _body(0xFE4E4C, 0xFE4EC1), _body(0xFE4FB2, 0xFE5027)
     diff = [i for i in range(min(len(w), len(r))) if w[i] != r[i]]
-    check("the operation-3 and operation-4 arms are %d instructions long and "
+    check10("the operation-3 and operation-4 arms are %d instructions long and "
           "differ in exactly one" % len(w),
           len(w) == len(r) and len(diff) == 1, (len(w), len(r), len(diff)))
-    check("and the one difference is the `calr` that picks the read or the write "
+    check10("and the one difference is the `calr` that picks the read or the write "
           "primitive", diff and "calr" in w[diff[0]], (w[diff[0]] if diff else None,
                                                        r[diff[0]] if diff else None))
     # the geometry the module programmes and the geometry it compares agree
     txt = "\n".join(src)
     for lit, why in (("0x605d38, 0x0239", "cylinders"), ("0x605d3a, 0x000f", "heads"),
                      ("0x605d3c, 0x003c", "sectors")):
-        check("the caller compares %s (%s)" % (lit, why), lit in txt)
-    check("INITIALIZE DEVICE PARAMETERS' sector operand 0x3C equals the compared "
+        check10("the caller compares %s (%s)" % (lit, why), lit in txt)
+    check10("INITIALIZE DEVICE PARAMETERS' sector operand 0x3C equals the compared "
           "sector count 0x003C", (0xFE5144, 0x3C) in
           [(s, v) for _l, s, b, r, v, _k in rows if b == 0 and r == 2])
-    check("and its device/head operand 0x0E is one less than the compared head "
+    check10("and its device/head operand 0x0E is one less than the compared head "
           "count 0x000F", 0x0E == 0x0F - 1)
     # the ring the MIDI injectors write is the RECEIVE ring, not a transmit one
-    check("0x600C1E is the ring MIDI_RX_DeliverTwo appends to",
+    check10("0x600C1E is the ring MIDI_RX_DeliverTwo appends to",
           re.search(r'MIDI_RX_DeliverTwo:(?:.|\n){0,400}?0x00600c1e', txt) is not None)
     # the three injectors differ only in their two data words
     b1, b2, b3 = _body(0xFB921C, 0xFB925C), _body(0xFB925C, 0xFB929C), \
         _body(0xFB929C, 0xFB92DC)
-    d12 = [i for i in range(min(len(b1), len(b2))) if b1[i] != b2[i]]
-    d13 = [i for i in range(min(len(b1), len(b3))) if b1[i] != b3[i]]
-    check("the three MIDI injectors are %d instructions and differ in exactly two"
-          % len(b1), len(b1) == len(b2) == len(b3) and len(d12) == 2 and len(d13) == 2,
-          (len(b1), len(b2), len(b3), len(d12), len(d13)))
-    check("and both differences are `pushw` of a data byte",
-          all("pushw" in b1[i] for i in d12 + d13),
-          [b1[i] for i in d12] + [b2[i] for i in d12])
+
+    def _pos_free(s):
+        """ROUND 11 CORRECTION.  Round 10's raw line diff called these three
+        bodies "different in exactly two instructions"; run for the first time
+        it reports SIX and FIVE.  The extra four are not content: three are the
+        `lda_24 xiy,(0xFB92xx)` return-address literals the call sequence pushes
+        (the routine's own address, which must differ between three copies at
+        three addresses) and one is the `jr ule,.LFBxxxx` loop-back label, the
+        same instruction naming the same offset in each body.  The prom_a header
+        at 0xFB925C already says exactly this -- "the low byte of one of the
+        three `lda_24 xiy` return-address literals ... which is position and not
+        content" -- so the HEADER was right and the CHECK was wrong.  Blanking
+        the position-only operands is what makes the header's claim testable."""
+        return re.sub(r'0x[0-9a-f]{4,6}\)', 'ADDR)',
+                      re.sub(r'\.L[0-9A-F]+', 'LOOP', s))
+    n1, n2, n3 = [[_pos_free(x) for x in b] for b in (b1, b2, b3)]
+    d12 = [i for i in range(min(len(n1), len(n2))) if n1[i] != n2[i]]
+    d13 = [i for i in range(min(len(n1), len(n3))) if n1[i] != n3[i]]
+    raw12 = [i for i in range(min(len(b1), len(b2))) if b1[i] != b2[i]]
+    check10("the three MIDI injectors are %d instructions long" % len(b1),
+          len(b1) == len(b2) == len(b3), (len(b1), len(b2), len(b3)))
+    check10("a RAW line diff of them shows six and five differences, NOT the two "
+          "round 10 claimed (that check had never run)",
+          len(raw12) == 6 and len([i for i in range(min(len(b1), len(b3)))
+                                   if b1[i] != b3[i]]) == 5, (len(raw12),))
+    check10("with the three return-address literals and the loop label blanked, "
+          "every surviving difference is a `pushw` of a data word",
+          d12 and d13 and all("pushw" in b1[i] for i in set(d12 + d13)),
+          [b1[i] for i in sorted(set(d12 + d13))])
+    check10("the pairs 1-2 and 1-3 differ in TWO and ONE of them, not two and two: "
+          "the CC/value words are (0x7B,0x00), (0x00,0x40), (0x40,0x00), so "
+          "injectors 1 and 3 share their second word",
+          len(d12) == 2 and len(d13) == 1, (len(d12), len(d13)))
+    pw = [[x for x in b if x.startswith("pushw 0x") and "0x00, " not in x]
+          for b in (b1, b2, b3)]
+    check10("...and that is what the three bodies' pushw pairs literally are",
+          pw == [["pushw 0x7b", "pushw 0x00"], ["pushw 0x00", "pushw 0x40"],
+                 ["pushw 0x40", "pushw 0x00"]], pw)
     # the refusal's arithmetic
-    check("the refused family's selector 0x97 is 151, which no MIDI controller "
+    check10("the refused family's selector 0x97 is 151, which no MIDI controller "
           "number can be", 0x97 > 0x7F, 0x97)
-    check("round 10 proposes %d names and %d refusal" % (len(NAMES10),
+    check10("round 10 proposes %d names and %d refusal" % (len(NAMES10),
                                                          len(REFUSALS10)),
           len(NAMES10) == 24 and len(REFUSALS10) == 1)
 
+
+
+# ==========================================================================
+# ROUND 11 -- prom_c receives the names prom_d's lane already derived, and a
+# systematic citation defect in prom_c's own data-table headers is corrected.
+# ==========================================================================
+S_D = os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")
+
+_DIRROW = re.compile(r'^\t\.long\s+0x[0-9A-Fa-f]{8}\s+;\s*\+0x([0-9A-F]{2})\s+(\S+)\s*(.*)$')
+
+
+def tonedb_directory():
+    """prom_d's 48-slot ToneDB directory, as {slot: (label, description)}.
+
+    Parsed from prom_d/wsa1_prom_d.s's own ToneDB_Directory listing rather than
+    retyped here, so a rename on prom_d's side reaches this table.  The tail
+    scalars (+0xC0 upward) are `.short` rows and are added separately, because
+    prom_c reads six of them and they are not pointers."""
+    out, on = {}, False
+    for ln in open(S_D, encoding="utf-8", errors="replace"):
+        if ln.startswith("ToneDB_Directory:"):
+            on = True
+            continue
+        if not on:
+            continue
+        if ln.startswith("; Directory tail"):
+            break
+        m = _DIRROW.match(ln.rstrip("\n"))
+        if m:
+            out[int(m.group(1), 16)] = (m.group(2), m.group(3).strip())
+    for ln in open(S_D, encoding="utf-8", errors="replace"):
+        m = re.match(r'^\t\.short\s+(-?\d+)\s+\t*;\s*\+0x([0-9A-F]{2})\s*(.*)$', ln.rstrip("\n"))
+        if m and int(m.group(2), 16) >= 0xC0:
+            out[int(m.group(2), 16)] = ("(scalar %s)" % m.group(1), m.group(3).strip())
+    return out
+
+
+_LOADBASE = re.compile(r'^ld\s+(X[A-Z]{2}),\((0x00d7ed|0x00d7f1|0x00d80d|0x00d811)\)$')
+_SLOTRD = re.compile(r'^ld\s+(X?[A-Z]{1,3}),\((X[A-Z]{2})\+(0x[0-9a-f]+)\)$')
+_KILLREG = re.compile(r'^(?:ld|lda|add|sub|or|and|mul|ex|pop|ext[sz]|sll|srl|sra|inc|dec)\w*'
+                      r'\s+(X[A-Z]{2})\b')
+_BASENAME = {'0x00d7ed': 'D7ED', '0x00d7f1': 'D7F1', '0x00d80d': 'D80D', '0x00d811': 'D811'}
+
+
+def tonedb_readers():
+    """Every prom_c site that loads one of the four INSTALLED BASE POINTERS and
+    then reads a directory slot through it, as (site, base, slot, routine).
+
+    The four bases are the ones ExtBoard_ProbeAndInstallBases writes:
+    0x00D7ED / 0x00D7F1 are prom_d's base 0x00F00000 and 0x00D80D / 0x00D811 are
+    the expansion board's, so a slot read through EITHER pair indexes the SAME
+    48-slot directory -- which is why a routine that reads slot +0x50 twice, once
+    through each pair, is reading the internal catalogue and the board's.
+
+    ⚠ THIS IS A LOWER BOUND and the rule is stated so it can be criticised: it
+    follows one register from the base load to the slot read and drops the
+    register the moment anything else writes it.  A base parked in a frame slot
+    is invisible to it.  notes/prom_d_documentation_round3.py Q2 runs the same
+    census from the ROM BYTES and byte-verifies each read; --tonedb asserts that
+    every site Q2 finds inside a routine this walk also names."""
+    rows, regs, cur = [], {}, None
+    for ln in open(SRC, encoding="utf-8", errors="replace"):
+        m = LABEL.match(ln)
+        if m:
+            cur = m.group(1)
+            regs = {}
+        a = ADDRC.search(ln)
+        if not a or ln.lstrip().startswith(";"):
+            continue
+        ad, t = int(a.group(1), 16), a.group(2).strip()
+        mb = _LOADBASE.match(t)
+        if mb:
+            regs[mb.group(1)] = _BASENAME[mb.group(2)]
+            continue
+        ms = _SLOTRD.match(t)
+        if ms and ms.group(2) in regs:
+            rows.append((ad, regs[ms.group(2)], int(ms.group(3), 16), cur))
+            regs.pop(ms.group(1), None)
+            continue
+        mk = _KILLREG.match(t)
+        if mk:
+            regs.pop(mk.group(1), None)
+    return rows
+
+
+def tonedb_by_routine():
+    """{routine (outermost label): sorted set of directory slots it reads}."""
+    out = collections.defaultdict(set)
+    for _ad, _b, slot, lab in tonedb_readers():
+        out[lab.split("__")[0]].add(slot)
+    return {k: sorted(v) for k, v in out.items()}
+
+
+# --------------------------------------------------------------------------
+# The names.  EVERY ONE is a prom_c routine whose body prom_d's round-3 lane
+# already decoded instruction by instruction -- the decode is in
+# notes/prom_d_documentation_round3.py --q4 and it PASSES today -- while prom_c
+# still called the routine sub_XXXXXX under a header reading "what the routine
+# is FOR: unknown".  Nothing here is a new inference about the hardware; what is
+# new is that the two images now agree on what these eleven routines are.
+# --------------------------------------------------------------------------
+NAMES11 = [
+ ("sub_FB4124", "ToneDB_ResolveToneRecord",
+  "resolves (bank selector, program) to a TONE RECORD pointer, from prom_d or "
+  "from the expansion board",
+  "prom_d's Q4a decodes the internal arm of this body from the ROM bytes, 15 "
+  "instructions at 0xFB4266-0xFB429F: directory slot +0x04 (ToneDB_ToneNumBanks) "
+  "indexed by row*128 + program as LE16, that value scaled by 4 into slot +0x08 "
+  "(ToneDB_ToneOffsetTable), and the LE32 it finds there added to the base a "
+  "SECOND time (0xFB429F) -- which is also the whole argument for prom_d's "
+  "offsets being file-relative.  The 0x0010-0x001F and 0x0030+ arms run the same "
+  "two-level walk through 0x00D811/0x00D80D, the EXPANSION BOARD's copy of the "
+  "same directory (0xFB418D-0xFB41E7), selected by `ld XBC,(0x00D80D) / or "
+  "XBC,XBC` at 0xFB4137 and 0xFB4184 -- so the board's image has prom_d's "
+  "layout.  Slot +0xB0 (ToneRec_Template_Clear) is the no-board fallback at "
+  "0xFB41F1",
+  "what the caller's second argument SELECTS.  The body compares it against "
+  "0x08, 0x10, 0x20, 0x28 and 0x30 and takes five different paths; the ranges are "
+  "instruction operands and their meaning is not established here"),
+ ("sub_FB4324", "ToneRec_GetElementBlock",
+  "returns the 81-byte ELEMENT BLOCK of a tone record, or the default block at "
+  "directory slot +0xAC when the element index is 0xFF",
+  "prom_d's Q4b decodes 8 instructions at 0xFB4356-0xFB4379: `ld C,0x51` (81, "
+  "the element-block stride) multiplied by the element index, plus 0x000000D9 "
+  "(217, the record head) added to the record pointer at (XIZ+0x08).  The other "
+  "arm, reached by `cp A,0xFF / jr NZ` at 0xFB4351, takes directory slot +0xAC "
+  "(ToneDB_DefaultLayerParams) instead, which is what makes that slot a FALLBACK.  "
+  "217 + 81*N + 43*N is exactly prom_d's melodic record size for N = 1..4",
+  "nothing here says what any field of the element block IS"),
+ ("sub_FB48F7", "DrumKit_ResolveInstrumentRecord",
+  "resolves (kit, note) to a 150-byte DRUM-INSTRUMENT RECORD",
+  "prom_d's Q4d decodes 9 instructions at 0xFB48FE-0xFB495A: directory slot "
+  "+0x74 (DrumKit_NoteMapA) indexed by kit*128 + note as LE16, and the index it "
+  "yields multiplied by the tail scalar at +0xEE (150) into slot +0x78 "
+  "(PercInst_000_Silent, the record array).  prom_d's own geometry confirms the "
+  "stride independently: 0x2EF5C + 504*150 = 0x416AC, which is exactly the next "
+  "slot, +0x20",
+  "what a drum-instrument record's 150 bytes contain"),
+ ("sub_FC295B", "DrawbarPreset_GetDescriptor",
+  "returns one 14-byte descriptor of the drawbar-preset table at directory slot "
+  "+0x70",
+  "prom_d's Q4e decodes 6 instructions at 0xFC2990-0xFC29A5: slot +0x70 "
+  "(DrawbarPreset_EnvDescTable) with the tail scalar at +0xEC (14) used AS A "
+  "MULTIPLIER (`mul XBC,HL` at 0xFC299F) -- the only place in prom_c where +0xEC "
+  "is a stride rather than a datum.  14 is what "
+  "notes/prom_d_structures_round2.py derived for that array from the "
+  "descriptors' own 32-bit offsets, without looking at prom_c",
+  "what a descriptor's 14 bytes mean"),
+ ("sub_FA72E9", "Voice_GetOctaveShift",
+  "returns a part's whole-octave pitch offset, in 8.8 semitones",
+  "its ONE caller is Voice_ComputePitch (0xFA7F7A).  With bit 0 of (0x14FF) set "
+  "it reads directory slot +0x6C (ToneDB_BankMap) at the part record's byte +28 "
+  "(0xFA7311 `add IY,0x001C` then 0xFA7317 `ld C,(XIY+0x1523)`), uses the row "
+  "number that returns as a 128-entry stride into slot +0xA8 "
+  "(ToneDB_OctaveShiftByProgram, 0xFA7332 and 0xFA7351 `sll 0x07,BC`) indexed by "
+  "the part record's byte +27 (0xFA733B / 0xFA7341), and returns that byte "
+  "shifted left 8 (0xFA735F).  prom_d's table holds only 0x00, 0xF4 and 0x0C -- "
+  "0, -12 and +12 -- so the shift makes the result semitones in 8.8.  The third "
+  "arm (0xFA7372) reads Instrument_OctaveShift_Semitones at 0xFDF22A, whose "
+  "sixteen bytes ARE 12*k for k = -8..+7, sign-extends and shifts by the same 8: "
+  "two independent tables, one unit.  ★ This also confirms from the CONSUMER "
+  "side what prom_d's own note left open -- that the byte at voice record +27 is "
+  "a program number and +28 a bank selector",
+  "what bit 0 and bit 1 of (0x14FF) select between the three arms"),
+ ("sub_FB90B3", "ToneDB_SourceNameList1_SelectEntry",
+  "applies one entry of ToneDB_SourceNameList1 to a part element, spanning the "
+  "internal catalogue and the expansion board's",
+  "prom_d's Q4c byte-checks the bound: 0xFB90BD loads directory slot +0x54 "
+  "(ToneDB_SourceList1_Footer), 0xFB90D0 reads its leading LE16, 0xFB90D2 "
+  "compares the caller's entry index against it and only then does 0xFB90D7 "
+  "address slot +0x50 (ToneDB_SourceNameList1) -- and that LE16 is 307, which IS "
+  "the catalogue's row count measured from prom_d's image.  When the index is at "
+  "or above the count the routine takes the board's copy of slot +0x50 through "
+  "0x00D811/0x00D80D and SUBTRACTS the internal count (0xFB90FF), so the two "
+  "catalogues are one index space.  It then reads bytes 14 and 15 of the 16-byte "
+  "row (0xFB911A, 0xFB912E) and stores them at +0x02 and +0x03 of the part "
+  "element record at 0x1523 + 0x012C*part + 0x29*element + 0x88",
+  "what row bytes 14 and 15 ARE.  The rows' first 13 bytes are the ASCII name; "
+  "nothing in either image gives the last two a meaning"),
+ ("sub_FB9281", "ToneDB_SourceNameList2_SelectEntry",
+  "the same, for ToneDB_SourceNameList2",
+  "prom_d's Q4c: 0xFB928D loads slot +0x68 (ToneDB_SourceList2_Footer), 0xFB92A0 "
+  "reads its LE16, 0xFB92A2 compares, 0xFB92A7 addresses slot +0x64 "
+  "(ToneDB_SourceNameList2); the count is 314 and that IS list 2's measured row "
+  "count.  The board arm at 0xFB92B7 and the subtraction at 0xFB92CF are the same "
+  "two instructions as list 1's.  It differs from list 1 in taking a SECOND "
+  "index out of the caller's high nibble (0xFB92DE `and A,0xF0` / 0xFB92E1 `srl "
+  "0x04,A`) and using it to pick the pair of bytes it writes",
+  "what the high nibble selects, and what the row's trailing bytes are"),
+ ("sub_FB9541", "ToneDB_DrumSourceNameList_SelectEntry",
+  "the same bounded lookup on ToneDB_DrumSourceNameList, applied to a "
+  "DRUM-INSTRUMENT record rather than a part element",
+  "prom_d's Q4c: 0xFB9568 loads slot +0x84 (ToneDB_DrumList_Footer), 0xFB957D "
+  "reads its LE16, 0xFB957F compares, 0xFB9584 addresses slot +0x80 "
+  "(ToneDB_DrumSourceNameList); the count is 503, the measured row count.  Its "
+  "destination is NOT the part record: 0xFB9547 reads (0x00D735) and 0xFB954F "
+  "multiplies it by 0x96 = 150 -- the drum-instrument record stride prom_d's "
+  "+0xEE names -- into the RAM array at 0x87D2 + 0x461",
+  "what the two bytes it stores are, and what (0x00D735) counts"),
+ ("sub_FB978B", "ToneDB_PercSourceNameList1_SelectEntry",
+  "the same, for ToneDB_PercSourceNameList1",
+  "prom_d's Q4c: 0xFB979D loads slot +0x90 (ToneDB_PercList1_Footer), 0xFB97B2 "
+  "reads its LE16, 0xFB97B4 compares, 0xFB97B9 addresses slot +0x8C "
+  "(ToneDB_PercSourceNameList1); the count is 208, the measured row count, and "
+  "the board arm at 0xFB97CB is the same shape as list 1's",
+  "what the row's trailing bytes are"),
+ ("sub_FB994E", "ToneDB_PercSourceNameList2_SelectEntry",
+  "the same, for ToneDB_PercSourceNameList2",
+  "prom_d's Q4c: 0xFB9961 loads slot +0x98 (ToneDB_PercList2_Footer), 0xFB9976 "
+  "reads its LE16, 0xFB9978 compares, 0xFB997D addresses slot +0x94 "
+  "(ToneDB_PercSourceNameList2); the count is 161, the measured row count",
+  "what the row's trailing bytes are"),
+ ("sub_FC1555", "ToneDB_PercSourceIndexMapB_Lookup",
+  "maps (row, column) through ToneDB_PercSourceIndexMapB to a row of "
+  "ToneDB_PercSourceNameList1",
+  "prom_d's Q4g decodes 16 instructions at 0xFC1568-0xFC1648: directory slot "
+  "+0x4C (ToneDB_PercSourceIndexMapB) indexed by row*128 + column as LE16, "
+  "0xFFFF tested as NO ENTRY (0xFC1589), and the value used at 0xFC1642 as a "
+  "row number into slot +0x8C (ToneDB_PercSourceNameList1) with `ld BC,0x0010` "
+  "-- 16, the catalogue row stride -- as the multiplier.  That chain is what "
+  "establishes, for every index map in prom_d, that a map value is a CATALOGUE "
+  "ROW NUMBER and not an offset",
+  "what the map's row and column ARE"),
+]
+
+# --------------------------------------------------------------------------
+# The refusals.  Each is a routine the same census reaches -- it reads the same
+# directory -- where the slot set alone does NOT decide what the routine does.
+# --------------------------------------------------------------------------
+REFUSALS11 = [
+ ("sub_FC164D", "reads the same three slots as ToneDB_PercSourceIndexMapB_Lookup "
+                "(+0x4C, +0x8C, +0x90) but is a different body -- 63 of its first "
+                "64 instructions differ once addresses are blanked -- and nothing "
+                "in this pass says which of the two roles is which."),
+ ("sub_FC12ED", "reads the same three slots as sub_FC10E0 (+0x7C, +0x80, +0x84), "
+                "same objection."),
+ ("sub_FB43CB", "reads slot +0xAC like ToneRec_GetElementBlock but is 82 "
+                "instructions to its 37 and shares none of the arithmetic; a name "
+                "borrowed from the slot would claim a twin the diff denies."),
+ ("sub_FBC80E", "reads slot +0x40, which prom_d records as an ALIAS of +0x3C, and "
+                "the tail scalar +0xF0, which prom_d explicitly does NOT claim as a "
+                "stride.  Naming it from an alias would name it twice over."),
+]
+
+_GENERIC_UNK = ("; Unknown:  what the routine is FOR.  Nothing here reads the "
+                "meaning of a field,")
+_GENERIC_UNK2 = ";          so the name is an address."
+
+
+def _c_wrap(s, w):
+    out, line = [], ""
+    for word in s.split():
+        if line and len(line) + 1 + len(word) > w:
+            out.append(line)
+            line = word
+        else:
+            line = (line + " " + word).strip()
+    if line:
+        out.append(line)
+    return out
+
+
+def _c_block(what, ev, unk, tag):
+    b = []
+    for i, c in enumerate(_c_wrap(what, 64)):
+        b.append("; %s%s" % ("Name:     " if i == 0 else "          ", c))
+    for i, c in enumerate(_c_wrap(ev, 64)):
+        b.append("; %s%s" % ("Evidence: " if i == 0 else "          ", c))
+    for i, c in enumerate(_c_wrap(unk, 64)):
+        b.append("; %s%s" % ("Unknown:  " if i == 0 else "          ", c))
+    b.append("; Named:   ROUND 11, by %s -- it was `%s`." % (tag[1], tag[0]))
+    return b
+
+
+def citation_defects():
+    """Every `Referenc...` citation in prom_c that names a byte INSIDE an
+    instruction, with the instruction start it should name and a check that the
+    correction is right rather than merely two bytes lower.
+
+    THE CHECK IS THE POINT.  Each row is accepted only if the instruction at the
+    corrected address literally carries, as an operand, the ADDRESS OF THE TABLE
+    whose header the citation sits in.  A blind `- 2` would pass on a wrong
+    address; this does not.  Returns (line, cited, corrected, table, table_addr,
+    instruction_text)."""
+    src = open(SRC, encoding="utf-8", errors="replace").read().split("\n")
+    text, order = {}, []
+    for ln in src:
+        if ln.lstrip().startswith(";"):
+            continue
+        m = ADDRC.search(ln)
+        if m:
+            a = int(m.group(1), 16)
+            text[a] = m.group(2).strip()
+            order.append(a)
+    order = sorted(set(order))
+    interior = {}
+    for a, b in zip(order, order[1:]):
+        if 0 < b - a <= 8:
+            for k in range(1, b - a):
+                interior[a + k] = a
+    hdr = re.compile(r'^;\s*([A-Za-z_][A-Za-z0-9_]*)\s+--\s+0x([0-9A-F]{6})\.\.0x([0-9A-F]{6})')
+    own, rows = None, []
+    for i, ln in enumerate(src):
+        h = hdr.match(ln)
+        if h:
+            own = (h.group(1), int(h.group(2), 16))
+        if not ln.strip().startswith(";") or "Referenc" not in ln:
+            continue
+        for m in re.finditer(r'0x([0-9A-Fa-f]{6})\b', ln):
+            a = int(m.group(1), 16)
+            if a not in interior or own is None:
+                continue
+            st = interior[a]
+            if ("%06x" % (own[1] & 0xFFFFFF)) not in text[st].lower():
+                continue
+            rows.append((i + 1, a, st, own[0], own[1], text[st]))
+    return rows
+
+
+def apply11():
+    """Rename, rewrite the eleven headers, record the four refusals, and correct
+    every citation `citation_defects()` accepts -- in prom_c/wsa1_prom_c.s AND in
+    notes/gen_prom_c_tables.py, which is where the wrong text is authored."""
+    cites = citation_defects()
+    pairs = sorted(set(("0x%06X" % c[1], "0x%06X" % c[2]) for c in cites))
+    n_c = 0
+    for path in (SRC, os.path.join(ROOT, "notes", "gen_prom_c_tables.py")):
+        lines = open(path, encoding="utf-8", errors="replace").read().split("\n")
+        for i, ln in enumerate(lines):
+            if "Referenc" not in ln:
+                continue
+            new = ln
+            for old, corr in pairs:
+                if old in new:
+                    new = new.replace(old, corr)
+            if new != ln:
+                lines[i] = new
+                n_c += 1
+        open(path, "w").write("\n".join(lines))
+    print("  citations: %d defects, %d lines rewritten across the listing and the "
+          "generator" % (len(cites), n_c))
+
+    text = open(SRC, encoding="utf-8", errors="replace").read()
+    todo = [(o, n) for o, n, _w, _e, _u in NAMES11
+            if re.search(r'^' + re.escape(o) + r':', text, re.M)]
+    if todo:
+        table = dict(todo)
+        pat = re.compile(r'(?<![A-Za-z0-9_])(' +
+                         "|".join(re.escape(o) for o, _n in todo) + r')(?![0-9A-Za-z])')
+        text = pat.sub(lambda m: table[m.group(1)], text)
+    lines = text.split("\n")
+    tagged = 0
+    for old, new, what, ev, unk in NAMES11:
+        try:
+            j = next(k for k, l in enumerate(lines) if l.startswith(new + ":"))
+        except StopIteration:
+            print("  MISSING  %s" % new)
+            continue
+        i = j - 1
+        while i >= 0 and lines[i].startswith(";"):
+            i -= 1
+        block = range(i + 1, j)
+        if any("ROUND 11" in lines[k] for k in block):
+            continue
+        u = [k for k in block if lines[k].startswith(_GENERIC_UNK)]
+        if not u:
+            print("  NO GENERIC PARAGRAPH in %s -- header left alone" % new)
+            continue
+        k = u[0]
+        end = k + 1
+        if end < j and lines[end].startswith(_GENERIC_UNK2):
+            end += 1
+        lines[k:end] = _c_block(what, ev, unk, (old, "notes/prom_c_inventory_round8.py"))
+        tagged += 1
+    text = "\n".join(lines)
+    lines = text.split("\n")
+    ref = 0
+    for old, why in REFUSALS11:
+        try:
+            j = next(k for k, l in enumerate(lines) if l.startswith(old + ":"))
+        except StopIteration:
+            print("  MISSING refusal target %s" % old)
+            continue
+        i = j - 1
+        while i >= 0 and lines[i].startswith(";"):
+            i -= 1
+        if any("REFUSED round 11" in lines[k] for k in range(i + 1, j)):
+            continue
+        blk = []
+        for n, c in enumerate(_c_wrap(why, 64)):
+            blk.append("; %s%s" % ("Refused:  REFUSED round 11.  " if n == 0
+                                   else "          ", c))
+        lines[j - 1:j - 1] = blk
+        ref += 1
+    open(SRC, "w").write("\n".join(lines))
+    print("  round 11: renamed %d labels, rewrote %d headers, recorded %d refusals"
+          % (len(todo), tagged, ref))
+
+
+def verify11():
+    text = open(SRC, encoding="utf-8", errors="replace").read()
+    bad = 0
+    for old, new, _w, _e, _u in NAMES11:
+        if not re.search(r'^' + new + r':', text, re.M):
+            print("  MISSING  %s" % new)
+            bad += 1
+        if re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  STALE    %s still defined" % old)
+            bad += 1
+        m = re.search(r'((?:^;.*\n)+)' + new + r':', text, re.M)
+        if m and _GENERIC_UNK in m.group(1):
+            print("  CONTRADICTION  %s still carries the generic Unknown" % new)
+            bad += 1
+    for old, _why in REFUSALS11:
+        m = re.search(r'((?:^;.*\n)+)' + re.escape(old) + r':', text, re.M)
+        if not m or "REFUSED round 11" not in m.group(1):
+            print("  REFUSAL LOST  %s" % old)
+            bad += 1
+    if citation_defects():
+        print("  CITATIONS  %d still name a byte inside an instruction"
+              % len(citation_defects()))
+        bad += 1
+    print("  round 11: %d names, %d refusals, %d problems"
+          % (len(NAMES11), len(REFUSALS11), bad))
+    return bad
+
+
+def mode_tonedb():
+    d = tonedb_directory()
+    by = tonedb_by_routine()
+    named = dict((o, n) for o, n, _w, _e, _u in NAMES11)
+    ref = dict(REFUSALS11)
+    print("=== 10. prom_c's READERS OF prom_d's TONE-DATABASE DIRECTORY ===\n")
+    print("  prom_d's 48-slot directory is the ONE object both images address, and")
+    print("  prom_d's source names every slot.  A prom_c routine that reads a slot")
+    print("  is therefore reading something with a name, and that is a naming")
+    print("  mechanism -- 'from what it points at' -- that no prom_c round had run.\n")
+    rows = tonedb_readers()
+    print("  %d slot reads, %d distinct slots, %d routines\n"
+          % (len(rows), len(set(r[2] for r in rows)), len(by)))
+    for lab in sorted(by):
+        cur = named.get(lab)
+        mark = "NAMED   " if cur else ("REFUSED " if lab in ref else "        ")
+        print("  %s %-34s %s" % (mark, cur or lab,
+                                 " ".join("+0x%02X" % s for s in by[lab])))
+        for s in by[lab]:
+            nm, desc = d.get(s, ("?", ""))
+            print("            +0x%02X  %-30s %s" % (s, nm, desc[:40]))
+    print("\n  ★ EVERY routine in this table was `sub_XXXXXX` when the round began,")
+    print("  and %d of them are decoded instruction by instruction in prom_d's own"
+          % len(NAMES11))
+    print("  committed script (notes/prom_d_documentation_round3.py --q4, which")
+    print("  PASSES today).  The knowledge was in the tree; prom_c had not received")
+    print("  it.  The other %d are left as they were, with a stated reason."
+          % (len(by) - len(NAMES11)))
+
+
+def mode_cites():
+    rows = citation_defects()
+    print("=== 11. THE CITATION DEFECT IN prom_c's DATA-TABLE HEADERS ===\n")
+    print("  This tree's error list already carries '~20 call sites cited one byte")
+    print("  past the instruction, systematically' and '31 citations one byte past")
+    print("  the instruction'.  Here is the third instance, in prom_c's own")
+    print("  data-table zone: %d citations that name the ADDRESS OF THE OPERAND"
+          % len(rows))
+    print("  instead of the address of the instruction that carries it.\n")
+    if not rows:
+        print("  none -- the defect is corrected (this mode is the check).")
+        return
+    for ln, cited, corr, tab, ta, t in rows:
+        print("  line %6d  cited 0x%06X -> instruction 0x%06X (+%d)  `%s`"
+              % (ln, cited, corr, cited - corr, t))
+        print("              header of %s (0x%06X), which that instruction names"
+              % (tab, ta))
+
+
+def _routine_body(name):
+    """The canonical disassembly text of every instruction of one routine, from
+    the label to the next `; ----` rule."""
+    src = open(SRC, encoding="utf-8", errors="replace").read().split("\n")
+    i = next(k for k, l in enumerate(src) if l.startswith(name + ":"))
+    out = []
+    for ln in src[i:]:
+        if re.match(r'^; -----', ln):
+            break
+        a = ADDRC.search(ln)
+        if a and not ln.lstrip().startswith(";"):
+            out.append(a.group(2).strip())
+    return out
+
+
+def sibling_diff(a, b):
+    """(len(a), len(b), differing positions) with every hex address operand
+    blanked, so only the SHAPE is compared.
+
+    ⚠ It is a POSITION-WISE comparison, and one inserted instruction shifts
+    everything after it.  That is why the round-11 refusals quote it as evidence
+    that two bodies are NOT the same routine and never as a similarity score: a
+    high difference count is conclusive against a twin, a low one would prove
+    nothing on its own."""
+    A, B = _routine_body(a), _routine_body(b)
+    def n(x):
+        return [re.sub(r'0x[0-9a-f]{4,6}', 'A', s) for s in x]
+    na, nb = n(A), n(B)
+    d = sum(1 for i in range(min(len(na), len(nb))) if na[i] != nb[i])
+    return len(A), len(B), d
+
+
+
+def _extents(path):
+    """{top-level label: (start, end)} from the source's own address comments.
+    A label containing `__` is an interior branch target and is not a boundary."""
+    lab = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
+    ents, pend = [], []
+    for ln in open(path, encoding="utf-8", errors="replace"):
+        m = lab.match(ln)
+        if m:
+            pend.append(m.group(1))
+            continue
+        a = ADDRC.search(ln)
+        if a and pend and not ln.lstrip().startswith(";"):
+            ad = int(a.group(1), 16)
+            for n in pend:
+                ents.append((ad, n))
+            pend = []
+    tops = sorted(set((a, n) for a, n in ents if "__" not in n))
+    out = {}
+    for i, (a, n) in enumerate(tops):
+        j = i + 1
+        while j < len(tops) and tops[j][0] == a:
+            j += 1
+        out[n] = (a, tops[j][0] if j < len(tops) else None)
+    return out
+
+
+def twin_sweep():
+    """Is prom_a's 'same machine, same compiler' name pool a lever for prom_c's
+    remaining sub_XXXXXX?  Every prom_c sub_XXXXXX with a derivable extent is
+    compared, byte for byte, against EVERY content-named prom_a routine of the
+    SAME LENGTH; the best match and its differing count are reported.
+
+    THE ANSWER IS NO, and that is the deliverable.  Round 7's TWIN mechanism swept
+    prom_c against itself; nobody had swept it against prom_a's 1,100 named
+    routines.  Returns (n_subs, n_named, rows) with rows = the matches within a
+    tolerance of max(2, len/12) differing bytes."""
+    A = _extents(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"))
+    C = _extents(SRC)
+    da = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
+    dc = open(ROM, "rb").read()
+    framed = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*_(?:[0-9A-Fa-f]{4,6}|[0-9]{1,4})$')
+    subs = [(n, a, e) for n, (a, e) in C.items()
+            if UNNAMED.match(n) and e and 8 <= e - a <= 4096]
+    named = [(n, a, e) for n, (a, e) in A.items()
+             if not UNNAMED.match(n) and not framed.match(n) and e and 8 <= e - a <= 4096]
+    bylen = collections.defaultdict(list)
+    for n, a, e in named:
+        bylen[e - a].append((n, a, e))
+    rows = []
+    for n, a, e in subs:
+        L = e - a
+        cb = dc[a - BASE:e - BASE]
+        best = None
+        for m, aa, ee in bylen.get(L, []):
+            ab = da[aa - BASE:ee - BASE]
+            d = sum(1 for x, y in zip(cb, ab) if x != y)
+            if best is None or d < best[0]:
+                best = (d, m, aa)
+        if best and best[0] <= max(2, L // 12):
+            rows.append((best[0], L, n, a, best[1], best[2]))
+    rows.sort()
+    return len(subs), len(named), rows
+
+
+def mode_twins11():
+    ns, nn, rows = twin_sweep()
+    print("=== 12. THE prom_a TWIN LEVER, MEASURED AND DECLINED ===\n")
+    print("  %d prom_c sub_XXXXXX with a derivable extent against %d content-named"
+          % (ns, nn))
+    print("  prom_a routines, every same-length pair compared byte for byte.\n")
+    for d, L, n, a, m, aa in rows:
+        print("    %3d of %4d bytes differ   %s @0x%06X  <-  prom_a %s @0x%06X"
+              % (d, L, n, a, m, aa))
+    print("\n  %d candidates, and NEITHER IS A NAME.  Both are 14-byte bodies of the"
+          % len(rows))
+    print("  shape `link / store the argument at an absolute address / ret`, which is")
+    print("  prom_a's Var<addr>_Set pattern -- and the address stored is the ONLY")
+    print("  thing that distinguishes one from another, so the match says the two")
+    print("  routines have the same SHAPE and nothing about what either stores.")
+    print("  prom_c and prom_a really do share a kernel (36 routine pairs, 35")
+    print("  structurally identical -- notes/prom_c_prom_a_routine_diff.py), but that")
+    print("  sharing is already spent: it is in the routines prom_c has NAMED.  For")
+    print("  the 398 that are left the lever measures ZERO, and this is the section")
+    print("  that says so instead of a later round re-discovering it.")
+
+
+def prose_depth():
+    """(comment lines, blank lines) in prom_c's listing.  The pair is the point:
+    this wave published a '+35 headers' gain that was 35 REMOVED BLANK LINES, so a
+    prose claim here is quoted with the blank count as its control."""
+    c = b = 0
+    for ln in open(SRC, encoding="utf-8", errors="replace"):
+        s = ln.strip()
+        if s.startswith(";"):
+            c += 1
+        elif not s:
+            b += 1
+    return c, b
+
+def selftest11():
+    d = tonedb_directory()
+    check(len(d) >= 48, "prom_d's directory parses to at least 48 slots (%d)" % len(d))
+    check(d.get(0x08, ("", ""))[0] == "ToneDB_ToneOffsetTable",
+          "slot +0x08 is ToneDB_ToneOffsetTable, parsed not retyped")
+    check(d.get(0xB4, ("", ""))[0] == "PercInst_Template_Silent",
+          "...and the LAST pointer slot, +0xB4, is PercInst_Template_Silent")
+    rows = tonedb_readers()
+    by = tonedb_by_routine()
+    check(len(rows) >= 100, "the slot census finds at least 100 reads (%d)" % len(rows))
+    check(len(by) == 35, "over exactly 35 routines (%d)" % len(by))
+    q2 = {0xFB90D7: "+0x50", 0xFB4288: "+0x08", 0xFC299A: "+0xEC"}
+    got = dict((a, "+0x%02X" % s) for a, _b, s, _l in rows)
+    for a, s in q2.items():
+        check(got.get(a) == s,
+              "site 0x%06X reads %s, the same slot prom_d's Q2 reports" % (a, s))
+    check(got.get(0xFC299A) == "+0xEC",
+          "...including Q2's LAST site, 0xFC299A")
+    names = set(n for _o, n, _w, _e, _u in NAMES11)
+    check(len(names) == len(NAMES11), "no two round-11 names collide")
+    text = open(SRC, encoding="utf-8", errors="replace").read()
+    for _o, n, _w, _e, _u in NAMES11:
+        check(re.search(r'^' + n + r':', text, re.M) is not None,
+              "%s is a label in the listing" % n)
+    check(re.search(r'^ToneDB_PercSourceIndexMapB_Lookup:', text, re.M) is not None,
+          "...checked on the LAST of the eleven as well as the first")
+    for _o, n, _w, _e, _u in NAMES11:
+        m = re.search(r'((?:^;.*\n)+)' + n + r':', text, re.M)
+        check(m is not None and "Evidence:" in m.group(1),
+              "%s carries an Evidence: line" % n)
+    for old, _why in REFUSALS11:
+        m = re.search(r'((?:^;.*\n)+)' + re.escape(old) + r':', text, re.M)
+        check(m is not None and "REFUSED round 11" in m.group(1),
+              "%s carries its round-11 refusal" % old)
+    la, lb, d = sibling_diff("ToneDB_PercSourceIndexMapB_Lookup", "sub_FC164D")
+    check(d == 63 and min(la, lb) == 64,
+          "the sub_FC164D refusal's arithmetic: %d of its first %d instructions "
+          "differ from the routine it shares three slots with" % (d, min(la, lb)))
+    la, lb, d = sibling_diff("sub_FC10E0", "sub_FC12ED")
+    check(d == 63 and min(la, lb) == 64,
+          "...and the sub_FC12ED refusal's, %d of %d" % (d, min(la, lb)))
+    la, lb, _d = sibling_diff("ToneRec_GetElementBlock", "sub_FB43CB")
+    check((la, lb) == (37, 82),
+          "the sub_FB43CB refusal's counts: %d instructions against %d" % (la, lb))
+    dirslots = tonedb_directory()
+    check("alias of +0x3C" in dirslots.get(0x40, ("", ""))[1],
+          "the sub_FBC80E refusal rests on prom_d's own word: slot +0x40 is "
+          "recorded there as an alias of +0x3C")
+    check(dirslots.get(0x40, ("", ""))[0] == dirslots.get(0x3C, ("", ""))[0],
+          "...and both slots carry the same label, ToneDB_WaveSelTailPresets")
+    ns, nn, tw = twin_sweep()
+    check(ns >= 390 and nn >= 1000,
+          "the prom_a twin sweep runs over %d prom_c sub_XXXXXX and %d prom_a "
+          "content names" % (ns, nn))
+    check(len(tw) == 2 and all(r[1] == 14 for r in tw),
+          "and it finds %d candidates, both 14 bytes -- no name is taken from it"
+          % len(tw))
+    check(tw and tw[-1][2] == "sub_FADC3E",
+          "...and the LAST of the two is sub_FADC3E, checked as well as the first")
+    cl, bl = prose_depth()
+    check(bl == 712,
+          "prom_c's BLANK-line count is %d, the SAME as the 712 measured on the "
+          "pre-round listing -- the control on the prose claim, because this "
+          "wave once counted removed blank lines as new headers" % bl)
+    check(cl == 26357,
+          "and its comment lines are %d, up 151 from 26,206 measured on the "
+          "pre-round listing" % cl)
+    check(len(citation_defects()) == 0,
+          "no citation in prom_c names a byte inside an instruction any more")
+    pd = open(os.path.join(ROOT, "notes", "gen_prom_c_tables.py"),
+              encoding="utf-8", errors="replace").read()
+    check("Referenced from 0xFA737C." in pd,
+          "the GENERATOR carries the corrected citation too, so a regeneration "
+          "cannot put the defect back")
+    check("Referenced from 0xFA737E." not in pd,
+          "...and the wrong one is gone from it")
+    # ⚠ and the honest limit on that claim
+    gen = subprocess.run([sys.executable,
+                          os.path.join(ROOT, "notes", "gen_prom_c_tables.py")],
+                         capture_output=True, text=True).stdout.rstrip("\n")
+    listing = open(SRC, encoding="utf-8", errors="replace").read()
+    check(gen not in listing,
+          "⚠ STATED, NOT FIXED: the generator's output no longer reproduces the "
+          "zone in the listing -- prose was hand-added to the .s after round 3 "
+          "and never went back into the generator, so 'regenerate' would LOSE "
+          "text.  The citation fix is in BOTH files; the drift is older and "
+          "wider than this round and is reported, not silently repaired")
 
 def main():
     args = sys.argv[1:]
@@ -2034,9 +2868,25 @@ def main():
         rc = selftest()
         selftest9()
         selftest10()
-        print("\n%d checks, %d failures (rounds 8, 9 and 10)" % (CHECKS[0], len(FAILS)))
+        selftest11()
+        print("\n%d checks, %d failures (rounds 8, 9, 10 and 11)"
+              % (CHECKS[0], len(FAILS)))
         sys.exit(1 if FAILS else rc)
+    if "--apply11" in args:
+        apply11()
+        sys.exit(0)
+    if "--verify11" in args:
+        sys.exit(1 if verify11() else 0)
     run_all = not args
+    if run_all or "--tonedb" in args:
+        mode_tonedb()
+        print()
+    if run_all or "--cites" in args:
+        mode_cites()
+        print()
+    if run_all or "--twins11" in args:
+        mode_twins11()
+        print()
     if run_all or "--dispatch" in args:
         show_dispatch()
         print()

@@ -264,6 +264,35 @@ if _got10 != _R8.AUDITED_R10:
     sys.exit("REFUSING TO EMIT: the round-10 selector shape is now %s; audited as "
              "%s.  Re-audit with notes/prom_d_inventory_round8.py Q16-Q19."
              % (_got10, _R8.AUDITED_R10))
+# ---------------------------------------------------------------------------
+# ★★ WAVE 7 ROUND 11.  The SOUND GROUP.  notes/prom_d_inventory_round8.py Q21
+# proves, from prom_a's own address arithmetic and prom_b's own tables, that
+# this image's tone index is 8*group + member and that the group's name is
+# prom_b's 16 ASCII bytes at 0xF068B4 + 16*group.  Nothing here is typed: the
+# bases are the 32-bit immediates of prom_a instructions whose opcode byte is
+# asserted at the cited address, the members-per-group is prom_a's own
+# 16-byte/2-byte stride pair, and the group COUNT is where the inverse identity
+# stops holding.  This emitter refuses to run if M10's label set moved.
+# ---------------------------------------------------------------------------
+_got11 = _R8._r11_shape()
+if _got11 != _R8.AUDITED_R11:
+    sys.exit("REFUSING TO EMIT: M10 now names %s; audited as %s.  Re-audit with "
+             "notes/prom_d_inventory_round8.py Q22 before regenerating."
+             % (_got11, _R8.AUDITED_R11))
+GRP_LABEL = _R8.group_labels()
+GRP_SETS = _R8.selector_groups()
+GRP_NAME = _R8.group_name
+GRP_MEMBERS = _R8.GROUP_MEMBERS
+GRP_COUNT = _R8.GROUP_COUNT
+GRP_RUN = _R8.GROUP_RUN
+TONE_GROUP = _R8.tone_group
+GRP_NAME_ADDR = _R8.GROUP_NAME_ADDR
+GRP_MEMBER_ADDR = _R8.GROUP_MEMBER_ADDR
+GRP_WORDHITS = len(_R8.group_word_alignment())
+GRP_WORDNULL = max(len(_R8.group_word_alignment(_s))
+                   for _s in range(2, _R8.GROUP_COUNT - 1))
+GRP_BOUND = _R8.GROUP_BOUND
+
 SEL_LABEL = _R8.selector_labels()
 SEL_COLS = _R8.selector_columns()
 SEL_NAMES = _R8.selector_names()
@@ -327,6 +356,27 @@ def tone_hdr_lines(p, idx, extra):
     directory slot +0x04 hold this record's index.  round 4 Q6.
     """
     n = _PROG_SEL.get(idx, 0)
+    # ★ ROUND 11: and what the PANEL calls it.  The group is not a property of
+    # these bytes -- it is this record's INDEX read as GRP_MEMBERS*group + member,
+    # which prom_a's own address arithmetic establishes (Q21).  Records outside the
+    # table's identity run get the gap said, not a group guessed.
+    g = TONE_GROUP(idx)
+    grp = (["; ★ SOUND GROUP %d %r, member %d of %d -- what the panel calls this"
+            % (g[0], GRP_NAME(g[0]).strip(), g[1], GRP_MEMBERS),
+            "; tone.  Evidence: prom_b's group/member table at 0x%06X, entry k of"
+            % GRP_MEMBER_ADDR,
+            "; which is the (program, bank) pair that this image's own BankMap and",
+            "; ToneNumBanks resolve to tone k (%d of %d consecutive entries); prom_a"
+            % (GRP_RUN, GRP_RUN),
+            "; strides it 16 bytes per group and 2 per member at 0xFC230C/0xFC2317,",
+            "; so the index is %d*group + member; the name is prom_b's own 16 ASCII"
+            % GRP_MEMBERS,
+            "; bytes at 0x%06X + 16*%d.  notes/prom_d_inventory_round8.py Q21."
+            % (GRP_NAME_ADDR, g[0])]
+           if g is not None else
+           ["; ⚠ NO SOUND GROUP: tone index %d is past the %d-entry run of prom_b's"
+            % (idx, GRP_RUN),
+            "; group/member table, so nothing in that table places it.  Q21."])
     return ["",
             "; ---- tone 0x%03X %r ----" % (idx, NAME(p)),
             "; %s" % extra,
@@ -338,7 +388,7 @@ def tone_hdr_lines(p, idx, extra):
             "; file 0x%05X; the program map holds no 0xFFFF and its values run"
             % (0xB80 + 4 * idx),
             "; 0..273 over that table's 274 entries, so the count above is the",
-            "; number of times this record's index appears in it.  round 4 Q6a-Q6c."]
+            "; number of times this record's index appears in it.  round 4 Q6a-Q6c."] + grp
 
 
 def tone_name(p):
@@ -1459,6 +1509,44 @@ def emit_offtable():
         "",
         "Same structure and same directory slot as the KN5000's table of the same",
         "name (629 entries there).",
+        "",
+        "\u2605\u2605 WAVE 7 ROUND 11 -- THE INDEX ORDER IS THE PANEL'S SOUND GROUP ORDER.",
+        "Rounds 4-10 left this table's ORDER unexplained.  It is %d groups of %d:"
+        % (GRP_COUNT, GRP_MEMBERS),
+        "tone index k is group k/%d, member k%%%d, and the group's displayed name is"
+        % (GRP_MEMBERS, GRP_MEMBERS),
+        "prom_b's 16 ASCII bytes at 0x%06X + 16*group.  The %d groups, in this"
+        % (GRP_NAME_ADDR, GRP_COUNT),
+        "table's own order:",
+    ] + ["    %s"
+         % "  ".join("%2d %-17s" % (_g, GRP_NAME(_g).strip())
+                     for _g in range(_g0, min(_g0 + 3, GRP_COUNT)))
+         for _g0 in range(0, GRP_COUNT, 3)] + [
+        "",
+        "Evidence: prom_a 0xFC231D `add XBC,0x00F06EF4` reaches prom_b's",
+        "group/member table after 0xFC230C `mul WA,0x0010` (group) and 0xFC2317",
+        "`mul BC,0x0002` (member), so a group's row holds 16/2 = %d entries; entry"
+        % GRP_MEMBERS,
+        "k of that table is a (program, bank-select) pair which THIS image's own",
+        "ToneDB_BankMap and ToneDB_ToneNumBanks resolve to tone k, for %d"
+        % GRP_RUN,
+        "consecutive entries k = 0..%d (entry %d is the first that is not its own"
+        % (GRP_RUN - 1, GRP_RUN),
+        "index); %d/%d = %d, and prom_b's name table has exactly %d named rows"
+        % (GRP_RUN, GRP_MEMBERS, GRP_COUNT, GRP_COUNT),
+        "before row %d becomes `----------------`." % GRP_COUNT,
+        "\u26a0 WHICH NAME GOES WITH WHICH OCTET is a separate claim and is witnessed",
+        "twice: %d of the %d group names share a word with one of the %d tone names"
+        % (GRP_WORDHITS, GRP_COUNT, GRP_MEMBERS),
+        "in their octet against a best rotation of %d, and the %d tone names ending"
+        % (GRP_WORDNULL, len(_R8.group_kit_witness()[0])),
+        "in `Kit` occupy exactly the groups whose names spell DRUM.  %d groups"
+        % (GRP_COUNT - GRP_WORDHITS),
+        "share no word; Q21 lists them.",
+        "\u26a0 AND THE PROGRAM ORDER OF ToneDB_ToneNumBanks IS A DIFFERENT THING and is",
+        "still unexplained -- it is not General MIDI (round 9 Q14) and this finding",
+        "says nothing about it.",
+        "notes/prom_d_inventory_round8.py Q21.",
     ] + ev_slot(0x08, [
         "",
         "★ THE ENTRY WIDTH AND THE 0-BASED READING ARE prom_c's TOO:",
@@ -2074,6 +2162,7 @@ def mk_wavesel_array(slot):
                           % MAX_NAMES)
                         W("; rather than name an object.  round 6 Q1, verdict")
                         W("; NAMELESS-AMBIGUOUS; round 8 Q3.")
+                        _m10_conflict(i, t)
                 else:
                     W("; ⚠ NO tone wave-select block is within one byte of these 43")
                     W("; bytes -- one of the %d records of this array with no twin,"
@@ -2138,6 +2227,7 @@ def mk_wavesel_array(slot):
                         W("; names -- more than round 8's bound of %d, so a" % MAX_NAMES)
                         W("; disjunction would enumerate a family rather than name")
                         W("; an object.  round 10 Q19.")
+                        _m10_lines(i)
                     else:
                         W("; ★ AND THE SELECTOR IS ASKED TOO, and refuses for the")
                         W("; other reason: the map holds %d at program column%s %s,"
@@ -2150,6 +2240,7 @@ def mk_wavesel_array(slot):
                         W("; digits reads as positional, so the name is refused")
                         W("; rather than spelled some other way -- inventing a")
                         W("; morpheme is round 3's `Home` failure.  round 10 Q19e.")
+                        _m10_lines(i)
             if car is not None:
                 ks = car[i]
                 W("")
@@ -2244,11 +2335,91 @@ def mk_wavesel_array(slot):
             elif slot == 0x18 and SEL_LABEL.get(i):
                 # ★ ROUND 10.  A record with no twin, named by what POINTS AT it.
                 _tail = "_SelectedFor_" + SEL_LABEL[i]
+            elif slot == 0x18 and GRP_LABEL.get(i):
+                # ★ ROUND 11.  The same pointer, read one level coarser: every
+                # program column that reaches this record lies in ONE sound group,
+                # and the group is an object the panel names.
+                _tail = "_SelectedForGroup_" + GRP_LABEL[i]
             else:
                 _tail = ""
             W("%s_%03d%s:" % (slot_label(slot), i, _tail))
             e_bytes(a + 43 * i, a + 43 * (i + 1), per=43)
     return fn
+
+
+def _wrap72(text, indent=""):
+    """Wrap prose to fit the file's 80-column comment width, with a fixed indent."""
+    out, cur = [], indent
+    for word in text.split():
+        if len(cur) + len(word) + 1 > 76 and cur.strip():
+            out.append(cur)
+            cur = indent + word
+        else:
+            cur = (cur + " " + word) if cur.strip() else cur + word
+    if cur.strip():
+        out.append(cur)
+    return out
+
+
+def _m10_conflict(i, twins):
+    """★ ROUND 11's refusal on a record whose TWO routes disagree.
+
+    Emitted only where M10's bound is met but the record has a byte twin, which
+    is the case round 10's rule -- never label a record that has one -- exists to
+    prevent.  The disagreement is printed rather than left implicit.
+    """
+    gs = GRP_SETS.get(i, [])
+    if not (1 <= len(gs) <= GRP_BOUND):
+        return
+    tg = sorted(set(TONE_GROUP(t)[0] for t, _j, _n in twins if TONE_GROUP(t)))
+    W("; ★ AND ROUND 11's COARSER QUESTION SPLITS THE TWO WITNESSES, which is")
+    W("; why this record keeps its number.  The map's columns all lie in sound")
+    W("; group %d %r, so M10's bound of %d is met -- but the %d blocks that"
+      % (gs[0], GRP_NAME(gs[0]).strip(), GRP_BOUND, len(twins)))
+    for _ln in _wrap72("carry these bytes span group%s %s."
+                       % ("" if len(tg) == 1 else "s",
+                          ", ".join("%d %r" % (g, GRP_NAME(g).strip()) for g in tg)),
+                       ""):
+        W("; " + _ln)
+    W("; Round 10's rule is never to label a record that HAS a twin, so that no")
+    W("; derived name can contradict another,")
+    W("; and this is the record that rule is for.")
+    W("; notes/prom_d_inventory_round8.py Q22f.")
+
+
+def _m10_lines(i):
+    """★ ROUND 11's paragraph on one record of ToneDB_MixerDefaultTable.
+
+    Emitted only where round 10 refused, and it says which of the two answers
+    the coarser question got.  Both branches are derived from the same object --
+    the sound groups of the tones in this record's map columns.
+    """
+    gs = GRP_SETS.get(i, [])
+    if GRP_LABEL.get(i):
+        W("; ★ ROUND 11 ASKS THE SAME COLUMNS A COARSER QUESTION and gets an")
+        W("; answer: every tone above lies in ONE sound group, %r --"
+          % GRP_NAME(gs[0]).strip())
+        W("; number %d of the %d groups the panel selects with.  That is what"
+          % (gs[0], GRP_COUNT))
+        W("; `_SelectedForGroup_` claims, and it claims nothing else: the group")
+        W("; holds %d tones and this label does not say which." % GRP_MEMBERS)
+        W("; Evidence: tone index = %d*group + member (prom_a 0xFC230C `mul"
+          % GRP_MEMBERS)
+        W("; WA,0x0010` and 0xFC2317 `mul BC,0x0002` over the table at")
+        W("; 0x%06X, whose entry k is the (program, bank) pair prom_d's own"
+          % GRP_MEMBER_ADDR)
+        W("; BankMap and ToneNumBanks resolve to tone k, %d of %d); the group's"
+          % (GRP_RUN, GRP_RUN))
+        W("; name is prom_b's own 16 ASCII bytes at 0x%06X + %d*%d."
+          % (GRP_NAME_ADDR, 16, gs[0]))
+        W("; notes/prom_d_inventory_round8.py Q21, Q22.")
+    elif gs:
+        W("; ★ AND ROUND 11's COARSER QUESTION IS ASKED TOO, and refuses: those")
+        W("; columns span %d sound groups (%s), above" % (len(gs),
+          ", ".join(GRP_NAME(g).strip() for g in gs[:4])))
+        W("; M10's bound of %d.  A label naming %d groups would claim %d tones."
+          % (GRP_BOUND, len(gs), len(gs) * GRP_MEMBERS))
+        W("; notes/prom_d_inventory_round8.py Q22.")
 
 
 def mk_catalogue(slot, foot_slot):
@@ -3293,12 +3464,138 @@ def _round9_header_lines():
     ])
 
 
+def _round11_header_lines():
+    """The round-11 block: the sound group, and what it did and did not name."""
+    kits, kitgroups, drumrows = _R8.group_kit_witness()
+    _n3c = _R6.array_records(0x3C)[1]
+    _cens = _R8.map_selector_census()
+    _CENS_SEL = [r for r in _cens if r[0] == _R8.SELECTOR_SLOT][0]
+    _CENS_OTH = [r for r in _cens if r[0] != _R8.SELECTOR_SLOT]
+    _n20 = _R6.array_records(0x20)[1]
+    _fr20 = sum(1 for _k in range(_n20) if _k not in _R8.wavesel_labels_r8(0x20))
+    _tg = _R8.tone_group(0x5D)
+    return "\n".join([
+        ";",
+        "; " + "-" * 78,
+        "; \u2605\u2605 WAVE 7 ROUND 11 -- THE SOUND GROUP: WHAT THE PANEL CALLS TONE k",
+        "; " + "-" * 78,
+        ";",
+        "; Every round from 4 to 10 asked this image about itself, or about prom_c,",
+        "; which is the only image that READS it.  Round 11 asked the two images",
+        "; nobody had opened: prom_a, which paints the panel, and prom_b, which",
+        "; stores the panel's text.  They settle a sentence that had stood over this",
+        "; image's tone table since round 4 -- that its index order is `a Technics-",
+        "; internal ordering; nothing here identifies which panel control it",
+        "; corresponds to`.",
+        ";",
+        "; \u2605\u2605 THE TONE INDEX IS %d*GROUP + MEMBER, and it is a proof rather than an"
+        % GRP_MEMBERS,
+        "; alignment:",
+        ";   * prom_a addresses prom_b's group/member table at 0x%06X as 0xFC230C"
+        % GRP_MEMBER_ADDR,
+        ";     `mul WA,0x0010` + 0xFC2317 `mul BC,0x0002` + 0xFC231D `add XBC,",
+        ";     0x00F06EF4` -- 16 bytes per group over 2 bytes per member, so a",
+        ";     group's row holds %d members.  prom_b's own" % GRP_MEMBERS,
+        ";     GroupMaxMemberIndex_ToneGroups at 0x%06X holds 0x%02X in all 16 of its"
+        % (_R8.GROUP_MAXMEM_ADDR, GRP_MEMBERS - 1),
+        ";     bytes, which is the same number said a second way.",
+        ";   * entry k of that table is a (program, bank-select) pair, and resolving",
+        ";     it through THIS image's own ToneDB_BankMap (+0x6C) and",
+        ";     ToneDB_ToneNumBanks (+0x04) gives tone k -- %d consecutive entries,"
+        % GRP_RUN,
+        ";     entry 0 and entry %d both checked, and entry %d is the first that is"
+        % (GRP_RUN - 1, GRP_RUN),
+        ";     not its own index.  So the table is the INVERSE of this image's",
+        ";     program map and is indexed by TONE INDEX.",
+        ";   * %d / %d = %d groups, and prom_b's 16-byte name table at 0x%06X has"
+        % (GRP_RUN, GRP_MEMBERS, GRP_COUNT, GRP_NAME_ADDR),
+        ";     EXACTLY %d named rows before row %d turns into `----------------`:"
+        % (GRP_COUNT, GRP_COUNT),
+        ";     PIANO, E.PIANO, HARPSI. & MALLET ... PERCUSSION, EFFECT, DRUMS 1,",
+        ";     DRUMS 2.",
+        ";",
+        "; \u26a0 WHICH NAME GOES WITH WHICH OCTET is a SEPARATE claim from that, and it",
+        ";   has two independent witnesses rather than an assertion: %d of the %d"
+        % (GRP_WORDHITS, GRP_COUNT),
+        ";   group names share a word of >=3 letters with one of the %d tone names"
+        % GRP_MEMBERS,
+        ";   their octet holds, where rotating the numbering scores at most %d -- and"
+        % GRP_WORDNULL,
+        ";   the +/-1 shifts are NOT independent nulls, because the list has runs like",
+        ";   GUITAR 1/2/3, which Q21 states rather than hides.  And at the END of the",
+        ";   table, where a rule that stops early shows, the %d tone names ending in"
+        % len(kits),
+        ";   `Kit` occupy exactly groups %s, which are exactly the rows whose text"
+        % kitgroups,
+        ";   spells DRUM.  %d groups share no word and are listed by name in Q21."
+        % (GRP_COUNT - GRP_WORDHITS),
+        ";",
+        "; \u26a0 WHAT IT DOES NOT SAY: it names no BYTE of a tone record and says",
+        ";   nothing about what a group means to the synthesis.  It says what the",
+        ";   PANEL calls tone k, and every banner below claims only that.",
+        ";",
+        "; \u2605 WHAT IT NAMED: %d framed records of ToneDB_MixerDefaultTable, as"
+        % len(GRP_LABEL),
+        ";   `_SelectedForGroup_<GROUP>` -- the records whose map columns ALL lie in",
+        ";   one group.  The bound is 1 and not round 8's 3 because a group already",
+        ";   names %d tones; the sweep to 5 is printed in Q22.  Two of the %d are the"
+        % (GRP_MEMBERS, len(GRP_LABEL)),
+        ";   records round 10 refused because the only tone name there CamelCases to",
+        ";   `161`, and one is the LAST record of the array, which round 10 refused",
+        ";   for carrying four names.",
+        ";   \u26a0 AND THE RULE COSTS ONE NAME, printed rather than left implicit:",
+        ";   round 10 never labels a record that HAS a byte twin, so that no derived",
+        ";   name can contradict another, and M10 keeps that rule.",
+    ] + ["; " + _w for _w in _wrap72(
+        "  ".join("record %d's map columns are all %s, while the tone blocks that "
+                  "carry its bytes reach %s."
+                  % (_k, _R8.group_name(_g[0]).strip(),
+                     " and ".join(_R8.group_name(_x).strip() for _x in _t))
+                  for _k, _g, _t in _R8.group_twin_conflicts()), "   ")] + [
+        ";   That is the record the rule is for.  (Q22f)",
+        ";",
+        "; \u26a0 AND WHAT IT REFUSED, measured rather than skipped:",
+        ";   * the %d records of ToneDB_WaveSelTailPresets.  The %d presets anything"
+        % (_n3c, len(_R8.preset_referrers())),
+        ";     selects at all are selected by records of the +0x18 array, and none",
+        ";     reaches one group by either route.  The nearest miss is preset 4, ALL",
+        ";     16 of whose records are identified and which spans BRASS, TRUMPET and",
+        ";     DEEP BRASS -- three groups, %d tones.  (Q24)" % (3 * GRP_MEMBERS),
+        ";   * the %d framed records of ToneDB_PercMixerDefaultTable: a drum record's"
+        % _fr20,
+        ";     group can only be one of the %d rows spelling DRUM, so the coarser"
+        % len(drumrows),
+        ";     question is coarser than the array itself.  (Q25)",
+        ";   * tone record 0x05D, whose own 16 bytes are the drawbar registration",
+        ";     this tree's CamelCase rule turns into `161`.  It is member %d of group"
+        % _tg[1],
+        ";     %d %r -- so the object is PLACED -- and it KEEPS the `161` label,"
+        % (_tg[0], _R8.group_name(_tg[0]).strip()),
+        ";     because spelling the apostrophes would invent a morpheme.  (Q26)",
+        ";",
+        "; \u2605\u2605 AND A CENSUS ROUND 10 RAN ON ONE MAP, RUN ON ALL TEN.  Of the ten",
+        ";   1,024-entry maps whose range fits the %d-record array, ONLY slot +0x%02X"
+        % (_R6.array_records(0x18)[1], _R8.SELECTOR_SLOT),
+        ";   is a selector: it agrees with the byte rule on %.1f%%%% of its asked"
+        % (100.0 * _CENS_SEL[5] / _CENS_SEL[4]),
+        ";   positions and the best of the other %d reaches %.1f%%%%, each within a"
+        % (len(_CENS_OTH), max(100.0 * r[5] / r[4] for r in _CENS_OTH)),
+        ";   few points of its own shuffled null.  It reaches 0 of the %d unreached"
+        % _CENS_SEL[10],
+        ";   records, while the maps that DO reach them are exactly the ones that",
+        ";   fail the test.  So `unreached` is now a statement about the only map",
+        ";   that IS a selector, not about the only map anyone tried.  (Q23)",
+        ";",
+    ])
+
+
 _HDR = HEADER
 _MARK = "; Reproduce every number quoted in this file:"
 assert _MARK in _HDR
 _HDR = _HDR.replace(_MARK, _round7_header_lines() + "\n"
                     + _round8_header_lines() + "\n"
-                    + _round9_header_lines() + "\n" + _MARK, 1)
+                    + _round9_header_lines() + "\n"
+                    + _round11_header_lines() + "\n" + _MARK, 1)
 _HDR = _HDR.replace(
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks",
     ";     python3 notes/prom_d_base_checks.py              # the base, 12 checks\n"
