@@ -103,3 +103,27 @@ comes from rather than the slot number alone. Tier A (the 27 legend-named `Exit`
 ⚠ The reasoning, not just the verdict, matters for the next round: the test is **whether the number
 has a referent outside the code**, not whether the name ends in a digit. `SoftKeyCol1` passes;
 `Dispatch_F54248_Arm3` still does not.
+
+## ★ COVERAGE GOAL: the runs that must be REFUSED, not converted
+
+`python3 notes/reachability.py --evidence` grades every reachable run by whether anything
+POSITIVELY says execution enters at its start: a graded seed names it, or already-converted code
+falls through into it. A run with neither was queued while the walk was **decoding**, and the walk
+can decode its way into data.
+
+**prom_a 87 bytes and prom_b 80 bytes have no start evidence. They must stay `.incbin`.**
+
+The decisive case, and it nearly shipped twice:
+
+    prom_a 0xFA369A-0xFA36AB   17 B   53 4f 55 4e 44 20 47 52 4f 55 50 20 4e 41 4d 49 4e 47
+                                      = "SOUND GROUP NAMING"
+
+A coverage brief (mine) told a lane to convert those 17 bytes. Framing them emits
+`ld XIX,0x4f524720` — and **the byte gate passes**, because the bytes are unchanged. The lane
+refused against its instruction and cited the prior audit. That is the second time in two rounds
+that the gate would have accepted a wrong decode, and it is why the evidence test exists.
+
+⚠ **A refusal can expire.** `0xFDE75D` was listed as unevidenced by a run that predated the splice
+of `0xFDE729`; the `jr z` at `0xFDE72D` targets it exactly, so converting `0xFDE729` *created* the
+evidence. Re-run `--evidence` after every conversion — its answer is a function of the tree, not a
+property of the address.

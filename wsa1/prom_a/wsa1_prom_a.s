@@ -137886,9 +137886,13 @@ sub_FDE729:
 	jp (xbc)                                      ; FDE74A  b1 d8
 	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05E74C, 0x000011
 ; ---------------------------------------------------------------------
-; sub_FDE75D -- an epilogue: `unlk XIZ / ret`, three bytes. Reached only after
-;               round 2's conversion made its caller's branch a seed.
-;               Converted for COVERAGE; semantics deferred.
+; sub_FDE75D -- an epilogue: `unlk XIZ / ret`, three bytes.
+; Evidence: START -- the `jr z` at 0xFDE729+4 = 0xFDE72D (bytes 66 2e) targets
+;           0xFDE72D + 2 + 0x2E = 0xFDE75D exactly. That branch only became
+;           visible when 0xFDE729 was converted in this same pass, which is why
+;           notes/reachability.py --evidence, run BEFORE the splice, listed this
+;           run as having no start evidence. It has one now, and it is that
+;           branch. Converted for COVERAGE; semantics deferred.
 ; ---------------------------------------------------------------------
 sub_FDE75D:
 	unlk XIZ                                      ; FDE75D  ee 0d

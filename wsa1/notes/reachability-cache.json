@@ -1,83 +1,11 @@
 [
  {
-  "image": "prom_b",
-  "lo": 15899590,
-  "hi": 15904210,
-  "size": 4620,
-  "reachable_strong": 379,
-  "reachable_any": 379
- },
- {
-  "image": "prom_b",
-  "lo": 15893566,
-  "hi": 15893794,
-  "size": 228,
-  "reachable_strong": 161,
-  "reachable_any": 161
- },
- {
-  "image": "prom_b",
-  "lo": 15893416,
-  "hi": 15893565,
-  "size": 149,
-  "reachable_strong": 81,
-  "reachable_any": 81
- },
- {
-  "image": "prom_b",
-  "lo": 15963879,
-  "hi": 15963949,
-  "size": 70,
-  "reachable_strong": 70,
-  "reachable_any": 70
- },
- {
-  "image": "prom_b",
-  "lo": 15809844,
-  "hi": 15812524,
-  "size": 2680,
-  "reachable_strong": 44,
-  "reachable_any": 44
- },
- {
   "image": "prom_a",
   "lo": 16639785,
   "hi": 16646144,
   "size": 6359,
   "reachable_strong": 38,
-  "reachable_any": 3
- },
- {
-  "image": "prom_b",
-  "lo": 15894647,
-  "hi": 15894678,
-  "size": 31,
-  "reachable_strong": 31,
-  "reachable_any": 31
- },
- {
-  "image": "prom_b",
-  "lo": 15751058,
-  "hi": 15751104,
-  "size": 46,
-  "reachable_strong": 29,
-  "reachable_any": 29
- },
- {
-  "image": "prom_b",
-  "lo": 15748951,
-  "hi": 15748978,
-  "size": 27,
-  "reachable_strong": 27,
-  "reachable_any": 27
- },
- {
-  "image": "prom_b",
-  "lo": 15750689,
-  "hi": 15750715,
-  "size": 26,
-  "reachable_strong": 26,
-  "reachable_any": 26
+  "reachable_any": 38
  },
  {
   "image": "prom_a",
@@ -85,79 +13,7 @@
   "hi": 16405504,
   "size": 15924,
   "reachable_strong": 17,
-  "reachable_any": 733
- },
- {
-  "image": "prom_b",
-  "lo": 15905826,
-  "hi": 15906164,
-  "size": 338,
-  "reachable_strong": 16,
-  "reachable_any": 16
- },
- {
-  "image": "prom_b",
-  "lo": 15749378,
-  "hi": 15749389,
-  "size": 11,
-  "reachable_strong": 11,
-  "reachable_any": 11
- },
- {
-  "image": "prom_b",
-  "lo": 15940047,
-  "hi": 15940123,
-  "size": 76,
-  "reachable_strong": 10,
-  "reachable_any": 10
- },
- {
-  "image": "prom_b",
-  "lo": 15750322,
-  "hi": 15750361,
-  "size": 39,
-  "reachable_strong": 10,
-  "reachable_any": 10
- },
- {
-  "image": "prom_b",
-  "lo": 15782019,
-  "hi": 15783836,
-  "size": 1817,
-  "reachable_strong": 8,
-  "reachable_any": 8
- },
- {
-  "image": "prom_b",
-  "lo": 15814572,
-  "hi": 15814692,
-  "size": 120,
-  "reachable_strong": 4,
-  "reachable_any": 4
- },
- {
-  "image": "prom_b",
-  "lo": 15750378,
-  "hi": 15750381,
-  "size": 3,
-  "reachable_strong": 3,
-  "reachable_any": 3
- },
- {
-  "image": "prom_b",
-  "lo": 15964319,
-  "hi": 15964558,
-  "size": 239,
-  "reachable_strong": 2,
-  "reachable_any": 2
- },
- {
-  "image": "prom_b",
-  "lo": 15784728,
-  "hi": 15788032,
-  "size": 3304,
-  "reachable_strong": 1,
-  "reachable_any": 1
+  "reachable_any": 701
  },
  {
   "image": "prom_a",
@@ -182,6 +38,14 @@
   "size": 87,
   "reachable_strong": 0,
   "reachable_any": 87
+ },
+ {
+  "image": "prom_b",
+  "lo": 15963879,
+  "hi": 15963949,
+  "size": 70,
+  "reachable_strong": 0,
+  "reachable_any": 70
  },
  {
   "image": "prom_a",
@@ -232,6 +96,14 @@
   "reachable_any": 11
  },
  {
+  "image": "prom_b",
+  "lo": 15750322,
+  "hi": 15750361,
+  "size": 39,
+  "reachable_strong": 0,
+  "reachable_any": 10
+ },
+ {
   "image": "prom_a",
   "lo": 16302150,
   "hi": 16302158,
@@ -260,14 +132,6 @@
   "lo": 16527360,
   "hi": 16536576,
   "size": 9216,
-  "reachable_strong": 0,
-  "reachable_any": 1
- },
- {
-  "image": "prom_a",
-  "lo": 16343641,
-  "hi": 16344088,
-  "size": 447,
   "reachable_strong": 0,
   "reachable_any": 1
  },
