@@ -467,3 +467,308 @@
 .equ CR_DMAM2, 0x2A
 .equ CR_DMAM3, 0x2E
 ; MACRO-PRELUDE-END
+
+; ==============================================================================
+; ADDED 2026-08-30 -- the forms prom_b needed and prom_a had never met
+; ==============================================================================
+;
+; prom_a grew this macro set one instruction at a time, as its own conversion
+; found each form, so the set covers what prom_a contains and nothing else.
+; prom_b holds 7,309 rows that llvm-mc has no spelling for, and 1,580 of them
+; were operations prom_a simply never uses.  The macros below close that gap.
+;
+; ⚠ SAME RULE AS ABOVE: these emit BYTES, and the byte gate is what proves the
+;   encoding.  The NAME on each comes from MAME's dasm900.cpp tables, and every
+;   use in prom_b carries unidasm's own text in its trailing comment -- so for
+;   each of these macros there are hundreds of lines where the two can be
+;   compared by eye, and notes/promb_macro_rewrite.py compares them by machine
+;   before it emits anything.
+;
+; The operation-byte numbers are the same four tables the block above cites:
+; mnemonic_c0/d0/e0 for a size-carrying operand, mnemonic_f0/b0/b8 for a
+; "destination" one, and mnemonic_c8/d8/e8 for a register-direct one.
+
+; --- mnemonic_c0/d0/e0: operations prom_a has no instance of ------------------
+.macro m_sub_mi8 pfx, addr, imm		; sub (addr),#imm8		op 0x3A
+	_mem \pfx, \addr
+	.byte 0x3A, \imm
+.endm
+.macro m_sub_mi16 pfx, addr, imm	; sub (addr),#imm16		op 0x3A
+	_mem \pfx, \addr
+	.byte 0x3A, (\imm) & 0xFF, ((\imm) >> 8) & 0xFF
+.endm
+.macro m_and_mi16 pfx, addr, imm	; and (addr),#imm16		op 0x3C
+	_mem \pfx, \addr
+	.byte 0x3C, (\imm) & 0xFF, ((\imm) >> 8) & 0xFF
+.endm
+.macro m_xor_mi16 pfx, addr, imm	; xor (addr),#imm16		op 0x3D
+	_mem \pfx, \addr
+	.byte 0x3D, (\imm) & 0xFF, ((\imm) >> 8) & 0xFF
+.endm
+.macro m_or_mi16 pfx, addr, imm		; or  (addr),#imm16		op 0x3E
+	_mem \pfx, \addr
+	.byte 0x3E, (\imm) & 0xFF, ((\imm) >> 8) & 0xFF
+.endm
+.macro m_and_mr pfx, addr, r		; and (addr),R			op 0xC8+r
+	_mem \pfx, \addr
+	.byte 0xC8 + (\r)
+.endm
+.macro m_xor_mr pfx, addr, r		; xor (addr),R			op 0xD8+r
+	_mem \pfx, \addr
+	.byte 0xD8 + (\r)
+.endm
+.macro m_or_mr pfx, addr, r		; or  (addr),R			op 0xE8+r
+	_mem \pfx, \addr
+	.byte 0xE8 + (\r)
+.endm
+
+; ⚠ THE OTHER MEMORY-TO-MEMORY MOVE.  m_ld_mm16 above is the "destination"
+; table's 0x14: the PREFIX names the destination and the trailing 16-bit address
+; the source.  0x19 in the size tables is the mirror image -- the prefix names
+; the SOURCE and the trailing address the destination -- and unidasm prints it
+; with the operands in that order, `ld (0x2540),(0x28c8)` for C1 C8 28 19 40 25.
+; Two ops that both spell `ld (mem),(mem)` and disagree about which is which is
+; exactly the kind of thing a byte-emitter macro must not guess at, so they have
+; separate names.
+.macro m_ld_m16m pfx, addr, dst		; ld  (dst16),(addr)		op 0x19
+	_mem \pfx, \addr
+	.byte 0x19, (\dst) & 0xFF, ((\dst) >> 8) & 0xFF
+.endm
+.macro m_ldw_m16m pfx, addr, dst	; ldw (dst16),(addr)		op 0x1B
+	_mem \pfx, \addr
+	.byte 0x1B, (\dst) & 0xFF, ((\dst) >> 8) & 0xFF
+.endm
+
+; --- the CARRY-FLAG group, ops 0x28-0x2C, in both operand tables --------------
+; `ldcf A,(addr)` and its four siblings take the bit number from A rather than
+; from the operation byte, which is why they have no bit-number argument.
+.macro m_ldcf_a pfx, addr		; ldcf  A,(addr)		op 0x28
+	_mem \pfx, \addr
+	.byte 0x28
+.endm
+.macro m_andcf_a pfx, addr		; andcf A,(addr)		op 0x29
+	_mem \pfx, \addr
+	.byte 0x29
+.endm
+.macro m_xorcf_a pfx, addr		; xorcf A,(addr)		op 0x2A
+	_mem \pfx, \addr
+	.byte 0x2A
+.endm
+.macro m_orcf_a pfx, addr		; orcf  A,(addr)		op 0x2B
+	_mem \pfx, \addr
+	.byte 0x2B
+.endm
+.macro m_stcf_a pfx, addr		; stcf  A,(addr)		op 0x2C
+	_mem \pfx, \addr
+	.byte 0x2C
+.endm
+
+; --- the eight SHIFT-A-MEMORY-OPERAND forms, ops 0x78-0x7F -------------------
+; ⚠ THE ORDER MATTERS AND IT IS NOT ALPHABETICAL: rlc rrc rl rr sla sra sll srl.
+;   This block was first written with sla and sll transposed; prom_b's own
+;   disassembly text is what caught it, because notes/promb_macro_rewrite.py
+;   refuses a row whose mnemonic disagrees with the macro it picked, and seven
+;   rows said `sllw` where the table said `slaw`.
+.macro m_rlc_m pfx, addr		; rlc (addr)			op 0x78
+	_mem \pfx, \addr
+	.byte 0x78
+.endm
+.macro m_rrc_m pfx, addr		; rrc (addr)			op 0x79
+	_mem \pfx, \addr
+	.byte 0x79
+.endm
+.macro m_rl_m pfx, addr			; rl  (addr)			op 0x7A
+	_mem \pfx, \addr
+	.byte 0x7A
+.endm
+.macro m_rr_m pfx, addr			; rr  (addr)			op 0x7B
+	_mem \pfx, \addr
+	.byte 0x7B
+.endm
+.macro m_sla_m pfx, addr		; sla (addr)			op 0x7C
+	_mem \pfx, \addr
+	.byte 0x7C
+.endm
+.macro m_sra_m pfx, addr		; sra (addr)			op 0x7D
+	_mem \pfx, \addr
+	.byte 0x7D
+.endm
+.macro m_sll_m pfx, addr		; sll (addr)			op 0x7E
+	_mem \pfx, \addr
+	.byte 0x7E
+.endm
+.macro m_srl_m pfx, addr		; srl (addr)			op 0x7F
+	_mem \pfx, \addr
+	.byte 0x7F
+.endm
+
+; --- the two BLOCK TRANSFERS, whose operand is a register the text hides ------
+; ⚠ unidasm prints `ldir` with NO operand, but the instruction is two bytes and
+;   the first is a memory-operand prefix that names the register pair the
+;   transfer runs on: 85 11 is `ldir` at (XIY), 83 11 is `ldir` at (XHL).  This
+;   image holds both.  llvm-mc's own `ldir` mnemonic exists but always emits
+;   80 11 -- the (XWA) form -- so it cannot spell either of them, and a lane
+;   that reached for the native spelling would have changed the bytes.
+;   `ldirw` is the one case where llvm-mc's spelling happens to match (95 11),
+;   and it is still written as a macro here so the two lines look alike.
+.macro m_ldir pfx			; ldir  (prefix names the register)  op 0x11
+	.byte \pfx, 0x11
+.endm
+.macro m_ldirw pfx			; ldirw (prefix names the register)  op 0x11
+	.byte \pfx, 0x11
+.endm
+
+; --- mnemonic_f0: the conditional jump and call through a memory operand ------
+; ⚠ unidasm prints the operand WITHOUT parentheses -- `jp C,0xf7c6e5` for
+;   F2 E5 C6 F7 D7 -- because for these two operations the "operand address" IS
+;   the branch target rather than a location to read.
+.macro m_jp_cc pfx, addr, cc		; jp   cc,addr			op 0xD0+cc
+	_mem \pfx, \addr
+	.byte 0xD0 + ((\cc) & 15)
+.endm
+.macro m_call_cc pfx, addr, cc		; call cc,addr			op 0xE0+cc
+	_mem \pfx, \addr
+	.byte 0xE0 + ((\cc) & 15)
+.endm
+
+; --- more of the REGISTER-INDEXED (rr+r) operand ------------------------------
+.macro mx_ld_mi16 pfx, base, idx, imm	; ldw (base+idx16),#imm16	op 0x02
+	_memx \pfx, \base, \idx
+	.byte 0x02, (\imm) & 0xFF, ((\imm) >> 8) & 0xFF
+.endm
+.macro mx_lda16 pfx, base, idx, r	; lda R16,(base+idx16)		op 0x20+r
+	_memx \pfx, \base, \idx
+	.byte 0x20 + (\r)
+.endm
+.macro mx_ld_mm16 pfx, base, idx, src	; ld  (base+idx16),(src16)	op 0x14
+	_memx \pfx, \base, \idx
+	.byte 0x14, (\src) & 0xFF, ((\src) >> 8) & 0xFF
+.endm
+.macro mx_cp_mi8 pfx, base, idx, imm	; cp  (base+idx16),#imm8	op 0x3F
+	_memx \pfx, \base, \idx
+	.byte 0x3F, \imm
+.endm
+.macro mx_and_mi8 pfx, base, idx, imm	; and (base+idx16),#imm8	op 0x3C
+	_memx \pfx, \base, \idx
+	.byte 0x3C, \imm
+.endm
+.macro mx_or_mi8 pfx, base, idx, imm	; or  (base+idx16),#imm8	op 0x3E
+	_memx \pfx, \base, \idx
+	.byte 0x3E, \imm
+.endm
+.macro mx_add_rm pfx, base, idx, r	; add R,(base+idx16)		op 0x80+r
+	_memx \pfx, \base, \idx
+	.byte 0x80 + (\r)
+.endm
+.macro mx_sub_rm pfx, base, idx, r	; sub R,(base+idx16)		op 0xA0+r
+	_memx \pfx, \base, \idx
+	.byte 0xA0 + (\r)
+.endm
+.macro mx_cp_rm pfx, base, idx, r	; cp  R,(base+idx16)		op 0xF0+r
+	_memx \pfx, \base, \idx
+	.byte 0xF0 + (\r)
+.endm
+.macro mx_cp_mr pfx, base, idx, r	; cp  (base+idx16),R		op 0xF8+r
+	_memx \pfx, \base, \idx
+	.byte 0xF8 + (\r)
+.endm
+.macro mx_res n, pfx, base, idx		; res n,(base+idx16)		op 0xB0+n
+	_memx \pfx, \base, \idx
+	.byte 0xB0 + ((\n) & 7)
+.endm
+.macro mx_set n, pfx, base, idx		; set n,(base+idx16)		op 0xB8+n
+	_memx \pfx, \base, \idx
+	.byte 0xB8 + ((\n) & 7)
+.endm
+.macro mx_bit n, pfx, base, idx		; bit n,(base+idx16)		op 0xC8+n
+	_memx \pfx, \base, \idx
+	.byte 0xC8 + ((\n) & 7)
+.endm
+.macro mx8_lda32 pfx, base, idx, r	; lda R32,(base+idx8)		op 0x30+r
+	_memxb \pfx, \base, \idx
+	.byte 0x30 + (\r)
+.endm
+
+; ==============================================================================
+; THE REGISTER-DIRECT OPERAND -- mnemonic_c8/d8/e8 (dasm900.cpp:779 and on)
+; ==============================================================================
+;
+; Not every unspellable row is a memory operand.  585 of prom_b's are a
+; REGISTER-DIRECT one, which comes in two shapes:
+;
+;   RB/RW/RL + index      one prefix byte naming a register of the CURRENT bank
+;                         -- 0xDE is IZ at word size, so DE 2A is `xorcf A,IZ`
+;   RBX/RWX/RLX + byte    prefix 0xC7/0xD7/0xE7 followed by a REGISTER-ADDRESS
+;                         byte, which can name any register in any bank --
+;                         C7 3C 89 is `ld A,RL3`, E7 38 04 is `push XDE3`
+;
+; ⚠ THE REGISTER-ADDRESS BYTE IS LEFT AS A NUMBER.  MAME's s_allreg8/16/32 name
+;   all 256 of those slots and this tree has no copy of the table; the eight
+;   ra_*/rb_* names above are the current-bank rows only.  So `m_rd_ld_rrx RBX,
+;   0x3C, r1` says what the bytes are and the trailing comment says the register
+;   is RL3.  Naming it here would be a guess; the comment is unidasm's.
+.equ RBX, 0xC7		; byte-size operand, register named by the next byte
+.equ RWX, 0xD7		; word-size operand, ditto
+.equ RLX, 0xE7		; long-size operand, ditto
+
+.macro m_rd_push rp			; push r			op 0x04
+	.byte \rp, 0x04
+.endm
+.macro m_rd_pop rp			; pop  r			op 0x05
+	.byte \rp, 0x05
+.endm
+.macro m_rd_ldcf_a rp			; ldcf  A,r			op 0x28
+	.byte \rp, 0x28
+.endm
+.macro m_rd_andcf_a rp			; andcf A,r			op 0x29
+	.byte \rp, 0x29
+.endm
+.macro m_rd_xorcf_a rp			; xorcf A,r			op 0x2A
+	.byte \rp, 0x2A
+.endm
+.macro m_rd_orcf_a rp			; orcf  A,r			op 0x2B
+	.byte \rp, 0x2B
+.endm
+.macro m_rd_stcf_a rp			; stcf  A,r			op 0x2C
+	.byte \rp, 0x2C
+.endm
+.macro m_rd_add_rr rp, r		; add R,r			op 0x80+r
+	.byte \rp, 0x80 + (\r)
+.endm
+.macro m_rd_ld_rr rp, r			; ld  R,r			op 0x88+r
+	.byte \rp, 0x88 + (\r)
+.endm
+.macro m_rd_ld_rr2 rp, r		; ld  r,R			op 0x98+r
+	.byte \rp, 0x98 + (\r)
+.endm
+
+.macro m_rd_pushx rp, reg		; push <reg>			op 0x04
+	.byte \rp, \reg, 0x04
+.endm
+.macro m_rd_popx rp, reg		; pop  <reg>			op 0x05
+	.byte \rp, \reg, 0x05
+.endm
+.macro m_rd_ldcf_ax rp, reg		; ldcf  A,<reg>			op 0x28
+	.byte \rp, \reg, 0x28
+.endm
+.macro m_rd_andcf_ax rp, reg		; andcf A,<reg>			op 0x29
+	.byte \rp, \reg, 0x29
+.endm
+.macro m_rd_xorcf_ax rp, reg		; xorcf A,<reg>			op 0x2A
+	.byte \rp, \reg, 0x2A
+.endm
+.macro m_rd_orcf_ax rp, reg		; orcf  A,<reg>			op 0x2B
+	.byte \rp, \reg, 0x2B
+.endm
+.macro m_rd_stcf_ax rp, reg		; stcf  A,<reg>			op 0x2C
+	.byte \rp, \reg, 0x2C
+.endm
+.macro m_rd_add_rrx rp, reg, r		; add R,<reg>			op 0x80+r
+	.byte \rp, \reg, 0x80 + (\r)
+.endm
+.macro m_rd_ld_rrx rp, reg, r		; ld  R,<reg>			op 0x88+r
+	.byte \rp, \reg, 0x88 + (\r)
+.endm
+.macro m_rd_ld_rr2x rp, reg, r		; ld  <reg>,R			op 0x98+r
+	.byte \rp, \reg, 0x98 + (\r)
+.endm
