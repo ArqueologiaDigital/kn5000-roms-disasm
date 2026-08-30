@@ -60,6 +60,8 @@ THE GRADES
                    never saw an answer, and identical timeouts would otherwise
                    read as UNAFFECTED.
     NONDET         the two identical trees disagreed.  Not graded.
+    BY-DESIGN      a tool whose SUBJECT is the layout (asm_source, the split
+                   probes, this file).  It is meant to differ; see LAYOUT_TOOLS.
 
 THE FIX, in every case, is notes/asm_source.py -- one reader that resolves an
 image the way llvm-mc does:
@@ -74,7 +76,8 @@ the expanded image while its WRITE stays on the primary would overwrite the
 2,517-line master with the whole 132,304-line image and undo the split
 silently.  Invocations whose flags are in WRITE_FLAGS are NEVER RUN here; they
 are listed under "not run (write mode)" and must be migrated by hand, write path
-first.  See notes/listing_writers.md.
+first -- `python3 notes/migrate_listing_readers.py --list` is the ledger, and
+asm_source.locate()/write_part() is the safe way to do it.
 
 RUN
 ---
@@ -121,6 +124,24 @@ WRITE_FLAGS = {"--apply", "--emit", "--emit68", "--write", "--rewrite", "--splic
 FROZEN_DIRS = ("prom_a", "prom_b", "prom_c", "prom_d", "kernel", "include",
                "maincpu", "original_ROMs")
 PERM_DENIED = re.compile(r"Permission denied|PermissionError")
+
+# ★ TOOLS WHOSE SUBJECT IS THE LAYOUT ITSELF.  asm_source prints how many files
+# an image is made of; prom_d_split_probe PROVES the split moved lines and did
+# not edit them; this file builds the layouts.  Each of them is SUPPOSED to give
+# a different answer in a differently-shaped tree -- that is what it measures.
+# Grading them VACUOUS would be the instrument reporting on itself, so they are
+# graded BY-DESIGN and left out of the work list.  ⚠ The list is short and
+# explicit on purpose: "it is meant to differ" is exactly the excuse a genuinely
+# broken probe would offer.
+LAYOUT_TOOLS = {
+    "notes/asm_source.py",
+    "notes/probe_health.py",
+    "notes/prom_c_probe_health.py",
+    "notes/prom_c_image.py",
+    "notes/prom_c_split.py",
+    "notes/prom_d_split_probe.py",
+    "notes/migrate_listing_readers.py",
+}
 
 # Words that mean "this run did not succeed".  Deliberately broad: a probe that
 # prints a traceback but exits 0 has still failed loudly.
@@ -336,7 +357,9 @@ def failed(rc, out):
     return rc != 0 or bool(FAILWORD.search(out or "")) or out == "<timeout>"
 
 
-def grade(res):
+def grade(res, script=None):
+    if script in LAYOUT_TOOLS:
+        return "BY-DESIGN"
     a, a2, f, s = res["asis"], res["asis2"], res["full"], res["stub"]
     # ⚠ A probe that ran out of TIME in every tree produced the same string in
     # every tree, and would otherwise be graded UNAFFECTED -- a green that means
@@ -355,7 +378,7 @@ def grade(res):
 
 
 ORDER = ["VACUOUS", "LOUD", "SPLIT-FRAGILE", "WRITER", "TIMEOUT", "NONDET",
-         "UNAFFECTED"]
+         "BY-DESIGN", "UNAFFECTED"]
 
 
 def measure(primary, argvs, jobs=6, base=None):
@@ -378,7 +401,7 @@ def measure(primary, argvs, jobs=6, base=None):
                     print("    ... %d/%d runs" % (n_done, len(futs)), flush=True)
         for argv in argvs:
             res = got[tuple(argv)]
-            rows.append({"argv": argv, "grade": grade(res),
+            rows.append({"argv": argv, "grade": grade(res, argv[0]),
                          "asis_rc": res["asis"][0],
                          "asis_fails": failed(*res["asis"])})
         return rows
@@ -422,8 +445,8 @@ def main(argv=None):
         n = {g: sum(1 for r in rows if r["grade"] == g) for g in ORDER}
         print("  " + "   ".join("%s %d" % (g, n[g]) for g in ORDER))
         if skipped:
-            print("  not run (write mode), migrate by hand -- see "
-                  "notes/listing_writers.md:")
+            print("  not run (write mode); the write path must move FIRST -- "
+                  "python3 notes/migrate_listing_readers.py --list:")
             for s in sorted(set(map(tuple, skipped))):
                 print("      %s" % " ".join(s))
         blind = [s for s in scripts if git_blind(s, primary)]
@@ -579,6 +602,13 @@ def selftest():
         T = (None, "<timeout>")
         check(grade({"asis": T, "asis2": T, "full": T, "stub": T}) == "TIMEOUT",
               "grader: four identical timeouts are TIMEOUT, not UNAFFECTED")
+        X, Yy = (0, "x"), (0, "y")
+        check(grade({"asis": Yy, "asis2": Yy, "full": X, "stub": Yy},
+                    "notes/asm_source.py") == "BY-DESIGN",
+              "grader: a tool whose subject IS the layout is BY-DESIGN")
+        check(grade({"asis": Yy, "asis2": Yy, "full": X, "stub": Yy},
+                    "notes/prom_c_header_audit.py") == "VACUOUS",
+              "...and an ordinary probe with the same numbers is still VACUOUS")
 
         # the git-blind detector, both directions
         check(git_blind("notes/wave7_round8_review_wd3_prom_d.py",
