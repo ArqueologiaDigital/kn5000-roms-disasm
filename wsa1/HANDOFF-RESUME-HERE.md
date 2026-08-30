@@ -168,6 +168,27 @@ Its `--selftest` runs the byte gate in both derived trees, so a difference is at
 file and not to the ROM. `python3 notes/migrate_listing_readers.py --list` is the ledger of every
 site that still spells a listing by path, with a verdict per site.
 
+**Where it stands (2026-08-31).** The four sweeps taken before any repair are committed in
+`notes/probe-health-baseline-2026-08-30/`, with the three regrades beside them:
+
+| image | scripts | before | after |
+|---|---:|---|---:|
+| prom_a | 103 | VACUOUS 9, LOUD 2, **SPLIT-FRAGILE 44** | 3 |
+| prom_b | 88 | VACUOUS 4, LOUD 2, **SPLIT-FRAGILE 34** | 7 |
+| prom_c | 74 | VACUOUS 18, LOUD 29 | 3 |
+| prom_d | 27 | VACUOUS 4, LOUD 5 | 4 |
+
+159 non-green invocations of 375 → **17**, and **SPLIT-FRAGILE is 0**.
+
+★ **THE MAINCPU SPLIT IS UNBLOCKED.** What blocked it was 78 probes that read prom_a's or
+prom_b's primary by path; every one of them now resolves the includes, and the three-tree test
+says so. What is left before splitting: the 27 write-mode invocations `--list` names, whose
+splices anchor on text that a split would move (`asm_source.locate()` / `edit_image()`).
+
+The 17 that remain are named in `regrade-3.log`; none is a probe reading a stub. Six compare the
+WORKING TREE with HEAD, which this method cannot grade; two are too slow to measure; the rest are
+pre-existing failures of the probe's own claims.
+
 ---
 
 ## Where it stands
