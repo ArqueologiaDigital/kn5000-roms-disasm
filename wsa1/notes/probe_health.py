@@ -95,6 +95,23 @@ RUN
   python3 notes/probe_health.py --image prom_c      one image
   python3 notes/probe_health.py --only prom_c_head  substring filter on scripts
   python3 notes/probe_health.py --json out.json     machine-readable
+  python3 notes/probe_health.py --regrade B.json    re-run only B's non-green rows
+
+THE BASELINE, and how to reproduce a per-probe before/after
+-----------------------------------------------------------
+  notes/probe-health-baseline-2026-08-30/ holds the four sweeps taken before any
+  migration, plus regrade-1..3.log.  Once a probe reads the image, the state it
+  was in is GONE, so the grades it had are checked in rather than regenerated.
+
+  To reproduce one probe's own PASS/FAIL counts before a change:
+
+      git archive <commit> | tar -x -C /tmp/before
+      cp -r original_ROMs /tmp/before/           # git archive carries them, but
+      cd /tmp/before && python3 notes/<probe>.py # a worktree copy is safer
+
+  ⚠ `git archive` gives no `.git`, so a probe that shells out to git will fail
+  there for that reason and not for the one being measured -- use a real
+  worktree (`git worktree add`) when the probe reads a revision.
   python3 notes/probe_health.py --selftest          ★ the instrument's controls
 
 ⚠ IF A RUN IS KILLED, its scratch trees are left READ-ONLY (see FROZEN_DIRS) and
