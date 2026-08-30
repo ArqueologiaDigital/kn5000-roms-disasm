@@ -38,6 +38,11 @@ WHY IT IS SAFE TO RUN
 
 RUN
     python3 notes/promb_macro_rewrite.py --census          # what is convertible, by macro
+    python3 notes/promb_macro_rewrite.py --census --baseline
+                                                          # ★ the same table for prom_b
+                                                          #   BEFORE the batches, which is
+                                                          #   where each batch's count in
+                                                          #   the commit log comes from
     python3 notes/promb_macro_rewrite.py --left            # what is NOT, by shape, with the reason
     python3 notes/promb_macro_rewrite.py --left --detail   # ... every remaining row, by address
     python3 notes/promb_macro_rewrite.py --apply --only m_cp_mi8,m_cp_mi16
@@ -717,7 +722,7 @@ def plan(lines):
 
 def main():
     args = sys.argv[1:]
-    lines = read(PROM_B)
+    lines = baseline_lines() if '--baseline' in args else read(PROM_B)
     only = None
     for a in args:
         if a.startswith('--only'):

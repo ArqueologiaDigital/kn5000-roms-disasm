@@ -18,8 +18,18 @@ WHAT IT ALLOWS, AND IT IS EXACTLY ONE THING
     The count of dropped markers must equal the count of rewritten rows, so a
     marker cannot go missing from a row that was not rewritten.
 
+★ AND ONE THING IT MEASURES THAT IS NOT A LOSS.  `--proven` counts the addresses
+    notes/reachability.py can see as INSTRUCTIONS before and after.  A `.byte` row
+    is a data directive to that tool and is excluded from its `proven` set on
+    purpose; a macro call is not.  So retiring a blob does not convert a byte --
+    the coverage figure is unmoved -- but it does hand the reachability walk
+    thousands of instruction addresses it was previously blind to, and a walk with
+    more seeds can reach more.  Any movement in that tool's numbers is this, and
+    it is an accuracy gain rather than a regression: those rows always were code.
+
 RUN
     python3 notes/promb_macro_preservation.py            # working tree vs HEAD
+    python3 notes/promb_macro_preservation.py <rev> --proven
     python3 notes/promb_macro_preservation.py <rev>      # ... vs another revision
     python3 notes/promb_macro_preservation.py --selftest
 """
@@ -122,9 +132,37 @@ def selftest():
     return 0 if (a == 0 and b and c and d) else 1
 
 
+def proven(rev):
+    """How many addresses reachability.py reads as instructions, before/after."""
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "reach", os.path.join(ROOT, "notes/reachability.py"))
+    R = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(R)
+
+    def count(lines):
+        out = set()
+        for ln in lines:
+            m = R.SRC_LINE.match(ln)
+            if m and not R.DATA_DIRECTIVE.match(m.group(1)):
+                out.add(int(m.group(2), 16))
+        return out
+    was, now_ = count(at(rev)), count(now())
+    print("  prom_b instruction addresses reachability.py can see")
+    print("    at %-10s %d" % (rev, len(was)))
+    print("    now        %d" % len(now_))
+    print("    delta      %+d" % (len(now_) - len(was)))
+    print("\n  ⚠ This is not converted territory -- source_coverage.py is unmoved.")
+    print("    It is seed material: a `.byte` row is data to the walk, a macro")
+    print("    call is an instruction, and these rows were always instructions.")
+    return 0
+
+
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
         sys.exit(selftest())
     rev = next((a for a in sys.argv[1:] if not a.startswith('-')), "HEAD")
+    if "--proven" in sys.argv:
+        sys.exit(proven(rev))
     print("prom_b/wsa1_prom_b.s: working tree vs %s\n" % rev)
     sys.exit(1 if compare(at(rev), now()) else 0)
