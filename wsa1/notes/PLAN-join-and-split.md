@@ -329,3 +329,69 @@ durable -- and the same tool then reports both trees' coverage in one number.
     P3   split BOTH trees into per-subject files -- including KN5000's two monoliths
     P4   name transfer, bidirectional, every name with its byte diff
     P5   reconcile the disagreements both trees already record
+
+---
+
+## 10. APPROVED — with the KN5000 preservation constraint, and a re-scope from measuring it
+
+### 10.1 The constraint, applying to BOTH trees now
+
+⚠⚠ **Do not destroy pre-existing comments, documentation headers, or semantic structures in the
+KN5000 tree.** Modify one only when the change is *demonstrably* semantically better, and say why
+in the commit.
+
+This is the same rule the coverage goal ran under for WSA1, where it was verified rather than
+promised: round 1's prom_a diff was 3,782 insertions and FIVE deletions, all five `.incbin`
+directives. The KN5000 tree is larger and older, so the same standard applies with the same
+verification: **every hunk accounted for, and a diff that shows movement rather than rewriting.**
+
+⚠ The KN5000 tree has its own byte gate, it PASSES today, and it is clean at `46a916e`. Green at
+every commit there too.
+
+### 10.2 ★ WHAT MEASURING KN5000 CHANGED ABOUT THE ROUTE
+
+    incbin directives by tree area
+        v7   maincpu   3,810
+        v9   maincpu   3,642
+        v10  maincpu   3,642
+        table_data        28
+        custom_data       11
+        hdae5000          10
+        ★ v142/subcpu      0   -- payload AND boot
+        ★ subcpu/boot      0
+
+★★ **KN5000's sub-CPU is already territorially complete**, exactly as WSA1's prom_c is. The 11,143
+incbins are **entirely in the three maincpu versions**, which are three builds of the same program —
+so that debt is one job seen three times, not three jobs.
+
+**This unblocks the ordering.** P-1 (the KN5000 coverage pass) was proposed as a prerequisite for
+everything. It is not: it is a prerequisite only for splitting the **maincpu** trees. The whole
+sub-CPU line of work — the kernel, the WSA1 prom_c ↔ KN5000 subcpu comparison, the shared-source
+experiment — can start immediately, because **both trees' sub-CPUs are already fully converted.**
+
+Revised route, and it is now two tracks rather than one queue:
+
+    TRACK A (starts now, nothing blocks it)
+      A1  ★ ONE SHARED KERNEL SOURCE for WSA1 maincpu+subcpu, .if/.else, gate green
+      A2  the three-way kernel test done properly (structural, real pair extents)
+      A3  if A2 lands: extend the shared source to KN5000's subcpu
+      A4  split BOTH sub-CPUs into per-subject files at the byte-matched boundaries
+
+    TRACK B (parallel; gates the maincpu split only)
+      B1  port reachability.py to KN5000's maincpu; report reachable-vs-data
+      B2  convert KN5000 maincpu's reachable code, semantics deferred
+      B3  join WSA1 maincpu (prom_b+prom_a) and split both trees' maincpu trees
+
+★ A1 does NOT require the maincpu join. A shared kernel source is `.include`d by
+`prom_a/wsa1_prom_a.s` and `prom_c/wsa1_prom_c.s` with different `.equ` settings; the join is a
+separate concern. So the thing you asked to be prioritised is also the thing with the fewest
+prerequisites, which is a good sign for the plan rather than a coincidence.
+
+### 10.3 Addresses, for the record
+
+    WSA1  prom_b  0xF00000  512K   maincpu low        KN5000  maincpu   0xE00000  2M  (v7/v9/v10)
+    WSA1  prom_a  0xF80000  512K   maincpu high       KN5000  subcpu    0x000400  251K
+    WSA1  prom_c  0xF80000  512K   subcpu             KN5000  subcpu boot 0xFE0000 128K
+    WSA1  prom_d  not established  data               KN5000  table_data 0x800000  2M
+                                                      KN5000  custom_data 0x300000 1M
+                                                      KN5000  hdae5000   0x280000 512K
