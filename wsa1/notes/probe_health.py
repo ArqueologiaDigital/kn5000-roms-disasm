@@ -54,6 +54,8 @@ THE GRADES
     SPLIT-FRAGILE  asis == full, so the probe is right today, but stub != full:
                    splitting this image would silently break it.  This is the
                    bucket that gates the prom_a/prom_b (maincpu) split.
+    WRITER         it tried to WRITE a source and was refused in every tree.  Not
+                   a reader; it belongs on the hand-migration list.
     NONDET         the two identical trees disagreed.  Not graded.
 
 THE FIX, in every case, is notes/asm_source.py -- one reader that resolves an
@@ -95,14 +97,27 @@ from asm_source import image_files, image_lines, IMAGES  # noqa: E402
 
 IMAGE_PRIMARY = dict(IMAGES)
 PARTS_DIRNAME = ".health_parts"
-TIMEOUT = 240
+TIMEOUT = 150
 HEADER_KEEP = 4          # lines of the primary the stub keeps before the first include
 
-# ⚠ NEVER RUN.  A mode that writes a source file back would write it in the
-# derived trees (harmless) but tells us nothing about reading, and the list is
-# also the hand-migration work list.
+# ⚠ NEVER RUN.  A mode that writes a source file back tells us nothing about
+# reading, and the list is also the hand-migration work list.
 WRITE_FLAGS = {"--apply", "--emit", "--emit68", "--write", "--rewrite", "--splice",
                "--install", "--patch", "--fix", "--force", "--regen", "--update"}
+
+# ★★ AND THE FLAG LIST IS NOT ENOUGH, WHICH IS WHY THE SOURCES ARE FROZEN.
+# scripts/analysis/gen_prom_d_asm.py writes prom_d's four sources with NO FLAG AT
+# ALL -- writing is its default and `--check` is the dry run.  The first run of
+# this tool invoked it bare, in all four trees, and it rewrote the very files
+# whose layout was under test: the `full` tree's expanded primary was replaced by
+# the split one, so every invocation that ran afterwards compared two identical
+# trees and was graded UNAFFECTED.  ★ AN INSTRUMENT THAT CAN CHANGE WHAT IT
+# MEASURES IS NOT AN INSTRUMENT.  So every source directory in every tree is made
+# READ-ONLY before anything runs.  A writer now fails identically in all four
+# trees and is reported as WRITER instead of silently poisoning its neighbours.
+FROZEN_DIRS = ("prom_a", "prom_b", "prom_c", "prom_d", "kernel", "include",
+               "maincpu", "original_ROMs")
+PERM_DENIED = re.compile(r"Permission denied|PermissionError")
 
 # Words that mean "this run did not succeed".  Deliberately broad: a probe that
 # prints a traceback but exits 0 has still failed loudly.
@@ -138,6 +153,22 @@ def readers(primary):
         if tag in txt:
             hits.append(p)
     return sorted(hits)
+
+
+# ★ THE ONE THING THE THREE-TREE TEST CANNOT SEE.  Flipping the layout changes
+# the WORKING TREE.  A probe that reads the listing out of git --
+# `git show HEAD:prom_d/wsa1_prom_d.s` -- gets the same committed blob in all
+# three trees and is graded UNAFFECTED for a reason that has nothing to do with
+# whether it reads the image.  Since the split IS committed, those probes are
+# reading a stub today.  They are detected statically and listed separately,
+# because a bucket the instrument is blind to must not be reported as green.
+GIT_READ_RE = re.compile(r'git[^\n]{0,40}show[^\n]{0,40}[:"\']([A-Za-z0-9_/]*%s)')
+
+
+def git_blind(script, primary):
+    txt = open(os.path.join(ROOT, script), encoding="utf-8", errors="replace").read()
+    return bool(re.search(GIT_READ_RE.pattern % re.escape(os.path.basename(primary)),
+                          txt))
 
 
 def citation_index():
@@ -199,6 +230,29 @@ def _copy_tree(dst):
     os.symlink(os.path.join(ROOT, ".git"), os.path.join(dst, ".git"))
 
 
+def _freeze(tree):
+    """Make every source directory read-only, files and directories alike."""
+    for d in FROZEN_DIRS:
+        top = os.path.join(tree, d)
+        if not os.path.isdir(top):
+            continue
+        for dirpath, _dirs, files in os.walk(top, topdown=False):
+            for fn in files:
+                os.chmod(os.path.join(dirpath, fn), 0o444)
+            os.chmod(dirpath, 0o555)
+
+
+def _thaw(tree):
+    for d in FROZEN_DIRS:
+        top = os.path.join(tree, d)
+        if not os.path.isdir(top):
+            continue
+        for dirpath, _dirs, files in os.walk(top):
+            os.chmod(dirpath, 0o755)
+            for fn in files:
+                os.chmod(os.path.join(dirpath, fn), 0o644)
+
+
 def _write_full(tree, primary):
     """The primary becomes the WHOLE image: every .include expanded inline."""
     text = "\n".join(image_lines(ROOT, primary))
@@ -253,6 +307,8 @@ def build_trees(base, primary, extra_stub_mutant=False):
     _write_stub(trees["stub"], primary)
     if extra_stub_mutant:
         _write_stub(trees["stub_mut"], primary, drop_line=12345)
+    for t in trees.values():
+        _freeze(t)
     return trees
 
 
@@ -262,7 +318,9 @@ def run(tree, argv):
     env = dict(os.environ, PYTHONHASHSEED="0", PYTHONDONTWRITEBYTECODE="1")
     try:
         r = subprocess.run([sys.executable] + argv, cwd=tree, env=env,
-                           capture_output=True, text=True, timeout=TIMEOUT)
+                           stdin=subprocess.DEVNULL,   # a probe that waits on
+                           capture_output=True,        # stdin would burn a whole
+                           text=True, timeout=TIMEOUT) # timeout in all four trees
         rc, out = r.returncode, r.stdout + r.stderr
     except subprocess.TimeoutExpired:
         rc, out = None, "<timeout>"
@@ -277,6 +335,8 @@ def failed(rc, out):
 
 def grade(res):
     a, a2, f, s = res["asis"], res["asis2"], res["full"], res["stub"]
+    if all(PERM_DENIED.search(r[1] or "") for r in (a, f, s)):
+        return "WRITER"          # it tried to write a frozen source; see FROZEN_DIRS
     if a != a2:
         return "NONDET"
     if f == s:
@@ -286,7 +346,7 @@ def grade(res):
     return "LOUD" if failed(*a) else "VACUOUS"
 
 
-ORDER = ["VACUOUS", "LOUD", "SPLIT-FRAGILE", "NONDET", "UNAFFECTED"]
+ORDER = ["VACUOUS", "LOUD", "SPLIT-FRAGILE", "WRITER", "NONDET", "UNAFFECTED"]
 
 
 def measure(primary, argvs, jobs=6, base=None):
@@ -300,10 +360,13 @@ def measure(primary, argvs, jobs=6, base=None):
             for argv in argvs:
                 for name, tree in trees.items():
                     futs[ex.submit(run, tree, argv)] = (tuple(argv), name)
-            got = {}
+            got, n_done = {}, 0
             for fut in concurrent.futures.as_completed(futs):
                 key, name = futs[fut]
                 got.setdefault(key, {})[name] = fut.result()
+                n_done += 1
+                if n_done % 25 == 0 or n_done == len(futs):
+                    print("    ... %d/%d runs" % (n_done, len(futs)), flush=True)
         for argv in argvs:
             res = got[tuple(argv)]
             rows.append({"argv": argv, "grade": grade(res),
@@ -312,6 +375,8 @@ def measure(primary, argvs, jobs=6, base=None):
         return rows
     finally:
         if made:
+            for name in os.listdir(base):
+                _thaw(os.path.join(base, name))
             shutil.rmtree(base, ignore_errors=True)
 
 
@@ -352,7 +417,14 @@ def main(argv=None):
                   "notes/listing_writers.md:")
             for s in sorted(set(map(tuple, skipped))):
                 print("      %s" % " ".join(s))
-        report[tag] = {"rows": rows, "skipped": sorted(set(map(tuple, skipped)))}
+        blind = [s for s in scripts if git_blind(s, primary)]
+        if blind:
+            print("  ★ GIT-BLIND -- reads the listing through `git show`, where the "
+                  "tree flip cannot reach it; classify by hand:")
+            for s in blind:
+                print("      %s" % s)
+        report[tag] = {"rows": rows, "skipped": sorted(set(map(tuple, skipped))),
+                       "git_blind": blind}
     if a.json:
         with open(a.json, "w") as fh:
             json.dump(report, fh, indent=1)
@@ -472,7 +544,39 @@ def selftest():
         keep, skip = invocations("notes/x.py", {"notes/x.py": [["--apply"], ["--verify"]]}, 4)
         check(keep == [["notes/x.py", "--verify"]] and skip == [["notes/x.py", "--apply"]],
               "a --apply invocation is NEVER RUN, and is listed for hand migration")
+
+        # ★★ THE INSTRUMENT MUST NOT BE ABLE TO CHANGE WHAT IT MEASURES.
+        # scripts/analysis/gen_prom_d_asm.py rewrites prom_d's four sources with
+        # NO FLAG AT ALL, so the flag list above cannot catch it.  The first run
+        # of this tool let it rewrite the `full` tree's expanded primary with the
+        # split one, and every invocation after that compared two identical trees.
+        wr = os.path.join("notes", ".health_writer.py")
+        for t in trees.values():
+            with open(os.path.join(t, "notes", ".health_writer.py"), "w") as fh:
+                fh.write("import os\n"
+                         "r=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n"
+                         "open(os.path.join(r,%r),'a').write('; clobbered\\n')\n"
+                         "print('wrote')\n" % primary)
+        before = {n: open(os.path.join(t, primary), encoding="utf-8").read()
+                  for n, t in trees.items()}
+        outs = {n: run(t, [wr]) for n, t in trees.items()}
+        check(all(PERM_DENIED.search(o[1]) for o in outs.values()),
+              "a probe that tries to WRITE a source is REFUSED in every tree")
+        check(all(open(os.path.join(t, primary), encoding="utf-8").read() == before[n]
+                  for n, t in trees.items()),
+              "...and every tree's layout is intact afterwards")
+        check(grade({k: outs[k] for k in ("asis", "asis2", "full", "stub")}) == "WRITER",
+              "...and it is graded WRITER, not UNAFFECTED")
+
+        # the git-blind detector, both directions
+        check(git_blind("notes/wave7_round8_review_wd3_prom_d.py",
+                        "prom_d/wsa1_prom_d.s"),
+              "git_blind SEES `git show HEAD:prom_d/wsa1_prom_d.s`")
+        check(not git_blind("notes/asm_source.py", "prom_d/wsa1_prom_d.s"),
+              "git_blind does NOT fire on a script that merely names the path")
     finally:
+        for name in os.listdir(base):
+            _thaw(os.path.join(base, name))
         shutil.rmtree(base, ignore_errors=True)
     print("\nPASS" if ok else "\nFAIL")
     return 0 if ok else 1
