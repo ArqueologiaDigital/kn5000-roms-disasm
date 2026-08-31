@@ -223,7 +223,17 @@ def _cache_store(all_c):
         pass
 
 
+# ⚠ --evidence needs the per-byte reached set, which the cache does not persist
+# (it stores per-span counts, which is all the other modes need). It used to get
+# a re-walk by os.unlink()ing the result cache -- EVERY LANE'S result cache, to
+# obtain an effect inside one process. This flag does the same thing to this
+# process only.
+FORCE_WALK = False
+
+
 def _cache_get(tag):
+    if FORCE_WALK:
+        return None
     e = _cache_load().get(tag)
     return e if e and e.get("fingerprint") == _fingerprint(tag) else None
 
@@ -727,7 +737,33 @@ def runs_of(seen, lo, hi):
     return out
 
 
-def start_evidence(tag, cpu, addr, sd, proven):
+def fallthrough_index(tag, proven):
+    """{the address a proven instruction ENDS at: that instruction}, built ONCE.
+
+    ⚠ WHY ONCE. start_evidence() used to scan the WHOLE proven set for every run
+    it graded -- 257,759 proven addresses across the tree, each one a
+    _decode_window() call -- so --evidence was O(runs x proven) and cost more
+    than the walk it depends on. The question it asks of that scan is only "does
+    some proven instruction end exactly here", and that is one dict.
+
+    ★ The length at `a` comes from the boundary index when the walk has already
+    settled it, which is what _decode_window() would have returned for that
+    address anyway (its first row IS the index entry); an address the walk never
+    reached still costs its one spawn, exactly as before."""
+    bi = _BOUND[tag]
+    out = {}
+    for a in proven:
+        e = bi.get(a)
+        if e is None:
+            rows = _decode_window(tag, a)
+            if not rows or rows[0][0] != a:
+                continue
+            e = (rows[0][1], rows[0][2])
+        out.setdefault(a + e[0], a)
+    return out
+
+
+def start_evidence(tag, cpu, addr, sd, proven, fall=None):
     """Does anything POSITIVELY say execution enters at `addr`?
 
     Two admissible witnesses, and nothing else:
@@ -740,11 +776,10 @@ def start_evidence(tag, cpu, addr, sd, proven):
     for cls in list(STRONG) + list(WEAK):
         if addr in sd.get(cls, ()):
             return cls
-    for a in proven:
-        if a < addr:
-            rows = _decode_window(tag, a)
-            if rows and rows[0][0] == a and a + rows[0][1] == addr:
-                return "fallthrough"
+    if fall is None:
+        fall = fallthrough_index(tag, proven)
+    if addr in fall:
+        return "fallthrough"
     return None
 
 
@@ -761,10 +796,11 @@ def evidence():
         sd = seeds(tag, cpu)
         proven, _ = proven_and_incbin(tag)
         pset = set(proven)
+        fall = fallthrough_index(tag, pset)
         good = bad = 0
         for lo, hi in r["spans"]:
             for a, b in runs_of(r["seen"], lo, hi):
-                ev = start_evidence(tag, cpu, a, sd, pset)
+                ev = start_evidence(tag, cpu, a, sd, pset, fall)
                 if ev:
                     good += b - a
                 else:
@@ -880,13 +916,10 @@ if __name__ == "__main__":
     if "--selftest" in sys.argv:
         sys.exit(selftest())
     if "--evidence" in sys.argv:
-        # ⚠ --evidence needs the per-byte reached set, which the cache does not
-        # persist (it stores per-span counts, which is all the other modes need).
-        # So this mode always re-walks. Stated rather than silently slow.
-        try:
-            os.unlink(RESULT_CACHE)
-        except OSError:
-            pass
+        # this mode always re-walks: it needs the per-byte set. Stated rather
+        # than silently slow -- and it no longer deletes the shared cache to
+        # arrange that.
+        FORCE_WALK = True
         evidence()
         sys.exit(0)
     if "--targets" in sys.argv:

@@ -6,7 +6,7 @@
     TOTAL reachable-and-unconverted: STRONG 17 bytes, ANY 1,702, in 17 spans.
 
     python3 notes/reachability.py --evidence
-    prom_a  runs with start evidence: 1,541 bytes; WITHOUT: 87
+    prom_a  runs with start evidence: 1,522 bytes; WITHOUT: 100
     prom_b  runs with start evidence:     0 bytes; WITHOUT: 80
     prom_c  0 / 0
 
@@ -15,9 +15,10 @@ the work list: an instruction straddling the end of a 2 KiB decode window used t
 decoded from truncated bytes, which cost real bytes and invented an edge into
 `0xFC3000-0xFC5400`. STRONG is unchanged at 17, so no conversion decision is affected.
 Every moved byte is accounted for in `notes/perf/GUARD-ACCOUNTING-2026-08-31.txt`.
-⚠ The `--evidence` figures above are the ones last measured, on 2026-08-30, and predate
-both the guard and the last conversions; they are refreshed with the P5 fix that makes
-that mode affordable to re-run.
+The `--evidence` figures are post-guard, re-measured 2026-08-31 (they had been 1,541/87,
+from a tree state two conversions older). ★ Every byte the guard newly reached inside an
+`.incbin` is in the WITHOUT column -- `0xF96315` and `0xFA1AC7` are both refused -- so the
++32 adds nothing convertible.
 
 **The 17 remaining STRONG bytes are a walk artefact and are formally refused.** They are
 `0xFA369A-0xFA36AB`, and reading them straight out of the ROM gives
@@ -84,7 +85,7 @@ proportional to coverage gained and cannot reach an already-converted line.
 
 ## What is left, for a future goal
 
-* **167 bytes with no start evidence** (prom_a 87, prom_b 80) — refuse unless evidence appears.
+* **180 bytes with no start evidence** (prom_a 100, prom_b 80) — refuse unless evidence appears.
 * **~1,702 bytes reachable, all but those 17 only from WEAK seeds** — pointer-table and
   immediate artefacts. Each
   would need a byte-level audit before conversion; round 1 framed 701 of them as instructions and

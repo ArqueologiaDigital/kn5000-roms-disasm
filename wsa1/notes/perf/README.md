@@ -361,7 +361,19 @@ hand-bumped `WALK_VERSION`. ⚠ Too narrow a key serves a STALE answer, which is
 the failure the fingerprint docstring is already about — so this one needs care,
 not speed.
 
-## P5 — `--evidence` is O(runs x proven) and deletes a shared file
+## P5 — `--evidence` is O(runs x proven) and deletes a shared file   ★ **LANDED 2026-08-31**
+
+    --evidence, decode index warm      29.15 s -> 19.50 s, output byte-identical
+    result cache after --evidence      DELETED -> same inode, survives
+
+`fallthrough_index()` answers "does a proven instruction end exactly here" from
+one dict instead of a scan per run, and `FORCE_WALK` gets the re-walk that the
+`os.unlink()` of every lane's result cache used to. Both proved on the real tree
+by `notes/perf/evidence_equiv.py`, which keeps the OLD scan as an oracle: 44
+graded runs, 0 disagreements.
+
+The original proposal follows.
+
 
 `start_evidence()` scans the WHOLE proven set per reachable run — 257,759 proven
 addresses across the tree — calling `_decode_window` for each. Build the
