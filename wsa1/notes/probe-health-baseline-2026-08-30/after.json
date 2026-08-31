@@ -1,0 +1,250 @@
+{
+ "prom_a": {
+  "rows": [
+   {
+    "argv": [
+     "notes/prom_a_understanding_round7.py",
+     "--apply-strings"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/verify_a1_independent_check.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_b_cover_round2.py"
+    ],
+    "grade": "TIMEOUT",
+    "asis_rc": null,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_b_thunks_round6.py",
+     "--unnamed"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/promb_macro_rewrite.py",
+     "--unused"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/round2_audit_probes.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   }
+  ],
+  "was": {
+   "notes/prom_b_thunks_round6.py --unnamed": "VACUOUS",
+   "notes/gen_prom_b_cover_round2.py": "LOUD",
+   "notes/prom_a_understanding_round7.py --apply-strings": "LOUD",
+   "notes/verify_a1_independent_check.py": "LOUD",
+   "notes/promb_macro_rewrite.py --unused": "SPLIT-FRAGILE",
+   "notes/round2_audit_probes.py": "SPLIT-FRAGILE",
+   "notes/prom_a_evidence_census.py": "UNAFFECTED",
+   "notes/prom_a_round3_checks.py": "UNAFFECTED",
+   "notes/prom_b_panel_names_round12.py --0x0d": "UNAFFECTED",
+   "notes/prom_c_record68_round10.py": "UNAFFECTED",
+   "notes/prom_c_understanding_round4.py": "UNAFFECTED",
+   "notes/wave7-verify-probes/wave7_pa_write_census.py --selftest": "UNAFFECTED",
+   "notes/wave7_round8_review_wd3_prom_d.py": "UNAFFECTED"
+  }
+ },
+ "prom_b": {
+  "rows": [
+   {
+    "argv": [
+     "notes/prom_b_entrypoints_round7.py",
+     "--runs",
+     "--selftest"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_round6_review_wb_prom_b.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_round9_review_wb_prom_b.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_round5_review_wb_prom_b.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_b_panel_names_round12.py",
+     "--0x0d"
+    ],
+    "grade": "SPLIT-FRAGILE",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/gen_prom_b_cover_round2.py"
+    ],
+    "grade": "TIMEOUT",
+    "asis_rc": null,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/reachability.py",
+     "--targets"
+    ],
+    "grade": "TIMEOUT",
+    "asis_rc": null,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_b_dl_screens_round5.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/promb_macro_rewrite.py",
+     "--unused"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   }
+  ],
+  "was": {
+   "notes/wave7_round6_review_wb_prom_b.py": "VACUOUS",
+   "notes/wave7_round5_review_wb_prom_b.py": "LOUD",
+   "notes/wave7_round9_review_wb_prom_b.py": "LOUD",
+   "notes/prom_b_dl_screens_round5.py": "SPLIT-FRAGILE",
+   "notes/prom_b_panel_names_round12.py --0x0d": "SPLIT-FRAGILE",
+   "notes/promb_macro_rewrite.py --unused": "SPLIT-FRAGILE",
+   "notes/gen_prom_b_cover_round2.py": "TIMEOUT",
+   "notes/reachability.py --targets": "TIMEOUT",
+   "notes/prom_b_entrypoints_round7.py --runs --selftest": "NONDET",
+   "notes/prom_a_understanding_round6.py --callshape": "UNAFFECTED",
+   "notes/prom_b_f65000_header_audit.py": "UNAFFECTED",
+   "notes/prom_c_record68_round10.py": "UNAFFECTED",
+   "notes/prom_c_understanding_round4.py": "UNAFFECTED",
+   "notes/promb_macro_preservation.py": "UNAFFECTED",
+   "notes/wave7-verify-probes/wave7_pa_write_census.py --selftest": "UNAFFECTED"
+  }
+ },
+ "prom_c": {
+  "rows": [
+   {
+    "argv": [
+     "notes/verify_a1_independent_check.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_doc_audit.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 45,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_doc_audit.py",
+     "--quiet"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 45,
+    "asis_fails": true
+   }
+  ],
+  "was": {
+   "notes/verify_a1_independent_check.py": "LOUD",
+   "notes/wave7_doc_audit.py": "LOUD",
+   "notes/wave7_doc_audit.py --quiet": "LOUD",
+   "notes/prom_c_record68_round10.py": "UNAFFECTED",
+   "notes/prom_c_understanding_round4.py": "UNAFFECTED",
+   "notes/prom_c_understanding_round4.py --names": "UNAFFECTED",
+   "notes/round2_audit_probes.py": "UNAFFECTED"
+  }
+ },
+ "prom_d": {
+  "rows": [
+   {
+    "argv": [
+     "notes/wave7_round4_review_wd3_prom_d.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_round6_review_wd3_prom_d.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_round8_review_wd3_prom_d.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "scripts/analysis/gen_prom_d_asm.py"
+    ],
+    "grade": "WRITER",
+    "asis_rc": 1,
+    "asis_fails": true
+   }
+  ],
+  "was": {
+   "notes/wave7_round4_review_wd3_prom_d.py": "LOUD",
+   "notes/wave7_round6_review_wd3_prom_d.py": "LOUD",
+   "notes/wave7_round8_review_wd3_prom_d.py": "LOUD",
+   "scripts/analysis/gen_prom_d_asm.py": "WRITER"
+  }
+ }
+}

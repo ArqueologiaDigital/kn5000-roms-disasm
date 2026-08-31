@@ -1,0 +1,27 @@
+{
+ "prom_b": {
+  "rows": [
+   {
+    "argv": [
+     "notes/prom_b_ram_and_device_census.py",
+     "--devices"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_ram_and_device_census.py",
+     "--lowram"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   }
+  ],
+  "skipped": [],
+  "git_blind": [],
+  "worktree_diff": []
+ }
+}

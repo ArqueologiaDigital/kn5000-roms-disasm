@@ -1,0 +1,1706 @@
+{
+ "prom_d": {
+  "rows": [
+   {
+    "argv": [
+     "notes/asm_source.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/asm_source.py",
+     "--selftest"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_split_probe.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_frontier_table.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_round3_review_wd3_prom_d.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_round4_review_wd3_prom_d.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_round5_review_wd3_prom_d.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_round6_review_wd3_prom_d.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_round8_review_wd3_prom_d.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/probe_health.py"
+    ],
+    "grade": "WRITER",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "scripts/analysis/gen_prom_d_asm.py"
+    ],
+    "grade": "WRITER",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/probe_health.py",
+     "--image"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 2,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_a_naming_round3.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_naming_round3.py",
+     "--gaps"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_understanding_round4.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_understanding_round4.py",
+     "--controllers"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_panel_names_round12.py",
+     "--0x0d"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_panel_names_round12.py",
+     "--audit"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_thunks_round6.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_thunks_round6.py",
+     "--unnamed"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_inventory_round8.py",
+     "--cites"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_inventory_round8.py",
+     "--record"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_naming_round3.py",
+     "--regaudit"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_naming_round3.py",
+     "--struct"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_prose_citation_check.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_prose_citation_check.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_understanding_round4.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_understanding_round4.py",
+     "--names"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_base_checks.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_base_checks.py",
+     "--verbose"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_documentation_round3.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_documentation_round3.py",
+     "--quiet"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_finish_round12.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_finish_round12.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_finish_round7.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_finish_round7.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_inventory_round8.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_inventory_round8.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_split_probe.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round4.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round4.py",
+     "--quiet"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round5.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round5.py",
+     "--quiet"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round6.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round6.py",
+     "--quiet"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_documentation_metrics.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_documentation_metrics.py",
+     "--range"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_frontier_table.py",
+     "--sums"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "scripts/analysis/gen_prom_d_asm.py",
+     "--check"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   }
+  ],
+  "skipped": [
+   [
+    "notes/prom_a_naming_round3.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_a_understanding_round4.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_b_panel_names_round12.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_b_thunks_round6.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_c_inventory_round8.py",
+    "--emit68"
+   ],
+   [
+    "notes/prom_c_naming_round3.py",
+    "--apply"
+   ]
+  ],
+  "git_blind": [
+   "notes/probe_health.py",
+   "notes/wave7_round4_review_wd3_prom_d.py",
+   "notes/wave7_round8_review_wd3_prom_d.py"
+  ]
+ },
+ "prom_c": {
+  "rows": [
+   {
+    "argv": [
+     "notes/asm_source.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/asm_source.py",
+     "--selftest"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_f64_pool.py",
+     "--table"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_naming_round3.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_fcd0f7_interpreter.py",
+     "--consumer"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_finish_round12.py",
+     "--inventory"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_finish_round7.py",
+     "--twins"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_frontier_src.py",
+     "--clusters"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_header_audit.py",
+     "--all"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_image.py",
+     "--selftest"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_inventory_round8.py",
+     "--record"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_naming_round2.py",
+     "--census"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_record68_round10.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_record68_round10.py",
+     "--claims10"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_reg_bytepair_check.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_split.py",
+     "--verify"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_frontier_table.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_kn5000_transplant_residue.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/audit_round3_probes.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/audit_round3_probes.py",
+     "--selftest"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/audit_wave6_round2_probes.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/audit_wave6_round2_probes.py",
+     "--selftest"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/audit_wave6_round3_probes.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/audit_wave6_round3_probes.py",
+     "--selftest"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_f64_pool.py",
+     "--verify"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_tail_tables.py",
+     "--verify"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_finish_round12.py",
+     "--names"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_finish_round7.py",
+     "--params"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_frontier_src.py",
+     "--range",
+     "0xFA7E2C"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_probe_health.py",
+     "--selftest"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_reg_bytepair_check.py",
+     "--selftest"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_staging_producer_audit.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_staging_producer_audit.py",
+     "--selftest"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_understanding_round4.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_understanding_round4.py",
+     "--names"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_understanding_round5.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_understanding_round5.py",
+     "--fields"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_understanding_round6.py",
+     "--dispatch"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_understanding_round6.py",
+     "--staging"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_voice_module_check.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_voice_module_check.py",
+     "--selftest"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/round2_audit_probes.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/verify_a1_independent_check.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_doc_audit.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_doc_audit.py",
+     "--quiet"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_kn5000_transplant_residue.py",
+     "--selftest"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_round3_review_wd3_prom_d.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/probe_health.py"
+    ],
+    "grade": "WRITER",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_block.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": null,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_block.py",
+     "--start",
+     "0xF9A050",
+     "--end",
+     "0xFA5949"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": null,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_block_headers.py",
+     "--start",
+     "0xF9A050",
+     "--end",
+     "0xFA5949"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": null,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_block_headers.py",
+     "--start",
+     "0xFA5949",
+     "--end",
+     "0xFA7E2C"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": null,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_preset_bank.py",
+     "--census"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_preset_bank.py",
+     "--verify"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/gen_prom_c_tail_tables.py",
+     "--census"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/kernel_join_probe.py",
+     "--pairs"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/kernel_join_probe.py",
+     "--symbols"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/kernel_shared_source_probe.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/kernel_shared_source_probe.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/kernel_three_way.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/kernel_three_way.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/migrate_listing_readers.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/probe_health.py",
+     "--image"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 2,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_a_naming_round3.py",
+     "--gaps"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_understanding_round4.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_understanding_round4.py",
+     "--controllers"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_understanding_round5.py",
+     "--accessors"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_understanding_round5.py",
+     "--dups"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_panel_names_round12.py",
+     "--0x0d"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_panel_names_round12.py",
+     "--audit"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_thunks_round6.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_thunks_round6.py",
+     "--unnamed"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_apply_headers.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_audit_callsites.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_audit_callsites.py",
+     "--quiet"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_coverage_split.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_curve_table_census.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_curve_table_census.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_dev10c_field_sources.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_dev10c_field_sources.py",
+     "--dev104"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_dev10c_meaning_checks.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_dev10c_meaning_checks.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_dsp_port.py",
+     "--diff"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_dsp_port.py",
+     "--verify"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_fcd0f7_interpreter.py",
+     "--families"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_frontier.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_frontier.py",
+     "--spans"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_header_audit.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_inventory_round8.py",
+     "--cites"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_kernel_map.py",
+     "--callers"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_kernel_map.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_link_state_machine.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_link_state_machine.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_listing_prep.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 2,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_module_map.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_module_map.py",
+     "0xFA7E2C",
+     "0xFABE30",
+     "--dups"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_naming_round2.py",
+     "--names"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_naming_round3.py",
+     "--regaudit"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_naming_round3.py",
+     "--struct"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_phantom_callsites.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_phantom_callsites.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_pool_frontier_delta.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_probe_health.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": null,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_c_prose_citation_check.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_prose_citation_check.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_round3_frontier_delta.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_round3_frontier_delta.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_split.py",
+     "--plan"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_tail_census.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_tail_census.py",
+     "--copyb"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_tg_chanmap.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_tg_chanmap.py",
+     "0xFB7345",
+     "0xAB",
+     "--pairs"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_voice_sweep_checks.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_c_voice_sweep_checks.py",
+     "--verbose"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_documentation_round3.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_documentation_round3.py",
+     "--quiet"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_finish_round7.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_finish_round7.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_inventory_round8.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_inventory_round8.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round5.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round5.py",
+     "--quiet"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round6.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_d_understanding_round6.py",
+     "--quiet"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/reachability.py",
+     "--evidence"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": null,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/reachability.py",
+     "--targets"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/round2_audit_probes.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7-verify-probes/wave7_r3_promc_refute.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7-verify-probes/wave7_r9_promc_citation_check.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_documentation_metrics.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_documentation_metrics.py",
+     "--range"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_frontier_table.py",
+     "--sums"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_round5_review_wd3_prom_d.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_round6_review_wd3_prom_d.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7_round8_review_wd3_prom_d.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   }
+  ],
+  "skipped": [
+   [
+    "notes/gen_prom_c_f64_pool.py",
+    "--apply"
+   ],
+   [
+    "notes/gen_prom_c_preset_bank.py",
+    "--apply"
+   ],
+   [
+    "notes/gen_prom_c_tail_tables.py",
+    "--emit"
+   ],
+   [
+    "notes/kernel_join_probe.py",
+    "--emit"
+   ],
+   [
+    "notes/prom_a_naming_round3.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_a_understanding_round4.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_a_understanding_round5.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_b_panel_names_round12.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_b_thunks_round6.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_c_inventory_round8.py",
+    "--emit68"
+   ],
+   [
+    "notes/prom_c_naming_round2.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_c_naming_round3.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_c_record68_round10.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_c_record68_round10.py",
+    "--emit68"
+   ],
+   [
+    "notes/prom_c_split.py",
+    "--emit"
+   ],
+   [
+    "notes/prom_c_understanding_round6.py",
+    "--apply"
+   ]
+  ],
+  "git_blind": [
+   "notes/prom_c_inventory_round8.py",
+   "notes/prom_c_round3_frontier_delta.py",
+   "notes/wave7-verify-probes/wave7_r3_promc_refute.py"
+  ]
+ }
+}

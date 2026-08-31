@@ -1,0 +1,19 @@
+  ok   prom_a: decoder lands on the tree's own proven boundary, 200 of 200 sampled
+  ok   prom_a: the sample includes the LAST proven instruction (0xFF7C65)
+  ok   prom_b: decoder lands on the tree's own proven boundary, 200 of 200 sampled
+  ok   prom_b: the sample includes the LAST proven instruction (0xF7FFFE)
+  ok   prom_c: decoder lands on the tree's own proven boundary, 200 of 200 sampled
+  ok   prom_c: the sample includes the LAST proven instruction (0xFCB27B)
+  ok   prom_a reaches kernel/kernel.s: 938 of 938 instruction addresses proven
+  ok   prom_a reaches maincpu/shared/indexed_table.s: 12 of 12 instruction addresses proven
+  ok   prom_a reaches maincpu/shared/lcd_screen_redraw.s: 11 of 11 instruction addresses proven
+  ok   prom_b reaches maincpu/shared/indexed_table.s: 12 of 12 instruction addresses proven
+  ok   prom_b reaches maincpu/shared/lcd_screen_redraw.s: 11 of 11 instruction addresses proven
+  ok   prom_c reaches kernel/kernel.s: 938 of 938 instruction addresses proven
+  ok   the routine directory yields entry points no branch walk would reach   1910 slots
+  ok   pointer tables (jump/dispatch) contribute entry points   2104
+  ok   prom_a has vector-table entry points
+  ok   a walk from a proven address marks bytes   1688
+  ok   ...and the start address is among them
+
+17 checks, 0 failures

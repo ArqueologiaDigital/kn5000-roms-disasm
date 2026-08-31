@@ -1,0 +1,115 @@
+{
+ "prom_a": {
+  "rows": [
+   {
+    "argv": [
+     "notes/prom_a_pa3_census.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_pa3_census.py",
+     "--quiet"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_panel_control_map.py",
+     "--checks"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_panel_control_map.py",
+     "--map"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_panel_names_round11.py",
+     "--apply12"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_a_panel_names_round11.py",
+     "--census"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_portb_and_blockdev_census.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_portb_and_blockdev_census.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_a_preservation_check.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_preservation_check.py",
+     "--list"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7-verify-probes/wave7_r5_prom_a_painter_scope.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   }
+  ],
+  "skipped": [
+   [
+    "notes/prom_a_panel_names_round11.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_a_panel_names_round11.py",
+    "--emit"
+   ]
+  ],
+  "git_blind": [
+   "notes/prom_a_preservation_check.py"
+  ],
+  "worktree_diff": []
+ }
+}

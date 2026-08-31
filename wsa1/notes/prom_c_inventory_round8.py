@@ -1,0 +1,4275 @@
+#!/usr/bin/env python3
+"""prom_c ROUND 8 (wave-7 round 3) -- THE GLOBAL SETUP RECORD, and an audit of the
+   instrument that grades this tree's documentation.
+
+QUESTION IT ANSWERS
+    "Round 7 left prom_c with 429 sub_XXXXXX in six buckets and said bucket S4 was
+     waiting on one question.  Is there a mechanism that reaches a block of them at
+     once -- and when the round is over, is prom_c's documentation debt what the
+     instrument says it is?"
+
+    Two answers, and the second one is uncomfortable:
+
+    1. YES.  `sub_FB0338` is the handler MidiIn_ParseRingAndDispatch reaches for
+       status nibble 0xF0, and its 27 arms are the WRITERS OF ONE 37-BYTE RECORD --
+       the instrument's part-less settings, at RAM 0x0014FE..0x001522, ending exactly
+       where the 33 part records begin.  Naming the record named twelve of its
+       writers from what they contain and what reads them, and let six more be
+       REFUSED with a reason that is a census result rather than a shrug.
+       (--dispatch, --record)
+
+    2. THE GRADER OVER-COUNTS prom_c's CONTENT NAMES BY 168.  notes/wave7_documentation
+       _metrics.py excludes `<parent>__<hexaddr>` internal branch targets from the
+       percentages, on the stated ground that a jump destination inside a routine is
+       not an object awaiting a name.  prom_c spells 168 of those targets
+       `<parent>__<word>` -- Kernel_InitRam__ready_queues, MAIN__bit3 -- and the
+       INTERNAL regex requires 4-6 HEX characters after the `__`, so every one of them
+       is graded CONTENT instead.  prom_a has 124 more.  (--grader)
+
+★ WHAT THE RECORD BUYS, and why it is a lever and not just a table
+    Before this round the twelve setters were twelve unrelated `link XIZ,0 / store /
+    ret` stubs, each with a header that ended "what the routine is FOR: unknown".  The
+    record turns each one into a field, and a field has TWO namable ends: the message
+    code that writes it and the engine routine that reads it.  Nine fields have a
+    located reader and are named from it; six have NONE, and this script's --record
+    proves the absence over both spellings the record is reached by (an absolute
+    store, and an offset from the `lda XIX,0x14fe` base) rather than asserting it.
+    A field with a writer and no reader gets no name here.  That is the whole
+    difference between this pass and a naming spree.
+
+WHAT THE ROUND SHIPPED
+    12 renames, sub_XXXXXX -> content, each with a rewritten header and an Evidence
+    line: GlobalSetup_Dispatch, P7Mixer_SetGainIndex1/2, GlobalTune_StoreFineTune,
+    GlobalTune_StoreTranspose, GlobalScale_StoreMode, GlobalScale_StorePitchClass
+    Detune, GlobalScale_SelectGlobalOrPerTone, Voice_RestagePitchReg0400_ForList,
+    GlobalTune_SetFineTune_AndRestageAll, Dev10C_SetReg0201_FromNibblePair,
+    VoiceDefaults_StoreFromPackedByte.
+    6 REFUSALS with derived reasons, in the source where a reader will hit them
+    (sub_FADA7C, sub_FADB0F, sub_FADBEE, sub_FADBFC, sub_FADC3E, sub_FB0285).
+    1 new block comment: the record itself, 66 lines, every row re-derived by --record.
+    prom_c content 809 -> 821, sub_XXXXXX 429 -> 417, LOWER 46.5%% -> 47.2%%,
+    UPPER 75.3%% -> 76.0%% (notes/wave7_documentation_metrics.py).
+    ⚠ The `headers` and `evidence` columns did NOT move, and that is correct: all 18
+    blocks this round rewrote ALREADY had three comment lines and an Evidence line,
+    because round 7 gave every sub_XXXXXX one.  The instrument counts the PRESENCE of
+    a header, not what it says, so a pass that replaces "what the routine is FOR:
+    unknown" with a decoded field map is invisible to it.  Stated because the mirror
+    of this -- counting removed blank lines as new headers -- is a mistake this tree
+    has already made and published.
+
+★ AND THE NAMES PROPAGATED, which is the point round 7 made and this round tested.
+    Re-running round 7's own census over the tree this round leaves
+    (`python3 notes/prom_c_finish_round7.py --census`) moves its buckets:
+
+        objects      929 -> 917     (the twelve are content now)
+        S6 opaque    258 -> 242     sixteen routines left the "every caller is a
+                                    sub_XXXXXX" bucket without being touched
+        S4           118 -> 122     because their callers acquired a content name
+
+    Round 7 predicted exactly this -- "naming S4 members is how S6 gets reached at
+    all; attacking S6 head-on is attacking the middle of a chain" -- and the twelve
+    names cost nothing to S6 and retired sixteen of it as a side effect.
+
+⚠ FRAMED -> CONTENT PROMOTIONS: ZERO, again, and --refusals says why for each
+    candidate rather than leaving it as a miss.  The three that would have been
+    honest are blocked on files this lane does not own.
+
+WHAT THIS DOES **NOT** ESTABLISH
+  * What CPU 1 calls the 27 codes.  The packets arrive over link channel 0, so the
+    panel's names live in prom_a; --dispatch reports the negative search.
+  * What any of the four bit-fields VoiceDefaults_StoreFromPackedByte unpacks IS.
+    The offsets, the shifts and the readers are measured; the musical meaning is not.
+  * That a "NO READER FOUND" field is dead.  The census is over literal spellings and
+    is blind to a read through a register it does not track.
+
+RUN
+    python3 notes/prom_c_inventory_round8.py              # every section
+    python3 notes/prom_c_inventory_round8.py --dispatch   # 1: the 27 arms of 0xFB0338
+    python3 notes/prom_c_inventory_round8.py --record     # 2: the record, writers+readers
+    python3 notes/prom_c_inventory_round8.py --claims     # 3: every citation this round made
+    python3 notes/prom_c_inventory_round8.py --grader     # 4: the 168-label grader defect
+    python3 notes/prom_c_inventory_round8.py --refusals   # 5: framed->content, refused
+    python3 notes/prom_c_inventory_round8.py --depth      # 6: what header depth really is
+    python3 notes/prom_c_inventory_round8.py --selftest   # all of it, exit 1 on a failure
+
+★ ROUND 9 (2026-08-30) APPENDED THREE MORE SECTIONS to this file; the round-8 text
+  above is unchanged and its 59 checks still run first.
+
+    python3 notes/prom_c_inventory_round8.py --pool8      # 7: the eight-slot note pool
+    python3 notes/prom_c_inventory_round8.py --framed     # 8: what `framed` really is
+    python3 notes/prom_c_inventory_round8.py --refused9   # 9: round 9's refusals
+
+★★ ROUND 11 (2026-08-30) APPENDED TWO MORE SECTIONS, and its headline is not a
+  new inference at all -- it is that THE TREE ALREADY KNEW.
+
+    python3 notes/prom_c_inventory_round8.py --tonedb   # 10: the ToneDB readers
+    python3 notes/prom_c_inventory_round8.py --cites    # 11: the citation defect
+    python3 notes/prom_c_inventory_round8.py --twins11  # 12: a lever, measured
+                                                        #     and DECLINED
+    python3 notes/prom_c_inventory_round8.py --apply11  #     apply (idempotent)
+    python3 notes/prom_c_inventory_round8.py --verify11
+
+  1. ELEVEN prom_c ROUTINES WERE DECODED, BYTE FOR BYTE, IN prom_d's SOURCE, AND
+     prom_c NEVER RECEIVED THE NAMES.  prom_d's base is 0x00F00000 on CPU 2's bus
+     and prom_c reaches it through the four base pointers ExtBoard_ProbeAndInstall
+     Bases writes at 0x00D7ED/0x00D7F1 (prom_d) and 0x00D80D/0x00D811 (the
+     expansion board).  --tonedb censuses every slot read through them: 120 reads,
+     32 slots, 35 routines, EVERY ONE of which was sub_XXXXXX.  And eleven of the
+     35 are decoded instruction by instruction in notes/prom_d_documentation_round3
+     .py --q4 -- a committed script that PASSES today -- while their prom_c headers
+     said "what the routine is FOR: unknown".  Q4a is ToneDB_ResolveToneRecord,
+     Q4b ToneRec_GetElementBlock, Q4c the five catalogue selectors, Q4d
+     DrumKit_ResolveInstrumentRecord, Q4e DrawbarPreset_GetDescriptor, Q4g
+     ToneDB_PercSourceIndexMapB_Lookup.  Nothing new is claimed about the
+     hardware; what is new is that the two images now agree.
+     ★ The twelfth, Voice_GetOctaveShift (sub_FA72E9), is this round's own decode
+     and it repays prom_d: its one caller is Voice_ComputePitch, it returns the
+     table byte shifted left 8, and prom_c's OWN table on the other arm
+     (Instrument_OctaveShift_Semitones, 12*k for k = -8..+7) fixes the unit as 8.8
+     semitones -- which confirms from the CONSUMER side that voice record +27 is a
+     program number and +28 a bank selector, something prom_d's note left open.
+     FOUR REFUSALS with derived arithmetic (--tonedb marks them; sibling_diff()
+     reproduces every count they quote).
+
+  2. SEVENTY CITATIONS IN prom_c NAMED THE OPERAND, NOT THE INSTRUCTION -- the
+     third time this tree has shipped a systematic off-by-N in call-site
+     citations.  "Referenced from 0xFA737E" for `add XBC,0x00FDF22A`, which starts
+     at 0xFA737C: +2 for `add Xrr,imm32`, +1 for `lda_24`.  ⚠ AND THE DEFECT WAS
+     ALREADY DIAGNOSED: notes/FINDINGS-prom_c-keyboard-and-touch.md says, of one
+     table, "cited its reference as 0xF99874, which is the address of the literal"
+     and reports the header corrected.  It was not; that citation was still wrong
+     today, and so were 69 others.  Corrected in the listing AND in
+     notes/gen_prom_c_tables.py, which is where the prose is authored.
+     ★ THE FIX IS SELF-VERIFYING, not arithmetic: a correction is accepted only if
+     the instruction at the corrected address literally carries, as an operand,
+     the START ADDRESS OF THE TABLE whose header the citation sits in.  70 of 70.
+     A blind `- 2` would pass on a wrong address; this cannot.
+
+  ⚠ WHAT THE INSTRUMENT SEES AND WHAT IT DOES NOT.  prom_c content 835 -> 846,
+  sub_XXXXXX 409 -> 398, LOWER 48.0%% -> 48.7%%, UPPER 76.5%% -> 77.1%%.  The
+  `headers` and `evidence` columns do NOT move, for the same reason round 8 gave:
+  every one of these routines already had a header and an Evidence line, and the
+  instrument counts their PRESENCE.  What actually changed is +151 comment lines
+  with the blank-line count UNCHANGED at 712 -- stated with its control because
+  "+35 headers that were 35 removed blank lines" is a mistake this wave published.
+  FRAMED -> CONTENT PROMOTIONS: ZERO, and round 9's --framed is why: prom_c's
+  framed column is one declared-blob region, one declared-shape-only region, 85
+  names whose number IS the meaning, and 7 individually adjudicated leftovers.
+
+  AND THREE REPAIRS TO THINGS THAT WERE NOT RUNNING:
+    * `--selftest` DIED before any round-10 check: selftest10 referenced an
+      undefined S_A and then called check() in the argument order (message,
+      condition), which this file's check() has never had.  Not one round-10
+      check had ever executed.  Both fixed; the checks are otherwise untouched.
+    * one of them was FALSE.  "The three MIDI injectors ... differ in exactly two"
+      is six and five on a raw line diff, and two and ONE once the three return-
+      address literals and the loop label are blanked -- injectors 1 and 3 share
+      their second pushed word.  The prom_a HEADER was right and the check was
+      wrong; the check now states what is true.
+    * ⚠ REPORTED, NOT REPAIRED: notes/gen_prom_c_tables.py's output no longer
+      reproduces its zone in the listing.  Prose was hand-added to the .s after
+      round 3 and never went back into the generator, so "regenerate" would LOSE
+      text.  Asserted in selftest11 so it cannot be forgotten.
+
+  A LEVER MEASURED AND DECLINED (--twins11).  Round 7 swept prom_c against ITSELF
+  for byte-identical twins; nobody had swept it against prom_a's content names,
+  and prom_a and prom_c really do share a kernel.  Every one of prom_c's 398
+  sub_XXXXXX that has a derivable extent (393 of them) against every same-length
+  prom_a content name -- 1,125 as this was written, and the count MOVES because a
+  sibling lane is naming prom_a in the same round, which is why --twins11 prints
+  it rather than this paragraph fixing it --
+  byte for byte: TWO candidates, both 14-byte `link / store the argument at
+  an absolute address / ret` bodies whose only distinguishing content IS the
+  address they store.  Zero names taken.  The kernel sharing is already spent --
+  it is in the routines prom_c has NAMED -- and this section says so instead of a
+  later round re-discovering it.
+
+  STALE BRIEF ITEMS, re-measured rather than re-answered: gap A (0x0440, 0x0480,
+  0x04C0, 0x0500) was closed by round 4 and reported closed by round 7
+  (prom_c_finish_round7.py --gapA); and "most named routines are a name and
+  nothing else" is answered by --depth: 134 of prom_c's content labels have no
+  header, 127 of them PresetBank_* records and the other 7 interrupt stubs that
+  carry an Evidence line anyway.
+
+★★ ROUND 12 (2026-08-30) APPENDED THREE MORE SECTIONS, and its headline is a
+  BUFFER.
+
+    python3 notes/prom_c_inventory_round8.py --reply    # 13: the reply packet
+    python3 notes/prom_c_inventory_round8.py --arms12   # 14: the 23 arms
+    python3 notes/prom_c_inventory_round8.py --rows12   # 15: the catalogue row
+    python3 notes/prom_c_inventory_round8.py --apply12  #     apply (idempotent)
+    python3 notes/prom_c_inventory_round8.py --verify12
+
+  1. prom_c ANSWERS CPU 1 OUT OF ONE BUFFER, AT RAM 0x00D945.  Its first six
+     bytes are the REQUEST's own first six bytes copied back; the payload starts
+     at 0x00D94B; and the whole thing goes out through Link_SendBuffer with
+     length = payload + 6 on the channel in request[+4].  EIGHT request handlers
+     share that shape and --reply derives all of it: the 6 is read twice over,
+     once from the echo loop's `cp ...,0x0006` guard and once from the `inc 6,`
+     the sent length passes through, and all 42 payload stores of the
+     `add Xrr,0x0000d945` form are preceded by `inc 6,` with ZERO exceptions.
+
+     That single fact is what turned a block of routines whose header said "what
+     the routine is FOR: unknown" into REPLY BUILDERS.  A routine that fills the
+     payload is FOR the thing it puts there, and the thing it puts there is a
+     named object of prom_d's -- so the name comes from what it contains, which
+     is the wave's own mechanism and not a new one.
+
+  2. EIGHTEEN NAMES, each with a rewritten header and an Evidence line, and the
+     one that matters most is ToneQuery_Dispatch (was sub_FC1BDE): the tone- and
+     wave-catalogue request handler, 23 arms, opcode = request[+2] with bit 7
+     cleared.  Its arms became ToneQuery_Reply* -- five source-name lookups, two
+     part-element lookups, three drum/percussion lookups, the catalogue-list
+     footer query and the whole-tone-record dump -- plus two routines outside
+     the dispatcher, DrumKit_ResolveSourceNameRow and
+     LinkQuery_ReplyPartRecordBytes.
+
+  3. THREE MEASURED REFUSALS, in the source where a reader will hit them.
+     sub_FC0F83 replies eight bytes from one of three places and nothing on
+     either side of the link reads their meaning; sub_FC10BE replies ONE byte,
+     tone record +0xD0, an offset no reader in either image interprets;
+     sub_FC1B6E replies two bytes of a record sub_FB42B0 returns, and sub_FB42B0
+     is itself unnamed -- that is a chain to name from the other end, not a gap
+     to paper over.
+
+  ★ AND IT LIFTED TWO OF ROUND 11's FOUR REFUSALS, which is the point of
+    writing refusals down.  Round 11 declined sub_FC12ED and sub_FC164D because
+    each reads the SAME THREE DIRECTORY SLOTS as another routine and 63 of its
+    first 64 instructions differ -- both facts still true, and still checked
+    under the new names.  The separation is not in what they READ, it is in what
+    they PRODUCE: these two write 13 characters into the reply payload and
+    return 13, while their twins write nothing to 0x00D945 and return a row
+    pointer.  supersede11() rewrites those two `Refused:` blocks into
+    `WasRefused:` IN PLACE, because a header that refuses and names the same
+    routine four lines apart is precisely the defect round 3 shipped; S12-29
+    checks that no round-12 header does it.
+
+  ★ TWO NUMBERS THAT AGREE ACROSS THE TWO IMAGES.  ToneQuery_ReplyWholeToneRecord
+    builds its reply length out of prom_d's OWN directory stride word +0xEA: 43,
+    times four, plus 541 -- and 541 is 217 + 4*81, the two other copy sizes in
+    the same routine.  217 + 4*81 + 4*43 = 713, which is the size prom_d gives
+    ToneRec_Template_Clear from its file offsets.  Two derivations, two images,
+    one number -- and it SPLITS prom_d's "217 + N*124" into 81 + 43: the element
+    parameter block and the wave-select record, held as two arrays and not
+    interleaved.  ⚠ FOR THE prom_d LANE: prom_d labels the four 81-byte blocks
+    inside that record and leaves the 43-byte array after them unlabelled.
+
+  ⚠ WHAT THE INSTRUMENT SEES.  Measured on this lane's OWN before/after
+    snapshot, not on the round's image row, because a second lane edited prom_c
+    in the same round: content 853 -> 871, sub_XXXXXX 385 -> 367, framed
+    UNCHANGED at 500, comment lines 26,504 -> 26,866, BLANK LINES UNCHANGED at
+    712.  The blank-line figure is stated with every prose claim because
+    "+35 headers that were 35 removed blank lines" is a mistake this wave
+    published.  The `headers` and `evidence` columns move by ONE each, for the
+    reason rounds 8 and 11 both gave: round 7 gave every sub_XXXXXX a header and
+    an Evidence line, and the instrument counts their PRESENCE, not what they
+    say.  Replacing "what the routine is FOR: unknown" with a decoded reply
+    layout is invisible to it.
+
+  FRAMED -> CONTENT PROMOTIONS BY THIS LANE: ZERO, and --framed is the reason
+    rather than the excuse: prom_c's framed column is 374 byte-code blobs, 28
+    data-tail objects, 92 labels whose number IS the meaning, and a PROMOTABLE
+    REMAINDER OF SIX, every one already carrying a refusal a committed round
+    derived.  There was nothing there to promote.
+
+  ★★ AND THE ANSWER TO THE QUESTION THE LANE WAS SET (--inventory, section 16).
+    "Is every prom_c object either named with evidence or declared nameless with
+    a reason?"  Measured in the LISTING rather than remembered from a round:
+    867 labels the grader does not count as content, and
+
+        sub_XXXXXX   14 refused   348 gap   5 reason     0 described   0 SILENT
+        framed        0 refused    35 gap   5 reason   460 described   0 SILENT
+
+    SILENT = 0.  Not one is left without a statement, and S12-31 turns red the
+    moment one is.  ⚠ BUT `described` IS THE WEAK CLASS AND IT IS 460 OF THE
+    867: those labels say what the object IS, not why it has no better name, and
+    374 of them are the P7 byte-code pool, whose reason is in a findings
+    document rather than on the label.  ⚠ AND the six promotable framed labels
+    carry their refusals in THIS SCRIPT and not in the listing -- two of the six
+    are emitted by generators, so the repair belongs in the generator, and this
+    round records the gap rather than hand-patching text a regeneration drops.
+    ⚠ The census itself had to be corrected once before it was believed: its
+    first draft matched three of the tree's FOUR refusal spellings and graded
+    three round-10 refusals a class too low.
+
+  ⚠ FIVE STALE CHECKS RE-BASED, each with the reason in place.  Round 8/9/11
+    pinned exact CENSUSES OF THE TREE -- 30 suspicious suffixes, 7 headerless
+    content labels, a 7-label remainder, 85 non-address framed labels, 26,357
+    comment lines, a 390-routine twin sweep.  Every one of those turns red when
+    a LATER LANE DOES THE WORK, and a check that fails on success is worse than
+    no check.  They are now floors, subsets and shape assertions with the
+    round's original figure kept in the message.  The one that stayed EXACT is
+    prom_c's blank-line count, because the mistake it guards shows up as blank
+    lines falling.
+
+  ROUND 9's ANSWER, in one line: round 8 shipped ZERO framed->content promotions and
+  said the honest count might be zero.  It was six -- the note pool's five tables and
+  its 68-byte device image, every one named from what READS it -- and after them
+  prom_c's framed column has a PROMOTABLE REMAINDER OF SEVEN LABELS, all seven
+  already carrying a refusal a committed round derived (--framed).  That is the
+  finished state the brief asked for: every framed object in prom_c is now either
+  named, inside a region a findings doc declares framed by decision, carrying a
+  number that IS the meaning, or individually refused with a reason.
+"""
+import collections
+import os
+import re
+import subprocess
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_path, write_part  # noqa: E402
+# ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
+# it is handed is the whole image: write_part() sees the master's
+# .include lines disappear.  That refusal is correct and is not the fix.
+# The fix for a RENAME is asm_source.edit_image(ROOT, <primary>, fn),
+# which applies the transform to every constituent file; for a SPLICE it
+# is asm_source.locate() on the block's anchor.  See notes/asm_source.py.
+SRC_MASTER = os.path.join(ROOT, "prom_c/wsa1_prom_c.s")   # the WRITE path: write_part() guards it
+SRC = image_path(ROOT, "prom_c/wsa1_prom_c.s")  # the READ path: the image, not the master
+ROM = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
+# ROUND 11 FIX: round 10 appended the prom_a ATA section (ata_sites, apply10,
+# verify10, selftest10) to this file but never defined the prom_a source path it
+# reads and writes, so `--selftest` died with NameError: S_A before reaching a
+# single round-10 check.  The section itself is fine; only the constant was
+# missing.  Reproduce the old failure by commenting the next line out.
+S_A_MASTER = os.path.join(ROOT, "prom_a/wsa1_prom_a.s")   # the WRITE path
+S_A = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+BASE = 0xF80000
+
+LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
+UNNAMED = re.compile(r'^sub_[0-9A-Fa-f]{6}$')
+INTERNAL = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*__[0-9A-Fa-f]{4,6}$')
+FRAMED = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*_'
+                    r'(?:[0-9A-Fa-f]{2}x[0-9A-Fa-f]{2}_)?'
+                    r'(?:[0-9A-Fa-f]{4,6}|[0-9]{1,4})$')
+ADDRC = re.compile(r';\s*([0-9A-F]{6})\s+(.*)$')
+
+FAILS = []
+
+
+def check(cond, msg):
+    print("  %-4s %s" % ("ok" if cond else "FAIL", msg))
+    if not cond:
+        FAILS.append(msg)
+    return cond
+
+
+_C = {}
+
+
+def load():
+    """The source, and every line that carries an `; AAAAAA <text>` address comment.
+
+    ⚠ ROUND-12 FIX: the guard was `if _C: return _C`, and `_C` is SHARED with
+    rom_bytes(), which parks the ROM image in `_C["rom9"]`.  Any mode that
+    touched the ROM before the source therefore made load() return a dict with
+    no "dis" key, and `--reply`/`--arms12` do exactly that.  The guard now asks
+    for the key it populates.  Reproduce the old failure by calling rom_bytes()
+    first and then load()["dis"]."""
+    if "src" in _C:
+        return _C
+    src = open(SRC).read().split("\n")
+    dis = {}
+    order = []
+    for ln in src:
+        m = ADDRC.search(ln)
+        if m:
+            a = int(m.group(1), 16)
+            dis[a] = m.group(2).strip()
+            order.append(a)
+    _C.update(src=src, dis=dis, order=sorted(dis))
+    return _C
+
+
+# ==================================================== 1. THE 27 DISPATCH ARMS
+DISPATCH = 0xFB0338
+DISPATCH_END = 0xFB0504
+
+
+def arms():
+    """Every `cp BC,imm / jrl Z,target` pair inside GlobalSetup_Dispatch, and the
+    routine each arm calls.  Re-derived from the listing on every run: if an arm
+    moves, this moves with it."""
+    d = load()["dis"]
+    body = [(a, d[a]) for a in load()["order"] if DISPATCH <= a < DISPATCH_END]
+    out = []
+    for i, (a, t) in enumerate(body):
+        m = re.match(r'cp BC,0x([0-9a-f]+)$', t)
+        if not m or i + 1 >= len(body):
+            continue
+        m2 = re.match(r'jrl? Z,0x([0-9a-f]+)$', body[i + 1][1])
+        if not m2:
+            continue
+        code, dest = int(m.group(1), 16), int(m2.group(1), 16)
+        callee = arg = None
+        for a2, t2 in body:
+            if a2 < dest:
+                continue
+            mp = re.match(r'push 0x([0-9a-f]+)$', t2)
+            if mp and arg is None and callee is None:
+                arg = int(mp.group(1), 16)
+            mc = re.match(r'cal[lr] .*0x([0-9a-f]{6})', t2)
+            if mc:
+                callee = int(mc.group(1), 16)
+                break
+        out.append((code, a, dest, callee, arg))
+    return out
+
+
+def show_dispatch():
+    a = arms()
+    print("=== 1. GlobalSetup_Dispatch (0x%06X) -- the status-0xF0 arm, %d codes ===\n"
+          % (DISPATCH, len(a)))
+    names = labels_by_addr()
+    for code, cp, dest, callee, arg in a:
+        print("  code 0x%02X  cp@%06X -> %06X  %-38s%s"
+              % (code, cp, dest, names.get(callee, "0x%06X" % (callee or 0)),
+                 "" if arg is None else "   extra arg 0x%04X" % arg))
+    d = load()["dis"]
+    body = [d[x] for x in load()["order"] if DISPATCH <= x < DISPATCH_END]
+    print("\n  reads of (XIX+0x01), the PART index every other status uses: %d"
+          % sum(1 for t in body if "XIX+0x01" in t))
+    print("  `mul BC,0x012c`, the part-record stride, anywhere in the body: %d"
+          % sum(1 for t in body if "0x012c" in t.lower()))
+    print("  -> the record it writes is GLOBAL, not per-part.")
+    return a
+
+
+def labels_by_addr():
+    """address -> label name.  From the `; AAAAAA` comment on the line below the label
+    where there is one, and from the linked ELF's symbol table otherwise -- a `.byte`
+    data label such as PresetBank_Paris_Caffe carries no address comment at all, and
+    leaving it out is how a census silently loses a third of its population."""
+    if "lba" in _C:
+        return _C["lba"]
+    src = load()["src"]
+    out = {}
+    for i, ln in enumerate(src):
+        m = LABEL.match(ln)
+        if not m:
+            continue
+        for j in range(i + 1, min(i + 4, len(src))):
+            mm = ADDRC.search(src[j])
+            if mm:
+                out[int(mm.group(1), 16)] = m.group(1)
+                break
+    import subprocess
+    nm = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")
+    elf = os.path.join(ROOT, "rebuilt_ROMs", "wsa1_prom_c.llvm.elf")
+    if os.path.exists(nm) and os.path.exists(elf):
+        for ln in subprocess.run([nm, elf], capture_output=True, text=True).stdout.split("\n"):
+            p = ln.split()
+            if len(p) == 3 and p[1] in "tTdDbBrR":
+                out.setdefault(int(p[0], 16), p[2])
+    _C["lba"] = out
+    return out
+
+
+# ==================================================== 2. THE RECORD
+RECORD_BASE = 0x14FE
+RECORD_END = 0x1523          # the part records begin here
+# The offsets the record is reached at through a REGISTER rather than an absolute
+# operand.  Pinned so the two prose copies of this list -- the block comment above
+# sub_FADA7C and sub_FADBEE's refusal -- cannot drift away from the census.
+REG_OFFS = (0x00, 0x01, 0x0D, 0x1B, 0x1D, 0x1E, 0x1F, 0x21, 0x23)
+
+ROWS = [
+    # offset, width, what the field is, or None where this round refused to say
+    (0x00, 1, None),
+    (0x01, 2, "the flag word"),
+    (0x03, 1, "mixer gain index 1"),
+    (0x04, 1, "mixer gain index 2"),
+    (0x05, 2, "master fine tune, 1/256 semitone"),
+    (0x07, 2, "master transpose, semitones * 256"),
+    (0x09, 1, None),
+    (0x0A, 1, None),
+    (0x0B, 1, None),
+    (0x0C, 1, "global scale MODE selector"),
+    (0x0D, 12, "the user scale: one signed detune per pitch class"),
+    (0x1B, 2, None),
+    (0x1D, 1, "voice-rebuild gate"),
+    (0x1E, 1, "voice-rebuild countdown"),
+    (0x1F, 2, "voice default copied to four voice fields"),
+    (0x21, 2, "voice default"),
+    (0x23, 2, "voice default"),
+]
+
+
+def record_touches():
+    """Every access to the record, by both spellings:
+         (a) an absolute operand `(0xNNNN)` with 0x14FE <= NNNN < 0x1523;
+         (b) an offset from a base register loaded `lda Xr,0x14fe`.
+    Returns {offset: (writers, readers)} as lists of (address, text)."""
+    d, order = load()["dis"], load()["order"]
+    acc = collections.defaultdict(lambda: ([], []))
+    for a in order:
+        t = d[a]
+        for h in re.findall(r'\(0x([0-9a-fA-F]{4})\)', t):
+            v = int(h, 16)
+            if RECORD_BASE <= v < RECORD_END:
+                w = re.match(r'(ld|or|and|set|res|xor|inc|dec)\s+\(0x', t) is not None
+                acc[v - RECORD_BASE][0 if w else 1].append((a, t))
+    idx = {a: i for i, a in enumerate(order)}
+    for a in order:
+        m = re.search(r'lda\s+X?(\w+),0x14fe', d[a], re.I)
+        if not m:
+            continue
+        reg = m.group(1)
+        for j in range(idx[a] + 1, min(idx[a] + 140, len(order))):
+            a2, t2 = order[j], d[order[j]]
+            if re.match(r'ret\b', t2):
+                break
+            for mm in re.finditer(r'\(X?%s\+0x([0-9a-f]{2})\)' % reg, t2, re.I):
+                off = int(mm.group(1), 16)
+                w = re.match(r'(ld|or|and|set|res|xor|inc|dec)\s+\(', t2) is not None
+                acc[off][0 if w else 1].append((a2, t2))
+            # the ZERO-offset spelling, `(XIX)`, is offset +0x00 and a census that
+            # only matched `+0xNN` would report the first field of the record as
+            # unread while Toggle14FE_AndDispatch is reading it
+            if re.search(r'\(X?%s\)' % reg, t2, re.I):
+                w = re.match(r'(ld|or|and|set|res|xor|inc|dec)\s+\(X', t2) is not None
+                acc[0][0 if w else 1].append((a2, t2))
+    # (c) the DISPLACEMENT spelling `(Xr+0x14fe)`, where the register carries the
+    # OFFSET and 0x14FE is the displacement.  Only the scale table is reached this
+    # way, and both sites add 13 first -- asserted rather than assumed.
+    for a in order:
+        t = d[a]
+        if not re.search(r'\(X\w+\+0x14fe\)', t):
+            continue
+        add13 = False
+        for j in range(max(0, idx[a] - 8), idx[a]):
+            if re.match(r'add BC,(13|0x000d)$', d[order[j]]):
+                add13 = True
+        if not add13:
+            continue
+        w = re.match(r'ld\s+\(X', t) is not None
+        acc[0x0D][0 if w else 1].append((a, t))
+    return acc
+
+
+def show_record():
+    acc = record_touches()
+    names = labels_by_addr()
+    encl = enclosing()
+    print("=== 2. THE GLOBAL SETUP RECORD -- RAM 0x%04X..0x%04X, %d bytes ===\n"
+          % (RECORD_BASE, RECORD_END - 1, RECORD_END - RECORD_BASE))
+    noread = []
+    for off, w, what in ROWS:
+        ws, rs = acc.get(off, ([], []))
+        wn = sorted(set(encl.get(a, "?") for a, _t in ws))
+        rn = sorted(set(encl.get(a, "?") for a, _t in rs))
+        if not rn:
+            noread.append(off)
+        print("  +%02X 0x%04X %2dB  %-46s" % (off, RECORD_BASE + off, w,
+                                              (what or "-- role NOT claimed")[:46]))
+        print("               writers: %s" % (", ".join(wn) or "none"))
+        print("               readers: %s" % (", ".join(rn) or "** NO READER FOUND **"))
+    print("\n  offsets reached through a REGISTER (an `lda Xr,0x14fe` base, or the")
+    print("  `(Xr+0x14fe)` displacement form): %s" % " ".join("+0x%02X" % o for o in REG_OFFS))
+    print("  fields with a writer and NO located reader: %s"
+          % " ".join("+0x%02X" % o for o in noread))
+    print("\n  ⚠ 'NO READER FOUND' is a census over literal spellings.  A read through a")
+    print("    register this scan does not track would be invisible, so it says")
+    print("    'not found', never 'dead'.")
+    return acc, noread
+
+
+def enclosing():
+    """address -> the name of the top-level label the instruction sits under."""
+    src = load()["src"]
+    out, cur = {}, None
+    for ln in src:
+        m = LABEL.match(ln)
+        if m and not INTERNAL.match(m.group(1)):
+            cur = m.group(1)
+        mm = ADDRC.search(ln)
+        if mm:
+            out[int(mm.group(1), 16)] = cur
+    return out
+
+
+# ==================================================== 3. THE CITATION AUDIT
+# Every address this round wrote into a header, with the instruction it claims is
+# there.  The tree's signature error is a citation one or two bytes past the opcode,
+# so this asserts the TEXT and not merely that something decodes.
+CLAIMS = [
+    (0xFB0678, "cp BC,0x00f0"), (0xFB09E6, "call 0xfb0338"), (0xFB0340, "ld C,(XIX+0x02)"),
+    (0xFB0345, "cp BC,0x0009"), (0xFB03FB, "cp BC,0x00b2"), (0xFB0479, "push 0x0000"),
+    (0xFB04DD, "push 0x000b"), (0xFB04E0, "calr"),
+    (0xFADAB8, "ld (0x1501),C"), (0xFADABC, "push 0x007f"), (0xFADAC2, "call 0xfa2dcd"),
+    (0xFB0413, "calr"), (0xFADAD1, "ld (0x1502),C"), (0xFADAD8, "ld C,(0x1501)"),
+    (0xFADADF, "call 0xfa2dcd"), (0xFB041D, "calr"),
+    (0xFADAEB, "ld C,(XIZ+0x08)"), (0xFADAF5, "ld (0x1503),BC"),
+    (0xFA8356, "ld BC,(0x1503)"), (0xFA83DB, "ld BC,(0x1503)"),
+    (0xFADB00, "ld BC,(XIZ+0x08)"), (0xFADB08, "ld (0x1505),BC"),
+    (0xFA7F4C, "ld WA,(0x1505)"), (0xFA7F3A, "ld A,(XIX+0x05)"), (0xFA7F48, "add HL,0x0080"),
+    (0xFA7F5A, "ld C,(XHL+0x15)"), (0xFC36FD, "ld BC,(0x1505)"),
+    (0xFADB74, "ld C,(XIZ+0x08)"), (0xFADB77, "ld (0x150a),C"), (0xFA7F9B, "ld C,(0x150a)"),
+    (0xFA7F81, "ld BC,(0x14ff)"), (0xFA7F8A, "jr Z,0xfa7fe0"),
+    (0xFA7FA1, "cp BC,0x0040"), (0xFA8006, "calr"), (0xFA7FA7, "cp BC,0x0041"),
+    (0xFA7FAE, "cp BC,0x0042"), (0xFA7FB5, "cp BC,0x0080"), (0xFA7FB9, "jr Z,0xfa7fbb"),
+    (0xFA7FFE, "cp BC,0x0080"),
+    (0xFADC24, "ld H,(XIZ+0x0a)"), (0xFADC35, "ld (XBC+0x14fe),H"),
+    (0xFA7FBD, "ld C,(XIX+0x05)"), (0xFA7FC5, "div C,0x0c"), (0xFA7FC8, "ld C,B"),
+    (0xFA7FD2, "ld A,(XBC+0x14fe)"), (0xFA7FD9, "add WA,WA"),
+    (0xFADC55, "cp (XIZ+0x08),0x00"), (0xFADC5D, "or (XIX+0x01),0x0200"),
+    (0xFADC66, "and (XIX+0x01),0xfdff"), (0xFADC51, "lda XIX,0x14fe"),
+    (0xFA7FE5, "ld H,(XBC+0x13)"), (0xFA8064, "add XBC,0x00fdf2c3"),
+    (0xFADCD0, "inc 5,XIX"), (0xFADCD4, "cp H,0x40"), (0xFADCCA, "ld DE,0x3bcf"),
+    (0xFADCD9, "ld C,0x44"), (0xFADD03, "call 0xfa8347"), (0xFADD0A, "call 0xfa83cc"),
+    (0xFADD1A, "calr"),
+    (0xFB0275, "calr"), (0xFB0278, "call 0xfb3d09"), (0xFB027D, "calr"),
+    (0xFB0270, "push 0x00"), (0xFB027C, "push XIY"), (0xFB0427, "calr"),
+    (0xFADC76, "ld D,(XIZ+0x08)"), (0xFADC79, "ld (0x1509),D"), (0xFADCB0, "and BC,0x0f9f"),
+    (0xFADCB4, "or BC,IX"), (0xFADCB6, "or BC,HL"), (0xFADCB9, "calr"), (0xFB04FC, "calr"),
+    (0xFADB84, "lda XIX,0x14fe"), (0xFADB94, "ld (XIX+0x1d),0x03"),
+    (0xFADBA2, "ld (XIX+0x1e),0x01"), (0xFADBBB, "ld (XIX+0x1f),BC"),
+    (0xFADBC7, "ld (XIX+0x21),0x8000"), (0xFADBE6, "ld (XIX+0x23),WA"),
+    (0xFB3FAA, "ld BC,(0x151d)"), (0xFB3FF1, "ld BC,(0x151d)"), (0xFB3FFA, "ld BC,(0x151d)"),
+    (0xFB4027, "ld BC,(0x151d)"), (0xFAC2BD, "ld BC,(0x151d)"), (0xFAC314, "ld BC,(0x151f)"),
+    (0xFAC31B, "ld BC,(0x151f)"), (0xFAC322, "ld BC,(0x1521)"),
+    (0xFAC35A, "ld C,(XIX+0x1d)"), (0xFAC364, "dec 1,(XIX+0x1e)"), (0xFB044F, "calr"),
+    (0xFADA81, "lda XIX,0x14fe"), (0xFADA85, "cp (XIZ+0x08),0x01"),
+    (0xFADA8D, "or (XIX+0x01),0x0001"), (0xFADA99, "and (XIX+0x01),0xfffe"),
+    (0xFB0409, "calr"), (0xFADB15, "lda XIX,0x14fe"), (0xFADB1F, "extz XIX"),
+    (0xFADB2E, "set 0x0b,BC"), (0xFADB38, "extz XIX"), (0xFADB51, "cp BC,0x0014"),
+    (0xFADB66, "ld (XIX+0x1b),0x0000"), (0xFB043B, "calr"),
+    (0xFADBF2, "ld C,(XIZ+0x08)"), (0xFADBF5, "ld (0x1507),C"), (0xFB0459, "calr"),
+    (0xFADC05, "cp (XIZ+0x08),0x00"), (0xFADC0D, "or (XIX+0x01),0x0002"),
+    (0xFADC16, "and (XIX+0x01),0xfffd"), (0xFB0469, "calr"),
+    (0xFADC42, "ld C,(XIZ+0x08)"), (0xFADC45, "ld (0x1508),C"), (0xFB04EA, "calr"),
+    (0xFB028E, "calr"), (0xFA72F0, "ld HL,(0x14ff)"), (0xFAA4DB, "ld BC,(0x14ff)"),
+    (0xFAD700, "ld BC,(0x14ff)"), (0xFAD797, "ld BC,(0x14ff)"),
+    (0xFA8233, "ld BC,(0x14ff)"), (0xFA82F0, "ld BC,(0x14ff)"),
+    (0xFB0518, "or (0x14ff),0x0004"), (0xFB0510, "and (0x14ff),0xfffb"),
+    (0xFB05E0, "ld (0x14fe),0x00"), (0xFB05F1, "ld C,(XIX)"), (0xFB6DA7, "ld (0x1509),0x11"),
+]
+
+
+def show_claims():
+    d = load()["dis"]
+    bad = [(a, e, d.get(a)) for a, e in CLAIMS if e.lower() not in (d.get(a) or "").lower()]
+    print("=== 3. EVERY ADDRESS THIS ROUND CITED, checked against the listing ===\n")
+    print("  %d citations, %d wrong" % (len(CLAIMS), len(bad)))
+    for a, e, t in bad:
+        print("    0x%06X  claimed %-24s  is %s" % (a, e, t))
+    print("\n  ⚠ ONE citation this round makes is NOT in this table and cannot be:")
+    print("    0xF98CA4, MAIN's `lda XBC,0x00E2EB`.  MAIN was converted in an older")
+    print("    style that carries no per-instruction address comments, so there is no")
+    print("    listing line to match.  It is fixed instead by the RELATIVE form on the")
+    print("    line above it, `calr (0xF98CB9 - 0xF98CA4)`, whose second operand is the")
+    print("    address of the instruction that follows -- checked below.")
+    return bad
+
+
+def check_f98ca4():
+    src = load()["src"]
+    i = next((k for k, l in enumerate(src) if "calr\t(0xF98CB9 - 0xF98CA4)" in l), None)
+    ok = i is not None and "0x00E2EB" in src[i + 1]
+    return ok
+
+
+# ==================================================== 4. THE GRADER
+def grade_labels(path):
+    names = [LABEL.match(l).group(1) for l in open(path) if LABEL.match(l)]
+    out = collections.Counter()
+    dd = []
+    for n in names:
+        if INTERNAL.match(n):
+            g = "internal"
+        elif UNNAMED.match(n):
+            g = "sub"
+        elif FRAMED.match(n):
+            g = "framed"
+        else:
+            g = "content"
+        out[g] += 1
+        if "__" in n and not INTERNAL.match(n):
+            dd.append((n, g))
+    return out, dd
+
+
+def show_grader():
+    print("=== 4. THE GRADER OVER-COUNTS CONTENT NAMES ===\n")
+    print("  notes/wave7_documentation_metrics.py drops `<parent>__<hexaddr>` branch")
+    print("  targets from BOTH sides of the percentage, because a jump destination")
+    print("  inside a routine is not an object awaiting a name.  Its INTERNAL regex")
+    print("  requires 4-6 HEX characters after the `__`.  These labels obey the same")
+    print("  convention with a WORD after the `__`, so they are graded CONTENT:\n")
+    tot = 0
+    for tag in ("a", "b", "c", "d"):
+        p = os.path.join(ROOT, "prom_%s" % tag, "wsa1_prom_%s.s" % tag)
+        g, dd = grade_labels(p)
+        n = sum(1 for _x, gg in dd if gg == "content")
+        tot += n
+        print("  prom_%s  %4d such labels, %4d of them graded content   e.g. %s"
+              % (tag, len(dd), n, ", ".join(x for x, _ in dd[:2]) or "--"))
+    print("\n  So the tree's content column is %d labels high, all of it in prom_a and"
+          % tot)
+    print("  prom_c.  Corrected, prom_c reads:")
+    g, dd = grade_labels(SRC)
+    n = sum(1 for _x, gg in dd if gg == "content")
+    c, f, u = g["content"] - n, g["framed"], g["sub"]
+    t = c + f + u
+    print("    content %d  framed %d  sub_XXXXXX %d   LOWER %.1f%%  UPPER %.1f%%"
+          % (c, f, u, 100.0 * c / t, 100.0 * (c + f) / t))
+    print("    (as printed: content %d, LOWER %.1f%%)"
+          % (g["content"], 100.0 * g["content"] / (g["content"] + f + u)))
+    print("\n  ⚠ NOT FIXED HERE.  wave7_documentation_metrics.py is the instrument every")
+    print("  lane in this round reports against; moving its denominator mid-round would")
+    print("  make four lanes' before/after figures incomparable.  Reported, with the")
+    print("  one-character fix stated: the INTERNAL regex needs `[0-9A-Za-z_]` where it")
+    print("  now has `[0-9A-Fa-f]`.")
+    print("\n  AND IT UNDER-COUNTS IN THE OTHER DIRECTION.  A framed label whose suffix")
+    print("  is not the object's own address is carrying a MEANING, not a position:")
+    sus = suffix_not_own_address()
+    print("    prom_c has %d of them; %d are a device register, a MIDI controller, a"
+          % (len(sus), len(sus) - 1))
+    print("    record offset or a numeric bound.  The one that is neither:")
+    rom = open(ROM, "rb").read()
+    for n, tok, a in sus:
+        if not re.fullmatch(r'[0-9A-Fa-f]+', tok) or tok.upper() != tok.lower().upper():
+            pass
+    print("      PresetBank_Paris_Caffe (0xF85840) -- `Caffe` is five HEX LETTERS, and")
+    print("      the ROM string it came from, 'Paris Caffe', is at 0x%06X, four bytes"
+          % (BASE + rom.find(b"Paris Caffe")))
+    print("      into the record.  Same for PresetBank_Brass_1995 at 0x%06X."
+          % (BASE + rom.find(b"Brass 1995")))
+    return tot, sus
+
+
+def suffix_not_own_address():
+    """Framed labels whose distinguishing suffix is NOT this object's own address."""
+    addr = {}
+    for a, n in sorted(labels_by_addr().items()):
+        addr.setdefault(n, a)
+    out = []
+    for n in sorted(addr):
+        if INTERNAL.match(n) or UNNAMED.match(n) or not FRAMED.match(n):
+            continue
+        tok = n.rsplit("_", 1)[-1]
+        try:
+            v = int(tok, 16)
+        except ValueError:
+            continue
+        if v == addr[n] or re.fullmatch(r'[0-9]{1,4}', tok):
+            continue
+        out.append((n, tok, addr[n]))
+    return out
+
+
+# ==================================================== 5. REFUSALS
+REFUSED_PROMOTIONS = [
+    ("unexplained_FCC5BE", 0xFCC5BE,
+     "SPLIT IT, and the split is proven: ROM 0xFCC5BE..0xFCC5C1 are the LAST FOUR "
+     "BYTES of the boot RAM image (0xFCB4EA + 0x10D8 - 1 = 0xFCC5C1) and land on RAM "
+     "0x00F3B3..0x00F3B6, the P7 mixer's requested and last-sent gain pairs; "
+     "0xFCC5C2..0xFCC5C8 are five constants read in place.  Two objects, two names. "
+     "NOT DONE: the label is load-bearing in notes/gen_prom_c_tables.py:378, which "
+     "EMITS it, and in four FINDINGS docs.  Renaming it here without those would put "
+     "the emitter and the source out of step -- a lane that owns them should do it."),
+    ("Dev10C_StageRegs_0800_0840_FAB818", 0xFAB818,
+     "REFUSED.  The address suffix distinguishes three producers of the SAME word "
+     "pair (0x00D78A/0x00D78C).  Promoting any of them means saying what its two "
+     "values MEAN, which the round-2 header explicitly declares unknown and which "
+     "nothing this round measured."),
+    ("Clamp_ToRange_LowByte_FBD88E", 0xFBD88E,
+     "REFUSED, and correctly framed already.  The suffix records that this is a "
+     "SEPARATELY COMPILED copy of Clamp_ToRange_LowByte, 42 bytes against 34 with 36 "
+     "of the first 42 differing.  Dropping it would claim a twin that the byte diff "
+     "denies."),
+    ("PresetBank_Paris_Caffe", 0xF85840,
+     "NOT A PROMOTION AT ALL -- a grader artefact.  The name is already content; "
+     "`Caffe` is a word from the ROM string, and the grader reads it as five hex "
+     "digits.  Renaming it to satisfy the metric would make the tree worse."),
+    ("Sat16_0_to_7FFF / Clamp_36_to_120 / MidiCtrl_CC07 (+27 more)", None,
+     "NOT A PROMOTION.  --grader lists 30 prom_c framed labels whose suffix is a "
+     "device register, a controller number, a record offset or a bound.  For those "
+     "THE NUMBER IS THE MEANING and a word in its place would say less."),
+]
+
+
+def show_refusals():
+    print("=== 5. FRAMED -> CONTENT: every candidate, and why it was refused ===\n")
+    print("  promotions shipped this round: 0\n")
+    for n, a, why in REFUSED_PROMOTIONS:
+        print("  %s%s" % (n, "  (0x%06X)" % a if a else ""))
+        for line in re.findall(r'.{1,74}(?:\s|$)', why):
+            print("      %s" % line.rstrip())
+        print()
+
+
+# ==================================================== 6. DEPTH
+def depth():
+    """Per grade: how many labels carry a >=3-line comment block, using the metric
+    script's own rule (one blank line tolerated)."""
+    src = load()["src"]
+    run = blanks = 0
+    ev = False
+    out = collections.defaultdict(lambda: [0, 0, 0])
+    noheader = collections.defaultdict(list)
+    for ln in src:
+        if ln.startswith(";"):
+            run += 1
+            blanks = 0
+            if "Evidence:" in ln:
+                ev = True
+            continue
+        if ln.strip() == "" and run:
+            blanks += 1
+            if blanks > 1:
+                run, ev, blanks = 0, False, 0
+            continue
+        m = LABEL.match(ln)
+        if m:
+            n = m.group(1)
+            if INTERNAL.match(n) or "__" in n:
+                g = "internal"
+            elif UNNAMED.match(n):
+                g = "sub"
+            elif FRAMED.match(n):
+                g = "framed"
+            else:
+                g = "content"
+            out[g][0] += 1
+            if run >= 3:
+                out[g][1] += 1
+            else:
+                noheader[g].append(n)
+            if ev:
+                out[g][2] += 1
+        run, ev, blanks = 0, False, 0
+    return out, noheader
+
+
+def show_depth():
+    out, noheader = depth()
+    print("=== 6. HEADER DEPTH -- what the brief for this round got wrong ===\n")
+    print("  The brief said prom_c has '1,096 headers and 866 Evidence: lines for 6,421")
+    print("  labels -- most named routines are a name and nothing else'.  6,421 counts")
+    print("  every branch target in the image.  Per grade, with `<parent>__*` treated as")
+    print("  internal throughout:\n")
+    print("  %-9s %7s %8s %9s" % ("grade", "labels", "header", "evidence"))
+    for g in ("content", "framed", "sub", "internal"):
+        t, h, e = out[g]
+        print("  %-9s %7d %8d %9d" % (g, t, h, e))
+    nh = noheader["content"]
+    pb = [n for n in nh if n.startswith("PresetBank")]
+    print("\n  content labels with NO header: %d, of which %d are PresetBank_* records"
+          % (len(nh), len(pb)))
+    print("  the rest: %s" % ", ".join(sorted(set(nh) - set(pb))))
+    print("\n  So every sub_XXXXXX in prom_c already carries a header AND an Evidence")
+    print("  line (round 7's doing), and the only real objects without one are the")
+    print("  two-instruction interrupt-vector stubs, which carry an Evidence line each")
+    print("  anyway.  prom_c's remaining debt is MEANING, not prose volume, and a lane")
+    print("  told to 'add headers' here would be padding.")
+    return out, nh
+
+
+# ==================================================== SHIPPED
+SHIPPED = {
+    "GlobalSetup_Dispatch": 0xFB0338,
+    "P7Mixer_SetGainIndex1": 0xFADAB1,
+    "P7Mixer_SetGainIndex2": 0xFADACA,
+    "GlobalTune_StoreFineTune": 0xFADAE7,
+    "GlobalTune_StoreTranspose": 0xFADAFC,
+    "GlobalScale_StoreMode": 0xFADB70,
+    "GlobalScale_StorePitchClassDetune": 0xFADC1F,
+    "GlobalScale_SelectGlobalOrPerTone": 0xFADC4C,
+    "Voice_RestagePitchReg0400_ForList": 0xFADCC3,
+    "GlobalTune_SetFineTune_AndRestageAll": 0xFB026C,
+    "Dev10C_SetReg0201_FromNibblePair": 0xFADC6F,
+    "VoiceDefaults_StoreFromPackedByte": 0xFADB7E,
+}
+REFUSED_ROUTINES = ["sub_FADA7C", "sub_FADB0F", "sub_FADBEE", "sub_FADBFC",
+                    "sub_FADC3E", "sub_FB0285"]
+
+
+def header_block(name):
+    src = load()["src"]
+    i = next((k for k, l in enumerate(src) if l.startswith("; %s -- 0x" % name)), None)
+    if i is None:
+        return None
+    j = i
+    while j < len(src) and not src[j].startswith("%s:" % name):
+        j += 1
+    return "\n".join(src[i:j])
+
+
+# ==================================================== SELFTEST
+def selftest():
+    print("=== SELFTEST ===\n")
+    a = arms()
+    check(len(a) == 27, "GlobalSetup_Dispatch has 27 arms")
+    check(a[0][0] == 0x09 and a[0][2] == 0xFB0405, "the FIRST arm is code 0x09 -> 0xFB0405")
+    check(a[-1][0] == 0xB2 and a[-1][2] == 0xFB04F8,
+          "the LAST arm is code 0xB2 -> 0xFB04F8")
+    check(a[-1][3] == 0xFADC6F,
+          "...and the LAST arm calls Dev10C_SetReg0201_FromNibblePair (0xFADC6F)")
+    twelve = [x for x in a if 0xA4 <= x[0] <= 0xAF]
+    check(len(twelve) == 12 and all(x[3] == 0xFADC1F for x in twelve),
+          "the twelve arms 0xA4..0xAF all call 0xFADC1F")
+    check([x[4] for x in twelve] == list(range(12)),
+          "...and their extra argument runs 0x0000..0x000B, in order")
+    d = load()["dis"]
+    body = [d[x] for x in load()["order"] if DISPATCH <= x < DISPATCH_END]
+    check(not any("XIX+0x01" in t for t in body),
+          "no arm reads (XIX+0x01), the part index -- the record is GLOBAL")
+    check(not any("0x012c" in t.lower() for t in body),
+          "no arm uses the part-record stride 0x012C")
+
+    acc, noread = show_record_quiet()
+    check(set(noread) == {0x04, 0x09, 0x0A, 0x0B},
+          "exactly four record fields have a writer and no located reader")
+    check(all(acc[o][0] for o, _w, _x in ROWS),
+          "every field in the table has at least one located writer")
+    check(0x09 in noread and 0x0A in noread,
+          "...including +0x09 (0x1507) and +0x0A (0x1508), the two refusals")
+    offs = set(o for o in acc)
+    check(0x0D in offs and 0x1F in offs,
+          "the scale table (+0x0D) and the voice default (+0x1F) are both seen")
+    check(RECORD_END - RECORD_BASE == 37, "the record is 37 bytes, 0x14FE..0x1522")
+    regoff = tuple(o for o in sorted(acc)
+                   if any("X" in t and "(0x" not in t.split(",")[-1]
+                          for _a, t in acc[o][0] + acc[o][1]))
+    check(regoff == REG_OFFS,
+          "the record is reached through a register at exactly %s"
+          % " ".join("+0x%02X" % o for o in REG_OFFS))
+    e = enclosing()
+    wnames = set()
+    for _o, (w, _r) in acc.items():
+        for a, _t in w:
+            wnames.add(e.get(a))
+    wnames.discard(None)
+    armfns = set(labels_by_addr().get(x[3]) for x in arms())
+    check(len(wnames) == 18, "eighteen routines write into the record")
+    check(len(wnames & armfns) == 13, "...thirteen of them are arms of the dispatcher")
+    check(wnames - armfns == {"ExtBoard_ProbeAndInstallBases", "Toggle14FE_AndDispatch",
+                              "sub_FB6CEE", "sub_FAC34D", "GlobalTune_StoreFineTune"},
+          "...and the other five are the four outside the message plus "
+          "GlobalTune_StoreFineTune, one level below arm 0x82")
+    src2 = open(SRC).read()
+    lst = ", ".join("+0x%02X" % o for o in REG_OFFS)
+    check(src2.count(lst) == 2,
+          "both prose copies of that list, in the block comment and in "
+          "sub_FADBEE's refusal, spell it identically")
+
+    bad = [(x, e) for x, e in CLAIMS if e.lower() not in (d.get(x) or "").lower()]
+    check(not bad, "all %d citations decode to the instruction they claim" % len(CLAIMS))
+    check(CLAIMS[-1][1].lower() in (d.get(CLAIMS[-1][0]) or "").lower(),
+          "...tested on the LAST citation as well as the first (0x%06X)" % CLAIMS[-1][0])
+    check(check_f98ca4(), "0xF98CA4 is fixed by `calr (0xF98CB9 - 0xF98CA4)` above it")
+
+    src = load()["src"]
+    for n, addr in sorted(SHIPPED.items()):
+        blk = header_block(n)
+        check(blk is not None and blk.count("\n") >= 3 and "Evidence:" in blk,
+              "%s has a header with an Evidence: line" % n)
+        check(any(l.startswith("%s:" % n) for l in src), "%s is defined" % n)
+    for n in REFUSED_ROUTINES:
+        blk = header_block(n)
+        check(blk is not None and "Refused:" in blk,
+              "%s carries a REFUSAL with a derived reason" % n)
+    stale = [l for l in src if "sub_FB0338" in l and not l.lstrip().startswith(";")]
+    check(not stale, "no CODE line still spells the old name sub_FB0338 (the one "
+                     "comment that does is the deliberate `was sub_FB0338` provenance)")
+
+    tot, sus = grader_quiet()
+    # ⚠ RE-BASED IN ROUND 12, the sixth of the same kind and the clearest case:
+    # this counts `<parent>__<word>` labels ACROSS ALL FOUR IMAGES, so a lane
+    # working prom_a or prom_b moves it while this file is being edited -- it
+    # was 292 when round 12 began and 291 an hour later, with nothing in prom_c
+    # touched.  The DEFECT the check exists for is that the grader's INTERNAL
+    # regex demands 4-6 hex digits after the `__` and so counts these as
+    # content; that is a property of the regex, not of the count, and it is what
+    # is asserted now.
+    check(tot >= 250, "%d `<parent>__<word>` labels are graded content across "
+                      "the tree (292 when round 8 found the defect)" % tot)
+    g, dd = grade_labels(SRC)
+    check(sum(1 for _x, gg in dd if gg == "content") == 168,
+          "...168 of them in prom_c")
+    # ⚠ RE-BASED IN ROUND 12.  This was `== 30`.  It is a CENSUS OF THE TREE, not
+    # of a round's own work, and every later lane that frames a new object moves
+    # it -- 30 at round 8, 34 today.  Pinning it made the check fail whenever the
+    # tree improved.  What matters is that the class is non-empty and that its
+    # named exemplar is still in it, both of which are still asserted exactly.
+    check(len(sus) >= 30, "%d prom_c framed labels carry a suffix that is not "
+                          "their own address (30 when round 8 measured it)"
+                          % len(sus))
+    check(any(n == "PresetBank_Paris_Caffe" for n, _t, _a in sus),
+          "...and PresetBank_Paris_Caffe is one of them")
+    rom = open(ROM, "rb").read()
+    check(rom.find(b"Paris Caffe") == 0xF85844 - BASE,
+          "the string 'Paris Caffe' really is at 0xF85844, inside that record")
+
+    out, nh = depth_quiet()
+    check(out["sub"][0] == out["sub"][1] == out["sub"][2],
+          "every remaining sub_XXXXXX carries a header AND an Evidence line")
+    # ⚠ RE-BASED IN ROUND 12: `== 7` became 6 when a lane gave IRQ_INTTC2 a
+    # header.  A pin that a later round breaks BY DOING THE WORK is the wrong
+    # shape; the claim worth keeping is that the shortfall is small and is
+    # entirely interrupt stubs, and that is what is checked.
+    nonpb = [n for n in nh if not n.startswith("PresetBank")]
+    check(len(nonpb) <= 7 and all(n.startswith("IRQ_") for n in nonpb),
+          "the %d non-PresetBank content labels without a header are ALL "
+          "interrupt-vector stubs (7 at round 8)" % len(nonpb))
+
+    print("\n%d checks, %d failures" % (CHECKS[0], len(FAILS)))
+    return 1 if FAILS else 0
+
+
+CHECKS = [0]
+_check = check
+
+
+def check(cond, msg):  # noqa: F811
+    CHECKS[0] += 1
+    return _check(cond, msg)
+
+
+def _quiet(fn):
+    import io
+    old = sys.stdout
+    sys.stdout = io.StringIO()
+    try:
+        return fn()
+    finally:
+        sys.stdout = old
+
+
+def show_record_quiet():
+    return _quiet(show_record)
+
+
+def grader_quiet():
+    return _quiet(show_grader)
+
+
+def depth_quiet():
+    return _quiet(show_depth)
+
+
+# ============================================================================
+# ROUND 9 (2026-08-30), writer-C -- THE EIGHT-SLOT NOTE POOL, AND WHAT `framed` IS
+# ============================================================================
+# Appended below round 8; nothing above this line was changed.  Three sections:
+#
+#   --pool8      every citation the note-pool module's twelve headers make,
+#                checked AT the cited address; the 68-byte device image against
+#                its reset twin, word by word; and the two-sweep census that
+#                turns "the pool state is private" into a measurement.
+#   --framed     what prom_c's `framed` column actually contains.  This round's
+#                headline number is framed->content promotions, and a promotion
+#                only means anything for a label that is a KIND PLUS ITS OWN
+#                ADDRESS.  The partition is derived, so the promotable population
+#                is a measurement rather than an impression.
+#   --refused9   this round's refusals, each with its arithmetic.
+#
+# THE QUESTION: "round 8 shipped ZERO framed->content promotions in prom_c.  Was
+# that because there is nothing to promote, or because nobody looked?"  Both, in
+# measurable parts.  Six were there and are shipped -- the note pool's five
+# tables and its 68-byte device image, every one named from what READS it.  What
+# is left in the column is, by --framed, almost entirely labels whose number IS
+# the meaning; the promotable remainder is eight labels, named one by one.
+
+POOL8_ENTRY = 0xFC3E02
+POOL8_LO, POOL8_HI = 0xFC3CB9, 0xFC3FAD
+POOL_ROTOR, POOL_NOTES = 0x00E005, 0x00E006
+RESET_IMAGE, POOL_IMAGE, IMAGE_LEN = 0xFE12CF, 0xFE1540, 68
+LEVEL_FIELD_TOP = 0x0FF4        # 2*Voice_OutputLevel_Table[255]: the 0x0080 field max
+
+POOL8_CLAIMS = [
+    (0xFB07FD, "cp H,0xf0"), (0xFB0800, "jr NC,0xfb0808"),
+    (0xFB0802, "call 0xfb3f36"), (0xFB0808, "call 0xfc3e02"),
+    (0xFC3E17, "and L,0x0f"), (0xFC3E1A, "cp L,6"), (0xFC3E1E, "ld L,0x00"),
+    (0xFC3E25, "inc 1,C"), (0xFC3E27, "and C,0x07"), (0xFC3E2A, "ld (0x00e005),C"),
+    (0xFC3E35, "res 0x07,D"), (0xFC3E3B, "res 0x07,H"),
+    (0xFC3E3E, "cp D,0"), (0xFC3E40, "jrl Z,0xfc3f47"),
+    (0xFC3E4C, "add IX,0x0840"), (0xFC3E58, "ld (XWA),IX"),
+    (0xFC3E5D, "ld (XBC+0x02),0xff00"),
+    (0xFC3E70, "add IX,0x0800"), (0xFC3E7C, "ld (XBC),IX"),
+    (0xFC3E81, "ld (XBC+0x02),0xff80"),
+    (0xFC3EA1, "call 0xfb7a58"), (0xFC3EA9, "call 0xfc571a"), (0xFC3ECD, "call 0xfb77ef"),
+    (0xFC3ED1, "push 0x0044"), (0xFC3ED8, "lda XWA,0xfe1540"), (0xFC3EDE, "call 0xf9a038"),
+    (0xFC3EEC, "cp L,1"), (0xFC3EEE, "jr NZ,0xfc3efb"),
+    (0xFC3EF4, "calr 0xfc3daf"), (0xFC3F04, "calr 0xfc3d26"),
+    (0xFC3F17, "call 0xfb713a"), (0xFC3F1B, "ld BC,(XIZ+0x92)"),
+    (0xFC3F1F, "ld BC,(0x00e005)"), (0xFC3F27, "call 0xfb732c"),
+    (0xFC3F2D, "set 0x07,L"), (0xFC3F39, "add XBC,0x0000e006"),
+    (0xFC3F47, "set 0x07,H"), (0xFC3F63, "cp A,H"),
+    (0xFC3F74, "ld (XBC+0x02),0xa200"), (0xFC3F8B, "ld (XBC+0x02),0xa280"),
+    (0xFC3F98, "and (XBC),0x7f"),
+    (0xFC3FA1, "inc 1,L"), (0xFC3FA3, "cp L,0x08"), (0xFC3FA6, "jr C,0xfc3f52"),
+    (0xFC3D35, "add XBC,0x00fe1584"), (0xFC3D3D, "add A,(XIZ+0x0a)"),
+    (0xFC3D42, "res 0x07,L"), (0xFC3D49, "sll 0x08,BC"), (0xFC3D4F, "or (XWA+0x0e),BC"),
+    (0xFC3D58, "or (XBC),WA"), (0xFC3D60, "or (XBC+0x06),WA"),
+    (0xFC3D73, "or (XBC+0x04),WA"),
+    (0xFC3D7A, "div C,0x0c"), (0xFC3D7D, "ld A,B"), (0xFC3D7F, "mul A,0x02"),
+    (0xFC3D87, "cp H,6"), (0xFC3D8B, "add XWA,0x00fe1599"), (0xFC3D96, "ld (XWA+0x02),BC"),
+    (0xFC3D9B, "lda XBC,0xfe15b1"), (0xFC3DA7, "ld (XBC+0x02),WA"),
+    (0xFC3DBD, "div C,0x0c"), (0xFC3DC0, "ld H,B"), (0xFC3DC5, "sub C,B"),
+    (0xFC3DCC, "sll 0x08,BC"), (0xFC3DCF, "or (XIX+0x0e),BC"),
+    (0xFC3DD4, "mul BC,H"), (0xFC3DD8, "add XBC,0x00fe15c9"), (0xFC3DE0, "or (XIX),BC"),
+    (0xFC3DE5, "or (XIX+0x06),WA"), (0xFC3DE8, "push 0x0001"), (0xFC3DEB, "push 0x007f"),
+    (0xFC3DF1, "or (XIX+0x04),WA"), (0xFC3DF4, "ld BC,(0xfe1599)"),
+    (0xFC3DF9, "ld (XIX+0x02),BC"),
+    (0xFC3CC2, "cp D,4"), (0xFC3CC9, "sll 0x05,BC"), (0xFC3CCE, "add BC,0x001f"),
+    (0xFC3CE2, "cp BC,WA"), (0xFC3CE4, "jr LE,0xfc3cf4"), (0xFC3CE6, "ld C,0x02"),
+    (0xFC3CFC, "ld C,(0x1533)"), (0xFC3D04, "sll 0x08,HL"),
+    (0xFC3D07, "ld C,(0x1534)"), (0xFC3D0D, "or BC,HL"),
+    (0xFC3D13, "ld C,(0x153c)"), (0xFC3D17, "srl 0x04,C"), (0xFC3D1A, "cp C,5"),
+    (0xFC3D1E, "ld WA,0x0c00"), (0xFC3D23, "sub WA,WA"),
+    (0xFAA0D3, "ld C,(XHL+0x11)"), (0xFAA12E, "ld C,(XDE+0x10)"),
+    (0xFAA110, "cp IX,0x007f"), (0xFAA181, "cp HL,0x007f"),
+    (0xFAA18C, "sll 0x08,BC"), (0xFAA19A, "ld (0x00d764),BC"),
+    (0xFB0C29, "mul WA,0x012c"), (0xFB0C8A, "ld BC,0x1523"),
+    (0xFB0CD3, "add BC,(XIZ+0xfa)"), (0xFB0CD6, "ld (XHL+0x23),BC"),
+    (0xFAD851, "add BC,0x0010"), (0xFAD85A, "ld (XBC+0x1523),A"),
+    (0xFAD86F, "add BC,0x0011"), (0xFAD878, "ld (XBC+0x1523),A"),
+    (0xFA7F48, "add HL,0x0080"), (0xFA7FC5, "div C,0x0c"),
+    (0xFB814F, "lda XWA,0xfe12cf"), (0xFB8155, "call 0xf9a038"),
+    (0xFB817E, "calr 0xfb713a"),
+]
+
+POOL8_NAMES = [
+    ("NotePool8_LevelFromVelocity", 0xFC3CB9),
+    ("NotePool8_Reg00C0_FromPart0Ctrl91And93", 0xFC3CFB),
+    ("NotePool8_Word0Bits_FromPart0Ctrl9B", 0xFC3D13),
+    ("NotePool8_StageVoice", 0xFC3D26),
+    ("NotePool8_StageVoice_Var1", 0xFC3DAF),
+    ("NotePool8_NoteOnOff", 0xFC3E02),
+]
+POOL8_TABLES = [
+    ("Dev10C_StagingStruct_NotePool8Image", 0xFE1540, 68),
+    ("NotePool8_TransposeByVariant", 0xFE1584, 7),
+    ("NotePool8_LevelCapByVariant", 0xFE158B, 14),
+    ("NotePool8_Reg0040_ByPitchClass", 0xFE1599, 24),
+    ("NotePool8_Reg0040_ByPitchClass_Var6", 0xFE15B1, 24),
+    ("NotePool8_Word0_ByPitchClass_Var1", 0xFE15C9, 24),
+]
+OLD_POOL8_NAMES = ["sub_FC3CB9", "sub_FC3CFB", "sub_FC3D13", "sub_FC3D26",
+                   "sub_FC3DAF", "sub_FC3E02", "Table_FE1540", "Table_FE1584",
+                   "Table_FE158B", "Table_FE1599", "Table_FE15B1", "Table_FE15C9"]
+# staging word -> 0x0010C000 register, as notes/prom_c_tg_chanmap.py 0xFB713A
+# 0x1F2 --pairs prints it.  22 words, 0x00 unsent by that routine.
+WORD2REG = {1: 0x0040, 2: 0x0080, 3: 0x00C0, 4: 0x0100, 5: 0x0140, 6: 0x0180,
+            7: 0x0400, 8: 0x0440, 9: 0x0480, 10: 0x04C0, 11: 0x0500, 12: 0x0800,
+            13: 0x0840, 14: 0x0880, 15: 0x08C0, 16: 0x0900, 17: 0x0940,
+            18: 0x0980, 19: 0x09C0, 20: 0x0A00, 21: 0x0A40}
+P7R = re.compile(r'^P7Stream_[0-9A-Fa-f]{6}$')
+DEV_BLOCKS = set(range(0x0000, 0x0A80, 0x40))     # block*0x40, the device's stride
+
+
+def rom_bytes():
+    if "rom9" not in _C:
+        _C["rom9"] = open(ROM, "rb").read()
+    return _C["rom9"]
+
+
+def w16(a):
+    r = rom_bytes()
+    return r[a - BASE] | (r[a - BASE + 1] << 8)
+
+
+def image_diff():
+    """The reset staging image against the note-pool one, word by word, straight
+    out of the ROM.  If either image moves, this moves with it."""
+    r = rom_bytes()
+    diff = [(i, w16(RESET_IMAGE + 2 * i), w16(POOL_IMAGE + 2 * i), WORD2REG.get(i))
+            for i in range(IMAGE_LEN // 2)
+            if w16(RESET_IMAGE + 2 * i) != w16(POOL_IMAGE + 2 * i)]
+    nb = sum(1 for i in range(IMAGE_LEN)
+             if r[RESET_IMAGE - BASE + i] != r[POOL_IMAGE - BASE + i])
+    return diff, nb
+
+
+def pool_state_census():
+    """Two independent sweeps for anything naming the pool's two RAM cells:
+    (a) every ADDRESSED source line whose disassembly text spells the address;
+    (b) every 24-bit little-endian occurrence in all 524,288 ROM bytes.
+    Both are blind to a reach through a register.  The result is 'nothing else
+    in the image names it', never 'dead'."""
+    d = load()["dis"]
+    src_hits = [(a, t) for a, t in sorted(d.items())
+                if re.search(r'0x0*e00[56]\b', t, re.I)]
+    rom_hits = []
+    r = rom_bytes()
+    for target in (POOL_ROTOR, POOL_NOTES):
+        pat = target.to_bytes(3, "little")
+        i = r.find(pat)
+        while i != -1:
+            rom_hits.append((BASE + i, target))
+            i = r.find(pat, i + 1)
+    return src_hits, sorted(rom_hits)
+
+
+def mnemonic(a):
+    """The disassembly text at `a` with any leading raw-byte run stripped.  Some
+    listing lines read `f2 cf 12 fe 30    lda XWA,0xfe12cf`; the citation names the
+    instruction, not the bytes."""
+    t = (load()["dis"].get(a) or "")
+    return re.sub(r'^(?:[0-9a-f]{2}\s+)+', '', t).strip()
+
+
+def pool8_bad_claims():
+    return [(a, t, mnemonic(a)) for a, t in POOL8_CLAIMS
+            if not mnemonic(a).lower().startswith(t.lower())]
+
+
+def source_labels():
+    return set(m.group(1) for m in (LABEL.match(l) for l in load()["src"]) if m)
+
+
+def show_pool8():
+    print("=== 7. THE EIGHT-SLOT NOTE POOL -- every claim, re-derived ===\n")
+    print("  The 0x90 (note-on) arm of MidiIn_ParseRingAndDispatch branches on packet")
+    print("  byte [1]: below 0xF0 to MidiNote_Dispatch and the 33 part records, at 0xF0")
+    print("  or above to NotePool8_NoteOnOff.  That second path is this module, and it")
+    print("  was the '⚠ what packet byte [1] >= 0xF0 means' line in that routine's own")
+    print("  Unknown section.\n")
+    bad = pool8_bad_claims()
+    d = load()["dis"]
+    print("  citations checked AT the cited address: %d, mismatching: %d"
+          % (len(POOL8_CLAIMS), len(bad)))
+    for a, t, got in bad:
+        print("    MISMATCH %06X  want %-26r got %r" % (a, t, got))
+    la, lt = POOL8_CLAIMS[-1]
+    print("  the LAST citation, 0x%06X, wants %r and decodes as %r"
+          % (la, lt, mnemonic(la)))
+
+    print("\n  -- the module's twelve objects --")
+    lab = source_labels()
+    for n, a in POOL8_NAMES:
+        print("    %-40s 0x%06X            %s"
+              % (n, a, "defined" if n in lab else "MISSING"))
+    for n, a, ln in POOL8_TABLES:
+        print("    %-40s 0x%06X  %3d B     %s"
+              % (n, a, ln, "defined" if n in lab else "MISSING"))
+
+    print("\n  -- the 68-byte device image against its reset twin --")
+    diff, nb = image_diff()
+    print("    bytes differing %d of %d ; words differing %d of %d"
+          % (nb, IMAGE_LEN, len(diff), IMAGE_LEN // 2))
+    for i, x, y, reg in diff:
+        where = ("register chan+0x%04X" % reg) if reg is not None else (
+            "staging word 0 -- the word Dev10C_WriteAllChanRegs never sends"
+            if i == 0 else "beyond the 0x2C struct")
+        print("      word %2d  reset 0x%04X  pool 0x%04X   %s" % (i, x, y, where))
+
+    print("\n  -- is the pool state private?  two sweeps --")
+    src_hits, rom_hits = pool_state_census()
+    ins = [a for a, _t in src_hits if POOL8_ENTRY <= a <= POOL8_HI]
+    rin = [a for a, _t in rom_hits if POOL8_ENTRY <= a <= POOL8_HI]
+    print("    addressed source lines naming 0x%06X / 0x%06X : %d, inside"
+          " NotePool8_NoteOnOff %d" % (POOL_ROTOR, POOL_NOTES, len(src_hits), len(ins)))
+    print("    24-bit LE occurrences in the 512 KiB image      : %d, inside it %d"
+          % (len(rom_hits), len(rin)))
+    print("    ⚠ both sweeps are blind to a reach through a register.")
+
+    print("\n  -- the five tables, read out of the ROM --")
+    r = rom_bytes()
+    tv = [r[0xFE1584 - BASE + i] for i in range(7)]
+    print("    NotePool8_TransposeByVariant        : %s" % tv)
+    print("      as signed semitones               : %s"
+          % [v - 256 if v > 127 else v for v in tv])
+    for nm, a, cnt in (("NotePool8_LevelCapByVariant", 0xFE158B, 7),
+                       ("NotePool8_Reg0040_ByPitchClass", 0xFE1599, 12),
+                       ("NotePool8_Reg0040_ByPitchClass_Var6", 0xFE15B1, 12),
+                       ("NotePool8_Word0_ByPitchClass_Var1", 0xFE15C9, 12)):
+        print("    %-36s: %s"
+              % (nm, " ".join("%04X" % w16(a + 2 * i) for i in range(cnt))))
+    for v in sorted(set(w16(0xFE158B + 2 * i) for i in range(7))):
+        print("    level cap 0x%04X : %4d counts below 0x%04X -> %.1f dB at 256/octave"
+              % (v, LEVEL_FIELD_TOP - v, LEVEL_FIELD_TOP,
+                 (LEVEL_FIELD_TOP - v) * 6.0206 / 256.0))
+
+    print("\n  -- what the module does NOT establish --")
+    print("    * what the seven variants are.  The packets arrive over link channel 0")
+    print("      from CPU 1, so any name for them lives in prom_a; prom_c spells")
+    print("      0xF0..0xF6 as a part selector nowhere else.")
+    print("    * whether the note-off pair 0xA200/0xA280 is a release envelope or a")
+    print("      second quiescent state.  Nothing in this image reads either back.")
+    print("    * what staging word 0's bit fields mean.")
+    return bad, diff, nb, src_hits, rom_hits
+
+
+# ------------------------------------------ 8. WHAT prom_c's `framed` COLUMN IS
+def framed_labels():
+    """(name, address) for every prom_c label the metric grades FRAMED."""
+    addr = {}
+    for a, n in sorted(labels_by_addr().items()):
+        addr.setdefault(n, a)
+    return sorted(((n, addr[n]) for n in addr
+                   if not INTERNAL.match(n) and not UNNAMED.match(n)
+                   and FRAMED.match(n)), key=lambda t: t[1])
+
+
+def own_address_framed():
+    """Framed labels that really are A KIND PLUS THEIR OWN ADDRESS -- the only
+    population for which the word `promotion` means anything.  Derived: the
+    trailing 4-6 hex digits equal the low bits of the label's own address."""
+    out = []
+    for n, a in framed_labels():
+        m = re.search(r'_([0-9A-Fa-f]{4,6})$', n)
+        if not m:
+            continue
+        if a & ((1 << (4 * len(m.group(1)))) - 1) == int(m.group(1), 16):
+            out.append((n, a))
+    return out
+
+
+# The two regions of prom_c that a committed findings doc declares framed BY
+# DECISION.  Neither is typed as a guess: the first is the extent
+# FINDINGS-prom_c-p7-byte-stream-pool.md gives for the byte-stream pool and its
+# directory, the second runs from the pool's end to the last byte of the image's
+# data tail (gen_prom_c_tail_tables.py's R1_LO..R3_HI plus the curves below it).
+P7_POOL = (0xFCD0F7, 0xFDD2AB)
+DATA_TAIL = (0xFDD2AB, 0xFE21E6)
+
+
+def framed_partition():
+    """Every prom_c framed label in exactly one DERIVED class.  The split that
+    matters is whether the suffix is the object's OWN ADDRESS -- only then is
+    'promotion' the right word -- and, for those, which declared-framed region
+    the object sits in."""
+    own = set(n for n, _a in own_address_framed())
+    part = collections.OrderedDict(
+        [("own address, inside the P7 byte-stream pool", []),
+         ("own address, inside the data tail", []),
+         ("own address, ELSEWHERE -- the promotable remainder", []),
+         ("the suffix is NOT this object's address: the number IS the meaning", [])])
+    for n, a in framed_labels():
+        if n not in own:
+            part["the suffix is NOT this object's address: the number IS the "
+                 "meaning"].append((n, a))
+        elif P7_POOL[0] <= a < P7_POOL[1]:
+            part["own address, inside the P7 byte-stream pool"].append((n, a))
+        elif DATA_TAIL[0] <= a < DATA_TAIL[1]:
+            part["own address, inside the data tail"].append((n, a))
+        else:
+            part["own address, ELSEWHERE -- the promotable remainder"].append((n, a))
+    return part
+
+
+# The promotable remainder, one line each.  Every one carries a REFUSAL that a
+# committed round already derived; --selftest asserts the set is exactly these
+# seven, so a new one appearing anywhere in prom_c fails the check instead of
+# slipping past.
+REMAINDER_STANDING = {
+    "Dev10C_StageRegs_0800_0840_FAB818":
+        "REFUSED round 8.  One of three producers of the SAME word pair "
+        "(0x00D78A/0x00D78C); promoting one means saying what its two values MEAN, "
+        "which the round-2 header declares unknown.",
+    "Dev10C_StageRegs_0800_0840_FAB8CC": "REFUSED round 8, same reason.",
+    "Dev10C_StageRegs_0800_0840_FAB9D8": "REFUSED round 8, same reason.",
+    "Clamp_ToRange_LowByte_FBD88E":
+        "REFUSED round 8, and correctly framed.  The suffix records a SEPARATELY "
+        "COMPILED copy of Clamp_ToRange_LowByte -- 42 bytes against 34, 36 of the "
+        "first 42 differing.  Dropping it would claim a twin the byte diff denies.",
+    "unexplained_FCC5BE":
+        "REFUSED round 8.  It needs a SPLIT (0xFCC5BE..0xFCC5C1 are the last four "
+        "bytes of the boot RAM image; 0xFCC5C2..0xFCC5C8 are five constants read in "
+        "place) and the label is emitted by notes/gen_prom_c_tables.py, which the "
+        "round-8 lane did not own.",
+    "unexplained_FCCB6E":
+        "REFUSED round 5, in the source, with an Evidence line.  Three bytes 00 01 "
+        "00 indexed by the port-P7 UNIT number at 0xFA2C1F / 0xFA2CD7 / 0xFA2D8A; "
+        "the fetched byte reaches sub_F9E0B7 and nothing reads that routine's "
+        "meaning, so it keeps its address.",
+    "fp_constant_pool_FCC81A":
+        "NOT A PROMOTION.  The suffix is the pool's own address because the pool is "
+        "what the name is FOR; notes/gen_prom_c_fp_pool.py emits it and --verify "
+        "checks its 76 doubles and 2 longs.",
+}
+
+
+def show_framed():
+    print("=== 8. WHAT prom_c's `framed` COLUMN ACTUALLY CONTAINS ===\n")
+    print("  This round's headline number is framed->content promotions, so the first")
+    print("  question is how many of the column could even BE promoted.  A promotion")
+    print("  means something only for a label that is a KIND PLUS ITS OWN ADDRESS.  A")
+    print("  label whose suffix is a device register, a MIDI controller number, a")
+    print("  saturation bound or a table length is already as specific as it can be,")
+    print("  and a word in place of the number would say LESS.  The test is mechanical:")
+    print("  do the trailing 4-6 hex digits equal the low bits of the label's own")
+    print("  address?\n")
+    part = framed_partition()
+    tot = 0
+    for k, v in part.items():
+        tot += len(v)
+        print("    %-58s %4d" % (k[:58], len(v)))
+    print("    %-58s %4d" % ("TOTAL framed in prom_c", tot))
+
+    rem = part["own address, ELSEWHERE -- the promotable remainder"]
+    print("\n  ★ THE WHOLE PROMOTABLE REMAINDER IS %d LABELS, and every one of them"
+          % len(rem))
+    print("  already carries a refusal that a committed round derived:\n")
+    for n, a in rem:
+        print("    %-38s 0x%06X" % (n, a))
+        for line in re.findall(r'.{1,68}(?:\s|$)',
+                               REMAINDER_STANDING.get(n, "NOT ADJUDICATED")):
+            if line.strip():
+                print("        %s" % line.rstrip())
+    print("\n  The two big classes are declared framed BY DECISION, in the tree, with a")
+    print("  reason that is a census result rather than a shrug:")
+    print("    * the P7 byte-stream pool, 0x%06X-0x%06X: the objects' CONTENT is"
+          % (P7_POOL[0], P7_POOL[1] - 1))
+    print("      undecoded byte-code for the port-P7 device, so a name would be naming")
+    print("      a blob (FINDINGS-prom_c-p7-byte-stream-pool.md sec 0).")
+    print("    * the data tail, 0x%06X-0x%06X: shape and reader known, ROLE NOT"
+          % (DATA_TAIL[0], DATA_TAIL[1] - 1))
+    print("      claimed (FINDINGS-prom_c-tail-data-zone.md sec 7).  Six of them left")
+    print("      that class this round, because their reader finally gave them a role.")
+    print("\n  ⚠ SO prom_c's framed COLUMN IS NOT A BACKLOG.  It is one declared-blob")
+    print("  region, one declared-shape-only region, %d names whose number is the"
+          % len(part["the suffix is NOT this object's address: the number IS the "
+                     "meaning"]))
+    print("  meaning, and %d adjudicated leftovers.  Any report of the column that does"
+          % len(rem))
+    print("  not say so is misleading about where the number comes from.")
+    return part
+
+
+# --------------------------------------------------- 9. ROUND 9's REFUSALS
+REFUSALS9 = [
+ ("THE TEN BUCKET-S1 LABELS STAY sub_XXXXXX, and that is the arithmetic talking.", [
+  "They are not routines.  Nothing in the image references them at any spelling and",
+  "the instruction above each is not a control transfer, so the code above walks",
+  "into them (prom_c_finish_round7.py --noref, ten of twenty-six).  Renaming them to",
+  "the tree's <parent>__<address> convention would be CORRECT -- and would move ten",
+  "labels out of the sub_XXXXXX column into `internal`, which the metric excludes",
+  "from both sides, so LOWER and UPPER would both rise while nobody understood one",
+  "more thing.  Round 7 left the job to 'a lane that is not also reporting the metric",
+  "it would move'.  This lane reports the metric.  Refused; the list stays in",
+  "--noref for a lane that does not."]),
+ ("Voice_StageRegs_00C0_AB IS NOT RENAMED, although its register is now named.", [
+  "Register chan+0x00C0 is established this round as (MIDI controller 91 << 8) |",
+  "MIDI controller 93.  A promotion to Voice_StageCtrl91And93_Reg00C0_AB was drafted",
+  "and dropped for three measured reasons: the label and its interior labels occur",
+  "35 times in prom_c/wsa1_prom_c.s -- 33 before this round added two mentions of it",
+  "to its own header; the name belongs to a family",
+  "(Voice_StageRegs_0500_08C0_AB, Voice_StageRegs_0180_AB, Voice_StageRegs_CD) whose",
+  "value is that they are spelled alike; and its suffix is a DEVICE REGISTER, where",
+  "the number is the meaning.  The finding went into the routine's header and into",
+  "the 0x0010C000 block comment, which is where a reader meets it."]),
+ ("THE BRIEF'S ITEM 4 -- 'prom_c has 1,096 headers for 6,421 labels, add headers'.", [
+  "Refused as stated; round 8 measured why and this round re-ran it (--depth).  6,421",
+  "counts every branch target in the image.  Per grade, EVERY remaining sub_XXXXXX",
+  "already carries a header AND an Evidence line, and the content labels with no",
+  "header are 127 PresetBank_* records plus seven two-instruction interrupt stubs.",
+  "New header text there is padding.  What this round did instead is REWRITE headers",
+  "that already existed: six routine headers whose `Unknown: what the routine is FOR.",
+  "Nothing here reads the meaning of a field' became a decoded field map, and three",
+  "more -- MidiIn_ParseRingAndDispatch, Dev10C_WriteAllChanRegs and",
+  "Voice_StageRegs_00C0_AB -- had a flagged Unknown closed.  The instrument cannot",
+  "see any of that: it counts the PRESENCE of a header, not what it says."]),
+ ("A COMMITTED SELFTEST HAS BEEN FAILING SINCE ROUND 7, and it is not this "
+  "round's doing.", [
+  "`python3 notes/prom_c_understanding_round6.py --selftest` prints 110 ok and FOUR",
+  "failures.  Three of them are round 6's own before/after ledger -- 'prom_c content",
+  "is 757 + 37 = 794', 'framed is 489 - 2 = 487', 'sub_XXXXXX is 492 - 35 = 457' --",
+  "and rounds 7 and 8 moved all three numbers before this lane started (round 8 left",
+  "prom_c at 821 / 500 / 417).  The fourth, 'every framed label matched exactly one",
+  "rule', is broken by the twelve PartRec_ApplyParam_00XX labels ROUND 7 shipped,",
+  "which its classifier has no rule for.  VERIFIED, not assumed: checked out with",
+  "`git show HEAD:notes/prom_c_understanding_round6.py` and",
+  "`git show HEAD:prom_c/wsa1_prom_c.s` into a scratch tree and re-run there, where",
+  "it prints the same '110 ok, FAILURES: 4' with the same four lines.",
+  "NOT FIXED HERE: three of the four are another round's before/after",
+  "record and rewriting them would destroy the ledger they exist to be.  Reported so",
+  "that the next lane does not read the failure as fresh damage."]),
+ ("THE BRIEF'S ITEM 5 -- 'gap A is still open: 0x0440, 0x0480, 0x04C0, 0x0500'.", [
+  "Stale.  Round 4 gave all four an accessor and notes/prom_c_gapA_remaining_regs.py",
+  "(16 sections plus 8 negative controls) establishes that the low bits of 0x0440,",
+  "0x0480 and 0x04C0 are a 0x0010C000 CHANNEL NUMBER -- the same number the producer",
+  "hands to a Dev10C_Slot* accessor a few instructions later -- and that 0x0500 is a",
+  "decoded byte pair.  notes/WSA1-EMULATION-DISASM-GAPS.md carries the retraction,",
+  "and prom_c_finish_round7.py --gapA already reported the brief as stale a round",
+  "ago.  Re-deriving it would be a lane spending itself on a closed question.  What",
+  "gap A still wants is a register with a MUSICAL meaning, and this round added one:",
+  "chan+0x00C0 = (controller 91 << 8) | controller 93, from two unrelated producers",
+  "that agree on the split."]),
+]
+
+
+def show_refused9():
+    print("=== 9. ROUND 9's REFUSALS, each with its arithmetic ===\n")
+    for title, body in REFUSALS9:
+        print("  %s" % title)
+        for l in body:
+            print("      %s" % l)
+        print()
+
+
+def selftest9():
+    """Round 9's checks.  --selftest runs these after round 8's."""
+    print("\n--- round 9 ---")
+    d = load()["dis"]
+    bad = pool8_bad_claims()
+    check(not bad, "all %d note-pool citations decode AT the cited address"
+          % len(POOL8_CLAIMS))
+    la, lt = POOL8_CLAIMS[-1]
+    check(mnemonic(la).lower().startswith(lt.lower()),
+          "...tested on the LAST citation too (0x%06X wants %r)" % (la, lt))
+
+    lab = source_labels()
+    src = open(SRC).read()
+    for n, _a in POOL8_NAMES:
+        check(n in lab, "%s is defined in the source" % n)
+        blk = header_block(n)
+        check(blk is not None and "Evidence:" in blk,
+              "...and its header carries an Evidence: line")
+    for n, _a, _l in POOL8_TABLES:
+        check(n in lab, "%s is defined in the source" % n)
+        # the emitted data block is  <SEP> ... <SEP> <label>: ; take the text
+        # between the OPENING separator and the label, i.e. skip the closing one.
+        i = src.index("\n%s:\n" % n)
+        head = src[max(0, i - 6000):i]
+        j = head.rfind("; ---")
+        j = head.rfind("; ---", 0, j)
+        check("Evidence:" in head[j:], "...and its block carries an Evidence: line")
+    for old in OLD_POOL8_NAMES:
+        check(old not in src, "the old name %s is gone from the source" % old)
+
+    diff, nb = image_diff()
+    check(nb == 9, "the note-pool image differs from the reset image in 9 of 68 bytes")
+    check(len(diff) == 8, "...which is 8 of its 34 words")
+    check(diff[0][:3] == (0, 0x1200, 0xF000),
+          "the FIRST differing word is word 0, 0x1200 -> 0xF000")
+    check(diff[-1][:3] == (23, 0xFF00, 0xA000),
+          "the LAST differing word is word 23, 0xFF00 -> 0xA000")
+    check(w16(POOL_IMAGE + 2 * 7) == 0x0080,
+          "the pool image seeds word 7 (register 0x0400) with the pitch centring 0x0080")
+    check(w16(POOL_IMAGE + 2 * 2) == 0x8000,
+          "and word 2 (register 0x0080) with the gate bit and a zero level field")
+
+    src_hits, rom_hits = pool_state_census()
+    check(len(src_hits) == 13, "13 addressed source lines name the pool's two RAM cells")
+    check(all(POOL8_ENTRY <= a <= POOL8_HI for a, _t in src_hits),
+          "...every one of them inside NotePool8_NoteOnOff")
+    check(len(rom_hits) == 13, "13 24-bit LE ROM occurrences of the same two addresses")
+    check(all(POOL8_ENTRY <= a <= POOL8_HI for a, _t in rom_hits),
+          "...every one of them inside NotePool8_NoteOnOff too")
+
+    r = rom_bytes()
+    tv = [r[0xFE1584 - BASE + i] for i in range(7)]
+    check(tv == [0, 0, 0x18, 0xE8, 0, 0, 0],
+          "NotePool8_TransposeByVariant is 0,0,+24,-24,0,0,0 as signed bytes")
+    caps = [w16(0xFE158B + 2 * i) for i in range(7)]
+    check(len(caps) == 7 and max(caps) < LEVEL_FIELD_TOP,
+          "all seven level caps are below the 0x0080 field's top 0x0FF4")
+    check(caps[-1] == 0x0B42, "...and the LAST cap, variant 6, is 0x0B42")
+    pc = [w16(0xFE1599 + 2 * i) for i in range(12)]
+    check(all((v & 0x0FFF) == 0 for v in pc),
+          "every NotePool8_Reg0040_ByPitchClass entry has a ZERO 12-bit payload")
+    check(pc[-1] == 0x0000, "...tested on the LAST entry as well as the first")
+    pc6 = [w16(0xFE15B1 + 2 * i) for i in range(12)]
+    check(all((v & 0x0FFF) == 0 for v in pc6) and pc6[-1] == 0xC000,
+          "the _Var6 table too, LAST entry 0xC000")
+
+    part = framed_partition()
+    tot = sum(len(v) for v in part.values())
+    check(tot == len(framed_labels()), "every framed label lands in exactly one class")
+    rem = part["own address, ELSEWHERE -- the promotable remainder"]
+    # ⚠ RE-BASED IN ROUND 12, and this is the one re-basing that must NOT weaken
+    # the claim.  Round 9's finding is that every promotable framed label carries
+    # a refusal SOMEBODY DERIVED.  Equality also asserted that no label ever
+    # LEAVES the remainder, which is the opposite of what the wave wants: a lane
+    # promoted Dev10C_StageRegs_0800_0840_FAB818 and turned the check red for
+    # doing exactly the right thing.  A SUBSET still fails the moment a new
+    # own-address framed label appears with no refusal behind it, which is the
+    # failure the check is for.
+    check(set(n for n, _a in rem) <= set(REMAINDER_STANDING),
+          "every one of the %d promotable framed labels carries a refusal a "
+          "committed round derived (7 stood at round 9)" % len(rem))
+    check(len(rem) <= 7, "...and the remainder only ever shrinks: %d now" % len(rem))
+    check(len(part["own address, inside the P7 byte-stream pool"]) == 374,
+          "374 own-address labels are inside the P7 byte-stream pool")
+    check(len(part["own address, inside the data tail"]) == 28,
+          "28 are inside the data tail")
+    nk = part["the suffix is NOT this object's address: the number IS the meaning"]
+    # ⚠ RE-BASED IN ROUND 12: 85 at round 9, 92 today, for the same reason as the
+    # `sus` census above -- naming an object can move it into this class.
+    check(len(nk) >= 85, "%d framed labels do NOT spell their own address "
+                         "(85 at round 9)" % len(nk))
+    check(all(not re.search(r'_([0-9A-Fa-f]{4,6})$', n)
+              or a & ((1 << (4 * len(re.search(r'_([0-9A-Fa-f]{4,6})$', n).group(1)))) - 1)
+              != int(re.search(r'_([0-9A-Fa-f]{4,6})$', n).group(1), 16)
+              for n, a in nk),
+          "...and not one of those 85 accidentally spells it after all")
+
+    check(mnemonic(0xFAD851).startswith("add BC,0x0010")
+          and mnemonic(0xFAD85A).startswith("ld (XBC+0x1523),A"),
+          "MidiCtrl_CC91 writes part[+0x10] (0xFAD851 / 0xFAD85A)")
+    check(mnemonic(0xFAD86F).startswith("add BC,0x0011")
+          and mnemonic(0xFAD878).startswith("ld (XBC+0x1523),A"),
+          "MidiCtrl_CC93 writes part[+0x11] (0xFAD86F / 0xFAD878)")
+    check(mnemonic(0xFB0C8A).startswith("ld BC,0x1523")
+          and mnemonic(0xFB0CD6).startswith("ld (XHL+0x23),BC"),
+          "voice_record[+0x23] is 0x1523 + 0x012C*part -- it IS the part record")
+    check(0x1523 + 0x10 == 0x1533 and 0x1523 + 0x11 == 0x1534,
+          "so RAM 0x001533/0x001534 are part 0's +0x10 and +0x11")
+    check(0x1523 + 0x19 == 0x153C,
+          "and 0x00153C is part 0's +0x19, the field MidiCtrl_Int9B writes")
+    # the one number REFUSALS9 quotes that nothing else re-derives
+    check(src.count("Voice_StageRegs_00C0_AB") == 35,
+          "Voice_StageRegs_00C0_AB and its interior labels occur 35 times in the "
+          "source -- the count the rename refusal rests on")
+
+# ===========================================================================
+# ★★ ROUND 10 (2026-08-30) -- WHAT THE UNIT-1 BACK END TALKS TO
+# ===========================================================================
+# The question this round started from is the one bucket T4/T5/C1 were left in:
+# 164 routines that touch something NAMED, distinctively, and that no round had
+# mined.  Nineteen of them are in one place, and that place turned out to answer
+# a gap three committed headers record as open.
+#
+# ★★ THE FINDING, AND IT IS AN IDENTIFICATION, NOT A DECODE
+#   notes/FINDINGS-prom_a-fdc.md sec.6 established that Fdc_Request is a
+#   TWO-UNIT block-device layer and that the unit field selects the back end:
+#   unit 0 is the uPD765-family floppy controller at 0x7B0000, unit 1 is
+#   0xFE4CE0-0xFE544D, which talks only to the 16-bit port at 0x7E0000.  Round 9
+#   named that port's four accessors Dev7E_* and wrote, four times, `Unknown:
+#   what the two banks selected by bit 3 and bit 4 ARE`.
+#
+#   `--ata` reads every accessor call in 0xFE4C73-0xFE54B6 whose bank and
+#   register are LITERAL, resolves each `calr` to one of the four accessors, and
+#   prints the (bank, register, value) it writes.  41 calls survive that filter.
+#   What they spell is an ATA (IDE) task file:
+#
+#     bank 0 = the COMMAND BLOCK, registers 0..7 at 0x7E0008..0x7E000F
+#     bank 1 = the CONTROL BLOCK, register 6 at 0x7E0016
+#
+#     reg 7 <- 0x20 at 0xFE4F3A, in the routine that then reads 512 bytes
+#     reg 7 <- 0x30 at 0xFE4DCE, in the routine that then writes 512 bytes
+#     reg 7 <- 0xEC at 0xFE5073, in the routine that then reads 512 bytes into
+#              the caller's buffer and whose caller compares the result against
+#              a cylinders/heads/sectors triple
+#     reg 7 <- 0x91 at 0xFE5183, immediately after reg 2 <- 0x3C and
+#              reg 6 <- 0x0E
+#     reg 7 <- 0xEF at 0xFE511B, immediately after reg 1 <- 0x01
+#     reg 6 <- 0xA0 at 0xFE5067, 0xFE5423, 0xFE548C, and at 0xFE4DBA /
+#              0xFE4F26 it is `and WA,0x000F / or WA,0x00A0` on the head number
+#     bank 1 reg 6 <- 0x0C then 0x08 at 0xFE50E9 and 0xFE50F5, nothing between
+#              them but the two calls
+#
+#   Read against the ATA command set those are READ SECTOR(S), WRITE SECTOR(S),
+#   IDENTIFY DEVICE, INITIALIZE DEVICE PARAMETERS and SET FEATURES; 0xA0 is the
+#   Device/Head register's "master, CHS" pattern with the head in bits 3..0;
+#   0x0C then 0x08 in the Device Control register is SRST asserted and released.
+#   The status bits the module tests agree independently: bit 7 at 0xFE4D41 is
+#   polled UNTIL CLEAR with a 500-tick timeout (BSY), bit 3 at 0xFE4DE7 /
+#   0xFE4F5C / 0xFE5091 is required BEFORE each 512-byte transfer (DRQ), bit 0
+#   at 0xFE50DB / 0xFE4FA3 is checked AFTER one (ERR), and bit 6 at 0xFE5441 /
+#   0xFE54AA is required after a command that moves no data (DRDY).
+#
+#   ★ SEVEN AGREEMENTS, EACH FROM A DIFFERENT PART OF THE MODULE, is why this is
+#   written down as an identification rather than a guess: the command opcodes,
+#   the register ORDER (sector count, sector number, cylinder low, cylinder
+#   high, device/head, command -- 0xFE4D6C..0xFE4DCE), the 0xA0 pattern, the
+#   three status bits used for the three things ATA uses them for, the reset
+#   pair in a SEPARATE bank at register 6, the 512-byte transfer through
+#   register 0 only, and INITIALIZE DEVICE PARAMETERS' operands matching the
+#   geometry its caller compares at 0xFE31AA-0xFE31C3 (0x0239 cylinders,
+#   0x000F heads, 0x003C sectors, and 0x0E = heads - 1).
+#
+#   ⚠ WHAT IS NOT CLAIMED.  The ATA opcode names come from the ATA standard and
+#   not from this ROM -- nothing in either image spells them.  Nothing here says
+#   what the PART is (the same discipline the floppy module's header already
+#   applies to its uPD765).  And the two power-mode opcodes are the weakest
+#   link: 0x95 at 0xFE542F and 0x94 at 0xFE5498 are the unit-1 arms of
+#   operations 6 and 7, whose unit-0 arms clear and set PA bit 3, and no
+#   behaviour in either body corroborates which is which.  Those two routines
+#   are therefore named for what they DO -- write the whole task file and issue
+#   one command, then require DRDY -- and the opcode is left in the header.
+#
+# ★ AND ONE COMMITTED `Unknown:` IS ANSWERED, in four headers at once.  The
+#   round-8 NAMES entries for the four Dev7E accessors carried "what the two
+#   banks selected by bit 3 and bit 4 ARE".  --apply10 rewrites all four from
+#   the corrected table; --verify10 fails if the old sentence survives anywhere.
+ATA_LO, ATA_HI = 0xFE4C73, 0xFE54B6
+ATA_ACCESSORS = {0xFE4C73: "write byte", 0xFE4C99: "write word",
+                 0xFE4CBF: "read byte", 0xFE4CE0: "read word"}
+# The ATA task-file register names, printed as a legend by --ata.  They are the
+# STANDARD's names, quoted so the table can be argued with; the module itself
+# spells only the numbers.
+ATA_REGS = {0: "data (16-bit)", 1: "features / error", 2: "sector count",
+            3: "sector number", 4: "cylinder low", 5: "cylinder high",
+            6: "device / head", 7: "command / status"}
+ATA_CTRL = {6: "device control (bit 2 = SRST)"}
+ATA_CMDS = {0x20: "READ SECTOR(S)", 0x30: "WRITE SECTOR(S)",
+            0x91: "INITIALIZE DEVICE PARAMETERS", 0x94: "STANDBY IMMEDIATE",
+            0x95: "IDLE IMMEDIATE", 0xEC: "IDENTIFY DEVICE",
+            0xEF: "SET FEATURES"}
+_ATA_ADDR = re.compile(r";\s*([0-9A-F]{6})\s+((?:[0-9a-f]{2}(?: |$))+)")
+_ATA_PUSHW = re.compile(r"^\s*pushw (0x[0-9a-f]+)\s")
+_ATA_CALR = re.compile(r"^\s*calr\s+(?:0x([0-9a-f]{4})\b|([A-Za-z_][A-Za-z0-9_]*))")
+
+
+def ata_sites():
+    """Every call to a Dev7E accessor in 0xFE4C73-0xFE54B6 whose bank and
+    register are LITERAL, as (label, site, bank, reg, value_or_None, accessor).
+
+    ⚠ THE ACCESSOR GUARD IS THE WHOLE POINT.  A first draft matched "three
+    `pushw` then a `calr`" and reported two extra register writes at 0xFE5360
+    and 0xFE53C2 with register 9, which no 3-bit register field can hold: those
+    two sites are `push XDE / pushw 0x16 / pushw 0x09 / pushw 0x00 / calr` into
+    the SECTOR WRITER at 0xFE4D57, a four-argument call, not a register write.
+    Resolving the `calr` and requiring the target to be one of the four
+    accessors drops both.  The value is None for a read, which takes two pushes.
+    """
+    rows, cur, lab = [], [], None
+    for ln in open(S_A, encoding="utf-8", errors="replace"):
+        ln = ln.rstrip("\n")
+        m = LABEL.match(ln)
+        if m:
+            lab = m.group(1)
+        a = _ATA_ADDR.search(ln)
+        if not a:
+            continue
+        ad, nb = int(a.group(1), 16), len(a.group(2).split())
+        if not (ATA_LO <= ad <= ATA_HI):
+            continue
+        p = _ATA_PUSHW.match(ln)
+        if p:
+            cur.append((ad, int(p.group(1), 16)))
+            if len(cur) > 3:
+                cur.pop(0)
+            continue
+        c = _ATA_CALR.match(ln)
+        if c and c.group(1):
+            d = int(c.group(1), 16)
+            t = ad + nb + (d - 0x10000 if d >= 0x8000 else d)
+            if t in ATA_ACCESSORS:
+                kind = ATA_ACCESSORS[t]
+                if kind.startswith("write") and len(cur) == 3 and cur[2][0] + 3 == ad:
+                    rows.append((lab, cur[0][0], cur[2][1], cur[1][1], cur[0][1], kind))
+                elif kind.startswith("read") and len(cur) >= 2 and cur[-1][0] + 3 == ad:
+                    rows.append((lab, cur[-2][0], cur[-1][1], cur[-2][1], None, kind))
+            cur = []
+            continue
+        cur = []
+    return rows
+
+
+def mode_ata():
+    rows = ata_sites()
+    print("prom_a 0x%06X-0x%06X -- every Dev7E accessor call with a LITERAL "
+          "bank and register\n" % (ATA_LO, ATA_HI))
+    prev = None
+    for lab, site, blk, reg, val, kind in rows:
+        if lab != prev:
+            print("  --- %s" % lab)
+            prev = lab
+        name = (ATA_CTRL if blk else ATA_REGS).get(reg, "?")
+        v = "" if val is None else "<- 0x%02X" % val
+        cmd = ""
+        if blk == 0 and reg == 7 and val is not None:
+            cmd = "   %s" % ATA_CMDS.get(val, "not in this file's opcode list")
+        print("      0x%06X  %-10s bank %d reg %d  %-22s %-8s%s"
+              % (site, kind, blk, reg, name, v, cmd))
+    cmds = [(s, v) for _l, s, b, r, v, k in rows if b == 0 and r == 7 and v is not None]
+    print("\n  %d accessor calls; %d of them write the command register."
+          % (len(rows), len(cmds)))
+    print("  bank 0 = command block at 0x7E0008; bank 1 = control block at 0x7E0010")
+    print("  (Dev7E_WriteByte forms 0x7E0000 + ((n & 7) | 0x08) or | 0x10).")
+    print("\n  ⚠ The opcode names are the ATA standard's, not this ROM's.  The")
+    print("  argument for reading them that way is the seven independent")
+    print("  agreements listed in this file's round-10 section; the two power")
+    print("  commands 0x94/0x95 have no corroborating behaviour and the two")
+    print("  routines that issue them are named for what they do, not for them.")
+
+
+# ---------------------------------------------------------------------------
+# Round 10's names.  Same five fields as NAMES: old label, new label, what it
+# is, the Evidence line, the Unknown line.  Every address cited is the address
+# of the INSTRUCTION.
+# ---------------------------------------------------------------------------
+ATA_NAMES = [
+    ("sub_FE4D01", "Dev7E_ReadStatus",
+     "reads command-block register 7 and returns it zero-extended in HL",
+     "0xFE4D01 `pushw 0x07` and 0xFE4D04 `pushw 0x00` are the register index "
+     "and the bank flag Dev7E_ReadByte reads at (XSP+0x06) and (XSP+0x04); "
+     "0xFE4D07 `calr` resolves to 0xFE4CBF, Dev7E_ReadByte; 0xFE4D0C `extz HL`. "
+     "Ten callers, every wait and result check in the module, and the bits they "
+     "test are bit 7 (0xFE4D41, polled until clear), bit 3 (0xFE4DE7, 0xFE4F5C, "
+     "0xFE5091, required before a 512-byte transfer), bit 0 (0xFE50DB, "
+     "checked after one) and bit 6 (0xFE5441, 0xFE54AA) -- BSY, DRQ, "
+     "ERR and DRDY of an ATA status register",
+     "nothing in this body says what the device is; the identification is "
+     "argued once, in this module's header and in "
+     "`prom_a_census_round8.py --ata`, and not re-asserted per routine"),
+    ("sub_FE4D0F", "Dev7E_SpinDelay",
+     "counts (XSP+0x04) down to zero and returns 0 -- the module's busy-wait",
+     "the whole routine is 0xFE4D0F `ld WA,(XSP+0x04)`, 0xFE4D12/0xFE4D16 "
+     "`dec 1,WA`, 0xFE4D18 `cps wa,0x00` with 0xFE4D1A `jr nz` back to it, and "
+     "0xFE4D1C `lds hl,0x00`. It touches no memory and no register. Its one "
+     "caller is 0xFE50C8, inside IDENTIFY DEVICE's transfer loop, which passes "
+     "0x64",
+     "what one count is worth in time. It depends on the CPU clock and this "
+     "file measures no clock"),
+    ("sub_FE4D1F", "Dev7E_WaitNotBusy",
+     "polls the status register until bit 7 clears, giving up after 500 ticks",
+     "0xFE4D20 takes a copy of the tick word (0x605A00), 0xFE4D2A re-reads it "
+     "and 0xFE4D33 `cp BC,0x01f4` is the 500-tick bound that stores 0xFFFF at "
+     "0xFE4D39; 0xFE4D3E calls Dev7E_ReadStatus and 0xFE4D41 `bit 0x07,L` is "
+     "the loop condition, so the wait ends when bit 7 is CLEAR. It returns 0 on "
+     "ready and 0xFFFF on timeout, and nine sites call it -- after every reset "
+     "and before every command",
+     "the tick rate at (0x605A00), so 500 ticks is not converted to a time here"),
+    ("sub_FE4D57", "Dev7E_WriteOneSector",
+     "writes ONE 512-byte sector: task file, command 0x30, then 256 words out "
+     "through the data register",
+     "0xFE4D60 `pushw 0xff` reg 1, 0xFE4D6C `pushw 0x01` reg 2 (one sector), "
+     "then reg 3 from (XSP+0x16), reg 4 and reg 5 from the two halves of "
+     "(XSP+0x18) at 0xFE4D87/0xFE4D9C/0xFE4DB1, reg 6 as 0xFE4DBA `and "
+     "WA,0x000f` + 0xFE4DBE `or WA,0x00a0` on (XSP+0x08), and 0xFE4DCE `pushw "
+     "0x30` into reg 7. 0xFE4DDD waits not-busy, 0xFE4DE7 `bit 0x03,HL` "
+     "requires DRQ, and the loop at 0xFE4DF6-0xFE4E26 packs two buffer bytes "
+     "into a word and calls Dev7E_WriteWord on register 0 until 0xFE4E22 `cp "
+     "IZ,0x0200`. Eight callers, all in this module",
+     "what the far side does with the sector. The 0x0200 is a byte count in "
+     "THIS body and nothing here reads a sector-size field"),
+    ("sub_FE4EC1", "Dev7E_ReadOneSector",
+     "reads ONE 512-byte sector: task file, command 0x20, then 256 words in "
+     "through the data register",
+     "the same eight-step task file as Dev7E_WriteOneSector, with 0xFE4F3A "
+     "`pushw 0x20` in place of 0x30; 0xFE4F5C `bit 0x03,IZ` requires DRQ, the "
+     "loop at 0xFE4F6C-0xFE4F9E calls Dev7E_ReadWord on register 0 and stores "
+     "L then H, and 0xFE4F99 `cpw qiz,0x0200` bounds it; 0xFE4FA3 tests bit 0 "
+     "of the status afterwards. Its one caller is Unit1_Op3_ReadSectorRun",
+     "as for Dev7E_WriteOneSector"),
+    ("sub_FE4E4C", "Unit1_Op4_WriteSectorRun",
+     "the unit-1 arm of operation 4: Dev7E_WriteOneSector per sector, "
+     "advancing cylinder/head/sector and the buffer by 0x200",
+     "0xFE4E5D `calr` resolves to 0xFE4D57; the advance is 0xFE4E66 "
+     "`ld WA,(0x605d3c)` against the incremented sector, 0xFE4E7A `(0x605d3a)` "
+     "against the incremented head and 0xFE4E89 `(0x605d38)` against the "
+     "incremented cylinder, and 0xFE4E9D adds 0x200 to the buffer; 0xFE4EB1 "
+     "counts the request's sector count down. ★ It is byte-identical to "
+     "Unit1_Op3_ReadSectorRun over all 117 bytes EXCEPT the one `calr` "
+     "displacement (0xFEF7 here, 0xFEFB there), which is what makes the "
+     "read/write pair a fact and not a resemblance. "
+     "notes/prom_a_unit1_backend_check.py lists it as operation 4's arm",
+     "which of the three cells is which is read off the INITIALIZE DEVICE "
+     "PARAMETERS operands at 0xFE5144/0xFE5177 and the compare at "
+     "0xFE31AA-0xFE31C3; this body only orders them"),
+    ("sub_FE4FB2", "Unit1_Op3_ReadSectorRun",
+     "the unit-1 arm of operation 3: Dev7E_ReadOneSector per sector, same "
+     "advance",
+     "0xFE4FC3 `calr` resolves to 0xFE4EC1; every other byte of the routine is "
+     "identical to Unit1_Op4_WriteSectorRun's, cell for cell (0xFE4FCC, "
+     "0xFE4FE0, 0xFE4FEF and the 0x200 at 0xFE5003). "
+     "notes/prom_a_unit1_backend_check.py lists it as operation 3's arm",
+     "as above"),
+    ("sub_FE5027", "Dev7E_IdentifyDevice",
+     "issues command 0xEC and reads the 512-byte reply into the caller's buffer",
+     "0xFE5028-0xFE5061 write 0xFF to registers 1..5, 0xFE5067 writes 0xA0 to "
+     "register 6 and 0xFE5073 `pushw 0xec` is the command; 0xFE5082 waits "
+     "not-busy, 0xFE5091 `bit 0x03,HL` requires DRQ, and the loop at "
+     "0xFE50A0-0xFE50D3 reads register 0 as a word, stores the HIGH byte first "
+     "(0xFE50B2) and the low byte second (0xFE50C0), and ends on 0xFE50CF `cp "
+     "IZ,0x0200`. Its one caller, 0xFE3100, passes the buffer 0x00606F9B and "
+     "then compares three words it extracts against 0x0239, 0x000F and 0x003C "
+     "at 0xFE31AA, 0xFE31B3 and 0xFE31BC",
+     "which words of the reply the caller reads. This body copies all 512 bytes "
+     "and interprets none of them"),
+    ("sub_FE50E9", "Unit1_Op0_SoftResetAndSetFeatures",
+     "the unit-1 arm of operation 0: pulse the control block's reset bit, then "
+     "SET FEATURES 0x01",
+     "0xFE50E9 writes 0x0C to BANK 1 register 6 and 0xFE50F5 writes 0x08 to the "
+     "same place with nothing between but the two calls, so bit 2 is asserted "
+     "and released; 0xFE5104 waits not-busy and returns 0xFFFF if it times out; "
+     "0xFE510F writes 0x01 to register 1 and 0xFE511B writes 0xEF to register "
+     "7, then 0xFE512A waits again and returns 0xFFFE on failure. Bank 1 is "
+     "reached NOWHERE ELSE in prom_a -- these two writes are the only ones "
+     "`--ata` finds. notes/prom_a_unit1_backend_check.py lists it as operation "
+     "0's arm",
+     "why 0x08 rather than 0x00 is the released state. Both writes set bit 3 "
+     "and this body never explains it"),
+    ("sub_FE5138", "Dev7E_SetDeviceParams",
+     "issues command 0x91 with 0x3C in the sector-count register and 0x0E in "
+     "the device/head register",
+     "0xFE5144 `pushw 0x3c` reg 2 and 0xFE5177 `pushw 0x0e` reg 6, then "
+     "0xFE5183 `pushw 0x91` reg 7; 0xFE5192 waits not-busy. Its one caller is "
+     "0xFE31C5, reached only when the geometry compare at 0xFE31AA-0xFE31C3 "
+     "fails -- and that compare tests 0x0239 cylinders, 0x000F heads and 0x003C "
+     "sectors, so the 0x3C here IS that sector count and the 0x0E is one less "
+     "than that head count",
+     "why registers 1, 3, 4 and 5 are written 0xFF first. The command reads "
+     "only 2 and 6"),
+    ("sub_FE51AC", "Unit1_Op5_FormatAndWriteDirBlocks",
+     "the unit-1 arm of operation 5: after the transfer loop it builds two "
+     "512-byte blocks in RAM and writes each with Dev7E_WriteOneSector",
+     "the first block is zeroed at 0xFE5315, space-filled to +0x0B at 0xFE5323, "
+     "and then written byte by byte at 0xFE532C-0xFE5357 with 0x2D 0x2D 0x53 "
+     "0x55 0x42 0x44 0x49 0x52 0x2D 0x53 0x42 = `--SUBDIR-SB`, 0x10 at +0x0B "
+     "and 0x02 at +0x1A; the second, at 0xFE53AA-0xFE53BD, is `.` at +0 and "
+     "`..` at +0x20, each with 0x10 at its +0x0B. That is an 11-byte name, an "
+     "attribute byte and a first-cluster word -- the FAT directory-entry "
+     "layout, and the second block is the `.`/`..` pair a FAT subdirectory "
+     "begins with. Both blocks go out through 0xFE5369 and 0xFE53CB, which "
+     "`calr` to 0xFE4D57. notes/prom_a_unit1_backend_check.py lists it as "
+     "operation 5's arm",
+     "the geometry the two blocks land on. The four `pushw` before each write "
+     "are Dev7E_WriteOneSector's arguments and this file does not decode which "
+     "cylinder/head/sector they name"),
+    ("sub_FE53E4", "Unit1_Op6_IssueCommandAndWaitReady",
+     "the unit-1 arm of operation 6: write the whole task file, issue one "
+     "command, require DRDY",
+     "0xFE53E4-0xFE5423 write registers 1..6 with 0xFF, 0x00, 0xFF, 0xFF, 0xFF "
+     "and 0xA0, 0xFE542F `pushw 0x95` is the command, 0xFE543E reads the status "
+     "and 0xFE5441 `bit 0x06,HL` is the only thing tested -- no data moves. "
+     "The routine at 0xFE544D, inside this label's extent, is the same body "
+     "with 0x94 at 0xFE5498, and it is operation 7's arm "
+     "(notes/prom_a_unit1_backend_check.py, and Fdc_Op7_PortA3_On's header "
+     "already records the tail jump to 0xFE544D)",
+     "⚠ WHICH command 0x95 is. In the ATA opcode list it is IDLE IMMEDIATE and "
+     "0x94 is STANDBY IMMEDIATE, but unlike the module's other five commands "
+     "NOTHING in either body corroborates that -- no data phase, no operand, "
+     "no result read beyond DRDY -- and operations 6 and 7 clear and SET PA "
+     "bit 3 on unit 0, whose meaning is itself open. So this name says what "
+     "the routine does and not what the command means"),
+]
+
+OTHER_NAMES = [
+    ("sub_F8E02C", "Link_SendBlockIn32ByteChunks",
+     "splits a buffer into 0x20-byte pieces and sends each with "
+     "Link_SendCountedBlock",
+     "0xF8E032 `ld XIX,(XIZ+0x0c)` is the buffer and 0xF8E035 "
+     "`ld HL,(XIZ+0x0a)` the byte count, which is the frame "
+     "Link_SendCountedBlock itself reads (+0x08 selector, +0x0a count, +0x0c "
+     "buffer); the loop at 0xF8E03A pushes 0x20 as the count, adds 0x20 to the "
+     "buffer at 0xF8E046 and subtracts 0x20 from the remainder at 0xF8E04F "
+     "while 0xF8E053 `cp HL,0x0020` says more than a chunk is left, then "
+     "0xF8E059-0xF8E062 sends the remainder in one final call. The chunk size "
+     "is the five-bit length field Link_SendCountedBlock's own header derives "
+     "(`(count - 1)` in bits 4..0), and 0x20 is the largest count that fits it. "
+     "prom_b publishes it as T_F40ED4 with 46 references",
+     "what the selector at (XIZ+0x08) means to the far side -- the same gap "
+     "Link_SendCountedBlock's header states"),
+    ("sub_F8E1FE", "Link_SendCommand3_WaitTicks",
+     "sends command 3 with a 32-bit argument, then spins for 20 ticks",
+     "0xF8E207 `pushw 0x03` and 0xF8E20A `ld XBC,(XIZ+0x08)` are the command "
+     "byte and the longword Link_SendCommandAndLong reads at (XIZ+0x0c) and "
+     "(XIZ+0x08); 0xF8E202 copies the tick word (0x0080) into the frame and the "
+     "loop at 0xF8E213-0xF8E21D re-reads it, subtracts the copy and compares "
+     "with 0x0014. It is the same shape as Link_SendCommand5_WaitDone, which "
+     "waits on a FLAG instead of on the clock",
+     "why this one waits on time rather than on the far side. The byte on the "
+     "wire is 3 | 0xE0 = 0xE3, because Link_SendCommandAndLong ORs 0xE0 in; the "
+     "NAME carries the literal 3 that is in this body"),
+    ("sub_FB921C", "MidiInQueue_InjectAllNotesOff_AllChannels",
+     "appends `Bn 7B 00` to the MIDI INPUT queue for n = 0..0x0F",
+     "0xFB921E loads the thunk 0xF41DAC, which prom_b publishes as "
+     "T_Ring600C1E_Put, and 0x600C1E is the ring MIDI_RX_DeliverTwo appends "
+     "received bytes to (0xFA57B3 `ld XIX,0x00600c1e`), so this INJECTS into "
+     "the receive path rather than transmitting; 0xFB9227 `or H,0xb0` builds "
+     "the status byte from the loop counter, which runs 0x00..0x0F (0xFB9223 "
+     "`ldb l,0x00`, 0xFB9254 `cp L,0x0f`, 0xFB9257 `jr ule`); the three calls "
+     "at 0xFB9236, 0xFB9241 and 0xFB924C push 0x00/H, 0x7B and 0x00, and "
+     "0xFB924E `inc 6,XSP` reclaims exactly those three words. CC 0x7B with "
+     "value 0 is All Notes Off, which the tree already documents at "
+     "MIDI_AllNotesOffTemplate",
+     "who calls it and when: its two callers, 0xFB9187 and 0xFB91DA, are "
+     "themselves unnamed"),
+    ("sub_FB925C", "MidiInQueue_InjectController0_AllChannels",
+     "appends `Bn 00 40` to the MIDI INPUT queue for n = 0..0x0F",
+     "byte-for-byte MidiInQueue_InjectAllNotesOff_AllChannels except the two "
+     "data words: 0xFB9278 `pushw 0x00` and 0xFB9283 `pushw 0x40` where the "
+     "other routine has 0x7B and 0x00. Same ring (0xFB925E), same 0xB0 (0xFB9267), "
+     "same 0x00..0x0F bound (0xFB9294)",
+     "⚠ what controller 0 means to this machine. On the wire CC 0 is Bank "
+     "Select MSB and 0x40 would be bank 64, but the destination here is the "
+     "INPUT queue, not the wire, and nothing in this tree maps the receiver's "
+     "controller numbers. The name states the number and claims nothing about "
+     "it"),
+    ("sub_FB929C", "MidiInQueue_InjectHoldPedalOff_AllChannels",
+     "appends `Bn 40 00` to the MIDI INPUT queue for n = 0..0x0F",
+     "the same body again, with 0xFB92B8 `pushw 0x40` and 0xFB92C3 `pushw 0x00` "
+     "as the two data words. CC 0x40 with value 0 is Hold 1 (damper) OFF, and "
+     "that reading is corroborated by the sibling that emits CC 0x7B: two of "
+     "the three routines spell a standard controller reset in the standard "
+     "order, which is what fixes the argument order as status, data 1, data 2",
+     "as for the sibling -- the receiver's controller map is not established"),
+    ("sub_FC0D41", "ScaleTuning_PostAllTwelveSemitones",
+     "posts the twelve semitone offsets of the selected scale, from ROM or from "
+     "the user's RAM copy",
+     "prom_b's ScaleTuningOffsets header (0xF06800, 15 rows of 12 bytes, one "
+     "row per temperament) already names 0xFC0D78-0xFC0D9D as its reader: "
+     "0xFC0D7E `ldb w,0x0c` and 0xFC0D80 `mul8rr a,w` scale the row index and "
+     "0xFC0D84 `ld XHL,0x00f06800` is the base. The row index is the byte "
+     "(0x78A2) mapped through 0xF43420 (0xFC0D78), except that 0xFC0D41 sends "
+     "0x80 to the RAM-copy arm and 0xFC0D48/0xFC0D4F/0xFC0D56 send 0x40, 0x41 "
+     "and 0x42 to row 0; both loops are bounded `cp A,0x0c`, so twelve "
+     "semitones each",
+     "the UNIT of an offset -- the same gap prom_b's table header states"),
+    ("sub_FC0D9E", "ScaleTuning_PostSemitoneFromRomRow",
+     "posts semitone A's offset, read from the ROM row the caller passes in XHL",
+     "0xFC0D9E `ld (XIX+0x02),A` puts the semitone number in the message at "
+     "RAM 0x0716 and 0xFC0DA3 reads (XHL + WA) into W, which 0xFC0DA8 writes to "
+     "+0x03; 0xFC0DAB `calr` resolves to 0xFC17DF, the module's sender. XHL is "
+     "the row ScaleTuning_PostAllTwelveSemitones computed at 0xFC0D84",
+     "what field +2 and +3 of the 0x0716 message mean to CPU 2. "
+     "notes/FINDINGS-prom_a-msg0716-module.md states that no handler's message "
+     "layout is established"),
+    ("sub_FC0DAF", "ScaleTuning_PostSemitoneFromUserRam",
+     "the same, reading the twelve-byte USER copy at RAM 0x78A4 instead",
+     "identical to ScaleTuning_PostSemitoneFromRomRow except 0xFC0DB4 "
+     "`ld XHL,0x000078a4`, which hard-codes the base the ROM row would have "
+     "supplied; 0xFC0DC1 `calr` resolves to the SAME sender, 0xFC17DF. prom_b's "
+     "ScaleTuningOffsets header names 0x78A4 as the user copy and this address "
+     "as the arm that reads it, and row 14 (USER) of the ROM table is flat "
+     "because the editable copy is this one",
+     "as above"),
+    ("sub_FC114E", "Msg0716_GetRecordPtrByIndex",
+     "returns Msg0716_RecordPtrTable[W] in XIY",
+     "0xFC1153 `sla wa,0x02` scales the index by the table's four-byte entry, "
+     "0xFC1156 `ld XIY,0x00fc1162` is Msg0716_RecordPtrTable itself and "
+     "0xFC115B loads XIY from XIY+WA. That table's own header, already in this "
+     "listing, names this routine as one of its exactly two readers -- `the "
+     "helper at 0xFC114E that is calr-ed 15 times and takes its index "
+     "in W`",
+     "what a 0x40-byte record holds -- the gap the table's header states. This "
+     "routine bounds nothing; the bound is the 32 records that supply the index"),
+    ("sub_F8DD49", "AnalogValue_MaskOffLow3Bits",
+     "clears the low three bits of C and returns",
+     "the routine is one instruction, 0xF8DD49 `and C,0xf8`, and a `ret`. Its "
+     "one caller is AnalogScan_Hysteresis, so the value being coarsened is an "
+     "analog reading",
+     "why three bits. AnalogScan_Hysteresis's own threshold is not read here"),
+    ("sub_F95128", "Delay_SpinNestedLoops",
+     "a busy-wait: 0x1000 outer passes of 0x600 inner decrements, touching no "
+     "memory",
+     "the whole routine is 0xF95128 `ldw bc,0x1000`, 0xF9512B `ldw wa,0x0600`, "
+     "0xF9512E `dec 1,WA`, and the two `djnz16` at 0xF95130 and 0xF95133. It "
+     "reads and writes nothing. Its two callers include LCD_FlashWholePanel, "
+     "which is a panel test",
+     "how long that is. It depends on the CPU clock, which this file does not "
+     "measure"),
+    ("sub_FEFE59", "LCD_DrawVRule_LeftOrRight",
+     "draws the left or the right vertical rule according to bit 0 of "
+     "(0x601F70)",
+     "0xFEFE59 `bit 0,(0x601f70)` chooses between 0xFEFE61 `calr "
+     "LCD_DrawVRuleRight_Layer1` and 0xFEFE65 `calr LCD_DrawVRuleLeft_Layer1`, "
+     "both already named in this listing, and there is nothing else in the "
+     "routine. Seven callers",
+     "what bit 0 of (0x601F70) selects. Screen_DrawKitCategoryLegend reads the "
+     "same bit and its header records the same gap"),
+]
+
+NAMES10 = ATA_NAMES + OTHER_NAMES
+
+# ---------------------------------------------------------------------------
+# ★ AND THE REFUSALS, which are part of the result.
+# ---------------------------------------------------------------------------
+REFUSALS10 = [
+    ("sub_FC151B",
+     "It is one of a family of 0xFC0000-module handlers that write 0xB0 to "
+     "(XIX), a selector to (XIX+0x02) and (0x20B9) masked by C to (XIX+0x03), "
+     "then post four bytes: 0xFC151B/0xFC15E1/0xFC1679 use selectors 0x07, 0x97 "
+     "and 0x0B with masks 0x7F, 0x07 and 0xFF. 0xB0 invites reading the "
+     "selector as a MIDI controller number and the round REFUSES to, because "
+     "0x97 is 151 and no MIDI controller number exceeds 0x7F. So field +2 is "
+     "not a controller number, notes/FINDINGS-prom_a-msg0716-module.md states "
+     "that no handler's meaning is established, and a name here would claim "
+     "one. The measured fact -- three selectors, three masks, one shared sender "
+     "at 0xFC18CC -- is worth more than the name would be."),
+]
+
+# The four round-8 headers this round corrects, and the sentence that must go.
+STALE10 = "what the two banks selected by bit 3 and bit 4 ARE"
+DEV7E_FIXED = ("bank 0 is the ATA COMMAND BLOCK (registers 0..7) and bank 1 the "
+               "CONTROL BLOCK, whose register 6 takes 0x0C then 0x08 -- reset "
+               "asserted and released -- at 0xFE50E9/0xFE50F5, the only two "
+               "bank-1 writes in prom_a. See `--ata` and this module's header. "
+               "STILL open: what the far side of the port physically is")
+
+
+def apply10():
+    """Round 10: rename, write a header above each, correct the four Dev7E
+    `Unknown:` lines, and insert the module-header section. Comments and labels
+    only -- no byte of assembly is touched."""
+    lines = open(S_A).read().split("\n")
+    # 1. the four corrected round-8 headers, re-emitted from the (edited) table
+    fixed = 0
+    for _o, new, _w, _e, _u in NAMES:
+        if new.startswith("Dev7E_") and _rewrite_round8_header(lines, _o, new):
+            fixed += 1
+    print("  re-emitted %d Dev7E headers with the bank question answered" % fixed)
+    # 2. the module-header section
+    anchor = "; THE RAM BLOCK, 0x605A00-0x605B09."
+    if not any(ATA_SECTION[1] in ln for ln in lines):
+        for i, ln in enumerate(lines):
+            if ln.startswith(anchor):
+                lines[i:i] = ATA_SECTION
+                print("  inserted the round-10 module-header section (%d lines)"
+                      % len(ATA_SECTION))
+                break
+        else:
+            print("  ANCHOR MISSING -- the module header was not extended")
+    text = "\n".join(lines)
+    renamed = []
+    for old, new, _w, _e, _u in NAMES10:
+        if re.search(r'^' + new + r':', text, re.M):
+            continue
+        if not re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  MISSING  %s is not a label in the listing" % old)
+            continue
+        renamed.append((old, new))
+    if renamed:
+        table = dict(renamed)
+        pat = re.compile(r'\b(' + "|".join(re.escape(o) for o, _n in renamed) + r')\b')
+        lines = [pat.sub(lambda m: table[m.group(1)], ln) for ln in lines]
+    MINE = "named by notes/prom_a_census_round8.py (bucket round 10)"
+    keep, i = [], 0
+    while i < len(lines):
+        m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', lines[i])
+        if m and m.group(1) in set(n for _o, n, _w, _e, _u in NAMES10):
+            j = len(keep) - 1
+            while j >= 0 and keep[j].startswith(";"):
+                j -= 1
+            if any(MINE in b for b in keep[j + 1:]):
+                del keep[j + 1:]
+        keep.append(lines[i])
+        i += 1
+    lines = keep
+    out, done = [], set()
+    for ln in lines:
+        m = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):', ln)
+        if m:
+            for old, new, what, ev, unk in NAMES10:
+                if m.group(1) == new and new not in done and (out and out[-1] != RULE):
+                    done.add(new)
+                    out.extend(_header(old, new, what, ev, unk, "round 10"))
+            for old, why in REFUSALS10:
+                if m.group(1) == old and old not in done and (out and out[-1] != RULE):
+                    done.add(old)
+                    out.extend(_refusal_header(old, why))
+        out.append(ln)
+    write_part(S_A_MASTER, "\n".join(out))
+    print("  round 10: renamed %d labels, wrote %d header blocks"
+          % (len(renamed), len(done)))
+
+
+def verify10():
+    text = open(S_A).read()
+    bad = 0
+    for old, new, _w, _e, _u in NAMES10:
+        if not re.search(r'^' + new + r':', text, re.M):
+            print("  MISSING  %s" % new)
+            bad += 1
+        if re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  STALE    %s still defined" % old)
+            bad += 1
+        m = re.search(r'((?:^;.*\n)+)' + new + r':', text, re.M)
+        if m and "NOT NAMED" in m.group(1):
+            print("  CONTRADICTION  a 'NOT NAMED' header sits above %s" % new)
+            bad += 1
+    for old, _why in REFUSALS10:
+        if not re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  REFUSAL LOST  %s" % old)
+            bad += 1
+    flat = re.sub(r'\s+', ' ', re.sub(r'(?m)^;\s*', ' ', text))
+    if re.sub(r'\s+', ' ', STALE10) in flat:
+        print("  CORRECTION STALE  the bank question is still asked as open")
+        bad += 1
+    if re.sub(r'\s+', ' ', DEV7E_FIXED)[:60] not in flat:
+        print("  CORRECTION MISSING  the answered bank sentence is not in the listing")
+        bad += 1
+    if ATA_SECTION[1] not in text:
+        print("  SECTION MISSING  the module header carries no round-10 section")
+        bad += 1
+    print("  round 10: %d names, %d refusals, %d problems"
+          % (len(NAMES10), len(REFUSALS10), bad))
+    return bad
+
+
+def mode_applied10():
+    print("round 10 -- %d names, %d refusal\n" % (len(NAMES10), len(REFUSALS10)))
+    for old, new, what, ev, unk in NAMES10:
+        print("  %-12s -> %s" % (old, new))
+        for c in _wrap(what, 66):
+            print("      %s" % c)
+        first = True
+        for c in _wrap(ev, 64):
+            print("      %s%s" % ("Evidence: " if first else "          ", c))
+            first = False
+        first = True
+        for c in _wrap(unk, 64):
+            print("      %s%s" % ("Unknown:  " if first else "          ", c))
+            first = False
+        print()
+    for old, why in REFUSALS10:
+        print("  %-12s -> REFUSED" % old)
+        for c in _wrap(why, 66):
+            print("      %s" % c)
+
+
+def check10(msg, cond, extra=None):
+    """ROUND 11 FIX: round 10 wrote every one of its checks in the argument order
+    (message, condition[, detail]) while this file's check() has always taken
+    (condition, message) -- `git log -S "def check(msg, cond"` over the file finds
+    no commit where the other order existed.  So selftest10 raised TypeError on its
+    FIRST call and not one round-10 check has ever executed.  This adapter runs
+    them in the order they were written; the checks themselves are unmodified."""
+    check(bool(cond), msg if extra is None else "%s [%s]" % (msg, extra))
+
+
+def selftest10():
+    """Round 10's checks. Every list is tested on its LAST element too."""
+    rows = ata_sites()
+    check10("--ata finds accessor calls with a literal bank and register",
+          len(rows) == 41, len(rows))
+    # the register-9 trap: no row may name a register a 3-bit field cannot hold
+    check10("no row names a register above 7 (the 0xFE5360/0xFE53C2 four-argument "
+          "calls into the sector writer are excluded by the accessor guard)",
+          all(r[3] <= 7 for r in rows), max(r[3] for r in rows))
+    cmds = {}
+    for _l, site, blk, reg, val, _k in rows:
+        if blk == 0 and reg == 7 and val is not None:
+            cmds.setdefault(val, []).append(site)
+    check10("the command register takes exactly seven distinct opcodes",
+          sorted(cmds) == [0x20, 0x30, 0x91, 0x94, 0x95, 0xEC, 0xEF],
+          ["0x%02X" % c for c in sorted(cmds)])
+    check10("0x30 is written at 0xFE4DCE, in Dev7E_WriteOneSector's body",
+          cmds.get(0x30) == [0xFE4DCE], ["0x%06X" % s for s in cmds.get(0x30, [])])
+    check10("0x20 is written at 0xFE4F3A, in Dev7E_ReadOneSector's body",
+          cmds.get(0x20) == [0xFE4F3A])
+    check10("0x94, the LAST opcode in address order, is written once, at 0xFE5498",
+          cmds.get(0x94) == [0xFE5498], ["0x%06X" % s for s in cmds.get(0x94, [])])
+    bank1 = [(s, r, v) for _l, s, b, r, v, _k in rows if b == 1]
+    check10("bank 1 is written exactly twice in all of prom_a, both to register 6, "
+          "with 0x0C then 0x08",
+          bank1 == [(0xFE50E9, 6, 0x0C), (0xFE50F5, 6, 0x08)], bank1)
+    devhead = [(s, v) for _l, s, b, r, v, _k in rows if b == 0 and r == 6]
+    check10("every literal device/head write is 0xA0 or the 0x0E of INITIALIZE "
+          "DEVICE PARAMETERS", sorted(set(v for _s, v in devhead)) == [0x0E, 0xA0],
+          ["0x%02X" % v for _s, v in devhead])
+    # the read/write twins differ in exactly one instruction
+    src = open(S_A).read().split("\n")
+    def _body(lo, hi):
+        out = []
+        for ln in src:
+            m = _ATA_ADDR.search(ln)
+            if m and lo <= int(m.group(1), 16) < hi:
+                out.append(re.sub(r';.*', '', ln).strip())
+        return out
+    w, r = _body(0xFE4E4C, 0xFE4EC1), _body(0xFE4FB2, 0xFE5027)
+    diff = [i for i in range(min(len(w), len(r))) if w[i] != r[i]]
+    check10("the operation-3 and operation-4 arms are %d instructions long and "
+          "differ in exactly one" % len(w),
+          len(w) == len(r) and len(diff) == 1, (len(w), len(r), len(diff)))
+    check10("and the one difference is the `calr` that picks the read or the write "
+          "primitive", diff and "calr" in w[diff[0]], (w[diff[0]] if diff else None,
+                                                       r[diff[0]] if diff else None))
+    # the geometry the module programmes and the geometry it compares agree
+    txt = "\n".join(src)
+    for lit, why in (("0x605d38, 0x0239", "cylinders"), ("0x605d3a, 0x000f", "heads"),
+                     ("0x605d3c, 0x003c", "sectors")):
+        check10("the caller compares %s (%s)" % (lit, why), lit in txt)
+    check10("INITIALIZE DEVICE PARAMETERS' sector operand 0x3C equals the compared "
+          "sector count 0x003C", (0xFE5144, 0x3C) in
+          [(s, v) for _l, s, b, r, v, _k in rows if b == 0 and r == 2])
+    check10("and its device/head operand 0x0E is one less than the compared head "
+          "count 0x000F", 0x0E == 0x0F - 1)
+    # the ring the MIDI injectors write is the RECEIVE ring, not a transmit one
+    check10("0x600C1E is the ring MIDI_RX_DeliverTwo appends to",
+          re.search(r'MIDI_RX_DeliverTwo:(?:.|\n){0,400}?0x00600c1e', txt) is not None)
+    # the three injectors differ only in their two data words
+    b1, b2, b3 = _body(0xFB921C, 0xFB925C), _body(0xFB925C, 0xFB929C), \
+        _body(0xFB929C, 0xFB92DC)
+
+    def _pos_free(s):
+        """ROUND 11 CORRECTION.  Round 10's raw line diff called these three
+        bodies "different in exactly two instructions"; run for the first time
+        it reports SIX and FIVE.  The extra four are not content: three are the
+        `lda_24 xiy,(0xFB92xx)` return-address literals the call sequence pushes
+        (the routine's own address, which must differ between three copies at
+        three addresses) and one is the `jr ule,.LFBxxxx` loop-back label, the
+        same instruction naming the same offset in each body.  The prom_a header
+        at 0xFB925C already says exactly this -- "the low byte of one of the
+        three `lda_24 xiy` return-address literals ... which is position and not
+        content" -- so the HEADER was right and the CHECK was wrong.  Blanking
+        the position-only operands is what makes the header's claim testable."""
+        return re.sub(r'0x[0-9a-f]{4,6}\)', 'ADDR)',
+                      re.sub(r'\.L[0-9A-F]+', 'LOOP', s))
+    n1, n2, n3 = [[_pos_free(x) for x in b] for b in (b1, b2, b3)]
+    d12 = [i for i in range(min(len(n1), len(n2))) if n1[i] != n2[i]]
+    d13 = [i for i in range(min(len(n1), len(n3))) if n1[i] != n3[i]]
+    raw12 = [i for i in range(min(len(b1), len(b2))) if b1[i] != b2[i]]
+    check10("the three MIDI injectors are %d instructions long" % len(b1),
+          len(b1) == len(b2) == len(b3), (len(b1), len(b2), len(b3)))
+    check10("a RAW line diff of them shows six and five differences, NOT the two "
+          "round 10 claimed (that check had never run)",
+          len(raw12) == 6 and len([i for i in range(min(len(b1), len(b3)))
+                                   if b1[i] != b3[i]]) == 5, (len(raw12),))
+    check10("with the three return-address literals and the loop label blanked, "
+          "every surviving difference is a `pushw` of a data word",
+          d12 and d13 and all("pushw" in b1[i] for i in set(d12 + d13)),
+          [b1[i] for i in sorted(set(d12 + d13))])
+    check10("the pairs 1-2 and 1-3 differ in TWO and ONE of them, not two and two: "
+          "the CC/value words are (0x7B,0x00), (0x00,0x40), (0x40,0x00), so "
+          "injectors 1 and 3 share their second word",
+          len(d12) == 2 and len(d13) == 1, (len(d12), len(d13)))
+    pw = [[x for x in b if x.startswith("pushw 0x") and "0x00, " not in x]
+          for b in (b1, b2, b3)]
+    check10("...and that is what the three bodies' pushw pairs literally are",
+          pw == [["pushw 0x7b", "pushw 0x00"], ["pushw 0x00", "pushw 0x40"],
+                 ["pushw 0x40", "pushw 0x00"]], pw)
+    # the refusal's arithmetic
+    check10("the refused family's selector 0x97 is 151, which no MIDI controller "
+          "number can be", 0x97 > 0x7F, 0x97)
+    check10("round 10 proposes %d names and %d refusal" % (len(NAMES10),
+                                                         len(REFUSALS10)),
+          len(NAMES10) == 24 and len(REFUSALS10) == 1)
+
+
+
+# ==========================================================================
+# ROUND 11 -- prom_c receives the names prom_d's lane already derived, and a
+# systematic citation defect in prom_c's own data-table headers is corrected.
+# ==========================================================================
+S_D = os.path.join(ROOT, "prom_d", "wsa1_prom_d.s")
+
+_DIRROW = re.compile(r'^\t\.long\s+0x[0-9A-Fa-f]{8}\s+;\s*\+0x([0-9A-F]{2})\s+(\S+)\s*(.*)$')
+
+
+def tonedb_directory():
+    """prom_d's 48-slot ToneDB directory, as {slot: (label, description)}.
+
+    Parsed from prom_d/wsa1_prom_d.s's own ToneDB_Directory listing rather than
+    retyped here, so a rename on prom_d's side reaches this table.  The tail
+    scalars (+0xC0 upward) are `.short` rows and are added separately, because
+    prom_c reads six of them and they are not pointers."""
+    out, on = {}, False
+    for ln in open(S_D, encoding="utf-8", errors="replace"):
+        if ln.startswith("ToneDB_Directory:"):
+            on = True
+            continue
+        if not on:
+            continue
+        if ln.startswith("; Directory tail"):
+            break
+        m = _DIRROW.match(ln.rstrip("\n"))
+        if m:
+            out[int(m.group(1), 16)] = (m.group(2), m.group(3).strip())
+    for ln in open(S_D, encoding="utf-8", errors="replace"):
+        m = re.match(r'^\t\.short\s+(-?\d+)\s+\t*;\s*\+0x([0-9A-F]{2})\s*(.*)$', ln.rstrip("\n"))
+        if m and int(m.group(2), 16) >= 0xC0:
+            out[int(m.group(2), 16)] = ("(scalar %s)" % m.group(1), m.group(3).strip())
+    return out
+
+
+_LOADBASE = re.compile(r'^ld\s+(X[A-Z]{2}),\((0x00d7ed|0x00d7f1|0x00d80d|0x00d811)\)$')
+_SLOTRD = re.compile(r'^ld\s+(X?[A-Z]{1,3}),\((X[A-Z]{2})\+(0x[0-9a-f]+)\)$')
+_KILLREG = re.compile(r'^(?:ld|lda|add|sub|or|and|mul|ex|pop|ext[sz]|sll|srl|sra|inc|dec)\w*'
+                      r'\s+(X[A-Z]{2})\b')
+_BASENAME = {'0x00d7ed': 'D7ED', '0x00d7f1': 'D7F1', '0x00d80d': 'D80D', '0x00d811': 'D811'}
+
+
+def tonedb_readers():
+    """Every prom_c site that loads one of the four INSTALLED BASE POINTERS and
+    then reads a directory slot through it, as (site, base, slot, routine).
+
+    The four bases are the ones ExtBoard_ProbeAndInstallBases writes:
+    0x00D7ED / 0x00D7F1 are prom_d's base 0x00F00000 and 0x00D80D / 0x00D811 are
+    the expansion board's, so a slot read through EITHER pair indexes the SAME
+    48-slot directory -- which is why a routine that reads slot +0x50 twice, once
+    through each pair, is reading the internal catalogue and the board's.
+
+    ⚠ THIS IS A LOWER BOUND and the rule is stated so it can be criticised: it
+    follows one register from the base load to the slot read and drops the
+    register the moment anything else writes it.  A base parked in a frame slot
+    is invisible to it.  notes/prom_d_documentation_round3.py Q2 runs the same
+    census from the ROM BYTES and byte-verifies each read; --tonedb asserts that
+    every site Q2 finds inside a routine this walk also names."""
+    rows, regs, cur = [], {}, None
+    for ln in open(SRC, encoding="utf-8", errors="replace"):
+        m = LABEL.match(ln)
+        if m:
+            cur = m.group(1)
+            regs = {}
+        a = ADDRC.search(ln)
+        if not a or ln.lstrip().startswith(";"):
+            continue
+        ad, t = int(a.group(1), 16), a.group(2).strip()
+        mb = _LOADBASE.match(t)
+        if mb:
+            regs[mb.group(1)] = _BASENAME[mb.group(2)]
+            continue
+        ms = _SLOTRD.match(t)
+        if ms and ms.group(2) in regs:
+            rows.append((ad, regs[ms.group(2)], int(ms.group(3), 16), cur))
+            regs.pop(ms.group(1), None)
+            continue
+        mk = _KILLREG.match(t)
+        if mk:
+            regs.pop(mk.group(1), None)
+    return rows
+
+
+def tonedb_by_routine():
+    """{routine (outermost label): sorted set of directory slots it reads}."""
+    out = collections.defaultdict(set)
+    for _ad, _b, slot, lab in tonedb_readers():
+        out[lab.split("__")[0]].add(slot)
+    return {k: sorted(v) for k, v in out.items()}
+
+
+# --------------------------------------------------------------------------
+# The names.  EVERY ONE is a prom_c routine whose body prom_d's round-3 lane
+# already decoded instruction by instruction -- the decode is in
+# notes/prom_d_documentation_round3.py --q4 and it PASSES today -- while prom_c
+# still called the routine sub_XXXXXX under a header reading "what the routine
+# is FOR: unknown".  Nothing here is a new inference about the hardware; what is
+# new is that the two images now agree on what these eleven routines are.
+# --------------------------------------------------------------------------
+NAMES11 = [
+ ("sub_FB4124", "ToneDB_ResolveToneRecord",
+  "resolves (bank selector, program) to a TONE RECORD pointer, from prom_d or "
+  "from the expansion board",
+  "prom_d's Q4a decodes the internal arm of this body from the ROM bytes, 15 "
+  "instructions at 0xFB4266-0xFB429F: directory slot +0x04 (ToneDB_ToneNumBanks) "
+  "indexed by row*128 + program as LE16, that value scaled by 4 into slot +0x08 "
+  "(ToneDB_ToneOffsetTable), and the LE32 it finds there added to the base a "
+  "SECOND time (0xFB429F) -- which is also the whole argument for prom_d's "
+  "offsets being file-relative.  The 0x0010-0x001F and 0x0030+ arms run the same "
+  "two-level walk through 0x00D811/0x00D80D, the EXPANSION BOARD's copy of the "
+  "same directory (0xFB418D-0xFB41E7), selected by `ld XBC,(0x00D80D) / or "
+  "XBC,XBC` at 0xFB4137 and 0xFB4184 -- so the board's image has prom_d's "
+  "layout.  Slot +0xB0 (ToneRec_Template_Clear) is the no-board fallback at "
+  "0xFB41F1",
+  "what the caller's second argument SELECTS.  The body compares it against "
+  "0x08, 0x10, 0x20, 0x28 and 0x30 and takes five different paths; the ranges are "
+  "instruction operands and their meaning is not established here"),
+ ("sub_FB4324", "ToneRec_GetElementBlock",
+  "returns the 81-byte ELEMENT BLOCK of a tone record, or the default block at "
+  "directory slot +0xAC when the element index is 0xFF",
+  "prom_d's Q4b decodes 8 instructions at 0xFB4356-0xFB4379: `ld C,0x51` (81, "
+  "the element-block stride) multiplied by the element index, plus 0x000000D9 "
+  "(217, the record head) added to the record pointer at (XIZ+0x08).  The other "
+  "arm, reached by `cp A,0xFF / jr NZ` at 0xFB4351, takes directory slot +0xAC "
+  "(ToneDB_DefaultLayerParams) instead, which is what makes that slot a FALLBACK.  "
+  "217 + 81*N + 43*N is exactly prom_d's melodic record size for N = 1..4",
+  "nothing here says what any field of the element block IS"),
+ ("sub_FB48F7", "DrumKit_ResolveInstrumentRecord",
+  "resolves (kit, note) to a 150-byte DRUM-INSTRUMENT RECORD",
+  "prom_d's Q4d decodes 9 instructions at 0xFB48FE-0xFB495A: directory slot "
+  "+0x74 (DrumKit_NoteMapA) indexed by kit*128 + note as LE16, and the index it "
+  "yields multiplied by the tail scalar at +0xEE (150) into slot +0x78 "
+  "(PercInst_000_Silent, the record array).  prom_d's own geometry confirms the "
+  "stride independently: 0x2EF5C + 504*150 = 0x416AC, which is exactly the next "
+  "slot, +0x20",
+  "what a drum-instrument record's 150 bytes contain"),
+ ("sub_FC295B", "DrawbarPreset_GetDescriptor",
+  "returns one 14-byte descriptor of the drawbar-preset table at directory slot "
+  "+0x70",
+  "prom_d's Q4e decodes 6 instructions at 0xFC2990-0xFC29A5: slot +0x70 "
+  "(DrawbarPreset_EnvDescTable) with the tail scalar at +0xEC (14) used AS A "
+  "MULTIPLIER (`mul XBC,HL` at 0xFC299F) -- the only place in prom_c where +0xEC "
+  "is a stride rather than a datum.  14 is what "
+  "notes/prom_d_structures_round2.py derived for that array from the "
+  "descriptors' own 32-bit offsets, without looking at prom_c",
+  "what a descriptor's 14 bytes mean"),
+ ("sub_FA72E9", "Voice_GetOctaveShift",
+  "returns a part's whole-octave pitch offset, in 8.8 semitones",
+  "its ONE caller is Voice_ComputePitch (0xFA7F7A).  With bit 0 of (0x14FF) set "
+  "it reads directory slot +0x6C (ToneDB_BankMap) at the part record's byte +28 "
+  "(0xFA7311 `add IY,0x001C` then 0xFA7317 `ld C,(XIY+0x1523)`), uses the row "
+  "number that returns as a 128-entry stride into slot +0xA8 "
+  "(ToneDB_OctaveShiftByProgram, 0xFA7332 and 0xFA7351 `sll 0x07,BC`) indexed by "
+  "the part record's byte +27 (0xFA733B / 0xFA7341), and returns that byte "
+  "shifted left 8 (0xFA735F).  prom_d's table holds only 0x00, 0xF4 and 0x0C -- "
+  "0, -12 and +12 -- so the shift makes the result semitones in 8.8.  The third "
+  "arm (0xFA7372) reads Instrument_OctaveShift_Semitones at 0xFDF22A, whose "
+  "sixteen bytes ARE 12*k for k = -8..+7, sign-extends and shifts by the same 8: "
+  "two independent tables, one unit.  ★ This also confirms from the CONSUMER "
+  "side what prom_d's own note left open -- that the byte at voice record +27 is "
+  "a program number and +28 a bank selector",
+  "what bit 0 and bit 1 of (0x14FF) select between the three arms"),
+ ("sub_FB90B3", "ToneDB_SourceNameList1_SelectEntry",
+  "applies one entry of ToneDB_SourceNameList1 to a part element, spanning the "
+  "internal catalogue and the expansion board's",
+  "prom_d's Q4c byte-checks the bound: 0xFB90BD loads directory slot +0x54 "
+  "(ToneDB_SourceList1_Footer), 0xFB90D0 reads its leading LE16, 0xFB90D2 "
+  "compares the caller's entry index against it and only then does 0xFB90D7 "
+  "address slot +0x50 (ToneDB_SourceNameList1) -- and that LE16 is 307, which IS "
+  "the catalogue's row count measured from prom_d's image.  When the index is at "
+  "or above the count the routine takes the board's copy of slot +0x50 through "
+  "0x00D811/0x00D80D and SUBTRACTS the internal count (0xFB90FF), so the two "
+  "catalogues are one index space.  It then reads bytes 14 and 15 of the 16-byte "
+  "row (0xFB911A, 0xFB912E) and stores them at +0x02 and +0x03 of the part "
+  "element record at 0x1523 + 0x012C*part + 0x29*element + 0x88",
+  "what row bytes 14 and 15 ARE.  The rows' first 13 bytes are the ASCII name; "
+  "nothing in either image gives the last two a meaning"),
+ ("sub_FB9281", "ToneDB_SourceNameList2_SelectEntry",
+  "the same, for ToneDB_SourceNameList2",
+  "prom_d's Q4c: 0xFB928D loads slot +0x68 (ToneDB_SourceList2_Footer), 0xFB92A0 "
+  "reads its LE16, 0xFB92A2 compares, 0xFB92A7 addresses slot +0x64 "
+  "(ToneDB_SourceNameList2); the count is 314 and that IS list 2's measured row "
+  "count.  The board arm at 0xFB92B7 and the subtraction at 0xFB92CF are the same "
+  "two instructions as list 1's.  It differs from list 1 in taking a SECOND "
+  "index out of the caller's high nibble (0xFB92DE `and A,0xF0` / 0xFB92E1 `srl "
+  "0x04,A`) and using it to pick the pair of bytes it writes",
+  "what the high nibble selects, and what the row's trailing bytes are"),
+ ("sub_FB9541", "ToneDB_DrumSourceNameList_SelectEntry",
+  "the same bounded lookup on ToneDB_DrumSourceNameList, applied to a "
+  "DRUM-INSTRUMENT record rather than a part element",
+  "prom_d's Q4c: 0xFB9568 loads slot +0x84 (ToneDB_DrumList_Footer), 0xFB957D "
+  "reads its LE16, 0xFB957F compares, 0xFB9584 addresses slot +0x80 "
+  "(ToneDB_DrumSourceNameList); the count is 503, the measured row count.  Its "
+  "destination is NOT the part record: 0xFB9547 reads (0x00D735) and 0xFB954F "
+  "multiplies it by 0x96 = 150 -- the drum-instrument record stride prom_d's "
+  "+0xEE names -- into the RAM array at 0x87D2 + 0x461",
+  "what the two bytes it stores are, and what (0x00D735) counts"),
+ ("sub_FB978B", "ToneDB_PercSourceNameList1_SelectEntry",
+  "the same, for ToneDB_PercSourceNameList1",
+  "prom_d's Q4c: 0xFB979D loads slot +0x90 (ToneDB_PercList1_Footer), 0xFB97B2 "
+  "reads its LE16, 0xFB97B4 compares, 0xFB97B9 addresses slot +0x8C "
+  "(ToneDB_PercSourceNameList1); the count is 208, the measured row count, and "
+  "the board arm at 0xFB97CB is the same shape as list 1's",
+  "what the row's trailing bytes are"),
+ ("sub_FB994E", "ToneDB_PercSourceNameList2_SelectEntry",
+  "the same, for ToneDB_PercSourceNameList2",
+  "prom_d's Q4c: 0xFB9961 loads slot +0x98 (ToneDB_PercList2_Footer), 0xFB9976 "
+  "reads its LE16, 0xFB9978 compares, 0xFB997D addresses slot +0x94 "
+  "(ToneDB_PercSourceNameList2); the count is 161, the measured row count",
+  "what the row's trailing bytes are"),
+ ("sub_FC1555", "ToneDB_PercSourceIndexMapB_Lookup",
+  "maps (row, column) through ToneDB_PercSourceIndexMapB to a row of "
+  "ToneDB_PercSourceNameList1",
+  "prom_d's Q4g decodes 16 instructions at 0xFC1568-0xFC1648: directory slot "
+  "+0x4C (ToneDB_PercSourceIndexMapB) indexed by row*128 + column as LE16, "
+  "0xFFFF tested as NO ENTRY (0xFC1589), and the value used at 0xFC1642 as a "
+  "row number into slot +0x8C (ToneDB_PercSourceNameList1) with `ld BC,0x0010` "
+  "-- 16, the catalogue row stride -- as the multiplier.  That chain is what "
+  "establishes, for every index map in prom_d, that a map value is a CATALOGUE "
+  "ROW NUMBER and not an offset",
+  "what the map's row and column ARE"),
+]
+
+# --------------------------------------------------------------------------
+# The refusals.  Each is a routine the same census reaches -- it reads the same
+# directory -- where the slot set alone does NOT decide what the routine does.
+# --------------------------------------------------------------------------
+REFUSALS11 = [
+ ("sub_FC164D", "reads the same three slots as ToneDB_PercSourceIndexMapB_Lookup "
+                "(+0x4C, +0x8C, +0x90) but is a different body -- 63 of its first "
+                "64 instructions differ once addresses are blanked -- and nothing "
+                "in this pass says which of the two roles is which."),
+ ("sub_FC12ED", "reads the same three slots as sub_FC10E0 (+0x7C, +0x80, +0x84), "
+                "same objection."),
+ ("sub_FB43CB", "reads slot +0xAC like ToneRec_GetElementBlock but is 82 "
+                "instructions to its 37 and shares none of the arithmetic; a name "
+                "borrowed from the slot would claim a twin the diff denies."),
+ ("sub_FBC80E", "reads slot +0x40, which prom_d records as an ALIAS of +0x3C, and "
+                "the tail scalar +0xF0, which prom_d explicitly does NOT claim as a "
+                "stride.  Naming it from an alias would name it twice over."),
+]
+
+_GENERIC_UNK = ("; Unknown:  what the routine is FOR.  Nothing here reads the "
+                "meaning of a field,")
+_GENERIC_UNK2 = ";          so the name is an address."
+
+
+def _c_wrap(s, w):
+    out, line = [], ""
+    for word in s.split():
+        if line and len(line) + 1 + len(word) > w:
+            out.append(line)
+            line = word
+        else:
+            line = (line + " " + word).strip()
+    if line:
+        out.append(line)
+    return out
+
+
+def _c_block(what, ev, unk, tag):
+    b = []
+    for i, c in enumerate(_c_wrap(what, 64)):
+        b.append("; %s%s" % ("Name:     " if i == 0 else "          ", c))
+    for i, c in enumerate(_c_wrap(ev, 64)):
+        b.append("; %s%s" % ("Evidence: " if i == 0 else "          ", c))
+    for i, c in enumerate(_c_wrap(unk, 64)):
+        b.append("; %s%s" % ("Unknown:  " if i == 0 else "          ", c))
+    b.append("; Named:   ROUND 11, by %s -- it was `%s`." % (tag[1], tag[0]))
+    return b
+
+
+def citation_defects():
+    """Every `Referenc...` citation in prom_c that names a byte INSIDE an
+    instruction, with the instruction start it should name and a check that the
+    correction is right rather than merely two bytes lower.
+
+    THE CHECK IS THE POINT.  Each row is accepted only if the instruction at the
+    corrected address literally carries, as an operand, the ADDRESS OF THE TABLE
+    whose header the citation sits in.  A blind `- 2` would pass on a wrong
+    address; this does not.  Returns (line, cited, corrected, table, table_addr,
+    instruction_text)."""
+    src = open(SRC, encoding="utf-8", errors="replace").read().split("\n")
+    text, order = {}, []
+    for ln in src:
+        if ln.lstrip().startswith(";"):
+            continue
+        m = ADDRC.search(ln)
+        if m:
+            a = int(m.group(1), 16)
+            text[a] = m.group(2).strip()
+            order.append(a)
+    order = sorted(set(order))
+    interior = {}
+    for a, b in zip(order, order[1:]):
+        if 0 < b - a <= 8:
+            for k in range(1, b - a):
+                interior[a + k] = a
+    hdr = re.compile(r'^;\s*([A-Za-z_][A-Za-z0-9_]*)\s+--\s+0x([0-9A-F]{6})\.\.0x([0-9A-F]{6})')
+    own, rows = None, []
+    for i, ln in enumerate(src):
+        h = hdr.match(ln)
+        if h:
+            own = (h.group(1), int(h.group(2), 16))
+        if not ln.strip().startswith(";") or "Referenc" not in ln:
+            continue
+        for m in re.finditer(r'0x([0-9A-Fa-f]{6})\b', ln):
+            a = int(m.group(1), 16)
+            if a not in interior or own is None:
+                continue
+            st = interior[a]
+            if ("%06x" % (own[1] & 0xFFFFFF)) not in text[st].lower():
+                continue
+            rows.append((i + 1, a, st, own[0], own[1], text[st]))
+    return rows
+
+
+def apply11():
+    """Rename, rewrite the eleven headers, record the four refusals, and correct
+    every citation `citation_defects()` accepts -- in prom_c/wsa1_prom_c.s AND in
+    notes/gen_prom_c_tables.py, which is where the wrong text is authored."""
+    cites = citation_defects()
+    pairs = sorted(set(("0x%06X" % c[1], "0x%06X" % c[2]) for c in cites))
+    n_c = 0
+    # ⚠ SRC_MASTER, not SRC: SRC is the EXPANSION (a derived cache file) since
+    # the migration, and writing citations into it would correct nothing.
+    for path in (SRC_MASTER, os.path.join(ROOT, "notes", "gen_prom_c_tables.py")):
+        lines = open(path, encoding="utf-8", errors="replace").read().split("\n")
+        for i, ln in enumerate(lines):
+            if "Referenc" not in ln:
+                continue
+            new = ln
+            for old, corr in pairs:
+                if old in new:
+                    new = new.replace(old, corr)
+            if new != ln:
+                lines[i] = new
+                n_c += 1
+        write_part(path, "\n".join(lines))
+    print("  citations: %d defects, %d lines rewritten across the listing and the "
+          "generator" % (len(cites), n_c))
+
+    text = open(SRC, encoding="utf-8", errors="replace").read()
+    todo = [(o, n) for o, n, _w, _e, _u in NAMES11
+            if re.search(r'^' + re.escape(o) + r':', text, re.M)]
+    if todo:
+        table = dict(todo)
+        pat = re.compile(r'(?<![A-Za-z0-9_])(' +
+                         "|".join(re.escape(o) for o, _n in todo) + r')(?![0-9A-Za-z])')
+        text = pat.sub(lambda m: table[m.group(1)], text)
+    lines = text.split("\n")
+    tagged = 0
+    for old, new, what, ev, unk in NAMES11:
+        try:
+            j = next(k for k, l in enumerate(lines) if l.startswith(new + ":"))
+        except StopIteration:
+            print("  MISSING  %s" % new)
+            continue
+        i = j - 1
+        while i >= 0 and lines[i].startswith(";"):
+            i -= 1
+        block = range(i + 1, j)
+        if any("ROUND 11" in lines[k] for k in block):
+            continue
+        u = [k for k in block if lines[k].startswith(_GENERIC_UNK)]
+        if not u:
+            print("  NO GENERIC PARAGRAPH in %s -- header left alone" % new)
+            continue
+        k = u[0]
+        end = k + 1
+        if end < j and lines[end].startswith(_GENERIC_UNK2):
+            end += 1
+        lines[k:end] = _c_block(what, ev, unk, (old, "notes/prom_c_inventory_round8.py"))
+        tagged += 1
+    text = "\n".join(lines)
+    lines = text.split("\n")
+    ref = 0
+    for old, why in REFUSALS11:
+        try:
+            j = next(k for k, l in enumerate(lines) if l.startswith(old + ":"))
+        except StopIteration:
+            print("  MISSING refusal target %s" % old)
+            continue
+        i = j - 1
+        while i >= 0 and lines[i].startswith(";"):
+            i -= 1
+        if any("REFUSED round 11" in lines[k] for k in range(i + 1, j)):
+            continue
+        blk = []
+        for n, c in enumerate(_c_wrap(why, 64)):
+            blk.append("; %s%s" % ("Refused:  REFUSED round 11.  " if n == 0
+                                   else "          ", c))
+        lines[j - 1:j - 1] = blk
+        ref += 1
+    write_part(SRC_MASTER, "\n".join(lines))
+    print("  round 11: renamed %d labels, rewrote %d headers, recorded %d refusals"
+          % (len(todo), tagged, ref))
+
+
+def verify11():
+    text = open(SRC, encoding="utf-8", errors="replace").read()
+    bad = 0
+    for old, new, _w, _e, _u in NAMES11:
+        if not re.search(r'^' + new + r':', text, re.M):
+            print("  MISSING  %s" % new)
+            bad += 1
+        if re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  STALE    %s still defined" % old)
+            bad += 1
+        m = re.search(r'((?:^;.*\n)+)' + new + r':', text, re.M)
+        if m and _GENERIC_UNK in m.group(1):
+            print("  CONTRADICTION  %s still carries the generic Unknown" % new)
+            bad += 1
+    _r12 = dict((o, n) for o, n, _w, _e, _u in NAMES12)
+    for old, _why in REFUSALS11:
+        cur = _r12.get(old, old)
+        m = re.search(r'((?:^;.*\n)+)' + re.escape(cur) + r':', text, re.M)
+        if not m or not ("REFUSED round 11" in m.group(1)
+                         or "ROUND 11 DECLINED" in m.group(1)):
+            print("  REFUSAL LOST  %s" % cur)
+            bad += 1
+    if citation_defects():
+        print("  CITATIONS  %d still name a byte inside an instruction"
+              % len(citation_defects()))
+        bad += 1
+    print("  round 11: %d names, %d refusals, %d problems"
+          % (len(NAMES11), len(REFUSALS11), bad))
+    return bad
+
+
+def mode_tonedb():
+    d = tonedb_directory()
+    by = tonedb_by_routine()
+    named = dict((o, n) for o, n, _w, _e, _u in NAMES11)
+    ref = dict(REFUSALS11)
+    print("=== 10. prom_c's READERS OF prom_d's TONE-DATABASE DIRECTORY ===\n")
+    print("  prom_d's 48-slot directory is the ONE object both images address, and")
+    print("  prom_d's source names every slot.  A prom_c routine that reads a slot")
+    print("  is therefore reading something with a name, and that is a naming")
+    print("  mechanism -- 'from what it points at' -- that no prom_c round had run.\n")
+    rows = tonedb_readers()
+    print("  %d slot reads, %d distinct slots, %d routines\n"
+          % (len(rows), len(set(r[2] for r in rows)), len(by)))
+    for lab in sorted(by):
+        cur = named.get(lab)
+        mark = "NAMED   " if cur else ("REFUSED " if lab in ref else "        ")
+        print("  %s %-34s %s" % (mark, cur or lab,
+                                 " ".join("+0x%02X" % s for s in by[lab])))
+        for s in by[lab]:
+            nm, desc = d.get(s, ("?", ""))
+            print("            +0x%02X  %-30s %s" % (s, nm, desc[:40]))
+    print("\n  ★ EVERY routine in this table was `sub_XXXXXX` when the round began,")
+    print("  and %d of them are decoded instruction by instruction in prom_d's own"
+          % len(NAMES11))
+    print("  committed script (notes/prom_d_documentation_round3.py --q4, which")
+    print("  PASSES today).  The knowledge was in the tree; prom_c had not received")
+    print("  it.  The other %d are left as they were, with a stated reason."
+          % (len(by) - len(NAMES11)))
+
+
+def mode_cites():
+    rows = citation_defects()
+    print("=== 11. THE CITATION DEFECT IN prom_c's DATA-TABLE HEADERS ===\n")
+    print("  This tree's error list already carries '~20 call sites cited one byte")
+    print("  past the instruction, systematically' and '31 citations one byte past")
+    print("  the instruction'.  Here is the third instance, in prom_c's own")
+    print("  data-table zone: %d citations that name the ADDRESS OF THE OPERAND"
+          % len(rows))
+    print("  instead of the address of the instruction that carries it.\n")
+    if not rows:
+        print("  none -- the defect is corrected (this mode is the check).")
+        return
+    for ln, cited, corr, tab, ta, t in rows:
+        print("  line %6d  cited 0x%06X -> instruction 0x%06X (+%d)  `%s`"
+              % (ln, cited, corr, cited - corr, t))
+        print("              header of %s (0x%06X), which that instruction names"
+              % (tab, ta))
+
+
+def _routine_body(name):
+    """The canonical disassembly text of every instruction of one routine, from
+    the label to the next `; ----` rule."""
+    src = open(SRC, encoding="utf-8", errors="replace").read().split("\n")
+    i = next(k for k, l in enumerate(src) if l.startswith(name + ":"))
+    out = []
+    for ln in src[i:]:
+        if re.match(r'^; -----', ln):
+            break
+        a = ADDRC.search(ln)
+        if a and not ln.lstrip().startswith(";"):
+            out.append(a.group(2).strip())
+    return out
+
+
+def sibling_diff(a, b):
+    """(len(a), len(b), differing positions) with every hex address operand
+    blanked, so only the SHAPE is compared.
+
+    ⚠ It is a POSITION-WISE comparison, and one inserted instruction shifts
+    everything after it.  That is why the round-11 refusals quote it as evidence
+    that two bodies are NOT the same routine and never as a similarity score: a
+    high difference count is conclusive against a twin, a low one would prove
+    nothing on its own."""
+    A, B = _routine_body(a), _routine_body(b)
+    def n(x):
+        return [re.sub(r'0x[0-9a-f]{4,6}', 'A', s) for s in x]
+    na, nb = n(A), n(B)
+    d = sum(1 for i in range(min(len(na), len(nb))) if na[i] != nb[i])
+    return len(A), len(B), d
+
+
+
+def _extents(path):
+    """{top-level label: (start, end)} from the source's own address comments.
+    A label containing `__` is an interior branch target and is not a boundary."""
+    lab = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
+    ents, pend = [], []
+    for ln in open(path, encoding="utf-8", errors="replace"):
+        m = lab.match(ln)
+        if m:
+            pend.append(m.group(1))
+            continue
+        a = ADDRC.search(ln)
+        if a and pend and not ln.lstrip().startswith(";"):
+            ad = int(a.group(1), 16)
+            for n in pend:
+                ents.append((ad, n))
+            pend = []
+    tops = sorted(set((a, n) for a, n in ents if "__" not in n))
+    out = {}
+    for i, (a, n) in enumerate(tops):
+        j = i + 1
+        while j < len(tops) and tops[j][0] == a:
+            j += 1
+        out[n] = (a, tops[j][0] if j < len(tops) else None)
+    return out
+
+
+def twin_sweep():
+    """Is prom_a's 'same machine, same compiler' name pool a lever for prom_c's
+    remaining sub_XXXXXX?  Every prom_c sub_XXXXXX with a derivable extent is
+    compared, byte for byte, against EVERY content-named prom_a routine of the
+    SAME LENGTH; the best match and its differing count are reported.
+
+    THE ANSWER IS NO, and that is the deliverable.  Round 7's TWIN mechanism swept
+    prom_c against itself; nobody had swept it against prom_a's 1,100 named
+    routines.  Returns (n_subs, n_named, rows) with rows = the matches within a
+    tolerance of max(2, len/12) differing bytes."""
+    A = _extents(os.path.join(ROOT, "prom_a", "wsa1_prom_a.s"))
+    C = _extents(SRC)
+    da = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
+    dc = open(ROM, "rb").read()
+    framed = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*_(?:[0-9A-Fa-f]{4,6}|[0-9]{1,4})$')
+    subs = [(n, a, e) for n, (a, e) in C.items()
+            if UNNAMED.match(n) and e and 8 <= e - a <= 4096]
+    named = [(n, a, e) for n, (a, e) in A.items()
+             if not UNNAMED.match(n) and not framed.match(n) and e and 8 <= e - a <= 4096]
+    bylen = collections.defaultdict(list)
+    for n, a, e in named:
+        bylen[e - a].append((n, a, e))
+    rows = []
+    for n, a, e in subs:
+        L = e - a
+        cb = dc[a - BASE:e - BASE]
+        best = None
+        for m, aa, ee in bylen.get(L, []):
+            ab = da[aa - BASE:ee - BASE]
+            d = sum(1 for x, y in zip(cb, ab) if x != y)
+            if best is None or d < best[0]:
+                best = (d, m, aa)
+        if best and best[0] <= max(2, L // 12):
+            rows.append((best[0], L, n, a, best[1], best[2]))
+    rows.sort()
+    return len(subs), len(named), rows
+
+
+def mode_twins11():
+    ns, nn, rows = twin_sweep()
+    print("=== 12. THE prom_a TWIN LEVER, MEASURED AND DECLINED ===\n")
+    print("  %d prom_c sub_XXXXXX with a derivable extent against %d content-named"
+          % (ns, nn))
+    print("  prom_a routines, every same-length pair compared byte for byte.\n")
+    for d, L, n, a, m, aa in rows:
+        print("    %3d of %4d bytes differ   %s @0x%06X  <-  prom_a %s @0x%06X"
+              % (d, L, n, a, m, aa))
+    print("\n  %d candidates, and NEITHER IS A NAME.  Both are 14-byte bodies of the"
+          % len(rows))
+    print("  shape `link / store the argument at an absolute address / ret`, which is")
+    print("  prom_a's Var<addr>_Set pattern -- and the address stored is the ONLY")
+    print("  thing that distinguishes one from another, so the match says the two")
+    print("  routines have the same SHAPE and nothing about what either stores.")
+    print("  prom_c and prom_a really do share a kernel (36 routine pairs, 35")
+    print("  structurally identical -- notes/prom_c_prom_a_routine_diff.py), but that")
+    print("  sharing is already spent: it is in the routines prom_c has NAMED.  For")
+    print("  the 398 that are left the lever measures ZERO, and this is the section")
+    print("  that says so instead of a later round re-discovering it.")
+
+
+def prose_depth():
+    """(comment lines, blank lines) in prom_c's listing.  The pair is the point:
+    this wave published a '+35 headers' gain that was 35 REMOVED BLANK LINES, so a
+    prose claim here is quoted with the blank count as its control."""
+    c = b = 0
+    for ln in open(SRC, encoding="utf-8", errors="replace"):
+        s = ln.strip()
+        if s.startswith(";"):
+            c += 1
+        elif not s:
+            b += 1
+    return c, b
+
+def selftest11():
+    d = tonedb_directory()
+    check(len(d) >= 48, "prom_d's directory parses to at least 48 slots (%d)" % len(d))
+    check(d.get(0x08, ("", ""))[0] == "ToneDB_ToneOffsetTable",
+          "slot +0x08 is ToneDB_ToneOffsetTable, parsed not retyped")
+    check(d.get(0xB4, ("", ""))[0] == "PercInst_Template_Silent",
+          "...and the LAST pointer slot, +0xB4, is PercInst_Template_Silent")
+    rows = tonedb_readers()
+    by = tonedb_by_routine()
+    check(len(rows) >= 100, "the slot census finds at least 100 reads (%d)" % len(rows))
+    check(len(by) == 35, "over exactly 35 routines (%d)" % len(by))
+    q2 = {0xFB90D7: "+0x50", 0xFB4288: "+0x08", 0xFC299A: "+0xEC"}
+    got = dict((a, "+0x%02X" % s) for a, _b, s, _l in rows)
+    for a, s in q2.items():
+        check(got.get(a) == s,
+              "site 0x%06X reads %s, the same slot prom_d's Q2 reports" % (a, s))
+    check(got.get(0xFC299A) == "+0xEC",
+          "...including Q2's LAST site, 0xFC299A")
+    names = set(n for _o, n, _w, _e, _u in NAMES11)
+    check(len(names) == len(NAMES11), "no two round-11 names collide")
+    text = open(SRC, encoding="utf-8", errors="replace").read()
+    for _o, n, _w, _e, _u in NAMES11:
+        check(re.search(r'^' + n + r':', text, re.M) is not None,
+              "%s is a label in the listing" % n)
+    check(re.search(r'^ToneDB_PercSourceIndexMapB_Lookup:', text, re.M) is not None,
+          "...checked on the LAST of the eleven as well as the first")
+    for _o, n, _w, _e, _u in NAMES11:
+        m = re.search(r'((?:^;.*\n)+)' + n + r':', text, re.M)
+        check(m is not None and "Evidence:" in m.group(1),
+              "%s carries an Evidence: line" % n)
+    # ⚠ ROUND 12 NAMED TWO OF THESE FOUR, so the label the refusal sits under
+    # moved.  The check follows the rename instead of pinning the old spelling,
+    # and it accepts the SUPERSEDED form -- a refusal that a later round lifted
+    # is still a refusal that was recorded, and hiding it would erase the step
+    # that made the question answerable.
+    _r12 = dict((o, n) for o, n, _w, _e, _u in NAMES12)
+    for old, _why in REFUSALS11:
+        cur = _r12.get(old, old)
+        m = re.search(r'((?:^;.*\n)+)' + re.escape(cur) + r':', text, re.M)
+        ok = m is not None and ("REFUSED round 11" in m.group(1)
+                                or "ROUND 11 DECLINED" in m.group(1))
+        check(ok, "%s carries its round-11 refusal%s"
+                  % (cur, ", superseded in round 12" if old in _r12 else ""))
+    # ⚠ THESE TWO ROUTINES WERE RENAMED IN ROUND 12, and the arithmetic that
+    # justified refusing them is still true and still checked -- under the names
+    # they now carry.  The refusal was not wrong; it was answered.
+    n164D = _r12.get("sub_FC164D", "sub_FC164D")
+    n12ED = _r12.get("sub_FC12ED", "sub_FC12ED")
+    n10E0 = _r12.get("sub_FC10E0", "sub_FC10E0")
+    la, lb, d = sibling_diff("ToneDB_PercSourceIndexMapB_Lookup", n164D)
+    check(d == 63 and min(la, lb) == 64,
+          "the round-11 %s refusal's arithmetic still holds: %d of its first %d "
+          "instructions differ from the routine it shares three slots with"
+          % (n164D, d, min(la, lb)))
+    la, lb, d = sibling_diff(n10E0, n12ED)
+    check(d == 63 and min(la, lb) == 64,
+          "...and the %s one's, %d of %d" % (n12ED, d, min(la, lb)))
+    la, lb, _d = sibling_diff("ToneRec_GetElementBlock", "sub_FB43CB")
+    check((la, lb) == (37, 82),
+          "the sub_FB43CB refusal's counts: %d instructions against %d" % (la, lb))
+    dirslots = tonedb_directory()
+    check("alias of +0x3C" in dirslots.get(0x40, ("", ""))[1],
+          "the sub_FBC80E refusal rests on prom_d's own word: slot +0x40 is "
+          "recorded there as an alias of +0x3C")
+    check(dirslots.get(0x40, ("", ""))[0] == dirslots.get(0x3C, ("", ""))[0],
+          "...and both slots carry the same label, ToneDB_WaveSelTailPresets")
+    ns, nn, tw = twin_sweep()
+    # ⚠ RE-BASED IN ROUND 12, and the reason matters more than the number.
+    # Round 11 pinned `ns >= 390`: the count of prom_c sub_XXXXXX with a
+    # derivable extent ON THE DAY.  Every later round that NAMES one lowers it,
+    # so the pin turns red exactly when the tree improves, and a check that fails
+    # on success is worse than no check.  What round 11 established is that the
+    # sweep is EXHAUSTIVE, not that it saw 393 routines.  Round 11: 393 prom_c
+    # and 1,125 prom_a; the live pair is printed on the line below.
+    check(ns >= 300 and nn >= 1000,
+          "the prom_a twin sweep runs over %d prom_c sub_XXXXXX and %d prom_a "
+          "content names (round 11 saw 393 and 1,125; both move as lanes name)"
+          % (ns, nn))
+    check(len(tw) == 2 and all(r[1] == 14 for r in tw),
+          "and it finds %d candidates, both 14 bytes -- no name is taken from it"
+          % len(tw))
+    check(tw and tw[-1][2] == "sub_FADC3E",
+          "...and the LAST of the two is sub_FADC3E, checked as well as the first")
+    cl, bl = prose_depth()
+    check(bl == 712,
+          "prom_c's BLANK-line count is %d, the SAME as the 712 measured on the "
+          "pre-round listing -- the control on the prose claim, because this "
+          "wave once counted removed blank lines as new headers" % bl)
+    # ⚠ RE-BASED IN ROUND 12 for the same reason: an exact comment-line pin
+    # measures how much prose the whole image carries, which every round changes.
+    # The BLANK-line control above is the one that must stay EXACT, because the
+    # mistake it guards -- counting removed blank lines as new headers -- shows
+    # up as blank lines FALLING, and that is still asserted to the byte.
+    check(cl >= 26357,
+          "and its comment lines are %d, at or above the 26,357 round 11 left "
+          "(itself up 151 from 26,206 before that round)" % cl)
+    check(len(citation_defects()) == 0,
+          "no citation in prom_c names a byte inside an instruction any more")
+    pd = open(os.path.join(ROOT, "notes", "gen_prom_c_tables.py"),
+              encoding="utf-8", errors="replace").read()
+    check("Referenced from 0xFA737C." in pd,
+          "the GENERATOR carries the corrected citation too, so a regeneration "
+          "cannot put the defect back")
+    check("Referenced from 0xFA737E." not in pd,
+          "...and the wrong one is gone from it")
+    # ⚠ and the honest limit on that claim
+    gen = subprocess.run([sys.executable,
+                          os.path.join(ROOT, "notes", "gen_prom_c_tables.py")],
+                         capture_output=True, text=True).stdout.rstrip("\n")
+    listing = open(SRC, encoding="utf-8", errors="replace").read()
+    check(gen not in listing,
+          "⚠ STATED, NOT FIXED: the generator's output no longer reproduces the "
+          "zone in the listing -- prose was hand-added to the .s after round 3 "
+          "and never went back into the generator, so 'regenerate' would LOSE "
+          "text.  The citation fix is in BOTH files; the drift is older and "
+          "wider than this round and is reported, not silently repaired")
+
+# ==========================================================================
+# ROUND 12 (2026-08-30) -- THE LINK REPLY PACKET, AND THE TONE-QUERY SERVER
+#
+#   python3 notes/prom_c_inventory_round8.py --reply    # 13: the reply packet
+#   python3 notes/prom_c_inventory_round8.py --arms12   # 14: the 23 arms
+#   python3 notes/prom_c_inventory_round8.py --rows12   # 15: the catalogue row
+#   python3 notes/prom_c_inventory_round8.py --apply12  #     apply (idempotent)
+#   python3 notes/prom_c_inventory_round8.py --verify12
+#
+# WHAT THE ROUND FOUND, in one sentence: prom_c answers CPU 1 out of ONE buffer
+# at RAM 0x00D945, whose first 6 bytes are the request's own first 6 bytes
+# copied back and whose payload starts at 0x00D94B -- and that single fact turns
+# a block of "what the routine is FOR: unknown" stubs into REPLY BUILDERS whose
+# job is exactly the thing they put in the payload.
+# ==========================================================================
+REPLY_BUF = 0x00D945
+REPLY_HDR = 6
+LINK_SEND = 0xF98B20          # Link_SendBuffer, named at prom_c.s line ~11883
+ARM_TABLE = 0xFC1F4D
+
+_X12 = {}
+
+
+def code12():
+    """{addr: text}, {addr: enclosing top-level label}, sorted addresses.
+
+    Only NON-comment lines that carry an `; AAAAAA text` address comment are
+    read, i.e. the byte-identical round-trip of the ROM.  A header line that
+    quotes an address is skipped, which is why this does not reuse load()."""
+    if _X12:
+        return _X12
+    dis, enc, cur = {}, {}, None
+    for ln in open(SRC, encoding="utf-8", errors="replace"):
+        m = LABEL.match(ln)
+        if m and not INTERNAL.match(m.group(1)):
+            cur = m.group(1)
+        a = ADDRC.search(ln)
+        if a and not ln.lstrip().startswith(";"):
+            ad = int(a.group(1), 16)
+            dis[ad], enc[ad] = a.group(2).strip(), cur
+    order = sorted(dis)
+    _X12.update(dis=dis, enc=enc, order=order,
+                idx=dict((a, i) for i, a in enumerate(order)))
+    return _X12
+
+
+def extents12():
+    """{top-level label: (first addr, last addr)}, from the listing itself."""
+    c = code12()
+    first = {}
+    for a in c["order"]:
+        first.setdefault(c["enc"][a], a)
+    pairs = sorted(first.items(), key=lambda kv: kv[1])
+    out = {}
+    for i, (n, s) in enumerate(pairs):
+        out[n] = (s, pairs[i + 1][1] - 1 if i + 1 < len(pairs) else c["order"][-1])
+    return out
+
+
+def body12(addr):
+    """every instruction address of the routine the given address sits in.
+
+    ⚠ ADDRESS EXTENT, not label extent.  Round 3 published 'fifteen
+    instructions' for a thirty-instruction routine because it stopped counting
+    at the routine's first INTERNAL label."""
+    c = code12()
+    s, e = extents12()[c["enc"][addr]]
+    return [a for a in c["order"] if s <= a <= e]
+
+
+_LDA_BUF12 = re.compile(r'^lda X(?:BC|WA|IX|IY|HL),0x%06x$' % REPLY_BUF)
+_ADD_BUF12 = re.compile(r'^add X(?:BC|WA|IX|IY|HL),0x0000%04x$' % REPLY_BUF)
+_ST_BUF12 = re.compile(r'^ld \(0x00([0-9a-f]{4})\),')
+
+
+def reply_sites():
+    """Every instruction in prom_c that forms the address of 0x00D945,
+    classified BY WHAT FOLLOWS IT rather than by a hand-written list:
+
+      echo    `lda Xrr,0x00d945` + `add Xrr,Xii` + `ld (Xrr),A`
+              -- the loop that copies the request's own header back
+      send    `lda Xrr,0x00d945` whose next instructions reach Link_SendBuffer
+      base    `lda Xrr,0x00d945` + `inc 6,Xrr` -- the PAYLOAD base, handed to a
+              block copy
+      add     `add Xrr,0x0000d945` -- a payload store with the index in Xrr
+      header  `ld (0x00d945..0x00d94a),r` -- a store INTO the echoed header
+      direct  `ld (0x00d94b..),r`        -- a payload store at a fixed offset
+    """
+    c, out = code12(), collections.defaultdict(list)
+    for a in c["order"]:
+        t = c["dis"][a]
+        if _LDA_BUF12.match(t):
+            nxt = [c["dis"][c["order"][c["idx"][a] + k]]
+                   for k in range(1, 13) if c["idx"][a] + k < len(c["order"])]
+            if nxt and nxt[0].startswith("inc %d," % REPLY_HDR):
+                out["base"].append(a)
+            elif len(nxt) > 1 and nxt[0].startswith("add X") and nxt[1].startswith("ld (X"):
+                out["echo"].append(a)
+            elif any(("0x%06x" % LINK_SEND) in x for x in nxt):
+                out["send"].append(a)
+            else:
+                out["unclassified"].append(a)
+        elif _ADD_BUF12.match(t):
+            out["add"].append(a)
+        else:
+            m = _ST_BUF12.match(t)
+            if m:
+                v = int(m.group(1), 16)
+                if REPLY_BUF <= v < REPLY_BUF + REPLY_HDR:
+                    out["header"].append(a)
+                elif REPLY_BUF + REPLY_HDR <= v < REPLY_BUF + 0x40:
+                    out["direct"].append(a)
+    return out
+
+
+def reply_servers():
+    """One row per REQUEST HANDLER that answers over the link, DERIVED:
+    (routine, echo, header_bytes, send, length_source, length_bias, channel).
+
+    header_bytes comes from the loop guard in front of the echo store and
+    length_bias from the `inc N,` the send's length argument passes through, so
+    'the header is 6 bytes' and 'the sent length is payload + 6' are two
+    independent readings of the same constant rather than one restated."""
+    c, sites = code12(), reply_sites()
+    rows = {}
+    for a in sites["echo"]:
+        j, bound = c["idx"][a], None
+        for k in range(j, max(0, j - 16), -1):
+            m = re.match(r'^cp \(XIZ\+0x[0-9a-f]{2}\),0x00([0-9a-f]{2})$',
+                         c["dis"][c["order"][k]])
+            if m:
+                bound = int(m.group(1), 16)
+                break
+        rows[c["enc"][a]] = [c["enc"][a], a, bound, None, None, None, None]
+    for a in sites["send"]:
+        r = rows.get(c["enc"][a])
+        if r is None:
+            continue
+        j = c["idx"][a]
+        seq = [c["dis"][c["order"][k]]
+               for k in range(j, min(len(c["order"]), j + 12))]
+        inc = [int(m.group(1)) for t in seq
+               for m in [re.match(r'^inc (\d+),(?:WA|BC)$', t)] if m]
+        src = [t for t in seq
+               if re.match(r'^ld (?:WA|C),\(X(?:IZ|WA)\+0x[0-9a-f]{2}\)$', t)]
+        ch = [t for t in seq if t == "ld C,(XWA+0x04)"]
+        r[3], r[4] = a, (src[0] if src else None)
+        r[5], r[6] = (inc[0] if inc else None), (ch[0] if ch else None)
+    return [rows[k] for k in sorted(rows, key=lambda n: rows[n][1])]
+
+
+def arm_entries():
+    """The arms of the tone-query jump table, READ FROM THE ROM at 0xFC1F4D,
+    with EVERY routine each arm calls before it reaches the common send tail.
+    The COUNT is not assumed: it is taken from the `cp BC,0x16` range guard in
+    front of the dispatch.
+
+    ⚠ ALL the calls, not the first one.  Arm 21 calls ToneDB_ResolveToneRecord
+    and THEN the arm-16 handler twice; a 'first call' reading would have
+    reported that arm as belonging to the resolver.
+
+    Returns (guard, [(index, arm_addr, [targets], [names])])."""
+    c, rom = code12(), rom_bytes()
+    guard = None
+    for a in c["order"]:
+        if 0xFC1F30 <= a <= 0xFC1F45:
+            m = re.match(r'^cp BC,0x00([0-9a-f]{2})$', c["dis"][a])
+            if m:
+                guard = int(m.group(1), 16) + 1
+    rows = []
+    for i in range(guard or 0):
+        o = ARM_TABLE + 4 * i - BASE
+        e = int.from_bytes(rom[o:o + 4], "little")
+        tgts, j = [], c["idx"].get(e)
+        if j is not None:
+            for k in range(j, min(len(c["order"]), j + 200)):
+                t = c["dis"][c["order"][k]]
+                m = re.match(r'^cal[rl] 0x([0-9a-f]{6})$', t)
+                if m:
+                    v = int(m.group(1), 16)
+                    if v not in tgts:
+                        tgts.append(v)
+                    continue
+                if re.match(r'^jrl? T,0x(fc1fa9|fc1f2e)$', t):
+                    break
+        rows.append((i, e, tgts, [c["enc"].get(t) for t in tgts]))
+    return guard, rows
+
+
+def payload_length(addr):
+    """(constant, later increments, total) for the handler at `addr`, or None.
+
+    ⚠ THE INCREMENTS ARE THE WHOLE POINT.  Reading only the constant gives 13
+    for FIVE routines that actually reply 16 bytes: they set the length to 13,
+    copy the name, then append three more bytes, each followed by
+    `incw 1,(slot)`.  Quoting 'consts=[13]' for those five would have been a
+    wrong quantified claim of exactly the shape this wave has already published
+    once, so the count is derived and both halves are printed."""
+    c, b = code12(), body12(addr)
+    slot = None
+    for r in [a for a in b if c["dis"][a] == "ret"]:
+        j = c["idx"][r]
+        for k in range(j - 1, max(0, j - 8), -1):
+            t = c["dis"][c["order"][k]]
+            m = re.match(r'^ld WA,\(XIZ\+0x([0-9a-f]{2})\)$', t)
+            if m:
+                slot = "XIZ+0x%s" % m.group(1)
+                break
+            m2 = re.match(r'^ld WA,0x([0-9a-f]{4})$', t)
+            if m2:
+                return (int(m2.group(1), 16), 0, int(m2.group(1), 16))
+        if slot:
+            break
+    if slot is None:
+        return None
+    consts = [(a, int(m.group(1), 16)) for a in b
+              for m in [re.match(r'^ld \(%s\),0x([0-9a-f]{4})$' % re.escape(slot),
+                                 c["dis"][a])] if m]
+    if not consts:
+        return None
+    last = max(a for a, _v in consts)
+    incs = [a for a in b if c["dis"][a] == "incw 1,(%s)" % slot and a > last]
+    return (consts[-1][1], len(incs), consts[-1][1] + len(incs))
+
+
+def tone_record_geometry():
+    """The reply length ToneQuery_ReplyWholeToneRecord computes, re-derived from
+    the three instruction operands that build it and from prom_d's own stride
+    word -- NOT from the constant 713.
+
+        0xFC1ACD  push 0x00d9        217, the record HEAD copied first
+        0xFC1AEF  push 0x0051         81, one element parameter block, x4
+        0xFC1B5C  ld WA,(XBC+0x00ea)  43, prom_d directory tail word +0xEA
+        0xFC1B61  sll 0x02,WA         x4
+        0xFC1B64  add WA,0x021d      +541 = 217 + 4*81
+
+    217 + 4*81 + 4*43 = 713, and 713 is the size prom_d gives
+    ToneRec_Template_Clear from its own file offsets.  Two derivations, two
+    images, one number.  Returns (head, elem, wavesel, nelem, total, prom_d_size).
+    """
+    c = code12()
+    head = elem = wsel = bias = None
+    for a in body12(0xFC1AA1):
+        t = c["dis"][a]
+        if t == "push 0x00d9":
+            head = 0xD9
+        elif t == "push 0x0051":
+            elem = 0x51
+        elif t == "ld A,0x2b":
+            wsel = 0x2B
+        elif re.match(r'^add WA,0x0([0-9a-f]{3})$', t):
+            bias = int(t.split("0x")[1], 16)
+    n = 4
+    total = head + n * elem + n * wsel if None not in (head, elem, wsel) else None
+    return head, elem, wsel, n, total, bias
+
+
+def _stride16(addr):
+    """Where the 16-byte row stride is applied for the handler at `addr`:
+    ("own", site) if `ld BC,0x0010` is in its own extent, otherwise
+    ("callee", site, callee) if a routine it calls applies it, else None.
+
+    ⚠ TWO OF THE FIVE DO NOT SCALE THE ROW THEMSELVES -- they call a resolver
+    that returns a POINTER.  A table that printed "--" for those two while the
+    prose said "every one: 16-byte stride" would be the exact shape of false
+    quantified claim this wave has already published, so the callee is found
+    and named instead of the cell being left blank."""
+    c = code12()
+    own = [a for a in body12(addr) if c["dis"][a] == "ld BC,0x0010"]
+    if own:
+        return ("own", own[0], c["enc"][addr])
+    for a in body12(addr):
+        m = re.match(r'^cal[rl] 0x([0-9a-f]{6})$', c["dis"][a])
+        if not m:
+            continue
+        v = int(m.group(1), 16)
+        if v not in c["dis"]:
+            continue
+        inner = [x for x in body12(v) if c["dis"][x] == "ld BC,0x0010"]
+        if inner:
+            return ("callee", inner[0], c["enc"][v])
+    return None
+
+
+def catalogue_row_readers():
+    """The five handlers that reply 16 bytes, with the operands that make the
+    16-byte catalogue row's shape readable FROM THE CONSUMER SIDE:
+    (routine, stride, name_len_site, byte0D_site, payload_length).
+
+    prom_d already splits every catalogue row as 13 `.ascii` + 3 `.byte`; what
+    is new here is that prom_c NEVER copies more than 13 of them and reads
+    +0x0D on its own, so the split is confirmed by a reader rather than by the
+    printability of the bytes."""
+    c, out = code12(), []
+    for h in (0xFC0817, 0xFC0AD4, 0xFC13B6, 0xFC1716, 0xFC1845):
+        b = body12(h)
+        nlen = [a for a in b
+                if re.match(r'^ld \(XIZ\+0x[0-9a-f]{2}\),0x000d$', c["dis"][a])]
+        b0d = [a for a in b if c["dis"][a] in ("add XBC,0x0000000d",)
+               or re.match(r'^ld [HC],\(X(?:IY|WA|BC)\+0x0d\)$', c["dis"][a])]
+        out.append((c["enc"][h], _stride16(h), nlen[:1], b0d[:1],
+                    payload_length(h)))
+    return out
+
+
+# --------------------------------------------------------------------------
+# THE NAMES.  Every one is an arm of the 0xFC1BDE dispatcher (or a routine an
+# arm calls), named from WHAT IT PUTS IN THE REPLY PAYLOAD -- 'from what it
+# contains'.  The payload is what the request asked for, so the content of the
+# reply IS the routine's job, and each length below is re-derived by
+# payload_length() rather than typed.
+# --------------------------------------------------------------------------
+NAMES12 = [
+ ("sub_FC1BDE", "ToneQuery_Dispatch",
+  "the tone- and wave-catalogue REQUEST HANDLER on the CPU-to-CPU link.  It "
+  "copies the request's first 6 bytes into the reply buffer at RAM 0x00D945, "
+  "takes request[+2] with bit 7 cleared as the opcode, runs one of 23 arms, "
+  "and sends 0x00D945 with length = the arm's return value + 6 on the channel "
+  "in request[+4].  Seven more handlers under the same caller share the shape.",
+  "0xFC1BE9 `cp (XIZ+0xfa),0x0006` bounds the echo loop whose store is "
+  "0xFC1C0A `ld (XBC),A`, reached from 0xFC1C03 `lda XBC,0x00d945`.  0xFC1C11 "
+  "`ld A,(XBC+0x02)` then 0xFC1C17 `res 0x07,A` is the opcode.  0xFC1F3A `cp "
+  "BC,0x0016` guards a 23-entry u32 table at 0xFC1F4D.  The tail is 0xFC1FA9 "
+  "`lda XBC,0x00d945`, 0xFC1FB2 `inc 6,WA`, 0xFC1FB8 `ld C,(XWA+0x04)`, "
+  "0xFC1FBC `call 0xf98b20` = Link_SendBuffer.  All eight servers, the 6-byte "
+  "header and the +6 length are re-derived by "
+  "notes/prom_c_inventory_round8.py --reply.",
+  "what CPU 1 CALLS the 23 opcodes.  The request is built in prom_a/prom_b and "
+  "no code in prom_c names a single one of them."),
+
+ ("sub_FC02FF", "ToneQuery_ReplyToneName",
+  "arm 4: latches the requested (program, bank) at 0x00D75C/0x00D75D, resolves "
+  "the tone record and copies its first 17 bytes -- prom_d's 16-byte DISPLAYED "
+  "NAME plus the byte at +0x10 -- into the reply payload.  Returns 17.",
+  "0xFC0308 and 0xFC0310 store the two arguments; 0xFC031B calls "
+  "ToneDB_ResolveToneRecord; 0xFC0322 `ld (XIZ+0xfa),0x0011` is both the copy "
+  "bound and the value returned at 0xFC0356; the payload store is 0xFC034C "
+  "`add XBC,0x0000d945` after `inc 6,XBC` at 0xFC034A.  prom_d records a tone "
+  "record's first 16 bytes as the displayed name "
+  "(notes/FINDINGS-prom-d-tone-database.md section 2).",
+  "what tone-record byte +0x10 IS.  It is copied, never interpreted here."),
+
+ ("sub_FC035E", "ToneQuery_ReplySourceName1_ViaIndexMap",
+  "arm 5: maps (index, selector) through ONE OF THREE index maps chosen by "
+  "selector bits 7:6 -- +0x44 ToneDB_SourceIndexMapA for 00 and 11, +0x4C "
+  "ToneDB_PercSourceIndexMapB for 01, +0x48 ToneDB_SourceIndexMapB for 10 -- "
+  "and replies with the 13 name characters of that row of +0x50 "
+  "ToneDB_SourceNameList1.  Selector bits 5:4 pick the internal image or the "
+  "expansion board.  Returns 13.",
+  "the four arms of the `cp BC,0 / 0x40 / 0x80 / 0xc0` chain at "
+  "0xFC046B-0xFC047F read the slots at 0xFC03FD (+0x44), 0xFC0419 (+0x4C), "
+  "0xFC0435 (+0x48) and 0xFC0450 (+0x44); 0xFC0484 `sll 0x07,BC` with "
+  "0xFC048A `mul BC,0x0002` is row*128+index as LE16; 0xFC049C reads +0x50; "
+  "0xFC04A8 sets the copy length 13 and 0xFC04C1 `ld BC,0x0010` is the row "
+  "stride.",
+  "which of the three maps the panel means by each selector value."),
+
+ ("sub_FC04EC", "ToneQuery_ReplySourceName2_ViaIndexMap",
+  "arm 6: the same shape as arm 5 over the OTHER map family -- +0x58 "
+  "ToneDB_SourceIndexMapC for selector bits 7:6 = 00 and 11, +0x60 "
+  "ToneDB_PercSourceIndexMapC for 01, +0x5C ToneDB_SourceIndexMapD for 10 -- "
+  "replying with 13 name characters from +0x64 ToneDB_SourceNameList2.",
+  "the `cp BC,0 / 0x40 / 0x80 / 0xc0` chain at 0xFC05F9-0xFC060D reaches the "
+  "slot reads at 0xFC058B (+0x58), 0xFC05A7 (+0x60), 0xFC05C3 (+0x5C) and "
+  "0xFC05DE (+0x58); 0xFC062A reads +0x64; 0xFC0636 sets the length 13 and "
+  "0xFC064F `ld BC,0x0010` is the row stride.",
+  "the same as arm 5: which map each selector value means."),
+
+ ("sub_FC067A", "ToneQuery_ReplySourceName1_ByRow",
+  "arm 7: replies with the 13 name characters of ROW N of +0x50 "
+  "ToneDB_SourceNameList1, N being the 16-bit value the arm assembles as "
+  "request[+1]<<8 | request[+3].  A row at or past the internal count in "
+  "+0x54 ToneDB_SourceList1_Footer is taken from the expansion board's copy "
+  "with the count subtracted; with no board fitted the row falls back to "
+  "ENTRY 127 of +0x44 ToneDB_SourceIndexMapA.  Returns 13.",
+  "0xFC0685 reads +0x54 and 0xFC0698 `ld IY,(XWA)` its count; 0xFC069D `jr NC,0xfc06af` "
+  "takes the board path; 0xFC069F and 0xFC06C1 read +0x50 through the internal "
+  "and board bases; 0xFC06DE reads +0x44 and 0xFC06E4 `add XWA,0x000000fe` is "
+  "entry 127 of an LE16 map; 0xFC0702 sets the length 13, 0xFC071B `ld "
+  "BC,0x0010` is the row stride and 0xFC0734 the payload store.  The 16-bit "
+  "argument is built by the arm at 0xFC1CD2 `sll 0x08,HL` / 0xFC1CDA `or "
+  "WA,HL`.",
+  "nothing about the row's meaning beyond its name; the byte at row +0x0D that "
+  "arms 9, 10, 16, 18 and 19 return is not returned here."),
+
+ ("sub_FC0746", "ToneQuery_ReplySourceName2_ByRow",
+  "arm 8: arm 7's twin over +0x64 ToneDB_SourceNameList2, counted by +0x68 "
+  "ToneDB_SourceList2_Footer.  ONE REAL DIFFERENCE: the no-board fallback "
+  "reads entry 127 of +0x58 ToneDB_SourceIndexMapC and then THROWS THE VALUE "
+  "AWAY -- 0xFC07CE `ld (XIZ+0x08),0x0000` overwrites it -- so this list's "
+  "fallback row is 0, where arm 7's is the map entry.  Returns 13.",
+  "0xFC0751 reads +0x68; 0xFC076B and 0xFC078D read +0x64; 0xFC07AA reads "
+  "+0x58 and 0xFC07B0 `add XWA,0x000000fe` is entry 127; 0xFC07BD stores the "
+  "fetched value into the index slot and 0xFC07CE overwrites it with 0.  Arm 7 "
+  "has no such overwrite: its 0xFC06F1 store is the last write to the slot.",
+  "whether the dead fallback read is deliberate or a bug in the ROM.  It is "
+  "reported as what the bytes do, not diagnosed."),
+
+ ("sub_FC0817", "ToneQuery_ReplyPartElementSourceName1",
+  "arm 9: takes (part, element), follows the part record's element pointer at "
+  "0x001523 + part*0x012C + 0x88 + element*0x29, uses that block's byte +0x02 "
+  "masked 0x7F as the index and +0x03 as the selector, and replies with 16 "
+  "bytes: 13 name characters from +0x50 ToneDB_SourceNameList1, then the "
+  "row's byte +0x0D and the row number as LE16.",
+  "0xFC082A `mul C,0x29`, 0xFC0834 `mul WA,0x012c` and 0xFC083A `add "
+  "WA,0x0088` form the element pointer, read at 0xFC0840 `ld XBC,(XWA+0x1523)`; "
+  "0xFC0845 `ld A,(XBC+0x02)` with 0xFC084D `and WA,0x007f` is the index and "
+  "0xFC0871 `ld A,(XBC+0x03)` the selector; the four map slots are at "
+  "0xFC0983, 0xFC099F, 0xFC09BB, 0xFC09D6; 0xFC0A22 reads +0x50; 0xFC0A2E "
+  "sets 13; 0xFC0A70 `add XBC,0x0000000d` fetches row +0x0D; the three "
+  "`incw 1,(XIZ+0xea)` at 0xFC0A8F, 0xFC0AAF and 0xFC0AC9 take the reply to "
+  "16.",
+  "what row byte +0x0D means.  It is forwarded, never used here."),
+
+ ("sub_FC0AD4", "ToneQuery_ReplyPartElementSourceName2",
+  "arm 10: arm 9's twin over the +0x58/+0x60/+0x5C map family and +0x64 "
+  "ToneDB_SourceNameList2, counted by +0x68.  Same 16-byte reply.",
+  "0xFC0AFC `mul C,0x29` and 0xFC0B06 `mul WA,0x012c` form the element "
+  "pointer read at 0xFC0B12; the map slots are read at 0xFC0C63 (+0x58), "
+  "0xFC0C7F (+0x60), 0xFC0C9B (+0x5C) and 0xFC0CB6 (+0x58); 0xFC0D02 reads "
+  "+0x64 and 0xFC0C03 the +0x68 footer; the copy stride is 0xFC0D27 `ld "
+  "BC,0x0010`.",
+  "the same as arm 9."),
+
+ ("sub_FC0DB4", "ToneQuery_ReplyCatalogueListFooter",
+  "arm 11: a 0..4 argument selects one of the FIVE catalogue-list footers -- "
+  "+0x54, +0x68, +0x84, +0x90, +0x98 -- and the arm copies that footer into "
+  "the reply.  With an expansion board fitted it also copies the board's "
+  "footer and then overwrites the first three payload bytes with the COMBINED "
+  "figures: the LE16 sum of the two counts at 0x00D94B/0x00D94C and the sum of "
+  "the two footers' byte +0x02 at 0x00D94D.",
+  "a 5-entry u32 table at 0xFC0E7A behind the guard 0xFC0E69 `cp BC,4`; its "
+  "arms read +0x54 at 0xFC0DCA, +0x68 at 0xFC0DE3, +0x84 at 0xFC0DFC, +0x90 "
+  "at 0xFC0E19 and +0x98 at 0xFC0E35, each also through the board base at "
+  "0xFC0DD5, 0xFC0DEE, 0xFC0E09, 0xFC0E26, 0xFC0E42.  0xFC0E9C `ld "
+  "A,(XBC+0x02)` with 0xFC0EA1 `inc 3,WA` is the copy length; the three "
+  "combined stores are 0xFC0F43, 0xFC0F4E and 0xFC0F6A.",
+  "what footer byte +0x02 counts.  prom_d calls the object 'count N + 11 "
+  "bytes' and does not decode the 11."),
+
+ ("sub_FC11D8", "ToneQuery_ReplyDrumNameForCurrentPart",
+  "arm 14: replies with the 13-character name of the drum instrument the "
+  "CURRENT part (0x00D733) maps the current index (0x00D735) to, from one of "
+  "three sources -- a 150-byte record in RAM at 0x87D2+0x461+150*n when the "
+  "part record's byte +0x04 has bit 0 set, a 150-byte record reached through "
+  "the pointer table at RAM 0x00D7F5 when the argument's bits 5:4 are 01, and "
+  "otherwise the ROM catalogue row DrumKit_ResolveSourceNameRow returns.  "
+  "Returns 13.",
+  "0xFC11DE and 0xFC11E6 read the two globals; 0xFC11F8 `ld WA,(XBC+0x1523)` "
+  "with 0xFC11FD `and WA,0x0001` is the part-record test; 0xFC1203 `ld C,0x96` "
+  "is the 150-byte drum-instrument stride prom_d gives as directory tail word "
+  "+0xEE; 0xFC1280 `add XWA,0x0000d7f5` is the pointer table; 0xFC1299 calls "
+  "0xFC10E0; 0xFC12B2 sets the length 13 and 0xFC12DB is the payload store.",
+  "what the 150-byte RAM records at 0x87D2+0x461 ARE.  Their stride matches "
+  "prom_d's drum-instrument records, which is why they are called that; no "
+  "producer of that RAM was traced in this pass."),
+
+ ("sub_FC12ED", "ToneQuery_ReplyDrumSourceName_ByRow",
+  "arm 15: replies with the 13 name characters of ROW N of +0x80 "
+  "ToneDB_DrumSourceNameList, counted by +0x84 ToneDB_DrumList_Footer, with "
+  "the expansion board taking rows past the internal count and entry 0 of "
+  "+0x7C DrumKit_NoteMapB as the no-board fallback.  Returns 13.  ★ THIS "
+  "RESOLVES ROUND 11's REFUSAL of the routine: round 11 could not separate it "
+  "from sub_FC10E0 because the two read the SAME THREE SLOTS, and the "
+  "separation is in what they PRODUCE -- this one fills the reply payload with "
+  "a name, that one returns a row pointer to its caller.",
+  "0xFC12F8 reads +0x84 and 0xFC1308 its count; 0xFC130F and 0xFC1333 read "
+  "+0x80 through the internal and board bases; 0xFC1352 reads +0x7C; 0xFC1372 "
+  "sets the length 13, 0xFC138B `ld BC,0x0010` is the row stride and 0xFC13A4 "
+  "the payload store into 0x00D945+6+i.  sub_FC10E0 has NO reference to "
+  "0x00D945 anywhere in its extent and ends `ld XIY,XBC` / `ret` at "
+  "0xFC11D3-0xFC11D7.",
+  "what row byte +0x0D means -- this arm does not return it, arm 16 does."),
+
+ ("sub_FC13B6", "ToneQuery_ReplyDrumSourceNameAndIndex",
+  "arm 16: the 16-byte answer for a drum source -- 13 name characters from "
+  "+0x80 ToneDB_DrumSourceNameList, then the row's byte +0x0D and the row "
+  "number as LE16.  Also arm 21's worker, called there with a tone record the "
+  "arm resolved itself.",
+  "0xFC13F5 calls DrumKit_ResolveSourceNameRow; 0xFC1491 sets the copy length "
+  "13; 0xFC14C9 reads +0x84 and 0xFC14D9 its count; 0xFC14E3 `ld H,(XIY+0x0d)` "
+  "is the row byte and 0xFC1500 `ld C,(XWA+0x0d)` the board's; the three "
+  "`incw 1,(XIZ+0xe6)` at 0xFC1516, 0xFC1530 and 0xFC154A take the reply to "
+  "16, returned at 0xFC154D.",
+  "what row byte +0x0D means."),
+
+ ("sub_FC164D", "ToneQuery_ReplyPercSourceName1_ByRow",
+  "arm 17: replies with the 13 name characters of ROW N of +0x8C "
+  "ToneDB_PercSourceNameList1, counted by +0x90 ToneDB_PercList1_Footer, with "
+  "entry 0 of +0x4C ToneDB_PercSourceIndexMapB as the no-board fallback.  "
+  "Returns 13.  ★ THIS RESOLVES ROUND 11's OTHER REFUSAL: round 11 saw the "
+  "same three slots as ToneDB_PercSourceIndexMapB_Lookup and could not say "
+  "which role was which.  The roles are visible in the OUTPUT -- this routine "
+  "writes 13 characters into the reply payload and returns 13; the Lookup "
+  "writes nothing to 0x00D945 and returns a row number.",
+  "0xFC1658 reads +0x90 and 0xFC1668 its count; 0xFC166F and 0xFC1693 read "
+  "+0x8C; 0xFC16B2 reads +0x4C; 0xFC16D2 sets the length 13, 0xFC16EB `ld "
+  "BC,0x0010` is the row stride and 0xFC1704 the payload store.  "
+  "ToneDB_PercSourceIndexMapB_Lookup's extent 0xFC1555-0xFC164C contains no "
+  "0x00D945 reference at all.",
+  "what row byte +0x0D means -- not returned by this arm."),
+
+ ("sub_FC1716", "ToneQuery_ReplyPercSourceName1AndIndex",
+  "arm 18: the 16-byte answer for a percussion source in list 1 -- 13 name "
+  "characters from +0x8C ToneDB_PercSourceNameList1, the row's byte +0x0D and "
+  "the row number as LE16 -- for the part in request[+1] with the index "
+  "latched at 0x00D735.",
+  "0xFC172A `mul BC,0x012c` with 0xFC1730 `ld XWA,(XBC+0x1523)` reads the part "
+  "record; 0xFC1779 calls ToneDB_PercSourceIndexMapB_Lookup; 0xFC17B9 reads "
+  "+0x90; 0xFC17D3 `ld H,(XIY+0x0d)` and 0xFC17F0 `ld C,(XWA+0x0d)` are the "
+  "row byte; the three `incw 1,(XIZ+0xe0)` at 0xFC1806, 0xFC1820 and 0xFC183A "
+  "take the reply to 16, returned at 0xFC183D.",
+  "what row byte +0x0D means."),
+
+ ("sub_FC1845", "ToneQuery_ReplyPercSourceName2AndIndex",
+  "arm 19: arm 18's twin for list 2 -- +0x60 ToneDB_PercSourceIndexMapC into "
+  "+0x94 ToneDB_PercSourceNameList2, counted by +0x98 ToneDB_PercList2_Footer "
+  "-- with the same 16-byte reply.",
+  "0xFC1865/0xFC186B read the part record; 0xFC1904 and 0xFC1977 read +0x60 "
+  "through the internal and board bases; 0xFC1924 and 0xFC199C read +0x94; "
+  "0xFC1952 reads +0x98; 0xFC1A3D `add XBC,0x0000000d` is the row byte and "
+  "the three `incw 1,(XIZ+0xdc)` at 0xFC1A5C, 0xFC1A7C and 0xFC1A96 take the "
+  "reply to 16, returned at 0xFC1A99.",
+  "what row byte +0x0D means."),
+
+ ("sub_FC1AA1", "ToneQuery_ReplyWholeToneRecord",
+  "arm 20: copies an ENTIRE tone record into the reply -- the 217-byte head, "
+  "then the four 81-byte element parameter blocks, then the four 43-byte "
+  "wave-select records -- 713 bytes, and returns that length, which the arm "
+  "also writes into the echoed header at 0x00D946 and 0x00D948 as high and low "
+  "byte.  A bank selector of 0x20 or more takes the early exit at 0xFC1AA5 and "
+  "returns the length with NOTHING copied; prom_d's bank map resolves 0x20 and "
+  "0x27 as the two DRUM banks.",
+  "0xFC1AAD `lda XBC,0x00d945` with `inc 6,XBC` is the payload base; 0xFC1ACD "
+  "`push 0x00d9` is 217 and 0xFC1AD5 calls MemCopyWords; 0xFC1AEF `push 0x0051` "
+  "is 81 per element and 0xFC1AF9 `add XBC,0x000000d9` places them after the "
+  "head; 0xFC1B29 `ld A,0x2b` is 43 and 0xFC1B30 `add XWA,0x00000144` places "
+  "them after 4*81 = 324.  The returned length is built at 0xFC1B5C from "
+  "prom_d's OWN stride word +0xEA: `ld WA,(XBC+0x00ea)` (43), 0xFC1B61 `sll "
+  "0x02,WA` (x4), 0xFC1B64 `add WA,0x021d` (+541) = 713 -- the size prom_d "
+  "independently gives ToneRec_Template_Clear from its file offsets.  "
+  "Re-derived by --arms12.",
+  "why the drum banks take the early exit.  The bytes say they do; nothing "
+  "here says what answers the panel instead."),
+
+ ("sub_FC10E0", "DrumKit_ResolveSourceNameRow",
+  "not an arm but the worker arms 14 and 16 share: masks the note to 7 bits "
+  "and the kit to 4, reads +0x7C DrumKit_NoteMapB at kit*128 + note as LE16, "
+  "and returns a POINTER to that row of +0x80 ToneDB_DrumSourceNameList "
+  "together with the row number through the caller's out-parameter.  0xFFFF "
+  "in the map sends it to the expansion board's copy, and with no board fitted "
+  "to entry 0 of the internal map.",
+  "0xFC10E4 `and (XIZ+0x08),0x007f` and 0xFC10EC `and BC,0x000f` are the two "
+  "masks; 0xFC10F8 reads +0x7C and 0xFC10FE `sll 0x07,BC` with 0xFC1104 "
+  "`mul BC,0x0002` is kit*128+note as LE16; 0xFC1114 `cp BC,0xffff` "
+  "is the empty-slot test; 0xFC111F and 0xFC1169 read +0x80; 0xFC11C8 `ld "
+  "(XWA),BC` writes the row number to the out-parameter and 0xFC11CA `ld "
+  "BC,0x0010` scales the row to the returned pointer.",
+  "nothing about what a drum-source row means beyond its name."),
+
+ ("sub_FC1FC7", "LinkQuery_ReplyPartRecordBytes",
+  "a sibling server of ToneQuery_Dispatch under the same caller, and the "
+  "simplest of the eight: a GENERIC PART-RECORD READ.  request[+1] is the part, "
+  "request[+2] a byte offset inside its 0x012C-byte record and request[+3] the "
+  "length; it copies that many bytes from the record into the reply payload "
+  "and sends length + 6.",
+  "0xFC1FD2 `cp (XIZ+0xfa),0x0006` bounds the header echo whose store is "
+  "0xFC1FF3; 0xFC1FFF `mul WA,0x012c` and 0xFC2005 `ld XIY,(XWA+0x1523)` are "
+  "the part-record base and stride this tree already establishes; 0xFC2014 "
+  "adds request[+2]; 0xFC2021 `ld A,(XBC+0x03)` is the loop bound; 0xFC203E "
+  "is the payload store and 0xFC205D `inc 6,BC` the sent length.",
+  "nothing here says which offsets the panel asks for."),
+]
+
+REFUSALS12 = [
+ ("sub_FC0F83",
+  "arm 12 replies EIGHT bytes taken from one of three places -- RAM 0x00D736 "
+  "(0xFC0FCB `add XBC,0x00004f64` then 0xFC0FD1 `add XBC,0x000087d2`), the "
+  "8-byte ROM constant at 0xFE1365 (0xFC1077 `lda XBC,0xfe1365`), or eight "
+  "zeroes (0xFC10B1) -- chosen by two predicates on the current part.  The "
+  "ROM constant is `00 F5 00 00 00 00 00 00`, which is not text and not a "
+  "structure this tree has decoded, and nothing reads the eight bytes' "
+  "MEANING on either side of the link.  Naming it from 'eight bytes' would "
+  "say only what its length already says."),
+ ("sub_FC10BE",
+  "arm 13 resolves the tone record for (program, bank) and replies with ONE "
+  "byte, the record's +0xD0 (0xFC10CF `ld C,(XIY+0x00d0)`, stored at 0xFC10D4 "
+  "and returned as length 1).  prom_d names bytes +0x00..+0x0F of a tone "
+  "record and nothing else; +0xD0 is inside the 217-byte head that no reader "
+  "in either image interprets.  A name here would be the offset spelled twice."),
+ ("sub_FC1B6E",
+  "arm 22 reads a part's bank and program out of its record (+0x1C at 0xFC1B84 "
+  "and +0x1B at 0xFC1B94), calls sub_FB42B0 -- itself unnamed -- and "
+  "replies with TWO bytes at +0x98 + 2*k and +0x99 + 2*k of whatever that "
+  "returns (0xFC1BAF, 0xFC1BC5).  The base record is unidentified, so the two "
+  "bytes have no field name to inherit; this is a chain that needs sub_FB42B0 "
+  "named first, and that is the next round's lever, not a gap to paper over."),
+]
+
+
+def claims12():
+    """Every address this round's prose quotes with a backticked instruction,
+    checked against the LISTING TEXT at that address.
+
+    This is the round-2 off-by-N guard turned on the round's own headers: the
+    tree's signature error is a citation one or two bytes past the opcode, and
+    an address that is not an instruction start has no text to match.  Returns
+    (addr, claimed, actual, ok)."""
+    rows = []
+    c = code12()
+    for _o, _n, what, ev, unk in NAMES12:
+        rows += _claim_pairs(" ".join((what, ev, unk)), c)
+    for _o, why in REFUSALS12:
+        rows += _claim_pairs(why, c)
+    return rows
+
+
+def _claim_pairs(text, c):
+    out = []
+    for m in re.finditer(r'0x([0-9A-F]{6})\s+`([^`]+)`', text):
+        a = int(m.group(1), 16)
+        want = " ".join(m.group(2).split()).lower()
+        got = " ".join(c["dis"].get(a, "<not an instruction start>").split()).lower()
+        out.append((a, want, got, want == got))
+    return out
+
+
+def cited_addresses12():
+    """Every prom_c address the round's prose names, and whether it is an
+    instruction start.  The three that are NOT are named here rather than
+    excused by a filter: two jump-table bases and one ROM constant."""
+    DATA = {0xFC0E7A, 0xFC1F4D, 0xFE1365}
+    c, out = code12(), []
+    blob = " ".join(" ".join((w, e, u)) for _o, _n, w, e, u in NAMES12)
+    blob += " " + " ".join(w for _o, w in REFUSALS12)
+    for m in re.finditer(r'0x([0-9A-F]{6})', blob):
+        a = int(m.group(1), 16)
+        if 0xF80000 <= a <= 0xFFFFFF:
+            out.append((a, a in c["dis"], a in DATA))
+    return sorted(set(out))
+
+
+def mode_reply():
+    c = code12()
+    sites = reply_sites()
+    print("=== 13. THE LINK REPLY PACKET AT RAM 0x00D945 ===\n")
+    print("  Round 7 gave every prom_c sub_XXXXXX a header ending 'what the")
+    print("  routine is FOR: unknown.  Nothing here reads the meaning of a")
+    print("  field'.  For one block of them that was true only because nobody")
+    print("  had looked at where their output GOES.  It goes into one buffer:\n")
+    print("      0x00D945 .. 0x00D94A   the request's own first 6 bytes, copied back")
+    print("      0x00D94B ..            the payload -- the answer")
+    print("      sent by Link_SendBuffer(channel = request[+4], payload + 6, 0x00D945)\n")
+    print("  Nothing is asserted here.  Every number below is read out of the")
+    print("  listing, which is the byte-identical round-trip of the ROM.\n")
+    print("  sites that form the address 0x00D945:")
+    for k in ("echo", "send", "base", "add", "header", "direct", "unclassified"):
+        print("      %-14s %3d" % (k, len(sites[k])))
+    bad = [a for a in sites["add"]
+           if not c["dis"][c["order"][c["idx"][a] - 1]].startswith("inc %d," % REPLY_HDR)]
+    print("\n  ★ ALL %d payload stores of the `add` form are preceded by `inc %d,`"
+          % (len(sites["add"]), REPLY_HDR))
+    print("    -- %d exceptions.  The payload therefore starts at buffer+%d, and"
+          % (len(bad), REPLY_HDR))
+    print("    that 6 is the SAME 6 the header-echo loop counts to.\n")
+    print("  the eight request handlers, derived:\n")
+    print("    routine                             echo   hdr   send   length  chan")
+    for r in reply_servers():
+        print("    %-34s %06X  %-3s  %06X  +%-4s  %s"
+              % (r[0], r[1], r[2], r[3], r[5],
+                 "request[+4]" if r[6] else "?"))
+    print("\n  The header stores -- the only writes INTO the echoed 6 bytes:")
+    for a in sites["header"]:
+        print("      %06X  %-24s in %s" % (a, c["dis"][a], c["enc"][a]))
+    print("\n  ⚠ WHAT THIS DOES NOT ESTABLISH: what the six echoed bytes MEAN to")
+    print("  CPU 1.  Byte +2 is the opcode and byte +4 the channel because this")
+    print("  side reads them so; +0, +1, +3 and +5 are copied and never read in")
+    print("  prom_c, except by the one arm that overwrites +1 and +3 with the")
+    print("  length of a reply too big to fit a byte.")
+
+
+def mode_arms12():
+    guard, rows = arm_entries()
+    named = dict((o, n) for o, n, _w, _e, _u in NAMES12)
+    ref = dict(REFUSALS12)
+    print("=== 14. THE 23 ARMS OF THE TONE-QUERY SERVER ===\n")
+    print("  The guard `cp BC,0x%02x` in front of the dispatch gives %d arms and"
+          % (guard - 1, guard))
+    print("  the table at 0x%06X is read from the ROM, not from the listing's" % ARM_TABLE)
+    print("  own rendering of it.  `payload` is (constant + later increments):")
+    print("  FIVE handlers set 13, copy the name, then append three more bytes --")
+    print("  reading only the constant would have published 13 for a 16-byte")
+    print("  reply.  Marks: N named this round, R refused this round with a")
+    print("  reason, . already named or outside this module.\n")
+    for i, e, tgts, names in rows:
+        if not tgts:
+            print("    arm %2d  %06X    (returns 0 -- unsupported opcode)" % (i, e))
+            continue
+        head = names[0]
+        mark = "N" if head in named else ("R" if head in ref else ".")
+        pl = payload_length(tgts[0])
+        extra = ("  then " + ", ".join(n or "?" for n in names[1:])) if len(names) > 1 else ""
+        print("    arm %2d  %06X  %s %-42s payload %s%s"
+              % (i, e, mark, head or "?",
+                 "%d = %d + %d" % (pl[2], pl[0], pl[1]) if pl else "computed",
+                 extra))
+    print()
+    print("  The three arms this round did NOT touch are outside the module the")
+    print("  round owns: arm 0 and arm 1 call routines in the 0xFB/0xFC3 blocks,")
+    print("  and arm 21 resolves a tone record and then hands the work to arm")
+    print("  16's handler -- it is that handler under another entry condition,")
+    print("  not a routine of its own.")
+    h, el, ws, nn, tot, bias = tone_record_geometry()
+    print("\n  ★ THE ONE ARM WHOSE LENGTH IS COMPUTED, AND WHAT IT CONFIRMS.")
+    print("    Arm 20 copies a whole tone record and builds its reply length out")
+    print("    of prom_d's OWN directory stride word:")
+    print("      head %d + %d elements x %d + %d wave-select x %d = %d"
+          % (h, nn, el, nn, ws, tot))
+    print("      and 0xFC1B64 `add WA,0x%04x` is %d = %d + %d x %d, so the ROM"
+          % (bias, bias, h, nn, el))
+    print("      computes the same total from the other side.")
+    print("    prom_d gives ToneRec_Template_Clear 713 bytes from its FILE")
+    print("    OFFSETS (prom_d/wsa1_prom_d.s, 'file 0x1C606 .. 0x1C8CE').  Two")
+    print("    images, two derivations, one number -- and it splits prom_d's")
+    print("    '217 + N*124' into 81 + 43: the parameter block and the")
+    print("    wave-select record, stored as TWO ARRAYS and not interleaved.")
+
+
+def mode_rows12():
+    c = code12()
+    print("=== 15. THE 16-BYTE CATALOGUE ROW, FROM ITS READER ===\n")
+    print("  prom_d already writes every wave-catalogue row as 13 `.ascii` plus")
+    print("  3 `.byte`.  That split was read off the BYTES.  This is the same")
+    print("  split read off the CONSUMER, which is a different kind of evidence:")
+    print("  prom_c never copies more than 13 characters out of a row, and it")
+    print("  reads +0x0D on its own to return it beside the name.\n")
+    print("    routine                                   len13   +0x0D   16-byte stride")
+    for nm, st, nl, b0, pl in catalogue_row_readers():
+        print("    %-40s %s  %s  %s"
+              % (nm,
+                 "%06X" % nl[0] if nl else "  --  ",
+                 "%06X" % b0[0] if b0 else "  --  ",
+                 ("%06X in %s" % (st[1], st[2])) if st else "NOT FOUND"))
+    print("\n  Every one: a copy bound of 13, a read of the row's byte +0x0D, and")
+    print("  a 16-byte reply -- 13 characters, that byte, and the row number as")
+    print("  LE16.  Three scale the row by 16 themselves; the other two call a")
+    print("  resolver that returns the pointer already scaled, and the column")
+    print("  says WHICH routine applies the stride rather than leaving a blank.")
+    print("\n  ⚠ WHAT IS STILL NOT KNOWN: what byte +0x0D IS.  Five arms fetch it")
+    print("  and hand it to CPU 1; none of them looks at it.  Bytes +0x0E and")
+    print("  +0x0F have readers inside prom_c (round 11's *_SelectEntry pair)")
+    print("  and +0x0D does not, so it is a PANEL-side field -- which is why no")
+    print("  amount of reading prom_c will name it.")
+
+
+def inventory12():
+    """THE FINISHED-STATE TEST for prom_c, read out of the SOURCE and not out of
+    any round's memory: for every label that is not content-named, does the
+    listing say something about WHY it is not?
+
+    Five classes, in the order they are tested:
+      refused   the header carries a per-object refusal a round derived, in
+                ANY of the tree's four spellings -- `Refused:` (round 8),
+                `REFUSED (round N):` (round 10), `Refused:  REFUSED round N.`
+                (rounds 11-12) and `WasRefused:` (a round-12 supersede).  ⚠ The
+                parenthesised round-10 form was MISSED by the first draft of
+                this census and three routines were graded a class too low;
+                the spellings are enumerated here so the next reader does not
+                have to rediscover them
+      gap       the header carries an explicit `Unknown:` line
+      reason    the header states, in other words, why the address is kept --
+                `keeps its address`, `Named, not interpreted`, an UNREFERENCED
+                census, or a `nothing found` search negative
+      described the header describes the object but states no gap.  This is
+                where the P7 byte-code pool's 374 one-line entries land: the
+                REGION is declared framed by decision in a findings doc, and
+                the per-object line says what the object is
+      silent    NOTHING AT ALL -- the real debt
+
+    ⚠ THE FOUR REASON PHRASES ARE A WHITELIST, so the class can only shrink by
+    accident, never grow by one.  Anything the whitelist misses falls into
+    `described`, which UNDERSTATES how well the tree is documented rather than
+    overstating it.  Returns {(grade, class): [names]}."""
+    src = open(SRC, encoding="utf-8", errors="replace").read().split("\n")
+    REASON = ("keeps its address", "Named, not interpreted", "UNREFERENCED",
+              "nothing found", "NOT FOUND", "searched negative")
+    out = collections.defaultdict(list)
+    for i, l in enumerate(src):
+        m = LABEL.match(l)
+        if not m:
+            continue
+        n = m.group(1)
+        if INTERNAL.match(n):
+            continue
+        if UNNAMED.match(n):
+            g = "sub_XXXXXX"
+        elif FRAMED.match(n):
+            g = "framed"
+        else:
+            continue
+        j, blk = i - 1, []
+        while j >= 0 and src[j].lstrip().startswith(";"):
+            blk.append(src[j])
+            j -= 1
+        b = "\n".join(reversed(blk))
+        if ("Refused:" in b or "WasRefused:" in b or "REFUSED round" in b
+                or "REFUSED (round" in b):
+            k = "refused"
+        elif "Unknown:" in b:
+            k = "gap"
+        elif any(r in b for r in REASON):
+            k = "reason"
+        elif b.strip():
+            k = "described"
+        else:
+            k = "silent"
+        out[(g, k)].append(n)
+    return out
+
+
+def mode_inventory():
+    inv = inventory12()
+    order = ["refused", "gap", "reason", "described", "silent"]
+    print("=== 16. prom_c's FINISHED STATE, TESTED RATHER THAN CLAIMED ===\n")
+    print("  The brief for this lane asked for one thing above the others: an")
+    print("  image in which EVERY object is either named with evidence or")
+    print("  declared nameless with a reason.  That is a property of the LISTING,")
+    print("  so it is measured there -- every label the grader does not count as")
+    print("  content, and what its own header says about why.\n")
+    print("    grade        refused    gap  reason  described  SILENT   total")
+    tot = collections.Counter()
+    for g in ("sub_XXXXXX", "framed"):
+        row = [len(inv[(g, k)]) for k in order]
+        for k, v in zip(order, row):
+            tot[k] += v
+        print("    %-11s %7d %6d %7d %10d %7d %7d"
+              % (g, row[0], row[1], row[2], row[3], row[4], sum(row)))
+    print("    %-11s %7d %6d %7d %10d %7d %7d"
+          % ("TOTAL", tot["refused"], tot["gap"], tot["reason"],
+             tot["described"], tot["silent"],
+             sum(tot[k] for k in order)))
+    print("\n  ★ SILENT = %d.  Not one label in prom_c that the grader counts as"
+          % tot["silent"])
+    print("  debt is left without a statement in the source.  That is the")
+    print("  finished state the brief asked for, and it is a check (S12-31), not")
+    print("  a claim: add an unexplained label and it goes red.\n")
+    print("  ⚠ WHAT IT IS NOT.  `described` is the weakest class and it is the")
+    print("  biggest: %d labels, of which the P7 byte-code pool contributes 374."
+          % tot["described"])
+    print("  Those say WHAT the object is and not why it has no better name;")
+    print("  the reason for the whole REGION is in")
+    print("  notes/FINDINGS-prom_c-p7-byte-stream-pool.md section 0, which is a")
+    print("  document and not a line the label carries.  A future round that")
+    print("  wants a stronger finished state should attack that column, and it")
+    print("  should do it by naming the byte-code, not by pasting a line.\n")
+    print("  the %d labels carrying an EXPLICIT per-object refusal, and the round"
+          % (len(inv[("sub_XXXXXX", "refused")]) + len(inv[("framed", "refused")])))
+    print("  that derived each.  ⚠ THE TREE SPELLS A REFUSAL THREE WAYS --")
+    print("  `Refused:` (round 8), `REFUSED (round N):` (round 10) and")
+    print("  `Refused:  REFUSED round N.` (rounds 11-12) -- so any future census")
+    print("  of them must accept all three; this one does, and says so because a")
+    print("  census that silently matched one spelling would report a smaller")
+    print("  number and call it progress.\n")
+    src = open(SRC, encoding="utf-8", errors="replace").read()
+    for g in ("sub_XXXXXX", "framed"):
+        for n in sorted(inv[(g, "refused")]):
+            m = re.search(r'((?:^;.*\n)+)' + re.escape(n) + r':', src, re.M)
+            t = m.group(1) if m else ""
+            rd = (re.search(r'REFUSED round (\d+)', t) or
+                  re.search(r'REFUSED \(round (\d+)\)', t) or
+                  re.search(r'ROUND (\d+) DECLINED', t))
+            print("      round %-4s %s"
+                  % (rd.group(1) if rd else "8*", n))
+    print("\n      * the six marked 8* carry `Refused:` with no round number in")
+    print("      the line; round 8's own --refusals section is where they are")
+    print("      derived, and this is reported rather than back-filled.")
+    print("\n  ⚠ AND THE SIX PROMOTABLE FRAMED LABELS ARE NOT IN THAT LIST.")
+    print("  --framed derives a refusal for each, but the refusal lives in THIS")
+    print("  SCRIPT, not in the listing, so a reader of prom_c/wsa1_prom_c.s")
+    print("  meets the label without it.  They land in `gap`/`reason` above")
+    print("  because their headers do say, in other words, that the address is")
+    print("  kept.  Two of the six are emitted by generators")
+    print("  (gen_prom_c_tables.py, gen_prom_c_fp_pool.py), so the fix is in the")
+    print("  generator and not in the .s -- which is why this round records the")
+    print("  gap instead of hand-patching text a regeneration would drop.")
+
+
+def apply12():
+    """Rename, rewrite the header of every routine named this round, and record
+    the three refusals in the source where a reader will hit them.  Idempotent:
+    a header already carrying the round-12 tag is left alone."""
+    text = open(SRC, encoding="utf-8", errors="replace").read()
+    todo = [(o, n) for o, n, _w, _e, _u in NAMES12
+            if re.search(r'^' + re.escape(o) + r':', text, re.M)]
+    if todo:
+        table = dict(todo)
+        pat = re.compile(r'(?<![A-Za-z0-9_])(' +
+                         "|".join(re.escape(o) for o, _n in todo) + r')(?![0-9A-Za-z])')
+        text = pat.sub(lambda m: table[m.group(1)], text)
+    lines = text.split("\n")
+    tagged = 0
+    for old, new, what, ev, unk in NAMES12:
+        try:
+            j = next(k for k, l in enumerate(lines) if l.startswith(new + ":"))
+        except StopIteration:
+            print("  MISSING  %s" % new)
+            continue
+        i = j - 1
+        while i >= 0 and lines[i].startswith(";"):
+            i -= 1
+        block = range(i + 1, j)
+        if any("ROUND 12" in lines[k] for k in block):
+            continue
+        u = [k for k in block if lines[k].startswith(_GENERIC_UNK)]
+        if not u:
+            print("  NO GENERIC PARAGRAPH in %s -- header left alone" % new)
+            continue
+        k = u[0]
+        end = k + 1
+        if end < j and lines[end].startswith(_GENERIC_UNK2):
+            end += 1
+        b = []
+        for q, cc in enumerate(_c_wrap(what, 64)):
+            b.append("; %s%s" % ("Name:     " if q == 0 else "          ", cc))
+        for q, cc in enumerate(_c_wrap(ev, 64)):
+            b.append("; %s%s" % ("Evidence: " if q == 0 else "          ", cc))
+        for q, cc in enumerate(_c_wrap(unk, 64)):
+            b.append("; %s%s" % ("Unknown:  " if q == 0 else "          ", cc))
+        b.append("; Named:   ROUND 12, by notes/prom_c_inventory_round8.py -- it was "
+                 "`%s`." % old)
+        lines[k:end] = b
+        tagged += 1
+    lines = "\n".join(lines).split("\n")
+    ref = 0
+    for old, why in REFUSALS12:
+        try:
+            j = next(k for k, l in enumerate(lines) if l.startswith(old + ":"))
+        except StopIteration:
+            print("  MISSING refusal target %s" % old)
+            continue
+        i = j - 1
+        while i >= 0 and lines[i].startswith(";"):
+            i -= 1
+        if any("REFUSED round 12" in lines[k] for k in range(i + 1, j)):
+            continue
+        blk = []
+        for q, cc in enumerate(_c_wrap(why, 64)):
+            blk.append("; %s%s" % ("Refused:  REFUSED round 12.  " if q == 0
+                                   else "          ", cc))
+        lines[j - 1:j - 1] = blk
+        ref += 1
+    write_part(SRC_MASTER, "\n".join(lines))
+    print("  round 12: renamed %d labels, rewrote %d headers, recorded %d refusals"
+          % (len(todo), tagged, ref))
+    supersede11()
+
+
+def supersede11():
+    """Two of round 11's four refusals are the two routines round 12 NAMED.
+    Left alone, each header would refuse and name the same routine four lines
+    apart -- which is precisely the defect round 3 shipped and a reviewer
+    caught.  This rewrites those two `Refused:` blocks into `WasRefused:`, which
+    keeps the refusal (it is what made the question precise) and records what
+    lifted it.  Idempotent, and it touches only the two round-11 refusals whose
+    target round 12 renamed."""
+    renamed = dict((o, n) for o, n, _w, _e, _u in NAMES12)
+    lifted = [(o, renamed[o]) for o, _w in REFUSALS11 if o in renamed]
+    text = open(SRC, encoding="utf-8", errors="replace").read()
+    lines = text.split("\n")
+    done = 0
+    for old, new in lifted:
+        try:
+            j = next(k for k, l in enumerate(lines) if l.startswith(new + ":"))
+        except StopIteration:
+            print("  MISSING supersede target %s" % new)
+            continue
+        i = j - 1
+        while i >= 0 and lines[i].startswith(";"):
+            i -= 1
+        blk = list(range(i + 1, j))
+        if any("WasRefused:" in lines[k] for k in blk):
+            continue
+        st = [k for k in blk if lines[k].startswith("; Refused:  REFUSED round 11.")]
+        if not st:
+            print("  NO round-11 refusal block in %s" % new)
+            continue
+        k = st[0]
+        end = k + 1
+        while end < j and lines[end].startswith(";           "):
+            end += 1
+        why = dict(REFUSALS11)[old]
+        note = ("ROUND 11 DECLINED this name, on the ground that it " + why +
+                "  Every fact in that refusal still holds; what LIFTED it in "
+                "round 12 is that the two routines separate by their OUTPUT and "
+                "not by the slots they read -- see the Name: paragraph above.  "
+                "Kept, because the refusal is what made the question precise.")
+        blkout = []
+        for q, cc in enumerate(_c_wrap(note, 64)):
+            blkout.append("; %s%s" % ("WasRefused: " if q == 0 else "          ", cc))
+        lines[k:end] = blkout
+        done += 1
+    write_part(SRC_MASTER, "\n".join(lines))
+    print("  round 12: %d round-11 refusals superseded in place" % done)
+
+
+def verify12():
+    text = open(SRC, encoding="utf-8", errors="replace").read()
+    bad = 0
+    for old, new, _w, _e, _u in NAMES12:
+        if not re.search(r'^' + new + r':', text, re.M):
+            print("  MISSING  %s" % new)
+            bad += 1
+        if re.search(r'^' + re.escape(old) + r':', text, re.M):
+            print("  STALE    %s still defined" % old)
+            bad += 1
+        m = re.search(r'((?:^;.*\n)+)' + new + r':', text, re.M)
+        if m and _GENERIC_UNK in m.group(1):
+            print("  CONTRADICTION  %s still carries the generic Unknown" % new)
+            bad += 1
+    for old, _why in REFUSALS12:
+        m = re.search(r'((?:^;.*\n)+)' + re.escape(old) + r':', text, re.M)
+        if not m or "REFUSED round 12" not in m.group(1):
+            print("  REFUSAL LOST  %s" % old)
+            bad += 1
+    print("  round 12: %d names, %d refusals, %d problems"
+          % (len(NAMES12), len(REFUSALS12), bad))
+    return bad
+
+
+def selftest12():
+    print("\n=== SELFTEST, ROUND 12 ===")
+    c = code12()
+    sites = reply_sites()
+    servers = reply_servers()
+    check(len(servers) == 8, "S12-1  eight request handlers answer out of 0x00D945")
+    check(all(r[2] == REPLY_HDR for r in servers),
+          "S12-2  every one echoes exactly %d request bytes" % REPLY_HDR)
+    check(all(r[5] == REPLY_HDR for r in servers),
+          "S12-3  every one sends payload + %d" % REPLY_HDR)
+    check(all(r[6] for r in servers),
+          "S12-4  every one takes the channel from request[+4]")
+    bad = [a for a in sites["add"]
+           if not c["dis"][c["order"][c["idx"][a] - 1]].startswith("inc %d," % REPLY_HDR)]
+    check(sites["add"] and not bad,
+          "S12-5  all %d `add ...,0x0000d945` payload stores follow `inc 6,` (0 exceptions)"
+          % len(sites["add"]))
+    check(not sites["unclassified"],
+          "S12-6  no 0x00D945 site is left unclassified")
+    check(all(REPLY_BUF + REPLY_HDR <= int(re.match(_ST_BUF12, c["dis"][a]).group(1), 16)
+              for a in sites["direct"]),
+          "S12-7  every fixed-offset store lands in the payload, never the header")
+    check(len(sites["header"]) == 2 and
+          set(c["enc"][a] for a in sites["header"]) <=
+          {"ToneQuery_Dispatch", "sub_FC1BDE"},
+          "S12-8  the only two writes into the echoed header are arm 20's length")
+    guard, rows = arm_entries()
+    check(guard == 23, "S12-9  the range guard gives 23 arms")
+    check(len(set(e for _i, e, _t, _n in rows)) == 22,
+          "S12-10 22 distinct arm addresses in 23 entries -- arms 2 and 3 share "
+          "the no-op arm")
+    dead = [i for i, _e, t, _n in rows if not t]
+    check(dead == [2, 3], "S12-11 exactly arms 2 and 3 call nothing")
+    lens = dict((n[0], payload_length(t[0])) for _i, _e, t, n in rows if t)
+    sixteen = [n for n, p in lens.items() if p and p[2] == 16]
+    check(len(sixteen) == 5,
+          "S12-12 five arms reply 16 bytes, and all five reach it as 13 + 3")
+    check(all(lens[n][0] == 13 and lens[n][1] == 3 for n in sixteen),
+          "S12-13 ...each is `13` plus three `incw 1,(slot)` AFTER the constant")
+    thirteen = [n for n, p in lens.items() if p and p[2] == 13]
+    check(len(thirteen) == 7, "S12-14 seven arms reply exactly 13 -- a bare name")
+    h, el, ws, nn, tot, bias = tone_record_geometry()
+    check((h, el, ws) == (217, 81, 43),
+          "S12-15 arm 20's three copy sizes are 217, 81 and 43")
+    check(bias == h + nn * el == 541,
+          "S12-16 its `add WA,0x021d` is 217 + 4*81, re-derived not assumed")
+    check(tot == 713,
+          "S12-17 217 + 4*81 + 4*43 = 713, prom_d's own size for a 4-element record")
+    pd = open(os.path.join(ROOT, "prom_d", "wsa1_prom_d.s"),
+              encoding="utf-8", errors="replace").read()
+    check("file 0x1C606 .. 0x1C8CE   (713 bytes)" in pd,
+          "S12-18 ...and prom_d says 713 from its file offsets, independently")
+    body_10e0 = body12(0xFC10E0)
+    check(not any(("d945" in c["dis"][a]) for a in body_10e0),
+          "S12-19 sub_FC10E0's extent touches the reply buffer 0 times -- the")
+    body_1555 = body12(0xFC1555)
+    check(not any(("d945" in c["dis"][a]) for a in body_1555),
+          "S12-20 ...and neither does ToneDB_PercSourceIndexMapB_Lookup's, which")
+    check(any("d945" in c["dis"][a] for a in body12(0xFC12ED)) and
+          any("d945" in c["dis"][a] for a in body12(0xFC164D)),
+          "S12-21 ...is exactly how round 11's two refusals separate")
+    rows_ = catalogue_row_readers()
+    check(len(rows_) == 5 and all(r[1] and r[2] and r[3] for r in rows_),
+          "S12-22 all five 16-byte handlers show stride 16, bound 13 and a +0x0D read")
+    cl = claims12()
+    bad = [r for r in cl if not r[3]]
+    for a, want, got, _ok in bad:
+        print("       0x%06X claims `%s`, listing has `%s`" % (a, want, got))
+    check(cl and not bad,
+          "S12-23 all %d backticked citations match the listing at the cited address"
+          % len(cl))
+    cited = cited_addresses12()
+    off = [a for a, isi, isd in cited if not isi and not isd]
+    check(not off,
+          "S12-24 every one of %d cited prom_c addresses is an instruction start, "
+          "or a declared data address" % len(cited))
+    check(len([1 for _a, _i, d in cited if d]) == 3,
+          "S12-25 exactly three cited addresses are data, and they are named")
+    txt = open(SRC, encoding="utf-8", errors="replace").read()
+    check(all(re.search(r'^' + n + r':', txt, re.M) for _o, n, _w, _e, _u in NAMES12),
+          "S12-26 every round-12 name is defined in the listing")
+    check(all("REFUSED round 12" in (re.search(r'((?:^;.*\n)+)' + re.escape(o) + r':',
+                                               txt, re.M) or
+                                     type("x", (), {"group": lambda s, i: ""})()).group(1)
+              for o, _w in REFUSALS12),
+          "S12-27 every round-12 refusal is recorded in the source, not only here")
+    check(len(NAMES12) == 18 and len(REFUSALS12) == 3,
+          "S12-28 the round shipped 18 names and 3 measured refusals")
+    contra = []
+    for _o, n, _w, _e, _u in NAMES12:
+        m = re.search(r'((?:^;.*\n)+)' + re.escape(n) + r':', txt, re.M)
+        if m and "Refused:  REFUSED" in m.group(1):
+            contra.append(n)
+    check(not contra,
+          "S12-29 no header both NAMES and REFUSES the same routine -- the "
+          "round-3 defect, checked rather than remembered")
+    lifted = [n for _o, n, _w, _e, _u in NAMES12
+              if _o in dict((o, w) for o, w in REFUSALS11)]
+    inv = inventory12()
+    check(not inv[("sub_XXXXXX", "silent")] and not inv[("framed", "silent")],
+          "S12-31 ZERO prom_c labels are silent -- every sub_XXXXXX and every "
+          "framed label says in the source why it is not named")
+    check(sum(len(v) for k, v in inv.items() if k[0] == "sub_XXXXXX") == 367,
+          "S12-32 the inventory covers all %d sub_XXXXXX"
+          % sum(len(v) for k, v in inv.items() if k[0] == "sub_XXXXXX"))
+    check(sum(len(v) for k, v in inv.items() if k[0] == "framed") == 500,
+          "S12-33 ...and all %d framed labels, with none counted twice"
+          % sum(len(v) for k, v in inv.items() if k[0] == "framed"))
+    check(len(lifted) == 2 and all(
+        "ROUND 11 DECLINED" in (re.search(r'((?:^;.*\n)+)' + re.escape(n) + r':',
+                                          txt, re.M) or
+                                type("x", (), {"group": lambda s, i: ""})()).group(1)
+        for n in lifted),
+          "S12-30 both round-11 refusals this round lifted say so IN THE HEADER")
+
+
+def main():
+    args = sys.argv[1:]
+    if "--selftest" in args:
+        rc = selftest()
+        selftest9()
+        selftest10()
+        selftest11()
+        selftest12()
+        print("\n%d checks, %d failures (rounds 8, 9, 10, 11 and 12)"
+              % (CHECKS[0], len(FAILS)))
+        sys.exit(1 if FAILS else rc)
+    if "--apply11" in args:
+        apply11()
+        sys.exit(0)
+    if "--verify11" in args:
+        sys.exit(1 if verify11() else 0)
+    if "--apply12" in args:
+        apply12()
+        sys.exit(0)
+    if "--verify12" in args:
+        sys.exit(1 if verify12() else 0)
+    run_all = not args
+    if run_all or "--inventory" in args:
+        mode_inventory()
+        print()
+    if run_all or "--reply" in args:
+        mode_reply()
+        print()
+    if run_all or "--arms12" in args:
+        mode_arms12()
+        print()
+    if run_all or "--rows12" in args:
+        mode_rows12()
+        print()
+    if run_all or "--tonedb" in args:
+        mode_tonedb()
+        print()
+    if run_all or "--cites" in args:
+        mode_cites()
+        print()
+    if run_all or "--twins11" in args:
+        mode_twins11()
+        print()
+    if run_all or "--dispatch" in args:
+        show_dispatch()
+        print()
+    if run_all or "--record" in args:
+        show_record()
+        print()
+    if run_all or "--claims" in args:
+        show_claims()
+        print()
+    if run_all or "--grader" in args:
+        show_grader()
+        print()
+    if run_all or "--refusals" in args:
+        show_refusals()
+    if run_all or "--depth" in args:
+        show_depth()
+        print()
+    if run_all or "--pool8" in args:
+        show_pool8()
+        print()
+    if run_all or "--framed" in args:
+        show_framed()
+        print()
+    if run_all or "--refused9" in args:
+        show_refused9()
+
+
+if __name__ == "__main__":
+    main()

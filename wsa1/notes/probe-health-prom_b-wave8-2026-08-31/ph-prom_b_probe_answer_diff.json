@@ -1,0 +1,18 @@
+{
+ "prom_b": {
+  "rows": [
+   {
+    "argv": [
+     "notes/prom_b_probe_answer_diff.py",
+     "--base"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   }
+  ],
+  "skipped": [],
+  "git_blind": [],
+  "worktree_diff": []
+ }
+}

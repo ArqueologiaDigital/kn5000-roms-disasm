@@ -1,0 +1,26 @@
+{
+ "prom_b": {
+  "rows": [
+   {
+    "argv": [
+     "notes/prom_b_string_refs.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_string_refs.py",
+     "--unnamed"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   }
+  ],
+  "skipped": [],
+  "git_blind": [],
+  "worktree_diff": []
+ }
+}

@@ -1,0 +1,200 @@
+
+=== prom_a  REGRADE 57 invocation(s) that were not green ===
+    ... 25/228 runs
+    ... 50/228 runs
+    ... 75/228 runs
+    ... 100/228 runs
+    ... 125/228 runs
+    ... 150/228 runs
+    ... 175/228 runs
+    ... 200/228 runs
+    ... 225/228 runs
+    ... 228/228 runs
+    VACUOUS       (was VACUOUS      ) notes/prom_a_evidence_census.py
+    VACUOUS       (was VACUOUS      ) notes/prom_b_thunks_round6.py --unnamed
+    VACUOUS       (was VACUOUS      ) notes/prom_c_record68_round10.py
+    LOUD          (was WRITER       ) notes/prom_a_understanding_round7.py --apply-strings
+    LOUD          (was LOUD         ) notes/verify_a1_independent_check.py
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/prom_a_round3_checks.py
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/prom_b_panel_names_round12.py --0x0d
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/prom_c_understanding_round4.py
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/promb_macro_rewrite.py --unused
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/round2_audit_probes.py
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/wave7-verify-probes/wave7_pa_write_census.py --selftest
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/wave7_round8_review_wd3_prom_d.py
+    NONDET        (was TIMEOUT      ) notes/gen_prom_b_cover_round2.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/audit_wave6_round2_probes.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/audit_wave6_round3_probes.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/gen_prom_a_f90989_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f17559_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f4f000_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f58000_module.py --selftest
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/midi_parser_check.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_a_audit_callsites.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_boot_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_byte_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_call_graph.py --module
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_census_round8.py --ata
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_converted_callers.py --checks
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_ctrl_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_disk_format_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_drumnames_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_f85ff9_layout.py --null
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_f85ff9_verify.py --all
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_fa1404_identify.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_fa5aeb_layout.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_fb2000_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_fcf000_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_fdc_callgraph.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_fdc_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_fdc_operation_census.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_a_header_depth.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_pa3_census.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_panel_names_round11.py --apply12
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_portb_and_blockdev_census.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_ring_slots.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_round3_frontier_delta.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_splash_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_uiblock_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_uiscreen_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_understanding_round4.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_a_understanding_round5.py --accessors
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_a_understanding_round6.py --callshape
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_unit1_backend_check.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_sc1_serial_regs.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/vector_map.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/wave7_panel_names_round11.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/wave7_review_wa3_prom_a_names.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/wave7_round6_review_wb_prom_b.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/wave7_round9_review_wb_prom_b.py
+  44 of 57 came back green
+
+=== prom_b  REGRADE 43 invocation(s) that were not green ===
+    ... 25/172 runs
+    ... 50/172 runs
+    ... 75/172 runs
+    ... 100/172 runs
+    ... 125/172 runs
+    ... 150/172 runs
+    ... 172/172 runs
+    VACUOUS       (was SPLIT-FRAGILE) notes/prom_b_f65000_header_audit.py
+    VACUOUS       (was VACUOUS      ) notes/promb_macro_preservation.py
+    VACUOUS       (was VACUOUS      ) notes/wave7_round6_review_wb_prom_b.py
+    LOUD          (was LOUD         ) notes/wave7_round5_review_wb_prom_b.py
+    LOUD          (was LOUD         ) notes/wave7_round9_review_wb_prom_b.py
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/prom_a_understanding_round6.py --callshape
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/prom_b_dl_screens_round5.py
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/prom_b_panel_names_round12.py --0x0d
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/prom_c_record68_round10.py
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/prom_c_understanding_round4.py
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/promb_macro_rewrite.py --unused
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/wave7-verify-probes/wave7_pa_write_census.py --selftest
+    TIMEOUT       (was SPLIT-FRAGILE) notes/gen_prom_b_cover_round2.py
+    TIMEOUT       (was TIMEOUT      ) notes/reachability.py --targets
+    NONDET        (was NONDET       ) notes/prom_b_entrypoints_round7.py --runs --selftest
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/audit_wave6_round3_probes.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f067a6_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f0ea9f_module.py --checks
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f17559_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f353ab_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f4f000_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f5553f_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f6d002_module.py --checks
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_understanding_round4.py
+  ✔ UNAFFECTED    (was WRITER       ) notes/prom_a_understanding_round7.py --apply-strings
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_b_audit_callsites.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_call_graph.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_dl_call_shapes.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_b_evidence_audit.py --scopes
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f067a6_layout.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f0ea9f_header_audit.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f17559_layout.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f17559_reaudit.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f5b800_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f6d002_touches.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_panel_names_round11.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_real_coverage.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_sc1_serial_regs.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_sc1_states.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/vector_map.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/wave7_panel_names_round11.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/wave7_review_wa3_prom_a_names.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/wave7_review_wb_dl_name_audit.py
+  28 of 43 came back green
+
+=== prom_c  REGRADE 48 invocation(s) that were not green ===
+    ... 25/192 runs
+    ... 50/192 runs
+    ... 75/192 runs
+    ... 100/192 runs
+    ... 125/192 runs
+    ... 150/192 runs
+    ... 175/192 runs
+    ... 192/192 runs
+    VACUOUS       (was VACUOUS      ) notes/prom_c_record68_round10.py
+    VACUOUS       (was LOUD         ) notes/prom_c_understanding_round4.py --names
+    LOUD          (was LOUD         ) notes/prom_c_understanding_round4.py
+    LOUD          (was LOUD         ) notes/round2_audit_probes.py
+    LOUD          (was LOUD         ) notes/verify_a1_independent_check.py
+    LOUD          (was LOUD         ) notes/wave7_doc_audit.py
+    LOUD          (was LOUD         ) notes/wave7_doc_audit.py --quiet
+  ✔ BY-DESIGN     (was VACUOUS      ) notes/asm_source.py
+  ✔ BY-DESIGN     (was VACUOUS      ) notes/asm_source.py --selftest
+  ✔ BY-DESIGN     (was WRITER       ) notes/probe_health.py
+  ✔ BY-DESIGN     (was VACUOUS      ) notes/prom_c_image.py --selftest
+  ✔ BY-DESIGN     (was LOUD         ) notes/prom_c_probe_health.py --selftest
+  ✔ BY-DESIGN     (was VACUOUS      ) notes/prom_c_split.py --verify
+  ✔ UNAFFECTED    (was LOUD         ) notes/audit_round3_probes.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/audit_round3_probes.py --selftest
+  ✔ UNAFFECTED    (was LOUD         ) notes/audit_wave6_round2_probes.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/audit_wave6_round2_probes.py --selftest
+  ✔ UNAFFECTED    (was LOUD         ) notes/audit_wave6_round3_probes.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/audit_wave6_round3_probes.py --selftest
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/gen_prom_c_f64_pool.py --table
+  ✔ UNAFFECTED    (was LOUD         ) notes/gen_prom_c_f64_pool.py --verify
+  ✔ UNAFFECTED    (was LOUD         ) notes/gen_prom_c_tail_tables.py --verify
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_a_naming_round3.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_c_fcd0f7_interpreter.py --consumer
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_c_finish_round12.py --inventory
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_finish_round12.py --names
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_finish_round7.py --params
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_c_finish_round7.py --twins
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_c_frontier_src.py --clusters
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_frontier_src.py --range 0xFA7E2C
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_c_header_audit.py --all
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_c_inventory_round8.py --record
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_c_naming_round2.py --census
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_c_record68_round10.py --claims10
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_c_reg_bytepair_check.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_reg_bytepair_check.py --selftest
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_staging_producer_audit.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_staging_producer_audit.py --selftest
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_understanding_round5.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_understanding_round5.py --fields
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_understanding_round6.py --dispatch
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_understanding_round6.py --staging
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_voice_module_check.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/prom_c_voice_module_check.py --selftest
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/wave7_frontier_table.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/wave7_kn5000_transplant_residue.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/wave7_kn5000_transplant_residue.py --selftest
+  ✔ UNAFFECTED    (was LOUD         ) notes/wave7_round3_review_wd3_prom_d.py
+  41 of 48 came back green
+
+=== prom_d  REGRADE 11 invocation(s) that were not green ===
+    ... 25/44 runs
+    ... 44/44 runs
+    LOUD          (was LOUD         ) notes/wave7_round4_review_wd3_prom_d.py
+    LOUD          (was LOUD         ) notes/wave7_round6_review_wd3_prom_d.py
+    LOUD          (was LOUD         ) notes/wave7_round8_review_wd3_prom_d.py
+    WRITER        (was WRITER       ) scripts/analysis/gen_prom_d_asm.py
+  ✔ BY-DESIGN     (was VACUOUS      ) notes/asm_source.py
+  ✔ BY-DESIGN     (was VACUOUS      ) notes/asm_source.py --selftest
+  ✔ BY-DESIGN     (was WRITER       ) notes/probe_health.py
+  ✔ BY-DESIGN     (was VACUOUS      ) notes/prom_d_split_probe.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/wave7_frontier_table.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/wave7_round3_review_wd3_prom_d.py
+  ✔ UNAFFECTED    (was LOUD         ) notes/wave7_round5_review_wd3_prom_d.py
+  7 of 11 came back green
+
+wrote /tmp/health-AFTER.json

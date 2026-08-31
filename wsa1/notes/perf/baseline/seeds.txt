@@ -1,0 +1,22 @@
+prom_a   reached  362,075 bytes | still .incbin  46,306 | ★ REACHABLE AND UNCONVERTED   1,622 (3.5%)
+             seed branch            683
+             seed directory        1910
+             seed immediate        1015
+             seed pointer_table    1938
+             seed vector             26
+prom_b   reached  242,566 bytes | still .incbin  40,932 | ★ REACHABLE AND UNCONVERTED      80 (0.2%)
+             seed branch           7285
+             seed directory        1910
+             seed immediate         802
+             seed pointer_table    2104
+prom_c   reached  216,437 bytes | still .incbin       0 | ★ REACHABLE AND UNCONVERTED       0 (0.0%)
+             seed branch           4432
+             seed immediate         145
+             seed pointer_table     512
+             seed vector             14
+
+TOTAL still .incbin 87,238, of which REACHABLE CODE 1,702 (2.0%)
+
+★ The reachable figure is the coverage goal's remaining work. The rest of the
+  .incbin is data or unreached, and converting it adds territory, not coverage.
+  prom_d is DATA ONLY with no established load base and is not walked.

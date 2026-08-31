@@ -1,0 +1,41 @@
+
+=== prom_a  REGRADE 6 invocation(s) that were not green ===
+    ... 24/24 runs
+    LOUD          (was LOUD         ) notes/prom_a_understanding_round7.py --apply-strings
+    LOUD          (was LOUD         ) notes/verify_a1_independent_check.py
+    TIMEOUT       (was LOUD         ) notes/gen_prom_b_cover_round2.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_b_thunks_round6.py --unnamed
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/promb_macro_rewrite.py --unused
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/round2_audit_probes.py
+  3 of 6 came back green
+
+=== prom_b  REGRADE 9 invocation(s) that were not green ===
+    ... 25/36 runs
+    ... 36/36 runs
+    VACUOUS       (was NONDET       ) notes/prom_b_entrypoints_round7.py --runs --selftest
+    VACUOUS       (was VACUOUS      ) notes/wave7_round6_review_wb_prom_b.py
+    VACUOUS       (was LOUD         ) notes/wave7_round9_review_wb_prom_b.py
+    LOUD          (was LOUD         ) notes/wave7_round5_review_wb_prom_b.py
+    SPLIT-FRAGILE (was SPLIT-FRAGILE) notes/prom_b_panel_names_round12.py --0x0d
+    TIMEOUT       (was TIMEOUT      ) notes/gen_prom_b_cover_round2.py
+    TIMEOUT       (was TIMEOUT      ) notes/reachability.py --targets
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_dl_screens_round5.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/promb_macro_rewrite.py --unused
+  2 of 9 came back green
+
+=== prom_c  REGRADE 3 invocation(s) that were not green ===
+    ... 12/12 runs
+    LOUD          (was LOUD         ) notes/verify_a1_independent_check.py
+    LOUD          (was LOUD         ) notes/wave7_doc_audit.py
+    LOUD          (was LOUD         ) notes/wave7_doc_audit.py --quiet
+  0 of 3 came back green
+
+=== prom_d  REGRADE 4 invocation(s) that were not green ===
+    ... 16/16 runs
+    LOUD          (was LOUD         ) notes/wave7_round4_review_wd3_prom_d.py
+    LOUD          (was LOUD         ) notes/wave7_round6_review_wd3_prom_d.py
+    LOUD          (was LOUD         ) notes/wave7_round8_review_wd3_prom_d.py
+    WRITER        (was WRITER       ) scripts/analysis/gen_prom_d_asm.py
+  0 of 4 came back green
+
+wrote /tmp/health-AFTER3.json

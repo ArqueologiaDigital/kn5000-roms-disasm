@@ -1,0 +1,118 @@
+
+=== prom_a  (prom_a/wsa1_prom_a.s)  103 script(s), 103 invocation(s) ===
+    ... 25/412 runs
+    ... 50/412 runs
+    ... 75/412 runs
+    ... 100/412 runs
+    ... 125/412 runs
+    ... 150/412 runs
+    ... 175/412 runs
+    ... 200/412 runs
+    ... 225/412 runs
+    ... 250/412 runs
+    ... 275/412 runs
+    ... 300/412 runs
+    ... 325/412 runs
+    ... 350/412 runs
+    ... 375/412 runs
+    ... 400/412 runs
+    ... 412/412 runs
+  VACUOUS       notes/gen_prom_a_f90989_module.py
+  VACUOUS       notes/prom_a_audit_callsites.py
+  VACUOUS       notes/prom_a_evidence_census.py
+  VACUOUS       notes/prom_a_header_depth.py
+  VACUOUS       notes/prom_a_understanding_round5.py --accessors
+  VACUOUS       notes/prom_a_understanding_round6.py --callshape
+  VACUOUS       notes/prom_b_thunks_round6.py --unnamed
+  VACUOUS       notes/prom_c_record68_round10.py
+  VACUOUS       notes/wave7_round6_review_wb_prom_b.py
+  LOUD          notes/verify_a1_independent_check.py
+  LOUD          notes/wave7_round9_review_wb_prom_b.py
+  SPLIT-FRAGILE notes/audit_wave6_round2_probes.py
+  SPLIT-FRAGILE notes/audit_wave6_round3_probes.py
+  SPLIT-FRAGILE notes/gen_prom_b_f17559_module.py
+  SPLIT-FRAGILE notes/gen_prom_b_f4f000_module.py
+  SPLIT-FRAGILE notes/gen_prom_b_f58000_module.py --selftest
+  SPLIT-FRAGILE notes/midi_parser_check.py
+  SPLIT-FRAGILE notes/prom_a_boot_checks.py
+  SPLIT-FRAGILE notes/prom_a_byte_checks.py
+  SPLIT-FRAGILE notes/prom_a_call_graph.py --module
+  SPLIT-FRAGILE notes/prom_a_census_round8.py --ata
+  SPLIT-FRAGILE notes/prom_a_converted_callers.py --checks
+  SPLIT-FRAGILE notes/prom_a_ctrl_checks.py
+  SPLIT-FRAGILE notes/prom_a_disk_format_checks.py
+  SPLIT-FRAGILE notes/prom_a_drumnames_checks.py
+  SPLIT-FRAGILE notes/prom_a_f85ff9_layout.py --null
+  SPLIT-FRAGILE notes/prom_a_f85ff9_verify.py --all
+  SPLIT-FRAGILE notes/prom_a_fa1404_identify.py
+  SPLIT-FRAGILE notes/prom_a_fa5aeb_layout.py
+  SPLIT-FRAGILE notes/prom_a_fb2000_checks.py
+  SPLIT-FRAGILE notes/prom_a_fcf000_checks.py
+  SPLIT-FRAGILE notes/prom_a_fdc_callgraph.py
+  SPLIT-FRAGILE notes/prom_a_fdc_checks.py
+  SPLIT-FRAGILE notes/prom_a_fdc_operation_census.py
+  SPLIT-FRAGILE notes/prom_a_pa3_census.py
+  SPLIT-FRAGILE notes/prom_a_panel_names_round11.py --apply12
+  SPLIT-FRAGILE notes/prom_a_portb_and_blockdev_census.py
+  SPLIT-FRAGILE notes/prom_a_ring_slots.py
+  SPLIT-FRAGILE notes/prom_a_round3_checks.py
+  SPLIT-FRAGILE notes/prom_a_round3_frontier_delta.py
+  SPLIT-FRAGILE notes/prom_a_splash_checks.py
+  SPLIT-FRAGILE notes/prom_a_uiblock_checks.py
+  SPLIT-FRAGILE notes/prom_a_uiscreen_checks.py
+  SPLIT-FRAGILE notes/prom_a_understanding_round4.py
+  SPLIT-FRAGILE notes/prom_a_unit1_backend_check.py
+  SPLIT-FRAGILE notes/prom_b_panel_names_round12.py --0x0d
+  SPLIT-FRAGILE notes/prom_b_sc1_serial_regs.py
+  SPLIT-FRAGILE notes/prom_c_understanding_round4.py
+  SPLIT-FRAGILE notes/promb_macro_rewrite.py --unused
+  SPLIT-FRAGILE notes/round2_audit_probes.py
+  SPLIT-FRAGILE notes/vector_map.py
+  SPLIT-FRAGILE notes/wave7-verify-probes/wave7_pa_write_census.py --selftest
+  SPLIT-FRAGILE notes/wave7_panel_names_round11.py
+  SPLIT-FRAGILE notes/wave7_review_wa3_prom_a_names.py
+  SPLIT-FRAGILE notes/wave7_round8_review_wd3_prom_d.py
+  WRITER        notes/prom_a_understanding_round7.py --apply-strings
+  TIMEOUT       notes/gen_prom_b_cover_round2.py
+  BY-DESIGN     notes/asm_source.py
+  BY-DESIGN     notes/migrate_listing_readers.py --list
+  VACUOUS 9   LOUD 2   SPLIT-FRAGILE 44   WRITER 1   TIMEOUT 1   NONDET 0   BY-DESIGN 2   UNAFFECTED 44
+  not run (write mode); the write path must move FIRST -- python3 notes/migrate_listing_readers.py --list:
+      notes/gen_prom_a_cover_round1.py --emit 0xF85B0D
+      notes/gen_prom_a_cover_round1.py --splice
+      notes/gen_prom_a_cover_round2.py --emit 0xF96432
+      notes/gen_prom_a_cover_round2.py --splice
+      notes/gen_prom_b_cover_round2.py --emit
+      notes/gen_prom_b_cover_round2.py --splice
+      notes/gen_prom_b_cover_round2.py --splice --anyway
+      notes/kernel_join_probe.py --emit
+      notes/migrate_listing_readers.py --apply
+      notes/migrate_listing_readers.py --apply --only
+      notes/prom_a_census_round8.py --apply
+      notes/prom_a_naming_round3.py --apply
+      notes/prom_a_panel_names_round11.py --apply
+      notes/prom_a_panel_names_round11.py --emit
+      notes/prom_a_understanding_round4.py --apply
+      notes/prom_a_understanding_round5.py --apply
+      notes/prom_a_understanding_round6.py --apply
+      notes/prom_a_understanding_round7.py --apply
+      notes/prom_b_entrypoints_round7.py --apply
+      notes/prom_b_panel_names_round12.py --apply
+      notes/prom_b_screens_round8.py --promote --apply
+      notes/prom_b_thunks_round6.py --apply
+      notes/prom_c_inventory_round8.py --emit68
+      notes/prom_c_naming_round3.py --apply
+      notes/prom_c_record68_round10.py --apply
+      notes/prom_c_record68_round10.py --emit68
+      notes/promb_macro_rewrite.py --apply --only
+  ★ GIT-BLIND -- reads the listing through `git show`, where the tree flip cannot reach it; classify by hand:
+      notes/audit_wave5_checks.py
+      notes/gen_prom_a_cover_round1.py
+      notes/gen_prom_a_cover_round2.py
+      notes/gen_prom_b_cover_round2.py
+      notes/prom_a_fa5aeb_layout.py
+      notes/prom_a_fad800_layout.py
+
+wrote /tmp/health-a-BEFORE.json
+
+VACUOUS+LOUD across the images measured: 11
