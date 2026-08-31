@@ -138473,7 +138473,7 @@ sub_F6F404:		; <- T_F43384
 ; sub_F6F408
 ; Called from: in-module: 0xF6F400
 ; Touches: (0x272B) (0x360A) (0x360B)
-; Calls:   sub_F6F476 sub_F6F4A3 T_F40AC8 sub_F6F526 T_Ring601850_Init T_Ring600A14_Init
+; Calls:   sub_F6F476 sub_F6F4A3 T_F40AC8 Smf_ReadFile_Entry T_Ring601850_Init T_Ring600A14_Init
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
 ;                  targets it.  The scan is at every byte offset, so a hit
 ;                  is an upper bound on the CALL COUNT -- but a hit that
@@ -138643,7 +138643,7 @@ sub_F6F4F2:
 	ret	; F6F525  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6F526
+; Smf_ReadFile_Entry -- 0xF6F526
 ; Called from: in-module: 0xF6F42A
 ; Touches: nothing with an absolute address
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -138652,14 +138652,20 @@ sub_F6F4F2:
 ;                  decodes is still a real instruction.  0xF6F526 is an
 ;                  instruction boundary of this transcription, re-asserted
 ;                  on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    Smf_ReadFile_Entry -- named 2026-08-31.
+; Evidence (BRANCH): the whole routine is `jr 0xF6F530`, a two-byte hop over the
+;          eight-byte tag table SmfChunkTags that sits between it and the body.
+;          Its only call site in either image is `call 0xf6f526` at 0xF6F42A and
+;          no thunk slot names it.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine is
+;          FOR.  Left as sub_XXXXXX with the gap stated`.
+; Unknown: what 0xF6F42A is.
 ; --------------------------------------------------------------------------
-sub_F6F526:
+Smf_ReadFile_Entry:
 	jr	8	; F6F526  jr T,0xf6f530
 
 ; --------------------------------------------------------------------------
-; Data_F6F528 -- 8 bytes this block could not split.  No content rule framed
+; SmfChunkTags -- 0xF6F528, 8 bytes this block could not split.  No content rule framed
 ;                it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or ASCII
 ;                -- and the code walk never reached it from a thunk slot, a
 ;                proven call site, an opcode-anchored call or an entry of a
@@ -138671,10 +138677,45 @@ sub_F6F526:
 ; Evidence: the bytes are re-read on every emit; the classification is
 ;           NEGATIVE (no rule matched, no walk arrived) and is stated as
 ;           such.
-; Unknown: everything about it except its bytes.
+; Name:    SmfChunkTags -- named 2026-08-31.
+; Evidence (STRING + USE): the eight bytes are `MThd` followed by `MTrk`, the
+;          Standard MIDI File header-chunk and track-chunk tags, and the reader
+;          uses them as two four-byte compare templates: `ld XIY,0x00f6f528` at
+;          0xF6F59B for the header and `ld XIY,0x00f6f52c` -- the same object,
+;          plus four -- at 0xF6F658 for the track.  Both are checked by
+;          notes/prom_b_smf_reader.py.
+; ⚠ CORRECTED 2026-08-31: this header's `Unknown: everything about it except its
+;          bytes` no longer holds; its two readers are named above.
 ; --------------------------------------------------------------------------
-Data_F6F528:
+SmfChunkTags:
 	.byte	0x4D, 0x54, 0x68, 0x64, 0x4D, 0x54, 0x72, 0x6B	; F6F528  [0..7]
+
+; --------------------------------------------------------------------------
+; Smf_ReadFile -- 0xF6F530-0xF6F8A4, 881 bytes
+; ★ LABEL ADDED 2026-08-31, not renamed: this routine had none.  The eight
+;   tag bytes SmfChunkTags end at 0xF6F52F and the code after them was emitted
+;   without a label, so every tool that walks this file by label attributed the
+;   whole reader to a DATA object.
+; Extent:  bracketed by a flag, not guessed.  0xF6F530 opens
+;          `or (0x21E8),0x80` and 0xF6F89F closes `and (0x21E8),0x7F` -- the
+;          same bit of the same byte -- four instructions before the `ret` at
+;          0xF6F8A4, which is the last row before the next label.
+; Called from: `call 0xf6f526` at 0xF6F42A, through the two-byte hop
+;          Smf_ReadFile_Entry.  No thunk slot names either address.
+; Reads:   one byte at a time through InputStream_GetByte (0xF7138F), from the
+;          1,024-byte window at 0x60A700-0x60AAFF whose cursor is (0x1088).
+; Evidence (FORMAT): it is a STANDARD MIDI FILE reader, and the case is
+;          notes/prom_b_smf_reader.py's 40 checks, every one re-derived from the
+;          ROM: the four-byte compare against `MThd` at 0xF6F59B, the retry at
+;          +0x80 and the 0x31 error code, the big-endian format / ntrks /
+;          division fields landing in (0x1078)-(0x107D), the `MTrk` compare at
+;          0xF6F658, and all three of the SMF specification's own rejections --
+;          a negative division (SMPTE timecode), a zero division, and a format
+;          neither 0 nor 1.
+; Unknown: what it does with the events after the header, and which of the RAM
+;          bytes it clears at 0xF6F537-0xF6F54F belong to the sequencer.
+; --------------------------------------------------------------------------
+Smf_ReadFile:
 
 	m_or_mi8 MB16, 0x21e8, 0x80	; F6F530  or (0x21e8),0x80
 	xor	a, a	; F6F535  xor A,A
@@ -139392,7 +139433,7 @@ sub_F6FB38:
 ; sub_F6FB51
 ; Called from: in-module: 0xF6F6FB 0xF71CB4
 ; Touches: (0x10CB) (0x124A)
-; Calls:   sub_F7138F sub_F6FD7A sub_F6FD91 sub_F6FC10
+; Calls:   InputStream_GetByte sub_F6FD7A sub_F6FD91 sub_F6FC10
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FB51 is an instruction boundary of this
@@ -139479,7 +139520,7 @@ sub_F6FB51:
 ; Called from: in-module: 0xF6FBF7
 ; Touches: (0x1078) (0x107A) (0x108C) (0x108D) (0x108E) (0x108F) (0x11B2)
 ;          (0x1238) (0x124A) (0x360C) +1 more
-; Calls:   sub_F7138F sub_F70C3F sub_F7124E sub_F70FDA sub_F7122F sub_F71275
+; Calls:   InputStream_GetByte sub_F70C3F sub_F7124E sub_F70FDA sub_F7122F sub_F71275
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FC10 is an instruction boundary of this
@@ -139646,7 +139687,7 @@ sub_F6FD7A:
 ; sub_F6FD91
 ; Called from: in-module: 0xF6FB90 0xF6FBA6 0xF6FBBB 0xF6FC0C 0xF71693
 ; Touches: (0x1088) (0x1198) (0x1238) (0x1248) (0x124A)  |  0x60AAFF
-; Calls:   sub_F765D4 T_F42604
+; Calls:   InputStream_Refill T_F42604
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FD91 is an instruction boundary of this
@@ -139712,7 +139753,7 @@ sub_F6FDE4:
 ; sub_F6FDF5
 ; Called from: in-module: 0xF6FD7D
 ; Touches: (0x124A)
-; Calls:   sub_F7138F
+; Calls:   InputStream_GetByte
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FDF5 is an instruction boundary of this
@@ -139816,7 +139857,7 @@ sub_F6FE96:
 ; sub_F6FEA1
 ; Called from: in-module: 0xF6F766 0xF71D30
 ; Touches: (0x1078) (0x107A) (0x10CC) (0x124A)
-; Calls:   sub_F7138F sub_F71DB7 sub_F6FF44
+; Calls:   InputStream_GetByte sub_F71DB7 sub_F6FF44
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FEA1 is an instruction boundary of this
@@ -139868,7 +139909,7 @@ sub_F6FEA1:
 ; sub_F6FEFE
 ; Called from: in-module: 0xF6F74C
 ; Touches: (0x10CC) (0x124A)
-; Calls:   sub_F7138F sub_F6FF44
+; Calls:   InputStream_GetByte sub_F6FF44
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6FEFE is an instruction boundary of this
@@ -142688,7 +142729,7 @@ sub_F712FB:
 ; sub_F71369
 ; Called from: in-module: 0xF6F6BD 0xF71C6F
 ; Touches: (0x124A)
-; Calls:   sub_F7138F
+; Calls:   InputStream_GetByte
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71369 is an instruction boundary of this
@@ -142714,20 +142755,35 @@ sub_F71369:
 	ret	; F7138E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7138F
+; InputStream_GetByte -- 0xF7138F
 ; Called from: in-module: 0xF6F5A2 0xF6F5D7 0xF6F5E2 0xF6F5E9 0xF6F5F0
 ;              0xF6F5F7 0xF6F604 0xF6F65F +33 more
 ; Touches: (0x1088) (0x1248) (0x124A)  |  0x60A700 0x60AAFF
-; Calls:   sub_F765D4 T_F42604
+; Calls:   InputStream_Refill T_F42604
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF7138F is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    InputStream_GetByte -- named 2026-08-31 for what it does, NOT for the
+;          file format it happens to serve.
+; Evidence (INTERNAL): `ld XIX,(0x1088) / ld A,(XIX+)` -- one byte from the
+;          32-bit cursor at RAM (0x1088), post-incremented -- then
+;          `cp XIX,0x0060aaff / jr ULE`, and past that bound it calls
+;          InputStream_Refill and re-reads.  Both the cursor address and the
+;          window's top are immediates in this routine.  It also sets (0x124A)
+;          to 1 on the fast path and to the refill's return code otherwise, so
+;          (0x124A) is the fetch's STATUS byte; every caller tests it against 1
+;          and 0xFD.
+; Callers: 41 `calr` sites, all inside 0xF6F5A2-0xF7136F, which is the SMF
+;          reader (notes/prom_b_smf_reader.py).  That is why the neighbours
+;          carry an Smf prefix and this one does not: a byte fetch is not
+;          evidence about a file format.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine is
+;          FOR.  Left as sub_XXXXXX with the gap stated`.
+; Unknown: what fills the window; the refill leaves prom_b through T_F425A8.
 ; --------------------------------------------------------------------------
-sub_F7138F:
+InputStream_GetByte:
 	push	xix	; F7138F  push XIX
 	ldda32	xix, (4232)	; F71390  ld XIX,(0x1088)
 	ldb_spi	a, 240	; F71394  ld A,(XIX+)
@@ -142936,7 +142992,7 @@ Data_F71512:
 ; Called from: in-module: 0xF6F733 0xF71CF1
 ; Touches: (0x1198) (0x11B1) (0x1239) (0x124A) (0x124B) (0x137B) (0x137C)
 ;          (0x137D) (0x137E)
-; Calls:   sub_F6FD7A sub_F7138F sub_F71417 sub_F71697 sub_F6FD91
+; Calls:   sub_F6FD7A InputStream_GetByte sub_F71417 sub_F71697 sub_F6FD91
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71525 is an instruction boundary of this
@@ -143580,7 +143636,7 @@ sub_F71A95:
 ; Called from: in-module: 0xF6F637
 ; Touches: (0x1010) (0x107A) (0x10CB) (0x11B2) (0x1239) (0x124B) (0x360C)
 ; Calls:   T_F409E0 T_F42708 sub_F72822 sub_F6FB38 sub_F71D4F sub_F6F929
-;          sub_F71BEA sub_F765DE sub_F729D9 sub_F72F5C sub_F6F94E
+;          sub_F71BEA InputStream_RefillDone sub_F729D9 sub_F72F5C sub_F6F94E
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71B82 is an instruction boundary of this
@@ -143644,7 +143700,7 @@ Data_F71BE6:
 ; sub_F71BEA
 ; Called from: in-module: 0xF71BB5
 ; Touches: (0x1010) (0x10CB) (0x11B1) (0x11B2) (0x1238) (0x124A) (0x2880)
-; Calls:   sub_F7138F sub_F71369 sub_F6FE1B sub_F728FE sub_F710E7 sub_F712B6
+; Calls:   InputStream_GetByte sub_F71369 sub_F6FE1B sub_F728FE sub_F710E7 sub_F712B6
 ;          sub_F6FB51 sub_F728A3 sub_F71525 sub_F71D71 sub_F6FEA1
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -143810,7 +143866,7 @@ sub_F71D4F:
 ; sub_F71D71
 ; Called from: in-module: 0xF71D10
 ; Touches: (0x10CC) (0x124A)
-; Calls:   sub_F7138F sub_F71DB7
+; Calls:   InputStream_GetByte sub_F71DB7
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF71D71 is an instruction boundary of this
@@ -147422,7 +147478,7 @@ Data_F73844:
 
 
 ; --------------------------------------------------------------------------
-; sub_F7385F
+; Smf_WriteFile -- 0xF7385F
 ; Called from: in-module: 0xF73840
 ; Touches: (0x0C70) (0x107E) (0x1080) (0x1082) (0x1084) (0x1086) (0x1088)
 ;          (0x10C4) (0x10C6) (0x1193) +39 more  |  0x603422 0x603500
@@ -147436,10 +147492,25 @@ Data_F73844:
 ;                  decodes is still a real instruction.  0xF7385F is an
 ;                  instruction boundary of this transcription, re-asserted
 ;                  on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    Smf_WriteFile -- named 2026-08-31.
+; Extent:  0xF7385F-0xF74809, 4,011 bytes, ends `ret`.  Bracketed by the same
+;          flag as Smf_ReadFile and by the OTHER of its only two brackets:
+;          `or (0x21E8),0x80` at 0xF73875 and `and (0x21E8),0x7F` at 0xF747FA,
+;          fifteen bytes before the `ret`, which is the last row before the next
+;          label (RamPtrTable_F7480A).
+; Evidence (FORMAT): it emits a Standard MIDI File out of the 32-byte template
+;          SmfFileTemplate_F7493F -- `MThd`, length 6, format 0, one track,
+;          division 96, `MTrk` -- copying the `MTrk` tag from template+0x0E at
+;          0xF73A3A and the 11-byte track-name meta event `00 FF 03 0F WSA    `
+;          from template+0x16 at 0xF73A5A, then EIGHT bytes from the filename
+;          field at RAM (0x21C8) at 0xF73A64.  7 + 8 = 15 = the 0x0F the meta
+;          event declares, so the two copies satisfy the ROM's own length byte.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine is
+;          FOR.  Left as sub_XXXXXX with the gap stated`.
+; Unknown: 4,011 bytes do much more than write a header.  The name claims the
+;          FILE FORMAT it produces, not everything the routine does.
 ; --------------------------------------------------------------------------
-sub_F7385F:
+Smf_WriteFile:
 	ldb_d8	a, (10021)	; F7385F  ld A,(0x2725)
 	pushw	wa	; F73863  push WA
 	m_cp_mi16 MW24, 0x60341c, 0x0000	; F73864  cp (0x60341c),0x0000
@@ -149046,7 +149117,7 @@ sub_F7492F:
 	ret	; F7493E  ret
 
 ; --------------------------------------------------------------------------
-; Data_F7493F -- 99 bytes this block could not split.  No content rule
+; SmfFileTemplate_F7493F -- 0xF7493F, 99 bytes this block could not split.  No content rule
 ;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
 ;                ASCII -- and the code walk never reached it from a thunk
 ;                slot, a proven call site, an opcode-anchored call or an
@@ -149059,9 +149130,27 @@ sub_F7492F:
 ; Evidence: the bytes are re-read on every emit; the classification is
 ;           NEGATIVE (no rule matched, no walk arrived) and is stated as
 ;           such.
-; Unknown: everything about it except its bytes.
+; Name:    named 2026-08-31 -- a STANDARD MIDI FILE header, byte for byte:
+;            4D 54 68 64             `MThd`
+;            00 00 00 06             chunk length 6
+;            00 00                   format 0
+;            00 01                   one track
+;            00 60                   division, 96 ticks per quarter note
+;            4D 54 72 6B             `MTrk`
+;            00 00 00 00             track length -- a placeholder
+;            00 FF 03 0F             delta 0, meta FF 03 (track name), length 15
+;            57 53 41 20 20 20 20    `WSA    `
+; Read by: the writer copies template+0x0E (`MTrk`) and the 11 bytes at
+;          template+0x16, then eight more from the filename field at RAM
+;          (0x21C8).  7 + 8 = 15, which is the length the meta event declares.
+; Evidence: the bytes are re-read on every emit, and the format claim is
+;          notes/prom_b_smf_reader.py's 40 checks plus the arithmetic above.
+; ⚠ CORRECTED 2026-08-31: this header's `Unknown: everything about it except its
+;          bytes` no longer holds.
+; Unknown: what the 0x40-strided bytes after offset 0x21 are.  They are NOT
+;          claimed here.
 ; --------------------------------------------------------------------------
-Data_F7493F:
+SmfFileTemplate_F7493F:
 	.byte	0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x60, 0x4D, 0x54	; F7493F  [0..15]
 	.byte	0x72, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0x0F, 0x57, 0x53, 0x41, 0x20, 0x20, 0x20	; F7494F  [16..31]
 	.byte	0x20, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01, 0x40, 0x01, 0x80, 0x01, 0xC0	; F7495F  [32..47]
@@ -151113,7 +151202,7 @@ ByteMap_F7609E:
 
 
 ; --------------------------------------------------------------------------
-; Data_F760BF -- 99 bytes this block could not split.  No content rule
+; SmfFileTemplate_F760BF -- 0xF760BF, 99 bytes this block could not split.  No content rule
 ;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
 ;                ASCII -- and the code walk never reached it from a thunk
 ;                slot, a proven call site, an opcode-anchored call or an
@@ -151126,9 +151215,27 @@ ByteMap_F7609E:
 ; Evidence: the bytes are re-read on every emit; the classification is
 ;           NEGATIVE (no rule matched, no walk arrived) and is stated as
 ;           such.
-; Unknown: everything about it except its bytes.
+; Name:    named 2026-08-31 -- a STANDARD MIDI FILE header, byte for byte:
+;            4D 54 68 64             `MThd`
+;            00 00 00 06             chunk length 6
+;            00 00                   format 0
+;            00 01                   one track
+;            00 60                   division, 96 ticks per quarter note
+;            4D 54 72 6B             `MTrk`
+;            00 00 00 00             track length -- a placeholder
+;            00 FF 03 0F             delta 0, meta FF 03 (track name), length 15
+;            57 53 41 20 20 20 20    `WSA    `
+; Read by: the writer copies template+0x0E (`MTrk`) and the 11 bytes at
+;          template+0x16, then eight more from the filename field at RAM
+;          (0x21C8).  7 + 8 = 15, which is the length the meta event declares.
+; Evidence: the bytes are re-read on every emit, and the format claim is
+;          notes/prom_b_smf_reader.py's 40 checks plus the arithmetic above.
+; ⚠ CORRECTED 2026-08-31: this header's `Unknown: everything about it except its
+;          bytes` no longer holds.
+; Unknown: what the 0x40-strided bytes after offset 0x21 are.  They are NOT
+;          claimed here.
 ; --------------------------------------------------------------------------
-Data_F760BF:
+SmfFileTemplate_F760BF:
 	.byte	0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x60, 0x4D, 0x54	; F760BF  [0..15]
 	.byte	0x72, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0x0F, 0x57, 0x53, 0x41, 0x20, 0x20, 0x20	; F760CF  [16..31]
 	.byte	0x20, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01, 0x40, 0x01, 0x80, 0x01, 0xC0	; F760DF  [32..47]
@@ -151735,7 +151842,7 @@ sub_F76552:
 ; sub_F76567
 ; Called from: in-module: 0xF75AAE 0xF75AEF 0xF75B4F
 ; Touches: (0x126E) (0x345C) (0x345E)
-; Calls:   sub_F72F0A sub_F7659B sub_F765D4 sub_F765DE
+; Calls:   sub_F72F0A sub_F7659B InputStream_Refill InputStream_RefillDone
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF76567 is an instruction boundary of this
@@ -151796,7 +151903,7 @@ sub_F7659B:
 	ret	; F765D3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F765D4
+; InputStream_Refill -- 0xF765D4
 ; Called from: in-module: 0xF6FDA7 0xF713A7 0xF76593
 ; Touches: (0x21E7)
 ; Calls:   T_F425A8
@@ -151805,16 +151912,24 @@ sub_F7659B:
 ;                    0xF765D4 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    InputStream_Refill -- named 2026-08-31.
+; Evidence (INTERNAL): the whole routine is `or (0x21E7),0x02` then
+;          `call 0xf425a8` then `ret`.  It is what InputStream_GetByte calls at
+;          0xF713A7 when its cursor passes the top of the 0x60A700-0x60AAFF
+;          window, and InputStream_RefillDone (0xF765DE) is its exact inverse on
+;          the same bit.  The name claims the bit and the hand-off and nothing
+;          about where the bytes come from.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine is
+;          FOR.  Left as sub_XXXXXX with the gap stated`.
+; Unknown: what prom_a 0xFE1C3A, behind slot T_F425A8, reads from.
 ; --------------------------------------------------------------------------
-sub_F765D4:
+InputStream_Refill:
 	m_or_mi8 MB16, 0x21e7, 0x02	; F765D4  or (0x21e7),0x02
 	call	16000424	; F765D9  call 0xf425a8
 	ret	; F765DD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F765DE
+; InputStream_RefillDone -- 0xF765DE
 ; Called from: in-module: 0xF6F723 0xF6F780 0xF6F7AD 0xF6F7DD 0xF71BBF
 ;              0xF71BD5 0xF76597
 ; Touches: (0x21E7)
@@ -151823,10 +151938,20 @@ sub_F765D4:
 ;                    0xF765DE is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    InputStream_RefillDone -- named 2026-08-31.
+; Evidence (INTERNAL): `and (0x21E7),0xFD / ld W,0x01 / ret` -- it clears exactly
+;          the bit InputStream_Refill (0xF765D4) sets, and returns 1, which is
+;          the value InputStream_GetByte stores in its status byte (0x124A) for
+;          a good fetch.  ⚠ Bit 1 of (0x21E7) is NOT unique to this pair: prom_b
+;          sets or clears it at ten addresses, in five set/clear pairs of the
+;          same shape (0xF765D4/DE, 0xF76661, 0xF76677/80, 0xF77D39/43,
+;          0xF77DC6/0xF77DE5, 0xF77F20/2A, 0xF77FAD/0xF77FCC).  The name claims
+;          this pair, not ownership of the bit.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine is
+;          FOR.  Left as sub_XXXXXX with the gap stated`.
+; Unknown: nothing about the bit; who calls it, and when, is listed above.
 ; --------------------------------------------------------------------------
-sub_F765DE:
+InputStream_RefillDone:
 	m_and_mi8 MB16, 0x21e7, 0xfd	; F765DE  and (0x21e7),0xfd
 	ldb	w, 1	; F765E3  ld W,0x01
 	ret	; F765E5  ret

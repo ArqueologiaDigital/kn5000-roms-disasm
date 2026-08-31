@@ -35,6 +35,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REL = "prom_b/wsa1_prom_b.s"
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from prom_b_apply_msgline_names import RENAMES, CLEARERS  # noqa: E402  the round's own table
+from prom_b_apply_smf_names import RENAMES as SMF_RENAMES, DATA_RENAMES  # noqa: E402
 
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
 
@@ -50,6 +51,8 @@ def main():
         rev = sys.argv[sys.argv.index("--base") + 1]
     ren = {"sub_%06X" % a: n for a, n, *_ in RENAMES}
     ren.update({"sub_%06X" % a: n for a, n, *_ in CLEARERS})
+    ren.update({"sub_%06X" % a: n for a, n in SMF_RENAMES})
+    ren.update({o: n for o, n, _k in DATA_RENAMES})
     old = base_text(rev).splitlines()
     with open(os.path.join(ROOT, REL)) as f:
         new = f.read().splitlines()
@@ -64,7 +67,8 @@ def main():
     # Two more shapes this round produces on purpose, each of which REPLACES a
     # line rather than dropping it.  Both are only accepted when the text that
     # was there is still readable somewhere in the new file.
-    titles = {"; sub_%06X" % a: f"; {n} -- 0x{a:06X}" for a, n, *_ in list(RENAMES) + list(CLEARERS)}
+    titles = {"; sub_%06X" % a: f"; {n} -- 0x{a:06X}"
+              for a, n, *_ in list(RENAMES) + list(CLEARERS) + [(a, n) for a, n in SMF_RENAMES]}
     newtext = "\n".join(new)
     QUOTED = ("is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's",
               "rule that a stated gap beats a plausible guess.")
@@ -85,8 +89,17 @@ def main():
             have[titles[ln]] -= 1
             retitled += 1
             continue
+        # a DATA object's title: `; Data_XXXXXX -- rest` -> `; <new> -- 0xXXXXXX, rest`
+        m = re.match(r"^; (Data_[0-9A-F]{6}) -- (.*)$", ln)
+        if m and m.group(1) in ren:
+            want = f"; {ren[m.group(1)]} -- 0x{m.group(1)[5:]}, {m.group(2)}"
+            if have[want] > 0:
+                have[want] -= 1
+                retitled += 1
+                continue
         if ("Unknown: what the routine is FOR" in ln or
-                "a stated gap beats a plausible guess" in ln) and all(q in newtext for q in QUOTED):
+                "a stated gap beats a plausible guess" in ln or
+                ln == "; Unknown: everything about it except its bytes.") and all(q in newtext for q in QUOTED):
             quoted += 1
             continue
         deleted += 1
