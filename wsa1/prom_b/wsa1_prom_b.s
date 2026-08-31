@@ -135609,7 +135609,7 @@ sub_F6DA12:
 ; sub_F6DA9A
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6DAA6 sub_F6DAED
+; Calls:   Format_ChordName sub_F6DAED
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135630,7 +135630,7 @@ sub_F6DA9A:
 	ret	; F6DAA5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6DAA6
+; Format_ChordName -- 0xF6DAA6
 ; Called from: in-module: 0xF6DA9F; an already-converted call site elsewhere
 ;              in the image
 ; Touches: (0x0E6C) (0x0E6D)
@@ -135644,10 +135644,28 @@ sub_F6DA9A:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DAA6
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    Format_ChordName -- named 2026-08-31 for the two tables it indexes,
+;          in the style of prom_a's Format_HexByte.
+; Evidence (TABLE): two copies into the caller's XIX --
+;            (XIX+0)  two bytes of entry (0x0E6C) & 15 of the 2-wide table at
+;                     0xF6DB19, the chord ROOT: `  `, `C `, `C#`, `D `, `Eb`,
+;                     `E `, `F `, `F#`, `G `, `Ab`, `A `, `Bb`, `B `
+;                     (the accidentals are the panel font's own glyphs, not
+;                     ASCII);
+;            (XIX+2)  five bytes of entry (0x0E6D) & 31 of the 5-wide table at
+;                     0xF6DB39, the chord TYPE: `7    `, `Maj7 `, `aug  `,
+;                     `min  `, `min7 `, `dim  `, `m7b5 `, `mM7  `, `7sus4`,
+;                     `6    `, `aug7 `, `b5   `, `7b5  `, `79   `, `7b9  `,
+;                     `M79  `, `69   `, `m6   `, ... .
+;          XIX is the caller's, so this formats INTO a buffer it is given; the
+;          neighbouring sub_F6DAED pads (XIX+7) with two spaces.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
+; Unknown: which chord (0x0E6C)/(0x0E6D) hold -- the one being played, the one
+;          the accompaniment recognised, or one being edited.
 ; --------------------------------------------------------------------------
-sub_F6DAA6:
+Format_ChordName:
 	xor	xhl, xhl	; F6DAA6  xor XHL,XHL
 	ldb_d8	l, (3692)	; F6DAA8  ld L,(0x0e6c)
 	and	l, 15	; F6DAAC  and L,0x0f
@@ -137102,7 +137120,7 @@ Data_F6E43E:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E463
+; MsgLine_NoteName -- 0xF6E463
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x0FE8) (0x125A)
 ; Calls:   T_F431B0 MsgLine_ClearTail T_F431B4
@@ -137116,10 +137134,23 @@ Data_F6E43E:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E463
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_NoteName -- named 2026-08-31 for the table it indexes.
+; Evidence (TABLE): `ld L,(0x125a) / and L,0x0f / sla 0x02,HL /
+;          ld XIY,0x00f6e4b2 / ld WA,(XIY+HL)` and two `ld (XIX),WA` stores put
+;          FOUR bytes of entry (0x125A) & 15 of Text_GAbABbBCDbDEbEFF at
+;          0x00000FE9, inside the 30-character on-screen text line at 0x0FE4
+;          (notes/FINDINGS-prom_b-message-line.md), after writing a space at
+;          0x0FE8; it then calls the painter through slot 0xF431B4.  That table
+;          is `<G >`, `<Ab>`, `<A >`, `<Bb>`, `<B >`, `<C >`, `<Db>`, `<D >`,
+;          `<Eb>`, `<E >`, `<F >`, `<F#>` and four blanks.  It claims (0x0EF5)
+;          = 1 like the rest of the family.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
+; Unknown: what (0x125A) is a note OF -- transpose, key, root, split point.
+;          The name claims the twelve names it draws and nothing else.
 ; --------------------------------------------------------------------------
-sub_F6E463:
+MsgLine_NoteName:
 	m_cp_mi8 MB16, 0x0ef5, 0x01	; F6E463  cp (0x0ef5),0x01
 	jr	z, 11	; F6E468  jr Z,0xf6e475
 	stdi8	(3829), 1	; F6E46A  ld (0x0ef5),0x01
