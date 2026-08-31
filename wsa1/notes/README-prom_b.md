@@ -44,13 +44,23 @@ copies and the sub-screen code it claims.
     python3 notes/prom_b_msgline.py --writers
     python3 notes/prom_b_msgline.py --selftest    # 45 checks, 2 of them negative
 
-⚠ **A routine that "references an ASCII string" is usually NOT a caption
-writer.** A census of prom_b routines whose operands land on printable bytes
-returns 74, and about half of those are display-list PAINTERS whose `ld
-XIX,imm` is the list's END POINTER, which merely happens to sit on a string
-table. The filter that separates them is the destination: does the routine copy
-INTO 0x0FE4-0x1001? That is what this script tests, and it is why the round
-named 38 routines and not 74.
+⚠ **A routine that "references an ASCII string" is often NOT a caption
+writer** — see `prom_b_string_refs.py` below, which measures the split. The
+filter that separates them is the DESTINATION: does the routine copy the bytes
+into 0x0FE4-0x1001? That is what this script tests.
+
+### `prom_b_string_refs.py` — ★ READ BEFORE NAMING ANYTHING FROM A STRING
+**"Which prom_b routines name an ASCII string, and which of those are
+CAPTIONS?"** Splits them three ways, because naming from the wrong column
+produces a confident wrong name the byte gate cannot see:
+
+    python3 notes/prom_b_string_refs.py             # 43 CAPTION, 19 DL-RUN, 24 OTHER
+    python3 notes/prom_b_string_refs.py --unnamed   #  5 CAPTION, 17 DL-RUN, 14 OTHER
+
+`DL-RUN` is the trap: the routine's shape is `ld XIY,<start> / ld XIX,<end> /
+call <a display-list runner>`, and the "string" is where the LIST ENDS, not
+anything the routine says. `sub_F5C4B8`, `sub_F5D5C8`, `sub_F7E2ED` and
+`sub_F7E430` are all in that column and were all deliberately left unnamed.
 
 ### `prom_b_effect_param_map.py` — ★ EffectNames entry k IS algorithm k
 **"Is entry k of EffectNames_F147AC the name of DSP effect algorithm k?"** Yes.
