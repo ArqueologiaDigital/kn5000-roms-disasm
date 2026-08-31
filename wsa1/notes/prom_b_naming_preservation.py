@@ -20,20 +20,30 @@ WHAT QUESTION THIS ANSWERS
     Neither substitutes for the other.
 
 RUN
-    python3 notes/prom_b_naming_preservation.py                 # vs HEAD
-    python3 notes/prom_b_naming_preservation.py --base <rev>
+    python3 notes/prom_b_naming_preservation.py
     python3 notes/prom_b_naming_preservation.py --show-deleted
 Exit status is non-zero if any base line is unaccounted for.
+A revision other than HEAD: `--base <rev>`.
+
+★ IT READS THE IMAGE, NOT ONE FILE, ON BOTH SIDES.  The working side goes
+through notes/asm_source.py.  The BASE side is materialised out of git into a
+temp tree -- the primary and, recursively, every `.include` it names at that
+revision -- and read through asm_source there too.  So a future per-subject
+split of prom_b changes neither side's answer, which is the property
+notes/probe_health.py exists to check for.
 """
 import collections
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REL = "prom_b/wsa1_prom_b.s"
 sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_lines, image_files  # noqa: E402
 from prom_b_apply_msgline_names import RENAMES, CLEARERS  # noqa: E402  the round's own table
 from prom_b_apply_smf_names import RENAMES as SMF_RENAMES, DATA_RENAMES  # noqa: E402
 from prom_b_apply_effect_names import RENAMES as FX_RENAMES  # noqa: E402
@@ -44,15 +54,55 @@ from prom_b_apply_chordnote_names import RENAMES as CN_RENAMES  # noqa: E402
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
 
 
-def base_text(rev):
-    return subprocess.run(["git", "-C", ROOT, "show", f"{rev}:{REL}"],
-                          capture_output=True, text=True, check=True).stdout
+INCLUDE = re.compile(r'^\s*\.include\s+"([^"]+)"')
+
+
+def _git_show(rev, path):
+    r = subprocess.run(["git", "-C", ROOT, "show", f"{rev}:{path}"],
+                       capture_output=True, text=True)
+    return r.stdout if r.returncode == 0 else None
+
+
+def base_lines(rev):
+    """The BASE revision's whole IMAGE, includes expanded, as a list of lines.
+
+    Materialised into a temp tree so that asm_source resolves the includes the
+    same way it does for the working tree -- one code path, two revisions.
+    """
+    tmp = tempfile.mkdtemp(prefix="preserve-base-")
+    try:
+        want, done = [REL], set()
+        while want:
+            rel = want.pop()
+            if rel in done:
+                continue
+            done.add(rel)
+            txt = _git_show(rev, rel)
+            if txt is None:
+                continue
+            dst = os.path.join(tmp, rel)
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            with open(dst, "w") as f:
+                f.write(txt)
+            for ln in txt.splitlines():
+                m = INCLUDE.match(ln)
+                if m:
+                    inc = m.group(1)
+                    want.append(inc if os.path.sep in inc or "/" in inc
+                                else os.path.join(os.path.dirname(rel), inc))
+        return list(image_lines(tmp, REL))
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 def main():
     rev = "HEAD"
     if "--base" in sys.argv:
-        rev = sys.argv[sys.argv.index("--base") + 1]
+        i = sys.argv.index("--base") + 1
+        if i >= len(sys.argv):
+            print("--base needs a revision; defaulting to HEAD")
+        else:
+            rev = sys.argv[i]
     ren = {"sub_%06X" % a: n for a, n, *_ in RENAMES}
     ren.update({"sub_%06X" % a: n for a, n, *_ in CLEARERS})
     ren.update({"sub_%06X" % a: n for a, n in SMF_RENAMES})
@@ -61,9 +111,8 @@ def main():
     ren.update(dict(DF_RENAMES))
     ren.update(dict(ED_RENAMES))
     ren.update(dict(CN_RENAMES))
-    old = base_text(rev).splitlines()
-    with open(os.path.join(ROOT, REL)) as f:
-        new = f.read().splitlines()
+    old = [l.rstrip("\n") for l in base_lines(rev)]
+    new = [l.rstrip("\n") for l in image_lines(ROOT, REL)]
     have = collections.Counter(new)
 
     def rewrite(line):

@@ -17,10 +17,22 @@ WHAT QUESTION THIS ANSWERS
     asks "would a per-subject SPLIT break this probe" and builds three trees to
     do it; this asks "did THIS round's edit break it" and changes one file.
 
+⚠⚠ IT RUNS EVERY OTHER PROBE, TWICE, SO IT MUST NEVER RUN UNDER A HARNESS THAT
+RUNS PROBES.  notes/probe_health.py discovers its candidates by grepping every
+committed .py for the image's filename and then executing the commands each
+docstring cites.  If this script were one of them it would re-enter the whole
+probe corpus inside each of three trees.  It therefore REFUSES to do anything
+unless `--base` is given an explicit revision: a bare run, or `--base` with no
+value, prints one line and exits 0.
+
 RUN
-    python3 notes/prom_b_probe_answer_diff.py --base <rev>
-    python3 notes/prom_b_probe_answer_diff.py --base <rev> --only <substr>
+    python3 notes/prom_b_probe_answer_diff.py --base HEAD~1
+    python3 notes/prom_b_probe_answer_diff.py --base HEAD~1 --only msgline
 Exit status is non-zero if any probe's answer changed.
+
+★ IT REPLACES THE WHOLE IMAGE, NOT ONE FILE.  The base copy gets the primary
+and, recursively, every `.include` it names at that revision, so a future
+per-subject split of prom_b does not silently reduce this to a partial swap.
 """
 import os
 import re
@@ -53,16 +65,46 @@ def run(cwd, script):
         return "TIMEOUT"
 
 
+INCLUDE = re.compile(r'^\s*\.include\s+"([^"]+)"')
+
+
+def swap_image(alt, base):
+    """Put the BASE revision of the whole image into `alt`. -> files replaced."""
+    want, done = [REL], set()
+    while want:
+        rel = want.pop()
+        if rel in done:
+            continue
+        done.add(rel)
+        r = subprocess.run(["git", "-C", ROOT, "show", f"{base}:{rel}"],
+                           capture_output=True)
+        if r.returncode != 0:
+            continue
+        dst = os.path.join(alt, rel)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        with open(dst, "wb") as f:
+            f.write(r.stdout)
+        for ln in r.stdout.decode("utf-8", "replace").splitlines():
+            m = INCLUDE.match(ln)
+            if m and m.group(1).endswith(".s"):
+                inc = m.group(1)
+                want.append(inc if "/" in inc else os.path.join(os.path.dirname(rel), inc))
+    return sorted(done)
+
+
 def main():
-    base = sys.argv[sys.argv.index("--base") + 1] if "--base" in sys.argv else "HEAD~1"
+    if "--base" not in sys.argv or sys.argv.index("--base") + 1 >= len(sys.argv):
+        print("prom_b_probe_answer_diff: needs an explicit `--base <rev>`; "
+              "it runs every prom_b probe twice and will not do that by accident.")
+        return 0
+    base = sys.argv[sys.argv.index("--base") + 1]
     only = sys.argv[sys.argv.index("--only") + 1] if "--only" in sys.argv else None
     tmp = tempfile.mkdtemp(prefix="probediff-")
     alt = os.path.join(tmp, "tree")
     subprocess.run(["cp", "-a", ROOT, alt], check=True)
-    old = subprocess.run(["git", "-C", ROOT, "show", f"{base}:{REL}"],
-                         capture_output=True, check=True).stdout
-    with open(os.path.join(alt, REL), "wb") as f:
-        f.write(old)
+    swapped = swap_image(alt, base)
+    print(f"base {base}: replaced {len(swapped)} file(s) of the image -- "
+          + ", ".join(swapped))
     for d in (ROOT, alt):
         shutil.rmtree(os.path.join(d, "notes", "__pycache__"), ignore_errors=True)
 
