@@ -29,8 +29,16 @@ HOW
     a stride that is deliberately coprime with the window, so each address is
     seen at many different offsets from its window's end.
 
+⚠⚠ THE GUARD LANDED (2026-08-31). `reachability._decode_window` now drops the
+    rows this file was written to find, so `--guard 0` here is the way to
+    reproduce the DEFECT -- it is no longer what the tool does -- and
+    `--guard 6`, the default MAXLEN-1, is. The measurement that justified it is
+    in notes/perf/README.md section 4, and the byte-by-byte consequences in
+    notes/perf/GUARD-ACCOUNTING-2026-08-31.txt.
+
 RUN
-    python3 notes/perf/decode_conflicts.py --tag prom_a --starts 400
+    python3 notes/perf/decode_conflicts.py --tag prom_a --starts 400          # 52 conflicts
+    python3 notes/perf/decode_conflicts.py --tag prom_a --starts 400 --guard 6  # 0
     python3 notes/perf/decode_conflicts.py --selftest
 
 SIGNAL BEING READ
@@ -176,11 +184,18 @@ def selftest():
     # ★ THE INSTRUMENT MUST AGREE WITH THE TOOL IT IS REASONING ABOUT. If this
     # file's decode() drifted from _decode_window's, every conclusion drawn from
     # it would be about a decoder the tool does not use.
+    # ⚠ AND THE TOOL NOW GUARDS ITS WINDOW TAILS, so the agreement to check is
+    # with the GUARDED rows: this file's raw decode is what unidasm said, and
+    # the tool's is that list with the last MAXLEN-1 bytes' rows dropped.
     start = m.BASES["prom_a"] + 0x1000
     mine = decode(m, "prom_a", start, m.WINDOW)
     theirs = m._decode_window("prom_a", start)
-    check("this file's decode() == reachability._decode_window()",
-          mine == theirs, "%d rows" % len(mine))
+    end = start + m.WINDOW
+    guarded = [r for r in mine if r[0] + m.MAXLEN <= end]
+    check("this file's raw decode() is what the tool decoded, before its guard",
+          guarded == theirs, "%d rows, %d dropped" % (len(theirs), len(mine) - len(theirs)))
+    check("...and the guard is what makes the difference -- unguarded, it does not match",
+          mine != theirs and mine[:len(theirs)] == theirs)
     check("a window yields many instructions", len(mine) > 100, "%d" % len(mine))
 
     # and it must be able to SEE a conflict: feed it a fabricated one.
