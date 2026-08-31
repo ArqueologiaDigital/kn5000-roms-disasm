@@ -183,7 +183,15 @@ one byte after its `ret`.
 * **`sub_F6D72F`** writes `P n ` into the line at +14 but does most of its work
   in work DRAM (`0x60A000`–`0x60A002`, `0x60F01D`) and its caption copy is not
   the routine's purpose. Left `sub_XXXXXX`.
-* **`sub_F6E463`, `sub_F6D482`, `sub_F6D5BA`, `sub_F6D5E2`, `sub_F6D6DC`,
+* ⚠ **CORRECTED the same day:** `sub_F6E463` was listed here as unnamed. It is
+  `MsgLine_NoteName` now — it copies four bytes of entry `(0x125A) & 15` of
+  `Text_GAbABbBCDbDEbEFF` (`<G >`, `<Ab>` … `<F#>`) to `0x0FE9` and paints. It
+  was missed by `prom_b_msgline.py`'s writer table only because it moves those
+  four bytes with two `ld (XIX),WA` stores rather than an `ldir`; the script's
+  `touches_buf` flag still listed it, which is why it got a second look.
+  `sub_F6DBF9` is still refused: it writes three table-selected fields into the
+  line and only the last, `TENU`/`NORM`/`STAC`/`CUTT`, is identifiable.
+* **`sub_F6D482`, `sub_F6D5BA`, `sub_F6D5E2`, `sub_F6D6DC`,
   `sub_F6D710`, `sub_F6D86B`, `sub_F6D890`, `sub_F6D963`, `sub_F6D9AE`,
   `sub_F6DA12`, `sub_F6DA9A`, `sub_F6DAED`, `sub_F6DBF9`** all touch the line
   but copy no caption of their own. Three of them are close to nameable and were
