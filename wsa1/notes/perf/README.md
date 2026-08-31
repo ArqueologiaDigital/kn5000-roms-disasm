@@ -171,13 +171,35 @@ does -- `--guard 6` on all three images:
 
 It costs 6 bytes of every 2,048 -- ~0.2% of the addresses a window asserts.
 
-★★ THE CONSEQUENCE FOR OPTIMISATION. Because interior decodes never conflict but
-tail decodes do, what `_BOUND` holds at an address depends on WHICH WINDOW GOT
-THERE FIRST -- that is, on walk order. So persisting the index, decoding the
-image up front, or changing WINDOW all change answers, and none of them can be
-argued safe: they must be gated on `prove_identical.py`. Fix the truncation
-first (drop rows within a max-instruction-length of the window end) and the
-index becomes canonical -- and then every one of those becomes safe.
+★★ IT IS IN THE TOOL'S OUTPUT, AND THE GUARD WAS **NOT LANDED**. The guard was
+applied and A/B'd cold against the recorded baseline
+(`notes/perf/GUARD-AB-2026-08-31.txt`). Four of five modes DIFFER:
+
+    TOTAL reachable-and-unconverted
+        as committed   STRONG 17 bytes, ANY 1,670, in 17 spans
+        with guard     STRONG 17 bytes, ANY 1,702, in 17 spans
+
+    and one span leaves the work list:
+        -prom_a  0xFC3000-0xFC5400  9,216 bytes, 1 reachable
+        +prom_a  0xF96259-0xF96418    447 bytes, 1 reachable
+
+A 9,216-byte span was on the work list because ONE byte in it was reachable, and
+that byte was reachable only through an edge a truncated decode invented.
+
+★ The **STRONG** column is unchanged at 17 bytes, and `--selftest` is identical,
+so no conversion decision made to date is affected -- STRONG is the column the
+tool tells lanes to convert on. What moves is the weak `any` figure. The guard
+costs nothing in time (1,083.70 s vs 1,079.85 s cold).
+
+⚠ It is a CORRECTNESS change, not an optimisation, and it needs Felipe's
+decision and a re-recorded baseline. A performance lane does not get to move a
+published figure.
+
+★★ AND IT BLOCKS THE PERFORMANCE WORK. While the tail is in, what `_BOUND` holds
+at an address depends on WHICH WINDOW GOT THERE FIRST -- on walk order. So
+persisting the index, decoding the image up front, or changing WINDOW all change
+answers and none can be argued safe. **The 83% cannot be attacked until this is
+settled.**
 
 ## 5. probe_health: it is not process churn, it is 52 guaranteed timeouts
 
@@ -225,3 +247,96 @@ roughly 2.5 hours of walking.
 tool edits mostly are not: a docstring, a print format or a new CLI flag cannot
 change a walk. **Editing this tool to save 0.1% costs the tree a 17-minute
 re-walk**, which is its own argument against micro-optimising it.
+
+---
+
+# What to do about it
+
+Ordered by return. The first two are the whole problem; the rest are small.
+
+## P1 — the window-tail guard   ★ ASK FELIPE, it moves a published figure
+
+Section 4 and `GUARD-AB-2026-08-31.txt`. Three lines, written and A/B'd, **not
+landed**: it takes `any` from 1,670 to 1,702 and drops a 9,216-byte span off the
+work list. STRONG stays 17 and `--selftest` stays identical, so nothing already
+converted is in question. It is a correctness fix in its own right AND the
+PRECONDITION for P2 and P3 -- while the index is order-dependent, neither can be
+shown answer-identical. **This is the decision that unblocks everything else.**
+
+## P2 — persist the decode index between runs   ★ the big one
+
+`_decode_window` asks unidasm what the ROM BYTES decode to. **The ROM bytes never
+change** — the byte gate freezes them — so the 847 s of decoding is invariant to
+the very thing that invalidates the result cache: an edited `.s`. A lane converts
+a span, the result cache correctly misses, and the tool re-derives from scratch
+a decode that could not possibly have changed.
+
+Key it on the ROM hash and unidasm's own hash, load it lazily (only on a result-
+cache miss, so the 0.23 s warm path stays 0.23 s), and store the boundary index
+plus, per spawned start, its row count. ~219k entries for prom_a, ~8 MB an image;
+gitignore it beside `.reachability-cache.json`.
+
+⚠ It must be gated on `prove_identical.py`, not argued — even with the guard, the
+index-vs-spawn decision order changes. Place the lookup exactly where the spawn
+would happen and the substitution is byte-for-byte what the spawn returned.
+
+**This also fixes probe_health**: the derived trees have different `.s` but the
+SAME ROMs, so the decode cache is valid there and the 52 guaranteed timeouts stop.
+
+## P3 — seed the index with one linear decode per image
+
+The whole image decodes in 1.07 s. With the guard the result is canonical, so it
+can simply be poured into `_BOUND` before the walk starts. How much it saves
+depends on what fraction of the 84,190 spawn starts are boundaries of the
+canonical decode — **measure that before building it**, it is one instrumented
+run.
+
+## P4 — a cache key that does not punish editing the tool
+
+The fingerprint hashes `__file__`, so a docstring, a print format or a new flag
+invalidates all three images and costs a 17-minute re-walk. 8 of 2026-08-30's 142
+commits touched this file: ~24 image-walks, most of them for edits that cannot
+change a walk. Hash the walk-determining code rather than the whole file, or a
+hand-bumped `WALK_VERSION`. ⚠ Too narrow a key serves a STALE answer, which is
+the failure the fingerprint docstring is already about — so this one needs care,
+not speed.
+
+## P5 — `--evidence` is O(runs x proven) and deletes a shared file
+
+`start_evidence()` scans the WHOLE proven set per reachable run — 257,759 proven
+addresses across the tree — calling `_decode_window` for each. Build the
+fall-through index once (`{a + len(a): a}`) instead. Separately, `--evidence`
+`os.unlink`s `notes/.reachability-cache.json`, which is every lane's cache, to
+get an in-memory effect; a module flag does the same thing without the collateral.
+
+## P6 — walk the three images in parallel
+
+They are independent. A cold full run is bounded by prom_a (621.72 s) instead of
+their sum (1,019.19 s), ~40%. ⚠ `_cache_store` is read-modify-write on one JSON
+file; three writers race. Moot if P2 lands.
+
+## NOT Rust, and not PyPy
+
+    unidasm subprocess        847 s   83.1%   a Rust caller pays the same fork+exec
+    everything in Python      169 s   16.6%   the ceiling for ANY language change
+    walk() inner loop         4.6 s    0.4%   the part people picture rewriting
+
+Rewriting every line of Python in Rust and making it take zero time turns 1,019 s
+into 850 s — **1.2x**. P2 and P3 attack the 83% and are worth 50-100x. Rust makes
+a bad algorithm fast; it does not make it good, and this algorithm decodes 110 MB
+to settle 219,086 boundaries.
+
+The honest costs, if it were ever proposed again:
+
+* **unidasm is the decode authority.** The only Rust worth writing here is a
+  TLCS-900 decoder, and that replaces the authority this project is certified
+  against. Every boundary would need re-certifying.
+* **It could not reproduce today's answers even in principle.** Section 4 shows
+  the current output depends on a truncation artifact. "Byte-identical to the
+  Python" would mean reimplementing the bug.
+* A build toolchain for every contributor and every lane, in a 321-file /
+  158,677-line Python tree, and `probe_health` copies the tree four times per
+  image and runs probes inside the copies.
+* PyPy would address the same 16.6%, is not installed, and would have to be for
+  every lane. After P2 there is nothing left for it to speed up.
+* Python 3.13.5 is current; a newer one changes nothing material here.

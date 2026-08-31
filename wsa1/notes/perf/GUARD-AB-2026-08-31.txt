@@ -1,0 +1,177 @@
+THE WINDOW-TAIL GUARD CHANGES THE ANSWER, SO IT WAS NOT LANDED.
+
+WHAT WAS TESTED
+  notes/reachability.py, _decode_window(), with three lines added: rows whose
+  instruction could extend past the 2 KiB window end are dropped, because
+  unidasm decoded them from truncated bytes.  MAXLEN = 7, the longest TLCS-900
+  instruction in the images (one linear decode of prom_a: 274,588 instructions).
+
+      if o + WINDOW < len(d):
+          end = start + WINDOW
+          rows = [r for r in rows if r[0] + MAXLEN <= end]
+
+HOW
+  notes/perf/prove_identical.py --record on the unmodified tool (commit b379204),
+  then the same tool with the guard, both from a cleared cache.
+      baseline cold --targets  1,079.85 s
+      guarded  cold --targets  1,083.70 s      (+0.4%, so the guard is not a cost)
+
+THE RESULT -- 4 of 5 modes DIFFER
+  ★ --selftest is IDENTICAL: 17 checks, 0 failures either way.
+  ★ THE **STRONG** COLUMN IS UNCHANGED AT 17 BYTES.  That is the column the
+    tool tells lanes to convert on, so no conversion decision made to date is
+    affected.  What moves is `any`, the weak-seed figure.
+
+      TOTAL reachable-and-unconverted
+          baseline   STRONG 17 bytes, ANY 1,670, in 17 spans
+          guarded    STRONG 17 bytes, ANY 1,702, in 17 spans
+
+      reached bytes      baseline      guarded    delta
+          prom_a          361,931      362,075     +144
+          prom_b          242,549      242,566      +17
+          prom_c          216,419      216,437      +18
+
+  ★★ AND ONE SPAN LEAVES THE WORK LIST ENTIRELY:
+
+          -prom_a  0xFC3000-0xFC5400   9,216 bytes, 1 reachable
+          +prom_a  0xF96259-0xF96418     447 bytes, 1 reachable
+
+    A 9,216-byte span was on the work list because ONE byte in it was reachable,
+    and that byte was reachable only through a branch target invented by a
+    truncated decode.  With the guard it is not reachable at all.  This is the
+    tool's own "paints data as code" failure, and it was in its output.
+
+WHAT THIS MEANS
+  The published figure ANY 1,670 is not the reachability of these images; it is
+  the reachability of these images plus phantom edges from truncated window
+  tails, minus real bytes those same tails mis-framed.  The corrected figure is
+  1,702.
+
+  ⚠ NOT LANDED, because the brief for this lane is that an optimisation must not
+  change an answer, and this changes four modes.  It is a CORRECTNESS change and
+  needs Felipe's decision and a re-recorded baseline, not a performance lane's.
+
+  ⚠⚠ AND IT BLOCKS THE PERFORMANCE WORK.  While the tail is in, what _BOUND
+  holds at an address depends on which window reached it first, so the tool's
+  answers depend on WALK ORDER -- and persisting the decode index, pre-decoding
+  an image, or changing WINDOW cannot be shown answer-identical.  The 83% of the
+  run that is unidasm cannot be attacked until this is settled.
+
+REPRODUCE
+  python3 notes/perf/decode_conflicts.py --tag prom_a --starts 300            # 52 conflicts
+  python3 notes/perf/decode_conflicts.py --tag prom_a --starts 300 --guard 6  # 0
+  # then apply the three lines above and:
+  python3 notes/perf/prove_identical.py
+
+THE FULL DIFF FOLLOWS.
+================================================================================
+COMPARING against baseline (cold)
+  targets    1083.70s  rc=0  1741 bytes   <- COLD, this one walks
+  spans         0.26s  rc=0  1758 bytes
+  seeds         0.23s  rc=0  1119 bytes
+  report        0.26s  rc=0  599 bytes
+  selftest      6.95s  rc=0  1331 bytes
+  FAIL targets   DIFFERS
+      --- baseline
+      +++ now
+      @@ -1,5 +1,5 @@
+       image    span                      size   STRONG      any  cumul(S) of goal
+      -prom_a   0xFA15CC-0xFA5400   15,924       17      701        17  100.0%
+      +prom_a   0xFA15CC-0xFA5400   15,924       17      733        17  100.0%
+       prom_a   0xF96504-0xF96C65    1,889        0      358        17  100.0%
+       prom_a   0xF96CA5-0xF97418    1,907        0      335        17  100.0%
+       prom_a   0xFA146F-0xFA14C6       87        0       87        17  100.0%
+      @@ -14,10 +14,10 @@
+       prom_a   0xF8C046-0xF8C04E        8        0        8        17  100.0%
+       prom_a   0xF96151-0xF96172       33        0        6        17  100.0%
+       prom_a   0xF96C7B-0xF96C8A       15        0        5        17  100.0%
+      -prom_a   0xFC3000-0xFC5400    9,216        0        1        17  100.0%
+      +prom_a   0xF96259-0xF96418      447        0        1        17  100.0%
+       prom_a   0xF8C428-0xF8C42A        2        0        1        17  100.0%
+       
+      -TOTAL reachable-and-unconverted: STRONG 17 bytes, ANY 1,670, in 17 spans.
+      +TOTAL reachable-and-unconverted: STRONG 17 bytes, ANY 1,702, in 17 spans.
+       ★ CONVERT ON THE **STRONG** COLUMN. `any` includes bytes reached only from a
+         32-bit immediate or a framed .long entry, and a pointer is as likely to name
+         a TABLE as a routine -- walking from one paints data as code. Round 1 framed
+  FAIL spans     DIFFERS
+      --- baseline
+      +++ now
+      @@ -1,9 +1,9 @@
+      -prom_a   reached  361,931 bytes | still .incbin  46,306 | ★ REACHABLE AND UNCONVERTED   1,590 (3.4%)
+      -             0xFA15CC-0xFA5400   15924 bytes,   701 reachable (4%)
+      -             0xFC3000-0xFC5400    9216 bytes,     1 reachable (0%)
+      +prom_a   reached  362,075 bytes | still .incbin  46,306 | ★ REACHABLE AND UNCONVERTED   1,622 (3.5%)
+      +             0xFA15CC-0xFA5400   15924 bytes,   733 reachable (5%)
+                    0xF8C930-0xF8DA00    4304 bytes,    11 reachable (0%)
+                    0xF96CA5-0xF97418    1907 bytes,   335 reachable (18%)
+                    0xF96504-0xF96C65    1889 bytes,   358 reachable (19%)
+      +             0xF96259-0xF96418     447 bytes,     1 reachable (0%)
+                    0xFA146F-0xFA14C6      87 bytes,    87 reachable (100%)
+                    0xF8C2B2-0xF8C2EC      58 bytes,    15 reachable (26%)
+                    0xF96151-0xF96172      33 bytes,     6 reachable (18%)
+      @@ -14,12 +14,12 @@
+                    0xF96C7B-0xF96C8A      15 bytes,     5 reachable (33%)
+                    0xF8C046-0xF8C04E       8 bytes,     8 reachable (100%)
+                    0xF8C428-0xF8C42A       2 bytes,     1 reachable (50%)
+      -prom_b   reached  242,549 bytes | still .incbin  40,932 | ★ REACHABLE AND UNCONVERTED      80 (0.2%)
+      +prom_b   reached  242,566 bytes | still .incbin  40,932 | ★ REACHABLE AND UNCONVERTED      80 (0.2%)
+                    0xF396E7-0xF3972D      70 bytes,    70 reachable (100%)
+                    0xF054B2-0xF054D9      39 bytes,    10 reachable (26%)
+      -prom_c   reached  216,419 bytes | still .incbin       0 | ★ REACHABLE AND UNCONVERTED       0 (0.0%)
+      +prom_c   reached  216,437 bytes | still .incbin       0 | ★ REACHABLE AND UNCONVERTED       0 (0.0%)
+       
+      -TOTAL still .incbin 87,238, of which REACHABLE CODE 1,670 (1.9%)
+      +TOTAL still .incbin 87,238, of which REACHABLE CODE 1,702 (2.0%)
+       
+       ★ The reachable figure is the coverage goal's remaining work. The rest of the
+         .incbin is data or unreached, and converting it adds territory, not coverage.
+  FAIL seeds     DIFFERS
+      --- baseline
+      +++ now
+      @@ -1,21 +1,21 @@
+      -prom_a   reached  361,931 bytes | still .incbin  46,306 | ★ REACHABLE AND UNCONVERTED   1,590 (3.4%)
+      +prom_a   reached  362,075 bytes | still .incbin  46,306 | ★ REACHABLE AND UNCONVERTED   1,622 (3.5%)
+                    seed branch            683
+                    seed directory        1910
+                    seed immediate        1015
+                    seed pointer_table    1938
+                    seed vector             26
+      -prom_b   reached  242,549 bytes | still .incbin  40,932 | ★ REACHABLE AND UNCONVERTED      80 (0.2%)
+      +prom_b   reached  242,566 bytes | still .incbin  40,932 | ★ REACHABLE AND UNCONVERTED      80 (0.2%)
+                    seed branch           7285
+                    seed directory        1910
+                    seed immediate         802
+                    seed pointer_table    2104
+      -prom_c   reached  216,419 bytes | still .incbin       0 | ★ REACHABLE AND UNCONVERTED       0 (0.0%)
+      +prom_c   reached  216,437 bytes | still .incbin       0 | ★ REACHABLE AND UNCONVERTED       0 (0.0%)
+                    seed branch           4432
+                    seed immediate         145
+                    seed pointer_table     512
+                    seed vector             14
+       
+      -TOTAL still .incbin 87,238, of which REACHABLE CODE 1,670 (1.9%)
+      +TOTAL still .incbin 87,238, of which REACHABLE CODE 1,702 (2.0%)
+       
+       ★ The reachable figure is the coverage goal's remaining work. The rest of the
+         .incbin is data or unreached, and converting it adds territory, not coverage.
+  FAIL report    DIFFERS
+      --- baseline
+      +++ now
+      @@ -1,8 +1,8 @@
+      -prom_a   reached  361,931 bytes | still .incbin  46,306 | ★ REACHABLE AND UNCONVERTED   1,590 (3.4%)
+      -prom_b   reached  242,549 bytes | still .incbin  40,932 | ★ REACHABLE AND UNCONVERTED      80 (0.2%)
+      -prom_c   reached  216,419 bytes | still .incbin       0 | ★ REACHABLE AND UNCONVERTED       0 (0.0%)
+      +prom_a   reached  362,075 bytes | still .incbin  46,306 | ★ REACHABLE AND UNCONVERTED   1,622 (3.5%)
+      +prom_b   reached  242,566 bytes | still .incbin  40,932 | ★ REACHABLE AND UNCONVERTED      80 (0.2%)
+      +prom_c   reached  216,437 bytes | still .incbin       0 | ★ REACHABLE AND UNCONVERTED       0 (0.0%)
+       
+      -TOTAL still .incbin 87,238, of which REACHABLE CODE 1,670 (1.9%)
+      +TOTAL still .incbin 87,238, of which REACHABLE CODE 1,702 (2.0%)
+       
+       ★ The reachable figure is the coverage goal's remaining work. The rest of the
+         .incbin is data or unreached, and converting it adds territory, not coverage.
+  ok   selftest  IDENTICAL (1331 bytes, rc=0)
+
+5 mode(s) compared, 4 differ
+EXIT rc=1
