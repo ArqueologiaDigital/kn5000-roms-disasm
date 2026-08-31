@@ -4,8 +4,8 @@
     the same 27 bytes with 0 differing"  (the ONLY borrowed name in this lane)
   * Queue2C00_AppendRegs: "77 bytes against this routine's 34"
 """
-A = open("/home/fsanches/compartilhado/wsa1-roms-disasm/rebuilt_ROMs/wsa1_prom_a.llvm.rom", "rb").read()
-Bm = open("/home/fsanches/compartilhado/wsa1-roms-disasm/rebuilt_ROMs/wsa1_prom_b.llvm.rom", "rb").read()
+A = open("/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/rebuilt_ROMs/wsa1_prom_a.llvm.rom", "rb").read()
+Bm = open("/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/rebuilt_ROMs/wsa1_prom_b.llvm.rom", "rb").read()
 a = lambda x: A[x - 0xF80000]
 b = lambda x: Bm[x - 0xF00000]
 

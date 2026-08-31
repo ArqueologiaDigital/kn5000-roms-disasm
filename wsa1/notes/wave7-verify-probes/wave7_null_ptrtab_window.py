@@ -1,5 +1,5 @@
 import os,sys
-ROOT="/home/fsanches/compartilhado/wsa1-roms-disasm"
+ROOT="/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1"
 sys.path.insert(0, os.path.join(ROOT,"notes"))
 sys.path.insert(0, os.path.join(ROOT,"scripts","analysis"))
 import prom_b_f65000_layout as L

@@ -43,7 +43,7 @@ import re
 import subprocess
 import sys
 
-ROOT = "/home/fsanches/compartilhado/wsa1-roms-disasm"
+ROOT = "/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1"
 SIB = "/home/fsanches/compartilhado/kn5000-roms-disasm"
 PROM_C = os.path.join(ROOT, "original_ROMs", "wsa1_prom_c.ic28")
 PAYLOAD = os.path.join(SIB, "original_ROMs", "kn5000_subprogram_v142.rom")

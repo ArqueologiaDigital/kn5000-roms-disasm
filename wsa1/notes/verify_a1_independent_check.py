@@ -20,7 +20,7 @@ WHAT EACH SECTION ANSWERS
 
 NOT AUTOMATED HERE, run by hand and recorded in the verify report:
   * BOTH BYTE GATES, after `rm -rf rebuilt_ROMs` so the build cannot be stale:
-        cd ~/compartilhado/wsa1-roms-disasm  && python3 scripts/analysis/assert_byte_identical.py
+        cd ~/compartilhado/kn5000-roms-disasm/wsa1  && python3 scripts/analysis/assert_byte_identical.py
         cd ~/compartilhado/kn5000-roms-disasm && python3 scripts/analysis/assert_byte_identical.py
   * ★ THE MUTATION TEST -- the check that makes the whole claim falsifiable.
     A gate that passes proves nothing unless it can also fail.  Copy the tree

@@ -24,7 +24,7 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent
 if not (ROOT / 'prom_c').is_dir():
-    ROOT = pathlib.Path('/home/fsanches/compartilhado/wsa1-roms-disasm')
+    ROOT = pathlib.Path('/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1')
 BASE = 0xF80000
 rom = (ROOT / 'original_ROMs' / 'wsa1_prom_c.ic28').read_bytes()
 # ⚠ THE IMAGE, not the primary: since the per-subject split that file is a

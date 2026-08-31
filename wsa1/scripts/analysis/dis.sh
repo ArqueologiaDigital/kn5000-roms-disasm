@@ -3,7 +3,7 @@
 # Disassembles a window of a WSA1 ROM at its real CPU address.
 # Bases: a=0xF80000  b=0xF00000  c=0xF80000  d=0 (unknown, file-relative)
 set -e
-ROOT=/home/fsanches/compartilhado/wsa1-roms-disasm
+ROOT=/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1
 UNIDASM=${UNIDASM:-/home/fsanches/compartilhado/kn7000_mame_build/unidasm}
 case "$1" in
   a) F=$ROOT/original_ROMs/wsa1_prom_a.ic12; BASE=$((0xF80000));;

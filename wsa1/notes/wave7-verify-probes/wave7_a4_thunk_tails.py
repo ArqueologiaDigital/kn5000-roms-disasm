@@ -1,5 +1,5 @@
 import struct
-R='/home/fsanches/compartilhado/wsa1-roms-disasm/original_ROMs/'
+R='/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/original_ROMs/'
 A=open(R+'wsa1_prom_a.ic12','rb').read(); AB=0xF80000
 def a(x,n): return A[x-AB:x-AB+n]
 def le32(bs): return list(struct.unpack('<%dI'%(len(bs)//4),bs))

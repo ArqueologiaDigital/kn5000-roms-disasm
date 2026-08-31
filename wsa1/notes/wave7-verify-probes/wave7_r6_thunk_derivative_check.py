@@ -3,7 +3,7 @@
    comment names?  And is that target label pre-existing at HEAD (i.e. is
    the name really DERIVATIVE, not invented here)?"""
 import re, subprocess, os
-ROOT = "/home/fsanches/compartilhado/wsa1-roms-disasm"
+ROOT = "/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1"
 A_BASE, B_BASE = 0xF80000, 0xF00000
 
 def labels(path, base, text=None):

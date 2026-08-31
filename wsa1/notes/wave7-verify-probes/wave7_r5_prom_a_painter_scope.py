@@ -20,7 +20,7 @@ RUN
 """
 import re, bisect, sys
 
-ROOT = "/home/fsanches/compartilhado/wsa1-roms-disasm/"
+ROOT = "/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/"
 S    = ROOT + "prom_a/wsa1_prom_a.s"
 IMG  = {'a': ROOT+"original_ROMs/wsa1_prom_a.ic12", 'b': ROOT+"original_ROMs/wsa1_prom_b.ic13",
         'c': ROOT+"original_ROMs/wsa1_prom_c.ic28", 'd': ROOT+"original_ROMs/wsa1_prom_d.bin"}

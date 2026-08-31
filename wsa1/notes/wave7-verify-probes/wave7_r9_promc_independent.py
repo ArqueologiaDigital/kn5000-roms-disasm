@@ -3,7 +3,7 @@
 (2) the NotePool8 staging image differs from the reset image in 9 of 68 bytes / 8 of 34 words;
 (3) the level caps' distance below 0x0FF4 and the dB figures quoted."""
 import math
-D=open('/home/fsanches/compartilhado/wsa1-roms-disasm/original_ROMs/wsa1_prom_c.ic28','rb').read()
+D=open('/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/original_ROMs/wsa1_prom_c.ic28','rb').read()
 BASE=0xF80000
 # (1)
 hits=[]

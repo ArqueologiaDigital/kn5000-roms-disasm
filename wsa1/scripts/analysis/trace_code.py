@@ -25,7 +25,7 @@ grouped into runs, with reference counts.
 """
 import os, re, subprocess, sys, tempfile, collections
 
-ROOT    = "/home/fsanches/compartilhado/wsa1-roms-disasm"
+ROOT    = "/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1"
 UNIDASM = os.environ.get("UNIDASM", "/home/fsanches/compartilhado/kn7000_mame_build/unidasm")
 PHASES  = 32
 

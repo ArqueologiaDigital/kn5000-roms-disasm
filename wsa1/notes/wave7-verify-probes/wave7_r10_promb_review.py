@@ -23,7 +23,7 @@ import os, collections, sys
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 if not os.path.isdir(os.path.join(ROOT, "original_ROMs")):
-    ROOT = "/home/fsanches/compartilhado/wsa1-roms-disasm"
+    ROOT = "/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1"
 IM = {"a": ("wsa1_prom_a.ic12", 0xF80000), "b": ("wsa1_prom_b.ic13", 0xF00000),
       "c": ("wsa1_prom_c.ic28", 0xF80000), "d": ("wsa1_prom_d.bin", 0)}
 D = {k: (open(os.path.join(ROOT, "original_ROMs", v[0]), "rb").read(), v[1])

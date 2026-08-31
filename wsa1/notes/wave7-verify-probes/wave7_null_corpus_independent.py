@@ -1,8 +1,8 @@
 # Independent re-implementation of the null corpus, written from the docstring, not copied.
 import re
 ADDRC = re.compile(r";\s*([0-9A-F]{6})\s\s([0-9a-f]{2}(?: [0-9a-f]{2})*)")
-src="/home/fsanches/compartilhado/wsa1-roms-disasm/prom_a/wsa1_prom_a.s"
-rom=open("/home/fsanches/compartilhado/wsa1-roms-disasm/original_ROMs/wsa1_prom_a.ic12","rb").read()
+src="/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_a/wsa1_prom_a.s"
+rom=open("/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/original_ROMs/wsa1_prom_a.ic12","rb").read()
 BASE=0xF80000
 seq=[]
 ninstr=0; badbytes=0

@@ -1,7 +1,7 @@
 # SX-WSA1R: what the emulator needs the disassembly to answer next
 
 Written 2026-08-25 from the emulation side, after reading the 29 findings notes in
-`wsa1-roms-disasm/notes/` and rewriting `src/mame/matsushita/wsa1.cpp` against them.
+`the wsa1/ tree/notes/` and rewriting `src/mame/matsushita/wsa1.cpp` against them.
 
 **Revised later the same day**, after the model-variant survey, its adversarial re-check, and the
 driver work that followed. **Gaps B, E and L are CLOSED**, gap C's leading hypothesis is REFUTED,
@@ -42,12 +42,12 @@ This is a **request list**, not a summary. Every entry is a question a disassemb
 answer, with what the driver does instead today and where to start looking. It is deliberately
 short: only gaps that change what the emulator can *do*.
 
-> This file lives in `kn7000_mame/notes/` because `wsa1-roms-disasm` was locked by another
-> workflow when it was written. Mirror it into `wsa1-roms-disasm/notes/` when convenient.
+> This file lives in `kn7000_mame/notes/` because `the wsa1/ tree` was locked by another
+> workflow when it was written. Mirror it into `the wsa1/ tree/notes/` when convenient.
 
 Conventions: a bare hex number is a CPU address in the image named beside it. "CPU 1" is the
 processor that fetches prom_a+prom_b, "CPU 2" the one that fetches prom_c, matching the driver's
-tags. `notes/X.md` means `wsa1-roms-disasm/notes/X.md`.
+tags. `notes/X.md` means `the wsa1/ tree/notes/X.md`.
 
 ---
 

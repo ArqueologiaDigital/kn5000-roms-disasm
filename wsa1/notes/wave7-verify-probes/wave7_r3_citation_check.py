@@ -9,7 +9,7 @@ the ROMs, so the set of those ADDRs IS the set of proven instruction starts.
 """
 import re, sys, subprocess, collections
 
-ROOT = "/home/fsanches/compartilhado/wsa1-roms-disasm"
+ROOT = "/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1"
 S = "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad"
 BASE = {"a": 0xF80000, "b": 0xF00000, "c": 0xF80000}
 ADDRC = re.compile(r';\s*([0-9A-F]{6})\s')

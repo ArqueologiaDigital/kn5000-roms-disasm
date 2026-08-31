@@ -3,14 +3,14 @@ import os
 start (or a known data label) rather than an operand byte.
 Instruction-start set = every `; ADDR  mnemonic` trailing comment in wsa1_prom_c.s."""
 import re
-S=open('/home/fsanches/compartilhado/wsa1-roms-disasm/prom_c/wsa1_prom_c.s').read().split('\n')
+S=open('/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_c/wsa1_prom_c.s').read().split('\n')
 starts=set(); datalab={}
 for ln in S:
     m=re.search(r';\s*([0-9A-F]{6})\s{2}\S', ln)
     if m and not ln.lstrip().startswith(';'): starts.add(int(m.group(1),16))
     m2=re.search(r';\s*0x([0-9A-F]{6})\s*$', ln)          # data emission lines
     if m2 and ('.short' in ln or '.byte' in ln or '.asciz' in ln): starts.add(int(m2.group(1),16))
-D=open('/home/fsanches/compartilhado/wsa1-roms-disasm/original_ROMs/wsa1_prom_c.ic28','rb').read()
+D=open('/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/original_ROMs/wsa1_prom_c.ic28','rb').read()
 BASE=0xF80000
 # ⚠ Self-contained: the original read a scratch 'promc.diff' that no longer
 # exists. It now produces the diff itself, so the probe is re-runnable. REV is
@@ -18,7 +18,7 @@ BASE=0xF80000
 import subprocess as _sp
 REV = os.environ.get('REV', 'db9d8b5')
 _d = _sp.run(['git', 'diff', REV, '--', 'prom_c/wsa1_prom_c.s'],
-             cwd='/home/fsanches/compartilhado/wsa1-roms-disasm',
+             cwd='/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1',
              capture_output=True, text=True).stdout
 added=[l[1:] for l in _d.split('\n') if l.startswith('+') and not l.startswith('+++')]
 cited={}

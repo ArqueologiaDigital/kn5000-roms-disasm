@@ -2,7 +2,7 @@
 # Written by lane G1 (verification), NOT by the lane under review.
 import sys
 BASE = 0xF80000
-rom = open('/home/fsanches/compartilhado/wsa1-roms-disasm/original_ROMs/wsa1_prom_c.ic28','rb').read()
+rom = open('/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/original_ROMs/wsa1_prom_c.ic28','rb').read()
 print("rom len", len(rom), "range 0x%06X-0x%06X" % (BASE, BASE+len(rom)-1))
 for word, ram in ((8,0x00D76E),(9,0x00D770),(10,0x00D772),(11,0x00D774)):
     pat = ram.to_bytes(3,'little')

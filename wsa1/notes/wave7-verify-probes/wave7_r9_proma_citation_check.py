@@ -26,7 +26,7 @@ RUN
 """
 
 import re,sys
-SRC="/home/fsanches/compartilhado/wsa1-roms-disasm/prom_a/wsa1_prom_a.s"
+SRC="/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_a/wsa1_prom_a.s"
 lines=open(SRC,encoding='utf-8',errors='replace').read().split('\n')
 # address -> (mnemonic text, bytes)  for every emitted instruction line
 addr2ins={}

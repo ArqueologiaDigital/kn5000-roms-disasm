@@ -18,7 +18,7 @@ NEXT: A2 (structural three-way test), A4 (split both sub-CPUs), B2 (convert KN50
 
 1. **Both trees' byte gates stay green at every commit.**
    `python3 scripts/analysis/assert_byte_identical.py` in each of
-   `~/compartilhado/wsa1-roms-disasm` and `~/compartilhado/kn5000-roms-disasm`.
+   `~/compartilhado/kn5000-roms-disasm/wsa1` and `~/compartilhado/kn5000-roms-disasm`.
    Both PASS today; KN5000 clean at `46a916e`.
 2. ⚠⚠ **Do not destroy pre-existing comments, documentation headers or semantic structures in
    EITHER tree.** Modify one only when demonstrably better, and say why in the commit. Verify it the
