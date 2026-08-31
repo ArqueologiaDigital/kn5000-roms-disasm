@@ -76864,7 +76864,7 @@ Table_WsaSoundRamS0Wsa1:
 
 
 ; --------------------------------------------------------------------------
-; sub_F48C1A
+; DiskFile_CheckSignature -- 0xF48C1A
 ; Called from: T_F43430 (x1)
 ; Touches: (0x207C) (0x2229) (0x2736) (0x2737) (0x2738) (0x2880)  |
 ;          0x000400 0xE80000 0xEC0000
@@ -76874,10 +76874,28 @@ Table_WsaSoundRamS0Wsa1:
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    DiskFile_CheckSignature -- named 2026-08-31.
+; Evidence (STRING): it copies the 16 bytes of Table_WsaSoundRamS0Wsa1 at
+;          0xF48C00, `WSA SOUND RAM S0`, into its own frame at XIZ+0xC6 and the
+;          four at 0xF48C10, `WSA1`, into XIZ+0xDC (0xF48C21-0xF48C33), then
+;          points XIX at work DRAM 0x60A700 (0xF48C60) and compares.  Which
+;          comparison it makes is decided by the screen id:
+;            (0x207C) == 0x54  -> all SIXTEEN bytes at 0x60A700+n, n = 0..15
+;                                 (`cp H,0x10`, 0xF48C89)
+;            otherwise         -> `inc 6,XIX` and FOUR bytes at 0x60A706+n,
+;                                 n = 0..3 (`cp H,4`, 0xF48CB9), with 0xFF
+;                                 accepted as a wildcard (0xF48CAD) and error
+;                                 code 0x2B returned on a mismatch (0xF48CB2).
+;          0x60A700 is the same 1,024-byte input window Smf_ReadFile reads
+;          through InputStream_GetByte, so the machine's three file signatures
+;          -- `MThd`, `WSA SOUND RAM S0`, `WSA1` -- are all checked there.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
+; Unknown: which of the two file kinds is which, and what screen 0x54 is.  The
+;          name claims that a signature is compared and nothing more.
 ; --------------------------------------------------------------------------
-sub_F48C1A:		; <- T_F43430
+DiskFile_CheckSignature:		; <- T_F43430
 	link XIZ,0xffa0	; F48C1A  link XIZ,0xffa0
 	pushw	hl	; F48C1E  push HL
 	pushw	de	; F48C1F  push DE

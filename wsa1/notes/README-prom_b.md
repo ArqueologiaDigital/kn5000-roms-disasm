@@ -30,6 +30,77 @@ the tree's owner commits it; as of round 9 that is round 8's
 `notes/prom_b_filefield_checks.py`**. Re-check with
 `git status --porcelain notes/`.
 
+## WAVE 8 (2026-08-31) — the naming round's six scripts
+
+### `prom_b_msgline.py` — ★ what RAM 0x0FE4 is
+**"What is the 30-character text line at RAM 0x00000FE4, and who writes it?"**
+Derives, from the ROM alone, that it is one line of on-screen text: the record
+at 0xF3D38A, `swi 7` function 6 = `LCD_Svc_06_DrawText8x14`, AP = 40 bytes per
+display line, four such lines at x = 8 and y = 52 / 97 / 142 / 180. Then lists
+every routine in the committed source that copies into it, with the literal it
+copies and the sub-screen code it claims.
+
+    python3 notes/prom_b_msgline.py
+    python3 notes/prom_b_msgline.py --writers
+    python3 notes/prom_b_msgline.py --selftest    # 45 checks, 2 of them negative
+
+⚠ **A routine that "references an ASCII string" is usually NOT a caption
+writer.** A census of prom_b routines whose operands land on printable bytes
+returns 74, and about half of those are display-list PAINTERS whose `ld
+XIX,imm` is the list's END POINTER, which merely happens to sit on a string
+table. The filter that separates them is the destination: does the routine copy
+INTO 0x0FE4-0x1001? That is what this script tests, and it is why the round
+named 38 routines and not 74.
+
+### `prom_b_effect_param_map.py` — ★ EffectNames entry k IS algorithm k
+**"Is entry k of EffectNames_F147AC the name of DSP effect algorithm k?"** Yes.
+Closes the ⚠ Unknown that table has carried since it was converted, with an
+identity of two 56/72 PARTITIONS rather than a coincidence of counts, plus a
+range control (456 of 456 descriptor indices inside a 100-row table). Prints
+every effect with its parameter list.
+
+    python3 notes/prom_b_effect_param_map.py
+    python3 notes/prom_b_effect_param_map.py --raw
+    python3 notes/prom_b_effect_param_map.py --selftest   # 20 checks, 3 controls
+
+Write-up: `FINDINGS-prom_b-dsp-effect-parameters.md`.
+
+### `prom_b_naming_preservation.py` — ★ RUN THIS AFTER ANY RENAME
+**"Did this round DELETE anything, or only substitute a token?"** Every comment
+line and label of a base revision must still be present, verbatim or as the same
+line with one of the round's renamed tokens substituted, or with its text quoted
+inside the correction that replaced it. Prints how many lines fall in each
+category; `UNACCOUNTED FOR` must be 0.
+
+    python3 notes/prom_b_naming_preservation.py --base <rev>
+    python3 notes/prom_b_naming_preservation.py --base <rev> --show-deleted
+
+It reads the round's rename tables from the appliers themselves, so it cannot
+drift from what was applied.
+
+### `prom_b_probe_answer_diff.py` — the cheap complement to probe_health.py
+**"Did a NAME change move any prom_b probe's ANSWER?"** Runs every committed
+prom_b probe against the current `prom_b/wsa1_prom_b.s` and against a base
+revision of that ONE file, everything else identical, and diffs.
+
+    python3 notes/prom_b_probe_answer_diff.py --base <rev>
+
+`probe_health.py` asks "would a per-subject SPLIT break this probe" and builds
+three trees; this asks "did THIS edit break it" and changes one file.
+
+### The three appliers
+`prom_b_apply_msgline_names.py`, `prom_b_apply_smf_names.py`,
+`prom_b_apply_effect_names.py`, `prom_b_apply_diskfile_name.py` — each carries
+the round's rename table AS DATA, re-derives every literal it names from the
+ROM with no argument, and edits the source with `--apply`. The table IS the
+change; running one with no argument is the check that nothing it rests on has
+moved.
+
+    python3 notes/prom_b_apply_msgline_names.py       # 36 captions re-derived
+    python3 notes/prom_b_apply_smf_names.py           # the SMF brackets and tags
+    python3 notes/prom_b_apply_effect_names.py        # the 8-record page
+    python3 notes/prom_b_apply_diskfile_name.py       # the two disk signatures
+
 ## `prom_b_dl_call_shapes.py` (round 9) — ★ READ THIS BEFORE PICKING A SPAN
 **"How many display lists does the committed scanner NOT see?"** It knows one
 call shape out of four. This enumerates all four and prints how many bytes that

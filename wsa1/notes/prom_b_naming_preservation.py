@@ -37,6 +37,7 @@ sys.path.insert(0, os.path.join(ROOT, "notes"))
 from prom_b_apply_msgline_names import RENAMES, CLEARERS  # noqa: E402  the round's own table
 from prom_b_apply_smf_names import RENAMES as SMF_RENAMES, DATA_RENAMES  # noqa: E402
 from prom_b_apply_effect_names import RENAMES as FX_RENAMES  # noqa: E402
+from prom_b_apply_diskfile_name import RENAMES as DF_RENAMES  # noqa: E402
 
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
 
@@ -55,6 +56,7 @@ def main():
     ren.update({"sub_%06X" % a: n for a, n in SMF_RENAMES})
     ren.update({o: n for o, n, _k in DATA_RENAMES})
     ren.update(dict(FX_RENAMES))
+    ren.update(dict(DF_RENAMES))
     old = base_text(rev).splitlines()
     with open(os.path.join(ROOT, REL)) as f:
         new = f.read().splitlines()
@@ -71,7 +73,8 @@ def main():
     # was there is still readable somewhere in the new file.
     titles = {"; sub_%06X" % a: f"; {n} -- 0x{a:06X}"
               for a, n, *_ in list(RENAMES) + list(CLEARERS) + [(a, n) for a, n in SMF_RENAMES]}
-    titles.update({f"; {o}": f"; {n} -- 0x{o[4:]}" for o, n in FX_RENAMES if o.startswith("sub_")})
+    titles.update({f"; {o}": f"; {n} -- 0x{o[4:]}"
+                   for o, n in list(FX_RENAMES) + list(DF_RENAMES) if o.startswith("sub_")})
     newtext = "\n".join(new)
     QUOTED = ("is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's",
               "rule that a stated gap beats a plausible guess.")
