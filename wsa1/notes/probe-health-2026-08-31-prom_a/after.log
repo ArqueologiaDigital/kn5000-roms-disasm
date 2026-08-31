@@ -1,0 +1,95 @@
+
+=== prom_a  (prom_a/wsa1_prom_a.s)  107 script(s), 195 invocation(s) ===
+    ... 25/780 runs
+    ... 50/780 runs
+    ... 75/780 runs
+    ... 100/780 runs
+    ... 125/780 runs
+    ... 150/780 runs
+    ... 175/780 runs
+    ... 200/780 runs
+    ... 225/780 runs
+    ... 250/780 runs
+    ... 275/780 runs
+    ... 300/780 runs
+    ... 325/780 runs
+    ... 350/780 runs
+    ... 375/780 runs
+    ... 400/780 runs
+    ... 425/780 runs
+    ... 450/780 runs
+    ... 475/780 runs
+    ... 500/780 runs
+    ... 525/780 runs
+    ... 550/780 runs
+    ... 575/780 runs
+    ... 600/780 runs
+    ... 625/780 runs
+    ... 650/780 runs
+    ... 675/780 runs
+    ... 700/780 runs
+    ... 725/780 runs
+    ... 750/780 runs
+    ... 775/780 runs
+    ... 780/780 runs
+  VACUOUS       notes/wave7_round9_review_wb_prom_b.py
+  LOUD          notes/prom_a_preservation_check.py
+  LOUD          notes/prom_a_preservation_check.py --list
+  LOUD          notes/prom_a_understanding_round7.py --apply-strings
+  LOUD          notes/verify_a1_independent_check.py
+  SPLIT-FRAGILE notes/gen_prom_b_cover_round2.py --closure
+  SPLIT-FRAGILE notes/prom_a_frontier_delta.py
+  SPLIT-FRAGILE notes/prom_a_naming_wave8_apply.py --plan
+  TIMEOUT       notes/gen_prom_a_cover_round2.py --dropped
+  NONDET        notes/prom_b_entrypoints_round7.py --runs --selftest
+  NONDET        notes/prom_b_entrypoints_round7.py --selftest
+  NONDET        notes/prom_b_screens_round8.py --calibrate
+  BY-DESIGN     notes/asm_source.py
+  BY-DESIGN     notes/asm_source.py --selftest
+  BY-DESIGN     notes/migrate_listing_readers.py --list
+  BY-DESIGN     notes/migrate_listing_readers.py --selftest
+  VACUOUS 1   LOUD 4   SPLIT-FRAGILE 3   WRITER 0   TIMEOUT 1   NONDET 3   BY-DESIGN 4   UNAFFECTED 179
+  not run (write mode); the write path must move FIRST -- python3 notes/migrate_listing_readers.py --list:
+      notes/gen_prom_a_cover_round1.py --emit 0xF85B0D
+      notes/gen_prom_a_cover_round1.py --splice
+      notes/gen_prom_a_cover_round2.py --emit 0xF96432
+      notes/gen_prom_a_cover_round2.py --splice
+      notes/gen_prom_b_cover_round2.py --emit
+      notes/gen_prom_b_cover_round2.py --splice
+      notes/gen_prom_b_cover_round2.py --splice --anyway
+      notes/kernel_join_probe.py --emit
+      notes/migrate_listing_readers.py --apply
+      notes/migrate_listing_readers.py --apply --only
+      notes/prom_a_census_round8.py --apply
+      notes/prom_a_naming_round3.py --apply
+      notes/prom_a_naming_wave8_apply.py --apply
+      notes/prom_a_panel_names_round11.py --apply
+      notes/prom_a_panel_names_round11.py --emit
+      notes/prom_a_understanding_round4.py --apply
+      notes/prom_a_understanding_round5.py --apply
+      notes/prom_a_understanding_round6.py --apply
+      notes/prom_a_understanding_round7.py --apply
+      notes/prom_b_entrypoints_round7.py --apply
+      notes/prom_b_panel_names_round12.py --apply
+      notes/prom_b_screens_round8.py --promote --apply
+      notes/prom_b_thunks_round6.py --apply
+      notes/prom_c_inventory_round8.py --emit68
+      notes/prom_c_naming_round3.py --apply
+      notes/prom_c_record68_round10.py --apply
+      notes/prom_c_record68_round10.py --emit68
+      notes/promb_macro_rewrite.py --apply --only
+  ★ WORKING-TREE DIFF -- compares the tree with HEAD, so it MUST differ between trees that differ; not gradable here:
+      notes/verify_a1_independent_check.py
+      notes/wave7_round9_review_wb_prom_b.py
+  ★ GIT-BLIND -- reads the listing through `git show`, where the tree flip cannot reach it; classify by hand:
+      notes/audit_wave5_checks.py
+      notes/gen_prom_a_cover_round1.py
+      notes/gen_prom_a_cover_round2.py
+      notes/gen_prom_b_cover_round2.py
+      notes/prom_a_fa5aeb_layout.py
+      notes/prom_a_fad800_layout.py
+      notes/prom_a_naming_wave8_apply.py
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/ph-after.json
+
+VACUOUS+LOUD across the images measured: 5

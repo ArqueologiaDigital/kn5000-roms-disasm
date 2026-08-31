@@ -1,0 +1,52 @@
+{
+ "prom_a": {
+  "rows": [
+   {
+    "argv": [
+     "notes/prom_a_naming_wave8.py",
+     "--dev"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_naming_wave8.py",
+     "--selftest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_naming_wave8_apply.py",
+     "--plan"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_naming_wave8_apply.py",
+     "--screens"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   }
+  ],
+  "skipped": [
+   [
+    "notes/prom_a_naming_wave8_apply.py",
+    "--apply"
+   ]
+  ],
+  "git_blind": [
+   "notes/prom_a_naming_wave8_apply.py"
+  ],
+  "worktree_diff": []
+ }
+}
