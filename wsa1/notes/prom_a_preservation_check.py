@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+"""Did this pass DESTROY anything in prom_a's listing, or only ADD to it?
+
+QUESTION IT ANSWERS
+-------------------
+  "Every comment line and every label that was in prom_a at commit REF -- is it
+   still there, verbatim?"
+
+★ WHY THE BYTE GATE IS NOT ENOUGH.  `scripts/analysis/assert_byte_identical.py`
+proves the file still assembles to the ROM.  Comments and label NAMES assemble
+to nothing, so a pass that deleted a 400-line documentation header, or quietly
+renamed a semantic label back to `sub_XXXXXX`, would pass the gate in silence.
+This is the instrument for that, and it is the one a naming pass owes a
+reviewer.
+
+WHAT IT CHECKS
+  COMMENTS  every `;`-comment line of REF's copy, compared as a MULTISET after
+            stripping trailing whitespace.  A multiset, not a set: deleting one
+            of two identical lines is a deletion.
+  LABELS    every column-0 label of REF's copy is still defined.  A label that
+            is gone must be declared in RENAMES below, and its new name must be
+            present -- so a rename is ALLOWED but must be DECLARED, and an
+            undeclared disappearance fails.
+  ⚠ It says nothing about lines that were ADDED.  Adding is the point.
+
+USAGE
+    python3 notes/prom_a_preservation_check.py              # vs HEAD
+    python3 notes/prom_a_preservation_check.py --ref <rev>  # vs any commit
+    python3 notes/prom_a_preservation_check.py --list       # the deltas
+"""
+import collections
+import os
+import re
+import subprocess
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PATH = "prom_a/wsa1_prom_a.s"
+LABEL = re.compile(r'^([A-Za-z_.][A-Za-z0-9_.]*):')
+
+# Renames this pass declares.  old -> new.  A label missing from the working
+# copy is a FAILURE unless it is a key here and its value is present.
+# ⚠ DECLARED STATICALLY, not read back from the applier.  The applier's --plan
+# is empty once --apply has run -- there is nothing left to rename -- so a probe
+# that asked it would forgive every loss the moment the work was done.  A
+# declaration has to survive the thing it declares.
+RENAMES = {
+    "sub_FF431C": "PanelButtonDispatch_FF3800",
+    "sub_FF4596": "PanelButtonDispatch_FF3880",
+    "sub_FF4995": "PanelButtonDispatch_FF3900",
+    "sub_FF522F": "PanelButtonDispatch_FF3980",
+    "sub_FF572E": "PanelButtonDispatch_FF3A29",
+    "sub_FF5ED1": "PanelButtonDispatch_FF3D39",
+    "sub_FF6550": "PanelButtonDispatch_FF3F39",
+    "sub_FF66AA": "PanelButtonDispatch_FF3FB9",
+    "sub_FF45F6": "LcdKeyRow2_FF3880",
+    "sub_FF4A91": "LcdKeyRow3_FF3900",
+    "sub_FF4ACB": "LcdKeyRow4_FF3900",
+    "sub_FF4D5D": "LcdKeyRow5_FF3900",
+    "sub_FF52E2": "LcdKeyRow2_FF3980",
+    "sub_FF5A69": "LcdKeyRow2_FF3A29_R1",
+}
+
+
+def _renames():
+    return RENAMES
+
+
+def ref_text(ref):
+    return subprocess.run(["git", "show", "%s:%s" % (ref, PATH)], cwd=ROOT,
+                          capture_output=True, text=True, check=True).stdout
+
+
+def comments(text):
+    out = collections.Counter()
+    for ln in text.splitlines():
+        s = ln.rstrip()
+        if s.lstrip().startswith(";"):
+            out[s] += 1
+    return out
+
+
+def labels(text):
+    return {m.group(1) for m in
+            (LABEL.match(ln) for ln in text.splitlines()) if m}
+
+
+def main():
+    argv = sys.argv[1:]
+    ref = argv[argv.index("--ref") + 1] if "--ref" in argv else "HEAD"
+    old = ref_text(ref)
+    new = open(os.path.join(ROOT, PATH), encoding="utf-8").read()
+
+    co, cn = comments(old), comments(new)
+    lost = co - cn                       # Counter subtraction: multiset delta
+
+    # ⚠ A DECLARED RENAME REWRITES THE COMMENTS THAT CITE THE OLD NAME, and a
+    # naive multiset diff would call every one of those a deletion.  A lost line
+    # that becomes a PRESENT line under the declared substitutions is an UPDATE,
+    # not a loss -- and it is counted and printed separately rather than
+    # forgiven silently, because "how many comments did this pass rewrite" is
+    # itself a number a reviewer wants.
+    updated = collections.Counter()
+    for line, n in list(lost.items()):
+        sub = line
+        for o, w in RENAMES.items():
+            sub = re.sub(r'\b%s\b' % o, w, sub)
+        if sub != line and cn.get(sub, 0) >= 1:
+            updated[line] += n
+            del lost[line]
+    lo, ln_ = labels(old), labels(new)
+    gone = sorted(lo - ln_)
+    undeclared = [g for g in gone if RENAMES.get(g) not in ln_]
+    declared = [g for g in gone if RENAMES.get(g) in ln_]
+
+    print("prom_a preservation, working tree vs %s" % ref)
+    print("  comment lines   %6d -> %6d   (+%d added)"
+          % (sum(co.values()), sum(cn.values()),
+             sum(cn.values()) - sum(co.values())))
+    print("  comment lines REWRITTEN by a declared rename: %d"
+          % sum(updated.values()))
+    print("  LOST comment lines: %d" % sum(lost.values()))
+    print("  labels          %6d -> %6d" % (len(lo), len(ln_)))
+    print("  labels gone: %d, of which DECLARED renames: %d, UNDECLARED: %d"
+          % (len(gone), len(declared), len(undeclared)))
+    if "--list" in argv:
+        for line, n in lost.items():
+            print("    LOST x%d  %s" % (n, line[:110]))
+        for g in undeclared:
+            print("    UNDECLARED LABEL LOSS  %s" % g)
+        for g in declared:
+            print("    renamed  %s -> %s" % (g, RENAMES[g]))
+        for line, n in updated.items():
+            print("    rewritten x%d  %s" % (n, line[:110]))
+    bad = sum(lost.values()) + len(undeclared)
+    print("FAILURES: %d" % bad)
+    return 1 if bad else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
