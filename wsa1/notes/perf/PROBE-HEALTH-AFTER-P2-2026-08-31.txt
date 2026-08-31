@@ -1,0 +1,109 @@
+THE TWO PROBES THAT COULD ONLY EVER TIME OUT NOW GET GRADES.
+
+WHY THEY COULD NOT BE GRADED
+  probe_health runs every invocation in four trees. `full` and `stub` differ
+  from the committed tree BY CONSTRUCTION -- that difference is the measurement
+  -- so reachability's result-cache fingerprint cannot hit there and those runs
+  walked COLD.  A cold prom_a walk was 621 s and the per-invocation timeout is
+  300 s, so the two probes that walk were graded TIMEOUT: "NOT a pass: the
+  instrument never saw an answer".  52 runs per sweep spent burning the timeout.
+
+WHAT CHANGED
+  P2 persists the decode index and P3 seeds it with one linear decode per image.
+  The derived trees have different `.s` files but the SAME ROMs, so the index is
+  valid in all four; a walk there is ~20 s, well inside the timeout.
+
+THE MEASUREMENT (2026-08-31, after P1+P2+P3+P5)
+
+  python3 notes/probe_health.py --regrade notes/probe-health-baseline-2026-08-30/prom_b.json --jobs 6
+      43 invocations, 172 runs, 15m45s wall
+      ✔ UNAFFECTED    (was TIMEOUT) notes/reachability.py --targets
+      40 of 43 came back green
+
+  python3 notes/probe_health.py --image prom_a --only gen_prom_b_cover_round2 --jobs 6
+      2 invocations, 8 runs, 1m05s wall   (it was 4 x 300 s of timeout)
+      UNAFFECTED    notes/gen_prom_b_cover_round2.py
+      SPLIT-FRAGILE notes/gen_prom_b_cover_round2.py --closure
+
+  ★ BOTH TIMEOUT ROWS NOW HAVE A REAL GRADE.  SPLIT-FRAGILE is not green, but it
+    is an ANSWER: the probe is right today and a split would break it, which is
+    a fact the sweep could not previously establish about that probe at all.
+
+  ⚠ DO NOT READ THE OTHER 39 AS THIS WORK'S DOING.  The baseline is 2026-08-30
+    and lanes have been migrating probes to notes/asm_source.py ever since; the
+    SPLIT-FRAGILE -> UNAFFECTED rows are theirs.  One row moved the other way
+    (notes/wave7_round9_review_wb_prom_b.py, LOUD -> VACUOUS); it does not import
+    reachability and was last edited in 765a4e6, so it is not this work either.
+    The row this work is accountable for is the TIMEOUT one.
+
+FULL OUTPUT OF THE REGRADE FOLLOWS.
+==============================================================================
+
+=== prom_b  REGRADE 43 invocation(s) that were not green ===
+    ... 25/172 runs
+    ... 50/172 runs
+    ... 75/172 runs
+    ... 100/172 runs
+    ... 125/172 runs
+    ... 150/172 runs
+    ... 172/172 runs
+    VACUOUS       (was VACUOUS      ) notes/wave7_round6_review_wb_prom_b.py
+    VACUOUS       (was LOUD         ) notes/wave7_round9_review_wb_prom_b.py
+    LOUD          (was LOUD         ) notes/wave7_round5_review_wb_prom_b.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/audit_wave6_round3_probes.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_cover_round2.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f067a6_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f0ea9f_module.py --checks
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f17559_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f353ab_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f4f000_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f5553f_module.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/gen_prom_b_f6d002_module.py --checks
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_understanding_round4.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_a_understanding_round6.py --callshape
+  ✔ UNAFFECTED    (was WRITER       ) notes/prom_a_understanding_round7.py --apply-strings
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_b_audit_callsites.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_call_graph.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_dl_call_shapes.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_dl_screens_round5.py
+  ✔ UNAFFECTED    (was NONDET       ) notes/prom_b_entrypoints_round7.py --runs --selftest
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/prom_b_evidence_audit.py --scopes
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f067a6_layout.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f0ea9f_header_audit.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f17559_layout.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f17559_reaudit.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f5b800_checks.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f65000_header_audit.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_f6d002_touches.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_panel_names_round11.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_panel_names_round12.py --0x0d
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_real_coverage.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_sc1_serial_regs.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_b_sc1_states.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_c_record68_round10.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/prom_c_understanding_round4.py
+  ✔ UNAFFECTED    (was VACUOUS      ) notes/promb_macro_preservation.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/promb_macro_rewrite.py --unused
+  ✔ UNAFFECTED    (was TIMEOUT      ) notes/reachability.py --targets
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/vector_map.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/wave7-verify-probes/wave7_pa_write_census.py --selftest
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/wave7_panel_names_round11.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/wave7_review_wa3_prom_a_names.py
+  ✔ UNAFFECTED    (was SPLIT-FRAGILE) notes/wave7_review_wb_dl_name_audit.py
+  40 of 43 came back green
+
+==============================================================================
+AND THE TARGETED prom_a RUN:
+
+=== prom_a  (prom_a/wsa1_prom_a.s)  1 script(s), 2 invocation(s) ===
+    ... 8/8 runs
+  SPLIT-FRAGILE notes/gen_prom_b_cover_round2.py --closure
+  VACUOUS 0   LOUD 0   SPLIT-FRAGILE 1   WRITER 0   TIMEOUT 0   NONDET 0   BY-DESIGN 0   UNAFFECTED 1
+  not run (write mode); the write path must move FIRST -- python3 notes/migrate_listing_readers.py --list:
+      notes/gen_prom_b_cover_round2.py --emit
+      notes/gen_prom_b_cover_round2.py --splice
+      notes/gen_prom_b_cover_round2.py --splice --anyway
+  ★ GIT-BLIND -- reads the listing through `git show`, where the tree flip cannot reach it; classify by hand:
+      notes/gen_prom_b_cover_round2.py
+
+VACUOUS+LOUD across the images measured: 0

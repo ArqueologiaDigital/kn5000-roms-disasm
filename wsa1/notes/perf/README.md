@@ -276,6 +276,13 @@ returns no grade for precisely the probes that do the most work.
 
 ★ Fixing the walk fixes probe_health. Nothing else here needs to change.
 
+★★ AND IT DID -- MEASURED, 2026-08-31, after P2/P3:
+   `notes/reachability.py --targets` TIMEOUT -> UNAFFECTED, and
+   `notes/gen_prom_b_cover_round2.py --closure` TIMEOUT -> SPLIT-FRAGILE
+   (8 runs in 65 s where it had been 4 x 300 s of timeout).
+   Both rows now have an ANSWER. See notes/perf/PROBE-HEALTH-AFTER-P2-2026-08-31.txt,
+   which also says which of the other regraded rows are NOT this work's doing.
+
 ## 6. What invalidates the cache, and how often
 
 Over the 142 commits of 2026-08-30: **8 touched `notes/reachability.py`**
@@ -351,7 +358,18 @@ persisted index is absent, and pours it into `_BOUND`. A walk that starts
 BETWEEN two canonical boundaries -- which weak seeds do -- still spawns, and
 those rows are canonical too. Proved with `prove_identical.py` from cold.
 
-## P4 — a cache key that does not punish editing the tool
+## P4 — a cache key that does not punish editing the tool   ⚠ **NOT WORTH IT NOW**
+
+The premise was that a docstring edit costs the tree a 17-minute re-walk. After
+P2/P3 it costs **20 seconds**: the edit invalidates the RESULT cache, as it
+should, but not the decode index, which is keyed on the ROM and the decoder and
+cannot be affected by a comment. So the saving is ~20 s per tool edit, against
+the risk the proposal itself names -- a key too narrow serves a STALE answer,
+which is the failure the fingerprint docstring exists to prevent. Recommend
+leaving the key hashing the whole file.
+
+The original proposal follows.
+
 
 The fingerprint hashes `__file__`, so a docstring, a print format or a new flag
 invalidates all three images and costs a 17-minute re-walk. 8 of 2026-08-30's 142
@@ -381,11 +399,35 @@ fall-through index once (`{a + len(a): a}`) instead. Separately, `--evidence`
 `os.unlink`s `notes/.reachability-cache.json`, which is every lane's cache, to
 get an in-memory effect; a module flag does the same thing without the collateral.
 
-## P6 — walk the three images in parallel
+## P6 — walk the three images in parallel   ⚠ **NOT WORTH IT NOW**
+
+Bounded by prom_a: with the decode index that is 9.98 s of a 17.7 s run, so the
+ceiling is ~8 s saved, for three processes racing two read-modify-write JSON/text
+caches. The README below already called it moot if P2 landed. It did.
+
+The original proposal follows.
+
 
 They are independent. A cold full run is bounded by prom_a (621.72 s) instead of
 their sum (1,019.19 s), ~40%. ⚠ `_cache_store` is read-modify-write on one JSON
 file; three writers race. Moot if P2 lands.
+
+## P7 — the NEW hot spot: `_decode_window`'s chain builder   ★ MEASURED, NOT LANDED
+
+    _decode_window   276,757 calls   12.0 s of a 17.7 s run   0 subprocesses
+
+With the index in memory the cost is no longer `fork`+`exec`, it is building a
+row list per call: the index path walks the chain from `start` up to **512
+rows**, and `walk()` then consumes rows only until the first FLOW_END -- usually
+a handful. Stopping the chain at the first FLOW_END row would cut nearly all of
+those 141M iterations.
+
+⚠ It LOOKS answer-identical (every current caller either consumes rows up to a
+FLOW_END or reads `rows[0]`), but "looks" is not the gate here: it would need
+`prove_identical.py` cold, and a note in `_decode_window` saying that a caller
+which reads past a FLOW_END would silently get a short list. Not landed, because
+the run is already 20 s and the invariant is subtle enough to deserve its own
+pass.
 
 ## NOT Rust, and not PyPy
 
@@ -394,9 +436,13 @@ file; three writers race. Moot if P2 lands.
     walk() inner loop         4.6 s    0.4%   the part people picture rewriting
 
 Rewriting every line of Python in Rust and making it take zero time turns 1,019 s
-into 850 s — **1.2x**. P2 and P3 attack the 83% and are worth 50-100x. Rust makes
-a bad algorithm fast; it does not make it good, and this algorithm decodes 110 MB
-to settle 219,086 boundaries.
+into 850 s — **1.2x**. P2 and P3 attacked the 83% and were worth 30-54x. Rust
+makes a bad algorithm fast; it does not make it good, and that algorithm decoded
+110 MB to settle 219,086 boundaries.
+
+★ AND THE ARGUMENT ONLY GOT STRONGER. The run those percentages describe is now
+20 s, of which 0 s is `unidasm` once the index exists. What is left is ~17 s of
+Python, and P7 above removes most of it in a dozen lines.
 
 The honest costs, if it were ever proposed again:
 

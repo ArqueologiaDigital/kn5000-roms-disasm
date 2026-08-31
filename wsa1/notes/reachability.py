@@ -175,7 +175,8 @@ def owner(addr, cpu):
 
 
 # ------------------------------------------------------------- result cache
-# ⚠ THE WALK IS EXPENSIVE (minutes), AND LANES RE-RUN IT. Without this, two lanes
+# ⚠ THE WALK COSTS REAL TIME (~20 s since the decode index below; it was 17
+# MINUTES before it), AND LANES RE-RUN IT. Without this, two lanes
 # asking the same question spawn two full walks, and ten concurrent processes on
 # an eight-core box make every one of them slower. The result is therefore cached
 # against a fingerprint of its INPUTS -- the four .s files and this file -- so a
@@ -244,7 +245,9 @@ _WIN = {}
 # ★ THE OPTIMISATION THAT MATTERS: a window decoded from seed A also settles the
 # boundaries of every instruction in A's linear run, so a later walk starting at
 # any of those addresses is a CACHE HIT and costs no subprocess. Without this the
-# tool spawns one unidasm per seed -- thousands -- and takes tens of minutes.
+# tool spawned one unidasm per seed -- thousands -- and took tens of minutes.
+# ★ Since the persisted index below, this index arrives ALREADY FULL and a cold
+# walk spawns 876 times instead of 84,190.
 _BOUND = defaultdict(dict)
 WINDOW = 0x800
 
@@ -320,8 +323,8 @@ def _decode_window(tag, start):
 # ★★ THE ROM BYTES NEVER CHANGE. The byte gate freezes them, so what unidasm
 # says an address decodes to is INVARIANT to the `.s` edit that (correctly)
 # invalidates the result cache above: a lane converts a span, the result cache
-# misses, and the tool re-derives -- from 84,190 subprocesses and 14 minutes --
-# a decode that could not possibly have changed. 83% of a cold run is that
+# misses, and the tool re-derived -- from 84,190 subprocesses and 17 minutes --
+# a decode that could not possibly have changed. 83% of a cold run was that
 # subprocess. So the boundary index is persisted too, on its OWN key: the ROM,
 # the decoder binary, and the two parameters that decide what a window asserts.
 #
