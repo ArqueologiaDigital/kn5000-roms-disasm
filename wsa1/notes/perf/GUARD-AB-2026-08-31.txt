@@ -175,3 +175,19 @@ COMPARING against baseline (cold)
 
 5 mode(s) compared, 4 differ
 EXIT rc=1
+
+================================================================================
+THE REVERT WAS VERIFIED, NOT ASSUMED.
+
+  After reverting the three lines, notes/perf/prove_identical.py was run cold
+  again against the same baseline:
+
+      targets    1101.37s  ok   IDENTICAL (1741 bytes, rc=0)
+      spans         0.19s  ok   IDENTICAL
+      seeds         0.18s  ok   IDENTICAL
+      report        0.24s  ok   IDENTICAL
+      selftest      5.49s  ok   IDENTICAL
+      5 mode(s) compared, 0 differ
+
+  So the tree is exactly where it was, and the result cache was left WARM --
+  all three images HIT -- rather than leaving the next lane a 18-minute walk.
