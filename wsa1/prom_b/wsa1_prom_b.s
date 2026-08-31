@@ -122093,17 +122093,32 @@ DispatchTable_F67CEF:
 	ret	; F67D8B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F67D8C
+; MsgLine_Volume -- 0xF67D8C
 ; Called from: in-module: 0xF67EAD
 ; Touches: (0x1011)
 ; Calls:   T_F41AF0 T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF67D8C is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_Volume -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 9 characters from the literal at
+;          0xF67DC6 -- `VOLUME = ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F67D8C:
+MsgLine_Volume:
 	ld	xix, 4071	; F67D8C  ld XIX,0x00000fe7
 	ldb	a, 32	; F67D91  ld A,0x20
 	ldw	bc, 27	; F67D93  ld BC,0x001b
@@ -132067,7 +132082,7 @@ sub_F6C877:
 ; sub_F6C8F3
 ; Called from: in-module: 0xF67444
 ; Touches: (0x0E5C) (0x0E63) (0x0EF5) (0x12EC)
-; Calls:   T_F431B0 sub_F6C984 sub_F6C9C7 sub_F6C935
+; Calls:   T_F431B0 sub_F6C984 MsgLine_PanKeyShiftTuningBendSens sub_F6C935
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C8F3 is an instruction
 ;           boundary.  The name IS the address.
@@ -132174,17 +132189,32 @@ sub_F6C984:
 	ret	; F6C9C6  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6C9C7
+; MsgLine_PanKeyShiftTuningBendSens -- 0xF6C9C7
 ; Called from: in-module: 0xF6C92A 0xF6CB0A 0xF6CB49
 ; Touches: (0x12EC) (0x12ED) (0x2660)
 ; Calls:   T_F41AF8 T_F41AF0 T_F431B4
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C9C7 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PanKeyShiftTuningBendSens -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 10 characters from entry 0 of the table at
+;          0xF6CA3B -- `PAN      :` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6C9C7:
+MsgLine_PanKeyShiftTuningBendSens:
 	ld	xix, 4071	; F6C9C7  ld XIX,0x00000fe7
 	ldb	a, 32	; F6C9CC  ld A,0x20
 	ldw	bc, 27	; F6C9CE  ld BC,0x001b
@@ -133085,7 +133115,7 @@ sub_F6D023:
 ; sub_F6D024
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0E4E) (0x0EF5) (0x1259) (0x125A) (0x1343)
-; Calls:   T_F431B0 sub_F6E849
+; Calls:   T_F431B0 MsgLine_PartRtCreateX
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133183,7 +133213,7 @@ sub_F6D075:
 ; sub_F6D0CE
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0E4E) (0x0EF5) (0x1259) (0x125A) (0x1344)
-; Calls:   T_F431B0 sub_F6E8A6
+; Calls:   T_F431B0 MsgLine_PartRtCreateY
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133281,7 +133311,7 @@ sub_F6D11F:
 ; sub_F6D178
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0E4E) (0x0EF5) (0x1259) (0x125A) (0x1345)
-; Calls:   T_F431B0 sub_F6E903
+; Calls:   T_F431B0 MsgLine_PartRtCtrlX
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133379,7 +133409,7 @@ sub_F6D1C9:
 ; sub_F6D222
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0E4E) (0x0EF5) (0x1259) (0x125A) (0x1346)
-; Calls:   T_F431B0 sub_F6E95F
+; Calls:   T_F431B0 MsgLine_PartRtCtrlY
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133477,7 +133507,7 @@ sub_F6D273:
 ; sub_F6D2CC
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0E4E) (0x0EF5) (0x1258) (0x1259) (0x125A) (0x134E)
-; Calls:   T_F431B0 sub_F6E2BA
+; Calls:   T_F431B0 MsgLine_PartReverb
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133571,7 +133601,7 @@ sub_F6D320:
 ; sub_F6D36C
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0E4E) (0x0EF5) (0x1258) (0x1259) (0x125A) (0x134F)
-; Calls:   T_F431B0 sub_F6E212
+; Calls:   T_F431B0 MsgLine_PartEffect1
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133683,10 +133713,10 @@ sub_F6D40C:
 	call	16003504	; F6D40C  call 0xf431b0
 
 ; --------------------------------------------------------------------------
-; sub_F6D410
+; MsgLine_Control_Cleared -- 0xF6D410
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6D9FB sub_F6D6DC sub_F6D890 T_F431B4
+; Calls:   MsgLine_Clear sub_F6D6DC sub_F6D890 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133697,10 +133727,25 @@ sub_F6D40C:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D410
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_Control_Cleared -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 7 characters from the literal at
+;          0xF6D464 -- `CONTROL` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D410:
+MsgLine_Control_Cleared:
 	calr	1512	; F6D410  calr 0xf6d9fb
 	ld	xix, 4068	; F6D413  ld XIX,0x00000fe4
 	ldw	wa, 8224	; F6D418  ld WA,0x2020
@@ -133740,10 +133785,10 @@ sub_F6D443:
 	call	16003504	; F6D443  call 0xf431b0
 
 ; --------------------------------------------------------------------------
-; sub_F6D447
+; MsgLine_Control -- 0xF6D447
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6D9FB sub_F6D6DC sub_F6D890 T_F431B4
+; Calls:   MsgLine_Clear sub_F6D6DC sub_F6D890 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133754,10 +133799,25 @@ sub_F6D443:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D447
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_Control -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 7 characters from the literal at
+;          0xF6D464 -- `CONTROL` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D447:
+MsgLine_Control:
 	calr	1457	; F6D447  calr 0xf6d9fb
 	ld	xiy, 16176228	; F6D44A  ld XIY,0x00f6d464
 	ld	xix, 4073	; F6D44F  ld XIX,0x00000fe9
@@ -133854,7 +133914,7 @@ Data_F6D478:
 ; sub_F6D482
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6D5BA sub_F6D5F1 sub_F6D497 T_F431B4
+; Calls:   sub_F6D5BA MsgLine_ClearTail sub_F6D497 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133927,19 +133987,34 @@ Data_F6D4BA:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6D4C6
+; MsgLine_TransportState_Plus14 -- 0xF6D4C6
 ; Called from: in-module: 0xF6D4FD
 ; Touches: (0x12C0)
-; Calls:   sub_F6D5F1
+; Calls:   MsgLine_ClearTail
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF6D4C6 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_TransportState_Plus14 -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 8 characters from entry 0 of the table at
+;          0xF6D66D -- `        ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D4C6:
+MsgLine_TransportState_Plus14:
 	calr	296	; F6D4C6  calr 0xf6d5f1
 	ld	xiy, 16176749	; F6D4C9  ld XIY,0x00f6d66d
 	ld	xix, 4082	; F6D4CE  ld XIX,0x00000ff2
@@ -133952,10 +134027,10 @@ sub_F6D4C6:
 	ret	; F6D4E3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D4E4
+; MsgLine_Rhythm -- 0xF6D4E4
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   T_F431B0 sub_F6D9FB sub_F6D6DC sub_F6D4C6 T_F431B4
+; Calls:   T_F431B0 MsgLine_Clear sub_F6D6DC MsgLine_TransportState_Plus14 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133966,10 +134041,25 @@ sub_F6D4C6:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D4E4
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_Rhythm -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 9 characters from the literal at
+;          0xF6D46D -- ` RHYTHM  ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D4E4:
+MsgLine_Rhythm:
 	call	16003504	; F6D4E4  call 0xf431b0
 	calr	1296	; F6D4E8  calr 0xf6d9fb
 	ld	xiy, 16176237	; F6D4EB  ld XIY,0x00f6d46d
@@ -133982,10 +134072,10 @@ sub_F6D4E4:
 	ret	; F6D504  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D505
+; MsgLine_Tempo -- 0xF6D505
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6D9FB sub_F6D6DC sub_F6D9AE T_F431B4
+; Calls:   MsgLine_Clear sub_F6D6DC sub_F6D9AE T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -133996,10 +134086,25 @@ sub_F6D4E4:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D505
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_Tempo -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 25 characters from the literal at
+;          0xF6D527 -- `  TEMPO  <glyph 0x15>=              ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D505:
+MsgLine_Tempo:
 	calr	1267	; F6D505  calr 0xf6d9fb
 	ld	xix, 4068	; F6D508  ld XIX,0x00000fe4
 	ld	xiy, 16176423	; F6D50D  ld XIY,0x00f6d527
@@ -134032,10 +134137,10 @@ Data_F6D527:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6D540
+; MsgLine_Tempo_Repaint -- 0xF6D540
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   T_F431B0 sub_F6D9FB sub_F6D6DC sub_F6D9AE T_F431B4
+; Calls:   T_F431B0 MsgLine_Clear sub_F6D6DC sub_F6D9AE T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -134046,10 +134151,25 @@ Data_F6D527:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D540
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_Tempo_Repaint -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 25 characters from the literal at
+;          0xF6D561 -- `  TEMPO  <glyph 0x15>=              ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D540:
+MsgLine_Tempo_Repaint:
 	call	16003504	; F6D540  call 0xf431b0
 	calr	1204	; F6D544  calr 0xf6d9fb
 	ld	xiy, 16176481	; F6D547  ld XIY,0x00f6d561
@@ -134103,10 +134223,10 @@ sub_F6D57A:
 	call	16003504	; F6D57A  call 0xf431b0
 
 ; --------------------------------------------------------------------------
-; sub_F6D57E
+; MsgLine_Blank -- 0xF6D57E
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6D9FB sub_F6D6DC T_F431B4 T_F431C0
+; Calls:   MsgLine_Clear sub_F6D6DC T_F431B4 T_F431C0
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -134117,10 +134237,25 @@ sub_F6D57A:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D57E
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_Blank -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 25 characters from the literal at
+;          0xF6D59C -- `                         ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D57E:
+MsgLine_Blank:
 	calr	1146	; F6D57E  calr 0xf6d9fb
 	ld	xiy, 16176540	; F6D581  ld XIY,0x00f6d59c
 	ld	xix, 4068	; F6D586  ld XIX,0x00000fe4
@@ -134247,7 +134382,7 @@ sub_F6D5F0:
 	ret	; F6D5F0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D5F1
+; MsgLine_ClearTail -- 0xF6D5F1
 ; Called from: in-module: 0xF6D486 0xF6D4C6 0xF6D608 0xF6DDC7 0xF6DF07
 ;              0xF6DF67 0xF6DFD4 0xF6E03E +20 more
 ; Touches: nothing with an absolute address
@@ -134256,10 +134391,21 @@ sub_F6D5F0:
 ;                    0xF6D5F1 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_ClearTail -- named 2026-08-31 for what it writes.
+; Evidence (DEVICE-FREE, INTERNAL): it blanks the line from +3 on: `ld XIX,0x00000FE7` / `ld BC,0x001B` / `ld A,0x20` / `ld (XIX+),A` / `djnz` -- twenty-seven byte stores of a space, 0x0FE7 through 0x1001 inclusive, and it saves and restores WA, BC and XIX around the loop.
+;          0x0FE7-0x1001 is inside the 30-character on-screen text
+;          line at RAM 0x00000FE4, whose extent the interpreter-B record at
+;          0xF3D38A independently states as 30 characters; the run ends on
+;          the line's last byte and not one byte either side.  Derived by
+;          `python3 notes/prom_b_msgline.py`; write-up in
+;          notes/FINDINGS-prom_b-message-line.md.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
+; Unknown: nothing about the blanking; the line's own consumers are the open
+;          question, not this.
 ; --------------------------------------------------------------------------
-sub_F6D5F1:
+MsgLine_ClearTail:
 	pushw	wa	; F6D5F1  push WA
 	pushw	bc	; F6D5F2  push BC
 	push	xix	; F6D5F3  push XIX
@@ -134274,10 +134420,10 @@ sub_F6D5F1:
 	ret	; F6D607  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D608
+; MsgLine_TransportState_Plus4 -- 0xF6D608
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x12C0)
-; Calls:   sub_F6D5F1 T_F431B4
+; Calls:   MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -134288,10 +134434,25 @@ sub_F6D5F1:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D608
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_TransportState_Plus4 -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 8 characters from entry 0 of the table at
+;          0xF6D66D -- `        ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D608:
+MsgLine_TransportState_Plus4:
 	calr	65510	; F6D608  calr 0xf6d5f1
 	ld	xiy, 16176749	; F6D60B  ld XIY,0x00f6d66d
 	ld	xix, 4072	; F6D610  ld XIX,0x00000fe8
@@ -134313,7 +134474,7 @@ sub_F6D608:
 	ret	; F6D641  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D642
+; MsgLine_TransportState_Plus10 -- 0xF6D642
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x12C0)
 ; Calls:   T_F431B4
@@ -134327,10 +134488,25 @@ sub_F6D608:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D642
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_TransportState_Plus10 -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 8 characters from entry 0 of the table at
+;          0xF6D66D -- `        ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D642:
+MsgLine_TransportState_Plus10:
 	ld	xix, 4078	; F6D642  ld XIX,0x00000fee
 	xor	xhl, xhl	; F6D647  xor XHL,XHL
 	ldb_d8	l, (4800)	; F6D649  ld L,(0x12c0)
@@ -134468,7 +134644,7 @@ sub_F6D70C:
 ; sub_F6D710
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   sub_F6D9FB sub_F6D6DC 0xF6DD17 sub_F6DBF9 T_F431B4 T_F431C0
+; Calls:   MsgLine_Clear sub_F6D6DC 0xF6DD17 sub_F6DBF9 T_F431B4 T_F431C0
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -134641,7 +134817,7 @@ Data_F6D867:
 ; sub_F6D86B
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
-; Calls:   T_F431B0 sub_F6D9FB sub_F6D6DC sub_F6D72F T_F431B4
+; Calls:   T_F431B0 MsgLine_Clear sub_F6D6DC sub_F6D72F T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -134859,7 +135035,7 @@ sub_F6D9AE:
 	ret	; F6D9CA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D9CB
+; MsgLine_Tempo_F6D9CB -- 0xF6D9CB
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Calls:   sub_F6D9AE T_F431B4
@@ -134873,10 +135049,25 @@ sub_F6D9AE:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D9CB
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_Tempo_F6D9CB -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 26 characters from the literal at
+;          0xF6D9E2 -- ` TEMPO   <glyph 0x15>=              1` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6D9CB:
+MsgLine_Tempo_F6D9CB:
 	ld	xiy, 16177634	; F6D9CB  ld XIY,0x00f6d9e2
 	ld	xix, 4073	; F6D9D0  ld XIX,0x00000fe9
 	ldw	bc, 26	; F6D9D5  ld BC,0x001a
@@ -134911,7 +135102,7 @@ Data_F6D9E2:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6D9FB
+; MsgLine_Clear -- 0xF6D9FB
 ; Called from: in-module: 0xF6D410 0xF6D447 0xF6D4E8 0xF6D505 0xF6D544
 ;              0xF6D57E 0xF6D710 0xF6D86F
 ; Touches: nothing with an absolute address
@@ -134920,10 +135111,21 @@ Data_F6D9E2:
 ;                    0xF6D9FB is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_Clear -- named 2026-08-31 for what it writes.
+; Evidence (DEVICE-FREE, INTERNAL): it blanks the WHOLE 30-character line: `ld BC,0x000F` / `ld XIX,0x00000FE4` / `ld WA,0x2020` / `ld (XIX+),WA` / `djnz` -- fifteen 16-bit stores of two spaces, 0x0FE4 through 0x1001 inclusive.
+;          0x0FE4-0x1001 is inside the 30-character on-screen text
+;          line at RAM 0x00000FE4, whose extent the interpreter-B record at
+;          0xF3D38A independently states as 30 characters; the run ends on
+;          the line's last byte and not one byte either side.  Derived by
+;          `python3 notes/prom_b_msgline.py`; write-up in
+;          notes/FINDINGS-prom_b-message-line.md.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
+; Unknown: nothing about the blanking; the line's own consumers are the open
+;          question, not this.
 ; --------------------------------------------------------------------------
-sub_F6D9FB:
+MsgLine_Clear:
 	ldw	bc, 15	; F6D9FB  ld BC,0x000f
 	ld	xix, 4068	; F6D9FE  ld XIX,0x00000fe4
 	ldw	wa, 8224	; F6DA03  ld WA,0x2020
@@ -135410,10 +135612,10 @@ Text_B21012345678:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6DDB7
+; MsgLine_PartVolume -- 0xF6DDB7
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258) (0x125A)
-; Calls:   T_F431B0 sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135424,10 +135626,25 @@ Text_B21012345678:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DDB7
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartVolume -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 7 characters from the literal at
+;          0xF6DE10 -- `VOLUME=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6DDB7:
+MsgLine_PartVolume:
 	m_cp_mi8 MB16, 0x0ef5, 0x0a	; F6DDB7  cp (0x0ef5),0x0a
 	jr	z, 9	; F6DDBC  jr Z,0xf6ddc7
 	stdi8	(3829), 10	; F6DDBE  ld (0x0ef5),0x0a
@@ -135500,10 +135717,10 @@ Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6DEF7
+; MsgLine_PartPanpot -- 0xF6DEF7
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258) (0x125A)
-; Calls:   T_F431B0 sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135514,10 +135731,25 @@ Text_VolumeP1P2P3P4P5P6P7P8P9P10P11P12P13P14P15:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DEF7
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartPanpot -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 7 characters from the literal at
+;          0xF6DF50 -- `PANPOT=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6DEF7:
+MsgLine_PartPanpot:
 	m_cp_mi8 MB16, 0x0ef5, 0x0a	; F6DEF7  cp (0x0ef5),0x0a
 	jr	z, 9	; F6DEFC  jr Z,0xf6df07
 	stdi8	(3829), 10	; F6DEFE  ld (0x0ef5),0x0a
@@ -135567,10 +135799,10 @@ Data_F6DF50:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6DF57
+; MsgLine_PartKeyShift -- 0xF6DF57
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258) (0x125A) (0x2660)
-; Calls:   T_F431B0 sub_F6D5F1 T_F41AF8 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F41AF8 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135581,10 +135813,25 @@ Data_F6DF50:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DF57
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartKeyShift -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 10 characters from the literal at
+;          0xF6DFBA -- `KEY SHIFT=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6DF57:
+MsgLine_PartKeyShift:
 	m_cp_mi8 MB16, 0x0ef5, 0x0a	; F6DF57  cp (0x0ef5),0x0a
 	jr	z, 9	; F6DF5C  jr Z,0xf6df67
 	stdi8	(3829), 10	; F6DF5E  ld (0x0ef5),0x0a
@@ -135637,10 +135884,10 @@ Data_F6DFBA:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6DFC4
+; MsgLine_PartTuning -- 0xF6DFC4
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258) (0x125A) (0x2660)
-; Calls:   T_F431B0 sub_F6D5F1 T_F41AF8 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F41AF8 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135651,10 +135898,25 @@ Data_F6DFBA:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6DFC4
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartTuning -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 7 characters from the literal at
+;          0xF6E027 -- `TUNING=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6DFC4:
+MsgLine_PartTuning:
 	m_cp_mi8 MB16, 0x0ef5, 0x0a	; F6DFC4  cp (0x0ef5),0x0a
 	jr	z, 9	; F6DFC9  jr Z,0xf6dfd4
 	stdi8	(3829), 10	; F6DFCB  ld (0x0ef5),0x0a
@@ -135707,10 +135969,10 @@ Data_F6E027:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E02E
+; MsgLine_PartBendSens -- 0xF6E02E
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258) (0x125A)
-; Calls:   T_F431B0 sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135721,10 +135983,25 @@ Data_F6E027:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E02E
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartBendSens -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 10 characters from the literal at
+;          0xF6E087 -- `BEND SENS=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E02E:
+MsgLine_PartBendSens:
 	m_cp_mi8 MB16, 0x0ef5, 0x0a	; F6E02E  cp (0x0ef5),0x0a
 	jr	z, 9	; F6E033  jr Z,0xf6e03e
 	stdi8	(3829), 10	; F6E035  ld (0x0ef5),0x0a
@@ -135774,10 +136051,10 @@ Data_F6E087:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E091
+; MsgLine_PartSustain -- 0xF6E091
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258) (0x125A)
-; Calls:   T_F431B0 sub_F6D5F1 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135788,10 +136065,25 @@ Data_F6E087:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E091
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartSustain -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 8 characters from the literal at
+;          0xF6E0EB -- `SUSTAIN ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E091:
+MsgLine_PartSustain:
 	m_cp_mi8 MB16, 0x0ef5, 0x01	; F6E091  cp (0x0ef5),0x01
 	jr	z, 9	; F6E096  jr Z,0xf6e0a1
 	stdi8	(3829), 1	; F6E098  ld (0x0ef5),0x01
@@ -135849,10 +136141,10 @@ Data_F6E0EB:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E152
+; MsgLine_PartDspEffect -- 0xF6E152
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258)
-; Calls:   T_F431B0 sub_F6D5F1 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135863,10 +136155,25 @@ Data_F6E0EB:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E152
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartDspEffect -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 11 characters from the literal at
+;          0xF6E1A6 -- `DSP EFFECT ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E152:
+MsgLine_PartDspEffect:
 	m_cp_mi8 MB16, 0x0ef5, 0x01	; F6E152  cp (0x0ef5),0x01
 	jr	z, 9	; F6E157  jr Z,0xf6e162
 	stdi8	(3829), 1	; F6E159  ld (0x0ef5),0x01
@@ -135913,10 +136220,10 @@ Data_F6E1A6:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E1B1
+; MsgLine_PartEffect -- 0xF6E1B1
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258) (0x125A)
-; Calls:   T_F431B0 sub_F6D5F1 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135927,10 +136234,25 @@ Data_F6E1A6:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E1B1
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartEffect -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 7 characters from the literal at
+;          0xF6E20B -- `EFFECT ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E1B1:
+MsgLine_PartEffect:
 	m_cp_mi8 MB16, 0x0ef5, 0x01	; F6E1B1  cp (0x0ef5),0x01
 	jr	z, 9	; F6E1B6  jr Z,0xf6e1c1
 	stdi8	(3829), 1	; F6E1B8  ld (0x0ef5),0x01
@@ -135979,11 +136301,11 @@ Data_F6E20B:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E212
+; MsgLine_PartEffect1 -- 0xF6E212
 ; Called from: in-module: 0xF6D3AF; an already-converted call site elsewhere
 ;              in the image
 ; Touches: (0x1258) (0x125A)
-; Calls:   sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -135994,10 +136316,25 @@ Data_F6E20B:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E212
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartEffect1 -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 8 characters from the literal at
+;          0xF6E259 -- `EFFECT1=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E212:
+MsgLine_PartEffect1:
 	calr	62428	; F6E212  calr 0xf6d5f1
 	ldb_d8	l, (4696)	; F6E215  ld L,(0x1258)
 	xor	h, h	; F6E219  xor H,H
@@ -136042,10 +136379,10 @@ Data_F6E259:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E261
+; MsgLine_PartEffect2 -- 0xF6E261
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x1258) (0x125A)
-; Calls:   sub_F6D5F1 T_F431B4
+; Calls:   MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136056,10 +136393,25 @@ Data_F6E259:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E261
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartEffect2 -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 8 characters from the literal at
+;          0xF6E2AC -- `EFFECT2 ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E261:
+MsgLine_PartEffect2:
 	calr	62349	; F6E261  calr 0xf6d5f1
 	ldb_d8	l, (4696)	; F6E264  ld L,(0x1258)
 	xor	h, h	; F6E268  xor H,H
@@ -136104,11 +136456,11 @@ Data_F6E2AC:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E2BA
+; MsgLine_PartReverb -- 0xF6E2BA
 ; Called from: in-module: 0xF6D30F; an already-converted call site elsewhere
 ;              in the image
 ; Touches: (0x1258) (0x125A)
-; Calls:   sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136119,10 +136471,25 @@ Data_F6E2AC:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E2BA
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartReverb -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 7 characters from the literal at
+;          0xF6E2FF -- `REVERB=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E2BA:
+MsgLine_PartReverb:
 	calr	62260	; F6E2BA  calr 0xf6d5f1
 	ldb_d8	l, (4696)	; F6E2BD  ld L,(0x1258)
 	xor	h, h	; F6E2C1  xor H,H
@@ -136165,10 +136532,10 @@ Data_F6E2FF:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E306
+; MsgLine_PanelMemory -- 0xF6E306
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x2662)
-; Calls:   T_F431B0 sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136179,10 +136546,25 @@ Data_F6E2FF:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E306
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PanelMemory -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 13 characters from the literal at
+;          0xF6E33F -- `PANEL MEMORY=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E306:
+MsgLine_PanelMemory:
 	m_cp_mi8 MB16, 0x0ef5, 0x01	; F6E306  cp (0x0ef5),0x01
 	jr	z, 11	; F6E30B  jr Z,0xf6e318
 	stdi8	(3829), 1	; F6E30D  ld (0x0ef5),0x01
@@ -136337,7 +136719,7 @@ Data_F6E43E:
 ; sub_F6E463
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x0FE8) (0x125A)
-; Calls:   T_F431B0 sub_F6D5F1 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136405,6 +136787,34 @@ sub_F6E463:
 ;           notes/prom_b_dl_screens_round5.py --tables --apply.
 Text_GAbABbBCDbDEbEFF:
 	.ascii	"<G ><Ab><A ><Bb><B ><C ><Db><D ><Eb><E ><F ><F#>                "	; F6E4B2  64 bytes
+
+; --------------------------------------------------------------------------
+; MsgLine_AccompVolume -- 0xF6E4F2
+; ★ LABEL ADDED 2026-08-31, not renamed: this routine had none.  The 64-byte
+;   note-name table Text_GAbABbBCDbDEbEFF ends at 0xF6E4F1 and the code that
+;   follows it was emitted with no label of its own, so every tool that walks
+;   this file by label attributed these 86 bytes to the DATA object above them.
+; Called from: not established -- no thunk slot and no decoded branch in this
+;          transcription names 0xF6E4F2.
+; Extent:  0xF6E4F2-0xF6E541, 80 bytes, ends `ret`.  Both ends are pinned by
+;          objects this file already frames: the 64-byte `.ascii`
+;          Text_GAbABbBCDbDEbEFF ends exactly at 0xF6E4F1, and the caption table
+;          Text_AccTotalVolBassVolumeDrumsVolumeAccmp1Volume begins exactly at
+;          0xF6E542, one byte after the `ret`.
+; Touches: (0x0EF5) (0x2661)
+; Calls:   T_F431B0 sub_F6D5F1 T_F41AF0 T_F431B4
+; Name:    named 2026-08-31 from the text it copies.
+; Evidence (STRING): it copies 16 characters of entry HL of the table at
+;          0xF6E542 -- `ACC. TOTAL VOL.=`, `   BASS VOLUME =`,
+;          `  DRUMS VOLUME =`, ` ACCMP1 VOLUME =`, ` ACCMP2 VOLUME =`,
+;          ` ACCMP3 VOLUME =`, six entries of 16 that end exactly where the next
+;          routine begins -- into the 30-character on-screen text line at RAM
+;          0x00000FE4+5, follows them with the three ASCII digits
+;          Value_ToAsciiDigits3 leaves at (0x2661), and calls the painter
+;          through slot 0xF431B4.  See notes/prom_b_msgline.py.
+; Unknown: which RAM variable selects the entry.
+; --------------------------------------------------------------------------
+MsgLine_AccompVolume:
 
 	m_cp_mi8 MB16, 0x0ef5, 0x01	; F6E4F2  cp (0x0ef5),0x01
 	jr	z, 13	; F6E4F7  jr Z,0xf6e506
@@ -136496,10 +136906,10 @@ sub_F6E5A4:
 	ret	; F6E5A4  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6E5A5
+; MsgLine_PartTremolo -- 0xF6E5A5
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258) (0x125A)
-; Calls:   T_F431B0 sub_F6D5F1 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136510,10 +136920,25 @@ sub_F6E5A4:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E5A5
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartTremolo -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 8 characters from the literal at
+;          0xF6E5FF -- `TREMOLO ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E5A5:
+MsgLine_PartTremolo:
 	m_cp_mi8 MB16, 0x0ef5, 0x01	; F6E5A5  cp (0x0ef5),0x01
 	jr	z, 9	; F6E5AA  jr Z,0xf6e5b5
 	stdi8	(3829), 1	; F6E5AC  ld (0x0ef5),0x01
@@ -136678,10 +137103,10 @@ sub_F6E627:
 	ret	; F6E629  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6E62A
+; MsgLine_TotalReverb -- 0xF6E62A
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x125A)
-; Calls:   T_F431B0 sub_F6D5F1 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136692,10 +137117,25 @@ sub_F6E627:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E62A
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_TotalReverb -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 13 characters from the literal at
+;          0xF6E66A -- `TOTAL REVERB ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E62A:
+MsgLine_TotalReverb:
 	m_cp_mi8 MB16, 0x0ef5, 0x01	; F6E62A  cp (0x0ef5),0x01
 	jr	z, 9	; F6E62F  jr Z,0xf6e63a
 	stdi8	(3829), 1	; F6E631  ld (0x0ef5),0x01
@@ -136736,10 +137176,10 @@ Data_F6E66A:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E678
+; MsgLine_PartMellowNormalBright -- 0xF6E678
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0EF5) (0x1258) (0x125A)
-; Calls:   T_F431B0 sub_F6D5F1 T_F431B4
+; Calls:   T_F431B0 MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136750,10 +137190,25 @@ Data_F6E66A:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E678
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartMellowNormalBright -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 6 characters from entry 0 of the table at
+;          0xF6E6D4 -- `      ` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E678:
+MsgLine_PartMellowNormalBright:
 	m_cp_mi8 MB16, 0x0ef5, 0x01	; F6E678  cp (0x0ef5),0x01
 	jr	z, 9	; F6E67D  jr Z,0xf6e688
 	stdi8	(3829), 1	; F6E67F  ld (0x0ef5),0x01
@@ -136843,10 +137298,10 @@ Text_MSAOffOn23:
 	ret	; F6E705  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6E706
+; MsgLine_TimeSignature -- 0xF6E706
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x0FF8)
-; Calls:   sub_F6D5F1 T_F431B4
+; Calls:   MsgLine_ClearTail T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136857,10 +137312,25 @@ Text_MSAOffOn23:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E706
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_TimeSignature -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 18 characters from the literal at
+;          0xF6E728 -- `TIME SIGNATURE: /4` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E706:
+MsgLine_TimeSignature:
 	pushw	wa	; F6E706  push WA
 	calr	61159	; F6E707  calr 0xf6d5f1
 	popw	wa	; F6E70A  pop WA
@@ -136895,10 +137365,10 @@ Data_F6E728:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E73A
+; MsgLine_PartModulation2 -- 0xF6E73A
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x1259) (0x125A) (0x2092)
-; Calls:   sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136909,10 +137379,25 @@ Data_F6E728:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E73A
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartModulation2 -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 12 characters from the literal at
+;          0xF6E78B -- `MODULATION2=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E73A:
+MsgLine_PartModulation2:
 	m_bit 0, MD16, 0x2092	; F6E73A  bit 0,(0x2092)
 	jr	nz, 74	; F6E73E  jr NZ,0xf6e78a
 	calr	61102	; F6E740  calr 0xf6d5f1
@@ -136961,10 +137446,10 @@ Data_F6E78B:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E797
+; MsgLine_PartCtrlPedal -- 0xF6E797
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x1259) (0x125A) (0x2092)
-; Calls:   sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -136975,10 +137460,25 @@ Data_F6E78B:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E797
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartCtrlPedal -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 11 characters from the literal at
+;          0xF6E7E8 -- `CTRL.PEDAL=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E797:
+MsgLine_PartCtrlPedal:
 	m_bit 0, MD16, 0x2092	; F6E797  bit 0,(0x2092)
 	jr	nz, 74	; F6E79B  jr NZ,0xf6e7e7
 	calr	61009	; F6E79D  calr 0xf6d5f1
@@ -137027,10 +137527,10 @@ Data_F6E7E8:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E7F3
+; MsgLine_PartHold -- 0xF6E7F3
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: (0x1259) (0x125A) (0x2092)
-; Calls:   sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -137041,10 +137541,25 @@ Data_F6E7E8:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E7F3
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartHold -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 5 characters from the literal at
+;          0xF6E844 -- `HOLD=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E7F3:
+MsgLine_PartHold:
 	m_bit 0, MD16, 0x2092	; F6E7F3  bit 0,(0x2092)
 	jr	nz, 74	; F6E7F7  jr NZ,0xf6e843
 	calr	60917	; F6E7F9  calr 0xf6d5f1
@@ -137093,11 +137608,11 @@ Data_F6E844:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E849
+; MsgLine_PartRtCreateX -- 0xF6E849
 ; Called from: in-module: 0xF6D064; an already-converted call site elsewhere
 ;              in the image
 ; Touches: (0x1259) (0x125A) (0x2092)
-; Calls:   sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -137108,10 +137623,25 @@ Data_F6E844:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E849
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartRtCreateX -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 12 characters from the literal at
+;          0xF6E89A -- `R.T.CREAT.X=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E849:
+MsgLine_PartRtCreateX:
 	m_bit 0, MD16, 0x2092	; F6E849  bit 0,(0x2092)
 	jr	nz, 74	; F6E84D  jr NZ,0xf6e899
 	calr	60831	; F6E84F  calr 0xf6d5f1
@@ -137160,11 +137690,11 @@ Data_F6E89A:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E8A6
+; MsgLine_PartRtCreateY -- 0xF6E8A6
 ; Called from: in-module: 0xF6D10E; an already-converted call site elsewhere
 ;              in the image
 ; Touches: (0x1259) (0x125A) (0x2092)
-; Calls:   sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -137175,10 +137705,25 @@ Data_F6E89A:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E8A6
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartRtCreateY -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 12 characters from the literal at
+;          0xF6E8F7 -- `R.T.CREAT.Y=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E8A6:
+MsgLine_PartRtCreateY:
 	m_bit 0, MD16, 0x2092	; F6E8A6  bit 0,(0x2092)
 	jr	nz, 74	; F6E8AA  jr NZ,0xf6e8f6
 	calr	60738	; F6E8AC  calr 0xf6d5f1
@@ -137227,11 +137772,11 @@ Data_F6E8F7:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E903
+; MsgLine_PartRtCtrlX -- 0xF6E903
 ; Called from: in-module: 0xF6D1B8; an already-converted call site elsewhere
 ;              in the image
 ; Touches: (0x1259) (0x125A) (0x2092)
-; Calls:   sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -137242,10 +137787,25 @@ Data_F6E8F7:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E903
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartRtCtrlX -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 11 characters from the literal at
+;          0xF6E954 -- `R.T.CTRL.X=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E903:
+MsgLine_PartRtCtrlX:
 	m_bit 0, MD16, 0x2092	; F6E903  bit 0,(0x2092)
 	jr	nz, 74	; F6E907  jr NZ,0xf6e953
 	calr	60645	; F6E909  calr 0xf6d5f1
@@ -137294,11 +137854,11 @@ Data_F6E954:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E95F
+; MsgLine_PartRtCtrlY -- 0xF6E95F
 ; Called from: in-module: 0xF6D262; an already-converted call site elsewhere
 ;              in the image
 ; Touches: (0x1259) (0x125A) (0x2092)
-; Calls:   sub_F6D5F1 T_F41AF0 T_F431B4
+; Calls:   MsgLine_ClearTail T_F41AF0 T_F431B4
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
 ;                    transcription calls or jumps here.  That is the
 ;                    strongest grade in this block: no byte-window scan is
@@ -137309,10 +137869,25 @@ Data_F6E954:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E95F
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    MsgLine_PartRtCtrlY -- named 2026-08-31 from the text it copies.
+; Evidence (STRING): this routine copies 11 characters from the literal at
+;          0xF6E9B0 -- `R.T.CTRL.Y=` -- into the 30-character on-screen text
+;          line at RAM 0x00000FE4, and then calls the painter through slot
+;          0xF431B4.  That line is 30 characters of the 8x14 font drawn at
+;          x=8, y=180 of the 320x240 panel -- the bottom line -- which is
+;          derived from the ROM by `python3 notes/prom_b_msgline.py`; the
+;          write-up is notes/FINDINGS-prom_b-message-line.md.  The name
+;          claims the CAPTION and nothing else.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`  The gap is now
+;          closed for the caption only, and the `The name IS the address`
+;          line above it is superseded: the name is now the caption.
+; Unknown: which RAM variable supplies the value drawn after the caption, and
+;          what screen id 0x0E -- the only screen prom_a will paint this line
+;          on -- is called.
 ; --------------------------------------------------------------------------
-sub_F6E95F:
+MsgLine_PartRtCtrlY:
 	m_bit 0, MD16, 0x2092	; F6E95F  bit 0,(0x2092)
 	jr	nz, 74	; F6E963  jr NZ,0xf6e9af
 	calr	60553	; F6E965  calr 0xf6d5f1
