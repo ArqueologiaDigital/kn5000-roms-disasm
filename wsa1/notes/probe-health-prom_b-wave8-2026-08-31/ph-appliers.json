@@ -1,0 +1,91 @@
+{
+ "prom_b": {
+  "rows": [
+   {
+    "argv": [
+     "notes/prom_b_apply_chordnote_names.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_apply_diskfile_name.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_apply_effect_editor_name.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_apply_effect_names.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_apply_msgline_names.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_apply_msgline_names.py",
+     "--check"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_b_apply_smf_names.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   }
+  ],
+  "skipped": [
+   [
+    "notes/prom_b_apply_chordnote_names.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_b_apply_diskfile_name.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_b_apply_effect_editor_name.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_b_apply_effect_names.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_b_apply_msgline_names.py",
+    "--apply"
+   ],
+   [
+    "notes/prom_b_apply_smf_names.py",
+    "--apply"
+   ]
+  ],
+  "git_blind": [],
+  "worktree_diff": []
+ }
+}
