@@ -289,6 +289,22 @@ def selftest():
     ck(text_at(b, 0xF6DF50, 7) == "PANPOT=", "the 0xF6DEF7 literal still reads PANPOT=")
     ck(text_at(b, 0xF6E1A6, 11) == "DSP EFFECT ", "the 0xF6E152 literal still reads DSP EFFECT")
 
+    # ★ EVERY NAME'S HEADER CITES AN ADDRESS THE ROUTINE ITSELF LOADS.
+    # A wrong name is worse than sub_XXXXXX and the byte gate cannot see one, so
+    # the rename table is checked against the transcription, not just the ROM:
+    # for each MsgLine_* the round named, the literal address its header quotes
+    # must appear as an operand of an instruction inside that routine.
+    from prom_b_apply_msgline_names import RENAMES as _R, CLEARERS as _C  # noqa
+    ops = {}
+    for name, rows in seq.items():
+        ops[name] = {int(h, 16) for _a, t in rows
+                     for h in re.findall(r"0x0*([0-9a-f]{4,6})\b", t)}
+    miss = [n for _a, n, _k, src, _w, _t in _R if src not in ops.get(n, ())]
+    ck(not miss, f"all {len(_R)} caption names cite an address their own body loads "
+                 f"({len(miss)} do not: {miss[:4]})")
+    miss = [n for _a, n, dst, _c, _u, _w in _C if dst not in ops.get(n, ())]
+    ck(not miss, f"both clearers cite the destination their own body loads ({miss})")
+
     bad = [w for ok, w in CHECKS if not ok]
     for ok, what in CHECKS:
         print(("  ok   " if ok else "  FAIL ") + what)
