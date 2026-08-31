@@ -49,6 +49,47 @@ writer** — see `prom_b_string_refs.py` below, which measures the split. The
 filter that separates them is the DESTINATION: does the routine copy the bytes
 into 0x0FE4-0x1001? That is what this script tests.
 
+### What wave 8's verification actually said
+
+Recorded here rather than left in a report, because the next round will want the
+numbers and the reasons.
+
+**Byte gate** PASS after every commit. **Coverage** unchanged throughout:
+`notes/reachability.py --targets` prints `STRONG 17 bytes, ANY 1,702, in 17
+spans` before and after. **Preservation**
+(`prom_b_naming_preservation.py --base 0f08601`): 0 lines unaccounted for, 0
+labels lost.
+
+**`prom_b_evidence_audit.py --all`, this tree against the round's base:**
+
+    BACKED    2027 -> 2077   (+50, every new semantic label)
+    GROUP       28 ->   28
+    SECTION    315 ->  315
+    UNBACKED   366 ->  366   (unchanged: the round added none)
+
+Every one of the round's new semantic labels grades BACKED — an `Evidence` line
+in its own immediately preceding header.
+
+**`prom_b_probe_answer_diff.py --base 0f08601`:** 93 probes, **75 unchanged, 18
+changed**, and all 18 are the round's own effects rather than damage:
+
+* `gen_prom_b_cover_round2.py` — `.incbin` total 40,932 → 40,812, the 0x78 that
+  `DL_EffectParamPage` now occupies. Its verdict is identical, STRONG 0 / weak
+  80 / **CLOSED**;
+* `prom_b_call_graph.py`, `prom_b_span_frontier.py`, `prom_b_real_coverage.py`,
+  `prom_b_thunks_round6.py`, `prom_b_dl_call_shapes.py` — all read the
+  `.incbin` set, which the same 0x78 changed;
+* `prom_b_evidence_audit.py`, `prom_b_audit_callsites.py`, the three header
+  audits and the three `wave7_round*_review_wb_prom_b.py` — they print label
+  names and count headers, and the round renamed 51 labels and rewrote 51
+  headers. `prom_b_audit_callsites.py`'s totals are unmoved at 3,964 citations
+  over 6,333 labels, and **not one of the round's labels appears in its
+  unresolved list**;
+* `prom_b_msgline.py`, `prom_b_string_refs.py`,
+  `prom_b_ram_and_device_census.py`, `prom_b_naming_preservation.py` — the
+  round's own tools, whose whole job is to answer differently once the names and
+  the `--orphans` count have moved.
+
 ### `prom_b_naming_evidence.py` — ★ THE WORK LIST FOR THE NEXT NAMING ROUND
 **"What evidence exists for the routines that are still `sub_XXXXXX`?"** Sorts
 them by the KIND of evidence the tree already holds, so a round can start at the
