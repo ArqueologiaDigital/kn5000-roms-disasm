@@ -30,6 +30,17 @@ After the fix, all four invocations of the applier and all eleven of the
 `prom_a_p*` group grade **UNAFFECTED**, which puts the count back at the
 baseline 3.
 
+⚠ **Stated exactly: the post-fix number is a REGRADE of the rows that moved,
+not a fresh full run.** A full `--image prom_a` run over all 108 scripts takes
+about two hours on this machine with the other lane's run competing, and one
+was left in flight rather than completed. What the regrade does establish is
+that every row this pass ADDED is UNAFFECTED; what it assumes is that the 188
+pre-existing rows, all UNAFFECTED in `after.json`, stayed that way across the
+later commits. That assumption has a basis — no notes script cites any of the
+47 renamed labels by name (checked with `grep -rl` before the renames were
+applied), so a later commit could not have changed another probe's answer — but
+it is an argument, not a measurement, and the next full run settles it.
+
 ## The one row that moved and is not this pass's
 
 `notes/prom_b_screens_round8.py --calibrate`: SPLIT-FRAGILE → NONDET. It belongs
