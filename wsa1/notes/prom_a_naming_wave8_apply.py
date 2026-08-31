@@ -827,6 +827,51 @@ def apply_():
     return added_labels, added_headers, added_legends
 
 
+BASE_COMMIT = "fab0949"      # the tree as it stood before this pass
+
+
+def verify():
+    """Does the COMMITTED listing equal what this COMMITTED script produces?
+
+    ★ WHY THIS AND NOT JUST IDEMPOTENCE.  `--apply` twice being a no-op proves
+    the second run changes nothing; it does not prove the file in git is what
+    the script in git makes.  Those drift apart the moment anyone hand-edits one
+    of these blocks, and then the script is documentation of something that no
+    longer happened.  This re-runs the whole transform from the PRE-PASS blob in
+    git, in a scratch file, and compares.
+
+    ⚠ It writes ONLY to a temp file; the working tree is untouched.
+    """
+    import subprocess
+    import tempfile
+    global LISTING
+    old = subprocess.run(["git", "show", "%s:prom_a/wsa1_prom_a.s" % BASE_COMMIT],
+                         cwd=ROOT, capture_output=True, text=True, check=True).stdout
+    want = open(LISTING, encoding="utf-8").read()
+    keep = LISTING
+    with tempfile.TemporaryDirectory() as d:
+        LISTING = os.path.join(d, "wsa1_prom_a.s")
+        try:
+            open(LISTING, "w", encoding="utf-8").write(old)
+            apply_()
+            got = open(LISTING, encoding="utf-8").read()
+        finally:
+            LISTING = keep
+    if got == want:
+        print("ok   the committed listing is exactly what this script makes "
+              "from %s" % BASE_COMMIT)
+        return 0
+    a, b = got.splitlines(), want.splitlines()
+    print("FAIL regenerated %d lines, committed %d" % (len(a), len(b)))
+    for i in range(min(len(a), len(b))):
+        if a[i] != b[i]:
+            print("  first difference at line %d" % (i + 1))
+            print("    regenerated: %s" % a[i][:100])
+            print("    committed  : %s" % b[i][:100])
+            break
+    return 1
+
+
 def screens_report():
     """Where the SCREEN OBJECTS still point at nothing named.
 
@@ -947,6 +992,8 @@ def main():
         return selftest()
     if "--screens" in argv:
         return screens_report()
+    if "--verify" in argv:
+        return verify()
     src, jobs = plan()
     if "--apply" not in argv:
         print("%d jobs (%d renames, %d new labels, %d table legends)"
