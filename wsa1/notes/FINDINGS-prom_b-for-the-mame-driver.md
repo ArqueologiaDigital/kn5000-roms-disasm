@@ -59,6 +59,15 @@ writes checksum words at `0x007FD2` and `0x007FD4` — 8,658 bytes above the top
 of what the driver maps. That is a settings-retention area, which is exactly the
 kind of thing that must be mapped for a boot to get past it.
 
+★ **SUPERSEDED AS THE BOUND, and by a better measurement.** Lane N1 ran the same
+question over BOTH CPU-1 images (`notes/cs1_sram_extent.py`, committed
+`f7d78f6`) and gets **227 distinct addresses, 827 references, highest
+`0x7FD7`** — with **9** of the 10 above also touched by prom_a. So prom_a
+carries the great majority of the evidence and reaches 21 bytes higher than
+prom_b does. The table above is the prom_b half, kept because it is what this
+lane measured and because a read-modify-write is a sharper shape than a
+reference count; **quote N1's number, not this one, when changing the driver.**
+
 **Suggested change:** widen the CS1 map to at least `0x007FFF`. 32 KiB is the
 obvious chip and `0x7FD4`/`0x7FC2` sitting 44 and 62 bytes below its top is the
 usual top-of-RAM layout. State it as a lower bound, as the driver already does.
