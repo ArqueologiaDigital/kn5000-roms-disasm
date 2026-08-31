@@ -272,7 +272,22 @@ bytes it moved across the three images -- 205 gained, 26 lost, in 68 runs -- is
 attributed to a specific truncated window tail in the accounting, and none is
 left unexplained. It was also the PRECONDITION for P2 and P3.
 
-## P2 — persist the decode index between runs   ★ the big one
+## P2 — persist the decode index between runs   ★ **LANDED 2026-08-31**
+
+    cold, no caches at all                     979.93 s   answers IDENTICAL
+    result cache cleared, decode index KEPT     19.01 s   answers IDENTICAL
+                                                          (54x; this is the case
+                                                           a lane hits after
+                                                           editing a .s)
+
+`notes/.reachability-decode.txt`, keyed on the ROM's SHA1, unidasm's SHA1,
+WINDOW and MAXLEN. Loaded lazily on a result-cache MISS, so the warm path stays
+0.2 s.
+Proved with `prove_identical.py` from cold, 5 modes, 0 differ.
+
+The original proposal follows.
+
+
 
 `_decode_window` asks unidasm what the ROM BYTES decode to. **The ROM bytes never
 change** — the byte gate freezes them — so the 847 s of decoding is invariant to

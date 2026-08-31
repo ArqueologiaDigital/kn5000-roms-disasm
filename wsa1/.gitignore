@@ -14,3 +14,9 @@ notes/.reachability-cache.json
 # kept so an older checkout does not start tracking it.)
 notes/.image-*.s
 notes/.prom_c-image.s
+
+# derived: the DECODE index -- what unidasm says each address decodes to. Keyed
+# on the ROM, the unidasm binary and the window parameters, so it is valid until
+# one of those changes, and it is what makes a cache-missing run take seconds
+# instead of 17 minutes. Regenerated automatically; never commit it.
+notes/.reachability-decode.txt

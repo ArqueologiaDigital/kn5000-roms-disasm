@@ -305,6 +305,99 @@ def _decode_window(tag, start):
     return rows
 
 
+# ------------------------------------------------- THE DECODE, PERSISTED
+# ★★ THE ROM BYTES NEVER CHANGE. The byte gate freezes them, so what unidasm
+# says an address decodes to is INVARIANT to the `.s` edit that (correctly)
+# invalidates the result cache above: a lane converts a span, the result cache
+# misses, and the tool re-derives -- from 84,190 subprocesses and 14 minutes --
+# a decode that could not possibly have changed. 83% of a cold run is that
+# subprocess. So the boundary index is persisted too, on its OWN key: the ROM,
+# the decoder binary, and the two parameters that decide what a window asserts.
+#
+# ⚠ THIS IS ONLY SOUND BECAUSE OF THE GUARD ABOVE. While truncated tail rows
+# were stored, what `_BOUND` held at an address depended on which window reached
+# it first, so an index built by one walk order was not the index another would
+# build, and persisting it would have changed answers. With the guard every
+# stored row was decoded from whole bytes, so the entry at an address IS
+# decode(address) -- measured, notes/perf/decode_conflicts.py -- and it can be
+# stored, reloaded and shared.
+#
+# ⚠ LOADED LAZILY, on a result-cache MISS only. A warm run answers out of the
+# result cache in 0.2 s and must not pay a 30 MB read to do it.
+DECODE_CACHE = os.path.join(ROOT, "notes", ".reachability-decode.txt")
+_DECODE_KEY = {}
+_DECODE_LOADED = set()
+
+
+def _decode_key(tag):
+    """What the stored rows are a function of, and nothing else."""
+    if tag not in _DECODE_KEY:
+        if "unidasm" not in _DECODE_KEY:
+            _DECODE_KEY["unidasm"] = hashlib.sha1(open(UNIDASM, "rb").read()).hexdigest()
+        _DECODE_KEY[tag] = "%s %s %d %d" % (hashlib.sha1(ROMS[tag]).hexdigest(),
+                                            _DECODE_KEY["unidasm"], WINDOW, MAXLEN)
+    return _DECODE_KEY[tag]
+
+
+def _decode_sections():
+    """[(tag, key, [lines])] as the file holds them, so another image's section
+    survives a store of ours."""
+    out = []
+    try:
+        fh = open(DECODE_CACHE)
+    except OSError:
+        return out
+    with fh:
+        for ln in fh:
+            if ln.startswith("#"):
+                _, t_, key = ln.rstrip("\n").split(" ", 2)
+                out.append((t_, key, []))
+            elif out:
+                out[-1][2].append(ln)
+    return out
+
+
+def _decode_load(tag):
+    """Pour the persisted index into `_BOUND`, if it is for these exact bytes."""
+    if tag in _DECODE_LOADED:
+        return 0
+    _DECODE_LOADED.add(tag)
+    bi = _BOUND[tag]
+    n = 0
+    for t_, key, lines in _decode_sections():
+        if t_ != tag or key != _decode_key(tag):
+            continue
+        for ln in lines:
+            a, l, text = ln.rstrip("\n").split(" ", 2)
+            bi.setdefault(int(a, 16), (int(l), text))
+            n += 1
+    return n
+
+
+def _decode_store(tag):
+    """Merge this run's index into the file, atomically. ⚠ Another lane may be
+    writing the same file; os.replace makes the loser's rows simply absent,
+    which costs a spawn and cannot corrupt an answer."""
+    keep = [(t_, key, lines) for t_, key, lines in _decode_sections() if t_ != tag]
+    rows = _BOUND[tag]
+    tmp = DECODE_CACHE + ".%d" % os.getpid()
+    try:
+        with open(tmp, "w") as f:
+            for t_, key, lines in keep:
+                f.write("# %s %s\n" % (t_, key))
+                f.writelines(lines)
+            f.write("# %s %s\n" % (tag, _decode_key(tag)))
+            for a in sorted(rows):
+                ln, text = rows[a]
+                f.write("%x %d %s\n" % (a, ln, text))
+        os.replace(tmp, DECODE_CACHE)
+    except OSError:
+        try:
+            os.unlink(tmp)
+        except OSError:
+            pass
+
+
 def walk(tag, start, seen, cpu, queue):
     """Linear decode from `start` until a flow end, marking bytes and queueing
     every branch/call target. Returns the number of NEW bytes marked."""
@@ -499,6 +592,9 @@ def analyse(tag, cpu):
         return r
     proven, spans = proven_and_incbin(tag)
     sd = seeds(tag, cpu)
+    # ★ past the result cache, so this run is going to walk: NOW the decode is
+    # worth loading, and only now.
+    _decode_load(tag)
     # STRONG first -- these are the bytes worth converting.
     strong = _walk_from(tag, cpu, sd, STRONG, proven)
     # then everything, so the difference is attributable to the weak classes.
@@ -522,6 +618,7 @@ def analyse(tag, cpu):
         "seen": seen,
     }
     _MEM[tag] = r
+    _decode_store(tag)
     all_c = _cache_load()
     all_c[tag] = {"fingerprint": _fingerprint(tag),
                   "seeds": r["seeds"], "reached": r["reached"], "incbin": r["incbin"],

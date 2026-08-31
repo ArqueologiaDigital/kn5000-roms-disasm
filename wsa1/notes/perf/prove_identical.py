@@ -39,7 +39,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 BASELINE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "baseline")
 TOOL = os.path.join(ROOT, "notes", "reachability.py")
 CACHES = [os.path.join(ROOT, "notes", ".reachability-cache.json"),
-          os.path.join(ROOT, "notes", ".reachability-decode.json")]
+          os.path.join(ROOT, "notes", ".reachability-decode.txt")]
 
 # ★ EVERY REPORTING MODE, not just the headline. --targets is the one lanes
 # quote, but --spans and --seeds feed judgement calls too, and a change that
@@ -149,8 +149,18 @@ def selftest():
     os.unlink(probe)
     check("the comparator sees identity and sees a one-digit difference",
           same and diff)
+    # ★ AND IT MUST NAME THE FILE THE TOOL ACTUALLY WRITES. A "cold" run that
+    # left a persisted decode index in place would not execute the code a
+    # decode change touches, and the gate would pass on a warm path.
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("reach_for_gate", TOOL)
+    R = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(R)
     check("clearing caches names both of them, not just the result cache",
           len(CACHES) == 2 and any("decode" in c for c in CACHES))
+    check("...and the decode cache named here is the one the tool writes",
+          R.DECODE_CACHE in CACHES, R.DECODE_CACHE)
+    check("...and so is the result cache", R.RESULT_CACHE in CACHES)
     print("\n%d checks, %d failures" % (ok + fail, fail))
     return 1 if fail else 0
 
