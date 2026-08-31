@@ -3,13 +3,15 @@
 *2026-08-31. The question the lane rule asks is "keep non-green at or below where
 you found it". This is the half of that which the round could actually move.*
 
-## Why per-script, and not the whole image
+## Why per-script FIRST, and the whole image after
 
-`python3 notes/probe_health.py --image prom_b` is now **101 scripts / 187
-invocations / 748 runs**, and with the prom_a lane running its own copy on the
-same eight cores it did not finish (it was killed at 50/748 after ~40 minutes;
+`python3 notes/probe_health.py --image prom_b` is **102 scripts / 189
+invocations / 756 runs**. While the prom_a lane was running its own copy on the
+same eight cores it could not finish (killed at 50/748 after ~40 minutes;
 `gen_prom_b_f0ea9f_module.py --checks` and `gen_prom_b_f067a6_module.py
---checks` are minutes each and it runs every invocation in three trees).
+--checks` are minutes each, in three trees), so the round measured the part it
+could move — the twelve scripts it adds — and said so. The full run finished
+later at `--jobs 8` in about 40 minutes and is reported at the bottom; it agrees.
 
 What the round can move splits in two, and only one half needs the full matrix:
 
@@ -57,8 +59,50 @@ split-proof and harness-safe"); the preservation check now reads the IMAGE
 through `asm_source` on both sides, and the answer-diff refuses to run without an
 explicit `--base <rev>`.
 
-⚠ **What is NOT here:** a fresh full-image `probe_health --image prom_b`. The
-standing baseline remains `notes/probe-health-baseline-2026-08-30/prom_b.json`
-(88 rows: 44 UNAFFECTED, 44 non-green — 34 SPLIT-FRAGILE, 4 VACUOUS, 2 LOUD, 1
-WRITER, 1 TIMEOUT, 1 NONDET, 1 BY-DESIGN). Re-running it whole, once the
-machine is not shared, is the honest next step and the command is above.
+## ✅ THE FULL RUN LANDED — 0 REGRESSED
+
+The whole matrix did finish, once the machine was free: **102 scripts, 189
+invocations, 756 runs**, `prom_b-full.json` here.
+
+    python3 notes/probe_health.py --image prom_b --jobs 8 --json prom_b-full.json
+    python3 notes/probe_health_regression.py \
+        notes/probe-health-baseline-2026-08-30/prom_b.json \
+        notes/probe-health-prom_b-wave8-2026-08-31/prom_b-full.json --image prom_b
+
+Two totals cannot settle the lane rule, because a round also ADDS scripts, so
+the comparison is joined on `argv` — the exact command probe_health ran:
+
+```
+base:  88 invocations, 45 green, 43 non-green
+new : 189 invocations, 183 green,  6 non-green
+
+in both runs: 88
+  ★ REGRESSED (green -> non-green): 0
+  IMPROVED (non-green -> green):   39
+  changed within non-green:         1   (LOUD -> VACUOUS)
+ADDED since base: 101  (2 of them non-green)
+GONE since base:    0
+```
+
+★ **REGRESSED is 0.** That is the number the rule is about, and it is the only
+one this round can claim.
+
+⚠ **The 43 → 6 improvement is NOT this round's.** The baseline is 2026-08-30 and
+the 39 improvements are the tree's: the perf work that made
+`reachability.py --targets` stop timing out, and both lanes' probe fixes since.
+Attributing them here would be theft.
+
+⚠ **Neither of the two ADDED non-green rows is this lane's**, and neither is a
+regression:
+
+| row | why |
+|---|---|
+| `prom_b_entrypoints_round7.py --selftest` NONDET | the same script was **already NONDET** in the baseline, under a different cited spelling (`--runs --selftest`). Same known nondeterminism, not a new one. |
+| `prom_b_screens_round8.py --calibrate` NONDET | a **different invocation** of a script the baseline graded UNAFFECTED as `--layer2`. A newly exercised command, which is why the comparator reports it as ADDED rather than REGRESSED. |
+
+Neither file was touched by any lane this pass (`git log 0f08601..HEAD --` on
+both is empty). Both are worth a look by whoever owns them; they are recorded
+here rather than left in a log.
+
+**All sixteen invocations this round added are UNAFFECTED**, which the per-script
+table above measured first and the full run confirms.
