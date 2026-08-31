@@ -28,6 +28,12 @@ value, prints one line and exits 0.
 RUN
     python3 notes/prom_b_probe_answer_diff.py --base HEAD~1
     python3 notes/prom_b_probe_answer_diff.py --base HEAD~1 --only msgline
+    python3 notes/prom_b_probe_answer_diff.py --base HEAD~1 --jobs 6
+
+⚠ 93 probes, run twice each, several of them minutes long: budget hours at
+`--jobs 1`.  The two runs of one probe are independent, so `--jobs` parallelises
+across probes; a probe's own pair always runs in the same worker, so it is never
+compared against a different probe's environment.
 Exit status is non-zero if any probe's answer changed.
 
 ★ IT REPLACES THE WHOLE IMAGE, NOT ONE FILE.  The base copy gets the primary
@@ -36,6 +42,7 @@ per-subject split of prom_b does not silently reduce this to a partial swap.
 """
 import os
 import re
+import concurrent.futures
 import shutil
 import subprocess
 import sys
@@ -108,19 +115,24 @@ def main():
     for d in (ROOT, alt):
         shutil.rmtree(os.path.join(d, "notes", "__pycache__"), ignore_errors=True)
 
+    jobs = int(sys.argv[sys.argv.index("--jobs") + 1]) if "--jobs" in sys.argv else 4
     same = changed = 0
     bad = []
     ps = [p for p in probes() if not only or only in p]
-    for p in ps:
+
+    def one(p):
         a, b = run(ROOT, p), run(alt, p)
-        a, b = a.replace(ROOT, "@"), b.replace(alt, "@").replace(ROOT, "@")
-        if a == b:
-            same += 1
-            print(f"  same     {p}")
-        else:
-            changed += 1
-            bad.append(p)
-            print(f"  CHANGED  {p}")
+        return p, a.replace(ROOT, "@"), b.replace(alt, "@").replace(ROOT, "@")
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=jobs) as ex:
+        for p, a, b in ex.map(one, ps):
+            if a == b:
+                same += 1
+                print(f"  same     {p}", flush=True)
+            else:
+                changed += 1
+                bad.append(p)
+                print(f"  CHANGED  {p}", flush=True)
     print(f"\n{same} unchanged, {changed} changed, base {base}")
     for p in bad:
         print("  " + p)
