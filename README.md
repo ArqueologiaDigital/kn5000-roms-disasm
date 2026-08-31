@@ -13,6 +13,29 @@ Cheers,
 Felipe Sanches
 
 
+## This repository now holds two disassemblies
+
+Since 2026-09-01 this tree also contains the **Technics SX-WSA1R** disassembly,
+under `wsa1/`, migrated here from its own repository so that both products build
+from one tree and can share code. That repository is decommissioned; all WSA1R
+work continues here.
+
+    make everything    build the KN5000 images and the WSA1R's four
+    make gate-all      run both byte-identity gates
+    make wsa1          the WSA1R alone
+
+The byte-identity gate is the only thing that certifies either disassembly, so
+neither is "built" until its gate is green.
+
+All 206 WSA1R commits were rewritten to the `wsa1/` prefix before the merge, so
+`git log wsa1/<path>` reaches the whole history rather than stopping at the
+migration.
+
+There is a real connection between the two machines, not just a shared
+repository: the multitasking kernel that the WSA1R's two processors run is also
+present in **both** of the KN5000's — one kernel, four processors, two products.
+See `wsa1/notes/FINDINGS-kernel-in-the-kn5000.md`.
+
 **Note:** I am using Alfred Arnold's **Macro assembler 1.42 Beta (Build 298)**.
 
 Current state of this effort:
