@@ -37007,9 +37007,51 @@ Paint_GateArrayCheck:
 	inc 0,XSP                                            ; F95762  ef 60
 .LF95764:
 	ret                                                  ; F95764  0e
-sub_F95765:
+; ---------------------------------------------------------------------
+; ScreenLeave_GateArrayCheck -- the LEAVE method of screen 0xF8's object
+;
+; Reached from: PanelScreen_VtableTable[0xF8] -> the screen object at
+;          0xF400D0, whose +4 slot is `jp 0xF95765`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   GateArrayCheck -- the same object's +0 ENTER method carries the
+;          label Paint_GateArrayCheck, a name an earlier round derived from
+;          the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_F95765`.
+; ---------------------------------------------------------------------
+ScreenLeave_GateArrayCheck:
 	ret                                                  ; F95765  0e
-sub_F95766:
+; ---------------------------------------------------------------------
+; ScreenButton_GateArrayCheck -- the BUTTON method of screen 0xF8's object
+;
+; Reached from: PanelScreen_VtableTable[0xF8] -> the screen object at
+;          0xF400D0, whose +8 slot is `jp 0xF95766`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   GateArrayCheck -- the same object's +0 ENTER method carries the
+;          label Paint_GateArrayCheck, a name an earlier round derived from
+;          the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on button, and the slot exists to keep the three-method shape.
+; Was `sub_F95766`.
+; ---------------------------------------------------------------------
+ScreenButton_GateArrayCheck:
 	ret                                                  ; F95766  0e
 sub_F95767:
 	ret                                                  ; F95767  0e
@@ -37056,9 +37098,51 @@ Paint_PanelCpuCheck:
 	inc 0,XSP                                            ; F95792  ef 60
 .LF95794:
 	ret                                                  ; F95794  0e
-sub_F95795:
+; ---------------------------------------------------------------------
+; ScreenLeave_PanelCpuCheck -- the LEAVE method of screen 0xF9's object
+;
+; Reached from: PanelScreen_VtableTable[0xF9] -> the screen object at
+;          0xF400E0, whose +4 slot is `jp 0xF95795`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   PanelCpuCheck -- the same object's +0 ENTER method carries the
+;          label Paint_PanelCpuCheck, a name an earlier round derived from
+;          the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_F95795`.
+; ---------------------------------------------------------------------
+ScreenLeave_PanelCpuCheck:
 	ret                                                  ; F95795  0e
-sub_F95796:
+; ---------------------------------------------------------------------
+; ScreenButton_PanelCpuCheck -- the BUTTON method of screen 0xF9's object
+;
+; Reached from: PanelScreen_VtableTable[0xF9] -> the screen object at
+;          0xF400E0, whose +8 slot is `jp 0xF95796`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   PanelCpuCheck -- the same object's +0 ENTER method carries the
+;          label Paint_PanelCpuCheck, a name an earlier round derived from
+;          the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on button, and the slot exists to keep the three-method shape.
+; Was `sub_F95796`.
+; ---------------------------------------------------------------------
+ScreenButton_PanelCpuCheck:
 	ret                                                  ; F95796  0e
 sub_F95797:
 	ret                                                  ; F95797  0e
@@ -37171,9 +37255,49 @@ Paint_SineWaveCheckMode:
 	add XSP,0x00000020                                   ; F95888  ef c8 20 00 00 00
 	pop XIX                                              ; F9588E  5c
 	ret                                                  ; F9588F  0e
-sub_F95890:
+; ---------------------------------------------------------------------
+; ScreenLeave_SineWaveCheckMode -- the LEAVE method of screen 0xFA's object
+;
+; Reached from: PanelScreen_VtableTable[0xFA] -> the screen object at
+;          0xF400F0, whose +4 slot is `jp 0xF95890`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   SineWaveCheckMode -- the same object's +0 ENTER method carries
+;          the label Paint_SineWaveCheckMode, a name an earlier round derived
+;          from the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_F95890`.
+; ---------------------------------------------------------------------
+ScreenLeave_SineWaveCheckMode:
 	ret                                                  ; F95890  0e
-sub_F95891:
+; ---------------------------------------------------------------------
+; ScreenButton_SineWaveCheckMode -- the BUTTON method of screen 0xFA's object
+;
+; Reached from: PanelScreen_VtableTable[0xFA] -> the screen object at
+;          0xF400F0, whose +8 slot is `jp 0xF95891`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   SineWaveCheckMode -- the same object's +0 ENTER method carries
+;          the label Paint_SineWaveCheckMode, a name an earlier round derived
+;          from the screen's own text.
+; Was `sub_F95891`.
+; ---------------------------------------------------------------------
+ScreenButton_SineWaveCheckMode:
 	link XIZ,0x0000                                      ; F95891  ee 0c 00 00
 	pushw hl                                             ; F95895  2b
 	m_cp_mi16 MWD+r6, 0x08, 0x001f                       ; F95896  9e 08 3f 1f 00
@@ -37326,9 +37450,51 @@ Paint_PanelSwLedCheck:
 .LF959B9:
 	calr 0xfcae                                          ; F959B9  1e ae fc
 	ret                                                  ; F959BC  0e
-sub_F959BD:
+; ---------------------------------------------------------------------
+; ScreenLeave_PanelSwLedCheck -- the LEAVE method of screen 0xFB's object
+;
+; Reached from: PanelScreen_VtableTable[0xFB] -> the screen object at
+;          0xF40100, whose +4 slot is `jp 0xF959BD`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   PanelSwLedCheck -- the same object's +0 ENTER method carries the
+;          label Paint_PanelSwLedCheck, a name an earlier round derived from
+;          the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_F959BD`.
+; ---------------------------------------------------------------------
+ScreenLeave_PanelSwLedCheck:
 	ret                                                  ; F959BD  0e
-sub_F959BE:
+; ---------------------------------------------------------------------
+; ScreenButton_PanelSwLedCheck -- the BUTTON method of screen 0xFB's object
+;
+; Reached from: PanelScreen_VtableTable[0xFB] -> the screen object at
+;          0xF40100, whose +8 slot is `jp 0xF959BE`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   PanelSwLedCheck -- the same object's +0 ENTER method carries the
+;          label Paint_PanelSwLedCheck, a name an earlier round derived from
+;          the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on button, and the slot exists to keep the three-method shape.
+; Was `sub_F959BE`.
+; ---------------------------------------------------------------------
+ScreenButton_PanelSwLedCheck:
 	ret                                                  ; F959BE  0e
 sub_F959BF:
 	ret                                                  ; F959BF  0e
@@ -40993,10 +41159,49 @@ sub_F9982C:
 Paint_SysexBulkDump_Entry:
 	calr 0x01d4                                          ; F9982D  1e d4 01
 	ret                                                  ; F99830  0e
-sub_F99831:
+; ---------------------------------------------------------------------
+; ScreenLeave_SysexBulkDump_Entry -- the LEAVE method of screen 0x99's object
+;
+; Reached from: PanelScreen_VtableTable[0x99] -> the screen object at
+;          0xF41710, whose +4 slot is `jp 0xF99831`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   SysexBulkDump_Entry -- the same object's +0 ENTER method carries
+;          the label Paint_SysexBulkDump_Entry, a name an earlier round
+;          derived from the screen's own text.
+; Was `sub_F99831`.
+; ---------------------------------------------------------------------
+ScreenLeave_SysexBulkDump_Entry:
 	calr 0x021a                                          ; F99831  1e 1a 02
 	ret                                                  ; F99834  0e
-sub_F99835:
+; ---------------------------------------------------------------------
+; ScreenButton_SysexBulkDump_Entry -- the BUTTON method of screen 0x99's
+;          object
+;
+; Reached from: PanelScreen_VtableTable[0x99] -> the screen object at
+;          0xF41710, whose +8 slot is `jp 0xF99835`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   SysexBulkDump_Entry -- the same object's +0 ENTER method carries
+;          the label Paint_SysexBulkDump_Entry, a name an earlier round
+;          derived from the screen's own text.
+; Was `sub_F99835`.
+; ---------------------------------------------------------------------
+ScreenButton_SysexBulkDump_Entry:
 	ld XIX,0x00f99870                                    ; F99835  44 70 98 f9 00
 	ldb_d8 e, (0x2740)                                   ; F9983A  c1 40 27 25
 	call 0xf41b0c                                        ; F9983E  1d 0c 1b f4
@@ -41018,10 +41223,50 @@ sub_F99843:
 Paint_GeneralMidiMode_Entry:
 	calr 0x04c5                                          ; F99844  1e c5 04
 	ret                                                  ; F99847  0e
-sub_F99848:
+; ---------------------------------------------------------------------
+; ScreenLeave_GeneralMidiMode_Entry -- the LEAVE method of screen 0x9A's
+;          object
+;
+; Reached from: PanelScreen_VtableTable[0x9A] -> the screen object at
+;          0xF41720, whose +4 slot is `jp 0xF99848`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   GeneralMidiMode_Entry -- the same object's +0 ENTER method
+;          carries the label Paint_GeneralMidiMode_Entry, a name an earlier
+;          round derived from the screen's own text.
+; Was `sub_F99848`.
+; ---------------------------------------------------------------------
+ScreenLeave_GeneralMidiMode_Entry:
 	calr 0x057b                                          ; F99848  1e 7b 05
 	ret                                                  ; F9984B  0e
-sub_F9984C:
+; ---------------------------------------------------------------------
+; ScreenButton_GeneralMidiMode_Entry -- the BUTTON method of screen 0x9A's
+;          object
+;
+; Reached from: PanelScreen_VtableTable[0x9A] -> the screen object at
+;          0xF41720, whose +8 slot is `jp 0xF9984C`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   GeneralMidiMode_Entry -- the same object's +0 ENTER method
+;          carries the label Paint_GeneralMidiMode_Entry, a name an earlier
+;          round derived from the screen's own text.
+; Was `sub_F9984C`.
+; ---------------------------------------------------------------------
+ScreenButton_GeneralMidiMode_Entry:
 	ld XIX,0x00f998f0                                    ; F9984C  44 f0 98 f9 00
 	ldb_d8 e, (0x2740)                                   ; F99851  c1 40 27 25
 	call 0xf41b0c                                        ; F99855  1d 0c 1b f4
@@ -42226,11 +42471,51 @@ Paint_MidiTotalMode:
 	pop XIX                                              ; F9A269  5c
 	unlk XIZ                                             ; F9A26A  ee 0d
 	ret                                                  ; F9A26C  0e
-sub_F9A26D:
+; ---------------------------------------------------------------------
+; ScreenLeave_MidiTotalMode -- the LEAVE method of screen 0x9D's object
+;
+; Reached from: PanelScreen_VtableTable[0x9D] -> the screen object at
+;          0xF4173C, whose +4 slot is `jp 0xF9A26D`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiTotalMode -- the same object's +0 ENTER method carries the
+;          label Paint_MidiTotalMode, a name an earlier round derived from
+;          the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_F9A26D`.
+; ---------------------------------------------------------------------
+ScreenLeave_MidiTotalMode:
 	ret                                                  ; F9A26D  0e
 sub_F9A26E:
 	ret                                                  ; F9A26E  0e
-sub_F9A26F:
+; ---------------------------------------------------------------------
+; ScreenButton_MidiTotalMode -- the BUTTON method of screen 0x9D's object
+;
+; Reached from: PanelScreen_VtableTable[0x9D] -> the screen object at
+;          0xF4173C, whose +8 slot is `jp 0xF9A26F`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiTotalMode -- the same object's +0 ENTER method carries the
+;          label Paint_MidiTotalMode, a name an earlier round derived from
+;          the screen's own text.
+; Was `sub_F9A26F`.
+; ---------------------------------------------------------------------
+ScreenButton_MidiTotalMode:
 	link XIZ,0x0000                                      ; F9A26F  ee 0c 00 00
 	pushw hl                                             ; F9A273  2b
 	m_cp_mi16 MWD+r6, 0x08, 0x001f                       ; F9A274  9e 08 3f 1f 00
@@ -42803,11 +43088,52 @@ sub_F9A73C:
 	call 0xf42e00                                        ; F9A74D  1d 00 2e f4
 	inc 0,XSP                                            ; F9A751  ef 60
 	ret                                                  ; F9A753  0e
-sub_F9A754:
+; ---------------------------------------------------------------------
+; ScreenLeave_MidiRealtimeMessages -- the LEAVE method of screen 0x95's object
+;
+; Reached from: PanelScreen_VtableTable[0x95] -> the screen object at
+;          0xF41690, whose +4 slot is `jp 0xF9A754`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiRealtimeMessages -- the same object's +0 ENTER method carries
+;          the label Paint_MidiRealtimeMessages, a name an earlier round
+;          derived from the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_F9A754`.
+; ---------------------------------------------------------------------
+ScreenLeave_MidiRealtimeMessages:
 	ret                                                  ; F9A754  0e
 sub_F9A755:
 	ret                                                  ; F9A755  0e
-sub_F9A756:
+; ---------------------------------------------------------------------
+; ScreenButton_MidiRealtimeMessages -- the BUTTON method of screen 0x95's
+;          object
+;
+; Reached from: PanelScreen_VtableTable[0x95] -> the screen object at
+;          0xF41690, whose +8 slot is `jp 0xF9A756`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiRealtimeMessages -- the same object's +0 ENTER method carries
+;          the label Paint_MidiRealtimeMessages, a name an earlier round
+;          derived from the screen's own text.
+; Was `sub_F9A756`.
+; ---------------------------------------------------------------------
+ScreenButton_MidiRealtimeMessages:
 	link XIZ,0x0000                                      ; F9A756  ee 0c 00 00
 	pushw hl                                             ; F9A75A  2b
 	m_cp_mi16 MWD+r6, 0x08, 0x001f                       ; F9A75B  9e 08 3f 1f 00
@@ -43108,11 +43434,53 @@ Paint_MidiInputOutputFilter:
 	pop XIX                                              ; F9AA4B  5c
 	unlk XIZ                                             ; F9AA4C  ee 0d
 	ret                                                  ; F9AA4E  0e
-sub_F9AA4F:
+; ---------------------------------------------------------------------
+; ScreenLeave_MidiInputOutputFilter -- the LEAVE method of screen 0x9E's
+;          object
+;
+; Reached from: PanelScreen_VtableTable[0x9E] -> the screen object at
+;          0xF4174C, whose +4 slot is `jp 0xF9AA4F`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiInputOutputFilter -- the same object's +0 ENTER method
+;          carries the label Paint_MidiInputOutputFilter, a name an earlier
+;          round derived from the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_F9AA4F`.
+; ---------------------------------------------------------------------
+ScreenLeave_MidiInputOutputFilter:
 	ret                                                  ; F9AA4F  0e
 sub_F9AA50:
 	ret                                                  ; F9AA50  0e
-sub_F9AA51:
+; ---------------------------------------------------------------------
+; ScreenButton_MidiInputOutputFilter -- the BUTTON method of screen 0x9E's
+;          object
+;
+; Reached from: PanelScreen_VtableTable[0x9E] -> the screen object at
+;          0xF4174C, whose +8 slot is `jp 0xF9AA51`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiInputOutputFilter -- the same object's +0 ENTER method
+;          carries the label Paint_MidiInputOutputFilter, a name an earlier
+;          round derived from the screen's own text.
+; Was `sub_F9AA51`.
+; ---------------------------------------------------------------------
+ScreenButton_MidiInputOutputFilter:
 	link XIZ,0x0000                                      ; F9AA51  ee 0c 00 00
 	pushw hl                                             ; F9AA55  2b
 	m_cp_mi16 MWD+r6, 0x08, 0x001f                       ; F9AA56  9e 08 3f 1f 00
@@ -43779,11 +44147,52 @@ Paint_MidiOutProgramChange:
 	pop XIX                                              ; F9B05A  5c
 	unlk XIZ                                             ; F9B05B  ee 0d
 	ret                                                  ; F9B05D  0e
-sub_F9B05E:
+; ---------------------------------------------------------------------
+; ScreenLeave_MidiOutProgramChange -- the LEAVE method of screen 0x9F's object
+;
+; Reached from: PanelScreen_VtableTable[0x9F] -> the screen object at
+;          0xF4175C, whose +4 slot is `jp 0xF9B05E`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiOutProgramChange -- the same object's +0 ENTER method carries
+;          the label Paint_MidiOutProgramChange, a name an earlier round
+;          derived from the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_F9B05E`.
+; ---------------------------------------------------------------------
+ScreenLeave_MidiOutProgramChange:
 	ret                                                  ; F9B05E  0e
 sub_F9B05F:
 	ret                                                  ; F9B05F  0e
-sub_F9B060:
+; ---------------------------------------------------------------------
+; ScreenButton_MidiOutProgramChange -- the BUTTON method of screen 0x9F's
+;          object
+;
+; Reached from: PanelScreen_VtableTable[0x9F] -> the screen object at
+;          0xF4175C, whose +8 slot is `jp 0xF9B060`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiOutProgramChange -- the same object's +0 ENTER method carries
+;          the label Paint_MidiOutProgramChange, a name an earlier round
+;          derived from the screen's own text.
+; Was `sub_F9B060`.
+; ---------------------------------------------------------------------
+ScreenButton_MidiOutProgramChange:
 	link XIZ,0x0000                                      ; F9B060  ee 0c 00 00
 	pushw hl                                             ; F9B064  2b
 	m_cp_mi16 MWD+r6, 0x08, 0x001f                       ; F9B065  9e 08 3f 1f 00
@@ -151809,7 +152218,26 @@ sub_FE805E:
 	ret                                                  ; FE805E  0e
 sub_FE805F:
 	ret                                                  ; FE805F  0e
-sub_FE8060:
+; ---------------------------------------------------------------------
+; ScreenButton_Sequencer -- the BUTTON method of screen 0x24's object
+;
+; Reached from: PanelScreen_VtableTable[0x24] -> the screen object at
+;          0xF402AC, whose +8 slot is `jp 0xFE8060`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the BUTTON method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   Sequencer -- the same object's +0 ENTER method carries the label
+;          Paint_Sequencer, a name an earlier round derived from the screen's
+;          own text.
+; Was `sub_FE8060`.
+; ---------------------------------------------------------------------
+ScreenButton_Sequencer:
 	cp HL,0x001f                                         ; FE8060  db cf 1f 00
 	jr gt, .LFE8076                                      ; FE8064  6a 10
 sub_FE8066:
@@ -151976,7 +152404,28 @@ Paint_Sequencer:
 	calr sub_FE826E                                      ; FE815E  1e 0d 01
 	calr LCD_ScreenRedraw_End_Copy                                      ; FE8161  1e a1 ff
 	ret                                                  ; FE8164  0e
-sub_FE8165:
+; ---------------------------------------------------------------------
+; ScreenLeave_Sequencer -- the LEAVE method of screen 0x24's object
+;
+; Reached from: PanelScreen_VtableTable[0x24] -> the screen object at
+;          0xF402AC, whose +4 slot is `jp 0xFE8165`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   Sequencer -- the same object's +0 ENTER method carries the label
+;          Paint_Sequencer, a name an earlier round derived from the screen's
+;          own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_FE8165`.
+; ---------------------------------------------------------------------
+ScreenLeave_Sequencer:
 	ret                                                  ; FE8165  0e
 	bit 0x07,W                                           ; FE8166  c8 33 07
 	jr nz, .LFE8173                                      ; FE8169  6e 08
@@ -164410,7 +164859,26 @@ Paint_MidiFileDirectPlay:
 .LFF457A:
 	pop XIX                                              ; FF457A  5c
 	ret                                                  ; FF457B  0e
-sub_FF457C:
+; ---------------------------------------------------------------------
+; ScreenLeave_MidiFileDirectPlay -- the LEAVE method of screen 0x65's object
+;
+; Reached from: PanelScreen_VtableTable[0x65] -> the screen object at
+;          0xF42274, whose +4 slot is `jp 0xFF457C`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiFileDirectPlay -- the same object's +0 ENTER method carries
+;          the label Paint_MidiFileDirectPlay, a name an earlier round
+;          derived from the screen's own text.
+; Was `sub_FF457C`.
+; ---------------------------------------------------------------------
+ScreenLeave_MidiFileDirectPlay:
 	ldb_d8 c, (0x207a)                                   ; FF457C  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; FF4580  c1 7b 20 f3
 	jr z, .LFF4595                                       ; FF4584  66 0f
@@ -165016,7 +165484,26 @@ sub_FF4936:
 	popw hl                                              ; FF4982  4b
 	unlk XIZ                                             ; FF4983  ee 0d
 	ret                                                  ; FF4985  0e
-sub_FF4986:
+; ---------------------------------------------------------------------
+; ScreenLeave_DiskL0adFile -- the LEAVE method of screen 0x67's object
+;
+; Reached from: PanelScreen_VtableTable[0x67] -> the screen object at
+;          0xF423A0, whose +4 slot is `jp 0xFF4986`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   DiskL0adFile -- the same object's +0 ENTER method carries the
+;          label Paint_DiskL0adFile, a name an earlier round derived from the
+;          screen's own text.
+; Was `sub_FF4986`.
+; ---------------------------------------------------------------------
+ScreenLeave_DiskL0adFile:
 	ldb_d8 c, (0x207a)                                   ; FF4986  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; FF498A  c1 7b 20 f3
 	jr z, .LFF4994                                       ; FF498E  66 04
@@ -166147,7 +166634,26 @@ sub_FF5118:
 	popw hl                                              ; FF5208  4b
 	unlk XIZ                                             ; FF5209  ee 0d
 	ret                                                  ; FF520B  0e
-sub_FF520C:
+; ---------------------------------------------------------------------
+; ScreenLeave_MidiFileL0ad -- the LEAVE method of screen 0x69's object
+;
+; Reached from: PanelScreen_VtableTable[0x69] -> the screen object at
+;          0xF42400, whose +4 slot is `jp 0xFF520C`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   MidiFileL0ad -- the same object's +0 ENTER method carries the
+;          label Paint_MidiFileL0ad, a name an earlier round derived from the
+;          screen's own text.
+; Was `sub_FF520C`.
+; ---------------------------------------------------------------------
+ScreenLeave_MidiFileL0ad:
 	ldb_d8 c, (0x207a)                                   ; FF520C  c1 7a 20 23
 	m_cp_rm MB16, 0x207b, r3                             ; FF5210  c1 7b 20 f3
 	jr z, .LFF522E                                       ; FF5214  66 18
@@ -168975,7 +169481,29 @@ Paint_FloppyDiskFormatSelectType:
 	call LCD_ShowAllThreeLayers_SaveRegs                                      ; FF6544  1d 15 76 ff
 	add XSP,0x00000014                                   ; FF6548  ef c8 14 00 00 00
 	ret                                                  ; FF654E  0e
-sub_FF654F:
+; ---------------------------------------------------------------------
+; ScreenLeave_FloppyDiskFormatSelectType -- the LEAVE method of screen 0x70's
+;          object
+;
+; Reached from: PanelScreen_VtableTable[0x70] -> the screen object at
+;          0xF423D0, whose +4 slot is `jp 0xFF654F`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   FloppyDiskFormatSelectType -- the same object's +0 ENTER method
+;          carries the label Paint_FloppyDiskFormatSelectType, a name an
+;          earlier round derived from the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_FF654F`.
+; ---------------------------------------------------------------------
+ScreenLeave_FloppyDiskFormatSelectType:
 	ret                                                  ; FF654F  0e
 ; ---------------------------------------------------------------------
 ; PanelButtonDispatch_FloppyDiskFormatSelectType -- run Dispatch_FF3F39's
@@ -169237,7 +169765,29 @@ Paint_FloppyDiskFormatAreYouSure:
 	inc 2,XSP                                            ; FF66A5  ef 62
 	pop XIX                                              ; FF66A7  5c
 	ret                                                  ; FF66A8  0e
-sub_FF66A9:
+; ---------------------------------------------------------------------
+; ScreenLeave_FloppyDiskFormatAreYouSure -- the LEAVE method of screen 0x71's
+;          object
+;
+; Reached from: PanelScreen_VtableTable[0x71] -> the screen object at
+;          0xF423F0, whose +4 slot is `jp 0xFF66A9`. It is reached from
+;          nowhere else: no other live screen object names this address in
+;          either of its two callable slots.
+; Evidence: the offset is not a guess about layout, and it is what makes this
+;          the LEAVE method. +0 is called by PanelScreen_CallEnter_A/B with
+;          the id that has just BECOME current, +4 by
+;          PanelScreen_CallLeave_A/B with the id that has just STOPPED being
+;          current, and +8 by PanelButton_Route (0xF8621E) with the current
+;          id and a button index -- three different call sites, checked as
+;          V1-V6 in PanelScreen_VtableTable's own header.
+; Screen:   FloppyDiskFormatAreYouSure -- the same object's +0 ENTER method
+;          carries the label Paint_FloppyDiskFormatAreYouSure, a name an
+;          earlier round derived from the screen's own text.
+; Body:     ONE BYTE, 0x0E -- a bare `ret`. This screen does nothing at all
+;          on leave, and the slot exists to keep the three-method shape.
+; Was `sub_FF66A9`.
+; ---------------------------------------------------------------------
+ScreenLeave_FloppyDiskFormatAreYouSure:
 	ret                                                  ; FF66A9  0e
 ; ---------------------------------------------------------------------
 ; PanelButtonDispatch_FloppyDiskFormatAreYouSure -- run Dispatch_FF3FB9's

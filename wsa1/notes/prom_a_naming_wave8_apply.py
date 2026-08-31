@@ -476,6 +476,85 @@ def plan():
             jobs.append((a, "rename", old, new, hdr))
         else:
             jobs.append((a, "label", None, new, hdr))
+    # --- the LEAVE and BUTTON methods of every screen whose ENTER is named ---
+    # ★ THE SAME OBJECT, THE OTHER TWO SLOTS.  A screen whose +0 already carries
+    # a `Paint_*` label names its own +4 and +8, and the three offsets are
+    # established by three different call sites (that table's header, checks
+    # V1-V6), not by a guess about layout.
+    # ⚠ AND AN ADDRESS ALREADY CLAIMED KEEPS THE RICHER NAME.  Six of these
+    # screens' BUTTON methods ARE the control-table readers named above, so the
+    # two families collide on one address; PanelButtonDispatch_X says what
+    # ScreenButton_X says AND that it dispatches a control table, so the reader
+    # name wins and this one is skipped.
+    claimed = {j[0] for j in jobs if isinstance(j[0], int)}
+    lab_at = {}
+    for i, ln in enumerate(src):
+        mm = LABEL.match(ln)
+        if not mm:
+            continue
+        aa = ADDR.search(src[i + 1]) if i + 1 < len(src) else None
+        if aa:
+            lab_at.setdefault(int(aa.group(1), 16), mm.group(1))
+    used = collections.Counter()
+    objs = []
+    for i in range(256):
+        v = int.from_bytes(_rom(VTABLE + 4 * i, 4), "little") & 0xFFFFFF
+        if not v or v == NULL_VTABLE:
+            continue
+
+        def _j(x):
+            b = _rom(x, 4)
+            return int.from_bytes(b[1:4], "little") if b and b[0] == 0x1B else None
+        objs.append((i, v, _j(v), _j(v + 4), _j(v + 8)))
+        for x in (_j(v + 4), _j(v + 8)):
+            if x:
+                used[x] += 1
+    for i, v, e, l, b in objs:
+        en = lab_at.get(e) if e else None
+        if not (en and en.startswith("Paint_")):
+            continue
+        screen = en[len("Paint_"):]
+        for off, tgt, root, what in ((4, l, "ScreenLeave", "LEAVE"),
+                                     (8, b, "ScreenButton", "BUTTON")):
+            if not tgt or used[tgt] > 1 or tgt not in at or tgt in claimed:
+                continue                   # shared, unreachable, or claimed
+            cur_lab = lab_at.get(tgt)
+            if cur_lab and not cur_lab.startswith("sub_"):
+                continue                   # already named (or named by us)
+            new = "%s_%s" % (root, screen)
+            bare = _rom(tgt, 1) == b"\x0e"
+            hdr = [
+                "%s -- the %s method of screen 0x%02X's object"
+                % (new, what, i),
+                "",
+                "Reached from: PanelScreen_VtableTable[0x%02X] -> the screen "
+                "object at 0x%06X, whose +%d slot is `jp 0x%06X`.  It is "
+                "reached from nowhere else: no other live screen object names "
+                "this address in either of its two callable slots."
+                % (i, v, off, tgt),
+                "Evidence: the offset is not a guess about layout, and it is "
+                "what makes this the %s method.  +0 is called "
+                "by PanelScreen_CallEnter_A/B with the id that has just BECOME "
+                "current, +4 by PanelScreen_CallLeave_A/B with the id that has "
+                "just STOPPED being current, and +8 by PanelButton_Route "
+                "(0xF8621E) with the current id and a button index -- three "
+                "different call sites, checked as V1-V6 in "
+                "PanelScreen_VtableTable's own header." % what,
+                "Screen:  %s -- the same object's +0 ENTER method carries the "
+                "label %s, a name an earlier round derived from the screen's "
+                "own text." % (screen, en),
+            ]
+            if bare:
+                hdr.append("Body:    ONE BYTE, 0x0E -- a bare `ret`.  This "
+                           "screen does nothing at all on %s, and the slot "
+                           "exists to keep the three-method shape."
+                           % what.lower())
+            if cur_lab:
+                hdr.append("Was `%s`." % cur_lab)
+                jobs.append((tgt, "rename", cur_lab, new, hdr))
+            else:
+                jobs.append((tgt, "label", None, new, hdr))
+
     # ★ NO TWO JOBS MAY PROPOSE THE SAME NAME.  A duplicate label does not
     # assemble, so the gate would catch it -- but only after the file is wrong,
     # and the point of a plan is to be wrong on paper first.

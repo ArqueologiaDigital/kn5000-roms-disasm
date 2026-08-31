@@ -160,6 +160,28 @@ round 11's variant-1 `add (XIX-1),0x11` rewrite), a target outside prom_a (eight
 are prom_b directory slots), and any address that is not the start of a listing
 line.
 
+## 3b. The same screen object names two more methods per screen
+
+A screen object has three slots and the module above uses one of them. The other
+two answer for **every** screen whose `+0` already carries a `Paint_*` label —
+sixteen of the 175 live objects:
+
+* `+4` **Leave** — called by `PanelScreen_CallLeave_A/B` with the id that has
+  just *stopped* being current (`ld BC,0x0004`);
+* `+8` **Button** — called by `PanelButton_Route` (`0xF8621E`) with the current
+  id and a button index.
+
+The offsets are established by three *different* call sites, checked as V1-V6
+in `PanelScreen_VtableTable`'s own header, so `ScreenLeave_PanelCpuCheck` and
+`ScreenButton_MidiTotalMode` are claims about a call convention and not about a
+layout. **27 more names**, refusing any address two live objects share, and
+refusing any address the reader batch already claimed — six screens' Button
+method *is* a control-table reader, and `PanelButtonDispatch_X` says everything
+`ScreenButton_X` says and more.
+
+Thirteen of the 27 are a bare `ret`: that screen does nothing on leave, and the
+header says so rather than implying a routine.
+
 ## 4. ★ A refusal from round 7, resolved
 
 Round 7 refused to name `sub_FF4ACB` and `sub_FF4D5D`:
