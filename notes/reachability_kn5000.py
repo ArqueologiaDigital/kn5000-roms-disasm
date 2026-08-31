@@ -15,7 +15,7 @@ QUESTION IT ANSWERS
     reports. Its work directories live under the system temp dir.
 
 WHY THIS IS A PORT AND NOT A COPY
-    notes/reachability.py in ../wsa1-roms-disasm answers the same question for the
+    notes/reachability.py in wsa1/ answers the same question for the
     WSA1R and turned a 107,371-byte job into a 17,558-byte one. Its IDEAS port.
     Its TABLES DO NOT, and four things had to be re-derived rather than copied:
 

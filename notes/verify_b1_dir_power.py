@@ -33,7 +33,7 @@ def scan(data, base, end):
             slots.add(data[o + 1] | data[o + 2] << 8 | data[o + 3] << 16)
     return ndir, len(slots), biggest
 
-W = os.path.expanduser("~/compartilhado/wsa1-roms-disasm/original_ROMs")
+W = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "wsa1", "original_ROMs")
 K = os.path.expanduser("~/compartilhado/kn5000-roms-disasm")
 
 # WSA1: prom_b is 0xF00000 low, prom_a 0xF80000 high, prom_c 0xF80000 subcpu.
