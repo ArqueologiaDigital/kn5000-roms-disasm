@@ -150,7 +150,12 @@ anything ambiguous:
   PanelButton name is the mistake the distinction exists to prevent.
 * **6 renames + 59 new labels** — the handlers, in round 12's exact form
   `<Control>_<Screen>`: `LcdKeyRow1_DiskMenu`, `ExitKey_MidiFileL0ad`,
-  `SoftKeyCol3_MidiFileSave_Page1`, …
+  `LcdKeyRow4_MidiFileSave_Page3`, `ExitKey_DiskSaveFile_Pages3_4`, …
+  ⚠ **No `SoftKeyCol*` name comes out of this module**, and that is the refusal
+  working: its tables do have live entries at 0x00-0x07, and every one of those
+  targets is also reached at `c + 0x11` — round 11's variant-1
+  `add (XIX-1),0x11` rewrite — so the control index is not unique and the name
+  is refused.
 * Fifty-nine of the sixty-five handler addresses **had no label at all**: the
   ROM's own table points at them and nothing in the listing named them.
 
