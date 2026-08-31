@@ -36,6 +36,7 @@ REL = "prom_b/wsa1_prom_b.s"
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from prom_b_apply_msgline_names import RENAMES, CLEARERS  # noqa: E402  the round's own table
 from prom_b_apply_smf_names import RENAMES as SMF_RENAMES, DATA_RENAMES  # noqa: E402
+from prom_b_apply_effect_names import RENAMES as FX_RENAMES  # noqa: E402
 
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
 
@@ -53,6 +54,7 @@ def main():
     ren.update({"sub_%06X" % a: n for a, n, *_ in CLEARERS})
     ren.update({"sub_%06X" % a: n for a, n in SMF_RENAMES})
     ren.update({o: n for o, n, _k in DATA_RENAMES})
+    ren.update(dict(FX_RENAMES))
     old = base_text(rev).splitlines()
     with open(os.path.join(ROOT, REL)) as f:
         new = f.read().splitlines()
@@ -69,11 +71,18 @@ def main():
     # was there is still readable somewhere in the new file.
     titles = {"; sub_%06X" % a: f"; {n} -- 0x{a:06X}"
               for a, n, *_ in list(RENAMES) + list(CLEARERS) + [(a, n) for a, n in SMF_RENAMES]}
+    titles.update({f"; {o}": f"; {n} -- 0x{o[4:]}" for o, n in FX_RENAMES if o.startswith("sub_")})
     newtext = "\n".join(new)
     QUOTED = ("is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's",
               "rule that a stated gap beats a plausible guess.")
 
-    kept = renamed = retitled = quoted = deleted = 0
+    # a `.incbin` that became assembly is not a lost line, it is a CONVERSION,
+    # and the byte gate is what says the bytes did not move.
+    CONVERTED = re.compile(r'^\s*\.incbin |^; --- 0x[0-9A-F]+-0x[0-9A-F]+: not converted ---$')
+    stripped = "\n".join(l.strip().lstrip(";").strip() for l in new)
+    flat = re.sub(r"\s+", " ", stripped)
+
+    kept = renamed = retitled = quoted = converted = deleted = 0
     missing = []
     for ln in old:
         if have[ln] > 0:
@@ -90,9 +99,9 @@ def main():
             retitled += 1
             continue
         # a DATA object's title: `; Data_XXXXXX -- rest` -> `; <new> -- 0xXXXXXX, rest`
-        m = re.match(r"^; (Data_[0-9A-F]{6}) -- (.*)$", ln)
+        m = re.match(r"^; ([A-Za-z]\w*_([0-9A-F]{6})) -- (.*)$", ln)
         if m and m.group(1) in ren:
-            want = f"; {ren[m.group(1)]} -- 0x{m.group(1)[5:]}, {m.group(2)}"
+            want = f"; {ren[m.group(1)]} -- 0x{m.group(2)}, {m.group(3)}"
             if have[want] > 0:
                 have[want] -= 1
                 retitled += 1
@@ -100,6 +109,14 @@ def main():
         if ("Unknown: what the routine is FOR" in ln or
                 "a stated gap beats a plausible guess" in ln or
                 ln == "; Unknown: everything about it except its bytes.") and all(q in newtext for q in QUOTED):
+            quoted += 1
+            continue
+        if CONVERTED.match(ln):
+            converted += 1
+            continue
+        # a comment line whose TEXT is quoted verbatim inside a replacement
+        body = re.sub(r"\s+", " ", ln.strip().lstrip(";").strip())
+        if ln.lstrip().startswith(";") and len(body) > 12 and body in flat:
             quoted += 1
             continue
         deleted += 1
@@ -118,6 +135,7 @@ def main():
     print(f"  accounted for by a rename {renamed}")
     print(f"  header title rewritten as `; <name> -- 0x<addr>` {retitled}")
     print(f"  stanza REPLACED, its text quoted verbatim in the replacement {quoted}")
+    print(f"  `.incbin` line CONVERTED to assembly (byte gate is the proof) {converted}")
     print(f"  ADDED                  {added}")
     print(f"  UNACCOUNTED FOR        {deleted}")
     print(f"  labels lost (not renamed either): {len(lost)}  {lost[:8]}")

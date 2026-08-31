@@ -126,6 +126,12 @@
 ;   0xF147AC-0xF14FAB  EffectNames -- 128 entries of 16 characters, 56 real
 ;                      effect names and 72 `----------` placeholders
 ;   0xF15024-0xF157A7  EffectParamNames -- the effect parameter labels
+;   0xF14FAC-0xF15023  DL_EffectParamPage -- the DSP EFFECT screen's eight
+;                      parameter-name rows, eight interpreter-B records of 15
+;                      (wave 8).  With EffectParamDescriptors_F12F24 and
+;                      DspEffect_LoadParamNames it closes `entry k of
+;                      EffectNames is effect algorithm k` --
+;                      notes/FINDINGS-prom_b-dsp-effect-parameters.md.
 ; Everything else is still .incbin, so it builds byte-exact by construction and
 ; asserts nothing.  The gate (scripts/analysis/assert_byte_identical.py) must
 ; print PASS after every edit.
@@ -25086,7 +25092,7 @@ Data_F10E0F:
 	ret	; F10FF0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10FF1
+; DspEffect_LoadParamNames -- 0xF10FF1
 ; Called from: in-module: 0xF10F55
 ; Touches: (0x2540) (0x2792) (0x2796)
 ; Calls:   T_DisplayListB_Run_Stack
@@ -25095,10 +25101,23 @@ Data_F10E0F:
 ;                    0xF10FF1 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    DspEffect_LoadParamNames -- named 2026-08-31.
+; Evidence (TABLE): it computes `BC = 4 * (0x2796)`, indexes
+;          EffectParamDescriptors_F12F24 with it, dereferences the entry, and
+;          copies EIGHT bytes at stride 4 -- starting at `4 * (0x2792)` -- into
+;          RAM (0x2640)-(0x2647).  Those eight bytes are exactly the eight
+;          source variables of DL_EffectParamPage, which it then runs by pushing
+;          0x00F15024 / 0x00F14FAC and calling slot T_F42E04.  Each is a row of
+;          EffectParamNames_F15024.  20 checks:
+;          `python3 notes/prom_b_effect_param_map.py --selftest`.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
+; Unknown: what (0x2792) counts.  It offsets the eight-byte window into a
+;          descriptor that can be longer than eight parameters, so `scroll
+;          position` is the obvious reading and is NOT asserted.
 ; --------------------------------------------------------------------------
-sub_F10FF1:
+DspEffect_LoadParamNames:
 	link XIZ,0xfffa	; F10FF1  link XIZ,0xfffa
 	pushw	hl	; F10FF5  push HL
 	pushw	de	; F10FF6  push DE
@@ -28257,7 +28276,7 @@ Data_F1284A:
 
 
 ; --------------------------------------------------------------------------
-; DataPtrTable_F12F24 -- 128 32-bit words, every one an address in
+; EffectParamDescriptors_F12F24 -- 0xF12F24, 128 32-bit words, every one an address in
 ;                        0x00F00000-0x00F7FFFF, i.e. inside this image.  57
 ;                        distinct values.  notes/prom_b_f0ea9f_layout.py
 ;                        classes it DEREF.
@@ -28280,9 +28299,24 @@ Data_F1284A:
 ;           notes/prom_b_f0ea9f_layout.py --null-ptr`), and the STRIDED rule
 ;           fires zero times over the 33 proven dispatch tables of this
 ;           image (`--null-stride`).
-; Unknown: what indexes it, and what the entries mean.
+; ✅ ANSWERED 2026-08-31.  This header used to end `Unknown: what indexes it,
+;    and what the entries mean.`  Both are now decoded and neither rests on a
+;    count coincidence:
+;      * DspEffect_LoadParamNames (0xF10FF1) computes `BC = 4 * (0x2796)` and
+;        adds it to 0x00F12F24, so the index is the DSP EFFECT ALGORITHM NUMBER.
+;      * an entry points at that algorithm's PARAMETER DESCRIPTOR: four bytes per
+;        parameter, of which byte 0 is a row of EffectParamNames_F15024.  All
+;        456 such bytes over the 57 distinct descriptors are < 100, and that
+;        table has exactly 100 rows.
+;      * the 57 distinct values are 56 used once and ONE used 72 times, and the
+;        72 slots that share it are EXACTLY the 72 slots whose EffectNames_F147AC
+;        entry is the `----------` placeholder -- symmetric difference empty.
+;    Read out: `python3 notes/prom_b_effect_param_map.py`.  DISTORTION's four
+;    parameters come back WET / DRIVE / ADJUST / VOLUME.
+; ⚠ Only byte 0 of each four-byte group is decoded, because that is the only one
+;    0xF10FF1 reads.  Bytes 1-3 are NOT interpreted.
 ; --------------------------------------------------------------------------
-DataPtrTable_F12F24:
+EffectParamDescriptors_F12F24:
 	.long	0x00F12748	; F12F24  [0] -> 0xF12748
 	.long	0x00F12608	; F12F28  [1] -> 0xF12608
 	.long	0x00F12630	; F12F2C  [2] -> 0xF12630
@@ -29394,9 +29428,21 @@ Data_F139AB:
 ; Evidence: every row is re-read and re-joined against the ROM on
 ;   every emit (`--checks`), and the two edge entries and the
 ;   72/56 split are asserted.
-; ⚠ Unknown: that entry k is effect algorithm k.  The block at
-;   0xF0EA9F-0xF13D33 has three 128-entry tables indexed from
-;   (0x2796); 128 and 128 is a CORRESPONDENCE, not a decoded fact.
+; ✅ ANSWERED 2026-08-31: entry k IS the name of effect algorithm k, and
+;   the `Read by: NOTHING ... spells 0x00F147AC` above still holds -- the
+;   join runs through a different table.  This header used to end `⚠ Unknown:
+;   that entry k is effect algorithm k.  The block at 0xF0EA9F-0xF13D33 has
+;   three 128-entry tables indexed from (0x2796); 128 and 128 is a
+;   CORRESPONDENCE, not a decoded fact.`  It is a decoded fact now, and what
+;   makes it one is an identity of PARTITIONS rather than of counts:
+;   EffectParamDescriptors_F12F24, indexed by 4*(0x2796), has 57 distinct
+;   entries -- 56 used once and one used 72 times -- and the 72 slots that
+;   share it are EXACTLY the 72 slots that carry the `----------` placeholder
+;   here.  The descriptors then name each effect's parameters out of
+;   EffectParamNames_F15024, and they read correctly: DISTORTION gets WET /
+;   DRIVE / ADJUST / VOLUME, CHORUS gets WET / DEPTH / LFO SPEED / LFO
+;   WAVEFORM / VOLUME.  `python3 notes/prom_b_effect_param_map.py`,
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md.
 ; --------------------------------------------------------------------------
 EffectNames_F147AC:
 	.ascii	"  NO OPERATION  "	; F147AC  [  0]
@@ -29529,8 +29575,89 @@ EffectNames_F147AC:
 	.ascii	"   ----------   "	; F14F9C  [127]
 
 
-; --- 0xF14FAC-0xF15023: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x014FAC, 0x000078
+; --------------------------------------------------------------------------
+; DL_EffectParamPage -- 0xF14FAC-0xF15023, the DSP EFFECT screen's eight
+;   parameter-name rows.  0x78 bytes, which is EXACTLY eight interpreter-B
+;   records of fifteen; converted 2026-08-31 from the last `.incbin` of the
+;   effect region.
+; Run by: DspEffect_LoadParamNames (0xF10FF1), which pushes 0x00F15024 and
+;   0x00F14FAC and calls slot T_F42E04.
+; Layout: each record draws entry (0x2640+j) of EffectParamNames_F15024 -- 17
+;   bytes per entry, which is the row stride that table's own header states --
+;   with `swi 7` function 0x20, prom_a's LCD_Svc_20_DrawText8x10.  The eight
+;   cursors are 640 apart, and 640 is 16 display lines of AP = 40 bytes, so the
+;   rows land at x = 72, y = 74, 90, 106, 122, 138, 154, 170, 186.
+; Evidence: the eight source variables are (0x2640)-(0x2647) and they are
+;   EXACTLY the eight bytes DspEffect_LoadParamNames writes, at stride 4, out of
+;   the per-algorithm descriptor it fetched from EffectParamDescriptors_F12F24.
+;   Re-derived by `python3 notes/prom_b_effect_param_map.py --selftest`;
+;   write-up in notes/FINDINGS-prom_b-dsp-effect-parameters.md.
+; --------------------------------------------------------------------------
+DL_EffectParamPage:
+	.byte 0x02, 0x0F	; F14FAC  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
+	.short 0x2640	; +0x02 source variable -- byte 0 of the eight
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
+	.long 0x00F15024	; +0x07 -> XIY: EffectParamNames_F15024
+	.short 0x0011	; +0x0B -> BC: bytes per entry
+	.short 0x0B99	; +0x0D -> IX: x=72, y=74
+	.byte 0x02, 0x0F	; F14FBB  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
+	.short 0x2641	; +0x02 source variable -- byte 1 of the eight
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
+	.long 0x00F15024	; +0x07 -> XIY: EffectParamNames_F15024
+	.short 0x0011	; +0x0B -> BC: bytes per entry
+	.short 0x0E19	; +0x0D -> IX: x=72, y=90
+	.byte 0x02, 0x0F	; F14FCA  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
+	.short 0x2642	; +0x02 source variable -- byte 2 of the eight
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
+	.long 0x00F15024	; +0x07 -> XIY: EffectParamNames_F15024
+	.short 0x0011	; +0x0B -> BC: bytes per entry
+	.short 0x1099	; +0x0D -> IX: x=72, y=106
+	.byte 0x02, 0x0F	; F14FD9  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
+	.short 0x2643	; +0x02 source variable -- byte 3 of the eight
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
+	.long 0x00F15024	; +0x07 -> XIY: EffectParamNames_F15024
+	.short 0x0011	; +0x0B -> BC: bytes per entry
+	.short 0x1319	; +0x0D -> IX: x=72, y=122
+	.byte 0x02, 0x0F	; F14FE8  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
+	.short 0x2644	; +0x02 source variable -- byte 4 of the eight
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
+	.long 0x00F15024	; +0x07 -> XIY: EffectParamNames_F15024
+	.short 0x0011	; +0x0B -> BC: bytes per entry
+	.short 0x1599	; +0x0D -> IX: x=72, y=138
+	.byte 0x02, 0x0F	; F14FF7  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
+	.short 0x2645	; +0x02 source variable -- byte 5 of the eight
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
+	.long 0x00F15024	; +0x07 -> XIY: EffectParamNames_F15024
+	.short 0x0011	; +0x0B -> BC: bytes per entry
+	.short 0x1819	; +0x0D -> IX: x=72, y=154
+	.byte 0x02, 0x0F	; F15006  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
+	.short 0x2646	; +0x02 source variable -- byte 6 of the eight
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
+	.long 0x00F15024	; +0x07 -> XIY: EffectParamNames_F15024
+	.short 0x0011	; +0x0B -> BC: bytes per entry
+	.short 0x1A99	; +0x0D -> IX: x=72, y=170
+	.byte 0x02, 0x0F	; F15015  B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout
+	.short 0x2647	; +0x02 source variable -- byte 7 of the eight
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function -- LCD_Svc_20_DrawText8x10
+	.long 0x00F15024	; +0x07 -> XIY: EffectParamNames_F15024
+	.short 0x0011	; +0x0B -> BC: bytes per entry
+	.short 0x1D19	; +0x0D -> IX: x=72, y=186
 ; --------------------------------------------------------------------------
 ; EffectParamNames_F15024 -- 100 rows of 17 bytes, 0xF15024-0xF156C7:
 ;   the effect parameter labels (`WET`, `DRIVE`, `EMPHASIS Fc`,
