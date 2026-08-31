@@ -113,7 +113,7 @@ All from the reset block, `0xF826AF-0xF82779` (converted, with comments):
 | PA / PACR | 0xF9 / 0x0E | |
 | PB / PBCR | 0xF3 / 0x0C | **bit 0 = the model strap** |
 | ODE | 0x03 | open-drain on two outputs; which is not established |
-| **ADMOD** | **0x3F** | ★ the **A/D converter is enabled at boot** |
+| **ADMOD** | **0x3F** | the A/D converter is PROGRAMMED at boot. ⚠ the field layout is not established here; what is established is that the A/D is *used* — see below |
 | IIMC | 0x05 | |
 | DMA0V..DMA3V | 0x00 | none armed at reset; DMA2V = 0x12 later (0xF8E166) ⇒ vector 0x48 = INTT2, the link push engine; DMA3V = 0x0A (0xF8E4CA) ⇒ INT0 |
 
@@ -140,8 +140,11 @@ T5MOD  = 0x02   TREG6 = TREG7 = 0x3A98 = 15000
 TRUN   = 0xB7   (bit 7 = prescaler run)
 ```
 
-`TREG1 = 0x1C` giving a 488.28 Hz tick is an *independent* check on the
-prescaler scale: it only comes out at 488 Hz under one reading.
+`TREG1 = 0x1C` is a second, independent handle on the prescaler question the
+driver raises: 28 MHz / 2048 (phiT256, from `T01MOD = 0x0D`) / 28 = 488.28 Hz,
+a plausible system tick. ⚠ This pass did **not** work out what the same
+constant gives under MAME's `tmp95c061` tap, so it is offered as a second
+constant to check the answer against, not as a second proof.
 
 ## 7. The panel matrix now has legends — for `wsa1_cpanel.cpp`
 
