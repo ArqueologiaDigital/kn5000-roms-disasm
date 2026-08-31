@@ -166,18 +166,40 @@ argued safe: they must be gated on `prove_identical.py`. Fix the truncation
 first (drop rows within a max-instruction-length of the window end) and the
 index becomes canonical -- and then every one of those becomes safe.
 
-## 5. probe_health: it is not process churn
+## 5. probe_health: it is not process churn, it is 52 guaranteed timeouts
+
+`profile_probe_health.py --census` (static, so load does not affect it):
+
+    image    scripts  invocations  runs (x4 trees)  of those, WALKERS
+    prom_a     103        188           752          12 inv -> 48 runs
+    prom_b      89        169           676          10 inv -> 40 runs
+    prom_c      73        135           540           4 inv -> 16 runs
+    prom_d      28         51           204           0 inv ->  0 runs
+    TOTAL                 543         2,172          26 inv -> 104 runs
 
     bare `python3 -c pass`                     23 ms  (median of 15)
-    a full prom_a sweep                       412 subprocess runs
 
-412 x 23 ms = **9.5 s of interpreter startup in a sweep that takes over an
-hour** -- about 0.3%. Batching or an in-process API would buy that 0.3%. The
-cost is in what the probes DO, and the probes that call `reachability.py` do it
-by `importlib`, in-process, with no result cache in the derived trees -- so each
-pays a cold walk. `probe_health` builds four trees per image; the `full` and
-`stub` trees differ from the committed one by construction, so their fingerprint
-CANNOT hit. Fixing the walk fixes probe_health.
+2,172 x 23 ms = **50 s of interpreter startup in a sweep that takes over half an
+hour** -- under 3%, and for one image's regrade it is the 9.5 s that 412 runs
+cost. **Batching or an in-process API would buy that.** It is not where the time
+is.
+
+★ WHERE IT IS. 26 invocations load `reachability.py` by `importlib` and walk.
+Each runs in four trees. `asis` and `asis2` have the committed `.s`, so the
+copied result cache HITS and they are quick. `full` and `stub` differ from the
+committed tree BY CONSTRUCTION -- that difference is the measurement -- so their
+fingerprint CANNOT hit and they walk COLD:
+
+    52 runs x 300 s per-invocation timeout = 4.3 hours of CPU,
+    at --jobs 8 => ~32 minutes of wall clock.
+
+That is the whole observed regrade time, and it is **spent burning the timeout**:
+a cold prom_a walk is 621.72 s and the timeout is 300 s, so those runs can never
+finish. They are graded TIMEOUT -- which probe_health's own docstring calls "NOT
+a pass: the instrument never saw an answer". So the sweep is not merely slow; it
+returns no grade for precisely the probes that do the most work.
+
+★ Fixing the walk fixes probe_health. Nothing else here needs to change.
 
 ## 6. What invalidates the cache, and how often
 

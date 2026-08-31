@@ -193,6 +193,54 @@ def run_all():
                          grand.calls["walk"])])
 
 
+def cachekey():
+    """★ WHICH EDITS INVALIDATE WHICH IMAGES, and what a hit is worth.
+
+    reachability.py's fingerprint hashes, per image, that image's .s, everything
+    it .includes, AND `__file__`.  The last term is the interesting one: it means
+    ANY byte changed in the tool -- a docstring, a print format, a new flag --
+    invalidates all three images at once and costs the tree a full cold walk.
+
+    This measures it WITHOUT editing the committed file: the fingerprint is
+    recomputed with one byte appended to the tool's own bytes, which is exactly
+    what an edit does to that term.
+    """
+    import hashlib
+    m = load_reach()
+    disk = _json_load(m.RESULT_CACHE)
+    print("%-8s %-14s %-14s %-14s %s"
+          % ("image", "cached", "now", "if tool edited", "hits now?"))
+    for tag, _s, _f, _b in m.IMAGES:
+        t = time.perf_counter()
+        now = m._fingerprint(tag)
+        secs = time.perf_counter() - t
+        # the same hash with one byte added to the tool term
+        h = hashlib.sha1()
+        for t_, sf, _f2, _b2 in m.IMAGES:
+            if t_ == tag:
+                h.update(open(os.path.join(m.ROOT, sf), "rb").read())
+                rels = [r for r, _c in m.SHARED_SOURCES.get(t_, [])]
+                for rel in dict.fromkeys(rels + m.included_sources(sf)):
+                    h.update(open(os.path.join(m.ROOT, rel), "rb").read())
+        h.update(open(os.path.abspath(m.__file__), "rb").read() + b"\n")
+        edited = h.hexdigest()
+        was = (disk.get(tag) or {}).get("fingerprint", "-")
+        print("%-8s %-14s %-14s %-14s %s   (fingerprint cost %.0f ms)"
+              % (tag, was[:12], now[:12], edited[:12],
+                 "HIT " if was == now else "MISS", 1000 * secs))
+    print("\n★ The 'if tool edited' column differs from 'now' for EVERY image:")
+    print("  one byte changed in this file invalidates all three, because the")
+    print("  fingerprint hashes __file__ for each of them.")
+
+
+def _json_load(p):
+    import json
+    try:
+        return json.load(open(p))
+    except Exception:
+        return {}
+
+
 def selftest():
     """INVARIANTS ONLY -- never a pinned timing."""
     ok = fail = 0
@@ -248,9 +296,14 @@ if __name__ == "__main__":
                     help="every walked image -- this is the cost of ONE COLD --targets")
     ap.add_argument("--cprofile", action="store_true")
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--cachekey", action="store_true",
+                    help="which edits invalidate which images")
     a = ap.parse_args()
     if a.selftest:
         sys.exit(selftest())
+    if a.cachekey:
+        cachekey()
+        sys.exit(0)
     if a.all:
         run_all()
     else:

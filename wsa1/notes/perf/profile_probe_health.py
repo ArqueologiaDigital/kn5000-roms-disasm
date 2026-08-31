@@ -125,6 +125,53 @@ def run_image(tag, per_script=2, timeout=300, limit=None):
     return rows, floor
 
 
+def census():
+    """★ HOW MUCH OF A SWEEP IS THE REACHABILITY WALK? -- a STATIC count, so it
+    is unaffected by whatever else is running on the box.
+
+    probe_health builds FOUR trees per image (asis, asis2, full, stub) and runs
+    every invocation in all four.  The `full` and `stub` trees differ from the
+    committed one by construction -- that IS the measurement -- so an image's
+    reachability fingerprint CANNOT hit there, and any probe that walks pays a
+    full cold walk in two trees out of four.  Measured cold walk: prom_a
+    621.72 s, prom_b 210.44 s, prom_c 187.03 s (notes/perf/profile_reachability.py
+    --all).  Against a 300 s per-invocation timeout, a prom_a walk cannot even
+    finish -- it is graded TIMEOUT, having burned the full 300 s in each tree."""
+    m = load_ph()
+    walkers = set()
+    for path in m.committed_py():
+        try:
+            txt = open(os.path.join(ROOT, path), encoding="utf-8",
+                       errors="replace").read()
+        except OSError:
+            continue
+        # a probe that WALKS loads reachability.py as a module; naming it in
+        # prose does not cost a second.
+        if "reachability.py" in txt and ("spec_from_file_location" in txt
+                                         or "import_module" in txt
+                                         or "subprocess" in txt and "reachability.py" in txt):
+            walkers.add(path)
+    cites = m.citation_index()
+    print("%-8s %-9s %-11s %-11s %s"
+          % ("image", "scripts", "invocations", "runs (x4)", "of those, WALKERS"))
+    for tag, _p in m.IMAGES:
+        primary = m.IMAGE_PRIMARY[tag]
+        scripts = m.readers(primary)
+        argvs = []
+        for sc in scripts:
+            keep, _ = m.invocations(sc, cites, 2)
+            argvs += keep
+        nw = sum(1 for a in argvs if a[0] in walkers)
+        print("%-8s %-9d %-11d %-11d %d invocation(s) -> %d run(s)"
+              % (tag, len(scripts), len(argvs), 4 * len(argvs), nw, 4 * nw))
+    print("\n%d committed script(s) load reachability.py as a module:" % len(walkers))
+    for w in sorted(walkers):
+        print("    " + w)
+    print("\n★ Each such invocation walks. In the `full` and `stub` trees the")
+    print("  result cache cannot hit, so it walks COLD -- and the per-invocation")
+    print("  timeout is %ds, shorter than a cold prom_a walk (621.72 s)." % m.TIMEOUT)
+
+
 def selftest():
     ok = fail = 0
 
@@ -169,7 +216,12 @@ if __name__ == "__main__":
     ap.add_argument("--timeout", type=int, default=300)
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--census", action="store_true",
+                    help="STATIC: how many sweep invocations do a cold walk")
     a = ap.parse_args()
     if a.selftest:
         sys.exit(selftest())
+    if a.census:
+        census()
+        sys.exit(0)
     run_image(a.image, a.per_script, a.timeout, a.limit)
