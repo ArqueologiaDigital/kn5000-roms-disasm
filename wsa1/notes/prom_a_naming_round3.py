@@ -478,18 +478,27 @@ def show_accessors(top=30):
     hit, coll = accessors()
     subs, rows = census()
     by = {r["addr"]: r for r in rows}
-    print("%d of %d prom_a sub_XXXXXX routines are single-cell accessors"
-          % (len(hit), len(subs)))
+    # ⚠ accessors() scans EVERY label, not only `sub_XXXXXX` -- deliberately, so
+    # that a rename this file has already applied still matches.  So `hit` holds
+    # addresses that are no longer in `subs`, and reading `by[s]` or `subs[s]`
+    # for one of those raised KeyError from the day the first --apply ran.  The
+    # two columns now say what the label is TODAY, and the header separates the
+    # ones still awaiting a name from the ones this matcher has already named.
+    todo = [s for s in hit if s in subs]
+    print("%d of %d prom_a sub_XXXXXX routines are single-cell accessors "
+          "(%d more already carry the name this matcher gives them)"
+          % (len(todo), len(subs), len(hit) - len(todo)))
     print("%d names were REFUSED because two routines would have shared them: %s"
           % (sum(len(v) for v in coll.values()),
              ", ".join(sorted(coll)) or "none"))
-    order = sorted(hit, key=lambda s: -by[s]["calls"])
-    print("\n%-16s %-14s %6s   %s" % ("new name", "was", "calls", "what it does"))
+    calls = lambda s: by[s]["calls"] if s in by else 0
+    order = sorted(hit, key=lambda s: -calls(s))
+    print("\n%-16s %-14s %6s   %s" % ("new name", "is now", "calls", "what it does"))
     for s in order[:top]:
         print("%-16s %-14s %6d   %s"
-              % (hit[s][0], subs[s], by[s]["calls"], hit[s][2]))
+              % (hit[s][0], subs.get(s, "(named)"), calls(s), hit[s][2]))
     print("\ncalls covered by the named accessors: %d"
-          % sum(by[s]["calls"] for s in hit))
+          % sum(calls(s) for s in hit))
     return 0
 
 
