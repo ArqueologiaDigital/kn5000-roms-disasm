@@ -79,7 +79,13 @@ def decode(m, tag, start, window):
     return rows
 
 
-def run(tag, n_starts, window, stride):
+def run(tag, n_starts, window, stride, guard=0):
+    """`guard` = the PROPOSED FIX: drop rows that start within `guard` bytes of
+    the window end, because unidasm decoded them from truncated bytes. The
+    longest TLCS-900 instruction in prom_a is 7 bytes (one linear decode of the
+    whole image: 274,588 instructions, max length 7), so guard=6 is the smallest
+    value that can be correct. Re-run with it and the conflicts should vanish --
+    that is the evidence the fix works, and it costs 6 bytes of every 2,048."""
     m = load_reach()
     base = m.BASES[tag]
     seen = {}                      # addr -> (len, text, from_start)
@@ -88,6 +94,8 @@ def run(tag, n_starts, window, stride):
         start = base + (i * stride) % (m.SIZE - window)
         rows = decode(m, tag, start, window)
         end = start + window
+        if guard:
+            rows = [r for r in rows if r[0] + guard < end]
         for addr, ln, text in rows:
             prev = seen.get(addr)
             if prev is None:
@@ -106,8 +114,8 @@ def run(tag, n_starts, window, stride):
                   % (i + 1, n_starts, len(seen),
                      len(conflicts) + len(tail_conflicts)), flush=True)
 
-    print("\n%s: %d windows of 0x%X bytes, stride 0x%X"
-          % (tag, n_starts, window, stride))
+    print("\n%s: %d windows of 0x%X bytes, stride 0x%X, tail guard %d"
+          % (tag, n_starts, window, stride, guard))
     print("  distinct addresses asserted : %d" % len(seen))
     print("  INTERIOR conflicts          : %d" % len(conflicts))
     print("  window-TAIL conflicts       : %d" % len(tail_conflicts))
@@ -135,7 +143,8 @@ def run(tag, n_starts, window, stride):
                 truncated += 1
                 bad = {int(x.group(1), 16) for x in m.BRANCH.finditer(text)}
                 good = {int(x.group(1), 16) for x in m.BRANCH.finditer(t_text)}
-                false_in_image = {t for t in bad - good if m.owner(t, m.CPU1)}
+                cpu = m.CPU1 if tag in m.CPU1 else m.CPU2
+                false_in_image = {t for t in bad - good if m.owner(t, cpu)}
                 if false_in_image:
                     wrong_edges += 1
                     print("    0x%06X truth %r" % (addr, t_text))
@@ -188,9 +197,11 @@ if __name__ == "__main__":
     ap.add_argument("--starts", type=int, default=400)
     ap.add_argument("--window", type=lambda s: int(s, 0), default=None)
     ap.add_argument("--stride", type=lambda s: int(s, 0), default=0x2711)
+    ap.add_argument("--guard", type=int, default=0,
+                    help="drop rows starting within N bytes of the window end")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     if a.selftest:
         sys.exit(selftest())
     m = load_reach()
-    run(a.tag, a.starts, a.window or m.WINDOW, a.stride)
+    run(a.tag, a.starts, a.window or m.WINDOW, a.stride, a.guard)

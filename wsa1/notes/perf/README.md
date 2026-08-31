@@ -158,6 +158,19 @@ wrong offset) and the wrong BRANCH TARGET (it queues an edge no control flow
 takes). This is the "paints data as code" failure the tool's own docstring is
 about, arriving through the decoder rather than through a seed.
 
+**THE FIX, AND IT IS MEASURED, NOT PROPOSED BLIND.** One linear decode of the
+whole prom_a image is 274,588 instructions and the longest is **7 bytes**
+(1-byte 54.8%, 2-byte 19.0%, ... 7-byte 0.15%). So dropping rows that start
+within 6 bytes of the window end must remove every truncated decode, and it
+does -- `--guard 6` on all three images:
+
+    image    guard 0: interior / tail conflicts / false edges | guard 6
+    prom_a         0 / 52 / 6                                 | 0 / 0
+    prom_b         0 / 17 / 0                                 | 0 / 0
+    prom_c         0 / 15 / 3                                 | 0 / 0
+
+It costs 6 bytes of every 2,048 -- ~0.2% of the addresses a window asserts.
+
 ★★ THE CONSEQUENCE FOR OPTIMISATION. Because interior decodes never conflict but
 tail decodes do, what `_BOUND` holds at an address depends on WHICH WINDOW GOT
 THERE FIRST -- that is, on walk order. So persisting the index, decoding the
