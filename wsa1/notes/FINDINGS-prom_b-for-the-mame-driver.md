@@ -46,9 +46,18 @@ stick.
 ⚠ These are not device registers. CPU 1's TMP95C061 internal I/O area is
 `0x000000-0x00007F` only, and the device supplies its own `internal_mem()`.
 
-prom_a agrees independently and goes higher: its own annotations put a
-**checksum word at `0x007FD4`** and a 512-byte block at `0x007620`
-(`prom_a/wsa1_prom_a.s` around `0xF83086`).
+prom_a agrees independently, goes higher, and has already named the chip. Its
+power-down routine check-sums two 512-byte blocks and stores the results, and
+the header on it says:
+
+> `0x007620 for 512 bytes -> checksum word at 0x007FD2`
+> `0x617800 for 512 bytes -> checksum word at 0x007FD4`
+> The first is **CS1 static RAM**, the second is work DRAM …
+
+So prom_a's own transcription already places CS1 static RAM at `0x007620` and
+writes checksum words at `0x007FD2` and `0x007FD4` — 8,658 bytes above the top
+of what the driver maps. That is a settings-retention area, which is exactly the
+kind of thing that must be mapped for a boot to get past it.
 
 **Suggested change:** widen the CS1 map to at least `0x007FFF`. 32 KiB is the
 obvious chip and `0x7FD4`/`0x7FC2` sitting 44 and 62 bytes below its top is the
