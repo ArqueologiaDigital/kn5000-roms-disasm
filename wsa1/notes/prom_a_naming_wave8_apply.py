@@ -60,6 +60,28 @@ def _rom(a, n):
 
 VTABLE = 0xF86EC1          # PanelScreen_VtableTable, 256 LE32 screen objects
 NULL_VTABLE = 0xF872C1
+VIEWB = 32                 # PanelScreen_VtableTable_ViewB = entry 32 as a base
+
+
+def screen_id_phrase(entry):
+    """How to SAY which screen a table entry is, without inventing a number.
+
+    ⚠ THE ENTRY NUMBER IS NOT THE SCREEN ID, and the first version of these
+    headers said it was.  PanelButton_Route reads the table through
+    PanelScreen_VtableTable_ViewB (`ld XBC,0x00F86F41` at 0xF86215), which is
+    entry 32 used as a second base, so a screen id `n` addresses ENTRY n+32.
+    Entries 0-47 are also reachable from the other base as mode indices 0-47,
+    and the two views overlap on 32-47 -- so an entry below 32 has no ViewB id
+    at all and one in 32..47 has two readings.  The phrase says exactly which.
+    """
+    if entry < VIEWB:
+        return ("entry 0x%02X (below the ViewB base, so it is a MODE INDEX of "
+                "the other view and has no screen id)" % entry)
+    return ("entry 0x%02X, i.e. SCREEN ID 0x%02X through "
+            "PanelScreen_VtableTable_ViewB%s"
+            % (entry, entry - VIEWB,
+               " -- and also mode index 0x%02X of the other view, which "
+               "overlaps here" % entry if entry < 48 else ""))
 
 
 def screen_of_reader():
@@ -157,17 +179,17 @@ def screen_names(src):
         nm = lab_at.get(enter)
         if nm and nm.startswith("Paint_"):
             out[t] = (nm[len("Paint_"):], sid,
-                      "the screen object at PanelScreen_VtableTable[0x%02X] "
-                      "names this reader as its BUTTON method and 0x%06X as "
-                      "its ENTER method, and that address carries the label "
-                      "%s -- a name an earlier round derived from the "
-                      "screen's own text" % (sid, enter, nm))
+                      "the screen object at PanelScreen_VtableTable %s names "
+                      "this reader as its BUTTON method and 0x%06X as its "
+                      "ENTER method, and that address carries the label %s -- "
+                      "a name an earlier round derived from the screen's own "
+                      "text" % (screen_id_phrase(sid), enter, nm))
         elif sid in SCREEN_DECLARED:
             n2, why = SCREEN_DECLARED[sid]
             out[t] = (n2, sid,
-                      "the screen object at PanelScreen_VtableTable[0x%02X] "
-                      "names this reader as its BUTTON method, and %s"
-                      % (sid, why))
+                      "the screen object at PanelScreen_VtableTable %s names "
+                      "this reader as its BUTTON method, and %s"
+                      % (screen_id_phrase(sid), why))
     # the PAGE dispatchers: same object, other method
     ent = screen_of_enter()
     byid = {sid: nm for nm, sid, _w in out.values()} if False else \
@@ -181,9 +203,9 @@ def screen_names(src):
         sid = ent.get(int(a.group(1), 16))
         if sid in byid:
             out[t] = (byid[sid], sid,
-                      "the screen object at PanelScreen_VtableTable[0x%02X] "
-                      "names this reader as its ENTER method, and its BUTTON "
-                      "method is that screen's control table" % sid)
+                      "the screen object at PanelScreen_VtableTable %s names "
+                      "this reader as its ENTER method, and its BUTTON method "
+                      "is that screen's control table" % screen_id_phrase(sid))
     return out
 SIMPLE = ["Dispatch_FF3800", "Dispatch_FF3880", "Dispatch_FF3900",
           "Dispatch_FF3980"]
@@ -526,13 +548,13 @@ def plan():
             new = "%s_%s" % (root, screen)
             bare = _rom(tgt, 1) == b"\x0e"
             hdr = [
-                "%s -- the %s method of screen 0x%02X's object"
-                % (new, what, i),
+                "%s -- the %s method of the screen object at "
+                "PanelScreen_VtableTable %s" % (new, what, screen_id_phrase(i)),
                 "",
-                "Reached from: PanelScreen_VtableTable[0x%02X] -> the screen "
-                "object at 0x%06X, whose +%d slot is `jp 0x%06X`.  It is "
-                "reached from nowhere else: no other live screen object names "
-                "this address in either of its two callable slots."
+                "Reached from: PanelScreen_VtableTable entry 0x%02X -> the "
+                "screen object at 0x%06X, whose +%d slot is `jp 0x%06X`.  It "
+                "is reached from nowhere else: no other live screen object "
+                "names this address in either of its two callable slots."
                 % (i, v, off, tgt),
                 "Evidence: the offset is not a guess about layout, and it is "
                 "what makes this the %s method.  +0 is called "
@@ -951,13 +973,41 @@ def selftest():
     except AssertionError as e:
         print("FAIL plan(): %s" % e)
         bad += 1
-    # 3. ★ THE REFUSAL IS DOING WORK, not just declared.  Every live target at
+    src2 = lines()
+    # 3. ★★ THE -32 IS NOT MINE TO GET WRONG, and round 9 already pinned it.
+    #    wave7_panel_button_codes.py's anchor A says the power-on chord on
+    #    number-pad key "4" requests SCREEN ID 0xDB and that ViewB[0xD9..0xDB]
+    #    resolve to Paint_PanelCpuCheck / Paint_SineWaveCheckMode /
+    #    Paint_PanelSwLedCheck.  Under entry = id + 32 those are ENTRIES
+    #    0xF9..0xFB, and that is exactly where this script finds them.  The
+    #    first version of these headers called the ENTRY the screen id; this is
+    #    the check that would have caught it.
+    lab2 = {}
+    for i, ln in enumerate(src2):
+        mm = LABEL.match(ln)
+        if not mm:
+            continue
+        aa = ADDR.search(src2[i + 1]) if i + 1 < len(src2) else None
+        if aa:
+            lab2.setdefault(int(aa.group(1), 16), mm.group(1))
+    want = {0xD9: "Paint_PanelCpuCheck", 0xDA: "Paint_SineWaveCheckMode",
+            0xDB: "Paint_PanelSwLedCheck"}
+    for sid, nm in sorted(want.items()):
+        v = int.from_bytes(_rom(VTABLE + 4 * (sid + VIEWB), 4), "little") & 0xFFFFFF
+        b = _rom(v, 4)
+        e = int.from_bytes(b[1:4], "little") if b and b[0] == 0x1B else None
+        got = lab2.get(e) if e else None
+        ok = got == nm
+        print("%-4s round 9's anchor: screen id 0x%02X = entry 0x%02X -> %s"
+              % ("ok" if ok else "FAIL", sid, sid + VIEWB, got))
+        bad += 0 if ok else 1
+
+    # 4. ★ THE REFUSAL IS DOING WORK, not just declared.  Every live target at
     #    a SOFT KEY control (0x00-0x07) in this module is ALSO reached at
     #    control + 0x11 -- round 11's variant-1 `add (XIX-1),0x11` rewrite --
     #    so not one of them has a unique control index and not one SoftKeyCol
     #    name comes out.  If that ever stops being true the refusal has gone
     #    quiet and this check says so.
-    src2 = lines()
     tb2 = tables(src2)
     reach = collections.defaultdict(set)
     for t in SIMPLE + ["Dispatch_FF3A29", "Dispatch_FF3D39", "Dispatch_FF4049",

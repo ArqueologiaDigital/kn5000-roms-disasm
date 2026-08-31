@@ -188,6 +188,43 @@ method *is* a control-table reader, and `PanelButtonDispatch_X` says everything
 Thirteen of the 27 are a bare `ret`: that screen does nothing on leave, and the
 header says so rather than implying a routine.
 
+## 3c. ★★ The module closes on itself: the DISK MENU and its destinations
+
+⚠ **First, a correction this pass made to its own headers.** `PanelButton_Route`
+reads the vtable through `PanelScreen_VtableTable_ViewB` — entry 32 used as a
+second base (`ld XBC,0x00F86F41` at `0xF86215`) — so **a screen id `n` addresses
+ENTRY `n + 32`**, and the first version of these headers called the entry number
+the screen id. Round 9's anchor A pins the offset independently: it says the
+power-on chords request screen ids `0xD9`-`0xDB` and that those resolve to
+`Paint_PanelCpuCheck` / `Paint_SineWaveCheckMode` / `Paint_PanelSwLedCheck` —
+which is exactly where entries `0xF9`-`0xFB` are.
+`prom_a_naming_wave8_apply.py --selftest` now asserts all three.
+
+With the offset right, the four LCD-row handlers of the DISK MENU read as a
+menu. Each writes a **screen id** to `(0x2070)` with the flag `(0x2071) = 0x80`,
+picking on bit 7 of the forwarded argument and, on one arm, on the model strap:
+
+| key | bit 7 SET | bit 7 CLEAR, variant 2 (the rack) | bit 7 CLEAR, variant 1 |
+|---|---|---|---|
+| LCD row 1 | `0x47` → **DiskL0adFile** | `0x54` → **L0adSingleS0und** | `0x49` → **MidiFileL0ad** |
+| LCD row 2 | `0x4C` → **DiskSaveFile** | `0x53` → **L0adSingleC0mbination** | `0x4E` → **MidiFileSave** |
+| LCD row 3 | `0x45` → **MidiFileDirectPlay** | *nothing* | `0x54` → **L0adSingleS0und** |
+| LCD row 4 | `0x50` → **FloppyDiskFormatSelectType** | *nothing* | `0x53` → **L0adSingleC0mbination** |
+| EXIT | — | `0x01` (entry 0x21) | `0x01` |
+
+Every id is a literal byte in the ROM (`0xFF4359`, `0xFF435E`, `0xFF4367`,
+`0xFF4385`, `0xFF438A`, `0xFF4393`, `0xFF43AC`, `0xFF43B9`, `0xFF43D3`,
+`0xFF43E0`, `0xFF43FA`), and **every destination is one of the other nine
+screens this module owns.** The module closes on itself, which is a check on the
+whole screen mapping from a direction the mapping did not use: the names came
+from the vtable and from `Paint_*` labels, the destinations are raw bytes in
+five handlers, and they meet.
+
+★ **This is a step on gap V** (`notes/WSA1-EMULATION-DISASM-GAPS.md`), which asks
+which UI action reaches the disk code and records that no single button press
+does. The answer is a menu: get to screen `0x40` and press an LCD-row key. Two
+of the eight slots are inert on the rack.
+
 ## 4. ★ A refusal from round 7, resolved
 
 Round 7 refused to name `sub_FF4ACB` and `sub_FF4D5D`:

@@ -37008,9 +37008,11 @@ Paint_GateArrayCheck:
 .LF95764:
 	ret                                                  ; F95764  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_GateArrayCheck -- the LEAVE method of screen 0xF8's object
+; ScreenLeave_GateArrayCheck -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xF8, i.e. SCREEN ID 0xD8 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0xF8] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0xF8 -> the screen object at
 ;          0xF400D0, whose +4 slot is `jp 0xF95765`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -37031,9 +37033,11 @@ Paint_GateArrayCheck:
 ScreenLeave_GateArrayCheck:
 	ret                                                  ; F95765  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_GateArrayCheck -- the BUTTON method of screen 0xF8's object
+; ScreenButton_GateArrayCheck -- the BUTTON method of the screen object at
+;          PanelScreen_VtableTable entry 0xF8, i.e. SCREEN ID 0xD8 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0xF8] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0xF8 -> the screen object at
 ;          0xF400D0, whose +8 slot is `jp 0xF95766`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -37099,9 +37103,11 @@ Paint_PanelCpuCheck:
 .LF95794:
 	ret                                                  ; F95794  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_PanelCpuCheck -- the LEAVE method of screen 0xF9's object
+; ScreenLeave_PanelCpuCheck -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xF9, i.e. SCREEN ID 0xD9 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0xF9] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0xF9 -> the screen object at
 ;          0xF400E0, whose +4 slot is `jp 0xF95795`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -37122,9 +37128,11 @@ Paint_PanelCpuCheck:
 ScreenLeave_PanelCpuCheck:
 	ret                                                  ; F95795  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_PanelCpuCheck -- the BUTTON method of screen 0xF9's object
+; ScreenButton_PanelCpuCheck -- the BUTTON method of the screen object at
+;          PanelScreen_VtableTable entry 0xF9, i.e. SCREEN ID 0xD9 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0xF9] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0xF9 -> the screen object at
 ;          0xF400E0, whose +8 slot is `jp 0xF95796`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -37256,9 +37264,11 @@ Paint_SineWaveCheckMode:
 	pop XIX                                              ; F9588E  5c
 	ret                                                  ; F9588F  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_SineWaveCheckMode -- the LEAVE method of screen 0xFA's object
+; ScreenLeave_SineWaveCheckMode -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xFA, i.e. SCREEN ID 0xDA through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0xFA] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0xFA -> the screen object at
 ;          0xF400F0, whose +4 slot is `jp 0xF95890`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -37279,9 +37289,11 @@ Paint_SineWaveCheckMode:
 ScreenLeave_SineWaveCheckMode:
 	ret                                                  ; F95890  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_SineWaveCheckMode -- the BUTTON method of screen 0xFA's object
+; ScreenButton_SineWaveCheckMode -- the BUTTON method of the screen object at
+;          PanelScreen_VtableTable entry 0xFA, i.e. SCREEN ID 0xDA through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0xFA] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0xFA -> the screen object at
 ;          0xF400F0, whose +8 slot is `jp 0xF95891`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -37451,9 +37463,11 @@ Paint_PanelSwLedCheck:
 	calr 0xfcae                                          ; F959B9  1e ae fc
 	ret                                                  ; F959BC  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_PanelSwLedCheck -- the LEAVE method of screen 0xFB's object
+; ScreenLeave_PanelSwLedCheck -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0xFB, i.e. SCREEN ID 0xDB through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0xFB] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0xFB -> the screen object at
 ;          0xF40100, whose +4 slot is `jp 0xF959BD`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -37474,9 +37488,11 @@ Paint_PanelSwLedCheck:
 ScreenLeave_PanelSwLedCheck:
 	ret                                                  ; F959BD  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_PanelSwLedCheck -- the BUTTON method of screen 0xFB's object
+; ScreenButton_PanelSwLedCheck -- the BUTTON method of the screen object at
+;          PanelScreen_VtableTable entry 0xFB, i.e. SCREEN ID 0xDB through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0xFB] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0xFB -> the screen object at
 ;          0xF40100, whose +8 slot is `jp 0xF959BE`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -41160,9 +41176,11 @@ Paint_SysexBulkDump_Entry:
 	calr 0x01d4                                          ; F9982D  1e d4 01
 	ret                                                  ; F99830  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_SysexBulkDump_Entry -- the LEAVE method of screen 0x99's object
+; ScreenLeave_SysexBulkDump_Entry -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x99, i.e. SCREEN ID 0x79 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x99] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x99 -> the screen object at
 ;          0xF41710, whose +4 slot is `jp 0xF99831`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -41182,10 +41200,11 @@ ScreenLeave_SysexBulkDump_Entry:
 	calr 0x021a                                          ; F99831  1e 1a 02
 	ret                                                  ; F99834  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_SysexBulkDump_Entry -- the BUTTON method of screen 0x99's
-;          object
+; ScreenButton_SysexBulkDump_Entry -- the BUTTON method of the screen object
+;          at PanelScreen_VtableTable entry 0x99, i.e. SCREEN ID 0x79 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x99] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x99 -> the screen object at
 ;          0xF41710, whose +8 slot is `jp 0xF99835`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -41224,10 +41243,11 @@ Paint_GeneralMidiMode_Entry:
 	calr 0x04c5                                          ; F99844  1e c5 04
 	ret                                                  ; F99847  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_GeneralMidiMode_Entry -- the LEAVE method of screen 0x9A's
-;          object
+; ScreenLeave_GeneralMidiMode_Entry -- the LEAVE method of the screen object
+;          at PanelScreen_VtableTable entry 0x9A, i.e. SCREEN ID 0x7A through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x9A] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x9A -> the screen object at
 ;          0xF41720, whose +4 slot is `jp 0xF99848`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -41247,10 +41267,11 @@ ScreenLeave_GeneralMidiMode_Entry:
 	calr 0x057b                                          ; F99848  1e 7b 05
 	ret                                                  ; F9984B  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_GeneralMidiMode_Entry -- the BUTTON method of screen 0x9A's
-;          object
+; ScreenButton_GeneralMidiMode_Entry -- the BUTTON method of the screen
+;          object at PanelScreen_VtableTable entry 0x9A, i.e. SCREEN ID 0x7A
+;          through PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x9A] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x9A -> the screen object at
 ;          0xF41720, whose +8 slot is `jp 0xF9984C`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -42472,9 +42493,11 @@ Paint_MidiTotalMode:
 	unlk XIZ                                             ; F9A26A  ee 0d
 	ret                                                  ; F9A26C  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_MidiTotalMode -- the LEAVE method of screen 0x9D's object
+; ScreenLeave_MidiTotalMode -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x9D, i.e. SCREEN ID 0x7D through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x9D] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x9D -> the screen object at
 ;          0xF4173C, whose +4 slot is `jp 0xF9A26D`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -42497,9 +42520,11 @@ ScreenLeave_MidiTotalMode:
 sub_F9A26E:
 	ret                                                  ; F9A26E  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_MidiTotalMode -- the BUTTON method of screen 0x9D's object
+; ScreenButton_MidiTotalMode -- the BUTTON method of the screen object at
+;          PanelScreen_VtableTable entry 0x9D, i.e. SCREEN ID 0x7D through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x9D] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x9D -> the screen object at
 ;          0xF4173C, whose +8 slot is `jp 0xF9A26F`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -43089,9 +43114,11 @@ sub_F9A73C:
 	inc 0,XSP                                            ; F9A751  ef 60
 	ret                                                  ; F9A753  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_MidiRealtimeMessages -- the LEAVE method of screen 0x95's object
+; ScreenLeave_MidiRealtimeMessages -- the LEAVE method of the screen object
+;          at PanelScreen_VtableTable entry 0x95, i.e. SCREEN ID 0x75 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x95] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x95 -> the screen object at
 ;          0xF41690, whose +4 slot is `jp 0xF9A754`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -43114,10 +43141,11 @@ ScreenLeave_MidiRealtimeMessages:
 sub_F9A755:
 	ret                                                  ; F9A755  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_MidiRealtimeMessages -- the BUTTON method of screen 0x95's
-;          object
+; ScreenButton_MidiRealtimeMessages -- the BUTTON method of the screen object
+;          at PanelScreen_VtableTable entry 0x95, i.e. SCREEN ID 0x75 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x95] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x95 -> the screen object at
 ;          0xF41690, whose +8 slot is `jp 0xF9A756`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -43435,10 +43463,11 @@ Paint_MidiInputOutputFilter:
 	unlk XIZ                                             ; F9AA4C  ee 0d
 	ret                                                  ; F9AA4E  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_MidiInputOutputFilter -- the LEAVE method of screen 0x9E's
-;          object
+; ScreenLeave_MidiInputOutputFilter -- the LEAVE method of the screen object
+;          at PanelScreen_VtableTable entry 0x9E, i.e. SCREEN ID 0x7E through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x9E] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x9E -> the screen object at
 ;          0xF4174C, whose +4 slot is `jp 0xF9AA4F`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -43461,10 +43490,11 @@ ScreenLeave_MidiInputOutputFilter:
 sub_F9AA50:
 	ret                                                  ; F9AA50  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_MidiInputOutputFilter -- the BUTTON method of screen 0x9E's
-;          object
+; ScreenButton_MidiInputOutputFilter -- the BUTTON method of the screen
+;          object at PanelScreen_VtableTable entry 0x9E, i.e. SCREEN ID 0x7E
+;          through PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x9E] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x9E -> the screen object at
 ;          0xF4174C, whose +8 slot is `jp 0xF9AA51`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -44148,9 +44178,11 @@ Paint_MidiOutProgramChange:
 	unlk XIZ                                             ; F9B05B  ee 0d
 	ret                                                  ; F9B05D  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_MidiOutProgramChange -- the LEAVE method of screen 0x9F's object
+; ScreenLeave_MidiOutProgramChange -- the LEAVE method of the screen object
+;          at PanelScreen_VtableTable entry 0x9F, i.e. SCREEN ID 0x7F through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x9F] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x9F -> the screen object at
 ;          0xF4175C, whose +4 slot is `jp 0xF9B05E`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -44173,10 +44205,11 @@ ScreenLeave_MidiOutProgramChange:
 sub_F9B05F:
 	ret                                                  ; F9B05F  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_MidiOutProgramChange -- the BUTTON method of screen 0x9F's
-;          object
+; ScreenButton_MidiOutProgramChange -- the BUTTON method of the screen object
+;          at PanelScreen_VtableTable entry 0x9F, i.e. SCREEN ID 0x7F through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x9F] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x9F -> the screen object at
 ;          0xF4175C, whose +8 slot is `jp 0xF9B060`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -152219,9 +152252,12 @@ sub_FE805E:
 sub_FE805F:
 	ret                                                  ; FE805F  0e
 ; ---------------------------------------------------------------------
-; ScreenButton_Sequencer -- the BUTTON method of screen 0x24's object
+; ScreenButton_Sequencer -- the BUTTON method of the screen object at
+;          PanelScreen_VtableTable entry 0x24, i.e. SCREEN ID 0x04 through
+;          PanelScreen_VtableTable_ViewB -- and also mode index 0x24 of the
+;          other view, which overlaps here
 ;
-; Reached from: PanelScreen_VtableTable[0x24] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x24 -> the screen object at
 ;          0xF402AC, whose +8 slot is `jp 0xFE8060`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -152405,9 +152441,12 @@ Paint_Sequencer:
 	calr LCD_ScreenRedraw_End_Copy                                      ; FE8161  1e a1 ff
 	ret                                                  ; FE8164  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_Sequencer -- the LEAVE method of screen 0x24's object
+; ScreenLeave_Sequencer -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x24, i.e. SCREEN ID 0x04 through
+;          PanelScreen_VtableTable_ViewB -- and also mode index 0x24 of the
+;          other view, which overlaps here
 ;
-; Reached from: PanelScreen_VtableTable[0x24] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x24 -> the screen object at
 ;          0xF402AC, whose +4 slot is `jp 0xFE8165`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -164474,7 +164513,8 @@ sub_FF431B:
 ;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
-; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable entry
+;          0x60, i.e. SCREEN ID 0x40 through PanelScreen_VtableTable_ViewB
 ;          names this reader as its BUTTON method, and its Enter method
 ;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
 ;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
@@ -164518,7 +164558,8 @@ PanelButtonDispatch_DiskMenu:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable entry
+;          0x60, i.e. SCREEN ID 0x40 through PanelScreen_VtableTable_ViewB
 ;          names this reader as its BUTTON method, and its Enter method
 ;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
 ;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
@@ -164560,7 +164601,8 @@ LcdKeyRow1_DiskMenu:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable entry
+;          0x60, i.e. SCREEN ID 0x40 through PanelScreen_VtableTable_ViewB
 ;          names this reader as its BUTTON method, and its Enter method
 ;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
 ;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
@@ -164602,7 +164644,8 @@ LcdKeyRow2_DiskMenu:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable entry
+;          0x60, i.e. SCREEN ID 0x40 through PanelScreen_VtableTable_ViewB
 ;          names this reader as its BUTTON method, and its Enter method
 ;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
 ;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
@@ -164641,7 +164684,8 @@ LcdKeyRow3_DiskMenu:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable entry
+;          0x60, i.e. SCREEN ID 0x40 through PanelScreen_VtableTable_ViewB
 ;          names this reader as its BUTTON method, and its Enter method
 ;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
 ;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
@@ -164679,7 +164723,8 @@ LcdKeyRow4_DiskMenu:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable entry
+;          0x60, i.e. SCREEN ID 0x40 through PanelScreen_VtableTable_ViewB
 ;          names this reader as its BUTTON method, and its Enter method
 ;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
 ;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
@@ -164867,9 +164912,11 @@ Paint_MidiFileDirectPlay:
 	pop XIX                                              ; FF457A  5c
 	ret                                                  ; FF457B  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_MidiFileDirectPlay -- the LEAVE method of screen 0x65's object
+; ScreenLeave_MidiFileDirectPlay -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x65, i.e. SCREEN ID 0x45 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x65] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x65 -> the screen object at
 ;          0xF42274, whose +4 slot is `jp 0xFF457C`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -164910,7 +164957,8 @@ ScreenLeave_MidiFileDirectPlay:
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
 ; Screen:   MidiFileDirectPlay -- the screen object at
-;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x65, i.e. SCREEN ID 0x45 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4408 as its ENTER method, and that address carries
 ;          the label Paint_MidiFileDirectPlay -- a name an earlier round
 ;          derived from the screen's own text.
@@ -164954,7 +165002,8 @@ PanelButtonDispatch_MidiFileDirectPlay:
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Screen:   MidiFileDirectPlay -- the screen object at
-;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x65, i.e. SCREEN ID 0x45 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4408 as its ENTER method, and that address carries
 ;          the label Paint_MidiFileDirectPlay -- a name an earlier round
 ;          derived from the screen's own text.
@@ -165000,7 +165049,8 @@ LcdKeyRow1_MidiFileDirectPlay:
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Screen:   MidiFileDirectPlay -- the screen object at
-;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x65, i.e. SCREEN ID 0x45 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4408 as its ENTER method, and that address carries
 ;          the label Paint_MidiFileDirectPlay -- a name an earlier round
 ;          derived from the screen's own text.
@@ -165037,7 +165087,8 @@ LcdKeyRow2_MidiFileDirectPlay:
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Screen:   MidiFileDirectPlay -- the screen object at
-;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x65, i.e. SCREEN ID 0x45 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4408 as its ENTER method, and that address carries
 ;          the label Paint_MidiFileDirectPlay -- a name an earlier round
 ;          derived from the screen's own text.
@@ -165077,7 +165128,8 @@ LcdKeyRow3_MidiFileDirectPlay:
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Screen:   MidiFileDirectPlay -- the screen object at
-;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x65, i.e. SCREEN ID 0x45 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4408 as its ENTER method, and that address carries
 ;          the label Paint_MidiFileDirectPlay -- a name an earlier round
 ;          derived from the screen's own text.
@@ -165149,7 +165201,8 @@ LcdKeyRow4_MidiFileDirectPlay:
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Screen:   MidiFileDirectPlay -- the screen object at
-;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x65, i.e. SCREEN ID 0x45 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4408 as its ENTER method, and that address carries
 ;          the label Paint_MidiFileDirectPlay -- a name an earlier round
 ;          derived from the screen's own text.
@@ -165221,7 +165274,8 @@ LcdKeyRow5_MidiFileDirectPlay:
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Screen:   MidiFileDirectPlay -- the screen object at
-;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x65, i.e. SCREEN ID 0x45 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4408 as its ENTER method, and that address carries
 ;          the label Paint_MidiFileDirectPlay -- a name an earlier round
 ;          derived from the screen's own text.
@@ -165492,9 +165546,11 @@ sub_FF4936:
 	unlk XIZ                                             ; FF4983  ee 0d
 	ret                                                  ; FF4985  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_DiskL0adFile -- the LEAVE method of screen 0x67's object
+; ScreenLeave_DiskL0adFile -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x67, i.e. SCREEN ID 0x47 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x67] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x67 -> the screen object at
 ;          0xF423A0, whose +4 slot is `jp 0xFF4986`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -165531,8 +165587,9 @@ ScreenLeave_DiskL0adFile:
 ;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
-; Screen:   DiskL0adFile -- the screen object at
-;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+; Screen:   DiskL0adFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x67, i.e. SCREEN ID 0x47 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4786 as its ENTER method, and that address carries
 ;          the label Paint_DiskL0adFile -- a name an earlier round derived
 ;          from the screen's own text.
@@ -165574,8 +165631,9 @@ PanelButtonDispatch_DiskL0adFile:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskL0adFile -- the screen object at
-;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+; Screen:   DiskL0adFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x67, i.e. SCREEN ID 0x47 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4786 as its ENTER method, and that address carries
 ;          the label Paint_DiskL0adFile -- a name an earlier round derived
 ;          from the screen's own text.
@@ -165675,8 +165733,9 @@ LcdKeyRow1_DiskL0adFile:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskL0adFile -- the screen object at
-;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+; Screen:   DiskL0adFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x67, i.e. SCREEN ID 0x47 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4786 as its ENTER method, and that address carries
 ;          the label Paint_DiskL0adFile -- a name an earlier round derived
 ;          from the screen's own text.
@@ -165704,8 +165763,9 @@ LcdKeyRow2_DiskL0adFile:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskL0adFile -- the screen object at
-;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+; Screen:   DiskL0adFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x67, i.e. SCREEN ID 0x47 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4786 as its ENTER method, and that address carries
 ;          the label Paint_DiskL0adFile -- a name an earlier round derived
 ;          from the screen's own text.
@@ -165748,8 +165808,9 @@ LcdKeyRow3_DiskL0adFile:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskL0adFile -- the screen object at
-;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+; Screen:   DiskL0adFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x67, i.e. SCREEN ID 0x47 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4786 as its ENTER method, and that address carries
 ;          the label Paint_DiskL0adFile -- a name an earlier round derived
 ;          from the screen's own text.
@@ -166077,8 +166138,9 @@ LcdKeyRow4_DiskL0adFile:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskL0adFile -- the screen object at
-;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+; Screen:   DiskL0adFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x67, i.e. SCREEN ID 0x47 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4786 as its ENTER method, and that address carries
 ;          the label Paint_DiskL0adFile -- a name an earlier round derived
 ;          from the screen's own text.
@@ -166396,8 +166458,9 @@ LcdKeyRow5_DiskL0adFile:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskL0adFile -- the screen object at
-;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+; Screen:   DiskL0adFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x67, i.e. SCREEN ID 0x47 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4786 as its ENTER method, and that address carries
 ;          the label Paint_DiskL0adFile -- a name an earlier round derived
 ;          from the screen's own text.
@@ -166642,9 +166705,11 @@ sub_FF5118:
 	unlk XIZ                                             ; FF5209  ee 0d
 	ret                                                  ; FF520B  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_MidiFileL0ad -- the LEAVE method of screen 0x69's object
+; ScreenLeave_MidiFileL0ad -- the LEAVE method of the screen object at
+;          PanelScreen_VtableTable entry 0x69, i.e. SCREEN ID 0x49 through
+;          PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x69] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x69 -> the screen object at
 ;          0xF42400, whose +4 slot is `jp 0xFF520C`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -166685,8 +166750,9 @@ ScreenLeave_MidiFileL0ad:
 ;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
-; Screen:   MidiFileL0ad -- the screen object at
-;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+; Screen:   MidiFileL0ad -- the screen object at PanelScreen_VtableTable
+;          entry 0x69, i.e. SCREEN ID 0x49 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4FFA as its ENTER method, and that address carries
 ;          the label Paint_MidiFileL0ad -- a name an earlier round derived
 ;          from the screen's own text.
@@ -166728,8 +166794,9 @@ PanelButtonDispatch_MidiFileL0ad:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileL0ad -- the screen object at
-;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+; Screen:   MidiFileL0ad -- the screen object at PanelScreen_VtableTable
+;          entry 0x69, i.e. SCREEN ID 0x49 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4FFA as its ENTER method, and that address carries
 ;          the label Paint_MidiFileL0ad -- a name an earlier round derived
 ;          from the screen's own text.
@@ -166806,8 +166873,9 @@ LcdKeyRow1_MidiFileL0ad:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileL0ad -- the screen object at
-;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+; Screen:   MidiFileL0ad -- the screen object at PanelScreen_VtableTable
+;          entry 0x69, i.e. SCREEN ID 0x49 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4FFA as its ENTER method, and that address carries
 ;          the label Paint_MidiFileL0ad -- a name an earlier round derived
 ;          from the screen's own text.
@@ -166842,8 +166910,9 @@ LcdKeyRow2_MidiFileL0ad:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileL0ad -- the screen object at
-;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+; Screen:   MidiFileL0ad -- the screen object at PanelScreen_VtableTable
+;          entry 0x69, i.e. SCREEN ID 0x49 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4FFA as its ENTER method, and that address carries
 ;          the label Paint_MidiFileL0ad -- a name an earlier round derived
 ;          from the screen's own text.
@@ -166871,8 +166940,9 @@ LcdKeyRow3_MidiFileL0ad:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileL0ad -- the screen object at
-;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+; Screen:   MidiFileL0ad -- the screen object at PanelScreen_VtableTable
+;          entry 0x69, i.e. SCREEN ID 0x49 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4FFA as its ENTER method, and that address carries
 ;          the label Paint_MidiFileL0ad -- a name an earlier round derived
 ;          from the screen's own text.
@@ -166967,8 +167037,9 @@ LcdKeyRow4_MidiFileL0ad:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileL0ad -- the screen object at
-;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+; Screen:   MidiFileL0ad -- the screen object at PanelScreen_VtableTable
+;          entry 0x69, i.e. SCREEN ID 0x49 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4FFA as its ENTER method, and that address carries
 ;          the label Paint_MidiFileL0ad -- a name an earlier round derived
 ;          from the screen's own text.
@@ -167058,8 +167129,9 @@ LcdKeyRow5_MidiFileL0ad:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileL0ad -- the screen object at
-;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+; Screen:   MidiFileL0ad -- the screen object at PanelScreen_VtableTable
+;          entry 0x69, i.e. SCREEN ID 0x49 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF4FFA as its ENTER method, and that address carries
 ;          the label Paint_MidiFileL0ad -- a name an earlier round derived
 ;          from the screen's own text.
@@ -167089,8 +167161,9 @@ sub_FF5489:
 ;          width-1), and `add XBC,0x00FF3A00` at 0xFF5499 names the table.
 ;          The entry is CALLED: a return address is pushed before
 ;          `jp (XBC)`.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its ENTER
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its ENTER
 ;          method, and its BUTTON method is that screen's control table.
 ; Was `sub_FF548A`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
@@ -167365,8 +167438,9 @@ sub_FF571F:
 ;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167546,8 +167620,9 @@ PanelButtonDispatch_DiskSaveFile:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167588,8 +167663,9 @@ LcdKeyRow1_DiskSaveFile_Page0:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167628,8 +167704,9 @@ LcdKeyRow4_DiskSaveFile_Page0:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167686,8 +167763,9 @@ ExitKey_DiskSaveFile_Page0:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167766,8 +167844,9 @@ sub_FF5A2D:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167811,8 +167890,9 @@ LcdKeyRow2_DiskSaveFile_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167846,8 +167926,9 @@ LcdKeyRow3_DiskSaveFile_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167877,8 +167958,9 @@ LcdKeyRow4_DiskSaveFile_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167907,8 +167989,9 @@ LcdKeyRow5_DiskSaveFile_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167941,8 +168024,9 @@ ExitKey_DiskSaveFile_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -167975,8 +168059,9 @@ LcdKeyRow3_DiskSaveFile_Page2:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -168008,8 +168093,9 @@ LcdKeyRow4_DiskSaveFile_Page2:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -168043,8 +168129,9 @@ ExitKey_DiskSaveFile_Page2:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -168081,8 +168168,9 @@ LcdKeyRow1_DiskSaveFile_Page3:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -168116,8 +168204,9 @@ ExitKey_DiskSaveFile_Pages3_4:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -168165,8 +168254,9 @@ LcdKeyRow1_DiskSaveFile_Page4:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -168218,8 +168308,9 @@ LcdKeyRow3_DiskSaveFile_Page5:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -168251,8 +168342,9 @@ LcdKeyRow4_DiskSaveFile_Page5:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   DiskSaveFile -- the screen object at
-;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+; Screen:   DiskSaveFile -- the screen object at PanelScreen_VtableTable
+;          entry 0x6C, i.e. SCREEN ID 0x4C through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its Enter method is the page dispatcher
 ;          PageDispatch_FF3A00, and four of that table's six pages are
 ;          Paint_DiskSaveFile.
@@ -168282,8 +168374,9 @@ sub_FF5C3D:
 ;          width-1), and `add XBC,0x00FF3D29` at 0xFF5C4D names the table.
 ;          The entry is CALLED: a return address is pushed before
 ;          `jp (XBC)`.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its ENTER
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its ENTER
 ;          method, and its BUTTON method is that screen's control table.
 ; Was `sub_FF5C3E`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
@@ -168519,8 +168612,9 @@ sub_FF5EAE:
 ;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -168692,8 +168786,9 @@ sub_FF5FA0:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -168734,8 +168829,9 @@ LcdKeyRow1_MidiFileSave_Page0:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -168777,8 +168873,9 @@ LcdKeyRow4_MidiFileSave_Page0:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -168812,8 +168909,9 @@ ExitKey_MidiFileSave_Pages0_1_2_3:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -168886,8 +168984,9 @@ LcdKeyRow1_MidiFileSave_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -168926,8 +169025,9 @@ LcdKeyRow2_MidiFileSave_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -168966,8 +169066,9 @@ LcdKeyRow3_MidiFileSave_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169079,8 +169180,9 @@ LcdKeyRow4_MidiFileSave_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169285,8 +169387,9 @@ sub_FF63FF:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169329,8 +169432,9 @@ LcdKeyRow3_MidiFileSave_Page2:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169363,8 +169467,9 @@ LcdKeyRow4_MidiFileSave_Page2:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169420,8 +169525,9 @@ LcdKeyRow3_MidiFileSave_Page3:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169489,10 +169595,11 @@ Paint_FloppyDiskFormatSelectType:
 	add XSP,0x00000014                                   ; FF6548  ef c8 14 00 00 00
 	ret                                                  ; FF654E  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_FloppyDiskFormatSelectType -- the LEAVE method of screen 0x70's
-;          object
+; ScreenLeave_FloppyDiskFormatSelectType -- the LEAVE method of the screen
+;          object at PanelScreen_VtableTable entry 0x70, i.e. SCREEN ID 0x50
+;          through PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x70] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x70 -> the screen object at
 ;          0xF423D0, whose +4 slot is `jp 0xFF654F`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -169527,7 +169634,8 @@ ScreenLeave_FloppyDiskFormatSelectType:
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
 ; Screen:   FloppyDiskFormatSelectType -- the screen object at
-;          PanelScreen_VtableTable[0x70] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x70, i.e. SCREEN ID 0x50 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF6512 as its ENTER method, and that address carries
 ;          the label Paint_FloppyDiskFormatSelectType -- a name an earlier
 ;          round derived from the screen's own text.
@@ -169592,8 +169700,9 @@ PanelButtonDispatch_FloppyDiskFormatSelectType:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169628,8 +169737,9 @@ LcdKeyRow3_MidiFileSave_Page4:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169663,8 +169773,9 @@ LcdKeyRow4_MidiFileSave_Page4:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169773,10 +169884,11 @@ Paint_FloppyDiskFormatAreYouSure:
 	pop XIX                                              ; FF66A7  5c
 	ret                                                  ; FF66A8  0e
 ; ---------------------------------------------------------------------
-; ScreenLeave_FloppyDiskFormatAreYouSure -- the LEAVE method of screen 0x71's
-;          object
+; ScreenLeave_FloppyDiskFormatAreYouSure -- the LEAVE method of the screen
+;          object at PanelScreen_VtableTable entry 0x71, i.e. SCREEN ID 0x51
+;          through PanelScreen_VtableTable_ViewB
 ;
-; Reached from: PanelScreen_VtableTable[0x71] -> the screen object at
+; Reached from: PanelScreen_VtableTable entry 0x71 -> the screen object at
 ;          0xF423F0, whose +4 slot is `jp 0xFF66A9`. It is reached from
 ;          nowhere else: no other live screen object names this address in
 ;          either of its two callable slots.
@@ -169811,7 +169923,8 @@ ScreenLeave_FloppyDiskFormatAreYouSure:
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
 ; Screen:   FloppyDiskFormatAreYouSure -- the screen object at
-;          PanelScreen_VtableTable[0x71] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x71, i.e. SCREEN ID 0x51 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method and 0xFF6613 as its ENTER method, and that address carries
 ;          the label Paint_FloppyDiskFormatAreYouSure -- a name an earlier
 ;          round derived from the screen's own text.
@@ -169854,8 +169967,9 @@ PanelButtonDispatch_FloppyDiskFormatAreYouSure:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169890,8 +170004,9 @@ LcdKeyRow3_MidiFileSave_Page5:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169923,8 +170038,9 @@ LcdKeyRow4_MidiFileSave_Page5:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   MidiFileSave -- the screen object at
-;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+; Screen:   MidiFileSave -- the screen object at PanelScreen_VtableTable
+;          entry 0x6E, i.e. SCREEN ID 0x4E through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58A21, whose first
 ;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
@@ -169954,8 +170070,9 @@ sub_FF672C:
 ;          width-1), and `add XBC,0x00FF4041` at 0xFF673C names the table.
 ;          The entry is CALLED: a return address is pushed before
 ;          `jp (XBC)`.
-; Screen:   L0adSingleS0und -- the screen object at
-;          PanelScreen_VtableTable[0x74] names this reader as its ENTER
+; Screen:   L0adSingleS0und -- the screen object at PanelScreen_VtableTable
+;          entry 0x74, i.e. SCREEN ID 0x54 through
+;          PanelScreen_VtableTable_ViewB names this reader as its ENTER
 ;          method, and its BUTTON method is that screen's control table.
 ; Was `sub_FF672D`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
@@ -170117,8 +170234,9 @@ sub_FF68CA:
 ;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
-; Screen:   L0adSingleS0und -- the screen object at
-;          PanelScreen_VtableTable[0x74] names this reader as its BUTTON
+; Screen:   L0adSingleS0und -- the screen object at PanelScreen_VtableTable
+;          entry 0x74, i.e. SCREEN ID 0x54 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58C53, whose first
 ;          record reads "LOAD SINGLE SOUND".
 ; Was `sub_FF68D8`, named by notes/prom_a_naming_wave8_apply.py.
@@ -170371,8 +170489,9 @@ PanelButtonDispatch_L0adSingleS0und:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   L0adSingleS0und -- the screen object at
-;          PanelScreen_VtableTable[0x74] names this reader as its BUTTON
+; Screen:   L0adSingleS0und -- the screen object at PanelScreen_VtableTable
+;          entry 0x74, i.e. SCREEN ID 0x54 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58C53, whose first
 ;          record reads "LOAD SINGLE SOUND".
 ; Unknown:  what this screen does with the button.
@@ -170664,8 +170783,9 @@ LcdKeyRow1_L0adSingleS0und_Page1:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   L0adSingleS0und -- the screen object at
-;          PanelScreen_VtableTable[0x74] names this reader as its BUTTON
+; Screen:   L0adSingleS0und -- the screen object at PanelScreen_VtableTable
+;          entry 0x74, i.e. SCREEN ID 0x54 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58C53, whose first
 ;          record reads "LOAD SINGLE SOUND".
 ; Unknown:  what this screen does with the button.
@@ -170708,8 +170828,9 @@ LcdKeyRow1_L0adSingleS0und_Page0:
 ;          SLOT_CONTROL slot for slot; what is new here is only that THIS
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Screen:   L0adSingleS0und -- the screen object at
-;          PanelScreen_VtableTable[0x74] names this reader as its BUTTON
+; Screen:   L0adSingleS0und -- the screen object at PanelScreen_VtableTable
+;          entry 0x74, i.e. SCREEN ID 0x54 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 0 draws the list at 0xF58C53, whose first
 ;          record reads "LOAD SINGLE SOUND".
 ; Unknown:  what this screen does with the button.
@@ -170739,7 +170860,8 @@ sub_FF6DB6:
 ;          The entry is CALLED: a return address is pushed before
 ;          `jp (XBC)`.
 ; Screen:   L0adSingleC0mbination -- the screen object at
-;          PanelScreen_VtableTable[0x73] names this reader as its ENTER
+;          PanelScreen_VtableTable entry 0x73, i.e. SCREEN ID 0x53 through
+;          PanelScreen_VtableTable_ViewB names this reader as its ENTER
 ;          method, and its BUTTON method is that screen's control table.
 ; Was `sub_FF6DB7`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
@@ -170873,7 +170995,8 @@ sub_FF6F13:
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
 ; Screen:   L0adSingleC0mbination -- the screen object at
-;          PanelScreen_VtableTable[0x73] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x73, i.e. SCREEN ID 0x53 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 1 draws the list at 0xF58F55, whose first
 ;          record reads "LOAD SINGLE COMBINATION".
 ; Was `sub_FF6F21`, named by notes/prom_a_naming_wave8_apply.py.
@@ -170916,7 +171039,8 @@ PanelButtonDispatch_L0adSingleC0mbination:
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Screen:   L0adSingleC0mbination -- the screen object at
-;          PanelScreen_VtableTable[0x73] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x73, i.e. SCREEN ID 0x53 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 1 draws the list at 0xF58F55, whose first
 ;          record reads "LOAD SINGLE COMBINATION".
 ; Unknown:  what this screen does with the button.
@@ -171037,7 +171161,8 @@ LcdKeyRow1_L0adSingleC0mbination_Page1:
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Screen:   L0adSingleC0mbination -- the screen object at
-;          PanelScreen_VtableTable[0x73] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x73, i.e. SCREEN ID 0x53 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 1 draws the list at 0xF58F55, whose first
 ;          record reads "LOAD SINGLE COMBINATION".
 ; Unknown:  what this screen does with the button.
@@ -171081,7 +171206,8 @@ LcdKeyRow1_L0adSingleC0mbination_Page0:
 ;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Screen:   L0adSingleC0mbination -- the screen object at
-;          PanelScreen_VtableTable[0x73] names this reader as its BUTTON
+;          PanelScreen_VtableTable entry 0x73, i.e. SCREEN ID 0x53 through
+;          PanelScreen_VtableTable_ViewB names this reader as its BUTTON
 ;          method, and its page 1 draws the list at 0xF58F55, whose first
 ;          record reads "LOAD SINGLE COMBINATION".
 ; Unknown:  what this screen does with the button.
