@@ -74,6 +74,16 @@ python3 notes/prom_b_ram_and_device_census.py --lowram
 The driver has six `noprw()` entries on CPU 1 with no part identified:
 `0x790000`, `0x7A0000`, `0x7B0004`, `0x7C0000`, `0x7E0008`, `0x7F0000`.
 
+⚠ **Two of those six are no longer unidentified, and the answer came from
+prom_a, not here.** Lane N1's `notes/FINDINGS-prom_a-for-the-mame-driver.md`
+establishes `0x7A0000` and `0x7B0004`/`0x7B0005` as **one uPD765-family floppy
+controller** — `0x7A0000` its data register on the micro-DMA-0 path,
+`0x7B0004`/`5` its status and result path, `INT5` (`INT5_Dev7B_Receive`,
+`0xFE6866`) its interrupt. Nothing in prom_b contradicts that, and nothing in
+prom_b could confirm it either, for the reason below. The remaining four are
+`0x790000` (the SED1330, already identified in the driver's own TODO),
+`0x7C0000`, `0x7E0008` and `0x7F0000`.
+
 **Not one of them appears anywhere in prom_b**, and neither does any other
 address in `0x700000-0x7FFFFF`. Over the converted 80.2 % of the image every one
 of the 130 distinct addresses at or above `0x600000` that prom_b names — 1,194
@@ -94,7 +104,18 @@ This is a **negative result and it is useful**: prom_b is the UI, text and
 table half of CPU 1's image and it drives no hardware. Every device on CPU 1 is
 reached through prom_a, so the TODO list's "identify the devices on both
 processors' CS0 areas" has nothing to gain from this image and the effort
-belongs in prom_a and prom_c.
+belongs in prom_a and prom_c — which is where lane N1 found the floppy
+controller.
+
+⚠ **And the converse caution, from N1: prom_b does not own all the UI text.**
+prom_a carries substantial text of its own — the SYSTEM menus at
+`0xFA1F00-0xFA4E58`, DSP EFFECT / SOUND EDIT at `0xFC40F4`, SEQUENCER at
+`0xFF0E26`, disk volume labels at `0xFE7026`. So "prom_b holds most of the UI
+text" is a rough division of labour and not a rule: a string found in prom_b may
+have a twin in prom_a, and a text-drawing routine in prom_b may be drawing a
+table that lives there. Every literal the `MsgLine_*` round named was checked to
+be in `0xF00000-0xF7FFFF` — the addresses are in each header — but the next lane
+should not assume it.
 
 ## 3. The LCD text layer, with pixel coordinates
 
