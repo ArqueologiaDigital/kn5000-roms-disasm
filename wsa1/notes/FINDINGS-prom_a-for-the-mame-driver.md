@@ -176,7 +176,33 @@ rectangle, 0x0E-0x15 the box/line services, 0x0C/0x0D **which of the three
 layers are visible**, and ten fonts with three glyph blitters at
 `0xF8F039-0xF8F3A3`. Three 320x240 bitmaps live at `0xFF8000-0xFFF080`.
 
-## 9. Two smaller ones
+## 9. ★ How to make the emulated machine touch the floppy controller
+
+Gap V of `notes/WSA1-EMULATION-DISASM-GAPS.md` records a measured negative: a
+200-second boot and a sweep of all 88 declared panel positions produce **zero**
+accesses to `0x7A0000` / `0x7B0004` / `0x7B0005`. The disk path is not one press
+away — it is a menu, and the menu is now named
+(`notes/FINDINGS-prom_a-panel-control-map.md` §3c):
+
+* the **DISK MENU** is the screen object at `PanelScreen_VtableTable` entry
+  `0x60`, i.e. **screen id 0x40** through `PanelScreen_VtableTable_ViewB`;
+* its **BUTTON** method is `PanelButtonDispatch_DiskMenu` (prom_a `0xFF431C`),
+  and its live controls are the **five LCD-row keys and EXIT** — nothing else on
+  the panel does anything on that screen;
+* each row handler writes a screen id to `(0x2070)` with `(0x2071) = 0x80`;
+  the ids are literal bytes at `0xFF4359`, `0xFF435E`, `0xFF4367`, `0xFF4385`,
+  `0xFF438A`, `0xFF4393`, `0xFF43AC`, `0xFF43B9`, `0xFF43D3`, `0xFF43E0`, and
+  they lead to **DiskL0adFile, DiskSaveFile, MidiFileL0ad, MidiFileSave,
+  MidiFileDirectPlay, L0adSingleS0und, L0adSingleC0mbination** and
+  **FloppyDiskFormatSelectType**;
+* ⚠ two of the eight slots are **inert on the rack**: rows 3 and 4's second key
+  is gated on `cp (0xC4),0x01`, i.e. variant 1.
+
+So a driver-side test that wants the FDC on the bus should drive the machine to
+screen id `0x40` and then press an LCD-row key — and, because that key's two
+sides differ, both sides are worth trying.
+
+## 10. Two smaller ones
 
 * **0x7F0000's slot encoding is `(n << 5) | 0x10`**, eight writes per slot
   (`0xF8319A`), and prom_a `0xF85F59-0xF85FF8` treats the port as a **register
