@@ -111,15 +111,46 @@ Under this map that reads "this screen answers the five LCD-row keys and EXIT",
 which is what a WSA1 menu screen looks like. Under any other assignment of the
 code space it is a coincidence four sibling tables share.
 
-`notes/prom_a_naming_wave8_apply.py` then applies, all derived at run time and
-refusing anything ambiguous:
+### ★★ And each table's SCREEN, from the screen object
 
-* **8 renames** — the table readers, `sub_XXXXXX` -> `PanelButtonDispatch_<table>`,
-  each evidenced by its own `cp H,0x20` bound and `add XBC,0x00FFxxxx` base.
-* **6 renames + 59 new labels** — the handlers, in round 12's own vocabulary:
-  `LcdKeyRow1_FF3800`, `ExitKey_FF3A29_R0`, `SoftKeyCol3_FF3D39_R1`, … The
-  suffix is the table (and, for a multi-row table, the row set), because *which
-  screen* each table serves is still unknown.
+`PanelScreen_VtableTable` (prom_a `0xF86EC1`) holds 256 three-method screen
+objects — **+0 Enter, +4 Leave, +8 Button** — and that listing's own header
+establishes the three offsets from three different call sites. So:
+
+> **the screen whose BUTTON method is a reader is the screen that reader
+> serves, and the same object's ENTER method is what paints it.**
+
+The mapping comes out **one to one** — ten readers, ten screen ids, no reader
+named by two screens — which is asserted rather than assumed, because a
+many-to-one mapping would mean a table could not carry a screen name at all.
+Seven screens are then named by an *existing* label: their Enter method already
+carries a `Paint_*` name an earlier round derived from the screen's own text.
+
+| table | screen id | screen | how |
+|---|---|---|---|
+| `Dispatch_FF3800` | 0x60 | **DiskMenu** | Enter draws "DISK" / "MIDI FILE LOAD" / "LOAD", choosing on the model strap at 0xFF42EE — the site this module's banner already calls the disk menu |
+| `Dispatch_FF3880` | 0x65 | **MidiFileDirectPlay** | Enter **is** `Paint_MidiFileDirectPlay` |
+| `Dispatch_FF3900` | 0x67 | **DiskL0adFile** | Enter **is** `Paint_DiskL0adFile` |
+| `Dispatch_FF3980` | 0x69 | **MidiFileL0ad** | Enter **is** `Paint_MidiFileL0ad` |
+| `Dispatch_FF3A29` | 0x6C | **DiskSaveFile** | Enter is `PageDispatch_DiskSaveFile`, four of whose six pages are `Paint_DiskSaveFile` |
+| `Dispatch_FF3D39` | 0x6E | **MidiFileSave** | its pages draw the lists at 0xF58A21 "MIDI FILE SAVE : FILE NAMING" and 0xF59222 "MIDI FILE SAVE : FILE SELECTI0N" |
+| `Dispatch_FF3F39` | 0x70 | **FloppyDiskFormatSelectType** | Enter **is** `Paint_FloppyDiskFormatSelectType` |
+| `Dispatch_FF3FB9` | 0x71 | **FloppyDiskFormatAreYouSure** | Enter **is** `Paint_FloppyDiskFormatAreYouSure` |
+| `Dispatch_FF4049` | 0x74 | **L0adSingleS0und** | its page 0 draws the list at 0xF58C53, "LOAD SINGLE SOUND" |
+| `Dispatch_FF4151` | 0x73 | **L0adSingleC0mbination** | its page 1 draws the list at 0xF58F55, "LOAD SINGLE COMBINATION" |
+
+### The batch
+
+`notes/prom_a_naming_wave8_apply.py` derives all of it at run time and refuses
+anything ambiguous:
+
+* **14 readers** — `PanelButtonDispatch_<Screen>` for the ten that index with
+  the control code, `PageDispatch_<Screen>` for the four that index with the
+  page byte `(0x2229)` alone and take no argument. Giving one of *those* a
+  PanelButton name is the mistake the distinction exists to prevent.
+* **6 renames + 59 new labels** — the handlers, in round 12's exact form
+  `<Control>_<Screen>`: `LcdKeyRow1_DiskMenu`, `ExitKey_MidiFileL0ad`,
+  `SoftKeyCol3_MidiFileSave_Page1`, …
 * Fifty-nine of the sixty-five handler addresses **had no label at all**: the
   ROM's own table points at them and nothing in the listing named them.
 

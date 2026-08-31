@@ -164005,21 +164005,28 @@ sub_FF42CD:
 sub_FF431B:
 	ret                                                  ; FF431B  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF3800 -- run Dispatch_FF3800's handler for one PANEL
+; PanelButtonDispatch_DiskMenu -- run Dispatch_FF3800's handler for one PANEL
 ;          CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
 ; Evidence: `cp H,0x20` at 0xFF4324 bounds the index to the 32-code
-;          panel space that PanelButton_Route's `and L,0x1f`
+;          panel space PanelButton_Route's `and L,0x1f`
 ;          (0xF861AE) produces, and `add XBC,0x00FF3800` at 0xFF4332
-;          names the table.  The handler is CALLED, not jumped to:
-;          the reader pushes a return address before `jp (XBC)`.
+;          names the table.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+;          names this reader as its BUTTON method, and its Enter method
+;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
+;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
+;          between the last two on the model strap (0xC4) at 0xFF42EE -- the
+;          site this module's own banner already calls THE DISK MENU.
 ; Was `sub_FF431C`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF3800:
+PanelButtonDispatch_DiskMenu:
 	link XIZ,0x0000                                      ; FF431C  ee 0c 00 00
 	pushw hl                                             ; FF4320  2b
 	ld H,(XIZ+0x08)                                      ; FF4321  8e 08 26
@@ -164040,27 +164047,30 @@ PanelButtonDispatch_FF3800:
 	unlk XIZ                                             ; FF4344  ee 0d
 	ret                                                  ; FF4346  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3800 -- what Dispatch_FF3800 runs for panel control 0x08
+; LcdKeyRow1_DiskMenu -- what Dispatch_FF3800 runs for panel control 0x08
 ;
-; Reached from: Dispatch_FF3800 entry [8], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3800 entry [8] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+;          names this reader as its BUTTON method, and its Enter method
+;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
+;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
+;          between the last two on the model strap (0xC4) at 0xFF42EE -- the
+;          site this module's own banner already calls THE DISK MENU.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3800:
+LcdKeyRow1_DiskMenu:
 	link XIZ,0x0000                                      ; FF4347  ee 0c 00 00
 	push XIX                                             ; FF434B  3c
 	lda_d16 xix, (0x2070)                                ; FF434C  f1 70 20 34
@@ -164080,26 +164090,29 @@ LcdKeyRow1_FF3800:
 	unlk XIZ                                             ; FF4370  ee 0d
 	ret                                                  ; FF4372  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_FF3800 -- what Dispatch_FF3800 runs for panel control 0x09
+; LcdKeyRow2_DiskMenu -- what Dispatch_FF3800 runs for panel control 0x09
 ;
-; Reached from: Dispatch_FF3800 entry [9], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x09 is the LCD row 2 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3800 entry [9] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x09 is the LCD row 2 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+;          names this reader as its BUTTON method, and its Enter method
+;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
+;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
+;          between the last two on the model strap (0xC4) at 0xFF42EE -- the
+;          site this module's own banner already calls THE DISK MENU.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow2_FF3800:
+LcdKeyRow2_DiskMenu:
 	link XIZ,0x0000                                      ; FF4373  ee 0c 00 00
 	push XIX                                             ; FF4377  3c
 	lda_d16 xix, (0x2070)                                ; FF4378  f1 70 20 34
@@ -164119,26 +164132,29 @@ LcdKeyRow2_FF3800:
 	unlk XIZ                                             ; FF439C  ee 0d
 	ret                                                  ; FF439E  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3800 -- what Dispatch_FF3800 runs for panel control 0x0A
+; LcdKeyRow3_DiskMenu -- what Dispatch_FF3800 runs for panel control 0x0A
 ;
-; Reached from: Dispatch_FF3800 entry [10], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3800 entry [10] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+;          names this reader as its BUTTON method, and its Enter method
+;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
+;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
+;          between the last two on the model strap (0xC4) at 0xFF42EE -- the
+;          site this module's own banner already calls THE DISK MENU.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3800:
+LcdKeyRow3_DiskMenu:
 	link XIZ,0x0000                                      ; FF439F  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF43A3  9e 08 21
 	and BC,0x0080                                        ; FF43A6  d9 cc 80 00
@@ -164155,26 +164171,29 @@ LcdKeyRow3_FF3800:
 	unlk XIZ                                             ; FF43C3  ee 0d
 	ret                                                  ; FF43C5  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3800 -- what Dispatch_FF3800 runs for panel control 0x0B
+; LcdKeyRow4_DiskMenu -- what Dispatch_FF3800 runs for panel control 0x0B
 ;
-; Reached from: Dispatch_FF3800 entry [11], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3800 entry [11] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+;          names this reader as its BUTTON method, and its Enter method
+;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
+;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
+;          between the last two on the model strap (0xC4) at 0xFF42EE -- the
+;          site this module's own banner already calls THE DISK MENU.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3800:
+LcdKeyRow4_DiskMenu:
 	link XIZ,0x0000                                      ; FF43C6  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF43CA  9e 08 21
 	and BC,0x0080                                        ; FF43CD  d9 cc 80 00
@@ -164191,26 +164210,28 @@ LcdKeyRow4_FF3800:
 	unlk XIZ                                             ; FF43EA  ee 0d
 	ret                                                  ; FF43EC  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3800 -- what Dispatch_FF3800 runs for panel control 0x0F
+; ExitKey_DiskMenu -- what Dispatch_FF3800 runs for panel control 0x0F
 ;
-; Reached from: Dispatch_FF3800 entry [15], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3800 entry [15] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskMenu -- the screen object at PanelScreen_VtableTable[0x60]
+;          names this reader as its BUTTON method, and its Enter method
+;          (0xFF42CD) hands the interpreter the lists at 0xF58014 ("DISK"),
+;          0xF580B0 ("MIDI FILE LOAD") and 0xF58127 ("LOAD"), choosing
+;          between the last two on the model strap (0xC4) at 0xFF42EE -- the
+;          site this module's own banner already calls THE DISK MENU.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3800:
+ExitKey_DiskMenu:
 	link XIZ,0x0000                                      ; FF43ED  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF43F1  9e 08 21
 	and BC,0x0080                                        ; FF43F4  d9 cc 80 00
@@ -164400,21 +164421,27 @@ sub_FF457C:
 .LFF4595:
 	ret                                                  ; FF4595  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF3880 -- run Dispatch_FF3880's handler for one PANEL
-;          CONTROL
+; PanelButtonDispatch_MidiFileDirectPlay -- run Dispatch_FF3880's handler for
+;          one PANEL CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
 ; Evidence: `cp H,0x20` at 0xFF459E bounds the index to the 32-code
-;          panel space that PanelButton_Route's `and L,0x1f`
+;          panel space PanelButton_Route's `and L,0x1f`
 ;          (0xF861AE) produces, and `add XBC,0x00FF3880` at 0xFF45AC
-;          names the table.  The handler is CALLED, not jumped to:
-;          the reader pushes a return address before `jp (XBC)`.
+;          names the table.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   MidiFileDirectPlay -- the screen object at
+;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          method and 0xFF4408 as its ENTER method, and that address carries
+;          the label Paint_MidiFileDirectPlay -- a name an earlier round
+;          derived from the screen's own text.
 ; Was `sub_FF4596`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF3880:
+PanelButtonDispatch_MidiFileDirectPlay:
 	link XIZ,0x0000                                      ; FF4596  ee 0c 00 00
 	pushw hl                                             ; FF459A  2b
 	ld H,(XIZ+0x08)                                      ; FF459B  8e 08 26
@@ -164435,27 +164462,30 @@ PanelButtonDispatch_FF3880:
 	unlk XIZ                                             ; FF45BE  ee 0d
 	ret                                                  ; FF45C0  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3880 -- what Dispatch_FF3880 runs for panel control 0x08
+; LcdKeyRow1_MidiFileDirectPlay -- what Dispatch_FF3880 runs for panel
+;          control 0x08
 ;
-; Reached from: Dispatch_FF3880 entry [8], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3880 entry [8] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileDirectPlay -- the screen object at
+;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          method and 0xFF4408 as its ENTER method, and that address carries
+;          the label Paint_MidiFileDirectPlay -- a name an earlier round
+;          derived from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3880:
+LcdKeyRow1_MidiFileDirectPlay:
 	link XIZ,0x0000                                      ; FF45C1  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF45C5  9e 08 21
 	and BC,0x0080                                        ; FF45C8  d9 cc 80 00
@@ -164473,33 +164503,36 @@ LcdKeyRow1_FF3880:
 	jr .LFF45F3                                          ; FF45EA  68 07
 .LFF45EC:
 	m_push MWD+r6, 0x08                                  ; FF45EC  9e 08 04
-	calr LcdKeyRow2_FF3880                                      ; FF45EF  1e 04 00
+	calr LcdKeyRow2_MidiFileDirectPlay                                      ; FF45EF  1e 04 00
 	popw bc                                              ; FF45F2  49
 .LFF45F3:
 	unlk XIZ                                             ; FF45F3  ee 0d
 	ret                                                  ; FF45F5  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_FF3880 -- what Dispatch_FF3880 runs for panel control 0x09
+; LcdKeyRow2_MidiFileDirectPlay -- what Dispatch_FF3880 runs for panel
+;          control 0x09
 ;
-; Reached from: Dispatch_FF3880 entry [9], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x09 is the LCD row 2 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3880 entry [9] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x09 is the LCD row 2 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileDirectPlay -- the screen object at
+;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          method and 0xFF4408 as its ENTER method, and that address carries
+;          the label Paint_MidiFileDirectPlay -- a name an earlier round
+;          derived from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; Was `sub_FF45F6`.
 ; ---------------------------------------------------------------------
-LcdKeyRow2_FF3880:
+LcdKeyRow2_MidiFileDirectPlay:
 	link XIZ,0x0000                                      ; FF45F6  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF45FA  9e 08 21
 	and BC,0x0080                                        ; FF45FD  d9 cc 80 00
@@ -164513,26 +164546,29 @@ LcdKeyRow2_FF3880:
 	unlk XIZ                                             ; FF4613  ee 0d
 	ret                                                  ; FF4615  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3880 -- what Dispatch_FF3880 runs for panel control 0x0A
+; LcdKeyRow3_MidiFileDirectPlay -- what Dispatch_FF3880 runs for panel
+;          control 0x0A
 ;
-; Reached from: Dispatch_FF3880 entry [10], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3880 entry [10] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileDirectPlay -- the screen object at
+;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          method and 0xFF4408 as its ENTER method, and that address carries
+;          the label Paint_MidiFileDirectPlay -- a name an earlier round
+;          derived from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3880:
+LcdKeyRow3_MidiFileDirectPlay:
 	link XIZ,0x0000                                      ; FF4616  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF461A  9e 08 21
 	and BC,0x0080                                        ; FF461D  d9 cc 80 00
@@ -164550,26 +164586,29 @@ LcdKeyRow3_FF3880:
 	unlk XIZ                                             ; FF463F  ee 0d
 	ret                                                  ; FF4641  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3880 -- what Dispatch_FF3880 runs for panel control 0x0B
+; LcdKeyRow4_MidiFileDirectPlay -- what Dispatch_FF3880 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3880 entry [11], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3880 entry [11] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileDirectPlay -- the screen object at
+;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          method and 0xFF4408 as its ENTER method, and that address carries
+;          the label Paint_MidiFileDirectPlay -- a name an earlier round
+;          derived from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3880:
+LcdKeyRow4_MidiFileDirectPlay:
 	link XIZ,0x0000                                      ; FF4642  ee 0c 00 00
 	ldb_da c, (0x60505e)                                 ; FF4646  c2 5e 50 60 23
 	and C,0x02                                           ; FF464B  cb cc 02
@@ -164613,32 +164652,35 @@ LcdKeyRow4_FF3880:
 	jr .LFF46BD                                          ; FF46B4  68 07
 .LFF46B6:
 	m_push MWD+r6, 0x08                                  ; FF46B6  9e 08 04
-	calr LcdKeyRow2_FF3880                                      ; FF46B9  1e 3a ff
+	calr LcdKeyRow2_MidiFileDirectPlay                                      ; FF46B9  1e 3a ff
 	popw bc                                              ; FF46BC  49
 .LFF46BD:
 	unlk XIZ                                             ; FF46BD  ee 0d
 	ret                                                  ; FF46BF  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow5_FF3880 -- what Dispatch_FF3880 runs for panel control 0x0C
+; LcdKeyRow5_MidiFileDirectPlay -- what Dispatch_FF3880 runs for panel
+;          control 0x0C
 ;
-; Reached from: Dispatch_FF3880 entry [12], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3880 entry [12] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row. The
+;          pair position -- which of the two keys -- reaches the handler in
+;          the argument the reader forwards; this pass did NOT establish that
+;          argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileDirectPlay -- the screen object at
+;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          method and 0xFF4408 as its ENTER method, and that address carries
+;          the label Paint_MidiFileDirectPlay -- a name an earlier round
+;          derived from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow5_FF3880:
+LcdKeyRow5_MidiFileDirectPlay:
 	link XIZ,0x0000                                      ; FF46C0  ee 0c 00 00
 	ldb_da c, (0x60505e)                                 ; FF46C4  c2 5e 50 60 23
 	and C,0x02                                           ; FF46C9  cb cc 02
@@ -164689,26 +164731,28 @@ LcdKeyRow5_FF3880:
 	unlk XIZ                                             ; FF473E  ee 0d
 	ret                                                  ; FF4740  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3880 -- what Dispatch_FF3880 runs for panel control 0x0F
+; ExitKey_MidiFileDirectPlay -- what Dispatch_FF3880 runs for panel control
+;          0x0F
 ;
-; Reached from: Dispatch_FF3880 entry [15], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3880 entry [15] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileDirectPlay -- the screen object at
+;          PanelScreen_VtableTable[0x65] names this reader as its BUTTON
+;          method and 0xFF4408 as its ENTER method, and that address carries
+;          the label Paint_MidiFileDirectPlay -- a name an earlier round
+;          derived from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3880:
+ExitKey_MidiFileDirectPlay:
 	link XIZ,0x0000                                      ; FF4741  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF4745  9e 08 21
 	and BC,0x0080                                        ; FF4748  d9 cc 80 00
@@ -164980,21 +165024,27 @@ sub_FF4986:
 .LFF4994:
 	ret                                                  ; FF4994  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF3900 -- run Dispatch_FF3900's handler for one PANEL
-;          CONTROL
+; PanelButtonDispatch_DiskL0adFile -- run Dispatch_FF3900's handler for one
+;          PANEL CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
 ; Evidence: `cp H,0x20` at 0xFF499D bounds the index to the 32-code
-;          panel space that PanelButton_Route's `and L,0x1f`
+;          panel space PanelButton_Route's `and L,0x1f`
 ;          (0xF861AE) produces, and `add XBC,0x00FF3900` at 0xFF49AB
-;          names the table.  The handler is CALLED, not jumped to:
-;          the reader pushes a return address before `jp (XBC)`.
+;          names the table.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   DiskL0adFile -- the screen object at
+;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+;          method and 0xFF4786 as its ENTER method, and that address carries
+;          the label Paint_DiskL0adFile -- a name an earlier round derived
+;          from the screen's own text.
 ; Was `sub_FF4995`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF3900:
+PanelButtonDispatch_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF4995  ee 0c 00 00
 	pushw hl                                             ; FF4999  2b
 	ld H,(XIZ+0x08)                                      ; FF499A  8e 08 26
@@ -165015,27 +165065,29 @@ PanelButtonDispatch_FF3900:
 	unlk XIZ                                             ; FF49BD  ee 0d
 	ret                                                  ; FF49BF  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3900 -- what Dispatch_FF3900 runs for panel control 0x08
+; LcdKeyRow1_DiskL0adFile -- what Dispatch_FF3900 runs for panel control 0x08
 ;
-; Reached from: Dispatch_FF3900 entry [8], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3900 entry [8] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskL0adFile -- the screen object at
+;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+;          method and 0xFF4786 as its ENTER method, and that address carries
+;          the label Paint_DiskL0adFile -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3900:
+LcdKeyRow1_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF49C0  ee 0c 00 00
 	push XIX                                             ; FF49C4  3c
 	lda_24 xix, (0xff753b)                               ; FF49C5  f2 3b 75 ff 34
@@ -165115,54 +165167,58 @@ LcdKeyRow1_FF3900:
 	unlk XIZ                                             ; FF4A80  ee 0d
 	ret                                                  ; FF4A82  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_FF3900 -- what Dispatch_FF3900 runs for panel control 0x09
+; LcdKeyRow2_DiskL0adFile -- what Dispatch_FF3900 runs for panel control 0x09
 ;
-; Reached from: Dispatch_FF3900 entry [9], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x09 is the LCD row 2 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3900 entry [9] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x09 is the LCD row 2 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskL0adFile -- the screen object at
+;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+;          method and 0xFF4786 as its ENTER method, and that address carries
+;          the label Paint_DiskL0adFile -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow2_FF3900:
+LcdKeyRow2_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF4A83  ee 0c 00 00
 	m_push MWD+r6, 0x08                                  ; FF4A87  9e 08 04
-	calr LcdKeyRow3_FF3900                                      ; FF4A8A  1e 04 00
+	calr LcdKeyRow3_DiskL0adFile                                      ; FF4A8A  1e 04 00
 	popw bc                                              ; FF4A8D  49
 	unlk XIZ                                             ; FF4A8E  ee 0d
 	ret                                                  ; FF4A90  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3900 -- what Dispatch_FF3900 runs for panel control 0x0A
+; LcdKeyRow3_DiskL0adFile -- what Dispatch_FF3900 runs for panel control 0x0A
 ;
-; Reached from: Dispatch_FF3900 entry [10], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3900 entry [10] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskL0adFile -- the screen object at
+;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+;          method and 0xFF4786 as its ENTER method, and that address carries
+;          the label Paint_DiskL0adFile -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; Was `sub_FF4A91`.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3900:
+LcdKeyRow3_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF4A91  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF4A95  9e 08 21
 	and BC,0x0080                                        ; FF4A98  d9 cc 80 00
@@ -165184,24 +165240,26 @@ LcdKeyRow3_FF3900:
 	unlk XIZ                                             ; FF4AC8  ee 0d
 	ret                                                  ; FF4ACA  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3900 -- what Dispatch_FF3900 runs for panel control 0x0B
+; LcdKeyRow4_DiskL0adFile -- what Dispatch_FF3900 runs for panel control 0x0B
 ;
-; Reached from: Dispatch_FF3900 entry [11], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3900 entry [11] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskL0adFile -- the screen object at
+;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+;          method and 0xFF4786 as its ENTER method, and that address carries
+;          the label Paint_DiskL0adFile -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; Was `sub_FF4ACB`.
 ;
 ; ★ THIS ANSWERS THE HEADER BELOW, which is left verbatim.
@@ -165215,7 +165273,7 @@ LcdKeyRow3_FF3900:
 ;   record of how the gap was closed.
 ; ---------------------------------------------------------------------
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3900 -- a screen painter this round REFUSED to name.
+; LcdKeyRow4_DiskL0adFile -- a screen painter this round REFUSED to name.
 ;
 ; It hands 14 display list(s) to the interpreter ON THE STACK.
 ;     site 0xFF4AEE  list 0xF5844A-0xF58455 (11 B, leaves by call)
@@ -165243,14 +165301,14 @@ LcdKeyRow3_FF3900:
 ; Evidence: the two 24-bit immediates of the 12-byte push idiom at
 ;          the cited site; the record walk from <start> lands exactly
 ;          on <end>; the text is the `.ascii` the interpreter draws.
-; NOT NAMED because it and LcdKeyRow5_FF3900 draw the SAME caption set (FROM S0NG
+; NOT NAMED because it and LcdKeyRow5_DiskL0adFile draw the SAME caption set (FROM S0NG
 ;          NUMBER, TO S0NG NUMBER, 1-10) and nothing in their own lists
 ;          tells the two apart.
 ;          A wrong name passes the byte gate forever, so this keeps
 ;          sub_XXXXXX and states the gap.
 ; Recorded by notes/prom_a_understanding_round7.py --apply.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3900:
+LcdKeyRow4_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF4ACB  ee 0c 00 00
 	pushw hl                                             ; FF4ACF  2b
 	push XIX                                             ; FF4AD0  3c
@@ -165511,24 +165569,26 @@ LcdKeyRow4_FF3900:
 	unlk XIZ                                             ; FF4D5A  ee 0d
 	ret                                                  ; FF4D5C  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow5_FF3900 -- what Dispatch_FF3900 runs for panel control 0x0C
+; LcdKeyRow5_DiskL0adFile -- what Dispatch_FF3900 runs for panel control 0x0C
 ;
-; Reached from: Dispatch_FF3900 entry [12], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3900 entry [12] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row. The
+;          pair position -- which of the two keys -- reaches the handler in
+;          the argument the reader forwards; this pass did NOT establish that
+;          argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskL0adFile -- the screen object at
+;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+;          method and 0xFF4786 as its ENTER method, and that address carries
+;          the label Paint_DiskL0adFile -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; Was `sub_FF4D5D`.
 ;
 ; ★ THIS ANSWERS THE HEADER BELOW, which is left verbatim.
@@ -165542,7 +165602,7 @@ LcdKeyRow4_FF3900:
 ;   record of how the gap was closed.
 ; ---------------------------------------------------------------------
 ; ---------------------------------------------------------------------
-; LcdKeyRow5_FF3900 -- a screen painter this round REFUSED to name.
+; LcdKeyRow5_DiskL0adFile -- a screen painter this round REFUSED to name.
 ;
 ; It hands 14 display list(s) to the interpreter ON THE STACK.
 ;     site 0xFF4D7F  list 0xF5844A-0xF58455 (11 B, leaves by call)
@@ -165570,14 +165630,14 @@ LcdKeyRow4_FF3900:
 ; Evidence: the two 24-bit immediates of the 12-byte push idiom at
 ;          the cited site; the record walk from <start> lands exactly
 ;          on <end>; the text is the `.ascii` the interpreter draws.
-; NOT NAMED because it and LcdKeyRow4_FF3900 draw the SAME caption set (FROM S0NG
+; NOT NAMED because it and LcdKeyRow4_DiskL0adFile draw the SAME caption set (FROM S0NG
 ;          NUMBER, TO S0NG NUMBER, 1-10) and nothing in their own lists
 ;          tells the two apart.
 ;          A wrong name passes the byte gate forever, so this keeps
 ;          sub_XXXXXX and states the gap.
 ; Recorded by notes/prom_a_understanding_round7.py --apply.
 ; ---------------------------------------------------------------------
-LcdKeyRow5_FF3900:
+LcdKeyRow5_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF4D5D  ee 0c 00 00
 	pushw hl                                             ; FF4D61  2b
 	push XIX                                             ; FF4D62  3c
@@ -165829,26 +165889,27 @@ LcdKeyRow5_FF3900:
 	unlk XIZ                                             ; FF4FDC  ee 0d
 	ret                                                  ; FF4FDE  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3900 -- what Dispatch_FF3900 runs for panel control 0x0F
+; ExitKey_DiskL0adFile -- what Dispatch_FF3900 runs for panel control 0x0F
 ;
-; Reached from: Dispatch_FF3900 entry [15], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3900 entry [15] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskL0adFile -- the screen object at
+;          PanelScreen_VtableTable[0x67] names this reader as its BUTTON
+;          method and 0xFF4786 as its ENTER method, and that address carries
+;          the label Paint_DiskL0adFile -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3900:
+ExitKey_DiskL0adFile:
 	link XIZ,0x0000                                      ; FF4FDF  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF4FE3  9e 08 21
 	and BC,0x0080                                        ; FF4FE6  d9 cc 80 00
@@ -166098,21 +166159,27 @@ sub_FF520C:
 .LFF522E:
 	ret                                                  ; FF522E  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF3980 -- run Dispatch_FF3980's handler for one PANEL
-;          CONTROL
+; PanelButtonDispatch_MidiFileL0ad -- run Dispatch_FF3980's handler for one
+;          PANEL CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
 ; Evidence: `cp H,0x20` at 0xFF5237 bounds the index to the 32-code
-;          panel space that PanelButton_Route's `and L,0x1f`
+;          panel space PanelButton_Route's `and L,0x1f`
 ;          (0xF861AE) produces, and `add XBC,0x00FF3980` at 0xFF5245
-;          names the table.  The handler is CALLED, not jumped to:
-;          the reader pushes a return address before `jp (XBC)`.
+;          names the table.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   MidiFileL0ad -- the screen object at
+;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+;          method and 0xFF4FFA as its ENTER method, and that address carries
+;          the label Paint_MidiFileL0ad -- a name an earlier round derived
+;          from the screen's own text.
 ; Was `sub_FF522F`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF3980:
+PanelButtonDispatch_MidiFileL0ad:
 	link XIZ,0x0000                                      ; FF522F  ee 0c 00 00
 	pushw hl                                             ; FF5233  2b
 	ld H,(XIZ+0x08)                                      ; FF5234  8e 08 26
@@ -166133,27 +166200,29 @@ PanelButtonDispatch_FF3980:
 	unlk XIZ                                             ; FF5257  ee 0d
 	ret                                                  ; FF5259  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3980 -- what Dispatch_FF3980 runs for panel control 0x08
+; LcdKeyRow1_MidiFileL0ad -- what Dispatch_FF3980 runs for panel control 0x08
 ;
-; Reached from: Dispatch_FF3980 entry [8], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3980 entry [8] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileL0ad -- the screen object at
+;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+;          method and 0xFF4FFA as its ENTER method, and that address carries
+;          the label Paint_MidiFileL0ad -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3980:
+LcdKeyRow1_MidiFileL0ad:
 	link XIZ,0x0000                                      ; FF525A  ee 0c 00 00
 	pushw hl                                             ; FF525E  2b
 	push XIX                                             ; FF525F  3c
@@ -166210,27 +166279,29 @@ LcdKeyRow1_FF3980:
 	unlk XIZ                                             ; FF52DF  ee 0d
 	ret                                                  ; FF52E1  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_FF3980 -- what Dispatch_FF3980 runs for panel control 0x09
+; LcdKeyRow2_MidiFileL0ad -- what Dispatch_FF3980 runs for panel control 0x09
 ;
-; Reached from: Dispatch_FF3980 entry [9], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x09 is the LCD row 2 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3980 entry [9] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x09 is the LCD row 2 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileL0ad -- the screen object at
+;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+;          method and 0xFF4FFA as its ENTER method, and that address carries
+;          the label Paint_MidiFileL0ad -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; Was `sub_FF52E2`.
 ; ---------------------------------------------------------------------
-LcdKeyRow2_FF3980:
+LcdKeyRow2_MidiFileL0ad:
 	link XIZ,0x0000                                      ; FF52E2  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF52E6  9e 08 21
 	and BC,0x0080                                        ; FF52E9  d9 cc 80 00
@@ -166244,53 +166315,57 @@ LcdKeyRow2_FF3980:
 	unlk XIZ                                             ; FF52FF  ee 0d
 	ret                                                  ; FF5301  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3980 -- what Dispatch_FF3980 runs for panel control 0x0A
+; LcdKeyRow3_MidiFileL0ad -- what Dispatch_FF3980 runs for panel control 0x0A
 ;
-; Reached from: Dispatch_FF3980 entry [10], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3980 entry [10] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileL0ad -- the screen object at
+;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+;          method and 0xFF4FFA as its ENTER method, and that address carries
+;          the label Paint_MidiFileL0ad -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3980:
+LcdKeyRow3_MidiFileL0ad:
 	link XIZ,0x0000                                      ; FF5302  ee 0c 00 00
 	m_push MWD+r6, 0x08                                  ; FF5306  9e 08 04
-	calr LcdKeyRow2_FF3980                                      ; FF5309  1e d6 ff
+	calr LcdKeyRow2_MidiFileL0ad                                      ; FF5309  1e d6 ff
 	popw bc                                              ; FF530C  49
 	unlk XIZ                                             ; FF530D  ee 0d
 	ret                                                  ; FF530F  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3980 -- what Dispatch_FF3980 runs for panel control 0x0B
+; LcdKeyRow4_MidiFileL0ad -- what Dispatch_FF3980 runs for panel control 0x0B
 ;
-; Reached from: Dispatch_FF3980 entry [11], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3980 entry [11] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileL0ad -- the screen object at
+;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+;          method and 0xFF4FFA as its ENTER method, and that address carries
+;          the label Paint_MidiFileL0ad -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3980:
+LcdKeyRow4_MidiFileL0ad:
 	link XIZ,0x0000                                      ; FF5310  ee 0c 00 00
 	push XIX                                             ; FF5314  3c
 	lda_d16 xix, (0x272b)                                ; FF5315  f1 2b 27 34
@@ -166365,26 +166440,28 @@ LcdKeyRow4_FF3980:
 	unlk XIZ                                             ; FF53C3  ee 0d
 	ret                                                  ; FF53C5  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow5_FF3980 -- what Dispatch_FF3980 runs for panel control 0x0C
+; LcdKeyRow5_MidiFileL0ad -- what Dispatch_FF3980 runs for panel control 0x0C
 ;
-; Reached from: Dispatch_FF3980 entry [12], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3980 entry [12] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row. The
+;          pair position -- which of the two keys -- reaches the handler in
+;          the argument the reader forwards; this pass did NOT establish that
+;          argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileL0ad -- the screen object at
+;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+;          method and 0xFF4FFA as its ENTER method, and that address carries
+;          the label Paint_MidiFileL0ad -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow5_FF3980:
+LcdKeyRow5_MidiFileL0ad:
 	link XIZ,0x0000                                      ; FF53C6  ee 0c 00 00
 	push XIX                                             ; FF53CA  3c
 	lda_d16 xix, (0x272b)                                ; FF53CB  f1 2b 27 34
@@ -166455,26 +166532,27 @@ LcdKeyRow5_FF3980:
 	unlk XIZ                                             ; FF546C  ee 0d
 	ret                                                  ; FF546E  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3980 -- what Dispatch_FF3980 runs for panel control 0x0F
+; ExitKey_MidiFileL0ad -- what Dispatch_FF3980 runs for panel control 0x0F
 ;
-; Reached from: Dispatch_FF3980 entry [15], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3980 entry [15] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileL0ad -- the screen object at
+;          PanelScreen_VtableTable[0x69] names this reader as its BUTTON
+;          method and 0xFF4FFA as its ENTER method, and that address carries
+;          the label Paint_MidiFileL0ad -- a name an earlier round derived
+;          from the screen's own text.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3980:
+ExitKey_MidiFileL0ad:
 	link XIZ,0x0000                                      ; FF546F  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5473  9e 08 21
 	and BC,0x0080                                        ; FF5476  d9 cc 80 00
@@ -166487,7 +166565,8 @@ ExitKey_FF3980:
 sub_FF5489:
 	ret                                                  ; FF5489  0e
 ; ---------------------------------------------------------------------
-; PageDispatch_FF3A00 -- run Dispatch_FF3A00's entry for the CURRENT PAGE
+; PageDispatch_DiskSaveFile -- run Dispatch_FF3A00's entry for the CURRENT
+;          PAGE
 ;
 ; ★ NOT a panel-control table.  This reader indexes with the page
 ;          byte (0x2229) ALONE and never reads an argument, so its
@@ -166497,9 +166576,12 @@ sub_FF5489:
 ;          width-1), and `add XBC,0x00FF3A00` at 0xFF5499 names the table.
 ;          The entry is CALLED: a return address is pushed before
 ;          `jp (XBC)`.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its ENTER
+;          method, and its BUTTON method is that screen's control table.
 ; Was `sub_FF548A`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PageDispatch_FF3A00:
+PageDispatch_DiskSaveFile:
 	m_cp_mi8 MB16, 0x2229, 0x06                          ; FF548A  c1 29 22 3f 06
 	jr nc, .LFF54A9                                      ; FF548F  6f 18
 	ldb c, 0x04                                          ; FF5491  23 04
@@ -166757,21 +166839,27 @@ sub_FF571F:
 .LFF572D:
 	ret                                                  ; FF572D  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF3A29 -- run Dispatch_FF3A29's handler for one PANEL
-;          CONTROL
+; PanelButtonDispatch_DiskSaveFile -- run Dispatch_FF3A29's handler for one
+;          PANEL CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
 ; Evidence: `cp H,0x20` at 0xFF5736 bounds the index to the 32-code
-;          panel space that PanelButton_Route's `and L,0x1f`
+;          panel space PanelButton_Route's `and L,0x1f`
 ;          (0xF861AE) produces, and `add XBC,0x00FF3A29` at 0xFF5753
-;          names the table.  The handler is CALLED, not jumped to:
-;          the reader pushes a return address before `jp (XBC)`.
+;          names the table.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
 ; Was `sub_FF572E`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF3A29:
+PanelButtonDispatch_DiskSaveFile:
 	link XIZ,0x0000                                      ; FF572E  ee 0c 00 00
 	pushw hl                                             ; FF5732  2b
 	ld H,(XIZ+0x08)                                      ; FF5733  8e 08 26
@@ -166929,27 +167017,30 @@ PanelButtonDispatch_FF3A29:
 	popw hl                                              ; FF5917  4b
 	ret                                                  ; FF5918  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3A29_R0 -- what Dispatch_FF3A29 runs for panel control 0x08
+; LcdKeyRow1_DiskSaveFile_Page0 -- what Dispatch_FF3A29 runs for panel
+;          control 0x08
 ;
-; Reached from: Dispatch_FF3A29 entry [8], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3A29 entry [8] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3A29_R0:
+LcdKeyRow1_DiskSaveFile_Page0:
 	link XIZ,0x0000                                      ; FF5919  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF591D  9e 08 21
 	and BC,0x0080                                        ; FF5920  d9 cc 80 00
@@ -166969,26 +167060,29 @@ LcdKeyRow1_FF3A29_R0:
 	unlk XIZ                                             ; FF5951  ee 0d
 	ret                                                  ; FF5953  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3A29_R0 -- what Dispatch_FF3A29 runs for panel control 0x0B
+; LcdKeyRow4_DiskSaveFile_Page0 -- what Dispatch_FF3A29 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3A29 entry [11], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [11] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3A29_R0:
+LcdKeyRow4_DiskSaveFile_Page0:
 	link XIZ,0x0000                                      ; FF5954  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5958  9e 08 21
 	and BC,0x0080                                        ; FF595B  d9 cc 80 00
@@ -167007,26 +167101,28 @@ LcdKeyRow4_FF3A29_R0:
 	unlk XIZ                                             ; FF5988  ee 0d
 	ret                                                  ; FF598A  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3A29_R0 -- what Dispatch_FF3A29 runs for panel control 0x0F
+; ExitKey_DiskSaveFile_Page0 -- what Dispatch_FF3A29 runs for panel control
+;          0x0F
 ;
-; Reached from: Dispatch_FF3A29 entry [15], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [15] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3A29_R0:
+ExitKey_DiskSaveFile_Page0:
 	link XIZ,0x0000                                      ; FF598B  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF598F  9e 08 21
 	and BC,0x0080                                        ; FF5992  d9 cc 80 00
@@ -167060,33 +167156,37 @@ ExitKey_FF3A29_R0:
 	pop XIX                                              ; FF59E7  5c
 	ret                                                  ; FF59E8  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3A29_R1 -- what Dispatch_FF3A29 runs for panel control 0x08
+; LcdKeyRow1_DiskSaveFile_Page1 -- what Dispatch_FF3A29 runs for panel
+;          control 0x08
 ;
-; Reached from: Dispatch_FF3A29 entry [40] (row 1, control 0x08), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3A29 entry [40] (page 1, control 0x08) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3A29_R1:
+LcdKeyRow1_DiskSaveFile_Page1:
 	link XIZ,0x0000                                      ; FF59E9  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF59ED  9e 08 21
 	and BC,0x0080                                        ; FF59F0  d9 cc 80 00
 	jr z, .LFF59FF                                       ; FF59F4  66 09
 	m_push MWD+r6, 0x08                                  ; FF59F6  9e 08 04
-	calr LcdKeyRow2_FF3A29_R1                                      ; FF59F9  1e 6d 00
+	calr LcdKeyRow2_DiskSaveFile_Page1                                      ; FF59F9  1e 6d 00
 	popw bc                                              ; FF59FC  49
 	jr .LFF5A2A                                          ; FF59FD  68 2b
 .LFF59FF:
@@ -167137,27 +167237,31 @@ sub_FF5A2D:
 	popw hl                                              ; FF5A67  4b
 	ret                                                  ; FF5A68  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_FF3A29_R1 -- what Dispatch_FF3A29 runs for panel control 0x09
+; LcdKeyRow2_DiskSaveFile_Page1 -- what Dispatch_FF3A29 runs for panel
+;          control 0x09
 ;
-; Reached from: Dispatch_FF3A29 entry [41] (row 1, control 0x09), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x09 is the LCD row 2 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [41] (page 1, control 0x09) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x09 is the LCD row 2 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; Was `sub_FF5A69`.
 ; ---------------------------------------------------------------------
-LcdKeyRow2_FF3A29_R1:
+LcdKeyRow2_DiskSaveFile_Page1:
 	link XIZ,0x0000                                      ; FF5A69  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5A6D  9e 08 21
 	and BC,0x0080                                        ; FF5A70  d9 cc 80 00
@@ -167178,111 +167282,126 @@ LcdKeyRow2_FF3A29_R1:
 	unlk XIZ                                             ; FF5A9C  ee 0d
 	ret                                                  ; FF5A9E  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3A29_R1 -- what Dispatch_FF3A29 runs for panel control 0x0A
+; LcdKeyRow3_DiskSaveFile_Page1 -- what Dispatch_FF3A29 runs for panel
+;          control 0x0A
 ;
-; Reached from: Dispatch_FF3A29 entry [42] (row 1, control 0x0A), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [42] (page 1, control 0x0A) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3A29_R1:
+LcdKeyRow3_DiskSaveFile_Page1:
 	link XIZ,0x0000                                      ; FF5A9F  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5AA3  9e 08 21
 	and BC,0x0080                                        ; FF5AA6  d9 cc 80 00
 	jr z, .LFF5AB3                                       ; FF5AAA  66 07
 	m_push MWD+r6, 0x08                                  ; FF5AAC  9e 08 04
-	calr LcdKeyRow2_FF3A29_R1                                      ; FF5AAF  1e b7 ff
+	calr LcdKeyRow2_DiskSaveFile_Page1                                      ; FF5AAF  1e b7 ff
 	popw bc                                              ; FF5AB2  49
 .LFF5AB3:
 	unlk XIZ                                             ; FF5AB3  ee 0d
 	ret                                                  ; FF5AB5  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3A29_R1 -- what Dispatch_FF3A29 runs for panel control 0x0B
+; LcdKeyRow4_DiskSaveFile_Page1 -- what Dispatch_FF3A29 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3A29 entry [43] (row 1, control 0x0B), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [43] (page 1, control 0x0B) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3A29_R1:
+LcdKeyRow4_DiskSaveFile_Page1:
 	link XIZ,0x0000                                      ; FF5AB6  ee 0c 00 00
 	m_push MWD+r6, 0x08                                  ; FF5ABA  9e 08 04
-	calr LcdKeyRow4_FF3900                                      ; FF5ABD  1e 0b f0
+	calr LcdKeyRow4_DiskL0adFile                                      ; FF5ABD  1e 0b f0
 	popw bc                                              ; FF5AC0  49
 	unlk XIZ                                             ; FF5AC1  ee 0d
 	ret                                                  ; FF5AC3  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow5_FF3A29_R1 -- what Dispatch_FF3A29 runs for panel control 0x0C
+; LcdKeyRow5_DiskSaveFile_Page1 -- what Dispatch_FF3A29 runs for panel
+;          control 0x0C
 ;
-; Reached from: Dispatch_FF3A29 entry [44] (row 1, control 0x0C), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [44] (page 1, control 0x0C) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row. The
+;          pair position -- which of the two keys -- reaches the handler in
+;          the argument the reader forwards; this pass did NOT establish that
+;          argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow5_FF3A29_R1:
+LcdKeyRow5_DiskSaveFile_Page1:
 	link XIZ,0x0000                                      ; FF5AC4  ee 0c 00 00
 	m_push MWD+r6, 0x08                                  ; FF5AC8  9e 08 04
-	calr LcdKeyRow5_FF3900                                      ; FF5ACB  1e 8f f2
+	calr LcdKeyRow5_DiskL0adFile                                      ; FF5ACB  1e 8f f2
 	popw bc                                              ; FF5ACE  49
 	unlk XIZ                                             ; FF5ACF  ee 0d
 	ret                                                  ; FF5AD1  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3A29_R1 -- what Dispatch_FF3A29 runs for panel control 0x0F
+; ExitKey_DiskSaveFile_Page1 -- what Dispatch_FF3A29 runs for panel control
+;          0x0F
 ;
-; Reached from: Dispatch_FF3A29 entry [47] (row 1, control 0x0F), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [47] (page 1, control 0x0F) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3A29_R1:
+ExitKey_DiskSaveFile_Page1:
 	link XIZ,0x0000                                      ; FF5AD2  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5AD6  9e 08 21
 	and BC,0x0080                                        ; FF5AD9  d9 cc 80 00
@@ -167293,26 +167412,30 @@ ExitKey_FF3A29_R1:
 	unlk XIZ                                             ; FF5AE9  ee 0d
 	ret                                                  ; FF5AEB  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3A29_R2 -- what Dispatch_FF3A29 runs for panel control 0x0A
+; LcdKeyRow3_DiskSaveFile_Page2 -- what Dispatch_FF3A29 runs for panel
+;          control 0x0A
 ;
-; Reached from: Dispatch_FF3A29 entry [74] (row 2, control 0x0A), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [74] (page 2, control 0x0A) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3A29_R2:
+LcdKeyRow3_DiskSaveFile_Page2:
 	link XIZ,0x0000                                      ; FF5AEC  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5AF0  9e 08 21
 	and BC,0x0080                                        ; FF5AF3  d9 cc 80 00
@@ -167323,26 +167446,30 @@ LcdKeyRow3_FF3A29_R2:
 	unlk XIZ                                             ; FF5B01  ee 0d
 	ret                                                  ; FF5B03  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3A29_R2 -- what Dispatch_FF3A29 runs for panel control 0x0B
+; LcdKeyRow4_DiskSaveFile_Page2 -- what Dispatch_FF3A29 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3A29 entry [75] (row 2, control 0x0B), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [75] (page 2, control 0x0B) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3A29_R2:
+LcdKeyRow4_DiskSaveFile_Page2:
 	link XIZ,0x0000                                      ; FF5B04  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5B08  9e 08 21
 	and BC,0x0080                                        ; FF5B0B  d9 cc 80 00
@@ -167353,26 +167480,29 @@ LcdKeyRow4_FF3A29_R2:
 	unlk XIZ                                             ; FF5B1B  ee 0d
 	ret                                                  ; FF5B1D  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3A29_R2 -- what Dispatch_FF3A29 runs for panel control 0x0F
+; ExitKey_DiskSaveFile_Page2 -- what Dispatch_FF3A29 runs for panel control
+;          0x0F
 ;
-; Reached from: Dispatch_FF3A29 entry [79] (row 2, control 0x0F), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [79] (page 2, control 0x0F) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3A29_R2:
+ExitKey_DiskSaveFile_Page2:
 	link XIZ,0x0000                                      ; FF5B1E  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5B22  9e 08 21
 	and BC,0x0080                                        ; FF5B25  d9 cc 80 00
@@ -167383,27 +167513,31 @@ ExitKey_FF3A29_R2:
 	unlk XIZ                                             ; FF5B35  ee 0d
 	ret                                                  ; FF5B37  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3A29_R3 -- what Dispatch_FF3A29 runs for panel control 0x08
+; LcdKeyRow1_DiskSaveFile_Page3 -- what Dispatch_FF3A29 runs for panel
+;          control 0x08
 ;
-; Reached from: Dispatch_FF3A29 entry [104] (row 3, control 0x08), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3A29 entry [104] (page 3, control 0x08) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3A29_R3:
+LcdKeyRow1_DiskSaveFile_Page3:
 	link XIZ,0x0000                                      ; FF5B38  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5B3C  9e 08 21
 	and BC,0x0080                                        ; FF5B3F  d9 cc 80 00
@@ -167418,27 +167552,30 @@ LcdKeyRow1_FF3A29_R3:
 	unlk XIZ                                             ; FF5B53  ee 0d
 	ret                                                  ; FF5B55  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3A29_R34 -- what Dispatch_FF3A29 runs for panel control 0x0F
+; ExitKey_DiskSaveFile_Page34 -- what Dispatch_FF3A29 runs for panel control
+;          0x0F
 ;
-; Reached from: Dispatch_FF3A29 entry [111] (row 3, control 0x0F),
-;          Dispatch_FF3A29 entry [143] (row 4, control 0x0F), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [111] (page 3, control 0x0F),
+;          Dispatch_FF3A29 entry [143] (page 4, control 0x0F) -- and from no
+;          other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3A29_R34:
+ExitKey_DiskSaveFile_Page34:
 	link XIZ,0x0000                                      ; FF5B56  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5B5A  9e 08 21
 	and BC,0x0080                                        ; FF5B5D  d9 cc 80 00
@@ -167449,27 +167586,31 @@ ExitKey_FF3A29_R34:
 	unlk XIZ                                             ; FF5B6D  ee 0d
 	ret                                                  ; FF5B6F  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3A29_R4 -- what Dispatch_FF3A29 runs for panel control 0x08
+; LcdKeyRow1_DiskSaveFile_Page4 -- what Dispatch_FF3A29 runs for panel
+;          control 0x08
 ;
-; Reached from: Dispatch_FF3A29 entry [136] (row 4, control 0x08), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3A29 entry [136] (page 4, control 0x08) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3A29_R4:
+LcdKeyRow1_DiskSaveFile_Page4:
 	link XIZ,0x0000                                      ; FF5B70  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5B74  9e 08 21
 	and BC,0x0080                                        ; FF5B77  d9 cc 80 00
@@ -167495,26 +167636,30 @@ LcdKeyRow1_FF3A29_R4:
 	unlk XIZ                                             ; FF5BAF  ee 0d
 	ret                                                  ; FF5BB1  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3A29_R5 -- what Dispatch_FF3A29 runs for panel control 0x0A
+; LcdKeyRow3_DiskSaveFile_Page5 -- what Dispatch_FF3A29 runs for panel
+;          control 0x0A
 ;
-; Reached from: Dispatch_FF3A29 entry [170] (row 5, control 0x0A), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [170] (page 5, control 0x0A) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3A29_R5:
+LcdKeyRow3_DiskSaveFile_Page5:
 	link XIZ,0xfff4                                      ; FF5BB2  ee 0c f4 ff
 	ld BC,(XIZ+0x08)                                     ; FF5BB6  9e 08 21
 	and BC,0x0080                                        ; FF5BB9  d9 cc 80 00
@@ -167544,26 +167689,30 @@ LcdKeyRow3_FF3A29_R5:
 	unlk XIZ                                             ; FF5C07  ee 0d
 	ret                                                  ; FF5C09  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3A29_R5 -- what Dispatch_FF3A29 runs for panel control 0x0B
+; LcdKeyRow4_DiskSaveFile_Page5 -- what Dispatch_FF3A29 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3A29 entry [171] (row 5, control 0x0B), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [171] (page 5, control 0x0B) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3A29_R5:
+LcdKeyRow4_DiskSaveFile_Page5:
 	link XIZ,0x0000                                      ; FF5C0A  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5C0E  9e 08 21
 	and BC,0x0080                                        ; FF5C11  d9 cc 80 00
@@ -167574,26 +167723,29 @@ LcdKeyRow4_FF3A29_R5:
 	unlk XIZ                                             ; FF5C20  ee 0d
 	ret                                                  ; FF5C22  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3A29_R5 -- what Dispatch_FF3A29 runs for panel control 0x0F
+; ExitKey_DiskSaveFile_Page5 -- what Dispatch_FF3A29 runs for panel control
+;          0x0F
 ;
-; Reached from: Dispatch_FF3A29 entry [175] (row 5, control 0x0F), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3A29 entry [175] (page 5, control 0x0F) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   DiskSaveFile -- the screen object at
+;          PanelScreen_VtableTable[0x6C] names this reader as its BUTTON
+;          method, and its Enter method is the page dispatcher
+;          PageDispatch_FF3A00, and four of that table's six pages are
+;          Paint_DiskSaveFile.
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3A29_R5:
+ExitKey_DiskSaveFile_Page5:
 	link XIZ,0x0000                                      ; FF5C23  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5C27  9e 08 21
 	and BC,0x0080                                        ; FF5C2A  d9 cc 80 00
@@ -167606,7 +167758,8 @@ ExitKey_FF3A29_R5:
 sub_FF5C3D:
 	ret                                                  ; FF5C3D  0e
 ; ---------------------------------------------------------------------
-; PageDispatch_FF3D29 -- run Dispatch_FF3D29's entry for the CURRENT PAGE
+; PageDispatch_MidiFileSave -- run Dispatch_FF3D29's entry for the CURRENT
+;          PAGE
 ;
 ; ★ NOT a panel-control table.  This reader indexes with the page
 ;          byte (0x2229) ALONE and never reads an argument, so its
@@ -167616,9 +167769,12 @@ sub_FF5C3D:
 ;          width-1), and `add XBC,0x00FF3D29` at 0xFF5C4D names the table.
 ;          The entry is CALLED: a return address is pushed before
 ;          `jp (XBC)`.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its ENTER
+;          method, and its BUTTON method is that screen's control table.
 ; Was `sub_FF5C3E`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PageDispatch_FF3D29:
+PageDispatch_MidiFileSave:
 	m_cp_mi8 MB16, 0x2229, 0x03                          ; FF5C3E  c1 29 22 3f 03
 	jr ugt, .LFF5C5D                                     ; FF5C43  6b 18
 	ldb c, 0x04                                          ; FF5C45  23 04
@@ -167837,21 +167993,27 @@ sub_FF5EAE:
 .LFF5ED0:
 	ret                                                  ; FF5ED0  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF3D39 -- run Dispatch_FF3D39's handler for one PANEL
-;          CONTROL
+; PanelButtonDispatch_MidiFileSave -- run Dispatch_FF3D39's handler for one
+;          PANEL CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
 ; Evidence: `cp H,0x20` at 0xFF5ED9 bounds the index to the 32-code
-;          panel space that PanelButton_Route's `and L,0x1f`
+;          panel space PanelButton_Route's `and L,0x1f`
 ;          (0xF861AE) produces, and `add XBC,0x00FF3D39` at 0xFF5EF6
-;          names the table.  The handler is CALLED, not jumped to:
-;          the reader pushes a return address before `jp (XBC)`.
+;          names the table.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
 ; Was `sub_FF5ED1`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF3D39:
+PanelButtonDispatch_MidiFileSave:
 	link XIZ,0x0000                                      ; FF5ED1  ee 0c 00 00
 	pushw hl                                             ; FF5ED5  2b
 	ld H,(XIZ+0x08)                                      ; FF5ED6  8e 08 26
@@ -168001,27 +168163,30 @@ sub_FF5FA0:
 	pop XHL                                              ; FF606C  5b
 	ret                                                  ; FF606D  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3D39_R0 -- what Dispatch_FF3D39 runs for panel control 0x08
+; LcdKeyRow1_MidiFileSave_Page0 -- what Dispatch_FF3D39 runs for panel
+;          control 0x08
 ;
-; Reached from: Dispatch_FF3D39 entry [8], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3D39 entry [8] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3D39_R0:
+LcdKeyRow1_MidiFileSave_Page0:
 	link XIZ,0x0000                                      ; FF606E  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF6072  9e 08 21
 	and BC,0x0080                                        ; FF6075  d9 cc 80 00
@@ -168041,26 +168206,29 @@ LcdKeyRow1_FF3D39_R0:
 	unlk XIZ                                             ; FF60A6  ee 0d
 	ret                                                  ; FF60A8  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3D39_R0 -- what Dispatch_FF3D39 runs for panel control 0x0B
+; LcdKeyRow4_MidiFileSave_Page0 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3D39 entry [11], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [11] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3D39_R0:
+LcdKeyRow4_MidiFileSave_Page0:
 	link XIZ,0x0000                                      ; FF60A9  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF60AD  9e 08 21
 	and BC,0x0080                                        ; FF60B0  d9 cc 80 00
@@ -168079,28 +168247,31 @@ LcdKeyRow4_FF3D39_R0:
 	unlk XIZ                                             ; FF60DD  ee 0d
 	ret                                                  ; FF60DF  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3D39_R0123 -- what Dispatch_FF3D39 runs for panel control 0x0F
+; ExitKey_MidiFileSave_Page0123 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0F
 ;
-; Reached from: Dispatch_FF3D39 entry [15], Dispatch_FF3D39 entry [47] (row
-;          1, control 0x0F), Dispatch_FF3D39 entry [79] (row 2, control
-;          0x0F), Dispatch_FF3D39 entry [111] (row 3, control 0x0F), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [15], Dispatch_FF3D39 entry [47] (page
+;          1, control 0x0F), Dispatch_FF3D39 entry [79] (page 2, control
+;          0x0F), Dispatch_FF3D39 entry [111] (page 3, control 0x0F) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3D39_R0123:
+ExitKey_MidiFileSave_Page0123:
 	link XIZ,0x0000                                      ; FF60E0  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF60E4  9e 08 21
 	and BC,0x0080                                        ; FF60E7  d9 cc 80 00
@@ -168111,27 +168282,31 @@ ExitKey_FF3D39_R0123:
 	unlk XIZ                                             ; FF60F7  ee 0d
 	ret                                                  ; FF60F9  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF3D39_R1 -- what Dispatch_FF3D39 runs for panel control 0x08
+; LcdKeyRow1_MidiFileSave_Page1 -- what Dispatch_FF3D39 runs for panel
+;          control 0x08
 ;
-; Reached from: Dispatch_FF3D39 entry [40] (row 1, control 0x08), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF3D39 entry [40] (page 1, control 0x08) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF3D39_R1:
+LcdKeyRow1_MidiFileSave_Page1:
 	link XIZ,0xfffc                                      ; FF60FA  ee 0c fc ff
 	push XIX                                             ; FF60FE  3c
 	lda_d16 xix, (0x2071)                                ; FF60FF  f1 71 20 34
@@ -168182,26 +168357,30 @@ LcdKeyRow1_FF3D39_R1:
 	unlk XIZ                                             ; FF617F  ee 0d
 	ret                                                  ; FF6181  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow2_FF3D39_R1 -- what Dispatch_FF3D39 runs for panel control 0x09
+; LcdKeyRow2_MidiFileSave_Page1 -- what Dispatch_FF3D39 runs for panel
+;          control 0x09
 ;
-; Reached from: Dispatch_FF3D39 entry [41] (row 1, control 0x09), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x09 is the LCD row 2 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [41] (page 1, control 0x09) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x09 is the LCD row 2 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow2_FF3D39_R1:
+LcdKeyRow2_MidiFileSave_Page1:
 	link XIZ,0x0000                                      ; FF6182  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF6186  9e 08 21
 	and BC,0x0080                                        ; FF6189  d9 cc 80 00
@@ -168218,26 +168397,30 @@ LcdKeyRow2_FF3D39_R1:
 	unlk XIZ                                             ; FF61AA  ee 0d
 	ret                                                  ; FF61AC  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3D39_R1 -- what Dispatch_FF3D39 runs for panel control 0x0A
+; LcdKeyRow3_MidiFileSave_Page1 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0A
 ;
-; Reached from: Dispatch_FF3D39 entry [42] (row 1, control 0x0A), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [42] (page 1, control 0x0A) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3D39_R1:
+LcdKeyRow3_MidiFileSave_Page1:
 	link XIZ,0x0000                                      ; FF61AD  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF61B1  9e 08 21
 	and BC,0x0080                                        ; FF61B4  d9 cc 80 00
@@ -168254,26 +168437,30 @@ LcdKeyRow3_FF3D39_R1:
 	unlk XIZ                                             ; FF61D5  ee 0d
 	ret                                                  ; FF61D7  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3D39_R1 -- what Dispatch_FF3D39 runs for panel control 0x0B
+; LcdKeyRow4_MidiFileSave_Page1 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3D39 entry [43] (row 1, control 0x0B), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [43] (page 1, control 0x0B) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3D39_R1:
+LcdKeyRow4_MidiFileSave_Page1:
 	link XIZ,0x0000                                      ; FF61D8  ee 0c 00 00
 	push XIX                                             ; FF61DC  3c
 	lda_d16 xix, (0x133e)                                ; FF61DD  f1 3e 13 34
@@ -168363,26 +168550,30 @@ LcdKeyRow4_FF3D39_R1:
 	unlk XIZ                                             ; FF62AD  ee 0d
 	ret                                                  ; FF62AF  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow5_FF3D39_R1 -- what Dispatch_FF3D39 runs for panel control 0x0C
+; LcdKeyRow5_MidiFileSave_Page1 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0C
 ;
-; Reached from: Dispatch_FF3D39 entry [44] (row 1, control 0x0C), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [44] (page 1, control 0x0C) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0C is the LCD row 5 button pair -- the BOTTOM row. The
+;          pair position -- which of the two keys -- reaches the handler in
+;          the argument the reader forwards; this pass did NOT establish that
+;          argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow5_FF3D39_R1:
+LcdKeyRow5_MidiFileSave_Page1:
 	link XIZ,0x0000                                      ; FF62B0  ee 0c 00 00
 	push XIX                                             ; FF62B4  3c
 	lda_d16 xix, (0x133e)                                ; FF62B5  f1 3e 13 34
@@ -168565,26 +168756,30 @@ sub_FF63FF:
 	unlk XIZ                                             ; FF644F  ee 0d
 	ret                                                  ; FF6451  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3D39_R2 -- what Dispatch_FF3D39 runs for panel control 0x0A
+; LcdKeyRow3_MidiFileSave_Page2 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0A
 ;
-; Reached from: Dispatch_FF3D39 entry [74] (row 2, control 0x0A), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [74] (page 2, control 0x0A) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3D39_R2:
+LcdKeyRow3_MidiFileSave_Page2:
 	link XIZ,0x0000                                      ; FF6452  ee 0c 00 00
 	push XIX                                             ; FF6456  3c
 	lda_d16 xix, (0x2071)                                ; FF6457  f1 71 20 34
@@ -168605,26 +168800,30 @@ LcdKeyRow3_FF3D39_R2:
 	unlk XIZ                                             ; FF6482  ee 0d
 	ret                                                  ; FF6484  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3D39_R2 -- what Dispatch_FF3D39 runs for panel control 0x0B
+; LcdKeyRow4_MidiFileSave_Page2 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3D39 entry [75] (row 2, control 0x0B), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [75] (page 2, control 0x0B) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3D39_R2:
+LcdKeyRow4_MidiFileSave_Page2:
 	link XIZ,0x0000                                      ; FF6485  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF6489  9e 08 21
 	and BC,0x0080                                        ; FF648C  d9 cc 80 00
@@ -168635,26 +168834,30 @@ LcdKeyRow4_FF3D39_R2:
 	unlk XIZ                                             ; FF649B  ee 0d
 	ret                                                  ; FF649D  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3D39_R3 -- what Dispatch_FF3D39 runs for panel control 0x0A
+; LcdKeyRow3_MidiFileSave_Page3 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0A
 ;
-; Reached from: Dispatch_FF3D39 entry [106] (row 3, control 0x0A), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [106] (page 3, control 0x0A) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3D39_R3:
+LcdKeyRow3_MidiFileSave_Page3:
 	link XIZ,0xfff4                                      ; FF649E  ee 0c f4 ff
 	push XIX                                             ; FF64A2  3c
 	lda_d16 xix, (0x21c8)                                ; FF64A3  f1 c8 21 34
@@ -168688,26 +168891,30 @@ LcdKeyRow3_FF3D39_R3:
 	unlk XIZ                                             ; FF64F5  ee 0d
 	ret                                                  ; FF64F7  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3D39_R3 -- what Dispatch_FF3D39 runs for panel control 0x0B
+; LcdKeyRow4_MidiFileSave_Page3 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3D39 entry [107] (row 3, control 0x0B), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [107] (page 3, control 0x0B) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3D39_R3:
+LcdKeyRow4_MidiFileSave_Page3:
 	link XIZ,0x0000                                      ; FF64F8  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF64FC  9e 08 21
 	and BC,0x0080                                        ; FF64FF  d9 cc 80 00
@@ -168771,21 +168978,27 @@ Paint_FloppyDiskFormatSelectType:
 sub_FF654F:
 	ret                                                  ; FF654F  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF3F39 -- run Dispatch_FF3F39's handler for one PANEL
-;          CONTROL
+; PanelButtonDispatch_FloppyDiskFormatSelectType -- run Dispatch_FF3F39's
+;          handler for one PANEL CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
 ; Evidence: `cp H,0x20` at 0xFF6558 bounds the index to the 32-code
-;          panel space that PanelButton_Route's `and L,0x1f`
+;          panel space PanelButton_Route's `and L,0x1f`
 ;          (0xF861AE) produces, and `add XBC,0x00FF3F39` at 0xFF6566
-;          names the table.  The handler is CALLED, not jumped to:
-;          the reader pushes a return address before `jp (XBC)`.
+;          names the table.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   FloppyDiskFormatSelectType -- the screen object at
+;          PanelScreen_VtableTable[0x70] names this reader as its BUTTON
+;          method and 0xFF6512 as its ENTER method, and that address carries
+;          the label Paint_FloppyDiskFormatSelectType -- a name an earlier
+;          round derived from the screen's own text.
 ; Was `sub_FF6550`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF3F39:
+PanelButtonDispatch_FloppyDiskFormatSelectType:
 	link XIZ,0x0000                                      ; FF6550  ee 0c 00 00
 	pushw hl                                             ; FF6554  2b
 	ld H,(XIZ+0x08)                                      ; FF6555  8e 08 26
@@ -168828,26 +169041,30 @@ PanelButtonDispatch_FF3F39:
 	unlk XIZ                                             ; FF65AF  ee 0d
 	ret                                                  ; FF65B1  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3D39_R4 -- what Dispatch_FF3D39 runs for panel control 0x0A
+; LcdKeyRow3_MidiFileSave_Page4 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0A
 ;
-; Reached from: Dispatch_FF3D39 entry [138] (row 4, control 0x0A), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [138] (page 4, control 0x0A) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3D39_R4:
+LcdKeyRow3_MidiFileSave_Page4:
 	link XIZ,0x0000                                      ; FF65B2  ee 0c 00 00
 	stdi8 (0x2730), 0x00                                 ; FF65B6  f1 30 27 00 00
 	ld BC,(XIZ+0x08)                                     ; FF65BB  9e 08 21
@@ -168860,26 +169077,30 @@ LcdKeyRow3_FF3D39_R4:
 	unlk XIZ                                             ; FF65D2  ee 0d
 	ret                                                  ; FF65D4  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3D39_R4 -- what Dispatch_FF3D39 runs for panel control 0x0B
+; LcdKeyRow4_MidiFileSave_Page4 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3D39 entry [139] (row 4, control 0x0B), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [139] (page 4, control 0x0B) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3D39_R4:
+LcdKeyRow4_MidiFileSave_Page4:
 	link XIZ,0x0000                                      ; FF65D5  ee 0c 00 00
 	stdi8 (0x2730), 0x00                                 ; FF65D9  f1 30 27 00 00
 	ld BC,(XIZ+0x08)                                     ; FF65DE  9e 08 21
@@ -168892,26 +169113,29 @@ LcdKeyRow4_FF3D39_R4:
 	unlk XIZ                                             ; FF65F5  ee 0d
 	ret                                                  ; FF65F7  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3D39_R4 -- what Dispatch_FF3D39 runs for panel control 0x0F
+; ExitKey_MidiFileSave_Page4 -- what Dispatch_FF3D39 runs for panel control
+;          0x0F
 ;
-; Reached from: Dispatch_FF3D39 entry [143] (row 4, control 0x0F), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [143] (page 4, control 0x0F) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3D39_R4:
+ExitKey_MidiFileSave_Page4:
 	link XIZ,0x0000                                      ; FF65F8  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF65FC  9e 08 21
 	and BC,0x0080                                        ; FF65FF  d9 cc 80 00
@@ -169016,21 +169240,27 @@ Paint_FloppyDiskFormatAreYouSure:
 sub_FF66A9:
 	ret                                                  ; FF66A9  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF3FB9 -- run Dispatch_FF3FB9's handler for one PANEL
-;          CONTROL
+; PanelButtonDispatch_FloppyDiskFormatAreYouSure -- run Dispatch_FF3FB9's
+;          handler for one PANEL CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
 ; Evidence: `cp H,0x20` at 0xFF66B2 bounds the index to the 32-code
-;          panel space that PanelButton_Route's `and L,0x1f`
+;          panel space PanelButton_Route's `and L,0x1f`
 ;          (0xF861AE) produces, and `add XBC,0x00FF3FB9` at 0xFF66C0
-;          names the table.  The handler is CALLED, not jumped to:
-;          the reader pushes a return address before `jp (XBC)`.
+;          names the table.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   FloppyDiskFormatAreYouSure -- the screen object at
+;          PanelScreen_VtableTable[0x71] names this reader as its BUTTON
+;          method and 0xFF6613 as its ENTER method, and that address carries
+;          the label Paint_FloppyDiskFormatAreYouSure -- a name an earlier
+;          round derived from the screen's own text.
 ; Was `sub_FF66AA`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF3FB9:
+PanelButtonDispatch_FloppyDiskFormatAreYouSure:
 	link XIZ,0x0000                                      ; FF66AA  ee 0c 00 00
 	pushw hl                                             ; FF66AE  2b
 	ld H,(XIZ+0x08)                                      ; FF66AF  8e 08 26
@@ -169051,26 +169281,30 @@ PanelButtonDispatch_FF3FB9:
 	unlk XIZ                                             ; FF66D2  ee 0d
 	ret                                                  ; FF66D4  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow3_FF3D39_R5 -- what Dispatch_FF3D39 runs for panel control 0x0A
+; LcdKeyRow3_MidiFileSave_Page5 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0A
 ;
-; Reached from: Dispatch_FF3D39 entry [170] (row 5, control 0x0A), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0A is the LCD row 3 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [170] (page 5, control 0x0A) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0A is the LCD row 3 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow3_FF3D39_R5:
+LcdKeyRow3_MidiFileSave_Page5:
 	link XIZ,0x0000                                      ; FF66D5  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF66D9  9e 08 21
 	and BC,0x0080                                        ; FF66DC  d9 cc 80 00
@@ -169083,26 +169317,30 @@ LcdKeyRow3_FF3D39_R5:
 	unlk XIZ                                             ; FF66F5  ee 0d
 	ret                                                  ; FF66F7  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow4_FF3D39_R5 -- what Dispatch_FF3D39 runs for panel control 0x0B
+; LcdKeyRow4_MidiFileSave_Page5 -- what Dispatch_FF3D39 runs for panel
+;          control 0x0B
 ;
-; Reached from: Dispatch_FF3D39 entry [171] (row 5, control 0x0B), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0B is the LCD row 4 button pair.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [171] (page 5, control 0x0B) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0B is the LCD row 4 button pair. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow4_FF3D39_R5:
+LcdKeyRow4_MidiFileSave_Page5:
 	link XIZ,0x0000                                      ; FF66F8  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF66FC  9e 08 21
 	and BC,0x0080                                        ; FF66FF  d9 cc 80 00
@@ -169113,26 +169351,29 @@ LcdKeyRow4_FF3D39_R5:
 	unlk XIZ                                             ; FF670F  ee 0d
 	ret                                                  ; FF6711  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF3D39_R5 -- what Dispatch_FF3D39 runs for panel control 0x0F
+; ExitKey_MidiFileSave_Page5 -- what Dispatch_FF3D39 runs for panel control
+;          0x0F
 ;
-; Reached from: Dispatch_FF3D39 entry [175] (row 5, control 0x0F), and from
-;          no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF3D39 entry [175] (page 5, control 0x0F) -- and
+;          from no other slot of any 32-entry control table in prom_a. A
+;          target reached at two DIFFERENT indices is refused by the script
+;          that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   MidiFileSave -- the screen object at
+;          PanelScreen_VtableTable[0x6E] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58A21, whose first
+;          record reads "MIDI FILE SAVE : FILE NAMING", and its page 1 the
+;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF3D39_R5:
+ExitKey_MidiFileSave_Page5:
 	link XIZ,0x0000                                      ; FF6712  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF6716  9e 08 21
 	and BC,0x0080                                        ; FF6719  d9 cc 80 00
@@ -169145,7 +169386,8 @@ ExitKey_FF3D39_R5:
 sub_FF672C:
 	ret                                                  ; FF672C  0e
 ; ---------------------------------------------------------------------
-; PageDispatch_FF4041 -- run Dispatch_FF4041's entry for the CURRENT PAGE
+; PageDispatch_L0adSingleS0und -- run Dispatch_FF4041's entry for the CURRENT
+;          PAGE
 ;
 ; ★ NOT a panel-control table.  This reader indexes with the page
 ;          byte (0x2229) ALONE and never reads an argument, so its
@@ -169155,9 +169397,12 @@ sub_FF672C:
 ;          width-1), and `add XBC,0x00FF4041` at 0xFF673C names the table.
 ;          The entry is CALLED: a return address is pushed before
 ;          `jp (XBC)`.
+; Screen:   L0adSingleS0und -- the screen object at
+;          PanelScreen_VtableTable[0x74] names this reader as its ENTER
+;          method, and its BUTTON method is that screen's control table.
 ; Was `sub_FF672D`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PageDispatch_FF4041:
+PageDispatch_L0adSingleS0und:
 	m_cp_mi8 MB16, 0x2229, 0x02                          ; FF672D  c1 29 22 3f 02
 	jr nc, .LFF674C                                      ; FF6732  6f 18
 	ldb c, 0x04                                          ; FF6734  23 04
@@ -169301,8 +169546,8 @@ sub_FF68CA:
 	stdi8 (0x21fa), 0x00                                 ; FF68D2  f1 fa 21 00 00
 	ret                                                  ; FF68D7  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF4049 -- run Dispatch_FF4049's handler for one PANEL
-;          CONTROL
+; PanelButtonDispatch_L0adSingleS0und -- run Dispatch_FF4049's handler for
+;          one PANEL CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
@@ -169315,9 +169560,13 @@ sub_FF68CA:
 ;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   L0adSingleS0und -- the screen object at
+;          PanelScreen_VtableTable[0x74] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58C53, whose first
+;          record reads "LOAD SINGLE SOUND".
 ; Was `sub_FF68D8`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF4049:
+PanelButtonDispatch_L0adSingleS0und:
 	link XIZ,0x0000                                      ; FF68D8  ee 0c 00 00
 	pushw hl                                             ; FF68DC  2b
 	ld H,(XIZ+0x08)                                      ; FF68DD  8e 08 26
@@ -169548,27 +169797,30 @@ PanelButtonDispatch_FF4049:
 	unlk XIZ                                             ; FF6AFB  ee 0d
 	ret                                                  ; FF6AFD  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF4049_R1 -- what Dispatch_FF4049 runs for panel control 0x08
+; LcdKeyRow1_L0adSingleS0und_Page1 -- what Dispatch_FF4049 runs for panel
+;          control 0x08
 ;
-; Reached from: Dispatch_FF4049 entry [40] (row 1, control 0x08), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF4049 entry [40] (page 1, control 0x08) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   L0adSingleS0und -- the screen object at
+;          PanelScreen_VtableTable[0x74] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58C53, whose first
+;          record reads "LOAD SINGLE SOUND".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF4049_R1:
+LcdKeyRow1_L0adSingleS0und_Page1:
 	link XIZ,0x0000                                      ; FF6AFE  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF6B02  9e 08 21
 	and BC,0x0080                                        ; FF6B05  d9 cc 80 00
@@ -169839,27 +170091,29 @@ LcdKeyRow1_FF4049_R1:
 	unlk XIZ                                             ; FF6D62  ee 0d
 	ret                                                  ; FF6D64  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF4049_R0 -- what Dispatch_FF4049 runs for panel control 0x08
+; LcdKeyRow1_L0adSingleS0und_Page0 -- what Dispatch_FF4049 runs for panel
+;          control 0x08
 ;
-; Reached from: Dispatch_FF4049 entry [8], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF4049 entry [8] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   L0adSingleS0und -- the screen object at
+;          PanelScreen_VtableTable[0x74] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58C53, whose first
+;          record reads "LOAD SINGLE SOUND".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF4049_R0:
+LcdKeyRow1_L0adSingleS0und_Page0:
 	link XIZ,0x0000                                      ; FF6D65  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF6D69  9e 08 21
 	and BC,0x0080                                        ; FF6D6C  d9 cc 80 00
@@ -169882,26 +170136,28 @@ LcdKeyRow1_FF4049_R0:
 	unlk XIZ                                             ; FF6D99  ee 0d
 	ret                                                  ; FF6D9B  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF4049_R01 -- what Dispatch_FF4049 runs for panel control 0x0F
+; ExitKey_L0adSingleS0und_Page01 -- what Dispatch_FF4049 runs for panel
+;          control 0x0F
 ;
-; Reached from: Dispatch_FF4049 entry [15], Dispatch_FF4049 entry [47] (row
-;          1, control 0x0F), and from no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF4049 entry [15], Dispatch_FF4049 entry [47] (page
+;          1, control 0x0F) -- and from no other slot of any 32-entry control
+;          table in prom_a. A target reached at two DIFFERENT indices is
+;          refused by the script that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   L0adSingleS0und -- the screen object at
+;          PanelScreen_VtableTable[0x74] names this reader as its BUTTON
+;          method, and its page 0 draws the list at 0xF58C53, whose first
+;          record reads "LOAD SINGLE SOUND".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF4049_R01:
+ExitKey_L0adSingleS0und_Page01:
 	link XIZ,0x0000                                      ; FF6D9C  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF6DA0  9e 08 21
 	and BC,0x0080                                        ; FF6DA3  d9 cc 80 00
@@ -169914,7 +170170,8 @@ ExitKey_FF4049_R01:
 sub_FF6DB6:
 	ret                                                  ; FF6DB6  0e
 ; ---------------------------------------------------------------------
-; PageDispatch_FF4149 -- run Dispatch_FF4149's entry for the CURRENT PAGE
+; PageDispatch_L0adSingleC0mbination -- run Dispatch_FF4149's entry for the
+;          CURRENT PAGE
 ;
 ; ★ NOT a panel-control table.  This reader indexes with the page
 ;          byte (0x2229) ALONE and never reads an argument, so its
@@ -169924,9 +170181,12 @@ sub_FF6DB6:
 ;          width-1), and `add XBC,0x00FF4149` at 0xFF6DC6 names the table.
 ;          The entry is CALLED: a return address is pushed before
 ;          `jp (XBC)`.
+; Screen:   L0adSingleC0mbination -- the screen object at
+;          PanelScreen_VtableTable[0x73] names this reader as its ENTER
+;          method, and its BUTTON method is that screen's control table.
 ; Was `sub_FF6DB7`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PageDispatch_FF4149:
+PageDispatch_L0adSingleC0mbination:
 	m_cp_mi8 MB16, 0x2229, 0x02                          ; FF6DB7  c1 29 22 3f 02
 	jr nc, .LFF6DD6                                      ; FF6DBC  6f 18
 	ldb c, 0x04                                          ; FF6DBE  23 04
@@ -170041,8 +170301,8 @@ sub_FF6F13:
 	stdi8 (0x21fa), 0x00                                 ; FF6F1B  f1 fa 21 00 00
 	ret                                                  ; FF6F20  0e
 ; ---------------------------------------------------------------------
-; PanelButtonDispatch_FF4151 -- run Dispatch_FF4151's handler for one PANEL
-;          CONTROL
+; PanelButtonDispatch_L0adSingleC0mbination -- run Dispatch_FF4151's handler
+;          for one PANEL CONTROL
 ;
 ; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
 ;          the argument this reader forwards to the handler.
@@ -170055,9 +170315,13 @@ sub_FF6F13:
 ;          a return address before `jp (XBC)`.
 ; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
 ;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Screen:   L0adSingleC0mbination -- the screen object at
+;          PanelScreen_VtableTable[0x73] names this reader as its BUTTON
+;          method, and its page 1 draws the list at 0xF58F55, whose first
+;          record reads "LOAD SINGLE COMBINATION".
 ; Was `sub_FF6F21`, named by notes/prom_a_naming_wave8_apply.py.
 ; ---------------------------------------------------------------------
-PanelButtonDispatch_FF4151:
+PanelButtonDispatch_L0adSingleC0mbination:
 	link XIZ,0x0000                                      ; FF6F21  ee 0c 00 00
 	pushw hl                                             ; FF6F25  2b
 	ld H,(XIZ+0x08)                                      ; FF6F26  8e 08 26
@@ -170077,27 +170341,30 @@ PanelButtonDispatch_FF4151:
 	unlk XIZ                                             ; FF6F4C  ee 0d
 	ret                                                  ; FF6F4E  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF4151_R1 -- what Dispatch_FF4151 runs for panel control 0x08
+; LcdKeyRow1_L0adSingleC0mbination_Page1 -- what Dispatch_FF4151 runs for
+;          panel control 0x08
 ;
-; Reached from: Dispatch_FF4151 entry [40] (row 1, control 0x08), and from no
-;          other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF4151 entry [40] (page 1, control 0x08) -- and from
+;          no other slot of any 32-entry control table in prom_a. A target
+;          reached at two DIFFERENT indices is refused by the script that
+;          wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   L0adSingleC0mbination -- the screen object at
+;          PanelScreen_VtableTable[0x73] names this reader as its BUTTON
+;          method, and its page 1 draws the list at 0xF58F55, whose first
+;          record reads "LOAD SINGLE COMBINATION".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF4151_R1:
+LcdKeyRow1_L0adSingleC0mbination_Page1:
 	link XIZ,0x0000                                      ; FF6F4F  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF6F53  9e 08 21
 	and BC,0x0080                                        ; FF6F56  d9 cc 80 00
@@ -170196,27 +170463,29 @@ LcdKeyRow1_FF4151_R1:
 	unlk XIZ                                             ; FF702F  ee 0d
 	ret                                                  ; FF7031  0e
 ; ---------------------------------------------------------------------
-; LcdKeyRow1_FF4151_R0 -- what Dispatch_FF4151 runs for panel control 0x08
+; LcdKeyRow1_L0adSingleC0mbination_Page0 -- what Dispatch_FF4151 runs for
+;          panel control 0x08
 ;
-; Reached from: Dispatch_FF4151 entry [8], and from no other slot of any
-;          32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
+; Reached from: Dispatch_FF4151 entry [8] -- and from no other slot of any
+;          32-entry control table in prom_a. A target reached at two
+;          DIFFERENT indices is refused by the script that wrote this.
 ; Control:  index 0x08 is the LCD row 1 button pair -- the left-hand and
-;          right-hand buttons of the display's TOP row.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+;          right-hand buttons of the display's TOP row. The pair position --
+;          which of the two keys -- reaches the handler in the argument the
+;          reader forwards; this pass did NOT establish that argument's bit
+;          layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   L0adSingleC0mbination -- the screen object at
+;          PanelScreen_VtableTable[0x73] names this reader as its BUTTON
+;          method, and its page 1 draws the list at 0xF58F55, whose first
+;          record reads "LOAD SINGLE COMBINATION".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-LcdKeyRow1_FF4151_R0:
+LcdKeyRow1_L0adSingleC0mbination_Page0:
 	link XIZ,0x0000                                      ; FF7032  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF7036  9e 08 21
 	and BC,0x0080                                        ; FF7039  d9 cc 80 00
@@ -170239,26 +170508,28 @@ LcdKeyRow1_FF4151_R0:
 	unlk XIZ                                             ; FF7066  ee 0d
 	ret                                                  ; FF7068  0e
 ; ---------------------------------------------------------------------
-; ExitKey_FF4151_R01 -- what Dispatch_FF4151 runs for panel control 0x0F
+; ExitKey_L0adSingleC0mbination_Page01 -- what Dispatch_FF4151 runs for panel
+;          control 0x0F
 ;
-; Reached from: Dispatch_FF4151 entry [15], Dispatch_FF4151 entry [47] (row
-;          1, control 0x0F), and from no other slot of any 32-entry control
-;          table in prom_a.  A target reached at two DIFFERENT
-;          indices is refused by the script that wrote this.
-; Control:  index 0x0F is the EXIT key.
-;          The pair position -- which of the two buttons -- reaches
-;          the handler in the argument the reader forwards; this
-;          pass did NOT establish that argument's bit layout.
-; Evidence: the code->control map is rounds 9-12's, re-derived from
-;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot.  What is new
-;          here is only that
-;          THIS module's tables are tied to it; see
+; Reached from: Dispatch_FF4151 entry [15], Dispatch_FF4151 entry [47] (page
+;          1, control 0x0F) -- and from no other slot of any 32-entry control
+;          table in prom_a. A target reached at two DIFFERENT indices is
+;          refused by the script that wrote this.
+; Control:  index 0x0F is the EXIT key. The pair position -- which of the two
+;          keys -- reaches the handler in the argument the reader forwards;
+;          this pass did NOT establish that argument's bit layout.
+; Evidence: the code->control map is rounds 9-12's, re-derived from the ROM
+;          by notes/prom_a_panel_control_map.py, which agrees with prom_b's
+;          SLOT_CONTROL slot for slot; what is new here is only that THIS
+;          module's tables are tied to it. See
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
-; Unknown:  what this screen does with the button, and which screen
-;          this table serves.
+; Screen:   L0adSingleC0mbination -- the screen object at
+;          PanelScreen_VtableTable[0x73] names this reader as its BUTTON
+;          method, and its page 1 draws the list at 0xF58F55, whose first
+;          record reads "LOAD SINGLE COMBINATION".
+; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_FF4151_R01:
+ExitKey_L0adSingleC0mbination_Page01:
 	link XIZ,0x0000                                      ; FF7069  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF706D  9e 08 21
 	and BC,0x0080                                        ; FF7070  d9 cc 80 00
@@ -170369,10 +170640,10 @@ sub_FF712A:
 ; ---------------------------------------------------------------------
 ; sub_FF7153 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_a PageDispatch_FF4041 (`calr`) at 0xFF688E
-;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF696C
-;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6A63
-;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6AD3
+; Called from: prom_a PageDispatch_L0adSingleS0und (`calr`) at 0xFF688E
+;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF696C
+;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6A63
+;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6AD3
 ;
 ;     0xFF71A5 loads 0xFF4291, where the ROM reads:
 ;        "                U1 -U2 -UD1-UD2-"
@@ -170509,10 +170780,10 @@ sub_FF725D:
 ; ---------------------------------------------------------------------
 ; sub_FF7296 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_a PageDispatch_FF4041 (`calr`) at 0xFF67F9
-;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6BBF
-;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6C96
-;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6CDE
+; Called from: prom_a PageDispatch_L0adSingleS0und (`calr`) at 0xFF67F9
+;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6BBF
+;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6C96
+;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6CDE
 ;          ... and 1 more
 ;
 ;     0xFF72D9 loads 0xFF4291, where the ROM reads:
@@ -170637,8 +170908,8 @@ sub_FF7333:
 ; ---------------------------------------------------------------------
 ; sub_FF7399 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6CE6
-;          prom_a PageDispatch_FF4149 (`calr`) at 0xFF6E5A
+; Called from: prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6CE6
+;          prom_a PageDispatch_L0adSingleC0mbination (`calr`) at 0xFF6E5A
 ;
 ;     0xFF73DC loads 0xFF4291, where the ROM reads:
 ;        "                U1 -U2 -UD1-UD2-"
@@ -170721,10 +170992,10 @@ sub_FF7399:
 ; ---------------------------------------------------------------------
 ; sub_FF7436 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_a PageDispatch_FF4041 (`calr`) at 0xFF6802
-;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6BC8
-;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6C1A
-;          prom_a PageDispatch_FF4149 (`calr`) at 0xFF6E63
+; Called from: prom_a PageDispatch_L0adSingleS0und (`calr`) at 0xFF6802
+;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6BC8
+;          prom_a PanelButtonDispatch_L0adSingleS0und (`calr`) at 0xFF6C1A
+;          prom_a PageDispatch_L0adSingleC0mbination (`calr`) at 0xFF6E63
 ;          ... and 1 more
 ;
 ;     0xFF744E loads 0xFF42A1, where the ROM reads:
@@ -170987,18 +171258,18 @@ sub_FF7604:
 ; Called from: prom_a sub_FF42CD (`call`) at 0xFF4312
 ;          prom_a Paint_MidiFileDirectPlay (`call`) at 0xFF4572
 ;          prom_a Paint_DiskL0adFile (`call`) at 0xFF48EA
-;          prom_a PanelButtonDispatch_FF3900 (`call`) at 0xFF4A77
-;          prom_a LcdKeyRow3_FF3900 (`call`) at 0xFF4AC0
-;          prom_a LcdKeyRow4_FF3900 (`call`) at 0xFF4D54
-;          prom_a LcdKeyRow5_FF3900 (`call`) at 0xFF4FD6
+;          prom_a PanelButtonDispatch_DiskL0adFile (`call`) at 0xFF4A77
+;          prom_a LcdKeyRow3_DiskL0adFile (`call`) at 0xFF4AC0
+;          prom_a LcdKeyRow4_DiskL0adFile (`call`) at 0xFF4D54
+;          prom_a LcdKeyRow5_DiskL0adFile (`call`) at 0xFF4FD6
 ;          prom_a Paint_MidiFileL0ad (`call`) at 0xFF50DE
-;          prom_a PageDispatch_FF3A00 (`call`) at 0xFF553A
+;          prom_a PageDispatch_DiskSaveFile (`call`) at 0xFF553A
 ;          prom_a Paint_DiskSaveFile (`call`) at 0xFF55B3, 0xFF5615, 0xFF5713
-;          prom_a PageDispatch_FF3D29 (`call`) at 0xFF5D1B, 0xFF5DDC, 0xFF5E3F, 0xFF5EA2
+;          prom_a PageDispatch_MidiFileSave (`call`) at 0xFF5D1B, 0xFF5DDC, 0xFF5E3F, 0xFF5EA2
 ;          prom_a Paint_FloppyDiskFormatSelectType (`call`) at 0xFF6544
 ;          prom_a Paint_FloppyDiskFormatAreYouSure (`call`) at 0xFF669F
-;          prom_a PageDispatch_FF4041 (`call`) at 0xFF6828, 0xFF68BE
-;          prom_a PageDispatch_FF4149 (`call`) at 0xFF6E89, 0xFF6F08
+;          prom_a PageDispatch_L0adSingleS0und (`call`) at 0xFF6828, 0xFF68BE
+;          prom_a PageDispatch_L0adSingleC0mbination (`call`) at 0xFF6E89, 0xFF6F08
 ; Issues:  SWI7 service 0x0C at 0xFF761D -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
 ; Evidence: `push XIZ/XIX/XHL/XDE`, `ld C,0x07`, service 0x0C, then the four pops.
 ;           Same effect as LCD_ScreenRedraw_End; the pushes are what distinguish it.

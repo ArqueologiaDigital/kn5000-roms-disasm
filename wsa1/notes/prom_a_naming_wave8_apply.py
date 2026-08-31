@@ -46,6 +46,145 @@ sys.path.insert(0, os.path.join(ROOT, "notes"))
 import prom_a_panel_control_map as PM                 # noqa: E402
 
 LISTING = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
+_A = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
+_B = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_b.ic13"), "rb").read()
+
+
+def _rom(a, n):
+    if 0xF80000 <= a < 0x1000000:
+        return _A[a - 0xF80000:a - 0xF80000 + n]
+    if 0xF00000 <= a < 0xF80000:
+        return _B[a - 0xF00000:a - 0xF00000 + n]
+    return b""
+
+
+VTABLE = 0xF86EC1          # PanelScreen_VtableTable, 256 LE32 screen objects
+NULL_VTABLE = 0xF872C1
+
+
+def screen_of_reader():
+    """{reader address: (screen id, Enter address)} -- from the SCREEN OBJECT.
+
+    ★ THIS IS THE LINK THAT TURNS A TABLE ADDRESS INTO A SCREEN.  Each entry of
+    PanelScreen_VtableTable is a three-method object -- +0 Enter, +4 Leave, +8
+    Button, each a `jp addr24` in prom_b's directory (that listing's own header,
+    with its checks V1-V6).  So the screen whose BUTTON method is a reader is
+    the screen that reader serves, and its ENTER method is what paints it.
+
+    The mapping comes out ONE-TO-ONE: ten readers, ten screen ids, no reader
+    named by two screens and no screen naming two readers.  That is asserted,
+    not assumed -- if it were many-to-one a table could not carry a screen name
+    at all.
+    """
+    out = {}
+    for i in range(256):
+        v = int.from_bytes(_rom(VTABLE + 4 * i, 4), "little") & 0xFFFFFF
+        if not v or v == NULL_VTABLE:
+            continue
+
+        def _jp(a):
+            b = _rom(a, 4)
+            return int.from_bytes(b[1:4], "little") if b and b[0] == 0x1B else None
+        enter, button = _jp(v), _jp(v + 8)
+        if button is None:
+            continue
+        out.setdefault(button, []).append((i, enter))
+    return {b: v[0] for b, v in out.items() if len(v) == 1}
+
+
+# Screens whose name is NOT the Enter method's own label.  Each carries the
+# evidence in the value, and --selftest re-derives the address it cites.
+SCREEN_DECLARED = {
+    0x60: ("DiskMenu",
+           "its Enter method (0xFF42CD) hands the interpreter the lists at "
+           "0xF58014 (\"DISK\"), 0xF580B0 (\"MIDI FILE LOAD\") and 0xF58127 "
+           "(\"LOAD\"), choosing between the last two on the model strap "
+           "(0xC4) at 0xFF42EE -- the site this module's own banner already "
+           "calls THE DISK MENU"),
+    0x6C: ("DiskSaveFile",
+           "its Enter method is the page dispatcher PageDispatch_FF3A00, and "
+           "four of that table's six pages are Paint_DiskSaveFile"),
+    0x6E: ("MidiFileSave",
+           "its page 0 draws the list at 0xF58A21, whose first record reads "
+           "\"MIDI FILE SAVE : FILE NAMING\", and its page 1 the list at "
+           "0xF59222, \"MIDI FILE SAVE : FILE SELECTI0N\""),
+    0x73: ("L0adSingleC0mbination",
+           "its page 1 draws the list at 0xF58F55, whose first record reads "
+           "\"LOAD SINGLE COMBINATION\""),
+    0x74: ("L0adSingleS0und",
+           "its page 0 draws the list at 0xF58C53, whose first record reads "
+           "\"LOAD SINGLE SOUND\""),
+}
+
+
+def screen_of_enter():
+    """{Enter-method address: screen id} -- the page dispatchers are reached as
+    a screen's ENTER method, not as its BUTTON method, so they need the other
+    half of the same object."""
+    out = {}
+    for i in range(256):
+        v = int.from_bytes(_rom(VTABLE + 4 * i, 4), "little") & 0xFFFFFF
+        if not v or v == NULL_VTABLE:
+            continue
+        b = _rom(v, 4)
+        e = int.from_bytes(b[1:4], "little") if b and b[0] == 0x1B else None
+        if e is not None:
+            out.setdefault(e, []).append(i)
+    return {e: v[0] for e, v in out.items() if len(v) == 1}
+
+
+def screen_names(src):
+    """{table label: (screen name, screen id, why)}."""
+    rd = readers(src)
+    lab_at = {}
+    for i, ln in enumerate(src):
+        mm = LABEL.match(ln)
+        if not mm:
+            continue
+        a = ADDR.search(src[i + 1]) if i + 1 < len(src) else None
+        if a:
+            lab_at[int(a.group(1), 16)] = mm.group(1)
+    link = screen_of_reader()
+    out = {}
+    for t, (_old, li, _kind, _ev) in rd.items():
+        a = ADDR.search(src[li + 1]) if li + 1 < len(src) else None
+        if not a:
+            continue
+        addr = int(a.group(1), 16)
+        if addr not in link:
+            continue
+        sid, enter = link[addr]
+        nm = lab_at.get(enter)
+        if nm and nm.startswith("Paint_"):
+            out[t] = (nm[len("Paint_"):], sid,
+                      "the screen object at PanelScreen_VtableTable[0x%02X] "
+                      "names this reader as its BUTTON method and 0x%06X as "
+                      "its ENTER method, and that address carries the label "
+                      "%s -- a name an earlier round derived from the "
+                      "screen's own text" % (sid, enter, nm))
+        elif sid in SCREEN_DECLARED:
+            n2, why = SCREEN_DECLARED[sid]
+            out[t] = (n2, sid,
+                      "the screen object at PanelScreen_VtableTable[0x%02X] "
+                      "names this reader as its BUTTON method, and %s"
+                      % (sid, why))
+    # the PAGE dispatchers: same object, other method
+    ent = screen_of_enter()
+    byid = {sid: nm for nm, sid, _w in out.values()} if False else \
+        {v[1]: v[0] for v in out.values()}
+    for t, (_old, li, kind, _ev) in rd.items():
+        if t in out or kind != "page":
+            continue
+        a = ADDR.search(src[li + 1]) if li + 1 < len(src) else None
+        if not a:
+            continue
+        sid = ent.get(int(a.group(1), 16))
+        if sid in byid:
+            out[t] = (byid[sid], sid,
+                      "the screen object at PanelScreen_VtableTable[0x%02X] "
+                      "names this reader as its ENTER method, and its BUTTON "
+                      "method is that screen's control table" % sid)
+    return out
 SIMPLE = ["Dispatch_FF3800", "Dispatch_FF3880", "Dispatch_FF3900",
           "Dispatch_FF3980"]
 TABLE_LABEL = re.compile(r'^(Dispatch_[A-Za-z0-9_]+):')
@@ -185,14 +324,17 @@ def plan():
     at = line_of_addr(src)
     rd = readers(src)
 
+    scr = screen_names(src)         # {table: (screen name, id, why)}
     jobs = []                       # (addr, kind, old, new, header lines)
 
     # --- the readers -------------------------------------------------------
     for t, (old, li, kind, ev) in sorted(rd.items()):
         if not old.startswith("sub_"):
             continue
+        sname = scr.get(t)
+        suffix = sname[0] if sname else t.split("_")[1]
         if kind in ("ctl", "ctl2"):
-            new = "PanelButtonDispatch_" + t.split("_")[1]
+            new = "PanelButtonDispatch_" + suffix
             hdr = [
                 "%s -- run %s's handler for one PANEL CONTROL" % (new, t),
                 "",
@@ -223,8 +365,11 @@ def plan():
                 "Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and",
                 "         `python3 notes/prom_a_panel_control_map.py --map`.",
             ]
+            if sname:
+                hdr += ["Screen:  %s -- %s."
+                        % (sname[0], sname[2])]
         elif kind == "page":
-            new = "PageDispatch_" + t.split("_")[1]
+            new = "PageDispatch_" + suffix
             hdr = [
                 "%s -- run %s's entry for the CURRENT PAGE" % (new, t),
                 "",
@@ -240,6 +385,9 @@ def plan():
                 "         The entry is CALLED: a return address is pushed before",
                 "         `jp (XBC)`.",
             ]
+            if sname:
+                hdr += ["Screen:  %s -- %s."
+                        % (sname[0], sname[2])]
         else:
             continue
         hdr.append("Was `%s`, named by notes/prom_a_naming_wave8_apply.py." % old)
@@ -286,8 +434,13 @@ def plan():
         # a claim the header underneath it contradicts.
         myrows = "".join(str(r) for r in sorted({i // 32 for t, i in slots
                                                  if t == t0}))
-        new = "%s_%s%s" % (short, t0.split("_")[1],
-                           "_R%s" % myrows if rows > 1 else "")
+        # ★ THE SUFFIX IS THE SCREEN, when the screen object gives one -- the
+        # form rounds 11/12 use in prom_b (<Control>_<Screen>).  It falls back
+        # to the table address only where no screen object names the reader.
+        sn = scr.get(t0)
+        new = "%s_%s%s" % (short, sn[0] if sn else t0.split("_")[1],
+                           "_Page%s" % myrows if rows > 1 else "")
+
         li = at[a]
         have = label_at(src, li)
         old = have[0] if have else None
@@ -296,25 +449,28 @@ def plan():
         hdr = [
             "%s -- what %s runs for panel control 0x%02X" % (new, t0, ctl),
             "",
-            "Reached from: %s, and from no other slot of any 32-entry control"
+            "Reached from: %s -- and from no other slot of any 32-entry "
+            "control table in prom_a.  A target reached at two DIFFERENT "
+            "indices is refused by the script that wrote this."
             % ", ".join("%s entry [%d]%s"
-                        % (t, i, "" if i < 32 else " (row %d, control 0x%02X)"
+                        % (t, i, "" if i < 32 else " (page %d, control 0x%02X)"
                            % (i // 32, i % 32)) for t, i in slots),
-            "         table in prom_a.  A target reached at two DIFFERENT",
-            "         indices is refused by the script that wrote this.",
-            "Control: index 0x%02X is %s." % (ctl, what),
-            "         The pair position -- which of the two buttons -- reaches",
-            "         the handler in the argument the reader forwards; this",
-            "         pass did NOT establish that argument's bit layout.",
-            "Evidence: the code->control map is rounds 9-12's, re-derived from",
-            "         the ROM by notes/prom_a_panel_control_map.py, which agrees",
-            "         with prom_b's SLOT_CONTROL slot for slot.  What is new",
-            "         here is only that",
-            "         THIS module's tables are tied to it; see",
-            "         notes/FINDINGS-prom_a-panel-control-map.md.",
-            "Unknown: what this screen does with the button, and which screen",
-            "         this table serves.",
+            "Control: index 0x%02X is %s.  The pair position -- which of the "
+            "two keys -- reaches the handler in the argument the reader "
+            "forwards; this pass did NOT establish that argument's bit "
+            "layout." % (ctl, what),
+            "Evidence: the code->control map is rounds 9-12's, re-derived from "
+            "the ROM by notes/prom_a_panel_control_map.py, which agrees with "
+            "prom_b's SLOT_CONTROL slot for slot; what is new here is only "
+            "that THIS module's tables are tied to it.  See "
+            "notes/FINDINGS-prom_a-panel-control-map.md.",
+            "Unknown: what this screen does with the button.",
         ]
+        if sn:
+            hdr[-1:] = [
+                "Screen:  %s -- %s." % (sn[0], sn[2]),
+                "Unknown: what this screen does with the button.",
+            ]
         if old:
             hdr.append("Was `%s`." % old)
             jobs.append((a, "rename", old, new, hdr))
