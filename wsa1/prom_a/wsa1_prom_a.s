@@ -163256,12 +163256,19 @@ Data_FF17E2:
 ;   5-bit event code, composed out of the wire->group map (0xF8A189) and
 ;   the group event lists (0xF8B4B2) and checked against the service
 ;   manual's switch matrix.  Every table below now carries the legend and
-;   its own live-entry list; the derivation, its variant adjudication and
-;   its nineteen corroborations are in
+;   its own live-entry list; the derivation, the variant adjudication it
+;   inherits from round 11, and its corroborations are in
 ;   notes/FINDINGS-prom_a-panel-control-map.md.
+;   ★ AND EACH TABLE'S SCREEN IS NAMED TOO, from the screen object that
+;   installs the reader as its BUTTON method -- so the handlers read
+;   LcdKeyRow1_DiskMenu and ExitKey_MidiFileL0ad rather than carrying a
+;   table address.  This module owns ten screens: the DISK MENU, MIDI
+;   FILE LOAD / SAVE / DIRECT PLAY, DISK LOAD FILE / SAVE FILE, LOAD
+;   SINGLE SOUND / COMBINATION, and the two floppy-format screens.
 ;   ⚠ It ties an index to a CONTROL, not to a FUNCTION.  What a handler
-;   does with the button, and which screen each table serves, are still
-;   open -- so most handlers here are still `sub_XXXXXX` on purpose.
+;   DOES with the button is still open, and a target reached at two
+;   different indices is refused -- so many handlers here are still
+;   `sub_XXXXXX` on purpose.
 ;
 ; ---------------------------------------------------------------------
 ; Dispatch_FF3800 -- 32 handler pointers, indexed by the control number
@@ -168058,8 +168065,8 @@ LcdKeyRow1_DiskSaveFile_Page3:
 	unlk XIZ                                             ; FF5B53  ee 0d
 	ret                                                  ; FF5B55  0e
 ; ---------------------------------------------------------------------
-; ExitKey_DiskSaveFile_Page34 -- what Dispatch_FF3A29 runs for panel control
-;          0x0F
+; ExitKey_DiskSaveFile_Pages3_4 -- what Dispatch_FF3A29 runs for panel
+;          control 0x0F
 ;
 ; Reached from: Dispatch_FF3A29 entry [111] (page 3, control 0x0F),
 ;          Dispatch_FF3A29 entry [143] (page 4, control 0x0F) -- and from no
@@ -168081,7 +168088,7 @@ LcdKeyRow1_DiskSaveFile_Page3:
 ;          Paint_DiskSaveFile.
 ; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_DiskSaveFile_Page34:
+ExitKey_DiskSaveFile_Pages3_4:
 	link XIZ,0x0000                                      ; FF5B56  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF5B5A  9e 08 21
 	and BC,0x0080                                        ; FF5B5D  d9 cc 80 00
@@ -168753,7 +168760,7 @@ LcdKeyRow4_MidiFileSave_Page0:
 	unlk XIZ                                             ; FF60DD  ee 0d
 	ret                                                  ; FF60DF  0e
 ; ---------------------------------------------------------------------
-; ExitKey_MidiFileSave_Page0123 -- what Dispatch_FF3D39 runs for panel
+; ExitKey_MidiFileSave_Pages0_1_2_3 -- what Dispatch_FF3D39 runs for panel
 ;          control 0x0F
 ;
 ; Reached from: Dispatch_FF3D39 entry [15], Dispatch_FF3D39 entry [47] (page
@@ -168777,7 +168784,7 @@ LcdKeyRow4_MidiFileSave_Page0:
 ;          list at 0xF59222, "MIDI FILE SAVE : FILE SELECTI0N".
 ; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_MidiFileSave_Page0123:
+ExitKey_MidiFileSave_Pages0_1_2_3:
 	link XIZ,0x0000                                      ; FF60E0  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF60E4  9e 08 21
 	and BC,0x0080                                        ; FF60E7  d9 cc 80 00
@@ -170686,7 +170693,7 @@ LcdKeyRow1_L0adSingleS0und_Page0:
 	unlk XIZ                                             ; FF6D99  ee 0d
 	ret                                                  ; FF6D9B  0e
 ; ---------------------------------------------------------------------
-; ExitKey_L0adSingleS0und_Page01 -- what Dispatch_FF4049 runs for panel
+; ExitKey_L0adSingleS0und_Pages0_1 -- what Dispatch_FF4049 runs for panel
 ;          control 0x0F
 ;
 ; Reached from: Dispatch_FF4049 entry [15], Dispatch_FF4049 entry [47] (page
@@ -170707,7 +170714,7 @@ LcdKeyRow1_L0adSingleS0und_Page0:
 ;          record reads "LOAD SINGLE SOUND".
 ; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_L0adSingleS0und_Page01:
+ExitKey_L0adSingleS0und_Pages0_1:
 	link XIZ,0x0000                                      ; FF6D9C  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF6DA0  9e 08 21
 	and BC,0x0080                                        ; FF6DA3  d9 cc 80 00
@@ -171058,8 +171065,8 @@ LcdKeyRow1_L0adSingleC0mbination_Page0:
 	unlk XIZ                                             ; FF7066  ee 0d
 	ret                                                  ; FF7068  0e
 ; ---------------------------------------------------------------------
-; ExitKey_L0adSingleC0mbination_Page01 -- what Dispatch_FF4151 runs for panel
-;          control 0x0F
+; ExitKey_L0adSingleC0mbination_Pages0_1 -- what Dispatch_FF4151 runs for
+;          panel control 0x0F
 ;
 ; Reached from: Dispatch_FF4151 entry [15], Dispatch_FF4151 entry [47] (page
 ;          1, control 0x0F) -- and from no other slot of any 32-entry control
@@ -171079,7 +171086,7 @@ LcdKeyRow1_L0adSingleC0mbination_Page0:
 ;          record reads "LOAD SINGLE COMBINATION".
 ; Unknown:  what this screen does with the button.
 ; ---------------------------------------------------------------------
-ExitKey_L0adSingleC0mbination_Page01:
+ExitKey_L0adSingleC0mbination_Pages0_1:
 	link XIZ,0x0000                                      ; FF7069  ee 0c 00 00
 	ld BC,(XIZ+0x08)                                     ; FF706D  9e 08 21
 	and BC,0x0080                                        ; FF7070  d9 cc 80 00

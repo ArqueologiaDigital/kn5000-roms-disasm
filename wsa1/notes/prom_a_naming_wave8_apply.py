@@ -432,14 +432,16 @@ def plan():
         # reached from several rows of one table at the same control -- the row
         # is then NOT what distinguishes them, and a name saying `R0` would be
         # a claim the header underneath it contradicts.
-        myrows = "".join(str(r) for r in sorted({i // 32 for t, i in slots
-                                                 if t == t0}))
+        rr = sorted({i // 32 for t, i in slots if t == t0})
+        # `_Page34` reads as page thirty-four.  Two pages are `_Pages3_4`.
+        myrows = ("Page%d" % rr[0] if len(rr) == 1
+                  else "Pages" + "_".join(str(r) for r in rr))
         # ★ THE SUFFIX IS THE SCREEN, when the screen object gives one -- the
         # form rounds 11/12 use in prom_b (<Control>_<Screen>).  It falls back
         # to the table address only where no screen object names the reader.
         sn = scr.get(t0)
         new = "%s_%s%s" % (short, sn[0] if sn else t0.split("_")[1],
-                           "_Page%s" % myrows if rows > 1 else "")
+                           "_%s" % myrows if rows > 1 else "")
 
         li = at[a]
         have = label_at(src, li)
@@ -806,12 +808,19 @@ def apply_():
             ";   5-bit event code, composed out of the wire->group map (0xF8A189) and",
             ";   the group event lists (0xF8B4B2) and checked against the service",
             ";   manual's switch matrix.  Every table below now carries the legend and",
-            ";   its own live-entry list; the derivation, its variant adjudication and",
-            ";   its nineteen corroborations are in",
+            ";   its own live-entry list; the derivation, the variant adjudication it",
+            ";   inherits from round 11, and its corroborations are in",
             ";   notes/FINDINGS-prom_a-panel-control-map.md.",
+            ";   ★ AND EACH TABLE'S SCREEN IS NAMED TOO, from the screen object that",
+            ";   installs the reader as its BUTTON method -- so the handlers read",
+            ";   LcdKeyRow1_DiskMenu and ExitKey_MidiFileL0ad rather than carrying a",
+            ";   table address.  This module owns ten screens: the DISK MENU, MIDI",
+            ";   FILE LOAD / SAVE / DIRECT PLAY, DISK LOAD FILE / SAVE FILE, LOAD",
+            ";   SINGLE SOUND / COMBINATION, and the two floppy-format screens.",
             ";   ⚠ It ties an index to a CONTROL, not to a FUNCTION.  What a handler",
-            ";   does with the button, and which screen each table serves, are still",
-            ";   open -- so most handlers here are still `sub_XXXXXX` on purpose.",
+            ";   DOES with the button is still open, and a target reached at two",
+            ";   different indices is refused -- so many handlers here are still",
+            ";   `sub_XXXXXX` on purpose.",
         ]
         added_legends += 1
     open(LISTING, "w", encoding="utf-8").write("\n".join(src) + "\n")
