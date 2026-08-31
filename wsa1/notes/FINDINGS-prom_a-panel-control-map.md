@@ -7,7 +7,8 @@
 python3 notes/prom_a_panel_control_map.py --checks    # the corroborations
 python3 notes/prom_a_panel_control_map.py --map       # code -> control
 python3 notes/prom_a_panel_control_map.py --variant   # the coverage argument
-python3 notes/prom_a_naming_wave8_apply.py --plan     # the 81 edits it justifies
+python3 notes/prom_a_naming_wave8_apply.py --plan     # every edit it justifies
+python3 notes/prom_a_naming_wave8_apply.py --screens  # the next lane's work list
 ```
 
 ## ⚠ First: what was already known, and by whom
