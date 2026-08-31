@@ -124,12 +124,8 @@ So a P7 unit block's byte +0 is the effect algorithm number, its name is
 
 ## 5. ⚠ What is NOT claimed
 
-* **Only byte 0 of each four-byte descriptor group is decoded**, because it is
-  the only one `0xF10FF1` reads. `--raw` prints the rest. `CHORUS`'s descriptor
-  is `01 01 01 00 | 19 01 02 01 | 1A 06 03 02 | 1B 07 04 FF | 04 01 05 04`, and
-  the guess that byte 1 selects one of the 18 value-name lists at `0xF157A8`
-  (`LFO WAVEFORM` has byte 1 = 7, `WET` has 1) is a **guess** and is written
-  down as one.
+* Bytes 1 and 3 are decoded in section 6 below; **byte 2 is not**. `--raw`
+  prints the descriptors whole.
 * **The number of parameters per effect** is bounded here by the next
   descriptor's address, not by a terminator this note trusts. The gaps between
   the 57 descriptors are 40 bytes in 38 cases and up to 84, so descriptors run
@@ -148,3 +144,46 @@ project" and that "whatever in prom_b indexes or renders that name table can be
 named with confidence". Nothing indexes that table in any decodable operand, so
 nothing could be named from it directly. What could be named — and was — is the
 routine that indexes the table *next to* it.
+
+## 6. The descriptor's other bytes, and the value lists — added the same day
+
+`DspEffect_PaintParamEditor` (prom_b 0xF11057, until this round `sub_F11057`)
+paints the page `DspEffect_LoadParamNames` labelled. It makes the *same*
+descriptor fetch — `lda XIX,0x2796` (0xF1107A), `ld A,(XIX)` (0xF11096),
+`mul A,4`, `add XWA,0x00f12f24`, `ld XWA,(XWA)` — and then, per screen line,
+with `C = (0x2792) + E` the parameter index and `XBC = 4*C` the group:
+
+| byte | what the code does with it |
+|---|---|
+| `+0` | the parameter NAME row — read by `DspEffect_LoadParamNames`, drawn by `DL_EffectParamPage` |
+| `+1` | written to `(0x2640)` (0xF110AC); `4 * byte1` indexes the 32-entry arrays at `0xF13264` (0xF110EA, jumped to at 0xF110F8) and `0xF132E4` (0xF110FA), and **that** entry `+ 15*line` is the interpreter-B record that draws the VALUE |
+| `+2` | pushed at 0xF110DF for the handler jumped to above. **Not decoded.** |
+| `+3` | compared at 0xF1112B against the byte `IndexedTable_GetByte` returns for `0x61 + (0x2797)`; equal writes 1 to `(0x2640)`, `0xFF` writes 0, otherwise 2, and a record from the SECOND group of `DLB_Records_F157A8` (0xF15820) draws that — the cursor marker |
+
+The line loop is `add H,0x0F` / `inc 1,E` / `cp H,0x69` / `jrl ULE`
+(0xF1115F-0xF11168), so `H` runs 0, 15, 30 … 105: **eight lines**, the same
+eight `DL_EffectParamPage` names.
+
+### 6.1 This half-answers a stated Unknown in the value-list block
+
+`notes/gen_prom_b_dsp_value_lists.py` emits, on each of the 18 record arrays at
+`0xF157A8`:
+
+> Unknown: which effect parameter occupies which line, and — where there is more
+> than one group — what selects between them. The caller adds a byte offset, so
+> `15 * (8*group + line)` reaches any of them, but **nothing converted here
+> computes that offset**.
+
+It is computed, in `DspEffect_PaintParamEditor`, and the answer is that *the
+effect chooses*: descriptor byte `4*p+1` picks the array through `0xF132E4`, and
+the line is the parameter's position on the page.
+
+⚠ **Still open:** what selects a record GROUP above 0. This loop never exceeds
+offset 105, so it only ever reaches group 0 of a 16- or 32-record array. Group 1
+of `DLB_Records_F157A8` is separately reached, at `0xF15820`, and it is the
+cursor marker.
+
+The generator's text and the 18 copies of it in `prom_b/wsa1_prom_b.s` were
+corrected **together**, in the same commit, so that regenerating reproduces what
+is in the source; `python3 notes/gen_prom_b_dsp_value_lists.py --selftest` still
+passes 105 checks and the byte gate still passes.

@@ -25162,7 +25162,7 @@ DspEffect_LoadParamNames:
 	ret	; F11056  ret
 
 ; --------------------------------------------------------------------------
-; sub_F11057
+; DspEffect_PaintParamEditor -- 0xF11057
 ; Called from: in-module: 0xF10FBE
 ; Touches: (0x2540) (0x2640) (0x2792) (0x2797)  |  0xF157A8 0xF15820
 ; Calls:   T_IndexedTable_GetByte T_DisplayListB_RunOne_Stack
@@ -25171,10 +25171,35 @@ DspEffect_LoadParamNames:
 ;                    0xF11057 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name:    DspEffect_PaintParamEditor -- named 2026-08-31.
+; Evidence (TABLE): `lda XIX,0x2796` at 0xF1107A and `ld A,(XIX)` at 0xF11096
+;          fetch the effect ALGORITHM number, and `mul A,4` /
+;          `add XWA,0x00f12f24` / `ld XWA,(XWA)` is the same descriptor fetch
+;          DspEffect_LoadParamNames makes.  Per line it takes the parameter
+;          index `C = (0x2792) + E` and the group `XBC = 4*C`, and uses three of
+;          the group's four bytes:
+;            +1  -> (0x2640) at 0xF110AC; 4*byte1 indexes the 32-entry arrays at
+;                   0xF13264 (0xF110EA, jumped to at 0xF110F8) and 0xF132E4
+;                   (0xF110FA), and THAT entry + 15*line is the interpreter-B
+;                   record that draws the value -- the arrays
+;                   notes/gen_prom_b_dsp_value_lists.py frames.
+;            +2  -> pushed at 0xF110DF for the handler above.
+;            +3  -> compared at 0xF1112B with the byte IndexedTable_GetByte
+;                   returns for 0x61 + (0x2797); equal writes 1 to (0x2640),
+;                   0xFF writes 0, otherwise 2, and a record from the SECOND
+;                   group of DLB_Records_F157A8 (0xF15820) draws it -- the
+;                   cursor marker.
+;          The line loop is `add H,0x0F` / `inc 1,E` / `cp H,0x69` / `jrl ULE`
+;          at 0xF1115F-0xF11168, so H runs 0, 15 ... 105: EIGHT lines, the same
+;          eight DL_EffectParamPage names.
+;          Write-up: notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
+; ⚠ CORRECTED 2026-08-31: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
+; Unknown: what descriptor byte 2 means, what selects a record GROUP above 0
+;          (this loop never exceeds offset 105), and what (0x2792) counts.
 ; --------------------------------------------------------------------------
-sub_F11057:
+DspEffect_PaintParamEditor:
 	link XIZ,0xffe5	; F11057  link XIZ,0xffe5
 	pushw	hl	; F1105B  push HL
 	pushw	de	; F1105C  push DE
@@ -29888,10 +29913,22 @@ DLTable_HzHzHzHzHzSSSSMsMsMs:
 ; Structure: 2 screen groups of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F157A8:
 	.byte	0x02, 0x0F	; F157A8  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -30035,10 +30072,22 @@ DLBTable_F15898:
 ; Structure: 4 screen groups of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAC, 0x0E2C, 0x10AC, 0x132C, 0x15AC, 0x182C, 0x1AAC, 0x1D2C -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F1589C:
 	.byte	0x00, 0x0A	; F1589C  [ 0] op 00 -> handler 0xF31BA1, 10 bytes
@@ -30335,10 +30384,22 @@ DLBTable_1k125k16k2k25k315k4k:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F15B03:
 	.byte	0x02, 0x0F	; F15B03  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -30455,10 +30516,22 @@ DLBTable_F15B7B:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F15C1B:
 	.byte	0x02, 0x0F	; F15C1B  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -30592,10 +30665,22 @@ DLBTable_F15C93:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F15D88:
 	.byte	0x02, 0x0F	; F15D88  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -30705,10 +30790,22 @@ DLBTable_F15E00:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAB, 0x0E2B, 0x10AB, 0x132B, 0x15AB, 0x182B, 0x1AAB, 0x1D2B -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F15E7D:
 	.byte	0x02, 0x0F	; F15E7D  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -30893,10 +30990,22 @@ DLBTable_F15EF5:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F16085:
 	.byte	0x02, 0x0F	; F16085  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -30993,10 +31102,22 @@ DLBTable_SineTriangSquare:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F16115:
 	.byte	0x02, 0x0F	; F16115  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -31181,10 +31302,22 @@ DLBTable_F1618D:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F16381:
 	.byte	0x02, 0x0F	; F16381  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -31379,10 +31512,22 @@ DLBTable_12k16k20k24k28k32k36k:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F165ED:
 	.byte	0x02, 0x0F	; F165ED  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -31567,10 +31712,22 @@ DLBTable_F16665:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F16859:
 	.byte	0x02, 0x0F	; F16859  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -31728,10 +31885,22 @@ DLBTable_F168D1:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F16A3E:
 	.byte	0x02, 0x0F	; F16A3E  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -31911,10 +32080,22 @@ DLBTable_F16AB6:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F16C91:
 	.byte	0x02, 0x0F	; F16C91  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -32099,10 +32280,22 @@ DLBTable_F16D09:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F16EFD:
 	.byte	0x02, 0x0F	; F16EFD  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -32287,10 +32480,22 @@ DLBTable_F16F75:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F17169:
 	.byte	0x02, 0x0F	; F17169  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -32475,10 +32680,22 @@ DLBTable_F171E1:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F173D5:
 	.byte	0x02, 0x0F	; F173D5  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -32573,10 +32790,22 @@ DLBTable_SlowFast:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F17457:
 	.byte	0x02, 0x0F	; F17457  [ 0] op 02 -> handler 0xF31B21, 15 bytes
@@ -32672,10 +32901,22 @@ DLBTable_WideMiddleNarrow:
 ; Structure: 1 screen group of 8 lines.  Within a group the +0x0D
 ;   position steps by a constant 0x280 -- 0x0BAA, 0x0E2A, 0x10AA, 0x132A, 0x15AA, 0x182A, 0x1AAA, 0x1D2A -- and it RESETS at
 ;   each group boundary, which is what makes the group the unit.
-; Unknown: which effect parameter occupies which line, and -- where there
-;   is more than one group -- what selects between them.  The caller adds
-;   a byte offset, so `15 * (8*group + line)` reaches any of them, but
-;   nothing converted here computes that offset.
+; ✅ HALF-ANSWERED 2026-08-31 (wave 8).  This block used to end `Unknown:
+;   which effect parameter occupies which line, and -- where there is more
+;   than one group -- what selects between them.  The caller adds a byte
+;   offset, so `15 * (8*group + line)` reaches any of them, but nothing
+;   converted here computes that offset.`  The offset IS computed, in
+;   DspEffect_PaintParamEditor (0xF11057): H runs 0, 15, 30 ... 105
+;   (`add H,0x0F` at 0xF1115F, `cp H,0x69` at 0xF11165), so a screen is
+;   EIGHT lines and the offset is 15*line.  WHICH array is used is the
+;   selected effect's own choice: descriptor byte 4*p+1 of
+;   EffectParamDescriptors_F12F24 indexes the 32-entry array at 0xF132E4
+;   (`mul BC,(XIZ+0xf5)` / `add XBC,0x00f132e4`, 0xF110E0-0xF11102), and
+;   THAT is the array whose record 15*line is run.  So parameter p of the
+;   current algorithm picks the value list, and the line is its position
+;   on the page.  ⚠ Still open: what selects a GROUP above 0 -- the loop
+;   above only ever reaches offset 105.  See
+;   notes/FINDINGS-prom_b-dsp-effect-parameters.md sec. 6.
 ; --------------------------------------------------------------------------
 DLB_Records_F174E1:
 	.byte	0x02, 0x0F	; F174E1  [ 0] op 02 -> handler 0xF31B21, 15 bytes
