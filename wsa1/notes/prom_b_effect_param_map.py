@@ -39,9 +39,18 @@ THE CHAIN, EACH LINK READ OUT OF THE ROM
     have failed.
 
 ★ AND A RANGE CONTROL
-    All 8 x 57 = 456 descriptor bytes this reads are < 100, and
-    EffectParamNames has exactly 100 rows.  A byte is < 100 by chance 39% of the
-    time, so 456 of 456 is 0.39^456.
+    All 8 x 57 = 456 descriptor bytes this reads land in rows 0-99 of
+    EffectParamNames, and rows 0-99 are exactly the PARAMETER-LABEL rows: 99 of
+    those 100 end in `:` (row 0 is the blank), while rows 100-112 -- the object
+    runs to 113 rows of 17, as `FINDINGS-prom_b-f0ea9f-module.md` sec. 4b already
+    states -- do not.  A random byte is < 100 with probability 0.39, so 456 of
+    456 is 0.39^456, and not one of them lands in the 13 rows that are not
+    labels.
+
+    ⚠ CORRECTED 2026-08-31: this said "EffectParamNames has exactly 100 rows".
+    It does not; it has 113, and only the first 100 are the labelled ones.  The
+    control is unaffected -- it is sharper this way -- but the wrong number was
+    quoted first and is recorded here rather than quietly replaced.
 
 WHAT IS NOT CLAIMED
     Only byte 0 of each four-byte descriptor group is decoded, because that is
@@ -67,7 +76,8 @@ B = 0xF00000
 PTRTAB = 0xF12F24            # 128 x .long, indexed by 4 * (0x2796)
 NAMES = 0xF147AC             # 128 x 16 ASCII
 PARAMS = 0xF15024            # 100 x 17 ASCII
-PARAM_ROWS, PARAM_W = 100, 17
+PARAM_ROWS, PARAM_W = 100, 17   # the LABEL rows; the object itself runs to 113
+PARAM_TOTAL_ROWS = 113
 DL = (0xF14FAC, 0xF15024)    # the 8-record parameter page
 NPROG = 128
 PLACEHOLDER = "----------"
@@ -170,10 +180,16 @@ def selftest():
     ck(shared == place, "the slots sharing the catch-all ARE the placeholder slots")
     ck(len(shared ^ place) == 0, "symmetric difference is empty")
 
-    # ★ CONTROL 2: every decoded index is a real row of EffectParamNames
+    # ★ CONTROL 2: every decoded index lands on a PARAMETER-LABEL row
     bad = [(hex(q), j) for q in set(p) for j in range(8)
            if descriptor(q)[j] >= PARAM_ROWS]
     ck(not bad, f"all {8 * len(set(p))} descriptor indices are < {PARAM_ROWS} ({len(bad)} bad)")
+    lab = sum(1 for i in range(PARAM_ROWS) if param_name(i).endswith(":"))
+    ck(lab == PARAM_ROWS - 1, f"rows 0-{PARAM_ROWS - 1}: {lab} of {PARAM_ROWS} end in ':' "
+                              f"(row 0 is the blank)")
+    tail = sum(1 for i in range(PARAM_ROWS, PARAM_TOTAL_ROWS) if param_name(i).endswith(":"))
+    ck(tail == 0, f"rows {PARAM_ROWS}-{PARAM_TOTAL_ROWS - 1} are NOT labels "
+                  f"({tail} end in ':'), and no index reaches them")
 
     # the display list
     rs = records()

@@ -28331,8 +28331,12 @@ Data_F1284A:
 ;        adds it to 0x00F12F24, so the index is the DSP EFFECT ALGORITHM NUMBER.
 ;      * an entry points at that algorithm's PARAMETER DESCRIPTOR: four bytes per
 ;        parameter, of which byte 0 is a row of EffectParamNames_F15024.  All
-;        456 such bytes over the 57 distinct descriptors are < 100, and that
-;        table has exactly 100 rows.
+;        456 such bytes over the 57 distinct descriptors land in rows 0-99,
+;        and rows 0-99 are exactly the PARAMETER-LABEL rows: 99 of the 100
+;        end in ':', row 0 being the blank, and rows 100-112 -- the object
+;        runs to 113 rows of 17, per FINDINGS-prom_b-f0ea9f-module.md
+;        sec. 4b -- do not.  ⚠ This first read `are < 100, and that table
+;        has exactly 100 rows`, which is wrong about the table.
 ;      * the 57 distinct values are 56 used once and ONE used 72 times, and the
 ;        72 slots that share it are EXACTLY the 72 slots whose EffectNames_F147AC
 ;        entry is the `----------` placeholder -- symmetric difference empty.

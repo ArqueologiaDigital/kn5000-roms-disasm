@@ -23,6 +23,31 @@ placeholders):
 
 The second is the answer to the first.
 
+## 1b. ★ PRIOR ART — half of this chain was already established, in round 4/5
+
+Grepped before writing, per the lane rule. `notes/FINDINGS-prom_b-f0ea9f-module.md`
+(§2.1 and §3, and `notes/gen_prom_b_f0ea9f_module.py`) already had:
+
+* the indexer itself — *"`0xF10609 mul WA,(0x2796)` / `0xF1060F add
+  XWA,0x00f12f24  ; &Table128[(0x2796)]` / `ld XWA,(XWA)` / `ld H,(XWA)`"* — and
+  the classification that follows from it, **DEREF**: the entries are DATA
+  pointers, so they must not seed the code walk. That rule is what stopped the
+  4-byte descriptor records at `0xF124EC-0xF12EE4` being decoded as instructions,
+  which an earlier round had done;
+* that those records exist and where they live (`notes/prom_b_screen_arrays.py`
+  censuses *"0xF124EC-0xF12F23 (the arrays the 0xF12F24 pointer table names)"*);
+* `EffectNames_F147AC`'s 128 x 16 tiling and its 56/72 split
+  (`notes/gen_prom_b_effect_tables.py`);
+* `EffectParamNames_F15024`'s 17-byte row stride and its 113-row extent;
+* and the refusal — *"128 names and 128 entries … is **not** proof that the index
+  is the effect-algorithm number"*.
+
+**What is new here is only the last step**, and it is the step that turns the
+correspondence into a decode: that the two 56/72 partitions are the SAME
+partition, that descriptor byte 0 is a row of `EffectParamNames`, and that the
+0x78 bytes at `0xF14FAC` are the eight records that draw them. Everything the
+argument stands on below the join was already in the tree.
+
 ## 2. The chain
 
 **`DspEffect_LoadParamNames`, prom_b 0xF10FF1** — until this round `sub_F10FF1`:
@@ -88,8 +113,16 @@ table that share no bytes, and they are the *same partition*. There are
 C(128,72) ≈ 10³⁷ ways for that to have failed.
 
 **A second, independent control:** all 8 × 57 = **456** decoded descriptor bytes
-are `< 100`, and `EffectParamNames` has exactly 100 rows. A random byte is < 100
-with probability 0.39.
+land in rows **0-99** of `EffectParamNames`, and rows 0-99 are exactly its
+PARAMETER-LABEL rows — 99 of those 100 end in `:`, row 0 being the blank, while
+rows 100-112 do not. A random byte is < 100 with probability 0.39, so 456 of 456
+is 0.39⁴⁵⁶, and not one lands in the 13 rows that are not labels.
+
+⚠ **CORRECTED the same day.** This paragraph first said *"`EffectParamNames` has
+exactly 100 rows"*. It does not: `FINDINGS-prom_b-f0ea9f-module.md` §4b already
+states its tiling as **113 rows of 17** covering 1,921 of 1,924 bytes, with *"99
+of the first 100 rows end in `:`"*. The control is sharper stated correctly, but
+the wrong number was quoted first and is recorded rather than quietly replaced.
 
 **And a semantic one**, which is not a proof but is what a reader will check
 first — the parameter lists read correctly for the effect they belong to:
