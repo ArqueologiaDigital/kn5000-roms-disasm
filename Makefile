@@ -24,6 +24,7 @@ HELP_DB_STALE_COMPRESSED=$(HELP_DB_DIR)/help_db_german_stale_compressed.bin
 CLANG=$(LLVM_BIN)/clang
 
 .PHONY: all llvm-all paramblocks screendata naka clean clean-asl clean-all
+.PHONY: wsa1 wsa1-clean everything gate gate-wsa1 gate-all
 .PHONY: llvm-convert llvm-convert-all asl-all gallery issues rom-status website
 .SECONDARY:
 
@@ -35,6 +36,32 @@ CLANG=$(LLVM_BIN)/clang
 # Primary build: LLVM assembly (authoritative source)
 all: llvm-all
 	python scripts/build/compare_roms.py
+
+# ---------------------------------------------------------------- SX-WSA1R
+# The WSA1R disassembly was migrated into this tree on 2026-09-01 and lives in
+# wsa1/.  It keeps its own Makefile because its four images have their own
+# linker scripts and their own assembler invocation; these targets delegate, so
+# that one tree builds both products.
+#
+#   make everything   both products
+#   make gate-all     both byte-identity gates -- the only things that certify
+#                     either tree.  Neither product is "built" until its gate is
+#                     green, so prefer this over `make everything` alone.
+wsa1:
+	$(MAKE) -C wsa1 all
+
+wsa1-clean:
+	$(MAKE) -C wsa1 clean
+
+everything: all wsa1
+
+gate:
+	python3 scripts/analysis/assert_byte_identical.py
+
+gate-wsa1:
+	cd wsa1 && python3 scripts/analysis/assert_byte_identical.py
+
+gate-all: gate gate-wsa1
 
 # LLVM build targets (primary)
 llvm-all: rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_v9_program.llvm.rom rebuilt_ROMs/kn5000_v7_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom rebuilt_ROMs/kn5000_table_data.llvm.rom rebuilt_ROMs/kn5000_custom_data.llvm.rom
