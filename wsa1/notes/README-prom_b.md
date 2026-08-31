@@ -70,8 +70,9 @@ labels lost.
 Every one of the round's new semantic labels grades BACKED — an `Evidence` line
 in its own immediately preceding header.
 
-**`prom_b_probe_answer_diff.py --base 0f08601`:** 93 probes, **75 unchanged, 18
-changed**, and all 18 are the round's own effects rather than damage:
+**`prom_b_probe_answer_diff.py --base 0f08601`,** run with the working tree at
+`5acf220` (the six comment lines `7a90144` added to the `.s` afterwards move no
+verdict below): 93 probes, **75 unchanged, 18 changed**, and all 18 are the round's own effects rather than damage:
 
 * `gen_prom_b_cover_round2.py` — `.incbin` total 40,932 → 40,812, the 0x78 that
   `DL_EffectParamPage` now occupies. Its verdict is identical, STRONG 0 / weak
