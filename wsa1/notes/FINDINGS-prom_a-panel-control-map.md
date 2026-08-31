@@ -206,7 +206,36 @@ all one. **That is not enough.** Its reader is published as prom_b thunk slot
 what HL holds. A shape that fits is a coincidence until a caller says otherwise;
 the handlers there are left `sub_XXXXXX` and the note says why.
 
-## 6. What is still not claimed
+## ★ 6. The work list this leaves, and why it is the best one in prom_a
+
+```
+python3 notes/prom_a_naming_wave8_apply.py --screens
+```
+
+`PanelScreen_VtableTable`'s 256 slots, as they stand:
+
+| | |
+|---|---:|
+| ENTER method in prom_a, still `sub_XXXXXX` | **103** |
+| stub (`PanelScreen_NullVtable`) | 81 |
+| ENTER in prom_b | 36 |
+| ENTER already named | 32 |
+| object's +0 is not a `jp` | 3 |
+| ENTER in prom_a, no label at all | 1 |
+
+**Every one of those 104 rows is a SCREEN of this instrument**, and naming its
+ENTER method names the screen — which then names that screen's LEAVE and BUTTON
+methods for free, exactly as the sixteen already-named ones did here. That is
+the highest-leverage 104 routines in prom_a: they are not leaf helpers, they are
+the top of a screen.
+
+⚠ **The obvious route does not work.** Extracting the display-list title the way
+round 7 did finds a title for **one** of the 103: these Enter methods delegate
+rather than draw, so the text is two or three calls away. Whoever takes this
+will need to follow the delegation, not the immediates. That negative is
+recorded so it is not re-measured.
+
+## 7. What is still not claimed
 
 * A code names a **control**, not a **function**. What each handler does, and
   which screen each table serves, are open.

@@ -818,6 +818,55 @@ def apply_():
     return added_labels, added_headers, added_legends
 
 
+def screens_report():
+    """Where the SCREEN OBJECTS still point at nothing named.
+
+    ★ THIS IS THE NEXT LANE'S WORK LIST, and it is the most valuable one this
+    pass can leave: every row is a SCREEN of this instrument, and naming its
+    ENTER method names the screen -- which then names that screen's LEAVE and
+    BUTTON methods for free, the way the sixteen already-named ones did here.
+    """
+    src = lines()
+    lab_at = {}
+    for i, ln in enumerate(src):
+        mm = LABEL.match(ln)
+        if not mm:
+            continue
+        aa = ADDR.search(src[i + 1]) if i + 1 < len(src) else None
+        if aa:
+            lab_at.setdefault(int(aa.group(1), 16), mm.group(1))
+    rows = collections.Counter()
+    todo = []
+    for i in range(256):
+        v = int.from_bytes(_rom(VTABLE + 4 * i, 4), "little") & 0xFFFFFF
+        if not v or v == NULL_VTABLE:
+            rows["stub (PanelScreen_NullVtable)" if v else "empty"] += 1
+            continue
+        b = _rom(v, 4)
+        e = int.from_bytes(b[1:4], "little") if b and b[0] == 0x1B else None
+        if e is None:
+            rows["object's +0 is not a `jp`"] += 1
+        elif e < 0xF80000:
+            rows["ENTER is in prom_b"] += 1
+        else:
+            nm = lab_at.get(e)
+            if nm is None:
+                rows["ENTER in prom_a, UNLABELLED"] += 1
+                todo.append((i, e, "(unlabelled)"))
+            elif nm.startswith("sub_"):
+                rows["ENTER in prom_a, still sub_XXXXXX"] += 1
+                todo.append((i, e, nm))
+            else:
+                rows["ENTER already named"] += 1
+    print("PanelScreen_VtableTable, 256 slots:")
+    for k, n in rows.most_common():
+        print("  %-34s %3d" % (k, n))
+    print("\nthe work list -- %d screens whose ENTER method has no name" % len(todo))
+    for i, e, nm in todo:
+        print("  screen 0x%02X  ENTER 0x%06X  %s" % (i, e, nm))
+    return 0
+
+
 def selftest():
     """The three things that would make this script write a wrong name."""
     bad = 0
@@ -861,6 +910,8 @@ def main():
     argv = sys.argv[1:]
     if "--selftest" in argv:
         return selftest()
+    if "--screens" in argv:
+        return screens_report()
     src, jobs = plan()
     if "--apply" not in argv:
         print("%d jobs (%d renames, %d new labels, %d table legends)"
