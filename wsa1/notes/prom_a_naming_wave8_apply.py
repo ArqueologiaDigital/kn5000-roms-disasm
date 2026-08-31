@@ -1,40 +1,67 @@
 #!/usr/bin/env python3
-"""Apply the panel-control map to prom_a's listing: name the control-table
-readers and the handlers whose control index the map now fixes.
+"""Name prom_a's screen-control tables, their readers, and the screen objects
+that install them -- all of it derived at run time, none of it pasted.
 
 QUESTION IT ANSWERS
 -------------------
-  "Which `sub_XXXXXX` -- and which UNLABELLED address -- can be named from
-   notes/prom_a_panel_control_map.py, and what header states the evidence?"
+  "Which `sub_XXXXXX`, and which UNLABELLED address, can be named from
+   notes/prom_a_panel_control_map.py and from PanelScreen_VtableTable -- and
+   what header states the evidence?"
 
-★ EVERY NAME HERE IS DERIVED AT RUN TIME, not pasted.  The script reads the
-dispatch tables out of the listing, reads the code->control map out of the ROM
-through prom_a_panel_control_map, and refuses any handler whose control index is
-not the SAME in every slot that reaches it.  So the plan cannot drift from the
-evidence, and `--plan` prints exactly what `--apply` will do.
+★ NOTHING HERE IS A NAME LIST.  The script reads the dispatch tables out of the
+listing, the code->control map out of the ROM through
+prom_a_panel_control_map, and the screen objects out of PanelScreen_VtableTable;
+`--plan` prints exactly what `--apply` will do, and `--verify` re-runs the whole
+transform from the pre-pass blob in git and compares it with the committed file.
 
 WHAT IT NAMES
-  READERS   the eight routines whose body carries both `cp H,0x20` -- the
-            32-code panel index space -- and an `add XBC,0x00FFxxxx` naming one
-            of the module's tables.  -> PanelCtlDispatch_<table>
-  HANDLERS  the targets of Dispatch_FF3800/_FF3880/_FF3900/_FF3980, the four
-            tables whose live entries are exactly the five LCD rows and EXIT.
-            -> PanelCtl_<table>_<control>
-            Nineteen of the twenty-four have NO LABEL AT ALL today; five are
-            `sub_XXXXXX`.  Adding a label to an address the ROM's own table
-            points at is an addition, and the byte gate certifies it changed
-            nothing.
+  READERS    a routine whose body carries an `add XBC,0x00FFxxxx` naming one of
+             the module's tables, classified by WHAT IT INDEXES WITH:
+               `cp H,0x20`, or `(0x2229)<<5` + H  -> PanelButtonDispatch_<Screen>
+               `cp (0x2229),N` and (0x2229)*4     -> PageDispatch_<Screen>
+             The second kind is indexed by the PAGE byte alone and takes no
+             argument -- calling one of those a PanelButton anything is the
+             mistake the distinction exists to prevent.
+  HANDLERS   the targets of those tables, one per (control, page):
+             LcdKeyRow1_DiskMenu, ExitKey_MidiFileL0ad,
+             ExitKey_DiskSaveFile_Pages3_4 -- the `<Control>_<Screen>` form
+             rounds 11 and 12 applied to 131 labels in prom_b.  Most of these
+             addresses HAVE NO LABEL AT ALL: the ROM's own table points at them
+             and the listing never named them.
+  SCREENS    the suffix.  A screen object is +0 Enter, +4 Leave, +8 Button, so
+             the screen whose BUTTON method is a reader is the screen that
+             reader serves, and the same object's ENTER method paints it.
+             Seven screens are named by an existing `Paint_*` label; five more
+             by their own display lists' titles, declared in SCREEN_DECLARED
+             with the evidence beside each.
+  METHODS    the other two slots of every screen object whose +0 already
+             carries a `Paint_*` label -> ScreenLeave_<Screen>,
+             ScreenButton_<Screen>.
+
+  ⚠ THE ENTRY NUMBER IS NOT THE SCREEN ID.  PanelButton_Route reads the table
+  through PanelScreen_VtableTable_ViewB, entry 32 used as a second base, so
+  screen id n is ENTRY n+32.  These headers said otherwise for one commit;
+  `screen_id_phrase` is the fix and --selftest asserts it against round 9's
+  independent anchor.
 
 WHAT IT REFUSES, and this is the point
-  * a target reached at two DIFFERENT control indices (32 of the 0xFF3800
-    module's 97 live targets are, always as index c and index c+0x11);
+  * a handler reached at two DIFFERENT control indices -- 32 of this module's
+    live targets are, always as c and c+0x11, round 11's variant-1 rewrite, and
+    that is why NO SoftKeyCol name comes out of this module;
   * a target outside prom_a (eight are prom_b directory slots);
-  * an address that is not the start of a listing line, which would mean the
-    table points inside an instruction and something is wrong upstream.
+  * a screen-object slot two live objects share, or one the reader batch has
+    already claimed with a richer name;
+  * an address that is not the start of a listing line, which would mean a
+    table points inside an instruction and something is wrong upstream;
+  * any two jobs proposing the same name -- asserted in `plan()`, because a
+    plan should be wrong on paper before it is wrong in the file.
 
 USAGE
     python3 notes/prom_a_naming_wave8_apply.py --plan
-    python3 notes/prom_a_naming_wave8_apply.py --apply     # idempotent
+    python3 notes/prom_a_naming_wave8_apply.py --apply      # idempotent
+    python3 notes/prom_a_naming_wave8_apply.py --verify     # committed == derived
+    python3 notes/prom_a_naming_wave8_apply.py --screens    # the work list left
+    python3 notes/prom_a_naming_wave8_apply.py --selftest
 """
 import collections
 import os
