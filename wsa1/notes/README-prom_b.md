@@ -49,6 +49,23 @@ writer** — see `prom_b_string_refs.py` below, which measures the split. The
 filter that separates them is the DESTINATION: does the routine copy the bytes
 into 0x0FE4-0x1001? That is what this script tests.
 
+### `prom_b_naming_evidence.py` — ★ THE WORK LIST FOR THE NEXT NAMING ROUND
+**"What evidence exists for the routines that are still `sub_XXXXXX`?"** Sorts
+them by the KIND of evidence the tree already holds, so a round can start at the
+top instead of reading addresses in order. Classes overlap.
+
+    python3 notes/prom_b_naming_evidence.py                # the summary
+    python3 notes/prom_b_naming_evidence.py --class TABLE  # one class, listed
+    python3 notes/prom_b_naming_evidence.py --named        # over ALL routines
+    python3 notes/prom_b_naming_evidence.py --selftest     # invariants + controls
+
+As of wave 8, over the 1,864 still bare: STRING 34, TABLE 60, CALLER 196,
+CALLEE 475, DEVICE 373, ORPHAN 492, and **616 with no class at all**. ⚠ Those
+are counts of a moving tree, not invariants — the `--selftest` asserts
+invariants (every label is seen, only declared classes are produced,
+`semantic()` rejects every generic spelling, and two routines this round named
+land in the class they were named from), never a pinned total.
+
 ### `prom_b_string_refs.py` — ★ READ BEFORE NAMING ANYTHING FROM A STRING
 **"Which prom_b routines name an ASCII string, and which of those are
 CAPTIONS?"** Splits them three ways, because naming from the wrong column
