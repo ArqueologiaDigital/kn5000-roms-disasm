@@ -92,6 +92,39 @@ answers this tree gave on a given day are reviewable rather than remembered.
 Machine: 8 cores, Python 3.13.5, `unidasm` from `~/compartilhado/kn7000_mame_build`.
 Reproduce with the commands above. Timings will differ; the ratios should not.
 
+⚠⚠ SECTIONS 1-6 BELOW ARE THE DIAGNOSIS, AND THEY MEASURE THE TOOL AS IT WAS
+   BEFORE P1/P2/P3 LANDED ON THE SAME DAY. They are left as measured -- they are
+   what the fixes were chosen from -- but they are no longer what the tool does.
+   What it does now is section 0, and every figure there is from the same
+   instruments.
+
+## 0. AFTER P1 + P2 + P3 -- the same answers, 30x to 54x less time
+
+    python3 notes/perf/prove_identical.py           # answers: 5 modes, 0 differ
+    python3 notes/perf/profile_reachability.py --all               # fresh index
+    python3 notes/perf/profile_reachability.py --all --warm-decode
+
+    one --targets run           before        after   unidasm spawns
+    ---------------------------------------------------------------
+    warm (result cache hits)     0.23 s      0.23 s        0        unchanged
+    result cache MISSES,
+      decode index persisted   1,020 s      20.3 s        0        the lane's case
+    nothing cached at all      1,020 s      34.4 s      876        84,190 before
+
+    per image, decode index persisted:  prom_a 9.98 s, prom_b 4.93 s, prom_c 2.81 s
+    per image, fresh index:             prom_a 12.54 s (184 spawns),
+                                        prom_b 12.40 s (620), prom_c 4.19 s (72)
+
+★ THE 84,190 SPAWNS ARE 876, and 0 once the index is on disk. What is left is
+  `_decode_window` bookkeeping -- 276,757 calls building row lists out of the
+  index, 12.0 s of the 17.7 s. That is now the hot spot, and it is Python, not
+  `fork`+`exec`; it was 16.1% of the problem before and it is 68% of a much
+  smaller one.
+
+★ AND THE ANSWERS DID NOT MOVE. Every one of those runs was gated on
+  `prove_identical.py` against the post-guard baseline, cold: --targets, --spans,
+  --seeds, the report and --selftest, byte for byte.
+
 ## 1. The tool is not slow. A CACHE MISS is slow.
 
     warm  `--targets`, all three images cached   0.23 s   (three runs, byte-identical output)
@@ -307,13 +340,16 @@ would happen and the substitution is byte-for-byte what the spawn returned.
 **This also fixes probe_health**: the derived trees have different `.s` but the
 SAME ROMs, so the decode cache is valid there and the 52 guaranteed timeouts stop.
 
-## P3 — seed the index with one linear decode per image
+## P3 — seed the index with one linear decode per image   ★ **LANDED 2026-08-31**
 
-The whole image decodes in 1.07 s. With the guard the result is canonical, so it
-can simply be poured into `_BOUND` before the walk starts. How much it saves
-depends on what fraction of the 84,190 spawn starts are boundaries of the
-canonical decode — **measure that before building it**, it is one instrumented
-run.
+    nothing cached at all      979.93 s -> 34.43 s,  84,190 spawns -> 876
+    (the fraction the question was about: 99.0% of the spawn starts ARE
+     boundaries of the canonical decode, so 99.0% of the spawns disappear)
+
+`_predecode()` runs one unidasm over the whole 512 KiB image (~1.1 s) when the
+persisted index is absent, and pours it into `_BOUND`. A walk that starts
+BETWEEN two canonical boundaries -- which weak seeds do -- still spawns, and
+those rows are canonical too. Proved with `prove_identical.py` from cold.
 
 ## P4 — a cache key that does not punish editing the tool
 

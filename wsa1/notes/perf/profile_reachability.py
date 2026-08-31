@@ -35,6 +35,7 @@ import os
 import pstats
 import subprocess
 import sys
+import tempfile
 import time
 from collections import defaultdict
 
@@ -104,13 +105,26 @@ def phase_report(meter, total, extra=()):
     print("%-34s %8s %10.3f %6.1f%%" % ("TOTAL WALL", "", total, 100.0))
 
 
-def run_tag(tag, cprofile=False, quiet=False):
-    """One COLD analyse() of `tag`, with every phase attributed."""
+def run_tag(tag, cprofile=False, quiet=False, warm_decode=False):
+    """One analyse() of `tag` with the RESULT cache bypassed, every phase
+    attributed.
+
+    ⚠ "COLD" NOW MEANS TWO THINGS, and the difference is the whole point of P2.
+    The result cache is always bypassed here. The DECODE index is a second
+    cache: by default this run gets a fresh empty one (so it measures the
+    build-it-from-nothing cost, which is what the historical figures in
+    notes/perf/README.md are), and `--warm-decode` measures the run a lane
+    actually pays after editing a .s, which reads the index it already has."""
     m = load_reach()
+    if not warm_decode:
+        # a private path, so a measurement can never eat the tree's real index
+        m.DECODE_CACHE = os.path.join(tempfile.mkdtemp(prefix="reach_prof_"),
+                                      "decode.txt")
     meter = Meter()
     meter.wrap_subprocess(m)
     for name in ("source_lines", "proven_and_incbin", "seeds", "_decode_window",
-                 "_fingerprint", "_cache_load", "included_sources"):
+                 "_fingerprint", "_cache_load", "included_sources",
+                 "_decode_load", "_predecode", "_decode_store"):
         meter.wrap(m, name)
     # ⚠ walk() is called from _walk_from, which the module resolves through its
     # own globals -- so patching the module attribute is enough, no import games.
@@ -165,13 +179,15 @@ def run_tag(tag, cprofile=False, quiet=False):
     return r, meter, total
 
 
-def run_all():
-    """Every walked image, cold. ★ THIS IS THE HEADLINE NUMBER: the wall time of
-    one `--targets` run whose result cache does not hit."""
+def run_all(warm_decode=False):
+    """Every walked image, with the result cache bypassed. ★ THE HEADLINE
+    NUMBER: the wall time of one `--targets` run whose result cache does not
+    hit -- with a fresh decode index by default, and with the persisted one
+    under --warm-decode, which is the case a lane hits after editing a .s."""
     grand = Meter()
     total = 0.0
     for tag, _s, _f, _b in load_reach().IMAGES:
-        r, meter, t = run_tag(tag, quiet=True)
+        r, meter, t = run_tag(tag, quiet=True, warm_decode=warm_decode)
         total += t
         for k, v in meter.secs.items():
             grand.secs[k] += v
@@ -185,7 +201,8 @@ def run_all():
                  / max(1, meter.calls["unidasm subprocess"]),
                  meter.calls["_decode_window"], meter.bound_size))
     print("\n" + "=" * 63)
-    print("ALL IMAGES COLD -- the cost of one --targets with no cache hit")
+    print("ALL IMAGES -- one --targets with no RESULT-cache hit, decode index %s"
+          % ("PERSISTED" if warm_decode else "empty"))
     print("=" * 63)
     inner = grand.secs["walk"] - grand.secs["_decode_window"]
     phase_report(grand, total,
@@ -295,6 +312,9 @@ if __name__ == "__main__":
     ap.add_argument("--all", action="store_true",
                     help="every walked image -- this is the cost of ONE COLD --targets")
     ap.add_argument("--cprofile", action="store_true")
+    ap.add_argument("--warm-decode", action="store_true",
+                    help="use the tree's persisted decode index instead of a"
+                         " fresh empty one (P2's actual case)")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--cachekey", action="store_true",
                     help="which edits invalidate which images")
@@ -305,6 +325,6 @@ if __name__ == "__main__":
         cachekey()
         sys.exit(0)
     if a.all:
-        run_all()
+        run_all(a.warm_decode)
     else:
-        run_tag(a.tag, a.cprofile)
+        run_tag(a.tag, a.cprofile, warm_decode=a.warm_decode)

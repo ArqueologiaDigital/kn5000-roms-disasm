@@ -47,6 +47,7 @@ from collections import defaultdict
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 UNIDASM = os.path.expanduser("~/compartilhado/kn7000_mame_build/unidasm")
+ARCH = "tlcs900"
 
 # (tag, .s file, rom file, load base). prom_d is DATA ONLY and has no load base
 # established, so it is not walked -- stated, not silently skipped.
@@ -287,7 +288,7 @@ def _decode_window(tag, start):
         f.write(d[o:o + WINDOW])
         tmp = f.name
     try:
-        out = subprocess.run([UNIDASM, tmp, "-arch", "tlcs900", "-basepc", hex(start)],
+        out = subprocess.run([UNIDASM, tmp, "-arch", ARCH, "-basepc", hex(start)],
                              capture_output=True, text=True).stdout
     finally:
         os.unlink(tmp)
@@ -330,12 +331,16 @@ _DECODE_LOADED = set()
 
 
 def _decode_key(tag):
-    """What the stored rows are a function of, and nothing else."""
+    """What the stored rows are a function of, and nothing else: the ROM, the
+    decoder binary and how it is invoked, the window parameters, and the regex
+    that turns its stdout into rows. ⚠ A key that misses one of those serves a
+    STALE decode, which is the one failure mode this file must not have."""
     if tag not in _DECODE_KEY:
         if "unidasm" not in _DECODE_KEY:
             _DECODE_KEY["unidasm"] = hashlib.sha1(open(UNIDASM, "rb").read()).hexdigest()
-        _DECODE_KEY[tag] = "%s %s %d %d" % (hashlib.sha1(ROMS[tag]).hexdigest(),
-                                            _DECODE_KEY["unidasm"], WINDOW, MAXLEN)
+        _DECODE_KEY[tag] = "%s %s %s %d %d %s" % (
+            hashlib.sha1(ROMS[tag]).hexdigest(), _DECODE_KEY["unidasm"], ARCH,
+            WINDOW, MAXLEN, hashlib.sha1(LINE.pattern.encode()).hexdigest()[:12])
     return _DECODE_KEY[tag]
 
 
@@ -370,6 +375,39 @@ def _decode_load(tag):
         for ln in lines:
             a, l, text = ln.rstrip("\n").split(" ", 2)
             bi.setdefault(int(a, 16), (int(l), text))
+            n += 1
+    if not n:
+        n = _predecode(tag)
+    return n
+
+
+def _predecode(tag):
+    """★ ONE LINEAR DECODE OF THE WHOLE IMAGE instead of tens of thousands of
+    2 KiB windows. unidasm decodes all 512 KiB in ~1.1 s; the walk was paying
+    847 s to settle the same boundaries 2,048 bytes at a time -- it decodes
+    110 MB to settle 219,086 boundaries in prom_a, ~265x redundant.
+
+    ⚠ It settles only the addresses ON that stream. A walk that starts between
+    two of them still spawns, and that spawn's rows are canonical too, because
+    with the guard an entry is decode(address) whatever window produced it.
+    ⚠ No tail guard here: the buffer IS the image, so nothing is truncated by a
+    window end -- only by the end of the ROM, exactly as today's last window is."""
+    b, d = BASES[tag], ROMS[tag]
+    with tempfile.NamedTemporaryFile(suffix=".bin", delete=False) as f:
+        f.write(d)
+        tmp = f.name
+    try:
+        out = subprocess.run([UNIDASM, tmp, "-arch", ARCH, "-basepc", hex(b)],
+                             capture_output=True, text=True).stdout
+    finally:
+        os.unlink(tmp)
+    bi = _BOUND[tag]
+    n = 0
+    for ln in out.splitlines():
+        m = LINE.match(ln)
+        if m:
+            bi.setdefault(int(m.group(1), 16),
+                          (len(m.group(2).split()), m.group(3).strip()))
             n += 1
     return n
 
