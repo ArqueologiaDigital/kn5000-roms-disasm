@@ -107,23 +107,30 @@ drift from what was applied.
 prom_b probe against the current `prom_b/wsa1_prom_b.s` and against a base
 revision of that ONE file, everything else identical, and diffs.
 
-    python3 notes/prom_b_probe_answer_diff.py --base <rev>
+    python3 notes/prom_b_probe_answer_diff.py --base <rev> --jobs 6
 
 `probe_health.py` asks "would a per-subject SPLIT break this probe" and builds
-three trees; this asks "did THIS edit break it" and changes one file.
+three trees; this asks "did THIS edit break it" and swaps the image.
 
-### The three appliers
-`prom_b_apply_msgline_names.py`, `prom_b_apply_smf_names.py`,
-`prom_b_apply_effect_names.py`, `prom_b_apply_diskfile_name.py` — each carries
-the round's rename table AS DATA, re-derives every literal it names from the
-ROM with no argument, and edits the source with `--apply`. The table IS the
-change; running one with no argument is the check that nothing it rests on has
-moved.
+⚠ It runs **93 probes, twice each** — budget hours at `--jobs 1`. And it
+**refuses to run without an explicit `--base <rev>`**, on purpose: probe_health
+discovers its candidates by grepping every committed .py for the image's
+filename, so a bare-runnable version of this script would re-enter the whole
+probe corpus inside each of three trees.
 
-    python3 notes/prom_b_apply_msgline_names.py       # 36 captions re-derived
-    python3 notes/prom_b_apply_smf_names.py           # the SMF brackets and tags
-    python3 notes/prom_b_apply_effect_names.py        # the 8-record page
-    python3 notes/prom_b_apply_diskfile_name.py       # the two disk signatures
+### The six appliers
+Each carries the round's rename table AS DATA, re-derives every literal it names
+from the ROM when run with no argument, and edits the source with `--apply`. The
+table IS the change; running one bare is the check that nothing it rests on has
+moved. `notes/prom_b_naming_preservation.py` imports all six, so it can never
+drift from what was applied.
+
+    python3 notes/prom_b_apply_msgline_names.py        # 36 captions re-derived
+    python3 notes/prom_b_apply_smf_names.py            # the SMF brackets and tags
+    python3 notes/prom_b_apply_effect_names.py         # the 8-record page
+    python3 notes/prom_b_apply_effect_editor_name.py   # the editor's four constants
+    python3 notes/prom_b_apply_diskfile_name.py        # the two disk signatures
+    python3 notes/prom_b_apply_chordnote_names.py      # note names and chord types
 
 ## `prom_b_dl_call_shapes.py` (round 9) — ★ READ THIS BEFORE PICKING A SPAN
 **"How many display lists does the committed scanner NOT see?"** It knows one
