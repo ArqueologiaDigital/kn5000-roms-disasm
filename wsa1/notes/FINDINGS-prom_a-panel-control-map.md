@@ -4,7 +4,7 @@
 **2026-08-31.** Reproduce with
 
 ```
-python3 notes/prom_a_panel_control_map.py --checks    # 21 corroborations, 0 failures
+python3 notes/prom_a_panel_control_map.py --checks    # the corroborations
 python3 notes/prom_a_panel_control_map.py --map       # code -> control
 python3 notes/prom_a_panel_control_map.py --variant   # the coverage argument
 python3 notes/prom_a_naming_wave8_apply.py --plan     # the 81 edits it justifies
@@ -46,6 +46,15 @@ panel.
 16 shared codes**. That check is looking for a *disagreement*: two maps built by
 different routes that disagree would mean one is wrong and every name resting on
 it is unsafe. They do not disagree.
+
+★ **And there is a consumer-side check that knew nothing of the derivation.**
+In each of the four sibling tables of §3, slot `0x0F`'s handler is the *same*
+five-instruction shape: test bit 7 of the forwarded argument and, if it is
+**clear**, write the screen-request pair `(0x2070)`/`(0x2071)` — leave for
+another screen, which is what an EXIT key does. Better: bit 7 of the delivered
+code is *set* at pair position 0, and code `0x0F` exists at position **1 only**,
+so the guard admits exactly the one position a wire on this panel can produce.
+Four handlers, one shape, and the shape agrees with the map's pair arithmetic.
 
 | code | control | pair position | in round 12? |
 |---|---|---|---|

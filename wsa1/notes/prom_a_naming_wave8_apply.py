@@ -243,8 +243,8 @@ def plan():
             "         pass did NOT establish that argument's bit layout.",
             "Evidence: the code->control map is rounds 9-12's, re-derived from",
             "         the ROM by notes/prom_a_panel_control_map.py, which agrees",
-            "         with prom_b's SLOT_CONTROL slot for slot and adds 21",
-            "         corroborations, 0 failures.  What is new here is only that",
+            "         with prom_b's SLOT_CONTROL slot for slot.  What is new",
+            "         here is only that",
             "         THIS module's tables are tied to it; see",
             "         notes/FINDINGS-prom_a-panel-control-map.md.",
             "Unknown: what this screen does with the button, and which screen",
@@ -286,8 +286,9 @@ def plan():
             "re-derives the map from the ROM by an independent route -- the "
             "wire->group map at 0xF8A189 and the group event lists at "
             "0xF8B4B2, composed with the service manual's switch matrix -- "
-            "and AGREES with prom_b's SLOT_CONTROL slot for slot.  21 "
-            "corroborations, 0 failures.  Write-up: "
+            "and AGREES with prom_b's SLOT_CONTROL slot for slot.  Its "
+            "corroborations all pass -- run --checks; a count is not quoted "
+            "here because a hand-copied count rots.  Write-up: "
             "notes/FINDINGS-prom_a-panel-control-map.md.",
             "",
             "  [00]..[07]  SOFT KEY columns 1..8; a column's lower and upper",

@@ -28,7 +28,7 @@ WHAT THIS FILE IS FOR, THEN
    `--checks` run asserts the outcome matches round 12's SLOT_CONTROL on every
    shared code -- and it is looking for a DISAGREEMENT, because a disagreement
    would mean one of the two maps is wrong and every name built on it is unsafe.
-   21 checks, 0 failures.
+   Every check it prints passes; run --checks for the current list.
 
 2. It covers three codes round 12's table does not: 0x0D (the -1/+1 pair, whose
    direction bit `PanelButton_Accept` special-cases at 0xF86610), 0x1E
@@ -75,7 +75,7 @@ USAGE
     python3 notes/prom_a_panel_control_map.py            # both variants
     python3 notes/prom_a_panel_control_map.py --map      # variant 2, code -> control
     python3 notes/prom_a_panel_control_map.py --variant  # the coverage argument
-    python3 notes/prom_a_panel_control_map.py --checks   # 21 corroborations
+    python3 notes/prom_a_panel_control_map.py --checks   # the corroborations
     python3 notes/prom_a_panel_control_map.py --selftest
 """
 import os
@@ -282,6 +282,29 @@ def checks():
         out.append(("%s answers only to the LCD rows and EXIT" % t,
                     bool(got) and got <= want,
                     "live %s" % sorted("%02X" % i for i in got)))
+    # C11  ★★ THE CONSUMER-SIDE TEST, and it is the strongest one here because
+    #      it looks at what the CODE DOES, not at what the tables contain.  In
+    #      each of the four sibling tables, slot 0x0F's handler is the same
+    #      five-instruction shape: test bit 7 of the forwarded argument and, if
+    #      it is CLEAR, write the screen-request pair (0x2070)/(0x2071) -- i.e.
+    #      LEAVE FOR ANOTHER SCREEN.  That is what an EXIT key does, and nothing
+    #      in the derivation of the map knew it.
+    exits = {"Dispatch_FF3800": 0xFF43ED, "Dispatch_FF3880": 0xFF4741,
+             "Dispatch_FF3900": 0xFF4FDF, "Dispatch_FF3980": 0xFF546F}
+    shape = bytes.fromhex("ee0c0000" "9e0821" "d9cc8000" "6e0a")
+    for t, a in sorted(exits.items()):
+        got = A(a, len(shape))
+        ok = (got == shape and A(a + 13, 3) == bytes.fromhex("f17020")
+              and A(a + 18, 3) == bytes.fromhex("f17120"))
+        out.append(("%s slot 0x0F requests a screen on bit 7 clear" % t, ok,
+                    got.hex()))
+    # C12  and the position it acts on is the ONLY one the map produces for
+    #      code 0x0F: bit 7 of the delivered code is SET at pair position 0,
+    #      and no wire puts code 0x0F at position 0.
+    pos0f = {v[2] for v in m2.values() if v[0] == 0xA9 and v[1] == 0x0F}
+    out.append(("code 0x0F exists at pair position 1 only -- the position the "
+                "four handlers act on", pos0f == {1}, "positions: %s" % pos0f))
+
     # C10  ★ THE AGREEMENT TEST.  Rounds 11 and 12 reached a code->control map
     #      from prom_b's side and applied it to 131 labels there.  This one is
     #      composed from the wire map and the group lists on prom_a's side.  If

@@ -162840,8 +162840,9 @@ Data_FF17E2:
 ;          the ROM by an independent route -- the wire->group map at 0xF8A189
 ;          and the group event lists at 0xF8B4B2, composed with the service
 ;          manual's switch matrix -- and AGREES with prom_b's SLOT_CONTROL
-;          slot for slot. 21 corroborations, 0 failures. Write-up:
-;          notes/FINDINGS-prom_a-panel-control-map.md.
+;          slot for slot. Its corroborations all pass -- run --checks; a
+;          count is not quoted here because a hand-copied count rots.
+;          Write-up: notes/FINDINGS-prom_a-panel-control-map.md.
 ;
 ;   [00]..[07]  SOFT KEY columns 1..8; a column's lower and upper
 ;               key share a code
@@ -162908,8 +162909,9 @@ Dispatch_FF3800:
 ;          the ROM by an independent route -- the wire->group map at 0xF8A189
 ;          and the group event lists at 0xF8B4B2, composed with the service
 ;          manual's switch matrix -- and AGREES with prom_b's SLOT_CONTROL
-;          slot for slot. 21 corroborations, 0 failures. Write-up:
-;          notes/FINDINGS-prom_a-panel-control-map.md.
+;          slot for slot. Its corroborations all pass -- run --checks; a
+;          count is not quoted here because a hand-copied count rots.
+;          Write-up: notes/FINDINGS-prom_a-panel-control-map.md.
 ;
 ;   [00]..[07]  SOFT KEY columns 1..8; a column's lower and upper
 ;               key share a code
@@ -162976,8 +162978,9 @@ Dispatch_FF3880:
 ;          the ROM by an independent route -- the wire->group map at 0xF8A189
 ;          and the group event lists at 0xF8B4B2, composed with the service
 ;          manual's switch matrix -- and AGREES with prom_b's SLOT_CONTROL
-;          slot for slot. 21 corroborations, 0 failures. Write-up:
-;          notes/FINDINGS-prom_a-panel-control-map.md.
+;          slot for slot. Its corroborations all pass -- run --checks; a
+;          count is not quoted here because a hand-copied count rots.
+;          Write-up: notes/FINDINGS-prom_a-panel-control-map.md.
 ;
 ;   [00]..[07]  SOFT KEY columns 1..8; a column's lower and upper
 ;               key share a code
@@ -163044,8 +163047,9 @@ Dispatch_FF3900:
 ;          the ROM by an independent route -- the wire->group map at 0xF8A189
 ;          and the group event lists at 0xF8B4B2, composed with the service
 ;          manual's switch matrix -- and AGREES with prom_b's SLOT_CONTROL
-;          slot for slot. 21 corroborations, 0 failures. Write-up:
-;          notes/FINDINGS-prom_a-panel-control-map.md.
+;          slot for slot. Its corroborations all pass -- run --checks; a
+;          count is not quoted here because a hand-copied count rots.
+;          Write-up: notes/FINDINGS-prom_a-panel-control-map.md.
 ;
 ;   [00]..[07]  SOFT KEY columns 1..8; a column's lower and upper
 ;               key share a code
@@ -163153,8 +163157,9 @@ Text_FF3A18:
 ;          the ROM by an independent route -- the wire->group map at 0xF8A189
 ;          and the group event lists at 0xF8B4B2, composed with the service
 ;          manual's switch matrix -- and AGREES with prom_b's SLOT_CONTROL
-;          slot for slot. 21 corroborations, 0 failures. Write-up:
-;          notes/FINDINGS-prom_a-panel-control-map.md.
+;          slot for slot. Its corroborations all pass -- run --checks; a
+;          count is not quoted here because a hand-copied count rots.
+;          Write-up: notes/FINDINGS-prom_a-panel-control-map.md.
 ;
 ;   [00]..[07]  SOFT KEY columns 1..8; a column's lower and upper
 ;               key share a code
@@ -163406,8 +163411,9 @@ Dispatch_FF3D29:
 ;          the ROM by an independent route -- the wire->group map at 0xF8A189
 ;          and the group event lists at 0xF8B4B2, composed with the service
 ;          manual's switch matrix -- and AGREES with prom_b's SLOT_CONTROL
-;          slot for slot. 21 corroborations, 0 failures. Write-up:
-;          notes/FINDINGS-prom_a-panel-control-map.md.
+;          slot for slot. Its corroborations all pass -- run --checks; a
+;          count is not quoted here because a hand-copied count rots.
+;          Write-up: notes/FINDINGS-prom_a-panel-control-map.md.
 ;
 ;   [00]..[07]  SOFT KEY columns 1..8; a column's lower and upper
 ;               key share a code
@@ -163666,8 +163672,9 @@ Dispatch_FF4041:
 ;          the ROM by an independent route -- the wire->group map at 0xF8A189
 ;          and the group event lists at 0xF8B4B2, composed with the service
 ;          manual's switch matrix -- and AGREES with prom_b's SLOT_CONTROL
-;          slot for slot. 21 corroborations, 0 failures. Write-up:
-;          notes/FINDINGS-prom_a-panel-control-map.md.
+;          slot for slot. Its corroborations all pass -- run --checks; a
+;          count is not quoted here because a hand-copied count rots.
+;          Write-up: notes/FINDINGS-prom_a-panel-control-map.md.
 ;
 ;   [00]..[07]  SOFT KEY columns 1..8; a column's lower and upper
 ;               key share a code
@@ -163776,8 +163783,9 @@ Dispatch_FF4149:
 ;          the ROM by an independent route -- the wire->group map at 0xF8A189
 ;          and the group event lists at 0xF8B4B2, composed with the service
 ;          manual's switch matrix -- and AGREES with prom_b's SLOT_CONTROL
-;          slot for slot. 21 corroborations, 0 failures. Write-up:
-;          notes/FINDINGS-prom_a-panel-control-map.md.
+;          slot for slot. Its corroborations all pass -- run --checks; a
+;          count is not quoted here because a hand-copied count rots.
+;          Write-up: notes/FINDINGS-prom_a-panel-control-map.md.
 ;
 ;   [00]..[07]  SOFT KEY columns 1..8; a column's lower and upper
 ;               key share a code
@@ -164045,8 +164053,8 @@ PanelButtonDispatch_FF3800:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164084,8 +164092,8 @@ LcdKeyRow1_FF3800:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164123,8 +164131,8 @@ LcdKeyRow2_FF3800:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164159,8 +164167,8 @@ LcdKeyRow3_FF3800:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164195,8 +164203,8 @@ LcdKeyRow4_FF3800:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164440,8 +164448,8 @@ PanelButtonDispatch_FF3880:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164483,8 +164491,8 @@ LcdKeyRow1_FF3880:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164517,8 +164525,8 @@ LcdKeyRow2_FF3880:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164554,8 +164562,8 @@ LcdKeyRow3_FF3880:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164623,8 +164631,8 @@ LcdKeyRow4_FF3880:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -164693,8 +164701,8 @@ LcdKeyRow5_FF3880:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -165020,8 +165028,8 @@ PanelButtonDispatch_FF3900:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -165119,8 +165127,8 @@ LcdKeyRow1_FF3900:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -165146,8 +165154,8 @@ LcdKeyRow2_FF3900:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -165188,8 +165196,8 @@ LcdKeyRow3_FF3900:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -165515,8 +165523,8 @@ LcdKeyRow4_FF3900:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -165833,8 +165841,8 @@ LcdKeyRow5_FF3900:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -166138,8 +166146,8 @@ PanelButtonDispatch_FF3980:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -166214,8 +166222,8 @@ LcdKeyRow1_FF3980:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -166248,8 +166256,8 @@ LcdKeyRow2_FF3980:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -166275,8 +166283,8 @@ LcdKeyRow3_FF3980:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -166369,8 +166377,8 @@ LcdKeyRow4_FF3980:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -166459,8 +166467,8 @@ LcdKeyRow5_FF3980:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -166921,8 +166929,8 @@ PanelButtonDispatch_FF3A29:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -166960,8 +166968,8 @@ LcdKeyRow1_FF3A29_R0:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -166998,8 +167006,8 @@ LcdKeyRow4_FF3A29_R0:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167052,8 +167060,8 @@ ExitKey_FF3A29_R0:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167128,8 +167136,8 @@ sub_FF5A2D:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167169,8 +167177,8 @@ LcdKeyRow2_FF3A29_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167200,8 +167208,8 @@ LcdKeyRow3_FF3A29_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167227,8 +167235,8 @@ LcdKeyRow4_FF3A29_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167254,8 +167262,8 @@ LcdKeyRow5_FF3A29_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167284,8 +167292,8 @@ ExitKey_FF3A29_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167314,8 +167322,8 @@ LcdKeyRow3_FF3A29_R2:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167344,8 +167352,8 @@ LcdKeyRow4_FF3A29_R2:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167375,8 +167383,8 @@ ExitKey_FF3A29_R2:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167410,8 +167418,8 @@ LcdKeyRow1_FF3A29_R3:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167441,8 +167449,8 @@ ExitKey_FF3A29_R34:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167486,8 +167494,8 @@ LcdKeyRow1_FF3A29_R4:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167535,8 +167543,8 @@ LcdKeyRow3_FF3A29_R5:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167565,8 +167573,8 @@ LcdKeyRow4_FF3A29_R5:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -167980,8 +167988,8 @@ sub_FF5FA0:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168019,8 +168027,8 @@ LcdKeyRow1_FF3D39_R0:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168059,8 +168067,8 @@ LcdKeyRow4_FF3D39_R0:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168090,8 +168098,8 @@ ExitKey_FF3D39_R0123:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168160,8 +168168,8 @@ LcdKeyRow1_FF3D39_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168196,8 +168204,8 @@ LcdKeyRow2_FF3D39_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168232,8 +168240,8 @@ LcdKeyRow3_FF3D39_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168341,8 +168349,8 @@ LcdKeyRow4_FF3D39_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168543,8 +168551,8 @@ sub_FF63FF:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168583,8 +168591,8 @@ LcdKeyRow3_FF3D39_R2:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168613,8 +168621,8 @@ LcdKeyRow4_FF3D39_R2:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168666,8 +168674,8 @@ LcdKeyRow3_FF3D39_R3:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168806,8 +168814,8 @@ PanelButtonDispatch_FF3F39:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168838,8 +168846,8 @@ LcdKeyRow3_FF3D39_R4:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -168870,8 +168878,8 @@ LcdKeyRow4_FF3D39_R4:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -169029,8 +169037,8 @@ PanelButtonDispatch_FF3FB9:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -169061,8 +169069,8 @@ LcdKeyRow3_FF3D39_R5:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -169091,8 +169099,8 @@ LcdKeyRow4_FF3D39_R5:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -169497,8 +169505,8 @@ sub_FF68D8:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -169788,8 +169796,8 @@ LcdKeyRow1_FF4049_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -169830,8 +169838,8 @@ LcdKeyRow1_FF4049_R0:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -169996,8 +170004,8 @@ sub_FF6F21:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -170115,8 +170123,8 @@ LcdKeyRow1_FF4151_R1:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
@@ -170157,8 +170165,8 @@ LcdKeyRow1_FF4151_R0:
 ;          pass did NOT establish that argument's bit layout.
 ; Evidence: the code->control map is rounds 9-12's, re-derived from
 ;          the ROM by notes/prom_a_panel_control_map.py, which agrees
-;          with prom_b's SLOT_CONTROL slot for slot and adds 21
-;          corroborations, 0 failures.  What is new here is only that
+;          with prom_b's SLOT_CONTROL slot for slot.  What is new
+;          here is only that
 ;          THIS module's tables are tied to it; see
 ;          notes/FINDINGS-prom_a-panel-control-map.md.
 ; Unknown:  what this screen does with the button, and which screen
