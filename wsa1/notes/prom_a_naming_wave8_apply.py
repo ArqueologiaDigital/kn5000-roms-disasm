@@ -123,22 +123,55 @@ def label_at(src, i):
 
 
 def readers(src):
-    """{table label: (routine label, line index, bound addr, base addr)}."""
+    """{table label: (routine, line, kind, evidence dict)} for every dispatcher.
+
+    ⚠ THE BODY IS CUT AT `jp (xbc)`.  A dispatcher is followed, with no label
+    between them, by the next routine -- and the first attempt at this scanned
+    to the next LABEL, so it picked up a neighbour's table immediate and gave
+    one reader two tables.  The dispatch instruction is where the dispatcher
+    ends, so that is where the scan stops.
+
+    THREE SHAPES, told apart by what they index with:
+
+      ctl    `cp H,0x20` then `add XBC,<table>`     -- one 32-entry row, indexed
+             by the 5-bit PANEL CONTROL code in (XIZ+0x08).
+      ctl2   `(0x2229) << 5` + H, then `add XBC`    -- a multi-row table, index
+             = 32*page + control.  Same control space, no explicit bound: H is
+             already 5 bits when it arrives.
+      page   `cp (0x2229),N` then `(0x2229) * 4`    -- indexed by THE PAGE BYTE
+             ALONE.  Not a control table at all, and giving one of these a
+             PanelButton name would be the error this distinction exists to
+             prevent.
+    """
     out = {}
-    cur, curline = None, None
-    body = []
+    cur, curline, body = None, None, []
     for i, ln in enumerate(src + [""]):
         m = LABEL.match(ln)
         if m or i == len(src):
             if cur and body:
                 txt = "\n".join(body)
-                base = re.search(r'add XBC,0x00(ff[0-9a-f]{4})', txt)
-                bound = re.search(r'cp H,0x20\s+;\s*([0-9A-F]{6})', txt)
-                if base and bound:
+                cut = txt.find("jp (xbc)")
+                if cut > 0:
+                    txt = txt[:cut]
+                base = re.search(r'add XBC,0x00(ff[0-9a-f]{4})\s+;\s*([0-9A-F]{6})',
+                                 txt)
+                if base:
                     t = "Dispatch_FF" + base.group(1)[2:].upper()
-                    ba = re.search(r'add XBC,0x00ff[0-9a-f]{4}\s+;\s*([0-9A-F]{6})', txt)
-                    out[t] = (cur, curline, bound.group(1),
-                              ba.group(1) if ba else "?")
+                    ev = {"base": base.group(2), "table": t}
+                    kind = None
+                    g = re.search(r'cp H,0x20\s+;\s*([0-9A-F]{6})', txt)
+                    if g:
+                        kind, ev["bound"] = "ctl", g.group(1)
+                    elif re.search(r'sll c, 0x05', txt) and re.search(r'add C,H', txt):
+                        kind = "ctl2"
+                    else:
+                        g = re.search(r'MB16, 0x2229, 0x([0-9a-f]{2})\s+;\s*'
+                                      r'([0-9A-F]{6})', txt)
+                        if g and re.search(r'MB16, 0x2229, 3', txt):
+                            kind, ev["bound"] = "page", g.group(2)
+                            ev["pages"] = int(g.group(1), 16)
+                    if kind:
+                        out[t] = (cur, curline, kind, ev)
             cur, curline, body = (m.group(1) if m else None), i, []
             continue
         if cur:
@@ -155,29 +188,61 @@ def plan():
     jobs = []                       # (addr, kind, old, new, header lines)
 
     # --- the readers -------------------------------------------------------
-    for t in SIMPLE + ["Dispatch_FF3A29", "Dispatch_FF3D39",
-                       "Dispatch_FF3F39", "Dispatch_FF3FB9"]:
-        if t not in rd:
-            continue
-        old, li, bound, base = rd[t]
+    for t, (old, li, kind, ev) in sorted(rd.items()):
         if not old.startswith("sub_"):
             continue
-        new = "PanelButtonDispatch_" + t.split("_")[1]
-        hdr = [
-            "%s -- run %s's handler for one PANEL CONTROL" % (new, t),
-            "",
-            "Inputs:  (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =",
-            "         the argument this reader forwards to the handler.",
-            "Evidence: `cp H,0x20` at 0x%s bounds the index to the 32-code" % bound,
-            "         panel space that PanelButton_Route's `and L,0x1f`",
-            "         (0xF861AE) produces, and `add XBC,0x00%s` at 0x%s"
-            % (t.split("_")[1], base),
-            "         names the table.  The handler is CALLED, not jumped to:",
-            "         the reader pushes a return address before `jp (XBC)`.",
-            "Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and",
-            "         `python3 notes/prom_a_panel_control_map.py --map`.",
-            "Was `%s`, named by notes/prom_a_naming_wave8_apply.py." % old,
-        ]
+        if kind in ("ctl", "ctl2"):
+            new = "PanelButtonDispatch_" + t.split("_")[1]
+            hdr = [
+                "%s -- run %s's handler for one PANEL CONTROL" % (new, t),
+                "",
+                "Inputs:  (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =",
+                "         the argument this reader forwards to the handler.",
+            ]
+            if kind == "ctl":
+                hdr += [
+                    "Evidence: `cp H,0x20` at 0x%s bounds the index to the 32-code"
+                    % ev["bound"],
+                    "         panel space PanelButton_Route's `and L,0x1f`",
+                    "         (0xF861AE) produces, and `add XBC,0x00%s` at 0x%s"
+                    % (t.split("_")[1], ev["base"]),
+                    "         names the table.",
+                ]
+            else:
+                hdr += [
+                    "Evidence: the index is `((0x2229) << 5) + H` -- the page byte",
+                    "         times the 32-entry row length, plus the control --",
+                    "         and `add XBC,0x00%s` at 0x%s names the table."
+                    % (t.split("_")[1], ev["base"]),
+                    "⚠ No explicit `cp H,0x20` here, unlike its single-row",
+                    "         siblings: H arrives already masked to five bits.",
+                ]
+            hdr += [
+                "         The handler is CALLED, not jumped to: the reader pushes",
+                "         a return address before `jp (XBC)`.",
+                "Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and",
+                "         `python3 notes/prom_a_panel_control_map.py --map`.",
+            ]
+        elif kind == "page":
+            new = "PageDispatch_" + t.split("_")[1]
+            hdr = [
+                "%s -- run %s's entry for the CURRENT PAGE" % (new, t),
+                "",
+                "★ NOT a panel-control table.  This reader indexes with the page",
+                "         byte (0x2229) ALONE and never reads an argument, so its",
+                "         %d entries are pages of one screen and not buttons."
+                % ev["pages"],
+                "Evidence: `cp (0x2229),0x%02X` at 0x%s is the bound, the index is"
+                % (ev["pages"], ev["bound"]),
+                "         `(0x2229) * 4` (`m_mul MB16,0x2229,3` -- the operand is",
+                "         width-1), and `add XBC,0x00%s` at 0x%s names the table."
+                % (t.split("_")[1], ev["base"]),
+                "         The entry is CALLED: a return address is pushed before",
+                "         `jp (XBC)`.",
+            ]
+        else:
+            continue
+        hdr.append("Was `%s`, named by notes/prom_a_naming_wave8_apply.py." % old)
         addr = None
         m = ADDR.search(src[li + 1]) if li + 1 < len(src) else None
         if m:

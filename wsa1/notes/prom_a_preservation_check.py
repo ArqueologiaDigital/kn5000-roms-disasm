@@ -59,6 +59,12 @@ RENAMES = {
     "sub_FF4D5D": "LcdKeyRow5_FF3900",
     "sub_FF52E2": "LcdKeyRow2_FF3980",
     "sub_FF5A69": "LcdKeyRow2_FF3A29_R1",
+    "sub_FF548A": "PageDispatch_FF3A00",
+    "sub_FF5C3E": "PageDispatch_FF3D29",
+    "sub_FF672D": "PageDispatch_FF4041",
+    "sub_FF6DB7": "PageDispatch_FF4149",
+    "sub_FF68D8": "PanelButtonDispatch_FF4049",
+    "sub_FF6F21": "PanelButtonDispatch_FF4151",
 }
 
 

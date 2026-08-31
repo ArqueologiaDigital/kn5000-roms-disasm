@@ -166486,7 +166486,20 @@ ExitKey_FF3980:
 	ret                                                  ; FF5488  0e
 sub_FF5489:
 	ret                                                  ; FF5489  0e
-sub_FF548A:
+; ---------------------------------------------------------------------
+; PageDispatch_FF3A00 -- run Dispatch_FF3A00's entry for the CURRENT PAGE
+;
+; ★ NOT a panel-control table.  This reader indexes with the page
+;          byte (0x2229) ALONE and never reads an argument, so its
+;          6 entries are pages of one screen and not buttons.
+; Evidence: `cp (0x2229),0x06` at 0xFF548A is the bound, the index is
+;          `(0x2229) * 4` (`m_mul MB16,0x2229,3` -- the operand is
+;          width-1), and `add XBC,0x00FF3A00` at 0xFF5499 names the table.
+;          The entry is CALLED: a return address is pushed before
+;          `jp (XBC)`.
+; Was `sub_FF548A`, named by notes/prom_a_naming_wave8_apply.py.
+; ---------------------------------------------------------------------
+PageDispatch_FF3A00:
 	m_cp_mi8 MB16, 0x2229, 0x06                          ; FF548A  c1 29 22 3f 06
 	jr nc, .LFF54A9                                      ; FF548F  6f 18
 	ldb c, 0x04                                          ; FF5491  23 04
@@ -167592,7 +167605,20 @@ ExitKey_FF3A29_R5:
 	ret                                                  ; FF5C3C  0e
 sub_FF5C3D:
 	ret                                                  ; FF5C3D  0e
-sub_FF5C3E:
+; ---------------------------------------------------------------------
+; PageDispatch_FF3D29 -- run Dispatch_FF3D29's entry for the CURRENT PAGE
+;
+; ★ NOT a panel-control table.  This reader indexes with the page
+;          byte (0x2229) ALONE and never reads an argument, so its
+;          3 entries are pages of one screen and not buttons.
+; Evidence: `cp (0x2229),0x03` at 0xFF5C3E is the bound, the index is
+;          `(0x2229) * 4` (`m_mul MB16,0x2229,3` -- the operand is
+;          width-1), and `add XBC,0x00FF3D29` at 0xFF5C4D names the table.
+;          The entry is CALLED: a return address is pushed before
+;          `jp (XBC)`.
+; Was `sub_FF5C3E`, named by notes/prom_a_naming_wave8_apply.py.
+; ---------------------------------------------------------------------
+PageDispatch_FF3D29:
 	m_cp_mi8 MB16, 0x2229, 0x03                          ; FF5C3E  c1 29 22 3f 03
 	jr ugt, .LFF5C5D                                     ; FF5C43  6b 18
 	ldb c, 0x04                                          ; FF5C45  23 04
@@ -169118,7 +169144,20 @@ ExitKey_FF3D39_R5:
 	ret                                                  ; FF672B  0e
 sub_FF672C:
 	ret                                                  ; FF672C  0e
-sub_FF672D:
+; ---------------------------------------------------------------------
+; PageDispatch_FF4041 -- run Dispatch_FF4041's entry for the CURRENT PAGE
+;
+; ★ NOT a panel-control table.  This reader indexes with the page
+;          byte (0x2229) ALONE and never reads an argument, so its
+;          2 entries are pages of one screen and not buttons.
+; Evidence: `cp (0x2229),0x02` at 0xFF672D is the bound, the index is
+;          `(0x2229) * 4` (`m_mul MB16,0x2229,3` -- the operand is
+;          width-1), and `add XBC,0x00FF4041` at 0xFF673C names the table.
+;          The entry is CALLED: a return address is pushed before
+;          `jp (XBC)`.
+; Was `sub_FF672D`, named by notes/prom_a_naming_wave8_apply.py.
+; ---------------------------------------------------------------------
+PageDispatch_FF4041:
 	m_cp_mi8 MB16, 0x2229, 0x02                          ; FF672D  c1 29 22 3f 02
 	jr nc, .LFF674C                                      ; FF6732  6f 18
 	ldb c, 0x04                                          ; FF6734  23 04
@@ -169261,7 +169300,24 @@ sub_FF68CA:
 	call 0xf42590                                        ; FF68CE  1d 90 25 f4
 	stdi8 (0x21fa), 0x00                                 ; FF68D2  f1 fa 21 00 00
 	ret                                                  ; FF68D7  0e
-sub_FF68D8:
+; ---------------------------------------------------------------------
+; PanelButtonDispatch_FF4049 -- run Dispatch_FF4049's handler for one PANEL
+;          CONTROL
+;
+; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
+;          the argument this reader forwards to the handler.
+; Evidence: the index is `((0x2229) << 5) + H` -- the page byte
+;          times the 32-entry row length, plus the control --
+;          and `add XBC,0x00FF4049` at 0xFF68F1 names the table.
+; ⚠ No explicit `cp H,0x20` here, unlike its single-row
+;          siblings: H arrives already masked to five bits.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
+; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
+;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Was `sub_FF68D8`, named by notes/prom_a_naming_wave8_apply.py.
+; ---------------------------------------------------------------------
+PanelButtonDispatch_FF4049:
 	link XIZ,0x0000                                      ; FF68D8  ee 0c 00 00
 	pushw hl                                             ; FF68DC  2b
 	ld H,(XIZ+0x08)                                      ; FF68DD  8e 08 26
@@ -169857,7 +169913,20 @@ ExitKey_FF4049_R01:
 	ret                                                  ; FF6DB5  0e
 sub_FF6DB6:
 	ret                                                  ; FF6DB6  0e
-sub_FF6DB7:
+; ---------------------------------------------------------------------
+; PageDispatch_FF4149 -- run Dispatch_FF4149's entry for the CURRENT PAGE
+;
+; ★ NOT a panel-control table.  This reader indexes with the page
+;          byte (0x2229) ALONE and never reads an argument, so its
+;          2 entries are pages of one screen and not buttons.
+; Evidence: `cp (0x2229),0x02` at 0xFF6DB7 is the bound, the index is
+;          `(0x2229) * 4` (`m_mul MB16,0x2229,3` -- the operand is
+;          width-1), and `add XBC,0x00FF4149` at 0xFF6DC6 names the table.
+;          The entry is CALLED: a return address is pushed before
+;          `jp (XBC)`.
+; Was `sub_FF6DB7`, named by notes/prom_a_naming_wave8_apply.py.
+; ---------------------------------------------------------------------
+PageDispatch_FF4149:
 	m_cp_mi8 MB16, 0x2229, 0x02                          ; FF6DB7  c1 29 22 3f 02
 	jr nc, .LFF6DD6                                      ; FF6DBC  6f 18
 	ldb c, 0x04                                          ; FF6DBE  23 04
@@ -169971,7 +170040,24 @@ sub_FF6F13:
 	call 0xf42590                                        ; FF6F17  1d 90 25 f4
 	stdi8 (0x21fa), 0x00                                 ; FF6F1B  f1 fa 21 00 00
 	ret                                                  ; FF6F20  0e
-sub_FF6F21:
+; ---------------------------------------------------------------------
+; PanelButtonDispatch_FF4151 -- run Dispatch_FF4151's handler for one PANEL
+;          CONTROL
+;
+; Inputs:   (XIZ+0x08) = the 5-bit panel control index; (XIZ+0x0A) =
+;          the argument this reader forwards to the handler.
+; Evidence: the index is `((0x2229) << 5) + H` -- the page byte
+;          times the 32-entry row length, plus the control --
+;          and `add XBC,0x00FF4151` at 0xFF6F3A names the table.
+; ⚠ No explicit `cp H,0x20` here, unlike its single-row
+;          siblings: H arrives already masked to five bits.
+;          The handler is CALLED, not jumped to: the reader pushes
+;          a return address before `jp (XBC)`.
+; Control legend: notes/FINDINGS-prom_a-panel-control-map.md, and
+;          `python3 notes/prom_a_panel_control_map.py --map`.
+; Was `sub_FF6F21`, named by notes/prom_a_naming_wave8_apply.py.
+; ---------------------------------------------------------------------
+PanelButtonDispatch_FF4151:
 	link XIZ,0x0000                                      ; FF6F21  ee 0c 00 00
 	pushw hl                                             ; FF6F25  2b
 	ld H,(XIZ+0x08)                                      ; FF6F26  8e 08 26
@@ -170283,10 +170369,10 @@ sub_FF712A:
 ; ---------------------------------------------------------------------
 ; sub_FF7153 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_a sub_FF672D (`calr`) at 0xFF688E
-;          prom_a sub_FF68D8 (`calr`) at 0xFF696C
-;          prom_a sub_FF68D8 (`calr`) at 0xFF6A63
-;          prom_a sub_FF68D8 (`calr`) at 0xFF6AD3
+; Called from: prom_a PageDispatch_FF4041 (`calr`) at 0xFF688E
+;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF696C
+;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6A63
+;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6AD3
 ;
 ;     0xFF71A5 loads 0xFF4291, where the ROM reads:
 ;        "                U1 -U2 -UD1-UD2-"
@@ -170423,10 +170509,10 @@ sub_FF725D:
 ; ---------------------------------------------------------------------
 ; sub_FF7296 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_a sub_FF672D (`calr`) at 0xFF67F9
-;          prom_a sub_FF68D8 (`calr`) at 0xFF6BBF
-;          prom_a sub_FF68D8 (`calr`) at 0xFF6C96
-;          prom_a sub_FF68D8 (`calr`) at 0xFF6CDE
+; Called from: prom_a PageDispatch_FF4041 (`calr`) at 0xFF67F9
+;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6BBF
+;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6C96
+;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6CDE
 ;          ... and 1 more
 ;
 ;     0xFF72D9 loads 0xFF4291, where the ROM reads:
@@ -170551,8 +170637,8 @@ sub_FF7333:
 ; ---------------------------------------------------------------------
 ; sub_FF7399 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_a sub_FF68D8 (`calr`) at 0xFF6CE6
-;          prom_a sub_FF6DB7 (`calr`) at 0xFF6E5A
+; Called from: prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6CE6
+;          prom_a PageDispatch_FF4149 (`calr`) at 0xFF6E5A
 ;
 ;     0xFF73DC loads 0xFF4291, where the ROM reads:
 ;        "                U1 -U2 -UD1-UD2-"
@@ -170635,10 +170721,10 @@ sub_FF7399:
 ; ---------------------------------------------------------------------
 ; sub_FF7436 -- loads a pointer straight at ROM TEXT.  NOT NAMED.
 ;
-; Called from: prom_a sub_FF672D (`calr`) at 0xFF6802
-;          prom_a sub_FF68D8 (`calr`) at 0xFF6BC8
-;          prom_a sub_FF68D8 (`calr`) at 0xFF6C1A
-;          prom_a sub_FF6DB7 (`calr`) at 0xFF6E63
+; Called from: prom_a PageDispatch_FF4041 (`calr`) at 0xFF6802
+;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6BC8
+;          prom_a PanelButtonDispatch_FF4049 (`calr`) at 0xFF6C1A
+;          prom_a PageDispatch_FF4149 (`calr`) at 0xFF6E63
 ;          ... and 1 more
 ;
 ;     0xFF744E loads 0xFF42A1, where the ROM reads:
@@ -170906,13 +170992,13 @@ sub_FF7604:
 ;          prom_a LcdKeyRow4_FF3900 (`call`) at 0xFF4D54
 ;          prom_a LcdKeyRow5_FF3900 (`call`) at 0xFF4FD6
 ;          prom_a Paint_MidiFileL0ad (`call`) at 0xFF50DE
-;          prom_a sub_FF548A (`call`) at 0xFF553A
+;          prom_a PageDispatch_FF3A00 (`call`) at 0xFF553A
 ;          prom_a Paint_DiskSaveFile (`call`) at 0xFF55B3, 0xFF5615, 0xFF5713
-;          prom_a sub_FF5C3E (`call`) at 0xFF5D1B, 0xFF5DDC, 0xFF5E3F, 0xFF5EA2
+;          prom_a PageDispatch_FF3D29 (`call`) at 0xFF5D1B, 0xFF5DDC, 0xFF5E3F, 0xFF5EA2
 ;          prom_a Paint_FloppyDiskFormatSelectType (`call`) at 0xFF6544
 ;          prom_a Paint_FloppyDiskFormatAreYouSure (`call`) at 0xFF669F
-;          prom_a sub_FF672D (`call`) at 0xFF6828, 0xFF68BE
-;          prom_a sub_FF6DB7 (`call`) at 0xFF6E89, 0xFF6F08
+;          prom_a PageDispatch_FF4041 (`call`) at 0xFF6828, 0xFF68BE
+;          prom_a PageDispatch_FF4149 (`call`) at 0xFF6E89, 0xFF6F08
 ; Issues:  SWI7 service 0x0C at 0xFF761D -- LCD_Svc_0C_SetLayersOn, rebuild DISP ON: C bits 0/1/2 = layers 1/2/3 steady on
 ; Evidence: `push XIZ/XIX/XHL/XDE`, `ld C,0x07`, service 0x0C, then the four pops.
 ;           Same effect as LCD_ScreenRedraw_End; the pushes are what distinguish it.
