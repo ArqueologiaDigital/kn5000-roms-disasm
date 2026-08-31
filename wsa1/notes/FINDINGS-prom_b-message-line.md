@@ -78,7 +78,14 @@ sibling records sit immediately after `0xF3D38A` and have the identical shape:
 | `0xF3D3E9` | `0x00104E` | 30 | `0x1631` | 8 | 142 |
 
 Four 30-character lines down the left of a 320 x 240 panel. `0x0FE4` is the
-**bottom** one. ⚠ The other three have **no writers at all** in the converted
+**bottom** one.
+
+⚠ The cursor in the record is LAYER-RELATIVE: `LCD_Svc_06_DrawText8x14` does
+`add IX,(0x2555)` before using it, and `(0x2555)` is set by
+`LCD_SelectCurrentLayer`. The panel has three OR-composited layers of
+40 x 240 = 9,600 bytes, and all four cursors are below 9,600, so the `y` above is
+the row **within whichever layer is selected**, not necessarily the row on the
+composited image. Which layer these four lines are drawn into was not traced. ⚠ The other three have **no writers at all** in the converted
 part of prom_b; they are listed because the records are real, not because
 anything here reaches them.
 

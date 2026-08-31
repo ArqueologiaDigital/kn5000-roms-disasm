@@ -98,8 +98,10 @@ Derived in `notes/FINDINGS-prom_b-message-line.md`
   `0xF3D3AD`, `0xF3D3CB`, `0xF3D3E9`) that carries the buffer address, the
   count 30, `swi 7` function 6 and an LCD cursor.
 * `AP = 40` bytes per display line (`0xF8E850` APL = 0x28, `0xF8E85B` APH = 0),
-  so the four cursors put them at **x = 8, y = 52 / 97 / 142 / 180** on the
-  320 x 240 panel, in the 8-pixel-wide, 14-row font at prom_b `0xF1B400`.
+  so the four cursors put them at **x = 8, y = 52 / 97 / 142 / 180**, in the
+  8-pixel-wide, 14-row font at prom_b `0xF1B400`. ⚠ Those are rows within
+  whichever of the three OR-composited layers is selected — the service adds
+  `(0x2555)` to the record's cursor first — and which layer was not traced.
 * Nothing draws them unless the **screen id byte `(0x207C)` is `0x0E`**.
 
 Useful the moment `0x790000` is wired to a `sed1330_device`: those four lines
