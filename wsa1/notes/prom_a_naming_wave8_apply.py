@@ -267,7 +267,28 @@ CONTROL_TEXT = {
 
 
 def lines():
+    """The PRIMARY file's own lines -- the WRITE path, and only that.
+
+    ⚠ Writing the expanded image back here would inline kernel/kernel.s and the
+    two maincpu/shared parts into prom_a and destroy them, so the write must
+    stay on the primary.  `apply_()` asserts every address it touches is IN the
+    primary before it writes a byte."""
     return open(LISTING, encoding="utf-8").read().splitlines()
+
+
+def analysis_lines():
+    """The IMAGE's lines -- every READ.
+
+    ★ NOT the primary.  A probe that opens `prom_X/wsa1_prom_X.s` and scans it
+    measures ONE FILE; an image is a primary plus its `.include`s, and the day
+    prom_a is split this script would plan NOTHING and say so quietly.  That is
+    the vacuous pass notes/probe_health.py exists to catch, and it graded this
+    file SPLIT-FRAGILE for exactly this reason."""
+    import asm_source
+    if os.path.abspath(LISTING) != os.path.abspath(
+            os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")):
+        return lines()          # --verify runs against a scratch copy
+    return asm_source.image_lines(ROOT, "prom_a/wsa1_prom_a.s")
 
 
 def tables(src):
@@ -368,7 +389,7 @@ def readers(src):
 
 
 def plan():
-    src = lines()
+    src = analysis_lines()
     tb = tables(src)
     at = line_of_addr(src)
     rd = readers(src)
@@ -698,7 +719,17 @@ def render(hdr):
 def apply_():
     """Idempotent.  Renames first, over the whole text; then labels and headers,
     located by ADDRESS and inserted from the bottom up so no index moves."""
-    src, jobs = plan()
+    _analysis, jobs = plan()
+    src = lines()                      # the PRIMARY: this is the write path
+    have = line_of_addr(src)
+    stray = [j[0] for j in jobs
+             if isinstance(j[0], int) and j[0] not in have]
+    if stray:
+        raise AssertionError(
+            "%d job addresses are in the IMAGE but not in the primary "
+            "(%s...) -- prom_a has been split and this script's write path has "
+            "to be taught asm_source.edit_image before it may run again"
+            % (len(stray), ", ".join("0x%06X" % a for a in stray[:4])))
     text = "\n".join(src)
     for _a, kind, old, new, _h in jobs:
         if kind == "rename" and re.search(r'\b%s\b' % old, text):
@@ -929,7 +960,7 @@ def screens_report():
     ENTER method names the screen -- which then names that screen's LEAVE and
     BUTTON methods for free, the way the sixteen already-named ones did here.
     """
-    src = lines()
+    src = analysis_lines()
     lab_at = {}
     for i, ln in enumerate(src):
         mm = LABEL.match(ln)
@@ -1000,7 +1031,7 @@ def selftest():
     except AssertionError as e:
         print("FAIL plan(): %s" % e)
         bad += 1
-    src2 = lines()
+    src2 = analysis_lines()
     # 3. ★★ THE -32 IS NOT MINE TO GET WRONG, and round 9 already pinned it.
     #    wave7_panel_button_codes.py's anchor A says the power-on chord on
     #    number-pad key "4" requests SCREEN ID 0xDB and that ViewB[0xD9..0xDB]

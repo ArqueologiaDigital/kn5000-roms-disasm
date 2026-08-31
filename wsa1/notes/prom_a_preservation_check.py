@@ -31,10 +31,12 @@ USAGE
 import collections
 import os
 import re
-import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import image_text, image_text_at_rev      # noqa: E402
+
 PATH = "prom_a/wsa1_prom_a.s"
 LABEL = re.compile(r'^([A-Za-z_.][A-Za-z0-9_.]*):')
 
@@ -100,8 +102,15 @@ def _renames():
 
 
 def ref_text(ref):
-    return subprocess.run(["git", "show", "%s:%s" % (ref, PATH)], cwd=ROOT,
-                          capture_output=True, text=True, check=True).stdout
+    """★ BOTH SIDES ARE READ AS THE IMAGE, not as the file.
+
+    A `git show <rev>:prom_a/wsa1_prom_a.s` on one side and an `open()` on the
+    other compares two FILES, and this tree splits images into a primary plus
+    included parts.  The day prom_a is split, that comparison would report the
+    entire body as LOST -- or, worse, as unchanged in a tree where the primary
+    is a header.  asm_source resolves both sides the way llvm-mc does, so the
+    answer is about the IMAGE and survives a split on either side."""
+    return image_text_at_rev(ROOT, PATH, ref)
 
 
 def comments(text):
@@ -122,7 +131,7 @@ def main():
     argv = sys.argv[1:]
     ref = argv[argv.index("--ref") + 1] if "--ref" in argv else "HEAD"
     old = ref_text(ref)
-    new = open(os.path.join(ROOT, PATH), encoding="utf-8").read()
+    new = image_text(ROOT, PATH)
 
     co, cn = comments(old), comments(new)
     lost = co - cn                       # Counter subtraction: multiset delta
