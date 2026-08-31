@@ -57,19 +57,7 @@ usual top-of-RAM layout. State it as a lower bound, as the driver already does.
 Reproduce:
 
 ```
-python3 - <<'EOF'
-import os,sys,re,collections
-sys.path.insert(0,"notes"); from asm_source import image_lines
-A=re.compile(r";\s*([0-9A-F]{6})\s\s(.*)$"); h=collections.defaultdict(list)
-for ln in image_lines(".", "prom_b/wsa1_prom_b.s"):
-    if ln.lstrip().startswith(";"): continue
-    m=A.search(ln)
-    if not m or "cannot encode" in m.group(2): continue
-    for x in re.findall(r"\((0x[0-9a-fA-F]+)\)", m.group(2)):
-        v=int(x,16)
-        if 0x5200<=v<0x10000: h[v].append((int(m.group(1),16), m.group(2).strip()))
-for v in sorted(h): print(hex(v), len(h[v]), hex(h[v][0][0]), h[v][0][1])
-EOF
+python3 notes/prom_b_ram_and_device_census.py --lowram
 ```
 
 ## 2. ★ prom_b identifies NONE of the six unnamed CS0 devices — because it names no device at all
@@ -78,13 +66,17 @@ The driver has six `noprw()` entries on CPU 1 with no part identified:
 `0x790000`, `0x7A0000`, `0x7B0004`, `0x7C0000`, `0x7E0008`, `0x7F0000`.
 
 **Not one of them appears anywhere in prom_b**, and neither does any other
-address in `0x700000-0x7FFFFF`. Over the converted 80.2 % of the image the only
-address above `0x600000` prom_b spells at all is `0x610000` (72 references, the
-banked workspace window) and `0x617800`:
+address in `0x700000-0x7FFFFF`. Over the converted 80.2 % of the image every one
+of the 130 distinct addresses at or above `0x600000` that prom_b names — 1,194
+references — lies in `0x600000-0x617800`, which is work DRAM:
 
 ```
-$ grep -c '0x790000\|0x7a0000\|0x7b0000\|0x7c0000\|0x7e0000\|0x7f0000' prom_b/wsa1_prom_b.s
-0
+$ python3 notes/prom_b_ram_and_device_census.py --devices
+addresses >= 0x600000 named by converted prom_b: 130 distinct, 1194 references
+  0x600000xx  130 distinct, 0x600000-0x617800
+  the driver's six unidentified CPU-1 devices named here: 0 []
+  any address at all in 0x700000-0x7FFFFF: 0
+
 $ grep -c '0x790000\|0x7a0000\|0x7c0000\|0x7e0000\|0x7f0000' prom_a/wsa1_prom_a.s
 61
 ```
@@ -216,3 +208,19 @@ said so since it was converted, and this round re-checked it. The three
 correspondence with the name table is a correspondence, not a decode. The
 neighbouring `EffectParamNames_F15024` **is** named by an operand
 (`sub_F10FF1`), and that is a different table.
+
+## 9. A standing check that came out of this round
+
+Two routines in prom_b had **no label at all** because the object before them
+was data and the emitter never opened a new one: the SMF reader at `0xF6F530`
+(881 bytes, under `Data_F6F528`) and the accompaniment-volume line at
+`0xF6E4F2` (80 bytes, under a 64-byte `.ascii`). Both are labelled now, and
+
+```
+$ python3 notes/prom_b_ram_and_device_census.py --orphans
+code rows following a data row under a data-kind label: 49
+  of those, named by a decoded transfer or a thunk slot (= a LOST ROUTINE ENTRY): 0
+```
+
+says there is no third: the remaining 49 cases are tables embedded mid-routine
+that the code jumps over, and must **not** be given labels.

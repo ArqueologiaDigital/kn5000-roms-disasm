@@ -75,6 +75,20 @@ every effect with its parameter list.
 
 Write-up: `FINDINGS-prom_b-dsp-effect-parameters.md`.
 
+### `prom_b_ram_and_device_census.py` — what the driver's map is missing
+**Three questions about `src/mame/matsushita/wsa1.cpp`'s memory map, measured
+from the committed source.** Every number in sections 1, 2 and 9 of
+`FINDINGS-prom_b-for-the-mame-driver.md` comes from here.
+
+    python3 notes/prom_b_ram_and_device_census.py --lowram    # 10 addresses above 0x51FF, 74 refs
+    python3 notes/prom_b_ram_and_device_census.py --devices   # 130 addresses, ALL work DRAM
+    python3 notes/prom_b_ram_and_device_census.py --orphans   # code that lost its label
+
+★ `--lowram` is the actionable one: the driver maps CS1 as `0x000080-0x0051FF`
+and prom_b read-modify-writes `(0x7FC2)`. ★ `--orphans` is the standing check
+that no converted routine is attributed to a data object — it found two this
+round (`Smf_ReadFile`, `MsgLine_AccompVolume`) and now returns none.
+
 ### `prom_b_naming_preservation.py` — ★ RUN THIS AFTER ANY RENAME
 **"Did this round DELETE anything, or only substitute a token?"** Every comment
 line and label of a base revision must still be present, verbatim or as the same
