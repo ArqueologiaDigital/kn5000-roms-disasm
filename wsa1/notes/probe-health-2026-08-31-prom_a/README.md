@@ -12,6 +12,7 @@ its includes shows up, and a probe that passes vacuously over a header shows up.
 | `before.json` | at the start of the pass, tree at `fab0949` + this pass's census script | **3** | 188 |
 | `after.json` | after the first naming batch | **5** | 195 |
 | `regrade-applier.json`, `regrade-preservation.json` | after the fix below | **0** for every script this pass added | 15 |
+| `final.json` | the finished tree, a full run | **3** | 198 |
 
 **The +2 was entirely this pass's own two new probes**, and both were correctly
 graded:
@@ -30,16 +31,27 @@ After the fix, all four invocations of the applier and all eleven of the
 `prom_a_p*` group grade **UNAFFECTED**, which puts the count back at the
 baseline 3.
 
-⚠ **Stated exactly: the post-fix number is a REGRADE of the rows that moved,
-not a fresh full run.** A full `--image prom_a` run over all 108 scripts takes
-about two hours on this machine with the other lane's run competing, and one
-was left in flight rather than completed. What the regrade does establish is
-that every row this pass ADDED is UNAFFECTED; what it assumes is that the 188
-pre-existing rows, all UNAFFECTED in `after.json`, stayed that way across the
-later commits. That assumption has a basis — no notes script cites any of the
-47 renamed labels by name (checked with `grep -rl` before the renames were
-applied), so a later commit could not have changed another probe's answer — but
-it is an argument, not a measurement, and the next full run settles it.
+## ★ The full post-fix run, and it settles it
+
+`final.json` is a complete `--image prom_a` run over the finished tree: 108
+scripts, 198 invocations, **VACUOUS+LOUD 3** — the baseline, and *the same three
+rows*:
+
+```
+notes/verify_a1_independent_check.py          LOUD
+notes/wave7_round9_review_wb_prom_b.py        LOUD
+notes/prom_a_understanding_round7.py --apply-strings   VACUOUS
+```
+
+Not one pre-existing row moved. Every row the diff shows is either **new**
+(eight this pass added, two the prom_b lane added — all ten UNAFFECTED) or the
+one prom_b row noted below. SPLIT-FRAGILE also fell 3 → 2, because the applier
+was one of the three.
+
+An earlier draft of this file argued the pre-existing rows were unchanged from
+`after.json` plus a `grep` showing no notes script cites any of the 47 renamed
+labels by name. The argument was right, and it is now replaced by the
+measurement, which is the thing that was actually wanted.
 
 ## The one row that moved and is not this pass's
 
