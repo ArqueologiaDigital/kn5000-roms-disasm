@@ -237,6 +237,31 @@ _WIN = {}
 _BOUND = defaultdict(dict)
 WINDOW = 0x800
 
+# ★★ AND THE WINDOW HAS AN END, WHICH THE DECODER CANNOT SEE PAST.
+# An instruction that straddles the end of the 2 KiB buffer is decoded from
+# TRUNCATED bytes: unidasm emits whatever shorter instruction fits, and the
+# boundary index stores it, last write wins. That hands walk() the wrong LENGTH
+# (it resumes at the wrong offset) and the wrong BRANCH TARGET (it queues an edge
+# no control flow takes) -- the tool's own "paints data as code" failure arriving
+# through the decoder instead of through a seed:
+#
+#     0xFA9794  truth 'jr NC,0xfa980e'  (3 bytes)
+#               got   'jr NC,0xfa9796'  (2 bytes)   => FALSE EDGE to 0xFA9796
+#
+# MAXLEN is the longest TLCS-900 instruction MEASURED in these images -- one
+# linear decode of prom_a is 274,588 instructions and none exceeds 7 bytes -- so
+# a row starting more than MAXLEN-1 bytes before the end had all of its bytes in
+# the buffer and is trustworthy, and every row after that point is dropped. It
+# costs 6 addresses of every 2,048 (0.3%), which the next window re-asserts from
+# whole bytes anyway.
+# ⚠ A row is only truncated if the buffer ended EARLY. When the window runs off
+# the end of the IMAGE there is nothing past it to truncate, so the guard is not
+# applied there -- that is the `o + WINDOW < len(d)` test.
+# Measured in notes/perf/decode_conflicts.py (52/17/15 tail conflicts across the
+# three images at guard 0, all of them 0 at guard 6) and accounted for byte by
+# byte in notes/perf/GUARD-ACCOUNTING-2026-08-31.txt.
+MAXLEN = 7
+
 
 def _decode_window(tag, start):
     """[(addr, length, text)] for the linear run beginning at `start`."""
@@ -271,6 +296,9 @@ def _decode_window(tag, start):
         m = LINE.match(ln)
         if m:
             rows.append((int(m.group(1), 16), len(m.group(2).split()), m.group(3).strip()))
+    if o + WINDOW < len(d):
+        end = start + WINDOW
+        rows = [r for r in rows if r[0] + MAXLEN <= end]
     _WIN[key] = rows
     for a, ln, text in rows:
         bi[a] = (ln, text)

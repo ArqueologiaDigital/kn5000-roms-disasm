@@ -3,12 +3,21 @@
 ## ★★ THE COVERAGE GOAL IS MET: every reachable code path with start evidence is converted
 
     python3 notes/reachability.py --targets
-    TOTAL reachable-and-unconverted: STRONG 17 bytes, ANY 1,670, in 17 spans.
+    TOTAL reachable-and-unconverted: STRONG 17 bytes, ANY 1,702, in 17 spans.
 
     python3 notes/reachability.py --evidence
     prom_a  runs with start evidence: 1,541 bytes; WITHOUT: 87
     prom_b  runs with start evidence:     0 bytes; WITHOUT: 80
     prom_c  0 / 0
+
+⚠ **`any` moved 1,670 -> 1,702 when the window-tail guard landed**, and one span left
+the work list: an instruction straddling the end of a 2 KiB decode window used to be
+decoded from truncated bytes, which cost real bytes and invented an edge into
+`0xFC3000-0xFC5400`. STRONG is unchanged at 17, so no conversion decision is affected.
+Every moved byte is accounted for in `notes/perf/GUARD-ACCOUNTING-2026-08-31.txt`.
+⚠ The `--evidence` figures above are the ones last measured, on 2026-08-30, and predate
+both the guard and the last conversions; they are refreshed with the P5 fix that makes
+that mode affordable to re-run.
 
 **The 17 remaining STRONG bytes are a walk artefact and are formally refused.** They are
 `0xFA369A-0xFA36AB`, and reading them straight out of the ROM gives
@@ -46,7 +55,7 @@ targets in converted code, and 32-bit immediates that land in an image.
 ★ **Seeds are GRADED, and it is the difference between code and painted data.** STRONG = a
 directory slot, a branch in decoded code, a hardware vector. WEAK = a 32-bit immediate or a `.long`
 entry, which are POINTERS, and a pointer is as likely to name a table as a routine. Convert on
-STRONG. The gap between the columns (17 vs 1,670) is the weak-seed artefact, measured.
+STRONG. The gap between the columns (17 vs 1,702) is the weak-seed artefact, measured.
 
 ★ **A run start needs POSITIVE EVIDENCE**: a graded seed names it, or converted code falls through
 into it. `0xF961BD` is named by no seed and IS code, because the instruction at `0xF961B8` is five
@@ -76,7 +85,8 @@ proportional to coverage gained and cannot reach an already-converted line.
 ## What is left, for a future goal
 
 * **167 bytes with no start evidence** (prom_a 87, prom_b 80) — refuse unless evidence appears.
-* **~1,670 bytes reachable only from WEAK seeds** — pointer-table and immediate artefacts. Each
+* **~1,702 bytes reachable, all but those 17 only from WEAK seeds** — pointer-table and
+  immediate artefacts. Each
   would need a byte-level audit before conversion; round 1 framed 701 of them as instructions and
   the gate passed.
 * **~105,000 bytes of `.incbin` that nothing reaches** — data. Converting it adds territory and

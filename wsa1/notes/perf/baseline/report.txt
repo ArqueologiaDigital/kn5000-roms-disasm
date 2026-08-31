@@ -1,8 +1,8 @@
-prom_a   reached  361,931 bytes | still .incbin  46,306 | ★ REACHABLE AND UNCONVERTED   1,590 (3.4%)
-prom_b   reached  242,549 bytes | still .incbin  40,932 | ★ REACHABLE AND UNCONVERTED      80 (0.2%)
-prom_c   reached  216,419 bytes | still .incbin       0 | ★ REACHABLE AND UNCONVERTED       0 (0.0%)
+prom_a   reached  362,075 bytes | still .incbin  46,306 | ★ REACHABLE AND UNCONVERTED   1,622 (3.5%)
+prom_b   reached  242,566 bytes | still .incbin  40,932 | ★ REACHABLE AND UNCONVERTED      80 (0.2%)
+prom_c   reached  216,437 bytes | still .incbin       0 | ★ REACHABLE AND UNCONVERTED       0 (0.0%)
 
-TOTAL still .incbin 87,238, of which REACHABLE CODE 1,670 (1.9%)
+TOTAL still .incbin 87,238, of which REACHABLE CODE 1,702 (2.0%)
 
 ★ The reachable figure is the coverage goal's remaining work. The rest of the
   .incbin is data or unreached, and converting it adds territory, not coverage.

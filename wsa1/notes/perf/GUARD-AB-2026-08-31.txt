@@ -1,3 +1,12 @@
+⚠⚠ HISTORICAL RECORD, AND ITS CONCLUSION IS SUPERSEDED.  The guard WAS landed,
+   on 2026-08-31, as a correctness fix with Felipe's decision -- see
+   notes/perf/GUARD-ACCOUNTING-2026-08-31.txt, which accounts for every byte it
+   moved, and notes/perf/README.md section 4.  Everything below is what was
+   measured on the day, against the PRE-GUARD tool (commit a247c67), and is left
+   exactly as recorded: the "baseline" side of every diff here is that tool, now
+   frozen in notes/perf/baseline-preguard-2026-08-31/, and NOT what
+   notes/perf/baseline/ holds today.
+
 THE WINDOW-TAIL GUARD CHANGES THE ANSWER, SO IT WAS NOT LANDED.
 
 WHAT WAS TESTED

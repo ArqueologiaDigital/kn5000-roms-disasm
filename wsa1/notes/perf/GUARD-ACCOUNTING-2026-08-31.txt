@@ -1,0 +1,522 @@
+EVERY BYTE THE WINDOW-TAIL GUARD MOVED, AND WHAT MOVED IT.
+
+WHAT LANDED
+  notes/reachability.py, _decode_window(): rows whose instruction could extend
+  past the end of the 2 KiB buffer are dropped, because unidasm decoded them
+  from TRUNCATED bytes.  MAXLEN = 7 is the longest TLCS-900 instruction measured
+  in these images (one linear decode of prom_a: 274,588 instructions).
+
+      if o + WINDOW < len(d):
+          end = start + WINDOW
+          rows = [r for r in rows if r[0] + MAXLEN <= end]
+
+WHAT IT DID TO THE PUBLISHED FIGURE
+      TOTAL reachable-and-unconverted   STRONG 17 bytes, ANY 1,670 -> 1,702
+      prom_a  reached 361,931 -> 362,075   in .incbin 1,590 -> 1,622   STRONG 17 -> 17
+      prom_b  reached 242,549 -> 242,566   in .incbin    80 ->    80   STRONG  0 ->  0
+      prom_c  reached 216,419 -> 216,437   in .incbin     0 ->     0   STRONG  0 ->  0
+
+  ★ THE STRONG COLUMN -- the one lanes convert on -- IS UNCHANGED, span by span
+    as well as in total, and --selftest is byte-identical.  No conversion
+    decision made to date is affected.
+
+  And the work list changes by one row:
+      -prom_a  0xFC3000-0xFC5400   9,216 B, 1 reachable   LEAVES
+      +prom_a  0xF96259-0xF96418     447 B, 1 reachable   ENTERS
+       prom_a  0xFA15CC-0xFA5400  15,924 B, 701 -> 733 reachable
+
+HOW THIS WAS MEASURED
+  Two full cold walks, from the SAME FILE: the pre-guard tool is
+  reachability.py with MAXLEN = 0, which keeps every row because every row of a
+  window starts before that window's end.  One module attribute apart, so there
+  is no second copy of the walk to drift.
+
+  ★ AND THE EQUIVALENCE IS CHECKED, NOT ASSUMED.  The MAXLEN=0 side reproduces
+  the committed pre-guard answers EXACTLY -- 361,931 / 242,549 / 216,419 reached,
+  1,590 / 80 / 0 reachable-and-unconverted, and 53,872 / 17,111 / 13,207 windows
+  decoded, which are the spawn counts the profiling lane measured.  Those answers
+  are frozen in notes/perf/baseline-preguard-2026-08-31/ and --explain refuses to
+  report if its pre side does not match them.
+
+      python3 notes/perf/guard_accounting.py --side pre  --out DIR   # ~17 min
+      python3 notes/perf/guard_accounting.py --side post --out DIR   # ~17 min
+      python3 notes/perf/guard_accounting.py --explain DIR
+      python3 notes/perf/guard_accounting.py --focus prom_a:0xFC3D54 --out DIR
+      python3 notes/perf/guard_accounting.py --selftest
+
+THE RESULT: 231 BYTES MOVED, IN 68 RUNS, AND EVERY ONE IS ATTRIBUTED
+      63 runs  STREAM  a truncated row's LENGTH was wrong, so the walk resumed
+                       inside a real instruction and framed a shifted stream
+       3 runs  EDGE+   a truncated row hid a REAL branch target
+       2 runs  EDGE-   a truncated row invented one
+       0 runs  UNEXPLAINED
+  The STRONG sets move too, image-wide (prom_a +1, prom_b +5, prom_c +3/-24) and
+  all 33 of those bytes are STREAM.  None of them is inside an .incbin span, which
+  is why the STRONG column of the work list does not move.
+
+  ⚠ THE INSTRUMENT HAD TO BE REBUILT TWICE TO GET THIS.  A first pass matched
+  moved runs to nearby truncated rows by PROXIMITY and left 17 runs unexplained;
+  a second read the final boundary index and left 16, because `_BOUND[addr]` is
+  LAST WRITE WINS -- a later window that decoded the same address from whole
+  bytes had overwritten the very row the walk consumed.  The tail table, which
+  records every row a window contributed from its last 6 bytes WITH the window it
+  came from, is the only record of what the walk was handed; and the model has to
+  stop where walk() stops, at FLOW_END, or it claims bytes the walk never marked.
+
+------------------------------------------------------------------------------
+1. THE 9,216-BYTE SPAN, AND THE FALSE EDGE THAT PUT IT ON THE WORK LIST
+------------------------------------------------------------------------------
+  prom_a 0xFC3000-0xFC5400 was on the work list because ONE byte in it,
+  0xFC3D54, was reachable.  The whole chain, and every step is in the data:
+
+    the real code at 0xFBCF4E is   9e 08 3f 1e 00   `cp (XIZ+0x08),0x001e`, 5 B
+    the 2 KiB window at 0xFBC74F ENDS AT 0xFBCF4F -- one byte into it
+    unidasm, given those truncated bytes, emitted   3 B `db`
+    the walk stored that and resumed at 0xFBCF4E + 3 = 0xFBCF51,
+        which is the FOURTH BYTE of the real instruction
+    decoding from 0xFBCF51 gives   1e 00 6e   `calr 0xfc3d54`
+    the walk queued 0xFC3D54, walked it, and marked one byte:
+        the ROM there is 0e 0e 0e 0e ... and 0e decodes as `ret`
+
+  So a 9,216-byte span sat on the coverage work list because a truncated decode
+  invented a call to it, and the byte it "reached" is one of a run of 0x0E
+  filler.  With the guard, the row at 0xFBCF4E is dropped from that window, the
+  next window decodes the instruction from whole bytes, the walk resumes at
+  0xFBCF53, and 0xFBCF51 is never a decode start:
+
+    guarded: consumed rows naming 0xFC3D54 -- NONE.  Named by a seed -- NO.
+             0xFC3D54 is not in the guarded reached set.
+
+------------------------------------------------------------------------------
+2. THE ONE BYTE THAT ENTERS THE WORK LIST
+------------------------------------------------------------------------------
+  prom_a 0xF96259-0xF96418, 447 B, 1 reachable.  The row at 0xF969AD is a
+  RELATIVE call whose displacement was read past the end of the window at
+  0xF961AE (which ends at 0xF969AE):
+
+      truncated   3 B `calr 0xf969b0`      <- a target 3 bytes ahead
+      whole bytes 3 B `calr 0xf96315`      <- the target the machine calls
+
+  The truncation did not invent an edge here, it HID one, and 0xF96315 was
+  unreachable in the published figure for that reason.  The same shape gains
+  16 bytes at 0xFA1AC7 (`jr F,0xfa1a68` truncated from `jr F,0xfa1ac7`) and 23
+  bytes at prom_b 0xF5945E.
+
+------------------------------------------------------------------------------
+3. THE +32 IN 0xFA15CC-0xFA5400
+------------------------------------------------------------------------------
+  Two runs of 16 bytes, and nothing else in that span moves:
+      +0xFA1A11-0xFA1A21  STREAM  window 0xFA120E ends at 0xFA1A0E; the row at
+                          0xFA1A0B truncated to 5 B `ld (0x00f9),0x00`, so the
+                          walk resumed at 0xFA1A10 and hit `swi 1`, a FLOW_END,
+                          instead of framing the four `db` rows the whole-byte
+                          decode gives.
+      +0xFA1AC7-0xFA1AD7  EDGE+   as in section 2.
+  ⚠ Both are in a span the tree has ALREADY judged to be pointer tables and
+  parameter descriptors (the 701 bytes round 1 wrongly framed).  These 32 bytes
+  are `any`, not STRONG, and the STRONG count of that span is unchanged at 17 --
+  which are the refused "SOUND GROUP NAMING" bytes.  Nothing here is a
+  conversion instruction.
+
+------------------------------------------------------------------------------
+4. EVERYTHING ELSE
+------------------------------------------------------------------------------
+  The other 64 runs (197 bytes) are in ALREADY CONVERTED code, so they move the
+  `reached` totals and no work-list row.  They are the same defect: a truncated
+  row's length is wrong, the walk resumes off-boundary, and it either stops early
+  at a spurious `swi`/`ret` (losing real bytes) or frames bytes the machine never
+  executes (gaining phantom ones).  Both directions occur -- 205 bytes gained and
+  26 lost -- which is why the corrected figure is not simply larger.
+
+  The full machine output, run by run, follows.
+
+==============================================================================
+==============================================================================
+GUARD ACCOUNTING -- every byte the window-tail guard moved
+==============================================================================
+
+------------------------------------------------------------------------------
+prom_a
+------------------------------------------------------------------------------
+  ok   pre-guard side reproduces the committed baseline: reached 361,931 (want 361,931), .incbin 46,306, reachable-in-.incbin 1,590 (want 1,590)
+  reached             361,931 ->    362,075  (+144)
+  in .incbin ANY        1,590 ->      1,622  (+32)
+  in .incbin STRONG        17 ->         17  (+0)
+
+  SPANS WHOSE COUNTS MOVED  (the work list)
+    0xF96259-0xF96418      447 B   any     0 ->     1   STRONG   0 ->   0  <- ENTERS the work list
+    0xFA15CC-0xFA5400   15,924 B   any   701 ->   733   STRONG  17 ->  17
+    0xFC3000-0xFC5400    9,216 B   any     1 ->     0   STRONG   0 ->   0  <- LEAVES the work list
+
+  bytes GAINED 150 in 34 run(s);  bytes LOST 6 in 2 run(s)
+
+  GAINED
+    + 0xF866D0-0xF866D7     7 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF866CD (truncated)
+          it was the last row of the 2 KiB window at 0xF85ECE, which ends at 0xF866CE
+          pre  F866CD:2 db  F866CF:1 swi 7
+          post F866CD:6 xor XWA,0xffffffff  F866D3:4 and (0x2084),XWA  F866D7:4 ld A,(0x2075)  F866DB:3 bit 0x02,A  F866DE:2 jr NZ,0xf866ea  F866E0:5 ld (0x2074),0x10  F866E5:5 and (0x2075),0xf3  F866EA:4 ld A,(0x2073)
+    + 0xF8AB55-0xF8AB56     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF8AB50 (truncated)
+          it was the last row of the 2 KiB window at 0xF8A351, which ends at 0xF8AB51
+          pre  F8AB50:2 db  F8AB52:2 jr C,0xf8aaff  F8AB54:1 swi 0
+          post F8AB50:6 add XDE,0x00f8ab67  F8AB56:2 ld E,(XDE)  F8AB58:2 ld D,0xff  F8AB5A:5 and (0x3614),0xfe  F8AB5F:4 jp 0xf8a90b
+    + 0xF8F083-0xF8F084     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF8F082 (off-stream)
+          pre  F8F082:1 swi 0
+          post F8F07F:5 ld A,(XIY+IZ)  F8F084:2 ld W,0x0a  F8F086:2 mul WA,W  F8F088:2 xor XHL,XHL  F8F08A:2 ld HL,WA  F8F08C:1 push XIY  F8F08D:5 ld XIY,0x00f24dc0  F8F092:2 add XIY,XHL
+    + 0xF8F11E-0xF8F11F     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF8F107 (truncated)
+          it was the last row of the 2 KiB window at 0xF8E909, which ends at 0xF8F109
+          pre  F8F107:4 ld (0xc6),0x00
+          post F8F107:3 bit 0,(0xc6)  F8F10A:2 jr NZ,0xf8f110  F8F10C:2 bit 6,(XHL)  F8F10E:2 jr NZ,0xf8f10c  F8F110:4 ld (XHL+0x01),0x42  F8F114:2 xor IZ,IZ  F8F116:2 cp IZ,DE  F8F118:2 jr NC,0xf8f12e
+    + 0xF8F2D6-0xF8F2D7     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF8F2D5 (off-stream)
+          pre  F8F2D5:1 swi 0
+          post F8F2D2:5 ld L,(XIY+IZ)  F8F2D7:3 sla 0x05,HL  F8F2DA:1 push XIY  F8F2DB:5 ld XIY,0x00f203b0  F8F2E0:2 add XIY,XHL  F8F2E2:3 ld DE,0x0020  F8F2E5:3 calr 0xf8f2f1  F8F2E8:1 pop XIY
+    + 0xF9080D-0xF9080E     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF90809 (truncated)
+          it was the last row of the 2 KiB window at 0xF9000A, which ends at 0xF9080A
+          pre  F90809:3 db  F9080C:1 swi 0
+          post F90809:5 ld A,(XIX+IZ)  F9080E:2 or A,E  F90810:2 inc 1,IZ  F90812:3 bit 0,(0xc6)  F90815:2 jr NZ,0xf9081b  F90817:2 bit 6,(XHL)  F90819:2 jr NZ,0xf90817  F9081B:2 ld (XHL),A
+    + 0xF96315-0xF96316     1 B  in 0xF96259-0xF96418 .incbin  EDGE+ (a real edge the truncation had hidden)
+        queued from 0xF969AD 'calr 0xf96315'  [truncated]
+          truncated: 3 B 'calr 0xf969b0'   (window 0xF961AE..0xF969AE)
+          whole bytes: 3 B 'calr 0xf96315'
+    + 0xF97490-0xF97491     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF97489 (truncated)
+          it was the last row of the 2 KiB window at 0xF96C8A, which ends at 0xF9748A
+          pre  F97489:4 ld (XIX+0x00),0x00  F9748D:3 jp 0x018c
+          post F97489:3 bit 5,(XIX+0x15)  F9748C:2 jr Z,0xf974a8  F9748E:3 ld E,(XIX+0x01)  F97491:2 extz DE  F97493:3 and E,0x3f  F97496:3 sll 0x05,DE  F97499:3 srl 0x01,E  F9749C:4 ld B,(0x218f)
+    + 0xF990FE-0xF990FF     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF990F9 (truncated)
+          it was the last row of the 2 KiB window at 0xF988FA, which ends at 0xF990FA
+          pre  F990F9:2 db  F990FB:2 ld A,0x93  F990FD:1 swi 1
+          post F990F9:6 add XBC,0x00f99321  F990FF:2 ld XBC,(XBC)  F99101:3 ld (XIZ+0xfc),XBC  F99104:2 ld XWA,XIX  F99106:2 inc 4,XWA  F99108:6 add XWA,0x00f99321  F9910E:2 ld XWA,(XWA)  F99110:1 push XWA
+    + 0xF9910D-0xF9910E     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF99101 (truncated)
+          it was the last row of the 2 KiB window at 0xF98903, which ends at 0xF99103
+          pre  F99101:4 ld (XIZ+0xfc),0x00
+          post F99101:3 ld (XIZ+0xfc),XBC  F99104:2 ld XWA,XIX  F99106:2 inc 4,XWA  F99108:6 add XWA,0x00f99321  F9910E:2 ld XWA,(XWA)  F99110:1 push XWA  F99111:1 push XBC  F99112:4 call 0xf42e04
+    + 0xF9F7AA-0xF9F7AB     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF9F7A2 (truncated)
+          it was the last row of the 2 KiB window at 0xF9EFA3, which ends at 0xF9F7A3
+          pre  F9F7A2:3 ld (XIX),0x00  F9F7A5:2 or (XBC),XBC  F9F7A7:2 jr PE/OV,0xf9f757  F9F7A9:1 swi 4
+          post F9F7A2:2 ld (XIX),XWA  F9F7A4:2 sub XBC,XBC  F9F7A6:2 inc 4,XBC  F9F7A8:3 add (XIZ+0xfc),XBC  F9F7AB:2 add XIX,XBC  F9F7AD:2 dec 1,H  F9F7AF:2 cp H,0  F9F7B1:2 jr NZ,0xf9f79d
+    + 0xF9FD2F-0xF9FD30     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF9FC8C (truncated)
+          it was the last row of the 2 KiB window at 0xF9F48E, which ends at 0xF9FC8E
+          pre  F9FC8C:5 ld (0x0016),0x00
+          post F9FC8C:4 ld (0x2916),C  F9FC90:4 lda XBC,0x2915  F9FC94:1 push XBC  F9FC95:3 push 0x0006  F9FC98:3 push 0x0000  F9FC9B:4 call 0xf40ed4  F9FC9F:2 inc 0,XSP  F9FCA1:3 jrl T,0xf9fdab
+    + 0xF9FDCB-0xF9FDCC     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF9FDCA (off-stream)
+          pre  F9FDCA:1 swi 2
+          post F9FDC8:4 link XIZ,0xfffa  F9FDCC:3 lda XBC,XIZ+0xfc  F9FDCF:1 push XBC  F9FDD0:3 push 0x0004  F9FDD3:5 ld XWA,0x00c00018  F9FDD8:1 push XWA  F9FDD9:3 calr 0xf9fae9  F9FDDC:3 lda XBC,XIZ+0xfa
+    + 0xFA0DDD-0xFA0DE0     3 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFA0DD8 (truncated)
+          it was the last row of the 2 KiB window at 0xFA05D9, which ends at 0xFA0DD9
+          pre  FA0DD8:2 db  FA0DDA:2 db  FA0DDC:1 reti
+          post FA0DD8:2 extz XBC  FA0DDA:6 add XBC,0x00fa1d07  FA0DE0:2 ld A,(XBC)  FA0DE2:2 ld (XIX),A  FA0DE4:2 inc 1,H  FA0DE6:2 inc 1,XIX  FA0DE8:3 cp H,0x09  FA0DEB:2 jr C,0xfa0dd4
+    + 0xFA1A11-0xFA1A21    16 B  in 0xFA15CC-0xFA5400 .incbin  STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFA1A0B (truncated)
+          it was the last row of the 2 KiB window at 0xFA120E, which ends at 0xFA1A0E
+          pre  FA1A0B:5 ld (0x00f9),0x00  FA1A10:1 swi 1
+          post FA1A0B:4 db  FA1A0F:4 db  FA1A13:4 db  FA1A17:4 db  FA1A1B:5 db  FA1A20:1 swi 1
+    + 0xFA1AC7-0xFA1AD7    16 B  in 0xFA15CC-0xFA5400 .incbin  EDGE+ (a real edge the truncation had hidden)
+        queued from 0xFA1A66 'jr F,0xfa1ac7'  [truncated]
+          truncated: 2 B 'jr F,0xfa1a68'   (window 0xFA1267..0xFA1A67)
+          whole bytes: 2 B 'jr F,0xfa1ac7'
+    + 0xFA5C15-0xFA5C16     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFA5C14 (off-stream)
+          pre  FA5C14:1 swi 6
+          post FA5C12:4 link XIZ,0xfefe  FA5C16:1 push HL  FA5C17:1 push DE  FA5C18:3 ld DE,0x0000  FA5C1B:4 call 0xf41e14  FA5C1F:2 ld HL,WA  FA5C21:4 cp WA,0xffff  FA5C25:2 jr Z,0xfa5c3b
+    + 0xFAAC12-0xFAAC13     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFAAC0F (truncated)
+          it was the last row of the 2 KiB window at 0xFAA410, which ends at 0xFAAC10
+          pre  FAAC0F:2 db  FAAC11:1 swi 4
+          post FAAC0F:4 link XIZ,0xfffc  FAAC13:1 push HL  FAAC14:1 push DE  FAAC15:1 push XIX  FAAC16:3 ld XIX,(XIZ+0x08)  FAAC19:2 ld D,(XIX)  FAAC1B:3 ld E,(XIX+0x01)  FAAC1E:2 ld XBC,XIX
+    + 0xFAB918-0xFAB919     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFAB915 (truncated)
+          it was the last row of the 2 KiB window at 0xFAB116, which ends at 0xFAB916
+          pre  FAB915:2 db  FAB917:1 swi 4
+          post FAB915:4 link XIZ,0xfffc  FAB919:1 push HL  FAB91A:1 push XIX  FAB91B:5 ld C,(0x60f021)  FAB920:3 and C,0x10  FAB923:2 jr NZ,0xfab937  FAB925:5 ld C,(0x60f089)  FAB92A:5 ld (0x60f0d0),C
+    + 0xFAC21C-0xFAC21D     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFAC20C (truncated)
+          it was the last row of the 2 KiB window at 0xFABA0E, which ends at 0xFAC20E
+          pre  FAC20C:6 ld (0x00000a),0x00  FAC212:2 sub W,(XWA)  FAC214:2 ld E,0xe2  FAC216:3 incw 0,(XWA+0xf2)  FAC219:2 ld XIY,6  FAC21B:1 swi 4
+          post FAC20C:5 lda XWA,0xfad20a  FAC211:2 add XWA,XIX  FAC213:2 ld XIY,(XWA)  FAC215:5 or (0x60f298),XIY  FAC21A:3 ld XBC,(XIZ+0xfc)  FAC21D:3 ld A,(XBC+0x0e)  FAC220:3 and A,0x02  FAC223:2 jr Z,0xfac233
+    + 0xFADB14-0xFADB24    16 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFADB09 (truncated)
+          it was the last row of the 2 KiB window at 0xFAD30A, which ends at 0xFADB0A
+          pre  FADB09:4 ld (XWA0),0x00  FADB0D:5 ld XBC,0x60f01ef2  FADB12:1 nop  FADB13:1 swi 7
+          post FADB09:5 ld (XIY+HL),A  FADB0E:6 ld (0x60f01e),0xff  FADB14:2 ld C,L  FADB16:2 ld B,0x03  FADB18:2 ld E,A  FADB1A:2 ld D,0x7f  FADB1C:4 call 0xf407d4  FADB20:4 call 0xf407b4
+    + 0xFAE0C4-0xFAE0FB    55 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFAE0BB (truncated)
+          it was the last row of the 2 KiB window at 0xFAD8BC, which ends at 0xFAE0BC
+          pre  FAE0BB:4 ld (XIY+0x00),0x00  FAE0BF:4 call 0x8c1d40  FAE0C3:1 reti
+          post FAE0BB:3 ld (XIY+0x1c),H  FAE0BE:3 ld (XIY+0x1d),W  FAE0C1:4 call 0xf4078c  FAE0C5:3 ld (XIX+0x00),L  FAE0C8:3 ld (XIX+0x01),H  FAE0CB:4 ld A,(0x1950)  FAE0CF:2 ld W,0x01  FAE0D1:5 ld (0x60f080),WA
+    + 0xFDB91A-0xFDB91B     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFDB912 (truncated)
+          it was the last row of the 2 KiB window at 0xFDB113, which ends at 0xFDB913
+          pre  FDB912:4 ld (XIZ+0x00),0x00  FDB916:3 ldcf 6,(-XBC0)  FDB919:1 swi 4
+          post FDB912:3 ld (XIZ+0xf4),DE  FDB915:3 pushw (XIZ+0xf4)  FDB918:3 ld BC,(XIZ+0xfc)  FDB91B:2 extz BC  FDB91D:1 push BC  FDB91E:4 call 0xfd61cf  FDB922:3 ld DE,(XIZ+0xf4)  FDB925:2 inc 1,DE
+    + 0xFDBB28-0xFDBB29     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFDBB20 (truncated)
+          it was the last row of the 2 KiB window at 0xFDB322, which ends at 0xFDBB22
+          pre  FDBB20:4 ld (XIZ+0xf4),0x00  FDBB24:3 ldcf 6,(-XBC0)  FDBB27:1 swi 4
+          post FDBB20:3 ld (XIZ+0xf4),DE  FDBB23:3 pushw (XIZ+0xf4)  FDBB26:3 ld BC,(XIZ+0xfc)  FDBB29:2 extz BC  FDBB2B:1 push BC  FDBB2C:4 call 0xfd61cf  FDBB30:3 ld DE,(XIZ+0xf4)  FDBB33:2 inc 1,DE
+    + 0xFDBBBC-0xFDBBBD     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFDBBB7 (truncated)
+          it was the last row of the 2 KiB window at 0xFDB3B8, which ends at 0xFDBBB8
+          pre  FDBBB7:2 db  FDBBB9:3 jp 0x0000
+          post FDBBB7:6 add XSP,0x0000001a  FDBBBD:1 pop XIX  FDBBBE:1 pop DE  FDBBBF:1 pop HL  FDBBC0:2 unlk XIZ  FDBBC2:1 ret
+    + 0xFE0818-0xFE081B     3 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFE0812 (truncated)
+          it was the last row of the 2 KiB window at 0xFE0014, which ends at 0xFE0814
+          pre  FE0812:5 ld (0x00ce),0x00  FE0817:1 swi 2
+          post FE0812:4 lda XIX,0x23ce  FE0816:5 cp (0x21fa),0x03  FE081B:2 jr Z,0xfe0857  FE081D:5 cp (0x207a),0x4e  FE0822:2 jr NZ,0xfe082f  FE0824:3 calr 0xfe0273  FE0827:2 ld BC,(XIX)  FE0829:2 cp BC,0
+    + 0xFE10C1-0xFE10C2     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFE10BA (truncated)
+          it was the last row of the 2 KiB window at 0xFE08BD, which ends at 0xFE10BD
+          pre  FE10BA:6 ld (0x00a000),0x00  FE10C0:1 swi 4
+          post FE10BA:5 lda XBC,0x60a000  FE10BF:3 add XBC,(XIZ+0xfc)  FE10C2:2 ld L,(XBC)  FE10C4:2 ld C,H  FE10C6:2 exts BC  FE10C8:2 exts XBC  FE10CA:3 ld (XIZ+0xf8),XBC  FE10CD:5 ld WA,(0x001743)
+    + 0xFE2965-0xFE2966     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFE2960 (truncated)
+          it was the last row of the 2 KiB window at 0xFE2162, which ends at 0xFE2962
+          pre  FE2960:4 ld (XIZ+0xf0),0x00  FE2964:1 swi 0
+          post FE2960:3 ld (XIZ+0xf0),XBC  FE2963:3 ld XWA,(XIZ+0xf8)  FE2966:2 ld IY,(XWA)  FE2968:2 ld (XBC),IY  FE296A:2 sub XBC,XBC  FE296C:2 inc 2,XBC  FE296E:3 add (XIZ+0xf8),XBC  FE2971:3 add XBC,(XIZ+0xf4)
+    + 0xFE2B29-0xFE2B2F     6 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFE2B1C (truncated)
+          it was the last row of the 2 KiB window at 0xFE231F, which ends at 0xFE2B1F
+          pre  FE2B1C:6 ld (0x00174b),0x00  FE2B22:1 push XBC  FE2B23:2 ldf 0x00  FE2B25:1 push SR  FE2B26:3 jp 0xf200
+          post FE2B1C:5 ld (0x00174b),XBC  FE2B21:7 ld (0x001739),0x001a  FE2B28:7 ld (0x00173b),0x0000  FE2B2F:3 push 0x0000  FE2B32:3 ld XWA,(XIZ+0xe6)  FE2B35:1 push XWA  FE2B36:3 push 0x001a  FE2B39:4 call 0xf42d34
+    + 0xFE3F0F-0xFE3F12     3 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFE3F08 (truncated)
+          it was the last row of the 2 KiB window at 0xFE370A, which ends at 0xFE3F0A
+          pre  FE3F08:6 ld (0x0000d8),0x00  FE3F0E:1 reti
+          post FE3F08:5 lda XIX,0xfe6dd8  FE3F0D:5 ld BC,(XIX+BC)  FE3F12:5 lda XIX,0xfe3f1c  FE3F17:5 jp T,XIX+BC
+    + 0xFF71FB-0xFF71FC     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFF71F6 (truncated)
+          it was the last row of the 2 KiB window at 0xFF69F8, which ends at 0xFF71F8
+          pre  FF71F6:4 ld (XIZ+0xfe),0x00  FF71FA:1 swi 6
+          post FF71F6:3 ld (XIZ+0xfe),IX  FF71F9:3 pushw (XIZ+0xfe)  FF71FC:4 lda XBC,0x2940  FF7200:1 push XBC  FF7201:4 call 0xff7895  FF7205:4 add HL,0x0230  FF7209:3 ld IX,(XIZ+0xfe)  FF720C:4 add IX,0x0230
+    + 0xFF7299-0xFF729A     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFF7298 (off-stream)
+          pre  FF7298:1 swi 6
+          post FF7296:4 link XIZ,0xfffe  FF729A:1 push HL  FF729B:1 push DE  FF729C:1 push IX  FF729D:2 ld C,0x02  FF729F:4 mul BC,(0x2736)  FF72A3:2 extz XBC  FF72A5:6 add XBC,0x00ff4039
+    + 0xFF7336-0xFF7337     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFF7335 (off-stream)
+          pre  FF7335:1 swi 6
+          post FF7333:4 link XIZ,0xfffe  FF7337:1 push HL  FF7338:1 push DE  FF7339:1 push IX  FF733A:3 ld IX,0x0000  FF733D:3 ld HL,0x0000  FF7340:3 ld DE,0x0d36  FF7343:4 lda XBC,0x2940
+    + 0xFF73C4-0xFF73C5     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFF73C1 (truncated)
+          it was the last row of the 2 KiB window at 0xFF6BC2, which ends at 0xFF73C2
+          pre  FF73C1:2 db  FF73C3:1 swi 7
+          post FF73C1:4 cp WA,0x00ff  FF73C5:2 jr Z,0xff7430  FF73C7:3 ld IX,0x0000  FF73CA:3 ld DE,0x0000  FF73CD:3 ld HL,0x0eee  FF73D0:3 cp IX,(XIZ+0xfe)  FF73D3:2 jr LE,0xff73e4  FF73D5:3 push 0x0006
+
+  LOST
+    - 0xFC3D54-0xFC3D55     1 B  in 0xFC3000-0xFC5400 .incbin  EDGE- (a phantom edge, queued from a truncated decode)
+        queued from 0xFBCF51 'calr 0xfc3d54'  [off-stream]
+          ⚠ 0xFBCF51 IS NOT AN INSTRUCTION BOUNDARY. The walk was inside a real instruction when it decoded that.
+          the canonical instruction covering it: 0xFBCF4E 5 B 'cp (XIZ+0x08),0x001e'
+          it arrived there because the window at 0xFBC74F ends at 0xFBCF4F, mid-instruction:
+            0xFBCF4E truncated: 3 B 'db' -> resumes at 0xFBCF51
+            0xFBCF4E whole bytes: 5 B 'cp (XIZ+0x08),0x001e' -> resumes at 0xFBCF53
+    - 0xFF0BC3-0xFF0BC8     5 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFF0BC0 (truncated)
+          it was the last row of the 2 KiB window at 0xFF03C1, which ends at 0xFF0BC1
+          pre  FF0BC0:3 ld (XWA),0x00  FF0BC3:1 nop  FF0BC4:2 ei 0x09  FF0BC6:3 call 0x0602  FF0BC9:4 ld (0xb0),0xff26  FF0BCD:1 nop  FF0BCE:2 ei 0x08  FF0BD0:3 call 0x0203
+          post FF0BC0:2 lda IZ,XWA  FF0BC2:1 swi 7
+
+  STRONG byte set: 1 gained, 0 lost image-wide; inside .incbin 17 -> 17
+     by mechanism: STREAM 1 B
+
+------------------------------------------------------------------------------
+prom_b
+------------------------------------------------------------------------------
+  ok   pre-guard side reproduces the committed baseline: reached 242,549 (want 242,549), .incbin 40,932, reachable-in-.incbin 80 (want 80)
+  reached             242,549 ->    242,566  (+17)
+  in .incbin ANY           80 ->         80  (+0)
+  in .incbin STRONG         0 ->          0  (+0)
+
+  bytes GAINED 37 in 11 run(s);  bytes LOST 20 in 5 run(s)
+
+  GAINED
+    + 0xF0A01D-0xF0A01E     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF0A01A (truncated)
+          it was the last row of the 2 KiB window at 0xF0981B, which ends at 0xF0A01B
+          pre  F0A01A:2 db  F0A01C:1 swi 7
+          post F0A01A:4 cp WA,0xffff  F0A01E:2 jr Z,0xf0a04e  F0A020:3 ld BC,(XIZ+0xfe)  F0A023:2 extz BC  F0A025:1 push BC  F0A026:2 ld C,0x04  F0A028:3 mul BC,(XIZ+0xfc)  F0A02B:2 extz XBC
+    + 0xF0A032-0xF0A033     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF0A02D (truncated)
+          it was the last row of the 2 KiB window at 0xF0982E, which ends at 0xF0A02E
+          pre  F0A02D:2 db  F0A02F:2 cp C,(XHL)  F0A031:1 swi 4
+          post F0A02D:6 add XBC,0x00fcf383  F0A033:2 ld XBC,(XBC)  F0A035:5 lda XIY,0xf0a03d  F0A03A:1 push XIY  F0A03B:2 jp T,XBC
+    + 0xF0A054-0xF0A055     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF0A051 (truncated)
+          it was the last row of the 2 KiB window at 0xF09852, which ends at 0xF0A052
+          pre  F0A051:2 db  F0A053:1 swi 4
+          post F0A051:4 link XIZ,0xfffc  F0A055:3 lda XBC,XIZ+0xfe  F0A058:1 push XBC  F0A059:3 lda XWA,XIZ+0xfc  F0A05C:1 push XWA  F0A05D:3 pushw (XIZ+0x0a)  F0A060:3 pushw (XIZ+0x08)  F0A063:4 call 0xfd7905
+    + 0xF0A08A-0xF0A08B     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF0A085 (truncated)
+          it was the last row of the 2 KiB window at 0xF09886, which ends at 0xF0A086
+          pre  F0A085:2 db  F0A087:2 cp C,C  F0A089:1 swi 4
+          post F0A085:6 add XBC,0x00fcf3cb  F0A08B:2 ld XBC,(XBC)  F0A08D:5 lda XIY,0xf0a095  F0A092:1 push XIY  F0A093:2 jp T,XBC
+    + 0xF4ED76-0xF4ED78     2 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF4ED6D (truncated)
+          it was the last row of the 2 KiB window at 0xF4E56F, which ends at 0xF4ED6F
+          pre  F4ED6D:4 db  F4ED71:2 inc 2,(XWA)  F4ED73:2 ei 0xc1  F4ED75:1 halt
+          post F4ED6D:5 cp (0x0c05),0x80  F4ED72:2 jr LE,0xf4ed7a  F4ED74:4 dec 1,(0x0c05)  F4ED78:2 jr T,0xf4ed83  F4ED7A:5 ld (0x0c05),0x00  F4ED7F:4 call 0xf409dc  F4ED83:1 ret
+    + 0xF5945E-0xF59475    23 B  in converted code             EDGE+ (a real edge the truncation had hidden)
+        queued from 0xF5845B 'calr 0xf5945e'  [truncated]
+          truncated: 3 B 'calr 0xf5845e'   (window 0xF57C5C..0xF5845C)
+          whole bytes: 3 B 'calr 0xf5945e'
+    + 0xF62218-0xF62219     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF62215 (truncated)
+          it was the last row of the 2 KiB window at 0xF61A16, which ends at 0xF62216
+          pre  F62215:2 db  F62217:1 swi 7
+          post F62215:4 cp IY,0x00ff  F62219:2 jr Z,0xf6223f  F6221B:6 ld (XHL+IY),0x81  F62221:2 inc 1,IY  F62223:6 ld (XHL+IY),0x82  F62229:2 ld DE,IY  F6222B:5 ld XIX,0x006034a0  F62230:2 xor BC,BC
+    + 0xF6A0C4-0xF6A0C6     2 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF6A0BA (truncated)
+          it was the last row of the 2 KiB window at 0xF698BD, which ends at 0xF6A0BD
+          pre  F6A0BA:5 ld (0x0f66),0x00
+          post F6A0BA:4 ld (0x0f66),A  F6A0BE:3 jrl T,0xf6a1b3  F6A0C1:5 cp (0x0e58),0x03  F6A0C6:2 jr UGT,0xf6a0d0  F6A0C8:5 cp (0x0e59),0x04  F6A0CD:3 jrl UGT,0xf6a154  F6A0D0:4 ld WA,(0x12b2)  F6A0D4:2 inc 1,WA
+    + 0xF6ACD8-0xF6ACD9     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF6ACD7 (off-stream)
+          pre  F6ACD7:1 swi 0
+          post F6ACD4:5 ld A,(XIX+IZ)  F6ACD9:1 pop XIX  F6ACDA:3 cp A,0x20  F6ACDD:2 jr Z,0xf6ad03  F6ACDF:2 ld L,A  F6ACE1:2 xor H,H  F6ACE3:3 sla 0x02,HL  F6ACE6:5 ld XHL,0x00f6ad04
+    + 0xF74DBA-0xF74DBB     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF74DB5 (truncated)
+          it was the last row of the 2 KiB window at 0xF745B8, which ends at 0xF74DB8
+          pre  F74DB5:4 db  F74DB9:1 swi 7
+          post F74DB5:6 cp (0x11aa),0x3fff  F74DBB:2 jr ULE,0xf74e13  F74DBD:5 cp (0x11ac),0x1f  F74DC2:2 jr ULE,0xf74dd3  F74DC4:5 ld (0x11ac),0x1f  F74DC9:5 ld (0x11ab),0xff  F74DCE:5 ld (0x11aa),0xff  F74DD3:4 ld A,(0x11aa)
+    + 0xF7638A-0xF7638D     3 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF76383 (truncated)
+          it was the last row of the 2 KiB window at 0xF75B86, which ends at 0xF76386
+          pre  F76383:6 ld (XIY+RWA0),0x00  F76389:1 reti
+          post F76383:5 lda XIY,XIY+DE  F76388:5 lda XIX,XIX+DE  F7638D:3 cp (XIY),0xff  F76390:2 jr Z,0xf763d3  F76392:3 ld WA,(XIY+0x01)  F76395:2 ld L,(XIX)  F76397:3 cp L,0xff  F7639A:2 jr Z,0xf763c9
+
+  LOST
+    - 0xF0B0BA-0xF0B0BE     4 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF0B0B5 (truncated)
+          it was the last row of the 2 KiB window at 0xF0A8B6, which ends at 0xF0B0B6
+          pre  F0B0B5:4 ld (0x00),0x00  F0B0B9:3 bit 1,(0x00)  F0B0BC:2 ret F
+          post F0B0B5:3 chg 3,(0x00)  F0B0B8:2 ret F
+    - 0xF0B15E-0xF0B162     4 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF0B159 (truncated)
+          it was the last row of the 2 KiB window at 0xF0A95B, which ends at 0xF0B15B
+          pre  F0B159:4 ld (0x00),0x00  F0B15D:3 db  F0B160:2 ret F
+          post F0B159:3 db  F0B15C:2 ret F
+    - 0xF0B289-0xF0B28D     4 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF0B284 (truncated)
+          it was the last row of the 2 KiB window at 0xF0AA86, which ends at 0xF0B286
+          pre  F0B284:4 ld (0x00),0x00  F0B288:3 res 2,(0x00)  F0B28B:2 ret F
+          post F0B284:3 res 2,(0x00)  F0B287:2 ret F
+    - 0xF0B343-0xF0B347     4 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF0B341 (truncated)
+          it was the last row of the 2 KiB window at 0xF0AB42, which ends at 0xF0B342
+          pre  F0B341:3 ld (XHL),0x00  F0B344:2 jr PO/NOV,0xf0b2f9  F0B346:3 db  F0B349:2 ret F
+          post F0B341:2 ret F
+    - 0xF6D7E2-0xF6D7E6     4 B  in converted code             EDGE- (a phantom edge, queued from a truncated decode)
+        queued from 0xF6D6E6 'calr 0xf6d7e2'  [truncated]
+          truncated: 3 B 'calr 0xf6d7e2'   (window 0xF6CEE8..0xF6D6E8)
+          whole bytes: 3 B 'calr 0xf6d5e2'
+
+  STRONG byte set: 5 gained, 0 lost image-wide; inside .incbin 0 -> 0
+     by mechanism: STREAM 5 B
+
+------------------------------------------------------------------------------
+prom_c
+------------------------------------------------------------------------------
+  ok   pre-guard side reproduces the committed baseline: reached 216,419 (want 216,419), .incbin 0, reachable-in-.incbin 0 (want 0)
+  reached             216,419 ->    216,437  (+18)
+  in .incbin ANY            0 ->          0  (+0)
+  in .incbin STRONG         0 ->          0  (+0)
+
+  bytes GAINED 18 in 16 run(s);  bytes LOST 0 in 0 run(s)
+
+  GAINED
+    + 0xF9B5B8-0xF9B5B9     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF9B5B4 (truncated)
+          it was the last row of the 2 KiB window at 0xF9ADB5, which ends at 0xF9B5B5
+          pre  F9B5B4:3 db  F9B5B7:1 swi 7
+          post F9B5B4:5 ld XBC,(XIZ+0xff76)  F9B5B9:1 push XBC  F9B5BA:5 ld XBC,(XIZ+0xff72)  F9B5BF:1 push XBC  F9B5C0:5 ld XBC,(0xfcca76)  F9B5C5:1 push XBC  F9B5C6:5 ld XBC,(0xfcca72)  F9B5CB:1 push XBC
+    + 0xF9E07A-0xF9E07B     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF9E079 (off-stream)
+          pre  F9E079:1 swi 4
+          post F9E077:4 link XIZ,0xfffc  F9E07B:1 push XIX  F9E07C:3 pushw (XIZ+0x0a)  F9E07F:3 pushw (XIZ+0x08)  F9E082:4 call 0xfcabc6  F9E086:2 ld XIX,XIY  F9E088:3 push 0x0000  F9E08B:3 push 0x8000
+    + 0xF9FEAB-0xF9FEAE     3 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xF9FEAA (off-stream)
+          pre  F9FEAA:1 swi 6
+          post F9FEA9:5 ld (XIZ+0xfe),0x0079  F9FEAE:5 ld XBC,(0x00863a)  F9FEB3:3 ld (XIZ+0xf4),XBC  F9FEB6:5 pushw (0x00863e)  F9FEBB:3 pushw (XIZ+0xfe)  F9FEBE:1 push XBC  F9FEBF:3 calr 0xf9e0b7  F9FEC2:3 ld (XIZ+0xf4),XIY
+    + 0xFA18EA-0xFA18EB     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFA18E6 (truncated)
+          it was the last row of the 2 KiB window at 0xFA10E7, which ends at 0xFA18E7
+          pre  FA18E6:3 db  FA18E9:1 swi 7
+          post FA18E6:5 ld XBC,(XIZ+0xff78)  FA18EB:1 push XBC  FA18EC:4 call 0xfcadd6  FA18F0:3 ld (XIZ+0xec),XIY  FA18F3:3 jrl T,0xfa1a55  FA18F6:3 ld XBC,(XIZ+0x10)  FA18F9:6 cp XBC,0x00000000  FA18FF:2 jr LT,0xfa1906
+    + 0xFA5F0A-0xFA5F0B     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFA5F09 (off-stream)
+          pre  FA5F09:1 swi 6
+          post FA5F05:6 add XBC,0x00fe10c9  FA5F0B:2 ld L,(XBC)  FA5F0D:2 ld C,E  FA5F0F:2 extz BC  FA5F11:2 extz XBC  FA5F13:6 add XBC,0x00fe10e9  FA5F19:2 ld D,(XBC)  FA5F1B:2 ld C,0x0c
+    + 0xFAD441-0xFAD442     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFAD43E (truncated)
+          it was the last row of the 2 KiB window at 0xFACC3F, which ends at 0xFAD43F
+          pre  FAD43E:2 db  FAD440:1 swi 4
+          post FAD43E:4 link XIZ,0xfffc  FAD442:1 push XHL  FAD443:1 push DE  FAD444:1 push XIX  FAD445:3 ld XIX,(XIZ+0x0c)  FAD448:3 ld D,(XIZ+0x0a)  FAD44B:3 ld C,(XIX+0x01)  FAD44E:3 and C,0x80
+    + 0xFC3028-0xFC3029     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC3022 (truncated)
+          it was the last row of the 2 KiB window at 0xFC2824, which ends at 0xFC3024
+          pre  FC3022:4 ld (XIZ+0xf0),0x00
+          post FC3022:3 ld (XIZ+0xf0),XBC  FC3025:4 and (XBC),0xf0ff  FC3029:3 ld XBC,(XIZ+0xf0)  FC302C:2 ld DE,(XBC)  FC302E:3 ld A,(XIZ+0x0a)  FC3031:3 and A,0xf0  FC3034:2 extz WA  FC3036:3 sll 0x04,WA
+    + 0xFC306C-0xFC306D     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC3069 (truncated)
+          it was the last row of the 2 KiB window at 0xFC286A, which ends at 0xFC306A
+          pre  FC3069:2 db  FC306B:1 swi 6
+          post FC3069:4 and (XIX),0xfffe  FC306D:3 ld XBC,(XIZ+0xfc)  FC3070:3 ld WA,(XBC+0x02)  FC3073:2 cp WA,0  FC3075:2 jr Z,0xfc307d  FC3077:4 or (XIX),0x0002  FC307B:2 jr T,0xfc3081  FC307D:4 and (XIX),0xfffd
+    + 0xFC30DB-0xFC30DC     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC30D8 (truncated)
+          it was the last row of the 2 KiB window at 0xFC28D9, which ends at 0xFC30D9
+          pre  FC30D8:2 db  FC30DA:1 swi 7
+          post FC30D8:4 and (XBC),0xf0ff  FC30DC:3 ld XBC,(XIZ+0xf0)  FC30DF:2 ld DE,(XBC)  FC30E1:3 ld A,(XIZ+0x0a)  FC30E4:3 and A,0x0f  FC30E7:2 extz WA  FC30E9:3 sll 0x08,WA  FC30EC:2 or WA,DE
+    + 0xFC312D-0xFC312E     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC30D8 (truncated)
+          it was the last row of the 2 KiB window at 0xFC28D9, which ends at 0xFC30D9
+          pre  FC30D8:2 db  FC30DA:1 swi 7
+          post FC30D8:4 and (XBC),0xf0ff  FC30DC:3 ld XBC,(XIZ+0xf0)  FC30DF:2 ld DE,(XBC)  FC30E1:3 ld A,(XIZ+0x0a)  FC30E4:3 and A,0x0f  FC30E7:2 extz WA  FC30E9:3 sll 0x08,WA  FC30EC:2 or WA,DE
+    + 0xFC3141-0xFC3142     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC30D8 (truncated)
+          it was the last row of the 2 KiB window at 0xFC28D9, which ends at 0xFC30D9
+          pre  FC30D8:2 db  FC30DA:1 swi 7
+          post FC30D8:4 and (XBC),0xf0ff  FC30DC:3 ld XBC,(XIZ+0xf0)  FC30DF:2 ld DE,(XBC)  FC30E1:3 ld A,(XIZ+0x0a)  FC30E4:3 and A,0x0f  FC30E7:2 extz WA  FC30E9:3 sll 0x08,WA  FC30EC:2 or WA,DE
+    + 0xFC3A17-0xFC3A18     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC3A10 (truncated)
+          it was the last row of the 2 KiB window at 0xFC3211, which ends at 0xFC3A11
+          pre  FC3A10:4 ld (XIZ+0x00),0x00  FC3A14:1 db  FC3A15:1 pop A  FC3A16:1 swi 6
+          post FC3A10:3 ld (XIZ+0xf0),XBC  FC3A13:5 ld XWA,(0xfe151f)  FC3A18:2 add XWA,XBC  FC3A1A:2 ld L,(XWA)  FC3A1C:2 add XBC,XIX  FC3A1E:2 ld W,(XBC)  FC3A20:2 cp L,W  FC3A22:2 jr Z,0xfc3a29
+    + 0xFC3B13-0xFC3B14     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC3AEB (truncated)
+          it was the last row of the 2 KiB window at 0xFC32EC, which ends at 0xFC3AEC
+          pre  FC3AEB:4 ld (XIZ+0x00),0x00
+          post FC3AEB:3 ld (XIZ+0xf2),C  FC3AEE:2 ld (XIX),C  FC3AF0:3 ld C,(XIZ+0xf2)  FC3AF3:3 set 0x04,C  FC3AF6:2 ld (XIX),C  FC3AF8:5 add (XIZ+0xfe),0x002b  FC3AFD:4 add DE,0x0051  FC3B01:2 dec 1,H
+    + 0xFC85AF-0xFC85B0     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC85AA (truncated)
+          it was the last row of the 2 KiB window at 0xFC7DAC, which ends at 0xFC85AC
+          pre  FC85AA:4 ld (XIZ+0xfc),0x00  FC85AE:1 swi 7
+          post FC85AA:3 ld (XIZ+0xfc),XBC  FC85AD:3 ld IX,0xffff  FC85B0:6 add XBC,0x0000aaaa  FC85B6:3 ld (XIZ+0xf8),XBC  FC85B9:4 ld (XBC),0x00aa  FC85BD:3 ld XBC,(XIZ+0xfc)  FC85C0:7 ld (XBC+0x5554),0x0055  FC85C7:3 ld XBC,(XIZ+0xf8)
+    + 0xFC865A-0xFC865B     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC8650 (truncated)
+          it was the last row of the 2 KiB window at 0xFC7E52, which ends at 0xFC8652
+          pre  FC8650:4 ld (XIZ+0xfc),0x00  FC8654:3 ld (0x24),0x40  FC8657:1 nop  FC8658:1 nop  FC8659:1 swi 7
+          post FC8650:3 ld (XIZ+0xfc),XBC  FC8653:3 ld XIX,(XIZ+0x08)  FC8656:5 ld XWA,0x00ff0000  FC865B:2 and XIX,XWA  FC865D:2 ei 0x06  FC865F:3 ld XBC,(XIZ+0xfc)  FC8662:6 add XBC,0x0000aaaa  FC8668:3 ld (XIZ+0xf8),XBC
+    + 0xFC87B6-0xFC87B7     1 B  in converted code             STREAM (a wrong length, then a shifted decode)
+        the two decodes part at 0xFC87AE (truncated)
+          it was the last row of the 2 KiB window at 0xFC7FAF, which ends at 0xFC87AF
+          pre  FC87AE:2 db  FC87B0:1 nop  FC87B1:1 nop  FC87B2:3 db  FC87B5:1 swi 4
+          post FC87AE:6 sub XBC,0x00e70000  FC87B4:3 ld (XIZ+0xfc),XBC  FC87B7:3 ld XIX,(XIZ+0x08)  FC87BA:3 ld HL,0x0000  FC87BD:3 ld DE,(XIZ+0x0c)  FC87C0:2 ld IY,DE  FC87C2:3 srl 0x01,IY  FC87C5:2 ld DE,IY
+
+  STRONG byte set: 3 gained, 24 lost image-wide; inside .incbin 0 -> 0
+     by mechanism: STREAM 27 B
+
+==============================================================================
+TOTAL reachable-and-unconverted:  STRONG 17 -> 17,  ANY 1,670 -> 1,702
+==============================================================================

@@ -171,9 +171,10 @@ does -- `--guard 6` on all three images:
 
 It costs 6 bytes of every 2,048 -- ~0.2% of the addresses a window asserts.
 
-★★ IT IS IN THE TOOL'S OUTPUT, AND THE GUARD WAS **NOT LANDED**. The guard was
-applied and A/B'd cold against the recorded baseline
-(`notes/perf/GUARD-AB-2026-08-31.txt`). Four of five modes DIFFER:
+★★ IT WAS IN THE TOOL'S OUTPUT. **THE GUARD IS NOW LANDED** (2026-08-31, with
+Felipe's decision, as a correctness fix). It was first A/B'd cold against the
+then-recorded baseline (`notes/perf/GUARD-AB-2026-08-31.txt`), and four of five
+modes DIFFER:
 
     TOTAL reachable-and-unconverted
         as committed   STRONG 17 bytes, ANY 1,670, in 17 spans
@@ -191,15 +192,21 @@ so no conversion decision made to date is affected -- STRONG is the column the
 tool tells lanes to convert on. What moves is the weak `any` figure. The guard
 costs nothing in time (1,083.70 s vs 1,079.85 s cold).
 
-⚠ It is a CORRECTNESS change, not an optimisation, and it needs Felipe's
-decision and a re-recorded baseline. A performance lane does not get to move a
-published figure.
+⚠ It is a CORRECTNESS change, not an optimisation. It moved a published figure,
+so it took Felipe's decision, a re-recorded baseline (`notes/perf/baseline/`, now
+the GUARDED answers; the pre-guard ones are frozen in
+`notes/perf/baseline-preguard-2026-08-31/`) and, before either, an accounting of
+EVERY BYTE IT MOVED:
 
-★★ AND IT BLOCKS THE PERFORMANCE WORK. While the tail is in, what `_BOUND` holds
-at an address depends on WHICH WINDOW GOT THERE FIRST -- on walk order. So
-persisting the index, decoding the image up front, or changing WINDOW all change
-answers and none can be argued safe. **The 83% cannot be attacked until this is
-settled.**
+    notes/perf/guard_accounting.py --side pre|post --out DIR ; --explain DIR
+    notes/perf/GUARD-ACCOUNTING-2026-08-31.txt
+
+★★ AND IT WAS BLOCKING THE PERFORMANCE WORK, which is the other reason it had to
+be settled first. While the tail was in, what `_BOUND` held at an address
+depended on WHICH WINDOW GOT THERE FIRST -- on walk order -- so persisting the
+index, decoding the image up front, or changing WINDOW all changed answers and
+none could be argued safe. With the guard the entry at an address IS
+decode(address), and P2/P3 below become provable rather than plausible.
 
 ## 5. probe_health: it is not process churn, it is 52 guaranteed timeouts
 
@@ -254,14 +261,16 @@ re-walk**, which is its own argument against micro-optimising it.
 
 Ordered by return. The first two are the whole problem; the rest are small.
 
-## P1 — the window-tail guard   ★ ASK FELIPE, it moves a published figure
+## P1 — the window-tail guard   ★ **LANDED 2026-08-31**
 
-Section 4 and `GUARD-AB-2026-08-31.txt`. Three lines, written and A/B'd, **not
-landed**: it takes `any` from 1,670 to 1,702 and drops a 9,216-byte span off the
-work list. STRONG stays 17 and `--selftest` stays identical, so nothing already
-converted is in question. It is a correctness fix in its own right AND the
-PRECONDITION for P2 and P3 -- while the index is order-dependent, neither can be
-shown answer-identical. **This is the decision that unblocks everything else.**
+Section 4, `GUARD-AB-2026-08-31.txt` and `GUARD-ACCOUNTING-2026-08-31.txt`. Three
+lines in `_decode_window`: it takes `any` from 1,670 to 1,702 and drops a
+9,216-byte span off the work list, because one byte in it was reachable only
+through an edge a truncated decode invented. STRONG stays 17 and `--selftest` is
+unchanged, so no conversion decision to date is affected. Every one of the 231
+bytes it moved across the three images -- 205 gained, 26 lost, in 68 runs -- is
+attributed to a specific truncated window tail in the accounting, and none is
+left unexplained. It was also the PRECONDITION for P2 and P3.
 
 ## P2 — persist the decode index between runs   ★ the big one
 
@@ -331,9 +340,9 @@ The honest costs, if it were ever proposed again:
 * **unidasm is the decode authority.** The only Rust worth writing here is a
   TLCS-900 decoder, and that replaces the authority this project is certified
   against. Every boundary would need re-certifying.
-* **It could not reproduce today's answers even in principle.** Section 4 shows
-  the current output depends on a truncation artifact. "Byte-identical to the
-  Python" would mean reimplementing the bug.
+* **It could not reproduce the answers of the day even in principle.** Section 4
+  shows the output BEFORE the guard depended on a truncation artifact, so
+  "byte-identical to the Python" would have meant reimplementing the bug.
 * A build toolchain for every contributor and every lane, in a 321-file /
   158,677-line Python tree, and `probe_health` copies the tree four times per
   image and runs probes inside the copies.
