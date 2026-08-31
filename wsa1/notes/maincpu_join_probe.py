@@ -61,6 +61,14 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 IMAGES = {"prom_a": ("prom_a/wsa1_prom_a.s", "wsa1_prom_a.ic12", 0xF80000),
           "prom_b": ("prom_b/wsa1_prom_b.s", "wsa1_prom_b.ic13", 0xF00000)}
+# ⚠ ENUMERATED, NOT PATTERN-MATCHED.  A regex over "any line citing a listing by
+# line number" would waive any FUTURE comment that happened to contain one, which
+# is exactly the hole this check exists to close.  These are the two specific lines
+# of one reflowed comment, quoted verbatim as they stood before the correction.
+REFLOWED_BY_PROM_C_SPLIT = (
+    ";          \u26a0 prom_c/wsa1_prom_c.s:58817 still cross-references this table under",
+    ";          its OLD name; that file belongs to another lane and was not edited.",
+)
 LABEL = re.compile(r'^([A-Za-z_.][A-Za-z0-9_.$]*):')
 
 # The three duplicated routines, by the address of each copy and its extent.
@@ -309,7 +317,7 @@ def selftest():
     shared = set()
     for rel in ("maincpu/shared/indexed_table.s", "maincpu/shared/lcd_screen_redraw.s"):
         shared |= set(open(os.path.join(ROOT, rel)).read().split('\n'))
-    lost, moved = [], 0
+    lost, moved, corrected = [], 0, 0
     for tag in IMAGES:
         rel = IMAGES[tag][0]
         try:
@@ -327,11 +335,30 @@ def selftest():
                 # named here so the exception is a listed one instead of a hole.
                 if ln == "end:":
                     continue
+                # ⚠ SECOND LISTED EXCEPTION, and it is a CORRECTION rather than a
+                # loss.  These lines cited prom_c by LINE NUMBER; the 26-file split
+                # of prom_c made every such number point nowhere, so the citation
+                # was rewritten to name the symbol instead.  The prose survives and
+                # says more than it did -- see the live text in prom_a:
+                #   was:  ⚠ prom_c/wsa1_prom_c.s:58817 still cross-references this
+                #         table under its OLD name; that file belongs to another lane
+                #   now:  ⚠ prom_c still cross-references this table under its OLD name,
+                #         at prom_c/midi/midi_controllers.s:6906 (0xFAF87F) ...
+                #         ⚠ THE CITATION WAS `prom_c/wsa1_prom_c.s:58817` and pointed
+                #         nowhere after the split.
+                # The replacement names a LIVE path AND the address, and records the
+                # dead citation -- strictly more than the original said.
+                # Enumerated, not waived: a comment that merely VANISHED would still
+                # fail here, which is the whole point of this check.
+                if ln in REFLOWED_BY_PROM_C_SPLIT:
+                    corrected += 1
+                    continue
                 moved += 1
                 if ln not in shared:
                     lost.append(ln)
     check("every comment and label the join moved out of the two images is in "
-          "the shared source verbatim (%d moved, %d lost)" % (moved, len(lost)),
+          "the shared source verbatim (%d moved, %d lost, %d line-number citations "
+          "corrected by the prom_c split)" % (moved, len(lost), corrected),
           not lost, "  e.g. %r" % (lost[0][:90] if lost else ''))
     for n, pa, pb, k in DUPLICATES:
         ba, bb = at("prom_a", pa, k), at("prom_b", pb, k)

@@ -1147,12 +1147,23 @@ def cmd_verify():
               line[0] if line else "no rule found")
 
     # 4. the two images now include the shared file and no longer carry the block
+    # ⚠ THESE TWO CHECKS NEED DIFFERENT READERS, and conflating them made the second
+    # one unfailable-in-reverse: it is ABOUT the file layout, so it must read the
+    # RAW master. `now()` returns the EXPANSION, which inlines kernel.s by design --
+    # so "the kernel is not inline" was false by construction there and reported a
+    # FAIL against work that is correct. (prom_c reaches kernel.s indirectly, through
+    # boot/boot_and_main.s, which is why check 1 wants the expansion.)
     for rel, inc in ((A_SRC, "kernel_maincpu.inc"), (C_SRC, "kernel_subcpu.inc")):
-        txt = "\n".join(now(rel))
-        check("%s includes %s and kernel/kernel.s" % (rel, inc),
+        txt = "\n".join(now(rel))                       # the expansion
+        raw = open(os.path.join(ROOT, rel)).read()       # the file as committed
+        check("%s reaches %s and kernel/kernel.s" % (rel, inc),
               inc in txt and 'include "kernel/kernel.s"' in txt)
-        check("%s no longer writes the kernel out inline" % rel,
-              "Kernel_Dispatch__drain_ticks:" not in txt)
+        check("%s does not write the kernel out inline" % rel,
+              "Kernel_Dispatch__drain_ticks:" not in raw)
+        # strictly stronger than the original: proves there is exactly ONE copy in
+        # what the assembler is handed, so a second inline copy anywhere would fail.
+        check("%s assembles exactly one copy of the kernel body" % rel,
+              txt.count("Kernel_Dispatch__drain_ticks:") == 1)
     return 1 if fail else 0
 
 
