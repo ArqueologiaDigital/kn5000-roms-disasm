@@ -906,7 +906,33 @@ def selftest():
     except AssertionError as e:
         print("FAIL plan(): %s" % e)
         bad += 1
-    # 3. the map tool itself still passes its own corroborations
+    # 3. ★ THE REFUSAL IS DOING WORK, not just declared.  Every live target at
+    #    a SOFT KEY control (0x00-0x07) in this module is ALSO reached at
+    #    control + 0x11 -- round 11's variant-1 `add (XIX-1),0x11` rewrite --
+    #    so not one of them has a unique control index and not one SoftKeyCol
+    #    name comes out.  If that ever stops being true the refusal has gone
+    #    quiet and this check says so.
+    src2 = lines()
+    tb2 = tables(src2)
+    reach = collections.defaultdict(set)
+    for t in SIMPLE + ["Dispatch_FF3A29", "Dispatch_FF3D39", "Dispatch_FF4049",
+                       "Dispatch_FF4151"]:
+        if t not in tb2:
+            continue
+        ents = tb2[t]
+        d = collections.Counter(a for _i, a in ents).most_common(1)[0][0]
+        for i, a in ents:
+            if a != d:
+                reach[a].add((t, i))
+    soft = [a for a, sl in reach.items() if any((i % 32) <= 7 for _t, i in sl)]
+    uniq = [a for a in soft
+            if len({i % 32 for _t, i in reach[a]}) == 1]
+    ok = bool(soft) and not uniq
+    print("%-4s all %d soft-key targets are reached at two controls, so none "
+          "is named" % ("ok" if ok else "FAIL", len(soft)))
+    bad += 0 if ok else 1
+
+    # 4. the map tool itself still passes its own corroborations
     n = sum(1 for _n, ok, _d in PM.checks() if not ok)
     print("%-4s prom_a_panel_control_map corroborations: %d failures"
           % ("ok" if n == 0 else "FAIL", n))
