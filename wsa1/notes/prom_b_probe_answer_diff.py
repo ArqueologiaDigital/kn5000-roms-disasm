@@ -30,6 +30,10 @@ RUN
     python3 notes/prom_b_probe_answer_diff.py --base HEAD~1 --only msgline
     python3 notes/prom_b_probe_answer_diff.py --base HEAD~1 --jobs 6
 
+⚠ IT COPIES THE WHOLE TREE, about 250 MB, and on this machine /tmp is a tmpfs --
+so a killed run used to leave a quarter-gigabyte of RAM behind, and five of them
+took 1.3 GB.  The copy is now removed by an atexit hook as well as at the end.
+
 ⚠ 93 probes, run twice each, several of them minutes long: budget hours at
 `--jobs 1`.  The two runs of one probe are independent, so `--jobs` parallelises
 across probes; a probe's own pair always runs in the same worker, so it is never
@@ -42,6 +46,7 @@ per-subject split of prom_b does not silently reduce this to a partial swap.
 """
 import os
 import re
+import atexit
 import concurrent.futures
 import shutil
 import subprocess
@@ -107,6 +112,7 @@ def main():
     base = sys.argv[sys.argv.index("--base") + 1]
     only = sys.argv[sys.argv.index("--only") + 1] if "--only" in sys.argv else None
     tmp = tempfile.mkdtemp(prefix="probediff-")
+    atexit.register(shutil.rmtree, tmp, True)   # a killed run must not leak 250 MB
     alt = os.path.join(tmp, "tree")
     subprocess.run(["cp", "-a", ROOT, alt], check=True)
     swapped = swap_image(alt, base)
