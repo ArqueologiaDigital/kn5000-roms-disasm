@@ -1536,6 +1536,10 @@ def stale_mentions():
     for root, _dirs, files in os.walk(ROOT):
         if os.sep + ".git" in root:
             continue
+        # ⚠ asm_source writes its expansion caches as notes/.image-<name>.s --
+        # derived whole-image copies with a .s extension, inside this walk.
+        # Counting them silently doubles every figure (seen 2026-09-01).
+        files = [f for f in files if not f.startswith(".")]
         for fn in sorted(files):
             if not fn.endswith((".s", ".py", ".md", ".txt")):
                 continue

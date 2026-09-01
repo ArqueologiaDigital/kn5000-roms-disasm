@@ -277,7 +277,13 @@ def call_sites(known):
     sites = []
     for dp, _, fns in os.walk(WSA1):
         for fn in sorted(fns):
-            if not fn.endswith(".s"):
+            # ⚠ SKIP asm_source's expansion caches.  They are written as
+            # notes/.image-<name>.s -- a DERIVED copy of a whole image, with a
+            # .s extension, inside a directory this walk covers.  Counting them
+            # doubles every figure this tool produces, silently: on 2026-09-01
+            # the total read 25,168 where the true count is 12,539, and only a
+            # by-hand grep caught it.  Any walk for sources must exclude dotfiles.
+            if fn.startswith(".") or not fn.endswith(".s"):
                 continue
             path = os.path.join(dp, fn)
             for n, line in enumerate(open(path, errors="replace"), 1):

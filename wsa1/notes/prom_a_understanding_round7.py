@@ -1598,6 +1598,10 @@ def mode_stale():
     for dirpath, _d, files in os.walk(ROOT):
         if ".git" in dirpath or "rebuilt_ROMs" in dirpath:
             continue
+        # ⚠ skip asm_source expansion caches (notes/.image-*.s): derived copies
+        # of whole images, with a .s extension, inside this walk.  They silently
+        # double every figure (seen 2026-09-01).
+        files = [f for f in files if not f.startswith(".")]
         for fn in files:
             if not fn.endswith((".md", ".py", ".s", ".txt")):
                 continue
