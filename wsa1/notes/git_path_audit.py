@@ -137,7 +137,15 @@ def lint_file(root, rel):
         if idx > 0 and (ln.count("'", 0, idx) % 2 or ln.count('"', 0, idx) % 2):
             continue
         window = " ".join(lines[i:i + 3])
-        if OBJ_RE.search(window) and (":" in window):
+        # ★ `cat-file -e` / `-t` ASK WHETHER SOMETHING EXISTS.  They are how the
+        #   helper finds out which spelling a revision uses and how --revs asks
+        #   whether a pinned hash still resolves; they are not reads, and the
+        #   runtime classifier already grades them PROBE.  Counting them here
+        #   would leave the lint permanently at "2 unrouted" -- both of them
+        #   inside the tool that enforces the rule.
+        if '"cat-file"' in window and ('"-e"' in window or '"-t"' in window):
+            kind = "PROBE"
+        elif OBJ_RE.search(window) and (":" in window):
             kind = "OBJECT"
         elif SPEC_RE.search(window):
             head = window[:window.index('"--"') if '"--"' in window
@@ -515,6 +523,10 @@ def _selftest():
             # the lint must agree about the two
             lb = lint_file(ROOT, "notes/.audit_control_bad.py")
             lg = lint_file(ROOT, "notes/.audit_control_good.py")
+            check("the lint does NOT count `cat-file -e` as a read",
+                  all(k != "OBJECT" for _l, k, _r, t in
+                      lint_file(ROOT, "notes/git_path_audit.py")
+                      if "cat-file" in t))
             check("the lint sees the raw call site and calls it unrouted",
                   any(k == "OBJECT" and not routed for _, k, routed, _ in lb),
                   "%s" % lb)
@@ -681,7 +693,7 @@ def main():
         bad = [r for r in rows if r["kind"] in ("OBJECT", "PATHSPEC")
                and not r["routed"]]
         for r in rows:
-            if r["kind"] == "NO-PATH":
+            if r["kind"] in ("NO-PATH", "PROBE"):
                 continue
             print("  %-9s %-7s %s:%d  %s"
                   % (r["kind"], "routed" if r["routed"] else "RAW",
