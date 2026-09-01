@@ -232,8 +232,14 @@ def _rev_of(argv, i):
 
 
 def classify_call(call, root):
-    """-> (kind, ok, detail).  kind in OBJECT / PATHSPEC / OTHER."""
+    """-> (kind, ok, detail).  kind in OBJECT / PATHSPEC / PROBE / OTHER."""
     argv = call["argv"]
+    # ★ A DELIBERATE MISS IS NOT A FAULT.  asm_source's --selftest proves the
+    #   unprefixed spelling is wrong by issuing it; a control that the instrument
+    #   scores as a failure is a control nobody will keep.  The caller says so by
+    #   setting GIT_AUDIT_EXPECT_FAIL=1 -- an opt-in, per call, not a filename.
+    if call.get("expect_fail"):
+        return ("PROBE", True, "expected-fail control")
     sub = None
     i = 0
     while i < len(argv):
@@ -349,7 +355,9 @@ def trace_script(root, rel, base, argv_extra=()):
     for c in calls:
         kind, ok, detail = classify_call(c, root)
         rows.append({"kind": kind, "ok": ok, "detail": detail,
-                     "argv": c["argv"], "rc": c["rc"], "out": c["out"]})
+                     "argv": c["argv"], "rc": c["rc"], "out": c["out"],
+                     "cwd": c.get("cwd"),
+                     "expect_fail": c.get("expect_fail", False)})
     bad = sum(1 for r_ in rows if not r_["ok"] and r_["kind"] not in ("OTHER",
                                                                       "PROBE"))
     reads = sum(1 for r_ in rows if r_["kind"] in ("OBJECT", "PATHSPEC"))
@@ -530,6 +538,13 @@ def _selftest():
     check("classify_call: a pathspec naming a path nothing holds IS a fault",
           classify_call({"argv": ["diff", "--", "no_such_dir/x.s"], "cwd": ROOT,
                          "rc": 0, "out": 0}, ROOT)[1] is False)
+    check("classify_call: a call marked GIT_AUDIT_EXPECT_FAIL is a PROBE",
+          classify_call({"argv": ["show", "HEAD:a/b.s"], "cwd": ROOT, "rc": 128,
+                         "out": 0, "expect_fail": True}, ROOT) == (
+              "PROBE", True, "expected-fail control"))
+    check("...and the SAME call unmarked is still a broken read",
+          classify_call({"argv": ["show", "HEAD:a/b.s"], "cwd": ROOT, "rc": 128,
+                         "out": 0}, ROOT)[1] is False)
     check("classify_call: `cat-file -e` saying no is a PROBE, not a broken read",
           classify_call({"argv": ["-C", ROOT, "cat-file", "-e", "HEAD:a/b.s"],
                          "cwd": ROOT, "rc": 1, "out": 0}, ROOT)[0] == "PROBE")
@@ -635,7 +650,8 @@ def main():
                 # ⚠ the trace always runs a script with cwd=ROOT, so that is the
                 #   cwd a stored call had unless it carried its own `-C`.
                 call = {"argv": c["argv"], "rc": c["rc"], "out": c["out"],
-                        "cwd": c.get("cwd", ROOT)}
+                        "cwd": c.get("cwd", ROOT),
+                        "expect_fail": c.get("expect_fail", False)}
                 kind, ok, detail = classify_call(call, ROOT)
                 rows.append(dict(c, kind=kind, ok=ok, detail=detail))
             r["calls"] = rows

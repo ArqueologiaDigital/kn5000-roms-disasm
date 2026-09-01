@@ -651,8 +651,14 @@ def _selftest():
         for tag, primary in IMAGES:
             if not os.path.isfile(os.path.join(ROOT, primary)):
                 continue
+            # ⚠ GIT_AUDIT_EXPECT_FAIL marks this as a NEGATIVE control for
+            #   notes/git_path_audit.py.  Without it the auditor counts the four
+            #   deliberate misses this check needs as four broken reads, in every
+            #   scratch tree probe_health builds -- 16 phantom faults attributed
+            #   to the file that proves the bug is fixed.
             r = subprocess.run(["git", "-C", ROOT, "show", "HEAD:" + primary],
-                               capture_output=True)
+                               capture_output=True,
+                               env=dict(os.environ, GIT_AUDIT_EXPECT_FAIL="1"))
             if r.returncode or r.stdout.decode("utf-8", "replace") != git_show(primary):
                 bare_wrong += 1
         check("the UNPREFIXED spelling is wrong for every image -- the bug this "
