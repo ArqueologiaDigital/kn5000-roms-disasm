@@ -339,6 +339,47 @@ The keybed's poll is the other direction of the same idea: read `+0x02`, test bi
 0, and only then read the 16-bit event from `+0x00`
 (`KeyScan_ReadEvent` 0xF9973D, `notes/FINDINGS-prom_c-keyboard-and-touch.md`).
 
+### 4.4b 0x00104000's boundary: which of its 19 blocks the firmware MODULATES
+
+The unrolled writer loads all nineteen; the seven small accessors show which ones
+the firmware touches again after a note has started.  Each accessor was walked
+with the tree's existing symbolic tool, which reports the SELECT and the struct
+word that feeds it in execution order:
+
+```
+python3 notes/prom_c_tg_chanmap.py 0xFB796E 0x62 --dev 0x00104000 --pairs   # 0x01C0 0x0200 0x0240
+python3 notes/prom_c_tg_chanmap.py 0xFB79D0 0x88 --dev 0x00104000 --pairs   # 0x0140 0x0180 0x01C0 0x0200 0x0240
+python3 notes/prom_c_tg_chanmap.py 0xFB7A73 0x56 --dev 0x00104000 --pairs   # 0x00C0 0x0100 0x0240
+python3 notes/prom_c_tg_chanmap.py 0xFB7AC9 0x3C --dev 0x00104000 --pairs   # 0x00C0 0x0100
+python3 notes/prom_c_tg_chanmap.py 0xFB7B05 0x3C --dev 0x00104000 --pairs   # 0x0140 0x0180
+python3 notes/prom_c_tg_chanmap.py 0xFB7B41 0x2A --dev 0x00104000 --pairs   # 0x0280
+python3 notes/prom_c_tg_chanmap.py 0xFB7A58 0x1B --dev 0x00104000 --pairs   # block 0 only
+```
+
+| block | k | reached by a small accessor? | staging word |
+|---|---|---|---|
+| 0x0000 | 0 | **yes** — `Dev104_WriteChanReg0`, and written first by two accessors | word 0 |
+| 0x0040 | 1 | no | 0x02 |
+| 0x0080 | 2 | no | 0x04 |
+| 0x00C0 | 3 | **yes** ×2 | 0x06 |
+| 0x0100 | 4 | **yes** ×2 | 0x08 |
+| 0x0140 | 5 | **yes** ×2 | 0x0A |
+| 0x0180 | 6 | **yes** ×2 | 0x0C |
+| 0x01C0 | 7 | **yes** ×2 | 0x0E |
+| 0x0200 | 8 | **yes** ×2 | 0x10 |
+| 0x0240 | 9 | **yes** ×4 | 0x12 |
+| 0x0280 | 10 | **yes** — from a register, not a staging word | — |
+| 0x02C0 … 0x0480 | 11..18 | no | 0x16 … 0x24 |
+
+★ So the firmware **modulates blocks 0 and 3..10 after the note starts, and sets
+blocks 1, 2 and 11..18 only as part of a whole-channel load.**  On a tone
+generator that split is the boundary between per-note-modulated parameters and
+set-at-note-on ones; what it is on this device is not established.
+
+⚠ The relation `staging word = 2 × (block / 0x40)` holds at every site above,
+which is the same relation `prom_c_tg_regmap.py --dev104` asserts over the
+unrolled writer — two tools, two routines, one layout.
+
 ### 4.5 The 0x00E00000 DSP register file is REFRESHED, not just initialised
 
 `DSP_ChannelRefresh_Loop` (0xF98118) is the **third** entry in

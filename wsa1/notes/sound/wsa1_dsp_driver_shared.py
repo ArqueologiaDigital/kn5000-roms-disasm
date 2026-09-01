@@ -41,6 +41,12 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(HERE))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+# ⚠ NOT `open(ROOT + "/prom_a/wsa1_prom_a.s")`.  probe_health graded the first
+# version of this file SPLIT-FRAGILE on prom_a for exactly that: prom_a is not
+# split TODAY, so the check passed, and it would have started answering over a
+# 40-line header the day it was.  asm_source resolves the IMAGE.
+from asm_source import image_text                                # noqa: E402
 LOAD = 0xF80000
 PA, PC, LEN = 0xF85F0F, 0xF98000, 234
 # the four routines, prom_a offset -> (prom_a label, prom_c label)
@@ -117,8 +123,7 @@ def selftest():
     ck("★ NULL: no neighbouring alignment scores anywhere near 231",
        worst < 60, "best misaligned score %d of %d" % (worst, LEN))
     # And the source really does carry these labels, at these addresses.
-    src = open(os.path.join(ROOT, "prom_a/wsa1_prom_a.s"),
-               encoding="utf-8", errors="replace").read()
+    src = image_text(ROOT, "prom_a/wsa1_prom_a.s")
     for off, la, _ in ROUTINES:
         ck("prom_a source defines %s" % la, ("\n%s:" % la) in src, "")
     for name, ok, detail in checks:
