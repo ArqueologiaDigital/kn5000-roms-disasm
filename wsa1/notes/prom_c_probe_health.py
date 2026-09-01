@@ -60,6 +60,13 @@ import sys
 import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import git_prefix, git_show  # noqa: E402  (repo-relative paths)
+
+PREFIX = git_prefix(ROOT)                       # "wsa1/", or "" at a repo root
+GITDIR = os.path.abspath(os.path.join(ROOT, subprocess.run(
+    ["git", "-C", ROOT, "rev-parse", "--git-common-dir"],
+    capture_output=True, text=True, check=True).stdout.strip()))
 MASTER = "prom_c/wsa1_prom_c.s"
 BASE_COMMIT = "df84060a8d9cb95561d363597bfa90172107d42c"
 TIMEOUT = 180
@@ -95,14 +102,40 @@ PROBES = [
 FAILWORD = re.compile(r'\bFAIL\b|Traceback|Error|FAILURES?:', re.I)
 
 
-def shadow_tree(dst):
+def shadow_tree(top):
     """A tree of symlinks to ROOT, with the ONE master replaced by the pre-split
     listing.  Symlinks, not a copy: the ROMs alone are 2 MB and the point is that
-    exactly one file differs."""
+    exactly one file differs.  Returns the tree's ROOT-counterpart.
+
+    ★ IT REPRODUCES THIS TREE'S GIT PREFIX.  `top` becomes the shadow
+    REPOSITORY root and the tree sits under it at the same prefix ROOT has, with
+    `.git` symlinked in -- otherwise a probe that reads the listing out of git
+    fails in the shadow tree for a reason that has nothing to do with the
+    master, which is exactly the artefact the blind control below was written to
+    avoid.  Before the 2026-09-01 move into wsa1/ there was nothing to do here,
+    because ROOT was the repository root."""
+    dst = os.path.join(top, PREFIX.rstrip("/")) if PREFIX else top
+    os.makedirs(dst, exist_ok=True)
+    os.symlink(GITDIR, os.path.join(top, ".git"))
     for name in os.listdir(ROOT):
         if name == ".git":
             continue
         os.symlink(os.path.join(ROOT, name), os.path.join(dst, name))
+    # ⚠⚠ `notes` MUST BE A REAL DIRECTORY, not a symlink to the real one.
+    # asm_source.image_path() materialises the expanded image at
+    # `<root>/notes/.image-<primary>`; with notes symlinked, a probe run in the
+    # SHADOW tree wrote the PRE-SPLIT expansion into the REAL tree's cache, and
+    # every image_path() reader there then silently read a 131,665-line image
+    # instead of the 132,304-line one -- from a probe run that only claimed to
+    # read.  Caught by notes/asm_source.py --selftest, whose "image_path() holds
+    # exactly image_text()" check is the only thing that looks at it.
+    os.unlink(os.path.join(dst, "notes"))
+    os.mkdir(os.path.join(dst, "notes"))
+    for name in os.listdir(os.path.join(ROOT, "notes")):
+        if name.startswith(".image-"):
+            continue
+        os.symlink(os.path.join(ROOT, "notes", name),
+                   os.path.join(dst, "notes", name))
     # prom_c must become a real directory so the one file can be swapped
     os.unlink(os.path.join(dst, "prom_c"))
     os.mkdir(os.path.join(dst, "prom_c"))
@@ -110,10 +143,10 @@ def shadow_tree(dst):
         if name != os.path.basename(MASTER):
             os.symlink(os.path.join(ROOT, "prom_c", name),
                        os.path.join(dst, "prom_c", name))
-    pre = subprocess.run(["git", "show", f"{BASE_COMMIT}:{MASTER}"],
-                         cwd=ROOT, capture_output=True, check=True).stdout
-    with open(os.path.join(dst, MASTER), "wb") as fh:
+    pre = git_show(MASTER, BASE_COMMIT)
+    with open(os.path.join(dst, MASTER), "w", encoding="utf-8") as fh:
         fh.write(pre)
+    return dst
 
 
 def run(tree, argv):
@@ -134,8 +167,8 @@ def grade(a_rc, a_out, b_rc, b_out):
 
 
 def main():
-    with tempfile.TemporaryDirectory() as d:
-        shadow_tree(d)
+    with tempfile.TemporaryDirectory() as top:
+        d = shadow_tree(top)
         rows = []
         for argv in PROBES:
             a_rc, a_out = run(ROOT, argv)
@@ -163,8 +196,18 @@ def selftest():
         print(("  ok    " if cond else "  FAIL  ") + msg)
         ok = ok and cond
 
-    with tempfile.TemporaryDirectory() as d:
-        shadow_tree(d)
+    # ⚠ WRITTEN BEFORE THE SHADOW TREE IS BUILT.  The shadow's notes/ is a
+    #   directory of symlinks taken at build time (see shadow_tree), so a file
+    #   created afterwards is not in it.
+    seer_src = ("import os\n"
+                "r=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))\n"
+                "print(len(open(os.path.join(r,%r),encoding='utf-8')"
+                ".read().split(chr(10))))\n" % MASTER)
+    seer_name = "notes/.pch_seer.py"
+    with open(os.path.join(ROOT, seer_name), "w") as fh:
+        fh.write(seer_src)
+    with tempfile.TemporaryDirectory() as top:
+        d = shadow_tree(top)
         a = open(os.path.join(ROOT, MASTER), encoding="utf-8").read().split("\n")
         b = open(os.path.join(d, MASTER), encoding="utf-8").read().split("\n")
         check(len(b) > 20 * len(a),
@@ -172,14 +215,21 @@ def selftest():
               f"({len(b):,} lines vs {len(a):,})")
         check(os.path.islink(os.path.join(d, "original_ROMs")),
               "everything except that one file is a symlink to the real tree")
-        check(os.path.realpath(os.path.join(d, "notes")) ==
-              os.path.realpath(os.path.join(ROOT, "notes")),
+        check(os.path.realpath(os.path.join(d, "notes", os.path.basename(__file__)))
+              == os.path.realpath(os.path.join(ROOT, "notes",
+                                               os.path.basename(__file__))),
               "the probes themselves are the same files in both trees")
         # a probe that reads the master MUST see the difference; one that reads
         # only the ROM must NOT.  Both directions, so neither grade is free.
-        seer = ["notes/prom_c_header_audit.py"]
-        s = run(ROOT, seer)[1] != run(d, seer)[1]
-        check(s, "a master-reading probe is SEEN to differ between the trees")
+        # ⚠ THE SEER IS SYNTHETIC, and this is the second time that lesson has
+        #   had to be learned here.  It used to be notes/prom_c_header_audit.py,
+        #   chosen because it read the master by path.  That probe has since been
+        #   migrated to read the IMAGE through asm_source -- so it now gives the
+        #   SAME answer in both trees, correctly, and the control failed.  ★ A
+        #   CONTROL THAT NAMES A REAL PROBE GOES RED WHEN THAT PROBE IS FIXED.
+        sa, sb = run(ROOT, [seer_name])[1], run(d, [seer_name])[1]
+        check(sa != sb, "a master-reading probe is SEEN to differ between the "
+                        "trees (%s vs %s)" % (sa.strip(), sb.strip()))
         # ⚠ The blind control is WRITTEN HERE rather than borrowed from notes/.
         #   The first version borrowed a real probe and the control failed for a
         #   reason that had nothing to do with the master: the shadow tree has no
@@ -198,6 +248,7 @@ def selftest():
         finally:
             os.remove(os.path.join(ROOT, "notes", ".blind_control.py"))
         check(b_, "a probe that reads only the ROM does NOT differ")
+    os.remove(os.path.join(ROOT, seer_name))
     print("\nPASS" if ok else "\nFAIL")
     return 0 if ok else 1
 

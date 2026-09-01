@@ -131,7 +131,7 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
-from asm_source import image_files, image_lines, IMAGES  # noqa: E402
+from asm_source import image_files, image_lines, git_prefix, IMAGES  # noqa: E402
 
 IMAGE_PRIMARY = dict(IMAGES)
 PARTS_DIRNAME = ".health_parts"
@@ -235,10 +235,14 @@ GIT_READ_RE = re.compile(r'git[^\n]{0,40}show[^\n]{0,40}[:"\']([A-Za-z0-9_/]*%s)
 WORKTREE_DIFF_RE = re.compile(r'"git"[^\n]{0,40}"diff"|git\s+diff\b')
 
 
+def worktree_diff_text(txt):
+    return bool(WORKTREE_DIFF_RE.search(txt))
+
+
 def worktree_diff(script):
     txt = open(os.path.join(ROOT, script), encoding="utf-8",
                errors="replace").read()
-    return bool(WORKTREE_DIFF_RE.search(txt))
+    return worktree_diff_text(txt)
 
 
 def git_blind_text(txt, primary):
@@ -301,6 +305,31 @@ def invocations(script, cites, per_script):
 
 # ---------------------------------------------------------------------------
 # the three trees
+# ★★ WHERE `.git` GOES, AND WHY IT IS NOT NEXT TO THE TREE.
+# ROOT used to BE the repository root, so a scratch copy of it with a `.git`
+# symlink beside it was a faithful repository and `git show HEAD:prom_a/...`
+# meant the same thing there as here.  Since the 2026-09-01 move ROOT is
+# `<repo>/wsa1`, there is no `wsa1/.git`, and that symlink became a DANGLING
+# one: every scratch tree stopped being a repository at all.  ⚠ THAT IS A GREEN
+# THAT MEANS NOTHING -- a probe reading the listing out of git then failed
+# IDENTICALLY in asis, full and stub, so full == stub and it was graded
+# UNAFFECTED.  The copy therefore reproduces the PREFIX: the tree goes at
+# `<scratch>/<name>/wsa1` and the `.git` symlink one level above it, so the
+# scratch repository has the same shape, and the same prefix, as this one.
+PREFIX = git_prefix(ROOT)                       # "wsa1/", or "" at a repo root
+GITDIR = subprocess.run(["git", "-C", ROOT, "rev-parse", "--git-common-dir"],
+                        capture_output=True, text=True,
+                        check=True).stdout.strip()
+GITDIR = os.path.abspath(os.path.join(ROOT, GITDIR))
+NEST = PREFIX.strip("/").count("/") + 1 if PREFIX else 0
+
+
+def _tree_top(tree):
+    """The repository root of a scratch tree whose ROOT-counterpart is `tree`."""
+    return os.path.normpath(os.path.join(tree, *([os.pardir] * NEST))) \
+        if NEST else tree
+
+
 def _copy_tree(dst):
     """A real copy, not symlinks: a probe with a write mode must not be able to
     reach the committed tree through one.  `.git` IS shared, because probes that
@@ -308,7 +337,9 @@ def _copy_tree(dst):
     shutil.copytree(ROOT, dst,
                     ignore=shutil.ignore_patterns(".git", "*.pyc", "__pycache__"),
                     symlinks=True)
-    os.symlink(os.path.join(ROOT, ".git"), os.path.join(dst, ".git"))
+    link = os.path.join(_tree_top(dst), ".git")
+    if not os.path.lexists(link):
+        os.symlink(GITDIR, link)
 
 
 def _freeze(tree):
@@ -381,7 +412,8 @@ def build_trees(base, primary, extra_stub_mutant=False):
     trees = {}
     for name in ("asis", "full", "stub") + (
             ("asis2", "stub_mut") if extra_stub_mutant else ("asis2",)):
-        d = os.path.join(base, name)
+        d = os.path.join(base, name, PREFIX.rstrip("/")) if PREFIX \
+            else os.path.join(base, name)
         _copy_tree(d)
         trees[name] = d
     _write_full(trees["full"], primary)
@@ -407,7 +439,7 @@ def run(tree, argv):
         rc, out = None, "<timeout>"
     except OSError as e:
         rc, out = None, "<oserror %s>" % e
-    out = out.replace(tree, "<TREE>")
+    out = out.replace(tree, "<TREE>").replace(_tree_top(tree), "<TOP>")
     # ⚠ NORMALISE THE MATERIALISED PATH.  asm_source.image_path() returns
     # notes/.image-wsa1_prom_b.s when the image is several files and the primary
     # itself when it is one -- so a probe that PRINTS the path it read differs
@@ -475,7 +507,8 @@ def measure(primary, argvs, jobs=6, base=None):
     finally:
         if made:
             for name in os.listdir(base):
-                _thaw(os.path.join(base, name))
+                _thaw(os.path.join(base, name, PREFIX.rstrip("/")) if PREFIX
+                      else os.path.join(base, name))
             shutil.rmtree(base, ignore_errors=True)
 
 
@@ -674,6 +707,31 @@ def selftest():
               % (run(trees["full"], [pp])[1].strip(),
                  run(trees["stub"], [pp])[1].strip()))
 
+        # ★★ EVERY SCRATCH TREE MUST BE A REPOSITORY, AND MUST HAVE THIS TREE'S
+        #   PREFIX.  When ROOT stopped being the repository root, the `.git`
+        #   symlink this tool plants went dangling and every scratch tree became
+        #   a non-repository.  A probe that reads the listing out of git then
+        #   failed the same way in asis, full and stub -- full == stub -- and
+        #   was graded UNAFFECTED.  A whole class of broken probes read as green,
+        #   with nothing in the output to say so.
+        gp = os.path.join("notes", ".health_gitread.py")
+        gbody = (head + 'sys.path.insert(0, os.path.join(r, "notes"))\n'
+                 'from asm_source import git_prefix, git_show\n'
+                 'print(git_prefix(r), len(git_show(%r, "HEAD", r)))\n' % primary)
+        for t in trees.values():
+            with open(os.path.join(t, "notes", ".health_gitread.py"), "w") as fh:
+                fh.write(gbody)
+        got = {n: run(t, [gp]) for n, t in trees.items()}
+        want = "%s %d" % (PREFIX, len(open(os.path.join(ROOT, primary),
+                                          encoding="utf-8").read()))
+        check(all(o[0] == 0 for o in got.values()),
+              "git is REACHABLE from every scratch tree (%s)"
+              % ", ".join("%s rc=%s" % (n, o[0]) for n, o in sorted(got.items())))
+        check(all(o[1].strip() == want.strip() for o in got.values()),
+              "...and a git read there returns THIS tree's committed listing "
+              "(want %r, got %r)" % (want.strip(),
+                                     got["asis"][1].strip()))
+
         # ★ THE FIX ITSELF IS UNDER TEST.  If asm_source did not really resolve
         #   the includes, every migration this tool recommends would be a
         #   no-op and every grade of UNAFFECTED after one would be free.
@@ -753,9 +811,14 @@ def selftest():
                      'git show 8ff84e5:prom_d/wsa1_prom_d.s'):
             check(git_blind_text(form, "prom_d/wsa1_prom_d.s"),
                   "git_blind SEES %r" % form[:46])
-        check(worktree_diff("notes/wave7_round5_review_wb_prom_b.py"),
+        # ⚠ SYNTHETIC TEXT, for the same reason the git_blind forms above are:
+        #   pinning a real file makes the check go red the day that file is
+        #   fixed, or the day a fixed file merely EXPLAINS the old spelling in a
+        #   comment -- which is what asm_source.git_diff_lines does.
+        check(worktree_diff_text('d = subprocess.run(["git", "-C", ROOT, "diff",'),
               "worktree_diff SEES a probe that diffs the working tree")
-        check(not worktree_diff("notes/asm_source.py"),
+        check(not worktree_diff_text('from asm_source import image_lines\n'
+                                     'lines = image_lines(ROOT, PRIMARY)\n'),
               "worktree_diff does NOT fire on a probe that does not")
         for form in ('SRC = image_path(ROOT, "prom_d/wsa1_prom_d.s")',
                      '# see prom_d/wsa1_prom_d.s for the directory'):
@@ -763,7 +826,8 @@ def selftest():
                   "git_blind does NOT fire on %r" % form[:46])
     finally:
         for name in os.listdir(base):
-            _thaw(os.path.join(base, name))
+            _thaw(os.path.join(base, name, PREFIX.rstrip("/")) if PREFIX
+                  else os.path.join(base, name))
         shutil.rmtree(base, ignore_errors=True)
     print("\nPASS" if ok else "\nFAIL")
     return 0 if ok else 1
