@@ -8002,5 +8002,22 @@ NumToAscii_PadTens:
 	ld (xbc), 0x20
 
 NumToAscii_OnesDigitAndFinish:
-	.incbin "includes/romslices/v7_fix_numtoascii_onesdigitandfinish.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; llvm-mc round-trips these 28 B byte-exact, and the shape matches its name
+	; exactly: "add a, 48" is the ASCII '0' offset and the routine null-terminates
+	; the string it just wrote. Addresses left numeric; this v7 link doesn't
+	; name them.
+	ld	bc, ix
+	inc	1, ix
+	lda_d16	xhl, (32430)
+	extz	xbc
+	add	xbc, xhl
+	add	a, 48
+	ld	(xbc), a
+	ld	wa, ix
+	extz	xwa
+	add	xwa, xhl
+	ld	(xwa), 0
+	pop	xiz
+	ret
 	.include "file_io/title_handlers.s"

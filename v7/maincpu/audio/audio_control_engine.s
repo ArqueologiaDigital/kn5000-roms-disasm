@@ -6423,7 +6423,10 @@ MidiStream_CmdPedalNotify:
 	.byte 0xcd, 0xcc, 0x7f, 0xcd, 0x69, 0x24, 0x7f, 0x1d
 	.byte 0x33, 0x9a, 0xfc
 MidiStream_CmdPedalDone:
-	.incbin "includes/romslices/v7_block_midistream_cmdpedaldone_head.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; a single 0x0e byte, the `ret` opcode. Low-risk regardless of naming --
+	; a one-instruction stub round-trips byte-exact by construction.
+	ret
 	cp A,0x48
 	jr z, .Lc_fcc350
 	and W,0x0f

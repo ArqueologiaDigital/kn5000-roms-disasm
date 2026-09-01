@@ -131,3 +131,24 @@ slice is a claim, not a measurement. ⚠ The mechanical pointer-table class here
 already exhausted and the remainder is ~89% opaque, so the productive route is
 cross-version comparison against the better-disassembled v9/v10 — a lead, not
 proof, since v7 genuinely differs and that is why the slices exist.
+
+## Added 2026-09-02 (lane V7SLICES, full-disassembly push wave 2)
+
+Takes `v7_list_slices.py`'s lead and follows it through: cross-reference every
+live romslice against v9/v10 by its label, then require a byte-exact round
+trip before converting anything.
+
+| script | question it answers |
+|---|---|
+| `v7_slice_v9v10_correspondence.py` | For each live romslice, what does the SAME-NAMED label look like in v9/v10 -- real disassembled CODE, a `.byte`/`.ascii` run, a `.long` table, or NOTFOUND (name has drifted)? A literal lookup, not a fuzzy match, since v7 shares source layout and labels with v9/v10. Caught two of its own misclassifications by hand-checking hits: a label with its directive on the SAME line as the colon, and a macro invocation (`aligned_string "..."`) with no leading dot that looks like an instruction. Both fixed in the classifier. |
+| `v7_slice_code_roundtrip.py` | Of the CODE-labelled slices, which ones does llvm-mc's own disassembler decode with zero "invalid instruction encoding" warnings AND reassemble back to the exact original bytes? Only 1 of 34 CODE-labelled slices does (47 B), and even that one is rejected by hand -- a clean decode is not proof of code (the HD-AE5000 version-string trap), and its content doesn't match v9/v10's real routine at that label. |
+
+    python3 scripts/analysis/v7_slice_v9v10_correspondence.py
+    python3 scripts/analysis/v7_slice_code_roundtrip.py
+
+Result: 10 slices (167 B) converted to verified instructions, 1 slice (27 B,
+all 0xff) retyped as `.fill` (erased flash, not code, despite a clean decode),
+194 B total. v7's verbatim debt: 120,332 B -> 120,138 B
+(`v7_no_source_bytes.py`). The 34 CODE-labelled, 25,425 B bucket is otherwise
+blocked by the same tlcs900-backend spelling gap already known from v7's
+general code-as-`.byte` debt.

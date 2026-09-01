@@ -863,7 +863,12 @@ FactoryReset_TrailingByte:
 	ret
 
 Boot_ReadFDCStatus:
-	.incbin "includes/romslices/v7_fix_boot_readfdcstatus.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; llvm-mc round-trips these 5 B byte-exact; v9/v10's Boot_ReadFDCStatus is the
+	; identical two instructions, "ldb_d8 l,(0x8e6a) / ret", with only the FDC
+	; status register address shifted (36302 here vs v9/v10's 36458).
+	ldb_d8	l, (36302)
+	ret
 	.include "shared/boot_routines.s"
 
 ; =============================================================================
@@ -1317,7 +1322,15 @@ malloc_X:
 	inc	2, xsp
 	ret
 free_X:
-	.incbin "includes/romslices/v7_fix_free_x.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; llvm-mc round-trips these 8 B byte-exact; v9/v10's free_X is the identical
+	; four instructions ("push xwa / call Free / inc 4,xsp / ret"), and its own
+	; neighbour malloc_X (immediately above) already carries a numeric call
+	; target in this exact style, so the convention is not new here.
+	push	xwa
+	call	16712469
+	inc	4, xsp
+	ret
 	.include "ui/setwall_routines.s"
 	.include "ui/ui_playback_modes.s"
 	.include "demo/demo_routines.s"
@@ -2605,7 +2618,10 @@ CPanel_KeyProcessing_Wrapper:
 
 
 EmptyRoutine_03:
-	.incbin "includes/romslices/v7_fix_emptyroutine_03.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; a single 0x0e byte. v9/v10's EmptyRoutine_03 is the same single `ret`,
+	; matching the name; round-trips byte-exact.
+	ret
 	.include "ui/cpanel_routines.s"
 
 
