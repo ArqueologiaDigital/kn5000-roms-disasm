@@ -273,46 +273,15 @@ DemoSongPreset18:
 
 
 ; =============================================================================
-; PRESET WALLPAPERS
+; PRESET WALLPAPERS (table_data/wallpapers.s: 0x8ED000-0x912BFF)
 ; =============================================================================
 ; These 320x240 8bpp wallpaper images are referenced by the SetWallPaper
 ; routine in the Main CPU ROM via the wallpaper table at 0xEAAE62.
-; Each wallpaper is 76,800 bytes (320 * 240).
+; Each wallpaper is 76,800 bytes (320 * 240). See wallpapers.s.
 ; =============================================================================
 
 	.org 0x8ED000 - 0x800000, 0xFF
-Wallpaper_0:	; Blue textured pattern
-	.incbin "images/Wallpaper_0.bin"
-
-	; Wallpaper_0 trailer (0x8FFC00 - 0x8FFFFF, formerly includes/
-	; wallpaper_gap.bin -- the file stays on disk for the archived ASL
-	; mirror).  Like Wallpaper_1's trailer (see ui_bitmaps.s), the +0x380
-	; slot holds a 16-entry shade ramp of ascending {r, g, b, 0x00}
-	; quadruplets; this one matches WallpaperRamp_Navy.  No code reference
-	; found yet, so the RGB interpretation is tentative.
-	.zero 896
-Wallpaper0_ShadeRamp:
-	.byte 0x1f, 0x1f, 0x28, 0x00
-	.byte 0x1f, 0x1f, 0x2d, 0x00
-	.byte 0x1f, 0x24, 0x2d, 0x00
-	.byte 0x1f, 0x1f, 0x33, 0x00
-	.byte 0x1f, 0x24, 0x33, 0x00
-	.byte 0x1f, 0x24, 0x38, 0x00
-	.byte 0x1f, 0x27, 0x38, 0x00
-	.byte 0x1f, 0x2c, 0x38, 0x00
-	.byte 0x1f, 0x27, 0x3d, 0x00
-	.byte 0x1f, 0x2c, 0x3d, 0x00
-	.byte 0x24, 0x27, 0x38, 0x00
-	.byte 0x24, 0x2c, 0x38, 0x00
-	.byte 0x24, 0x2c, 0x3d, 0x00
-	.byte 0x24, 0x2c, 0x43, 0x00
-	.byte 0x27, 0x2e, 0x41, 0x00
-	.byte 0x2b, 0x33, 0x46, 0x00
-	.zero 64
-
-	.org 0x900000 - 0x800000, 0xFF
-Wallpaper_1:	; Technics branded texture
-	.incbin "images/Wallpaper_1.bin"
+	.include "wallpapers.s"
 
 	; Wallpaper_1 trailer, UI bitmap/frame descriptor tables and pixel
 	; runs, and factory image banks (0x912C00 - 0x937FFF)
