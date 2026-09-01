@@ -22062,154 +22062,25 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	pop xiz                                 ; pop XIZ
 	ret
 
-	.byte 0x54                             ; db
-	jr	mi, 0x63
-	jr t, .LDSR_9a25                       ; [68 6e] jr T,0x299a25
-	jr	ge, 0x63
-	jrl	ule, 0x5320
-	jr	nc, 0x66
-	jrl	ov, 0x6177
-	jrl	le, 0x2065
-	jrl	ule, 0x6365
-	jrl	ov, 0x6f69
-	jr	nz, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x4d
-	pushw iz                                ; push IZ
-	ldb	w, 0x4b
-	jr ge, .LDSR_9a49                      ; [69 74] jr GE,0x299a49
-	jr	lt, 0x6a
-	jr ge, .LDSR_9a46                      ; [69 6d] jr GE,0x299a46
-	jr	lt, 0x32
-	pushw iz                                ; push IZ
-	ldw	hl, 0x4a33
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x32
-	pushw iz                                ; push IZ
-	ldw	de, 0x2031
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x54
-	ld	xiy, 0x494e4843
-	ld	xhl, 0x4e4b2053
-	ldw	iy, 0x3030
-.LDSR_9a18:
-	ldw	wa, 0x2020
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-.LDSR_9a25:
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x20
-	ldb	w, 0x4a
-	jrl	mi, 0x696c
-	pushw iy                                ; push IY
-	.byte 0x4f                             ; pop SP
-	jr	ugt, 0x74
-	jr	nc, 0x62
-	jr	mi, 0x72
-.LDSR_9a46:
-	ldb	w, 0x31
-	push xbc
-.LDSR_9a49:
-	push xbc
-	ldw	iz, 0x5858
-	pop xwa                                 ; pop XWA
-	pop xwa                                 ; pop XWA
-	pop xwa                                 ; pop XWA
-	pop xwa                                 ; pop XWA
-	pop xwa                                 ; pop XWA
-	pop xwa                                 ; pop XWA
-	jp 0x221f1c                             ; jp 0x221f1c
-	.byte 0x56                             ; db
-	ld	xiy, 0x31452220
-	ldw	de, 0x3433
-	ldw	iy, 0x3736
-	push xwa
-	push xbc
-	ldw	bc, 0x3130
-	ldw	bc, 0x3231
-	ldw	bc, 0x3133
-	ldw	ix, 0x3531
-	ldw	bc, 0x3136
-	.byte 0x37, 0x31, 0x38                 ; ld SP,0x3831
-	ldw	bc, 0x3239
-	ldw	wa, 0x3132
-	ldw	de, 0x3232
-	ldw	hl, 0x3432
-	ldw	de, 0x4135
-	ld	xde, 0x46454443
-	ld	xsp, 0x4b4a4948
-	popw ix                                 ; pop IX
-	popw iy                                 ; pop IY
-	popw iz                                 ; pop IZ
-	popw sp
-	.byte 0x50, 0x51, 0x52, 0x53, 0x54, 0x55, 0x56, 0x57
-	pop xwa                                 ; pop XWA
-	pop xbc                                 ; pop XBC
-	pop xde                                 ; pop XDE
-	jr	lt, 0x62
-	jr ule, .LDSR_9b07                     ; [63 64] jr ULE,0x299b07
-	jr	mi, 0x66
-	jr	c, 0x68
-	jr	ge, 0x6a
-	jr	ugt, 0x6c
-	jr	pl, 0x6e
-	jr	nc, 0x70
-	jrl	lt, 0x7372
-	jrl	ov, 0x7675
-	jrl	c, 0x2320
-.LDSR_9ab8:
-	pushw iz                                ; push IZ
-	pushw iy                                ; push IY
-	pushw ix                                ; push IX
-	push xhl
-	push xde
-	pop xsp                                 ; pop XSP
-	jrl	f, 0x726f
-	jrl	ov, 0x6f75
-	jr	ge, 0x72
-	jrl	mi, 0x6f74
-	jr	ge, 0x75
-	jrl	le, 0x5574
-	.byte 0x50
-	popw sp
-	.byte 0x54, 0x52, 0x55
-	popw de                                 ; pop DE
-	.byte 0x52                             ; db
-	popw iz                                 ; pop IZ
-	ld	xsp, 0x55495245
-	.byte 0x54                             ; db
-	.byte 0x37, 0x34, 0x35                 ; ld SP,0x3534
-	.byte 0x37, 0x38, 0x39                 ; ld SP,0x3938
-	ldw	wa, 0x5643
-	popw iz                                 ; pop IZ
-	ld	xde, 0x3e37b6bf
+	; The 148 lines this replaces (through the old `ld xde, 0x3e37b6bf`) were NOT code:
+	; llvm-mc's disassembler happened to find a valid TLCS900 encoding in every one of these
+	; 309 bytes, chained by internal .LDSR_9a18/25/46/49/ab8 jr/jrl targets that referenced
+	; nothing outside this span -- a self-contained illusion of code. The bytes are the
+	; firmware's own version-info block plus a charset/reference-digit table, confirmed
+	; directly against original_ROMs/hd-ae5000_v2_06i.ic4 at 0x2999B2-0x299AE6 (309 bytes).
+	; Real code resumes at 0x299AE7; the old fake `ld xde,...` opcode byte (0x42, the 'B' of
+	; "CVNB" here) had swallowed the first real instruction's bytes with it, so the true next
+	; two instructions are given explicitly below and match ROM bytes 0x299AE7-0x299AEA.
+	.ascii "Technics Software section    M. Kitajima"
+	.ascii "2.33J                   "
+	.ascii "2.21                    "
+	.ascii "TECHNICS KN5000                                 "
+	.ascii "Juli-Oktober 1996XXXXXXXX"
+	.byte 0x1b, 0x1c, 0x1f
+	.ascii "\"VE \""
+	.ascii "E12345678910111213141516171819202122232425ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw #.-,;:_portuoirutoiurtUPOTRUJRNGERIUT7457890CVNB"
+	lda xsp, (xsp - 74)
+	push xiz
 	ldw (xsp + 0x04), 0
 	jrl t, .LDSR_a3b7                      ; [78 c4 08] jrl T,0x29a3b7
 .LDSR_9af3:
