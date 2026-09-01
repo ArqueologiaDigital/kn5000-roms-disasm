@@ -1,6 +1,27 @@
 #!/usr/bin/env python3
 """Is the SOUND SUBSYSTEM code fully disassembled, in both machines?
 
+★★ FOR THE KN5000 THIS TOOL IS SUPERSEDED, AND ITS ANSWER WAS WRONG THREE WAYS.
+   Use notes/sound/kn5000_sound_boundary.py, and see
+   notes/sound/FINDINGS-kn5000-sound-coverage-2026-09-01.md.  In short:
+
+   1. "Zero .incbin" IS NOT COVERAGE.  A `.byte` run is exactly as undisassembled
+      as an `.incbin` and passes that test.  The v1.42 sub-CPU payload held 8,496
+      bytes of sound code framed as `.byte`, including two runs the source itself
+      annotated "MISLABELLED, THIS IS CODE".  All of it is instructions now.
+   2. THE WAVE_RAM WINDOW BELOW IS NOT A SOUND-CHIP WINDOW.  kn5000.cpp maps
+      0x1E0000-0x1EFFFF in the sub-CPU with `.noprw()` -- a stub -- and in the
+      MAIN CPU's map that range is the battery-backed SRAM at IC21.  Every one of
+      the eight occurrences in the payload loads it as the DESTINATION of an
+      inter-CPU DMA push into that SRAM.  42 of the 49 "WAVE_RAM" sites this tool
+      reported were the sound-editor UI touching NVRAM.
+   3. A CONSTANT IS NOT AN ACCESS.  `cp xhl, 0x100000` is a float normalisation
+      constant in subcpu_fp_math.s, and a `.long 0x1e0c51c0` is a table entry.
+
+   ★ And the biggest miss is not an address at all: the busiest sound-chip line
+   in the payload is P6 bit 7 (SFR 0x18), strobed low around every tone-generator
+   address latch -- 183 times -- which no address-window scan can see.
+
 QUESTION IT ANSWERS: Felipe's goal is full disassembly coverage of every routine
 that talks to the sound chips -- the tone generator, the DSPs and the acoustic
 modelling LSI -- in the KN5000 and the SX-WSA1R.  Semantics are optional; COVERAGE
@@ -96,13 +117,18 @@ WSA  = os.path.join(KN, "wsa1")
 
 # (name, first, last, what it is).  Sources: kn5000.cpp subcpu_map, wsa1.cpp cpu2_map.
 MACHINES = {
+    # ⚠ v10/maincpu/audio IS SCANNED WITH THE SUB-CPU'S WINDOW LIST AND THAT IS
+    # WRONG -- the main CPU has no window on any sound chip; it reaches the tone
+    # generator only through the IC22/IC23 latch pair at 0x140000.  Left in place
+    # so the figures this tool has already published stay reproducible; do not
+    # read its KN5000 rows as coverage.
     "kn5000": dict(root=KN, dirs=["v142", "subcpu", "v10/maincpu/audio"], windows=[
         ("TG_ADDR",   0x100000, 0x100001, "tone generator: register-address latch (w) / active-voice bitmap (r)"),
         ("TG_DATA",   0x100002, 0x100003, "tone generator: register data"),
         ("TG_KBD",    0x110000, 0x110003, "tone generator: keybed data and status"),
         ("DSP_ADDR",  0x130000, 0x130001, "DSP: register address"),
         ("DSP_DATA",  0x130002, 0x130003, "DSP: register data"),
-        ("WAVE_RAM",  0x1E0000, 0x1EFFFF, "waveform / sample RAM"),
+        ("WAVE_RAM",  0x1E0000, 0x1EFFFF, "⚠ NOT A SOUND CHIP -- IC21 battery SRAM; see the header"),
     ]),
     # ⚠ AMENDED 2026-09-01 (lane S2).  This list was SHORT BY TWO DEVICES and one
     # whole transport, and the completeness figure computed over it was therefore
