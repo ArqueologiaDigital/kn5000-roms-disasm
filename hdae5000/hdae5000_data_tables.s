@@ -6194,8 +6194,12 @@ HDAE5000_RECORD_TABLE:	; 0x29C0AA
 
 HDAE5000_RECORD_COUNT:	; 0x29D97E
 	; Record count data
-	.byte 0x0d
-	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+	.byte 0x0d, 0x00                       ; u16 count = 13 (LE); matches HDAE5000_RECORD_TABLE's 13
+	                                       ; records and the 13 UI class procedures/names
+	                                       ; hdae5000_init_data.s documents at 0x2f97fa/0x2f9832.
+	                                       ; hd-ae5000_v2_06i.s:310 `ldw_da xwa, (0x29d97e)` reads
+	                                       ; this exact word -- NOT alignment padding, real data;
+	                                       ; it also happens to word-align the string pool below.
 	.asciz "EV_DrawFDText"
 	.asciz "EV_InitFDFileSelect"
 	.asciz "EV_Scrollline"
@@ -6265,7 +6269,8 @@ HDAE5000_RECORD_COUNT:	; 0x29D97E
 	.asciz "DbMemoClProc"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SelectListProc"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad to the pool boundary 0x29DC12 (see the
+	                                       ; "HD-AE5000 UI OBJECT DESCRIPTOR POOL" header just below)
 
 ; =============================================================================
 ; HD-AE5000 UI OBJECT DESCRIPTOR POOL  (0x29DC12 - 0x2A5D2B, 33,050 bytes)
