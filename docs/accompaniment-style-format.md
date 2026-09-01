@@ -250,6 +250,43 @@ is in the hundreds.
 The payload is 249 bytes, not 250. Byte 0xFF of every cell is a second 0x87 marker, and reading it
 as payload injects one bogus status per cell.
 
+## A second cell marker (2026-09-01)
+
+Lane CUST's byte-debt measurement found that "RAW" (undecoded hex-dump) blocks in the exported
+`.styles` listings were not uniformly erased/zero filler: 816 of them, across all four banks, are
+shaped exactly like a cell -- `byte[5]==0x87`, `byte[255]==0x87` -- but carry **`byte[0]==0x00`**
+where a chain cell carries `0x80`. `cells_of()` required `0x80` and so filed all 816 as
+undifferentiated hex.
+
+Every one of the 816 has `prev=next=0xFFFF` (a trivial, unlinked, single-block "chain"), and
+**813 of 816 decode with ZERO malformed events** under the unchanged event grammar. More: 811 of
+the 816 are **one single 256-byte block, byte-for-byte identical**, repeated in every section --
+an ascending eight-note run (`NOTE` 0x30..0x37, one `BEAT` after each, then `END`, then zero PAD
+to the block boundary). Section_3_4 and section_5_6 are each 100% this one template; section_0
+and section_1_2 carry a handful of near-variants alongside it. [INFERENCE, not established] a
+factory-blank template slot is a plausible reading of `byte[0]==0x00` -- a chromatic run is a
+recognisable factory test/calibration pattern -- but nothing in the firmware has been traced to
+confirm what writes or reads it, so this stays a guess about MEANING, not a claim.
+
+`cells_of()` in `scripts/build/style_events.py` now accepts `byte[0] in (0x80, 0x00)` (with the
+`byte[255]==0x87` check added for both, proven not to exclude any of the original 1564 cells
+first). The `export()` decode loop was made to fall back to an honest `PAD` dump instead of
+crashing on an unrecognised status, for the 3 of 816 that don't decode cleanly. Round trip
+reproved exact (`style_events.py verify`) after the change. This moved 208,896 bytes from
+undifferentiated hex to decoded, typed event data with no byte-for-byte change to any ROM output.
+
+A **third**, smaller anomaly, found while checking the arithmetic: at a FIXED offset (source
+offset `+0x1300` relative to each section's own "H.K." magic, i.e. block 0x13, the block
+immediately before the first 256-aligned cell) there sits a **misaligned** pseudo-cell -- the same
+6-byte header/trailer shape (`80 FF FF FF FF 87 ... 87`) but NOT on a 256-byte boundary (it starts
+64 bytes before the aligned cell grid begins), holding seven `BEAT`s and an `END`. It is
+byte-identical across all seven occurrences (one per HK-announced sub-section, 7 x 256 B = 1,792
+B including its zero padding). Because `cells_of()` only ever tests 256-byte-aligned offsets, this
+one is NOT picked up by the fix above, and is reported as the genuine UNCLASSIFIED remainder by
+`scripts/lanes/measure_lane_cust_ic19_debt.py` -- honestly, rather than silently absorbed by
+relaxing the alignment check (which would also start matching inside ordinary cell payloads).
+Reproduce: run the measurement script; the seven offsets it prints are exactly these blocks.
+
 ## What is still missing
 
 1. ~~The cell pointer encoding~~ **SOLVED 2026-08-21** -- prev/next, section nibble plus a
@@ -260,6 +297,7 @@ as payload injects one bogus status per cell.
    semantic gap, and it no longer blocks reading the data -- only interpreting those events.
 3. **The 96-byte directory record**, beyond the name.
 4. **Which chain belongs to which style**, and how a style's parts/variations map onto chains.
+5. **The 0x00-marker cell's meaning** (§ above) and the 7 misaligned pseudo-cells at `+0x1300`.
 
 ## What NOT to do
 
