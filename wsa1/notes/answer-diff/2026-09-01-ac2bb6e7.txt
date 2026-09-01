@@ -1,0 +1,78 @@
+probe_answer_diff.py --before fe5d8636 --after ac2bb6e7
+=========================================================================
+WHAT THIS ANSWERS
+  Did sharing the DSP channel-register driver between the two WSA1 CPUs
+  change what any probe in the tree SAYS?  The sweep runs every probe at
+  both revisions and reports the ones whose answer moved.
+
+REPRODUCE
+  cd wsa1 && python3 notes/probe_answer_diff.py --before fe5d8636 --after ac2bb6e7
+
+⚠ WHICH REVISION THIS IS.  ac2bb6e7, which is TWO COMMITS BEHIND the
+  branch tip abd95602.  Those two commits touch comments in
+  dsp/dsp_channel_regs.s and the join probe, plus a reachability
+  selftest, so the comment-COUNTING probes below can shift by a few
+  lines against the tip.  A tip run is captured separately; do not quote
+  this file as if it were the tip.
+
+HOW THE 26 WERE ADJUDICATED (each run individually at both revisions,
+against a same-revision null):
+  2  real defects, since fixed -- prom_a_f85ff9_verify (an ordinary
+     `ret` at 0xF85FF8 read as not an instruction boundary) and
+     prom_a_audit_callsites (FOUR DSP CALL SITES ATTRIBUTED TO THE
+     WRONG ROUTINE, PanelTask_EntryVectors at 0xF86000 -- a wrong
+     answer, not a missing one; it predates this lane)
+  1  caused by the merge and fixed -- prom_c_header_audit tier C, now 0
+  1  pin artefact, footnoted -- prom_c_probe_health
+  1  path-only noise on a pre-existing traceback -- gen_prom_b_cover_round1
+ 21  counting shifts: 97 instruction lines left prom_a's single-address
+     dialect for the shared dual-address shape
+
+⚠ STILL OPEN, AND OLDER THAN THIS LANE: since the kernel merge, 941 of
+  prom_a's proven instructions are invisible to prom_a_f85ff9_layout.py
+  and corpus_bytes; these 97 make 1,038.  The dossier comparison is red
+  on both sides either way (-6 runs / -226 bytes).
+=========================================================================
+
+301 probe(s) present in BOTH revisions
+  new in HEAD: notes/sound/wsa1_dsp_join_probe.py
+  ★ DIFFERS  notes/asm_source.py
+  ★ DIFFERS  notes/gen_prom_a_f96018_module.py
+    ... 25/301
+  ★ DIFFERS  notes/gen_prom_b_cover_round1.py
+    ... 50/301
+    ... 75/301
+  ★ DIFFERS  notes/prom_a_audit_callsites.py
+  ★ DIFFERS  notes/prom_a_evidence_census.py
+  ★ DIFFERS  notes/prom_a_f85ff9_verify.py
+    ... 100/301
+  ★ DIFFERS  notes/prom_a_header_depth.py
+  ★ DIFFERS  notes/prom_a_preservation_check.py
+    ... 125/301
+    ... 150/301
+    ... 175/301
+  ★ DIFFERS  notes/prom_b_sc1_serial_regs.py
+    ... 200/301
+  ★ DIFFERS  notes/prom_c_frontier_src.py
+  ★ DIFFERS  notes/prom_c_header_audit.py
+  ★ DIFFERS  notes/prom_c_inventory_round8.py
+    ... 225/301
+  ★ DIFFERS  notes/prom_c_naming_round3.py
+  ★ DIFFERS  notes/prom_c_probe_health.py
+  ★ DIFFERS  notes/prom_c_prose_citation_check.py
+  ★ DIFFERS  notes/prom_c_record68_round10.py
+  ★ DIFFERS  notes/prom_c_understanding_round4.py
+  ★ DIFFERS  notes/prom_c_understanding_round5.py
+    ... 250/301
+  ★ DIFFERS  notes/reachability.py
+    ... 275/301
+  ★ DIFFERS  notes/verify_a1_independent_check.py
+  ★ DIFFERS  notes/verify_a2_independent_check.py
+  ★ DIFFERS  notes/wave7_doc_audit.py
+  ★ DIFFERS  notes/wave7_documentation_metrics.py
+  ★ DIFFERS  notes/wave7_frontier_table.py
+  ★ DIFFERS  notes/wave7_round9_review_wb_prom_b.py
+  ★ DIFFERS  notes/wave7_xref_mn10300_family.py
+    ... 300/301
+
+26 of 301 probe(s) changed their answer.
