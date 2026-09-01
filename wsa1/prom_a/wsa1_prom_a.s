@@ -100513,6 +100513,32 @@ sub_FC25BF:
 ; 0xFC3000-0xFC3FFF -- 4096 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
 	.fill 4096, 1, 0x0E
+; ---------------------------------------------------------------------
+; 0xFC4000-0xFC52F7 -- DSP-effect / SOUND EDIT parameter-label text, NOT
+; converted: nothing in this tree's control-flow graph reaches it
+;
+; Read by: NOT ESTABLISHED. notes/reachability.py reports ZERO reachable bytes
+;          in this span (no seed, no branch, no fallthrough names any address
+;          inside it) -- so unlike the 0xFA15CC span below, there is not even
+;          WEAK evidence to frame a decode from.
+; Evidence: notes/prom_a_fc40f4_strings_scan.py finds 95 printable-ASCII runs
+;          (887 of 4,856 bytes) and all 12 of a checked DSP-effect-parameter
+;          vocabulary -- DEPTH, SPEED, DETUNE, DELAY, BALANCE, WAVE, REVERB,
+;          TYPE, INTENSITY, KEY SHIFT, DIGITAL EFFECT, SOUND EDIT -- which is
+;          the byte-level confirmation of the one-line claim in
+;          notes/FINDINGS-prom_a-for-the-mame-driver.md ("DSP EFFECT / SOUND
+;          EDIT at 0xFC40F4"). This reads as the label table for the DSP
+;          effect edit screen (REVERB DEPTH/SPEED/DETUNE/DELAY/BALANCE, plus
+;          per-effect-type variants DEPTH1/SPEED1/DEPTH2/SPEED2/...).
+; Unknown: the record framing around each string (fixed-width field? a
+;          pointer/length header per label, the way the 0xFA1F00 SYSTEM-menu
+;          display lists are framed in FINDINGS-prom_a-round3-modules.md §4?).
+;          Nothing here answers that, so typing this as .byte would claim a
+;          framing that is not established -- left `.incbin`, same call as
+;          the 0xFA15CC span below and for the same reason: converting a
+;          text/table region half-framed ships a plausible-looking wrong
+;          extent, which is exactly what this tree exists to avoid.
+; ---------------------------------------------------------------------
 	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x044000, 0x0012F8
 ; 0xFC52F8-0xFC53FF -- 264 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
