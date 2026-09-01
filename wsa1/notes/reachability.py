@@ -98,7 +98,21 @@ WEAK = ("immediate", "pointer_table")
 # falls on, so a converting lane never has to guess.
 
 LINE = re.compile(r'^\s*([0-9a-f]{6}):\s+((?:[0-9a-f]{2} )+)\s*(.*)$')
-FLOW_END = re.compile(r'^\s*(ret|reti|retd|jp\s|jr\s+0x|halt|swi)', re.I)
+# ★ FIXED 2026-09-01 (lane PROMC, notes/prom_c_true_debt.py's cross-check found
+# it). unidasm ALWAYS spells a TLCS-900 jp/jr/jrl with an explicit condition --
+# `jp T,XWA` for a register-indirect jump, `jr Z,0xaddr` for a conditional one --
+# so `jp\s` matched EVERY jp regardless of condition (wrongly ending the walk at
+# a CONDITIONAL jp, e.g. the tree's own `jp C,`/`jp UGT,` sites, hiding their
+# fallthrough), while `jr\s+0x` never matched at all, because a bare `jr 0x...`
+# with no condition does not occur in this dialect: every `jr`/`jrl`, including
+# the UNCONDITIONAL ones, is written `jr T,0xaddr` -- so the walk never stopped
+# after ANY short jump and kept decoding into whatever followed as if it were
+# more code. That is exactly how the old (and already-corrected in the .s text)
+# misreading of kernel.s's SoftTimer_Request_Boot record happened: a `jr T,`
+# stepping over 8 bytes of inline data got walked straight through. The fix is
+# symmetric: T (true = always) ends the flow for both mnemonics; every other
+# condition does not, because its fallthrough executes too.
+FLOW_END = re.compile(r'^\s*(ret|reti|retd|halt|swi|jrl?\s+T\s*,|jp\s+T\s*,)', re.I)
 BRANCH = re.compile(r'\b(?:jr|jp|call|calr)\b[^;]*?0x([0-9a-f]{6})', re.I)
 
 
