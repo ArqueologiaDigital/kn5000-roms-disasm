@@ -25,13 +25,16 @@ Every commit must keep the gate green, and every commit message must carry the
 | `prom_c/` | `wsa1_prom_c.ic28` | `0xF80000` **established** | program, boot image of CPU 2 |
 | `prom_d/` | `wsa1_prom_d.bin` | `0x00F00000` (CPU 2) | the tone database; data only |
 
-## The fifth source, which is not an image
+## The sources that are not images
 
 | source | included by | contents |
 |---|---|---|
 | `kernel/kernel.s` | `prom_a` **and** `prom_c` | the multitasking kernel both CPUs run |
 | `kernel/kernel_maincpu.inc` | `prom_a` | the 21 values that are CPU 1's |
 | `kernel/kernel_subcpu.inc` | `prom_c` | the same 21 values for CPU 2 |
+| `dsp/dsp_channel_regs.s` | `prom_a` **and** `prom_c` | the DSP channel-register driver both CPUs run |
+| `dsp/dsp_channel_regs_maincpu.inc` | `prom_a` | the ONE value that is CPU 1's |
+| `dsp/dsp_channel_regs_subcpu.inc` | `prom_c` | the same one value for CPU 2 |
 
 The two processors run **the same 2,180-byte kernel**, at `0xF85606` on CPU 1 and
 `0xF9816B` on CPU 2 — every pair of addresses differing by exactly `0x12B65`. It
@@ -48,6 +51,20 @@ single equate were wrong, both images would stop rebuilding.
     python3 notes/kernel_join_probe.py --selftest  # + proves the merge lost nothing
     python3 notes/kernel_join_probe.py --metrics   # header/label figures, before and after
     python3 notes/kernel_join_probe.py --reachability  # coverage tool's inputs, before and after
+
+### And the same thing again, at 234 bytes
+
+The two processors also run **the same DSP channel-register driver**, at
+`0xF85F0F` on CPU 1 and `0xF98000` on CPU 2 — every pair of addresses differing
+by exactly `0x120F1`. 231 of its 234 bytes are the same byte in the two EPROMs,
+and the three that differ are A23..A16 of the register file's address, `0x7F`
+against `0xE0`. So there is exactly **one** per-CPU value in the whole driver,
+`DSP_REGS_BASE`, used at three sites — and no `.if` anywhere, as in the kernel.
+
+    python3 notes/sound/wsa1_dsp_join_probe.py           # 231 of 234, from the ROMs alone
+    python3 notes/sound/wsa1_dsp_join_probe.py --pairs   # the 97 instruction pairs
+    python3 notes/sound/wsa1_dsp_join_probe.py --verify  # + proves the merge lost nothing
+    python3 notes/sound/wsa1_dsp_join_probe.py --images  # what each image's text gained
 
 ⚠ Its lines carry **both** images' addresses — `; F85788/F982ED` — which is a
 line shape no `prom_*.s` file uses. **Any tool that scans a source by address has
