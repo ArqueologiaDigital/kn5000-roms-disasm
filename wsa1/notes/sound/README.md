@@ -36,6 +36,28 @@ data tables, three bytes of a font decode as readily as three bytes of code, and
 the byte gate cannot tell the difference — the bytes would be identical either
 way.
 
+## Reading `wsa1_unspellable_forms.py`'s output
+
+The headline is the last line: **sites with no spelling, and how many of them
+are inside a sound routine.** The second number is the one the
+sound-disassembly goal is about, and on 2026-09-01 it reached **0** in all three
+code images. What remains is 286 sites / 1,268 bytes / 94 forms, all in prom_a.
+
+⚠ **Those 286 are not 286 backend gaps.** A site is listed when neither spelling
+route produced its bytes, and the per-form line says which failed and how:
+
+| what the line says | what it means | who fixes it |
+|---|---|---|
+| `did not assemble` | the syntax is not what llvm-mc wants (`ex bc,qbc`, `srl a,c`) | mostly a translation job; sometimes a real gap |
+| `assembles to <other bytes>` | llvm-mc has an encoding and picks a different one — the big class is the 16-bit-address memory operand, 26 sites of `or (0x2134),0x0002`, which `f29a4827693f` made writable as `or (0x2134:16), 0x0002` | a conversion job, not a backend one |
+| `PC-relative, so its rendering cannot be typed verbatim` | 12 `jr` / `calr` / `djnz` sites that need a LABEL, not an address literal | a converter that resolves targets |
+
+Three classes are rejected before being counted, each named with its count in
+the report: bare-address comments (5,143 prom_a lines — data tables), bytes
+unidasm itself renders `db` (24 — `80 0f` is an opcode the CPU does not have,
+not one the assembler cannot write), and comments that copy that `db` marker
+where a byte echo belongs (7 in prom_b).
+
 ## What makes these measurements rather than greps
 
 * **The framing authority is the committed MAME unidasm listing**
