@@ -173,6 +173,8 @@ try:
     with open(os.environ["GIT_AUDIT_LOG"], "a") as fh:
         fh.write(json.dumps({"argv": sys.argv[1:], "cwd": os.getcwd(),
                              "rc": r.returncode, "out": len(r.stdout),
+                             "expect_fail": os.environ.get(
+                                 "GIT_AUDIT_EXPECT_FAIL") == "1",
                              "err": r.stderr.decode("utf-8", "replace")[:200]})
                  + "\\n")
 except OSError:
