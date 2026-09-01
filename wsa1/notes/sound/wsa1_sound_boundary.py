@@ -72,6 +72,7 @@ RUN
     python3 notes/sound/wsa1_sound_boundary.py --windows      # window completeness
     python3 notes/sound/wsa1_sound_boundary.py --routines     # per-routine coverage
     python3 notes/sound/wsa1_sound_boundary.py --stream 0x10C000   # select/data order
+    python3 notes/sound/wsa1_sound_boundary.py --stream 0x10C000 --routine Dev10C_WriteGlobalRegs
     python3 notes/sound/wsa1_sound_boundary.py --p7          # the DSP transport
     python3 notes/sound/wsa1_sound_boundary.py --values      # what is written
     python3 notes/sound/wsa1_sound_boundary.py --selftest
@@ -502,7 +503,7 @@ def report_routines(data):
     return bad
 
 
-def report_stream(data, base):
+def report_stream(data, base, only=None):
     """Select/data pairs IN EXECUTION ORDER -- never zipped from two lists.
 
     ⚠ notes/FINDINGS-prom_c-tone-generator.md §3 records a retraction caused by
@@ -519,6 +520,8 @@ def report_stream(data, base):
         last = None
         for a in d["acc"]:
             if a.base != base:
+                continue
+            if only and only not in a.label:
                 continue
             if a.label != last:
                 print("\n  --- %s / %s ---" % (image, a.label))
@@ -747,7 +750,8 @@ def main():
         report_values(data)
     elif "--stream" in args:
         base = int(args[args.index("--stream") + 1], 16)
-        report_stream(data, base)
+        only = args[args.index("--routine") + 1] if "--routine" in args else None
+        report_stream(data, base, only)
     else:
         report_registers(data)
 

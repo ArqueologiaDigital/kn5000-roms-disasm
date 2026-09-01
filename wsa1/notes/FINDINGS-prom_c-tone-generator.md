@@ -402,9 +402,19 @@ its internal pointers relocated.  ~~**Left for a later pass**~~ **DONE 2026-08-2
   ⚠ Half-closed no longer: **four registers were named in round 7** — `0x0400` pitch,
   `0x0080` output level, `0x0040` the key-zone word, and `0x0800`/`0x0840`'s quiescent pair.
   Seventeen still have no meaning.  `notes/FINDINGS-prom_c-dev10c-register-meanings.md`.
-* `0xFA68FC` is the only READ of 0x0010C000 located so far.  What it reads back
-  (register number is a byte from 0x0087CF, multiplied by 2 afterwards) would name at least one
-  register.
+* ~~`0xFA68FC` is the only READ of 0x0010C000 located so far.~~  **CORRECTED
+  2026-09-01: there are TWO, and a census that follows base registers finds both
+  independently** (`python3 notes/sound/wsa1_sound_boundary.py --stream 0x10C000`,
+  which reports `+0x04` as 2 reads and 0 writes across 2 routines).
+  * `Dev10C_PollBankAndRetire` `0xFA68FC` — selects at 0xFA6901, reads `+0x04` at
+    0xFA690A.  Its register number is a byte from 0x0087CF, multiplied by 2
+    afterwards, so what it reads back would name at least one register.
+  * `Dev10C_ReadChanReg_0100` `0xFC7E57` — named in round 7 and described in
+    `prom_c/field_accessors.s`, which already called it *"the SECOND read site in
+    the whole image"*; this line was simply never updated.  `add HL,0x0100` forms
+    the selector and `ld BC,(XIX+0x04)` at 0xFC7E6F reads.  So **register
+    `chan + 0x0100` is READABLE**, which the sibling map calls TVF cutoff.
+  Full account: `notes/FINDINGS-sound-subsystem-boundary.md` §4.4.
 * ~~The five blocks the first bank never touches (0x0040, 0x0080, 0x0480, 0x05C0, 0x0640) and
   the unmatched 27 sites in `--unmatched` are the remaining 0x0010C000 surface.~~
   **PARTLY DONE 2026-08-25.** Most of the 27 unmatched sites are inside
