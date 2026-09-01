@@ -105,9 +105,32 @@ where a byte echo belongs (7 in prom_b).
 tone-database sources, by directive class — and is an unstructured dump
 hiding inside what looks like per-record source?
 
-    python3 wsa1/notes/sound/prom_d_debt_probe.py
+    python3 wsa1/notes/sound/prom_d_debt_probe.py             # the report
+    python3 wsa1/notes/sound/prom_d_debt_probe.py --selftest  # 4 invariants
 
 Label density is the discriminating measure, not the byte total: a raw blob
 spelled in `.byte` accounts for its bytes just as well as a real record table
 does, but only the record table carries labels at record boundaries. Spans
-longer than 512 bytes are reported as leads, not verdicts.
+longer than 512 bytes are reported as leads, not verdicts; every one of the 23
+in prom_d resolves to a single-purpose, single-directive-type table (an index
+map, a name list, the drawbar pool, or the erased tail) rather than a mixed
+undifferentiated dump.
+
+★ FIXED 2026-09-01 (PROMD lane). The first committed version's accumulator
+read `total.get(d, 0)` (the raw directive name) but wrote `total[resolved_key]`
+(the bucket name) — for any directive not literally named `byte`/`ascii`/
+`word`/`long`/`fill`, the two disagreed, so every new `.short` line
+**overwrote** the `other` bucket instead of adding to it. Only the last
+`.short` line's 2 bytes survived, understating the total by the `.short`
+class's full 40,010 B and making the three files look 40,008 B short of the
+image. Rewritten to key one dict by the actual directive name throughout, so
+a read and a write of the same entry can never use different keys. Current
+result: the three files account for prom_d's 524,288 bytes **exactly** — 0
+unexplained, 0 unknown directives, 0 `.incbin`.
+
+⚠ **Read the result by class, never as one "coverage" number.** 193,767 of
+those bytes (37.0%) are the single trailing `.fill 0x2F4E7, 1, 0xFF` — real,
+correct, but erased flash, not decoded content. The other 330,521 bytes
+(63.0%) are actual typed content (`.byte` 258,838 / `.short` 40,010 / `.ascii`
+30,385 / `.long` 1,288). The report prints fill on its own row for exactly
+this reason.
