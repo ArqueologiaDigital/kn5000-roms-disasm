@@ -1,0 +1,11 @@
+
+=== prom_c  REGRADE 5 invocation(s) that were not green ===
+    ... 20/20 runs
+    LOUD          (was LOUD         ) notes/verify_a1_independent_check.py
+    LOUD          (was LOUD         ) notes/wave7_doc_audit.py
+    LOUD          (was LOUD         ) notes/wave7_doc_audit.py --quiet
+  ✔ UNAFFECTED    (was TIMEOUT      ) notes/gen_prom_c_block.py --start 0xF9A050 --end 0xFA5949
+  ✔ UNAFFECTED    (was TIMEOUT      ) notes/gen_prom_c_block_headers.py --start 0xF9A050 --end 0xFA5949
+  2 of 5 came back green
+
+wrote /home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/notes/probe-health-gitpath-2026-09-01/regrade-prom_c.json

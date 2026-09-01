@@ -1,0 +1,30 @@
+prom_b: baseline has 189 invocation(s); 23 belong to the 30 touched script(s)
+  NOT IN BASELINE (this lane touched them, the baseline never ran them): 18
+      notes/audit_wave5_checks.py
+      notes/gen_prom_a_cover_round1.py
+      notes/gen_prom_a_cover_round2.py
+      notes/git-path-migration-2026-09-01/mkresult.py
+      notes/git_path_audit.py
+      notes/kernel_join_probe.py
+      notes/overlay-review/cpu2_timer1_rate.py
+      notes/overlay-review/hang_trap_reachability.py
+      notes/overlay-review/p6_bit5_census.py
+      notes/prom_a_fa5aeb_layout.py
+      notes/prom_a_frontier_delta.py
+      notes/prom_a_naming_wave8_apply.py
+      notes/prom_c_probe_health.py
+      notes/prom_c_split.py
+      notes/verify_a1_independent_check.py
+      notes/wave7-verify-probes/wave7_r3_citation_check.py
+      notes/wave7-verify-probes/wave7_r3_promc_refute.py
+      notes/wave7-verify-probes/wave7_r9_promc_citation_check.py
+    ... 25/92 runs
+    ... 50/92 runs
+    ... 75/92 runs
+    ... 92/92 runs
+
+  ★ REGRESSED (green -> non-green): 0
+  IMPROVED (non-green -> green):   0
+  unchanged in kind: 23
+
+wrote /home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/notes/probe-health-gitpath-2026-09-01/touched-prom_b.json

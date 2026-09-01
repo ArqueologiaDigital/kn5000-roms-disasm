@@ -1,0 +1,269 @@
+{
+ "prom_a": {
+  "rows": [
+   {
+    "argv": [
+     "notes/asm_source.py"
+    ],
+    "grade": "BY-DESIGN",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/asm_source.py",
+     "--selftest"
+    ],
+    "grade": "BY-DESIGN",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/audit_wave5_checks.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/audit_wave5_checks.py",
+     "--coverage"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_a_cover_round1.py",
+     "--after"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/gen_prom_a_cover_round1.py",
+     "--layout"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/gen_prom_a_cover_round2.py",
+     "--after"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/gen_prom_a_cover_round2.py",
+     "--dropped"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/gen_prom_b_cover_round2.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/gen_prom_b_cover_round2.py",
+     "--closure"
+    ],
+    "grade": "SPLIT-FRAGILE",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/kernel_join_probe.py",
+     "--pairs"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/kernel_join_probe.py",
+     "--symbols"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/maincpu_join_probe.py",
+     "--callers",
+     "--nearest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/maincpu_join_probe.py",
+     "--collisions",
+     "--callers",
+     "--nearest"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_f85ff9_layout.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_f85ff9_layout.py",
+     "--null"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_fa5aeb_layout.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_fa5aeb_layout.py",
+     "--barrier"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_fad800_layout.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_fad800_layout.py",
+     "--accepted"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_frontier_delta.py"
+    ],
+    "grade": "SPLIT-FRAGILE",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_frontier_delta.py",
+     "--rev"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/prom_a_naming_wave8_apply.py",
+     "--plan"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/prom_a_naming_wave8_apply.py",
+     "--screens"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/promb_macro_rewrite.py",
+     "--census"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/promb_macro_rewrite.py",
+     "--unused"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/verify_a1_independent_check.py"
+    ],
+    "grade": "LOUD",
+    "asis_rc": 1,
+    "asis_fails": true
+   },
+   {
+    "argv": [
+     "notes/wave7-verify-probes/wave7_r3_citation_check.py"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_round9_review_wb_prom_b.py"
+    ],
+    "grade": "VACUOUS",
+    "asis_rc": 0,
+    "asis_fails": false
+   },
+   {
+    "argv": [
+     "notes/wave7_round9_review_wb_prom_b.py",
+     "--zeros"
+    ],
+    "grade": "UNAFFECTED",
+    "asis_rc": 0,
+    "asis_fails": false
+   }
+  ]
+ }
+}

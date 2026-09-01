@@ -1,11 +1,9 @@
-=== prom_c vs notes/probe-health-baseline-2026-08-30/prom_c-prom_d.json ===
+=== prom_c : notes/probe-health-baseline-2026-08-30/prom_c-prom_d.json  vs  ph-prom_c-regraded.json ===
 base: 135 invocations, 87 green, 48 non-green   LOUD=29 UNAFFECTED=87 VACUOUS=18 WRITER=1
-new : 137 invocations, 132 green, 5 non-green   BY-DESIGN=10 LOUD=3 TIMEOUT=2 UNAFFECTED=122
+new : 137 invocations, 134 green, 3 non-green   BY-DESIGN=10 LOUD=3 UNAFFECTED=124
 
 in both runs: 133
-  ★ REGRESSED (green -> non-green): 2
-      UNAFFECTED     -> TIMEOUT        notes/gen_prom_c_block.py --start 0xF9A050 --end 0xFA5949
-      UNAFFECTED     -> TIMEOUT        notes/gen_prom_c_block_headers.py --start 0xF9A050 --end 0xFA5949
+  ★ REGRESSED (green -> non-green): 0
   IMPROVED (non-green -> green):   44
       VACUOUS        -> BY-DESIGN      notes/asm_source.py
       VACUOUS        -> BY-DESIGN      notes/asm_source.py --selftest
@@ -65,7 +63,7 @@ GONE since base:  2
       UNAFFECTED     notes/migrate_listing_readers.py
       VACUOUS        notes/prom_c_image.py --selftest
 
-=== prom_d vs notes/probe-health-baseline-2026-08-30/prom_c-prom_d.json ===
+=== prom_d : notes/probe-health-baseline-2026-08-30/prom_c-prom_d.json  vs  ph-prom_d.json ===
 base: 49 invocations, 38 green, 11 non-green   LOUD=5 UNAFFECTED=38 VACUOUS=4 WRITER=2
 new : 51 invocations, 47 green, 4 non-green   BY-DESIGN=8 LOUD=3 UNAFFECTED=39 WRITER=1
 
