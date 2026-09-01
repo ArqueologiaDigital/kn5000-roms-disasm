@@ -153,8 +153,11 @@ WRITE_FLAGS = {"--apply", "--emit", "--emit68", "--write", "--rewrite", "--splic
 # MEASURES IS NOT AN INSTRUMENT.  So every source directory in every tree is made
 # READ-ONLY before anything runs.  A writer now fails identically in all four
 # trees and is reported as WRITER instead of silently poisoning its neighbours.
-FROZEN_DIRS = ("prom_a", "prom_b", "prom_c", "prom_d", "kernel", "include",
-               "maincpu", "original_ROMs")
+# ⚠ EVERY SOURCE DIRECTORY, and "every" now includes dsp/ -- the DSP channel-
+# register driver became a second shared source on 2026-09-01.  A directory
+# missing from this list is one a writer can still poison.
+FROZEN_DIRS = ("prom_a", "prom_b", "prom_c", "prom_d", "kernel", "dsp",
+               "include", "maincpu", "original_ROMs")
 PERM_DENIED = re.compile(r"Permission denied|PermissionError")
 
 # ★ TOOLS WHOSE SUBJECT IS THE LAYOUT ITSELF.  asm_source prints how many files
