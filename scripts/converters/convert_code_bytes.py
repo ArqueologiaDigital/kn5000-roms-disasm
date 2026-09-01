@@ -305,13 +305,17 @@ def unidasm_to_llvm(mnemonic, raw_bytes, offset, nbytes):
         size = {0xC1: 8, 0xD1: 16, 0xE1: 32}[prefix]
 
         # LD r, (da16)
+        # ⚠ 2026-09-01: 'ldda8'/'ldda16' were never real llvm-mc mnemonics --
+        # verify_roundtrip always failed and every hit here fell back to
+        # .byte. The real names (TLCS900InstrInfo.td LD8_da16/LD16_da16) are
+        # ldb_d8 / ldw_d16; ldda32 (32-bit) was already correct.
         if 0x20 <= subop <= 0x27:
             if size == 8:
                 r = ['w', 'a', 'b', 'c', 'd', 'e', 'h', 'l'][subop - 0x20]
-                return f'ldda8\t{r}, {addr}'
+                return f'ldb_d8\t{r}, {addr}'
             elif size == 16:
                 r = ['wa', 'bc', 'de', 'hl', 'ix', 'iy', 'iz', 'sp'][subop - 0x20]
-                return f'ldda16\t{r}, {addr}'
+                return f'ldw_d16\t{r}, {addr}'
             elif size == 32:
                 r = ['xwa', 'xbc', 'xde', 'xhl', 'xix', 'xiy', 'xiz', 'xsp'][subop - 0x20]
                 return f'ldda32\t{r}, {addr}'
@@ -374,38 +378,44 @@ def unidasm_to_llvm(mnemonic, raw_bytes, offset, nbytes):
         subop = raw_bytes[offset + 1 + addr_len]
 
         # LD (da), r8
+        # ⚠ 2026-09-01: 'st8_24'/'st16_24'/'st32_24'/'stda8'/'sti8_24'/
+        # 'sti16_24'/'ldada' were never real llvm-mc mnemonics (checked
+        # against TLCS900InstrInfo.td LD8m_da16/LD8m_da24/etc and confirmed
+        # against llvm-mc --show-encoding); every one of these branches
+        # silently fell back to .byte. stda16/stda32/lda_24 below were
+        # already correct.
         if 0x40 <= subop <= 0x47:
             r = ['w', 'a', 'b', 'c', 'd', 'e', 'h', 'l'][subop - 0x40]
             if is24:
-                return f'st8_24\t{addr}, {r}'
-            return f'stda8\t{addr}, {r}'
+                return f'stb_da\t{addr}, {r}'
+            return f'stb_d8\t{addr}, {r}'
 
         # LD (da), r16
         if 0x50 <= subop <= 0x57:
             r = ['wa', 'bc', 'de', 'hl', 'ix', 'iy', 'iz', 'sp'][subop - 0x50]
             if is24:
-                return f'st16_24\t{addr}, {r}'
+                return f'stw_da\t{addr}, {r}'
             return f'stda16\t{addr}, {r}'
 
         # LD (da), r32
         if 0x60 <= subop <= 0x67:
             r = ['xwa', 'xbc', 'xde', 'xhl', 'xix', 'xiy', 'xiz', 'xsp'][subop - 0x60]
             if is24:
-                return f'st32_24\t{addr}, {r}'
+                return f'stl_da\t{addr}, {r}'
             return f'stda32\t{addr}, {r}'
 
         # LD (da), imm8
         if subop == 0x00:
             imm = raw_bytes[offset + 2 + addr_len]
             if is24:
-                return f'sti8_24\t{addr}, {imm}'
+                return f'stib_da\t{addr}, {imm}'
             return f'stdi8\t{addr}, {imm}'
 
         # LD (da), imm16
         if subop == 0x02:
             imm = raw_bytes[offset + 2 + addr_len] | (raw_bytes[offset + 3 + addr_len] << 8)
             if is24:
-                return f'sti16_24\t{addr}, {imm}'
+                return f'stiw_da\t{addr}, {imm}'
             return f'stdi16\t{addr}, {imm}'
 
         # LDA — sub-ops 0x30-0x37 select destination register
@@ -414,7 +424,7 @@ def unidasm_to_llvm(mnemonic, raw_bytes, offset, nbytes):
             r32 = ['xwa', 'xbc', 'xde', 'xhl', 'xix', 'xiy', 'xiz', 'xsp'][r_idx]
             if is24:
                 return f'lda_24\t{r32}, {addr}'
-            return f'ldada\t{r32}, {addr}'
+            return f'lda_d16\t{r32}, {addr}'
 
     # Register prefix operations (C8-CF, D8-DF, E8-EF only — NOT D0-D7/E0-E7)
     is_reg_prefix = ((0xC8 <= prefix <= 0xCF) or
@@ -532,13 +542,30 @@ def unidasm_to_llvm(mnemonic, raw_bytes, offset, nbytes):
 
         # MUL/MULS/DIV/DIVS — not in LLVM, must remain as .byte
 
-        # Shift/Rotate by 1
-        shift_map = {
-            0xE8: 'rrc', 0xE9: 'rlc', 0xEA: 'rr', 0xEB: 'rl',
-            0xEC: 'sla', 0xED: 'sra', 0xEE: 'sll', 0xEF: 'srl',
-        }
-        if subop in shift_map:
-            return f'{shift_map[subop]}\t1, {r}'
+        # Shift/Rotate
+        # ⚠ 2026-09-01: this used to emit e.g. 'sll\t1, bc' unconditionally --
+        # operands backwards (td AsmString is "$rd, $cnt", reg first) AND a
+        # hardcoded count of 1 regardless of the real 3rd byte. It also
+        # swapped rrc/rlc and rr/rl against their real opcodes (checked
+        # against TLCS900InstrInfo.td: RLC/RRC/RL/RR are 0xE8-0xEB in that
+        # order, not 0xE8=rrc). Every hit here produced the wrong bytes and
+        # fell back to .byte. This is always a 3-byte encoding (prefix, subop,
+        # count) -- confirmed with llvm-mc: 'rlc bc' itself assembles to
+        # [.., 0xe8, 0x01], i.e. the "by 1" mnemonics are just this form with
+        # count fixed at 1. RL/RR have no variable-count form at all.
+        ROT1 = {0xE8: 'rlc', 0xE9: 'rrc', 0xEA: 'rl', 0xEB: 'rr'}
+        ROT_I = {0xE8: 'rlc_i', 0xE9: 'rrc_i'}
+        SHIFT_I = {0xEC: 'sla', 0xED: 'sra', 0xEE: 'sll', 0xEF: 'srl'}
+        if (subop in ROT1 or subop in SHIFT_I) and nbytes >= 3:
+            count = raw_bytes[offset + 2]
+            if subop in SHIFT_I:
+                return f'{SHIFT_I[subop]}\t{r}, {count}'
+            if count == 1:
+                return f'{ROT1[subop]}\t{r}'
+            if subop in ROT_I:
+                suffix = {8: '_8', 16: '_16', 32: '_32'}[sz]
+                return f'{ROT_I[subop]}{suffix}\t{r}, {count}'
+            return None  # RL/RR with count != 1 has no encoding
 
         # SWAP
         if subop == 0xF4:
