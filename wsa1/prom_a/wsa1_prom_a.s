@@ -20709,7 +20709,10 @@ sub_F8C3FB:   ; entry: prom_b routine directory
 	call 0xf40f08                                        ; F8C423  1d 08 0f f4
 .LF8C427:
 	ret                                                  ; F8C427  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C428, 0x000002
+; 0xF8C428-0xF8C429 -- 2 bytes of 0xFF (erased-flash pad) between sub_F8C3FB's
+; `ret` and sub_F8C42A.  Too short for gen_prom_a_block.py's pad_runs() (MIN_PAD
+; 32) to catch, and it is not a uniform-0x0E run either, so it is typed by hand.
+	.byte 0xff, 0xff                                     ; F8C428  ff ff
 sub_F8C42A:   ; entry: reachable-run entry
 	xor HL,HL                                            ; F8C42A  db d3
 	ld WA,(XIY)                                          ; F8C42C  95 20
@@ -37908,7 +37911,35 @@ sub_F96257:   ; entry: prom_b routine directory
 	ret                                                  ; F96257  0e
 sub_F96258:   ; entry: prom_b routine directory
 	ret                                                  ; F96258  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016259, 0x0001BF
+
+; 0xF96259-0xF96400 -- 424 bytes of 0x0E (RET), module padding.
+; Checked byte by byte, not sampled: notes/gen_prom_a_block.py refuses to
+; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
+	.fill 424, 1, 0x0E
+
+	nop                                                  ; F96401  00
+	nop                                                  ; F96402  00
+	nop                                                  ; F96403  00
+	ret                                                  ; F96404  0e
+	nop                                                  ; F96405  00
+	nop                                                  ; F96406  00
+	nop                                                  ; F96407  00
+	ret                                                  ; F96408  0e
+	nop                                                  ; F96409  00
+	nop                                                  ; F9640A  00
+	nop                                                  ; F9640B  00
+	ret                                                  ; F9640C  0e
+	nop                                                  ; F9640D  00
+	nop                                                  ; F9640E  00
+	nop                                                  ; F9640F  00
+	ret                                                  ; F96410  0e
+	nop                                                  ; F96411  00
+	nop                                                  ; F96412  00
+	nop                                                  ; F96413  00
+	ret                                                  ; F96414  0e
+	nop                                                  ; F96415  00
+	nop                                                  ; F96416  00
+	nop                                                  ; F96417  00
 sub_F96418:   ; entry: prom_b routine directory
 	call 0xf96432                                        ; F96418  1d 32 64 f9
 	ret                                                  ; F9641C  0e
@@ -102342,7 +102373,11 @@ MixedTables_FC6626:
 ; Checked byte by byte, not sampled: notes/gen_prom_a_block.py refuses to
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 1979, 1, 0x0E
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x047000, 0x001000
+
+; 0xFC7000-0xFC7FFF -- 4096 bytes of 0x0E (RET), module padding.
+; Checked byte by byte, not sampled: notes/gen_prom_a_block.py refuses to
+; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
+	.fill 4096, 1, 0x0E
 
 ; ==============================================================================
 ; 0xFC8000-0xFCEFFF -- the RAM-0x3800 MODULE: its own C-runtime initialiser, a
@@ -102355,9 +102390,14 @@ MixedTables_FC6626:
 ; all 20 of its targets land here.  18,558 substantive bytes; the 10,113-byte 0x0E
 ; run that follows is emitted as `.fill` and is NOT part of that figure.
 ;
-; ITS BOUNDS ARE THE ROM'S: 0xFC7000-0xFC7FFF is 4,096 bytes of 0x0E (left as
-; `.incbin` -- it is pad, and converting it would inflate a filler column for
-; nothing) and 0xFCC87E-0xFCEFFF is 10,114 more.
+; ITS BOUNDS ARE THE ROM'S: 0xFC7000-0xFC7FFF is 4,096 bytes of 0x0E and
+; 0xFCC87F-0xFCEFFF is 10,113 more (0xFCC87E itself is this module's own last
+; `ret`).  Both are `.fill` now, not `.incbin` -- the 2026-09-01 parallel push
+; retired the earlier per-round call to leave known-uniform pad as `.incbin`
+; rather than "inflate a filler column for nothing": today's goal is every
+; byte in real source, and source_coverage.py already reports filler and
+; substantive separately, so a verified `.fill` cannot be mistaken for
+; understanding.
 ;
 ; ★ IT CARRIES ITS OWN C-RUNTIME INITIALISER, and that is what makes the rest of
 ; the module readable.  0xFC8020 is four blocks of the shape a linker emits:
