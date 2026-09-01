@@ -73,3 +73,44 @@ What WAS actually run, precisely:
   but this lane deliberately did NOT run `assert_byte_identical.py` against
   them -- that 9-image (13 with wsa1) certification is the coordinator's to
   run centrally after merge, per instruction.
+
+## Lane MISLABEL (2026-09-02) -- the three self-tagged "MISLABELLED, THIS IS CODE" markers
+
+Assignment: `kn5000_source_coverage.py` prints three spans in
+`kn5000_subprogram_v142.s` as "self-tagged still-undecoded markers needing
+human adjudication" (`VoiceCC_DataTable_0280FE`, `VoiceCC_DataTable_028F75`,
+`VoiceModWheel_DataTable_02A061`). Checked each against the actual bytes
+rather than trusting the marker text, since the falsification pass above
+(105 blocks / 1,230 bytes, commit `35b5b51d`) could have silently resolved
+some of them already.
+
+Result: `VoiceCC_DataTable_028F75` (3,772 B) was ALREADY fully code -- its
+marker was pure stale text, rewritten rather than left claiming a debt that
+no longer existed. The other two still had real `.byte` residue: 134 B in
+`VoiceCC_DataTable_0280FE` (the `AudioMod_Scale_To_Part_1C`/`_1B` pair, which
+also contains the separately-named 42 B `Voice_CC_SetModWheelRange`) and all
+136 B of `VoiceModWheel_DataTable_02A061`. All three resisted the automated
+convert/audit pipeline for the SAME reason: llvm-mc's own `--disassemble`
+cannot decode the register-indexed forms involved (`st_rrb`, `ld_sril3`,
+`lda_rr`, `ldib_erp`/`cpib_erp`/`inc1b_erp`) even though its assembler can
+ENCODE them -- the mirror image of the already-documented DSP_Bytecode gap
+(that one can decode but not encode). MAME unidasm supplied the framing;
+each block was proved by hand-assembling that text with llvm-mc and diffing
+the result against the original bytes before touching the source.
+
+| script | question it answers |
+|---|---|
+| `verify_mislabel_markers.py` | For each of the three marker addresses: how many `.byte` lines remain in the source between that header and the next one (should be 0), and is the rebuilt ROM byte-identical to the original **exactly across that address range** (not just "the whole-ROM cmp was clean", which does not by itself prove these three spans specifically didn't drift while something else changed too)? |
+
+Commands run for the lane report's numbers:
+
+    make rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom
+    python3 scripts/lanes/verify_mislabel_markers.py
+    python3 scripts/lanes/audit_lane_sub_byte_code.py v142/subcpu subcpu/boot   # before/after totals: 158,821 -> 158,509
+    python3 scripts/analysis/kn5000_source_coverage.py                          # confirms all 3 markers gone from the "self-tagged" list
+
+Gate: narrow only, per lane brief (`make gate-all` not run in this
+worktree). `rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom` cmp'd
+byte-identical to `original_ROMs/kn5000_subprogram_v142.rom` after the
+change -- the coordinator's central `make gate-all` is the 13-image
+certification.
