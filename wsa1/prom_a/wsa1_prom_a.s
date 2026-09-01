@@ -20874,7 +20874,59 @@ sub_F8C8C3:   ; entry: prom_b routine directory
 	or (XIX),A                                           ; F8C92D  84 e9
 .LF8C92F:
 	ret                                                  ; F8C92F  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00C930, 0x0010D0
+; ---------------------------------------------------------------------
+; SelfPtrTable_F8C930 -- 9 LE32 self-pointers into an 18-long block of
+; unclaimed bitmap-like constants, then a 4,196-byte uniform 0x0E pad
+;
+; Read by: NOT ESTABLISHED -- no call site or table walker anywhere in this
+;          tree reaches 0xF8C930 or dereferences these pointers. Wave 1
+;          (2026-09-02, c94f57ca) investigated this span and deliberately
+;          left it whole as .incbin rather than respell it .byte with no
+;          new understanding; this splits off the verified fill tail only.
+; Evidence: notes/prom_a_c930_selfptr_check.py reads the ROM directly.
+;          Words 0-8 are LE32 0x00F8C954, +8, +8, ... +8 = 0x00F8C994 -- each
+;          one SELF-REFERENTIAL, landing exactly on the start of its own
+;          8-byte (2-long) slot among words 9-26 that follow (no overlap, no
+;          gap: pointer[i] == this table + 0x00F8C954 + 8*i). Words 9-26 (18
+;          longs) use only the byte alphabet {0x00, 0x40, 0x80} -- a
+;          one-byte-per-something mask shape consistent with a small bitmap,
+;          though what draws or reads it is not established. Bytes
+;          0xF8C99C-0xF8D9FF (4,196 bytes) are uniform 0x0E, checked byte by
+;          byte by the same script, not sampled.
+; Unknown: what reads this table; what the 16 non-zero constant longs mean;
+;          why the table exists at all if nothing in this tree reaches it.
+;          Left as .long typed data, not named: only the 4-byte-word FRAMING
+;          is established, not the semantics.
+; ---------------------------------------------------------------------
+SelfPtrTable_F8C930:
+	.long 0x00f8c954                                 ; F8C930  [ptr 0]
+	.long 0x00f8c95c                                 ; F8C934  [ptr 1]
+	.long 0x00f8c964                                 ; F8C938  [ptr 2]
+	.long 0x00f8c96c                                 ; F8C93C  [ptr 3]
+	.long 0x00f8c974                                 ; F8C940  [ptr 4]
+	.long 0x00f8c97c                                 ; F8C944  [ptr 5]
+	.long 0x00f8c984                                 ; F8C948  [ptr 6]
+	.long 0x00f8c98c                                 ; F8C94C  [ptr 7]
+	.long 0x00f8c994                                 ; F8C950  [ptr 8]
+	.long 0x00000000                                 ; F8C954  [ 0]
+	.long 0x00000000                                 ; F8C958  [ 1]
+	.long 0x40404040                                 ; F8C95C  [ 2]
+	.long 0x40404040                                 ; F8C960  [ 3]
+	.long 0x80408040                                 ; F8C964  [ 4]
+	.long 0x80408040                                 ; F8C968  [ 5]
+	.long 0x40808040                                 ; F8C96C  [ 6]
+	.long 0x80408080                                 ; F8C970  [ 7]
+	.long 0x80808040                                 ; F8C974  [ 8]
+	.long 0x80808040                                 ; F8C978  [ 9]
+	.long 0x80808040                                 ; F8C97C  [10]
+	.long 0x80804080                                 ; F8C980  [11]
+	.long 0x80808040                                 ; F8C984  [12]
+	.long 0x80408080                                 ; F8C988  [13]
+	.long 0x80808040                                 ; F8C98C  [14]
+	.long 0x40808080                                 ; F8C990  [15]
+	.long 0x80808040                                 ; F8C994  [16]
+	.long 0x80808080                                 ; F8C998  [17]
+	.fill 4196, 1, 0x0E                                  ; F8C99C-F8D9FF: uniform RET pad, verified by notes/prom_a_c930_selfptr_check.py
 ; ---------------------------------------------------------------------
 ; Task2_CallbackDispatcher -- kernel task 2: wait, take a callback, call it
 ;
@@ -22560,7 +22612,10 @@ MemCopyWords:
 	ldirw                                         ; F8E6F6  95 11
 	pop XIX                                       ; F8E6F8  5c
 	ret                                           ; F8E6F9  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00E6FA, 0x000106
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00E6FA, 0x0000D3
+; 0xF8E7CD-0xF8E7FF -- 51 bytes of 0x0E (RET), module padding.
+; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
+	.fill 51, 1, 0x0E
 
 ; ==============================================================================
 ; 0xF8E800-0xF8E9A4 -- the LCD controller: entry thunks and the power-on setup
@@ -38084,7 +38139,11 @@ sub_F96C8A:   ; entry: branch/call in converted code
 	ld (XHL),WA                                          ; F96C9F  b3 50
 	djnz16 bc, .LF96C99                                  ; F96CA1  d9 1c f5
 	ret                                                  ; F96CA4  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016CA5, 0x000773
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016CA5, 0x0001E4
+; 0xF96E89-0xF97400 -- 1400 bytes of 0x0E (RET), module padding.
+; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
+	.fill 1400, 1, 0x0E
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x017401, 0x000017
 sub_F97418:   ; entry: reachable-run entry
 	push XIZ                                             ; F97418  3e
 	push XIX                                             ; F97419  3c
@@ -100451,7 +100510,39 @@ sub_FC25BF:
 ; Checked byte by byte, not sampled: notes/gen_prom_a_block.py refuses to
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 2578, 1, 0x0E
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x043000, 0x002400
+; 0xFC3000-0xFC3FFF -- 4096 bytes of 0x0E (RET), module padding.
+; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
+	.fill 4096, 1, 0x0E
+; ---------------------------------------------------------------------
+; 0xFC4000-0xFC52F7 -- DSP-effect / SOUND EDIT parameter-label text, NOT
+; converted: nothing in this tree's control-flow graph reaches it
+;
+; Read by: NOT ESTABLISHED. notes/reachability.py reports ZERO reachable bytes
+;          in this span (no seed, no branch, no fallthrough names any address
+;          inside it) -- so unlike the 0xFA15CC span below, there is not even
+;          WEAK evidence to frame a decode from.
+; Evidence: notes/prom_a_fc40f4_strings_scan.py finds 95 printable-ASCII runs
+;          (887 of 4,856 bytes) and all 12 of a checked DSP-effect-parameter
+;          vocabulary -- DEPTH, SPEED, DETUNE, DELAY, BALANCE, WAVE, REVERB,
+;          TYPE, INTENSITY, KEY SHIFT, DIGITAL EFFECT, SOUND EDIT -- which is
+;          the byte-level confirmation of the one-line claim in
+;          notes/FINDINGS-prom_a-for-the-mame-driver.md ("DSP EFFECT / SOUND
+;          EDIT at 0xFC40F4"). This reads as the label table for the DSP
+;          effect edit screen (REVERB DEPTH/SPEED/DETUNE/DELAY/BALANCE, plus
+;          per-effect-type variants DEPTH1/SPEED1/DEPTH2/SPEED2/...).
+; Unknown: the record framing around each string (fixed-width field? a
+;          pointer/length header per label, the way the 0xFA1F00 SYSTEM-menu
+;          display lists are framed in FINDINGS-prom_a-round3-modules.md §4?).
+;          Nothing here answers that, so typing this as .byte would claim a
+;          framing that is not established -- left `.incbin`, same call as
+;          the 0xFA15CC span below and for the same reason: converting a
+;          text/table region half-framed ships a plausible-looking wrong
+;          extent, which is exactly what this tree exists to avoid.
+; ---------------------------------------------------------------------
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x044000, 0x0012F8
+; 0xFC52F8-0xFC53FF -- 264 bytes of 0x0E (RET), module padding.
+; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
+	.fill 264, 1, 0x0E
 ; =====================================================================
 ; 0xFC5400-0xFC6FFF -- the second module of this round
 ;
