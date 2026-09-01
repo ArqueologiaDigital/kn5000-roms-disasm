@@ -16,6 +16,16 @@ QUESTION IT ANSWERS
     the same false-positive class that once made the KN5000's "562 bytes in 45
     forms" spurious.
 
+⚠ "NO SPELLING" IS NOT THE SAME AS "THE BACKEND CANNOT ENCODE IT".  A form is
+  listed when NEITHER route in gate 4 produced its bytes.  For most of them the
+  honest statement is "nobody has written a route yet": the decoder covers the
+  exotic families it was built for, and the verbatim route fails on things like
+  the 16-bit-address memory operand, which llvm-mc CAN write -- as
+  `or (0x2134:16), 0x0002` -- but not in the spelling unidasm prints.  The
+  per-form line says which route failed and how, so the two are never merged
+  into one number.  Deciding which of the 97 remaining forms are real backend
+  gaps is the next lane's job, and this is its work list.
+
 ★ FOUR INDEPENDENT GATES MAKE THIS A MEASUREMENT RATHER THAN A GREP
     A line is counted only if ALL of these hold:
       1. its comment is this tree's code convention, `; ADDR  b0 b1 ...`, and
@@ -29,14 +39,28 @@ QUESTION IT ANSWERS
          is rejected here.  24 prom_a sites (`80 0f`, the (XWA) byte prefix with
          undefined sub-opcode 0x0F) render that way; counting them as unspelt
          would blame the assembler for an opcode the CPU does not have;
-      4. "spellable" means THE BYTES CAME BACK: the form is handed to
-         `scripts/converters/convert_unspellable_forms.py`'s decoder and the
-         result to llvm-mc, and it is GREEN only if the encoding is byte-for-byte
-         what it came from.  "llvm-mc accepted it" is not the test -- this
-         backend has been caught accepting `push (0x1234)` while truncating the
-         address.
+      4. "spellable" means THE BYTES CAME BACK.  Two routes are tried and both
+         are judged the same way -- by the encoding, never by acceptance, because
+         this backend has been caught accepting `push (0x1234)` while truncating
+         the address:
+           * `../../../scripts/converters/convert_unspellable_forms.py`'s
+             decoder, which reads the OPCODE BYTES and knows the exotic families;
+           * failing that, unidasm's own rendering typed VERBATIM.  Much of the
+             tree is already written that way, so a form the decoder has no
+             branch for may still be perfectly writable.
+           * failing that, the same rendering with a NEGATIVE 8-bit
+             displacement.  unidasm prints d8 unsigned, and llvm-mc reads
+             `(XIZ+0xfc)` as +252 and widens to the d16 form -- five bytes where
+             the ROM has three.  `(xiz-4)` is the same slot, is what prom_c's
+             own sources write, and encodes exactly.
+         ⚠ THE VERBATIM ROUTE IS REFUSED FOR PC-RELATIVE MNEMONICS,
+         whatever the bytes say.  `calr 0x0000040b` reproduces `1e 0b 04` only
+         when the assembler's PC happens to match the one the target was
+         resolved against; at any other address the same text is a different
+         instruction, and the byte gate would catch it only if some OTHER byte
+         moved.
 
-    Gate 1 has two grades, reported separately because they are not equally
+    Gate 1 has three grades, reported separately because they are not equally
     strong evidence:
       A  the comment ALSO carries unidasm's rendering and it matches gate 3's.
       P  same, but the form is PC-RELATIVE and only the MNEMONIC matches: the
@@ -256,11 +280,32 @@ def census(img):
     return out, rej
 
 
-def spelling(bs):
-    """-> (text, True) if llvm-mc reproduces these EXACT bytes, else (why, False)."""
-    text = conv.decode(bs)
-    if text is None:
-        return "no decoder for this form", False
+# ⚠ PC-RELATIVE.  Their operand is an ADDRESS in the rendering and a
+# DISPLACEMENT in the encoding, so the same text means different bytes at
+# different PCs.  Never spelt from a rendering.
+PCREL = ("jr", "jrl", "calr", "djnz")
+
+
+# unidasm prints an 8-bit displacement UNSIGNED -- `srl (XIZ+0xfc)` -- and
+# llvm-mc reads 0xFC as 252, which does not fit a signed d8, so it widens to the
+# (Xrr+d16) form: `c3 f9 fc 00 7f`, five bytes where the ROM has three.  The
+# same slot spelt `(xiz-4)` gives `8e fc 7f` exactly, and that IS this tree's
+# own dialect -- prom_c's split sources already write `(xiz-4)`.  So a rendering
+# whose displacement is >= 0x80 gets a second try, signed.  The round-trip is
+# still the only judge; nothing here is trusted because it looks right.
+DISP = re.compile(r'\((x(?:wa|bc|de|hl|ix|iy|iz|sp))\+0x([0-9a-f]{2})\)')
+
+
+def _signed_disp(text):
+    """The same text with any d8 >= 0x80 written as a negative, or None."""
+    if not DISP.search(text):
+        return None
+    out = DISP.sub(lambda m: "(%s%+d)" % (m.group(1), int(m.group(2), 16) - 256)
+                   if int(m.group(2), 16) >= 0x80 else m.group(0), text)
+    return out if out != text else None
+
+
+def _roundtrip(text, bs):
     got = conv.assemble([text])
     if got is None:
         return f"`{text}` did not assemble", False
@@ -268,6 +313,33 @@ def spelling(bs):
         return (f"`{text}` assembles to "
                 + " ".join(f"{b:#04x}" for b in got[0])), False
     return text, True
+
+
+def spelling(bs, rendering=None):
+    """-> (text, True) if llvm-mc reproduces these EXACT bytes, else (why, False).
+
+    Route 1 is the byte decoder; route 2 is unidasm's rendering typed verbatim.
+    `rendering` is the SITE's own rendering where the caller has one -- a form's
+    exemplar carries one displacement and its siblings carry others.
+    """
+    text = conv.decode(bs)
+    if text is not None:
+        return _roundtrip(text, bs)
+    if rendering is None:
+        return "no decoder for this form, and no rendering to try", False
+    if rendering.split()[0].lower() in PCREL:
+        return ("no decoder for this form; PC-relative, so its rendering "
+                "cannot be typed verbatim"), False
+    why, ok = _roundtrip(rendering.lower(), bs)
+    if ok:
+        return why, True
+    signed = _signed_disp(rendering.lower())
+    if signed is not None:
+        why2, ok2 = _roundtrip(signed, bs)
+        if ok2:
+            return why2, True
+        why = f"{why}; as `{signed}`, {why2.split(', ', 1)[-1]}"
+    return f"no decoder for this form, and {why}", False
 
 
 def report(show_sites, images):
@@ -281,7 +353,8 @@ def report(show_sites, images):
         sites = sum(len(v) for v in c.values())
         nb = sum(len(s.bytes) for v in c.values() for s in v)
         sound_sites = [s for v in c.values() for s in v if s.routine in inside]
-        unspelt = {f: v for f, v in c.items() if not spelling(v[0].bytes)[1]}
+        unspelt = {f: v for f, v in c.items()
+                   if not spelling(v[0].bytes, v[0].rendering)[1]}
         u_sites = sum(len(v) for v in unspelt.values())
         u_sound = [s for v in unspelt.values() for s in v if s.routine in inside]
         tot["sites"] += sites
@@ -298,7 +371,7 @@ def report(show_sites, images):
         print(f"  {u_sites} of those site(s) have NO SPELLING, "
               f"{len(u_sound)} of them inside a sound routine")
         for form, hits in sorted(c.items(), key=lambda kv: -len(kv[1])):
-            text, ok = spelling(hits[0].bytes)
+            text, ok = spelling(hits[0].bytes, hits[0].rendering)
             in_snd = [h for h in hits if h.routine in inside]
             grades = collections.Counter(h.grade for h in hits)
             mark = "spellable" if ok else "★ NO SPELLING"
@@ -401,11 +474,36 @@ def selftest():
     #    passes; it does not go red when the work succeeds.
     for img in IMAGES:
         for form, hits in census(img)[0].items():
-            text, ok = spelling(hits[0].bytes)
+            text, ok = spelling(hits[0].bytes, hits[0].rendering)
             if ok:
                 print(f"FAIL  {img.name}: `{form}` is spellable as `{text}` and "
                       f"is still .byte at {hits[0].path}:{hits[0].line}")
                 bad += 1
+
+    # 5b. THE PC-RELATIVE REFUSAL IS LIVE.  `1e 0b 04` is `calr 0x0000040b`,
+    #     and typed verbatim it reproduces those bytes at PC 0 and nowhere else.
+    #     `spelling` must refuse it even though the round-trip would pass.
+    if _roundtrip("calr 0x0000040b", [0x1e, 0x0b, 0x04])[1] is not True:
+        print("FAIL  the PC-relative probe no longer round-trips at PC 0; "
+              "the refusal below is no longer testing anything")
+        bad += 1
+    if spelling([0x1e, 0x0b, 0x04], "calr 0x0000040b")[1]:
+        print("FAIL  a PC-relative form was spelt from its rendering")
+        bad += 1
+
+    # 5c. THE SIGNED-DISPLACEMENT ROUTE, and its refusal to fire on a d8 that
+    #     already fits.  `8e fc 7f` is `srl (XIZ+0xfc)` and needs it; `8e 08 7f`
+    #     is `srl (XIZ+0x08)` and must be left alone.
+    if _signed_disp("srl (xiz+0xfc)") != "srl (xiz-4)":
+        print("FAIL  the signed-displacement rewrite is wrong: "
+              + repr(_signed_disp("srl (xiz+0xfc)")))
+        bad += 1
+    if _signed_disp("srl (xiz+0x08)") is not None:
+        print("FAIL  a displacement that already fits was rewritten")
+        bad += 1
+    if not spelling([0x8e, 0xfc, 0x7f], "srl (XIZ+0xfc)")[1]:
+        print("FAIL  the signed-displacement route did not spell `8e fc 7f`")
+        bad += 1
 
     # 6. NEGATIVE CONTROL for `spelling`: bytes one bit off must not round-trip
     #    to the same text.

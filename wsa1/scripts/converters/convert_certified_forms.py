@@ -62,14 +62,25 @@ _spec.loader.exec_module(census)
 
 
 def candidates():
-    """[(relpath, lineno, text, comment)] -- certified, spellable, still .byte."""
+    """[(relpath, lineno, text, comment)] -- certified, spellable, still .byte.
+
+    ⚠ PER SITE, NOT PER FORM.  census.spelling()'s second route types unidasm's
+    rendering verbatim, and a form's siblings do not share a rendering: the four
+    `srl (XIZ+N)` sites are +0x08, +0xfc, +0xf6 and +0x08.  Spelling them all
+    from the exemplar would write the first site's displacement into all four --
+    and three of them would then assemble to bytes that are not theirs, which
+    apply()'s round-trip would catch, but only after the census had reported a
+    form as converted when it was not.
+    """
     out = []
     for img in census.IMAGES:
         for hits in census.census(img)[0].values():
-            text, ok = census.spelling(hits[0].bytes)
-            if not ok:
+            if not census.spelling(hits[0].bytes, hits[0].rendering)[1]:
                 continue
             for h in hits:
+                text, ok = census.spelling(h.bytes, h.rendering)
+                if not ok:
+                    continue
                 echo = " ".join(f"{b:02x}" for b in h.bytes)
                 out.append((h.path, h.line, text.replace("\t", " "),
                             f"{h.addr:06X}  {echo}   {h.rendering}"))

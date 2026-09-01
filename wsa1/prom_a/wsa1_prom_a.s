@@ -36360,7 +36360,7 @@ sub_F95158:
 	dec 1,HL                                             ; F951AD  db 69
 	cps hl, 0x00                                         ; F951AF  db d8
 	jr nz, -14                                           ; F951B1  6e f2
-	.byte 0x8e, 0x08, 0x7f                               ; F951B3  8e 08 7f   srl (XIZ+0x08)
+	srl (xiz+0x08)                                       ; F951B3  8e 08 7f   srl (XIZ+0x08)
 	dec 1,E                                              ; F951B6  cd 69
 	cps e, 0x00                                          ; F951B8  cd d8
 	jr nz, -92                                           ; F951BA  6e a4
@@ -67672,7 +67672,7 @@ sub_FAC0FA:
 	lda_24 xwa, (0xfad20a)                               ; FAC18F  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC194  ec 80
 	ld XIY,(XWA)                                         ; FAC196  a0 25
-	.byte 0xe2, 0x84, 0xf2, 0x60, 0xed                   ; FAC198  e2 84 f2 60 ed   or (0x60f284),XIY
+	or (0x60f284),xiy                                    ; FAC198  e2 84 f2 60 ed   or (0x60f284),XIY
 .LFAC19D:
 	ld xbc, (xiz-4)                                      ; FAC19D  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC1A0  89 0e 21
@@ -67681,7 +67681,7 @@ sub_FAC0FA:
 	lda_24 xwa, (0xfad20a)                               ; FAC1A8  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC1AD  ec 80
 	ld XIY,(XWA)                                         ; FAC1AF  a0 25
-	.byte 0xe2, 0x88, 0xf2, 0x60, 0xed                   ; FAC1B1  e2 88 f2 60 ed   or (0x60f288),XIY
+	or (0x60f288),xiy                                    ; FAC1B1  e2 88 f2 60 ed   or (0x60f288),XIY
 .LFAC1B6:
 	ld xbc, (xiz-4)                                      ; FAC1B6  ae fc 21
 	ld A,(XBC+0x0b)                                      ; FAC1B9  89 0b 21
@@ -67690,7 +67690,7 @@ sub_FAC0FA:
 	lda_24 xwa, (0xfad20a)                               ; FAC1C1  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC1C6  ec 80
 	ld XIY,(XWA)                                         ; FAC1C8  a0 25
-	.byte 0xe2, 0x8c, 0xf2, 0x60, 0xed                   ; FAC1CA  e2 8c f2 60 ed   or (0x60f28c),XIY
+	or (0x60f28c),xiy                                    ; FAC1CA  e2 8c f2 60 ed   or (0x60f28c),XIY
 .LFAC1CF:
 	ld xbc, (xiz-4)                                      ; FAC1CF  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC1D2  89 0e 21
@@ -67699,7 +67699,7 @@ sub_FAC0FA:
 	lda_24 xwa, (0xfad20a)                               ; FAC1DA  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC1DF  ec 80
 	ld XIY,(XWA)                                         ; FAC1E1  a0 25
-	.byte 0xe2, 0x90, 0xf2, 0x60, 0xed                   ; FAC1E3  e2 90 f2 60 ed   or (0x60f290),XIY
+	or (0x60f290),xiy                                    ; FAC1E3  e2 90 f2 60 ed   or (0x60f290),XIY
 .LFAC1E8:
 	ld xbc, (xiz-4)                                      ; FAC1E8  ae fc 21
 	ld A,(XBC+0x0c)                                      ; FAC1EB  89 0c 21
@@ -67708,7 +67708,7 @@ sub_FAC0FA:
 	lda_24 xwa, (0xfad20a)                               ; FAC1F3  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC1F8  ec 80
 	ld XIY,(XWA)                                         ; FAC1FA  a0 25
-	.byte 0xe2, 0x94, 0xf2, 0x60, 0xed                   ; FAC1FC  e2 94 f2 60 ed   or (0x60f294),XIY
+	or (0x60f294),xiy                                    ; FAC1FC  e2 94 f2 60 ed   or (0x60f294),XIY
 .LFAC201:
 	ld xbc, (xiz-4)                                      ; FAC201  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC204  89 0e 21
@@ -67717,7 +67717,7 @@ sub_FAC0FA:
 	lda_24 xwa, (0xfad20a)                               ; FAC20C  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC211  ec 80
 	ld XIY,(XWA)                                         ; FAC213  a0 25
-	.byte 0xe2, 0x98, 0xf2, 0x60, 0xed                   ; FAC215  e2 98 f2 60 ed   or (0x60f298),XIY
+	or (0x60f298),xiy                                    ; FAC215  e2 98 f2 60 ed   or (0x60f298),XIY
 .LFAC21A:
 	ld xbc, (xiz-4)                                      ; FAC21A  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC21D  89 0e 21
@@ -67726,7 +67726,7 @@ sub_FAC0FA:
 	lda_24 xwa, (0xfad20a)                               ; FAC225  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC22A  ec 80
 	ld XIY,(XWA)                                         ; FAC22C  a0 25
-	.byte 0xe2, 0x9c, 0xf2, 0x60, 0xed                   ; FAC22E  e2 9c f2 60 ed   or (0x60f29c),XIY
+	or (0x60f29c),xiy                                    ; FAC22E  e2 9c f2 60 ed   or (0x60f29c),XIY
 .LFAC233:
 	ld xbc, (xiz-4)                                      ; FAC233  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC236  89 0e 21
@@ -67735,7 +67735,7 @@ sub_FAC0FA:
 	lda_24 xwa, (0xfad20a)                               ; FAC23E  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC243  ec 80
 	ld XIY,(XWA)                                         ; FAC245  a0 25
-	.byte 0xe2, 0xa0, 0xf2, 0x60, 0xed                   ; FAC247  e2 a0 f2 60 ed   or (0x60f2a0),XIY
+	or (0x60f2a0),xiy                                    ; FAC247  e2 a0 f2 60 ed   or (0x60f2a0),XIY
 .LFAC24C:
 	ld xbc, (xiz-4)                                      ; FAC24C  ae fc 21
 	ld A,(XBC+0x0e)                                      ; FAC24F  89 0e 21
@@ -67744,7 +67744,7 @@ sub_FAC0FA:
 	lda_24 xwa, (0xfad20a)                               ; FAC257  f2 0a d2 fa 30
 	add XWA,XIX                                          ; FAC25C  ec 80
 	ld XIY,(XWA)                                         ; FAC25E  a0 25
-	.byte 0xe2, 0xa4, 0xf2, 0x60, 0xed                   ; FAC260  e2 a4 f2 60 ed   or (0x60f2a4),XIY
+	or (0x60f2a4),xiy                                    ; FAC260  e2 a4 f2 60 ed   or (0x60f2a4),XIY
 .LFAC265:
 	lda_24 xbc, (0xfad20a)                               ; FAC265  f2 0a d2 fa 31
 	add XBC,XIX                                          ; FAC26A  ec 81
@@ -85337,9 +85337,9 @@ sub_FB826A:
 	sub XIX,XIX                                          ; FB8275  ec a4
 .LFB8277:
 	sll xix, 0x01                                        ; FB8277  ec ee 01
-	.byte 0x9e, 0x08, 0x7e                               ; FB827A  9e 08 7e   sllw (XIZ+0x08)
+	sllw (xiz+0x08)                                      ; FB827A  9e 08 7e   sllw (XIZ+0x08)
 	.byte 0xd8, 0x24, 0x00                               ; FB827D  d8 24 00   stcf 0x00,WA
-	.byte 0x9e, 0x0a, 0x7e                               ; FB8280  9e 0a 7e   sllw (XIZ+0x0a)
+	sllw (xiz+0x0a)                                      ; FB8280  9e 0a 7e   sllw (XIZ+0x0a)
 	.byte 0xdc, 0x24, 0x00                               ; FB8283  dc 24 00   stcf 0x00,IX
 	add (XIZ+0x0a),WA                                    ; FB8286  9e 0a 88
 	sll xiy, 0x01                                        ; FB8289  ed ee 01
@@ -87490,9 +87490,9 @@ sub_FBA133:
 	sub XIX,XIX                                          ; FBA13E  ec a4
 .LFBA140:
 	sll xix, 0x01                                        ; FBA140  ec ee 01
-	.byte 0x9e, 0x08, 0x7e                               ; FBA143  9e 08 7e   sllw (XIZ+0x08)
+	sllw (xiz+0x08)                                      ; FBA143  9e 08 7e   sllw (XIZ+0x08)
 	.byte 0xd8, 0x24, 0x00                               ; FBA146  d8 24 00   stcf 0x00,WA
-	.byte 0x9e, 0x0a, 0x7e                               ; FBA149  9e 0a 7e   sllw (XIZ+0x0a)
+	sllw (xiz+0x0a)                                      ; FBA149  9e 0a 7e   sllw (XIZ+0x0a)
 	.byte 0xdc, 0x24, 0x00                               ; FBA14C  dc 24 00   stcf 0x00,IX
 	add (XIZ+0x0a),WA                                    ; FBA14F  9e 0a 88
 	sll xiy, 0x01                                        ; FBA152  ed ee 01
@@ -110722,7 +110722,7 @@ sub_FD058E:
 	ld c, (xiz-4)                                        ; FD07C6  8e fc 23
 	and C,0x01                                           ; FD07C9  cb cc 01
 	jr nz, .LFD07D7                                      ; FD07CC  6e 09
-	.byte 0x8e, 0xfc, 0x7f                               ; FD07CE  8e fc 7f   srl (XIZ+0xfc)
+	srl (xiz-4)                                          ; FD07CE  8e fc 7f   srl (XIZ+0xfc)
 	inc 1,H                                              ; FD07D1  ce 61
 	cps h, 0x06                                          ; FD07D3  ce de
 	jr c, .LFD07C6                                       ; FD07D5  67 ef
@@ -122445,7 +122445,7 @@ sub_FD724B:
 	ld L,H                                               ; FD727F  ce 8f
 	jr .LFD728C                                          ; FD7281  68 09
 .LFD7283:
-	.byte 0x8e, 0xf6, 0x7f                               ; FD7283  8e f6 7f   srl (XIZ+0xf6)
+	srl (xiz-10)                                         ; FD7283  8e f6 7f   srl (XIZ+0xf6)
 	inc 1,H                                              ; FD7286  ce 61
 	cps h, 0x06                                          ; FD7288  ce de
 	jr ule, .LFD7277                                     ; FD728A  63 eb
@@ -122463,7 +122463,7 @@ sub_FD724B:
 	ld D,H                                               ; FD72A2  ce 8c
 	jr .LFD72AF                                          ; FD72A4  68 09
 .LFD72A6:
-	.byte 0x8e, 0xf6, 0x7f                               ; FD72A6  8e f6 7f   srl (XIZ+0xf6)
+	srl (xiz-10)                                         ; FD72A6  8e f6 7f   srl (XIZ+0xf6)
 	inc 1,H                                              ; FD72A9  ce 61
 	cps h, 0x06                                          ; FD72AB  ce de
 	jr ule, .LFD729A                                     ; FD72AD  63 eb
