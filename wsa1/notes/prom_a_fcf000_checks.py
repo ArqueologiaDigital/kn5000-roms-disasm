@@ -237,9 +237,18 @@ check("S4 the three parts sum to the module's own 63,247",
       68 + 3427 + (_END - _CODE) == _END - _DISP == 63247,
       "%d vs %d" % (68 + 3427 + (_END - _CODE), _END - _DISP))
 _i, _d = _tally(_CODE, _END)
-check("S5 code block holds 23,585 instruction lines (NOT 23,622) and 24 "
-      "directive lines -- the two inline jump tables", _i == 23585 and _d == 24,
-      "instructions %d, directives %d" % (_i, _d))
+# ⚠ THE SPLIT MOVES, THE TOTAL DOES NOT.  This used to pin 23,585 instruction
+# lines and 24 directive lines.  On 2026-09-01 seven of those 24 `.byte` lines
+# became instructions -- they were never jump-table entries, they were single
+# decoded instructions the assembler had a spelling for all along
+# (notes/sound/wsa1_unspellable_forms.py) -- so the split is now 23,592 / 17 and
+# will keep moving as conversion proceeds.  What the check is actually about is
+# the module's SHAPE, and the shape is the TOTAL: pinning a number that legal
+# work is supposed to change turns green work into a red test.  The split is
+# still printed, so a reader sees it move.
+check("S5 code block holds 23,609 source lines with an address comment; the "
+      "instruction/directive split is reported, not pinned", _i + _d == 23609,
+      "instructions %d, directives %d, total %d" % (_i, _d, _i + _d))
 _i2, _d2 = _tally(_DISP, _CODE)
 check("S6 the table block is all data: 0 instruction lines, 232 directive lines",
       _i2 == 0 and _d2 == 232, "instructions %d, directives %d" % (_i2, _d2))
