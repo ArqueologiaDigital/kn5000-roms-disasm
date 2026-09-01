@@ -233,6 +233,27 @@ MERGED_HEADER = '''\
 ;   is printed by --verify rather than assumed.
 ;
 ; ------------------------------------------------------------------------------
+; ★ AND SOMETHING THE MERGE MADE VISIBLE: THE SAME CODE, REACHED DIFFERENTLY
+; ------------------------------------------------------------------------------
+; Putting the two files' "Called from:" lines side by side, for the first time on
+; one page, shows the two processors do NOT use this driver the same way -- and
+; the asymmetry runs in OPPOSITE directions for two of the four routines:
+;
+;   DSP_ChannelRegs_Init      CPU 1: NO SITE FOUND -- nothing in prom_a or prom_b
+;                                    names 0xF85F0F and no PC-relative
+;                                    displacement reaches it
+;                             CPU 2: called once, at 0xF98B95, from the power-on
+;                                    init chain
+;   DSP_WriteAllChannelRegs   CPU 1: published through prom_b's thunk 0xF42DE4,
+;                                    the LAST slot of the kernel thunk block
+;                             CPU 2: NOT TRACED
+;
+; ⚠ "NOT TRACED" and "NO SITE FOUND" are DIFFERENT CLAIMS and both headers say
+;   which they mean; neither is "dead code".  What is established is that byte
+;   identity of a routine says NOTHING about whether either machine runs it --
+;   which is worth stating right where the byte identity is strongest.
+;
+; ------------------------------------------------------------------------------
 ; ⚠ WHAT THIS FILE DOES **NOT** ESTABLISH
 ; ------------------------------------------------------------------------------
 ; That the two processors run the same driver is a fact about the CODE.  What the
