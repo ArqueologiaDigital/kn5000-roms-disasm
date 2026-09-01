@@ -24,6 +24,11 @@ USE
     for ln in image_lines(ROOT, "prom_c/wsa1_prom_c.s"):
         ...
 
+★ AND IF YOU ASK GIT FOR A FILE, ASK THROUGH git_path()/git_show().  os.path
+paths in this tree are relative to ROOT; git's `<rev>:<path>` is relative to the
+REPOSITORY, and since 2026-09-01 those are not the same directory.  See the
+"GIT PATHS ARE REPO-RELATIVE" section below.
+
 RESOLUTION follows what the Makefile passes llvm-mc, which is `-I . -I <image
 dir>`: an `.include "x"` is looked up relative to ROOT first and then to the
 directory of the file doing the including.  Both spellings in this tree work --
@@ -213,15 +218,127 @@ def image_path(root, primary):
 # resolves the includes THROUGH GIT, so both sides are the same object.
 
 
-def _git_show(root, rev, rel):
-    r = subprocess.run(["git", "show", "%s:%s" % (rev, rel)], cwd=root,
+# ---------------------------------------------------------------------------
+# ★★ GIT PATHS ARE REPO-RELATIVE.  os.path PATHS ARE ROOT-RELATIVE.
+# ---------------------------------------------------------------------------
+# On 2026-09-01 this disassembly moved from the root of its own repository into
+# `wsa1/` of the unified tree.  Everything built on os.path survived, because
+# ROOT comes from `__file__` and simply became one directory deeper.  ★ THE GIT
+# READS DID NOT.  `<rev>:<path>` is resolved from the REPOSITORY ROOT and takes
+# no notice of `-C` or `cwd=`, so every `git show HEAD:prom_a/wsa1_prom_a.s` in
+# this tree began asking for a path that no longer exists.
+#
+# Hardcoding "wsa1/" would fix today and break the next move, and it would be
+# wrong at the pinned pre-migration revisions, whose trees ARE root-relative.
+# So the prefix is asked for, per revision:
+#
+#     git_path("prom_a/wsa1_prom_a.s")             -> "wsa1/prom_a/wsa1_prom_a.s"
+#     git_path("prom_a/wsa1_prom_a.s", "8ff84e5")  -> "prom_a/wsa1_prom_a.s"
+#
+# ⚠ THE PREFIX IS NOT COSMETIC, IT SELECTS THE FILE.  `notes/`, `scripts/`,
+# `notas/`, `original_ROMs/`, `Makefile` and `README.md` all exist BOTH at the
+# unified root (the KN5000 disassembly) and under `wsa1/`, and
+# `scripts/analysis/assert_byte_identical.py` is a file on both sides.  An
+# unprefixed read of that path does not miss -- it silently returns the OTHER
+# product's file.  That is why the prefixed spelling is tried FIRST and the bare
+# one is only reached when the revision has no such directory at all.
+#
+# ⚠ NOT A GIT REPOSITORY RAISES.  A caller under `git archive` output, or in a
+# scratch tree with no `.git`, gets an exception rather than a bare path that
+# would then read whatever the ambient repository happens to hold.
+
+_PREFIX_CACHE = {}
+
+
+def git_prefix(root=ROOT):
+    """Where `root` sits inside its repository: "wsa1/", or "" at the root."""
+    key = os.path.realpath(root)
+    if key not in _PREFIX_CACHE:
+        r = subprocess.run(["git", "-C", root, "rev-parse", "--show-prefix"],
+                           capture_output=True, text=True)
+        if r.returncode:
+            raise FileNotFoundError(
+                "%s is not inside a git repository, so no revision can be read "
+                "from it (%s)" % (root, r.stderr.strip()))
+        _PREFIX_CACHE[key] = r.stdout.strip()
+    return _PREFIX_CACHE[key]
+
+
+def _exists_at(root, rev, path):
+    return subprocess.run(["git", "-C", root, "cat-file", "-e",
+                           "%s:%s" % (rev, path)],
+                          capture_output=True).returncode == 0
+
+
+def git_path(rel, rev="HEAD", root=ROOT):
+    """The REPO-relative path of a ROOT-relative one, as `rev` spells it.
+
+    ⚠ RAISES when the revision holds neither spelling.  A helper that fell back
+    to `rel` would hand `git show` a path that resolves to the other product's
+    file of the same name, which is worse than the miss it replaced.
+    """
+    rel = rel.replace(os.sep, "/")
+    if rel.startswith("/") or rel.startswith("../"):
+        raise ValueError("git_path wants a ROOT-relative path, got %r" % rel)
+    prefix = git_prefix(root)
+    cands = [prefix + rel, rel] if prefix else [rel]
+    for cand in cands:
+        if _exists_at(root, rev, cand):
+            return cand
+    raise FileNotFoundError(
+        "%s holds none of %s -- the file is not in that revision under any "
+        "spelling this tree has used" % (rev, " or ".join(cands)))
+
+
+def git_pathspec(rel, rev="HEAD", root=ROOT):
+    """The same, as a PATHSPEC for `git diff`/`git show <rev> -- ...`.
+
+    A pathspec is relative to the CURRENT DIRECTORY, not to the repository, so
+    it needs the opposite treatment: `:(top)` anchors it at the repository root
+    and the path is then spelled as `rev` spells it.
+    """
+    return ":(top)" + git_path(rel, rev, root)
+
+
+def git_show(rel, rev="HEAD", root=ROOT):
+    """`rev`'s copy of the ROOT-relative file `rel`, as text.  Raises if absent."""
+    path = git_path(rel, rev, root)
+    r = subprocess.run(["git", "-C", root, "show", "%s:%s" % (rev, path)],
                        capture_output=True)
     if r.returncode:
         raise FileNotFoundError(
             "%s:%s does not exist -- returning a short listing instead of "
             "raising is the bug this module prevents (%s)"
-            % (rev, rel, r.stderr.decode("utf-8", "replace").strip()))
+            % (rev, path, r.stderr.decode("utf-8", "replace").strip()))
     return r.stdout.decode("utf-8", "replace")
+
+
+def git_diff_lines(rel, rev, root=ROOT, context=3, text=None):
+    """A unified diff of `rev`'s copy of `rel` against the WORKING TREE copy.
+
+    ★ WHY NOT `git diff <rev> -- <rel>`.  The two sides of this comparison are
+    spelled differently once a revision predates the move: the old side holds
+    `prom_a/wsa1_prom_a.s` and the new one `wsa1/prom_a/wsa1_prom_a.s`.  One
+    pathspec cannot name both, and naming both turns a line diff into one
+    deletion plus one addition -- 175,190 lines "added" that nobody added, with
+    no error anywhere.  So the old side is fetched by object and the diff is
+    computed here.  The output keeps git's `+`/`-`/`@@` shape, which is what the
+    callers scan.
+
+    `text` overrides the working-tree side (pass the expanded image).
+    """
+    import difflib
+    old = git_show(rel, rev, root).split("\n")
+    if text is None:
+        with open(os.path.join(root, rel), encoding="utf-8") as fh:
+            text = fh.read()
+    new = text.split("\n")
+    return list(difflib.unified_diff(old, new, fromfile="a/" + rel,
+                                     tofile="b/" + rel, n=context, lineterm=""))
+
+
+def _git_show(root, rev, rel):
+    return git_show(rel, rev, root)
 
 
 def image_lines_at_rev(root, primary, rev="HEAD"):
@@ -504,6 +621,77 @@ def _selftest():
         check("a missing file at a revision RAISES", False)
     except FileNotFoundError:
         check("a missing file at a revision RAISES", True)
+
+    # ---- git_path: the repo-relative spelling, per revision ---------------
+    prefix = git_prefix(ROOT)
+    check("git_prefix is empty or ends in a slash",
+          prefix == "" or prefix.endswith("/"), repr(prefix))
+    top = subprocess.run(["git", "-C", ROOT, "rev-parse", "--show-toplevel"],
+                         capture_output=True, text=True).stdout.strip()
+    check("ROOT is exactly <toplevel>/<prefix>",
+          os.path.realpath(os.path.join(top, prefix)) == os.path.realpath(ROOT),
+          "%s + %r" % (top, prefix))
+    for tag, primary in IMAGES:
+        if not os.path.isfile(os.path.join(ROOT, primary)):
+            continue
+        gp = git_path(primary)
+        check("%-7s git_path() names a path HEAD actually holds" % tag,
+              _exists_at(ROOT, "HEAD", gp), gp)
+        check("%-7s git_path() = prefix + the ROOT-relative path" % tag,
+              gp == prefix + primary, "%s vs %s" % (gp, prefix + primary))
+        check("%-7s git_show() returns the committed file, byte for byte" % tag,
+              git_show(primary) == open(os.path.join(ROOT, primary),
+                                        encoding="utf-8").read())
+    # ★ THE CONTROL.  With a non-empty prefix the BARE spelling is the bug, so
+    #   the bug must be visible from here: git must refuse it (or, worse, hand
+    #   back the other product's file).  Where the prefix is empty there is no
+    #   bug to see and the check says so rather than passing quietly.
+    if prefix:
+        bare_wrong = 0
+        for tag, primary in IMAGES:
+            if not os.path.isfile(os.path.join(ROOT, primary)):
+                continue
+            r = subprocess.run(["git", "-C", ROOT, "show", "HEAD:" + primary],
+                               capture_output=True)
+            if r.returncode or r.stdout.decode("utf-8", "replace") != git_show(primary):
+                bare_wrong += 1
+        check("the UNPREFIXED spelling is wrong for every image -- the bug this "
+              "helper exists for is reproducible from here", bare_wrong == 4,
+              "%d of 4" % bare_wrong)
+    else:
+        check("(prefix is empty: ROOT is the repository root, nothing to prefix)",
+              True)
+    try:
+        git_path("prom_a/no_such_file_anywhere.s")
+        check("git_path RAISES on a path no spelling reaches", False)
+    except FileNotFoundError:
+        check("git_path RAISES on a path no spelling reaches", True)
+    try:
+        git_path("/absolute/path.s")
+        check("git_path REFUSES an absolute path", False)
+    except ValueError:
+        check("git_path REFUSES an absolute path", True)
+    check("git_pathspec anchors at the repository root",
+          git_pathspec(IMAGES[0][1]).startswith(":(top)"))
+    with tempfile.TemporaryDirectory() as td:
+        try:
+            git_prefix(td)
+            check("git_prefix RAISES outside a repository", False)
+        except FileNotFoundError:
+            check("git_prefix RAISES outside a repository", True)
+
+    # ---- git_diff_lines: a mutation control -------------------------------
+    primary = IMAGES[0][1]
+    if os.path.isfile(os.path.join(ROOT, primary)):
+        same = git_diff_lines(primary, "HEAD",
+                              text=git_show(primary))
+        check("git_diff_lines is EMPTY when the two sides agree",
+              same == [], "%d line(s)" % len(same))
+        mutated = git_show(primary).replace("\n", "\n", 1) + "\n; injected\n"
+        diff = git_diff_lines(primary, "HEAD", text=mutated)
+        check("...and reports the ONE line a mutation adds",
+              [l for l in diff if l.startswith("+; injected")] != [],
+              "%d line(s)" % len(diff))
 
     # ---- the write path, and the accident it exists to refuse ------------
     with tempfile.TemporaryDirectory() as td:
