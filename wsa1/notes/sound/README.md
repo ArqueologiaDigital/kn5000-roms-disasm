@@ -98,3 +98,16 @@ where a byte echo belongs (7 in prom_b).
   disassembly" matches every data table in the image.
 * **The certificate is the byte gate**, `scripts/analysis/assert_byte_identical.py`.
   Nothing here certifies anything.
+
+## `prom_d_debt_probe.py`
+
+**Question:** of prom_d's 524,288 bytes, how many are accounted for by the
+tone-database sources, by directive class — and is an unstructured dump
+hiding inside what looks like per-record source?
+
+    python3 wsa1/notes/sound/prom_d_debt_probe.py
+
+Label density is the discriminating measure, not the byte total: a raw blob
+spelled in `.byte` accounts for its bytes just as well as a real record table
+does, but only the record table carries labels at record boundaries. Spans
+longer than 512 bytes are reported as leads, not verdicts.
