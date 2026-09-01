@@ -71,7 +71,10 @@ table_data = {
 	"images/FTBMP01.BMP": [0x80418, 0x13036], # Technics logo + World Globe
 	"images/FTBMP02.BMP": [0x9344E, 0x0A6B6], # Upside-down showcasing subwoofers
 	"images/FTBMP03.BMP": [0x9DB04, 0x09A36], # Some floppy disks
-	"images/FTBMP04.BMP": [0xA753A, 0x09A53], # Inserting disks into the floppy drive
+	"images/FTBMP04.BMP": [0xA753A, 0x09A36], # Inserting disks into the floppy drive -- was
+	# 0x09A53 (29 B too many, bleeding into FTBMP05's 0xB0F70 start); corrected 2026-09-02
+	# after scripts/analysis/verbatim_bmp_header_audit.py found the extracted length did
+	# not match the committed file's actual, header-declared, ROM-verified size.
 	"images/FTBMP05.BMP": [0xB0F70, 0x0A076], # Arrows representing 360 surround sound
 	"images/FTBMP06.BMP": [0xBAFE6, 0x13036], # KN5000 name + rainbow comet
 }
