@@ -8,9 +8,9 @@
 # commits on top, appended below.
 
 Branch: tlcs900_backend
-Commit: 4149d0474bf8 (4149d0474bf862d3837737441a23b339656baaf7)
+Commit: dbb72df07371 (dbb72df073711ef98be1e41f003e04a7022bf120)
 Date: 2026-09-01
-Subject: [TLCS900] The last KN5000 sound forms, and an inverted 8-bit index address
+Subject: [TLCS900] A regression guard for the SX-WSA1R's sound-code C7 forms
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # The WSA1's two processors are Toshiba TMP95C061 (TLCS-900/H), the same family
@@ -98,3 +98,26 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # Verified: `make gate-all` -- 9 KN5000 and 4 SX-WSA1R ROMs, all IDENTICAL,
 # plus scripts/analysis/assert_images_assemble.py on all 8 KN5000 images, and
 # llvm-lit clean on the 23 TLCS900 MC tests.
+
+# UPDATE 10 (2026-09-01): dbb72df07371 is a TEST-ONLY commit and adds no code.
+# The toolchain binaries are bit-identical to 4149d0474bf8's, which is what
+# built the ROMs verified below; the pin moves so that HEAD and the record do
+# not drift apart, not because anything was rebuilt.
+#
+# What it guards: the WSA1's DSP-register-file writer at prom_a 0xF831B3 ends
+# with `ld QW,A` / `ld QA,A` -- c7 e3 99, c7 e2 99 -- and those are the only two
+# sites in either tree that name a PREVIOUS-BANK byte register as an
+# extended-register-prefix DESTINATION.  UPDATE 9 had to correct the same +2/+3
+# offsets on the INDEX side after they had been inverted for months with a green
+# byte gate throughout, and nothing covered the destination side.
+#
+# ★ AND THE PATTERN FROM UPDATE 9 REPEATED EXACTLY.  Those two bytes were
+#   reported as a residue the assembler refuses; they had had a spelling since
+#   cb165c5cdc4b (`ldb_erp a, 0xe3`).  What was actually tried was unidasm's
+#   rendering, `ld QW,A`, which is not a mnemonic this backend has ever used for
+#   an ERP form.  Running scripts/converters/convert_unspellable_forms.py's
+#   decoder over the bytes -- one function call -- answers this in a second.
+#
+# Verified: `make gate-all` -- 9 KN5000 and 4 SX-WSA1R ROMs, all IDENTICAL,
+# plus scripts/analysis/assert_images_assemble.py on all 8 KN5000 images, and
+# llvm-lit clean on all 24 TLCS900 MC tests.
