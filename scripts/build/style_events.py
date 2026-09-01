@@ -212,6 +212,7 @@ def rebuild(sec):
 
 def build():
     tot = 0
+    INC.mkdir(parents=True, exist_ok=True)
     for sec in SECTIONS:
         d = rebuild(sec)
         (INC / f'{sec}.bin').write_bytes(d)
