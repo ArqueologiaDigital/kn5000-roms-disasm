@@ -7,12 +7,13 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: bcf152d1fe00
-Date: 2026-08-23
-Subject: [TLCS900] Add cpib_ind, the register-indexed compare with an immediate
+Commit: f29a4827693f
+Date: 2026-09-01
+Subject: [TLCS900] Native mnemonics for the memory forms, and two silent miscompiles
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: bcf152d1fe00  [TLCS900] Add cpib_ind, the register-indexed compare with an immediate
 #   Commit: 1b9432474daa  [TLCS900] Fix two silently-wrong sub-opcodes in the F3 memory forms
 #   Commit: cb165c5cdc4b  [TLCS900] Add ERP-byte LD short-immediate and LD register forms
 #   Commit: f7a3cb91e999  [TLCS900] Add register-indexed LOAD forms (ldb/ldw/ldl_dri)
@@ -144,3 +145,37 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #
 # Verified: all six rebuilt ROMs byte-identical via
 # scripts/analysis/assert_byte_identical.py (NOT a rounded percentage).
+
+# UPDATE 7 (2026-09-01): moved to tlcs900_backend@f29a4827693f, two commits on
+# top of bcf152d1fe00 (e7a43c67fdca then f29a4827693f).  Together they close the
+# gap that made wsa1/include/tlcs900_mem_ops.inc necessary at all.
+#
+#   * A DIRECT memory operand was always emitted as the 24-bit prefix, and only
+#     for a 32-bit operand -- byte and word were refused outright.  All three
+#     sizes encode now, and the ADDRESS WIDTH is requested in the source as
+#     `(0x2075:16)`.  ⚠ The width is NOT derivable from the address value: this
+#     firmware writes `set 7,(0x00008a)` as F2 8A 00 00 BF for an address that
+#     fits in eight bits.  An operand with no suffix keeps the 24-bit default,
+#     which is why nothing that already assembled changed.
+#   * TWO SILENT MISCOMPILES.  `push (0x1234)` emitted `09 34` -- the address
+#     truncated to eight bits with no diagnostic -- and `mul WA,(0x1234)`
+#     emitted `d8 08 34 12`, a multiply by the ADDRESS.  Neither mnemonic had a
+#     memory form, so the parenthesised address was read as an immediate.
+#   * Twelve instructions that answered only to internal names (ormi8, addmi8,
+#     incm8, ...) now take their real mnemonic; every old spelling is kept as an
+#     InstAlias because this tree writes them in hundreds of files.
+#
+# ★ PROOF, not "llvm-mc accepted it".  wsa1/notes/llvm/llvm_native_equivalence.py
+#   assembles BOTH spellings of every macro call site in the tree and compares
+#   the bytes: 9,901 of the 12,539 sites are byte-identical under a real
+#   mnemonic, 0 differ.  The remaining 2,638 are the register-indexed (rr+r)
+#   operand, the register-direct operand and the two block transfers, for which
+#   no native spelling is claimed.
+#
+# ⚠ AND ONE NEW DEFECT FOUND, not fixed: `ld wa,(xix+iz)` is ACCEPTED and emits
+#   the (Xrr+d16) form with `iz` swallowed as an UNDEFINED SYMBOL -- d3 f1 00 00
+#   20 where the ROM has d3 07 f0 f8 20.  It fails at link time only because
+#   nothing defines `iz`.  See wsa1/notes/llvm/llvm_encoding_gaps.py, class C.
+#
+# Verified: `make gate-all` -- 6 KN5000 ROMs and 4 SX-WSA1R ROMs, all IDENTICAL,
+# with the toolchain rebuilt from this pin.
