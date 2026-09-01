@@ -1,0 +1,7 @@
+  building (make all) ...
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+
+PASS: every rebuilt ROM is byte-identical.

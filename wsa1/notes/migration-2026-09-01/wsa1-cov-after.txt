@@ -1,0 +1,25 @@
+image    span                      size   STRONG      any  cumul(S) of goal
+prom_a   0xFA15CC-0xFA5400   15,924       17      733        17  100.0%
+prom_a   0xF96504-0xF96C65    1,889        0      358        17  100.0%
+prom_a   0xF96CA5-0xF97418    1,907        0      335        17  100.0%
+prom_a   0xFA146F-0xFA14C6       87        0       87        17  100.0%
+prom_b   0xF396E7-0xF3972D       70        0       70        17  100.0%
+prom_a   0xF8C05B-0xF8C071       22        0       17        17  100.0%
+prom_a   0xF8C2B2-0xF8C2EC       58        0       15        17  100.0%
+prom_a   0xF8C0C1-0xF8C0D0       15        0       15        17  100.0%
+prom_a   0xF8C0A4-0xF8C0B3       15        0       15        17  100.0%
+prom_a   0xF8C086-0xF8C095       15        0       15        17  100.0%
+prom_a   0xF8C930-0xF8DA00    4,304        0       11        17  100.0%
+prom_b   0xF054B2-0xF054D9       39        0       10        17  100.0%
+prom_a   0xF8C046-0xF8C04E        8        0        8        17  100.0%
+prom_a   0xF96151-0xF96172       33        0        6        17  100.0%
+prom_a   0xF96C7B-0xF96C8A       15        0        5        17  100.0%
+prom_a   0xF96259-0xF96418      447        0        1        17  100.0%
+prom_a   0xF8C428-0xF8C42A        2        0        1        17  100.0%
+
+TOTAL reachable-and-unconverted: STRONG 17 bytes, ANY 1,702, in 17 spans.
+★ CONVERT ON THE **STRONG** COLUMN. `any` includes bytes reached only from a
+  32-bit immediate or a framed .long entry, and a pointer is as likely to name
+  a TABLE as a routine -- walking from one paints data as code. Round 1 framed
+  701 bytes of pointer tables as instructions that way and the byte gate PASSED.
+Work list cached to notes/reachability-cache.json

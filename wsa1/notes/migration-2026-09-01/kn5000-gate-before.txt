@@ -1,0 +1,9 @@
+  building (make all) ...
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+
+PASS: every rebuilt ROM is byte-identical.
