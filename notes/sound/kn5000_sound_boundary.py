@@ -314,6 +314,14 @@ def sites(fl):
     return out
 
 
+def im_windows(page):
+    return [n for n, lo, hi, _w in WINDOWS if (lo & 0xFF0000) == page] or \
+        (["inter-CPU latch pair (IC22/IC23)"] if page == 0x120000 else
+         ["main-CPU battery SRAM (IC21), reached by DMA over the inter-CPU link"]
+         if page in (0x1E0000, 0x1F0000) else
+         ["this image's own ROM"] if page >= 0xFE0000 else [])
+
+
 def chip_of(win):
     return "IC311" if win.startswith("DSP") else "IC303"
 
@@ -501,6 +509,74 @@ def unspellable(key):
     return c, nb
 
 
+DA = re.compile(r'\b(?:st\w*_da|ld\w*_da|sti\w*_da|lda_24|ld16_24|st16_24)\b[^;]*?\(?(\d{5,8})\)?')
+
+
+def external_windows(fl):
+    """EVERY direct-addressing access above the 1 MB DRAM, by 64 KB page.
+
+    ★ THIS IS THE MEASURED NEGATIVE FOR "IS THERE A FOURTH SOUND CHIP?".  The
+    sub-CPU's own DRAM is 0x000000-0x0FFFFF; anything the firmware names above
+    that is a device.  If a part existed that the window list does not mention,
+    it would have to appear here.  Enumerating the pages is therefore an
+    exhaustive answer rather than a search for something already expected."""
+    c = collections.Counter()
+    for addr in sorted(fl["code"]):
+        _n, text = fl["code"][addr]
+        m = DA.search(text)
+        if not m:
+            continue
+        v = int(m.group(1))
+        if v >= 0x100000:
+            c[v & 0xFF0000] += 1
+    return c
+
+
+ADDWA = re.compile(r'^\s*(?:add|or)\s+wa,\s*(\d+)\s*$')
+LDWA = re.compile(r'^\s*(?:ld|ldw|lds)\s+wa,\s*(\d+)\s*$')
+STIW = re.compile(r'^\s*stiw_da\s+\(?1048578\)?,\s*(-?\d+)')
+
+
+def tg_registers(fl):
+    """WHICH tone-generator registers the firmware writes, and with what.
+
+    ★ THE BOUNDARY, for the chip with no datasheet.  IC303's address latch takes
+    (register << 6) | channel: every writer computes it as `add wa,<bank>` on a
+    channel number, or loads the whole constant, and then stores to 0x100000.
+    Walking back one instruction from each latch write therefore gives the
+    register number directly.  Immediate data writes (`stiw_da (0x100002),imm`)
+    are attributed to the latch that precedes them, which is what gives the
+    known VALUES as well as the register numbers.
+
+    -> {register: (n_sites, [example immediate values])}"""
+    order = sorted(fl["code"])
+    out = collections.defaultdict(lambda: [0, []])
+    for i, a in enumerate(order):
+        _n, text = fl["code"][a]
+        if "1048576" not in text.replace(" ", "") or not re.match(r'^\s*stw?_da\b', text):
+            continue
+        bank = None
+        for j in range(i - 1, max(-1, i - 4), -1):
+            t = fl["code"][order[j]][1]
+            m = ADDWA.match(t) or LDWA.match(t)
+            if m:
+                bank = int(m.group(1))
+                break
+        if bank is None:
+            continue
+        reg = bank >> 6
+        e = out[reg]
+        e[0] += 1
+        for j in range(i + 1, min(len(order), i + 5)):
+            m = STIW.match(fl["code"][order[j]][1])
+            if m:
+                v = int(m.group(1)) & 0xFFFF
+                if v not in e[1]:
+                    e[1].append(v)
+                break
+    return out
+
+
 def undisassembled_bytes(fl):
     return sum(fl["data"].values())
 
@@ -542,6 +618,24 @@ def report(key, argv):
               f"{nb} bytes, {len(c)} distinct form(s)")
         for form, n in c.most_common(20):
             print(f"    {n:4d}  {form}")
+    if "--windows" in argv:
+        print("  every direct-addressing access above the 1 MB DRAM, by 64 KB page:")
+        pages = external_windows(fl)
+        for page, n in sorted(pages.items()):
+            known = im_windows(page) or ["★ NOT IN THE WINDOW LIST -- investigate"]
+            print(f"    0x{page:06X}  {n:5d}  {', '.join(known)}")
+        ind = sorted({s[4].split("+")[0] for s in st if s[3] in ("BASE", "INDIRECT")})
+        print("  ★ reached ONLY through a register base, so absent from the list above: "
+              + (", ".join(ind) or "none"))
+    if "--tgregs" in argv:
+        tg = tg_registers(fl)
+        print(f"  tone-generator registers written ({sum(v[0] for v in tg.values())} "
+              f"latch sites resolved to a register):")
+        for reg in sorted(tg):
+            n, vals = tg[reg]
+            vs = " ".join("0x%04X" % v for v in sorted(vals)[:6])
+            print(f"    reg 0x{reg:02X}  latch base 0x{reg << 6:04X}  {n:4d} site(s)"
+                  + (f"   immediate values: {vs}" if vals else ""))
     if "--coverage" in argv:
         cov = coverage(fl, st)
         broken = [c for c in cov if c[3] or c[4]]
@@ -628,12 +722,25 @@ def selftest():
     ck("register-indirect DSP register writes are counted",
        any(s[1].startswith("DSP_Write") for s in ind),
        f"{len(ind)} indirect site(s)")
+    # ★ INDEPENDENT CORROBORATION.  A comment block in the payload records a
+    # census of the ten envelope registers made by scanning the ROM IMAGE for
+    # the opcode bytes `D8 C8 <lo> <hi>` -- a different method, a different
+    # tool, and written before any of these .byte blocks were decoded.  If this
+    # extraction and that scan disagree, one of them is wrong.
+    EXPECT = {0x20: 24, 0x21: 29, 0x22: 4, 0x23: 1, 0x24: 3,
+              0x25: 3, 0x26: 1, 0x27: 3, 0x28: 3, 0x29: 1}
+    tg = tg_registers(fl)
+    got = {r: tg[r][0] for r in EXPECT if r in tg}
+    ck("the ten envelope registers match the source's own ROM-image scan",
+       got == EXPECT,
+       "expected %s, got %s" % (EXPECT, got) if got != EXPECT else
+       "24/29/4/1/3/3/1/3/3/1 for r0x20..r0x29")
     # 5. NEGATIVE CONTROL: a window the hardware does not decode must score far
     #    below the real ones, or the census is matching noise rather than code.
     real = sum(1 for s in st if s[3] in ("DIRECT", "INDIRECT") and s[4].startswith("TG"))
     ck("the tone-generator windows are reached far more than any constant range",
        real > 100, f"{real} TG accesses")
-    print(f"\n{4 + 3 * len(IMAGES)} checks, {f} failures")
+    print(f"\n{5 + 3 * len(IMAGES)} checks, {f} failures")
     return 1 if f else 0
 
 

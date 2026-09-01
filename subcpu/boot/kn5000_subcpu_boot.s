@@ -15,7 +15,9 @@
 ;   0x0400-0x04E0  - Interrupt vector trampolines (copied from ROM at boot)
 ;   0x0500+        - RAM / Payload data area
 ;   0x120000       - Inter-CPU Communication Latches (shared with main CPU)
-;   0x130000       - Tone generator registers
+;   0x130000       - 4 channels x 8 registers, which the payload calls the DSP
+;                    register base (see TONE_GEN_BASE below).  The tone generator
+;                    itself is at 0x100000 / 0x110000.
 ;   0xFE0000-0xFFFFFF - This boot ROM (128KB, but mostly 0xFF)
 ;
 ; Boot sequence:
@@ -42,9 +44,28 @@
 .equ E2_XFER_PARAMS, 0x53E	; E2 command params: src_addr(4), count(2)
 .equ STACK_INIT, 0x5A2	; Initial stack pointer
 .equ DMA_BURST_CTRL, 0x102	; DMA burst/trigger control register
-.equ AUDIO_HW_BASE, 0x100000	; Audio hardware registers (DSP/DAC?)
+.equ AUDIO_HW_BASE, 0x100000	; IC303 TONE GENERATOR register window: +0 is the
+				; register-ADDRESS latch (and the active-voice
+				; bitmap on read), +2 the register DATA port.
+				; Not a DAC, and not a DSP.
 .equ INTER_CPU_LATCH, 0x120000	; Inter-CPU communication latch
-.equ TONE_GEN_BASE, 0x130000	; Tone generator base address
+.equ TONE_GEN_BASE, 0x130000	; ⚠ MISNAMED, corrected 2026-09-01.  The tone
+				; generator is at 0x100000 and 0x110000; 0x130000
+				; is a 4-channel x 8-register block, and the v1.42
+				; payload's byte-identical code calls it the DSP
+				; register base (DSP_Init_Channels 0x01FC95,
+				; DSP_Write_Channel 0x01FCDE).  kn5000.cpp maps it
+				; to IC311 but records that it is NOT the
+				; uPD6383GF host interface, since the microprogram
+				; and coefficient uploads go over port PZ with the
+				; port 7 strobes -- so WHICH chip decodes it is
+				; [UNCERTAIN].  ★ What is certain: every
+				; tone-generator word is bracketed by the P6.7
+				; select strobe (res/set 7,(0x18)), and no access
+				; to 0x130000 anywhere in either image is.
+				; The NAME is left alone because the docs site,
+				; symbols/subcpu_boot_symbols_reference.txt and
+				; archive/asl all cite it.
 
 ; ==============================================================================
 ; SFR addresses (directly addressable 0x00-0xFF)
@@ -87,15 +108,28 @@
 .equ SC1CR, 0x3C
 .equ SC1MOD, 0x3E
 
-; Port 8 extended area
-.equ P8_DATA, 0x40	; Port 8 extended data
-.equ P8_FC_LO, 0x44	; Port 8 function control low
-.equ P8_FC_HI, 0x46	; Port 8 function control high
-.equ P8_FC_EXT, 0x47	; Port 8 function control extended
-
-; Port E area (Timer/Interrupt signals)
-.equ PE_DATA, 0x68	; Port E Data
-.equ PE_CR, 0x6A	; Port E Control
+; ⚠ CORRECTED 2026-09-01.  These six names were wrong, and they were wrong about
+; the SOUND CONTROL PINS.  The TMP94C241's port SFRs run P0..P8 at 0x00..0x20 and
+; then PA,PB,PC,PD,PE,PF,PG,PH at 0x28,0x2C,0x30,0x34,0x38,0x3C,0x40,0x44, with PZ
+; at 0x68 -- see v142/subcpu/shared/sfr_tmp94c241.s, which the payload uses and
+; which agrees with the DSP CONTROL ROUTINES header in
+; v142/subcpu/kn5000_subprogram_v142.s.  So 0x40 is PG, 0x44 is PH -- whose bits
+; 0, 1 and 2 are the DSP ready line and the two DSP resets -- and 0x68 is PZ, the
+; DSP1 command/data byte port.  Not "port 8 extended", and not port E.
+; The old names are kept as aliases only because the archived ASL source uses
+; them; no code in this file references either set.
+.equ PG, 0x40		; Port G data
+.equ PH, 0x44		; Port H data -- .0 DSP ready in, .1 DSP1 reset, .2 DSP2 reset
+.equ PHCR, 0x46		; Port H control
+.equ PHFC, 0x47		; Port H function control
+.equ PZ, 0x68		; Port Z data -- the DSP1 command/data byte port
+.equ PZCR, 0x6A		; Port Z control
+.equ P8_DATA, PG	; superseded name, kept for the archived ASL source
+.equ P8_FC_LO, PH	; superseded name
+.equ P8_FC_HI, PHCR	; superseded name
+.equ P8_FC_EXT, PHFC	; superseded name
+.equ PE_DATA, PZ	; superseded name -- 0x68 is PZ, not port E
+.equ PE_CR, PZCR	; superseded name
 
 ; 8-Bit Timer Registers (0x80-0x8F)
 .equ T01MOD, 0x80	; Timer 0/1 Mode (NOT watchdog - that's at 110h)
@@ -99134,7 +99168,10 @@ INIT_TONE_GEN__init_loop:
 	ret
 
 ; ==============================================================================
-; TONE_GEN_WRITE (0xFF84F1) - Write to tone generator
+; TONE_GEN_WRITE (0xFF84F1) - Write 8 registers of one 0x130000 channel
+; ⚠ NOT the tone generator; see TONE_GEN_BASE above.  Byte for byte the same
+; routine as the payload's DSP_Write_Channel (0x01FCDE): address = channel * 32 +
+; 0x10, then eight consecutive (address, data) pairs through (XHL) and (XHL+2).
 ; ==============================================================================
 
 	.org 0xFF84F1 - 0xFE0000, 0xFF
