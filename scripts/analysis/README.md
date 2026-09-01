@@ -71,3 +71,15 @@ emit the same four bytes. These are the tools for the other half.
     python3 scripts/analysis/code_vs_data_delta.py 8b3d510 HEAD
 
 Findings: `notes/FINDINGS-misframe-corrections-2026-08-30.md`.
+
+
+## Fixed 2026-09-01 (lane INSTR -- the coverage instrument itself was broken)
+
+| script | question it answers |
+|---|---|
+| `kn5000_source_coverage.py` | For each of the 13 gated images (9 KN5000 + 4 WSA1R), how many bytes are real source -- assembly, typed/derived data, or C compiled byte-exact by clang -- and how many are still handed back verbatim from a committed blob with no decode path (the actual territorial debt)? Was reporting an impossible negative source figure for HD-AE5000 (a comment-blind `.incbin` regex was double-counting a dead "; Was:" fossil comment against its live replacement); fixed by stripping comments before matching and by classifying every `.incbin` target against the build machinery that actually produces it, instead of a `"generated/" in path` guess. |
+
+    python3 scripts/analysis/kn5000_source_coverage.py         # run `make all` first
+    python3 scripts/analysis/kn5000_source_coverage.py --selftest
+
+Findings and the corrected 13-image table: `notes/coverage-instrument-fix-2026-09-01.md`.
