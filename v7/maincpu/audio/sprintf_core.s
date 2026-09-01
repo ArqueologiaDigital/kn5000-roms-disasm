@@ -898,7 +898,13 @@ Sprintf_ESci_AfterRound:
 	.byte 0xf2, 0x44, 0xc2, 0x03, 0x32, 0xd8, 0x12, 0xf3
 	.byte 0x07, 0xe8, 0xec, 0x50
 Sprintf_ESci_AfterRound_NoCase:
-	.incbin "includes/romslices/v7_fix_sprintf_esci_afterround_nocase.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; llvm-mc round-trips these 3 B byte-exact as one instruction. v9/v10 open
+	; this label with "ld a,(xsp+10)" instead, so this fragment is NOT the
+	; routine's first instruction in this revision -- the label here just marks
+	; the nearest preceding symbol, not a verified entry point. Kept as a single
+	; verified instruction rather than an opaque blob.
+	inc	1, qiz
 Sprintf_ESci_StripTrailZeros:
 	.byte 0xd7, 0xfa, 0xcf, 0x08, 0x00, 0x61, 0xdb, 0xdc
 	.byte 0xd8, 0x66, 0x04, 0x92, 0x3e, 0x10, 0x00, 0x9f
@@ -2064,7 +2070,14 @@ Sprintf_DecExp_CheckRemainder:
 	swi	7
 	swi	7
 Sprintf_DecExp_ApplySign:
-	.incbin "includes/romslices/v7_block_sprintf_decexp_applysign.bin"
+	; NOT code, despite the label: all 27 bytes are 0xff. v9/v10 has a real,
+	; ~10-instruction routine at this same label ("cpw (xsp+16),0x0 / jr ge,... /
+	; ld xwa,xiz / cpl wa / ..."), so this is not shared structure -- this v7
+	; revision's flash is unprogrammed/erased here, not merely undecoded. A
+	; disassembler happily decodes 0xff as 27x `swi 7` and round-trips it
+	; byte-exact, which is exactly the trap noted in the HD-AE5000 version-string
+	; case: a clean decode is not proof of code. Typed as the fill it plainly is.
+	.fill 27, 1, 0xff
 ; === end v7 block ===
 Sprintf_CopyBytes8:
 	swi	7

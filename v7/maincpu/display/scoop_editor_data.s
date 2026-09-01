@@ -10,7 +10,27 @@
 
 
 Scoop_SoundEditorData:
-	.incbin "includes/romslices/v7_block_scoop_soundeditordata_head.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; llvm-mc -triple=tlcs900 --disassemble round-trips these 51 B byte-exact.
+	; v9/v10's Scoop_SoundEditorData opens the same way (jp/jp/ld wa,(xsp+4)/
+	; ld bc,(xsp+6)/...) confirming the framing; only the call targets differ,
+	; unresolved to symbols because this v7 link never names them.
+	jp	15776404
+	jp	15776994
+	ld	wa, (xsp+4)
+	ld	bc, (xsp+6)
+	call	15783792
+	lds	wa, 1
+	call	15671353
+	cps	hl, 0
+	jr	z, 8
+	lds	wa, 3
+	call	15670325
+	jr	-18
+	lds32	xwa, 0
+	ld	xbc, 29360135
+	jp	16421979
+	jp	15776995
 	dec 4,XSP
 	lda xde, (xsp + 0x02)
 	lda XHL, (XSP)

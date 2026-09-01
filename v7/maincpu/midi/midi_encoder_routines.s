@@ -190,4 +190,16 @@ Encoder_ConfigureVolumeMode:
 	stb_d8	(36416), a
 	ret
 Encoder_ConfigureRangeLimit:
-	.incbin "includes/romslices/v7_fix_encoder_configurerangelimit.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; llvm-mc round-trips these 23 B byte-exact, and matches v9/v10's
+	; Encoder_ConfigureRangeLimit instruction-for-instruction (ldb_d8 a,(..) /
+	; res 7,a / cps a,0 / ret z / ...); only the two register addresses differ
+	; from v9/v10's 0xc07f/0xc07e, a real cross-revision shift.
+	ldb_d8	a, (49123)
+	res	7, a
+	cps	a, 0
+	ret	z
+	ldb_d8	a, (49122)
+	res	7, a
+	stb_d8	(36418), a
+	ret

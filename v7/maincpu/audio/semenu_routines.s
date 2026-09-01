@@ -4294,7 +4294,17 @@ SeMenu_RefreshPartDisplay:
 	ret
 
 SeMenu_RefreshPartDisplay_Data:
-	.incbin "includes/romslices/v7_fix_semenu_refreshpartdisplay_data_head.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; llvm-mc round-trips these 13 B byte-exact. v9/v10 name offset +13 into
+	; this same label SeMenu_RefreshPartDisplay_Data_0xD -- exactly where these
+	; 13 bytes end -- and v9/v10's own bytes at offsets 0 and 6 are the identical
+	; "stdi8 (1709),0 / ret" pair this decodes to. Structural match, not just a
+	; clean decode.
+	stdi8	(1709), 0
+	ret
+	stdi8	(1709), 0
+	ret
+	ret
 	dec 4,XSP
 	lda xde, (xsp + 0x02)
 	lda XHL, (XSP)

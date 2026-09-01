@@ -1839,4 +1839,21 @@ BuildSlotLabel_WriteColon:
 	stib_dsp 0xf8, 0x3a
 
 BuildSlotLabel_WriteContent:
-	.incbin "includes/romslices/v7_fix_buildslotlabel_writecontent.bin"
+	; Disassembled from the committed romslice (no source of any kind existed):
+	; llvm-mc round-trips these 34 B byte-exact. v9/v10's BuildSlotLabel_WriteContent
+	; is line-for-line identical in shape (ld xwa,xiz / ldw de,0x10 /
+	; call FileIO_CopyString_WriteNull / ld (xiz+16),0x0 / ...); the call target
+	; and table-base address are left numeric because this v7 link doesn't name them.
+	ld	xwa, xiz
+	ldw	de, 16
+	call	16288997
+	ld	(xiz+16), 0
+	ld	wa, (xsp+4)
+	mul	wa, 21
+	lda_d16	xbc, (33126)
+	extz	xwa
+	add	xwa, xbc
+	ld	xhl, xwa
+	pop	xiz
+	inc	2, xsp
+	ret
