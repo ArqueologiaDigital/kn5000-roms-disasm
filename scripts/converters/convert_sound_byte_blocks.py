@@ -163,13 +163,66 @@ def rom_matches(addr, raw):
     return d[off:off + len(raw)] == raw
 
 
-def runs(lines, sym):
-    """Every maximal run of `.byte` lines, with the address of its first byte.
+DATALINE = re.compile(r'^\s*\.(byte|hword|word|dword|ascii)\s+(.*?)\s*$')
+STRESC = re.compile(r'\\(x[0-9A-Fa-f]{1,2}|[0-7]{1,3}|.)')
+UNESC = {"n": 10, "t": 9, "r": 13, "0": 0, "\\": 92, '"': 34}
 
-    The address is (nearest preceding label) + (bytes emitted by data directives
-    in between).  ⚠ If an INSTRUCTION sits between the label and the run the
-    offset cannot be computed without assembling, so such a run is skipped and
-    reported rather than guessed at."""
+
+def line_bytes(kind, rest):
+    """The bytes one data directive emits, or None if this tool should not
+    touch it.  ⚠ `.ascii` MATTERS: a run of code interrupted by four printable
+    bytes gets emitted as a string, and treating that as the end of the run
+    leaves the previous instruction cut in half -- which is how two of these
+    blocks were refused before this existed."""
+    if kind == "ascii":
+        m = re.match(r'^"(.*)"$', rest)
+        if m is None:
+            return None
+        out, i, sv = [], 0, m.group(1)
+        while i < len(sv):
+            if sv[i] == "\\" and i + 1 < len(sv):
+                c = sv[i + 1]
+                if c == "x":
+                    j = i + 2
+                    while j < len(sv) and j < i + 4 and sv[j] in "0123456789abcdefABCDEF":
+                        j += 1
+                    out.append(int(sv[i + 2:j], 16))
+                    i = j
+                    continue
+                if c in "01234567":
+                    j = i + 1
+                    while j < len(sv) and j < i + 4 and sv[j] in "01234567":
+                        j += 1
+                    out.append(int(sv[i + 1:j], 8))
+                    i = j
+                    continue
+                out.append(UNESC.get(c, ord(c)))
+                i += 2
+                continue
+            out.append(ord(sv[i]))
+            i += 1
+        return out
+    w = {"byte": 1, "hword": 2, "word": 4, "dword": 8}[kind]
+    out = []
+    for v in rest.split(","):
+        v = v.strip()
+        if not v:
+            continue
+        try:
+            n = int(v, 0)
+        except ValueError:
+            return None
+        out.extend((n >> (8 * k)) & 0xFF for k in range(w))
+    return out
+
+
+def runs(lines, sym):
+    """Every maximal run of DATA directives, with the address of its first byte.
+
+    The address is (nearest preceding label) + (bytes emitted in between).
+    ⚠ If an INSTRUCTION sits between the label and the run the offset cannot be
+    computed without assembling, so such a run is skipped and reported rather
+    than guessed at."""
     out, cur, addr, dirty = [], None, None, False
     for i, ln in enumerate(lines):
         lm = LABELLINE.match(ln)
@@ -180,34 +233,24 @@ def runs(lines, sym):
             addr = sym.get(lm.group(1))
             dirty = False
             continue
-        bm = BYTELINE.match(ln)
-        if bm and not ln.lstrip().startswith(";"):
-            vals = [v.strip() for v in bm.group(1).split(",") if v.strip()]
-            try:
-                bs = [int(v, 0) & 0xFF for v in vals]
-            except ValueError:
-                bs = None
-            if bs is not None:
-                if cur is None:
-                    cur = dict(start=i, end=i, bytes=list(bs),
-                               addr=None if (addr is None or dirty) else addr)
-                else:
-                    cur["end"] = i
-                    cur["bytes"].extend(bs)
-                if addr is not None:
-                    addr += len(bs)
-                continue
+        dm = DATALINE.match(ln)
+        bs = line_bytes(dm.group(1), dm.group(2)) if dm else None
+        if bs is not None:
+            if cur is None:
+                cur = dict(start=i, end=i, bytes=list(bs),
+                           addr=None if (addr is None or dirty) else addr)
+            else:
+                cur["end"] = i
+                cur["bytes"].extend(bs)
+            if addr is not None:
+                addr += len(bs)
+            continue
         if cur:
             out.append(cur)
             cur = None
-        s = ln.split(";")[0].strip()
-        if s and not s.startswith(";"):
-            d = s.split()[0]
-            if d in DATA_W and d != ".byte":
-                if addr is not None:
-                    addr += DATA_W[d] * len([x for x in s.split(None, 1)[1].split(",") if x.strip()])
-            elif not s.startswith("."):
-                dirty = True        # an instruction: the offset is unknown from here
+        t = ln.split(";")[0].strip()
+        if t and not t.startswith(";") and not t.startswith("."):
+            dirty = True        # an instruction: the offset is unknown from here
     if cur:
         out.append(cur)
     return out
