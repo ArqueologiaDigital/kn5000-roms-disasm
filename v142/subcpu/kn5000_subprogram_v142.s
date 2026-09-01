@@ -561,7 +561,7 @@ DSP_ChecksumRange:
 	extz xbc			; Zero-extend count
 	add xbc, xwa			; XBC = end address
 DSP_ChecksumRange_Loop:
-	.byte 0xe5, 0xe2, 0x83		; add xhl, (xwa+)  (add + auto-increment)
+	add_spil	xhl, 0xe2	; add xhl, (xwa+)  (add + auto-increment)
 	cp xwa, xbc			; Reached end?
 	jr lt, DSP_ChecksumRange_Loop
 	cpl hl				; One's complement
@@ -2011,27 +2011,27 @@ RingBuf_WrappedRead_Opaque_B:
 ; 512-byte twin of 0x020A9D (wrap mask 0x1FF).
 FIFO_Engine512_Get_Marked:
 	ld	ix, (xde-10)
-	.byte 0x9a, 0xfa, 0xf4	; cp IX,(XDE+0xfa)
+	cp16_src_rid8	xde, 0xfa, ix	; cp IX,(XDE+0xfa)
 	jr	nz, LABEL_020B38
 	ldw	hl, 65535
 	ret
 LABEL_020B38:
 	xor	hl, hl
-	.byte 0xc3, 0x07, 0xe8, 0xf0, 0x27	; ld L,(XDE+IX)
-	.byte 0xdc, 0x38, 0xff, 0x01	; minc1 0x01ff,IX
+	ld_rrb	l, xde, ix	; ld L,(XDE+IX)
+	minc1_16	ix, 0x01ff	; minc1 0x01ff,IX
 	ld	(xde-10), ix
 	ret
 ; 512-byte twin of 0x020AB8 (wrap mask 0x1FF).
 FIFO_Engine512_Get_From_Mark:
 	ld	ix, (xde-10)
-	.byte 0x9a, 0xfc, 0xf4	; cp IX,(XDE+0xfc)
+	cp16_src_rid8	xde, 0xfc, ix	; cp IX,(XDE+0xfc)
 	jr	nz, LABEL_020B53
 	ldw	hl, 65535
 	ret
 LABEL_020B53:
 	xor	hl, hl
-	.byte 0xc3, 0x07, 0xe8, 0xf0, 0x27	; ld L,(XDE+IX)
-	.byte 0xdc, 0x38, 0xff, 0x01	; minc1 0x01ff,IX
+	ld_rrb	l, xde, ix	; ld L,(XDE+IX)
+	minc1_16	ix, 0x01ff	; minc1 0x01ff,IX
 	ld	(xde-10), ix
 	ret
 ; 512-byte twin of 0x020AD3 (wrap mask 0x1FF).
@@ -16396,7 +16396,7 @@ Voice_DSP_OutputConfig:
 	lda	xsp, (xsp-10)
 	ld	(xsp+6), c
 	ld	(xsp+8), a
-	.byte 0x8f, 0x06, 0x3f, 0x00	; cp (XSP+0x06),0x00
+	cp8_imm_rid8	xsp, 0x06, 0x00	; cp (XSP+0x06),0x00
 	jr	nz, LABEL_027D61
 	ld	a, (xsp+8)
 	ld	e, a
@@ -16419,13 +16419,13 @@ Voice_DSP_OutputConfig:
 	lds	de, 0
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
-	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; ld (XSP+0x04),0x0000
+	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
 	jr	LABEL_027D4A
 LABEL_027D31:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	ldb	w, 0
 	lda_24	xbc, (283084)
@@ -16435,7 +16435,7 @@ LABEL_027D4A:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
@@ -16463,13 +16463,13 @@ LABEL_027D61:
 	lds	de, 0
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
-	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; ld (XSP+0x04),0x0000
+	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
 	jr	LABEL_027DB8
 LABEL_027D9F:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	ldb	w, 0
 	lda_24	xbc, (283084)
@@ -16479,7 +16479,7 @@ LABEL_027DB8:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
@@ -16498,7 +16498,7 @@ Voice_DSP_OutputConfig2:
 	lda	xsp, (xsp-10)
 	ld	(xsp+6), c
 	ld	(xsp+8), a
-	.byte 0x8f, 0x06, 0x3f, 0x00	; cp (XSP+0x06),0x00
+	cp8_imm_rid8	xsp, 0x06, 0x00	; cp (XSP+0x06),0x00
 	jr	nz, LABEL_027E4E
 	ld	a, (xsp+8)
 	ld	e, a
@@ -16521,13 +16521,13 @@ Voice_DSP_OutputConfig2:
 	lds	de, 0
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
-	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; ld (XSP+0x04),0x0000
+	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
 	jr	LABEL_027E37
 LABEL_027E1E:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	ldb	w, 0
 	lda_24	xbc, (283084)
@@ -16537,7 +16537,7 @@ LABEL_027E37:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
@@ -16565,13 +16565,13 @@ LABEL_027E4E:
 	lds	de, 0
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
-	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; ld (XSP+0x04),0x0000
+	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
 	jr	LABEL_027EA5
 LABEL_027E8C:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	ldb	w, 0
 	lda_24	xbc, (283084)
@@ -16581,7 +16581,7 @@ LABEL_027EA5:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
@@ -16610,13 +16610,13 @@ Voice_DSP_SimpleCopy:
 	lds	de, 0
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
-	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; ld (XSP+0x04),0x0000
+	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
 	jr	LABEL_027F01
 LABEL_027EE8:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	ldb	w, 0
 	lda_24	xbc, (283084)
@@ -16626,7 +16626,7 @@ LABEL_027F01:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
@@ -16653,13 +16653,13 @@ Voice_DSP_SimpleCopy2:
 	lds	de, 0
 	call	Voice_BuildOutputList
 	ld	(xsp), xhl
-	.byte 0xbf, 0x04, 0x02, 0x00, 0x00	; ld (XSP+0x04),0x0000
+	ldw	(xsp+4), 0x0000	; ld (XSP+0x04),0x0000
 	jr	LABEL_027F5C
 LABEL_027F43:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	ldb	w, 0
 	lda_24	xbc, (283084)
@@ -16669,7 +16669,7 @@ LABEL_027F5C:
 	ld	wa, (xsp+4)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xa7, 0x80	; add XWA,(XSP)
+	add32_src_ri	xsp, xwa	; add XWA,(XSP)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
@@ -17254,13 +17254,13 @@ LABEL_028347:
 	ld	l, w
 	extz	hl
 	lda_24	xiy, (63191)
-	.byte 0xc3, 0x07, 0xf4, 0xec, 0x27	; ld L,(XIY+HL)
+	ld_rrb	l, xiy, hl	; ld L,(XIY+HL)
 	and	l, c
 	jrl	z, LABEL_0283EE
 	ld	l, w
 	extz	hl
 	lda_24	xiy, (63195)
-	.byte 0xc3, 0x07, 0xf4, 0xec, 0x27	; ld L,(XIY+HL)
+	ld_rrb	l, xiy, hl	; ld L,(XIY+HL)
 	and	l, c
 	jr	z, LABEL_02839A
 	ld	l, w
@@ -17274,7 +17274,7 @@ LABEL_028347:
 	lda_24	xiy, (267112)
 	exts	xhl
 	add	xhl, xiy
-	.byte 0xf3, 0x07, 0xec, 0xf8, 0x33	; lda XHL,XHL+IZ
+	lda_rr	xhl, xhl, iz	; lda XHL,XHL+IZ
 	ld	iy, de
 	or	iy, ix
 	or	(xhl+24), iy
@@ -17291,7 +17291,7 @@ LABEL_02839A:
 	lda_24	xiy, (267112)
 	exts	xhl
 	add	xhl, xiy
-	.byte 0xf3, 0x07, 0xec, 0xf8, 0x35	; lda XIY,XHL+IZ
+	lda_rr	xiy, xhl, iz	; lda XIY,XHL+IZ
 	ld	hl, ix
 	cpl	hl
 	and	(xiy+24), hl
@@ -17306,7 +17306,7 @@ LABEL_02839A:
 	lda_24	xiy, (267112)
 	exts	xhl
 	add	xhl, xiy
-	.byte 0xf3, 0x07, 0xec, 0xf8, 0x33	; lda XHL,XHL+IZ
+	lda_rr	xhl, xhl, iz	; lda XHL,XHL+IZ
 	or	(xhl+24), de
 	jr	LABEL_02841B
 LABEL_0283EE:
@@ -17321,7 +17321,7 @@ LABEL_0283EE:
 	lda_24	xiy, (267112)
 	exts	xhl
 	add	xhl, xiy
-	.byte 0xf3, 0x07, 0xec, 0xf8, 0x35	; lda XIY,XHL+IZ
+	lda_rr	xiy, xhl, iz	; lda XIY,XHL+IZ
 	ld	hl, de
 	or	hl, ix
 	cpl	hl
@@ -17372,7 +17372,7 @@ AudioMod_Scale_To_Part_1B:
 AudioMod_Apply_Porta_Curve:
 	dec	2, xsp
 	ld	(xsp), a
-	.byte 0xba, 0x01, 0xcf	; bit 7,(XDE+0x01)
+	bit	7, (xde+1)	; bit 7,(XDE+0x01)
 	jr	z, LABEL_0284C1
 	ld	hl, bc
 	exts	xhl
@@ -17398,29 +17398,50 @@ LABEL_0284C8:
 	jr	gt, 33
 	add	wa, wa
 	lda_24	xix, (63199)
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x20	; ld WA,(XIX+WA)
+	ld_rrw	wa, xix, wa	; ld WA,(XIX+WA)
 	lda_24	xix, (165120)
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8	; jp T,XIX+WA
+	jp_rr	8, xix, wa	; jp T,XIX+WA
 ; Base address of the 10-entry computed jump inside AudioMod_Apply_Porta_Curve; offsets come
 ; from the word table at 0x00F6DF.  Entry 0 (this address) triples then shifts left 2.
 AudioMod_Porta_Curve_JumpBase:
-	.byte 0xeb, 0x88, 0xeb, 0x83, 0xe8, 0x83
-	.byte 0xeb, 0xec, 0x02, 0x68, 0x1c, 0x87, 0x21, 0xd8
-	.byte 0x12, 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x7b, 0x13
-	.byte 0x04, 0x31, 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xe9
-	.byte 0xa8, 0xc9, 0x8b, 0xeb, 0x88, 0x1d, 0xca, 0xd8
-	.byte 0x03, 0xeb, 0xec, 0x09, 0xeb, 0xcf, 0x00, 0x00
-	.byte 0x00, 0x00, 0x62, 0x0d, 0xeb, 0x88, 0x41, 0x00
-	.byte 0x40, 0x00, 0x00, 0x1d, 0x5f, 0xdc, 0x03, 0x68
-	.byte 0x0b, 0xeb, 0x88, 0x41, 0xff, 0x3f, 0x00, 0x00
-	.byte 0x1d, 0x5f, 0xdc, 0x03, 0x87, 0x21, 0xd8, 0x12
-	.byte 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x85, 0x13, 0x04
-	.byte 0x31, 0xf3, 0x07, 0xe4, 0xe0, 0x53, 0xef, 0x62
-	.byte 0x0e
+	ld	xwa, xhl
+	add	xhl, xhl
+	add	xhl, xwa
+	sla	xhl, 2
+	jr	LABEL_028527
+	ld	a, (xsp)
+	extz	wa
+	muls	wa, 287
+	lda_24	xbc, (267131)
+	ld_rrb	a, xbc, wa	; ld A,(XBC+WA)
+	lds32	xbc, 0
+	ld	c, a
+	ld	xwa, xhl
+	call	FP_MulAccum64
+LABEL_028527:
+	sla	xhl, 9
+	cp	xhl, 0
+	jr	le, LABEL_02853F
+	ld	xwa, xhl
+	ld	xbc, 16384
+	call	Int_SignedDiv_AltEntry
+	jr	LABEL_02854A
+LABEL_02853F:
+	ld	xwa, xhl
+	ld	xbc, 16383
+	call	Int_SignedDiv_AltEntry
+LABEL_02854A:
+	ld	a, (xsp)
+	extz	wa
+	muls	wa, 287
+	lda_24	xbc, (267141)
+	st_rrw	hl, xbc, wa	; ld (XBC+WA),HL
+	inc	2, xsp
+	ret
 ; Same descriptor convention as AudioMod_Scale_To_Part_1C but SIGNED (muls), arithmetic
 ; shift right 1, then divided by 0x7F; stores the byte at 0x041387 + part*0x11F (part+0x1F).
 AudioMod_Scale_To_Part_1F:
-	.byte 0xba, 0x01, 0xcf	; bit 7,(XDE+0x01)
+	bit	7, (xde+1)	; bit 7,(XDE+0x01)
 	jr	z, LABEL_02857D
 	ld	e, (xde+2)
 	ld	l, e
@@ -17451,11 +17472,11 @@ LABEL_02858E:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267143)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x45	; ld (XBC+WA),E
+	st_rrb	e, xbc, wa	; ld (XBC+WA),E
 	ret
 ; As above without the >>1; stores the byte at 0x041388 + part*0x11F (part+0x20).
 AudioMod_Scale_To_Part_20:
-	.byte 0xba, 0x01, 0xcf	; bit 7,(XDE+0x01)
+	bit	7, (xde+1)	; bit 7,(XDE+0x01)
 	jr	z, LABEL_0285CA
 	ld	e, (xde+2)
 	ld	l, e
@@ -17485,7 +17506,7 @@ LABEL_0285DB:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267144)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x45	; ld (XBC+WA),E
+	st_rrb	e, xbc, wa	; ld (XBC+WA),E
 	ret
 ; A = part, C = controller value, XDE = routing descriptor, plus L and W taken from the
 ; caller's stack frame (they select one of the part's four output-slot records and a
@@ -17500,7 +17521,7 @@ AudioMod_Apply_Slot_Field2A:
 	ld	xix, xde
 	ld	l, (xsp+6)
 	ld	w, (xsp+8)
-	.byte 0xbc, 0x01, 0xcf	; bit 7,(XIX+0x01)
+	bit	7, (xix+1)	; bit 7,(XIX+0x01)
 	jr	z, LABEL_028614
 	cp	c, 64
 	jr	ule, LABEL_028612
@@ -17528,7 +17549,7 @@ LABEL_028614:
 	lda_24	xiy, (267112)
 	exts	xde
 	add	xde, xiy
-	.byte 0xf3, 0x07, 0xe8, 0xf8, 0x32	; lda XDE,XDE+IZ
+	lda_rr	xde, xde, iz	; lda XDE,XDE+IZ
 	ld	e, (xde+40)
 	and	e, 85
 	ld	h, e
@@ -17556,7 +17577,7 @@ LABEL_028614:
 	lda_24	xiy, (267112)
 	exts	xde
 	add	xde, xiy
-	.byte 0xf3, 0x07, 0xe8, 0xf8, 0x35	; lda XIY,XDE+IZ
+	lda_rr	xiy, xde, iz	; lda XIY,XDE+IZ
 	ld	e, h
 	or	e, b
 	ld	(xiy+40), e
@@ -17577,13 +17598,13 @@ LABEL_028691:
 	lda_24	xiy, (267112)
 	exts	xde
 	add	xde, xiy
-	.byte 0xf3, 0x07, 0xe8, 0xf8, 0x32	; lda XDE,XDE+IZ
+	lda_rr	xde, xde, iz	; lda XDE,XDE+IZ
 	ld	(xde+40), 0
 LABEL_0286BF:
-	.byte 0xc7, 0xf4, 0x9b	; ld IYL,C
+	ldb_erp	c, 0xf4	; ld IYL,C
 	extz	iy
 	ld	e, (xix+2)
-	.byte 0xc7, 0xf0, 0x9d	; ld IXL,E
+	ldb_erp	e, 0xf0	; ld IXL,E
 	extz	ix
 	ld	de, iy
 	mul	xde, xix
@@ -17608,8 +17629,8 @@ LABEL_0286DD:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x31	; lda XBC,XWA+HL
-	.byte 0xc7, 0xf4, 0x89	; ld A,IYL
+	lda_rr	xbc, xwa, hl	; lda XBC,XWA+HL
+	ld_erpb_rr	a, 0xf4	; ld A,IYL
 	ld	(xbc+42), a
 	popw	iz
 	retd	4
@@ -17621,7 +17642,7 @@ AudioMod_Apply_Slot_Field29:
 	ld	xix, xde
 	ld	l, (xsp+6)
 	ld	w, (xsp+8)
-	.byte 0xbc, 0x01, 0xcf	; bit 7,(XIX+0x01)
+	bit	7, (xix+1)	; bit 7,(XIX+0x01)
 	jr	z, LABEL_02872D
 	cp	c, 64
 	jr	ule, LABEL_02872B
@@ -17649,7 +17670,7 @@ LABEL_02872D:
 	lda_24	xiy, (267112)
 	exts	xde
 	add	xde, xiy
-	.byte 0xf3, 0x07, 0xe8, 0xf8, 0x32	; lda XDE,XDE+IZ
+	lda_rr	xde, xde, iz	; lda XDE,XDE+IZ
 	ld	e, (xde+40)
 	and	e, 85
 	ld	h, e
@@ -17677,7 +17698,7 @@ LABEL_02872D:
 	lda_24	xiy, (267112)
 	exts	xde
 	add	xde, xiy
-	.byte 0xf3, 0x07, 0xe8, 0xf8, 0x35	; lda XIY,XDE+IZ
+	lda_rr	xiy, xde, iz	; lda XIY,XDE+IZ
 	ld	e, h
 	or	e, b
 	ld	(xiy+40), e
@@ -17698,13 +17719,13 @@ LABEL_0287AA:
 	lda_24	xiy, (267112)
 	exts	xde
 	add	xde, xiy
-	.byte 0xf3, 0x07, 0xe8, 0xf8, 0x32	; lda XDE,XDE+IZ
+	lda_rr	xde, xde, iz	; lda XDE,XDE+IZ
 	ld	(xde+40), 0
 LABEL_0287D8:
-	.byte 0xc7, 0xf4, 0x9b	; ld IYL,C
+	ldb_erp	c, 0xf4	; ld IYL,C
 	extz	iy
 	ld	e, (xix+2)
-	.byte 0xc7, 0xf0, 0x9d	; ld IXL,E
+	ldb_erp	e, 0xf0	; ld IXL,E
 	extz	ix
 	ld	de, iy
 	mul	xde, xix
@@ -17729,8 +17750,8 @@ LABEL_0287F6:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x31	; lda XBC,XWA+HL
-	.byte 0xc7, 0xf4, 0x89	; ld A,IYL
+	lda_rr	xbc, xwa, hl	; lda XBC,XWA+HL
+	ld_erpb_rr	a, 0xf4	; ld A,IYL
 	ld	(xbc+41), a
 	popw	iz
 	retd	4
@@ -18697,7 +18718,7 @@ VoiceCC_DataTable_028F75:
 	ld	(xsp+4), xbc
 	inc	5, xwa
 	ld	xiz, xwa
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	nc, LABEL_028FE4
 LABEL_028F89:
 	ld	a, (xiz)
@@ -18734,7 +18755,7 @@ LABEL_028FCB:
 	calr	ToneGen_WriteVoice_Pan_Pair
 LABEL_028FDD:
 	inc	1, xiz
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	c, LABEL_028F89
 LABEL_028FE4:
 	pop	xiz
@@ -18751,7 +18772,7 @@ AudioChannel_AllVoices_Update_PanShift:
 	ld	(xsp+4), xbc
 	inc	5, xwa
 	ld	xiz, xwa
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	nc, LABEL_02906D
 LABEL_028FFC:
 	ld	a, (xiz)
@@ -18772,7 +18793,7 @@ LABEL_028FFC:
 	cps	wa, 4
 	jr	nz, LABEL_029066
 LABEL_02902A:
-	.byte 0xb9, 0x05, 0xcf	; bit 7,(XBC+0x05)
+	bit	7, (xbc+5)	; bit 7,(XBC+0x05)
 	jr	z, LABEL_029066
 	ld	xwa, xbc
 	lds	bc, 1
@@ -18784,9 +18805,9 @@ LABEL_02902A:
 	jr	LABEL_029066
 LABEL_029045:
 	ld	xwa, (xbc+19)
-	.byte 0xb8, 0x0d, 0xcd	; bit 5,(XWA+0x0d)
+	bit	5, (xwa+13)	; bit 5,(XWA+0x0d)
 	jr	z, LABEL_029052
-	.byte 0xb9, 0x05, 0xcf	; bit 7,(XBC+0x05)
+	bit	7, (xbc+5)	; bit 7,(XBC+0x05)
 	jr	z, LABEL_029066
 LABEL_029052:
 	ld	xwa, xbc
@@ -18798,7 +18819,7 @@ LABEL_029052:
 	calr	ToneGen_WriteVoice_Reg21_Reg22
 LABEL_029066:
 	inc	1, xiz
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	c, LABEL_028FFC
 LABEL_02906D:
 	pop	xiz
@@ -18815,7 +18836,7 @@ AudioChannel_AllVoices_Update_Variant3:
 	ld	(xsp+4), xbc
 	inc	5, xwa
 	ld	(xsp+8), xwa
-	.byte 0x80, 0x3f, 0x40	; cp (XWA),0x40
+	cp8_imm_ri	xwa, 0x40	; cp (XWA),0x40
 	jr	nc, LABEL_0290E3
 LABEL_029086:
 	ld	xwa, (xsp+8)
@@ -18824,7 +18845,7 @@ LABEL_029086:
 	muls	wa, 71
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x36	; lda XIZ,XWA+BC
+	lda_rr	xiz, xwa, bc	; lda XIZ,XWA+BC
 	ld	wa, (xiz+1)
 	and	wa, 60
 	cp	wa, 16
@@ -18850,7 +18871,7 @@ LABEL_0290D6:
 	lds32	xwa, 1
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
-	.byte 0x80, 0x3f, 0x40	; cp (XWA),0x40
+	cp8_imm_ri	xwa, 0x40	; cp (XWA),0x40
 	jr	c, LABEL_029086
 LABEL_0290E3:
 	pop	xiz
@@ -18950,7 +18971,7 @@ AudioChannel_Handler_Cmd02:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267118)
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20	; ld XWA,(XBC+WA)
+	ld_rrl	xwa, xbc, wa	; ld XWA,(XBC+WA)
 	ld	a, (xwa+16)
 	and	a, 192
 	cp	a, 192
@@ -18998,8 +19019,8 @@ AudioChannel_Handler_Cmd04_07:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x30	; lda XWA,XWA+HL
-	.byte 0x88, 0x03, 0x3f, 0x00	; cp (XWA+0x03),0x00
+	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
+	cp8_imm_rid8	xwa, 0x03, 0x00	; cp (XWA+0x03),0x00
 	jrl	nz, LABEL_0292D7
 	ld	a, (xsp+12)
 	ld	l, a
@@ -19030,7 +19051,7 @@ LABEL_02925E:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19047,12 +19068,12 @@ LABEL_02927A:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	lda_24	xwa, (274574)
 	ld	(xsp+6), xwa
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jrl	nc, LABEL_0293E9
 LABEL_0292AB:
 	ld	a, (xiz)
@@ -19060,14 +19081,14 @@ LABEL_0292AB:
 	muls	wa, 71
 	ld	bc, wa
 	ld	xwa, (xsp+6)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; lda XWA,XWA+BC
+	lda_rr	xwa, xwa, bc	; lda XWA,XWA+BC
 	call	ExtVoice_Build_SlotRegisters
 	ld	a, (xiz)
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg11
 	inc	1, xiz
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	c, LABEL_0292AB
 	jrl	LABEL_0293E9
 LABEL_0292D7:
@@ -19100,7 +19121,7 @@ LABEL_029311:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19121,15 +19142,15 @@ LABEL_02932D:
 	ldw	de, 32
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00	; ld (XSP+0x08),0x0000
+	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
 	jrl	LABEL_0293D2
 LABEL_029351:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	iz, (xwa)
-	.byte 0xc7, 0xf9, 0xa8	; ld IZH,0
+	lds_erpb	0xf9, 0	; ld IZH,0
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -19137,32 +19158,32 @@ LABEL_029351:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31	; lda XBC,XBC+WA
+	lda_rr	xbc, xbc, wa	; lda XBC,XBC+WA
 	ld	a, (xsp+18)
 	ld	e, a
 	extz	de
 	pushw	0
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	pushw	wa
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
-	.byte 0x8f, 0x0a, 0x3f, 0x00	; cp (XSP+0x0a),0x00
+	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
 	jr	nz, LABEL_0293B4
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	stiw_da	(283148), 0
 	jr	LABEL_0293C2
 LABEL_0293B4:
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	EGEnv_Compute_A
 	stw_da	(283148), hl
 LABEL_0293C2:
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg18
@@ -19171,7 +19192,7 @@ LABEL_0293D2:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
@@ -19197,8 +19218,8 @@ AudioChannel_Handler_Cmd10_13:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x30	; lda XWA,XWA+HL
-	.byte 0x88, 0x02, 0x3f, 0x00	; cp (XWA+0x02),0x00
+	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
+	cp8_imm_rid8	xwa, 0x02, 0x00	; cp (XWA+0x02),0x00
 	jrl	nz, LABEL_0294D9
 	ld	a, (xsp+12)
 	ld	l, a
@@ -19229,7 +19250,7 @@ LABEL_029460:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19246,12 +19267,12 @@ LABEL_02947C:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	lda_24	xwa, (274574)
 	ld	(xsp+6), xwa
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jrl	nc, LABEL_0295F8
 LABEL_0294AD:
 	ld	a, (xiz)
@@ -19259,14 +19280,14 @@ LABEL_0294AD:
 	muls	wa, 71
 	ld	bc, wa
 	ld	xwa, (xsp+6)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; lda XWA,XWA+BC
+	lda_rr	xwa, xwa, bc	; lda XWA,XWA+BC
 	call	ExtVoice_Build_SlotRegisters
 	ld	a, (xiz)
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg11
 	inc	1, xiz
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	c, LABEL_0294AD
 	jrl	LABEL_0295F8
 LABEL_0294D9:
@@ -19299,7 +19320,7 @@ LABEL_029513:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19320,15 +19341,15 @@ LABEL_02952F:
 	ldw	de, 32
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00	; ld (XSP+0x08),0x0000
+	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
 	jrl	LABEL_0295E1
 LABEL_029553:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	iz, (xwa)
-	.byte 0xc7, 0xf9, 0xa8	; ld IZH,0
+	lds_erpb	0xf9, 0	; ld IZH,0
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -19336,35 +19357,35 @@ LABEL_029553:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31	; lda XBC,XBC+WA
+	lda_rr	xbc, xbc, wa	; lda XBC,XBC+WA
 	ld	a, (xsp+18)
 	ld	e, a
 	extz	de
 	pushw	0
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	pushw	wa
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
-	.byte 0x8f, 0x0a, 0x3f, 0x00	; cp (XSP+0x0a),0x00
+	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
 	jr	nz, LABEL_0295C3
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	stiw_da	(283148), 0
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg18
 	jr	LABEL_0295DE
 LABEL_0295C3:
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	EGEnv_Compute_A_Simple
 	stw_da	(283144), hl
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg16
@@ -19374,7 +19395,7 @@ LABEL_0295E1:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
@@ -19400,8 +19421,8 @@ AudioChannel_Handler_Cmd08_0B:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x30	; lda XWA,XWA+HL
-	.byte 0x88, 0x03, 0x3f, 0x00	; cp (XWA+0x03),0x00
+	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
+	cp8_imm_rid8	xwa, 0x03, 0x00	; cp (XWA+0x03),0x00
 	jrl	nz, LABEL_0296E8
 	ld	a, (xsp+12)
 	ld	l, a
@@ -19432,7 +19453,7 @@ LABEL_02966F:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19449,12 +19470,12 @@ LABEL_02968B:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	lda_24	xwa, (274574)
 	ld	(xsp+6), xwa
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jrl	nc, LABEL_0297FD
 LABEL_0296BC:
 	ld	a, (xiz)
@@ -19462,14 +19483,14 @@ LABEL_0296BC:
 	muls	wa, 71
 	ld	bc, wa
 	ld	xwa, (xsp+6)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; lda XWA,XWA+BC
+	lda_rr	xwa, xwa, bc	; lda XWA,XWA+BC
 	call	Voice_SubVoice_ComputeAndTrigger
 	ld	a, (xiz)
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_EnvLevel
 	inc	1, xiz
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	c, LABEL_0296BC
 	jrl	LABEL_0297FD
 LABEL_0296E8:
@@ -19502,7 +19523,7 @@ LABEL_029722:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19524,15 +19545,15 @@ LABEL_02973E:
 	ldw	de, 32
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00	; ld (XSP+0x08),0x0000
+	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
 	jrl	LABEL_0297E6
 LABEL_029765:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	iz, (xwa)
-	.byte 0xc7, 0xf9, 0xa8	; ld IZH,0
+	lds_erpb	0xf9, 0	; ld IZH,0
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -19540,32 +19561,32 @@ LABEL_029765:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31	; lda XBC,XBC+WA
+	lda_rr	xbc, xbc, wa	; lda XBC,XBC+WA
 	ld	a, (xsp+18)
 	ld	e, a
 	extz	de
 	pushw	1
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	pushw	wa
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
-	.byte 0x8f, 0x0a, 0x3f, 0x00	; cp (XSP+0x0a),0x00
+	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
 	jr	nz, LABEL_0297C8
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	stiw_da	(283140), 0
 	jr	LABEL_0297D6
 LABEL_0297C8:
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	EGEnv_Compute_B
 	stw_da	(283140), hl
 LABEL_0297D6:
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg07
@@ -19574,7 +19595,7 @@ LABEL_0297E6:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
@@ -19600,8 +19621,8 @@ AudioChannel_Handler_Cmd14_17:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x30	; lda XWA,XWA+HL
-	.byte 0x88, 0x02, 0x3f, 0x00	; cp (XWA+0x02),0x00
+	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
+	cp8_imm_rid8	xwa, 0x02, 0x00	; cp (XWA+0x02),0x00
 	jrl	nz, LABEL_0298ED
 	ld	a, (xsp+12)
 	ld	l, a
@@ -19632,7 +19653,7 @@ LABEL_029874:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19649,12 +19670,12 @@ LABEL_029890:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	lda_24	xwa, (274574)
 	ld	(xsp+6), xwa
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jrl	nc, LABEL_029A0F
 LABEL_0298C1:
 	ld	a, (xiz)
@@ -19662,14 +19683,14 @@ LABEL_0298C1:
 	muls	wa, 71
 	ld	bc, wa
 	ld	xwa, (xsp+6)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; lda XWA,XWA+BC
+	lda_rr	xwa, xwa, bc	; lda XWA,XWA+BC
 	call	Voice_SubVoice_ComputeAndTrigger
 	ld	a, (xiz)
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_EnvLevel
 	inc	1, xiz
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	c, LABEL_0298C1
 	jrl	LABEL_029A0F
 LABEL_0298ED:
@@ -19702,7 +19723,7 @@ LABEL_029927:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19724,15 +19745,15 @@ LABEL_029943:
 	ldw	de, 32
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00	; ld (XSP+0x08),0x0000
+	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
 	jrl	LABEL_0299F8
 LABEL_02996A:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	iz, (xwa)
-	.byte 0xc7, 0xf9, 0xa8	; ld IZH,0
+	lds_erpb	0xf9, 0	; ld IZH,0
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -19740,35 +19761,35 @@ LABEL_02996A:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31	; lda XBC,XBC+WA
+	lda_rr	xbc, xbc, wa	; lda XBC,XBC+WA
 	ld	a, (xsp+18)
 	ld	e, a
 	extz	de
 	pushw	1
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	pushw	wa
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
-	.byte 0x8f, 0x0a, 0x3f, 0x00	; cp (XSP+0x0a),0x00
+	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
 	jr	nz, LABEL_0299DA
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	stiw_da	(283140), 0
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg07
 	jr	LABEL_0299F5
 LABEL_0299DA:
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	EGEnv_Compute_B_Simple
 	stw_da	(283142), hl
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg15
@@ -19778,7 +19799,7 @@ LABEL_0299F8:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
@@ -19804,8 +19825,8 @@ AudioChannel_Handler_Cmd0C_0F:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x30	; lda XWA,XWA+HL
-	.byte 0x88, 0x03, 0x3f, 0x00	; cp (XWA+0x03),0x00
+	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
+	cp8_imm_rid8	xwa, 0x03, 0x00	; cp (XWA+0x03),0x00
 	jrl	nz, LABEL_029AFF
 	ld	a, (xsp+12)
 	ld	l, a
@@ -19836,7 +19857,7 @@ LABEL_029A86:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19853,12 +19874,12 @@ LABEL_029AA2:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	lda_24	xwa, (274574)
 	ld	(xsp+6), xwa
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jrl	nc, LABEL_029C16
 LABEL_029AD3:
 	ld	a, (xiz)
@@ -19866,14 +19887,14 @@ LABEL_029AD3:
 	muls	wa, 71
 	ld	bc, wa
 	ld	xwa, (xsp+6)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; lda XWA,XWA+BC
+	lda_rr	xwa, xwa, bc	; lda XWA,XWA+BC
 	call	Voice2_UpdatePitch
 	ld	a, (xiz)
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg13
 	inc	1, xiz
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	c, LABEL_029AD3
 	jrl	LABEL_029C16
 LABEL_029AFF:
@@ -19906,7 +19927,7 @@ LABEL_029B39:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -19928,15 +19949,15 @@ LABEL_029B55:
 	ldw	de, 32
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00	; ld (XSP+0x08),0x0000
+	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
 	jrl	LABEL_029BFF
 LABEL_029B7C:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	iz, (xwa)
-	.byte 0xc7, 0xf9, 0xa8	; ld IZH,0
+	lds_erpb	0xf9, 0	; ld IZH,0
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -19944,32 +19965,32 @@ LABEL_029B7C:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31	; lda XBC,XBC+WA
+	lda_rr	xbc, xbc, wa	; lda XBC,XBC+WA
 	ld	a, (xsp+18)
 	ld	e, a
 	extz	de
 	pushw	2
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	pushw	wa
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
-	.byte 0x8f, 0x0a, 0x3f, 0x00	; cp (XSP+0x0a),0x00
+	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
 	jr	nz, LABEL_029BE6
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	stiw_da	(283140), 0
 	stiw_da	(283150), 0
 	jr	LABEL_029BEF
 LABEL_029BE6:
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	Voice_Freq_WriteLeft
 LABEL_029BEF:
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg07_Or_Reg18
@@ -19978,7 +19999,7 @@ LABEL_029BFF:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
@@ -20005,8 +20026,8 @@ AudioChannel_Handler_Cmd18_1B:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x30	; lda XWA,XWA+HL
-	.byte 0x88, 0x02, 0x3f, 0x00	; cp (XWA+0x02),0x00
+	lda_rr	xwa, xwa, hl	; lda XWA,XWA+HL
+	cp8_imm_rid8	xwa, 0x02, 0x00	; cp (XWA+0x02),0x00
 	jrl	nz, LABEL_029D06
 	ld	a, (xsp+12)
 	ld	l, a
@@ -20037,7 +20058,7 @@ LABEL_029C8D:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -20054,12 +20075,12 @@ LABEL_029CA9:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	lda_24	xwa, (274574)
 	ld	(xsp+6), xwa
 	lda	xwa, (xhl+5)
 	ld	xiz, xwa
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jrl	nc, LABEL_029E2A
 LABEL_029CDA:
 	ld	a, (xiz)
@@ -20067,14 +20088,14 @@ LABEL_029CDA:
 	muls	wa, 71
 	ld	bc, wa
 	ld	xwa, (xsp+6)
-	.byte 0xf3, 0x07, 0xe0, 0xe4, 0x30	; lda XWA,XWA+BC
+	lda_rr	xwa, xwa, bc	; lda XWA,XWA+BC
 	call	Voice2_UpdatePitch
 	ld	a, (xiz)
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg13
 	inc	1, xiz
-	.byte 0x86, 0x3f, 0x40	; cp (XIZ),0x40
+	cp8_imm_ri	xiz, 0x40	; cp (XIZ),0x40
 	jr	c, LABEL_029CDA
 	jrl	LABEL_029E2A
 LABEL_029D06:
@@ -20107,7 +20128,7 @@ LABEL_029D40:
 	ld	a, (xsp+12)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -20129,15 +20150,15 @@ LABEL_029D5C:
 	ldw	de, 32
 	call	Voice_BuildOutputList
 	ld	(xsp+4), xhl
-	.byte 0xbf, 0x08, 0x02, 0x00, 0x00	; ld (XSP+0x08),0x0000
+	ldw	(xsp+8), 0x0000	; ld (XSP+0x08),0x0000
 	jrl	LABEL_029E13
 LABEL_029D83:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	iz, (xwa)
-	.byte 0xc7, 0xf9, 0xa8	; ld IZH,0
+	lds_erpb	0xf9, 0	; ld IZH,0
 	ld	a, (xsp+12)
 	ld	l, a
 	extz	hl
@@ -20145,35 +20166,35 @@ LABEL_029D83:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31	; lda XBC,XBC+WA
+	lda_rr	xbc, xbc, wa	; lda XBC,XBC+WA
 	ld	a, (xsp+18)
 	ld	e, a
 	extz	de
 	pushw	2
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	pushw	wa
 	ld	wa, hl
 	call	Voice_OpSlot_WriteParams
-	.byte 0x8f, 0x0a, 0x3f, 0x00	; cp (XSP+0x0a),0x00
+	cp8_imm_rid8	xsp, 0x0a, 0x00	; cp (XSP+0x0a),0x00
 	jr	nz, LABEL_029DFA
 	ld	a, (xsp+12)
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267112)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3e, 0x08, 0x00	; or (XBC+WA),0x0008
+	or_rrw_im	xbc, wa, 0x08, 0x00	; or (XBC+WA),0x0008
 	stiw_da	(283140), 0
 	stiw_da	(283150), 0
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg07_Or_Reg18
 	jr	LABEL_029E10
 LABEL_029DFA:
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	call	Voice_Freq_WriteRight
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	extz	wa
 	lda_24	xbc, (283084)
 	calr	ToneGen_WriteVoice_Reg15_Or_Reg16
@@ -20183,7 +20204,7 @@ LABEL_029E13:
 	ld	wa, (xsp+8)
 	extz	xwa
 	add	xwa, xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
@@ -25666,7 +25687,7 @@ VoiceAllocate_DataTable_02CD14:
 	sll	wa, 8
 	set	7, wa
 	ld	(xiz+1), wa
-	.byte 0xbe, 0x03, 0x02, 0x7f, 0x00	; ld (XIZ+0x03),0x007f
+	ldw	(xiz+3), 0x007f	; ld (XIZ+0x03),0x007f
 	ld	xwa, xiz
 	call	NoteOn_RoutePacket
 	ld	xhl, xiz
@@ -28854,7 +28875,7 @@ VoiceSubSlot_Init_AltData:
 	ld	de, wa
 	add	de, bc
 	ldl_da	xwa, (283420)
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x30	; lda XWA,XWA+DE
+	lda_rr	xwa, xwa, de	; lda XWA,XWA+DE
 	lda	xwa, (xwa+19169)
 	ld	xbc, xwa
 	ldl_da	xde, (283412)
@@ -33133,12 +33154,26 @@ DSP_RouteCoeffs_TypeA_Fetch:
 	jr	nc, 40
 ; 0x0D-byte copy into 0x045210+6.
 DSP_RouteCoeffs_TypeA_CopyLoop:
-	.byte 0xda, 0x89, 0xe9, 0x12, 0xdc, 0x88, 0xe8
-	.byte 0x12, 0xe8, 0xee, 0x04, 0xe9, 0x80, 0xe8, 0x89
-	.byte 0xed, 0x81, 0xda, 0x88, 0xd8, 0x66, 0xe8, 0x12
-	.byte 0x46, 0x10, 0x52, 0x04, 0x00, 0xe8, 0x86, 0x81
-	.byte 0x21, 0xb6, 0x41, 0xda, 0x61, 0xdb, 0xf2, 0x67
-	.byte 0xd8, 0x5e, 0x0e
+	ld	bc, de
+	extz	xbc
+	ld	wa, ix
+	extz	xwa
+	sll	xwa, 4
+	add	xwa, xbc
+	ld	xbc, xwa
+	add	xbc, xiy
+	ld	wa, de
+	inc	6, wa
+	extz	xwa
+	ld	xiz, 283152
+	add	xiz, xwa
+	ld	a, (xbc)
+	ld	(xiz), a
+	inc	1, de
+	cp	de, hl
+	jr	c, DSP_RouteCoeffs_TypeA_CopyLoop
+	pop	xiz
+	ret
 ; ----------------------------------------------------------------------------
 ; DSP_RouteCoeffs_TypeB - Route DSP coefficients via type-B table
 ; Entry: Same as TypeA
@@ -33200,12 +33235,26 @@ DSP_RouteCoeffs_TypeB_Fetch:
 	jr	nc, 40
 ; 0x0D-byte copy into 0x045210+6.
 DSP_RouteCoeffs_TypeB_CopyLoop:
-	.byte 0xda, 0x89, 0xe9, 0x12, 0xdc, 0x88, 0xe8
-	.byte 0x12, 0xe8, 0xee, 0x04, 0xe9, 0x80, 0xe8, 0x89
-	.byte 0xed, 0x81, 0xda, 0x88, 0xd8, 0x66, 0xe8, 0x12
-	.byte 0x46, 0x10, 0x52, 0x04, 0x00, 0xe8, 0x86, 0x81
-	.byte 0x21, 0xb6, 0x41, 0xda, 0x61, 0xdb, 0xf2, 0x67
-	.byte 0xd8, 0x5e, 0x0e
+	ld	bc, de
+	extz	xbc
+	ld	wa, ix
+	extz	xwa
+	sll	xwa, 4
+	add	xwa, xbc
+	ld	xbc, xwa
+	add	xbc, xiy
+	ld	wa, de
+	inc	6, wa
+	extz	xwa
+	ld	xiz, 283152
+	add	xiz, xwa
+	ld	a, (xbc)
+	ld	(xiz), a
+	inc	1, de
+	cp	de, hl
+	jr	c, DSP_RouteCoeffs_TypeB_CopyLoop
+	pop	xiz
+	ret
 ; ----------------------------------------------------------------------------
 ; DSP_CopyCoeffs_TypeA - Direct coefficient copy (type A)
 ; Entry: WA = voice parameter
@@ -33296,9 +33345,9 @@ DSP_VoiceCoeffRoute:
 	lda_24	xix, (267112)
 	exts	xbc
 	add	xbc, xix
-	.byte 0xe3, 0x07, 0xe4, 0xf4, 0x21	; ld XBC,(XBC+IY)
+	ld_rrl	xbc, xbc, iy	; ld XBC,(XBC+IY)
 	ld	c, (xbc+2)
-	.byte 0xc7, 0xf0, 0x9b	; ld IXL,C
+	ldb_erp	c, 0xf0	; ld IXL,C
 	extz	ix
 	and	ix, 127
 	ld	c, e
@@ -33312,9 +33361,9 @@ DSP_VoiceCoeffRoute:
 	lda_24	xiy, (267112)
 	exts	xbc
 	add	xbc, xiy
-	.byte 0xe3, 0x07, 0xe4, 0xf8, 0x21	; ld XBC,(XBC+IZ)
+	ld_rrl	xbc, xbc, iz	; ld XBC,(XBC+IZ)
 	ld	c, (xbc+3)
-	.byte 0xc7, 0xf4, 0x9b	; ld IYL,C
+	ldb_erp	c, 0xf4	; ld IYL,C
 	extz	iy
 	and	iy, 15
 	ld	c, e
@@ -33327,7 +33376,7 @@ DSP_VoiceCoeffRoute:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xe3, 0x07, 0xe0, 0xe8, 0x20	; ld XWA,(XWA+DE)
+	ld_rrl	xwa, xwa, de	; ld XWA,(XWA+DE)
 	ld	a, (xwa+3)
 	extz	wa
 	and	wa, 192
@@ -33450,38 +33499,38 @@ DSP_VoiceCoeffRoute2:
 	lda_24	xiy, (267112)
 	exts	xbc
 	add	xbc, xiy
-	.byte 0xf3, 0x07, 0xe4, 0xf8, 0x35	; lda XIY,XBC+IZ
+	lda_rr	xiy, xbc, iz	; lda XIY,XBC+IZ
 	ld	c, e
 	extz	bc
 	add	bc, bc
 	ld	iz, bc
 	inc	3, iz
 	ld	xbc, (xiy+4)
-	.byte 0xc3, 0x07, 0xe4, 0xf8, 0x23	; ld C,(XBC+IZ)
-	.byte 0xc7, 0xf4, 0x9b	; ld IYL,C
+	ld_rrb	c, xbc, iz	; ld C,(XBC+IZ)
+	ldb_erp	c, 0xf4	; ld IYL,C
 	extz	iy
 	and	iy, 127
 	ld	c, l
 	extz	bc
 	muls	bc, 37
 	ld	qwa, bc
-	.byte 0xd7, 0xe2, 0xc8, 0x6e, 0x00	; add QWA,0x006e
+	add_erpw	0xe2, 0x6e, 0x00	; add QWA,0x006e
 	ld	c, a
 	extz	bc
 	muls	bc, 287
 	lda_24	xiz, (267112)
 	exts	xbc
 	add	xbc, xiz
-	.byte 0xf3, 0x07, 0xe4, 0xe2, 0x36	; lda XIZ,XBC+QWA
+	lda_rrq	xiz, xbc, qwa	; lda XIZ,XBC+QWA
 	ld	c, e
 	extz	bc
 	add	bc, bc
 	ld	qwa, bc
 	inc	3, qwa
 	ld	xbc, (xiz+4)
-	.byte 0xf3, 0x07, 0xe4, 0xe2, 0x31	; lda XBC,XBC+QWA
+	lda_rrq	xbc, xbc, qwa	; lda XBC,XBC+QWA
 	ld	c, (xbc+1)
-	.byte 0xc7, 0xf8, 0x9b	; ld IZL,C
+	ldb_erp	c, 0xf8	; ld IZL,C
 	extz	iz
 	and	iz, 15
 	ld	c, l
@@ -33494,14 +33543,14 @@ DSP_VoiceCoeffRoute2:
 	lda_24	xbc, (267112)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0, 0xec, 0x31	; lda XBC,XWA+HL
+	lda_rr	xbc, xwa, hl	; lda XBC,XWA+HL
 	ld	a, e
 	extz	wa
 	add	wa, wa
 	ld	de, wa
 	inc	3, de
 	ld	xwa, (xbc+4)
-	.byte 0xf3, 0x07, 0xe0, 0xe8, 0x30	; lda XWA,XWA+DE
+	lda_rr	xwa, xwa, de	; lda XWA,XWA+DE
 	ld	a, (xwa+1)
 	extz	wa
 	and	wa, 192
@@ -34281,23 +34330,23 @@ LABEL_03140F:
 DSP_SetCoeff_RouteWithCallback:
 	dec	4, xsp
 	push	xiz
-	.byte 0xc7, 0xfb, 0x9d	; ld QIZH,E
-	.byte 0xc7, 0xfb, 0xcc, 0x0f	; and QIZH,0x0f
+	ldb_erp	e, 0xfb	; ld QIZH,E
+	and_erpb	0xfb, 0x0f	; and QIZH,0x0f
 	ld	e, a
 	extz	de
 	muls	de, 287
 	lda_24	xhl, (267118)
-	.byte 0xe3, 0x07, 0xec, 0xe8, 0x23	; ld XHL,(XHL+DE)
+	ld_rrl	xhl, xhl, de	; ld XHL,(XHL+DE)
 	extz	bc
 	ld	e, a
 	extz	de
 	ld	xwa, xhl
 	call	ToneDB_Find_SubToneRecord
-	.byte 0xc7, 0xfb, 0x89	; ld A,QIZH
+	ld_erpb_rr	a, 0xfb	; ld A,QIZH
 	extz	wa
 	muls	wa, 21
 	add	wa, 16
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x33	; lda XHL,XHL+WA
+	lda_rr	xhl, xhl, wa	; lda XHL,XHL+WA
 	ld	a, (xhl+1)
 	ld	e, a
 	extz	de
@@ -34327,7 +34376,7 @@ LABEL_03148B:
 	add	wa, de
 	add	wa, wa
 	extz	xwa
-	.byte 0xaf, 0x04, 0x80	; add XWA,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xwa	; add XWA,(XSP+0x04)
 	addda32_24	xwa, (283408)
 	ld	xwa, (xwa)
 	ld	de, wa
@@ -34335,7 +34384,7 @@ LABEL_03148B:
 	ld	xwa, (xwa+140)
 	ld	(xsp+4), xwa
 	ldl_da	xix, (283408)
-	.byte 0xaf, 0x04, 0x84	; add XIX,(XSP+0x04)
+	add32_src_rid8	xsp, 0x04, xix	; add XIX,(XSP+0x04)
 	ldw	hl, 13
 	lds	iy, 0
 	cp	iy, hl
@@ -34640,14 +34689,14 @@ DSP_SetCoeff_WriteParams:
 	extz	bc
 	muls	bc, 287
 	lda_24	xde, (267118)
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21	; ld XBC,(XDE+BC)
+	ld_rrl	xbc, xde, bc	; ld XBC,(XDE+BC)
 	ld	c, (xbc+16)
 	stb_da	(283158), c
 	ld	c, a
 	extz	bc
 	muls	bc, 287
 	lda_24	xde, (267118)
-	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x21	; ld XBC,(XDE+BC)
+	ld_rrl	xbc, xde, bc	; ld XBC,(XDE+BC)
 	ld	c, (xbc+93)
 	and	c, 15
 	cp	c, 12
@@ -34655,7 +34704,7 @@ DSP_SetCoeff_WriteParams:
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267118)
-	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x20	; ld XWA,(XBC+WA)
+	ld_rrl	xwa, xbc, wa	; ld XWA,(XBC+WA)
 	ld	a, (xwa+95)
 	stb_da	(283159), a
 	jr	LABEL_031794
@@ -39459,7 +39508,7 @@ Voice_ProgChange_TableData:
 	dec	2, xsp
 	pushw	iz
 	ld	(xsp+2), a
-	.byte 0xc2, 0xa7, 0x51, 0x04, 0x3f, 0xf5	; cp (0x0451a7),0xf5
+	cpib_da	0x0451a7, 0xf5	; cp (0x0451a7),0xf5
 	jr	z, LABEL_034590
 	lds	iz, 0
 	cps	iz, 4
@@ -39478,7 +39527,7 @@ LABEL_034517:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xwa, (xwa)
-	.byte 0x88, 0x06, 0x3c, 0x07	; and (XWA+0x06),0x07
+	and8_imm_rid8	xwa, 0x06, 0x07	; and (XWA+0x06),0x07
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 37
@@ -39492,7 +39541,7 @@ LABEL_034517:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xwa, (xwa)
-	.byte 0xb8, 0x06, 0xbd	; set 5,(XWA+0x06)
+	set	5, (xwa+6)	; set 5,(XWA+0x06)
 	inc	1, iz
 	cps	iz, 4
 	jr	c, LABEL_034517
@@ -39526,7 +39575,7 @@ LABEL_034596:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xwa, (xwa)
-	.byte 0x88, 0x06, 0x3c, 0x07	; and (XWA+0x06),0x07
+	and8_imm_rid8	xwa, 0x06, 0x07	; and (XWA+0x06),0x07
 	inc	1, iz
 	cps	iz, 4
 	jr	c, LABEL_034596
@@ -39549,7 +39598,7 @@ LABEL_0345E7:
 	ld	a, (xsp+2)
 	ld	e, a
 	extz	de
-	.byte 0xc7, 0xf8, 0x89	; ld A,IZL
+	ld_erpb_rr	a, 0xf8	; ld A,IZL
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -41069,13 +41118,13 @@ DSP_FlushAllSlots_Data:
 	extz	bc
 	muls	bc, 287
 	lda_24	xde, (267137)
-	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x23	; ld C,(XDE+BC)
+	ld_rrb	c, xde, bc	; ld C,(XDE+BC)
 	ld	e, c
 	extz	de
 	extz	wa
 	muls	wa, 287
 	lda_24	xbc, (267138)
-	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21	; ld A,(XBC+WA)
+	ld_rrb	a, xbc, wa	; ld A,(XBC+WA)
 	ld	c, a
 	extz	bc
 	ld	wa, de
