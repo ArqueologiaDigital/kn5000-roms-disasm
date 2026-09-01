@@ -2,13 +2,13 @@ HDAE5000_UI_Config:	; 0x29BFE0
 	; UI configuration strings
 	.asciz "adraw"
 	.asciz "auto_inc"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "dial"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "sel_num"
 	.asciz "row"
 	.asciz "column"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "str_adr"
 	.asciz "main_func"
 	.asciz "fontcolor"
@@ -21,12 +21,12 @@ HDAE5000_UI_Config:	; 0x29BFE0
 	.zero 15
 	.asciz "infocolor"
 	.asciz "infofont"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "reversecolor"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "fontcolor"
 	.asciz "font"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "pEnable"
 	.zero 2
 	.asciz "sel_pos"
@@ -6194,66 +6194,70 @@ HDAE5000_RECORD_TABLE:	; 0x29C0AA
 
 HDAE5000_RECORD_COUNT:	; 0x29D97E
 	; Record count data
-	.byte 0x0d
-	.byte 0x00
+	.byte 0x0d, 0x00                       ; u16 count = 13 (LE); matches HDAE5000_RECORD_TABLE's 13
+	                                       ; records and the 13 UI class procedures/names
+	                                       ; hdae5000_init_data.s documents at 0x2f97fa/0x2f9832.
+	                                       ; hd-ae5000_v2_06i.s:310 `ldw_da xwa, (0x29d97e)` reads
+	                                       ; this exact word -- NOT alignment padding, real data;
+	                                       ; it also happens to word-align the string pool below.
 	.asciz "EV_DrawFDText"
 	.asciz "EV_InitFDFileSelect"
 	.asciz "EV_Scrollline"
 	.asciz "EV_Drawsyllable"
 	.asciz "EV_Alldraw"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "EV_Initlyrics"
 	.asciz "EV_SETPOSITION"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "EV_BEATMESSAGE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "EV_TICKS"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "EV_INITLYRICPARAM"
 	.asciz "EV_TimerBack"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "EV_AfterLoad"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "EV_SeqStop"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_FdSaveLyric"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_FdLoadLyric"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_FdInfo"
 	.asciz "MT_FdFreshUp"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_SelectDelFile"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_SelectDEL"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_LOOP"
 	.asciz "MT_SetStrAdr"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_SelectAll"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_SelectSAVE"
 	.asciz "MT_SelectOK2"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_SelectOK"
 	.asciz "MT_AckSelNum"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_ReqSelNum"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_SetSelNum"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_ChangeSelNum"
 	.asciz "MT_UnderFlow"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MT_OverFlow"
 	.zero 2
 	.asciz "FDFileSelectProc"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LyricBoxProc"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "AcLanguageText1Proc"
 	.asciz "IvScreenR2Proc"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "AcWindowPage1Proc"
 	.asciz "TtlScreenR3Proc"
 	.asciz "TtlScreenR2Proc"
@@ -6261,11 +6265,12 @@ HDAE5000_RECORD_COUNT:	; 0x29D97E
 	.asciz "IvHddNamingProc"
 	.asciz "AcHddNamingWindowProc"
 	.asciz "TtlScreenRProc"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "DbMemoClProc"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SelectListProc"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad to the pool boundary 0x29DC12 (see the
+	                                       ; "HD-AE5000 UI OBJECT DESCRIPTOR POOL" header just below)
 
 ; =============================================================================
 ; HD-AE5000 UI OBJECT DESCRIPTOR POOL  (0x29DC12 - 0x2A5D2B, 33,050 bytes)
@@ -6455,10 +6460,10 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.byte 0x9c  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "a"
 	.byte 0xf7  ; "÷"
 	.byte 0x00
@@ -6494,7 +6499,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x08
 	.byte 0x00
 	.byte 0xa3  ; "£"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.ascii "7"
 	.byte 0x01
@@ -6521,7 +6526,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x00
 	.zero 4
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x02
 	.byte 0x00
@@ -6529,7 +6534,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x08
 	.byte 0x00
 	.byte 0xaa  ; "ª"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.byte 0x19, 0x01
 	.byte 0x91  ; ""
@@ -6544,7 +6549,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -6592,7 +6597,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x00
 	.zero 4
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x04
 	.byte 0x00
@@ -6616,7 +6621,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -6633,7 +6638,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.byte 0x9c  ; ""
 	.byte 0x00
@@ -6657,13 +6662,13 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.asciz "s"
 	.zero 4
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x06
 	.byte 0x00
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "r"
 	.byte 0xa0  ; " "
@@ -6680,7 +6685,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -6720,17 +6725,17 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x85  ; ""
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!"
 	.zero 4
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x08
 	.byte 0x00
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.byte 0x9c  ; ""
 	.byte 0x00
@@ -6748,7 +6753,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -6774,7 +6779,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -6823,7 +6828,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x0b
 	.byte 0x00
 	.byte 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
@@ -6843,13 +6848,13 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x0c
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "]"
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "w"
 	.byte 0x1b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.ascii "*"
 	.byte 0x01
@@ -6866,7 +6871,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x08
 	.byte 0x00
 	.byte 0xa3  ; "£"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.ascii "7"
 	.byte 0x01
@@ -6893,7 +6898,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x00
 	.zero 4
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x0e
 	.byte 0x00
@@ -6903,7 +6908,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x08
 	.byte 0x00
 	.byte 0xaa  ; "ª"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.byte 0x19, 0x01
 	.asciz "g"
@@ -6917,11 +6922,11 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x0f
 	.byte 0x00
@@ -6929,7 +6934,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x08
 	.byte 0x00
 	.byte 0xaa  ; "ª"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.byte 0x19, 0x01
 	.asciz "g"
@@ -6943,7 +6948,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -6983,7 +6988,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.asciz ")"
 	.byte 0xf0  ; "ð"
 	.byte 0x02, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.zero 4
 	.asciz "6"
@@ -7000,7 +7005,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x1e
 	.byte 0x00
 	.byte 0xe5  ; "å"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "="
 	.byte 0xf7  ; "÷"
 	.byte 0x00
@@ -7026,7 +7031,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	; pool header at HDAE5000_UI_Descriptors.
 	.asciz "LYRICS WINDOW"
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -7067,7 +7072,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x1f
 	.zero 3
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "`"
 	.byte 0x01, 0x13
@@ -7082,14 +7087,14 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1e
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.asciz "="
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "z"
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "`"
 	.byte 0x01, 0x13
@@ -7104,15 +7109,15 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "n"
 	.byte 0x7f
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x13
 	.byte 0x00
@@ -7142,7 +7147,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x02
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -7180,10 +7185,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "`"
 	.byte 0x01, 0x18
@@ -7197,14 +7202,14 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.byte 0x01
 	.byte 0x00
 	.byte 0xff
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "`"
 	.byte 0x01, 0x18
@@ -7218,7 +7223,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 3
 	.asciz "@"
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "_"
 	.byte 0x02
 	.byte 0x00
@@ -7268,7 +7273,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ")"
 	.zero 6
 	.asciz "LOAD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01, 0x18
@@ -7289,7 +7294,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xf4  ; "ô"
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.ascii "`"
 	.byte 0x01, 0x18
@@ -7364,7 +7369,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x02
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -7399,7 +7404,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.byte 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xde  ; "Þ"
 	.byte 0x00
@@ -7417,7 +7422,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x04
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ")"
 	.ascii "`"
 	.byte 0x01
@@ -7447,7 +7452,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.byte 0x07, 0x01
 	.byte 0xd2  ; "Ò"
@@ -7516,7 +7521,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xe2  ; "â"
 	.asciz ")"
 	.asciz "97-120"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
 	.byte 0x01
@@ -7530,7 +7535,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -7556,10 +7561,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ")"
 	.asciz "'"
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -7670,7 +7675,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -7686,7 +7691,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ")"
 	.zero 6
 	.asciz "EDIT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -7696,14 +7701,14 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "/"
 	.asciz ","
 	.byte 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
 	.zero 3
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.ascii "`"
 	.byte 0x01
@@ -7729,7 +7734,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 3
 	.ascii " "
 	.byte 0x01, 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~80"
 	.asciz "."
 	.ascii "`"
@@ -7751,7 +7756,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -7777,7 +7782,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x00
 	.zero 2
 	.asciz " DIRECTORY SELECT   "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.ascii "`"
 	.byte 0x01
@@ -7831,7 +7836,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ")"
 	.zero 6
 	.asciz "OK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -7841,7 +7846,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "5"
 	.asciz "2"
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xdc  ; "Ü"
 	.byte 0x00
@@ -7871,10 +7876,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "6"
 	.asciz "4"
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xed  ; "í"
 	.byte 0x00
@@ -7887,7 +7892,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x0f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.ascii "`"
 	.byte 0x01
@@ -7939,7 +7944,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ")"
 	.zero 6
 	.asciz "OK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -7989,7 +7994,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x10
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -8016,7 +8021,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x00
 	.zero 2
 	.asciz " FD FILE SELECT   "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.ascii "`"
 	.byte 0x01
@@ -8042,7 +8047,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.zero 3
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii " "
 	.byte 0x99  ; ""
 	.asciz "#"
@@ -8070,7 +8075,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ")"
 	.zero 6
 	.asciz "COPY"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -8080,7 +8085,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ">"
 	.asciz ";"
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xdc  ; "Ü"
 	.byte 0x00
@@ -8110,10 +8115,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "?"
 	.asciz "="
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xed  ; "í"
 	.byte 0x00
@@ -8126,7 +8131,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x0f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.ascii "`"
 	.byte 0x01
@@ -8208,7 +8213,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x05
 	.byte 0x00
 	.byte 0x10
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -8265,7 +8270,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.fill 3, 1, 0xff
 	.asciz "B"
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "4"
 	.byte 0xef  ; "ï"
@@ -8297,7 +8302,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "#"
 	.zero 2
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -8338,7 +8343,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x1f
 	.zero 3
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -8362,14 +8367,14 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "I"
 	.asciz "F"
 	.byte 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
 	.zero 3
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.ascii "`"
 	.byte 0x01
@@ -8398,12 +8403,12 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x99  ; ""
 	.asciz "#"
 	.byte 0x0c
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "RUN"
 	.asciz "STOP"
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.asciz "E"
@@ -8420,7 +8425,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x00
 	.zero 2
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.ascii "`"
 	.byte 0x01
@@ -8447,7 +8452,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x99  ; ""
 	.asciz "#"
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PPORT"
 	.asciz "PPORT"
 	.asciz "&"
@@ -8476,11 +8481,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x99  ; ""
 	.asciz "#"
 	.byte 0x0b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.ascii "`"
 	.byte 0x01
@@ -8505,11 +8510,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x99  ; ""
 	.asciz "#"
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HDD"
 	.asciz "HDD"
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -8538,7 +8543,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x00
 	.zero 2
 	.asciz "EDIT FILE NAME"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ")"
 	.ascii "`"
 	.byte 0x01
@@ -8549,7 +8554,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.byte 0xff
 	.byte 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
@@ -8606,7 +8611,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x18
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -8654,7 +8659,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 6
 	.asciz "OPT"
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.asciz "N"
@@ -8683,7 +8688,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "v"
 	.asciz "&"
 	.byte 0x87  ; ""
@@ -8711,7 +8716,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "w"
 	.asciz "$"
 	.byte 0x89  ; ""
@@ -8721,14 +8726,14 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ")"
 	.zero 4
 	.byte 0xf9  ; "ù"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LST"
 	.asciz "K"
 	.ascii "`"
 	.byte 0x01
 	.fill 8, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "`"
 	.byte 0x0b, 0x01
@@ -8746,7 +8751,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x99  ; ""
 	.asciz "#"
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -8835,11 +8840,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.asciz "\""
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -8851,7 +8856,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "v"
 	.asciz "&"
 	.byte 0x87  ; ""
@@ -8879,7 +8884,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "w"
 	.asciz "$"
 	.byte 0x89  ; ""
@@ -8889,7 +8894,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ")"
 	.zero 4
 	.byte 0xf9  ; "ù"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LST"
 	.asciz "5"
 	.ascii "`"
@@ -8899,7 +8904,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.fill 3, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.asciz "T"
 	.byte 0x03, 0x01
@@ -8923,11 +8928,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.fill 5, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "n"
 	.asciz "b"
 	.byte 0xd1  ; "Ñ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "t"
 	.byte 0x8c, 0xeb  ; "ë"
 	.asciz ")"
@@ -8935,7 +8940,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "PLEASE WAIT!"
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -8961,7 +8966,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x00
 	.zero 2
 	.asciz "HD UTILITY"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -8972,7 +8977,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.byte 0xff
 	.byte 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
@@ -8981,7 +8986,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x13
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -9014,7 +9019,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xaa  ; "ª"
 	.byte 0x00
 	.byte 0xef  ; "ï"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "="
 	.ascii "`"
 	.byte 0x01
@@ -9026,7 +9031,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0xa3  ; "£"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.ascii "7"
 	.byte 0x01
@@ -9050,7 +9055,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x00
 	.zero 2
 	.asciz "FORMAT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "="
 	.ascii "`"
 	.byte 0x01
@@ -9087,7 +9092,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 2
 	.asciz "READ ID"
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -9141,7 +9146,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x14
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.ascii "+"
 	.byte 0x01
@@ -9216,13 +9221,13 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x31
 	.byte 0x01
 	.byte 0xed  ; "í"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "h"
 	.byte 0xed  ; "í"
 	.asciz ")"
 	.zero 6
 	.asciz "CANCEL"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -9235,7 +9240,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -9259,7 +9264,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x12
 	.byte 0x00
 	.byte 0xdb  ; "Û"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "="
 	.byte 0xed  ; "í"
 	.byte 0x00
@@ -9275,13 +9280,13 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.fill 3, 1, 0xff
 	.asciz "k"
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "L"
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "f"
 	.byte 0x1b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.ascii "*"
 	.byte 0x01
@@ -9293,7 +9298,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.fill 3, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.asciz "Z"
 	.byte 0x1a, 0x01
@@ -9334,7 +9339,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.zero 3
 	.byte 0x0b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "l"
 	.byte 0x99  ; ""
 	.asciz "#"
@@ -9348,7 +9353,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x00
 	.zero 2
 	.asciz "PC DATA LINK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "i"
 	.ascii "`"
 	.byte 0x01
@@ -9363,7 +9368,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x35
 	.byte 0x01
 	.byte 0xb5  ; "µ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.ascii "*"
 	.byte 0x01
@@ -9407,10 +9412,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.byte 0xa3  ; "£"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "a"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
@@ -9427,7 +9432,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x89  ; ""
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "n"
 	.byte 0x99  ; ""
 	.asciz "#"
@@ -9440,7 +9445,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "#"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.asciz "r"
@@ -9449,10 +9454,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.byte 0x80  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "g"
 	.byte 0xf7  ; "÷"
 	.byte 0x00
@@ -9464,7 +9469,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x1b
@@ -9502,7 +9507,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x8b  ; ""
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "t"
 	.byte 0x99  ; ""
 	.asciz "#"
@@ -9527,7 +9532,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0xa3  ; "£"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.ascii "7"
 	.byte 0x01
@@ -9548,7 +9553,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x09
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "z"
 	.byte 0x99  ; ""
 	.asciz "#"
@@ -9570,7 +9575,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.byte 0xa3  ; "£"
 	.byte 0x00
@@ -9600,7 +9605,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "#"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.asciz "v"
@@ -9609,7 +9614,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.byte 0x80  ; ""
 	.byte 0x00
@@ -9625,7 +9630,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x1b
@@ -9671,7 +9676,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x88, 0x99
 	.asciz "#"
 	.asciz "LD BY NUM. M.:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.ascii "`"
 	.byte 0x01
@@ -9682,7 +9687,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0xa3  ; "£"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.ascii "7"
 	.byte 0x01
@@ -9703,11 +9708,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xf0  ; "ð"
 	.asciz ")"
 	.byte 0x0c, 0x03, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.zero 2
 	.asciz "LYRICS OPTIONS"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "5"
 	.ascii "`"
 	.byte 0x01
@@ -9716,7 +9721,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.fill 3, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.asciz "T"
 	.byte 0x03, 0x01
@@ -9764,7 +9769,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.fill 3, 1, 0xff
 	.zero 6
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.asciz "{"
@@ -9786,7 +9791,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x0b
 	.zero 9
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -9796,7 +9801,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "z"
 	.asciz "~"
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "{"
 	.byte 0x08
 	.byte 0x00
@@ -9841,7 +9846,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x35
 	.byte 0x01
 	.byte 0xdf  ; "ß"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.ascii "*"
 	.byte 0x01
@@ -9852,13 +9857,13 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.byte 0xff
 	.byte 0x80  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "}"
 	.byte 0x18
 	.zero 3
 	.asciz "@"
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "_"
 	max
 	nop
@@ -9939,11 +9944,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x35
 	.byte 0x01
 	.byte 0xb5  ; "µ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x82  ; ""
@@ -9972,11 +9977,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -10002,7 +10007,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "!"
 	.zero 2
 	.asciz "OUTPUT SETTING"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -10021,7 +10026,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x1f
 	.zero 3
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -10069,7 +10074,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x0c
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.ascii "7"
 	.byte 0x01
@@ -10112,7 +10117,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x0c
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.ascii "7"
 	.byte 0x01
@@ -10191,7 +10196,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "#"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x85  ; ""
@@ -10205,10 +10210,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x0c
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "g"
 	.byte 0xf7  ; "÷"
 	.byte 0x00
@@ -10220,11 +10225,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x85  ; ""
@@ -10238,7 +10243,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x0c
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.byte 0x07, 0x01
 	.byte 0x91  ; ""
@@ -10253,11 +10258,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x85  ; ""
@@ -10287,11 +10292,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x85  ; ""
@@ -10322,11 +10327,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -10353,7 +10358,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x00
 	.zero 2
 	.asciz "LOAD BY NUMBER"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -10372,7 +10377,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x1f
 	.zero 3
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "`"
 	.byte 0x01
@@ -10388,14 +10393,14 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.byte 0x01
 	.byte 0x00
 	.byte 0x95  ; ""
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "`"
 	.byte 0x01
@@ -10408,7 +10413,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x91  ; ""
 	.byte 0x00
 	.byte 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz " "
 	.asciz "?"
@@ -10420,7 +10425,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x7f
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x8f  ; ""
@@ -10451,7 +10456,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -10462,7 +10467,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x93  ; ""
 	.byte 0x00
 	.byte 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.asciz " "
 	.asciz "_"
@@ -10479,7 +10484,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.fill 3, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.asciz "T"
 	.byte 0x03, 0x01
@@ -10555,7 +10560,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "["
 	.ascii "?"
 	.byte 0x01
@@ -10564,7 +10569,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -10630,7 +10635,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ")"
 	.zero 6
 	.asciz "LOAD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.ascii "`"
 	.byte 0x01
@@ -10683,7 +10688,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xf4  ; "ô"
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "`"
 	normal
@@ -10721,7 +10726,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0xd2  ; "Ò"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.byte 0xeb  ; "ë"
 	.byte 0x00
@@ -10748,14 +10753,14 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0xb3  ; "³"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0x07
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "x"
 	.byte 0xf6  ; "ö"
 	.asciz ")"
@@ -10773,10 +10778,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x9d  ; ""
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0xd2  ; "Ò"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "J"
 	.byte 0xeb, 0x00
 	reti
@@ -10798,10 +10803,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xa0  ; " "
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0xb3  ; "³"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "J"
 	.byte 0xcc, 0x00
 	reti
@@ -10823,10 +10828,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xa1  ; "¡"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "X"
 	.byte 0xd2  ; "Ò"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.byte 0xeb  ; "ë"
 	.byte 0x00
@@ -10850,10 +10855,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xa2  ; "¢"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "X"
 	.byte 0xb3  ; "³"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
@@ -10920,7 +10925,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x07
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "h"
 	.byte 0xf7  ; "÷"
 	.asciz ")"
@@ -10998,14 +11003,14 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "-"
 	.asciz "#"
 	.asciz "B"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.zero 4
 	.byte 0xff
@@ -11035,16 +11040,16 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xa8  ; "¨"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.asciz "-"
 	.byte 0xf9  ; "ù"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "B"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.zero 4
 	.byte 0xff
@@ -11076,14 +11081,14 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "D"
 	.asciz "#"
 	.asciz "Y"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.zero 4
 	.byte 0xff
@@ -11113,16 +11118,16 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xaa  ; "ª"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.asciz "D"
 	.byte 0xf9  ; "ù"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Y"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.zero 4
 	.byte 0xf2  ; "ò"
@@ -11159,7 +11164,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "*"
 	.byte 0x01
@@ -11198,7 +11203,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x03
 	.byte 0x00
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x95  ; ""
@@ -11210,7 +11215,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "t"
 	.byte 0xd3  ; "Ó"
 	.byte 0x00
@@ -11228,7 +11233,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x01
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -11243,7 +11248,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "h"
 	.byte 0x1f
 	.byte 0x00
@@ -11269,7 +11274,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.byte 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "/"
 	.byte 0x07, 0x01
@@ -11314,7 +11319,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xb0  ; "°"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "L"
 	.byte 0x03, 0x01
@@ -11371,7 +11376,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xb1  ; "±"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "["
 	.byte 0x03, 0x01
@@ -11409,7 +11414,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.fill 5, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "J"
 	.asciz "("
@@ -11432,7 +11437,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xb2  ; "²"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "j"
 	.byte 0x03, 0x01
@@ -11441,7 +11446,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "p"
 	.byte 0xfa  ; "ú"
 	.asciz ")"
@@ -11476,7 +11481,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xb4  ; "´"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "y"
 	.byte 0x03, 0x01
@@ -11520,7 +11525,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xb5  ; "µ"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0x88  ; ""
 	.byte 0x00
@@ -11566,7 +11571,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xb6  ; "¶"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0x97  ; ""
 	.byte 0x00
@@ -11577,7 +11582,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "f"
 	.byte 0xfb  ; "û"
 	.asciz ")"
@@ -11612,7 +11617,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xb7  ; "·"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0xa6  ; "¦"
 	.byte 0x00
@@ -11658,7 +11663,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xb8  ; "¸"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0xb5  ; "µ"
 	.byte 0x00
@@ -11704,7 +11709,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xb9  ; "¹"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "J"
 	.byte 0x07, 0x01
@@ -11712,7 +11717,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -11734,7 +11739,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -11747,7 +11752,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xbb  ; "»"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xc6  ; "Æ"
 	.byte 0x00
@@ -11775,7 +11780,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -11800,10 +11805,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xbd  ; "½"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -11830,10 +11835,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xbe  ; "¾"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "s"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -11860,7 +11865,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xbf  ; "¿"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "|"
 	.byte 0xd8  ; "Ø"
 	.byte 0x00
@@ -12003,7 +12008,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x05
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -12030,7 +12035,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PNL"
 	.asciz "+"
 	.ascii "`"
@@ -12044,10 +12049,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xc5  ; "Å"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.byte 0xca  ; "Ê"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
@@ -12056,7 +12061,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P.MEM"
 	.asciz "+"
 	.ascii "`"
@@ -12070,10 +12075,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xc6  ; "Æ"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "X"
 	.byte 0xca  ; "Ê"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "m"
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
@@ -12083,7 +12088,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SEQ"
 	.asciz "+"
 	.ascii "`"
@@ -12097,7 +12102,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xc7  ; "Ç"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~"
 	.byte 0xca  ; "Ê"
 	.byte 0x00
@@ -12111,9 +12116,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "COMP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -12134,14 +12139,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xc3  ; "Ã"
 	.byte 0x00
 	.byte 0xd4  ; "Ô"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "d"
 	.byte 0xfe  ; "þ"
 	.asciz ")"
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SOUND"
 	.asciz "+"
 	.ascii "`"
@@ -12169,7 +12174,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MSP"
 	.asciz "+"
 	.ascii "`"
@@ -12196,9 +12201,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "CUSTOM"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -12224,9 +12229,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MIDI"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -12241,7 +12246,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xd7  ; "×"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "J"
 	.byte 0xd7  ; "×"
 	.byte 0x00
@@ -12298,7 +12303,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz ")"
 	.zero 6
 	.asciz "LOAD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -12321,7 +12326,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf4  ; "ô"
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.ascii "`"
 	.byte 0x01
@@ -12352,7 +12357,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 2, 1, 0xff
 	.asciz "~80"
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -12443,10 +12448,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -12459,7 +12464,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x0f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -12472,7 +12477,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xd5  ; "Õ"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xd8  ; "Ø"
 	.byte 0x00
@@ -12502,7 +12507,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xd6  ; "Ö"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz ":"
 	.byte 0xef  ; "ï"
@@ -12536,7 +12541,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x9a  ; ""
 	.asciz "#"
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -12551,7 +12556,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xd7  ; "×"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.byte 0xd7  ; "×"
 	.byte 0x00
@@ -12560,7 +12565,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -12573,7 +12578,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xd8  ; "Ø"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "v"
 	.asciz "<"
 	.asciz "v"
@@ -12582,7 +12587,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -12598,11 +12603,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.asciz "5"
 	.byte 0xe8  ; "è"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.zero 6
 	.asciz "* TO"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -12624,7 +12629,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SELECT"
 	.zero 3
 	.ascii "j"
@@ -12640,10 +12645,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x8e  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.byte 0xeb  ; "ë"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "5"
 	.byte 0x07
 	.zero 3
@@ -12681,22 +12686,22 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xde  ; "Þ"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "$"
 	.byte 0xef  ; "ï"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "7"
 	.byte 0x07
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "x"
 	.byte 0x01
 	.asciz "*"
 	.zero 6
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "StringBox"
 	.asciz "+"
 	.ascii "`"
@@ -12720,10 +12725,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SEL ALL"
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -12831,7 +12836,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.byte 0x07, 0x01
 	.byte 0xd2  ; "Ò"
@@ -12881,7 +12886,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -12911,10 +12916,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xe7  ; "ç"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -12946,7 +12951,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xe8  ; "è"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xde  ; "Þ"
 	.byte 0x00
@@ -12964,7 +12969,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
 	.byte 0x01
@@ -13125,7 +13130,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "*"
 	.zero 6
 	.asciz "EDIT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ")"
 	.ascii "`"
 	.byte 0x01
@@ -13136,7 +13141,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xed  ; "í"
 	.byte 0x00
 	.byte 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
@@ -13173,7 +13178,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.asciz " F.L.S. SELECT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -13192,7 +13197,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.zero 3
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
 	.byte 0x01
@@ -13209,7 +13214,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -13239,10 +13244,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf2  ; "ò"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -13274,7 +13279,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf3  ; "ó"
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xde  ; "Þ"
 	.byte 0x00
@@ -13292,7 +13297,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
 	.byte 0x01
@@ -13431,7 +13436,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -13467,7 +13472,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.byte 0xff
 	.byte 0x00
@@ -13516,7 +13521,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xfb  ; "û"
 	.byte 0x00
 	.byte 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
@@ -13555,7 +13560,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 3
 	.ascii " "
 	.byte 0x01, 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~80"
 	.asciz "."
 	.ascii "`"
@@ -13577,7 +13582,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf4  ; "ô"
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "5"
 	.ascii "`"
 	.byte 0x01
@@ -13586,11 +13591,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.fill 4, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.asciz "P"
 	.byte 0xeb  ; "ë"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "{"
 	.byte 0x07
 	.byte 0x00
@@ -13634,7 +13639,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "_"
 	.ascii "@"
 	.byte 0x01
@@ -13643,7 +13648,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -13657,7 +13662,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "b"
 	.byte 0x9a  ; ""
 	.asciz "#"
@@ -13672,7 +13677,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.fill 2, 1, 0xff
 	.byte 0x04, 0x01, 0x02, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "4"
 	.byte 0xeb  ; "ë"
@@ -13698,14 +13703,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x10
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x9a  ; ""
 	.asciz "#"
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "l"
 	.byte 0x9a  ; ""
 	.asciz "#"
@@ -13716,16 +13721,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.fill 2, 1, 0xff
 	.byte 0x05, 0x01, 0x03, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "#"
 	.byte 0xeb  ; "ë"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "2"
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -13739,7 +13744,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "r"
 	.byte 0x9a  ; ""
 	.asciz "#"
@@ -13756,10 +13761,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.fill 2, 1, 0xff
 	.byte 0x06, 0x01, 0x04, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xed  ; "í"
 	.byte 0x00
@@ -13772,7 +13777,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x0f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -13780,7 +13785,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.fill 2, 1, 0xff
 	.byte 0x07, 0x01, 0x05, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xdc  ; "Ü"
 	.byte 0x00
@@ -13825,7 +13830,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x05
 	.byte 0x00
 	.byte 0x10
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "-"
 	.ascii "`"
 	.byte 0x01
@@ -13833,7 +13838,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.fill 2, 1, 0xff
 	.byte 0x09, 0x01, 0x07, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.zero 2
 	.asciz "G"
@@ -13849,7 +13854,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.fill 2, 1, 0xff
 	.byte 0x0a, 0x01, 0x08, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "N"
 	ei	0
 	.byte 0xeb, 0x00
@@ -13861,9 +13866,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HD FILE SELECT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01, 0x0a, 0x01
@@ -13873,7 +13878,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x0b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!"
 	.asciz " "
 	.asciz "+"
@@ -13908,7 +13913,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "u"
 	.byte 0x1f
 	.byte 0x00
@@ -13929,7 +13934,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.byte 0x89  ; ""
 	.byte 0x00
@@ -13939,7 +13944,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 5
 	.asciz "FILE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "5"
 	.ascii "`"
 	.byte 0x01
@@ -13947,7 +13952,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x11, 0x01
 	.fill 4, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "F"
 	.asciz "P"
 	.byte 0xf9  ; "ù"
@@ -13972,7 +13977,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x12, 0x01
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "N"
 	.byte 0x06
 	.byte 0x00
@@ -13985,15 +13990,15 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HD LOAD OPTION"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "-"
 	.ascii "`"
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.byte 0x13, 0x01, 0x11, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.zero 2
 	.asciz "G"
@@ -14008,7 +14013,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.byte 0x14, 0x01, 0x12, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "4"
 	.byte 0x03, 0x01
@@ -14017,7 +14022,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "t"
 	.byte 0x09
 	.asciz "*"
@@ -14050,7 +14055,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -14061,7 +14066,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.zero 11
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01, 0x10, 0x01
@@ -14082,7 +14087,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PNL"
 	.byte 0x1f
 	.byte 0x00
@@ -14090,10 +14095,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.byte 0x17, 0x01, 0x15, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -14113,10 +14118,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.byte 0x18, 0x01, 0x16, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "s"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -14136,7 +14141,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.byte 0x19, 0x01, 0x17, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "|"
 	.byte 0xd8  ; "Ø"
 	.byte 0x00
@@ -14251,16 +14256,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.byte 0x1e, 0x01, 0x1c, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.byte 0xca  ; "Ê"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
@@ -14269,17 +14274,17 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P.MEM"
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.byte 0x1f, 0x01, 0x1d, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "X"
 	.byte 0xca  ; "Ê"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "m"
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
@@ -14289,7 +14294,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SEQ"
 	.asciz "+"
 	.ascii "`"
@@ -14297,7 +14302,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 2, 1, 0xff
 	.ascii " "
 	.byte 0x01, 0x1e, 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~"
 	.byte 0xca, 0x00, 0x99, 0x00, 0xd4
 	nop
@@ -14307,9 +14312,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "COMP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01, 0x10, 0x01
@@ -14331,7 +14336,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SOUND"
 	.asciz "+"
 	.ascii "`"
@@ -14356,7 +14361,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MSP"
 	.asciz "+"
 	.ascii "`"
@@ -14380,9 +14385,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "CUSTOM"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01, 0x10, 0x01
@@ -14405,7 +14410,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MIDI"
 	.byte 0x00
 	.byte 0x1b
@@ -14417,7 +14422,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x23
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "T"
 	.byte 0x03, 0x01
@@ -14457,7 +14462,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x24
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "d"
 	.byte 0x03, 0x01
@@ -14497,7 +14502,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x25
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "t"
 	.byte 0x03, 0x01
@@ -14538,7 +14543,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x26
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0x84  ; ""
 	.byte 0x00
@@ -14579,7 +14584,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x27
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0x94  ; ""
 	.byte 0x00
@@ -14590,7 +14595,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x07
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "z"
 	.byte 0x0d
 	.asciz "*"
@@ -14734,7 +14739,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "t"
 	.byte 0x0e
 	.asciz "*"
@@ -14772,7 +14777,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01, 0x10, 0x01
@@ -14793,7 +14798,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LYRIC"
 	.byte 0x1b
 	.byte 0x00
@@ -14804,7 +14809,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x2f
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -14846,7 +14851,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xd5  ; "Õ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "2"
 	.byte 0xd5  ; "Õ"
 	.byte 0x00
@@ -14855,7 +14860,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01, 0x10, 0x01
@@ -14864,7 +14869,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x31
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.asciz "2"
 	.asciz "*"
@@ -14873,14 +14878,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01, 0x10, 0x01
 	.fill 4, 1, 0xff
 	.ascii "2"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.asciz "2"
 	.byte 0x07, 0x01
@@ -14890,7 +14895,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -14944,7 +14949,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x35
 	.byte 0x01, 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
@@ -14953,7 +14958,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf0  ; "ð"
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -14996,7 +15001,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "v"
 	.asciz "&"
 	.byte 0x87  ; ""
@@ -15023,7 +15028,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "w"
 	.asciz "$"
 	.byte 0x89  ; ""
@@ -15033,10 +15038,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "*"
 	.zero 4
 	.byte 0xf9  ; "ù"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LST"
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -15062,7 +15067,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.asciz "F.L.S. FILE LOAD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -15126,7 +15131,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "*"
 	.zero 6
 	.asciz "LOAD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -15146,7 +15151,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "*"
 	.zero 6
 	.asciz "EDIT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -15157,7 +15162,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x3e
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xdc  ; "Ü"
 	.byte 0x00
@@ -15187,10 +15192,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x40
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xed  ; "í"
 	.byte 0x00
@@ -15245,7 +15250,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P"
 	.ascii "?"
 	.byte 0x01
@@ -15254,7 +15259,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -15285,7 +15290,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ":"
 	.ascii "?"
 	.byte 0x01
@@ -15293,7 +15298,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -15324,12 +15329,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	nop
 	.asciz " "
 	.byte 0xc5  ; "Å"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "1"
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -15361,15 +15366,15 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc5  ; "Å"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.byte 0xd6  ; "Ö"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "1"
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "r"
 	.byte 0x12
 	.asciz "*"
@@ -15378,7 +15383,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.zero 3
 	.asciz "AS"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "7"
 	.ascii "`"
 	.byte 0x01
@@ -15389,10 +15394,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xd6  ; "Ö"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.byte 0xe8  ; "è"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "1"
 	.byte 0x08
 	.byte 0x00
@@ -15461,7 +15466,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc5  ; "Å"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.byte 0xc5  ; "Å"
 	.byte 0x00
@@ -15470,7 +15475,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	normal
@@ -15481,7 +15486,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xd6  ; "Ö"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.byte 0xd6  ; "Ö"
 	.byte 0x00
@@ -15490,7 +15495,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -15508,7 +15513,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.ascii "?"
 	.byte 0x01, 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "3"
 	.ascii "*"
 	.byte 0x01
@@ -15558,10 +15563,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "*"
 	.zero 4
 	.byte 0xf9  ; "ù"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PANIC"
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -15641,7 +15646,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.byte 0x07, 0x01
 	.byte 0xd2  ; "Ò"
@@ -15687,7 +15692,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -15715,10 +15720,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x52
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -15748,7 +15753,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x53
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xde  ; "Þ"
 	.byte 0x00
@@ -15766,7 +15771,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
 	normal
@@ -15870,7 +15875,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x15
 	.asciz "*"
 	.asciz "97-120"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ")"
 	.ascii "`"
 	normal
@@ -15914,7 +15919,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.asciz "F.L.S. FILE SELECT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
 	normal
@@ -15947,12 +15952,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz ","
 	.asciz " "
 	.byte 0xeb  ; "ë"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "/"
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -16058,7 +16063,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08, 0x00
 	.asciz ","
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xed  ; "í"
 	.byte 0x00
@@ -16111,7 +16116,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -16177,7 +16182,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "SELECT"
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -16220,7 +16225,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0x3a
 	.byte 0x01, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -16231,7 +16236,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.ascii "d"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xde  ; "Þ"
 	.byte 0x00
@@ -16262,15 +16267,15 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.byte 0xc5  ; "Å"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "1"
 	.byte 0x07
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 7
@@ -16302,10 +16307,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc6  ; "Æ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.byte 0xd6  ; "Ö"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "1"
 	.byte 0x07
 	.byte 0x00
@@ -16317,7 +16322,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 7
 	.asciz "AS"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "7"
 	.ascii "`"
 	.byte 0x01
@@ -16328,10 +16333,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xd7  ; "×"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.byte 0xe8  ; "è"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "1"
 	.byte 0x07
 	.byte 0x00
@@ -16356,7 +16361,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.byte 0xe8  ; "è"
 	.byte 0x00
@@ -16403,7 +16408,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xd6  ; "Ö"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.byte 0xd6  ; "Ö"
 	.byte 0x00
@@ -16411,7 +16416,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -16422,7 +16427,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xc5  ; "Å"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.byte 0xc5  ; "Å"
 	.byte 0x00
@@ -16525,9 +16530,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SAVE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -16550,9 +16555,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "F.L.S."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
 	.byte 0x01
@@ -16567,7 +16572,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -16585,7 +16590,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x19
 	.asciz "*"
 	.asciz "DEL1"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
 	.byte 0x01
@@ -16596,10 +16601,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.ascii "q"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xde  ; "Þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "L"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -16619,7 +16624,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x19
 	.asciz "*"
 	.asciz "DEL2"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
 	.byte 0x01
@@ -16688,7 +16693,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1a
 	.asciz "*"
 	.asciz "A.S."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
 	.byte 0x01
@@ -16735,7 +16740,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ":"
 	.ascii "?"
 	.byte 0x01
@@ -16743,7 +16748,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -16777,7 +16782,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "N"
 	.ascii "?"
 	.byte 0x01
@@ -16786,7 +16791,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -16818,7 +16823,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.ascii "w"
 	.byte 0x01, 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
@@ -16840,14 +16845,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xd6  ; "Ö"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.byte 0xd6  ; "Ö"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.zero 2
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -16858,16 +16863,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xc5  ; "Å"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.byte 0xc5  ; "Å"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.zero 2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -16911,7 +16916,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xe2  ; "â"
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "M"
 	.ascii "`"
 	.byte 0x01
@@ -16925,7 +16930,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	pop_f
 	nop
@@ -16973,7 +16978,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "v"
 	.asciz "&"
 	.byte 0x87  ; ""
@@ -17010,14 +17015,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "*"
 	.zero 4
 	.byte 0xf9  ; "ù"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LST"
 	.asciz "K"
 	.ascii "`"
 	.byte 0x01
 	.fill 8, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.asciz "T"
 	.byte 0x03, 0x01
@@ -17035,7 +17040,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x9b  ; ""
 	.asciz "#"
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -17076,7 +17081,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "N"
 	.byte 0x7f
 	.byte 0x00
@@ -17095,7 +17100,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -17118,10 +17123,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x84  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -17146,10 +17151,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x85  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "s"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -17174,7 +17179,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x86  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "|"
 	.byte 0xd8  ; "Ø"
 	.byte 0x00
@@ -17309,7 +17314,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -17334,7 +17339,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PNL"
 	.asciz "+"
 	.ascii "`"
@@ -17346,10 +17351,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x8c  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.byte 0xca  ; "Ê"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
@@ -17359,7 +17364,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P.MEM"
 	.asciz "+"
 	.ascii "`"
@@ -17371,10 +17376,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x8d  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "X"
 	.byte 0xca  ; "Ê"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "m"
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
@@ -17384,7 +17389,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SEQ"
 	.asciz "+"
 	.ascii "`"
@@ -17396,23 +17401,23 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x8e  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~"
 	.byte 0xca  ; "Ê"
 	.byte 0x00
 	.byte 0x99  ; ""
 	.byte 0x00
 	.byte 0xd4  ; "Ô"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "x"
 	.byte 0x1e
 	.asciz "*"
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "COMP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -17438,7 +17443,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SOUND"
 	.asciz "+"
 	.ascii "`"
@@ -17465,7 +17470,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MSP"
 	.asciz "+"
 	.ascii "`"
@@ -17491,9 +17496,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "CUSTOM"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -17517,7 +17522,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MIDI"
 	.byte 0x00
 	.byte 0x1b
@@ -17531,11 +17536,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x93  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "j"
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "y"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
@@ -17575,7 +17580,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x94  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0x1f
 	.byte 0x00
@@ -17620,11 +17625,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x95  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "="
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "L"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
@@ -17665,17 +17670,17 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x96  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "L"
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "["
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0 *"
 	.zero 4
 	.byte 0xff
@@ -17706,11 +17711,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x97  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "["
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "j"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
@@ -17750,7 +17755,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x98  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "y"
 	.byte 0xff
@@ -17795,7 +17800,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x99  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0x88  ; ""
 	.byte 0x00
@@ -17807,7 +17812,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&!*"
 	.zero 4
 	.byte 0xff
@@ -17840,7 +17845,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x9a  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0x97  ; ""
 	.byte 0x00
@@ -17852,7 +17857,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x07
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "x!*"
 	.zero 4
 	.byte 0xff
@@ -17885,7 +17890,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x9b  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xa6  ; "¦"
 	.byte 0x00
@@ -17930,7 +17935,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x9c  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xc6  ; "Æ"
 	.byte 0x00
@@ -17940,7 +17945,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -17951,7 +17956,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x9d  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz ":"
 	.byte 0x03, 0x01
@@ -17959,7 +17964,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -17979,7 +17984,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -17990,7 +17995,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x9f  ; ""
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz ":"
 	.asciz "("
@@ -17999,7 +18004,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -18010,7 +18015,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xa0  ; " "
 	.byte 0x01, 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
@@ -18143,7 +18148,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x36
 	.byte 0x01
 	.byte 0xae  ; "®"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "J#*"
 	.byte 0x03
 	.zero 5
@@ -18207,7 +18212,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xa8  ; "¨"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xb5  ; "µ"
 	.byte 0x00
@@ -18257,7 +18262,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x9e  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.byte 0xb3  ; "³"
 	.byte 0x00
@@ -18270,7 +18275,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x8b  ; ""
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -18285,15 +18290,15 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x06
 	.byte 0x00
 	.byte 0x93  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.byte 0x9d  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<$*"
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LYRIC"
 	.asciz "."
 	.ascii "`"
@@ -18305,7 +18310,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xd1  ; "Ñ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ":"
 	.byte 0xd1  ; "Ñ"
 	.byte 0x00
@@ -18316,7 +18321,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -18324,7 +18329,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.fill 4, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "l"
 	.byte 0x13, 0x01
@@ -18355,7 +18360,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "L"
 	.asciz "&"
 	.asciz "]"
@@ -18377,7 +18382,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "M"
 	.asciz "$"
 	.asciz "_"
@@ -18399,7 +18404,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.asciz "&"
 	.asciz "3"
@@ -18421,7 +18426,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.asciz "$"
 	.asciz "5"
@@ -18529,7 +18534,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -18552,10 +18557,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xb7  ; "·"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -18568,7 +18573,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x10
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -18583,16 +18588,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x06
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.byte 0xdb  ; "Û"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$&*"
 	.zero 4
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "POSITION"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "L"
 	.ascii "`"
 	.byte 0x01
@@ -18603,7 +18608,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xb9  ; "¹"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "H"
 	.byte 0x13, 0x01
@@ -18739,7 +18744,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.zero 3
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -18763,7 +18768,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.asciz "HD FILE DELETE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -18782,7 +18787,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x18
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -18801,12 +18806,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1e
 	.byte 0x00
 	.byte 0xd4  ; "Ô"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~'*"
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PNL"
 	.asciz "+"
 	.ascii "`"
@@ -18818,10 +18823,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xc4  ; "Ä"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.byte 0xca  ; "Ê"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
@@ -18830,7 +18835,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P.MEM"
 	.asciz "+"
 	.ascii "`"
@@ -18842,10 +18847,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xc5  ; "Å"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "X"
 	.byte 0xca  ; "Ê"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "m"
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
@@ -18854,7 +18859,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SEQ"
 	.asciz "+"
 	.ascii "`"
@@ -18866,7 +18871,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xc6  ; "Æ"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~"
 	.byte 0xca  ; "Ê"
 	.byte 0x00
@@ -18879,9 +18884,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "COMP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -18906,7 +18911,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SOUND"
 	.asciz "+"
 	.ascii "`"
@@ -18926,12 +18931,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xe6  ; "æ"
 	.byte 0x00
 	.byte 0xd4  ; "Ô"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "8(*"
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MSP"
 	.asciz "+"
 	.ascii "`"
@@ -18950,14 +18955,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0x16, 0x01
 	.byte 0xd4  ; "Ô"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\\(*"
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "CUSTOM"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -18981,9 +18986,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MIDI"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -18994,7 +18999,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xcb  ; "Ë"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.asciz ";"
 	.asciz "+"
@@ -19003,7 +19008,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -19014,16 +19019,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xcc  ; "Ì"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.asciz ":"
 	.byte 0xfa  ; "ú"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ":"
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -19034,7 +19039,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xcd  ; "Í"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.byte 0xc6  ; "Æ"
 	.byte 0x00
@@ -19057,7 +19062,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xce  ; "Î"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz ";"
 	.byte 0x01, 0x01
@@ -19099,7 +19104,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xcf  ; "Ï"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "L"
 	.byte 0x01, 0x01
@@ -19108,7 +19113,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "`)*"
 	.zero 4
 	.byte 0xff
@@ -19140,7 +19145,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xd0  ; "Ð"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "["
 	.byte 0x01, 0x01
@@ -19181,7 +19186,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xd1  ; "Ñ"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "j"
 	.byte 0x01, 0x01
@@ -19222,7 +19227,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xd2  ; "Ò"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "y"
 	.byte 0x01, 0x01
@@ -19232,7 +19237,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x05
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "J**"
 	.zero 4
 	.byte 0xff
@@ -19263,7 +19268,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xd3  ; "Ó"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0x88  ; ""
 	.byte 0x00
@@ -19306,7 +19311,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xd4  ; "Ô"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0x97  ; ""
 	.byte 0x00
@@ -19349,7 +19354,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xd5  ; "Õ"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0xa6  ; "¦"
 	.byte 0x00
@@ -19360,7 +19365,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4+*"
 	.zero 4
 	.byte 0xff
@@ -19395,7 +19400,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "#"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -19418,10 +19423,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xd7  ; "×"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -19446,10 +19451,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xd8  ; "Ø"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "s"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -19474,7 +19479,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xd9  ; "Ù"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "|"
 	.byte 0xd8  ; "Ø"
 	.byte 0x00
@@ -19609,7 +19614,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -19620,7 +19625,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xde  ; "Þ"
 	.byte 0x01, 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
@@ -19680,7 +19685,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xfd  ; "ý"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "v"
 	.ascii "7"
 	.byte 0x01
@@ -19704,12 +19709,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0xfd  ; "ý"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "w"
 	.ascii "8"
 	.byte 0x01
 	.byte 0x89  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6-*"
 	.zero 6
 	.asciz "ALL DEL"
@@ -19774,11 +19779,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xe4  ; "ä"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.asciz " "
 	.byte 0xfc  ; "ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "9"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
@@ -19824,7 +19829,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x9e  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.byte 0xb3  ; "³"
 	.byte 0x00
@@ -19837,7 +19842,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x8b  ; ""
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -19852,7 +19857,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x06
 	.byte 0x00
 	.byte 0x93  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.byte 0x9d  ; ""
 	.byte 0x00
@@ -19861,7 +19866,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LYRIC"
 	.byte 0x1b
 	.byte 0x00
@@ -19874,7 +19879,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0xe8  ; "è"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.byte 0xb5  ; "µ"
 	.byte 0x00
@@ -19885,7 +19890,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R.*"
 	.zero 4
 	.byte 0xff
@@ -19904,7 +19909,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xc6, 0x9b  ; "Æ"
 	.asciz "#"
 	.asciz "TECHNICS LYRICS   "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -19917,7 +19922,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xcd  ; "Í"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ";"
 	.byte 0xcd  ; "Í"
 	.byte 0x00
@@ -19926,7 +19931,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -19937,7 +19942,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0xfa  ; "ú"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ";"
 	.byte 0xfa  ; "ú"
 	.byte 0x00
@@ -19946,7 +19951,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "3"
 	.ascii "`"
 	.byte 0x01
@@ -19980,11 +19985,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x34
 	.byte 0x01
 	.byte 0xdf  ; "ß"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 8, 1, 0xff
@@ -20001,7 +20006,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xce, 0x9b  ; "Î"
 	.asciz "#"
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -20037,7 +20042,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -20053,7 +20058,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "R/*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xf0  ; "ð"
@@ -20064,7 +20069,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -20075,7 +20080,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -20114,7 +20119,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "/*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xf2  ; "ò"
@@ -20137,7 +20142,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -20155,11 +20160,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xef  ; "ï"
@@ -20169,7 +20174,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 2, 1, 0xff
 	.byte 0xf4  ; "ô"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "L"
 	.byte 0x17, 0x01
@@ -20184,11 +20189,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xf5  ; "õ"
@@ -20198,7 +20203,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0x9b  ; ""
 	.byte 0x00
@@ -20213,11 +20218,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.zero 7
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xf5  ; "õ"
@@ -20225,7 +20230,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.byte 0xf6  ; "ö"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "l"
 	.byte 0x13, 0x01
@@ -20241,7 +20246,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a
 	.zero 3
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -20282,7 +20287,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x1e
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.ascii "!"
 	.byte 0x01
@@ -20291,7 +20296,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "0*"
 	.zero 6
 	.asciz "DELETE DIRECTORY FROM HARD DISK:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -20302,7 +20307,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x08
 	.byte 0x00
 	.byte 0x1e
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.byte 0x11, 0x01
 	.asciz "H"
@@ -20311,10 +20316,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PLEASE WAIT ..."
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -20349,7 +20354,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -20378,7 +20383,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "5"
 	.ascii "*"
 	.byte 0x01
@@ -20415,7 +20420,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "1*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xfb  ; "û"
@@ -20424,7 +20429,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02, 0x02, 0x02
 	.byte 0xfe  ; "þ"
 	.byte 0x01, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "L"
 	.byte 0x17, 0x01
@@ -20439,11 +20444,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xff
@@ -20452,7 +20457,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0x9b  ; ""
 	.byte 0x00
@@ -20467,11 +20472,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.zero 7
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xff
@@ -20479,7 +20484,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.byte 0x00
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "l"
 	.byte 0x13, 0x01
@@ -20495,11 +20500,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a
 	.zero 3
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xfb  ; "û"
@@ -20512,7 +20517,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -20523,11 +20528,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xfb  ; "û"
@@ -20550,11 +20555,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -20586,7 +20591,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ";"
 	.ascii "*"
 	.byte 0x01
@@ -20597,7 +20602,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -20614,7 +20619,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "2*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x06, 0x02
 	.fill 6, 1, 0xff
@@ -20623,7 +20628,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -20634,7 +20639,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -20664,7 +20669,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "L3*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x08, 0x02
 	.fill 6, 1, 0xff
@@ -20685,16 +20690,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x04, 0x02, 0x0b, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08, 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "L"
 	.byte 0x17, 0x01
@@ -20709,18 +20714,18 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x0a, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x0c, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0x9b  ; ""
 	.byte 0x00
@@ -20735,11 +20740,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.zero 7
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x0a, 0x02
 	.fill 4, 1, 0xff
@@ -20760,11 +20765,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a
 	.zero 3
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -20795,7 +20800,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ":"
 	.ascii "*"
 	.byte 0x01
@@ -20806,7 +20811,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -20822,7 +20827,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "j4*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x0f, 0x02
 	.fill 6, 1, 0xff
@@ -20831,7 +20836,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -20842,7 +20847,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -20873,7 +20878,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "4*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x11, 0x02
 	.fill 6, 1, 0xff
@@ -20894,16 +20899,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x0d, 0x02, 0x14, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x11, 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz ","
 	.byte 0x17, 0x01
@@ -20918,18 +20923,18 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x05
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x13, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x15, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xa0  ; " "
 	.byte 0x00
@@ -20944,16 +20949,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.zero 7
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x13, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x16, 0x02, 0x14, 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "L"
 	.byte 0x13, 0x01
@@ -20968,16 +20973,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a
 	.zero 3
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x13, 0x02
 	.fill 4, 1, 0xff
 	.byte 0x15, 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "|"
 	.byte 0x13, 0x01
@@ -20993,7 +20998,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -21022,14 +21027,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xee, 0x9b  ; "î"
 	.asciz "#"
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x17, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x19, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "\""
 	.byte 0x17, 0x01
@@ -21040,16 +21045,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "8"
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x17, 0x02
 	.fill 4, 1, 0xff
 	.byte 0x18, 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "8"
 	.ascii "#"
@@ -21065,11 +21070,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -21090,7 +21095,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz ":6*"
 	.zero 4
 	.asciz "   HD FORMAT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "`"
 	.byte 0x01, 0x1a, 0x02, 0x1c, 0x02
@@ -21098,7 +21103,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "&"
 	.byte 0x1b, 0x01
@@ -21107,21 +21112,21 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf9  ; "ù"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "p6*"
 	.byte 0x02
 	.zero 7
 	.byte 0x05
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x1b, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x1d, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.asciz "F"
 	.byte 0x19, 0x01
@@ -21137,16 +21142,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x1b, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x1e, 0x02, 0x1c, 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -21164,16 +21169,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x1b, 0x02
 	.fill 2, 1, 0xff
 	.byte 0x1f, 0x02, 0x1d, 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.asciz "h"
 	.byte 0x19, 0x01
@@ -21187,11 +21192,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.zero 7
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x1b, 0x02
 	.fill 4, 1, 0xff
@@ -21209,7 +21214,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -21219,13 +21224,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 2, 1, 0xff
 	.ascii "!"
 	.byte 0x02, 0x1b, 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "]"
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "w"
 	.byte 0x1b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.ascii "*"
 	.byte 0x01
@@ -21259,7 +21264,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 3
 	.asciz "b7*"
 	.asciz "CANCEL"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01, 0x1a, 0x02
@@ -21270,7 +21275,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "*"
 	.byte 0x01
@@ -21301,7 +21306,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xfa, 0x9b  ; "ú"
 	.asciz "#"
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x23
@@ -21311,7 +21316,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "&"
 	.byte 0x1f, 0x01
@@ -21324,11 +21329,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x23
@@ -21338,7 +21343,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.byte 0x24
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "b"
 	.byte 0x1f, 0x01
@@ -21352,11 +21357,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x23
@@ -21364,7 +21369,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "%"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.byte 0x9a  ; ""
 	.byte 0x00
@@ -21382,11 +21387,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -21425,7 +21430,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x13
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "7"
 	.ascii "`"
 	.byte 0x01
@@ -21441,7 +21446,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0c
 	.byte 0x00
 	.byte 0xdb  ; "Û"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "3"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
@@ -21465,7 +21470,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.ascii "<"
 	.byte 0x01
@@ -21517,7 +21522,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -21557,7 +21562,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.zero 3
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "F"
 	.ascii "`"
 	normal
@@ -21568,14 +21573,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "4"
 	.byte 0x01
 	.byte 0xe5  ; "å"
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -21611,11 +21616,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "9"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x2f
@@ -21626,7 +21631,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.byte 0x30
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz ","
 	.byte 0x17, 0x01
@@ -21641,11 +21646,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x05
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x31
@@ -21655,7 +21660,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0x9e  ; ""
 	.byte 0x00
@@ -21670,11 +21675,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.zero 7
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x31
@@ -21684,7 +21689,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.byte 0x32
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "L"
 	.byte 0x13, 0x01
@@ -21699,11 +21704,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a
 	.zero 3
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x31
@@ -21711,7 +21716,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "3"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "|"
 	.byte 0x13, 0x01
@@ -21727,7 +21732,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -21746,7 +21751,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -21762,7 +21767,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "x:*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x35
@@ -21773,7 +21778,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -21784,7 +21789,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -21803,7 +21808,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -21820,7 +21825,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz ":*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x37
@@ -21831,7 +21836,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -21842,7 +21847,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -21879,7 +21884,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz ",;*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x39
@@ -21902,11 +21907,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -21961,7 +21966,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xee  ; "î"
 	.byte 0x00
@@ -21978,7 +21983,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz ";*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x3d
@@ -21989,7 +21994,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x04
 	.byte 0x00
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -22000,7 +22005,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -22037,7 +22042,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "&<*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x3b
@@ -22063,11 +22068,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x3b
@@ -22077,7 +22082,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 2, 1, 0xff
 	.ascii "@"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "4"
 	.byte 0x17, 0x01
@@ -22092,11 +22097,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x41
@@ -22106,7 +22111,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "\\"
 	.byte 0x17, 0x01
@@ -22121,11 +22126,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a
 	.zero 3
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x41
@@ -22133,7 +22138,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "B"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0x9c  ; ""
 	.byte 0x00
@@ -22148,11 +22153,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.zero 7
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -22206,15 +22211,15 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.byte 0x45
 	.byte 0x02, 0x18
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "c"
 	.byte 0x01, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -22256,7 +22261,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "v"
 	.asciz "&"
 	.byte 0x87  ; ""
@@ -22283,7 +22288,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "w"
 	.asciz "$"
 	.byte 0x89  ; ""
@@ -22292,10 +22297,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "=*"
 	.zero 4
 	.byte 0xf9  ; "ù"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LST"
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -22331,7 +22336,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "7"
 	.ascii "*"
 	.byte 0x01
@@ -22383,14 +22388,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf0  ; "ð"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "V>*"
 	.byte 0x02
 	.zero 7
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	normal
 	popw iy
@@ -22400,7 +22405,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.asciz "x"
 	.byte 0x1d, 0x01
@@ -22417,11 +22422,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	normal
 	popw iy
@@ -22429,7 +22434,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "N"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xa0  ; " "
 	.byte 0x00
@@ -22444,11 +22449,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.zero 7
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	normal
 	popw de
@@ -22471,11 +22476,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	normal
 	popw de
@@ -22499,11 +22504,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -22535,7 +22540,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "T"
 	.byte 0x1b, 0x01
@@ -22544,21 +22549,21 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf9  ; "ù"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T?*"
 	.byte 0x02
 	.zero 7
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x53
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.asciz "|"
 	.byte 0x19, 0x01
@@ -22575,11 +22580,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x52
@@ -22589,7 +22594,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.byte 0x53
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.asciz "^"
 	.byte 0x1a, 0x01
@@ -22602,11 +22607,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x52
@@ -22614,7 +22619,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "U"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -22628,11 +22633,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -22665,7 +22670,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "T"
 	.byte 0x1b, 0x01
@@ -22674,14 +22679,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf9  ; "ù"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "(@*"
 	.byte 0x02
 	.zero 7
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x57
@@ -22706,11 +22711,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x57
@@ -22733,11 +22738,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x57
@@ -22745,7 +22750,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "Z"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -22759,11 +22764,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -22796,7 +22801,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "T"
 	.byte 0x1b, 0x01
@@ -22813,7 +22818,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	normal
 	pop xix
@@ -22838,11 +22843,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	normal
 	pop xix
@@ -22865,11 +22870,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	normal
 	pop xix
@@ -22877,7 +22882,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "_"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -22891,11 +22896,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -22929,7 +22934,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "T"
 	.byte 0x1b, 0x01
@@ -22946,14 +22951,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "b"
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.asciz "|"
 	.byte 0x15, 0x01
@@ -22969,11 +22974,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "a"
@@ -22983,7 +22988,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.ascii "b"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.asciz "^"
 	.byte 0x1a, 0x01
@@ -22996,11 +23001,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "a"
@@ -23008,7 +23013,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "d"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -23022,11 +23027,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -23059,7 +23064,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "T"
 	.byte 0x1b, 0x01
@@ -23076,14 +23081,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "g"
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.asciz "|"
 	.byte 0x19, 0x01
@@ -23099,11 +23104,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "f"
@@ -23113,7 +23118,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.ascii "g"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.asciz "^"
 	.byte 0x1a, 0x01
@@ -23126,11 +23131,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "f"
@@ -23138,7 +23143,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "i"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -23152,11 +23157,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -23189,7 +23194,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "T"
 	.byte 0x1b, 0x01
@@ -23198,21 +23203,21 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf9  ; "ù"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "xC*"
 	.byte 0x02
 	.zero 7
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "l"
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.asciz "x"
 	.byte 0x19, 0x01
@@ -23228,11 +23233,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "k"
@@ -23242,7 +23247,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.ascii "l"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.asciz "^"
 	.byte 0x1a, 0x01
@@ -23255,11 +23260,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "k"
@@ -23267,7 +23272,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "n"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -23281,11 +23286,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -23316,7 +23321,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 4, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "T"
 	.byte 0x1b, 0x01
@@ -23325,14 +23330,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf9  ; "ù"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LD*"
 	.byte 0x02
 	.zero 7
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "q"
@@ -23342,7 +23347,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.asciz "^"
 	.byte 0x1a, 0x01
@@ -23355,11 +23360,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "q"
@@ -23369,7 +23374,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.ascii "r"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -23383,11 +23388,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "q"
@@ -23395,7 +23400,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "s"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.asciz "x"
 	.byte 0x19, 0x01
@@ -23411,11 +23416,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -23447,7 +23452,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 4, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "T"
 	.byte 0x1b, 0x01
@@ -23456,14 +23461,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf9  ; "ù"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " E*"
 	.byte 0x02
 	.zero 7
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "v"
@@ -23473,7 +23478,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xa4  ; "¤"
 	.byte 0x00
@@ -23487,11 +23492,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "v"
@@ -23501,7 +23506,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.ascii "w"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.asciz "^"
 	.byte 0x1a, 0x01
@@ -23514,11 +23519,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.ascii "v"
@@ -23526,7 +23531,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 4, 1, 0xff
 	.ascii "x"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.asciz "x"
 	.byte 0x19, 0x01
@@ -23542,11 +23547,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -23583,7 +23588,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "8"
 	.ascii "*"
 	.byte 0x01
@@ -23622,7 +23627,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "F*"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x7c
@@ -23645,7 +23650,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -23657,7 +23662,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.fill 2, 1, 0xff
 	.ascii "|"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "T"
 	.byte 0x17, 0x01
@@ -23666,14 +23671,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf0  ; "ð"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "hF*"
 	.byte 0x02
 	.zero 7
 	.byte 0x02
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x7e
@@ -23683,7 +23688,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "^"
 	.byte 0x17, 0x01
@@ -23696,11 +23701,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x7e
@@ -23723,11 +23728,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -23752,7 +23757,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.zero 3
 	.asciz "            "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "i"
 	.ascii "`"
 	.byte 0x01
@@ -23763,13 +23768,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "L"
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "f"
 	.byte 0x1b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.ascii "*"
 	.byte 0x01
@@ -23786,7 +23791,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x19
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "D"
 	.ascii "&"
 	.byte 0x01
@@ -23794,7 +23799,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x07
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "8G*"
 	.zero 6
 	.byte 0x01
@@ -23813,7 +23818,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x08
 	.byte 0x00
 	.byte 0x1d
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "E"
 	.asciz " "
 	.asciz "O"
@@ -23832,10 +23837,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x1d
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xe8  ; "è"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "f"
 	.asciz "|G*"
 	.zero 6
@@ -23865,17 +23870,17 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x1d
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0xe8  ; "è"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "v"
 	.byte 0xb6  ; "¶"
 	.asciz "G*"
 	.zero 6
 	.asciz "Pointstyle, CH-Buttisholz"
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x83  ; ""
@@ -23885,7 +23890,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x1b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "E"
 	.byte 0x1e, 0x01
 	.asciz "T"
@@ -23899,7 +23904,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -23916,7 +23921,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x19
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "x"
 	.ascii "&"
 	.byte 0x01
@@ -23925,7 +23930,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x07
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\"H*"
 	.zero 6
 	.byte 0x01
@@ -23949,7 +23954,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.byte 0x08, 0x01
 	.byte 0x9b  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "DH*"
 	.zero 6
 	.asciz "KEY SOFT SERVICE, CH-Schenkon"
@@ -23977,7 +23982,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x03
 	.zero 5
 	.asciz "Fax.  +41-41-922 03 15"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -24003,7 +24008,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 5
 	.asciz "email:keysoftservice@bluewin.ch"
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x88  ; ""
@@ -24013,7 +24018,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x1b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "z"
 	.byte 0x1e, 0x01
 	.byte 0x89  ; ""
@@ -24028,7 +24033,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -24055,7 +24060,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x07
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ",I*"
 	.zero 6
 	.byte 0x01
@@ -24063,7 +24068,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x8d  ; ""
@@ -24089,7 +24094,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -24150,7 +24155,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.asciz "Mr. T.Hamaguchi and Mr. M.Kitajima"
 	.byte 0x00
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x8f  ; ""
@@ -24177,7 +24182,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -24201,7 +24206,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x7f
 	.byte 0x00
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x81  ; ""
@@ -24209,7 +24214,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0x92  ; ""
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "e"
 	.zero 2
 	.byte 0x18, 0x01, 0x1f
@@ -24226,7 +24231,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -24258,7 +24263,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x9c  ; ""
 	.asciz "#"
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x94  ; ""
@@ -24268,7 +24273,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "\""
 	.byte 0x17, 0x01
@@ -24279,11 +24284,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.asciz ";"
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x94  ; ""
@@ -24291,7 +24296,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0x95  ; ""
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz ":"
 	.ascii "#"
@@ -24307,11 +24312,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -24344,7 +24349,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.asciz ">"
 	.ascii "*"
@@ -24360,7 +24365,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0x99  ; ""
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "T"
 	.byte 0x17, 0x01
@@ -24377,14 +24382,14 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x9a  ; ""
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "x"
 	.byte 0x17, 0x01
@@ -24400,11 +24405,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x97  ; ""
@@ -24412,7 +24417,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0x9a  ; ""
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "^"
 	.byte 0x17, 0x01
@@ -24425,11 +24430,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -24462,7 +24467,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz "$"
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "C"
 	.asciz ">"
 	.ascii "*"
@@ -24478,7 +24483,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0x9f  ; ""
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "T"
 	.byte 0x17, 0x01
@@ -24495,14 +24500,14 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x03
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xa0  ; " "
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "^"
 	.byte 0x17, 0x01
@@ -24515,11 +24520,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0x9d  ; ""
@@ -24527,7 +24532,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0xa0  ; " "
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "x"
 	.byte 0x17, 0x01
@@ -24543,11 +24548,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -24585,7 +24590,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0xd2  ; "Ò"
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -24599,7 +24604,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.asciz ">"
 	.ascii "*"
@@ -24614,7 +24619,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 2, 1, 0xff
 	.byte 0xa5  ; "¥"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "T"
 	.byte 0x17, 0x01
@@ -24630,7 +24635,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x05
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xa6  ; "¦"
@@ -24640,7 +24645,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "^"
 	.byte 0x17, 0x01
@@ -24653,11 +24658,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xa6  ; "¦"
@@ -24665,7 +24670,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0xa7  ; "§"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "|"
 	.byte 0x17, 0x01
@@ -24681,11 +24686,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -24723,7 +24728,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0xe2  ; "â"
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -24737,7 +24742,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.asciz ">"
 	.ascii "*"
@@ -24752,7 +24757,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 2, 1, 0xff
 	.byte 0xab  ; "«"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "2"
 	.byte 0x17, 0x01
@@ -24761,14 +24766,14 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0xf0  ; "ð"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rM*"
 	.byte 0x02
 	.zero 7
 	.byte 0x04
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xac  ; "¬"
@@ -24778,7 +24783,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "8"
 	.byte 0x17, 0x01
@@ -24791,11 +24796,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xac  ; "¬"
@@ -24805,7 +24810,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xad  ; "­"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "R"
 	.byte 0x17, 0x01
@@ -24821,11 +24826,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xac  ; "¬"
@@ -24833,7 +24838,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0xae  ; "®"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0x98  ; ""
 	.byte 0x00
@@ -24850,11 +24855,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -24892,7 +24897,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0xe2  ; "â"
 	.byte 0x00
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -24906,7 +24911,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.asciz ">"
 	.ascii "*"
@@ -24921,7 +24926,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 2, 1, 0xff
 	.byte 0xb2  ; "²"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "2"
 	.byte 0x17, 0x01
@@ -24930,14 +24935,14 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0xf0  ; "ð"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "pN*"
 	.byte 0x02
 	.zero 7
 	.byte 0x04
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xb3  ; "³"
@@ -24947,7 +24952,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0x8c  ; ""
 	.byte 0x00
@@ -24960,11 +24965,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.asciz "."
 	.zero 8
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xb3  ; "³"
@@ -24974,7 +24979,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xb4  ; "´"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "8"
 	.byte 0x17, 0x01
@@ -24987,11 +24992,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xb3  ; "³"
@@ -24999,7 +25004,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0xb5  ; "µ"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "T"
 	.byte 0x17, 0x01
@@ -25015,11 +25020,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -25053,7 +25058,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.ascii "*"
 	.byte 0x01
@@ -25068,7 +25073,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xb8  ; "¸"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "T"
 	.byte 0x17, 0x01
@@ -25077,21 +25082,21 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x07
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TO*"
 	.byte 0x02
 	.zero 7
 	.byte 0x02
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xb9  ; "¹"
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "x"
 	.byte 0x17, 0x01
@@ -25107,11 +25112,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xb7  ; "·"
@@ -25119,7 +25124,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0xb9  ; "¹"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "\\"
 	.byte 0x17, 0x01
@@ -25132,11 +25137,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -25170,7 +25175,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.ascii "*"
 	.byte 0x01
@@ -25185,7 +25190,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xbd  ; "½"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "T"
 	.byte 0x17, 0x01
@@ -25202,14 +25207,14 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xbe  ; "¾"
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "\\"
 	.byte 0x17, 0x01
@@ -25222,11 +25227,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xbc  ; "¼"
@@ -25234,7 +25239,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0xbe  ; "¾"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "x"
 	.byte 0x11, 0x01
@@ -25250,11 +25255,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -25283,7 +25288,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 4, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.asciz "T"
 	.byte 0x03, 0x01
@@ -25300,18 +25305,18 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xc2  ; "Â"
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.asciz "b"
 	.byte 0xf1  ; "ñ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "y"
 	.byte 0xf7  ; "÷"
 	.byte 0x00
@@ -25319,11 +25324,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.asciz "1"
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -25359,7 +25364,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1a, 0x02, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -25373,7 +25378,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.asciz ">"
 	.ascii "*"
@@ -25388,7 +25393,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 2, 1, 0xff
 	.byte 0xc6  ; "Æ"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "N"
 	.byte 0x1f, 0x01
@@ -25397,14 +25402,14 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0xf9  ; "ù"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "XQ*"
 	.byte 0x02
 	.zero 7
 	.byte 0x05
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xc7  ; "Ç"
@@ -25414,7 +25419,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "t"
 	.byte 0x17, 0x01
@@ -25429,11 +25434,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xc7  ; "Ç"
@@ -25445,7 +25450,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0x1e
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P"
 	.ascii "!"
 	.byte 0x01
@@ -25457,11 +25462,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xc7  ; "Ç"
@@ -25469,7 +25474,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0xc9  ; "É"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0x9c  ; ""
 	.byte 0x00
@@ -25483,11 +25488,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x07
 	.zero 7
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -25523,7 +25528,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1a, 0x02, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "R"
 	.ascii "`"
 	.byte 0x01
@@ -25537,7 +25542,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.asciz ">"
 	.ascii "*"
@@ -25552,7 +25557,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 2, 1, 0xff
 	.byte 0xcd  ; "Í"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "N"
 	.byte 0x1f, 0x01
@@ -25561,14 +25566,14 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0xf9  ; "ù"
 	.byte 0x00
 	.byte 0xc9  ; "É"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "VR*"
 	.byte 0x02
 	.zero 7
 	.byte 0x05
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xce  ; "Î"
@@ -25578,7 +25583,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.asciz "P"
 	.ascii "%"
@@ -25591,11 +25596,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.zero 7
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xce  ; "Î"
@@ -25605,7 +25610,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xcf  ; "Ï"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.asciz "t"
 	.byte 0x17, 0x01
@@ -25620,11 +25625,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x00
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xce  ; "Î"
@@ -25632,7 +25637,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.fill 4, 1, 0xff
 	.byte 0xd0  ; "Ð"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0x98  ; ""
 	.byte 0x00
@@ -25646,11 +25651,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x07
 	.zero 7
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -25687,10 +25692,10 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x1f
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "`"
 	.byte 0x01
@@ -25704,13 +25709,13 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz " "
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
 	.byte 0x01
 	.byte 0x00
 	.byte 0xd8  ; "Ø"
 	.byte 0x02, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.ascii "`"
 	.byte 0x01
@@ -25724,12 +25729,12 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz "@"
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "_"
 	.byte 0x02
 	.byte 0x00
 	.byte 0x10, 0x01, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ")"
 	.ascii "`"
 	.byte 0x01
@@ -25776,7 +25781,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "5"
 	.ascii "`"
 	.byte 0x01
@@ -25809,10 +25814,10 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0xdc  ; "Ü"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.byte 0xed  ; "í"
 	.byte 0x00
@@ -25825,7 +25830,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x00
 	.byte 0x07
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "`"
 	.byte 0x01
@@ -25836,7 +25841,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xd9  ; "Ù"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "T"
 	.byte 0xdc  ; "Ü"
 	.byte 0x00
@@ -25866,7 +25871,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xda  ; "Ú"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz "4"
 	.byte 0xeb  ; "ë"
@@ -25926,7 +25931,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x05
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "-"
 	.ascii "`"
 	.byte 0x01
@@ -25937,7 +25942,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xdc  ; "Ü"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "*"
 	.zero 2
 	.asciz "E"
@@ -25956,7 +25961,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xdd  ; "Ý"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "F"
 	.byte 0x07
 	.byte 0x00
@@ -25969,7 +25974,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x04
 	.zero 3
 	.byte 0xff
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FILE SELECT A-Z"
 	.byte 0x1f
 	.byte 0x00
@@ -25997,7 +26002,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x08
 	.byte 0x00
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.ascii "`"
 	.byte 0x01
@@ -26024,7 +26029,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.ascii " "
 	.byte 0x01, 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~80"
 	.asciz "."
 	.ascii "`"
@@ -26057,17 +26062,17 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xe1  ; "á"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.byte 0x1e
 	.byte 0x00
 	.byte 0xeb  ; "ë"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "/"
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.byte 0x03
 	.zero 3
@@ -26096,11 +26101,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 4, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "N"
 	.asciz " "
 	.byte 0xed  ; "í"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "/"
 	.byte 0x08
 	.zero 3
@@ -26113,9 +26118,9 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Evergreens slow / 12"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "`"
 	.byte 0x01
@@ -26123,11 +26128,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ","
 	.asciz " "
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "/"
 	.byte 0xf7  ; "÷"
 	.byte 0x00
@@ -26141,7 +26146,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LOC.:"
 	.byte 0x10
 	.byte 0x00
@@ -26154,12 +26159,12 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02
 	.byte 0xe2  ; "â"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.asciz "T"
 	.byte 0x03, 0x01
 	.byte 0x83  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "`"
 	.byte 0x01
@@ -26172,7 +26177,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "d"
 	.ascii "?"
 	.byte 0x01
@@ -26257,7 +26262,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xff
 	.zero 3
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "USER MIDI"
 	.asciz "6"
 	.ascii "`"
@@ -26288,7 +26293,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x0d
 	.zero 3
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TECH LYRICS"
 	.asciz "6"
 	.ascii "`"
@@ -26319,7 +26324,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xff
 	.zero 3
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "MSP"
 	.asciz "6"
 	.ascii "`"
@@ -26351,9 +26356,9 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xff
 	.zero 3
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SOUND MEMORY"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "`"
 	.byte 0x01
@@ -26379,9 +26384,9 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xff
 	.zero 3
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "COMPOSER"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "`"
 	.byte 0x01
@@ -26394,7 +26399,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~"
 	.ascii "?"
 	.byte 0x01
@@ -26409,7 +26414,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xff
 	.zero 3
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SEQUENCER"
 	.asciz "6"
 	.ascii "`"
@@ -26423,7 +26428,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.ascii "?"
 	.byte 0x01
@@ -26439,9 +26444,9 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xff
 	.zero 3
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PANEL MEMORY"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "`"
 	.byte 0x01
@@ -26452,7 +26457,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x02, 0x08
 	.byte 0x00
 	.byte 0xec  ; "ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "f"
 	.ascii "?"
 	.byte 0x01
@@ -26467,10 +26472,10 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xff
 	.zero 3
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "CURRENT PANEL"
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -26510,7 +26515,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x1f
 	.zero 3
 	.byte 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "`"
 	.byte 0x01
@@ -26530,7 +26535,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x08
 	.byte 0x00
 	.byte 0xc0  ; "À"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "RX*"
 	.zero 4
 	.byte 0xff
@@ -26549,7 +26554,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x08
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "\""
 	.ascii "?"
 	.byte 0x01
@@ -26601,7 +26606,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x08
 	.byte 0x00
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "9"
 	.ascii "?"
 	.byte 0x01
@@ -26627,7 +26632,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x02, 0x08
 	.zero 3
 	.byte 0xe0  ; "à"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -26650,10 +26655,10 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x02
 	.byte 0xf6  ; "ö"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "("
 	.byte 0xe0  ; "à"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "O"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -26676,10 +26681,10 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x02
 	.byte 0xf7  ; "÷"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "P"
 	.byte 0xe0  ; "à"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "w"
 	.byte 0xef  ; "ï"
 	.byte 0x00
@@ -26702,7 +26707,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x02
 	.byte 0xf8  ; "ø"
 	.byte 0x02, 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "x"
 	.byte 0xe0  ; "à"
 	.byte 0x00
@@ -26856,7 +26861,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x01
 	.zero 3
 	.byte 0x0b
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.byte 0xf0  ; "ð"
@@ -26888,7 +26893,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xf9  ; "ù"
 	.byte 0x00
 	.byte 0x07
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -26923,7 +26928,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x00
 	.byte 0xf0  ; "ð"
 	.byte 0x02, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01, 0x04, 0x03
@@ -26933,7 +26938,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x1c
 	.byte 0x00
 	.byte 0xe1  ; "á"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "7"
 	.byte 0xeb  ; "ë"
 	.byte 0x00
@@ -26942,7 +26947,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x03
 	.zero 5
 	.asciz "Info"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01, 0x04, 0x03
@@ -26963,7 +26968,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.asciz "Load"
 	.byte 0x00
 	.byte 0x0c
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x04, 0x03
 	.fill 4, 1, 0xff
@@ -26978,7 +26983,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	adc	(xwa), xix
 	.asciz "#"
 	.byte 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -27003,7 +27008,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x01, 0x09, 0x03, 0x0b, 0x03
 	.fill 4, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "<"
 	.asciz "T"
 	.byte 0x03, 0x01
@@ -27012,23 +27017,23 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x09
 	.byte 0x00
 	.byte 0xc1  ; "Á"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "V[*"
 	.byte 0x01
 	.zero 7
 	.byte 0x01
 	.zero 3
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x0a, 0x03
 	.fill 6, 1, 0xff
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.asciz "b"
 	.byte 0xf1  ; "ñ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "y"
 	.byte 0xf7  ; "÷"
 	.byte 0x00
@@ -27036,11 +27041,11 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.asciz "1"
 	.zero 8
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x06
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -27063,7 +27068,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.asciz "<"
 	.zero 2
 	.asciz "LYRICS OPTIONS"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01, 0x0c, 0x03
@@ -27086,10 +27091,10 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x01, 0x0c, 0x03, 0x0f, 0x03, 0x10, 0x03, 0x0d, 0x03, 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.byte 0xc5  ; "Å"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "a"
 	.byte 0xf5  ; "õ"
 	.byte 0x00
@@ -27116,17 +27121,17 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.asciz "#"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x0e, 0x03
 	.fill 6, 1, 0xff
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.byte 0x8e  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "g"
 	.byte 0xf7  ; "÷"
 	.byte 0x00
@@ -27138,7 +27143,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x1b
@@ -27147,7 +27152,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x01, 0x0c, 0x03, 0x11, 0x03, 0x12, 0x03, 0x0e, 0x03, 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.byte 0xc5  ; "Å"
 	.byte 0x00
@@ -27175,14 +27180,14 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.asciz "#"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x10, 0x03
 	.fill 6, 1, 0xff
 	.byte 0x08
 	.byte 0x00
 	.byte 0x08
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "r"
 	.byte 0x8e  ; ""
 	.byte 0x00
@@ -27198,7 +27203,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01, 0x1b
@@ -27239,7 +27244,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.asciz "#"
 	.zero 2
 	.byte 0x0a
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
 	.byte 0x01, 0x0c, 0x03
 	.fill 4, 1, 0xff
@@ -27263,7 +27268,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x01
 	.byte 0x00
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "@"
 	.ascii "*"
 	.byte 0x01
@@ -27274,7 +27279,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0x08
 	.byte 0x00
 	.byte 0x10
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "p"
 	.ascii "3"
 	.byte 0x01
@@ -29817,23 +29822,23 @@ HDAE5000_GFX_INIT_PARAMS:	; 0x2A849A
 	.asciz "FileLoadSwCatch"	; 0x2A84A6
 	.asciz "HDDTitleSwCatch"	; 0x2A84B6
 	.asciz "CopyToHDDirSelScreen"	; 0x2A84C6
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "CopyToHDScreen"	; 0x2A84DC
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FlsFileSelScreen"	; 0x2A84EC
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FlsDirSelScreen"	; 0x2A84FE
 	.asciz "FlsEditScreen"		; 0x2A850E
 	.asciz "FlsLoadScreen"		; 0x2A851C
 	.asciz "SelectFlsScreen"	; 0x2A852A
 	.asciz "SetupP2SwCatch"	; 0x2A853A
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FILE_Naming_Screen"	; 0x2A854A
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FILE_LOAD_Screen"	; 0x2A855E
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SEL_DIR_Screen"	; 0x2A8570
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HDAETitleFunc"		; 0x2A8580
 
 HDAE5000_Palette_TitleLogo:	; 0x2A858E
@@ -29921,16 +29926,16 @@ HDAE5000_Config_Strings:	; 0x2E1C82
 	.zero 2
 	.ascii "                "
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "   "
 	.byte 0x09
 	.zero 2
 	.ascii "                          "
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "            "
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "01:        "
 	.byte 0x09
 	.ascii "02:        "
@@ -29988,7 +29993,7 @@ HDAE5000_Config_Strings:	; 0x2E1C82
 	.asciz "OFF"
 	.asciz "---"
 	.asciz "050354"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "965768"
 	nop
 	popw wa
@@ -30061,7 +30066,7 @@ HDAE5000_Config_Strings:	; 0x2E1C82
 	.byte 0x32, 0x39
 	.byte 0x09
 	.asciz "30"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Debug Time!"
 	.byte 0xea  ; "ê"
 	.byte 0x1e
@@ -30073,9 +30078,9 @@ HDAE5000_Config_Strings:	; 0x2E1C82
 	.byte 0x1e
 	.asciz "."
 	.asciz " !#$%&?.... "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "abc...123..."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "ABC...123..."
 	.byte 0x00
 	.byte 0xe2  ; "â"
@@ -30441,7 +30446,7 @@ HDAE5000_Config_Strings:	; 0x2E1C82
 	.asciz "%"
 	.asciz "%"
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "$"
 	.asciz "$"
 	.byte 0x1f
@@ -30465,25 +30470,25 @@ HDAE5000_Config_Strings:	; 0x2E1C82
 HDAE5000_Test_Strings:	; 0x2E21D8
 	; PPORT test and debug strings
 	.asciz "Name"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Test"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PPORT TEST"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HDD ID READ"
 	.asciz "FD TEST"
 	.asciz "OK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "ERROR"
 	.asciz "ERROR"
 	.asciz "STOP TEST LOOP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "START TEST LOOP"
 	.asciz "=======> Port Test OK"
 	.asciz "=======> Port Test Error"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HD-TYPE : "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Fre Capa: %3.1f [MB]"
 	.zero 3
 	.asciz "=======> HDD OK"
@@ -30493,9 +30498,9 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.asciz "B%2.2d"
 	.asciz "*.*"
 	.asciz "CpHD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "CpHD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "WRITE PROTECTION   :ON     QUICK LOAD MODE:     1"
 	.byte 0x09
 	.ascii "WRITE CONFIRM      :OFF    JUMP AFTER LOAD:     2"
@@ -30504,15 +30509,15 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.byte 0x09
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "     %d"
 	.asciz "     %d"
 	.asciz "%4ldMB"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HDAE"
 	.zero 3
 	jrl	nc, 20992
@@ -30525,16 +30530,16 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.byte 0x7f, 0x00
 	.ascii "a"
 	.byte 0x02, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "f"
 	.byte 0x02, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "k"
 	.byte 0x02, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "p"
 	.byte 0x02, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "u"
 	.byte 0x02, 0x7f
 	.zero 3
@@ -30551,10 +30556,10 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.byte 0x37
 	.byte 0x01
 	.byte 0xfe  ; "þ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "   :                "
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%3.3d"
 	.ascii "CURRENT PANEL"
 	.byte 0x09
@@ -30616,11 +30621,11 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 HDAE5000_Dir_Strings:	; 0x2E2500
 	; Directory management strings
 	.asciz "DIRECTORY "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%2.2d"
 	.asciz ":"
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii ":                          "
 	.byte 0x09
 	.zero 2
@@ -30650,55 +30655,55 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xb7  ; "·"
 	.byte 0x00
 	.byte 0x83  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "DELD"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "DELF"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "UTIL"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "---[ LSW File Info. ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "---[ SDA File Info. ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "---[ PMT File Info. ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "---[ SQF File Info. ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "---[ SEQ File Info. ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "---[ CMP File Info. ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "---[ TM File Info. ]---"
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "---[ MSP File Info. ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "---[ RCM File Info. ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "---[ MD File Info. ]---"
 	.asciz "adr  : "
 	.asciz "size : "
 	.asciz "PCLK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PORT IS ACTIVE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "              "
 	.byte 0x00
 	.byte 0xb0  ; "°"
@@ -30708,7 +30713,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xb0  ; "°"
 	.byte 0x00
 	.byte 0x9d  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "v'."
 	.asciz "f'."
 	.asciz "V'."
@@ -30718,7 +30723,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "   DRUMS L/R   "
 	.asciz "      OFF      "
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "i"
@@ -30758,41 +30763,41 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xe2  ; "â"
 	.asciz "'."
 	.asciz " 16 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 15 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 14 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 13 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 12 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 11 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 10 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  9 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  8 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  7 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  6 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  5 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  4 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  3 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  2 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  1 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "NONE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "l"
@@ -30838,41 +30843,41 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xa4  ; "¤"
 	.asciz "(."
 	.asciz " 16 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 15 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 14 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 13 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 12 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 11 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " 10 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  9 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  8 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  7 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  6 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  5 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  4 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  3 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  2 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "  1 "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "NONE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "l"
@@ -30894,7 +30899,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x1b
 	.byte 0x00
 	.byte 0x1f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "B"
 	.asciz "B"
 	.asciz "B"
@@ -30904,9 +30909,9 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "2"
 	.zero 2
 	.asciz "SVOP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.asciz "+"
 	.asciz "F"
@@ -30918,7 +30923,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz ">"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "x"
@@ -30930,7 +30935,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "x"
@@ -30942,7 +30947,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "x"
@@ -30954,7 +30959,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "x"
@@ -30966,7 +30971,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "x"
@@ -30978,7 +30983,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "x"
@@ -30990,7 +30995,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "x"
@@ -31002,7 +31007,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "x"
@@ -31014,7 +31019,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0"
 	.asciz "4"
 	.byte 0xa2  ; "¢"
@@ -31022,14 +31027,14 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xa2  ; "¢"
 	.byte 0x00
 	.byte 0xa2  ; "¢"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "8"
 	.asciz "F"
 	.asciz "s"
 	.asciz "z"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz "%"
 	.asciz "J"
@@ -31044,12 +31049,12 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x19
 	.byte 0x00
 	.byte 0x19
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.asciz "4"
 	.asciz "4"
 	.byte 0x1d
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!"
 	.asciz "%"
 	.asciz ","
@@ -31071,7 +31076,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz " GREEN "
 	.asciz " RED   "
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "D"
@@ -31098,7 +31103,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz " GREEN "
 	.asciz " RED   "
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "D"
@@ -31110,7 +31115,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "<"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz "%"
 	.asciz "@"
@@ -31125,12 +31130,12 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x19
 	.byte 0x00
 	.byte 0x19
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.asciz "4"
 	.asciz "4"
 	.byte 0x1d
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!"
 	.asciz "%"
 	.asciz ","
@@ -31139,12 +31144,12 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x19
 	.byte 0x00
 	.byte 0x19
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.asciz "4"
 	.asciz "4"
 	.byte 0x1d
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!"
 	.asciz "%"
 	.asciz ","
@@ -31153,12 +31158,12 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x19
 	.byte 0x00
 	.byte 0x19
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.asciz "4"
 	.asciz "4"
 	.byte 0x1d
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!"
 	.asciz "%"
 	.asciz ","
@@ -31194,24 +31199,24 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "BFMT!"
 	.zero 3
 	.byte 0x13
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "&"
 	.asciz "9"
 	.asciz "L"
 	.byte 0x90  ; ""
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "a"
 	.asciz "a"
 	.zero 2
 	.byte 0x03
 	.byte 0x00
 	.byte 0x1e
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "9"
 	.asciz "N"
 	.asciz "i"
 	.asciz "LBNS"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "4"
 	.asciz "N"
 	.asciz "h"
@@ -31235,12 +31240,12 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.zero 2
 	.asciz "LBN!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%1.1d"
 	.asciz "%2.2d"
 	.asciz "%3.3d"
 	.asciz " %1.1d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " %2.2d"
 	.zero 3
 	.asciz "U"
@@ -31252,9 +31257,9 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	normal
 	.byte 0xbb, 0x01
 	.asciz "                          "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "B"
 	.asciz "F"
 	.asciz "a"
@@ -31266,7 +31271,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.asciz "Y"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.asciz "F"
 	.byte 0xcc  ; "Ì"
@@ -31274,7 +31279,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0xcc  ; "Ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.asciz "f"
 	.byte 0x81  ; ""
@@ -31283,7 +31288,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.asciz "F"
 	.byte 0xcc  ; "Ì"
@@ -31291,7 +31296,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0xcc  ; "Ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.asciz "f"
 	.byte 0x81  ; ""
@@ -31300,7 +31305,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.asciz "F"
 	.byte 0xcc  ; "Ì"
@@ -31308,7 +31313,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0xcc  ; "Ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.asciz "f"
 	.byte 0x81  ; ""
@@ -31317,7 +31322,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.asciz "F"
 	.byte 0xcc  ; "Ì"
@@ -31325,7 +31330,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0xcc  ; "Ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.asciz "f"
 	.byte 0x81  ; ""
@@ -31334,7 +31339,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.asciz "F"
 	.byte 0xcc  ; "Ì"
@@ -31342,7 +31347,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0xcc  ; "Ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.asciz "f"
 	.byte 0x81  ; ""
@@ -31351,7 +31356,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.asciz "F"
 	.byte 0xcc  ; "Ì"
@@ -31359,7 +31364,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0xcc  ; "Ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.asciz "f"
 	.byte 0x81  ; ""
@@ -31368,7 +31373,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.asciz "F"
 	.byte 0xcc  ; "Ì"
@@ -31376,7 +31381,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0xcc  ; "Ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.asciz "f"
 	.byte 0x81  ; ""
@@ -31385,7 +31390,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.asciz "F"
 	.byte 0xcc  ; "Ì"
@@ -31393,7 +31398,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0xcc  ; "Ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.asciz "f"
 	.byte 0x81  ; ""
@@ -31402,7 +31407,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0x00
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "A"
 	.asciz "F"
 	.byte 0xcc  ; "Ì"
@@ -31410,7 +31415,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.byte 0xcc  ; "Ì"
 	.byte 0x00
 	.byte 0xcc  ; "Ì"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "K"
 	.asciz "f"
 	.byte 0x81  ; ""
@@ -31427,7 +31432,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "%3.3d"
 	.ascii "E"
 	.byte 0x01, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "f"
 	normal
 	.byte 0x7f, 0x00
@@ -31439,13 +31444,13 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.byte 0x00
 	.byte 0x44
 	.byte 0x01, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "v"
 	.byte 0x01, 0x7f
 	.byte 0x00
 	.byte 0x43
 	.byte 0x01, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "w"
 	normal
 	.byte 0x7f, 0x00
@@ -31460,53 +31465,53 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.byte 0x7f, 0x00
 	.ascii "j"
 	.byte 0x01, 0x7f
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FLS NAME "
 	.asciz "%2.2d"
 	.asciz ":"
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii ":                                 "
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%2.2d"
 	.ascii " LOC. %3.3d/%2.2d"
 	.byte 0x09
 	.zero 2
 	.ascii " LOC. 000/00"
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FLS!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "DEL1"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "DEL2"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OVWR"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%2.2d"
 	.asciz ".LSW"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".PMT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".SQT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".CMP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".TM"
 	.asciz ".MSP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".RCM"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".MD"
 	.asciz ".TLX"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "WrCn"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "DEL!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "'"
 	.asciz "+"
 	.asciz "F"
@@ -31518,7 +31523,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz ">"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "`"
@@ -31530,7 +31535,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "`"
@@ -31542,7 +31547,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "`"
@@ -31554,7 +31559,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "`"
@@ -31566,7 +31571,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "`"
@@ -31578,7 +31583,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "`"
@@ -31590,7 +31595,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "`"
@@ -31602,7 +31607,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "`"
@@ -31614,7 +31619,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "P"
 	.zero 2
 	.asciz "%s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%"
 	.asciz ")"
 	.asciz "l"
@@ -31626,7 +31631,7 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "\\"
 	.zero 2
 	.asciz "TimB"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TLBN"
 	.zero 5
 	normal
@@ -32233,9 +32238,9 @@ HDAE5000_UI_Icons:	; 0x2E365D
 	.zero 41
 	.asciz "AcLanguage1"
 	.asciz "LANENG00"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LANDEU00"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LANFRA00"
 	.byte 0x00
 
@@ -32248,32 +32253,32 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.asciz "pertoir?"
 	.asciz "Would you really delete the selected title?"
 	.asciz "Moechten Sie den angewaehlten Titel wirklich loeschen?"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Voulez-vous effacer ce titre?"
 	.asciz "COPY FD TO HARD DISK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "COPY FD TO HARD DISK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "COPY FD TO HARD DISK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OUTPUT SETTING"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OUTPUT SETTING"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OUTPUT SETTING"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SELECT BY   NAME    "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SELECT BY   NAME    "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SELECT BY   NAME    "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LOAD BY     NUMBER"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LOAD BY     NUMBER"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LOAD BY     NUMBER"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SELECT FILE LOAD SCRIPT"
 	.asciz "SELECT FILE LOAD SCRIPT"
 	.asciz "SELECT FILE LOAD SCRIPT"
@@ -32287,35 +32292,35 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.asciz "ABOUT & HELP "
 	.asciz "ABOUT & HELP "
 	.asciz "SAVE SETUP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SAVE SETUP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SAVE SETUP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OUTPUT SETTING"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OUTPUT SETTING"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OUTPUT SETTING"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SEPARATE OUTPUT MODE:"
 	.asciz "SEPARATE OUTPUT MODE:"
 	.asciz "SEPARATE OUTPUT MODE:"
 	.asciz "PART SELECT FOR SEQ.DRUMS OUT:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PART SELECT FOR SEQ.DRUMS OUT:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PART SELECT FOR SEQ.DRUMS OUT:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PART SELECT FOR SEQ.BASS  OUT:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PART SELECT FOR SEQ.BASS  OUT:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PART SELECT FOR SEQ.BASS  OUT:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "! The separate outputs cannot be controlled by the internal volume control."
 	.asciz "! Die separaten Ausgaenge werden nicht durch Volumen am Keyboard kontrolliert."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "! Les sortie s"
 	.byte 0xe9  ; "é"
 	.ascii "par"
@@ -32327,25 +32332,25 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.asciz "es par les volume du calvier."
 	.asciz "Hardware and software developement:"
 	.asciz "Hardware und Software Entwicklung:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Hardware et Software developement:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Conception, marketing, sales and service:"
 	.asciz "Konzeption, Marketing, Verkauf und Service:"
 	.asciz "Conception, Marketing, Vente et Service:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "All rigths reserved by the called companies"
 	.asciz "Alle Rechte bei den obengenannten Firmen"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "All rigths reserved by the called companies"
 	.asciz "Special thanks to:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Spezieller Dank an:"
 	.asciz "Special thanks to:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Press 3 digits for directory and 2 digits for the file."
 	.asciz "Geben Sie 3 Ziffern fuer das Verzeichnis und 2 Ziffern fuer den Titel ein."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Introduisez 3 chiffres pour le r"
 	.byte 0xe9  ; "é"
 	.asciz "pertoir at 2 chiffres pour le titre."
@@ -32354,19 +32359,19 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.ascii "Voulez-vous vraiment "
 	.byte 0xe9  ; "é"
 	.asciz "crire par dessus le FLS?"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Do you really want to delete this FLS entry?"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Wollen Sie den bestehenden FLS Eintrag wirklich loeschen?"
 	.asciz "Voulez-vous vraiment effacer ce FLS?"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HD FORMAT will erase all files at once."
 	.asciz "HD FORMAT loescht alle Daten auf der Festplatte."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "HD-FORMAT effacera toutes les donn"
 	.byte 0xe9  ; "é"
 	.asciz "es de votre disque dur."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Therefore you need a 6-digit key code. Please refer your owners manual chapter SETUP & TOOLS."
 	.asciz "Geben Sie auf dieser Seite den 6-stelligen Code ein. Schauen Sie in der Anleitung unter SETUP & TOOLS nach."
 	.ascii "Indroduisez le code "
@@ -32380,7 +32385,7 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.asciz " votre manuel dans (SETUP & TOOLS)."
 	.asciz "After your code input all data will be deleted irrevocable!"
 	.asciz "Nach der Codeeingabe werden alle Daten unwiderruflich geloescht!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Apr"
 	.byte 0xe8  ; "è"
 	.ascii "s l'introduction du code, toutes les donn"
@@ -32389,44 +32394,44 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.byte 0xe9  ; "é"
 	.asciz "es."
 	.asciz "You are going to delete a FLS entry. Are you sure?"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Sie haben einen FLS Eintrag zum Loeschen markiert. Sind Sie sicher?"
 	.asciz "Vous avez marquer un FLS connection pour effacer. Vous ait sure?"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "You are going to overwrite a FLS entry. Are you sure?"
 	.asciz "Sie ueberschreiben eine bestehenden FLS Eintrag. Sind Sie sicher?"
 	.asciz "Voulez-vous vraiment transcrire ce FLS enregistration?"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "The hard disk is write protected!"
 	.ascii "Die Festplatte ist schreibgesch"
 	.byte 0xfc  ; "ü"
 	.asciz "tzt!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Le disque dur est prot"
 	.byte 0xe9  ; "é"
 	.ascii "ger contre l'"
 	.byte 0xe9  ; "é"
 	.asciz "ctriture!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Please set the write protect mode to OFF."
 	.asciz "Schalten Sie WRITE PROTECT im SETUP & TOOLS auf OFF."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Pour "
 	.byte 0xe9  ; "é"
 	.asciz "crire mettez la protection sur OFF."
 	.asciz "The hard disk is not formatted!"
 	.asciz "Die Festplatte ist nicht formatiert!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Le disque dur n'est pas format"
 	.byte 0xe9  ; "é"
 	.asciz "."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Hard disk SRAM error."
 	.asciz "Im HD-AE5000 SRAM ist ein Fehler aufgetreten."
 	.asciz "Il y a un problem avec le SRAM de HD-AE5000."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Hard disk reset error."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Die Festplatte konnte nicht initialisiert werden."
 	.asciz "Votre disque dur n'est pas reconnu."
 	.asciz "Hard disk read error."
@@ -32435,14 +32440,14 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.byte 0xe9  ; "é"
 	.asciz "me de leture du disque."
 	.asciz "Hard disk ID read error."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Die ID der Festplatte konnte nicht gelesen werden."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "L'ID du disque dur n'a pas pu "
 	.byte 0xea  ; "ê"
 	.asciz "tre lue."
 	.asciz "Hard disk track 0 error."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Track O der Festplatte konnte nicht gelesen werden."
 	.ascii "La piste 0 du disque dur n'a pas pu "
 	.byte 0xea  ; "ê"
@@ -32459,7 +32464,7 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.asciz "tre lue."
 	.asciz "There are no files marked for copy to HD!"
 	.asciz "Es wurden keine Titel zum Kopieren gefunden."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Aucun titre n'a "
 	.byte 0xe9  ; "é"
 	.ascii "t"
@@ -32468,23 +32473,23 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.byte 0xe9  ; "é"
 	.asciz " pour faire des copies."
 	.asciz "Please make a safety backup of your data and call your service center."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Sichern Sie alle Ihre Daten auf Diskette oder den PC und rufen Sie Ihre Service-Stelle an."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Sauvez vos donn"
 	.byte 0xe9  ; "é"
 	.asciz "e sur disquette ou l'ordinateur et contactez votre service assistance."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Please make a safety backup of your data and call your service center."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Sichern Sie alle Ihre Daten auf Diskette oder den PC und rufen Sie Ihre Service-Stelle an."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Sauvez vos donn"
 	.byte 0xe9  ; "é"
 	.asciz "e sur disquette ou l'ordinateur et contactez votre service assistance."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "The data on the disk you would like to copy to HD has no KN5000 format or some data are corrupted."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Die Daten auf der Diskette die Sie kopieren moechten, haben keine KN5000 ID oder sind fehlerhaft."
 	.ascii "Les donn"
 	.byte 0xe9  ; "é"
@@ -32492,9 +32497,9 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.byte 0xe9  ; "é"
 	.asciz "faults."
 	.asciz "The number or marked songs cannot fit in the free space of the selected directory."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Im gewuenschten Verzeichnis sind nicht genuegend freie Plaetze fuer die Anzahl markierter Titel."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Le r"
 	.byte 0xe9  ; "é"
 	.ascii "pertoir est satur"
@@ -32502,17 +32507,17 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.ascii ", il n'y "
 	.byte 0xe0  ; "à"
 	.asciz " plus de place pour d'autres titre."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Reduce the number of selected songs or find a free directory."
 	.asciz "Reduzieren Sie die Zahl der Titel oder waehlen Sie ein anderes Verzeichnis."
 	.ascii "Changer de r"
 	.byte 0xe9  ; "é"
 	.asciz "pertoire ou supprimez des titres."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "You cannot copy files/songs to an unnamed directory."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Kopieren Sie keine Titel in ein nicht beschriftetes Verzeichnis."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Vous ne pouvez pas copier des titres dans un r"
 	.byte 0xe9  ; "é"
 	.ascii "pertoire pas pr"
@@ -32520,35 +32525,35 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.ascii "par"
 	.byte 0xe9  ; "é"
 	.asciz "."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Please use a named directory or create the new directory with EDIT first."
 	.asciz "Waehlen Sie ein bereits beschriftetes Verzeichnis oder benennen Sie es zuvor mit EDIT."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Nommez-le d'abord par example avec EDIT."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "The DIR number is out of range."
 	.asciz "Sie haben eine ungueltige Verzeichnis Nummer eingegeben."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Le r"
 	.byte 0xe9  ; "é"
 	.asciz "pertoire choisi n'existe pas."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "The file number is out of range."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Die eingegebene Nummer existiert nicht."
 	.asciz "Le titre choisi n'existe pas."
 	.asciz "Please wait ..."
 	.asciz "Bitte warten ..."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Attendre S.V.P."
 	.asciz "!FORMAT ERROR!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!FORMAT FEHLER!"
 	.asciz "!FORMAT ERREUR!"
 	.asciz "The automatic HD format was not successful!"
 	.asciz "Die Formatierung war nicht erfolgreich!"
 	.asciz "Le formatage du disque dur n'a pas pu se faire correctement!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Please try once more, refer your owners manual or ask your dealer/service center."
 	.asciz "Versuchen Sie es nochmals, schauen Sie in der Anleitung nach oder rufen Sie Ihre Service-Stelle an."
 	.ascii "R"
@@ -32563,12 +32568,12 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.byte 0xe9  ; "é"
 	.asciz "chec, contactez votre service assistance."
 	.asciz "Input error!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Eingabe-Fehler!"
 	.asciz "Erreur d'operation!"
 	.asciz "The key code input was wrong!"
 	.asciz "Die Nummerneingabe war falsch!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Le cocde n'est pas correct!"
 	.asciz "Please try once more, refer your owners manual or ask your dealer/service center."
 	.asciz "Versuchen Sie es nochmals, schauen Sie in der Anleitung nach oder rufen Sie Ihre Service-Stelle an."
@@ -32586,108 +32591,108 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.asciz "Delete file from hard disk:"
 	.asciz "Loesche Titel von Festplatte:"
 	.asciz "Effacer titre du disque dur:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "The hard disk will now be formatted. This procedure can take about 2-3 minutes."
 	.asciz "Die Festplatte wird nun neu formatiert. Dieser Vorgang dauert ca. 2-3 Minuten."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "The hard disk will now be formatted. This procedure can take about 2-3 minutes."
 	.asciz "We recommend to turn ON and OFF again the power after the complete format."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Wir empfehlen, nach der Formatierung das Keyboard aus und wieder einzuschalten."
 	.asciz "We recommend to turn ON and OFF again the power after the complete format."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Track O will be recovered:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Track 0 wird kontrolliert:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Track O will be recovered:"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "The FLS entry remains free."
 	.asciz "Der FLS Eintrag bleibt frei."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Ce FLS registartion reste libre."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "All following entries will be moved."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Alle nachfolgenden Eintraege werden nachgeschoben."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "Tous les registartion suivant seront d"
 	.byte 0xe9  ; "é"
 	.asciz "placer."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Evaluation 01-01-99"
 	.asciz "Test-Version 01-01-99"
 	.ascii "Version d'"
 	.byte 0xe9  ; "é"
 	.asciz "valuation"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LYRICS LOAD MODE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LYRICS LOAD MODE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LYRICS LOAD MODE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "COLOR ACTIV"
 	.asciz "AKTIVE FARBE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "COLOUR ACTIVE"
 	.asciz "COLOR PASSIV"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "PASSIVE FARBE"
 	.asciz "COLOUR PASSIVE"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "You are going to overwrite an existing entry. Are you sure?"
 	.asciz "Sie ueberschreiben einen bestehenden Eintrag. Sind Sie sicher?"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Vous etes en train de modifier un titre existant. Etes-vous sur?"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "YES"
 	.asciz "JA"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OUI"
 	.asciz "NO"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "NEIN"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "NON"
 	.asciz "OK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "OK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "CANCEL"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Abbruch"
 	.asciz "CANCEL"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Operation error!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Bedienungsfehler!"
 	.asciz "Error d'operation!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!SAVE ERROR!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!SAVE-FEHLER!"
 	.asciz "!SAVE ERREUR!"
 	.asciz "!LOAD ERROR!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!LOAD-FEHLER!"
 	.asciz "!LOAD ERREUR!"
 	.asciz "!SYSTEM ERROR!"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "!SYSTEM-FEHLER!"
 	.asciz "!SYSTEM ERREUR!"
 	.asciz "!ATTENTION!"
 	.asciz "!ACHTUNG!"
 	.asciz "!ATTENTION!"
 	.asciz "Press YES for confirmation, NO to abort."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Bestaetigen Sie den Vorgang mit JA oder druecken Sie die NEIN Taste."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Pressez OUI pour confirmer ou NON pour annuler."
 	.asciz "Please call your dealer or service center."
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Bitte rufen Sie Ihre Service-Stelle an."
 	.asciz "Contactez votre service assistance."
 	.asciz "No Message"
@@ -32836,10 +32841,10 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 HDAE5000_Lang_Codes:	; 0x2E5B80
 	; Language code strings and file types
 	.asciz "                                        "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Reset"
 	.asciz "Load"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "%03i - %i "
 	.zero 3
 	.asciz "}"
@@ -32857,20 +32862,20 @@ HDAE5000_Lang_Codes:	; 0x2E5B80
 	push	sr
 	.byte 0xc5, 0x02, 0x3b, 0x05
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TESTTEST.TLX"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "Fault : No Lyrics loaded or corrupt Data - Code %i %i %i     "
 	.asciz " %i/%i "
 	.asciz "Chord : %s               "
 	.asciz "Info :                            "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "No Copyright Info"
 	.asciz "No Song Title"
 	.asciz " %i/%i "
 	.zero 4
 	.asciz "TLhd"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TLtr"
 	.zero 3
 	.asciz "                           "
@@ -32881,7 +32886,7 @@ HDAE5000_Lang_Codes:	; 0x2E5B80
 	.asciz "%s %s"
 	.asciz "%s %s"
 	.asciz ".TLX"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
 	.zero 3
 	.byte 0x03, 0x03, 0x03, 0x03, 0x02, 0x02
@@ -32896,13 +32901,13 @@ HDAE5000_Lang_Codes:	; 0x2E5B80
 	.asciz " ->"
 	.asciz "*.*"
 	.asciz ".TTX"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".MID"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "XLT."
 	.byte 0x00
 	.byte 0xbc  ; "¼"
@@ -32963,9 +32968,9 @@ HDAE5000_Display_Params:	; 0x2F8DCE
 	.asciz "HD-AE5000"
 	.zero 8
 	.asciz "                "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "                "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "                          "
 	.byte 0x00
 	.byte 0x98, 0x8e
@@ -32989,222 +32994,222 @@ HDAE5000_Display_Params:	; 0x2F8DCE
 	.asciz "/"
 	.zero 2
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "z"
 	.byte 0x8e
 	.asciz "/"
 	.zero 2
 	.byte 0x10
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "v"
 	.byte 0x8e
 	.asciz "/"
 	.zero 2
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "r"
 	.byte 0x8e
 	.asciz "/"
 	.zero 2
 	.byte 0x03
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "n"
 	.byte 0x8e
 	.asciz "/"
 	.zero 2
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "h"
 	.byte 0x8e
 	.asciz "/"
 	.zero 2
 	.byte 0x04
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TLhd"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.asciz "K"
 	.asciz "H"
 	.asciz "K"
 	.asciz "KN5000 SOUND RAM"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "H"
 	.asciz "K"
 	.byte 0x01, 0x08
 	.zero 2
 	.asciz "HK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HK"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".SEQ"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".SQF"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".LSW"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".PMT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".SQT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".CMP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".TM"
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".MSP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".RCM"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".MD"
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".TLX"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".TTX"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".LSW"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".PMT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".SQT"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".CMP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".TM"
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".MSP"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".RCM"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".MD"
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ".TLX"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "rb"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "---[ GetInfoBlockPointer ]---"
 	.asciz "ppib adr = %lx"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ TurnHdMotorOff ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ SendInfosAboutHd ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "hddname : "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "hddtrck : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "hddhead : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "hddsctr : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "hddscby : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ SendInfosAboutDirBlock ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FGB ptr : %lx"
 	.asciz "FGB wid : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FGB num : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ SendInfosAboutFileSystemBlock ]---"
 	.asciz "FEB ptr : %lx"
 	.asciz "FEB wid : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FEB num : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ SendInfosAboutFlsBlock ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FLS ptr : %lx"
 	.asciz "FLS wid : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FLS num : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "FLS ent : %d"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ ReadDirBlockFromHd ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ ReadFileBlockFromHd ]---"
 	.asciz " "
 	.asciz "---[ ReadFlsBlockFromHd ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ WriteDirBlockToHd ]---"
 	.asciz " "
 	.asciz "---[ WriteFileSystemBlockToHd ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ WriteFlsBlockToHd ]---"
 	.asciz " "
 	.asciz "---[ SendInfosAboutSong ]--- "
 	.asciz "dirname : %s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "sngname : %s"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ LoadSongFromHdToMemory ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ SaveSongInMemoryToHd ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ InitWholeSongInMemory ]---"
 	.asciz " "
 	.asciz "---[ FormatHd ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ SendPointerToFreeBufferSpace ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "work adr : %lx"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ PreWholeSongInMemory ]---"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz " "
 	.asciz "---[ WriteOpenHD ]--- "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "SUFFIX : %d"
 	.asciz "---[ WriteCloseHD ]--- "
 	.asciz "---[ WriteFileHD ]--- "
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "---[ ReadOpenHD ]--- "
 	.asciz "---[ ReadFileHD ]--- "
 	.ascii "         (((((                  H"
@@ -33223,7 +33228,7 @@ HDAE5000_Display_Params:	; 0x2F8DCE
 	.asciz "i"
 	.byte 0xe1, 0x06, 0xb9, 0x02, 0xe1, 0x06, 0xe1, 0x06, 0xb2, 0x03
 	.asciz "0123456789abcdef"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "0123456789ABCDEF"
 	.byte 0x00
 
