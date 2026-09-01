@@ -290,12 +290,24 @@ velocity and then silences everything** as the last act of initialisation.
 2. **0x00104000** register 0x0800 := the word at ROM 0xFE1313
 3. for i = 0..0x3F: register `0x0840+i` := **0xFF00**, register `0x0800+i` := **0xFF80**
    (the count is a literal `ldb d,0x40`, not an address stride)
+   ⚠ **CORRECTED 2026-09-01: this sweep is the TONE GENERATOR's, not 0x00104000's.**
+   Following step 2, this step read as if it continued on the same device.  A bus
+   trace of CPU 2's program space at 0x104000-0x104003 across 45 emulated seconds
+   of boot (`kn7000_mame/tools/rigs/wsa1_dev104_bus_trace.lua`) measures 0x104000's
+   written span as **0x0000..0x0800**, with nothing in 0x0801..0x087F ever written.
+   The arithmetic agrees without needing the trace: the run touches **1217 distinct
+   registers = 19 blocks x 64 channels + 1**, the +1 being step 2's single 0x0800.
+   Had this sweep landed here it would have added 64 more.  Only step 2 is
+   0x00104000's.
 4. RAM 0x00D8DB ← ROM 0xFE12CF, **68 bytes** (the staging struct's exact span);
    RAM 0x00D91F ← ROM 0xFE133B, 38 bytes
 5. for chan = 0..0x3F: `Dev10C_WriteAllChanRegs`, `Dev104_WriteAllChanRegs`,
    `Dev10C_WriteReg`, editing a bitfield at 0x00D91F between calls
 6. for chan = 0..0x3F: `0x0840+i`:=0xFF00, `0x0800+i`:=0xFF80, `0x00C0+i`:=0x0000,
    `0x0000+i`:=0x7E00, then slots 1, 2 and 3
+   ⚠ Same correction as step 3: the 0x0840/0x0800 pair here is the tone generator's.
+   Which device each line in this step addresses is NOT disambiguated by the text
+   above, and the trace is what separates them.
 
 ★ Step 5 is where the two devices are shown to be two halves of one voice: the
 same loop, the same channel index, one call each.
