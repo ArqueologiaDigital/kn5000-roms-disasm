@@ -93,3 +93,15 @@ it reports a bounded 149,016 B -- but that is answering a DIFFERENT, looser ques
 ("how wrong would naively reusing v9's committed bin be for v7") than
 `v7_no_source_bytes.py`'s ("how much of v7's actual committed tree has no source").
 Use `v7_no_source_bytes.py` for the headline number.
+
+
+## Fixed 2026-09-01 (lane INSTR -- the coverage instrument itself was broken)
+
+| script | question it answers |
+|---|---|
+| `kn5000_source_coverage.py` | For each of the 13 gated images (9 KN5000 + 4 WSA1R), how many bytes are real source -- assembly, typed/derived data, or C compiled byte-exact by clang -- and how many are still handed back verbatim from a committed blob with no decode path (the actual territorial debt)? Was reporting an impossible negative source figure for HD-AE5000 (a comment-blind `.incbin` regex was double-counting a dead "; Was:" fossil comment against its live replacement); fixed by stripping comments before matching and by classifying every `.incbin` target against the build machinery that actually produces it, instead of a `"generated/" in path` guess. |
+
+    python3 scripts/analysis/kn5000_source_coverage.py         # run `make all` first
+    python3 scripts/analysis/kn5000_source_coverage.py --selftest
+
+Findings and the corrected 13-image table: `notes/coverage-instrument-fix-2026-09-01.md`.
