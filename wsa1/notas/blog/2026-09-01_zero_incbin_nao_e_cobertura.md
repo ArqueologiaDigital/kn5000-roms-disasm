@@ -104,3 +104,25 @@ importava.
 
 Antes de dizer "está completo", vale perguntar **o que este teste ficaria vermelho ao encontrar** —
 e se a resposta não incluir a falha que você está tentando excluir, o teste não é evidência de nada.
+
+## Atualização, no mesmo dia: a sobra fechou — e não era o que eu disse
+
+Os 833 bytes viraram instruções, e os 275 do ponto fixo também: `--unspellable` e `--misframes`
+estão ambos em **zero** nas duas imagens de som, com `--coverage` intacto em 229/229 e 36/36, os
+8 alvos KN5000 montando e 9 KN5000 + 4 WSA1R byte-a-byte idênticos.
+
+O diagnóstico é que estava errado. Das 59 formas, **48 já tinham grafia** — `lda_rr`, `ld_rrb/w/l`,
+`st_rrb/w`, `jp_rr`, `ld_erpb_rr`, `ldb_erp`, `lds_erpb`, `and_erpb`, `add_erpw`, `add_spil`,
+`minc1_16`, `ldw`, `bit`, `set`, `cpib_da` — cobrindo **137 dos 211 sítios**. Só onze formas
+precisaram de encoding novo no backend. ★ Em particular, o operando indexado por registrador
+`(Xrr+Rn)`, que a faixa anterior recusou a acrescentar por ser "invasivo", **já estava lá**: o que
+o pin recusa é a *sintaxe* `(xix+iz)`, uma grafia do operando, e isso foi lido como o encoding ser
+inalcançável.
+
+E o critério do `--unspellable` era ele próprio um instrumento cego, do mesmo feitio dos dois que o
+post denuncia: contava **qualquer** linha `.byte` comentada, e a anotação por linha de uma tabela
+de dados é indistinguível de um comentário de disassembly — 562 bytes das curvas de velocity da
+boot ROM entravam na conta. Agora a listagem do `unidasm` tem de decodificar exatamente aqueles
+bytes como **uma** instrução *e* o comentário tem de ser essa renderização.
+
+Três vezes, então, não duas.
