@@ -21,13 +21,26 @@ Events are emitted per CHAIN, because an event may straddle a cell boundary; the
 which cells a chain occupies so `build` can re-split the rendered bytes at 249-byte boundaries
 and put them back. Bytes after 0x83 are preserved verbatim as PAD -- they are not always zero.
 
+⚠ A SECOND CELL MARKER, found 2026-09-01: 816 blocks across all four banks are shaped exactly
+like a cell (byte[5]==0x87, byte[255]==0x87) but carry byte[0]==0x00 where a chain cell carries
+0x80. Every one of them has prev=next=0xFFFF (a trivial, unlinked, single-block "chain"), and
+813 of 816 decode with ZERO malformed events under the SAME grammar. Better: 811 of the 816 are
+one single 256-byte block, byte-for-byte IDENTICAL in every section (all of section_3_4's and
+section_5_6's, 124/126 of section_0's, 254/257 of section_1_2's) -- an ascending eight-note run,
+0x30..0x37, one BEAT after each note, then END, then zero PAD to the block's end. The other
+three hit an unrecognised status a few bytes in and are exported as one big PAD run instead of
+being decoded -- honestly inert, not silently wrong. Nothing here says what 0x00 MEANS (a
+factory-blank template slot is a plausible guess, not a claim); `cells_of` just stops requiring
+byte[0]==0x80 and lets the same event grammar speak for itself.
+
     python3 scripts/build/style_events.py export   # blobs -> .styles listings (run once)
     python3 scripts/build/style_events.py build    # listings -> blobs (build step)
     python3 scripts/build/style_events.py verify   # assert the round trip is byte-exact
 
 ⚠ WHAT THIS DOES NOT CLAIM. NOTE2's two trailing bytes and the three controller values are
 NAMED, not understood: the argument counts are confirmed across all 50,245 events but nobody has
-established what they select. They are emitted as numbers, never as invented labels.
+established what they select. They are emitted as numbers, never as invented labels. Nor does the
+0x00-marker cell's MEANING: only its shape and decodability are established.
 """
 import pathlib
 import sys
@@ -65,7 +78,12 @@ def hk_sections(d):
 
 
 def cells_of(d, s, e):
-    return [o for o in range(s, e - 255, 256) if d[o] == 0x80 and d[o + 5] == 0x87]
+    # byte[0] is 0x80 on a chain cell and 0x00 on the second marker documented above; both
+    # shapes are required to also close with a second 0x87 at byte[255], which every one of the
+    # 1564 originally-known cells already does (proven by scripts/analysis/style_cell_chains.py),
+    # so adding it costs nothing there and is what keeps this from also matching random bytes.
+    return [o for o in range(s, e - 255, 256)
+            if d[o] in (0x80, 0x00) and d[o + 5] == 0x87 and d[o + 255] == 0x87]
 
 
 def chains_of(d, cells, base):
@@ -136,7 +154,13 @@ def export():
                         lines.append('  END')
                         i += 1
                         break
-                    n = ARGS[st]
+                    n = ARGS.get(st)
+                    if n is None:
+                        # Status this grammar doesn't recognise (3 of 816 new 0x00-marker
+                        # cells, none of the original 1050 chains): stop decoding HONESTLY
+                        # rather than guess. The post-loop PAD dump below covers `i` onward,
+                        # so the undecoded bytes are still emitted -- and rebuilt -- verbatim.
+                        break
                     a = list(pay[i + 1:i + 1 + n])
                     lines.append(f'  {NAME[st]}' + (' ' + ' '.join(str(x) for x in a) if a else ''))
                     i += 1 + n
