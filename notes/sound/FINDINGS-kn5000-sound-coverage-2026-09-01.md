@@ -11,8 +11,11 @@ Reproduce everything below with:
 python3 notes/sound/kn5000_sound_boundary.py --selftest        # 11 invariants
 python3 notes/sound/kn5000_sound_boundary.py --calibrate --windows --tgregs \
                                              --misframes --coverage --unspellable
+python3 notes/sound/kn5000_unspellable_forms.py --selftest      # the work list
+python3 notes/sound/kn5000_unspellable_forms.py                 # per form
 python3 scripts/converters/convert_sound_byte_blocks.py --selftest
-make gate            # 9 KN5000 ROMs, byte-identical, plus the assemble check
+python3 scripts/converters/convert_unspellable_forms.py --selftest
+make gate-all        # 9 KN5000 + 4 WSA1R ROMs, byte-identical, plus assemble
 ```
 
 ---
@@ -103,9 +106,11 @@ and a guessed instruction length reframes everything after it.
 | 6 | the DSP coefficient and routing routines | 1,233 | 417 |
 | 7 | their selectors, fetches and epilogues | 570 | 220 |
 | 8 | `ToneGen_PanTable_02D0DC`, `ToneGen_GlobalConfigTable_02D93E` | 117 | 49 |
+| 9 | the 59 forms the assembler could not spell, 211 single-instruction sites | 833 | 211 |
+| 10 | the three residual blocks `--misframes` still named | 179 | 71 |
 
-Payload bytes emitted as instructions went **112,116 -> 120,612**; bytes emitted by a data
-directive went **83,472 -> 74,976**. Sound-chip accesses the source can see went **636 in
+Payload bytes emitted as instructions went **112,116 -> 121,624**; bytes emitted by a data
+directive went **83,472 -> 73,964**. Sound-chip accesses the source can see went **636 in
 190 routines -> 798 in 229 routines**, without a byte of the ROM changing.
 
 ### The call-graph fixpoint
@@ -113,8 +118,9 @@ directive went **83,472 -> 74,976**. Sound-chip accesses the source can see went
 Each round exposed the next. `--misframes` counts entry points whose first byte was emitted
 by a data directive and which converted code branches or calls to; converting a caller makes
 its callees visible for the first time. The sequence was
-**4,778 -> 2,629 -> 1,057 -> 2,218 -> 632 -> 424 -> 275 bytes**, the rises being the layers
-that were invisible until their callers were decoded.
+**4,778 -> 2,629 -> 1,057 -> 2,218 -> 632 -> 424 -> 275 -> 0 bytes**, the rises being the layers
+that were invisible until their callers were decoded.  `--misframes` is now empty: zero entry
+points, in both images.
 
 ### The coverage number that the source cannot influence
 
@@ -132,16 +138,37 @@ those occurrences the source has decoded as that instruction:
 Every tone-generator opcode in `kn5000_subprogram_v142.rom` is now an instruction in the
 source. The boot ROM was already at 24/24 and 22/22.
 
-### What was refused, and why
+### What the last 833 bytes turned out to be
 
-* **833 bytes in 211 sites across 59 distinct instruction forms** stay as `.byte`, each
-  carrying unidasm's rendering in a comment. They are forms **this assembler backend cannot
-  spell yet**, not undecoded bytes: 34 `ld A,IZL`, 16 `cp (XIZ),N`, 25 `add XWA,(XSP…)`,
-  12 `or (XBC+WA),N`, and a long tail of register-indexed operands -- which is the class the
-  toolchain commit itself calls "the largest thing still missing". `--unspellable` prints
-  the work list; the fix belongs in the backend.
-* **The 275 bytes still listed by `--misframes`** are, with three exceptions, exactly those
-  single unspellable instructions sitting at a branch target.
+Round 9 closed the residue that rounds 1-8 had to leave: **833 bytes in 211 sites across 59
+distinct instruction forms**, each already framed as one instruction by the committed unidasm
+listing, each carrying that rendering as its comment. The claim attached to them was that they
+were forms *this assembler backend cannot spell*. Measured form by form, that was true of eleven
+of the fifty-nine:
+
+| what was added to `tlcs900_backend` | sites | ROM truth |
+|---|---|---|
+| `cp8_imm_ri`, `cp8_imm_rid8` -- CP (mem),#imm8, sub-opcode 0x3F | 32 | `86 3f 40`, `8f 06 3f 00` |
+| `add32_src_ri`, `add32_src_rid8` -- ADD r32,(mem)/(mem+d8) | 26 | `a7 80`, `af 04 84` |
+| `cp16_src_rid8` -- CP r16,(mem+d8) | 2 | `9a fa f4` |
+| `or_rrw_im` -- the register-indexed operand with an immediate | 12 | `d3 07 e4 e0 3e 08 00` |
+| `lda_rrq` -- LDA whose INDEX is a previous-bank register | 2 | `f3 07 e4 e2 36` |
+
+**The other 48 forms -- 137 of the 211 sites -- already had a spelling.** `lda_rr`, `ld_rrb/w/l`,
+`st_rrb/w`, `jp_rr`, `ld_erpb_rr`, `ldb_erp`, `lds_erpb`, `and_erpb`, `add_erpw`, `add_spil`,
+`minc1_16`, `ldw`, `bit`, `set`, `cpib_da`, `and8_imm_rid8`. ★ In particular
+**the register-indexed `(Xrr+Rn)` operand was never missing**: `lda_rr`, `ld_rr[bwl]` and
+`st_rr[bwl]` take base and index as separate typed operands and have since before this work.
+What `95f7f2d40428` refuses is the `(xix+iz)` **MEMri syntax** -- one spelling of the operand,
+not the encoding -- and a previous lane read that refusal as the encoding being unreachable.
+`notes/sound/kn5000_unspellable_forms.py` is the tool that separates the two: it asks llvm-mc for
+each form and calls it spellable only if the bytes come back identical.
+
+* **`--misframes` is at zero.** The 275 bytes were 15 single unspellable instructions sitting at a
+  branch target plus three real blocks -- `AudioMod_Porta_Curve_JumpBase` (95 B, the computed-goto
+  target of `jp T,XIX+WA`), `DSP_RouteCoeffs_TypeA_CopyLoop` and `DSP_RouteCoeffs_TypeB_CopyLoop`
+  (42 B each). Round 10 converted all three with `convert_sound_byte_blocks.py`, whose
+  unidasm-boundary guard is what makes framing them as code defensible.
 * **The misleading names are left alone.** `VoiceCC_DataTable_0280FE`,
   `ToneGen_ExtParams15_DataTable`, `Voice_ProgChange_TableData` and the rest name code, and
   each block's header already records both a rename proposal and an explicit decision to
@@ -160,7 +187,20 @@ v142_subcpu : 229 sound routines, 229 clean
 subcpu_boot :  36 sound routines,  36 clean
 ```
 
-Zero fall-throughs, zero edges into data, in either image.
+Zero fall-throughs, zero edges into data, in either image. Unchanged by rounds 9 and 10 --
+which is the point: those rounds moved no byte and reframed nothing, they only changed how
+already-framed instructions are spelt.
+
+Alongside it, after rounds 9 and 10:
+
+```
+--unspellable : 0 sites, 0 bytes, 0 forms   in BOTH images
+--misframes   : 0 entry points, 0 bytes     in BOTH images
+```
+
+and the two reachability figures the sound work must not disturb are where they were:
+`notes/reachability_kn5000.py` **37 STRONG-with-evidence bytes**, and
+`wsa1 && notes/reachability.py --targets` **STRONG 17 / ANY 1,702 / 17 spans**.
 
 ---
 
@@ -331,7 +371,24 @@ synthesis method is named for it; that is lane S2's tree.
    firmware evidence supports it being waveform RAM in the sub-CPU's own space.
 3. **The main CPU is not in the window list's scope at all.** It has no sound-chip window;
    `v10/maincpu/audio` reaches the tone generator only through the sub-CPU.
-4. **"Territorially complete" was doing work it cannot do.** `subcpu/boot` has zero
+4. **`--unspellable` was counting DATA TABLES as unspelt instructions.** Its rule was "a `.byte`
+   line with a comment", and the boot ROM's velocity-curve and error-bit tables annotate every
+   row -- so it reported **562 bytes in 45 forms** for `subcpu_boot` that are not instructions at
+   all. Only three of those 81 lines even had bytes that form an instruction, and none of the
+   three had a comment that was one. The rule is now: the committed unidasm listing must decode
+   exactly those bytes as ONE instruction *and* the comment must be that rendering. The payload's
+   211/833/59 is unchanged by the tightening, which is the evidence that it was measuring the
+   right thing there; the boot ROM's figure was noise and is now 0.
+5. **The 8-bit INDEX register's file address was inverted in the backend, and the byte gate could
+   not see it.** The register file is byte-addressed and little-endian, so a word register's low
+   half sits at offset 0 -- `A`=0xE0, `W`=0xE1, `C`=0xE4, `B`=0xE5 -- and `TLCS900MCCodeEmitter`
+   had it the other way. All four call sites in this tree (`ld_rr8b a, xhl, w` twice in
+   `scoop_display.s`, `ld_rr8w bc, xix, w` once in `midi_dispatch_handlers.s`, per image) named
+   the WRONG register to obtain the RIGHT byte, so the gate stayed green while the source said
+   `w` where the CPU reads `A` -- and at both `scoop_display.s` sites the preceding instruction is
+   literally `ld a, l` or `ld a, c`. Corroborated by MAME unidasm over all 32 codes 0xE0-0xFF.
+   Fixed in `4149d0474bf8`, sources corrected, gate still green.
+6. **"Territorially complete" was doing work it cannot do.** `subcpu/boot` has zero
    `.incbin` and 99,209 of its 131,072 bytes come from data directives -- but 98,304 of
    those are the leading 0xFF filler (only 4,352 bytes of the image are not 0xFF), so the
    boot ROM really is essentially fully disassembled. The payload's `.byte` was a different
@@ -339,9 +396,18 @@ synthesis method is named for it; that is lane S2's tree.
 
 ## 7. What the next pass needs
 
-* **The assembler backend, not the disassembly.** 833 bytes in 59 forms are all that stand
-  between the payload's sound code and being wholly spelt. `--unspellable` is the work list,
-  ordered by site count; `ld A,IZL` alone is 34 sites.
-* The `*_DataTable` / `*_TableData` names on code are still a maintainer decision.
-* `--misframes` should return to zero as those forms land; three entries in it are real
-  blocks, the rest are single instructions.
+* **Nothing in the sound path.** `--unspellable` and `--misframes` are both at zero in both
+  images, `--coverage` is 229/229 and 36/36, all 8 KN5000 images assemble, and 9 KN5000 + 4
+  SX-WSA1R ROMs rebuild byte-identical. Every byte the tone generator, either DSP or the acoustic
+  modelling programs are reached through is an instruction in the source.
+* The `*_DataTable` / `*_TableData` names on code are still a maintainer decision. Decoding the
+  bytes did not make that call ours, and rounds 9 and 10 did not touch a name or a comment.
+* **The remaining KN5000 debt is elsewhere**: `notes/reachability_kn5000.py`'s 37
+  STRONG-with-evidence bytes in the v10 maincpu, which is a different tree and a different
+  question.
+* ⚠ **The LLVM TLCS-900 DISASSEMBLER is not trustworthy and nothing here depends on it.** Asked
+  for the 63 distinct byte strings in the residue, it refused 51 and got at least three of the
+  remaining twelve WRONG -- `ba 01 cf` came back as `and (xde+1), xsp` where the hardware and
+  unidasm both say `bit 7,(XDE+0x01)`, and `bf 04 02 00 00` as `ldmi16` where sub-opcode 0x02 is
+  `ldw`. The framing authority is the committed unidasm listing and the encoding authority is a
+  round-trip through the ASSEMBLER; the backend's own `--disassemble` is neither.
