@@ -33,6 +33,23 @@ THE RULES, IN PRIORITY ORDER, AND THE NULL MEASURED FOR EACH
   So the corpus, not the rule, is what is wrong in all 17 cases; but the RAW
   count is 17 and that is the number to quote.
 
+  ⚠ 264,982/10,509 is a HISTORICAL citation (working tree of 2026-08-28) and
+  is not rewritten here.  Separately, the corpus itself was blind from the
+  kernel/DSP-driver merges until 2026-09-01: proven_instructions() only read
+  the single-image `; ADDR  bytes` comment shape, so kernel.s's 941 and
+  dsp_channel_regs.s's 97 instructions -- both SHARED with prom_c and
+  commented `; ADDR/ADDR  bytes` -- were invisible to it and to
+  prom_a_f85ff9_verify.py's corpus_bytes(), which deliberately matched the
+  blindness for comparability (see notes/answer-diff/2026-09-01-ac2bb6e7.txt).
+  Fixed by teaching this file's three parsers the second comment shape too;
+  re-measured same-day: 11,237 runs / 283,741 bytes (was 11,167 / 281,479).
+  The chosen-threshold rule hits are UNCHANGED (16 total, 2 GENUINE) -- the
+  941+97 newly-visible instructions sit at 0xF85606-0xF8598E-ish, entirely
+  outside this file's [0xF85FF9,0xF89800) span, so the LAYOUT table below is
+  byte-for-byte identical before and after (diffed 2026-09-01).  corpus_bytes()
+  was fixed the same way, so the two tools are still one comparable
+  cross-check, now seeing the same larger corpus instead of the same blind one.
+
   1. FILL0E -- a maximal run of >= 16 bytes of 0x0E.  0x0E is `ret`, so a SHORT
      run of it is ordinary inter-routine padding and stays inside a code
      segment; only the long runs that close a module become `.fill`.
@@ -339,11 +356,24 @@ def proven_instructions(src, base):
     beyond argument.  Directive lines (.byte/.ascii/.long/.fill) carry the same
     comment shape and are excluded by requiring the mnemonic not to start with a
     dot -- without that the corpus silently includes the data islands it is
-    meant to be a null for."""
+    meant to be a null for.
+
+    ⚠ TWO LINE SHAPES.  `kernel/kernel.s` and `dsp/dsp_channel_regs.s` are
+    SHARED between prom_a and prom_c, so their comment carries BOTH images'
+    addresses (`; F85606/F98170  a=... c=...`, or plain bytes with no `a=`/`c=`
+    prefix when the two CPUs' bytes are identical) instead of the single-image
+    `; ADDR  bytes` shape.  Matching only the single-image shape silently
+    dropped 941 kernel instructions and 97 DSP-driver instructions from this
+    corpus -- fixed 2026-09-01; see notes/answer-diff/2026-09-01-ac2bb6e7.txt
+    and prom_a_f85ff9_verify.py's `_proven_line`, which found this
+    independently and (deliberately, at the time) stayed blind to match this
+    file for comparability.  The `(?:/[0-9A-F]{6})?` and `(?:a=)?` groups below
+    are both optional, so one pattern reads either shape."""
     out = []
     for l in open(src, encoding="utf-8").read().splitlines():
         body = l.split(";")[0]
-        m = re.search(r";\s*([0-9A-F]{6})\s\s+((?:[0-9a-f]{2} )*[0-9a-f]{2})", l)
+        m = re.search(r";\s*([0-9A-F]{6})(?:/[0-9A-F]{6})?\s\s+"
+                      r"(?:a=)?((?:[0-9a-f]{2} )*[0-9a-f]{2})", l)
         if not m or not body.startswith("\t") or body.lstrip().startswith("."):
             continue
         out.append((int(m.group(1), 16), len(m.group(2).split())))
@@ -864,11 +894,15 @@ def source_text(src, rev=None):
 
 
 def proven_code_runs(rev=None):
-    """Maximal runs of PROVEN instruction text in prom_a/wsa1_prom_a.s."""
+    """Maximal runs of PROVEN instruction text in prom_a/wsa1_prom_a.s.
+
+    Matches both the single-image `; ADDR  bytes` shape and the shared-source
+    `; ADDR/ADDR  bytes` shape (kernel.s, dsp_channel_regs.s) -- see
+    proven_instructions()'s docstring for why the second shape matters."""
     seq = []
     for l in source_text(SRCA, rev).splitlines():
         body = l.split(";")[0]
-        m = re.search(r";\s*([0-9A-F]{6})\s\s", l)
+        m = re.search(r";\s*([0-9A-F]{6})(?:/[0-9A-F]{6})?\s\s", l)
         ok = bool(m) and body.startswith("\t") and not body.lstrip().startswith(".")
         seq.append(int(m.group(1), 16) if ok else None)
     runs, cur = [], []
@@ -931,7 +965,7 @@ def null(rev=None):
     lines = {}
     for l in source_text(SRCA).splitlines():
         body = l.split(";")[0]
-        m = re.search(r";\s*([0-9A-F]{6})\s\s", l)
+        m = re.search(r";\s*([0-9A-F]{6})(?:/[0-9A-F]{6})?\s\s", l)
         if m and body.startswith("\t"):
             lines[int(m.group(1), 16)] = body.strip()
     disp = set(t for _, t, _ in misframed_jump_tables())
