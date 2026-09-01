@@ -98,6 +98,11 @@ IMAGES = [
 # per row; a wrong base makes every figure below wrong in the same direction and
 # nothing else here can notice.
 # ---------------------------------------------------------------------------
+# `shared`: True = was always in ../notes/sound/sound_coverage.py's window list;
+# "added" = this file's finding, ADDED to that list on 2026-09-01 (commit
+# "notes/sound: the shared tool's WSA1 window list was short by two devices").
+# ⚠ Kept as a distinct value rather than flipped to True, so the report still
+# says which rows this census is responsible for.
 Window = collections.namedtuple("Window", "base size cpu name shared what")
 WINDOWS = [
     # base        size  cpu     name        in the shared tool?
@@ -107,9 +112,9 @@ WINDOWS = [
            "16-bit addr(+0)/data(+2); 64 channels x 19 regs"),
     Window(0x00108000, 4, "cpu2", "KeyScan", True,
            "keybed: +0 event word, +2 status; NOT an addr/data pair"),
-    Window(0x00E00000, 4, "cpu2", "DspRegs_C", False,
+    Window(0x00E00000, 4, "cpu2", "DspRegs_C", "added",
            "8-bit addr(+0)/data(+2); 4 channels x 32 regs.  KN5000 twin at 0x130000"),
-    Window(0x007F0000, 4, "cpu1", "DspRegs_A", False,
+    Window(0x007F0000, 4, "cpu1", "DspRegs_A", "added",
            "8-bit addr(+0)/data(+2); same 44-byte writer as prom_c and the KN5000"),
 ]
 BASES = {w.base: w for w in WINDOWS}
@@ -431,7 +436,8 @@ def report_registers(data):
                 rows[(a.off, a.dirn)] += 1
                 routines[a.off].add(a.label)
         tot = sum(rows.values())
-        star = "" if w.shared else "   ★ NOT IN THE SHARED TOOL'S WINDOW LIST"
+        star = "" if w.shared is True else \
+            "   ★ ADDED to the shared tool's window list by this census"
         print("\n%s  0x%08X  (%s)%s" % (w.name, w.base, w.cpu, star))
         print("  %s" % w.what)
         if not rows:
@@ -468,13 +474,14 @@ def report_windows(data):
                            if d["cpu"] == w.cpu
                            for a in d["acc"] if a.base == w.base})
         print("%-11s %-6s %-5s %8d %9d   %s"
-              % (w.name, w.cpu, "yes" if w.shared else "NO", lit, fol,
+              % (w.name, w.cpu, "yes" if w.shared is True else "ADDED", lit, fol,
                  ", ".join("+0x%02X" % o for o in off_seen) or "-"))
     print("""
 ★ The `in?` column is the finding.  Two 4-channel address/data devices that this
-  tree's own headers call DSP register files -- one per processor -- are absent
-  from the window list the coverage claim was computed over, and the P7 effect
-  transport is not a window at all.""")
+  tree's own headers call DSP register files -- one per processor -- were absent
+  from the window list the coverage claim was computed over; they were added to
+  ../notes/sound/sound_coverage.py on 2026-09-01 and are marked ADDED here.  The
+  P7 effect transport still cannot be in any window list at all -- see --p7.""")
 
 
 def report_routines(data):
