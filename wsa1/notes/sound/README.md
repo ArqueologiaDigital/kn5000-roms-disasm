@@ -98,3 +98,54 @@ where a byte echo belongs (7 in prom_b).
   disassembly" matches every data table in the image.
 * **The certificate is the byte gate**, `scripts/analysis/assert_byte_identical.py`.
   Nothing here certifies anything.
+
+## `prom_d_debt_probe.py`
+
+**Question:** of prom_d's 524,288 bytes, how many are accounted for by the
+tone-database sources, by directive class — and is an unstructured dump
+hiding inside what looks like per-record source?
+
+    python3 wsa1/notes/sound/prom_d_debt_probe.py             # the report
+    python3 wsa1/notes/sound/prom_d_debt_probe.py --selftest  # 4 invariants
+
+Label density is the discriminating measure, not the byte total: a raw blob
+spelled in `.byte` accounts for its bytes just as well as a real record table
+does, but only the record table carries labels at record boundaries. Spans
+longer than 512 bytes are reported as leads, not verdicts; every one of the 23
+in prom_d resolves to a single-purpose, single-directive-type table (an index
+map, a name list, the drawbar pool, or the erased tail) rather than a mixed
+undifferentiated dump.
+
+★ FIXED 2026-09-01 (PROMD lane). The first committed version's accumulator
+read `total.get(d, 0)` (the raw directive name) but wrote `total[resolved_key]`
+(the bucket name) — for any directive not literally named `byte`/`ascii`/
+`word`/`long`/`fill`, the two disagreed, so every new `.short` line
+**overwrote** the `other` bucket instead of adding to it. Only the last
+`.short` line's 2 bytes survived, understating the total by the `.short`
+class's full 40,010 B and making the three files look 40,008 B short of the
+image. Rewritten to key one dict by the actual directive name throughout, so
+a read and a write of the same entry can never use different keys. Current
+result: the three files account for prom_d's 524,288 bytes **exactly** — 0
+unexplained, 0 unknown directives, 0 `.incbin`.
+
+⚠ **Read the result by class, never as one "coverage" number.** 193,767 of
+those bytes (37.0%) are the single trailing `.fill 0x2F4E7, 1, 0xFF` — real,
+correct, but erased flash, not decoded content. The other 330,521 bytes
+(63.0%) are actual typed content (`.byte` 258,838 / `.short` 40,010 / `.ascii`
+30,385 / `.long` 1,288). The report prints fill on its own row for exactly
+this reason.
+
+⚠ **Correction, verified against the ROM 2026-09-01.** The 193,767 `.fill`
+bytes are NOT simply "the trailing erased tail". They are a single contiguous
+`0xFF` run at **0x050B09-0x07FFF0**, and **16 bytes of real content follow it**:
+the image's last bytes are the ASCII `wsad_54.ssf` plus NUL padding — a lone
+record sitting past 189 KB of erased flash. The image has NO trailing `0xFF`
+run at all. Checked by locating every `0xFF` run of 1 KiB or more in
+`wsa1_prom_d.bin`: exactly one exists, and its length matches the `.fill`
+figure to the byte.
+
+Also on record, because it was a wrong lead rather than a wrong number: the
+earlier 40,008-byte shortfall was first read as "these three files are not the
+whole image". That was wrong. It was an accumulator bug in the probe (the
+`.short` bucket was overwritten rather than accumulated), and the three files
+do account for all 524,288 bytes.
