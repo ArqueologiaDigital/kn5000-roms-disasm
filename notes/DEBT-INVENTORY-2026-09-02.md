@@ -17,19 +17,33 @@ Quoting one as the total is the mistake this whole push exists to correct.
 A `.byte` run is exactly as un-decoded as an `.incbin`, and it passes every
 "no `.incbin`" test. This project has now shipped that false claim twice.
 
-## Verbatim debt: 544,138 B of 12,386,304 — 95.6% source
+## Verbatim debt: 544,138 B counted, but ⚠ only 225,670 B is real
+
+The tool reports 544,138 B of 12,386,304 (95.6% source). **318,468 B of that is
+the six table_data BMPs, which are the genuine shipped artefact in their best
+form — see below. Subtracting them leaves 225,670 B, i.e. 98.2% source.**
+Quote 225,670; the 544,138 figure counts a correctly-represented asset as debt
+because the tool classifies by MECHANISM (`.incbin` with no generator) rather
+than by whether anything is actually unknown.
 
     python3 scripts/analysis/kn5000_source_coverage.py
 
 Zero verbatim debt: subcpu v142, subcpu boot, custom data, HD-AE5000,
 wsa1/prom_c, wsa1/prom_d. Remaining, in order:
 
-* **table data 336,038 B (62% of all verbatim debt)** — and it is NOT mysterious.
-  `scripts/analysis/table_data_debt.py` classifies every byte: 318,468 B are six
-  genuine Windows BMPs checked in verbatim, 17,570 B a documented stale remnant.
-  0 B unclassified. Two independently built tools agree on this partition to the
-  byte. This is a REPRESENTATION question, not a decoding one — the fix is a
-  round-trip generator, not disassembly.
+* **table data 336,038 B — and ⚠ 318,468 B of it IS NOT DEBT AT ALL.**
+  ★ CORRECTED 2026-09-02. Those 318,468 B are six **genuine, uncompressed 8bpp
+  Windows BMPs** — `BM` magic, 40-byte DIB header, compression 0, 256-colour
+  palette at the declared offset, header size field matching the file, verified
+  per file by `scripts/analysis/verbatim_bmp_header_audit.py`. They are directly
+  viewable in any image tool, and the `.incbin` reads that exact committed file.
+  There is no raw blob to bridge back to, so **a round-trip generator would add
+  machinery for zero viewability gain** and would discard the genuine artefact as
+  shipped by Technics's own toolchain. This entry previously said "the fix is a
+  round-trip generator"; that was wrong, and `docs/COMPLETENESS-STATUS.md` had
+  already said so. The remaining 17,570 B is a documented stale remnant.
+  **Real verbatim debt is therefore 225,670 B, not 544,138 B**, and v7 — not
+  table_data — is the largest genuine block in the tree.
 * **v7 123,927 B** — 272 live `romslices/*.bin` transplants plus 2 raw patches,
   itemised by `scripts/analysis/v7_no_source_bytes.py`. The mechanical
   pointer-table technique is EXHAUSTED (0 candidates remain).
@@ -98,8 +112,9 @@ require the original bytes).
 
 ## Where the next pass should aim
 
-1. A round-trip generator for table_data's six BMPs — 318,468 B, the single
-   largest block, and the mechanism is already proven elsewhere in this tree.
+1. ~~A round-trip generator for table_data's six BMPs~~ — **DONE, as a refusal:
+   they are already in their best form. See the correction above.** The next
+   largest genuine block is v7's 123,927 B of romslice transplants.
 2. The v9/v10 misframed islands (~14,727 B each), the largest measured
    code-as-`.byte` debt.
 3. Teach the LLVM backend to encode the forms it can already decode; that alone
