@@ -246,10 +246,16 @@ def classify_call(call, root):
         sub = argv[i]
         break
     if sub in ("show", "cat-file"):
+        # ⚠ `cat-file -e` ASKS WHETHER A PATH EXISTS.  A non-zero answer is the
+        #   answer, not a fault -- git_path() uses exactly this to find out which
+        #   spelling a revision uses, and counting its "no" as a broken read
+        #   would make the FIX look worse than the bug.
+        probe = sub == "cat-file" and "-e" in argv
         for a in argv[i + 1:]:
             m = REV_PATH.match(a)
             if m and "/" in m.group(2):
-                return ("OBJECT", call["rc"] == 0,
+                return ("PROBE" if probe else "OBJECT",
+                        True if probe else call["rc"] == 0,
                         "%s (rc=%d)" % (a, call["rc"]))
     if "--" in argv and sub in ("show", "diff", "log"):
         spec = argv[argv.index("--") + 1:]
@@ -261,10 +267,18 @@ def classify_call(call, root):
             #   file counted as ADDED.  So the pathspec is checked against the
             #   revision it was handed, in the spelling it was handed in.
             for pth in spec:
-                pth = pth.split(":")[-1].rstrip("/")
+                # ★ `:(top)x` and `:/x` are ALREADY repository-relative -- that is
+                #   what the magic is for, and asm_source.git_pathspec emits it.
+                #   Running them through the cwd rule produces `wsa1/(top)x`.
+                magic = pth.startswith(":(top)") or pth.startswith(":/")
+                if magic:
+                    pth = pth[6:] if pth.startswith(":(top)") else pth[2:]
+                else:
+                    pth = pth.split(":")[-1]
+                pth = pth.rstrip("/")
                 if not pth or pth.startswith("-"):
                     continue
-                eff = _effective(call, root, pth)
+                eff = pth if magic else _effective(call, root, pth)
                 # ⚠ THE WORKING-TREE FALLBACK IS ONLY FOR A DIFF WITH NO
                 #   REVISION.  When a revision IS named, "the path exists on
                 #   disk" is exactly the wrong test: `wsa1/prom_a/...` exists
@@ -336,7 +350,8 @@ def trace_script(root, rel, base, argv_extra=()):
         kind, ok, detail = classify_call(c, root)
         rows.append({"kind": kind, "ok": ok, "detail": detail,
                      "argv": c["argv"], "rc": c["rc"], "out": c["out"]})
-    bad = sum(1 for r_ in rows if not r_["ok"] and r_["kind"] != "OTHER")
+    bad = sum(1 for r_ in rows if not r_["ok"] and r_["kind"] not in ("OTHER",
+                                                                      "PROBE"))
     reads = sum(1 for r_ in rows if r_["kind"] in ("OBJECT", "PATHSPEC"))
     return {"script": rel, "rc": rc, "reads": reads, "bad": bad,
             "calls": rows,
@@ -345,13 +360,27 @@ def trace_script(root, rel, base, argv_extra=()):
 
 
 def git_scripts(root, only=None):
-    """Committed .py that invoke git AND are not write-mode-only."""
+    """Committed .py that read a revision -- raw, or through the helper.
+
+    ⚠⚠ THE SECOND HALF IS NOT OPTIONAL.  Discovery used to be "has a raw git
+    call site", so the moment a script was migrated to asm_source.git_show it
+    DROPPED OUT of the trace: the sweep that was meant to prove the fix went from
+    31 scripts to 3 and reported 2 bad reads, which looks like a triumph and is
+    an empty room.  A tool that stops measuring what it just fixed measures
+    nothing."""
     out = []
     for rel in committed_py(root):
         if only and only not in rel:
             continue
         rows = lint_file(root, rel)
         if any(r[1] in ("OBJECT", "PATHSPEC") for r in rows):
+            out.append(rel)
+            continue
+        try:
+            txt = open(os.path.join(root, rel), encoding="utf-8").read()
+        except OSError:
+            continue
+        if ROUTED_RE.search(txt):
             out.append(rel)
     return out
 
@@ -501,6 +530,13 @@ def _selftest():
     check("classify_call: a pathspec naming a path nothing holds IS a fault",
           classify_call({"argv": ["diff", "--", "no_such_dir/x.s"], "cwd": ROOT,
                          "rc": 0, "out": 0}, ROOT)[1] is False)
+    check("classify_call: `cat-file -e` saying no is a PROBE, not a broken read",
+          classify_call({"argv": ["-C", ROOT, "cat-file", "-e", "HEAD:a/b.s"],
+                         "cwd": ROOT, "rc": 1, "out": 0}, ROOT)[0] == "PROBE")
+    check("classify_call: a `:(top)` pathspec is NOT re-prefixed with the cwd",
+          classify_call({"argv": ["show", "HEAD", "--",
+                                  ":(top)" + prefix + "prom_a/wsa1_prom_a.s"],
+                         "cwd": ROOT, "rc": 0, "out": 9}, ROOT)[1] is True)
     check("classify_call: `-C <dir>` is not mistaken for the subcommand",
           classify_call({"argv": ["-C", "/x", "show", "HEAD:a/b.s"], "rc": 0,
                          "out": 5}, ROOT)[0] == "OBJECT")
@@ -603,7 +639,8 @@ def main():
                 kind, ok, detail = classify_call(call, ROOT)
                 rows.append(dict(c, kind=kind, ok=ok, detail=detail))
             r["calls"] = rows
-            r["bad"] = sum(1 for x in rows if not x["ok"] and x["kind"] != "OTHER")
+            r["bad"] = sum(1 for x in rows
+                           if not x["ok"] and x["kind"] not in ("OTHER", "PROBE"))
             r["reads"] = sum(1 for x in rows if x["kind"] in ("OBJECT", "PATHSPEC"))
         for r in out:
             flag = "BAD " if r["bad"] else ("    " if r["reads"] else "  - ")
@@ -611,7 +648,7 @@ def main():
                   % (flag, " ".join([r["script"]] + list(SAFE_ARGV.get(r["script"], ()))),
                      r["reads"], r["bad"], r["rc"]))
             for c in r["calls"]:
-                if not c["ok"] and c["kind"] != "OTHER":
+                if not c["ok"] and c["kind"] not in ("OTHER", "PROBE"):
                     print("        %-8s %s" % (c["kind"], c["detail"][:120]))
         nbad = sum(1 for r in out if r["bad"])
         print("\n%d script(s); %d issued a git read that FAILED or was spelled for "
@@ -650,7 +687,7 @@ def main():
                      r["reads"], r["bad"], r["rc"],
                      "  TRACEBACK" if r["traceback"] else ""))
             for c in r["calls"]:
-                if not c["ok"] and c["kind"] != "OTHER":
+                if not c["ok"] and c["kind"] not in ("OTHER", "PROBE"):
                     print("        %-8s %s" % (c["kind"], c["detail"][:120]))
     finally:
         shutil.rmtree(base, ignore_errors=True)
