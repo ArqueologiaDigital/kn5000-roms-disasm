@@ -37,8 +37,8 @@ failure mode that sentence describes.
 
 | | address | what converts it | what identifies it |
 |---|---|---|---|
-| CPU 2 | **0x00E00000** | `prom_c/boot/boot_and_main.s`, 4 routines, 234 bytes | `DSP_WriteChannelRegs_Inner` is **80 of its 81 bytes identical** to the KN5000 sub-CPU routine of the same name at 0x1FD27; the one differing byte is inside the base literal, 0xE0 here against 0x13 there |
-| CPU 1 | **0x007F0000** | `prom_a/wsa1_prom_a.s`, 5 routines | the same 44-byte `DSP_WriteAllChannelRegs` is present a **third** time at 0xF85F7C, and prom_a's own inline comments at 0xF85F40 / 0xF85F66 / 0xF85FB4 already read *"the DSP register file"* |
+| CPU 2 | **0x00E00000** | `dsp/dsp_channel_regs.s`, 4 routines, 234 bytes — **shared with prom_a since 2026-09-01**, included from `prom_c/boot/boot_and_main.s` | `DSP_WriteChannelRegs_Inner` is **80 of its 81 bytes identical** to the KN5000 sub-CPU routine of the same name at 0x1FD27; the one differing byte is inside the base literal, 0xE0 here against 0x13 there |
+| CPU 1 | **0x007F0000** | the same `dsp/dsp_channel_regs.s` (4 of the 5 routines) plus `Dev7F_WriteSlot8` and `sub_F831B3` in `prom_a/wsa1_prom_a.s` | the same 44-byte `DSP_WriteAllChannelRegs` is present a **third** time at 0xF85F7C, and prom_a's own inline comments at 0xF85F40 / 0xF85F66 / 0xF85FB4 already read *"the DSP register file"* |
 
 `0x00130000` is exactly the address the shared tool lists for the KN5000 as
 `DSP_ADDR` / `DSP_DATA`.  So the two machines' DSP register files are the same
@@ -103,7 +103,7 @@ The walk is checked against counts established by other tools before it existed:
 |---|---|---|
 | `Dev104_WriteAllChanRegs` = 19 registers × 2 = **38** | `prom_c_tg_regmap.py --dev104` | 38 ✔ |
 | `Dev10C_WriteGlobalRegs` = 13 registers × 2 = **26** | `FINDINGS-prom_c-tone-generator.md` §7 | 26 ✔ |
-| `DSP_WriteChannelRegs_Inner` = 8 × 2 = **16**, in both images | `boot_and_main.s`, prom_a | 16 and 16 ✔ |
+| `DSP_WriteChannelRegs_Inner` = 8 × 2 = **16**, in both images | `dsp/dsp_channel_regs.s` (one source, both images) | 16 and 16 ✔ |
 | `Dev10C_WriteAllChanRegs` = 23 SELECT + 23 DATA = **46** | `prom_c_tg_chanmap.py --selftest` | **45** |
 
 ★ The disagreement is the honest one and is asserted as 45, not papered over.
@@ -457,10 +457,23 @@ prom_c's favour:
 `FINDINGS-prom_a-tasks-and-dsp-refresh.md` and `boot_and_main.s:90` all name the
 *sibling's* labels, not this tree's.
 
-★ **The opportunity, not taken here.**  A shared `include/dsp_channel_regs.inc`
-parameterised on one `DSP_BASE` symbol would make the two copies literally one
-source, the way `kernel/kernel.s` already is.  That is a source-layout change with
-its own byte gate and it belongs in its own pass, not bolted to a naming commit.
+★ **The opportunity, TAKEN — 2026-09-01, the pass after this one.**  The two
+copies are now literally one source, `dsp/dsp_channel_regs.s`, parameterised on a
+single `DSP_REGS_BASE` equate defined once per image in
+`dsp/dsp_channel_regs_maincpu.inc` / `_subcpu.inc` — the way `kernel/kernel.s`
+already was.  No `.if` anywhere; there is exactly **one** per-CPU value in 234
+bytes, used at three sites.
+
+The proof is the dual build: one source assembles into prom_a at 0xF85F0F **and**
+prom_c at 0xF98000 and both images still rebuild byte-identical.  Flipping the
+subcpu equate to `0x00E10000` breaks prom_c at exactly those three bytes and
+leaves prom_a green, so the gate really is load-bearing here.
+
+Every comment line, label, instruction and prose fragment of both pre-merge
+blocks is accounted for verbatim (`python3 notes/sound/wsa1_dsp_join_probe.py
+--verify`, `CORRECTIONS` empty), and both images GAINED text: prom_a now carries
+prom_c's headers for these four routines and prom_c carries prom_a's addresses
+and bytes, which its hand-written block never had (`--images`).
 
 ---
 

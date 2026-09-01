@@ -33,6 +33,14 @@ already recorded in `prom_c/boot/boot_and_main.s`.  The 234-byte block as a whol
 is NOT: the KN5000's `DSP_Init_Channels` fills its buffer with 0x5A5A5A5A where
 both WSA1 copies fill it with zero, so only 12 of 74 bytes line up there.
 
+★ WHAT WAS DONE WITH IT.  On 2026-09-01 the two copies became ONE source,
+`dsp/dsp_channel_regs.s`, with the base a single `DSP_REGS_BASE` equate defined
+once per image -- the same arrangement `kernel/kernel.s` has.  The numbers below
+are the evidence that merge rests on; `notes/sound/wsa1_dsp_join_probe.py` is
+the merge's own instrument (pairing, emission, and the preservation proof).
+⚠ This file still reads the ROMs and only the ROMs, which is why it stays: it
+answers the byte question WITHOUT depending on how the source is laid out.
+
     python3 notes/sound/wsa1_dsp_driver_shared.py
     python3 notes/sound/wsa1_dsp_driver_shared.py --selftest
 """

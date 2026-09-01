@@ -30,16 +30,19 @@ The shared tool's WSA1 window list is TG/SYNTH2/KEYBED on CPU 2 only.  Two
 devices that this tree has already identified as the WSA1's DSP register files
 are NOT in it, and one whole DSP transport is not memory-mapped at all:
 
-  * 0x00E00000 on CPU 2 (prom_c).  `prom_c/boot/boot_and_main.s` converts four
-    drivers for it, and `DSP_WriteChannelRegs_Inner` is 80 of 81 bytes identical
+  * 0x00E00000 on CPU 2 (prom_c).  `dsp/dsp_channel_regs.s` -- ONE source, shared
+    with prom_a since 2026-09-01 -- converts four drivers for it, and
+    `DSP_WriteChannelRegs_Inner` is 80 of 81 bytes identical
     to the KN5000 sub-CPU's routine of the same name -- the ONE differing byte
     being the base literal, 0xE0 here against 0x13 there.  0x00130000 is exactly
     the address the shared tool lists for the KN5000 as `DSP_ADDR`.  The two
     machines' DSP register files are the same driver at two addresses, and the
     WSA1's is missing from the list.
   * 0x007F0000 on CPU 1 (prom_a).  The same 44-byte `DSP_WriteAllChannelRegs`
-    is present a third time at prom_a 0xF85F7C, and prom_a's own inline comments
-    at 0xF85F40/0xF85F66/0xF85FB4 already read "the DSP register file".
+    is present a third time at prom_a 0xF85F7C -- and since the merge it is
+    LITERALLY the same source line, with the base an equate rather than a
+    literal.  prom_a's own inline comments at 0xF85F40/0xF85F66/0xF85FB4 already
+    read "the DSP register file".
   * PORT P7 (SFR 0x0013), a bit-banged parallel handshake with three
     destinations, is where DSP EFFECT MICROCODE leaves CPU 2
     (`../notes/prom_c_dsp_port.py`), and effect 5 PHASER's stream is
