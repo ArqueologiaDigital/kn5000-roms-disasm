@@ -349,6 +349,68 @@ machine is on, from RAM rather than from a one-shot boot image.
 
 ---
 
+## 4.6 ★★ The shared-code result: ONE DSP driver, TWO processors
+
+```
+python3 notes/sound/wsa1_dsp_driver_shared.py            # 8 checks, 0 failures
+```
+
+| | |
+|---|---|
+| prom_a 0xF85F0F..0xF85FF8 | prom_c 0xF98000..0xF980E9 |
+| 234 bytes, four routines | 234 bytes, four routines |
+
+**231 of 234 bytes are identical.**  The three that differ are:
+
+```
++0x034   prom_a 0xF85F43 = 0x7F      prom_c 0xF98034 = 0xE0
++0x05A   prom_a 0xF85F69 = 0x7F      prom_c 0xF9805A = 0xE0
++0x0A8   prom_a 0xF85FB7 = 0x7F      prom_c 0xF980A8 = 0xE0
+```
+
+— A23..A16 of each routine's `ld <Xrr>,imm32`, and nothing else.  `0x007F0000` on
+CPU 1, `0x00E00000` on CPU 2.  Three routines each loading a 32-bit immediate,
+all three differing in the same byte of that immediate and in no other byte of
+234, is **one source assembled twice with one symbol changed** — the same
+evidence shape as this tree's kernel result (`kernel/kernel.s` → 2,180 identical
+bytes of prom_a and prom_c), at 234 bytes instead of 2,180.
+
+★ **NULL CONTROL:** the same comparison at eight neighbouring alignments scores
+between 5 and 19 of 234.  Only the true alignment matches, which is what makes
+231/234 a fact about the code rather than about padding.
+
+**The third copy.**  `DSP_WriteAllChannelRegs`, 44 of these bytes, is
+byte-identical in the KN5000 sub-CPU at 0x1FCFB as well — three processors across
+two products.  The 234-byte block as a whole is **not**: the KN5000's version
+fills its buffer with the test pattern 0x5A5A5A5A where both WSA1 copies fill it
+with zero, so only 12 of 74 bytes line up there.
+
+### The label collision this exposed, and how it was resolved
+
+The same four routines carried **two different names** in the two images.  The
+brief's rule is to choose the better and adopt it, and the argument decided it in
+prom_c's favour:
+
+| prom_a had | now | why |
+|---|---|---|
+| `DSP_Init_Channels` | `DSP_ChannelRegs_Init` | the old name was **anchored to the weaker of two byte identities** — a 13-byte run shared with the KN5000, whose enclosing routine differs from this one in 62 of 74 bytes, against 231 of 234 shared with prom_c.  A transplanted name over non-transplanted bytes is exactly the error `notes/prom_c_sibling_map.py`'s docstring exists to prevent |
+| `DSP_Init_Channels_Loop` | `DSP_ChannelRegs_Init_Loop` | its local label |
+| `DSP_WriteChannelRegs_FromTable` | `DSP_ChannelRegs_Write8` | ⚠ **the old name was not wrong.**  "FromTable" is argued for in its own header by `ldb_spi e,0xf4` walking the caller's array, and that argument survives verbatim in the source.  What decides it is that its sibling routine had to move anyway and two images should not spell one driver two ways |
+| `DSP_WriteChannelRegs_FromTable__loop` | `DSP_ChannelRegs_Write8__loop` | its local label |
+| prom_b's thunk `T_DSP_WriteChannelRegs_FromTable` | `T_DSP_ChannelRegs_Write8` | follows the routine |
+
+⚠ **The KN5000 citations are deliberately unchanged.**  `prom_a/wsa1_prom_a.s`'s
+`llvm-nm names the label DSP_Init_Channels_Loop`, the `0x1FC95` line in
+`FINDINGS-prom_a-tasks-and-dsp-refresh.md` and `boot_and_main.s:90` all name the
+*sibling's* labels, not this tree's.
+
+★ **The opportunity, not taken here.**  A shared `include/dsp_channel_regs.inc`
+parameterised on one `DSP_BASE` symbol would make the two copies literally one
+source, the way `kernel/kernel.s` already is.  That is a source-layout change with
+its own byte gate and it belongs in its own pass, not bolted to a naming commit.
+
+---
+
 ## 5. What this note does NOT establish
 
 * **Any part number.**  No WSA1 ROM names a chip.  The one part number in the

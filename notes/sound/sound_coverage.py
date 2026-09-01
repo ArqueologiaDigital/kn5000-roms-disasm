@@ -32,6 +32,34 @@ WHAT IS ESTABLISHED (2026-09-01, first pass):
     data, and WSA1's final 17 likewise.  Unreached, unconverted bytes that were
     examined and found to be data cannot be hiding sound routines.
 
+★★ AMENDED 2026-09-01 BY LANE S2 -- THE WSA1 WINDOW LIST WAS INCOMPLETE, WHICH
+IS THE FAILURE THE PARAGRAPH AT THE BOTTOM OF THIS DOCSTRING PREDICTS.  Two
+devices were added (see the table below) and a third thing cannot be added at
+all:
+
+  * 0x00E00000 (CPU 2) and 0x007F0000 (CPU 1) are the WSA1's DSP REGISTER FILES,
+    driven by the same 234-byte four-routine driver, 231 of whose bytes are
+    identical between the two processors -- the three that differ being one byte
+    of each base literal.  0x00130000, this tool's `DSP_ADDR` for the KN5000, is
+    the third instance of that driver.  Neither WSA1 address was in the list.
+  * DSP EFFECT MICROCODE leaves CPU 2 through PORT P7 (SFR 0x0013), written as
+    `extpfx5 0x8E,0x08,0x19,0x13,0x00` -- a raw-encoding directive, because
+    llvm-mc cannot spell the instruction.  The destination is not an operand; it
+    is two payload bytes of an assembler directive.  ★ NO WINDOW LIST, HOWEVER
+    COMPLETE, CAN CONTAIN IT.
+  * ★ AND THE TWO ROUTINE COUNTS ARE DIFFERENT UNITS -- state which you mean.
+    With the two devices added this tool reports 124 sites / 108 routines, up
+    from 116 / 103.  That is `routines containing an instruction whose operand
+    NAMES a window`.  The base-following census reports **89** routines, which
+    is `routines that actually READ OR WRITE a device register`.  89 < 108
+    because a routine can load a base and hand the pointer to a callee, and
+    because prom_a's DSP block is entered through labels the literal scan
+    counts separately.  Neither number is wrong; quoting one as the other is.
+
+  Full account, with the per-register census this tool's limit 1 below asks for:
+      wsa1/notes/FINDINGS-sound-subsystem-boundary.md
+      python3 wsa1/notes/sound/wsa1_sound_boundary.py --windows
+
 ⚠ TWO LIMITS OF THIS TOOL, BOTH MEASURED, NEITHER PAPERED OVER:
 
   1. IT UNDERCOUNTS REGISTER-INDIRECT ACCESS.  The WSA1 reaches its tone
@@ -41,6 +69,12 @@ WHAT IS ESTABLISHED (2026-09-01, first pass):
      the WSA1 rows read TG_DATA 0 and TG_STATUS 0 while the driver maps both.
      The ROUTINE is still found, via the base load, so COVERAGE figures hold;
      the per-register breakdown does not.
+     ★ CLOSED FOR THE WSA1 2026-09-01: `wsa1/notes/sound/wsa1_sound_boundary.py`
+     follows base loads (and their spills into frame slots) into their
+     displacement uses.  TG_DATA is 155 writes across 58 routines and TG_STATUS
+     is 2 reads across 2 -- not 0 and 0.  It is calibrated against three counts
+     established here before it existed and reproduces all three exactly.
+     The KN5000 half of this limit is still open.
   2. A BYTE-PATTERN SEARCH FOR SOUND CODE IN UNCONVERTED SPANS DOES NOT WORK,
      and the null says so.  Searching 11,155,461 unconverted bytes for the
      little-endian encodings of the five KN5000 sound addresses gives 272 span
@@ -70,12 +104,26 @@ MACHINES = {
         ("DSP_DATA",  0x130002, 0x130003, "DSP: register data"),
         ("WAVE_RAM",  0x1E0000, 0x1EFFFF, "waveform / sample RAM"),
     ]),
+    # ⚠ AMENDED 2026-09-01 (lane S2).  This list was SHORT BY TWO DEVICES and one
+    # whole transport, and the completeness figure computed over it was therefore
+    # a figure about part of the sound subsystem.  See
+    # `wsa1/notes/FINDINGS-sound-subsystem-boundary.md` §0.
     "wsa1": dict(root=WSA, dirs=["prom_a", "prom_b", "prom_c"], windows=[
         ("TG_ADDR",   0x10C000, 0x10C001, "tone generator: address register (64 voices)"),
         ("TG_DATA",   0x10C002, 0x10C003, "tone generator: data register"),
         ("TG_STATUS", 0x10C004, 0x10C005, "tone generator: status read-back"),
         ("SYNTH2",    0x104000, 0x104003, "second synthesis device: address / data"),
         ("KEYBED",    0x108000, 0x108003, "keybed data and status"),
+        # ★ ADDED.  The two DSP register files, one per processor.  prom_c's
+        # DSP_WriteChannelRegs_Inner is 80 of 81 bytes identical to the KN5000
+        # sub-CPU routine of the same name at 0x1FD27, the one differing byte
+        # being inside the base literal -- 0xE0 here against 0x13 there, and
+        # 0x130000 is exactly what the kn5000 row below calls DSP_ADDR.  The
+        # whole 234-byte four-routine driver is 231 of 234 bytes identical
+        # BETWEEN THE TWO WSA1 PROCESSORS as well; measured, with a null over
+        # eight alignments, by wsa1/notes/sound/wsa1_dsp_driver_shared.py.
+        ("DSP_C",     0x00E00000, 0x00E00003, "CPU 2's DSP register file: address / data"),
+        ("DSP_A",     0x007F0000, 0x007F0003, "CPU 1's DSP register file: address / data"),
     ]),
 }
 
