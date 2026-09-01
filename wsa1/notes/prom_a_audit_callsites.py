@@ -89,7 +89,15 @@ IMGS = {
 
 ADDR = re.compile(r'0x([0-9A-Fa-f]{6,8})(?![0-9A-Fa-f])')
 LABEL = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):\s*$')
-INSTR_ADDR = re.compile(r';\s*([0-9A-F]{6})\s')
+# ⚠ `[\s/]`, NOT `\s`.  prom_a's transcription has TWO line shapes: its own
+# `; F85F0F  ee 0c ...` and, in the sources it SHARES with prom_c
+# (kernel/kernel.s, dsp/dsp_channel_regs.s), `; F85F0F/F98000  ee 0c ...` with
+# prom_a's address FIRST.  Requiring whitespace after the address matched none
+# of the shared lines, so their addresses were unknown to the label map -- and
+# the citations that name them were then attributed to the NEXT label with a
+# known address.  ★ That is a WRONG answer, not a missing one: four DSP call
+# sites were reported under PanelTask_EntryVectors at 0xF86000.
+INSTR_ADDR = re.compile(r';\s*([0-9A-F]{6})[\s/]')
 SECTION = re.compile(r';\s*(Inputs|Outputs|Evidence|Unknown|Note|Packet|Dispatch|Reads|Writes):')
 XFER = re.compile(r'\b(call|calr|jp|jrl|jr)\b')
 
@@ -311,7 +319,11 @@ def selftest():
     return 1 if fails else 0
 
 
-SRC_LINE = re.compile(r'^\t(\S.*?)\s*;\s*([0-9A-F]{6})\s+((?:[0-9a-f]{2} )*[0-9a-f]{2})(\s|$)')
+# The same two shapes -- and in a shared line the BYTES may differ between the
+# two images too, spelled `a=41 00 00 7f 00 c=41 00 00 e0 00`.  prom_a's are the
+# `a=` set; where the images agree there is one unprefixed set.
+SRC_LINE = re.compile(r'^\t(\S.*?)\s*;\s*([0-9A-F]{6})(?:/[0-9A-F]{6})?\s+'
+                      r'(?:a=)?((?:[0-9a-f]{2} )*[0-9a-f]{2})(\s|$)')
 INCBIN_D = re.compile(r'\.incbin\s+"original_ROMs/wsa1_prom_a\.ic12",\s*'
                       r'0x([0-9A-Fa-f]+),\s*0x([0-9A-Fa-f]+)')
 DIRECTIVE = re.compile(r'^\.(byte|short|long|ascii|asciz|fill|space)\b')

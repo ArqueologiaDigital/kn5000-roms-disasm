@@ -166,6 +166,31 @@ def grade(a_rc, a_out, b_rc, b_out):
     return "VACUOUS"
 
 
+# ★ WHERE THE SHADOW IS NOT A RE-ARRANGEMENT BUT AN OLDER TREE.
+#
+# The shadow replaces prom_c's master with BASE_COMMIT's, on the premise that the
+# two trees hold THE SAME TEXT, differently arranged.  A later round that changes
+# what prom_c's image CONTAINS breaks that premise, and the difference then shows
+# up as VACUOUS -- "the probe noticed, and still reported success" -- when what
+# the probe noticed is real and correct.
+#
+# ⚠ THIS IS A FOOTNOTE, NOT A RECLASSIFICATION.  The grade and the counts are
+# printed unchanged; a lane that disagrees with a reason below should say so
+# rather than find the row quietly missing.  Each entry names the exact thing the
+# shadow cannot have, so it can be checked in one command.
+PIN_ARTEFACTS = {
+    "notes/prom_c_header_audit.py":
+        "prom_c's image gained ONE label on 2026-09-01 that a BASE_COMMIT master "
+        "cannot contain: DSP_ChannelRegs_Init_Loop, prom_a's name for the address "
+        "prom_c calls DSP_ChannelRegs_Init__loop.  Both are defined in the SHARED "
+        "source dsp/dsp_channel_regs.s, which prom_c did not have then.  The "
+        "audit's answer moves by exactly that one label (1,203 -> 1,204, tier B "
+        "680 -> 681, tier C 0 both sides), and it reads the image through "
+        "asm_source, so it is not blind to anything.  Check: "
+        "`python3 notes/prom_c_header_audit.py --all | grep DSP_ChannelRegs`.",
+}
+
+
 def main():
     with tempfile.TemporaryDirectory() as top:
         d = shadow_tree(top)
@@ -182,7 +207,34 @@ def main():
     print(f"\n  VACUOUS {n['VACUOUS']}   LOUD {n['LOUD']}   UNAFFECTED {n['UNAFFECTED']}"
           f"   of {len(rows)} probe(s) prom_c's own text cites")
     print("  ★ VACUOUS is the bucket that matters: those still report success.")
+    noted = [(g, n) for g, n in rows if n in PIN_ARTEFACTS]
+    if noted:
+        print("\n  FOOTNOTES -- rows whose difference is traced to the shadow being")
+        print("  OLDER than the tree, not to the probe being blind.  Counts above are")
+        print("  UNCHANGED; judge these, do not skip them:")
+        for g, n in noted:
+            print("    %s  %s" % (g, n))
+            for chunk in _wrap(PIN_ARTEFACTS[n], 68):
+                print("      " + chunk)
+    stale = sorted(set(PIN_ARTEFACTS) - {n for _g, n in rows})
+    if stale:
+        print("\n  ⚠ %d STALE footnote(s) for probes no longer graded here: %s"
+              % (len(stale), ", ".join(stale)))
+        return 1
     return 0
+
+
+def _wrap(text, width):
+    out, cur = [], ""
+    for w in text.split():
+        if len(cur) + len(w) + 1 > width:
+            out.append(cur)
+            cur = w
+        else:
+            cur = (cur + " " + w).strip()
+    if cur:
+        out.append(cur)
+    return out
 
 
 def selftest():
