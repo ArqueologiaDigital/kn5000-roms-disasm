@@ -1,0 +1,2612 @@
+[
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 44,
+  "label": "FileIO_BytecodeData",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FileIO_BytecodeData_head.bin",
+  "size": 3083,
+  "kind": "byte",
+  "sample": ".byte 0x80, 0x3f, 0xff"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 280,
+  "label": "ExtDev_SndParam_BlockA9_Var02",
+  "next_label": "ExtDev_SndParam_Block98_Var80",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ExtDev_SndParam_BlockA9_Var02.bin",
+  "size": 45,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 3053,
+  "label": "ExtData_Voice_CopyAndJump",
+  "next_label": "ExtData_Voice_CompareAndDispatch",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ExtData_Voice_CopyAndJump.bin",
+  "size": 15,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 3521,
+  "label": "UIState_RenderBitmapData",
+  "next_label": "ToshiCmd_DefaultHandler_Ret",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_RenderBitmapData.bin",
+  "size": 121,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 3790,
+  "label": "UIWidget_MidiStreamControl",
+  "next_label": "SndParam_ApplyAndFetch",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIWidget_MidiStreamControl.bin",
+  "size": 85,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 4389,
+  "label": "AudioCtrl_PreserveRegs_PopEpilogue",
+  "next_label": "SwbtWr_WriteParamBlockSafe",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AudioCtrl_PreserveRegs_PopEpilogue.bin",
+  "size": 19,
+  "kind": "ascii",
+  "sample": ".ascii \"89:;<=>\""
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 4992,
+  "label": "MidiSeqBuf_ProcessorTable",
+  "next_label": "MidiSeqBuf_InitFromTable",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiSeqBuf_ProcessorTable.bin",
+  "size": 34,
+  "kind": "byte",
+  "sample": ".byte 0xff, 0x24, 0xa9, 0xfc, 0x00, 0x76, 0xa9, 0xfc"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 5201,
+  "label": "TempoRing_ProcessorTable",
+  "next_label": "TempoRing_ValidateState",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_TempoRing_ProcessorTable.bin",
+  "size": 66,
+  "kind": "byte",
+  "sample": ".byte 0xff, 0x24, 0xa9, 0xfc, 0x00, 0x76, 0xa9, 0xfc"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 5560,
+  "label": "MidiCtrl_ModeDispatch_Table",
+  "next_label": "MidiCtrl_NullRet",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiCtrl_ModeDispatch_Table.bin",
+  "size": 232,
+  "kind": "CODE",
+  "sample": "swi\t1"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 5599,
+  "label": "VoiceMode3_DispatchTable",
+  "next_label": "MidiPartCC_WriteAndDispatch",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceMode3_DispatchTable.bin",
+  "size": 405,
+  "kind": "CODE",
+  "sample": "swi\t7"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 6112,
+  "label": "VoiceMode_ParamConfigTables",
+  "next_label": "MidiStream_ApplyPendingParams",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceMode_ParamConfigTables.bin",
+  "size": 2980,
+  "kind": "byte",
+  "sample": ".byte 0xb1, 0x17, 0x7f, 0x02, 0xb2, 0x17, 0x7f, 0x03"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 6364,
+  "label": "MidiStream_SysExData",
+  "next_label": "MidiStream_CtrlJumpTable",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiStream_SysExData.bin",
+  "size": 49,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 6461,
+  "label": ".Lc_fcc350",
+  "next_label": "MidiStream_HandleRunningStatus",
+  "bin": "v7/maincpu/includes/romslices/v7_block_midistream_cmdpedaldone_tail.bin",
+  "size": 840,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 6465,
+  "label": "MidiStream_HandleRunningStatus",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_midistream_handlerunningstatus_head.bin",
+  "size": 1159,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x50"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "incbin_line": 6470,
+  "label": "MidiStream_HandleRunningStatus",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_midistream_handlerunningstatus_tail.bin",
+  "size": 277,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x50"
+ },
+ {
+  "file": "v7/maincpu/audio/audioinit_routines.s",
+  "incbin_line": 208,
+  "label": "AudioInit_VoiceRoutingTable",
+  "next_label": "AudioInit_ConfigureVoiceRouting",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AudioInit_VoiceRoutingTable.bin",
+  "size": 248,
+  "kind": "byte",
+  "sample": ".byte 0x0e, 0x0e, 0x0e, 0x0e, 0x0e, 0x0e, 0x0e, 0xf1"
+ },
+ {
+  "file": "v7/maincpu/audio/audioinit_routines.s",
+  "incbin_line": 760,
+  "label": "AudioInit_InitPartSendLevels",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_audioinit_initpartsendlevels.bin",
+  "size": 77,
+  "kind": "CODE",
+  "sample": "lds\tde, 0"
+ },
+ {
+  "file": "v7/maincpu/audio/dsp_config_sysex.s",
+  "incbin_line": 421,
+  "label": "SwbtWr_SoundBankParamTable",
+  "next_label": "SwbtWr_ProcessAll",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SwbtWr_SoundBankParamTable.bin",
+  "size": 18,
+  "kind": "byte",
+  "sample": ".byte 0x3e, 0x1e, 0x3e, 0x00, 0x5e, 0x0e, 0x3e, 0x1e"
+ },
+ {
+  "file": "v7/maincpu/audio/dsp_config_sysex.s",
+  "incbin_line": 876,
+  "label": "MidiOut_RealtimeDispatch_Data",
+  "next_label": "MidiOut_SerializeAndSend",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiOut_RealtimeDispatch_Data.bin",
+  "size": 35,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0x80, 0xc0"
+ },
+ {
+  "file": "v7/maincpu/audio/dsp_config_sysex.s",
+  "incbin_line": 2526,
+  "label": "DSPCfg_ReturnValueTable",
+  "next_label": ".Lc_fdd776",
+  "bin": "v7/maincpu/includes/romslices/v7_fix_dspcfg_returnvaluetable.bin",
+  "size": 20,
+  "kind": "CODE",
+  "sample": "ret"
+ },
+ {
+  "file": "v7/maincpu/audio/dsp_config_sysex.s",
+  "incbin_line": 2744,
+  "label": "UIStateEvt_TransposeUpdate",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_uistateevt_transposeupdate.bin",
+  "size": 3812,
+  "kind": "CODE",
+  "sample": "bit 0, e"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "incbin_line": 7061,
+  "label": "VoiceSlot_StoreParams_Data",
+  "next_label": "Voice_ComputeNoteBitPosition",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceSlot_StoreParams_Data.bin",
+  "size": 16,
+  "kind": "byte",
+  "sample": ".byte 0x01"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "incbin_line": 7776,
+  "label": "VoiceSlot_CheckAndApply_Data2",
+  "next_label": "VoiceSlot_CheckAndApply_Prologue",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceSlot_CheckAndApply_Data2.bin",
+  "size": 372,
+  "kind": "byte",
+  "sample": ".byte 0x01"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "incbin_line": 9065,
+  "label": "StartFillIn_Data",
+  "next_label": "FileIO_ReadMultiByteRecord",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_StartFillIn_Data.bin",
+  "size": 7,
+  "kind": "byte",
+  "sample": ".byte 0xd1, 0xe5, 0xe9"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "incbin_line": 12493,
+  "label": "SendPartDataBlock_Data3",
+  "next_label": "SendPartDataBlock_Data4",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SendPartDataBlock_Data3.bin",
+  "size": 169,
+  "kind": "byte",
+  "sample": ".byte 0x01"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "incbin_line": 12832,
+  "label": "TmFlashWrite_Block2",
+  "next_label": "TmFlashWrite_Block3",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_TmFlashWrite_Block2.bin",
+  "size": 4,
+  "kind": "byte",
+  "sample": ".byte 0xa7, 0xc2"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "incbin_line": 13456,
+  "label": "Math_AbsInt16",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_fix_math_absint16.bin",
+  "size": 10,
+  "kind": "CODE",
+  "sample": "ld hl, (xsp + 4)"
+ },
+ {
+  "file": "v7/maincpu/audio/semenu_routines.s",
+  "incbin_line": 4043,
+  "label": "SeMenu_OrPartConfig_Data",
+  "next_label": "SeMenu_StoreParamByte",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeMenu_OrPartConfig_Data_head.bin",
+  "size": 6,
+  "kind": "long",
+  "sample": ".long Pad_BeforeBitmap_Dredt0d"
+ },
+ {
+  "file": "v7/maincpu/audio/semenu_routines.s",
+  "incbin_line": 4387,
+  "label": ".Lc_f09b5b",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_fix_semenu_refreshpartdisplay_data_mid1.bin",
+  "size": 332,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/audio/semenu_routines.s",
+  "incbin_line": 4486,
+  "label": ".Lc_f09dba",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_fix_semenu_refreshpartdisplay_data_tail.bin",
+  "size": 801,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/audio/sndparam_routines.s",
+  "incbin_line": 1299,
+  "label": "SndParam_HeapAllocOK",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_fix_sndparam_heapallocok.bin",
+  "size": 13,
+  "kind": "CODE",
+  "sample": "ld de, (xbc)"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "incbin_line": 4403,
+  "label": "SeMenu_NameEditor_End",
+  "next_label": "SeMenu_DisplayPartValue",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeMenu_NameEditor_End.bin",
+  "size": 88,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "incbin_line": 4720,
+  "label": ".Lc_f0f0a6",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_mid0.bin",
+  "size": 165,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "incbin_line": 4827,
+  "label": ".Lc_f0f2e0",
+  "next_label": "SeMenu_WaveformSelect_Init",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_tail_tail.bin",
+  "size": 449,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "incbin_line": 6580,
+  "label": "SeBitmap_EnvCurve5",
+  "next_label": "SeMenu_CompareScreen_DataTable",
+  "bin": "v7/maincpu/includes/romslices/v7_block_sebitmap_envcurve5.bin",
+  "size": 8055,
+  "kind": "CODE",
+  "sample": "swi\t7"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "incbin_line": 6582,
+  "label": "SeMenu_CompareScreen_DataTable",
+  "next_label": "TuningSys_Param_01",
+  "bin": "v7/maincpu/includes/romslices/v7_block_semenu_comparescreen_datatable.bin",
+  "size": 672,
+  "kind": "byte",
+  "sample": ".byte 0x3d, 0x00"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "incbin_line": 6697,
+  "label": "TuningSystem_Handler_Table",
+  "next_label": "S2cShowHideFunc",
+  "bin": "v7/maincpu/includes/romslices/v7_fix_tuningsystem_handler_table_tail.bin",
+  "size": 9252,
+  "kind": "long",
+  "sample": ".long TuningSys_Param_01"
+ },
+ {
+  "file": "v7/maincpu/audio/sprintf_core.s",
+  "incbin_line": 865,
+  "label": "Sprintf_FFixed_DataTable",
+  "next_label": "Sprintf_FormatEScientific",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_Sprintf_FFixed_DataTable.bin",
+  "size": 20,
+  "kind": "byte",
+  "sample": ".byte 0xaf, 0x04, 0x20, 0x80, 0x3f, 0x00, 0x6e, 0x03"
+ },
+ {
+  "file": "v7/maincpu/audio/sprintf_core.s",
+  "incbin_line": 2350,
+  "label": "Sprintf_DataBlock_28E9",
+  "next_label": "Sprintf_StringLength",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_Sprintf_DataBlock_28E9.bin",
+  "size": 32,
+  "kind": "byte",
+  "sample": ".byte 0x9f, 0x0a, 0x22, 0xaf, 0x04, 0x24, 0xec, 0x8b"
+ },
+ {
+  "file": "v7/maincpu/boot/interrupt_vector_trampolines.s",
+  "incbin_line": 7,
+  "label": null,
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_interrupt_vector_trampolines_head.bin",
+  "size": 41,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/boot/interrupt_vector_trampolines.s",
+  "incbin_line": 84,
+  "label": ".Lc_fccd1f",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_interrupt_vector_trampolines_tail.bin",
+  "size": 292,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/boot/screen_group_dispatch.s",
+  "incbin_line": 129,
+  "label": "ScreenGroup_InitFinalize",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_screengroup_initfinalize.bin",
+  "size": 34,
+  "kind": "CODE",
+  "sample": "stdi8 (0xca6a), 8"
+ },
+ {
+  "file": "v7/maincpu/boot/system_handlers.s",
+  "incbin_line": 1798,
+  "label": "TaskSched_ScreenGroupTable",
+  "next_label": "TaskSched_ScreenGroupTable_End",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_TaskSched_ScreenGroupTable.bin",
+  "size": 82,
+  "kind": "long",
+  "sample": ".long Boot_InitPeripherals"
+ },
+ {
+  "file": "v7/maincpu/boot/system_handlers.s",
+  "incbin_line": 7942,
+  "label": "HDAE5000_Init_BytecodeBlock",
+  "next_label": "HDAE5000_Init_DetectAndVerify",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_HDAE5000_Init_BytecodeBlock.bin",
+  "size": 349,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/demo/demo_routines.s",
+  "incbin_line": 86,
+  "label": "DemoStyle_DispatchTable",
+  "next_label": "DemoStyle_InputHandler",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DemoStyle_DispatchTable.bin",
+  "size": 15,
+  "kind": "ascii",
+  "sample": ".ascii \":;<>\""
+ },
+ {
+  "file": "v7/maincpu/demo/demo_routines.s",
+  "incbin_line": 157,
+  "label": "DemoSound_DispatchTable",
+  "next_label": "DemoSound_InputHandler",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DemoSound_DispatchTable.bin",
+  "size": 14,
+  "kind": "ascii",
+  "sample": ".ascii \":;<>\""
+ },
+ {
+  "file": "v7/maincpu/demo/demo_routines.s",
+  "incbin_line": 228,
+  "label": "DemoRhythm_DispatchTable",
+  "next_label": "DemoRhythm_InputHandler",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DemoRhythm_DispatchTable.bin",
+  "size": 14,
+  "kind": "ascii",
+  "sample": ".ascii \":;<>\""
+ },
+ {
+  "file": "v7/maincpu/demo/demo_seq_bridge.s",
+  "incbin_line": 26,
+  "label": "MiddleFuncCall_DispatchData",
+  "next_label": "SqTrSel_CaseB",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MiddleFuncCall_DispatchData.bin",
+  "size": 147,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0xa4"
+ },
+ {
+  "file": "v7/maincpu/demo/demo_seq_bridge.s",
+  "incbin_line": 331,
+  "label": "CDlikeSwTtl_DispatchData",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_CDlikeSwTtl_DispatchData_head.bin",
+  "size": 6,
+  "kind": "byte",
+  "sample": ".byte 0xeb, 0xa8, 0x0e, 0xeb, 0xa8, 0x0e, 0xf1, 0xe0"
+ },
+ {
+  "file": "v7/maincpu/demo/fdemotext_routines.s",
+  "incbin_line": 37,
+  "label": "FDemoText_ByteData_VoiceProbeB",
+  "next_label": "FDemoText_ByteData_VoiceProbeC",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDemoText_ByteData_VoiceProbeB.bin",
+  "size": 24,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/demo/fdemotext_routines.s",
+  "incbin_line": 1552,
+  "label": "FDemoText_ByteData_LayoutEngine",
+  "next_label": "FDemoText_ScaleDownCoords",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDemoText_ByteData_LayoutEngine.bin",
+  "size": 1831,
+  "kind": "byte",
+  "sample": ".byte 0xf3"
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "incbin_line": 9,
+  "label": "FDemo_DisplayResourceData",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDemo_DisplayResourceData_head_head.bin",
+  "size": 293,
+  "kind": "byte",
+  "sample": ".byte 0xf3"
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "incbin_line": 1444,
+  "label": "DrawFunc_Init_Variant1",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrawFunc_Init_Variant1_head.bin",
+  "size": 264,
+  "kind": "byte",
+  "sample": ".byte 0xf3"
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "incbin_line": 1496,
+  "label": ".Lc_fb1e56",
+  "next_label": "ColorBlit_WithPaletteSave",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrawFunc_Init_Variant1_tail.bin",
+  "size": 572,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 839,
+  "label": "ScoopDisp_HandlerData2",
+  "next_label": "DefaultHandler_Ret",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ScoopDisp_HandlerData2_tail.bin",
+  "size": 127,
+  "kind": "byte",
+  "sample": ".byte 0x97, 0x97, 0xef"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 875,
+  "label": "ScoopDisp_FlagSetAndDispatch",
+  "next_label": "ScoopDisp_DispatchTable_Small",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ScoopDisp_FlagSetAndDispatch.bin",
+  "size": 24,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 1006,
+  "label": "PerfMode_ParamHandler_Table",
+  "next_label": "PerfMode_JumpTable_Extended",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PerfMode_ParamHandler_Table_tail.bin",
+  "size": 26,
+  "kind": "long",
+  "sample": ".long PerfMode_ParamHandler_0"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 1074,
+  "label": "PerfMode_Evt03_FlagHandler_A",
+  "next_label": "PerfMode_Evt03_FlagHandler_B",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PerfMode_Evt03_FlagHandler_A.bin",
+  "size": 30,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 1076,
+  "label": "PerfMode_Evt03_FlagHandler_B",
+  "next_label": "PerfMode_Evt03_ClampAndUpdate",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PerfMode_Evt03_FlagHandler_B.bin",
+  "size": 30,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 1511,
+  "label": "PerfMode_Evt04_VolumeHandler",
+  "next_label": "PerfMode_VoiceAddressTable",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PerfMode_Evt04_VolumeHandler.bin",
+  "size": 117,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 1513,
+  "label": "PerfMode_VoiceAddressTable",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PerfMode_VoiceAddressTable_head.bin",
+  "size": 80,
+  "kind": "byte",
+  "sample": ".byte 0xb9, 0xf9, 0x00, 0x00, 0xed"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 2357,
+  "label": "ScoopDisp_DispatchTable_Extended",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail_head.bin",
+  "size": 46,
+  "kind": "long",
+  "sample": ".long DefaultHandler_Ret"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 2373,
+  "label": "ScoopDisp_DispatchTable_Extended",
+  "next_label": "Display_DirtyRegionDispatch",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail_tail.bin",
+  "size": 13,
+  "kind": "long",
+  "sample": ".long DefaultHandler_Ret"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 2859,
+  "label": ".Lc_ef81dd",
+  "next_label": ".Lc_ef82fd",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail_head.bin",
+  "size": 259,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 2875,
+  "label": ".Lc_ef8314",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail_mid1.bin",
+  "size": 265,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 3004,
+  "label": ".Lc_ef8549",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_head_tail_tail_tail.bin",
+  "size": 218,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 3021,
+  "label": ".Lc_ef8658",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_mid1.bin",
+  "size": 41,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 3558,
+  "label": ".Lc_ef9128",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail_mid0.bin",
+  "size": 436,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 3567,
+  "label": ".Lc_ef9128",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail_mid1.bin",
+  "size": 282,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 3576,
+  "label": ".Lc_ef9128",
+  "next_label": ".Lc_ef9545",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail_tail.bin",
+  "size": 276,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 3582,
+  "label": ".Lc_ef9545",
+  "next_label": ".Lc_ef957a",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceSlot_TableSetup_mid1.bin",
+  "size": 38,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 3588,
+  "label": ".Lc_ef957a",
+  "next_label": "AccPedal_CheckBitAndUpdate",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceSlot_TableSetup_tail.bin",
+  "size": 19,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 3796,
+  "label": "VoiceCtrl_CheckAndReset",
+  "next_label": "VoiceCtrl_SendNoteOffSequence",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceCtrl_CheckAndReset.bin",
+  "size": 18,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0x53"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 4094,
+  "label": "ScoopParam_ValueTable",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ScoopParam_ValueTable_head.bin",
+  "size": 477,
+  "kind": "byte",
+  "sample": ".byte 0x00, 0x00, 0x08"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 4127,
+  "label": ".Lc_efa1aa",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ScoopParam_ValueTable_tail_head.bin",
+  "size": 250,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 4460,
+  "label": "PortConfig_DataTable_A",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PortConfig_DataTable_A_head.bin",
+  "size": 24,
+  "kind": "byte",
+  "sample": ".byte 0x01, 0x01"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 4527,
+  "label": "ClockConfig_Handler_1",
+  "next_label": "ClockConfig_Handler_0",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ClockConfig_Handler_1.bin",
+  "size": 6,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 4529,
+  "label": "ClockConfig_Handler_0",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ClockConfig_Handler_0_head.bin",
+  "size": 272,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 4536,
+  "label": "ClockConfig_Handler_0",
+  "next_label": "SysEx_PeriodicDispatch",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ClockConfig_Handler_0_tail.bin",
+  "size": 281,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 4671,
+  "label": "MemoryConfig_Handler_Table",
+  "next_label": "MemConfig_VoiceSlotLookup",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MemoryConfig_Handler_Table_tail_tail.bin",
+  "size": 320,
+  "kind": "long",
+  "sample": ".long MemConfig_Handler_0"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 4740,
+  "label": "MemConfig_Handler_1",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MemConfig_Handler_1_head.bin",
+  "size": 139,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x54"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 4796,
+  "label": ".Lc_efaf0b",
+  "next_label": "MemConfig_Handler_3",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MemConfig_Handler_1_tail.bin",
+  "size": 413,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 5155,
+  "label": "SystemInit_Handler_Table",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SystemInit_Handler_Table_tail_head.bin",
+  "size": 43,
+  "kind": "long",
+  "sample": ".long SystemInit_StepHandler_0"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 5220,
+  "label": "SysInit_BytecodeBlock",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SysInit_BytecodeBlock_head.bin",
+  "size": 12,
+  "kind": "byte",
+  "sample": ".byte 0x50"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 5230,
+  "label": "SysInit_BytecodeBlock",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SysInit_BytecodeBlock_mid1_head.bin",
+  "size": 164,
+  "kind": "byte",
+  "sample": ".byte 0x50"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 5242,
+  "label": ".Lc_efb9fd",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SysInit_BytecodeBlock_mid1_tail_head.bin",
+  "size": 23,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 5262,
+  "label": ".Lc_efb9fd",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SysInit_BytecodeBlock_mid1_tail_tail.bin",
+  "size": 703,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 5268,
+  "label": ".Lc_efb9fd",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SysInit_BytecodeBlock_mid2.bin",
+  "size": 155,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 5274,
+  "label": ".Lc_efb9fd",
+  "next_label": "VoiceSlot_InitAndProcess",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SysInit_BytecodeBlock_tail.bin",
+  "size": 505,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 5893,
+  "label": "VoiceSlot_StatusRet",
+  "next_label": "VoiceState_SaveAndRestore",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceSlot_StatusRet.bin",
+  "size": 2268,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 6519,
+  "label": "SubCPU_ToneClearRegion",
+  "next_label": "PerfMode_ParamHandler_11",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SubCPU_ToneClearRegion.bin",
+  "size": 99,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xd3"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 6566,
+  "label": "SubCPU_ToneParamRet",
+  "next_label": "OscScope_HandlerTable",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SubCPU_ToneParamRet_tail.bin",
+  "size": 2596,
+  "kind": "long",
+  "sample": ".long UIDisp_DefaultInputHandler"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 7004,
+  "label": "DisplayStr_RhythmLabel",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DisplayStr_RhythmLabel_head.bin",
+  "size": 146,
+  "kind": "byte",
+  "sample": ".byte 0x20"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 7994,
+  "label": "StringData_APCModeNames",
+  "next_label": "Display_RedrawStatusBar",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_StringData_APCModeNames.bin",
+  "size": 2808,
+  "kind": "ascii",
+  "sample": ".ascii \"APC OFF         BASIC           ADVANCED 1      PIANIST         PIANO MODE      ADVANCED 2                                      SPLIT           \""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "incbin_line": 10704,
+  "label": "Scoop_EventLoop_36Entry_Data",
+  "next_label": "Scoop_EventLoop_12Entry_Alt",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_Scoop_EventLoop_36Entry_Data.bin",
+  "size": 907,
+  "kind": "byte",
+  "sample": ".byte 0xf3"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_editor_data.s",
+  "incbin_line": 133,
+  "label": ".Lc_f03e6c",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_scoop_soundeditordata_mid1.bin",
+  "size": 4037,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_editor_data.s",
+  "incbin_line": 334,
+  "label": ".Lc_f04ffd",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_scoop_soundeditordata_mid2_head.bin",
+  "size": 18,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_editor_data.s",
+  "incbin_line": 385,
+  "label": ".Lc_f05075",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_scoop_soundeditordata_mid2_mid1.bin",
+  "size": 18,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_editor_data.s",
+  "incbin_line": 436,
+  "label": ".Lc_f0510e",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_scoop_soundeditordata_mid2_mid2.bin",
+  "size": 9,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_editor_data.s",
+  "incbin_line": 487,
+  "label": ".Lc_f0519e",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_scoop_soundeditordata_mid2_mid3.bin",
+  "size": 9,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_editor_data.s",
+  "incbin_line": 684,
+  "label": ".Lc_f053b5",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_scoop_soundeditordata_mid2_tail.bin",
+  "size": 18,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_editor_data.s",
+  "incbin_line": 696,
+  "label": ".Lc_f05401",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_scoop_soundeditordata_mid3.bin",
+  "size": 30,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_editor_data.s",
+  "incbin_line": 718,
+  "label": ".Lc_f0544c",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_scoop_soundeditordata_mid4.bin",
+  "size": 177,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/display/scoop_editor_data.s",
+  "incbin_line": 731,
+  "label": ".Lc_f05511",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_scoop_soundeditordata_tail.bin",
+  "size": 3118,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/extensions/extension_data.s",
+  "incbin_line": 5,
+  "label": "ExtData_ChordTypeTable_Top",
+  "next_label": "ExtData_ChordTypeTable_Mid",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ExtData_ChordTypeTable_Top.bin",
+  "size": 48,
+  "kind": "long",
+  "sample": ".long SeqVoice_ValidateState_StoreChannel"
+ },
+ {
+  "file": "v7/maincpu/extensions/extension_data.s",
+  "incbin_line": 593,
+  "label": "Str_StoreTotalSetting_EN3",
+  "next_label": "NoteNameStr_Table_4",
+  "bin": "v7/maincpu/includes/romslices/v7_data_str_storetotalsetting_de.bin",
+  "size": 700,
+  "kind": "MACRO:aligned_string",
+  "sample": "aligned_string \"Stores to total setting including Rhythm, Transpose & tempo.\""
+ },
+ {
+  "file": "v7/maincpu/extensions/extension_data.s",
+  "incbin_line": 1385,
+  "label": "KeyScaleNoteStr_G",
+  "next_label": "KeyScaleNoteStr_G_PtrTable",
+  "bin": "v7/maincpu/includes/romslices/v7_data_keyscalenotestr_g_head.bin",
+  "size": 28,
+  "kind": "byte",
+  "sample": ".byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20"
+ },
+ {
+  "file": "v7/maincpu/extensions/extension_data.s",
+  "incbin_line": 1905,
+  "label": "ExtData_NormScreenProc_Ptr",
+  "next_label": "NakaDesc_AcDispTimeSetGridBox",
+  "bin": "v7/maincpu/includes/romslices/v7_fix_extdata_normscreenproc_ptr.bin",
+  "size": 4,
+  "kind": "long",
+  "sample": ".long NormScreenProc"
+ },
+ {
+  "file": "v7/maincpu/extensions/extension_data.s",
+  "incbin_line": 2043,
+  "label": "MethodNameStr_MT_SvariIni",
+  "next_label": "MethodNameStr_MT_SvariIni_PtrTable",
+  "bin": "v7/maincpu/includes/romslices/v7_data_methodnamestr_mt_svariini_head.bin",
+  "size": 28,
+  "kind": "MACRO:aligned_string",
+  "sample": "aligned_string \"MT_SvariIni\""
+ },
+ {
+  "file": "v7/maincpu/extensions/extension_data.s",
+  "incbin_line": 2135,
+  "label": "ProcNameStr_NormScreenProc",
+  "next_label": "ProcNameStr_NormScreenProc_PtrTable",
+  "bin": "v7/maincpu/includes/romslices/v7_data_procnamestr_normscreenproc_head.bin",
+  "size": 16,
+  "kind": "MACRO:aligned_string",
+  "sample": "aligned_string \"NormScreenProc\""
+ },
+ {
+  "file": "v7/maincpu/extensions/extension_data.s",
+  "incbin_line": 3273,
+  "label": "ErrorDialog_RecoveryLine3",
+  "next_label": "Protocol_values_for_LED_rows",
+  "bin": "v7/maincpu/includes/romslices/v7_data_encoder_region.bin",
+  "size": 1206,
+  "kind": "CODE",
+  "sample": "pushw\thl"
+ },
+ {
+  "file": "v7/maincpu/extensions/extension_data.s",
+  "incbin_line": 4370,
+  "label": "SoundProgram_DispatchTable",
+  "next_label": "VoiceCtrlR1_Entry_001",
+  "bin": "v7/maincpu/includes/romslices/v7_data_naka_toshiparam_table.bin",
+  "size": 1872,
+  "kind": "long",
+  "sample": ".long ExtData_ToneParam_DispatchHandler"
+ },
+ {
+  "file": "v7/maincpu/factory_test/fd_test_data.s",
+  "incbin_line": 134,
+  "label": "FDTest_ConsoleArea1",
+  "next_label": "FDTest_String_Console1",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDTest_ConsoleArea1.bin",
+  "size": 54,
+  "kind": "byte",
+  "sample": ".byte 0x41, 0x00, 0x60, 0x01, 0x0a, 0x00, 0x10, 0x00"
+ },
+ {
+  "file": "v7/maincpu/factory_test/fd_test_data.s",
+  "incbin_line": 320,
+  "label": "FDTest_String_TestTitleFunc",
+  "next_label": "FDTest_String_TestTitleFunc_PtrTable",
+  "bin": "v7/maincpu/includes/romslices/v7_data_fdtest_string_testtitlefunc_head.bin",
+  "size": 632,
+  "kind": "MACRO:aligned_string",
+  "sample": "aligned_string \"TestTitleFunc\""
+ },
+ {
+  "file": "v7/maincpu/factory_test/fd_test_data.s",
+  "incbin_line": 326,
+  "label": "FDTest_String_TestTitleFunc_PtrTable",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_data_fdtest_string_testtitlefunc_tail.bin",
+  "size": 12,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/file_io/smf_operations.s",
+  "incbin_line": 1043,
+  "label": "DispSeqList_LoopBody",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_fix_dispseqlist_loopbody.bin",
+  "size": 102,
+  "kind": "CODE",
+  "sample": "ld de, iz"
+ },
+ {
+  "file": "v7/maincpu/kn5000_v7_program.s",
+  "incbin_line": 1393,
+  "label": "Voice_InitBankTables_SlotLoop",
+  "next_label": "Voice_InitBankData",
+  "bin": "v7/maincpu/includes/romslices/v7_fix_voice_initbanktables_slotloop.bin",
+  "size": 21,
+  "kind": "CODE",
+  "sample": "ld xiy, Voice_SlotTemplate"
+ },
+ {
+  "file": "v7/maincpu/kn5000_v7_program.s",
+  "incbin_line": 2638,
+  "label": "SoundParam_NotifyChange",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_soundparam_notifychange.bin",
+  "size": 85,
+  "kind": "CODE",
+  "sample": "lda xsp, (xsp - 10)"
+ },
+ {
+  "file": "v7/maincpu/midi/computer_interface_pcg.s",
+  "incbin_line": 297,
+  "label": "PcgOutGridCheckJumpTable",
+  "next_label": "PcgOutCheckGridDataStructure",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PcgOutGridCheckJumpTable.bin",
+  "size": 1161,
+  "kind": "byte",
+  "sample": ".byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 31,
+  "label": "MidiSerial_StatusTable",
+  "next_label": "MidiSerial_WaitForData",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiSerial_StatusTable.bin",
+  "size": 33,
+  "kind": "byte",
+  "sample": ".byte 0xff, 0xd5, 0xfa, 0xfc, 0x00, 0xd5, 0xfa, 0xfc"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 48,
+  "label": "MidiSerial_CmdJumpTable",
+  "next_label": "MidiSerial_HandleSysReset_Data",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiSerial_CmdJumpTable.bin",
+  "size": 64,
+  "kind": "long",
+  "sample": ".long MidiSerial_HandleDefault_Data"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 58,
+  "label": "MidiSerial_HandleDefault_Data",
+  "next_label": "MidiCC_LowRange_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiSerial_HandleDefault_Data.bin",
+  "size": 110,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 60,
+  "label": "MidiCC_LowRange_Table",
+  "next_label": "MidiCC_Handler_SimpleParamStore",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiCC_LowRange_Table.bin",
+  "size": 32,
+  "kind": "long",
+  "sample": ".long MidiCC_Handler_SimpleParamStore"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 62,
+  "label": "MidiCC_Handler_SimpleParamStore",
+  "next_label": "MidiCC_Handler_CC3_TableLookup",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiCC_Handler_SimpleParamStore.bin",
+  "size": 6,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 75,
+  "label": "MidiCC_ExtendedRange_Table",
+  "next_label": "MidiCC_NullHandlerBlock",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiCC_ExtendedRange_Table.bin",
+  "size": 192,
+  "kind": "long",
+  "sample": ".long MidiCC_VoiceParam_0"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 79,
+  "label": "MidiCC_Handler_BitManipulation",
+  "next_label": "MidiCC_Handler_PairedParamA",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiCC_Handler_BitManipulation.bin",
+  "size": 72,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x51"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 389,
+  "label": "UIState_ProcessDisplayUpdate",
+  "next_label": "UIState_DisplayUpdate_BitmapHandler",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ProcessDisplayUpdate.bin",
+  "size": 21,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 391,
+  "label": "UIState_DisplayUpdate_BitmapHandler",
+  "next_label": "MIDI_DispatchCC",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_DisplayUpdate_BitmapHandler.bin",
+  "size": 247,
+  "kind": "byte",
+  "sample": ".byte 0xf1"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 449,
+  "label": "PanelEvt_DispatchTable",
+  "next_label": "PanelEvt_Handler_0_NoteOnParam",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PanelEvt_DispatchTable.bin",
+  "size": 64,
+  "kind": "long",
+  "sample": ".long PanelEvt_Handler_0_NoteOnParam"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 833,
+  "label": "FileData_ValidateAndDispatch",
+  "next_label": "FileData_DispatchHandler",
+  "bin": "v7/maincpu/includes/romslices/v7_fix_filedata_validateanddispatch.bin",
+  "size": 47,
+  "kind": "CODE",
+  "sample": "push xix"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 1125,
+  "label": "PanelEvt_Handler_4_DualValueCheck",
+  "next_label": "FileData_ValidateFormat",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PanelEvt_Handler_4_DualValueCheck.bin",
+  "size": 4008,
+  "kind": "byte",
+  "sample": ".byte 0xf1"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 4088,
+  "label": "MidiStream_PrevBankCheck",
+  "next_label": "SeqAlt_ProcessAndFinalize",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiStream_PrevBankCheck.bin",
+  "size": 75,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 5490,
+  "label": "MidiPkt_InitSingleField_Data",
+  "next_label": "MidiPkt_HandleCmdCode01",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiPkt_InitSingleField_Data.bin",
+  "size": 24,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 5985,
+  "label": "SoundMode_SysExConfig_Data",
+  "next_label": "SoundMode_DispatchRender",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SoundMode_SysExConfig_Data.bin",
+  "size": 88,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x50"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 6407,
+  "label": "MidiCtrl_ModeSwitch_Data",
+  "next_label": "MidiCtrl_Bit2ToChannel",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiCtrl_ModeSwitch_Data.bin",
+  "size": 29,
+  "kind": "byte",
+  "sample": ".byte 0xf1"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 6579,
+  "label": "SeqData_FormatOutput_Default",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeqData_FormatOutput_Default_head.bin",
+  "size": 30,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x50"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 6583,
+  "label": "SeqData_FormatOutput_Default",
+  "next_label": "SeqData_FormatOutput_Data",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeqData_FormatOutput_Default_tail.bin",
+  "size": 11,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x50"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 6585,
+  "label": "SeqData_FormatOutput_Data",
+  "next_label": "SeqAlt_NibbleSearch_Ret",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeqData_FormatOutput_Data.bin",
+  "size": 666,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x50"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 6953,
+  "label": "VoiceParam_AssSwb_MultiBlock_Data",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceParam_AssSwb_MultiBlock_Data_head.bin",
+  "size": 500,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x50"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 6990,
+  "label": ".Lc_fd989b",
+  "next_label": "VoiceParam_MultiBlock_Ret",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_VoiceParam_AssSwb_MultiBlock_Data_tail.bin",
+  "size": 48,
+  "kind": "NOTFOUND",
+  "sample": ""
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "incbin_line": 7004,
+  "label": "VoiceParam_LookupAndEnqueue",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_fix_voiceparam_lookupandenqueue.bin",
+  "size": 60,
+  "kind": "CODE",
+  "sample": "lda xsp, (xsp - 12)"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_serial_routines.s",
+  "incbin_line": 371,
+  "label": "MIDI_CHANNEL_HANDLER_JUMP_TABLE",
+  "next_label": "ChanDisp_NoStatusReturn",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MIDI_CHANNEL_HANDLER_JUMP_TABLE.bin",
+  "size": 33,
+  "kind": "byte",
+  "sample": ".byte 0xff, 0xa8, 0xf7, 0xfc, 0x00, 0xa8, 0xf7, 0xfc"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_serial_routines.s",
+  "incbin_line": 486,
+  "label": "MIDI_SC0_DISPATCH_TABLE",
+  "next_label": "MIDI_SC0_TX_DISPATCH",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MIDI_SC0_DISPATCH_TABLE.bin",
+  "size": 16,
+  "kind": "byte",
+  "sample": ".byte 0x97, 0xf8, 0xfc, 0x00, 0x61, 0xf9, 0xfc, 0x00"
+ },
+ {
+  "file": "v7/maincpu/midi/midipkt_routines.s",
+  "incbin_line": 530,
+  "label": "MidiPkt_SysExBulkTransfer_Data",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_midipkt_sysexbulktransfer_data_head.bin",
+  "size": 54,
+  "kind": "CODE",
+  "sample": "ldda32\txwa, (0xbcac)"
+ },
+ {
+  "file": "v7/maincpu/midi/midipkt_routines.s",
+  "incbin_line": 537,
+  "label": "MidiPkt_SysExBulkTransfer_Data",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_block_midipkt_sysexbulktransfer_data_tail.bin",
+  "size": 480,
+  "kind": "CODE",
+  "sample": "ldda32\txwa, (0xbcac)"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 6896,
+  "label": "AccAutoPlay_Configure_Done",
+  "next_label": "AccAutoPlay_Configure_Return2",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccAutoPlay_Configure_Done.bin",
+  "size": 10,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0x99"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 7186,
+  "label": "AccPlayMode_Dispatch_Table",
+  "next_label": "AccPlayMode_TransitionRouter",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccPlayMode_Dispatch_Table.bin",
+  "size": 37,
+  "kind": "byte",
+  "sample": ".byte 0x00, 0x00, 0x19, 0xae, 0xf5, 0x00, 0x4d, 0xaf"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 8933,
+  "label": "AccDir_JumpTable",
+  "next_label": "AccProcess_Entry",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccDir_JumpTable.bin",
+  "size": 7,
+  "kind": "byte",
+  "sample": ".byte 0x00, 0x00, 0x1d, 0x4e, 0xbf, 0xf5, 0x0e"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 10663,
+  "label": "AccTone_InlineBytecodeData",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head_head.bin",
+  "size": 309,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x1f, 0x34, 0xb0"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 10695,
+  "label": "AccTone_InlineBytecodeData",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head_mid1.bin",
+  "size": 845,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x1f, 0x34, 0xb0"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 10752,
+  "label": "AccTone_InlineBytecodeData",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head_tail.bin",
+  "size": 46,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x1f, 0x34, 0xb0"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 10762,
+  "label": "AccTone_InlineBytecodeData",
+  "next_label": "AccVoice_ClearChannelStates",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccTone_InlineBytecodeData_tail.bin",
+  "size": 61,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0x1f, 0x34, 0xb0"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 10778,
+  "label": "AccVoice_BarCounterBytecodeData",
+  "next_label": "AccTuning_ReadAndApplyOffset",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccVoice_BarCounterBytecodeData.bin",
+  "size": 1175,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0xe0, 0x33, 0x00, 0x00, 0xc1, 0x21, 0x34"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 10785,
+  "label": "AccTuning_ComplexBytecodeData",
+  "next_label": "AccTone_WriteProgramChange",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccTuning_ComplexBytecodeData.bin",
+  "size": 809,
+  "kind": "byte",
+  "sample": ".byte 0xef, 0x6a, 0x3e, 0xf1, 0x63, 0x33, 0xc8, 0x76"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 11178,
+  "label": "Not_sure_maybe_SOFT_VERSION_related",
+  "next_label": "AccPatch_CheckAndInitDemo",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_Not_sure_maybe_SOFT_VERSION_related.bin",
+  "size": 361,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 11997,
+  "label": "AccPatch_SeqBaseAddrTable",
+  "next_label": "AccPatch_WriteRhythmInit",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccPatch_SeqBaseAddrTable.bin",
+  "size": 48,
+  "kind": "byte",
+  "sample": ".byte 0x87, 0x32, 0x00, 0x00, 0x89, 0x32, 0x00, 0x00"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 12010,
+  "label": "AccPatch_ChannelToParamTable",
+  "next_label": "AccPatch_WriteRhythmParams",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccPatch_ChannelToParamTable.bin",
+  "size": 40,
+  "kind": "byte",
+  "sample": ".byte 0x00, 0x00, 0x00, 0x00, 0xd7, 0x00, 0xd4, 0x00"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 14212,
+  "label": "AccPatch_AdvPlayPos_DataBlock",
+  "next_label": "AccPatch_AdvanceAllSteps",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccPatch_AdvPlayPos_DataBlock.bin",
+  "size": 143,
+  "kind": "zero",
+  "sample": ".zero 8"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19681,
+  "label": "RhythmPatInit_KitIndexTable",
+  "next_label": "RhythmFillIn_Wrapper",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_RhythmPatInit_KitIndexTable.bin",
+  "size": 138,
+  "kind": "byte",
+  "sample": ".byte 0x02, 0x04, 0x06, 0x08, 0x01, 0x02, 0x03, 0x04"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19697,
+  "label": "RhythmFillIn_PatternTable",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_RhythmFillIn_PatternTable_head.bin",
+  "size": 8,
+  "kind": "CODE",
+  "sample": "rcf"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19702,
+  "label": "RhythmFillIn_PatternTable",
+  "next_label": "RhythmMute_Wrapper",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_RhythmFillIn_PatternTable_tail.bin",
+  "size": 49,
+  "kind": "CODE",
+  "sample": "rcf"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19940,
+  "label": "DrumVoice_Handler0",
+  "next_label": "DrumVoice_Handler1",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrumVoice_Handler0.bin",
+  "size": 61,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0xce"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19942,
+  "label": "DrumVoice_Handler1",
+  "next_label": "DrumVoice_Handler2",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrumVoice_Handler1.bin",
+  "size": 61,
+  "kind": "byte",
+  "sample": ".byte 0xf1, 0xce"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19944,
+  "label": "DrumVoice_Handler2",
+  "next_label": "DrumVoice_Handler3",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrumVoice_Handler2.bin",
+  "size": 50,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19946,
+  "label": "DrumVoice_Handler3",
+  "next_label": "DrumVoice_Handler5",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrumVoice_Handler3.bin",
+  "size": 28,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19948,
+  "label": "DrumVoice_Handler5",
+  "next_label": "DrumVoice_Handler4",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrumVoice_Handler5.bin",
+  "size": 45,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19950,
+  "label": "DrumVoice_Handler4",
+  "next_label": "DrumVoice_Handler6",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrumVoice_Handler4.bin",
+  "size": 145,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19952,
+  "label": "DrumVoice_Handler6",
+  "next_label": "DrumVoice_Handler7",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrumVoice_Handler6.bin",
+  "size": 50,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 19954,
+  "label": "DrumVoice_Handler7",
+  "next_label": "DrumVoice_NotifyEE",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_DrumVoice_Handler7.bin",
+  "size": 1090,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 20530,
+  "label": "Tempo_DisplayParamFormat",
+  "next_label": "Tempo_DisplayParamReturn",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_Tempo_DisplayParamFormat.bin",
+  "size": 11,
+  "kind": "long",
+  "sample": ".long Pad_AfterBitmap_Dredt0k"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 22928,
+  "label": "CmpSetTtl_Dispatch2",
+  "next_label": "CmpReal_ReturnZero",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_CmpSetTtl_Dispatch2.bin",
+  "size": 94,
+  "kind": "asciz",
+  "sample": ".asciz \":;<> \""
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 23384,
+  "label": "CmpBkslSTtl_Dispatch",
+  "next_label": "CmpBkslSTtl_DirectMode",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_CmpBkslSTtl_Dispatch.bin",
+  "size": 43,
+  "kind": "ascii",
+  "sample": ".ascii \":;<>\""
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 23577,
+  "label": "CmpNcpTtl_Dispatch",
+  "next_label": "CmpNcpTtl_SpecialMode7",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_CmpNcpTtl_Dispatch.bin",
+  "size": 144,
+  "kind": "ascii",
+  "sample": ".ascii \":;<>\""
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 25315,
+  "label": "AccSeq_DcModeDataBlock",
+  "next_label": "SndArgTtl_SubA",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccSeq_DcModeDataBlock.bin",
+  "size": 24,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 25652,
+  "label": "CmpStep_DataBlock",
+  "next_label": "AccAudio_LockAcquire",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_CmpStep_DataBlock.bin",
+  "size": 72,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0x37, 0x8d"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 25904,
+  "label": "AccScreen_BeatDataBlock",
+  "next_label": "AccScreen_DrawInit_StackWrap",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccScreen_BeatDataBlock.bin",
+  "size": 33,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 25968,
+  "label": "AccScreen_UIDataBlock",
+  "next_label": "AccPatch_InitSlotChain_Wrap",
+  "bin": "v7/maincpu/includes/romslices/v7_block_accscreen_uidatablock.bin",
+  "size": 2096,
+  "kind": "CODE",
+  "sample": "stib_da\t(0x03efa8), 0"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "incbin_line": 28927,
+  "label": "AccStyle_TableDataEntry",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_fix_accstyle_tabledataentry.bin",
+  "size": 1116,
+  "kind": "CODE",
+  "sample": "call\tBoot_CheckConfigFlag7"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompseq_routines.s",
+  "incbin_line": 254,
+  "label": "AccompSeq_VRAMHelperData",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccompSeq_VRAMHelperData_head.bin",
+  "size": 19,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompseq_routines.s",
+  "incbin_line": 1430,
+  "label": "AccompSeq_MidiFilterCodeBlock",
+  "next_label": "AccompSeq_ProcessChordChange",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccompSeq_MidiFilterCodeBlock.bin",
+  "size": 186,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xe2, 0xe3"
+ },
+ {
+  "file": "v7/maincpu/sequencer/bmdredit_routines.s",
+  "incbin_line": 1529,
+  "label": "BmDrEdit_ByteData_NoteCoordTable",
+  "next_label": "BmDrEdit_ChordScrollUp_Check",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_BmDrEdit_ByteData_NoteCoordTable.bin",
+  "size": 113,
+  "kind": "byte",
+  "sample": ".byte 0xd1, 0x5e, 0x27, 0x19, 0x78, 0x27, 0xc1, 0x60, 0x27, 0x19, 0x7a, 0x27, 0xd1, 0xaf, 0x28, 0x19, 0x7c, 0x27, 0xd1, 0x66, 0x26, 0x19, 0x7e, 0x27"
+ },
+ {
+  "file": "v7/maincpu/sequencer/bmdredit_routines.s",
+  "incbin_line": 3889,
+  "label": "BmDrEdit_ByteData_CompoundWidgetUpdate",
+  "next_label": "ReadSeqData_StoreParams",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_BmDrEdit_ByteData_CompoundWidgetUpdate.bin",
+  "size": 194,
+  "kind": "CODE",
+  "sample": "dec\t8, xsp"
+ },
+ {
+  "file": "v7/maincpu/sequencer/rhythm_routines.s",
+  "incbin_line": 1257,
+  "label": "Rhythm_SeqResetTable",
+  "next_label": "Rhythm_TransposeWithMod",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_Rhythm_SeqResetTable.bin",
+  "size": 68,
+  "kind": "byte",
+  "sample": ".byte 0x00, 0x00, 0x00, 0x00, 0x94, 0x2d, 0x00, 0x00"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_audio_mode.s",
+  "incbin_line": 50,
+  "label": "AccPedal_BytecodeBlock1",
+  "next_label": "AccPedal_SetFlag13155",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccPedal_BytecodeBlock1.bin",
+  "size": 33,
+  "kind": "byte",
+  "sample": ".byte 0x28, 0x3d, 0xc1, 0x63, 0x33, 0x3c, 0xfe, 0x45"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_audio_mode.s",
+  "incbin_line": 162,
+  "label": "AccChannel_BytecodeBlock2",
+  "next_label": "AccChannel_SetDirtyIfActive",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccChannel_BytecodeBlock2.bin",
+  "size": 62,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0xf5, 0x32, 0x21, 0xc1, 0xf6, 0x32, 0xf1"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_audio_mode.s",
+  "incbin_line": 1368,
+  "label": "AccVoice_BytecodeBlock3",
+  "next_label": "RhythmROM_CheckValid",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AccVoice_BytecodeBlock3.bin",
+  "size": 114,
+  "kind": "byte",
+  "sample": ".byte 0x1e, 0x0d, 0x00, 0x1e, 0x15, 0x00, 0x1e, 0x1d"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_step_routines.s",
+  "incbin_line": 1254,
+  "label": "SeqStep_VoiceReassignExit",
+  "next_label": "SeqStep_VoiceReassignFinalExit",
+  "bin": "v7/maincpu/includes/romslices/v7_block_seqstep_voicereassignexit.bin",
+  "size": 120,
+  "kind": "CODE",
+  "sample": "ldb_d8 c, (9994)"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_step_routines.s",
+  "incbin_line": 2985,
+  "label": "SeqStep_ByteBlockEA5F",
+  "next_label": "SeqStep_ReinitPartTable",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeqStep_ByteBlockEA5F.bin",
+  "size": 120,
+  "kind": "CODE",
+  "sample": "dec\t2, xsp"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "incbin_line": 1366,
+  "label": "SeqPlay_VoiceChannelCfg",
+  "next_label": "SeqPlay_ProcessCh_SkipToReturn",
+  "bin": "v7/maincpu/includes/romslices/v7_block_seqplay_voicechannelcfg.bin",
+  "size": 333,
+  "kind": "CODE",
+  "sample": "cpib_erp 0xfb, 0"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "incbin_line": 8550,
+  "label": "SeqTimerFlags_CheckSysFlag",
+  "next_label": "PartVoiceOff_Return",
+  "bin": "v7/maincpu/includes/romslices/v7_block_seqtimerflags_checksysflag.bin",
+  "size": 157,
+  "kind": "CODE",
+  "sample": "ldb_d8 a, (1057)"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "incbin_line": 9534,
+  "label": "NotePool_DataBlock",
+  "next_label": "SeqBuffer_MoveEntryToHead",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_NotePool_DataBlock.bin",
+  "size": 69,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "incbin_line": 10538,
+  "label": "SeqChLoad_SetupAndCopy",
+  "next_label": "SeqChLoad_FirstBarSetup",
+  "bin": "v7/maincpu/includes/romslices/v7_block_seqchload_setupandcopy.bin",
+  "size": 161,
+  "kind": "CODE",
+  "sample": "ld a, (xsp + 16)"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "incbin_line": 10555,
+  "label": "SeqCh_LoadData_CheckBass",
+  "next_label": "Voice_WriteIndexedData",
+  "bin": "v7/maincpu/includes/romslices/v7_block_seqch_loaddata_checkbass.bin",
+  "size": 107,
+  "kind": "CODE",
+  "sample": "ld a, (xsp + 16)"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "incbin_line": 11537,
+  "label": "SeqPos_DataBlock",
+  "next_label": "Seq_ValidatePartTempoAndRange",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeqPos_DataBlock.bin",
+  "size": 71,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "incbin_line": 12123,
+  "label": "SeqPart_LoadDualPartData",
+  "next_label": "SeqVoice_SeekToBar",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeqPart_LoadDualPartData.bin",
+  "size": 118,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "incbin_line": 21326,
+  "label": "SeqAccomp_SubHandlerB",
+  "next_label": "SeqAccomp_StartHandler",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeqAccomp_SubHandlerB.bin",
+  "size": 468,
+  "kind": "byte",
+  "sample": ".byte 0xf1"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "incbin_line": 27263,
+  "label": "SeqPart_ByteBlockA207",
+  "next_label": "SeqPart_SinglePartLoad",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeqPart_ByteBlockA207.bin",
+  "size": 739,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/storage/fdc_routines.s",
+  "incbin_line": 849,
+  "label": "FDC_CmdRecalibrate",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDC_CmdRecalibrate_head.bin",
+  "size": 68,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/storage/fdc_routines.s",
+  "incbin_line": 853,
+  "label": "FDC_CmdRecalibrate",
+  "next_label": "FDC_CMD_EXEC",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDC_CmdRecalibrate_tail.bin",
+  "size": 68,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/storage/fdc_routines.s",
+  "incbin_line": 964,
+  "label": "FDC_MC_EXIT",
+  "next_label": "FDC_STATUS_COPY",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDC_MC_EXIT.bin",
+  "size": 536,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/storage/fdc_routines.s",
+  "incbin_line": 966,
+  "label": "FDC_STATUS_COPY",
+  "next_label": "FDC_INTERRUPT_HANDLER",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDC_STATUS_COPY.bin",
+  "size": 40,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/storage/fdc_routines.s",
+  "incbin_line": 968,
+  "label": "FDC_INTERRUPT_HANDLER",
+  "next_label": "FDC_CommandEntry",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDC_INTERRUPT_HANDLER.bin",
+  "size": 78,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/storage/fdc_routines.s",
+  "incbin_line": 1091,
+  "label": "FDC_ByteTransfer_PIO",
+  "next_label": "INTTC3_HANDLER",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FDC_ByteTransfer_PIO.bin",
+  "size": 71,
+  "kind": "byte",
+  "sample": ".byte 0xd1, 0x1c, 0x8a"
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "incbin_line": 147,
+  "label": "FlashWrite_BlockRef_Type3",
+  "next_label": "FlashWrite_BlockData_Type4",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FlashWrite_BlockRef_Type3.bin",
+  "size": 20,
+  "kind": "byte",
+  "sample": ".byte 0xb3"
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "incbin_line": 170,
+  "label": "FlashWrite_BlockRef_Type4",
+  "next_label": "FlashWrite_BlockData_Type5",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_FlashWrite_BlockRef_Type4.bin",
+  "size": 20,
+  "kind": "byte",
+  "sample": ".byte 0xf4"
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "incbin_line": 420,
+  "label": "DrumDetailEdit_Menu_Table",
+  "next_label": "EffectParam_Edit_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_fix_drumdetailedit_menu_table.bin",
+  "size": 1024,
+  "kind": "long",
+  "sample": ".long DrumDetailEdit_Entry_01"
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "incbin_line": 422,
+  "label": "EffectParam_Edit_Table",
+  "next_label": "InitializeNaka",
+  "bin": "v7/maincpu/includes/romslices/v7_fix_effectparam_edit_table.bin",
+  "size": 188,
+  "kind": "long",
+  "sample": ".long EffectParamEdit_Entry_08"
+ },
+ {
+  "file": "v7/maincpu/ui/bitmap_out_routines.s",
+  "incbin_line": 206,
+  "label": "BitMapOut_ByteData_PresetCopy",
+  "next_label": "BitMapOut_CopyVoicePreset9",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_BitMapOut_ByteData_PresetCopy.bin",
+  "size": 105,
+  "kind": "byte",
+  "sample": ".byte 0xd7"
+ },
+ {
+  "file": "v7/maincpu/ui/bitmap_out_routines.s",
+  "incbin_line": 428,
+  "label": "BitMapOut_Snapshot_Execute",
+  "next_label": "BitMapOut_RestoreFull_FieldLoop",
+  "bin": "v7/maincpu/includes/romslices/v7_block_bitmapout_snapshot_execute.bin",
+  "size": 303,
+  "kind": "CODE",
+  "sample": "ld a, (xsp)"
+ },
+ {
+  "file": "v7/maincpu/ui/bitmap_out_routines.s",
+  "incbin_line": 573,
+  "label": "BitMapOut_CopyExtTable_Check",
+  "next_label": "BitMapOut_CopyROMToWorkspace",
+  "bin": "v7/maincpu/includes/romslices/v7_block_bitmapout_copyexttable_check.bin",
+  "size": 315,
+  "kind": "CODE",
+  "sample": "ldb_d8 a, (0xfcc1)"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "incbin_line": 1003,
+  "label": "PmemOutLGridCheck_JumpTable",
+  "next_label": "PmemOutL_GridCheck",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PmemOutLGridCheck_JumpTable.bin",
+  "size": 1777,
+  "kind": "byte",
+  "sample": ".byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "incbin_line": 2719,
+  "label": "MidiPartGridCheck_JumpTable",
+  "next_label": "MidiSetup_EventHandler",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiPartGridCheck_JumpTable.bin",
+  "size": 844,
+  "kind": "byte",
+  "sample": ".byte 0x1d, 0xd0, 0x44, 0xfa, 0xeb, 0x88, 0x41, 0x8f"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "incbin_line": 2819,
+  "label": "MidiPart_DataBlock",
+  "next_label": "InitializeMurai",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiPart_DataBlock.bin",
+  "size": 46,
+  "kind": "byte",
+  "sample": ".byte 0xc1, 0x80, 0xc0"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_control_panel.s",
+  "incbin_line": 2539,
+  "label": "MainPmanCtrl_DispatchTable",
+  "next_label": "MainPmanCtrl_HandleA0",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MainPmanCtrl_DispatchTable.bin",
+  "size": 228,
+  "kind": "byte",
+  "sample": ".byte 0xea, 0x8e, 0xa6, 0x20, 0x9e, 0x04, 0x21, 0x9e"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "incbin_line": 64,
+  "label": "EffectMode_ByteData_Block2",
+  "next_label": "EffectMode_ByteData_Block3",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_EffectMode_ByteData_Block2.bin",
+  "size": 202,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "incbin_line": 89,
+  "label": "EffectMode_ByteData_Block4",
+  "next_label": "EffectMode_ApplyTranspose",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_EffectMode_ByteData_Block4.bin",
+  "size": 81,
+  "kind": "byte",
+  "sample": ".byte 0xc1"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "incbin_line": 2253,
+  "label": "AcMstStyleAlp_Boundary",
+  "next_label": "MasterSetup_StringSearch_Done",
+  "bin": "v7/maincpu/includes/romslices/v7_block_acmststylealp_boundary.bin",
+  "size": 497,
+  "kind": "CODE",
+  "sample": "lda xsp, (xsp - 74)"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "incbin_line": 11473,
+  "label": "RVari_Select_CheckSameBank",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_fix_rvari_select_checksamebank.bin",
+  "size": 931,
+  "kind": "CODE",
+  "sample": "ld xwa, (xiz + 64)"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_widget_defs.s",
+  "incbin_line": 7627,
+  "label": "PsTrkSw_TrailingData",
+  "next_label": "AcTrackSwitchProc",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_PsTrkSw_TrailingData.bin",
+  "size": 77,
+  "kind": "CODE",
+  "sample": "dec\t8, xsp"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "incbin_line": 7514,
+  "label": "ColorBlit2_LargeCodeBlock",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_fix_colorblit2_largecodeblock.bin",
+  "size": 4128,
+  "kind": "CODE",
+  "sample": "dec\t6, xsp"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/naka_direct_play_dispatch.s",
+  "incbin_line": 303,
+  "label": "MtName_PsSongSelBoxID",
+  "next_label": null,
+  "bin": "v7/maincpu/includes/romslices/v7_data_mtname_songnameset.bin",
+  "size": 46,
+  "kind": "MACRO:aligned_string",
+  "sample": "aligned_string \"MT_PsSongSelBoxID\""
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/naka_widget_desc_dispatch.s",
+  "incbin_line": 81,
+  "label": "MsgType_DrawKey",
+  "next_label": "MidiMenu_NakaProcName_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_data_msgtype_excsend.bin",
+  "size": 94,
+  "kind": "MACRO:aligned_string",
+  "sample": "aligned_string \"MT_DRAWKEY\""
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 125,
+  "label": "Naka_SubDispatch_A_Table",
+  "next_label": "Naka_SubDispatch_B_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_data_naka_subdispatch_a_table_tail.bin",
+  "size": 24,
+  "kind": "long",
+  "sample": ".long WidgetParam_MidiCC_Program"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 1140,
+  "label": "Naka_MainDispatch_Table",
+  "next_label": "NakaInst_SoundConfig_LookupTable",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_Naka_MainDispatch_Table_tail.bin",
+  "size": 1044,
+  "kind": "long",
+  "sample": ".long VoiceCtrlR1_Entry_047"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 1227,
+  "label": "SeqChan_CommandDispatch_Table",
+  "next_label": "SeqFormat_ReferenceData",
+  "bin": "v7/maincpu/includes/romslices/v7_data_seqchan_commanddispatch_table_tail.bin",
+  "size": 110,
+  "kind": "long",
+  "sample": ".long SeqChan_UnhandledCmd"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 1283,
+  "label": "SeqData_SubDispatch_Table",
+  "next_label": "MidiPkt_EventType_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SeqData_SubDispatch_Table_tail.bin",
+  "size": 36,
+  "kind": "long",
+  "sample": ".long SeqData_DispatchLoop_Check"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 1477,
+  "label": "MidiPkt_EventType_Table",
+  "next_label": "DisplayScript_NullNode",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_MidiPkt_EventType_Table_tail.bin",
+  "size": 812,
+  "kind": "long",
+  "sample": ".long MidiPkt_Nop"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 2259,
+  "label": "WidgetParam_Entry_002",
+  "next_label": "WidgetParam_Entry_003",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_WidgetParam_Entry_002.bin",
+  "size": 72,
+  "kind": "byte",
+  "sample": ".byte 0x00, 0x00, 0x74, 0x3d, 0xee, 0x00"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 2279,
+  "label": "WidgetParam_Entry_006",
+  "next_label": "WidgetParam_Entry_007",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_WidgetParam_Entry_006.bin",
+  "size": 96,
+  "kind": "byte",
+  "sample": ".byte 0xfe, 0x21, 0x78, 0x36, 0xee, 0x00"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 2287,
+  "label": "WidgetParam_Entry_008",
+  "next_label": "WidgetParam_Entry_009",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_WidgetParam_Entry_008.bin",
+  "size": 48,
+  "kind": "byte",
+  "sample": ".byte 0xfe, 0x1f, 0x78, 0x36, 0xee, 0x00"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 2289,
+  "label": "WidgetParam_Entry_009",
+  "next_label": "WidgetParam_Entry_010",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_WidgetParam_Entry_009.bin",
+  "size": 48,
+  "kind": "byte",
+  "sample": ".byte 0x00, 0x00, 0xe6, 0x46, 0xee, 0x00"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 2297,
+  "label": "WidgetParam_Entry_011",
+  "next_label": "WidgetParam_Entry_012",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_WidgetParam_Entry_011.bin",
+  "size": 222,
+  "kind": "byte",
+  "sample": ".byte 0xfe, 0x23, 0x78, 0x36, 0xee, 0x00"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 2314,
+  "label": "WidgetParam_Entry_014",
+  "next_label": "WidgetParam_Entry_015",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_WidgetParam_Entry_014.bin",
+  "size": 66,
+  "kind": "byte",
+  "sample": ".byte 0x04, 0x00, 0x78, 0x36, 0xee, 0x00, 0xfe, 0x26"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 2341,
+  "label": "WidgetParam_Entry_018",
+  "next_label": "ToneKit_FrequencyTable",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_WidgetParam_Entry_018.bin",
+  "size": 246,
+  "kind": "byte",
+  "sample": ".byte 0x40, 0x00, 0x02, 0x49, 0xee, 0x00"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 2343,
+  "label": "ToneKit_FrequencyTable",
+  "next_label": "WidgetParam_SelfRef_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_ToneKit_FrequencyTable.bin",
+  "size": 1036,
+  "kind": "byte",
+  "sample": ".byte 0xc0, 0xc1, 0xc3, 0xc4, 0xc6, 0xc8, 0xca, 0xcb"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 2344,
+  "label": "ToneKit_FrequencyTable",
+  "next_label": "ToneKit_NullParams",
+  "bin": "v7/maincpu/includes/romslices/v7_data_widgetparam_selfref_table.bin",
+  "size": 426,
+  "kind": "byte",
+  "sample": ".byte 0xc0, 0xc1, 0xc3, 0xc4, 0xc6, 0xc8, 0xca, 0xcb"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4091,
+  "label": "UIState_ConfigA_102",
+  "next_label": "UIState_ConfigA_103",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigA_102.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long MidiCtrl_ModeSwitchHandler"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4745,
+  "label": "UIState_ConfigB_039",
+  "next_label": "UIState_ConfigB_040",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_039.bin",
+  "size": 12,
+  "kind": "long",
+  "sample": ".long UIState_KeyScan_Dispatch"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4794,
+  "label": "UIState_ConfigB_053",
+  "next_label": "UIState_ConfigB_054",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_053.bin",
+  "size": 12,
+  "kind": "long",
+  "sample": ".long HdaeRom_ReadParam"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4801,
+  "label": "UIState_ConfigB_055",
+  "next_label": "UIState_ConfigB_056",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_055.bin",
+  "size": 12,
+  "kind": "long",
+  "sample": ".long EffEdit_DSPConfigBlock"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4803,
+  "label": "UIState_ConfigB_056",
+  "next_label": "UIState_ConfigB_057",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_056.bin",
+  "size": 12,
+  "kind": "long",
+  "sample": ".long EffEdit_DSPConfigBlock"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4805,
+  "label": "UIState_ConfigB_057",
+  "next_label": "UIState_ConfigB_058",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_057.bin",
+  "size": 12,
+  "kind": "long",
+  "sample": ".long EffEdit_DSPConfigBlock"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4807,
+  "label": "UIState_ConfigB_058",
+  "next_label": "UIState_ConfigB_059",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_058.bin",
+  "size": 12,
+  "kind": "long",
+  "sample": ".long HdaeRom_TableEntry0"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4813,
+  "label": "UIState_ConfigB_060",
+  "next_label": "UIState_ConfigB_061",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_060.bin",
+  "size": 12,
+  "kind": "long",
+  "sample": ".long HdaeRom_TableEntry1"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4837,
+  "label": "UIState_ConfigB_068",
+  "next_label": "UIState_ConfigB_069",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_068.bin",
+  "size": 12,
+  "kind": "long",
+  "sample": ".long HdaeRom_TableEntry2"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4863,
+  "label": "UIState_ConfigB_074",
+  "next_label": "UIState_EventHandler_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_074.bin",
+  "size": 4,
+  "kind": "long",
+  "sample": ".long MidiCtrl_ModeSwitch_Data"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4872,
+  "label": "UIState_ConfigB_075",
+  "next_label": "UIState_ConfigB_076",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_075.bin",
+  "size": 12,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltProcessBlock"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4923,
+  "label": "UIState_ConfigB_086",
+  "next_label": "UIState_ConfigB_087",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_086.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltTableEntry0"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4925,
+  "label": "UIState_ConfigB_087",
+  "next_label": "UIState_ConfigB_088",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_087.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltTableEntry1"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4927,
+  "label": "UIState_ConfigB_088",
+  "next_label": "UIState_ConfigB_089",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_088.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltTableEntry2"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4929,
+  "label": "UIState_ConfigB_089",
+  "next_label": "UIState_ConfigB_090",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_089.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltTableEntry3"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4931,
+  "label": "UIState_ConfigB_090",
+  "next_label": "UIState_ConfigB_091",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_090.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltTableEntry4"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4933,
+  "label": "UIState_ConfigB_091",
+  "next_label": "UIState_ConfigB_092",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_091.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltTableEntry5"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4935,
+  "label": "UIState_ConfigB_092",
+  "next_label": "UIState_ConfigB_093",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_092.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltTableEntry6"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4937,
+  "label": "UIState_ConfigB_093",
+  "next_label": "UIState_ConfigB_094",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_093.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltTableEntry7"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 4939,
+  "label": "UIState_ConfigB_094",
+  "next_label": "UIState_ConfigB_095",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_UIState_ConfigB_094.bin",
+  "size": 8,
+  "kind": "long",
+  "sample": ".long HdaeRom_AltTableEntry8"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 5519,
+  "label": "SystemConfig_PointerTable",
+  "next_label": "AudioInit_VoiceDispatch_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_data_systemconfig_pointertable_tail.bin",
+  "size": 42,
+  "kind": "long",
+  "sample": ".long Seq_InitFuncTable"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 5552,
+  "label": "AudioInit_VoiceDispatch_Table",
+  "next_label": "CharMap_ValueData_A",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_AudioInit_VoiceDispatch_Table_tail.bin",
+  "size": 324,
+  "kind": "long",
+  "sample": ".long AudioInit_ConfigStereoVoice"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 5558,
+  "label": "CharMap_ValueData_A",
+  "next_label": "SoundEffect_Dispatch_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_data_charmap_valuedata_b.bin",
+  "size": 7984,
+  "kind": "byte",
+  "sample": ".byte 0x81, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 5583,
+  "label": "SoundEffect_Dispatch_Table",
+  "next_label": "CharMap_Preamble_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_transplant_SoundEffect_Dispatch_Table_tail.bin",
+  "size": 5156,
+  "kind": "long",
+  "sample": ".long SoundFX_Handler_0"
+ },
+ {
+  "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
+  "incbin_line": 6091,
+  "label": "CharMap_Mode22",
+  "next_label": "ScaleNote_Display_Table",
+  "bin": "v7/maincpu/includes/romslices/v7_data_charmap_fullpermutation.bin",
+  "size": 3102,
+  "kind": "byte",
+  "sample": ".byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07"
+ }
+]
