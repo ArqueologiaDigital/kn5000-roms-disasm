@@ -134,3 +134,18 @@ correct, but erased flash, not decoded content. The other 330,521 bytes
 (63.0%) are actual typed content (`.byte` 258,838 / `.short` 40,010 / `.ascii`
 30,385 / `.long` 1,288). The report prints fill on its own row for exactly
 this reason.
+
+⚠ **Correction, verified against the ROM 2026-09-01.** The 193,767 `.fill`
+bytes are NOT simply "the trailing erased tail". They are a single contiguous
+`0xFF` run at **0x050B09-0x07FFF0**, and **16 bytes of real content follow it**:
+the image's last bytes are the ASCII `wsad_54.ssf` plus NUL padding — a lone
+record sitting past 189 KB of erased flash. The image has NO trailing `0xFF`
+run at all. Checked by locating every `0xFF` run of 1 KiB or more in
+`wsa1_prom_d.bin`: exactly one exists, and its length matches the `.fill`
+figure to the byte.
+
+Also on record, because it was a wrong lead rather than a wrong number: the
+earlier 40,008-byte shortfall was first read as "these three files are not the
+whole image". That was wrong. It was an accumulator bug in the probe (the
+`.short` bucket was overwritten rather than accumulated), and the three files
+do account for all 524,288 bytes.
