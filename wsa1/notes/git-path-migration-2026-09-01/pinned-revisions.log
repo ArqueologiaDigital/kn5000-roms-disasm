@@ -1,0 +1,27 @@
+  OK     47d40941b750                               NOT an ancestor refs/tags/pre-migration-2026-09-01
+           notes/gen_prom_b_cover_round2.py
+           notes/git_path_audit.py
+  OK     6f6ee7e                                    NOT an ancestor refs/tags/pre-migration-2026-09-01
+           notes/wave7-verify-probes/wave7_r3_promc_refute.py
+  OK     8ff84e5                                    NOT an ancestor refs/tags/pre-migration-2026-09-01
+           notes/git_path_audit.py
+           notes/kernel_join_probe.py (PRE_MERGE=)
+           notes/verify_a1_independent_check.py (PRE_MERGE=)
+  OK     a4c8972                                    NOT an ancestor refs/tags/pre-migration-2026-09-01
+           notes/promb_macro_rewrite.py (BASELINE=)
+  OK     c099e1cf7b20                               NOT an ancestor refs/tags/pre-migration-2026-09-01
+           notes/maincpu_join_probe.py
+  OK     db9d8b5                                    NOT an ancestor refs/tags/pre-migration-2026-09-01
+           notes/git_path_audit.py
+           notes/wave7-verify-probes/wave7_r9_promc_citation_check.py
+  OK     df84060a8d9cb95561d363597bfa90172107d42c   NOT an ancestor refs/tags/pre-migration-2026-09-01
+           notes/prom_c_probe_health.py (BASE_COMMIT=)
+           notes/prom_c_split.py (BASE_COMMIT=)
+  OK     ebabc85                                    NOT an ancestor refs/tags/pre-migration-2026-09-01
+           notes/git_path_audit.py
+           notes/wave7-verify-probes/wave7_r3_citation_check.py
+  OK     fab0949                                    NOT an ancestor refs/tags/pre-migration-2026-09-01
+           notes/prom_a_naming_wave8_apply.py (BASE_COMMIT=)
+
+9 pinned revision(s); 0 unresolvable; 9 resolvable but NOT reachable from HEAD
+  ⚠ those 9 survive only through the ref(s) named above.  Delete it and `git gc` drops the baseline of every probe listed under it.

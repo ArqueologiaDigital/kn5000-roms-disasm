@@ -1,0 +1,1043 @@
+[
+ {
+  "script": "notes/asm_source.py",
+  "rc": 0,
+  "reads": 0,
+  "bad": 0,
+  "calls": [],
+  "traceback": false,
+  "tail": "uch_eq_mixer.s\n          prom_c/p7/p7_stream_pool.s\n          prom_c/data_tables/voice_dsp_tables.s\n          prom_c/data_tables/tail_data_zone.s\n          prom_c/boot/reset_and_vectors.s\nprom_d  prom_d/wsa1_prom_d.s  ->  4 file(s), 56,480 line(s)\n          prom_d/wsa1_prom_d.s\n          prom_d/tone_database_directory.s\n          prom_d/tone_database_records.s\n          prom_d/tone_database_aux.s\n"
+ },
+ {
+  "script": "notes/audit_wave5_checks.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_a/wsa1_prom_a.s (rc=128)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "HEAD:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": false,
+  "tail": "abels this round ADDED to prom_a\n     new Fdc_  labels with a header block: 55, of which FULL (all five fields): 53\n     new Ctrl  labels with a header block: 16, of which FULL: 16\n  FAIL fewer than 53 FDC headers carry all five fields   53 do\n4. comments calling an address THIS round converted 'still .incbin'/'not converted'\n  ok   no stale 'still .incbin' comment survives   0 survive\n\nFAILED: 1\n"
+ },
+ {
+  "script": "notes/gen_prom_a_cover_round1.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_a/wsa1_prom_a.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": false,
+  "tail": "1 non-.incbin lines existed at HEAD; 0 of them were removed or rewritten by this round.\n"
+ },
+ {
+  "script": "notes/gen_prom_a_cover_round2.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_a/wsa1_prom_a.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": false,
+  "tail": "1 non-.incbin lines existed at HEAD; 0 of them were removed or rewritten by this round.\n"
+ },
+ {
+  "script": "notes/gen_prom_b_cover_round2.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 0,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "47d40941b750:prom_a/wsa1_prom_a.s (rc=0)",
+    "argv": [
+     "show",
+     "47d40941b750:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11473930
+   }
+  ],
+  "traceback": false,
+  "tail": "ds,    0 land in an `.incbin` \n    branch           132 seeds,    0 land in an `.incbin` \n    immediate          5 seeds,    0 land in an `.incbin` \n    pointer_table      0 seeds,    0 land in an `.incbin` \n    0 of 0 directives are immediately preceded by a printed DATA row\n\n\u26a0 the prom_a rows above read the LIVE file, which another lane is\n  splicing; quote the HEAD block at the top, not these.\n"
+ },
+ {
+  "script": "notes/kernel_join_probe.py",
+  "rc": 0,
+  "reads": 2,
+  "bad": 0,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_a/wsa1_prom_a.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11489287
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_c/wsa1_prom_c.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 8546589
+   }
+  ],
+  "traceback": false,
+  "tail": "                   2   <- prom_c has converted bytes prom_a still holds as .incbin\n     0xF85C3D  extpfx5 0xBF, 0x0E, 0x02, 0xFF, 0xFF\n     0xF85C42  jr MsgQueue_Send_NoDispatch__ret\n\nassembly text identical (case/space/radix normalised)   736\nassembly text differs                                   203\n\nnon-instruction source lines carried into the merge:\n   from prom_a   951\n   from prom_c   771\n"
+ },
+ {
+  "script": "notes/maincpu_join_probe.py",
+  "rc": 1,
+  "reads": 2,
+  "bad": 0,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "c099e1cf7b20:prom_a/wsa1_prom_a.s (rc=0)",
+    "argv": [
+     "show",
+     "c099e1cf7b20:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11350264
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "c099e1cf7b20:prom_b/wsa1_prom_b.s (rc=0)",
+    "argv": [
+     "show",
+     "c099e1cf7b20:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 8104354
+   },
+   {
+    "kind": "OTHER",
+    "ok": true,
+    "detail": "ls-files",
+    "argv": [
+     "ls-files",
+     "*.py"
+    ],
+    "rc": 0,
+    "out": 11642
+   }
+  ],
+  "traceback": false,
+  "tail": "  FAIL  every comment and label the join moved out of the two images is in the shared source verbatim (375 moved, 304 lost, 2 line-number citations corrected by the prom_c split)  e.g. 'sub_F95765:'\n\n22 checks, 1 failed\n"
+ },
+ {
+  "script": "notes/prom_a_f85ff9_layout.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:notes/.image-wsa1_prom_a.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:notes/.image-wsa1_prom_a.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "output=True, text=True).stdout\n                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['git', 'show', 'HEAD:notes/.image-wsa1_prom_a.s']' returned non-zero exit status 128.\n"
+ },
+ {
+  "script": "notes/prom_a_fa5aeb_layout.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_a/wsa1_prom_a.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "^^^^^^^^^^^^^^^^^^^^^^^^^\n                          text=True).stdout\n                          ^^^^^^^^^^\n  File \"/usr/lib/python3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['git', 'show', 'HEAD:prom_a/wsa1_prom_a.s']' returned non-zero exit status 128.\n"
+ },
+ {
+  "script": "notes/prom_a_fad800_layout.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_a/wsa1_prom_a.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "^^^^^^^^^^^^^^^^^^^^^^^^^\n                          text=True).stdout\n                          ^^^^^^^^^^\n  File \"/usr/lib/python3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['git', 'show', 'HEAD:prom_a/wsa1_prom_a.s']' returned non-zero exit status 128.\n"
+ },
+ {
+  "script": "notes/prom_a_frontier_delta.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_a/wsa1_prom_a.s (rc=128)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "HEAD:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "ython3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['git', '-C', '/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1', 'show', 'HEAD:prom_a/wsa1_prom_a.s']' returned non-zero exit status 128.\n"
+ },
+ {
+  "script": "notes/prom_a_naming_wave8_apply.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 0,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "fab0949:prom_a/wsa1_prom_a.s (rc=0)",
+    "argv": [
+     "show",
+     "fab0949:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11347498
+   }
+  ],
+  "traceback": false,
+  "tail": "ok   the committed listing is exactly what this script makes from fab0949\n"
+ },
+ {
+  "script": "notes/prom_a_preservation_check.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_a/wsa1_prom_a.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "ror(\n    ...<2 lines>...\n        % (rev, rel, r.stderr.decode(\"utf-8\", \"replace\").strip()))\nFileNotFoundError: HEAD:prom_a/wsa1_prom_a.s does not exist -- returning a short listing instead of raising is the bug this module prevents (fatal: path 'wsa1/prom_a/wsa1_prom_a.s' exists, but not 'prom_a/wsa1_prom_a.s'\nhint: Did you mean 'HEAD:wsa1/prom_a/wsa1_prom_a.s' aka 'HEAD:./prom_a/wsa1_prom_a.s'?)\n"
+ },
+ {
+  "script": "notes/prom_b_evidence_audit.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_b/wsa1_prom_b.s (rc=128)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "HEAD:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": false,
+  "tail": "cannot read HEAD:prom_b/wsa1_prom_b.s -- Command '['git', '-C', '/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1', 'show', 'HEAD:prom_b/wsa1_prom_b.s']' returned non-zero exit status 128.\n"
+ },
+ {
+  "script": "notes/prom_b_f65000_layout.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_b/wsa1_prom_b.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "^^^^^^^^^^^^^^^^^^^^^^^^^\n                          text=True).stdout\n                          ^^^^^^^^^^\n  File \"/usr/lib/python3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['git', 'show', 'HEAD:prom_b/wsa1_prom_b.s']' returned non-zero exit status 128.\n"
+ },
+ {
+  "script": "notes/prom_b_naming_preservation.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_b/wsa1_prom_b.s (rc=128)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "HEAD:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1/notes/asm_source.py\", line 101, in walk\n    with open(real, encoding=\"utf-8\") as fh:\n         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: '/tmp/preserve-base-qgqnpds4/prom_b/wsa1_prom_b.s'\n"
+ },
+ {
+  "script": "notes/prom_b_probe_answer_diff.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_b/wsa1_prom_b.s (rc=128)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "HEAD:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 128,
+    "out": 0
+   },
+   {
+    "kind": "OTHER",
+    "ok": true,
+    "detail": "ls-files",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "ls-files",
+     "notes",
+     "scripts"
+    ],
+    "rc": 0,
+    "out": 18232
+   }
+  ],
+  "traceback": false,
+  "tail": "base HEAD: replaced 1 file(s) of the image -- prom_b/wsa1_prom_b.s\n  same     notes/prom_b_string_refs.py\n\n1 unchanged, 0 changed, base HEAD\n"
+ },
+ {
+  "script": "notes/prom_c_probe_health.py",
+  "rc": 0,
+  "reads": 3,
+  "bad": 2,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "df84060a8d9cb95561d363597bfa90172107d42c:prom_c/wsa1_prom_c.s (rc=0)",
+    "argv": [
+     "show",
+     "df84060a8d9cb95561d363597bfa90172107d42c:prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 8437812
+   },
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_c/wsa1_prom_c.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 128,
+    "out": 0
+   },
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_c/wsa1_prom_c.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": false,
+  "tail": "_c_phantom_callsites.py --selftest\n  UNAFFECTED  notes/prom_c_record68_round10.py --selftest\n  UNAFFECTED  notes/prom_c_reg_bytepair_check.py --selftest\n  UNAFFECTED  notes/prom_c_understanding_round4.py\n  UNAFFECTED  notes/prom_c_voice_module_check.py\n\n  VACUOUS 0   LOUD 3   UNAFFECTED 17   of 20 probe(s) prom_c's own text cites\n  \u2605 VACUOUS is the bucket that matters: those still report success.\n"
+ },
+ {
+  "script": "notes/prom_c_round3_frontier_delta.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_c/wsa1_prom_c.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "ror(\n    ...<2 lines>...\n        % (rev, rel, r.stderr.decode(\"utf-8\", \"replace\").strip()))\nFileNotFoundError: HEAD:prom_c/wsa1_prom_c.s does not exist -- returning a short listing instead of raising is the bug this module prevents (fatal: path 'wsa1/prom_c/wsa1_prom_c.s' exists, but not 'prom_c/wsa1_prom_c.s'\nhint: Did you mean 'HEAD:wsa1/prom_c/wsa1_prom_c.s' aka 'HEAD:./prom_c/wsa1_prom_c.s'?)\n"
+ },
+ {
+  "script": "notes/prom_c_split.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 0,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "df84060a8d9cb95561d363597bfa90172107d42c:prom_c/wsa1_prom_c.s (rc=0)",
+    "argv": [
+     "show",
+     "df84060a8d9cb95561d363597bfa90172107d42c:prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 8437812
+   }
+  ],
+  "traceback": false,
+  "tail": "ines  0xFDD2AB-0xFDF7DF  the voice / DSP data-table zone, 43 tables\n  prom_c/data_tables/tail_data_zone.s            2,280 lines  0xFDF7E0-0xFFEFFF  the tail data zone, copy B of the initialiser, and the pad\n  prom_c/boot/reset_and_vectors.s                  313 lines  0xFFF000-0xFFFFFF  RESET, the trampolines, the vector table and the build tag\n\n  26 files, 125,265 of 127,731 lines moved (98.1%)\n"
+ },
+ {
+  "script": "notes/promb_macro_preservation.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_b/wsa1_prom_b.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "ror(\n    ...<2 lines>...\n        % (rev, rel, r.stderr.decode(\"utf-8\", \"replace\").strip()))\nFileNotFoundError: HEAD:prom_b/wsa1_prom_b.s does not exist -- returning a short listing instead of raising is the bug this module prevents (fatal: path 'wsa1/prom_b/wsa1_prom_b.s' exists, but not 'prom_b/wsa1_prom_b.s'\nhint: Did you mean 'HEAD:wsa1/prom_b/wsa1_prom_b.s' aka 'HEAD:./prom_b/wsa1_prom_b.s'?)\n"
+ },
+ {
+  "script": "notes/promb_macro_rewrite.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 0,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "a4c8972:prom_b/wsa1_prom_b.s (rc=0)",
+    "argv": [
+     "show",
+     "a4c8972:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 8366355
+   }
+  ],
+  "traceback": false,
+  "tail": "  `; ADDR <text>` comment is kept VERBATIM; the trailing\n    `   [llvm-mc cannot encode this]` marker is dropped, because it explained why\n    the row was a `.byte` and the row is no longer one.  Rows left alone keep\n    theirs.  Nothing else on the line changes, and no other line is touched --\n    --selftest asserts that the file's comment lines and labels are the same set\n    before and after.\n\n"
+ },
+ {
+  "script": "notes/verify_a1_independent_check.py",
+  "rc": 1,
+  "reads": 14,
+  "bad": 5,
+  "calls": [
+   {
+    "kind": "PATHSPEC",
+    "ok": false,
+    "detail": "git asks 8ff84e5 for wsa1/prom_a/wsa1_prom_a.s, which it does not contain",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "8ff84e5",
+     "--",
+     "prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11699862
+   },
+   {
+    "kind": "PATHSPEC",
+    "ok": false,
+    "detail": "git asks 8ff84e5 for wsa1/prom_c/wsa1_prom_c.s, which it does not contain",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "8ff84e5",
+     "--",
+     "prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 162298
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_a/wsa1_prom_a.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11489287
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_a/wsa1_prom_a.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11489287
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_b/wsa1_prom_b.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 8364947
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_c/wsa1_prom_c.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 8546589
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_d/wsa1_prom_d.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_d/wsa1_prom_d.s"
+    ],
+    "rc": 0,
+    "out": 4196038
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_a/wsa1_prom_a.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11489287
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_c/wsa1_prom_c.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 8546589
+   },
+   {
+    "kind": "PATHSPEC",
+    "ok": false,
+    "detail": "git asks 8ff84e5 for wsa1/prom_a/wsa1_prom_a.s, which it does not contain",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "8ff84e5",
+     "--",
+     "prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11699862
+   },
+   {
+    "kind": "PATHSPEC",
+    "ok": false,
+    "detail": "git asks 8ff84e5 for wsa1/prom_c/wsa1_prom_c.s, which it does not contain",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "8ff84e5",
+     "--",
+     "prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 162298
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_a/wsa1_prom_a.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11489287
+   },
+   {
+    "kind": "OBJECT",
+    "ok": true,
+    "detail": "8ff84e5:prom_c/wsa1_prom_c.s (rc=0)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "8ff84e5:prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 8546589
+   },
+   {
+    "kind": "PATHSPEC",
+    "ok": false,
+    "detail": "git asks 8ff84e5 for wsa1/prom_a/wsa1_prom_a.s, which it does not contain",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "8ff84e5",
+     "-U0",
+     "--",
+     "prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11699862
+   }
+  ],
+  "traceback": true,
+  "tail": "k.py\", line 301, in main\n    section_hunks()\n    ~~~~~~~~~~~~~^^\n  File \"/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1/notes/verify_a1_independent_check.py\", line 260, in section_hunks\n    \"toc %s, block %s..%s\" % (toc, min(blk), max(blk)))\n                                   ~~~^^^^^\nValueError: min() iterable argument is empty\n"
+ },
+ {
+  "script": "notes/wave7-verify-probes/wave7_r3_citation_check.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "PATHSPEC",
+    "ok": false,
+    "detail": "git asks ebabc85 for ../../../../../../home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_a/wsa1_prom_a.s, which it does not contain",
+    "argv": [
+     "diff",
+     "-U0",
+     "ebabc85",
+     "--",
+     "prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 0,
+    "out": 11699862
+   }
+  ],
+  "traceback": false,
+  "tail": " -- build tag\n      nearest proven instruction starts: none within +-2\n  prom_a 0xFFFFF8   ; The byte at 0xFFFFF8 is the 0x02 separator inside this tag, and it is what the\n      nearest proven instruction starts: none within +-2\nprom_a: 129880 proven instruction starts\nprom_b: 79006 proven instruction starts\nprom_c: 1605 proven instruction starts\nadded lines: 175190, of which comment lines: 28047\n"
+ },
+ {
+  "script": "notes/wave7-verify-probes/wave7_r3_promc_refute.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "PATHSPEC",
+    "ok": false,
+    "detail": "git asks 6f6ee7e for ../../../../../../home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_c/wsa1_prom_c.s, which it does not contain",
+    "argv": [
+     "show",
+     "6f6ee7e",
+     "--",
+     "prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 0
+   }
+  ],
+  "traceback": false,
+  "tail": "oved blank lines, 0 of them immediately before a label; 0 genuinely new 'Evidence:' lines]\n\n7 checks, 5 refuted\n  refuted: the routine really is 15 instructions\n  refuted: header: 'THE RESULT IS NEVER POSITIVE'\n  refuted: header: 'with a count of 6 the value lands in [-127, 0]'\n  refuted: header: 'with the count of 4 ... spans [-508, 0]'\n  refuted: header: the caller's clamp 'does nothing at all'\n"
+ },
+ {
+  "script": "notes/wave7-verify-probes/wave7_r9_promc_citation_check.py",
+  "rc": 0,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "PATHSPEC",
+    "ok": false,
+    "detail": "git asks db9d8b5 for ../../../../../../home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_c/wsa1_prom_c.s, which it does not contain",
+    "argv": [
+     "diff",
+     "db9d8b5",
+     "--",
+     "prom_c/wsa1_prom_c.s"
+    ],
+    "rc": 0,
+    "out": 162298
+   }
+  ],
+  "traceback": false,
+  "tail": " obje\n  FFF000  byte@cited-1=0x0E  | ;   0xFFF000-0xFFF0E4  RESET and the interrupt trampoline block\n  FFF0E4  byte@cited-1=0x90  | ;   0xFFF000-0xFFF0E4  RESET and the interrupt trampoline block\n  FFF0E5  byte@cited-1=0xF9  | ;   0xFFF0E5-0xFFFFFF  the RET padding, the vector table, the fc confi\n  FFFFFF  byte@cited-1=0x00  | ; point into 0xF00000-0xFFFFFF, and the reset word 0x00FFF000 lands on\n"
+ },
+ {
+  "script": "notes/wave7_round4_review_wd3_prom_d.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_d/wsa1_prom_d.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_d/wsa1_prom_d.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "ror(\n    ...<2 lines>...\n        % (rev, rel, r.stderr.decode(\"utf-8\", \"replace\").strip()))\nFileNotFoundError: HEAD:prom_d/wsa1_prom_d.s does not exist -- returning a short listing instead of raising is the bug this module prevents (fatal: path 'wsa1/prom_d/wsa1_prom_d.s' exists, but not 'prom_d/wsa1_prom_d.s'\nhint: Did you mean 'HEAD:wsa1/prom_d/wsa1_prom_d.s' aka 'HEAD:./prom_d/wsa1_prom_d.s'?)\n"
+ },
+ {
+  "script": "notes/wave7_round5_review_wd3_prom_d.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_d/wsa1_prom_d.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_d/wsa1_prom_d.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "ror(\n    ...<2 lines>...\n        % (rev, rel, r.stderr.decode(\"utf-8\", \"replace\").strip()))\nFileNotFoundError: HEAD:prom_d/wsa1_prom_d.s does not exist -- returning a short listing instead of raising is the bug this module prevents (fatal: path 'wsa1/prom_d/wsa1_prom_d.s' exists, but not 'prom_d/wsa1_prom_d.s'\nhint: Did you mean 'HEAD:wsa1/prom_d/wsa1_prom_d.s' aka 'HEAD:./prom_d/wsa1_prom_d.s'?)\n"
+ },
+ {
+  "script": "notes/wave7_round6_review_wb_prom_b.py",
+  "rc": 1,
+  "reads": 2,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "PATHSPEC",
+    "ok": true,
+    "detail": "prom_b/wsa1_prom_b.s -> 0 byte(s)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "-U0",
+     "--",
+     "prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 0
+   },
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_b/wsa1_prom_b.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "ror(\n    ...<2 lines>...\n        % (rev, rel, r.stderr.decode(\"utf-8\", \"replace\").strip()))\nFileNotFoundError: HEAD:prom_b/wsa1_prom_b.s does not exist -- returning a short listing instead of raising is the bug this module prevents (fatal: path 'wsa1/prom_b/wsa1_prom_b.s' exists, but not 'prom_b/wsa1_prom_b.s'\nhint: Did you mean 'HEAD:wsa1/prom_b/wsa1_prom_b.s' aka 'HEAD:./prom_b/wsa1_prom_b.s'?)\n"
+ },
+ {
+  "script": "notes/wave7_round8_review_wd3_prom_d.py",
+  "rc": 1,
+  "reads": 1,
+  "bad": 1,
+  "calls": [
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_d/wsa1_prom_d.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_d/wsa1_prom_d.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "ror(\n    ...<2 lines>...\n        % (rev, rel, r.stderr.decode(\"utf-8\", \"replace\").strip()))\nFileNotFoundError: HEAD:prom_d/wsa1_prom_d.s does not exist -- returning a short listing instead of raising is the bug this module prevents (fatal: path 'wsa1/prom_d/wsa1_prom_d.s' exists, but not 'prom_d/wsa1_prom_d.s'\nhint: Did you mean 'HEAD:wsa1/prom_d/wsa1_prom_d.s' aka 'HEAD:./prom_d/wsa1_prom_d.s'?)\n"
+ },
+ {
+  "script": "notes/wave7_round9_review_wb_prom_b.py",
+  "rc": 1,
+  "reads": 9,
+  "bad": 3,
+  "calls": [
+   {
+    "kind": "PATHSPEC",
+    "ok": true,
+    "detail": "prom_b/wsa1_prom_b.s -> 0 byte(s)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "-U0",
+     "--",
+     "prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 0
+   },
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_a/wsa1_prom_a.s (rc=128)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "HEAD:prom_a/wsa1_prom_a.s"
+    ],
+    "rc": 128,
+    "out": 0
+   },
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_b/wsa1_prom_b.s (rc=128)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "show",
+     "HEAD:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 128,
+    "out": 0
+   },
+   {
+    "kind": "PATHSPEC",
+    "ok": true,
+    "detail": "prom_b/wsa1_prom_b.s -> 0 byte(s)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "-U0",
+     "--",
+     "prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 0
+   },
+   {
+    "kind": "PATHSPEC",
+    "ok": true,
+    "detail": "prom_b/wsa1_prom_b.s -> 0 byte(s)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "--",
+     "prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 0
+   },
+   {
+    "kind": "PATHSPEC",
+    "ok": true,
+    "detail": "prom_b/wsa1_prom_b.s -> 0 byte(s)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "-U0",
+     "--",
+     "prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 0
+   },
+   {
+    "kind": "PATHSPEC",
+    "ok": true,
+    "detail": "prom_b/wsa1_prom_b.s -> 0 byte(s)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "-U0",
+     "--",
+     "prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 0
+   },
+   {
+    "kind": "PATHSPEC",
+    "ok": true,
+    "detail": "prom_b/wsa1_prom_b.s -> 0 byte(s)",
+    "argv": [
+     "-C",
+     "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/before-wt/wsa1",
+     "diff",
+     "-U0",
+     "--",
+     "prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 0,
+    "out": 0
+   },
+   {
+    "kind": "OBJECT",
+    "ok": false,
+    "detail": "HEAD:prom_b/wsa1_prom_b.s (rc=128)",
+    "argv": [
+     "show",
+     "HEAD:prom_b/wsa1_prom_b.s"
+    ],
+    "rc": 128,
+    "out": 0
+   }
+  ],
+  "traceback": true,
+  "tail": "ror(\n    ...<2 lines>...\n        % (rev, rel, r.stderr.decode(\"utf-8\", \"replace\").strip()))\nFileNotFoundError: HEAD:prom_b/wsa1_prom_b.s does not exist -- returning a short listing instead of raising is the bug this module prevents (fatal: path 'wsa1/prom_b/wsa1_prom_b.s' exists, but not 'prom_b/wsa1_prom_b.s'\nhint: Did you mean 'HEAD:wsa1/prom_b/wsa1_prom_b.s' aka 'HEAD:./prom_b/wsa1_prom_b.s'?)\n"
+ }
+]

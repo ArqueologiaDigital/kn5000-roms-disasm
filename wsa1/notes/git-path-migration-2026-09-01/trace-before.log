@@ -1,0 +1,64 @@
+    - notes/asm_source.py                                        reads   0  bad   0  rc 0
+  BAD notes/audit_wave5_checks.py                                reads   1  bad   1  rc 1
+        OBJECT   HEAD:prom_a/wsa1_prom_a.s (rc=128)
+  BAD notes/gen_prom_a_cover_round1.py --untouched               reads   1  bad   1  rc 0
+        OBJECT   HEAD:prom_a/wsa1_prom_a.s (rc=128)
+  BAD notes/gen_prom_a_cover_round2.py --untouched               reads   1  bad   1  rc 0
+        OBJECT   HEAD:prom_a/wsa1_prom_a.s (rc=128)
+      notes/gen_prom_b_cover_round2.py --closure                 reads   1  bad   0  rc 0
+      notes/kernel_join_probe.py                                 reads   2  bad   0  rc 0
+      notes/maincpu_join_probe.py --selftest                     reads   2  bad   0  rc 1
+  BAD notes/prom_a_f85ff9_layout.py --null --rev HEAD            reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:notes/.image-wsa1_prom_a.s (rc=128)
+  BAD notes/prom_a_fa5aeb_layout.py --null --rev HEAD            reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_a/wsa1_prom_a.s (rc=128)
+  BAD notes/prom_a_fad800_layout.py --null --rev HEAD            reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_a/wsa1_prom_a.s (rc=128)
+  BAD notes/prom_a_frontier_delta.py --rev HEAD                  reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_a/wsa1_prom_a.s (rc=128)
+      notes/prom_a_naming_wave8_apply.py --verify                reads   1  bad   0  rc 0
+  BAD notes/prom_a_preservation_check.py                         reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_a/wsa1_prom_a.s (rc=128)
+  BAD notes/prom_b_evidence_audit.py --since                     reads   1  bad   1  rc 1
+        OBJECT   HEAD:prom_b/wsa1_prom_b.s (rc=128)
+  BAD notes/prom_b_f65000_layout.py --null --rev HEAD            reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_b/wsa1_prom_b.s (rc=128)
+  BAD notes/prom_b_naming_preservation.py                        reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_b/wsa1_prom_b.s (rc=128)
+  BAD notes/prom_b_probe_answer_diff.py --base HEAD --only prom_b_string_refs reads   1  bad   1  rc 0
+        OBJECT   HEAD:prom_b/wsa1_prom_b.s (rc=128)
+  BAD notes/prom_c_probe_health.py                               reads   3  bad   2  rc 0
+        OBJECT   HEAD:prom_c/wsa1_prom_c.s (rc=128)
+        OBJECT   HEAD:prom_c/wsa1_prom_c.s (rc=128)
+  BAD notes/prom_c_round3_frontier_delta.py                      reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_c/wsa1_prom_c.s (rc=128)
+      notes/prom_c_split.py                                      reads   1  bad   0  rc 0
+  BAD notes/promb_macro_preservation.py                          reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_b/wsa1_prom_b.s (rc=128)
+      notes/promb_macro_rewrite.py --baseline                    reads   1  bad   0  rc 0
+  BAD notes/verify_a1_independent_check.py                       reads  14  bad   5  rc 1  TRACEBACK
+        PATHSPEC git asks 8ff84e5 for wsa1/prom_a/wsa1_prom_a.s, which it does not contain
+        PATHSPEC git asks 8ff84e5 for wsa1/prom_c/wsa1_prom_c.s, which it does not contain
+        PATHSPEC git asks 8ff84e5 for wsa1/prom_a/wsa1_prom_a.s, which it does not contain
+        PATHSPEC git asks 8ff84e5 for wsa1/prom_c/wsa1_prom_c.s, which it does not contain
+        PATHSPEC git asks 8ff84e5 for wsa1/prom_a/wsa1_prom_a.s, which it does not contain
+  BAD notes/wave7-verify-probes/wave7_r3_citation_check.py       reads   1  bad   1  rc 0
+        PATHSPEC git asks ebabc85 for ../../../../../../home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_a/wsa1_prom_a.s, which i
+  BAD notes/wave7-verify-probes/wave7_r3_promc_refute.py         reads   1  bad   1  rc 0
+        PATHSPEC git asks 6f6ee7e for ../../../../../../home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_c/wsa1_prom_c.s, which i
+  BAD notes/wave7-verify-probes/wave7_r9_promc_citation_check.py reads   1  bad   1  rc 0
+        PATHSPEC git asks db9d8b5 for ../../../../../../home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/prom_c/wsa1_prom_c.s, which i
+  BAD notes/wave7_round4_review_wd3_prom_d.py                    reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_d/wsa1_prom_d.s (rc=128)
+  BAD notes/wave7_round5_review_wd3_prom_d.py                    reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_d/wsa1_prom_d.s (rc=128)
+  BAD notes/wave7_round6_review_wb_prom_b.py                     reads   2  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_b/wsa1_prom_b.s (rc=128)
+  BAD notes/wave7_round8_review_wd3_prom_d.py                    reads   1  bad   1  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_d/wsa1_prom_d.s (rc=128)
+  BAD notes/wave7_round9_review_wb_prom_b.py                     reads   9  bad   3  rc 1  TRACEBACK
+        OBJECT   HEAD:prom_a/wsa1_prom_a.s (rc=128)
+        OBJECT   HEAD:prom_b/wsa1_prom_b.s (rc=128)
+        OBJECT   HEAD:prom_b/wsa1_prom_b.s (rc=128)
+
+31 script(s) traced; 24 issued a git read that FAILED or came back EMPTY; 31 total bad reads
