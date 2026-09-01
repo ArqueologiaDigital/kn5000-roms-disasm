@@ -38,13 +38,26 @@ built, and it prints a warning so the choice is visible.
 """
 import glob, os, sys
 
+# (stem, original file in original_ROMs/, rebuilt file in rebuilt_ROMs/)
+#
+# ⚠ THE LAST THREE WERE NOT GATED AT ALL UNTIL 2026-09-01.  The list used to hold
+# stems only and looked for `original_ROMs/<stem>.rom`; the sub-CPU boot ROM, the
+# custom-data flash and the HD-AE5000 board ROM are dumped under their IC names
+# (`.ic30`, `.ic19`, `.ic4`), so those three names never resolved and three of the
+# nine images `make all` builds were certified by nothing.  All three were in fact
+# byte-identical when the pairs were added, so this widens the gate without moving
+# a byte -- but "it happened to be right" is not the same as "it was checked", and
+# subcpu/boot in particular carries tone-generator code.
 PAIRS = [
-    ("kn5000_v7_program", "kn5000_v7_program.llvm.rom"),
-    ("kn5000_v9_program", "kn5000_v9_program.llvm.rom"),
-    ("kn5000_v10_program", "kn5000_v10_program.llvm.rom"),
-    ("kn5000_subprogram_v142", "kn5000_subprogram_v142.llvm.rom"),
-    ("kn5000_subprogram_v142_compressed", "kn5000_subprogram_v142_compressed.rom"),
-    ("kn5000_table_data", "kn5000_table_data.llvm.rom"),
+    ("kn5000_v7_program", "kn5000_v7_program.rom", "kn5000_v7_program.llvm.rom"),
+    ("kn5000_v9_program", "kn5000_v9_program.rom", "kn5000_v9_program.llvm.rom"),
+    ("kn5000_v10_program", "kn5000_v10_program.rom", "kn5000_v10_program.llvm.rom"),
+    ("kn5000_subprogram_v142", "kn5000_subprogram_v142.rom", "kn5000_subprogram_v142.llvm.rom"),
+    ("kn5000_subprogram_v142_compressed", "kn5000_subprogram_v142_compressed.rom", "kn5000_subprogram_v142_compressed.rom"),
+    ("kn5000_table_data", "kn5000_table_data.rom", "kn5000_table_data.llvm.rom"),
+    ("kn5000_subcpu_boot", "kn5000_subcpu_boot.ic30", "kn5000_subcpu_boot.llvm.rom"),
+    ("kn5000_custom_data", "kn5000_custom_data.ic19", "kn5000_custom_data.llvm.rom"),
+    ("hd-ae5000_v2_06i", "hd-ae5000_v2_06i.ic4", "hd-ae5000_v2_06i.llvm.rom"),
 ]
 
 
@@ -64,8 +77,8 @@ def main():
             print(tail)
             sys.exit(2)
     bad = 0
-    for stem, built in PAIRS:
-        o = os.path.join("original_ROMs", stem + ".rom")
+    for stem, orig, built in PAIRS:
+        o = os.path.join("original_ROMs", orig)
         b = os.path.join("rebuilt_ROMs", built)
         if not (os.path.exists(o) and os.path.exists(b)):
             print(f"  {stem:38} MISSING (build first)")

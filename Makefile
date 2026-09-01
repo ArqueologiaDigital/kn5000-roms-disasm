@@ -55,7 +55,12 @@ wsa1-clean:
 
 everything: all wsa1
 
+# ⚠ assert_images_assemble.py runs FIRST and asks the assembler directly, from
+# each root source.  The byte gate reads `make`'s answer and therefore inherits
+# `make`'s blind spots; on 2026-09-01 an incomplete prerequisite list let it
+# certify objects from a toolchain that no longer accepted the sources.
 gate:
+	python3 scripts/analysis/assert_images_assemble.py
 	python3 scripts/analysis/assert_byte_identical.py
 
 gate-wsa1:
@@ -604,10 +609,29 @@ paramblocks: $(PARAMBLOCK_BINS)
 screendata: $(SCREENDATA_BINS)
 naka: $(NAKA_BINS)
 
+# --------------------------------------------------------------- include deps
+# ⚠ AN IMAGE'S OBJECT DEPENDS ON EVERY .s THE ROOT INCLUDES, NOT JUST THE ROOT.
+# Until 2026-09-01 each rule below named only its root file, so a change to any
+# of the ~150 included sources left the object stale and `make all` did nothing.
+# assert_byte_identical.py rebuilds before comparing precisely so that it cannot
+# certify stale artefacts -- but an incomplete prerequisite list defeats that,
+# and it did: after the toolchain pin moved to 95f7f2d40428 (which refuses an
+# immediate that does not fit) four KN5000 images stopped assembling, and the
+# gate stayed green on objects dated 2026-08-23.  $(LLVM_MC) is a prerequisite
+# for the same reason: a new assembler must invalidate every object it produced.
+V10_SRC = $(wildcard v10/maincpu/*.s v10/maincpu/*/*.s v10/maincpu/*/*/*.s)
+V9_SRC  = $(wildcard v9/maincpu/*.s v9/maincpu/*/*.s v9/maincpu/*/*/*.s)
+V7_SRC  = $(wildcard v7/maincpu/*.s v7/maincpu/*/*.s v7/maincpu/*/*/*.s)
+V142_SRC = $(wildcard v142/subcpu/*.s v142/subcpu/*/*.s)
+SUBBOOT_SRC = $(wildcard subcpu/boot/*.s subcpu/boot/*/*.s)
+HDAE_SRC = $(wildcard hdae5000/*.s hdae5000/*/*.s)
+TABLEDATA_SRC = $(wildcard table_data/*.s table_data/*/*.s)
+CUSTOMDATA_SRC = $(wildcard custom_data/*.s custom_data/*/*.s)
+
 # --- Maincpu ---
-rebuilt_ROMs/kn5000_v10_program.llvm.o: v10/maincpu/kn5000_v10_program.s original_ROMs/kn5000_v10_program.rom $(C_DATA_BINS) indexed-images
+rebuilt_ROMs/kn5000_v10_program.llvm.o: $(V10_SRC) original_ROMs/kn5000_v10_program.rom $(C_DATA_BINS) indexed-images $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
-	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v10/maincpu -o $@ $<
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v10/maincpu -o $@ v10/maincpu/kn5000_v10_program.s
 
 rebuilt_ROMs/kn5000_v10_program.llvm.elf: rebuilt_ROMs/kn5000_v10_program.llvm.o v10/maincpu/maincpu.ld
 	$(LLVM_LLD) -T v10/maincpu/maincpu.ld -o $@ $<
@@ -616,9 +640,9 @@ rebuilt_ROMs/kn5000_v10_program.llvm.rom: rebuilt_ROMs/kn5000_v10_program.llvm.e
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- V9 Maincpu ---
-rebuilt_ROMs/kn5000_v9_program.llvm.o: v9/maincpu/kn5000_v9_program.s original_ROMs/kn5000_v9_program.rom $(V9_C_DATA_BINS) indexed-images
+rebuilt_ROMs/kn5000_v9_program.llvm.o: $(V9_SRC) original_ROMs/kn5000_v9_program.rom $(V9_C_DATA_BINS) indexed-images $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
-	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v9/maincpu -o $@ $<
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v9/maincpu -o $@ v9/maincpu/kn5000_v9_program.s
 
 rebuilt_ROMs/kn5000_v9_program.llvm.elf: rebuilt_ROMs/kn5000_v9_program.llvm.o v9/maincpu/maincpu.ld
 	$(LLVM_LLD) -T v9/maincpu/maincpu.ld -o $@ $<
@@ -641,9 +665,9 @@ rebuilt_ROMs/kn5000_v9_program.llvm.rom: rebuilt_ROMs/kn5000_v9_program.llvm.elf
 v7-extract-bins: $(V7_C_DATA_BINS)
 	python3 scripts/build/apply_v7_c_divergence.py
 
-rebuilt_ROMs/kn5000_v7_program.llvm.o: v7/maincpu/kn5000_v7_program.s v7-extract-bins indexed-images
+rebuilt_ROMs/kn5000_v7_program.llvm.o: $(V7_SRC) v7-extract-bins indexed-images $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
-	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v7/maincpu -o $@ $<
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v7/maincpu -o $@ v7/maincpu/kn5000_v7_program.s
 
 rebuilt_ROMs/kn5000_v7_program.llvm.elf: rebuilt_ROMs/kn5000_v7_program.llvm.o v7/maincpu/maincpu.ld
 	$(LLVM_LLD) -T v7/maincpu/maincpu.ld -o $@ $<
@@ -652,9 +676,9 @@ rebuilt_ROMs/kn5000_v7_program.llvm.rom: rebuilt_ROMs/kn5000_v7_program.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Subcpu payload ---
-rebuilt_ROMs/kn5000_subprogram_v142.llvm.o: v142/subcpu/kn5000_subprogram_v142.s
+rebuilt_ROMs/kn5000_subprogram_v142.llvm.o: $(V142_SRC) $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
-	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v142/subcpu -o $@ $<
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v142/subcpu -o $@ v142/subcpu/kn5000_subprogram_v142.s
 
 rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf: rebuilt_ROMs/kn5000_subprogram_v142.llvm.o v142/subcpu/subcpu.ld
 	$(LLVM_LLD) -T v142/subcpu/subcpu.ld -o $@ $<
@@ -685,9 +709,9 @@ rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom: rebuilt_ROMs/kn5000_subprogr
 	@echo "  subprogram v142 update image OK (byte-identical)"
 
 # --- Subcpu boot ---
-rebuilt_ROMs/kn5000_subcpu_boot.llvm.o: subcpu/boot/kn5000_subcpu_boot.s
+rebuilt_ROMs/kn5000_subcpu_boot.llvm.o: $(SUBBOOT_SRC) $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
-	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I subcpu/boot -o $@ $<
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I subcpu/boot -o $@ subcpu/boot/kn5000_subcpu_boot.s
 
 rebuilt_ROMs/kn5000_subcpu_boot.llvm.elf: rebuilt_ROMs/kn5000_subcpu_boot.llvm.o subcpu/boot/subcpu_boot.ld
 	$(LLVM_LLD) -T subcpu/boot/subcpu_boot.ld -o $@ $<
@@ -717,9 +741,9 @@ tabledata-images: indexed-images
 	python3 scripts/build/font_images.py build
 	python3 scripts/build/mono_images.py build
 
-rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o: hdae5000/hd-ae5000_v2_06i.s hdae5000-images
+rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o: $(HDAE_SRC) hdae5000-images $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
-	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I hdae5000 -o $@ $<
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I hdae5000 -o $@ hdae5000/hd-ae5000_v2_06i.s
 
 rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o hdae5000/hdae5000.ld
 	$(LLVM_LLD) -T hdae5000/hdae5000.ld -o $@ $<
@@ -728,9 +752,9 @@ rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Table data ---
-rebuilt_ROMs/kn5000_table_data.llvm.o: table_data/kn5000_table_data.s table_data/preset_banks.s table_data/help_databases.s table_data/fonts.s table_data/style_records.s table_data/style_record_ptr_tables.s table_data/panel_memory_presets.s $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED) tabledata-images style-events
+rebuilt_ROMs/kn5000_table_data.llvm.o: $(TABLEDATA_SRC) $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED) tabledata-images style-events $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
-	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I table_data -o $@ $<
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I table_data -o $@ table_data/kn5000_table_data.s
 
 rebuilt_ROMs/kn5000_table_data.llvm.elf: rebuilt_ROMs/kn5000_table_data.llvm.o table_data/table_data.ld
 	$(LLVM_LLD) -T table_data/table_data.ld -o $@ $<
@@ -739,9 +763,9 @@ rebuilt_ROMs/kn5000_table_data.llvm.rom: rebuilt_ROMs/kn5000_table_data.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Custom data ---
-rebuilt_ROMs/kn5000_custom_data.llvm.o: custom_data/kn5000_custom_data.s style-events
+rebuilt_ROMs/kn5000_custom_data.llvm.o: $(CUSTOMDATA_SRC) style-events $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
-	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I custom_data -o $@ $<
+	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I custom_data -o $@ custom_data/kn5000_custom_data.s
 
 rebuilt_ROMs/kn5000_custom_data.llvm.elf: rebuilt_ROMs/kn5000_custom_data.llvm.o custom_data/custom_data.ld
 	$(LLVM_LLD) -T custom_data/custom_data.ld -o $@ $<

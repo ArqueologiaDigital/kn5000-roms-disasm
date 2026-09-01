@@ -15760,7 +15760,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0x91, 0x07
 	halt
-	jrl	po, 16747793
+	jrl	po, 0x8d11
 	reti
 	halt
 	.byte 0xcf, 0x11, 0xa9, 0x07, 0x13, 0x67, 0x13
@@ -16058,7 +16058,7 @@ TuningSystem_Handler_Table:
 	.byte 0x50
 	nop
 	jr	f, 0
-	jrl	f, 16744448
+	jrl	f, 0x8000
 	nop
 	.byte 0x90, 0x00, 0xa0, 0x00
 	ld	(xwa), 192
@@ -16069,7 +16069,7 @@ TuningSystem_Handler_Table:
 	rcf
 	normal
 	jr	c, 0
-	jrl	z, 16745728
+	jrl	z, 0x8500
 	nop
 	.byte 0x94, 0x00, 0xa3, 0x00
 	ld	(xde), 67
@@ -16224,7 +16224,7 @@ TuningSystem_Handler_Table:
 	push	sr
 	ldwio	124, 0x3800
 	nop
-	jrl	po, 16763392
+	jrl	po, 0xca00
 	nop
 	push	sr
 	ldwio	174, 0x3800
@@ -16319,7 +16319,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0xd0, 0x00, 0x57
 	ld	xbc, 0x0b174556
-	jrl	nz, 16764928
+	jrl	nz, 0xd000
 	nop
 	ld	xix, 0x59414c45
 	ldf	11
@@ -16933,7 +16933,7 @@ TuningSystem_Handler_Table:
 	.byte 0xd1, 0x00, 0x44
 	ld	xiy, 0x454e5554
 	ldf	11
-	jrl	po, 16765184
+	jrl	po, 0xd100
 	nop
 	ld	xix, 0x59414c45
 	ldf	13
@@ -17116,7 +17116,7 @@ TuningSystem_Handler_Table:
 	.byte 0xd1, 0x00, 0x4b, 0x45
 	pop xbc
 	ldf	13
-	jrl	t, 16765184
+	jrl	t, 0xd100
 	nop
 	ld	xde, 0x4e414c41
 	ld	xhl, 0xfb090645

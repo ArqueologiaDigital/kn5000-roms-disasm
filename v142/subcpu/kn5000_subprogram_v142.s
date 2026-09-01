@@ -28498,62 +28498,62 @@ DSP_EffParam_Apply_By_AlgoType:
 DSP_EffParam_Apply_T0:
 	extz	wa
 	lds	bc, 0
-	jrl	t, 16776496
+	jrl	t, 0xfd30
 ; Algorithm type 1: DSP_EffParam_Copy_V0 with descriptor 1.
 DSP_EffParam_Apply_T1:
 	extz	wa
 	lds	bc, 1
-	jrl	t, 16776489
+	jrl	t, 0xfd29
 ; Algorithm type 2: DSP_EffParam_Copy_V0 with descriptor 2.
 DSP_EffParam_Apply_T2:
 	extz	wa
 	lds	bc, 2
-	jrl	t, 16776482
+	jrl	t, 0xfd22
 ; Algorithm type 3: DSP_EffParam_Copy_V0 with descriptor 3.
 DSP_EffParam_Apply_T3:
 	extz	wa
 	lds	bc, 3
-	jrl	t, 16776475
+	jrl	t, 0xfd1b
 ; Algorithm type 4: DSP_EffParam_Copy_V1 with descriptor 4.
 DSP_EffParam_Apply_T4:
 	extz	wa
 	lds	bc, 4
-	jrl	t, 16776545
+	jrl	t, 0xfd61
 ; Algorithm type 5: DSP_EffParam_Copy_V1 with descriptor 5.
 DSP_EffParam_Apply_T5:
 	extz	wa
 	lds	bc, 5
-	jrl	t, 16776538
+	jrl	t, 0xfd5a
 ; Algorithm type 6: DSP_EffParam_Copy_V2 with descriptor 6.
 DSP_EffParam_Apply_T6:
 	extz	wa
 	lds	bc, 6
-	jrl	t, 16776614
+	jrl	t, 0xfda6
 ; Algorithm type 7: DSP_EffParam_Copy_V3 with descriptor 7.
 DSP_EffParam_Apply_T7:
 	extz	wa
 	lds	bc, 7
-	jrl	t, 16776687
+	jrl	t, 0xfdef
 ; Algorithm type 8: DSP_EffParam_Copy_V4 with descriptor 8.
 DSP_EffParam_Apply_T8:
 	extz	wa
 	ldw	bc, 8
-	jrl	t, 16776758
+	jrl	t, 0xfe36
 ; Algorithm type 9: DSP_EffParam_Copy_V5 with descriptor 9.
 DSP_EffParam_Apply_T9:
 	extz	wa
 	ldw	bc, 9
-	jrl	t, 16776830
+	jrl	t, 0xfe7e
 ; Algorithm type 0x0A: DSP_EffParam_Copy_V6 with descriptor 0x0A.
 DSP_EffParam_Apply_TA:
 	extz	wa
 	ldw	bc, 10
-	jrl	t, 16776902
+	jrl	t, 0xfec6
 ; Algorithm type 0x0B: DSP_EffParam_Copy_V7 with descriptor 0x0B.
 DSP_EffParam_Apply_TB:
 	extz	wa
 	ldw	bc, 11
-	jrl	t, 16776981
+	jrl	t, 0xff15
 	ret
 ; Input A = part.  Re-runs the part's DSP output routing after a parameter change.
 ; Reads the algorithm type; types outside 0..7 do nothing.  Dispatches through

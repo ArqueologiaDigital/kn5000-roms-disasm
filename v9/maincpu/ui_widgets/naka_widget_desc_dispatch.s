@@ -116,7 +116,7 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	pushw bc
 	cp	l, (xhl)
 	.byte 0x00			; padding
-	jrl	po, 16775046
+	jrl	po, 0xf786
 	.byte 0x00			; padding
 	.byte 0xdc, 0x9a
 	ldx
