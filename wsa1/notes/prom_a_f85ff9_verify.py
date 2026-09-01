@@ -514,16 +514,69 @@ def counts():
     return 0
 
 
+# ⚠⚠ A SECOND LINE SHAPE, and it is prom_a's text too.  prom_a no longer writes
+# its multitasking kernel or its DSP channel-register driver out: both are SHARED
+# SOURCES included by prom_a AND prom_c, and their lines carry BOTH images'
+# addresses, with both images' bytes where those differ:
+#     ld XBC,DSP_REGS_BASE   ; F85F40/F98031  a=41 00 00 7f 00 c=41 00 00 e0 00
+#     ldw hl, KERNEL_READY_HEADS  ; F85615/F9817A  a=33 30 03 c=33 24 01   c: ...
+# The single-address pattern below matches NONE of them, because the address is
+# followed by `/` rather than by whitespace.  ★ THAT IS NOT A COSMETIC MISS: it
+# made 0xF85FF8 -- an ordinary `ret` -- read as NOT an instruction boundary, and
+# the boundary check went from OK to FAIL on a routine nobody had touched.
+SHARED_LINE = re.compile(
+    r";\s*([0-9A-F]{6})/[0-9A-F]{6}\s\s+"
+    r"(?:a=)?((?:[0-9a-f]{2} )*[0-9a-f]{2})")
+
+
+SINGLE_LINE = re.compile(
+    r";\s*([0-9A-F]{6})\s\s+((?:[0-9a-f]{2} )*[0-9a-f]{2})")
+
+
+def _proven_line(l, shared=True):
+    """(addr, nbytes) if `l` is a proven instruction line, else None.
+
+    ★ ONE PARSER, used by proven_instruction_lines AND corpus_bytes.  They used
+    to carry the same regex twice, which is how a duplicated pattern fails:
+    silently, and in only one of its copies.
+
+    ⚠ AND `shared` IS NOT A STYLE SWITCH -- the two callers are answering
+    different questions and must NOT be unified into one answer:
+
+      * proven_instruction_lines asks "is this address an instruction boundary
+        of prom_a's transcription?"  The shared sources ARE prom_a's
+        transcription, so shared=True.  With them excluded, 0xF85FF8 -- an
+        ordinary `ret` -- read as NOT a boundary and a passing check went red.
+      * corpus_bytes exists to be compared, line for line, against the count
+        `notes/prom_a_f85ff9_layout.py` prints, and THAT tool reads only the
+        single-address shape.  Teaching this one about shared sources while the
+        other stays blind turns "re-derived independently" from a cross-check
+        into two tools disagreeing (measured: 11,167 against 11,237).  So it
+        stays blind, deliberately, and the two still agree.
+      ⚠ The blindness itself is REAL and predates this file's use of it: since
+        the kernel merge, 941 of prom_a's proven instructions -- and since the
+        DSP merge, 97 more -- are in sources both tools skip.  Fixing it is a
+        change to prom_a_f85ff9_layout.py first, and it will move the dossier
+        comparison, which is red either way.
+    """
+    body = l.split(";")[0]
+    if not body.startswith("\t") or body.lstrip().startswith("."):
+        return None
+    m = SINGLE_LINE.search(l) or (SHARED_LINE.search(l) if shared else None)
+    return (int(m.group(1), 16), len(m.group(2).split())) if m else None
+
+
 def proven_instruction_lines(src):
-    """(addr, nbytes) for every PROVEN instruction line of a transcription."""
-    out = []
-    for l in open(src, encoding="utf-8").read().splitlines():
-        body = l.split(";")[0]
-        m = re.search(r";\s*([0-9A-F]{6})\s\s+((?:[0-9a-f]{2} )*[0-9a-f]{2})", l)
-        if not m or not body.startswith("\t") or body.lstrip().startswith("."):
-            continue
-        out.append((int(m.group(1), 16), len(m.group(2).split())))
-    return out
+    """(addr, nbytes) for every PROVEN instruction line of a transcription.
+
+    ⚠ Reads BOTH shapes.  `src` is the EXPANDED image (image_path), so the
+    shared sources are in it; parsing only the single-address shape silently
+    dropped 1,038 of prom_a's proven instructions -- the kernel's 941 and the
+    DSP driver's 97 -- and every count below understated by that much.
+    """
+    return [x for x in (_proven_line(l)
+                        for l in open(src, encoding="utf-8").read().splitlines())
+            if x is not None]
 
 
 def corpus_bytes():
@@ -537,14 +590,8 @@ def corpus_bytes():
     instruction of all 10,509 runs -- and those bytes are never scanned by the
     content rules either."""
     src = image_path(ROOT, "prom_a/wsa1_prom_a.s")
-    seq = []
-    for l in open(src, encoding="utf-8", errors="replace"):
-        body = l.split(";")[0]
-        m = re.search(r";\s*([0-9A-F]{6})\s\s+((?:[0-9a-f]{2} )*[0-9a-f]{2})", l)
-        if m and body.startswith("\t") and not body.lstrip().startswith("."):
-            seq.append((int(m.group(1), 16), len(m.group(2).split())))
-        else:
-            seq.append(None)
+    seq = [_proven_line(l, shared=False)      # see _proven_line's ⚠
+           for l in open(src, encoding="utf-8", errors="replace")]
     runs, cur = [], []
     for it in seq:
         if it is None or (cur and it[0] <= cur[-1][0]):

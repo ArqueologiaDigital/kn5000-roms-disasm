@@ -244,6 +244,10 @@ DSP_ChannelRegs_Init:
 	ld XWA,0x0101001f                            ; F85F45/F98036  40 1f 00 01 01   A = register 0x1F, +2 = 0x01 / A = register 0x1F, data 0x01
 	ldb d, 0x04                                  ; F85F4A/F9803B  24 04   four channels
 DSP_ChannelRegs_Init__loop:
+; prom_a's name for the SAME address, 0xF85F4C on CPU 1 and 0xF9803D on
+; CPU 2; prom_c writes DSP_ChannelRegs_Init__loop just above.  BOTH are
+; defined, so a reference to either still resolves -- see kernel/kernel.s,
+; which does this for every address its two files named differently.
 DSP_ChannelRegs_Init_Loop:
 	ld W,A                                       ; F85F4C/F9803D  c9 88
 	ld (XBC),XWA                                 ; F85F4E/F9803F  b1 60   +0 = reg number, +2 = 0x01
