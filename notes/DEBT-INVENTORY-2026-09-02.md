@@ -13,6 +13,19 @@ Quoting one as the total is the mistake this whole push exists to correct.
 |---|---|---|
 | **verbatim** | bytes handed back through `.incbin` of a blob with no generating source | `scripts/analysis/kn5000_source_coverage.py` |
 | **code-as-`.byte`** | real instructions spelled as data directives | per-image census tools; **NOT in the column above** |
+| **data-as-code** ★ | data disassembled into plausible instruction mnemonics | ⚠ **NOTHING COUNTS THIS** |
+
+★ **The third kind was identified on 2026-09-02 and no instrument measures it.**
+It is invisible by construction: a `.byte`/`.incbin` scanner sees mnemonics and
+moves on, and the byte gate cannot object because re-assembling a wrong
+interpretation reproduces the same bytes. Two confirmed instances, both in
+HD-AE5000: the 309-byte version string (*"Technics Software section
+M. Kitajima"*) disassembled as ~35 garbage instructions, and
+**`HDAE5000_RECORD_TABLE` at 0x29C0AA — 6,356 bytes written as ~6,150 lines of
+instruction mnemonics**, whose only references load it as an ADDRESS, with zero
+call or jump sites anywhere in the tree. A smaller instance exists in
+`HDAE5000_Lang_Codes`. **This category is unmeasured across all 13 images**, so
+every "remaining debt" figure in this file is a LOWER BOUND.
 
 A `.byte` run is exactly as un-decoded as an `.incbin`, and it passes every
 "no `.incbin`" test. This project has now shipped that false claim twice.
