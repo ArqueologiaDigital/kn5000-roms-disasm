@@ -58,6 +58,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 MASTER = "prom_c/wsa1_prom_c.s"
 
 # The listing as it stood before the split.  `git show BASE_COMMIT:MASTER`.
@@ -311,9 +313,7 @@ WHAT IS LEFT IN THIS FILE, AND WHY
 # --------------------------------------------------------------------- helpers
 def base_lines():
     """The listing as it stood at BASE_COMMIT, as a list of lines (no newlines)."""
-    out = subprocess.run(["git", "show", f"{BASE_COMMIT}:{MASTER}"],
-                         cwd=ROOT, capture_output=True, check=True)
-    return out.stdout.decode("utf-8").split("\n")
+    return git_show(MASTER, BASE_COMMIT).split("\n")
 
 
 def disk(path):

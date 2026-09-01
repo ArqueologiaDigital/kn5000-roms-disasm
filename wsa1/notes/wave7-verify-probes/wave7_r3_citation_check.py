@@ -31,9 +31,15 @@ for img in "abc":
     print("prom_%s: %d proven instruction starts" % (img, len(IA[img])), file=sys.stderr)
 
 # added comment lines in prom_a
-d = subprocess.run(["git", "diff", "-U0", "ebabc85", "--", "prom_a/wsa1_prom_a.s"],
-                   cwd=ROOT, capture_output=True, text=True).stdout
-added = [l[1:] for l in d.split("\n") if l.startswith("+") and not l.startswith("+++")]
+# ⚠ NOT `git diff ebabc85 -- prom_a/wsa1_prom_a.s`.  The pathspec is relative to
+# the current directory, so after the move it named `wsa1/prom_a/...`, which
+# ebabc85 does not contain: git matched nothing on the old side and reported the
+# WHOLE working file as added -- 175,190 "new" comment lines to audit, rc 0.
+import sys as _sys
+_sys.path.insert(0, ROOT + "/notes")
+from asm_source import git_diff_lines  # noqa: E402
+d = git_diff_lines("prom_a/wsa1_prom_a.s", "ebabc85", root=ROOT, context=0)
+added = [l[1:] for l in d if l.startswith("+") and not l.startswith("+++")]
 comments = [l for l in added if l.lstrip().startswith(";")]
 print("added lines: %d, of which comment lines: %d" % (len(added), len(comments)), file=sys.stderr)
 

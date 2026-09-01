@@ -113,6 +113,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path, image_text_at_rev  # noqa: E402
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 SRCA = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 SRCB = image_path(ROOT, "prom_b/wsa1_prom_b.s")
@@ -131,8 +132,10 @@ def img(name):
 
 
 def head(path):
-    return subprocess.run(["git", "-C", ROOT, "show", "HEAD:" + path],
-                          capture_output=True, text=True).stdout
+    try:
+        return git_show(path)
+    except FileNotFoundError:
+        return ""
 
 
 def scan(text):

@@ -65,6 +65,7 @@ from collections import Counter, defaultdict
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path, image_lines, write_part  # noqa: E402
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 # ⚠ A WRITE THROUGH THIS NAME IS GUARDED AND WILL REFUSE while the text
 # it is handed is the whole image: write_part() sees the master's
 # .include lines disappear.  That refusal is correct and is not the fix.
@@ -892,9 +893,7 @@ BASELINE = "a4c8972"
 
 def baseline_lines():
     import subprocess
-    return subprocess.run(["git", "show", "%s:prom_b/wsa1_prom_b.s" % BASELINE],
-                          cwd=ROOT, capture_output=True, text=True,
-                          check=True).stdout.split('\n')
+    return git_show("prom_b/wsa1_prom_b.s", BASELINE).split('\n')
 
 
 def selftest(lines):

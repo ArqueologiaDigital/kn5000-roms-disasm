@@ -55,6 +55,8 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REL = "prom_b/wsa1_prom_b.s"
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 TIMEOUT = 900
 
 
@@ -88,15 +90,21 @@ def swap_image(alt, base):
         if rel in done:
             continue
         done.add(rel)
-        r = subprocess.run(["git", "-C", ROOT, "show", f"{base}:{rel}"],
-                           capture_output=True)
-        if r.returncode != 0:
-            continue
+        # ⚠ A MISS RAISES.  This used to `continue`, so a base revision that
+        # spelled a path differently -- every revision from before the 2026-09-01
+        # move into wsa1/ does -- produced an EMPTY alt tree, and the answer-diff
+        # then compared the working tree with itself and reported no differences.
+        try:
+            txt = git_show(rel, base)
+        except FileNotFoundError as e:
+            if rel == REL:
+                raise SystemExit("cannot materialise %s at %s: %s" % (rel, base, e))
+            raise
         dst = os.path.join(alt, rel)
         os.makedirs(os.path.dirname(dst), exist_ok=True)
-        with open(dst, "wb") as f:
-            f.write(r.stdout)
-        for ln in r.stdout.decode("utf-8", "replace").splitlines():
+        with open(dst, "w", encoding="utf-8") as f:
+            f.write(txt)
+        for ln in txt.splitlines():
             m = INCLUDE.match(ln)
             if m and m.group(1).endswith(".s"):
                 inc = m.group(1)

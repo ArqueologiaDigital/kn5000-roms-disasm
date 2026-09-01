@@ -152,6 +152,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path, write_part  # noqa: E402
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 AUTOFORCE = os.path.join(ROOT, "notes", "llvm_roundtrip_autoforce.py")
@@ -395,12 +396,11 @@ def closure_baseline():
     `git show` only; this function reads, it never touches the tree."""
     R = _patch_reachability()
     keep = R.source_lines
-    src = subprocess.run(["git", "show", "47d40941b750:prom_a/wsa1_prom_a.s"],
-                         capture_output=True, text=True, cwd=ROOT)
-    if src.returncode != 0:
+    try:
+        head = git_show("prom_a/wsa1_prom_a.s", "47d40941b750").split("\n")
+    except FileNotFoundError:
         R.source_lines = keep
         return None
-    head = src.stdout.split("\n")
     paths = dict((t, x) for t, x, _f, _b in R.IMAGES)
     R.source_lines = lambda tag, _l=head: _l if tag == "prom_a" else \
         open(os.path.join(ROOT, paths[tag])).read().split("\n")

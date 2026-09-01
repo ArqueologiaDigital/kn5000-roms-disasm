@@ -139,6 +139,7 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import image_text_at_rev  # noqa: E402  (the image at a revision)
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import trace_code as TC                                            # noqa: E402
@@ -1003,9 +1004,10 @@ def build(lo=LO, hi=HI, passes=3):
 def source_text(rev=None):
     if rev is None:
         return open(SRC).read()
-    return subprocess.run(["git", "show", "%s:prom_a/wsa1_prom_a.s" % rev],
-                          cwd=ROOT, check=True, capture_output=True,
-                          text=True).stdout
+    # ⚠ THE IMAGE, not the primary, on the git side too: the working-tree
+    # branch above goes through image_path(), and comparing an image with a
+    # 494- or 2,517-line master is not a calibration of anything.
+    return image_text_at_rev(ROOT, "prom_a/wsa1_prom_a.s", rev)
 
 
 def proven_code_runs(rev=None):

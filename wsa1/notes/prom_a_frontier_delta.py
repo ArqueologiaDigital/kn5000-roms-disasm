@@ -26,6 +26,8 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 B_BASE, A_BASE = 0xF00000, 0xF80000
 TBL_LO, TBL_HI = 0x40000, 0x44018
 SRC_REL = "prom_a/wsa1_prom_a.s"
@@ -53,8 +55,7 @@ BLOCKS_2026_08_25 = [
 def source(rev=None):
     if rev is None:
         return open(os.path.join(ROOT, SRC_REL), encoding="utf-8").read()
-    return subprocess.run(["git", "-C", ROOT, "show", "%s:%s" % (rev, SRC_REL)],
-                          check=True, capture_output=True, text=True).stdout
+    return git_show(SRC_REL, rev)
 
 
 def incbin_ranges(text):

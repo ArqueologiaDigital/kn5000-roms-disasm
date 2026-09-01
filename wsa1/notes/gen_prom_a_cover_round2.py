@@ -171,6 +171,7 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 ARGV = list(sys.argv)
 LLVM_MC = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-mc")
 OBJCOPY = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-objcopy")
@@ -797,8 +798,7 @@ def untouched(rev="HEAD"):
 
     THE POINT: twelve waves of naming and header work sit in this file and this
     round is not allowed to disturb a byte of it."""
-    old = subprocess.run(["git", "show", "%s:prom_a/wsa1_prom_a.s" % rev],
-                         capture_output=True, text=True, cwd=ROOT).stdout.split("\n")
+    old = git_show("prom_a/wsa1_prom_a.s", rev).split("\n")
     new = open(SRC).read().split("\n")
     keep = [l for l in old if not R.INCBIN.match(l)]
     ni = iter(new)

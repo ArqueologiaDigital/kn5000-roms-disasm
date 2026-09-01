@@ -53,6 +53,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_lines  # noqa: E402  (the image, not the master)
+from asm_source import git_show, git_diff_lines  # noqa: E402  (repo-relative)
 PRE_MERGE = "8ff84e5"
 A_SRC = "prom_a/wsa1_prom_a.s"
 C_SRC = "prom_c/wsa1_prom_c.s"
@@ -81,11 +82,10 @@ def check(desc, cond, detail=""):
 
 
 def at(commit, rel):
-    r = subprocess.run(["git", "-C", ROOT, "show", "%s:%s" % (commit, rel)],
-                       capture_output=True, text=True)
-    if r.returncode:
-        raise SystemExit("cannot read %s at %s: %s" % (rel, commit, r.stderr))
-    return r.stdout.split("\n")
+    try:
+        return git_show(rel, commit).split("\n")
+    except FileNotFoundError as e:
+        raise SystemExit("cannot read %s at %s: %s" % (rel, commit, e))
 
 
 def nowlines(rel):
@@ -104,18 +104,29 @@ def nowlines(rel):
     return image_lines(ROOT, rel, skip=SKIP)
 
 
+# ⚠ NOT `git diff PRE_MERGE -- <rel>`.  A pathspec is relative to the CURRENT
+# DIRECTORY, so it is spelled `wsa1/prom_a/...` here -- and PRE_MERGE predates
+# the move into wsa1/ and holds that file as `prom_a/...`.  One pathspec cannot
+# name both sides: git matched nothing on the old side and reported all 175,190
+# working-tree lines as ADDED, with no error and no empty result to notice.
+# asm_source.git_diff_lines fetches the old side BY OBJECT, at that revision's
+# own spelling, and diffs here.
+def _diff(rel, context=3):
+    # ⚠ THE FILE, NOT THE IMAGE, on both sides -- that is what `git diff` did and
+    # what these checks mean.  The kernel was FACTORED OUT of this file into
+    # kernel/kernel.s, so its lines are `-` in a file diff and present in an
+    # expanded one; section 1 exists to prove they reappear in kernel/.
+    return git_diff_lines(rel, PRE_MERGE, context=context)
+
+
 def deleted_lines(rel):
     """The `-` side of the working-tree diff against the pre-merge commit."""
-    d = subprocess.run(["git", "-C", ROOT, "diff", PRE_MERGE, "--", rel],
-                       capture_output=True, text=True).stdout
-    return [l[1:] for l in d.split("\n")
+    return [l[1:] for l in _diff(rel)
             if l.startswith("-") and not l.startswith("---")]
 
 
 def added_lines(rel):
-    d = subprocess.run(["git", "-C", ROOT, "diff", PRE_MERGE, "--", rel],
-                       capture_output=True, text=True).stdout
-    return [l[1:] for l in d.split("\n")
+    return [l[1:] for l in _diff(rel)
             if l.startswith("+") and not l.startswith("+++")]
 
 
@@ -247,9 +258,7 @@ def section_new_prose():
 def section_hunks():
     print("\n5. HUNK CONTAINMENT -- the merge must not touch unrelated code")
     for img, rel in (("prom_a", A_SRC), ("prom_c", C_SRC)):
-        d = subprocess.run(["git", "-C", ROOT, "diff", PRE_MERGE, "-U0", "--", rel],
-                           capture_output=True, text=True).stdout
-        hunks = [l for l in d.split("\n") if l.startswith("@@")]
+        hunks = [l for l in _diff(rel, context=0) if l.startswith("@@")]
         starts = [int(re.match(r"@@ -(\d+)", h).group(1)) for h in hunks]
         # the file's own contents banner near the top, then the kernel block
         toc = [s for s in starts if s < 400]

@@ -152,6 +152,7 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 ARGV = list(sys.argv)
 LLVM_MC = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-mc")
 OBJCOPY = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-objcopy")
@@ -681,8 +682,7 @@ def untouched(rev="HEAD"):
     into `.incbin` ranges, which is what makes that structurally true; this is
     the check that says so out loud.  Prints the number of pre-existing non-
     `.incbin` lines that were removed or rewritten -- it must be 0."""
-    old = subprocess.run(["git", "show", "%s:prom_a/wsa1_prom_a.s" % rev],
-                         capture_output=True, text=True, cwd=ROOT).stdout.split("\n")
+    old = git_show("prom_a/wsa1_prom_a.s", rev).split("\n")
     new = open(SRC).read().split("\n")
     keep = [l for l in old if not R.INCBIN.match(l)]
     ni = iter(new)

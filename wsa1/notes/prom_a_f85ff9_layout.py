@@ -101,6 +101,7 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import image_text_at_rev  # noqa: E402  (the image at a revision)
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 sys.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
 import trace_code as TC                                            # noqa: E402
@@ -849,11 +850,17 @@ def build(lo=LO, hi=HI):
 
 # ------------------------------------------------------------------- null ----
 def source_text(src, rev=None):
+    """The image's text, from the working tree or from a revision.
+
+    ⚠ THE IMAGE ON BOTH SIDES.  `src` is what image_path() returned, which since
+    the split is the materialised expansion `notes/.image-wsa1_prom_a.s` -- a
+    derived file that is not committed, so `git show <rev>:notes/.image-...`
+    asked for something no revision has ever held.  image_text_at_rev resolves
+    the `.include`s THROUGH GIT, so the calibration corpus is the same object as
+    the working-tree one."""
     if rev is None:
         return open(src, encoding="utf-8").read()
-    rel = os.path.relpath(src, ROOT)
-    return subprocess.run(["git", "show", "%s:%s" % (rev, rel)], cwd=ROOT,
-                          check=True, capture_output=True, text=True).stdout
+    return image_text_at_rev(ROOT, "prom_a/wsa1_prom_a.s", rev)
 
 
 def proven_code_runs(rev=None):

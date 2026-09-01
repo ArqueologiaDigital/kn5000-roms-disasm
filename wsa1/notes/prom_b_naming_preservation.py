@@ -44,6 +44,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REL = "prom_b/wsa1_prom_b.s"
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_lines, image_files  # noqa: E402
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 from prom_b_apply_msgline_names import RENAMES, CLEARERS  # noqa: E402  the round's own table
 from prom_b_apply_smf_names import RENAMES as SMF_RENAMES, DATA_RENAMES  # noqa: E402
 from prom_b_apply_effect_names import RENAMES as FX_RENAMES  # noqa: E402
@@ -58,9 +59,15 @@ INCLUDE = re.compile(r'^\s*\.include\s+"([^"]+)"')
 
 
 def _git_show(rev, path):
-    r = subprocess.run(["git", "-C", ROOT, "show", f"{rev}:{path}"],
-                       capture_output=True, text=True)
-    return r.stdout if r.returncode == 0 else None
+    """`rev`'s copy of a ROOT-relative path.  ⚠ RAISES when it is not there.
+
+    ★ IT USED TO RETURN None, AND THE CALLER SKIPPED IT.  When the tree moved
+    into `wsa1/` every `git show HEAD:prom_b/...` started missing, the temp tree
+    was left empty, and the failure surfaced only as a FileNotFoundError naming
+    a RANDOM temp directory -- which made two runs of this probe differ, so
+    probe_health graded it NONDET (flaky) instead of broken.  A deterministic
+    failure has to look deterministic."""
+    return git_show(path, rev)
 
 
 def base_lines(rev):
@@ -78,8 +85,6 @@ def base_lines(rev):
                 continue
             done.add(rel)
             txt = _git_show(rev, rel)
-            if txt is None:
-                continue
             dst = os.path.join(tmp, rel)
             os.makedirs(os.path.dirname(dst), exist_ok=True)
             with open(dst, "w") as f:

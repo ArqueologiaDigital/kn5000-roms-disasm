@@ -15,12 +15,16 @@ BASE=0xF80000
 # ⚠ Self-contained: the original read a scratch 'promc.diff' that no longer
 # exists. It now produces the diff itself, so the probe is re-runnable. REV is
 # the commit the round-9 prom_c additions landed on top of.
-import subprocess as _sp
+# ⚠ NOT a pathspec: it is cwd-relative, and REV predates the move into wsa1/,
+# so `-- prom_c/wsa1_prom_c.s` matched nothing on the old side and the whole
+# working file came back as "added".
+import sys as _sys
+_ROOT = '/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1'
+_sys.path.insert(0, _ROOT + '/notes')
+from asm_source import git_diff_lines
 REV = os.environ.get('REV', 'db9d8b5')
-_d = _sp.run(['git', 'diff', REV, '--', 'prom_c/wsa1_prom_c.s'],
-             cwd='/home/fsanches/compartilhado/kn5000-roms-disasm/wsa1',
-             capture_output=True, text=True).stdout
-added=[l[1:] for l in _d.split('\n') if l.startswith('+') and not l.startswith('+++')]
+_d = git_diff_lines('prom_c/wsa1_prom_c.s', REV, root=_ROOT, context=0)
+added=[l[1:] for l in _d if l.startswith('+') and not l.startswith('+++')]
 cited={}
 for l in added:
     if not l.lstrip().startswith(';'): continue

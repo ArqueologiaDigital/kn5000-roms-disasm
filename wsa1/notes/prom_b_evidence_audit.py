@@ -47,6 +47,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 SRC = image_path(ROOT, "prom_b/wsa1_prom_b.s")
 
 LABEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*):")
@@ -113,10 +114,9 @@ def grade(lines):
 def since_head():
     """Names of semantic labels already present in git HEAD's prom_b."""
     try:
-        old = subprocess.run(["git", "-C", ROOT, "show", "HEAD:prom_b/wsa1_prom_b.s"],
-                             capture_output=True, text=True, check=True).stdout
-    except Exception as e:  # pragma: no cover
-        raise SystemExit("cannot read HEAD:prom_b/wsa1_prom_b.s -- %s" % e)
+        old = git_show("prom_b/wsa1_prom_b.s")
+    except FileNotFoundError as e:  # pragma: no cover
+        raise SystemExit("cannot read HEAD's prom_b listing -- %s" % e)
     return set(n for _, n, _ in grade(old.split("\n")))
 
 

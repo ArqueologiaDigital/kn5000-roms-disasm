@@ -32,6 +32,7 @@ rom = (ROOT / 'original_ROMs' / 'wsa1_prom_c.ic28').read_bytes()
 # of the image's, marking almost every citation a non-start.
 sys.path.insert(0, str(ROOT / 'notes'))
 from asm_source import image_lines  # noqa: E402
+from asm_source import git_pathspec  # noqa: E402  (repo-relative git paths)
 src = image_lines(str(ROOT), 'prom_c/wsa1_prom_c.s')
 UNIDASM = pathlib.Path.home() / 'compartilhado/kn7000_mame_build/unidasm'
 fails = []
@@ -76,7 +77,12 @@ for l in src:
     if l[:1] in ('\t', ' '):
         m = re.search(r';\s*([0-9A-F]{6})\s\s', l)
         if m: starts.add(int(m.group(1), 16))
-diff = subprocess.run(['git', 'show', '6f6ee7e', '--', 'prom_c/wsa1_prom_c.s'],
+# ⚠ A PATHSPEC IS CWD-RELATIVE, so after the move into wsa1/ this one read
+# `wsa1/prom_c/wsa1_prom_c.s` -- a path 6f6ee7e does not contain.  git restricted
+# the diff to nothing, returned 0, and `cited` came out EMPTY: a refutation probe
+# that refutes nothing and says "ok".  git_pathspec spells it as that revision does.
+diff = subprocess.run(['git', 'show', '6f6ee7e', '--',
+                       git_pathspec('prom_c/wsa1_prom_c.s', '6f6ee7e', str(ROOT))],
                       cwd=ROOT, capture_output=True, text=True).stdout
 cited = {int(m.group(1), 16) for l in diff.split('\n') if l.startswith('+;')
          for m in re.finditer(r'0x(F[A-F0-9]{5})\b', l)}

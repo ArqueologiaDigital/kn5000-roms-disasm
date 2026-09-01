@@ -37,6 +37,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 A = os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12")
 SRC_A = image_path(ROOT, "prom_a/wsa1_prom_a.s")
 SIZE = 524288
@@ -206,8 +207,7 @@ def coverage(rev):
     tot = [0, 0]
     for k in "abcd":
         p = "prom_%s/wsa1_prom_%s.s" % (k, k)
-        old = subprocess.run(["git", "-C", ROOT, "show", "%s:%s" % (rev, p)],
-                             capture_output=True, text=True).stdout
+        old = git_show(p, rev)
         new = open(os.path.join(ROOT, p)).read()
         so, fo, _ = measure(old)
         sn, fn, _ = measure(new)
@@ -224,8 +224,7 @@ def main():
     if "--coverage" in sys.argv:
         coverage(sys.argv[sys.argv.index("--coverage") + 1])
         return 0
-    base = subprocess.run(["git", "-C", ROOT, "show", "HEAD:prom_a/wsa1_prom_a.s"],
-                          capture_output=True, text=True).stdout
+    base = git_show("prom_a/wsa1_prom_a.s")
     old = set(re.findall(r"^([A-Za-z_]\w*):$", base, re.M))
     cur = set(re.findall(r"^([A-Za-z_]\w*):$", open(SRC_A).read(), re.M))
     new_labels = cur - old

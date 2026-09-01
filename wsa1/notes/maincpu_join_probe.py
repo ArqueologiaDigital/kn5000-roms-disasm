@@ -59,6 +59,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "notes"))
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 IMAGES = {"prom_a": ("prom_a/wsa1_prom_a.s", "wsa1_prom_a.ic12", 0xF80000),
           "prom_b": ("prom_b/wsa1_prom_b.s", "wsa1_prom_b.ic13", 0xF00000)}
 # ⚠ ENUMERATED, NOT PATTERN-MATCHED.  A regex over "any line citing a listing by
@@ -321,9 +323,8 @@ def selftest():
     for tag in IMAGES:
         rel = IMAGES[tag][0]
         try:
-            was = subprocess.run(["git", "show", "%s:%s" % (JOIN_BASE, rel)], cwd=ROOT,
-                                 capture_output=True, text=True, check=True).stdout.split('\n')
-        except Exception:
+            was = git_show(rel, JOIN_BASE).split('\n')
+        except FileNotFoundError:
             was = None
         if was is None:
             continue

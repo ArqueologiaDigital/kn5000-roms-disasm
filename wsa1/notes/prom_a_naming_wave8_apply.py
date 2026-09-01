@@ -71,6 +71,7 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 import prom_a_panel_control_map as PM                 # noqa: E402
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 
 LISTING = os.path.join(ROOT, "prom_a", "wsa1_prom_a.s")
 _A = open(os.path.join(ROOT, "original_ROMs", "wsa1_prom_a.ic12"), "rb").read()
@@ -922,11 +923,9 @@ def verify():
 
     ⚠ It writes ONLY to a temp file; the working tree is untouched.
     """
-    import subprocess
     import tempfile
     global LISTING
-    old = subprocess.run(["git", "show", "%s:prom_a/wsa1_prom_a.s" % BASE_COMMIT],
-                         cwd=ROOT, capture_output=True, text=True, check=True).stdout
+    old = git_show("prom_a/wsa1_prom_a.s", BASE_COMMIT)
     want = open(LISTING, encoding="utf-8").read()
     keep = LISTING
     with tempfile.TemporaryDirectory() as d:

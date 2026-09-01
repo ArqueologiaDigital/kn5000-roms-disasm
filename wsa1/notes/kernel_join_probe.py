@@ -65,6 +65,7 @@ from collections import Counter, OrderedDict
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "notes"))
 from asm_source import image_path  # noqa: E402  (the image, not the master)
+from asm_source import git_show  # noqa: E402  (git paths are repo-relative)
 
 OFFSET = 0x12B65                      # prom_c address - prom_a address, every pair
 
@@ -191,12 +192,10 @@ _cache = {}
 def src(rel):
     """The PRE-MERGE text of a source file, from git."""
     if rel not in _cache:
-        import subprocess
-        r = subprocess.run(["git", "-C", ROOT, "show", "%s:%s" % (PRE_MERGE, rel)],
-                           capture_output=True, text=True)
-        if r.returncode != 0:
-            raise SystemExit("cannot read %s at %s: %s" % (rel, PRE_MERGE, r.stderr))
-        _cache[rel] = r.stdout.split("\n")
+        try:
+            _cache[rel] = git_show(rel, PRE_MERGE).split("\n")
+        except FileNotFoundError as e:
+            raise SystemExit("cannot read %s at %s: %s" % (rel, PRE_MERGE, e))
     return _cache[rel]
 
 
