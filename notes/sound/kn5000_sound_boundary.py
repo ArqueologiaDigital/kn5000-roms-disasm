@@ -434,7 +434,10 @@ CALIB = [
     ("f018bf", "set 7,(P6)     -- release it"),
     ("f200001050", "ld (0x100000),WA  -- latch a TG register address"),
     ("f202001050", "ld (0x100002),WA  -- write TG register data"),
-    ("f0181c", "the same three-byte shape on P6 with a different bit (control)"),
+    # ★ NULL CONTROL.  Same 5-byte shape, same opcode, a window address no sound
+    # chip on this board decodes (0x150000).  If the search were matching noise
+    # rather than instructions this would not be near zero.
+    ("f200001550", "NULL CONTROL: ld (0x150000),WA -- nothing decodes 0x150000"),
 ]
 
 
@@ -476,6 +479,28 @@ def calibrate(fl):
     return out
 
 
+UNSPELLABLE = re.compile(r'^\s*\.byte\s+[^;]*;\s*(\S.*?)\s*$')
+NUM = re.compile(r'0x[0-9A-Fa-f]+')
+
+
+def unspellable(key):
+    """Which instruction FORMS still have to be left as raw bytes.
+
+    Every `.byte` line this tree emits for a real instruction carries unidasm's
+    rendering as its comment, so the residue can be counted by form rather than
+    by byte.  That turns "20 bytes could not be converted" into a work list for
+    the assembler backend, which is where the fix belongs."""
+    im = IMAGES[key]
+    c = collections.Counter()
+    nb = 0
+    for line in open(os.path.join(ROOT, im["root"]), errors="replace"):
+        m = UNSPELLABLE.match(line)
+        if m:
+            c[NUM.sub("N", m.group(1)).strip()] += 1
+            nb += len([x for x in line.split(";")[0].split(",") if x.strip()])
+    return c, nb
+
+
 def undisassembled_bytes(fl):
     return sum(fl["data"].values())
 
@@ -511,6 +536,12 @@ def report(key, argv):
         for hexpat, what, tot, seen in calibrate(fl):
             pct = (100.0 * seen / tot) if tot else 0.0
             print(f"    {hexpat:<12} {seen:5d} / {tot:<5d} {pct:5.1f}%   {what}")
+    if "--unspellable" in argv:
+        c, nb = unspellable(key)
+        print(f"  instruction forms still emitted as .byte: {sum(c.values())} site(s), "
+              f"{nb} bytes, {len(c)} distinct form(s)")
+        for form, n in c.most_common(20):
+            print(f"    {n:4d}  {form}")
     if "--coverage" in argv:
         cov = coverage(fl, st)
         broken = [c for c in cov if c[3] or c[4]]
