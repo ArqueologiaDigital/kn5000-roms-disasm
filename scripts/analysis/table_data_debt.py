@@ -21,10 +21,24 @@ table_data/ only, and reporting BYTES not directive counts):
     UNCLASSIFIED       anything not matching the above -- this is the number that matters
 
 Run:
-    python3 scripts/analysis/table_data_debt.py
+    python3 scripts/analysis/table_data_debt.py            # measure + classify
+    python3 scripts/analysis/table_data_debt.py --selftest  # prove the classifier isn't vacuous
+
+--selftest is the answer to "couldn't this just call everything legitimate?": it (1) feeds the
+classifier paths it has never seen and asserts they come back UNCLASSIFIED, so a genuinely new
+undocumented blob would be caught, not silently waved through; (2) pins today's known paths to
+their expected class as a regression guard; (3) actually RE-RUNS the underlying round-trip
+verifiers (font_images.py / icon_images.py / ui_bitmaps_images.py / indexed_images.py /
+mono_images.py / style_events.py `verify`, plus `make verify-demo-presets` and
+`verify-help-databases`) rather than trusting the classifier's path-string guess -- if a PNG or
+.styles file drifts from the ROM, or a codec regresses, THIS goes red; (4) checks the six
+verbatim-BMP files actually have a 'BM' magic and a header-declared size matching the file, so
+"verbatim-bmp" is not just a filename pattern. Anything that would make the 0-B-unclassified
+finding false makes --selftest exit 1.
 """
 import pathlib
 import re
+import struct
 import subprocess
 import sys
 
@@ -57,6 +71,107 @@ def resolve_size(path_str, off, ln):
     if full.exists():
         return full.stat().st_size
     return None  # not built yet -- must be generated to know the size
+
+
+
+def selftest():
+    """Prove the classifier can go red -- see the module docstring's --selftest section."""
+    failures = []
+
+    # (1) paths the classifier has never seen must NOT be waved through as legitimate.
+    bogus_paths = [
+        "includes/mystery_blob_nobody_has_looked_at.bin",
+        "includes/tone_database_directory_extra.bin",
+        "raw/unknown_dump.bin",
+        "includes/new_factory_data_2026.bin",
+    ]
+    for p in bogus_paths:
+        got = classify(p)
+        if got != "UNCLASSIFIED":
+            failures.append(
+                f"classify({p!r}) = {got!r}, expected UNCLASSIFIED -- the classifier would "
+                f"silently legitimise a brand-new, never-reviewed blob"
+            )
+
+    # (2) today's known paths must map to their documented class (regression guard).
+    known = [
+        ("images/FTBMP01.BMP", "verbatim-bmp"),
+        ("images/Wallpaper_0.bin", "round-trip-png"),
+        ("includes/generated/IconPixels_000.bin", "round-trip-png"),
+        ("includes/generated/Composer_FactoryMemoryImage.bin", "round-trip-png"),
+        ("includes/demo_presets/demo_preset_00_compressed.bin", "round-trip-codec"),
+        ("includes/help_databases/help_db_english_compressed.bin", "round-trip-codec"),
+        ("includes/icons_to_strings.bin", "stale-remnant"),
+    ]
+    for p, expected in known:
+        got = classify(p)
+        if got != expected:
+            failures.append(f"classify({p!r}) = {got!r}, expected {expected!r}")
+
+    # (3) the round-trip CLAIM must be backed by actually re-running the round trip, not just
+    #     matched by a path substring. This is what makes "round-trip-png"/"round-trip-codec"
+    #     mean something -- if a committed PNG or .styles file no longer reproduces the ROM,
+    #     this fails, regardless of what the .incbin path looks like.
+    py_checks = [
+        ("round-trip-png: fonts", ["scripts/build/font_images.py", "verify"]),
+        ("round-trip-png: icons", ["scripts/build/icon_images.py", "verify"]),
+        ("round-trip-png: UI bitmaps/frames", ["scripts/build/ui_bitmaps_images.py", "verify"]),
+        ("round-trip-png: indexed images (incl. wallpapers)",
+         ["scripts/build/indexed_images.py", "verify"]),
+        ("round-trip-png: boot-update banners", ["scripts/build/mono_images.py", "verify"]),
+        ("round-trip-png: Composer/style banks", ["scripts/build/style_events.py", "verify"]),
+    ]
+    for name, argv in py_checks:
+        try:
+            r = subprocess.run([sys.executable] + argv, cwd=REPO, capture_output=True,
+                                text=True, timeout=180)
+        except Exception as e:  # noqa: BLE001
+            failures.append(f"{name}: could not run ({e})")
+            continue
+        if r.returncode != 0 or "EXACT" not in r.stdout.upper():
+            failures.append(f"{name}: FAILED (exit {r.returncode})\n"
+                             f"{r.stdout[-500:]}\n{r.stderr[-500:]}")
+
+    make_checks = [
+        ("round-trip-codec: demo presets", "verify-demo-presets"),
+        ("round-trip-codec: help databases", "verify-help-databases"),
+    ]
+    for name, target in make_checks:
+        try:
+            r = subprocess.run(["make", target], cwd=REPO, capture_output=True,
+                                text=True, timeout=180)
+        except Exception as e:  # noqa: BLE001
+            failures.append(f"{name}: could not run ({e})")
+            continue
+        if r.returncode != 0:
+            failures.append(f"{name}: FAILED (exit {r.returncode})\n"
+                             f"{r.stdout[-800:]}\n{r.stderr[-500:]}")
+
+    # (4) "verbatim-bmp" must actually BE a Windows BMP (magic + header-declared size matches
+    #     the file), not just a file whose path contains "FTBMP".
+    for name in ["FTBMP01.BMP", "FTBMP02.BMP", "FTBMP03.BMP", "FTBMP04.BMP",
+                 "FTBMP05.BMP", "FTBMP06.BMP"]:
+        p = TABLE_DIR / "images" / name
+        data = p.read_bytes()
+        if data[:2] != b"BM":
+            failures.append(f"{name}: missing 'BM' magic -- not a real BMP")
+            continue
+        declared = struct.unpack_from("<I", data, 2)[0]
+        if declared != len(data):
+            failures.append(f"{name}: header declares {declared} B, file on disk is {len(data)} B")
+
+    if failures:
+        print(f"SELFTEST FAILED ({len(failures)}):")
+        for f in failures:
+            print(f"  - {f}")
+        return 1
+
+    print(f"SELFTEST OK: {len(bogus_paths)} bogus paths correctly rejected as UNCLASSIFIED, "
+          f"{len(known)} known-path classifications unchanged, "
+          f"{len(py_checks)} PNG/.styles round trips re-verified live, "
+          f"{len(make_checks)} LZSS/SLIDE8K codec round trips re-verified live, "
+          f"6 BMP headers checked against their file sizes.")
+    return 0
 
 
 def main():
@@ -112,4 +227,6 @@ def main():
 
 
 if __name__ == "__main__":
+    if "--selftest" in sys.argv:
+        sys.exit(selftest())
     main()
