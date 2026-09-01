@@ -1058,9 +1058,12 @@ Int_SignedDiv_NegResult:
 	ret
 
 ; Entry point "signed quotient": D = 0, jump to Int_SignedDiv. Despite the name this is
-; executable code, not data.
+; executable code, not data. Converted from `.byte` to mnemonics 2026-09-01 (lane SUB);
+; `jr -75` takes the raw signed 8-bit displacement, verified byte-identical by an
+; llvm-mc round trip.
 Int_SignedDiv_ConstData:
-	.byte 0x24, 0x00, 0x68, 0xb5
+	ldb	d, 0
+	jr	-75
 
 ; Entry point "signed remainder": D = 1, jump to Int_SignedDiv. The three bytes at
 ; 0x03DC63 are a fourth entry point ("unsigned remainder"): call FP_UnsignedDiv and
