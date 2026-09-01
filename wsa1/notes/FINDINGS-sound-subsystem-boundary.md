@@ -150,6 +150,42 @@ transport **inside** the measured set rather than outside it.
 ⚠ prom_b's zero is a real zero, not a gap: CPU 1's sound work is entirely in
 prom_a, and prom_b is the UI/display/song-store half of that processor's firmware.
 
+### 2.1 And nothing is hiding in the 87,118 bytes that are still `.incbin`
+
+The paragraph above is a statement about routines a SOURCE scan can see.  prom_a
+still has 29 `.incbin` spans and prom_b 123, and a driver living entirely inside
+one would be invisible to it.  So the unconverted BYTES were searched directly,
+for the instruction every sound driver in this firmware starts with -- opcode
+`0x40..0x47` followed by a device base as a 32-bit little-endian immediate:
+
+```
+python3 notes/sound/wsa1_sound_in_unconverted.py            # 7 checks, 0 failures
+```
+
+| | in CONVERTED bytes | in 87,118 UNCONVERTED bytes |
+|---|---:|---:|
+| the five real device bases | **122** | **0** |
+| four bases of identical shape that no chip decodes | 0 | 0 |
+
+★ Three controls, because `../notes/sound/sound_coverage.py` records a byte
+search of this kind that was NOT evidence (272 real against 188 null, a 1.45x
+ratio in zero-heavy data) and ends *"Do not reintroduce that search without its
+null"*:
+
+* **POSITIVE:** the search finds 102 `ld <X..>,0x0010C000` sites in prom_c's
+  converted bytes -- the source census's number exactly, arrived at from the ROM
+  instead of from the listing.  An instrument that found nothing anywhere would
+  not be evidence of absence.
+* **NULL:** four undecoded bases of the same shape score 0 in both halves.
+* **FALSIFIABILITY:** prom_b's unconverted spans contain **1,102** five-byte
+  sites whose first byte is an `ld <Xrr>,imm32` opcode.  A hit was possible; none
+  of them was a sound base.
+
+⚠ RESIDUE: a driver handed its base as an ARGUMENT would not be found.  What
+bounds that is that all 102 converted references to 0x0010C000 are the single
+instruction shape `ld <X..>,0x0010C000` -- this firmware does not pass device
+bases around.
+
 ⚠ What this does **not** check is that a routine's callees are converted.  It
 checks that the routine's own text is.  The tree-wide answer to the callee
 question is `notes/reachability.py --targets`, which reports **STRONG 17 bytes,
