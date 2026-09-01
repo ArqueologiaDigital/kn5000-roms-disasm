@@ -25,8 +25,8 @@
 ; 0x87FFF0-0x8CFFFF  Feature Demo Data (SSF file, BMP bitmaps, file entries)
 ; 0x8D0000-0x8DFFFF  Unused (0xFF fill)
 ; 0x8E0000-0x8ECFFF  LZSS Compressed Preset Data (SLIDE4K format, ~28KB)
-; 0x8ED000-0x912FFF  Wallpapers (2 x 320x240 8bpp), each followed by a 1KB
-;                     trailer holding 16-entry {r,g,b,0} shade-ramp tables
+; 0x8ED000-0x912FFF  Wallpapers (2 x 320x240 8bpp; wallpapers.s), each followed
+;                     by a 1KB trailer holding 16-entry {r,g,b,0} shade-ramp tables
 ; 0x913000-0x91CFFF  UI bitmap descriptor table (34) + 8bpp pixel runs
 ;                     (DrawBitmap/DrawBitmapFast source -- see ui_bitmaps.s)
 ; 0x91D000-0x933FFF  Section banks 6, 28-32: factory UI images (Technics
