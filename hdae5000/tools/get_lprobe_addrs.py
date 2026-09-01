@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""get_lprobe_addrs.py -- ground-truth ROM address of every line of hdae5000_data_tables.s
+"""get_lprobe_addrs.py -- ground-truth ROM address of every line of an hdae5000 source file
 
-QUESTION ANSWERED: what is the real, linked ROM address of line N of hdae5000_data_tables.s?
+QUESTION ANSWERED: what is the real, linked ROM address of line N of a given hdae5000/*.s file
+(hdae5000_data_tables.s by default; pass another path relative to hdae5000/ as argv[1])?
 
 WHY: several bare `.byte` debt bytes only make sense once you know their exact address (is a
 lone `.byte 0x00` at an ODD or EVEN offset? does a `.set` offset documented in
@@ -9,14 +10,15 @@ hdae5000_init_data.s really land on the string it claims to?). Computing that by
 `.asciz`/`.ascii` escape sequences and `.fill`/`.zero` counts is exactly the kind of thing a
 one-off script gets subtly wrong (backslash escapes, extended-ASCII bytes hiding inside quoted
 strings, etc). Instead this tool asks the PINNED ASSEMBLER ITSELF: it clones hdae5000/, inserts a
-unique label before every source line of hdae5000_data_tables.s, rebuilds the full ROM image with
-those labels in place, confirms the build is STILL byte-identical to the original dump (i.e. the
-probe labels changed nothing), and then reads every probe label's linked address back out of the
-ELF symbol table. No address in the output is a guess; every one came out of llvm-mc + ld.lld.
+unique label before every source line of the target file, rebuilds the full ROM image with those
+labels in place, confirms the build is STILL byte-identical to the original dump (i.e. the probe
+labels changed nothing), and then reads every probe label's linked address back out of the ELF
+symbol table. No address in the output is a guess; every one came out of llvm-mc + ld.lld.
 
 RUN (from the hdae5000 lane worktree root):
-    python3 hdae5000/tools/get_lprobe_addrs.py > /tmp/lprobe.txt
-    wc -l /tmp/lprobe.txt        # one line per source line of hdae5000_data_tables.s
+    python3 hdae5000/tools/get_lprobe_addrs.py > /tmp/lprobe.txt                        # data_tables
+    python3 hdae5000/tools/get_lprobe_addrs.py hdae5000_utilities.s > /tmp/lprobe_u.txt # another file
+    wc -l /tmp/lprobe.txt        # one line per source line of the target file
 
 Output format (one line per probe, same as `llvm-nm`):
     <8-hex-digit-address> t Lprobe_<source-line-number>
@@ -34,8 +36,9 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 HDAE_DIR = os.path.join(ROOT, "hdae5000")
 ORIGINAL_ROM = os.path.join(ROOT, "original_ROMs", "hd-ae5000_v2_06i.ic4")
+ROM_SIZE = 524288
 LLVM_BIN = os.environ.get("LLVM_BIN", os.path.expanduser("~/compartilhado/llvm-project/build/bin"))
-TARGET_FILE = "hdae5000_data_tables.s"
+TARGET_FILE = sys.argv[1] if len(sys.argv) > 1 else "hdae5000_data_tables.s"
 
 
 def instrument(path):
@@ -78,10 +81,22 @@ def main():
             built = f.read()
         with open(ORIGINAL_ROM, "rb") as f:
             original = f.read()
+        # Guard against a vacuous pass (e.g. both reads silently returning empty): the comparison
+        # below is only meaningful if we actually read the full, real ROM image on both sides.
+        if len(original) != ROM_SIZE:
+            sys.exit(f"original_ROMs/hd-ae5000_v2_06i.ic4 is {len(original)} B, expected "
+                     f"{ROM_SIZE} B -- refusing to compare against a wrong/truncated file.")
+        if len(built) != ROM_SIZE:
+            sys.exit(f"probe build produced {len(built)} B, expected {ROM_SIZE} B -- the build "
+                     f"is broken, not byte-identical. Aborting without printing any output.")
         if built != original:
             sys.exit("PROBE BUILD IS NOT BYTE-IDENTICAL to original_ROMs/hd-ae5000_v2_06i.ic4 -- "
                      "the probe labels perturbed the image; addresses below would be untrustworthy. "
                      "Aborting without printing any output.")
+
+        if n == 0:
+            sys.exit(f"{TARGET_FILE} instrumented to 0 lines -- refusing to report an empty, "
+                     f"vacuously-'verified' address map.")
 
         result = subprocess.run([llvm_nm, elf], check=True, capture_output=True, text=True)
         printed = 0
