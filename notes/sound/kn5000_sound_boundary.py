@@ -487,25 +487,61 @@ def calibrate(fl):
     return out
 
 
-UNSPELLABLE = re.compile(r'^\s*\.byte\s+[^;]*;\s*(\S.*?)\s*$')
+UNSPELLABLE = re.compile(r'^\s*\.byte\s+([^;]*?)\s*;\s*(\S.*?)\s*$')
 NUM = re.compile(r'0x[0-9A-Fa-f]+')
+UNILINE = re.compile(r'^([0-9a-f]{4,6}): ((?:[0-9a-f]{2} )+)\s+(\S.*?)\s*$')
+
+
+def unidasm_forms(key):
+    """byte string -> MAME unidasm's rendering, from the committed listing.
+
+    ★ THE FRAMING AUTHORITY, again.  A `.byte` line's comment is not evidence
+    of anything by itself; this is what turns it into evidence."""
+    out = {}
+    for line in open(os.path.join(ROOT, IMAGES[key]["rom"] + ".unidasm"),
+                     errors="replace"):
+        m = UNILINE.match(line.rstrip())
+        if m:
+            out[" ".join(m.group(2).split())] = m.group(3)
+    return out
+
+
+def _norm(s):
+    return "".join(s.split()).lower()
 
 
 def unspellable(key):
     """Which instruction FORMS still have to be left as raw bytes.
 
-    Every `.byte` line this tree emits for a real instruction carries unidasm's
-    rendering as its comment, so the residue can be counted by form rather than
-    by byte.  That turns "20 bytes could not be converted" into a work list for
-    the assembler backend, which is where the fix belongs."""
+    A `.byte` line counts ONLY if the committed unidasm listing decodes exactly
+    those bytes as ONE instruction and the line's comment is that rendering.
+    ⚠ THE COMMENT ALONE IS NOT A TEST.  Matching any commented `.byte` line
+    counted 81 lines of the boot ROM's velocity-curve and error-bit TABLES as
+    unspelt instructions -- 562 bytes of pure data -- because a data table's
+    per-row annotation looks exactly like a disassembly comment.  Only three of
+    those 81 even had bytes that form an instruction, and none of the three had
+    a comment that was one.
+
+    -> (Counter of form -> sites, total bytes)"""
     im = IMAGES[key]
+    forms = unidasm_forms(key)
     c = collections.Counter()
     nb = 0
     for line in open(os.path.join(ROOT, im["root"]), errors="replace"):
         m = UNSPELLABLE.match(line)
-        if m:
-            c[NUM.sub("N", m.group(1)).strip()] += 1
-            nb += len([x for x in line.split(";")[0].split(",") if x.strip()])
+        if not m:
+            continue
+        try:
+            bs = [int(x, 0) for x in m.group(1).split(",") if x.strip()]
+        except ValueError:
+            continue
+        if not all(0 <= b <= 0xFF for b in bs):
+            continue
+        rendering = forms.get(" ".join(f"{b:02x}" for b in bs))
+        if rendering is None or not _norm(m.group(2)).startswith(_norm(rendering)):
+            continue
+        c[NUM.sub("N", m.group(2)).strip()] += 1
+        nb += len(bs)
     return c, nb
 
 
