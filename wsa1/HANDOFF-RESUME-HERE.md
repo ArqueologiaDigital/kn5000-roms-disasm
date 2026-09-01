@@ -1,5 +1,25 @@
 # SX-WSA1R disassembly — resume here
 
+## ★★ GIT PATHS ARE REPO-RELATIVE; THIS TREE IS AT `wsa1/`
+
+Since the 2026-09-01 migration ROOT is `<repo>/wsa1`, not the repository root.  `os.path`
+paths are ROOT-relative; `git show <rev>:<path>` is resolved from the REPOSITORY ROOT and
+ignores `-C` and `cwd=`, and a pathspec (`git diff <rev> -- <path>`) is resolved from the
+CURRENT DIRECTORY.  Never spell either by hand:
+
+    from asm_source import git_path, git_show, git_pathspec, git_diff_lines
+
+They ask git for the prefix **per revision**, so the nine pinned pre-migration baselines --
+whose trees really are root-relative -- keep working.
+
+    python3 notes/git_path_audit.py            # lint: every git call site
+    python3 notes/git_path_audit.py --trace    # run them under a logging git
+    python3 notes/git_path_audit.py --revs     # every pinned revision, and what keeps it alive
+
+⚠ **All nine pinned baselines are NOT ancestors of HEAD.**  They survive only through
+`refs/tags/pre-migration-2026-09-01`.  Delete that tag and `git gc` takes the baseline of
+six probes with it.
+
 ## ★★ THE COVERAGE GOAL IS MET: every reachable code path with start evidence is converted
 
     python3 notes/reachability.py --targets

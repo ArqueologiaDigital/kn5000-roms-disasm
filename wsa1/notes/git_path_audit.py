@@ -357,6 +357,66 @@ def git_scripts(root, only=None):
 
 
 # ---------------------------------------------------------------------------
+# PINNED REVISIONS
+# ★ A BASELINE IS A DEPENDENCY, AND AN UNREACHABLE ONE IS A SILENT DEADLINE.
+# Six probes compare the working tree with a revision they name by hash.  The
+# 2026-09-01 migration rewrote the WSA1R history into `wsa1/`, so those hashes
+# are NOT ancestors of HEAD any more; they resolve only because a tag still
+# points at the old tip.  Nothing in the tree said so, and nothing would have
+# said so on the day the tag went away and every one of those probes started
+# raising "cannot read ... at ...".
+REV_ASSIGN = re.compile(
+    r'^\s*(BASE|BASE_COMMIT|BASELINE|PRE_MERGE|JOIN_BASE|REV|COMMIT)\s*=\s*'
+    r'["\']([0-9a-f]{7,40})["\']', re.M)
+REV_INLINE = re.compile(r'["\']([0-9a-f]{7,40}):')
+REV_ARG = re.compile(r'["\']([0-9a-f]{7,40})["\']\s*,\s*["\']--["\']')
+# ★ AND ANY HEX LITERAL ON A LINE THAT TALKS TO GIT.  The three that the
+# assignment and `<rev>:` forms missed were all of this shape:
+#   git_show("prom_a/...", "47d40941b750")   git_diff_lines(..., "ebabc85", ...)
+#   REV = os.environ.get('REV', 'db9d8b5')
+# A hex constant that is not a revision comes back GONE, which is a visible
+# false alarm rather than an invisible miss -- the right way round.
+REV_LINE = re.compile(r'git_show|git_diff_lines|git_pathspec|image_(?:lines|text)'
+                      r'_at_rev|["\']git["\']|environ\.get')
+REV_HEX = re.compile(r'["\']([0-9a-f]{7,40})["\']')
+
+
+def pinned_revs(root=ROOT):
+    found = {}
+    for rel in committed_py(root):
+        try:
+            txt = open(os.path.join(root, rel), encoding="utf-8").read()
+        except OSError:
+            continue
+        for m in REV_ASSIGN.finditer(txt):
+            found.setdefault(m.group(2), set()).add("%s (%s=)" % (rel, m.group(1)))
+        for rx in (REV_INLINE, REV_ARG):
+            for m in rx.finditer(txt):
+                found.setdefault(m.group(1), set()).add(rel)
+        for ln in txt.split("\n"):
+            if REV_LINE.search(ln):
+                for m in REV_HEX.finditer(ln):
+                    found.setdefault(m.group(1), set()).add(rel)
+    rows = []
+    for rev in sorted(found):
+        t = subprocess.run(["git", "-C", root, "cat-file", "-t", rev],
+                           capture_output=True, text=True)
+        resolves = t.returncode == 0 and t.stdout.strip() == "commit"
+        ancestor = resolves and subprocess.run(
+            ["git", "-C", root, "merge-base", "--is-ancestor", rev, "HEAD"],
+            capture_output=True).returncode == 0
+        where = ""
+        if resolves and not ancestor:
+            refs = subprocess.run(
+                ["git", "-C", root, "for-each-ref", "--contains", rev,
+                 "--format=%(refname)"], capture_output=True, text=True).stdout
+            where = " ".join(refs.split()) or "(no ref -- unreferenced object)"
+        rows.append({"rev": rev, "resolves": resolves, "ancestor": ancestor,
+                     "where": where, "sites": sorted(found[rev])})
+    return rows
+
+
+# ---------------------------------------------------------------------------
 def _selftest():
     """INVARIANTS.  ★ The two that matter are the CONTROLS: the instrument must
     catch a deliberately-broken git read, and must not flag a fixed one."""
@@ -467,8 +527,31 @@ def _selftest():
         check("...and the correct spelling, from the repository root, is not "
               "flagged", ok is True)
 
+    # ---- pinned revisions -------------------------------------------------
+    rows = pinned_revs(ROOT)
+    check("every pinned revision this tree names still RESOLVES",
+          all(r["resolves"] for r in rows),
+          ", ".join(r["rev"] for r in rows if not r["resolves"]))
+    check("the pinned-revision scanner finds something at all", len(rows) > 0,
+          "%d" % len(rows))
+    check("a revision that cannot resolve is reported GONE, not skipped",
+          not any(r["resolves"] for r in pinned_revs_synthetic()),
+          "control")
+
     print("\nFAILURES: %d" % len(fails))
     return 1 if fails else 0
+
+
+def pinned_revs_synthetic():
+    """The CONTROL for pinned_revs: a hash no repository holds must come back
+    unresolvable.  A scanner that silently dropped what it could not resolve
+    would report a clean sheet forever."""
+    rev = "deadbee" + "f" * 33
+    t = subprocess.run(["git", "-C", ROOT, "cat-file", "-t", rev],
+                       capture_output=True, text=True)
+    return [{"rev": rev, "resolves": t.returncode == 0 and
+             t.stdout.strip() == "commit", "ancestor": False, "where": "",
+             "sites": []}]
 
 
 def main():
@@ -476,6 +559,9 @@ def main():
     ap.add_argument("--trace", action="store_true")
     ap.add_argument("--only", default=None)
     ap.add_argument("--json", default=None)
+    ap.add_argument("--revs", action="store_true",
+                    help="every pinned revision this tree names, and what keeps "
+                         "it reachable")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--reclassify", default=None,
                     help="re-grade a previous --trace --json without re-running "
@@ -483,6 +569,27 @@ def main():
     a = ap.parse_args()
     if a.selftest:
         return _selftest()
+
+    if a.revs:
+        rows = pinned_revs(ROOT)
+        for r in rows:
+            print("  %-6s %-42s %-14s %s"
+                  % ("OK" if r["resolves"] else "GONE", r["rev"],
+                     "ancestor" if r["ancestor"] else "NOT an ancestor",
+                     r["where"]))
+            for site in r["sites"]:
+                print("           %s" % site)
+        gone = [r for r in rows if not r["resolves"]]
+        orphan = [r for r in rows if r["resolves"] and not r["ancestor"]]
+        print("\n%d pinned revision(s); %d unresolvable; %d resolvable but NOT "
+              "reachable from HEAD" % (len(rows), len(gone), len(orphan)))
+        if orphan:
+            print("  ⚠ those %d survive only through the ref(s) named above.  "
+                  "Delete it and `git gc` drops the baseline of every probe "
+                  "listed under it." % len(orphan))
+        if a.json:
+            json.dump(rows, open(a.json, "w"), indent=1)
+        return 1 if gone else 0
 
     if a.reclassify:
         out = json.load(open(a.reclassify))
