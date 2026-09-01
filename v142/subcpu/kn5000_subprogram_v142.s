@@ -7309,16 +7309,17 @@ Voice_Clamp_Byte_WA_Return:
 ; at ToneGen_WriteVoice_6Words, _Pan_Pair, _EnvLevel and _Reg11). Every routine that talks to
 ; the chip latches 0x100000 with `add wa, <bank>` and then writes 0x100002, so counting that
 ; one opcode gives the writer list per bank.
-; ★ COUNT IT IN THE ROM IMAGE, NOT IN THIS FILE: a grep for `add wa, 0x8..` here misses the
-; stretches still emitted as `.byte`, and two of them contain real bank writers (see the
-; MISLABELLED-AS-DATA notes at 0x0280FE-0x028838 and 0x028F75-0x029E30). Scanning
+; ★ COUNT IT IN THE ROM IMAGE, NOT IN THIS FILE: at the time this was written, a grep for
+; `add wa, 0x8..` here missed two real bank writers that were still emitted as `.byte` (see
+; the now-resolved MISLABELLED notes at 0x0280FE-0x028838 and 0x028F75-0x029E30, both fully
+; converted to instructions as of 2026-09-02). Scanning
 ; kn5000_subprogram_v142.rom for the opcode bytes D8 C8 <lo> <hi> gives:
 ;
 ;   seg 0   +0x800 r0x20 : 24 sites     seg 1   +0x840 r0x21 : 29 sites
 ;           +0x900 r0x24 :  3 sites             +0x940 r0x25 :  3 sites
 ;           +0x9C0 r0x27 :  3 sites             +0xA00 r0x28 :  3 sites
 ;   seg 2   +0x880 r0x22 :  4 sites  -- ToneGen_WriteVoiceParams, ToneGen_WriteEnvSegments,
-;                                      ToneGen_WriteSegRegs_SameLevel, and the .byte-coded
+;                                      ToneGen_WriteSegRegs_SameLevel, and
 ;                                      ToneGen_WriteVoice_Reg21_Reg22 (0x028170)
 ;           +0x980 r0x26 :  1 site   -- ToneGen_WriteVoiceParams
 ;           +0xA40 r0x29 :  1 site   -- ToneGen_WriteVoiceParams
@@ -17043,11 +17044,14 @@ ToneGen_WriteNote2ch_NopCont2:
 	inc 4, xsp
 	ret
 
-; --- 0x0280FE-0x028838  VoiceCC_DataTable_0280FE -- MISLABELLED, THIS IS CODE
-; 1851 bytes emitted as `.byte` by the ASL->LLVM converter.  It disassembles cleanly as
-; TLCS-900H from byte 0 and contains 21 subroutines, every one of them reached by `calr`
-; from named code or from the 0x028F75 block.  The 21 entry points are proposed individually
-; below.  Nothing in here is data.
+; --- 0x0280FE-0x028838  VoiceCC_DataTable_0280FE -- was MISLABELLED, now fully code
+; All 1851 bytes are TLCS-900H instructions, byte-for-byte (round-trip verified against
+; kn5000_subprogram_v142.rom).  Most of this span had already been converted from `.byte` by
+; an earlier pass; the last 134 bytes (AudioMod_Scale_To_Part_1C/1B) resisted the automated
+; convert because llvm-mc's own disassembler cannot DECODE the `st_rrb`/register-indexed
+; forms it can ENCODE -- MAME unidasm framing plus a hand round trip closed them 2026-09-02.
+; It contains 21 subroutines, every one of them reached by `calr` from named code or from the
+; 0x028F75 block.  The 21 entry points are proposed individually below.  Nothing in here is data.
 ; ⚠ RENAME PROPOSAL, NOT A PLACEHOLDER FILL: this address already carries the real name
 ; VoiceCC_DataTable_0280FE.  I have left that name alone; applying this one is a decision for
 ; the maintainer.  See the matching [UNCERTAIN] at the end.
@@ -17457,26 +17461,66 @@ LABEL_028422:
 ; Computes  E = ((bipolar ? (BC-0x40)*2 : BC) * depth) >> 6  and stores the byte at
 ; 0x041384 + part*0x11F  (part+0x1C).
 AudioMod_Scale_To_Part_1C:
-	.byte 0xba, 0x01, 0xcf, 0x66, 0x19, 0x8a, 0x02, 0x25
-	.byte 0xcd, 0x8f, 0xdb, 0x12, 0xd9, 0x12, 0xd9, 0xca
-	.byte 0x40, 0x00, 0xd9, 0x8a, 0xda, 0x82, 0xda, 0x89
-	.byte 0xdb, 0x41, 0xd9, 0x8a, 0x68, 0x11, 0x8a, 0x02
-	.byte 0x25, 0xcd, 0x8f, 0xdb, 0x12, 0xcb, 0x8d, 0xda
-	.byte 0x12, 0xda, 0x89, 0xdb, 0x41, 0xd9, 0x8a, 0xda
-	.byte 0xef, 0x06, 0xd8, 0x12, 0xd8, 0x09, 0x1f, 0x01
-	.byte 0xf2, 0x84, 0x13, 0x04, 0x31, 0xf3, 0x07, 0xe4
-	.byte 0xe0, 0x45, 0x0e
+	bit	7, (xde+1)
+	jr	z, AudioMod_Scale_To_Part_1C_Unipolar
+	ld	e, (xde+2)
+	ld	l, e
+	extz	hl
+	extz	bc
+	sub	bc, 64
+	ld	de, bc
+	add	de, de
+	ld	bc, de
+	mul	xbc, xhl
+	ld	de, bc
+	jr	AudioMod_Scale_To_Part_1C_Common
+AudioMod_Scale_To_Part_1C_Unipolar:
+	ld	e, (xde+2)
+	ld	l, e
+	extz	hl
+	ld	e, c
+	extz	de
+	ld	bc, de
+	mul	xbc, xhl
+	ld	de, bc
+AudioMod_Scale_To_Part_1C_Common:
+	srl	de, 6
+	extz	wa
+	muls	wa, 0x11F
+	lda_24	xbc, 0x041384
+	st_rrb	e, xbc, wa	; ld (XBC+WA),E
+	ret
 ; Identical to AudioMod_Scale_To_Part_1C but stores to 0x041383 + part*0x11F (part+0x1B).
 AudioMod_Scale_To_Part_1B:
-	.byte 0xba, 0x01, 0xcf, 0x66, 0x19
-	.byte 0x8a, 0x02, 0x25, 0xcd, 0x8f, 0xdb, 0x12, 0xd9
-	.byte 0x12, 0xd9, 0xca, 0x40, 0x00, 0xd9, 0x8a, 0xda
-	.byte 0x82, 0xda, 0x89, 0xdb, 0x41, 0xd9, 0x8a, 0x68
-	.byte 0x11, 0x8a, 0x02, 0x25, 0xcd, 0x8f, 0xdb, 0x12
-	.byte 0xcb, 0x8d, 0xda, 0x12, 0xda, 0x89, 0xdb, 0x41
-	.byte 0xd9, 0x8a, 0xda, 0xef, 0x06, 0xd8, 0x12, 0xd8
-	.byte 0x09, 0x1f, 0x01, 0xf2, 0x83, 0x13, 0x04, 0x31
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x45, 0x0e
+	bit	7, (xde+1)
+	jr	z, AudioMod_Scale_To_Part_1B_Unipolar
+	ld	e, (xde+2)
+	ld	l, e
+	extz	hl
+	extz	bc
+	sub	bc, 64
+	ld	de, bc
+	add	de, de
+	ld	bc, de
+	mul	xbc, xhl
+	ld	de, bc
+	jr	AudioMod_Scale_To_Part_1B_Common
+AudioMod_Scale_To_Part_1B_Unipolar:
+	ld	e, (xde+2)
+	ld	l, e
+	extz	hl
+	ld	e, c
+	extz	de
+	ld	bc, de
+	mul	xbc, xhl
+	ld	de, bc
+AudioMod_Scale_To_Part_1B_Common:
+	srl	de, 6
+	extz	wa
+	muls	wa, 0x11F
+	lda_24	xbc, 0x041383
+	st_rrb	e, xbc, wa	; ld (XBC+WA),E
+	ret
 ; A = part index (saved on the stack), BC = value, XDE = routing descriptor.
 ; Bipolar branch subtracts 0x2000 from the sign-extended value, unipolar branch halves it;
 ; scales by descriptor+2 via FP_MulAccum64 (0x03D8CA), then, for A-0x10 in 0..9, takes a
@@ -18105,16 +18149,23 @@ Voice_CC_SetPortamentoTime:
 	stb_dri E, 0x07, 0xE4, 0xE0
 	ret
 
-; Emitted as `.byte` (42 bytes) but is ordinary code: if C != 0 stores +2 into the word at
+; Ordinary code, not data: if C != 0 stores +2 into the word at
 ; 0x041372 + part*0x11F, otherwise stores -3 (0xFFFD).  Two-valued, so "range" is a guess --
 ; what it really does is force a small signed constant into part flags word 2.
 Voice_CC_SetModWheelRange:
-	.byte 0xcb, 0xd8, 0x66, 0x13, 0xd8, 0x12, 0xd8, 0x09
-	.byte 0x1f, 0x01, 0xf2, 0x72, 0x13, 0x04, 0x31, 0xd3
-	.byte 0x07, 0xe4, 0xe0, 0x3e, 0x02, 0x00, 0x0e, 0xd8
-	.byte 0x12, 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x72, 0x13
-	.byte 0x04, 0x31, 0xd3, 0x07, 0xe4, 0xe0, 0x3c, 0xfd
-	.byte 0xff, 0x0e
+	cps	c, 0
+	jr	z, Voice_CC_SetModWheelRange_Else
+	extz	wa
+	muls	wa, 0x11F
+	lda_24	xbc, 0x041372
+	or_sriw_im 0x07, 0xE4, 0xE0, 0x02, 0x00
+	ret
+Voice_CC_SetModWheelRange_Else:
+	extz	wa
+	muls	wa, 0x11F
+	lda_24	xbc, 0x041372
+	and_sriw_im 0x07, 0xE4, 0xE0, 0xFD, 0xFF
+	ret
 
 ; Voice_CC_SetReverbDepth -- CC 0x91: Store reverb depth
 ; Stores value at voice + 0x7F (base 0x04137F). Range 0x00-0x7F.
@@ -18817,10 +18868,12 @@ Voice_AllNotes_SustainRetrigger_Exit:
 	lda xsp, (xsp + 10)
 	ret
 
-; --- 0x028F75-0x029E30  VoiceCC_DataTable_028F75 -- MISLABELLED, THIS IS CODE
-; 3772 bytes emitted as `.byte`.  It is the body of the audio-channel command handlers: the
-; nine entry points below are all reached by `calr`/`jrl` from AudioChannel_DispatchTable at
-; 0x029E5B or by absolute `call` from outside the region.  Nothing in here is data.
+; --- 0x028F75-0x029E30  VoiceCC_DataTable_028F75 -- was MISLABELLED, now fully code
+; All 3772 bytes are TLCS-900H instructions (previously `.byte`; converted in an earlier pass,
+; before this note was checked -- this is a corrected marker, not a new conversion). It is the
+; body of the audio-channel command handlers: the nine entry points below are all reached by
+; `calr`/`jrl` from AudioChannel_DispatchTable at 0x029E5B or by absolute `call` from outside
+; the region.  Nothing in here is data.
 ; ⚠ RENAME PROPOSAL, NOT A PLACEHOLDER FILL: this address already carries the real name
 ; VoiceCC_DataTable_028F75.  Left alone; maintainer's call.  See [UNCERTAIN].
 ; XWA = part record (voice list at +5).  Walks the list, classifies each voice by
@@ -20597,8 +20650,12 @@ Voice_ModWheel_Apply_Exit:
 	lda xsp, (xsp + 10)
 	ret
 
-; --- 0x02A061-0x02A0E8  VoiceModWheel_DataTable_02A061 -- MISLABELLED, THIS IS CODE
-; 136 bytes emitted as `.byte`; a complete routine, documented immediately below.
+; --- 0x02A061-0x02A0E8  VoiceModWheel_DataTable_02A061 -- was MISLABELLED, now fully code
+; All 136 bytes are TLCS-900H instructions (round-trip verified byte-identical to
+; kn5000_subprogram_v142.rom, converted 2026-09-02).  llvm-mc's own disassembler cannot decode
+; this span cleanly (the `ld_sril3`/`lda_rr`/`*_erp` register-indexed forms it can ENCODE but
+; not auto-DECODE), so MAME unidasm supplied the framing and the mnemonics were hand-matched to
+; the encoder, then proved by re-assembling to the exact original bytes.
 ; ★ No caller found: an exhaustive scan of the whole 0x30000-byte ROM for CALL (0x1D),
 ; CALR (0x1E) and JRL (0x78) encodings targeting 0x02A061 returns nothing.  It is either
 ; dead code or reached through a pointer I have not located.
@@ -20610,23 +20667,57 @@ Voice_ModWheel_Apply_Exit:
 ; inside Voice_ModWheel_Apply but with descriptor base 0x1D instead of 0x15 / 0x17 -- i.e.
 ; this is the applier for a THIRD modulation source.  See the no-caller warning above.
 VoiceModWheel_DataTable_02A061:
-	.byte 0xef, 0x6c, 0xd7, 0xfa, 0x04, 0xbf, 0x02, 0x43
-	.byte 0xbf, 0x04, 0x41, 0x8f, 0x04, 0x21, 0xd8, 0x12
-	.byte 0xd8, 0x09, 0x1f, 0x01, 0xf2, 0x6e, 0x13, 0x04
-	.byte 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x88, 0x10
-	.byte 0x21, 0xc9, 0xcc, 0xc0, 0xc9, 0xcf, 0x40, 0x66
-	.byte 0x09, 0xc9, 0xcf, 0xc0, 0x66, 0x04, 0xc9, 0xd8
-	.byte 0x6e, 0x50, 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0xda
-	.byte 0x6f, 0x48, 0x8f, 0x04, 0x21, 0xc9, 0x8f, 0xdb
-	.byte 0x12, 0x8f, 0x02, 0x21, 0xc9, 0x8d, 0xda, 0x12
-	.byte 0x8f, 0x04, 0x21, 0xd8, 0x12, 0xd8, 0x09, 0x1f
-	.byte 0x01, 0xd8, 0x89, 0xf2, 0x6e, 0x13, 0x04, 0x34
-	.byte 0xc7, 0xfb, 0x89, 0xd8, 0x12, 0xd8, 0x09, 0x03
-	.byte 0x00, 0xd8, 0x8d, 0xdd, 0xc8, 0x1d, 0x00, 0xe3
-	.byte 0x07, 0xf0, 0xe4, 0x20, 0xf3, 0x07, 0xe0, 0xf4
-	.byte 0x34, 0xdb, 0x88, 0xda, 0x89, 0xec, 0x8a, 0x1e
-	.byte 0x56, 0xfd, 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xda
-	.byte 0x67, 0xb8, 0xd7, 0xfa, 0x05, 0xef, 0x64, 0x0e
+	dec	4, xsp
+	push	qiz
+	ld	(xsp+2), c
+	ld	(xsp+4), a
+	ld	a, (xsp+4)
+	extz	wa
+	muls	wa, 0x11F
+	lda_24	xbc, 0x04136e
+	ld_sril3	xwa, 0x07, 0xE4, 0xE0	; ld XWA,(XBC+WA)
+	ld	a, (xwa+16)
+	and	a, 0xC0
+	cp	a, 0x40
+	jr	z, VoiceModWheel_DataTable_02A061_Check
+	cp	a, 0xC0
+	jr	z, VoiceModWheel_DataTable_02A061_Check
+	cps	a, 0
+	jr	nz, VoiceModWheel_DataTable_02A061_Exit
+VoiceModWheel_DataTable_02A061_Check:
+	ldib_erp	0xfb, 0	; ld QIZH,0
+	cpib_erp	0xfb, 2	; cp QIZH,2
+	jr	nc, VoiceModWheel_DataTable_02A061_Exit
+VoiceModWheel_DataTable_02A061_Loop:
+	ld	a, (xsp+4)
+	ld	l, a
+	extz	hl
+	ld	a, (xsp+2)
+	ld	e, a
+	extz	de
+	ld	a, (xsp+4)
+	extz	wa
+	muls	wa, 0x11F
+	ld	bc, wa
+	lda_24	xix, 0x04136e
+	ld_erpb_rr	a, 0xfb	; ld A,QIZH
+	extz	wa
+	muls	wa, 3
+	ld	iy, wa
+	add	iy, 0x1D
+	ld_sril3	xwa, 0x07, 0xF0, 0xE4	; ld XWA,(XIX+BC)
+	lda_rr	xix, xwa, iy	; lda XIX,XWA+IY
+	ld	wa, hl
+	ld	bc, de
+	ld	xde, xix
+	calr	AudioChannel_Dispatch
+	inc1b_erp	0xfb	; inc 1,QIZH
+	cpib_erp	0xfb, 2	; cp QIZH,2
+	jr	c, VoiceModWheel_DataTable_02A061_Loop
+VoiceModWheel_DataTable_02A061_Exit:
+	pop	qiz
+	inc	4, xsp
+	ret
 
 ; A = part index, C = CC 0x5E value.  Reads the patch pointer at part+0x06 and takes a
 ; different path when (patch+0x10) & 0xC0 == 0xC0.  Updates the part's portamento state and
