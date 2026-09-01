@@ -1,0 +1,47 @@
+### prom_c
+
+=== prom_c  (prom_c/wsa1_prom_c.s)  74 script(s), 137 invocation(s) ===
+  LOUD          notes/verify_a1_independent_check.py
+  LOUD          notes/wave7_doc_audit.py
+  LOUD          notes/wave7_doc_audit.py --quiet
+  TIMEOUT       notes/gen_prom_c_block.py --start 0xF9A050 --end 0xFA5949
+  TIMEOUT       notes/gen_prom_c_block_headers.py --start 0xF9A050 --end 0xFA5949
+  BY-DESIGN     notes/asm_source.py
+  BY-DESIGN     notes/asm_source.py --selftest
+  BY-DESIGN     notes/migrate_listing_readers.py --list
+  BY-DESIGN     notes/migrate_listing_readers.py --selftest
+  BY-DESIGN     notes/probe_health.py
+  BY-DESIGN     notes/probe_health.py --image
+  BY-DESIGN     notes/prom_c_probe_health.py
+  BY-DESIGN     notes/prom_c_probe_health.py --selftest
+  BY-DESIGN     notes/prom_c_split.py --plan
+  BY-DESIGN     notes/prom_c_split.py --verify
+  VACUOUS 0   LOUD 3   SPLIT-FRAGILE 0   WRITER 0   TIMEOUT 2   NONDET 0   BY-DESIGN 10   UNAFFECTED 122
+  not run (write mode); the write path must move FIRST -- python3 notes/migrate_listing_readers.py --list:
+      notes/gen_prom_c_f64_pool.py --apply
+      notes/gen_prom_c_preset_bank.py --apply
+      notes/gen_prom_c_tail_tables.py --emit
+      notes/kernel_join_probe.py --emit
+      notes/migrate_listing_readers.py --apply
+      notes/migrate_listing_readers.py --apply --only
+      notes/prom_a_naming_round3.py --apply
+      notes/prom_a_understanding_round4.py --apply
+      notes/prom_a_understanding_round5.py --apply
+      notes/prom_b_panel_names_round12.py --apply
+      notes/prom_b_thunks_round6.py --apply
+      notes/prom_c_inventory_round8.py --emit68
+      notes/prom_c_naming_round2.py --apply
+      notes/prom_c_naming_round3.py --apply
+      notes/prom_c_record68_round10.py --apply
+      notes/prom_c_record68_round10.py --emit68
+      notes/prom_c_split.py --emit
+      notes/prom_c_understanding_round6.py --apply
+  ★ WORKING-TREE DIFF -- compares the tree with HEAD, so it MUST differ between trees that differ; not gradable here:
+      notes/verify_a1_independent_check.py
+  ★ GIT-BLIND -- reads the listing through `git show`, where the tree flip cannot reach it; classify by hand:
+      notes/prom_c_inventory_round8.py
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/ph-prom_c.json
+
+VACUOUS+LOUD across the images measured: 3
+prom_c exit=0

@@ -1,0 +1,37 @@
+### prom_d
+
+=== prom_d  (prom_d/wsa1_prom_d.s)  28 script(s), 51 invocation(s) ===
+  LOUD          notes/wave7_round4_review_wd3_prom_d.py
+  LOUD          notes/wave7_round6_review_wd3_prom_d.py
+  LOUD          notes/wave7_round8_review_wd3_prom_d.py
+  WRITER        scripts/analysis/gen_prom_d_asm.py
+  BY-DESIGN     notes/asm_source.py
+  BY-DESIGN     notes/asm_source.py --selftest
+  BY-DESIGN     notes/migrate_listing_readers.py --list
+  BY-DESIGN     notes/migrate_listing_readers.py --selftest
+  BY-DESIGN     notes/probe_health.py
+  BY-DESIGN     notes/probe_health.py --image
+  BY-DESIGN     notes/prom_d_split_probe.py
+  BY-DESIGN     notes/prom_d_split_probe.py --selftest
+  VACUOUS 0   LOUD 3   SPLIT-FRAGILE 0   WRITER 1   TIMEOUT 0   NONDET 0   BY-DESIGN 8   UNAFFECTED 39
+  not run (write mode); the write path must move FIRST -- python3 notes/migrate_listing_readers.py --list:
+      notes/migrate_listing_readers.py --apply
+      notes/migrate_listing_readers.py --apply --only
+      notes/prom_a_naming_round3.py --apply
+      notes/prom_a_understanding_round4.py --apply
+      notes/prom_b_panel_names_round12.py --apply
+      notes/prom_b_thunks_round6.py --apply
+      notes/prom_c_inventory_round8.py --emit68
+      notes/prom_c_naming_round3.py --apply
+  ★ WORKING-TREE DIFF -- compares the tree with HEAD, so it MUST differ between trees that differ; not gradable here:
+      notes/wave7_round4_review_wd3_prom_d.py
+      notes/wave7_round6_review_wd3_prom_d.py
+      notes/wave7_round8_review_wd3_prom_d.py
+  ★ GIT-BLIND -- reads the listing through `git show`, where the tree flip cannot reach it; classify by hand:
+      notes/probe_health.py
+      notes/wave7_round4_review_wd3_prom_d.py
+
+wrote /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/ph-prom_d.json
+
+VACUOUS+LOUD across the images measured: 3
+prom_d exit=0

@@ -1,0 +1,90 @@
+=== prom_c vs notes/probe-health-baseline-2026-08-30/prom_c-prom_d.json ===
+base: 135 invocations, 87 green, 48 non-green   LOUD=29 UNAFFECTED=87 VACUOUS=18 WRITER=1
+new : 137 invocations, 132 green, 5 non-green   BY-DESIGN=10 LOUD=3 TIMEOUT=2 UNAFFECTED=122
+
+in both runs: 133
+  ★ REGRESSED (green -> non-green): 2
+      UNAFFECTED     -> TIMEOUT        notes/gen_prom_c_block.py --start 0xF9A050 --end 0xFA5949
+      UNAFFECTED     -> TIMEOUT        notes/gen_prom_c_block_headers.py --start 0xF9A050 --end 0xFA5949
+  IMPROVED (non-green -> green):   44
+      VACUOUS        -> BY-DESIGN      notes/asm_source.py
+      VACUOUS        -> BY-DESIGN      notes/asm_source.py --selftest
+      LOUD           -> UNAFFECTED     notes/audit_round3_probes.py
+      LOUD           -> UNAFFECTED     notes/audit_round3_probes.py --selftest
+      LOUD           -> UNAFFECTED     notes/audit_wave6_round2_probes.py
+      LOUD           -> UNAFFECTED     notes/audit_wave6_round2_probes.py --selftest
+      LOUD           -> UNAFFECTED     notes/audit_wave6_round3_probes.py
+      LOUD           -> UNAFFECTED     notes/audit_wave6_round3_probes.py --selftest
+      VACUOUS        -> UNAFFECTED     notes/gen_prom_c_f64_pool.py --table
+      LOUD           -> UNAFFECTED     notes/gen_prom_c_f64_pool.py --verify
+      LOUD           -> UNAFFECTED     notes/gen_prom_c_tail_tables.py --verify
+      WRITER         -> BY-DESIGN      notes/probe_health.py
+      VACUOUS        -> UNAFFECTED     notes/prom_a_naming_round3.py
+      VACUOUS        -> UNAFFECTED     notes/prom_c_fcd0f7_interpreter.py --consumer
+      VACUOUS        -> UNAFFECTED     notes/prom_c_finish_round12.py --inventory
+      LOUD           -> UNAFFECTED     notes/prom_c_finish_round12.py --names
+      LOUD           -> UNAFFECTED     notes/prom_c_finish_round7.py --params
+      VACUOUS        -> UNAFFECTED     notes/prom_c_finish_round7.py --twins
+      VACUOUS        -> UNAFFECTED     notes/prom_c_frontier_src.py --clusters
+      LOUD           -> UNAFFECTED     notes/prom_c_frontier_src.py --range 0xFA7E2C
+      VACUOUS        -> UNAFFECTED     notes/prom_c_header_audit.py --all
+      VACUOUS        -> UNAFFECTED     notes/prom_c_inventory_round8.py --record
+      VACUOUS        -> UNAFFECTED     notes/prom_c_naming_round2.py --census
+      LOUD           -> BY-DESIGN      notes/prom_c_probe_health.py --selftest
+      VACUOUS        -> UNAFFECTED     notes/prom_c_record68_round10.py
+      VACUOUS        -> UNAFFECTED     notes/prom_c_record68_round10.py --claims10
+      VACUOUS        -> UNAFFECTED     notes/prom_c_reg_bytepair_check.py
+      LOUD           -> UNAFFECTED     notes/prom_c_reg_bytepair_check.py --selftest
+      VACUOUS        -> BY-DESIGN      notes/prom_c_split.py --verify
+      LOUD           -> UNAFFECTED     notes/prom_c_staging_producer_audit.py
+      LOUD           -> UNAFFECTED     notes/prom_c_staging_producer_audit.py --selftest
+      LOUD           -> UNAFFECTED     notes/prom_c_understanding_round4.py
+      LOUD           -> UNAFFECTED     notes/prom_c_understanding_round4.py --names
+      LOUD           -> UNAFFECTED     notes/prom_c_understanding_round5.py
+      LOUD           -> UNAFFECTED     notes/prom_c_understanding_round5.py --fields
+      LOUD           -> UNAFFECTED     notes/prom_c_understanding_round6.py --dispatch
+      LOUD           -> UNAFFECTED     notes/prom_c_understanding_round6.py --staging
+      LOUD           -> UNAFFECTED     notes/prom_c_voice_module_check.py
+      LOUD           -> UNAFFECTED     notes/prom_c_voice_module_check.py --selftest
+      LOUD           -> UNAFFECTED     notes/round2_audit_probes.py
+      VACUOUS        -> UNAFFECTED     notes/wave7_frontier_table.py
+      VACUOUS        -> UNAFFECTED     notes/wave7_kn5000_transplant_residue.py
+      LOUD           -> UNAFFECTED     notes/wave7_kn5000_transplant_residue.py --selftest
+      LOUD           -> UNAFFECTED     notes/wave7_round3_review_wd3_prom_d.py
+  changed within non-green:        3
+      UNAFFECTED     -> BY-DESIGN      notes/probe_health.py --image
+      UNAFFECTED     -> BY-DESIGN      notes/prom_c_probe_health.py
+      UNAFFECTED     -> BY-DESIGN      notes/prom_c_split.py --plan
+
+ADDED since base: 4  (0 of them non-green)
+      UNAFFECTED     notes/maincpu_join_probe.py --callers --nearest
+      UNAFFECTED     notes/maincpu_join_probe.py --collisions --callers --nearest
+      BY-DESIGN      notes/migrate_listing_readers.py --list
+      BY-DESIGN      notes/migrate_listing_readers.py --selftest
+GONE since base:  2
+      UNAFFECTED     notes/migrate_listing_readers.py
+      VACUOUS        notes/prom_c_image.py --selftest
+
+=== prom_d vs notes/probe-health-baseline-2026-08-30/prom_c-prom_d.json ===
+base: 49 invocations, 38 green, 11 non-green   LOUD=5 UNAFFECTED=38 VACUOUS=4 WRITER=2
+new : 51 invocations, 47 green, 4 non-green   BY-DESIGN=8 LOUD=3 UNAFFECTED=39 WRITER=1
+
+in both runs: 49
+  ★ REGRESSED (green -> non-green): 0
+  IMPROVED (non-green -> green):   7
+      VACUOUS        -> BY-DESIGN      notes/asm_source.py
+      VACUOUS        -> BY-DESIGN      notes/asm_source.py --selftest
+      WRITER         -> BY-DESIGN      notes/probe_health.py
+      VACUOUS        -> BY-DESIGN      notes/prom_d_split_probe.py
+      VACUOUS        -> UNAFFECTED     notes/wave7_frontier_table.py
+      LOUD           -> UNAFFECTED     notes/wave7_round3_review_wd3_prom_d.py
+      LOUD           -> UNAFFECTED     notes/wave7_round5_review_wd3_prom_d.py
+  changed within non-green:        2
+      UNAFFECTED     -> BY-DESIGN      notes/probe_health.py --image
+      UNAFFECTED     -> BY-DESIGN      notes/prom_d_split_probe.py --selftest
+
+ADDED since base: 2  (0 of them non-green)
+      BY-DESIGN      notes/migrate_listing_readers.py --list
+      BY-DESIGN      notes/migrate_listing_readers.py --selftest
+GONE since base:  0
+
