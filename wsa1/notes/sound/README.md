@@ -25,7 +25,7 @@ only report.
 
 | script | the question it answers | command |
 |---|---|---|
-| `../../scripts/converters/convert_certified_forms.py` | Can this `.byte` LINE, certified by the census, be spelt natively without moving a byte? | `python3 scripts/converters/convert_certified_forms.py --dry-run` |
+| `../../scripts/converters/convert_certified_forms.py` | Can this `.byte` LINE, certified by the census, be spelt natively without moving a byte? | `python3 scripts/converters/convert_certified_forms.py` (dry run; `--apply` writes) |
 
 ⚠ **Do not point the sibling tree's
 `../../../scripts/converters/convert_unspellable_forms.py` at this tree.** It

@@ -29,8 +29,14 @@ QUESTION IT ANSWERS
    line loses its only human-readable description without it.  Nothing is ever
    removed from a comment.
 
-RUN:  python3 scripts/converters/convert_certified_forms.py --dry-run
-      python3 scripts/converters/convert_certified_forms.py
+⚠ WRITING TAKES `--apply`, AND THE BARE RUN IS A DRY RUN.  notes/probe_health.py
+   records what a writer with no flag costs: scripts/analysis/gen_prom_d_asm.py
+   writes by default, its first health run invoked it bare in all four trees, and
+   it rewrote the very files whose layout was under test.  Nothing here should be
+   one command-line typo away from that.
+
+RUN:  python3 scripts/converters/convert_certified_forms.py            # dry run
+      python3 scripts/converters/convert_certified_forms.py --apply
       python3 scripts/converters/convert_certified_forms.py --selftest
 """
 import collections
@@ -171,9 +177,10 @@ def selftest():
 if __name__ == "__main__":
     if "--selftest" in sys.argv:
         sys.exit(selftest())
-    dry = "--dry-run" in sys.argv
+    dry = "--apply" not in sys.argv
     n, refused = apply(dry_run=dry)
-    print(f"{n} line(s) {'would be ' if dry else ''}converted")
+    print(f"{n} line(s) {'would be ' if dry else ''}converted"
+          + ("  (dry run -- pass --apply to write)" if dry and n else ""))
     for rel, line, why in refused:
         print(f"  REFUSED {rel}:{line}  --  {why}")
     sys.exit(0)
