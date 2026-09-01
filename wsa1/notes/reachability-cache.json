@@ -118,21 +118,5 @@
   "size": 15,
   "reachable_strong": 0,
   "reachable_any": 5
- },
- {
-  "image": "prom_a",
-  "lo": 16343641,
-  "hi": 16344088,
-  "size": 447,
-  "reachable_strong": 0,
-  "reachable_any": 1
- },
- {
-  "image": "prom_a",
-  "lo": 16303144,
-  "hi": 16303146,
-  "size": 2,
-  "reachable_strong": 0,
-  "reachable_any": 1
  }
 ]
