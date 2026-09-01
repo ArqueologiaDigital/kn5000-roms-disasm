@@ -164,11 +164,16 @@ not the encoding -- and a previous lane read that refusal as the encoding being 
 `notes/sound/kn5000_unspellable_forms.py` is the tool that separates the two: it asks llvm-mc for
 each form and calls it spellable only if the bytes come back identical.
 
-* **`--misframes` is at zero.** The 275 bytes were 15 single unspellable instructions sitting at a
-  branch target plus three real blocks -- `AudioMod_Porta_Curve_JumpBase` (95 B, the computed-goto
-  target of `jp T,XIX+WA`), `DSP_RouteCoeffs_TypeA_CopyLoop` and `DSP_RouteCoeffs_TypeB_CopyLoop`
-  (42 B each). Round 10 converted all three with `convert_sound_byte_blocks.py`, whose
-  unidasm-boundary guard is what makes framing them as code defensible.
+* **`--misframes` is at zero.** Its last reading was 18 entry points. Fifteen were labelled
+  routines whose FIRST BYTE was one of these unspellable instructions -- the 275 bytes are those
+  routines' spans, and the undisassembled part of each was a single instruction, so round 9 closed
+  all fifteen. The remaining three carried a 0-byte span because they sit INSIDE a data run rather
+  than at a label, and those were three genuine undisassembled blocks:
+  `AudioMod_Porta_Curve_JumpBase` (95 B, the computed-goto target of `jp T,XIX+WA` and the reason
+  its bytes are code rather than a pointer table), `DSP_RouteCoeffs_TypeA_CopyLoop` and
+  `DSP_RouteCoeffs_TypeB_CopyLoop` (42 B each, two copies of the same coefficient copy loop).
+  Round 10 converted all three with `convert_sound_byte_blocks.py`, whose unidasm-boundary guard
+  is what makes framing them as code defensible.
 * **The misleading names are left alone.** `VoiceCC_DataTable_0280FE`,
   `ToneGen_ExtParams15_DataTable`, `Voice_ProgChange_TableData` and the rest name code, and
   each block's header already records both a rename proposal and an explicit decision to
