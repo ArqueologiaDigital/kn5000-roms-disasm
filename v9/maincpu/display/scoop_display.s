@@ -6173,7 +6173,7 @@ VoiceCtrl_ParamSetupBytecode:
 	ldb	a, 0
 	jp	VoiceCtrl_ParamSetupBytecode_0x1E4
 	ld	xhl, VoiceCtrl_ParamSetupBytecode_0x1E5
-	ld_rr8b	a, xhl, w
+	ld_rr8b	a, xhl, a
 	jp	VoiceCtrl_ParamSetupBytecode_0x1CA
 	ldb_erp	a, 60
 	ld	a, (xiy)
@@ -8933,7 +8933,7 @@ SystemInit_Handler_Table:
 	push	xhl
 	ld	a, l
 	ld	xhl, SystemInit_StepHandler_0_0x9
-	ld_rr8b	a, xhl, w
+	ld_rr8b	a, xhl, a
 	stb_d8	(0x3728), a
 	stdi8	(3422), 16
 	call	VoiceCtrl_ParamSetupBytecode_0x5E0

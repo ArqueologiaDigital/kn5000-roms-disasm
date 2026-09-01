@@ -1057,7 +1057,7 @@ MidiCC_Handler_TableDispatch:
 	jr ugt, MidiCC_Handler_TableDispatch_Ret
 	sll	a, 1
 	ld xix, 0x00fd1587
-	ld_rr8w	bc, xix, w
+	ld_rr8w	bc, xix, a
 	cp c, 0xff
 	jr z, MidiCC_Handler_TableDispatch_Ret
 	ldb_d8	e, (0x9636)

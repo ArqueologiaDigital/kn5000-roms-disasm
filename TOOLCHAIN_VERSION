@@ -7,12 +7,13 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 95f7f2d40428
+Commit: 4149d0474bf8 (4149d0474bf862d3837737441a23b339656baaf7)
 Date: 2026-09-01
-Subject: [TLCS900] Refuse an immediate or an index register that does not fit
+Subject: [TLCS900] The last KN5000 sound forms, and an inverted 8-bit index address
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 95f7f2d40428  [TLCS900] Refuse an immediate or an index register that does not fit
 #   Commit: f29a4827693f  [TLCS900] Native mnemonics for the memory forms, and two silent miscompiles
 #   Commit: bcf152d1fe00  [TLCS900] Add cpib_ind, the register-indexed compare with an immediate
 #   Commit: 1b9432474daa  [TLCS900] Fix two silently-wrong sub-opcodes in the F3 memory forms
@@ -198,3 +199,30 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #
 # Verified: `make gate-all` -- 10 ROMs, all IDENTICAL, and llvm-lit clean on
 # all 73 TLCS900 MC and CodeGen tests.
+
+# UPDATE 9 (2026-09-01): 4149d0474bf8 closes the KN5000 sound residue.  Seven
+# encodings the v1.42 sub-CPU payload contains had no spelling -- CP (mem),#imm8
+# (sub-opcode 0x3F, the one member of the 0x38..0x3F row with no def, in BOTH
+# the (Xrr) and the (Xrr+d8) table), ADD r32,(mem) and (mem+d8) (the whole
+# r,(mem) direction of the LONG table), CP r16,(mem+d8), the register-indexed
+# operand with an immediate, and LDA with a PREVIOUS-BANK index register.
+#
+# ⚠ AND ONE INVERTED ENCODING.  The 8-bit INDEX register's file address was
+# emitted with its halves swapped.  The register file is byte-addressed and
+# little-endian, so a word register's LOW half is at offset 0 -- A=0xE0, W=0xE1,
+# C=0xE4, B=0xE5 -- and the emitter had A=0xE1.  The byte gate stayed green
+# because all FOUR call sites in this tree named the wrong register to get the
+# right byte; two of them index by a value the preceding instruction loads into
+# A.  Corroborated by MAME unidasm over all 32 codes 0xE0..0xFF.
+#
+# ★ AND THE FINDING THAT COST THE LEAST WORK: of the 59 "unspellable" forms in
+#   notes/sound/FINDINGS-kn5000-sound-coverage-2026-09-01.md, 48 already had a
+#   spelling -- lda_rr, ld_rrb/w/l, st_rrb, jp_rr, ld_erpb_rr, ldb_erp,
+#   lds_erpb, and_erpb, add_erpw, add_spil, minc1_16, ldw, bit, set, cpib_da.
+#   137 of the 211 sites needed no backend change at all.  The register-indexed
+#   operand a previous lane refused to add was already there under *_rr names;
+#   what 95f7f2d40428 refuses is the `(xix+iz)` MEMri SYNTAX, not the encoding.
+#
+# Verified: `make gate-all` -- 9 KN5000 and 4 SX-WSA1R ROMs, all IDENTICAL,
+# plus scripts/analysis/assert_images_assemble.py on all 8 KN5000 images, and
+# llvm-lit clean on the 23 TLCS900 MC tests.
