@@ -902,6 +902,26 @@ def selftest():
             check("%s reaches %s: %d of %d instruction addresses proven"
                   % (tag, rel, got, len(addrs)), addrs and got == len(addrs))
 
+    # ★ AND THE RESULT CACHE MUST NOTICE A SHARED SOURCE CHANGING.  The cache is
+    # keyed on a fingerprint of the image's inputs; a shared file reached only
+    # through this table -- dsp/dsp_channel_regs.s is included from INSIDE
+    # prom_c/boot/boot_and_main.s, so included_sources() never names it -- would
+    # otherwise let an edit to it validate a stale entry.  That is the same
+    # stale-build trap the Makefile's own warning describes, one layer out, and
+    # it fails silently in both places.
+    for tag, rels in SHARED_SOURCES.items():
+        for rel, _col in rels:
+            path = os.path.join(ROOT, rel)
+            orig = open(path, "rb").read()
+            before = _fingerprint(tag)
+            try:
+                open(path, "ab").write(b"\n; reachability --selftest probe\n")
+                after = _fingerprint(tag)
+            finally:
+                open(path, "wb").write(orig)
+            check("%s's cache key depends on %s" % (tag, rel),
+                  before != after and _fingerprint(tag) == before)
+
     # indirection is actually being followed
     sd = seeds("prom_b", CPU1)
     check("the routine directory yields entry points no branch walk would reach",
