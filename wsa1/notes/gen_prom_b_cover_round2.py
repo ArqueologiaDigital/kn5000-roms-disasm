@@ -1013,6 +1013,12 @@ def c(desc, got, want, verbose=True):
 def print_closure():
     cl = closure()
     base = closure_baseline()
+    if base is None:
+        # ⚠ SAY SO.  A missing baseline used to print nothing at all, and the
+        # section simply vanished from the report -- which reads exactly like a
+        # baseline with nothing to say.
+        print("FAIL  the prom_a baseline at 47d40941b750 could not be read; the "
+              "closure comparison below has NO control.\n")
     if base:
         print("prom_a AT HEAD (the committed source; another lane is splicing the live")
         print("  one, so only this state is quotable): %d directives, %d addressed lines, "

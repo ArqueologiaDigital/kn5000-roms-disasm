@@ -324,9 +324,11 @@ def selftest():
         rel = IMAGES[tag][0]
         try:
             was = git_show(rel, JOIN_BASE).split('\n')
-        except FileNotFoundError:
-            was = None
-        if was is None:
+        except FileNotFoundError as e:
+            # ⚠ SAY SO.  A skipped image is a check that did not run, and this
+            # used to be spelled `except Exception: continue` -- indistinguishable
+            # in the output from an image with nothing lost.
+            print("  FAIL  cannot read %s at %s: %s" % (rel, JOIN_BASE, e))
             continue
         have = set(src(tag))
         for ln in was:

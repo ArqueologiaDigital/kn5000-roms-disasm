@@ -132,10 +132,16 @@ def img(name):
 
 
 def head(path):
-    try:
-        return git_show(path)
-    except FileNotFoundError:
-        return ""
+    """HEAD's copy of a ROOT-relative path.  ⚠ RAISES if HEAD has no such file.
+
+    ★ IT USED TO RETURN `.stdout`, WHICH IS "" WHEN GIT FAILS.  Every caller
+    below then measured an EMPTY baseline and reported "+N new" for the whole
+    file, or a set difference against nothing -- with rc 0.  For the two images
+    it also returned the primary rather than the image, so the two sides of
+    check_derived() were an image and a 494-line master."""
+    if path.endswith(".s"):
+        return image_text_at_rev(ROOT, path, "HEAD")
+    return git_show(path)
 
 
 def scan(text):
