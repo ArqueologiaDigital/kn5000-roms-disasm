@@ -40,6 +40,13 @@ COMMANDS
   alignment to contain INSERTIONS ONLY: no line deleted, no line reordered, no
   line altered by a character.  Every inserted line is printed.
 
+  ★ A RANGE THAT HAS SINCE LEFT THE LISTING ALTOGETHER -- the DSP channel-
+  register driver, now the shared source dsp/dsp_channel_regs.s -- is CUT FROM
+  BOTH SIDES rather than reported as a deletion, and the cut is printed with the
+  probe that does cover it.  See MOVED_OUT.  Two controls in --selftest keep that
+  hole honest: an edit outside the excluded range must still fail, and an
+  exclusion whose replacement is no longer on disk must RAISE.
+
   ⚠ It is PINNED to BASE_COMMIT on purpose.  It answers "did THE SPLIT preserve
   the text", which is a question about one commit and stays true forever.  It is
   not a coverage metric and must not be read as one: once later rounds edit an
@@ -406,6 +413,96 @@ def body_of(path):
     return ls[j:]
 
 
+# ---------------------------------------------------------------------------
+# ★ WHAT LEAVES THE LISTING ALTOGETHER, and why it is EXCLUDED rather than
+#   silently reported as a deletion -- or, worse, silently re-inserted.
+#
+# --verify answers ONE question: "did THE SPLIT preserve the text?"  That is a
+# question about a single commit and its answer must stay true forever, which is
+# why BASE_COMMIT is pinned.  A LATER round that moves a range OUT of an
+# extracted file is not evidence about the split at all, and letting it fail the
+# alignment would retire an instrument that still has a job.
+#
+# So such a range is cut from BOTH sides and the cut is PRINTED, with the probe
+# that does cover it named.  ⚠ THIS IS NOT A WAY TO SILENCE AN EDIT.  Nothing is
+# re-inserted from BASE_COMMIT -- that would make the check vacuous over the
+# range.  Every line that is still in the listing is still aligned, and
+# --selftest's "one comment deleted must FAIL" control runs with these in place.
+#
+# On 2026-09-01 the DSP channel-register driver became dsp/dsp_channel_regs.s,
+# ONE source assembled into prom_a at 0xF85F0F and prom_c at 0xF98000.  Its
+# preservation is proven line by line, verbatim, by the prover named below.
+MOVED_OUT = [dict(
+    what="the DSP channel-register driver, prom_c 0xF98000-0xF980E9",
+    to="dsp/dsp_channel_regs.s",
+    prover="python3 notes/sound/wsa1_dsp_join_probe.py --verify",
+    entry="DSP_ChannelRegs_Init",          # the anchor in the BASE listing
+    ninsn=97,                              # instructions from that label
+    title="; 0xF98000-0xF980E9 -- \u2605\u2605 THE DSP CHANNEL-REGISTER DRIVER, "
+          "SHARED WITH prom_a",
+    last='\t.include "dsp/dsp_channel_regs.s"',
+)]
+RULE = "; " + "=" * 78
+
+
+def _is_code(l):
+    s = l.strip()
+    return bool(s) and not s.startswith(";") and not LABEL_RE.match(s)
+
+
+def _cut_ref(lines, spec):
+    """The moved range in the PRE-SPLIT listing, found by LABEL, never by line
+    number: the block's own header down to its NINSN'th instruction."""
+    first = next((i for i, l in enumerate(lines)
+                  if LABEL_RE.match(l) and LABEL_RE.match(l).group(1) == spec["entry"]),
+                 None)
+    if first is None:
+        raise LookupError("`%s:` is not in the reference listing" % spec["entry"])
+    start = 0
+    for i in range(first):
+        if _is_code(lines[i]):
+            start = i + 1
+    n = 0
+    for i in range(first, len(lines)):
+        if _is_code(lines[i]):
+            n += 1
+            if n == spec["ninsn"]:
+                return start, i + 1
+    raise LookupError("only %d instructions after `%s:`" % (n, spec["entry"]))
+
+
+def _cut_got(lines, spec):
+    """The range that REPLACED it on disk: the new banner and its two includes."""
+    try:
+        title = lines.index(spec["title"])
+        last = lines.index(spec["last"])
+    except ValueError:
+        raise LookupError("the replacement banner/include for %r is not on disk "
+                          "-- the exclusion is stale and must be removed"
+                          % spec["to"])
+    start = title - 1 if title and lines[title - 1] == RULE else title
+    # ⚠ SYMMETRY.  _cut_ref starts just after the last CODE line, so it swallows
+    # the blank that separated the block from what came before.  Not swallowing
+    # the matching blank here left it unpaired and the insertion count drifted
+    # by one -- harmless, but a number that moves for a reason nobody can state
+    # is how a check stops being read.
+    while start and lines[start - 1] == "":
+        start -= 1
+    return start, last + 1
+
+
+def excise(ref, got):
+    """Cut every MOVED_OUT range from both sides.  -> (ref, got, [notes])"""
+    notes = []
+    for spec in MOVED_OUT:
+        a0, a1 = _cut_ref(ref, spec)
+        b0, b1 = _cut_got(got, spec)
+        notes.append((spec, a1 - a0, b1 - b0))
+        ref = ref[:a0] + ref[a1:]
+        got = got[:b0] + got[b1:]
+    return ref, got, notes
+
+
 def reconstruct():
     out = []
     for l in disk(MASTER):
@@ -419,6 +516,12 @@ def reconstruct():
 
 def verify():
     ref, got = base_lines(), reconstruct()
+    ref, got, moved = excise(ref, got)
+    for spec, nref, ngot in moved:
+        print("  EXCLUDED   %s" % spec["what"])
+        print("             %d line(s) -> %s, replaced by %d line(s) here"
+              % (nref, spec["to"], ngot))
+        print("             preserved verbatim; proof: %s" % spec["prover"])
     sm = difflib.SequenceMatcher(None, ref, got, autojunk=False)
     bad, ins = [], []
     for tag, i1, i2, j1, j2 in sm.get_opcodes():
@@ -453,7 +556,14 @@ def census(lines):
 
 
 def counts():
-    ref, got = base_lines(), reconstruct()
+    # ⚠ THE SAME EXCLUSION AS --verify, and for the same reason.  Without it this
+    # census reports the DSP driver's 6 labels and its whole header as LOST, when
+    # they are in dsp/dsp_channel_regs.s -- verbatim, and proven so.  What is
+    # excluded is PRINTED, never dropped quietly.
+    ref, got, moved = excise(base_lines(), reconstruct())
+    for spec, nref, ngot in moved:
+        print("  EXCLUDED  %d line(s) that moved to %s (%s)"
+              % (nref, spec["to"], spec["prover"]))
     import collections
     rc, rl = census(ref)
     gc, gl = census(got)
@@ -571,6 +681,29 @@ def selftest():
         ok = False
     else:
         print("  ok    every range begins on a `; ====` block banner of the listing")
+    # ---- controls on the MOVED_OUT exclusion itself -------------------------
+    # ★ AN EXCLUSION IS A HOLE IN A CHECK, so it needs its own controls: that it
+    #   silences ONLY its own range, and that it cannot go stale in silence.
+    ref, got, notes = excise(base_lines(), reconstruct())
+    victim = next(i for i, l in enumerate(got)
+                  if l.lstrip().startswith(";") and len(l) > 40 and got.count(l) == 1)
+    hurt = got[:victim] + got[victim + 1:]
+    sm = difflib.SequenceMatcher(None, ref, hurt, autojunk=False)
+    if any(tag not in ("equal", "insert") for tag, *_ in sm.get_opcodes()):
+        print("  ok    with the exclusions applied, a comment deleted ELSEWHERE "
+              "still FAILS")
+    else:
+        print("  FAIL  the exclusion silences edits outside its own range"); ok = False
+    for spec in MOVED_OUT:
+        try:
+            _cut_got([l for l in reconstruct() if l != spec["title"]], spec)
+        except LookupError:
+            print("  ok    a STALE exclusion raises rather than passing quietly "
+                  "(%s)" % spec["to"])
+        else:
+            print("  FAIL  a stale exclusion for %s went unnoticed" % spec["to"])
+            ok = False
+
     print("\nPASS" if ok else "\nFAIL")
     return 0 if ok else 1
 

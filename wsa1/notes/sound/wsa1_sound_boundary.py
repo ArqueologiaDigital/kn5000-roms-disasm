@@ -144,6 +144,30 @@ R32 = ("xwa", "xbc", "xde", "xhl", "xix", "xiy", "xiz", "xsp")
 
 LABEL_RE = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
 ADDR_RE = re.compile(r';\s*([0-9A-Fa-f]{6})\b')
+# ⚠⚠ A FOURTH DIALECT, and it does not have ONE address.  Since 2026-09-01 the
+# DSP channel-register driver is dsp/dsp_channel_regs.s, ONE source assembled
+# into prom_a at 0xF85F0F and prom_c at 0xF98000, and its lines carry BOTH:
+#     `\tld XBC,DSP_REGS_BASE   ; F85F40/F98031  a=41 00 00 7f 00 c=41 ...`
+# kernel/kernel.s and maincpu/shared/*.s have carried this shape for longer.
+# ADDR_RE matches such a line and returns the FIRST column, so prom_c's copy of
+# every shared instruction would be reported at prom_a's address -- a wrong
+# number, not a missing one, which is the worse failure.  The column is chosen
+# per image, exactly as notes/reachability.py's SHARED_SOURCES does it.
+DUAL_ADDR_RE = re.compile(r';\s*([0-9A-F]{6})/([0-9A-F]{6})\b')
+ADDR_COLUMN = {"prom_a": 1, "prom_b": 2, "prom_c": 2}
+# ★ AND THE BASE IS NO LONGER A LITERAL IN A SHARED SOURCE.  It cannot be: the
+# whole point of the merge is that 0x007F0000 and 0x00E00000 are ONE symbol,
+# `DSP_REGS_BASE`, defined once per image in dsp/dsp_channel_regs_*.inc.  A
+# literal scan sees `ld xbc, dsp_regs_base` and follows nothing, so this tool
+# reported 0 accesses to BOTH DSP register files the moment the merge landed --
+# silently, because "no accesses" is what it also prints for a device nothing
+# touches.  Equates are therefore resolved from the image's own text.
+# ⚠ ONLY equates whose value lands in a WINDOW are substituted.  The images
+# define hundreds of others (every SFR name in include/tmp95c061_sfr.inc), and
+# rewriting those into operands would change what this tool reports about
+# devices the merge never touched.  --selftest prints which symbols were used.
+EQU_RE = re.compile(r'^\s*\.equ\s+([A-Za-z_][A-Za-z0-9_]*)\s*,\s*'
+                    r'(0x[0-9A-Fa-f]+|\d+)\s*(?:;.*)?$')
 # `(xiz-4)` / `(xsp+6)` / `(XIZ+0xfc)` -- a frame slot, the thing a base gets
 # spilled into.  ⚠ The two dialects in this tree spell the SAME slot two ways:
 # prom_c's split files write `(xiz-4)` where the unidasm comment says
@@ -212,6 +236,32 @@ def is_local(label, routine):
     return False
 
 
+def window_equates(lines):
+    """{lowercased name: "0x...."} for every `.equ` whose value is in a window.
+
+    ⚠ DELIBERATELY NARROW -- see the comment at EQU_RE.  A tool that rewrote
+    every equate in the tree would be answering a different question than the
+    one it answers today, with no way for a reader to see the change.
+    """
+    out = {}
+    for ln in lines:
+        m = EQU_RE.match(ln)
+        if not m:
+            continue
+        v = _int(m.group(2))
+        if v is not None and in_window(v):
+            out[m.group(1).lower()] = m.group(2)
+    return out
+
+
+SYM_TOKEN = re.compile(r'\b([a-z_][a-z0-9_]*)\b')
+
+
+def _resolve(op, syms):
+    """Substitute a window equate where it stands as a whole token in `op`."""
+    return SYM_TOKEN.sub(lambda m: syms.get(m.group(1), m.group(1)), op)
+
+
 def parse(image, primary):
     """The image's instruction stream, in address order, plus its labels.
 
@@ -219,13 +269,30 @@ def parse(image, primary):
         prom_a  `\tld XIX,0x007f0000        ; F8319A  44 00 00 7f 00`
         prom_c  `\tld\txbc, 0x10C000        ; FB6E5B  ld XBC,0x0010c000`
         hand    `\tld\txbc, 0x00E00000      ; the register port`   <- NO ADDRESS
+        shared  `\tld XBC,DSP_REGS_BASE      ; F85F40/F98031  a=41 .. c=41 ..`
     The third is why `addr` may be None.  A tool that required an address in the
-    comment would silently skip every hand-written converted routine, and
-    prom_c/boot/boot_and_main.s -- the whole 0x00E00000 driver -- is one.
+    comment would silently skip every hand-written converted routine.
+    ⚠ The fourth is a SOURCE SHARED BY TWO IMAGES: two addresses, and a base
+    that is a SYMBOL rather than a literal.  Both are handled at the top of this
+    file (DUAL_ADDR_RE / EQU_RE); before they were, prom_c's whole 0x00E00000
+    driver read as prom_a addresses and neither DSP register file was followed
+    at all.  ⚠ The 0x00E00000 driver used to be the hand-written example above
+    and is now the shared one -- the dialect list is a list of what the PARSER
+    handles, not a claim about which file is which.
     """
+    return parse_lines(image, list(image_lines(ROOT, primary)))
+
+
+def parse_lines(image, src):
+    """The same, over lines already in hand.  ★ THE SELFTEST'S ENTRY POINT: a
+    dialect check that reads the real tree goes vacuous the day that dialect
+    stops appearing in it -- which is exactly what happened to check 6 when the
+    0x00E00000 driver became a shared source.  A synthetic listing cannot."""
     insns, incbins, labels = [], [], []
     label = routine = "<top>"
-    for lineno, ln in enumerate(image_lines(ROOT, primary), 1):
+    syms = window_equates(src)
+    column = ADDR_COLUMN[image]
+    for lineno, ln in enumerate(src, 1):
         stripped = ln.strip()
         if not stripped or stripped.startswith(";"):
             continue
@@ -248,11 +315,17 @@ def parse(image, primary):
             continue
         if code.lstrip().startswith("."):
             continue                      # .byte/.word/.ascii/.include/...
-        am = ADDR_RE.search(comment)
-        addr = int(am.group(1), 16) if am else None
+        dm = DUAL_ADDR_RE.search(comment)
+        if dm:
+            addr = int(dm.group(column), 16)
+        else:
+            am = ADDR_RE.search(comment)
+            addr = int(am.group(1), 16) if am else None
         parts = code.strip().split(None, 1)
         mnem = parts[0].lower()
         ops = _split_ops(parts[1].lower()) if len(parts) > 1 else []
+        if syms:
+            ops = [_resolve(o, syms) for o in ops]
         insns.append(Insn(image, label, routine, addr, mnem, ops, code.strip()))
     return insns, incbins, labels
 
@@ -673,13 +746,49 @@ def selftest():
     ck("no routine touching a sound device contains .incbin", bad == 0,
        "%d" % bad)
 
-    # 6. THE PARSER SEES ALL THREE DIALECTS.  boot_and_main.s carries NO address
-    #    comment; if the parser required one, the whole 0x00E00000 driver would
-    #    vanish and check 3 would still pass off the two prom_a rows.
-    ck("addressless (hand-written) converted lines are parsed",
-       any(a.addr is None for a in dspc),
-       "%d of %d prom_c DSP accesses have no address comment"
-       % (sum(1 for a in dspc if a.addr is None), len(dspc)))
+    # 6. THE PARSER SEES ALL FOUR DIALECTS -- checked on SYNTHETIC listings, so
+    #    the check cannot go vacuous when the tree stops using one of them.
+    #    ⚠ IT DID GO VACUOUS ONCE.  This check used to read "boot_and_main.s
+    #    carries NO address comment", and on 2026-09-01 that file's DSP driver
+    #    became dsp/dsp_channel_regs.s, which carries TWO -- so the check was
+    #    asserting a property of a file that no longer had it.  It also stopped
+    #    covering the failure it was written for.
+    hand = parse_lines("prom_c", [
+        "Synthetic_Hand:", "\tld\txbc, 0x00E00000\t\t; the register port",
+        "\tld\t(xbc), a\t\t; select the register"])[0]
+    hacc, _ = walk(hand, "cpu2")
+    ck("dialect 3: an ADDRESSLESS converted line is parsed and followed",
+       len(hacc) == 1 and hacc[0].addr is None and hacc[0].base == 0x00E00000,
+       "%d access(es)" % len(hacc))
+
+    # 6b. ★ THE SHARED DIALECT, BOTH WAYS ROUND.  One source, two images: the
+    #     SAME two lines must be reported at prom_a's addresses for prom_a and at
+    #     prom_c's for prom_c, with the base resolved from that image's equate.
+    #     A tool that took column 1 for both would report prom_c's driver at
+    #     prom_a's addresses -- a wrong number, not a missing one.
+    shared = ["\t.equ DSP_REGS_BASE, 0x%08X",
+              "Synthetic_Shared:",
+              "\tld XBC,DSP_REGS_BASE                        "
+              "; F85F66/F98057  a=41 00 00 7f 00 c=41 00 00 e0 00",
+              "\tld (XBC),A                                  "
+              "; F85F6D/F9805E  b1 41"]
+    for img, cpu, base, want in (("prom_a", "cpu1", 0x007F0000, 0xF85F6D),
+                                 ("prom_c", "cpu2", 0x00E00000, 0xF9805E)):
+        ins = parse_lines(img, [shared[0] % base] + shared[1:])[0]
+        sacc, _ = walk(ins, cpu)
+        ck("dialect 4 (%s): symbolic base resolved, right address column" % img,
+           len(sacc) == 1 and sacc[0].base == base and sacc[0].addr == want,
+           "%d access(es), base 0x%08X, addr 0x%06X"
+           % (len(sacc), sacc[0].base if sacc else 0, sacc[0].addr or 0)
+           if sacc else "0 accesses")
+
+    # 6c. and the substitution stays NARROW: only window equates are resolved.
+    syms = {img: window_equates(list(image_lines(ROOT, prim)))
+            for img, prim, _c in IMAGES}
+    ck("only WINDOW equates are substituted, and they are named",
+       all(all(in_window(_int(v)) for v in s.values()) for s in syms.values()),
+       "; ".join("%s: %s" % (i, ", ".join(sorted(s)) or "none")
+                 for i, s in syms.items()))
 
     # 7. THE FOLLOWED COUNT MUST BEAT THE LITERAL COUNT, which is the whole point.
     lit = sum(literal_hits(d["insns"], 0x0010C002, 2) for d in data.values())

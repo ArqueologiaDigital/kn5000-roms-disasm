@@ -10,13 +10,37 @@ Run them **from `wsa1/`**, not from the repository root.
 | `wsa1_sound_in_unconverted.py` | How much sound code is still inside an unconverted `.incbin` region? | `python3 notes/sound/wsa1_sound_in_unconverted.py` |
 | `wsa1_dev104_vs_kn5000.py` | Is the WSA1's 0x104000 device the KN5000's tone generator? | `python3 notes/sound/wsa1_dev104_vs_kn5000.py` |
 | `wsa1_dsp_driver_shared.py` | Are the WSA1's and the KN5000's DSP register-file drivers the same code? | `python3 notes/sound/wsa1_dsp_driver_shared.py` |
+| `wsa1_dsp_join_probe.py` | prom_a 0xF85F0F and prom_c 0xF98000 are ONE source now — did the merge MOVE the text, or change it? And is the 231-of-234 byte identity real? | `python3 notes/sound/wsa1_dsp_join_probe.py --verify` |
 
 Selftests:
 
 ```
 python3 notes/sound/wsa1_sound_boundary.py --selftest
 python3 notes/sound/wsa1_unspellable_forms.py --selftest
+python3 notes/sound/wsa1_dsp_join_probe.py --selftest
 ```
+
+## `wsa1_dsp_join_probe.py` — the DSP driver merge
+
+Since 2026-09-01 the four DSP channel-register routines are **one source**,
+`dsp/dsp_channel_regs.s`, assembled into prom_a at 0xF85F0F **and** prom_c at
+0xF98000 — 234 bytes each, 231 of them the same byte, the three that differ
+being A23..A16 of the base literal (`DSP_REGS_BASE`, named once in each
+`dsp/dsp_channel_regs_*.inc`). The same arrangement `kernel/kernel.s` has.
+
+| mode | the question it answers |
+|---|---|
+| (no flag) / `--rom` | 231 of 234, computed **from the two EPROM images alone** with a misalignment null — checkable without reading the disassembly at all |
+| `--pairs` | the 97 instruction pairs at `BASE_REV`, the 12 house-style ADOPTIONS with the side kept and why, and the 3 per-CPU sites |
+| `--verify` | ★ the preservation proof: every comment line, label, instruction and prose fragment of **both** pre-merge blocks, verbatim |
+| `--images` | what each image's text gained, with the delta accounted for arithmetically; prom_b is the control |
+| `--emit` | regenerate the merged source and the two `.inc` (the record of the merge, not a build step) |
+| `--selftest` | invariants and two controls, including "`--verify` must REJECT a merged file with one comment deleted" |
+
+⚠ The byte gate is still the only certificate: `python3
+scripts/analysis/assert_byte_identical.py`. What makes the merge trustworthy is
+that **one source rebuilds both images** — flip the subcpu equate to
+`0x00E10000` and prom_c fails at exactly three bytes while prom_a stays green.
 
 ## The converter these drive
 

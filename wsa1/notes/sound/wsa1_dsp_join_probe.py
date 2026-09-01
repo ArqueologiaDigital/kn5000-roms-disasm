@@ -32,6 +32,8 @@ MODES
   python3 notes/sound/wsa1_dsp_join_probe.py --emit     regenerate the merged
                                                           source and the two .inc
   python3 notes/sound/wsa1_dsp_join_probe.py --verify   ★ the preservation proof
+  python3 notes/sound/wsa1_dsp_join_probe.py --images    what the merge did to
+                                                          each IMAGE's text
   python3 notes/sound/wsa1_dsp_join_probe.py --selftest the instrument's own
                                                           controls
 
@@ -126,6 +128,27 @@ BASE_SITES = (18, 32, 67)      # ordinals whose operand becomes DSP_REGS_BASE
 #   Empty means every comment line of both blocks survives character for
 #   character.
 CORRECTIONS = {}
+
+# ⚠ AND CLAIMS THE MOVE MADE WRONG *OUTSIDE* THE BLOCK.  A range banner or an
+#   index row that names an address range which has just left the file is a
+#   silent lie the byte gate cannot see -- the kernel merge hit exactly this and
+#   recorded it rather than fixing it quietly.  Each is listed here with the text
+#   before and after; --images uses the net line count to account for prom_a's
+#   comment delta, so an unlisted edit shows up as UNEXPLAINED rather than being
+#   absorbed.
+HOST_CORRECTIONS = [
+    (PROM_A, 3, 4,
+     "the file index said `0xF85E8A-0xF85F58  207  EntryPoint_Records ..., and "
+     "DSP_ChannelRegs_Init` over two rows plus `0xF85F59-0xF85FF8  160  the DSP "
+     "/ tone-generator register writers`.  Both ranges lost their code to the "
+     "shared source, so they are now `0xF85E8A-0xF85F0E  133` (the records and "
+     "the refresh task, which DID stay) and `0xF85F0F-0xF85FF8  234` naming "
+     "dsp/dsp_channel_regs.s.  Four rows where there were three: +1 line."),
+    (PROM_A, 1, 1,
+     "the region banner `; 0xF85E8A-0xF85F58 -- the task entry-point records, "
+     "and the DSP refresh task` overstated its range by the 74 bytes of "
+     "DSP_ChannelRegs_Init, which is no longer under it.  Now 0xF85E8A-0xF85F0E."),
+]
 
 MERGED_HEADER = '''\
 ; ==============================================================================
@@ -729,6 +752,97 @@ def cmd_selftest():
     return 1 if fails else 0
 
 
+# ---------------------------------------------------------------------------
+# --images -- what the merge did to each IMAGE's text, before against after
+# ---------------------------------------------------------------------------
+def cmd_images():
+    """Per-image comment/label census, BASE_REV against the working tree.
+
+    ★ WHY THIS IS NOT THE SAME QUESTION AS --verify.  --verify asks whether the
+    two BLOCKS survived.  This asks what each IMAGE now reads like -- and the
+    answer is that both GAINED, because a shared source belongs to both: prom_a
+    now carries prom_c's headers for these four routines and prom_c carries
+    prom_a's.  A delta of zero here would mean the merge had thrown one side's
+    documentation away.
+    """
+    from asm_source import image_text, image_text_at_rev
+    a, c, _rs = rows()
+    merged = open(os.path.join(ROOT, MERGED), encoding="utf-8").read().split("\n")
+    nmerged = sum(1 for l in merged if kind(l) == "comment")
+    lost = {"prom_a": sum(1 for l in a if kind(l) == "comment"),
+            "prom_c": sum(1 for l in c if kind(l) == "comment"), "prom_b": 0}
+    gained = {}
+    for img, side, host in (("prom_a", "a", PROM_A), ("prom_c", "c", PROM_C)):
+        ls = open(os.path.join(ROOT, host), encoding="utf-8").read().split("\n")
+        # the replacement written in place: the banner down to the .include
+        end = ls.index('\t.include "%s"' % MERGED)
+        start = end
+        while not ls[start].lstrip().startswith("; 0x%06X"
+                                                % (PA if side == "a" else PC)):
+            start -= 1
+        if ls[start - 1].startswith("; ==="):
+            start -= 1
+        inc = open(os.path.join(ROOT, INC[side]), encoding="utf-8").read().split("\n")
+        gained[img] = (nmerged
+                       + sum(1 for l in ls[start:end + 1] if kind(l) == "comment")
+                       + sum(1 for l in inc if kind(l) == "comment"))
+    gained["prom_b"] = 0
+    for host, before_n, after_n, _why in HOST_CORRECTIONS:
+        img = "prom_a" if host == PROM_A else "prom_c"
+        gained[img] += after_n - before_n
+    print("PER-IMAGE TEXT, BASE_REV %s against the working tree" % BASE_REV[:8])
+    print("=" * 78)
+    print("  image    comment lines        label definitions   delta accounted for")
+    ok = True
+    for img, prim in (("prom_a", "prom_a/wsa1_prom_a.s"),
+                      ("prom_b", "prom_b/wsa1_prom_b.s"),
+                      ("prom_c", "prom_c/wsa1_prom_c.s")):
+        before = image_text_at_rev(ROOT, prim, BASE_REV).split("\n")
+        after = image_text(ROOT, prim).split("\n")
+        bc = sum(1 for l in before if kind(l) == "comment")
+        ac_ = sum(1 for l in after if kind(l) == "comment")
+        bl = sum(1 for l in before if kind(l) == "label")
+        al = sum(1 for l in after if kind(l) == "label")
+        want = gained[img] - lost[img]
+        ok = ok and want == ac_ - bc
+        print("  %-7s %7d -> %7d  %+5d   %7d -> %7d  %+4d   %s"
+              % (img, bc, ac_, ac_ - bc, bl, al, al - bl,
+                 "%+d gained %+d lost" % (gained[img], -lost[img])
+                 if want == ac_ - bc else "★ UNEXPLAINED (%+d)" % want))
+    print("""
+  ★ NO IMAGE LOSES A LINE.  prom_a and prom_c each gain the OTHER's headers for
+    these four routines plus the merged file's own; prom_b is untouched and is
+    here as the control -- a nonzero row for prom_b would mean the merge reached
+    an image it has no business in.
+
+  ★ AND EVERY DELTA IS ACCOUNTED FOR ARITHMETICALLY: the merged file's comment
+    lines, plus the in-place banner that replaced the block, plus that image's
+    .inc, plus the HOST_CORRECTIONS below, minus the block the image gave up.
+    A row that did not add up would be a comment line this merge cannot explain, which is the failure --verify is
+    for -- so this is a second, independent way to notice the same thing.""")
+    print("\nHOST_CORRECTIONS -- %d claim(s) elsewhere in the host files that the"
+          % len(HOST_CORRECTIONS))
+    print("move made WRONG, corrected in the same commit rather than left to rot:")
+    for host, bn, an, why in HOST_CORRECTIONS:
+        print("  %s   %d comment line(s) -> %d" % (host, bn, an))
+        for chunk in _wrap(why, 70):
+            print("      " + chunk)
+    return 0 if ok else 1
+
+
+def _wrap(text, width):
+    out, cur = [], ""
+    for w in text.split():
+        if len(cur) + len(w) + 1 > width:
+            out.append(cur)
+            cur = w
+        else:
+            cur = (cur + " " + w).strip()
+    if cur:
+        out.append(cur)
+    return out
+
+
 def _quiet(fn):
     import io
     import contextlib
@@ -744,6 +858,8 @@ if __name__ == "__main__":
         sys.exit(cmd_pairs())
     if "--verify" in args:
         sys.exit(cmd_verify())
+    if "--images" in args:
+        sys.exit(cmd_images())
     if "--selftest" in args:
         sys.exit(cmd_selftest())
     sys.exit(cmd_rom())

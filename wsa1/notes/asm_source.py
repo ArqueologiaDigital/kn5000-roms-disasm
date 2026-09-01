@@ -399,10 +399,10 @@ def image_text_at_rev(root, primary, rev="HEAD"):
 #     ...
 #     write_part(path, new_text)
 #
-# SHARED SOURCES ARE OPT-IN.  kernel/kernel.s and maincpu/shared/*.s are included
-# by TWO images, so a prom_c tool that rewrote one would silently edit prom_a.
-# They are excluded unless shared=True is passed.
-SHARED_PREFIXES = ("kernel/", "include/", "maincpu/")
+# SHARED SOURCES ARE OPT-IN.  kernel/kernel.s, dsp/dsp_channel_regs.s and
+# maincpu/shared/*.s are included by TWO images, so a prom_c tool that rewrote
+# one would silently edit prom_a.  They are excluded unless shared=True is passed.
+SHARED_PREFIXES = ("kernel/", "dsp/", "include/", "maincpu/")
 
 
 def _is_shared(root, path):

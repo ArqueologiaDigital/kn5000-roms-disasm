@@ -122,13 +122,20 @@ def rom(img):
 # image; it is a LIST per image, because prom_a now has three and prom_b two.
 # ★ A shared source is reached through the image's own `.include` too, so
 #   source_lines() must skip it there or its lines arrive twice, once unusable.
+# ⚠⚠ AND ONE OF THEM IS NOT REACHED THROUGH THE MASTER AT ALL.  prom_c pulls
+#   dsp/dsp_channel_regs.s in from INSIDE prom_c/boot/boot_and_main.s, so
+#   included_sources() -- which scans the master only -- never names it and the
+#   `if rel in shared: continue` skip below has nothing to skip.  It arrives
+#   exactly once, from this table, which is what the table is for.
 SHARED_SOURCES = {
     "prom_a": [("kernel/kernel.s", 1),
+               ("dsp/dsp_channel_regs.s", 1),
                ("maincpu/shared/indexed_table.s", 1),
                ("maincpu/shared/lcd_screen_redraw.s", 1)],
     "prom_b": [("maincpu/shared/indexed_table.s", 2),
                ("maincpu/shared/lcd_screen_redraw.s", 2)],
-    "prom_c": [("kernel/kernel.s", 2)],
+    "prom_c": [("kernel/kernel.s", 2),
+               ("dsp/dsp_channel_regs.s", 2)],
 }
 SHARED_ADDR = re.compile(r';\s*([0-9A-F]{6})/([0-9A-F]{6})\b')
 
