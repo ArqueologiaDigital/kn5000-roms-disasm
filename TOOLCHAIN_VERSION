@@ -7,12 +7,13 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: f29a4827693f
+Commit: 95f7f2d40428
 Date: 2026-09-01
-Subject: [TLCS900] Native mnemonics for the memory forms, and two silent miscompiles
+Subject: [TLCS900] Refuse an immediate or an index register that does not fit
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: f29a4827693f  [TLCS900] Native mnemonics for the memory forms, and two silent miscompiles
 #   Commit: bcf152d1fe00  [TLCS900] Add cpib_ind, the register-indexed compare with an immediate
 #   Commit: 1b9432474daa  [TLCS900] Fix two silently-wrong sub-opcodes in the F3 memory forms
 #   Commit: cb165c5cdc4b  [TLCS900] Add ERP-byte LD short-immediate and LD register forms
@@ -179,3 +180,21 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #
 # Verified: `make gate-all` -- 6 KN5000 ROMs and 4 SX-WSA1R ROMs, all IDENTICAL,
 # with the toolchain rebuilt from this pin.
+
+# UPDATE 8 (2026-09-01): 95f7f2d40428 adds no encoding.  It turns the last two
+# known SILENT MISCOMPILES into diagnostics, which is the outcome that matters
+# when an encoding is not available:
+#
+#   * an immediate that fits its field neither signed nor unsigned was
+#     truncated to the low bytes -- `push 0x1234` was [0x09,0x34], and
+#     `cp (xhl),0x1234` was [0x83,0x3f,0x34].  Both readings stay legal,
+#     because the same field spells -1 and 0xFF;
+#   * `(Xrr+Rn)`, the register-indexed operand, was read as `(Xrr+d16)` with
+#     the index register swallowed as an UNDEFINED SYMBOL: `ld wa,(xix+iz)`
+#     assembled to d3 f1 00 00 20 where the ROM has d3 07 f0 f8 20.
+#
+# ★ That the gate is still green with these checks in place is itself the
+#   finding: NOTHING in either tree was relying on a truncated immediate.
+#
+# Verified: `make gate-all` -- 10 ROMs, all IDENTICAL, and llvm-lit clean on
+# all 73 TLCS900 MC and CodeGen tests.

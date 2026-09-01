@@ -352,6 +352,42 @@ def refused_slots(stderr, nlines):
     return bad
 
 
+ADDR_CLASS = {}
+for _b, _n in (("MB", 1), ("MW", 1), ("ML", 1), ("MD", 1)):
+    pass
+for _base in ("MB", "MW", "ML", "MD"):
+    for _w, _bytes in (("8", 1), ("16", 2), ("24", 3)):
+        ADDR_CLASS[_base + _w] = "direct%d" % _bytes
+for _p in ("MBI", "MWI", "MLI", "MDI"):
+    ADDR_CLASS[_p] = "reg-indirect"
+for _p in ("MBD", "MWD", "MLD", "MDD"):
+    ADDR_CLASS[_p] = "reg+d8"
+for _p in ("MXB", "MXW", "MXL", "MXD"):
+    ADDR_CLASS[_p] = "reg-indexed"
+for _p in ("RB", "RW", "RL", "RBX", "RWX", "RLX"):
+    ADDR_CLASS[_p] = "reg-direct"
+
+
+def classes(known, sites):
+    """Split the call sites by ADDRESSING CLASS.
+
+    This is the number that says how much work is left: the direct* and
+    reg+d8/reg-indirect classes are the ones a native memory operand can
+    spell, while reg-indexed, reg-direct and the prefixless block transfers
+    need features the assembler does not have.
+    """
+    counts = collections.Counter()
+    for name, args, _p, _n in sites:
+        params = known[name]
+        pi = params.index("pfx") if "pfx" in params else (
+            params.index("rp") if "rp" in params else None)
+        if pi is None or pi >= len(args):
+            counts["no prefix argument"] += 1
+            continue
+        counts[ADDR_CLASS.get(args[pi].split("+")[0].strip(), "literal prefix byte")] += 1
+    return counts
+
+
 def main():
     verbose = "-v" in sys.argv
     if not os.path.exists(MC):
@@ -362,6 +398,12 @@ def main():
     HEADER_LINES = 3 + PREAMBLE.count("\n")  # .include + preamble + .text + .balign
     known = parse_macros()
     sites = call_sites(known)
+    if "--classes" in sys.argv:
+        cc = classes(known, sites)
+        print("%d macro call sites, by ADDRESSING CLASS:" % len(sites))
+        for k, v in cc.most_common():
+            print("  %-20s %6d" % (k, v))
+        return 0
     bymac = collections.defaultdict(list)
     for name, args, path, n in sites:
         bymac[name].append((args, path, n))

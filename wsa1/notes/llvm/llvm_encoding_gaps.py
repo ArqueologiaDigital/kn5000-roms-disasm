@@ -24,13 +24,20 @@ stays in class B/C/D, where the selftest asserts the defect.
 
       python3 wsa1/notes/llvm/llvm_native_equivalence.py
 
-★★ WHAT IS NOW THE WORST THING IN THIS FILE is the second class-C case.  The
-   register-indexed operand `(xix+iz)` is ACCEPTED, and llvm-mc emits the
-   (Xrr+d16) form with the index register swallowed as an UNDEFINED SYMBOL
-   named `iz` -- d3 f1 00 00 20 where the ROM has d3 07 f0 f8 20.  Today that
-   fails at link time because nothing defines `iz`; the day anything does, it
-   links to a wrong address silently.  1,761 call sites (the mx_* macros) use
-   this addressing mode.
+★★ CLASS C IS NOW EMPTY, and the selftest asserts that.  Two forms moved out
+   of it into class R -- refused rather than encodable, which is the outcome
+   the brief asked for when an encoding is not available:
+
+     push 0x1234      was 09 34, the immediate truncated to eight bits
+     ld wa,(xix+iz)   was d3 f1 00 00 20 -- the REGISTER-INDEXED operand read
+                      as (xix+d16) with the index register swallowed as an
+                      undefined symbol named `iz`.  The ROM has d3 07 f0 f8 20.
+                      It only failed later, at link time, and only because
+                      nothing happened to define a symbol called `iz`.
+
+   The register-indexed operand is the biggest thing still missing: 1,761 of
+   the 12,539 call sites (the mx_* macros) use it.  Run
+   `llvm_native_equivalence.py --classes` for the full split.
 
 WHAT WAS FIXED (2026-09-01)
   * class C, the silent miscompiles.  `push (0x1234)` assembled to `09 34` --
@@ -84,11 +91,14 @@ CASES = [
     # --- class B: still rejected -- a real missing feature ----------------
     ("B", "ld sp,(0x9c:8)",      None, "SP is not in the 16-bit memory-load class"),
     ("B", "ldir (xiy)",          None, "the block transfer's operand register"),
-    # --- class C: still ACCEPTED AND WRONG.  The dangerous class. ---------
-    ("C", "push 0x1234",         "0934", "immediate truncated to 8 bits, no diagnostic"),
-    ("C", "ld wa,(xix+iz)",      "d3f1000020",
-     "REGISTER-INDEXED read as (xix+d16) with iz an UNDEFINED SYMBOL; "
-     "ROM is d3 07 f0 f8 20"),
+    # --- class R: was a SILENT MISCOMPILE, now a diagnostic ---------------
+    # Still not encodable -- but refused instead of quietly wrong, which is
+    # the outcome that matters.  Promote to class F if either gains a real
+    # encoding.
+    ("R", "push 0x1234",         None, "was 09 34: immediate truncated to 8 bits"),
+    ("R", "ld wa,(xix+iz)",      None,
+     "was d3 f1 00 00 20: REGISTER-INDEXED read as (xix+d16) with iz "
+     "swallowed as an undefined symbol.  ROM is d3 07 f0 f8 20"),
 ]
 
 
@@ -123,18 +133,21 @@ def main():
         ck("class B: every listed form is still REJECTED",
            all(not ok for *_x, ok, _o in cls("B")),
            "if this FAILS, a gap was fixed -- move the case to class F")
-        ck("class C: the two remaining silent miscompiles are still there",
-           all(ok and out == exp for _c, _s, exp, _n, ok, out in cls("C")),
-           "if this FAILS, verify the new bytes, then move the case to class F")
+        ck("class C is EMPTY: no known form assembles to the wrong bytes",
+           not cls("C"))
+        ck("class R: the two former silent miscompiles are now DIAGNOSED",
+           all(not ok for *_x, ok, _o in cls("R")),
+           "if this FAILS, one of them assembles again -- check the bytes")
         ck("class F is not empty -- this file records fixes, not only defects",
            len(cls("F")) >= 16)
-        print("\n4 checks, %d failures" % f)
+        print("\n5 checks, %d failures" % f)
         return 1 if f else 0
     hdr = {"F": "FIXED -- and these bytes are the ROM's, not just 'accepted'",
+           "R": "REFUSED now, SILENTLY WRONG before -- still not encodable",
            "B": "REJECTED -- a real missing feature in llvm-mc",
            "C": "★★ ACCEPTED AND WRONG -- silently truncated, the dangerous class",
            "D": "ACCEPTED but WIDER than the ROM's form"}
-    for k in "FBCD":
+    for k in "FRBCD":
         if not cls(k):
             continue
         print("\n%s: %s" % (k, hdr[k]))
