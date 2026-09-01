@@ -500,15 +500,18 @@ def counts():
     chk("the dossier's \"15 ... the remaining 2\" against 12+2 and 2",
         "14 + 2 = 16", "14 + 2 = 16")
 
-    print("-- the null CORPUS size the dossier quotes")
+    print("-- the null CORPUS size, re-measured 2026-09-01 after the kernel/DSP")
+    print("   blind-spot fix (dossier quotes 10,509 runs / 264,982 bytes;")
+    print("   both stale now -- the corpus grows with every conversion round")
+    print("   AND was blind to kernel.s + dsp_channel_regs.s until today)")
     m = re.search(r"(\d+) runs, (\d+) bytes", out)
     runs, cb = int(m.group(1)), int(m.group(2))
-    chk("runs (dossier: 10,509)", runs, 10509)
-    chk("bytes (dossier: 264,982)", cb, 264982)
+    chk("runs, live from LAYOUT --null", runs, 11237)
+    chk("bytes, live from LAYOUT --null", cb, 283741)
     tr, true_bytes = corpus_bytes()
-    chk("runs, re-derived independently", tr, 10509)
-    chk("bytes if the LAST instruction of each run is included", true_bytes, 287291)
-    chk("  ...so the corpus understates the proven text by", true_bytes - cb, 22309)
+    chk("runs, re-derived independently", tr, 11237)
+    chk("bytes if the LAST instruction of each run is included", true_bytes, 307860)
+    chk("  ...so the corpus understates the proven text by", true_bytes - cb, 24119)
     chk("  ...and those bytes are never scanned by the content rules either",
         "7.8% of the corpus", "7.8%% of the corpus" % ())
     return 0
@@ -524,6 +527,15 @@ def counts():
 # followed by `/` rather than by whitespace.  ★ THAT IS NOT A COSMETIC MISS: it
 # made 0xF85FF8 -- an ordinary `ret` -- read as NOT an instruction boundary, and
 # the boundary check went from OK to FAIL on a routine nobody had touched.
+#
+# ⚠ 2026-09-01: `notes/prom_a_f85ff9_layout.py` was ALSO blind to this shape --
+# not a style choice, an oversight -- and corpus_bytes() below matched that
+# blindness deliberately, for comparability, per _proven_line()'s old note.
+# Fixed on both sides the same day (layout.py's proven_instructions() /
+# proven_code_runs() and this file's corpus_bytes(), which now passes
+# shared=True): the two tools are still one comparable cross-check, now
+# seeing the same 941 kernel + 97 DSP-driver instructions instead of missing
+# them identically.  See notes/answer-diff/2026-09-01-ac2bb6e7.txt.
 SHARED_LINE = re.compile(
     r";\s*([0-9A-F]{6})/[0-9A-F]{6}\s\s+"
     r"(?:a=)?((?:[0-9a-f]{2} )*[0-9a-f]{2})")
@@ -548,16 +560,18 @@ def _proven_line(l, shared=True):
         transcription, so shared=True.  With them excluded, 0xF85FF8 -- an
         ordinary `ret` -- read as NOT a boundary and a passing check went red.
       * corpus_bytes exists to be compared, line for line, against the count
-        `notes/prom_a_f85ff9_layout.py` prints, and THAT tool reads only the
-        single-address shape.  Teaching this one about shared sources while the
-        other stays blind turns "re-derived independently" from a cross-check
-        into two tools disagreeing (measured: 11,167 against 11,237).  So it
-        stays blind, deliberately, and the two still agree.
-      ⚠ The blindness itself is REAL and predates this file's use of it: since
-        the kernel merge, 941 of prom_a's proven instructions -- and since the
-        DSP merge, 97 more -- are in sources both tools skip.  Fixing it is a
-        change to prom_a_f85ff9_layout.py first, and it will move the dossier
-        comparison, which is red either way.
+        `notes/prom_a_f85ff9_layout.py` prints.  UNTIL 2026-09-01 that tool
+        read only the single-address shape, and corpus_bytes() called this
+        with shared=False to match it -- otherwise "re-derived independently"
+        would have been two tools disagreeing (measured then: 11,167 against
+        11,237).  Both sides were fixed together on 2026-09-01 (see the ⚠
+        above the regexes), so corpus_bytes() now also passes shared=True and
+        the two stay comparable, seeing the same corpus instead of the same
+        blind spot.
+      ⚠ The blindness was REAL and predated this file's use of it: since the
+        kernel merge, 941 of prom_a's proven instructions -- and since the DSP
+        merge, 97 more -- were in sources both tools skipped.  STILL FIXED:
+        see notes/prom_a_f85ff9_layout.py's proven_instructions().
     """
     body = l.split(";")[0]
     if not body.startswith("\t") or body.lstrip().startswith("."):
@@ -587,10 +601,14 @@ def corpus_bytes():
     non-instruction line and at any address that does not advance), but the run
     END is `last.addr + last.len`, not `last.addr`.  The lane sums `e - s` with
     e = the LAST INSTRUCTION'S ADDRESS, so its corpus silently omits the last
-    instruction of all 10,509 runs -- and those bytes are never scanned by the
-    content rules either."""
+    instruction of every run -- and those bytes are never scanned by the
+    content rules either.
+
+    shared=True since 2026-09-01, matching the lane's own fix: both tools now
+    see kernel.s and dsp_channel_regs.s's instructions instead of both
+    skipping them (see _proven_line's ⚠)."""
     src = image_path(ROOT, "prom_a/wsa1_prom_a.s")
-    seq = [_proven_line(l, shared=False)      # see _proven_line's ⚠
+    seq = [_proven_line(l, shared=True)       # see _proven_line's ⚠
            for l in open(src, encoding="utf-8", errors="replace")]
     runs, cur = [], []
     for it in seq:
