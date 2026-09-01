@@ -221,7 +221,7 @@ check("DSP_WriteChannelRegs_Inner: 8 data writes `ld (XIY+0x02),r` (bd 02 4x)",
       sum(1 for i in range(len(_INNER) - 2)
           if _INNER[i] == 0xBD and _INNER[i + 1] == 0x02
           and 0x40 <= _INNER[i + 2] <= 0x47) == 8)
-check("DSP_WriteChannelRegs_FromTable: index = (channel<<5)|0x10",
+check("DSP_ChannelRegs_Write8: index = (channel<<5)|0x10",
       a(0xF85F60, 3) == bytes([0xC9, 0xEE, 0x05])
       and a(0xF85F63, 3) == bytes([0xC9, 0x31, 0x04]))
 check("DSP_WriteAllChannelRegs: the four pushed channels are 1, 0, 2, 3",
@@ -263,18 +263,18 @@ check("vectors: they are 0x38 0x3C 0x40 0x54 0x58 0x5C 0x70 0x78",
 check("vectors: 0xF82D02-0xF82D08 are seven NOPs falling into it",
       a(0xF82D02, 7) == b"\x00" * 7 and a(0xF82D09, 2) == bytes([0x68, 0xFE]))
 
-# --- round 2 new territory: DSP_Init_Channels --------------------------------
-check("DSP_Init_Channels: 0xF85F0F opens with `link XIZ,0xFFF8`",
+# --- round 2 new territory: DSP_ChannelRegs_Init --------------------------------
+check("DSP_ChannelRegs_Init: 0xF85F0F opens with `link XIZ,0xFFF8`",
       a(0xF85F0F, 4) == bytes([0xEE, 0x0C, 0xF8, 0xFF]))
-check("DSP_Init_Channels: it ends `unlk XIZ / ret` at 0xF85F56",
+check("DSP_ChannelRegs_Init: it ends `unlk XIZ / ret` at 0xF85F56",
       a(0xF85F56, 3) == bytes([0xEE, 0x0D, 0x0E]))
-check("DSP_Init_Channels: the four calls all target 0xF85F59",
+check("DSP_ChannelRegs_Init: the four calls all target 0xF85F59",
       all(int.from_bytes(a(s0 + 1, 2), "little") + s0 + 3 == 0xF85F59
           and a(s0, 1) == b"\x1e" for s0 in (0xF85F22, 0xF85F29, 0xF85F30, 0xF85F37)))
-check("DSP_Init_Channels: the config word is 0x0101001F and the stride 0x20",
+check("DSP_ChannelRegs_Init: the config word is 0x0101001F and the stride 0x20",
       a(0xF85F45, 5) == bytes([0x40, 0x1F, 0x00, 0x01, 0x01])
       and a(0xF85F50, 3) == bytes([0xC9, 0xC8, 0x20]))
-check("DSP_Init_Channels: the loop runs 4 times",
+check("DSP_ChannelRegs_Init: the loop runs 4 times",
       a(0xF85F4A, 2) == bytes([0x24, 0x04]))
 
 # --- round 2 new territory: micro-DMA channel 0 and the 0x7A0000 data port ---
@@ -483,7 +483,7 @@ def _rel_targets():
 REL = _rel_targets()
 
 for addr, label in ((0xF85E8A, "EntryPoint_Records"),
-                    (0xF85F0F, "DSP_Init_Channels")):
+                    (0xF85F0F, "DSP_ChannelRegs_Init")):
     hits = names_addr(addr)
     rel = REL.get(addr, [])
     check("nothing names 0x%06X (%s): 0 byte hits" % (addr, label),
@@ -514,7 +514,7 @@ check("MsgQueue_ReceiveBlocking IS published through prom_b thunk 0xF42DCC",
       and b(0xF42DCC, 1) == b"\x1b")
 check("DSP_RefreshTask IS named, exactly once, and by the record table",
       names_addr(0xF85EC8) == [("prom_a", 0xF85EA2)] and not REL.get(0xF85EC8))
-check("the same search finds the four calls to DSP_WriteChannelRegs_FromTable",
+check("the same search finds the four calls to DSP_ChannelRegs_Write8",
       sorted(REL.get(0xF85F59, [])) == [0xF85F22, 0xF85F29, 0xF85F30, 0xF85F37])
 
 # --- the three prom_b thunks EntryPoint_Records points at ---------------------
@@ -1207,7 +1207,7 @@ for _addr, _thunk, _label in (
           names_addr(_addr) == [("prom_b", _thunk + 1)]
           and b(_thunk, 1) == b"\x1b" and not REL.get(_addr),
           str(names_addr(_addr)))
-check("DSP_WriteChannelRegs_FromTable is ALSO published, at 0xF42DE0",
+check("DSP_ChannelRegs_Write8 is ALSO published, at 0xF42DE0",
       int.from_bytes(b(0xF42DE1, 3), "little") == 0xF85F59
       and b(0xF42DE0, 1) == b"\x1b")
 

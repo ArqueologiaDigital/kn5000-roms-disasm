@@ -69954,8 +69954,8 @@ T_F42DD4:	jp 0xF85E5B  ; -> prom_a 0x05E5B
 T_Kernel_SemaTryWait:	jp 0xF85AEF  ; F42DD8 (was T_F42DD8) -> prom_a 0x05AEF   x1
 T_F42DDC:	jp 0xF85D1C  ; -> prom_a 0x05D1C
 ; Evidence: slot 0xF42DE0 is `jp 0xF85F59`; prom_a 0xF85F59 carries the label
-;           DSP_WriteChannelRegs_FromTable, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
-T_DSP_WriteChannelRegs_FromTable:	jp 0xF85F59  ; F42DE0 (was T_F42DE0) -> prom_a 0x05F59   x1
+;           DSP_ChannelRegs_Write8, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
+T_DSP_ChannelRegs_Write8:	jp 0xF85F59  ; F42DE0 (was T_F42DE0) -> prom_a 0x05F59   x1
 ; Evidence: slot 0xF42DE4 is `jp 0xF85F7C`; prom_a 0xF85F7C carries the label
 ;           DSP_WriteAllChannelRegs, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DSP_WriteAllChannelRegs:	jp 0xF85F7C  ; F42DE4 (was T_F42DE4) -> prom_a 0x05F7C

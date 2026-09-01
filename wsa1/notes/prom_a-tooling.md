@@ -189,7 +189,7 @@ loudly if the sibling ELF is missing, never silently passed); the control
 register each micro-DMA setter's second argument reaches, and its operand width;
 the three `DMA3V := 0x0A` writes and the one `DMA0V := 0x0E`; that vector slot
 `0x28` is *not* the hang; that **eight** slots are, and which eight; and the
-five structural facts behind the new `DSP_Init_Channels`. Round 2's new
+five structural facts behind the new `DSP_ChannelRegs_Init`. Round 2's new
 territory brought its own: the two micro-DMA direction setups register by
 register, and the ten `Dev7A_StartDma` command codes — **parsed out of the
 compare chain by the check itself**, so a miscount or a changed literal fails

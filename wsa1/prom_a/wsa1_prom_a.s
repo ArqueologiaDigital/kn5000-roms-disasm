@@ -203,7 +203,7 @@
 ;   0xF85C89-0xF85D1B   147  MsgQueue_ReceiveBlocking -- the blocking message
 ;                            receive, and with it the kernel's queue RAM map
 ;   0xF85E8A-0xF85F58   207  EntryPoint_Records (4 x 12 bytes), the endless DSP
-;                            refresh task, and DSP_Init_Channels
+;                            refresh task, and DSP_ChannelRegs_Init
 ;   0xF85F59-0xF85FF8   160  the DSP / tone-generator register writers at 0x7F0000
 ;   0xF8E47F-0xF8E6A1   547  INT0, the inter-processor link receiver, INTTC2,
 ;                            INTTC3 and the link's main-loop service task
@@ -9081,7 +9081,7 @@ sub_F85EC2:
 ;             which is INSIDE the frame the `link XIZ,0xFFFC` at 0xF85ECA opened
 ;             -- a frame built once with the loop below it is an entry point, not
 ;             a subroutine;
-;          2. the four calls are DSP_WriteChannelRegs_FromTable (0xF85F59,
+;          2. the four calls are DSP_ChannelRegs_Write8 (0xF85F59,
 ;             converted below), each `push XIY / pushw channel / call /
 ;             inc 6,XSP`, which is that routine's stack argument list exactly,
 ;             with the channel numbers 0,1,2,3 in order;
@@ -9122,27 +9122,27 @@ DSP_RefreshTask__pass:
 	ld_spil xiy, 0xea                             ; F85ED9  e5 ea 25   ld XIY,(XDE+) -- pointer for channel 0
 	push XIY                                      ; F85EDC  3d
 	pushw 0x00                                    ; F85EDD  0b 00 00
-	call DSP_WriteChannelRegs_FromTable           ; F85EE0  1d 59 5f f8
+	call DSP_ChannelRegs_Write8           ; F85EE0  1d 59 5f f8
 	inc 6,XSP                                     ; F85EE4  ef 66
 	ld_spil xiy, 0xea                             ; F85EE6  e5 ea 25   ld XIY,(XDE+) -- channel 1
 	push XIY                                      ; F85EE9  3d
 	pushw 0x01                                    ; F85EEA  0b 01 00
-	call DSP_WriteChannelRegs_FromTable           ; F85EED  1d 59 5f f8
+	call DSP_ChannelRegs_Write8           ; F85EED  1d 59 5f f8
 	inc 6,XSP                                     ; F85EF1  ef 66
 	ld_spil xiy, 0xea                             ; F85EF3  e5 ea 25   ld XIY,(XDE+) -- channel 2
 	push XIY                                      ; F85EF6  3d
 	pushw 0x02                                    ; F85EF7  0b 02 00
-	call DSP_WriteChannelRegs_FromTable           ; F85EFA  1d 59 5f f8
+	call DSP_ChannelRegs_Write8           ; F85EFA  1d 59 5f f8
 	inc 6,XSP                                     ; F85EFE  ef 66
 	ld_spil xiy, 0xea                             ; F85F00  e5 ea 25   ld XIY,(XDE+) -- channel 3
 	push XIY                                      ; F85F03  3d
 	pushw 0x03                                    ; F85F04  0b 03 00
-	call DSP_WriteChannelRegs_FromTable           ; F85F07  1d 59 5f f8
+	call DSP_ChannelRegs_Write8           ; F85F07  1d 59 5f f8
 	inc 6,XSP                                     ; F85F0B  ef 66
 	jr DSP_RefreshTask__pass                      ; F85F0D  68 bf   for ever
 
 ; ---------------------------------------------------------------------
-; DSP_Init_Channels -- zero all 32 channel registers, then set register 0x1F of
+; DSP_ChannelRegs_Init -- zero all 32 channel registers, then set register 0x1F of
 ;                      each channel to 1
 ;
 ; Called from: NO SITE FOUND.  notes/prom_a_xref.py 0xF85F0F reports no `call`,
@@ -9152,6 +9152,19 @@ DSP_RefreshTask__pass:
 ; Inputs:  none.  Outputs: for each channel 0..3, registers (ch<<5)|0x10 .. +7
 ;          set to 0, then register (ch<<5)|0x1F set to 1.  XIZ frame; XBC, XWA,
 ;          D clobbered.
+; ★ RENAMED 2026-09-01 (lane S2), from DSP_Init_Channels, because the name was
+;          anchored to the WEAKER of two byte identities.  The transplanted name
+;          below rests on a 13-byte run shared with the KN5000, whose enclosing
+;          routine differs from this one in 62 of 74 bytes.  The 234-byte block
+;          0xF85F0F-0xF85FF8 is 231 of 234 bytes IDENTICAL to prom_c 0xF98000,
+;          the three differing bytes being A23..A16 of each routine's base
+;          literal (0x7F here, 0xE0 there) and nothing else -- one source, two
+;          processors, one symbol changed.  The name now follows that identity,
+;          which is prom_c's DSP_ChannelRegs_Init.  Measured, with a null over
+;          eight neighbouring alignments (best 19 of 234), by
+;          `python3 notes/sound/wsa1_dsp_driver_shared.py --selftest`.
+;          ⚠ The KN5000 citation below is UNCHANGED and still names the
+;          sibling's own labels; do not rename those.
 ; Evidence: ★ TRANSPLANTED NAME, byte-backed.  0xF85F4C-0xF85F58 is 13 bytes
 ;          identical to the KN5000 sub-CPU at 0x1FCD1, where llvm-nm names the
 ;          label DSP_Init_Channels_Loop and the enclosing routine (0x1FC95)
@@ -9172,7 +9185,7 @@ DSP_RefreshTask__pass:
 ;          top of the loop keeps the two index bytes equal.
 ; Unknown:  what register 0x1F is; why nothing calls this.
 ; ---------------------------------------------------------------------
-DSP_Init_Channels:
+DSP_ChannelRegs_Init:
 	link XIZ,0xfff8                               ; F85F0F  ee 0c f8 ff   8-byte buffer
 	xor XWA,XWA                                   ; F85F13  e8 d0
 	ld (xiz-8), xwa                               ; F85F15  be f8 60   buffer[0..3] = 0
@@ -9180,25 +9193,25 @@ DSP_Init_Channels:
 	lda xiy, (xiz-8)                              ; F85F1B  be f8 35   XIY = &buffer
 	push XIY                                      ; F85F1E  3d
 	pushw 0x00                                    ; F85F1F  0b 00 00
-	calr DSP_WriteChannelRegs_FromTable           ; F85F22  1e 34 00
+	calr DSP_ChannelRegs_Write8           ; F85F22  1e 34 00
 	push XIY                                      ; F85F25  3d
 	pushw 0x01                                    ; F85F26  0b 01 00
-	calr DSP_WriteChannelRegs_FromTable           ; F85F29  1e 2d 00
+	calr DSP_ChannelRegs_Write8           ; F85F29  1e 2d 00
 	push XIY                                      ; F85F2C  3d
 	pushw 0x02                                    ; F85F2D  0b 02 00
-	calr DSP_WriteChannelRegs_FromTable           ; F85F30  1e 26 00
+	calr DSP_ChannelRegs_Write8           ; F85F30  1e 26 00
 	push XIY                                      ; F85F33  3d
 	pushw 0x03                                    ; F85F34  0b 03 00
-	calr DSP_WriteChannelRegs_FromTable           ; F85F37  1e 1f 00
+	calr DSP_ChannelRegs_Write8           ; F85F37  1e 1f 00
 	add XSP,0x00000018                            ; F85F3A  ef c8 18 00 00 00   drop 4 x (pointer + channel word)
 	ld XBC,0x007f0000                             ; F85F40  41 00 00 7f 00   the DSP register file
 	ld XWA,0x0101001f                             ; F85F45  40 1f 00 01 01   A = register 0x1F, +2 = 0x01
 	ldb d, 0x04                                   ; F85F4A  24 04   four channels
-DSP_Init_Channels_Loop:
+DSP_ChannelRegs_Init_Loop:
 	ld W,A                                        ; F85F4C  c9 88
 	ld (XBC),XWA                                  ; F85F4E  b1 60
 	add A,0x20                                    ; F85F50  c9 c8 20   next channel's window
-	djnz8 d, DSP_Init_Channels_Loop               ; F85F53  cc 1c f6
+	djnz8 d, DSP_ChannelRegs_Init_Loop               ; F85F53  cc 1c f6
 	unlk XIZ                                      ; F85F56  ee 0d
 	ret                                           ; F85F58  0e
 
@@ -9239,7 +9252,14 @@ DSP_Init_Channels_Loop:
 ;   file does NOT auto-increment.
 
 ; ---------------------------------------------------------------------
-; DSP_WriteChannelRegs_FromTable -- write 8 bytes into one channel's registers
+; DSP_ChannelRegs_Write8 -- write 8 bytes into one channel's registers
+;
+; ★ RENAMED 2026-09-01 (lane S2), from DSP_WriteChannelRegs_FromTable, to keep
+; one family name across the two processors that run this same 234-byte driver
+; (see the block above).  ⚠ THE OLD NAME WAS NOT WRONG -- "FromTable" is argued
+; for below by `ldb_spi e,0xf4` walking the caller's array, and that argument
+; survives verbatim.  What decides it is that its sibling routine had to move
+; anyway, and two images should not spell one driver two ways.
 ;
 ; Called from: 0xF85F30 and 0xF85F37 (a caller that pushes a channel number and
 ;          a pointer; not yet converted)
@@ -9261,7 +9281,7 @@ DSP_Init_Channels_Loop:
 ;          for XIY with a post-increment of 1 (same convention as MEM_XIX_PI4 in
 ;          include/tmp95c061_sfr.inc).
 ; ---------------------------------------------------------------------
-DSP_WriteChannelRegs_FromTable:
+DSP_ChannelRegs_Write8:
 	ld A,(XSP+0x04)                               ; F85F59  8f 04 21   argument 1: the channel number
 	ld XIY,(XSP+0x06)                             ; F85F5C  af 06 25   argument 2: a pointer to 8 bytes
 	pushw de                                      ; F85F5F  2a
@@ -9269,12 +9289,12 @@ DSP_WriteChannelRegs_FromTable:
 	set 0x04,A                                    ; F85F63  c9 31 04   | 0x10 -> the register index for this channel's first slot
 	ld XBC,0x007f0000                             ; F85F66  41 00 00 7f 00   the DSP register file
 	ldb d, 0x08                                   ; F85F6B  24 08
-DSP_WriteChannelRegs_FromTable__loop:
+DSP_ChannelRegs_Write8__loop:
 	ld (XBC),A                                    ; F85F6D  b1 41   select the register
 	ldb_spi e, 0xf4                               ; F85F6F  c5 f4 25   ld E,(XIY+)
 	ld (XBC+0x02),E                               ; F85F72  b9 02 45   write its value
 	inc 1,A                                       ; F85F75  c9 61
-	djnz8 d, DSP_WriteChannelRegs_FromTable__loop                             ; F85F77  cc 1c f3
+	djnz8 d, DSP_ChannelRegs_Write8__loop                             ; F85F77  cc 1c f3
 	popw de                                       ; F85F7A  4a
 	ret                                           ; F85F7B  0e
 
@@ -9283,7 +9303,7 @@ DSP_WriteChannelRegs_FromTable__loop:
 ;
 ; Called from: prom_b thunk 0xF42DE4 (`jp 0xF85F7C`), the LAST slot of the
 ;          kernel thunk block at 0xF42D60-0xF42DE7.  No prom_a site reaches it.
-;          Its neighbour 0xF42DE0 publishes DSP_WriteChannelRegs_FromTable the
+;          Its neighbour 0xF42DE0 publishes DSP_ChannelRegs_Write8 the
 ;          same way, so both DSP writers are exported next to the kernel API.
 ; Inputs:  XBC/XDE hold the data for channel 1; XIZ, XWA/XHL and XIX/XIY carry
 ;          the data for channels 0, 2 and 3 respectively -- the routine shuffles
@@ -149036,7 +149056,7 @@ INT5_Dev7B__giveup:
 ;          exists to make that class of miss visible.  At a 12-byte floor it finds
 ;          nine complete sibling routines in prom_a; SEVEN of them sit inside runs
 ;          of 68 or 170 bytes that the 48-byte tool already reported, and TWO were
-;          below its floor -- this one (22 bytes) and DSP_Init_Channels_Loop
+;          below its floor -- this one (22 bytes) and DSP_ChannelRegs_Init_Loop
 ;          (21 bytes, prom_a 0xF85F4C, converted above).  Two, not one: corrected
 ;          here after re-reading the scanner's own output.
 ;

@@ -83,7 +83,7 @@ prom_c has a 4-byte trailer of the same flavour (`0x01010001`) in the same place
 
 For ever: push selector 1 to the kernel primitive at `0xF85C89`, take the block
 it returns in XIY, walk it with `ld XIY,(XDE+)` and hand each of four consecutive
-pointers to `DSP_WriteChannelRegs_FromTable` (`0xF85F59`, converted earlier) with
+pointers to `DSP_ChannelRegs_Write8` (`0xF85F59`, converted earlier) with
 channel numbers 0, 1, 2, 3 in order.
 
 It is an **entry point, not a subroutine**: the `link XIZ,0xFFFC` at `0xF85ECA`
@@ -165,7 +165,7 @@ of those now sits next to its own correction: the audit's own example, the
 `EntryPoint_Records` header at what is now line 390, carries an explicit
 *CORRECTED 2026-08-25 (round-2 audit F8)* line.
 
-## 3. `DSP_Init_Channels` (`0xF85F0F`) — a transplanted name, byte-backed
+## 3. `DSP_ChannelRegs_Init` (`0xF85F0F`) — a transplanted name, byte-backed
 
 Zeroes an 8-byte buffer, pushes it to all four channels, then sets register
 `(ch<<5)|0x1F` of each channel to 1 by writing `XWA = 0x0101001F` (and `ld W,A`
