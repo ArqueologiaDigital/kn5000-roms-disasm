@@ -23,6 +23,13 @@ PROMS = a b c d
 KERNEL_SRC = kernel/kernel.s kernel/kernel_maincpu.inc kernel/kernel_subcpu.inc
 COMMON_INC = include/tmp95c061_sfr.inc include/tlcs900_mem_ops.inc
 
+# The DSP channel-register driver is ONE source too, included by prom_a at
+# 0xF85F0F and by prom_c at 0xF98000 -- 234 bytes each, the same arrangement
+# KERNEL_SRC has.  ⚠ BOTH images must list it, for the reason above: an edit to
+# a file no rule names rebuilds nothing and the gate passes on a stale object.
+DSP_SRC = dsp/dsp_channel_regs.s dsp/dsp_channel_regs_maincpu.inc \
+          dsp/dsp_channel_regs_subcpu.inc
+
 # The three routines prom_a and prom_b carry TWICE are one source each, included
 # at both sites -- the same arrangement KERNEL_SRC has one level up, where one
 # source serves two processors.  Both images must list them, for the reason the
@@ -43,7 +50,7 @@ PROM_C_SRC = prom_c/wsa1_prom_c.s \
 
 all: rebuilt_ROMs/wsa1_prom_a.llvm.rom rebuilt_ROMs/wsa1_prom_b.llvm.rom rebuilt_ROMs/wsa1_prom_c.llvm.rom rebuilt_ROMs/wsa1_prom_d.llvm.rom
 
-rebuilt_ROMs/wsa1_prom_a.llvm.o: prom_a/wsa1_prom_a.s $(COMMON_INC) $(KERNEL_SRC) $(MAINCPU_SHARED)
+rebuilt_ROMs/wsa1_prom_a.llvm.o: prom_a/wsa1_prom_a.s $(COMMON_INC) $(KERNEL_SRC) $(MAINCPU_SHARED) $(DSP_SRC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_a -o $@ $<
 
@@ -63,7 +70,7 @@ rebuilt_ROMs/wsa1_prom_b.llvm.elf: rebuilt_ROMs/wsa1_prom_b.llvm.o prom_b/prom_b
 rebuilt_ROMs/wsa1_prom_b.llvm.rom: rebuilt_ROMs/wsa1_prom_b.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-rebuilt_ROMs/wsa1_prom_c.llvm.o: $(PROM_C_SRC) $(COMMON_INC) $(KERNEL_SRC)
+rebuilt_ROMs/wsa1_prom_c.llvm.o: $(PROM_C_SRC) $(COMMON_INC) $(KERNEL_SRC) $(DSP_SRC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_c -o $@ $<
 

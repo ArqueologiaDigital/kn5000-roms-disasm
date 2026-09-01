@@ -23,249 +23,35 @@
 ; >>> END OF EXTRACTION HEADER -- everything below is verbatim from the master
 
 ; ==============================================================================
-; 0xF98000-0xF980E9 -- the channel-register writers for the device at 0x00E00000
+; 0xF98000-0xF980E9 -- ★★ THE DSP CHANNEL-REGISTER DRIVER, SHARED WITH prom_a
 ; ==============================================================================
 ;
-; Four routines, 234 bytes, all four of them drivers for the SAME two-register
-; port.  They are the only converted code in this image that touches it.
+; These 234 bytes are no longer written out here.  They are dsp/dsp_channel_regs.s,
+; ONE source that assembles into prom_c at 0xF98000 AND into prom_a at 0xF85F0F --
+; 231 of the 234 bytes are the same byte in the two EPROMs, and the three that
+; are not are A23..A16 of each routine's base literal, 0xE0 on this processor and
+; 0x7F on the other.  That is the whole difference between the two copies.
 ;
-; ★ THE PORT, READ OFF THIS CODE ALONE.  0x00E00000 is an ADDRESS/DATA PAIR:
-; +0 takes a register number, +2 takes that register's value.  The proof is the
-; loop at 0xF9805E, which writes A to (XBC), a byte to (XBC+0x02), and then
-; INCREMENTS A once per data byte -- there is no reading of that in which +0 is
-; anything but a register selector.  DSP_WriteChannelRegs_Inner says the same
-; thing eight times unrolled.
+; The block banner and the four routine headers that stood here moved there
+; verbatim and now sit beside prom_a's headers for the same routines, each under
+; a banner naming its file.  Nothing was reworded:
+;       python3 notes/sound/wsa1_dsp_join_probe.py --verify
 ;
-; ★ EACH CHANNEL OWNS 32 REGISTERS, AND ITS DATA BLOCK IS AT +0x10.  Both writers
-; compute the first register number the same way:
-;       sll 0x05,A      ; channel * 0x20
-;       set 0x04,A      ; + 0x10
-; so channel n's eight data bytes land in registers n*0x20+0x10 .. n*0x20+0x17.
-; DSP_ChannelRegs_Init then writes n*0x20+0x1F as well -- the last register of
-; each channel's window -- with the constant 0x01.  There are FOUR channels: each
-; of the three routines that walks them is unrolled or counted 0,1,2,3.
+; dsp/dsp_channel_regs_subcpu.inc below supplies the ONE value that is CPU 2's
+; rather than CPU 1's: DSP_REGS_BASE = 0x00E00000.  Nothing else about the two
+; copies differs, so there is no conditional anywhere in the body.
 ;
-; ⚠ WHAT THE DEVICE IS, IS NOT ESTABLISHED HERE.  notes/FINDINGS-memory-map.md
-; already records 0x00E00000 as an address/data pair of unknown identity and
-; cites 0xF98057 for it.  The name "DSP" below is the SIBLING PROJECT'S name for
-; the device its own byte-identical code drives at ITS base address, and it is
-; used here only because two of these four routines are byte-identical to that
-; project's and it would be perverse to call the same bytes something else.  It
-; is a borrowed name, not a WSA1 finding.
+; ★ prom_c GAINS ADDRESSES AND BYTES in the move.  This block was hand-written
+;   and carried no address comments at all; every merged line now names both
+;   images' addresses and the bytes at them, so a reader can check the listing
+;   against the EPROM without assembling it.
 ;
-; ★★ AND THE BORROWING HAS A LIMIT WORTH RECORDING.  The WSA1 register file is at
-; 0x00E00000; the KN5000 sub-CPU's is at 0x00130000.  In
-; DSP_WriteChannelRegs_Inner that is the ONLY difference in the whole 81-byte
-; routine -- 80 of 81 bytes are identical and the one that differs is a byte of
-; the base-address literal:
-;
-;   $ python3 notes/prom_c_sibling_map.py --addr 0xF98099 --len 81 --diff 0x1FD27
-;     80 of 81 bytes identical; 1 differ
-;       +0x00F  WSA1 0xF980A8 = 0xE0   KN5000 0x1FD36 = 0x13
-;
-; A header that had copied the sibling's comment across without running that
-; would have written 0x130000 -- a peripheral address that does not exist on this
-; machine -- into this tree, and the byte gate would never have noticed.
-;
-; --------------------------------------------------------------------------
-; DSP_ChannelRegs_Init -- zero all four channels' data registers, then arm them.
-;
-; Called from: 0xF98B95 (`call 0xF98000`), inside the power-on init chain that
-;              also calls 0xFB0504, 0xFC88A0, 0xFC8B9C, 0xF9993E, 0xF9919F and
-;              then reads the fc byte at 0xFFFFEF (0xF98BA0) -- i.e. this runs
-;              once at boot.  Found with notes/prom_c_xrefs.py 0xF98000.
-; Inputs:  none.
-; Outputs: registers n*0x20+0x10 .. +0x17 = 0 and register n*0x20+0x1F = 0x01,
-;          for n = 0..3, in the device at 0x00E00000.
-; Evidence: the eight zero bytes come from `xor xwa,xwa` stored twice into the
-;          8-byte stack buffer at (XIZ-8), whose address is then passed to
-;          DSP_ChannelRegs_Write8 four times with channel = 0,1,2,3.  The final
-;          loop writes XWA = 0x0101001F as a 32-bit store to the port with A
-;          stepping 0x1F, 0x3F, 0x5F, 0x7F.
-; Unknown:  what register 0x1F does.  Also: the 32-bit store puts the register
-;          number in BOTH byte +0 and byte +1 (`ld w,a` immediately before it)
-;          and 0x01 in both +2 and +3.  Whether +1 and +3 are the high halves of
-;          16-bit registers or ignored mirrors is NOT ESTABLISHED.
-; Sibling:  the same routine, instruction for instruction, is
-;          DSP_Init_Channels at KN5000 0x1FC95
-;          (../kn5000-roms-disasm/v142/subcpu/kn5000_subprogram_v142.s:396).
-;          ⚠ It is NOT byte-identical and must not be quoted as if it were: the
-;          KN5000 fills its buffer with the test pattern 0x5A5A5A5A where this
-;          one fills it with zero, which makes it five bytes longer and shifts
-;          everything after; and it passes the channel number in BC and the
-;          buffer pointer in XWA where this one passes both on the stack.  Run
-;          `notes/prom_c_sibling_map.py --addr 0xF98000 --len 0x4A --diff 0x1FC95`
-;          to see that only 12 of 74 bytes line up.
-; --------------------------------------------------------------------------
-DSP_ChannelRegs_Init:
-	link32	0xEE, 0x0C, 0xF8, 0xFF	; frame: 8 bytes of channel data
-	xor	xwa, xwa
-	ld	(xiz-8), xwa		; buffer[0..3] = 0
-	ld	(xiz-4), xwa		; buffer[4..7] = 0
-	lda	xiy, (xiz-8)		; XIY = &buffer
-	push	xiy
-	pushw	0x0000			; channel 0
-	calr	(0xF9804A - 0xF98016)	; DSP_ChannelRegs_Write8
-	push	xiy
-	pushw	0x0001			; channel 1
-	calr	(0xF9804A - 0xF9801D)
-	push	xiy
-	pushw	0x0002			; channel 2
-	calr	(0xF9804A - 0xF98024)
-	push	xiy
-	pushw	0x0003			; channel 3
-	calr	(0xF9804A - 0xF9802B)
-	add	xsp, 0x18		; drop 4 x (pointer + channel word)
-	ld	xbc, 0x00E00000		; the register port
-	ld	xwa, 0x0101001F		; A = register 0x1F, data 0x01
-	ldb	d, 0x04			; four channels
-DSP_ChannelRegs_Init__loop:
-	ld	w, a
-	ld	(xbc), xwa		; +0 = reg number, +2 = 0x01
-	add	a, 0x20			; next channel's window
-	djnz8	d, DSP_ChannelRegs_Init__loop
-	unlk32	xiz
-	ret
-
-; --------------------------------------------------------------------------
-; DSP_ChannelRegs_Write8 -- write 8 bytes into one channel's data registers.
-;
-; Called from: DSP_ChannelRegs_Init (four calr sites, 0xF98013/1A/21/28) and
-;              from 0xF98130, 0xF9813F, 0xF9814E, 0xF9815D, which are the four
-;              calls inside DSP_ChannelRefresh_Loop (0xF98118, converted below --
-;              an interrupt-disabled endless loop that is the third entry in
-;              EntryPoint_Records).  notes/prom_c_xrefs.py 0xF9804A.
-; Inputs:  (XSP+4) = channel number 0..3, (XSP+6) = pointer to 8 bytes.
-;          Caller-cleaned: every call site drops 6 bytes afterwards.
-; Outputs: registers channel*0x20+0x10 .. +0x17 of the device at 0x00E00000.
-; Evidence: `sll 0x05,A` + `set 0x04,A` on the stacked channel number forms the
-;          base register; `ldb_spi e,0xF4` is `ld E,(XIY+)`, a post-incrementing
-;          byte fetch, and D = 8 counts the loop.
-; Unknown:  nothing about the loop; what the eight registers mean is not
-;          determined by this routine.
-; Sibling:  corresponds to DSP_Write_Channel at KN5000 0x1FCDE
-;          (kn5000_subprogram_v142.s:439), which has the same body but takes its
-;          arguments in registers.  NOT byte-identical -- see the diff quoted in
-;          the block comment above.
-; --------------------------------------------------------------------------
-DSP_ChannelRegs_Write8:
-	ld	a, (xsp+4)		; channel number
-	ld	xiy, (xsp+6)		; source pointer
-	pushw	de
-	sll	a, 5			; channel * 0x20
-	set	4, a			; + 0x10 -> first data register
-	ld	xbc, 0x00E00000
-	ldb	d, 0x08			; eight registers
-DSP_ChannelRegs_Write8__loop:
-	ld	(xbc), a		; select register A
-	ldb_spi	e, 0xF4			; ld E,(XIY+)
-	ld	(xbc+2), e		; write its value
-	inc	1, a
-	djnz8	d, DSP_ChannelRegs_Write8__loop
-	popw	de
-	ret
-
-; --------------------------------------------------------------------------
-; DSP_WriteAllChannelRegs -- write the caller's registers into all four channels.
-;
-; Called from: NOT TRACED.  notes/prom_c_xrefs.py finds no absolute literal and
-;              no calr displacement anywhere in prom_c that reaches 0xF9806D, and
-;              that tool does not search the short PC-relative forms, so this is
-;              "not found", not "unreferenced".
-; Inputs:  XBC and XDE hold four of the eight bytes for channel 1; the previous
-;          register bank's QBC/QDE hold the other four (the inner routine reads
-;          them).  XIZ, XWA/XHL and XIX/XIY supply channels 0, 2 and 3.
-; Outputs: 32 registers -- eight in each of channels 0..3.
-; Evidence: ★ BYTE-IDENTICAL, all 44 bytes, to the KN5000 sub-CPU routine of this
-;          name at 0x1FCFB (kn5000_subprogram_v142.s:462).  Checked with
-;          `python3 notes/prom_c_sibling_map.py --sym DSP_WriteAllChannelRegs`,
-;          which reports the same 44 bytes at prom_a 0xF85F7C as well -- BOTH
-;          WSA1 processors carry this routine.
-;          Structure independent of the sibling: four calls to 0xF98099, each
-;          preceded by `pushw n` for n = 1,0,2,3, and `inc 8,xsp` at the end
-;          drops exactly those four words.
-; Unknown:  why the channel order is 1,0,2,3 rather than 0,1,2,3.  The sibling
-;          has the same order, so it is not a WSA1 quirk.
-; --------------------------------------------------------------------------
-DSP_WriteAllChannelRegs:
-	push	xbc
-	push	xde
-	pushw	0x0001			; channel 1 first
-	calr	(0xF98099 - 0xF98075)	; DSP_WriteChannelRegs_Inner
-	ld	xbc, (xsp+10)		; the XBC pushed on entry
-	ld	xde, xiz
-	pushw	0x0000			; channel 0
-	calr	(0xF98099 - 0xF98080)
-	ld	xbc, xwa
-	ld	xde, xhl
-	pushw	0x0002			; channel 2
-	calr	(0xF98099 - 0xF9808A)
-	ld	xbc, xix
-	ld	xde, xiy
-	pushw	0x0003			; channel 3
-	calr	(0xF98099 - 0xF98094)
-	inc	8, xsp			; drop the four channel words
-	pop	xde
-	pop	xbc
-	ret
-
-; --------------------------------------------------------------------------
-; DSP_WriteChannelRegs_Inner -- write eight registers of ONE channel, unrolled.
-;
-; Called from: DSP_WriteAllChannelRegs, four calr sites (0xF98072/7D/87/91).
-; Inputs:  (XSP+12) = channel number 0..3 (pushed by the caller).
-;          Data: C, B, then QBC's C and B from the previous register bank, then
-;          E, D, then QDE's C and B.  Eight bytes, in that order.
-; Outputs: registers channel*0x20+0x10 .. +0x17 of the device at 0x00E00000.
-; Evidence: ★ 80 of its 81 bytes are identical to the KN5000 sub-CPU's
-;          DSP_WriteChannelRegs_Inner at 0x1FD27 (kn5000_subprogram_v142.s:492).
-;          The single differing byte is 0xF980A8, inside the base-address
-;          literal: 0x00E00000 here, 0x00130000 there.  Reproduce with
-;          `python3 notes/prom_c_sibling_map.py --addr 0xF98099 --len 81 --diff 0x1FD27`.
-;          The address/data structure is independently visible here: eight
-;          (write A to +0, write a byte to +2, inc A) triples.
-; Unknown:  what the eight registers hold.  `ld bc,qbc` and `ld bc,qde` reach the
-;          PREVIOUS register bank, so two of the eight bytes come from whatever
-;          the caller of DSP_WriteAllChannelRegs had in QBC/QDE -- and that
-;          caller has not been found (see above), so the data's origin is open.
-; --------------------------------------------------------------------------
-DSP_WriteChannelRegs_Inner:
-	push	xiy
-	pushw	wa
-	pushw	bc
-	ld	a, (xsp+12)		; channel number
-	sll	a, 5			; * 0x20
-	set	4, a			; + 0x10
-	ld	xiy, 0x00E00000		; ⚠ KN5000 has 0x00130000 here -- the one byte
-	ld	(xiy), a		; register +0x10
-	ld	(xiy+2), c
-	inc	1, a
-	ld	(xiy), a		; +0x11
-	ld	(xiy+2), b
-	inc	1, a
-	ld	(xiy), a		; +0x12
-	ld	bc, qbc			; previous register bank
-	ld	(xiy+2), c
-	inc	1, a
-	ld	(xiy), a		; +0x13
-	ld	(xiy+2), b
-	inc	1, a
-	ld	(xiy), a		; +0x14
-	ld	(xiy+2), e
-	inc	1, a
-	ld	(xiy), a		; +0x15
-	ld	(xiy+2), d
-	inc	1, a
-	ld	(xiy), a		; +0x16
-	ld	bc, qde			; previous register bank
-	ld	(xiy+2), c
-	inc	1, a
-	ld	(xiy), a		; +0x17
-	ld	(xiy+2), b
-	popw	bc
-	popw	wa
-	pop	xiy
-	ret
+; ⚠ The proof is the byte gate, not this comment.  If the equate were wrong THIS
+;   image would stop rebuilding:
+;       python3 scripts/analysis/assert_byte_identical.py
+; ==============================================================================
+	.include "dsp/dsp_channel_regs_subcpu.inc"
+	.include "dsp/dsp_channel_regs.s"
 
 ; ----------------------------------------------------------------------------
 ; EntryPoint_Records -- 0xF980EA..0xF9810D  (36 bytes)
