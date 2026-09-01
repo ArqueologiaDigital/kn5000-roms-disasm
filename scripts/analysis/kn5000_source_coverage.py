@@ -61,8 +61,22 @@ for root, (label, total) in ROMS.items():
 # --- the v7 circularity, measured ------------------------------------------
 # extract_v7_bins.py stage 1 overwrites a C-compiled bin with a raw slice of the
 # v7 ROM whenever the block at the v9 label address is >50% similar.
+#
+# ⚠ FIXED 2026-09-01 (lane v7): this used to ignore the `.incbin "path", off, len`
+# form and take os.path.getsize(v9p) -- the WHOLE shared blob -- as the size of
+# EVERY labelled slice into it. v9/maincpu/ui_widgets/technichord_string_data.s
+# alone .incbin's naka_technichord_strings.bin (111,742 B) 842 TIMES, each a few
+# bytes of it at a different offset; the old code counted 842 * 111,742 B for
+# that one file. That is how a 2,097,152-byte ROM produced a "31,758,150 B"
+# result: the total was never bounded by the ROM size because it wasn't
+# measuring the ROM, it was measuring (occurrences * shared-file-size). Now it
+# reads the same off/len the assembler would and slices both ROMs by LEN, not
+# by the whole file -- see scripts/analysis/README-v7-no-source-bytes.md for
+# the standalone, ROM-size-bounded replacement (v7_no_source_bytes.py), which
+# is the one to trust for the headline number.
 LLVM_NM = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-nm"
 ROM_BASE = 0xE00000
+INC2 = re.compile(rb'\.incbin\s+"([^"]+)"(?:\s*,\s*([0-9a-fA-Fx]+)\s*(?:,\s*([0-9a-fA-Fx]+))?)?')
 try:
     v7rom = open("original_ROMs/kn5000_v7_program.rom", "rb").read()
 
@@ -83,24 +97,40 @@ try:
     incmap = {}
     for fp in sorted(glob.glob("v9/maincpu/**/*.s", recursive=True)):
         last = None
-        for line in open(fp, "rb").readlines():
+        for lineno, line in enumerate(open(fp, "rb").readlines()):
             s = line.strip()
             m = re.match(rb"^(\w+):", s)
             if m and not s.startswith(b".") and not s.startswith(b";"):
                 last = m.group(1).decode("latin-1")
-            if b".incbin" in s and b"generated/" in s:
-                i1 = s.find(b'"') + 1
-                rel = s[i1:s.find(b'"', i1)].decode("latin-1")
+            mm = INC2.search(s) if b".incbin" in s and b"generated/" in s else None
+            if mm:
+                rel = mm.group(1).decode("latin-1")
+                off = int(mm.group(2), 0) if mm.group(2) else 0
+                ln = int(mm.group(3), 0) if mm.group(3) else None
                 a = v7s.get(last, v9s.get(last)) if last else None
                 if a is not None:
-                    incmap[(last, rel)] = (a, "v9/maincpu/" + rel)
+                    # A label on THIS line names byte 0 of the slice, so its
+                    # ROM address does not move with `off`. A label on an
+                    # EARLIER line (last) still refers to the start of ITS OWN
+                    # slice -- but successive .incbin lines under one label
+                    # each describe a DIFFERENT sub-region, so key on the
+                    # (label, file-line) pair, not (label, path), or repeats
+                    # under the same label collide again.
+                    incmap[(last, fp, lineno)] = (a, "v9/maincpu/" + rel, off, ln)
     ov = ovb = keep = keepb = differ = differb = 0
-    for (lab, _), (addr, v9p) in incmap.items():
+    for (lab, _, _), (addr, v9p, off, ln) in incmap.items():
         if not os.path.exists(v9p):
             continue
-        n = os.path.getsize(v9p)
+        fsz = os.path.getsize(v9p)
+        n = ln if ln is not None else (fsz - off)
+        if n <= 0:
+            continue
         d7 = v7rom[addr - ROM_BASE: addr - ROM_BASE + n]
-        d9 = open(v9p, "rb").read()
+        with open(v9p, "rb") as fh:
+            fh.seek(off)
+            d9 = fh.read(n)
+        if len(d7) != n or len(d9) != n:
+            continue
         pct = sum(1 for a, b in zip(d7, d9) if a == b) / n if n else 0
         if pct > 0.5:
             ov += 1
@@ -111,9 +141,11 @@ try:
         else:
             keep += 1
             keepb += n
-    print(f"\nextract_v7_bins.py: overwrites {ov} C-compiled bins with raw v7 ROM slices "
-          f"({ovb:,d} B); keeps C output for {keep} ({keepb:,d} B)")
-    print(f"  of the overwritten, {differ} files / {differb:,d} B genuinely DIFFER from the "
+    print(f"\nextract_v7_bins.py: overwrites {ov} C-compiled slices with raw v7 ROM bytes "
+          f"({ovb:,d} B); keeps C output for {keep} slices ({keepb:,d} B)")
+    print(f"  of the overwritten, {differ} slices / {differb:,d} B genuinely DIFFER from the "
           f"C output -- i.e. that many bytes of the v7 ROM are reproduced by NO source.")
+    print(f"  (fixed 2026-09-01: this used to ignore .incbin off/len and count "
+          f"occurrences * whole-file-size, giving 31,758,150 B on a 2,097,152 B ROM.)")
 except FileNotFoundError as e:
     print("\n(v7 circularity check skipped:", e, ")")

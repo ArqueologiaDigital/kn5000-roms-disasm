@@ -71,3 +71,25 @@ emit the same four bytes. These are the tools for the other half.
     python3 scripts/analysis/code_vs_data_delta.py 8b3d510 HEAD
 
 Findings: `notes/FINDINGS-misframe-corrections-2026-08-30.md`.
+
+## Added 2026-09-01 (lane v7, parallel disasm push)
+
+Lane v7's brief asked it to check whether the v7 build still "reads its own ROM" --
+already fixed once, in 1528605e (2026-08-21) -- and to quantify precisely, in bytes,
+how much of v7 has no source at all.
+
+| script | question it answers |
+|---|---|
+| `v7_no_source_bytes.py` | How many v7 maincpu ROM bytes are reproduced by NO source, right now, measured directly from what `v7/maincpu/kn5000_v7_program.s` actually assembles? (120,332 B / 5.74%, 2026-09-01: 272 live-referenced `romslices/` transplants + 2 raw-byte patches in `v7_c_divergence.json`. Down from the 141,893 B documented on 2026-08-21 -- intervening lane work, e.g. `056a9a1d`'s 8,084 B of pointer tables, already closed part of the gap.) |
+
+    python3 scripts/analysis/v7_no_source_bytes.py
+
+`kn5000_source_coverage.py`'s "v7 circularity" section was also fixed in this pass: it
+ignored `.incbin "path", off, len` and charged the WHOLE shared blob's size to every
+labelled slice into it, so a file referenced 842 times (`technichord_string_data.s`)
+counted 842x its own size -- 31,758,150 B of "differ" on a 2,097,152 B ROM, an
+impossible number that should have been the tell. Fixed to slice by the actual off/len,
+it reports a bounded 149,016 B -- but that is answering a DIFFERENT, looser question
+("how wrong would naively reusing v9's committed bin be for v7") than
+`v7_no_source_bytes.py`'s ("how much of v7's actual committed tree has no source").
+Use `v7_no_source_bytes.py` for the headline number.
