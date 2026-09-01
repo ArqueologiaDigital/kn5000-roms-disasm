@@ -28,7 +28,7 @@ RUN:  python3 scripts/converters/convert_sound_byte_blocks.py --list
       python3 scripts/converters/convert_sound_byte_blocks.py LABEL [LABEL ...]
       python3 scripts/converters/convert_sound_byte_blocks.py --selftest
 """
-import os, re, subprocess, sys
+import os, re, shutil, subprocess, sys, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 PROJ = os.environ.get("PROJECTS_ROOT", os.path.expanduser("~/compartilhado"))
@@ -256,6 +256,59 @@ def runs(lines, sym):
     return out
 
 
+LLD = os.path.join(PROJ, "llvm-project", "build", "bin", "ld.lld")
+LD_SCRIPT = os.path.join(ROOT, "v142/subcpu/subcpu.ld")
+INCDIR = os.path.join(ROOT, "v142/subcpu")
+
+
+def mark_addresses(lines):
+    """Address of EVERY data run, including runs that follow an instruction.
+
+    ⚠ The label-relative walk cannot reach these: once an instruction sits
+    between the nearest label and the run, the offset needs the assembler.  So
+    build a MIRROR of the payload with a synthetic label before each run, link
+    it, and read the labels out with nm.  Injected labels emit no bytes, and
+    --selftest checks the marked build still produces the ROM byte for byte.
+
+    -> {source line index of the run's first line: address}"""
+    marks, out = [], []
+    cur = None
+    for i, ln in enumerate(lines):
+        dm = DATALINE.match(ln)
+        isdata = dm is not None and line_bytes(dm.group(1), dm.group(2)) is not None
+        if isdata and cur is None:
+            cur = i
+            out.append("__addrmark_%d:" % len(marks))
+            marks.append(i)
+        elif not isdata:
+            cur = None
+        out.append(ln)
+    with tempfile.TemporaryDirectory() as td:
+        for f in os.listdir(INCDIR):
+            src = os.path.join(INCDIR, f)
+            if os.path.isdir(src):
+                os.symlink(src, os.path.join(td, f))
+            elif f != os.path.basename(SRC):
+                shutil.copy(src, os.path.join(td, f))
+        root = os.path.join(td, os.path.basename(SRC))
+        open(root, "w", encoding="latin-1").write("\n".join(out))
+        o, e = os.path.join(td, "m.o"), os.path.join(td, "m.elf")
+        r = subprocess.run([MC, "-triple=tlcs900", "-filetype=obj", "-I", td, "-o", o, root],
+                           capture_output=True, text=True)
+        if r.returncode:
+            return {}, r.stderr[:400]
+        r = subprocess.run([LLD, "-e", "0", "-T", LD_SCRIPT, "-o", e, o],
+                           capture_output=True, text=True)
+        if r.returncode:
+            return {}, r.stderr[:400]
+        res = {}
+        for line in subprocess.run([NM, e], capture_output=True, text=True).stdout.split("\n"):
+            p = line.split()
+            if len(p) == 3 and p[2].startswith("__addrmark_"):
+                res[marks[int(p[2].split("_")[-1])]] = int(p[0], 16)
+        return res, ""
+
+
 def frame(addr, raw, uni, sym):
     """Split `raw` at unidasm's instruction boundaries and spell each one.
 
@@ -349,6 +402,37 @@ def symbolic_ok(text, target, at, n):
     return False
 
 
+FLOWEND = re.compile(r'^\s*(ret|reti|retd|halt|swi|jp|jp_24|jp_ind|jp_rr|jrl|jr)\b')
+
+
+def inline_runs(lines, allruns):
+    """Data runs that sit INSIDE an instruction stream: the line before is an
+    instruction that is not a flow end, and the line after is an instruction.
+
+    ★ THAT IS THE EVIDENCE.  Execution falls into the run and out the far side,
+    so the tree itself is already asserting these bytes are executed -- they
+    were left as `.byte` only because the assembler could not spell them at the
+    time.  Several are `res 7,(P6)`, the tone-generator select strobe, which the
+    backend has been able to spell for a while now."""
+    def code_line(k, step):
+        while 0 <= k < len(lines):
+            t = lines[k].split(";")[0].strip()
+            if t and not lines[k].lstrip().startswith(";"):
+                return lines[k]
+            k += step
+        return ""
+    out = []
+    for r in allruns:
+        before = code_line(r["start"] - 1, -1)
+        after = code_line(r["end"] + 1, 1)
+        bt, at = before.split(";")[0].strip(), after.split(";")[0].strip()
+        if (bt and not bt.startswith(".") and not bt.endswith(":")
+                and not FLOWEND.match(before)
+                and at and not at.startswith(".") and not at.endswith(":")):
+            out.append(r)
+    return out
+
+
 def convert(labels, apply=True):
     sym = symbols()
     uni = unidasm()
@@ -362,6 +446,16 @@ def convert(labels, apply=True):
         if lm:
             idx[lm.group(1)] = i
     allruns = runs(lines, sym)
+    marks, err = mark_addresses(lines)
+    if err:
+        print("  !! the marked mirror did not build; falling back to label-relative "
+              "addresses only\n     " + err.strip().splitlines()[0])
+    for r in allruns:
+        if r["start"] in marks:
+            if r["addr"] is not None and r["addr"] != marks[r["start"]]:
+                failed.append(("0x%06X" % r["addr"],
+                               "the mirror puts this run at 0x%06X" % marks[r["start"]]))
+            r["addr"] = marks[r["start"]]
     byline = {r["start"]: r for r in allruns}
     done, failed, edits, chosen = [], [], {}, []
     for lab in labels:
@@ -420,6 +514,50 @@ def convert(labels, apply=True):
                 i += 1
         open(SRC, "w", encoding="latin-1").write("\n".join(out))
     return done, failed
+
+
+def convert_inline(apply=True):
+    sym, uni = symbols(), unidasm()
+    BYADDR.clear()
+    for n, a in sym.items():
+        BYADDR.setdefault(a, n)
+    lines = open(SRC, encoding="latin-1").read().split("\n")
+    marks, err = mark_addresses(lines)
+    if err:
+        print("  !! the marked mirror did not build: " + err.strip().splitlines()[0])
+        return 1
+    allruns = runs(lines, sym)
+    for r in allruns:
+        if r["start"] in marks:
+            r["addr"] = marks[r["start"]]
+    edits, nb, ni = {}, 0, 0
+    skipped = 0
+    for r in inline_runs(lines, allruns):
+        if r["addr"] is None or not rom_matches(r["addr"], bytes(r["bytes"])):
+            skipped += 1
+            continue
+        txt, kept, spelt = frame(r["addr"], bytes(r["bytes"]), uni, sym)
+        if txt is None or kept:
+            skipped += 1        # partial spelling would churn without covering
+            continue
+        edits[r["start"]] = (r["end"], txt)
+        nb += len(r["bytes"])
+        ni += spelt
+        print(f"  CONVERTED  0x{r['addr']:06X}  {len(r['bytes']):4d} B -> {spelt:3d} instructions")
+    if apply and edits:
+        out, i = [], 0
+        while i < len(lines):
+            if i in edits:
+                end, txt = edits[i]
+                out.extend(txt)
+                i = end + 1
+            else:
+                out.append(lines[i])
+                i += 1
+        open(SRC, "w", encoding="latin-1").write("\n".join(out))
+    print(f"\n  {len(edits)} inline run(s), {nb} bytes -> {ni} instructions; "
+          f"{skipped} left alone (not fully spellable, or not framed by unidasm)")
+    return 0
 
 
 def selftest():
@@ -491,6 +629,8 @@ def main():
             if r["addr"] is not None and len(r["bytes"]) >= 8:
                 print(f"  line {r['start']+1:6d}  0x{r['addr']:06X}  {len(r['bytes']):5d} B")
         return 0
+    if "--inline" in sys.argv:
+        return convert_inline(apply="--dry-run" not in sys.argv)
     labels = [a for a in sys.argv[1:] if not a.startswith("-")]
     if not labels:
         print(__doc__)

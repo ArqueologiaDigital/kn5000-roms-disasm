@@ -87,6 +87,7 @@ IMAGES = {
     "v142_subcpu": dict(
         incdir="v142/subcpu", root="v142/subcpu/kn5000_subprogram_v142.s",
         origin=0x000400, elf="rebuilt_ROMs/kn5000_subprogram_v142.llvm.elf",
+        rom="original_ROMs/kn5000_subprogram_v142.rom",
         # ⚠ the link spans 0x000400-0x03EAFF but the ROM is only the two slices
         # the Makefile's `dd` keeps; the 58,624 bytes of 0xFF between them are
         # padding and counting them would inflate every "undisassembled" figure.
@@ -95,6 +96,7 @@ IMAGES = {
     "subcpu_boot": dict(
         incdir="subcpu/boot", root="subcpu/boot/kn5000_subcpu_boot.s",
         origin=0xFE0000, elf="rebuilt_ROMs/kn5000_subcpu_boot.llvm.elf",
+        rom="original_ROMs/kn5000_subcpu_boot.ic30",
         regions=[(0xFE0000, 0x1000000)],
         what="sub-CPU boot ROM (IC30)"),
 }
@@ -424,6 +426,56 @@ def coverage(fl, st):
     return out
 
 
+# ★ THE CALIBRATION.  Each is one instruction, encoded the same way wherever it
+# sits, so its occurrences can be counted in the ROM IMAGE without any source at
+# all -- which gives a denominator the source cannot influence.
+CALIB = [
+    ("f018b7", "res 7,(P6)     -- assert the tone-generator select"),
+    ("f018bf", "set 7,(P6)     -- release it"),
+    ("f200001050", "ld (0x100000),WA  -- latch a TG register address"),
+    ("f202001050", "ld (0x100002),WA  -- write TG register data"),
+    ("f0181c", "the same three-byte shape on P6 with a different bit (control)"),
+]
+
+
+def rom_addresses(fl, pat):
+    im = IMAGES[fl["image"]]
+    d = open(os.path.join(ROOT, im["rom"]), "rb").read()
+    out, i = [], 0
+    while True:
+        i = d.find(pat, i)
+        if i < 0:
+            return out
+        out.append(rom_addr(fl["image"], i))
+        i += 1
+
+
+def rom_addr(key, off):
+    """ROM file offset -> address.  The payload ROM is the two slices the
+    Makefile's `dd` keeps out of the 0x000400-based link."""
+    if key == "subcpu_boot":
+        return 0xFE0000 + off
+    return (0x400 + off) if off < 0x100 else (0xF000 + off - 0x100)
+
+
+def calibrate(fl):
+    """How much of the sound code the SOURCE can see, against a denominator the
+    source cannot influence.
+
+    ★ WHY THIS EXISTS.  "No .incbin left" is a statement about the source file.
+    Counting a tone-generator opcode in the ROM IMAGE and asking how many of
+    those occurrences the source has actually decoded is a statement about
+    COVERAGE, and the two differed by a third of the tone-generator traffic
+    before the .byte blocks were converted."""
+    out = []
+    for hexpat, what in CALIB:
+        pat = bytes.fromhex(hexpat)
+        addrs = rom_addresses(fl, pat)
+        seen = sum(1 for a in addrs if a in fl["code"])
+        out.append((hexpat, what, len(addrs), seen))
+    return out
+
+
 def undisassembled_bytes(fl):
     return sum(fl["data"].values())
 
@@ -453,6 +505,12 @@ def report(key, argv):
     if "--misframes" in argv:
         for sym, a, n, src, c in mf:
             print(f"      0x{a:06X}  {n:5d} B  {sym:<44} {c:3d} referrer(s), e.g. 0x{src:06X}")
+    if "--calibrate" in argv:
+        print("  calibration -- occurrences in the ROM IMAGE vs occurrences the")
+        print("  source has decoded as that instruction:")
+        for hexpat, what, tot, seen in calibrate(fl):
+            pct = (100.0 * seen / tot) if tot else 0.0
+            print(f"    {hexpat:<12} {seen:5d} / {tot:<5d} {pct:5.1f}%   {what}")
     if "--coverage" in argv:
         cov = coverage(fl, st)
         broken = [c for c in cov if c[3] or c[4]]
