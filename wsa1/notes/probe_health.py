@@ -337,9 +337,19 @@ def _copy_tree(dst):
     shutil.copytree(ROOT, dst,
                     ignore=shutil.ignore_patterns(".git", "*.pyc", "__pycache__"),
                     symlinks=True)
-    link = os.path.join(_tree_top(dst), ".git")
+    top = _tree_top(dst)
+    link = os.path.join(top, ".git")
     if not os.path.lexists(link):
         os.symlink(GITDIR, link)
+    # ⚠ AND A PRIVATE INDEX.  `.git` is shared, so without this every `git diff`
+    # a probe runs -- in five trees at once -- refreshes the REAL repository's
+    # index and they contend for index.lock.  A failure caused by the instrument
+    # running in parallel with itself would be graded NONDET, and it would also
+    # be writing to the tree under measurement.  The COPY has the same content,
+    # so the diffs mean the same thing.
+    idx = os.path.join(GITDIR, "index")
+    if os.path.exists(idx):
+        shutil.copy2(idx, os.path.join(top, ".git-index"))
 
 
 def _freeze(tree):
@@ -429,6 +439,9 @@ def build_trees(base, primary, extra_stub_mutant=False):
 # running and grading
 def run(tree, argv):
     env = dict(os.environ, PYTHONHASHSEED="0", PYTHONDONTWRITEBYTECODE="1")
+    private_index = os.path.join(_tree_top(tree), ".git-index")
+    if os.path.exists(private_index):
+        env["GIT_INDEX_FILE"] = private_index
     try:
         r = subprocess.run([sys.executable] + argv, cwd=tree, env=env,
                            stdin=subprocess.DEVNULL,   # a probe that waits on
