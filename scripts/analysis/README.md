@@ -117,3 +117,17 @@ Findings and the corrected 13-image table: `notes/coverage-instrument-fix-2026-0
     python3 scripts/analysis/verify_converted_call_targets.py --git-diff 11a48aca 244bde7b
 
 Findings: `README-v9v10-census.md`'s 2026-09-01 update.
+
+## `v7_list_slices.py`
+
+**Question:** which `.incbin` slices does v7's maincpu pull in — from which file,
+at what offset/length, under which label? The work list for v7's 123,927 B of
+verbatim debt, now the largest genuine block in the tree.
+
+    python3 scripts/analysis/v7_list_slices.py
+
+⚠ Reports what the SOURCE says, not what the ROM contains: the label above a
+slice is a claim, not a measurement. ⚠ The mechanical pointer-table class here is
+already exhausted and the remainder is ~89% opaque, so the productive route is
+cross-version comparison against the better-disassembled v9/v10 — a lead, not
+proof, since v7 genuinely differs and that is why the slices exist.
