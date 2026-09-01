@@ -105,3 +105,15 @@ Use `v7_no_source_bytes.py` for the headline number.
     python3 scripts/analysis/kn5000_source_coverage.py --selftest
 
 Findings and the corrected 13-image table: `notes/coverage-instrument-fix-2026-09-01.md`.
+
+## Added 2026-09-01 (lane V10V9, full-disassembly push)
+
+| script | question it answers |
+|---|---|
+| `v9_v10_true_debt.py` | How much of v9/v10 maincpu is still NOT reproduced by real source, in bytes, counting `.incbin` AND literal `.byte`/`.ascii`/`.word` runs (not `.incbin` alone)? Requires the ROM already built -- `kn5000_source_coverage.py` silently undercounts `.incbin` on a fresh tree because `generated/*.bin` don't exist until `make` runs. |
+| `verify_converted_call_targets.py` | Does a region `convert_region.py` converted actually behave like code -- do its `call` targets land on routines ALREADY named in the tree, independent of the byte gate (which cannot tell real code from a coincidentally-decodable data table)? |
+
+    python3 scripts/analysis/v9_v10_true_debt.py v9 v10
+    python3 scripts/analysis/verify_converted_call_targets.py --git-diff 11a48aca 244bde7b
+
+Findings: `README-v9v10-census.md`'s 2026-09-01 update.
