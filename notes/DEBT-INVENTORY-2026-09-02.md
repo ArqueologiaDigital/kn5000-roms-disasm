@@ -77,6 +77,38 @@ important — are 28 and 62.
   decoder and no framing judgement: blind starts are **enriched 1.29x INSIDE
   spans proven not to be code at all** (20.1% vs 15.6%).
 
+### ★★ AND IT IS WORSE THAN CONFOUNDED — IT POINTS THE WRONG WAY
+
+The naka lane ran the identical statistic **inside v10**, on regions whose
+status was settled first by independent evidence:
+
+| region | runs | blind | control |
+|---|---:|---:|---:|
+| 18-byte records 0xEDCAD6–0xEE0010 — **PROVEN DATA** | 1,873 | **68.4%** | 0.0% |
+| `extensions/extension_data.s` — whole file | 2,950 | 58.3% | 0.0% |
+| `boot/system_handlers.s` — **KNOWN CODE**, 652 call targets | 88 | **14.8%** | 0.0% |
+
+**The proven-data block scores 4.6× HIGHER than the known code.** So the
+statistic does not merely fail to indicate undecoded code; on this image it
+*anti*-correlates with code. Note the control column is 0.0% in every row
+**including the known-code one** — the floor is what drives the ratio, exactly
+as the structural argument above predicts.
+
+`scripts/analysis/blind_start_enrichment_control.py`.
+
+★ And `extension_data.s`, the file whose 58.3% I told a lane to treat as a code
+candidate, **is data**: 1,590 of its 1,721 blind starts sit inside 18-byte
+records of a 956-entry pointer table, clustered at field offsets (+0x0C alone
+48.0%, which holds the value 1 in 781 of 956 records), `0x01`/`0x04` are 97.9%
+of them, and **0 of 59,849** absolute call/jp/jr targets in `v10/maincpu` land
+anywhere in the file. The stride hypothesis raised on `widget_dispatch.s` is
+confirmed here at twenty times the scale, and it accounts for the whole of that
+file's image-worst rate.
+
+⚠ I told that lane twice, in opposite directions. The first message —
+"probably type it, not decode it", reasoned from the filename — was right, and
+I talked it out of that on the strength of the retracted statistic.
+
 ### What survives
 
 A high blind rate means **the region is framed wrongly** — and that resolves in
