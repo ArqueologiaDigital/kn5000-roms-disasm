@@ -1,0 +1,272 @@
+[
+ {
+  "addr": 16166817,
+  "size": 2175,
+  "file": "maincpu/sequencer/accompaniment_engine.s",
+  "src_line": 27151,
+  "n_calls": 5,
+  "n_call_hits": 5,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16009366,
+  "size": 1780,
+  "file": "maincpu/sequencer/sequencer_engine.s",
+  "src_line": 19811,
+  "n_calls": 4,
+  "n_call_hits": 4,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16137548,
+  "size": 847,
+  "file": "maincpu/sequencer/accompaniment_engine.s",
+  "src_line": 19356,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15907791,
+  "size": 792,
+  "file": "maincpu/sequencer/sequencer_ui.s",
+  "src_line": 2772,
+  "n_calls": 11,
+  "n_call_hits": 11,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15828937,
+  "size": 641,
+  "file": "maincpu/storage/flash_floppy_handlers.s",
+  "src_line": 2715,
+  "n_calls": 3,
+  "n_call_hits": 3,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16215006,
+  "size": 620,
+  "file": "maincpu/midi/param_load_routines.s",
+  "src_line": 584,
+  "n_calls": 4,
+  "n_call_hits": 4,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16665882,
+  "size": 593,
+  "file": "maincpu/audio/note_voice_mapping.s",
+  "src_line": 3721,
+  "n_calls": 2,
+  "n_call_hits": 2,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15851804,
+  "size": 592,
+  "file": "maincpu/factory_test/test_init.s",
+  "src_line": 89,
+  "n_calls": 2,
+  "n_call_hits": 2,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15764000,
+  "size": 581,
+  "file": "maincpu/audio/semenu_routines.s",
+  "src_line": 4134,
+  "n_calls": 3,
+  "n_call_hits": 3,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16321637,
+  "size": 529,
+  "file": "maincpu/file_io/single_load.s",
+  "src_line": 2598,
+  "n_calls": 2,
+  "n_call_hits": 2,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15765219,
+  "size": 524,
+  "file": "maincpu/audio/semenu_routines.s",
+  "src_line": 4432,
+  "n_calls": 3,
+  "n_call_hits": 3,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15777121,
+  "size": 443,
+  "file": "maincpu/audio/sound_editor_ui.s",
+  "src_line": 2759,
+  "n_calls": 8,
+  "n_call_hits": 8,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16654220,
+  "size": 363,
+  "file": "maincpu/audio/note_voice_mapping.s",
+  "src_line": 1618,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16321120,
+  "size": 358,
+  "file": "maincpu/file_io/single_load.s",
+  "src_line": 2519,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15763592,
+  "size": 341,
+  "file": "maincpu/audio/semenu_routines.s",
+  "src_line": 4061,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16150776,
+  "size": 333,
+  "file": "maincpu/sequencer/accompaniment_engine.s",
+  "src_line": 23336,
+  "n_calls": 6,
+  "n_call_hits": 6,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16652998,
+  "size": 307,
+  "file": "maincpu/audio/note_voice_mapping.s",
+  "src_line": 1378,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15860418,
+  "size": 303,
+  "file": "maincpu/ui/ui_playback_modes.s",
+  "src_line": 1,
+  "n_calls": 8,
+  "n_call_hits": 8,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16021081,
+  "size": 291,
+  "file": "maincpu/sequencer/sequencer_engine.s",
+  "src_line": 23284,
+  "n_calls": 2,
+  "n_call_hits": 2,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15793196,
+  "size": 225,
+  "file": "maincpu/audio/sound_editor_ui.s",
+  "src_line": 6617,
+  "n_calls": 8,
+  "n_call_hits": 8,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16020380,
+  "size": 164,
+  "file": "maincpu/sequencer/sequencer_engine.s",
+  "src_line": 23102,
+  "n_calls": 3,
+  "n_call_hits": 3,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16139838,
+  "size": 102,
+  "file": "maincpu/sequencer/accompaniment_engine.s",
+  "src_line": 19701,
+  "n_calls": 2,
+  "n_call_hits": 2,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15791899,
+  "size": 96,
+  "file": "maincpu/audio/sound_editor_ui.s",
+  "src_line": 6282,
+  "n_calls": 8,
+  "n_call_hits": 8,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16129072,
+  "size": 89,
+  "file": "maincpu/sequencer/accompaniment_engine.s",
+  "src_line": 16593,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15681833,
+  "size": 82,
+  "file": "maincpu/boot/system_handlers.s",
+  "src_line": 7896,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16557340,
+  "size": 81,
+  "file": "maincpu/audio/audio_control_engine.s",
+  "src_line": 5658,
+  "n_calls": 2,
+  "n_call_hits": 2,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16147989,
+  "size": 75,
+  "file": "maincpu/sequencer/accompaniment_engine.s",
+  "src_line": 21985,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15792163,
+  "size": 74,
+  "file": "maincpu/audio/sound_editor_ui.s",
+  "src_line": 6349,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 15792256,
+  "size": 74,
+  "file": "maincpu/audio/sound_editor_ui.s",
+  "src_line": 6365,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ },
+ {
+  "addr": 16694948,
+  "size": 68,
+  "file": "maincpu/audio/note_voice_mapping.s",
+  "src_line": 9087,
+  "n_calls": 1,
+  "n_call_hits": 1,
+  "table_tail_reject": true
+ }
+]

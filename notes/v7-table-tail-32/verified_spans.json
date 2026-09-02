@@ -1,0 +1,594 @@
+[
+ {
+  "addr": 16166817,
+  "size": 2175,
+  "file": "sequencer/accompaniment_engine.s",
+  "true_start_line": 27151,
+  "end_line0idx_excl": 27423,
+  "labels": [
+   [
+    0,
+    "AccPatch_VoiceAssignDataBlock"
+   ]
+  ]
+ },
+ {
+  "addr": 16009366,
+  "size": 1780,
+  "file": "sequencer/sequencer_engine.s",
+  "true_start_line": 19811,
+  "end_line0idx_excl": 20035,
+  "labels": [
+   [
+    0,
+    "AppEvent_SubDispatch"
+   ]
+  ]
+ },
+ {
+  "addr": 16137548,
+  "size": 847,
+  "file": "sequencer/accompaniment_engine.s",
+  "true_start_line": 19356,
+  "end_line0idx_excl": 19465,
+  "labels": [
+   [
+    0,
+    "AccWidget_ProcessSpecialCmd"
+   ],
+   [
+    36,
+    "__pad_F64174"
+   ]
+  ]
+ },
+ {
+  "addr": 15907791,
+  "size": 792,
+  "file": "sequencer/sequencer_ui.s",
+  "true_start_line": 2772,
+  "end_line0idx_excl": 2872,
+  "labels": [
+   [
+    0,
+    "IvNamingExit_ScreenData"
+   ]
+  ]
+ },
+ {
+  "addr": 15828937,
+  "size": 641,
+  "file": "storage/flash_floppy_handlers.s",
+  "true_start_line": 2715,
+  "end_line0idx_excl": 2795,
+  "labels": []
+ },
+ {
+  "addr": 16215006,
+  "size": 620,
+  "file": "midi/param_load_routines.s",
+  "true_start_line": 584,
+  "end_line0idx_excl": 663,
+  "labels": [
+   [
+    0,
+    "ParaLoadOpt_GridDispatch"
+   ]
+  ]
+ },
+ {
+  "addr": 16665882,
+  "size": 593,
+  "file": "audio/note_voice_mapping.s",
+  "true_start_line": 3721,
+  "end_line0idx_excl": 3810,
+  "labels": [
+   [
+    0,
+    "Voice_ScanAndEmitMidiEvents"
+   ],
+   [
+    17,
+    "ScanEmitMidi_VoiceLoop"
+   ],
+   [
+    177,
+    "ScanEmitMidi_ValidFormat"
+   ],
+   [
+    251,
+    "MIDI_SysExParse_CheckLength"
+   ],
+   [
+    276,
+    "SysExParse_CheckLeng_LoadReg"
+   ],
+   [
+    291,
+    "ScanEmitMidi_NextVoice"
+   ],
+   [
+    294,
+    "ScanEmitMidi_CheckVoiceCount"
+   ],
+   [
+    316,
+    "Voice_BuildAndEmitNoteOnEvents"
+   ],
+   [
+    345,
+    "BuildNoteOn_VoiceLoop"
+   ],
+   [
+    550,
+    "BuildNoteOn_NextVoice"
+   ],
+   [
+    572,
+    "BuildNoteOn_NextVoic_LoadReg"
+   ]
+  ]
+ },
+ {
+  "addr": 15851804,
+  "size": 592,
+  "file": "factory_test/test_init.s",
+  "true_start_line": 89,
+  "end_line0idx_excl": 171,
+  "labels": [
+   [
+    0,
+    "InitializeHama"
+   ]
+  ]
+ },
+ {
+  "addr": 15764000,
+  "size": 581,
+  "file": "audio/semenu_routines.s",
+  "true_start_line": 4134,
+  "end_line0idx_excl": 4206,
+  "labels": []
+ },
+ {
+  "addr": 16321637,
+  "size": 529,
+  "file": "file_io/single_load.s",
+  "true_start_line": 2598,
+  "end_line0idx_excl": 2675,
+  "labels": [
+   [
+    0,
+    "SLDst_ScrollDispatch"
+   ],
+   [
+    109,
+    "SLDst_Scroll_ChildReturn"
+   ],
+   [
+    178,
+    "SLDst_Scroll_SubMode"
+   ],
+   [
+    232,
+    "SLDst_Scroll_SubMode2"
+   ],
+   [
+    302,
+    "SLDst_Scroll_SubMode3"
+   ],
+   [
+    356,
+    "SLDst_Scroll_SubMode4"
+   ],
+   [
+    406,
+    "SLDst_Scroll_SubMode5"
+   ],
+   [
+    467,
+    "SLDst_Scroll_SubMode6"
+   ]
+  ]
+ },
+ {
+  "addr": 15765219,
+  "size": 524,
+  "file": "audio/semenu_routines.s",
+  "true_start_line": 4432,
+  "end_line0idx_excl": 4497,
+  "labels": []
+ },
+ {
+  "addr": 16138491,
+  "size": 459,
+  "file": "sequencer/accompaniment_engine.s",
+  "true_start_line": 19491,
+  "end_line0idx_excl": 19553,
+  "labels": [
+   [
+    0,
+    "DrumKit_GroupAssignTable"
+   ],
+   [
+    81,
+    "RhythmROM_LoadDrumKit"
+   ]
+  ]
+ },
+ {
+  "addr": 15777121,
+  "size": 443,
+  "file": "audio/sound_editor_ui.s",
+  "true_start_line": 2759,
+  "end_line0idx_excl": 2814,
+  "labels": []
+ },
+ {
+  "addr": 16654220,
+  "size": 363,
+  "file": "audio/note_voice_mapping.s",
+  "true_start_line": 1618,
+  "end_line0idx_excl": 1673,
+  "labels": [
+   [
+    0,
+    "FinalizeCount_LoadIdx"
+   ],
+   [
+    46,
+    "FinalizeCount_CheckZero"
+   ],
+   [
+    105,
+    "FinalizeCount_LoadParam"
+   ],
+   [
+    112,
+    "FinalizeCount_LoadParam2"
+   ],
+   [
+    196,
+    "FinalizeCount_LoadReg"
+   ],
+   [
+    297,
+    "FinalizeCount_AdvanceSlot"
+   ],
+   [
+    303,
+    "Voice_BuildProgramNotify"
+   ],
+   [
+    350,
+    "VoiceNotify_SendAllNotesOff"
+   ]
+  ]
+ },
+ {
+  "addr": 16321120,
+  "size": 358,
+  "file": "file_io/single_load.s",
+  "true_start_line": 2519,
+  "end_line0idx_excl": 2570,
+  "labels": [
+   [
+    0,
+    "SLDst_HandleShow"
+   ],
+   [
+    125,
+    "SLDst_HandleConfirm"
+   ],
+   [
+    180,
+    "SLDst_HandleScroll"
+   ],
+   [
+    317,
+    "SLDst_ScrollMode4"
+   ]
+  ]
+ },
+ {
+  "addr": 15763592,
+  "size": 341,
+  "file": "audio/semenu_routines.s",
+  "true_start_line": 4061,
+  "end_line0idx_excl": 4103,
+  "labels": []
+ },
+ {
+  "addr": 16150776,
+  "size": 333,
+  "file": "sequencer/accompaniment_engine.s",
+  "true_start_line": 23336,
+  "end_line0idx_excl": 23377,
+  "labels": []
+ },
+ {
+  "addr": 16582024,
+  "size": 309,
+  "file": "midi/midi_dispatch_handlers.s",
+  "true_start_line": 569,
+  "end_line0idx_excl": 624,
+  "labels": [
+   [
+    0,
+    "PanelEvt_Dispatch3_TableAndHandlers_A"
+   ],
+   [
+    69,
+    "PanelEvt_Dispatch3Entry_B"
+   ],
+   [
+    80,
+    "PanelEvt_Dispatch3_Table_B"
+   ],
+   [
+    96,
+    "PanelEvt_Dispatch11Entry"
+   ],
+   [
+    107,
+    "PanelEvt_Dispatch11_TableAndHandlers"
+   ],
+   [
+    206,
+    "PanelEvent_DispatchByIndex"
+   ],
+   [
+    226,
+    "PanelEvt_DispatchByIndex_Ret"
+   ],
+   [
+    227,
+    "MidiCC_ChannelDispatch_TableA"
+   ],
+   [
+    262,
+    "MidiCC_ChannelDispatch_TableA_Ret"
+   ],
+   [
+    263,
+    "MidiCC_ChannelDispatch_Ctrl40"
+   ],
+   [
+    308,
+    "BitMask_Ctrl40_ConfigExit"
+   ]
+  ]
+ },
+ {
+  "addr": 16652998,
+  "size": 307,
+  "file": "audio/note_voice_mapping.s",
+  "true_start_line": 1378,
+  "end_line0idx_excl": 1433,
+  "labels": [
+   [
+    0,
+    "VoiceLinks_CheckCount"
+   ],
+   [
+    17,
+    "MidiEvent_ParseNoteSequence"
+   ],
+   [
+    49,
+    "ParseNoteSequence_ReadBuf"
+   ],
+   [
+    73,
+    "ParseNoteSequence_ReadBuf2"
+   ],
+   [
+    93,
+    "ParseNoteSequence_Compare"
+   ],
+   [
+    160,
+    "ParseNoteSequence_AdvanceSlot"
+   ],
+   [
+    171,
+    "MidiEvent_NoteSeqCount"
+   ],
+   [
+    188,
+    "NoteSeqCount_ProcMerge"
+   ],
+   [
+    198,
+    "NoteSeqCount_Epilogue"
+   ],
+   [
+    202,
+    "MidiEvent_ProcessNoteEntry"
+   ],
+   [
+    279,
+    "ProcessNoteEntry_CheckEnd"
+   ],
+   [
+    285,
+    "ProcessNoteEntry_ReadBuf"
+   ]
+  ]
+ },
+ {
+  "addr": 15860418,
+  "size": 303,
+  "file": "ui/ui_playback_modes.s",
+  "true_start_line": 1,
+  "end_line0idx_excl": 48,
+  "labels": [
+   [
+    0,
+    "UIStateEvt_VoiceParamHandler"
+   ]
+  ]
+ },
+ {
+  "addr": 16021081,
+  "size": 291,
+  "file": "sequencer/sequencer_engine.s",
+  "true_start_line": 23284,
+  "end_line0idx_excl": 23323,
+  "labels": [
+   [
+    0,
+    "HelpLang_DispatchDataBlock"
+   ],
+   [
+    239,
+    "HelpLangChkMain"
+   ]
+  ]
+ },
+ {
+  "addr": 15793196,
+  "size": 225,
+  "file": "audio/sound_editor_ui.s",
+  "true_start_line": 6617,
+  "end_line0idx_excl": 6646,
+  "labels": [
+   [
+    0,
+    "SeMenu_Utility_CopyBlock"
+   ]
+  ]
+ },
+ {
+  "addr": 16020380,
+  "size": 164,
+  "file": "sequencer/sequencer_engine.s",
+  "true_start_line": 23102,
+  "end_line0idx_excl": 23124,
+  "labels": [
+   [
+    0,
+    "MainExe_RhythmLoad"
+   ]
+  ]
+ },
+ {
+  "addr": 16139838,
+  "size": 102,
+  "file": "sequencer/accompaniment_engine.s",
+  "true_start_line": 19701,
+  "end_line0idx_excl": 19716,
+  "labels": [
+   [
+    0,
+    "DrumKitInit_Entry"
+   ],
+   [
+    16,
+    "DrumKitInit_Setup"
+   ]
+  ]
+ },
+ {
+  "addr": 15791899,
+  "size": 96,
+  "file": "audio/sound_editor_ui.s",
+  "true_start_line": 6282,
+  "end_line0idx_excl": 6294,
+  "labels": [
+   [
+    0,
+    "SeMenu_PresetManager_Data"
+   ]
+  ]
+ },
+ {
+  "addr": 16129072,
+  "size": 89,
+  "file": "sequencer/accompaniment_engine.s",
+  "true_start_line": 16593,
+  "end_line0idx_excl": 16606,
+  "labels": [
+   [
+    0,
+    "AccPlayback_ProcessOngoingEvents"
+   ]
+  ]
+ },
+ {
+  "addr": 15681833,
+  "size": 82,
+  "file": "boot/system_handlers.s",
+  "true_start_line": 7896,
+  "end_line0idx_excl": 7908,
+  "labels": [
+   [
+    0,
+    "HDAE5000_FlashVerify_BytecodeBlock"
+   ]
+  ]
+ },
+ {
+  "addr": 16557340,
+  "size": 81,
+  "file": "audio/audio_control_engine.s",
+  "true_start_line": 5658,
+  "end_line0idx_excl": 5670,
+  "labels": [
+   [
+    0,
+    "PartReinit_SendB0Command"
+   ],
+   [
+    60,
+    "PartReinit_CheckSpecialPart15"
+   ]
+  ]
+ },
+ {
+  "addr": 16147989,
+  "size": 75,
+  "file": "sequencer/accompaniment_engine.s",
+  "true_start_line": 21985,
+  "end_line0idx_excl": 21995,
+  "labels": [
+   [
+    0,
+    "Part_LoadAndIndexVoiceTable"
+   ]
+  ]
+ },
+ {
+  "addr": 15792163,
+  "size": 74,
+  "file": "audio/sound_editor_ui.s",
+  "true_start_line": 6349,
+  "end_line0idx_excl": 6358,
+  "labels": []
+ },
+ {
+  "addr": 15792256,
+  "size": 74,
+  "file": "audio/sound_editor_ui.s",
+  "true_start_line": 6365,
+  "end_line0idx_excl": 6374,
+  "labels": []
+ },
+ {
+  "addr": 16694948,
+  "size": 68,
+  "file": "audio/note_voice_mapping.s",
+  "true_start_line": 9087,
+  "end_line0idx_excl": 9098,
+  "labels": [
+   [
+    0,
+    "FileIO_ReadVariableLengthData"
+   ],
+   [
+    34,
+    "ReadVariableLengthDa_LoadParam"
+   ]
+  ]
+ }
+]

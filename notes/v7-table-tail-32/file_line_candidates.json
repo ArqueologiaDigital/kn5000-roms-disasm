@@ -1,0 +1,447 @@
+[
+ {
+  "addr": 16166817,
+  "size": 2175,
+  "hint_file": "sequencer/accompaniment_engine.s",
+  "chosen_file": "sequencer/accompaniment_engine.s",
+  "cand_files": [
+   "sequencer/accompaniment_engine.s"
+  ],
+  "guess_line": 27152,
+  "end_candidates": [
+   27424,
+   27425
+  ]
+ },
+ {
+  "addr": 16009366,
+  "size": 1780,
+  "hint_file": "sequencer/sequencer_engine.s",
+  "chosen_file": "sequencer/sequencer_engine.s",
+  "cand_files": [
+   "sequencer/sequencer_engine.s"
+  ],
+  "guess_line": 19813,
+  "end_candidates": [
+   20036,
+   20037
+  ]
+ },
+ {
+  "addr": 16137548,
+  "size": 847,
+  "hint_file": "sequencer/accompaniment_engine.s",
+  "chosen_file": "sequencer/accompaniment_engine.s",
+  "cand_files": [
+   "sequencer/accompaniment_engine.s"
+  ],
+  "guess_line": 19358,
+  "end_candidates": [
+   19466,
+   19467
+  ]
+ },
+ {
+  "addr": 15907791,
+  "size": 792,
+  "hint_file": "sequencer/sequencer_ui.s",
+  "chosen_file": "sequencer/sequencer_ui.s",
+  "cand_files": [
+   "sequencer/sequencer_ui.s"
+  ],
+  "guess_line": 2774,
+  "end_candidates": [
+   2873,
+   2874
+  ]
+ },
+ {
+  "addr": 15828937,
+  "size": 641,
+  "hint_file": "storage/flash_floppy_handlers.s",
+  "chosen_file": "storage/flash_floppy_handlers.s",
+  "cand_files": [
+   "storage/flash_floppy_handlers.s"
+  ],
+  "guess_line": 2715,
+  "end_candidates": [
+   2796,
+   2797
+  ]
+ },
+ {
+  "addr": 16215006,
+  "size": 620,
+  "hint_file": "midi/param_load_routines.s",
+  "chosen_file": "midi/param_load_routines.s",
+  "cand_files": [
+   "midi/param_load_routines.s"
+  ],
+  "guess_line": 586,
+  "end_candidates": [
+   664,
+   665
+  ]
+ },
+ {
+  "addr": 16665882,
+  "size": 593,
+  "hint_file": "audio/note_voice_mapping.s",
+  "chosen_file": "audio/note_voice_mapping.s",
+  "cand_files": [
+   "audio/note_voice_mapping.s"
+  ],
+  "guess_line": 3722,
+  "end_candidates": [
+   3811,
+   3812
+  ]
+ },
+ {
+  "addr": 15851804,
+  "size": 592,
+  "hint_file": "factory_test/test_init.s",
+  "chosen_file": "factory_test/test_init.s",
+  "cand_files": [
+   "audio/sound_editor_ui.s",
+   "factory_test/test_init.s"
+  ],
+  "guess_line": 98,
+  "end_candidates": [
+   172,
+   173
+  ]
+ },
+ {
+  "addr": 15764000,
+  "size": 581,
+  "hint_file": "audio/semenu_routines.s",
+  "chosen_file": "audio/semenu_routines.s",
+  "cand_files": [
+   "audio/semenu_routines.s"
+  ],
+  "guess_line": 4134,
+  "end_candidates": [
+   4207
+  ]
+ },
+ {
+  "addr": 16321637,
+  "size": 529,
+  "hint_file": "file_io/single_load.s",
+  "chosen_file": "file_io/single_load.s",
+  "cand_files": [
+   "file_io/single_load.s"
+  ],
+  "guess_line": 2600,
+  "end_candidates": [
+   2676,
+   2677
+  ]
+ },
+ {
+  "addr": 15765219,
+  "size": 524,
+  "hint_file": "audio/semenu_routines.s",
+  "chosen_file": "audio/semenu_routines.s",
+  "cand_files": [
+   "audio/semenu_routines.s"
+  ],
+  "guess_line": 4432,
+  "end_candidates": [
+   4498
+  ]
+ },
+ {
+  "addr": 16138491,
+  "size": 459,
+  "hint_file": "sequencer/accompaniment_engine.s",
+  "chosen_file": "sequencer/accompaniment_engine.s",
+  "cand_files": [
+   "sequencer/accompaniment_engine.s"
+  ],
+  "guess_line": 19493,
+  "end_candidates": [
+   19554,
+   19555
+  ]
+ },
+ {
+  "addr": 15777121,
+  "size": 443,
+  "hint_file": "audio/sound_editor_ui.s",
+  "chosen_file": "audio/sound_editor_ui.s",
+  "cand_files": [
+   "audio/sound_editor_ui.s"
+  ],
+  "guess_line": 2759,
+  "end_candidates": [
+   2815
+  ]
+ },
+ {
+  "addr": 16654220,
+  "size": 363,
+  "hint_file": "audio/note_voice_mapping.s",
+  "chosen_file": "audio/note_voice_mapping.s",
+  "cand_files": [
+   "audio/note_voice_mapping.s"
+  ],
+  "guess_line": 1619,
+  "end_candidates": [
+   1674,
+   1675
+  ]
+ },
+ {
+  "addr": 16321120,
+  "size": 358,
+  "hint_file": "file_io/single_load.s",
+  "chosen_file": "file_io/single_load.s",
+  "cand_files": [
+   "file_io/single_load.s"
+  ],
+  "guess_line": 2521,
+  "end_candidates": [
+   2571,
+   2572
+  ]
+ },
+ {
+  "addr": 15763592,
+  "size": 341,
+  "hint_file": "audio/semenu_routines.s",
+  "chosen_file": "audio/semenu_routines.s",
+  "cand_files": [
+   "audio/semenu_routines.s"
+  ],
+  "guess_line": 4061,
+  "end_candidates": [
+   4104
+  ]
+ },
+ {
+  "addr": 16150776,
+  "size": 333,
+  "hint_file": "sequencer/accompaniment_engine.s",
+  "chosen_file": "sequencer/accompaniment_engine.s",
+  "cand_files": [
+   "sequencer/accompaniment_engine.s"
+  ],
+  "guess_line": 23336,
+  "end_candidates": [
+   23378,
+   23379
+  ]
+ },
+ {
+  "addr": 16582024,
+  "size": 309,
+  "hint_file": "midi/midi_dispatch_handlers.s",
+  "chosen_file": "midi/midi_dispatch_handlers.s",
+  "cand_files": [
+   "midi/midi_dispatch_handlers.s"
+  ],
+  "guess_line": 570,
+  "end_candidates": [
+   625,
+   626,
+   627
+  ]
+ },
+ {
+  "addr": 16652998,
+  "size": 307,
+  "hint_file": "audio/note_voice_mapping.s",
+  "chosen_file": "audio/note_voice_mapping.s",
+  "cand_files": [
+   "audio/note_voice_mapping.s"
+  ],
+  "guess_line": 1379,
+  "end_candidates": [
+   1434,
+   1435
+  ]
+ },
+ {
+  "addr": 15860418,
+  "size": 303,
+  "hint_file": "ui/ui_playback_modes.s",
+  "chosen_file": "ui/ui_playback_modes.s",
+  "cand_files": [
+   "kn5000_v7_program.s",
+   "ui/setwall_routines.s",
+   "ui/ui_playback_modes.s"
+  ],
+  "guess_line": 11,
+  "end_candidates": [
+   49,
+   50
+  ]
+ },
+ {
+  "addr": 16021081,
+  "size": 291,
+  "hint_file": "sequencer/sequencer_engine.s",
+  "chosen_file": "sequencer/sequencer_engine.s",
+  "cand_files": [
+   "sequencer/sequencer_engine.s"
+  ],
+  "guess_line": 23286,
+  "end_candidates": [
+   23324,
+   23325
+  ]
+ },
+ {
+  "addr": 15793196,
+  "size": 225,
+  "hint_file": "audio/sound_editor_ui.s",
+  "chosen_file": "audio/sound_editor_ui.s",
+  "cand_files": [
+   "audio/sound_editor_ui.s"
+  ],
+  "guess_line": 6618,
+  "end_candidates": [
+   6647,
+   6648
+  ]
+ },
+ {
+  "addr": 16020380,
+  "size": 164,
+  "hint_file": "sequencer/sequencer_engine.s",
+  "chosen_file": "sequencer/sequencer_engine.s",
+  "cand_files": [
+   "sequencer/sequencer_engine.s"
+  ],
+  "guess_line": 23104,
+  "end_candidates": [
+   23125,
+   23126
+  ]
+ },
+ {
+  "addr": 16139838,
+  "size": 102,
+  "hint_file": "sequencer/accompaniment_engine.s",
+  "chosen_file": "sequencer/accompaniment_engine.s",
+  "cand_files": [
+   "sequencer/accompaniment_engine.s"
+  ],
+  "guess_line": 19703,
+  "end_candidates": [
+   19717,
+   19718
+  ]
+ },
+ {
+  "addr": 15791899,
+  "size": 96,
+  "hint_file": "audio/sound_editor_ui.s",
+  "chosen_file": "audio/sound_editor_ui.s",
+  "cand_files": [
+   "audio/sound_editor_ui.s"
+  ],
+  "guess_line": 6283,
+  "end_candidates": [
+   6295
+  ]
+ },
+ {
+  "addr": 16129072,
+  "size": 89,
+  "hint_file": "sequencer/accompaniment_engine.s",
+  "chosen_file": "sequencer/accompaniment_engine.s",
+  "cand_files": [
+   "sequencer/accompaniment_engine.s"
+  ],
+  "guess_line": 16595,
+  "end_candidates": [
+   16607,
+   16608
+  ]
+ },
+ {
+  "addr": 15681833,
+  "size": 82,
+  "hint_file": "boot/system_handlers.s",
+  "chosen_file": "boot/system_handlers.s",
+  "cand_files": [
+   "boot/system_handlers.s"
+  ],
+  "guess_line": 7898,
+  "end_candidates": [
+   7909,
+   7910
+  ]
+ },
+ {
+  "addr": 16557340,
+  "size": 81,
+  "hint_file": "audio/audio_control_engine.s",
+  "chosen_file": "audio/audio_control_engine.s",
+  "cand_files": [
+   "audio/audio_control_engine.s"
+  ],
+  "guess_line": 5659,
+  "end_candidates": [
+   5671,
+   5672
+  ]
+ },
+ {
+  "addr": 16147989,
+  "size": 75,
+  "hint_file": "sequencer/accompaniment_engine.s",
+  "chosen_file": "sequencer/accompaniment_engine.s",
+  "cand_files": [
+   "sequencer/accompaniment_engine.s"
+  ],
+  "guess_line": 21986,
+  "end_candidates": [
+   21996,
+   21997
+  ]
+ },
+ {
+  "addr": 15792163,
+  "size": 74,
+  "hint_file": "audio/sound_editor_ui.s",
+  "chosen_file": "audio/sound_editor_ui.s",
+  "cand_files": [
+   "audio/sound_editor_ui.s"
+  ],
+  "guess_line": 6349,
+  "end_candidates": [
+   6359
+  ]
+ },
+ {
+  "addr": 15792256,
+  "size": 74,
+  "hint_file": "audio/sound_editor_ui.s",
+  "chosen_file": "audio/sound_editor_ui.s",
+  "cand_files": [
+   "audio/sound_editor_ui.s"
+  ],
+  "guess_line": 6365,
+  "end_candidates": [
+   6375
+  ]
+ },
+ {
+  "addr": 16694948,
+  "size": 68,
+  "hint_file": "audio/note_voice_mapping.s",
+  "chosen_file": "audio/note_voice_mapping.s",
+  "cand_files": [
+   "audio/note_voice_mapping.s"
+  ],
+  "guess_line": 9088,
+  "end_candidates": [
+   9099,
+   9100
+  ]
+ }
+]
