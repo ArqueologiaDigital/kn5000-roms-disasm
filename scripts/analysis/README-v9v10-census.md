@@ -100,4 +100,80 @@ the same phenomenon re-measured, not a new one -- the small drift is
 calibration noise, not a change in the ROM.) Left alone because re-framing
 an existing "instruction" boundary is a materially different and riskier
 operation than filling in raw `.byte`, and was out of
-scope for the time available.
+scope for the time available. **NOTE: this is the ISLANDS lane's territory
+(worktree `disasm-lanes/islands`, branch `w3/islands`) -- do not attempt it
+from here.**
+
+## 2026-09-02 update: the 12 interrupted regions are closed, confirmed-region debt is now ZERO
+
+Lane V10CODE. Re-ran `--prepare`/`--census`/`--judge` fresh in a clean
+worktree before touching anything (v7/v9/v10 all rebuilt from scratch,
+markers byte-neutral, ROMs byte-identical to source -- the tool's own
+precondition). Before any edit: **17 raw `--judge` hits, 7,769 B**, exactly
+reproducing the 2026-09-01 session's 26-confirmed/5-rejected split (the 5
+rejects are unchanged and still correctly DATA -- 348 B: two copies of a
+`ld XIY,0x4e492052`/`db` fragment at 0xED1A36/0xED1A7A [a UI string, one
+instance unresolved to any source file], the `fd_test_data.s` factory-test
+bytes at 0xE1FE6E/0xE1FF68, and the `swi 7` x3 = pure `0xFF` fill at
+0xEED1B0). Subtracting the rejects: **12 confirmed regions, 7,421 B** --
+bit-for-bit the number the 2026-09-01 session and its `README` left as "the
+12 it left", independently reproduced rather than inherited.
+
+**All 12 converted**, using `scripts/converters/convert_interrupted_region.py`
+(the tool `convert_region.py` cannot use here because it stops at the first
+non-`.byte` line -- this one pulls the exact ROM bytes for the *whole*
+region by address, walks the source forward summing each DATA directive's
+emitted size until it lands exactly on the region boundary, then replaces
+the whole span in one shot, re-inserting any label found inside at its
+original byte offset). Four of the twelve carry a jump-table label at byte
+offset 0 -- `PcgOutGridCheckJumpTable`, `MidiPartGridCheck_JumpTable`,
+`PmemOutLGridCheck_JumpTable`, `ScoopParam_ValueTable` -- each confirmed
+still referenced elsewhere in the tree by an `lda_24 xix, (...)` load
+immediately before an indexed dispatch, so the label is not just preserved
+mechanically but demonstrably still the right name for the right byte.
+
+7,421 B -> **6,567 B (88.5%) now real instructions**, 854 B left as `.byte`
+(unsupported addressing forms -- e.g. `.byte 0x1e`, `0x45`, `0x1d` isolated
+bytes where `unidasm` decodes something llvm-mc has no mnemonic for; never a
+wrong guess, since every emitted instruction round-trips byte-exact through
+llvm-mc before being written, same discipline as the clean-region pass).
+
+Corroboration beyond the byte gate:
+* `verify_converted_call_targets.py --tag v10 --git-diff`: 60 distinct
+  `call`/`calr` targets across the 12 regions, **40 resolve to routines
+  already named in the tree before this session (67%)** -- e.g.
+  `GetFocusObject`, `Util_FindLowestSetBit`, `SndParam_LookupViaEncode`,
+  `Audio_CheckSubsystemReady`. The 25 `lda`/`lda_24` hits are load-ADDRESS,
+  not call, and correctly resolve to DATA (font palette, a `NakaInst_ON`
+  table) rather than routines -- expected, not a miss.
+* The four jump-table label cross-references above.
+* Re-ran `--judge v9` and `--judge v10` after applying: **both now report
+  exactly the same 5 rejects, 348 B, and ZERO confirmed hits** -- the
+  confirmed-region backlog this census can find is fully closed on both
+  images, not just v10.
+
+**A note on provenance:** while re-deriving this batch, a stale, unmerged
+branch `w2/islands` (an EARLIER wave of the *other* lane, not the current
+`w3/islands`) turned out to already contain a solution for this exact
+batch, despite its branch name -- `convert_interrupted_region.py` originates
+there. It was never merged to `main`; nothing on `w2/islands` was merged
+here. Its diffstat for these six files (1508/77/394/283/774/489 lines) matches
+this session's independently-produced diff line-for-line, which is exactly
+the kind of external corroboration this file's methodology asks for -- two
+separate runs of the (borrowed) tool against the same source converged on
+the same output.
+
+Verified narrowly, not via `make gate-all` (see the lane brief -- a fresh
+worktree stalls building other images first):
+
+    make rebuilt_ROMs/kn5000_v9_program.llvm.rom rebuilt_ROMs/kn5000_v10_program.llvm.rom
+    cmp rebuilt_ROMs/kn5000_v9_program.llvm.rom original_ROMs/kn5000_v9_program.rom
+    cmp rebuilt_ROMs/kn5000_v10_program.llvm.rom original_ROMs/kn5000_v10_program.rom
+
+Both report identical. The full 13-image gate is Felipe's to run centrally
+after merge.
+
+**What is left in this shape:** nothing confirmed. The remaining 348 B (5
+regions) were hand-audited as real DATA in the 2026-09-01 session and
+re-confirmed here; the only larger debt this census's `--judge` mode can
+still see is the `--islands` shape above, out of this lane's scope.
