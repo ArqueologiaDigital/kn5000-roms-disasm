@@ -32,7 +32,8 @@ SPAN 1 -- 0xF0033F-0xF007FF, 1,217 bytes: FOUR TABLES OF 4-BYTE LE POINTERS
       1   0xF0033F            one 0x00 pad, after the `ret` at 0xF0033E
     140   0xF00340-0xF003CB    35 slots -> routines at 0xF01200-0xF014CE
      45   0xF003CC-0xF003F8    three short byte objects, shape NOT established
-    724   0xF003F9-0xF006CC   181 slots -> the 0xF78029 bitmap sheet
+    724   0xF003F9-0xF006CC   181 slots -> INTO the 0xF78028 icon sheet, but
+                              NOT an index of it -- see below
     140   0xF006CD-0xF00758    35 slots -> prom_a display lists at 0xFC4082+
       9   0xF00759-0xF00761   eight powers of two and a 0x00
     156   0xF00762-0xF007FD    39 slots -> prom_a 0xFE28B2-0xFE2F8C
@@ -74,12 +75,27 @@ SPAN 1 -- 0xF0033F-0xF007FF, 1,217 bytes: FOUR TABLES OF 4-BYTE LE POINTERS
   block, 0xF01200-0xF014E8, is still `.incbin` (span 0x000C4D+0x000BB3, another
   lane's) -- these 25 addresses are proven entry points for whoever converts it.
 
-  THE TABLE AT 0xF003F9 IS THE ONE THIS TREE ALREADY USES.  It is the index that
-  bounds the 121 objects of the bitmap sheet at 0xF78029; see the banner at
-  `0xF78029-0xF7A3FF` in the .s and notes/gen_prom_b_f78029_module.py.  Until
-  now the tree read it out of the ROM through a still-`.incbin` address.  --
-  selftest re-derives the sheet's object starts from the table THIS file emits
-  and checks them against the `Bitmap_F7xxxx:` labels in the source.
+  ⚠ THE TABLE AT 0xF003F9 IS **NOT** THE INDEX OF THE 0xF78028 ICON SHEET.
+  An earlier version of this file said it was, and the tree bounded 110
+  `Bitmap_F78*` objects by abutment of these entries.  That is refuted, by the
+  consuming code rather than by the pictures: DLHandler_Glyph24x24 (0xF31ACE)
+  computes 0xF78028 + index * 72 and blits 3 columns x 24 rows, the sheet ends
+  exactly on that grid (0xF7A1A0 - 0xF78028 = 8568 = 119 * 72, remainder 0),
+  the highest index any op-0x23 record carries is 118 -- and exactly ONE of
+  this table's 121 targets in the sheet is a multiple of 72 from 0xF78028,
+  against 1.7 expected by chance.  The same table misses in its other target
+  region too: 3 of its 24 targets in prom_a's DisplayList_FC4000 land on a
+  record boundary of that region's PROVEN framing, against 1.8 by chance.
+
+  What survives is the SHAPE.  The 216 slots 0xF003F9-0xF00758 -- the "181 +
+  35" cut this file used to make is not structural -- are 18 COLUMNS x 12
+  ROWS: column 17 is zero in every row, columns 13 and 14 are the sentinel in
+  every row, columns 15 and 16 are always in descending address order, and the
+  delta between consecutive targets is near-constant down a column.  Rows 0-9
+  point into the icon sheet, rows 10-11 into prom_a 0xFC4082-0xFC4454.  So it
+  is a real table describing a real 12-screen x 18-field structure whose
+  objects are not, in this build, where it says they are.
+  See notes/gen_prom_b_f78028_icon_sheet.py --evidence.
 
   THE TABLE AT 0xF006CD points into prom_a's DisplayList_FC4000 (2,095 bytes of
   DSP-effect / SOUND EDIT label text, already converted there).  0 of its 24
@@ -515,10 +531,20 @@ def ptr_block(addr, n, label, headline):
     out += headline
     out.append("%s:" % label)
     for i in range(n):
-        v = w32(addr + 4 * i)
+        a = addr + 4 * i
+        v = w32(a)
         note = slot_note(v)
-        out.append("\t.long 0x%08X\t; %06X  [%3d]%s"
-                   % (v, addr + 4 * i, i, ("  " + note) if note else ""))
+        # ★ THE 18-COLUMN GRID, printed on every slot of the 0xF003F9-0xF00758
+        #   run so its shape is legible in the source.  It is the one thing
+        #   about that table that survived the refutation of "it indexes the
+        #   icon sheet" -- see the header on PtrTable_F003F9.  Slots outside
+        #   that run get no tag, because 18 columns is not their shape.
+        rc = ""
+        if 0xF003F9 <= a < 0xF00759 and (a - 0xF003F9) % 4 == 0:
+            k = (a - 0xF003F9) // 4
+            rc = "  r%dc%d" % (k // 18, k % 18)
+        out.append("\t.long 0x%08X\t; %06X  [%3d]%s%s"
+                   % (v, a, i, ("  " + note) if note else "", rc))
     return out
 
 
@@ -601,38 +627,79 @@ def emit_r1():
     L += brow(0xF003EC, 13, 13, "  00-05 then 10-16")
 
     L += ptr_block(0xF003F9, 181, "PtrTable_F003F9", [
-        "; --------------------------------------------------------------------------",
-        "; PtrTable_F003F9 -- 181 slots, THE INDEX OF THE 0xF78029 BITMAP SHEET",
-        "; ★ THIS TABLE IS ALREADY LOAD-BEARING IN THIS TREE.  The banner at",
-        ";   `0xF78029-0xF7A3FF -- A 121-OBJECT BITMAP SHEET, INDEXED FROM prom_b",
-        ";   0xF003F9' bounds all 120 bounded objects there by abutment of these",
-        ";   entries, and notes/gen_prom_b_f78029_module.py read them straight out of",
-        ";   the ROM because the address was inside an `.incbin`.  It no longer is.",
-        "; Evidence: %d of the slots are a distinct address in 0xF7828A-0xF799E8, %d"
-        % census(0xF003F9, 181)[:2],
-        ";           are the sentinel and %d are zero; slot 181 leaves that range,"
-        % census(0xF003F9, 181)[2],
-        ";           which is where this run is cut.",
-        "; ⚠ The cut at 181 is a statement about the TARGETS, not about how the firmware",
-        ";   indexes them: no reader for either run has been found.  The two runs are",
-        ";   labelled separately because their target sets do not overlap at all.",
-        "; Unknown: what the 121 images depict -- see the 0xF78029 banner, which says so",
-        ";          at length.  Nothing is guessed here either.",
-        "; --------------------------------------------------------------------------",
+        '; --------------------------------------------------------------------------',
+        "; PtrTable_F003F9 -- 181 slots: ROWS 0-9 (AND ROW 10's FIRST SLOT) OF AN",
+        ';                    18-COLUMN TABLE THAT NOTHING IN THE MACHINE READS',
+        ';',
+        '; ⚠ THIS HEADER REPLACES ONE THAT CALLED THIS TABLE "THE INDEX OF THE',
+        ';   0xF78029 BITMAP SHEET".  It is not that.  The sheet at 0xF78028 is 119',
+        ';   cells of 24x24 on the 72-byte grid DLHandler_Glyph24x24 (0xF31ACE)',
+        ';   computes, and:',
+        ";     * exactly 1 of this table's 121 targets in the sheet is a multiple of 72",
+        ';       from 0xF78028, against 1.7 expected by chance -- the targets carry NO',
+        ';       information about the grid;',
+        ';     * the sheet ends exactly on that grid (0xF7A1A0 - 0xF78028 = 8568 =',
+        ';       119 * 72, remainder 0) and the highest index any op-0x23 display-list',
+        ';       record carries is 118, i.e. 119 cells.',
+        ';   The 110 `Bitmap_F78*` labels these targets used to bound are gone; see the',
+        ';   banner at 0xF78028 and notes/gen_prom_b_f78028_icon_sheet.py --evidence.',
+        ';',
+        '; WHAT IT IS, as far as it can honestly be taken.  216 consecutive 4-byte LE',
+        '; slots run 0xF003F9-0xF00758, and they are shaped 18 COLUMNS x 12 ROWS:',
+        ';     * column 17 is 0x00000000 in every one of the 12 rows;',
+        ';     * columns 13 and 14 are the 0x00FDB10E filler in every row;',
+        ';     * columns 15 and 16 are always in DESCENDING address order;',
+        ';     * the delta between consecutive targets is near-constant DOWN a column',
+        ';       (column 15 is 52 bytes in six successive rows, then 32 in three).',
+        ";   Rows 0-9 point into the icon sheet; rows 10-11 point into prom_a's",
+        ';   DisplayList_FC4000 and carry the same column pattern.  ⚠ The label',
+        ';   boundary at 0xF006CD below is a LEGACY CUT, not a structural one -- row 10',
+        ';   begins one slot earlier, at 0xF006C9.  The `rNNcNN` in each slot comment is',
+        ';   that row and column.',
+        ';',
+        '; ⚠ AND IT RESOLVES TO NOTHING IN EITHER REGION IT POINTS AT.  For the prom_a',
+        ";   half see PtrTable_F006CD's header (3 of 24 targets on a proven record",
+        ';   boundary, against 1.8 by chance).  No immediate in any of the four ROM',
+        ';   images equals 0xF003F9 or 0xF006CD, so no reader has been found either.',
+        ';   THE CONTROL, which says this instrument can still recognise a live table:',
+        ';   the table 185 bytes earlier at 0xF00340 IS dispatched (`add XBC,0x00F0033C`',
+        ';   at 0xF00D51 and `add XBC,0x00F00384` at 0xF00D92) and 25 of its 26 distinct',
+        ';   targets begin `EE 0C` = `link XIZ,0x0000`, a function prologue.',
+        ';',
+        '; Open research target, sharper than the one it replaces: not "what is in the',
+        '; icon sheet" (119 icons) but WHAT THESE 216 SLOTS INDEXED, given that in this',
+        '; build they land at chance level in both regions they name and the 0x00FDB10E',
+        '; filler is not even an instruction boundary (it is the second byte of',
+        '; `lda XBC,(XIZ-12)` at prom_a 0xFDB10C).  A vestigial index left by the',
+        '; authoring tool after the resources were relaid out is the obvious hypothesis',
+        '; and there is no second build of this firmware to test it against.',
+        '; --------------------------------------------------------------------------',
     ])
 
     L += ptr_block(0xF006CD, 35, "PtrTable_F006CD", [
-        "; --------------------------------------------------------------------------",
-        "; PtrTable_F006CD -- 35 slots -> prom_a's DisplayList_FC4000",
+        '; --------------------------------------------------------------------------',
+        '; PtrTable_F006CD -- 35 slots: the rest of rows 10-11 of the 18-column table',
+        ';                    that starts at PtrTable_F003F9 (row 10 begins one slot',
+        ';                    earlier, at 0xF006C9; this label boundary is a legacy cut)',
         "; Evidence: 24 distinct targets, all in 0xFC4082-0xFC4454, which prom_a's",
-        ";           source already carries as DisplayList_FC4000 (2,095 bytes of",
-        ";           DSP-effect / SOUND EDIT label text).  0 of the 24 is an instruction",
-        ";           boundary there -- correct, since 0 of that region's 979 addresses",
-        ";           is one: prom_a frames it as data too.  %d slots are the sentinel"
-        % census(0xF006CD, 35)[1],
-        ";           and %d are zero." % census(0xF006CD, 35)[2],
-        "; Unknown: what selects a slot.  No reader found.",
-        "; --------------------------------------------------------------------------",
+        ';           source already carries as DisplayList_FC4000 (2,095 bytes of',
+        ';           DSP-effect / SOUND EDIT label text).  9 slots are the sentinel and',
+        ';           2 are zero.',
+        "; ⚠ THE TARGETS ARE NOT OBJECT STARTS THERE.  prom_a's framing of that region",
+        ';   IS proven -- a strict op/len walk from 0xFC4000 reaches 0xFC482F with zero',
+        ';   resyncs, 155 records -- and only 3 of these 24 targets land on a record',
+        ';   boundary, against 1.8 expected by chance (155 boundaries in 2,095 bytes).',
+        ';   So this table indexes neither the display list here nor the 0xF78028 icon',
+        ";   sheet its sibling half points at; see PtrTable_F003F9's header for the",
+        ';   sheet half, the 18x12 shape, and the control that shows the test can still',
+        ';   recognise a live table.',
+        ';   (The header this replaces said "0 of the 24 is an instruction boundary',
+        ';   there -- correct, since prom_a frames it as data too".  That is true and',
+        ';   beside the point: the question for a data region is whether they are RECORD',
+        ';   boundaries, and they are not.)',
+        '; Unknown: what selects a slot.  No reader found -- no immediate in any of the',
+        ';          four ROM images equals 0xF003F9 or 0xF006CD.',
+        '; --------------------------------------------------------------------------',
     ])
 
     L.append("")
@@ -842,25 +909,35 @@ def checks(verbose=True):
     c("0xF00340: targets with the `link XIZ,0` prologue", hit, 25, verbose)
     c("0xF00340: `EE 0C` null in 0xF01200-0xF014E8 stays under 5%",
       null / pos < 0.05, True, verbose)
-    c("0xF003F9: distinct bitmap-sheet targets",
+    c("0xF003F9: distinct targets inside the 0xF78028 icon sheet",
       len(set(slots(0xF003F9, 181)) - {0, SENTINEL}), 121, verbose)
     c("0xF003F9: slot 181 leaves the sheet",
       0xF7828A <= w32(0xF003F9 + 181 * 4) <= 0xF799E8, False, verbose)
-    # the sheet's object labels in the .s must be exactly this table's targets
-    src = open(SRCB, encoding="utf-8").read()
-    # ⚠ NOT equality: the sheet's 121st target, 0xF799E8, is bounded by nothing,
-    # so gen_prom_b_f78029_module.py labels it `Data_F799E8` and not `Bitmap_`.
-    # And `Data_F78029` -- the sheet's unreferenced head -- is a label that is
-    # NOT a target.  The honest assertion is CONTAINMENT: every target of this
-    # table already carries a label at exactly that address in the .s.
-    lab = set(int(m, 16) for m in
-              re.findall(r"^(?:Bitmap|Data)_(F7[0-9A-F]{4}):", src, re.M))
+
+    # ★ THE REFUTATION, ASSERTED SO IT CANNOT DRIFT BACK.  This table used to
+    # be called the icon sheet's index and 110 `Bitmap_F78*` labels were bounded
+    # by abutment of its entries.  The grid the CONSUMING CODE computes --
+    # DLHandler_Glyph24x24, 0xF78028 + index * 72 -- is the framing that stands,
+    # so this table's targets must be at CHANCE LEVEL with respect to it.  If
+    # they ever stop being, the reframing has to be revisited, loudly.
     tg = set(slots(0xF003F9, 181)) - {0, SENTINEL}
-    c("every 0xF003F9 target already carries a label in the .s",
-      sorted("%06X" % x for x in tg - lab), [], verbose)
-    c("...and 120 of the 121 are `Bitmap_` (the 121st, 0xF799E8, is unbounded)",
-      len(set(int(m, 16) for m in
-              re.findall(r"^Bitmap_(F7[0-9A-F]{4}):", src, re.M)) & tg), 120, verbose)
+    on_grid = sum(1 for v in tg if (v - 0xF78028) % 72 == 0)
+    c("0xF003F9: targets on the 72-byte glyph grid (chance = 121/72 = 1.7)",
+      on_grid <= 3, True, verbose)
+    src = open(SRCB, encoding="utf-8").read()
+    c("...and the sheet now carries 119 DLGlyph cells, not Bitmap_F78* objects",
+      (len(re.findall(r"^DLGlyph_\d{3}_F7[0-9A-F]{4}:", src, re.M)),
+       len(re.findall(r"^Bitmap_F7[89][0-9A-F]{3}:", src, re.M))), (119, 0), verbose)
+
+    # ★ THE SHAPE THAT SURVIVES: 18 columns x 12 rows over 0xF003F9-0xF00758.
+    # The "181 + 35" split this file makes is a LABEL boundary, not a structural
+    # one -- row 10 starts at slot 180, i.e. 0xF006C9.
+    grid = [w32(0xF003F9 + 4 * k) for k in range(216)]
+    c("0xF003F9: column 17 is zero in all 12 rows",
+      sum(1 for r in range(12) if grid[r * 18 + 17] == 0), 12, verbose)
+    c("0xF003F9: columns 13 and 14 are the sentinel in all 12 rows",
+      sum(1 for r in range(12) for cc in (13, 14)
+          if grid[r * 18 + cc] == SENTINEL), 24, verbose)
     c("no call/jp into span 1", code_refs(*R1), 0, verbose)
     c("no call/jp into span 2", code_refs(*R2), 0, verbose)
     c("no directory slot into span 1", directory_slots(*R1), 0, verbose)

@@ -878,250 +878,294 @@ Data_F003CC:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16	; F003EC  00-05 then 10-16
 
 ; --------------------------------------------------------------------------
-; PtrTable_F003F9 -- 181 slots, THE INDEX OF THE 0xF78029 BITMAP SHEET
-; ★ THIS TABLE IS ALREADY LOAD-BEARING IN THIS TREE.  The banner at
-;   `0xF78029-0xF7A3FF -- A 121-OBJECT BITMAP SHEET, INDEXED FROM prom_b
-;   0xF003F9' bounds all 120 bounded objects there by abutment of these
-;   entries, and notes/gen_prom_b_f78029_module.py read them straight out of
-;   the ROM because the address was inside an `.incbin`.  It no longer is.
-; Evidence: 121 of the slots are a distinct address in 0xF7828A-0xF799E8, 50
-;           are the sentinel and 10 are zero; slot 181 leaves that range,
-;           which is where this run is cut.
-; ⚠ The cut at 181 is a statement about the TARGETS, not about how the firmware
-;   indexes them: no reader for either run has been found.  The two runs are
-;   labelled separately because their target sets do not overlap at all.
-; Unknown: what the 121 images depict -- see the 0xF78029 banner, which says so
-;          at length.  Nothing is guessed here either.
+; PtrTable_F003F9 -- 181 slots: ROWS 0-9 (AND ROW 10's FIRST SLOT) OF AN
+;                    18-COLUMN TABLE THAT NOTHING IN THE MACHINE READS
+;
+; ⚠ THIS HEADER REPLACES ONE THAT CALLED THIS TABLE "THE INDEX OF THE
+;   0xF78029 BITMAP SHEET".  It is not that.  The sheet at 0xF78028 is 119
+;   cells of 24x24 on the 72-byte grid DLHandler_Glyph24x24 (0xF31ACE)
+;   computes, and:
+;     * exactly 1 of this table's 121 targets in the sheet is a multiple of 72
+;       from 0xF78028, against 1.7 expected by chance -- the targets carry NO
+;       information about the grid;
+;     * the sheet ends exactly on that grid (0xF7A1A0 - 0xF78028 = 8568 =
+;       119 * 72, remainder 0) and the highest index any op-0x23 display-list
+;       record carries is 118, i.e. 119 cells.
+;   The 110 `Bitmap_F78*` labels these targets used to bound are gone; see the
+;   banner at 0xF78028 and notes/gen_prom_b_f78028_icon_sheet.py --evidence.
+;
+; WHAT IT IS, as far as it can honestly be taken.  216 consecutive 4-byte LE
+; slots run 0xF003F9-0xF00758, and they are shaped 18 COLUMNS x 12 ROWS:
+;     * column 17 is 0x00000000 in every one of the 12 rows;
+;     * columns 13 and 14 are the 0x00FDB10E filler in every row;
+;     * columns 15 and 16 are always in DESCENDING address order;
+;     * the delta between consecutive targets is near-constant DOWN a column
+;       (column 15 is 52 bytes in six successive rows, then 32 in three).
+;   Rows 0-9 point into the icon sheet; rows 10-11 point into prom_a's
+;   DisplayList_FC4000 and carry the same column pattern.  ⚠ The label
+;   boundary at 0xF006CD below is a LEGACY CUT, not a structural one -- row 10
+;   begins one slot earlier, at 0xF006C9.  The `rNNcNN` in each slot comment is
+;   that row and column.
+;
+; ⚠ AND IT RESOLVES TO NOTHING IN EITHER REGION IT POINTS AT.  For the prom_a
+;   half see PtrTable_F006CD's header (3 of 24 targets on a proven record
+;   boundary, against 1.8 by chance).  No immediate in any of the four ROM
+;   images equals 0xF003F9 or 0xF006CD, so no reader has been found either.
+;   THE CONTROL, which says this instrument can still recognise a live table:
+;   the table 185 bytes earlier at 0xF00340 IS dispatched (`add XBC,0x00F0033C`
+;   at 0xF00D51 and `add XBC,0x00F00384` at 0xF00D92) and 25 of its 26 distinct
+;   targets begin `EE 0C` = `link XIZ,0x0000`, a function prologue.
+;
+; Open research target, sharper than the one it replaces: not "what is in the
+; icon sheet" (119 icons) but WHAT THESE 216 SLOTS INDEXED, given that in this
+; build they land at chance level in both regions they name and the 0x00FDB10E
+; filler is not even an instruction boundary (it is the second byte of
+; `lda XBC,(XIZ-12)` at prom_a 0xFDB10C).  A vestigial index left by the
+; authoring tool after the resources were relaid out is the obvious hypothesis
+; and there is no second build of this firmware to test it against.
 ; --------------------------------------------------------------------------
 PtrTable_F003F9:
-	.long 0x00F7828A	; F003F9  [  0]
-	.long 0x00F78346	; F003FD  [  1]
-	.long 0x00F78402	; F00401  [  2]
-	.long 0x00F784B2	; F00405  [  3]
-	.long 0x00FDB10E	; F00409  [  4]  absent (sentinel)
-	.long 0x00F78562	; F0040D  [  5]
-	.long 0x00F785FC	; F00411  [  6]
-	.long 0x00F78697	; F00415  [  7]
-	.long 0x00F78732	; F00419  [  8]
-	.long 0x00F7875F	; F0041D  [  9]
-	.long 0x00F78783	; F00421  [ 10]
-	.long 0x00F787BE	; F00425  [ 11]
-	.long 0x00F78818	; F00429  [ 12]
-	.long 0x00FDB10E	; F0042D  [ 13]  absent (sentinel)
-	.long 0x00FDB10E	; F00431  [ 14]  absent (sentinel)
-	.long 0x00F78872	; F00435  [ 15]
-	.long 0x00F7884B	; F00439  [ 16]
-	.long 0x00000000	; F0043D  [ 17]  empty
-	.long 0x00F788A6	; F00441  [ 18]
-	.long 0x00F788CA	; F00445  [ 19]
-	.long 0x00F788EE	; F00449  [ 20]
-	.long 0x00F78906	; F0044D  [ 21]
-	.long 0x00FDB10E	; F00451  [ 22]  absent (sentinel)
-	.long 0x00F7891E	; F00455  [ 23]
-	.long 0x00F7892F	; F00459  [ 24]
-	.long 0x00F78940	; F0045D  [ 25]
-	.long 0x00F78951	; F00461  [ 26]
-	.long 0x00F78962	; F00465  [ 27]
-	.long 0x00F78973	; F00469  [ 28]
-	.long 0x00F78984	; F0046D  [ 29]
-	.long 0x00F789DE	; F00471  [ 30]
-	.long 0x00FDB10E	; F00475  [ 31]  absent (sentinel)
-	.long 0x00FDB10E	; F00479  [ 32]  absent (sentinel)
-	.long 0x00F78A16	; F0047D  [ 33]
-	.long 0x00F789EF	; F00481  [ 34]
-	.long 0x00000000	; F00485  [ 35]  empty
-	.long 0x00FDB10E	; F00489  [ 36]  absent (sentinel)
-	.long 0x00FDB10E	; F0048D  [ 37]  absent (sentinel)
-	.long 0x00F78A4A	; F00491  [ 38]
-	.long 0x00F78A6E	; F00495  [ 39]
-	.long 0x00F78A92	; F00499  [ 40]
-	.long 0x00F78AAA	; F0049D  [ 41]
-	.long 0x00FDB10E	; F004A1  [ 42]  absent (sentinel)
-	.long 0x00FDB10E	; F004A5  [ 43]  absent (sentinel)
-	.long 0x00F78AC2	; F004A9  [ 44]
-	.long 0x00F78AEF	; F004AD  [ 45]
-	.long 0x00F78B13	; F004B1  [ 46]
-	.long 0x00F78B4E	; F004B5  [ 47]
-	.long 0x00F78BA8	; F004B9  [ 48]
-	.long 0x00FDB10E	; F004BD  [ 49]  absent (sentinel)
-	.long 0x00FDB10E	; F004C1  [ 50]  absent (sentinel)
-	.long 0x00F78C02	; F004C5  [ 51]
-	.long 0x00F78BDB	; F004C9  [ 52]
-	.long 0x00000000	; F004CD  [ 53]  empty
-	.long 0x00FDB10E	; F004D1  [ 54]  absent (sentinel)
-	.long 0x00FDB10E	; F004D5  [ 55]  absent (sentinel)
-	.long 0x00F78C36	; F004D9  [ 56]
-	.long 0x00F78C5A	; F004DD  [ 57]
-	.long 0x00F78C7E	; F004E1  [ 58]
-	.long 0x00F78C96	; F004E5  [ 59]
-	.long 0x00FDB10E	; F004E9  [ 60]  absent (sentinel)
-	.long 0x00FDB10E	; F004ED  [ 61]  absent (sentinel)
-	.long 0x00F78CAE	; F004F1  [ 62]
-	.long 0x00F78CBF	; F004F5  [ 63]
-	.long 0x00F78CD0	; F004F9  [ 64]
-	.long 0x00F78CE1	; F004FD  [ 65]
-	.long 0x00F78D3B	; F00501  [ 66]
-	.long 0x00FDB10E	; F00505  [ 67]  absent (sentinel)
-	.long 0x00FDB10E	; F00509  [ 68]  absent (sentinel)
-	.long 0x00F78D73	; F0050D  [ 69]
-	.long 0x00F78D4C	; F00511  [ 70]
-	.long 0x00000000	; F00515  [ 71]  empty
-	.long 0x00FDB10E	; F00519  [ 72]  absent (sentinel)
-	.long 0x00F78DA7	; F0051D  [ 73]
-	.long 0x00F78E4C	; F00521  [ 74]
-	.long 0x00F78E68	; F00525  [ 75]
-	.long 0x00F78F09	; F00529  [ 76]
-	.long 0x00F78F9B	; F0052D  [ 77]
-	.long 0x00F78FB3	; F00531  [ 78]
-	.long 0x00FDB10E	; F00535  [ 79]  absent (sentinel)
-	.long 0x00F78FCB	; F00539  [ 80]
-	.long 0x00F78FF8	; F0053D  [ 81]
-	.long 0x00F7901C	; F00541  [ 82]
-	.long 0x00F79057	; F00545  [ 83]
-	.long 0x00F790A7	; F00549  [ 84]
-	.long 0x00FDB10E	; F0054D  [ 85]  absent (sentinel)
-	.long 0x00FDB10E	; F00551  [ 86]  absent (sentinel)
-	.long 0x00F79101	; F00555  [ 87]
-	.long 0x00F790DA	; F00559  [ 88]
-	.long 0x00000000	; F0055D  [ 89]  empty
-	.long 0x00FDB10E	; F00561  [ 90]  absent (sentinel)
-	.long 0x00FDB10E	; F00565  [ 91]  absent (sentinel)
-	.long 0x00FDB10E	; F00569  [ 92]  absent (sentinel)
-	.long 0x00FDB10E	; F0056D  [ 93]  absent (sentinel)
-	.long 0x00FDB10E	; F00571  [ 94]  absent (sentinel)
-	.long 0x00FDB10E	; F00575  [ 95]  absent (sentinel)
-	.long 0x00FDB10E	; F00579  [ 96]  absent (sentinel)
-	.long 0x00FDB10E	; F0057D  [ 97]  absent (sentinel)
-	.long 0x00F79135	; F00581  [ 98]
-	.long 0x00F79162	; F00585  [ 99]
-	.long 0x00F79186	; F00589  [100]
-	.long 0x00F791C1	; F0058D  [101]
-	.long 0x00F7921B	; F00591  [102]
-	.long 0x00FDB10E	; F00595  [103]  absent (sentinel)
-	.long 0x00FDB10E	; F00599  [104]  absent (sentinel)
-	.long 0x00F79275	; F0059D  [105]
-	.long 0x00F7924E	; F005A1  [106]
-	.long 0x00000000	; F005A5  [107]  empty
-	.long 0x00FDB10E	; F005A9  [108]  absent (sentinel)
-	.long 0x00FDB10E	; F005AD  [109]  absent (sentinel)
-	.long 0x00F792A9	; F005B1  [110]
-	.long 0x00F79334	; F005B5  [111]
-	.long 0x00F793AF	; F005B9  [112]
-	.long 0x00F7944F	; F005BD  [113]
-	.long 0x00FDB10E	; F005C1  [114]  absent (sentinel)
-	.long 0x00FDB10E	; F005C5  [115]  absent (sentinel)
-	.long 0x00F794CA	; F005C9  [116]
-	.long 0x00F794E8	; F005CD  [117]
-	.long 0x00F7950C	; F005D1  [118]
-	.long 0x00F79538	; F005D5  [119]
-	.long 0x00F7955C	; F005D9  [120]
-	.long 0x00FDB10E	; F005DD  [121]  absent (sentinel)
-	.long 0x00FDB10E	; F005E1  [122]  absent (sentinel)
-	.long 0x00F79598	; F005E5  [123]
-	.long 0x00F79580	; F005E9  [124]
-	.long 0x00000000	; F005ED  [125]  empty
-	.long 0x00F795B8	; F005F1  [126]
-	.long 0x00F795D1	; F005F5  [127]
-	.long 0x00F795EA	; F005F9  [128]
-	.long 0x00F79603	; F005FD  [129]
-	.long 0x00F7961C	; F00601  [130]
-	.long 0x00F79635	; F00605  [131]
-	.long 0x00F7964E	; F00609  [132]
-	.long 0x00FDB10E	; F0060D  [133]  absent (sentinel)
-	.long 0x00F79667	; F00611  [134]
-	.long 0x00F79678	; F00615  [135]
-	.long 0x00F796A4	; F00619  [136]
-	.long 0x00F796D0	; F0061D  [137]
-	.long 0x00F796FE	; F00621  [138]
-	.long 0x00FDB10E	; F00625  [139]  absent (sentinel)
-	.long 0x00FDB10E	; F00629  [140]  absent (sentinel)
-	.long 0x00F79744	; F0062D  [141]
-	.long 0x00F7972C	; F00631  [142]
-	.long 0x00000000	; F00635  [143]  empty
-	.long 0x00FDB10E	; F00639  [144]  absent (sentinel)
-	.long 0x00F79764	; F0063D  [145]
-	.long 0x00F79779	; F00641  [146]
-	.long 0x00F7978E	; F00645  [147]
-	.long 0x00F797A3	; F00649  [148]
-	.long 0x00FDB10E	; F0064D  [149]  absent (sentinel)
-	.long 0x00F797B8	; F00651  [150]
-	.long 0x00F797CD	; F00655  [151]
-	.long 0x00F797E2	; F00659  [152]
-	.long 0x00F797F3	; F0065D  [153]
-	.long 0x00F7981F	; F00661  [154]
-	.long 0x00F7984B	; F00665  [155]
-	.long 0x00F7986F	; F00669  [156]
-	.long 0x00FDB10E	; F0066D  [157]  absent (sentinel)
-	.long 0x00FDB10E	; F00671  [158]  absent (sentinel)
-	.long 0x00F798AB	; F00675  [159]
-	.long 0x00F79893	; F00679  [160]
-	.long 0x00000000	; F0067D  [161]  empty
-	.long 0x00FDB10E	; F00681  [162]  absent (sentinel)
-	.long 0x00F798CB	; F00685  [163]
-	.long 0x00F798E0	; F00689  [164]
-	.long 0x00F798F5	; F0068D  [165]
-	.long 0x00F7990A	; F00691  [166]
-	.long 0x00F7991F	; F00695  [167]
-	.long 0x00F79934	; F00699  [168]
-	.long 0x00F79949	; F0069D  [169]
-	.long 0x00F7995E	; F006A1  [170]
-	.long 0x00F7997C	; F006A5  [171]
-	.long 0x00F799A0	; F006A9  [172]
-	.long 0x00F799B8	; F006AD  [173]
-	.long 0x00F799D0	; F006B1  [174]
-	.long 0x00FDB10E	; F006B5  [175]  absent (sentinel)
-	.long 0x00FDB10E	; F006B9  [176]  absent (sentinel)
-	.long 0x00F799E8	; F006BD  [177]
-	.long 0x00FDB10E	; F006C1  [178]  absent (sentinel)
-	.long 0x00000000	; F006C5  [179]  empty
-	.long 0x00FDB10E	; F006C9  [180]  absent (sentinel)
+	.long 0x00F7828A	; F003F9  [  0]  r0c0
+	.long 0x00F78346	; F003FD  [  1]  r0c1
+	.long 0x00F78402	; F00401  [  2]  r0c2
+	.long 0x00F784B2	; F00405  [  3]  r0c3
+	.long 0x00FDB10E	; F00409  [  4]  absent (sentinel)  r0c4
+	.long 0x00F78562	; F0040D  [  5]  r0c5
+	.long 0x00F785FC	; F00411  [  6]  r0c6
+	.long 0x00F78697	; F00415  [  7]  r0c7
+	.long 0x00F78732	; F00419  [  8]  r0c8
+	.long 0x00F7875F	; F0041D  [  9]  r0c9
+	.long 0x00F78783	; F00421  [ 10]  r0c10
+	.long 0x00F787BE	; F00425  [ 11]  r0c11
+	.long 0x00F78818	; F00429  [ 12]  r0c12
+	.long 0x00FDB10E	; F0042D  [ 13]  absent (sentinel)  r0c13
+	.long 0x00FDB10E	; F00431  [ 14]  absent (sentinel)  r0c14
+	.long 0x00F78872	; F00435  [ 15]  r0c15
+	.long 0x00F7884B	; F00439  [ 16]  r0c16
+	.long 0x00000000	; F0043D  [ 17]  empty  r0c17
+	.long 0x00F788A6	; F00441  [ 18]  r1c0
+	.long 0x00F788CA	; F00445  [ 19]  r1c1
+	.long 0x00F788EE	; F00449  [ 20]  r1c2
+	.long 0x00F78906	; F0044D  [ 21]  r1c3
+	.long 0x00FDB10E	; F00451  [ 22]  absent (sentinel)  r1c4
+	.long 0x00F7891E	; F00455  [ 23]  r1c5
+	.long 0x00F7892F	; F00459  [ 24]  r1c6
+	.long 0x00F78940	; F0045D  [ 25]  r1c7
+	.long 0x00F78951	; F00461  [ 26]  r1c8
+	.long 0x00F78962	; F00465  [ 27]  r1c9
+	.long 0x00F78973	; F00469  [ 28]  r1c10
+	.long 0x00F78984	; F0046D  [ 29]  r1c11
+	.long 0x00F789DE	; F00471  [ 30]  r1c12
+	.long 0x00FDB10E	; F00475  [ 31]  absent (sentinel)  r1c13
+	.long 0x00FDB10E	; F00479  [ 32]  absent (sentinel)  r1c14
+	.long 0x00F78A16	; F0047D  [ 33]  r1c15
+	.long 0x00F789EF	; F00481  [ 34]  r1c16
+	.long 0x00000000	; F00485  [ 35]  empty  r1c17
+	.long 0x00FDB10E	; F00489  [ 36]  absent (sentinel)  r2c0
+	.long 0x00FDB10E	; F0048D  [ 37]  absent (sentinel)  r2c1
+	.long 0x00F78A4A	; F00491  [ 38]  r2c2
+	.long 0x00F78A6E	; F00495  [ 39]  r2c3
+	.long 0x00F78A92	; F00499  [ 40]  r2c4
+	.long 0x00F78AAA	; F0049D  [ 41]  r2c5
+	.long 0x00FDB10E	; F004A1  [ 42]  absent (sentinel)  r2c6
+	.long 0x00FDB10E	; F004A5  [ 43]  absent (sentinel)  r2c7
+	.long 0x00F78AC2	; F004A9  [ 44]  r2c8
+	.long 0x00F78AEF	; F004AD  [ 45]  r2c9
+	.long 0x00F78B13	; F004B1  [ 46]  r2c10
+	.long 0x00F78B4E	; F004B5  [ 47]  r2c11
+	.long 0x00F78BA8	; F004B9  [ 48]  r2c12
+	.long 0x00FDB10E	; F004BD  [ 49]  absent (sentinel)  r2c13
+	.long 0x00FDB10E	; F004C1  [ 50]  absent (sentinel)  r2c14
+	.long 0x00F78C02	; F004C5  [ 51]  r2c15
+	.long 0x00F78BDB	; F004C9  [ 52]  r2c16
+	.long 0x00000000	; F004CD  [ 53]  empty  r2c17
+	.long 0x00FDB10E	; F004D1  [ 54]  absent (sentinel)  r3c0
+	.long 0x00FDB10E	; F004D5  [ 55]  absent (sentinel)  r3c1
+	.long 0x00F78C36	; F004D9  [ 56]  r3c2
+	.long 0x00F78C5A	; F004DD  [ 57]  r3c3
+	.long 0x00F78C7E	; F004E1  [ 58]  r3c4
+	.long 0x00F78C96	; F004E5  [ 59]  r3c5
+	.long 0x00FDB10E	; F004E9  [ 60]  absent (sentinel)  r3c6
+	.long 0x00FDB10E	; F004ED  [ 61]  absent (sentinel)  r3c7
+	.long 0x00F78CAE	; F004F1  [ 62]  r3c8
+	.long 0x00F78CBF	; F004F5  [ 63]  r3c9
+	.long 0x00F78CD0	; F004F9  [ 64]  r3c10
+	.long 0x00F78CE1	; F004FD  [ 65]  r3c11
+	.long 0x00F78D3B	; F00501  [ 66]  r3c12
+	.long 0x00FDB10E	; F00505  [ 67]  absent (sentinel)  r3c13
+	.long 0x00FDB10E	; F00509  [ 68]  absent (sentinel)  r3c14
+	.long 0x00F78D73	; F0050D  [ 69]  r3c15
+	.long 0x00F78D4C	; F00511  [ 70]  r3c16
+	.long 0x00000000	; F00515  [ 71]  empty  r3c17
+	.long 0x00FDB10E	; F00519  [ 72]  absent (sentinel)  r4c0
+	.long 0x00F78DA7	; F0051D  [ 73]  r4c1
+	.long 0x00F78E4C	; F00521  [ 74]  r4c2
+	.long 0x00F78E68	; F00525  [ 75]  r4c3
+	.long 0x00F78F09	; F00529  [ 76]  r4c4
+	.long 0x00F78F9B	; F0052D  [ 77]  r4c5
+	.long 0x00F78FB3	; F00531  [ 78]  r4c6
+	.long 0x00FDB10E	; F00535  [ 79]  absent (sentinel)  r4c7
+	.long 0x00F78FCB	; F00539  [ 80]  r4c8
+	.long 0x00F78FF8	; F0053D  [ 81]  r4c9
+	.long 0x00F7901C	; F00541  [ 82]  r4c10
+	.long 0x00F79057	; F00545  [ 83]  r4c11
+	.long 0x00F790A7	; F00549  [ 84]  r4c12
+	.long 0x00FDB10E	; F0054D  [ 85]  absent (sentinel)  r4c13
+	.long 0x00FDB10E	; F00551  [ 86]  absent (sentinel)  r4c14
+	.long 0x00F79101	; F00555  [ 87]  r4c15
+	.long 0x00F790DA	; F00559  [ 88]  r4c16
+	.long 0x00000000	; F0055D  [ 89]  empty  r4c17
+	.long 0x00FDB10E	; F00561  [ 90]  absent (sentinel)  r5c0
+	.long 0x00FDB10E	; F00565  [ 91]  absent (sentinel)  r5c1
+	.long 0x00FDB10E	; F00569  [ 92]  absent (sentinel)  r5c2
+	.long 0x00FDB10E	; F0056D  [ 93]  absent (sentinel)  r5c3
+	.long 0x00FDB10E	; F00571  [ 94]  absent (sentinel)  r5c4
+	.long 0x00FDB10E	; F00575  [ 95]  absent (sentinel)  r5c5
+	.long 0x00FDB10E	; F00579  [ 96]  absent (sentinel)  r5c6
+	.long 0x00FDB10E	; F0057D  [ 97]  absent (sentinel)  r5c7
+	.long 0x00F79135	; F00581  [ 98]  r5c8
+	.long 0x00F79162	; F00585  [ 99]  r5c9
+	.long 0x00F79186	; F00589  [100]  r5c10
+	.long 0x00F791C1	; F0058D  [101]  r5c11
+	.long 0x00F7921B	; F00591  [102]  r5c12
+	.long 0x00FDB10E	; F00595  [103]  absent (sentinel)  r5c13
+	.long 0x00FDB10E	; F00599  [104]  absent (sentinel)  r5c14
+	.long 0x00F79275	; F0059D  [105]  r5c15
+	.long 0x00F7924E	; F005A1  [106]  r5c16
+	.long 0x00000000	; F005A5  [107]  empty  r5c17
+	.long 0x00FDB10E	; F005A9  [108]  absent (sentinel)  r6c0
+	.long 0x00FDB10E	; F005AD  [109]  absent (sentinel)  r6c1
+	.long 0x00F792A9	; F005B1  [110]  r6c2
+	.long 0x00F79334	; F005B5  [111]  r6c3
+	.long 0x00F793AF	; F005B9  [112]  r6c4
+	.long 0x00F7944F	; F005BD  [113]  r6c5
+	.long 0x00FDB10E	; F005C1  [114]  absent (sentinel)  r6c6
+	.long 0x00FDB10E	; F005C5  [115]  absent (sentinel)  r6c7
+	.long 0x00F794CA	; F005C9  [116]  r6c8
+	.long 0x00F794E8	; F005CD  [117]  r6c9
+	.long 0x00F7950C	; F005D1  [118]  r6c10
+	.long 0x00F79538	; F005D5  [119]  r6c11
+	.long 0x00F7955C	; F005D9  [120]  r6c12
+	.long 0x00FDB10E	; F005DD  [121]  absent (sentinel)  r6c13
+	.long 0x00FDB10E	; F005E1  [122]  absent (sentinel)  r6c14
+	.long 0x00F79598	; F005E5  [123]  r6c15
+	.long 0x00F79580	; F005E9  [124]  r6c16
+	.long 0x00000000	; F005ED  [125]  empty  r6c17
+	.long 0x00F795B8	; F005F1  [126]  r7c0
+	.long 0x00F795D1	; F005F5  [127]  r7c1
+	.long 0x00F795EA	; F005F9  [128]  r7c2
+	.long 0x00F79603	; F005FD  [129]  r7c3
+	.long 0x00F7961C	; F00601  [130]  r7c4
+	.long 0x00F79635	; F00605  [131]  r7c5
+	.long 0x00F7964E	; F00609  [132]  r7c6
+	.long 0x00FDB10E	; F0060D  [133]  absent (sentinel)  r7c7
+	.long 0x00F79667	; F00611  [134]  r7c8
+	.long 0x00F79678	; F00615  [135]  r7c9
+	.long 0x00F796A4	; F00619  [136]  r7c10
+	.long 0x00F796D0	; F0061D  [137]  r7c11
+	.long 0x00F796FE	; F00621  [138]  r7c12
+	.long 0x00FDB10E	; F00625  [139]  absent (sentinel)  r7c13
+	.long 0x00FDB10E	; F00629  [140]  absent (sentinel)  r7c14
+	.long 0x00F79744	; F0062D  [141]  r7c15
+	.long 0x00F7972C	; F00631  [142]  r7c16
+	.long 0x00000000	; F00635  [143]  empty  r7c17
+	.long 0x00FDB10E	; F00639  [144]  absent (sentinel)  r8c0
+	.long 0x00F79764	; F0063D  [145]  r8c1
+	.long 0x00F79779	; F00641  [146]  r8c2
+	.long 0x00F7978E	; F00645  [147]  r8c3
+	.long 0x00F797A3	; F00649  [148]  r8c4
+	.long 0x00FDB10E	; F0064D  [149]  absent (sentinel)  r8c5
+	.long 0x00F797B8	; F00651  [150]  r8c6
+	.long 0x00F797CD	; F00655  [151]  r8c7
+	.long 0x00F797E2	; F00659  [152]  r8c8
+	.long 0x00F797F3	; F0065D  [153]  r8c9
+	.long 0x00F7981F	; F00661  [154]  r8c10
+	.long 0x00F7984B	; F00665  [155]  r8c11
+	.long 0x00F7986F	; F00669  [156]  r8c12
+	.long 0x00FDB10E	; F0066D  [157]  absent (sentinel)  r8c13
+	.long 0x00FDB10E	; F00671  [158]  absent (sentinel)  r8c14
+	.long 0x00F798AB	; F00675  [159]  r8c15
+	.long 0x00F79893	; F00679  [160]  r8c16
+	.long 0x00000000	; F0067D  [161]  empty  r8c17
+	.long 0x00FDB10E	; F00681  [162]  absent (sentinel)  r9c0
+	.long 0x00F798CB	; F00685  [163]  r9c1
+	.long 0x00F798E0	; F00689  [164]  r9c2
+	.long 0x00F798F5	; F0068D  [165]  r9c3
+	.long 0x00F7990A	; F00691  [166]  r9c4
+	.long 0x00F7991F	; F00695  [167]  r9c5
+	.long 0x00F79934	; F00699  [168]  r9c6
+	.long 0x00F79949	; F0069D  [169]  r9c7
+	.long 0x00F7995E	; F006A1  [170]  r9c8
+	.long 0x00F7997C	; F006A5  [171]  r9c9
+	.long 0x00F799A0	; F006A9  [172]  r9c10
+	.long 0x00F799B8	; F006AD  [173]  r9c11
+	.long 0x00F799D0	; F006B1  [174]  r9c12
+	.long 0x00FDB10E	; F006B5  [175]  absent (sentinel)  r9c13
+	.long 0x00FDB10E	; F006B9  [176]  absent (sentinel)  r9c14
+	.long 0x00F799E8	; F006BD  [177]  r9c15
+	.long 0x00FDB10E	; F006C1  [178]  absent (sentinel)  r9c16
+	.long 0x00000000	; F006C5  [179]  empty  r9c17
+	.long 0x00FDB10E	; F006C9  [180]  absent (sentinel)  r10c0
 
 ; --------------------------------------------------------------------------
-; PtrTable_F006CD -- 35 slots -> prom_a's DisplayList_FC4000
+; PtrTable_F006CD -- 35 slots: the rest of rows 10-11 of the 18-column table
+;                    that starts at PtrTable_F003F9 (row 10 begins one slot
+;                    earlier, at 0xF006C9; this label boundary is a legacy cut)
 ; Evidence: 24 distinct targets, all in 0xFC4082-0xFC4454, which prom_a's
 ;           source already carries as DisplayList_FC4000 (2,095 bytes of
-;           DSP-effect / SOUND EDIT label text).  0 of the 24 is an instruction
-;           boundary there -- correct, since 0 of that region's 979 addresses
-;           is one: prom_a frames it as data too.  9 slots are the sentinel
-;           and 2 are zero.
-; Unknown: what selects a slot.  No reader found.
+;           DSP-effect / SOUND EDIT label text).  9 slots are the sentinel and
+;           2 are zero.
+; ⚠ THE TARGETS ARE NOT OBJECT STARTS THERE.  prom_a's framing of that region
+;   IS proven -- a strict op/len walk from 0xFC4000 reaches 0xFC482F with zero
+;   resyncs, 155 records -- and only 3 of these 24 targets land on a record
+;   boundary, against 1.8 expected by chance (155 boundaries in 2,095 bytes).
+;   So this table indexes neither the display list here nor the 0xF78028 icon
+;   sheet its sibling half points at; see PtrTable_F003F9's header for the
+;   sheet half, the 18x12 shape, and the control that shows the test can still
+;   recognise a live table.
+;   (The header this replaces said "0 of the 24 is an instruction boundary
+;   there -- correct, since prom_a frames it as data too".  That is true and
+;   beside the point: the question for a data region is whether they are RECORD
+;   boundaries, and they are not.)
+; Unknown: what selects a slot.  No reader found -- no immediate in any of the
+;          four ROM images equals 0xF003F9 or 0xF006CD.
 ; --------------------------------------------------------------------------
 PtrTable_F006CD:
-	.long 0x00FC4082	; F006CD  [  0]
-	.long 0x00FDB10E	; F006D1  [  1]  absent (sentinel)
-	.long 0x00FC4097	; F006D5  [  2]
-	.long 0x00FC40A9	; F006D9  [  3]
-	.long 0x00FC40BE	; F006DD  [  4]
-	.long 0x00FC40D3	; F006E1  [  5]
-	.long 0x00FC40F7	; F006E5  [  6]
-	.long 0x00FDB10E	; F006E9  [  7]  absent (sentinel)
-	.long 0x00FC411B	; F006ED  [  8]
-	.long 0x00FC415C	; F006F1  [  9]
-	.long 0x00FC419D	; F006F5  [ 10]
-	.long 0x00FDB10E	; F006F9  [ 11]  absent (sentinel)
-	.long 0x00FDB10E	; F006FD  [ 12]  absent (sentinel)
-	.long 0x00FDB10E	; F00701  [ 13]  absent (sentinel)
-	.long 0x00FC423D	; F00705  [ 14]
-	.long 0x00FC4225	; F00709  [ 15]
-	.long 0x00000000	; F0070D  [ 16]  empty
-	.long 0x00FDB10E	; F00711  [ 17]  absent (sentinel)
-	.long 0x00FC4269	; F00715  [ 18]
-	.long 0x00FDB10E	; F00719  [ 19]  absent (sentinel)
-	.long 0x00FC427E	; F0071D  [ 20]
-	.long 0x00FC4290	; F00721  [ 21]
-	.long 0x00FC42A5	; F00725  [ 22]
-	.long 0x00FC42BA	; F00729  [ 23]
-	.long 0x00FC42DE	; F0072D  [ 24]
-	.long 0x00FC4302	; F00731  [ 25]
-	.long 0x00FC4338	; F00735  [ 26]
-	.long 0x00FC4379	; F00739  [ 27]
-	.long 0x00FC43BA	; F0073D  [ 28]
-	.long 0x00FC43FB	; F00741  [ 29]
-	.long 0x00FDB10E	; F00745  [ 30]  absent (sentinel)
-	.long 0x00FDB10E	; F00749  [ 31]  absent (sentinel)
-	.long 0x00FC4454	; F0074D  [ 32]
-	.long 0x00FC443C	; F00751  [ 33]
-	.long 0x00000000	; F00755  [ 34]  empty
+	.long 0x00FC4082	; F006CD  [  0]  r10c1
+	.long 0x00FDB10E	; F006D1  [  1]  absent (sentinel)  r10c2
+	.long 0x00FC4097	; F006D5  [  2]  r10c3
+	.long 0x00FC40A9	; F006D9  [  3]  r10c4
+	.long 0x00FC40BE	; F006DD  [  4]  r10c5
+	.long 0x00FC40D3	; F006E1  [  5]  r10c6
+	.long 0x00FC40F7	; F006E5  [  6]  r10c7
+	.long 0x00FDB10E	; F006E9  [  7]  absent (sentinel)  r10c8
+	.long 0x00FC411B	; F006ED  [  8]  r10c9
+	.long 0x00FC415C	; F006F1  [  9]  r10c10
+	.long 0x00FC419D	; F006F5  [ 10]  r10c11
+	.long 0x00FDB10E	; F006F9  [ 11]  absent (sentinel)  r10c12
+	.long 0x00FDB10E	; F006FD  [ 12]  absent (sentinel)  r10c13
+	.long 0x00FDB10E	; F00701  [ 13]  absent (sentinel)  r10c14
+	.long 0x00FC423D	; F00705  [ 14]  r10c15
+	.long 0x00FC4225	; F00709  [ 15]  r10c16
+	.long 0x00000000	; F0070D  [ 16]  empty  r10c17
+	.long 0x00FDB10E	; F00711  [ 17]  absent (sentinel)  r11c0
+	.long 0x00FC4269	; F00715  [ 18]  r11c1
+	.long 0x00FDB10E	; F00719  [ 19]  absent (sentinel)  r11c2
+	.long 0x00FC427E	; F0071D  [ 20]  r11c3
+	.long 0x00FC4290	; F00721  [ 21]  r11c4
+	.long 0x00FC42A5	; F00725  [ 22]  r11c5
+	.long 0x00FC42BA	; F00729  [ 23]  r11c6
+	.long 0x00FC42DE	; F0072D  [ 24]  r11c7
+	.long 0x00FC4302	; F00731  [ 25]  r11c8
+	.long 0x00FC4338	; F00735  [ 26]  r11c9
+	.long 0x00FC4379	; F00739  [ 27]  r11c10
+	.long 0x00FC43BA	; F0073D  [ 28]  r11c11
+	.long 0x00FC43FB	; F00741  [ 29]  r11c12
+	.long 0x00FDB10E	; F00745  [ 30]  absent (sentinel)  r11c13
+	.long 0x00FDB10E	; F00749  [ 31]  absent (sentinel)  r11c14
+	.long 0x00FC4454	; F0074D  [ 32]  r11c15
+	.long 0x00FC443C	; F00751  [ 33]  r11c16
+	.long 0x00000000	; F00755  [ 34]  empty  r11c17
 
 ; --------------------------------------------------------------------------
 ; Data_F00759 -- 9 bytes: the eight powers of two, then one 0x00
