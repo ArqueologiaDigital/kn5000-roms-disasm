@@ -30183,7 +30183,26 @@ DL_F143AF:
 	.short 0x0021	; +0x0F -> (0x2532)
 
 ; --- 0xF143C0-0xF143DF: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0143C0, 0x000020
+; 0xF143C0-0xF143D3: 2 interpreter-A records (op 0x05, 0x1B), the op/len
+; walk landing exactly on 0xF143D4, the string table DL_F143AF names
+; in its own +0x07 field.
+DL_F143C0:
+	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
+	.short 0x0111
+	.short 0x001F
+	.short 0x0137
+	.short 0x0033
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x0111
+	.short 0x001F
+	.short 0x0137
+	.short 0x0033
+; 0xF143D4-0xF143DF: 4-byte-stride table, 3 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x45, 0x46, 0x46, 0x31	; F143D4  |EFF1|
+	.byte 0x45, 0x46, 0x46, 0x32	; F143D8  |EFF2|
+	.byte 0x52, 0x45, 0x56, 0x20	; F143DC  |REV |
 
 ; ------------------------------------------------------------------
 ; 0xF143E0-0xF1447C -- 11 display-list records, 157 bytes -- interpreter A/B
@@ -30284,7 +30303,31 @@ DL_F14432:
 	.short 0x17AD	; +0x0D -> IX
 
 ; --- 0xF1447D-0xF1449E: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x01447D, 0x000022
+; 0xF1447D-0xF14484: 4-byte-stride table, 2 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x45, 0x46, 0x46, 0x31	; F1447D  |EFF1|
+	.byte 0x2D, 0x2D, 0x2D, 0x2D	; F14481  |----|
+; 0xF14485-0xF1448C: 4-byte-stride table, 2 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x45, 0x46, 0x46, 0x32	; F14485  |EFF2|
+	.byte 0x2D, 0x2D, 0x2D, 0x2D	; F14489  |----|
+; 0xF1448D-0xF14492: 3-byte-stride table, 2 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x52, 0x45, 0x56	; F1448D  |REV|
+	.byte 0x2D, 0x2D, 0x2D	; F14490  |---|
+; 0xF14493-0xF14498: 3-byte-stride table, 2 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x45, 0x51, 0x31	; F14493  |EQ1|
+	.byte 0x2D, 0x2D, 0x2D	; F14496  |---|
+; 0xF14499-0xF1449E: 3-byte-stride table, 2 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x45, 0x51, 0x32	; F14499  |EQ2|
+	.byte 0x2D, 0x2D, 0x2D	; F1449C  |---|
 
 ; ------------------------------------------------------------------
 ; 0xF1449F-0xF1451C -- 8 display-list records, 126 bytes -- interpreter A/B
@@ -30367,7 +30410,35 @@ DL_F1449F:
 	.short 0x0091	; +0x0F -> (0x2532)
 
 ; --- 0xF1451D-0xF14561: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x01451D, 0x000045
+; 0xF1451D-0xF1452C: 8-byte-stride table, 2 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x50, 0x41, 0x52, 0x41, 0x4C, 0x4C, 0x45, 0x4C	; F1451D  |PARALLEL|
+	.byte 0x53, 0x45, 0x52, 0x49, 0x41, 0x4C, 0x20, 0x20	; F14525  |SERIAL  |
+; 0xF1452D-0xF1452D: 1-byte-stride table, 1 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0xA8	; F1452D  |.|
+; 0xF1452E-0xF1452E: 1-byte-stride table, 1 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0xA8	; F1452E  |.|
+; 0xF1452F-0xF1452F: 1-byte-stride table, 1 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x10	; F1452F  |.|
+; 0xF14530-0xF14531: 2 byte(s), unattributed by any record's field --
+; left as plain data rather than folded into a neighbouring table.
+	.byte 0xA8, 0xA8	; F14530  |..|
+; 0xF14532-0xF14561: 8-byte-stride table, 6 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x54, 0x00, 0x44, 0x00, 0x9B, 0x00, 0x57, 0x00	; F14532  |T.D...W.|
+	.byte 0x3E, 0x00, 0x6B, 0x00, 0x63, 0x00, 0x7A, 0x00	; F1453A  |>.k.c.z.|
+	.byte 0xA4, 0x00, 0x92, 0x00, 0xE4, 0x00, 0xA5, 0x00	; F14542  |........|
+	.byte 0x03, 0x0C, 0x48, 0x3D, 0xF1, 0x00, 0x34, 0x11	; F1454A  |..H=..4.|
+	.byte 0x02, 0x00, 0x0C, 0x00, 0x03, 0x0C, 0x30, 0x3D	; F14552  |......0=|
+	.byte 0xF1, 0x00, 0x34, 0x11, 0x02, 0x00, 0x0C, 0x00	; F1455A  |..4.....|
 
 ; ------------------------------------------------------------------
 ; 0xF14562-0xF145D2 -- 8 display-list records, 113 bytes -- interpreter A/B
@@ -30448,7 +30519,11 @@ DL_F145B5:
 	.short 0x2298	; +0x0D -> IX
 
 ; --- 0xF145D3-0xF145D8: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0145D3, 0x000006
+; 0xF145D3-0xF145D8: 3-byte-stride table, 2 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x4F, 0x46, 0x46	; F145D3  |OFF|
+	.byte 0x4F, 0x4E, 0x20	; F145D6  |ON |
 
 ; ------------------------------------------------------------------
 ; 0xF145D9-0xF14620 -- 5 display-list records, 72 bytes -- interpreter A/B
@@ -30505,7 +30580,28 @@ DL_F14617:
 	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
 
 ; --- 0xF14621-0xF1465E: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x014621, 0x00003E
+; 0xF14621-0xF14638: 8-byte-stride table, 3 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x45, 0x46, 0x46, 0x45, 0x43, 0x54, 0x20, 0x31	; F14621  |EFFECT 1|
+	.byte 0x45, 0x46, 0x46, 0x45, 0x43, 0x54, 0x20, 0x32	; F14629  |EFFECT 2|
+	.byte 0x52, 0x45, 0x56, 0x45, 0x52, 0x42, 0x20, 0x20	; F14631  |REVERB  |
+; 0xF14639-0xF1463E: 3-byte-stride table, 2 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x20, 0x2D, 0x20	; F14639  | - |
+	.byte 0x20, 0x20, 0x20	; F1463C  |   |
+; 0xF1463F-0xF1465E: 4-byte-stride table, 8 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x20, 0x4F, 0x46, 0x46	; F1463F  | OFF|
+	.byte 0x4D, 0x41, 0x49, 0x4E	; F14643  |MAIN|
+	.byte 0x53, 0x55, 0x42, 0x31	; F14647  |SUB1|
+	.byte 0x53, 0x55, 0x42, 0x32	; F1464B  |SUB2|
+	.byte 0x53, 0x55, 0x42, 0x33	; F1464F  |SUB3|
+	.byte 0x45, 0x46, 0x46, 0x32	; F14653  |EFF2|
+	.byte 0x20, 0x2D, 0x2D, 0x20	; F14657  | -- |
+	.byte 0x20, 0x20, 0x20, 0x20	; F1465B  |    |
 
 ; ------------------------------------------------------------------
 ; 0xF1465F-0xF146A5 -- 5 display-list records, 71 bytes -- interpreter A/B
@@ -30557,7 +30653,27 @@ DL_F1469B:
 	.long 0x00F146B1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF146A6-0xF146E0: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0146A6, 0x00003B
+; 0xF146A6-0xF146B0: one self-framing interpreter-B record (op 0x08,
+; handler 0xF31B57, the same handler DL_F1441C/DL_F14427 already use),
+; not reached by any known call shape -- accepted because its own
+; length byte and its own +0x07 field (naming the table right after
+; it) are both self-checking.
+DL_F146A6:
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value]
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F146B1	; +0x07 -> XIX: array, indexed by the value
+; 0xF146B1-0xF146E0: 8-byte-stride table, 6 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x29, 0x00, 0xDB, 0x00, 0x2A, 0x01, 0xE8, 0x00	; F146B1  |)...*...|
+	.byte 0x0E, 0x01, 0x45, 0x00, 0x32, 0x01, 0x52, 0x00	; F146B9  |..E.2.R.|
+	.byte 0x0E, 0x01, 0x6D, 0x00, 0x32, 0x01, 0x7A, 0x00	; F146C1  |..m.2.z.|
+	.byte 0x16, 0x01, 0x95, 0x00, 0x32, 0x01, 0xA2, 0x00	; F146C9  |....2...|
+	.byte 0x0E, 0x01, 0x45, 0x00, 0x32, 0x01, 0x52, 0x00	; F146D1  |..E.2.R.|
+	.byte 0x16, 0x01, 0x95, 0x00, 0x32, 0x01, 0xA2, 0x00	; F146D9  |....2...|
 
 ; ------------------------------------------------------------------
 ; 0xF146E1-0xF14727 -- 5 display-list records, 71 bytes -- interpreter A/B
@@ -30610,7 +30726,39 @@ DL_F14712:
 	.long 0x00F1472C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; --- 0xF14728-0xF147AB: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x014728, 0x000084
+; 0xF14728-0xF14728: 1-byte-stride table, 1 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x20	; F14728  | |
+; 0xF14729-0xF14729: 1 byte(s), unattributed by any record's field --
+; left as plain data rather than folded into a neighbouring table.
+	.byte 0xAD	; F14729  |.|
+; 0xF1472A-0xF1472A: 1-byte-stride table, 1 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x20	; F1472A  | |
+; 0xF1472B-0xF1472B: 1 byte(s), unattributed by any record's field --
+; left as plain data rather than folded into a neighbouring table.
+	.byte 0x89	; F1472B  |.|
+; 0xF1472C-0xF147AB: 8-byte-stride table, 16 entries -- the string/array
+; table a nearby already-spliced record names in its own +0x07 (and,
+; for the string-table ops, +0x0B `BC`) field.
+	.byte 0x39, 0x00, 0x48, 0x00, 0x07, 0x01, 0x55, 0x00	; F1472C  |9.H...U.|
+	.byte 0x39, 0x00, 0x58, 0x00, 0x07, 0x01, 0x65, 0x00	; F14734  |9.X...e.|
+	.byte 0x39, 0x00, 0x68, 0x00, 0x07, 0x01, 0x75, 0x00	; F1473C  |9.h...u.|
+	.byte 0x39, 0x00, 0x78, 0x00, 0x07, 0x01, 0x85, 0x00	; F14744  |9.x.....|
+	.byte 0x39, 0x00, 0x88, 0x00, 0x07, 0x01, 0x95, 0x00	; F1474C  |9.......|
+	.byte 0x39, 0x00, 0x98, 0x00, 0x07, 0x01, 0xA5, 0x00	; F14754  |9.......|
+	.byte 0x39, 0x00, 0xA8, 0x00, 0x07, 0x01, 0xB5, 0x00	; F1475C  |9.......|
+	.byte 0x39, 0x00, 0xB8, 0x00, 0x07, 0x01, 0xC5, 0x00	; F14764  |9.......|
+	.byte 0x38, 0x00, 0x1F, 0x00, 0x05, 0x01, 0x3C, 0x00	; F1476C  |8.....<.|
+	.byte 0x38, 0x00, 0x1F, 0x00, 0x05, 0x01, 0x3C, 0x00	; F14774  |8.....<.|
+	.byte 0x38, 0x00, 0x1F, 0x00, 0x05, 0x01, 0x3C, 0x00	; F1477C  |8.....<.|
+	.byte 0x38, 0x00, 0x1F, 0x00, 0x05, 0x01, 0x3C, 0x00	; F14784  |8.....<.|
+	.byte 0x38, 0x00, 0x1F, 0x00, 0x05, 0x01, 0x3C, 0x00	; F1478C  |8.....<.|
+	.byte 0x38, 0x00, 0x1F, 0x00, 0x05, 0x01, 0x3C, 0x00	; F14794  |8.....<.|
+	.byte 0x38, 0x00, 0x1F, 0x00, 0x05, 0x01, 0x3C, 0x00	; F1479C  |8.....<.|
+	.byte 0x38, 0x00, 0x1F, 0x00, 0x05, 0x01, 0x3C, 0x00	; F147A4  |8.....<.|
 
 ; --------------------------------------------------------------------------
 ; EffectNames_F147AC -- 128 entries of 16 characters, 2,048 bytes.
