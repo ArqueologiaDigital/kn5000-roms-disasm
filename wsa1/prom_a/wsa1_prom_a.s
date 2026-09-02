@@ -38483,6 +38483,11 @@ sub_F9642D:   ; entry: prom_b routine directory
 ; ==== 0xF96432-0xF97418 -- STRONG-REACHABLE CODE ONLY, emitted by notes/gen_prom_a_cover_round2.py ====
 ; 3 run(s), 259 bytes framed as code.  3811 bytes that nothing STRONGLY reaches stay
 ; `.incbin` -- this round converts REACHABLE CODE, not territory.
+; ★ UPDATE 2026-09-02: that 3811 is now ZERO.  Later rounds converted the rest, the
+;   last 1,889 of them by notes/gen_prom_a_f96504_module.py, which typed
+;   0xF96504-0xF96C65 from its already-converted READER rather than from
+;   reachability -- exactly the kind of evidence this round's seed classes cannot
+;   see.  The sentence above records what THIS round did and is left standing.
 ; Boundaries: notes/reachability.py's walk over its STRONG seed classes only (CPU
 ; vectors, prom_b routine-directory slots, branches in decoded code), frozen against
 ; this file's own output.  A bare 32-bit immediate is NOT a seed here: round 1 proved
@@ -38584,7 +38589,650 @@ sub_F9647F:   ; entry: branch/call in converted code
 	jr .LF964BB                                          ; F96501  68 b8
 .LF96503:
 	ret                                                  ; F96503  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016504, 0x000761
+; ==============================================================================
+; 0xF96504-0xF96C65 -- a bit-field SCRIPT INTERPRETER's handlers and its three tables
+; ==============================================================================
+;
+; Converted 2026-09-02 by notes/gen_prom_a_f96504_module.py, which re-derives
+; every boundary below on each run and refuses to emit if one moves.
+; Full argument: notes/FINDINGS-prom_a-f96504-script-tables.md.
+;
+; The reader is `.LF964B9` (0xF964B9, converted earlier, just above): it walks
+; an array of (u32 struct offset, u32 script pointer) pairs terminated by
+; 0xFFFFFFFF, and for each script executes (opcode, field offset, immediates)
+; records until 0xFF.  Its three literal addresses -- `add XHL,0x00f969a1` at
+; 0xF964E6, `ld XIX,0x00f969dd` at 0xF96455/0xF96484 and `ld XIX,0x00f96aa1`
+; at 0xF96476 -- are what fix the three tables below.  Nothing here rests on
+; decode plausibility.
+;
+; ★ THE CHECK THAT COULD HAVE FAILED: walking every script the two tables name,
+;   with record widths read off the handlers, TILES 0xF9667A-0xF969A1 exactly --
+;   18 scripts, 259 records, no gap, no byte claimed twice, no overrun, and no
+;   opcode outside the 8 the handler table populates (0x01 0x04 0x06 0x07 0x08 are the 5 actually
+;   used by these scripts).
+;
+; What these fields MEAN is not established -- the layout is.  The handlers are
+; `sub_XXXXXX`: an address plus its dispatch slot, not a claim.
+; ------------------------------------------------------------------------------
+sub_F96504:   ; script opcode 0x01 handler (slot 1 of ScriptOpHandlers_F969A1)
+	and A,(XIX)                                          ; F96504  84 c1
+	ld (XHL),A                                           ; F96506  b3 41
+	inc 1,XIX                                            ; F96508  ec 61
+	ret                                                  ; F9650A  0e
+sub_F9650B:   ; script opcode 0x08 handler (slot 8 of ScriptOpHandlers_F969A1)
+	ld A,(XIX)                                           ; F9650B  84 21
+	ld (XHL),A                                           ; F9650D  b3 41
+	inc 1,XIX                                            ; F9650F  ec 61
+	ret                                                  ; F96511  0e
+sub_F96512:   ; script opcode 0x02 handler (slot 2 of ScriptOpHandlers_F969A1)
+	ld W,(XIX)                                           ; F96512  84 20
+	xor W,0xff                                           ; F96514  c8 cd ff
+	and A,W                                              ; F96517  c8 c1
+	ld (XHL),A                                           ; F96519  b3 41
+	inc 1,XIX                                            ; F9651B  ec 61
+	ret                                                  ; F9651D  0e
+sub_F9651E:   ; script opcode 0x03 handler (slot 3 of ScriptOpHandlers_F969A1)
+	ld W,(XIX)                                           ; F9651E  84 20
+	or A,W                                               ; F96520  c8 e1
+	ld (XHL),A                                           ; F96522  b3 41
+	inc 1,XIX                                            ; F96524  ec 61
+	ret                                                  ; F96526  0e
+sub_F96527:   ; script opcode 0x04 handler (slot 4 of ScriptOpHandlers_F969A1)
+	ld W,(XIX)                                           ; F96527  84 20
+	ld E,W                                               ; F96529  c8 8d
+	and A,W                                              ; F9652B  c8 c1
+	xor C,C                                              ; F9652D  cb d3
+	cps w, 0x00                                          ; F9652F  c8 d8
+	jr ule, .LF9653C                                     ; F96531  63 09
+.LF96533:
+	srl w, 0x01                                          ; F96533  c8 ef 01
+	jr c, .LF9653C                                       ; F96536  67 04
+	inc 1,C                                              ; F96538  cb 61
+	jr .LF96533                                          ; F9653A  68 f7
+.LF9653C:
+	cps c, 0x00                                          ; F9653C  cb d8
+	jr z, .LF96546                                       ; F9653E  66 06
+	ex8 a, c                                             ; F96540  cb b9
+	.byte 0xcb, 0xff                                     ; F96542  cb ff
+	ex8 a, c                                             ; F96544  cb b9
+.LF96546:
+	inc 1,XIX                                            ; F96546  ec 61
+	cp A,(XIX)                                           ; F96548  84 f1
+	jr c, .LF96556                                       ; F9654A  67 0a
+	inc 1,XIX                                            ; F9654C  ec 61
+	cp A,(XIX)                                           ; F9654E  84 f1
+	jr ugt, .LF9655C                                     ; F96550  6b 0a
+	inc 1,XIX                                            ; F96552  ec 61
+	jr .LF96560                                          ; F96554  68 0a
+.LF96556:
+	inc 2,XIX                                            ; F96556  ec 62
+	ld A,(XIX)                                           ; F96558  84 21
+	jr .LF96560                                          ; F9655A  68 04
+.LF9655C:
+	inc 1,XIX                                            ; F9655C  ec 61
+	ld A,(XIX)                                           ; F9655E  84 21
+.LF96560:
+	xor E,0xff                                           ; F96560  cd cd ff
+	and (XHL),E                                          ; F96563  83 cd
+	cps c, 0x00                                          ; F96565  cb d8
+	jr z, .LF9656F                                       ; F96567  66 06
+	ex8 a, c                                             ; F96569  cb b9
+	.byte 0xcb, 0xfc                                     ; F9656B  cb fc
+	ex8 a, c                                             ; F9656D  cb b9
+.LF9656F:
+	or (XHL),A                                           ; F9656F  83 e9
+	inc 1,XIX                                            ; F96571  ec 61
+	ret                                                  ; F96573  0e
+sub_F96574:   ; script opcode 0x05 handler (slot 5 of ScriptOpHandlers_F969A1)
+	ld W,(XIX)                                           ; F96574  84 20
+	ld E,W                                               ; F96576  c8 8d
+	and A,W                                              ; F96578  c8 c1
+	xor C,C                                              ; F9657A  cb d3
+	cps w, 0x00                                          ; F9657C  c8 d8
+	jr ule, .LF96589                                     ; F9657E  63 09
+.LF96580:
+	srl w, 0x01                                          ; F96580  c8 ef 01
+	jr c, .LF96589                                       ; F96583  67 04
+	inc 1,C                                              ; F96585  cb 61
+	jr .LF96580                                          ; F96587  68 f7
+.LF96589:
+	cps c, 0x00                                          ; F96589  cb d8
+	jr z, .LF96593                                       ; F9658B  66 06
+	ex8 a, c                                             ; F9658D  cb b9
+	.byte 0xcb, 0xff                                     ; F9658F  cb ff
+	ex8 a, c                                             ; F96591  cb b9
+.LF96593:
+	inc 1,XIX                                            ; F96593  ec 61
+	cp A,(XIX)                                           ; F96595  84 f1
+	jr nc, .LF9659D                                      ; F96597  6f 04
+	inc 2,XIX                                            ; F96599  ec 62
+	jr .LF965AD                                          ; F9659B  68 10
+.LF9659D:
+	inc 1,XIX                                            ; F9659D  ec 61
+	cp A,(XIX)                                           ; F9659F  84 f1
+	jr ule, .LF965A7                                     ; F965A1  63 04
+	inc 1,XIX                                            ; F965A3  ec 61
+	jr .LF965AD                                          ; F965A5  68 06
+.LF965A7:
+	inc 1,XIX                                            ; F965A7  ec 61
+	ld A,(XIX)                                           ; F965A9  84 21
+	jr .LF965AD                                          ; F965AB  68 00
+.LF965AD:
+	xor E,0xff                                           ; F965AD  cd cd ff
+	and (XHL),E                                          ; F965B0  83 cd
+	cps c, 0x00                                          ; F965B2  cb d8
+	jr z, .LF965BC                                       ; F965B4  66 06
+	ex8 a, c                                             ; F965B6  cb b9
+	.byte 0xcb, 0xfc                                     ; F965B8  cb fc
+	ex8 a, c                                             ; F965BA  cb b9
+.LF965BC:
+	or (XHL),A                                           ; F965BC  83 e9
+	inc 1,XIX                                            ; F965BE  ec 61
+	ret                                                  ; F965C0  0e
+sub_F965C1:   ; script opcode 0x06 handler (slot 6 of ScriptOpHandlers_F969A1)
+	ld W,(XIX)                                           ; F965C1  84 20
+	and A,W                                              ; F965C3  c8 c1
+	ld D,W                                               ; F965C5  c8 8c
+	inc 1,XIX                                            ; F965C7  ec 61
+	ld E,(XIX)                                           ; F965C9  84 25
+	xor C,C                                              ; F965CB  cb d3
+	cps w, 0x00                                          ; F965CD  c8 d8
+	jr ule, .LF965DA                                     ; F965CF  63 09
+.LF965D1:
+	srl w, 0x01                                          ; F965D1  c8 ef 01
+	jr c, .LF965DA                                       ; F965D4  67 04
+	inc 1,C                                              ; F965D6  cb 61
+	jr .LF965D1                                          ; F965D8  68 f7
+.LF965DA:
+	cps c, 0x00                                          ; F965DA  cb d8
+	jr z, .LF965E4                                       ; F965DC  66 06
+	ex8 a, c                                             ; F965DE  cb b9
+	.byte 0xcb, 0xff                                     ; F965E0  cb ff
+	ex8 a, c                                             ; F965E2  cb b9
+.LF965E4:
+	cps e, 0x00                                          ; F965E4  cd d8
+	jr ule, .LF965F2                                     ; F965E6  63 0a
+	inc 1,XIX                                            ; F965E8  ec 61
+	dec 1,E                                              ; F965EA  cd 69
+	cp A,(XIX)                                           ; F965EC  84 f1
+	jr z, .LF965F4                                       ; F965EE  66 04
+	jr .LF965E4                                          ; F965F0  68 f2
+.LF965F2:
+	ld A,(XIX)                                           ; F965F2  84 21
+.LF965F4:
+	xor D,0xff                                           ; F965F4  cc cd ff
+	and (XHL),D                                          ; F965F7  83 cc
+	cps c, 0x00                                          ; F965F9  cb d8
+	jr z, .LF96603                                       ; F965FB  66 06
+	ex8 a, c                                             ; F965FD  cb b9
+	.byte 0xcb, 0xfc                                     ; F965FF  cb fc
+	ex8 a, c                                             ; F96601  cb b9
+.LF96603:
+	or (XHL),A                                           ; F96603  83 e9
+	xor D,D                                              ; F96605  cc d4
+	extz XDE                                             ; F96607  ea 12
+	add XIX,XDE                                          ; F96609  ea 84
+	inc 1,XIX                                            ; F9660B  ec 61
+	ret                                                  ; F9660D  0e
+sub_F9660E:   ; script opcode 0x07 handler (slot 7 of ScriptOpHandlers_F969A1)
+	ld W,(XIX)                                           ; F9660E  84 20
+	and A,W                                              ; F96610  c8 c1
+	ld D,W                                               ; F96612  c8 8c
+	inc 1,XIX                                            ; F96614  ec 61
+	ld E,(XIX)                                           ; F96616  84 25
+	xor C,C                                              ; F96618  cb d3
+	cps w, 0x00                                          ; F9661A  c8 d8
+	jr ule, .LF96627                                     ; F9661C  63 09
+.LF9661E:
+	srl w, 0x01                                          ; F9661E  c8 ef 01
+	jr c, .LF96627                                       ; F96621  67 04
+	inc 1,C                                              ; F96623  cb 61
+	jr .LF9661E                                          ; F96625  68 f7
+.LF96627:
+	cps c, 0x00                                          ; F96627  cb d8
+	jr z, .LF96631                                       ; F96629  66 06
+	ex8 a, c                                             ; F9662B  cb b9
+	.byte 0xcb, 0xff                                     ; F9662D  cb ff
+	ex8 a, c                                             ; F9662F  cb b9
+.LF96631:
+	cps e, 0x00                                          ; F96631  cd d8
+	jr ule, .LF9665E                                     ; F96633  63 29
+	inc 1,XIX                                            ; F96635  ec 61
+	dec 1,E                                              ; F96637  cd 69
+	cp A,(XIX)                                           ; F96639  84 f1
+	jr z, .LF9663F                                       ; F9663B  66 02
+	jr .LF96631                                          ; F9663D  68 f2
+.LF9663F:
+	push XDE                                             ; F9663F  3a
+	xor D,D                                              ; F96640  cc d4
+	extz XDE                                             ; F96642  ea 12
+	add XIX,XDE                                          ; F96644  ea 84
+	pop XDE                                              ; F96646  5a
+	inc 1,XIX                                            ; F96647  ec 61
+	ld A,(XIX)                                           ; F96649  84 21
+	xor D,0xff                                           ; F9664B  cc cd ff
+	and (XHL),D                                          ; F9664E  83 cc
+	cps c, 0x00                                          ; F96650  cb d8
+	jr z, .LF9665A                                       ; F96652  66 06
+	ex8 a, c                                             ; F96654  cb b9
+	.byte 0xcb, 0xfc                                     ; F96656  cb fc
+	ex8 a, c                                             ; F96658  cb b9
+.LF9665A:
+	or (XHL),A                                           ; F9665A  83 e9
+	jr .LF96677                                          ; F9665C  68 19
+.LF9665E:
+	xor D,0xff                                           ; F9665E  cc cd ff
+	and (XHL),D                                          ; F96661  83 cc
+	cps c, 0x00                                          ; F96663  cb d8
+	jr z, .LF9666D                                       ; F96665  66 06
+	ex8 a, c                                             ; F96667  cb b9
+	.byte 0xcb, 0xfc                                     ; F96669  cb fc
+	ex8 a, c                                             ; F9666B  cb b9
+.LF9666D:
+	or (XHL),A                                           ; F9666D  83 e9
+	xor D,D                                              ; F9666F  cc d4
+	extz XDE                                             ; F96671  ea 12
+	add XIX,XDE                                          ; F96673  ea 84
+	inc 1,XIX                                            ; F96675  ec 61
+.LF96677:
+	inc 1,XIX                                            ; F96677  ec 61
+	ret                                                  ; F96679  0e
+; ------------------------------------------------------------------------------
+; 0xF9667A-0xF969A1 -- the SCRIPTS.  DATA: nothing calls or jumps here; the only
+; references LOAD these addresses out of the two tables below.  One line per
+; record, `op field imm...`, widths from the handlers (0x01/0x02/0x03/0x08 = 3,
+; 0x04/0x05 = 6, 0x06 = 4+n, 0x07 = 5+n, 0xFF = end).
+; ------------------------------------------------------------------------------
+Script_F9667A:   ; 16 record(s), named by A[0]
+	.byte 0x01, 0x02, 0x7f                       ; F9667A  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0x7f                       ; F9667D  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0x7f                       ; F96680  op 0x01 field 0x04
+	.byte 0x01, 0x05, 0x7f                       ; F96683  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0x7f                       ; F96686  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0x7f                       ; F96689  op 0x01 field 0x07
+	.byte 0x01, 0x08, 0x7f                       ; F9668C  op 0x01 field 0x08
+	.byte 0x01, 0x09, 0x7f                       ; F9668F  op 0x01 field 0x09
+	.byte 0x01, 0x0a, 0x7f                       ; F96692  op 0x01 field 0x0a
+	.byte 0x01, 0x0b, 0x7f                       ; F96695  op 0x01 field 0x0b
+	.byte 0x01, 0x0c, 0x7f                       ; F96698  op 0x01 field 0x0c
+	.byte 0x01, 0x0d, 0x7f                       ; F9669B  op 0x01 field 0x0d
+	.byte 0x01, 0x0e, 0x7f                       ; F9669E  op 0x01 field 0x0e
+	.byte 0x01, 0x0f, 0x7f                       ; F966A1  op 0x01 field 0x0f
+	.byte 0x01, 0x10, 0x7f                       ; F966A4  op 0x01 field 0x10
+	.byte 0x01, 0x11, 0x7f                       ; F966A7  op 0x01 field 0x11
+	.byte 0xff                                   ; F966AA  end
+Script_F966AB:   ; 0 record(s), named by A[1]
+	.byte 0xff                                   ; F966AB  end
+Script_F966AC:   ; 23 record(s), named by A[2]
+	.byte 0x01, 0x02, 0xff                       ; F966AC  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0xff                       ; F966AF  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0xff                       ; F966B2  op 0x01 field 0x04
+	.byte 0x01, 0x05, 0xff                       ; F966B5  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0xff                       ; F966B8  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0xff                       ; F966BB  op 0x01 field 0x07
+	.byte 0x01, 0x08, 0xff                       ; F966BE  op 0x01 field 0x08
+	.byte 0x01, 0x09, 0xff                       ; F966C1  op 0x01 field 0x09
+	.byte 0x01, 0x0a, 0xff                       ; F966C4  op 0x01 field 0x0a
+	.byte 0x01, 0x0b, 0xff                       ; F966C7  op 0x01 field 0x0b
+	.byte 0x01, 0x0c, 0xff                       ; F966CA  op 0x01 field 0x0c
+	.byte 0x01, 0x0d, 0xff                       ; F966CD  op 0x01 field 0x0d
+	.byte 0x01, 0x0e, 0xff                       ; F966D0  op 0x01 field 0x0e
+	.byte 0x01, 0x0f, 0xff                       ; F966D3  op 0x01 field 0x0f
+	.byte 0x01, 0x10, 0xff                       ; F966D6  op 0x01 field 0x10
+	.byte 0x01, 0x11, 0xff                       ; F966D9  op 0x01 field 0x11
+	.byte 0x01, 0x12, 0xff                       ; F966DC  op 0x01 field 0x12
+	.byte 0x01, 0x13, 0xff                       ; F966DF  op 0x01 field 0x13
+	.byte 0x01, 0x14, 0xff                       ; F966E2  op 0x01 field 0x14
+	.byte 0x01, 0x15, 0xff                       ; F966E5  op 0x01 field 0x15
+	.byte 0x01, 0x16, 0xff                       ; F966E8  op 0x01 field 0x16
+	.byte 0x01, 0x17, 0xff                       ; F966EB  op 0x01 field 0x17
+	.byte 0x01, 0x18, 0xff                       ; F966EE  op 0x01 field 0x18
+	.byte 0xff                                   ; F966F1  end
+Script_F966F2:   ; 23 record(s), named by A[3]
+	.byte 0x01, 0x02, 0xff                       ; F966F2  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0xff                       ; F966F5  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0xff                       ; F966F8  op 0x01 field 0x04
+	.byte 0x01, 0x05, 0xff                       ; F966FB  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0xff                       ; F966FE  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0xff                       ; F96701  op 0x01 field 0x07
+	.byte 0x01, 0x08, 0xff                       ; F96704  op 0x01 field 0x08
+	.byte 0x01, 0x09, 0xff                       ; F96707  op 0x01 field 0x09
+	.byte 0x01, 0x0a, 0xff                       ; F9670A  op 0x01 field 0x0a
+	.byte 0x01, 0x0b, 0xff                       ; F9670D  op 0x01 field 0x0b
+	.byte 0x01, 0x0c, 0xff                       ; F96710  op 0x01 field 0x0c
+	.byte 0x01, 0x0d, 0xff                       ; F96713  op 0x01 field 0x0d
+	.byte 0x01, 0x0e, 0xff                       ; F96716  op 0x01 field 0x0e
+	.byte 0x01, 0x0f, 0xff                       ; F96719  op 0x01 field 0x0f
+	.byte 0x01, 0x10, 0xff                       ; F9671C  op 0x01 field 0x10
+	.byte 0x01, 0x11, 0xff                       ; F9671F  op 0x01 field 0x11
+	.byte 0x01, 0x12, 0xff                       ; F96722  op 0x01 field 0x12
+	.byte 0x01, 0x13, 0xff                       ; F96725  op 0x01 field 0x13
+	.byte 0x01, 0x14, 0xff                       ; F96728  op 0x01 field 0x14
+	.byte 0x01, 0x15, 0xff                       ; F9672B  op 0x01 field 0x15
+	.byte 0x01, 0x16, 0xff                       ; F9672E  op 0x01 field 0x16
+	.byte 0x01, 0x17, 0xff                       ; F96731  op 0x01 field 0x17
+	.byte 0x01, 0x18, 0xff                       ; F96734  op 0x01 field 0x18
+	.byte 0xff                                   ; F96737  end
+Script_F96738:   ; 23 record(s), named by A[4]
+	.byte 0x01, 0x02, 0xff                       ; F96738  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0xff                       ; F9673B  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0xff                       ; F9673E  op 0x01 field 0x04
+	.byte 0x01, 0x05, 0xff                       ; F96741  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0xff                       ; F96744  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0xff                       ; F96747  op 0x01 field 0x07
+	.byte 0x01, 0x08, 0xff                       ; F9674A  op 0x01 field 0x08
+	.byte 0x01, 0x09, 0xff                       ; F9674D  op 0x01 field 0x09
+	.byte 0x01, 0x0a, 0xff                       ; F96750  op 0x01 field 0x0a
+	.byte 0x01, 0x0b, 0xff                       ; F96753  op 0x01 field 0x0b
+	.byte 0x01, 0x0c, 0xff                       ; F96756  op 0x01 field 0x0c
+	.byte 0x01, 0x0d, 0xff                       ; F96759  op 0x01 field 0x0d
+	.byte 0x01, 0x0e, 0xff                       ; F9675C  op 0x01 field 0x0e
+	.byte 0x01, 0x0f, 0xff                       ; F9675F  op 0x01 field 0x0f
+	.byte 0x01, 0x10, 0xff                       ; F96762  op 0x01 field 0x10
+	.byte 0x01, 0x11, 0xff                       ; F96765  op 0x01 field 0x11
+	.byte 0x01, 0x12, 0xff                       ; F96768  op 0x01 field 0x12
+	.byte 0x01, 0x13, 0xff                       ; F9676B  op 0x01 field 0x13
+	.byte 0x01, 0x14, 0xff                       ; F9676E  op 0x01 field 0x14
+	.byte 0x01, 0x15, 0xff                       ; F96771  op 0x01 field 0x15
+	.byte 0x01, 0x16, 0xff                       ; F96774  op 0x01 field 0x16
+	.byte 0x01, 0x17, 0xff                       ; F96777  op 0x01 field 0x17
+	.byte 0x01, 0x18, 0xff                       ; F9677A  op 0x01 field 0x18
+	.byte 0xff                                   ; F9677D  end
+Script_F9677E:   ; 22 record(s), named by A[5], A[7], A[9], A[11], A[13], A[15], A[17], A[19], B[0], B[2], B[4], B[6], B[8], B[10], B[12], B[14], B[16], B[18], B[20], B[22], B[24], B[26], B[28], B[30], B[32], B[34], B[36], B[38], B[40], B[42], B[44], B[46]
+	.byte 0x01, 0x02, 0xff                       ; F9677E  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0x7f                       ; F96781  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0x00                       ; F96784  op 0x01 field 0x04
+	.byte 0x01, 0x05, 0xff                       ; F96787  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0xdf                       ; F9678A  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0x7f                       ; F9678D  op 0x01 field 0x07
+	.byte 0x01, 0x08, 0x7f                       ; F96790  op 0x01 field 0x08
+	.byte 0x01, 0x09, 0x7f                       ; F96793  op 0x01 field 0x09
+	.byte 0x01, 0x0a, 0x7f                       ; F96796  op 0x01 field 0x0a
+	.byte 0x04, 0x0b, 0x7f, 0x1c, 0x64, 0x40     ; F96799  op 0x04 field 0x0b
+	.byte 0x01, 0x0c, 0xff                       ; F9679F  op 0x01 field 0x0c
+	.byte 0x01, 0x0d, 0x7f                       ; F967A2  op 0x01 field 0x0d
+	.byte 0x01, 0x0e, 0x3f                       ; F967A5  op 0x01 field 0x0e
+	.byte 0x01, 0x0f, 0xff                       ; F967A8  op 0x01 field 0x0f
+	.byte 0x01, 0x10, 0xff                       ; F967AB  op 0x01 field 0x10
+	.byte 0x01, 0x11, 0xff                       ; F967AE  op 0x01 field 0x11
+	.byte 0x01, 0x12, 0x7f                       ; F967B1  op 0x01 field 0x12
+	.byte 0x01, 0x13, 0xff                       ; F967B4  op 0x01 field 0x13
+	.byte 0x01, 0x14, 0xff                       ; F967B7  op 0x01 field 0x14
+	.byte 0x01, 0x15, 0xff                       ; F967BA  op 0x01 field 0x15
+	.byte 0x01, 0x16, 0xff                       ; F967BD  op 0x01 field 0x16
+	.byte 0x01, 0x17, 0x1f                       ; F967C0  op 0x01 field 0x17
+	.byte 0xff                                   ; F967C3  end
+Script_F967C4:   ; 31 record(s), named by A[6], A[8], A[10], A[12], A[14], A[16], A[18], A[20], B[1], B[3], B[5], B[7], B[9], B[11], B[13], B[15], B[17], B[19], B[21], B[23], B[25], B[27], B[29], B[31], B[33], B[35], B[37], B[39], B[41], B[43], B[45], B[47]
+	.byte 0x01, 0x02, 0x00                       ; F967C4  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0x00                       ; F967C7  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0x00                       ; F967CA  op 0x01 field 0x04
+	.byte 0x04, 0x05, 0xff, 0x00, 0x05, 0x01     ; F967CD  op 0x04 field 0x05
+	.byte 0x04, 0x06, 0xff, 0x00, 0x05, 0x01     ; F967D3  op 0x04 field 0x06
+	.byte 0x01, 0x07, 0xff                       ; F967D9  op 0x01 field 0x07
+	.byte 0x01, 0x08, 0xff                       ; F967DC  op 0x01 field 0x08
+	.byte 0x04, 0x08, 0x0f, 0x00, 0x01, 0x00     ; F967DF  op 0x04 field 0x08
+	.byte 0x01, 0x09, 0x7f                       ; F967E5  op 0x01 field 0x09
+	.byte 0x01, 0x0a, 0x7f                       ; F967E8  op 0x01 field 0x0a
+	.byte 0x01, 0x0b, 0x7f                       ; F967EB  op 0x01 field 0x0b
+	.byte 0x01, 0x0c, 0x7f                       ; F967EE  op 0x01 field 0x0c
+	.byte 0x01, 0x0d, 0xff                       ; F967F1  op 0x01 field 0x0d
+	.byte 0x01, 0x0e, 0xff                       ; F967F4  op 0x01 field 0x0e
+	.byte 0x01, 0x0f, 0xff                       ; F967F7  op 0x01 field 0x0f
+	.byte 0x01, 0x10, 0xff                       ; F967FA  op 0x01 field 0x10
+	.byte 0x01, 0x11, 0xff                       ; F967FD  op 0x01 field 0x11
+	.byte 0x01, 0x12, 0xff                       ; F96800  op 0x01 field 0x12
+	.byte 0x01, 0x13, 0xff                       ; F96803  op 0x01 field 0x13
+	.byte 0x01, 0x14, 0xff                       ; F96806  op 0x01 field 0x14
+	.byte 0x01, 0x15, 0xff                       ; F96809  op 0x01 field 0x15
+	.byte 0x01, 0x16, 0xff                       ; F9680C  op 0x01 field 0x16
+	.byte 0x01, 0x17, 0xff                       ; F9680F  op 0x01 field 0x17
+	.byte 0x01, 0x18, 0xff                       ; F96812  op 0x01 field 0x18
+	.byte 0x01, 0x19, 0xff                       ; F96815  op 0x01 field 0x19
+	.byte 0x01, 0x1a, 0x01                       ; F96818  op 0x01 field 0x1a
+	.byte 0x01, 0x1b, 0x3f                       ; F9681B  op 0x01 field 0x1b
+	.byte 0x01, 0x1c, 0x3f                       ; F9681E  op 0x01 field 0x1c
+	.byte 0x01, 0x1d, 0xff                       ; F96821  op 0x01 field 0x1d
+	.byte 0x01, 0x1e, 0xff                       ; F96824  op 0x01 field 0x1e
+	.byte 0x01, 0x1f, 0xff                       ; F96827  op 0x01 field 0x1f
+	.byte 0xff                                   ; F9682A  end
+Script_F9682B:   ; 15 record(s), named by A[21]
+	.byte 0x01, 0x02, 0xff                       ; F9682B  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0x8f                       ; F9682E  op 0x01 field 0x03
+	.byte 0x04, 0x03, 0x0f, 0x00, 0x0b, 0x00     ; F96831  op 0x04 field 0x03
+	.byte 0x01, 0x04, 0xff                       ; F96837  op 0x01 field 0x04
+	.byte 0x01, 0x05, 0xff                       ; F9683A  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0xff                       ; F9683D  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0xff                       ; F96840  op 0x01 field 0x07
+	.byte 0x01, 0x08, 0xff                       ; F96843  op 0x01 field 0x08
+	.byte 0x01, 0x09, 0xff                       ; F96846  op 0x01 field 0x09
+	.byte 0x01, 0x0a, 0xff                       ; F96849  op 0x01 field 0x0a
+	.byte 0x01, 0x0b, 0xff                       ; F9684C  op 0x01 field 0x0b
+	.byte 0x01, 0x0c, 0xff                       ; F9684F  op 0x01 field 0x0c
+	.byte 0x01, 0x0d, 0xff                       ; F96852  op 0x01 field 0x0d
+	.byte 0x01, 0x0e, 0xff                       ; F96855  op 0x01 field 0x0e
+	.byte 0x01, 0x0f, 0xff                       ; F96858  op 0x01 field 0x0f
+	.byte 0xff                                   ; F9685B  end
+Script_F9685C:   ; 8 record(s), named by A[22]
+	.byte 0x01, 0x02, 0x7f                       ; F9685C  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0xff                       ; F9685F  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0xff                       ; F96862  op 0x01 field 0x04
+	.byte 0x01, 0x05, 0xff                       ; F96865  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0xff                       ; F96868  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0xff                       ; F9686B  op 0x01 field 0x07
+	.byte 0x04, 0x07, 0x0f, 0x00, 0x05, 0x00     ; F9686E  op 0x04 field 0x07
+	.byte 0x04, 0x07, 0xf0, 0x00, 0x05, 0x00     ; F96874  op 0x04 field 0x07
+	.byte 0xff                                   ; F9687A  end
+Script_F9687B:   ; 2 record(s), named by A[23]
+	.byte 0x08, 0x00, 0xff                       ; F9687B  op 0x08 field 0x00
+	.byte 0x08, 0x01, 0xff                       ; F9687E  op 0x08 field 0x01
+	.byte 0xff                                   ; F96881  end
+Script_F96882:   ; 5 record(s), named by B[48]
+	.byte 0x01, 0x02, 0xff                       ; F96882  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0x01                       ; F96885  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0xff                       ; F96888  op 0x01 field 0x04
+	.byte 0x04, 0x04, 0x0f, 0x00, 0x02, 0x02     ; F9688B  op 0x04 field 0x04
+	.byte 0x04, 0x04, 0xf0, 0x00, 0x02, 0x02     ; F96891  op 0x04 field 0x04
+	.byte 0xff                                   ; F96897  end
+Script_F96898:   ; 2 record(s), named by B[49]
+	.byte 0x08, 0x00, 0xff                       ; F96898  op 0x08 field 0x00
+	.byte 0x08, 0x01, 0xff                       ; F9689B  op 0x08 field 0x01
+	.byte 0xff                                   ; F9689E  end
+Script_F9689F:   ; 6 record(s), named by B[50]
+	.byte 0x01, 0x02, 0xf0                       ; F9689F  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0x7f                       ; F968A2  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0x3f                       ; F968A5  op 0x01 field 0x04
+	.byte 0x01, 0x05, 0x7f                       ; F968A8  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0x00                       ; F968AB  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0x1f                       ; F968AE  op 0x01 field 0x07
+	.byte 0xff                                   ; F968B1  end
+Script_F968B2:   ; 27 record(s), named by B[51]
+	.byte 0x01, 0x02, 0xff                       ; F968B2  op 0x01 field 0x02
+	.byte 0x01, 0x03, 0x0f                       ; F968B5  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0xff                       ; F968B8  op 0x01 field 0x04
+	.byte 0x01, 0x05, 0xff                       ; F968BB  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0xff                       ; F968BE  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0xff                       ; F968C1  op 0x01 field 0x07
+	.byte 0x01, 0x08, 0xff                       ; F968C4  op 0x01 field 0x08
+	.byte 0x01, 0x09, 0xff                       ; F968C7  op 0x01 field 0x09
+	.byte 0x01, 0x0a, 0xff                       ; F968CA  op 0x01 field 0x0a
+	.byte 0x01, 0x0b, 0xff                       ; F968CD  op 0x01 field 0x0b
+	.byte 0x01, 0x0c, 0xff                       ; F968D0  op 0x01 field 0x0c
+	.byte 0x01, 0x0d, 0xff                       ; F968D3  op 0x01 field 0x0d
+	.byte 0x01, 0x0e, 0xff                       ; F968D6  op 0x01 field 0x0e
+	.byte 0x01, 0x0f, 0xff                       ; F968D9  op 0x01 field 0x0f
+	.byte 0x01, 0x10, 0xff                       ; F968DC  op 0x01 field 0x10
+	.byte 0x01, 0x11, 0xff                       ; F968DF  op 0x01 field 0x11
+	.byte 0x01, 0x12, 0xff                       ; F968E2  op 0x01 field 0x12
+	.byte 0x01, 0x13, 0xff                       ; F968E5  op 0x01 field 0x13
+	.byte 0x01, 0x14, 0xff                       ; F968E8  op 0x01 field 0x14
+	.byte 0x01, 0x15, 0xff                       ; F968EB  op 0x01 field 0x15
+	.byte 0x01, 0x16, 0xff                       ; F968EE  op 0x01 field 0x16
+	.byte 0x01, 0x17, 0xff                       ; F968F1  op 0x01 field 0x17
+	.byte 0x01, 0x18, 0xff                       ; F968F4  op 0x01 field 0x18
+	.byte 0x01, 0x19, 0xff                       ; F968F7  op 0x01 field 0x19
+	.byte 0x01, 0x1a, 0xff                       ; F968FA  op 0x01 field 0x1a
+	.byte 0x01, 0x1b, 0xff                       ; F968FD  op 0x01 field 0x1b
+	.byte 0x01, 0x1c, 0xff                       ; F96900  op 0x01 field 0x1c
+	.byte 0xff                                   ; F96903  end
+Script_F96904:   ; 15 record(s), named by B[52]
+	.byte 0x01, 0x02, 0x0f                       ; F96904  op 0x01 field 0x02
+	.byte 0x07, 0x02, 0x03, 0x01, 0x02, 0x00     ; F96907  op 0x07 field 0x02
+	.byte 0x01, 0x03, 0x08                       ; F9690D  op 0x01 field 0x03
+	.byte 0x01, 0x04, 0x1c                       ; F96910  op 0x01 field 0x04
+	.byte 0x07, 0x04, 0x18, 0x01, 0x02, 0x00     ; F96913  op 0x07 field 0x04
+	.byte 0x01, 0x05, 0xff                       ; F96919  op 0x01 field 0x05
+	.byte 0x04, 0x05, 0x0f, 0x00, 0x02, 0x00     ; F9691C  op 0x04 field 0x05
+	.byte 0x04, 0x05, 0xf0, 0x00, 0x01, 0x00     ; F96922  op 0x04 field 0x05
+	.byte 0x01, 0x06, 0x2f                       ; F96928  op 0x01 field 0x06
+	.byte 0x01, 0x07, 0x3f                       ; F9692B  op 0x01 field 0x07
+	.byte 0x01, 0x08, 0xff                       ; F9692E  op 0x01 field 0x08
+	.byte 0x01, 0x09, 0xff                       ; F96931  op 0x01 field 0x09
+	.byte 0x01, 0x0a, 0xbf                       ; F96934  op 0x01 field 0x0a
+	.byte 0x01, 0x0b, 0x81                       ; F96937  op 0x01 field 0x0b
+	.byte 0x01, 0x0c, 0xbf                       ; F9693A  op 0x01 field 0x0c
+	.byte 0xff                                   ; F9693D  end
+Script_F9693E:   ; 5 record(s), named by B[53]
+	.byte 0x01, 0x02, 0xff                       ; F9693E  op 0x01 field 0x02
+	.byte 0x04, 0x03, 0xff, 0x00, 0x0b, 0x05     ; F96941  op 0x04 field 0x03
+	.byte 0x06, 0x04, 0xff, 0x02, 0x01, 0x00     ; F96947  op 0x06 field 0x04
+	.byte 0x01, 0x05, 0x07                       ; F9694D  op 0x01 field 0x05
+	.byte 0x01, 0x06, 0xff                       ; F96950  op 0x01 field 0x06
+	.byte 0xff                                   ; F96953  end
+Script_F96954:   ; 16 record(s), named by B[54]
+	.byte 0x01, 0x02, 0x0f                       ; F96954  op 0x01 field 0x02
+	.byte 0x04, 0x02, 0x0f, 0x00, 0x09, 0x08     ; F96957  op 0x04 field 0x02
+	.byte 0x08, 0x03, 0x00                       ; F9695D  op 0x08 field 0x03
+	.byte 0x01, 0x04, 0x7f                       ; F96960  op 0x01 field 0x04
+	.byte 0x04, 0x04, 0x7f, 0x00, 0x7f, 0x7f     ; F96963  op 0x04 field 0x04
+	.byte 0x01, 0x05, 0x7f                       ; F96969  op 0x01 field 0x05
+	.byte 0x04, 0x05, 0x7f, 0x00, 0x7f, 0x7f     ; F9696C  op 0x04 field 0x05
+	.byte 0x08, 0x06, 0x00                       ; F96972  op 0x08 field 0x06
+	.byte 0x01, 0x07, 0xff                       ; F96975  op 0x01 field 0x07
+	.byte 0x04, 0x07, 0xff, 0x00, 0x0a, 0x05     ; F96978  op 0x04 field 0x07
+	.byte 0x01, 0x08, 0x7f                       ; F9697E  op 0x01 field 0x08
+	.byte 0x04, 0x08, 0x7f, 0x01, 0x7f, 0x01     ; F96981  op 0x04 field 0x08
+	.byte 0x01, 0x09, 0xff                       ; F96987  op 0x01 field 0x09
+	.byte 0x04, 0x09, 0xff, 0x00, 0x03, 0x00     ; F9698A  op 0x04 field 0x09
+	.byte 0x01, 0x0a, 0x7f                       ; F96990  op 0x01 field 0x0a
+	.byte 0x04, 0x0a, 0x7f, 0x01, 0x7f, 0x01     ; F96993  op 0x04 field 0x0a
+	.byte 0xff                                   ; F96999  end
+Script_F9699A:   ; 2 record(s), named by B[55]
+	.byte 0x08, 0x00, 0xff                       ; F9699A  op 0x08 field 0x00
+	.byte 0x08, 0x01, 0xff                       ; F9699D  op 0x08 field 0x01
+	.byte 0xff                                   ; F969A0  end
+; ------------------------------------------------------------------------------
+; ScriptOpHandlers_F969A1 -- 15 LE32 slots indexed by the opcode byte
+; (`sla hl,0x02 / add XHL,0x00f969a1 / ld XDE,(XHL) / call (xde)`).  Slots 1, 2, 3, 4, 5, 6, 7, 8
+; are the routines above; the rest are zero and no script names them.
+; ------------------------------------------------------------------------------
+ScriptOpHandlers_F969A1:
+	.long 0x00000000   ; F969A1  [ 0] unused
+	.long 0x00f96504   ; F969A5  [ 1] opcode 0x01
+	.long 0x00f96512   ; F969A9  [ 2] opcode 0x02
+	.long 0x00f9651e   ; F969AD  [ 3] opcode 0x03
+	.long 0x00f96527   ; F969B1  [ 4] opcode 0x04
+	.long 0x00f96574   ; F969B5  [ 5] opcode 0x05
+	.long 0x00f965c1   ; F969B9  [ 6] opcode 0x06
+	.long 0x00f9660e   ; F969BD  [ 7] opcode 0x07
+	.long 0x00f9650b   ; F969C1  [ 8] opcode 0x08
+	.long 0x00000000   ; F969C5  [ 9] unused
+	.long 0x00000000   ; F969C9  [10] unused
+	.long 0x00000000   ; F969CD  [11] unused
+	.long 0x00000000   ; F969D1  [12] unused
+	.long 0x00000000   ; F969D5  [13] unused
+	.long 0x00000000   ; F969D9  [14] unused
+; ------------------------------------------------------------------------------
+; ScriptTableA_F969DD -- 24 (u32 struct offset, u32 script) pairs then the
+; 0xFFFFFFFF terminator `.LF964B9` stops on.  Named by `ld XIX,0x00f969dd` at 0xF96455 and 0xF96484.
+; ------------------------------------------------------------------------------
+ScriptTableA_F969DD:
+	.long 0x00000000, 0x00f9667a   ; F969DD  [ 0] +0x0000 -> Script_F9667A
+	.long 0x00000012, 0x00f966ab   ; F969E5  [ 1] +0x0012 -> Script_F966AB
+	.long 0x00000020, 0x00f966ac   ; F969ED  [ 2] +0x0020 -> Script_F966AC
+	.long 0x00000040, 0x00f966f2   ; F969F5  [ 3] +0x0040 -> Script_F966F2
+	.long 0x00000060, 0x00f96738   ; F969FD  [ 4] +0x0060 -> Script_F96738
+	.long 0x00000080, 0x00f9677e   ; F96A05  [ 5] +0x0080 -> Script_F9677E
+	.long 0x000000a0, 0x00f967c4   ; F96A0D  [ 6] +0x00a0 -> Script_F967C4
+	.long 0x000000c0, 0x00f9677e   ; F96A15  [ 7] +0x00c0 -> Script_F9677E
+	.long 0x000000e0, 0x00f967c4   ; F96A1D  [ 8] +0x00e0 -> Script_F967C4
+	.long 0x00000100, 0x00f9677e   ; F96A25  [ 9] +0x0100 -> Script_F9677E
+	.long 0x00000120, 0x00f967c4   ; F96A2D  [10] +0x0120 -> Script_F967C4
+	.long 0x00000140, 0x00f9677e   ; F96A35  [11] +0x0140 -> Script_F9677E
+	.long 0x00000160, 0x00f967c4   ; F96A3D  [12] +0x0160 -> Script_F967C4
+	.long 0x00000180, 0x00f9677e   ; F96A45  [13] +0x0180 -> Script_F9677E
+	.long 0x000001a0, 0x00f967c4   ; F96A4D  [14] +0x01a0 -> Script_F967C4
+	.long 0x000001c0, 0x00f9677e   ; F96A55  [15] +0x01c0 -> Script_F9677E
+	.long 0x000001e0, 0x00f967c4   ; F96A5D  [16] +0x01e0 -> Script_F967C4
+	.long 0x00000200, 0x00f9677e   ; F96A65  [17] +0x0200 -> Script_F9677E
+	.long 0x00000220, 0x00f967c4   ; F96A6D  [18] +0x0220 -> Script_F967C4
+	.long 0x00000240, 0x00f9677e   ; F96A75  [19] +0x0240 -> Script_F9677E
+	.long 0x00000260, 0x00f967c4   ; F96A7D  [20] +0x0260 -> Script_F967C4
+	.long 0x00000280, 0x00f9682b   ; F96A85  [21] +0x0280 -> Script_F9682B
+	.long 0x00000290, 0x00f9685c   ; F96A8D  [22] +0x0290 -> Script_F9685C
+	.long 0x000002be, 0x00f9687b   ; F96A95  [23] +0x02be -> Script_F9687B
+	.long 0xffffffff   ; F96A9D  end of table
+; ------------------------------------------------------------------------------
+; ScriptTableB_F96AA1 -- 56 (u32 struct offset, u32 script) pairs then the
+; 0xFFFFFFFF terminator `.LF964B9` stops on.  Named by `ld XIX,0x00f96aa1` at 0xF96476.
+; ------------------------------------------------------------------------------
+ScriptTableB_F96AA1:
+	.long 0x000002c0, 0x00f9677e   ; F96AA1  [ 0] +0x02c0 -> Script_F9677E
+	.long 0x000002e0, 0x00f967c4   ; F96AA9  [ 1] +0x02e0 -> Script_F967C4
+	.long 0x00000300, 0x00f9677e   ; F96AB1  [ 2] +0x0300 -> Script_F9677E
+	.long 0x00000320, 0x00f967c4   ; F96AB9  [ 3] +0x0320 -> Script_F967C4
+	.long 0x00000340, 0x00f9677e   ; F96AC1  [ 4] +0x0340 -> Script_F9677E
+	.long 0x00000360, 0x00f967c4   ; F96AC9  [ 5] +0x0360 -> Script_F967C4
+	.long 0x00000380, 0x00f9677e   ; F96AD1  [ 6] +0x0380 -> Script_F9677E
+	.long 0x000003a0, 0x00f967c4   ; F96AD9  [ 7] +0x03a0 -> Script_F967C4
+	.long 0x000003c0, 0x00f9677e   ; F96AE1  [ 8] +0x03c0 -> Script_F9677E
+	.long 0x000003e0, 0x00f967c4   ; F96AE9  [ 9] +0x03e0 -> Script_F967C4
+	.long 0x00000400, 0x00f9677e   ; F96AF1  [10] +0x0400 -> Script_F9677E
+	.long 0x00000420, 0x00f967c4   ; F96AF9  [11] +0x0420 -> Script_F967C4
+	.long 0x00000440, 0x00f9677e   ; F96B01  [12] +0x0440 -> Script_F9677E
+	.long 0x00000460, 0x00f967c4   ; F96B09  [13] +0x0460 -> Script_F967C4
+	.long 0x00000480, 0x00f9677e   ; F96B11  [14] +0x0480 -> Script_F9677E
+	.long 0x000004a0, 0x00f967c4   ; F96B19  [15] +0x04a0 -> Script_F967C4
+	.long 0x000004c0, 0x00f9677e   ; F96B21  [16] +0x04c0 -> Script_F9677E
+	.long 0x000004e0, 0x00f967c4   ; F96B29  [17] +0x04e0 -> Script_F967C4
+	.long 0x00000500, 0x00f9677e   ; F96B31  [18] +0x0500 -> Script_F9677E
+	.long 0x00000520, 0x00f967c4   ; F96B39  [19] +0x0520 -> Script_F967C4
+	.long 0x00000540, 0x00f9677e   ; F96B41  [20] +0x0540 -> Script_F9677E
+	.long 0x00000560, 0x00f967c4   ; F96B49  [21] +0x0560 -> Script_F967C4
+	.long 0x00000580, 0x00f9677e   ; F96B51  [22] +0x0580 -> Script_F9677E
+	.long 0x000005a0, 0x00f967c4   ; F96B59  [23] +0x05a0 -> Script_F967C4
+	.long 0x000005c0, 0x00f9677e   ; F96B61  [24] +0x05c0 -> Script_F9677E
+	.long 0x000005e0, 0x00f967c4   ; F96B69  [25] +0x05e0 -> Script_F967C4
+	.long 0x00000600, 0x00f9677e   ; F96B71  [26] +0x0600 -> Script_F9677E
+	.long 0x00000620, 0x00f967c4   ; F96B79  [27] +0x0620 -> Script_F967C4
+	.long 0x00000640, 0x00f9677e   ; F96B81  [28] +0x0640 -> Script_F9677E
+	.long 0x00000660, 0x00f967c4   ; F96B89  [29] +0x0660 -> Script_F967C4
+	.long 0x00000680, 0x00f9677e   ; F96B91  [30] +0x0680 -> Script_F9677E
+	.long 0x000006a0, 0x00f967c4   ; F96B99  [31] +0x06a0 -> Script_F967C4
+	.long 0x000006c0, 0x00f9677e   ; F96BA1  [32] +0x06c0 -> Script_F9677E
+	.long 0x000006e0, 0x00f967c4   ; F96BA9  [33] +0x06e0 -> Script_F967C4
+	.long 0x00000700, 0x00f9677e   ; F96BB1  [34] +0x0700 -> Script_F9677E
+	.long 0x00000720, 0x00f967c4   ; F96BB9  [35] +0x0720 -> Script_F967C4
+	.long 0x00000740, 0x00f9677e   ; F96BC1  [36] +0x0740 -> Script_F9677E
+	.long 0x00000760, 0x00f967c4   ; F96BC9  [37] +0x0760 -> Script_F967C4
+	.long 0x00000780, 0x00f9677e   ; F96BD1  [38] +0x0780 -> Script_F9677E
+	.long 0x000007a0, 0x00f967c4   ; F96BD9  [39] +0x07a0 -> Script_F967C4
+	.long 0x000007c0, 0x00f9677e   ; F96BE1  [40] +0x07c0 -> Script_F9677E
+	.long 0x000007e0, 0x00f967c4   ; F96BE9  [41] +0x07e0 -> Script_F967C4
+	.long 0x00000800, 0x00f9677e   ; F96BF1  [42] +0x0800 -> Script_F9677E
+	.long 0x00000820, 0x00f967c4   ; F96BF9  [43] +0x0820 -> Script_F967C4
+	.long 0x00000840, 0x00f9677e   ; F96C01  [44] +0x0840 -> Script_F9677E
+	.long 0x00000860, 0x00f967c4   ; F96C09  [45] +0x0860 -> Script_F967C4
+	.long 0x00000880, 0x00f9677e   ; F96C11  [46] +0x0880 -> Script_F9677E
+	.long 0x000008a0, 0x00f967c4   ; F96C19  [47] +0x08a0 -> Script_F967C4
+	.long 0x000008c0, 0x00f96882   ; F96C21  [48] +0x08c0 -> Script_F96882
+	.long 0x000008de, 0x00f96898   ; F96C29  [49] +0x08de -> Script_F96898
+	.long 0x000008e0, 0x00f9689f   ; F96C31  [50] +0x08e0 -> Script_F9689F
+	.long 0x000008f0, 0x00f968b2   ; F96C39  [51] +0x08f0 -> Script_F968B2
+	.long 0x00000910, 0x00f96904   ; F96C41  [52] +0x0910 -> Script_F96904
+	.long 0x00000928, 0x00f9693e   ; F96C49  [53] +0x0928 -> Script_F9693E
+	.long 0x00000938, 0x00f96954   ; F96C51  [54] +0x0938 -> Script_F96954
+	.long 0x0000095e, 0x00f9699a   ; F96C59  [55] +0x095e -> Script_F9699A
+	.long 0xffffffff   ; F96C61  end of table
 sub_F96C65:   ; entry: branch/call in converted code
 	ld XIY,0x00f96c7b                                    ; F96C65  45 7b 6c f9 00
 	ldw bc, 0x01                                         ; F96C6A  31 01 00
