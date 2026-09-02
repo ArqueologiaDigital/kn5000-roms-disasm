@@ -76,3 +76,25 @@ for each window's element width. The most important refusal:
 pointer}` records, and the tree's existing `.long AudioInit_PartConfig_CheckCarry`
 at 0xEE45D0 already straddles a record boundary -- byte-exact, invisible to the
 gate, and a warning against typing more of that region.
+
+## `seq_type_data_region.py` (lane v10seq, 2026-09-02)
+
+**Question:** this span is data, and the tree spells it as garbage mnemonics or
+as an undifferentiated `.byte` soup -- what is the byte-exact typed source for
+it?
+
+It never reads the existing directives. It turns the source LINE RANGE into a
+ROM ADDRESS RANGE with the linked address map, reads the bytes out of
+`original_ROMs/`, and emits the requested segment types, so the replacement
+cannot drift from the dump and the byte gate is a real check of the LAYOUT.
+
+    python3 scripts/analysis/address_line_map.py --dump /tmp/amap.json
+    python3 scripts/converters/seq_type_data_region.py --amap /tmp/amap.json \
+        --file v10/maincpu/sequencer/seq_event_playback.s --lines 943-1102 \
+        --layout '256:w' --dry-run
+
+⚠ `.word` is FOUR bytes in this assembler; 16-bit is `.short`. ⚠ The map is
+keyed on line numbers, so apply several conversions to one file in DESCENDING
+line order, or regenerate the map between them. It writes latin-1 through a
+temp file, because `open(path,'w')` truncates before a failed encode can be
+caught -- that mistake destroyed this script's own first version.
