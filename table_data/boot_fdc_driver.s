@@ -183,9 +183,9 @@ FDC_MediaConfigAndRecalibrate__media_dispatch:
 	cps wa, 5	; cp WA,5
 	jrl gt, FDC_MediaStanza_Default	; jrl GT,0xffda23
 	add wa, wa	; add WA,WA
-	lda_24 xix, 0xffb496	; lda XIX,0xffb496 - XIX = FDC_DiskTypeStanza_Offsets (boot alias of ROM 0x9FB496)
+	lda xix, (0xffb496:24)	; lda XIX,0xffb496 - XIX = FDC_DiskTypeStanza_Offsets (boot alias of ROM 0x9FB496)
 	ldw_sri wa, 0x07, 0xf0, 0xe0	; ld WA,(XIX+WA) - fetch stanza offset
-	lda_24 xix, 0xffd9a2	; lda XIX,0xffd9a2
+	lda xix, (0xffd9a2:24)	; lda XIX,0xffd9a2
 	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA
 
 ; -----------------------------------------------------------------------------
@@ -309,9 +309,9 @@ FDC_ValidateRequest:
 	cp wa, 0x0b	; cp WA,0x000b
 	jr ugt, FDC_Validate_DriveTrackSector	; jr UGT,0xffdab9
 	add wa, wa	; add WA,WA
-	lda_24 xix, 0xffb4a2	; lda XIX,0xffb4a2
+	lda xix, (0xffb4a2:24)	; lda XIX,0xffb4a2
 	ldw_sri wa, 0x07, 0xf0, 0xe0	; ld WA,(XIX+WA) - XIX = FDC_ValidateCmd_Offsets (boot alias of ROM 0x9FB4A2)
-	lda_24 xix, 0xffdaab	; lda XIX,0xffdaab
+	lda xix, (0xffdaab:24)	; lda XIX,0xffdaab
 	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA - XIX = FDC_Validate_FormatParams (validator base)
 
 ; -----------------------------------------------------------------------------
@@ -2218,9 +2218,9 @@ FDC_Request__start:
 	cp wa, 0x0b	; cp WA,0x000b - commands are 0..11
 	jr ugt, FDC_Request__invalid_command	; jr UGT,0xffea43
 	add wa, wa	; add WA,WA
-	lda_24 xix, 0xffb4ba	; lda XIX,0xffb4ba - XIX = FDC_CommandDispatch_Offsets (boot alias of ROM 0x9FB4BA)
+	lda xix, (0xffb4ba:24)	; lda XIX,0xffb4ba - XIX = FDC_CommandDispatch_Offsets (boot alias of ROM 0x9FB4BA)
 	ldw_sri wa, 0x07, 0xf0, 0xe0	; ld WA,(XIX+WA) - fetch stub offset (entries are 5 bytes apart)
-	lda_24 xix, 0xffea07	; lda XIX,0xffea07 - XIX = FDC_Dispatch_Initialize (stub base)
+	lda xix, (0xffea07:24)	; lda XIX,0xffea07 - XIX = FDC_Dispatch_Initialize (stub base)
 	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA
 
 ; -----------------------------------------------------------------------------

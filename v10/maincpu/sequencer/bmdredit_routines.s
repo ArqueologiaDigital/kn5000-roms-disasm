@@ -21,7 +21,7 @@ BmDrEdit_AdvanceStreamWrap:
 	extz xbc
 	sll xbc, 8
 	lda xwa, (xbc + 4)
-	lda_24 xde, (0x0b0000)
+	lda xde, (0x0b0000:24)
 	ld xhl, xde
 	add xhl, xwa
 	ld l, (xhl)
@@ -348,7 +348,7 @@ BmDrEdit_RenderHorizontal:
 	ldb_d8 a, (0x2806)
 	extz wa
 	add wa, wa
-	lda_24 xbc, (NakaInst_NO_OPERATION_0x19A)
+	lda xbc, (NakaInst_NO_OPERATION_0x19A:24)
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0xbe, 0x27
 	ldw_d16 xwa, (0x27be)
 	inc 3, wa
@@ -367,7 +367,7 @@ BmDrEdit_RenderVertical:
 	ldb_d8 a, (0x2806)
 	extz wa
 	add wa, wa
-	lda_24 xbc, (NakaInst_NO_OPERATION_0x1D4)
+	lda xbc, (NakaInst_NO_OPERATION_0x1D4:24)
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0xbe, 0x27
 	ldw_d16 xwa, (0x27be)
 	inc 3, wa
@@ -412,7 +412,7 @@ BmDrEdit_RenderSecondaryHoriz:
 	ldb_da a, (0x0210b0)
 	extz wa
 	add wa, wa
-	lda_24 xbc, (NakaInst_NO_OPERATION_0x19A)
+	lda xbc, (NakaInst_NO_OPERATION_0x19A:24)
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0xc6, 0x27
 	ldw_d16 xwa, (0x27c6)
 	inc 3, wa
@@ -431,7 +431,7 @@ BmDrEdit_RenderSecondaryVert:
 	ldb_da a, (0x0210b0)
 	extz wa
 	add wa, wa
-	lda_24 xbc, (NakaInst_NO_OPERATION_0x1D4)
+	lda xbc, (NakaInst_NO_OPERATION_0x1D4:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	stda16 (0x27c6), xwa
 	inc 3, wa
@@ -1742,7 +1742,7 @@ BmDrEdit_SetupScrollRegion_MelodicMode:
 	ldb_d8 a, (0x2798)
 	extz wa
 	add wa, wa
-	lda_24 xhl, (WidgetData_DrawbarPositionTable)
+	lda xhl, (WidgetData_DrawbarPositionTable:24)
 	ldb_sri A, 0x07, 0xec, 0xe0
 	ld (xde), a
 	ldb_d8 a, (0x2798)

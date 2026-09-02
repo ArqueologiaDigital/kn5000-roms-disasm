@@ -249,7 +249,7 @@ FileRenameFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_24 xix, (CharMap_FullPermutation_0x660)
+	lda xix, (CharMap_FullPermutation_0x660:24)
 	lda_d16 xwa, (0x8870)
 	ld xhl, xwa
 	jr FRename_PadLoop_Cond
@@ -352,7 +352,7 @@ FileRenameSmfFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_24 xix, (CharMap_FullPermutation_0x660)
+	lda xix, (CharMap_FullPermutation_0x660:24)
 	lda_d16 xwa, (0x8870)
 	ld xhl, xwa
 	jr FRenameSmf_PadLoop_Cond
@@ -910,7 +910,7 @@ DiskName_TextChange:
 	call FileIO_CopyString
 	lds iy, 0
 	lda_d16 xix, (0x8870)
-	lda_24 xiz, (CharMap_FullPermutation_0x660)
+	lda xiz, (CharMap_FullPermutation_0x660:24)
 	lda_d16 xde, (0x878c)
 	ld xhl, xde
 	jr DiskName_PadLoop_Cond
@@ -1043,7 +1043,7 @@ DiskInfo_RenderStrings:
 	ld (xsp + 4), xbc
 	ldw_d16 xwa, (0x8500)
 	sla wa, 2
-	lda_24 xbc, (DiskType_CodeTable)
+	lda xbc, (DiskType_CodeTable:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	ld xwa, 0x87ce
 	call FileIO_CopyString
@@ -1203,7 +1203,7 @@ SaveFileName_TextChange:
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_24 xix, (CharMap_FullPermutation_0x660)
+	lda xix, (CharMap_FullPermutation_0x660:24)
 	lda_d16 xde, (0x8850)
 	ld xhl, xde
 	jr SaveFileName_PadLoop_Cond

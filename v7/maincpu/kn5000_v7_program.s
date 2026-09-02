@@ -561,7 +561,7 @@ Boot_InitPeripherals:
 	calr Detect_Region_Code
 	cpw_da (65482), 23205
 	jr z, Boot_FlashAndExtensions
-	lda_24 xde, (0x00066e)
+	lda xde, (0x00066e:24)
 	srl xde, 1
 	ld xwa, 0xf980
 	ld xbc, 0x1e8000
@@ -800,7 +800,7 @@ Boot_HandleComboDisplay:
 	call Get_Firmware_Version	; Returns version byte in L (0x0a = v10)
 	and l, 0xf
 	extz hl
-	lda_24 xbc, (LED_patterns_indicating_firmware_version); LED_patterns_indicating_firmware_version table
+	lda xbc, (LED_patterns_indicating_firmware_version:24); LED_patterns_indicating_firmware_version table
 	ldb_sri C, 0x07, 0xe4, 0xec	; Read LED pattern from table
 	extz bc
 	lds wa, 7
@@ -907,9 +907,9 @@ GetResouceInfo:
 	cp wa, 0x9
 	ret ugt
 	add wa, wa
-	lda_24 xix, (RESOURCE_INFO_HANDLER_OFFSETS)
+	lda xix, (RESOURCE_INFO_HANDLER_OFFSETS:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (RESOURCE_INFO_HANDLERS)
+	lda xix, (RESOURCE_INFO_HANDLERS:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; Resource info handlers - 10 handlers for different resource types
 RESOURCE_INFO_HANDLERS:
@@ -924,31 +924,31 @@ RESOURCE_INFO_HANDLERS:
 	ret
 
 ResInfo_GetSRAMBankRange:
-	lda_24 xwa, (0x1e7800)
+	lda xwa, (0x1e7800:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x1e7800)
+	lda xwa, (0x1e7800:24)
 	ld xde, xwa
-	lda_24 xwa, (0x1e8000)
+	lda xwa, (0x1e8000:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetUserAreaRange:
-	lda_24 xwa, (0x1ed350)
+	lda xwa, (0x1ed350:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x1ed350)
+	lda xwa, (0x1ed350:24)
 	ld xde, xwa
-	lda_24 xwa, (0x200000)
+	lda xwa, (0x200000:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetFlashBankRange:
-	lda_24 xwa, (0x1e0000)
+	lda xwa, (0x1e0000:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x1e0000)
+	lda xwa, (0x1e0000:24)
 	ld xde, xwa
-	lda_24 xwa, (0x1e7800)
+	lda xwa, (0x1e7800:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
@@ -961,44 +961,44 @@ ResInfo_GetTableDataInfo:
 	ret
 
 ResInfo_GetSndParamRange:
-	lda_24 xwa, (0x0ab000)
+	lda xwa, (0x0ab000:24)
 	ld (xbc), xwa
 	ld xwa, 0x5000
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetVoiceBankRange:
-	lda_24 xwa, (0x0b0000)
+	lda xwa, (0x0b0000:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x0b0000)
+	lda xwa, (0x0b0000:24)
 	ld xde, xwa
-	lda_24 xwa, (0x0fd800)
+	lda xwa, (0x0fd800:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetToneGenRange:
-	lda_24 xwa, (0x094800)
+	lda xwa, (0x094800:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x094800)
+	lda xwa, (0x094800:24)
 	ld xde, xwa
-	lda_24 xwa, (0x0ab000)
+	lda xwa, (0x0ab000:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetMspSettingsRange:
-	lda_24 xwa, (0x1e8800)
+	lda xwa, (0x1e8800:24)
 	ld (xbc), xwa
-	lda_24 xwa, (0x1e8800)
+	lda xwa, (0x1e8800:24)
 	ld xde, xwa
-	lda_24 xwa, (0x1ec400)
+	lda xwa, (0x1ec400:24)
 	sub xwa, xde
 	ld (xbc + 4), xwa
 	ret
 
 ResInfo_GetResourceListPtr:
-	lda_24 xwa, (0xe1ffcc)
+	lda xwa, (0xe1ffcc:24)
 	ld (xbc), xwa
 	lds32 xwa, 0
 	ld (xbc + 4), xwa
@@ -1605,7 +1605,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xix, (277504)
+	lda	xix, (277504:24)
 	add	xix, xwa
 	cpw	(xsp+50), 245
 	jr	z, 30
@@ -1647,7 +1647,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xde, (277504)
+	lda	xde, (277504:24)
 	add	xde, xwa
 	bitm	7, (xde)
 	jr	z, 4
@@ -1658,7 +1658,7 @@ Voice_FactoryPresetData:
 	ld	wa, (xbc)
 	exts	xwa
 	add	xwa, xde
-	lda_24	xde, (277504)
+	lda	xde, (277504:24)
 	add	xde, xwa
 	bitm	7, (xde)
 	jr	z, 4
@@ -1714,7 +1714,7 @@ Voice_FactoryPresetData:
 	ldw	wa, 16
 	calr	38654
 	ld	xwa, xhl
-	lda_24	xbc, (16451936)
+	lda	xbc, (16451936:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -2102,7 +2102,7 @@ TextRender_CharEncodeAndDraw:
 	ld xhl, (xsp + 30)
 	ld c, (xhl)
 	extz bc
-	lda_24 xde, (0xeab1b4)
+	lda xde, (0xeab1b4:24)
 	ldb_sri C, 0x07, 0xe8, 0xe4
 	ld (xhl), c
 	ld xbc, (xsp + 4)
@@ -2194,7 +2194,7 @@ TextRender_BitMask4_DrawPixel:
 	ld wa, (xwa)
 	exts xwa
 	add xwa, xde
-	lda_24 xix, (0x043c00)
+	lda xix, (0x043c00:24)
 	add xix, xwa
 	lds hl, 0
 	cpw (xsp + 24), 0x0
@@ -2283,7 +2283,7 @@ TextRender_BitMask5_DrawPixel:
 	ld wa, (xde)
 	exts xwa
 	add xwa, xbc
-	lda_24 xiz, (0x043c00)
+	lda xiz, (0x043c00:24)
 	add xiz, xwa
 	lds hl, 0
 	cpw (xsp + 24), 0x0
@@ -2464,7 +2464,7 @@ MainChordPre_AppendChordSuffix:
 	ldb_d8	a, (36006)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (258808)
+	lda	xbc, (258808:24)
 	ld_rrl	xbc, xbc, wa
 	ldb_d8	a, (36004)
 	extz	wa

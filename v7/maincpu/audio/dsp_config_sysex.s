@@ -2575,7 +2575,7 @@ AudioModeChange_Handler:
 	jr z, .Lc_fddab0
 	ld A,L
 	extz WA
-	lda_24 xbc, (AudioInit_VoiceDispatch_Table_0xFC)
+	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
 	ldb_dri a, 0x07, 0xe4, 0xe0
 	extz WA
 	add WA,WA

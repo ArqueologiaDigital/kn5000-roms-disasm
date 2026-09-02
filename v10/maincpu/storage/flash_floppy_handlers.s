@@ -498,109 +498,109 @@ NAKA_InitDataBlock:
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x13E0)
+	lda	xhl, (NAKA_UIObjectTable_0x13E0:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x1452)
+	lda	xhl, (NAKA_UIObjectTable_0x1452:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x1492)
+	lda	xhl, (NAKA_UIObjectTable_0x1492:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x1684)
+	lda	xhl, (NAKA_UIObjectTable_0x1684:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x16FC)
+	lda	xhl, (NAKA_UIObjectTable_0x16FC:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x186C)
+	lda	xhl, (NAKA_UIObjectTable_0x186C:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x19FE)
+	lda	xhl, (NAKA_UIObjectTable_0x19FE:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x1B8A)
+	lda	xhl, (NAKA_UIObjectTable_0x1B8A:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x1D6E)
+	lda	xhl, (NAKA_UIObjectTable_0x1D6E:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x1DF2)
+	lda	xhl, (NAKA_UIObjectTable_0x1DF2:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x1F94)
+	lda	xhl, (NAKA_UIObjectTable_0x1F94:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x2004)
+	lda	xhl, (NAKA_UIObjectTable_0x2004:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x2166)
+	lda	xhl, (NAKA_UIObjectTable_0x2166:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x21E0)
+	lda	xhl, (NAKA_UIObjectTable_0x21E0:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x2342)
+	lda	xhl, (NAKA_UIObjectTable_0x2342:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x24B2)
+	lda	xhl, (NAKA_UIObjectTable_0x24B2:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x2512)
+	lda	xhl, (NAKA_UIObjectTable_0x2512:24)
 	ret
 	lds32	xhl, 0
 	ret
 	cp	xbc, 0x1e0009f
 	jr	nz, 6
-	lda_24	xhl, (NAKA_UIObjectTable_0x2572)
+	lda	xhl, (NAKA_UIObjectTable_0x2572:24)
 	ret
 	lds32	xhl, 0
 	ret
@@ -743,7 +743,7 @@ NoteEvent_CopySlotData_Body:
 	ret
 
 Flash_InitExtMemAddrs:
-	lda_24 xwa, (0x300000)
+	lda xwa, (0x300000:24)
 	stda32 3190, xwa
 	ld xbc, xwa
 	add xbc, 0x19800
@@ -766,9 +766,9 @@ Flash_InitExtMemAddrs:
 	ld xbc, xwa
 	add xbc, 0xb0000
 	stda32 3218, xbc
-	lda_24 xwa, (0x094800)
+	lda xwa, (0x094800:24)
 	stda32 3182, xwa
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 3186, xwa
 	stda32 3222, xwa
 	ret
@@ -803,7 +803,7 @@ Flash_InitBytecodeBlock:
 	call	AccPatch_CountSlotsAlt
 	ld	a, (xsp+10)
 	extz	wa
-	lda_24	xbc, (MSP_Default_GroupIndexPad)
+	lda	xbc, (MSP_Default_GroupIndexPad:24)
 	ld_rrb a, xbc, wa
 	ld (xsp+6), a
 	ld xwa, (3186:16)
@@ -816,7 +816,7 @@ Flash_InitBytecodeBlock:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda_24	xwa, (MSP_Default_ChannelMap)
+	lda	xwa, (MSP_Default_ChannelMap:24)
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xe8
@@ -843,7 +843,7 @@ Flash_InitBytecodeBlock:
 	muls	wa, 3
 	ld	bc, wa
 	add	wa, de
-	lda_24	xde, (MSP_Default_ChannelMap)
+	lda	xde, (MSP_Default_ChannelMap:24)
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -944,7 +944,7 @@ Flash_InitBytecodeBlock:
 	scf
 	ld	a, (xsp+12)
 	extz	wa
-	lda_24	xbc, (MSP_Default_GroupIndexPad)
+	lda	xbc, (MSP_Default_GroupIndexPad:24)
 	ld_rrb a, xbc, wa
 	ld (xsp+6), a
 	ld xwa, (3186:16)
@@ -957,7 +957,7 @@ Flash_InitBytecodeBlock:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda_24	xwa, (MSP_Default_ChannelMap)
+	lda	xwa, (MSP_Default_ChannelMap:24)
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xe8
@@ -986,7 +986,7 @@ Flash_InitBytecodeBlock:
 	muls	wa, 3
 	ld	bc, wa
 	add	wa, de
-	lda_24	xde, (MSP_Default_ChannelMap)
+	lda	xde, (MSP_Default_ChannelMap:24)
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -1141,9 +1141,9 @@ PartGrid_ColumnDispatch:
 	cps wa, 6
 	jr gt, PartGrid_CopyHLtoBC
 	add wa, wa
-	lda_24 xix, (MSP_Default_GroupOffsetA)
+	lda xix, (MSP_Default_GroupOffsetA:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (PartGrid_ColumnJumpTable)
+	lda xix, (PartGrid_ColumnJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PartGrid_ColumnJumpTable:
@@ -1196,7 +1196,7 @@ FrameSetup_ComputeGridIndex:
 	extz wa
 	muls wa, 0x3
 	add wa, bc
-	lda_24 xbc, (MSP_Default_ChannelMap)
+	lda xbc, (MSP_Default_ChannelMap:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld e, (xsp + 4)
 	cp (xsp + 4), 0x4
@@ -1289,7 +1289,7 @@ PartGrid_OperationsBlock:
 	extz	wa
 	muls	wa, 3
 	add	wa, bc
-	lda_24	xbc, (MSP_Default_ChannelMap)
+	lda	xbc, (MSP_Default_ChannelMap:24)
 	ld_rrb	a, xbc, wa
 	ld	(xsp+2), a
 	ld	bc, (xsp+18)
@@ -1464,7 +1464,7 @@ Pack12BitValueWithBank:
 ; NoteEventBuffer Store dispatch (7-entry, table 0xe16136)
 NoteEvent_Store:
 	extz wa
-	lda_24 xbc, (MSP_Default_ChannelMap_0x1E)
+	lda xbc, (MSP_Default_ChannelMap_0x1E:24)
 	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
@@ -1478,9 +1478,9 @@ NoteEventBuffer_CopyToSlot:
 	cps bc, 6
 	jr gt, NoteEvent_CopyCommon
 	add bc, bc
-	lda_24 xix, (MSP_Default_GroupOffsetB)
+	lda xix, (MSP_Default_GroupOffsetB:24)
 	ldw_sri BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, (NOTE_EVENT_DISPATCH_1)
+	lda xix, (NOTE_EVENT_DISPATCH_1:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; Note event buffer copy dispatch - 7 cases (BC 0-6)
 ; Selects destination buffer pointer based on case, then copies 46080 bytes
@@ -1525,9 +1525,9 @@ NoteEventBuffer_Store:
 	cps wa, 6
 	jrl gt, NoteEvent_StoreCommon
 	add wa, wa
-	lda_24 xix, (MSP_Default_VarSize)
+	lda xix, (MSP_Default_VarSize:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (NOTE_EVENT_DISPATCH_2)
+	lda xix, (NOTE_EVENT_DISPATCH_2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; Note event dispatch table 2
 ; 7 cases (WA 0-6), offset table at 0xe16136
@@ -1629,7 +1629,7 @@ Flash_StoreBaseAndInitAccPatch:
 Flash_ExtendedOpsBlock:
 	push	xiz
 	extz	de
-	lda_24	xix, (MSP_Default_ChannelMap)
+	lda	xix, (MSP_Default_ChannelMap:24)
 	lda_rr xhl, xix, de
 	ldb e, 0
 	cp	a, 10
@@ -3545,7 +3545,7 @@ Flash_SlotUpdateOpsBlock:
 	ldw (xbc+2), 0
 	ld	a, (xsp)
 	extz	wa
-	lda_24	xbc, (MSP_Default_GroupIndexPad)
+	lda	xbc, (MSP_Default_GroupIndexPad:24)
 	ld_rrb e, xbc, wa
 	extz de
 	ld	wa, de
@@ -3598,7 +3598,7 @@ Flash_SlotUpdateOpsBlock:
 	nop
 	ld	a, (xsp)
 	extz	wa
-	lda_24	xbc, (MSP_Default_GroupIndexPad)
+	lda	xbc, (MSP_Default_GroupIndexPad:24)
 	ld_rrb e, xbc, wa
 	extz de
 	ld	wa, de
@@ -4479,9 +4479,9 @@ FloppyCtrl_PopIzStoreRet:
 ToneParam_ExtendedOpsBlock:
 	pushw	iz
 	call	cmp_ld_mae
-	lda_24	xwa, (0x94800)
+	lda	xwa, (0x94800:24)
 	ld	xde, xwa
-	lda_24	xbc, (0xab000)
+	lda	xbc, (0xab000:24)
 	sub	xbc, xde
 	call	FileIO_ReadBlock
 	call	FileIO_ReturnError
@@ -4936,7 +4936,7 @@ DualVoice_LoadAndScan:
 	call AccPatch_CountSlotsAlt
 	ld a, (xsp + 12)
 	extz wa
-	lda_24 xbc, (MSP_Default_GroupIndexPad)
+	lda xbc, (MSP_Default_GroupIndexPad:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xsp + 8), a
 	ld xwa, (3186:16)
@@ -4951,7 +4951,7 @@ DualVoice_AccPatchLoop:
 	muls wa, 0x3
 	ld de, wa
 	add de, bc
-	lda_24 xwa, (MSP_Default_ChannelMap)
+	lda xwa, (MSP_Default_ChannelMap:24)
 	ldmm_srib 0x07, 0xe0, 0xe8, 0xac, 0x39
 	call AccPatch_InitFromSlotIndex
 	inc1b_erp 0xfb
@@ -4972,7 +4972,7 @@ DualVoice_ParamCompareLoop:
 	muls wa, 0x3
 	ld bc, wa
 	add wa, de
-	lda_24 xde, (MSP_Default_ChannelMap)
+	lda xde, (MSP_Default_ChannelMap:24)
 	ldmm_srib 0x07, 0xe8, 0xe0, 0xac, 0x39
 	ld a, (xsp + 8)
 	extz wa
@@ -5015,9 +5015,9 @@ DualVoice_WriteBackSlots:
 	jr DualVoice_LoadDoneRetVal
 	pushw iz
 	call msp_ld_mae
-	lda_24 xwa, (0x1e8800)
+	lda xwa, (0x1e8800:24)
 	ld xde, xwa
-	lda_24 xbc, (0x1ec400)
+	lda xbc, (0x1ec400:24)
 	sub xbc, xde
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -5073,7 +5073,7 @@ FileHdr_CopyDataLoop:
 	ret
 
 FileHdr_InitBasePointer:
-	lda_24 xwa, (0x1e8800)
+	lda xwa, (0x1e8800:24)
 	stda32 3226, xwa
 	ret
 
@@ -5088,7 +5088,7 @@ ToneData_ZeroFillLoop:
 	cp xwa, xbc
 	jr c, ToneData_ZeroFillLoop
 
-	lda_24 xwa, (Composer_SettingsBlock)
+	lda xwa, (Composer_SettingsBlock:24)
 	ld xbc, xwa
 	ld xde, (3226:16)
 	lda xhl, (xwa + 6)
@@ -5098,7 +5098,7 @@ ToneData_CopyBlock1_Loop:
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock1_Loop
-	lda_24 xhl, (Composer_SettingsBlock_0x60)
+	lda xhl, (Composer_SettingsBlock_0x60:24)
 	ld xbc, xhl
 	ld xwa, (3226:16)
 	lda xde, (xwa + 16)
@@ -5109,7 +5109,7 @@ ToneData_CopyBlock2_Loop:
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock2_Loop
-	lda_24 xhl, (MSP_Default_PartBankMap)
+	lda xhl, (MSP_Default_PartBankMap:24)
 	ld xbc, xhl
 	ld xwa, (3226:16)
 	lda_dri XDE, 0xe1, 0x00, 0x02
@@ -5120,7 +5120,7 @@ ToneData_CopyBlock3_Loop:
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock3_Loop
-	lda_24 xhl, (Composer_SettingsBlock_0x80)
+	lda xhl, (Composer_SettingsBlock_0x80:24)
 	ld xbc, xhl
 	ld xwa, (3226:16)
 	lda_dri XDE, 0xe1, 0x40, 0x02
@@ -5131,7 +5131,7 @@ ToneData_CopyBlock4_Loop:
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock4_Loop
-	lda_24 xhl, (Composer_SettingsBlock_0xC0)
+	lda xhl, (Composer_SettingsBlock_0xC0:24)
 	ld xbc, xhl
 	ld xwa, (3226:16)
 	lda_dri XDE, 0xe1, 0x80, 0x02
@@ -5149,7 +5149,7 @@ ToneData_CopyBlock5_Loop:
 ToneData_ScanRegionLoop:
 	cp (xbc), 0x0
 	jr nz, ToneData_AdvanceRegion
-	lda_24 xiy, (Composer_SettingsBlock_0x70)
+	lda xiy, (Composer_SettingsBlock_0x70:24)
 	ld xhl, xiy
 	ld xwa, (3226:16)
 	lda xwa, (xwa + 32)
@@ -5300,7 +5300,7 @@ CmpBndRng_BoundCase:
 	cp bc, 0xc
 	jr gt, CmpBndRng_DefaultString
 	sla bc, 2
-	lda_24 xde, (0x03d992)
+	lda xde, (0x03d992:24)
 	ld_sril3 XBC, 0x07, 0xe8, 0xe4
 	push xbc
 	jr CmpBndRng_CallStrcpy
@@ -5369,7 +5369,7 @@ AcCmpMdBox_HandleLswUpdate:
 	call GetViewInstance
 	ld xix, (xsp + 4)
 	ld xbc, (xix)
-	lda_24 xwa, (0x094810)
+	lda xwa, (0x094810:24)
 	lda xde, (xhl + 46)
 	cp xwa, xbc
 	jr nz, GridBoxProc_Return
@@ -5441,7 +5441,7 @@ AcCmpSetGridBoxProc:
 	add xbc, xbc
 	add xbc, NoteStepDisplayData_0x5C
 	ld bc, (xbc)
-	lda_24 xix, (CmpSetP1_DialGrid)
+	lda xix, (CmpSetP1_DialGrid:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; CmpSetP1 dial grid dispatch (7-entry, table 0xe1ce3a)
@@ -5498,7 +5498,7 @@ CmpSetP1_DialGrid:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, (NoteStepDisplayData_0x38)
+	lda xbc, (NoteStepDisplayData_0x38:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sub hl, wa
 	extz xhl
@@ -5556,7 +5556,7 @@ CmpSetP1_SendAndApplyFunc:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda_24 xbc, (NoteStepDisplayData_0x4A)
+	lda xbc, (NoteStepDisplayData_0x4A:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, hl
 	ld de, wa
@@ -5664,7 +5664,7 @@ CmpSetP1GridCheck:
 	add xwa, xwa
 	add xwa, StrTimeSig_1_2_0x20
 	ld wa, (xwa)
-	lda_24 xix, (CmpSetP1_GridCheck_EventEnc)
+	lda xix, (CmpSetP1_GridCheck_EventEnc:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; CmpSetP1 grid check event encoding dispatch
@@ -5721,16 +5721,16 @@ CmpSetP1_GridCheck_Return:
 	lda xde, (xsp)
 	ld (xbc + 4), xde
 	ld wa, (xwa)
-	lda_24 xhl, (0x03da06)
+	lda xhl, (0x03da06:24)
 	dec 1, wa
 	cps wa, 0
 	jrl lt, WidgetHandler_PostEventAndReturnZero
 	cps wa, 7
 	jrl gt, WidgetHandler_PostEventAndReturnZero
 	add wa, wa
-	lda_24 xix, (StrTimeSig_1_2_0x10)
+	lda xix, (StrTimeSig_1_2_0x10:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (UI_COMPONENT_DISPATCH)
+	lda xix, (UI_COMPONENT_DISPATCH:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; UI component dispatch table - handles cases 0-7 for grid/focus handling
 ; Offset table at 0xe1cef0 selects which handler to run based on WA value
@@ -5750,13 +5750,13 @@ UI_COMPONENT_DISPATCH_CASE1:
 	srl a, 7	; Shift right logical by 7
 	extz wa	; Zero-extend A to WA
 	sla wa, 2	; Shift left by 2 (multiply by 4)
-	lda_24 xbc, (0x03d9f6); Load table address
+	lda xbc, (0x03d9f6:24); Load table address
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0	; Load entry from table
 	push xwa	; Push parameter
 	ldb_d8 a, (0x34d8); Load byte from UI state
 	extz wa	; Zero-extend A to WA
 	sla wa, 2	; Shift left by 2 (multiply by 4)
-	lda_24 xbc, (0x03da0e); Load table address
+	lda xbc, (0x03da0e:24); Load table address
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0	; Load entry from table
 	push xwa	; Push parameter
 	pushw 0xe1	; Push parameter
@@ -5830,7 +5830,7 @@ CmpSetGridCheck:
 	add xwa, xwa
 	add xwa, StrPanLeft64_0xA
 	ld wa, (xwa)
-	lda_24 xix, (GridCheck_Handler0)
+	lda xix, (GridCheck_Handler0:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; =============================================================================
@@ -5959,7 +5959,7 @@ GridCheck_LookupSndParam:
 	ldb_d8 e, (0x34d6)
 	extz de
 	sla de, 2
-	lda_24 xhl, (RhythmTiming_OffsetTable)
+	lda xhl, (RhythmTiming_OffsetTable:24)
 	ld xix, 0x94860
 	add_sril_rm XIX, 0x07, 0xec, 0xe8
 	sll xbc, 3
@@ -6335,7 +6335,7 @@ S2cMemNoBox_HandleScroll:
 	ldb_d8 a, (0x398f)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (StrPanLeft64_0x18)
+	lda xbc, (StrPanLeft64_0x18:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 8)
@@ -6522,7 +6522,7 @@ PsS2cTrans_HandleScroll:
 	ldb_d8 a, (0x398e)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (PtrTbl_TransposeStrs)
+	lda xbc, (PtrTbl_TransposeStrs:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 8)
@@ -6586,7 +6586,7 @@ S2cGridBoxProc:
 	add xwa, xwa
 	add xwa, StrTranspose_Minus25_0x4
 	ld wa, (xwa)
-	lda_24 xix, (FdcFormat_DialGrid)
+	lda xix, (FdcFormat_DialGrid:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; FdcFormat dial grid dispatch (7-entry, table 0xe1d728)

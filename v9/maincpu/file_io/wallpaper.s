@@ -431,7 +431,7 @@ WP_FindNextSlot:
 	lds iz, 1
 	extz wa
 	ldw_erp WA, 0xe6
-	lda_24 xde, (Str_SmfConvert_GmToGm_0x2A)
+	lda xde, (Str_SmfConvert_GmToGm_0x2A:24)
 
 WPFind_SearchLoop:
 	stw_erp HL, 0xe6
@@ -484,7 +484,7 @@ WPFind_Return:
 WP_GetConfigName:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (0x1ed350); Wallpaper config base address
+	lda xhl, (0x1ed350:24); Wallpaper config base address
 	extz xbc
 	sll xbc, 4	; index * 16
 	add xhl, xbc
@@ -506,7 +506,7 @@ WP_GetConfigName:
 WP_GetNameByOffset:
 	push xiz
 	ld xiz, xwa
-	lda_24 xwa, (0x1ed350)
+	lda xwa, (0x1ed350:24)
 	ld hl, (xwa + 13)	; Get entry size from config
 	ld xix, xwa
 	mul xhl, xbc	; Calculate offset
@@ -566,7 +566,7 @@ WP_GetBankMemName:
 	cps de, 4
 	jr nc, WP_GetBankMemName_FromROM
 	; From RAM at 0x0948a0
-	lda_24 xbc, (0x0948a0)
+	lda xbc, (0x0948a0:24)
 	sll hl, 2
 	add hl, de
 	mul hl, 0x60	; Entry size = 96 bytes
@@ -616,7 +616,7 @@ WP_GetPresetName3:
 WP_GetUserName1:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (0x1e0000)
+	lda xhl, (0x1e0000:24)
 	lda xhl, (xhl + 16)
 	mul bc, 0x1d6	; Entry stride
 	add xhl, xbc
@@ -638,7 +638,7 @@ WP_GetUserName2:
 	push xiz
 	ld de, bc
 	ld xiz, xwa
-	lda_24 xbc, (0x1e4980)
+	lda xbc, (0x1e4980:24)
 	lda_dpi XIY, 0xf8
 	ld xwa, xiz
 	ldw de, 0x10
@@ -655,7 +655,7 @@ WP_GetUserName2:
 WP_GetUserName3:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (0x1e4aa7)
+	lda xhl, (0x1e4aa7:24)
 	mul bc, 0x50	; Entry stride
 	add xhl, xbc
 	lda_dpi XIY, 0xf8

@@ -392,29 +392,29 @@ Flash_SectorErase__FC8713:
 ; --------------------------------------------------------------------------
 DSP_WriteChans0to3_FromE29D:
 	push	xix                               ; FC8719  push XIX
-	lda_24	xix, (0xF9804A)                 ; FC871A  lda XIX,0xf9804a
-	lda_24	xbc, (0xE29D)                   ; FC871F  lda XBC,0x00e29d
+	lda	xix, (0xF9804A:24)                 ; FC871A  lda XIX,0xf9804a
+	lda	xbc, (0xE29D:24)                   ; FC871F  lda XBC,0x00e29d
 	push	xbc                               ; FC8724  push XBC
 	pushw	0                                ; FC8725  push 0x0000
-	lda_24	xiy, (0xFC8730)                 ; FC8728  lda XIY,0xfc8730
+	lda	xiy, (0xFC8730:24)                 ; FC8728  lda XIY,0xfc8730
 	push	xiy                               ; FC872D  push XIY
 	jp	(xix)                               ; FC872E  jp T,XIX
-	lda_24	xbc, (0xE29D)                   ; FC8730  lda XBC,0x00e29d
+	lda	xbc, (0xE29D:24)                   ; FC8730  lda XBC,0x00e29d
 	push	xbc                               ; FC8735  push XBC
 	pushw	1                                ; FC8736  push 0x0001
-	lda_24	xiy, (0xFC8741)                 ; FC8739  lda XIY,0xfc8741
+	lda	xiy, (0xFC8741:24)                 ; FC8739  lda XIY,0xfc8741
 	push	xiy                               ; FC873E  push XIY
 	jp	(xix)                               ; FC873F  jp T,XIX
-	lda_24	xbc, (0xE29D)                   ; FC8741  lda XBC,0x00e29d
+	lda	xbc, (0xE29D:24)                   ; FC8741  lda XBC,0x00e29d
 	push	xbc                               ; FC8746  push XBC
 	pushw	2                                ; FC8747  push 0x0002
-	lda_24	xiy, (0xFC8752)                 ; FC874A  lda XIY,0xfc8752
+	lda	xiy, (0xFC8752:24)                 ; FC874A  lda XIY,0xfc8752
 	push	xiy                               ; FC874F  push XIY
 	jp	(xix)                               ; FC8750  jp T,XIX
-	lda_24	xbc, (0xE29D)                   ; FC8752  lda XBC,0x00e29d
+	lda	xbc, (0xE29D:24)                   ; FC8752  lda XBC,0x00e29d
 	push	xbc                               ; FC8757  push XBC
 	pushw	3                                ; FC8758  push 0x0003
-	lda_24	xiy, (0xFC8763)                 ; FC875B  lda XIY,0xfc8763
+	lda	xiy, (0xFC8763:24)                 ; FC875B  lda XIY,0xfc8763
 	push	xiy                               ; FC8760  push XIY
 	jp	(xix)                               ; FC8761  jp T,XIX
 	add	xsp, 24                            ; FC8763  add XSP,0x00000018
@@ -810,7 +810,7 @@ Flash_ProgramSlice1K:
 	push	xix                               ; FC893F  push XIX
 	ld	xhl, 0xE8AAAA                       ; FC8940  ld XHL,0x00e8aaaa
 	ld	xix, 0x10000                        ; FC8945  ld XIX,0x00010000
-	lda_24	xiy, (0x8568)                   ; FC894A  lda XIY,0x008568
+	lda	xiy, (0x8568:24)                   ; FC894A  lda XIY,0x008568
 	ld	xiy, (xiy)                          ; FC894F  ld XIY,(XIY)
 	and	xiy, 0xFF0000                      ; FC8951  and XIY,0x00ff0000
 	extz	wa                                ; FC8957  extz WA

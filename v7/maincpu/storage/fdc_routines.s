@@ -188,9 +188,9 @@ FDC_COMMAND_DISPATCHER:
 	cp	wa, 11
 	jr	ugt, 36	; -> 0xF969D7
 	add	wa, wa
-	lda_24	xix, (15374514)
+	lda	xix, (15374514:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (16345545)
+	lda	xix, (16345545:24)
 	jp_rr	8, xix, wa
 FDC_CMD_HANDLER_BASE:
 	calr	255

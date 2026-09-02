@@ -373,8 +373,8 @@ INTT3_KernelTick:
 ;          leaves it open.
 ; --------------------------------------------------------------------------
 RamImage_Copy:
-	lda_24	xiy, 0x00FCB4EA
-	lda_24	xix, 0x00E2DF
+	lda	xiy, (0x00FCB4EA:24)
+	lda	xix, (0x00E2DF:24)
 	ld	xbc, 0x000010D8
 	extpfx2	0x85, 0x11
 	ret
@@ -556,9 +556,9 @@ Analog_ScanAndReport:
 	exts	xbc                                   ; F98A7C  exts XBC
 	ld	a, (xbc)                                ; F98A7E  ld A,(XBC)
 	ld	(xiz-5), a                              ; F98A80  ld (XIZ+0xfb),A
-	lda_24	xbc, (0xE2E6)                       ; F98A83  lda XBC,0x00e2e6
+	lda	xbc, (0xE2E6:24)                       ; F98A83  lda XBC,0x00e2e6
 	push	xbc                                   ; F98A88  push XBC
-	lda_24	xwa, (0xE2E5)                       ; F98A89  lda XWA,0x00e2e5
+	lda	xwa, (0xE2E5:24)                       ; F98A89  lda XWA,0x00e2e5
 	push	xwa                                   ; F98A8E  push XWA
 	push	0                                     ; F98A8F  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; F98A91  push (XIZ+0xfb)
@@ -573,7 +573,7 @@ Analog_ScanAndReport:
 	stib_da	(0xE2E9), 0xB0                     ; F98AAA  ld (0x00e2e9),0xb0
 	ldb_da	c, (0xE2E5)                         ; F98AB0  ld C,(0x00e2e5)
 	stb_da	(0xE2EA), c                         ; F98AB5  ld (0x00e2ea),C
-	lda_24	xbc, (0xE2E9)                       ; F98ABA  lda XBC,0x00e2e9
+	lda	xbc, (0xE2E9:24)                       ; F98ABA  lda XBC,0x00e2e9
 	push	xbc                                   ; F98ABF  push XBC
 	pushw	2                                    ; F98AC0  push 0x0002
 	pushw	5                                    ; F98AC3  push 0x0005
@@ -584,9 +584,9 @@ Analog_ScanAndReport__chan2:
 	exts	xbc                                   ; F98ACE  exts XBC
 	ld	a, (xbc)                                ; F98AD0  ld A,(XBC)
 	ld	(xiz-5), a                              ; F98AD2  ld (XIZ+0xfb),A
-	lda_24	xbc, (0xE2E8)                       ; F98AD5  lda XBC,0x00e2e8
+	lda	xbc, (0xE2E8:24)                       ; F98AD5  lda XBC,0x00e2e8
 	push	xbc                                   ; F98ADA  push XBC
-	lda_24	xwa, (0xE2E7)                       ; F98ADB  lda XWA,0x00e2e7
+	lda	xwa, (0xE2E7:24)                       ; F98ADB  lda XWA,0x00e2e7
 	push	xwa                                   ; F98AE0  push XWA
 	push	0                                     ; F98AE1  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; F98AE3  push (XIZ+0xfb)
@@ -601,7 +601,7 @@ Analog_ScanAndReport__chan2:
 	stib_da	(0xE2E9), 0xB1                     ; F98AFC  ld (0x00e2e9),0xb1
 	ldb_da	c, (0xE2E7)                         ; F98B02  ld C,(0x00e2e7)
 	stb_da	(0xE2EA), c                         ; F98B07  ld (0x00e2ea),C
-	lda_24	xbc, (0xE2E9)                       ; F98B0C  lda XBC,0x00e2e9
+	lda	xbc, (0xE2E9:24)                       ; F98B0C  lda XBC,0x00e2e9
 	push	xbc                                   ; F98B11  push XBC
 	pushw	2                                    ; F98B12  push 0x0002
 	pushw	5                                    ; F98B15  push 0x0005
@@ -917,7 +917,7 @@ MAIN__bit3:
 	calr	(0xF9915C - 0xF98CA1)
 MAIN__tail:
 	calr	(0xF98CB9 - 0xF98CA4)
-	lda_24	xbc, 0x00E2EB
+	lda	xbc, (0x00E2EB:24)
 	push	xbc
 	call	0xFB060A
 	call	0xF994E4

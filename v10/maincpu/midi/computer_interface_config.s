@@ -284,7 +284,7 @@ MdSetupLoadFunc:
 	add xhl, xhl
 	add xhl, NakaInst_OFF_WidgetTbl2_0x12
 	ld hl, (xhl)
-	lda_24 xix, (SetupLoadOptionJumpTable)
+	lda xix, (SetupLoadOptionJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
 SetupLoadOptionJumpTable:
 	ld	xwa, (xde+14)
@@ -308,7 +308,7 @@ SetupLoadOptionJumpTable:
 SetupLoadInvalidIndex:
 	lds32 xhl, 0
 	jr MdSetupLoad_Epilogue
-	lda_24 xhl, (0x00ffc0)
+	lda xhl, (0x00ffc0:24)
 	jr MdSetupLoad_Epilogue
 	lds32 xhl, 1
 

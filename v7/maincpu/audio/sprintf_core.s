@@ -947,7 +947,7 @@ Sprintf_ESci_PadLeftSpace:
 	inc	1, qiz
 	ld	de, (xsp+4)
 	neg	de
-	lda_24	xbc, (246340)
+	lda	xbc, (246340:24)
 Sprintf_ESci_PadLeftLoop:
 	.byte 0xd7, 0xfa, 0x88, 0xda, 0xf0, 0x61, 0xd7, 0x9f
 	.byte 0x06, 0x04

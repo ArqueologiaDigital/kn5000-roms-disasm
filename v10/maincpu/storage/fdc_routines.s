@@ -198,9 +198,9 @@ FDC_WaitReady:
 	cps	wa, 5
 	jrl	gt, 151
 	add	wa, wa
-	lda_24	xix, (DiskWarning_ConfirmStrings_0xBFA)
+	lda	xix, (DiskWarning_ConfirmStrings_0xBFA:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16346317)
+	lda xix, (16346317:24)
 	jp_rr 8, xix, wa
 	stdi8 (35436), 0
 	stdi16	(0x8a22), 0
@@ -287,9 +287,9 @@ FDC_COMMAND_DISPATCHER:
 	cp wa, 0xb
 	jr ugt, FDC_CheckDriveCount
 	add wa, wa
-	lda_24 xix, (DiskWarning_ConfirmStrings_0xC06)
+	lda xix, (DiskWarning_ConfirmStrings_0xC06:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (FDC_CMD_HANDLER_BASE)
+	lda xix, (FDC_CMD_HANDLER_BASE:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; FDC command handler base - entry point for command 0
 FDC_CMD_HANDLER_BASE:
@@ -2141,9 +2141,9 @@ FDC_CommandEntry_CopyParams:
 	cp wa, 0xb
 	jr	ugt, 100
 	add wa, wa
-	lda_24 xix, (DiskWarning_ConfirmStrings_0xC1E)
+	lda xix, (DiskWarning_ConfirmStrings_0xC1E:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (FDC_HANDLER_DISPATCH_BASE)
+	lda xix, (FDC_HANDLER_DISPATCH_BASE:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 

@@ -9,7 +9,7 @@
 
 	; === ROM-specific ending: initialize video buffers ===
 	call Fill_memory_at_XWA_with_DE_words_of_BC_value
-	lda_24 xwa, (0x1a0000)
+	lda xwa, (0x1a0000:24)
 	ld xbc, 0x43c00
 	ldw de, 0x9600
 	call Copy_DE_words_from_XBC_to_XWA	; Blit video buffer
@@ -12364,7 +12364,7 @@ Scoop_CurveUpdate_End:
 	add xhl, xiz
 	ld a, (xhl)
 	extz wa
-	lda_24 xhl, (StyleUI_ScreenData_CtlOnly_0x23)
+	lda xhl, (StyleUI_ScreenData_CtlOnly_0x23:24)
 	ldb_sri A, 0x07, 0xec, 0xe0
 	ld (xix), a
 	inc 1, iy
@@ -12381,7 +12381,7 @@ Scoop_EnvelopeCalc:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Str_No_0xCEE)
+	lda xbc, (Str_No_0xCEE:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 4), xwa
 	dec_sriw 2, 0xfd, 0x0a, 0x01
@@ -12469,7 +12469,7 @@ Scoop_EnvelopeCalc_Data:
 	add	xhl, xiz
 	ld	a, (xhl)
 	extz	wa
-	lda_24	xhl, (StyleUI_ScreenData_CtlOnly_0x23)
+	lda	xhl, (StyleUI_ScreenData_CtlOnly_0x23:24)
 	ld_rrb a, xhl, wa
 	ld (xix), a
 	inc 1, iy
@@ -12484,7 +12484,7 @@ Scoop_EnvelopeCalc_Data:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Str_No_0xCEE)
+	lda	xbc, (Str_No_0xCEE:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -12685,7 +12685,7 @@ Scoop_EnvCalc_Handler1:
 	add	xbc, xwa
 	ld	c, (xbc)
 	extz	bc
-	lda_24	xiy, (StyleUI_ScreenData_CtlOnly_0x23)
+	lda	xiy, (StyleUI_ScreenData_CtlOnly_0x23:24)
 	ld_rrb c, xiy, bc
 	ld (xhl), c
 	inc 1, ix
@@ -12813,7 +12813,7 @@ Scoop_GlideParam_Configure:
 	add xbc, xwa
 	ld c, (xbc)
 	extz bc
-	lda_24 xiy, (StyleUI_ScreenData_CtlOnly_0x23)
+	lda xiy, (StyleUI_ScreenData_CtlOnly_0x23:24)
 	ldb_sri C, 0x07, 0xf4, 0xe4
 	ld (xhl), c
 	inc 1, ix
@@ -12906,7 +12906,7 @@ Scoop_GlideParam_Data:
 	add	xbc, xwa
 	ld	c, (xbc)
 	extz	bc
-	lda_24	xiy, (StyleUI_ScreenData_CtlOnly_0x23)
+	lda	xiy, (StyleUI_ScreenData_CtlOnly_0x23:24)
 	ld_rrb c, xiy, bc
 	ld (xhl), c
 	inc 1, ix
@@ -13271,7 +13271,7 @@ Scoop_EnvProcessor_Data:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (15380484)
+	lda	xbc, (15380484:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -13411,7 +13411,7 @@ Scoop_EnvProcessor_Data:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (15380484)
+	lda	xbc, (15380484:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -13485,7 +13485,7 @@ Scoop_EventLoop_36Entry_Branch3:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Str_No_0xCEE)
+	lda xbc, (Str_No_0xCEE:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 2), xwa
 	ldw_sri0 WA, (xsp + 0x0106)

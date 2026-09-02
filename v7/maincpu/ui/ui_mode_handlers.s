@@ -12,7 +12,7 @@ EffectMode_CopyVoiceParams:
 	lda_d16 xbc, (0xfd05)
 	lda_d16 xhl, (0xf9a0)
 	sub xbc, xhl
-	lda_24 xde, (0x03c2c4)
+	lda xde, (0x03c2c4:24)
 	add xbc, xde
 	cp (xbc), 0x3
 	jr nz, EffectMode_CopyVoiceParams_Done
@@ -222,7 +222,7 @@ EffectMode_CopyParamByte:
 	lda_d16	xwa, (0xfa07)
 	lda_d16	xde, (0xf9a0)
 	sub	xwa, xde
-	lda_24	xbc, (0x3c2c4)
+	lda	xbc, (0x3c2c4:24)
 	ld	xhl, xwa
 	add	xhl, xbc
 	lda_d16	xwa, (0xfba7)
@@ -332,7 +332,7 @@ EffectMode_DisplayName_Done:
 
 EffectMode_SearchPresetTableC2C5:
 	lds ix, 0
-	lda_24 xhl, (WidgetStyleDataTable_0x36E)
+	lda xhl, (WidgetStyleDataTable_0x36E:24)
 
 EffectMode_SearchPresetTableC2C5_Loop:
 	ld bc, ix
@@ -357,7 +357,7 @@ EffectMode_SearchPresetTableC2C5_Next:
 
 EffectMode_SearchPresetTableC0:
 	lds ix, 0
-	lda_24 xhl, (WidgetStyleDataTable_0x4FA)
+	lda xhl, (WidgetStyleDataTable_0x4FA:24)
 
 EffectMode_SearchPresetTableC0_Loop:
 	ld bc, ix
@@ -409,7 +409,7 @@ EffectMode_UpdateBitFlags:
 	lda_d16	xwa, (63930)
 	lda_d16	xde, (63904)
 	sub	xwa, xde
-	lda_24	xbc, (246468)
+	lda	xbc, (246468:24)
 	ld	(xsp+32), xwa
 	add	(xsp+32), xbc
 	ld	xwa, (xsp+32)
@@ -625,7 +625,7 @@ EffectMode_SetRegion_Apply:
 	ld	h, (xbc)
 	and	h, 3
 	sub	xbc, 63904
-	lda_24	xde, 246468
+	lda	xde, (246468:24)
 	add	xbc, xde
 	ld	a, (xbc)
 	and	a, 252
@@ -954,7 +954,7 @@ DramTest_IC10IC9_NextChip:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xa
-	lda_24 xbc, (WidgetStyleDataTable_0x6FC)
+	lda xbc, (WidgetStyleDataTable_0x6FC:24)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xhl, (xde)
 	ld xiz, (xde + 4)
@@ -1032,7 +1032,7 @@ SramTest_IC21_Loop:
 	ld c, l
 	extz bc
 	muls bc, 0xa
-	lda_24 xde, (WidgetStyleDataTable_0x706)
+	lda xde, (WidgetStyleDataTable_0x706:24)
 	lda_dri XDE, 0x07, 0xe8, 0xe4
 	ld xiy, (xde)
 	ld xbc, (xde + 4)
@@ -1222,7 +1222,7 @@ RhythmRomTest_SumLoop:
 	set 0, a
 
 RhythmRomTest_Compare:
-	lda_24 xix, (WidgetStyleDataTable_0x6DA)
+	lda xix, (WidgetStyleDataTable_0x6DA:24)
 	ld xiy, (xix)
 	lda xbc, (xix + 4)
 	ld xde, xbc
@@ -1805,7 +1805,7 @@ EffectMode_DiagSeq_AnimFrame:
 	cps	c, 0
 	jr	nz, 61	; -> 0xFB7385
 	extz	wa
-	lda_24	xbc, (15433350)
+	lda	xbc, (15433350:24)
 	lds32	xde, 0
 	ld_rrb	e, xbc, wa
 	add	xde, 27262976
@@ -1899,7 +1899,7 @@ EffectMode_SetAllLEDs_Loop:
 	stb_erp A, 0xfb
 	extz wa
 	add wa, wa
-	lda_24 xbc, (WidgetStyleDataTable_0x6BA)
+	lda xbc, (WidgetStyleDataTable_0x6BA:24)
 	ldw_sri BC, 0x07, 0xe4, 0xe0
 	cp bc, 0xffff
 	jr nz, EffectMode_SetAllLEDs_SetOne
@@ -1921,7 +1921,7 @@ LED_SetAll_BlankLoop:
 	stb_erp A, 0xfb
 	extz wa
 	add wa, wa
-	lda_24 xbc, (WidgetStyleDataTable_0x6BA)
+	lda xbc, (WidgetStyleDataTable_0x6BA:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	cp wa, 0xffff
 	jr nz, LED_SetAll_BlankOne
@@ -1989,7 +1989,7 @@ EffectMode_MidiSetLEDs:
 	sll wa, 4
 	add wa, bc
 	extz xwa
-	lda_24 xde, (WidgetStyleDataTable_0x55A)
+	lda xde, (WidgetStyleDataTable_0x55A:24)
 	ld xhl, xde
 	add xhl, xwa
 	ld l, (xhl)
@@ -2027,7 +2027,7 @@ TEST2FUNC:
 	add xde, xde
 	add xde, WidgetStyleDataTable_0x710
 	ld de, (xde)
-	lda_24 xix, (TEST2FUNC_DispatchReturn)
+	lda xix, (TEST2FUNC_DispatchReturn:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST2FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST2FUNC_DispatchReturn:
@@ -2048,7 +2048,7 @@ TEST3FUNC:
 	add xde, xde
 	add xde, WidgetStyleDataTable_0x71C
 	ld de, (xde)
-	lda_24 xix, (TEST3FUNC_DispatchReturn)
+	lda xix, (TEST3FUNC_DispatchReturn:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST3FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST3FUNC_DispatchReturn:
@@ -2069,7 +2069,7 @@ TEST4FUNC:
 	add xde, xde
 	add xde, WidgetStyleDataTable_0x728
 	ld de, (xde)
-	lda_24 xix, (TEST4FUNC_DispatchReturn)
+	lda xix, (TEST4FUNC_DispatchReturn:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST4FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST4FUNC_DispatchReturn:
@@ -2090,7 +2090,7 @@ TEST6FUNC:
 	add xde, xde
 	add xde, WidgetStyleDataTable_0x734
 	ld de, (xde)
-	lda_24 xix, (TEST6FUNC_DispatchReturn)
+	lda xix, (TEST6FUNC_DispatchReturn:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; TEST6FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST6FUNC_DispatchReturn:
@@ -2128,7 +2128,7 @@ BitmapFinpic:
 	ret
 
 BitmapFinpic_GetDataPtr:
-	lda_24 xhl, (Bitmap_FadeInPicture)
+	lda xhl, (Bitmap_FadeInPicture:24)
 	ret
 
 BitmapFinpic_GetWidth:
@@ -2150,7 +2150,7 @@ BitmapFinst:
 	ret
 
 BitmapFinst_GetDataPtr:
-	lda_24 xhl, (Bitmap_FadeInText)
+	lda xhl, (Bitmap_FadeInText:24)
 	ret
 
 BitmapFinst_GetWidth:
@@ -2172,7 +2172,7 @@ BitmapFoutpic:
 	ret
 
 BitmapFoutpic_GetDataPtr:
-	lda_24 xhl, (Bitmap_FadeOutPicture)
+	lda xhl, (Bitmap_FadeOutPicture:24)
 	ret
 
 BitmapFoutpic_GetWidth:
@@ -2194,7 +2194,7 @@ BitmapFoutst:
 	ret
 
 BitmapFoutst_GetDataPtr:
-	lda_24 xhl, (Bitmap_FadeOutText)
+	lda xhl, (Bitmap_FadeOutText:24)
 	ret
 
 BitmapFoutst_GetWidth:
@@ -2276,7 +2276,7 @@ SysSureShowHideFunc:
 AttnLngCheck:
 	cp xbc, 0x1e0009f
 	jr nz, AttnLngCheck_ReturnZero
-	lda_24 xhl, (NoteStr3_Blank_3_0x4)
+	lda xhl, (NoteStr3_Blank_3_0x4:24)
 	ret
 
 AttnLngCheck_ReturnZero:
@@ -2286,7 +2286,7 @@ AttnLngCheck_ReturnZero:
 SysSureLngCheck:
 	cp xbc, 0x1e0009f
 	jr nz, SysSureLngCheck_ReturnZero
-	lda_24 xhl, (Str_Attention_EN_0xC)
+	lda xhl, (Str_Attention_EN_0xC:24)
 	ret
 
 SysSureLngCheck_ReturnZero:
@@ -2296,7 +2296,7 @@ SysSureLngCheck_ReturnZero:
 SureLngCheck:
 	cp xbc, 0x1e0009f
 	jr nz, SureLngCheck_ReturnZero
-	lda_24 xhl, (Str_InitSettingWarn_IT_0x19A)
+	lda xhl, (Str_InitSettingWarn_IT_0x19A:24)
 	ret
 
 SureLngCheck_ReturnZero:
@@ -2306,7 +2306,7 @@ SureLngCheck_ReturnZero:
 CtlIniLngCheck:
 	cp xbc, 0x1e0009f
 	jr nz, CtlIniLngCheck_ReturnZero
-	lda_24 xhl, (Str_AreYouSure_IT_0x46)
+	lda xhl, (Str_AreYouSure_IT_0x46:24)
 	ret
 
 CtlIniLngCheck_ReturnZero:
@@ -2316,7 +2316,7 @@ CtlIniLngCheck_ReturnZero:
 PmemNormLngCheck:
 	cp xbc, 0x1e0009f
 	jr nz, PmemNormLngCheck_ReturnZero
-	lda_24 xhl, (Str_FactoryResetDesc_EN3_0x156)
+	lda xhl, (Str_FactoryResetDesc_EN3_0x156:24)
 	ret
 
 PmemNormLngCheck_ReturnZero:
@@ -2326,7 +2326,7 @@ PmemNormLngCheck_ReturnZero:
 PmemExpLngCheck:
 	cp xbc, 0x1e0009f
 	jr nz, PmemExpLngCheck_ReturnZero
-	lda_24 xhl, (Str_StoreSoundBalance_DE_0x58)
+	lda xhl, (Str_StoreSoundBalance_DE_0x58:24)
 	ret
 
 PmemExpLngCheck_ReturnZero:
@@ -2403,7 +2403,7 @@ MasterSetup_DialTurn_ScrollUp:
 	ld	xwa, (xix)
 	ld	wa, (xwa)
 	muls	wa, 6
-	lda_24	xde, 15443092
+	lda	xde, (15443092:24)
 	ld_rrl	xwa, xde, wa
 	push	xwa
 	push	xbc
@@ -2512,7 +2512,7 @@ MasterSetup_ScrollUp_Search_Done:
 	jrl	nz, 272
 	ld	xbc, (xbc+78)
 	lda	xde, (xsp+12)
-	lda_24	xhl, 15443092
+	lda	xhl, (15443092:24)
 	.byte 0x91, 0x3f, 0x00, 0x00
 	jr	z, 25
 	ld	wa, (xbc)
@@ -2732,7 +2732,7 @@ MasterSetup_FallbackEvent:
 	.byte 0x90, 0x81
 	inc	1, bc
 	ld	hl, bc
-	lda_24	xbc, 15443092
+	lda	xbc, (15443092:24)
 	cp	hl, 1000
 	jr	nc, 36
 	ld	hl, (xwa)
@@ -3019,7 +3019,7 @@ MstStyleAlpGridCheck:
 	add xwa, xwa
 	add xwa, Str_StoreTotalSetting_DE_0xCC
 	ld wa, (xwa)
-	lda_24 xix, (MstStyleAlp_EventDispatch)
+	lda xix, (MstStyleAlp_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; MstStyleAlpGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d58)
@@ -3043,7 +3043,7 @@ MstStyleAlp_EventDispatch:
 	add	wa, (xbc)
 	add	de, wa
 	muls	de, 6
-	lda_24	xbc, (StyleSong_MasterTable_0x4)
+	lda	xbc, (StyleSong_MasterTable_0x4:24)
 	ld_rrw	de, xbc, de
 	extz	xde
 	ld	xwa, 0x142000d
@@ -3072,7 +3072,7 @@ MstStyleAlp_CellSelect:
 	ld XHL,(XIX)
 	lda xde, (xwa + 0x56)
 	ld XIY,(XDE)
-	lda_24 xwa, (StyleSong_MasterTable)
+	lda xwa, (StyleSong_MasterTable:24)
 	ld (XSP+0x08),XWA
 	ld XIX,(XIX)
 	ld XWA,(XSP+0x04)
@@ -3208,7 +3208,7 @@ AcMstStyle1GridBoxProc:
 	add xbc, xbc
 	add xbc, Str_StoreTotalSetting_DE_0xDA
 	ld bc, (xbc)
-	lda_24 xix, (MstStyle_EventDispatch)
+	lda xix, (MstStyle_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; MasterStyle event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d66)
@@ -3508,7 +3508,7 @@ MstStyle1GridCheck:
 	add xwa, xwa
 	add xwa, Str_StoreTotalSetting_DE_0xFE
 	ld wa, (xwa)
-	lda_24 xix, (MstStyle1Grid_EventDispatch)
+	lda xix, (MstStyle1Grid_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; MstStyle1GridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d8a)
@@ -3534,7 +3534,7 @@ MstStyle1Grid_CellSelect:
 	ld	xiy, (xix)
 	lda	xhl, (xwa+78)
 	ld	xiz, (xhl)
-	lda_24	xwa, 15531172
+	lda	xwa, (15531172:24)
 	ld	(xsp+8), xwa
 	ld	xwa, (xix)
 	ld	ix, (xwa)
@@ -3657,7 +3657,7 @@ AcMstStyle1SubGridBoxProc:
 	add xbc, xbc
 	add xbc, Str_StoreTotalSetting_DE_0x112
 	ld bc, (xbc)
-	lda_24 xix, (MstStyle1_EventDispatch)
+	lda xix, (MstStyle1_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; MstStyle1 event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d9e)
@@ -3704,7 +3704,7 @@ MstStyle1_EventDispatch:
 	ldw_da xwa, (0x0340c4)
 	extz xwa
 	sll xwa, 3
-	lda_24 xbc, (StyleGroup_LatinDance_Table)
+	lda xbc, (StyleGroup_LatinDance_Table:24)
 	add xbc, xwa
 	ld xde, (xbc)
 	stl_da (0x0340d2), xde
@@ -3782,7 +3782,7 @@ MstStyle1Sub_HandleSubSelect:
 	ldw_da xwa, (0x0340c4)
 	extz xwa
 	sll xwa, 3
-	lda_24 xbc, (StyleGroup_LatinDance_Table)
+	lda xbc, (StyleGroup_LatinDance_Table:24)
 	add xbc, xwa
 	ld xde, (xbc)
 	stl_da (0x0340d2), xde
@@ -3850,7 +3850,7 @@ MstStyle1Sub_SubSel_Adjust:
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
-	lda_24 xbc, (0x0340c8)
+	lda xbc, (0x0340c8:24)
 	cps hl, 0
 	jr nz, MstStyle1Sub_DialDown_Decrement
 	ld xwa, (xsp + 8)
@@ -3963,7 +3963,7 @@ MstStyle1Sub_FallbackEvent:
 	ld wa, (xiy)
 	cp wa, (xix)
 	jr ge, MstStyle1Sub_DialUp_CheckLimit
-	lda_24 xix, (0x0340c8)
+	lda xix, (0x0340c8:24)
 	cp hl, 0x9
 	jr nz, MstStyle1Sub_DialUp_Increment
 	incw 1, (xiy)
@@ -4144,7 +4144,7 @@ MstStyle1SubGridCheck:
 	add xwa, xwa
 	add xwa, Str_StoreTotalSetting_DE_0x136
 	ld wa, (xwa)
-	lda_24 xix, (MstStyle1Sub_EventDispatch)
+	lda xix, (MstStyle1Sub_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; MstStyle1SubGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0dc2)
@@ -4312,7 +4312,7 @@ AcMstStyle2GridBoxProc:
 	add xbc, xbc
 	add xbc, Str_StoreTotalSetting_DE_0x178
 	ld bc, (xbc)
-	lda_24 xix, (MstStyle1Page_EventDispatch)
+	lda xix, (MstStyle1Page_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; MstStyle1 subpage event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0e04)
@@ -4365,7 +4365,7 @@ MstStyle1Page_EventDispatch:
 	ldw_da xwa, (0x0340c4)
 	extz xwa
 	sll xwa, 3
-	lda_24 xbc, (StyleGroup_LatinDance_Table)
+	lda xbc, (StyleGroup_LatinDance_Table:24)
 	add xbc, xwa
 	ld xde, (xbc)
 	stl_da (0x0340d2), xde
@@ -4597,7 +4597,7 @@ MstStyle2_HandleDialTurn:
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
-	lda_24 xbc, (0x0340c8)
+	lda xbc, (0x0340c8:24)
 	lda xhl, (xwa + 82)
 	lda xix, (xwa + 86)
 	ld xwa, (xsp + 48)
@@ -4884,7 +4884,7 @@ MstStyle2_DialUp_UpdateAndPost:
 	lds32 xde, 0
 	call SendEvent
 	ld ix, hl
-	lda_24 xbc, (0x0340c8)
+	lda xbc, (0x0340c8:24)
 	cps ix, 0
 	jrl nz, MstStyle2_DialScrollUp_Middle
 	ld xhl, (xsp + 8)
@@ -5513,7 +5513,7 @@ MstStyle2GridCheck:
 	add xwa, xwa
 	add xwa, Str_StoreTotalSetting_DE_0x238
 	ld wa, (xwa)
-	lda_24 xix, (MstGrid2_ScrollJumpTable)
+	lda xix, (MstGrid2_ScrollJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MstGrid2_ScrollJumpTable:
@@ -5930,7 +5930,7 @@ AcTchSensGridBoxProc:
 	add xbc, xbc
 	add xbc, Str_StoreTotalSetting_DE_0x246
 	ld bc, (xbc)
-	lda_24 xix, (MstStyle2_EventDispatch)
+	lda xix, (MstStyle2_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; MstStyle2 event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0ed2)
@@ -6173,7 +6173,7 @@ TchSensGridCheck:
 	add xwa, xwa
 	add xwa, Str_StoreTotalSetting_DE_0x27C
 	ld wa, (xwa)
-	lda_24 xix, (TchSensGrid_EventDispatch)
+	lda xix, (TchSensGrid_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 TchSensGrid_EventDispatch:
 	call	16400579
@@ -6439,7 +6439,7 @@ AcFSWAssGridBoxProc:
 	add xbc, xbc
 	add xbc, Str_StoreTotalSetting_DE_0x28A
 	ld bc, (xbc)
-	lda_24 xix, (TchSens_EventDispatch)
+	lda xix, (TchSens_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; TouchSensitivity event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0f16)
@@ -6656,7 +6656,7 @@ FSWAssGridCheck:
 	add xwa, xwa
 	add xwa, CtrlAssignStr_Off_0x4A
 	ld wa, (xwa)
-	lda_24 xix, (FSWAssGrid_EventDispatch)
+	lda xix, (FSWAssGrid_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 FSWAssGrid_EventDispatch:
 	call	16400579
@@ -6689,7 +6689,7 @@ FSWAssGrid_EventDispatch:
 	calr	2206
 	inc	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10374
@@ -6713,7 +6713,7 @@ FSWAssGrid_EventDispatch:
 	calr	2132
 	inc	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10376
@@ -6737,7 +6737,7 @@ FSWAssGrid_EventDispatch:
 	calr	2058
 	inc	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10378
@@ -6761,7 +6761,7 @@ FSWAssGrid_EventDispatch:
 	calr	1984
 	inc	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10380
@@ -6785,7 +6785,7 @@ FSWAssGrid_EventDispatch:
 	calr	1910
 	inc	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10382
@@ -6809,7 +6809,7 @@ FSWAssGrid_EventDispatch:
 	calr	1836
 	inc	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10384
@@ -6833,7 +6833,7 @@ FSWAssGrid_EventDispatch:
 	calr	1758
 	inc	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10368
@@ -6869,7 +6869,7 @@ FSWAssGrid_EventDispatch:
 	calr	1648
 	dec	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10374
@@ -6893,7 +6893,7 @@ FSWAssGrid_EventDispatch:
 	calr	1575
 	dec	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10376
@@ -6917,7 +6917,7 @@ FSWAssGrid_EventDispatch:
 	calr	1502
 	dec	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10378
@@ -6941,7 +6941,7 @@ FSWAssGrid_EventDispatch:
 	calr	1429
 	dec	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10380
@@ -6965,7 +6965,7 @@ FSWAssGrid_EventDispatch:
 	calr	1356
 	dec	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10382
@@ -6989,7 +6989,7 @@ FSWAssGrid_EventDispatch:
 	calr	1283
 	dec	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10384
@@ -7013,7 +7013,7 @@ FSWAssGrid_EventDispatch:
 	calr	1206
 	dec	1, l
 	extz	hl
-	lda_24	xbc, 15535908
+	lda	xbc, (15535908:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10368
@@ -7034,7 +7034,7 @@ FSWAssGrid_EventDispatch:
 	calr	1136
 	extz	hl
 	sla	hl, 2
-	lda_24	xbc, 15535940
+	lda	xbc, (15535940:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7061,7 +7061,7 @@ FSWAssGrid_EventDispatch:
 	calr	1048
 	extz	hl
 	sla	hl, 2
-	lda_24	xbc, 15535940
+	lda	xbc, (15535940:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7086,7 +7086,7 @@ FSWAssGrid_EventDispatch:
 	calr	968
 	extz	hl
 	sla	hl, 2
-	lda_24	xbc, 15535940
+	lda	xbc, (15535940:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7111,7 +7111,7 @@ FSWAssGrid_EventDispatch:
 	calr	888
 	extz	hl
 	sla	hl, 2
-	lda_24	xbc, 15535940
+	lda	xbc, (15535940:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7137,7 +7137,7 @@ FSWAssGrid_EventDispatch:
 	calr	806
 	extz	hl
 	sla	hl, 2
-	lda_24	xbc, 15535940
+	lda	xbc, (15535940:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7162,7 +7162,7 @@ FSWAssGrid_EventDispatch:
 	calr	727
 	extz	hl
 	sla	hl, 2
-	lda_24	xbc, 15535940
+	lda	xbc, (15535940:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7187,7 +7187,7 @@ FSWAssGrid_EventDispatch:
 	calr	647
 	extz	hl
 	sla	hl, 2
-	lda_24	xbc, 15535940
+	lda	xbc, (15535940:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7222,7 +7222,7 @@ FSWAssGrid_CellSelect:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda_24 xbc, (Str_StoreTotalSetting_DE_0x2B8)
+	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
 	pushw 0x00ed
@@ -7249,7 +7249,7 @@ FSWAssGrid_CheckCell_1_3:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda_24 xbc, (Str_StoreTotalSetting_DE_0x2B8)
+	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
 	pushw 0x00ed
@@ -7276,7 +7276,7 @@ FSWAssGrid_CheckCell_1_4:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda_24 xbc, (Str_StoreTotalSetting_DE_0x2B8)
+	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
 	pushw 0x00ed
@@ -7303,7 +7303,7 @@ FSWAssGrid_CheckCell_1_5:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda_24 xbc, (Str_StoreTotalSetting_DE_0x2B8)
+	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
 	pushw 0x00ed
@@ -7330,7 +7330,7 @@ FSWAssGrid_CheckCell_1_6:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda_24 xbc, (Str_StoreTotalSetting_DE_0x2B8)
+	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
 	pushw 0x00ed
@@ -7357,7 +7357,7 @@ FSWAssGrid_CheckCell_1_7:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda_24 xbc, (Str_StoreTotalSetting_DE_0x2B8)
+	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
 	pushw 0x00ed
@@ -7384,7 +7384,7 @@ FSWAssGrid_CheckCell_1_8:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda_24 xbc, (Str_StoreTotalSetting_DE_0x2B8)
+	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
 	pushw 0x00ed
@@ -7408,7 +7408,7 @@ AudioTable_ReturnZero:
 
 AudioTable_FindMatchIndex:
 	ldb l, 0x0
-	lda_24 xde, (Str_StoreTotalSetting_DE_0x298)
+	lda xde, (Str_StoreTotalSetting_DE_0x298:24)
 
 AudioTable_FindMatch_Loop:
 	ld c, l
@@ -7431,7 +7431,7 @@ FswAsIniFunc:
 	add xde, xde
 	add xde, CtrlAssignStr_Off_0x58
 	ld de, (xde)
-	lda_24 xix, (FswAsIni_EventDispatch)
+	lda xix, (FswAsIni_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; FswAsIniFunc event dispatch (6-entry, event 0x1c00013, table 0xed1234)
 FswAsIni_EventDispatch:
@@ -7638,7 +7638,7 @@ AcPmExpFilterGridBoxProc:
 	add xbc, xbc
 	add xbc, ParamStr02_Vocalist_0x44
 	ld bc, (xbc)
-	lda_24 xix, (PmemPageCtl_EventDispatch)
+	lda xix, (PmemPageCtl_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; IvPmemWindowPageCtl event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1420)
@@ -7753,7 +7753,7 @@ PmExpFilter_DrawCellBank1:
 	ld	a, (xsp+10)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, 15536704
+	lda	xbc, (15536704:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	.byte 0x0b, 0xed, 0x00, 0x0b, 0x04, 0x14
@@ -7820,7 +7820,7 @@ PmExpFilter_DrawCellBank2:
 	ld A,(XSP+0x0a)
 	extz WA
 	sla WA, 0x02
-	lda_24 xbc, (ParamStr_Table_02)
+	lda xbc, (ParamStr_Table_02:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xe0
 	push XWA
 	pushw 0x00ed
@@ -8124,7 +8124,7 @@ PmExpFilterGridCheck:
 	add xwa, xwa
 	add xwa, ParamStr02_Vocalist_0xBE
 	ld wa, (xwa)
-	lda_24 xix, (PmExpFilter_EventDispatch)
+	lda xix, (PmExpFilter_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; PmExpFilterGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed149a)
@@ -8160,7 +8160,7 @@ PmExpFilter_EventDispatch:
 	jrl	lt, 593
 	cp	de, 10
 	jrl	gt, 586
-	lda_24	xbc, (ParamStr02_Vocalist_0x52)
+	lda	xbc, (ParamStr02_Vocalist_0x52:24)
 	ld_rrl	xwa, xbc, wa
 	ldw	bc, 65535
 	lds	de, 2
@@ -8169,7 +8169,7 @@ PmExpFilter_EventDispatch:
 	jrl	lt, 563
 	cp	de, 10
 	jrl	gt, 556
-	lda_24	xbc, (ParamStr02_Vocalist_0x76)
+	lda	xbc, (ParamStr02_Vocalist_0x76:24)
 	ld_rrl	xwa, xbc, wa
 	ldw	bc, 65535
 	lds	de, 2
@@ -8204,7 +8204,7 @@ PmExpFilter_EventDispatch:
 	jrl	lt, 469
 	cp	de, 10
 	jrl	gt, 462
-	lda_24	xbc, (ParamStr02_Vocalist_0x52)
+	lda	xbc, (ParamStr02_Vocalist_0x52:24)
 	ld_rrl	xwa, xbc, wa
 	lds	bc, 1
 	lds	de, 2
@@ -8213,7 +8213,7 @@ PmExpFilter_EventDispatch:
 	jrl	lt, 441
 	cp	de, 10
 	jrl	gt, 434
-	lda_24	xbc, (ParamStr02_Vocalist_0x76)
+	lda	xbc, (ParamStr02_Vocalist_0x76:24)
 	ld_rrl	xwa, xbc, wa
 	lds	bc, 1
 	lds	de, 2
@@ -8225,7 +8225,7 @@ PmExpFilter_EventDispatch:
 	cps	a, 1
 	jrl	nz, 399
 	ldb	l, 0
-	lda_24	xix, (ParamStr02_Vocalist_0x52)
+	lda	xix, (ParamStr02_Vocalist_0x52:24)
 	ld	xwa, (xde)
 	ld	c, l
 	extz	bc
@@ -8269,7 +8269,7 @@ PmExpFilter_EventDispatch:
 	jr	c, -86
 	jrl	301
 	ldb	l, 0
-	lda_24	xix, (ParamStr02_Vocalist_0x76)
+	lda	xix, (ParamStr02_Vocalist_0x76:24)
 	ld	xwa, (xde)
 	ld	c, l
 	extz	bc
@@ -8336,7 +8336,7 @@ PmExpFilterCheck_AltDecode:
 	jr	lt, 40	; -> 0xFBBC1E
 	cp	wa, 10
 	jr	gt, 34	; -> 0xFBBC1E
-	lda_24	xwa, (15537234)
+	lda	xwa, (15537234:24)
 	ld_rrl	xwa, xwa, bc
 	call	16567398
 	lda	xbc, (xsp)
@@ -8404,7 +8404,7 @@ AcDispTimeSetGridBoxProc:
 	add xbc, xbc
 	add xbc, ParamStr02_Vocalist_0xCC
 	ld bc, (xbc)
-	lda_24 xix, (PmExpFilter2_EventDispatch)
+	lda xix, (PmExpFilter2_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; PmExpFilter event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed14a8)
@@ -8651,7 +8651,7 @@ DispTimeSetGridCheck:
 	add xwa, xwa
 	add xwa, FadeTimeStr_Off_0x38
 	ld wa, (xwa)
-	lda_24 xix, (DispTimeSet_EventDispatch)
+	lda xix, (DispTimeSet_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 DispTimeSet_EventDispatch:
 	call	16400579
@@ -8671,7 +8671,7 @@ DispTimeSet_EventDispatch:
 	cps	de, 2
 	jr	nz, 36
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213222
+	lda	xbc, (213222:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	lds32	xbc, 1
@@ -8686,7 +8686,7 @@ DispTimeSet_EventDispatch:
 	cps	de, 3
 	jr	nz, 36
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213224
+	lda	xbc, (213224:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	lds32	xbc, 1
@@ -8701,7 +8701,7 @@ DispTimeSet_EventDispatch:
 	cps	de, 4
 	jr	nz, 33
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213226
+	lda	xbc, (213226:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	lds32	xbc, 1
@@ -8716,7 +8716,7 @@ DispTimeSet_EventDispatch:
 	cps	de, 5
 	jr	nz, 36
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213228
+	lda	xbc, (213228:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	lds32	xbc, 1
@@ -8731,7 +8731,7 @@ DispTimeSet_EventDispatch:
 	cps	de, 6
 	jr	nz, 36
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213230
+	lda	xbc, (213230:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	lds32	xbc, 1
@@ -8746,7 +8746,7 @@ DispTimeSet_EventDispatch:
 	cps	de, 7
 	jrl	nz, 1194
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213232
+	lda	xbc, (213232:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	lds32	xbc, 1
@@ -8774,7 +8774,7 @@ DispTimeSet_EventDispatch:
 	cps	iz, 2
 	jr	nz, 39
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213222
+	lda	xbc, (213222:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	ld	xbc, 4294967295
@@ -8789,7 +8789,7 @@ DispTimeSet_EventDispatch:
 	cps	iz, 3
 	jr	nz, 39
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213224
+	lda	xbc, (213224:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	ld	xbc, 4294967295
@@ -8804,7 +8804,7 @@ DispTimeSet_EventDispatch:
 	cps	iz, 4
 	jr	nz, 36
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213226
+	lda	xbc, (213226:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	ld	xbc, 4294967295
@@ -8819,7 +8819,7 @@ DispTimeSet_EventDispatch:
 	cps	iz, 5
 	jr	nz, 38
 	lda	xwa, (xsp+8)
-	lda_24	xbc, 213228
+	lda	xbc, (213228:24)
 	ld	(xwa), xbc
 	ldw	(xwa+4), 1
 	ld	xbc, 4294967295
@@ -8838,7 +8838,7 @@ DispTimeSet_EventDispatch:
 	jr	nz, 35
 	cps	iz, 6
 	jr	nz, 31
-	lda_24	xiy, 213230
+	lda	xiy, (213230:24)
 	ld	(xwa), xiy
 	ldw	(xbc), 1
 	ld	xbc, 4294967295
@@ -8852,7 +8852,7 @@ DispTimeSet_EventDispatch:
 	jrl	nz, 866
 	cps	iz, 7
 	jrl	nz, 861
-	lda_24	xiy, 213232
+	lda	xiy, (213232:24)
 	ld	(xwa), xiy
 	ldw	(xbc), 1
 	ld	xbc, 4294967295
@@ -8863,7 +8863,7 @@ DispTimeSet_EventDispatch:
 	ld	(xde), xbc
 	call	16382589
 	jrl	825
-	lda_24	xwa, 213222
+	lda	xwa, (213222:24)
 	lda	xiy, (xde+14)
 	.byte 0xa2, 0xf0
 	jr	nz, 64
@@ -8888,7 +8888,7 @@ DispTimeSet_EventDispatch:
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
 	jrl	745
-	lda_24	xwa, 213224
+	lda	xwa, (213224:24)
 	.byte 0xa2, 0xf0
 	jr	nz, 64
 	lda	xwa, (xsp+40)
@@ -8912,8 +8912,8 @@ DispTimeSet_EventDispatch:
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
 	jrl	672
-	lda_24	xbc, 213226
-	lda_24	xwa, 15537334
+	lda	xbc, (213226:24)
+	lda	xwa, (15537334:24)
 	ld	(xsp+4), xwa
 	.byte 0xa2, 0xf1
 	jr	nz, 62
@@ -8938,7 +8938,7 @@ DispTimeSet_EventDispatch:
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
 	jrl	593
-	lda_24	xwa, 213228
+	lda	xwa, (213228:24)
 	.byte 0xa2, 0xf0
 	jr	nz, 62
 	lda	xwa, (xsp+40)
@@ -8962,7 +8962,7 @@ DispTimeSet_EventDispatch:
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
 	jrl	522
-	lda_24	xiz, 213230
+	lda	xiz, (213230:24)
 	lda	xhl, (xsp+40)
 	lda	xix, (xsp+30)
 	lda	xwa, (xhl+2)
@@ -8988,7 +8988,7 @@ DispTimeSet_EventDispatch:
 	lda	xde, (xsp+40)
 	ld	xbc, 31457420
 	jrl	447
-	lda_24	xiz, 213232
+	lda	xiz, (213232:24)
 	.byte 0xa2, 0xf6
 	jrl	nz, 441
 	ldw	(xhl), 1
@@ -9027,7 +9027,7 @@ DispTimeSetCheck_CellDecode:
 	ldb_da a, (0x0340e6)
 	extz WA
 	sla WA, 0x02
-	lda_24 xde, (ParamStr_Table_03)
+	lda xde, (ParamStr_Table_03:24)
 	ldl_dri xwa, 0x07, 0xe8, 0xe0
 	push XWA
 	pushw 0x00ed
@@ -9042,7 +9042,7 @@ DispTimeSetCheck_CellDecode:
 	jrl t, DispTimeSet_SendEventReturn
 DispTimeSetCheck_TryRow3:
 .Lc_fbc3fb:
-	lda_24 xde, (ParamStr_Table_03)
+	lda xde, (ParamStr_Table_03:24)
 	cpw (XHL), 0x0001
 	jr nz, .Lc_fbc43b
 	cpw (XWA), 0x0003
@@ -9719,7 +9719,7 @@ MssNameFunc:
 	add xbc, xbc
 	add xbc, FadeTimeStr_Off_0x62
 	ld bc, (xbc)
-	lda_24 xix, (MssName_EventDispatch)
+	lda xix, (MssName_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; MssNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ac)
 MssName_EventDispatch:
@@ -10065,7 +10065,7 @@ MsaMode_Select:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 48)
-	lda_24 xbc, (NakaInst_Rock_Pop_0x2C)
+	lda xbc, (NakaInst_Rock_Pop_0x2C:24)
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -10098,7 +10098,7 @@ MsaMode_Select_DrawHighlight1:
 	call DrawDesignFrame
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 44)
-	lda_24 xbc, (NakaInst_Rock_Pop_0x2C)
+	lda xbc, (NakaInst_Rock_Pop_0x2C:24)
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -10380,7 +10380,7 @@ PmemMode_Select:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 40)
-	lda_24 xbc, (NakaInst_Rock_Pop_0x30)
+	lda xbc, (NakaInst_Rock_Pop_0x30:24)
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -10413,7 +10413,7 @@ PmemMode_Select_DrawHighlight1:
 	call DrawDesignFrame
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 36)
-	lda_24 xbc, (NakaInst_Rock_Pop_0x30)
+	lda xbc, (NakaInst_Rock_Pop_0x30:24)
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -10991,7 +10991,7 @@ PmBkNameFunc:
 	add xbc, xbc
 	add xbc, FadeTimeStr_Off_0xA4
 	ld bc, (xbc)
-	lda_24 xix, (PmBkName_EventDispatch)
+	lda xix, (PmBkName_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; PmBkNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ee)
 PmBkName_EventDispatch:
@@ -11306,7 +11306,7 @@ VariScreen_CalcRowOffset:
 	srl e, 1
 	extz de
 	sla de, 2
-	lda_24 xhl, (0x03f214)
+	lda xhl, (0x03f214:24)
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0xa
@@ -11382,7 +11382,7 @@ VariScreen_DrawEditSwitch:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 64)
 	ld wa, (xwa)
@@ -11398,7 +11398,7 @@ VariScreen_DrawEditSwitch:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 64)
 	ld wa, (xwa)
@@ -11558,7 +11558,7 @@ VariScreen_DrawRightPanel:
 	srl e, 1
 	extz de
 	sla de, 2
-	lda_24 xhl, (0x03f214)
+	lda xhl, (0x03f214:24)
 	ld wa, (xbc)
 	exts xwa
 	divs wa, 0xa
@@ -11635,7 +11635,7 @@ VariScreen_DrawRightEditSw:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xhl, (0x03f214)
+	lda xhl, (0x03f214:24)
 	ld wa, (xde)
 	extz wa
 	div a, 0xa
@@ -11649,7 +11649,7 @@ VariScreen_DrawRightEditSw:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 60)
 	ld wa, (xwa)
@@ -11916,7 +11916,7 @@ VariScreen_ConfirmDrawEditSw:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 10)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -11927,7 +11927,7 @@ VariScreen_ConfirmDrawEditSw:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 10)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -12132,7 +12132,7 @@ VariScreen_EnumHighlightColors:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld_sril XWA, (xsp + 0x022e)
 	ld l, (xwa)
 	extz hl
@@ -12144,7 +12144,7 @@ VariScreen_EnumHighlightColors:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld_sril XWA, (xsp + 0x022e)
 	ld l, (xwa)
 	extz hl
@@ -12969,7 +12969,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda_24	xbc, (15531432)
+	lda	xbc, (15531432:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	call	16369274
@@ -12978,7 +12978,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda_24	xbc, (15531432)
+	lda	xbc, (15531432:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -13000,7 +13000,7 @@ RVari_Select_CheckSameBank:
 	divs	wa, 4
 	ld	wa, qwa
 	sla	wa, 2
-	lda_24	xbc, (15537702)
+	lda	xbc, (15537702:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	237
@@ -13052,7 +13052,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda_24	xbc, (15531432)
+	lda	xbc, (15531432:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -13090,7 +13090,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda_24	xbc, (15531432)
+	lda	xbc, (15531432:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	call	16369274
@@ -13099,7 +13099,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda_24	xbc, (15531432)
+	lda	xbc, (15531432:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -13121,7 +13121,7 @@ RVari_Select_CheckSameBank:
 	divs	wa, 4
 	ld	wa, qwa
 	sla	wa, 2
-	lda_24	xbc, (15537702)
+	lda	xbc, (15537702:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	237
@@ -13161,7 +13161,7 @@ RVari_Select_CheckSameBank:
 	ld	wa, (xwa)
 	exts	xwa
 	divs	wa, 4
-	lda_24	xbc, (15531436)
+	lda	xbc, (15531436:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -13195,7 +13195,7 @@ RVari_Select_CheckSameBank:
 	srl	e, 2
 	extz	de
 	sla	de, 2
-	lda_24	xhl, (15531476)
+	lda	xhl, (15531476:24)
 	ld_rrl	xde, xhl, de
 	lds32	xhl, 1
 	push	xhl
@@ -13206,7 +13206,7 @@ RVari_Select_CheckSameBank:
 	ld	wa, (xwa)
 	exts	xwa
 	divs	wa, 4
-	lda_24	xbc, (15531436)
+	lda	xbc, (15531436:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -13240,7 +13240,7 @@ RVari_Select_CheckSameBank:
 	srl	e, 2
 	extz	de
 	sla	de, 2
-	lda_24	xhl, (15531476)
+	lda	xhl, (15531476:24)
 	ld_rrl	xde, xhl, de
 	lds32	xhl, 1
 	push	xhl

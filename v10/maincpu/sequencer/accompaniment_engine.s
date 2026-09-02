@@ -12093,17 +12093,17 @@ AccTone_LookupByProgram:
 	sub a, 0xf0
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Display_FontPalette_Table_0x515C)
+	lda xbc, (Display_FontPalette_Table_0x515C:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld a, (xde)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (RhythmTiming_OffsetTable)
+	lda xbc, (RhythmTiming_OffsetTable:24)
 	ld xde, 0x94860
 	add_sril_rm XDE, 0x07, 0xe4, 0xe0
 	ld a, (xde + 12)
 	extz wa
-	lda_24 xbc, (Display_FontPalette_Table_0x1D32)
+	lda xbc, (Display_FontPalette_Table_0x1D32:24)
 	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
@@ -12148,7 +12148,7 @@ AccTone_Process_UnderF0:
 	sub a, 0xf0
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Display_FontPalette_Table_0x515C)
+	lda xbc, (Display_FontPalette_Table_0x515C:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld e, (xwa)
 	extz de
@@ -12168,7 +12168,7 @@ AccTone_NoteLookup:
 	ldw_d16 xde, (4360)
 	ld ix, de
 	and ix, 0x4
-	lda_24 xhl, (Display_FontPalette_Table_0x1EBF)
+	lda xhl, (Display_FontPalette_Table_0x1EBF:24)
 	ld a, c
 	add a, c
 	mul iy, 0x28
@@ -12209,21 +12209,21 @@ AccTone_ExtendAndDispatch_Body:
 	push xiz
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Display_FontPalette_Table_0x513C)
+	lda xde, (Display_FontPalette_Table_0x513C:24)
 	ld_sril3 XIY, 0x07, 0xe8, 0xe4
 	ld e, a
 	extz de
 	ld wa, de
 	sla wa, 2
-	lda_24 xix, (RhythmTiming_OffsetTable)
+	lda xix, (RhythmTiming_OffsetTable:24)
 	ld xiz, xiy
 	add_sril_rm XIZ, 0x07, 0xf0, 0xe0
 	ld a, (xiz + 12)
 	extz wa
-	lda_24 xhl, (Display_FontPalette_Table_0x1D32)
+	lda xhl, (Display_FontPalette_Table_0x1D32:24)
 	ldb_sri A, 0x07, 0xec, 0xe0
 	ldb_erp A, 0xe2
-	lda_24 xiz, (Display_FontPalette_Table_0x511C)
+	lda xiz, (Display_FontPalette_Table_0x511C:24)
 	ld_sril3 XBC, 0x07, 0xf8, 0xe4
 	add de, 0x11
 	ldb_sri C, 0x07, 0xe4, 0xe8
@@ -12233,7 +12233,7 @@ AccTone_ExtendAndDispatch_Body:
 	extz bc
 	cps de, 4
 	jr nz, AccTone_CheckBit10Flag
-	lda_24 xde, (Display_FontPalette_Table_0x51E4)
+	lda xde, (Display_FontPalette_Table_0x51E4:24)
 	ldb_sri A, 0x07, 0xe8, 0xe4
 	extz wa
 	sla wa, 2
@@ -12257,7 +12257,7 @@ AccTone_CheckBit10Flag:
 	and de, 0x400
 	cp de, 0x400
 	jr nz, AccTone_CheckBit3Flag
-	lda_24 xde, (Display_FontPalette_Table_0x51E8)
+	lda xde, (Display_FontPalette_Table_0x51E8:24)
 	ldb_sri A, 0x07, 0xe8, 0xe4
 	extz wa
 	sla wa, 2
@@ -12280,7 +12280,7 @@ AccTone_CheckBit3Flag:
 	jr nz, AccTone_SetupExit
 	stb_erp A, 0xe2
 	extz wa
-	lda_24 xbc, (Display_FontPalette_Table_0x1D58)
+	lda xbc, (Display_FontPalette_Table_0x1D58:24)
 	bit_dri 0, 0x07, 0xe4, 0xe0
 	jr nz, AccTone_SetupExit
 	ldb l, 0x1
@@ -12291,18 +12291,18 @@ AccTone_CheckBit3Flag:
 	jrl z, AccTone_LookupFailed
 	extz bc
 	sla bc, 2
-	lda_24 xde, (Display_FontPalette_Table_0x513C)
+	lda xde, (Display_FontPalette_Table_0x513C:24)
 	ld_sril3 XDE, 0x07, 0xe8, 0xe4
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (RhythmTiming_OffsetTable)
+	lda xbc, (RhythmTiming_OffsetTable:24)
 	add_sril_rm XDE, 0x07, 0xe4, 0xe0
 	ld a, (xde + 12)
 	extz wa
-	lda_24 xbc, (Display_FontPalette_Table_0x1D32)
+	lda xbc, (Display_FontPalette_Table_0x1D32:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_24 xbc, (Display_FontPalette_Table_0x1D58)
+	lda xbc, (Display_FontPalette_Table_0x1D58:24)
 	bit_dri 0, 0x07, 0xe4, 0xe0
 	jr nz, AccTone_LookupFailed
 	lda xwa, (xsp)
@@ -12397,7 +12397,7 @@ AccTone_InlineBytecodeData:
 	ret
 	ldb_d8	a, 13016
 	extz	wa
-	lda_24	xbc, 14983112
+	lda	xbc, (14983112:24)
 	ld_rrb	a, xbc, wa
 	stb_d8	13355, a
 	ld	xbc, (13006:16)
@@ -12416,7 +12416,7 @@ AccTone_InlineBytecodeData:
 	ldb_d8	a, 13345
 	extz	wa
 	sla	wa, 2
-	lda_24	xde, 14967570
+	lda	xde, (14967570:24)
 	ld	xbc, 608352
 	.byte 0xe3, 0x07, 0xe8, 0xe0, 0x81
 	stda32	13350, xbc
@@ -12470,13 +12470,13 @@ AccTone_InlineBytecodeData:
 	sub	a, 240
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, 14983092
+	lda	xbc, (14983092:24)
 	ld_rrl	xwa, xbc, wa
 	stda32	13006, xwa
 	ld	a, (xwa)
 	stb_d8	13297, a
 	extz	wa
-	lda_24	xbc, 14969849
+	lda	xbc, (14969849:24)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0x38, 0x33
 	ld	bc, wa
 	sla	bc, 2
@@ -12515,12 +12515,12 @@ AccTone_InlineBytecodeData:
 	call	16115479
 	ld	a, (xiz+12)
 	extz	wa
-	lda_24	xbc, 14969738
+	lda	xbc, (14969738:24)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0x33, 0x04
 	ldb_d8	a, 1075
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 14969758
+	lda	xbc, (14969758:24)
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x19, 0x7b, 0x32
 	ldb_d8	a, 13297
 	add	a, 128
@@ -12534,7 +12534,7 @@ AccTone_InlineBytecodeData:
 	ldb_d8	a, 13354
 	extz	wa
 	sla	wa, 2
-	lda_24	xde, 14967570
+	lda	xde, (14967570:24)
 	ld	xbc, 608352
 	.byte 0xe3, 0x07, 0xe8, 0xe0, 0x81
 	stda32	13350, xbc
@@ -12558,17 +12558,17 @@ AccTone_InlineBytecodeData:
 	sub	a, 240
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, 14983092
+	lda	xbc, (14983092:24)
 	ld_rrl	xwa, xbc, wa
 	stda32	13006, xwa
 	ld	a, (xwa)
 	stb_d8	13297, a
 	extz	wa
-	lda_24	xbc, 14969849
+	lda	xbc, (14969849:24)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0x38, 0x33
 	ld	bc, wa
 	sla	bc, 2
-	lda_24	xde, 14967570
+	lda	xde, (14967570:24)
 	ld	xwa, 608352
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x80
 	stda32	13298, xwa
@@ -12601,12 +12601,12 @@ AccTone_InlineBytecodeData:
 	call	16115479
 	ld	a, (xiz+12)
 	extz	wa
-	lda_24	xbc, 14969738
+	lda	xbc, (14969738:24)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x19, 0x33, 0x04
 	ldb_d8	a, 1075
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 14969758
+	lda	xbc, (14969758:24)
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x19, 0x7b, 0x32
 	ldb_d8	a, 13297
 	add	a, 128
@@ -12618,7 +12618,7 @@ AccTone_InlineBytecodeData:
 	ldb_d8	c, 13345
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, 14967570
+	lda	xde, (14967570:24)
 	ld	xwa, 608352
 	.byte 0xe3, 0x07, 0xe8, 0xe4, 0x80
 	stda32	13350, xwa
@@ -12640,7 +12640,7 @@ AccTone_InlineBytecodeData:
 	jr	nz, 41
 	ldb_d8	a, 1075
 	extz	wa
-	lda_24	xbc, 14969776
+	lda	xbc, (14969776:24)
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x3f, 0x01
 	jr	nz, 5
 	calr 252
@@ -12828,7 +12828,7 @@ AccVoice_BarCounterBytecodeData:
 	ret
 	dec	2, xsp
 	push	xiz
-	lda_24	xbc, 14967570
+	lda	xbc, (14967570:24)
 	.byte 0xf1, 0x63, 0x33, 0xc8
 	jr	z, 126
 	ldb_d8	a, 13067
@@ -12913,7 +12913,7 @@ AccVoice_BarCounterBytecodeData:
 	ret
 	dec	2, xsp
 	push	xiz
-	lda_24	xbc, 14967570
+	lda	xbc, (14967570:24)
 	.byte 0xf1, 0x63, 0x33, 0xc8
 	jr	z, 126
 	ldb_d8	a, 13065
@@ -12996,7 +12996,7 @@ AccVoice_BarCounterBytecodeData:
 	dec	2, xsp
 	push	xiz
 	ld	xwa, (13298:16)
-	lda_24	xiy, 14967570
+	lda	xiy, (14967570:24)
 	lda	xix, (xwa+17)
 	ld	e, (xwa+16)
 	lda	xhl, (xsp+4)
@@ -13029,7 +13029,7 @@ AccVoice_BarCounterBytecodeData:
 	jrl	276
 	ldb_d8	a, 1075
 	extz	wa
-	lda_24	xiy, 14969776
+	lda	xiy, (14969776:24)
 	.byte 0xc3, 0x07, 0xf4, 0xe0, 0x3f, 0x01
 	jr	nz, 18
 	calr	-1262
@@ -13133,7 +13133,7 @@ AccVoice_BarCounterBytecodeData:
 AccTuning_ReadAndApplyOffset:
 	ldb_d8 a, (0x3423)
 	extz wa
-	lda_24 xbc, (Display_FontPalette_Table_0x5170)
+	lda xbc, (Display_FontPalette_Table_0x5170:24)
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x22, 0x34
 	ret
 
@@ -13161,12 +13161,12 @@ AccTuning_ComplexBytecodeData:
 	ldb_d8 e, (13161)
 	jr -61
 	extz wa
-	lda_24	xbc, 14983160
+	lda	xbc, (14983160:24)
 	ld_rrb	l, xbc, wa
 	ld	a, e
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, 14967570
+	lda	xbc, (14967570:24)
 	ld	xde, 608352
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x82
 	extz	hl
@@ -27080,7 +27080,7 @@ Tempo_AdjustEffect:
 	ldb_d8 a, (0x3990)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Display_FontPalette_Table_0x524C)
+	lda xbc, (Display_FontPalette_Table_0x524C:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	ld a, (xbc)
 	cp (xsp), 0x0
@@ -27686,7 +27686,7 @@ Tempo_RefreshDisplay5:
 	ld a, (xwa)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Display_FontPalette_Table_0x5270)
+	lda xbc, (Display_FontPalette_Table_0x5270:24)
 	ld_sril3 XIX, 0x07, 0xe4, 0xe0
 	ld e, (xix + 1)
 	extz de
@@ -28256,9 +28256,9 @@ RhythmParam_Dispatch:
 	cps bc, 6
 	jr gt, RhythmParam_CheckExit
 	add bc, bc
-	lda_24 xix, (Display_FontPalette_Table_0x52CE)
+	lda xix, (Display_FontPalette_Table_0x52CE:24)
 	ldw_sri BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, (RhythmParam_CheckExit)
+	lda xix, (RhythmParam_CheckExit:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 RhythmParam_CheckExit:
@@ -28444,9 +28444,9 @@ VoiceSlot_Dispatch:
 	cps de, 6
 	jr gt, Voice_ClearSlotAndRet
 	add de, de
-	lda_24 xix, (Display_FontPalette_Table_0x52C0)
+	lda xix, (Display_FontPalette_Table_0x52C0:24)
 	ldw_sri DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, (Voice_ClearSlotAndRet)
+	lda xix, (Voice_ClearSlotAndRet:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 
 Voice_ClearSlotAndRet:
@@ -30201,7 +30201,7 @@ CmpMenuTtlFunc:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x701A
 	ld de, (xde)
-	lda_24 xix, (CmpMenuTtl_Dispatch)
+	lda xix, (CmpMenuTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpMenuTtlFunc title dispatch
 CmpMenuTtl_Dispatch:
@@ -30259,7 +30259,7 @@ CmpSetTtlFunc:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x7040
 	ld de, (xde)
-	lda_24 xix, (CmpSetTtl_Dispatch)
+	lda xix, (CmpSetTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpSetTtlFunc title dispatch
 CmpSetTtl_Dispatch:
@@ -30369,7 +30369,7 @@ CmpSetTtl_DynamicLookup:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x7028
 	ld de, (xde)
-	lda_24 xix, (CmpSetTtl_Dispatch2)
+	lda xix, (CmpSetTtl_Dispatch2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpSetTtlFunc title dispatch 2
 CmpSetTtl_Dispatch2:
@@ -30414,7 +30414,7 @@ CmpRealTtlFunc:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x7068
 	ld de, (xde)
-	lda_24 xix, (CmpRealTtl_Dispatch)
+	lda xix, (CmpRealTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpRealTtlFunc title dispatch
 CmpRealTtl_Dispatch:
@@ -30452,7 +30452,7 @@ CmpRealTtl_MajorDispatch:
 	add xwa, xwa
 	add xwa, Display_FontPalette_Table_0x704E
 	ld wa, (xwa)
-	lda_24 xix, (CmpRealTtl_RhythmVar0)
+	lda xix, (CmpRealTtl_RhythmVar0:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; CmpRealTtl rhythm variation 0
@@ -30684,7 +30684,7 @@ CmpBkslTtlFunc:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x7076
 	ld de, (xde)
-	lda_24 xix, (CmpBkslTtl_Dispatch)
+	lda xix, (CmpBkslTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpBkslTtlFunc title dispatch
 CmpBkslTtl_Dispatch:
@@ -30885,7 +30885,7 @@ CmpBksl_STtlFunc:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x709A
 	ld de, (xde)
-	lda_24 xix, (CmpBkslSTtl_Dispatch)
+	lda xix, (CmpBkslSTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpBksl_STtlFunc title dispatch
 CmpBkslSTtl_Dispatch:
@@ -30931,7 +30931,7 @@ CmpBkslSTtl_DirectMode:
 	add xwa, xwa
 	add xwa, Display_FontPalette_Table_0x7084
 	ld wa, (xwa)
-	lda_24 xix, (CmpBkslSTtl_FillIn4)
+	lda xix, (CmpBkslSTtl_FillIn4:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; CmpBkslSTtl fill-in level 4
@@ -31067,7 +31067,7 @@ CmpNcpTtlFunc:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x70D0
 	ld de, (xde)
-	lda_24 xix, (CmpNcpTtl_Dispatch)
+	lda xix, (CmpNcpTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpNcpTtlFunc title dispatch
 CmpNcpTtl_Dispatch:
@@ -31147,7 +31147,7 @@ CmpNcpTtl_TableDispatch:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x70A8
 	ld de, (xde)
-	lda_24 xix, (CmpNcpTtl_Dispatch2)
+	lda xix, (CmpNcpTtl_Dispatch2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpNcpTtlFunc title dispatch 2
 CmpNcpTtl_Dispatch2:
@@ -31584,7 +31584,7 @@ CmEsyTtlFunc:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x70FE
 	ld de, (xde)
-	lda_24 xix, (CmEsyTtl_Dispatch)
+	lda xix, (CmEsyTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmEsyTtlFunc title dispatch
 CmEsyTtl_Dispatch:
@@ -31651,7 +31651,7 @@ CmpEsyTtl_Mode2:
 	sll de, 1
 	ld xix, Display_FontPalette_Table_0x70F2
 	ldw_sri DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, (CmEsyTtl_Dispatch2)
+	lda xix, (CmEsyTtl_Dispatch2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmEsyTtlFunc title dispatch 2
 CmEsyTtl_Dispatch2:
@@ -31773,7 +31773,7 @@ S2cTtlFunc:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x7124
 	ld de, (xde)
-	lda_24 xix, (S2cTtl_Dispatch)
+	lda xix, (S2cTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; S2cTtlFunc title dispatch
 S2cTtl_Dispatch:
@@ -31830,7 +31830,7 @@ CmpEsyTtl_E_Var1:
 	add xwa, xwa
 	add xwa, Display_FontPalette_Table_0x710C
 	ld wa, (xwa)
-	lda_24 xix, (CmpEsy_E_DispatchDataBlock)
+	lda xix, (CmpEsy_E_DispatchDataBlock:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 CmpEsy_E_DispatchDataBlock:
@@ -32107,7 +32107,7 @@ CstmCpTtlFunc:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x715A
 	ld de, (xde)
-	lda_24 xix, (CstmCpTtl_Dispatch)
+	lda xix, (CstmCpTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CstmCpTtlFunc title dispatch
 CstmCpTtl_Dispatch:
@@ -32163,7 +32163,7 @@ CstmCpTtl_RecMode2:
 	add xde, xde
 	add xde, Display_FontPalette_Table_0x7132
 	ld de, (xde)
-	lda_24 xix, (CstmCpTtl_Dispatch2)
+	lda xix, (CstmCpTtl_Dispatch2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CstmCpTtlFunc title dispatch 2
 CstmCpTtl_Dispatch2:
@@ -32775,7 +32775,7 @@ MainCmpSetFunc:
 	ldb_d8 a, (0x34d6)
 	extz wa
 	sla wa, 2
-	lda_24 xde, (RhythmTiming_OffsetTable)
+	lda xde, (RhythmTiming_OffsetTable:24)
 	ld xhl, 0x94860
 	add_sril_rm XHL, 0x07, 0xe8, 0xe0
 	ld xde, xhl
@@ -32790,7 +32790,7 @@ MainCmpSetFunc:
 	add xhl, xhl
 	add xhl, NakaInst_MEMORY_A_0xE
 	ld hl, (xhl)
-	lda_24 xix, (MainCmpSet_Dispatch)
+	lda xix, (MainCmpSet_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
 ; MainCmpSetFunc dispatch
 MainCmpSet_Dispatch:
@@ -33223,7 +33223,7 @@ MspMenuTtlFunc:
 	add xde, xde
 	add xde, NakaInst_MEMORY_A_0x26
 	ld de, (xde)
-	lda_24 xix, (MspMenuTtl_Dispatch)
+	lda xix, (MspMenuTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; MspMenuTtlFunc title dispatch
 MspMenuTtl_Dispatch:
@@ -33273,7 +33273,7 @@ MspNameTtlFunc:
 	add xde, xde
 	add xde, NakaInst_MEMORY_A_0x34
 	ld de, (xde)
-	lda_24 xix, (MspNameTtl_Dispatch)
+	lda xix, (MspNameTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; MspNameTtlFunc title dispatch
 MspNameTtl_Dispatch:
@@ -33328,7 +33328,7 @@ MspRecTtlFunc:
 	add xde, xde
 	add xde, NakaInst_MEMORY_A_0x42
 	ld de, (xde)
-	lda_24 xix, (MspRecTtl_Dispatch)
+	lda xix, (MspRecTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; MspRecTtlFunc title dispatch
 MspRecTtl_Dispatch:
@@ -33457,7 +33457,7 @@ SndArgTtlFunc:
 	add xde, xde
 	add xde, NakaInst_MEMORY_A_0x50
 	ld de, (xde)
-	lda_24 xix, (SndArgTtl_Dispatch)
+	lda xix, (SndArgTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; SndArgTtlFunc title dispatch
 SndArgTtl_Dispatch:
@@ -35799,9 +35799,9 @@ Display_RestoreEntry:
 	jr AccDisplay_CopyToFrontBuffer
 
 AccDisplay_CopyToBackBuffer:
-	lda_24 xbc, (0x094800)
+	lda xbc, (0x094800:24)
 	stda32 0x55dc, xbc
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 0x55e0, xwa
 	ld xiy, xbc
 	ld xix, xwa
@@ -35810,9 +35810,9 @@ AccDisplay_CopyToBackBuffer:
 	ret
 
 AccDisplay_CopyToFrontBuffer:
-	lda_24 xde, (0x094800)
+	lda xde, (0x094800:24)
 	stda32 0x55dc, xde
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 0x55e0, xwa
 	ld xiy, xwa
 	ld xix, xde
@@ -35868,14 +35868,14 @@ AccBankData_PadSpaces_Done:
 	ldib_erp 0xfb, 0
 
 AccBankData_ProcessSlot:
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 0x39ae, xwa
 	stb_erp A, 0xfb
 	stb_d8 (0x39ac), a
 	call AccPatch_InitFromSlotIndex
 	ld xwa, (0x3d5c:16)
 	stda32 0x39ae, xwa
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 0x39b2, xwa
 	stb_erp A, 0xfb
 	stb_d8 (0x39ad), a
@@ -35897,7 +35897,7 @@ AccBankData_SlotFound:
 	jr z, AccBankData_FinalizeCheck
 
 AccBankData_ReInitAllSlots:
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 0x39ae, xwa
 	ldib_erp 0xfb, 0
 
@@ -35938,7 +35938,7 @@ AccBankData_CompareLoop:
 	cp_erpb 0xfb, 0x10
 	jr c, AccBankData_CompareLoop
 	ld xix, xbc
-	lda_24 xbc, (0x1e0000)
+	lda xbc, (0x1e0000:24)
 	lds32 xde, 0
 
 AccBankData_CopyToExtRAM:
@@ -36006,7 +36006,7 @@ AccBankData_InitSlotScan:
 	ldib_erp 0xfb, 0
 
 AccBankData_SlotScan_Loop:
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 0x39ae, xwa
 	ld c, (xsp + 2)
 	extz bc
@@ -36015,18 +36015,18 @@ AccBankData_SlotScan_Loop:
 	muls wa, 0x3
 	ld de, wa
 	add de, bc
-	lda_24 xwa, (NakaInst_OFF_Str_0x42)
+	lda xwa, (NakaInst_OFF_Str_0x42:24)
 	ldmm_srib 0x07, 0xe0, 0xe8, 0xac, 0x39
 	call AccPatch_InitFromSlotIndex
 	ld xwa, (0x3d5c:16)
 	stda32 0x39ae, xwa
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 0x39b2, xwa
 	stb_erp A, 0xfb
 	extz wa
 	muls wa, 0x3
 	ld bc, wa
-	lda_24 xde, (NakaInst_OFF_Str_0x42)
+	lda xde, (NakaInst_OFF_Str_0x42:24)
 	ldmm_srib 0x07, 0xe8, 0xe4, 0xac, 0x39
 	ld a, (xsp + 2)
 	extz wa
@@ -36048,7 +36048,7 @@ AccBankData_SlotScan_Next:
 	jr z, AccBankData_NotifyAndUpdateTempo
 
 AccBankData_SlotScan_ReInit:
-	lda_24 xwa, (0x069800)
+	lda xwa, (0x069800:24)
 	stda32 0x39ae, xwa
 	ldib_erp 0xfb, 0
 
@@ -36060,7 +36060,7 @@ AccBankData_ReInit_ScanLoop:
 	muls wa, 0x3
 	ld de, wa
 	add de, bc
-	lda_24 xwa, (NakaInst_OFF_Str_0x42)
+	lda xwa, (NakaInst_OFF_Str_0x42:24)
 	ldmm_srib 0x07, 0xe0, 0xe8, 0xac, 0x39
 	call AccPatch_InitFromSlotIndex
 	inc1b_erp 0xfb
@@ -38614,16 +38614,16 @@ AccStyle_TableDataEntry:
 	lda	xix, (xsp+4)
 	ldw	bc, 15
 	ldirw
-	lda_24	xde, (0x094800)
-	lda_24	xbc, (0x0ab000)
+	lda	xde, (0x094800:24)
+	lda	xbc, (0x0ab000:24)
 	sub	xbc, xde
 	ld	xwa, 0x069800
 	call	FileIO_ReadBlock
 	cp	xhl, 0
 	jrl	lt, 731
-	lda_24	xbc, (0x069800)
+	lda	xbc, (0x069800:24)
 	stda32	0x7ae4, xbc
-	lda_24	xwa, (0x094800)
+	lda	xwa, (0x094800:24)
 	stda32	0x7ae8, xwa
 	stdi8	(0x3950), 0
 	ld	a, (xbc)
@@ -38851,7 +38851,7 @@ AccStyle_TableDataEntry:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda_24	xwa, (NakaInst_OFF_Str_0x98)
+	lda	xwa, (NakaInst_OFF_Str_0x98:24)
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xe8
@@ -38886,7 +38886,7 @@ AccStyle_TableDataEntry:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda_24	xwa, (NakaInst_OFF_Str_0x98)
+	lda	xwa, (NakaInst_OFF_Str_0x98:24)
 	.byte 0xc3
 	reti
 	.byte 0xe0, 0xe8
@@ -38912,7 +38912,7 @@ AccStyle_TableDataEntry:
 	muls	wa, 3
 	ld	bc, wa
 	add	wa, de
-	lda_24	xde, (NakaInst_OFF_Str_0x98)
+	lda	xde, (NakaInst_OFF_Str_0x98:24)
 	.byte 0xc3
 	reti
 	or	xwa, xwa

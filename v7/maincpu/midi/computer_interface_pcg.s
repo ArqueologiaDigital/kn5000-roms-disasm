@@ -57,7 +57,7 @@ AcPcgOutGridBoxProc:
 	add xbc, xbc
 	add xbc, NakaInst_INITIAL_0x28
 	ld bc, (xbc)
-	lda_24 xix, (PcgOutGridBoxEventDispatch)
+	lda xix, (PcgOutGridBoxEventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 PcgOutGridBoxEventDispatch:
@@ -291,7 +291,7 @@ PcgOutGridCheck:
 	add xwa, xwa
 	add xwa, UserMemory_FormatStrings_0xC0
 	ld wa, (xwa)
-	lda_24 xix, (PcgOutGridCheckJumpTable)
+	lda xix, (PcgOutGridCheckJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PcgOutGridCheckJumpTable:
@@ -465,7 +465,7 @@ PcgOutGridCheckComplete:
 PcgOutSendFunc:
 	cp xbc, 0x1c00008
 	jr nz, PcgOutSendFunc_Exit
-	lda_24 xde, (0x024752)
+	lda xde, (0x024752:24)
 	ldb_da a, (0x02476a)
 	ld (xde), a
 	ldb_da a, (0x02476c)

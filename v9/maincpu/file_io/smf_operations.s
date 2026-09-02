@@ -204,7 +204,7 @@ RenderSmfFilename:
 	extz bc
 	stib_ind 0x07, 0xe0, 0xe4, 0x00
 	lds ix, 0
-	lda_24 xhl, (CharMap_FullPermutation_0x660)
+	lda xhl, (CharMap_FullPermutation_0x660:24)
 	jr RenderSmf_LoopCheck
 
 RenderSmf_CheckSeparator:
@@ -404,7 +404,7 @@ SmfLoadAs_Apply:
 	ldb_d8 a, (0x8946)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (DiskOp_ChannelCfgTable_0xE8)
+	lda xbc, (DiskOp_ChannelCfgTable_0xE8:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x819c:16)
 	ld xbc, 0x1c0000f
@@ -560,7 +560,7 @@ FmmSmfFileNameFunc:
 	add xde, xde
 	add xde, Str_SmfConvert_GmToGm_0x1E
 	ld de, (xde)
-	lda_24 xix, (SmfFN_JumpTable)
+	lda xix, (SmfFN_JumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 SmfFN_JumpTable:
 	stda32	0x81a0, xbc
@@ -750,7 +750,7 @@ SmfFN_Save_WriteSlot:
 	lda xwa, (xsp + 8)
 	ldw bc, 0x10
 	calr TrimAndPadSmfFilename
-	lda_24 xwa, (0x0ab000)
+	lda xwa, (0x0ab000:24)
 	lds32 xbc, 0
 	ldb_d8 c, (0x8948)
 	sll xbc, 11
@@ -762,7 +762,7 @@ SmfFN_Save_WriteSlot:
 	ldb_da a, (0x00ffe3)
 	cpda8 a, 0x8948
 	jr nz, SmfFN_Save_Finish
-	lda_24 xwa, (0x00f180)
+	lda xwa, (0x00f180:24)
 	lda_dri XWA, 0xe1, 0x00, 0x01
 	lda xbc, (xsp + 8)
 	ldw de, 0x10

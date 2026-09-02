@@ -133,7 +133,7 @@ CompLoad_DrawItemLoop:
 	ld	xbc, xhl
 	jr	5
 CompLoad_DrawItem_Empty:
-	lda_24 xbc, (DiskOp_ChannelCfgTable_0x80)
+	lda xbc, (DiskOp_ChannelCfgTable_0x80:24)
 
 CompLoad_DrawItem_Continue:
 	ld	de, iz

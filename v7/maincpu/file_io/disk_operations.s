@@ -231,7 +231,7 @@ FileRenameFunc:
 	ld	xwa, xiz
 	call	16288975
 	lds	iy, 0
-	lda_24	xix, (15652728)
+	lda	xix, (15652728:24)
 	lda_d16	xwa, (34772)
 	ld	xhl, xwa
 	jr	17
@@ -330,7 +330,7 @@ FileRenameSmfFunc:
 	ld	xwa, xiz
 	call	16288975
 	lds	iy, 0
-	lda_24	xix, (15652728)
+	lda	xix, (15652728:24)
 	lda_d16	xwa, (34772)
 	ld	xhl, xwa
 	jr	17
@@ -859,7 +859,7 @@ DiskName_TextChange:
 	call	16288975
 	lds	iy, 0
 	lda_d16	xix, (34772)
-	lda_24	xiz, (15652728)
+	lda	xiz, (15652728:24)
 	lda_d16	xde, (34544)
 	ld	xhl, xde
 	jr	22
@@ -979,7 +979,7 @@ DiskInfo_RenderStrings:
 	ld	(xsp+4), xbc
 	ldw_d16	wa, 33892
 	sla	wa, 2
-	lda_24	xbc, 15336792
+	lda	xbc, (15336792:24)
 	ld_rrl	xbc, xbc, wa
 	ld	xwa, 34610
 	call	16288975
@@ -1131,7 +1131,7 @@ SaveFileName_TextChange:
 	ld	xwa, xiz
 	call	16288975
 	lds	iy, 0
-	lda_24	xix, (15652728)
+	lda	xix, (15652728:24)
 	lda_d16	xde, (34740)
 	ld	xhl, xde
 	jr	17

@@ -334,7 +334,7 @@ sub_FB6F2C:
 	pushw	hl                               ; FB6F30  push HL
 	pushw	de                               ; FB6F31  push DE
 	push	xix                               ; FB6F32  push XIX
-	lda_24	xix, (0xFB6E8C)                 ; FB6F33  lda XIX,0xfb6e8c
+	lda	xix, (0xFB6E8C:24)                 ; FB6F33  lda XIX,0xfb6e8c
 	ld	de, (xiz+8)                         ; FB6F38  ld DE,(XIZ+0x08)
 	ldw	bc, 68                             ; FB6F3B  ld BC,0x0044
 	mul	xbc, xde                           ; FB6F3E  mul XBC,DE
@@ -356,29 +356,29 @@ sub_FB6F2C:
 	jr z, sub_FB6F2C__FB6F81                        ; FB6F6D  jr Z,0xfb6f81
 	ld	bc, hl                              ; FB6F6F  ld BC,HL
 	res	15, bc                             ; FB6F71  res 0x0f,BC
-	lda_24	xwa, (0xD85B)                   ; FB6F74  lda XWA,0x00d85b
+	lda	xwa, (0xD85B:24)                   ; FB6F74  lda XWA,0x00d85b
 	extpfx3 0xAE, 0xFC, 0x80               ; FB6F79  add XWA,(XIZ+0xfc)   [llvm-mc cannot encode this]
 	ld	(xwa), bc                           ; FB6F7C  ld (XWA),BC
 	jrl sub_FB6F2C__FB7010                          ; FB6F7E  jrl T,0xfb7010
 sub_FB6F2C__FB6F81:
 	pushw	de                               ; FB6F81  push DE
-	lda_24	xiy, (0xFB6F8A)                 ; FB6F82  lda XIY,0xfb6f8a
+	lda	xiy, (0xFB6F8A:24)                 ; FB6F82  lda XIY,0xfb6f8a
 	push	xiy                               ; FB6F87  push XIY
 	jp	(xix)                               ; FB6F88  jp T,XIX
 	pushw	de                               ; FB6F8A  push DE
-	lda_24	xiy, (0xFB6F93)                 ; FB6F8B  lda XIY,0xfb6f93
+	lda	xiy, (0xFB6F93:24)                 ; FB6F8B  lda XIY,0xfb6f93
 	push	xiy                               ; FB6F90  push XIY
 	jp	(xix)                               ; FB6F91  jp T,XIX
 	pushw	de                               ; FB6F93  push DE
-	lda_24	xiy, (0xFB6F9C)                 ; FB6F94  lda XIY,0xfb6f9c
+	lda	xiy, (0xFB6F9C:24)                 ; FB6F94  lda XIY,0xfb6f9c
 	push	xiy                               ; FB6F99  push XIY
 	jp	(xix)                               ; FB6F9A  jp T,XIX
 	pushw	de                               ; FB6F9C  push DE
-	lda_24	xiy, (0xFB6FA5)                 ; FB6F9D  lda XIY,0xfb6fa5
+	lda	xiy, (0xFB6FA5:24)                 ; FB6F9D  lda XIY,0xfb6fa5
 	push	xiy                               ; FB6FA2  push XIY
 	jp	(xix)                               ; FB6FA3  jp T,XIX
 	pushw	de                               ; FB6FA5  push DE
-	lda_24	xiy, (0xFB6FAE)                 ; FB6FA6  lda XIY,0xfb6fae
+	lda	xiy, (0xFB6FAE:24)                 ; FB6FA6  lda XIY,0xfb6fae
 	push	xiy                               ; FB6FAB  push XIY
 	jp	(xix)                               ; FB6FAC  jp T,XIX
 	ldw	bc, 68                             ; FB6FAE  ld BC,0x0044
@@ -527,26 +527,26 @@ sub_FB707E:
 	pushw	hl                               ; FB7082  push HL
 	pushw	de                               ; FB7083  push DE
 	push	xix                               ; FB7084  push XIX
-	lda_24	xix, (0xFB6E8C)                 ; FB7085  lda XIX,0xfb6e8c
+	lda	xix, (0xFB6E8C:24)                 ; FB7085  lda XIX,0xfb6e8c
 	ld	hl, (xiz+8)                         ; FB708A  ld HL,(XIZ+0x08)
 	pushw	hl                               ; FB708D  push HL
-	lda_24	xiy, (0xFB7096)                 ; FB708E  lda XIY,0xfb7096
+	lda	xiy, (0xFB7096:24)                 ; FB708E  lda XIY,0xfb7096
 	push	xiy                               ; FB7093  push XIY
 	jp	(xix)                               ; FB7094  jp T,XIX
 	pushw	hl                               ; FB7096  push HL
-	lda_24	xiy, (0xFB709F)                 ; FB7097  lda XIY,0xfb709f
+	lda	xiy, (0xFB709F:24)                 ; FB7097  lda XIY,0xfb709f
 	push	xiy                               ; FB709C  push XIY
 	jp	(xix)                               ; FB709D  jp T,XIX
 	pushw	hl                               ; FB709F  push HL
-	lda_24	xiy, (0xFB70A8)                 ; FB70A0  lda XIY,0xfb70a8
+	lda	xiy, (0xFB70A8:24)                 ; FB70A0  lda XIY,0xfb70a8
 	push	xiy                               ; FB70A5  push XIY
 	jp	(xix)                               ; FB70A6  jp T,XIX
 	pushw	hl                               ; FB70A8  push HL
-	lda_24	xiy, (0xFB70B1)                 ; FB70A9  lda XIY,0xfb70b1
+	lda	xiy, (0xFB70B1:24)                 ; FB70A9  lda XIY,0xfb70b1
 	push	xiy                               ; FB70AE  push XIY
 	jp	(xix)                               ; FB70AF  jp T,XIX
 	pushw	hl                               ; FB70B1  push HL
-	lda_24	xiy, (0xFB70BA)                 ; FB70B2  lda XIY,0xfb70ba
+	lda	xiy, (0xFB70BA:24)                 ; FB70B2  lda XIY,0xfb70ba
 	push	xiy                               ; FB70B7  push XIY
 	jp	(xix)                               ; FB70B8  jp T,XIX
 	ldw	bc, 68                             ; FB70BA  ld BC,0x0044
@@ -3358,7 +3358,7 @@ Dev10C_ResetAllChannels:
 	pushw	hl                                   ; FB80E5  2b                push HL
 	pushw	de                                   ; FB80E6  2a                push DE
 	push	xix                                   ; FB80E7  3c                push XIX
-	lda_24	xbc, 0xFE12B5                       ; FB80E8  f2 b5 12 fe 31    lda XBC,0xfe12b5
+	lda	xbc, (0xFE12B5:24)                       ; FB80E8  f2 b5 12 fe 31    lda XBC,0xfe12b5
 	push	xbc                                   ; FB80ED  39                push XBC
 	calr (0xFB7715 - 0xFB80F1)                 ; FB80EE  1e 24 f6          calr 0xfb7715
 	ld	xix, 0x00104000                         ; FB80F1  44 00 40 10 00    ld XIX,0x00104000
@@ -3394,22 +3394,22 @@ Dev10C_ResetAllChannels__FB8119:
 	dec	1, d                                   ; FB8140  cc 69             dec 1,D
 	cps	d, 0                                   ; FB8142  cc d8             cp D,0
 	jr nz, Dev10C_ResetAllChannels__FB8119                            ; FB8144  6e d3             jr NZ,0xfb8119
-	lda_24	xix, 0x00D8DB                       ; FB8146  f2 db d8 00 34    lda XIX,0x00d8db
+	lda	xix, (0x00D8DB:24)                       ; FB8146  f2 db d8 00 34    lda XIX,0x00d8db
 	pushw	68                                   ; FB814B  0b 44 00          push 0x0044
 	push	xix                                   ; FB814E  3c                push XIX
-	lda_24	xwa, 0xFE12CF                       ; FB814F  f2 cf 12 fe 30    lda XWA,0xfe12cf
+	lda	xwa, (0xFE12CF:24)                       ; FB814F  f2 cf 12 fe 30    lda XWA,0xfe12cf
 	push	xwa                                   ; FB8154  38                push XWA
 	call 0x00F9A038                            ; FB8155  1d 38 a0 f9       call 0xf9a038
-	lda_24	xix, 0x00D91F                       ; FB8159  f2 1f d9 00 34    lda XIX,0x00d91f
+	lda	xix, (0x00D91F:24)                       ; FB8159  f2 1f d9 00 34    lda XIX,0x00d91f
 	pushw	38                                   ; FB815E  0b 26 00          push 0x0026
 	push	xix                                   ; FB8161  3c                push XIX
-	lda_24	xbc, 0xFE133B                       ; FB8162  f2 3b 13 fe 31    lda XBC,0xfe133b
+	lda	xbc, (0xFE133B:24)                       ; FB8162  f2 3b 13 fe 31    lda XBC,0xfe133b
 	push	xbc                                   ; FB8167  39                push XBC
 	call 0x00F9A038                            ; FB8168  1d 38 a0 f9       call 0xf9a038
 	ldw	hl, 0                                  ; FB816C  33 00 00          ld HL,0x0000
 	add	xsp, 20                                ; FB816F  ef c8 14 00 00 00 add XSP,0x00000014
 Dev10C_ResetAllChannels__FB8175:
-	lda_24	xbc, 0x00D8DB                       ; FB8175  f2 db d8 00 31    lda XBC,0x00d8db
+	lda	xbc, (0x00D8DB:24)                       ; FB8175  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB817A  39                push XBC
 	ld	de, hl                                  ; FB817B  db 8a             ld DE,HL
 	pushw	de                                   ; FB817D  2a                push DE
@@ -3421,7 +3421,7 @@ Dev10C_ResetAllChannels__FB8175:
 	and	bc, 0x3F00                             ; FB8192  d9 cc 00 3f       and BC,0x3f00
 	or	bc, ix                                  ; FB8196  dc e1             or BC,IX
 	stw_da	0x00D91F, bc                        ; FB8198  f2 1f d9 00 51    ld (0x00d91f),BC
-	lda_24	xbc, 0x00D91F                       ; FB819D  f2 1f d9 00 31    lda XBC,0x00d91f
+	lda	xbc, (0x00D91F:24)                       ; FB819D  f2 1f d9 00 31    lda XBC,0x00d91f
 	push	xbc                                   ; FB81A2  39                push XBC
 	pushw	de                                   ; FB81A3  2a                push DE
 	calr (0xFB77EF - 0xFB81A7)                 ; FB81A4  1e 48 f6          calr 0xfb77ef
@@ -3470,15 +3470,15 @@ Dev10C_ResetAllChannels__FB81DB:
 	ld	(xix), bc                               ; FB820C  b4 51             ld (XIX),BC
 	ld	xbc, (xiz-8)                            ; FB820E  ae f8 21          ld XBC,(XIZ+0xf8)
 	ldw (xbc), 0x7E00                          ; FB8211  b1 02 00 7e       ld (XBC),0x7e00
-	lda_24	xbc, 0x00D8DB                       ; FB8215  f2 db d8 00 31    lda XBC,0x00d8db
+	lda	xbc, (0x00D8DB:24)                       ; FB8215  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB821A  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB821B  9e f6 04          pushw (XIZ+0xf6)
 	calr (0xFB7E13 - 0xFB8221)                 ; FB821E  1e f2 fb          calr 0xfb7e13
-	lda_24	xbc, 0x00D8DB                       ; FB8221  f2 db d8 00 31    lda XBC,0x00d8db
+	lda	xbc, (0x00D8DB:24)                       ; FB8221  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB8226  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB8227  9e f6 04          pushw (XIZ+0xf6)
 	calr (0xFB7C27 - 0xFB822D)                 ; FB822A  1e fa f9          calr 0xfb7c27
-	lda_24	xbc, 0x00D8DB                       ; FB822D  f2 db d8 00 31    lda XBC,0x00d8db
+	lda	xbc, (0x00D8DB:24)                       ; FB822D  f2 db d8 00 31    lda XBC,0x00d8db
 	push	xbc                                   ; FB8232  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB8233  9e f6 04          pushw (XIZ+0xf6)
 	calr (0xFB7D1D - 0xFB8239)                 ; FB8236  1e e4 fa          calr 0xfb7d1d
@@ -3492,7 +3492,7 @@ Dev10C_ResetAllChannels__FB81DB:
 	and	bc, 0x3F00                             ; FB8256  d9 cc 00 3f       and BC,0x3f00
 	extpfx3 0x9E, 0xF4, 0xE1                   ; FB825A  9e f4 e1          or BC,(XIZ+0xf4)
 	stw_da	0x00D91F, bc                        ; FB825D  f2 1f d9 00 51    ld (0x00d91f),BC
-	lda_24	xbc, 0x00D91F                       ; FB8262  f2 1f d9 00 31    lda XBC,0x00d91f
+	lda	xbc, (0x00D91F:24)                       ; FB8262  f2 1f d9 00 31    lda XBC,0x00d91f
 	push	xbc                                   ; FB8267  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB8268  9e f6 04          pushw (XIZ+0xf6)
 	calr (0xFB7A58 - 0xFB826E)                 ; FB826B  1e ea f7          calr 0xfb7a58

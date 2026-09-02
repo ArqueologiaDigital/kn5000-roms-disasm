@@ -39,7 +39,7 @@ CPanel_EncoderDispatch:
 	or c, e	; Combine to form 5-bit index
 	extz bc
 	sla bc, 2	; Multiply by 4 (jump table entry size)
-	lda_24 xde, (ENCODER_HANDLER_TABLE)
+	lda xde, (ENCODER_HANDLER_TABLE:24)
 	exts xbc
 	add xbc, xde	; XBC = table entry address
 	ld xix, (xbc)	; Load handler address
@@ -61,7 +61,7 @@ Encoder_ProcessModwheel:
 	stb_d8	(36398), c
 	srl	a, 1
 	extz	wa
-	lda_24	xbc, (15573308)
+	lda	xbc, (15573308:24)
 	ld_rrb	a, xbc, wa
 	ldb_d8	c, (36424)
 	res	7, c
@@ -81,7 +81,7 @@ Encoder_ProcessVolume:
 	ldw	iz, 65535
 	stb_d8	(36400), a
 	extz	wa
-	lda_24	xbc, (15573436)
+	lda	xbc, (15573436:24)
 	ld_rrb	a, xbc, wa
 	calr	21
 	ld	a, l
@@ -115,7 +115,7 @@ Encoder_PerformScaling:
 	ldb_d8	a, (36416)
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (15573692)
+	lda	xbc, (15573692:24)
 	ld_rrw	bc, xbc, wa
 	extz	xbc
 	ld	xwa, xhl
@@ -148,10 +148,10 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	dec	1, c
 	extz	bc
 	add	bc, bc
-	lda_24	xwa, (15573970)
+	lda	xwa, (15573970:24)
 	ld_rrw	de, xwa, bc
 	mul	xhl, xde
-	lda_24	xwa, (15573994)
+	lda	xwa, (15573994:24)
 	ld_rrw	wa, xwa, bc
 	sub	hl, wa
 	add	hl, 16512
@@ -178,7 +178,7 @@ Encoder_ProcessFoot:
 	stb_d8	(36410), a
 	srl	a, 1
 	extz	wa
-	lda_24	xbc, (15574018)
+	lda	xbc, (15574018:24)
 	ld_rrb	a, xbc, wa
 	ldb_d8	c, (36430)
 	res	7, c
@@ -199,7 +199,7 @@ Encoder_ProcessExpression:
 	stb_d8	(36412), c
 	srl	a, 1
 	extz	wa
-	lda_24	xbc, (15574146)
+	lda	xbc, (15574146:24)
 	ld_rrb	a, xbc, wa
 	stb_d8	(36426), a
 	extz	wa

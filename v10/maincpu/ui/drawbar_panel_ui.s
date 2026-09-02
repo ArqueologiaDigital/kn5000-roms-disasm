@@ -50,7 +50,7 @@ AcSendEditSw_EventD:
 	inc 8, xsp
 	ld xbc, (xiz + 48)
 	lda xde, (xsp + 4)
-	lda_24 xwa, (UserMemory_FormatStrings_0xCE)
+	lda xwa, (UserMemory_FormatStrings_0xCE:24)
 	cpw (xbc), 0xc1
 	jr nz, AcSendEditSw_DrawAlt
 	lds32 xbc, 0
@@ -181,7 +181,7 @@ ComSetGridCheck:
 	add xwa, xwa
 	add xwa, NakaInst_GM_0x50
 	ld wa, (xwa)
-	lda_24 xix, (ComSetGridCheck_JumpTable)
+	lda xix, (ComSetGridCheck_JumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ComSetGridCheck_JumpTable:
@@ -206,7 +206,7 @@ ComSetGridCheck_JumpTable:
 	jr	nz, 34
 	ld	wa, (xsp+6)
 	sla	wa, 2
-	lda_24	xbc, (NakaData_ModeConfig2_0x8)
+	lda	xbc, (NakaData_ModeConfig2_0x8:24)
 	ld_rrl	xwa, xbc, wa
 	cp	xwa, 8705
 	jrl	z, 699
@@ -214,7 +214,7 @@ ComSetGridCheck_JumpTable:
 	jrl	z, 690
 	ld	bc, (xsp+6)
 	sla	bc, 2
-	lda_24	xwa, (NakaData_ModeConfig2_0x8)
+	lda	xwa, (NakaData_ModeConfig2_0x8:24)
 	ld_rrl	xwa, xwa, bc
 	lds	bc, 1
 	lds	de, 2
@@ -240,7 +240,7 @@ ComSetGridCheck_JumpTable:
 	jr	nz, 34
 	ld	wa, (xsp+6)
 	sla	wa, 2
-	lda_24	xbc, (NakaData_ModeConfig2_0x8)
+	lda	xbc, (NakaData_ModeConfig2_0x8:24)
 	ld_rrl	xwa, xbc, wa
 	cp	xwa, 8705
 	jrl	z, 583
@@ -248,7 +248,7 @@ ComSetGridCheck_JumpTable:
 	jrl	z, 574
 	ld	bc, (xsp+6)
 	sla	bc, 2
-	lda_24	xwa, (NakaData_ModeConfig2_0x8)
+	lda	xwa, (NakaData_ModeConfig2_0x8:24)
 	ld_rrl	xwa, xwa, bc
 	ldw	bc, 0xffff
 	lds	de, 2
@@ -258,7 +258,7 @@ ComSetGridCheck_JumpTable:
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
 	ldw	(xde), 0
-	lda_24	xix, (NakaData_ModeConfig2_0x8)
+	lda	xix, (NakaData_ModeConfig2_0x8:24)
 	ld	xiz, (xsp+22)
 	jr	18
 	ld	iy, bc
@@ -356,7 +356,7 @@ ComSetGrid_EventHandler:
 	jrl nz, UI_ReturnZero
 	ld wa, (xbc)
 	sla wa, 2
-	lda_24 xbc, (NakaData_ModeConfig2_0x8)
+	lda xbc, (NakaData_ModeConfig2_0x8:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	cp xwa, 0x2205
 	jr z, ComSetGrid_CheckC0Param
@@ -407,7 +407,7 @@ ComSetGrid_CheckC0Param:
 ComSetGrid_LookupByColumn:
 	ld bc, (xsp + 6)
 	sla bc, 2
-	lda_24 xwa, (NakaData_ModeConfig2_0x8)
+	lda xwa, (NakaData_ModeConfig2_0x8:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	call SndParam_LookupReadOnly
 	cps hl, 3
@@ -508,7 +508,7 @@ AcPmemOutLGridBoxProc:
 	add xbc, xbc
 	add xbc, NakaInst_GM_0x5E
 	ld bc, (xbc)
-	lda_24 xix, (AcPmemOutL_Init)
+	lda xix, (AcPmemOutL_Init:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 AcPmemOutL_Init:
@@ -818,7 +818,7 @@ AcPmemOutRGridBoxProc:
 	add xbc, xbc
 	add xbc, NakaInst_GM_0x6C
 	ld bc, (xbc)
-	lda_24 xix, (AcPmemOutR_Init)
+	lda xix, (AcPmemOutR_Init:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 AcPmemOutR_Init:
@@ -1097,10 +1097,10 @@ PmemOutLGridCheck:
 	lds bc, 4
 	ldirw
 	ld xix, xde
-	lda_24 xwa, (NakaInst_NEXT_E800E8_0x2)
+	lda xwa, (NakaInst_NEXT_E800E8_0x2:24)
 	ld (xsp + 8), xwa
 	lda xbc, (xsp + 36)
-	lda_24 xwa, (0x1ed400)
+	lda xwa, (0x1ed400:24)
 	ld (xsp + 24), xwa
 	lda_d16 xwa, (0xf9a0)
 	ld (xsp + 20), xwa
@@ -1122,7 +1122,7 @@ PmemOutLGridCheck:
 	add xwa, xwa
 	add xwa, NakaInst_ON_E80168_0x5E
 	ld wa, (xwa)
-	lda_24 xix, (PmemOutLGridCheck_JumpTable)
+	lda xix, (PmemOutLGridCheck_JumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 PmemOutLGridCheck_JumpTable:
 	call	16401616
@@ -1149,7 +1149,7 @@ PmemOutLGridCheck_JumpTable:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+60)
-	lda_24	xbc, 149362
+	lda	xbc, (149362:24)
 	ld	(xwa), xbc
 	ld	xbc, 79
 	ld	(xwa+6), xbc
@@ -1166,7 +1166,7 @@ PmemOutLGridCheck_JumpTable:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, 2020352
+	lda	xwa, (2020352:24)
 	add	xwa, xbc
 	ld	xbc, xwa
 	add	xbc, xde
@@ -1186,7 +1186,7 @@ PmemOutLGridCheck_JumpTable:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+60)
-	lda_24	xbc, 149364
+	lda	xbc, (149364:24)
 	ld	(xwa), xbc
 	lds32	xbc, 2
 	ld	(xwa+6), xbc
@@ -1215,7 +1215,7 @@ PmemOutLGridCheck_JumpTable:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+60)
-	lda_24	xbc, 149362
+	lda	xbc, (149362:24)
 	ld	(xwa), xbc
 	ld	xbc, 79
 	ld	(xwa+6), xbc
@@ -1236,7 +1236,7 @@ PmemOutLGridCheck_JumpTable:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, 2020352
+	lda	xwa, (2020352:24)
 	add	xwa, xbc
 	ld	xbc, xwa
 	add	xbc, xde
@@ -1257,7 +1257,7 @@ PmemOutLGridCheck_JumpTable:
 	ldw	bc, 11
 	.byte 0x95, 0x11
 	lda	xwa, (xsp+60)
-	lda_24	xbc, 149364
+	lda	xbc, (149364:24)
 	ld	(xwa), xbc
 	lds32	xbc, 2
 	ld	(xwa+6), xbc
@@ -1272,7 +1272,7 @@ PmemOutLGridCheck_JumpTable:
 	ld	xwa, (xsp+28)
 	ld	xhl, (xsp+12)
 	ld	(xwa), xhl
-	lda_24	xbc, 149362
+	lda	xbc, (149362:24)
 	ld	(xsp+16), xiy
 	ld	xde, (xsp+4)
 	lda	xwa, (xde+14)
@@ -1320,7 +1320,7 @@ PmemOutLGridCheck_JumpTable:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, 2020352
+	lda	xwa, (2020352:24)
 	add	xwa, xbc
 	add	xwa, xde
 	.byte 0xb0, 0xc9
@@ -1672,7 +1672,7 @@ PmemOutRGridCheck:
 	lda xbc, (xsp + 32)
 	lda_d16 xwa, (0xf9b6)
 	ld (xsp + 20), xwa
-	lda_24 xwa, (0x1ed400)
+	lda xwa, (0x1ed400:24)
 	ld (xsp + 16), xwa
 	ld xwa, (xsp + 20)
 	lda xwa, (xwa + 14)
@@ -1690,7 +1690,7 @@ PmemOutRGridCheck:
 	add xhl, xhl
 	add xhl, NakaInst_ON_E80168_0x10A
 	ld hl, (xhl)
-	lda_24 xix, (TtMdCtlMsg_EventDispatch)
+	lda xix, (TtMdCtlMsg_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
 ; TtMdCtlMsg event dispatch (7-entry, table 0xe80272)
 
@@ -1744,7 +1744,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
@@ -1780,7 +1780,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
@@ -1808,7 +1808,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
@@ -1868,7 +1868,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
@@ -1911,7 +1911,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
@@ -1942,7 +1942,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
@@ -1979,7 +1979,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	(xsp+12), xbc
 	ld	xwa, (xsp+24)
 	ld	(xwa), xbc
-	lda_24	xwa, (0x24772)
+	lda	xwa, (0x24772:24)
 	ld	(xsp+24), xiy
 	lda_d16	xbc, (0xf9a0)
 	.byte 0xa6, 0xf0
@@ -2043,7 +2043,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	.byte 0xaf, 0x1c, 0x80
@@ -2075,7 +2075,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	.byte 0xaf, 0x1c, 0x80, 0xb0
@@ -2102,7 +2102,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xde, (xsp+32)
 	ld	xbc, 0x1e0008c
 	jrl	943
-	lda_24	xde, (0x24774)
+	lda	xde, (0x24774:24)
 	ld	xwa, (xsp+28)
 	sub	xwa, xbc
 	ld	(xsp+28), xwa
@@ -2167,7 +2167,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	.byte 0xaf, 0x1c, 0x80
@@ -2199,7 +2199,7 @@ TtMdCtlMsg_EventDispatch:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	add	xwa, xhl
 	.byte 0xaf, 0x1c, 0x80
@@ -2522,7 +2522,7 @@ AcCtlMsgGridBoxProc:
 	add xbc, xbc
 	add xbc, NakaInst_ON_E80168_0x210
 	ld bc, (xbc)
-	lda_24 xix, (AcCtlMsgGrid_Init)
+	lda xix, (AcCtlMsgGrid_Init:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 AcCtlMsgGrid_Init:
@@ -2583,7 +2583,7 @@ AcCtlMsgGrid_Show:
 	ld xwa, (xiz + 74)
 	ld wa, (xwa)
 	sla wa, 2
-	lda_24 xbc, (MidiPart_PageDisplay_Data_0xC)
+	lda xbc, (MidiPart_PageDisplay_Data_0xC:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 12)
@@ -2703,7 +2703,7 @@ AcCtlMsgGrid_ScrollUp_PageDec:
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 74)
-	lda_24 xbc, (NakaInst_ON_E80168_0x118)
+	lda xbc, (NakaInst_ON_E80168_0x118:24)
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -2779,7 +2779,7 @@ AcCtlMsgGrid_ScrollUp_AutoScroll:
 	ld xwa, (xsp + 4)
 	lda xde, (xwa + 74)
 	ld xbc, (xde)
-	lda_24 xhl, (NakaInst_ON_E80168_0x118)
+	lda xhl, (NakaInst_ON_E80168_0x118:24)
 	ld wa, (xbc)
 	ldb_sri A, 0x07, 0xec, 0xe0
 	extz wa
@@ -2935,7 +2935,7 @@ CtlMsgGridCheck:
 	ldirw
 	ld xix, xde
 	lda xhl, (xsp + 12)
-	lda_24 xwa, (NakaInst_ON_E80168_0x21E)
+	lda xwa, (NakaInst_ON_E80168_0x21E:24)
 	ld (xsp + 8), xwa
 	lda xbc, (xhl + 2)
 	cp xde, 0x1e0008d
@@ -2949,7 +2949,7 @@ CtlMsgGridCheck:
 	add xwa, xwa
 	add xwa, NakaInst_ON_E80168_0x288
 	ld wa, (xwa)
-	lda_24 xix, (CtlMsgGridCheck_JumpTable)
+	lda xix, (CtlMsgGridCheck_JumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 CtlMsgGridCheck_JumpTable:
@@ -2975,7 +2975,7 @@ CtlMsgGridCheck_JumpTable:
 	muls	wa, 36
 	ld	de, wa
 	add	de, bc
-	lda_24	xwa, (NakaInst_ON_E80168_0x21E)
+	lda	xwa, (NakaInst_ON_E80168_0x21E:24)
 	ld_rrl	xwa, xwa, de
 	lds	bc, 1
 	lds	de, 2
@@ -3002,7 +3002,7 @@ CtlMsgGridCheck_JumpTable:
 	muls	wa, 36
 	ld	de, wa
 	add	de, bc
-	lda_24	xwa, (NakaInst_ON_E80168_0x21E)
+	lda	xwa, (NakaInst_ON_E80168_0x21E:24)
 	ld_rrl	xwa, xwa, de
 	ldw	bc, 0xffff
 	lds	de, 2
@@ -3169,7 +3169,7 @@ AcMidiPartGridBoxProc:
 	add xbc, xbc
 	add xbc, NakaInst_ON_E80168_0x3AA
 	ld bc, (xbc)
-	lda_24 xix, (MidiSetup_TtlCase3)
+	lda xix, (MidiSetup_TtlCase3:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; MidiSetup title case 3
@@ -3232,7 +3232,7 @@ MidiSetup_TtlCase4:
 	ld xwa, (xiz + 74)
 	ld wa, (xwa)
 	sla wa, 2
-	lda_24 xbc, (MidiPart_PageStr_1of2_0xA)
+	lda xbc, (MidiPart_PageStr_1of2_0xA:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	lda xwa, (xsp + 12)
@@ -3288,7 +3288,7 @@ MidiPart_StorePartIndex:
 	ldb_da a, (0x024778)
 	extz wa
 	muls wa, 0xa
-	lda_24 xbc, (NakaInst_ON_E80168_0x298)
+	lda xbc, (NakaInst_ON_E80168_0x298:24)
 	lds32 xde, 0
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld xwa, 0x1400002
@@ -3321,7 +3321,7 @@ MidiPart_StoreAndNotify:
 	ldb_da a, (0x024778)
 	extz wa
 	muls wa, 0xa
-	lda_24 xbc, (NakaInst_ON_E80168_0x298)
+	lda xbc, (NakaInst_ON_E80168_0x298:24)
 	lds32 xde, 0
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld xwa, 0x1400002
@@ -3371,7 +3371,7 @@ MidiPart_AutoDec_StorePart:
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 74)
-	lda_24 xbc, (NakaInst_ON_E80168_0x2DA)
+	lda xbc, (NakaInst_ON_E80168_0x2DA:24)
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
@@ -3383,7 +3383,7 @@ MidiPart_AutoDec_StorePart:
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 74)
-	lda_24 xbc, (NakaInst_ON_E80168_0x2DA)
+	lda xbc, (NakaInst_ON_E80168_0x2DA:24)
 	ld wa, (xwa)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	extz bc
@@ -3391,7 +3391,7 @@ MidiPart_AutoDec_StorePart:
 	extz wa
 	muls wa, 0xa
 	add wa, bc
-	lda_24 xbc, (NakaInst_ON_E80168_0x296)
+	lda xbc, (NakaInst_ON_E80168_0x296:24)
 	lds32 xde, 0
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld xwa, 0x1400002
@@ -3407,7 +3407,7 @@ MidiPart_Part2ColumnNav:
 	jr nz, MidiPart_GenericColumnNav
 	ld wa, iz
 	add wa, wa
-	lda_24 xbc, (NakaInst_ON_E80168_0x2B4)
+	lda xbc, (NakaInst_ON_E80168_0x2B4:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ld bc, iz
 	sub bc, wa
@@ -3419,7 +3419,7 @@ MidiPart_Part2ColumnNav:
 	call SendEvent
 	ld wa, iz
 	add wa, wa
-	lda_24 xbc, (NakaInst_ON_E80168_0x2B4)
+	lda xbc, (NakaInst_ON_E80168_0x2B4:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ld bc, iz
 	sub bc, wa
@@ -3427,7 +3427,7 @@ MidiPart_Part2ColumnNav:
 	extz wa
 	muls wa, 0xa
 	add wa, bc
-	lda_24 xbc, (NakaInst_ON_E80168_0x296)
+	lda xbc, (NakaInst_ON_E80168_0x296:24)
 	lds32 xde, 0
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld xwa, 0x1400002
@@ -3449,7 +3449,7 @@ MidiPart_GenericColumnNav:
 	extz wa
 	muls wa, 0xa
 	add wa, bc
-	lda_24 xbc, (NakaInst_ON_E80168_0x296)
+	lda xbc, (NakaInst_ON_E80168_0x296:24)
 	lds32 xde, 0
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld xwa, 0x1400002
@@ -3536,7 +3536,7 @@ MidiPart_AutoInc_StorePart:
 	ldb_da a, (0x024778)
 	extz wa
 	muls wa, 0xa
-	lda_24 xbc, (NakaInst_ON_E80168_0x298)
+	lda xbc, (NakaInst_ON_E80168_0x298:24)
 	lds32 xde, 0
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld xwa, 0x1400002
@@ -3552,7 +3552,7 @@ MidiPart_Part2ColumnNavUp:
 	jr nz, MidiPart_GenericColumnNavUp
 	ld wa, iz
 	add wa, wa
-	lda_24 xbc, (NakaInst_ON_E80168_0x2C6)
+	lda xbc, (NakaInst_ON_E80168_0x2C6:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	add wa, iz
 	ld de, wa
@@ -3563,14 +3563,14 @@ MidiPart_Part2ColumnNavUp:
 	call SendEvent
 	ld wa, iz
 	add wa, wa
-	lda_24 xbc, (NakaInst_ON_E80168_0x2C6)
+	lda xbc, (NakaInst_ON_E80168_0x2C6:24)
 	ldw_sri BC, 0x07, 0xe4, 0xe0
 	add bc, iz
 	ldb_da a, (0x024778)
 	extz wa
 	muls wa, 0xa
 	add wa, bc
-	lda_24 xbc, (NakaInst_ON_E80168_0x296)
+	lda xbc, (NakaInst_ON_E80168_0x296:24)
 	lds32 xde, 0
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld xwa, 0x1400002
@@ -3592,7 +3592,7 @@ MidiPart_GenericColumnNavUp:
 	extz wa
 	muls wa, 0xa
 	add wa, bc
-	lda_24 xbc, (NakaInst_ON_E80168_0x296)
+	lda xbc, (NakaInst_ON_E80168_0x296:24)
 	lds32 xde, 0
 	ldb_sri E, 0x07, 0xe4, 0xe0
 	ld xwa, 0x1400002
@@ -3743,7 +3743,7 @@ MidiPartGridCheck:
 	add xwa, xwa
 	add xwa, Transpose_String_Plus2_0x5E
 	ld wa, (xwa)
-	lda_24 xix, (MidiPartGridCheck_JumpTable)
+	lda xix, (MidiPartGridCheck_JumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 MidiPartGridCheck_JumpTable:
 	call	16401616
@@ -3772,7 +3772,7 @@ MidiPartGridCheck_JumpTable:
 	dec	4, wa
 	ld	de, wa
 	add	de, hl
-	lda_24	xwa, 15205664
+	lda	xwa, (15205664:24)
 	ld_rrl	xwa, xwa, de
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
@@ -3816,7 +3816,7 @@ MidiPartGridCheck_JumpTable:
 	call	16569399
 	ld	wa, hl
 	add	wa, wa
-	lda_24	xbc, 15205952
+	lda	xbc, (15205952:24)
 	ld_rrw	bc, xbc, wa
 	cp	bc, hl
 	jrl	z, 924
@@ -3853,7 +3853,7 @@ MidiPartGridCheck_JumpTable:
 	dec	4, wa
 	ld	de, wa
 	add	de, hl
-	lda_24	xwa, 15205664
+	lda	xwa, (15205664:24)
 	ld_rrl	xwa, xwa, de
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
@@ -3898,7 +3898,7 @@ MidiPartGridCheck_JumpTable:
 	call	16569399
 	ld	wa, hl
 	add	wa, wa
-	lda_24	xbc, 15205968
+	lda	xbc, (15205968:24)
 	ld_rrw	bc, xbc, wa
 	cp	bc, hl
 	jrl	z, 691
@@ -3925,7 +3925,7 @@ MidiPartGridCheck_JumpTable:
 	muls	wa, 96
 	ld	iy, wa
 	add	iy, de
-	lda_24	xhl, 15205664
+	lda	xhl, (15205664:24)
 	ld_rrl	xiz, xhl, iy
 	ld	xde, (xsp+34)
 	cp	(xde), xiz
@@ -4007,7 +4007,7 @@ MidiSetup_EventHandler:
 	add wa, bc
 	cps de, 3
 	jrl z, MidiPart_LookupFromTable
-	lda_24 xbc, (NakaInst_ON_E80168_0x3B8)
+	lda xbc, (NakaInst_ON_E80168_0x3B8:24)
 	cps de, 2
 	jr z, MidiPart_LookupColumnParam
 	cps de, 1
@@ -4057,7 +4057,7 @@ MidiPart_LookupColumnParam:
 	ld xwa, (xsp + 12)
 	call SndParam_LookupReadOnly
 	sla hl, 2
-	lda_24 xwa, (Transpose_ValueDisplay_Table)
+	lda xwa, (Transpose_ValueDisplay_Table:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xec
 	push xwa
 	lda xwa, (xsp + 28)
@@ -4071,7 +4071,7 @@ MidiPart_LookupColumnParam:
 	jr MidiPart_SendEventReturn
 
 MidiPart_LookupFromTable:
-	lda_24 xbc, (NakaInst_ON_E80168_0x3C0)
+	lda xbc, (NakaInst_ON_E80168_0x3C0:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 12), xwa
 	cp xwa, 0xffffffff
@@ -4198,7 +4198,7 @@ BitmapAccita16:
 	ret
 
 BitmapAccita16_DataPtr:
-	lda_24 xhl, (Bitmap_Accita16)
+	lda xhl, (Bitmap_Accita16:24)
 	ret
 
 BitmapAccita16_Width:
@@ -4220,7 +4220,7 @@ BitmapAccger16:
 	ret
 
 BitmapAccger16_DataPtr:
-	lda_24 xhl, (Bitmap_Accger16)
+	lda xhl, (Bitmap_Accger16:24)
 	ret
 
 BitmapAccger16_Width:
@@ -4242,7 +4242,7 @@ BitmapDrawsw:
 	ret
 
 BitmapDrawsw_DataPtr:
-	lda_24 xhl, (Bitmap_SomeArrows)
+	lda xhl, (Bitmap_SomeArrows:24)
 	ret
 
 BitmapDrawsw_Width:
@@ -4270,7 +4270,7 @@ Bitmap_QueryProperties3x:
 	jr	z, 3
 	lds32	xhl, 0
 	ret
-	lda_24	xhl, (BitmapBound_DrawbarSlider1_Start)
+	lda	xhl, (BitmapBound_DrawbarSlider1_Start:24)
 	ret
 	ld	xhl, 22
 	ret
@@ -4284,7 +4284,7 @@ Bitmap_QueryProperties3x:
 	jr	z, 3
 	lds32	xhl, 0
 	ret
-	lda_24	xhl, (BitmapBound_DrawbarSlider2_Start)
+	lda	xhl, (BitmapBound_DrawbarSlider2_Start:24)
 	ret
 	ld	xhl, 22
 	ret
@@ -4298,7 +4298,7 @@ Bitmap_QueryProperties3x:
 	jr	z, 3
 	lds32	xhl, 0
 	ret
-	lda_24	xhl, (BitmapBound_DrawbarSlider3_Start)
+	lda	xhl, (BitmapBound_DrawbarSlider3_Start:24)
 	ret
 	ld	xhl, 22
 	ret
@@ -4317,7 +4317,7 @@ BitmapTechnics:
 	ret
 
 BitmapTechnics_DataPtr:
-	lda_24 xhl, (Bitmap_Technics_Logo)
+	lda xhl, (Bitmap_Technics_Logo:24)
 	ret
 
 BitmapTechnics_Width:
@@ -4340,7 +4340,7 @@ BitmapKn5000:
 	ret
 
 BitmapKn5000_DataPtr:
-	lda_24 xhl, (Bitmap_KN5000_Logo)
+	lda xhl, (Bitmap_KN5000_Logo:24)
 	ret
 
 BitmapKn5000_Width:
@@ -4479,7 +4479,7 @@ LswLeftHold_Case42:
 	cps bc, 1
 	jr gt, LswLeftHold_DefaultStr
 	sla bc, 2
-	lda_24 xde, (0x03e91c)
+	lda xde, (0x03e91c:24)
 	ld_sril3 XBC, 0x07, 0xe8, 0xe4
 	push xbc
 	jr LswLeftHold_CopyAndReturn
@@ -4546,7 +4546,7 @@ IvSdpartProc:
 	add xwa, xwa
 	add xwa, Str_PartName_Right1_0x10
 	ld wa, (xwa)
-	lda_24 xix, (IvSdpart_Init)
+	lda xix, (IvSdpart_Init:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 IvSdpart_Init:
@@ -4571,7 +4571,7 @@ IvSdpart_Init_ResetPart:
 IvSdpart_Init_LoadDescriptor:
 	ldw_da xwa, (0x03e99c)
 	sla wa, 2
-	lda_24 xbc, (MixerPartTable_Start_0x108)
+	lda xbc, (MixerPartTable_Start_0x108:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -4615,7 +4615,7 @@ IvSdpart_ShowHide_UpdateUI:
 	calr SdpartUpdatePartUI
 	ldw_da xwa, (0x03e99e)
 	sla wa, 2
-	lda_24 xbc, (0x03e924)
+	lda xbc, (0x03e924:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, 0x3000b
 	ld xbc, 0x1c0000f
@@ -4636,7 +4636,7 @@ IvSdpart_OK:
 	cp wa, 0x8
 	jr z, IvSdpart_OK_ExitToMenu
 	sla wa, 2
-	lda_24 xbc, (MixerPartTable_Start_0x108)
+	lda xbc, (MixerPartTable_Start_0x108:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1c00002
 	lds32 xde, 5
@@ -4681,7 +4681,7 @@ IvSdpart_PageSelect:
 	cp iz, 0xffff
 	jrl z, IvSdpart_ReturnHandled
 	sla wa, 2
-	lda_24 xbc, (MixerPartTable_Start_0x108)
+	lda xbc, (MixerPartTable_Start_0x108:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1c00002
 	lds32 xde, 5
@@ -4689,7 +4689,7 @@ IvSdpart_PageSelect:
 	stw_da (0x03e99c), xiz
 	ld wa, iz
 	sla wa, 2
-	lda_24 xbc, (MixerPartTable_Start_0x108)
+	lda xbc, (MixerPartTable_Start_0x108:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1c00001
 	lds32 xde, 5
@@ -4720,14 +4720,14 @@ IvSdpart_PageSelect:
 	calr SdpartUpdatePartUI
 	ldw_da xwa, (0x03e99e)
 	sla wa, 2
-	lda_24 xbc, (0x03e924)
+	lda xbc, (0x03e924:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, 0x3000b
 	ld xbc, 0x1c0000f
 	call SendEvent
 	ldw_da xwa, (0x03e99e)
 	sla wa, 1
-	lda_24 xbc, (MixerPartTable_Start_0x12C)
+	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
 	exts xde
 	ld xwa, 0x1400002
@@ -4735,7 +4735,7 @@ IvSdpart_PageSelect:
 	call MainFuncCall
 	ldw_da xwa, (0x03e99c)
 	sla wa, 2
-	lda_24 xbc, (MixerPartTable_Start_0x108)
+	lda xbc, (MixerPartTable_Start_0x108:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -4766,14 +4766,14 @@ IvSdpart_Refresh:
 	calr SdpartUpdatePartUI
 	ldw_da xwa, (0x03e99e)
 	sla wa, 2
-	lda_24 xbc, (0x03e924)
+	lda xbc, (0x03e924:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, 0x3000b
 	ld xbc, 0x1c0000f
 	call SendEvent
 	ldw_da xwa, (0x03e99c)
 	sla wa, 2
-	lda_24 xbc, (MixerPartTable_Start_0x108)
+	lda xbc, (MixerPartTable_Start_0x108:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -4784,7 +4784,7 @@ IvSdpart_Refresh:
 	call InheritedProc
 	ldw_da xwa, (0x03e99e)
 	sla wa, 1
-	lda_24 xbc, (MixerPartTable_Start_0x12C)
+	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
 	exts xde
 	ld xbc, xde
@@ -4809,7 +4809,7 @@ IvSdpart_Match_HitTest:
 	call InheritedProc
 	ldw_da xwa, (0x03e99e)
 	sla wa, 1
-	lda_24 xbc, (MixerPartTable_Start_0x12C)
+	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri BC, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 4)
 	cp bc, (xwa)
@@ -6288,12 +6288,12 @@ SdpartUpdatePartUI:
 	ldw_da xbc, (0x03e99e)
 	ld wa, bc
 	sla wa, 2
-	lda_24 xde, (MixerPartTable_Start_0x8)
+	lda xde, (MixerPartTable_Start_0x8:24)
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	bit_erpw 0xe2, 0x0f
 	jr z, SdpartUpdatePartUI_Confirm
 	add bc, bc
-	lda_24 xwa, (MixerPartTable_Start_0x12C)
+	lda xwa, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe0, 0xe4
 	exts xde
 	ld xwa, 0x1400004
@@ -6309,7 +6309,7 @@ SdpartUpdatePartUI_Confirm:
 LswSound:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswSound_ReturnZero
 	ld xix, xde
@@ -6400,7 +6400,7 @@ LswSound_PopIzRet:
 LswVolume:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, AudioCtrlMuteZeroReturn
 	ld xix, xde
@@ -6525,7 +6525,7 @@ AudioCtrl_PopIzRet3:
 LswMute:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, AudioCtrlMutePitchReturn
 	ld xix, xde
@@ -6646,7 +6646,7 @@ AudioCtrl_PopIzRet2:
 LswPan:
 	push xiz
 	ld xiz, xwa
-	lda_24 xix, (MixerPartTable_Start_0x8)
+	lda xix, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e000b9
 	jrl z, LswPan_ReturnCenter
 	cp xbc, 0x1e000b8
@@ -6774,7 +6774,7 @@ AudioCtrl_PopIzRet6:
 LswReverb:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, AudioCtrlVibratoZeroReturn
 	ld xix, xde
@@ -6890,7 +6890,7 @@ AudioCtrl_PopIzRet1:
 LswDSPEffect:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswDSPEffZeroReturn
 	ld xix, xde
@@ -6987,7 +6987,7 @@ LswDSPEffect_PopIzRet:
 LswDigitalEffect:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswDigitalEffZeroReturn
 	ld xix, xde
@@ -7085,7 +7085,7 @@ LswDigitalEffect_PopIzRet:
 LswSustain:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswSustainZeroReturn2
 	ld xix, xde
@@ -7183,7 +7183,7 @@ LswSustain_PopIzRet2:
 LswSustainLength:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswSustainLenZeroReturn
 	ld xix, xde
@@ -7282,7 +7282,7 @@ LswSustainLength_PopIzRet:
 LswKeyShift:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e000b9
 	jrl z, LswKeyShift_ReturnCenter
 	cp xbc, 0x1e000b8
@@ -7400,7 +7400,7 @@ AudioCtrl_PopIzRet5:
 LswTuning:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e000b9
 	jrl z, LswTuning_ReturnCenter
 	cp xbc, 0x1e000b8
@@ -7518,7 +7518,7 @@ AudioCtrl_PopIzRet4:
 LswBendRange:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswBendRangeZeroReturn
 	ld xix, xde
@@ -7615,7 +7615,7 @@ LswBendRange_PopIzRet:
 LswGlidePedal:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswGlideZeroReturn
 	ld xix, xde
@@ -7715,7 +7715,7 @@ LswGlide_PopIzRet:
 LswSustainPedal:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswSustainZeroReturn
 	ld xix, xde
@@ -7815,7 +7815,7 @@ LswSustain_PopIzRet:
 LswKeyScaling:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswKeyScaleZeroReturn
 	ld xix, xde
@@ -7915,7 +7915,7 @@ LswKeyScale_PopIzRet:
 LswAfterTouch:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswAfterTouchZeroReturn
 	ld xix, xde
@@ -8015,7 +8015,7 @@ LswAfterTouch_PopIzRet:
 LswPartExp:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswPartExpZeroReturn
 	ld xix, xde
@@ -8115,7 +8115,7 @@ LswPartExp_PopIzRet:
 LswLocalControl:
 	push xiz
 	ld xiz, xwa
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswLocalControlZeroReturn
 	ld xix, xde
@@ -8216,8 +8216,8 @@ LswMidiChannel:
 	push xiz
 	ld xiz, xde
 	ld (xsp + 4), xwa
-	lda_24 xde, (MixerPartTable_Start_0x12C)
-	lda_24 xhl, (MixerPartTable_Start_0x8)
+	lda xde, (MixerPartTable_Start_0x12C:24)
+	lda xhl, (MixerPartTable_Start_0x8:24)
 	cp xbc, 0x1e00083
 	jrl z, LswLocalZeroReturn
 	ld xix, xiz
@@ -8360,17 +8360,17 @@ IvMesageProc:
 	call InheritedProc
 	ldw_da xwa, (0x02478c)
 	muls wa, 0xe
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sla wa, 2
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call SendEvent
 	ldw_da xwa, (0x02478c)
 	muls wa, 0xe
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	cpiw_sri 0x07, 0xe4, 0xe0, 0x05, 0x00
 	jrl nz, IvMessageStrcpyReturn
 	ld xwa, 0xffffffff
@@ -8394,7 +8394,7 @@ IvMessage_Paint:
 	call InheritedProc
 	ldw_da xwa, (0x02478c)
 	muls wa, 0xe
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	cpiw_sri 0x07, 0xe4, 0xe0, 0x05, 0x00
 	call_24 nz, DrawWall
 	ld xwa, xiz
@@ -8408,10 +8408,10 @@ IvMessage_SendEvent:
 IvMessage_SelectionChange:
 	stw_da (0x02478c), xwa
 	muls wa, 0xe
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sla wa, 2
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1e000b5
 	ld xde, 0x1e000b6
@@ -8516,7 +8516,7 @@ PleaseWait_GetText:
 	ldb_da a, (0x0340e4)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5A2)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5A2:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	call Strlen
@@ -8544,7 +8544,7 @@ PleaseWait_BuildScrollStr:
 	stw_erp HL, 0xe2
 	ldb_da a, (0x0340e4)
 	extz wa
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5A2)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5A2:24)
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	cp hl, de
@@ -8630,7 +8630,7 @@ CheckLang_GetTextStr:
 	ldb_da a, (0x0340e4)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Str_PleaseWait_Multilingual)
+	lda xbc, (Str_PleaseWait_Multilingual:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 18)
@@ -8643,7 +8643,7 @@ CheckLang_ReturnZero:
 	ret
 
 CheckLang_ReturnAddress:
-	lda_24 xhl, (0x0340e4)
+	lda xhl, (0x0340e4:24)
 	ret
 
 CheckLang_ReturnOne:
@@ -8663,10 +8663,10 @@ CheckMessage:
 	jrl nz, CheckMsg_ReturnZero
 	ldw_da xwa, (0x02478c)
 	muls wa, 0xe
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sla wa, 2
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -8685,7 +8685,7 @@ CheckMsg_IncrementCheck:
 	ld bc, wa
 	muls wa, 0xe
 	add wa, 0xe
-	lda_24 xde, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x122)
+	lda xde, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x122:24)
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	or xwa, xwa
 	jr z, LanguageCheckReturn
@@ -8695,10 +8695,10 @@ CheckMsg_IncrementCheck:
 LanguageCheckReturn:
 	ldw_da xwa, (0x02478c)
 	muls wa, 0xe
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	sla wa, 2
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -8719,7 +8719,7 @@ CheckMsg_ReturnZero:
 	jr CheckMsg_Epilogue
 
 CheckMsg_ReturnAddress:
-	lda_24 xhl, (0x02478c)
+	lda xhl, (0x02478c:24)
 	jr CheckMsg_Epilogue
 
 CheckMsg_ReturnTwo:
@@ -8740,7 +8740,7 @@ MsgText_LookupMessage:
 	cp wa, 0x1a
 	jr z, MsgText_CheckLanguage
 	muls wa, 0xe
-	lda_24 xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x122)
+	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x122:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
@@ -8752,7 +8752,7 @@ MsgText_CheckLanguage:
 	jr z, MsgText_Lang2
 	cps a, 1
 	jr z, MsgText_Lang1
-	lda_24 xhl, (Str_DiskErr20_Italian_0x5DE)
+	lda xhl, (Str_DiskErr20_Italian_0x5DE:24)
 	ret
 
 MsgText_Lang1:
@@ -8780,7 +8780,7 @@ MessageHeader:
 MsgHeader_BuildHeader:
 	ldw_da xbc, (0x02478c)
 	muls bc, 0xe
-	lda_24 xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
+	lda xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	lda_dri XWA, 0x07, 0xe0, 0xe4
 	cpw (xwa), 0x3
 	jrl nz, MsgHeader_SingleEntry
@@ -8797,7 +8797,7 @@ MsgHeader_BuildHeader:
 MsgHeader_BuildLoop:
 	ldw_da xbc, (0x02478c)
 	muls bc, 0xe
-	lda_24 xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x11E)
+	lda xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x11E:24)
 	ld de, (xsp + 8)
 	extz xde
 	sll xde, 2
@@ -8811,7 +8811,7 @@ MsgHeader_BuildLoop:
 	ld xiz, xhl
 	ldw_da xbc, (0x02478c)
 	muls bc, 0xe
-	lda_24 xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118)
+	lda xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	lda_dri XWA, 0x07, 0xe0, 0xe4
 	pushm (xwa + 4)
 	ld bc, (xsp + 16)
@@ -8946,7 +8946,7 @@ IvAccordion_ShowHide_Toggle:
 IvAccordion_ShowHide_UpdatePart:
 	ldw_da xwa, (0x02477e)
 	sla wa, 2
-	lda_24 xbc, (0x03e9a0)
+	lda xbc, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, WidgetName_InitPtrTable_0x15
 	ld xbc, 0x1c0000f
@@ -9137,7 +9137,7 @@ IvAccordion_Refresh:
 	call GetPartSelect
 	stw_da (0x02477e), xhl
 	sla hl, 2
-	lda_24 xwa, (0x03e9a0)
+	lda xwa, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe0, 0xec
 	ld xwa, WidgetName_InitPtrTable_0x15
 	ld xbc, 0x1c0000f
@@ -9447,7 +9447,7 @@ IvSdtecd1Proc:
 	ld xwa, 0x4202
 	call SndParam_LookupReadOnly
 	sla hl, 2
-	lda_24 xwa, (NakaInst_RIGHT_1_E9D9B0_0x1C)
+	lda xwa, (NakaInst_RIGHT_1_E9D9B0_0x1C:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xec
 	ld xbc, 0x1e00087
 	lds32 xde, 1
@@ -9504,7 +9504,7 @@ Sdtecd1_ScrollDown_Lookup:
 	jrl gt, IvSdtecd1_ReturnDefault
 	inc 7, hl
 	add hl, hl
-	lda_24 xwa, (NakaInst_RIGHT_1_E9D9B0_0x54)
+	lda xwa, (NakaInst_RIGHT_1_E9D9B0_0x54:24)
 	ldw_sri BC, 0x07, 0xe0, 0xec
 	ld xwa, 0x4202
 	lds de, 3
@@ -9549,7 +9549,7 @@ Sdtecd1_ScrollUp_Lookup:
 	jr lt, IvSdtecd1_ReturnDefault
 	dec 7, hl
 	add hl, hl
-	lda_24 xwa, (NakaInst_RIGHT_1_E9D9B0_0x54)
+	lda xwa, (NakaInst_RIGHT_1_E9D9B0_0x54:24)
 	ldw_sri BC, 0x07, 0xe0, 0xec
 	ld xwa, 0x4202
 	lds de, 3
@@ -9567,7 +9567,7 @@ Sdtecd1_Match:
 	jr nz, IvSdtecd1_ReturnDefault
 	ld wa, (xiz + 4)
 	sla wa, 2
-	lda_24 xbc, (NakaInst_RIGHT_1_E9D9B0_0x1C)
+	lda xbc, (NakaInst_RIGHT_1_E9D9B0_0x1C:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1e00087
 	lds32 xde, 1
@@ -9626,7 +9626,7 @@ LswOrchestrator:
 	cp bc, 0xff
 	jr z, LswOrch_StrDefault
 	sla bc, 2
-	lda_24 xde, (Naka_TechniChord1_Screens)
+	lda xde, (Naka_TechniChord1_Screens:24)
 	ld_sril3 XBC, 0x07, 0xe8, 0xe4
 	push xbc
 	jr LswOrch_StrCopyReturn
@@ -9883,7 +9883,7 @@ LswMasterTuning:
 	cp xde, 0x1e00042
 	jrl nz, StringOp_ReturnZero
 	lds iz, 1
-	lda_24 xde, (NakaInst_RIGHT_1_E9DB0C_0x14)
+	lda xde, (NakaInst_RIGHT_1_E9DB0C_0x14:24)
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 4)
 
@@ -10024,7 +10024,7 @@ IvSdscltyp2Proc:
 	call SendEvent
 	ldw_da xwa, (0x02478e)
 	sla wa, 2
-	lda_24 xbc, (NakaInst_RIGHT_1_E9DB0C_0x70)
+	lda xbc, (NakaInst_RIGHT_1_E9DB0C_0x70:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1e0004d
 	lds32 xde, 1
@@ -10058,7 +10058,7 @@ Sdscltyp2_ScrollDown:
 	call SendEvent
 	ldw_da xwa, (0x02478e)
 	sla wa, 2
-	lda_24 xbc, (NakaInst_RIGHT_1_E9DB0C_0x70)
+	lda xbc, (NakaInst_RIGHT_1_E9DB0C_0x70:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1e0004d
 	lds32 xde, 1
@@ -10093,7 +10093,7 @@ Sdscltyp2_ScrollUp:
 	call SendEvent
 	ldw_da xwa, (0x02478e)
 	sla wa, 2
-	lda_24 xbc, (NakaInst_RIGHT_1_E9DB0C_0x70)
+	lda xbc, (NakaInst_RIGHT_1_E9DB0C_0x70:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld xbc, 0x1e0004d
 	lds32 xde, 1
@@ -10166,7 +10166,7 @@ LswScalingType:
 	cp hl, 0xffff
 	jr z, LswScaleType_StrDefault
 	sla hl, 2
-	lda_24 xwa, (Naka_Scale2_Screens)
+	lda xwa, (Naka_Scale2_Screens:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xec
 	push xwa
 	jr LswScaleType_StrCopyReturn
@@ -10219,7 +10219,7 @@ LswScalingShift:
 	jr nz, LswScaleShift_ReturnZero
 	ld wa, (xde + 4)
 	sla wa, 2
-	lda_24 xbc, (Scale_Arabic2_NameTable)
+	lda xbc, (Scale_Arabic2_NameTable:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 8)
@@ -10265,7 +10265,7 @@ LswScalingShift2:
 	jr nz, LswScaleShift2_ReturnZero
 	ld wa, (xde + 4)
 	sla wa, 2
-	lda_24 xbc, (Scale_Names_Table)
+	lda xbc, (Scale_Names_Table:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 8)
@@ -10311,7 +10311,7 @@ LswScalingMode:
 	jr nz, LswScaleMode_ReturnZero
 	ld wa, (xde + 4)
 	sla wa, 2
-	lda_24 xbc, (NakaInst_KEY_C_E9DE14_0xA)
+	lda xbc, (NakaInst_KEY_C_E9DE14_0xA:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 8)
@@ -10738,9 +10738,9 @@ AcWelcomScreen_Select:
 	cp hl, 0xc
 	jrl gt, AcWelcomScreen_Select_NextStep
 	add hl, hl
-	lda_24 xix, (Bitmap_DigitD_0x11D6)
+	lda xix, (Bitmap_DigitD_0x11D6:24)
 	ldw_sri HL, 0x07, 0xf0, 0xec
-	lda_24 xix, (AcWelcomScreen_RenderBytecode)
+	lda xix, (AcWelcomScreen_RenderBytecode:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
 AcWelcomScreen_RenderBytecode:
 	ld	xwa, 0xffffffff
@@ -10752,7 +10752,7 @@ AcWelcomScreen_RenderBytecode:
 	jrl	ge, 873
 	ld	bc, iz
 	muls	bc, 12
-	lda_24	xwa, (0x3ea0c)
+	lda	xwa, (0x3ea0c:24)
 	.byte 0xf3
 	reti
 	.byte 0xe0, 0xe4
@@ -10791,7 +10791,7 @@ AcWelcomScreen_RenderBytecode:
 	cp	iz, 0xffff
 	jrl	z, 776
 	muls	iz, 12
-	lda_24	xwa, (0x3ea0c)
+	lda	xwa, (0x3ea0c:24)
 	ldw_da	bc, (0x24784)
 	exts	xbc
 	ld	xiy, xbc
@@ -10897,7 +10897,7 @@ AcWelcomScreen_RenderBytecode:
 	ldw	de, 16
 	call	DrawBitmapSP2
 	jrl	510
-	lda_24	xhl, (0x3ea24)
+	lda	xhl, (0x3ea24:24)
 	.byte 0x9b
 	ldwio	63, 0xffff
 	jr	z, 77
@@ -11201,7 +11201,7 @@ PsMixerControlProc:
 	add xbc, xbc
 	add xbc, TrackName4_Tr1_0x2E
 	ld bc, (xbc)
-	lda_24 xix, (PsMixer_ControlHandler)
+	lda xix, (PsMixer_ControlHandler:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 ; PsMixerControlProc control handler dispatch (10-entry)
@@ -11364,14 +11364,14 @@ PsMixer_ControlHelper:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000d
 	ld xhl, (xhl)
 	call (xhl)
 	ld de, (xsp + 8)
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	extz xde
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
@@ -11411,7 +11411,7 @@ PsMixer_GridLoop:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
@@ -11430,7 +11430,7 @@ PsMixer_GridLoop:
 	ldw_erp HL, 0xfa
 	stw_erp WA, 0xfa
 	add wa, wa
-	lda_24 xbc, (MixerPartTable_Start_0x12C)
+	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
 	exts xde
 	ld xwa, 0x1400004
@@ -11590,7 +11590,7 @@ AudioCtrl_DispatchHandler:
 	add xde, 0x10000
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000e
@@ -11604,7 +11604,7 @@ AudioCtrl_DispatchHandler:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000e
@@ -11673,7 +11673,7 @@ AudioCtrl_PageAdvance:
 AudioCtrl_SetupPartDisplay:
 	stw_erp WA, 0xfa
 	add wa, wa
-	lda_24 xbc, (MixerPartTable_Start_0x12C)
+	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
 	exts xde
 	ld xwa, 0x1400002
@@ -11681,7 +11681,7 @@ AudioCtrl_SetupPartDisplay:
 	call MainFuncCall
 	stw_erp WA, 0xfa
 	add wa, wa
-	lda_24 xbc, (MixerPartTable_Start_0x12C)
+	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
 	exts xde
 	ld xwa, 0x1400004
@@ -11864,7 +11864,7 @@ PsMixer_ControlCase8:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -11899,7 +11899,7 @@ PsMixer_MidiScanOuterLoop:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
 	sla wa, 2
-	lda_24 xbc, (MixerPartTable_Start_0x80)
+	lda xbc, (MixerPartTable_Start_0x80:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 14), xwa
 	ldw_da xiz, (0x024794)
@@ -11940,7 +11940,7 @@ PsMixer_ArrayReadHandler:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
@@ -11955,7 +11955,7 @@ AudioCtrl_MixerDispatch:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -11973,7 +11973,7 @@ AudioCtrl_MixerDispatch:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
@@ -11998,7 +11998,7 @@ PsMixer_UnmatchedPartScan:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
 	sla wa, 2
-	lda_24 xbc, (MixerPartTable_Start_0x80)
+	lda xbc, (MixerPartTable_Start_0x80:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 14), xwa
 	ldw_da xiz, (0x024794)
@@ -12033,7 +12033,7 @@ AudioCtrl_ArrayReadHandler:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
@@ -12047,7 +12047,7 @@ AudioCtrl_DispatchCallback:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -12065,7 +12065,7 @@ AudioCtrl_DispatchCallback:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, 0x1c0000f
@@ -12164,7 +12164,7 @@ PsMixer_VolumeSelect_Continue:
 	stw_da (0x024794), xwa
 	stw_erp WA, 0xfa
 	add wa, wa
-	lda_24 xbc, (MixerPartTable_Start_0x12C)
+	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri DE, 0x07, 0xe4, 0xe0
 	exts xde
 	ld xwa, 0x1400004
@@ -12208,7 +12208,7 @@ PsMixer_SendEventAndForward:
 	ldw_erp HL, 0xfa
 	stw_erp WA, 0xfa
 	add wa, wa
-	lda_24 xbc, (MixerPartTable_Start_0x12C)
+	lda xbc, (MixerPartTable_Start_0x12C:24)
 	ldw_sri BC, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 82)
 	cp bc, (xwa)
@@ -12217,7 +12217,7 @@ PsMixer_SendEventAndForward:
 	push xwa
 	stw_erp WA, 0xfa
 	sla wa, 2
-	lda_24 xbc, (0x03ea38)
+	lda xbc, (0x03ea38:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xe9
@@ -12245,14 +12245,14 @@ PsMixer_EventForwardHelper:
 	ld xde, (xsp + 4)
 	ld wa, (xde)
 	sla wa, 2
-	lda_24 xbc, (MixerPartTable_Start_0x80)
+	lda xbc, (MixerPartTable_Start_0x80:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 14), xwa
 	cp xwa, 0x1210027
 	jr nz, PsMixer_EventFwd_Next
 	ld wa, (xde + 2)
 	sla wa, 2
-	lda_24 xbc, (Bitmap_DigitD_0x11F0)
+	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -12802,7 +12802,7 @@ AudioCtrl_DataBlock:
 	ldb	b, 30
 	cp	(xwa), h
 	lda	xbc, (xsp+16)
-	lda_24	xwa, (0x3eab0)
+	lda	xwa, (0x3eab0:24)
 	ld	de, (xsp+4)
 	sla	de, 2
 	ld_rrl xde, xwa, de
@@ -12833,7 +12833,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -12942,7 +12942,7 @@ AudioCtrl_DataBlock:
 	lda	xwa, (xsp+20)
 	ld	de, (xsp+4)
 	sla	de, 2
-	lda_24	xhl, (0x3eab0)
+	lda	xhl, (0x3eab0:24)
 	ld_rrl xde, xhl, de
 	lds32 xhl, 3
 	push	xhl
@@ -12992,7 +12992,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -13120,7 +13120,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+6), xwa
 	lda xwa, (xsp+62)
@@ -13210,7 +13210,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+6)
 	ld	xbc, 0x1e10002
 	call	ApFuncCall
-	lda_24	xbc, (MidiParam_MixerCfgData_0x2A)
+	lda	xbc, (MidiParam_MixerCfgData_0x2A:24)
 	or	xhl, xhl
 	jr	z, 41
 	lda	xhl, (xsp+58)
@@ -13246,7 +13246,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -13319,7 +13319,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -13444,7 +13444,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	lda xwa, (xsp+64)
@@ -13527,7 +13527,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
@@ -13592,7 +13592,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
@@ -13707,7 +13707,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+6), xwa
 	lda xwa, (xsp+66)
@@ -13815,7 +13815,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -13940,7 +13940,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	lda xwa, (xsp+64)
@@ -14064,7 +14064,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
@@ -14314,7 +14314,7 @@ AudioCtrl_DataBlock:
 	calr	60252
 	ld	wa, (xhl)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+12), xwa
 	ld de, (xsp+6)
@@ -14531,7 +14531,7 @@ AudioCtrl_DataBlock:
 	.byte 0xef, 0xe8
 	ld	(xsp+8), hl
 	sla	hl, 2
-	lda_24	xwa, (0x3ea38)
+	lda	xwa, (0x3ea38:24)
 	ld_rrl xwa, xwa, hl
 	push xwa
 	pushw	233
@@ -14578,7 +14578,7 @@ AudioCtrl_DataBlock:
 	calr	59510
 	ld	(xsp+8), hl
 	add	hl, hl
-	lda_24	xwa, (MixerPartTable_Start_0x12C)
+	lda	xwa, (MixerPartTable_Start_0x12C:24)
 	ld_rrw de, xwa, hl
 	exts xde
 	ld	xwa, 0x1400004
@@ -14596,7 +14596,7 @@ AudioCtrl_DataBlock:
 	ld	xiz, xhl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	.byte 0xe3
 	reti
 	.byte 0xe4, 0xe0
@@ -14703,7 +14703,7 @@ AudioCtrl_DataBlock:
 	ld	(xsp+8), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+14), xwa
 	ld de, (xsp+8)
@@ -14812,7 +14812,7 @@ AudioCtrl_DataBlock:
 	nop
 	ld	wa, iz
 	sla	wa, 2
-	lda_24	xbc, (0x3eb28)
+	lda	xbc, (0x3eb28:24)
 	ld_rrl xwa, xbc, wa
 	push xwa
 	pushw	233
@@ -14866,7 +14866,7 @@ AudioCtrl_DataBlock:
 	ld	xwa, (xsp+12)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda_24	xbc, (MixerPartTable_Start_0x80)
+	lda	xbc, (MixerPartTable_Start_0x80:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+10), xwa
 	ld de, (xsp+8)
@@ -16037,7 +16037,7 @@ LswPercDecay:
 	jr nz, LswPercDecay_Return
 	ld wa, (xde + 4)
 	sla wa, 2
-	lda_24 xbc, (KeyShift_DisplayStrTable)
+	lda xbc, (KeyShift_DisplayStrTable:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 8)
@@ -16154,7 +16154,7 @@ LswPercLevel:
 	jr nz, LswPercLevel_Return
 	ld wa, (xde + 4)
 	sla wa, 2
-	lda_24 xbc, (KeyShift_DisplayStrTable)
+	lda xbc, (KeyShift_DisplayStrTable:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 8)
@@ -16241,7 +16241,7 @@ LswDrawAttack:
 	jr nz, LswDrawAttack_Return
 	ld wa, (xde + 4)
 	sla wa, 2
-	lda_24 xbc, (KeyShift_DisplayStrTable)
+	lda xbc, (KeyShift_DisplayStrTable:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 8)
@@ -16328,7 +16328,7 @@ LswDrawRelease:
 	jr nz, LswDrawRelease_Return
 	ld wa, (xde + 4)
 	sla wa, 2
-	lda_24 xbc, (KeyShift_DisplayStrTable)
+	lda xbc, (KeyShift_DisplayStrTable:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 8)
@@ -16572,7 +16572,7 @@ IvDrawbar1_OK_CheckSixteen:
 IvDrawbar1_OK_ComputeNewValue:
 	stw_erp BC, 0xfa
 	add bc, bc
-	lda_24 xwa, (0x0247b0)
+	lda xwa, (0x0247b0:24)
 	ldw_sri IZ, 0x07, 0xe0, 0xe4
 	ld xwa, (xsp + 4)
 	bit 7, wa
@@ -16586,7 +16586,7 @@ IvDrawbar1_OK_ComputeNewValue:
 	ldw_da xwa, (0x02479a)
 	stw_erp BC, 0xfa
 	add bc, bc
-	lda_24 xde, (MidiParam_MixerCfgData_0x78)
+	lda xde, (MidiParam_MixerCfgData_0x78:24)
 	ldw_sri BC, 0x07, 0xe8, 0xe4
 	pushw 0x4
 	ld de, iz
@@ -16596,7 +16596,7 @@ IvDrawbar1_OK_ComputeNewValue:
 IvDrawbar1_OK_ScrollUp_DualMode:
 	stw_erp BC, 0xfa
 	add bc, bc
-	lda_24 xwa, (0x0247b0)
+	lda xwa, (0x0247b0:24)
 	ldw_sri WA, 0x07, 0xe0, 0xe4
 	cp wa, 0x8
 	jr ge, IvDrawbar1_OK_ScrollRelease
@@ -16627,7 +16627,7 @@ IvDrawbar1_OK_ScrollDown:
 	cp xhl, 0x1800003
 	jr z, IvDrawbar1_OK_ScrollDown_DualMode
 	ldw_da xwa, (0x02479a)
-	lda_24 xde, (MidiParam_MixerCfgData_0x78)
+	lda xde, (MidiParam_MixerCfgData_0x78:24)
 	ldw_sri BC, 0x07, 0xe8, 0xe4
 	pushw 0x4
 	ld de, iz
@@ -16635,7 +16635,7 @@ IvDrawbar1_OK_ScrollDown:
 	jr IvDrawbar1_OK_ScrollDown_Release
 
 IvDrawbar1_OK_ScrollDown_DualMode:
-	lda_24 xwa, (0x0247b0)
+	lda xwa, (0x0247b0:24)
 	ldw_sri WA, 0x07, 0xe0, 0xe4
 	cps wa, 0
 	jr le, IvDrawbar1_OK_ScrollDown_Release
@@ -16723,7 +16723,7 @@ IvDrawbar1_Match_Ch3:
 IvDrawbar1_Match_Ch4:
 	ld xwa, xde
 	add xwa, 0x8284
-	lda_24 xbc, (0x0247b0)
+	lda xbc, (0x0247b0:24)
 	cp xwa, (xix)
 	jr nz, IvDrawbar1_Match_Ch5
 	ld wa, (xhl)
@@ -17084,7 +17084,7 @@ DrawbarNorm_Update:
 DrawbarNorm_UpdateCase4:
 	ldw_da xwa, (0x02479a)
 	sla wa, 2
-	lda_24 xbc, (0x03e9a0)
+	lda xbc, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, Presentation_TagStrTable_0x17
 	ld xbc, 0x1c0000f
@@ -17199,15 +17199,15 @@ DrawbarBitmapHelper:
 	lda xwa, (xsp)
 	ld hl, de
 	add hl, hl
-	lda_24 xix, (KeyShiftStr_Zero_0x28)
+	lda xix, (KeyShiftStr_Zero_0x28:24)
 	ldw_sri HL, 0x07, 0xf0, 0xec
 	ld (xwa), hl
 	ldw (xwa + 2), 0x72
 	sla de, 2
-	lda_24 xhl, (0x03ec28)
+	lda xhl, (0x03ec28:24)
 	ld_sril3 XDE, 0x07, 0xec, 0xe8
 	sla bc, 2
-	lda_24 xhl, (KeyShiftStr_Zero_0x3A)
+	lda xhl, (KeyShiftStr_Zero_0x3A:24)
 	ld_sril3 XBC, 0x07, 0xec, 0xe4
 	add xbc, xbc
 	add xde, xbc
@@ -17396,9 +17396,9 @@ DemoMenu_WorkspaceFunc:
 	cps wa, 5
 	jr ugt, DemoMenu_BuildItemWorkspace_Post
 	add wa, wa
-	lda_24 xix, (KeyShiftStr_Zero_0x5E)
+	lda xix, (KeyShiftStr_Zero_0x5E:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (DemoMenu_WorkspaceDispatch)
+	lda xix, (DemoMenu_WorkspaceDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; DemoMenu workspace dispatch (6-entry, table 0xe9f984)
@@ -17453,9 +17453,9 @@ DemoMenu_DescriptorFunc:
 	cps wa, 5
 	jr ugt, DemoMenu_DescriptorReturn
 	add wa, wa
-	lda_24 xix, (KeyShiftStr_Zero_0x6A)
+	lda xix, (KeyShiftStr_Zero_0x6A:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (DemoDesc_DispatchTable)
+	lda xix, (DemoDesc_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 DemoDesc_DispatchTable:
@@ -17486,7 +17486,7 @@ DemoDesc_BuildCompactParams:
 	sla bc, 4
 	addda16_24 xbc, (0x247e8)
 	ld (xwa + 1), c
-	lda_24 xbc, (0x0247ce)
+	lda xbc, (0x0247ce:24)
 	ld de, (xbc + 4)
 	sla de, 4
 	add de, (xbc)
@@ -18175,7 +18175,7 @@ AcPresentationControlProc:
 	add xbc, xbc
 	add xbc, KeyShiftStr_Zero_0x8C
 	ld bc, (xbc)
-	lda_24 xix, (AcPresCtrl_EventDispatch)
+	lda xix, (AcPresCtrl_EventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; AcPresentationControlProc event dispatch (11-entry, table 0xe9f9b2)
 AcPresCtrl_EventDispatch:

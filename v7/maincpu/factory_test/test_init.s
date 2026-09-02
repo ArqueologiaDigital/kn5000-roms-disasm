@@ -90,11 +90,11 @@ InitializeHama:
 	lda	xsp, (xsp-14)
 	ld	xwa, 23068676
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16400597
+	lda	xwa, (16400597:24)
 	ld	(xsp+4), xwa
 	ldw_da	wa, (14807228)
 	ld	(xsp+8), wa
-	lda_24	xwa, 14807168
+	lda	xwa, (14807168:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -102,11 +102,11 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068684
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16405742
+	lda	xwa, (16405742:24)
 	ld	(xsp+4), xwa
 	ldw_da	wa, (14807252)
 	ld	(xsp+8), wa
-	lda_24	xwa, 14807230
+	lda	xwa, (14807230:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -114,11 +114,11 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068685
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16405819
+	lda	xwa, (16405819:24)
 	ld	(xsp+4), xwa
 	ldw_da	wa, (14807274)
 	ld	(xsp+8), wa
-	lda_24	xwa, 14807254
+	lda	xwa, (14807254:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -126,10 +126,10 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068674
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16401759
+	lda	xwa, (16401759:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
-	lda_24	xwa, 14807114
+	lda	xwa, (14807114:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -137,10 +137,10 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068674
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16401759
+	lda	xwa, (16401759:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
-	lda_24	xwa, 14807126
+	lda	xwa, (14807126:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -148,10 +148,10 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068673
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16401564
+	lda	xwa, (16401564:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 75
-	lda_24	xwa, 14807276
+	lda	xwa, (14807276:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -159,10 +159,10 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068673
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16401564
+	lda	xwa, (16401564:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 75
-	lda_24	xwa, 14807616
+	lda	xwa, (14807616:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -170,10 +170,10 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068675
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16401931
+	lda	xwa, (16401931:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 1
-	lda_24	xwa, 14810412
+	lda	xwa, (14810412:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -181,10 +181,10 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068675
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16401931
+	lda	xwa, (16401931:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 1
-	lda_24	xwa, 14810420
+	lda	xwa, (14810420:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -192,10 +192,10 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068688
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16405896
+	lda	xwa, (16405896:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 0
-	lda_24	xwa, 14810064
+	lda	xwa, (14810064:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -203,10 +203,10 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068687
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16408254
+	lda	xwa, (16408254:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 0
-	lda_24	xwa, 14810176
+	lda	xwa, (14810176:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -214,10 +214,10 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068688
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16405896
+	lda	xwa, (16405896:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 26
-	lda_24	xwa, 14810068
+	lda	xwa, (14810068:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -225,24 +225,24 @@ InitializeHama:
 	call	16400110
 	ld	xwa, 23068687
 	ld	(xsp+256), xwa
-	lda_24	xwa, 16408254
+	lda	xwa, (16408254:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 26
-	lda_24	xwa, 14810182
+	lda	xwa, (14810182:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
 	ldw	wa, 1020
 	call	16400110
 	pushw 9
-	lda_24	xwa, 14810392
+	lda	xwa, (14810392:24)
 	push	xwa
 	ld	xwa, 127
 	ld	xbc, 21561344
 	ld	xde, 16515072
 	call	16402803
 	pushw 9
-	lda_24	xwa, 14810402
+	lda	xwa, (14810402:24)
 	push	xwa
 	ld	xwa, 252
 	ld	xbc, 21561344
@@ -276,28 +276,28 @@ TestTitleFunc:
 	add xwa, xwa
 	add xwa, FDTest_String_TestTitleFunc_0xD0
 	ld wa, (xwa)
-	lda_24 xix, (TitleFunc_ActionDispatch)
+	lda xix, (TitleFunc_ActionDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; User action dispatch table (event 0x1c00013, xde=2..6)
 ; Each entry loads a string address and calls FDTest_PrintDiag, then exits
 TitleFunc_ActionDispatch:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0xE)
+	lda xwa, (FDTest_String_TestTitleFunc_0xE:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x1A)
+	lda xwa, (FDTest_String_TestTitleFunc_0x1A:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x26)
+	lda xwa, (FDTest_String_TestTitleFunc_0x26:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x36)
+	lda xwa, (FDTest_String_TestTitleFunc_0x36:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x48)
+	lda xwa, (FDTest_String_TestTitleFunc_0x48:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x58)
+	lda xwa, (FDTest_String_TestTitleFunc_0x58:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
 
@@ -308,7 +308,7 @@ TitleFunc_LifecycleDispatch:
 	add xwa, xwa
 	add xwa, FDTest_String_TestTitleFunc_0xC0
 	ld wa, (xwa)
-	lda_24 xix, (TitleFunc_LifecycleTable)
+	lda xix, (TitleFunc_LifecycleTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Title lifecycle dispatch table (event 0x1c00007, xde=0..6)
@@ -317,7 +317,7 @@ TitleFunc_LifecycleDispatch:
 ; 4=interrupt: print+call RegHamaTitle1_Entry, 5=interrupt return: print+call RegHamaTitle2_Entry
 ; 6=TBIOS test: call ListDir2_Entry
 TitleFunc_LifecycleTable:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x70)
+	lda xwa, (FDTest_String_TestTitleFunc_0x70:24)
 	calr FDTest_PrintDiag
 	call Reset_Floppy_Disk_Controller_0x12
 	jr TitleFunc_Return
@@ -329,11 +329,11 @@ TitleFunc_LifecycleTable:
 	lds32 xwa, 0
 	ld xde, 0xffffffff
 	call KillApTimer
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x7C)
+	lda xwa, (FDTest_String_TestTitleFunc_0x7C:24)
 	calr FDTest_PrintDiag
 	lds wa, 0
 	jr TitleFunc_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x8C)
+	lda xwa, (FDTest_String_TestTitleFunc_0x8C:24)
 	calr FDTest_PrintDiag
 	calr RunTestCounters_Entry
 	ld xwa, 0x01c00007
@@ -346,15 +346,15 @@ TitleFunc_LifecycleTable:
 	call SetApTimer
 	lds wa, 1
 	jr TitleFunc_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0xA2)
+	lda xwa, (FDTest_String_TestTitleFunc_0xA2:24)
 	calr FDTest_PrintDiag
 	calr FDListDirectory
 	jr TitleFunc_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0xA8)
+	lda xwa, (FDTest_String_TestTitleFunc_0xA8:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle1_Entry
 	jr TitleFunc_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0xB4)
+	lda xwa, (FDTest_String_TestTitleFunc_0xB4:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle2_Entry
 	jr TitleFunc_Return
@@ -374,7 +374,7 @@ TitleFunc_Return:
 ListDir2_Entry:
 	lda xsp, (xsp - 266)
 	push xiz
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0xDC)
+	lda xwa, (FDTest_String_TestTitleFunc_0xDC:24)
 	lda xbc, (xsp + 4)
 	call _findfirst
 	ld xiz, xhl
@@ -430,7 +430,7 @@ RunTestCounters_BadStatus:
 RunTestCounters_IncrNG:
 	incdi16_24 1, (0x03dd02)
 RunTestCounters_Display:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0xEA)
+	lda xwa, (FDTest_String_TestTitleFunc_0xEA:24)
 	calr FDTest_PrintDiag
 	ldw_da de, (0x03dcfe)
 	exts xde
@@ -452,7 +452,7 @@ RunTestCounters_Display:
 ; calls 0xf97cca to execute the FD operation, then prints success/failure.
 CreateRunFDOp_Entry:
 	lda xsp, (xsp - 16)
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0xFA)
+	lda xwa, (FDTest_String_TestTitleFunc_0xFA:24)
 	calr FDTest_PrintDiag
 	ldw (xsp+256), 0
 	ldw (xsp + 6), 0xe0
@@ -468,11 +468,11 @@ CreateRunFDOp_Entry:
 	inc 4, xsp
 	cps hl, 0
 	jr nz, CreateRunFDOp_Fail
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x100)
+	lda xwa, (FDTest_String_TestTitleFunc_0x100:24)
 	calr FDTest_PrintDiag
 	jr CreateRunFDOp_Return
 CreateRunFDOp_Fail:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x104)
+	lda xwa, (FDTest_String_TestTitleFunc_0x104:24)
 	calr FDTest_PrintDiag
 CreateRunFDOp_Return:
 	lda xsp, (xsp + 16)
@@ -485,7 +485,7 @@ CreateRunFDOp_Return:
 RegHamaTitle1_Entry:
 	lds wa, 2
 	call format_FD
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x204)
+	lda xwa, (FDTest_String_TestTitleFunc_0x204:24)
 	call FileIO_CheckPathAndVolumeLabel
 	lds hl, 0
 	ret
@@ -495,7 +495,7 @@ RegHamaTitle1_Entry:
 RegHamaTitle2_Entry:
 	lds wa, 3
 	call format_FD
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x20E)
+	lda xwa, (FDTest_String_TestTitleFunc_0x20E:24)
 	call FileIO_CheckPathAndVolumeLabel
 	lds hl, 0
 	ret
@@ -523,17 +523,17 @@ HamaEvtDisp_LifecycleCheck:
 	jr z, HamaEvtDisp_ExtBootstrap
 	cp xde, 0x8a
 	jr nz, HamaEvtDisp_Return
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x21A)
+	lda xwa, (FDTest_String_TestTitleFunc_0x21A:24)
 	calr SendEvent_Entry
 	calr CheckFDStatusLoad_Entry
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x220)
+	lda xwa, (FDTest_String_TestTitleFunc_0x220:24)
 	calr SendEvent_Entry
 	jr HamaEvtDisp_Return
 HamaEvtDisp_ExtBootstrap:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x22A)
+	lda xwa, (FDTest_String_TestTitleFunc_0x22A:24)
 	calr SendEvent_Entry
 	calr LoadExtROM_Entry
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x22E)
+	lda xwa, (FDTest_String_TestTitleFunc_0x22E:24)
 	calr SendEvent_Entry
 HamaEvtDisp_Return:
 	lds32 xhl, 0
@@ -549,11 +549,11 @@ CheckFDStatusLoad_Entry:
 	jr z, CheckFDStatusLoad_DoLoad
 	cps hl, 3
 	jr z, CheckFDStatusLoad_DoLoad
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x236)
+	lda xwa, (FDTest_String_TestTitleFunc_0x236:24)
 	calr SendEvent_Entry
 	jr CheckFDStatusLoad_Return
 CheckFDStatusLoad_DoLoad:
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x242)
+	lda xwa, (FDTest_String_TestTitleFunc_0x242:24)
 	push xwa
 	pushw 0xe1
 	pushw 0xff84
@@ -562,7 +562,7 @@ CheckFDStatusLoad_DoLoad:
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, CheckFDStatusLoad_Transfer
-	lda_24 xwa, (FDTest_String_TestTitleFunc_0x252)
+	lda xwa, (FDTest_String_TestTitleFunc_0x252:24)
 	calr SendEvent_Entry
 	jr CheckFDStatusLoad_Return
 CheckFDStatusLoad_Transfer:
@@ -591,11 +591,11 @@ LoadExtROM_Entry:
 	add	xsp, 10
 	cps	hl, 0
 	jr	z, 8
-	lda_24	xwa, (14811042)
+	lda	xwa, (14811042:24)
 	jrl	-217
 LoadExtROM_JumpEntry:
 	ld xhl, 0x200008
-	lda_24 xwa, (0x027ed2)
+	lda xwa, (0x027ed2:24)
 	jp (xhl)
 
 GetAprStatus_Entry:
@@ -649,6 +649,6 @@ LoadAndRunXapr_CallIfActive:
 	cpib_da (0x03dd04), 0x00
 	ret z
 	ld xhl, 0x280008
-	lda_24 xwa, (0x027ed2)
+	lda xwa, (0x027ed2:24)
 	call (xhl)
 	ret

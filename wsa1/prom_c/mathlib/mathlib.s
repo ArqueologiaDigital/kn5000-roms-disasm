@@ -377,10 +377,10 @@ sub_FC8C45__FC8DDF:
 	lda	xiy, (xiz-8)                           ; FC8E0C  lda XIY,XIZ+0xf8
 	call	0xFCA252                              ; FC8E0F  call 0xfca252
 	lda	xix, (xiz-16)                          ; FC8E13  lda XIX,XIZ+0xf0
-	lda_24	xiy, (0xFCB2CE)                     ; FC8E16  lda XIY,0xfcb2ce
+	lda	xiy, (0xFCB2CE:24)                     ; FC8E16  lda XIY,0xfcb2ce
 	ldw	bc, 4                                  ; FC8E1B  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC8E1E  ldirw
-	lda_24	xix, (0xFCB2CE)                     ; FC8E20  lda XIX,0xfcb2ce
+	lda	xix, (0xFCB2CE:24)                     ; FC8E20  lda XIX,0xfcb2ce
 	inc	8, xix                                 ; FC8E25  inc 0,XIX
 	ldb	h, 7                                   ; FC8E27  ld H,0x07
 sub_FC8C45__FC8E29:
@@ -554,7 +554,7 @@ sub_FC8EE5__FC8F0F:
 	cp	iy, 0x3FF                               ; FC8F7B  cp IY,0x03ff
 	jr nc, sub_FC8EE5__FC8F91                  ; FC8F7F  jr NC,0xfc8f91
 	ld	xix, (xiz+16)                           ; FC8F81  ld XIX,(XIZ+0x10)
-	lda_24	xiy, (0xFCB30E)                     ; FC8F84  lda XIY,0xfcb30e
+	lda	xiy, (0xFCB30E:24)                     ; FC8F84  lda XIY,0xfcb30e
 	ldw	bc, 4                                  ; FC8F89  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC8F8C  ldirw
 	jrl sub_FC8EE5__FC9121                     ; FC8F8E  jrl T,0xfc9121
@@ -1025,10 +1025,10 @@ sub_FC9140__FC93E4:
 	lda	xiy, (xiz-10)                          ; FC93F4  lda XIY,XIZ+0xf6
 	call	0xFCA252                              ; FC93F7  call 0xfca252
 	lda	xix, (xiz-26)                          ; FC93FB  lda XIX,XIZ+0xe6
-	lda_24	xiy, (0xFCB376)                     ; FC93FE  lda XIY,0xfcb376
+	lda	xiy, (0xFCB376:24)                     ; FC93FE  lda XIY,0xfcb376
 	ldw	bc, 4                                  ; FC9403  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9406  ldirw
-	lda_24	xix, (0xFCB376)                     ; FC9408  lda XIX,0xfcb376
+	lda	xix, (0xFCB376:24)                     ; FC9408  lda XIX,0xfcb376
 	inc	8, xix                                 ; FC940D  inc 0,XIX
 	ldb	h, 2                                   ; FC940F  ld H,0x02
 sub_FC9140__FC9411:
@@ -1093,10 +1093,10 @@ sub_FC9140__FC9411:
 	lda	xiy, (xiz+8)                           ; FC9491  lda XIY,XIZ+0x08
 	call	0xFCA41F                              ; FC9494  call 0xfca41f
 	lda	xix, (xiz-26)                          ; FC9498  lda XIX,XIZ+0xe6
-	lda_24	xiy, (0xFCB38E)                     ; FC949B  lda XIY,0xfcb38e
+	lda	xiy, (0xFCB38E:24)                     ; FC949B  lda XIY,0xfcb38e
 	ldw	bc, 4                                  ; FC94A0  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC94A3  ldirw
-	lda_24	xix, (0xFCB38E)                     ; FC94A5  lda XIX,0xfcb38e
+	lda	xix, (0xFCB38E:24)                     ; FC94A5  lda XIX,0xfcb38e
 	inc	8, xix                                 ; FC94AA  inc 0,XIX
 	ldb	h, 4                                   ; FC94AC  ld H,0x04
 sub_FC9140__FC94AE:
@@ -1782,10 +1782,10 @@ sub_FC9844__FC9A68:
 	lda	xiy, (xiz-10)                          ; FC9A78  lda XIY,XIZ+0xf6
 	call	0xFCA252                              ; FC9A7B  call 0xfca252
 	lda	xix, (xiz-18)                          ; FC9A7F  lda XIX,XIZ+0xee
-	lda_24	xiy, (0xFCB436)                     ; FC9A82  lda XIY,0xfcb436
+	lda	xiy, (0xFCB436:24)                     ; FC9A82  lda XIY,0xfcb436
 	ldw	bc, 4                                  ; FC9A87  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9A8A  ldirw
-	lda_24	xix, (0xFCB436)                     ; FC9A8C  lda XIX,0xfcb436
+	lda	xix, (0xFCB436:24)                     ; FC9A8C  lda XIX,0xfcb436
 	inc	8, xix                                 ; FC9A91  inc 0,XIX
 	ldb	h, 2                                   ; FC9A93  ld H,0x02
 sub_FC9844__FC9A95:
@@ -1852,10 +1852,10 @@ sub_FC9ACB:
 	lda	xiy, (xiz+8)                           ; FC9AE7  lda XIY,XIZ+0x08
 	call	0xFCA252                              ; FC9AEA  call 0xfca252
 	lda	xix, (xiz-18)                          ; FC9AEE  lda XIX,XIZ+0xee
-	lda_24	xiy, (0xFCB44E)                     ; FC9AF1  lda XIY,0xfcb44e
+	lda	xiy, (0xFCB44E:24)                     ; FC9AF1  lda XIY,0xfcb44e
 	ldw	bc, 4                                  ; FC9AF6  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9AF9  ldirw
-	lda_24	xix, (0xFCB44E)                     ; FC9AFB  lda XIX,0xfcb44e
+	lda	xix, (0xFCB44E:24)                     ; FC9AFB  lda XIX,0xfcb44e
 	inc	8, xix                                 ; FC9B00  inc 0,XIX
 	ldb	h, 3                                   ; FC9B02  ld H,0x03
 sub_FC9ACB__FC9B04:
@@ -2267,10 +2267,10 @@ sub_FC9D12__FC9DD5:
 	lda	xiy, (xiz-8)                           ; FC9E41  lda XIY,XIZ+0xf8
 	call	0xFCA252                              ; FC9E44  call 0xfca252
 	lda	xix, (xiz-18)                          ; FC9E48  lda XIX,XIZ+0xee
-	lda_24	xiy, (0xFCB4A6)                     ; FC9E4B  lda XIY,0xfcb4a6
+	lda	xiy, (0xFCB4A6:24)                     ; FC9E4B  lda XIY,0xfcb4a6
 	ldw	bc, 4                                  ; FC9E50  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9E53  ldirw
-	lda_24	xix, (0xFCB4A6)                     ; FC9E55  lda XIX,0xfcb4a6
+	lda	xix, (0xFCB4A6:24)                     ; FC9E55  lda XIX,0xfcb4a6
 	inc	8, xix                                 ; FC9E5A  inc 0,XIX
 	ldb	h, 2                                   ; FC9E5C  ld H,0x02
 sub_FC9D12__FC9E5E:
@@ -2305,10 +2305,10 @@ sub_FC9D12__FC9E5E:
 	cps	h, 0                                   ; FC9E9C  cp H,0
 	jr nz, sub_FC9D12__FC9E5E                  ; FC9E9E  jr NZ,0xfc9e5e
 	lda	xix, (xiz-26)                          ; FC9EA0  lda XIX,XIZ+0xe6
-	lda_24	xiy, (0xFCB4BE)                     ; FC9EA3  lda XIY,0xfcb4be
+	lda	xiy, (0xFCB4BE:24)                     ; FC9EA3  lda XIY,0xfcb4be
 	ldw	bc, 4                                  ; FC9EA8  ld BC,0x0004
 	extpfx2 0x95, 0x11                         ; FC9EAB  ldirw
-	lda_24	xix, (0xFCB4BE)                     ; FC9EAD  lda XIX,0xfcb4be
+	lda	xix, (0xFCB4BE:24)                     ; FC9EAD  lda XIX,0xfcb4be
 	inc	8, xix                                 ; FC9EB2  inc 0,XIX
 	ldb	h, 3                                   ; FC9EB4  ld H,0x03
 sub_FC9D12__FC9EB6:

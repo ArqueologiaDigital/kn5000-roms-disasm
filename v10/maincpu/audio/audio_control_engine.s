@@ -703,7 +703,7 @@ FileIO_BytecodeData:
 	extz	xwa
 	call	16546867
 	extz	hl
-	lda_24	xbc, 15572320
+	lda	xbc, (15572320:24)
 	ld_rrb	a, xbc, hl
 	ld	(xiz+2), a
 	stb_d8	36154, a
@@ -883,17 +883,17 @@ FileIO_BytecodeData:
 	jr	z, 35
 	cp	hl, 17
 	jr	nz, 58
-	lda_24	xde, 15572348
+	lda	xde, (15572348:24)
 	ld_rrb	c, xde, bc
-	lda_24	xde, 15572324
+	lda	xde, (15572324:24)
 	lda_rr	xde, xde, wa
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
 	call	(xhl)
 	jr	35
-	lda_24	xde, 15572378
+	lda	xde, (15572378:24)
 	ld_rrb	c, xde, bc
-	lda_24	xde, 15572354
+	lda	xde, (15572354:24)
 	lda_rr	xde, xde, wa
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
@@ -942,7 +942,7 @@ FileIO_BytecodeData:
 	jr	nc, 28
 	stb_erp	a, 251
 	extz	wa
-	lda_24	xhl, 15572384
+	lda	xhl, (15572384:24)
 	ld_rrb	a, xhl, wa
 	ld	(xbc), a
 	ld	(xde), 48
@@ -1133,13 +1133,13 @@ FileIO_BytecodeData:
 	inc	6, xsp
 	ret
 	extz	bc
-	lda_24	xde, 15572388
+	lda	xde, (15572388:24)
 	ld_rrb	e, xde, bc
 	cp	e, 22
 	ret	ugt
 	extz	de
 	sla	de, 2
-	lda_24	xhl, 15572644
+	lda	xhl, (15572644:24)
 	exts	xde
 	add	xde, xhl
 	ld	xhl, (xde)
@@ -1679,7 +1679,7 @@ ExtDev_SndParam_DispatchComplex:
 	ldb_d8	a, (0x8e90)
 	extz	wa
 	sla	wa, 2
-	lda_24	xde, (SoundParam_EncoderMappingData_0x286)
+	lda	xde, (SoundParam_EncoderMappingData_0x286:24)
 	ld_rrl xde, xde, wa
 	or xde, xde
 	jr	z, 23
@@ -1727,7 +1727,7 @@ VoiceEntry_CheckTerminator:
 
 Audio_CopyStateFromROM:
 	calr MidiCC_ResetState
-	lda_24 xbc, (SoundParam_EncoderMappingData_0x302)
+	lda xbc, (SoundParam_EncoderMappingData_0x302:24)
 	ld xwa, xbc
 	lda_d16 xde, (0x8eb6)
 	lda xhl, (xbc + 12)
@@ -1974,7 +1974,7 @@ MidiCC_LookupHandler:
 	srl a, 1
 	or a, c
 	extz wa
-	lda_24 xbc, (EffectMode_DispatchTable_0x10)
+	lda xbc, (EffectMode_DispatchTable_0x10:24)
 	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
@@ -2476,7 +2476,7 @@ Set_LEDs:
 	ret ugt
 	lda_d16 xwa, (0x8f38)
 	extz de
-	lda_24 xhl, (Protocol_values_for_LED_rows)
+	lda xhl, (Protocol_values_for_LED_rows:24)
 	ldb_sri E, 0x07, 0xec, 0xe8
 	ld (xwa), e
 	ld (xwa + 1), c
@@ -2604,7 +2604,7 @@ SndParam_TableLookup_Via4100:
 	lda_d16	xiz, (0x8f18)
 	ld xwa, 0x00004100
 	call SndParam_LookupReadOnly
-	lda_24 xwa, (Protocol_values_for_LED_rows_0x10)
+	lda xwa, (Protocol_values_for_LED_rows_0x10:24)
 	ld_rrb	a, xwa, hl
 	and a, 0x07
 	sla	a, 4
@@ -2887,7 +2887,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	cp	wa, 16
 	jr	gt, 82
 	add	wa, wa
-	lda_24	xix, (Protocol_values_for_LED_rows_0x16)
+	lda	xix, (Protocol_values_for_LED_rows_0x16:24)
 	.byte 0xd3
 	reti
 	.byte 0xf0, 0xe0
@@ -3659,9 +3659,9 @@ UIState_ProcessExtendedMode:
 	cps	wa, 7
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (Protocol_values_for_LED_rows_0x46)
+	lda	xix, (Protocol_values_for_LED_rows_0x46:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16546693)
+	lda xix, (16546693:24)
 	.byte 0xf3
 	reti
 	.byte 0xf0, 0xe0
@@ -3760,7 +3760,7 @@ UIState_ProcessSimpleMode:
 CtrlPanel_LookupIndicatorEntry:
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Protocol_values_for_LED_rows_0x56)
+	lda xbc, (Protocol_values_for_LED_rows_0x56:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
@@ -3792,9 +3792,9 @@ Audio_InitAllDefaults:
 	stdi8 (0x91d2), 255
 	stdi8 (0x90f8), 127
 	stdi8 (0x8f63), 255
-	lda_24 xwa, (SoundProgram_DispatchTable_0x400)
+	lda xwa, (SoundProgram_DispatchTable_0x400:24)
 	stda32 0x90f2, xwa
-	lda_24 xwa, (SoundProgram_DispatchTable_0x800)
+	lda xwa, (SoundProgram_DispatchTable_0x800:24)
 	stda32 0x9182, xwa
 	lda_d16 xbc, (0x918d)
 	ld xwa, xbc
@@ -3905,9 +3905,9 @@ Audio_UpdateTempoAndReturn:
 	jp CompIface_SetMax
 
 Audio_FullReinitWithPreset:
-	lda_24 xwa, (SoundProgram_DispatchTable_0x400)
+	lda xwa, (SoundProgram_DispatchTable_0x400:24)
 	stda32 0x90f2, xwa
-	lda_24 xwa, (SoundProgram_DispatchTable_0x800)
+	lda xwa, (SoundProgram_DispatchTable_0x800:24)
 	stda32 0x9182, xwa
 	call Sys_CheckPowerStableFlag
 	cps hl, 0
@@ -3975,13 +3975,13 @@ VoiceData_InitAndCopyParams:
 	sll xwa, 4
 	sub xwa, xiz
 	sll xwa, 6
-	lda_24 xiz, (0x1ed400)
+	lda xiz, (0x1ed400:24)
 	add xiz, xwa
 	pushw 0x7c
 	push xhl
 	push xiz
 	call Mem_Copy
-	lda_24 xwa, (Naka_ToshiParam_Table_0x8C)
+	lda xwa, (Naka_ToshiParam_Table_0x8C:24)
 	add xwa, 0x7c
 	lda xiz, (xiz + 124)
 	pushw 0x11e
@@ -4014,7 +4014,7 @@ VoiceData_ExtendedParamSetup:
 	extz	xwa
 	ld	xde, xwa
 	add	xde, 0x99ec00
-	lda_24	xbc, (0x1ed360)
+	lda	xbc, (0x1ed360:24)
 	add	xbc, xwa
 	pushw	16
 	push	xde
@@ -4031,7 +4031,7 @@ VoiceData_ExtendedParamSetup:
 	jrl	-415
 	dec	8, xsp
 	pushw	iz
-	lda_24	xwa, (Naka_ToshiParam_Table_0x8C)
+	lda	xwa, (Naka_ToshiParam_Table_0x8C:24)
 	ld	(xsp+2), xwa
 	lda_d16	xwa, (0xf9a0)
 	ld	(xsp+6), xwa
@@ -4078,7 +4078,7 @@ VoiceData_ExtendedParamSetup:
 	.byte 0xd7
 	swi	2
 	.byte 0x04
-	lda_24	xwa, (Naka_ToshiParam_Table_0x8C)
+	lda	xwa, (Naka_ToshiParam_Table_0x8C:24)
 	ld	(xsp+4), xwa
 	lda_d16	xwa, (0xf9a0)
 	ld	(xsp+8), xwa
@@ -4209,7 +4209,7 @@ VoiceData_ExtendedParamSetup:
 	pop	xhl
 	pop	xde
 	ld	(xsp+2), 0
-	lda_24	xwa, (Naka_ToshiParam_Table_0x8C)
+	lda	xwa, (Naka_ToshiParam_Table_0x8C:24)
 	ld	(xsp+4), xwa
 	lds32	xwa, 0
 	ld	a, (xsp+2)
@@ -4410,7 +4410,7 @@ BitmapTable_ProcessEntry:
 	add xbc, xbc
 	add xbc, xwa
 	add xbc, xbc
-	lda_24 xwa, (SoundProgram_DispatchTable_0x892)
+	lda xwa, (SoundProgram_DispatchTable_0x892:24)
 	add xwa, xbc
 	ld a, (xwa)
 	calr VoiceData_LookupPtrByIndex
@@ -4424,7 +4424,7 @@ BitmapTable_ProcessEntry:
 	add xbc, xbc
 	ld xwa, SoundProgram_DispatchTable_0x890
 	add xwa, xbc
-	lda_24 xbc, (0x1ed400)
+	lda xbc, (0x1ed400:24)
 	lda xde, (xwa + 3)
 	lda xhl, (xwa + 4)
 	lda xix, (xwa + 5)
@@ -4662,7 +4662,7 @@ Audio_MainPeriodicUpdate:
 	cpdi8 (0xc039), 255
 	ret z
 	resda 0, 0x9165
-	lda_24 xwa, (SoundProgram_DispatchTable_0x400)
+	lda xwa, (SoundProgram_DispatchTable_0x400:24)
 	stda32 0x90f2, xwa
 	calr Audio_SyncBufferPositions
 	push xde
@@ -4693,7 +4693,7 @@ FileIO_OperationDispatch:
 	ldb_d8 a, (0x9127)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (SoundProgram_DispatchTable)
+	lda xbc, (SoundProgram_DispatchTable:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	call (xhl)
 	cpdi16 0x90de, 508
@@ -4735,9 +4735,9 @@ ExtData_ToneParam_DispatchHandler:
 	cp	wa, 11
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (SoundProgram_DispatchTable_0x896)
+	lda	xix, (SoundProgram_DispatchTable_0x896:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16549232)
+	lda xix, (16549232:24)
 	jp_rr 8, xix, wa
 	jr 31
 	jrl	179
@@ -4951,9 +4951,9 @@ ExtData_ToneParam_AltDispatch:
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (SoundProgram_DispatchTable_0x8AE)
+	lda	xix, (SoundProgram_DispatchTable_0x8AE:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16549779)
+	lda xix, (16549779:24)
 	jp_rr 8, xix, wa
 	jr 8
 	jr 15
@@ -4989,9 +4989,9 @@ ExtData_ToneParam_AltBody:
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (SoundProgram_DispatchTable_0x8C0)
+	lda	xix, (SoundProgram_DispatchTable_0x8C0:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (16549885)
+	lda xix, (16549885:24)
 	jp_rr 8, xix, wa
 	jr 15
 	jr 112
@@ -5255,7 +5255,7 @@ ExtData_ToneParam_MultiChannel:
 	ret	z
 	lda_d16	xde, (0xfc66)
 	extz	wa
-	lda_24	xbc, (SoundProgram_DispatchTable_0x8D2)
+	lda	xbc, (SoundProgram_DispatchTable_0x8D2:24)
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -5417,7 +5417,7 @@ ExtData_Voice_MixedHandler:
 	ldb_d8	a, (0xfd02)
 	and	a, 3
 	extz	wa
-	lda_24	xbc, (SoundProgram_DispatchTable_0x8D6)
+	lda	xbc, (SoundProgram_DispatchTable_0x8D6:24)
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe0
@@ -6080,7 +6080,7 @@ CtrlPanelRefresh_Done:
 CtrlPanel_BuildIndicatorBitmask:
 	push xiz
 	lds32 xiz, 0
-	lda_24 xde, (SoundProgram_DispatchTable_0x8DA)
+	lda xde, (SoundProgram_DispatchTable_0x8DA:24)
 	ld c, (xwa + 1)
 	cp c, 0xff
 	jr nz, IndBitmask_LookupByChannel
@@ -7325,7 +7325,7 @@ SwbtWr_AppendFixedParamBlock:
 VoiceData_LookupPtrByIndex:
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (SoundProgram_DispatchTable_0x400)
+	lda xbc, (SoundProgram_DispatchTable_0x400:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
@@ -7334,7 +7334,7 @@ VoiceData_LookupPtrByChannel:
 	jr ugt, VoiceLookup_CheckRhythm
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (SoundProgram_DispatchTable_0x800)
+	lda xbc, (SoundProgram_DispatchTable_0x800:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
@@ -7367,7 +7367,7 @@ VoicePanInit_Loop:
 	add xbc, xwa
 	ld a, (xbc)
 	extz wa
-	lda_24 xbc, (SoundProgram_DispatchTable_0x8F4)
+	lda xbc, (SoundProgram_DispatchTable_0x8F4:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	calr VoiceData_LookupPtrByIndex
 	cp xhl, 0xffffffff
@@ -7559,7 +7559,7 @@ ReverbPreset_Load:
 	pushw iz
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (SoundProgram_DispatchTable_0x908)
+	lda xbc, (SoundProgram_DispatchTable_0x908:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	pushw 0x18
 	push xwa
@@ -7601,7 +7601,7 @@ EQPreset_Load:
 	pushw iz
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Naka_ToshiParam_Table_0x24)
+	lda xbc, (Naka_ToshiParam_Table_0x24:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	pushw 0x18
 	push xwa
@@ -7644,7 +7644,7 @@ CombinedPreset_Load:
 	pushw iz
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Naka_ToshiParam_Table_0x48)
+	lda xbc, (Naka_ToshiParam_Table_0x48:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xsp + 2), xwa
 	pushw 0x18

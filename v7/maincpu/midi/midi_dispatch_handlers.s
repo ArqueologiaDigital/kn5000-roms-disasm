@@ -3509,7 +3509,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	dec 6,XSP
 	pushw iz
 	ld (XSP+0x06),WA
-	lda_24 xwa, (Naka_ToshiParam_Table_0x8C)
+	lda xwa, (Naka_ToshiParam_Table_0x8C:24)
 	ld (XSP+0x02),XWA
 	lds iz, 0
 	cpw (XSP+0x06), 0x0000
@@ -3538,16 +3538,16 @@ DSPCfg_VoiceSlotB_ExtractData:
 	ret
 	pushw iz
 	ld IZ,WA
-	lda_24 xwa, (Naka_ToshiParam_Table_0x6C)
+	lda xwa, (Naka_ToshiParam_Table_0x6C:24)
 	cps iz, 0
 	jr nz, .Lc_fd4c1f
-	lda_24 xbc, (0x00f180)
+	lda xbc, (0x00f180:24)
 	add XBC,0x000002e0
 	pushw 0x0020
 	push XWA
 	push XBC
 	call 0xff05bc
-	lda_24 xbc, (0x00f180)
+	lda xbc, (0x00f180:24)
 	add XBC,0x00000300
 	lda_d16 xwa, (0xfda2)
 	sub XWA,0x0000f9a0
@@ -3601,7 +3601,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	ret
 	cp	wa, 9
 	ret	ugt
-	lda_24	xbc, 2020192
+	lda	xbc, (2020192:24)
 	sll	wa, 4
 	extz	xwa
 	add	xbc, xwa
@@ -4081,7 +4081,7 @@ MidiSysEx_SendAllParams:
 	.byte 0xef, 0x64, 0x5e, 0xef, 0x62, 0x0e
 	extz WA
 	sla WA, 0x03
-	lda_24 xbc, (NakaInst_SoundConfig_LookupTable_0x1786)
+	lda xbc, (NakaInst_SoundConfig_LookupTable_0x1786:24)
 	exts XWA
 	add XWA,XBC
 	pushw 0x0008
@@ -4986,7 +4986,7 @@ SeqBuf_FlushTerminate:
 	lda	xbc, (xbc+29354)
 	ld	(xwa+4), xbc
 	ret
-	lda_24	xbc, (1966080)
+	lda	xbc, (1966080:24)
 	ld	(xwa), xbc
 	ld	xbc, 16
 	ld	(xwa+8), xbc
@@ -5849,7 +5849,7 @@ MidiPkt_ArpExtHandler_E_Data:
 	ret	nc
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (15609440)
+	lda	xbc, (15609440:24)
 MidiPkt_ArpExtHandler_F_Data:
 	.byte 0xe3, 0x07, 0xe4, 0xe0, 0x23, 0xb3, 0xe8, 0xf1
 	.byte 0x80, 0xbc, 0xb7, 0x0e, 0xe1, 0x10, 0xbc, 0x20
@@ -6211,7 +6211,7 @@ SeqAlt_CheckInitBuffer:
 	ret
 	lda_d16 xwa, (0xf9b6)
 	sub XWA,0x0000f9b4
-	lda_24 xbc, (0x03c8e4)
+	lda xbc, (0x03c8e4:24)
 	add XWA,XBC
 	ld (XWA),0xff
 	ret
@@ -6342,7 +6342,7 @@ SoundMode_RenderWithNotify:
 	jr	5
 	stdi8	(46928), 93
 	jp	16600229
-	lda_24	xbc, (15609654)
+	lda	xbc, (15609654:24)
 	ld	xwa, xbc
 	lda	xbc, (xbc+64)
 	ld	xhl, (xwa)
@@ -6500,7 +6500,7 @@ TGReg_WriteCC0_Check:
 	ld	c, (xhl-1)
 	ld	xwa, xhl
 	sub	xwa, 63904
-	lda_24	xde, (248036)
+	lda	xde, (248036:24)
 	add	xde, xwa
 TGReg_WriteCC0_AltMask:
 	.byte 0xd9, 0x12, 0x29, 0x3a, 0x3b, 0x1d, 0xbc, 0x05
@@ -6723,7 +6723,7 @@ MidiBuf_FillLoop:
 	ldb	c, 217
 	ccf
 	sla	bc, 2
-	lda_24	xde, (15617898)
+	lda	xde, (15617898:24)
 	exts	xbc
 MidiCtrl_ModeSwitch_Data:
 	.incbin "includes/romslices/v7_transplant_MidiCtrl_ModeSwitch_Data.bin"
@@ -6879,7 +6879,7 @@ SeqData_FormatOutput_Dispatch:
 	jr	nc, 121
 	extz	wa
 	muls	wa, 6
-	lda_24	xbc, (15617558)
+	lda	xbc, (15617558:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	de, (xwa)
@@ -7160,7 +7160,7 @@ SeqAlt_DualNibblePack:
 	.byte 0x12, 0x23, 0xd9, 0x12, 0xd9, 0xec
 SeqAlt_DualNibblePack_Dispatch:
 	push	sr
-	lda_24	xde, (15617946)
+	lda	xde, (15617946:24)
 	exts	xbc
 DSPParam_StoreWithLoop:
 	.byte 0xea, 0x81, 0xa1, 0x23, 0xb3, 0xe8, 0xd7, 0xfa
@@ -7298,7 +7298,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ld C,(XWA)
 	extz BC
 	sla BC, 0x02
-	lda_24 xde, (MidiPkt_EventType_Table)
+	lda xde, (MidiPkt_EventType_Table:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)

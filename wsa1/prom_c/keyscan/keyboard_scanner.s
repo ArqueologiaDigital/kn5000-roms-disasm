@@ -747,7 +747,7 @@ Link_SendCmdE2_MemRead:
 	pushw	hl                               ; F99A44  push HL
 	pushw	de                               ; F99A45  push DE
 	push	xix                               ; F99A46  push XIX
-	lda_24	xix, (0x8538)                   ; F99A47  lda XIX,0x008538
+	lda	xix, (0x8538:24)                   ; F99A47  lda XIX,0x008538
 	ldw	hl, 0                              ; F99A4C  ld HL,0x0000
 	jr Link_SendCmdE2_MemRead__F99A5C                           ; F99A4F  jr T,0xf99a5c
 Link_SendCmdE2_MemRead__F99A51:
@@ -926,7 +926,7 @@ Link_SendCmdE1:
 	pushw	hl                               ; F99B11  push HL
 	pushw	de                               ; F99B12  push DE
 	push	xix                               ; F99B13  push XIX
-	lda_24	xix, (0x851A)                   ; F99B14  lda XIX,0x00851a
+	lda	xix, (0x851A:24)                   ; F99B14  lda XIX,0x00851a
 	ldw	hl, 0                              ; F99B19  ld HL,0x0000
 	jr Link_SendCmdE1__F99B29                           ; F99B1C  jr T,0xf99b29
 Link_SendCmdE1__F99B1E:
@@ -962,7 +962,7 @@ Link_SendCmdE1__F99B5A:
 	ld	bc, (xiz+12)                        ; F99B70  ld BC,(XIZ+0x0c)
 	stw_da	(0x8546), bc                    ; F99B73  ld (0x008546),BC
 	pushw	6                                ; F99B78  push 0x0006
-	lda_24	xbc, (0x8542)                   ; F99B7B  lda XBC,0x008542
+	lda	xbc, (0x8542:24)                   ; F99B7B  lda XBC,0x008542
 	push	xbc                               ; F99B80  push XBC
 	call	0xF9A005                          ; F99B81  call 0xf9a005
 	ldio	DMA2V, 18                         ; F99B85  ld (0x7e),0x12

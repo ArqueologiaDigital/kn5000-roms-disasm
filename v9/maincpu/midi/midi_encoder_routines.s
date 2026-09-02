@@ -39,7 +39,7 @@ CPanel_EncoderDispatch:
 	or c, e	; Combine to form 5-bit index
 	extz bc
 	sla bc, 2	; Multiply by 4 (jump table entry size)
-	lda_24 xde, (ENCODER_HANDLER_TABLE)
+	lda xde, (ENCODER_HANDLER_TABLE:24)
 	exts xbc
 	add xbc, xde	; XBC = table entry address
 	ld xix, (xbc)	; Load handler address
@@ -61,7 +61,7 @@ Encoder_ProcessModwheel:
 	stb_d8 (0x8eca), c; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
-	lda_24 xbc, (ENCODER_LUT_MODWHEEL); Lookup table address
+	lda xbc, (ENCODER_LUT_MODWHEEL:24); Lookup table address
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value from table
 	ldb_d8 c, (0x8ee4); Get current value
 	res 7, c	; Clear change flag
@@ -81,7 +81,7 @@ Encoder_ProcessVolume:
 	ldw iz, 0xffff	; Default return = no change
 	stb_d8 (0x8ecc), a; Store raw value
 	extz wa
-	lda_24 xbc, (ENCODER_LUT_VOLUME); Lookup table address
+	lda xbc, (ENCODER_LUT_VOLUME:24); Lookup table address
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
 	calr Encoder_ClampScaleAndNormalize	; Clamp to valid range
 	ld a, l
@@ -117,7 +117,7 @@ Encoder_PerformScaling:
 	ldb_d8 a, (0x8edc); Get mode value
 	extz wa
 	add wa, wa	; Double for word table index
-	lda_24 xbc, (ENCODER_LUT_BREATH_INDEX); Index table
+	lda xbc, (ENCODER_LUT_BREATH_INDEX:24); Index table
 	ldw_sri BC, 0x07, 0xe4, 0xe0	; Get index offset
 	extz xbc
 	ld xwa, xhl
@@ -139,7 +139,7 @@ Encoder_ProcessBreath:
 	cpl a	; Invert input
 	stb_d8 (0x8ed4), a; Store raw value
 	extz wa
-	lda_24 xbc, (ENCODER_LUT_BREATH_VALUE); Lookup table
+	lda xbc, (ENCODER_LUT_BREATH_VALUE:24); Lookup table
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
 	ldb_d8 c, (0x379b); Get system mode flags
 	and c, 0xf	; Mask relevant bits
@@ -157,10 +157,10 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	dec 1, c	; Decrement mode for index
 	extz bc
 	add bc, bc	; Word index
-	lda_24 xwa, (ENCODER_LUT_BREATH_MULT); Multiplier table
+	lda xwa, (ENCODER_LUT_BREATH_MULT:24); Multiplier table
 	ldw_sri DE, 0x07, 0xe0, 0xe4	; Get multiplier
 	mul xhl, xde	; Multiply
-	lda_24 xwa, (ENCODER_LUT_BREATH_OFFSET); Offset table
+	lda xwa, (ENCODER_LUT_BREATH_OFFSET:24); Offset table
 	ldw_sri WA, 0x07, 0xe0, 0xe4	; Get offset
 	sub hl, wa	; Subtract offset
 	add hl, 0x4080	; Add center offset
@@ -189,7 +189,7 @@ Encoder_ProcessFoot:
 	stb_d8 (0x8ed6), a; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
-	lda_24 xbc, (ENCODER_LUT_FOOT); Lookup table
+	lda xbc, (ENCODER_LUT_FOOT:24); Lookup table
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
 	ldb_d8 c, (0x8eea); Get current value
 	res 7, c	; Clear change flag
@@ -210,7 +210,7 @@ Encoder_ProcessExpression:
 	stb_d8 (0x8ed8), c; Store raw value
 	srl a, 1	; Divide by 2
 	extz wa
-	lda_24 xbc, (ENCODER_LUT_EXPRESSION); Lookup table
+	lda xbc, (ENCODER_LUT_EXPRESSION:24); Lookup table
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
 	stb_d8 (0x8ee6), a; Store value
 	extz wa

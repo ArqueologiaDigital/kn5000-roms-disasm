@@ -679,7 +679,7 @@ BOOT_INIT__clock_done2:
 	ldio 0xF6, 0x00
 
 	; Set up stack pointer
-	lda_24 xwa, (0x0005a2); lda XWA, 0x0005a2 (24-bit encoding)
+	lda xwa, (0x0005a2:24); lda XWA, 0x0005a2 (24-bit encoding)
 	ld xsp, xwa
 
 	; Copy interrupt vector trampolines to RAM at 0x0400
@@ -751,7 +751,7 @@ TONE_GEN_CHANNEL_INIT__loop:
 	stb_erp C, 0xFB	; C = loop counter (QIZH)
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; BC <<= 2 (multiply by 4 for table index)
-	lda_24 xde, (0xfffef0); XDE = pointer to channel config table
+	lda xde, (0xfffef0:24); XDE = pointer to channel config table
 	ld_sril3 XBC, 0x07, 0xE8, 0xE4	; XBC = config[channel] (4 bytes per entry)
 	call TONE_GEN_WRITE	; Write config to tone generator
 	inc1b_erp 0xFB	; Increment loop counter
@@ -1045,11 +1045,11 @@ INIT_DMA_SERIAL:
 	ldio 0x8A, 0x0A
 
 	; Set up DMA for inter-CPU latch at 0x120000
-	lda_24 xwa, (0x120000)
+	lda xwa, (0x120000:24)
 	ldc_cr32 xwa, 0x28	; DMA channel 2 destination = 0x120000
 	ldb a, 0x8
 	ldc_cr8 a, 0x4A	; DMA channel 2 count = 8
-	lda_24 xwa, (0x120000)
+	lda xwa, (0x120000:24)
 	ldc_cr32 xwa, 0x00	; DMA channel 0 source = 0x120000
 	ldb a, 0x0	; TMP94C241 encoding (21 00)
 	ldc_cr8 a, 0x42	; DMA channel 0 mode = 0
@@ -1600,7 +1600,7 @@ CMD_Dispatch_Handler:
 	ld a, c
 	extz wa
 	sla wa, 2	; index * 4
-	lda_24 xbc, (0xff8000); XBC = CmdHandler_Table
+	lda xbc, (0xff8000:24); XBC = CmdHandler_Table
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0	; Get handler address
 	call (xwa)	; Call handler (if valid)
 	inc 6, xsp	; Clean up stack
@@ -1780,7 +1780,7 @@ MEM_TEST_ROUTINE__next_region:
 	ld a, (xsp + 4)
 	extz wa
 	muls wa, 0xA	; Each entry is 10 bytes (TMP94C241 encoding)
-	lda_24 xbc, (0xff8020); XBC = MemTest_RegionTable
+	lda xbc, (0xff8020:24); XBC = MemTest_RegionTable
 	lda_dri XDE, 0x07, 0xE4, 0xE0	; Point to current entry
 	ld xhl, (xde)	; Memory start address
 	ld xiz, (xde + 4)	; Size in dwords
@@ -2195,12 +2195,12 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	; Calculate velocity from tables
 	ld c, e	; C = velocity index
 	extz bc	; Zero-extend BC
-	lda_24 xde, (0xff804c); XDE = ToneGen_Velocity_Input_Curve
+	lda xde, (0xff804c:24); XDE = ToneGen_Velocity_Input_Curve
 	lds32 xhl, 0	; Clear XHL
 	ldb_sri L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
 	ldw_da xbc, (0xff802a); BC = ToneGen_VelCurve_Pivot (77)
 	sub hl, bc	; HL = L - BC
-	lda_24 xde, (0xff8040); XDE = ToneGen_VelCurve_ModeParams_Mode6
+	lda xde, (0xff8040:24); XDE = ToneGen_VelCurve_ModeParams_Mode6
 	ld c, (xde)	; C = table[0]
 	extz bc	; Zero-extend BC
 	muls xbc, xhl	; XBC = BC * HL (signed)
@@ -2249,7 +2249,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__use_max:
 NOTE_VELOCITY_LOOKUP_CALCULATE__use_min:
 	; Look up final velocity in curve table
 	extz bc	; Zero-extend BC (velocity 0-255)
-	lda_24 xde, (0xff814c); XDE = ToneGen_Velocity_Output_Curve
+	lda xde, (0xff814c:24); XDE = ToneGen_Velocity_Output_Curve
 	ldb_sri C, 0x07, 0xE8, 0xE4	; C = curve[velocity]
 	ld (xwa + 1), c	; Store final velocity to output[1]
 	ret

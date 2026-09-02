@@ -1956,7 +1956,7 @@ SeMenu_CheckObjValid:
 	ret
 
 SeMenu_FillEntryTable:
-	lda_24 xhl, (0x020c33)
+	lda xhl, (0x020c33:24)
 	ld c, (xhl + 3)
 	ldb_erp C, 0xe6
 	ldib_erp 0xea, 0
@@ -1980,7 +1980,7 @@ SeMenu_FillEntryTable_Loop:
 
 SeMenu_FillObjTable:
 	ld xhl, xwa
-	lda_24 xde, (0x020c39)
+	lda xde, (0x020c39:24)
 	ld xbc, xde
 	lda xde, (xde + 25)
 
@@ -1997,7 +1997,7 @@ SeMenu_SetupPartDisplay:
 	ldb w, 0x0
 	cps e, 0
 	ret ule
-	lda_24 xix, (0x020bf3)
+	lda xix, (0x020bf3:24)
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_Loop:
@@ -2015,7 +2015,7 @@ SeMenu_SetupPartDisplay_Alt:
 	ldb w, 0x0
 	cps e, 0
 	ret ule
-	lda_24 xix, (0x020c03)
+	lda xix, (0x020c03:24)
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_AltLoop:
@@ -2033,7 +2033,7 @@ SeMenu_SetupPartDisplay_Mode2:
 	ldb w, 0x0
 	cps e, 0
 	ret ule
-	lda_24 xix, (0x020c13)
+	lda xix, (0x020c13:24)
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_Mode2Loop:
@@ -2051,7 +2051,7 @@ SeMenu_SetupPartDisplay_Mode3:
 	ldb w, 0x0
 	cps e, 0
 	ret ule
-	lda_24 xix, (0x020c23)
+	lda xix, (0x020c23:24)
 	lds hl, 0
 
 SeMenu_SetupPartDisplay_Mode3Loop:
@@ -2069,7 +2069,7 @@ SeMenu_SetupPartDisplay_End:
 	ldb w, 0
 	cps e, 0
 	ret ule
-	lda_24 xix, (134131)
+	lda xix, (134131:24)
 	lds hl, 0
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
@@ -2083,7 +2083,7 @@ SeMenu_SetupPartDisplay_End:
 	ldb w, 0
 	cps e, 0
 	ret ule
-	lda_24 xix, (134147)
+	lda xix, (134147:24)
 	lds hl, 0
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
@@ -2097,7 +2097,7 @@ SeMenu_SetupPartDisplay_End:
 	ldb w, 0
 	cps e, 0
 	ret ule
-	lda_24 xix, (134163)
+	lda xix, (134163:24)
 	lds hl, 0
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
@@ -2111,7 +2111,7 @@ SeMenu_SetupPartDisplay_End:
 	ldb w, 0
 	cps e, 0
 	ret ule
-	lda_24 xix, (134179)
+	lda xix, (134179:24)
 	lds hl, 0
 	ld_rrb a, xix, hl
 	st_rrb a, xbc, hl
@@ -4222,7 +4222,7 @@ SeMenu_ApplyPartEdit_Data2:
 	div A,0x0c
 	ld A,W
 	extz WA
-	lda_24 xde, (GUI_DisplayStructData_0x1110)
+	lda xde, (GUI_DisplayStructData_0x1110:24)
 	ldb_dri e, 0x07, 0xe8, 0xe0
 	mul L,0x1c
 	add L,E
@@ -4425,7 +4425,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld	a, (xsp+24)
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, 14737659
+	lda	xbc, (14737659:24)
 	ld_rrw	wa, xbc, wa
 	ld	(xsp), wa
 	ldw	(xsp+2), 20
@@ -5939,7 +5939,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda_24 xde, (GUI_DisplayStructData_0x1222)
+	lda xde, (GUI_DisplayStructData_0x1222:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -5959,7 +5959,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda_24 xde, (GUI_DisplayStructData_0x126A)
+	lda xde, (GUI_DisplayStructData_0x126A:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -5979,7 +5979,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda_24 xde, (GUI_DisplayStructData_0x12B2)
+	lda xde, (GUI_DisplayStructData_0x12B2:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -5999,7 +5999,7 @@ SeMenu_RefreshPartDisplay_Data:
 	ld C,(XSP+0x02)
 	extz BC
 	sla BC, 0x02
-	lda_24 xde, (GUI_DisplayStructData_0x12FA)
+	lda xde, (GUI_DisplayStructData_0x12FA:24)
 	exts XBC
 	add XBC,XDE
 	ld XHL,(XBC)
@@ -6019,7 +6019,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda xbc, (xsp + 0x02)
 	ld A,(XSP+0x0e)
 	extz WA
-	lda_24 xde, (GUI_DisplayStructData_0x1342)
+	lda xde, (GUI_DisplayStructData_0x1342:24)
 	ldb_dri a, 0x07, 0xe8, 0xe0
 	ld (XBC),A
 	ld (XBC+0x06),0x1f
@@ -6036,7 +6036,7 @@ SeMenu_RefreshPartDisplay_Data:
 	jr nz, .Lc_f09d35
 	ld A,(XSP+0x05)
 	extz WA
-	lda_24 xbc, (GUI_DisplayStructData_0x1362)
+	lda xbc, (GUI_DisplayStructData_0x1362:24)
 	ldb_dri c, 0x07, 0xe4, 0xe0
 	ld (XSP+0x0e),C
 	extz BC

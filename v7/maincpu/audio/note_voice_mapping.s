@@ -339,7 +339,7 @@ AccNoteOn_CheckSpecialChannel:
 	ld (XSP+0x15),A
 	ld_erpb_rr a, 0xfb
 	extz WA
-	lda_24 xbc, (CharMap_ValueData_B_0x18)
+	lda xbc, (CharMap_ValueData_B_0x18:24)
 	ldb_dri a, 0x07, 0xe4, 0xe0
 	ldb_erp a, 0xfa
 	lda xwa, (xsp + 0x12)
@@ -6084,7 +6084,7 @@ SeqPart_MelodicNote_Layer1Done_Alt:
 	jrl	z, -713
 	ld	wa, (xsp+4)
 	and	wa, 15
-	lda_24	xbc, 15634330
+	lda	xbc, (15634330:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 SeqPart_EmitMelodicNote_Return:
@@ -6462,7 +6462,7 @@ NoteMap_CheckVoiceReuse:
 	dec	1, a
 	extz	wa
 	muls	wa, 24
-	lda_24	xbc, 15634718
+	lda	xbc, (15634718:24)
 	exts	xwa
 	add	xwa, xbc
 	ld_rrb	c, xwa, de
@@ -6503,7 +6503,7 @@ GetVoiceData_Entry_Compare:
 GetVoiceData_Entry_Block:
 	push	36
 	nop
-	lda_24	xbc, (15637070)
+	lda	xbc, (15637070:24)
 	exts	xwa
 	add	xwa, xbc
 GetVoiceData_Entry_Block2:
@@ -6530,7 +6530,7 @@ UIParam_CallbackDispatch:
 	dec	1, a
 	extz	wa
 	muls	wa, 36
-	lda_24	xbc, (15637070)
+	lda	xbc, (15637070:24)
 	exts	xwa
 	add	xwa, xbc
 UIParam_CallbackReturn:
@@ -6587,7 +6587,7 @@ SearchVoice_SetZero:
 SearchVoice_SortCheck:
 	ccf
 	muls	wa, 48
-	lda_24	xbc, (15635390)
+	lda	xbc, (15635390:24)
 	exts	xwa
 	add	xwa, xbc
 SearchVoice_BubbleSortOuter:
@@ -12833,7 +12833,7 @@ SendPartDataBlock_Data:
 	ldb L, 0x00
 	ret
 	ldw DE, 0x24b8
-	lda_24 xbc, (0x1e0000)
+	lda xbc, (0x1e0000:24)
 	lda xwa, (xbc + 0x10)
 	lds hl, 0
 	.byte 0xd5, 0xe1, 0x83, 0xda, 0x1c, 0xfa, 0xdb, 0x06
@@ -13195,7 +13195,7 @@ TmFlashWrite_Block1_Entry:
 	ld XHL,(XSP+0x04)
 	lds iy, 0
 	lds ix, 0
-	lda_24 xbc, (CharMap_FullPermutation_0x660)
+	lda xbc, (CharMap_FullPermutation_0x660:24)
 	jr t, .Lc_ff01d3
 .Lc_ff01d1:
 	inc 1,XHL

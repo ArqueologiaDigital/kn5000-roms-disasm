@@ -8,7 +8,7 @@
 ; GridBox. The core UI rendering and event dispatch layer.
 ; =============================================================================
 
-	lda_24 xde, (0x0274b0)
+	lda xde, (0x0274b0:24)
 	ldl_da xhl, (0x0274e4)
 	lds32 xbc, 0
 
@@ -26,7 +26,7 @@ WndScroll_CopyLoop:
 WndScroll_InitBuffer:
 	ld wa, iz
 	extz xwa
-	lda_24 xde, (0x0274b0)
+	lda xde, (0x0274b0:24)
 	ld xbc, xde
 	add xbc, xwa
 	ld (xbc), 0x0
@@ -306,7 +306,7 @@ WndEvt_DispatchByEventCode:
 	add xwa, xwa
 	add xwa, Data_SoundEditorCharsLayout_0x24
 	ld wa, (xwa)
-	lda_24 xix, (WndEvt_EventCodeDispatch)
+	lda xix, (WndEvt_EventCodeDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Window event dispatch by event code
@@ -367,7 +367,7 @@ WndEvt_EventCodeDispatch:
 	call	ConvertStrings
 	ldw_da	wa, (160984)
 	extz	xwa
-	lda_24	xde, (160944)
+	lda	xde, (160944:24)
 	ld	xbc, xde
 	add	xbc, xwa
 	ld	a, (xsp+12)
@@ -384,7 +384,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	646
-	lda_24	xde, (Data_SoundEditorCharsLayout)
+	lda	xde, (Data_SoundEditorCharsLayout:24)
 	lda	xwa, (xsp+12)
 	ld	(xsp+8), xwa
 	ld	xwa, (xsp+46)
@@ -417,7 +417,7 @@ WndEvt_EventCodeDispatch:
 	call	ConvertStrings
 	ldw_da	wa, (160984)
 	extz	xwa
-	lda_24	xde, (160944)
+	lda	xde, (160944:24)
 	ld	xbc, xde
 	add	xbc, xwa
 	ld	a, (xsp+12)
@@ -454,7 +454,7 @@ WndEvt_EventCodeDispatch:
 	addda16_24	wa, (160986)
 	extz	xwa
 	add	xwa, xwa
-	lda_24	xde, (Data_SoundEditorCharsLayout_0xC)
+	lda	xde, (Data_SoundEditorCharsLayout_0xC:24)
 	ld	xbc, xde
 	add	xbc, xwa
 	ldw_da	wa, (160990)
@@ -508,7 +508,7 @@ WndEvt_EventCodeDispatch:
 	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
-	lda_24	xwa, (160944)
+	lda	xwa, (160944:24)
 	cp	c, 83
 	jr	nz, 28
 	.byte 0x8a	; v10 does not spell this byte either
@@ -610,7 +610,7 @@ WndEvt_EventCodeDispatch:
 	dec	1, iz
 	cpda16_24	xiz, (160984)
 	jr	ule, 47
-	lda_24	xde, (160944)
+	lda	xde, (160944:24)
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, 4294967295
@@ -631,7 +631,7 @@ WndEvt_EventCodeDispatch:
 	jr	ugt, -31
 	ldw_da	wa, (160984)
 	extz	xwa
-	lda_24	xde, (160944)
+	lda	xde, (160944:24)
 	ld	xbc, xde
 	add	xbc, xwa
 	ldl_da	xwa, (160996)
@@ -648,7 +648,7 @@ WndEvt_EventCodeDispatch:
 	ldw_da	iz, (160984)
 	cpda16_24	xiz, (160982)
 	jr	nc, 47
-	lda_24	xde, (160944)
+	lda	xde, (160944:24)
 	ld	bc, iz
 	extz	xbc
 	lds32	xwa, 1
@@ -670,7 +670,7 @@ WndEvt_EventCodeDispatch:
 	ldw_da	wa, (160982)
 	dec	1, wa
 	extz	xwa
-	lda_24	xde, (160944)
+	lda	xde, (160944:24)
 	ld	xbc, xde
 	add	xbc, xwa
 	ldl_da	xwa, (160996)
@@ -689,7 +689,7 @@ WndEvt_EventCodeDispatch:
 	ldw_da	de, (160982)
 	cps	de, 0
 	jr	ule, 28
-	lda_24	xhl, (160944)
+	lda	xhl, (160944:24)
 	ld	a, (xbc)
 	ld	bc, iz
 	extz	xbc
@@ -713,7 +713,7 @@ WndEvt_EventCodeDispatch:
 	lds	iz, 0
 	cps	de, 0
 	jr	ule, 37
-	lda_24	xbc, (160944)
+	lda	xbc, (160944:24)
 	ldl_da	xwa, (160996)
 	ld	a, (xwa)
 	ld	hl, de
@@ -778,7 +778,7 @@ WndEvt_EventCodeDispatch:
 	nop
 	nop
 	jr	ule, 31
-	lda_24	xde, (160944)
+	lda	xde, (160944:24)
 	ldl_da	xhl, (160996)
 	lds32	xbc, 0
 	ld	xwa, xbc
@@ -806,7 +806,7 @@ WndEvt_EventCodeDispatch:
 	sub	iz, bc
 	cp	iz, wa
 	jr	nc, 35
-	lda_24	xde, (160944)
+	lda	xde, (160944:24)
 	ldl_da	xhl, (160996)
 	ld	bc, iz
 	extz	xbc
@@ -835,7 +835,7 @@ WndEvt_EventCodeDispatch:
 	nop
 	nop
 	jr	ule, 30
-	lda_24	xde, (160944)
+	lda	xde, (160944:24)
 	ld	xhl, xbc
 	lds32	xbc, 0
 	ld	xwa, xbc
@@ -924,13 +924,13 @@ WndScroll_HandleCharInput:
 	call SendEvent
 	ldw_da xbc, (0x0274d8)
 	extz xbc
-	lda_24 xde, (0x0274b0)
+	lda xde, (0x0274b0:24)
 	ld xwa, xde
 	add xwa, xbc
 	ld a, (xwa)
 	ld c, a
 	extz bc
-	lda_24 xhl, (CharMap_FullPermutation_0x660)
+	lda xhl, (CharMap_FullPermutation_0x660:24)
 	ldb_sri C, 0x07, 0xec, 0xe4
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
@@ -990,7 +990,7 @@ WndScroll_SetUnderscoreOffset:
 	jr WndScroll_SendPageEvents
 
 WndScroll_SearchCharTable:
-	lda_24 xwa, (DiskWarning_ConfirmStrings_0x1154)
+	lda xwa, (DiskWarning_ConfirmStrings_0x1154:24)
 	ld (xsp + 8), xwa
 	lds iz, 0
 	jr WndScroll_CheckTableEnd
@@ -1589,7 +1589,7 @@ UserBitmapCheck:
 	ret
 
 UserBitmapCheck_ReturnTablePtr:
-	lda_24 xhl, (Data_SoundEditorCharsLayout_0x4E)
+	lda xhl, (Data_SoundEditorCharsLayout_0x4E:24)
 	ret
 
 UserBitmapCheck_ReturnSize:
@@ -3922,7 +3922,7 @@ PsGridBoxProc:
 	add xbc, xbc
 	add xbc, Data_SoundEditorCharsLayout_0x376
 	ld bc, (xbc)
-	lda_24 xix, (PsGridBox_Init)
+	lda xix, (PsGridBox_Init:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 	.include "ui/psgridbox_routines.s"
@@ -3994,7 +3994,7 @@ DrawDesignBox_ByteData:
 	ldw	wa, 14
 	calr	53750
 	ld	xwa, xhl
-	lda_24	xbc, (16436844)
+	lda	xbc, (16436844:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -4299,7 +4299,7 @@ DrawDesignBox_QueuedPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (DrawDesignBox_QueueCallback)
+	lda xbc, (DrawDesignBox_QueueCallback:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -4379,9 +4379,9 @@ DrawDesignBox_CheckStyle80:
 ; Draw dispatch by part type
 Draw_DispatchByPartType:
 	add wa, wa
-	lda_24 xix, (Str_No_0xB00)
+	lda xix, (Str_No_0xB00:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (Draw_StyledBoxWithFrame)
+	lda xix, (Draw_StyledBoxWithFrame:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Draw_StyledBoxWithFrame:
@@ -4873,9 +4873,9 @@ DrawDesignBox_PartGroupStyle:
 ; DrawPartGroup dispatch by type
 DrawPartGroup_DispatchByType:
 	add wa, wa
-	lda_24 xix, (Str_No_0xAE0)
+	lda xix, (Str_No_0xAE0:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (DrawPartGroup_TableJump_DefaultCase)
+	lda xix, (DrawPartGroup_TableJump_DefaultCase:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 DrawPartGroup_TableJump_DefaultCase:
@@ -6059,7 +6059,7 @@ Gfx_ImageDecodeByteData:
 	ld	bc, (xwa)
 	exts	xbc
 	add	xbc, xde
-	lda_24	xde, (0x043c00)
+	lda	xde, (0x043c00:24)
 	ld	xiz, xde
 	add	xiz, xbc
 	ld	iy, (xwa)
@@ -6950,7 +6950,7 @@ CaptureLcd_WriteRowLoop:
 	sll xbc, 2
 	add xbc, xwa
 	sll xbc, 6
-	lda_24 xwa, (0x043c00)
+	lda xwa, (0x043c00:24)
 	add xwa, xbc
 	ld xbc, 0x140
 	call FileIO_WriteByte_Impl
@@ -6989,7 +6989,7 @@ ChangeWall_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (ChangeWall_QueueCallback)
+	lda xbc, (ChangeWall_QueueCallback:24)
 	ld (xwa), xbc
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
@@ -7030,7 +7030,7 @@ ChangeWallPalette_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (ChangeWallPalette_QueueCallback)
+	lda xbc, (ChangeWallPalette_QueueCallback:24)
 	ld (xwa), xbc
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
@@ -7107,7 +7107,7 @@ ChangePalette_QueuedPath:
 	lds wa, 6
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (ChangePalette_QueueCallback)
+	lda xbc, (ChangePalette_QueueCallback:24)
 	ld (xwa), xbc
 	ld (xwa + 4), iz
 	calr DisplayCmd_DequeueAndExecute
@@ -7129,7 +7129,7 @@ ChangePalette_Impl:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda_24 xwa, (Str_No_0xB50)
+	lda xwa, (Str_No_0xB50:24)
 	add xwa, xbc
 	ld xwa, (xwa)
 	stl_da (0x03ef94), xwa
@@ -7184,14 +7184,14 @@ PaletteBankRotate:
 	lds wa, 4
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (PaletteBankRotate_0x18)
+	lda xbc, (PaletteBankRotate_0x18:24)
 	ld (xwa), xbc
 	jrl DisplayCmd_DequeueAndExecute
 	jr PaletteBankRotate_Impl
 
 PaletteBankRotate_Impl:
 	push	xiz
-	lda_24	xwa, (277504)
+	lda	xwa, (277504:24)
 	ld	xiz, xwa
 	pushw	38400
 	push	xwa
@@ -7205,7 +7205,7 @@ PaletteBankRotate_Impl:
 	push	xwa
 	call	16713148
 	lda	xsp, (xsp+20)
-	lda_24	xwa, (277504)
+	lda	xwa, (277504:24)
 	ld	xbc, xwa
 	lds	de, 0
 PaletteBankRotate_RowLoop:
@@ -7260,7 +7260,7 @@ ClipBlit_Replace_Deferred:
 	ldw wa, 0x000a
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24	xbc, (ClipBlit_Replace_ParamBlock)
+	lda	xbc, (ClipBlit_Replace_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -7330,7 +7330,7 @@ ClipBlit_Replace_CalcVRAMAddr:
 	add xbc, xde
 	sll xbc, 6
 	lda_rrq xhl, xbc, qiz
-	lda_24	xwa, (0x043c00)
+	lda	xwa, (0x043c00:24)
 	add xwa, xhl
 	ld (xsp + 16), xwa
 	ld xwa, 0x00056800
@@ -7350,7 +7350,7 @@ ClipBlit_Replace_ScanlineLoop:
 	pushw	bc
 	call	16713825
 	add	hl, hl
-	lda_24	xwa, (15380116)
+	lda	xwa, (15380116:24)
 	ld_rrw	de, xwa, hl
 	ldw	bc, 30
 	sub	bc, de
@@ -7406,7 +7406,7 @@ ClipBlit_Direct_Deferred:
 	ldw wa, 0x000a
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24	xbc, (ClipBlit_Direct_ParamBlock)
+	lda	xbc, (ClipBlit_Direct_ParamBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -7473,7 +7473,7 @@ ClipBlit_Direct_CalcVRAMAddr:
 	sll xbc, 6
 	ld wa, (xsp + 2)
 	lda_rr	xhl, xbc, wa
-	lda_24	xwa, (0x043c00)
+	lda	xwa, (0x043c00:24)
 	add xwa, xhl
 	ld (xsp + 16), xwa
 	ld xwa, 0x00069800
@@ -7540,7 +7540,7 @@ ColorBlit_Deferred:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (ColorBlit_CallbackBlock)
+	lda xbc, (ColorBlit_CallbackBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -7632,7 +7632,7 @@ ColorBlit_Mode0_RowLoop:
 	ld de, (xwa)
 	exts xde
 	add xde, xix
-	lda_24 xiz, (0x043c00)
+	lda xiz, (0x043c00:24)
 	add xiz, xde
 	ld ix, (xwa)
 	ld xde, (xsp + 8)
@@ -7682,7 +7682,7 @@ ColorBlit_ModeF5_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xiy, (0x043c00)
+	lda xiy, (0x043c00:24)
 	add xiy, xbc
 	ld bc, (xwa)
 	exts xbc
@@ -7738,7 +7738,7 @@ ColorBlit_Mode1_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xde, (0x043c00)
+	lda xde, (0x043c00:24)
 	add xde, xbc
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
@@ -7784,7 +7784,7 @@ ColorBlit_Mode2_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xde, (0x043c00)
+	lda xde, (0x043c00:24)
 	add xde, xbc
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
@@ -7842,7 +7842,7 @@ ColorBlit2_Deferred:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda_24 xbc, (ColorBlit2_CallbackBlock)
+	lda xbc, (ColorBlit2_CallbackBlock:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -7934,7 +7934,7 @@ ColorBlit2_Mode0_RowLoop:
 	ld de, (xwa)
 	exts xde
 	add xde, xix
-	lda_24 xiz, (0x043c00)
+	lda xiz, (0x043c00:24)
 	add xiz, xde
 	ld ix, (xwa)
 	ld xde, (xsp + 8)
@@ -7984,7 +7984,7 @@ ColorBlit2_ModeF5_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xiy, (0x043c00)
+	lda xiy, (0x043c00:24)
 	add xiy, xbc
 	ld bc, (xwa)
 	exts xbc
@@ -8037,7 +8037,7 @@ ColorBlit2_Mode1_RowLoop:
 	sll xde, 2
 	add xde, xbc
 	sll xde, 6
-	lda_24 xiy, (0x043c00)
+	lda xiy, (0x043c00:24)
 	add xiy, xde
 	ld bc, (xwa)
 	lda_dri XIY, 0x07, 0xf4, 0xe4
@@ -8082,7 +8082,7 @@ ColorBlit2_Mode2_Entry:
 	sub bc, (xwa)
 	cp bc, 0x13f
 	jr nz, ColorBlit2_Mode2_ClippedEntry
-	lda_24 xbc, (0x043c00)
+	lda xbc, (0x043c00:24)
 	lds32 xde, 0
 
 ColorBlit2_Mode2_FullscreenLoop:
@@ -8116,7 +8116,7 @@ ColorBlit2_Mode2_RowLoop:
 	ld bc, (xwa)
 	exts xbc
 	add xbc, xde
-	lda_24 xde, (0x043c00)
+	lda xde, (0x043c00:24)
 	add xde, xbc
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)

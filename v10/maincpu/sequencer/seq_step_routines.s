@@ -40,9 +40,9 @@ SeqStep_NoteReadEvent:
 	cps wa, 6
 	jr gt, SeqStep_NoteSetOther
 	add wa, wa
-	lda_24 xix, (Display_FontPalette_Table_0x7E)
+	lda xix, (Display_FontPalette_Table_0x7E:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SeqStep_NoteByteBlock)
+	lda xix, (SeqStep_NoteByteBlock:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SeqStep_NoteByteBlock:
@@ -301,9 +301,9 @@ SeqStep_EventPosConsumeAdvance:
 	cps wa, 6
 	jr gt, SeqStep_EventPosSetD3
 	add wa, wa
-	lda_24 xix, (Display_FontPalette_Table_0x8C)
+	lda xix, (Display_FontPalette_Table_0x8C:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SeqStep_EventPosFinish)
+	lda xix, (SeqStep_EventPosFinish:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SeqStep_EventPosFinish:
@@ -544,9 +544,9 @@ SeqStep_DeleteDone:
 	cps wa, 6
 	jrl gt, SeqStep_DeleteSetOther
 	add wa, wa
-	lda_24 xix, (Display_FontPalette_Table_0x9A)
+	lda xix, (Display_FontPalette_Table_0x9A:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SeqStep_DeleteExitRestore)
+	lda xix, (SeqStep_DeleteExitRestore:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SeqStep_DeleteExitRestore:
@@ -750,7 +750,7 @@ SeqStep_TrackChangeLoopExit:
 	extz xwa
 	sll xwa, 8
 	inc 5, xwa
-	lda_24 xhl, (0x0b0000)
+	lda xhl, (0x0b0000:24)
 	ld xde, xhl
 	add xde, xwa
 	ld bc, (xsp + 6)
@@ -808,7 +808,7 @@ SeqStep_TrackChangeFinal:
 	extz xwa
 	sll xwa, 8
 	inc 5, xwa
-	lda_24 xhl, (0x0b0000)
+	lda xhl, (0x0b0000:24)
 	ld xde, xhl
 	add xde, xwa
 	ld bc, (xsp + 6)
@@ -1010,7 +1010,7 @@ SeqStep_MultiTrackAdvance:
 	extz xwa
 	sll xwa, 8
 	inc 5, xwa
-	lda_24 xhl, (0x0b0000)
+	lda xhl, (0x0b0000:24)
 	ld xde, xhl
 	add xde, xwa
 	ld bc, (xsp + 4)
@@ -1069,7 +1069,7 @@ SeqStep_PartCopy:
 	extz xwa
 	sll xwa, 8
 	inc 5, xwa
-	lda_24 xhl, (0x0b0000)
+	lda xhl, (0x0b0000:24)
 	ld xde, xhl
 	add xde, xwa
 	stw_erp BC, 0xfa
@@ -2237,7 +2237,7 @@ SeqStep_ParseRhythm:
 	stb_d8 (0x289d), c
 	ldb_d8 e, (0x2873)
 	extz de
-	lda_24 xhl, (FontPalette_Gradient7_0x32)
+	lda xhl, (FontPalette_Gradient7_0x32:24)
 	ldb_d8 a, (4340)
 	cpb_sri_rm A, 0x07, 0xec, 0xe8
 	jr z, SeqStep_ParseRhythmLoop
@@ -2532,7 +2532,7 @@ SeqStep_TimerDispatchA:
 	ldb_d8 a, (8956)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Display_FontPalette_Table_0xA8)
+	lda xbc, (Display_FontPalette_Table_0xA8:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	jp (xhl)
 
@@ -2540,7 +2540,7 @@ SeqStep_TimerDispatchB:
 	ldb_d8 a, (8956)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Display_FontPalette_Table_0x104)
+	lda xbc, (Display_FontPalette_Table_0x104:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	jp (xhl)
 
@@ -2548,7 +2548,7 @@ SeqStep_TimerDispatchC:
 	ldb_d8 a, (8956)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (Display_FontPalette_Table_0x160)
+	lda xbc, (Display_FontPalette_Table_0x160:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	jp (xhl)
 

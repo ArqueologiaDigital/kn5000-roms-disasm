@@ -24,7 +24,7 @@ JumpInsertFunc:
 	add xbc, xbc
 	add xbc, DiskWarning_ConfirmStrings_0xA38
 	ld bc, (xbc)
-	lda_24 xix, (JumpInsert_DispatchBody)
+	lda xix, (JumpInsert_DispatchBody:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 JumpInsert_DispatchBody:
 	ld	xwa, (xde+14)
@@ -47,7 +47,7 @@ JumpInsert_DispatchBody:
 JumpInsert_Error:
 	lds32 xhl, 0
 	jr JumpInsert_Return
-	lda_24 xhl, (0x0340f2)
+	lda xhl, (0x0340f2:24)
 
 JumpInsert_Return:
 	pop xiz
@@ -67,7 +67,7 @@ FilePriorityFunc:
 	ld wa, (xde + 8)
 	and wa, 0x1
 	sla wa, 2
-	lda_24 xbc, (DiskWarning_ConfirmStrings_0xA4C)
+	lda xbc, (DiskWarning_ConfirmStrings_0xA4C:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 10)
@@ -78,7 +78,7 @@ FilePriorityFunc:
 	jr FilePriority_Return
 
 FilePriority_ReturnPointer:
-	lda_24 xhl, (0x0340f4)
+	lda xhl, (0x0340f4:24)
 	jr FilePriority_Return
 
 FilePriority_ReturnOne:
@@ -472,7 +472,7 @@ WaitingFunc_DrawMessage:
 	ldb_da a, (0x0340e4)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (DiskWarning_ConfirmStrings_0xA6C)
+	lda xbc, (DiskWarning_ConfirmStrings_0xA6C:24)
 	ld_sril3 XIZ, 0x07, 0xe4, 0xe0
 	push xiz
 	call Strlen

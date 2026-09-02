@@ -191,7 +191,7 @@ RenderSmfFilename:
 	extz bc
 	stib_ind 0x07, 0xe0, 0xe4, 0x00
 	lds ix, 0
-	lda_24 xhl, (CharMap_FullPermutation_0x660)
+	lda xhl, (CharMap_FullPermutation_0x660:24)
 	jr RenderSmf_LoopCheck
 
 RenderSmf_CheckSeparator:
@@ -380,7 +380,7 @@ SmfLoadAs_Apply:
 	ldb_d8	a, 34986
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, 15337300
+	lda	xbc, (15337300:24)
 	ld_rrl	xde, xbc, wa
 	ld	xwa, (33024:16)
 	ld	xbc, 29360143
@@ -532,7 +532,7 @@ FmmSmfFileNameFunc:
 	add	xde, xde
 	add	xde, 15337374
 	ld	de, (xde)
-	lda_24	xix, 16309435
+	lda	xix, (16309435:24)
 SmfFN_JumpTable:
 	jp_rr 8, xix, de
 	stda32	33028, xbc
@@ -679,7 +679,7 @@ SmfFN_Save_WriteSlot:
 	lda	xwa, (xsp+8)
 	ldw	bc, 16
 	calr	-799
-	lda_24	xwa, 700416
+	lda	xwa, (700416:24)
 	lds32	xbc, 0
 	ldb_d8	c, 34988
 	sll	xbc, 11
@@ -691,7 +691,7 @@ SmfFN_Save_WriteSlot:
 	ldb_da	a, (65507)
 	cpda8	a, 34988
 	jr	nz, 20
-	lda_24	xwa, 61824
+	lda	xwa, (61824:24)
 	.byte 0xf3, 0xe1, 0x00, 0x01, 0x30
 	lda	xbc, (xsp+8)
 	ldw	de, 16

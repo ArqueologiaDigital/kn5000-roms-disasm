@@ -404,7 +404,7 @@ Voice_RecomputeAllThreeBaseCurves__FABE3F:
 	or	iy, hl                                  ; FABE9D  or IY,HL
 	stw_da	(0xD79E), iy                        ; FABE9F  ld (0x00d79e),IY
 Voice_RecomputeAllThreeBaseCurves__FABEA4:
-	lda_24	xbc, (0xD75E)                       ; FABEA4  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FABEA4  lda XBC,0x00d75e
 	push	xbc                                   ; FABEA9  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FABEAA  pushw (XIZ+0xfe)
 	call	0xFB7C8F                              ; FABEAD  call 0xfb7c8f
@@ -457,7 +457,7 @@ Voice_RecomputeAllThreeBaseCurves__FABECC:
 	or	iy, hl                                  ; FABF2A  or IY,HL
 	stw_da	(0xD796), iy                        ; FABF2C  ld (0x00d796),IY
 Voice_RecomputeAllThreeBaseCurves__FABF31:
-	lda_24	xbc, (0xD75E)                       ; FABF31  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FABF31  lda XBC,0x00d75e
 	push	xbc                                   ; FABF36  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FABF37  pushw (XIZ+0xfe)
 	call	0xFB7E7B                              ; FABF3A  call 0xfb7e7b
@@ -532,7 +532,7 @@ Voice_RecomputeAllThreeBaseCurves__FABFC8:
 	or	iy, hl                                  ; FABFF8  or IY,HL
 	stw_da	(0xD7A0), iy                        ; FABFFA  ld (0x00d7a0),IY
 Voice_RecomputeAllThreeBaseCurves__FABFFF:
-	lda_24	xbc, (0xD75E)                       ; FABFFF  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FABFFF  lda XBC,0x00d75e
 	push	xbc                                   ; FAC004  push XBC
 	extpfx3 0x9E, 0xFE, 0x04                   ; FAC005  pushw (XIZ+0xfe)
 	call	0xFB7FCE                              ; FAC008  call 0xfb7fce
@@ -812,7 +812,7 @@ sub_FAC08D__FAC232:
 	pushw	ix                                   ; FAC237  push IX
 	calr (0xFAB79D - 0xFAC23B)                 ; FAC238  calr 0xfab79d
 	pushw	ix                                   ; FAC23B  push IX
-	lda_24	xbc, (0xD75E)                       ; FAC23C  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FAC23C  lda XBC,0x00d75e
 	push	xbc                                   ; FAC241  push XBC
 	ld	a, (xix)                                ; FAC242  ld A,(XIX)
 	extz	wa                                    ; FAC244  extz WA
@@ -883,7 +883,7 @@ sub_FAC08D__FAC2A0:
 sub_FAC2AE:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FAC2AE  link XIZ,0x0000
 	push	xix                                   ; FAC2B2  push XIX
-	lda_24	xix, (0xD75E)                       ; FAC2B3  lda XIX,0x00d75e
+	lda	xix, (0xD75E:24)                       ; FAC2B3  lda XIX,0x00d75e
 	extpfx5 0xBC, 0x02, 0x02, 0x00, 0x00       ; FAC2B8  ld (XIX+0x02),0x0000
 	ldw_d16	bc, (0x151D)                       ; FAC2BD  ld BC,(0x151d)
 	ld	(xix+14), bc                            ; FAC2C1  ld (XIX+0x0e),BC
@@ -987,26 +987,26 @@ sub_FAC34D:
 	ld	(xwa), bc                               ; FAC3B8  ld (XWA),BC
 	ld	xbc, (xiz-20)                           ; FAC3BA  ld XBC,(XIZ+0xec)
 	extpfx5 0xB9, 0x02, 0x02, 0x80, 0xFF       ; FAC3BD  ld (XBC+0x02),0xff80
-	lda_24	xbc, (0xD7A2)                       ; FAC3C2  lda XBC,0x00d7a2
+	lda	xbc, (0xD7A2:24)                       ; FAC3C2  lda XBC,0x00d7a2
 	push	xbc                                   ; FAC3C7  push XBC
 	push	0                                     ; FAC3C8  push 0x00
 	push	d                                     ; FAC3CA  push D
 	call	0xFC7DAF                              ; FAC3CC  call 0xfc7daf
-	lda_24	xbc, (0xD7A2)                       ; FAC3D0  lda XBC,0x00d7a2
+	lda	xbc, (0xD7A2:24)                       ; FAC3D0  lda XBC,0x00d7a2
 	push	xbc                                   ; FAC3D5  push XBC
 	pushw	hl                                   ; FAC3D6  push HL
 	call	0xFB7A58                              ; FAC3D7  call 0xfb7a58
-	lda_24	xbc, (0xD7A2)                       ; FAC3DB  lda XBC,0x00d7a2
+	lda	xbc, (0xD7A2:24)                       ; FAC3DB  lda XBC,0x00d7a2
 	push	xbc                                   ; FAC3E0  push XBC
 	call	0xFC571A                              ; FAC3E1  call 0xfc571a
-	lda_24	xbc, (0xD7A2)                       ; FAC3E5  lda XBC,0x00d7a2
+	lda	xbc, (0xD7A2:24)                       ; FAC3E5  lda XBC,0x00d7a2
 	push	xbc                                   ; FAC3EA  push XBC
 	pushw	hl                                   ; FAC3EB  push HL
 	call	0xFB77EF                              ; FAC3EC  call 0xfb77ef
 	push	0                                     ; FAC3F0  push 0x00
 	push	d                                     ; FAC3F2  push D
 	calr (0xFAC2AE - 0xFAC3F7)                 ; FAC3F4  calr 0xfac2ae
-	lda_24	xbc, (0xD75E)                       ; FAC3F7  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FAC3F7  lda XBC,0x00d75e
 	push	xbc                                   ; FAC3FC  push XBC
 	pushw	hl                                   ; FAC3FD  push HL
 	call	0xFB713A                              ; FAC3FE  call 0xfb713a
@@ -1130,7 +1130,7 @@ sub_FAC42C__FAC4FE:
 	and	de, 0xFF                               ; FAC505  and DE,0x00ff
 	cp	de, 0x80                                ; FAC509  cp DE,0x0080
 	jr nc, sub_FAC42C__FAC520                  ; FAC50D  jr NC,0xfac520
-	lda_24	xbc, (0xD75E)                       ; FAC50F  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FAC50F  lda XBC,0x00d75e
 	push	xbc                                   ; FAC514  push XBC
 	pushw	de                                   ; FAC515  push DE
 	call	0xFB7C27                              ; FAC516  call 0xfb7c27
@@ -1191,7 +1191,7 @@ sub_FAC526__FAC567:
 	and	de, 0xFF                               ; FAC56E  and DE,0x00ff
 	cp	de, 0x80                                ; FAC572  cp DE,0x0080
 	jr nc, sub_FAC526__FAC589                  ; FAC576  jr NC,0xfac589
-	lda_24	xbc, (0xD75E)                       ; FAC578  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FAC578  lda XBC,0x00d75e
 	push	xbc                                   ; FAC57D  push XBC
 	pushw	de                                   ; FAC57E  push DE
 	call	0xFB7C27                              ; FAC57F  call 0xfb7c27
@@ -1305,7 +1305,7 @@ sub_FAC58F__FAC661:
 	and	de, 0xFF                               ; FAC668  and DE,0x00ff
 	cp	de, 0x80                                ; FAC66C  cp DE,0x0080
 	jr nc, sub_FAC58F__FAC683                  ; FAC670  jr NC,0xfac683
-	lda_24	xbc, (0xD75E)                       ; FAC672  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FAC672  lda XBC,0x00d75e
 	push	xbc                                   ; FAC677  push XBC
 	pushw	de                                   ; FAC678  push DE
 	call	0xFB7D1D                              ; FAC679  call 0xfb7d1d
@@ -1366,7 +1366,7 @@ sub_FAC689__FAC6CA:
 	and	de, 0xFF                               ; FAC6D1  and DE,0x00ff
 	cp	de, 0x80                                ; FAC6D5  cp DE,0x0080
 	jr nc, sub_FAC689__FAC6EC                  ; FAC6D9  jr NC,0xfac6ec
-	lda_24	xbc, (0xD75E)                       ; FAC6DB  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FAC6DB  lda XBC,0x00d75e
 	push	xbc                                   ; FAC6E0  push XBC
 	pushw	de                                   ; FAC6E1  push DE
 	call	0xFB7D1D                              ; FAC6E2  call 0xfb7d1d
@@ -1451,7 +1451,7 @@ sub_FAC6F2__FAC774:
 	and	de, 0xFF                               ; FAC77B  and DE,0x00ff
 	cp	de, 64                                  ; FAC77F  cp DE,0x0040
 	jr nc, sub_FAC6F2__FAC796                  ; FAC783  jr NC,0xfac796
-	lda_24	xbc, (0xD75E)                       ; FAC785  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FAC785  lda XBC,0x00d75e
 	push	xbc                                   ; FAC78A  push XBC
 	pushw	de                                   ; FAC78B  push DE
 	call	0xFB7E9D                              ; FAC78C  call 0xfb7e9d
@@ -1506,7 +1506,7 @@ sub_FAC79C__FAC7C7:
 	and	de, 0xFF                               ; FAC7CE  and DE,0x00ff
 	cp	de, 64                                  ; FAC7D2  cp DE,0x0040
 	jr nc, sub_FAC79C__FAC7E9                  ; FAC7D6  jr NC,0xfac7e9
-	lda_24	xbc, (0xD75E)                       ; FAC7D8  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FAC7D8  lda XBC,0x00d75e
 	push	xbc                                   ; FAC7DD  push XBC
 	pushw	de                                   ; FAC7DE  push DE
 	call	0xFB7E9D                              ; FAC7DF  call 0xfb7e9d
@@ -1598,7 +1598,7 @@ sub_FAC7EF__FAC84A:
 	pushw	wa                                   ; FAC86D  push WA
 	pushw	hl                                   ; FAC86E  push HL
 	calr (0xFAC58F - 0xFAC872)                 ; FAC86F  calr 0xfac58f
-	lda_24	xbc, (0xFDE47B)                     ; FAC872  lda XBC,0xfde47b
+	lda	xbc, (0xFDE47B:24)                     ; FAC872  lda XBC,0xfde47b
 	add	xbc, xix                               ; FAC877  add XBC,XIX
 	ld	a, (xbc)                                ; FAC879  ld A,(XBC)
 	pushw	wa                                   ; FAC87B  push WA
@@ -1634,7 +1634,7 @@ sub_FAC888:
 	pushw	hl                                   ; FAC88C  push HL
 	push	xde                                   ; FAC88D  push XDE
 	push	xix                                   ; FAC88E  push XIX
-	lda_24	xix, (0xFDE47B)                     ; FAC88F  lda XIX,0xfde47b
+	lda	xix, (0xFDE47B:24)                     ; FAC88F  lda XIX,0xfde47b
 	ld	de, (xiz+10)                            ; FAC894  ld DE,(XIZ+0x0a)
 	ld	l, (xiz+8)                              ; FAC897  ld L,(XIZ+0x08)
 	extz	xde                                   ; FAC89A  extz XDE
@@ -1765,7 +1765,7 @@ sub_FAC90E__FAC948:
 	push	0                                     ; FAC984  push 0x00
 	push	d                                     ; FAC986  push D
 	calr (0xFAC58F - 0xFAC98B)                 ; FAC988  calr 0xfac58f
-	lda_24	xbc, (0xFDE47B)                     ; FAC98B  lda XBC,0xfde47b
+	lda	xbc, (0xFDE47B:24)                     ; FAC98B  lda XBC,0xfde47b
 	add	xbc, xix                               ; FAC990  add XBC,XIX
 	ld	a, (xbc)                                ; FAC992  ld A,(XBC)
 	pushw	wa                                   ; FAC994  push WA
@@ -1827,7 +1827,7 @@ sub_FAC9A6__FAC9CD:
 sub_FAC9A6__FAC9E6:
 	extz	xix                                   ; FAC9E6  extz XIX
 	ld	(xix+0x72), l                           ; FAC9E8  ld (XIX+0x72),L
-	lda_24	xbc, (0xFDE47B)                     ; FAC9EB  lda XBC,0xfde47b
+	lda	xbc, (0xFDE47B:24)                     ; FAC9EB  lda XBC,0xfde47b
 	extpfx3 0xAE, 0xFC, 0x81                   ; FAC9F0  add XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; FAC9F3  ld A,(XBC)
 	pushw	wa                                   ; FAC9F5  push WA
@@ -1850,7 +1850,7 @@ sub_FAC9A6__FAC9E6:
 	push	0                                     ; FACA1E  push 0x00
 	push	d                                     ; FACA20  push D
 	calr (0xFAC58F - 0xFACA25)                 ; FACA22  calr 0xfac58f
-	lda_24	xbc, (0xFDE47B)                     ; FACA25  lda XBC,0xfde47b
+	lda	xbc, (0xFDE47B:24)                     ; FACA25  lda XBC,0xfde47b
 	add	xbc, xix                               ; FACA2A  add XBC,XIX
 	ld	a, (xbc)                                ; FACA2C  ld A,(XBC)
 	pushw	wa                                   ; FACA2E  push WA
@@ -2041,7 +2041,7 @@ sub_FACAB7__FACB3E:
 sub_FACAB7__FACB5E:
 	pop	xiy                                    ; FACB5E  pop XIY
 sub_FACAB7__FACB5F:
-	lda_24	xbc, (0xD7A2)                       ; FACB5F  lda XBC,0x00d7a2
+	lda	xbc, (0xD7A2:24)                       ; FACB5F  lda XBC,0x00d7a2
 	push	xbc                                   ; FACB64  push XBC
 	ld	a, (xix)                                ; FACB65  ld A,(XIX)
 	pushw	wa                                   ; FACB67  push WA
@@ -2054,7 +2054,7 @@ sub_FACAB7__FACB5F:
 	jr z, sub_FACAB7__FACB8B                   ; FACB76  jr Z,0xfacb8b
 	jr sub_FACAB7__FACB9C                      ; FACB78  jr T,0xfacb9c
 sub_FACAB7__FACB7A:
-	lda_24	xbc, (0xD7A2)                       ; FACB7A  lda XBC,0x00d7a2
+	lda	xbc, (0xD7A2:24)                       ; FACB7A  lda XBC,0x00d7a2
 	push	xbc                                   ; FACB7F  push XBC
 	ld	a, (xix)                                ; FACB80  ld A,(XIX)
 	extz	wa                                    ; FACB82  extz WA
@@ -2062,7 +2062,7 @@ sub_FACAB7__FACB7A:
 	call	0xFB7A73                              ; FACB85  call 0xfb7a73
 	jr sub_FACAB7__FACB9A                      ; FACB89  jr T,0xfacb9a
 sub_FACAB7__FACB8B:
-	lda_24	xbc, (0xD7A2)                       ; FACB8B  lda XBC,0x00d7a2
+	lda	xbc, (0xD7A2:24)                       ; FACB8B  lda XBC,0x00d7a2
 	push	xbc                                   ; FACB90  push XBC
 	ld	a, (xix)                                ; FACB91  ld A,(XIX)
 	extz	wa                                    ; FACB93  extz WA
@@ -2264,7 +2264,7 @@ sub_FACC75__FACCB2:
 	and	de, 0xFF                               ; FACCB9  and DE,0x00ff
 	cp	de, 0x80                                ; FACCBD  cp DE,0x0080
 	jr nc, sub_FACC75__FACD15                  ; FACCC1  jr NC,0xfacd15
-	lda_24	xbc, (0xD75E)                       ; FACCC3  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FACCC3  lda XBC,0x00d75e
 	push	xbc                                   ; FACCC8  push XBC
 	pushw	de                                   ; FACCC9  push DE
 	call	0xFB7D85                              ; FACCCA  call 0xfb7d85
@@ -2290,7 +2290,7 @@ sub_FACC75__FACCF3:
 	and	de, 0xFF                               ; FACCFA  and DE,0x00ff
 	cp	de, 0x80                                ; FACCFE  cp DE,0x0080
 	jr nc, sub_FACC75__FACD15                  ; FACD02  jr NC,0xfacd15
-	lda_24	xbc, (0xD75E)                       ; FACD04  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FACD04  lda XBC,0x00d75e
 	push	xbc                                   ; FACD09  push XBC
 	pushw	de                                   ; FACD0A  push DE
 	call	0xFB7C8F                              ; FACD0B  call 0xfb7c8f
@@ -2354,7 +2354,7 @@ sub_FACD1B__FACD58:
 	and	de, 0xFF                               ; FACD5F  and DE,0x00ff
 	cp	de, 0x80                                ; FACD63  cp DE,0x0080
 	jr nc, sub_FACD1B__FACDBB                  ; FACD67  jr NC,0xfacdbb
-	lda_24	xbc, (0xD75E)                       ; FACD69  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FACD69  lda XBC,0x00d75e
 	push	xbc                                   ; FACD6E  push XBC
 	pushw	de                                   ; FACD6F  push DE
 	call	0xFB7DA7                              ; FACD70  call 0xfb7da7
@@ -2380,7 +2380,7 @@ sub_FACD1B__FACD99:
 	and	de, 0xFF                               ; FACDA0  and DE,0x00ff
 	cp	de, 0x80                                ; FACDA4  cp DE,0x0080
 	jr nc, sub_FACD1B__FACDBB                  ; FACDA8  jr NC,0xfacdbb
-	lda_24	xbc, (0xD75E)                       ; FACDAA  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FACDAA  lda XBC,0x00d75e
 	push	xbc                                   ; FACDAF  push XBC
 	pushw	de                                   ; FACDB0  push DE
 	call	0xFB7CB1                              ; FACDB1  call 0xfb7cb1
@@ -2434,7 +2434,7 @@ sub_FACDC1__FACDEC:
 	and	de, 0xFF                               ; FACDF3  and DE,0x00ff
 	cp	de, 64                                  ; FACDF7  cp DE,0x0040
 	jr nc, sub_FACDC1__FACE0E                  ; FACDFB  jr NC,0xface0e
-	lda_24	xbc, (0xD75E)                       ; FACDFD  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FACDFD  lda XBC,0x00d75e
 	push	xbc                                   ; FACE02  push XBC
 	pushw	de                                   ; FACE03  push DE
 	call	0xFB7E7B                              ; FACE04  call 0xfb7e7b
@@ -2487,7 +2487,7 @@ sub_FACE14__FACE3F:
 	and	de, 0xFF                               ; FACE46  and DE,0x00ff
 	cp	de, 64                                  ; FACE4A  cp DE,0x0040
 	jr nc, sub_FACE14__FACE61                  ; FACE4E  jr NC,0xface61
-	lda_24	xbc, (0xD75E)                       ; FACE50  lda XBC,0x00d75e
+	lda	xbc, (0xD75E:24)                       ; FACE50  lda XBC,0x00d75e
 	push	xbc                                   ; FACE55  push XBC
 	pushw	de                                   ; FACE56  push DE
 	call	0xFB7E9D                              ; FACE57  call 0xfb7e9d

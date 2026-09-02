@@ -2266,7 +2266,7 @@ SeqPlay_SaveState_CheckChordVoice:
 SeqPlay_SaveState_ChordShiftDone:
 	andda16 xbc, 0x28aa
 	jr z, SeqPlay_AssignBassVoice
-	lda_24 xbc, (WidgetData_DrawbarPositionTable_0x82)
+	lda xbc, (WidgetData_DrawbarPositionTable_0x82:24)
 	bitda 1, (0x28b1)
 	jr z, SeqPlay_SaveState_ChordAssignDirect
 	ldw wa, 0x12
@@ -2297,7 +2297,7 @@ SeqPlay_AssignBassVoice:
 SeqPlay_SaveState_BassShiftDone:
 	andda16 xbc, 0x28aa
 	jr z, SeqPlay_ReturnFalse
-	lda_24 xbc, (WidgetData_DrawbarPositionTable_0x82)
+	lda xbc, (WidgetData_DrawbarPositionTable_0x82:24)
 	bitda 1, (0x28b1)
 	jr z, SeqPlay_SaveState_BassAssignDirect
 	ldw wa, 0x12
@@ -3406,7 +3406,7 @@ SeqNote_ProcessCurrent_DrumCheck:
 	dec 1, a
 	extz wa
 	add wa, wa
-	lda_24 xbc, (WidgetData_DrawbarPositionTable_0x86)
+	lda xbc, (WidgetData_DrawbarPositionTable_0x86:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	andda16 xwa, 8982
 	jr nz, SeqNote_ProcessCurrent_ComparePos
@@ -3468,7 +3468,7 @@ VoiceConfig_SlotCheck_GetChannel:
 	dec 1, a
 	extz wa
 	add wa, wa
-	lda_24 xbc, (WidgetData_DrawbarPositionTable_0x86)
+	lda xbc, (WidgetData_DrawbarPositionTable_0x86:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	andda16 xwa, 8982
 	jr nz, VoiceConfig_SlotCheck_ReadData
@@ -3517,7 +3517,7 @@ VoiceConfig_EventType_GetChannel:
 	extz wa
 	ld de, wa
 	add de, de
-	lda_24 xhl, (WidgetData_DrawbarPositionTable_0x86)
+	lda xhl, (WidgetData_DrawbarPositionTable_0x86:24)
 	ldw_sri DE, 0x07, 0xec, 0xe8
 	andda16 xde, 8982
 	jr nz, VoiceConfig_EventType_ReadData
@@ -10523,7 +10523,7 @@ Part_SendVoiceOffAndCCEvents:
 	jr z, SeqBuf_MidiEventReturnPath
 	ld_erpb_rr a, 0xfb
 	extz WA
-	lda_24 xbc, (WidgetData_DrawbarPositionTable_0xBE)
+	lda xbc, (WidgetData_DrawbarPositionTable_0xBE:24)
 	ldb_dri c, 0x07, 0xe4, 0xe0
 	lda_d16 xwa, (0xe2e2)
 	ld (XWA+0x02),C
@@ -11544,7 +11544,7 @@ SeqValPTK_ClampKeyValue:
 	ldw wa, 0xd
 
 SeqValPTK_LookupAndReturn:
-	lda_24 xix, (WidgetData_DrawbarPositionTable_0x17A)
+	lda xix, (WidgetData_DrawbarPositionTable_0x17A:24)
 	ldb_sri L, 0x07, 0xf0, 0xe0
 	exts hl
 	ret
@@ -14602,7 +14602,7 @@ SeqData_CopyBlockToBuffer:
 	ldb w, 0x0
 	extz xwa
 	sll xwa, 11
-	lda_24 xde, (0x0ab000)
+	lda xde, (0x0ab000:24)
 	add xde, xwa
 	ld xiy, 0xf180
 	ld xix, xde
@@ -14614,7 +14614,7 @@ VoicePreset_LoadAndInitPan:
 	ldb w, 0x0
 	extz xwa
 	sll xwa, 11
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	add xbc, xwa
 	ld xiy, xbc
 	ld xix, 0xf180
@@ -14689,7 +14689,7 @@ PartCopy16_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda_dri XWA, 0xe1, 0x00, 0x01
-	lda_24 xhl, (0x0ab000)
+	lda xhl, (0x0ab000:24)
 	add xhl, xwa
 
 PartCopy16_TransferLoop:
@@ -14715,7 +14715,7 @@ PartCopyBuf_ComputeSrcAddr:
 	extz xwa
 	sll xwa, 11
 	lda_dri XWA, 0xe1, 0xe0, 0x02
-	lda_24 xde, (0x0ab000)
+	lda xde, (0x0ab000:24)
 	add xde, xwa
 
 PartCopyBuf_SetupDst:
@@ -14730,7 +14730,7 @@ PartCopyBuf_ComputeDstAddr:
 	extz xbc
 	sll xbc, 11
 	lda_dri XWA, 0xe5, 0xe0, 0x02
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	add xbc, xwa
 
 PartCopyBuf_InitCounter:
@@ -14769,7 +14769,7 @@ Part_WriteByte_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	add xwa, xbc
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	add xbc, xwa
 
 Part_WriteByte_DoWrite:
@@ -14822,7 +14822,7 @@ Part_ReadByteDirect_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	add xwa, xbc
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	add xbc, xwa
 
 Part_ReadByteDirect_DoRead:
@@ -14993,7 +14993,7 @@ PartSubBlk_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda xwa, (xwa + 32)
-	lda_24 xhl, (0x0ab000)
+	lda xhl, (0x0ab000:24)
 	add xhl, xwa
 
 PartSubBlk_WriteAndCheck:
@@ -15013,7 +15013,7 @@ PartSubBlkRd_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda xwa, (xwa + 32)
-	lda_24 xde, (0x0ab000)
+	lda xde, (0x0ab000:24)
 	add xde, xwa
 
 PartSubBlkRd_ReadAndReturn:
@@ -15034,7 +15034,7 @@ PartSubBlk48_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda xwa, (xwa + 48)
-	lda_24 xhl, (0x0ab000)
+	lda xhl, (0x0ab000:24)
 	add xhl, xwa
 
 PartSubBlk48_WriteAndCheck:
@@ -15052,7 +15052,7 @@ Part_VoiceSearchBlock:
 	extz	xwa
 	sll	xwa, 11
 	lda	xwa, (xwa+48)
-	lda_24	xde, (0x0ab000)
+	lda	xde, (0x0ab000:24)
 	add	xde, xwa
 	extz	bc
 	.byte 0xf3
@@ -15272,7 +15272,7 @@ PartSubBlkA_WriteLoop32:
 	stb_erp E, 0xfb
 	dec 1, e
 	extz de
-	lda_24 xhl, (WidgetData_DrawbarPositionTable_0xD2)
+	lda xhl, (WidgetData_DrawbarPositionTable_0xD2:24)
 	ldb_sri E, 0x07, 0xec, 0xe8
 	calr Part_WriteSubBlock32
 	inc1b_erp 0xfb
@@ -15288,7 +15288,7 @@ PartSubBlkA_WriteLoop48:
 	stb_erp E, 0xfb
 	dec 1, e
 	extz de
-	lda_24 xhl, (WidgetData_DrawbarPositionTable_0xF2)
+	lda xhl, (WidgetData_DrawbarPositionTable_0xF2:24)
 	ldb_sri E, 0x07, 0xec, 0xe8
 	calr Part_WriteSubBlock48
 	inc1b_erp 0xfb
@@ -15312,7 +15312,7 @@ PartSubBlkB_WriteLoop32:
 	stb_erp E, 0xfb
 	dec 1, e
 	extz de
-	lda_24 xhl, (WidgetData_DrawbarPositionTable_0xE2)
+	lda xhl, (WidgetData_DrawbarPositionTable_0xE2:24)
 	ldb_sri E, 0x07, 0xec, 0xe8
 	calr Part_WriteSubBlock32
 	inc1b_erp 0xfb
@@ -15328,7 +15328,7 @@ PartSubBlkB_WriteLoop48:
 	stb_erp E, 0xfb
 	dec 1, e
 	extz de
-	lda_24 xhl, (WidgetData_DrawbarPositionTable_0xF2)
+	lda xhl, (WidgetData_DrawbarPositionTable_0xF2:24)
 	ldb_sri E, 0x07, 0xec, 0xe8
 	calr Part_WriteSubBlock48
 	inc1b_erp 0xfb
@@ -15380,7 +15380,7 @@ SeqCopy2K_ComputeAddr:
 	extz xwa
 	sll xwa, 11
 	lda_dri XWA, 0xe1, 0x00, 0x01
-	lda_24 xhl, (0x0ab000)
+	lda xhl, (0x0ab000:24)
 	add xhl, xwa
 
 SeqCopy2K_SetupTransfer:
@@ -15403,7 +15403,7 @@ SeqPart_ReadNextEventByte:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
-	lda_24 xde, (0x0b0000)
+	lda xde, (0x0b0000:24)
 	add xde, xwa
 	lda xhl, (xiz + 2)
 	ld bc, (xhl)
@@ -15436,7 +15436,7 @@ SeqEvent_CheckPageBoundary:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
-	lda_24 xde, (0x0b0000)
+	lda xde, (0x0b0000:24)
 	add xde, xwa
 	jr SeqEvent_CheckHighBit
 
@@ -15481,7 +15481,7 @@ SeqEvent_NewPageSetup:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
-	lda_24 xde, (0x0b0000)
+	lda xde, (0x0b0000:24)
 	add xde, xwa
 	jr SeqEvent_CheckMaxParams
 
@@ -15513,7 +15513,7 @@ Part_CopyBytesToVoiceBlock:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
-	lda_24 xde, (0x0b0000)
+	lda xde, (0x0b0000:24)
 	add xde, xwa
 	ldw (xsp + 4), 0x0
 	ld a, (xsp + 6)
@@ -15703,7 +15703,7 @@ PartCtrl_TestBit7:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
-	lda_24 xbc, (0x0b0000)
+	lda xbc, (0x0b0000:24)
 	add xbc, xwa
 	ld l, (xbc)
 	and l, 0x80
@@ -15713,7 +15713,7 @@ PartCtrl_SetClearBit7:
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
-	lda_24 xde, (0x0b0000)
+	lda xde, (0x0b0000:24)
 	add xde, xwa
 	cps c, 0
 	jr z, PartCtrl_SetClearBit7_ClearPath
@@ -15730,7 +15730,7 @@ PartCtrl_ReadByte:
 	extz xwa
 	sll xwa, 8
 	lda_dri XWA, 0x07, 0xe0, 0xe4
-	lda_24 xbc, (0x0b0000)
+	lda xbc, (0x0b0000:24)
 	add xbc, xwa
 	ld l, (xbc)
 	ret
@@ -15741,7 +15741,7 @@ PartCtrl_WriteByteToBuf:
 	extz xwa
 	sll xwa, 8
 	lda_dri XWA, 0x07, 0xe0, 0xe4
-	lda_24 xbc, (0x0b0000)
+	lda xbc, (0x0b0000:24)
 	add xbc, xwa
 	ld (xbc), e
 	ret
@@ -15757,7 +15757,7 @@ PartCtrl_DataBlock_CE1:
 	extz	xwa
 	sll	xwa, 8
 	add	xwa, xhl
-	lda_24	xhl, (0x0b0000)
+	lda	xhl, (0x0b0000:24)
 	add	xhl, xwa
 	ld	(xhl), c
 	ld	hl, (xde)
@@ -15787,7 +15787,7 @@ PartCtrl_DataBlock_CE1:
 	extz	xwa
 	sll	xwa, 8
 	add	xwa, xhl
-	lda_24	xhl, (0x0b0000)
+	lda	xhl, (0x0b0000:24)
 	add	xhl, xwa
 	ld	a, (xhl)
 	ld	(xbc), a
@@ -15819,7 +15819,7 @@ PartCtrl_WriteBytePair:
 	extz xde
 	sll xde, 8
 	add xde, xhl
-	lda_24 xhl, (0x0b0000)
+	lda xhl, (0x0b0000:24)
 	add xhl, xde
 	ld e, (xiz)
 	ld (xhl), e
@@ -15837,7 +15837,7 @@ PartCtrl_WritePair_ReadNext:
 	extz xwa
 	sll xwa, 8
 	inc 5, xwa
-	lda_24 xhl, (0x0b0000)
+	lda xhl, (0x0b0000:24)
 	add xhl, xwa
 	jr PartCtrl_WritePair_WriteSecond
 
@@ -17699,7 +17699,7 @@ SeqInit_ReturnStub:
 
 SeqInit_SetBaseAddress:
 	stdi16 (0x286d), 1240
-	lda_24 xwa, (0x0b0000)
+	lda xwa, (0x0b0000:24)
 	stda32 7514, xwa
 	ret
 
@@ -18905,7 +18905,7 @@ SeqStatus_ResetAndSendCmd:
 SeqPlay_WriteErrorToVoiceTable:
 	ldb_d8 a, (0x287a)
 	extz wa
-	lda_24 xbc, (WidgetData_DrawbarPositionTable_0x16A)
+	lda xbc, (WidgetData_DrawbarPositionTable_0x16A:24)
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x7a, 0x28
 	ret
 
@@ -19250,9 +19250,9 @@ SeqEvent_MainHandler:
 	cp WA,0x000d
 	jrl gt, AppEvent_PostDefaultEvents
 	add WA,WA
-	lda_24 xix, (WidgetData_CharsetMappingTable_0x248)
+	lda xix, (WidgetData_CharsetMappingTable_0x248:24)
 	ldw_dri wa, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SeqEvent_Dispatch)
+	lda xix, (SeqEvent_Dispatch:24)
 	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
 SeqEvent_Dispatch:
 	call SeqData_CopyBlockWithLookup
@@ -19513,7 +19513,7 @@ AppEvent_ChainDispatch1:
 	add xbc, xbc
 	add xbc, WidgetData_CharsetMappingTable_0x2C0
 	ld bc, (xbc)
-	lda_24 xix, (APP_EVENT_HANDLER_TABLE)
+	lda xix, (APP_EVENT_HANDLER_TABLE:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; Application event handler dispatch table
 ; Handles up to 32 event types (XBC 0-0x1f), used by ApDeliveryEvent system
@@ -19584,9 +19584,9 @@ AppEvtHandler_Branch_006:
 	cps	wa, 7
 	jr	gt, 82	; -> 0xF442AC
 	add	wa, wa
-	lda_24	xix, (14960818)
+	lda	xix, (14960818:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (16007792)
+	lda	xix, (16007792:24)
 	jp_rr	8, xix, wa
 	lda_d16	xiz, (9744)
 	lda_d16	xwa, (9746)
@@ -19795,7 +19795,7 @@ AppEvtHandler_Branch_021:
 	add xwa, xwa
 	add xwa, WidgetData_CharsetMappingTable_0x270
 	ld wa, (xwa)
-	lda_24 xix, (AppEvtHandler_Branch_021_0x5E)
+	lda xix, (AppEvtHandler_Branch_021_0x5E:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 	ldb_d8 a, (0xf1e9)
 	cp a, 0x11
@@ -19881,7 +19881,7 @@ AppEvtHandler_Branch_024:
 	add xwa, xwa
 	add xwa, WidgetData_CharsetMappingTable_0x264
 	ld wa, (xwa)
-	lda_24 xix, (AppEvtHandler_Branch_024_0x97)
+	lda xix, (AppEvtHandler_Branch_024_0x97:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 	ldb_d8 a, (0xf1e1)
 	cp a, 0x11
@@ -20063,7 +20063,7 @@ AppEvent_InlineHandler:
 	add xbc, xbc
 	add xbc, WidgetData_CharsetMappingTable_0x35C
 	ld bc, (xbc)
-	lda_24 xix, (AppEvent_SubDispatch)
+	lda xix, (AppEvent_SubDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 AppEvent_SubDispatch:
 	ldb_d8	a, 35994
@@ -20075,7 +20075,7 @@ AppEvent_SubDispatch:
 	jr	le, 3
 	ldw	wa, 8
 	sll	wa, 2
-	lda_24	xix, 14961006
+	lda	xix, (14961006:24)
 	ld_rrl	xwa, xix, wa
 	.byte 0x80, 0x3f, 0x01
 	jrl	ule, 1740
@@ -20092,9 +20092,9 @@ AppEvent_SubDispatch:
 	cps	wa, 7
 	jr	gt, 82
 	add	wa, wa
-	lda_24	xix, 14960990
+	lda	xix, (14960990:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, 16009462
+	lda	xix, (16009462:24)
 	jp_rr 8, xix, wa
 	lda_d16	xiz, 9744
 	lda_d16	xwa, 9746
@@ -20148,9 +20148,9 @@ AppEvent_SubDispatch:
 	cps	wa, 7
 	jr	gt, 82
 	add	wa, wa
-	lda_24	xix, 14960974
+	lda	xix, (14960974:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, 16009643
+	lda	xix, (16009643:24)
 	jp_rr 8, xix, wa
 	lda_d16	xiz, 9744
 	lda_d16	xwa, 9746
@@ -20344,7 +20344,7 @@ AppEvent_SubDispatch:
 	add	xwa, xwa
 	add	xwa, 14960962
 	ld	wa, (xwa)
-	lda_24	xix, 16010300
+	lda	xix, (16010300:24)
 	jp_rr 8, xix, wa
 	ldb_d8	a, 61929
 	cps	a, 1
@@ -20427,7 +20427,7 @@ AppEvent_SubDispatch:
 	add	xwa, xwa
 	add	xwa, 14960950
 	ld	wa, (xwa)
-	lda_24	xix, 16010594
+	lda	xix, (16010594:24)
 	jp_rr 8, xix, wa
 	ldb_d8	a, 61921
 	cps	a, 1
@@ -20839,9 +20839,9 @@ SeqState_LabelDispatch:
 	cp bc, 0xf
 	jrl gt, AppEvent_PopIzSkip2Ret
 	add bc, bc
-	lda_24 xix, (WidgetData_CharsetMappingTable_0x3AC)
+	lda xix, (WidgetData_CharsetMappingTable_0x3AC:24)
 	ldw_sri BC, 0x07, 0xf0, 0xe4
-	lda_24 xix, (SoundData_HandlerDispatch)
+	lda xix, (SoundData_HandlerDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; Sound data handler dispatch
 SoundData_HandlerDispatch:
@@ -20889,7 +20889,7 @@ AppEvent_RecordClampLow:
 	ldw bc, 0xf
 
 AppEvent_RecordDispatch:
-	lda_24 xix, (WidgetData_CharsetMappingTable_0x39C)
+	lda xix, (WidgetData_CharsetMappingTable_0x39C:24)
 	ldb_sri A, 0x07, 0xf0, 0xe4
 	ld (xsp + 4), a
 	inc 1, a
@@ -20901,7 +20901,7 @@ AppEvent_RecordDispatch:
 	ld a, (xsp + 4)
 	extz wa
 	add wa, wa
-	lda_24 xbc, (WidgetData_CharsetMappingTable_0x226)
+	lda xbc, (WidgetData_CharsetMappingTable_0x226:24)
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0x4f, 0x0d
 	call BmDrEdit_SaveSequencerState
 	jr AppEvent_PopIzSkip2Ret
@@ -21030,9 +21030,9 @@ EffEdit_ParamChangeA:
 	stdi8	58096, 1
 	ldw_d16	wa, 10614
 	extz	wa
-	lda_24	xde, 14960604
+	lda	xde, (14960604:24)
 	ld_rrb	e, xde, wa
-	lda_24	xwa, 14960476
+	lda	xwa, (14960476:24)
 	cps	e, 0
 	jr	ge, 12
 	ld	c, (xwa)
@@ -21079,9 +21079,9 @@ EffEdit_ParamChangeB:
 	stdi8 (0xe2f0), 0x01
 	ldw_d16 wa, (0x2976)
 	extz WA
-	lda_24 xde, (WidgetData_CharsetMappingTable_0xA6)
+	lda xde, (WidgetData_CharsetMappingTable_0xA6:24)
 	ldb_dri e, 0x07, 0xe8, 0xe0
-	lda_24 xwa, (WidgetData_CharsetMappingTable_0x26)
+	lda xwa, (WidgetData_CharsetMappingTable_0x26:24)
 	cps e, 0
 	jr ge, EffEdit_ParamBPositive
 	ld C,(XWA)
@@ -21392,7 +21392,7 @@ EffEdit_ReadParamA_Check:
 
 EffEdit_ReadParamA_Fixup:
 	ld bc, wa
-	lda_24 xwa, (0x0029ab)
+	lda xwa, (0x0029ab:24)
 	extz xbc
 	add xbc, xwa
 	ld a, (xbc)
@@ -21471,7 +21471,7 @@ EffEdit_ReadParamB_Check:
 
 EffEdit_ReadParamB_Fixup:
 	ld de, wa
-	lda_24 xbc, (0x0029ab)
+	lda xbc, (0x0029ab:24)
 	extz xde
 	add xde, xbc
 	cp (xde), 0x55
@@ -21683,9 +21683,9 @@ ApPlaySyori:
 	cps	bc, 7
 	jrl	gt, 2094	; -> 0xF4636D
 	add	bc, bc
-	lda_24	xix, (14961202)
+	lda	xix, (14961202:24)
 	ld_rrw	bc, xix, bc
-	lda_24	xix, (16014165)
+	lda	xix, (16014165:24)
 	jp_rr	8, xix, bc
 SeqAccomp_EventDispatch:
 	ld	xbc, 0x01c0000f
@@ -21885,7 +21885,7 @@ SeqAccomp_ParamDelivery:
 	add xwa, xwa
 	add xwa, WidgetData_CharsetMappingTable_0x3E4
 	ld wa, (xwa)
-	lda_24 xix, (SeqAccomp_SubHandlerA)
+	lda xix, (SeqAccomp_SubHandlerA:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Sequencer accompaniment sub-handler A
@@ -21960,7 +21960,7 @@ SeqAccomp_SubChain:
 	add xwa, xwa
 	add xwa, WidgetData_CharsetMappingTable_0x3CC
 	ld wa, (xwa)
-	lda_24 xix, (SeqAccomp_SubHandlerB)
+	lda xix, (SeqAccomp_SubHandlerB:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; Sequencer accompaniment sub-handler B
@@ -22510,7 +22510,7 @@ NoteEditSy_HandleUpScroll:
 	add xde, xde
 	add xde, WidgetData_CharsetMappingTable_0x434
 	ld de, (xde)
-	lda_24 xix, (NoteEditSy_UpScroll_Param0)
+	lda xix, (NoteEditSy_UpScroll_Param0:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 
 NoteEditSy_UpScroll_Param0:
@@ -22571,7 +22571,7 @@ NoteEditSy_HandleDownScroll:
 	add xde, xde
 	add xde, WidgetData_CharsetMappingTable_0x41C
 	ld de, (xde)
-	lda_24 xix, (NoteEditSy_DownScroll_Param0)
+	lda xix, (NoteEditSy_DownScroll_Param0:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 
 NoteEditSy_DownScroll_Param0:
@@ -23498,9 +23498,9 @@ MainExeCall:
 	cp	wa, 16
 	jrl	gt, 1079	; -> 0xF4750A
 	add	wa, wa
-	lda_24	xix, (14961288)
+	lda	xix, (14961288:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (16019689)
+	lda	xix, (16019689:24)
 	jp_rr	8, xix, wa
 MainExe_HandleD6:
 	call	16648347
@@ -26037,7 +26037,7 @@ Seq_AdvanceValidateB0Params:
 	add hl, bc
 	ld bc, hl
 	extz xbc
-	lda_24 xwa, (0x1ed400)
+	lda xwa, (0x1ed400:24)
 	ld xde, xwa
 	add xde, xbc
 	mrib4 0x82, 0x19, 0xca, 0x25
@@ -26351,7 +26351,7 @@ SeqEvt_SetBit7B0Event:
 	add ix, hl
 	ld bc, ix
 	extz xbc
-	lda_24 xwa, (0x1ed400)
+	lda xwa, (0x1ed400:24)
 	ld xhl, xwa
 	add xhl, xbc
 	mrib4 0x83, 0x19, 0xca, 0x25
@@ -27097,7 +27097,7 @@ SeqSearch_ValidateB0Params:
 	add hl, de
 	ld bc, hl
 	extz xbc
-	lda_24 xwa, (0x1ed400)
+	lda xwa, (0x1ed400:24)
 	ld xde, xwa
 	add xde, xbc
 	mrib4 0x82, 0x19, 0xca, 0x25
@@ -28076,7 +28076,7 @@ SeqPart_CheckBothCompatible:
 	add xwa, xbc
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, (FontPalette_Gradient7_0x32)
+	lda xbc, (FontPalette_Gradient7_0x32:24)
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x7c, 0x28
 	calr SeqPart_SetupWithDispatch
 	cpdi8 (0x287a), 0
@@ -28740,7 +28740,7 @@ SeqPart_ByteBlockA95A:
 	jrl	z, 323
 	stb_d8	(3386), a
 	extz	wa
-	lda_24	xde, (FontPalette_Gradient7_0x32)
+	lda	xde, (FontPalette_Gradient7_0x32:24)
 	.byte 0xc3
 	reti
 	or	xwa, xwa
@@ -29677,7 +29677,7 @@ SeqPart_DualLoadPartB:
 	jr z, SeqPart_DualLoadExit
 	stb_d8 (3386), a
 	extz wa
-	lda_24 xbc, (FontPalette_Gradient7_0x32)
+	lda xbc, (FontPalette_Gradient7_0x32:24)
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x7c, 0x28
 	stb_d8 (3378), e
 	calr SeqPart_DualCopySetup
@@ -31111,9 +31111,9 @@ SeqPart_VelocityCurveCalc:
 	cp wa, 0xa
 	jrl gt, SeqPart_VelRangeToZone
 	add wa, wa
-	lda_24 xix, (Display_FontPalette_Table_0x68)
+	lda xix, (Display_FontPalette_Table_0x68:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SeqPart_VelCurveData)
+	lda xix, (SeqPart_VelCurveData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SeqPart_VelCurveData:
@@ -31128,7 +31128,7 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 1
 	extz	de
-	lda_24	xbc, (Display_FontPalette_Table_0x1E)
+	lda	xbc, (Display_FontPalette_Table_0x1E:24)
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -31159,7 +31159,7 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 3
 	extz	de
-	lda_24	xbc, (Display_FontPalette_Table_0x20)
+	lda	xbc, (Display_FontPalette_Table_0x20:24)
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -31206,7 +31206,7 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 7
 	extz	de
-	lda_24	xbc, (Display_FontPalette_Table_0x24)
+	lda	xbc, (Display_FontPalette_Table_0x24:24)
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -31233,7 +31233,7 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 2
 	extz	de
-	lda_24	xbc, (Display_FontPalette_Table_0x2C)
+	lda	xbc, (Display_FontPalette_Table_0x2C:24)
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -31272,7 +31272,7 @@ SeqPart_VelCurveData:
 	jr	nc, 2
 	ldb	e, 5
 	extz	de
-	lda_24	xbc, (Display_FontPalette_Table_0x30)
+	lda	xbc, (Display_FontPalette_Table_0x30:24)
 	.byte 0xc3
 	reti
 	.byte 0xe4, 0xe8
@@ -31361,7 +31361,7 @@ SeqPart_VelZone11:
 
 SeqPart_VelZoneLookup:
 	extz de
-	lda_24 xbc, (Display_FontPalette_Table_0x36)
+	lda xbc, (Display_FontPalette_Table_0x36:24)
 	ldmm_srib 0x07, 0xe4, 0xe8, 0x40, 0x26
 	ld xbc, Display_FontPalette_Table_0x5C
 	ldmm_srib 0x07, 0xe4, 0xe8, 0x42, 0x26
@@ -31414,7 +31414,7 @@ SeqPart_VelExprEdit:
 	srl l, 1
 	extz hl
 	sla hl, 2
-	lda_24 xbc, (Display_FontPalette_Table)
+	lda xbc, (Display_FontPalette_Table:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xec
 	ld (xsp + 4), xwa
 	cpdi8 (9728), 0

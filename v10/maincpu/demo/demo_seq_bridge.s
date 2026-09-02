@@ -20,7 +20,7 @@ MiddleFuncCall:
 	add xwa, xwa
 	add xwa, SepaOut_Config_0_0x202
 	ld wa, (xwa)
-	lda_24 xix, (MiddleFuncCall_DispatchData)
+	lda xix, (MiddleFuncCall_DispatchData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MiddleFuncCall_DispatchData:
@@ -85,7 +85,7 @@ SongBank_ComputeTableOfs:
 	push xiz
 	ld hl, bc
 	ld (xsp + 4), wa
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	ld wa, (xsp + 4)
 	extz xwa
 	sll xwa, 11
@@ -461,7 +461,7 @@ SeqInit_PostEventSequence:
 SeqInit_LookupDispatchEntry:
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (SepaOut_Config_0_0x222)
+	lda xbc, (SepaOut_Config_0_0x222:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	ret
 
@@ -560,9 +560,9 @@ SqTrSel_CaseG:
 	cps wa, 7
 	ret gt
 	add wa, wa
-	lda_24 xix, (SepaOut_Config_0_0x26A)
+	lda xix, (SepaOut_Config_0_0x26A:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (SqTrSel_CaseG_JumpTable)
+	lda xix, (SqTrSel_CaseG_JumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SqTrSel_CaseG_JumpTable:

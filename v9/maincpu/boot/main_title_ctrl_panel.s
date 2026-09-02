@@ -309,7 +309,7 @@ CtrlPanel_HandleSerialPort:
 	add a, 0x10
 	exts wa
 	sla wa, 2
-	lda_24 xbc, (DiskWarning_ConfirmStrings_0xC36)
+	lda xbc, (DiskWarning_ConfirmStrings_0xC36:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001f

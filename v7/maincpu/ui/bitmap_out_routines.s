@@ -390,7 +390,7 @@ BitMapOut_CopyPreset9_Execute:
 	ld (xsp + 56), xbc
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (WidgetStyleDataTable_0x10)
+	lda xbc, (WidgetStyleDataTable_0x10:24)
 	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xwa, (xbc)
 	ld xix, (xsp + 56)
@@ -740,7 +740,7 @@ BitMapOut_CopyROMToWorkspace:
 	pushw	960
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (15432002)
+	lda	xbc, (15432002:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	0
@@ -761,7 +761,7 @@ BitMapOut_SelectiveFieldRestore:
 	lda_d16 xbc, (0xfc5a)
 	ld xwa, xbc
 	sub xwa, xde
-	lda_24 xhl, (0x03c8e4)
+	lda xhl, (0x03c8e4:24)
 	add xwa, xhl
 	ld a, (xwa)
 	ld (xbc), a
@@ -822,7 +822,7 @@ BitMapOut_SelectRestore_CheckBit1:
 	lda xbc, (xde + 8)
 	ld xwa, xbc
 	sub xwa, xhl
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	add xwa, xix
 	ld a, (xwa)
 	ld (xbc), a
@@ -844,7 +844,7 @@ BitMapOut_SelectRestore_CheckBit2:
 	lda_d16 xhl, (0xf9a0)
 	ld xwa, xde
 	sub xwa, xhl
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	add xwa, xix
 	ld a, (xwa)
 	and a, 0x3
@@ -864,7 +864,7 @@ BitMapOut_SelectRestore_CheckBit3:
 	lda_d16 xbc, (0xfd04)
 	ld xde, xbc
 	sub xde, 0xf9a0
-	lda_24 xwa, (0x03c8e4)
+	lda xwa, (0x03c8e4:24)
 	add xde, xwa
 	ld a, (xde)
 	ld (xbc), a
@@ -880,7 +880,7 @@ BitMapOut_SelectRestore_CheckBit4:
 	lda_d16 xhl, (0xf9a0)
 	ld xwa, xde
 	sub xwa, xhl
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	add xwa, xix
 	ld a, (xwa)
 	and a, 0xf
@@ -906,7 +906,7 @@ BitMapOut_SelectRestore_CheckVolBit:
 	jr z, BitMapOut_SelectRestore_CheckEffBit
 	lda_d16 xhl, (0xf9a0)
 	lda_d16 xwa, (0xfc74)
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	ld xbc, xwa
 	lda xde, (xwa + 24)
 
@@ -925,7 +925,7 @@ BitMapOut_SelectRestore_CheckEffBit:
 	jr z, BitMapOut_RestoreVoiceChannels
 	lda_d16 xhl, (0xf9a0)
 	lda_d16 xwa, (0xfc8e)
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	ld xbc, xwa
 	lda xde, (xwa + 24)
 
@@ -950,7 +950,7 @@ BitMapOut_RestoreVoiceChannels:
 	lda_d16 xbc, (0xf9a0)
 	ld xwa, xix
 	sub xwa, xbc
-	lda_24 xde, (0x03c8e4)
+	lda xde, (0x03c8e4:24)
 	add xwa, xde
 	ld a, (xwa)
 	and a, 0x7
@@ -1400,7 +1400,7 @@ BitMapOut_RestoreParts_InnerLoop:
 	add xiz, xix
 	ld xwa, xiz
 	sub xwa, xbc
-	lda_24 xiy, (0x03c8e4)
+	lda xiy, (0x03c8e4:24)
 	add xwa, xiy
 	ld a, (xwa)
 	ld (xiz), a
@@ -1459,7 +1459,7 @@ BitMapOut_RestoreExtra_CheckBit6:
 	jr z, BitMapOut_RestoreExtra_CheckConfigBit
 	lda_d16 xhl, (0xf9a0)
 	lda_d16 xwa, (0xfd1c)
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	ld xbc, xwa
 	lda xde, (xwa + 14)
 
@@ -1478,7 +1478,7 @@ BitMapOut_RestoreExtra_CheckConfigBit:
 	jr z, BitMapOut_RestoreExtra_CheckDataBit
 	lda_d16 xhl, (0xf9a0)
 	lda_d16 xwa, (0xfd30)
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	ld xbc, xwa
 	lda xde, (xwa + 30)
 
@@ -1500,7 +1500,7 @@ BitMapOut_RestoreExtra_CheckDataBit:
 	lda xbc, (xde + 1)
 	ld xwa, xbc
 	sub xwa, xhl
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	add xwa, xix
 	ld a, (xwa)
 	ld (xbc), a
@@ -1531,7 +1531,7 @@ BitMapOut_RestoreExtra_CheckMiscBit:
 	lda xbc, (xix + 5)
 	ld xwa, xbc
 	sub xwa, xde
-	lda_24 xhl, (0x03c8e4)
+	lda xhl, (0x03c8e4:24)
 	add xwa, xhl
 	ld a, (xwa)
 	ld (xbc), a
@@ -1557,7 +1557,7 @@ BitMapOut_RestoreExtra_CheckFlagBits:
 	lda_d16 xbc, (0xfd12)
 	ld xde, xbc
 	sub xde, 0xf9a0
-	lda_24 xwa, (0x03c8e4)
+	lda xwa, (0x03c8e4:24)
 	add xde, xwa
 	ld a, (xde)
 	ld (xbc), a
@@ -1569,7 +1569,7 @@ BitMapOut_RestoreExtra_CheckPanBit:
 	lda_d16 xbc, (0xfc6a)
 	ld xde, xbc
 	sub xde, 0xf9a0
-	lda_24 xwa, (0x03c8e4)
+	lda xwa, (0x03c8e4:24)
 	add xde, xwa
 	ld a, (xde)
 	ld (xbc), a
@@ -1580,7 +1580,7 @@ BitMapOut_RestoreExtra_CheckCtrlBit:
 	jr z, BitMapOut_RestoreExtra_CheckLevelBit
 	lda_d16 xhl, (0xf9a0)
 	lda_d16 xwa, (0xfc4a)
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	ld xbc, xwa
 	lda xde, (xwa + 8)
 
@@ -1604,7 +1604,7 @@ BitMapOut_RestoreExtra_CheckLevelBit:
 	lda_d16 xhl, (0xf9a0)
 	ld xwa, xde
 	sub xwa, xhl
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	add xwa, xix
 	ld a, (xwa)
 	and a, 0x40
@@ -1634,7 +1634,7 @@ BitMapOut_RestoreExtra_CheckExpBit:
 	lda_d16 xhl, (0xf9a0)
 	ld xwa, xde
 	sub xwa, xhl
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	add xwa, xix
 	ld a, (xwa)
 	and a, 0x20
@@ -1681,7 +1681,7 @@ BitMapOut_DetectChanges:
 	lda xbc, (xde + 0x05)
 	ld XWA,XBC
 	sub XWA,XHL
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	add XWA,XIX
 	ld W,(XWA)
 	res 0x01,W
@@ -2629,7 +2629,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	sll xbc, 3
 	sub xbc, xwa
 	add xbc, xbc
-	lda_24 xhl, (WidgetStyleDataTable_0x15E)
+	lda xhl, (WidgetStyleDataTable_0x15E:24)
 	add xhl, xbc
 	lda xde, (xsp + 2)
 	ld a, (xde)
@@ -2660,7 +2660,7 @@ BitMapOut_RefreshDisplay_ClearDirty:
 	lda_d16 xix, (0xfc66)
 	ld XBC,XIX
 	sub XBC,(XSP+0x08)
-	lda_24 xwa, (0x03c8e4)
+	lda xwa, (0x03c8e4:24)
 	ld (XSP+0x04),XWA
 	ld XIY,XBC
 	add XIY,(XSP+0x04)
@@ -2768,7 +2768,7 @@ BitMapOut_CalcDisplayMetrics:
 	lda_d16 xhl, (0xfd05)
 	ld XWA,XHL
 	sub XWA,0x0000f9a0
-	lda_24 xix, (0x03c8e4)
+	lda xix, (0x03c8e4:24)
 	ld XDE,XWA
 	add XDE,XIX
 	ld A,(XHL)
@@ -2818,7 +2818,7 @@ BitMapOut_PrepareRenderState:
 	lda_d16	xhl, (64606)
 	ld	xwa, xhl
 	sub	xwa, 63904
-	lda_24	xiz, (248036)
+	lda	xiz, (248036:24)
 	ld	xde, xwa
 	add	xde, xiz
 	ld	w, (xde)
@@ -3005,7 +3005,7 @@ BitMapOut_UpdateWidget_CheckType:
 	dec 1, a
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (WidgetStyleDataTable_0x10)
+	lda xbc, (WidgetStyleDataTable_0x10:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	pushw 0x10
 	lda_d16 xwa, (0xf9a2)
@@ -3027,7 +3027,7 @@ BitMapOut_UpdateWidget_TypeB:
 	dec 1,A
 	extz WA
 	sla wa, 2
-	lda_24 xde, (WidgetStyleDataTable_0x10)
+	lda xde, (WidgetStyleDataTable_0x10:24)
 	ldl_dri xde, 0x07, 0xe8, 0xe0
 	pushw 0x0010
 	push XBC
@@ -3045,7 +3045,7 @@ BitMapOut_UpdateWidget_PostDraw:
 	pushw	16
 	sll	a, 4
 	extz	wa
-	lda_24	xbc, (2020192)
+	lda	xbc, (2020192:24)
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -3060,7 +3060,7 @@ BitMapOut_UpdateWidget_Finalize:
 	push	xbc
 	sll	a, 4
 	extz	wa
-	lda_24	xbc, (2020192)
+	lda	xbc, (2020192:24)
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -3125,7 +3125,7 @@ OneTchFUNC:
 	add xde, xde
 	add xde, WidgetStyleDataTable_0x362
 	ld de, (xde)
-	lda_24 xix, (BitMapOut_ByteData_WidgetTable)
+	lda xix, (BitMapOut_ByteData_WidgetTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 BitMapOut_ByteData_WidgetTable:
 	.byte 0xf1, 0x46, 0xb7, 0xb7	; resda	7, 0xb7e2 (v7 patched)
@@ -3213,7 +3213,7 @@ BitMapOut_ByteData_PatchTable:
 	lda_d16 xix, (0xf9a0)
 	ld xbc, xhl
 	sub xbc, xix
-	lda_24 xde, (0x03c2c4)
+	lda xde, (0x03c2c4:24)
 	ld xiy, xbc
 	add xiy, xde
 	ld c, (xwa)

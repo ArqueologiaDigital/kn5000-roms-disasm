@@ -45,7 +45,7 @@ RVari_Select_CheckTypeE:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
@@ -244,7 +244,7 @@ RVari_Select_OtherItem:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
@@ -441,7 +441,7 @@ RVari_Select_TypeNotE:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	exts xwa
@@ -534,7 +534,7 @@ RVari_SelNE_FirstItem_Deselect:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	extz wa
@@ -549,7 +549,7 @@ RVari_SelNE_FirstItem_Deselect:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 64)
 	ld wa, (xwa)
 	extz wa
@@ -610,7 +610,7 @@ RVari_SelNE_SecondItem:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	exts xwa
@@ -702,7 +702,7 @@ RVari_SelNE_SecondItem_Deselect:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	extz wa
@@ -717,7 +717,7 @@ RVari_SelNE_SecondItem_Deselect:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xiz + 60)
 	ld wa, (xwa)
 	extz wa
@@ -818,13 +818,13 @@ RVari_Confirm_TypeF_Loop:
 RVari_ConfirmF_CheckSelected:
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x24)
+	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x24)
+	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	lda_dri XBC, 0xfd, 0x14, 0x02
@@ -855,7 +855,7 @@ RVari_ConfirmF_Item_Draw:
 	ld a, (xsp + 8)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (ParamStr_Table_04)
+	lda xbc, (ParamStr_Table_04:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed
@@ -922,13 +922,13 @@ RVari_ConfirmF_Btn_Draw:
 RVari_Confirm_TypeF_SubItems:
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x28)
+	lda xbc, (NakaInst_Rock_Pop_0x28:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x28)
+	lda xbc, (NakaInst_Rock_Pop_0x28:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	lda_dri XBC, 0xfd, 0x14, 0x02
@@ -947,7 +947,7 @@ RVari_Confirm_TypeF_SubItems:
 	ld c, (xsp + 8)
 	extz bc
 	sla bc, 2
-	lda_24 xhl, (SeqChan_Map_2ch_0x2)
+	lda xhl, (SeqChan_Map_2ch_0x2:24)
 	ld_sril3 XHL, 0x07, 0xec, 0xe4
 	lds32 xbc, 1
 	push xbc
@@ -1098,7 +1098,7 @@ RVari_ConfirmE_CheckSelected:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -1109,7 +1109,7 @@ RVari_ConfirmE_CheckSelected:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -1263,7 +1263,7 @@ RVari_ConfirmNE_CheckSelected:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -1274,7 +1274,7 @@ RVari_ConfirmNE_CheckSelected:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -1354,14 +1354,14 @@ RVari_EnumNotifyF_CheckSelected:
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x24)
+	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
-	lda_24 xbc, (NakaInst_Rock_Pop_0x24)
+	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	lda_dri XBC, 0xfd, 0x14, 0x02
@@ -1393,7 +1393,7 @@ RVari_EnumNotifyF_Item_Draw:
 	ld a, (xwa)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (ParamStr_Table_04)
+	lda xbc, (ParamStr_Table_04:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	pushw 0xed
@@ -1480,7 +1480,7 @@ RVari_EnumNotify_SetupDisplay:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xsp + 6)
 	ld l, (xwa)
 	extz hl
@@ -1492,7 +1492,7 @@ RVari_EnumNotify_SetupDisplay:
 	srl c, 1
 	extz bc
 	sla bc, 2
-	lda_24 xde, (0x03f214)
+	lda xde, (0x03f214:24)
 	ld xwa, (xsp + 6)
 	ld l, (xwa)
 	extz hl

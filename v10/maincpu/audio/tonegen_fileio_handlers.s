@@ -34,7 +34,7 @@ ToneGen_Config_InitAllChannels:
 	dec 2, xsp
 	push xiz
 	ldw (xsp + 4), 0x0
-	lda_24 xiz, (0x1ed400)
+	lda xiz, (0x1ed400:24)
 
 ToneGen_Config_InitChannelLoop:
 	ld xwa, xiz
@@ -55,7 +55,7 @@ ToneGen_LookupByVoiceIndex:
 	sll	xbc, 4
 	sub	xbc, xwa
 	sll	xbc, 6
-	lda_24	xwa, (0x1ed400)
+	lda	xwa, (0x1ed400:24)
 	add	xwa, xbc
 	calr	317
 	ret
@@ -65,7 +65,7 @@ ToneGen_Config_InitAndChannels:
 	jr ToneGen_Config_InitAllChannels
 
 ToneGen_ApplyMaskTable:
-	lda_24 xwa, (NakaInst_ExtDevice_Screens_0x2B0C)
+	lda xwa, (NakaInst_ExtDevice_Screens_0x2B0C:24)
 	lda xbc, (xwa + 4)
 	ld xde, xwa
 	lda xhl, (xwa + 25)
@@ -164,7 +164,7 @@ ToneGen_DSPCfg_ResetAllChannels:
 	dec 2, xsp
 	push xiz
 	ldw (xsp + 4), 0x0
-	lda_24 xiz, (0x1ed400)
+	lda xiz, (0x1ed400:24)
 
 ToneGen_DSPCfg_ResetChannelLoop:
 	ld xwa, xiz
@@ -312,9 +312,9 @@ DSPCfg_Init_BoundsCheck:
 	cp de, 0x8
 	jr gt, DSPCfg_Init_Finalize
 	add de, de
-	lda_24 xix, (NakaInst_ExtDevice_Screens_0x2B3E)
+	lda xix, (NakaInst_ExtDevice_Screens_0x2B3E:24)
 	ldw_sri DE, 0x07, 0xf0, 0xe8
-	lda_24 xix, (DSPCfg_InitDispatch)
+	lda xix, (DSPCfg_InitDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DSPCfg_InitAllEntries dispatch
 DSPCfg_InitDispatch:
@@ -659,7 +659,7 @@ SndParam_SyncDisplayBitmap:
 	lda_d16 xbc, (0xf9a0)
 	lda_d16 xwa, (0xf9b6)
 	sub xwa, xbc
-	lda_24 xde, (0x03c8e4)
+	lda xde, (0x03c8e4:24)
 	add xwa, xde
 	xormi8 (xwa), 0x1
 	lda_d16 xwa, (0xf9d0)
@@ -729,7 +729,7 @@ ToneGen_DiffScanInner:
 	ld hl, iz
 	extz xhl
 	add xhl, xwa
-	lda_24 xwa, (0x03c8e4)
+	lda xwa, (0x03c8e4:24)
 	add xhl, xwa
 	ld wa, iz
 	extz xwa
@@ -782,7 +782,7 @@ ToneGen_DiffRecordChange:
 	ld hl, iz
 	extz xhl
 	add xhl, xwa
-	lda_24 xwa, (0x03c8e4)
+	lda xwa, (0x03c8e4:24)
 	add xhl, xwa
 	ld e, (xde)
 	xor e, (xhl)
@@ -864,7 +864,7 @@ ToneGen_FileIO_RestoreFromBackup:
 	ret
 
 ToneGen_FlashVerify:
-	lda_24 xhl, (NakaInst_ExtDevice_Screens_0x2B6E)
+	lda xhl, (NakaInst_ExtDevice_Screens_0x2B6E:24)
 	ld xde, 0x3d3000
 	lds bc, 0
 
@@ -885,13 +885,13 @@ ToneGen_FlashWriteAll:
 	ld xbc, NakaInst_ExtDevice_Screens_0x2B6E
 	ldw de, 0xfa
 	call FlashWrite
-	lda_24 xbc, (NakaInst_ExtDevice_Screens_0x2C68)
+	lda xbc, (NakaInst_ExtDevice_Screens_0x2C68:24)
 	ld xwa, 0x3d3110
 	push xwa
 	lds wa, 1
 	ldw de, 0xea
 	call FlashWrite
-	lda_24 xbc, (NakaInst_ExtDevice_Screens_0x2D52)
+	lda xbc, (NakaInst_ExtDevice_Screens_0x2D52:24)
 	ld xwa, 0x3d3210
 	push xwa
 	lds wa, 1
@@ -1054,9 +1054,9 @@ CtrlPanel_IndicatorJumpTable:
 	cp wa, 0x8
 	ret gt
 	add wa, wa
-	lda_24 xix, (NakaInst_ExtDevice_Screens_0x2E3C)
+	lda xix, (NakaInst_ExtDevice_Screens_0x2E3C:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (DSPCfg_Param_CaseC)
+	lda xix, (DSPCfg_Param_CaseC:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; DSP config parameter handler C
@@ -1099,9 +1099,9 @@ Audio_DispatchCommand:
 	cp wa, 0x8
 	ret gt
 	add wa, wa
-	lda_24 xix, (NakaInst_ExtDevice_Screens_0x2E4E)
+	lda xix, (NakaInst_ExtDevice_Screens_0x2E4E:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (DSPCfg_Param_CaseD)
+	lda xix, (DSPCfg_Param_CaseD:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ; DSP config parameter handler D
@@ -1145,14 +1145,14 @@ PanelDisplay_DispatchByMode:
 	cp wa, 0x8
 	jrl gt, DSPCfg_Param_Default
 	add wa, wa
-	lda_24 xix, (NakaInst_ExtDevice_Screens_0x2E60)
+	lda xix, (NakaInst_ExtDevice_Screens_0x2E60:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda_24 xix, (PanelDisplay_DispatchData)
+	lda xix, (PanelDisplay_DispatchData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PanelDisplay_DispatchData:
 	ld	xde, 0x3d3400
-	lda_24	xhl, (0x0340e4)
+	lda	xhl, (0x0340e4:24)
 	lds	bc, 0
 	ldb_spi	a, 236
 	cp_spib	a, 232
@@ -1162,7 +1162,7 @@ PanelDisplay_DispatchData:
 	jr	c, -14
 	jr	115
 	ld	xde, 0x3d3410
-	lda_24	xhl, (0x0340e6)
+	lda	xhl, (0x0340e6:24)
 	lds	bc, 0
 	ldb_spi	a, 236
 	cp_spib	a, 232
@@ -1171,7 +1171,7 @@ PanelDisplay_DispatchData:
 	cp	bc, 12
 	jr	c, -16
 	.asciz "hUB 4="
-	lda_24	xhl, (0x0340f2)
+	lda	xhl, (0x0340f2:24)
 	lds	bc, 0
 	ldb_spi a, 236
 	cp_spib a, 232
@@ -1180,7 +1180,7 @@ PanelDisplay_DispatchData:
 	cps	bc, 4
 	jr	c, -14
 	.asciz "h9B04="
-	lda_24	xhl, (0x0340f6)
+	lda	xhl, (0x0340f6:24)
 	lds	bc, 0
 	ldb_spi	a, 236
 	cp_spib a, 232
@@ -1190,7 +1190,7 @@ PanelDisplay_DispatchData:
 	jr	c, -14
 	jr	t, 0x1d
 	.asciz "B@4="
-	lda_24	xhl, (0x0340fa)
+	lda	xhl, (0x0340fa:24)
 	lds	bc, 0
 	ldb_spi a, 236
 	cp_spib a, 232

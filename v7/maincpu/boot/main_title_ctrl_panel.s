@@ -246,7 +246,7 @@ CtrlPanel_HandleSerialPort:
 	add	a, 16
 	exts	wa
 	sla	wa, 2
-	lda_24	xbc, 15374562
+	lda	xbc, (15374562:24)
 	ld_rrl	xde, xbc, wa
 	ld	xwa, 4294967295
 	ld	xbc, 29360159

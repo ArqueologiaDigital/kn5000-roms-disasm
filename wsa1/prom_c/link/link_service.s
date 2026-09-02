@@ -159,7 +159,7 @@
 ; --------------------------------------------------------------------------
 Link_ServiceTask:
 	push	xix                               ; F99E5F  push XIX
-	lda_24	xix, (0x8536)                   ; F99E60  lda XIX,0x008536
+	lda	xix, (0x8536:24)                   ; F99E60  lda XIX,0x008536
 	ei	6                                   ; F99E65  ei 0x06
 	extpfx5 0xF2, 0x2A, 0x85, 0x00, 0xCF   ; F99E67  bit 7,(0x00852a)   [llvm-mc cannot encode this]
 	jr z, Link_ServiceTask__F99E8E                        ; F99E6C  jr Z,0xf99e8e

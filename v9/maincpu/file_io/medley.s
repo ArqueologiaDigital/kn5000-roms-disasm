@@ -818,7 +818,7 @@ DiskMed2_InitLoop:
 DiskMed2_FormatLoop:
 	ld wa, iz
 	sll wa, 3
-	lda_24 xbc, (0x00833a)
+	lda xbc, (0x00833a:24)
 	extz xwa
 	add xwa, xbc
 	lda_d16 xbc, (0x8926)
@@ -832,7 +832,7 @@ DiskMed2_FormatLoop:
 	calr FormatMedleyNumber
 	ld wa, iz
 	sll wa, 3
-	lda_24 xbc, (0x00833a)
+	lda xbc, (0x00833a:24)
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -1420,7 +1420,7 @@ DiskSel_GetFileName:
 	jr DiskSel_FormatEntry
 
 DiskSel_EmptyFileName:
-	lda_24 xbc, (Data_SaveLoadMenuTable_0x64)
+	lda xbc, (Data_SaveLoadMenuTable_0x64:24)
 
 DiskSel_FormatEntry:
 	ld de, iz
@@ -4049,7 +4049,7 @@ DocMed_Exit:
 SetSongSlotValue:
 	cp wa, 0xa
 	ret nc
-	lda_24 xhl, (0x0ab000)
+	lda xhl, (0x0ab000:24)
 	ld de, wa
 	sll de, 11
 	extz xde
@@ -4060,7 +4060,7 @@ SetSongSlotValue:
 	extz de
 	cp de, wa
 	ret nz
-	lda_24 xhl, (0x00f180)
+	lda xhl, (0x00f180:24)
 	add xhl, 0x1c
 	ld (xhl), bc
 	ret
@@ -4070,7 +4070,7 @@ GetSongSlotValue:
 	lds hl, 0
 	cp wa, 0xa
 	ret nc
-	lda_24 xbc, (0x0ab000)
+	lda xbc, (0x0ab000:24)
 	sll wa, 11
 	extz xwa
 	add xbc, xwa
@@ -4264,7 +4264,7 @@ InitializeCheap:
 PasswordText:
 	cp xbc, 0x1e0009f
 	jr nz, PasswordText_Exit
-	lda_24 xhl, (NakaInst_WaitWinCtlSmf_0x7C8)
+	lda xhl, (NakaInst_WaitWinCtlSmf_0x7C8:24)
 	ret
 
 PasswordText_Exit:
@@ -4488,7 +4488,7 @@ CheckOk_HandleConfirm:
 	ld xbc, 0x1e00056
 	lds32 xde, 0
 	call SendEvent
-	lda_24 xwa, (0x027424)
+	lda xwa, (0x027424:24)
 	cps hl, 1
 	jr nz, CheckOk_Type2
 	ld de, (xwa)
@@ -4567,7 +4567,7 @@ CheckNo_HandleConfirm:
 DiskAttention:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_Type1
-	lda_24 xhl, (NakaInst_WaitWinCtlSmf_0xDFE)
+	lda xhl, (NakaInst_WaitWinCtlSmf_0xDFE:24)
 	ret
 
 CheckNo_Type1:
@@ -4577,7 +4577,7 @@ CheckNo_Type1:
 DiskSure:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_Type2
-	lda_24 xhl, (NakaInst_WaitWinCtlSmf_0xE5C)
+	lda xhl, (NakaInst_WaitWinCtlSmf_0xE5C:24)
 	ret
 
 CheckNo_Type2:
@@ -4587,7 +4587,7 @@ CheckNo_Type2:
 FormatText:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_Type3
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x30)
+	lda xhl, (DiskWarning_ConfirmStrings_0x30:24)
 	ret
 
 CheckNo_Type3:
@@ -4597,7 +4597,7 @@ CheckNo_Type3:
 DeleteText:
 	cp xbc, 0x1e0009f
 	jr nz, CheckNo_CallFunc
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x1C4)
+	lda xhl, (DiskWarning_ConfirmStrings_0x1C4:24)
 	ret
 
 CheckNo_CallFunc:
@@ -4651,7 +4651,7 @@ PwdChange_Type1:
 SaveText:
 	cp xbc, 0x1e0009f
 	jr nz, PwdChange_CallFunc
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x47E)
+	lda xhl, (DiskWarning_ConfirmStrings_0x47E:24)
 	ret
 
 PwdChange_CallFunc:
@@ -4705,7 +4705,7 @@ PwdDel_Type1:
 InsertOptionText:
 	cp xbc, 0x1e0009f
 	jr nz, PwdDel_Type2
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x790)
+	lda xhl, (DiskWarning_ConfirmStrings_0x790:24)
 	ret
 
 PwdDel_Type2:
@@ -4715,7 +4715,7 @@ PwdDel_Type2:
 TypePriorityText:
 	cp xbc, 0x1e0009f
 	jr nz, PwdDel_CallFunc
-	lda_24 xhl, (DiskWarning_ConfirmStrings_0x8AC)
+	lda xhl, (DiskWarning_ConfirmStrings_0x8AC:24)
 	ret
 
 PwdDel_CallFunc:
