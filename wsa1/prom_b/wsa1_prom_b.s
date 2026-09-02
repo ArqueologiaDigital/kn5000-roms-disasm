@@ -19638,8 +19638,319 @@ DL_GeneralMidiMidiYesNo:
 	.short 0x010E
 	.short 0x00D2
 
-; --- 0xF0DB18-0xF0E7FF: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00DB18, 0x000CE8
+
+; =============================================================================
+; 0xF0DB18-0xF0E7FF -- THE "GENERAL MIDI ON/OFF" CONFIRMATION DIALOG, 5 LANGUAGES
+; =============================================================================
+;
+; PTR_F0DB18: 20 pointers, 4 groups of 5 (one per language) -- box+button
+; display-list start, its own start repeated, and the raw message text start.
+; notes/gen_prom_b_f0db18_module.py
+PTR_F0DB18:
+	.long 0x00F0DB68	; [0] box_starts[ENGLISH]
+	.long 0x00F0DC97	; [1] box_starts[GERMAN]
+	.long 0x00F0DDDB	; [2] box_starts[FRENCH]
+	.long 0x00F0DF54	; [3] box_starts[SPANISH]
+	.long 0x00F0E0BA	; [4] box_starts[ITALIAN]
+	.long 0x00F0DB91	; [5] btn_starts[ENGLISH]
+	.long 0x00F0DCC1	; [6] btn_starts[GERMAN]
+	.long 0x00F0DE62	; [7] btn_starts[FRENCH]
+	.long 0x00F0DF7D	; [8] btn_starts[SPANISH]
+	.long 0x00F0E0E2	; [9] btn_starts[ITALIAN]
+	.long 0x00F0DB91	; [10] btn_starts[ENGLISH]
+	.long 0x00F0DCC1	; [11] btn_starts[GERMAN]
+	.long 0x00F0DE62	; [12] btn_starts[FRENCH]
+	.long 0x00F0DF7D	; [13] btn_starts[SPANISH]
+	.long 0x00F0E0E2	; [14] btn_starts[ITALIAN]
+	.long 0x00F0DBCD	; [15] txt_starts[ENGLISH]
+	.long 0x00F0DCFD	; [16] txt_starts[GERMAN]
+	.long 0x00F0DE9E	; [17] txt_starts[FRENCH]
+	.long 0x00F0DFC8	; [18] txt_starts[SPANISH]
+	.long 0x00F0E12D	; [19] txt_starts[ITALIAN]
+
+; ------------------------------------------------------------------
+; 0xF0DB68-0xF0DBCC -- ENGLISH: 7 display-list records, 101 bytes -- interpreter A
+; ------------------------------------------------------------------
+DL_F0DB68:
+	.byte 0x08, 0x0E	; op 08, 14 bytes -> handler 0xF31A3A
+	.short 0x08C6
+	.ascii "ATTENTION!"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x002D
+	.short 0x0048
+	.short 0x00D2
+	.short 0x0049
+	.byte 0x08, 0x11	; op 08, 17 bytes -> handler 0xF31A3A
+	.short 0x1B5B
+	.ascii "Are You Sure?"
+DL_F0DB91:
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0xCD07
+	.short 0xF0DB
+	.byte 0x00, 0x1D, 0x00, 0x13, 0x0E	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x0707
+	.short 0xF0DC
+	.byte 0x00, 0x1D, 0x00, 0x33, 0x11	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x4107
+	.short 0xF0DC
+	.byte 0x00, 0x1A, 0x00, 0x53, 0x14	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x7507
+	.short 0xF0DC
+	.byte 0x00, 0x11, 0x00, 0x73, 0x17	; operand bytes the handler does not read
+
+; 0xF0DBCD-0xF0DC96 -- ENGLISH: literal message text, 202 bytes (no compression;
+; see the module docstring for why the Italian copy looks doubled)
+DL_F0DBCD_TEXT:
+	.ascii "Turning off GENERAL MIDI MODETurning on GENERAL MIDI MODE will replace the GENERAL MIDIwill replace your current    settings with the originalsettings with GENERAL MIDIfactory settings!settings!        "
+
+; ------------------------------------------------------------------
+; 0xF0DC97-0xF0DCFC -- GERMAN: 7 display-list records, 102 bytes -- interpreter A
+; ------------------------------------------------------------------
+DL_F0DC97:
+	.byte 0x08, 0x0C	; op 08, 12 bytes -> handler 0xF31A3A
+	.short 0x08C8
+	.ascii "ACHTUNG!"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x003D
+	.short 0x0048
+	.short 0x00C2
+	.short 0x0049
+	.byte 0x08, 0x14	; op 08, 20 bytes -> handler 0xF31A3A
+	.short 0x1B59
+	.ascii "SIND SIE SICHER?"
+DL_F0DCC1:
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0xFD07
+	.short 0xF0DC
+	.byte 0x00, 0x1E, 0x00, 0x12, 0x0E	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x3907
+	.short 0xF0DD
+	.byte 0x00, 0x1D, 0x00, 0x32, 0x11	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x7307
+	.short 0xF0DD
+	.byte 0x00, 0x1B, 0x00, 0x52, 0x14	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0xA907
+	.short 0xF0DD
+	.byte 0x00, 0x19, 0x00, 0x72, 0x17	; operand bytes the handler does not read
+
+; 0xF0DCFD-0xF0DDDA -- GERMAN: literal message text, 222 bytes (no compression;
+; see the module docstring for why the Italian copy looks doubled)
+DL_F0DCFD_TEXT:
+	.ascii "Wenn Sie den GENERAL MIDI MODEGENERAL MIDI MODE ver"
+	.byte 0x83	; device charset code(s) above 0x7E
+	.ascii "ndert   verlassen,werden die GENERAL Ihre Einstellungen in GENERALMIDI - Einstellungen wiederMIDI - Einstellungen.      zu Werks - Einstellungen.                         "
+
+; ------------------------------------------------------------------
+; 0xF0DDDB-0xF0DE9D -- FRENCH: 10 display-list records, 195 bytes -- interpreter A
+; ------------------------------------------------------------------
+DL_F0DDDB:
+	.byte 0x08, 0x0E	; op 08, 14 bytes -> handler 0xF31A3A
+	.short 0x07D6
+	.ascii "ATTENTION!"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x002D
+	.short 0x0042
+	.short 0x00D2
+	.short 0x0043
+	.byte 0x06, 0x20	; op 06, 32 bytes -> handler 0xF31A3A
+	.short 0x0E11
+	.ascii "GENERAL MIDI a pour effet de"
+	.byte 0x06, 0x24	; op 06, 36 bytes -> handler 0xF31A3A
+	.short 0x1091
+	.ascii "remplacer les r"
+	.byte 0xA0	; character codes below 0x20
+	.ascii "glages effectu"
+	.byte 0xA0	; character codes below 0x20
+	.ascii "s"
+	.byte 0x07, 0x17	; op 07, 23 bytes -> handler 0xF31A3A
+	.short 0x1A96
+	.ascii "VEUILLEZ CONFIRMER,"
+	.byte 0x07, 0x14	; op 07, 20 bytes -> handler 0xF31A3A
+	.short 0x1E57
+	.ascii "S'IL VOUS PLAIT!"
+DL_F0DE62:
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x9E06
+	.short 0xF0DE
+	.byte 0x00, 0x1D, 0x00, 0x91, 0x0B	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0xD806
+	.short 0xF0DE
+	.byte 0x00, 0x1D, 0x00, 0x11, 0x13	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x1206
+	.short 0xF0DF
+	.byte 0x00, 0x1C, 0x00, 0x91, 0x15	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x4A06
+	.short 0xF0DF
+	.byte 0x00, 0x05, 0x00, 0x11, 0x18	; operand bytes the handler does not read
+
+; 0xF0DE9E-0xF0DF53 -- FRENCH: literal message text, 182 bytes (no compression;
+; see the module docstring for why the Italian copy looks doubled)
+DL_F0DE9E_TEXT:
+	.ascii "La mise en fonction du mode  La mise hors fonction du modeen mode normal par les       avec ce mode par les r"
+	.byte 0xA0	; device charset code(s) above 0x7E
+	.ascii "glagespr"
+	.byte 0xA0	; device charset code(s) above 0x7E
+	.ascii "s"
+	.byte 0xA0	; device charset code(s) above 0x7E
+	.ascii "lections assign"
+	.byte 0xA0	; device charset code(s) above 0x7E
+	.ascii "es "
+	.byte 0x9D	; device charset code(s) above 0x7E
+	.ascii " ced'usine!                    mode.     "
+
+; ------------------------------------------------------------------
+; 0xF0DF54-0xF0DFC7 -- SPANISH: 8 display-list records, 116 bytes -- interpreter A
+; ------------------------------------------------------------------
+DL_F0DF54:
+	.byte 0x08, 0x0E	; op 08, 14 bytes -> handler 0xF31A3A
+	.short 0x08C8
+	.ascii "ATTENCION!"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x003D
+	.short 0x0048
+	.short 0x00E2
+	.short 0x0049
+	.byte 0x08, 0x11	; op 08, 17 bytes -> handler 0xF31A3A
+	.short 0x1CC1
+	.byte 0xBB	; character codes below 0x20
+	.ascii "Est"
+	.byte 0xB4	; character codes below 0x20
+	.ascii " seguro?"
+DL_F0DF7D:
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0xC807
+	.short 0xF0DF
+	.byte 0x00, 0x1E, 0x00, 0x72, 0x0D	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x0407
+	.short 0xF0E0
+	.byte 0x00, 0x1E, 0x00, 0x42, 0x10	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x4007
+	.short 0xF0E0
+	.byte 0x00, 0x1C, 0x00, 0x12, 0x13	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x7807
+	.short 0xF0E0
+	.byte 0x00, 0x19, 0x00, 0xE2, 0x15	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0xAA07
+	.short 0xF0E0
+	.byte 0x00, 0x08, 0x00, 0xB2, 0x18	; operand bytes the handler does not read
+
+; 0xF0DFC8-0xF0E0B9 -- SPANISH: literal message text, 242 bytes (no compression;
+; see the module docstring for why the Italian copy looks doubled)
+DL_F0DFC8_TEXT:
+	.ascii "La desactivaci"
+	.byte 0xB5	; device charset code(s) above 0x7E
+	.ascii "n del MODO MIDILa activaci"
+	.byte 0xB5	; device charset code(s) above 0x7E
+	.ascii "n del MODO MIDI   GENERAL har"
+	.byte 0xB4	; device charset code(s) above 0x7E
+	.ascii " que se reemplacenGENERAL har"
+	.byte 0xB4	; device charset code(s) above 0x7E
+	.ascii " que se reemplacenlos ajustes MIDI GENERAL porlos ajustes actuales por loslos ajustes originales deajustes MIDI GENERAL!    f"
+	.byte 0xB4	; device charset code(s) above 0x7E
+	.ascii "brica!        "
+
+; ------------------------------------------------------------------
+; 0xF0E0BA-0xF0E12C -- ITALIAN: 8 display-list records, 115 bytes -- interpreter A
+; ------------------------------------------------------------------
+DL_F0E0BA:
+	.byte 0x08, 0x0F	; op 08, 15 bytes -> handler 0xF31A3A
+	.short 0x08C7
+	.ascii "ATTENZIONE!"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0035
+	.short 0x0048
+	.short 0x00EA
+	.short 0x0049
+	.byte 0x08, 0x0F	; op 08, 15 bytes -> handler 0xF31A3A
+	.short 0x1CC2
+	.ascii "Sei sicuro?"
+DL_F0E0E2:
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x2D07
+	.short 0xF0E1
+	.byte 0x00, 0x1C, 0x00, 0x72, 0x0D	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x6507
+	.short 0xF0E1
+	.byte 0x00, 0x1A, 0x00, 0x42, 0x10	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x9907
+	.short 0xF0E1
+	.byte 0x00, 0x1D, 0x00, 0x12, 0x13	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0xD307
+	.short 0xF0E1
+	.byte 0x00, 0x19, 0x00, 0xE2, 0x15	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2720
+	.short 0x8204
+	.short 0x0507
+	.short 0xF0E2
+	.byte 0x00, 0x0F, 0x00, 0xB2, 0x18	; operand bytes the handler does not read
+
+; 0xF0E12D-0xF0E2AB -- ITALIAN: literal message text, 383 bytes (no compression;
+; see the module docstring for why the Italian copy looks doubled)
+DL_F0E12D_TEXT:
+	.ascii "Disattivando il modo GENERALAttivando il modo GENERAL   MIDI, si rimpiazzeranno leMIDI, si rimpiazzeranno leimpostazioni GENERAL MIDI conimpostazioni correnti con    le impostazioni originaliquelle GENERAL MIDI.     della fabbrica.               mpostazioni GENERAL MIDI conimpostazioni correnti con    le impostazioni originaliquelle GENERAL MIDI.     della fabbrica.               "
+
+; 0xF0E2AC-0xF0E7FF -- 0x0E fill, 1364 bytes (same padding the FIELD-BLINK
+; header below already names as running up to 0xF0E800)
+	.fill 0x0554, 1, 0x0E
 
 ; =============================================================================
 ; 0xF0E800-0xF0EA9E -- THE FIELD-BLINK ENGINE
