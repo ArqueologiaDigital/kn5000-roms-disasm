@@ -257,6 +257,27 @@ generator. So the detector had nothing to search, and a zero here means "no
 foothold", not "no defect". Finding the equivalent shape elsewhere needs a
 different signature derived from how those images declare object extents.
 
+## ⚠ Converting regions CREATES islands — the debt is not a fixed pool
+
+Measured 2026-09-02. v7's misframed-island population was 2,268 candidates when
+a lane was briefed on it and **6,854** when that lane measured it fresh a few
+hours later. Nothing regressed: other lanes' confirmed-region conversions had
+landed in between, and **every new code/data boundary produces new short
+islands**.
+
+Consequences for planning: an island figure is only valid against a stated tree
+state, "islands remaining" cannot be tracked as a burn-down while region work
+continues, and a lane briefed with an island count will find a different one.
+Measure fresh, and say which commit you measured at.
+
+## ⚠ In-tree comments naming call targets are frequently WRONG
+
+192 `.byte` runs carry a `; call NAME (v7 addr)` comment added by an earlier
+pass. Three were checked by hand and **all three named a different or unnamed
+routine than the byte-verified target**. Harmless to conversion, which reads the
+bytes and not the comment — but do not use these comments as evidence of
+anything, and do not propagate them into new headers.
+
 ## ⚠ A wrong START frames fake records that pass the gate
 
 Demonstrated 2026-09-02 by a lane on its own work, which is why it is worth
