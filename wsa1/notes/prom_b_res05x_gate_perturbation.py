@@ -67,6 +67,13 @@ def write(text):
 
 
 def main():
+    # Refuse rather than misbehave: `make -C ..` and the relative SRC only mean
+    # what this script intends when cwd is wsa1/.  Lane res03a hit the same cwd
+    # assumption in a sibling script, where it silently examined a different
+    # tree instead of erroring.
+    if not (os.path.isfile(SRC) and os.path.isfile("Makefile")):
+        print("run this from the wsa1/ directory (cwd is %s)" % os.getcwd())
+        return 2
     orig = open(SRC, encoding="latin-1").read()
     rc = 0
     try:
