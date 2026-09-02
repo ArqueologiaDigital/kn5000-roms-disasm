@@ -22,7 +22,7 @@ NakaPropStr_SelBox_AutoInc:		aligned_string "auto_inc"
 NakaPropStr_SelBox_Dial:		aligned_string "dial"
 NakaPropStr_SelBox_SelNum:		aligned_string "sel_num"
 NakaPropStr_SelBox_Row:
-	.byte 0x72, 0x6f, 0x77, 0x00
+	aligned_string "row"
 NakaPropStr_SelBox_Column:	aligned_string "column"
 NakaPropStr_SelBox_MainFunc:	aligned_string "main_func"
 NakaPropStr_SelBox_FontColor:	aligned_string "fontcolor"
@@ -112,12 +112,7 @@ NakaPropStr_TextLabel2_Lines:			aligned_string "lines"
 NakaPropStr_TextLabel2_Alignment:			aligned_string "alignment"
 NakaPropStr_TextLabel2_FontColor:			aligned_string "fontcolor"
 NakaPropStr_TextLabel2_Font:
-	jr	z, 0x6f
-	jr	nz, 116
-	.byte 0x00			; padding
-	.byte 0xff			; padding
-	.byte 0xd4, 0x08, 0xe2
-	.byte 0x00			; padding
+	.byte 0x66, 0x6f, 0x6e, 0x74, 0x00, 0xff, 0xd4, 0x08, 0xe2, 0x00		; padding
 
 
 NakaPropTbl_LyricsBoxFunc:
