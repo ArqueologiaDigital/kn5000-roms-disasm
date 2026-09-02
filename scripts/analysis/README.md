@@ -461,3 +461,49 @@ after it.
 WARNING: run `make all` first -- the census assembles each image from source,
 and several `.incbin` targets are build products that do not exist on a clean
 tree.
+
+## Added 2026-09-02 (decoder memory-prefix gap -- lane `w15/llvm-alumem`)
+
+| script | question it answers |
+|---|---|
+| `mem_subopcode_gap_census.py` | Which **(prefix table, sub-opcode)** pairs can `llvm-objdump` not read, how many statements each blocks, does every decode it *does* produce re-assemble to the ROM's bytes, and does MAME's independently written `unidasm` read the same length and the same operation? The leading byte is not the unit of the gap -- `9f 06 81` was refused while `9f 08 23` read fine -- so it groups by what the decoder actually dispatches on. |
+| `mem_prefix_test_sites.py` | Are the 111 byte sequences in `llvm/test/MC/TLCS900/mem-prefix-subopcodes.s` really at the ROM offsets they claim, and does each one survive both directions of the toolchain? `--check` re-reads every offset from the dump, re-assembles every asm line and re-disassembles every byte string. `--emit` regenerates the lit test; edit this script, never the test. |
+
+    python3 scripts/analysis/mem_subopcode_gap_census.py --selftest
+    python3 scripts/analysis/mem_subopcode_gap_census.py             # v10, by (table, sub-opcode)
+    python3 scripts/analysis/mem_subopcode_gap_census.py --roundtrip # v7+v9+v10, decode -> re-assemble
+    python3 scripts/analysis/mem_subopcode_gap_census.py --oracle    # vs MAME unidasm
+    python3 scripts/analysis/mem_prefix_test_sites.py --check
+    python3 scripts/analysis/mem_prefix_test_sites.py --foil    # ...and that --check can fail
+
+Measured against this tree at `b9dc136c` (its v7/v9/v10 sources are unchanged
+from there to `84a7137f`). ⚠ Each row names the toolchain commit it was taken
+with, because a decodability figure is a property of the decoder as much as of
+the bytes, and this lane rebuilt the shared toolchain three times:
+
+| measurement | toolchain | value |
+|---|---|---|
+| `decoder_gap_ranking.py`, v10 statements refused or mis-sized | `6f456a19f05b` (before this lane) | **171 / 655** |
+| same | `7e541b8ddb07` (at lane close) | **21 / 655** |
+| distinct v10 memory-prefix samples refused, register-indirect prefixes only | `6f456a19f05b` | 1,794 / 7,797 |
+| distinct v10 samples refused, register-indirect **and** direct-address prefixes | `1f75e04f774a` | 2,665 / 20,976 |
+| same | `7e541b8ddb07` | **294 / 20,976** |
+| (table, sub-opcode) shapes with at least one refusal | `1f75e04f774a` | 88 of 978 |
+| same | `7e541b8ddb07` | **20 of 978** |
+| decoded samples that do NOT re-assemble to the ROM's bytes (v7+v9+v10) | `1f75e04f774a` | 157 |
+| same | `7e541b8ddb07` | **0** |
+| our decode vs MAME unidasm, v10: LENGTH disagreements | `7e541b8ddb07` | 0 |
+| same: operation disagreements outside the naming table | `7e541b8ddb07` | 0 |
+| same: our names mapping to more than one unidasm operation | `7e541b8ddb07` | 0 |
+
+⚠ The two rows at `1f75e04f774a` are NOT a pre-lane baseline: the census only
+learned to classify direct-address prefixes after the first decoder commit had
+already landed, so no measurement of that sample space exists for
+`6f456a19f05b`. Rebuilding the shared toolchain backwards to take one would have
+invalidated every other lane's in-flight measurement, which is why it was not
+done. The clean before/after pair is the `decoder_gap_ranking.py` row.
+
+WARNING: every number here is a property of the DECODER as much as of the bytes,
+so quote the toolchain commit beside it. `--roundtrip` and `--oracle` take a few
+minutes each; `--check` is seconds and needs no `make`.  Full account of what was fixed and
+what resisted: `notes/lanes/llvmalumem-2026-09-02.md`.
