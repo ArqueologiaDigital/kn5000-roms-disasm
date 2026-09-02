@@ -475,11 +475,20 @@ def patch_lines(lines, amap, addr, data, rom_data, base, who, apply_):
     if apply_:
         for li, updates in per_line.items():
             m = BYTE_LINE.match(lines[li])
-            vals = [v.strip() for v in m.group(2).split(',')]
-            width = len(m.group(2)) - len(m.group(2).lstrip())
+            raw = m.group(2).split(',')
+            # ⚠ REWRITE ONLY THE SLOTS THAT ACTUALLY CHANGE.  Re-spelling every
+            # value on a touched line turned a one-byte edit into a 136-line diff
+            # (0x0f -> 0x0F across neighbouring rows), which is exactly the
+            # "check the diff SIZE against what you intended" failure the lane
+            # brief's latin-1 addendum describes.
+            dirty = False
             for vi, b in updates:
-                vals[vi] = f'0x{b:02X}'
-            lines[li] = m.group(1) + ' ' * width + ', '.join(vals) + m.group(3)
+                if int(raw[vi].strip(), 16) != b:
+                    lead = raw[vi][:len(raw[vi]) - len(raw[vi].lstrip())]
+                    raw[vi] = lead + f'0x{b:02X}'
+                    dirty = True
+            if dirty:
+                lines[li] = m.group(1) + ','.join(raw) + m.group(3)
     return changed
 
 
