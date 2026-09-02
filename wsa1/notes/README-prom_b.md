@@ -1430,4 +1430,8 @@ here. The bitmap is emitted as its span-visible tail with the whole picture in
 the header.
 
 Gate: `make gate-wsa1` green, and shown RED at `0x3014` and at `0x13D59` by
-perturbing one emitted byte in each span.
+perturbing one emitted byte in each span. That proof is reproducible, not a
+transcript — `--falsify` does both perturbations, rebuilds, asserts the gate
+names those two addresses, and restores the source:
+
+    python3 notes/gen_res02f_spans.py --falsify

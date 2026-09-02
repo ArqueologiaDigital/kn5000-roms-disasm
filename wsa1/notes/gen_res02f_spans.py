@@ -90,6 +90,7 @@ RUN
     python3 notes/gen_res02f_spans.py --render    # the bitmaps, both orderings
     python3 notes/gen_res02f_spans.py --asm       # the text, to stdout
     python3 notes/gen_res02f_spans.py --splice    # write it into prom_b/wsa1_prom_b.s
+    python3 notes/gen_res02f_spans.py --falsify   # the gate must go RED, then restore
 """
 import os
 import re
@@ -637,6 +638,52 @@ def splice(b, hta, htb):
 
 
 # --------------------------------------------------------------------------
+# The gate-visibility proof, reproducible.  A gate that was never shown to fail
+# on this lane's own bytes certifies nothing, so this perturbs ONE byte each
+# lane emitted -- one per span -- rebuilds, and expects `assert_byte_identical`
+# to name that exact address.  It restores the source whatever happens.
+FALSIFY = [
+    # (line as emitted, line with one byte changed, the address the gate must name)
+    ("\t.short 0x0008, 0x006E, 0x0022, 0x007B\t; [2] X0=8 Y0=110 X1=34 Y1=123",
+     "\t.short 0x0008, 0x006F, 0x0022, 0x007B\t; [2] X0=8 Y0=110 X1=34 Y1=123",
+     0x003014),
+    ("\t.byte\t0x00, 0x00, 0x00, 0x00, 0x1C, 0xFF, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00"
+     "\t; F13D54  column 1, rows 0..11",
+     "\t.byte\t0x00, 0x00, 0x00, 0x00, 0x1C, 0xFE, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00"
+     "\t; F13D54  column 1, rows 0..11",
+     0x013D59),
+]
+
+
+def falsify():
+    import subprocess
+    path = os.path.join(ROOT, S_FILE)
+    orig = open(path, "rb").read()
+    rc = 0
+    try:
+        for good, bad, addr in FALSIFY:
+            src = orig.decode("utf-8")
+            if src.count(good) != 1:
+                print("  SKIP: %d matches for the emitted line at 0x%06X"
+                      % (src.count(good), addr))
+                rc = 1
+                continue
+            open(path, "wb").write(src.replace(good, bad).encode("utf-8"))
+            out = subprocess.run(["make", "-C", os.path.dirname(ROOT), "gate-wsa1"],
+                                 capture_output=True, text=True).stdout
+            want = "first at 0x%X" % addr
+            ok = want in out
+            print("  perturb -> gate names %s : %s" % (want, "RED, OK" if ok else "NOT SEEN"))
+            if not ok:
+                print(out)
+                rc = 1
+    finally:
+        open(path, "wb").write(orig)
+        print("  source restored (%d bytes)" % len(orig))
+    return rc
+
+
+# --------------------------------------------------------------------------
 def main():
     b, hta, htb = load()
     if "--selftest" in sys.argv:
@@ -669,6 +716,8 @@ def main():
         return 0
     if "--splice" in sys.argv:
         return splice(b, hta, htb)
+    if "--falsify" in sys.argv:
+        return falsify()
     print(__doc__.strip().split("RUN")[-1])
     return 1
 
