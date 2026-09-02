@@ -811,9 +811,9 @@ TaskSched_SoftTimer_Entry:
 	ld	xwa, (xix+4)
 	cp	xwa, 4294967295
 	jr	z, 12
-	ld16_src_rid8	xix, 0x00, wa	; ld wa,(XIX+0x00)
+	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
 	dec	1, wa
-	ld_dst16_rid8	xix, 0x00, wa	; ld (XIX+0x00),wa
+	ld	(xix+256), wa	; ld (XIX+0x00),wa
 	or	wa, wa
 	jr	z, 23
 ; Advance XIX by 8 and djnz; also the synthetic return address pushed for a fired callback.
@@ -831,7 +831,7 @@ TaskSched_SoftTimer_Unlock:
 ; Reload counter from +2, push 0x01FFA8, jp (XIX+4) -- i.e. tail-call the callback.
 TaskSched_SoftTimer_Fire:
 	ld16_src_rid8	xix, 0x02, wa	; ld wa,(XIX+0x02)
-	ld_dst16_rid8	xix, 0x00, wa	; ld (XIX+0x00),wa
+	ld	(xix+256), wa	; ld (XIX+0x00),wa
 	lda_24	xwa, (130984)
 	push	xwa
 	ld	xwa, (xix+4)
@@ -1042,9 +1042,9 @@ TaskQueue_Operations_Opaque:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld16_src_rid8	xix, 0x00, wa	; ld wa,(XIX+0x00)
+	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld_dst16_rid8	xhl, 0x00, wa	; ld (XHL+0x00),wa
+	ld	(xhl+256), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 3
 	jrl	-604
@@ -1085,7 +1085,7 @@ TaskSched_Wake_Task:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld_dst16_rid8	xix, 0x00, iy	; ld (XIX+0x00),iy
+	ld	(xix+256), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1120,7 +1120,7 @@ TaskSched_Wake_Task_NoResched:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld_dst16_rid8	xix, 0x00, iy	; ld (XIX+0x00),iy
+	ld	(xix+256), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1180,7 +1180,7 @@ TaskEvent_Signal:
 	add	wa, 4212
 	ld	iy, wa
 	extz	xiy
-	ld16_src_rid8	xiy, 0x00, ix	; ld ix,(XIY+0x00)
+	ld	ix, (xiy+256)	; ld ix,(XIY+0x00)
 	cp	ix, iy
 	jr	nz, 13
 	extz	hl
@@ -1193,9 +1193,9 @@ TaskEvent_Signal_Wake:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld16_src_rid8	xix, 0x00, wa	; ld wa,(XIX+0x00)
+	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld_dst16_rid8	xhl, 0x00, wa	; ld (XHL+0x00),wa
+	ld	(xhl+256), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 4
 	ld8_src_rid8	xix, 0x08, a	; ld a,(XIX+0x08)
@@ -1206,7 +1206,7 @@ TaskEvent_Signal_Wake:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld_dst16_rid8	xix, 0x00, iy	; ld (XIX+0x00),iy
+	ld	(xix+256), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1227,7 +1227,7 @@ TaskEvent_Signal_NoResched:
 	extz	xiy
 	push	sr
 	ei	6
-	ld16_src_rid8	xiy, 0x00, ix	; ld ix,(XIY+0x00)
+	ld	ix, (xiy+256)	; ld ix,(XIY+0x00)
 	cp	ix, iy
 	jr	nz, 16
 	extz	hl
@@ -1247,9 +1247,9 @@ TaskEvent_Signal_NoResched_Wake:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld16_src_rid8	xix, 0x00, wa	; ld wa,(XIX+0x00)
+	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld_dst16_rid8	xhl, 0x00, wa	; ld (XHL+0x00),wa
+	ld	(xhl+256), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 4
 	ld8_src_rid8	xix, 0x08, a	; ld a,(XIX+0x08)
@@ -1260,7 +1260,7 @@ TaskEvent_Signal_NoResched_Wake:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld_dst16_rid8	xix, 0x00, iy	; ld (XIX+0x00),iy
+	ld	(xix+256), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1300,9 +1300,9 @@ TaskEvent_Wait_Block:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld16_src_rid8	xix, 0x00, wa	; ld wa,(XIX+0x00)
+	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld_dst16_rid8	xhl, 0x00, wa	; ld (XHL+0x00),wa
+	ld	(xhl+256), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 3
 	sll	e, 2
@@ -1312,7 +1312,7 @@ TaskEvent_Wait_Block:
 	extz	xix
 	extz	xiy
 	xor	xwa, xwa
-	ld_dst16_rid8	xix, 0x00, iy	; ld (XIX+0x00),iy
+	ld	(xix+256), iy	; ld (XIX+0x00),iy
 	ld16_src_rid8	xiy, 0x02, wa	; ld wa,(XIY+0x02)
 	ld_dst16_rid8	xix, 0x02, wa	; ld (XIX+0x02),wa
 	ld	(xwa), ix
@@ -1918,9 +1918,9 @@ RingBuf_Access_Opaque_A:
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ld16_src_rid8	xix, 0x00, wa	; ld wa,(XIX+0x00)
+	ld	wa, (xix+256)	; ld wa,(XIX+0x00)
 	ld16_src_rid8	xix, 0x02, hl	; ld hl,(XIX+0x02)
-	ld_dst16_rid8	xhl, 0x00, wa	; ld (XHL+0x00),wa
+	ld	(xhl+256), wa	; ld (XHL+0x00),wa
 	ld_dst16_rid8	xwa, 0x02, hl	; ld (XWA+0x02),hl
 	ld	(xix+9), 0
 	ld	(xix+10), 0
