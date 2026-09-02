@@ -66,6 +66,30 @@ SLIDE8K compressed streams that really are inside these ROMs.
 evidence is a rule that fires on 3/4 of known PCM and on none of six kinds of known
 non-PCM.
 
+AND A THIRD LANE, BECAUSE COMPRESSED AUDIO IS INVISIBLE TO BOTH
+---------------------------------------------------------------
+ADPCM sample data is high-entropy and NOT smooth in its stored form, so lanes 1 and 2
+are blind to it by construction -- exactly the shape of blind spot that turns "we found
+no audio" into "our instrument cannot see audio".  Lane 3 DECODES each window as 4-bit
+IMA ADPCM (both nibble orders, adaptive predictor from a zero state) and scores the
+DECODED signal with a relaxed 16-bit rule, `r1 >= 0.40, lo_ent >= 7.00,
+diff_ent >= 6.00` -- relaxed because ADPCM quantisation noise costs the reconstruction
+about 0.35 of its lag-1 autocorrelation.
+
+  POSITIVE: IC307's own PCM run through an IMA encoder, then decoded and scored:
+  81% of windows.  NULLS: random bytes, IC307's parameter records, and the program
+  ROMs themselves decoded AS IF they were ADPCM: 0%.
+
+  This lane is not a general compressed-audio detector -- it tests IMA/DVI
+  specifically.  A different ADPCM variant with different step tables would decode to
+  noise under it.  What it rules out is the most common 1990s ROM sample codec.
+
+  ⚠ ITS FALSE-POSITIVE MODE IS THE RAMP AGAIN, one level down.  A slowly-rising
+  STAIRCASE table (`00 00 00 01 01 01 01 02 02 ...`) presents the IMA predictor with
+  near-constant nibbles, which it integrates into a smooth ramp.  All 11 windows this
+  lane flags in the 13 images are of that shape and every one is adjudicated in
+  FINDINGS-audio-and-music-ranges-2026-09-02.md.
+
 USAGE
 -----
   python3 notes/sound/pcm_discriminator.py --calibrate   # the table above
@@ -110,6 +134,19 @@ IMAGES = [
 
 R1_MIN, LO_ENT_MIN, DIFF_ENT_MIN = 0.60, 7.00, 7.00
 R1_MIN8, ENT_MIN8, DIFF_ENT_MIN8 = 0.60, 6.50, 4.50
+R1_MINA, LO_ENT_MINA, DIFF_ENT_MINA = 0.40, 7.00, 6.00
+
+# IMA/DVI ADPCM, the standard tables.
+_IMA_STEP = np.array([
+    7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 19, 21, 23, 25, 28, 31, 34, 37, 41, 45,
+    50, 55, 60, 66, 73, 80, 88, 97, 107, 118, 130, 143, 157, 173, 190, 209, 230,
+    253, 279, 307, 337, 371, 408, 449, 494, 544, 598, 658, 724, 796, 876, 963,
+    1060, 1166, 1282, 1411, 1552, 1707, 1878, 2066, 2272, 2499, 2749, 3024, 3327,
+    3660, 4026, 4428, 4871, 5358, 5894, 6484, 7132, 7845, 8630, 9493, 10442,
+    11487, 12635, 13899, 15289, 16818, 18500, 20350, 22385, 24623, 27086, 29794,
+    32767], dtype=np.int32)
+_IMA_IDX = np.array([-1, -1, -1, -1, 2, 4, 6, 8, -1, -1, -1, -1, 2, 4, 6, 8],
+                    dtype=np.int32)
 
 
 def _ent(v):
@@ -173,6 +210,84 @@ def scan8(data, win=1024, step=None):
             continue
         tot += 1
         if is_pcm8(f):
+            hits.append(i)
+    return tot, hits
+
+
+def ima_decode(buf, hi_first=False):
+    """4-bit IMA ADPCM -> s16le bytes.  Predictor and index start at zero, which is what
+    a headerless ROM block would have to do."""
+    b = np.frombuffer(buf, dtype=np.uint8)
+    nib = np.empty(len(b) * 2, dtype=np.uint8)
+    if hi_first:
+        nib[0::2], nib[1::2] = b >> 4, b & 0xF
+    else:
+        nib[0::2], nib[1::2] = b & 0xF, b >> 4
+    pred, idx = 0, 0
+    out = np.empty(len(nib), dtype=np.int16)
+    for i, n in enumerate(nib):
+        step = int(_IMA_STEP[idx])
+        diff = step >> 3
+        if n & 4:
+            diff += step
+        if n & 2:
+            diff += step >> 1
+        if n & 1:
+            diff += step >> 2
+        pred = pred - diff if n & 8 else pred + diff
+        pred = -32768 if pred < -32768 else (32767 if pred > 32767 else pred)
+        idx = int(max(0, min(88, idx + int(_IMA_IDX[n]))))
+        out[i] = pred
+    return out.tobytes()
+
+
+def _ima_encode(s16):
+    """The inverse of ima_decode, used ONLY to manufacture the positive control."""
+    x = np.frombuffer(s16, dtype='<i2').astype(np.int64)
+    pred, idx, nibs = 0, 0, []
+    for v in x:
+        step = int(_IMA_STEP[idx])
+        d = int(v) - pred
+        n = 8 if d < 0 else 0
+        d = -d if d < 0 else d
+        if d >= step:
+            n |= 4
+            d -= step
+        if d >= step >> 1:
+            n |= 2
+            d -= step >> 1
+        if d >= step >> 2:
+            n |= 1
+        diff = step >> 3
+        if n & 4:
+            diff += step
+        if n & 2:
+            diff += step >> 1
+        if n & 1:
+            diff += step >> 2
+        pred = pred - diff if n & 8 else pred + diff
+        pred = -32768 if pred < -32768 else (32767 if pred > 32767 else pred)
+        idx = int(max(0, min(88, idx + int(_IMA_IDX[n]))))
+        nibs.append(n)
+    return bytes(nibs[i] | (nibs[i + 1] << 4) for i in range(0, len(nibs) - 1, 2))
+
+
+def is_adpcm(buf):
+    """True if EITHER nibble order decodes to something the relaxed rule calls audio."""
+    for hi in (False, True):
+        f = features(ima_decode(buf, hi))
+        if (f is not None and f['r1'] >= R1_MINA and f['lo_ent'] >= LO_ENT_MINA
+                and f['diff_ent'] >= DIFF_ENT_MINA):
+            return True
+    return False
+
+
+def scan_adpcm(data, win=4096, step=None):
+    step = step or win
+    tot, hits = 0, []
+    for i in range(0, max(len(data) - win + 1, 0), step):
+        tot += 1
+        if is_adpcm(data[i:i + win]):
             hits.append(i)
     return tot, hits
 
@@ -251,6 +366,19 @@ def cmd_calibrate(win=4096, win8=1024):
     _rate((127 + 120 * np.sin(2 * np.pi * np.arange(1 << 19) / 64)).astype(np.uint8).tobytes(),
           "sine table u8", win8, eight=True)
 
+    print(f"\n=== ADPCM LANE.  Window {win} B, decoded as 4-bit IMA then scored with "
+          f"r1>={R1_MINA}, lo_ent>={LO_ENT_MINA}, diff_ent>={DIFF_ENT_MINA}\n")
+    print("POSITIVE CONTROL -- IC307's own PCM run through an IMA encoder")
+    enc = _ima_encode(d[0x40000:0x40000 + 0x40000])
+    t, h = scan_adpcm(enc, win)
+    print(f"  {'IMA ADPCM stream':52s} {len(h):6d}/{t:6d}  {100 * len(h) / t:6.2f}%")
+    print("\nNULLS -- non-audio bytes decoded AS IF they were ADPCM")
+    for buf, lab in ((rng.integers(0, 256, 1 << 19, dtype=np.uint8).tobytes(),
+                      "uniform random bytes"),
+                     (d[slice(*IC307_TABLE)], "IC307 index + parameter records")):
+        t, h = scan_adpcm(buf, win)
+        print(f"  {lab:52s} {len(h):6d}/{t:6d}  {100 * len(h) / max(t, 1):6.2f}%")
+
 
 def cmd_census(win=4096, step=None, win8=1024):
     step = step or win // 2
@@ -287,7 +415,21 @@ def cmd_census(win=4096, step=None, win8=1024):
         print(f"  {name:52s} {len(hits):5d}/{tot:5d} windows{extra}")
     print(f"\n  8-bit lane: {grand8} window(s) flagged -- see the findings for their"
           f" adjudication.")
-    return grand, grand8
+
+    print(f"\n=== ADPCM LANE.  Window {win} B, step {win} B.\n")
+    grandA = 0
+    for name, path in IMAGES:
+        if not os.path.exists(path):
+            continue
+        data = open(path, 'rb').read()
+        tot, hits = scan_adpcm(data, win)
+        grandA += len(hits)
+        extra = ''
+        if hits:
+            extra = '  <- ' + ' '.join(f'0x{h:06X}' for h in hits[:12])
+        print(f"  {name:52s} {len(hits):5d}/{tot:5d} windows{extra}")
+    print(f"\n  ADPCM lane: {grandA} window(s) flagged.")
+    return grand, grand8, grandA
 
 
 def cmd_containers(win=4096, step=None, win8=1024):
@@ -394,6 +536,20 @@ def cmd_selftest():
     assert n == 0, f"16-bit lane moved to {n}; re-adjudicate before trusting this"
     assert n8 == 13, (f"8-bit lane moved to {n8} (was 13: 11 HD-AE5000 splash-screen "
                       f"windows + 2 WSA1R lookup-curve windows); re-adjudicate")
+    # ADPCM lane: it must SEE real IMA data, and must not fire on the ROMs
+    enc = _ima_encode(d[0x40000:0x40000 + 0x20000])
+    ta, ha = scan_adpcm(enc, win)
+    assert len(ha) / ta > 0.60, (len(ha), ta)
+    assert scan_adpcm(rng.integers(0, 256, 1 << 18, dtype=np.uint8).tobytes(), win)[1] == []
+    nA = 0
+    for _, p_ in IMAGES:
+        if os.path.exists(p_):
+            nA += len(scan_adpcm(open(p_, 'rb').read(), win)[1])
+    assert nA == 11, (f"ADPCM lane moved to {nA} (was 11: 7 windows of the KN5000 tone "
+                      f"database's ToneEnv staircase tables, 3 of the SX-WSA1R tone "
+                      f"database's, 1 HD-AE5000 ascending u32 pointer table); "
+                      f"re-adjudicate")
+    print(f"  ADPCM  lane: real IMA {len(ha)}/{ta}; random 0; 13 gated images {nA}")
     print(f"selftest OK\n"
           f"  16-bit lane: IC307 PCM {len(h0)}/{t0} and {len(h1)}/{t1}; "
           f"IC307 tables 0/{tt}; nulls 0; 13 gated images {n}\n"
