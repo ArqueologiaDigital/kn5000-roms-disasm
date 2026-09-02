@@ -1,0 +1,41 @@
+# WSA1R private kanji encoding -- a TRANSCRIPTION of the two ideograph faces
+#
+# QUESTION THIS ANSWERS: prom_a's headers on LCD_Svc_1A / LCD_Svc_1F say
+# "the ENCODING ... prom_a cannot say which ideograph a given code is".
+# This file says which, by READING THE RENDERED GLYPHS.
+#
+# PROVENANCE AND GRADE.  Every character below was read by eye from
+# prom_b/images/fonts/Font_Svc1A_16x16.png and Font_Svc1F_16x16.png -- the
+# lossless contact sheets that scripts/build/wsa1_fonts.py round-trips against
+# the ROM.  This is HUMAN OCR OF A 16x16 BITMAP, not a decode: it is the
+# weakest link in anything built on this file, and a handful of the readings
+# are genuinely ambiguous at this resolution.  Treat a single character as a
+# ranked reading, not a fact.  Errors are NOISE, not bias: any statistic run
+# over this table is CONSERVATIVE, because a misread character can only break
+# a word that is really there, never invent one.
+#
+# `〓` = one cell whose reading could not be settled (set A 0x38: a 貝/耳-like
+# left component with a 戈-like right one; 賦 / 賊 / 職 all fit badly).
+#
+# Cell counts are the ROM's, and they check out exactly: 224 defined cells in
+# set A (codes 0x10-0xEF) and 43 in set B (0x10-0x3A), per
+# notes/font_layout_check.py.
+#
+# FORMAT:  <set> <base code, hex> <16 characters, in ascending code order>
+A 10 節消合状態心配数秒接現在故障工場
+A 20 出荷構成行今左右両手再生中最適細
+A 30 作使用方了感簡単〓機器種能完練好
+A 40 陥一度演定奏楽音色事何憶面思設押
+A 50 要標不複雑変更保持法豊富本鳴目戻
+A 60 問題矢印優有様離例連選必全体組創
+A 70 送入操側発置意長記直当転電源子得
+A 80 注録挿択蔵内味号換番弾拍異指洗始
+A 90 続格規認欠確曲画前修正準備初勝小
+A A0 時点自動的実頭受信下解除別違壊終
+A B0 超後先存力容量杯来間他次毎等読々
+A C0 短表示伴般鍵盤付同替和従良覚大重
+A D0 可見新対応元呼項扱期化切各列決滅
+A E0 部去分判以上含由書軽身多調整効果
+B 10 忠補微覧希望括易照限説明取個詳基
+B 20 素通順便利登士仕情報統式併互性足
+B 30 計名台回済常約待減無顕
