@@ -462,7 +462,7 @@ BmDrEdit_CalcSecondaryPosition:
 BmDrEdit_CalcSecondaryPos_Vert:
 	ldb a, 0xb
 	subda8_24 a, (0x0210b0)
-	stb_da (0x0210b0), a
+	ld (0x0210b0:24), a
 
 BmDrEdit_CalcSecondaryPos_ClampSize:
 	ld e, (0x2774:16)

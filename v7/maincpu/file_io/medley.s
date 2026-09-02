@@ -4450,7 +4450,7 @@ WakeUp_ClearCounter:
 
 WakeUp_StoreType:
 	ld xwa, (xsp + 4)
-	stb_da (0x02748e), a
+	ld (0x02748e:24), a
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
 	lds32 xde, 1

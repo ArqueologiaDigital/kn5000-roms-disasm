@@ -1171,7 +1171,7 @@ SendData_Block__wait_ready1:
 	dec 1, l	; L = count - 1
 	sll a, 5	; A = command << 5
 	or a, l	; A = (command << 5) | (count - 1)
-	stb_da (0x120000), a; Send command+count to main CPU
+	ld (0x120000:24), a; Send command+count to main CPU
 	lds ix, 0	; Reset timeout counter
 SendData_Block__wait_ready2:
 	bit_dd8 4, 0x34	; Check if main CPU acknowledged

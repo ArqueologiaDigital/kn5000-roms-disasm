@@ -2133,7 +2133,7 @@ AcCtlMsgGrid_OK:
 AcCtlMsgGrid_OK_Up_Store:
 	ld xwa, (xde)
 	ld wa, (xwa)
-	stb_da (0x024776), a
+	ld (0x024776:24), a
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2157,7 +2157,7 @@ AcCtlMsgGrid_OK_Down:
 AcCtlMsgGrid_OK_Down_Store:
 	ld xwa, (xde)
 	ld wa, (xwa)
-	stb_da (0x024776), a
+	ld (0x024776:24), a
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2203,7 +2203,7 @@ AcCtlMsgGrid_OK_DispatchScroll:
 AcCtlMsgGrid_ScrollUp_PageDec:
 	ld xwa, (xbc)
 	ld wa, (xwa)
-	stb_da (0x024776), a
+	ld (0x024776:24), a
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2303,7 +2303,7 @@ AcCtlMsgGrid_ScrollUp_AutoScroll:
 AcCtlMsgGrid_ScrollDown_PageInc:
 	ld xwa, (xde)
 	ld wa, (xwa)
-	stb_da (0x024776), a
+	ld (0x024776:24), a
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2771,7 +2771,7 @@ MidiSetup_TtlCase5:
 MidiPart_StorePartIndex:
 	ld xwa, (xde)
 	ld wa, (xwa)
-	stb_da (0x024778), a
+	ld (0x024778:24), a
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2804,7 +2804,7 @@ MidiPart_DecrementPart:
 MidiPart_StoreAndNotify:
 	ld xwa, (xde)
 	ld wa, (xwa)
-	stb_da (0x024778), a
+	ld (0x024778:24), a
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -2859,7 +2859,7 @@ MidiPart_CallMainFunc:
 MidiPart_AutoDec_StorePart:
 	ld xwa, (xbc)
 	ld wa, (xwa)
-	stb_da (0x024778), a
+	ld (0x024778:24), a
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -3019,7 +3019,7 @@ MidiPart_InitGridBox:
 MidiPart_AutoInc_StorePart:
 	ld xwa, (xbc)
 	ld wa, (xwa)
-	stb_da (0x024778), a
+	ld (0x024778:24), a
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -8092,14 +8092,14 @@ CheckLanguage:
 	cps a, 0
 	jr z, CheckLang_SkipLang4
 	dec 1, c
-	stb_da (0x0340e4), c
+	ld (0x0340e4:24), c
 
 CheckLang_SkipLang4:
 	ld a, (0x0340e4:24)
 	cps a, 4
 	jr nz, LanguageSelectEventReturn
 	dec 1, a
-	stb_da (0x0340e4), a
+	ld (0x0340e4:24), a
 	jr LanguageSelectEventReturn
 
 CheckLang_Increment:
@@ -8107,14 +8107,14 @@ CheckLang_Increment:
 	cps a, 5
 	jr nc, CheckLang_SkipLang4Up
 	inc 1, c
-	stb_da (0x0340e4), c
+	ld (0x0340e4:24), c
 
 CheckLang_SkipLang4Up:
 	ld a, (0x0340e4:24)
 	cps a, 4
 	jr nz, LanguageSelectEventReturn
 	inc 1, a
-	stb_da (0x0340e4), a
+	ld (0x0340e4:24), a
 
 LanguageSelectEventReturn:
 	ld xwa, 0xffffffff
@@ -14463,7 +14463,7 @@ IvDrawbar_Init_CheckDualMode:
 	bit 0, a
 	jr z, IvDrawbar_Init_SetupMode
 	res 0, a
-	stb_da (0x0205f2), a
+	ld (0x0205f2:24), a
 	ld xwa, (xsp + 8)
 	ld xbc, 0x1e10008
 	lds32 xde, 0

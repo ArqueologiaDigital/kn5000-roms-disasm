@@ -830,7 +830,7 @@ SMF_LoadSoundBankAndPlay:
 	cpda8_24 a, (0xffe3)
 	jr z, SMF_LoadBank_ClearAndPrepare
 	ld a, (4599:16)
-	stb_da (0x00ffe3), a
+	ld (0x00ffe3:24), a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
 
@@ -7583,7 +7583,7 @@ FDC_ReturnAndPop:
 
 FDC_StoreDiskType:
 	ld a, (xsp + 4)
-	stb_da (0x03e3e4), a
+	ld (0x03e3e4:24), a
 	ldw (0x03e3e6:24), 0x0001
 	ld (0x03e3be:24), 0x00
 	ret
@@ -7591,7 +7591,7 @@ FDC_StoreDiskType:
 FDC_ClearDiskChangeStatus:
 	ldw	(0x3e3e6:24), 0
 	ld	a, (0x3e3e4:24)
-	stb_da	(0x3e3e2), a
+	ld	(0x3e3e2:24), a
 	ret
 	ld	hl, (0x3e3e6:24)
 	ret

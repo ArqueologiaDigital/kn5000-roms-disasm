@@ -5484,7 +5484,7 @@ InterCPU_Send_WaitReady:
 	dec 1, l
 	sll a, 5
 	or a, l
-	stb_da (0x140000), a
+	ld (0x140000:24), a
 	lds ix, 0
 
 InterCPU_Send_WaitAck:
@@ -5619,7 +5619,7 @@ Audio_DMA_Transfer_ByteLoop:
 	stb_dpi A, 0xe0
 	ld (1498:16), xwa
 	ld a, (xbc)
-	stb_da (0x140000), a
+	ld (0x140000:24), a
 	ldb a, 0x0
 
 Audio_DMA_Transfer_DelayLoop:
@@ -8011,7 +8011,7 @@ HDAE5000_ROM_Transfer:
 	jr ugt, HDAE5000_ROM_Transfer_Success
 
 HDAE5000_ROM_Transfer_BlockLoop:
-	stb_da (0x160000), w
+	ld (0x160000:24), w
 	ld xix, xbc
 	ld xiy, 0x3ffff
 
@@ -8040,7 +8040,7 @@ HDAE5000_ROM_Transfer_Return:
 
 HDAE5000_FlashWrite_BankLoop:
 	ld a, (xsp + 12)
-	stb_da (0x160000), a
+	ld (0x160000:24), a
 	lda xwa, (0x200000:24)
 	ld (xsp + 4), xwa
 	lds32 xiz, 0
@@ -8071,7 +8071,7 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	ld	(xsp+8), xwa
 	ld	(xsp+12), 0
 	ld	a, (xsp+12)
-	stb_da	(0x160000), a
+	ld	(0x160000:24), a
 	lda	xwa, (0x280000:24)
 	ld	(xsp+4), xwa
 	lds32	xiz, 0
@@ -8107,7 +8107,7 @@ HDAE5000_TableData_Write:
 
 HDAE5000_TableData_BankLoop:
 	ld a, (xsp + 12)
-	stb_da (0x160000), a
+	ld (0x160000:24), a
 	lda xwa, (0x280000:24)
 	ld (xsp + 4), xwa
 	lds32 xiz, 0

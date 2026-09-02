@@ -15430,8 +15430,8 @@ EffectState_Dispatch_Block3:
 VoiceSlot_StoreParams:
 
 VoiceSlot_StoreParams_Block:
-	stb_da (0x00cedf), a
-	stb_da (0x00cee0), w
+	ld (0x00cedf:24), a
+	ld (0x00cee0:24), w
 	ld (0x00cee1:24), 0x00
 	anddi8_24 (0xcede), 249
 	ret
@@ -15479,7 +15479,7 @@ VoiceSlot_StoreParams_Decrement:
 	jr nz, VoiceSlot_StoreParams_LoadReg
 
 VoiceSlot_StoreParams_Block3:
-	stb_da (0x00cee5), b
+	ld (0x00cee5:24), b
 	ld c, b
 	xor b, b
 	ld xix, 0xcee6
@@ -16115,7 +16115,7 @@ NoteBuffer_CompactEn_LoadReg:
 	jr nz, NoteBuffer_CompactEn_LoadReg
 
 NoteBuffer_CompactEn_Block:
-	stb_da (0x00cee5), b
+	ld (0x00cee5:24), b
 	ld c, b
 	xor b, b
 	ld xix, 0xcee6
@@ -16280,7 +16280,7 @@ NoteDisplay_NotFound:
 
 NoteDisplay_StoreBoundsReturn:
 	popw bc
-	stb_da (0x00cee5), c
+	ld (0x00cee5:24), c
 	ret
 
 NoteDisplay_AlternateLookup:
@@ -16340,8 +16340,8 @@ NoteDisplay_ClearReturn:
 NoteDisplay_InitState:
 	push xix
 	push xiz
-	stb_da (0x00cedf), a
-	stb_da (0x00cee0), w
+	ld (0x00cedf:24), a
+	ld (0x00cee0:24), w
 	ld (0x00cee1:24), 0x00
 	ld (0x00cee4:24), 0x00
 	anddi8_24 (0xcede), 253
@@ -16356,8 +16356,8 @@ NoteDisplay_InitState:
 NoteDisplay_LookupBitmap:
 	push xix
 	push xiz
-	stb_da (0x00cedf), a
-	stb_da (0x00cee0), w
+	ld (0x00cedf:24), a
+	ld (0x00cee0:24), w
 	xor hl, hl
 	cpw_da (0xcf2f), 0
 	jr z, NoteDisplay_LookupFromCurrent
@@ -16377,12 +16377,12 @@ NoteDisplay_LookupFromTable:
 	jr z, NoteDisplay_SameNote
 	cpw_da (0xcf2f), 0
 	jr z, NoteDisplay_StoreNoCurrent
-	stb_da (0x00cee1), a
-	stb_da (0x00cee4), a
+	ld (0x00cee1:24), a
+	ld (0x00cee4:24), a
 	jr NoteDisplay_SetUpdateFlags
 
 NoteDisplay_StoreNoCurrent:
-	stb_da (0x00cee1), a
+	ld (0x00cee1:24), a
 	ld (0x00cee4:24), 0x00
 
 NoteDisplay_SetUpdateFlags:
@@ -16397,7 +16397,7 @@ NoteDisplay_SameNote:
 	cpw_da (0xcf2f), 0
 	jr z, NoteDisplay_ClearBoth
 	ld (0x00cee1:24), 0x00
-	stb_da (0x00cee4), w
+	ld (0x00cee4:24), w
 	jr NoteDisplay_SetOverlayFlags
 
 NoteDisplay_ClearBoth:
@@ -16419,10 +16419,10 @@ VoiceSlot_Epilogue_Epilogue:
 	ret
 
 VoiceSlot_Epilogue_Block:
-	stb_da (0x00cedf), a
-	stb_da (0x00cee0), w
+	ld (0x00cedf:24), a
+	ld (0x00cee0:24), w
 	ld (0x00cee1:24), 0x00
-	stb_da (0x00cee4), w
+	ld (0x00cee4:24), w
 	ordi8_24 (0xcede), 4
 	anddi8_24 (0xcede), 253
 	anddi8_24 (0xcede), 127
@@ -16434,9 +16434,9 @@ VoiceSlot_Epilogue_Block2:
 	calr VoiceSlot_IterateAlloc_TestBit24
 	ordi16_24 (0xcf01), 0xff00
 	ld a, (0x00cedf:24)
-	stb_da (0x00cee2), a
+	ld (0x00cee2:24), a
 	ld a, (0x00cee0:24)
-	stb_da (0x00cee3), a
+	ld (0x00cee3:24), a
 	ret
 
 Voice_InitPartAllocState:
@@ -16492,7 +16492,7 @@ InitPartAllocState_TestBit242:
 	dec 1, hl
 	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
 	ldb_sri A, 0x07, 0xf8, 0xec
-	stb_da (0x00cee5), a
+	ld (0x00cee5:24), a
 	ld xiz, VoiceSlot_CheckAndApply_Data_0xBA
 	sla hl, 2
 	ldw_sri BC, 0x07, 0xf8, 0xec
@@ -16564,7 +16564,7 @@ VoiceSlot_SetPitchParams_TestBit24:
 	dec 1, hl
 	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
 	ldb_sri C, 0x07, 0xf8, 0xec
-	stb_da (0x00cef1), c
+	ld (0x00cef1:24), c
 	incdi8_24 1, (0xcef1)
 	xor b, b
 	ld xiy, VoiceSlot_CheckAndApply_Data_0xBA
@@ -16611,7 +16611,7 @@ VoiceSlot_IterateAlloc_Block:
 	dec 1, hl
 	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
 	ldb_sri C, 0x07, 0xf8, 0xec
-	stb_da (0x00cef1), c
+	ld (0x00cef1:24), c
 	xor b, b
 	ld xiy, VoiceSlot_CheckAndApply_Data_0xBA
 	ld xix, 0xcef2
@@ -16637,7 +16637,7 @@ VoiceSlot_IterateAlloc_Block2:
 	dec 1, hl
 	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
 	ldb_sri A, 0x07, 0xf8, 0xec
-	stb_da (0x00cef1), a
+	ld (0x00cef1:24), a
 	ld xiz, VoiceSlot_CheckAndApply_Data_0xBA
 	sla hl, 2
 	ldw_sri BC, 0x07, 0xf8, 0xec
@@ -16651,10 +16651,10 @@ VoiceSlot_IterateAlloc_Block2:
 	add b, l
 	add e, l
 	add d, l
-	stb_da (0x00cef2), c
-	stb_da (0x00cef3), b
-	stb_da (0x00cef4), e
-	stb_da (0x00cef5), d
+	ld (0x00cef2:24), c
+	ld (0x00cef3:24), b
+	ld (0x00cef4:24), e
+	ld (0x00cef5:24), d
 	ret
 
 VoiceSlot_IterateAlloc_Block3:
@@ -17080,19 +17080,19 @@ VoiceSlot_CheckAndApply_Data2:
 	ld	(0xceb6:16), 0
 	ld	(0xceb7:16), 0
 	ld	a, (0xcec0:16)
-	stb_da	(0xcede), a
+	ld	(0xcede:24), a
 	ld	a, (0xcec1:16)
-	stb_da	(0xcedf), a
+	ld	(0xcedf:24), a
 	ld	a, (0xcec2:16)
-	stb_da	(0xcee0), a
+	ld	(0xcee0:24), a
 	ld	a, (0xcec3:16)
-	stb_da	(0xcee1), a
+	ld	(0xcee1:24), a
 	ld	a, (0xcec4:16)
-	stb_da	(0xcee2), a
+	ld	(0xcee2:24), a
 	ld	a, (0xcec5:16)
-	stb_da	(0xcee3), a
+	ld	(0xcee3:24), a
 	ld	a, (0xcec6:16)
-	stb_da	(0xcee4), a
+	ld	(0xcee4:24), a
 	ld	xiy, 0xceca
 	ld	xix, 0xcee5
 	ldw	bc, 10

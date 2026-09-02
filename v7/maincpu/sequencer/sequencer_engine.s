@@ -24285,7 +24285,7 @@ SeqLoad_ProcessDataBlock:
 	extz	wa
 	call	15995928
 	ld	a, (xsp+2)
-	stb_da	65507, a
+	ld	(65507:24), a
 	call	15988735
 	ld	a, (65507:24)
 	extz	wa
@@ -24883,7 +24883,7 @@ SeqLoad_RestorePartConfig:
 	lds wa, 1
 	ldw bc, 0xc7
 	call Part_ReadByteDirect
-	stb_da (0x00ffe3), l
+	ld (0x00ffe3:24), l
 	lds wa, 1
 	ldw bc, 0xc7
 	lds de, 0

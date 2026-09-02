@@ -125,7 +125,7 @@ FDemoText_ProcessVoiceFlags_ReadState:
 	jr z, FDemoText_ProcessVoiceFlags_CheckBits
 	set 7, a
 	res 6, a
-	stb_da (0x0247ee), a
+	ld (0x0247ee:24), a
 	pushw 0x0
 	ldw wa, 0x44
 	ldw bc, 0x8
@@ -229,7 +229,7 @@ FDemoText_ProcessOutputChannels:
 	andda8_24 a, (0x0247ee)
 	jr z, FDemoText_ProcessOutput_CheckFlags
 	or_srib_rm C, 0x07, 0xec, 0xe8
-	stb_da (0x0247ec), c
+	ld (0x0247ec:24), c
 
 FDemoText_ProcessOutput_CheckFlags:
 	stb_erp A, 0xfb

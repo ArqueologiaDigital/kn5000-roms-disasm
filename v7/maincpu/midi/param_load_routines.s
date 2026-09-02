@@ -27,7 +27,7 @@ ParaLoadOpt_CaseA:
 	cp a, (xsp + 2)
 	jr z, ParaLoadOpt_CaseB
 	ld a, (xsp + 2)
-	stb_da (0x02475c), a
+	ld (0x02475c:24), a
 	ld xwa, 0x570010
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -39,7 +39,7 @@ ParaLoadOpt_CaseB:
 	cp a, (xsp)
 	jr z, ParaLoadOpt_CaseC
 	ld a, (xsp)
-	stb_da (0x02475e), a
+	ld (0x02475e:24), a
 	ld xwa, 0x570010
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -51,7 +51,7 @@ ParaLoadOpt_CaseC:
 	cp a, (xsp + 4)
 	jrl z, MidiFunc_SendEvtReturnAlt
 	ld a, (xsp + 4)
-	stb_da (0x02475a), a
+	ld (0x02475a:24), a
 	ld a, (xsp + 4)
 	extz wa
 	cps wa, 0
@@ -150,7 +150,7 @@ ParaLoadOpt_CaseD:
 	res	7, a
 	ld	(48244:16), a
 	ld	a, (xsp+2)
-	stb_da	(149340), a
+	ld	(149340:24), a
 	ld	xwa, 5701659
 	ld	xbc, 31457447
 	lds32	xde, 0
@@ -162,7 +162,7 @@ ParaLoadOpt_CaseE:
 	res	7, a
 	ld	(48248:16), a
 	ld	a, (xsp)
-	stb_da	(149342), a
+	ld	(149342:24), a
 	ld	xwa, 5701659
 	ld	xbc, 31457447
 	lds32	xde, 0

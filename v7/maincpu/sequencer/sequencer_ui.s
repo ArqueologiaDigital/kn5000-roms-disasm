@@ -3141,7 +3141,7 @@ TrAsGrid_ScrollDown:
 
 TrAsGrid_ApplyScrollOffset:
 	calr TrAsGrid_LookupByteTable
-	stb_da (0x021082), l
+	ld (0x021082:24), l
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
@@ -3265,7 +3265,7 @@ TrAsGrid_ScrollDown2:
 
 TrAsGrid_ApplyScrollOffset2:
 	calr TrAsGrid_LookupByteTable
-	stb_da (0x021082), l
+	ld (0x021082:24), l
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
@@ -3400,7 +3400,7 @@ TrAsGrid_HandleSelectEvent:
 	jr nz, TrAsGrid_DeselectCell
 	ldw wa, 0x8
 	calr TrAsGrid_LookupByteTable
-	stb_da (0x021082), l
+	ld (0x021082:24), l
 	setda 0, 3296
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
@@ -3423,7 +3423,7 @@ TrAsGrid_HandleSelectEvent:
 TrAsGrid_DeselectCell:
 	lds wa, 0
 	calr TrAsGrid_LookupByteTable
-	stb_da (0x021082), l
+	ld (0x021082:24), l
 	resda 0, 3296
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008e
@@ -7123,7 +7123,7 @@ AcIndexWideToggleFunc:
 	ret
 
 AcIndexToggleFunc_StoreAndPost:
-	stb_da (0x0340e4), a
+	ld (0x0340e4:24), a
 	ld xwa, 0x1480028
 	call MainPostEvent
 
@@ -8059,7 +8059,7 @@ NoteEditBox_EventDispatch2:
 	call	16436029
 	ld	a, (135318:24)
 	inc	1, a
-	stb_da	135318, a
+	ld	(135318:24), a
 	cp	a, 11
 	jrl	ule, -284
 	jrl	299
@@ -15184,7 +15184,7 @@ SqplyFunc_GetValueReturn:
 	jrl SqplyFunc_Epilogue
 
 SqplyFunc_StoreTrackPart:
-	stb_da (0x02109c), a
+	ld (0x02109c:24), a
 
 SqplyFunc_ReturnZero:
 	lds32 xhl, 0
@@ -15929,7 +15929,7 @@ SqedtFunc_ModeD:
 	lds32 xhl, 0
 	ld l, (0x02109c:24)
 	jrl SqedtFunc_Epilogue12
-	stb_da (0x02109c), a
+	ld (0x02109c:24), a
 
 SeqFunc_ReturnZeroJmp:
 	lds32 xhl, 0
@@ -16076,12 +16076,12 @@ SeqFormat_DispatchA:
 	lds32	xhl, 0
 	ld	l, (0x03e2dc:24)
 	jrl	206
-	stb_da	(0x03e2dc), a
+	ld	(0x03e2dc:24), a
 	jrl	-366
 	lds32	xhl, 0
 	ld	l, (0x03e2de:24)
 	jrl	188
-	stb_da	(0x03e2de), a
+	ld	(0x03e2de:24), a
 	jrl	-384
 	extz	wa
 	sub	wa, 15
@@ -16669,7 +16669,7 @@ DspItem0_HandleType2:
 	scc16 c, hl
 	extz xhl
 	jr DspItem0_Epilogue
-	stb_da (0x02109a), e
+	ld (0x02109a:24), e
 
 EffectEdit_ReturnZero:
 	lds32 xhl, 0
@@ -16677,7 +16677,7 @@ EffectEdit_ReturnZero:
 	lds32 xhl, 0
 	ld l, (0x02109a:24)
 	jr DspItem0_Epilogue
-	stb_da (0x021098), e
+	ld (0x021098:24), e
 	jr EffectEdit_ReturnZero
 	ldb h, 0x0
 	extz xhl

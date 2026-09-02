@@ -25772,7 +25772,7 @@ SeqLoad_ProcessDataBlock:
 	extz	wa
 	call	VoicePreset_LoadAndInitPan
 	ld	a, (xsp+2)
-	stb_da	(0xffe3), a
+	ld	(0xffe3:24), a
 	call	SeqPos_DataBlock
 	ld	a, (0xffe3:24)
 	extz	wa
@@ -26383,7 +26383,7 @@ SeqLoad_RestorePartConfig:
 	lds wa, 1
 	ldw bc, 0xc7
 	call Part_ReadByteDirect
-	stb_da (0x00ffe3), l
+	ld (0x00ffe3:24), l
 	lds wa, 1
 	ldw bc, 0xc7
 	lds de, 0

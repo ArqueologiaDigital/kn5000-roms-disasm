@@ -3062,7 +3062,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	lds de, 0
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a0a0:24)
-	stb_da (0x23a0a2), a; (0x23A0A2) = A
+	ld (0x23a0a2:24), a; (0x23A0A2) = A
 	ret
 .LHD_SC__state2:			; state=2: process A0A0+A09E
 	cpib_da (0x23a0a0), 0x00
@@ -3074,7 +3074,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	lds de, 0
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a0a0:24)
-	stb_da (0x23a0a2), a
+	ld (0x23a0a2:24), a
 .LHD_SC__s2_check_9e:
 	cpib_da (0x23a09e), 0x00
 	ret z
@@ -3085,7 +3085,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	lds de, 0
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a09e:24)
-	stb_da (0x23a0a4), a
+	ld (0x23a0a4:24), a
 	ret
 .LHD_SC__state3:			; state=3: process A0A0 (DE=2) + A09E (DE=1)
 	cpib_da (0x23a0a0), 0x00
@@ -3097,7 +3097,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	lds de, 2
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a0a0:24)
-	stb_da (0x23a0a2), a
+	ld (0x23a0a2:24), a
 .LHD_SC__s3_check_9e:
 	cpib_da (0x23a09e), 0x00
 	ret z
@@ -3108,7 +3108,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	lds de, 1
 	calr HDAE5000_HD_Wait_Ready
 	ld a, (0x23a09e:24)
-	stb_da (0x23a0a4), a
+	ld (0x23a0a4:24), a
 	ret
 	;
 	; Part 2: Event handler 1 (0x2850ED) — jump table dispatch

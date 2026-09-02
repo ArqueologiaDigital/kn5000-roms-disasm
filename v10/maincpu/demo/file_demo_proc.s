@@ -923,9 +923,9 @@ Voice_LoadVoiceTable_Loop:
 	calr Demo_LookupPartTableEntry
 	ld c, (xhl + 13)
 	stb_erp A, 0xfb
-	stb_da (0x025b86), a
+	ld (0x025b86:24), a
 	and c, 0xf
-	stb_da (0x025b88), c
+	ld (0x025b88:24), c
 	push xde
 	push xhl
 	push xix
@@ -945,7 +945,7 @@ Voice_LoadVoiceTable_Loop:
 	ld c, (xhl + 13)
 	ld (0x025b86:24), 0x19
 	and c, 0xf
-	stb_da (0x025b88), c
+	ld (0x025b88:24), c
 	push xde
 	push xhl
 	push xix
@@ -5262,7 +5262,7 @@ GetDiskSizeInfo:
 	cpda8_24 a, (0x25db6)
 	jr nz, GetDiskSize_Return
 	call GetMediaType
-	stb_da (0x025db6), l
+	ld (0x025db6:24), l
 
 GetDiskSize_Return:
 	ld l, (0x025db6:24)
@@ -7940,7 +7940,7 @@ FindFirst_StoreFileSize:
 FindFirst_StoreResult:
 	stl_da (0x027416), xiz
 	ld wa, (xsp + 4)
-	stb_da (0x027414), a
+	ld (0x027414:24), a
 	lds hl, 0
 	jr FindFirst_Return
 

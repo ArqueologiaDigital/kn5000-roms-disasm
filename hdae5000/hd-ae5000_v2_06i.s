@@ -3845,13 +3845,13 @@ HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 	and a, 0x0f			; mask low nibble
 	set 4, a			; set bit 4 (data strobe)
 	sll a, 3			; shift left 3
-	stb_da (0x160002), a; ld (0x160002), A — PPI port B
+	ld (0x160002:24), a; ld (0x160002), A — PPI port B
 	ld c, a				; save port B value
 	srl c, 6			; shift right 6 for port C
-	stb_da (0x160004), c; ld (0x160004), C — PPI port C
+	ld (0x160004:24), c; ld (0x160004), C — PPI port C
 	res 7, a			; clear bit 7 (handshake low)
 	srl a, 6			; shift right 6
-	stb_da (0x160004), a; ld (0x160004), A — PPI port C
+	ld (0x160004:24), a; ld (0x160004), A — PPI port C
 	ld xwa, 0x000003E8		; timeout counter (1000)
 .Lppi_wait_high:
 	bitda_24 4, (1441792); bit 4, (0x160000) — check ACK
@@ -3863,13 +3863,13 @@ HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 	ld a, l				; restore original byte
 	srl a, 1			; shift right 1
 	res 7, a			; clear bit 7
-	stb_da (0x160002), a; ld (0x160002), A — PPI port B
+	ld (0x160002:24), a; ld (0x160002), A — PPI port B
 	ld c, a				; save port B value
 	srl c, 6			; shift right 6 for port C
-	stb_da (0x160004), c; ld (0x160004), C — PPI port C
+	ld (0x160004:24), c; ld (0x160004), C — PPI port C
 	set 7, a			; set bit 7 (handshake high)
 	srl a, 6			; shift right 6
-	stb_da (0x160004), a; ld (0x160004), A — PPI port C
+	ld (0x160004:24), a; ld (0x160004), A — PPI port C
 	ld xwa, 0x000003E8		; timeout counter (1000)
 .Lppi_wait_low:
 	bitda_24 4, (1441792); bit 4, (0x160000) — check ACK

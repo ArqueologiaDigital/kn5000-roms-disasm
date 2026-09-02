@@ -62,9 +62,9 @@ Display_MarkClean:
 ; Undisassembled data block (18 bytes) - possibly lookup table
 Display_Data_ScoopInit:
 	ldb	a, 255
-	stb_da	(0x0205ea), a
-	stb_da	(0x0205e8), a
-	stb_da	(0x0205ec), a
+	ld	(0x0205ea:24), a
+	ld	(0x0205e8:24), a
+	ld	(0x0205ec:24), a
 	ret
 
 ;-----------------------------------------------------------------------------
@@ -98,11 +98,11 @@ Display_UpdateRegion0_Changed:
 	jrl nz, Display_UpdateRegion0_NoChange
 	call Display_RedrawStatusBar
 	ld a, (3429:16)
-	stb_da (0x0205ea), a
+	ld (0x0205ea:24), a
 	ld a, (3567:16)
-	stb_da (0x0205e8), a
+	ld (0x0205e8:24), a
 	ld a, (3424:16)
-	stb_da (0x0205ec), a
+	ld (0x0205ec:24), a
 
 Display_UpdateRegion0_NoChange:
 	popw wa

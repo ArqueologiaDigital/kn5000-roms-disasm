@@ -1704,7 +1704,7 @@ Voice_FactoryPresetData:
 	cps	hl, 0
 	jr	z, 29
 	ld	a, (257960:24)
-	stb_da	(257962), a
+	ld	(257962:24), a
 	cpw_da	(197710), 0
 	jr	z, 51
 	ld	xwa, xiz
@@ -1732,7 +1732,7 @@ Voice_FactoryPresetData:
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	stb_da	(257962), c
+	ld	(257962:24), c
 	cpw_da	(197710), 0
 	ret	z
 	ld	bc, de
@@ -1840,7 +1840,7 @@ DrawText_QueueOrDirect:
 	cps hl, 0
 	jr z, DrawText_QueueDeferred
 	ld a, (0x03efa8:24)
-	stb_da (0x03efaa), a
+	ld (0x03efaa:24), a
 	cpw_da (197710), 0
 	jrl z, DrawText_PopAndReturn
 	ld xwa, (xsp + 28)
@@ -1880,7 +1880,7 @@ DrawText_PopAndReturn:
 	ld ix, (xiz + 24)
 	ld de, (xiz + 26)
 	ld a, (xiz + 28)
-	stb_da (0x03efaa), a
+	ld (0x03efaa:24), a
 	cpw_da (197710), 0
 	jr z, DrawText_DeferredFreeAndReturn
 	push xiy

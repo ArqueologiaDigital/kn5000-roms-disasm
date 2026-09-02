@@ -2310,7 +2310,7 @@ FDC_PIO_CountAndFinish:
 FDC_PIO_WriteTransfer:
 	ld xhl, (0x0c7c:16)	; ld XHL,(0x0c7c)
 	ld c, (xhl)	; ld C,(XHL)
-	stb_da (0x120000), c	; ld (0x120000),C - write one byte to the FDC DMA-acknowledge port
+	ld (0x120000:24), c	; ld (0x120000),C - write one byte to the FDC DMA-acknowledge port
 	inc 1, xhl	; inc 1,XHL
 	ld (0x0c7c:16), xhl	; ld (0x0c7c),XHL
 	jr FDC_PIO_CountAndFinish	; jr T,0xffea7b

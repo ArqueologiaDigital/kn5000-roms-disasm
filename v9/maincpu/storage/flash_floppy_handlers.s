@@ -6224,7 +6224,7 @@ CmpSetP1_TtlDispatch:
 	ld xwa, xiz
 	call GetViewInstance
 	ld a, (xhl + 50)
-	stb_da (0x094810), a
+	ld (0x094810:24), a
 
 GridBoxProc_Return:
 	lds32 xhl, 0

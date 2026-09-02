@@ -2448,7 +2448,7 @@ DMA_Chunk_Start:
 	dec 1, l
 	sll a, 5
 	or a, l
-	stb_da 0x120000, a
+	ld (0x120000:24), a
 	lds ix, 0
 
 DMA_Chunk_Transfer:
@@ -18547,7 +18547,7 @@ Voice_SetKeyShiftRange_BranchB:
 ; Voice_ResetAllControllers with A = 0.  The reference file calls the getter
 ; ScaleTune_Get_Global_Mode; see [UNCERTAIN].
 ScaleTune_Set_Global_Mode:
-	stb_da 0x04134d, a
+	ld (0x04134d:24), a
 	ret
 
 ScaleTune_Get_Global_Mode:
@@ -18604,7 +18604,7 @@ Voice_SetRhythmMode_BranchD:
 
 ; A -> byte 0x04134B.  SysEx dispatch entry 0 (sub-command 0x91).
 Voice_SetParam_04134B:
-	stb_da 0x04134b, a
+	ld (0x04134b:24), a
 	ret
 
 ; A == 0x7F sets bit 1 of the global flag word 0x041343, anything else clears it.
@@ -18655,7 +18655,7 @@ Voice_AllVoices_UpdateVelocity:
 	dec 2, xsp
 	push xiz
 	and a, 0xF
-	stb_da 0x04134c, a
+	ld (0x04134c:24), a
 	ld (xsp + 4), 0x0
 	cp (xsp + 4), 0x1A
 	jrl nc, Voice_AllVoices_UpdateVelocity_Exit
@@ -30489,9 +30489,9 @@ Audio_Cmd_ToneEdit_Op0B_Alt:
 ; gated on VoiceAlloc_CheckAndInit is inert until this opcode arrives.
 Audio_Cmd_ToneEdit_Op0D_SelectPart:
 	ld	a, (283044:24)
-	stb_da	283045, a
+	ld	(283045:24), a
 	ld	a, (xiz+1)
-	stb_da	283044, a
+	ld	(283044:24), a
 	jrl	t, 211
 ; Opcode 0x0C: only acts when (patch+0x10) & 0xC0 == 0x40; then calls 0x02AFBD with
 ; WA = part, BC = rec+4.  No allocation, no reply.
@@ -35171,7 +35171,7 @@ DSP_SetCoeff_WriteParams:
 	lda	xde, (267118:24)
 	ld_rrl	xbc, xde, bc	; ld XBC,(XDE+BC)
 	ld	c, (xbc+16)
-	stb_da	(283158), c
+	ld	(283158:24), c
 	ld	c, a
 	extz	bc
 	muls	bc, 287
@@ -35186,7 +35186,7 @@ DSP_SetCoeff_WriteParams:
 	lda	xbc, (267118:24)
 	ld_rrl	xwa, xbc, wa	; ld XWA,(XBC+WA)
 	ld	a, (xwa+95)
-	stb_da	(283159), a
+	ld	(283159:24), a
 	jr	LABEL_031794
 LABEL_03178E:
 	ld	(283159:24), 0

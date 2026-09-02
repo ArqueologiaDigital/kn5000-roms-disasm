@@ -1884,7 +1884,7 @@ ColorBlit_PalSave_SkipShift:
 	ld bc, (0x03efa4:24)
 	calr ColorBlit
 	stb_erp A, 0xfb
-	stb_da (0x03efa8), a
+	ld (0x03efa8:24), a
 	popw_erp 0xfa
 	inc 8, xsp
 	ret

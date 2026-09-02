@@ -32132,7 +32132,7 @@ StylCnvSel_OK_SelectItem:
 	ld	(1047552:24), 255
 	ld	wa, (15464:16)
 	inc	1, a
-	stb_da	(1047553), a
+	ld	(1047553:24), a
 	calr	3375
 	calr	250
 	jr	10

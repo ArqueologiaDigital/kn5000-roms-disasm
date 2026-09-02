@@ -2184,7 +2184,7 @@ MdPresetOK_Slot4Path:
 	ld xbc, 0x1e0006b
 	lds32 xde, 0
 	call SendEvent
-	stb_da (0x024758), l
+	ld (0x024758:24), l
 	ld xwa, 0x560025
 	ld xbc, 0x1e00090
 	lds32 xde, 0

@@ -112,7 +112,7 @@ ToneGen_SetVelCurveMode:
 	cp	(xiz+8), 0x09
 	jr	ugt, ToneGen_SetVelCurveMode__reject
 	ld	c, (xiz+8)
-	stb_da	0x00F32A, c
+	ld	(0x00F32A:24), c
 ToneGen_SetVelCurveMode__reject:
 	unlk32	xiz
 	ret
@@ -136,7 +136,7 @@ ToneGen_SetVelOffset:
 	cp	(xiz+8), 0x7F
 	jr	ugt, ToneGen_SetVelOffset__reject
 	ld	c, (xiz+8)
-	stb_da	0x00F32B, c
+	ld	(0x00F32B:24), c
 ToneGen_SetVelOffset__reject:
 	unlk32	xiz
 	ret

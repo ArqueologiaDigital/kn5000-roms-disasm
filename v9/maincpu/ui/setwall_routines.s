@@ -1957,7 +1957,7 @@ SetWall_LoadToneGenData:
 	call SetWall_LoadBankToToneGen
 	popw wa
 	ld a, (7502:16)
-	stb_da (0x00ffe3), a
+	ld (0x00ffe3:24), a
 	call SetWall_SyncToneGenToDRAM
 	ret
 

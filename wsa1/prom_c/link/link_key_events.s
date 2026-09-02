@@ -380,7 +380,7 @@ Link_Ch1_WriteParamBlock__F98E2D:
 	setda_24 0, 0x007ECC                   ; F98E38  set 0,(0x007ecc)   [llvm-mc cannot encode this]
 	ld	xbc, (xiz+10)                       ; F98E3D  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc)                            ; F98E40  ld A,(XBC)
-	stb_da	(0xF361), a                     ; F98E42  ld (0x00f361),A
+	ld	(0xF361:24), a                     ; F98E42  ld (0x00f361),A
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98E47  jrl T,0xf98fd1
 	ld	(0x7E97:24), 1                    ; F98E4A  ld (0x007e97),0x01
 	setda_24 1, 0x007ECC                   ; F98E50  set 1,(0x007ecc)   [llvm-mc cannot encode this]

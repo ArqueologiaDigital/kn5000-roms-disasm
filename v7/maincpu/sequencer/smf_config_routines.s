@@ -129,7 +129,7 @@ SMF_FinalizeAndStartPlayback:
 	call SMF_CheckAndFlush
 	call Vga_RestoreMultiPlaneDisplay
 	ld a, (4599:16)
-	stb_da (0x00ffe3), a
+	ld (0x00ffe3:24), a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
 	ldw (6699:16), 2
@@ -140,7 +140,7 @@ SMF_Finalize_PopReturn:
 SMF_Finalize_RestoreAndPlay:
 	call Vga_RestoreMultiPlaneDisplay
 	ld a, (4599:16)
-	stb_da (0x00ffe3), a
+	ld (0x00ffe3:24), a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
 	jr SMF_PopReturn
@@ -160,7 +160,7 @@ SMF_FlushAndFinalize:
 	pop xhl
 	call Vga_RestoreMultiPlaneDisplay
 	ld a, (4599:16)
-	stb_da (0x00ffe3), a
+	ld (0x00ffe3:24), a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
 	jr SMF_PopReturn

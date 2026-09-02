@@ -3374,7 +3374,7 @@ Boot_VerifyFlash:
 	jr ugt, Boot_VerifyFlash__vf_success	; 6b 22
 
 Boot_VerifyFlash__vf_bank_loop:
-	stb_da (0x160000), w; LD (0x160000), W - set bank
+	ld (0x160000:24), w; LD (0x160000), W - set bank
 	ld xix, xbc	; LD XIX, XBC - source addr
 	ld xiy, 0x3FFFF	; LD XIY, 0x0003FFFF - 256KB-1
 
@@ -3410,7 +3410,7 @@ Boot_ProgramCustomFlash:
 
 Boot_ProgramCustomFlash__pcf_bank_loop:
 	ld a, (xsp + 12)	; LD A, (XSP+0x0C)
-	stb_da (0x160000), a; LD (0x160000), A - set bank
+	ld (0x160000:24), a; LD (0x160000), A - set bank
 	lda xwa, (0x200000:24); LDA XWA, 0x200000 - source
 	ld (xsp + 4), xwa	; LD (XSP+0x04), XWA
 	lds32 xiz, 0	; LD XIZ, 0 - counter
@@ -3450,7 +3450,7 @@ Flash_ProgramHDAE_Initialization:
 
 Flash_ProgramHDAE_Initialization__phd1_bank_loop:
 	ld a, (xsp + 12)	; LD A, (XSP+0x0C)
-	stb_da (0x160000), a; LD (0x160000), A - set bank
+	ld (0x160000:24), a; LD (0x160000), A - set bank
 	lda xwa, (0x280000:24); LDA XWA, 0x280000 - dest
 	ld (xsp + 4), xwa	; LD (XSP+0x04), XWA
 	lds32 xiz, 0	; LD XIZ, 0
@@ -3489,7 +3489,7 @@ Flash_ProgramHDAE_Payload:
 
 Flash_ProgramHDAE_Payload__phd2_bank_loop:
 	ld a, (xsp + 12)	; LD A, (XSP+0x0C)
-	stb_da (0x160000), a; LD (0x160000), A
+	ld (0x160000:24), a; LD (0x160000), A
 	lda xwa, (0x280000:24); LDA XWA, 0x280000
 	ld (xsp + 4), xwa	; LD (XSP+0x04), XWA
 	lds32 xiz, 0	; LD XIZ, 0
@@ -4561,7 +4561,7 @@ FDC_ReadData:
 ; The name is kept for history; see boot_fdc_driver.s for the command layer.
 ; -----------------------------------------------------------------------------
 FDC_WriteStatus:
-	stb_da (0x110008), a; LD (0x110008), A
+	ld (0x110008:24), a; LD (0x110008), A
 	ret	; 0e
 
 ; -----------------------------------------------------------------------------
@@ -4580,7 +4580,7 @@ FDC_SaveCommand:
 ; Input: A = value to write
 ; -----------------------------------------------------------------------------
 FDC_WriteData:
-	stb_da (0x11000a), a; LD (0x11000A), A
+	ld (0x11000a:24), a; LD (0x11000A), A
 	ret	; 0e
 
 ; -----------------------------------------------------------------------------

@@ -125,7 +125,7 @@ sub_FA5949:
 sub_FA5958:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA5958  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FA595C  ld C,(XIZ+0x08)
-	stb_da	(0x8677), c                         ; FA595F  ld (0x008677),C
+	ld	(0x8677:24), c                         ; FA595F  ld (0x008677),C
 	unlk32 xiz                                 ; FA5964  unlk XIZ
 	ret                                        ; FA5966  ret
 ; --------------------------------------------------------------------------
@@ -2536,7 +2536,7 @@ Dev10C_PollBankAndRetire:
 	incdi8_24	1, (0x87CF)                      ; FA68E3  inc 1,(0x0087cf)
 	ld	h, (0x87CF:24)                         ; FA68E8  ld H,(0x0087cf)
 	and	h, 3                                   ; FA68ED  and H,0x03
-	stb_da	(0x87CF), h                         ; FA68F0  ld (0x0087cf),H
+	ld	(0x87CF:24), h                         ; FA68F0  ld (0x0087cf),H
 	ld	c, h                                    ; FA68F5  ld C,H
 	extz	bc                                    ; FA68F7  extz BC
 	ld	(xiz-16), bc                            ; FA68F9  ld (XIZ+0xf0),BC

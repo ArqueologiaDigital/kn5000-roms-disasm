@@ -953,7 +953,7 @@ PlayMode_ResetAndSchedule:
 	call	16635550
 	ret
 SongBank_SwitchAndUpdateTempo:
-	stb_da (0x00ffe3), a
+	ld (0x00ffe3:24), a
 	call SongBank_SaveAndReload
 	call SeqTimer_PostTempoUpdate
 	ret

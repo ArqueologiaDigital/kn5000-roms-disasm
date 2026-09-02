@@ -38679,7 +38679,7 @@ StylCnvSel_OK_SelectItem:
 	ld (0x0ffc00:24), 0xff
 	ld wa, (0x3d04:16)
 	inc 1, a
-	stb_da (0x0ffc01), a
+	ld (0x0ffc01:24), a
 	calr TableData_JumpToEntry
 	calr FloppyState_Dispatch
 	jr StylCnvSel_Return

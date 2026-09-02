@@ -7528,7 +7528,7 @@ ColorBlit:
 	cps hl, 0
 	jr z, ColorBlit_Deferred
 	ld a, (0x03efa8:24)
-	stb_da (0x03efaa), a
+	ld (0x03efaa:24), a
 	cpw_da (0x03044e), 0
 	jr z, ColorBlit_Return
 	ld xwa, xiz
@@ -7562,7 +7562,7 @@ ColorBlit_CallbackBlock:
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	stb_da	(0x03efaa), c
+	ld	(0x03efaa:24), c
 	.byte 0xd2
 	popw	iz
 	max
@@ -7830,7 +7830,7 @@ ColorBlit2:
 	cps hl, 0
 	jr z, ColorBlit2_Deferred
 	ld a, (0x03efa8:24)
-	stb_da (0x03efaa), a
+	ld (0x03efaa:24), a
 	cpw_da (0x03044e), 0
 	jr z, ColorBlit2_Return
 	ld xwa, xiz
@@ -7864,7 +7864,7 @@ ColorBlit2_CallbackBlock:
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	stb_da	(0x03efaa), c
+	ld	(0x03efaa:24), c
 	.byte 0xd2
 	popw	iz
 	max

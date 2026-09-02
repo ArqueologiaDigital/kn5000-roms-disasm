@@ -1850,7 +1850,7 @@ NotePool8_NoteOnOff__FC3E20:
 	ld	c, (0xE005:24)                         ; FC3E20  ld C,(0x00e005)
 	inc	1, c                                   ; FC3E25  inc 1,C
 	and	c, 7                                   ; FC3E27  and C,0x07
-	stb_da	(0xE005), c                         ; FC3E2A  ld (0x00e005),C
+	ld	(0xE005:24), c                         ; FC3E2A  ld (0x00e005),C
 	ld	xbc, (xiz+8)                            ; FC3E2F  ld XBC,(XIZ+0x08)
 	ld	d, (xbc+3)                              ; FC3E32  ld D,(XBC+0x03)
 	res	7, d                                   ; FC3E35  res 0x07,D
@@ -3885,11 +3885,11 @@ Pack104_SetInputs_E088_E089_E08A:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FC4D63  link XIZ,0x0000
 	ld	c, (xiz+12)                             ; FC4D67  ld C,(XIZ+0x0c)
 	res	7, c                                   ; FC4D6A  res 0x07,C
-	stb_da	(0xE088), c                         ; FC4D6D  ld (0x00e088),C
+	ld	(0xE088:24), c                         ; FC4D6D  ld (0x00e088),C
 	ld	bc, (xiz+10)                            ; FC4D72  ld BC,(XIZ+0x0a)
 	ld	(0xE08A:24), bc                        ; FC4D75  ld (0x00e08a),BC
 	ld	a, (xiz+14)                             ; FC4D7A  ld A,(XIZ+0x0e)
-	stb_da	(0xE089), a                         ; FC4D7D  ld (0x00e089),A
+	ld	(0xE089:24), a                         ; FC4D7D  ld (0x00e089),A
 	unlk32 xiz                                 ; FC4D82  unlk XIZ
 	ret                                        ; FC4D84  ret
 ; --------------------------------------------------------------------------
@@ -3925,7 +3925,7 @@ Pack104_SetInputs_Rec0C_E08C:
 	ld	wa, (xiz+12)                            ; FC4D90  ld WA,(XIZ+0x0c)
 	ld	(xbc+12), wa                            ; FC4D93  ld (XBC+0x0c),WA
 	ld	c, (xiz+10)                             ; FC4D96  ld C,(XIZ+0x0a)
-	stb_da	(0xE08C), c                         ; FC4D99  ld (0x00e08c),C
+	ld	(0xE08C:24), c                         ; FC4D99  ld (0x00e08c),C
 	unlk32 xiz                                 ; FC4D9E  unlk XIZ
 	ret                                        ; FC4DA0  ret
 ; --------------------------------------------------------------------------

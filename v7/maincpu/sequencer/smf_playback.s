@@ -326,7 +326,7 @@ SMF_SelectBank_AfterReset:
 	cpda8_24 a, (0xffe3)
 	jrl z, SMF_SelectBank_AfterToneLoad
 	ld a, (4599:16)
-	stb_da (0x00ffe3), a
+	ld (0x00ffe3:24), a
 	call SoundBank_LoadToWorkRAM
 
 SMF_SelectBank_AfterToneLoad:

@@ -218,10 +218,10 @@ Serial0_Init:
 	ld	c, (0x00F2F7:24)
 	and	c, 0x8F
 	or	c, 0x50
-	stb_da	0x00F2F7, c
+	ld	(0x00F2F7:24), c
 	and	c, 0xF8
 	or	c, 0x05
-	stb_da	0x00F2F7, c
+	ld	(0x00F2F7:24), c
 	ldw	bc, INTES0
 	exts	xbc
 	ld	a, (0x00F2F7:24)
@@ -342,7 +342,7 @@ INTRX0_HANDLER:
 	cps c, 0
 	jr z, INTRX0_HANDLER__no_error
 	ld c, (xiz-2)
-	stb_da 0x00F327, c
+	ld (0x00F327:24), c
 	jr INTRX0_HANDLER__exit
 INTRX0_HANDLER__no_error:
 	ld xbc, (0x00F2F3:24)

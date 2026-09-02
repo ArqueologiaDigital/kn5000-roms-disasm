@@ -14540,9 +14540,9 @@ P7Unit_SendParamValue:
 P7Mixer_RequestGain:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FA2DCD  link XIZ,0x0000
 	ld	c, (xiz+8)                              ; FA2DD1  ld C,(XIZ+0x08)
-	stb_da	(0xF3B3), c                         ; FA2DD4  ld (0x00f3b3),C
+	ld	(0xF3B3:24), c                         ; FA2DD4  ld (0x00f3b3),C
 	ld	a, (xiz+10)                             ; FA2DD9  ld A,(XIZ+0x0a)
-	stb_da	(0xF3B4), a                         ; FA2DDC  ld (0x00f3b4),A
+	ld	(0xF3B4:24), a                         ; FA2DDC  ld (0x00f3b4),A
 	pushw	2                                    ; FA2DE1  push 0x0002
 	call	0xF98510                              ; FA2DE4  call 0xf98510
 	popw	bc                                    ; FA2DE8  pop BC
@@ -14587,9 +14587,9 @@ P7Mixer_SendGainIfChanged__FA2E04:
 	pushw	bc                                   ; FA2E13  push BC
 	calr (0xFA2E2D - 0xFA2E17)                 ; FA2E14  calr 0xfa2e2d
 	ld	c, (0xF3B3:24)                         ; FA2E17  ld C,(0x00f3b3)
-	stb_da	(0xF3B5), c                         ; FA2E1C  ld (0x00f3b5),C
+	ld	(0xF3B5:24), c                         ; FA2E1C  ld (0x00f3b5),C
 	ld	a, (0xF3B4:24)                         ; FA2E21  ld A,(0x00f3b4)
-	stb_da	(0xF3B6), a                         ; FA2E26  ld (0x00f3b6),A
+	ld	(0xF3B6:24), a                         ; FA2E26  ld (0x00f3b6),A
 	pop	xiy                                    ; FA2E2B  pop XIY
 P7Mixer_SendGainIfChanged__FA2E2C:
 	ret                                        ; FA2E2C  ret
@@ -15820,23 +15820,23 @@ P7Units_ReloadForGroup__FA3811:
 	call	0xF9A646                              ; FA38CC  call 0xf9a646
 	ld	c, (0x8586:24)                         ; FA38D0  ld C,(0x008586)
 	xor	c, 0xFF                                ; FA38D5  xor C,0xff
-	stb_da	(0x85D4), c                         ; FA38D8  ld (0x0085d4),C
+	ld	(0x85D4:24), c                         ; FA38D8  ld (0x0085d4),C
 	ld	c, (0x85A0:24)                         ; FA38DD  ld C,(0x0085a0)
 	xor	c, 0xFF                                ; FA38E2  xor C,0xff
-	stb_da	(0x85EE), c                         ; FA38E5  ld (0x0085ee),C
+	ld	(0x85EE:24), c                         ; FA38E5  ld (0x0085ee),C
 	inc	8, xsp                                 ; FA38EA  inc 0,XSP
 	inc	2, xsp                                 ; FA38EC  inc 2,XSP
 	pushw	2                                    ; FA38EE  push 0x0002
 	calr (0xFA4940 - 0xFA38F4)                 ; FA38F1  calr 0xfa4940
 	ld	c, (0x8584:24)                         ; FA38F4  ld C,(0x008584)
 	xor	c, 0xFF                                ; FA38F9  xor C,0xff
-	stb_da	(0x85D2), c                         ; FA38FC  ld (0x0085d2),C
+	ld	(0x85D2:24), c                         ; FA38FC  ld (0x0085d2),C
 	ld	c, (0x859E:24)                         ; FA3901  ld C,(0x00859e)
 	xor	c, 0xFF                                ; FA3906  xor C,0xff
-	stb_da	(0x85EC), c                         ; FA3909  ld (0x0085ec),C
+	ld	(0x85EC:24), c                         ; FA3909  ld (0x0085ec),C
 	ld	c, (0x85B8:24)                         ; FA390E  ld C,(0x0085b8)
 	xor	c, 0xFF                                ; FA3913  xor C,0xff
-	stb_da	(0x8606), c                         ; FA3916  ld (0x008606),C
+	ld	(0x8606:24), c                         ; FA3916  ld (0x008606),C
 	popw	bc                                    ; FA391B  pop BC
 	jrl P7Units_ReloadForGroup__FA3A39                     ; FA391C  jrl T,0xfa3a39
 P7Units_ReloadForGroup__FA391F:
@@ -15910,23 +15910,23 @@ P7Units_ReloadForGroup__FA391F:
 	call	0xF9A646                              ; FA39DA  call 0xf9a646
 	ld	c, (0x8586:24)                         ; FA39DE  ld C,(0x008586)
 	xor	c, 0xFF                                ; FA39E3  xor C,0xff
-	stb_da	(0x85D4), c                         ; FA39E6  ld (0x0085d4),C
+	ld	(0x85D4:24), c                         ; FA39E6  ld (0x0085d4),C
 	ld	c, (0x85A0:24)                         ; FA39EB  ld C,(0x0085a0)
 	xor	c, 0xFF                                ; FA39F0  xor C,0xff
-	stb_da	(0x85EE), c                         ; FA39F3  ld (0x0085ee),C
+	ld	(0x85EE:24), c                         ; FA39F3  ld (0x0085ee),C
 	inc	8, xsp                                 ; FA39F8  inc 0,XSP
 	inc	2, xsp                                 ; FA39FA  inc 2,XSP
 	pushw	2                                    ; FA39FC  push 0x0002
 	calr (0xFA4940 - 0xFA3A02)                 ; FA39FF  calr 0xfa4940
 	ld	c, (0x8584:24)                         ; FA3A02  ld C,(0x008584)
 	xor	c, 0xFF                                ; FA3A07  xor C,0xff
-	stb_da	(0x85D2), c                         ; FA3A0A  ld (0x0085d2),C
+	ld	(0x85D2:24), c                         ; FA3A0A  ld (0x0085d2),C
 	ld	c, (0x859E:24)                         ; FA3A0F  ld C,(0x00859e)
 	xor	c, 0xFF                                ; FA3A14  xor C,0xff
-	stb_da	(0x85EC), c                         ; FA3A17  ld (0x0085ec),C
+	ld	(0x85EC:24), c                         ; FA3A17  ld (0x0085ec),C
 	ld	c, (0x85B8:24)                         ; FA3A1C  ld C,(0x0085b8)
 	xor	c, 0xFF                                ; FA3A21  xor C,0xff
-	stb_da	(0x8606), c                         ; FA3A24  ld (0x008606),C
+	ld	(0x8606:24), c                         ; FA3A24  ld (0x008606),C
 	popw	bc                                    ; FA3A29  pop BC
 	jr P7Units_ReloadForGroup__FA3A39                      ; FA3A2A  jr T,0xfa3a39
 P7Units_ReloadForGroup__FA3A2C:
@@ -17762,7 +17762,7 @@ sub_FA4A0D__FA4B37:
 	calr (0xFA2C5E - 0xFA4B43)                 ; FA4B40  calr 0xfa2c5e
 	ld	c, (0x8584:24)                         ; FA4B43  ld C,(0x008584)
 	xor	c, 0xFF                                ; FA4B48  xor C,0xff
-	stb_da	(0x85D2), c                         ; FA4B4B  ld (0x0085d2),C
+	ld	(0x85D2:24), c                         ; FA4B4B  ld (0x0085d2),C
 	popw	bc                                    ; FA4B50  pop BC
 	pushw	0                                    ; FA4B51  push 0x0000
 	calr (0xFA35D5 - 0xFA4B57)                 ; FA4B54  calr 0xfa35d5
@@ -17817,7 +17817,7 @@ sub_FA4A0D__FA4BCD:
 	calr (0xFA2C5E - 0xFA4BD9)                 ; FA4BD6  calr 0xfa2c5e
 	ld	c, (0x85B8:24)                         ; FA4BD9  ld C,(0x0085b8)
 	xor	c, 0xFF                                ; FA4BDE  xor C,0xff
-	stb_da	(0x8606), c                         ; FA4BE1  ld (0x008606),C
+	ld	(0x8606:24), c                         ; FA4BE1  ld (0x008606),C
 	popw	bc                                    ; FA4BE6  pop BC
 	pushw	2                                    ; FA4BE7  push 0x0002
 	calr (0xFA35D5 - 0xFA4BED)                 ; FA4BEA  calr 0xfa35d5
@@ -17968,7 +17968,7 @@ sub_FA4CE5__FA4CF8:
 	calr (0xFA2C5E - 0xFA4D1A)                 ; FA4D17  calr 0xfa2c5e
 	ld	c, (0x85B8:24)                         ; FA4D1A  ld C,(0x0085b8)
 	xor	c, 0xFF                                ; FA4D1F  xor C,0xff
-	stb_da	(0x8606), c                         ; FA4D22  ld (0x008606),C
+	ld	(0x8606:24), c                         ; FA4D22  ld (0x008606),C
 	popw	bc                                    ; FA4D27  pop BC
 	pushw	2                                    ; FA4D28  push 0x0002
 	calr (0xFA35D5 - 0xFA4D2E)                 ; FA4D2B  calr 0xfa35d5
@@ -18773,7 +18773,7 @@ P7Units_ServiceTask__FA54F1:
 	ld	c, (0xF35F:24)                         ; FA54F3  ld C,(0x00f35f)
 	extpfx5 0xC2, 0x60, 0xF3, 0x00, 0xF3       ; FA54F8  cp C,(0x00f360)
 	jr z, P7Units_ServiceTask__FA5509                   ; FA54FD  jr Z,0xfa5509
-	stb_da	(0xF360), c                         ; FA54FF  ld (0x00f360),C
+	ld	(0xF360:24), c                         ; FA54FF  ld (0x00f360),C
 	ei	0                                       ; FA5504  ei 0x00
 	calr (0xFA336B - 0xFA5509)                 ; FA5506  calr 0xfa336b
 P7Units_ServiceTask__FA5509:
@@ -18856,7 +18856,7 @@ P7Units_ResolveProgramsAndReload__FA557B:
 	extz	xbc                                   ; FA5580  extz XBC
 	add	xbc, 0xFDC551                          ; FA5582  add XBC,0x00fdc551
 	ld	a, (xbc)                                ; FA5588  ld A,(XBC)
-	stb_da	(0x8586), a                         ; FA558A  ld (0x008586),A
+	ld	(0x8586:24), a                         ; FA558A  ld (0x008586),A
 	ld	c, (0x8588:24)                         ; FA558F  ld C,(0x008588)
 	ld	(xiz-2), c                              ; FA5594  ld (XIZ+0xfe),C
 	cp	c, 0x7F                                 ; FA5597  cp C,0x7f
@@ -18868,7 +18868,7 @@ P7Units_ResolveProgramsAndReload__FA55A0:
 	extz	xbc                                   ; FA55A5  extz XBC
 	add	xbc, 0xFDC551                          ; FA55A7  add XBC,0x00fdc551
 	ld	a, (xbc)                                ; FA55AD  ld A,(XBC)
-	stb_da	(0x85A0), a                         ; FA55AF  ld (0x0085a0),A
+	ld	(0x85A0:24), a                         ; FA55AF  ld (0x0085a0),A
 	ld	c, (0x85A2:24)                         ; FA55B4  ld C,(0x0085a2)
 	ld	(xiz-2), c                              ; FA55B9  ld (XIZ+0xfe),C
 	cp	c, 0x7F                                 ; FA55BC  cp C,0x7f
@@ -18880,7 +18880,7 @@ P7Units_ResolveProgramsAndReload__FA55C5:
 	extz	xbc                                   ; FA55CA  extz XBC
 	add	xbc, 0xFDC551                          ; FA55CC  add XBC,0x00fdc551
 	ld	a, (xbc)                                ; FA55D2  ld A,(XBC)
-	stb_da	(0x85BA), a                         ; FA55D4  ld (0x0085ba),A
+	ld	(0x85BA:24), a                         ; FA55D4  ld (0x0085ba),A
 	ld	bc, (0x7ECD:24)                        ; FA55D9  ld BC,(0x007ecd)
 	ld	(0x860A:24), bc                        ; FA55DE  ld (0x00860a),BC
 	ld	bc, (0x7ECF:24)                        ; FA55E3  ld BC,(0x007ecf)
@@ -18986,7 +18986,7 @@ P7Units_ResolveProgramsAndReload__FA56EB:
 	popw	bc                                    ; FA5706  pop BC
 	ei	6                                       ; FA5707  ei 0x06
 	ld	c, (0xF361:24)                         ; FA5709  ld C,(0x00f361)
-	stb_da	(0xF35D), c                         ; FA570E  ld (0x00f35d),C
+	ld	(0xF35D:24), c                         ; FA570E  ld (0x00f35d),C
 	ei	0                                       ; FA5713  ei 0x00
 	cpib_da 0x00F35D, 0x01                     ; FA5715  cp (0x00f35d),0x01
 	jr ule, P7Units_ResolveProgramsAndReload__FA5723                 ; FA571B  jr ULE,0xfa5723
@@ -19000,7 +19000,7 @@ P7Units_ResolveProgramsAndReload__FA5723:
 	popw	bc                                    ; FA5733  pop BC
 P7Units_ResolveProgramsAndReload__FA5734:
 	ld	c, (0xF35D:24)                         ; FA5734  ld C,(0x00f35d)
-	stb_da	(0xF35E), c                         ; FA5739  ld (0x00f35e),C
+	ld	(0xF35E:24), c                         ; FA5739  ld (0x00f35e),C
 	ld	(xiz-1), 1                              ; FA573E  ld (XIZ+0xff),0x01
 	ldb	c, 26                                  ; FA5742  ld C,0x1a
 	extpfx3 0x8E, 0xFF, 0x43                   ; FA5744  mul BC,(XIZ+0xff)

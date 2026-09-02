@@ -2297,7 +2297,7 @@ UIState_ProcessExtendedMode:
 	call	16567398
 	cps	l, 0
 	jr	z, 5
-	stb_da	(65480), l
+	ld	(65480:24), l
 	.byte 0xd1	; v10 does not spell this byte either
 	.byte 0xa2	; differs from v10 here and llvm-objdump cannot read it
 	.byte 0x8e	; v10 does not spell this byte either

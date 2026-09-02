@@ -3681,7 +3681,7 @@ UIState_ProcessExtendedMode:
 	call	SndParam_LookupReadOnly
 	cps	l, 0
 	jr	z, 5
-	stb_da	(0xffc8), l
+	ld	(0xffc8:24), l
 	.byte 0xd1
 	push	xiz
 	.byte 0x8f

@@ -31,13 +31,13 @@ FDC_Read_Data:
 ; waits for FDC ready via status register polling,
 ; then returns. Uses (R+d16) addressing for FDC port access.
 FDC_Send_Command:
-	stb_da (0x110008), a
+	ld (0x110008:24), a
 	ret
 	ldmm8 0x8a84, 0x8a86
 	ld (0x8a86:16), a
 	ret
 FDC_Write_Data:
-	stb_da (0x11000a), a
+	ld (0x11000a:24), a
 	ret
 
 ; --- FDC_WaitReady: Wait for FDC ready with timeout and DMA transfer ---

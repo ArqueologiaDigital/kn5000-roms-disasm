@@ -3048,7 +3048,7 @@ SeqStep_ByteBlockEA5F:
 	inc	2, xsp
 	ret
 	ld	a, (62023:16)
-	stb_da	65507, a
+	ld	(65507:24), a
 	ld	(62023:16), 0
 	ld	wa, (62024:16)
 	ld	(65516:24), wa

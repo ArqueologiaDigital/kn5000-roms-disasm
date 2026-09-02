@@ -60,7 +60,7 @@ INT0_HANDLER:
 	jrl nz, (0x00F99CF8 - 0x00F99BCE)
 	ld xbc, 0x00100000
 	ld h, (xbc)
-	stb_da 0x008518, h
+	ld (0x008518:24), h
 	ld c, h
 	extz bc
 	extz xbc
