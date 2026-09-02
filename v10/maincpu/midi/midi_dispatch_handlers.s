@@ -3525,30 +3525,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1A93-0xFD1AB2 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x3A7+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -3558,33 +3538,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1ABB-0xFD1ADA (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=74% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x3A7+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -3614,30 +3571,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1B13-0xFD1B32 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x427+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -3647,33 +3584,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1B3B-0xFD1B5A (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=74% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x427+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -3703,30 +3617,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1B93-0xFD1BB2 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x4A7+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -3736,26 +3630,9 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	swi	7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1BBB-0xFD1BCF (20 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=69% dist=7 near PanelEvt_Handler_4_DualValueCheck_0x4A7+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -3775,30 +3652,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1C13-0xFD1C32 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x527+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -3808,33 +3665,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1C3B-0xFD1C5A (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x527+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -3864,30 +3698,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1C93-0xFD1CB2 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x5A7+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -3897,33 +3711,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1CBB-0xFD1CDA (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=74% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x5A7+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -3954,30 +3745,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1D14-0xFD1D33 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x628+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -3987,33 +3758,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1D3C-0xFD1D5B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x628+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -4029,30 +3777,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1D94-0xFD1DB3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x6A8+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4094,30 +3822,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1E14-0xFD1E33 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x728+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4159,30 +3867,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1E94-0xFD1EB3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x7A8+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4224,30 +3912,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1F14-0xFD1F33 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x828+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4257,25 +3925,9 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1F3C-0xFD1F4F (19 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=73% dist=6 near PanelEvt_Handler_4_DualValueCheck_0x828+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -4289,30 +3941,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1F94-0xFD1FB3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x8A8+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4322,25 +3954,9 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1FBC-0xFD1FCF (19 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=73% dist=6 near PanelEvt_Handler_4_DualValueCheck_0x8A8+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -4354,30 +3970,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2014-0xFD2033 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x928+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4387,33 +3983,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD203C-0xFD205B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x928+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -4436,30 +4009,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2094-0xFD20B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x9A8+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4469,33 +4022,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD20BC-0xFD20DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x9A8+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -4518,30 +4048,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2114-0xFD2133 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xA28+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4551,33 +4061,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	popw	bc
-	swi	3
-	nop
-	nop
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD213C-0xFD215B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=74% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xA28+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -4600,30 +4087,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2194-0xFD21B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xAA8+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4665,30 +4132,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2214-0xFD2233 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xB28+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4698,33 +4145,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD223C-0xFD225B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xB28+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -4747,30 +4171,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2294-0xFD22B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xBA8+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4780,33 +4184,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD22BC-0xFD22DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xBA8+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -4829,30 +4210,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2314-0xFD2333 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xC28+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4862,33 +4223,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD233C-0xFD235B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xC28+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -4911,30 +4249,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2394-0xFD23B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xCA8+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -4944,33 +4262,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD23BC-0xFD23DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xCA8+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -5006,30 +4301,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2414-0xFD2433 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xD28+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -5039,33 +4314,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD243C-0xFD245B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xD28+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -5101,30 +4353,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2494-0xFD24B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xDA8+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -5134,33 +4366,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD24BC-0xFD24DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xDA8+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -5196,30 +4405,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2514-0xFD2533 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xE28+5
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -5229,33 +4418,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD253C-0xFD255B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xE28+45
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -5291,30 +4457,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2594-0xFD25B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xE28+133
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -5324,33 +4470,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD25BC-0xFD25DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xE28+173
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop
@@ -5386,30 +4509,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xdd
-	swi	1
-	nop
-	nop
-	ldx
-	swi	1
-	nop
-	nop
-	scf
-	swi	2
-	nop
-	nop
-	pushw	hl
-	swi	2
-	nop
-	nop
-	ld	xiy, 0x5f0000fa
-	swi	2
-	nop
-	nop
-	jrl	ge, 250
-	nop
-	cp	(xhl), de
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2614-0xFD2633 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xE28+261
+	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
+	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
+	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
 	.byte 0xad
 	swi	2
 	nop
@@ -5419,33 +4522,10 @@ PanelEvt_Handler_4_DualValueCheck:
 	nop
 	nop
 	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	ule, -5
-	nop
-	nop
-	jrl	pl, 251
-	nop
-	cp	(xsp), hl
-	nop
-	nop
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD263C-0xFD265B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xE28+301
+	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
+	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
+	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
 	.byte 0xb1
 	swi	3
 	nop

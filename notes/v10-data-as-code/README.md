@@ -8,6 +8,18 @@ it found and excluded (55 spans/1,257 B — real code the reachability signal co
 `notes/v10-data-as-code/v10dac_conversion_manifest.json` for the full per-span list. Re-run the
 census (below) for the current remaining total; it drifts as other lanes touch v10 source.
 
+★ **FOLLOW-ON (lane V10DAC2, 2026-09-02):** the 91 spans (2,536 B) lane V10DAC's text-based
+locator couldn't place (0 or >1 matches for the flagged instruction text) were resolved by
+ADDRESS instead of text, using a new tool, `scripts/analysis/v10dac2_line_probe.py` (per-line
+label + rebuild + read the ELF symbol table, generalised from `hdae5000/tools/get_lprobe_addrs.py`
+to the whole `.include` tree) — all 91 resolved to an exact, unambiguous file+line. Of those, 76
+spans (2,243 B) were then confirmed data (numeric-only branch targets, filler templates, or more
+repeats of already-converted arrays) and converted; 15 (293 B) turned out to be real code or a
+misframed island on closer reading (9 end in a call to a real named routine) and were left
+excluded with that specific evidence. See
+`notes/v10-data-as-code/lane-v10dac2-conversions-2026-09-02.md`. Running total: 196 spans
+(5,633 B) converted, 70 spans (1,550 B) excluded as real code/misframed, out of the original 266.
+
 **Question this answers:** how much of v10 is the THIRD kind of debt identified
 this week in HD-AE5000 — data disassembled into plausible instruction
 mnemonics, invisible to `.byte`/`.incbin` scanners and to the byte-identity

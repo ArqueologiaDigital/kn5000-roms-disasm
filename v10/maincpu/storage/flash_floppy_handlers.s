@@ -674,15 +674,9 @@ FlashWrite_BlockRef_Type6:
 	ei	5
 	ldb	h, 34
 	.byte 0x8d
-	ei	5
-	pushw	hl
-	ldb	b, 141
-	ei	5
-	ldw	wa, 0x8d22
-	ei	5
-	ldw	iy, 0x8d22
-	ei	5
-	ld	xhl, (xde)
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15E71-0xF15E84 (19 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=71% dist=9 near FlashWrite_BlockRef_Type6_0x295+331
+	.byte 0x06, 0x05, 0x2b, 0x22, 0x8d, 0x06, 0x05, 0x30, 0x22, 0x8d, 0x06, 0x05
+	.byte 0x35, 0x22, 0x8d, 0x06, 0x05, 0xa2, 0x23
 	.byte 0x8e
 	ei	5
 	ld	xhl, (xsp)
@@ -765,16 +759,9 @@ FlashWrite_BlockRef_Type6:
 	ldb	b, 10
 	push	0
 	.byte 0xda
-	nop
-	calr	60928
-	nop
-	ldb	b, 10
-	ldw	bc, 0xda00
-	nop
-	ld	xiz, 0x2200ee00
-	ldwio	89, 0xda00
-	nop
-	jr	nz, 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15F25-0xF15F3C (23 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=10 near FlashWrite_BlockRef_Type6_0x295+511
+	.byte 0x00, 0x1e, 0x00, 0xee, 0x00, 0x22, 0x0a, 0x31, 0x00, 0xda, 0x00, 0x46
+	.byte 0x00, 0xee, 0x00, 0x22, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x6e, 0x00
 	.byte 0xee
 	nop
 	ldb	b, 10
@@ -835,12 +822,9 @@ FlashWrite_BlockRef_Type6:
 	calr	58368
 	nop
 	.byte 0x01
-	ldwio	49, 0xe400
-	nop
-	ld	xiz, 0x100e400
-	ldwio	89, 0xe400
-	nop
-	jr	nz, 0
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15F8F-0xF15FA0 (17 B), unreached CODE-territory, was disassembled as 6 plausible-but-dead instruction lines; per=71% dist=8 near FlashWrite_BlockRef_Type6_0x295+617
+	.byte 0x0a, 0x31, 0x00, 0xe4, 0x00, 0x46, 0x00, 0xe4, 0x00, 0x01, 0x0a, 0x59
+	.byte 0x00, 0xe4, 0x00, 0x6e, 0x00
 	.byte 0xe4
 	nop
 	.byte 0x01
