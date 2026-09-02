@@ -5474,7 +5474,7 @@ GridCheck_LookupAndSend:
 
 	push xwa
 
-	.byte 0x1d, 0x95, 0x02, 0xff	; call Sprintf_Locked (v7 addr)
+	call	16712341
 
 	inc 8, xsp
 

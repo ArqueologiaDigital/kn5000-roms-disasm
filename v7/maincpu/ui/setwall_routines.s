@@ -480,7 +480,7 @@ SetWall_WriteSingle_SetMode:
 
 	ldb_d8 c, (3390)
 
-	.byte 0x1d, 0x58, 0x4f, 0xfd	; call SndParam_UpdateChannels (v7 addr)
+	call	16600920
 
 	ret
 
@@ -1852,7 +1852,7 @@ SetWall_SendPanelCtrl:
 
 	ldb d, 0x3
 
-	.byte 0x1d, 0x20, 0xac, 0xfd	; call SwbtWr_QueuePostEvent (v7 addr)
+	call	16624672
 
 	ret
 
@@ -2172,7 +2172,7 @@ SetWall_Sync_PostEvent:
 SetWall_Sync_FinalUpdate:
 	stdi8 (4596), 1
 
-	.byte 0x1d, 0xae, 0xad, 0xfd	; call BitMapOut_RenderDisplay (v7 addr)
+	call	16625070
 
 	stdi8 (4596), 1
 
@@ -2182,7 +2182,7 @@ SetWall_Sync_FinalUpdate:
 
 	anddi8 (0x28b1), 254
 
-	.byte 0x1d, 0x9e, 0xd6, 0xfd	; call Audio_CheckSubsystemReady (v7 addr)
+	call	16635550
 
 	ret
 
