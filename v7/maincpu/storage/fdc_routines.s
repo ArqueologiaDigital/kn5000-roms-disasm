@@ -972,9 +972,47 @@ FDC_MODE_CONFIG:
 FDC_MC_EXIT:
 	.incbin "includes/romslices/v7_transplant_FDC_MC_EXIT.bin"
 FDC_STATUS_COPY:
-	.incbin "includes/romslices/v7_transplant_FDC_STATUS_COPY.bin"
+	.byte 0xc1, 0x8a, 0x89, 0x19, 0x88, 0x89
+FDC_STATUS_COPY_Code:
+	ret	
+	ldw_d16	wa, (35240)
+	cps	wa, 1
+	jr	z, 13
+	cps	wa, 0
+	jr	nz, 2
+	jr	13
+	ldw	wa, 254
+	calr	63806
+	ret	
+	stdi8	(35278), 255
+	ret	
+	stdi8	(35278), 0
+	ret	
 FDC_INTERRUPT_HANDLER:
-	.incbin "includes/romslices/v7_transplant_FDC_INTERRUPT_HANDLER.bin"
+	.byte 0xd7, 0xfa, 0x04, 0xc1, 0x88, 0x89, 0x3f, 0x00
+	.byte 0x6e, 0x40, 0xd8, 0xac, 0x1e, 0x6e, 0xf6, 0xc1
+	.byte 0x88, 0x89, 0x3f, 0x00, 0x6e, 0x34, 0x1e, 0x34
+	.byte 0xf4, 0xc1, 0x88, 0x89
+FDC_INTERRUPT_HANDLER_Code:
+	push	xsp
+	nop	
+	jr	nz, 42
+	calr	61050
+	ldb_erp	l, 251
+	bit_erpb	251, 7
+	jr	z, 6
+	ldw	wa, 50
+	calr	63743
+	bit_erpb	251, 5
+	jr	nz, 6
+	ldw	wa, 49
+	calr	63731
+	bit_erpb	251, 6
+	jr	z, 6
+	ldw	wa, 47
+	calr	63719
+	pop	qiz
+	ret	
 FDC_CommandEntry:
 	push XIZ
 	ld XIZ,(XSP+0x08)

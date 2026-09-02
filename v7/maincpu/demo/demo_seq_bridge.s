@@ -24,7 +24,97 @@ MiddleFuncCall:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MiddleFuncCall_DispatchData:
-	.incbin "includes/romslices/v7_transplant_MiddleFuncCall_DispatchData.bin"
+	.byte 0xf1, 0xa4
+MiddleFuncCall_DispatchData_Code:
+	pushw	wa
+	ld	xiy, 1044134714
+	call	16279416
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jrl	132
+	push	xde
+	pushw	0
+	pushw	4441
+	call	16713584
+	inc	8, xsp
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	15859911
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	105
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	15855126
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	91
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	15855165
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	77
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	15855680
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	63
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	15855698
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	49
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	15855243
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	35
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	15855321
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	21
+	call	16635550
+	jr	15
+	calr	60449
+	jr	10
+	call	16553566
+	jr	4
 SqTrSel_CaseB:
 	call	16696381
 SqTrSel_CaseC:

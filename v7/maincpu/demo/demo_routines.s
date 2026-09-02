@@ -84,7 +84,14 @@ DemoStyleTtlFunc:
 	lda_24 xix, (DemoStyle_DispatchTable)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoStyle_DispatchTable:
-	.incbin "includes/romslices/v7_transplant_DemoStyle_DispatchTable.bin"
+	.ascii ":;<>"
+DemoStyle_DispatchTable_Code:
+	call	16278990
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jrl	128
 DemoStyle_InputHandler:
 	cp xde, 0xf
 	jr z, DemoStyle_EnterHandler
@@ -155,7 +162,14 @@ DemoSoundTtlFunc:
 	lda_24 xix, (DemoSound_DispatchTable)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoSound_DispatchTable:
-	.incbin "includes/romslices/v7_transplant_DemoSound_DispatchTable.bin"
+	.ascii ":;<>"
+DemoSound_DispatchTable_Code:
+	call	16278990
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	124
 DemoSound_InputHandler:
 	cp xde, 0xf
 	jr z, DemoSound_EnterHandler
@@ -226,7 +240,14 @@ DemoRhyTtlFunc:
 	lda_24 xix, (DemoRhythm_DispatchTable)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 DemoRhythm_DispatchTable:
-	.incbin "includes/romslices/v7_transplant_DemoRhythm_DispatchTable.bin"
+	.ascii ":;<>"
+DemoRhythm_DispatchTable_Code:
+	call	16278990
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	124
 DemoRhythm_InputHandler:
 	cp xde, 0xf
 	jr z, DemoRhythm_EnterHandler

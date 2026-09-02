@@ -941,7 +941,16 @@ DefaultHandler_Ret:
 	jp	15688292
 	ret
 ScoopDisp_FlagSetAndDispatch:
-	.incbin "includes/romslices/v7_transplant_ScoopDisp_FlagSetAndDispatch.bin"
+	.byte 0xc1, 0x1c, 0xe3
+ScoopDisp_FlagSetAndDispatch_Code:
+	push	xiz
+	ldio	200, 51
+	reti	
+	jrl	z, 8
+	call	15707916
+	jp	15688316
+	call	15708093
+	ret	
 ScoopDisp_DispatchTable_Small:
 	.long ScoopDisp_FlagSetAndDispatch
 	.long DefaultHandler_Ret
@@ -1140,9 +1149,29 @@ PerfMode_EventTable_0:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 PerfMode_Evt03_FlagHandler_A:
-	.incbin "includes/romslices/v7_transplant_PerfMode_Evt03_FlagHandler_A.bin"
+	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08
+PerfMode_Evt03_FlagHandler_A_Code:
+	ldb_d8	a, (13944)
+	ldb	l, 1
+	ldb	h, 13
+	call	15689018
+	stb_d8	(13944), a
+	call	15726319
+	call	15686621
+	ret	
 PerfMode_Evt03_FlagHandler_B:
-	.incbin "includes/romslices/v7_transplant_PerfMode_Evt03_FlagHandler_B.bin"
+	.byte 0xc1, 0x1c, 0xe3
+PerfMode_Evt03_FlagHandler_B_Code:
+	push	xiz
+	ldio	193, 121
+	ldw	iz, 10017
+	nop	
+	ldb	h, 12
+	call	15689018
+	stb_d8	(13945), a
+	call	15726319
+	call	15686621
+	ret	
 PerfMode_Evt03_ClampAndUpdate:
 	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0xc1, 0x7a, 0x36
 	.byte 0x21, 0x27, 0x00, 0x26, 0x03, 0x1d, 0x3a, 0x65
@@ -4581,7 +4610,17 @@ VoiceCtrl_BytecodeHandler:
 	jp	VoiceCtrl_BytecodeHandler_0x9C
 	ret
 VoiceCtrl_CheckAndReset:
-	.incbin "includes/romslices/v7_transplant_VoiceCtrl_CheckAndReset.bin"
+	.byte 0xc1, 0x53
+VoiceCtrl_CheckAndReset_Code:
+	decf	
+	push	xiz
+	ldb	w, 193
+	add	(xix), xix
+	push	xsp
+	nop	
+	jrl	z, 4
+	call	15701869
+	ret	
 VoiceCtrl_SendNoteOffSequence:
 	push xhl
 	pushw wa
@@ -5825,7 +5864,11 @@ ClockConfig_Select_Table:
 	.long ClockConfig_Handler_1
 	.long ClockConfig_Handler_0
 ClockConfig_Handler_1:
-	.incbin "includes/romslices/v7_transplant_ClockConfig_Handler_1.bin"
+	.byte 0xc1, 0x1c, 0xe3
+ClockConfig_Handler_1_Code:
+	push	xiz
+	push	sr	
+	ret	
 ClockConfig_Handler_0:
 	.incbin "includes/romslices/v7_transplant_ClockConfig_Handler_0_head.bin"
 	stdi8 (0x3673), 0x00

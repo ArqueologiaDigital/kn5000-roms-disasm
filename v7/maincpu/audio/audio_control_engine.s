@@ -278,7 +278,18 @@ ExtDev_SndParam_Block98_Var40:
 	jrl	-3542
 
 ExtDev_SndParam_BlockA9_Var02:
-	.incbin "includes/romslices/v7_transplant_ExtDev_SndParam_BlockA9_Var02.bin"
+	.byte 0xc1, 0x9a, 0x8c, 0x3f, 0x87, 0xb0, 0xfe, 0xf1
+	.byte 0x5d, 0x90, 0xb9, 0xb0, 0x00, 0xa9, 0xb8, 0x01
+	.byte 0x00, 0x0a, 0xb8, 0x02, 0x32, 0xb8, 0x03, 0x33
+	.byte 0x83, 0x23, 0x82, 0xc3
+ExtDev_SndParam_BlockA9_Var02_Code:
+	jr	z, 5
+	ld	(xde), 2
+	jr	3
+	ld	(xde), 0
+	ld	(xhl), 2
+	calr	61950
+	ret	
 ExtDev_SndParam_Block98_Var80:
 	.byte 0xf1, 0x5d, 0x90, 0xb9	; setda	1, 0x90f9 (v7 patched)
 
@@ -3429,7 +3440,10 @@ ExtData_Voice_FullHandler:
 	.byte 0x90, 0xbe, 0x1e, 0xe3, 0x08, 0xd7, 0xfa, 0x05
 	.byte 0x0e
 ExtData_Voice_CopyAndJump:
-	.incbin "includes/romslices/v7_transplant_ExtData_Voice_CopyAndJump.bin"
+	.byte 0xc1, 0x94, 0x90, 0x19, 0x8d, 0x90, 0xc1, 0x95
+	.byte 0x90, 0x19, 0x8e, 0x90
+ExtData_Voice_CopyAndJump_Code:
+	jrl	2256
 ExtData_Voice_CompareAndDispatch:
 	.byte 0xc1, 0x93, 0x90, 0x21, 0xc9, 0xd8, 0x66, 0x07
 	.byte 0xc9, 0xd9, 0xb0, 0xfe, 0x78, 0x8c, 0x00, 0x1e
@@ -4886,7 +4900,17 @@ SwbtWr_WriteVoiceParam_PreserveRegs:
 	ret
 
 AudioCtrl_PreserveRegs_PopEpilogue:
-	.incbin "includes/romslices/v7_transplant_AudioCtrl_PreserveRegs_PopEpilogue.bin"
+	.ascii "89:;<=>"
+AudioCtrl_PreserveRegs_PopEpilogue_Code:
+	call	16551613
+	pop	xiz
+	pop	xiy
+	pop	xix
+	pop	xhl
+	pop	xde
+	pop	xbc
+	pop	xwa
+	ret	
 SwbtWr_WriteParamBlockSafe:
 	push xwa
 	push xbc
@@ -7205,7 +7229,26 @@ MidiStream_SysExJumpTable:
 MidiStream_SysExNop:
 	ret
 MidiStream_SysExData:
-	.incbin "includes/romslices/v7_transplant_MidiStream_SysExData.bin"
+	.byte 0xc1, 0x98, 0x8c
+MidiStream_SysExData_Code:
+	push	xsp
+	ret	
+	jr	z, 18
+	and	d, 7
+	jr	z, 13
+	ldb_d8	e, (64605)
+	and	e, 7
+	ldb	d, 7
+	call	16554547
+	ret	
+	extz	hl
+	ld	l, b
+	cps	l, 1
+	jr	ugt, 23
+	sll	hl, 2
+	ld	xix, 16564825
+	ld_rrl	xix, xix, hl
+	jp	(xix)
 MidiStream_CtrlJumpTable:
 	.long MidiStream_CtrlNop
 	.long MidiStream_CtrlData
