@@ -156,12 +156,19 @@ def main():
     # Makefile: add the newly integrated names to SE_NAMES.
     mk = open(MAKEFILE, encoding="latin-1").read()
     names = [d["name"] for d in p if "skip" not in d]
-    for ln in mk.split("\n"):
-        if ln.startswith("SE_NAMES = "):
-            cur = ln[len("SE_NAMES = "):].split()
-            new = cur + [n for n in names if n not in cur]
-            mk = mk.replace(ln, "SE_NAMES = " + " ".join(new), 1)
-            break
+    # `se_screen_*` blocks are v10-only (this lane derived them from the v10 ROM);
+    # SE_NAMES is patsubst'd into v7/ and v9/ too, so they go in SE_V10_NAMES.
+    for var, sel in (("SE_NAMES", lambda n: not n.startswith("se_screen_")),
+                     ("SE_V10_NAMES", lambda n: n.startswith("se_screen_"))):
+        want = [n for n in names if sel(n)]
+        if not want:
+            continue
+        for ln in mk.split("\n"):
+            if ln.startswith(var + " = "):
+                cur = ln[len(var) + 3:].split()
+                new = cur + [n for n in want if n not in cur]
+                mk = mk.replace(ln, var + " = " + " ".join(new), 1)
+                break
     mk = mk.replace(
         "# Note: se_drumkit_display and se_rhythm_transport_tables are"
         " .incbin'd in assembly.\n"

@@ -43,12 +43,27 @@ INCDIR = os.path.join(ROOT, "v10/maincpu/style_ui")
 ROM = os.path.join(ROOT, "original_ROMs/kn5000_v10_program.rom")
 BASE = 0xE00000
 
-# The 9 already wired into the build via SE_NAMES in the Makefile.
-INTEGRATED = {
-    "se_drumkit_display", "se_rhythm_transport_tables", "se_name_editor",
-    "se_compare_screen", "se_parameter_grid", "se_transport_display",
-    "se_setup_sel3", "se_apply_confirm", "se_general_edit",
-}
+def _integrated():
+    """Names already `.incbin`'d by some v10 assembly file.
+
+    Derived, not hardcoded: this lane wires several more into the build during
+    its own run, and a stale constant would make the tool try to integrate them
+    twice (dropping the comments carried over the first time).
+    """
+    got = set()
+    root = os.path.join(ROOT, "v10", "maincpu")
+    for dp, _, fs in os.walk(root):
+        for f in fs:
+            if not f.endswith(".s"):
+                continue
+            txt = open(os.path.join(dp, f), encoding="latin-1").read()
+            for m in re.finditer(r'\.incbin\s+"includes/generated/(se_[\w]+)\.bin"',
+                                 txt):
+                got.add(m.group(1))
+    return got
+
+
+INTEGRATED = _integrated()
 
 
 def header_base(path):
