@@ -374,3 +374,64 @@ classifier's own error rate is the only quality signal.  Four negative controls
 called code) and two positive ones (so a detector cannot pass by never firing)
 are drawn from these same four images.  The script's module docstring lists
 five named failure modes and which control measures each.
+
+## Driver-gap census set (lane `w12/drvkn5000`, 2026-09-02)
+
+Four scripts written to answer "what does the completed KN5000 disassembly say
+that the MAME drivers do not model?".  Findings are in
+`notes/DRIVER-INSIGHT-kn5000-2026-09-02.md`; each script's own header repeats
+its question and its traps.
+
+### `io_address_census.py`
+**Question:** which hardware addresses does the firmware read, write or
+read-modify-write, and which of them does the MAME `kn5000` address_map not
+cover?
+
+    python3 scripts/analysis/io_address_census.py v10/maincpu --map main
+    python3 scripts/analysis/io_address_census.py v10/maincpu --map main+hdae
+    python3 scripts/analysis/io_address_census.py v142 --map sub
+    python3 scripts/analysis/io_address_census.py v142 --map sub --bases
+
+⚠ The default mode sees only DIRECT-addressing operands.  Firmware that loads a
+base into a register and then stores register-indirect is invisible to it — the
+sub-CPU's DSP1 driver and the main CPU's flash routines both do that.  **A zero
+from the default mode is not evidence of absence**; run `--bases` too.
+
+### `flash_command_census.py`
+**Question:** which regions the driver maps `.rom()` does the firmware actually
+identify, erase and program?
+
+    python3 scripts/analysis/flash_command_census.py v10/maincpu
+
+Finds the AMD/JEDEC signature: the unlock ADDRESS offsets added to a base
+register (`+0xAAAA`/`+0x5554` = one x16 device, `+0x15554`/`+0xAAA8` = two in
+parallel) and the command DATA words stored there, plus the device IDs the
+identify routine accepts.  The 16-bit command values are common constants, so
+they count only within 14 lines of an unlock offset — unfiltered, `0x10` alone
+scored 1,919 sites, nearly all `.byte` rows.
+
+### `port_read_census.py`
+**Question:** which TMP94C241 port bits does the firmware READ, and does the
+driver wire them?  An unbound port reads 0 in MAME, so a port the firmware
+branches on and the driver never binds is a silently wrong input.
+
+    python3 scripts/analysis/port_read_census.py v10/maincpu
+    python3 scripts/analysis/port_read_census.py v142 subcpu
+
+⚠ `ldb_d8` / `stdi8` / `cpdi8` in this tree are the SIXTEEN-bit direct forms and
+address DRAM, **not** the SFRs; `lda_dd8l` materialises the constant rather than
+reading the port.  Counting either as port access inflates the census.  The real
+SFR families are `*_dd8` and `*_sd8b`.
+Result at the time of writing: v10/maincpu 31 read sites over P7, PC, PD, PE,
+PF, PG, PH, PZ; v142+subcpu 20 over PC, PD, PG, PH.
+
+### `error_number_table.py`
+**Question:** what does "ERROR 08" mean — does the number identify where the
+failure happened?
+
+    python3 scripts/analysis/error_number_table.py original_ROMs/kn5000_v10_program.rom
+
+Answer: no.  8 is the format handler's DEFAULT message number, taken by any
+return code absent from the table at `0x00EA067C`; the format worker's own
+failure return (-6) also maps to 8.  Written because the sibling KN7000's floppy
+notes treat ERROR 08 as naming a decision point.
