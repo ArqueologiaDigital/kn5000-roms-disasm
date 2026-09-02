@@ -147,6 +147,22 @@ NOTHING HERE CAN BREAK THE GATE
   text for each span with llvm-mc and compares all 1,217 / 1,236 bytes against
   the ROM; --splice refuses to write if either differs or if any check fails.
 
+★ AND THE GATE WAS PROVED TO SEE THIS SPAN, not just to stay green over it.  A
+  green gate over a region certifies nothing if the object was built from a
+  stale prerequisite, so the emission was falsified once, 2026-09-02:
+
+      # flip ONE nibble of one emitted slot: in prom_b/wsa1_prom_b.s change
+      #     .long 0x00F7828A   ; F003F9  [  0]
+      # to  .long 0x00F7828B   ; F003F9  [  0]
+      make all && python3 scripts/analysis/assert_byte_identical.py
+      #   DIFFERS  wsa1_prom_b.ic13: 1 byte(s), first at 0x3F9
+      #   FAIL: 1 ROM(s) differ.            <- the gate sees it
+      # restore that one character, rebuild:
+      #   PASS: every rebuilt ROM is byte-identical.
+
+  The reported offset is 0x3F9, the slot that was touched -- so the bytes the
+  gate compares really are the ones these directives emit.
+
 RUN
   python3 notes/gen_prom_b_f0033f_f0199e.py            # both spans' assembly
   python3 notes/gen_prom_b_f0033f_f0199e.py --layout   # the segment table
