@@ -168,9 +168,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
 	lda_d16	xwa, (0x894e)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	ldb_d8	c, (0x89f8)
 	extz	bc
 	sla	bc, 2
@@ -372,9 +370,7 @@ SLSrcBankList_FuncBody:
 	ld	a, l
 	ld	c, e
 	add	a, e
-	.byte 0xc2, 0x54
-	push	234
-	.byte 0xf1
+	cpda8_24 xbc, (15337812)
 	jr	nc, 25
 	add	c, l
 	stb_d8	(0x89fc), c
@@ -420,9 +416,7 @@ SLSrcBankList_FuncBody:
 	ld	c, e
 	ld	a, e
 	inc	1, a
-	.byte 0xc2, 0x54
-	push	234
-	.byte 0xf1
+	cpda8_24 xbc, (15337812)
 	jr	nc, 36
 	ldb_da	e, (PtrTbl_DrumKitNames_0x7A)
 	ld	l, e
@@ -516,9 +510,7 @@ SLSrcBankList_FuncBody:
 	cp	xbc, 0x01c0000b
 	jrl	nz, 196
 	lda_d16	xwa, (0x894e)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	60117
@@ -584,9 +576,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	xiz, xwa
 	lda_d16	xwa, (0x894e)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	ldb_d8	c, (0x89f8)
 	extz	bc
 	sla	bc, 2
@@ -686,7 +676,7 @@ SLSrcBankList_FuncBody:
 	jr	39
 	.byte 0x9f, 0x04
 	push	xsp
-	.byte 0x04
+	max
 	nop
 	jr	c, 36
 	ldb_d8	c, (0x89fe)
@@ -775,9 +765,7 @@ SLSrcBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	.byte 0xc2
-	jrl	z, -5623
-	.byte 0xf1
+	cpda8_24 xbc, (15337846)
 	jr	nc, 25
 	add	c, e
 	stb_d8	(0x89fe), c
@@ -822,9 +810,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2
-	jrl	z, -5623
-	.byte 0xf1
+	cpda8_24 xbc, (15337846)
 	jr	nc, 36
 	ldb_da	e, (PtrTbl_DrumKitNames_0x9C)
 	ld	l, e
@@ -939,9 +925,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp), c
 	ld	(xsp+2), xwa
 	lda_d16	xwa, (0x894e)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	ldb_d8	c, (0x89f8)
 	extz	bc
 	sla	bc, 2
@@ -1229,9 +1213,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0x94
-	push	234
-	.byte 0xf1
+	cpda8_24 xbc, (15337876)
 	jr	nc, 105
 	ldb_da	e, (Str_AllOption_EA0980_0x12)
 	ld	a, e
@@ -1376,9 +1358,7 @@ SLSrcBankList_FuncBody:
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp a, 248
 	ld	(xhl), a
 	lds	wa, 1
 	add	wa, de
@@ -1572,9 +1552,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
 	lda_d16	xwa, (0x89a2)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	ldb_d8	c, (0x89f8)
 	extz	bc
 	sla	bc, 2
@@ -1725,9 +1703,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	.byte 0xc2
-	muls	b, 234
-	.byte 0xf1
+	cpda8_24 xbc, (15337930)
 	jr	nc, 25
 	add	c, e
 	stb_d8	(0x8a02), c
@@ -1775,9 +1751,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2
-	muls	b, 234
-	.byte 0xf1
+	cpda8_24 xbc, (15337930)
 	jr	nc, 36
 	ldb_da	e, (Str_AllOption_EA09B2_0x16)
 	ld	l, e
@@ -1928,9 +1902,7 @@ SLDstBankList_FuncBody:
 	cp	xbc, 0x01c0000b
 	jr	nz, 122
 	lda_d16	xwa, (0x89a2)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	56043
@@ -1960,9 +1932,7 @@ SLDstBankList_FuncBody:
 	ld	c, w
 	ld	a, w
 	inc	1, a
-	.byte 0xc2, 0xd0
-	push	234
-	.byte 0xf1
+	cpda8_24 xbc, (15337936)
 	jr	nc, 15
 	inc	1, c
 	stb_d8	(0x8a04), c
@@ -2005,9 +1975,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	xiz, xwa
 	lda_d16	xwa, (0x89a2)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	ldb_d8	c, (0x89f8)
 	extz	bc
 	sla	bc, 2
@@ -2149,9 +2117,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	.byte 0xc2, 0xee
-	push	234
-	.byte 0xf1
+	cpda8_24 xbc, (15337966)
 	jr	nc, 25
 	add	c, e
 	stb_d8	(0x8a06), c
@@ -2199,9 +2165,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0xee
-	push	234
-	.byte 0xf1
+	cpda8_24 xbc, (15337966)
 	jr	nc, 36
 	ldb_da	e, (Str_AllOption_EA09B2_0x3A)
 	ld	l, e
@@ -2295,9 +2259,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp), c
 	ld	(xsp+2), xwa
 	lda_d16	xwa, (0x89a2)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	ldb_d8	c, (0x89f8)
 	extz	bc
 	sla	bc, 2
@@ -2716,9 +2678,7 @@ SLDstBankList_FuncBody:
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp a, 248
 	ld	(xhl), a
 	lds	wa, 1
 	add	wa, de

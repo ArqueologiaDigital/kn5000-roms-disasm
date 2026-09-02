@@ -7,26 +7,17 @@
 ; =============================================================================
 
 FDemo_DisplayResourceData:
-	.byte 0xf3
-	swi	5
-	.byte 0xdc
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-292)
 	push	xiz
 	ld	xiz, xwa
-	.byte 0xbf
-	ei	2
-	nop
-	nop
+	ldw (xsp+6), 0
 	.byte 0xf3
 	swi	5
 	ldio	1, 49
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-	.byte 0xf5, 0xe0
-	nop
-	ldb	w, 233
-	.byte 0xf0
+	stib_dsp 224, 32
+	cp xwa, xbc
 	jr	c, -8
 	push	xiz
 	call	Strlen
@@ -95,7 +86,7 @@ FDemo_DisplayResourceData:
 	jr	lt, -47
 	.byte 0x9f, 0x06
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 22
 	lds	iz, 0
@@ -3097,9 +3088,7 @@ FileIO_ByteBlock_DemoProc1:
 	ldw	hl, 0xff98
 	jrl	187
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	call	GetFileEntryPtr
@@ -3272,9 +3261,7 @@ FileIO_ByteBlock_DemoProc1:
 	ldw	hl, 0xff98
 	jrl	204
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	call	GetFileEntryPtr
@@ -3357,9 +3344,7 @@ FileIO_ByteBlock_DemoProc1:
 	ldw	hl, 0xff98
 	jr	92
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	call	GetFileEntryPtr
@@ -3404,9 +3389,7 @@ FileIO_ByteBlock_DemoProc1:
 	ldw	hl, 0xff98
 	jrl	313
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	call	GetFileEntryPtr
@@ -3481,9 +3464,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	xwa, 0x4aa7
 	add	(xsp+6), xwa
 	ld	(xsp+12), 64
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp a, 248
 	ld	(xsp+14), a
 	ld	xwa, (xsp+2)
 	lds	bc, 0
@@ -3524,9 +3505,7 @@ FileIO_ByteBlock_DemoProc1:
 	.byte 0x33, 0x98
 	.long Pad_AfterBitmap_MIDIConnections_1
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	call	GetFileEntryPtr
@@ -3554,10 +3533,8 @@ FileIO_ByteBlock_DemoProc1:
 	jrl	152
 	cpw	(xsp+38), 2
 	jr	nc, 60
-	.byte 0xbf
-	ldio	2, 184
-	ldb	d, 159
-	ldb	h, 32
+	ldw (xsp+8), 9400
+	ld wa, (xsp+38)
 	extz	xwa
 	ld	xbc, 9400
 	call	Math_MultiplyAccumulate
@@ -6662,9 +6639,7 @@ FileIO_ByteBlock_DemoProc2:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	calr	62715
@@ -6706,9 +6681,7 @@ FileIO_ByteBlock_DemoProc2:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	calr	62593
@@ -6757,9 +6730,7 @@ FileIO_ByteBlock_DemoProc2:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	calr	62446
@@ -6801,9 +6772,7 @@ FileIO_ByteBlock_DemoProc2:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	calr	62321
@@ -6847,9 +6816,7 @@ FileIO_ByteBlock_DemoProc2:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	calr	62192
@@ -6890,9 +6857,7 @@ FileIO_ByteBlock_DemoProc2:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	calr	62072
@@ -6931,9 +6896,7 @@ FileIO_ByteBlock_DemoProc2:
 	cps	hl, 0
 	jr	lt, 49
 	ld	a, l
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, hl
 	calr	61957
@@ -8794,7 +8757,7 @@ FileIO_ErrorCodeByteBlock:
 	ldb_da	a, (0x340f2)
 	.byte 0xc1
 	ldw	ix, 0x3f8d
-	.byte 0x01
+	normal
 	jr	nz, 75
 	.byte 0xf1
 	ldb	w, 4
@@ -8813,11 +8776,8 @@ FileIO_ErrorCodeByteBlock:
 	ldb_da	a, (0x340f2)
 	extz	wa
 	lda_24	xbc, (FileOp_StubAndDirNames_0x90)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 201
-	scc8	c, l
+	ld_rrb a, xbc, wa
+	cp a, 119
 	jr	z, 21
 	cp	a, 108
 	jr	z, 13
@@ -8840,11 +8800,8 @@ FileIO_ErrorCodeByteBlock:
 	ld	a, c
 	extz	wa
 	lda_24	xbc, (FileOp_StubAndDirNames_0x90)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 201
-	scc8	c, l
+	ld_rrb a, xbc, wa
+	cp a, 119
 	jr	z, 19
 	cp	a, 108
 	jr	z, -51

@@ -4390,11 +4390,8 @@ AllocCheckNoteOn_Data:
 	ldw_d16	wa, (0xc598)
 	bit	9, wa
 	jrl	z, 355
-	.byte 0xc7
-	swi	3
-	cp	(xwa-57), xhl
-	.byte 0xcf
-	rcf
+	ldib_erp 251, 0
+	cp_erpb 251, 16
 	jrl	nc, 345
 	stb_erp	a, 251
 	extz	wa
@@ -4404,18 +4401,13 @@ AllocCheckNoteOn_Data:
 	push	xsp
 	pop_a
 	jr	nz, 14
-	.byte 0xc7
-	swi	3
-	add	(xbc-55), c
+	stb_erp a, 251
+	ld c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	Voice_BuildAndEmitNoteOnEvents
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	.byte 0xcf
-	rcf
+	inc1b_erp 251
+	cp_erpb 251, 16
 	jr	c, -42
 	jrl	300
 	ld	xwa, (xsp+4)
@@ -4484,11 +4476,8 @@ AllocCheckNoteOn_Data:
 	ldw_d16	wa, (0xc598)
 	bit	9, wa
 	jr	z, 53
-	.byte 0xc7
-	swi	3
-	cp	(xwa-57), xhl
-	.byte 0xcf
-	rcf
+	ldib_erp 251, 0
+	cp_erpb 251, 16
 	jr	nc, 44
 	stb_erp	a, 251
 	extz	wa
@@ -4500,18 +4489,13 @@ AllocCheckNoteOn_Data:
 	push	sr
 	.byte 0xf1
 	jr	nz, 14
-	.byte 0xc7
-	swi	3
-	add	(xbc-55), c
+	stb_erp a, 251
+	ld c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	Voice_BuildAndEmitNoteOnEvents
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	.byte 0xcf
-	rcf
+	inc1b_erp 251
+	cp_erpb 251, 16
 	jr	c, -44
 	ld	a, (xsp+2)
 	extz	wa
@@ -4522,9 +4506,8 @@ AllocCheckNoteOn_Data:
 	ldb_erp	a, 251
 	cp	a, 255
 	jr	z, 14
-	.byte 0xc7
-	swi	3
-	add	(xbc-55), c
+	stb_erp a, 251
+	ld c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	SeqPart_EmitNoteOnMessages
@@ -4537,15 +4520,12 @@ AllocCheckNoteOn_Data:
 	ldb_erp	a, 251
 	cp	a, 255
 	jr	z, 14
-	.byte 0xc7
-	swi	3
-	add	(xbc-55), c
+	stb_erp a, 251
+	ld c, a
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	Voice_EmitMidiNoteOnEvents
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 
@@ -15547,17 +15527,19 @@ VoiceSlot_StoreParams_LoadReg5:
 	ret
 
 VoiceSlot_StoreParams_Data:
-	.byte 0x01
+	normal
 	push	sr
-	.byte 0x01
+	normal
 	push	sr
-	.byte 0x01, 0x01
+	normal
+	normal
 	push	sr
-	.byte 0x01
+	normal
 	push	sr
-	.byte 0x01
+	normal
 	push	sr
-	.byte 0x01, 0x01
+	normal
+	normal
 	push	sr
 	halt
 	.byte 0x06
@@ -15605,22 +15587,14 @@ ComputeNoteBitPositi_Data:
 	pushw	bc
 	ld	xiz, 0xcee6
 	ld	l, (xiz)
-	.byte 0xc3
-	reti
-	swi	0
-	.byte 0xf4
-	ldb	w, 206
-	and	(xsp), xiz
-	.byte 0xd6
+	ld_rrb w, xiz, iy
+	sub l, h
+	xor h, h
 	ld	xiz, VoiceSlot_CheckAndApply_Data_0xD
-	.byte 0xc3
-	reti
-	swi	0
-	.byte 0xec
-	ldb	c, 203
-	jr	ge, -57
-	push	xix
-	add	(xbc-53), bc
+	ld_rrb c, xiz, hl
+	dec 1, c
+	ldb_erp a, 60
+	ld a, c
 	scf
 	.byte 0xda
 	pushw	ix
@@ -16848,10 +16822,32 @@ VoiceSlot_CheckAndApply_LoadReg:
 	ret
 
 VoiceSlot_CheckAndApply_Data2:
-	.hword 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080
-	.hword 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000
+	normal
+	nop
+	push sr
+	nop
+	max
+	nop
+	ldio 0, 16
+	nop
+	ldb w, 0
+	ld xwa, 32768
+	normal
+	nop
+	push sr
+	nop
+	max
+	nop
+	ldio 0, 16
+	nop
+	ldb w, 0
+	ld xwa, 960004096
+	push xhl
+	push xde
+	push xix
+	push xiy
+	push xiz
 	; index row
-	.byte 0x38, 0x39, 0x3b, 0x3a, 0x3c, 0x3d, 0x3e
 	ldb_da a, (0xcede)
 	stb_d8	(0xcec0), a
 	ldb_da	a, (0xcedf)
@@ -16909,14 +16905,9 @@ VoiceSlot_CheckAndApply_Data2:
 	dec	1, hl
 	ld	xiz, 0xcee6
 	ld	d, (xiz)
-	.byte 0xc3
-	reti
-	swi	0
-	.byte 0xec
-	ldb	e, 205
-	and	(xix), xix
-	.byte 0xcf
-	incf
+	ld_rrb e, xiz, hl
+	sub d, e
+	cp d, 12
 	jr	nc, 5
 	calr	63771
 	jr	3
@@ -17141,9 +17132,10 @@ UIState_ProcessKeyEvent:
 	jrl	nz, -16448
 	pop	sr
 	push_a
-	.byte 0x7f, 0xc0
-	ld	a, (xsp+1)
-	extz	wa
+	jrl nc, -28736
+	normal
+	ldb a, 216
+	ccf
 	cps	wa, 0
 	jrl	mi, 483
 	cp	wa, 12
@@ -17270,10 +17262,8 @@ SndParam_ProcessEntry:
 	res	7, a
 	cps	a, 0
 	jrl	z, 175
-	.byte 0x8f
-	nop
-	ldb	a, 216
-	ccf
+	ld a, (xsp+256)
+	extz wa
 	calr	5551
 	cps	l, 0
 	jrl	nz, 162
@@ -17364,7 +17354,7 @@ HdaeRom_Entry:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	dec	6, bc
 	popw	wa
@@ -17420,7 +17410,7 @@ HdaeRom_ProcessBlock:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	.byte 0xcf
 	push_f
@@ -17456,7 +17446,7 @@ HdaeRom_ReadParam:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	.byte 0xcf
 	push_f
@@ -17491,7 +17481,7 @@ HdaeRom_WriteParam:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	.byte 0xcf
 	push_f
@@ -17526,7 +17516,7 @@ HdaeRom_CheckResult:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	.byte 0xcf
 	push_f
@@ -17561,7 +17551,7 @@ HdaeRom_FinishBlock:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	.byte 0xcf
 	push_f
@@ -17602,7 +17592,7 @@ HdaeRom_TableEntry2:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 216
 	ccf
 	cps	wa, 0
@@ -17611,15 +17601,9 @@ HdaeRom_TableEntry2:
 	jrl	gt, 128
 	add	wa, wa
 	lda_24	xix, (SoundEffect_Dispatch_Table_0x1256)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	push_a
-	.byte 0xac
-	swi	6
-	ldw	ix, 2035
-	jp_dd8	8, 224
+	ld_rrw wa, xix, wa
+	lda_24 xix, (16690196)
+	jp_rr 8, xix, wa
 	ld	a, (xsp+3)
 	and	a, 255
 	jr	z, 98
@@ -17682,7 +17666,7 @@ UIStateEvt_ProcessHandler:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	inc	6, hl
 	ld	xiz, 0x5a66dac9
@@ -17742,7 +17726,7 @@ HdaeRom_AltProcessBlock:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	.byte 0xcf
 	decf
@@ -17792,7 +17776,7 @@ HdaeRom_AltReadParam:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	inc	6, ix
 	ld	xiy, 0x4166dbc9
@@ -17840,10 +17824,11 @@ HdaeRom_AltCheckResult:
 	jrl	nz, -16448
 	pop	sr
 	push_a
-	.byte 0x7f, 0xc0
-	ld	a, (xsp+1)
-	cps	a, 4
-	jr	z, 40
+	jrl nc, -28736
+	normal
+	ldb a, 201
+	inc 6, ix
+	pushw wa
 	cps	a, 3
 	jr	z, 77
 	cps	a, 2
@@ -17896,7 +17881,7 @@ HdaeRom_AltCheckResult:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	exts	l
 	jr	ugt, 69
@@ -17911,11 +17896,9 @@ HdaeRom_AltCheckResult:
 	ld	a, (xwa)
 	extz	wa
 	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x1AA)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	e, 205
-	xor	(xbc-55), a
+	ld_rrb e, xbc, wa
+	ld a, e
+	cps a, 1
 	jr	z, 8
 	cps	a, 2
 	jr	z, 4
@@ -17970,7 +17953,7 @@ HdaeRom_AltTableEntry1:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	inc	6, hl
 	pushw	ix
@@ -18063,7 +18046,7 @@ HdaeRom_AltTableEntry4:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	push	xsp
 	rcf
 	jr	c, 6
@@ -18145,7 +18128,7 @@ HdaeRom_AltTableEntry9:
 	pop	sr
 	push_a
 	jrl	nc, -28736
-	.byte 0x01
+	normal
 	ldb	a, 201
 	inc	6, bc
 	calr	55497
@@ -18501,9 +18484,7 @@ SendEpilogue_Data:
 	cps	wa, 0
 	jrl	nz, 1530
 	add	iz, 64
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18511,19 +18492,15 @@ SendEpilogue_Data:
 	calr	2290
 	jrl	1507
 	dec	5, iz
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 131
 	calr	2269
-	.byte 0xc7
-	swi	0
-	.byte 0x89, 0xc1
-	andda8_24	l, (0x76f1e9)
-	halt
+	stb_erp a, 248
+	cpda8 xbc, (59842)
+	jrl z, 1479
 	ldw_d16	wa, (0xc596)
 	and	wa, 128
 	cp	wa, 128
@@ -18578,23 +18555,14 @@ SendEpilogue_Data:
 	jrl	ugt, 1331
 	add	wa, wa
 	lda_24	xix, (SoundEffect_Dispatch_Table_0x1284)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	decf
-	.byte 0xb4
-	swi	6
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8, 0xc7
-	swi	0
-	.byte 0x89
+	ld_rrw wa, xix, wa
+	lda_24 xix, (16692237)
+	jp_rr 8, xix, wa
+	stb_erp a, 248
 	extz	wa
 	call	SendPartDataBlock_Block
 	jrl	1297
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp a, 248
 	extz	wa
 	call	SendPartDataBlock_Block2
 	jrl	1285
@@ -18633,9 +18601,7 @@ SendEpilogue_Data:
 	cps	hl, 1
 	jr	nz, 2
 	lds	iz, 0
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp a, 248
 	extz	wa
 	call	SendPartDataBlock_Block4
 	jrl	1166
@@ -18660,14 +18626,9 @@ SendEpilogue_Data:
 	jrl	ugt, 1106
 	add	wa, wa
 	lda_24	xix, (SoundEffect_Dispatch_Table_0x1266)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	sbc	xix, xiz
-	swi	6
-	ldw	ix, 2035
-	jp_dd8	8, 224
+	ld_rrw wa, xix, wa
+	lda_24 xix, (16692462)
+	jp_rr 8, xix, wa
 	ldw	wa, 127
 	cps	iz, 0
 	jr	nz, 2
@@ -18683,19 +18644,14 @@ SendEpilogue_Data:
 	stb_erp	a, 248
 	extz	wa
 	calr	2042
-	.byte 0xd7
-	swi	2
-	cp	(xhl-41), de
-	.byte 0x8a
+	ld qiz, hl
+	ld de, qiz
 	ldb	d, 0
 	ldw	wa, 80
 	ldw	bc, 134
 	calr	1809
-	.byte 0xd7
-	swi	2
-	and	(xwa-40), d
-	nop
-	swi	7
+	ld wa, qiz
+	and wa, 65280
 	jrl	nz, 1019
 	stb_erp	a, 248
 	extz	wa
@@ -18717,12 +18673,8 @@ SendEpilogue_Data:
 	add	wa, 164
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	.byte 0xc3
-	reti
-	.byte 0xe0
-	swi	0
-	ldb	a, 216
-	ccf
+	ld_rrb a, xwa, iz
+	extz wa
 	ld	de, wa
 	ldw	wa, 80
 	calr	1728
@@ -18735,12 +18687,9 @@ SendEpilogue_Data:
 	ld	a, l
 	extz	wa
 	calr	1917
-	.byte 0xd7
-	swi	2
-	cp	(xhl-41), de
-	and	(xwa-40), d
-	nop
-	swi	7
+	ld qiz, hl
+	ld wa, qiz
+	and wa, 65280
 	jrl	nz, 908
 	ld	xwa, 0x4281
 	call	SndParam_LookupReadOnly
@@ -18764,12 +18713,8 @@ SendEpilogue_Data:
 	add	wa, 164
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	.byte 0xc3
-	reti
-	.byte 0xe0
-	swi	0
-	ldb	a, 216
-	ccf
+	ld_rrb a, xwa, iz
+	extz wa
 	ld	de, wa
 	ldw	wa, 80
 	calr	1609
@@ -19684,13 +19629,9 @@ MIDI_WriteChannelData_Block:
 	ret	gt
 	add	wa, wa
 	lda_24	xix, (SoundEffect_Dispatch_Table_0x136E)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	ld	xiy, 0xf334febf
-	reti
-	jp_dd8	8, 224
+	ld_rrw wa, xix, wa
+	lda_24 xix, (16695109)
+	jp_rr 8, xix, wa
 	ldb	l, 1
 	ret
 
@@ -23683,11 +23624,9 @@ CalcAddrOffset_Data:
 	ldw	hl, 0xffff
 	jr	19
 	ld	xwa, (xsp+2)
-	.byte 0xf3
-	reti
-	.byte 0xe0
-	swi	0
-	ld	xsp, 0x88de61de
+	st_rrb l, xwa, iz
+	inc 1, iz
+	ld wa, iz
 	.byte 0x9f, 0x06, 0xf0
 	jr	c, -31
 	lds	hl, 0
@@ -24819,11 +24758,8 @@ SndParam_LookupByPartAndNote:
 SndParam_CompactLookupStub:
 	extz	wa
 	lda_24	xbc, (CharMap_FullPermutation_0x22E)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 216
-	ccf
+	ld_rrb a, xbc, wa
+	extz wa
 	ld	l, a
 	ret
 
@@ -25091,9 +25027,10 @@ Param_SignExtendRetu_Data:
 	res	7, c
 	ldb	b, 0
 	extz	xbc
-	.byte 0xea
-	xor	(xde+3811), xwa
-	.byte 0x8b
+	or xhl, xde
+	or xhl, xbc
+	ret
+	ld hl, wa
 	cpl	bc
 	and	hl, bc
 	retd	4
@@ -25112,10 +25049,7 @@ Param_SignExtendRetu_Data:
 	add	xhl, CharMap_FullPermutation_0x38C
 	ld	hl, (xhl)
 	lda_24	xix, (Param_SignExtendRetu_Data_0x69)
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	cps	xix, 0
+	jp_rr 8, xix, hl
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -25136,14 +25070,9 @@ Param_SignExtendRetu_Data:
 	extz	hl
 	sll	hl, 1
 	ld	xix, CharMap_FullPermutation_0x37E
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	sla	de, 254
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (16706778)
+	jp_rr 8, xix, hl
 	ld	a, (xsp)
 	exts	wa
 	pushw	50
@@ -25201,14 +25130,9 @@ Param_SignExtendRetu_Data:
 	extz	bc
 	sll	bc, 1
 	ld	xix, CharMap_FullPermutation_0x323
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	a, 242
-	or	(xbc), iy
-	swi	6
-	ldw	ix, 2035
-	jp_dd8	8, 228
+	ld_rrw bc, xix, bc
+	lda_24 xix, (16706961)
+	jp_rr 8, xix, bc
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -25296,10 +25220,7 @@ Param_SignExtendRetu_Data:
 	add	xhl, CharMap_FullPermutation_0x3F4
 	ld	hl, (xhl)
 	lda_24	xix, (Param_SignExtendRetu_Data_0x264)
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	cps	xix, 0
+	jp_rr 8, xix, hl
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
@@ -25326,14 +25247,10 @@ Param_SignExtendRetu_Data:
 	extz	wa
 	sll	wa, 1
 	ld	xix, CharMap_FullPermutation_0x3E6
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	sll	xhl, 254
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	divs	wa, 127
+	ld_rrw wa, xix, wa
+	lda_24 xix, (16707307)
+	jp_rr 8, xix, wa
+	pushw 127
 	pushw	32
 	ld	wa, (xsp+8)
 	ldw	bc, 0xffff
@@ -25390,14 +25307,10 @@ Param_SignExtendRetu_Data:
 	extz	bc
 	sll	bc, 1
 	ld	xix, CharMap_FullPermutation_0x3B7
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	a, 242
-	cp	(xde-17), xiz
-	ldw	ix, 2035
-	.byte 0xf0, 0xe4
-	divs	wa, 127
+	ld_rrw bc, xix, bc
+	lda_24 xix, (16707498)
+	jp_rr 8, xix, bc
+	pushw 127
 	pushw	32
 	ld	wa, (xsp+8)
 	ldw	bc, 0xffff
@@ -26489,44 +26402,27 @@ SendPartDataBlock_Data:
 	ld	(xiz+92), a
 	ld	a, (xbc+32)
 	ld	(xiz+93), a
-	.byte 0xc7, 0xe6
-	sub	(xwa-39), xwa
+	ldib_erp 230, 0
+	lds bc, 0
 	ld	hl, bc
 	add	hl, 94
 	ld	de, bc
 	add	de, 33
 	ld	xwa, (xsp+10)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe8
-	ldb	a, 243
-	reti
-	swi	0
-	.byte 0xec
-	ld	xbc, 0xd961e6c7
-	jr	lt, -57
-	.byte 0xe6
-	mul	l, 103
-	.byte 0xdc
+	ld_rrb a, xwa, de
+	st_rrb a, xiz, hl
+	inc1b_erp 230
+	inc 1, bc
+	cp_erpb 230, 8
+	jr c, -36
 	ld	(xsp+4), 0
-	.byte 0xbf
-	ldio	2, 0
-	nop
-	.byte 0xbf
-	ei	2
-	nop
-	nop
+	ldw (xsp+8), 0
+	ldw (xsp+6), 0
 	ld	wa, (xsp+6)
 	add	wa, 102
-	.byte 0xf3
-	reti
-	swi	0
-	.byte 0xe0
-	ldw	bc, 2207
-	ldb	b, 218
-	.byte 0xc8
-	pushw	bc
-	nop
+	lda_rr xbc, xiz, wa
+	ld de, (xsp+8)
+	add de, 41
 	ld	xwa, (xsp+10)
 	exts	xde
 	add	xde, xwa
@@ -26675,7 +26571,7 @@ SendPartDataBlock_Data:
 	nop
 	.byte 0x8f, 0x04
 	push	xsp
-	.byte 0x04
+	max
 	jrl	c, -444
 	pop	xiz
 	lda	xsp, (xsp+10)
@@ -26700,13 +26596,10 @@ SendPartDataBlock_Data:
 	srl	c, 4
 	extz	bc
 	lda_24	xhl, (CharMap_FullPermutation_0x475)
-	.byte 0xc3
-	reti
-	or	xix, xix
-	ldb	c, 199
-	.byte 0xf0, 0x9b, 0xc7, 0xf0
-	or	(xix-52), h
-	.byte 0x06
+	ld_rrb c, xhl, bc
+	ldb_erp c, 240
+	stb_erp d, 240
+	sll d, 6
 	ld	e, (xwa+19)
 	ld	c, e
 	and	c, 240
@@ -26725,13 +26618,9 @@ SendPartDataBlock_Data:
 	ldb_erp	e, 240
 	stb_erp	c, 240
 	extz	bc
-	.byte 0xc3
-	reti
-	or	xix, xix
-	ldb	c, 199
-	.byte 0xf0
-	or	(xhl-53), iz
-	push	sr
+	ld_rrb c, xhl, bc
+	ldb_erp c, 240
+	sll c, 2
 	or	d, c
 	ld	(xwa+17), d
 	lda	xbc, (xwa+20)
@@ -26745,56 +26634,38 @@ SendPartDataBlock_Data:
 	lds	hl, 0
 	ld	de, hl
 	add	de, 40
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe8
-	ldw	bc, 4489
-	ldb	c, 199
-	.byte 0xf0, 0x9b, 0xf3
-	reti
-	.byte 0xe0, 0xe8
-	ldw	iy, 2035
-	.byte 0xe0, 0xe8
-	ldw	bc, 4233
-	ldb	c, 189
-	scf
-	ld	xhl, 0xe8e007f3
-	ldw	iy, 2035
-	.byte 0xe0, 0xe8
-	ldw	bc, 3977
-	ldb	c, 189
-	rcf
-	ld	xhl, 0xe8e007f3
-	ldw	iy, 2035
-	.byte 0xe0, 0xe8
-	ldw	bc, 3721
-	ldb	c, 189
-	retd	0xf343
-	reti
-	.byte 0xe0, 0xe8
-	ldw	iy, 2035
-	.byte 0xe0, 0xe8
-	ldw	bc, 3465
-	ldb	c, 189
-	ret
-	ld	xhl, 0xe8e007f3
-	ldw	iy, 2035
-	.byte 0xe0, 0xe8
-	ldw	bc, 3209
-	ldb	c, 189
-	decf
-	ld	xhl, 0x82e813ea
+	lda_rr xbc, xwa, de
+	ld c, (xbc+17)
+	ldb_erp c, 240
+	lda_rr xiy, xwa, de
+	lda_rr xbc, xwa, de
+	ld c, (xbc+16)
+	ld (xiy+17), c
+	lda_rr xiy, xwa, de
+	lda_rr xbc, xwa, de
+	ld c, (xbc+15)
+	ld (xiy+16), c
+	lda_rr xiy, xwa, de
+	lda_rr xbc, xwa, de
+	ld c, (xbc+14)
+	ld (xiy+15), c
+	lda_rr xiy, xwa, de
+	lda_rr xbc, xwa, de
+	ld c, (xbc+13)
+	ld (xiy+14), c
+	lda_rr xiy, xwa, de
+	lda_rr xbc, xwa, de
+	ld c, (xbc+12)
+	ld (xiy+13), c
+	exts xde
+	add xde, xwa
 	stb_erp	c, 240
 	ld	(xde+12), c
 	add	hl, 34
 	cp	hl, 102
 	jr	lt, -117
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0x56
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-426)
 	ld	xde, xwa
 	ld	xiy, CharMap_FullPermutation_0x485
 	ld	xix, xsp
@@ -26806,11 +26677,8 @@ SendPartDataBlock_Data:
 	ldirw
 	lda	xwa, (xde+102)
 	ld	xiy, xwa
-	.byte 0xf3
-	sbc	xsp, xbc
-	nop
-	ldw	ix, 0x2831
-	nop
+	lda xix, (xde+183)
+	ldw bc, 40
 	ldirw
 	.byte 0x85
 	rcf
@@ -26858,10 +26726,11 @@ SendPartDataBlock_Data:
 	ld	(xsp+14), xwa
 	.byte 0x80
 	push	xix
-	.byte 0xf0
-	lda	xwa, (xhl+42)
-	ld	(xsp+10), xwa
-	ld	(xwa), 0
+	xorcf_dd8 187
+	ldw wa, 2751
+	jr f, -80
+	nop
+	nop
 	ld	xix, (xsp+22)
 	lda	xwa, (xix+17)
 	ld	(xsp+18), xwa
@@ -26973,7 +26842,7 @@ SendPartDataBlock_Data:
 	.byte 0xe4, 0xf0
 	ld	xbc, 0xda61048f
 	jr	lt, -113
-	.byte 0x04
+	max
 	push	xsp
 	ldio	103, 217
 	ld	xwa, (xsp+6)
@@ -27023,7 +26892,7 @@ SendPartDataBlock_Data:
 	.byte 0xb2
 	inc	6, l
 	ldb	e, 143
-	.byte 0x04
+	max
 	push	xsp
 	nop
 	jr	nz, 7
@@ -27032,7 +26901,7 @@ SendPartDataBlock_Data:
 	jr	24
 	.byte 0x8f, 0x04
 	push	xsp
-	.byte 0x01
+	normal
 	jr	nz, 7
 	ld	xwa, (xsp+10)
 	.byte 0xb0, 0xba
@@ -27104,7 +26973,7 @@ SendPartDataBlock_Data2:
 	ld	a, (xde+15)
 	.byte 0xc9, 0xee
 SendPartDataBlock_Data3:
-	.byte 0x01
+	normal
 	ld	(xbc+43), a
 	ld	a, (xde+16)
 	sla	a, 1
@@ -27447,7 +27316,7 @@ HdaeRom_DataDispatch:
 	calr	63168
 	.byte 0x9f, 0x04
 	push	xde
-	.byte 0x01
+	normal
 	nop
 	jr	nz, -82
 	jrl	208
@@ -27483,7 +27352,7 @@ HdaeRom_DataDispatch:
 	calr	64029
 	.byte 0x9f, 0x04
 	push	xde
-	.byte 0x01
+	normal
 	nop
 	jr	nz, -75
 	jr	107
@@ -27551,10 +27420,9 @@ HdaeRom_DataDispatch_Block2:
 
 HdaeRom_DataDispatch_Block3:
 	lda	xhl, (xwa+18833)
-	.byte 0xf3, 0xe1, 0xa7
-	jrl	le, -5068
-	jr	ge, -21
-	.byte 0xf4
+	lda xix, (xwa+29351)
+	dec 1, xix
+	cp xix, xhl
 	jr	c, 16
 	lda	xde, (xix-1)
 	ld	c, (xde)
@@ -27891,14 +27759,12 @@ TmFlash_WriteRoutine:
 	.byte 0x9f
 	ccf
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nc, -52
-	.byte 0xf3, 0xe5, 0x80
-	popw	bc
-	ldw	bc, 3759
-	ldb	w, 176
-	.byte 0x61
+	lda xbc, (xbc+18816)
+	ld xwa, (xsp+14)
+	ld (xwa), xbc
 	.ascii "0')h"
 	scf
 	.byte 0x9f
@@ -27974,8 +27840,7 @@ VoiceParam_DispatchTable1:
 	.byte 0xaf
 	push	sr
 	decm8	8, (xhl)
-	.byte 0x1c
-	ld	xbc, xwa
+	call16 35304
 	sll	xbc, 3
 	add	xbc, xwa
 	sll	xbc, 4
@@ -28027,14 +27892,9 @@ VoiceParam_DispatchTable1:
 	jrl	gt, 129
 	add	hl, hl
 	lda_24	xix, (CharMap_FullPermutation_0x653)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	cp	(xbc+8), xsp
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (16713897)
+	jp_rr 8, xix, hl
 	ld	xwa, xbc
 	ld	xbc, 470
 	call	Math_MultiplyAccumulate

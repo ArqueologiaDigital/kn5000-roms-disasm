@@ -170,9 +170,17 @@ SMF_PopReturn:
 	ret
 
 SMF_HeaderConstants:
-	.byte 0x00, 0xff, 0x03, 0x10
+	nop
+	swi 7
+	pop sr
+	rcf
 	.asciz "MThd"
-	.byte 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01
+	nop
+	nop
+	di
+	nop
+	nop
+	normal
 	nop
 	.asciz "`MTrk"
 	nop

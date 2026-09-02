@@ -1,0 +1,7 @@
+image        before        after        delta   (08d0c4e8 vs HEAD)
+v10          106605       101510        -5095
+v9           108596        98729        -9867
+v7           299596       254034       -45562
+TOTAL        514797       454273       -60524
+
+.incbin bytes, reported separately because their sizes are read from the CURRENT tree: 2343834 -> 2343834 (+0)

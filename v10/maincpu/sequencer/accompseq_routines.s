@@ -1095,15 +1095,9 @@ AccompSeq_LargeCodeBlock2:
 	xor	w, w
 	ld	hl, wa
 	ld	xix, AccompSeq_MidiFilterCodeBlock_0x7A
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	h, 193
-	ccf
-	swi	5
-	ldb	l, 207
-	.byte 0xcf
-	scf
+	ld_rrb h, xix, hl
+	ldb_d8 l, (64786)
+	cp l, 17
 	jr	z, 84
 	cp	l, 18
 	jr	z, 79
@@ -1116,16 +1110,10 @@ AccompSeq_LargeCodeBlock2:
 	jr	nz, 6
 	add	xix, 16
 	sll	h, 1
-	.byte 0xc3
-	pop	sr
-	.byte 0xf0, 0xed
-	ldb	l, 206
-	jr	lt, -61
-	pop	sr
-	.byte 0xf0, 0xed
-	ldb	h, 207
-	.byte 0xcf
-	ret
+	ld_rr8b l, xix, h
+	inc 1, h
+	ld_rr8b h, xix, h
+	cp l, 14
 	jr	ugt, 33
 	call	Voice_NoteChannelTable1_0x422
 	cps	h, 0
@@ -1511,9 +1499,8 @@ AccompSeq_WriteMidi_CodeBlock:
 	inc	1, iy
 	cp	iy, bc
 	jr	ule, 3
-	.byte 0x9b
-	nop
-	ldb	e, 14
+	ld iy, (xhl+256)
+	ret
 	ldb_d8	a, (0xc07e)
 	bit	7, a
 	jr	nz, 7
@@ -1523,7 +1510,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	jr	60
 	.byte 0xc1
 	jrl	gt, 15998
-	.byte 0x01
+	normal
 	ldb_d8	a, (0x7f0b)
 	cps	a, 0
 	jr	z, 8

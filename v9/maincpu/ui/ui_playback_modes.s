@@ -132,7 +132,7 @@ UIStateEvt_VoiceParamHandler:
 	push	xiz
 	.byte 0x01, 0xc1
 	jrl	ugt, 15912
-	.byte 0x04
+	max
 	jr	12
 	.byte 0xc1, 0x54
 	decf
@@ -393,7 +393,7 @@ PlayMode_InitFlagBlock:
 	.byte 0xc1, 0xac
 	pushw	wa
 	push	xiz
-	.byte 0x04
+	max
 	stdi8	(4420), 10
 	ret
 
@@ -559,7 +559,7 @@ SongMode_InitFlagBlock:
 	.byte 0xc1, 0xac
 	pushw	wa
 	push	xiz
-	.byte 0x04
+	max
 	stdi8	(4420), 10
 	ret
 	stdi8	(3380), 0
@@ -712,7 +712,7 @@ PartFormat_InitFlagBlock:
 	.byte 0xc1, 0xac
 	pushw	wa
 	push	xiz
-	.byte 0x04
+	max
 	stdi8	(4420), 10
 	ret
 	stdi8	(3380), 0
@@ -774,7 +774,7 @@ PlayModeStop_InitFlagBlock:
 	.byte 0xc1, 0xac
 	pushw	wa
 	push	xiz
-	.byte 0x04
+	max
 	stdi8	(4420), 10
 	ret
 	.byte 0xc1
@@ -1443,22 +1443,13 @@ SqTrAsPsTtl_CaseF:
 	cp	wa, 13
 	jr	gt, 35
 	lda_24	xix, (SepaOut_Config_0_0x44)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 216
-	ccf
+	ld_rrw wa, xix, wa
+	extz wa
 	sll	wa, 1
 	ld	xix, SepaOut_Config_0_0x52
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	.byte 0x8c
-	retd	0x34f2
-	.byte 0xf3
-	reti
-	jp_dd8	8, 224
+	ld_rrw wa, xix, wa
+	lda_24 xix, (15863692)
+	jp_rr 8, xix, wa
 	push	xde
 	push	xhl
 	push	xix

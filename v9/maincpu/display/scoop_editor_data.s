@@ -206,16 +206,12 @@ Scoop_SoundEditorData:
 	jr	nz, 10
 	ld	a, (xsp+16)
 	inc	4, a
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp a, 251
 	jr	8
 	ld	a, (xsp+16)
 	inc	2, a
-	.byte 0xc7
-	swi	3
-	cp	(xbc-57), hl
-	.byte 0x89
+	ldb_erp a, 251
+	stb_erp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -251,9 +247,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xwa+16)
 	inc	7, xwa
 	ld	(xsp+16), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -265,9 +259,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 4
 	call	SeMenu_SetupPartDisplay_End_0x1F6
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-18)
@@ -280,15 +272,13 @@ Scoop_SoundEditorData:
 	.byte 0x8f
 	ret
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 85
 	lda	xwa, (xsp+16)
 	call	SeMenu_ValidatePartNumber
 	ld	a, (xsp+16)
 	inc	8, a
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -301,9 +291,7 @@ Scoop_SoundEditorData:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	SeMenu_SetupPartDisplay_End_0x219
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -314,9 +302,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_TransferPartValues_EndData_0x169
 	lds	wa, 5
 	call	SeMenu_SetupPartDisplay_End_0x1F6
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	cps	a, 0
@@ -344,7 +330,7 @@ Scoop_SoundEditorData:
 	jr	nz, 16
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 22
 	ldw	wa, 47
 	lds	bc, 0
@@ -362,7 +348,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 17
 	.byte 0x8f
 	push	sr
@@ -381,7 +367,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 17
 	.byte 0x8f
 	push	sr
@@ -400,7 +386,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 15
 	.byte 0x8f
 	push	sr
@@ -671,9 +657,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	scc8	nz, a
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -701,9 +685,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xwa+16)
 	inc	8, xwa
 	ld	(xsp+16), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -715,9 +697,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_ApplyPartEdit_Data2_0xA69
 	lds	wa, 1
 	call	SeMenu_SetupPartDisplay_End_0x1F6
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-18)
@@ -741,16 +721,12 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 3
-	.byte 0xc7
-	swi	3
-	.byte 0xa9
+	ldib_erp 251, 1
 	ld	(xwa), 127
 	ld	(xbc), 0
 	ld	(xde), 100
 	ld	(xhl), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -773,9 +749,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xwa+16)
 	lda	xwa, (xwa+9)
 	ld	(xsp+16), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -787,9 +761,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_ApplyPartEdit_Data2_0xA69
 	lds	wa, 2
 	call	SeMenu_SetupPartDisplay_End_0x1F6
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-18)
@@ -813,16 +785,12 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 3
-	.byte 0xc7
-	swi	3
-	.byte 0xaa
+	ldib_erp 251, 2
 	ld	(xwa), 127
 	ld	(xbc), 0
 	ld	(xde), 100
 	ld	(xhl), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -845,9 +813,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xwa+16)
 	lda	xwa, (xwa+10)
 	ld	(xsp+16), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -859,9 +825,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_ApplyPartEdit_Data2_0xA69
 	lds	wa, 3
 	call	SeMenu_SetupPartDisplay_End_0x1F6
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-18)
@@ -885,16 +849,12 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 3
-	.byte 0xc7
-	swi	3
-	.byte 0xab
+	ldib_erp 251, 3
 	ld	(xwa), 127
 	ld	(xbc), 0
 	ld	(xde), 100
 	ld	(xhl), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -917,9 +877,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xwa+16)
 	lda	xwa, (xwa+11)
 	ld	(xsp+16), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	ld	e, (xsp+16)
 	extz	de
@@ -931,9 +889,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_ApplyPartEdit_Data2_0xA69
 	lds	wa, 4
 	call	SeMenu_SetupPartDisplay_End_0x1F6
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-20)
@@ -950,9 +906,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 20
-	.byte 0xc7
-	swi	3
-	.byte 0xac
+	ldib_erp 251, 4
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 127
 	ld	(xwa+7), 0
@@ -971,9 +925,7 @@ Scoop_SoundEditorData:
 	ld	(xwa+7), 0
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -996,9 +948,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xwa+16)
 	lda	xwa, (xwa+12)
 	ld	(xsp+18), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	ld	e, (xsp+18)
 	extz	de
@@ -1010,9 +960,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_ApplyPartEdit_Data2_0xA69
 	lds	wa, 5
 	call	SeMenu_SetupPartDisplay_End_0x1F6
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-20)
@@ -1029,9 +977,7 @@ Scoop_SoundEditorData:
 	push	xsp
 	nop
 	jr	nz, 20
-	.byte 0xc7
-	swi	3
-	.byte 0xad
+	ldib_erp 251, 5
 	lda	xwa, (xsp+2)
 	ld	(xwa+6), 127
 	ld	(xwa+7), 0
@@ -1050,9 +996,7 @@ Scoop_SoundEditorData:
 	ld	(xwa+7), 0
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	SeMenu_LoadPartParam
@@ -1075,9 +1019,7 @@ Scoop_SoundEditorData:
 	lda	xwa, (xwa+16)
 	lda	xwa, (xwa+13)
 	ld	(xsp+18), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	ld	e, (xsp+18)
 	extz	de
@@ -1089,9 +1031,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_ApplyPartEdit_Data2_0xA69
 	lds	wa, 6
 	call	SeMenu_SetupPartDisplay_End_0x1F6
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-18)
@@ -1101,7 +1041,7 @@ Scoop_SoundEditorData:
 	.byte 0x8f
 	incf
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 76
 	lda	xwa, (xsp+14)
 	call	SeMenu_ValidatePartNumber
@@ -1220,7 +1160,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 25
 	.byte 0x8f
 	push	sr
@@ -1287,7 +1227,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 15
 	.byte 0x8f
 	push	sr
@@ -1415,7 +1355,7 @@ Scoop_SoundEditorData:
 	.byte 0x8f
 	incf
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 21
 	ldw	wa, 9
 	lds	bc, 1
@@ -2422,16 +2362,15 @@ Scoop_SoundEditorData:
 	swi	0
 	.byte 0xbf
 	push	sr
-	.byte 0xb9
-	ld	a, (xsp+2)
-	extz	wa
+	ldw (xbc-113), 55329
+	ccf
 	call	SeMenu_BitShiftMask_End_0x1C4
 	ldw	wa, 48
 	lds	bc, 0
 	jr	20
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
@@ -2453,7 +2392,7 @@ Scoop_SoundEditorData:
 	jr	z, 24
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 19
 	lds	wa, 4
 	call	SeMenu_TransferPartValues_EndData_0x1E0
@@ -2470,7 +2409,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 15
 	.byte 0x8f
 	push	sr
@@ -2714,16 +2653,15 @@ Scoop_SoundEditorData:
 	swi	0
 	.byte 0xbf
 	push	sr
-	.byte 0xba
-	ld	a, (xsp+2)
-	extz	wa
+	ldw (xde-113), 55329
+	ccf
 	call	SeMenu_BitShiftMask_End_0x1C4
 	ldw	wa, 48
 	lds	bc, 0
 	jr	20
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
@@ -2740,7 +2678,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 25
 	.byte 0x8f
 	push	sr
@@ -2762,7 +2700,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 15
 	.byte 0x8f
 	push	sr
@@ -2852,7 +2790,7 @@ Scoop_SoundEditorData:
 	jr	20
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
@@ -2871,7 +2809,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 15
 	.byte 0x8f
 	push	sr
@@ -3152,7 +3090,7 @@ Scoop_SoundEditorData:
 	jr	20
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
@@ -3169,7 +3107,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 25
 	.byte 0x8f
 	push	sr
@@ -3191,7 +3129,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 15
 	.byte 0x8f
 	push	sr
@@ -3298,16 +3236,15 @@ Scoop_SoundEditorData:
 	swi	0
 	.byte 0xbf
 	push	sr
-	.byte 0xb8
-	ld	a, (xsp+2)
-	extz	wa
+	ldw (xwa-113), 55329
+	ccf
 	call	SeMenu_BitShiftMask_End_0x1C4
 	ldw	wa, 48
 	lds	bc, 0
 	jr	20
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 19
 	lds	wa, 3
 	call	SeMenu_TransferPartValues_EndData_0x1E0
@@ -3324,7 +3261,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 25
 	.byte 0x8f
 	push	sr
@@ -3346,7 +3283,7 @@ Scoop_SoundEditorData:
 	call	SeMenu_LoadObjEntries
 	.byte 0x87
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 15
 	.byte 0x8f
 	push	sr

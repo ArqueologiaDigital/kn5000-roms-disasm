@@ -1,0 +1,152 @@
+toolchain: 6f456a19f05b (6f456a19f05bf94696728e89e74a53ed62dc9adf)
+
+v7 DATA label-spans >= 64 B considered: 1906 (1124367 B)
+  PASS all five gates .........   87 spans,   13217 B
+  refused: twin v9 is only 0% instruction b 1098
+  refused: gate C                            397
+  refused: gate D                            158
+  refused: no twin symbol                     27
+  refused: twin v9 is only 90% instruction    13
+  refused: twin v9 is only 1% instruction b   11
+  refused: twin v9 is only 94% instruction    10
+  refused: twin v9 is only 93% instruction     8
+  refused: twin v9 is only 91% instruction     8
+  refused: twin v9 is only 89% instruction     8
+  refused: twin v9 is only 2% instruction b    6
+  refused: twin v9 is only 92% instruction     4
+  refused: twin v9 is only 87% instruction     4
+  refused: twin v9 is only 88% instruction     4
+  refused: twin v9 is only 80% instruction     3
+  refused: twin v9 is only 84% instruction     3
+  refused: twin v9 is only 68% instruction     3
+  refused: gate E                              3
+  refused: twin v9 is only 86% instruction     3
+  refused: twin v9 is only 83% instruction     3
+  refused: twin v9 is only 82% instruction     3
+  refused: twin v9 is only 85% instruction     2
+  refused: twin v9 is only 81% instruction     2
+  refused: twin v9 is only 73% instruction     2
+  refused: twin v9 span is 19 B                2
+  refused: twin v9 is only 95% instruction     2
+  refused: twin v9 span is 660 B               1
+  refused: twin v9 is only 38% instruction     1
+  refused: twin v9 is only 31% instruction     1
+  refused: twin v9 is only 37% instruction     1
+  refused: twin v9 span is 1137 B              1
+  refused: twin v9 span is 1296 B              1
+  refused: twin v9 is only 11% instruction     1
+  refused: twin v9 is only 18% instruction     1
+  refused: twin v9 is only 66% instruction     1
+  refused: twin v9 is only 50% instruction     1
+  refused: twin v9 span is 38 B                1
+  refused: twin v9 span is 33 B                1
+  refused: twin v9 is only 79% instruction     1
+  refused: twin v9 span is 17 B                1
+  refused: twin v9 is only 77% instruction     1
+  refused: twin v9 is only 75% instruction     1
+  refused: twin v9 is only 54% instruction     1
+  refused: twin v9 is only 45% instruction     1
+  refused: twin v9 is only 24% instruction     1
+  refused: twin v9 is only 74% instruction     1
+  refused: twin v9 span is 637 B               1
+  refused: twin v9 span is 536 B               1
+  refused: twin v9 span is 557 B               1
+  refused: twin v9 span is 49 B                1
+  refused: twin v9 span is 79 B                1
+  refused: twin v9 span is 14 B                1
+  refused: twin v9 span is 116 B               1
+  refused: twin v9 span is 3296 B              1
+  refused: twin v9 is only 70% instruction     1
+  refused: twin v9 span is 55 B                1
+  refused: twin v9 is only 78% instruction     1
+  refused: twin v9 span is 41912 B             1
+
+  label                                            bytes  twin  gateC  gateD  refus  same%
+  WndEvt_EventCodeDispatch                          1527   v10  0.981  1.000     35  96.9%
+  Data_InOutGridDispatch                            1096   v10  0.983  1.000      2  92.5%
+  VocalistGrid_CheckDispData                         709   v10  0.982  1.000      0  89.8%
+  Data_ParaLoadOptDispatch                           656   v10  1.000  1.000      0  87.5%
+  Scoop_EnvProcessor_Data                            587   v10  0.991  1.000      4  96.3%
+  RVari_Paint                                        340   v10  1.000  1.000      0  92.4%
+  RVariScreenProc                                    219   v10  0.985  1.000      1  95.4%
+  MemConfig_Handler_3                                211   v10  1.000  1.000      2  88.6%
+  AcInOutGrid_ScrollUp_CheckAlt                      185   v10  1.000  1.000      0  89.2%
+  ApPlaySyori                                        171   v10  1.000  1.000      0  97.1%
+  IvSdtecd1Proc                                      157   v10  1.000  1.000      0  92.4%
+  MainGetRhythmName                                  154   v10  1.000  1.000      0  88.3%
+  AccTuning_LoadFromROM                              151   v10  1.000  1.000      0  80.1%
+  RVari_SelectE_FirstItem_Draw                       149   v10  0.981  1.000      2  96.0%
+  SeqBufPos_Return                                   148   v10  1.000  1.000      0  98.6%
+  PcgOutCheck_SendPreset3Named                       144   v10  1.000  1.000      0  88.9%
+  SLDst_ScrollMode4_Dispatch                         141   v10  1.000  1.000      0  93.6%
+  SeqTempo_ApplyAndReturn                            136   v10  1.000  1.000      0  98.5%
+  SeqEvt_WriteRemainingParams                        135   v10  1.000  1.000      0  77.8%
+  LswPercDecay                                       134   v10  1.000  1.000      0  98.5%
+  LswPercLevel                                       134   v10  1.000  1.000      0  98.5%
+  LswDrawAttack                                      134   v10  1.000  1.000      0  98.5%
+  LswDrawRelease                                     134   v10  1.000  1.000      0  98.5%
+  LswReverb                                          131   v10  1.000  1.000      0  98.5%
+  LswDSPEffect                                       128   v10  1.000  1.000      0  98.4%
+  LswBendRange                                       128   v10  1.000  1.000      0  98.4%
+  PsGridBox_Scroll_Render                            122   v10  1.000  1.000      0  96.7%
+  AppEvtHandler_Branch_006                           119   v10  1.000  1.000      0  95.8%
+  BitMapOut_DeltaEncode_Type90PartB                  115   v10  0.981  1.000      2  98.3%
+  CmpDst_HandleShow                                  114   v10  1.000  1.000      0  93.9%
+  FDC_Format2DD_WriteBoot                            109   v10  1.000  1.000      0  92.7%
+  FDC_Format2DD_WriteFAT1                            109   v10  1.000  1.000      0  92.7%
+  FDC_Format2DD_WriteDataSec1                        109   v10  1.000  1.000      0  92.7%
+  FDC_Format2HD_WriteBoot                            109   v10  1.000  1.000      0  92.7%
+  FDC_Format2HD_WriteFAT1                            109   v10  1.000  1.000      0  92.7%
+  RhythmROM_PatternDisp_Check91                      109   v10  1.000  1.000      0  86.2%
+  BitMapOut_DeltaEncode_Type90Loop                   109   v10  0.980  1.000      2  98.2%
+  ExtData_ToneParam_AltDispatch                      105   v10  1.000  1.000      0  96.2%
+  MainGetPmemName                                    104   v10  1.000  1.000      0  88.5%
+  PsNumEditBox_Confirm                               102   v10  1.000  1.000      0  88.2%
+  DrawBitmapFile_Impl_CopyToVRAM                     101   v10  1.000  1.000      0  98.0%
+  PsPageBox_Confirm_DrawValue                        100   v10  1.000  1.000      0  94.0%
+  AccChord_CheckModeAndUpdate                         99   v10  1.000  1.000      0  75.8%
+  PcgOutCheck_SendPreset2Named                        99   v10  1.000  1.000      0  89.9%
+  RhythmROM_PatternDisp_ReadByte                      98   v10  1.000  1.000      0  87.8%
+  FileName_UpdateDisplay                              94   v10  1.000  1.000      0  75.5%
+  MainChordPre_AppendChordSuffix                      94   v10  1.000  1.000      0  85.1%
+  TrAsSureLangCheck                                   92   v10  1.000  1.000      0  97.8%
+  VoiceParam_ByMode_Mode0                             91   v10  1.000  1.000      0  96.7%
+  AccKbdTiming_Catchup_Loop                           91   v10  1.000  1.000      0  97.8%
+  PartVoiceStatus_ShiftDone                           90   v10  1.000  1.000      0  98.9%
+  ExtDev_SndParam_DispatchAndWriteA8                  89   v10  1.000  1.000      2  94.4%
+  ExtDev_SndParam_DispatchAndWriteA8_Alt              89   v10  1.000  1.000      2  94.4%
+  MainExeCall                                         83   v10  1.000  1.000      0  96.4%
+  EffEdit_ValidateLoop                                82   v10  1.000  1.000      0  92.7%
+  LswScalingShift                                     82   v10  1.000  1.000      0  97.6%
+  LswScalingShift2                                    82   v10  1.000  1.000      0  97.6%
+  LswScalingMode                                      82   v10  1.000  1.000      0  97.6%
+  AccPedalConfig_CheckCtrl7                           81   v10  1.000  1.000      0  95.1%
+  GmOnOffFunc                                         81   v10  1.000  1.000      0  97.5%
+  VoicePanInit_Loop                                   81   v10  1.000  1.000      0  97.5%
+  SelfTest_SramAndRom                                 80   v10  1.000  1.000      0  90.0%
+  ClipBlit_Replace_ScanlineLoop                       78   v10  1.000  1.000      0  94.9%
+  AcFreeSplit_LookupNoteLabel                         78   v10  1.000  1.000      0  92.3%
+  AcFreeSplit_LookupSecondNote                        78   v10  1.000  1.000      0  92.3%
+  ToneGen_EventDispatchLoop                           77   v10  1.000  1.000      0  94.8%
+  AccPatch_SwapSlotBuffers                            77   v10  1.000  1.000      0  74.0%
+  DkMdlyPly_HandleResult                              76   v10  1.000  1.000      0  89.5%
+  LswEditCheck                                        75   v10  1.000  1.000      0  97.3%
+  AcCmpRecBox_HandleEvtBC                             74   v10  1.000  1.000      0  89.2%
+  EffEdit_ReadParamD6_Loop                            72   v10  1.000  1.000      0  94.4%
+  AccPatch_InitSlot_StoreAddrs                        72   v10  1.000  1.000      0  69.4%
+  ToneGen_ScanRestored_Loop                           72   v10  1.000  1.000      0  94.4%
+  SelfTest_SramAndRom_CheckROM                        71   v10  1.000  1.000      0  83.1%
+  Encoder_PerformScaling                              71   v10  1.000  1.000      0  90.1%
+  FilePriorityFunc                                    70   v10  1.000  1.000      0  97.1%
+  BitEditCheck                                        70   v10  1.000  1.000      0  97.1%
+  MainPmGet_HandleBankData                            70   v10  1.000  1.000      0  91.4%
+  ToneGen_CalcTempo_Lookup                            69   v10  1.000  1.000      0  85.5%
+  CombinedPreset_SendEQLoop                           68   v10  1.000  1.000      0  91.2%
+  SqAftSetFunc                                        66   v10  1.000  1.000      0  97.0%
+  FDC_Format2DD_FinalTrack                            66   v10  1.000  1.000      0  93.9%
+  FDC_Format2HD_FinalTrack                            66   v10  1.000  1.000      0  93.9%
+  GroupBoxProc_SSFItemLoop                            65   v10  1.000  1.000      0  90.8%
+  AccPat_DualVoice_ClampIndex2                        64   v10  1.000  1.000      0  89.1%
+  MIDI_WriteVoiceParamCC                              64   v10  1.000  1.000      0  89.1%
+  MIDI_WriteVoiceParamDirect                          64   v10  1.000  1.000      0  89.1%
+EXIT=0

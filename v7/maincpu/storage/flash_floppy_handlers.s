@@ -104,8 +104,8 @@ FlashRead_BlockData_Field5:
 	nop
 FlashRead_BlockData_Field6:
 	nop
-	.byte 0x0a
-	.long 0x00ff0666	; TmFlashWrite_Block3 (data record pointer)
+	ldwio 102, 65286
+	nop
 	ldb	w, 196
 	ex_ff
 	push	sr
@@ -199,11 +199,26 @@ FlashWrite_BlockRef_Type5:
 	.byte 0x10, 0x5a, 0xf1, 0x00, 0x1b, 0x5a, 0xf1, 0x00
 	.byte 0x26, 0x5a, 0xf1, 0x00
 FlashWrite_BlockData_Type6:
-	.byte 0x02, 0x0f, 0x61, 0x06, 0x01, 0x00, 0x20, 0xa7
-	.byte 0x14, 0xf1, 0x00, 0x03, 0x00, 0x0b, 0x0b, 0x00
-	.byte 0x0a, 0x62, 0x06, 0xff, 0x00, 0x20, 0x64, 0x0d
-	.byte 0x02, 0x00, 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20
-	.byte 0xbb, 0x0f, 0x03
+	push	sr
+	retd	1633
+	normal
+	nop
+	ldb	w, 167
+	push_a
+	stdi8	(768), 11
+	pushw	2560
+	jr	le, 6	; -> 0xF15A5D
+	swi	7
+	nop
+	ldb	w, 100
+	decf
+	push	sr
+	nop
+	ldwio	99, 65286
+	nop
+	ldb	w, 187
+	.byte 0x0f	; llvm-mc cannot spell this byte
+	pop	sr
 FlashWrite_BlockRef_Type6:
 	.byte 0x44, 0x5a, 0xf1, 0x00, 0x44, 0x5a, 0xf1, 0x00
 	.byte 0x53, 0x5a, 0xf1, 0x00, 0x5d, 0x5a, 0xf1, 0x00
@@ -1025,7 +1040,7 @@ Flash_InitBytecodeBlock:
 	.byte 0x8f, 0x0c, 0x19, 0x68, 0x0c, 0x8f, 0x0a, 0x19, 0x6a, 0x0c, 0x8f, 0x06, 0x19, 0x6c, 0x0c
 	call	16114965
 	ld	l, (xsp+2)
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+12)
 	ret
 	ld	a, (xsp+10)
@@ -1224,15 +1239,13 @@ PartGrid_OperationsBlock:
 	.byte 0x8f
 	incf
 	push	xde
-	.byte 0x1e
-	jr	21
+	calr 5480
 	cp	(xsp+12), 10
 	jr	c, 15
 	.byte 0x8f
 	incf
 	push	xde
-	.byte 0x0a
-	ld	a, (xsp+12)
+	ldwio 143, 8460
 	extz	wa
 	div	a, 3
 	ld	(xsp+12), w
@@ -2355,67 +2368,32 @@ SlotTable_InitBank1850_Loop:
 
 SlotTable_ExtendedOpsBlock:
 	lda_d16	xde, (1952)
-	.byte 0xb2
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xba
-	push	sr
-	push	sr
-	swi	7
-	swi	7
+	ldw (xde), 65535
+	ldw (xde+2), 65535
 	lda	xbc, (xde+6)
 	ld	xwa, xbc
 	inc	4, xde
-	.byte 0xf3, 0xe5, 0xc8
-	nop
-	ldw	bc, 0xeaf5
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xf5, 0xe2
-	push	sr
-	swi	7
-	swi	7
+	lda xbc, (xbc+200)
+	stiw_dsp 234, 255, 255
+	stiw_dsp 226, 255, 255
 	cp	xwa, xbc
 	jr	c, -14
 	ret
 	lda_d16	xde, (2156)
-	.byte 0xb2
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xba
-	push	sr
-	push	sr
-	swi	7
-	swi	7
+	ldw (xde), 65535
+	ldw (xde+2), 65535
 	lda	xbc, (xde+6)
 	ld	xwa, xbc
 	inc	4, xde
-	.byte 0xf3, 0xe5, 0xc8
-	nop
-	ldw	bc, 0xeaf5
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xf5, 0xe2
-	push	sr
-	swi	7
-	swi	7
+	lda xbc, (xbc+200)
+	stiw_dsp 234, 255, 255
+	stiw_dsp 226, 255, 255
 	cp	xwa, xbc
 	jr	c, -14
 	ret
 	lda_d16	xix, (2360)
-	.byte 0xb4
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xbc
-	push	sr
-	push	sr
-	swi	7
-	swi	7
+	ldw (xix), 65535
+	ldw (xix+2), 65535
 	.byte 0xbc, 0x04
 	push	sr
 	swi	7
@@ -2424,38 +2402,21 @@ SlotTable_ExtendedOpsBlock:
 	ld	xwa, xbc
 	lda	xde, (xix+106)
 	lds	hl, 0
-	.byte 0xf3, 0xe5, 0xc8
-	nop
-	ldw	bc, 0x8ddb
+	lda xbc, (xbc+200)
+	ld iy, hl
 	inc	6, iy
 	.byte 0xf3
 	reti
-	.byte 0xf0, 0xf4
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xf5, 0xea
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xf5, 0xe2
-	push	sr
-	swi	7
-	swi	7
+	stiw_d8 244, 255, 255
+	stiw_dsp 234, 255, 255
+	stiw_dsp 226, 255, 255
 	inc	2, hl
 	cp	xwa, xbc
 	jr	c, -27
 	ret
 	lda_d16	xix, (2666)
-	.byte 0xb4
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xbc
-	push	sr
-	push	sr
-	swi	7
-	swi	7
+	ldw (xix), 65535
+	ldw (xix+2), 65535
 	.byte 0xbc, 0x04
 	push	sr
 	swi	7
@@ -2469,27 +2430,15 @@ SlotTable_ExtendedOpsBlock:
 	inc	6, iy
 	.byte 0xf3
 	reti
-	.byte 0xf0, 0xf4
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xf5, 0xea
-	push	sr
-	swi	7
-	swi	7
-	.byte 0xf5, 0xe2
-	push	sr
-	swi	7
-	swi	7
+	stiw_d8 244, 255, 255
+	stiw_dsp 234, 255, 255
+	stiw_dsp 226, 255, 255
 	inc	2, hl
 	cp	xwa, xbc
 	jr	c, -27
 	ret
 	lda_d16	xbc, (3074)
-	.byte 0xb1
-	push	sr
-	swi	7
-	swi	7
+	ldw (xbc), 65535
 	ldb	l, 0
 	lds	wa, 0
 	ld	de, wa
@@ -2506,10 +2455,7 @@ SlotTable_ExtendedOpsBlock:
 	jr	c, -20
 	ret
 	lda_d16	xbc, (2972)
-	.byte 0xb1
-	push	sr
-	swi	7
-	swi	7
+	ldw (xbc), 65535
 	ldb	l, 0
 	lds	wa, 0
 	ld	de, wa
@@ -5288,14 +5234,25 @@ UI_COMPONENT_DISPATCH:
 	lda	xsp, (xsp+10)
 	jrl	138
 UI_COMPONENT_DISPATCH_CASE1:
-	.byte 0xc1, 0x32, 0x34, 0x21, 0xc9, 0xef, 0x07, 0xd8
-	.byte 0x12, 0xd8, 0xec, 0x02, 0xf2, 0xf6, 0xd9, 0x03
-	.byte 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x38, 0xc1
-	.byte 0x3c, 0x34, 0x21, 0xd8, 0x12, 0xd8, 0xec, 0x02
-	.byte 0xf2, 0x0e, 0xda, 0x03, 0x31, 0xe3, 0x07, 0xe4
-	.byte 0xe0, 0x20, 0x38, 0x0b, 0xe1, 0x00, 0x0b, 0xe8
-	.byte 0xce, 0x3a, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x10
-	.byte 0x37, 0x68, 0x4f
+	ldb_d8	a, (13362)
+	srl	a, 7
+	extz	wa
+	sla	wa, 2
+	lda_24	xbc, (252406)
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	ldb_d8	a, (13372)
+	extz	wa
+	sla	wa, 2
+	lda_24	xbc, (252430)
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	pushw	225
+	pushw	52968
+	push	xde
+	call	16712341
+	lda	xsp, (xsp+16)
+	jr	79	; -> 0xF1A845
 UI_COMPONENT_DISPATCH_CASE2:
 	ldb_d8	c, (13389)
 	ld	xwa, 252358
@@ -5458,8 +5415,9 @@ CmpSet_GridCheck_Dispatch:
 GridCheck_SetMode1:
 	lds wa, 1
 	ld xiz, 0x3d9c6
+
 GridCheck_LookupAndSend:
-	calr	46
+	calr 46
 
 	extz hl
 

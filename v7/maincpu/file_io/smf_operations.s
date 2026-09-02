@@ -534,7 +534,7 @@ FmmSmfFileNameFunc:
 	ld	de, (xde)
 	lda_24	xix, 16309435
 SmfFN_JumpTable:
-	.byte 0xf3, 0x07, 0xf0, 0xe8, 0xd8
+	jp_rr 8, xix, de
 	stda32	33028, xbc
 	lds32	xwa, 0
 	stda32	33032, xwa
@@ -863,7 +863,7 @@ SmfFN_Delete_Execute:
 	lds32	xde, 0
 	call	16423243
 	ldw_d16	wa, 33040
-	.byte 0xd1, 0x68, 0x84, 0xf0
+	cpda16 xwa, (33896)
 	jr	lt, 13
 	cps	wa, 0
 	jr	le, 9
@@ -1109,7 +1109,7 @@ SmfFN_UpdateFilenameField:
 	jr	nz, 74
 	lda_d16	xiz, 34740
 	ldw_d16	wa, 33040
-	.byte 0xd1, 0x68, 0x84, 0xf0
+	cpda16 xwa, (33896)
 	jr	lt, 17
 	cps	wa, 0
 	jr	le, 13

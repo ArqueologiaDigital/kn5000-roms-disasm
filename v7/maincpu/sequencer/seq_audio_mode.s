@@ -518,13 +518,14 @@ AccVoice_ResolveParamAddr:
 	cp a, 0x1d
 	jr ule, AccVoice_ComputeParamOffset
 	xor a, a
+
 AccVoice_ComputeParamOffset:
 	extz	wa
 	sla	wa, 2
 	extz	xwa
 	add	xiy, xwa
 	ld	xiy, (xiy)
-	ldb_d8	a, 12874
+	ldb_d8	a, (12874)
 	extz	wa
 	sla	wa, 2
 	ld	xix, 16070995
@@ -573,11 +574,11 @@ AccVoice_PatchFromDirect:
 	and	a, 127
 	calr	43
 AccVoice_StorePatchAndLookup:
-	stb_d8	1075, a
+	stb_d8	(1075), a
 	ld	xhl, 14969758
 	sla	a, 1
 	ld_rr8w	wa, xhl, a
-	stda16	12767, wa
+	stda16	(12767), wa
 	ret
 AccStyle_ReadVoiceParam:
 	ldb_sri0 W, (xiy + 0x03da)
@@ -613,7 +614,7 @@ AccVoice_LoadTuningBlock:
 
 	add xiy, xhl
 
-	.byte 0x44, 0xaa, 0x31, 0x00, 0x00	; ld xix, 0x3246 (v7 patched)
+	ld xix, 12714
 
 	ldw bc, 0x31
 
@@ -623,7 +624,7 @@ AccVoice_LoadTuningBlock:
 
 	push xix
 
-	.byte 0x44, 0xaa, 0x31, 0x00, 0x00	; ld xix, 0x3246 (v7 patched)
+	ld xix, 12714
 
 	ldw wa, 0x9
 
@@ -668,7 +669,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	add xiy, 0x18
 
-	.byte 0x44, 0xaa, 0x31, 0x00, 0x00	; ld xix, 0x3246 (v7 patched)
+	ld xix, 12714
 
 	lds bc, 7
 
@@ -678,7 +679,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	add xiy, 0x20
 
-	.byte 0x44, 0xb1, 0x31, 0x00, 0x00	; ld xix, 0x324d (v7 patched)
+	ld xix, 12721
 
 	lds bc, 7
 
@@ -688,7 +689,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	add xiy, 0x28
 
-	.byte 0x44, 0xb8, 0x31, 0x00, 0x00	; ld xix, 0x3254 (v7 patched)
+	ld xix, 12728
 
 	lds bc, 7
 
@@ -698,7 +699,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	add xiy, 0x30
 
-	.byte 0x44, 0xbf, 0x31, 0x00, 0x00	; ld xix, 0x325b (v7 patched)
+	ld xix, 12735
 
 	lds bc, 7
 
@@ -708,7 +709,7 @@ AccTuning_CopyAllPartsFromStyle:
 
 	add xiy, 0x38
 
-	.byte 0x44, 0xc6, 0x31, 0x00, 0x00	; ld xix, 0x3262 (v7 patched)
+	ld xix, 12742
 
 	lds bc, 7
 
@@ -727,7 +728,7 @@ AccTuning_LoadAndApplyMaster:
 
 	add xiy, xhl
 
-	.byte 0x44, 0xaa, 0x31, 0x00, 0x00	; ld xix, 0x3246 (v7 patched)
+	ld xix, 12714
 
 	lds bc, 7
 
@@ -756,13 +757,13 @@ AccTuning_LoadCoarseFromStyle:
 
 	add xiy, xhl
 
-	.byte 0x44, 0xb1, 0x31, 0x00, 0x00	; ld xix, 0x324d (v7 patched)
+	ld xix, 12721
 
 	lds bc, 7
 
 	ldir85
 
-	.byte 0x44, 0xb3, 0x31, 0x00, 0x00	; ld xix, 0x324f (v7 patched)
+	ld xix, 12723
 
 	ld (xix), 0x40
 
@@ -789,13 +790,13 @@ AccTuning_LoadFineFromStyle:
 
 	add xiy, xhl
 
-	.byte 0x44, 0xb8, 0x31, 0x00, 0x00	; ld xix, 0x3254 (v7 patched)
+	ld xix, 12728
 
 	lds bc, 7
 
 	ldir85
 
-	.byte 0x44, 0xba, 0x31, 0x00, 0x00	; ld xix, 0x3256 (v7 patched)
+	ld xix, 12730
 
 	ld (xix), 0xc
 
@@ -822,13 +823,13 @@ AccTuning_LoadOctaveFromStyle:
 
 	add xiy, xhl
 
-	.byte 0x44, 0xbf, 0x31, 0x00, 0x00	; ld xix, 0x325b (v7 patched)
+	ld xix, 12735
 
 	lds bc, 7
 
 	ldir85
 
-	.byte 0x44, 0xc1, 0x31, 0x00, 0x00	; ld xix, 0x325d (v7 patched)
+	ld xix, 12737
 
 	ld (xix), 0x74
 
@@ -855,13 +856,13 @@ AccTuning_LoadTransposeFromStyle:
 
 	add xiy, xhl
 
-	.byte 0x44, 0xc6, 0x31, 0x00, 0x00	; ld xix, 0x3262 (v7 patched)
+	ld xix, 12742
 
 	lds bc, 7
 
 	ldir85
 
-	.byte 0x44, 0xc8, 0x31, 0x00, 0x00	; ld xix, 0x3264 (v7 patched)
+	ld xix, 12744
 
 	ld (xix), 0x40
 
@@ -897,9 +898,9 @@ Rhythm_ProcessAllDone:
 RhythmPart_CopyData:
 	ldw bc, 0x19
 
-	.byte 0x45, 0x78, 0x31, 0x00, 0x00	; ld xiy, 0x3214 (v7 patched)
+	ld xiy, 12664
 
-	.byte 0x44, 0x91, 0x31, 0x00, 0x00	; ld xix, 0x322d (v7 patched)
+	ld xix, 12689
 
 	ldir85
 
@@ -934,35 +935,35 @@ RhythmPart1_ProcessRingBuf:
 
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 
-	.byte 0x1e, 0x92, 0x00	; calr RingBuf_AdvanceIndex (v7 displacement)
+	calr 146
 
-	.byte 0x1e, 0x41, 0x00	; calr RhythmAccent_CopyAndUpdateRingBuf (v7 displacement)
+	calr 65
 
 	stb_dri E, 0x07, 0xec, 0xf4
 
-	.byte 0x1e, 0x87, 0x00	; calr RingBuf_AdvanceIndex (v7 displacement)
+	calr 135
 
 	stb_dri D, 0x07, 0xec, 0xf4
 
 	ldb w, 0x0
 
-	.byte 0x1e, 0x7d, 0x00	; calr RingBuf_AdvanceIndex (v7 displacement)
+	calr 125
 
 	stb_dri W, 0x07, 0xec, 0xf4
 
-	.byte 0x1e, 0x75, 0x00	; calr RingBuf_AdvanceIndex (v7 displacement)
+	calr 117
 
 	stb_dri W, 0x07, 0xec, 0xf4
 
-	.byte 0x1e, 0x6d, 0x00	; calr RingBuf_AdvanceIndex (v7 displacement)
+	calr 109
 
 	stb_dri W, 0x07, 0xec, 0xf4
 
-	.byte 0x1e, 0x65, 0x00	; calr RingBuf_AdvanceIndex (v7 displacement)
+	calr 101
 
 	ld (xhl + 4), iy
 
-	.byte 0x43, 0x78, 0x31, 0x00, 0x00	; ld xhl, 0x3214 (v7 patched)
+	ld xhl, 12664
 
 	ld (xhl), e
 
@@ -1287,25 +1288,40 @@ AccompVoice_BulkReadRegisters:
 	ld	xhl, 12280
 	xor	iy, iy
 BulkRead_Loop1_6Byte:
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41, 0xdd, 0xc8, 0x06
-	.byte 0x00, 0xdd, 0xcf, 0x30, 0x00, 0x67, 0xf1, 0x43
-	.byte 0x28, 0x30, 0x00, 0x00, 0xdd, 0xd5
+	st_rrb	a, xhl, iy
+	add	iy, 6
+	cp	iy, 48
+	jr	c, -15	; -> 0xF53F55
+	ld	xhl, 12328
+	xor	iy, iy
 BulkRead_Loop2_6Byte:
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41, 0xdd, 0xc8, 0x06
-	.byte 0x00, 0xdd, 0xcf, 0x30, 0x00, 0x67, 0xf1, 0x43
-	.byte 0x58, 0x30, 0x00, 0x00, 0xdd, 0xd5
+	st_rrb	a, xhl, iy
+	add	iy, 6
+	cp	iy, 48
+	jr	c, -15	; -> 0xF53F6B
+	ld	xhl, 12376
+	xor	iy, iy
 BulkRead_Loop3_9Byte:
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41, 0xdd, 0xc8, 0x09
-	.byte 0x00, 0xdd, 0xcf, 0x48, 0x00, 0x67, 0xf1, 0x43
-	.byte 0xa0, 0x30, 0x00, 0x00, 0xdd, 0xd5
+	st_rrb	a, xhl, iy
+	add	iy, 9
+	cp	iy, 72
+	jr	c, -15	; -> 0xF53F81
+	ld	xhl, 12448
+	xor	iy, iy
 BulkRead_Loop4_9Byte:
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41, 0xdd, 0xc8, 0x09
-	.byte 0x00, 0xdd, 0xcf, 0x48, 0x00, 0x67, 0xf1, 0x43
-	.byte 0xe8, 0x30, 0x00, 0x00, 0xdd, 0xd5
+	st_rrb	a, xhl, iy
+	add	iy, 9
+	cp	iy, 72
+	jr	c, -15	; -> 0xF53F97
+	ld	xhl, 12520
+	xor	iy, iy
 BulkRead_Loop5_9Byte:
-	.byte 0xf3, 0x07, 0xec, 0xf4, 0x41, 0xdd, 0xc8, 0x09
-	.byte 0x00, 0xdd, 0xcf, 0x48, 0x00, 0x67, 0xf1, 0x43
-	.byte 0x30, 0x31, 0x00, 0x00, 0xdd, 0xd5
+	st_rrb	a, xhl, iy
+	add	iy, 9
+	cp	iy, 72
+	jr	c, -15	; -> 0xF53FAD
+	ld	xhl, 12592
+	xor	iy, iy
 BulkRead_Loop6_9Byte:
 	stb_dri A, 0x07, 0xec, 0xf4
 	add iy, 0x9

@@ -527,7 +527,7 @@ AccompSeq_CalcSize_Store:
 	stda16	(32180), wa
 	ret
 AccompSeq_ResetCounters:
-	ldda32	xhl, 32176
+	ldda32 xhl, (32176)
 
 	ldw (xhl + 256), 0xa
 
@@ -703,14 +703,14 @@ AccompSeq_ResolveChannel:
 AccompSeq_ResolveCh_Store:
 	stb_d8	(32185), a
 AccompSeq_ResolveCh_AddOffset:
-	ldb_d8	w, 1133
+	ldb_d8	w, (1133)
 	add	a, w
 	st_rrb	a, xhl, iy
 	calr	131
-	ldb_d8	w, 32096
+	ldb_d8	w, (32096)
 	cp	a, w
-	jr	nc, 4
-	stb_d8	32096, a
+	jr	nc, 4	; -> 0xF6DF9B
+	stb_d8	(32096), a
 AccompSeq_ResolveCh_Done:
 	ei 0
 	ret
@@ -1151,11 +1151,11 @@ AccompSeq_LoadParams_Bit0Set:
 AccompSeq_LoadParams_Alt:
 	ld	a, (xiy+256)
 	and	a, 29
-	stb_d8	32139, a
+	stb_d8	(32139), a
 	ld	wa, (xiy+3)
-	stda16	32144, wa
+	stda16	(32144), wa
 	lds	wa, 6
-	stda16	32146, wa
+	stda16	(32146), wa
 AccompSeq_LoadParams_OverrideCheck:
 	.byte 0xf1, 0xc3, 0x7d, 0xc8, 0x66, 0x4f, 0xd1, 0x90
 	.byte 0x7d, 0x20, 0xd7, 0xe2, 0x98, 0xd1, 0x92, 0x7d
@@ -1756,13 +1756,10 @@ AccompSeq_SeqParse_CheckNoteOn8:
 	calr AccompSeq_AdvancePosition
 	calr AccompSeq_AdvancePosition
 	jp AccompSeq_SeqParse_Loop
+
 AccompSeq_SeqParse_CheckProgChg:
-	cp	a, 192
-	jr	nz, 105
-	ldb	a, 1
-	cpdi8	32182, 0
-	jr	z, 2
-	ldb	a, 2
+	.byte 0xc9, 0xcf, 0xc0, 0x6e, 0x69, 0x21, 0x01, 0xc1
+	.byte 0xb6, 0x7d, 0x3f, 0x00, 0x66, 0x02, 0x21, 0x02
 AccompSeq_SeqParse_ProgChg_SetCh:
 	.byte 0xc9, 0xce, 0xc0, 0xf1, 0xb8, 0x7d, 0x41, 0x1e
 	.byte 0xbe, 0xef, 0x1e, 0xbb, 0xef, 0x85, 0x21, 0xf1

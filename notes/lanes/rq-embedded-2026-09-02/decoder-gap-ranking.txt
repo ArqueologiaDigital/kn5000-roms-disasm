@@ -1,0 +1,27 @@
+toolchain: 6f456a19f05b
+
+byte   blocks    gap  an example the decoder cannot read       asm
+0xc1     1952    16/40  cpdi8 (1026), 4                          ok
+0xf1     1134     0/40  (all sampled forms decode)               -
+0x8f     1073     8/40  cp (xsp+10), 1                           ok
+0x9f      716    14/40  cpw (xsp+4), 65535                       ok
+0x80      649    26/40  cp (xwa), 0                              ok
+0xd1      598     3/40  cpdi16 (10410), 0                        ok
+0xee      500     5/40  link32 238, 12, 248, 255                 ok
+0xaf      379     7/40  cp xbc, (xsp+4)                          ok
+0x90      328    24/40  cpw (xwa), 65535                         ok
+0x95      308    14/28  adc iy, (xiy)                            ok
+0x87      274    18/27  cp l, (xsp)                              ok
+0x50      213      -  (no unrelocated v10 statement)           -
+0x98      213    11/40  cpw (xwa+2), 65535                       ok
+0x81      210    19/40  add b, (xbc)                             ok
+0xbf      209     0/40  (all sampled forms decode)               -
+0xe3      184     2/40  add_sril_rm xix, 7, 236, 232             ok
+0xe4      181      -  (no unrelocated v10 statement)           -
+0xb0      168     2/40  resm 0, (xwa)                            ok
+0xb2      168     2/40  setm 6, (xde)                            ok
+0xe0      166      -  (no unrelocated v10 statement)           -
+
+171 of 655 sampled statements are refused or mis-sized by the decoder.
+`asm ok` means llvm-mc ENCODES that exact text back to the ROM's bytes:
+for those rows the tree's source is right and only the reading of it is missing.

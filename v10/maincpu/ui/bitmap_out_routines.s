@@ -150,11 +150,8 @@ BitMapOut_ByteData_RenderB:
 	push	xde
 	.byte 0x8d
 	call	SndParam_ResolveVoiceEntry
-	.byte 0x8f
-	nop
-	ldb	a, 201
-	.byte 0xcf
-	decf
+	ld a, (xsp+256)
+	cp a, 13
 	jr	z, 5
 	cp	a, 12
 	jr	nz, 18
@@ -210,11 +207,8 @@ BitMapOut_ByteData_RenderD:
 	push	xde
 	.byte 0x8d
 	call	SndParam_ResolveVoiceEntry
-	.byte 0x8f
-	nop
-	ldb	a, 201
-	.byte 0xcf
-	decf
+	ld a, (xsp+256)
+	cp a, 13
 	jr	z, 5
 	cp	a, 12
 	jr	nz, 18
@@ -386,30 +380,24 @@ BitMapOut_ByteData_PresetCopy:
 	ld	xiz, 0x516ecb8d
 	.byte 0xc1
 	jrl	pl, 16320
-	.byte 0x01
+	normal
 	jr	nz, 74
 	calr	7325
 	bit	1, l
 	jr	nz, 60
 	ldb_d8	a, (0xc07e)
 	res	7, a
-	.byte 0xc7
-	swi	3
-	cp	(xbc-57), hl
-	inc	6, wa
-	pushw	iy
-	.byte 0xc7
-	swi	3
-	jr	ge, -63
-	jrl	nc, 8640
+	ldb_erp a, 251
+	cpib_erp 251, 0
+	jr z, 45
+	dec1b_erp 251
+	ldb_d8 a, (49279)
 	res	7, a
 	cps	a, 0
 	jr	z, 31
 	ld	xwa, 769
 	call	SndParam_LookupReadOnly
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	cps	hl, 0
 	jr	nz, 5
@@ -3636,7 +3624,7 @@ BitMapOut_ByteData_RenderState:
 	push	xiz
 	.byte 0xc1
 	jrl	pl, 16320
-	.byte 0x04
+	max
 	jrl	nz, 179
 	ldb_d8	a, (0xc07e)
 	andda8	a, 0xc07f
@@ -3646,17 +3634,12 @@ BitMapOut_ByteData_RenderState:
 	cps	a, 2
 	jr	nz, 48
 	calr	65468
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	jr	lt, -57
-	swi	3
-	muls	l, 98
-	pop	sr
-	.byte 0xc7
-	swi	3
-	cp	(xwa-57), xhl
-	.byte 0x89
+	ldb_erp l, 251
+	inc1b_erp 251
+	cp_erpb 251, 9
+	jr le, 3
+	ldib_erp 251, 0
+	stb_erp a, 251
 	extz	wa
 	jr	20
 	calr	65443
@@ -3675,9 +3658,7 @@ BitMapOut_ByteData_RenderState:
 	call	GetTitleNow
 	cp	xhl, 0x01a000d0
 	jr	nz, 19
-	.byte 0xc7
-	swi	3
-	.byte 0x8d
+	stb_erp e, 251
 	exts	de
 	exts	xde
 	ld	xwa, 0xffffffff
@@ -3712,8 +3693,7 @@ BitMapOut_ByteData_RenderState:
 	ret
 BitMapOut_ByteData_DisplayUpdate:
 	push xiz
-	.byte 0xc1
-	jrl	pl, 8640
+	ldb_d8 a, (49277)
 	cps	a, 1
 	jr	nz, 107
 	ldb_d8	a, (0xc07f)
@@ -3895,24 +3875,18 @@ BitMapOut_UpdateWidget_Done:
 	extz	wa
 	call	VoiceData_ExtendedParamSetup
 	jr	31
-	.byte 0xc7
-	swi	3
-	cp	(xwa-57), xhl
-	.byte 0x8b
+	ldib_erp 251, 0
+	stb_erp c, 251
 	extz	bc
 	ld	a, (xsp+2)
 	extz	wa
 	sll	wa, 3
 	add	wa, bc
 	call	ToneGen_LookupByVoiceIndex
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	mul	l, 103
-	.byte 0xe4, 0xd7
-	swi	2
-	halt
+	inc1b_erp 251
+	cp_erpb 251, 8
+	jr c, -28
+	pop qiz
 	inc	2, xsp
 	ret
 

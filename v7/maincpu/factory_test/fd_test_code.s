@@ -312,7 +312,7 @@ FDTestDlg_FormatDisplay:
 	ld xwa, xde
 	srl xwa, 0
 	ldiw_erp 0xe2, 0
-	.byte 0xbf, 0x00, 0x50	; ld (xsp + 0), wa
+	ld (xsp+256), wa
 	ld (xsp + 2), de
 	lda_24 xwa, (FDTest_String_TestTitleFunc_0x1E0)
 	ld (xsp + 4), xwa

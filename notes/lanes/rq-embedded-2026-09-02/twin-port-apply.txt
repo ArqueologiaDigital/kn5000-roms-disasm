@@ -1,0 +1,21 @@
+flattening v7 ...
+flattening v9 ...
+flattening v10 ...
+toolchain: 6f456a19f05b (6f456a19f05bf94696728e89e74a53ed62dc9adf)
+line-map guard: 36330 `.byte` lines checked against the ROM, 0 disagree
+
+ported 43 spans in 15 files: 22240 B now instructions, 1081 B still `.byte`
+  slots byte-identical to the twin, per ported span: min 0.60  median 0.74  max 0.98
+  refused: only 0 of 136 slots are byte-identical to tw    158
+  refused: port round trip                                 141
+  refused: byte agreement with twin v10 is only 1% -- s    137
+  refused: byte agreement with twin v10 is only 0% -- s    122
+  refused: only 0 of 64 slots are byte-identical to twi     87
+  refused: only 0 of 200 slots are byte-identical to tw     69
+  refused: byte agreement with twin v10 is only 2% -- s     61
+  refused: only 0 of 68 slots are byte-identical to twi     53
+  refused: byte agreement with twin v10 is only 3% -- s     43
+  refused: only 0 of 132 slots are byte-identical to tw     43
+  refused: only 0 of 102 slots are byte-identical to tw     41
+  refused: only 0 of 98 slots are byte-identical to twi     41
+VERIFIED: rebuilt v7 image is byte-identical to the ROM

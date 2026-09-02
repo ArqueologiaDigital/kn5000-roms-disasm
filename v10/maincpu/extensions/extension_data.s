@@ -407,7 +407,7 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	aligned_string "%c:%d/%d  "
 	.byte 0xef, 0x02, 0x1d, 0x05, 0xef, 0x02, 0x1d, 0x05, 0x27, 0x08, 0xfd, 0x07, 0xfd, 0x07, 0x20, 0x00
 	aligned_string "                                "
-	.byte 0x20, 0x00
+	ldb w, 0
 	.zero 8
 	.byte 0xf1, 0x01, 0xf1, 0x01, 0xf1, 0x01, 0x59, 0x00, 0x65, 0x01, 0x59, 0x00, 0x65, 0x01, 0x10, 0x03
 	.byte 0xf8, 0x02, 0xf8, 0x02, 0x20, 0x00
@@ -416,21 +416,44 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	aligned_string "%d/%d"
 	.byte 0xcc, 0x01, 0xfa, 0x02, 0xcc, 0x01, 0xfa, 0x02, 0x29, 0x05, 0x11, 0x05, 0x11, 0x05, 0x20, 0x00
 	aligned_string "                "
-	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5e, 0x01, 0x00, 0x00, 0x00, 0x00
-	.byte 0x25, 0x73, 0x3a, 0x00
+	ldb w, 0
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	pop xiz
+	normal
+	nop
+	nop
+	nop
+	nop
+	ldb e, 115
+	push xde
+	nop
 	aligned_string "                 "
-	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x00, 0x25, 0x73, 0x3a, 0x00
+	ldb w, 32
+	ldb w, 32
+	ldb w, 0
+	ldb e, 115
+	push xde
+	nop
 	aligned_string "TEMPO"
-	.byte 0x25, 0x73, 0x3a, 0x00
+	ldb e, 115
+	push xde
+	nop
 	aligned_string "TEMPO"
 	.byte 0x25, 0x73, 0x00, 0xff, 0x5a, 0x05, 0x6a, 0x07, 0x5a, 0x05, 0x6a, 0x07, 0xae, 0x0b, 0x96, 0x0b
 	.byte 0x96, 0x0b, 0x20, 0x00
 	aligned_string "                                "
-	.byte 0x20, 0x00
+	ldb w, 0
 	aligned_string "                                "
-	.byte 0x20, 0x00
+	ldb w, 0
 	aligned_string "                                "
-	.byte 0x20, 0x00
+	ldb w, 0
 	aligned_string "                                "
 	aligned_string "                                "
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xdb, 0x02, 0xdb, 0x02, 0xdb, 0x02, 0x6a, 0x00
@@ -629,8 +652,21 @@ VariationStr_V1:
 	.byte 0x56, 0x31, 0x00, 0xff
 	aligned_string "RHYTHM"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED164E-0xED1662 (20 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+8
-	.byte 0x25, 0x73, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
-	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00
+	ldb e, 115
+	push xde
+	nop
+	ldb e, 115
+	push xde
+	nop
+	ldb e, 100
+	push xde
+	nop
+	ldb e, 100
+	push xde
+	nop
+	ldb e, 115
+	push xde
+	nop
 	aligned_string "PAGE %d/%d"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED166E-0xED167E (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+40
 	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
@@ -695,8 +731,16 @@ TransposeNoteStr_C:
 	aligned_string "DEFAULT"
 	aligned_string " USER  "
 	aligned_string " ERROR "
-	.byte 0x31, 0x00, 0x31, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x31, 0x00, 0x40, 0x00, 0x35, 0x00
-	.byte 0x3c, 0x00, 0x00, 0x00
+	ldw bc, 12544
+	nop
+	ld xwa, 1073758208
+	nop
+	ldw bc, 16384
+	nop
+	ldw iy, 15360
+	nop
+	nop
+	nop
 	aligned_string "DEFAULT"
 	aligned_string " USER  "
 	aligned_string " ERROR "
@@ -1150,7 +1194,10 @@ ParamStr19_nowstylectgpage:	aligned_string "nowstylectgpage"
 ParamStr19_nowstylectgmaxpage:	aligned_string "nowstylectgmaxpage"
 ParamStr19_nowstylectgdtno:	aligned_string "nowstylectgdtno"
 ParamStr19_func:
-	.byte 0x66, 0x75, 0x6e, 0x63, 0x00, 0xff
+	jr z, 117
+	jr nz, 99
+	nop
+	swi 7
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
 
@@ -1202,7 +1249,7 @@ NakaParam_AcMstSong2GridBox:
 MstSong2Grid_nowsongctgpage:	aligned_string "nowsongctgpage"
 MstSong2Grid_nowsongctgmaxpage:	aligned_string "nowsongctgmaxpage"
 MstSong2Grid_nowsongctgdtno:	aligned_string "nowsongctgdtno"
-	.byte 0x66, 0x75
+	jr z, 117
 MstSong2Grid_func:	.byte 0x6e, 0x63, 0x00, 0xff
 	aligned_string "fixedrow"
 	aligned_string "fixedcol"
@@ -1261,15 +1308,21 @@ ExtData_NormScreenProc_Ptr:
 	.byte 0x6a, 0x00
 	aligned_string "AcDispTimeSetGridBox"
 NakaDesc_AcDispTimeSetGridBox:
-	.byte 0x58, 0x58, 0x6a, 0x00
+	pop xwa
+	pop xwa
+	jr gt, 0
 NakaInst_AcDispTimeSetGridBox:	aligned_string "AcPmExpFilterGridBox"
 NakaDesc_AcPmExpFilterGridBox:
-	.byte 0x58, 0x58, 0x6a, 0x00
+	pop xwa
+	pop xwa
+	jr gt, 0
 NakaInst_AcPmExpFilterGridBox:	aligned_string "AcFSWAssGridBox"
 NakaDesc_AcFSWAssGridBox:
-	.byte 0x58, 0x58, 0x6a, 0x00
+	pop xwa
+	pop xwa
+	jr gt, 0
 	aligned_string "AcTchSensGridBox"
-	.byte 0x6e, 0x00
+	jr nz, 0
 	aligned_string "IvMstStyleWindowPgCtl"
 	.byte 0x6e, 0x00
 	aligned_string "IvPmemWindowPageCtl"
@@ -1280,11 +1333,13 @@ NakaInst_IvWindowPageControl:	aligned_string "PmemModeBox"
 NakaDesc_PmemModeBox:	aligned_string "kc^nn"
 NakaInst_PmemModeBox:	aligned_string "MsaModeScreen"
 NakaDesc_MsaModeScreen:
-	.byte 0x6a, 0x72, 0x00, 0xff
+	jr gt, 114
+	nop
+	swi 7
 	aligned_string "AcPmBkEditBox"
 NakaDesc_AcPmBkEditBox:	aligned_string "kc^nnn"
 NakaInst_AcPmBkEditBox:	.asciz "PmBankScreen"
-	.byte 0xff
+	swi 7
 NakaDesc_PmBankScreen:	aligned_string ""
 NakaInst_PmBankScreen:	aligned_string "PmBkNoBox"
 NakaDesc_AcPmBkNoBox:	aligned_string ""
@@ -1473,7 +1528,8 @@ NoteNameStr_Table_8:
 	.long NakaInst_TEST6FUNC
 	.long NakaInstTable8_NullTerm
 NakaInstTable8_NullTerm:
-	.byte 0x00, 0xff
+	nop
+	swi 7
 .include "ui_widgets/normal_mode_layout.s"
 	.byte 0xf5, 0x00, 0x00, 0x00, 0x00, 0x00, 0x04, 0xf4, 0x03, 0x00, 0x08, 0xf4, 0x03, 0x00
 	.byte 0x3c, 0x00, 0x60, 0x01, 0x18, 0x00, 0xff, 0xff, 0x1a, 0x00, 0xff, 0xff, 0x08, 0x00, 0x15, 0x01
@@ -1651,7 +1707,12 @@ NakaInstTable8_NullTerm:
 	.byte 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x09, 0x00, 0xff, 0xff, 0x08, 0x00, 0x4e, 0x00, 0x80, 0x00
 	.byte 0xe1, 0x00, 0x92, 0x00
 	.long Str_ErrorDialog_Caution
-	.byte 0x02, 0x00, 0x00, 0x00, 0xf9, 0x00
+	push sr
+	nop
+	nop
+	nop
+	swi 1
+	nop
 Str_ErrorDialog_Caution:	.asciz "CAUTION!!"	; English text
 
 
@@ -1675,7 +1736,12 @@ ErrorDialog_RecoveryLine1:
 	.byte 0x2b, 0x00, 0x60, 0x01, 0x07, 0x00, 0xff, 0xff, 0x0b, 0x00, 0x09, 0x00, 0x08, 0x00, 0x2e, 0x00
 	.byte 0xae, 0x00, 0x09, 0x01, 0xb8, 0x00
 	.long Str_ErrorDialog_TryTurningOff
-	.byte 0x03, 0x00, 0x00, 0x00, 0x00, 0x00
+	pop sr
+	nop
+	nop
+	nop
+	nop
+	nop
 Str_ErrorDialog_TryTurningOff:	aligned_string "Please try turning off and on again."
 
 

@@ -308,8 +308,15 @@ ResetPlay_Src3Check:
 ResetPlay_Return:
 	.byte 0x1d
 MIDI_APPLY_STARTUP_TIMING:
-	.byte 0x32, 0xb1, 0xfd, 0x5e, 0x5d, 0x5c, 0x5b, 0x5a
-	.byte 0x59, 0x58, 0x0e
+	ldw de, 64945
+	pop xiz
+	pop xiy
+	pop xix
+	pop xhl
+	pop xde
+	pop xbc
+	pop xwa
+	ret
 	push SR
 	ei 0x06
 	cpdi8 (0x0474), 0x55
@@ -561,7 +568,7 @@ SysEx_InProgressReturn:
 	swi	7
 	nop
 	push	sr
-	.byte 0x01
+	normal
 	pop	sr
 	ldb_d8	a, 38350
 	cp	a, 20

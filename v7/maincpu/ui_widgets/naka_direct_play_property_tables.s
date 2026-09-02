@@ -22,7 +22,8 @@ NakaPropStr_SelBox_AutoInc:		aligned_string "auto_inc"
 NakaPropStr_SelBox_Dial:		aligned_string "dial"
 NakaPropStr_SelBox_SelNum:		aligned_string "sel_num"
 NakaPropStr_SelBox_Row:
-	.byte 0x72, 0x6f, 0x77, 0x00
+	jrl le, 30575
+	nop
 NakaPropStr_SelBox_Column:	aligned_string "column"
 NakaPropStr_SelBox_MainFunc:	aligned_string "main_func"
 NakaPropStr_SelBox_FontColor:	aligned_string "fontcolor"

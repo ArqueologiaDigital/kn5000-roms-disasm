@@ -88,7 +88,8 @@ LABEL_RE = re.compile(r"^([A-Za-z_.$][A-Za-z0-9_.$]*):\s*(;.*)?$")
 
 
 def load_rom(root):
-    return open(os.path.join(root, "original_ROMs/kn5000_v10_program.rom"), "rb").read()
+    return open(os.path.join(root, "original_ROMs/kn5000_%s_program.rom"
+                             % os.environ.get("KN5000_IMAGE", "v10")), "rb").read()
 
 
 def parse(path, lm):

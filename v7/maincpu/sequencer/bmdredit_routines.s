@@ -1895,8 +1895,9 @@ BmDrEdit_ResetAndScanNotes:
 	stdi16 (0x2782), 0
 	stdi8 (0x2784), 0
 	calr BmDrEdit_ScanChannelEvents
+
 BmDrEdit_FlagDisplayUpdate:
-	call	16635550
+	call 16635550
 
 	setda 0, 0x27b0
 
@@ -4363,9 +4364,12 @@ BmDrEdit_EnterPlay_RestoreSettings:
 	ldmm16 0xf19e, 0x2963
 
 BmDrEdit_EnterPlay_CheckAudio:
-	.byte 0x1d, 0x9e, 0xd6, 0xfd, 0xd1, 0x44, 0x27, 0x20
-	.byte 0xf1, 0x1c, 0x25, 0x50, 0xd1, 0x1e, 0x25, 0xf0
-	.byte 0x63, 0x04, 0xf1, 0x1e, 0x25, 0x50
+	call	16635550
+	ldw_d16	wa, (10052)
+	stda16	(9500), wa
+	cpda16	xwa, (9502)
+	jr	ule, 4	; -> 0xF3880C
+	stda16	(9502), wa
 BmDrEdit_EnterPlay_UpdateProgress:
 	ldmm16 9832, 9500
 	cpdi16 9832, 1

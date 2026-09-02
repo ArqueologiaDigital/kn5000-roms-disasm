@@ -874,7 +874,8 @@ AcNumEdit_GetText:
 	ld	xwa, (xsp+32)
 	call	16408153
 	ld	(xsp+4), xhl
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0xaa, 0xa2
+	pushw 234
+	pushw 41642
 	lda	xwa, (xsp+22)
 	push	xwa
 	call	16713584
@@ -889,7 +890,8 @@ AcNumEdit_GetText:
 	push	xwa
 	call	16713188
 	lda	xsp, (xsp+26)
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0xb0, 0xa2
+	pushw 234
+	pushw 41648
 	lda	xwa, (xsp+22)
 	push	xwa
 	call	16713188
@@ -2275,15 +2277,28 @@ AcBitEdit_Return:
 	ret
 
 BitEditCheck:
-	.byte 0x3e, 0xe8, 0x8e, 0xe9, 0xcf, 0x65, 0x00, 0xe0
-	.byte 0x01, 0x66, 0x49, 0xe9, 0xcf, 0x64, 0x00, 0xe0
-	.byte 0x01, 0x66, 0x3a, 0xe9, 0xcf, 0x63, 0x00, 0xe0
-	.byte 0x01, 0x66, 0x2b, 0xe9, 0xcf, 0x62, 0x00, 0xe0
-	.byte 0x01, 0x6e, 0x31, 0x9a, 0x08, 0x20, 0xd8, 0xcc
-	.byte 0x01, 0x00, 0xd8, 0xec, 0x02, 0xf2, 0xce, 0xa2
-	.byte 0xea, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x38
-	.byte 0xaa, 0x0a, 0x20, 0x38, 0x1d, 0x70, 0x07, 0xff
-	.byte 0xef, 0x60, 0xee, 0x8b, 0x68, 0x10
+	push	xiz
+	ld	xiz, xwa
+	cp	xbc, 31457381
+	jr	z, 73	; -> 0xF9FD76
+	cp	xbc, 31457380
+	jr	z, 58	; -> 0xF9FD6F
+	cp	xbc, 31457379
+	jr	z, 43	; -> 0xF9FD68
+	cp	xbc, 31457378
+	jr	nz, 49	; -> 0xF9FD76
+	ld	wa, (xde+8)
+	and	wa, 1
+	sla	wa, 2
+	lda_24	xbc, (15377102)
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	ld	xwa, (xde+10)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	ld	xhl, xiz
+	jr	16	; -> 0xF9FD78
 BitEditCheck_GetAddr:
 	lda_24 xhl, (0x0276ce)
 	jr BitEditCheck_Return
@@ -3208,7 +3223,7 @@ PsEditSwBox_InlineData:
 	ld	iz, bc
 	cp	wa, iz
 	jr	c, 2
-	.byte 0xd8, 0xbe
+	ex16 iz, wa
 	lda	xbc, (xsp+6)
 	calr	40333
 	lda	xbc, (xsp+2)
@@ -6248,7 +6263,7 @@ AcMixerVol_Confirm:
 	lda	xde, (xsp+18)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	ld	xhl, (xsp+14)
 	.byte 0x9b, 0x16, 0x04
 	call	16435871
@@ -6748,7 +6763,8 @@ DbMemo_DrawContent_Loop:
 	lda	xbc, (xsp+74)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x07, 0x00
+	pushw 0
+	pushw 7
 	call	16434877
 	lda	xwa, (xsp+10)
 	push	xwa
@@ -7578,7 +7594,8 @@ PsTrkSw_Confirm_DrawGeometry:
 	ld	wa, (xwa+22)
 	inc	1, wa
 	pushw	wa
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0x24, 0xa8
+	pushw 234
+	pushw 43044
 	lda	xwa, (xsp+124)
 	push	xwa
 	call	16712341
@@ -7602,7 +7619,8 @@ PsTrkSw_Confirm_DrawGeometry:
 	lda	xde, (xsp+118)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0x07, 0x00, 0x0b, 0xf7, 0x00
+	pushw 7
+	pushw 247
 	call	16435871
 	lda	xwa, (xsp+150)
 	lds	bc, 7
@@ -8145,7 +8163,8 @@ AcTrkSw_Return:
 	call	16421459
 	or	xhl, xhl
 	jr	z, 18
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0x90, 0xa8
+	pushw 234
+	pushw 43152
 	ld	xwa, (xsp+140)
 	push	xwa
 	call	16713188
@@ -8167,7 +8186,8 @@ AcTrkSw_Return:
 	lda	xde, (xwa+4)
 	.byte 0x83, 0x3f, 0x59
 	jr	nz, 11
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0x94, 0xa8
+	pushw 234
+	pushw 43156
 	ld	xwa, (xde)
 	push	xwa
 	jr	21
@@ -8176,12 +8196,14 @@ AcTrkSw_Return:
 	ld	xwa, (xde)
 	.byte 0x81, 0x3f, 0x5a
 	jr	nz, 16
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0x9a, 0xa8
+	pushw 234
+	pushw 43162
 	push	xwa
 	call	16713584
 	inc	8, xsp
 	jrl	419
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0xa2, 0xa8
+	pushw 234
+	pushw 43170
 	push	xwa
 	call	16713584
 	inc	8, xsp
@@ -9662,14 +9684,22 @@ RegisterTitle:
 
 
 UnregisteredTitle:
-	.byte 0x41, 0x16, 0x00, 0x00, 0x00, 0x1d, 0x7f, 0x02
-	.byte 0xff, 0x41, 0xbc, 0x2a, 0x03, 0x00, 0xeb, 0x81
-	.byte 0x40, 0x00, 0x00, 0x20, 0x01, 0xb1, 0x60, 0x40
-	.byte 0xff, 0xff, 0xff, 0xff, 0xb9, 0x04, 0x60, 0xb9
-	.byte 0x08, 0x02, 0xff, 0xff, 0xf2, 0x16, 0xa9, 0xea
-	.byte 0x30, 0xb9, 0x0a, 0x60, 0x40, 0xff, 0xff, 0xff
-	.byte 0xff, 0xb9, 0x0e, 0x60, 0xb9, 0x12, 0x02, 0xff
-	.byte 0xff, 0xb9, 0x14, 0x02, 0xff, 0xff, 0x0e
+	ld	xbc, 22
+	call	16712319
+	ld	xbc, 207548
+	add	xbc, xhl
+	ld	xwa, 18874368
+	ld	(xbc), xwa
+	ld	xwa, 4294967295
+	ld	(xbc+4), xwa
+	ldw	(xbc+8), 65535
+	lda_24	xwa, (15378710)
+	ld	(xbc+10), xwa
+	ld	xwa, 4294967295
+	ld	(xbc+14), xwa
+	ldw	(xbc+18), 65535
+	ldw	(xbc+20), 65535
+	ret
 TitleProc:
 	lda xsp, (xsp - 34)
 	push xiz
@@ -9799,7 +9829,7 @@ EventDispatch_Select:
 
 	ld xbc, 0x16
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call 16712319
 
 	add xhl, (xsp + 4)
 
@@ -9988,7 +10018,7 @@ EventDispatch_DefaultProc:
 
 	ld xbc, 0x16
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call 16712319
 
 	add xhl, (xsp + 4)
 
@@ -10154,7 +10184,7 @@ EnumList_Close:
 
 	ld xbc, 0x16
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call 16712319
 
 	add xhl, (xsp + 4)
 
@@ -10191,7 +10221,7 @@ EnumList_ShowHide_A:
 
 	ld xbc, 0x16
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call 16712319
 
 	add xhl, (xsp + 4)
 
@@ -10269,13 +10299,13 @@ EnumList_PartChange_B:
 
 	ld xbc, 0x16
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call 16712319
 
 	add xhl, (xsp + 4)
 
 	cpw (xhl + 18), 0xffff
 
-	.byte 0x76, 0xa4, 0x03	; jrl z, TitleProc_ReturnZero (v7 displacement)
+	jrl z, 932
 
 	ld xwa, 0x1c00028
 
@@ -15567,7 +15597,8 @@ ViewID_GetCurrent:
 	.byte 0x83, 0x3f, 0x00
 	jr	z, 23
 	push	xhl
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0xda, 0xaa
+	pushw 234
+	pushw 43738
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -16984,7 +17015,8 @@ CommonIDProc_CheckAvail:
 	jrl	273
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0xe2, 0xab
+	pushw 234
+	pushw 44002
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -16993,7 +17025,7 @@ CommonIDProc_CheckAvail:
 	jr	88
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
-	.byte 0x0b, 0x0a, 0x00
+	pushw 10
 	ld	xbc, (xsp+6)
 	ld	xwa, (xbc+4)
 	push	xwa

@@ -234,14 +234,14 @@ InitializeHama:
 	ld	xbc, xwa
 	ldw	wa, 1020
 	call	16400110
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	lda_24	xwa, 14810392
 	push	xwa
 	ld	xwa, 127
 	ld	xbc, 21561344
 	ld	xde, 16515072
 	call	16402803
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	lda_24	xwa, 14810402
 	push	xwa
 	ld	xwa, 252
@@ -454,7 +454,7 @@ CreateRunFDOp_Entry:
 	lda xsp, (xsp - 16)
 	lda_24 xwa, (FDTest_String_TestTitleFunc_0xFA)
 	calr FDTest_PrintDiag
-	.byte 0xbf, 0x00, 0x02, 0x00, 0x00	; ldw (xsp + 0), 0x0 (force d8 displacement)
+	ldw (xsp+256), 0
 	ldw (xsp + 6), 0xe0
 	ldw (xsp + 2), 0x0
 	ldw (xsp + 4), 0x0

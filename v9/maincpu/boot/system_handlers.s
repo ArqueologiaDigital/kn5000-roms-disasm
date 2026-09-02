@@ -1670,7 +1670,7 @@ TempoRingBuf_Consume_Done:
 TempoRingBuf_BytecodeSnippet:
 	.byte 0xf1
 	pop	xbc
-	.byte 0x04
+	max
 	dec	6, w
 	.byte 0x06
 	ldb	e, 129
@@ -3289,13 +3289,9 @@ TaskSched_TCBTemplate:	.ascii "(<=;"
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	.byte 0x9c
-	nop
-	.byte 0x20
+	ld wa, (xix+256)
 	ld	hl, (xix+2)
-	.byte 0xbb
-	nop
-	.byte 0x50
+	ld (xhl+256), wa
 	ld	(xwa+2), hl
 	ld	(xix+9), 0
 	ld	(xix+10), 0
@@ -4350,10 +4346,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	unlk	xiz
 	ret
 	ldw_da	hl, (0x200a9)
-	.byte 0xd2, 0xa5
-	nop
-	push	sr
-	.byte 0xf3
+	cpda16_24 xhl, (131237)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4631,10 +4624,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	unlk	xiz
 	ret
 	ldw_da	hl, (0x202c7)
-	.byte 0xd2, 0xc3
-	push	sr
-	push	sr
-	.byte 0xf3
+	cpda16_24 xhl, (131779)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4718,9 +4708,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	unlk	xiz
 	ret
 	ldw_da	hl, (0x203d1)
-	.byte 0xd2
-	ld	e, 2
-	.byte 0xf3
+	cpda16_24 xhl, (132045)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4880,10 +4868,7 @@ RingBuf_CopyPtr_Sub2:
 	ret
 RingBuf_InitStructFields:
 	; --- Sub 3: init XDE struct fields at offsets -10..-2 (26 bytes) ---
-	.byte 0xba, 0xf6
-	push	sr
-	nop
-	nop
+	ldw (xde-10), 0
 	ldw	(xde-8), 0
 	ldw	(xde-4), 0
 	ldw	(xde-6), 0
@@ -5073,7 +5058,7 @@ RingBuf512_ReadAlt_ByteBlock:
 	ldb	l, 220
 	push	xwa
 	swi	7
-	.byte 0x01
+	normal
 	ld	(xde-10), ix
 	ret
 
@@ -6066,8 +6051,7 @@ E1DMA_ISR_BytecodeBlock:
 	ld	xde, (xde+4)
 	calr	64945
 	di
-	.byte 0xf0
-	jr	-55
+	bit_dd8 1, 104
 	jr	nz, 27
 	.byte 0xd8
 	pushw	sp
@@ -6085,8 +6069,7 @@ E1DMA_ISR_BytecodeBlock:
 	stdi16	(0xe360), 0
 	stdi8	(256), 0
 	stdi8	(1506), 0
-	.byte 0xf0
-	jr	-71
+	set_dd8 1, 104
 	incdi8	1, (0xe35e)
 	ret
 	ldw_d16	de, (1033)
@@ -8093,10 +8076,9 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	ld	(xsp+4), xwa
 	lds32	xiz, 0
 	ld	xwa, (xsp+8)
-	.byte 0xf5, 0xe2
-	ldw	bc, 2239
-	jr	f, -23
-	.byte 0x88
+	stb_dpi a, 226
+	ld (xsp+8), xwa
+	ld xwa, xbc
 	ld	xde, (xsp+4)
 	.byte 0xe5, 0xea
 	ldb	a, 191
@@ -8110,7 +8092,7 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	.byte 0x8f
 	incf
 	push	xsp
-	.byte 0x04
+	max
 	jr	c, -61
 	pop	xiz
 	lda	xsp, (xsp+10)
@@ -8190,13 +8172,9 @@ HDAE5000_Init_BytecodeBlock:
 	swi	3
 	.byte 0xa9
 	jr	8
-	.byte 0xc7
-	swi	3
-	dec	6, bc
-	halt
-	.byte 0xd7
-	swi	2
-	halt
+	cpib_erp 251, 1
+	jr nz, 5
+	pop qiz
 	jr	-2
 	stib_da	(0x160004), 0
 	ld	xwa, 0x800000
@@ -8248,7 +8226,7 @@ HDAE5000_Init_BytecodeBlock:
 	nop
 	ex_ff
 	ret	le
-	.byte 0x04
+	max
 	nop
 	ex_ff
 	.byte 0xb9
@@ -8261,7 +8239,7 @@ HDAE5000_Init_BytecodeBlock:
 	.byte 0xf2, 0x90
 	popw	wa
 	sll	xsp, 11
-	.byte 0x01
+	normal
 	nop
 	ld	xwa, 0x300000
 	ld	xbc, 0x200000
@@ -8293,9 +8271,7 @@ HDAE5000_Init_BytecodeBlock:
 	.long SeqCh_SystemHandlerData
 	ld	(xix), 128
 	jp	(xwa)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 HDAE5000_Init_DetectAndVerify:

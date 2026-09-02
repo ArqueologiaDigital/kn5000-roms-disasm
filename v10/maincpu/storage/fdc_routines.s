@@ -55,11 +55,7 @@ FDC_Write_Data:
 FDC_WaitReady:
 	push	xiz
 	ldw_d16	iz, (1033)
-	.byte 0xd7
-	swi	2
-	pop	sr
-	.byte 0x80
-	nop
+	ldw qiz, 128
 	cpw	qiz, 128
 	jr	nz, 41
 	calr	65481
@@ -68,59 +64,39 @@ FDC_WaitReady:
 	extz	wa
 	cps	wa, 0
 	jr	nz, 3
-	.byte 0xd7
-	swi	2
-	.byte 0xa8
+	ld qiz, 0
 	ldw_d16	wa, (1033)
 	sub	wa, iz
 	cp	wa, 500
 	jr	ule, 5
-	.byte 0xd7
-	swi	2
-	pop	sr
-	swi	7
-	swi	7
+	ldw qiz, 65535
 	cpw	qiz, 128
 	jr	z, -41
-	.byte 0xd7
-	swi	2
-	inc	6, wa
-	halt
+	cp qiz, 0
+	jr z, 5
 	lds	wa, 1
 	calr	2611
 	pop	xiz
 	ret
 	push	xiz
 	ldw_d16	iz, (1033)
-	.byte 0xd7
-	swi	2
-	pop	sr
-	.byte 0x80
-	nop
+	ldw qiz, 128
 	cpw	qiz, 128
 	jr	nz, 38
 	calr	65411
 	and	l, 144
 	cp	l, 144
 	jr	nz, 3
-	.byte 0xd7
-	swi	2
-	.byte 0xa8
+	ld qiz, 0
 	ldw_d16	wa, (1033)
 	sub	wa, iz
 	cp	wa, 500
 	jr	ule, 5
-	.byte 0xd7
-	swi	2
-	pop	sr
-	swi	7
-	swi	7
+	ldw qiz, 65535
 	cpw	qiz, 128
 	jr	z, -38
-	.byte 0xd7
-	swi	2
-	inc	6, wa
-	halt
+	cp qiz, 0
+	jr z, 5
 	lds	wa, 1
 	calr	2544
 	pop	xiz
@@ -184,11 +160,10 @@ FDC_WaitReady:
 	inc	1, xiz
 	calr	1134
 	calr	65211
-	.byte 0xf5
-	swi	0
-	ld	xsp, 0xcffeaf1e
-	ldw	hl, 0x6607
-	swi	0
+	lda_dpi xsp, 248
+	calr 65199
+	bit 7, l
+	jr z, -8
 	calr	65191
 	bit	6, l
 	jr	nz, -25
@@ -224,73 +199,53 @@ FDC_WaitReady:
 	jrl	gt, 151
 	add	wa, wa
 	lda_24	xix, (DiskWarning_ConfirmStrings_0xBFA)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	dec	4, e
-	swi	1
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	cp	bc, wa
-	jr	nov, -118
-	nop
-	nop
+	ld_rrw wa, xix, wa
+	lda_24 xix, (16346317)
+	jp_rr 8, xix, wa
+	stdi8 (35436), 0
 	stdi16	(0x8a22), 0
-	.byte 0xc7
-	swi	3
-	sub	(xwa-40), xde
+	ldib_erp 251, 0
+	lds wa, 2
 	calr	65093
 	jr	127
 	stdi8	(0x8a6c), 0
 	stdi16	(0x8a22), 0
-	.byte 0xc7
-	swi	3
-	pop	sr
-	.byte 0xc0
+	ldi_erpb 251, 192
 	lds	wa, 2
 	calr	65071
 	jr	105
 	stdi8	(0x8a6c), 2
 	stdi16	(0x8a22), 0
-	.byte 0xc7
-	swi	3
-	pop	sr
-	ld	xwa, 0x191ea8d8
-	swi	6
+	ldi_erpb 251, 64
+	lds wa, 0
+	calr 65049
 	jr	83
 	stdi8	(0x8a6c), 3
 	stdi16	(0x8a22), 0
-	.byte 0xc7
-	swi	3
-	pop	sr
-	ld	xwa, 0x031ea8d8
-	swi	6
+	ldi_erpb 251, 64
+	lds wa, 0
+	calr 65027
 	jr	61
 	stdi8	(0x8a6c), 4
 	stdi16	(0x8a22), 0
-	.byte 0xc7
-	swi	3
-	sub	(xwa-40), xde
+	ldib_erp 251, 0
+	lds wa, 2
 	calr	65006
 	jr	40
 	stdi8	(0x8a6c), 5
 	stdi16	(0x8a22), 0
-	.byte 0xc7
-	swi	3
-	sub	(xwa-40), xde
+	ldib_erp 251, 0
+	lds wa, 2
 	calr	64985
 	jr	19
 	stdi8	(0x8a6c), 0
 	stdi16	(0x8a22), 0
-	.byte 0xc7
-	swi	3
-	sub	(xwa-40), xde
+	ldib_erp 251, 0
+	lds wa, 2
 	calr	64964
-	.byte 0xc7
-	swi	3
-	and	(xbc-55), h
-	pushw	4824
+	stb_erp a, 251
+	or a, 11
+	extz wa
 	calr	1421
 	.byte 0xc1
 	ldb	d, 138
@@ -755,15 +710,8 @@ FDC_ResultPhase_Read:
 	.byte 0xbf, 0x04
 	ex_ff
 	push	4
-	.byte 0xd7
-	swi	2
-	pop	sr
-	.byte 0x80
-	nop
-	.byte 0xd7
-	swi	2
-	add	w, l
-	nop
+	ldw qiz, 128
+	cpw qiz, 128
 	jr	nz, 83
 	calr	63905
 	res	4, l
@@ -772,15 +720,12 @@ FDC_ResultPhase_Read:
 	jr	z, 10
 	cp	a, 128
 	jr	nz, 40
-	.byte 0xd7
-	swi	2
-	ld	xhl, (xwa+104)
+	ld qiz, 0
+	jr 35
 	lds	iz, 1
-	.byte 0xd7
-	swi	2
-	cp	(xwa-41), xde
-	dec	6, wa
-	pop_f
+	ld qiz, 0
+	cp qiz, 0
+	jr nz, 25
 	calr	63878
 	lda_d16	xwa, (0x8a60)
 	ld	bc, iz
@@ -789,30 +734,19 @@ FDC_ResultPhase_Read:
 	ld	(xbc), l
 	calr	63857
 	inc	1, iz
-	.byte 0xd7
-	swi	2
-	inc	6, wa
-	.byte 0xe7
+	cp qiz, 0
+	jr z, -25
 	ldw_d16	wa, (1033)
 	.byte 0x9f, 0x04
 	xor	(xwa), xwa
 	cp	d, l
-	.byte 0x01
+	normal
 	jr	ule, 5
-	.byte 0xd7
-	swi	2
-	pop	sr
-	swi	7
-	swi	7
-	.byte 0xd7
-	swi	2
-	add	w, l
-	nop
+	ldw qiz, 65535
+	cpw qiz, 128
 	jr	z, -83
-	.byte 0xd7
-	swi	2
-	inc	6, wa
-	halt
+	cp qiz, 0
+	jr z, 5
 	lds	wa, 3
 	calr	993
 	pop	xiz
@@ -971,20 +905,20 @@ FDC_StatusDecode_UnknownIC:
 ; Uses ldio, (R+d16) addressing. 460 bytes.
 FDC_HardwareSetup:
 	ldio	248, 11
-	.byte 0xf0, 0xe0
-	ldw	bc, 8577
+	lda_dd8l xbc, 224
+	ld a, (xbc)
 	and	a, 248
 	set	2, a
 	ld	(xbc), a
 	ldio	248, 40
-	.byte 0xf0, 0xed
-	ldw	bc, 8577
+	lda_dd8l xbc, 237
+	ld a, (xbc)
 	and	a, 143
 	or	a, 80
 	ld	(xbc), a
 	ldio	248, 12
-	.byte 0xf0, 0xe0
-	ldw	bc, 8577
+	lda_dd8l xbc, 224
+	ld a, (xbc)
 	and	a, 143
 	or	a, 96
 	ld	(xbc), a
@@ -1214,7 +1148,7 @@ FDC_HardwareSetup:
 	popw	de
 	.byte 0x8a
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	z, 3
 	lds	hl, 0
@@ -1230,7 +1164,7 @@ FDC_HardwareSetup:
 	popw	wa
 	.byte 0x8a
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	z, 3
 	lds	hl, 0
@@ -1256,7 +1190,7 @@ FDC_HardwareSetup:
 	popw	de
 	.byte 0x8a
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	z, 3
 	lds	hl, 0
@@ -1354,9 +1288,7 @@ FDC_ClearStatus_InitTimer:
 	ldw	bc, 0xffff
 	ldw_d16	wa, (1033)
 	sub	wa, iz
-	.byte 0xd7
-	swi	2
-	.byte 0xf0
+	cp wa, qiz
 	jr	ule, 9
 	ldw	wa, 9
 	calr	65444
@@ -1420,9 +1352,7 @@ FDC_CmdRecalibrate:
 	swi	2
 	.byte 0x04
 	ldb_d8	a, (0x8a36)
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp a, 251
 	stdi8	(0x8a36), 5
 	stdi8	(0x8b04), 255
 	calr	45
@@ -1437,22 +1367,18 @@ FDC_CmdRecalibrate:
 	nop
 	jr	z, 5
 	stdi8	(0x8b04), 255
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	stb_d8	(0x8a36), a
 	ldw	wa, 16
 	calr	65408
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	ldb_d8	a, (0x8a36)
 	cpda8	a, 35588
 	ret	z
 	.byte 0xc1
 	ldw	iz, 6538
-	.byte 0x04
+	max
 	sub	(xhl-40), b
 	calr	65383
 	calr	65326
@@ -1513,9 +1439,7 @@ FDC_CMD_EXEC:
 	nop
 	jr	z, 22
 	ldb_d8	a, (0x8a24)
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	exts	iz
 	calr	62634
 	.byte 0xc7
@@ -1658,9 +1582,7 @@ FDC_CMD_EXEC:
 	nop
 	jr	z, 22
 	ldb_d8	a, (0x8a24)
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	exts	iz
 	calr	62327
 	.byte 0xc7
@@ -1871,8 +1793,7 @@ FDC_MODE_CONFIG:
 	stb_d8	(0x8a12), a
 	ldb_d8	a, (0x8a36)
 	extz	wa
-	.byte 0xd1
-	ldio	139, 240
+	cpda16 xwa, (35592)
 	jr	ule, -66
 ; --- FDC_MC_EXIT: FORMAT command execution and sector fill ---
 ; Calls cleanup, sets up FORMAT command (command byte 0x4d).
@@ -2071,9 +1992,7 @@ FDC_MC_EXIT:
 	ret	nz
 	jrl	-1599
 	pushw	iz
-	.byte 0xf0
-	pushw	wa
-	.byte 0xbb
+	set_dd8 3, 40
 	ldw	wa, 254
 	calr	63182
 	.byte 0xc1
@@ -2092,11 +2011,8 @@ FDC_MC_EXIT:
 	djnz16	iz, -9
 	popw	iz
 	ret
-	.byte 0xf0
-	pushw	wa
-	lda	xwa, (xhl)
-	ret
-	nop
+	res_dd8 3, 40
+	ldw wa, 14
 	jrl	-2395
 ; --- FDC_STATUS_COPY: Copy FDC status and validate drive count ---
 ; Copies status from source to destination via (R+d16) load/store.
@@ -2151,28 +2067,20 @@ FDC_INTERRUPT_HANDLER:
 	nop
 	jr	nz, 42
 	calr	61050
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	ldw	hl, 0x6607
-	.byte 0x06
+	ldb_erp l, 251
+	bit_erpb 251, 7
+	jr z, 6
 	ldw	wa, 50
 	calr	63743
-	.byte 0xc7
-	swi	3
-	ldw	hl, 0x6e05
-	.byte 0x06
+	bit_erpb 251, 5
+	jr nz, 6
 	ldw	wa, 49
 	calr	63731
-	.byte 0xc7
-	swi	3
-	ldw	hl, 0x6606
-	.byte 0x06
+	bit_erpb 251, 6
+	jr z, 6
 	ldw	wa, 47
 	calr	63719
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 FDC_CommandEntry:
@@ -2370,7 +2278,7 @@ FDC_ByteTransfer_PIO:
 	stda32	0x8a4e, xhl
 	.byte 0xd1, 0x1c, 0x8a
 	push	xde
-	.byte 0x01
+	normal
 	nop
 	ret	nz
 	calr	61988

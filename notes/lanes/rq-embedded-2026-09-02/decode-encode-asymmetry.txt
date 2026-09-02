@@ -1,0 +1,9 @@
+toolchain: 6f456a19f05b
+rom bytes      llvm-objdump prints            re-encodes to  site
+85 11          ldir                           80 11          v7 RhythmROM_PatternDisp_Check91 +0x02  <-- ASYMMETRIC
+bb 01 cf       and	(xhl+1), xsp               ab 01 cf       v7 AccTuning_LoadFromROM +0x0C  <-- ASYMMETRIC
+7f da 61       jrl	nc, 25050                  7f da 61       v7 WndEvt_EventCodeDispatch +0x4C5
+9e 04 04       push	xiz                       3e             v7 Data_InOutGridDispatch +0x372  <-- ASYMMETRIC
+9c 20 04       push	xix                       3c             v7 PsGridBox_Scroll_Render +0x11  <-- ASYMMETRIC
+
+4 of 5 cases do not round-trip.

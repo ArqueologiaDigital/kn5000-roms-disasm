@@ -31,16 +31,13 @@ SysEx_ApplyToSlot4B_Data:
 	ld	(xsp+4), l
 	ld	xwa, 0x4b04
 	call	DSPCfg_ReadParam_Map0
-	.byte 0xd7
-	swi	2
-	cp	(xhl-41), de
-	inc	1, wa
-	push	xsp
+	ld qiz, hl
+	cp qiz, 0
+	jr lt, 63
 	lds	iz, 0
-	.byte 0xd7
-	swi	2
-	inc	2, wa
-	ldw	de, 0x88de
+	cp qiz, 0
+	jr le, 50
+	ld wa, iz
 	exts	xwa
 	add	xwa, 0x4b10
 	call	DSPCfg_ResolveAndExtract
@@ -94,15 +91,12 @@ SysEx_ApplyToSlot49_Data:
 	jr	lt, 72
 	ld	xwa, 0x4904
 	call	DSPCfg_ReadParam_Map0
-	.byte 0xd7
-	swi	2
-	cp	(xhl-41), de
-	inc	1, wa
-	ldw	sp, 43230
-	.byte 0xd7
-	swi	2
-	inc	2, wa
-	pushw	de
+	ld qiz, hl
+	cp qiz, 0
+	jr lt, 55
+	lds iz, 0
+	cp qiz, 0
+	jr le, 42
 	ld	a, (xsp+4)
 	extz	wa
 	stb_erp	c, 248
@@ -149,16 +143,13 @@ SysEx_ApplyToSlot49_Format_Data:
 	ld	(xsp+4), l
 	ld	xwa, 0x4904
 	call	DSPCfg_ReadParam_Map0
-	.byte 0xd7
-	swi	2
-	cp	(xhl-41), de
-	inc	1, wa
-	push	xsp
+	ld qiz, hl
+	cp qiz, 0
+	jr lt, 63
 	lds	iz, 0
-	.byte 0xd7
-	swi	2
-	inc	2, wa
-	ldw	de, 0x88de
+	cp qiz, 0
+	jr le, 50
+	ld wa, iz
 	exts	xwa
 	add	xwa, 0x4910
 	call	DSPCfg_ResolveAndExtract
@@ -2927,7 +2918,7 @@ DSPCfg_Data_003:
 	ldw	hl, 0xffff
 	.byte 0x8f, 0x06
 	push	xsp
-	.byte 0x01
+	normal
 	jr	nz, 2
 	lds	hl, 0
 	pop	xiz
@@ -3857,9 +3848,8 @@ DSPCfg_Data_ParamDispatch:
 	.ascii "?df5Å"
 	ldb	l, 219
 	zcf
-	.byte 0xd7
-	swi	2
-	cp	(xbc+37), xsp
+	ld qiz, 1
+	ldb e, 255
 	ld	xwa, (xsp+14)
 	ld	bc, qiz
 	ld	(xwa), bc
@@ -3877,9 +3867,8 @@ DSPCfg_Data_ParamDispatch:
 	pop	xiz
 	lda	xsp, (xsp+14)
 	retd	16
-	.byte 0xd7
-	swi	2
-	and	(xde+104), xiy
+	ld qiz, 2
+	jr -51
 	lda	xbc, (xsp+8)
 	calr	62102
 	ld	wa, (xsp+12)
@@ -3927,9 +3916,8 @@ DSPCfg_Data_ParamDispatch:
 	srl	wa, 8
 	and	wa, 63
 	ld	hl, wa
-	.byte 0xd7
-	swi	2
-	and	xiy, (xbc+104)
+	ld qiz, 1
+	jr -59
 	lda	xsp, (xsp-24)
 	pushw	iz
 	ld	(xsp+16), e
@@ -3991,7 +3979,7 @@ DSPCfg_Data_ParamDispatch:
 	dec	1, iz
 	.byte 0x8f, 0x06
 	push	xsp
-	.byte 0x01
+	normal
 	jr	nz, 2
 	inc	1, iz
 	ld	a, (xsp+12)
@@ -4017,19 +4005,10 @@ DSPCfg_Data_ParamDispatch:
 	jr	gt, 74
 	add	wa, wa
 	lda_24	xix, (ToneKit_VoiceDispatch_Table_0x33C)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	.byte 0xd3, 0xce
-	swi	5
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	mul	xiz, xwa
-	nop
-	popw	bc
-	nop
-	nop
+	ld_rrw wa, xix, wa
+	lda_24 xix, (16633555)
+	jp_rr 8, xix, wa
+	ld xiz, 18688
 	lds	wa, 0
 	jr	48
 	ld	xiz, 0x4a00
@@ -5750,16 +5729,10 @@ UIStateEvt_ParamEdit_Data:
 	jrl	gt, 601
 	add	wa, wa
 	lda_24	xix, (AudioInit_VoiceDispatch_Table_0x150)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	or	b, l
-	swi	5
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	and	bc, wa
-	jrl	nc, 8640
+	ld_rrw wa, xix, wa
+	lda_24 xix, (16638671)
+	jp_rr 8, xix, wa
+	ldb_d8 a, (49279)
 	and	a, 7
 	jrl	z, 183
 	ldw_d16	wa, (0xc598)
@@ -5770,15 +5743,10 @@ UIStateEvt_ParamEdit_Data:
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
-	.byte 0xd3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	h, 193
-	pop	xiy
-	swi	4
-	ldb	a, 201
-	mul	d, 216
-	ccf
+	ld_rrw iz, xbc, wa
+	ldb_d8 a, (64605)
+	and a, 8
+	extz wa
 	add	wa, wa
 	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
 	.byte 0xd3
@@ -5804,14 +5772,9 @@ UIStateEvt_ParamEdit_Data:
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
-	.byte 0xd3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	h, 209
-	.byte 0x96, 0xc5
-	ldb	w, 216
-	cpl	d
-	nop
+	ld_rrw iz, xbc, wa
+	ldw_d16 wa, (50582)
+	and wa, 6
 	jr	z, 18
 	ld	wa, iz
 	and	wa, 6
@@ -5869,7 +5832,7 @@ UIStateEvt_ParamEdit_Data:
 	.byte 0xd1, 0x96, 0xc5
 	push	xiz
 	nop
-	.byte 0x04
+	max
 	jr	6
 	.byte 0xd1, 0x96, 0xc5
 	push	xix
@@ -5879,7 +5842,7 @@ UIStateEvt_ParamEdit_Data:
 	push	xiz
 	nop
 	ld	xwa, 0x3ec594d1
-	.byte 0x04
+	max
 	nop
 	.byte 0xf1
 	jrl	nc, -13120
@@ -5914,15 +5877,10 @@ UIStateEvt_ParamEdit_Data:
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
-	.byte 0xd3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	h, 193
-	pop	xiy
-	swi	4
-	ldb	a, 201
-	mul	d, 216
-	ccf
+	ld_rrw iz, xbc, wa
+	ldb_d8 a, (64605)
+	and a, 8
+	extz wa
 	add	wa, wa
 	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x130)
 	.byte 0xd3
@@ -6028,17 +5986,10 @@ UIStateEvt_VolumeMixer_Data:
 	ret	gt
 	add	wa, wa
 	lda_24	xix, (AudioInit_VoiceDispatch_Table_0x15E)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 242
-	push	xwa
-	.byte 0xe5
-	swi	5
-	ldw	ix, 2035
-	.byte 0xf0, 0xe0
-	and	bc, wa
-	jrl	nc, 8640
+	ld_rrw wa, xix, wa
+	lda_24 xix, (16639288)
+	jp_rr 8, xix, wa
+	ldb_d8 a, (49279)
 	and	a, 31
 	jr	z, 22
 	.byte 0xc1
@@ -6217,19 +6168,19 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
-	.byte 0x04
+	max
 	jr	37
 	stdi8	(0xc5a2), 55
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
-	.byte 0x04
+	max
 	jr	24
 	stdi8	(0xc5a2), 60
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
-	.byte 0x04
+	max
 	jr	11
 	stdi8	(0xc5a2), 67
 	.byte 0xd1, 0x9a, 0xc5
@@ -6269,13 +6220,9 @@ UIStateEvt_EffectSelect_Data:
 	and	a, 255
 	extz	wa
 	lda_24	xbc, (AudioInit_VoiceDispatch_Table_0x124)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	e, 219
-	and	(xwa-37), xsp
-	.byte 0x1a
-	nop
+	ld_rrb e, xbc, wa
+	lds hl, 0
+	cp hl, 26
 	jr	nc, 37
 	ld	wa, hl
 	add	wa, wa
@@ -6318,7 +6265,7 @@ UIStateEvt_EffectSelect_Data:
 	push	xiz
 	nop
 	ld	xwa, 0x3ec594d1
-	.byte 0x04
+	max
 	nop
 	ret
 UIStateEvt_PlayModeGuard_Data:

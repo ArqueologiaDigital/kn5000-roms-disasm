@@ -75,7 +75,7 @@ InterruptVectorTable:
 	.long 0xffffffff
 	.long 0xffffffff
 FIRMWARE_VERSION:
-	.byte FW_VERSION_BYTE
+	reti
 
 ; RESERVED:
 	.fill 23, 1, 0xff

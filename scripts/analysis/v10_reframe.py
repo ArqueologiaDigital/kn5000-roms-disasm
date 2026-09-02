@@ -50,6 +50,14 @@ import subprocess
 import sys
 
 ROM_BASE = 0xE00000
+# ⚠ IMAGE SELECTOR, added 2026-09-02.  v7, v9 and v10 are three versions of one
+# firmware with the same link base and the same tree shape, and the identical
+# `.byte`-island defect exists in all three.  Set KN5000_IMAGE=v7 / v9 to point
+# this module and everything importing it at another one.  It DEFAULTS TO v10,
+# so every existing caller is unaffected.
+IMAGE = os.environ.get("KN5000_IMAGE", "v10")
+if IMAGE not in ("v7", "v9", "v10"):
+    raise SystemExit("KN5000_IMAGE must be v7, v9 or v10, not %r" % IMAGE)
 LLVM = os.environ.get("LLVM_BIN",
                       os.path.expanduser("~/compartilhado/llvm-project/build/bin"))
 LABEL_RE = re.compile(r"^([A-Za-z_.$][A-Za-z0-9_.$]*):\s*(;.*)?$")
@@ -57,14 +65,15 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 
 
 def rom_bytes():
-    return open(os.path.join(ROOT, "original_ROMs/kn5000_v10_program.rom"), "rb").read()
+    return open(os.path.join(ROOT, "original_ROMs/kn5000_%s_program.rom" % IMAGE),
+                "rb").read()
 
 
 def elf_symbols():
     """address -> label, from the last built ELF (built if absent)."""
-    elf = os.path.join(ROOT, "rebuilt_ROMs/kn5000_v10_program.llvm.elf")
+    elf = os.path.join(ROOT, "rebuilt_ROMs/kn5000_%s_program.llvm.elf" % IMAGE)
     if not os.path.exists(elf):
-        subprocess.run(["make", "rebuilt_ROMs/kn5000_v10_program.llvm.elf"],
+        subprocess.run(["make", "rebuilt_ROMs/kn5000_%s_program.llvm.elf" % IMAGE],
                        cwd=ROOT, check=True)
     out = subprocess.run([os.path.join(LLVM, "llvm-nm"), "--defined-only", elf],
                          capture_output=True, text=True, check=True).stdout
@@ -263,17 +272,22 @@ def main():
         for p, t in backups.items():
             open(p, "w", encoding="latin-1").write(t)
         sys.exit("REJECTED: rebuilt image differs from the ROM; all edits rolled back")
-    print("VERIFIED: rebuilt v10 image is byte-identical to the ROM")
+    print("VERIFIED: rebuilt %s image is byte-identical to the ROM" % IMAGE)
 
 
 def verify():
-    obj = "/tmp/v10reframe.o"
-    elf = "/tmp/v10reframe.elf"
-    binf = "/tmp/v10reframe.bin"
-    inc = os.path.join(ROOT, "v10/maincpu")
+    # ⚠ These were three FIXED /tmp paths shared by every lane running this
+    # pass at once; a private temporary directory is the difference between
+    # "my image verified" and "somebody's image verified".
+    import tempfile
+    td = tempfile.mkdtemp(prefix="kn5000-reframe-")
+    obj = os.path.join(td, "reframe.o")
+    elf = os.path.join(td, "reframe.elf")
+    binf = os.path.join(td, "reframe.bin")
+    inc = os.path.join(ROOT, "%s/maincpu" % IMAGE)
     r = subprocess.run([os.path.join(LLVM, "llvm-mc"), "-triple=tlcs900",
                         "-filetype=obj", "-I", inc, "-o", obj,
-                        os.path.join(inc, "kn5000_v10_program.s")],
+                        os.path.join(inc, "kn5000_%s_program.s" % IMAGE)],
                        cwd=ROOT, capture_output=True, text=True)
     if r.returncode:
         print(r.stderr[-4000:])
