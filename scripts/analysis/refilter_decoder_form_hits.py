@@ -27,6 +27,14 @@ RUN
   cannot catch data framed as code, because re-assembling a wrong
   interpretation reproduces the same bytes.
 """
+"""Re-check each raw hit from census_two_forms.py's broad pass against a strict
+filter: the dst-mem-store form only counts as `ldw` with a MEMORY destination
+(`ldw (...)`, not `ldw reg, imm` -- the latter is an unrelated, long-supported
+encoding that happens to share the mnemonic name and is the dominant false
+positive, e.g. `.byte 0x30, 0x00, 0xff` -> `ldw wa, 65280`, a 3-byte data
+record decoding as a register-immediate load). The ALU da16 family mnemonics
+are kept as originally matched (much rarer coincidental hits).
+"""
 import re, sys, os
 sys.path.insert(0, os.path.expanduser('~/compartilhado/disasm-lanes/subcpudsp/scripts/lanes'))
 import convert_lane_sub_byte_code as m
@@ -46,7 +54,6 @@ def main(hits_file):
         path, s, e, n, label = mm.group(1), int(mm.group(2)), int(mm.group(3)), int(mm.group(4)), mm.group(5)
         lines = open(path, encoding='latin-1').readlines()
         blocks = m.find_blocks(lines)
-        # find the block matching this start line
         target = None
         for b in blocks:
             if b['start']+1 == s and b['end']+1 == e:

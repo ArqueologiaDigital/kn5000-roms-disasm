@@ -27,38 +27,13 @@ RUN
   the same bytes. Corroborate with call targets landing on already-named
   routines before converting anything this reports.
 """
-"""census_two_forms.py -- tree-wide search for other .byte sites blocked by the
-same two TLCS900 decoder bugs fixed 2026-09-02 in ad8129f59880:
-  1. dst-mem-prefix immediate store, OpByte==0x02 (mnemonic "ldw", ROM like
-     bf 04 02 xx xx)
-  2. direct-address ALU family addda16/subda16/andda16/xorda16/orda16/cpda16
-     and their _24/mem-dest siblings (ROM like d1 40 xx xx xx)
-
-METHOD
-  Reuses convert_lane_sub_byte_code.py's block-finder + round-trip prover.
-  For every contiguous .byte run of >=3 non-uniform bytes in the given files:
-    - disassemble with llvm-mc, require a clean decode (no warnings, some insns)
-    - require the decode to round-trip byte-exact through llvm-mc again
-    - if it round-trips AND the decoded text mentions "ldw" (the 0x02 store,
-      distinguished from ldw's many other addressing forms by requiring a
-      literal immediate second operand) or any of the six da16/da16_24 ALU
-      mnemonics, count it as a site attributable to the two fixed forms.
-  This is a LOWER BOUND filter tuned for precision: it only flags a block if
-  the round-tripped decode text literally names one of the six ALU mnemonics
-  or "ldw " (the store form's actual mnemonic per the probe's own finding).
-  A block that round-trips for an unrelated reason (some other decoder fix,
-  or was never broken) is not counted unless it also uses one of these forms.
-
-RUN
-    python3 census_two_forms.py <file.s> [file.s ...]
-"""
 import re, sys, os
 sys.path.insert(0, os.path.expanduser(
     '~/compartilhado/disasm-lanes/subcpudsp/scripts/lanes'))
 import convert_lane_sub_byte_code as m
 
 ALU_DA16 = re.compile(r'\b(addda16|subda16|andda16|xorda16|orda16|cpda16)(_24)?\b')
-LDW_STORE = re.compile(r'\bldw\b')
+LDW_MEM_STORE = re.compile(r'\bldw\s+\(')
 
 def scan(path):
     lines = open(path, encoding='latin-1').readlines()
@@ -75,7 +50,7 @@ def scan(path):
         if rt != bytes(b['bytes']):
             continue
         text = '\n'.join(insns)
-        if ALU_DA16.search(text) or LDW_STORE.search(text):
+        if ALU_DA16.search(text) or LDW_MEM_STORE.search(text):
             label = None
             for j in range(b['start']-1, max(b['start']-60,-1), -1):
                 mm = m.LABEL_RE.match(lines[j])
@@ -89,11 +64,12 @@ def main():
     total_bytes = 0
     total_sites = 0
     for path in sys.argv[1:]:
-        hits = scan(path)
-        for (p, s, e, n, label, text) in hits:
+        for (p, s, e, n, label, text) in scan(path):
             total_sites += 1
             total_bytes += n
             print(f"{p}:{s}-{e}  {n} bytes  label~={label}")
+            for l in text.splitlines():
+                print(f"    {l}")
     print(f"\nTOTAL: {total_sites} sites, {total_bytes} bytes")
 
 if __name__ == '__main__':
