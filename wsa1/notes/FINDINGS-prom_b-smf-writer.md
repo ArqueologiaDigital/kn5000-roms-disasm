@@ -145,8 +145,8 @@ now carved out as typed data.
 
 Measured with `--debt`:
 
-    08d0c4e8   raw `.byte` debt  4790   typed data  130   fallback   0   instr lines    0
-    HEAD       raw `.byte` debt     0   typed data  352   fallback 382   instr lines 1541
+    08d0c4e8  raw `.byte` debt 4790  typed data 130  fallback   0  instr bytes    0 (0 lines)
+    HEAD      raw `.byte` debt    0  typed data 352  fallback 382  instr bytes 4186 (1541 lines)
 
 ## What is still not known
 

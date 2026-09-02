@@ -951,9 +951,12 @@ def main():
         rev = a[a.index("--debt") + 1] if len(a) > a.index("--debt") + 1 else None
         for r in ([rev] if rev else [None]):
             t = debt(r)
+            code = 0xF779D5 - 0xF7669D - t["raw"] - t["data"] - t["fallback"]
             print("  %-10s raw `.byte` debt %5d   typed data %4d   "
-                  "instruction-fallback `.byte` %3d   instruction lines %5d"
-                  % (r or "HEAD", t["raw"], t["data"], t["fallback"], t["code"]))
+                  "instruction-fallback `.byte` %3d   instruction bytes %5d "
+                  "(on %d lines)"
+                  % (r or "HEAD", t["raw"], t["data"], t["fallback"], code,
+                     t["code"]))
         return 0
     if "--layout" in a:
         for k, s, n in layout():
