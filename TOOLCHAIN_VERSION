@@ -7,9 +7,9 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 6fe210fb0a81 (6fe210fb0a81f50050b854007880d5e3d140234a)
+Commit: 58fb7f2afaed (58fb7f2afaed21f7c63feb4f50aab06f5183b2da)
 Date: 2026-09-02
-Subject: [TLCS900] Add a regression test for the signed-d8 spelling-trap warning
+Subject: [TLCS900] Narrow the ALU-direct-address register fix; add GPR-typed _da24 siblings
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # What this pin adds over dbb72df07371, all DECODER-side (no encoding changed,
@@ -45,6 +45,7 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # real code from every automated audit for months.
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 6fe210fb0a81  [TLCS900] Add a regression test for the signed-d8 spelling-trap warning
 #   Commit: 63ff7d92fb5f  [TLCS900] Disambiguate the (Xrr) vs explicit (Xrr+d8=0) print collision
 #   Commit: 975a2c17d683  [TLCS900] Corroborate the ERP/SriRR decoders with real v10 + WSA1R bytes
 #   Commit: dbb72df07371  [TLCS900] A regression guard for the SX-WSA1R's sound-code C7 forms
@@ -285,3 +286,46 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # Verified: `make gate-all` -- 9 KN5000 and 4 SX-WSA1R ROMs, all IDENTICAL,
 # plus scripts/analysis/assert_images_assemble.py on all 8 KN5000 images, and
 # llvm-lit clean on all 24 TLCS900 MC tests.
+
+# UPDATE 11 (2026-09-02): moved to 58fb7f2afaed, two commits on top of
+# 6fe210fb0a81, from a lane sent to remove the assembler-spelling gaps blocking
+# 94 v7 romslices (46,570 B).
+#
+# ⚠ IT DID NOT UNBLOCK THEM. Those totals are UNCHANGED. Every slice it fixed a
+# form for moved its blocking point deeper into its tail and then hit what reads
+# as a genuine data table. Six single-byte opcodes (0x01, 0x04, 0x17, 0x1a,
+# 0x1c, 0x1f) are CONFIRMED unmapped anywhere in the decoder -- real reserved
+# space, not a gap -- and 0x01 alone accounts for 9,424 B across 8 slices. So
+# "teach llvm-mc to spell it" is NOT the lever for the v7 remainder, and the
+# note in DEBT-INVENTORY that said it was has been corrected.
+#
+# ★ WHAT IT DID FIX IS LARGER THAN WHAT IT WAS SENT FOR -- two llvm-mc CRASHES
+#   reachable from any image, and three silent-miscompile-class bugs:
+#   * decodeMemPrefix's dst-mem 0xD0-0xEF sub-opcodes mis-used JPcc/CALLCC_24
+#     (wrong operand shape, so printInst ABORTED on any byte reaching it), and
+#     32-bit EX mis-used the codegen-only 4-operand EX32 pseudo (encodeInstruction
+#     OOB abort). Both now refuse cleanly. A crash in the disassembler takes down
+#     whatever tool called it, in any image, not just v7.
+#   * the (Xrr)/(Xrr+d8=0) print/encode collapse fixed in 63ff7d92fb5f existed
+#     one width up, for the SRI (Xrr+d16=0) form. Same sentinel, mirrored.
+#   * LD16ri_short (ldw rd, imm16) excluded SP although the hardware encoding
+#     covers it, like PUSH16_short. Added as an asm-only sibling.
+#   * ⚠ THE SILENT ONE: the ALU-direct-address family's register encoder used
+#     the instruction's OpSize field -- which names the MEMORY operand's width,
+#     not the register's -- to decide 8-bit sub-register substitution, silently
+#     swapping XWA/XBC/XDE/XHL for the wrong register.
+#
+# ⚠ AND THE FIRST FIX FOR THAT LAST ONE WAS TOO BROAD and broke hd-ae5000's
+#   existing `ldb_da xwa`, which relies on the old behaviour. Caught by the lane
+#   itself, reverted, and re-done scoped to the ALU family (Opcode != 0x20) with
+#   GPR-typed _da24 siblings added alongside the existing GR8-typed ones.
+#
+# Refused and recorded: ldi/ldd/ei 5 (938 B) are a genuine don't-care-bits
+# pattern -- canonical re-encoding legitimately differs from a non-canonical
+# original byte. No spelling was invented for it.
+#
+# Verified CENTRALLY on main, not only in the lane: `make clean-all` then
+# `make gate-all` -- 8/8 KN5000 images assemble clean, 9/9 KN5000 ROMs and 4/4
+# SX-WSA1R ROMs byte-identical. That the gate is green ACROSS AN ENCODING
+# CHANGE is the finding: nothing in either tree was relying on the wrong
+# register substitution.
