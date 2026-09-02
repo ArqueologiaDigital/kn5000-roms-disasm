@@ -4,6 +4,80 @@ Result of an eleven-lane parallel push across all 13 gated images. **The byte
 gate is green: 13/13 byte-identical, 8/8 KN5000 images assembling with the
 pinned toolchain**, re-run centrally on `main` after every merge.
 
+## ⚠⚠ RETRACTED THE SAME DAY: "v10's leftover `.byte` runs are undecoded code"
+
+I measured that v10 starts a `.byte` run with one of `{01,04,17,1a,1c}` — five
+bytes `llvm-mc` could not decode — **19.2% of the time against 0.4% for
+decodable bytes of the same magnitude, a 46x enrichment**, with all four WSA1R
+images flat as a negative control. I read that as "v10's residue is largely
+undecoded code", wrote it into this file, and **sent it to seven lanes as
+actionable**.
+
+**It is retracted.** The number is real; the reading is not.
+
+### The null that settles it
+
+With the five bytes made decodable, **82.8% of v10's blind-starting runs decode
+end-to-end clean — and a SHUFFLE of the same bytes scores 82.1%.** Real and
+permuted are indistinguishable, so the runs carry **no instruction structure**.
+(Uniform random scores 24.2%: that is the architecture's base rate, and the gap
+between 24% and 82% is what "these bytes look like data of this shape" is worth,
+not what "these bytes are code" is worth.) Only the 96 runs of ≥12 B open any
+gap at all, and the longest of those are
+`04 00 00 00 08 00 00 00 10 00 00 00 …` — data regularity, not code.
+`scripts/analysis/blind_run_decode_census.py`.
+
+Separately, across six committed images, **not one occurrence of the five
+survives inspection as executed code**: every site is a byte ramp, a
+power-of-two mask table, a pointer table, a string, or a DSP parameter block.
+`scripts/analysis/blind_byte_rom_sites.py`.
+
+### Why the 46x was never evidence — the structural confound
+
+Where a region was converted by a **linear force-disassembly** pass, a `.byte`
+run begins at *exactly* the byte the decoder refused. A **decodable** control
+byte therefore can almost never START a run — it gets consumed into the
+surrounding instruction stream instead. **The control rate is pinned near zero
+by construction**, whatever the region actually contains, so the blind/control
+ratio is close to tautological for any force-disassembled region. The WSA1R
+images are flat because their residue was not produced that way — not because
+it is more data-like. My "negative control" controlled for the wrong thing.
+
+And the composition gives it away: `0x01` and `0x04`, two of the commonest data
+values in any image, are **93.6%** of v10's blind run-starts (2,188 + 993 of
+3,395). `0x1a` and `0x1c` — the `jp`/`call` bytes that made the finding sound
+important — are 28 and 62.
+
+### Three lanes found it independently, from three directions
+
+* **`ui_widgets/widget_dispatch.s`: 2.1x**, below the script's own threshold —
+  65 of its 74 blind starts are a **tag's low byte** in six-byte
+  `{u16 tag, u32 ptr}` records, at a boundary manufactured by an interposed
+  `.long`.
+* **`sequencer/seq_event_playback.s`: 40.9% → 1.7%** after clearing
+  data-as-code misframes, **converting nothing into an instruction**. A wrong
+  stream breaks at every refused byte, so a misframe manufactures the signature
+  in bulk.
+* **`audio/sound_editor_ui.s`** is the strongest, because its population was
+  certified data by an **external** authority — a C struct compiled by the
+  project's toolchain emitting exactly those ROM bytes, which depends on no
+  decoder and no framing judgement: blind starts are **enriched 1.29x INSIDE
+  spans proven not to be code at all** (20.1% vs 15.6%).
+
+### What survives
+
+A high blind rate means **the region is framed wrongly** — and that resolves in
+BOTH directions, which the midi/display lane demonstrated within one lane:
+`midi_dispatch_handlers.s` was data spelled as code (typed, never
+disassembled), while `graphics_text_vga.s` is honest undecoded code. So it is a
+weak *pointer* to suspect framing, never a verdict, and never a byte count.
+
+⚠ **Do not schedule a v10 residue conversion lane on this finding.**
+
+★ The decoder gap it caused to be closed was worth closing on its own merits —
+a decoder that cannot see a byte reports nothing there rather than reporting a
+problem — but it is not a route to converting v10.
+
 ## ★★ SX-WSA1R: 13,206 B → 481 B in one push (2026-09-02)
 
 **Three of the four SX-WSA1R images are at ZERO verbatim debt. The fourth,
