@@ -26939,7 +26939,8 @@ SendPartDataBlock_Data:
 	.byte 0x04
 	or	d, c
 	and	e, 15
-	.byte 0xc7, 0xf0, 0x9d, 0xc7, 0xf0, 0x8b
+	ldb_erp	e, 240
+	stb_erp	c, 240
 	extz	bc
 	.byte 0xc3
 	reti

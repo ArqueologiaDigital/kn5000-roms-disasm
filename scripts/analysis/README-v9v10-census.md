@@ -235,3 +235,136 @@ from misframed `.byte` to real instructions, on top of lane V10CODE's 12
 regions above, gate green throughout
 (`rebuilt_ROMs/kn5000_v{9,10}_program.llvm.rom` byte-identical to their
 originals after every commit).
+
+## 2026-09-02 update: lane V9ISLANDS -- v9's confirmed-region backlog was already closed, and the honest remaining floor is tiny
+
+Lane V9ISLANDS, worktree `disasm-lanes/v9islands`, branch `w6/v9islands`,
+picking up where the entries above left off: does v9 specifically (not
+mirrored from v10) still carry either shape of debt? Re-ran `--prepare`
+(all three tags, from a full `make` of `kn5000_v{7,9,10}_program.llvm.rom`
+first -- a fresh worktree has no `includes/generated/*.bin` yet, see the
+09-01 update's "always `make` first" note, still true) and `--census`/
+`--judge`/`--islands v9` fresh, not inherited:
+
+* `--judge v9`: **316 non-`.incbin` DATA regions >= 64 B, 109,181 B; rule
+  fires (CODE-like) on only 4 regions / 277 B** -- and all four are the
+  SAME already-known hand-audited DATA rejects from the 09-02 V10CODE
+  entry above: the `ld XIY,0x4e492052` UI-string pair at
+  0xED1A36/0xED1A7A and the `swi 7`x3 = pure 0xFF fill at 0xEED1B0.
+  **v9's confirmed-region backlog is therefore ALREADY ZERO**, the same
+  closed state as v10 -- it did not need re-closing this session. (v9
+  shows 4 regions/277 B against v10's 5/348 B purely because the
+  `fd_test_data.s` duplicate at a second address does not reach the 64 B
+  floor / is not present at that address in v9 -- real content, not a
+  measurement gap: confirmed by inspecting `fd_test_data.s` directly.)
+* `--islands v9`: **15,758 CODE-flanked `.byte` runs, 27,605 B**; in
+  genuine-code context, **8,140 runs / 12,737 B** (ONE_INSN 2,213 B +
+  MULTI-tiling 2,305 B + SPANS 8,219 B out of scope per the brief).
+
+### Check 1: `convert_decoder_unblocked_islands.py` run DIRECTLY against v9
+
+Prior sessions ran this tool on v10 and mirrored to v9 by matching line
+number -- but v9's `sound_editor_ui.s` has since drifted out of lockstep
+with v10's (confirmed: the same line numbers now hold different
+instructions in the two trees), so a v10-only run cannot see whatever is
+v9-specific any more. Running it directly against `v9` found **24
+CODE-flanked isolated `.byte` lines that now decode + round-trip
+byte-exact, 67 B**, 22 of them concentrated in `sound_editor_ui.s`.
+
+**Before trusting any of them**, checked every one against
+`fill_verified_islands.py`'s `looks_like_a_table_tail()` (that guard
+exists in a sibling tool, not this one, so it does not run automatically
+here) using the file's own address markers to locate each candidate:
+**22 of 24 reject** -- overwhelmingly the `sound_editor_ui.s` cluster,
+which is exactly the file already documented above as holding
+`TuningSystem_Handler_Table` and `SeBitmap_EnvCurve5`, the two data
+tables that slipped through the ORIGINAL 283-run incident this guard was
+built to catch. Left all 22 as `.byte`.
+
+The 2 survivors were converted, each with its own contextual
+corroboration beyond the guard (no `call` targets in either, so
+`verify_converted_call_targets.py` does not apply; the check here is
+control-flow shape, the same standard the postdec10 lane used for
+register/ALU forms):
+* `note_voice_mapping.s` 0xFEFC7A, `ldb_erp e,240` / `stb_erp c,240` (6 B)
+  -- sits inside `SendPartDataBlock_Data`, in the same repeated
+  `and`/ERP-pair/`extz`/`reti` dispatch shape as two neighbouring,
+  already-decoded instances a few lines above it in the same function.
+* `accompaniment_engine.s` 0xF6B4CA, `cp wa,qwa` (3 B) -- completes a
+  bounded loop, `inc 1,wa` / `cp wa,qwa` / `jr ule,-64` / `ret`, reading
+  as a real loop test rather than a table record.
+
+v10's mirror was correctly skipped for both (line content already
+diverged there -- `MIRROR SKIP ... bytes differ or line missing`).
+
+### Check 2: `convert_interrupted_region.py` against the 4 known-DATA regions -- does the guard still fire on the cases it exists for?
+
+Ran (dry run, no `--apply`) against the 3 of the 4 hand-audited rejects
+that have a resolvable file:line (the 4th, 0xED1A7A, is the instance the
+V10CODE entry above already flags as "unresolved to any source file" --
+left alone, unchanged):
+
+* `fd_test_data.s:379` (0xE1FE6E, 67 B): **ABORTS** -- "line 386 is not a
+  recognized DATA directive (`aligned_string \"File Write =>\"`)", i.e.
+  the span the census measured is not pure DATA-directive territory and
+  the tool refuses to guess past a real string macro.
+* `extension_data.s:1459` (0xED1A36, 67 B): **ABORTS** the same way, one
+  line in -- "line 1460 is not a recognized DATA directive
+  (`aligned_string \"ER INITIAL va remplacer...\"`)".
+* `widget_dispatch.s:8073` (0xEED1B0, 64 B, the `swi 7` x3 = pure 0xFF
+  fill): **does NOT abort** -- it happily proposes converting 55 of 64 B
+  into a chain of `swi 7`/`ldw`/`ldb`/`pushw`/... instructions. This is
+  the expected trap, not a tool bug: a long run of the single repeated
+  byte `0xFF` trivially decodes as repeated valid 1-byte `swi 7`
+  instructions and round-trips byte-exact by construction, because
+  `swi 7` really does encode as `0xFF`. **Nothing in this tool's own
+  structural check catches a uniform-fill region** -- the only thing
+  that rejects it is the human hand-audit already on record (a `.fill`
+  of `0xFF`, not six deliberate `swi 7`s). Correctly left untouched
+  (dry run only, no `--apply`).
+
+  So: 2 of the 3 testable known-bad regions are caught mechanically by
+  `convert_interrupted_region.py`'s own directive-walk; the third needs
+  the documented hand-audit, which is exactly why that hand-audit is
+  recorded rather than re-derived from a rule.
+
+### Check 3: a second wave opened by check 1's edits, and both declined
+
+Re-ran `list_ready_islands.py v9` after committing the 2 conversions
+above (cascading candidates are the documented shape from the postdec10
+entry): **2 new candidates, 4 B**, both already passing
+`looks_like_a_table_tail()` internally. Manual review declined both:
+* `note_voice_mapping.s:27322` (3 B, `.byte 0xc9,0xee` + the label
+  `SendPartDataBlock_Data3:` + `.byte 0x01`, decoding as one `sll a,1`
+  spanning the label) -- `fill_verified_islands.py`'s own `apply()` uses
+  `collect_span()`, which stops at the first non-`.byte` line and does
+  NOT skip over a label the way the census's `inject()` grouping does;
+  attempting this candidate through the real apply path would self-abort
+  with a collected/expected byte mismatch rather than silently drop the
+  label, but that is exactly the "labels are not special-cased" trap
+  `convert_interrupted_region.py`'s docstring warns about, and hand
+  fixing it up was not worth the risk for 3 B.
+* `midi_serial_routines.s:914` (1 B) sits inside a block the tree already
+  names `MidiSerial_OffsetTable:`, with sibling entries commented
+  `; MIDI` / `; MAC` -- the enclosing label already says DATA more
+  directly than any periodicity heuristic could. Declined.
+
+### Net result
+
+**9 B converted this session** (2 regions, both independently
+corroborated by control-flow shape, not just by round-trip), v9's
+confirmed-region backlog reconfirmed at the same closed floor as v10
+(4 regions / 277 B, all pre-existing hand-audited DATA), and two
+mechanically-passing but substantively-wrong candidate classes
+identified and declined with reasons on record rather than converted for
+the byte count. `--islands v9` after: 15,756 runs / 27,596 B total,
+8,138 runs / 12,728 B in genuine-code context -- down by exactly the 2
+runs / 9 B converted, confirming the census sees the change and nothing
+else moved.
+
+Verified narrowly, per the lane brief (not `make gate-all`):
+
+    make rebuilt_ROMs/kn5000_v9_program.llvm.rom
+    cmp rebuilt_ROMs/kn5000_v9_program.llvm.rom original_ROMs/kn5000_v9_program.rom
+
+IDENTICAL.
