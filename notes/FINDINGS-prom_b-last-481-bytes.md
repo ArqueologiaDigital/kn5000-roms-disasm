@@ -4,24 +4,22 @@
 zero verbatim debt — 481 bytes in 16 `.incbin` spans. Can those be described as
 source as well, or are they actually data?
 
-> ## ⚠ STATUS: the answer holds, the COUNT is moving
+> ## ⚠ STATUS: the answer is now DEMONSTRATED — 481 B → 88 B
 >
-> This document was written when the residue was **16 spans / 481 bytes**. Lanes
-> are now converting it, so **re-derive the count before quoting it**:
+> This document was written when the residue was **16 spans / 481 bytes**. Three
+> lanes have since closed 14 of the 16, **entirely as typed data, with no
+> instruction emitted anywhere** — which is the answer below, proved by doing it
+> rather than argued.
+>
+> **2026-09-02: 2 spans / 88 bytes remain** — `0xF02FFE` (+44) and `0xF13D34`
+> (+44). Re-derive before quoting:
 >
 >     grep -ac '\.incbin' wsa1/prom_b/wsa1_prom_b.s
 >
-> **2026-09-02, after lanes `res3xx` and `res03a`: 7 spans / 265 bytes.** Both
-> closed every span they were given, entirely as typed data — which is the
-> answer below, demonstrated rather than argued. `res03a` typed a further 359 B
-> of adjacent walk-extent `.byte` runs in the same pass, 680 B in total.
-> Still open: `0xF02FFE`, `0xF03F81`, `0xF04D14`, `0xF0540B`, `0xF05792`,
-> `0xF05CEC`, `0xF13D34`. Two lanes are working them.
->
-> Two specifics below are now superseded and are kept because the reasoning
-> around them is still the point: `0xF286CC` and `0xF3B656` are converted, and
-> the `0xF286CC` bullet under "sharp enough to hand to a lane" understated the
-> error — see the correction at the end.
+> Lane `res03a` also typed 359 B of adjacent walk-extent `.byte` in the same
+> pass. Specifics in this file about spans now closed are superseded; the
+> reasoning around them is why they are kept, and the corrections are appended
+> at the end.
 
 **Answer: they are data — every one of the sixteen — and being data is exactly
 what makes them writable as source.** Nothing here is undecoded program text.
@@ -266,3 +264,52 @@ Evidence: `wsa1/notes/prom_b_res05x_spans.py --selftest`, and
 the result. This lane removed 177 B; with lanes `res3xx` and `res03a` merged
 alongside it, prom_b's verbatim residue is **88 B in 2 spans**, from the 481 B
 in 16 this document was written about.
+
+### ★ The cheapest instrument in this whole effort: the lists are entered BY IMMEDIATE
+
+Lane `res05x` found the general key, and it is embarrassingly simple. A display
+list is entered as
+
+    ld XIY,<start> ; ld XIX,<end> ; call 0xF417F0   (interpreter A)
+                                   call 0xF417F4   (interpreter B)
+
+so **a list's first byte and its EXCLUSIVE end are two 32-bit constants sitting
+in code this tree already disassembles.** They are not inferred from the data at
+all:
+
+    grep -an 'ld XI[XY],0x00f0' <converted sources>
+
+Four of that lane's five spans were fixed from outside the bytes that way, and
+`0xF0540B`'s four record starts turned out to be **written down 79 bytes later**
+in the pointer array at `0xF0545A`. Anyone continuing this work should reach for
+this before anything else.
+
+### ⚠ My own span triage was wrong about which was weakest
+
+This document's brief called `0xF05CEC` *"twelve small values, plausibly a curve
+row — the weakest of the five, and a refusal there is fine."* It is the
+**best-anchored of the five**: three op-03 records each carry
+`.long 0x00F05CE0` with width 2 and height 12, so 24 bytes ending exactly at
+`Data_F05CF8`.
+
+★ The lesson is the one this file argues throughout, turned on its author: a
+span's *appearance* — twelve small values — predicted nothing. What settled it
+was finding the records that name it. I ranked the spans by how they looked and
+got the ranking backwards.
+
+The span that actually resisted was `0xF05792`, and it is documented in place:
+no 32-bit word anywhere in the four ROMs holds its candidate interior splits, so
+its ends are code but its three interior boundaries rest on a zero-slack tiling
+plus an idiom shared by the image's other externally-sized rectangle arrays. The
+competing framing is **recorded and rejected in the source**, not dropped.
+
+### ⚠ A hazard that bit two lanes: `open(path, "w", encoding="latin-1")`
+
+It truncates `wsa1_prom_b.s` to **zero bytes** the instant a character will not
+encode — a stray `⚠` in a comment did it, twice, recovered from git both times.
+These sources are latin-1 files *carrying UTF-8 text*. Encode the whole file
+first, then `os.replace`. And one lane's perturbation checker compared the
+gate's message against a **CPU address** while the gate speaks in **file
+offsets**, so it reported "does not name it" for four of five perturbations that
+had in fact been named: **a checker's own units are part of what has to be
+checked.**
