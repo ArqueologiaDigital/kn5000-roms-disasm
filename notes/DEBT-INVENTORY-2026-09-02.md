@@ -116,12 +116,23 @@ wsa1/prom_c, wsa1/prom_d. Remaining, in order:
 
 Measured this push, per image where a census exists:
 
-* **v9 and v10: 8,058 B each** of confirmed code still as `.byte`, plus
-  **~14,727 B each** of shorter misframed islands, measured and deliberately not
-  attempted (fixing one means re-framing an instruction already present, not
-  filling a gap). `scripts/analysis/v9_v10_undisassembled_census.py`
-* **subcpu v142: ~569 B**, all of it `DSP_Bytecode_Op01/02/03` (the pinned LLVM
-  backend can DECODE these addressing forms but could not ENCODE them; fixed
+* **v9 and v10: confirmed-region backlog CLOSED — 0 B.** ★ Corrected
+  2026-09-02; this entry previously said 8,058 B each and was stale. Both images
+  now report only the same small set of hand-audited DATA rejects (v10: 5
+  regions / 348 B, v9: 4 / 277 B — they differ because a duplicate is not
+  present at a second address in v9, real content divergence, not a tooling
+  artefact). `scripts/analysis/v9_v10_undisassembled_census.py --judge`
+* ⚠ **Islands: DO NOT QUOTE A STATIC NUMBER.** This entry used to say
+  "~14,727 B each". Island counts are not a fixed pool — every region conversion
+  creates new short islands at the new code/data boundaries, and v7's population
+  was measured going 2,268 → 6,854 in a few hours with nothing regressing.
+  Measure fresh and state the commit you measured at.
+* **subcpu v142: 0 B.** ★ Corrected 2026-09-02: the 569 B of
+  `DSP_Bytecode_Op01/02/03` were converted once the decoder was fixed, and the
+  ~407 B once attributed to a TaskEvent/FIFO encoder gap was RETRACTED — it was
+  a measurement bug, not a gap. Historical note on the original cause (the
+  pinned LLVM backend could DECODE these addressing forms but could not ENCODE
+  them; fixed
   2026-09-02 in `ad8129f59880`, 569 B proven convertible, conversion itself
   owned by a separate lane). ⚠ CORRECTED 2026-09-02: the ~407 B
   TaskEvent/FIFO/TaskSched figure was never a real decoder gap. It was an
