@@ -135,10 +135,21 @@ EffectMode_TimerCountdown:
 	ldb_d8 a, (0x8cb2)
 	cps a, 0
 	ret Z
-	.byte 0xc9, 0x69, 0xf1, 0xb2, 0x8c, 0x41, 0xc9, 0xd8
-	.byte 0xb0, 0xfe, 0xd1, 0xba, 0x8c, 0x3f, 0x00, 0x00
-	.byte 0x66, 0x0b, 0x3a, 0x3b, 0x3c, 0x3e, 0x1e, 0x60
-	.byte 0xff, 0x5e, 0x5c, 0x5b, 0x5a
+	dec	1, a
+	stb_d8	36018, a
+	cps	a, 0
+	ret	nz
+	cpdi16	36026, 0
+	jr	z, 11
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	calr	-160
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
 EffectMode_TimerCountdown_CheckMode:
 	ldb_d8	a, (35994)
 	cp	a, 197
@@ -1577,7 +1588,7 @@ EffectMode_InitSwbWr_DiagMode:
 
 	lds bc, 1
 
-	.byte 0x1d, 0x53, 0xaa, 0xfd	; call AddswbWr (v7 addr)
+	call	16624211
 
 	pushw 0xff
 
@@ -1587,7 +1598,7 @@ EffectMode_InitSwbWr_DiagMode:
 
 	lds de, 0
 
-	.byte 0x1d, 0x53, 0xaa, 0xfd	; call AddswbWr (v7 addr)
+	call	16624211
 
 	pushw 0xf
 
@@ -1597,7 +1608,7 @@ EffectMode_InitSwbWr_DiagMode:
 
 	lds de, 6
 
-	.byte 0x1d, 0x53, 0xaa, 0xfd	; call AddswbWr (v7 addr)
+	call	16624211
 
 	ret
 
@@ -1622,7 +1633,7 @@ EffectMode_RestoreSwbWr_NormalMode:
 
 	lds bc, 1
 
-	.byte 0x1d, 0x53, 0xaa, 0xfd	; call AddswbWr (v7 addr)
+	call	16624211
 
 	pushw 0xff
 
@@ -1632,7 +1643,7 @@ EffectMode_RestoreSwbWr_NormalMode:
 
 	ldw de, 0x40
 
-	.byte 0x1d, 0x53, 0xaa, 0xfd	; call AddswbWr (v7 addr)
+	call	16624211
 
 	pushw 0xf
 
@@ -1642,7 +1653,7 @@ EffectMode_RestoreSwbWr_NormalMode:
 
 	lds de, 0
 
-	.byte 0x1d, 0x53, 0xaa, 0xfd	; call AddswbWr (v7 addr)
+	call	16624211
 
 	ret
 
@@ -2055,13 +2066,22 @@ TableDispatch_Return:
 	ret
 
 BitmapFinpic_ByteData:
-	.byte 0x1d, 0x6d, 0x07, 0xef, 0xdb, 0xd8, 0xb0, 0xf6
-	.byte 0xc1, 0xe4, 0xbf, 0x21, 0xc1, 0x9e, 0x8c, 0xf1
-	.byte 0xb0, 0xfe, 0xc1, 0xe1, 0xbf, 0x3f, 0x00, 0xb0
-	.byte 0xfe, 0x1d, 0x5a, 0x54, 0xfa, 0xeb, 0xcf, 0xf6
-	.byte 0x00, 0xa0, 0x01, 0xb0, 0xfe, 0x40, 0xff, 0xff
-	.byte 0xff, 0xff, 0x41, 0x0b, 0x00, 0xc0, 0x01, 0xea
-	.byte 0xa8, 0x1d, 0x4b, 0x99, 0xfa, 0x0e
+	call	15665005
+	cps	hl, 0
+	ret	z
+	ldb_d8	a, 49124
+	cpda8	a, 35998
+	ret	nz
+	cpdi8	49121, 0
+	ret	nz
+	call	16405594
+	cp	xhl, 27263222
+	ret	nz
+	ld	xwa, 4294967295
+	ld	xbc, 29360139
+	lds32	xde, 0
+	call	16423243
+	ret
 BitmapFinpic:
 	cp xbc, 0x1e000a3
 	jr z, BitmapFinpic_GetHeight
@@ -2477,7 +2497,7 @@ MasterSetup_DialDown_Underflow:
 
 	push xde
 
-	.byte 0x1d, 0x70, 0x07, 0xff	; call Strcpy (v7 addr)
+	call	16713584
 
 	inc 8, xsp
 
@@ -2704,7 +2724,7 @@ MstStyleAlp_OverflowCopy:
 
 	push xwa
 
-	.byte 0x1d, 0x70, 0x07, 0xff	; call Strcpy (v7 addr)
+	call	16713584
 
 	inc 8, xsp
 
@@ -4154,7 +4174,7 @@ MstStyle1SubGrid_PadLeft_Loop:
 
 	push xwa
 
-	.byte 0x1d, 0xb5, 0x04, 0xff	; call Strncat (v7 addr)
+	call	16712885
 
 	lda xsp, (xsp + 10)
 
@@ -4193,7 +4213,7 @@ MstStyle1SubGrid_PadLeft_LoopB:
 
 	push xwa
 
-	.byte 0x1d, 0xb5, 0x04, 0xff	; call Strncat (v7 addr)
+	call	16712885
 
 	lda xsp, (xsp + 10)
 
@@ -8150,11 +8170,11 @@ PmExpFilterCheck_PushDefault:
 	push xde
 
 PmExpFilterCheck_StrcpySend:
-	.byte 0x1d, 0x70, 0x07, 0xff	; call Strcpy (v7 addr)
+	call	16713584
 
 	inc 8, xsp
 
-	.byte 0x1d, 0xc3, 0x40, 0xfa	; call GetFocusObject (v7 addr)
+	call	16400579
 
 	ld xwa, xhl
 
@@ -9027,7 +9047,7 @@ NormScreen_ClearBit:
 
 	ld xde, (xsp + 4)
 
-	.byte 0x1d, 0xfc, 0x3f, 0xfa	; call InheritedProc (v7 addr)
+	call	16400380
 
 	lds32 xhl, 0
 
@@ -10083,7 +10103,7 @@ PmemMode_Paint:
 
 	ldw de, 0xf3
 
-	.byte 0x1d, 0x4c, 0xd1, 0xfa	; call DrawDesignBox (v7 addr)
+	call	16437580
 
 	lda_dri XDE, 0xfd, 0x0c, 0x01
 
@@ -10127,7 +10147,7 @@ PmemMode_Paint:
 
 	push xwa
 
-	.byte 0x1d, 0x70, 0x07, 0xff	; call Strcpy (v7 addr)
+	call	16713584
 
 	inc 8, xsp
 
@@ -10145,7 +10165,7 @@ PmemMode_Paint:
 
 	pushw 0xf7
 
-	.byte 0x1d, 0x9f, 0xca, 0xfa	; call DrawStringCentered (v7 addr)
+	call	16435871
 
 	ld_sril XWA, (xsp + 0x0118)
 
@@ -10376,7 +10396,7 @@ AcPmBkEdit_BankChanged:
 
 	push xwa
 
-	.byte 0x1d, 0x95, 0x02, 0xff	; call Sprintf_Locked (v7 addr)
+	call	16712341
 
 	ld_sril XWA, (xsp + 0x0138)
 
@@ -10388,7 +10408,7 @@ AcPmBkEdit_BankChanged:
 
 	push xwa
 
-	.byte 0x1d, 0xe4, 0x05, 0xff	; call Strcat (v7 addr)
+	call	16713188
 
 	lda xsp, (xsp + 18)
 
@@ -10398,7 +10418,7 @@ AcPmBkEdit_BankChanged:
 
 	ld xbc, 0x1c0000f
 
-	.byte 0x1d, 0x53, 0x92, 0xfa	; call SendEvent (v7 addr)
+	call	16421459
 
 	ldib_erp 0xfb, 1
 

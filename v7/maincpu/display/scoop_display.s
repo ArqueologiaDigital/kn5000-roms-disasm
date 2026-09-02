@@ -3715,9 +3715,11 @@ DisplayMode_Handler_2:
 	call	DisplayStr_TempoString_0x32
 	ret
 DisplayMode_Handler_3:
-	.byte 0xf1, 0xef, 0x0d, 0x00, 0x0f, 0x1d, 0x7f, 0xef
-	.byte 0xef, 0xf1, 0x8c, 0x36, 0x00, 0x00, 0x1d, 0x15
-	.byte 0xf0, 0xef, 0x0e
+	stdi8	3567, 15
+	call	15724415
+	stdi8	13964, 0
+	call	15724565
+	ret
 	call VoiceSlot_ReadCurrentParams
 	cp A,0x81
 	jrl z, .Lc_ef8807
@@ -3857,9 +3859,10 @@ DisplayMode_Handler_3:
 	ldb_d8	w, 64316
 	call	15687414
 	stb_d8	13948, a
-	.byte 0xe7, 0x38, 0x9d, 0xf3, 0x07, 0xf4, 0xec, 0x35
+	ldfr_lerp	xiy, 56
+	lda_rr	xiy, xiy, hl
 	ld	a, (xiy+8)
-	.byte 0xe7, 0x38, 0x8d
+	ldto_lerp	xiy, 56
 	ld	(xix+3), a
 	stb_d8	13947, a
 	ldb_d8	a, 13201
@@ -3929,11 +3932,12 @@ DisplayMode_Handler_3:
 	xor	h, h
 	ld	xiy, 3542
 	ldb_d8	a, 13201
-	.byte 0xf3, 0x07, 0xf4, 0xec, 0x41
+	st_rrb	a, xiy, hl
 	ldb_d8	a, 13202
-	.byte 0xe7, 0x38, 0x9d, 0xf3, 0x07, 0xf4, 0xec, 0x35
+	ldfr_lerp	xiy, 56
+	lda_rr	xiy, xiy, hl
 	ld	(xiy+8), a
-	.byte 0xe7, 0x38, 0x8d
+	ldto_lerp	xiy, 56
 	inc	1, l
 	stb_d8	3540, l
 	cpda8	l, 3541
@@ -8015,7 +8019,7 @@ VoiceState_DataBlock2:
 	stda16	10431, wa
 	srl	hl, 1
 	ld	xde, 3262
-	.byte 0xc3, 0x07, 0xe8, 0xec, 0x21
+	ld_rrb	a, xde, hl
 	pop	xde
 	xor	w, w
 	stda16	10433, wa
@@ -8042,7 +8046,7 @@ VoiceState_DataBlock2:
 	ret
 	push	xwa
 	ldda32	xwa, 4349
-	.byte 0xe7, 0x38, 0x98
+	ldfr_lerp	xwa, 56
 	pop	xwa
 	.byte 0xe7, 0x38, 0x04
 	push	xwa
@@ -8078,10 +8082,10 @@ VoiceState_DataBlock2:
 	call	15713930
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3, 0x07, 0xe8, 0xf8, 0x25
+	ld_rrw	iy, xde, iz
 	srl	iz, 1
 	ld	xde, 3262
-	.byte 0xc3, 0x07, 0xe8, 0xf8, 0x21
+	ld_rrb	a, xde, iz
 	pop	xde
 	.byte 0xd1, 0xff, 0x0d, 0xf5
 	jrl	nz, 7
@@ -8112,18 +8116,18 @@ VoiceState_DataBlock2:
 	pop	xwa
 	.byte 0xe7, 0x38, 0x05
 	push	xwa
-	.byte 0xe7, 0x38, 0x88
+	ldto_lerp	xwa, 56
 	stda32	4349, xwa
 	pop	xwa
 	ret
 	call	15713930
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3, 0x07, 0xe8, 0xf8, 0x25
+	ld_rrw	iy, xde, iz
 	stda16	10431, iy
 	srl	iz, 1
 	ld	xde, 3262
-	.byte 0xc3, 0x07, 0xe8, 0xf8, 0x21
+	ld_rrb	a, xde, iz
 	pop	xde
 	xor	w, w
 	stda16	10433, wa
@@ -8188,7 +8192,7 @@ VoiceState_DataBlock2:
 	sla	iy, 1
 	push	xix
 	ld	xix, 15718033
-	.byte 0xd3, 0x07, 0xf0, 0xf4, 0x21
+	ld_rrw	bc, xix, iy
 	pop	xix
 	andda16_24	xbc, (65516)
 	cps	bc, 0
@@ -8272,7 +8276,7 @@ VoiceState_DataBlock2:
 	div8rr	a, l
 	pushw	bc
 	ld	c, a
-	.byte 0xc7, 0x3c, 0x99
+	ldb_erp	a, 60
 	ld	a, c
 	scf
 	.byte 0xb4, 0x2c, 0xc7, 0x3c, 0x89
@@ -8513,7 +8517,7 @@ SubCPU_ToneParamDisplay:
 	ldb_d8	l, 4380
 	exts	hl
 	ld	xiy, 15719270
-	.byte 0xc3, 0x07, 0xf4, 0xec, 0x21
+	ld_rrb	a, xiy, hl
 	ld	(xix+3), a
 	pop	xiy
 	pop	xix
@@ -8981,13 +8985,13 @@ OscScope_RenderBlock:
 	ld	xix, 3669
 	ldw	bc, 16
 	xor	wa, wa
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ret
 	ld	xix, 3701
 	ldw	bc, 16
 	xor	wa, wa
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ret
 	ld	xix, 3733
@@ -9440,7 +9444,7 @@ DisplayStr_StyleClearLoop:
 	ret
 
 DisplayStr_BytecodeBlock_E:
-	.byte 0x0e
+	ret
 	ld XIX,0x00000ed4
 	xor XHL,XHL
 	ldb_d8 l, (0x368c)
@@ -11070,11 +11074,16 @@ Scoop_Selection_CheckMode1:
 	jr nz, Scoop_Selection_DrawMode2
 
 Scoop_Selection_DrawMode1:
-	.byte 0x45, 0x16, 0xc5, 0xe0, 0x00, 0x44, 0x20, 0xc5
-	.byte 0xe0, 0x00, 0x1d, 0xcf, 0x5c, 0xef, 0xc1, 0x73
-	.byte 0x36, 0x3f, 0x00, 0x66, 0x38, 0xc1, 0x73, 0x36
-	.byte 0x21, 0xf1, 0x8f, 0x11, 0x41, 0x45, 0x96, 0xc5
-	.byte 0xe0, 0x00, 0x1d, 0x0a, 0x5d, 0xef, 0x68, 0x25
+	ld	xiy, 14730518
+	ld	xix, 14730528
+	call	15686863
+	cpdi8	13939, 0
+	jr	z, 56
+	ldb_d8	a, 13939
+	stb_d8	4495, a
+	ld	xiy, 14730646
+	call	15686922
+	jr	37
 Scoop_Selection_DrawMode2:
 	cps a, 2
 	jr z, Scoop_Selection_DrawMode1

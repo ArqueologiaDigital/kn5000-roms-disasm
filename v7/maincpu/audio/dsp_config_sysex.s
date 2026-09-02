@@ -819,8 +819,11 @@ SeqBuf_DspSysEx_ReadAndForward_Done:
 SeqBuf3_EnableTx_Stub:
 	swi	7
 MidiSysEx_BuildAndSend:
-	.byte 0xeb, 0x89, 0x40, 0x00, 0x7f, 0x00, 0x00, 0x1d
-	.byte 0x3b, 0x04, 0xff, 0x5e, 0x0e
+	ld	xbc, xhl
+	ld	xwa, 32512
+	call	16712763
+	pop	xiz
+	ret
 	ldb_d8 c, (0xc150)
 	cp C,A
 	ret Z
@@ -966,9 +969,15 @@ CompIface_CallSync:
 	ccf
 	and	w, 15
 CompIface_PostProcess:
-	.byte 0xc8, 0x89, 0xd8, 0x12, 0xd8, 0xda, 0x6e, 0x06
-	.byte 0x8c, 0x05, 0x27, 0xcf, 0xcc, 0x1f, 0xb2, 0x55
-	.byte 0xb1, 0x50, 0x0e
+	ld	a, w
+	extz	wa
+	cps	wa, 2
+	jr	nz, 6
+	ld	l, (xix+5)
+	and	l, 31
+	ld	(xde), iy
+	ld	(xbc), wa
+	ret
 	ld L,(XDE+0x04)
 	ld E,L
 	and E,0xf0
@@ -1233,8 +1242,12 @@ DSPCfg_WriteParam:
 	ld L,(XBC)
 	extz HL
 	ret
-	.byte 0xe8, 0x12, 0x41, 0x68, 0x63, 0xee, 0x00, 0xe8
-	.byte 0x81, 0x81, 0x27, 0xdb, 0x12, 0x0e
+	extz	xwa
+	ld	xbc, 15623016
+	add	xbc, xwa
+	ld	l, (xbc)
+	extz	hl
+	ret
 DSPCfg_WriteParam_SetMask:
 	dec	2, xsp
 DSPCfg_WriteParam_Exit:

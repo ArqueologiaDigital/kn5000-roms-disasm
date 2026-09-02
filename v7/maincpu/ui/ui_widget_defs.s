@@ -273,11 +273,11 @@ GridCheck_CellSelect:
 
 	push xde
 
-	.byte 0x1d, 0x95, 0x02, 0xff	; call Sprintf_Locked (v7 addr)
+	call	16712341
 
 	lda xsp, (xsp + 12)
 
-	.byte 0x1d, 0xc3, 0x40, 0xfa	; call GetFocusObject (v7 addr)
+	call	16400579
 
 	ld xwa, xhl
 
@@ -285,7 +285,7 @@ GridCheck_CellSelect:
 
 	ld xbc, 0x1e0008c
 
-	.byte 0x1d, 0x53, 0x92, 0xfa	; call SendEvent (v7 addr)
+	call	16421459
 
 	lds32 xhl, 0
 
@@ -1519,7 +1519,7 @@ MainLswGet:
 
 	pushw 0xc
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -1543,7 +1543,7 @@ MainLswGet:
 
 	ld xde, xiz
 
-	.byte 0x1d, 0x25, 0x45, 0xfa	; call FuncCall (v7 addr)
+	call	16401701
 
 	ld xwa, 0x1400003
 
@@ -1551,7 +1551,7 @@ MainLswGet:
 
 	ld xde, xiz
 
-	.byte 0x1d, 0x25, 0x45, 0xfa	; call FuncCall (v7 addr)
+	call	16401701
 
 	lds hl, 0
 
@@ -1574,7 +1574,7 @@ MainLswPartGet:
 
 	pushw 0xc
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -1610,7 +1610,7 @@ MainLswPartGet:
 
 	ld xde, (xsp + 2)
 
-	.byte 0x1d, 0x25, 0x45, 0xfa	; call FuncCall (v7 addr)
+	call	16401701
 
 	ld xwa, 0x1400003
 
@@ -1618,7 +1618,7 @@ MainLswPartGet:
 
 	ld xde, (xsp + 2)
 
-	.byte 0x1d, 0x25, 0x45, 0xfa	; call FuncCall (v7 addr)
+	call	16401701
 
 	lds hl, 0
 
@@ -1966,7 +1966,7 @@ MainRamPut:
 
 	pushw 0x16
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -1988,7 +1988,7 @@ MainRamPut:
 
 	ld xde, (xsp + 4)
 
-	.byte 0x1d, 0x56, 0x46, 0xfa	; call MainFuncCall (v7 addr)
+	call	16402006
 
 	ld xwa, 0x1400003
 
@@ -1996,7 +1996,7 @@ MainRamPut:
 
 	ld xde, (xsp + 4)
 
-	.byte 0x1d, 0x56, 0x46, 0xfa	; call MainFuncCall (v7 addr)
+	call	16402006
 
 	pop xiz
 
@@ -2015,7 +2015,7 @@ MainRamAdd:
 
 	pushw 0x16
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -2037,7 +2037,7 @@ MainRamAdd:
 
 	ld xde, (xsp + 4)
 
-	.byte 0x1d, 0x56, 0x46, 0xfa	; call MainFuncCall (v7 addr)
+	call	16402006
 
 	ld xwa, 0x1400003
 
@@ -2334,7 +2334,7 @@ MainBitGet:
 
 	pushw 0xe
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -2360,7 +2360,7 @@ MainBitGet:
 
 	ld xde, xiz
 
-	.byte 0x1d, 0x56, 0x46, 0xfa	; call MainFuncCall (v7 addr)
+	call	16402006
 
 	ld xwa, 0x1400003
 
@@ -9625,7 +9625,7 @@ RegisterTitle:
 
 	ld xbc, 0x16
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call	16712319
 
 	ld xbc, 0x32abc
 
@@ -10135,7 +10135,7 @@ EnumList_Init_TypeB:
 
 	ld xbc, 0x16
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call	16712319
 
 	add xhl, (xsp + 4)
 
@@ -10449,7 +10449,7 @@ EnumList_OK_Next:
 
 	ld xbc, 0x16
 
-	.byte 0x1d, 0x7f, 0x02, 0xff	; call Math_MultiplyAccumulate (v7 addr)
+	call	16712319
 
 	add xhl, (xsp + 4)
 
@@ -11007,7 +11007,7 @@ Viewable_SetName_Copy:
 
 	push xwa
 
-	.byte 0x1d, 0x70, 0x07, 0xff	; call Strcpy (v7 addr)
+	call	16713584
 
 	inc 8, xsp
 
@@ -19088,9 +19088,12 @@ UpdateScreen_Prologue:
 	ret
 
 UpdateScreen_CheckDirty:
-	.byte 0x1e, 0x0f, 0x00, 0xd2, 0x50, 0x04, 0x03, 0x20
-	.byte 0xd8, 0xd8, 0xb0, 0xfe, 0xf2, 0x4e, 0x04, 0x03
-	.byte 0x50, 0x0e
+	calr	15
+	ldw_da	wa, (197712)
+	cps	wa, 0
+	ret	nz
+	stw_da	197710, wa
+	ret
 
 Gfx_BlitDirtyRegions:
 	dec 8, xsp

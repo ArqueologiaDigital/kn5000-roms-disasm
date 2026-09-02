@@ -659,7 +659,7 @@ BmDrEdit_RefreshDisplayState:
 
 	ldw wa, 0xf
 
-	.byte 0x1d, 0x7d, 0x66, 0xf4	; call SoundCtrl_SaveAndSendCmd_EE (v7 addr)
+	call	16017021
 
 	setda 4, 0x28ad
 
@@ -697,7 +697,7 @@ BmDrEdit_SaveSeqState_SetMode95:
 	ldw wa, 0x95
 
 BmDrEdit_SaveSeqState_Apply:
-	.byte 0x1d, 0x83, 0x90, 0xf9	; call UI_PostModeChangeEvent (v7 addr)
+	call	16355459
 
 	ldmm16 0x2963, 3407
 
@@ -1945,7 +1945,7 @@ BmDrEdit_CleanupCommon:
 
 	ldmm16 9832, 0x2744
 
-	.byte 0x1d, 0x9e, 0xd6, 0xfd	; call Audio_CheckSubsystemReady (v7 addr)
+	call	16635550
 
 	resda 0, 0x27b0
 

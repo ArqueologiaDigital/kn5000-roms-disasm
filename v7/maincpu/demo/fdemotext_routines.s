@@ -592,13 +592,24 @@ FDemoText_SendParams_NoteLoop:
 	ldib_erp 0xfb, 4
 
 FDemoText_SendParams_LevelLoop:
-	.byte 0xbf, 0x06, 0x32, 0xc7, 0xfb, 0x89, 0xba, 0x02
-	.byte 0x41, 0xaf, 0x02, 0x20, 0x80, 0x21, 0xba, 0x04
-	.byte 0x41, 0xd8, 0xa8, 0xd9, 0xae, 0x1d, 0xca, 0x32
-	.byte 0xef, 0xe8, 0xa9, 0xaf, 0x02, 0x88, 0xc7, 0xfb
-	.byte 0x61, 0xc7, 0xfb, 0xcf, 0x08, 0x63, 0xd9, 0x8f
-	.byte 0x0c, 0x23, 0xd9, 0x12, 0x30, 0xff, 0x00, 0x1d
-	.byte 0x76, 0x0c, 0xfe
+	lda	xde, (xsp+6)
+	stb_erp	a, 251
+	ld	(xde+2), a
+	ld	xwa, (xsp+2)
+	ld	a, (xwa)
+	ld	(xde+4), a
+	lds	wa, 0
+	lds	bc, 6
+	call	15676106
+	lds32	xwa, 1
+	add	(xsp+2), xwa
+	inc1b_erp	251
+	cp_erpb	251, 8
+	jr	ule, -39
+	ld	c, (xsp+12)
+	extz	bc
+	ldw	wa, 255
+	call	16649334
 FDemoText_SendVoiceParams_Return:
 	popw_erp 0xfa
 	lda xsp, (xsp + 12)
@@ -776,7 +787,7 @@ FDemoText_ProbeVoiceType:
 
 	ld xwa, xbc
 
-	.byte 0x1d, 0x1b, 0xe0, 0xfe	; call SndParam_FetchOscTableEntry (v7 addr)
+	call	16703515
 
 	ld l, (xsp + 256)
 
@@ -1535,7 +1546,7 @@ FDemoText_ProcessMarkup_CopyAndRender:
 
 	pushw wa
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	ld (xsp + 18), xhl
 
@@ -1549,7 +1560,7 @@ FDemoText_ProcessMarkup_CopyAndRender:
 
 	push xwa
 
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call	16713148
 
 	lda xsp, (xsp + 12)
 
@@ -1571,7 +1582,7 @@ FDemoText_ProcessMarkup_CopyAndRender:
 
 	push xwa
 
-	.byte 0x1d, 0x15, 0x03, 0xff	; call Free (v7 addr)
+	call	16712469
 
 	inc 4, xsp
 

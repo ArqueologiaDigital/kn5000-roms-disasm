@@ -131,7 +131,7 @@ Sound_Navigate_Init:
 
 	lds bc, 0
 
-	.byte 0x1d, 0x26, 0xcd, 0xfc	; call SndParam_LookupViaEncode (v7 addr)
+	call	16567590
 
 	ld (xsp + 17), l
 
@@ -139,7 +139,7 @@ Sound_Navigate_Init:
 
 	ldw bc, 0x20
 
-	.byte 0x1d, 0x26, 0xcd, 0xfc	; call SndParam_LookupViaEncode (v7 addr)
+	call	16567590
 
 	lda xwa, (xsp + 14)
 
@@ -149,7 +149,7 @@ Sound_Navigate_Init:
 
 	ld (xwa + 2), c
 
-	.byte 0x1d, 0x1b, 0xe0, 0xfe	; call SndParam_FetchOscTableEntry (v7 addr)
+	call	16703515
 
 	lda xbc, (xsp + 14)
 
@@ -286,7 +286,7 @@ Sound_Navigate_ApplyChange:
 
 	extz de
 
-	.byte 0x1d, 0x2e, 0x95, 0xfc	; call MIDI_DistributeParamToChannels (v7 addr)
+	call	16553262
 
 	ld wa, (xsp + 4)
 
@@ -306,7 +306,7 @@ Sound_Navigate_ApplyChange:
 
 	lds bc, 0
 
-	.byte 0x1d, 0x84, 0xaa, 0xfd	; call SwbtWr (v7 addr)
+	call	16624260
 
 	lds wa, 1
 
