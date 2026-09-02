@@ -234,25 +234,25 @@ Delay51T_Loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
 	.byte 0xd8, 0xcf, 0x33, 0x00, 0x61, 0xf2, 0x0e
 CPanel_CheckSpecialCombos:
-	cpdi8 (0x8dc2), 0x6c
+	cp (0x8dc2:16), 0x6c
 	jr nz, .Lc_fc39a5
 	lds hl, 3
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_CheckAllInitSetting:
 .Lc_fc39a5:
-	cpdi8 (0x8daf), 0x70
+	cp (0x8daf:16), 0x70
 	jr nz, .Lc_fc39b0
 	lds hl, 2
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_CheckFactoryReset:
 .Lc_fc39b0:
-	cpdi8 (0x8dc4), 0x38
+	cp (0x8dc4:16), 0x38
 	jr nz, .Lc_fc39bb
 	lds hl, 1
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_CheckFlashUpdate:
 .Lc_fc39bb:
-	cpdi8 (0x8db4), 0x0f
+	cp (0x8db4:16), 0x0f
 	jr nz, CPanel_Combo_NormalBoot
 	lds hl, 4
 	jr t, CPanel_CheckSpecialCombos_Return
@@ -715,7 +715,7 @@ CPanel_SM_Idle:
 
 CPanel_InterruptPoll_MainLoop:
 	incdi8 1, 0x8cfe
-	cpdi8 (0x8cfe), 0x2a
+	cp (0x8cfe:16), 0x2a
 	jr ule, PollLoop_DispatchWork
 	ei 0x06
 	ld wa, (0x8d63:16)

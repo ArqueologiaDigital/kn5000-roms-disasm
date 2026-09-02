@@ -465,7 +465,7 @@ Demo_SelectionEntryHandler:
 	ldw WA, 0x0022
 	call CtrlPanel_SetIndicatorLED
 	jrl t, Banner_Loop_Check
-	cpdi8 (0xbfe1), 0x20
+	cp (0xbfe1:16), 0x20
 	ret NZ
 	ld	a, (49123:16)
 	and	a, 19
@@ -480,7 +480,7 @@ Demo_SelectEntry_NoNewButton:
 	ret
 
 Demo_SelectEntry_PreSaveCheck:
-	cpdi8 (0x8c98), 0x13
+	cp (0x8c98:16), 0x13
 	jr nz, Demo_SelectEntry_CheckVoiceKeys
 	calr Voice_SavePreset
 	lda xbc, (0xf9a0:16)
@@ -519,11 +519,11 @@ Demo_SelectEntry_ByteTable:
 	ld	a, (1115:16)
 	and	a, 3
 	ret	nz
-	cpdi8	3375, 0
+	cp	(3375:16), 0
 	ret	nz
-	cpdi8	49121, 1
+	cp	(49121:16), 1
 	ret	nz
-	cpdi8	35992, 19
+	cp	(35992:16), 19
 	ret	nz
 	.byte 0xf1, 0xe2, 0xbf, 0xc8
 	ret	z
@@ -532,19 +532,19 @@ Demo_SelectEntry_ByteTable:
 	.byte 0xf1, 0xe7, 0x31, 0xc8
 	jr	z, 52
 	.byte 0xf1, 0xad, 0x28, 0xb3
-	cpdi8	35996, 228
+	cp	(35996:16), 228
 	.byte 0xf2, 0xc7, 0x29, 0xf2, 0xee
 	calr	827
 	calr	1008
 	stiw_da	154500, 1
 	ld	(36530:16), 4
-	cpdi8	35996, 228
+	cp	(35996:16), 228
 	.byte 0xf2, 0x23, 0x2a, 0xf2, 0xee
 	ld	a, (10404:16)
 	extz	wa
 	jp	16269993
 	.byte 0xf1, 0xad, 0x28, 0xbb
-	cpdi8	35996, 228
+	cp	(35996:16), 228
 	jr	z, 11
 	call	15870353
 	ld	(4440:16), 0
@@ -600,7 +600,7 @@ Demo_SelectEntry_CheckCountdown:
 	ld (0x2966:16), 133
 	ret
 Demo_SelectEntry_CheckCPanel:
-	cpdi8	35992, 19
+	cp	(35992:16), 19
 
 	ret nz
 
@@ -616,7 +616,7 @@ Demo_SelectEntry_Debounce:
 	cps	a, 0
 	ret	nz
 	.byte 0xf1, 0xad, 0x28, 0xbb
-	cpdi8	35996, 228
+	cp	(35996:16), 228
 	.byte 0xf2, 0x91, 0x29, 0xf2, 0xee, 0x0b, 0x01, 0x00
 	ldw	wa, 168
 	lds	bc, 1
@@ -624,7 +624,7 @@ Demo_SelectEntry_Debounce:
 	call	16624211
 	ret
 Demo_SelectEntry_AfterSongLoad:
-	cpdi8	35996, 228
+	cp	(35996:16), 228
 	.byte 0xf2, 0x23, 0x2a, 0xf2, 0xee
 	ld	a, (10404:16)
 	extz	wa
@@ -632,9 +632,9 @@ Demo_SelectEntry_AfterSongLoad:
 	ld	(36530:16), 4
 	.byte 0xf1, 0xad, 0x28, 0xcb
 	ret	z
-	cpdi8	35996, 228
+	cp	(35996:16), 228
 	jr	z, 14
-	cpdi8	4440, 18
+	cp	(4440:16), 18
 	jr	c, 36
 	ld	(4440:16), 0
 	jr	29
@@ -642,12 +642,12 @@ Demo_SelectEntry_CheckSongCount:
 	call Seq_IsMelodyActive
 	cps hl, 0
 	jr z, Demo_SelectEntry_CheckLimit18
-	cpdi8 (4440), 19
+	cp (4440:16), 19
 	jr ugt, Demo_SelectEntry_ClampSongIdx
 	jr Demo_SelectEntry_UpdateDisplay
 
 Demo_SelectEntry_CheckLimit18:
-	cpdi8 (4440), 18
+	cp (4440:16), 18
 	jr ule, Demo_SelectEntry_UpdateDisplay
 
 Demo_SelectEntry_ClampSongIdx:
@@ -694,7 +694,7 @@ Demo_SelectEntry_DrawSecondary:
 
 
 Demo_SelectEntry_PlaySong:
-	cpdi8 (0x8c98), 0x13
+	cp (0x8c98:16), 0x13
 	ret NZ
 	ld a, (0x28a4:16)
 	extz WA
@@ -722,12 +722,12 @@ Demo_SelectEntry_PlaySong:
 	call Seq_DispatchEventType5
 	ret
 Demo_SelectEntry_StartPlayback:
-	cpdi8 (0x8c98), 0x13
+	cp (0x8c98:16), 0x13
 	ret NZ
 	call Seq_ResetAndRestartAccompaniment
 	call 0xfdd69e
 	ldmm8 0x1157, 0x28a4
-	cpdi8 (0x8c9c), 0xe4
+	cp (0x8c9c:16), 0xe4
 	ret Z
 	call SeqInit_PostDispatchEvent
 	ret
@@ -8414,7 +8414,7 @@ FileIO_ErrorCodeByteBlock:
 	call	15665005
 	cps	hl, 0
 	ret	z
-	cpdi8	49121, 65
+	cp	(49121:16), 65
 	ret	nz
 	.byte 0xf1, 0xe3, 0xbf, 0xc8
 	ret	z
@@ -8425,7 +8425,7 @@ FileIO_ErrorCodeByteBlock:
 	ret	ule
 	.byte 0xf1, 0xe2, 0xbf, 0xc8
 	jr	z, 68
-	cpdi8	35992, 6
+	cp	(35992:16), 6
 	jr	nz, 15
 	cp	c, 96
 	jr	z, 52
@@ -8452,7 +8452,7 @@ FileIO_ErrorCodeByteBlock:
 	calr	-924
 	ret
 	ldb_da	a, (213234)
-	cpdi8	35992, 1
+	cp	(35992:16), 1
 	jr	nz, 75
 	.byte 0xf1, 0x20, 0x04, 0xca
 	ret	nz

@@ -628,7 +628,7 @@ BitMapOut_MergeOutputFields:
 	.byte 0x0e
 	pushw iz
 	lds iz, 0
-	cpdi8 (0xb744), 0x00
+	cp (0xb744:16), 0x00
 	jrl z, .Lc_fdb35a
 .Lc_fdb297:
 	cp IZ,0x0108

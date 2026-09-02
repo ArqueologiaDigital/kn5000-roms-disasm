@@ -7202,7 +7202,7 @@ PsS2cFmeas_HandleScroll:
 	lda xsp, (xsp + 10)
 	lda xbc, (xiz + 22)
 	lda xwa, (xiz + 32)
-	cpdi8 (0x3a77), 0
+	cp (0x3a77:16), 0
 	jr nz, PsS2cFmeas_SetActive
 	ldw (xwa), 0x0
 	ldw (xbc), 0xff
@@ -7256,7 +7256,7 @@ PsS2cLmeas_HandleScroll:
 	lda xsp, (xsp + 10)
 	lda xbc, (xiz + 22)
 	lda xwa, (xiz + 32)
-	cpdi8 (0x3a77), 1
+	cp (0x3a77:16), 1
 	jr nz, PsS2cLmeas_SetActive
 	ldw (xwa), 0x0
 	ldw (xbc), 0xff
@@ -7350,7 +7350,7 @@ PsS2cTrans_HandleScroll:
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
-	cpdi8 (0x3a77), 2
+	cp (0x3a77:16), 2
 	jr nz, SndArg_GridBnk_Case0
 	ldw (xbc), 0x0
 	ldw (xwa), 0xff
@@ -7417,7 +7417,7 @@ FdcFormat_DialGrid:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld (xsp + 8), xhl
-	cpdi8 (0x3a77), 3
+	cp (0x3a77:16), 3
 	jrl nz, FdcFormat_ReturnZeroJmp
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f

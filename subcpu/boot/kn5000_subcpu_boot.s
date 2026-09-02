@@ -1182,10 +1182,10 @@ SendData_Block__wait_ready2:
 	ldc_cr16 bc, 0x48	; DMA count = BC
 	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
-	cpdi8 (1302), 0; Is DMA complete?
+	cp (1302:16), 0; Is DMA complete?
 	ret z	; Yes - return
 SendData_Block__wait_dma_done:
-	cpdi8 (1302), 0; Check DMA sync flag
+	cp (1302:16), 0; Check DMA sync flag
 	jr nz, SendData_Block__wait_dma_done	; Wait until cleared
 	ret
 SendData_Block__timeout1:
@@ -1271,14 +1271,14 @@ SendCmd_E3__timeout2:
 SendParams_E2:
 	lds ix, 0	; IX = timeout counter
 SendParams_E2__wait_sync_clear:
-	cpdi8 (1302), 0; Is DMA sync flag clear?
+	cp (1302:16), 0; Is DMA sync flag clear?
 	jr z, SendParams_E2__sync_cleared	; Yes - proceed
 SendParams_E2__timeout_wait:
 	ld hl, ix	; HL = timeout counter
 	inc 1, ix	; Increment counter
 	cp hl, 0xEA60	; Timeout limit (60000)
 	ret ugt	; Timeout - give up and return
-	cpdi8 (1302), 0; Check sync flag again
+	cp (1302:16), 0; Check sync flag again
 	jr nz, SendParams_E2__timeout_wait	; Still not clear - keep waiting
 SendParams_E2__sync_cleared:
 	res_dd8 0, 0x34	; Clear our ready flag
@@ -1299,10 +1299,10 @@ SendParams_E2__wait_cpu_ready:
 	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
 	setda 7, 1278	; Set DMA ready flag
-	cpdi8 (1302), 0; Is DMA complete?
+	cp (1302:16), 0; Is DMA complete?
 	ret z	; Yes - return
 SendParams_E2__wait_dma_done:
-	cpdi8 (1302), 0; Check DMA sync flag
+	cp (1302:16), 0; Check DMA sync flag
 	jr nz, SendParams_E2__wait_dma_done	; Wait until cleared
 	ret
 SendParams_E2__timeout2:
@@ -1342,14 +1342,14 @@ TwoPhase_Transfer:
 	pushw iz	; Save IZ
 	lds iz, 0	; IZ = timeout counter
 TwoPhase_Transfer__wait_sync:
-	cpdi8 (1302), 0; Is DMA sync clear?
+	cp (1302:16), 0; Is DMA sync clear?
 	jr z, TwoPhase_Transfer__sync_cleared	; Yes - proceed
 TwoPhase_Transfer__timeout_sync:
 	ld hl, iz	; HL = timeout counter
 	inc 1, iz	; Increment counter
 	cp hl, 0xEA60	; Timeout limit (60000)
 	jrl ugt, TwoPhase_Transfer__exit	; Timeout - exit
-	cpdi8 (1302), 0; Check sync again
+	cp (1302:16), 0; Check sync again
 	jr nz, TwoPhase_Transfer__timeout_sync	; Still not clear - keep waiting
 TwoPhase_Transfer__sync_cleared:
 	lds iz, 0	; Reset timeout counter
@@ -1377,10 +1377,10 @@ TwoPhase_Transfer__wait_ack:
 	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
 	; Wait for first transfer to complete (sync flag = 1)
-	cpdi8 (1302), 1; Is sync flag = 1?
+	cp (1302:16), 1; Is sync flag = 1?
 	jr z, TwoPhase_Transfer__phase1_done	; Yes - phase 1 complete
 TwoPhase_Transfer__wait_phase1:
-	cpdi8 (1302), 1; Check sync flag
+	cp (1302:16), 1; Check sync flag
 	jr nz, TwoPhase_Transfer__wait_phase1	; Wait until = 1
 TwoPhase_Transfer__phase1_done:
 	; Delay loop (200 iterations)
@@ -1402,10 +1402,10 @@ TwoPhase_Transfer__delay1_done:
 	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
 	; Wait for second transfer to complete (sync flag = 0)
-	cpdi8 (1302), 0; Is sync flag = 0?
+	cp (1302:16), 0; Is sync flag = 0?
 	jr z, TwoPhase_Transfer__phase2_done	; Yes - phase 2 complete
 TwoPhase_Transfer__wait_phase2:
-	cpdi8 (1302), 0; Check sync flag
+	cp (1302:16), 0; Check sync flag
 	jr nz, TwoPhase_Transfer__wait_phase2	; Wait until = 0
 TwoPhase_Transfer__phase2_done:
 	; Second delay loop (200 iterations)
@@ -1537,12 +1537,12 @@ InterCPU_RX_Handler__exit:
 
 DMA_Complete_Handler:
 	res_dd8 2, 0x80	; Clear watchdog bit
-	cpdi8 (1302), 1; State 1?
+	cp (1302:16), 1; State 1?
 	jr nz, DMA_Complete_Handler__not_state1
 	ld (1302:16), 0; -> State 0
 	jr DMA_Complete_Handler__done
 DMA_Complete_Handler__not_state1:
-	cpdi8 (1302), 2; State 2?
+	cp (1302:16), 2; State 2?
 	jr nz, DMA_Complete_Handler__done
 	ld (1302:16), 1; -> State 1
 DMA_Complete_Handler__done:

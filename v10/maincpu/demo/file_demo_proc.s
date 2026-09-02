@@ -333,11 +333,11 @@ ApPreControl_Exit:
 
 FDemo_MultiGuardCheck:
 	; --- Routine 1: multi-guard check, return HL=1 or 0 (30 bytes) ---
-	cpdi8	(0x8d38), 228
+	cp	(0x8d38:16), 228
 	jr nz, Banner_ReturnZero
 	cpdi16	0x28b4, 0
 	jr nz, Banner_ReturnZero
-	cpdi8	(3375), 0
+	cp	(3375:16), 0
 	jr nz, Banner_ReturnZero
 	bitda	3, (0x28ad)
 	jr nz, Banner_ReturnZero
@@ -598,7 +598,7 @@ Demo_SelectionEntryHandler:
 	ldw wa, 0x22
 	call CtrlPanel_SetIndicatorLED
 	jrl Banner_Loop_Check
-	cpdi8 (0xc07d), 32
+	cp (0xc07d:16), 32
 	ret nz
 	ld a, (0xc07f:16)
 	and a, 0x13
@@ -614,7 +614,7 @@ Demo_SelectEntry_NoNewButton:
 	ret
 
 Demo_SelectEntry_PreSaveCheck:
-	cpdi8 (0x8d34), 19
+	cp (0x8d34:16), 19
 	jr nz, Demo_SelectEntry_CheckVoiceKeys
 	calr Voice_SavePreset
 	lda xbc, (0xf9a0:16)
@@ -656,11 +656,11 @@ Demo_SelectEntry_ByteTable:
 	ld	a, (1115:16)
 	and	a, 3
 	ret	nz
-	cpdi8	(3375), 0
+	cp	(3375:16), 0
 	ret	nz
-	cpdi8	(0xc07d), 1
+	cp	(0xc07d:16), 1
 	ret	nz
-	cpdi8	(0x8d34), 19
+	cp	(0x8d34:16), 19
 	ret	nz
 	bitda	0, (0xc07e)
 	ret	z
@@ -669,19 +669,19 @@ Demo_SelectEntry_ByteTable:
 	bitda	0, (0x3283)
 	jr	z, 52
 	resda	3, 0x28ad
-	cpdi8	(0x8d38), 228
+	cp	(0x8d38:16), 228
 	.byte 0xf2, 0xf1, 0x29, 0xf2, 0xee
 	calr	827
 	calr	1008
 	stiw_da	(0x25b84), 1
 	ld	(0x8f4e:16), 4
-	cpdi8	(0x8d38), 228
+	cp	(0x8d38:16), 228
 	.byte 0xf2, 0x4d, 0x2a, 0xf2, 0xee
 	ld	a, (0x28a4:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
 	setda	3, 0x28ad
-	cpdi8	(0x8d38), 228
+	cp	(0x8d38:16), 228
 	jr	z, 11
 	call	CDlikeSwTtl_SetRecordAndNotify
 	ld	(4440:16), 0
@@ -700,7 +700,7 @@ Demo_SelectEntry_ProcessSongList:
 	calr Demo_PreSetupAndScan
 	calr Demo_WaitForDisplayBit
 	calr Banner_Loop_Check
-	cpdi8 (0x8d38), 228
+	cp (0x8d38:16), 228
 	call_24 nz, SeqInit_FinalEvent
 	jrl Demo_SelectEntry_AfterSongLoad
 
@@ -711,7 +711,7 @@ Demo_SelectEntry_ManualSelect:
 	ld a, (0x28a4:16)
 	cpda8 a, 4439
 	jr z, Demo_SelectEntry_StartAutoPlay
-	cpdi8 (0x8d38), 228
+	cp (0x8d38:16), 228
 	call_24 nz, SeqInit_FinalEvent
 
 Demo_SelectEntry_ToCountdown:
@@ -719,7 +719,7 @@ Demo_SelectEntry_ToCountdown:
 
 Demo_SelectEntry_StartAutoPlay:
 	ld (0x8f4e:16), 4
-	cpdi8 (0x8d38), 228
+	cp (0x8d38:16), 228
 	call_24 nz, SeqInit_FinalEvent
 	ld a, (0x28a4:16)
 	extz wa
@@ -752,7 +752,7 @@ Demo_SelectEntry_CheckCountdown:
 	ret
 
 Demo_SelectEntry_CheckCPanel:
-	cpdi8 (0x8d34), 19
+	cp (0x8d34:16), 19
 	ret nz
 	calr Demo_SelectEntry_Debounce
 	ret
@@ -766,7 +766,7 @@ Demo_SelectEntry_Debounce:
 	cps a, 0
 	ret nz
 	setda 3, 0x28ad
-	cpdi8 (0x8d38), 228
+	cp (0x8d38:16), 228
 	call_24 nz, CDlikeSwTtl_SetRecordAndNotify
 	pushw 0x1
 	ldw wa, 0xa8
@@ -776,7 +776,7 @@ Demo_SelectEntry_Debounce:
 	ret
 
 Demo_SelectEntry_AfterSongLoad:
-	cpdi8 (0x8d38), 228
+	cp (0x8d38:16), 228
 	call_24 nz, SeqInit_FinalEvent
 	ld a, (0x28a4:16)
 	extz wa
@@ -784,9 +784,9 @@ Demo_SelectEntry_AfterSongLoad:
 	ld (0x8f4e:16), 4
 	bitda 3, (0x28ad)
 	ret z
-	cpdi8 (0x8d38), 228
+	cp (0x8d38:16), 228
 	jr z, Demo_SelectEntry_CheckSongCount
-	cpdi8 (4440), 18
+	cp (4440:16), 18
 	jr c, Demo_SelectEntry_UpdateDisplay
 	ld (4440:16), 0
 	jr Demo_SelectEntry_UpdateDisplay
@@ -795,12 +795,12 @@ Demo_SelectEntry_CheckSongCount:
 	call Seq_IsMelodyActive
 	cps hl, 0
 	jr z, Demo_SelectEntry_CheckLimit18
-	cpdi8 (4440), 19
+	cp (4440:16), 19
 	jr ugt, Demo_SelectEntry_ClampSongIdx
 	jr Demo_SelectEntry_UpdateDisplay
 
 Demo_SelectEntry_CheckLimit18:
-	cpdi8 (4440), 18
+	cp (4440:16), 18
 	jr ule, Demo_SelectEntry_UpdateDisplay
 
 Demo_SelectEntry_ClampSongIdx:
@@ -824,7 +824,7 @@ Demo_SelectEntry_LoadPattern:
 Demo_SelectEntry_DrawSecondary:
 	bitda 3, (0x28ad)
 	ret z
-	cpdi8 (0x8d38), 228
+	cp (0x8d38:16), 228
 	ret z
 	ld a, (4440:16)
 	extz wa
@@ -835,7 +835,7 @@ Demo_SelectEntry_DrawSecondary:
 	ret
 
 Demo_SelectEntry_PlaySong:
-	cpdi8 (0x8d34), 19
+	cp (0x8d34:16), 19
 	ret nz
 	ld a, (0x28a4:16)
 	extz wa
@@ -864,12 +864,12 @@ Demo_SelectEntry_PlaySong:
 	ret
 
 Demo_SelectEntry_StartPlayback:
-	cpdi8 (0x8d34), 19
+	cp (0x8d34:16), 19
 	ret nz
 	call Seq_ResetAndRestartAccompaniment
 	call Audio_CheckSubsystemReady
 	ldmm8 4439, 0x28a4
-	cpdi8 (0x8d38), 228
+	cp (0x8d38:16), 228
 	ret z
 	call SeqInit_PostDispatchEvent
 	ret

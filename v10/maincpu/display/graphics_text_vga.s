@@ -5558,7 +5558,7 @@ AcTranspose_ValueChanged:
 	ld wa, (xiz + 4)
 	cps wa, 5
 	jr nz, AcTranspose_FormatLabel
-	cpdi8 (0x8d3c), 0
+	cp (0x8d3c:16), 0
 	jr nz, AcTranspose_FormatLabel
 	pushw 0xed
 	pushw 0x1c86

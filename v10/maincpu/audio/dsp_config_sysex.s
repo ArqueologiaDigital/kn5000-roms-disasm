@@ -1225,7 +1225,7 @@ BitMapOut_CopyRegion_Done:
 	pushw 0xfcdc
 	call Mem_Copy
 	lda xsp, (xsp + 20)
-	cpdi8 (4596), 1
+	cp (4596:16), 1
 	jr nz, BitMapOut_SkipRestore
 	cpib_da (0x0340f7), 0x00
 	jr nz, BitMapOut_MergeOutputFields
@@ -1364,7 +1364,7 @@ SeqOut_WriteTimedBytes:
 	push xiz
 	ld iz, (xsp + 8)
 	ei 6
-	cpdi8 (0xb7e0), 0; zero means MIDI
+	cp (0xb7e0:16), 0; zero means MIDI
 	jr nz, SeqOut_WriteTimedBytes_CompIface
 	call SeqBuf_MidiOut_GetTimingValue
 	cp hl, iz
@@ -1418,7 +1418,7 @@ MidiSeq_ReceiveAndForward:
 	pushw iz
 	ldw iz, 0xffff
 	ei 6
-	cpdi8 (0xb7e0), 0; zero means MIDI
+	cp (0xb7e0:16), 0; zero means MIDI
 	jr nz, MidiSeq_ReceiveAndForward_CompIface
 	ld xwa, (xsp + 8)
 	ld a, (xwa)
@@ -1466,7 +1466,7 @@ MidiSeq_SendMultiByteWithTiming:
 	dec 2, xsp
 	pushw iz
 	ei 6
-	cpdi8 (0xb7e0), 0; zero means MIDI
+	cp (0xb7e0:16), 0; zero means MIDI
 	jr nz, MidiSeq_SendMultiByte_CompIface
 	call SeqMain_GetTimingValue
 	ld (xsp + 2), hl
@@ -1711,7 +1711,7 @@ MidiOut_RealtimeDispatch_Data:
 	.byte 0xc1, 0x80, 0xc0
 	push	xsp
 	cp	(xwa-80), iz
-	cpdi8	49277, 14
+	cp	(49277:16), 14
 	ret	nz
 	ld	a, (0xc07f:16)
 	and	a, 3
@@ -1724,7 +1724,7 @@ MidiOut_RealtimeDispatch_Data:
 MidiOut_SerializeAndSend:
 	pushw iz
 	lds iz, 0
-	cpdi8 (0xb7e0), 0; zero means MIDI
+	cp (0xb7e0:16), 0; zero means MIDI
 	jrl z, MidiOut_SerializeAndSend_Exit
 
 MidiOut_SerializeRealtimeLoop:
@@ -1933,7 +1933,7 @@ CompIface_RampUp_Clamp:
 	ld xwa, 0x4005
 	lds de, 1
 	call SoundParam_NotifyChange
-	cpdi8 (0xc1ec), 127
+	cp (0xc1ec:16), 127
 	ret nz
 	resda 0, 0xc1f0
 	ld xwa, 0x40c0
@@ -1964,7 +1964,7 @@ CompIface_RampDown_Clamp:
 	ld xwa, 0x4005
 	lds de, 1
 	call SoundParam_NotifyChange
-	cpdi8 (0xc1ec), 0
+	cp (0xc1ec:16), 0
 	ret nz
 	resda 1, 0xc1f0
 	setda 3, 0xc1f0
@@ -5516,7 +5516,7 @@ AudioMode_ConfigExternal_Apply:
 ; state machine, updating relevant display elements.
 ; ============================================================================
 UIState_ProcessMidiEvent:
-	cpdi8 (0xc080), 24
+	cp (0xc080:16), 24
 	ret ugt
 	ld l, (0xc080:16)
 	ld h, (0xc07d:16)
@@ -6270,7 +6270,7 @@ UIStateEvt_EffectSelect_Data:
 	ret
 UIStateEvt_PlayModeGuard_Data:
 	; --- Guard/dispatch: check flags, set/clear bits, conditional calls (54 bytes) ---
-	cpdi8	(0xc07d), 2
+	cp	(0xc07d:16), 2
 	ret nz
 	bitda	6, (0xc07e)
 	jr z, UIStateEvt_PlayModeGuard_ClearBit

@@ -6739,17 +6739,17 @@ SoundFX_Handler_5:
 	nop
 	nop
 	ret
-	cpdi8 (0xce19), 0x00
+	cp (0xce19:16), 0x00
 	jr z, .Lc_fe8c6a
 	decdi8 1, 0xce19
 	jr z, .Lc_fe8c84
 .Lc_fe8c6a:
-	cpdi8 (0xce18), 0x00
+	cp (0xce18:16), 0x00
 	jr z, .Lc_fe8c77
 	decdi8 1, 0xce18
 	jr z, .Lc_fe8c84
 .Lc_fe8c77:
-	cpdi8 (0xce17), 0x00
+	cp (0xce17:16), 0x00
 	jr z, .Lc_fe8c9b
 	decdi8 1, 0xce17
 	jr z, .Lc_fe8c84
@@ -8842,7 +8842,7 @@ MIDI_SendChannelPressure:
 	popw	iz
 	ret
 	push	xiz
-	cpdi8	59646, 0
+	cp	(59646:16), 0
 	jr	nz, 5
 	lds	hl, 0
 	jrl	142
@@ -8861,7 +8861,7 @@ MIDI_SendChannelPressure:
 	ld	bc, (59689:16)
 	calr	1054
 	ld	xiz, xhl
-	cpdi8	59678, 4
+	cp	(59678:16), 4
 	jr	nz, 5
 	ld	xwa, xiz
 	calr	7010
@@ -9636,7 +9636,7 @@ SeqFile_SkipTrackPad_Init:
 	ret
 	pushw	iz
 	lds	iz, 0
-	cpdi8	59646, 0
+	cp	(59646:16), 0
 	jr	nz, 31
 	lds	hl, 0
 	jr	79

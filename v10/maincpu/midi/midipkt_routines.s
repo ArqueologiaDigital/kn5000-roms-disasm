@@ -1217,7 +1217,7 @@ MidiPkt_DispatchData_Chan6:
 	ld	a, (0x8d36:16)
 	cp	a, 87
 	jr	z, 11
-	cpdi8	(0x8d34), 1
+	cp	(0x8d34:16), 1
 	jr	nz, 6
 	cps	a, 1
 	jr	nz, 2

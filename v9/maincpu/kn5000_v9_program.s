@@ -591,7 +591,7 @@ BootInit_SeqAndPanel:
 	call Check_for_Floppy_Disk_Change
 	cps hl, 0
 	jr z, User_didnt_request_flash_mem_update
-	cpdi8 (1026), 4
+	cp (1026:16), 4
 	jr nz, User_didnt_request_flash_mem_update
 	call FLASH_MEM_UPDATE
 
@@ -2527,7 +2527,7 @@ MainChordPre:
 	push xiz
 	call Strcat
 	lda xsp, (xsp + 18)
-	cpdi8 (36164), 0
+	cp (36164:16), 0
 	jr z, MainChordPre_EmptyChordStr
 	bitda 1, (52958)
 	jr z, MainChordPre_EmptyChordStr

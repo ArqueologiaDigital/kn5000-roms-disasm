@@ -1113,7 +1113,7 @@ Audio_UpdateLEDsAndChannels:
 
 
 MIDI_ProcessChangedChannels:
-	cpdi8 (0x8c9a), 0xfb
+	cp (0x8c9a:16), 0xfb
 	ret Z
 	calr Audio_CheckAndFlagChanges
 	ld wa, (0x8ea0:16)
@@ -1152,7 +1152,7 @@ MidiChanged_ProcessGroup4:
 	stdi16 (0x8eaa), 0x0000
 	ret
 MidiChannel_DispatchChanged:
-	cpdi8 (0x8c9a), 0xfb
+	cp (0x8c9a:16), 0xfb
 	ret Z
 	ld wa, (0x8ea0:16)
 	cps wa, 0
@@ -1207,7 +1207,7 @@ AudioChange_CheckSelectionState:
 	ordi16 (0x8ea8), 0x0004
 AudioChange_UpdatePreviousSelect:
 .Lc_fc6948:
-	cpdi8 (0x8ec4), 0x02
+	cp (0x8ec4:16), 0x02
 	jr nz, .Lc_fc6955
 	anddi16 (0x8ea8), 0xfffb
 AudioChange_SetChannelFlag:
@@ -1252,7 +1252,7 @@ CtrlPanel_UpdateLEDState:
 	ld (XSP+0x02),XWA
 	lda xwa, (0x8e8c:16)
 	ld (XSP+0x06),XWA
-	cpdi8 (0x8c9a), 0xf7
+	cp (0x8c9a:16), 0xf7
 	jr z, LEDUpdate_Cleanup
 	lds_erpb 0xfb, 0
 LEDUpdate_ProcessChannel:
@@ -2413,7 +2413,7 @@ Audio_ResetAfterPayloadError:
 	call	15665487
 	cp	hl, 65535
 	jr	nz, 55
-	cpdi8	35994, 65
+	cp	(35994:16), 65
 	jr	nz, 38
 	ld	xwa, 192
 	call	16567398
@@ -2482,7 +2482,7 @@ Audio_ReinitToneGenAndOutput:
 	pop xhl
 	pop xde
 	calr MidiMsg_ParseChannelStream
-	cpdi8 (0xfd32), 182
+	cp (0xfd32:16), 182
 	jr z, Audio_UpdateTempoAndReturn
 	pushw 0x7f
 	ldw wa, 0xb0
@@ -3177,7 +3177,7 @@ Audio_InitSingleChannelParams:
 	.byte 0x00, 0x00, 0xf1, 0x8e, 0x90, 0x00, 0x08, 0x1e
 	.byte 0x08, 0x12, 0xef, 0x62, 0x0e
 Audio_MainPeriodicUpdate:
-	cpdi8 (0xbf9d), 0xff
+	cp (0xbf9d:16), 0xff
 	ret Z
 	resda 0, (0x90c9)
 	lda xwa, (SoundProgram_DispatchTable_0x400:24)
@@ -3667,10 +3667,10 @@ ExtData_ToneParam_MultiChannel:
 	ret	nz
 	.byte 0xb9, 0x03, 0xc8
 	jr	nz, 15
-	cpdi8	37011, 1
+	cp	(37011:16), 1
 	jr	nz, 8
 	.byte 0xf1, 0x94, 0x90, 0xb1, 0xf1, 0x95, 0x90, 0xb1
-	cpdi8	37011, 1
+	cp	(37011:16), 1
 	jr	nz, 29
 	lds	wa, 2
 	calr	3291
@@ -3867,7 +3867,7 @@ ExtData_Voice_MixedHandler:
 	lds	bc, 3
 	calr	3208
 	calr	2685
-	cpdi8	50476, 255
+	cp	(50476:16), 255
 	ret	nz
 	ld	a, (37012:16)
 	andda8	a, 37013
@@ -3921,7 +3921,7 @@ ExtData_Voice_MixedHandler:
 	ld	(xbc), 5
 	ld	(37005:16), 5
 	ld	(37006:16), 255
-	cpdi8	37005, 5
+	cp	(37005:16), 5
 	jr	nz, 5
 	ld	(36000:16), 24
 	jrl	2496
@@ -4578,7 +4578,7 @@ MIDI_DispatchVoiceParamCC:
 	dec 2, xsp
 	pushw iz
 	ld (xsp + 2), a
-	cpdi8 (0xfd32), 183
+	cp (0xfd32:16), 183
 	jr nz, VoiceParamCC_Done
 	lds iz, 0
 
@@ -4672,7 +4672,7 @@ SndParam_WriteLookupAndStore:
 	.byte 0xc1, 0x93, 0x90, 0x21, 0xd8, 0x12, 0xc3, 0x07
 	.byte 0xec, 0xe0, 0x19, 0x96, 0x90, 0x0e
 SwbtWr_FlushAndAppendParams:
-	cpdi8 (0x908e), 0x00
+	cp (0x908e:16), 0x00
 	ret Z
 	cpdi16 (0x9042), 0x01fc
 	jr c, SwbtWr_FlushDone
@@ -6203,9 +6203,9 @@ MidiStream_ProcessHandler_4:
 	ret
 MidiStream_ProcessSeqBuffer:
 	push XIZ
-	cpdi8 (0x8c9a), 0xc9
+	cp (0x8c9a:16), 0xc9
 	jrl nz, MidiSeqBuf_Return
-	cpdi8 (0x7e6f), 0x00
+	cp (0x7e6f:16), 0x00
 	jrl z, MidiSeqBuf_Return
 	ei 0x06
 	setda 0, (0x0459)
@@ -6473,7 +6473,7 @@ MidiStream_ProcessorDispatchC:
 TempoRing_UpdateAndContinue:
 	ld	(37174:16), 255
 	incdi8	1, (37163)
-	cpdi8	37163, 15
+	cp	(37163:16), 15
 	jr	ule, -78
 	jr	-115
 TempoRing_Done:
@@ -6621,7 +6621,7 @@ TempoPartStream_Done:
 	ret
 
 TempoRingBuf_ProcessEntry:
-	cpdi8 (0x9111), 0xff
+	cp (0x9111:16), 0xff
 	jr z, TempoRingBuf_EntryDone
 	ld XIX,0x00009111
 	push XIX
@@ -6633,7 +6633,7 @@ TempoRingBuf_ProcessEntry:
 	call TempoRingBuf_WriteBytes
 	inc 6,XSP
 	ei 0x00
-	cpdi8 (0x905c), 0xff
+	cp (0x905c:16), 0xff
 	jr nz, TempoRingBuf_ClearEntryType
 	call AudioCtrl_SaveAllRegs
 	call SeqPlay_CheckAndStartPlayback
@@ -6719,7 +6719,7 @@ PartReinit_ProcessNextPart:
 	calr	164
 PartReinit_AdvancePart:
 	incdi8	1, (37164)
-	cpdi8	37164, 16
+	cp	(37164:16), 16
 	jr	c, -74
 	calr	3127
 	call	15668425
@@ -6777,7 +6777,7 @@ PartReinit_SendB0Command:
 	calr	735
 	ret
 PartReinit_CheckSpecialPart15:
-	cpdi8	37169, 15
+	cp	(37169:16), 15
 	jr	nz, 14
 	ldw	bc, 664
 	ldw	de, 32768
@@ -6853,7 +6853,7 @@ AudioSeq_FlushAndTerminate:
 	ret
 VoiceMode_ParamHandler_4:
 	calr	507
-	cpdi8	37145, 255
+	cp	(37145:16), 255
 	jrl	z, 498
 	ld	xix, 37147
 	ld_spiw	bc, 241
@@ -6875,7 +6875,7 @@ VoiceMode_ParamHandler_4:
 	ld	(37171:16), hl
 	call	16560581
 	jr	nc, 95
-	cpdi8	37055, 23
+	cp	(37055:16), 23
 	jr	nz, 7
 	ld	hl, de
 	call	16177321
@@ -6905,7 +6905,7 @@ VoiceMode4_SetupChannelAndWrite:
 	ld	de, (37057:16)
 	call	16554503
 VoiceMode4_CheckPart0:
-	cpdi8	37055, 0
+	cp	(37055:16), 0
 	jr	nz, 7
 	.byte 0xf1, 0x50, 0xfd, 0xcb
 	jrl	nz, 319
@@ -7107,7 +7107,7 @@ VoiceMode3_InitChannelMatch:
 	ld	a, (37151:16)
 	ld	(37164:16), a
 	calr	92
-	cpdi8	37174, 255
+	cp	(37174:16), 255
 	jr	z, 73
 	ld	xix, 37147
 	ld	bc, (xix)
@@ -7176,7 +7176,7 @@ VoiceMode3_TableCopyDone:
 	ret
 
 VoiceMode_ParamHandler_0:
-	cpdi8	37145, 128
+	cp	(37145:16), 128
 	jr	nz, 59
 	ld	a, (37149:16)
 	ld	(37164:16), a
@@ -7212,7 +7212,7 @@ VoiceMode0_Done:
 
 VoiceParam_DispatchByMode:
 	calr MidiVoiceNote_Dispatch
-	cpdi8 (0x9119), 0xff
+	cp (0x9119:16), 0xff
 	jr z, VoiceParam_DispatchDone
 	ld a, (0x9119:16)
 	and A,0x03
@@ -7401,7 +7401,7 @@ VoiceNote_SetupCCParams:
 	ld	(37057:16), de
 	call	16560581
 	jr	nc, 66
-	cpdi8	37055, 176
+	cp	(37055:16), 176
 	jr	z, 22
 	ld	wa, (37055:16)
 	ld	(37003:16), wa

@@ -743,7 +743,7 @@ EffectMode_ReinitSoundOutput:
 	call	16466337
 	calr	-979
 	.byte 0xf1, 0xb6, 0x8c, 0xb4
-	cpdi8	36020, 1
+	cp	(36020:16), 1
 	jr	z, 11
 	ld	xwa, 770
 	lds	bc, 0
@@ -1551,7 +1551,7 @@ SelfTest_PopCount_ShiftNext:
 	ret
 
 EffectMode_CheckAndDispatch:
-	cpdi8 (0x8c9a), 0xfb
+	cp (0x8c9a:16), 0xfb
 	jr nz, EffectMode_DispatchUpdate
 	ld a, (0x8ce6:16)
 	cps a, 2
@@ -2107,7 +2107,7 @@ BitmapFinpic_ByteData:
 	ld	a, (49124:16)
 	cpda8	a, 35998
 	ret	nz
-	cpdi8	49121, 0
+	cp	(49121:16), 0
 	ret	nz
 	call	16405594
 	cp	xhl, 27263222

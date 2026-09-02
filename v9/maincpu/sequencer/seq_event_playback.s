@@ -1911,9 +1911,9 @@ AccPlay_StopEntry:
 	jp AccPlay_StopAndReset
 
 AccPlay_MainDispatch:
-	cpdi8 (0x7f0b), 0
+	cp (0x7f0b:16), 0
 	jr z, AccPlay_CheckPrevRunning
-	cpdi8 (0x7f0c), 0
+	cp (0x7f0c:16), 0
 	jr z, AccPlay_StartNewAccomp
 	bitda 0, (0x7f0b)
 	jr z, AccPlay_RunningWithBit0
@@ -1929,7 +1929,7 @@ AccPlay_StartNewAccomp:
 	jr AccPlay_ContinueMainLoop
 
 AccPlay_CheckPrevRunning:
-	cpdi8 (0x7f0c), 0
+	cp (0x7f0c:16), 0
 	jr z, AccPlay_StopSequencer
 	calr AccPlay_MainUpdateLoop
 	jr AccPlay_ContinueMainLoop
@@ -1949,7 +1949,7 @@ AccPlay_UpdateStateFlags:
 	ld (0x7f0c:16), a
 	bitda 2, (0x7f15)
 	jr z, AccPlay_DispatchRet
-	cpdi8 (0x8d36), 1
+	cp (0x8d36:16), 1
 	jr nz, AccPlay_DispatchRet
 	anddi8 (0x7f15), 251
 	ld (0x7f42:16), 15
@@ -2019,7 +2019,7 @@ AccPlay_MainUpdateLoop:
 	call AudioInit_CheckMIDIAndDispatch
 	calr AccPlay_RestoreMuteStates
 	calr AccPlay_ClearSlotTable
-	cpdi8 (0x8d34), 16
+	cp (0x8d34:16), 16
 	jr nz, AccPlay_SetIndicatorAndRet
 	push xwa
 	push xhl
@@ -2474,7 +2474,7 @@ AccPlay_NoteAllocAndWrite:
 	ldb_sri A, 0x07, 0xf0, 0xec
 	ld (0x7e56:16), a
 	ldb a, 0x90
-	cpdi8 (0x7e54), 0
+	cp (0x7e54:16), 0
 	jr z, AccPlay_NoteSetType91
 	ldb a, 0x91
 
@@ -2509,7 +2509,7 @@ AccPlay_NoteSetType91:
 	ldb a, 0x0
 	calr MidiSeqBuf_WriteByte
 	calr MidiSeqBuf_AdvancePosition
-	cpdi8 (0x7e54), 0
+	cp (0x7e54:16), 0
 	jr z, AccPlay_NoteAllocRet
 	ld a, (0x7e55:16)
 	calr MidiSeqBuf_WriteByte
@@ -2795,7 +2795,7 @@ AccPlay_TrackMeasureChange:
 
 AccPlay_MeasureIncrement:
 	ld (0x7f0e:16), hl
-	cpdi8 (0x8d38), 201
+	cp (0x8d38:16), 201
 	jr nz, AccPlay_MeasureNotifyDone
 	push xwa
 	push xhl
@@ -2824,7 +2824,7 @@ AccPlay_TrackVoiceCount:
 	ld hl, (0x7e1a:16)
 	cp wa, hl
 	jr z, AccPlay_VoiceCountRet
-	cpdi8 (0x8d38), 201
+	cp (0x8d38:16), 201
 	jr nz, AccPlay_VoiceCountNotify
 	push xwa
 	push xhl
@@ -2849,9 +2849,9 @@ AccPlay_VoiceCountRet:
 	ret
 
 AccPlay_MonitorParamState:
-	cpdi8 (0x7f0b), 0
+	cp (0x7f0b:16), 0
 	jr z, AccPlay_SaveCurrentState
-	cpdi8 (0x7f0c), 0
+	cp (0x7f0c:16), 0
 	jr z, AccPlay_InitVoiceBankState
 	calr AccPlay_CompareAndSendProg
 	jr AccPlay_SaveCurrentState
@@ -5494,7 +5494,7 @@ ParamFunc_CommonExit:
 
 AccWrap_SetMinVelocity:
 	ld c, a
-	cpdi8 (0x8d38), 236
+	cp (0x8d38:16), 236
 	ret nz
 	cp c, 0x15
 	ret c

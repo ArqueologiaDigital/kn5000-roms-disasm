@@ -668,7 +668,7 @@ SqTrSel_CaseG_Thunk4:
 
 
 PlayMode_CheckAndAbort:
-	cpdi8 (0x8c9a), 0x72
+	cp (0x8c9a:16), 0x72
 	ret Z
 	call 0xfeb7ab
 	bit 0x00,HL

@@ -133,7 +133,7 @@ FmmUtility_ScanFormat:
 FmmUtility_CheckCapacity:
 	cpdi16 0x8504, 0
 	jrl le, FmmUtility_ContinueWait
-	cpdi8 (0x7f5c), 124
+	cp (0x7f5c:16), 124
 	jrl z, FmmUtility_ContinueWait
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
@@ -265,7 +265,7 @@ FmmSmfUtility_ScanFormat:
 FmmSmfUtility_CheckCapacity:
 	cpdi16 0x8502, 0
 	jrl le, FmmSmfUtility_ContinueWait
-	cpdi8 (0x7f5e), 123
+	cp (0x7f5e:16), 123
 	jrl z, FmmSmfUtility_ContinueWait
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006

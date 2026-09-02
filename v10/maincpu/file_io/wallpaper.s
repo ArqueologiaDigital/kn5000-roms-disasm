@@ -360,7 +360,7 @@ WPScan_CheckAvail:
 
 WPScan_MarkAvailable:
 	orddm16 0x89f6, xde
-	cpdi8 (0x89f8), 4
+	cp (0x89f8:16), 4
 	jr nc, WPScan_LimitReached
 	jr WPScan_LoopContinue
 
@@ -386,7 +386,7 @@ WPScan_TypeNotThree:
 
 WPScan_TypeTwo_Mark:
 	orddm16 0x89f6, xde
-	cpdi8 (0x89f8), 4
+	cp (0x89f8:16), 4
 	jr nc, WPScan_LimitReached
 	jr WPScan_LoopContinue
 
@@ -406,7 +406,7 @@ WPScan_TypeGeneric:
 
 WPScan_Generic_Mark:
 	orddm16 0x89f6, xde
-	cpdi8 (0x89f8), 4
+	cp (0x89f8:16), 4
 	jr c, WPScan_LoopContinue
 
 WPScan_LimitReached:

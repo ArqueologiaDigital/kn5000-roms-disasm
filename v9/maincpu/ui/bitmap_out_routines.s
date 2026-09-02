@@ -275,7 +275,7 @@ BitMapOut_ByteData_RenderE:
 	ret
 
 BitMapOut_CheckDiskAndApply:
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jp_24 z, Interrupt_ModeGuardCheck
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c20000
@@ -2412,7 +2412,7 @@ BitMapOut_DetectChanges:
 	calr BitMapOut_GetRenderMode
 	bit 0, l
 	jr nz, BitMapOut_DetectChanges_CheckMode
-	cpdi8 (0x8d34), 19
+	cp (0x8d34:16), 19
 	jr z, BitMapOut_DetectChanges_CheckMode
 	lda xhl, (0xf9a0:16)
 	lda xde, (0xfc5a:16)

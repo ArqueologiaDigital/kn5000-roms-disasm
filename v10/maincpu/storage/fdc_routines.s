@@ -307,7 +307,7 @@ FDC_ErrorInvalidDrive:
 FDC_CheckDriveCount:
 	ld wa, (0x8a42:16)
 	ld (0x8a2a:16), a
-	cpdi8 (0x8a2a), 1
+	cp (0x8a2a:16), 1
 	jr ule, FDC_ValidateCommand
 	ldw wa, 0xfe
 	jrl FDC_Set_Status
@@ -362,7 +362,7 @@ FDC_CheckSectorCount:
 FDC_CheckSectorNum:
 	ld wa, (0x8a48:16)
 	ld (0x8a2d:16), a
-	cpdi8 (0x8a2d), 0
+	cp (0x8a2d:16), 0
 	jr nz, FDC_CheckFormatType
 	ldw wa, 0xfe
 	jrl FDC_Set_Status
@@ -379,32 +379,32 @@ FDC_CheckFormatType:
 	jr z, FDC_FormatType3
 	cps a, 2
 	jr nz, FDC_ErrorInvalid
-	cpdi8 (0x8a2d), 8
+	cp (0x8a2d:16), 8
 	jr ule, FDC_ValidExecute
 	ldw wa, 0xfe
 	jrl FDC_Set_Status
 
 FDC_FormatType3:
-	cpdi8 (0x8a2d), 18
+	cp (0x8a2d:16), 18
 	jr ule, FDC_ValidExecute
 	ldw wa, 0xfe
 	jrl FDC_Set_Status
 
 FDC_FormatType4:
-	cpdi8 (0x8a2d), 255
+	cp (0x8a2d:16), 255
 	jr nz, FDC_Format4Check
 	calr FDC_CheckHead
 	ld l, (0x8a24:16)
 	ret
 
 FDC_Format4Check:
-	cpdi8 (0x8a2d), 9
+	cp (0x8a2d:16), 9
 	jr ule, FDC_ValidExecute
 	ldw wa, 0xfe
 	jrl FDC_Set_Status
 
 FDC_FormatDefault:
-	cpdi8 (0x8a2d), 9
+	cp (0x8a2d:16), 9
 	jr ule, FDC_ValidExecute
 	ldw wa, 0xfe
 	jrl FDC_Set_Status
@@ -497,9 +497,9 @@ FDC_CheckHead:
 	ld wa, (0x8a44:16)
 	ld (0x8a2c:16), a
 	ld (0x8a29:16), a
-	cpdi8 (0x8a29), 0
+	cp (0x8a29:16), 0
 	ret z
-	cpdi8 (0x8a29), 1
+	cp (0x8a29:16), 1
 	ret z
 	ldw wa, 0xfe
 	calr FDC_Set_Status
@@ -1235,7 +1235,7 @@ FDC_HardwareSetup:
 	ret
 
 FDC_Set_Status:
-	cpdi8 (0x8a24), 0
+	cp (0x8a24:16), 0
 	jr nz, FDC_SetStatus_AlreadySet
 	ld (0x8a24:16), a
 	cp a, 0x36
@@ -1740,13 +1740,13 @@ FDC_CMD_EXEC:
 ; Uses (R+d16) addressing for all state variables. 184 bytes.
 FDC_MODE_CONFIG:
 	calr	64549
-	cpdi8	(0x8a24), 0
+	cp	(0x8a24:16), 0
 	jrl	nz, 173
 	calr	746
-	cpdi8	(0x8a24), 0
+	cp	(0x8a24:16), 0
 	jrl	nz, 162
 	calr	64693
-	cpdi8	(0x8a24), 0
+	cp	(0x8a24:16), 0
 	jrl	nz, 151
 	ld	a, (0x8a6c:16)
 	cps	a, 2
@@ -1778,13 +1778,13 @@ FDC_MODE_CONFIG:
 	ccf
 	.byte 0x8a
 	calr	76
-	cpdi8	(0x8a24), 0
+	cp	(0x8a24:16), 0
 	jr	nz, 50
 	ld	a, (0x8a29:16)
 	xor	a, 1
 	ld	(0x8a29:16), a
 	ld	(0x8a2c:16), a
-	cpdi8	(0x8a2c), 0
+	cp	(0x8a2c:16), 0
 	jr	nz, 16
 	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
@@ -2092,7 +2092,7 @@ FDC_CommandEntry:
 
 FDC_CommandEntry_EnableIRQ:
 	ei 6
-	cpdi8 (0x8a16), 165
+	cp (0x8a16:16), 165
 	jr nz, FDC_CommandEntry_CopyParams
 	ei 0
 	ldw wa, 0xfb
@@ -2373,7 +2373,7 @@ INT4_WaitResultReady:
 	bit 6, l
 	jr nz, INT4_ReadResultLoop
 	calr FDC_Exception_Status_Decoder
-	cpdi8 (0x8a61), 128
+	cp (0x8a61:16), 128
 	jr nz, INT4_WaitDataReady
 
 INT4_ExitRestore:

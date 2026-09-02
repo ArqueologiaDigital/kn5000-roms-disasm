@@ -135,7 +135,7 @@ SmfLoad_CancelCleanup:
 SmfLoad_HandleOk:
 	cp	xde, 15
 	jr	nz, 19
-	cpdi8	35992, 7
+	cp	(35992:16), 7
 	jr	nz, 5
 	ldw	wa, 214
 	jr	3
@@ -539,7 +539,7 @@ SmfFN_JumpTable:
 	lds32	xwa, 0
 	stda32	33032, xwa
 	stda32	33036, xwa
-	cpdi8	35994, 107
+	cp	(35994:16), 107
 	jr	z, 20
 	call	16291514
 	ld	(33040:16), hl
@@ -918,7 +918,7 @@ SmfFN_IgnoredEvents:
 	jrl	z, 397
 	cp	xiz, 20
 	jr	nz, 34
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jr	nz, 27
 	ld	xwa, (xsp+28)
 	cp	xwa, 29360151
@@ -1098,14 +1098,14 @@ SmfFN_RefreshIfChanged:
 SmfFN_RedrawPage:
 	muls	bc, 10
 	calr	-2084
-	cpdi8	35994, 108
+	cp	(35994:16), 108
 	jr	nz, 13
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0
 	calr	17837
 SmfFN_UpdateFilenameField:
-	cpdi8	35994, 107
+	cp	(35994:16), 107
 	jr	nz, 74
 	lda	xiz, (34740:16)
 	ld	wa, (33040:16)
@@ -1142,7 +1142,7 @@ SmfFN_SendOkState:
 	jrl t, SmfFN_ReturnZero
 	ld (0x8112:16), iz
 	jrl t, SmfFN_ReturnZero
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jrl z, SmfFN_ReturnZero
 	ld WA,IZ
 	ld (0x8110:16), wa

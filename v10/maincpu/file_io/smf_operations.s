@@ -66,7 +66,7 @@ SmfLoad_CheckFileCount:
 SmfLoad_CheckSlotCount:
 	cpdi16 0x8502, 0
 	jrl le, SmfLoad_SendWait
-	cpdi8 (0x808a), 97
+	cp (0x808a:16), 97
 	jrl z, SmfLoad_SendWait
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -145,7 +145,7 @@ SmfLoad_CancelCleanup:
 SmfLoad_HandleOk:
 	cp xde, 0xf
 	jr nz, SmfLoad_Return
-	cpdi8 (0x8d34), 7
+	cp (0x8d34:16), 7
 	jr nz, SmfLoad_OkReturnCode
 	ldw wa, 0xd6
 	jr SmfLoad_CallHandler
@@ -567,7 +567,7 @@ SmfFN_JumpTable:
 	lds32	xwa, 0
 	stda32	0x81a4, xwa
 	stda32	0x81a8, xwa
-	cpdi8	(0x8d36), 107
+	cp	(0x8d36:16), 107
 	jr	z, 20
 	call	GetFirstPageBase
 	ld	(0x81ac:16), hl
@@ -609,14 +609,14 @@ SmfFN_NavSetup:
 	ld (xsp + 4), ix
 	or xiz, xiz
 	jr nz, SmfFN_PageUp
-	cpdi8 (0x84fe), 0
+	cp (0x84fe:16), 0
 	jr nz, SmfFN_PageUp
 	ld xwa, (xsp + 28)
 	cp xwa, 0x1c00018
 	jr nz, SmfFN_NavUp
 	ld bc, ix
 	inc 1, bc
-	cpdi8 (0x8d36), 107
+	cp (0x8d36:16), 107
 	jr z, SmfFN_NavDown_WrapCheck
 	cpda16 xbc, 0x8504
 	jr lt, SmfFN_NavDown_Apply
@@ -643,7 +643,7 @@ SmfFN_NavUp:
 SmfFN_PageUp:
 	cp xiz, 0x1
 	jr nz, SmfFN_PageDown
-	cpdi8 (0x84fe), 0
+	cp (0x84fe:16), 0
 	jr nz, SmfFN_PageDown
 	cp ix, 0xa
 	jrl lt, SmfFN_UpdateDisplay
@@ -653,7 +653,7 @@ SmfFN_PageUp:
 SmfFN_PageDown:
 	cp xiz, 0x2
 	jrl nz, SmfFN_HandleSave
-	cpdi8 (0x84fe), 0
+	cp (0x84fe:16), 0
 	jr nz, SmfFN_HandleSave
 	ld iy, ix
 	add iy, 0xa
@@ -661,7 +661,7 @@ SmfFN_PageDown:
 	ld de, ix
 	exts xde
 	divs de, 0xa
-	cpdi8 (0x8d36), 107
+	cp (0x8d36:16), 107
 	jr z, SmfFN_PageDown_WrapCheck
 	ld hl, bc
 	cp iy, bc
@@ -1001,7 +1001,7 @@ SmfFN_IgnoredEvents:
 	jrl z, SmfFN_UpdateDisplay
 	cp xiz, 0x14
 	jr nz, SmfFN_HandleScrollFlag1
-	cpdi8 (0x84fe), 0
+	cp (0x84fe:16), 0
 	jr nz, SmfFN_HandleScrollFlag1
 	ld xwa, (xsp + 28)
 	cp xwa, 0x1c00017
@@ -1203,7 +1203,7 @@ SmfFN_RefreshIfChanged:
 SmfFN_RedrawPage:
 	muls bc, 0xa
 	calr DisplaySmfFileList
-	cpdi8 (0x8d36), 108
+	cp (0x8d36:16), 108
 	jr nz, SmfFN_UpdateFilenameField
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
@@ -1211,7 +1211,7 @@ SmfFN_RedrawPage:
 	calr FmmSmfMedleyFunc
 
 SmfFN_UpdateFilenameField:
-	cpdi8 (0x8d36), 107
+	cp (0x8d36:16), 107
 	jr nz, SmfFN_SendOkState
 	lda xiz, (0x8850:16)
 	ld wa, (0x81ac:16)
@@ -1251,7 +1251,7 @@ SmfFN_SendOkState:
 	jrl SmfFN_ReturnZero
 	ld (0x81ae:16), iz
 	jrl SmfFN_ReturnZero
-	cpdi8 (0x84fe), 0
+	cp (0x84fe:16), 0
 	jrl z, SmfFN_ReturnZero
 	ld wa, iz
 	ld (0x81ac:16), wa

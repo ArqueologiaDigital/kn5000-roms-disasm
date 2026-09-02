@@ -72,9 +72,9 @@ SingleLoadDstMemFunc:
 SLDstMem_HandleShow:
 	ld xwa, (0x81be:16)
 	lda xde, (BankStr_Bank3_0x6:24)
-	cpdi8 (0x89fa), 0
+	cp (0x89fa:16), 0
 	jr z, SLDstMem_ShowFromBank
-	cpdi8 (0x89f8), 1
+	cp (0x89f8:16), 1
 	jr z, SLDstMem_ShowFromBank
 	ld xde, (xde + 16)
 	ld xbc, 0x1c0000f
@@ -108,7 +108,7 @@ SLSrcBank_HandleShow:
 	ld c, (0x89f8:16)
 	cps c, 0
 	jr nz, SLSrcBank_ShowFromIndex
-	cpdi8 (0x8a0a), 0
+	cp (0x8a0a:16), 0
 	jr z, SLSrcBank_ShowFromIndex
 	ld xde, (xde + 16)
 	ld xbc, 0x1c0000f
@@ -141,7 +141,7 @@ SLSrcMem_HandleShow:
 	ld c, (0x89f8:16)
 	cps c, 1
 	jr z, SLSrcMem_ShowDirect
-	cpdi8 (0x89fa), 0
+	cp (0x89fa:16), 0
 	jr z, SLSrcMem_ShowFromIndex
 
 SLSrcMem_ShowDirect:
@@ -1427,7 +1427,7 @@ SLSrc_HandleShow:
 SLSrc_HandleScroll:
 	cp xiz, 0x5
 	jr nz, SLSrc_ScrollMode6
-	cpdi8 (0x89f8), 1
+	cp (0x89f8:16), 1
 	jr z, SLSrc_ScrollMode5_Prev
 	ld xwa, (0x81e0:16)
 	ld xbc, 0x1e50002
@@ -1456,9 +1456,9 @@ SLSrc_ScrollMode5_Dispatch:
 SLSrc_ScrollMode6:
 	cp xiz, 0x6
 	jr nz, SLSrc_ScrollMode7
-	cpdi8 (0x89f8), 1
+	cp (0x89f8:16), 1
 	jr z, SLSrc_ScrollMode6_NoStep
-	cpdi8 (0x89fa), 0
+	cp (0x89fa:16), 0
 	jr nz, SLSrc_ScrollMode6_NoStep
 	ld xwa, (0x81e0:16)
 	ld xbc, 0x1e50002
@@ -2729,7 +2729,7 @@ SingleLoadDstFunc:
 	calr SignalProgressUpdate
 	calr WP_ScanAvailability
 	calr SignalProgressUpdate
-	cpdi8 (0x89f8), 1
+	cp (0x89f8:16), 1
 	jr z, SLDst_ShowHide_Internal
 	ld xwa, 0x61004a
 	ld xbc, 0x1e0009c
@@ -2747,7 +2747,7 @@ SLDst_ShowHide_Dispatch:
 	ld xbc, 0x1e50002
 	ld xde, 0xffffffff
 	call ApPostEvent
-	cpdi8 (0x89f8), 0
+	cp (0x89f8:16), 0
 	jr nz, SLDst_ClearFloppyFlag
 	call FileIO_ValidateWithExtHeader
 	cps hl, 0
@@ -2824,7 +2824,7 @@ SLDst_HandleScroll:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x3
 	jr nz, SLDst_ScrollMode4
-	cpdi8 (0x89f8), 1
+	cp (0x89f8:16), 1
 	jr z, SLDst_ScrollMode4
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1c00017
@@ -2868,7 +2868,7 @@ SLDst_ScrollMode4:
 	calr WP_FindNextSlot
 	cps l, 0
 	jrl z, SLDst_Return
-	cpdi8 (0x89f8), 1
+	cp (0x89f8:16), 1
 	jr z, SLDst_ScrollMode4_Internal
 	ld xwa, 0x61004a
 	ld xbc, 0x1e0009c
@@ -2932,7 +2932,7 @@ SLDst_ScrollDispatch:
 	ld xwa, (xsp + 4)
 	cp xwa, 0xa
 	jr nz, SLDst_Scroll_ChildReturn
-	cpdi8 (0x89f8), 4
+	cp (0x89f8:16), 4
 	jr z, SLDst_Scroll_ChildReturn
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -2966,7 +2966,7 @@ SLDst_Scroll_ChildReturn:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x7
 	jr nz, SLDst_Scroll_SubMode2
-	cpdi8 (0x89f8), 1
+	cp (0x89f8:16), 1
 	jr z, SLDst_Scroll_SubMode
 	ld xwa, (0x81f0:16)
 	ld xbc, 0x1e50002
@@ -3006,7 +3006,7 @@ SLDst_Scroll_SubMode2:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x8
 	jrl nz, SLDst_Scroll_SubMode5
-	cpdi8 (0x89f8), 1
+	cp (0x89f8:16), 1
 	jr nz, SLDst_Scroll_SubMode3
 	ld xbc, 0x1e50002
 	lds32 xde, 2
@@ -3024,7 +3024,7 @@ SLDst_Scroll_SubMode2:
 	jrl SLDst_Return
 
 SLDst_Scroll_SubMode3:
-	cpdi8 (0x89fa), 0
+	cp (0x89fa:16), 0
 	jr nz, SLDst_Scroll_SubMode4
 	ld xbc, 0x1e50002
 	lds32 xde, 3
@@ -3166,7 +3166,7 @@ CmpSrc_ScrollMode6:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x6
 	jr nz, CmpSrc_ScrollMode7
-	cpdi8 (0x89fa), 0
+	cp (0x89fa:16), 0
 	jr nz, CmpSrc_ScrollMode6_NoStep
 	ld xwa, (0x81f4:16)
 	ld xbc, 0x1e50002
@@ -3225,7 +3225,7 @@ CmpSrc_ScrollMode8:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x8
 	jr nz, CmpSrc_ScrollMode40
-	cpdi8 (0x89fa), 0
+	cp (0x89fa:16), 0
 	jr nz, CmpSrc_ScrollMode40
 	ld xbc, 0x1e50002
 	ld xde, 0xffffffff
@@ -3373,7 +3373,7 @@ CmpDst_ScrollModeA:
 	ld xwa, (xsp + 4)
 	cp xwa, 0xa
 	jr nz, CmpDst_ScrollMode7
-	cpdi8 (0x89f8), 4
+	cp (0x89f8:16), 4
 	jr z, CmpDst_ScrollMode7
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
@@ -3428,7 +3428,7 @@ CmpDst_ScrollMode8:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x8
 	jr nz, CmpDst_ScrollMode5
-	cpdi8 (0x89fa), 0
+	cp (0x89fa:16), 0
 	jr nz, CmpDst_ScrollMode8_NoStep
 	ld xbc, 0x1e50002
 	lds32 xde, 3
@@ -3484,7 +3484,7 @@ CmpDst_ScrollMode6:
 	ld xbc, (xsp + 4)
 	cp xbc, 0x6
 	jr nz, CmpDst_Return
-	cpdi8 (0x89fa), 0
+	cp (0x89fa:16), 0
 	jr nz, CmpDst_Return
 	ld xbc, 0x1e50002
 	ld xde, 0xffffffff
@@ -3539,7 +3539,7 @@ CmpFile_Selection_Clamp:
 
 CmpFile_HandleShow:
 	ld (0x8870:16), 0
-	cpdi8 (0x89f8), 2
+	cp (0x89f8:16), 2
 	jr nz, CmpFile_ShowDefault
 	ld wa, (0x8200:16)
 	call GetFileEntryPtr

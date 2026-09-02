@@ -1841,9 +1841,9 @@ AccPlay_StopEntry:
 	jp AccPlay_StopAndReset
 
 AccPlay_MainDispatch:
-	cpdi8 (0x7e6f), 0x00
+	cp (0x7e6f:16), 0x00
 	jr z, AccPlay_CheckPrevRunning
-	cpdi8 (0x7e70), 0x00
+	cp (0x7e70:16), 0x00
 	jr z, AccPlay_StartNewAccomp
 	bitda 0, (0x7e6f)
 	jr z, AccPlay_RunningWithBit0
@@ -1932,7 +1932,7 @@ AccPlay_MainUpdateLoop:
 	call 0xfdd726
 	calr AccPlay_RestoreMuteStates
 	calr AccPlay_ClearSlotTable
-	cpdi8 (0x8c98), 0x10
+	cp (0x8c98:16), 0x10
 	jr nz, AccPlay_SetIndicatorAndRet
 	push XWA
 	push XHL
@@ -2616,7 +2616,7 @@ AccPlay_TrackMeasureChange:
 	inc	1, hl
 AccPlay_MeasureIncrement:
 	ld	(32370:16), hl
-	cpdi8	35996, 201
+	cp	(35996:16), 201
 	jr	nz, 18
 	push	xwa
 	push	xhl
@@ -2643,7 +2643,7 @@ AccPlay_TrackVoiceCount:
 	ld hl, (0x7d7e:16)
 	cp WA,HL
 	jr z, AccPlay_VoiceCountRet
-	cpdi8 (0x8c9c), 0xc9
+	cp (0x8c9c:16), 0xc9
 	jr nz, AccPlay_VoiceCountNotify
 	push XWA
 	push XHL
@@ -2666,9 +2666,9 @@ AccPlay_VoiceCountRet:
 	ret
 
 AccPlay_MonitorParamState:
-	cpdi8	32367, 0
+	cp	(32367:16), 0
 	jr	z, 15
-	cpdi8	32368, 0
+	cp	(32368:16), 0
 	jr	z, 5
 	calr	34
 	jr	3
@@ -3168,7 +3168,7 @@ AccPlay_InitAndStartLoop:
 
 
 AccPlay_ToggleCodeFragment:
-	cpdi8 (0x7e6f), 0x00
+	cp (0x7e6f:16), 0x00
 	jr z, .Lc_f7273d
 	ld (0x7e6f:16), 0x00
 	call TempoRingBuf_ReInitAndRet

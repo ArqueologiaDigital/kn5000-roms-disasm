@@ -221,9 +221,9 @@ CtrlPanel_HandleFirmwareCheck:
 	cp l, 0xff
 	call_24 z, CaptureLcd
 CtrlPanel_HandlePortCommands:
-	cpdi8	49121, 32
+	cp	(49121:16), 32
 	jr	nz, 47
-	cpdi8	49122, 0
+	cp	(49122:16), 0
 	jr	z, 40
 	ld	xwa, 4294967295
 	ld	xbc, 29360187
@@ -235,9 +235,9 @@ CtrlPanel_HandlePortCommands:
 	ld	xbc, 29360187
 	call	16423243
 CtrlPanel_HandleSerialPort:
-	cpdi8	49121, 33
+	cp	(49121:16), 33
 	jrl	nz, 835
-	cpdi8	49122, 0
+	cp	(49122:16), 0
 	jrl	z, 827
 	ld	xwa, 4294967295
 	ld	xbc, 29360159

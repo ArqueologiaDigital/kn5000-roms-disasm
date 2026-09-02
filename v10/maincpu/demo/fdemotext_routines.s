@@ -505,7 +505,7 @@ FDemoText_ParseControlMessage:
 	ld a, (xbc + 1)
 	cpda8 a, 0x8d3a
 	ret nz
-	cpdi8 (0x8d38), 234
+	cp (0x8d38:16), 234
 	ret nz
 	ld a, (xbc)
 	cp a, 0x83

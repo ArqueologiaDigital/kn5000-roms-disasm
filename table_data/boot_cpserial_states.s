@@ -181,9 +181,9 @@ BootSerial_State10_TxNextByte:
 	stdi16	(0x0fd5), 0
 BootSerial_State10_TxNextByte__no_wrap:
 	decdi8	1, (0x0f63)
-	cpdi8	(0x0f63), 0x01
+	cp	(0x0f63:16), 0x01
 	jr	z, BootSerial_State10_TxNextByte__last
-	cpdi8	(0x0f63), 0x00
+	cp	(0x0f63:16), 0x00
 	jr	z, BootSerial_State10_TxNextByte__last
 	decdi8	4, (0x0f62)		; more bytes: state -> 0x0c
 	jrl	t, BootSerial_TxIsrEpilogue
@@ -310,7 +310,7 @@ BootSerial_State24_RxNextByte:
 	stdi16	(0x0f77), 0
 BootSerial_State24_RxNextByte__no_advance:
 	decdi8	1, (0x0f63)
-	cpdi8	(0x0f63), 0x01
+	cp	(0x0f63:16), 0x01
 	jr	nz, BootSerial_State24_RxNextByte__rearm
 	ld	(0x0f63:16), 0		; frame complete
 	anddi8	(0x0f64), 0xfe		; clear RX-active flag
@@ -381,7 +381,7 @@ BootSerial_PollTX:
 ; frame into the TX serial ring when at least 3 slots are free.
 BootSerial_PollTX__inject_sync:
 	incdi8	1, (0x0f72)
-	cpdi8	(0x0f72), 42
+	cp	(0x0f72:16), 42
 	jr	ule, BootSerial_PollTX__inject_done
 	ei	6
 	ld	wa, (0x0fd7:16)
@@ -451,7 +451,7 @@ BootSerial_PollTX__exit:
 	ret
 BootSerial_PollTX__line_busy:
 	incdi8	1, (0x0f70)
-	cpdi8	(0x0f70), 20
+	cp	(0x0f70:16), 20
 	jr	ule, BootSerial_PollTX__exit
 	ei	6			; 20 retries exhausted: give up
 	ldio	0xf8, 0x22		; INTCLR: INTRX1

@@ -191,7 +191,7 @@ AccChannel_CheckActivitySetDirty:
 	orda8 a, (0x327c)
 	and A,0x3f
 	jr z, AccChannel_ActivityCheckDone
-	cpdi8 (0x3259), 0x80
+	cp (0x3259:16), 0x80
 	jr c, AccChannel_ActivityCheckDone
 	ordi8 (0x328a), 0x3f
 AccChannel_ActivityCheckDone:
@@ -475,7 +475,7 @@ AccChord_SetDirtyBit5:
 	ordi8 (0x3257), 0x20
 AccChord_CheckZeroChord:
 .Lc_f538b9:
-	cpdi8 (0x3240), 0x00
+	cp (0x3240:16), 0x00
 	jr nz, AccChord_CompareDone
 	anddi8 (0x3257), 0xdf
 AccChord_CompareDone:
@@ -489,9 +489,9 @@ AccentVoice_DetectAndMarkChange:
 	orda8 a, (0x3279)
 	and A,0x3f
 	jr nz, AccentVoice_UpdateParamIndex
-	cpdi8 (0x3249), 0xf0
+	cp (0x3249:16), 0xf0
 	jr nc, AccentVoice_UpdateParamIndex
-	cpdi8 (0x3249), 0x80
+	cp (0x3249:16), 0x80
 	jr nc, AccentVoice_UpdateParamIndex
 	bitda 0, (0x3265)
 	jr z, .Lc_f538fe
@@ -563,7 +563,7 @@ AccVoice_LookupWithOffset:
 	ret
 
 AccVoice_SelectAndApplyPatch:
-	cpdi8 (0x3249), 0x80
+	cp (0x3249:16), 0x80
 	jr nc, AccVoice_PatchFromDirect
 	ld xiy, (0x3232:16)
 	calr AccStyle_ReadVoiceParam
@@ -996,7 +996,7 @@ RhythmAccent_UpdateRingBufPosition:
 	jr ugt, RhythmAccent_StorePosition
 	ldb A, 0x01
 	ld (0x3392:16), a
-	cpdi8 (0x0462), 0x00
+	cp (0x0462:16), 0x00
 	jr z, RhythmAccent_AddAndCompare
 	xor A,A
 	jr t, RhythmAccent_AddAndCompare
@@ -1564,7 +1564,7 @@ AccPatch_SetByChordIndex:
 	ld L,W
 	and L,0x7f
 	srl L, 0x02
-	cpdi8 (0x324a), 0x00
+	cp (0x324a:16), 0x00
 	jrl nz, AccPatch_ChIdx1_Entry
 	cps l, 0
 	jr nz, AccPatch_ChIdx0_Bank1
@@ -1630,7 +1630,7 @@ AccPatch_ChIdx0_Bank2:
 	ld	(13010:16), wa
 	jrl	1236
 AccPatch_ChIdx1_Entry:
-	cpdi8 (0x324a), 0x01
+	cp (0x324a:16), 0x01
 	jrl nz, AccPatch_ChIdx2_Entry
 	cps l, 0
 	jr nz, AccPatch_ChIdx1_Bank1
@@ -1696,7 +1696,7 @@ AccPatch_ChIdx1_Bank2:
 	ld	(13010:16), wa
 	jrl	1049
 AccPatch_ChIdx2_Entry:
-	cpdi8 (0x324a), 0x02
+	cp (0x324a:16), 0x02
 	jrl nz, AccPatch_ChIdx3_Entry
 	cps l, 0
 	jr nz, AccPatch_ChIdx2_Bank1
@@ -1762,7 +1762,7 @@ AccPatch_ChIdx2_Bank2:
 	ld	(13010:16), wa
 	jrl	862
 AccPatch_ChIdx3_Entry:
-	cpdi8 (0x324a), 0x03
+	cp (0x324a:16), 0x03
 	jrl nz, AccPatch_ChIdx4_Entry
 	cps l, 0
 	jr nz, AccPatch_ChIdx3_Bank1
@@ -1828,7 +1828,7 @@ AccPatch_ChIdx3_Bank2:
 	ld	(13010:16), wa
 	jrl	675
 AccPatch_ChIdx4_Entry:
-	cpdi8 (0x324a), 0x04
+	cp (0x324a:16), 0x04
 	jrl nz, AccPatch_ChIdx5_Entry
 	cps l, 0
 	jr nz, AccPatch_ChIdx4_Bank1
@@ -1894,7 +1894,7 @@ AccPatch_ChIdx4_Bank2:
 	ld	(13010:16), wa
 	jrl	488
 AccPatch_ChIdx5_Entry:
-	cpdi8 (0x324a), 0x05
+	cp (0x324a:16), 0x05
 	jrl nz, AccPatch_ChIdx6_Entry
 	cps l, 0
 	jr nz, AccPatch_ChIdx5_Bank1
@@ -1960,7 +1960,7 @@ AccPatch_ChIdx5_Bank2:
 	ld	(13010:16), wa
 	jrl	301
 AccPatch_ChIdx6_Entry:
-	cpdi8 (0x324a), 0x06
+	cp (0x324a:16), 0x06
 	jrl nz, AccPatch_ChIdxDefault_Bank0
 	cps l, 0
 	jr nz, AccPatch_ChIdx6_Bank1

@@ -206,7 +206,7 @@ FDC_ErrorInvalidDrive:
 FDC_CheckDriveCount:
 	ld	wa, (35238:16)
 	ld	(35214:16), a
-	cpdi8	35214, 1
+	cp	(35214:16), 1
 	jr	ule, 6
 	ldw	wa, 254
 	jrl	1972
@@ -351,7 +351,7 @@ FDC_CheckHead:
 	ld wa, (0x89a8:16)
 	ld (0x8990:16), a
 	ld (0x898d:16), a
-	cpdi8 (0x898d), 0x00
+	cp (0x898d:16), 0x00
 	ret Z
 	.byte 0xc1, 0x8d, 0x89, 0x3f, 0x01, 0xb0, 0xf6, 0x30
 	.byte 0xfe, 0x00, 0x1e, 0xa5, 0x05, 0x0e
@@ -780,7 +780,7 @@ FDC_HardwareSetup:
 	ret
 	.byte 0x0e
 FDC_Set_Status:
-	cpdi8 (0x8988), 0x00
+	cp (0x8988:16), 0x00
 	jr nz, FDC_SetStatus_AlreadySet
 	ld (0x8988:16), a
 	cp A,0x36
@@ -815,7 +815,7 @@ FDC_ClearStatus_InitTimer:
 	ld iz, (0x0409:16)
 	lds bc, 0
 .Lc_f971e1:
-	cpdi8 (0x89c4), 0xff
+	cp (0x89c4:16), 0xff
 	jr z, .Lc_f971eb
 	ldw BC, 0xffff
 .Lc_f971eb:
@@ -1029,7 +1029,7 @@ FDC_CommandEntry:
 FDC_CommandEntry_EnableIRQ:
 .Lc_f978cc:
 	ei 0x06
-	cpdi8 (0x897a), 0xa5
+	cp (0x897a:16), 0xa5
 	jr nz, .Lc_f978e2
 	ei 0x00
 	ldw WA, 0x00fb
@@ -1224,7 +1224,7 @@ INT4_WaitResultReady:
 	bit	6, l
 	jr	nz, -25
 	calr	-3192
-	cpdi8	35269, 128
+	cp	(35269:16), 128
 	jr	nz, -81
 INT4_ExitRestore:
 	ld	(35268:16), 0

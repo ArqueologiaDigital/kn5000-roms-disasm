@@ -1237,7 +1237,7 @@ Encoder_PrepareCallback:
 	extz BC
 	sla BC, 0x02
 	ld XWA,NakaInst_ExtDevice_Screens_0x3452
-	cpdi8 (0x8c98), 0x14
+	cp (0x8c98:16), 0x14
 	jr nz, .Lc_fc501b
 	ld XWA,NakaInst_ExtDevice_Screens_0x34D2
 Encoder_ResolveCallbackAddr:

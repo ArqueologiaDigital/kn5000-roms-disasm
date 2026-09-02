@@ -200,9 +200,9 @@ AudioInit_RestoreStack:
 	ret
 
 AudioInit_CheckSoundGroup:
-	cpdi8 (0x8d36), 3
+	cp (0x8d36:16), 3
 	jr z, AudioInit_LoadGroupVoice
-	cpdi8 (0x8d36), 8
+	cp (0x8d36:16), 8
 	jr nz, AudioInit_GroupFallbackDefault
 
 AudioInit_LoadGroupVoice:
@@ -257,7 +257,7 @@ AudioInit_GroupFallbackDefault:
 	jrl AudioInit_ConfigStereoVoice
 
 AudioInit_CheckSoundGroup51:
-	cpdi8 (0x8d36), 81
+	cp (0x8d36:16), 81
 	jr nz, AudioInit_G51FallbackDefault
 	ld c, (0x8d3a:16)
 	extz bc
@@ -369,9 +369,9 @@ AudioInit_VoiceParamCtrl:
 	set 1, c
 
 AudioInit_CheckVoiceParamState:
-	cpdi8 (0xc1ff), 255
+	cp (0xc1ff:16), 255
 	jr nz, AudioInit_CompareAndSendMIDI
-	cpdi8 (0xc5c8), 255
+	cp (0xc5c8:16), 255
 	jr z, AudioInit_CheckBit2VoiceParam
 	set 0, c
 	ld wa, (0xc596:16)
@@ -402,7 +402,7 @@ AudioInit_CompareAndSendMIDI:
 	lda xwa, (xsp)
 	call MIDI_SendCmdPacket
 	call MIDI_PostSendStub
-	cpdi8 (0x8d34), 13
+	cp (0x8d34:16), 13
 	jr z, AudioInit_VoiceParamDone
 	push xde
 	push xhl
@@ -441,14 +441,14 @@ AudioInit_CheckOutputFlags:
 	jrl z, AudioInit_NoRoutingActive
 
 AudioInit_ProcessVoiceAssign:
-	cpdi8 (0xc1ff), 255
+	cp (0xc1ff:16), 255
 	jr nz, AudioInit_CheckStoredVoice
 	set 3, de
 	ldmm8 0xc5c8, 0xc5a2
 	jr AudioInit_UpdateVoiceBank0
 
 AudioInit_CheckStoredVoice:
-	cpdi8 (0xc5c8), 255
+	cp (0xc5c8:16), 255
 	jr z, AudioInit_ClearStoredVoice
 	set 3, de
 
@@ -538,7 +538,7 @@ AudioInit_VoiceStereoCheck:
 	jrl AudioInit_UpdateIndicators
 
 AudioInit_NoRoutingActive:
-	cpdi8 (0xc5c8), 255
+	cp (0xc5c8:16), 255
 	jr z, AudioInit_ClearAllVoiceBanks
 	set 3, de
 
@@ -597,7 +597,7 @@ AudioInit_UpdateIndicators:
 	ret z
 	ldw wa, 0x45
 	call CtrlPanel_SetIndicatorBit
-	cpdi8 (0xc5c8), 255
+	cp (0xc5c8:16), 255
 	jr z, AudioInit_ClearDrumModeAlt
 	ld a, (0xfd02:16)
 	and a, 0x3
@@ -871,7 +871,7 @@ AudioInit_GroupA_TypeE:
 	jrl AudioInit_CheckGroupB_Channel
 
 AudioInit_GroupA_OtherType:
-	cpdi8 (0x8d36), 138
+	cp (0x8d36:16), 138
 	jr nz, AudioInit_GroupA_DefaultMapping
 	ld a, e
 	extz wa
@@ -977,7 +977,7 @@ AudioInit_CheckGroupB_Channel:
 	and wa, bc
 	jrl z, AudioInit_ChannelLoop_Next
 	incw 1, (xsp)
-	cpdi8 (0xc59e), 255
+	cp (0xc59e:16), 255
 	jr nz, AudioInit_GroupB_CheckType
 	ld a, d
 	extz wa
@@ -1211,7 +1211,7 @@ AudioInit_Priority_Default:
 	ret
 
 AudioInit_CheckMIDIStatus:
-	cpdi8 (0x7f0b), 0
+	cp (0x7f0b:16), 0
 	jr z, AudioInit_MIDIDisabled
 	ld (0xc279:16), 0
 	ld (0xc27a:16), 255
@@ -1415,7 +1415,7 @@ AudioInit_Routing_SimpleAssign:
 	ld (0xc2bb:16), 22
 	ld (0xc217:16), 255
 	ld (0xc218:16), 255
-	cpdi8 (3431), 4
+	cp (3431:16), 4
 	jr z, AudioInit_Routing_AllDisabled
 	ld wa, (0xc598:16)
 	and wa, 0x22
@@ -1493,13 +1493,13 @@ AudioInit_ConfigurePanning:
 	ld wa, (0xc596:16)
 	bit 2, wa
 	ret nz
-	cpdi8 (0xc1ff), 255
+	cp (0xc1ff:16), 255
 	jr nz, AudioInit_Pan_CheckMode0
 	bitda 0, (0xc1fe)
 	jr nz, AudioInit_Pan_SetStereoLeft
 
 AudioInit_Pan_CheckMode0:
-	cpdi8 (0xc1ff), 0
+	cp (0xc1ff:16), 0
 	jr nz, AudioInit_Pan_CheckMode1
 
 AudioInit_Pan_SetStereoLeft:
@@ -1507,13 +1507,13 @@ AudioInit_Pan_SetStereoLeft:
 	jr AudioInit_Pan_CheckReverbChannel
 
 AudioInit_Pan_CheckMode1:
-	cpdi8 (0xc1ff), 255
+	cp (0xc1ff:16), 255
 	jr nz, AudioInit_Pan_CheckMode1b
 	bitda 1, (0xc1fe)
 	jr nz, AudioInit_Pan_SetStereoRight
 
 AudioInit_Pan_CheckMode1b:
-	cpdi8 (0xc1ff), 1
+	cp (0xc1ff:16), 1
 	jr nz, AudioInit_Pan_CheckTypeED
 
 AudioInit_Pan_SetStereoRight:
@@ -1539,15 +1539,15 @@ AudioInit_Pan_DefaultCenter:
 	ld (0xc2b4:16), 255
 
 AudioInit_Pan_CheckReverbChannel:
-	cpdi8 (0xe9c0), 14
+	cp (0xe9c0:16), 14
 	jr ule, AudioInit_Pan_Reverb_CopyFromMain
-	cpdi8 (0xc1ff), 255
+	cp (0xc1ff:16), 255
 	jr nz, AudioInit_Pan_Reverb_CheckMode0
 	bitda 0, (0xc1fe)
 	jr nz, AudioInit_Pan_Reverb_Left
 
 AudioInit_Pan_Reverb_CheckMode0:
-	cpdi8 (0xc1ff), 0
+	cp (0xc1ff:16), 0
 	jr nz, AudioInit_Pan_Reverb_CheckMode1
 
 AudioInit_Pan_Reverb_Left:
@@ -1555,13 +1555,13 @@ AudioInit_Pan_Reverb_Left:
 	jr AudioInit_Pan_Done
 
 AudioInit_Pan_Reverb_CheckMode1:
-	cpdi8 (0xc1ff), 255
+	cp (0xc1ff:16), 255
 	jr nz, AudioInit_Pan_Reverb_CheckMode1b
 	bitda 1, (0xc1fe)
 	jr nz, AudioInit_Pan_Reverb_Right
 
 AudioInit_Pan_Reverb_CheckMode1b:
-	cpdi8 (0xc1ff), 1
+	cp (0xc1ff:16), 1
 	jr nz, AudioInit_Pan_Reverb_CheckTypeED
 
 AudioInit_Pan_Reverb_Right:
@@ -1905,9 +1905,9 @@ AudioInit_CompareVoiceConfig:
 	ret
 
 AudioInit_VoiceCompare_BothFF:
-	cpdi8 (0xc1ff), 255
+	cp (0xc1ff:16), 255
 	jrl nz, AudioInit_VoiceCompare_NotBothFF
-	cpdi8 (0xc365), 255
+	cp (0xc365:16), 255
 	jrl nz, AudioInit_VoiceCompare_NotBothFF
 	ld a, (0xc364:16)
 	xorda8 a, 0xc1fe
@@ -1984,9 +1984,9 @@ AudioInit_VoiceCompare_LayerNext:
 	jr AudioInit_VoiceCompare_BuildCmd
 
 AudioInit_VoiceCompare_NotBothFF:
-	cpdi8 (0xc1ff), 255
+	cp (0xc1ff:16), 255
 	jr z, AudioInit_VoiceCompare_BuildCmd
-	cpdi8 (0xc365), 255
+	cp (0xc365:16), 255
 	jr z, AudioInit_VoiceCompare_BuildCmd
 	ld a, (0xc364:16)
 	xorda8 a, 0xc1fe
@@ -2234,9 +2234,9 @@ AudioInit_PartAssign_Loop:
 	add xwa, xbc
 	cp (xwa), 0xff
 	jr z, AudioInit_PartAssign_CheckIdx15
-	cpdi8 (0xc2ba), 2
+	cp (0xc2ba:16), 2
 	jr nz, AudioInit_PartAssign_CheckIdx15
-	cpdi8 (0xc420), 2
+	cp (0xc420:16), 2
 	jr nz, AudioInit_PartAssign_Next
 
 AudioInit_PartAssign_CheckIdx15:
@@ -2248,9 +2248,9 @@ AudioInit_PartAssign_CheckIdx15:
 	add xwa, xbc
 	cp (xwa), 0xff
 	jr z, AudioInit_PartAssign_CheckIdx16
-	cpdi8 (0xc2ba), 21
+	cp (0xc2ba:16), 21
 	jr nz, AudioInit_PartAssign_CheckIdx16
-	cpdi8 (0xc420), 21
+	cp (0xc420:16), 21
 	jr nz, AudioInit_PartAssign_Next
 
 AudioInit_PartAssign_CheckIdx16:
@@ -2262,9 +2262,9 @@ AudioInit_PartAssign_CheckIdx16:
 	add xwa, xbc
 	cp (xwa), 0xff
 	jr z, AudioInit_PartAssign_QueueChange
-	cpdi8 (0xc2bb), 22
+	cp (0xc2bb:16), 22
 	jr nz, AudioInit_PartAssign_QueueChange
-	cpdi8 (0xc421), 22
+	cp (0xc421:16), 22
 	jr nz, AudioInit_PartAssign_Next
 
 AudioInit_PartAssign_QueueChange:

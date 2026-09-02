@@ -65,7 +65,7 @@ Password_HandleDeleteEvent:
 	jr Password_ForwardToFileName
 
 Password_Delete_CheckLoadOnly:
-	cpdi8 (0x8a0c), 1
+	cp (0x8a0c:16), 1
 	jr nz, Password_Delete_CheckSaveOnly
 	ld wa, iz
 	call CheckSlotIsSelected
@@ -78,7 +78,7 @@ Password_Delete_CheckLoadOnly:
 	jr Password_ForwardToFileName
 
 Password_Delete_CheckSaveOnly:
-	cpdi8 (0x8a0c), 2
+	cp (0x8a0c:16), 2
 	jr nz, Password_ShowErrorStatus
 	ld wa, iz
 	call CheckIsCurrentSlot
@@ -117,7 +117,7 @@ Password_HandleSaveEvent:
 	jr Password_ForwardToSaveFilter
 
 Password_Save_CheckLoadOnly:
-	cpdi8 (0x8a0c), 1
+	cp (0x8a0c:16), 1
 	jr nz, Password_Save_CheckSaveOnly
 	ld wa, iz
 	call CheckSlotIsSelected
@@ -130,7 +130,7 @@ Password_Save_CheckLoadOnly:
 	jr Password_ForwardToSaveFilter
 
 Password_Save_CheckSaveOnly:
-	cpdi8 (0x8a0c), 2
+	cp (0x8a0c:16), 2
 	jr nz, Password_SaveErrorStatus
 	ld wa, iz
 	call CheckIsCurrentSlot
@@ -715,7 +715,7 @@ FileName_CheckCallback:
 	ld xwa, (0x7f76:16)
 	or xwa, xwa
 	jrl z, FileName_Return
-	cpdi8 (0x8d36), 103
+	cp (0x8d36:16), 103
 	jr z, FileName_Callback_Simple
 	call CheckFileSystemStatus
 	ld iz, hl
@@ -757,7 +757,7 @@ FileName_Callback_Simple:
 
 FileName_HandleRegister:
 	stda32 0x7f76, xbc
-	cpdi8 (0x8d36), 103
+	cp (0x8d36:16), 103
 	jr z, FileName_Register_Simple
 	call CheckFileSystemStatus
 	ld iz, hl

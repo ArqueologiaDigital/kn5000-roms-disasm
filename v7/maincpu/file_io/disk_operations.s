@@ -458,7 +458,7 @@ FmmFmt_HandleCancel:
 	ld	(32464:16), 0
 	jrl	332
 FmmFmt_HandleProgress:
-	cpdi8	32464, 0
+	cp	(32464:16), 0
 	jrl	z, 324
 	ld	a, (32462:16)
 	extz	wa
@@ -740,7 +740,7 @@ FmmLoadTtl_HandleCancelOp:
 FmmLoadTtl_HandleOk:
 	cp	xde, 15
 	jr	nz, 19
-	cpdi8	35992, 7
+	cp	(35992:16), 7
 	jr	nz, 5
 	ldw	wa, 214
 	jr	3
@@ -779,7 +779,7 @@ FmmSaveTitleFunc:
 	call	16290094
 	calr	-4686
 FmmSaveTtl_CheckFont:
-	cpdi8	35995, 102
+	cp	(35995:16), 102
 	jr	z, 45
 	lds	iz, 0
 FmmSaveTtl_SlotLoop:

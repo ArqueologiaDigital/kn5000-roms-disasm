@@ -2460,11 +2460,11 @@ DMA_Chunk_Transfer:
 	ldc_cr16 bc, 0x48
 	ld (258:16), 22
 	set_dd8 2, 0x80
-	cpdi8 4328, 0
+	cp (4328:16), 0
 	ret z
 
 DMA_Chunk_Wait:
-	cpdi8 4328, 0
+	cp (4328:16), 0
 	jr nz, DMA_Chunk_Wait
 	ret
 
@@ -2534,7 +2534,7 @@ InterCPU_E2_DMA_Transfer:
 	; 9 instructions, of which 2 needed a spelling search because
 	; llvm-mc --disassemble refuses them (it can still ASSEMBLE them).
 	lds	ix, 0
-	cpdi8	(4328), 0
+	cp	(4328:16), 0
 	jr	z, 17
 
 ; Spins while the TX-state flag (DMA_XFER_STATE) is non-zero, i.e. a previous micro-DMA burst is still running.
@@ -2543,7 +2543,7 @@ E2_Wait_DMA_Idle:
 	inc	1, ix
 	cp	hl, 60000
 	ret	ugt
-	cpdi8	(4328), 0
+	cp	(4328:16), 0
 	jr	nz, -17
 
 ; TX engine idle: assert SSTAT0, mark busy, push the 0xE2 header into the latch.
@@ -2594,7 +2594,7 @@ E2_Wait_MSTAT1_Set:
 InterCPU_E1_DMA_Transfer:
 	pushw iz
 	lds iz, 0
-	cpdi8 4328, 0
+	cp (4328:16), 0
 	jr z, E1_DMA_Ready
 
 E1_Wait_DMA_Idle:
@@ -2602,7 +2602,7 @@ E1_Wait_DMA_Idle:
 	inc 1, iz
 	cp hl, 0xEA60
 	jrl ugt, E1_Exit
-	cpdi8 4328, 0
+	cp (4328:16), 0
 	jr nz, E1_Wait_DMA_Idle
 
 E1_DMA_Ready:
@@ -2631,11 +2631,11 @@ E1_Start_Transfer:
 	ldc_cr16 wa, 0x48
 	ld (258:16), 22
 	set_dd8 2, 0x80
-	cpdi8 4328, 1
+	cp (4328:16), 1
 	jr z, E1_Delay_Loop1
 
 E1_Wait_State1:
-	cpdi8 4328, 1
+	cp (4328:16), 1
 	jr nz, E1_Wait_State1
 
 E1_Delay_Loop1:
@@ -2657,11 +2657,11 @@ E1_Phase2_Setup:
 	ldc_cr16 wa, 0x48
 	ld (258:16), 22
 	set_dd8 2, 0x80
-	cpdi8 4328, 0
+	cp (4328:16), 0
 	jr z, E1_Delay_Loop2
 
 E1_Wait_Complete:
-	cpdi8 4328, 0
+	cp (4328:16), 0
 	jr nz, E1_Wait_Complete
 
 E1_Delay_Loop2:
@@ -2797,13 +2797,13 @@ INT0_Exit:	; 020EFFh
 ;=============================================================================
 MICRODMA_CH2_HANDLER:	; Channel #2 completion		; 20F01
 	res_dd8 2, 0x80
-	cpdi8 4328, 1
+	cp (4328:16), 1
 	jr nz, MICRODMA_CH2_State2
 	ld (4328:16), 0
 	jr MICRODMA_CH2_Done
 
 MICRODMA_CH2_State2:	; 020F12h - two-phase transfer, go to state 1
-	cpdi8 4328, 2
+	cp (4328:16), 2
 	jr nz, MICRODMA_CH2_Done
 	ld (4328:16), 1
 
@@ -3001,7 +3001,7 @@ RingBuf_SetOffsetLo:
 	ret
 
 RingBuf_CheckOffset_ClearFlags:
-	cpdi8 10214, 0
+	cp (10214:16), 0
 	jr z, RingBuf_CheckOffset_LoZero
 	cpdi16 10215, 48
 	jr c, RingBuf_CheckOffset_Level1
@@ -43080,7 +43080,7 @@ DSP_RingBuf_Compare_MismatchPath:
 	extz wa
 	cp iz, wa
 	jr c, DSP_RingBuf_Compare_Loop
-	cpdi8 17263, 255
+	cp (17263:16), 255
 	jr z, DSP_RingBuf_Compare_LoopNext
 	cpi3_erpw 2, 0xFA
 	jr c, DSP_RingBuf_Compare_FoundPath
@@ -43226,7 +43226,7 @@ Audio_Process_DSP_MsgSizeCheck:
 	jrl c, DSP_Cmd2B_SkipAndContinue
 	cp_erpb 0xFB, 0x3F
 	jrl ugt, DSP_Cmd2B_SkipAndContinue
-	cpdi8 17258, 127
+	cp (17258:16), 127
 	jrl nz, DSP_Cmd2B_VoiceParamWrite
 	stb_erp A, 0xFB
 	ldb_erp A, 0xF8
@@ -43508,7 +43508,7 @@ DSP_CmdHandler_2C:
 	ldb_erp A, 0xFB
 	cpib_erp 0xFB, 0
 	jrl nz, CmdHandler2C_SubCmd1
-	cpdi8 17258, 8
+	cp (17258:16), 8
 	jrl nz, DSP_Process_ReadNext
 	ld a, (17259:16)
 	extz wa
@@ -43636,7 +43636,7 @@ CmdHandler2C_SubCmd1:
 	jrl c, CmdHandler2C_SubCmd6
 	cp_erpb 0xFB, 0x3F
 	jrl ugt, CmdHandler2C_SubCmd6
-	cpdi8 17258, 127
+	cp (17258:16), 127
 	jrl nz, DSP_Process_ReadNext
 	stb_erp A, 0xFB
 	ldb_erp A, 0xF8
@@ -43804,7 +43804,7 @@ CmdHandler2D_PathD:
 	ld c, a
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_ReadAndCompare
-	cpdi8 17258, 127
+	cp (17258:16), 127
 	jr z, CmdHandler2D_MsgSizeMatch
 	stb_erp A, 0xFB
 	sub a, 0x30
@@ -57620,7 +57620,7 @@ ToneGen_Note_Loop:	; 03D02Eh
 	ld (19011:16), a	; Store note number
 	ld a, (xsp + 1)
 	ld (19012:16), a	; Store velocity
-	cpdi8 19018, 1	; Check if DMA enabled
+	cp (19018:16), 1	; Check if DMA enabled
 	jr nz, ToneGen_Note_Continue
 	ld xde, 0x4A42
 	lds wa, 2
@@ -57649,7 +57649,7 @@ ToneGen_Note_Off_Slot:	; 03D06Dh
 	ld (19011:16), a
 	ld a, (xsp + 1)
 	ld (19012:16), a
-	cpdi8 19018, 1
+	cp (19018:16), 1
 	jr nz, ToneGen_Note_Continue
 	ld xde, 0x4A42
 	lds wa, 2

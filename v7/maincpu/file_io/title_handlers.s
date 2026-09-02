@@ -128,7 +128,7 @@ FmmUtility_ScanFormat:
 FmmUtility_CheckCapacity:
 	cpdi16	33896, 0
 	jrl	le, 197
-	cpdi8	32448, 124
+	cp	(32448:16), 124
 	jrl	z, 189
 	ld	xwa, 8060947
 	ld	xbc, 31784966
@@ -253,7 +253,7 @@ FmmSmfUtility_ScanFormat:
 FmmSmfUtility_CheckCapacity:
 	cpdi16	33894, 0
 	jrl	le, 197
-	cpdi8	32450, 123
+	cp	(32450:16), 123
 	jrl	z, 189
 	ld	xwa, 8060970
 	ld	xbc, 31784966

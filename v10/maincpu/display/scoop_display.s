@@ -2212,7 +2212,7 @@ Display_RedrawInd_Store:
 	call VoiceBank_BitsAndLoad
 	ld a, (3424:16)
 	call SetWall_SlotResolve
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl z, Display_RedrawInd_LoadDirect
 	ld a, (3421:16)
 	ld (3820:16), a
@@ -2296,7 +2296,7 @@ Display_RedrawFooter_Main:
 	jrl z, Display_RedrawTitleString
 	cp a, 0x86
 	jrl z, Display_RedrawTitleString
-	cpdi8 (3766), 0
+	cp (3766:16), 0
 	jrl nz, Display_RedrawFooter_Main
 
 Display_RedrawTitleString:
@@ -2316,12 +2316,12 @@ Display_NullRet2:
 	ret
 
 VoiceBank_CheckCommand:
-	cpdi8 (3765), 129
+	cp (3765:16), 129
 	jrl nz, Display_TitleString_BuildFromMode
 	push xix
 	call VoiceBank_ProcessCommand
 	pop xix
-	cpdi8 (3765), 129
+	cp (3765:16), 129
 	jrl z, TitleString_NullRet
 
 Display_TitleString_BuildFromMode:
@@ -2369,7 +2369,7 @@ Display_TitleString_Mode4:
 	jp String_CopyFromIY
 
 Display_TitleString_Mode5:
-	cpdi8 (3767), 72
+	cp (3767:16), 72
 	jrl nz, TitleString_NullRet
 	ld a, (3768:16)
 	cps a, 5
@@ -2421,7 +2421,7 @@ TitleString_BitScanLoop:
 	jp TitleString_NullRet
 
 TitleString_CheckRhythmBank:
-	cpdi8 (3768), 6
+	cp (3768:16), 6
 	jrl nz, TitleString_BuildFromBank
 	add c, 0x8
 
@@ -4318,7 +4318,7 @@ PeriphReg_CheckAndDispatch:
 	jrl z, PeriphReg_CheckActiveSlot
 	jp PeriphReg_Ret
 PeriphReg_CheckActiveSlot:
-	cpdi8	(3413), 255
+	cp	(3413:16), 255
 	jrl nz, PeriphReg_StoreAndUpdate
 	jp PeriphReg_Ret
 PeriphReg_StoreAndUpdate:
@@ -5121,7 +5121,7 @@ DMA_ChannelHandler_0:
 	ret
 DMA_ChannelHandler_3:
 	; --- Conditional init (31 bytes) ---
-	cpdi8	(3567), 15
+	cp	(3567:16), 15
 	jrl z, DMA_Channel3_CallAndInit
 	ld	(3567:16), 15
 	call DisplayStr_TempoString_0x6F
@@ -5658,7 +5658,7 @@ AccPedal_CheckBitAndUpdate:
 AccPedal_LoadModeAndChannel:
 	ld w, (3414:16)
 	ld a, (3822:16)
-	cpdi8 (3429), 0
+	cp (3429:16), 0
 	jrl z, AccPedal_LoadAddr0
 	ld hl, (3418:16)
 	jp AccPedal_StoreAddrAndCheck
@@ -5668,14 +5668,14 @@ AccPedal_LoadAddr0:
 
 AccPedal_StoreAddrAndCheck:
 	ld (3299:16), hl
-	cpdi8 (3429), 3
+	cp (3429:16), 3
 	jrl nz, AccPedal_CallEventSwitch
 	ld w, a
 	ordi8 0x287b, 4
 
 AccPedal_CallEventSwitch:
 	call Scoop_EventHandler_MenuSwitch
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, AccPedal_SendSysExAndReturn
 	ld (0x371a:16), de
 	ld (3420:16), c
@@ -5888,7 +5888,7 @@ VoiceCtrl_SendNoteOffSequence:
 	ret
 
 VoiceCtrl_ParamSetupBytecode:
-	cpdi8	(3429), 0
+	cp	(3429:16), 0
 	jrl	nz, 8
 	call	VoiceState_DataBlock2_0x1A6
 	jp	VoiceCtrl_ParamSetupBytecode_0xF1
@@ -5923,7 +5923,7 @@ VoiceCtrl_ParamSetupBytecode:
 	call	VoiceCtrl_ParamSetupBytecode_0xF2
 	cps	a, 0
 	jrl	nz, 115
-	cpdi8	(3429), 3
+	cp	(3429:16), 3
 	jrl	nz, 29
 	ld	xiy, 3471
 	cp	(xiy+2), 72
@@ -6250,7 +6250,7 @@ VoiceCtrl_ParamSetupBytecode:
 	ldb	a, 1
 	call	VoiceSlot_RestoreState
 	ret
-	cpdi8	(3429), 0
+	cp	(3429:16), 0
 	jrl	nz, 4
 	jp	VoiceCtrl_ParamSetupBytecode_0x4DD
 	ld	xiy, 3471
@@ -6830,7 +6830,7 @@ ScoopParam_ValueTable:
 	ld	a, (64605:16)
 	ld	(4392:16), a
 	call	15705812
-	cpdi8	3429, 0
+	cp	(3429:16), 0
 	jrl	nz, 19
 	.byte 0xc1, 0x5d, 0xfc, 0x3c, 0xf7
 	ldb	e, 72
@@ -6924,7 +6924,7 @@ ScoopParam_ValueTable:
 	call	15701437
 	.byte 0xf1, 0xd3, 0x0d, 0xb8
 	ld	(14120:16), 0
-	cpdi8	4346, 0
+	cp	(4346:16), 0
 	jrl	nz, 4
 	call	15705324
 	call	15697281
@@ -6934,22 +6934,22 @@ ScoopParam_ValueTable:
 	.byte 0xf1, 0x53, 0x0d, 0xcb
 	jrl	z, 12
 	call	15705324
-	cpdi8	3429, 0
+	cp	(3429:16), 0
 	jrl	nz, 0
 	jp	15704861
 	ret
 
 Interrupt_ModeGuardCheck:
-	cpdi8 (3567), 18
+	cp (3567:16), 18
 	jrl z, Interrupt_NullRet
-	cpdi8 (3429), 0
+	cp (3429:16), 0
 	jrl nz, Interrupt_NullRet
 	jp Interrupt_ModeGuardEntry
 Interrupt_JumpToGuard:
 	jp	Interrupt_NullRet
 
 Interrupt_ModeGuardEntry:
-	cpdi8 (3429), 0
+	cp (3429:16), 0
 	jrl nz, Interrupt_NullRet
 	ld a, (3432:16)
 	cps a, 4
@@ -6977,7 +6977,7 @@ Interrupt_VectorSelect_Table:
 	.long Interrupt_VectorHandler_4
 
 Interrupt_VectorHandler_0:
-	cpdi8 (0x8d40), 0
+	cp (0x8d40:16), 0
 	jrl z, Interrupt_Vec0_InitPath
 	call Interrupt_StoreHWRegsAndInit
 	jp Interrupt_Vec0_Ret
@@ -6994,7 +6994,7 @@ Interrupt_VectorHandler_1:
 	ret
 
 Interrupt_VectorHandler_2:
-	cpdi8 (0x8d40), 0
+	cp (0x8d40:16), 0
 	jrl z, Interrupt_Vec2_Ret
 	call Interrupt_SendAllNotesOff
 
@@ -7002,7 +7002,7 @@ Interrupt_Vec2_Ret:
 	ret
 
 Interrupt_VectorHandler_3:
-	cpdi8 (0x8d40), 0
+	cp (0x8d40:16), 0
 	jrl nz, Interrupt_Vec3_UpdatePath
 	call Interrupt_ClearModeRegs
 	jp Interrupt_Vec3_Ret
@@ -7014,7 +7014,7 @@ Interrupt_Vec3_Ret:
 	ret
 
 Interrupt_VectorHandler_4:
-	cpdi8 (0x8d40), 0
+	cp (0x8d40:16), 0
 	jrl z, Interrupt_Vec4_InitPath
 	call Interrupt_UpdateFromHW
 	jp Interrupt_Vec4_Ret
@@ -7026,7 +7026,7 @@ Interrupt_Vec4_Ret:
 	ret
 
 Interrupt_StoreHWRegsAndInit:
-	cpdi8 (3422), 0
+	cp (3422:16), 0
 	jrl z, Interrupt_LoadAndStoreRegs
 	ld (3422:16), 0
 
@@ -7739,22 +7739,22 @@ SysEx_ModeChangeCheck:
 	jrl nz, ControllerMode_UpdateFlags
 
 ControllerMode_UpdateFlags:
-	cpdi8 (0x8d36), 138
+	cp (0x8d36:16), 138
 	jrl nz, SysEx_FlagClearAndCompare
-	cpdi8 (3429), 3
+	cp (3429:16), 3
 	jrl nz, SysEx_FlagClearAndCompare
 	ordi8 3926, 2
 	jp SubCPU_CmdCountdownRet
 
 SysEx_FlagClearAndCompare:
 	anddi8 (3926), 253
-	cpdi8 (0x8d36), 129
+	cp (0x8d36:16), 129
 	jrl z, SysEx_DecrementCounter
-	cpdi8 (0x8d36), 142
+	cp (0x8d36:16), 142
 	jrl nz, SubCPU_CmdCountdownRet
 
 SysEx_DecrementCounter:
-	cpdi8 (3393), 0
+	cp (3393:16), 0
 	jrl z, SubCPU_CmdCountdownRet
 	decdi8 1, 3393
 
@@ -12354,18 +12354,18 @@ SubCPU_ToneHandler_A:
 	ld	a, (4381:16)
 	xor l, l
 	ldb h, 0x7f
-	cpdi8	(4380), 1
+	cp	(4380:16), 1
 	jrl nz, SubCPU_ToneHandler_B
 	ldb l, 0x34
 	ldb h, 0x4c
 	jp SubCPU_CallRoutine
 SubCPU_ToneHandler_B:
-	cpdi8	(4380), 3
+	cp	(4380:16), 3
 	jrl nz, SubCPU_ToneLoadAndStore
 	ldb h, 0x0c
 	jp SubCPU_CallRoutine
 SubCPU_ToneLoadAndStore:
-	cpdi8	(4380), 2
+	cp	(4380:16), 2
 	jrl nz, SubCPU_CallRoutine
 	ldb h, 0xff
 SubCPU_CallRoutine:
@@ -14169,9 +14169,9 @@ DisplayStr_BytecodeBlock_C:
 	call	Display_BytecodeBlock_F_0x32D
 	ld	xix, 3786
 	ld	xiy, DisplayStr_BytecodeBlock_C_0x5E
-	cpdi8	(0xfc5a), 7
+	cp	(0xfc5a:16), 7
 	jrl	nz, 13
-	cpdi8	(0xfc5b), 2
+	cp	(0xfc5b:16), 2
 	jrl	nz, 5
 	ld	xiy, DisplayStr_BytecodeBlock_C_0x77
 	ld	xix, 3791
@@ -16265,7 +16265,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 Display_RedrawStatusBar:
 	bitda 0, (3927)
 	jrl nz, Scoop_Return
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jrl nz, Scoop_Return
 	stib_da (0x03efa8), 0x00
 	call UIRender_LoadTwoDescriptors
@@ -16287,7 +16287,7 @@ Scoop_SetupDisplayTables:
 	push xhl
 	call UIRender_TwoTableGeneral
 	pop xhl
-	cpdi8 (3429), 0
+	cp (3429:16), 0
 	jr nz, Scoop_InitPartDisplay
 	call Scoop_InitDisplayFull
 	jr Scoop_Return
@@ -16302,14 +16302,14 @@ Scoop_InitPartDisplay:
 	push xhl
 	sla hl, 2
 	ld xiy, StyleUI_ParamBlockPtrTable
-	cpdi8 (3429), 2
+	cp (3429:16), 2
 	jr nz, Scoop_SelectModeTable_2Part
 	ld xiy, StyleUI_ParamBlockPtrTable_0x98
 
 Scoop_SelectModeTable_2Part:
 	ld_sril3 XIY, 0x07, 0xf4, 0xec
 	ld xix, StyleUI_ParamBlockPtrTable_0x4C
-	cpdi8 (3429), 2
+	cp (3429:16), 2
 	jr nz, Scoop_SelectModeTable_2Part_XIX
 	ld xix, StyleUI_ParamBlockPtrTable_0xE4
 
@@ -16504,7 +16504,7 @@ Scoop_InitDisplayFull:
 	ret
 
 Display_RedrawMainContent:
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jr nz, Scoop_RedrawMainContent_End
 	stib_da (0x03efa8), 0x00
 	ld xiy, StyleUI_ScreenData_Main_0x1F9
@@ -16514,7 +16514,7 @@ Scoop_RedrawMainContent_End:
 	ret
 
 Display_RedrawFooter:
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jr nz, Scoop_RedrawFooter_End
 	stib_da (0x03efa8), 0x00
 	ld a, (3922:16)
@@ -16541,7 +16541,7 @@ Scoop_RedrawFooter_End:
 ; Display_RedrawTitleBar - Redraw the title bar region
 ;=============================================================================
 Display_RedrawTitleBar:
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jrl nz, Scoop_TitleBar_End
 	stib_da (0x03efa8), 0x02
 	calr Scoop_DrawGridLines
@@ -16656,7 +16656,7 @@ Scoop_TitleBar_GetPartConfig_End:
 	ret
 
 Display_RedrawSelection:
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jr z, Scoop_Selection_RedrawActive
 	jp Scoop_Selection_End
 
@@ -16684,7 +16684,7 @@ Scoop_Selection_DrawMode1:
 	ld xiy, StyleUI_ScreenData_Main_0x986
 	ld xix, StyleUI_ScreenData_Main_0x990
 	call UIRender_TwoTableGeneral
-	cpdi8 (0x370f), 0
+	cp (0x370f:16), 0
 	jr z, Scoop_Selection_End
 	ld a, (0x370f:16)
 	ld (4495:16), a
@@ -16711,7 +16711,7 @@ Scoop_Selection_End:
 Display_RedrawSidePanel:
 	bitda 0, (3927)
 	jrl nz, Scoop_SidePanel_End
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jrl nz, Scoop_SidePanel_End
 	ld xiy, 0x372e
 	ld xix, 0xa51
@@ -16760,7 +16760,7 @@ Scoop_SidePanel_NextPart:
 Scoop_SidePanel_DrawValues:
 	stib_da (0x03efa8), 0x00
 	ld a, (3666:16)
-	cpdi8 (3660), 0
+	cp (3660:16), 0
 	jr nz, Scoop_SidePanel_StoreAndDraw
 	ldb a, 0x0
 
@@ -16811,7 +16811,7 @@ Scoop_SidePanel_DrawOneSlot:
 	ret
 
 Display_RedrawAltContent:
-	cpdi8 (3930), 0
+	cp (3930:16), 0
 	jr z, Scoop_AltContent_ClearRegions
 	ld xix, 0x820
 	xor wa, wa
@@ -16863,7 +16863,7 @@ Scoop_AltContent_ClearOneRegion:
 	ret
 
 Display_RedrawButtonLabels:
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jr nz, Scoop_ButtonLabels_End
 	stib_da (0x03efa8), 0x00
 	call Scoop_ButtonLabels_CopySlotData
@@ -17025,7 +17025,7 @@ Scoop_ButtonLabels_DrawFilterLabel1:
 	ret
 
 Scoop_ButtonLabels_DrawCategory:
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jr nz, Scoop_EventHandler_SetupData
 	xor bc, bc
 
@@ -17195,7 +17195,7 @@ Scoop_Scroll_Apply:
 	inc 1, bc
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Data
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 
 Scoop_EventHandler_CategorySelect:
@@ -17204,12 +17204,12 @@ Scoop_EventHandler_CategorySelect:
 	ld bc, (9870:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	ld bc, (9872:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Data
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, Scoop_EventHandler_CategorySelect
 	jrl Scoop_ButtonGrid_Data
 
@@ -17229,10 +17229,10 @@ Scoop_CategorySelect_Amplitude:
 	ld ix, (0x28b6:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	call Scoop_SpecialMode_Data
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 
 Scoop_CategorySelect_Filter:
@@ -17242,10 +17242,10 @@ Scoop_CategorySelect_Filter:
 	sub bc, 0x5
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	call Scoop_SpecialMode_Data
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, Scoop_CategorySelect_Filter
 	jrl Scoop_ButtonGrid_Data
 
@@ -17271,12 +17271,12 @@ Scoop_CategorySelect_UpdateDisplay:
 	inc 1, bc
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	ld bc, (9870:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Data
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 
 Scoop_EventHandler_ButtonGrid:
@@ -17285,12 +17285,12 @@ Scoop_EventHandler_ButtonGrid:
 	ld bc, (9872:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, Scoop_ButtonGrid_Data
 	ld bc, (9870:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Data
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, Scoop_EventHandler_ButtonGrid
 	jr Scoop_ButtonGrid_Data
 
@@ -17319,7 +17319,7 @@ Scoop_ButtonGrid_End:
 	ld bc, (9876:16)
 	call Scoop_SpecialMode_Setup
 	call Scoop_SpecialMode_Draw
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, Scoop_ButtonGrid_Data
 	ld bc, (9880:16)
 	subda16 xbc, 9876

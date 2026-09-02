@@ -1174,7 +1174,7 @@ PanelEvt_CheckFlag6_Ret:
 	ret
 
 PanelEvt_CheckChanZero_Dispatch:
-	cpdi8 (0x964d), 0
+	cp (0x964d:16), 0
 	jr PanelEvt_CheckChanZero_DoDispatch
 	bitda 6, (0xfd50)
 	jr z, PanelEvt_CheckChanZero_Ret
@@ -7820,7 +7820,7 @@ SndParam_ReadAndApply:
 	and a, 0x3f
 	ldb_erp A, 0xfb
 	ld (0xb7ec:16), a
-	cpdi8 (0xb7f0), 0
+	cp (0xb7f0:16), 0
 	jr nz, SndParam_CheckRangeForDisplay
 	ld xwa, 0xc0
 	lds bc, 0
@@ -11880,7 +11880,7 @@ MidiPkt_ArpConfigChain_Data:
 	ret
 MidiPkt_ArpChordHandler:
 	; --- Main: guard check, loop with bit 4 flag, multiple calls (76 bytes) ---
-	cpdi8	(0x8d36), 87
+	cp	(0x8d36:16), 87
 	jr nz, ArpChord_ClearBitAndReturn
 	ld	xwa, (0xbcac:16)
 	lds	bc, 0
@@ -11971,7 +11971,7 @@ MidiPkt_InitSingleField_Data:
 	ret
 MidiPkt_HandleCmdCode01:
 	; --- Two-path: 3x field extraction or single store (73 bytes) ---
-	cpdi8	(0xbd20), 1
+	cp	(0xbd20:16), 1
 	jr nz, MidiPkt_SetSlot18
 	ld	xwa, (0xbcac:16)
 	lds	bc, 6
@@ -12745,7 +12745,7 @@ MidiSysEx_ProcessBlock:
 	ret
 
 SeqAlt_CheckInitBuffer:
-	cpdi8 (0x8d36), 87
+	cp (0x8d36:16), 87
 	ret nz
 	ei 6
 	call SeqMain_InitBuffer
@@ -13145,7 +13145,7 @@ SoundMode_AlternateRender:
 	calr SoundMode_ApplyVoiceParams
 	jrl VoiceData_SyncAllToHardware
 MidiCtrl_ModeSwitchHandler:
-	cpdi8 (0xc07d), 3
+	cp (0xc07d:16), 3
 	ret nz
 	ld a, (0xc07f:16)
 	bit 2, a
@@ -13181,7 +13181,7 @@ MidiCtrl_ApplyModeSwitch:
 	ret
 
 MidiCtrl_CheckAltCommand:
-	cpdi8 (0xc07e), 4
+	cp (0xc07e:16), 4
 	ret nz
 	cps a, 0
 	ret nz
@@ -13867,7 +13867,7 @@ VoiceData_SyncLoop:
 	or a, e
 	ld (xbc), a
 	lda xwa, (0xfc6f:16)
-	cpdi8 (0x8e74), 0
+	cp (0x8e74:16), 0
 	jr z, VoiceSync_ClearBit5
 	setm 5, (xwa)
 	jr VoiceSync_PopReturn
@@ -14042,7 +14042,7 @@ SeqData_DispatchLoop_Done:
 	jr z, ArpQueue_Flush_Return
 	bitda 0, (0xb7e7)
 	jr nz, ArpQueue_Flush_Return
-	cpdi8 (0x8d36), 87
+	cp (0x8d36:16), 87
 	jr z, ArpQueue_Flush_Return
 	ld a, (0xfd50:16)
 	and a, 0x14
@@ -14086,7 +14086,7 @@ SeqData_FormatOutput_Dispatch:
 	call AccWrap_ReturnZero
 	cp hl, 0xffff
 	ret z
-	cpdi8	(0x8d36), 87
+	cp	(0x8d36:16), 87
 	ret z
 	ld	a, (0xfd50:16)
 	and a, 0x14

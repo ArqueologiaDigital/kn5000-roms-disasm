@@ -353,7 +353,7 @@ MidiCC_VoiceParam_8:
 	ld	(38314:16), de
 	call	16563896
 	ret
-	cpdi8	49121, 13
+	cp	(49121:16), 13
 	jr	nz, 13
 	ld	a, (49123:16)
 	and	a, 255
@@ -370,7 +370,7 @@ MidiCC_VoiceParam_8:
 	call	16553566
 	ret
 	ld	xix, 37976
-	cpdi8	38353, 128
+	cp	(38353:16), 128
 	jr	z, 5
 	ld	xix, 38136
 	ldw	wa, 65535
@@ -378,7 +378,7 @@ MidiCC_VoiceParam_8:
 	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ld	xix, 38008
-	cpdi8	38353, 128
+	cp	(38353:16), 128
 	jr	z, 5
 	ld	xix, 38168
 	xor	wa, wa
@@ -3626,7 +3626,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	and	a, 63
 	ldb_erp	a, 251
 	ld	(46928:16), a
-	cpdi8	46932, 0
+	cp	(46932:16), 0
 	jr	nz, 36
 	ld	xwa, 192
 	lds	bc, 0

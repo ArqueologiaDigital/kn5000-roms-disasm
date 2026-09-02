@@ -283,9 +283,9 @@ CtrlPanel_HandleFirmwareCheck:
 	call_24 z, CaptureLcd
 
 CtrlPanel_HandlePortCommands:
-	cpdi8 (0xc07d), 32
+	cp (0xc07d:16), 32
 	jr nz, CtrlPanel_HandleSerialPort
-	cpdi8 (0xc07e), 0
+	cp (0xc07e:16), 0
 	jr z, CtrlPanel_HandleSerialPort
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0003b
@@ -298,9 +298,9 @@ CtrlPanel_HandlePortCommands:
 	call ApPostEvent
 
 CtrlPanel_HandleSerialPort:
-	cpdi8 (0xc07d), 33
+	cp (0xc07d:16), 33
 	jrl nz, UIEvent_Epilogue
-	cpdi8 (0xc07e), 0
+	cp (0xc07e:16), 0
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001f

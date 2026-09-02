@@ -5861,7 +5861,7 @@ PsS2cFmeas_HandleScroll:
 	lda	xsp, (xsp+10)
 	lda	xbc, (xiz+22)
 	lda	xwa, (xiz+32)
-	cpdi8	14811, 0
+	cp	(14811:16), 0
 	jr	nz, 10
 	ldw	(xwa), 0
 	ldw	(xbc), 255
@@ -5911,7 +5911,7 @@ PsS2cLmeas_HandleScroll:
 	lda	xsp, (xsp+10)
 	lda	xbc, (xiz+22)
 	lda	xwa, (xiz+32)
-	cpdi8	14811, 1
+	cp	(14811:16), 1
 	jr	nz, 10
 	ldw	(xwa), 0
 	ldw	(xbc), 255
@@ -6002,7 +6002,7 @@ PsS2cTrans_HandleScroll:
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
-	cpdi8	14811, 2
+	cp	(14811:16), 2
 	jr	nz, 10
 	ldw	(xbc), 0
 	ldw	(xwa), 255
@@ -6065,7 +6065,7 @@ FdcFormat_DialGrid:
 	ld	xwa, (xsp+16)
 	call	16408153
 	ld	(xsp+8), xhl
-	cpdi8	14811, 3
+	cp	(14811:16), 3
 	jrl	nz, 538
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457423

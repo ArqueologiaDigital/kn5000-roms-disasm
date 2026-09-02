@@ -56,10 +56,10 @@ SeqStep_NoteByteBlock:
 	ld	(9686:16), l
 	ldw	wa, 129
 	call	PartCtrl_WriteByte_Indexed
-	cpdi8	(9686), 129
+	cp	(9686:16), 129
 	jr	z, 73
 	call	SeqData_AdvancePosition
-	cpdi8	(0x287a), 0
+	cp	(0x287a:16), 0
 	jr	nz, 62
 	.byte 0xc1, 0xd6, 0x25, 0x19, 0xd8, 0x25
 	call	SeqData_ReadNextByte
@@ -89,7 +89,7 @@ SeqStep_NoteConsumeInit:
 SeqStep_NoteConsumeLoop:
 	ldib_erp 0xfa, 0
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_NoteConsumeAdvance
 	mrdw5 0x9f, 0x04, 0x19, 0xaf, 0x28
 	mrdw5 0x9f, 0x06, 0x19, 0x66, 0x26
@@ -144,7 +144,7 @@ SeqStep_NoteVelSkip:
 
 SeqStep_NoteVelContinue:
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_NoteExitRestore
 
 SeqStep_NoteExit:
@@ -245,7 +245,7 @@ SeqStep_EventPosAdvance:
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceReadPos
 	call PartCtrl_AdvanceToNextEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_EventPosUpdate
 	jrl SeqStep_EventExit
 	ldib_erp 0xfa, 0
@@ -269,7 +269,7 @@ SeqStep_EventPosSetNote:
 
 SeqStep_EventPosConsumeLoop:
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, SeqStep_EventExit
 	inc1b_erp 0xf9
 	stb_erp A, 0xfa
@@ -334,7 +334,7 @@ SeqStep_EventPosComplete:
 
 SeqStep_EventPosDone:
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_EventCleanup
 
 SeqStep_EventExit:
@@ -398,7 +398,7 @@ SeqStep_VelNoteFwd:
 	ld wa, bc
 	lds bc, 0
 	call SeqVoice_SeekToBar
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret nz
 	calr SeqStep_WalkWithCallback
 	cps hl, 0
@@ -420,7 +420,7 @@ SeqStep_VelNoteBwd:
 	ld wa, bc
 	lds bc, 0
 	call SeqVoice_SeekToBar
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret nz
 	ldmm16 0x273c, 0x28af
 	ldmm16 0x273e, 9830
@@ -459,7 +459,7 @@ SeqStep_DeleteConsumeInit:
 
 SeqStep_DeleteConsumeLoop:
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, SeqStep_DeleteExitRestore
 	inc 1, iz
 	stb_erp A, 0xfa
@@ -507,7 +507,7 @@ SeqStep_DeleteCheck:
 
 SeqStep_DeleteExit:
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_DeleteExitRestore
 	inc 1, iz
 	stb_erp A, 0xfa
@@ -1271,7 +1271,7 @@ SeqStep_EventAdvance:
 
 SeqStep_EventAdvanceCheck:
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_EventAdvanceBit7
 
 SeqStep_EventAdvanceLoop:
@@ -1290,7 +1290,7 @@ SeqStep_EventAdvanceBit7:
 
 SeqStep_EventAdvanceStore:
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_EventAdvanceLoop
 	call SeqData_ReadNextByte
 	bit 7, l
@@ -1313,7 +1313,7 @@ SeqStep_EventAdvanceReturn:
 
 SeqStep_EventAdvanceError:
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_EventAdvanceLoop
 	stb_erp A, 0xfa
 	ldb_erp A, 0xfb
@@ -1344,14 +1344,14 @@ SeqStep_MeasureRead:
 	cp l, 0x81
 	jrl z, SeqStep_MeasureReadDone
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	ld (9804:16), l
 	ldmm16 9800, 9830
 	ldmm16 9802, 0x28af
 	calr SeqStep_AdvanceHelper1
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -1364,13 +1364,13 @@ SeqStep_MeasureReadLoop:
 	cpda8 a, 9806
 	jr ule, SeqStep_MeasureReadCheck
 	calr SeqStep_DeleteShiftEvents
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	ldmm8 9804, 9806
 
 SeqStep_MeasureReadCheck:
 	calr SeqStep_AdvanceHelper1
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -1380,7 +1380,7 @@ SeqStep_MeasureReadCheck:
 
 SeqStep_MeasureReadProcess:
 	calr SeqStep_SkipToHighBit
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -1390,7 +1390,7 @@ SeqStep_MeasureReadProcess:
 	ldmm16 9800, 9830
 	ldmm16 9802, 0x28af
 	calr SeqStep_AdvanceHelper1
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_MeasureReadDone
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -1409,7 +1409,7 @@ SeqStep_SkipToHighBit:
 	ldmm16 9830, 9796
 	ldmm16 0x28af, 9798
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret nz
 
 SeqStep_SkipLoop:
@@ -1417,7 +1417,7 @@ SeqStep_SkipLoop:
 	bit 7, l
 	jr nz, SeqStep_SkipCheck
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_SkipLoop
 	ret
 
@@ -1433,7 +1433,7 @@ SeqStep_SkipDone:
 	ldmm16 9796, 9830
 	ldmm16 9798, 0x28af
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret nz
 	call SeqData_ReadNextByte
 	ld (9804:16), l
@@ -1443,7 +1443,7 @@ SeqStep_AdvanceHelper1:
 	ldmm16 9830, 9800
 	ldmm16 0x28af, 9802
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret nz
 
 SeqStep_AdvanceHelper2:
@@ -1451,7 +1451,7 @@ SeqStep_AdvanceHelper2:
 	bit 7, l
 	jr nz, SeqStep_AdvanceHelper2Loop
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_AdvanceHelper2
 	ret
 
@@ -1467,7 +1467,7 @@ SeqStep_AdvanceHelper2Done:
 	ldmm16 9800, 9830
 	ldmm16 9802, 0x28af
 	call SeqData_AdvancePosition
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret nz
 	call SeqData_ReadNextByte
 	ld (9806:16), l
@@ -1682,13 +1682,13 @@ SeqStep_DeleteShiftEvents:
 	add xbc, xwa
 	ld (xbc), l
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_DeleteShiftAdvance
 	jrl SeqStep_DeleteShiftCleanup
 
 SeqStep_DeleteShiftLoop:
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, SeqStep_DeleteShiftCleanup
 
 SeqStep_DeleteShiftAdvance:
@@ -1735,7 +1735,7 @@ SeqStep_DeleteShiftUpdate:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_DeleteShiftError
 	jr SeqStep_DeleteShiftCleanup
 
@@ -1744,10 +1744,10 @@ SeqStep_DeleteShiftReturn:
 	ld wa, hl
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_NavigateBackward
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_DeleteShiftCleanup
 	call PartCtrl_NavigateBackwardAlt
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_DeleteShiftDone
 	jr SeqStep_DeleteShiftCleanup
 
@@ -1930,7 +1930,7 @@ SeqStep_SkipIfLeftFlag:
 	bitda 0, (0x2879)
 	jr z, SeqStep_SkipIfLeftDone
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_SkipIfLeftReturn
 
 SeqStep_SkipIfLeftCheck:
@@ -1975,10 +1975,10 @@ SeqStep_AdvanceOneEvent:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_AdvanceOneDone
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_AdvanceOneReturn
 
 SeqStep_AdvanceOneDone:
@@ -2007,13 +2007,13 @@ SeqStep_SkipToMeasureLoop:
 
 SeqStep_SkipThreeEvents:
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_SkipThreeError
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_SkipThreeError
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_SkipThreeError
 	call SeqPart_ReadByte_Secondary
 	cps l, 0
@@ -2035,7 +2035,7 @@ SeqStep_ProcessC0:
 	and a, 0x3
 	jr z, SeqStep_ProcessC0SavePos
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ProcessC0Error
 	jr SeqStep_ProcessC0Done
 
@@ -2062,10 +2062,10 @@ SeqStep_ProcessC0ReadParam:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ProcessC0Error
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_ProcessC0Advance
 
 SeqStep_ProcessC0Error:
@@ -2106,7 +2106,7 @@ SeqStep_ProcessB0:
 	stw_erp WA, 0xfa
 	ld (0x288b:16), wa
 	ld (0x2889:16), iz
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ProcessB0Error
 	ld a, (0x289d:16)
 	bit 0, a
@@ -2122,7 +2122,7 @@ SeqStep_ProcessB0:
 
 SeqStep_ProcessB0Check:
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ProcessB0Error
 	jr SeqStep_ProcessB0Exit
 
@@ -2176,10 +2176,10 @@ SeqStep_ProcessB0Final:
 
 SeqStep_ParseRhythm:
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ParseRhythmCheck
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ParseRhythmCheck
 	ld (3387:16), 255
 	call SeqPart_ReadByte_Secondary
@@ -2205,7 +2205,7 @@ SeqStep_ParseRhythm:
 
 SeqStep_ParseRhythmLoop:
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_ParseRhythmAdvance
 
 SeqStep_ParseRhythmCheck:
@@ -2247,7 +2247,7 @@ SeqStep_ParseRhythmReturn:
 
 SeqStep_ParseRhythmError:
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ParseRhythmComplete
 	call SeqPart_ReadByte_Secondary
 	cps l, 5
@@ -2255,7 +2255,7 @@ SeqStep_ParseRhythmError:
 	ld a, (0x289d:16)
 	res 2, a
 	ld (0x289d:16), a
-	cpdi8 (0x2873), 12
+	cp (0x2873:16), 12
 	jr z, SeqStep_ParseRhythmSkip
 	res 0, a
 	res 2, a
@@ -2281,10 +2281,10 @@ SeqStep_ParseRhythmCleanup:
 SeqStep_ParseRhythmExit:
 	resda 0, 0x289d
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ParseRhythmComplete
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ParseRhythmComplete
 	call SeqPart_ReadByte_Secondary
 	ld a, (3310:16)
@@ -2319,7 +2319,7 @@ SeqStep_ProcessC0Ext:
 	and a, 0x3
 	jr z, SeqStep_ProcessC0ExtCheck
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ProcessC0ExtReturn
 	jr SeqStep_ProcessC0ExtFinal
 
@@ -2350,10 +2350,10 @@ SeqStep_ProcessC0ExtDone:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ProcessC0ExtReturn
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_ProcessC0ExtExit
 
 SeqStep_ProcessC0ExtReturn:
@@ -2396,7 +2396,7 @@ SeqStep_ProcessB0Ext:
 	stw_erp WA, 0xfa
 	ld (0x288b:16), wa
 	ld (0x2889:16), iz
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ProcessB0ExtExit
 	ld a, (0x289d:16)
 	bit 0, a
@@ -2412,7 +2412,7 @@ SeqStep_ProcessB0Ext:
 
 SeqStep_ProcessB0ExtCheck:
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ProcessB0ExtExit
 
 SeqStep_ProcessB0ExtProcess:
@@ -2438,10 +2438,10 @@ SeqStep_ProcessB0ExtReturn:
 	extz wa
 	call SeqPart_WriteByte_Primary
 	call PartCtrl_AdvanceToNextEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, SeqStep_ProcessB0ExtExit
 	call PartCtrl_AdvanceReadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SeqStep_ProcessB0ExtComplete
 
 SeqStep_ProcessB0ExtExit:

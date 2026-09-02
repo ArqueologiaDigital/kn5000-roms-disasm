@@ -776,7 +776,7 @@ SMF_TimeDelta_CheckFirst:
 	ld (4229:16), wa
 	bitda 0, (4344)
 	jr nz, SMF_TimeDelta_Store
-	cpdi8 (6710), 0
+	cp (6710:16), 0
 	jr z, SMF_TimeDelta_Store
 	adddi16 4229, 384
 	ld (4344:16), 1
@@ -1068,9 +1068,9 @@ SMF_Event_OutputByte:
 	and a, 0xf0
 	cp a, 0x90
 	jrl nz, SMF_EventLoop_Continue
-	cpdi8 (4324), 0
+	cp (4324:16), 0
 	jrl z, SMF_EventLoop_Continue
-	cpdi8 (4008), 9
+	cp (4008:16), 9
 	jrl nz, SMF_EventLoop_Continue
 	jrl SMF_EventLoop_Continue
 
@@ -1241,7 +1241,7 @@ SMF_PartAssignTable:
 SMF_EncodeTimeDelta:
 	stdi16 (4206), 0
 	stdi16 (4208), 0
-	cpdi8 (4231), 0
+	cp (4231:16), 0
 	jr nz, SMF_Encode_LargeValue
 	cpdi16 4229, 127
 	jrl ule, SMF_Encode_OneByte
@@ -1249,7 +1249,7 @@ SMF_EncodeTimeDelta:
 	jr ule, SMF_Encode_TwoBytes
 
 SMF_Encode_LargeValue:
-	cpdi8 (4231), 31
+	cp (4231:16), 31
 	jr ule, SMF_Encode_ThreeBytes
 	ld (4231:16), 31
 	ld (4230:16), 255
@@ -1320,7 +1320,7 @@ SMF_SortOutputQueue:
 	cps iy, 0
 	jr z, SMF_Sort_Return
 	xor de, de
-	cpdi8 (4014), 255
+	cp (4014:16), 255
 	jr z, SMF_Sort_Return
 
 SMF_Sort_OuterLoop:
@@ -1417,7 +1417,7 @@ SMF_AdvanceMulti_Loop:
 SMF_ResolveChannel:
 	xor h, h
 	ld iy, hl
-	cpdi8 (4324), 255
+	cp (4324:16), 255
 	jr nz, SMF_Resolve_NoDrum
 	push xix
 	ld xix, 0xf1a0
@@ -1642,7 +1642,7 @@ SMF_ResolveGlobalChannel:
 	jr nz, SMF_GlobalCh_NoDrum
 
 SMF_GlobalCh_DrumMode:
-	cpdi8 (4324), 255
+	cp (4324:16), 255
 	jp_24 nz, SMF_GlobalCh_DrumCh15
 	ld (6881:16), 9
 	jp SMF_GlobalCh_Return
@@ -1652,7 +1652,7 @@ SMF_GlobalCh_DrumCh15:
 	jp SMF_GlobalCh_Return
 
 SMF_GlobalCh_NoDrum:
-	cpdi8 (4324), 255
+	cp (4324:16), 255
 	jp_24 nz, SMF_GlobalCh_NonDrumCh15
 	cp iy, 0x9
 	jp_24 z, SMF_GlobalCh_FreeSearch
@@ -1709,7 +1709,7 @@ SMF_LoadSongBank:
 	jr z, SMF_LoadBank_Return
 	ld xde, 0xab000
 	lda_dri XDE, 0xe9, 0xc7, 0x00
-	cpdi8 (4394), 1
+	cp (4394:16), 1
 	jr nz, SMF_LoadBank_ReadEntries
 	ld (xde), 0x0
 
@@ -1819,7 +1819,7 @@ SMF_TranslateChannel:
 	ldb_sri W, 0x07, 0xf0, 0xec
 	cp w, 0xff
 	jr z, SMF_Translate_Return
-	cpdi8 (4394), 3
+	cp (4394:16), 3
 	jr nz, SMF_Translate_Apply
 	cp a, 0xe
 	jr z, SMF_Translate_0xE
@@ -1855,7 +1855,7 @@ SMF_ConfigSlot:
 	ld (0x287d:16), wa
 	stdi16 (0x287f), 1
 	call SetWall_SlotResolve
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SMF_ConfigSlot_Setup
 	jrl SMF_ConfigSlot_Return
 
@@ -1894,7 +1894,7 @@ SMF_ConfigSlot_EventLoop:
 	jr z, SMF_ConfigSlot_TypeB0
 	jr SMF_ConfigSlot_DefaultHandler
 	calr SMF_AdvanceReadPtr
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, SMF_ConfigSlot_EventLoop
 	jrl SMF_ConfigSlot_Return
 
@@ -1906,12 +1906,12 @@ SMF_ConfigSlot_DefaultHandler:
 
 SMF_ConfigSlot_WriteAndContinue:
 	calr SMF_AdvanceWritePtr
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, SMF_ConfigSlot_Return
 
 SMF_ConfigSlot_AdvanceEvent:
 	calr SMF_AdvanceReadPtr
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, SMF_ConfigSlot_Return
 	push xde
 	ld xde, (4349:16)
@@ -1974,7 +1974,7 @@ SMF_ConfigSlot_ReadDataLoop:
 	jr c, SMF_ConfigSlot_ReadDataLoop
 	popw hl
 	pop xiy
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, SMF_ConfigSlot_Return
 	anddi8 (4404), 254
 	anddi8 (4404), 251
@@ -2129,7 +2129,7 @@ SMF_Config_WriteLoop:
 	jr c, SMF_Config_WriteLoop
 	pop xhl
 	pop xix
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, SMF_ConfigSlot_Return
 	bitda 0, (4404)
 	jr nz, SMF_Config_OutputOverride1
@@ -2361,7 +2361,7 @@ SMF_CalcPageAddress:
 SMF_SlotChain_CheckInstr:
 	bitda 0, (4411)
 	jr nz, SMF_SlotChain_InstrReturn
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotChain_InstrReturn
 	ld a, (xiy + 2)
 	cp a, 0x1e
@@ -2396,9 +2396,9 @@ SMF_SlotChain_InstrReturn:
 SMF_SlotChain_CheckVoice:
 	bitda 0, (4411)
 	jr nz, SMF_SlotChain_VoiceReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotChain_VoiceReturn
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotChain_VoiceReturn
 	ld a, (xiy + 2)
 	cp a, 0x1e
@@ -2432,7 +2432,7 @@ SMF_SlotChain_VoiceReturn:
 	ret
 
 SMF_SlotChain_ExtendedVoice:
-	cpdi8 (4394), 3
+	cp (4394:16), 3
 	jr z, SMF_SlotChain_ExtVoiceReturn
 	ld a, (xiy + 5)
 	orda8 a, 3310
@@ -2468,9 +2468,9 @@ SMF_SlotChain_Fmt3Voice:
 	ld a, (4394:16)
 	cps a, 3
 	jr nz, SMF_SlotChain_Fmt3Return
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotChain_Fmt3Return
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotChain_Fmt3Return
 	ld a, (xiy + 2)
 	cp a, 0x1e
@@ -2505,7 +2505,7 @@ SMF_SlotChain_Fmt3Return:
 SMF_SlotParam_Volume:
 	bitda 0, (4411)
 	jrl nz, SMF_SlotParam_VolumeReturn
-	cpdi8 (4394), 3
+	cp (4394:16), 3
 	jr z, SMF_SlotParam_VolumeWrite
 	ld a, (xiy + 2)
 	cp a, 0x1e
@@ -2590,9 +2590,9 @@ SMF_SlotParam_VolumeReturn:
 SMF_SlotParam_Pan:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_PanReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotParam_PanReturn
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotParam_PanReturn
 	cp (xiy + 2), 0x27
 	jr nz, SMF_SlotParam_PanReturn
@@ -2607,9 +2607,9 @@ SMF_SlotParam_PanReturn:
 SMF_SlotParam_Expression:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_ExprReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotParam_ExprReturn
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotParam_ExprReturn
 	cp (xiy + 2), 0x2b
 	jr nz, SMF_SlotParam_ExprReturn
@@ -2624,9 +2624,9 @@ SMF_SlotParam_ExprReturn:
 SMF_SlotParam_Reverb:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_ReverbReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotParam_ReverbReturn
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotParam_ReverbReturn
 	cp (xiy + 2), 0x29
 	jr nz, SMF_SlotParam_ReverbReturn
@@ -2641,9 +2641,9 @@ SMF_SlotParam_ReverbReturn:
 SMF_SlotParam_Chorus:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_ChorusReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotParam_ChorusReturn
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotParam_ChorusReturn
 	cp (xiy + 2), 0x2a
 	jr nz, SMF_SlotParam_ChorusReturn
@@ -2658,13 +2658,13 @@ SMF_SlotParam_ChorusReturn:
 SMF_SlotParam_ModWheel:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_ModWheelReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotParam_ModWheelImpl
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotParam_ModWheelImpl
-	cpdi8 (0x2873), 13
+	cp (0x2873:16), 13
 	jr z, SMF_SlotParam_ModWheelImpl
-	cpdi8 (0x2873), 14
+	cp (0x2873:16), 14
 	jr nz, SMF_SlotParam_ModWheelReturn
 
 SMF_SlotParam_ModWheelImpl:
@@ -2707,13 +2707,13 @@ SMF_SlotParam_ModWheelReturn:
 SMF_SlotParam_PitchBend:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_Detune
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotParam_PitchBendImpl
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotParam_PitchBendImpl
-	cpdi8 (0x2873), 13
+	cp (0x2873:16), 13
 	jr z, SMF_SlotParam_PitchBendImpl
-	cpdi8 (0x2873), 14
+	cp (0x2873:16), 14
 	jr nz, SMF_SlotParam_Detune
 
 SMF_SlotParam_PitchBendImpl:
@@ -2779,11 +2779,11 @@ SMF_SlotParam_DetuneImpl:
 SMF_SlotParam_Aftertouch:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_AftertouchReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr nz, SMF_SlotParam_AftertouchReturn
 	cp (xiy + 2), 0x18
 	jr nz, SMF_SlotParam_AftertouchReturn
-	cpdi8 (4394), 3
+	cp (4394:16), 3
 	jr z, SMF_SlotParam_AftertouchImpl
 	cp (xiy + 3), 0x3
 	jr nz, SMF_SlotParam_AftertouchReturn
@@ -2814,7 +2814,7 @@ SMF_SlotParam_AftertouchReturn:
 SMF_SlotParam_PortamentoSwitch:
 	anddi8 (4404), 253
 	anddi8 (4411), 253
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr nz, SMF_SlotParam_PortaReturn
 	cp (xiy + 2), 0x12
 	jr nz, SMF_SlotParam_PortaReturn
@@ -2844,7 +2844,7 @@ SMF_SlotParam_PortamentoTime:
 SMF_SlotParam_Sustain:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_SustainReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr nz, SMF_SlotParam_SustainReturn
 	cp (xiy + 2), 0x18
 	jr nz, SMF_SlotParam_SustainReturn
@@ -2872,7 +2872,7 @@ SMF_SlotParam_SustainReturn:
 SMF_SlotParam_Sostenuto:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_SostenutoReturn1
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr nz, SMF_SlotParam_SostenutoReturn1
 	cp (xiy + 2), 0x18
 	jr nz, SMF_SlotParam_SostenutoReturn1
@@ -2896,7 +2896,7 @@ SMF_SlotParam_SostenutoReturn1:
 SMF_SlotParam_SoftPedal:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_SoftPedalReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr nz, SMF_SlotParam_SoftPedalReturn
 	cp (xiy + 2), 0x18
 	jr nz, SMF_SlotParam_SoftPedalReturn
@@ -2920,13 +2920,13 @@ SMF_SlotParam_SoftPedalReturn:
 SMF_SlotParam_Format5Handler:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_Format5Return
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotParam_Format5Impl
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotParam_Format5Impl
-	cpdi8 (0x2873), 13
+	cp (0x2873:16), 13
 	jr z, SMF_SlotParam_Format5Impl
-	cpdi8 (0x2873), 14
+	cp (0x2873:16), 14
 	jr nz, SMF_SlotParam_Format5Return
 
 SMF_SlotParam_Format5Impl:
@@ -2960,13 +2960,13 @@ SMF_SlotParam_Format5Return:
 SMF_SlotParam_ReverbType:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_ReverbTypeReturn
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotParam_ReverbTypeImpl
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotParam_ReverbTypeImpl
-	cpdi8 (0x2873), 13
+	cp (0x2873:16), 13
 	jr z, SMF_SlotParam_ReverbTypeImpl
-	cpdi8 (0x2873), 14
+	cp (0x2873:16), 14
 	jr nz, SMF_SlotParam_ReverbTypeReturn
 
 SMF_SlotParam_ReverbTypeImpl:
@@ -3007,7 +3007,7 @@ SMF_SlotParam_ReverbTypeReturn:
 SMF_SlotParam_ChorusType:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_ChorusTypeDone
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr nz, SMF_SlotParam_ChorusTypeDone
 	cp (xiy + 2), 0x20
 	jr nz, SMF_SlotParam_ChorusTypeDone
@@ -3066,7 +3066,7 @@ SMF_SlotParam_ChorusTypeReturn:
 SMF_SlotParam_BankSelect:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_BankSelectDone
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr nz, SMF_SlotParam_BankSelectDone
 	cp (xiy + 2), 0x20
 	jr nz, SMF_SlotParam_BankSelectDone
@@ -3090,11 +3090,11 @@ SMF_SlotParam_BankSelectDone:
 SMF_SlotParam_BankSelectReturn:
 	bitda 0, (4411)
 	jr nz, SMF_SlotParam_BankLSBDone
-	cpdi8 (0x2873), 0
+	cp (0x2873:16), 0
 	jr z, SMF_SlotParam_BankSelectLSB
-	cpdi8 (0x2873), 2
+	cp (0x2873:16), 2
 	jr z, SMF_SlotParam_BankSelectLSB
-	cpdi8 (0x2873), 1
+	cp (0x2873:16), 1
 	jr nz, SMF_SlotParam_BankLSBDone
 
 SMF_SlotParam_BankSelectLSB:
@@ -3193,9 +3193,9 @@ SMF_SlotParam_NRPNReturn:
 	ld a, (xiy + 2)
 	calr SMF_TranslateChannel
 	ld (xiy + 2), a
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr nz, SMF_SlotParam_DataEntry
-	cpdi8 (4419), 1
+	cp (4419:16), 1
 	jr z, SMF_SlotParam_DataEntryReturn
 
 SMF_SlotParam_DataEntry:
@@ -3208,9 +3208,9 @@ SMF_SlotParam_DataEntryReturn:
 	ret
 
 SMF_SlotParam_TypeD2Handler:
-	cpdi8 (0x2873), 15
+	cp (0x2873:16), 15
 	jr z, SMF_SlotParam_TypeD2Return
-	cpdi8 (0x2873), 16
+	cp (0x2873:16), 16
 	jr z, SMF_SlotParam_TypeD2Return
 	ld a, (xiy + 2)
 	cp a, 0x40

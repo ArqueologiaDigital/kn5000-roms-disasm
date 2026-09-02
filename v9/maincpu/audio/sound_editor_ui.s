@@ -7459,7 +7459,7 @@ SeMenu_PopupDialog_Close_Data:
 	call (xhl)
 
 SeMenu_ValueEditor_Init:
-	cpdi8 (0x8d38), 32
+	cp (0x8d38:16), 32
 	jrl nz, SeMenu_ValueEditor_Data3
 	cpib_da (0x020c38), 0x10
 	jrl nz, SeMenu_ValueEditor_Data3
@@ -7485,7 +7485,7 @@ SeMenu_ValueEditor_Draw:
 	lda xbc, (xwa + 5)
 	cp e, 0x9
 	jr nz, SeMenu_ValueEditor_Increment
-	cpdi8 (0x8d38), 34
+	cp (0x8d38:16), 34
 	jr nz, SeMenu_ValueEditor_Data3
 	ld a, (xbc)
 	cp a, 0x22
@@ -7505,7 +7505,7 @@ SeMenu_ValueEditor_Increment:
 	jr nz, SeMenu_ValueEditor_Redraw
 
 SeMenu_ValueEditor_Decrement:
-	cpdi8 (0x8d38), 38
+	cp (0x8d38:16), 38
 	jr nz, SeMenu_ValueEditor_Data3
 	ld a, (xbc)
 	cp a, 0x26
@@ -7530,7 +7530,7 @@ SeMenu_ValueEditor_Redraw:
 SeMenu_ValueEditor_Complete:
 	cp e, 0x12
 	jr nz, SeMenu_ValueEditor_Data3
-	cpdi8 (0x8d38), 32
+	cp (0x8d38:16), 32
 	jr nz, SeMenu_ValueEditor_Data3
 	ld a, (xbc)
 	cp a, 0x20
@@ -8664,12 +8664,12 @@ SeMenu_WaveformSelect_Apply:
 	call	SeMenu_NameEditor_Setup
 	ret
 SeMenu_WaveformSelect_Data:
-	cpdi8	(1720), 1
+	cp	(1720:16), 1
 	jr	nz, 6
 	call	SeMenu_WaveformSelect_Apply
 	jr	95
 	stib_da	(0x03efa8), 0
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	jr	z, 20
 	ld	xiy, SeBitmap_EnvCurve5_0x19A
 	ld	xix, SeBitmap_EnvCurve5_0x2BD
@@ -8787,7 +8787,7 @@ SeMenu_PresetManager_Init:
 SeMenu_PresetManager_Load:
 	; --- Wrapper 1: conditional XIY/XIX setup + call (28 bytes) ---
 	stib_da	(0x03efa8), 0
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	jr nz, SeMenu_PresetManager_End
 	ld xiy, 0x00f1616f
 	ld xix, 0x00f16239
@@ -9224,7 +9224,7 @@ SeMenu_PresetBrowser_Data:
 SeMenu_CompareAndApply_Init:
 	; --- Main dispatch: language check, XIY/XIX setup, calls (111 bytes) ---
 	call SeMenu_CompareAndApply_Data
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	jr z, SeMenu_CompareAndApply_Check
 	call SeMenu_PresetManager_Save
 	ld xiy, 0x00f11e96
@@ -9239,7 +9239,7 @@ SeMenu_CompareAndApply_Match:
 	call SeMenu_ShowConfirmDialog_Data_0xC0
 	call SeMenu_PresetManager_Data_0x60
 	call SeMenu_ShowConfirmDialog_Data_0x408
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	jr z, SeMenu_CompareAndApply_Apply
 	stib_da	(0x03efa8), 0
 	ld xiy, 0x00f12f95
@@ -9258,7 +9258,7 @@ SeMenu_CompareAndApply_Data:
 	; --- Init helper: language-conditional XIX setup (35 bytes) ---
 	stib_da	(0x03efa8), 0
 	ld xiy, 0x00f11c8f
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	jr z, SeMenu_CompareAndApply_Data2
 	ld xix, 0x00f11d41
 	jr t, SeMenu_CompareAndApply_Data3
@@ -9303,7 +9303,7 @@ SeMenu_CompareAndApply_Data6:
 	ret
 SeMenu_Utility_CopyBlock:
 	call	SeMenu_CompareAndApply_Data
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	.ascii "f(El "
 	.byte 0xf1
 	nop
@@ -9390,7 +9390,7 @@ SeMenu_Utility_CompareBlock:
 	ld xiy, 0x00f124f3
 	ld xix, 0x00f12507
 	call SeMenu_NameEditor_Setup
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	jr z, SeMenu_Utility_CompareBlock_Loop
 	call SeMenu_Utility_CompareBlock_End
 SeMenu_Utility_CompareBlock_Loop:
@@ -9413,7 +9413,7 @@ SeMenu_Utility_CompareBlock_End:
 SeMenu_Utility_SearchByte:
 	; --- Init: language-conditional XIX selection (35 bytes) ---
 	stib_da	(0x03efa8), 0
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	jr z, SeMenu_Utility_SearchByte_End
 	ld xix, 0x00f12341
 	jr t, SeMenu_Utility_FormatNumber
@@ -9436,7 +9436,7 @@ SeMenu_Utility_FormatNumber_End:
 	ld	(1656:16), a
 	stib_da	(0x03efa8), 2
 	ld xiy, 0x00f12364
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	jr z, SeMenu_Utility_FormatNumber_Data
 	ld xix, 0x00f12386
 	jr t, SeMenu_Utility_FormatSigned
@@ -10477,7 +10477,7 @@ SeMenu_EqEdit_Dispatch:
 	cp a, 0x0c
 	jr nz, SeMenu_EqEdit_DefaultPath
 	stib_da	(0x03efa8), 0
-	cpdi8	(1710), 1
+	cp	(1710:16), 1
 	jr z, SeMenu_EqEdit_DrawTable
 	ld xiy, 0x00f149d9
 	ld xix, 0x00f149f7
@@ -16975,9 +16975,9 @@ PsCmpCpFGrpBox_HandleEvt4:
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
-	cpdi8 (0x39a7), 0
+	cp (0x39a7:16), 0
 	jr nz, PsCmpCpFGrpBox_SetColorFF
-	cpdi8 (0x3a80), 0
+	cp (0x3a80:16), 0
 	jr nz, PsCmpCpFGrpBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xff
@@ -17006,7 +17006,7 @@ PsCmpCpFGrpBox_SendNotify:
 	ld bc, (xde)
 	add bc, 0x27
 	ld (xwa + 6), bc
-	cpdi8 (0x39a7), 0
+	cp (0x39a7:16), 0
 	jr nz, PsCmpCpFGrpBox_PushF5
 	pushw 0xf2
 	lds bc, 1
@@ -17088,9 +17088,9 @@ PsCmpCpFVariBox_HandleEvt5:
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
-	cpdi8 (0x39a7), 1
+	cp (0x39a7:16), 1
 	jr nz, PsCmpCpFVariBox_SetColorFF
-	cpdi8 (0x3a80), 0
+	cp (0x3a80:16), 0
 	jr nz, PsCmpCpFVariBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xff
@@ -17122,7 +17122,7 @@ PsCmpCpFVariBox_SendNotify:
 	ld bc, (xde)
 	add bc, 0x27
 	ld (xwa + 6), bc
-	cpdi8 (0x39a7), 1
+	cp (0x39a7:16), 1
 	jr nz, PsCmpCpFVariBox_PushF5
 	pushw 0xf2
 	lds bc, 1
@@ -17191,9 +17191,9 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
-	cpdi8 (0x39a7), 2
+	cp (0x39a7:16), 2
 	jr nz, PsCmpCpFPtnBox_SetColorFF
-	cpdi8 (0x3a80), 0
+	cp (0x3a80:16), 0
 	jr nz, PsCmpCpFPtnBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xff
@@ -17222,7 +17222,7 @@ PsCmpCpFPtnBox_SendNotify:
 	ld bc, (xde)
 	add bc, 0x26
 	ld (xwa + 6), bc
-	cpdi8 (0x39a7), 2
+	cp (0x39a7:16), 2
 	jr nz, PsCmpCpFPtnBox_PushF5
 	pushw 0xf2
 	lds bc, 1
@@ -17346,7 +17346,7 @@ PsCstmCpSwBox_HandleEvtBC:
 	cp (xhl + 36), 0x0
 	jr nz, PsCstmCpSwBox_ReadParam2
 	ld xwa, StrRhySlot_MemoryA_0x12
-	cpdi8 (0x39b6), 10
+	cp (0x39b6:16), 10
 	jr nc, PsCstmCpSwBox_PushTableAddr0
 	ld xwa, StrRhySlot_MemoryA_0xA
 
@@ -17357,7 +17357,7 @@ PsCstmCpSwBox_PushTableAddr0:
 
 PsCstmCpSwBox_ReadParam2:
 	ld xwa, StrRhySlot_MemoryA_0x22
-	cpdi8 (0x39b7), 10
+	cp (0x39b7:16), 10
 	jr nc, PsCstmCpSwBox_PushTableAddr1
 	ld xwa, StrRhySlot_MemoryA_0x1A
 
@@ -17416,7 +17416,7 @@ PsCstmCpNameBox_CallInherited:
 	jrl PsCtmAtt_ReturnZero
 
 PsCstmCpNameBox_HandleEvtD:
-	cpdi8 (0x3a7e), 0
+	cp (0x3a7e:16), 0
 	jrl nz, PsCtmAtt_ReturnZero
 	ld xwa, xiz
 	ld XDE, (xsp + 0x0104)
@@ -17443,7 +17443,7 @@ PsCstmCpNameBox_MainFuncCall:
 	jr PsCtmAtt_ReturnZero
 
 PsCstmCpNameBox_HandleEvt2D:
-	cpdi8 (0x3a7e), 0
+	cp (0x3a7e:16), 0
 	jr nz, PsCtmAtt_ReturnZero
 	ld xwa, xiz
 	call GetViewInstance
@@ -17459,7 +17459,7 @@ PsCstmCpNameBox_HandleEvt2D:
 	jr PsCstmCpNameBox_SendEventJoin
 
 PsCstmCpNameBox_HandleEvt2E:
-	cpdi8 (0x3a7e), 0
+	cp (0x3a7e:16), 0
 	jr nz, PsCtmAtt_ReturnZero
 	ld xwa, xiz
 	call GetViewInstance
@@ -17580,9 +17580,9 @@ AcMemNoBox_HandleEvtBC:
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
-	cpdi8 (0x39a8), 1
+	cp (0x39a8:16), 1
 	jr nz, AcMemNoBox_SetColorFF
-	cpdi8 (0x3a80), 1
+	cp (0x3a80:16), 1
 	jr nz, AcMemNoBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xff
@@ -17614,7 +17614,7 @@ AcMemNoBox_SendNotify:
 	ld bc, (xde)
 	add bc, 0x2e
 	ld (xwa + 6), bc
-	cpdi8 (0x39a8), 1
+	cp (0x39a8:16), 1
 	jr nz, AcMemNoBox_PushF5
 	pushw 0xf2
 	lds bc, 1
@@ -18101,9 +18101,9 @@ PsNameMemBox_HandleEvtBC:
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
-	cpdi8 (0x39a8), 0
+	cp (0x39a8:16), 0
 	jr nz, PsNameMemBox_SetColorFF
-	cpdi8 (0x3a80), 1
+	cp (0x3a80:16), 1
 	jr nz, PsNameMemBox_SetColorFF
 	ldw (xbc), 0x0
 	ldw (xwa), 0xff
@@ -18135,7 +18135,7 @@ PsNameMemBox_SendNotify:
 	ld bc, (xde)
 	add bc, 0x26
 	ld (xwa + 6), bc
-	cpdi8 (0x39a8), 0
+	cp (0x39a8:16), 0
 	jr nz, EasyCmp_TtlDispatch
 	pushw 0xf2
 	lds bc, 1
@@ -18981,7 +18981,7 @@ VwVariBox_GetText_PlaySample:
 VwVariBox_OK:
 	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
-	cpdi8 (0x7f0b), 0
+	cp (0x7f0b:16), 0
 	jr nz, VwVariBox_OK_Forward
 	ld wa, (xhl + 36)
 	extz xwa
@@ -19203,7 +19203,7 @@ MspBnkSlBox_HandleEvt7:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 12)
 	call GetViewInstance
-	cpdi8 (0x7f0b), 0
+	cp (0x7f0b:16), 0
 	jr nz, MspBnk_JoinLoadParams
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 42)
@@ -19602,7 +19602,7 @@ MspRGrpSetBnkFunc:
 	pushw_erp 0xfa
 	cp xbc, 0x1c00007
 	jr nz, MspRGrpSetBnk_ReturnZero
-	cpdi8 (0x7f3d), 0
+	cp (0x7f3d:16), 0
 	jr nz, MspRGrpSetBnk_SetToZero
 	ld (0x7f3d:16), 1
 	jr MspRGrpSetBnk_UpdateLsw
@@ -19836,7 +19836,7 @@ MspRecBnkBox_HandleEvtBC:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, 0x1e8a80
-	cpdi8 (0x7f14), 5
+	cp (0x7f14:16), 5
 	jr ule, MspRecBnkBox_CopyMemBlock
 	ld xwa, 0x1e8a90
 
@@ -20516,7 +20516,7 @@ SndArgTtlCheck:
 	call GetTitleOld
 	cp xhl, 0x1a000ee
 	jr nz, ParamList_ReturnZero
-	cpdi8 (0x339f), 1
+	cp (0x339f:16), 1
 	jr nz, ParamList_ReturnZero
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -21383,7 +21383,7 @@ CmpNameMenuBoxProc:
 	jr CmpNameMenu_Epilogue
 
 CmpNameMenu_HandleEvtD:
-	cpdi8 (0x34d6), 12
+	cp (0x34d6:16), 12
 	jr nc, CmpNameMenu_SetReturnZero
 	ld xwa, xiz
 	call InheritedProc

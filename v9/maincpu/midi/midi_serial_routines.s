@@ -233,7 +233,7 @@ SysMsg_NotActiveSense:
 	jr nc, SysMsg_Return
 	bitda 6, (0xb7e2)
 	jr nz, SysMsg_Return
-	cpdi8 (0x7f0b), 0
+	cp (0x7f0b:16), 0
 	jr z, SysMsg_ClockTransportDispatch
 	cp a, 0xfa
 	jr nz, SysMsg_CheckStop
@@ -285,11 +285,11 @@ ClkTick_BeatSubdivCheck:
 	jr z, ClkTick_PerClockCounters
 	anddi8 (1130), 252
 	incdi8 4, (1130)
-	cpdi8 (1130), 96
+	cp (1130:16), 96
 	jr nz, ClkTick_PerClockCounters
 	ld (1130:16), 0
 	incdi16 1, (1128)
-	cpdi8 (0x7f0b), 0
+	cp (0x7f0b:16), 0
 	jr z, ClkTick_PerClockCounters
 	calr MIDI_QUEUE_TRACK_EVENT
 
@@ -321,7 +321,7 @@ ClkTick_Src2ClickIncrement:
 	jr z, ClkTick_Src2FineBeatCheck
 	anddi8 (1047), 252
 	incdi8 4, (1047)
-	cpdi8 (1047), 96
+	cp (1047:16), 96
 	jr nz, ClkTick_Src2FineBeatCheck
 	ld (1047:16), 0
 	incdi16 1, (1048)
@@ -331,7 +331,7 @@ ClkTick_Src2FineBeatCheck:
 	jr z, ClkTick_Src2ErrorDelta
 	anddi8 (1045), 252
 	incdi8 4, (1045)
-	cpdi8 (1045), 96
+	cp (1045:16), 96
 	jr nz, ClkTick_Src2ErrorDelta
 	ld (1045:16), 0
 	incdi8 1, (1046)
@@ -406,7 +406,7 @@ ClkTick_Src3LowerSyncCheck:
 	calr MIDI_QUEUE_EVENT_PAIR
 
 ClkTick_Src3OverflowQueue:
-	cpdi8 (1051), 96
+	cp (1051:16), 96
 	jr nz, Transport_Return
 	ld (1051:16), 0
 	incdi16 1, (1052)
@@ -508,7 +508,7 @@ ResetPlay_Return:
 	ret
 
 MIDI_APPLY_STARTUP_TIMING:
-	cpdi8 (1108), 0
+	cp (1108:16), 0
 	jr z, StartTiming_ClearAndReturn
 	bitda 0, (1056)
 	jr z, StartTiming_ClearAndReturn
@@ -957,7 +957,7 @@ MIDI_SC0_TX_DISPATCH:
 	push xix
 	push xiy
 	push xiz
-	cpdi8 (0xb7e0), 0; 000h means MIDI
+	cp (0xb7e0:16), 0; 000h means MIDI
 	jr nz, SC0TxDisp_NonMidiPath
 	calr MIDI_SC0_ENABLE_TX
 	jr SC0TxDisp_RestoreAndReturn
@@ -978,7 +978,7 @@ SC0TxDisp_RestoreAndReturn:
 MIDI_SC0_ENABLE_TX:
 	push	sr
 	ei 6
-	cpdi8 (1140), 85
+	cp (1140:16), 85
 	jr z, SC0TxEnable_MidiActivePath
 	ld (234:16), 221
 	jr SC0TxEnable_Return

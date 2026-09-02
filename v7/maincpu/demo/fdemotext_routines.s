@@ -458,7 +458,7 @@ FDemoText_ParseControlMessage:
 	ld A,(XBC+0x01)
 	cpda8 a, (0x8c9e)
 	ret NZ
-	cpdi8	35996, 234
+	cp	(35996:16), 234
 	ret	nz
 	ld	a, (xbc)
 	cp	a, 131

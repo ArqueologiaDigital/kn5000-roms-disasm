@@ -71,7 +71,7 @@ ToneGen_DispatchAndLinkBlock:
 	ret
 
 VoiceChannel_GetCombinedStatus:
-	cpdi8 (4012), 6
+	cp (4012:16), 6
 	jr z, VoiceChannel_GetStatusBank2First
 	push xix
 	ld xix, 0x10d3
@@ -127,7 +127,7 @@ VoiceChannel_SetPanDirection:
 	ld w, (xiy + 4)
 	and w, 0xf7
 	xor a, a
-	cpdi8 (4013), 64
+	cp (4013:16), 64
 	jr c, VoiceChannel_MergePanBit
 	or a, 0x8
 
@@ -154,7 +154,7 @@ VoiceChannel_UpdateWithPitch:
 VoiceChannel_ApplyPitchFlags:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceChannel_NullRet
 	sla xiy, 1
 	push xix
@@ -168,11 +168,11 @@ VoiceChannel_ApplyPitchFlags:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceChannel_NullRet
 	push xix
 	ld xix, SeqTrack_ChannelMapIdentity
-	cpdi8 (4600), 1
+	cp (4600:16), 1
 	jr z, VoiceChannel_SelectChannelBank
 	ld xix, SeqTrack_ChannelMapIdentity_0x10
 
@@ -182,27 +182,27 @@ VoiceChannel_SelectChannelBank:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet
 	ld a, (4233:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet
 	ld a, (4234:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet
 	ld a, (4235:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet
 	call ToneGen_SetSustainBit
 	call ToneGen_WriteChannelRegs
@@ -220,7 +220,7 @@ SoundGen_ClampUpdateVoice:
 	ldb a, 0xb0
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet2
 	sla iy, 1
 	push xix
@@ -234,32 +234,32 @@ SoundGen_ClampUpdateVoice:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet2
 	ld a, (4011:16)
 	and a, 0xf
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet2
 	ld a, (4233:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet2
 	ld a, (4234:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet2
 	ld a, (4235:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jr nz, VoiceChannel_NullRet2
 	call ToneGen_SetSustainBit
 	call SoundGen_WriteVoiceParams
@@ -322,7 +322,7 @@ VoiceChannel_GetParamBlock:
 	ld l, (4011:16)
 	and l, 0xf
 	sla hl, 2
-	cpdi8 (4600), 1
+	cp (4600:16), 1
 	jr nz, VoiceChannel_GetParamBlockAlt
 	push xix
 	ld xix, VoiceChannel_ParamTable1
@@ -478,7 +478,7 @@ SoundGen_UpdateAndWriteChannel:
 	call SoundGen_UpdateAndRefresh
 	popw bc
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_PopIyRet
 	sla xiy, 1
 	push xix
@@ -492,7 +492,7 @@ SoundGen_UpdateAndWriteChannel:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_PopIyRet
 	ld l, c
 	xor h, h
@@ -508,7 +508,7 @@ SoundGen_UpdateAndWriteChannel:
 
 SoundGen_SelectChannelTable:
 	ld xix, SeqTrack_ChannelMapIdentity_0x10
-	cpdi8 (4600), 1
+	cp (4600:16), 1
 	jr nz, SoundGen_SelectAltChannelTable
 	ld xix, SeqTrack_ChannelMapIdentity
 
@@ -521,7 +521,7 @@ SoundGen_ApplyChannelParam:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_PopIyRet
 	pop xiy
 	push xiy
@@ -532,20 +532,20 @@ SoundGen_ApplyChannelParam:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_PopIyRet
 	ld a, (4234:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_PopIyRet
 	ldb a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_PopIyRet
 	call ToneGen_SetSustainBit
 	ld iy, (4011:16)
@@ -666,7 +666,7 @@ SoundGen_InitVoiceData:
 
 SndParam_LookupChannelVoice:
 	push xhl
-	cpdi8 (4600), 2
+	cp (4600:16), 2
 	jr nz, SndParam_LookupDefault
 	ld a, (4011:16)
 	and a, 0xf
@@ -751,7 +751,7 @@ SMF_SysEx_FileUnderflow:
 	jp Seq_ReturnToDispatcher
 
 SMF_SysEx_CheckBlockLimit:
-	cpdi8 (4600), 1
+	cp (4600:16), 1
 	jr z, Seq_AdvanceBlock
 	ldb a, 0x7f
 	ld bc, ix
@@ -766,7 +766,7 @@ SMF_SysEx_CheckBlockLimit:
 	ld xiy, 0x106e
 	ldir85
 	call SysEx_ReadBytesLoop_Init
-	cpdi8 (6880), 255
+	cp (6880:16), 255
 	jr z, Seq_ReturnToDispatcher
 	ld xwa, 0x1a61
 	lds32 xbc, 0
@@ -783,7 +783,7 @@ SysEx_ReadBytesLoop_Init:
 	ld (6880:16), 0
 
 SysEx_ReadBytesLoop:
-	cpdi8 (4211), 0
+	cp (4211:16), 0
 	jr ule, SysEx_ReadBytesReturn
 	call FloppyIO_ReadNextByte
 	push xwa
@@ -899,7 +899,7 @@ SMF_SeekReturn:
 
 SeqPlay_StartWithDisplay:
 	call SeqPlay_CheckStartConditions
-	cpdi8 (0xf23d), 255
+	cp (0xf23d:16), 255
 	jr z, SeqPlay_SetFlagAndMode
 	anddi8 (0xfdad), 251
 	xor a, a
@@ -1080,7 +1080,7 @@ SMF_Setup_FileUnderflow:
 
 SMF_Setup_WriteLoop:
 	ld xiy, SMF_HeaderConstants_0x42
-	cpdi8 (4324), 0
+	cp (4324:16), 0
 	jr nz, SMF_Setup_SelectTablePtr
 	ld xiy, SMF_HeaderConstants_0x4A
 
@@ -1117,7 +1117,7 @@ SMF_WriteChannel_FileUnderflow:
 SMF_WriteChannel_Continue:
 	djnz xbc, SMF_WriteChannelDataLoop
 	stda32 4376, xix
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jrl z, SMF_FinishChannelAndGetNextEvent
 	call BitMapOut_ComputeRegionDelta
 	ld (0x2877:16), 0
@@ -1174,7 +1174,7 @@ SMF_WriteChannelNoteData:
 	ld xix, 0xf1a0
 	ldb_sri L, 0x07, 0xf0, 0xec
 	pop xix
-	cpdi8 (4324), 255
+	cp (4324:16), 255
 	jrl nz, SMF_WriteNote_AltPath
 	call SMF_ResolveGlobalChannel
 	ld a, (6881:16)
@@ -1783,7 +1783,7 @@ SMF_WriteRPN_FileUnderflow13:
 
 SMF_AdvanceChannelScan:
 	incdi8 1, (0x2877)
-	cpdi8 (0x2877), 15
+	cp (0x2877:16), 15
 	jrl ule, SMF_ScanAndProcessChannel
 
 SMF_FinishChannelAndGetNextEvent:
@@ -2223,12 +2223,12 @@ SMF_NoteOn_StoreVoiceData:
 SMF_ProgramChange_Handler:
 	cps hl, 6
 	jrl nz, SMF_ProcessEventLoop
-	cpdi8 (4213), 127
+	cp (4213:16), 127
 	jrl z, SMF_ProcessEventLoop
 	ld a, (4214:16)
 	cps a, 0
 	jrl nz, SMF_ProcessEventLoop
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jr z, SMF_ProgramChange_CalcTime
 	bitda 0, (4236)
 	jrl z, SMF_ProcessEventLoop
@@ -2255,7 +2255,7 @@ SMF_ProgramChange_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_ProgramChange_ProcessPatch:
-	cpdi8 (4324), 0
+	cp (4324:16), 0
 	jrl z, SMF_ProgramChange_DirectWrite
 	ld l, (4211:16)
 	ld h, l
@@ -2432,7 +2432,7 @@ SMF_ProgramChange_WritePatch_Done:
 SMF_ControlChange_Handler:
 	cps hl, 6
 	jrl nz, SMF_ProcessEventLoop
-	cpdi8 (4213), 127
+	cp (4213:16), 127
 	jrl z, SMF_ProcessEventLoop_Entry
 	ld l, (4214:16)
 	ld a, (4213:16)
@@ -2481,7 +2481,7 @@ SMF_ControlChange_ValidateRange:
 	jrl nz, SMF_ProcessEventLoop
 
 SMF_CC_RPN_Handler:
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jrl z, SMF_CC_RPN_CalcTime
 	bitda 0, (4236)
 	jrl z, SMF_ProcessEventLoop
@@ -2609,7 +2609,7 @@ SMF_CC_RPN_Done:
 	jrl SMF_ProcessEventLoop
 
 SMF_CC_PitchBendSens_Handler:
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jrl z, SMF_CC_PitchBendSens_CalcTime
 	bitda 0, (4236)
 	jrl z, SMF_ProcessEventLoop
@@ -2728,7 +2728,7 @@ SMF_CC_PitchBendSens_Done:
 	jrl SMF_ProcessEventLoop
 
 SMF_CC_Modulation_Handler:
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jrl z, SMF_CC_Modulation_CalcTime
 	bitda 0, (4236)
 	jrl z, SMF_ProcessEventLoop
@@ -2847,7 +2847,7 @@ SMF_CC_Modulation_Done:
 	jrl SMF_ProcessEventLoop
 
 SMF_CC_Pan_Handler:
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jr z, SMF_CC_Pan_CalcTime
 	bitda 0, (4236)
 	jrl z, SMF_ProcessEventLoop
@@ -2908,7 +2908,7 @@ SMF_CC_Portamento_CheckBit3:
 	jrl SMF_ProcessEventLoop
 
 SMF_CC_Reverb_Handler:
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jr z, SMF_CC_Reverb_SetupCC93
 	bitda 0, (4236)
 	jrl z, SMF_ProcessEventLoop
@@ -2922,7 +2922,7 @@ SMF_CC_Sustain_CheckBits:
 	ld bc, (4215:16)
 	bit 3, b
 	jrl z, SMF_ProcessEventLoop
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jr z, SMF_CC_Sustain_SetCC64Value
 	bitda 0, (4236)
 	jrl z, SMF_ProcessEventLoop
@@ -2938,7 +2938,7 @@ SMF_CC_Sustain_SetCC64Value:
 SMF_CC_Chorus_Handler:
 	ldb w, 0x5b
 	ldb l, 0x0
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jr z, SMF_CC_Chorus_SetupCC91
 	bitda 0, (4236)
 	jrl z, SMF_ProcessEventLoop
@@ -2949,7 +2949,7 @@ SMF_CC_Chorus_SetupCC91:
 	jr SMF_ProcessTimedEvent_Continue
 
 SMF_CC_Volume_Handler:
-	cpdi8 (6709), 0
+	cp (6709:16), 0
 	jr z, SMF_ProcessTimedEvent_Entry
 	bitda 0, (4236)
 	jrl z, SMF_ProcessEventLoop
@@ -11027,9 +11027,9 @@ Rhythm_TransposeTrampBlock:
 	jp	AccStyle_TempoLookupData_0x6
 
 Seq_DispatcherTick:
-	cpdi8 (0x8d36), 16
+	cp (0x8d36:16), 16
 	jr c, Seq_DispatcherTick_Process
-	cpdi8 (0x8d36), 22
+	cp (0x8d36:16), 22
 	jr ugt, Seq_DispatcherTick_Process
 	jr Seq_DispatcherTickReturn
 
@@ -11292,7 +11292,7 @@ AccChord_ReadAndStoreKeys:
 	ld (0x32da:16), a
 	ld a, (0xcede:16)
 	ld (0x32d7:16), a
-	cpdi8 (8968), 0
+	cp (8968:16), 0
 	jr z, AccChord_CheckKeyOverride
 	ld a, (8962:16)
 	ld (0x32d9:16), a
@@ -11310,11 +11310,11 @@ AccChord_CheckKeyOverride:
 	ld (0x32da:16), a
 
 AccChord_CheckUIState:
-	cpdi8 (0x8d34), 14
+	cp (0x8d34:16), 14
 	jr nz, AccChord_CheckUIStateExit
-	cpdi8 (0x8d36), 177
+	cp (0x8d36:16), 177
 	jr z, AccChord_CheckKeyFlags
-	cpdi8 (0x8d36), 176
+	cp (0x8d36:16), 176
 	jr nz, AccChord_SetDefaultKeys
 
 AccChord_CheckKeyFlags:
@@ -11340,9 +11340,9 @@ AccChord_ReadChannelKeys:
 	ld (0x32da:16), a
 
 AccChord_CheckUIStateExit:
-	cpdi8 (0x8d34), 14
+	cp (0x8d34:16), 14
 	jr z, AccChord_CheckModeAndUpdate
-	cpdi8 (0x32f1), 14
+	cp (0x32f1:16), 14
 	jr nz, AccChord_CheckModeAndUpdate
 	ld a, (0xcedf:16)
 	ld (0x8d42:16), a

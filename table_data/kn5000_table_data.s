@@ -4801,7 +4801,7 @@ Handler_INT4__int4_check_more:
 	jr nz, Handler_INT4__int4_read_loop	; 6e e7 - more data to read
 
 	calr FDC_ProcessResults	; CALR FDC_ProcessResults
-	cpdi8 (3215), 128; CP (0x0C8F), 0x80 - check status
+	cp (3215:16), 128; CP (0x0C8F), 0x80 - check status
 	jr nz, Handler_INT4__int4_wait_rqm	; 6e af - not done, continue
 
 Handler_INT4__int4_done:

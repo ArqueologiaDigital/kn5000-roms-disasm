@@ -507,22 +507,22 @@ BootSerial_TickWait51__loop:
 ; Callers: Boot_ProbeExternalDevice (boot 0xffed1a)
 ; -----------------------------------------------------------------------------
 Boot_ClassifyDeviceID:
-	cpdi8	(0x1036), 0x6c
+	cp	(0x1036:16), 0x6c
 	jr	nz, Boot_ClassifyDeviceID__not3
 	lds	hl, 3
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__not3:
-	cpdi8	(0x1023), 0x70
+	cp	(0x1023:16), 0x70
 	jr	nz, Boot_ClassifyDeviceID__not2
 	lds	hl, 2
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__not2:
-	cpdi8	(0x1038), 0x38
+	cp	(0x1038:16), 0x38
 	jr	nz, Boot_ClassifyDeviceID__not1
 	lds	hl, 1
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__not1:
-	cpdi8	(0x1028), 0x0f
+	cp	(0x1028:16), 0x0f
 	jr	nz, Boot_ClassifyDeviceID__none
 	lds	hl, 4
 	jr	Boot_ClassifyDeviceID__ret
@@ -750,7 +750,7 @@ BootSerial_WaitTxIdle__outer:
 	jr	BootSerial_WaitTxIdle__check_tx
 BootSerial_WaitTxIdle__busy:
 	decdi8	1, (0x0f6f)
-	cpdi8	(0x0f6f), 0
+	cp	(0x0f6f:16), 0
 	jr	z, BootSerial_WaitTxIdle__exit	; timed out
 	ei	0
 	calr	BootSerial_SpinWait1500

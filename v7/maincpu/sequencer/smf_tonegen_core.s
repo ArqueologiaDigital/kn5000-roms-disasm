@@ -154,7 +154,7 @@ FloppyIO_ReadNextByte_StorePtr:
 	ld xwa, (6883:16)
 	cp xwa, xbc
 	jp_24 z, FloppyIO_ReadNextByte_UpdateRemaining
-	cpdi8 (6887), 1
+	cp (6887:16), 1
 	jp_24 z, FloppyIO_ReadNextByte_UpdateRemaining
 	dec 1, xwa
 
@@ -190,9 +190,9 @@ FloppyIO_SelectReadMode:
 	push xiy
 	push xiz
 	xor wa, wa
-	cpdi8 (4600), 0
+	cp (4600:16), 0
 	jr z, FloppyIO_SelectReadMode_ModeDefault
-	cpdi8 (4600), 1
+	cp (4600:16), 1
 	jr z, FloppyIO_SelectReadMode_Mode0
 	ldb a, 0x2
 	jp FloppyIO_SelectReadMode_Dispatch
@@ -268,7 +268,7 @@ FloppyIO_SwitchboardChannelPtrs:
 	nop
 
 FloppyIO_ConfigureSwitchboard:
-	cpdi8 (4600), 0
+	cp (4600:16), 0
 	jrl z, FloppyIO_ConfigSwb_Mode0
 	ldb c, 0x0
 	anddi8 (0xfdad), 251
@@ -288,7 +288,7 @@ FloppyIO_ConfigSwb_QueueEvent:
 	ldb d, 0x3
 	ldb w, 0x4
 	xor a, a
-	cpdi8 (4600), 0
+	cp (4600:16), 0
 	jrl nz, FloppyIO_ConfigSwb_DispatchAndReinit
 	ldb a, 0x4
 	push xhl
@@ -315,7 +315,7 @@ SeqPlay_InitTrackLoop:
 	call SeqTrack_ClearTempoAccumulators
 	call SeqTrack_ClearPlaybackBuffers
 	call SMF_ReadAndValidateMTrkHeader
-	cpdi8 (3830), 0
+	cp (3830:16), 0
 	jrl z, SeqPlay_InitTrackLoop_Continue
 	call FloppyIO_ReturnReady
 	jrl SeqPlay_CheckLoadStatus
@@ -327,10 +327,10 @@ SeqPlay_InitTrackLoop_Continue:
 	cpda16 xwa, 3934
 	jrl c, SeqPlay_InitTrackLoop
 	call FloppyIO_ReturnReady
-	cpdi8 (3830), 0
+	cp (3830:16), 0
 	jrl nz, SeqPlay_CheckLoadStatus
 	call SeqTrack_ValidateAndAssignVoices
-	cpdi8 (3830), 0
+	cp (3830:16), 0
 	jrl nz, SeqPlay_CheckLoadStatus
 	call VoiceChannels_LoadPartMapAndInitPan
 
@@ -383,7 +383,7 @@ SeqTrack_AssignChannel_Loop:
 	add iy, 0x3
 	add ix, 0x2
 	incdi8 1, (5113)
-	cpdi8 (5113), 16
+	cp (5113:16), 16
 	jrl c, SeqTrack_AssignChannel_Loop
 	jrl SeqTrack_AssignChannels_Done
 
@@ -992,7 +992,7 @@ FloppyIO_ReadMidiEvtBytes_Exit:
 
 VoiceChannels_LoadPartMapAndInitPan:
 	ld xiy, VoiceChannels_PartMapTable
-	cpdi8 (4600), 1
+	cp (4600:16), 1
 	jrl z, VoiceChannels_LoadPartMap_Mode1
 	ld xiy, VoiceChannels_PartMapTable_0x10
 
@@ -1182,7 +1182,7 @@ SMF_MTrk_FileSizeReady:
 	ld (4236:16), 0
 
 SMF_ProcessVoiceData:
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SMF_EventFailureExit
 	push xwa
 	push xbc
@@ -1262,9 +1262,9 @@ SMF_VoiceData_MetaParseFailed:
 	jrl SMF_NullRet
 
 SMF_VoiceData_CheckEndOfTrack:
-	cpdi8 (4009), 255
+	cp (4009:16), 255
 	jrl z, SMF_VoiceData_HandleEndOfTrack
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl z, SMF_ProcessVoiceData
 	ld (3830:16), 255
 	jr SMF_EventFailureExit
@@ -1317,7 +1317,7 @@ SMF_VoiceData_CheckMidiStatus:
 	bit 7, a
 	jrl z, SMF_VoiceData_ReadMidiRunning
 	call SMF_ReadMidiEventWithStatus
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SMF_EventFailureExit
 	push xwa
 	push xbc
@@ -1339,7 +1339,7 @@ SMF_EventFailureExit:
 
 SMF_VoiceData_ReadMidiRunning:
 	call FloppyIO_ReadMidiEventBytes
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SMF_VoiceData_SetErrorFlag
 	push xwa
 	push xbc
@@ -1402,7 +1402,7 @@ SeqTrack_ClearVoiceSlots_Loop:
 	jrl ule, SeqTrack_ClearVoiceSlots_Loop
 	popw de
 	call SeqTrack_AssignFloppyChannels
-	cpdi8 (3830), 0
+	cp (3830:16), 0
 	jrl nz, SoundGen_ResetBitmapDone
 	call SoundGen_InitAllVoiceChannels
 	ld (6650:16), 0
@@ -1507,7 +1507,7 @@ MidiSysEx_Cmd_ControlChange:
 MidiSysEx_CC_LookupPartMap:
 	push xix
 	ld xix, SeqTrack_ChannelMapIdentity
-	cpdi8 (4600), 1
+	cp (4600:16), 1
 	jrl z, MidiSysEx_CC_PartMapSelected
 	ld xix, SeqTrack_ChannelMapIdentity_0x10
 
@@ -1530,7 +1530,7 @@ MidiSysEx_Cmd_ProgramChange:
 	ld l, (4213:16)
 	push xix
 	ld xix, SeqTrack_ChannelMapIdentity
-	cpdi8 (4600), 1
+	cp (4600:16), 1
 	jrl z, MidiSysEx_PgmChg_PartMapSelected
 	ld xix, SeqTrack_ChannelMapIdentity_0x10
 
@@ -1648,7 +1648,7 @@ SoundGen_RefreshVoices_Loop:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_RefreshVoices_Done
 	djnz xbc, SoundGen_RefreshVoices_Loop
 	call ToneGen_WriteChannelRegs
@@ -1762,7 +1762,7 @@ Sequencer_Advance_StorePtr:
 	ld xwa, (6883:16)
 	cp xwa, xbc
 	jp_24 z, Sequencer_Advance_UpdateRemaining
-	cpdi8 (6887), 1
+	cp (6887:16), 1
 	jp_24 z, Sequencer_Advance_UpdateRemaining
 	subda32 xwa, 4211
 
@@ -1865,7 +1865,7 @@ SoundGen_UpdateTempoAndScale:
 	pushw bc
 	call SoundGen_UpdateAndRefresh
 	popw bc
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullRet
 	lds iy, 7
 	cpdi16 3932, 0
@@ -1893,7 +1893,7 @@ SoundGen_ScaleAndWriteTempo:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullRet
 	ld a, c
 	pushw bc
@@ -1901,13 +1901,13 @@ SoundGen_ScaleAndWriteTempo:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	popw bc
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullRet
 	ld a, b
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullRet
 	lds32 xiy, 7
 	cpdi16 3932, 0
@@ -2205,7 +2205,7 @@ SetWall_ParamsValid:
 	anddi8 (0x287b), 191
 	ld a, (0x2877:16)
 	call SetWall_SingleSlotResolve
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl z, SetWall_SlotResolved
 	jrl Scoop_NullRet
 
@@ -2214,7 +2214,7 @@ SetWall_SlotResolved:
 	ld (0x27d4:16), wa
 	ld a, (9858:16)
 	call SetWall_SingleSlotResolve
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, Scoop_NullRet
 	ld wa, (0x28af:16)
 	ld (0x27d8:16), wa
@@ -2277,12 +2277,12 @@ SetWall_InitVoiceSlots:
 	call ToneGen_ValidateVoiceCh2
 
 Scoop_ProcessCompareLoop:
-	cpdi8 (0x27d2), 255
+	cp (0x27d2:16), 255
 	jrl nz, Scoop_Compare_NotFinished
 	jrl Scoop_NullRet
 
 Scoop_Compare_NotFinished:
-	cpdi8 (0x27d2), 3
+	cp (0x27d2:16), 3
 	jrl z, Scoop_Compare_Mode3
 	jrl Scoop_Compare_BitTest
 
@@ -2440,7 +2440,7 @@ ToneGen_WriteAllCh_Loop:
 	call ToneGen_AdvancePosition
 	popw iy
 	popw wa
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl z, ToneGen_WriteAllChannels_Next
 	popw iy
 	jrl ToneGen_WriteAllCh_Done
@@ -2477,7 +2477,7 @@ ToneGen_UpdateBlocks_Loop:
 	call ToneGen_AdvancePosition
 	pop xix
 	popw bc
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, ToneGen_UpdateBlocks_Done
 	inc 1, ix
 	djnz xbc, ToneGen_UpdateBlocks_Loop
@@ -2625,7 +2625,7 @@ MidiEvent_HandleChannelPressureA:
 	ldb a, 0xd0
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, ToneGen_SetSustainExitAlt
 	sla xiy, 1
 	push xix
@@ -2639,13 +2639,13 @@ MidiEvent_HandleChannelPressureA:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, ToneGen_SetSustainExitAlt
 	ld a, (4012:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, ToneGen_SetSustainExitAlt
 	call ToneGen_SetSustainBit
 	call ToneGen_WriteChannelRegs
@@ -2690,7 +2690,7 @@ MidiNoteOn_SetupVoiceA:
 	call	15879109
 	pop	xix
 	pop	xiy
-	cpdi8	4323, 0
+	cp	(4323:16), 0
 	jrl	nz, 284
 	sla	xiy, 1
 	push	xix
@@ -2706,9 +2706,9 @@ MidiNoteOn_SetupVoiceA:
 	call	15879109
 	pop	xix
 	pop	xiy
-	cpdi8	4323, 0
+	cp	(4323:16), 0
 	jrl	nz, 244
-	cpdi8	4600, 2
+	cp	(4600:16), 2
 	jr	nz, 108
 	ld	a, (4011:16)
 	and	a, 15
@@ -2765,7 +2765,7 @@ Scoop_ApplySoundParams:
 	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceSynth_NullRet2
 	ld a, (4013:16)
 	push xiy
@@ -2773,7 +2773,7 @@ Scoop_ApplySoundParams:
 	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceSynth_NullRet2
 	ld a, (9830:16)
 	ld (xix + 2), a
@@ -2785,7 +2785,7 @@ Scoop_ApplySoundParams:
 	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceSynth_NullRet2
 	xor a, a
 	push xiy
@@ -2793,7 +2793,7 @@ Scoop_ApplySoundParams:
 	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceSynth_NullRet2
 	call ToneGen_SetSustainBit
 	push xix
@@ -3000,7 +3000,7 @@ MidiEvent_HandlePitchBendA:
 	ldb a, 0xd2
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceSynth_NullRet3
 	sla xiy, 1
 	push xix
@@ -3014,19 +3014,19 @@ MidiEvent_HandlePitchBendA:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceSynth_NullRet3
 	ld a, (4012:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceSynth_NullRet3
 	ld a, (4013:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceSynth_NullRet3
 	call ToneGen_SetSustainBit
 	call ToneGen_WriteChannelRegs
@@ -3045,9 +3045,9 @@ MidiEvent_HandleProgramChangeA:
 	ld (4323:16), 0
 
 MidiPgmChg_CheckModeA:
-	cpdi8 (4600), 0
+	cp (4600:16), 0
 	jr z, MidiPgmChg_Mode0_SetupA
-	cpdi8 (4600), 2
+	cp (4600:16), 2
 	jrl z, MidiPgmChg_Mode2_SetupA
 	jrl MidiPgmChg_Mode1_SetupA
 
@@ -3129,7 +3129,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 	call SoundGen_UpdateAndRefresh
 	pop xhl
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	sla xiy, 1
 	push xix
@@ -3147,7 +3147,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	push xix
 	ld xix, SeqTrack_ChannelMapIdentity_0x10
@@ -3158,7 +3158,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	xor a, a
 	push xhl
@@ -3166,21 +3166,21 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	ld a, (6746:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	ld a, (6747:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	call ToneGen_SetSustainBit
 	call ToneGen_WriteChannelRegs
@@ -3201,7 +3201,7 @@ MidiPgmChg_Mode1_SetupA:
 	or a, w
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	sla xiy, 1
 	push xix
@@ -3215,7 +3215,7 @@ MidiPgmChg_Mode1_SetupA:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	push xix
 	ld xix, SeqTrack_ChannelMapIdentity
@@ -3224,19 +3224,19 @@ MidiPgmChg_Mode1_SetupA:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	ldb a, 0x0
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	ld a, (4012:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	push xix
 	ld xix, 0xf82
@@ -3245,7 +3245,7 @@ MidiPgmChg_Mode1_SetupA:
 	and a, 0x70
 	srl a, 4
 	call SoundGen_UpdateAndRefresh
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	call ToneGen_SetSustainBit
 	call ToneGen_WriteChannelRegs
@@ -3268,7 +3268,7 @@ MidiEvent_HandleChannelPressureB:
 	or a, w
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, ToneGen_SetSustain_Exit
 	sla xiy, 1
 	push xix
@@ -3282,13 +3282,13 @@ MidiEvent_HandleChannelPressureB:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, ToneGen_SetSustain_Exit
 	ld a, (4012:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, ToneGen_SetSustain_Exit
 	call ToneGen_SetSustainBit
 	call SoundGen_WriteVoiceParams
@@ -3336,7 +3336,7 @@ MidiNoteOn_SetupVoiceB:
 	call	15879109
 	pop	xix
 	pop	xiy
-	cpdi8	4323, 0
+	cp	(4323:16), 0
 	jrl	nz, 294
 	sla	xiy, 1
 	push	xix
@@ -3354,9 +3354,9 @@ MidiNoteOn_SetupVoiceB:
 	call	15879109
 	pop	xix
 	pop	xiy
-	cpdi8	4323, 0
+	cp	(4323:16), 0
 	jrl	nz, 252
-	cpdi8	4600, 2
+	cp	(4600:16), 2
 	jr	nz, 108
 	ld	a, (4011:16)
 	and	a, 15
@@ -3413,7 +3413,7 @@ Scoop_ApplySoundParamsAlt:
 	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullRet2
 	ld a, (4013:16)
 	cp a, 0x7f
@@ -3426,7 +3426,7 @@ MidiNoteOn_ClampVelocityB:
 	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullRet2
 	ld a, (9830:16)
 	ld (xix + 2), a
@@ -3440,14 +3440,14 @@ MidiNoteOn_ClampVelocityB:
 	popw wa
 	pop xix
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullRet2
 	push xiy
 	push xix
 	call SoundGen_UpdateAndRefresh
 	pop xix
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullRet2
 	call ToneGen_SetSustainBit
 	push xix
@@ -3653,7 +3653,7 @@ MidiEvent_HandlePitchBendB:
 	or a, w
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullRet3
 	sla xiy, 1
 	push xix
@@ -3667,19 +3667,19 @@ MidiEvent_HandlePitchBendB:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullRet3
 	push xiy
 	ld a, (4012:16)
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullRet3
 	push xiy
 	ld a, (4013:16)
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullRet3
 	call ToneGen_SetSustainBit
 	call SoundGen_WriteVoiceParams
@@ -3700,9 +3700,9 @@ MidiEvent_HandleProgramChangeB:
 	ld (4323:16), 0
 
 MidiPgmChg_CheckModeB:
-	cpdi8 (4600), 0
+	cp (4600:16), 0
 	jr z, MidiPgmChg_Mode0_SetupB
-	cpdi8 (4600), 2
+	cp (4600:16), 2
 	jrl z, MidiPgmChg_Mode2_SetupB
 	jrl MidiPgmChg_Mode1_SetupB
 
@@ -3789,7 +3789,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeB:
 	call SoundGen_UpdateAndRefresh
 	pop xhl
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	sla iy, 1
 	push xix
@@ -3807,7 +3807,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeB:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	ld a, (4011:16)
 	and a, 0xf
@@ -3816,7 +3816,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeB:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	xor a, a
 	push xhl
@@ -3824,21 +3824,21 @@ MidiPgmChg_Mode2_ApplyEnvelopeB:
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	pop xhl
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	ld a, (6746:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	ld a, (6747:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	call ToneGen_SetSustainBit
 	call SoundGen_WriteVoiceParams
@@ -3861,7 +3861,7 @@ MidiPgmChg_Mode1_SetupB:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	sla iy, 1
 	push xix
@@ -3875,26 +3875,26 @@ MidiPgmChg_Mode1_SetupB:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	ld a, (4011:16)
 	and a, 0xf
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	ldb a, 0x0
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	ld a, (4012:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	push xix
 	push xiy
@@ -3907,7 +3907,7 @@ MidiPgmChg_Mode1_SetupB:
 	and a, 0x70
 	srl a, 4
 	call SoundGen_UpdateAndRefresh
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, VoiceParam_NullReturn
 	call ToneGen_SetSustainBit
 	call SoundGen_WriteVoiceParams
@@ -4370,7 +4370,7 @@ VoiceSynth_HandlePan:
 VoiceSynth_Pan_SetDirection:
 	ld (4233:16), 4
 	xor a, a
-	cpdi8 (4013), 64
+	cp (4013:16), 64
 	jr c, VoiceSynth_Pan_StoreAndUpdate
 	or a, 0x8
 
@@ -4627,9 +4627,9 @@ VoiceChannel_NoteOff_Done:
 VoiceChannel_ApplyParamByMode:
 	push xiy
 	call VoiceChannel_GetParamBlock
-	cpdi8 (4600), 0
+	cp (4600:16), 0
 	jr z, VoiceParam_ByMode_Mode0
-	cpdi8 (4600), 2
+	cp (4600:16), 2
 	jrl z, VoiceParam_ByMode_Mode2
 	jrl VoiceParam_ByMode_Mode1
 
@@ -4809,7 +4809,7 @@ VoiceParam_HandlePan:
 VoiceParam_Pan_SetDirection:
 	ld (4233:16), 4
 	xor a, a
-	cpdi8 (4013), 64
+	cp (4013:16), 64
 	jr c, VoiceParam_Pan_StoreAndUpdate
 	ldb a, 0x8
 
@@ -4985,7 +4985,7 @@ VoiceSynth_Algo_ConditionalUpdate:
 VoiceSynth_ConditionalUpdate_SetParams:
 	ld	(4233:16), 3
 	ld	a, (4013:16)
-	cpdi8	(4600), 2
+	cp	(4600:16), 2
 	jr nz, VoiceSynth_ConditionalUpdate_StoreAndCall
 	call VoiceSynth_ConditionalUpdate_Helper
 VoiceSynth_ConditionalUpdate_StoreAndCall:

@@ -33,7 +33,7 @@ FmmSeqSongNameFunc:
 	cp XBC,0x01e50004
 	jr nz, SeqName_ReturnZero
 	stda32 (0x8238), xde
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr nz, SeqName_SendCurrentIndex
 	stdi16 (0x823c), 0x0000
 SeqName_SendCurrentIndex:
@@ -66,7 +66,7 @@ SeqName_HandleNavigation:
 	ld	iz, hl
 	or	xde, xde
 	jr	nz, 51
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jr	nz, 44
 	cp	xbc, 29360152
 	jr	nz, 11
@@ -189,7 +189,7 @@ SeqName_UpdateDisplay:
 	ld	xbc, 29360143
 	jr	75
 SeqName_SetIndexPlaying:
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jrl z, SeqName_ReturnZero
 	ld IZ,HL
 	ld (0x823c:16), de
@@ -304,7 +304,7 @@ FmmIntMedleyFunc:
 	jrl z, IntMed_HandleStop
 	cp XDE,0x00000002
 	jrl nz, IntMed_Exit
-	cpdi8 (0x8c9b), 0x7a
+	cp (0x8c9b:16), 0x7a
 	jr z, IntMed_CheckPlaying
 	call CDlike_InitModeAndLoadBank
 	ld (0x8462:16), 0x00
@@ -373,7 +373,7 @@ IntMed_NextSongSearch:
 	jr c, IntMed_FindCurrentSong
 	jrl IntMed_Exit
 IntMed_CheckRepeat:
-	cpdi8	34818, 0
+	cp	(34818:16), 0
 	jr	z, 87
 	ld	(34816:16), 0
 	lds	iz, 0
@@ -421,7 +421,7 @@ IntMed_HandleError:
 	call	16355504
 	jrl	759
 IntMed_HandleStop:
-	cpdi8 (0x8c9a), 0x7a
+	cp (0x8c9a:16), 0x7a
 	jrl z, IntMed_Exit
 	call CDlike_ExitModeAndRestore
 	ld (0x8462:16), 0x00
@@ -465,7 +465,7 @@ IntMed_HandleNavToggle:
 	lda xwa, (0x87f4:16)
 	cp XDE,0x0000000a
 	jrl nz, IntMed_HandleSelectToggle
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jrl nz, IntMed_HandleSelectToggle
 	lds iz, 0
 IntMed_FindMarkedSlot:
@@ -556,7 +556,7 @@ IntMed_NextUnmark:
 IntMed_HandleSelectToggle:
 	cp XDE,0x0000000b
 	jrl nz, IntMed_HandleRepeatToggle
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jrl nz, IntMed_HandleRepeatToggle
 	ld XWA,(XSP+0x06)
 	ld XBC,0x01e50003
@@ -652,7 +652,7 @@ IntMed_SetRepeatOff:
 IntMed_HandlePlay:
 	cp	xde, 13
 	jrl	nz, 129
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jr	nz, 122
 	ld	(34816:16), 0
 	lds	iz, 0
@@ -689,7 +689,7 @@ IntMed_StoreDelayFlag:
 	stda32	(33346), xwa
 	jr	30
 IntMed_CheckContinue:
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr z, IntMed_Exit
 	ld XWA,0xffffffff
 	ld XBC,0x01e0009a
@@ -799,7 +799,7 @@ DiskMed_PlayNextHelper:
 	jrl z, DiskMed_ReturnZero
 	cp XDE,0x00000002
 	jrl nz, DiskMed_ReturnZero
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jrl z, DiskMed_ReturnZero
 	ld a, (0x8800:16)
 	cpda8 a, (0x87fe)
@@ -934,7 +934,7 @@ FmmDiskMedleySelectFunc:
 	jrl nz, DiskSel_Exit
 	lds wa, 0
 	calr InitializeOperationState
-	cpdi8 (0x8c9b), 0x78
+	cp (0x8c9b:16), 0x78
 	jrl z, DiskSel_CheckPlaying
 	ld XWA,0xffffffff
 	ld XBC,0x01e0009e
@@ -1133,7 +1133,7 @@ DiskSel_ClearPlaying:
 	ld	(33890:16), 0
 	jrl	1394
 DiskSel_CheckRepeat:
-	cpdi8	34978, 0
+	cp	(34978:16), 0
 	jr	z, -15
 	ld	(34976:16), 0
 	lds	iz, 0
@@ -1262,7 +1262,7 @@ DiskSel_ShowError:
 	ldw	wa, 238
 	jrl	799
 DiskSel_HandleStopEvent:
-	cpdi8 (0x8c9a), 0x78
+	cp (0x8c9a:16), 0x78
 	jr z, DiskSel_PostStopEvent
 	call CDlike_ExitModeAndRestore
 	ld (0x8462:16), 0x00
@@ -1354,7 +1354,7 @@ DiskSel_HandleNavigation:
 	ld XWA,(XSP+0x06)
 	or XWA,XWA
 	jr nz, DiskSel_CheckPage
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr nz, DiskSel_CheckPage
 	ld XWA,XBC
 	cp XBC,0x01c00018
@@ -1390,7 +1390,7 @@ DiskSel_HandleToggle:
 	ld	xwa, (xsp+6)
 	cp	xwa, 10
 	jr	nz, 100
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jr	nz, 93
 	lds	iz, 0
 DiskSel_FindMarkedLoop:
@@ -1919,7 +1919,7 @@ SmfMed_NextSong:
 	jr c, SmfMed_FindSongLoop
 	jrl SmfMed_Exit
 SmfMed_CheckRepeat:
-	cpdi8	34952, 0
+	cp	(34952:16), 0
 	jr	z, 113
 	cpdm8	33696, a
 	jr	nc, 107
@@ -2052,7 +2052,7 @@ SmfMed_HandleNavToggle:
 	lda xwa, (0x8804:16)
 	cp XDE,0x0000000a
 	jr nz, SmfMed_HandleSelectToggle
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr nz, SmfMed_HandleSelectToggle
 	lds iz, 0
 	ld DE,BC
@@ -2162,7 +2162,7 @@ SmfMed_SetRepeatOff:
 SmfMed_HandlePlay:
 	cp	xde, 13
 	jrl	nz, 188
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jrl	nz, 180
 	ld	(34950:16), 0
 	ld	(33696:16), 0
@@ -2198,7 +2198,7 @@ SmfMed_PlayNextLoop:
 	jr c, SmfMed_PlayFindLoop
 
 SmfMed_CheckAutoPlay:
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jr	nz, 81
 	ld	xwa, (xsp+2)
 	ld	xbc, 31784963
@@ -2217,7 +2217,7 @@ SmfMed_StoreDelayFlag:
 	stda32	(33688), xwa
 	jr	33
 SmfMed_CheckContinue:
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr z, SmfMed_Exit
 	ld XWA,0xffffffff
 	ld XBC,0x01e0009a
@@ -2424,7 +2424,7 @@ PdName_RefreshPage:
 	jrl PdName_ReturnZero
 
 PdName_SetIndexPlaying:
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jrl z, PdName_ReturnZero
 	ld (0x83a6:16), de
 
@@ -2720,7 +2720,7 @@ PdMed_RefreshDisplay:
 PdMed_HandleNavToggle:
 	cp XHL,0x0000000a
 	jrl nz, PdMed_HandleSelectToggle
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr nz, PdMed_HandleSelectToggle
 	lds hl, 0
 	ld WA,BC
@@ -2774,7 +2774,7 @@ PdMed_RefreshAfterToggle:
 PdMed_HandleSelectToggle:
 	cp XHL,0x0000000b
 	jr nz, PdMed_HandleRepeat
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr nz, PdMed_HandleRepeat
 	ld XWA,XIZ
 	ld XBC,0x01e50003
@@ -2839,7 +2839,7 @@ PdMed_SetRepeatOff:
 PdMed_HandlePlay:
 	cp	xhl, 13
 	jrl	nz, 156
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jrl	nz, 148
 	ld	(34950:16), 0
 	lds	hl, 0
@@ -2873,7 +2873,7 @@ PdMed_PlayNextLoop:
 	jr c, PdMed_PlayFindLoop
 
 PdMed_CheckAutoPlay:
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jr	nz, 57
 	ld	xwa, 4294967295
 	ld	xbc, 31457434
@@ -2885,7 +2885,7 @@ PdMed_StoreDelayFlag:
 	stda32	(33788), xwa
 	jr	30
 PdMed_CheckContinue:
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr z, PdMed_Exit
 	ld XWA,0xffffffff
 	ld XBC,0x01e0009a
@@ -3140,7 +3140,7 @@ DocName_RefreshPage:
 	jrl DocName_ReturnZero
 
 DocName_SetIndexPlaying:
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jrl z, DocName_ReturnZero
 	ld (0x8406:16), de
 
@@ -3448,7 +3448,7 @@ DocMed_RefreshDisplay:
 DocMed_HandleNavToggle:
 	cp XHL,0x0000000a
 	jrl nz, DocMed_HandleSelectToggle
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr nz, DocMed_HandleSelectToggle
 	lds hl, 0
 	ld WA,BC
@@ -3502,7 +3502,7 @@ DocMed_RefreshAfterToggle:
 DocMed_HandleSelectToggle:
 	cp XHL,0x0000000b
 	jr nz, DocMed_HandleRepeat
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr nz, DocMed_HandleRepeat
 	ld XWA,XIZ
 	ld XBC,0x01e50003
@@ -3567,7 +3567,7 @@ DocMed_SetRepeatOff:
 DocMed_HandlePlay:
 	cp	xhl, 13
 	jrl	nz, 168
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jrl	nz, 160
 	ld	(34950:16), 0
 	lds	hl, 0
@@ -3601,7 +3601,7 @@ DocMed_PlayNextLoop:
 	jr c, DocMed_PlayFindLoop
 
 DocMed_CheckAutoPlay:
-	cpdi8	33890, 0
+	cp	(33890:16), 0
 	jr	nz, 69
 	ld	xwa, xiz
 	ld	xbc, 31784963
@@ -3617,7 +3617,7 @@ DocMed_StoreDelayFlag:
 	stda32	(33884), xwa
 	jr	30
 DocMed_CheckContinue:
-	cpdi8 (0x8462), 0x00
+	cp (0x8462:16), 0x00
 	jr z, DocMed_Exit
 	ld XWA,0xffffffff
 	ld XBC,0x01e0009a

@@ -4160,7 +4160,7 @@ AcDemoSong_HandleResize:
 	jr nz, AcDemoSong_DefaultHandler
 	ld xwa, (xsp + 8)
 	calr VoiceConfig_ScreenTypeDispatch
-	cpdi8 (3375), 0
+	cp (3375:16), 0
 	jr nz, AcCurrentSongBox_RetZero
 	bitda 3, (0x28ad)
 	jr z, AcDemoSong_SetupDisplay
@@ -6794,7 +6794,7 @@ IvPlayExit_CheckSendEvent:
 	call	16421459
 	or	xhl, xhl
 	jr	z, 32
-	cpdi8	58098, 0
+	cp	(58098:16), 0
 	jr	nz, 20
 	ld	xwa, (xsp+4)
 	ld	xde, (xwa+22)
@@ -15024,7 +15024,7 @@ SqplyFunc_ParamFormatData:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	xwa, 14895824
-	cpdi8	10298, 0
+	cp	(10298:16), 0
 	jr	z, 5
 	ld	xwa, 14895818
 	push	xwa
@@ -15844,7 +15844,7 @@ SqedtFunc_Case1:
 SqedtFunc_Case2:
 	ld XWA,(XSP+0x08)
 	ld (XSP+0x04),XWA
-	cpdi8 (0x2878), 0x0a
+	cp (0x2878:16), 0x0a
 	jr nz, SqedtFunc_Case2_CopyParam
 	pushw 0x00e3
 	pushw 0x4c5c
@@ -15868,7 +15868,7 @@ SqedtFunc_Case2_CopyParam:
 SqedtFunc_CheckMode:
 	ld XWA,(XSP+0x08)
 	ld (XSP+0x04),XWA
-	cpdi8 (0x2878), 0x0a
+	cp (0x2878:16), 0x0a
 	jr nz, SqedtFunc_CheckMode_CopyParam
 	pushw 0x00e3
 	pushw 0x4c68

@@ -491,7 +491,7 @@ FmmFmt_HandleCancel:
 	jrl FmmFmt_Return
 
 FmmFmt_HandleProgress:
-	cpdi8 (0x7f6c), 0
+	cp (0x7f6c:16), 0
 	jrl z, FmmFmt_Return
 	ld a, (0x7f6a:16)
 	extz wa
@@ -671,7 +671,7 @@ FmmLoadTtl_CheckFileHandle:
 FmmLoadTtl_CheckSmfHandle:
 	cpdi16 0x8504, 0
 	jrl le, FmmLoadTtl_LoadSlots
-	cpdi8 (0x7f6e), 100
+	cp (0x7f6e:16), 100
 	jrl z, FmmLoadTtl_LoadSlots
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -785,7 +785,7 @@ FmmLoadTtl_HandleCancelOp:
 FmmLoadTtl_HandleOk:
 	cp xde, 0xf
 	jr nz, FmmLoadTtl_Return
-	cpdi8 (0x8d34), 7
+	cp (0x8d34:16), 7
 	jr nz, FmmLoadTtl_Ok_DefaultSound
 	ldw wa, 0xd6
 	jr FmmLoadTtl_PlaySound
@@ -827,7 +827,7 @@ FmmSaveTitleFunc:
 	calr SignalProgressUpdate
 
 FmmSaveTtl_CheckFont:
-	cpdi8 (0x8d37), 102
+	cp (0x8d37:16), 102
 	jr z, FmmSaveTtl_CommitSave
 	lds iz, 0
 

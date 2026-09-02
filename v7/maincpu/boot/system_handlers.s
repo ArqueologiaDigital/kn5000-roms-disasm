@@ -52,7 +52,7 @@ NMI_HaltLoop:
 ; ===========================================================================
 NMI_StorePayloadChecksums:
 NMI_StorePayloadChecksums_Entry:
-	cpdi8 (1024), 128
+	cp (1024:16), 128
 	ret nz
 	call Demo_SelectEntry_PreSaveCheck
 	call SeqPlay_JumpCopyVoiceData
@@ -392,7 +392,7 @@ INTT1_HANDLER:
 	bit 7, a
 	jr z, INTT1_NoOverflow
 	incdi8 1, (1061)
-	cpdi8 (1061), 165
+	cp (1061:16), 165
 	jr ule, INTT1_NoOverflow
 	and a, 0x7f
 	or a, 0x20
@@ -423,12 +423,12 @@ INTT1_CheckScanFlag:
 	jp UIStateMachine_DispatchEntry
 
 INTT1_CheckTickCount:
-	cpdi8 (1050), 1
+	cp (1050:16), 1
 	jrl nc, UIStateMachine_DispatchEntry
 	ld (1056:16), 16
 
 INTT1_CheckMidiSync:
-	cpdi8 (0x8c98), 0x13
+	cp (0x8c98:16), 0x13
 	jr z, UIState_DispatchBranch
 	bitda 2, (0xfd52)
 	jr z, UIState_DispatchBranch
@@ -443,7 +443,7 @@ UIState_DispatchBranch:
 	jr UIStateMachine_DispatchEntry
 
 INTT1_CheckTickOverflow:
-	cpdi8 (1050), 1
+	cp (1050:16), 1
 	jr ule, UIStateMachine_DispatchEntry
 	ld (1056:16), 6
 	resda 0, 1139
@@ -671,7 +671,7 @@ INTTR4_CheckAltSeqEnable:
 	bitda 2, (1057)
 	jr z, INTTR4_MetroPhaseSync
 	incdi8 1, (1051)
-	cpdi8 (1051), 96
+	cp (1051:16), 96
 	jr lt, INTTR4_MetroPhaseSync
 	ld (1051:16), 0
 	incdi16 1, (1052)
@@ -818,7 +818,7 @@ INTTR4_AltSeqSync_Check:
 	calr TempoRingBuf_WritePair
 
 INTTR4_FadeDelay_Check:
-	cpdi8 (1126), 0
+	cp (1126:16), 0
 	jr z, INTTR4_SyncAccum_Update
 	decdi8 1, 1126
 
@@ -1051,7 +1051,7 @@ MainLoop_AfterTimerSync:
 	call MidiChannel_ScanPending
 
 MainLoop_AfterInput:
-	cpdi8 (1124), 7
+	cp (1124:16), 7
 	jr ule, MainLoop_AfterSeqTick
 	calr Seq_TickWrapper
 
@@ -1154,7 +1154,7 @@ Seq_TickWrapper:
 	lda xiy, (0x045b:16)
 	cp (XIY),0x01
 	jr nz, SeqTick_CheckActive
-	cpdi8 (0xce43), 0x00
+	cp (0xce43:16), 0x00
 	jr z, SeqTick_CheckActive
 	ld (XIY),0x00
 SeqTick_CheckActive:
@@ -1298,7 +1298,7 @@ SeqEvtTick_ProcessTimers:
 	call SeqEvt_ProcessBuffer
 	call MIDI_SendChannelPressure
 	call 0xfd855a
-	cpdi8 (0x0474), 0x55
+	cp (0x0474:16), 0x55
 	jr z, SeqEvtTick_Return
 Seq_ProcessEventLoop:
 	call Seq_CheckSongEnd
@@ -1314,7 +1314,7 @@ SeqEvtTick_Return:
 ; Calls SwbtWr_InitBank1 and SwbtWr_InitBank2 to reinitialize voice
 ; parameter transfers to the tone generator.
 SwbtWr_ReinitBothBanks:
-	cpdi8 (0xbca0), 0xff
+	cp (0xbca0:16), 0xff
 	jr z, SwbtWr_ReinitBothBanks_Return
 	call 0xfdaafa
 	call 0xfdab19
@@ -1326,7 +1326,7 @@ SwbtWr_ReinitBothBanks_Return:
 ; Original Matsushita debug symbol: "assswb_out" (assign sound write bank - output)
 ; Calls only SwbtWr_InitBank2 (the output bank).
 SwbtWr_ReinitOutputBank:
-	cpdi8 (0xbca0), 0xff
+	cp (0xbca0:16), 0xff
 	jr z, SwbtWr_ReinitOutputBank_Return
 	call 0xfdab19
 	ld (0xbca0:16), 0xff
@@ -5345,11 +5345,11 @@ InterCPU_Send_WaitAck:
 	ld (1502:16), bc
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	ret z
 
 InterCPU_Send_WaitComplete:
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	jr nz, InterCPU_Send_WaitComplete
 	ret
 
@@ -5384,7 +5384,7 @@ InterCPU_Send_AckTimeoutLoop:
 ; ===========================================================================
 InterCPU_E2_Send:
 	lds ix, 0
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	jr z, InterCPU_E2_ClearAndSend
 
 InterCPU_E2_WaitIdle:
@@ -5392,7 +5392,7 @@ InterCPU_E2_WaitIdle:
 	inc 1, ix
 	cp hl, 0xea60
 	ret ugt
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	jr nz, InterCPU_E2_WaitIdle
 
 InterCPU_E2_ClearAndSend:
@@ -5414,11 +5414,11 @@ InterCPU_E2_WaitAck:
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
 	setda 7, 1568
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	ret z
 
 InterCPU_E2_WaitComplete:
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	jr nz, InterCPU_E2_WaitComplete
 	ret
 
@@ -5504,7 +5504,7 @@ Audio_DMA_Transfer_DelayLoop:
 InterCPU_E1_Bulk_Transfer:
 	pushw iz
 	lds iz, 0
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	jr z, E1Bulk_ReadyCheck
 
 E1Bulk_WaitIdle_Loop:
@@ -5512,7 +5512,7 @@ E1Bulk_WaitIdle_Loop:
 	inc 1, iz
 	cp hl, 0xea60
 	jrl ugt, FlashBufferIO_Exit
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	jr nz, E1Bulk_WaitIdle_Loop
 
 E1Bulk_ReadyCheck:
@@ -5540,11 +5540,11 @@ E1Bulk_WaitAck:
 	stdi16 (1502), 6
 	calr Audio_DMA_Transfer
 	ld (1504:16), 1
-	cpdi8 (1504), 1
+	cp (1504:16), 1
 	jr z, E1Bulk_Phase2_Init
 
 E1Bulk_WaitPhase1_Loop:
-	cpdi8 (1504), 1
+	cp (1504:16), 1
 	jr nz, E1Bulk_WaitPhase1_Loop
 
 E1Bulk_Phase2_Init:
@@ -5560,11 +5560,11 @@ E1Bulk_Phase2_Delay:
 	mrdw5 0x99, 0x04, 0x19, 0xde, 0x05
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	jr z, E1Bulk_PostTransfer_Delay_Init
 
 E1Bulk_WaitPhase2_Loop:
-	cpdi8 (1504), 0
+	cp (1504:16), 0
 	jr nz, E1Bulk_WaitPhase2_Loop
 
 E1Bulk_PostTransfer_Delay_Init:
@@ -5798,13 +5798,13 @@ INT0_AckAndReturn:
 
 INTTC2_HANDLER:
 	res_dd8 2, 0x80
-	cpdi8 (1504), 1
+	cp (1504:16), 1
 	jr nz, INTTC2_CheckPhase2
 	ld (1504:16), 0
 	jr INTTC2_Exit
 
 INTTC2_CheckPhase2:
-	cpdi8 (1504), 2
+	cp (1504:16), 2
 	jr nz, INTTC2_Exit
 	ld (1504:16), 1
 

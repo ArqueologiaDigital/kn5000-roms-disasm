@@ -268,7 +268,7 @@ AccompSeq_VRAMHelperData_Code:
 	ld XIY,XWA
 	ret
 ResolveVRAMAddressForVoice:
-	cpdi8 (0x7d89), 0x80
+	cp (0x7d89:16), 0x80
 	jr c, AccompSeq_ResolveVRAMFallback
 	bitda 0, (0x7dd1)
 	jr nz, AccompSeq_ResolveVRAMFallback
@@ -322,7 +322,7 @@ AccompSeq_ReadPatternTimeSig:
 AccompSeq_HandlePartTransition:
 	bitda 3, (0x7d8b)
 	jr z, AccompSeq_StopPart
-	cpdi8 (0x7db6), 0x01
+	cp (0x7db6:16), 0x01
 	jr z, AccompSeq_TransitionChannel2
 	ld wa, (0x7d98:16)
 	ld (0x7da6:16), wa
@@ -696,7 +696,7 @@ AccompSeq_ResolveChannel:
 	jr ugt, AccompSeq_ResolveCh_Store
 	ldb A, 0x01
 	ld (0x7db9:16), a
-	cpdi8 (0x046d), 0x00
+	cp (0x046d:16), 0x00
 	jr z, AccompSeq_ResolveCh_AddOffset
 	xor A,A
 	jr t, AccompSeq_ResolveCh_AddOffset
@@ -980,7 +980,7 @@ AccompSeq_LargeCodeBlock1:
 	ei	0x00
 	ret
 AccompSeq_UpdatePosition:
-	cpdi8 (0x7db6), 0x00
+	cp (0x7db6:16), 0x00
 	jr nz, .Lc_f6e215
 	ld xwa, (0x7dc9:16)
 	anddi8 (0x7dd1), 0xfe
@@ -1066,7 +1066,7 @@ AccompSeq_LargeCodeBlock2:
 	call	16191601
 	cps	h, 0
 	jr	z, 25
-	cpdi8	32367, 0
+	cp	(32367:16), 0
 	jr	nz, 18
 	.byte 0xf1, 0xde, 0x7d, 0xc8
 	jr	z, 5
@@ -1078,7 +1078,7 @@ AccompSeq_LargeCodeBlock2:
 AccompSeq_PostNoteProcess:
 	cps h, 0
 	jr z, AccompSeq_PostNote_Return
-	cpdi8 (0x7e6f), 0x00
+	cp (0x7e6f:16), 0x00
 	jr nz, AccompSeq_PostNote_Return
 	calr AccompSeq_OutputEvent
 	call AccompSeq_ProcessChordChange
@@ -1127,7 +1127,7 @@ AccompSeq_LoadParams:
 	ld QWA,WA
 	ld wa, (0x7d8e:16)
 	ld XIY,XWA
-	cpdi8 (0x7d89), 0x80
+	cp (0x7d89:16), 0x80
 	jr nc, AccompSeq_LoadParams_Alt
 	.byte 0x8d, 0x00, 0x21, 0xc9, 0xcc, 0x1d, 0xf1, 0x8b
 	.byte 0x7d, 0x41, 0xad, 0x01, 0x20, 0xe8, 0xc8, 0x06
@@ -1456,9 +1456,9 @@ AccompSeq_GuardedNoteOff:
 	and A,0x03
 	cps a, 0
 	jr z, AccompSeq_GuardedNote_Return
-	cpdi8 (0x8c98), 0x13
+	cp (0x8c98:16), 0x13
 	jr z, AccompSeq_GuardedNote_Return
-	cpdi8 (0x8c9c), 0xc8
+	cp (0x8c9c:16), 0xc8
 	jr z, AccompSeq_GuardedNote_Return
 	push XWA
 	push XHL
@@ -1783,7 +1783,7 @@ AccompSeq_SeqParse_CtrlChg:
 	and	a, 15
 	ld	(32185:16), a
 	ldb	a, 1
-	cpdi8	32182, 0
+	cp	(32182:16), 0
 	jr	z, 2
 	ldb	a, 2
 AccompSeq_SeqParse_CtrlChg_SetCh:
@@ -1814,7 +1814,7 @@ AccompSeq_SeqParse_CtrlChg_Loop:
 
 AccompSeq_SeqParse_TempoReset:
 	ld xwa, (0x7dc9:16)
-	cpdi8 (0x7db6), 0x00
+	cp (0x7db6:16), 0x00
 	jr z, AccompSeq_SeqParse_TempoStore
 	ld xwa, (0x7dcd:16)
 AccompSeq_SeqParse_TempoStore:

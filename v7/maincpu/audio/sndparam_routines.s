@@ -1202,7 +1202,7 @@ SndParam_Widget1_CallType3:
 	jr	nc, -12
 	.byte 0xf1, 0x46, 0xb7, 0xce
 	jr	nz, -18
-	cpdi8	32367, 0
+	cp	(32367:16), 0
 	jr	z, 19
 	cp	a, 250
 	jr	nz, 5
@@ -1240,11 +1240,11 @@ SndParam_Widget1_CallType3:
 	jr	z, 35
 	.byte 0xc1, 0x6a, 0x04, 0x3c, 0xfc
 	incdi8	4, (1130)
-	cpdi8	1130, 96
+	cp	(1130:16), 96
 	jr	nz, 19
 	ld	(1130:16), 0
 	incdi16	1, (1128)
-	cpdi8	32367, 0
+	cp	(32367:16), 0
 	jr	z, 3
 	calr	845
 	ld	a, (1056:16)
@@ -1268,7 +1268,7 @@ SndParam_Widget1_CallType3:
 	jr	z, 25
 	.byte 0xc1, 0x17, 0x04, 0x3c, 0xfc
 	incdi8	4, (1047)
-	cpdi8	1047, 96
+	cp	(1047:16), 96
 	jr	nz, 9
 	ld	(1047:16), 0
 	incdi16	1, (1048)
@@ -1276,7 +1276,7 @@ SndParam_Widget1_CallType3:
 	jr	z, 81
 	.byte 0xc1, 0x15, 0x04, 0x3c, 0xfc
 	incdi8	4, (1045)
-	cpdi8	1045, 96
+	cp	(1045:16), 96
 	jr	nz, 65
 	ld	(1045:16), 0
 	incdi8	1, (1046)
@@ -1337,7 +1337,7 @@ SndParam_Widget1_CallType3:
 	jr	z, 5
 	ldb	a, 134
 	calr	609
-	cpdi8	1051, 96
+	cp	(1051:16), 96
 	jr	nz, 99
 	ld	(1051:16), 0
 	incdi16	1, (1052)

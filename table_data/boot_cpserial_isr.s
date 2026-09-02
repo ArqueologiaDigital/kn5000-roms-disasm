@@ -60,7 +60,7 @@
 ; -----------------------------------------------------------------------------
 Handler_INTA:
 	push	xwa
-	cpdi8	(0x0f63), 0
+	cp	(0x0f63:16), 0
 	jr	nz, Handler_INTA__rx_pacing
 	anddi8	(0x0f66), 0x9f		; PFCR shadow: SC1 pins to RX mode
 	ld	a, (0x0f66:16)

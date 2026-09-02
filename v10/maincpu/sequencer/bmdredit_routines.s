@@ -278,7 +278,7 @@ BmDrEdit_CalcNotePosition:
 	call GetTitleNow
 	cp xhl, 0x1a00095
 	jr nz, BmDrEdit_CalcNotePos_VerticalMode
-	cpdi8 (0x2798), 0
+	cp (0x2798:16), 0
 	jr nz, BmDrEdit_CalcNotePos_ReadFields
 	incdi8 3, (0x2806)
 	jr BmDrEdit_CalcNotePos_ReadFields
@@ -454,7 +454,7 @@ BmDrEdit_CalcSecondaryPosition:
 	call GetTitleNow
 	cp xhl, 0x1a00095
 	jr nz, BmDrEdit_CalcSecondaryPos_Vert
-	cpdi8 (0x2798), 0
+	cp (0x2798:16), 0
 	jr nz, BmDrEdit_CalcSecondaryPos_ClampSize
 	incdi8_24 3, (0x0210b0)
 	jr BmDrEdit_CalcSecondaryPos_ClampSize
@@ -536,7 +536,7 @@ BmDrEdit_ProcessTempoEvent:
 	call TempoRingBuf_ReadByte
 	ld (0x2961:16), l
 	call TempoRingBuf_ReadByte
-	cpdi8 (0x2961), 0
+	cp (0x2961:16), 0
 	jr z, BmDrEdit_ProcessTempoEvent_NoteOff
 	calr BmDrEdit_AllocateNoteSlot
 	jr BmDrEdit_TempoEventLoop
@@ -553,7 +553,7 @@ BmDrEdit_ProcessTempoEvent_NoteOff:
 	calr BmDrEdit_AdjustScrollToView
 	calr BmDrEdit_InsertNotesFromSlots
 	calr BmDrEdit_CountMeasuresInit
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_ClearSlotAndRedraw
 
 BmDrEdit_ClearNoteAndRefresh:
@@ -581,7 +581,7 @@ BmDrEdit_DecrementDelayA:
 	ret
 
 BmDrEdit_DelayAExpired:
-	cpdi8 (0x295c), 128
+	cp (0x295c:16), 128
 	ret nz
 	ld (0x295c:16), 0
 	ld a, (0x295d:16)
@@ -608,7 +608,7 @@ BmDrEdit_DecrementDelayB:
 	ret
 
 BmDrEdit_DelayBExpired:
-	cpdi8 (0x295e), 128
+	cp (0x295e:16), 128
 	ret nz
 	ld (0x295e:16), 0
 	jrl BmDrEdit_DelayAction_PlayClick
@@ -703,7 +703,7 @@ BmDrEdit_SaveSeqState_Apply:
 BmDrEdit_CheckScrollBusy:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_ScrollRight
-	cpdi8 (0x295d), 0
+	cp (0x295d:16), 0
 	jr z, BmDrEdit_ScrollRight
 	ldw hl, 0xffff
 	ret
@@ -723,7 +723,7 @@ BmDrEdit_ScrollRight_Done:
 BmDrEdit_CheckScrollBusyAlt:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_ScrollLeft
-	cpdi8 (0x295d), 0
+	cp (0x295d:16), 0
 	jr z, BmDrEdit_ScrollLeft
 	ldw hl, 0xffff
 	ret
@@ -752,7 +752,7 @@ BmDrEdit_ScrollReset:
 BmDrEdit_PitchScrollUp_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_PitchScrollUp
-	cpdi8 (0x295d), 1
+	cp (0x295d:16), 1
 	ret nz
 
 BmDrEdit_PitchScrollUp:
@@ -769,7 +769,7 @@ BmDrEdit_PitchScrollUp:
 BmDrEdit_PitchScrollDown_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_PitchScrollDown
-	cpdi8 (0x295d), 1
+	cp (0x295d:16), 1
 	ret nz
 
 BmDrEdit_PitchScrollDown:
@@ -786,7 +786,7 @@ BmDrEdit_PitchScrollDown:
 BmDrEdit_VelocityUp_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_VelocityUp_Dispatch
-	cpdi8 (0x295d), 2
+	cp (0x295d:16), 2
 	ret nz
 
 BmDrEdit_VelocityUp_Dispatch:
@@ -799,7 +799,7 @@ BmDrEdit_VelocityUp_Dispatch:
 BmDrEdit_VelocityDown_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_VelocityDown_Dispatch
-	cpdi8 (0x295d), 2
+	cp (0x295d:16), 2
 	ret nz
 
 BmDrEdit_VelocityDown_Dispatch:
@@ -896,7 +896,7 @@ BmDrEdit_DecrementVelocityValue:
 BmDrEdit_DurationUp_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_DurationUp_Dispatch
-	cpdi8 (0x295d), 3
+	cp (0x295d:16), 3
 	ret nz
 
 BmDrEdit_DurationUp_Dispatch:
@@ -905,7 +905,7 @@ BmDrEdit_DurationUp_Dispatch:
 BmDrEdit_DurationDown_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_DurationDown_Dispatch
-	cpdi8 (0x295d), 3
+	cp (0x295d:16), 3
 	ret nz
 
 BmDrEdit_DurationDown_Dispatch:
@@ -1547,7 +1547,7 @@ BmDrEdit_ByteData_NoteCoordTable:
 BmDrEdit_ChordScrollUp_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_ChordScrollUp
-	cpdi8 (0x295d), 4
+	cp (0x295d:16), 4
 	ret nz
 
 BmDrEdit_ChordScrollUp:
@@ -1564,7 +1564,7 @@ BmDrEdit_ChordScrollUp:
 BmDrEdit_ChordScrollDown_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_ChordScrollDown
-	cpdi8 (0x295d), 4
+	cp (0x295d:16), 4
 	ret nz
 
 BmDrEdit_ChordScrollDown:
@@ -1901,11 +1901,11 @@ BmDrEdit_InitPlayback:
 	calr BmDrEdit_ClearAllSlotsAlt
 	calr BmDrEdit_ClearAllSlots
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_ResetAndScanNotes
 	stdi16 (0x2744), 1
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_ResetAndScanNotes
 
 BmDrEdit_RefreshAndReturn:
@@ -1937,7 +1937,7 @@ BmDrEdit_CleanupDrumMode:
 	push xwa
 	call Free
 	inc 4, xsp
-	cpdi8 (0x8d36), 152
+	cp (0x8d36:16), 152
 	jr z, BmDrEdit_SkipPartSelect
 	resda 0, 9954
 	call PartSelect_UpdateDisplayState
@@ -1946,7 +1946,7 @@ BmDrEdit_SkipPartSelect:
 	jr BmDrEdit_CleanupCommon
 
 BmDrEdit_CleanupMelodicMode:
-	cpdi8 (0x8d36), 149
+	cp (0x8d36:16), 149
 	jr z, BmDrEdit_SkipMelodicPartSelect
 	resda 0, 9954
 	call PartSelect_UpdateDisplayState
@@ -1999,7 +1999,7 @@ BmDrEdit_InsertNotesFromSlots_Loop:
 	add xwa, xbc
 	mrib4 0x80, 0x19, 0x61, 0x29
 	calr BmDrEdit_PrepareAndInsertNote
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_InsertNotesFromSlots_CalcBeat
 	calr BmDrEdit_RefreshDisplayState
 	jr BmDrEdit_InsertNotesFromSlots_Done
@@ -2018,7 +2018,7 @@ BmDrEdit_InsertNotesFromSlots_Done:
 
 BmDrEdit_WalkEventsOrSetError:
 	calr BmDrEdit_PrepareAndInsertNote
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl z, BmDrEdit_CalcBeatFromGridPos
 	ldw wa, 0xcf
 	call SeqData_SetErrorCode
@@ -2067,10 +2067,10 @@ BmDrEdit_CleanupReturn:
 BmDrEdit_HandleDelayExpired_Rescan:
 	calr Metronome_PlayClick
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_Rescan_LoadAlternate
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_Rescan_RefreshDisplay
 	calr BmDrEdit_SelectChannelAndLoadPos
 
@@ -2078,7 +2078,7 @@ BmDrEdit_Rescan_LoadAlternate:
 	calr BmDrEdit_ScanChannelEvents
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_ValidateAndInsertSteps
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_Rescan_CalcAndWalk
 
 BmDrEdit_Rescan_RefreshDisplay:
@@ -2097,7 +2097,7 @@ BmDrEdit_Rescan_CalcAndWalk:
 BmDrEdit_ValidateAndInsertSteps:
 	ld (0x287a:16), 0
 	calr BmDrEdit_SaveEditState
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_ValidateSteps_CheckCount
 	ldw wa, 0xb6
 	call SeqData_SetErrorCode
@@ -2111,7 +2111,7 @@ BmDrEdit_ValidateSteps_CheckCount:
 BmDrEdit_ValidateSteps_InsertLoop:
 	calr EditChannel_LoadVoiceParams
 	calr BmDrEdit_InsertStepEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_ValidateSteps_RestoreState
 	ld wa, (0x2772:16)
 	dec 1, wa
@@ -2132,7 +2132,7 @@ BmDrEdit_SeekToPartVoice:
 	ret z
 	ld (0x28af:16), hl
 	stdi16 (9830), 5
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_SeekVoice_CountAndInsert
 	ldw wa, 0xb7
 	call SeqData_SetErrorCode
@@ -2140,7 +2140,7 @@ BmDrEdit_SeekToPartVoice:
 BmDrEdit_SeekVoice_CountAndInsert:
 	calr BmDrEdit_CountMeasuresAndValidate
 	calr BmDrEdit_InsertMultiSongSteps
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_SeekVoice_RefreshDisplay
 	ld wa, (0x2782:16)
 	inc 2, wa
@@ -2151,7 +2151,7 @@ BmDrEdit_SeekVoice_CountAndInsert:
 BmDrEdit_SeekVoice_InsertLoop:
 	calr EditChannel_LoadVoiceParams
 	calr BmDrEdit_InsertStepEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_SeekVoice_DecrementLoop
 
 BmDrEdit_SeekVoice_RefreshDisplay:
@@ -2177,20 +2177,20 @@ BmDrEdit_CalcTickPosition:
 
 BmDrEdit_ReloadChannelAndDisplay:
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_ReloadChannel_LoadAndSkip
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_ReloadChannel_RefreshDisplay
 	calr BmDrEdit_SelectChannelAndLoadPos
 
 BmDrEdit_ReloadChannel_LoadAndSkip:
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_SkipToEventByCount
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_LoadAndDisplayNotes
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_LoadAndDisplayNotes
 
 BmDrEdit_ReloadChannel_RefreshDisplay:
@@ -2213,20 +2213,20 @@ BmDrEdit_LoadAndDisplayNotes:
 BmDrEdit_NavigateAndLoadPosition:
 	calr BmDrEdit_CalcTickPosition
 	calr BmDrEdit_SelectChannelAndLoadPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_NavLoad_LoadAndSkip
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_NavLoad_RefreshDisplay
 	calr BmDrEdit_SelectChannelAndLoadPos
 
 BmDrEdit_NavLoad_LoadAndSkip:
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_SkipToEventByCount
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_NavigateAndDisplayNotes
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_NavigateAndDisplayNotes
 
 BmDrEdit_NavLoad_RefreshDisplay:
@@ -2340,7 +2340,7 @@ BmDrEdit_DelayAction_CheckCountError:
 	bitda 0, (0x295f)
 	jr z, BmDrEdit_DelayAction_UpdateScroll
 	calr BmDrEdit_CountMeasuresInit
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_DelayAction_UpdateScroll
 	ldw wa, 0xcc
 	call SeqData_SetErrorCode
@@ -2354,7 +2354,7 @@ BmDrEdit_DelayAction_UpdateScrollAlt:
 
 BmDrEdit_ReadNoteDataFields:
 	pushw_erp 0xfa
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_ReadNoteData_Advance
 	ldw wa, 0xb9
 	call SeqData_SetErrorCode
@@ -2367,7 +2367,7 @@ BmDrEdit_ReadNoteData_Advance:
 	call SeqData_AdvancePosition
 	call SeqData_ReadNextByte
 	ldb_erp L, 0xfb
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_ReadNoteData_StoreDuration
 	ldw wa, 0xba
 	call SeqData_SetErrorCode
@@ -2421,7 +2421,7 @@ BmDrEdit_PitchOverflow_UpdateDisplay:
 	calr BmDrEdit_SaveEditState
 	calr BmDrEdit_SeekForwardToEvent
 	calr BmDrEdit_RestoreEditState
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, BmDrEdit_RefreshDisplayState
 	jrl BmDrEdit_SetFeedbackTimer
 
@@ -2649,7 +2649,7 @@ BmDrEdit_InsertNoteSequence:
 
 BmDrEdit_InsertSeq_StepLoop:
 	calr BmDrEdit_InsertStepEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_InsertSeq_DecrementCount
 	setda 2, 0x295f
 	jr BmDrEdit_SavePositionAndReturn
@@ -2688,7 +2688,7 @@ BmDrEdit_ScanAfterModify_CheckVelocity:
 	calr BmDrEdit_CompareVelocity
 	cps l, 0
 	jr nz, BmDrEdit_SetFlagReturn
-	cpdi8 (0x2760), 0
+	cp (0x2760:16), 0
 	jr nz, BmDrEdit_SetFlagReturn
 
 BmDrEdit_ScanAfterModify_LoadAndWalk:
@@ -2736,7 +2736,7 @@ BmDrEdit_AlignGridBackward_Store:
 
 BmDrEdit_LoadAlternateAndValidate:
 	calr BmDrEdit_LoadAlternateState
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_LoadAlternateAndValidate_Done
 	ldw wa, 0xb8
 	call SeqData_SetErrorCode
@@ -2745,7 +2745,7 @@ BmDrEdit_LoadAlternateAndValidate_Done:
 	jr BmDrEdit_CountMeasuresAndValidate
 
 BmDrEdit_CountMeasuresAndValidate:
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_CountMeasures_Init
 	ldw wa, 0xd1
 	call SeqData_SetErrorCode
@@ -2768,7 +2768,7 @@ BmDrEdit_CountMeasures_SkipEvent:
 	jr BmDrEdit_CountMeasures_Loop
 
 BmDrEdit_CheckAndReportScanError:
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret z
 	ldw wa, 0xce
 	call SeqData_SetErrorCode
@@ -2882,7 +2882,7 @@ BmDrEdit_WalkAndScanAfterEdit:
 
 BmDrEdit_ScanSequenceEnd:
 	calr BmDrEdit_ClearAndScanToEnd
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_WalkScan_ReadNext
 	setda 3, 0x295f
 	ld (0x287a:16), 0
@@ -2938,7 +2938,7 @@ BmDrEdit_PostModeChange96:
 BmDrEdit_DrumVoiceUp_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_DrumVoiceUp_ClearFlag
-	cpdi8 (0x295d), 5
+	cp (0x295d:16), 5
 	ret nz
 
 BmDrEdit_DrumVoiceUp_ClearFlag:
@@ -2974,7 +2974,7 @@ BmDrEdit_DrumVoiceUp_UpdateDisplay:
 BmDrEdit_DrumVoiceDown_Check:
 	bitda 7, (0x295c)
 	jr z, BmDrEdit_DrumVoiceDown_ClearFlag
-	cpdi8 (0x295d), 5
+	cp (0x295d:16), 5
 	ret nz
 
 BmDrEdit_DrumVoiceDown_ClearFlag:
@@ -3275,7 +3275,7 @@ BmDrEdit_ValidateAndProcessVoice:
 	ld a, (xsp + 10)
 	extz wa
 	call Part_ValidateVoiceChannel
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_ValidateVoice_ProcessState
 	ldb l, 0xff
 	jr BmDrEdit_ValidateVoice_Epilog
@@ -3302,11 +3302,11 @@ BmDrEdit_ValidateVoice_SkipSections:
 	call SeqData_SkipSections
 	ld xwa, (xsp + 6)
 	ld (xwa), hl
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_TrackValidateRet
 	incw 1, (xsp + 4)
 	call SeqTrack_ProcessControlBytes
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_TrackValidateRet
 	ld wa, (xsp + 4)
 	cpda16 xwa, 0x287f
@@ -3338,7 +3338,7 @@ BmDrEdit_SyncChannelAndGetPos:
 BmDrEdit_SelectChannelAndLoadPos:
 	ld (0x287a:16), 0
 	calr BmDrEdit_SyncChannelAndGetPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret nz
 	ld (0x276a:16), hl
 	ld (0x276c:16), 0
@@ -3350,7 +3350,7 @@ BmDrEdit_SelectChannelAndLoadPos:
 BmDrEdit_LoadAlternatePosition:
 	ld (0x287a:16), 0
 	calr BmDrEdit_SyncChannelAndGetPos
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret nz
 	ld (0x275e:16), hl
 	ld (0x2760:16), 0
@@ -3488,7 +3488,7 @@ BmDrEdit_ScanChannel_UseChannel:
 	ld bc, hl
 	calr BmDrEdit_ValidateAndProcessVoice
 	lda xwa, (0x27a4:16)
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_ScanChannel_StoreAndContinue
 	ld xbc, xwa
 	ld a, (0x27a2:16)
@@ -3687,7 +3687,7 @@ BmDrEdit_CountMeasuresInit:
 	calr BmDrEdit_ReadNoteDataFields
 	ldb_erp L, 0xfb
 	inc1b_erp 0xfb
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_CountInit_ValidateAndInsert
 	ldw wa, 0xb5
 	call SeqData_SetErrorCode
@@ -3712,7 +3712,7 @@ BmDrEdit_CountInit_ValidateAndInsert:
 BmDrEdit_CountInit_InsertLoop:
 	calr EditChannel_LoadVoiceParams
 	calr BmDrEdit_InsertStepEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_CountInit_DecrementLoop
 	ldw wa, 0xcd
 	call SeqData_SetErrorCode
@@ -3840,7 +3840,7 @@ BmDrEdit_MultiSong_CalcRemaining:
 BmDrEdit_MultiSong_InsertLoop:
 	calr EditChannel_LoadVoiceParams
 	calr BmDrEdit_InsertStepEntry
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_MultiSong_Return
 	incdi16 1, (0x275e)
 	ld wa, (0x2772:16)
@@ -3910,7 +3910,7 @@ NoteEdit_UpdateScrollAndDisplay:
 BmDrEdit_UpdateDisplay_MelodicOffset:
 	ld c, a
 	ld (0x27cc:16), a
-	cpdi8 (0x2798), 0
+	cp (0x2798:16), 0
 	ret nz
 	inc 3, c
 	ld (0x27cc:16), c
@@ -4001,7 +4001,7 @@ ReadSeqData_StoreParams:
 	extz wa
 	calr BmDrEdit_CopyEventDataBetweenParts
 	calr BmDrEdit_SeekForwardToEvent
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_ReadSeqStoreParams_Error
 	ld (0x2967:16), 144
 	ldmm8 0x2968, 0x2784
@@ -4013,7 +4013,7 @@ ReadSeqData_StoreParams:
 	lds de, 6
 	calr BmDrEdit_ApplyVelocityChange
 	calr BmDrEdit_CountMeasuresInit
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	ret z
 
 BmDrEdit_ReadSeqStoreParams_Error:
@@ -4140,10 +4140,10 @@ BmDrEdit_SyncSeekCheck:
 	push xiz
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_InitScanEventPositions
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl nz, BmDrEdit_SyncSeek_PopIzRet
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
@@ -4165,7 +4165,7 @@ BmDrEdit_SyncSeek_ReadLoop:
 
 BmDrEdit_SyncSeek_EndOfTrack:
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_SyncSeek_PopIzRet
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
@@ -4188,7 +4188,7 @@ BmDrEdit_SyncSeek_ReadNext:
 
 BmDrEdit_SyncSeek_EndOfTrackAlt:
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_SyncSeek_ResyncChannel
 	jr BmDrEdit_SyncSeek_PopIzRet
 
@@ -4241,10 +4241,10 @@ BmDrEdit_SeekForwardToEvent:
 	push xiz
 	calr BmDrEdit_SyncChannelAndGetPos
 	ld iz, hl
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl z, BmDrEdit_StoreStreamPos
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jrl z, BmDrEdit_SyncStorePos
 	jrl BmDrEdit_PopIzRet
 
@@ -4266,7 +4266,7 @@ BmDrEdit_SeekFwd_ReadLoop:
 
 BmDrEdit_SeekFwd_EndOfTrack:
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_SeekFwd_ResyncChannel
 	jrl BmDrEdit_PopIzRet
 
@@ -4288,7 +4288,7 @@ BmDrEdit_AdvanceAndCheckBeat:
 
 BmDrEdit_SeekFwd_EndOfTrackAlt:
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_SyncStorePos
 	jrl BmDrEdit_PopIzRet
 
@@ -4309,7 +4309,7 @@ BmDrEdit_SeekFwd_CheckStepMark:
 
 BmDrEdit_SeekFwd_EndOfTrackResync:
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr nz, BmDrEdit_PopIzRet
 
 BmDrEdit_SeekFwd_ResyncChannel:
@@ -4344,7 +4344,7 @@ BmDrEdit_StoreStreamPos:
 
 BmDrEdit_SeekFwd_EndOfTrackResyncAlt:
 	calr BmDrEdit_SeekToPartVoice
-	cpdi8 (0x287a), 0
+	cp (0x287a:16), 0
 	jr z, BmDrEdit_SyncStorePos
 	jr BmDrEdit_PopIzRet
 
@@ -4438,7 +4438,7 @@ BmDrEdit_EnterPlayMode:
 	ld a, (0x28b1:16)
 	ld (0x283c:16), a
 	setda 0, 0x28b1
-	cpdi8 (0x283a), 0
+	cp (0x283a:16), 0
 	jr nz, BmDrEdit_EnterPlay_RestoreSettings
 	ldmm_sd24w 0xec, 0xff, 0x00, 0x9e, 0xf1
 	jr BmDrEdit_EnterPlay_CheckAudio

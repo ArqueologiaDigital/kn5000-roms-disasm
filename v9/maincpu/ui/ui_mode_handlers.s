@@ -235,7 +235,7 @@ EffectMode_ByteData_Block4:
 
 EffectMode_ApplyTranspose:
 	calr EffectMode_ProcessPresetChange
-	cpdi8 (0x8d36), 192
+	cp (0x8d36:16), 192
 	jr nz, EffectMode_ApplyTranspose_StoreTimer
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
@@ -880,7 +880,7 @@ EffectMode_ReinitSoundOutput:
 	call BitMapOut_SnapshotFromROM
 	calr EffectMode_DisplayPresetName
 	resda 4, 0x8d52
-	cpdi8 (0x8d50), 1
+	cp (0x8d50:16), 1
 	jr z, EffectMode_ReinitSound_NotifyBank1
 	ld xwa, 0x302
 	lds bc, 0
@@ -1715,7 +1715,7 @@ SelfTest_PopCount_ShiftNext:
 	ret
 
 EffectMode_CheckAndDispatch:
-	cpdi8 (0x8d36), 251
+	cp (0x8d36:16), 251
 	jr nz, EffectMode_DispatchUpdate
 	ld a, (0x8d82:16)
 	cps a, 2
@@ -1755,11 +1755,11 @@ EffectMode_ResetDiagMode:
 	calr EffectMode_RestoreSwbWr_NormalMode
 
 EffectMode_DispatchUpdate:
-	cpdi8 (0x8d36), 248
+	cp (0x8d36:16), 248
 	call_24 z, EffectMode_HandleTimerEvents
-	cpdi8 (0x8d36), 247
+	cp (0x8d36:16), 247
 	call_24 z, EffectMode_ModeChangeTransition
-	cpdi8 (0x8d36), 251
+	cp (0x8d36:16), 251
 	ret nz
 	calr EffectMode_RunDiagSequence
 	ret
@@ -2019,7 +2019,7 @@ EffectMode_ByteData_DiagEvents:
 	ret
 
 Voice_EmitNoteWithVelocity:
-	cpdi8 (0x8d36), 246
+	cp (0x8d36:16), 246
 	ret nz
 	ld (0x8d84:16), a
 	ld (0x8d86:16), c

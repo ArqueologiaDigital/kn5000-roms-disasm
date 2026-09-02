@@ -384,21 +384,21 @@ Delay51T_Loop:
 ; See: docs/test-modes.md for full documentation
 ; =============================================================================
 CPanel_CheckSpecialCombos:
-	cpdi8 (0x8e5e), 108; CPL_SEG4 == 0x6c (0110 1100)?
+	cp (0x8e5e:16), 108; CPL_SEG4 == 0x6c (0110 1100)?
 				; = AUTO PLAY CHORD + SPLIT POINT + VARIATION 4 + VARIATION 3
 	jr nz, CPanel_Combo_CheckAllInitSetting
 	lds hl, 3		; Combo 3: Software version / build numbers screen
 	jr CPanel_CheckSpecialCombos_Return
 
 CPanel_Combo_CheckAllInitSetting:
-	cpdi8 (0x8e4b), 112; CPR_SEG1 == 0x70 (0111 0000)?
+	cp (0x8e4b:16), 112; CPR_SEG1 == 0x70 (0111 0000)?
 				; = GM SPECIAL + ACCORDION REGISTER + DIGITAL DRAWBAR
 	jr nz, CPanel_Combo_CheckFactoryReset
 	lds hl, 2		; Combo 2: "ALL INITIAL SETTING!" + LED version display
 	jr CPanel_CheckSpecialCombos_Return
 
 CPanel_Combo_CheckFactoryReset:
-	cpdi8 (0x8e60), 56; CPL_SEG6 == 0x38 (0011 1000)?
+	cp (0x8e60:16), 56; CPL_SEG6 == 0x38 (0011 1000)?
 				; = SHOWTIME & TRAD DANCE + PARTY TIME + MARCH & WALTZ
 				; (three leftmost RHYTHM GROUP buttons)
 	jr nz, CPanel_Combo_CheckFlashUpdate
@@ -406,7 +406,7 @@ CPanel_Combo_CheckFactoryReset:
 	jr CPanel_CheckSpecialCombos_Return
 
 CPanel_Combo_CheckFlashUpdate:
-	cpdi8 (0x8e50), 15; CPR_SEG6 == 0x0f (0000 1111)?
+	cp (0x8e50:16), 15; CPR_SEG6 == 0x0f (0000 1111)?
 				; = PM 1 + PM 2 + PM 3 + PM 4 (all 4 Panel Memory buttons)
 	jr nz, CPanel_Combo_NormalBoot
 	lds hl, 4		; Combo 4: Flash Memory Update
@@ -614,7 +614,7 @@ CPanel_WaitTXReady_Poll:
 
 CPanel_WaitTXReady_Timeout:
 	decdi8 1, 0x8d97
-	cpdi8 (0x8d97), 0
+	cp (0x8d97:16), 0
 	jr z, WaitTX_ConfigAndReturn
 	ei 0
 	calr DELAY_1500_LOOPS
@@ -673,7 +673,7 @@ CPanel_SendCommand:
 INTA_HANDLER:
 	ld (0x8d98:16), 0
 	push xwa
-	cpdi8 (0x8d8b), 0
+	cp (0x8d8b:16), 0
 	jr nz, INTA_HandleCountdown
 
 	anddi8 (0x8d8e), 159
@@ -894,9 +894,9 @@ CPanel_SM_SendByteN:
 
 SendByteN_CheckDone:
 	decdi8 1, 0x8d8b
-	cpdi8 (0x8d8b), 1
+	cp (0x8d8b:16), 1
 	jr z, SendByteN_AdvanceState
-	cpdi8 (0x8d8b), 0
+	cp (0x8d8b:16), 0
 	jr z, SendByteN_AdvanceState
 	decdi8 4, 0x8d8a	; previous routine
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
@@ -1011,7 +1011,7 @@ CPanel_SM_RXByteN:
 
 RXByteN_CheckDone:
 	decdi8 1, 0x8d8b
-	cpdi8 (0x8d8b), 1
+	cp (0x8d8b:16), 1
 	jr nz, RXByteN_ContinueRX
 	ld (0x8d8b:16), 0
 	anddi8 (0x8d8c), 254; CP_Flags_A.0 = 0
@@ -1056,7 +1056,7 @@ CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 
 CPanel_InterruptPoll_MainLoop:
 	incdi8 1, (0x8d9a)
-	cpdi8 (0x8d9a), 42; =42 ;-)
+	cp (0x8d9a:16), 42; =42 ;-)
 	jr ule, PollLoop_DispatchWork
 	ei 6
 	ld wa, (0x8dff:16)
@@ -1161,7 +1161,7 @@ PollLoop_Return:
 
 PollLoop_BusyRetry:
 	incdi8 1, (0x8d98)
-	cpdi8 (0x8d98), 20
+	cp (0x8d98:16), 20
 	jr ule, PollLoop_Return
 
 	ei 6

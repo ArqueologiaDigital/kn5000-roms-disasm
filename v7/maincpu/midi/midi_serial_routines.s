@@ -319,7 +319,7 @@ MIDI_APPLY_STARTUP_TIMING:
 	ret
 	push SR
 	ei 0x06
-	cpdi8 (0x0474), 0x55
+	cp (0x0474:16), 0x55
 	jr z, .Lc_fcf1d1
 	ld (0x00ea:16), 0xdd
 	jr t, .Lc_fcf1da
@@ -489,7 +489,7 @@ SysEx_InProgressReturn:
 	ld	a, (38350:16)
 	cp	a, 25
 	jr	nz, 52
-	cpdi8	38331, 18
+	cp	(38331:16), 18
 	jr	nz, 45
 	xor	e, e
 	ld	a, (38298:16)
@@ -549,7 +549,7 @@ SysEx_InProgressReturn:
 	ld	a, (38350:16)
 	cp	a, 16
 	jr	nz, 52
-	cpdi8	38331, 16
+	cp	(38331:16), 16
 	jr	nz, 45
 	xor	e, e
 	ld	a, (38298:16)
@@ -573,7 +573,7 @@ SysEx_InProgressReturn:
 	ld	a, (38350:16)
 	cp	a, 20
 	jr	nz, 86
-	cpdi8	38331, 17
+	cp	(38331:16), 17
 	jr	nz, 79
 	ldb	b, 5
 	ldw	de, 64512

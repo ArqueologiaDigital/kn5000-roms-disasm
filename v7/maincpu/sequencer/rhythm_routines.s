@@ -174,7 +174,7 @@ Rhythm_SetupChannel_D6:
 	calr RhythmEvt_ProcessNote
 	ret
 RhythmEvt_ProcessNote:
-	cpdi8 (0x3249), 0xf0
+	cp (0x3249:16), 0xf0
 	jr c, RhythmEvt_AlternateProcess
 	ld a, (0x327a:16)
 	orda8 a, (0x327b)
@@ -418,7 +418,7 @@ Rhythm_VelocityLookup_A:
 	push XHL
 	ld W,A
 	calr Rhythm_InstrBaseLookup
-	cpdi8 (0x323c), 0x00
+	cp (0x323c:16), 0x00
 	jr nz, .Lc_f54c61
 	ldb A, 0x00
 	jr t, Rhythm_VelLookA_Done
@@ -532,7 +532,7 @@ Rhythm_Transp_Done:
 Rhythm_VoiceMapLookup:
 	push XIY
 	push XHL
-	cpdi8 (0x323c), 0x00
+	cp (0x323c:16), 0x00
 	jr nz, .Lc_f54dc7
 	ldb A, 0x00
 	jrl t, Rhythm_VoiceMap_Done
@@ -686,7 +686,7 @@ Rhythm_VelocityCompute:
 	push XHL
 	ld W,A
 	calr Rhythm_InstrBaseLookup
-	cpdi8 (0x323c), 0x00
+	cp (0x323c:16), 0x00
 	jr nz, .Lc_f54edf
 	ldb A, 0x00
 	jr t, Rhythm_VelComp_Done
@@ -846,7 +846,7 @@ Rhythm_SendByte:
 	ret
 
 Rhythm_ValidateAndSend:
-	cpdi8 (0x3249), 0xf0
+	cp (0x3249:16), 0xf0
 	jr c, Rhythm_Validate_Mismatch
 	ld a, (0x327a:16)
 	orda8 a, (0x327b)
@@ -983,7 +983,7 @@ Rhythm_AllNotesOff_Dispatch:
 	ret
 
 Rhythm_AllNotesOff_D7:
-	cpdi8 (0x3293), 0x00
+	cp (0x3293:16), 0x00
 	jr z, Rhythm_AllNotesOff_D7_Skip
 	ldb A, 0xd7
 	ldb W, 0x03
@@ -993,7 +993,7 @@ Rhythm_AllNotesOff_D7_Skip:
 	ret
 
 Rhythm_AllNotesOff_D4:
-	cpdi8 (0x3294), 0x00
+	cp (0x3294:16), 0x00
 	jr z, Rhythm_AllNotesOff_D4_Skip
 	ldb A, 0xd4
 	ldb W, 0x03
@@ -1003,7 +1003,7 @@ Rhythm_AllNotesOff_D4_Skip:
 	ret
 
 Rhythm_AllNotesOff_D5:
-	cpdi8 (0x3295), 0x00
+	cp (0x3295:16), 0x00
 	jr z, Rhythm_AllNotesOff_D5_Skip
 	ldb A, 0xd5
 	ldb W, 0x03
@@ -1013,7 +1013,7 @@ Rhythm_AllNotesOff_D5_Skip:
 	ret
 
 Rhythm_AllNotesOff_D6:
-	cpdi8 (0x3296), 0x00
+	cp (0x3296:16), 0x00
 	jr z, Rhythm_AllNotesOff_D6_Done
 	ldb A, 0xd6
 	ldb W, 0x03
@@ -1030,7 +1030,7 @@ Rhythm_SendVolume_Dispatch:
 	ret
 
 Rhythm_SendVolume_D7:
-	cpdi8 (0x3293), 0x00
+	cp (0x3293:16), 0x00
 	jr z, Rhythm_SendVolume_D7_Skip
 	ldb A, 0xd7
 	ldb W, 0x03
@@ -1040,7 +1040,7 @@ Rhythm_SendVolume_D7_Skip:
 	ret
 
 Rhythm_SendVolume_D4:
-	cpdi8 (0x3294), 0x00
+	cp (0x3294:16), 0x00
 	jr z, Rhythm_SendVolume_D4_Skip
 	ldb A, 0xd4
 	ldb W, 0x03
@@ -1050,7 +1050,7 @@ Rhythm_SendVolume_D4_Skip:
 	ret
 
 Rhythm_SendVolume_D5:
-	cpdi8 (0x3295), 0x00
+	cp (0x3295:16), 0x00
 	jr z, Rhythm_SendVolume_D5_Skip
 	ldb A, 0xd5
 	ldb W, 0x03
@@ -1060,7 +1060,7 @@ Rhythm_SendVolume_D5_Skip:
 	ret
 
 Rhythm_SendVolume_D6:
-	cpdi8 (0x3296), 0x00
+	cp (0x3296:16), 0x00
 	jr z, Rhythm_SendVolume_D6_Done
 	ldb A, 0xd6
 	ldb W, 0x03
@@ -1077,7 +1077,7 @@ Rhythm_NoteOffMax_Dispatch:
 	ret
 
 Rhythm_NoteOffMax_D7:
-	cpdi8 (0x3293), 0x00
+	cp (0x3293:16), 0x00
 	jr z, Rhythm_NoteOffMax_D7_Skip
 	ldb A, 0x90
 	ldb W, 0x7f
@@ -1087,7 +1087,7 @@ Rhythm_NoteOffMax_D7_Skip:
 	ret
 
 Rhythm_NoteOffMax_D4:
-	cpdi8 (0x3294), 0x00
+	cp (0x3294:16), 0x00
 	jr z, Rhythm_NoteOffMax_D4_Skip
 	ldb A, 0x90
 	ldb W, 0x7f
@@ -1097,7 +1097,7 @@ Rhythm_NoteOffMax_D4_Skip:
 	ret
 
 Rhythm_NoteOffMax_D5:
-	cpdi8 (0x3295), 0x00
+	cp (0x3295:16), 0x00
 	jr z, Rhythm_NoteOffMax_D5_Skip
 	ldb A, 0x90
 	ldb W, 0x7f
@@ -1107,7 +1107,7 @@ Rhythm_NoteOffMax_D5_Skip:
 	ret
 
 Rhythm_NoteOffMax_D6:
-	cpdi8 (0x3296), 0x00
+	cp (0x3296:16), 0x00
 	jr z, Rhythm_NoteOffMax_D6_Done
 	ldb A, 0x90
 	ldb W, 0x7f
@@ -1332,9 +1332,9 @@ Rhythm_SeqReset_Store:
 Rhythm_SeqResetTable:
 	.incbin "includes/romslices/v7_transplant_Rhythm_SeqResetTable.bin"
 Rhythm_TransposeWithMod:
-	cpdi8 (0x323c), 0x00
+	cp (0x323c:16), 0x00
 	jr z, Rhythm_TranspMod_Return
-	cpdi8 (0x323d), 0x00
+	cp (0x323d:16), 0x00
 	jr z, Rhythm_TranspMod_Return
 	bitda 2, (0x3349)
 	jr nz, Rhythm_TranspMod_Return

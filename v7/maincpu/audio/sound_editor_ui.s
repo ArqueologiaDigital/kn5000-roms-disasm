@@ -5937,7 +5937,7 @@ SeMenu_ValueEditor_Draw:
 	lda	xbc, (xwa+5)
 	cp	e, 9
 	jr	nz, 29
-	cpdi8	35996, 34
+	cp	(35996:16), 34
 	jr	nz, 114
 	ld	a, (xbc)
 	cp	a, 34
@@ -5956,7 +5956,7 @@ SeMenu_ValueEditor_Increment:
 	jr nz, SeMenu_ValueEditor_Redraw
 
 SeMenu_ValueEditor_Decrement:
-	cpdi8	35996, 38
+	cp	(35996:16), 38
 	jr	nz, 75
 	ld	a, (xbc)
 	cp	a, 38
@@ -6544,7 +6544,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld XIY,SeBitmap_EnvCurve5_0x46B
 	ld XIX,SeBitmap_EnvCurve5_0x492
 	call SeMenu_NameEditor_Setup
-	cpdi8 (0x065c), 0x00
+	cp (0x065c:16), 0x00
 	jr z, .Lc_f0f04e
 	ld XIY,SeBitmap_EnvCurve5_0x492
 	ld XIX,SeBitmap_EnvCurve5_0x49C
@@ -6570,7 +6570,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push XIX
 	push XIY
 	push XIZ
-	cpdi8 (0x06ae), 0x01
+	cp (0x06ae:16), 0x01
 	jr nz, .Lc_f0f090
 	stib_da (0x03efa8), 0x00
 	ld XIY,SeBitmap_EnvCurve5_0x313
@@ -6750,7 +6750,7 @@ SeMenu_WaveformSelect_Data:
 	.byte 0xf1, 0x00, 0x1d, 0xd6, 0xeb, 0xf0, 0xf2, 0xa8
 	.byte 0xef, 0x03, 0x00, 0x00, 0x0e
 	stib_da (0x03efa8), 0x00
-	cpdi8 (0x0661), 0x01
+	cp (0x0661:16), 0x01
 	jr z, .Lc_f0f596
 	ld XIY,SeBitmap_EnvCurve5_0x2BD
 	ld XIX,SeBitmap_EnvCurve5_0x2E9
@@ -6858,7 +6858,7 @@ SeMenu_PresetManager_SaveApply:
 	ret
 SeMenu_PresetManager_Data:
 	call	15792330
-	cpdi8	1710, 1
+	cp	(1710:16), 1
 	jr	z, 20
 	ld	xiy, 15814194
 	ld	xix, 15814646
@@ -6880,7 +6880,7 @@ SeMenu_PresetManager_Data:
 	call	15794653
 	call	15792351
 	ret
-	cpdi8 (0x06ae), 0x01
+	cp (0x06ae:16), 0x01
 	jr nz, .Lc_f0f79a
 	stib_da (0x03efa8), 0x00
 	ld XIY,SeBitmap_EnvCurve5_0x7B6
@@ -6923,7 +6923,7 @@ SeMenu_PresetManager_Data:
 	djnz8	c, -84
 	ret
 	stib_da (0x03efa8), 0x00
-	cpdi8 (0x06ae), 0x01
+	cp (0x06ae:16), 0x01
 	jr nz, .Lc_f0f816
 	ldb C, 0x02
 	jr t, .Lc_f0f818
@@ -7161,7 +7161,7 @@ SeMenu_PresetBrowser_Data:
 	ret
 SeMenu_CompareAndApply_Init:
 	call	15793043
-	cpdi8	1710, 1
+	cp	(1710:16), 1
 	jr	z, 20
 	call	15791819
 	ld	xiy, 15801964
@@ -7176,7 +7176,7 @@ SeMenu_CompareAndApply_Match:
 	call	15790112
 	call	15791995
 	call	15790952
-	cpdi8	1710, 1
+	cp	(1710:16), 1
 	jr	z, 22
 	stib_da	257960, 0
 	ld	xiy, 15806315
@@ -7194,7 +7194,7 @@ SeMenu_CompareAndApply_End:
 SeMenu_CompareAndApply_Data:
 	stib_da (0x03efa8), 0x00
 	ld XIY,SeBitmap_EnvCurve5_0xCC1
-	cpdi8 (0x06ae), 0x01
+	cp (0x06ae:16), 0x01
 	jr z, SeMenu_CompareAndApply_Data2
 	ld XIX,0x00f11d17
 	jr t, SeMenu_CompareAndApply_Data3
@@ -7235,7 +7235,7 @@ SeMenu_CompareAndApply_Data6:
 	ret
 SeMenu_Utility_CopyBlock:
 	call	15793043
-	cpdi8	1710, 1
+	cp	(1710:16), 1
 	jr	z, 40
 	ld	xiy, 15802434
 	ld	xix, 15802623
@@ -7255,7 +7255,7 @@ SeMenu_Utility_CopyBlock:
 	call	15790112
 	call	15790186
 	stib_da	257960, 0
-	cpdi8	1710, 1
+	cp	(1710:16), 1
 	jr	z, 16
 	ld	xiy, 15806628
 	ld	xix, 15806698
@@ -7333,7 +7333,7 @@ SeMenu_Utility_CompareBlock_End:
 	ret
 SeMenu_Utility_SearchByte:
 	stib_da (0x03efa8), 0x00
-	cpdi8 (0x06ae), 0x01
+	cp (0x06ae:16), 0x01
 	jr z, SeMenu_Utility_SearchByte_End
 	ld XIX,0x00f12317
 	jr t, SeMenu_Utility_FormatNumber
@@ -7354,7 +7354,7 @@ SeMenu_Utility_FormatNumber_End:
 	ld (0x0678:16), a
 	stib_da (0x03efa8), 0x02
 	ld XIY,0x00f1233a
-	cpdi8 (0x06ae), 0x01
+	cp (0x06ae:16), 0x01
 	jr z, SeMenu_Utility_FormatNumber_Data
 	ld XIX,0x00f1235c
 	jr t, SeMenu_Utility_FormatSigned
@@ -8975,7 +8975,7 @@ PsCmpCpFGrpBox_SendNotify:
 	ld	bc, (xde)
 	add	bc, 39
 	ld	(xwa+6), bc
-	cpdi8	14603, 0
+	cp	(14603:16), 0
 	jr	nz, 9
 	pushw 242
 	lds	bc, 1
@@ -9076,7 +9076,7 @@ PsCmpCpFVariBox_SendNotify:
 	ld	bc, (xde)
 	add	bc, 39
 	ld	(xwa+6), bc
-	cpdi8	14603, 1
+	cp	(14603:16), 1
 	jr	nz, 9
 	pushw 242
 	lds	bc, 1
@@ -9143,9 +9143,9 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
-	cpdi8	14603, 2
+	cp	(14603:16), 2
 	jr	nz, 17
-	cpdi8	14820, 0
+	cp	(14820:16), 0
 	jr	nz, 10
 	ldw	(xbc), 0
 	ldw	(xwa), 255
@@ -9172,7 +9172,7 @@ PsCmpCpFPtnBox_SendNotify:
 	ld	bc, (xde)
 	add	bc, 38
 	ld	(xwa+6), bc
-	cpdi8	14603, 2
+	cp	(14603:16), 2
 	jr	nz, 9
 	pushw 242
 	lds	bc, 1
@@ -9291,7 +9291,7 @@ PsCstmCpSwBox_PushTableAddr0:
 
 PsCstmCpSwBox_ReadParam2:
 	ld	xwa, 14801780
-	cpdi8	14619, 10
+	cp	(14619:16), 10
 	jr	nc, 5
 	ld	xwa, 14801772
 PsCstmCpSwBox_PushTableAddr1:
@@ -9365,7 +9365,7 @@ PsCstmCpNameBox_MainFuncCall:
 	jr PsCtmAtt_ReturnZero
 
 PsCstmCpNameBox_HandleEvt2D:
-	cpdi8 (0x39e2), 0x00
+	cp (0x39e2:16), 0x00
 	jr nz, PsCtmAtt_ReturnZero
 	ld XWA,XIZ
 	call GetViewInstance
@@ -9380,7 +9380,7 @@ PsCstmCpNameBox_HandleEvt2D:
 	ld XBC,0x01c0000f
 	jr t, PsCstmCpNameBox_SendEventJoin
 PsCstmCpNameBox_HandleEvt2E:
-	cpdi8 (0x39e2), 0x00
+	cp (0x39e2:16), 0x00
 	jr nz, PsCtmAtt_ReturnZero
 	ld XWA,XIZ
 	call GetViewInstance
@@ -9498,9 +9498,9 @@ AcMemNoBox_HandleEvtBC:
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
-	cpdi8	14604, 1
+	cp	(14604:16), 1
 	jr	nz, 17
-	cpdi8	14820, 1
+	cp	(14820:16), 1
 	jr	nz, 10
 	ldw	(xbc), 0
 	ldw	(xwa), 255
@@ -9530,7 +9530,7 @@ AcMemNoBox_SendNotify:
 	ld	bc, (xde)
 	add	bc, 46
 	ld	(xwa+6), bc
-	cpdi8	14604, 1
+	cp	(14604:16), 1
 	jr	nz, 9
 	pushw 242
 	lds	bc, 1
@@ -10007,9 +10007,9 @@ PsNameMemBox_HandleEvtBC:
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
-	cpdi8	14604, 0
+	cp	(14604:16), 0
 	jr	nz, 17
-	cpdi8	14820, 1
+	cp	(14820:16), 1
 	jr	nz, 10
 	ldw	(xbc), 0
 	ldw	(xwa), 255
@@ -10039,7 +10039,7 @@ PsNameMemBox_SendNotify:
 	ld	bc, (xde)
 	add	bc, 38
 	ld	(xwa+6), bc
-	cpdi8	14604, 0
+	cp	(14604:16), 0
 	jr	nz, 9
 	pushw 242
 	lds	bc, 1
@@ -10887,7 +10887,7 @@ VwVariBox_GetText_PlaySample:
 VwVariBox_OK:
 	ld XWA,(XSP+0x0118)
 	call GetViewInstance
-	cpdi8 (0x7e6f), 0x00
+	cp (0x7e6f:16), 0x00
 	jr nz, VwVariBox_OK_Forward
 	ld WA,(XHL+0x24)
 	extz XWA
@@ -11107,7 +11107,7 @@ MspBnkSlBox_HandleEvt7:
 	ld (XSP+0x04),XHL
 	ld XWA,(XSP+0x0c)
 	call GetViewInstance
-	cpdi8 (0x7e6f), 0x00
+	cp (0x7e6f:16), 0x00
 	jr nz, MspBnk_JoinLoadParams
 	ld XWA,(XSP+0x04)
 	ld WA,(XWA+0x2a)
@@ -13233,7 +13233,7 @@ CmpNameMenuBoxProc:
 	jr CmpNameMenu_Epilogue
 
 CmpNameMenu_HandleEvtD:
-	cpdi8	13370, 12
+	cp	(13370:16), 12
 	jr	nc, 19
 	ld	xwa, xiz
 	call	16400380

@@ -70,7 +70,7 @@ BitMapOut_ByteData_RenderA:
 	call	16405594
 	cp	xhl, 27263222
 	ret	z
-	cpdi8	49121, 0
+	cp	(49121:16), 0
 	ret	nz
 	calr	605
 	cps	l, 0
@@ -119,7 +119,7 @@ BitMapOut_ByteData_RenderB:
 	ld	a, (49124:16)
 	cpda8	a, 35998
 	jrl	nz, 134
-	cpdi8	49121, 0
+	cp	(49121:16), 0
 	jr	nz, 127
 	calr	429
 	cps	l, 0
@@ -274,7 +274,7 @@ BitMapOut_ByteData_RenderE:
 	calr	32
 	ret
 BitMapOut_CheckDiskAndApply:
-	cpdi8 (0x8c9c), 0x8a
+	cp (0x8c9c:16), 0x8a
 	jp_24 z, (Interrupt_ModeGuardCheck)
 	ld XWA,0xffffffff
 	ld XBC,0x01c20000
@@ -1674,7 +1674,7 @@ BitMapOut_DetectChanges:
 	calr BitMapOut_GetRenderMode
 	bit 0x00,L
 	jr nz, .Lc_fb4e26
-	cpdi8 (0x8c98), 0x13
+	cp (0x8c98:16), 0x13
 	jr z, .Lc_fb4e26
 	lda xhl, (0xf9a0:16)
 	lda xde, (0xfc5a:16)
@@ -2888,7 +2888,7 @@ BitMapOut_GetRenderMode_Return:
 	ret
 BitMapOut_ByteData_RenderState:
 	push	xiz
-	cpdi8	49121, 4
+	cp	(49121:16), 4
 	jrl	nz, 179
 	ld	a, (49122:16)
 	andda8	a, 49123

@@ -83,7 +83,7 @@ Password_HandleSaveEvent:
 	jr t, Password_ForwardToSaveFilter
 Password_Save_CheckLoadOnly:
 .Lc_f8c61d:
-	cpdi8 (0x8970), 0x01
+	cp (0x8970:16), 0x01
 	jr nz, .Lc_f8c641
 	ld WA,IZ
 	call CheckSlotIsSelected
@@ -96,7 +96,7 @@ Password_Save_CheckLoadOnly:
 	jr t, Password_ForwardToSaveFilter
 Password_Save_CheckSaveOnly:
 .Lc_f8c641:
-	cpdi8 (0x8970), 0x02
+	cp (0x8970:16), 0x02
 	jr nz, Password_SaveErrorStatus
 	ld WA,IZ
 	call CheckIsCurrentSlot
@@ -656,7 +656,7 @@ FileName_CheckCallback:
 	ld	xwa, (32474:16)
 	or	xwa, xwa
 	jrl	z, 200
-	cpdi8	35994, 103
+	cp	(35994:16), 103
 	jr	z, 71
 	call	16289841
 	ld	iz, hl
@@ -695,7 +695,7 @@ FileName_Callback_Simple:
 	jr	99
 FileName_HandleRegister:
 	stda32 (0x7eda), xbc
-	cpdi8 (0x8c9a), 0x67
+	cp (0x8c9a:16), 0x67
 	jr z, FileName_Register_Simple
 	call CheckFileSystemStatus
 	ld IZ,HL

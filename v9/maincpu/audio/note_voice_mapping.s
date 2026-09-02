@@ -526,7 +526,7 @@ AccNoteOn_AutoPlayCheck:
 	cp iz, wa
 	jr c, AccNoteOn_AutoPlayLoop
 	call CompIface_ResetPedal
-	cpdi8 (0x8d38), 236
+	cp (0x8d38:16), 236
 	jr nz, AccNoteOn_EmitVoiceLoop_Init
 	lds iz, 0
 	ldb e, 0x7f
@@ -3071,14 +3071,14 @@ ProcessNoteEntry_ReadBuf3:
 ProcessNoteEntry_Compare:
 	cps hl, 0
 	jr z, MidiEvent_ProcessCC_Continue
-	cpdi8 (0xc363), 255
+	cp (0xc363:16), 255
 	jr z, ProcessNoteEntry_CheckDRAM
 	ld l, (0xc363:16)
 	extz hl
 	jr MidiEvent_ProcessCC_Continue
 
 ProcessNoteEntry_CheckDRAM:
-	cpdi8 (0xc362), 0
+	cp (0xc362:16), 0
 	jr le, ProcessNoteEntry_LoadDRAM2
 	ld a, (0xc362:16)
 	exts wa
@@ -9505,7 +9505,7 @@ NoteMap_ResetEntryTimers:
 	pushw_erp 0xfa
 	ld (xsp + 16), e
 	ld (xsp + 18), xwa
-	cpdi8 (0x8d36), 152
+	cp (0x8d36:16), 152
 	jr nz, ResetTimers_Return
 	ldw (xsp + 2), 0x0
 	jr ResetTimers_CheckCount
@@ -10624,7 +10624,7 @@ SelectTone_Continue_Return:
 
 SelectTone_Continue_Prologue:
 	dec 6, xsp
-	cpdi8 (0x8d36), 246
+	cp (0x8d36:16), 246
 	jr nz, SelectTone_Continue_LoadReg
 	lds wa, 0
 	lds bc, 0
@@ -11933,7 +11933,7 @@ ReallocVoices_Exit_Compare:
 	jrl z, NoteMap_StoreAndRet
 	lda_dri XWA, 0xfd, 0xa4, 0x00
 	call NoteMap_AssignAllVoiceLinks
-	cpdi8 (0xc365), 255
+	cp (0xc365:16), 255
 	jrl nz, ReallocVoices_Exit_CheckDRAM
 	bitda 0, (0xc364)
 	jr z, ReallocVoices_Exit_TestBit1
@@ -12009,7 +12009,7 @@ ReallocVoices_Exit_TestBit3:
 	jrl NoteMap_StoreAndRet
 
 ReallocVoices_Exit_CheckDRAM:
-	cpdi8 (0xc365), 21
+	cp (0xc365:16), 21
 	jr nz, ReallocVoices_Exit_TestBit32
 	ld wa, (0xc598:16)
 	bit 1, wa
@@ -13434,7 +13434,7 @@ ProcessEventDispatch_LoadParam:
 	ld de, (xsp + 10)
 	ldw bc, 0x20
 	call SndParam_NotifyAndReturn
-	cpdi8 (0x8d36), 220
+	cp (0x8d36:16), 220
 	jr z, ProcessEventDispatch_InitVal
 	ld wa, (xsp + 4)
 	pushw 0x3
@@ -13464,7 +13464,7 @@ ProcessEventDispatch_LoadParam2:
 	ld de, (xsp + 12)
 	ldw bc, 0x5e
 	call SndParam_NotifyAndReturn
-	cpdi8 (0x8d36), 220
+	cp (0x8d36:16), 220
 	jr z, ProcessEventDispatch_LoadParam3
 	ld wa, (xsp + 4)
 	pushw 0x3
@@ -14029,7 +14029,7 @@ NoteMap_FindBestMatch:
 	ld a, (0xceac:16)
 	cpda8 a, 0xceaa
 	jr nz, NoteMap_CheckVoiceReuse
-	cpdi8 (0xceb2), 0
+	cp (0xceb2:16), 0
 	jr z, CheckVoiceReuse_SetByteFF2
 
 NoteMap_CheckVoiceReuse:
@@ -14132,7 +14132,7 @@ UIParam_ScanAndCollect:
 	lda xsp, (xsp - 68)
 	pushw_erp 0xfa
 	ld (0xceb2:16), 0
-	cpdi8 (0xceab), 15
+	cp (0xceab:16), 15
 	jr ule, UIParam_SetDefaultCount
 	ld a, (0xceab:16)
 	sub a, 0xf
@@ -15089,19 +15089,19 @@ Audio_NullRet1_Data:
 	ret
 
 Voice_UpdateNoteState:
-	cpdi8 (0xceb5), 0
+	cp (0xceb5:16), 0
 	jr z, UpdateNoteState_CheckDRAM
 	decdi8 1, 0xceb5
 	jr z, Voice_CheckAndUpdateMode
 
 UpdateNoteState_CheckDRAM:
-	cpdi8 (0xceb4), 0
+	cp (0xceb4:16), 0
 	jr z, UpdateNoteState_CheckDRAM2
 	decdi8 1, 0xceb4
 	jr z, Voice_CheckAndUpdateMode
 
 UpdateNoteState_CheckDRAM2:
-	cpdi8 (0xceb3), 0
+	cp (0xceb3:16), 0
 	jr z, Voice_ProcessControllers_Return
 	decdi8 1, 0xceb3
 	jr z, Voice_CheckAndUpdateMode
@@ -15272,7 +15272,7 @@ VelocityUpdate_CheckNoThreshold:
 	jr z, Voice_CheckAndUpdateSlot
 
 VelocityUpdate_SetTimerValue:
-	cpdi8 (0xceb3), 0
+	cp (0xceb3:16), 0
 	jr nz, VelocityUpdate_Return
 	ld (0xceb3:16), 5
 	jr VelocityUpdate_Return
@@ -16076,7 +16076,7 @@ VoiceSlot_CheckPitch_Compare3:
 	jr nz, VoiceSlot_CheckPitch_OrBits2
 	bitda_24 5, (0xcede)
 	jr z, VoiceSlot_CheckPitch_OrBits
-	cpdi8 (0xceb5), 0
+	cp (0xceb5:16), 0
 	jr z, NoteBuffer_CompactEntries
 
 VoiceSlot_CheckPitch_OrBits:
@@ -17191,7 +17191,7 @@ NoteDisplay_StoreAnd_LoadReg2:
 	lds bc, 5
 	ldirw
 	ldi85
-	cpdi8 (0xcee5), 0
+	cp (0xcee5:16), 0
 	jr nz, NoteDisplay_StoreAnd_LoadDRAM
 	call NoteDisplay_ClearAndSetUpdate
 	ld (0xcedf:16), 0
@@ -19866,7 +19866,7 @@ OutputFlush_RestoreReg:
 
 OutputFlush_Prologue:
 	push xiz
-	cpdi8 (0xe9c4), 0
+	cp (0xe9c4:16), 0
 	jr nz, OutputFlush_LoadDRAM
 	lds hl, 0
 	jrl Acc_PopIzRet
@@ -19889,7 +19889,7 @@ OutputFlush_InitVal:
 	ld bc, (0xe9ef:16)
 	calr PlayModeStateMachine_Prologue
 	ld xiz, xhl
-	cpdi8 (0xe9e4), 4
+	cp (0xe9e4:16), 4
 	jr nz, AccSong_ProcessRecord_Loop
 	ld xwa, xiz
 	calr MidiRealtime_Process_Prologue
@@ -20559,7 +20559,7 @@ SendSinglePacket_DoGetPlayS:
 	call GetPlayState2
 	cps l, 0
 	jr z, SendSinglePacket_Epilogue
-	cpdi8 (0xe9e4), 1
+	cp (0xe9e4:16), 1
 	jr nz, SendSinglePacket_Epilogue
 	push xiz
 	pushm (xsp + 40)
@@ -21236,7 +21236,7 @@ SeekRecord_Done_DoGetPlayS:
 	call GetPlayState2
 	cps l, 0
 	jr z, FileIO_SeekRecord_Return
-	cpdi8 (0xe9e4), 1
+	cp (0xe9e4:16), 1
 	jr nz, FileIO_SeekRecord_Return
 	lda xwa, (xsp + 4)
 	push xwa
@@ -21340,7 +21340,7 @@ SeekRecord_PopReturn_Data:
 SeqFile_ParseHeader:
 	pushw iz
 	lds iz, 0
-	cpdi8 (0xe9c4), 0
+	cp (0xe9c4:16), 0
 	jr nz, SeqFile_ParseHeader_Block2
 	lds hl, 0
 	jr SeqFile_ParseHeader_RestoreReg
@@ -22067,7 +22067,7 @@ RecordReadOK_NextIter2:
 	jr ule, RecordReadOK_Block8
 
 RecordReadOK_CheckDRAM:
-	cpdi8 (0xe9e4), 3
+	cp (0xe9e4:16), 3
 	jr nz, RecordReadOK_InitVal6
 	ld xwa, (xsp + 2)
 	cp xwa, 0xc
@@ -22820,7 +22820,7 @@ Dispatch_Prologue:
 	jr ToneGen_PopIzStackReturn
 
 ToneGen_CheckSpecialChannel:
-	cpdi8 (0xe9e4), 2
+	cp (0xe9e4:16), 2
 	jr nz, ToneGen_SendPacketDirect
 	ld a, (xiz)
 	and a, 0xf
@@ -23214,7 +23214,7 @@ ProcessMidiConverge_LoadDRAM:
 	and a, 0xf0
 	cp a, 0x90
 	jr nz, ToneGen_ValidateRange_Loop
-	cpdi8 (0xec05), 0
+	cp (0xec05:16), 0
 	jr z, ToneGen_ValidateRange_Loop
 	ld a, (0xec05:16)
 	extz wa
@@ -23223,7 +23223,7 @@ ProcessMidiConverge_LoadDRAM:
 	div wa, 0x64
 	add wa, 0x20
 	ld (0xec05:16), a
-	cpdi8 (0xec05), 127
+	cp (0xec05:16), 127
 	jr ule, ToneGen_ValidateRange_Loop
 	ld (0xec05:16), 127
 
@@ -23232,7 +23232,7 @@ ToneGen_ValidateRange_Loop:
 	and a, 0xf0
 	cp a, 0xb0
 	jrl nz, ToneGen_ProcessMidiConverge
-	cpdi8 (0xec04), 7
+	cp (0xec04:16), 7
 	jrl nz, ToneGen_ProcessMidiConverge
 	ld (0xec05:16), 127
 	jrl ToneGen_ProcessMidiConverge
