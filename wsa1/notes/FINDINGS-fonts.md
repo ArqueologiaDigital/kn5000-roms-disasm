@@ -443,6 +443,36 @@ none — so on this firmware revision the five Japanese faces, 21,120 bytes, shi
 as **unreferenced data**. Whoever built them was working from a document the
 ROM does not carry.
 
+### 6.2 ★ And the service manual says why — Japan is not a market for this model
+
+Page 1 of `~/compartilhado/KN7000/service_manual/SX-WSA1R Service Manual.pdf`
+(image-only, so `pdftotext` shows nothing; render it with
+`pdftoppm -r 110 -png -f 1 -l 1`) lists the model's eighteen **AREAS**:
+
+> (M) U.S.A. · (MC) Canada · (XM) Mexico · (EN) Norway, Sweden, Denmark,
+> Finland · (EH) Holland, Belgium · (EF) France, Italy · (EZ) Germany ·
+> (EW) Switzerland · (EA) Austria · (EP) **Spain**, Portugal, Greece,
+> Singapore, South Africa · (EK) the United Kingdom · (XL) New Zealand ·
+> (XR) Australia · (XS) Malaysia · (XD) Saudi Arabia, Hong Kong, Kuwait ·
+> (XT) Taiwan · (X) Thailand, Indonesia, Iran, U.A.E., Panama, Argentina,
+> Peru, Brasil · (XP) Philippines
+
+**Japan is not on the list.** The `R` is the export suffix; the domestic model
+is the SX-WSA1. That closes the circle three ways:
+
+* the accented Latin runs of §5.3 are these areas, appended one market at a
+  time — German for (EZ)/(EW)/(EA), French for (EF), and the `0xB0`-`0xBC`
+  Spanish block for **(EP)**;
+* the five Japanese faces are present because the two products share one
+  firmware source, and **unreferenced** because this build is the export one;
+* the ideograph order of §5.2 is a *domestic* document's order, which is why no
+  amount of searching these four images will find the text (§6.1). It was
+  never shipped in them.
+
+⚠ Ranked, not proved: the manual establishes the market list and the export
+suffix; the shared-source step is the ordinary reading of those facts plus
+§6.1, not a measurement.
+
 ---
 
 ## 7. One oddity worth keeping
