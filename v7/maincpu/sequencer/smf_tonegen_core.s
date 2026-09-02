@@ -4769,7 +4769,7 @@ VoiceSynth_Algo_SimpleStore:
 	retd	0
 	.byte 0xf3
 	reti
-	.byte 0xf0, 0xf4, 0x41
+	st_dd8b	a, 244
 	pop	xix
 	ret
 VoiceSynth_Algo_MultiPath:

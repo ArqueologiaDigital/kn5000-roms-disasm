@@ -1380,7 +1380,8 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 0
 	lds	de, 1
 	call	15753743
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xde
+	inc1b_erp	251
+	cpib_erp	251, 6
 	jr	c, -30
 	lda	xwa, (xsp+4)
 	call	15756849
@@ -1422,7 +1423,8 @@ UpdSeSel_ExtendedOps_Data:
 	lds	wa, 3
 	lds	de, 1
 	call	15754165
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xde
+	inc1b_erp	251
+	cpib_erp	251, 6
 	jr	c, -30
 	lda	xwa, (xsp+4)
 	call	15756849
@@ -1469,7 +1471,7 @@ UpdSeSel_ExtendedOps_Data:
 	jr	28
 	lda	xwa, (xsp)
 	call	15757724
-	.byte 0x8f, 0x00, 0x23
+	ld	c, (xsp+256)
 	extz	bc
 	lds	wa, 0
 	call	15756036
@@ -1547,16 +1549,17 @@ UpdSeSel_ExtendedOps_Data:
 	.byte 0xd7, 0xfa, 0x04
 	lda	xwa, (xsp+2)
 	call	15755792
-	.byte 0xc7, 0xfb, 0xa8
+	ldib_erp	251, 0
 	ld	a, (xsp+2)
 	extz	wa
 	ldb	c, 54
 	.byte 0xc7, 0xfb, 0x83, 0x0b, 0x30, 0x00
 	lds	de, 1
 	call	15753743
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xda
+	inc1b_erp	251
+	cpib_erp	251, 2
 	jr	c, -27
-	.byte 0xc7, 0xfb, 0xa8
+	ldib_erp	251, 0
 	ld	a, (xsp+2)
 	extz	wa
 	ldb	c, 77
@@ -1799,7 +1802,8 @@ UpdSeSel_ExtendedOps_Data:
 	pop QIZ
 	lda xsp, (xsp + 0x0a)
 	ret
-	.byte 0x30, 0x39, 0x00, 0x78, 0x03, 0xf6
+	ldw	wa, 57
+	jrl	-2557
 SeMenu_AltUpdate:
 	lda xsp, (xsp - 38)
 	pushw_erp 0xfa
@@ -2426,13 +2430,15 @@ SeMenu_CopyWriteUpdate_Data:
 	jrl	173
 	lda	xwa, (xsp+6)
 	call	15757724
-	.byte 0xc7, 0xfb, 0xa8, 0xc7, 0xfb, 0x89
+	ldib_erp	251, 0
+	stb_erp	a, 251
 	extz	wa
 	lda	xbc, (xsp+6)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x31
+	lda_rr	xbc, xbc, wa
 	ld	xwa, xbc
 	call	16458804
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf, 0x10
+	inc1b_erp	251
+	cp_erpb	251, 16
 	jr	c, -28
 	lda	xbc, (xsp+6)
 	lds	wa, 1
@@ -3195,7 +3201,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15756049
 	ld	a, (xsp+4)
 	res	7, a
-	.byte 0xc7, 0xfb, 0x99
+	ldb_erp	a, 251
 	ld	a, (xsp+2)
 	extz	wa
 	call	15756001
@@ -3203,11 +3209,11 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	cps	hl, 0
 	jr	z, 9
-	.byte 0xc7, 0xfb, 0xd8
+	cpib_erp	251, 0
 	jr	z, 33
 	lds	bc, 0
 	jr	7
-	.byte 0xc7, 0xfb, 0xd8
+	cpib_erp	251, 0
 	jr	nz, 24
 	lds	bc, 1
 	call	15755899
@@ -3305,7 +3311,9 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15756049
 	ld	a, (xsp+14)
 	mul	a, 3
-	.byte 0xc7, 0xfb, 0x99, 0xc7, 0xfb, 0x69, 0xc7, 0xfb, 0x89
+	ldb_erp	a, 251
+	dec1b_erp	251
+	stb_erp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15756049
@@ -3318,7 +3326,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	15758482
-	.byte 0xc7, 0xfb, 0x8b
+	stb_erp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -3347,7 +3355,7 @@ SeMenu_CopyWriteUpdate_Data:
 	call	15756049
 	ld	a, (xsp+14)
 	mul	a, 3
-	.byte 0xc7, 0xfb, 0x99
+	ldb_erp	a, 251
 	extz	wa
 	lda	xbc, (xsp+2)
 	call	15756049
@@ -3360,7 +3368,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	15758482
-	.byte 0xc7, 0xfb, 0x8b
+	stb_erp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -3395,7 +3403,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	15758482
-	.byte 0xc7, 0xfb, 0x8b
+	stb_erp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -3484,15 +3492,15 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nz, 8
 	.byte 0xbf, 0x02, 0xbf, 0xc7, 0xfa, 0xa8
 	jr	27
-	.byte 0xc7, 0xfa, 0x61
+	inc1b_erp	250
 	jr	22
 	.byte 0xbf, 0x02, 0xcf
 	jr	z, 8
 	.byte 0xbf, 0x02, 0xb7, 0xc7, 0xfa, 0xa9
 	jr	9
-	.byte 0xc7, 0xfa, 0xd8
+	cpib_erp	250, 0
 	jrl	z, 134
-	.byte 0xc7, 0xfa, 0x69
+	dec1b_erp	250
 	ld	a, (xsp+6)
 	.byte 0x8f, 0x06, 0x81
 	dec	2, a
@@ -3500,10 +3508,11 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	bc
 	lds	wa, 3
 	call	15756065
-	.byte 0xc7, 0xfb, 0x9f, 0xc7, 0xfb, 0x89
+	ldb_erp	l, 251
+	stb_erp	a, 251
 	cpl	a
 	and	(xsp+4), a
-	.byte 0xc7, 0xfa, 0x89
+	stb_erp	a, 250
 	extz	wa
 	ld	c, (xsp+6)
 	.byte 0x8f, 0x06, 0x83
@@ -3518,7 +3527,7 @@ SeMenu_CopyWriteUpdate_Data:
 	lds	bc, 0
 	call	15753648
 	lda	xde, (xsp+4)
-	.byte 0xc7, 0xfb, 0x89
+	stb_erp	a, 251
 	extz	wa
 	pushw	wa
 	lds	wa, 0
@@ -3562,7 +3571,7 @@ SeMenu_CopyWriteUpdate_Data:
 	extz	wa
 	lda	xbc, (xbc+10)
 	call	15758482
-	.byte 0xc7, 0xfb, 0x8b
+	stb_erp	c, 251
 	extz	bc
 	ld	e, (xsp+14)
 	extz	de
@@ -4354,22 +4363,22 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xde), a
 	jr	2
 	decm8	1, (xde)
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	extz	wa
 	lda	xhl, (xsp+12)
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x32
+	lda_rr	xde, xhl, wa
 	ld	c, (xde)
 	cp	c, 127
 	jr	z, 17
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	inc	1, a
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	extz	ix
 	inc	1, c
-	.byte 0xf3, 0x07, 0xec, 0xf0, 0x43
+	st_rrb	c, xhl, ix
 	ld	a, (xde)
 	ld	(xsp+4), a
-	.byte 0xc7, 0xfb, 0xa8
+	ldib_erp	251, 0
 	ldb	c, 0
 	ld	a, c
 	add	a, c
@@ -4383,33 +4392,36 @@ SeMenu_CopyWriteUpdate_Data:
 	inc	1, c
 	cps	c, 4
 	jr	c, -29
-	.byte 0xc7, 0xfb, 0x89, 0xc7, 0xfb, 0x81, 0xc7, 0xe2, 0x99
+	stb_erp	a, 251
+	addb_erp	a, 251
+	ldb_erp	a, 226
 	extz	wa
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x35
+	lda_rr	xiy, xhl, wa
 	ld	c, (xiy)
 	ld	b, c
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	inc	1, a
 	extz	wa
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0x34
+	lda_rr	xix, xhl, wa
 	ld	a, (xix)
-	.byte 0xc7, 0xe2, 0x99, 0xc7, 0xfb, 0x88
+	ldb_erp	a, 226
+	stb_erp	w, 251
 	inc	1, w
 	cp	(xsp+8), w
 	jr	ule, 34
 	ld	a, (xsp+8)
 	sub	a, w
 	ld	w, a
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	add	a, w
 	cp	(xsp+4), a
 	jr	nc, 71
 	ld	a, (xsp+4)
 	sub	a, w
-	.byte 0xc7, 0xe2, 0x99
+	ldb_erp	a, 226
 	cp	a, c
 	jr	nc, 59
-	.byte 0xc7, 0xe2, 0x8a
+	stb_erp	b, 226
 	jr	54
 	cp	(xsp+8), w
 	jr	nc, 41
@@ -4425,18 +4437,19 @@ SeMenu_CopyWriteUpdate_Data:
 	cp	a, b
 	jr	ule, 2
 	ld	b, a
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	cp	a, b
 	jr	nc, 13
-	.byte 0xc7, 0xe2, 0x9a
+	ldb_erp	b, 226
 	jr	8
 	cp	(xsp+4), b
 	jr	nc, 3
 	ld	b, (xsp+4)
 	ld	(xiy), b
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	ld	(xix), a
-	.byte 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xdc
+	inc1b_erp	251
+	cpib_erp	251, 4
 	jrl	c, -182
 	ld	a, (xsp+4)
 	ld	(xde), a
@@ -5376,10 +5389,17 @@ SeMenu_ValueEditor_Setup:
 	jr c, SeMenu_ValueEditor_Setup
 
 SeMenu_ValueEditor_Draw:
-	.byte 0x88, 0x02, 0x25, 0xb8, 0x05, 0x31, 0xcd, 0xcf
-	.byte 0x09, 0x6e, 0x1d, 0xc1, 0x9c, 0x8c, 0x3f, 0x22
-	.byte 0x6e, 0x72, 0x81, 0x21, 0xc9, 0xcf, 0x22, 0x6e
-	.byte 0x07, 0x1d, 0xb3, 0xb3, 0xf0, 0x78, 0xf2, 0x00
+	ld	e, (xwa+2)
+	lda	xbc, (xwa+5)
+	cp	e, 9
+	jr	nz, 29
+	cpdi8	35996, 34
+	jr	nz, 114
+	ld	a, (xbc)
+	cp	a, 34
+	jr	nz, 7
+	call	15774643
+	jrl	242
 SeMenu_ValueEditor_HandleInput:
 	cp a, 0x10
 	jr z, SeMenu_ValueEditor_Data2
@@ -5392,9 +5412,13 @@ SeMenu_ValueEditor_Increment:
 	jr nz, SeMenu_ValueEditor_Redraw
 
 SeMenu_ValueEditor_Decrement:
-	.byte 0xc1, 0x9c, 0x8c, 0x3f, 0x26, 0x6e, 0x4b, 0x81
-	.byte 0x21, 0xc9, 0xcf, 0x26, 0x6e, 0x07, 0x1d, 0xc4
-	.byte 0xb7, 0xf0, 0x78, 0xcb, 0x00
+	cpdi8	35996, 38
+	jr	nz, 75
+	ld	a, (xbc)
+	cp	a, 38
+	jr	nz, 7
+	call	15775684
+	jrl	203
 SeMenu_ValueEditor_ClampAndStore:
 	cp a, 0x10
 	jr nz, SeMenu_ValueEditor_Data3
@@ -6558,12 +6582,16 @@ SeMenu_CompareAndApply_Check:
 	ld	xix, 15819433
 	call	15789014
 SeMenu_CompareAndApply_Match:
-	.byte 0x1d, 0x20, 0xf0, 0xf0, 0x1d, 0x7b, 0xf7, 0xf0
-	.byte 0x1d, 0x68, 0xf3, 0xf0, 0xc1, 0xae, 0x06, 0x3f
-	.byte 0x01, 0x66, 0x16, 0xf2, 0xa8, 0xef, 0x03, 0x00
-	.byte 0x00, 0x45, 0x6b, 0x2f, 0xf1, 0x00, 0x44, 0xf6
-	.byte 0x2f, 0xf1, 0x00, 0x1d, 0xe3, 0xeb, 0xf0, 0x68
-	.byte 0x14
+	call	15790112
+	call	15791995
+	call	15790952
+	cpdi8	1710, 1
+	jr	z, 22
+	stib_da	257960, 0
+	ld	xiy, 15806315
+	ld	xix, 15806454
+	call	15789027
+	jr	20
 SeMenu_CompareAndApply_Apply:
 	stib_da	(257960), 0
 	ld	xiy, 15819648
@@ -8552,11 +8580,19 @@ PsCstmCpBnkBox_HandleEvtBC:
 PsCstmCpBnkBox_ReadParam2:
 	ldb_d8	a, (14619)
 PsCstmCpBnkBox_LookupAndSend:
-	.byte 0xd8, 0x12, 0xd8, 0xec, 0x02, 0xf2, 0xb8, 0xd9
-	.byte 0xe1, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x38
-	.byte 0xbf, 0x08, 0x30, 0x38, 0x1d, 0x95, 0x02, 0xff
-	.byte 0xef, 0x60, 0xbf, 0x04, 0x32, 0xee, 0x88, 0x41
-	.byte 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x53, 0x92, 0xfa
+	extz	wa
+	sla	wa, 2
+	lda_24	xbc, 14801336
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	lda	xwa, (xsp+8)
+	push	xwa
+	call	16712341
+	inc	8, xsp
+	lda	xde, (xsp+4)
+	ld	xwa, xiz
+	ld	xbc, 29360143
+	call	16421459
 PsCstmCpBnkBox_ReturnZero:
 	lds32 xhl, 0
 
@@ -8605,9 +8641,10 @@ PsCstmCpSwBox_PushTableAddr0:
 	jr PsCstmCpSwBox_SendCommand
 
 PsCstmCpSwBox_ReadParam2:
-	.byte 0x40, 0x74, 0xdb, 0xe1, 0x00, 0xc1, 0x1b, 0x39
-	.byte 0x3f, 0x0a, 0x6f, 0x05, 0x40, 0x6c, 0xdb, 0xe1
-	.byte 0x00
+	ld	xwa, 14801780
+	cpdi8	14619, 10
+	jr	nc, 5
+	ld	xwa, 14801772
 PsCstmCpSwBox_PushTableAddr1:
 	push xwa
 	push xbc
@@ -8973,13 +9010,24 @@ PsCmpQtzBox_CallInherited:
 	jr PsCmpQtzBox_ReturnZero
 
 PsCmpQtzBox_HandleEvtBC:
-	.byte 0xee, 0x88, 0x1d, 0xfc, 0x3f, 0xfa, 0xee, 0x88
-	.byte 0x1d, 0x59, 0x5e, 0xfa, 0xc1, 0x3f, 0x34, 0x21
-	.byte 0xd8, 0x12, 0xd8, 0xec, 0x02, 0xf2, 0x26, 0xdd
-	.byte 0xe1, 0x31, 0xe3, 0x07, 0xe4, 0xe0, 0x20, 0x38
-	.byte 0xbf, 0x08, 0x30, 0x38, 0x1d, 0x95, 0x02, 0xff
-	.byte 0xef, 0x60, 0xbf, 0x04, 0x32, 0xee, 0x88, 0x41
-	.byte 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x53, 0x92, 0xfa
+	ld	xwa, xiz
+	call	16400380
+	ld	xwa, xiz
+	call	16408153
+	ldb_d8	a, 13375
+	extz	wa
+	sla	wa, 2
+	lda_24	xbc, 14802214
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	lda	xwa, (xsp+8)
+	push	xwa
+	call	16712341
+	inc	8, xsp
+	lda	xde, (xsp+4)
+	ld	xwa, xiz
+	ld	xbc, 29360143
+	call	16421459
 PsCmpQtzBox_ReturnZero:
 	lds32 xhl, 0
 
@@ -9832,13 +9880,22 @@ PsMspNameBnk_CallInherited:
 	jr PsMspNameBnk_SetReturnZero
 
 PsMspNameBnk_HandleEvtBC:
-	.byte 0xee, 0x88, 0x1d, 0xfc, 0x3f, 0xfa, 0xc1, 0xa2
-	.byte 0x7e, 0x21, 0xd8, 0x12, 0xd8, 0xec, 0x02, 0xf2
-	.byte 0x70, 0xdf, 0xe1, 0x31, 0xe3, 0x07, 0xe4, 0xe0
-	.byte 0x20, 0x38, 0xbf, 0x08, 0x30, 0x38, 0x1d, 0x95
-	.byte 0x02, 0xff, 0xef, 0x60, 0xbf, 0x04, 0x32, 0xee
-	.byte 0x88, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x53
-	.byte 0x92, 0xfa
+	ld	xwa, xiz
+	call	16400380
+	ldb_d8	a, 32418
+	extz	wa
+	sla	wa, 2
+	lda_24	xbc, 14802800
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	lda	xwa, (xsp+8)
+	push	xwa
+	call	16712341
+	inc	8, xsp
+	lda	xde, (xsp+4)
+	ld	xwa, xiz
+	ld	xbc, 29360143
+	call	16421459
 PsMspNameBnk_SetReturnZero:
 	lds32 xhl, 0
 
@@ -10096,10 +10153,17 @@ VwVariBox_GetText:
 	jr ule, VwVariBox_GetText_HighValues
 
 VwVariBox_GetText_LookupAudio:
-	.byte 0x80, 0x21, 0xd8, 0x12, 0xd8, 0xec, 0x02, 0xf2
-	.byte 0xd0, 0xdf, 0xe1, 0x31, 0xe3, 0x07, 0xe4, 0xe0
-	.byte 0x20, 0x38, 0xe3, 0xfd, 0x18, 0x01, 0x20, 0x38
-	.byte 0x1d, 0x95, 0x02, 0xff, 0xef, 0x60, 0x68, 0xc3
+	ld	a, (xwa)
+	extz	wa
+	sla	wa, 2
+	lda_24	xbc, 14802896
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	ld	xwa, (xsp+280)
+	push	xwa
+	call	16712341
+	inc	8, xsp
+	jr	-61
 VwVariBox_GetText_HighValues:
 	cp c, 0x10
 	jr z, VwVariBox_GetText_Val10
@@ -10715,13 +10779,22 @@ RgpSetBnkBox_CallInherited:
 	jr RgpSetBnkBox_SetReturnZero
 
 RgpSetBnkBox_HandleEvtBC:
-	.byte 0xee, 0x88, 0x1d, 0xfc, 0x3f, 0xfa, 0xc1, 0xa1
-	.byte 0x7e, 0x21, 0xd8, 0x12, 0xd8, 0xec, 0x02, 0xf2
-	.byte 0xd0, 0xe2, 0xe1, 0x31, 0xe3, 0x07, 0xe4, 0xe0
-	.byte 0x20, 0x38, 0xbf, 0x08, 0x30, 0x38, 0x1d, 0x95
-	.byte 0x02, 0xff, 0xef, 0x60, 0xbf, 0x04, 0x32, 0xee
-	.byte 0x88, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d, 0x53
-	.byte 0x92, 0xfa
+	ld	xwa, xiz
+	call	16400380
+	ldb_d8	a, 32417
+	extz	wa
+	sla	wa, 2
+	lda_24	xbc, 14803664
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	lda	xwa, (xsp+8)
+	push	xwa
+	call	16712341
+	inc	8, xsp
+	lda	xde, (xsp+4)
+	ld	xwa, xiz
+	ld	xbc, 29360143
+	call	16421459
 RgpSetBnkBox_SetReturnZero:
 	lds32 xhl, 0
 
@@ -12496,10 +12569,14 @@ CmpNameMenuBoxProc:
 	jr CmpNameMenu_Epilogue
 
 CmpNameMenu_HandleEvtD:
-	.byte 0xc1, 0x3a, 0x34, 0x3f, 0x0c, 0x6f, 0x13, 0xee
-	.byte 0x88, 0x1d, 0xfc, 0x3f, 0xfa, 0xee, 0x88, 0x41
-	.byte 0x0f, 0x00, 0xc0, 0x01, 0xea, 0xa8, 0x1d, 0x53
-	.byte 0x92, 0xfa
+	cpdi8	13370, 12
+	jr	nc, 19
+	ld	xwa, xiz
+	call	16400380
+	ld	xwa, xiz
+	ld	xbc, 29360143
+	lds32	xde, 0
+	call	16421459
 CmpNameMenu_SetReturnZero:
 	lds32 xhl, 0
 
