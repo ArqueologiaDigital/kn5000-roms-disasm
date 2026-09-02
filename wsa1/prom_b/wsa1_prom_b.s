@@ -50715,31 +50715,90 @@ DL_GroupCombiDisplayHoldGr0up:
 	.short 0x00F3
 	.short 0x00CE
 
-; --- 0xF2B8F9-0xF2BA0B: not converted ---
-	
-; --- 0xF2B8F9-0xF2B991: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02B8F9, 0x000099
-
 ; ------------------------------------------------------------------
-; 0xF2B992-0xF2BA0B -- 3 display-list records, 122 bytes -- interpreter A
-; NOT reached by any known call shape (reachability.py: prom_b has 0
-; bytes with start evidence) and not named by any converted record's
-; own table field either -- found because a plain op/len walk, starting
-; 153 bytes into this span, lands with ZERO DRIFT exactly on the span's
-; declared end, and every record's length satisfies ITS OWN handler's
-; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
-; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
-; --splice
+; 0xF2B8F9-0xF2BA0B -- one interpreter-B string-table-readout record (op 0x02,
+; handler 0xF31B21) plus its OWN 65-entry, 4-byte-stride caption table --
+; NOT 3 interpreter-A records, which was this lane's own earlier misframe
+; (see this generator's docstring). The record's +0x07 field names
+; 0xF2B908, the address of the very next byte, and 65 entries of the
+; record's own +0x0B stride (4) exactly fill the rest of this span with
+; zero remainder: 15 + 65*4 = 275, the whole original span.
+; Regenerate: python3 notes/gen_prom_b_f2b8f9_fix_module.py --splice
 ; ------------------------------------------------------------------
-	.byte 0x20, 0x3A	; op 20, 58 bytes -> handler 0xF31A3A
-	.short 0x2020
-	.ascii " :   :   :   :   :UD1:UD2:   :   :   :   :   :   :ED1:"
-	.byte 0x20, 0x20	; op 20, 32 bytes -> handler 0xF31A3A
-	.short 0x3A20
-	.ascii "   :   :   :   :   :   :   :"
-	.byte 0x20, 0x20	; op 20, 32 bytes -> handler 0xF31A3A
-	.short 0x3A20
-	.ascii "   :   :   :   :   :   :   :"
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x216A	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F2B908	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x0124	; +0x0D -> IX
+; 65 x 4-byte entries, +0x00 of the string table above
+	.ascii "R1 :"	; entry 0
+	.ascii "R2 :"	; entry 1
+	.ascii "   :"	; entry 2
+	.ascii "   :"	; entry 3
+	.ascii "   :"	; entry 4
+	.ascii "   :"	; entry 5
+	.ascii "   :"	; entry 6
+	.ascii "   :"	; entry 7
+	.ascii "U1 :"	; entry 8
+	.ascii "U2 :"	; entry 9
+	.ascii "   :"	; entry 10
+	.ascii "   :"	; entry 11
+	.ascii "   :"	; entry 12
+	.ascii "   :"	; entry 13
+	.ascii "   :"	; entry 14
+	.ascii "   :"	; entry 15
+	.ascii "E1 :"	; entry 16
+	.ascii "   :"	; entry 17
+	.ascii "   :"	; entry 18
+	.ascii "   :"	; entry 19
+	.ascii "   :"	; entry 20
+	.ascii "   :"	; entry 21
+	.ascii "   :"	; entry 22
+	.ascii "   :"	; entry 23
+	.ascii "M1 :"	; entry 24
+	.ascii "M2 :"	; entry 25
+	.ascii "M3 :"	; entry 26
+	.ascii "   :"	; entry 27
+	.ascii "   :"	; entry 28
+	.ascii "   :"	; entry 29
+	.ascii "   :"	; entry 30
+	.ascii "   :"	; entry 31
+	.ascii "RD1:"	; entry 32
+	.ascii "RD2:"	; entry 33
+	.ascii "   :"	; entry 34
+	.ascii "   :"	; entry 35
+	.ascii "   :"	; entry 36
+	.ascii "   :"	; entry 37
+	.ascii "   :"	; entry 38
+	.ascii "   :"	; entry 39
+	.ascii "UD1:"	; entry 40
+	.ascii "UD2:"	; entry 41
+	.ascii "   :"	; entry 42
+	.ascii "   :"	; entry 43
+	.ascii "   :"	; entry 44
+	.ascii "   :"	; entry 45
+	.ascii "   :"	; entry 46
+	.ascii "   :"	; entry 47
+	.ascii "ED1:"	; entry 48
+	.ascii "   :"	; entry 49
+	.ascii "   :"	; entry 50
+	.ascii "   :"	; entry 51
+	.ascii "   :"	; entry 52
+	.ascii "   :"	; entry 53
+	.ascii "   :"	; entry 54
+	.ascii "   :"	; entry 55
+	.ascii "   :"	; entry 56
+	.ascii "   :"	; entry 57
+	.ascii "   :"	; entry 58
+	.ascii "   :"	; entry 59
+	.ascii "   :"	; entry 60
+	.ascii "   :"	; entry 61
+	.ascii "   :"	; entry 62
+	.ascii "   :"	; entry 63
+	.ascii "   :"	; entry 64
 
 ; ------------------------------------------------------------------
 ; 0xF2BA0C-0xF2BB0C -- 26 display-list records, 257 bytes -- interpreter A (25 records) and B (1)
