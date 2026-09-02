@@ -125,6 +125,17 @@ def directive_size(line):
         return None, None  # not a directive -- likely an instruction
     d, rest = mm.group(1), mm.group(2).strip()
     if d in WIDTH:
+        # A WIDTH directive's operands are always bare numeric/symbolic
+        # tokens -- never a quoted string -- so a trailing `; comment` (this
+        # tree's own earlier passes attach one to almost every hand-annotated
+        # `.byte` line, e.g. `.byte 0x78, 0x76, 0x03\t; jrl Foo (v7 displacement)`)
+        # can be split off with a plain, unquoted `;` search. Before this fix
+        # the comment text rode along as part of the last operand and failed
+        # LITERAL_OPERAND_RE, which made find_span() abort on a perfectly
+        # ordinary DATA line as if it were an instruction. 2026-09-02, lane
+        # V7REGIONS3, confirmed on maincpu/file_io/filename_password.s:315.
+        if ";" in rest:
+            rest = rest.split(";", 1)[0]
         ops = [x.strip() for x in rest.split(",") if x.strip()]
         if ops and not all(LITERAL_OPERAND_RE.match(x) for x in ops):
             return None, None  # symbolic operand -- already-typed, not debt

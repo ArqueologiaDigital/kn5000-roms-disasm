@@ -75,11 +75,17 @@ def main():
     n_ok = n_fail = 0
     for w in sel:
         try:
-            remaining = civ7.process(w['file'], w['src_line'], w['addr'],
-                                      w['size'], apply=a.apply)
-            converted = w['size'] - remaining
-            results.append(dict(w, status='ok', converted=converted, remaining=remaining))
-            total_addr += w['size']; total_conv += converted
+            actual_size, remaining = civ7.process(w['file'], w['src_line'], w['addr'],
+                                                    w['size'], apply=a.apply)
+            # Use the ACTUAL (possibly auto-shrunk) size process() reports,
+            # not the worklist's original w['size'] -- see
+            # convert_interrupted_region_v7.py's 2026-09-02 fix. Using the
+            # original size here silently credited bytes that were never
+            # touched (they sat outside the shrunk, verified-safe prefix).
+            converted = actual_size - remaining
+            results.append(dict(w, status='ok', converted=converted, remaining=remaining,
+                                 actual_size=actual_size))
+            total_addr += actual_size; total_conv += converted
             n_ok += 1
         except Exception as e:
             results.append(dict(w, status='fail', error=str(e)))
