@@ -11,9 +11,12 @@ source as well, or are they actually data?
 >
 >     grep -ac '\.incbin' wsa1/prom_b/wsa1_prom_b.s
 >
-> **2026-09-02, after lane `res3xx`: 11 spans / 375 bytes.** That lane closed all
-> five of its spans as typed data — which is the answer below, demonstrated
-> rather than argued. Three further lanes are working the rest.
+> **2026-09-02, after lanes `res3xx` and `res03a`: 7 spans / 265 bytes.** Both
+> closed every span they were given, entirely as typed data — which is the
+> answer below, demonstrated rather than argued. `res03a` typed a further 359 B
+> of adjacent walk-extent `.byte` runs in the same pass, 680 B in total.
+> Still open: `0xF02FFE`, `0xF03F81`, `0xF04D14`, `0xF0540B`, `0xF05792`,
+> `0xF05CEC`, `0xF13D34`. Two lanes are working them.
 >
 > Two specifics below are now superseded and are kept because the reasoning
 > around them is still the point: `0xF286CC` and `0xF3B656` are converted, and
@@ -178,3 +181,41 @@ land exactly where that tiling predicts.
 ★ The lesson is the one this file already argues: **measure an object from the
 thing that names it, never from the `.incbin` boundary**, which was cut by a
 superseded walk and carries no structural information at all.
+
+### `0xF039ED-0xF03C94` is eight instances of one object
+
+Lane `res03a` closed all four `0xF03Axx` spans and found they are not four
+things but part of one repeated structure:
+
+```
+<list 1>...<list N><selector table of N+2 LE32 entries>
+table[0] == table[1] == list 1's first byte      (entry 0 is padding)
+table[i] == list i's first byte                  (i = 1..N)
+table[N+1] == the table's OWN address            (one past the last list)
+```
+
+★ **What fixes it is code outside every span** — a `djnz` loop at `0xF5C3E5`
+and six sibling sites doing `ld XIZ,<table>` / `ld XIY,(XIZ+BC)` / `add BC,4`.
+`djnz` counts `C` down from 4 (or 2) to 1, so entries 1..N+1 are read and
+**entry 0 never is** — which is why entry 0 is duplicated, and why the C=2
+blocks carry four entries where the C=4 blocks carry six. The layout is not
+inferred from the bytes; it is read off the loop that walks it.
+
+⚠ And it corrects this document: the "stride 0x18 LE32 run" described above **is
+that selector table**, its stride being the list length. Two tables,
+`0xF03AB5` and `0xF03B2D`, have **no reader anywhere in four images** — their
+framing rests on the chain alone, and the lane's check prints them as NOTED
+rather than OK so the entry count is never claimed as verified.
+
+### ⚠ And this file's own script passed a stale selftest
+
+`wsa1/notes/prom_b_residue_481.py` went on printing *"481 B in 16 spans"* and
+**passing `--selftest`** after five of those spans had been converted. It read
+only the ROM, so nothing it asserted could notice the tree moving underneath it.
+
+It now reads the tree too, and refuses to pass if a span it calls closed still
+carries an `.incbin` — or the reverse. The guard was shown to fail in both
+directions before being trusted. It also died with `FileNotFoundError` when run
+from the repo root instead of `wsa1/`; paths are now anchored to the file's own
+location, because the same cwd assumption in a script that reads the tree would
+silently examine the wrong tree and report a confident wrong answer.

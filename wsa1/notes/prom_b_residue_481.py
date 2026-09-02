@@ -95,7 +95,16 @@ import random
 import struct
 import sys
 
-ROM = "original_ROMs/wsa1_prom_b.ic13"
+# ⚠ Anchor every path to THIS FILE, not to the caller's cwd. Run from the repo
+# root instead of wsa1/, an earlier version died with a bare FileNotFoundError
+# on the ROM -- which is a benign failure, but the same cwd assumption in a
+# script that READS THE TREE (as this one's selftest now does) would silently
+# examine the wrong tree and report a confident wrong answer.
+import os as _os
+_HERE = _os.path.dirname(_os.path.abspath(__file__))
+WSA1 = _os.path.dirname(_HERE)
+ROM = _os.path.join(WSA1, "original_ROMs/wsa1_prom_b.ic13")
+
 BASE = 0xF00000
 
 # The 16 remaining .incbin spans, (file offset, length). Regenerate with:
@@ -125,7 +134,7 @@ CLOSED = {
     0x003AF8: "res03a: tail of 0xF03AF1, lists 3-4 and the table of block 3",
     0x003BE6: "res03a: tail of block 6 list 3's op-03 record at 0xF03BDF",
 }
-S_FILE = "prom_b/wsa1_prom_b.s"
+S_FILE = _os.path.join(WSA1, "prom_b/wsa1_prom_b.s")
 
 
 def load():
