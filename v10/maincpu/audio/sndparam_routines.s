@@ -511,10 +511,7 @@ SndParam_ResolveWidgetEx_Data:
 	ld	(xsp+10), xde
 	ld	xde, xbc
 	ld	(xsp+14), xwa
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	ld	xwa, (xsp+14)
 	ld	xiy, Naka_ToshiParam_Table_0x6C8
 	ld	xix, xwa
@@ -606,10 +603,7 @@ SndParam_ResolveWidgetEx_Data:
 	and	wa, 127
 	ld	(xde), a
 	jr	5
-	.byte 0xbf, 0x04
-	push	sr
-	swi	7
-	swi	7
+	ldw	(xsp+4), 65535
 	ld	hl, (xsp+4)
 	pop	xiz
 	lda	xsp, (xsp+14)
@@ -1221,8 +1215,7 @@ SndParam_UpdateEntry_Data:
 	lda	xix, (xhl+7)
 	cp	(xiy), 177
 	jr	nz, 15
-	.byte 0xc7
-	ld	xbc, xde
+	stb_erp	a, 234
 	res	7, a
 	ld	(xbc), a
 	sra	de, 7
@@ -1230,8 +1223,7 @@ SndParam_UpdateEntry_Data:
 	jr	16
 	lda	xiy, (xwa+6)
 	ld	e, (xiy)
-	.byte 0xc7
-	ld	xbc, xde
+	stb_erp	a, 234
 	and	a, e
 	ld	(xbc), a
 	ld	a, (xiy)
@@ -1292,9 +1284,7 @@ SndParam_RegisterMultiField_Data:
 	jr	56
 	lda	xiy, (xde+5)
 	ld	a, (xiy)
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp	a, 248
 	extz	iz
 	ld	xwa, (xsp+4)
 	exts	xiz
@@ -1318,8 +1308,7 @@ SndParam_RegisterMultiField_Data:
 	ld	(xiy), a
 	ld	(xbc), a
 	lda_d16	xbc, (0x9704)
-	.byte 0xc7
-	ld	xbc, xiz
+	stb_erp	a, 238
 	.byte 0x89, 0x06, 0xf1
 	jr	nz, 7
 	cpw	(xsp+12), 4
@@ -1647,9 +1636,7 @@ SndParam_RegisterLinked2_Data:
 	jr	56
 	lda	xiy, (xde+5)
 	ld	a, (xiy)
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp	a, 248
 	extz	iz
 	ld	xwa, (xsp+4)
 	exts	xiz
@@ -1673,8 +1660,7 @@ SndParam_RegisterLinked2_Data:
 	ld	(xiy), a
 	ld	(xix), a
 	lda_d16	xix, (0x9728)
-	.byte 0xc7
-	ld	xbc, xiz
+	stb_erp	a, 238
 	.byte 0x8c, 0x06, 0xf1
 	jr	nz, 7
 	cpw	(xsp+12), 4
@@ -1733,8 +1719,7 @@ SndParam_RegisterSimple_Data:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	(xhl), 8
-	.byte 0xc7
-	ld	xbc, xde
+	stb_erp	a, 234
 	ld	(xix), a
 	sra	de, 8
 	ld	(xiy), e
@@ -1748,8 +1733,7 @@ SndParam_RegisterSimple_Data:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	(xhl), 8
-	.byte 0xc7
-	ld	xbc, xde
+	stb_erp	a, 234
 	ld	(xix), a
 	ld	(xiy), 255
 	jr	6
@@ -1833,8 +1817,7 @@ SndParam_RegisterChained_Data:
 	lda_d16	xbc, (0x9752)
 	cpw	(xsp+18), 4
 	jr	nz, 24
-	.byte 0xc7
-	and	xiy, xde
+	andb_erp	e, 234
 	ld	l, e
 	ld	(xbc), l
 	ld	e, w
@@ -1846,8 +1829,7 @@ SndParam_RegisterChained_Data:
 	or	l, e
 	ld	(xbc), l
 	jr	41
-	.byte 0xc7
-	ld	xbc, xde
+	stb_erp	a, 234
 	and	a, e
 	ldb_erp	a, 234
 	ld	(xix), a
@@ -1954,8 +1936,7 @@ SndParam_RegisterChained2_Data:
 	lda_d16	xbc, (0x975e)
 	cpw	(xsp+16), 4
 	jr	nz, 24
-	.byte 0xc7
-	and	xiy, xiz
+	andb_erp	e, 238
 	ld	l, e
 	ld	(xbc), l
 	ld	e, w
@@ -1967,8 +1948,7 @@ SndParam_RegisterChained2_Data:
 	or	l, e
 	ld	(xbc), l
 	jr	41
-	.byte 0xc7
-	ld	xbc, xiz
+	stb_erp	a, 238
 	and	a, e
 	ldb_erp	a, 238
 	ld	(xix), a
@@ -2097,16 +2077,14 @@ SndParam_RegisterComplex_Data:
 	incm	6, (xbc-19)
 	ld	w, (xiy)
 	ld	d, w
-	.byte 0xc7
-	and	xix, xhl
+	andb_erp	d, 235
 	cpl	w
 	and	e, w
 	ld	a, e
 	ld	(xhl), a
 	or	e, d
 	ld	(xhl), e
-	.byte 0xc7
-	ld	xbc, xde
+	stb_erp	a, 234
 	cp	a, e
 	jr	z, 63
 	cpw	(xsp+8), 4
@@ -2281,8 +2259,7 @@ SndParam_RegisterDual_Data:
 	.byte 0xe0, 0xe4
 	ldb	e, 199
 	ld	xde, xiz
-	.byte 0xc7
-	ld	xbc, xiz
+	stb_erp	a, 238
 	ldb_erp	a, 230
 	cpl	l
 	stb_erp	a, 230
@@ -2751,10 +2728,7 @@ SndParam_WriteViaHash_Data:
 	extz	wa
 	add	wa, wa
 	lda_d16	xde, (0x9798)
-	.byte 0xf3
-	reti
-	or	xwa, xwa
-	.byte 0x51
+	st_rrw	bc, xde, wa
 	lds	hl, 0
 	ret
 SndParam_BatchUpdate_Data:
@@ -2856,29 +2830,19 @@ SndParam_BatchUpdate_Data:
 	call	SndParam_ComputeVoiceIndex
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
-	.byte 0xc7
-	swi	2
-	.byte 0x99
+	ldb_erp	a, 250
 	ld	a, (xbc+1)
-	.byte 0xc7
-	swi	1
-	.byte 0x99
+	ldb_erp	a, 249
 	ld	a, (xbc+2)
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp	a, 251
 	lda	xwa, (xsp+16)
 	ld	(xwa), 129
 	ld	xbc, (xsp+22)
 	ld	c, (xbc+4)
 	ld	(xwa+1), c
-	.byte 0xc7
-	swi	2
-	.byte 0x8b
+	stb_erp	c, 250
 	ld	(xwa+2), c
-	.byte 0xc7
-	swi	1
-	.byte 0x8b
+	stb_erp	c, 249
 	ld	(xwa+3), c
 	calr	35
 	lda	xwa, (xsp+16)
@@ -2886,9 +2850,7 @@ SndParam_BatchUpdate_Data:
 	ld	c, (xbc+4)
 	ld	(xwa), c
 	ld	(xwa+1), 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp	c, 251
 	ld	(xwa+2), c
 	ld	(xwa+3), 255
 	calr	7
