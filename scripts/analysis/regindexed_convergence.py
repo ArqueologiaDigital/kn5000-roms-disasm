@@ -154,6 +154,13 @@ def native_for(mn, ops):
             return None, "not-a-known-addressing-mode"
         base = GPR32[(mode - 0xE0) // 4]
         d16 = b1 | (b2 << 8)
+        # ⚠ The d16 field is SIGNED in the source syntax: llvm-mc refuses an
+        # operand that fits its field neither signed nor unsigned (95f7f2d40428).
+        # Writing the raw unsigned value scored 571 sites as "bytes differ" on
+        # the first run of this script -- a defect in the PROBE, not the
+        # backend, and exactly the shape it exists to catch.
+        if d16 >= 0x8000:
+            d16 -= 0x10000
         m = "(%s%+d)" % (base, d16) if d16 else "(%s+0)" % base
     if kind == "ld_r_m":
         return "%s %s, %s" % (out_mn, head.lower(), m), None
