@@ -88,6 +88,20 @@ already labels, using the SAME reference index:
 `--control` prints both rates and names the offenders.  A number from this tool
 should never be quoted without them.
 
+Because rule 1 has an 18.1% false-negative rate, the CODE class is a LOWER bound
+and needs an upper bound from a different direction.  `--codebound` supplies
+one: it disassembles every run out of the linked ELF and counts the bytes that
+could be code AT ALL -- the run decodes with no `<unknown>` and its last
+instruction ends exactly on the run boundary -- and, more strictly, the subset
+that also ends in a control-flow terminator.  With tlcs900_backend at
+58fb7f2afaed that is 3,044 B (12.4%) and 359 B (1.5%) of the file's 24,526
+operands.
+
+WARNING: the bound moves with the DECODER, not with the tree.  Measured earlier
+the same day, before 352d0c47ce2a / 58fb7f2afaed fixed two decoder crashes and
+three encoding gaps, the same file gave 1,445 B and 111 B.  Regenerate it and
+name the backend commit; never quote a remembered figure.
+
 THE BUCKET-(d) CONTROL, AND WHY THIS FILE READS AS DATA
 -------------------------------------------------------
 A raw blind-start count means nothing on its own: 0x01 and 0x04 are common data
@@ -114,6 +128,7 @@ RUN
     python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --selfcheck
     python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --list CODE
     python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --list BLIND
+    python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --codebound
     python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --json out.json
 
 Set AMAP_CACHE=<file> to cache the address map between runs (it is rebuilt from
@@ -483,6 +498,53 @@ def control(refidx):
         print("     offenders:", nh[:20])
 
 
+def codebound(runs):
+    """UPPER bound on the CODE class: how many bytes could be code at all?
+
+    One objdump over the whole file, then each run is walked instruction by
+    instruction.  A run counts only if every byte is consumed by a decodable
+    instruction and the last one ends exactly on the run boundary -- a run whose
+    final instruction would overrun its end is not a self-contained fragment.
+    """
+    lo = min(r["a0"] for r in runs)
+    hi = max(r["a0"] + r["size"] for r in runs)
+    out = subprocess.run([OBJDUMP, "-d", "--start-address=0x%X" % lo,
+                          "--stop-address=0x%X" % hi, ELF],
+                         capture_output=True, text=True).stdout
+    ins = {}
+    for line in out.split("\n"):
+        m = re.match(r"\s+([0-9a-f]+):\s+((?:[0-9a-f]{2} )+)\s*(.*)", line)
+        if m:
+            ins[int(m.group(1), 16)] = (len(m.group(2).split()), m.group(3).strip())
+    TERMS = ("ret", "reti", "retd", "jp", "jr", "jrl", "halt")
+    clean = cleanb = term = termb = 0
+    for r in runs:
+        p, end, ok, last = r["a0"], r["a0"] + r["size"], True, None
+        while p < end:
+            if p not in ins:
+                ok = False
+                break
+            n, mn = ins[p]
+            if "<unknown>" in mn or p + n > end:
+                ok = False
+                break
+            last, p = mn, p + n
+        if ok and p == end:
+            clean += 1
+            cleanb += r["size"]
+            if last and last.split()[0] in TERMS:
+                term += 1
+                termb += r["size"]
+    tot = sum(r["size"] for r in runs)
+    print("UPPER BOUND ON CODE  (%d runs, %d bytes)" % (len(runs), tot))
+    print("  decode cleanly to the exact run boundary: %4d runs %6d B (%.1f%%)"
+          % (clean, cleanb, 100.0 * cleanb / tot))
+    print("  ...and end in a control-flow terminator:  %4d runs %6d B (%.1f%%)"
+          % (term, termb, 100.0 * termb / tot))
+    print("  A clean decode is NOT proof of code -- a wrong frame tiles too.")
+    print("  This is the ceiling the CODE class cannot exceed, nothing more.")
+
+
 # ---------------------------------------------------------------- main
 def main():
     a = sys.argv[1:]
@@ -492,6 +554,9 @@ def main():
     refidx = build_ref_index()
     if "--control" in a:
         control(refidx)
+        return
+    if "--codebound" in a:
+        codebound(byte_runs(amap))
         return
 
     rom = open(ROM, "rb").read()

@@ -181,9 +181,12 @@ and the deciding rule could never fire at all.
 
 Result: **0 bytes of code, 416 B of proposed-but-refused structured data, 24,110
 B of genuine byte table.** Nothing in the file is a named call or jump target,
-and an independent decode bound says at most 1,445 B of the original 25,211
-could be code at all (only 111 B of that both decodes and ends in a
-terminator). 688 B of pointer-table entries were typed as `.long`
+and `--codebound` puts a ceiling on it from the other side: at most 3,044 B of
+the remaining 24,526 could be code at all, and only 359 B of that both decodes
+and ends in a terminator (tlcs900_backend 58fb7f2afaed -- ⚠ the bound moves with
+the DECODER: an earlier build the same day gave 1,445 B / 111 B, so regenerate
+it and name the backend commit rather than quoting a remembered number). 688 B
+of pointer-table entries were typed as `.long`
 (`scripts/converters/v10_widget_dispatch_ptr_entries.py`) and one 3-byte code
 misframe inside a character map was restored to `.byte`.
 
