@@ -142481,6 +142481,10 @@ sub_FDE75D:
 ; (notes/prom_a_fcf000_checks.py --tail) that are the only ones among 128
 ; that make 0xFE0000 (the next module's `jp`-veneer boundary) land right.
 ; Left `.incbin`, refused -- see the tail comment below.
+; ★ SUPERSEDED 2026-09-02: those 33 bytes are converted.  The observation above
+;   stands (no start makes 0xFE0000 a boundary); the reason is that the
+;   fragment's last instruction is cut in half by the boundary.  See the block
+;   at 0xFDFFDF and notes/FINDINGS-prom_a-fdffdf-stale-fragment.md.
 ;
 ; Every label here is `sub_XXXXXX`/`.LXXXXXX`: an address, not a claim.
 ; =======================================================================
@@ -145079,6 +145083,11 @@ sub_FDE760:
 	unlk XIZ                                      ; FDFFDC  ee 0d
 	ret                                           ; FDFFDE  0e
 ; ---------------------------------------------------------------------
+; ★ THE REFUSAL BELOW IS SUPERSEDED (2026-09-02) and kept because its
+;   observations are all correct and worth having.  What changed is the
+;   INSTRUMENT: an exact substring search cannot find a relocated copy of a
+;   routine, and that is what these bytes are.  The conversion follows it.
+; ---------------------------------------------------------------------
 ; 0xFDFFDF-0xFE0000 -- 33 bytes, REFUSED.  The preceding `ret` at 0xFDFFDE
 ; is a clean function boundary (the same `unlk XIZ / ret` idiom that closes
 ; dozens of routines above).  A decode continued from here never
@@ -145095,7 +145104,48 @@ sub_FDE760:
 ; notes/FINDINGS-prom_a-fde74c-boundary.md for what was tried and
 ; eliminated.
 ; ---------------------------------------------------------------------
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x05FFDF, 0x000021
+; ---------------------------------------------------------------------
+; 0xFDFFDF-0xFE0000 (33 B) -- LINKER SLACK holding the middle of a STALE COPY
+; of a routine prologue.  Converted 2026-09-02 by
+; notes/gen_prom_a_fdffdf_fragment.py; argument in
+; notes/FINDINGS-prom_a-fdffdf-stale-fragment.md.
+;
+; ★ THIS OVERTURNS THE REFUSAL THAT STOOD HERE.  That text (kept below,
+;   above the fragment) said the bytes were "the signature of genuinely
+;   different content" and that no start makes 0xFE0000 a boundary.  Both
+;   observations are correct.  The conclusion drawn from them -- that the
+;   content could not be identified -- is not: it IS different content,
+;   and it is a 94%-identical copy of a prologue that 26 places in prom_a
+;   and prom_b match at 70% or better.  No start makes 0xFE0000 a boundary
+;   because the fragment's last instruction is CUT IN HALF by that boundary.
+;
+; Evidence: notes/prom_a_near_match.py 0xFDFFDF 0xFE0000 --
+;   31/33 identical to prom_b 0xF00CB2, 0xF00CF3, 0xF00D34 and 0xF00D75,
+;   29/33 to prom_b 0xF0A91E, 28/33 to twenty-one more including
+;   prom_a's own 0xFDE71F, against a NULL of best 5/33 (15%) over 4000
+;   random offsets in the same four images.  Every differing byte is an
+;   operand field: the `call` target, the `jr` displacement, the imm32.
+;
+; It starts and ends mid-instruction because it is slack: the live module
+; that ends at 0xFDFFDF overwrote the leading `9e` of `pushw (XIZ+0x08)` at
+; 0xFDFFDE, and the module starting at 0xFE0000 overwrote the top two bytes
+; of the trailing `add XBC,0x00fc0144`.  Nothing reaches it; it never runs.
+; ---------------------------------------------------------------------
+	.byte 0x08, 0x04                                     ; FDFFDF  orphan operands of `pushw (XIZ+0x08)`; its 0x9e
+	;                                                     opcode byte at 0xFDFFDE is under the live `ret`
+	call 0xfdbd28                                        ; FDFFE1  1d 28 bd fd
+	inc 0,XSP                                            ; FDFFE5  ef 60
+	inc 4,XSP                                            ; FDFFE7  ef 64
+	cp WA,0xffff                                         ; FDFFE9  d8 cf ff ff
+	jr z, 0x1e                                           ; FDFFED  66 1e
+	ld bc, (xiz-2)                                       ; FDFFEF  9e fe 21
+	extz BC                                              ; FDFFF2  d9 12
+	pushw bc                                             ; FDFFF4  29
+	ldb c, 0x04                                          ; FDFFF5  23 04
+	m_mul MBD+r6, 0xfc, 3                                ; FDFFF7  8e fc 43
+	extz XBC                                             ; FDFFFA  e9 12
+	.byte 0xe9, 0xc8, 0x44, 0x01                         ; FDFFFC  head of `add XBC,0x00fc0144`, truncated
+	;                                                     by the module that starts at 0xFE0000
 
 ; ==============================================================================
 ; 0xFE0000-0xFE54B5 -- 21,686 bytes of application code, converted but NOT NAMED
