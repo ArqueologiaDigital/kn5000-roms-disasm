@@ -3265,7 +3265,11 @@ DL_F02F36:
 	.ascii "4th"
 
 ; --------------------------------------------------------------------------
-; Data_F02F52 -- 29 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F02F52 -- 24 bytes, EMITTED AS DATA (not promoted to code).
+; SHRUNK 2026-09-02 from a declared 29 B: the trailing 5 declared bytes
+; plus the 7 B .incbin that followed it were really the first record of
+; the display list right after this object -- see
+; notes/gen_prom_b_f02f52_fix_module.py.
 ; Reached from: 0x00F02F52 appears as a 32-bit word at 0xF02F66 0xF5BB73;
 ;               converted code at 0xF5BB72 loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
@@ -3279,14 +3283,13 @@ DL_F02F36:
 ; --------------------------------------------------------------------------
 Data_F02F52:
 	.byte	0x22, 0x2F, 0xF0, 0x00, 0x36, 0x2F, 0xF0, 0x00, 0x3D, 0x2F, 0xF0, 0x00, 0x44, 0x2F, 0xF0, 0x00	; F02F52  |"/..6/..=/..D/..|
-	.byte	0x4B, 0x2F, 0xF0, 0x00, 0x52, 0x2F, 0xF0, 0x00, 0x03, 0x0C, 0x1A, 0x19, 0xF0	; F02F62  |K/..R/.......|
-
-	
-; --- 0xF02F6F-0xF02F75: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x002F6F, 0x000007
+	.byte	0x4B, 0x2F, 0xF0, 0x00, 0x52, 0x2F, 0xF0, 0x00	; F02F62
 
 ; ------------------------------------------------------------------
-; 0xF02F76-0xF02F99 -- 3 display-list records, 36 bytes -- interpreter A
+; 0xF02F6A-0xF02F99 -- 4 display-list records, 48 bytes -- interpreter A.
+; The FIRST record (0xF02F6A-0xF02F76, 12 B) was recovered from
+; Data_F02F52's oversized declaration (see notes/gen_prom_b_f02f52_fix_module.py);
+; the other 3 (0xF02F76-0xF02F99) are as follows.
 ; NOT reached by any known call shape (reachability.py: prom_b has 0
 ; bytes with start evidence) and not named by any converted record's
 ; own table field either -- found because a plain op/len walk, starting
@@ -3296,6 +3299,11 @@ Data_F02F52:
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
 ; ------------------------------------------------------------------
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE, recovered from Data_F02F52's oversized declaration
+	.long 0x00F0191A
+	.short 0x0B91
+	.short 0x0003
+	.short 0x000A
 	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
 	.long 0x00F01938
 	.short 0x1159
