@@ -5,6 +5,17 @@ Lane promB6, 2026-09-02.  Target: every `.incbin` in `prom_b/wsa1_prom_b.s` of
 list: **55 spans, 1,362 bytes** (the next size up is 143 B, which belongs to
 another lane).
 
+> **⚠ UPDATE 2026-09-02 (lane res03a).** Four of the `REFUSE` rows below are
+> now typed source: `0xF03A26` (7 B), `0xF03ADE` (21 B), `0xF03AF8` (77 B) and
+> `0xF03BE6` (5 B). This lane's central finding is what closed them — they were
+> indeed "the rest of the object above them", and the object is a **display-list
+> selector block**: `<lists><table of N+2 LE32>`, indexed by an `ld XIZ,<table>`
+> in already-converted code. That also reunites this lane's own `PTRTAB4` row at
+> `0xF03C12` with the 13 bytes the walk had cut into `Data_F03C05`: one 6-entry
+> table, correctly named here from only its last 11 bytes. See
+> `notes/gen_prom_b_f039ed_selector_blocks.py --evidence`. The census tables
+> below are left as the tool printed them, as the record of that moment.
+
 ## The question this lane actually asked
 
 Not "how do I decode 30 bytes".  A one- or two-byte `.incbin` between two

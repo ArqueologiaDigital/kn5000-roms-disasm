@@ -1502,4 +1502,8 @@ while the gate speaks in **file offsets**, and so reported "does not name it" on
 four of five perturbations that had in fact been named. A checker's own units
 are part of what has to be checked.
 
-prom_b's verbatim residue: **375 B in 11 spans → 198 B in 6 spans.**
+This lane removed **177 B**; with `res3xx` and `res03a` merged beside it,
+prom_b's verbatim residue is **88 B in 2 spans** — `0xF02FFE`+44 and
+`0xF13D34`+44 — from 481 B in 16. Re-measure with
+`python3 notes/prom_b_residue_481.py --selftest`, whose guard now refuses to
+pass if a span it calls closed still carries an `.incbin`, or the reverse.
