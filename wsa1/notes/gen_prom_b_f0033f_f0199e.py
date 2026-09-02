@@ -376,6 +376,13 @@ def evidence():
           % (len(tg), hit))
     print("    null: `EE 0C` at %d of %d byte positions in 0xF01200-0xF014E8"
           " (%.2f%%)" % (null, pos, 100.0 * null / pos))
+    print("    ★ FOR THE LANE THAT OWNS file 0x000C4D+0x000BB3: these are proven")
+    print("      routine entry points inside its still-`.incbin` span --")
+    ep = [t for t in tg if at(t, 2) == b"\xEE\x0C"]
+    for i in range(0, len(ep), 10):
+        print("        " + " ".join("%06X" % t for t in ep[i:i + 10]))
+    print("      (slot [0], 0x%06X, begins `%s` and is NOT claimed to be one)"
+          % (tg[0], at(tg[0], 2).hex(" ").upper()))
     print()
     print("TABLE 0xF006CD and TABLE 0xF00762 -- targets vs prom_a boundaries")
     for a, n, lo, hi in ((0xF006CD, 35, 0xFC4082, 0xFC4455),
