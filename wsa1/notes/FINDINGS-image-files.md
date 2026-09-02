@@ -81,6 +81,21 @@ On the array whose phase is not in doubt, the *misaligned* reading scores
 better. Phase comes from the code that computes the address, never from a
 statistic over the pixels.
 
+⚠ **And it fails on a DITHERED image even for major-order.** `probe` reports,
+for the three splash screens:
+
+| image | column-major | row-major |
+|---|---|---|
+| `SplashImage_Wordmark` (solid type) | **0.0089** | 0.0484 |
+| `SplashImage_DitherA` (50% half-tone) | 0.1041 | **0.0875** |
+| `SplashImage_DitherB` (50% half-tone) | 0.1041 | **0.0872** |
+
+The wordmark separates the two readings by 5.4x and picks the right one. The two
+half-tones — which are the SAME artwork, at the SAME geometry, from the SAME
+blit site — pick the wrong one, because a 50% dither has a high edge density
+whichever way you read it. Any lane tempted to settle a layout with this
+statistic should run it on a control whose answer is already known first.
+
 ---
 
 ## 2. Where each geometry comes from
@@ -214,3 +229,39 @@ Those eight (720 B) are exported as `Widget_FC48D7.png` .. The remaining
 `prom_b/images/Bitmap_F05CE0.png`, run `wsa1_bitmaps.py rewrite`, and
 `make gate-wsa1` goes red with `DIFFERS wsa1_prom_b.ic13: 1 byte(s), first at
 0x5CE0` — the address of that pixel. Done 2026-09-02; the tree is restored.
+
+---
+
+## 7. The KN5000 side of this lane's brief, checked and left alone
+
+The brief asked this lane to confirm `table_data`'s six FTBMP files are still
+genuine images and then not touch them, and to say what else on the KN5000 side
+is pixel data. Both done; **no KN5000 file was modified**, which is why this
+lane's gate is `make gate-wsa1` and not `make gate-all`.
+
+* `python3 scripts/analysis/verbatim_bmp_header_audit.py` → **OK**, all six are
+  genuine uncompressed 8bpp `BITMAPINFOHEADER` BMPs, header-consistent and
+  byte-identical to their recorded ROM spans: 320x240, 320x130, 320x120,
+  320x120, 320x125, 320x240, **318,468 B** total. They are already image files
+  in the source with no transform to invert, so there is nothing for a PNG
+  round trip to add.
+* `python3 scripts/analysis/l4_find_unrecognised_images.py` examines 72 opaque
+  blobs at 16 candidate widths and returns **6** that are image-like and
+  control-clean — all in `v7/maincpu/includes/romslices/`, scores 0.462 to
+  0.714. ⚠ **REFUSED.** Not one is named by a record or by code that states a
+  width; the score is a row-similarity statistic, and a statistic is exactly
+  what section 1.2 shows cannot fix a geometry. They belong in the inventory
+  lane's PURPOSE-UNKNOWN column, not in an images manifest:
+
+  ```
+  0.462  v7_transplant_PanelEvt_Handler_4_DualValueCheck.bin   4,008 B
+  0.550  v7_data_charmap_valuedata_b.bin                       7,984 B
+  0.619  v7_block_semenu_comparescreen_datatable.bin             672 B
+  0.671  v7_data_naka_toshiparam_table.bin                     1,872 B
+  0.696  v7_transplant_MemoryConfig_Handler_Table_tail_tail.bin  320 B
+  0.714  v7_block_accscreen_uidatablock.bin                    2,096 B
+  ```
+
+* prom_c and prom_d carry **no** bitmaps this lane can find: the op-03 record
+  scan returns 6 and 2 raw `03 0C` pairs in them and **0 plausible records**
+  from either. prom_c is the sub-CPU and does not drive the panel.
