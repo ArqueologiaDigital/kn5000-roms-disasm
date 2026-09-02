@@ -469,9 +469,7 @@ DSPCfg_InitDispatchData:
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
 	ld	c, (xbc)
-	.byte 0xc7
-	swi	0
-	.byte 0x9b
+	ldb_erp	c, 248
 	extz	iz
 	ld	l, (xde+2)
 	ld	h, l
@@ -1165,8 +1163,7 @@ PanelDisplay_DispatchData:
 	lda_24	xhl, (0x0340e4)
 	lds	bc, 0
 	ldb_spi	a, 236
-	.byte 0xc5
-	cp	xbc, xwa
+	cp_spib	a, 232
 	jr	nz, 114
 	inc	1, bc
 	cps	bc, 2
@@ -1176,8 +1173,7 @@ PanelDisplay_DispatchData:
 	lda_24	xhl, (0x0340e6)
 	lds	bc, 0
 	ldb_spi	a, 236
-	.byte 0xc5
-	cp	xbc, xwa
+	cp_spib	a, 232
 	jr	nz, 86
 	inc	1, bc
 	cp	bc, 12

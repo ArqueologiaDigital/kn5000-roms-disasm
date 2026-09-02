@@ -56,9 +56,7 @@ SysEx_ApplyToSlot4B_Data:
 	call	DSPCfg_WriteParamFull
 	jr	7
 	inc	1, iz
-	.byte 0xd7
-	swi	2
-	.byte 0xf6
+	cp	iz, qiz
 	jr	lt, -50
 	push	xiz
 	call	SwbtWr_ReinitOutputBank
@@ -100,17 +98,14 @@ SysEx_ApplyToSlot49_Data:
 	swi	2
 	cp	(xhl-41), de
 	inc	1, wa
-	.byte 0x37
-	lds	iz, 0
+	ldw	sp, 43230
 	.byte 0xd7
 	swi	2
 	inc	2, wa
 	pushw	de
 	ld	a, (xsp+4)
 	extz	wa
-	.byte 0xc7
-	swi	0
-	.byte 0x8b
+	stb_erp	c, 248
 	extz	bc
 	calr	191
 	ld	bc, hl
@@ -121,9 +116,7 @@ SysEx_ApplyToSlot49_Data:
 	add	xwa, 0x4910
 	call	DSPCfg_WriteParamFull
 	inc	1, iz
-	.byte 0xd7
-	swi	2
-	.byte 0xf6
+	cp	iz, qiz
 	jr	lt, -42
 	push	xiz
 	call	SwbtWr_ReinitOutputBank
@@ -181,9 +174,7 @@ SysEx_ApplyToSlot49_Format_Data:
 	call	DSPCfg_WriteParamFull
 	jr	7
 	inc	1, iz
-	.byte 0xd7
-	swi	2
-	.byte 0xf6
+	cp	iz, qiz
 	jr	lt, -50
 	push	xiz
 	call	SwbtWr_ReinitOutputBank
@@ -1729,9 +1720,7 @@ MidiOut_RealtimeDispatch_Data:
 	.byte 0xc1, 0x80, 0xc0
 	push	xsp
 	cp	(xwa-80), iz
-	.byte 0xc1
-	jrl	pl, 16320
-	ret
+	cpdi8	49277, 14
 	ret	nz
 	ldb_d8	a, (0xc07f)
 	and	a, 3
@@ -3905,9 +3894,7 @@ DSPCfg_Data_ParamDispatch:
 	ldb	e, 7
 	cpw	(xsp+8), 1
 	jr	nz, -90
-	.byte 0xd7
-	swi	2
-	.byte 0xa9
+	ld	qiz, 1
 	incm8	1, (xsp+4)
 	jr	-98
 	ld	wa, iz
@@ -4021,10 +4008,7 @@ DSPCfg_Data_ParamDispatch:
 	push	xiz
 	ld	(xsp+10), e
 	ld	(xsp+12), c
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	extz	wa
 	sub	wa, 97
 	cps	wa, 0
@@ -4062,10 +4046,7 @@ DSPCfg_Data_ParamDispatch:
 	ld	xiz, 0x4e00
 	lds	wa, 3
 	jr	5
-	.byte 0xbf, 0x04
-	push	sr
-	swi	7
-	swi	7
+	ldw	(xsp+4), 65535
 	cp	(xsp+12), 1
 	jr	c, 75
 	cp	(xsp+12), 17
@@ -4090,10 +4071,7 @@ DSPCfg_Data_ParamDispatch:
 	calr	65183
 	cp	hl, 0xffff
 	jr	nz, 7
-	.byte 0xbf, 0x04
-	push	sr
-	swi	7
-	swi	7
+	ldw	(xsp+4), 65535
 	jr	8
 	add	hl, 16
 	exts	xhl

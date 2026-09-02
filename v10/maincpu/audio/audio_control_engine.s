@@ -1381,9 +1381,7 @@ ExtDev_SndParam_Block98_Var40:
 	ld	(xhl), 64
 	jrl	-3542
 ExtDev_SndParam_BlockA9_Var02:
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	.byte 0x87
+	cpdi8	36150, 135
 	ret	nz
 	.byte 0xf1
 	swi	1
@@ -1653,9 +1651,7 @@ ExtDev_SndParam_DispatchComplex:
 	ld	a, (xiz+3)
 	.byte 0x8e
 	push	sr
-	.byte 0xc1
-	jr	z, 38
-	.byte 0xf1
+	cpda8	a, 9830
 	swi	1
 	.byte 0x90
 	ld	(xbc-74), 152
@@ -1693,9 +1689,7 @@ ExtDev_SndParam_DispatchComplex:
 	.byte 0xe2
 	jr	z, 23
 	extz	hl
-	.byte 0xc3
-	reti
-	sla	xwa, 33
+	ld_rrb	a, xde, hl
 	ld	(xbc), a
 	cp	a, 255
 	jr	z, 9
@@ -2943,8 +2937,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	pop	xiz
 	ret
 	lda_d16	xwa, (0x8f18)
-	.byte 0xc1, 0x90
-	ldw	hl, 63
+	cpdi8	13200, 0
 	jr	z, 3
 	.byte 0xb0, 0xbb
 	ret
@@ -4148,10 +4141,7 @@ VoiceData_ExtendedParamSetup:
 	.byte 0x30, 0x38, 0x1d  ; bytecode param 0x1d38
 	addr24 Mem_Copy  ; Mem_Copy
 	lda	xsp, (xsp+10)
-	.byte 0xc7
-	swi	3
-	pop	sr
-	decf
+	ldi_erpb	251, 13
 	ld	a, (xsp+2)
 	extz	wa
 	muls	wa, 26
@@ -4164,14 +4154,10 @@ VoiceData_ExtendedParamSetup:
 	or	xix, xwa
 	ldb	a, 216
 	ccf
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp	c, 251
 	extz	bc
 	add	hl, bc
-	.byte 0xf3
-	reti
-	sla	xwa, 50
+	lda_rr	xde, xde, hl
 	ld	e, (xde+22)
 	extz	de
 	pushw	255
@@ -4835,9 +4821,7 @@ ExtData_ToneParam_DispatchHandler:
 	res	7, a
 	.byte 0x8a, 0x04, 0xf1
 	jr	nz, 7
-	.byte 0xc1
-	ldw	ix, 0x3f8d
-	decf
+	cpdi8	36148, 13
 	jr	nz, 77
 	ld	a, (xde+3)
 	.byte 0xf5, 0xec
@@ -5142,8 +5126,7 @@ ExtData_ToneParam_AltBody:
 	cp	(xbc), e
 	jr	nz, 8
 	ld	a, (xhl)
-	.byte 0xc1
-	ldw	bc, 0xf191
+	cpda8	a, 37169
 	jr	z, 40
 	ld	(xbc), e
 	.byte 0xb3
@@ -5255,11 +5238,7 @@ ExtData_ToneParam_MultiChannel:
 	ldw	wa, 0xb191
 	.byte 0xf1
 	ldw	bc, 0xb191
-	.byte 0xc1
-	pushw	sp
-	.byte 0x91
-	push	xsp
-	.byte 0x01
+	cpdi8	37167, 1
 	jr	nz, 29
 	lds	wa, 2
 	calr	3291
@@ -5481,10 +5460,7 @@ ExtData_Voice_MixedHandler:
 	lds	bc, 3
 	calr	3208
 	calr	2685
-	.byte 0xc1
-	and	e, w
-	push	xsp
-	swi	7
+	cpdi8	50632, 255
 	ret	nz
 	ldb_d8	a, (0x9130)
 	andda8	a, 0x9131
@@ -5544,11 +5520,7 @@ ExtData_Voice_MixedHandler:
 	ld	(xbc), 5
 	stdi8	(0x9129), 5
 	stdi8	(0x912a), 255
-	.byte 0xc1
-	pushw	bc
-	.byte 0x91
-	push	xsp
-	halt
+	cpdi8	37161, 5
 	jr	nz, 5
 	stdi8	(0x8d3c), 24
 	jrl	2496
@@ -5605,9 +5577,7 @@ ExtData_Voice_FullHandler:
 	.byte 0x04
 	ldb_d8	a, (0xfda1)
 	and	a, 192
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp	a, 251
 	ldw	wa, 128
 	calr	2463
 	ldw	wa, 64
@@ -5964,10 +5934,7 @@ MidiCh_IterateExpression:
 	res	7, a
 	cps	a, 0
 	jr	z, 125
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	lda_d16	xbc, (0x90fb)
 	ld	wa, (xsp+4)
 	extz	xwa
@@ -6486,9 +6453,7 @@ VoiceParamCC_Done:
 
 UIState_CheckAndRenderBitmap:
 	pushw	iz
-	.byte 0xc1
-	jrl	pl, 16320
-	push	sr
+	cpdi8	49277, 2
 	jr	nz, 67
 	ldb_d8	a, (0xc07f)
 	and	a, 255
@@ -6516,9 +6481,7 @@ UIState_CheckAndRenderBitmap:
 	popw	iz
 	ret
 UIState_RenderBitmapData:
-	.byte 0xc1
-	jrl	pl, 16320
-	halt
+	cpdi8	49277, 5
 	jr	nz, 38
 	ldb_d8	a, (0xc07f)
 	res	7, a
@@ -6534,9 +6497,7 @@ UIState_RenderBitmapData:
 	extz	xwa
 	add	xwa, xde
 	ld	(xwa), c
-	.byte 0xc1
-	jrl	pl, 16320
-	incf
+	cpdi8	49277, 12
 	jr	nz, 30
 	.byte 0xf1
 	jrl	nc, -13120
@@ -6550,9 +6511,7 @@ UIState_RenderBitmapData:
 	ldw	bc, 434
 	lds	de, 0
 	call	SndParam_NotifyAndReturn
-	.byte 0xc1
-	jrl	pl, 16320
-	.byte 0x04
+	cpdi8	49277, 4
 	ret	nz
 	.byte 0xf1
 	jrl	nc, -12864
@@ -7014,9 +6973,7 @@ BankFlush_CheckChannel1:
 	ret
 
 UIWidget_MidiStreamControl:
-	.byte 0xc1
-	jrl	pl, 16320
-	nop
+	cpdi8	49277, 0
 	ret	nz
 	ldb_d8	a, (0xc07f)
 	and	a, 3
@@ -7039,20 +6996,14 @@ UIWidget_MidiStreamControl:
 	ret
 	lds	wa, 0
 	lda_d16	xbc, (0x93d2)
-	.byte 0xf5, 0xe4
-	nop
-	nop
-	.byte 0xf5, 0xe4
-	nop
-	nop
+	stib_dsp	228, 0
+	stib_dsp	228, 0
 	inc	1, wa
 	cp	wa, 32
 	jr	c, -16
 	lds	wa, 0
 	lda_d16	xbc, (0x9412)
-	.byte 0xf5, 0xe4
-	nop
-	nop
+	stib_dsp	228, 0
 	inc	1, wa
 	cp	wa, 32
 	jr	c, -12
@@ -10901,9 +10852,7 @@ MidiStream_DispatchData:
 	set	7, e
 	ld	xix, 0x9472
 	sll	b, 1
-	.byte 0xf3
-	pop	sr
-	st_dd8w	de, 229
+	st_rr8w	de, xix, b
 	ret
 	calr	1257
 	ret
@@ -11727,9 +11676,7 @@ MidiStream_ExtendedDispatch:
 	ld	xix, 0x6e483f96
 	decf
 	stdi8	(0x9644), 20
-	.byte 0xc1
-	ldw	ix, 0x3f8d
-	ret
+	cpdi8	36148, 14
 	jrl	z, 156
 	ldw_d16	bc, (0x9644)
 	ldw_d16	de, (0x9646)

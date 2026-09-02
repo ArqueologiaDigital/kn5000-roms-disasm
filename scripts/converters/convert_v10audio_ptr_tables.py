@@ -165,6 +165,13 @@ def main():
                 sys.exit(f"{name}: label inside span at line: {t!r} -- refusing")
             if ";" in t:
                 sys.exit(f"{name}: comment inside span at line: {t!r} -- refusing")
+            # HARD REFUSAL on a string literal.  A sibling lane's re-frame pass
+            # turned 14 `.ascii` lines into instructions, `"TEMPO   "` among
+            # them -- byte-exact, and completely invisible to the gate.  A span
+            # that swallows a string is a span whose extent is wrong.
+            if re.search(r'\.ascii[z]?\b', t):
+                sys.exit(f"{name}: string literal inside span at line: {t!r} "
+                         f"-- refusing (see the TEMPO incident)")
         new = []
         if span_start < base:
             if span_start < base - pre and not BYTE_RE.match(lines[l0 - 1]):

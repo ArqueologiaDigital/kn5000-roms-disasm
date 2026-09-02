@@ -137,6 +137,10 @@ def main():
                 if LABEL_RE.match(t) or ";" in t:
                     sys.exit(f"{rel} 0x{addr:06X}: label or comment inside span: {t!r}")
                 if not BYTE_RE.match(t):
+                    # This already refuses `.ascii`/`.asciz`, which is the hard
+                    # rule after a sibling lane re-framed 14 string literals --
+                    # `"TEMPO   "` included -- into instructions, byte-exactly
+                    # and invisibly to the gate.
                     sys.exit(f"{rel} 0x{addr:06X}: non-.byte line inside span: {t!r}")
             raw = list(rom[addr - BASE:addr - BASE + size])
             # ⚠ convert_code_bytes IS NOT RELIABLY DETERMINISTIC.  It shells out

@@ -4379,11 +4379,7 @@ AllocCheckNoteOn_Data:
 	ld	xwa, (xsp+4)
 	lds	bc, 1
 	calr	5074
-	.byte 0xd1
-	ldb	b, 206
-	push	xsp
-	nop
-	nop
+	cpdi16	52770, 0
 	jr	z, 17
 	call	NoteMap_FindBestMatch
 	cp	l, 255
@@ -4400,9 +4396,7 @@ AllocCheckNoteOn_Data:
 	.byte 0xcf
 	rcf
 	jrl	nc, 345
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp	a, 251
 	extz	wa
 	add	wa, 132
 	extz	xwa
@@ -4496,9 +4490,7 @@ AllocCheckNoteOn_Data:
 	.byte 0xcf
 	rcf
 	jr	nc, 44
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp	a, 251
 	extz	wa
 	add	wa, 132
 	extz	xwa
@@ -4527,9 +4519,7 @@ AllocCheckNoteOn_Data:
 	extz	xwa
 	.byte 0xaf, 0x04, 0x80
 	ld	a, (xwa)
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp	a, 251
 	cp	a, 255
 	jr	z, 14
 	.byte 0xc7
@@ -4544,9 +4534,7 @@ AllocCheckNoteOn_Data:
 	extz	xwa
 	.byte 0xaf, 0x04, 0x80
 	ld	a, (xwa)
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp	a, 251
 	cp	a, 255
 	jr	z, 14
 	.byte 0xc7
@@ -15636,9 +15624,7 @@ ComputeNoteBitPositi_Data:
 	scf
 	.byte 0xda
 	pushw	ix
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp	a, 60
 	cp	a, c
 	jr	nc, 2
 	ld	a, c
@@ -17170,9 +17156,7 @@ UIState_ProcessKeyEvent:
 	ld	a, (xsp+3)
 	and	a, 255
 	jrl	z, 445
-	.byte 0x8f
-	nop
-	.byte 0x21
+	ld	a, (xsp+256)
 	extz	wa
 	calr	5821
 	cps	l, 0
@@ -18556,9 +18540,7 @@ SendEpilogue_Data:
 	ldw	wa, 255
 	ldw	bc, 22
 	call	MidiEvent_ConfigChannel
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp	a, 248
 	stb_d8	(0xe9c2), a
 	jrl	1417
 	lds	wa, 1
@@ -18566,9 +18548,7 @@ SendEpilogue_Data:
 	jr	nz, 2
 	lds	wa, 2
 	ld	iz, wa
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 127
@@ -18580,9 +18560,7 @@ SendEpilogue_Data:
 	jr	nz, 2
 	lds	wa, 0
 	ld	iz, wa
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18626,21 +18604,15 @@ SendEpilogue_Data:
 	jrl	1271
 	stda16	(0xcfcc), iz
 	jrl	1264
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block3
 	jrl	1252
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block9
 	jrl	1240
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18701,18 +18673,14 @@ SendEpilogue_Data:
 	jr	nz, 2
 	lds	wa, 0
 	ld	iz, wa
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp	a, 248
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
 	ldw	bc, 177
 	calr	1837
 	jrl	1054
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp	a, 248
 	extz	wa
 	calr	2042
 	.byte 0xd7
@@ -18729,9 +18697,7 @@ SendEpilogue_Data:
 	nop
 	swi	7
 	jrl	nz, 1019
-	.byte 0xc7
-	swi	0
-	.byte 0x89
+	stb_erp	a, 248
 	extz	wa
 	calr	1823
 	ld	(xsp+4), xhl
@@ -25540,17 +25506,9 @@ Param_SignExtendRetu_Data:
 	lds	wa, 3
 	ld	xde, 0xe198
 	call	sendCOMM
-	.byte 0xbf
-	ccf
-	push	sr
-	nop
-	nop
+	ldw	(xsp+18), 0
 	jr	5
-	.byte 0xbf
-	ccf
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xsp+18), 1
 	ld	hl, (xsp+18)
 	popw	iz
 	lda	xsp, (xsp+22)
@@ -25687,15 +25645,9 @@ Param_SignExtendRetu_Data:
 	ld	bc, (xsp+6)
 	ld	xde, xiz
 	call	sendCOMM
-	.byte 0xbf, 0x04
-	push	sr
-	nop
-	nop
+	ldw	(xsp+4), 0
 	jr	5
-	.byte 0xbf, 0x04
-	push	sr
-	.byte 0x01
-	nop
+	ldw	(xsp+4), 1
 	ld	hl, (xsp+4)
 	pop	xiz
 	inc	4, xsp
@@ -27465,10 +27417,7 @@ HdaeRom_DataDispatch:
 	jrl	nz, 307
 	cp	(xsp+440), 255
 	jrl	nz, 298
-	.byte 0xbf, 0x04
-	push	sr
-	pushw	wa
-	nop
+	ldw	(xsp+4), 40
 	lda	xwa, (xsp+14)
 	ld	(xsp+10), xwa
 	ld	wa, (xsp+4)
@@ -27507,9 +27456,7 @@ HdaeRom_DataDispatch:
 	jr	nz, 90
 	cp	(xsp+440), 255
 	jr	nz, 82
-	.byte 0xbf, 0x04
-	push	sr
-	ldb	d, 0
+	ldw	(xsp+4), 36
 	lda	xwa, (xsp+14)
 	ld	(xsp+10), xwa
 	ld	wa, (xsp+4)
@@ -27617,8 +27564,7 @@ HdaeRom_DataDispatch_Block3:
 	cp	xix, xhl
 	jr	nc, -13
 	ld	(xhl), 1
-	.byte 0xc7
-	lds32	xde, 0
+	ldib_erp	234, 0
 	lds	de, 0
 	ld	bc, de
 	add	bc, 0x49a7
@@ -27627,8 +27573,7 @@ HdaeRom_DataDispatch_Block3:
 	.byte 0xe0, 0xe4
 	ldw	hl, 395
 	push	xix
-	.byte 0xcf
-	exts	xbc
+	rrc_i_8	l, 19
 	add	xbc, xwa
 	.byte 0xb9, 0x01, 0xbd, 0xc7
 	inc	1, xde
@@ -27825,9 +27770,7 @@ TmFlashWrite_ValidateParams:
 	.byte 0x04
 	ldb	a, 216
 	ccf
-	.byte 0xc7
-	swi	0
-	.byte 0x8b
+	stb_erp	c, 248
 	extz	bc
 	calr	HdaeRom_DataHandler
 	inc	1, iz
@@ -27835,9 +27778,7 @@ TmFlashWrite_ValidateParams:
 	jr	c, -21
 	calr	HdaeRom_DataDispatch_Block
 	ld	a, (xsp+4)
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp	a, 248
 	extz	iz
 	mul	iz, 20
 	ld	wa, iz
@@ -27856,9 +27797,7 @@ TmFlashWrite_ValidateParams:
 	.byte 0x04
 	ldb	a, 216
 	ccf
-	.byte 0xc7
-	swi	0
-	.byte 0x8b
+	stb_erp	c, 248
 	extz	bc
 	calr	HdaeRom_AltHandler
 	inc	1, iz
@@ -28064,9 +28003,7 @@ VoiceParam_DispatchTable1:
 	add	xwa, xhl
 	ld	(xiz), xwa
 	ld	xwa, (xsp+4)
-	.byte 0xb0
-	push	sr
-	.byte 0xd6, 0x01
+	ldw	(xwa), 470
 	lds	hl, 0
 	jr	3
 	ldw	hl, 0xff38
@@ -28961,9 +28898,7 @@ NumFormat_DivideAndC_Data:
 	ld	wa, (xsp+8)
 	.byte 0x83, 0xf1
 	ret	z
-	.byte 0xc5, 0xec
-	push	xsp
-	nop
+	cp_spib_im	236, 0
 	jr	nz, -10
 	lds32	xhl, 0
 	ret
