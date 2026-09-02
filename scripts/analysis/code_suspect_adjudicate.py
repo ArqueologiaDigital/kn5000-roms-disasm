@@ -135,9 +135,18 @@ def symtab(key):
     out = subprocess.run([NM, "--defined-only", elf],
                          capture_output=True, text=True).stdout
     s = {}
+    lo, hi = IMG[key]["base"], IMG[key]["base"] + len(rom(key))
     for ln in out.split("\n"):
         p = ln.split()
-        if len(p) >= 3:
+        # Keep only symbols that OCCUPY ADDRESS SPACE.  llvm-nm type `a` is an
+        # ABSOLUTE symbol -- the register/IO equates (`ADMOD1 = 0x128`, 1,153 of
+        # them in v7) -- and mixing those into the sorted address list silently
+        # TRUNCATES regions: an equate whose value happens to fall inside a
+        # region is read as "the next label", so a 2,268 B region is graded as
+        # 96 B.  Caught by three regions whose symbol-derived extent disagreed
+        # with the source run they sit in.
+        if len(p) >= 3 and p[1] in ("t", "T", "d", "D", "r", "R") \
+                and lo <= int(p[0], 16) < hi:
             s.setdefault(p[2], int(p[0], 16))
     return s
 

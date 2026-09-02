@@ -2804,11 +2804,9 @@ UI_PostTimerResetEvent:
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	jp ApPostEvent
-
 SeqState_HasModeChanged:
-	.byte 0xc1, 0x9a, 0x8c, 0x21	; ldb_d8 a, (0x8d36) (v7 patched)
-
-	.byte 0xc1, 0x9c, 0x8c, 0xf1	; cpda8 a, 0x8d38 (v7 patched)
+	ldb_d8	a, 35994
+	cpda8	a, 35996
 
 	scc16 nz, hl
 

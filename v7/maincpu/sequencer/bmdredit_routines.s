@@ -1895,9 +1895,8 @@ BmDrEdit_ResetAndScanNotes:
 	stdi16 (0x2782), 0
 	stdi8 (0x2784), 0
 	calr BmDrEdit_ScanChannelEvents
-
 BmDrEdit_FlagDisplayUpdate:
-	.byte 0x1d, 0x9e, 0xd6, 0xfd	; call Audio_CheckSubsystemReady (v7 addr)
+	call	16635550
 
 	setda 0, 0x27b0
 

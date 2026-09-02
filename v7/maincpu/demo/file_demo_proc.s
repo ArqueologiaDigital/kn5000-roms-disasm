@@ -599,9 +599,8 @@ Demo_SelectEntry_CheckCountdown:
 	ret nz
 	stdi8 (0x2966), 133
 	ret
-
 Demo_SelectEntry_CheckCPanel:
-	.byte 0xc1, 0x98, 0x8c, 0x3f, 0x13	; cpdi8 (0x8d34), 19 (v7 patched)
+	cpdi8	35992, 19
 
 	ret nz
 
