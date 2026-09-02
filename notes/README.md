@@ -27,3 +27,21 @@ instruction as the position anchor rather than an inferred length, so one
 bad instruction can't desync every mismatch reported after it. The same
 invocation also walks the still-`.byte` TaskSched/TaskEvent/FIFO runs in
 `v142/subcpu/kn5000_subprogram_v142.s` directly from source.
+
+⚠ CORRECTION, 2026-09-02: that anchor is not reliable, and every "PARTIAL
+DECODE" this probe reported for the TaskEvent/FIFO/TaskSched runs was a false
+alarm caused by it. `--show-encoding`'s `encoding: [...]` field is not
+necessarily the bytes the disassembler consumed -- it can be a RE-ENCODE of
+the decoded instruction, which is shorter than the true consumed length
+whenever the byte stream is genuinely ambiguous (e.g. an explicit-zero-
+displacement `LD` collapses to the same printed text, and a shorter
+re-encoding, as the plain no-displacement form). Proof and the real
+per-instruction verification method (reassemble each decoded instruction's
+own text and check it reproduces the exact byte slice, never trust a summed
+encoding length) are in
+`scripts/converters/convert_taskevent_fifo_family.py`. Using that method,
+608 of the previously-"blocked" 672 B convert cleanly (plus the 14 B already
+proven here); 50 B is genuine DATA (loaded as an address, never executed) and
+was correctly left as `.byte`; the true remaining blocked total for this
+family is 0 B. Run `python3 scripts/converters/convert_taskevent_fifo_family.py
+--selftest` to re-derive this from the committed ROM image.

@@ -77,10 +77,21 @@ Measured this push, per image where a census exists:
   **~14,727 B each** of shorter misframed islands, measured and deliberately not
   attempted (fixing one means re-framing an instruction already present, not
   filling a gap). `scripts/analysis/v9_v10_undisassembled_census.py`
-* **subcpu v142: ~976 B**, and the reason is named rather than "did not try":
-  the pinned LLVM backend can DECODE addressing forms it cannot ENCODE
-  (`DSP_Bytecode_Op01/02/03`, 569 B) and cannot re-parse some spellings its own
-  disassembler emits (~407 B, TaskEvent/FIFO/TaskSched).
+* **subcpu v142: ~569 B**, all of it `DSP_Bytecode_Op01/02/03` (the pinned LLVM
+  backend can DECODE these addressing forms but could not ENCODE them; fixed
+  2026-09-02 in `ad8129f59880`, 569 B proven convertible, conversion itself
+  owned by a separate lane). ⚠ CORRECTED 2026-09-02: the ~407 B
+  TaskEvent/FIFO/TaskSched figure was never a real decoder gap. It was an
+  artifact of `llvm_roundtrip_probe.py` trusting `--show-encoding`'s
+  `encoding: [...]` field as the true consumed-byte count, when it can be a
+  RE-ENCODE shorter than what the disassembler actually consumed (proof and
+  the corrected per-instruction verification method:
+  `scripts/converters/convert_taskevent_fifo_family.py`). Of the 672 B across
+  the 18 flagged `.byte` runs: 50 B is genuine DATA (loaded as an address,
+  never executed — left as `.byte` deliberately, not debt) and 622 B is real
+  code that decodes and reassembles byte-exact once verified correctly; all
+  622 B is now converted. **True remaining blocked total for this family:
+  0 B.**
 * **HD-AE5000: 13,288 B** undocumented `.byte`, overwhelmingly scattered
   single-byte numeric fields. `hdae5000/tools/measure_debt.py`
 * **wsa1/prom_b: audited and clean** — all 188 runs of 64 B or more are typed and
@@ -152,10 +163,19 @@ require the original bytes).
    `bf 04 02 01 00` disassembled to text that re-encoded as `bf 04 14 01 00`,
    accepted with no diagnostic. **569 B unblocked and measured** — the three
    `DSP_Bytecode_Op01/02/03` handlers now round-trip byte-exact, 203
-   instructions. Of the ~407 B TaskEvent/FIFO/TaskSched figure, only **14 B**
-   is proven; the lane refused to round up, and the rest fails for a different
-   cause. **The 569 B are now CONVERTIBLE and nobody has converted them** —
-   that is the cheapest remaining win in the tree.
+   instructions. **The 569 B are CONVERTIBLE**, conversion owned by a
+   separate lane (stay off `DSP_Bytecode_Op01/02/03` if you are not that
+   lane). ⚠ CORRECTED 2026-09-02: the ~407 B TaskEvent/FIFO/TaskSched figure
+   is retracted — it was a measurement artifact, not a decoder gap; see the
+   correction above and `scripts/converters/convert_taskevent_fifo_family.py`.
+   622 B of that family is now converted (0 B remains blocked); the same
+   script's docstring names four decoder-level gaps a future LLVM pass should
+   fix so the DISASSEMBLER (not just a hand-written workaround) can spell
+   these forms: the explicit-zero-displacement `LD` print/encode collapse
+   (the dominant one, ~490 B here), `RESm`/`SETm`/`BITm` missing from
+   `decodeMemPrefix()` (with `BITm` silently misdecoding as `AND` rather than
+   failing), and `LDC CR16,r16` having no decoder branch at all despite the
+   mnemonic already being used elsewhere in this same file.
 4. Measure v7's code-as-`.byte` debt — the one image with no census in that shape.
 
 5. ★ **The DECODE leg, which is now the bigger half.** The disassembler has
