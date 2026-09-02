@@ -60,13 +60,18 @@ import v10_reframe as R
 ROM_BASE = 0xE00000
 ROOT = R.ROOT
 
-# Leading opcode bytes with no decode anywhere in tlcs900_backend, which MAME's
-# unidasm decodes as real TLCS-900 instructions (normal / max / ldf / JP nnnn /
-# CALL nnnn).  They are BACKEND GAPS, not reserved silicon.  Two of them are
-# control flow, so a span that swallows one into an operand may be framed wrong
-# in a way the byte gate cannot see -- see byte_run_start_enrichment.py and
-# notes/DEBT-INVENTORY-2026-09-02.md.  Lane w10/missinginsns is adding them.
-BLIND = {0x01, 0x04, 0x17, 0x1a, 0x1c}
+# Leading opcode bytes with no decode in the backend, which MAME's unidasm
+# decodes as real TLCS-900 instructions.  They are BACKEND GAPS, not reserved
+# silicon -- see byte_run_start_enrichment.py and
+# notes/DEBT-INVENTORY-2026-09-02.md.  The set started as
+# {0x01, 0x04, 0x17, 0x1a, 0x1c}; tlcs900_backend 6f456a19f05b added ldf (0x17),
+# jp16 (0x1a) and call16 (0x1c) while this lane was running, leaving 0x01
+# (normal) and 0x04 (max).  RE-CHECK THIS SET against the installed decoder
+# before quoting any number from this script -- the exact command is in
+# leading_byte_reserved_probe.py.  A span that would swallow one of these into
+# an operand is refused: that reading round-trips through the byte gate and is
+# still wrong, and two of the original five were control flow.
+BLIND = {0x01, 0x04}
 
 
 def sweep(rom, a, b):
@@ -174,7 +179,8 @@ def main():
         blocked = []  # (first_line, last_line, [blind byte values])
         stat = dict(conv=0, convb=0, reframed=0, refused=0, refusedb=0, data=0,
                         datab=0, lostsym=0, notround=0,
-                        blind=0, blindb=0, absorb=0, absorbb=0, labelcross=0)
+                        blind=0, blindb=0, absorb=0, absorbb=0, labelcross=0,
+                        hasascii=0)
         for reg in regions:
             runs = byte_runs(lines, lm, reg["ln"], reg["end_line"])
             if not runs or reg["end"] <= reg["addr"]:
@@ -289,6 +295,18 @@ def main():
                     new_names |= {w for w in re.findall(r"[A-Za-z_][A-Za-z0-9_]*",
                                                         t.split(";")[0])
                                   if w in symnames}
+                # ⚠ REFUSE any span containing a string literal. The first run
+                # of this pass re-framed 14 `.ascii` lines into instructions,
+                # among them "TEMPO   ", "Y SHIFT=" and "ADE-IN ON OFF" -- real
+                # UI text turned into fake code, byte-exact and invisible to the
+                # gate. A string is evidence about the region that the decoder
+                # does not have, so it wins.
+                if any(lines[i - 1].strip().startswith((".ascii", ".asciz",
+                                                        ".string"))
+                       for i in range(first, last)):
+                    stat["hasascii"] += 1
+                    stat["refusedb"] += nb
+                    continue
                 if old_names - new_names:
                     # the re-frame would replace a symbolic operand with a bare
                     # number: that is a loss of information, so refuse it
@@ -322,15 +340,18 @@ def main():
                 continue
             kept.append(e)
         edits = kept
-        print("%-40s converted %4d spans (%5d B of .byte), re-framed %6d B; "
-              "refused %3d undecodable + %3d symbol-losing + %3d not-round-tripping\n%40s + %3d label-crossing (%5d B); "
-              "in-data regions skipped %2d (%4d B); "
-              "(d) blocked on backend gap %3d (%4d B); blind-absorbing %3d (%4d B)"
+        print("%s\n"
+              "  (a) converted            %4d spans, %5d B of .byte, %6d B re-framed\n"
+              "  (b) in-data, left to the data pass  %4d regions, %5d B\n"
+              "  (d) blocked on a backend gap        %4d runs,    %5d B\n"
+              "      would swallow a blind byte      %4d runs,    %5d B\n"
+              "  refused: %d undecodable, %d symbol-losing, %d not-round-tripping,\n"
+              "           %d label-crossing, %d string-containing  (%d B total)"
               % (os.path.basename(rel), stat["conv"], stat["convb"],
-                 stat["reframed"], stat["refused"], stat["lostsym"],
-                 stat["notround"], "", stat["labelcross"],
-                 stat["refusedb"], stat["data"], stat["datab"],
-                 stat["blind"], stat["blindb"], stat["absorb"], stat["absorbb"]))
+                 stat["reframed"], stat["data"], stat["datab"],
+                 stat["blind"], stat["blindb"], stat["absorb"], stat["absorbb"],
+                 stat["refused"], stat["lostsym"], stat["notround"],
+                 stat["labelcross"], stat["hasascii"], stat["refusedb"]))
         grand[0] += stat["conv"]; grand[1] += stat["convb"]
         grand[2] += stat["reframed"]; grand[3] += stat["refusedb"]
         grand[4] += stat["datab"]

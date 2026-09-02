@@ -133,13 +133,9 @@ MidiSerial_HandleSysCommon_Data:
 MidiSerial_HandleDefault_Data:
 	.byte 0xc1
 	pushw	wa
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	push	xiz
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	ret
 	ldb_d8	a, (0x9634)
 	and	a, 15
@@ -185,13 +181,9 @@ MidiCC_LowRange_Table:
 MidiCC_Handler_SimpleParamStore:
 	.byte 0xc1
 	pushw	wa
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	push	xiz
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	ret
 MidiCC_Handler_CC3_TableLookup:
 	ld	xix, MidiCC_ChannelMappingData
@@ -368,9 +360,7 @@ MidiCC_Handler_RangeCheck:
 	swi	7
 	nop
 	push	sr
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	pop	sr
 MidiCC_Handler_ChannelMapping:
 	ldb_d8	a, (0x966a)
@@ -417,9 +407,8 @@ MidiCC_Handler_ChannelMapping:
 	rcf
 	popw	wa
 	halt
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04, 0x04
+	max
+	max
 	popw	wa
 	halt
 	nop
@@ -1468,9 +1457,7 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	swi	7
 	nop
 	push	sr
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	pop	sr
 	nop
 	nop
@@ -2132,9 +2119,7 @@ Periodic_TimestampCompare_Done:
 
 MidiCC_ChannelMappingData:
 	push_f
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -2142,9 +2127,7 @@ MidiCC_ChannelMappingData:
 	ldb	w, 2
 	swi	7
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	pop	sr
 	swi	7
 	swi	7
@@ -2204,23 +2187,18 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01, 0x01
+	normal
+	normal
 	push	sr
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01, 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01, 0x04, 0x01
+	normal
+	max
+	normal
 	ldio	1, 16
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	ldb	w, 1
 	ldb	w, 1
 	ldb	w, 1
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	push	sr
 	push	sr
 	push	sr
@@ -2234,8 +2212,6 @@ MidiCC_ChannelMappingData:
 	ld	xwa, 0xffffff02
 	swi	7
 	.fill 8, 1, 0xff
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x80, 0x01, 0x80, 0x01
 	swi	7
 	swi	7
@@ -2244,9 +2220,7 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 	swi	7
@@ -2256,9 +2230,7 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	nop
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ldio	1, 4
 	ldio	2, 4
 	ldio	3, 4
@@ -2276,8 +2248,6 @@ MidiCC_ChannelMappingData:
 	ldio	255, 255
 	swi	7
 	rcf
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04, 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD0F79-0xFD0F8C (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=69% dist=6 near MidiCC_ChannelMappingData_0xE0+50
 	.byte 0x08, 0x11, 0x04, 0x08, 0x12, 0x04, 0x08, 0x13, 0x04, 0x08, 0xff, 0xff
@@ -2287,8 +2257,6 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xsp), 127
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb7, 0x01
 	jrl	nc, 695
 	jrl	nc, 951
@@ -2316,8 +2284,6 @@ MidiCC_ChannelMappingData:
 	pop_a
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb7, 0x17
 	jrl	nc, 6327
 	jrl	nc, -1
@@ -2327,8 +2293,6 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xiz), 127
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb6, 0x01
 	jrl	nc, 694
 	jrl	nc, 950
@@ -2356,8 +2320,6 @@ MidiCC_ChannelMappingData:
 	pop_a
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb6, 0x17
 	jrl	nc, 6326
 	jrl	nc, -1
@@ -2367,8 +2329,6 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xde), 127
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb2, 0x01
 	jrl	nc, 690
 	jrl	nc, 946
@@ -2396,8 +2356,6 @@ MidiCC_ChannelMappingData:
 	pop_a
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb2, 0x17, 0x7f
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -2427,10 +2385,7 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 789
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x17
-	pop	sr
+	ldf 3
 	jrl nc, -1
 	swi 7
 	swi 7
@@ -2441,8 +2396,6 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xhl), 127
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb3, 0x01
 	jrl	nc, 691
 	jrl	nc, 947
@@ -2470,13 +2423,9 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb3, 0x17
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb0, 0x01
 	jrl	nc, -1
 	.fill 8, 1, 0xff
@@ -2512,10 +2461,14 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x17, 0x08, 0x7f
-	.fill 8, 1, 0xff
+	ldf 8
+	jrl nc, -1
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
@@ -2548,57 +2501,37 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0x2400401
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0x4400403
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0x6400405
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0x8400407
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0xa400409
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0xc40040b
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0xe40040d
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0x10ffffff
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0x12400411
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0xff400413
 	swi	7
 	swi	7
 	pop_a
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ld	xwa, 0x17ffffff
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04, 0x40
-	.fill 8, 1, 0xff
+	max
+	ld xwa, 4294967295
+	swi 7
+	swi 7
+	swi 7
+	swi 7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
@@ -2626,10 +2559,7 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 1813
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x17
-	reti
+	ldf 7
 	jrl	nc, -1
 	swi	7
 	jr	f, 1
@@ -2662,8 +2592,6 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5564
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xbc, 0x17
 	jrl	nc, 6332
 	jrl	nc, -1
@@ -2697,8 +2625,6 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5565
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xbd, 0x17
 	jrl	nc, 6333
 	jrl	nc, -1
@@ -2732,8 +2658,6 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5560
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb8, 0x17
 	jrl	nc, 6328
 	jrl	nc, -1
@@ -2767,8 +2691,6 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5561
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb9, 0x17
 	jrl	nc, 6329
 	jrl	nc, -1
@@ -2802,8 +2724,6 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5562
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xba, 0x17
 	jrl	nc, 6330
 	jrl	nc, -1
@@ -2837,8 +2757,6 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5563
 	jrl	nc, -1
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xbb, 0x17
 	jrl	nc, 6331
 	jrl	nc, -1
@@ -2847,19 +2765,13 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xad
 	nop
 	sub	(xiy+1), xiy
 	push	sr
 	sub	(xiy+3), xiy
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	sub	(xiy+5), xiy
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06
 	sub	(xiy+7), xiy
 	ldio	173, 9
@@ -2879,19 +2791,13 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xae
 	nop
 	sub	(xiz+1), xiz
 	push	sr
 	sub	(xiz+3), xiz
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	sub	(xiz+5), xiz
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06
 	sub	(xiz+7), xiz
 	ldio	174, 9
@@ -2913,17 +2819,13 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	nop
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	nop
 	push	sr
 	nop
 	pop	sr
 	nop
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	nop
 	halt
 	nop
@@ -2953,23 +2855,12 @@ MidiCC_ChannelMappingData:
 	nop
 	swi	7
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x17
-	nop
+	ldf 0
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xbc), 177
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01, 0xb1
-	push	sr
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0xb1
-	pop	sr
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
+	normal
+	ldw (xbc), 945
 	.byte 0xb1, 0x04, 0xb1
 	halt
 	.byte 0xb1, 0x06, 0xb1
@@ -2999,22 +2890,12 @@ MidiCC_ChannelMappingData:
 	pop_a
 	swi	7
 	swi	7
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb1, 0x17
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xix), 180
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01, 0xb4
-	push	sr
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0xb4
-	pop	sr
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
+	normal
+	ldw (xix), 948
 	.byte 0xb4, 0x04, 0xb4
 	halt
 	.byte 0xb4, 0x06, 0xb4
@@ -3035,14 +2916,10 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	push	sr
 	pop	sr
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -3053,17 +2930,13 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	nop
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	nop
 	push	sr
 	nop
 	pop	sr
 	nop
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	nop
 	halt
 	nop
@@ -3093,10 +2966,7 @@ MidiCC_ChannelMappingData:
 	nop
 	swi	7
 	nop
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x17
-	nop
+	ldf 0
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 PanelEvt_Handler_4_DualValueCheck:
@@ -3803,8 +3673,6 @@ FileData_RawDataBlock:
 	add	(xwa-21), a
 	calr	1351
 	incm	1, (xsp+4)
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x9f, 0x04
 	push	xsp
 	push_f
@@ -3824,8 +3692,6 @@ FileData_RawDataBlock:
 	.byte 0xaf, 0x06, 0x81
 	calr	1869
 	incm	1, (xsp+4)
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x9f, 0x04
 	push	xsp
 	pop	sr
@@ -3873,8 +3739,6 @@ FileData_RawDataBlock:
 	add	(xwa-21), a
 	calr	2499
 	incm	1, (xsp+4)
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x9f, 0x04
 	push	xsp
 	push	sr
@@ -4004,8 +3868,6 @@ FileData_RawDataBlock:
 	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	add	xhl, 20
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xaf, 0x04
 	or	(xhl), h
 	add	(xwa-21), a
@@ -4027,8 +3889,6 @@ FileData_RawDataBlock:
 	push	sr
 	nop
 	nop
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xaf, 0x04, 0x81
 	calr	1326
 	incm	1, (xsp+8)
@@ -4067,8 +3927,6 @@ FileData_RawDataBlock:
 	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	add	xhl, 722
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xaf, 0x04
 	or	(xhl), h
 	add	(xwa-21), a
@@ -6894,9 +6752,7 @@ VoiceParam_CopyBitfields_LargeBlock:
 	.byte 0xb0, 0x9d, 0xb2, 0xa5, 0xb0, 0x9e, 0xb2, 0xa6
 	.byte 0xb0, 0x9e, 0xb2
 	add	(xsp), xwa
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	ldb	a, 201
 	neg	d
 	.byte 0x89
@@ -7362,8 +7218,6 @@ DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0x8c
 	swi	6
 	push	xix
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x80
 	or	(xix-2), a
 	ld	a, (xhl-18)
@@ -7372,8 +7226,6 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix+1), a
 	ld	a, (xhl+18)
 	res	7, a
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x8c
 	swi	7
 	push	xix
@@ -7671,12 +7523,12 @@ DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0x89
 	swi	6
 	push	xix
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x80
-	or	(xbc-2), l
-	ld	l, (xwa+1)
-	and	l, 127
+	add (xwa), a
+	swi 6
+	ld xwa, xsp
+	normal
+	ldb l, 207
+	scc nc, d
 	andmi8	(xbc+1), 128
 	or	(xbc+1), l
 	ld	l, (xwa-1)
@@ -7684,16 +7536,13 @@ DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0x89
 	swi	7
 	push	xix
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x80
-	or	(xbc-1), l
-	ld	l, (xwa)
-	ld	(xbc), l
-	lda	xbc, (xbc+26)
-	lda	xwa, (xwa+26)
-	cp	xwa, xde
-	jr	c, -53
+	add (xwa), a
+	swi 7
+	add xwa, xsp
+	ldb l, 177
+	ld xsp, 3090225849
+	jp16 59952
+	bit_dd8 3, 103
 	ret
 
 DataBuf_TransferSlotBitfields:
@@ -8924,22 +8773,16 @@ MidiStream_PrevBankCheck:
 	ldda32	xwa, (0xbcac)
 	.byte 0x80
 	push	xsp
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x01
+	normal
 	jr	z, 47
 	.byte 0x80
 	push	xsp
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06
 	jr	nz, 6
 	ld	(xwa+4), 32
 	jr	36
 	ldda32	xwa, (0xbc60)
 	calr	3797
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -10411,15 +10254,11 @@ ArpQueue_EnqueueDone:
 
 ArpQueue_ProcessAndSort_Data:
 	ldda32	xwa, (0xbcac)
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x88, 0x04
 	push	xsp
 	nop
 	ret	nz
 	ldda32	xwa, (0xbcac)
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x88, 0x04
 	push	xsp
 	nop
@@ -10742,8 +10581,6 @@ SeqVoice_DispatchProcess_Data:
 	sub	xwa, 0xf980
 	add	xwa, 0x12cb2
 	add	xwa, xhl
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xaf, 0x04
 	or	(xwa), w
 	.byte 0xc8
@@ -10897,10 +10734,9 @@ SeqVoice_DispatchProcess_Data:
 	.byte 0xf1
 	push_f
 	ld	(xiy-50), xiz
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x17
-	calr	312
+	ldf 30
+	push xwa
+	normal
 	.byte 0xf3, 0xed
 	nop
 	pop	xwa
@@ -12623,8 +12459,6 @@ SeqChan_WriteField_Data_A:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xbf
 	ret
 SeqChan_WriteField_Data_B:
@@ -12632,8 +12466,6 @@ SeqChan_WriteField_Data_B:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xbe
 	ret
 SeqChan_WriteField_Data_C:
@@ -12641,8 +12473,6 @@ SeqChan_WriteField_Data_C:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xbd
 	ret
 SeqChan_WriteField_Data_D:
@@ -12650,8 +12480,6 @@ SeqChan_WriteField_Data_D:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xbc
 	ret
 SeqChan_RetStub_C:
@@ -12661,8 +12489,6 @@ SeqChan_WriteField_Data_E:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xba
 	ret
 ; MIDI SysEx processing block with dispatch
@@ -14387,11 +14213,8 @@ SeqData_FormatOutput_Data:
 	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xE)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0xba, 0x17
+	ld_rrl xwa, xwa, bc
+	calr 6074
 	cp	hl, 0xffff
 	jr	z, 41
 	stb_erp a, 251
@@ -14423,12 +14246,8 @@ SeqData_FormatOutput_Data:
 	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x66)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	pop	xiy
-	.byte 0x17
+	ld_rrl xwa, xwa, bc
+	calr 5981
 	cp	hl, 0xffff
 	jr	z, 41
 	stb_erp a, 251
@@ -14910,13 +14729,9 @@ SeqAlt_DescriptorBlock_Data:
 	ld	(xsp+4), l
 	ld	xde, (xsp+10)
 	ld	a, (xde+9)
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x8f, 0x04
 	stdi8	(0x857b), 143
-	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
-	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
-	.byte 0x04
+	max
 	ldb	c, 138
 	ldwio	243, 0x7d6b
 	ldda32	xwa, (0xbc54)
