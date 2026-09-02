@@ -44,7 +44,27 @@ import convert_interrupted_region as cir  # noqa: E402
 CONSUMED_RE = __import__('re').compile(r'consumed (\d+)/(\d+) B')
 
 
-def process(relpath, start_line, address, size, apply=False, auto_shrink=True):
+def process(relpath, start_line, address, size, apply=False, auto_shrink=True,
+            min_start_line=None):
+    """min_start_line (OPTIONAL, default None = previous behaviour exactly):
+    refuse if rewind_to_true_start() walks the span's start ABOVE this line.
+
+    WHY IT EXISTS, and the bug it stops.  rewind_to_true_start() walks backward
+    "while the preceding line is still a recognized DATA directive (blanks and
+    labels do not stop it)".  When the region ABOVE the one being converted is
+    itself a raw `.byte` run, that walk crosses the intervening label and keeps
+    going -- so find_span() then sums `size` bytes from the WRONG region and the
+    converter rewrites the neighbour with this region's instructions.
+
+    Caught 2026-09-02 by lane rq-codeshape on
+    sequencer_engine.s:4621 `AccPedalConfig_StoreCtrl6ValsAlt` (0xF3B526, 20 B):
+    its decode was written into `AccPedalConfig_StoreCtrl6Vals` (0xF3B512, 20 B)
+    one region above.  The two are near-clones, so the rebuilt ROM differed by
+    exactly ONE byte -- the `jrl` displacement, 0x0161 where the dump has 0x0175.
+    Had the two regions been exact clones the byte gate would have stayed GREEN
+    on a conversion that rewrote the wrong region.
+
+    Pass the region's own label line to make that refusal loud."""
     p7 = REPO / 'v7' / relpath
     rom7 = (REPO / 'original_ROMs' / 'kn5000_v7_program.rom').read_bytes()
     BASE = 0xE00000
@@ -52,6 +72,22 @@ def process(relpath, start_line, address, size, apply=False, auto_shrink=True):
 
     lines7 = p7.read_text(encoding='latin-1').split('\n')
     start_idx = start_line - 1
+    if min_start_line is not None:
+        t = cir.rewind_to_true_start(lines7, start_idx)
+        # Only a rewind that crosses BYTE-EMITTING lines above the label is a
+        # problem.  Crossing blanks, comments and the label line itself is
+        # normal and harmless -- those emit nothing, and build_replacement()
+        # re-inserts the label.
+        stolen = 0
+        for k in range(t, min_start_line - 1):
+            n, _ = cir.directive_size(lines7[k])
+            stolen += n or 0
+        if stolen:
+            raise ValueError(
+                f"rewind_to_true_start walked to line {t+1}, {stolen} B above "
+                f"this region's own label at line {min_start_line} -- the run "
+                f"above is raw `.byte` too, so find_span would size the span "
+                f"from the WRONG region; refusing")
     try:
         true7, end7, labels7 = cir.find_span(lines7, start_idx, size)
     except ValueError as e:

@@ -87,3 +87,7 @@ scripts/analysis/.amap_v10.json
 # Built from EDICT2 on demand by scripts/analysis/japanese_text_census.py
 # --build-dict; 2.7 MB and fully regenerable, so not tracked.
 wsa1/notes/fonts-kanji/kana_words.txt
+# rq-codeshape lane: regenerable adjudication output (recipe in
+# notes/data-census-2026-09-02/README-rq-codeshape.md)
+code_suspect_v*.json
+code_shape_shortlist.json

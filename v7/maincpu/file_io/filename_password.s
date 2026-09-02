@@ -179,8 +179,11 @@ SelectMode_SetBothMode:
 	stb_d8	(35184), a
 	jr	25
 SelectMode_SingleMode:
-	.byte 0xf1, 0x70, 0x89, 0x31, 0xc7, 0xfa, 0xd8, 0x66
-	.byte 0x05, 0xb1, 0x00, 0x01, 0x68, 0x0b
+	lda_d16	xbc, 35184
+	cpib_erp	250, 0
+	jr	z, 5
+	ld	(xbc), 1
+	jr	11
 SelectMode_CheckSaveOnlyMode:
 	ldb a, 0x0
 	cpib_erp 0xfb, 0

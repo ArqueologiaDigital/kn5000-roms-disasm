@@ -494,11 +494,14 @@ Rhythm_Transp_CheckZero:
 	jr nz, Rhythm_Transp_Apply
 	ldb a, 0x0
 	jr Rhythm_Transp_Done
-
 Rhythm_Transp_Apply:
-	.byte 0xc9, 0x69, 0xc1, 0x2f, 0x32, 0xf1, 0x6b, 0x0c
-	.byte 0xc9, 0x80, 0xc8, 0x33, 0x07, 0x66, 0x03, 0xc8
-	.byte 0xca, 0x0c
+	dec	1, a
+	cpda8	a, 12847
+	jr	ugt, 12
+	add	w, a
+	bit	7, w
+	jr	z, 3
+	sub	w, 12
 Rhythm_Transp_JumpToWrap:
 	jr Rhythm_Transp_WrapCheck
 

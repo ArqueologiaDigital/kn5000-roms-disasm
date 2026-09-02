@@ -1,0 +1,37 @@
+BLOCKERS in the control-transfer-targeted population
+  PHANTOM SHAPE -- unidasm emits a raw data byte AT the branch
+  target, so the target is not an instruction start:
+      14 regions, 18 B
+  BACKEND SPELLING GAP -- unidasm decodes a real instruction at the
+  target; llvm-mc cannot reassemble something in the run:
+      390 regions, 20533 B
+      of those, the FIRST blocker is itself undecodable rather than
+      unspellable: 0 regions
+
+  first-blocking form, by region count:
+    bit                       74
+    cp                        65
+    res                       54
+    and                       36
+    or                        35
+    ld                        25
+    push                      24
+    set                       17
+    add                       14
+    db                        14
+    call                      10
+    sub                        7
+    ldw                        6
+    pushw                      6
+    ldirw                      3
+    ex                         2
+    div                        2
+    jp                         2
+    ldc                        2
+    ldir                       1
+    tset                       1
+    ldiw                       1
+    lda                        1
+    srl                        1
+    pop                        1
+EXIT=0

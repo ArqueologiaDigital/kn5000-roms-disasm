@@ -5458,9 +5458,8 @@ CmpSet_GridCheck_Dispatch:
 GridCheck_SetMode1:
 	lds wa, 1
 	ld xiz, 0x3d9c6
-
 GridCheck_LookupAndSend:
-	.byte 0x1e, 0x2e, 0x00	; calr GridCheck_LookupSndParam (v7 displacement)
+	calr	46
 
 	extz hl
 
