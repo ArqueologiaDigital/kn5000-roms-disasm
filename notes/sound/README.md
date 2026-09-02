@@ -8,6 +8,7 @@ Run them from the repository root.
 |---|---|---|
 | `kn5000_sound_boundary.py` | Which routines touch a sound chip, where do the chip boundaries lie, and does any of that code's control flow leave disassembled text? | `python3 notes/sound/kn5000_sound_boundary.py --calibrate --windows --tgregs --misframes --coverage --unspellable` |
 | `kn5000_unspellable_forms.py` | Which instruction FORMS does the tree still carry as `.byte`, what are their bytes, and can the assembler spell them at all? | `python3 notes/sound/kn5000_unspellable_forms.py --sites` |
+| `dsp_protocol_cross_product.py` | Is the uPD6383GF host protocol the SAME on the KN5000 and the SX-WSA1R -- which parts are a property of the CHIP and which of the PRODUCT, and how much DSP payload is literally the same bytes? Backs `notes/DRIVER-INSIGHT-dsp-2026-09-02.md`. | `python3 notes/sound/dsp_protocol_cross_product.py` (or one of `grammar params handlers shared runs commands transport`) |
 | `sound_coverage.py` | (superseded — the first, territorial census; see §1 of the findings for why its conclusion did not follow) | `python3 notes/sound/sound_coverage.py` |
 
 Selftests:
@@ -15,6 +16,9 @@ Selftests:
 ```
 python3 notes/sound/kn5000_sound_boundary.py --selftest      # 11 invariants
 python3 notes/sound/kn5000_unspellable_forms.py --selftest   # the work list is the test
+python3 notes/sound/dsp_protocol_cross_product.py --selftest # 28 invariants, incl.
+                                                             # figures published in
+                                                             # the wsa1/ notes
 ```
 
 ## The two converters these drive
