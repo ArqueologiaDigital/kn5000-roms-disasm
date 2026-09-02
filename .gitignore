@@ -73,3 +73,7 @@ notes/v7-table-tail-32/line_probe_cache.json
 # copy plus rebuilt ROMs/ELFs/pickles -- several hundred MB, regenerate with
 # --prepare, never commit)
 island-work/
+# census_one_image.py's default single-image scratch dir (same regenerable
+# nature as island-work/ above, just scoped to one tag): rebuild with
+# `python3 scripts/analysis/census_one_image.py v7`, never commit.
+census-work/

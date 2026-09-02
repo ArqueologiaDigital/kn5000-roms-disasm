@@ -100,7 +100,16 @@ def process(relpath, start_line, address, size, apply=False, auto_shrink=True):
         lines7[true7:end7] = new_lines
         p7.write_text('\n'.join(lines7), encoding='latin-1')
         print(f"APPLIED to {p7}")
-    return remaining
+    # Return (actual_size_processed, remaining) rather than just `remaining`.
+    # `size` here is the POSSIBLY-SHRUNK value (see the auto_shrink branch
+    # above, which reassigns it to `consumed`) -- a caller that instead
+    # subtracts `remaining` from the ORIGINAL worklist size silently
+    # overstates the converted byte count whenever a shrink happened.
+    # Confirmed 2026-09-02, lane V7REGIONS3: a 139B region auto-shrunk to a
+    # 2B untouched-as-.byte prefix (0 bytes actually converted, no file
+    # change at all) was tallied by run_v7_worklist_batch.py as "137B
+    # converted" because it used the pre-shrink 139 instead of this 2.
+    return size, remaining
 
 
 if __name__ == '__main__':
