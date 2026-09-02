@@ -43,3 +43,19 @@ misread as ~35 instructions)? Checks whether the region's `call` targets
 land on routines that were ALREADY named in the tree before the conversion.
 
     python3 scripts/analysis/verify_converted_call_targets.py --git-diff [REV [REV2]]
+
+## `fill_verified_islands.py` / `list_ready_islands.py`
+
+**Question:** of the census's island `.byte` runs (a run flanked by real CODE on
+both sides), which can be filled touching ONLY that run — no reframing of any
+neighbouring line?
+
+    python3 scripts/converters/list_ready_islands.py v10    # dry-run work list
+    python3 scripts/converters/fill_verified_islands.py     # see its own header
+
+It decodes forward from a point *earlier in the surrounding established code*,
+rather than feeding the run's bytes in isolation — an isolated decode cannot
+tell a genuine short instruction from a coincidental one that happens to tile to
+the exact length. ⚠ Even so, tiling is not proof that the bytes are code: a
+wrong frame reproduces the same bytes and the gate cannot object. Corroborate
+with call targets before converting.

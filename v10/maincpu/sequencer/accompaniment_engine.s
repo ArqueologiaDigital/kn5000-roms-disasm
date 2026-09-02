@@ -27549,7 +27549,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ld	xsp, 0x352d250e
 	push	xiy
 	ldb_d8	a, (0x8d36)
-	.byte 0xc1, 0x37, 0x8d, 0xf1
+	cpda8	a, 36151
 	ret	z
 	ldb_da	a, (0xffe3)
 	inc	1, a
@@ -30708,7 +30708,7 @@ AccVoice_SetupSlots_DataBlock:
 	inc	2, xwa
 	ld	a, (xwa)
 	calr	30
-	.byte 0xc1, 0xc9, 0x37, 0xf3
+	cpda8	c, 14281
 	jr	z, 23
 	calr	62513
 	sll	xbc, 2

@@ -1448,7 +1448,7 @@ FDC_CmdRecalibrate:
 	halt
 	ret
 	ldb_d8	a, (0x8a36)
-	.byte 0xc1, 0x04, 0x8b, 0xf1
+	cpda8	a, 35588
 	ret	z
 	.byte 0xc1
 	ldw	iz, 6538

@@ -6866,7 +6866,7 @@ VoiceParam_CompareAndUpdate:
 	ldb_d8	c, (0x9153)
 	ld	a, e
 	add	a, c
-	.byte 0xc1, 0x54, 0x91, 0xf1
+	cpda8	a, 37204
 	jr	nc, 4
 	add	e, c
 	jr	4
