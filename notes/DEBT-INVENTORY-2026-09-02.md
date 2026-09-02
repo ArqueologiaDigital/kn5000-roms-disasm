@@ -371,6 +371,28 @@ are unchanged either way.
 Resolve by finding the region's reader. If code reaches it via `call`, it is
 code; if something indexes it with a stride, the head is a table.
 
+## ⚠ CORRECTED: v7 region conversion was overstated by ~9%
+
+`run_v7_worklist_batch.py` overstated converted-byte counts whenever a region
+auto-shrank, subtracting `remaining` from the PRE-SHRINK worklist size rather
+than the size actually touched. It was caught reporting "137 B converted" for a
+region whose `git diff` showed **zero changes**. Fixed 2026-09-02.
+
+Re-derived from the merge diffs themselves — counting `.byte` values removed
+minus those added back — rather than from any tool's own report:
+
+| lane | reported | **actual net** |
+|---|---:|---:|
+| v7regions2 | ~32,700 B | **29,682 B** |
+| v7islands2 | 566 B | 566 B (exact) |
+
+**So v7's region conversion was ~3,000 B (9%) less than reported.** The islands
+figure was exact, and the romslice lane's diff correctly shows `.byte` INCREASING
+(it converted slices INTO typed data, which is the intended direction there).
+
+⚠ Any byte count produced by that driver before the fix is an **upper bound**.
+Re-derive from diffs, which is what this table does.
+
 ## ⚠ The weakest evidence currently in the tree: v7 batch F
 
 Recorded 2026-09-02 so it is not forgotten under an aggregate. v7's confirmed-region
