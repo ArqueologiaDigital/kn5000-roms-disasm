@@ -195,3 +195,23 @@ not a verdict, exactly like the sibling census's own `judge()`.
   RAM-resident dispatch built at init time). It would take dynamic tracing
   (a MAME coverage run) to separate any remaining real data-as-code
   instances from this bucket, which is out of scope here.
+
+
+## Querying the manifest (do not re-parse a text dump)
+
+`v10dac_conversion_manifest.json` is the structured record of every span this
+lane touched or declined. It has two keys, `converted` and `excluded`, and each
+entry carries `addr_lo`, `addr_hi`, `size`, `loc` (enclosing label + offset),
+the census stats `per`/`dist`/`ascii`, and a `reason`.
+
+The 146 excluded spans split by reason, and both subsets are one line away:
+
+    import json
+    ex = json.load(open('notes/v10-data-as-code/v10dac_conversion_manifest.json'))['excluded']
+    no_unique = [e for e in ex if 'no unique context' in e['reason']]   # 91 spans, 2,536 B
+    real_code = [e for e in ex if e not in no_unique]                   # 55 spans, 1,257 B
+
+⚠ The 91 are spans whose instruction-text sequence was not uniquely locatable in
+the source tree — a MATCHING problem, not evidence about the bytes. The 55 are
+different in kind: they were corroborated as REAL CODE that the census's static
+reachability could not trace, and must not be converted.
