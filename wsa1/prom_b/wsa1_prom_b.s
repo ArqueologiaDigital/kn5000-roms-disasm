@@ -68566,7 +68566,7 @@ DL_F3B379:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3B3B2 -- 53 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F3B3B2 -- 40 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3B3B2 appears as a 32-bit word at 0xF3B3AE 0xF7FFBC;
 ;               converted code at 0xF7FFBB loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
@@ -68581,10 +68581,228 @@ DL_F3B379:
 Data_F3B3B2:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0B, 0x00, 0x20, 0x00, 0xDF, 0x00, 0x3F, 0x00	; F3B3B2  |.......... ...?.|
 	.byte	0x0B, 0x00, 0x44, 0x00, 0xDF, 0x00, 0x63, 0x00, 0x0B, 0x00, 0x68, 0x00, 0xDF, 0x00, 0x87, 0x00	; F3B3C2  |..D...c...h.....|
-	.byte	0x0B, 0x00, 0x8C, 0x00, 0xDF, 0x00, 0xAB, 0x00, 0x06, 0x08, 0xC0, 0x00, 0x53, 0x4F, 0x4E, 0x47	; F3B3D2  |............SONG|
-	.byte	0x1C, 0x12, 0x60, 0x00, 0x05	; F3B3E2  |..`..|
+	.byte	0x0B, 0x00, 0x8C, 0x00, 0xDF, 0x00, 0xAB, 0x00	; F3B3D2  |....|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B3E7, 0x0001C2
+
+; ------------------------------------------------------------------
+; 0xF3B3DA-0xF3B5A8 -- 53 display-list records, 463 bytes -- interpreter A
+; DL_F3B3DA, the "TRACK ASSIGN" screen -- ALREADY NAMED AND CITED
+; elsewhere in this file (search "draws display list 0xF3B3DA"),
+; from a real `ld XIY,0x00F3B3DA` immediate inside 0xF7E440 (still
+; .incbin).  Its first 13 bytes had been folded into Data_F3B3B2
+; above (now shrunk to its real 40-byte extent); walking from here
+; lands with ZERO DRIFT on Data_F3B5A9, already committed below.
+; notes/gen_prom_b_f3b3da_module.py
+; ------------------------------------------------------------------
+DL_F3B3DA:
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x00C0
+	.ascii "SONG"
+	.byte 0x1C, 0x12	; op 1C, 18 bytes -> handler 0xF31A52
+	.short 0x0060
+	.short 0x0005
+	.ascii "TRACK ASSIGN"
+	.byte 0x20, 0x18	; op 20, 24 bytes -> handler 0xF31A3A
+	.short 0x050C
+	.ascii "TRACK   L0CAL   MIDI"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0643
+	.byte 0x8D	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0640
+	.byte 0xA8	; character codes below 0x20
+	.byte 0x06, 0x1A	; op 06, 26 bytes -> handler 0xF31A3A
+	.short 0x0714
+	.ascii "ASSIGN  CONTROL OUT CH"
+	.byte 0x06, 0x09	; op 06, 9 bytes -> handler 0xF31A3A
+	.short 0x0961
+	.ascii "TRACK"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0BE0
+	.byte 0xA8	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0C0B
+	.byte 0x8E	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x10E3
+	.ascii "_"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1180
+	.byte 0x10	; character codes below 0x20
+	.byte 0x06, 0x05	; op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x11D2
+	.ascii "1"
+	.byte 0x06, 0x05	; op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x11D4
+	.ascii "8"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x16FB
+	.ascii "_"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1798
+	.byte 0x10	; character codes below 0x20
+	.byte 0x06, 0x05	; op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x17EA
+	.ascii "9"
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x17EC
+	.ascii "16"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1E78
+	.byte 0x10	; character codes below 0x20
+	.byte 0x06, 0x0B	; op 06, 11 bytes -> handler 0xF31A3A
+	.short 0x1EA2
+	.ascii "PRESETS"
+	.byte 0x06, 0x06	; op 06, 6 bytes -> handler 0xF31A3A
+	.short 0x1EDC
+	.ascii "LO"
+	.byte 0x06, 0x05	; op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x1EDE
+	.ascii "C"
+	.byte 0x06, 0x0D	; op 06, 13 bytes -> handler 0xF31A3A
+	.short 0x1EDF
+	.ascii "AL    CHA"
+	.byte 0x06, 0x05	; op 06, 5 bytes -> handler 0xF31A3A
+	.short 0x1EE8
+	.ascii "N"
+	.byte 0x06, 0x07	; op 06, 7 bytes -> handler 0xF31A3A
+	.short 0x1EE9
+	.ascii "NEL"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x20E6
+	.byte 0x8D	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x20F0
+	.byte 0x8D	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2316
+	.byte 0x8E	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2320
+	.byte 0x8E	; character codes below 0x20
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x00A5
+	.short 0x00D3
+	.short 0x00C2
+	.short 0x00EB
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x00F5
+	.short 0x00D3
+	.short 0x0112
+	.short 0x00EB
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000A
+	.short 0x0025
+	.short 0x002D
+	.short 0x0038
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000C
+	.short 0x0027
+	.short 0x002B
+	.short 0x0036
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000A
+	.short 0x0049
+	.short 0x002D
+	.short 0x005C
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000C
+	.short 0x004B
+	.short 0x002B
+	.short 0x005A
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000A
+	.short 0x006D
+	.short 0x002D
+	.short 0x0080
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000C
+	.short 0x006F
+	.short 0x002B
+	.short 0x007E
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000A
+	.short 0x0094
+	.short 0x0033
+	.short 0x00A7
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000C
+	.short 0x0096
+	.short 0x0031
+	.short 0x00A5
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000B
+	.short 0x00BF
+	.short 0x004D
+	.short 0x00D3
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000D
+	.short 0x00C1
+	.short 0x004B
+	.short 0x00D1
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0037
+	.short 0x001A
+	.short 0x0118
+	.short 0x001A
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0037
+	.short 0x003B
+	.short 0x0119
+	.short 0x003B
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0037
+	.short 0x00B7
+	.short 0x0119
+	.short 0x00B7
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0038
+	.short 0x00B8
+	.short 0x0119
+	.short 0x00B8
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00A5
+	.short 0x00DF
+	.short 0x00C4
+	.short 0x00DF
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00F5
+	.short 0x00DF
+	.short 0x0114
+	.short 0x00DF
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0037
+	.short 0x001A
+	.short 0x0037
+	.short 0x00B7
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x005C
+	.short 0x001A
+	.short 0x005C
+	.short 0x00B8
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x009B
+	.short 0x001A
+	.short 0x009B
+	.short 0x00B8
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00DC
+	.short 0x001A
+	.short 0x00DC
+	.short 0x00B8
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0118
+	.short 0x001A
+	.short 0x0118
+	.short 0x00B8
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0119
+	.short 0x001C
+	.short 0x0119
+	.short 0x00B8
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x37
+	.short 0x0057
 
 ; --------------------------------------------------------------------------
 ; Data_F3B5A9 -- 16 bytes, EMITTED AS DATA (not promoted to code).
