@@ -67,8 +67,11 @@ def main():
     # script report PASS on artefacts that no longer correspond to the sources.
     if "--no-build" in sys.argv:
         print("  !! --no-build: comparing whatever is on disk, NOT rebuilding")
+        _build_started = 0.0
     else:
         import subprocess as _sp
+        import time as _time
+        _build_started = _time.time()
         print("  building (make all) ...")
         r = _sp.run(["make", "all"], cwd=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), capture_output=True, text=True)
         if r.returncode != 0:
@@ -76,6 +79,43 @@ def main():
             print("  BUILD FAILED -- the comparison below would be meaningless:")
             print(tail)
             sys.exit(2)
+    # ⚠ A NON-ZERO EXIT IS NOT THE ONLY WAY A BUILD FAILS. If a recipe fails
+    # while make still returns 0, or make simply does not rebuild what it
+    # should, the PREVIOUS rebuilt_ROMs/*.rom is still on disk and this
+    # comparison reports IDENTICAL for it -- a false green of exactly the shape
+    # that let week-old objects certify the tree on 2026-09-01 (blog Part 152),
+    # reported again by lane v10audio on 2026-09-02.
+    #
+    # ⚠ TWO HAND-ROLLED VERSIONS OF THIS GUARD WERE WRONG BEFORE THIS ONE, both
+    # FALSE-REDDING on a perfectly good tree -- and a false red trains people to
+    # ignore the gate, which is the same damage as a false green:
+    #   1. "every ROM must be newer than when the build started" -- wrong,
+    #      because a correct INCREMENTAL build has nothing to do and its
+    #      up-to-date ROMs legitimately predate it.
+    #   2. "every ROM must be newer than the newest source in the tree" --
+    #      wrong, because it compared the v7 and v9 ROMs against a v10 source
+    #      they do not depend on.
+    #
+    # The invariant is per-target and make already owns it, so ASK MAKE:
+    # `make -q <target>` runs no recipe and exits non-zero exactly when the
+    # target is out of date. No dependency logic is duplicated here, so this
+    # cannot drift from the Makefile the way a hand-rolled mtime rule does.
+    if "--no-build" not in sys.argv:
+        import subprocess as _sp2
+        stale = []
+        for stem, _orig, built in PAIRS:
+            t = os.path.join("rebuilt_ROMs", built)
+            q = _sp2.run(["make", "-q", t], capture_output=True, text=True)
+            if q.returncode != 0:
+                stale.append(f"{stem} ({t})")
+        if stale:
+            print("  STALE -- `make -q` says these targets are out of date, so "
+                  "the build did not produce them and the comparison below "
+                  "would be meaningless:")
+            for line in stale:
+                print(f"    {line}")
+            sys.exit(2)
+
     bad = 0
     for stem, orig, built in PAIRS:
         o = os.path.join("original_ROMs", orig)
