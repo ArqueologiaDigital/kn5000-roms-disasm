@@ -1,0 +1,26 @@
+{
+ "sites": {
+  "NATIVE": 1152209,
+  "SYNTHETIC": 147842,
+  "MACRO": 16922,
+  "UNKNOWN": 163
+ },
+ "names": {
+  "NATIVE": 72,
+  "SYNTHETIC": 438,
+  "MACRO": 113,
+  "UNKNOWN": 4
+ },
+ "files": {
+  "NATIVE": 326,
+  "SYNTHETIC": 303,
+  "MACRO": 77,
+  "UNKNOWN": 4
+ },
+ "tracked_s_files": 547,
+ "rawbyte_names": 98,
+ "rawbyte_sites": 22135,
+ "unidasm_vocab": 112,
+ "backend_vocab": 738,
+ "tree_macros": 147
+}
