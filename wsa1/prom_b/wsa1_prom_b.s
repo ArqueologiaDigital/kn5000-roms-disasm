@@ -70788,7 +70788,97 @@ DL_F3B7C3:
 Data_F3B7CD:
 	.byte	0x03, 0x0B, 0xFA, 0x12, 0x01, 0x00, 0x05	; F3B7CD  |.......|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B7D4, 0x0001C9
+
+; ------------------------------------------------------------------
+; 0xF3B7D4-0xF3B99C -- a 64-entry fixed-stride caption table, 457 bytes:
+; "PART 1".."PART 32" (32 x 7 B) then "1- 1CH".."2-16CH" (32 x 6 B)
+; then a 21-byte tail.  Immediately follows Data_F3B7CD and immediately
+; precedes DL_TrackAssignChangeAttention, both already committed.
+; The header's 8 words are NOT a display-list record (no handler's
+; implied length matches) and their indexing scheme is not established;
+; three of the eight (0x000C, 0x006F, 0x00A5) also appear verbatim in
+; the immediately preceding record, DL_F3B7C3's own 4 words -- recorded
+; as corroboration this is a deliberate field, not padding, without
+; claiming what it selects.  Regenerate: python3
+; notes/gen_prom_b_f3b7d4_module.py --splice
+; ------------------------------------------------------------------
+Table_F3B7D4:
+	.long	0x00F3B7D8	; +0x00 purpose not established
+	.short	0x000C	; +0x04 purpose not established
+	.short	0x006F	; +0x06 purpose not established
+	.short	0x002B	; +0x08 purpose not established
+	.short	0x007E	; +0x0A purpose not established
+	.short	0x000C	; +0x0C purpose not established
+	.short	0x0096	; +0x0E purpose not established
+	.short	0x0031	; +0x10 purpose not established
+	.short	0x00A5	; +0x12 purpose not established
+; 32 x 7-byte "PART n" captions, +0x14
+	.ascii "PART 1 "	; entry 1
+	.ascii "PART 2 "	; entry 2
+	.ascii "PART 3 "	; entry 3
+	.ascii "PART 4 "	; entry 4
+	.ascii "PART 5 "	; entry 5
+	.ascii "PART 6 "	; entry 6
+	.ascii "PART 7 "	; entry 7
+	.ascii "PART 8 "	; entry 8
+	.ascii "PART 9 "	; entry 9
+	.ascii "PART 10"	; entry 10
+	.ascii "PART 11"	; entry 11
+	.ascii "PART 12"	; entry 12
+	.ascii "PART 13"	; entry 13
+	.ascii "PART 14"	; entry 14
+	.ascii "PART 15"	; entry 15
+	.ascii "PART 16"	; entry 16
+	.ascii "PART 17"	; entry 17
+	.ascii "PART 18"	; entry 18
+	.ascii "PART 19"	; entry 19
+	.ascii "PART 20"	; entry 20
+	.ascii "PART 21"	; entry 21
+	.ascii "PART 22"	; entry 22
+	.ascii "PART 23"	; entry 23
+	.ascii "PART 24"	; entry 24
+	.ascii "PART 25"	; entry 25
+	.ascii "PART 26"	; entry 26
+	.ascii "PART 27"	; entry 27
+	.ascii "PART 28"	; entry 28
+	.ascii "PART 29"	; entry 29
+	.ascii "PART 30"	; entry 30
+	.ascii "PART 31"	; entry 31
+	.ascii "PART 32"	; entry 32
+; 32 x 6-byte "<bank>-<channel>CH" captions, +0xF4
+	.ascii "1- 1CH"	; entry 1
+	.ascii "1- 2CH"	; entry 2
+	.ascii "1- 3CH"	; entry 3
+	.ascii "1- 4CH"	; entry 4
+	.ascii "1- 5CH"	; entry 5
+	.ascii "1- 6CH"	; entry 6
+	.ascii "1- 7CH"	; entry 7
+	.ascii "1- 8CH"	; entry 8
+	.ascii "1- 9CH"	; entry 9
+	.ascii "1-10CH"	; entry 10
+	.ascii "1-11CH"	; entry 11
+	.ascii "1-12CH"	; entry 12
+	.ascii "1-13CH"	; entry 13
+	.ascii "1-14CH"	; entry 14
+	.ascii "1-15CH"	; entry 15
+	.ascii "1-16CH"	; entry 16
+	.ascii "2- 1CH"	; entry 17
+	.ascii "2- 2CH"	; entry 18
+	.ascii "2- 3CH"	; entry 19
+	.ascii "2- 4CH"	; entry 20
+	.ascii "2- 5CH"	; entry 21
+	.ascii "2- 6CH"	; entry 22
+	.ascii "2- 7CH"	; entry 23
+	.ascii "2- 8CH"	; entry 24
+	.ascii "2- 9CH"	; entry 25
+	.ascii "2-10CH"	; entry 26
+	.ascii "2-11CH"	; entry 27
+	.ascii "2-12CH"	; entry 28
+	.ascii "2-13CH"	; entry 29
+	.ascii "2-14CH"	; entry 30
+	.ascii "2-15CH"	; entry 31
+	.ascii "2-16CH"	; entry 32
+	.ascii " OFF  -- CH OFFON -- "	; +0x1B4, 21-byte tail
 
 ; === END COVER-R1 0xF3B7CD-0xF3B99D ===
 
