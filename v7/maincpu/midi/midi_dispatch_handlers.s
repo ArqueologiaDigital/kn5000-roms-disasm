@@ -4838,10 +4838,22 @@ SeqVoice_DispatchProcess_Data:
 	sub BC,WA
 	cp BC,DE
 	ret LE
-	.byte 0xe1, 0x10, 0xbc, 0x20, 0xd9, 0xac, 0xda, 0xad
-	.byte 0x1e, 0x58, 0xed, 0x0e, 0x3a, 0x3b, 0x3c, 0x3e
-	.byte 0x1d, 0x13, 0x45, 0xfc, 0x1d, 0xba, 0x49, 0xfc
-	.byte 0x5e, 0x5c, 0x5b, 0x5a, 0x0e
+	ldda32	xwa, 48144
+	lds	bc, 4
+	lds	de, 5
+	calr	-4776
+	ret
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	16532755
+	call	16533946
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	ret
 	ldw_d16 de, (0x0409)
 .Lc_fd6927:
 	ld WA,DE
@@ -6040,7 +6052,7 @@ SoundMode_NotifyActiveVoices:
 	cp	xwa, xbc
 	jr	c, -31
 SoundMode_RenderPopRegs:
-	.byte 0x0e
+	ret
 	ldw_d16 wa, (0x11f5)
 	bit 0x0f,WA
 	ret Z
@@ -6089,7 +6101,7 @@ MidiCtrl_CheckAltCommand:
 	cp	a, 15
 	jr	ule, -32
 MidiCtrl_FullReconfigure:
-	.byte 0x0e
+	ret
 	stdi8 (0x908b), 0xb3
 	stdi8 (0x908d), 0x7f
 	stdi8 (0x908c), 0x00
