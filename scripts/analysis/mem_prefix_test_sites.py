@@ -405,6 +405,32 @@ SITES = [
      'bitda_24 7, (132580)',
      'bit 7,(0x0205e4)'),
 
+    # --- 16-bit XOR through a 24-bit direct address ---
+    ("16-bit XOR through a 24-bit direct address", "v10", 0x1635C1,
+     "d203d803d2", 'xorda16_24 xde, (251907)', 'xor DE,(0x03d803)'),
+
+    # --- LDCF / STCF / TSET on a direct address, at their real sub-opcodes ---
+    # The destination sub-opcode table is 0x98 LDCF, 0xA0 STCF, 0xA8 TSET --
+    # the same as the register-indirect one.  TSET_da16/TSET_da24 are declared
+    # at 0xA0, which is STCF; those spellings keep their encoding and the
+    # correctly-named siblings are what the disassembler prints.
+    ("LDCF / STCF / TSET on a direct address", "v10", 0x1DFC2C, "f188c49c",
+     'ldcfda 4, (50312)', 'ldcf 4,(0xc488)'),
+    ("LDCF / STCF / TSET on a direct address", "v10", 0x0F0797, "f106049f",
+     'ldcfda 7, (1030)', 'ldcf 7,(0x0406)'),
+    ("LDCF / STCF / TSET on a direct address", "v10", 0x0F1259, "f12204a8",
+     'tsetda16 0, (1058)', 'tset 0,(0x0422)'),
+    ("LDCF / STCF / TSET on a direct address", "v10", 0x0F134F, "f11304af",
+     'tsetda16 7, (1043)', 'tset 7,(0x0413)'),
+
+    # --- PUSH (addr) -- source sub-opcode 0x04 with a direct address ---
+    ("PUSH (addr) with a direct address", "v10", 0x0FC1E6, "d1580d04",
+     'pushdi_w (3416)', 'pushw (0x0d58)'),
+    ("PUSH (addr) with a direct address", "v10", 0x15F2ED, "c12e3404",
+     'pushdi_b (13358)', 'push (0x342e)'),
+    ("PUSH (addr) with a direct address", "v10", 0x17E0FF, "d28c470204",
+     'pushdi_24 (149388)', 'pushw (0x02478c)'),
+
     # --- ALU (addr8), #imm8 through the 8-bit-direct (I/O) prefix 0xC0 ---
     # Only AND and OR of the 0x38-0x3F row have a definition for this prefix;
     # the other six stay refused.
