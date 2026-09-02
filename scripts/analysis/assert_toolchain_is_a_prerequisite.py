@@ -73,8 +73,14 @@ def main():
                          "prerequisite removed")
     args = ap.parse_args()
 
+    # NOT ROOT.parent: a lane worktree lives under disasm-lanes/, so that
+    # resolves to disasm-lanes/llvm-project and the check fails for every lane.
+    # Mirror the Makefile's own default instead -- PROJECTS_ROOT ?= $(HOME)/
+    # compartilhado -- and honour PROJECTS_ROOT if the caller overrode it.
+    projects_root = pathlib.Path(
+        os.environ.get("PROJECTS_ROOT", pathlib.Path.home() / "compartilhado"))
     assembler = pathlib.Path(
-        args.assembler or ROOT.parent / "llvm-project/build/bin/llvm-mc")
+        args.assembler or projects_root / "llvm-project/build/bin/llvm-mc")
     if not assembler.exists():
         sys.exit(f"no assembler at {assembler}")
 
