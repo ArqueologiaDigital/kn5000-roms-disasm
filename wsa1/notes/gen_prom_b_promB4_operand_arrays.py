@@ -548,9 +548,45 @@ def cmd_falsify():
     return red
 
 
+# ------------------------------------------------------------------- filler
+def cmd_filler(minrun=64):
+    """Where does prom_b's uniform filler start, and is any promB4 span in it?
+
+    The lane brief warns that a span inside or adjacent to the image's `.fill`
+    filler is a different question from one in live code.  This reads the runs
+    off the ROM itself rather than trusting the source's `.fill` directives.
+    """
+    b = rom()
+    runs, i = [], 0
+    while i < len(b):
+        j = i
+        while j + 1 < len(b) and b[j + 1] == b[i]:
+            j += 1
+        if j - i + 1 >= minrun:
+            runs.append((i, j - i + 1, b[i]))
+        i = j + 1
+    print("runs of >= %d identical bytes in prom_b: %d, %d bytes total"
+          % (minrun, len(runs), sum(n for _o, n, _v in runs)))
+    first = runs[0]
+    print("lowest such run: 0x%06X +%d of 0x%02X" % first)
+    ok = True
+    for sp in SPANS:
+        off, ln = sp["incbin"]
+        inside = [r for r in runs if r[0] < off + ln and off < r[0] + r[1]]
+        near = [r for r in runs if abs(r[0] - (off + ln)) < 16 or abs(off - (r[0] + r[1])) < 16]
+        print("  %s 0x%06X+%-4d  overlaps %d filler run(s), adjacent to %d"
+              % (sp["name"], off, ln, len(inside), len(near)))
+        if inside or near:
+            ok = False
+    print("FILLER: %s" % ("no promB4 span touches filler" if ok else "SOME SPAN TOUCHES FILLER"))
+    return ok
+
+
 if __name__ == "__main__":
     if "--apply" in sys.argv:
         sys.exit(0 if cmd_apply() else 1)
     if "--falsify" in sys.argv:
         sys.exit(0 if cmd_falsify() else 1)
+    if "--filler" in sys.argv:
+        sys.exit(0 if cmd_filler() else 1)
     sys.exit(0 if cmd_check() else 1)
