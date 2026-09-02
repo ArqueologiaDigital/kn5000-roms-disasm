@@ -54286,6 +54286,21 @@ sub_FA1304:
 ; Boundaries: notes/reachability.py's walk, frozen against this file's own output.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
+;
+; ★ FOLLOW-UP 2026-09-02 (lane PROMASECOND): the two gaps at 0xFA1428 (10 B) and
+; 0xFA146F (87 B) were part of the "16021 bytes that nothing reaches" figure
+; above, NOT of the separate 701-byte "outside CODE_BLOCKS" list -- they sit
+; INSIDE notes/prom_a_fa1404_identify.py's own CODE_HEAD_A/JUMPTAB/CODE_HEAD_B
+; partition, which that file's `code_blocks()` decodes with a PROVEN boundary
+; (decode reaches the stated end exactly, no `db`) and `--selftest` (23/23)
+; already checked before this file existed.  round 1's static walk missed them
+; because they are reached only through the computed jump `jp (xbc)` at
+; 0xFA146D -- a dynamic dispatch no linear/seed walk follows -- not because
+; their content was in doubt.  Converted straight from that tool's own decode,
+; byte-compared against the ROM by the gate.  0xFA146F's jump table is 7 LE32
+; entries read by exactly that dispatch; JUMPTAB in the same tool gives the
+; identical partition.  16021 -> 15924 bytes of this span remain undecided
+; after this follow-up.
 sub_FA1404:   ; entry: reachable-run entry
 	push XBC                                             ; FA1404  39
 	lda_24 xwa, (0xfa2fb9)                               ; FA1405  f2 b9 2f fa 30
@@ -54300,7 +54315,9 @@ sub_FA1404:   ; entry: reachable-run entry
 	inc 0,XSP                                            ; FA1423  ef 60
 	inc 0,XSP                                            ; FA1425  ef 60
 	ret                                                  ; FA1427  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x021428, 0x00000A
+	m_set 1, MD16, 0x2071                                ; FA1428  f1 71 20 b9
+	stdi8 (0x2070), 0x01                                 ; FA142C  f1 70 20 00 01
+	ret                                                  ; FA1431  0e
 sub_FA1432:   ; entry: reachable-run entry
 	ldb_d8 c, (0x28b0)                                   ; FA1432  c1 b0 28 23
 	and C,0x01                                           ; FA1436  cb cc 01
@@ -54326,7 +54343,40 @@ sub_FA1432:   ; entry: reachable-run entry
 	add XBC,0x00fa146f                                   ; FA1465  e9 c8 6f 14 fa 00
 	ld XBC,(XBC)                                         ; FA146B  a1 21
 	jp (xbc)                                             ; FA146D  b1 d8
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x02146F, 0x000057
+JumpTable_FA146F:
+	.long 0x00fa148b                                 ; FA146F  [  0]
+	.long 0x00fa1499                                 ; FA1473  [  1]
+	.long 0x00fa149f                                 ; FA1477  [  2]
+	.long 0x00fa14ac                                 ; FA147B  [  3]
+	.long 0x00fa14b2                                 ; FA147F  [  4]
+	.long 0x00fa14bc                                 ; FA1483  [  5]
+	.long 0x00fa14c2                                 ; FA1487  [  6]
+sub_FA148B:   ; entry: jump-table target (JumpTable_FA146F[0])
+	call 0xf40034                                        ; FA148B  1d 34 00 f4
+	call 0xf40a00                                        ; FA148F  1d 00 0a f4
+	call 0xf43450                                        ; FA1493  1d 50 34 f4
+	jr .LFA14A7                                       ; FA1497  68 0e
+; entry: jump-table target (JumpTable_FA146F[1])
+	call 0xf43440                                        ; FA1499  1d 40 34 f4
+	jr sub_FA14C6                                     ; FA149D  68 27
+; entry: jump-table target (JumpTable_FA146F[2])
+	call 0xf415c4                                        ; FA149F  1d c4 15 f4
+	call 0xf43444                                        ; FA14A3  1d 44 34 f4
+.LFA14A7:
+	calr sub_FA0DCC                                      ; FA14A7  1e 22 f9
+	jr sub_FA14C6                                     ; FA14AA  68 1a
+; entry: jump-table target (JumpTable_FA146F[3])
+	call 0xf4077c                                        ; FA14AC  1d 7c 07 f4
+	jr sub_FA14C6                                     ; FA14B0  68 14
+; entry: jump-table target (JumpTable_FA146F[4])
+	call 0xf41048                                        ; FA14B2  1d 48 10 f4
+	call 0xf4104c                                        ; FA14B6  1d 4c 10 f4
+	jr sub_FA14C6                                     ; FA14BA  68 0a
+; entry: jump-table target (JumpTable_FA146F[5])
+	call 0xf41050                                        ; FA14BC  1d 50 10 f4
+	jr sub_FA14C6                                     ; FA14C0  68 04
+; entry: jump-table target (JumpTable_FA146F[6])
+	call 0xf40a18                                        ; FA14C2  1d 18 0a f4
 sub_FA14C6:   ; entry: reachable-run entry
 	m_and_mi8 MB16, 0x2075, 0x6f                         ; FA14C6  c1 75 20 3c 6f
 	stdi8 (0x2880), 0x23                                 ; FA14CB  f1 80 28 00 23
