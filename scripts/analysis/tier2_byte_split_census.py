@@ -143,6 +143,7 @@ The probe build is cached under .tier2cache/ (gitignored); delete it to force
 a re-measure after editing any source.
 """
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -243,11 +244,22 @@ def build_addrmap(tag):
     """{relpath: [addr per source line]} -- from llvm-nm on a probe build that
     is asserted byte-identical to the original dump."""
     os.makedirs(CACHE, exist_ok=True)
-    cached = os.path.join(CACHE, tag + ".json")
-    if os.path.exists(cached):
-        return json.load(open(cached))
     info = IMAGES[tag]
     files = source_files(tag)
+    # ⚠ THE CACHE KEY IS THE SOURCE CONTENT, NOT THE TAG. A plain per-tag
+    # cache silently served a PRE-CONVERSION address map after a converter
+    # had rewritten the file: run start addresses and source line numbers no
+    # longer matched the file on disk, and the next converter refused five
+    # runs with nonsense diagnostics ("line parse recovered 448 B" for a
+    # 122 B run). An address map is only valid for the exact bytes it was
+    # measured from.
+    h = hashlib.sha256()
+    for rel in files:
+        h.update(rel.encode())
+        h.update(open(os.path.join(ROOT, info["dir"], rel), "rb").read())
+    cached = os.path.join(CACHE, "%s.%s.json" % (tag, h.hexdigest()[:16]))
+    if os.path.exists(cached):
+        return json.load(open(cached))
     with tempfile.TemporaryDirectory(prefix="tier2_%s_" % tag) as tmp:
         pdir = os.path.join(tmp, "src")
         shutil.copytree(os.path.join(ROOT, info["dir"]), pdir, symlinks=True)
@@ -300,6 +312,14 @@ def build_addrmap(tag):
 _ROM = {}
 
 
+def _rom_key(tag):
+    info = IMAGES[tag]
+    h = hashlib.sha256()
+    for rel in source_files(tag):
+        h.update(open(os.path.join(ROOT, info["dir"], rel), "rb").read())
+    return "%s.%s" % (tag, h.hexdigest()[:16])
+
+
 def rom_bytes(tag):
     """Flat image content indexed by (addr - base). Built from the ELF so the
     v142 payload's DRAM gap is present too."""
@@ -307,7 +327,7 @@ def rom_bytes(tag):
         return _ROM[tag]
     info = IMAGES[tag]
     os.makedirs(CACHE, exist_ok=True)
-    binf = os.path.join(CACHE, tag + ".full.bin")
+    binf = os.path.join(CACHE, _rom_key(tag) + ".full.bin")
     if not os.path.exists(binf):
         with tempfile.TemporaryDirectory(prefix="tier2rom_") as tmp:
             obj, elf = os.path.join(tmp, "o"), os.path.join(tmp, "e")
@@ -336,7 +356,7 @@ def unidasm_map(tag):
         return _UNI[tag]
     info = IMAGES[tag]
     os.makedirs(CACHE, exist_ok=True)
-    cf = os.path.join(CACHE, tag + ".uni.txt")
+    cf = os.path.join(CACHE, "%s.uni.txt" % _rom_key(tag))
     if not os.path.exists(cf):
         with tempfile.NamedTemporaryFile(suffix=".bin", delete=False) as f:
             f.write(rom_bytes(tag))
