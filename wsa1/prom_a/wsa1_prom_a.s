@@ -152843,7 +152843,7 @@ sub_FE426E:
 	push XDE                                             ; FE42F8  3a
 	calr 0xf9b5                                          ; FE42F9  1e b5 f9
 	inc 4,XSP                                            ; FE42FC  ef 64
-	jr T,0xfe434d                                        ; FE42FE  68 4d
+	jr T,0x4d                                            ; FE42FE  68 4d
 	push XDE                                             ; FE4300  3a
 	calr 0xfaae                                          ; FE4301  1e ae fa
 	inc 4,XSP                                            ; FE4304  ef 64
@@ -154689,7 +154689,7 @@ Unit1_Op5_FormatAndWriteDirBlocks:
 	lds32 xiz, 0x00                                      ; FE51F3  ee a8
 	ld XWA,(XSP+0x0a)                                    ; FE51F5  af 0a 20
 	cp XWA,0x00000000                                    ; FE51F8  e8 cf 00 00 00 00
-	jr ULE,0xfe525a                                      ; FE51FE  63 5a
+	jr ULE,0x5a                                          ; FE51FE  63 5a
 .LFE5200:
 	ld XWA,(XSP+0x0e)                                    ; FE5200  af 0e 20
 	push XWA                                             ; FE5203  38

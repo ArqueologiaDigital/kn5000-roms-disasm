@@ -1,0 +1,1113 @@
+toolchain: tlcs900_backend@e816cddb6e2d   unidasm: /home/fsanches/compartilhado/mame/unidasm
+
+=== prefix 80 ===  AGREE 194  ASYM 0  MNEMONIC 23  LENGTH 0  LLVM-NONE 3  UNI-NONE 0  BOTH-NONE 36
+  38  MNEMONIC  llvm=addmi8 (xwa), 0                uni=add (XWA),0x00               reenc=80 38 00
+  39  MNEMONIC  llvm=adcmi8 (xwa), 0                uni=adc (XWA),0x00               reenc=80 39 00
+  3a  MNEMONIC  llvm=submi8 (xwa), 0                uni=sub (XWA),0x00               reenc=80 3a 00
+  3b  MNEMONIC  llvm=sbcmi8 (xwa), 0                uni=sbc (XWA),0x00               reenc=80 3b 00
+  3c  MNEMONIC  llvm=andmi8 (xwa), 0                uni=and (XWA),0x00               reenc=80 3c 00
+  3d  MNEMONIC  llvm=xormi8 (xwa), 0                uni=xor (XWA),0x00               reenc=80 3d 00
+  3e  MNEMONIC  llvm=ormi8 (xwa), 0                 uni=or (XWA),0x00                reenc=80 3e 00
+  60  MNEMONIC  llvm=incm8 8, (xwa)                 uni=inc 0,(XWA)                  reenc=80 60
+  61  MNEMONIC  llvm=incm8 1, (xwa)                 uni=inc 1,(XWA)                  reenc=80 61
+  62  MNEMONIC  llvm=incm8 2, (xwa)                 uni=inc 2,(XWA)                  reenc=80 62
+  63  MNEMONIC  llvm=incm8 3, (xwa)                 uni=inc 3,(XWA)                  reenc=80 63
+  64  MNEMONIC  llvm=incm8 4, (xwa)                 uni=inc 4,(XWA)                  reenc=80 64
+  65  MNEMONIC  llvm=incm8 5, (xwa)                 uni=inc 5,(XWA)                  reenc=80 65
+  66  MNEMONIC  llvm=incm8 6, (xwa)                 uni=inc 6,(XWA)                  reenc=80 66
+  67  MNEMONIC  llvm=incm8 7, (xwa)                 uni=inc 7,(XWA)                  reenc=80 67
+  68  MNEMONIC  llvm=decm8 8, (xwa)                 uni=dec 0,(XWA)                  reenc=80 68
+  69  MNEMONIC  llvm=decm8 1, (xwa)                 uni=dec 1,(XWA)                  reenc=80 69
+  6a  MNEMONIC  llvm=decm8 2, (xwa)                 uni=dec 2,(XWA)                  reenc=80 6a
+  6b  MNEMONIC  llvm=decm8 3, (xwa)                 uni=dec 3,(XWA)                  reenc=80 6b
+  6c  MNEMONIC  llvm=decm8 4, (xwa)                 uni=dec 4,(XWA)                  reenc=80 6c
+  6d  MNEMONIC  llvm=decm8 5, (xwa)                 uni=dec 5,(XWA)                  reenc=80 6d
+  6e  MNEMONIC  llvm=decm8 6, (xwa)                 uni=dec 6,(XWA)                  reenc=80 6e
+  6f  MNEMONIC  llvm=decm8 7, (xwa)                 uni=dec 7,(XWA)                  reenc=80 6f
+
+=== prefix 88 04 ===  AGREE 186  ASYM 0  MNEMONIC 23  LENGTH 0  LLVM-NONE 3  UNI-NONE 0  BOTH-NONE 44
+  38  MNEMONIC  llvm=addmi8 (xwa+4), 0              uni=add (XWA+0x04),0x00          reenc=88 04 38 00
+  39  MNEMONIC  llvm=adcmi8 (xwa+4), 0              uni=adc (XWA+0x04),0x00          reenc=88 04 39 00
+  3a  MNEMONIC  llvm=submi8 (xwa+4), 0              uni=sub (XWA+0x04),0x00          reenc=88 04 3a 00
+  3b  MNEMONIC  llvm=sbcmi8 (xwa+4), 0              uni=sbc (XWA+0x04),0x00          reenc=88 04 3b 00
+  3c  MNEMONIC  llvm=andmi8 (xwa+4), 0              uni=and (XWA+0x04),0x00          reenc=88 04 3c 00
+  3d  MNEMONIC  llvm=xormi8 (xwa+4), 0              uni=xor (XWA+0x04),0x00          reenc=88 04 3d 00
+  3e  MNEMONIC  llvm=ormi8 (xwa+4), 0               uni=or (XWA+0x04),0x00           reenc=88 04 3e 00
+  60  MNEMONIC  llvm=incm8 8, (xwa+4)               uni=inc 0,(XWA+0x04)             reenc=88 04 60
+  61  MNEMONIC  llvm=incm8 1, (xwa+4)               uni=inc 1,(XWA+0x04)             reenc=88 04 61
+  62  MNEMONIC  llvm=incm8 2, (xwa+4)               uni=inc 2,(XWA+0x04)             reenc=88 04 62
+  63  MNEMONIC  llvm=incm8 3, (xwa+4)               uni=inc 3,(XWA+0x04)             reenc=88 04 63
+  64  MNEMONIC  llvm=incm8 4, (xwa+4)               uni=inc 4,(XWA+0x04)             reenc=88 04 64
+  65  MNEMONIC  llvm=incm8 5, (xwa+4)               uni=inc 5,(XWA+0x04)             reenc=88 04 65
+  66  MNEMONIC  llvm=incm8 6, (xwa+4)               uni=inc 6,(XWA+0x04)             reenc=88 04 66
+  67  MNEMONIC  llvm=incm8 7, (xwa+4)               uni=inc 7,(XWA+0x04)             reenc=88 04 67
+  68  MNEMONIC  llvm=decm8 8, (xwa+4)               uni=dec 0,(XWA+0x04)             reenc=88 04 68
+  69  MNEMONIC  llvm=decm8 1, (xwa+4)               uni=dec 1,(XWA+0x04)             reenc=88 04 69
+  6a  MNEMONIC  llvm=decm8 2, (xwa+4)               uni=dec 2,(XWA+0x04)             reenc=88 04 6a
+  6b  MNEMONIC  llvm=decm8 3, (xwa+4)               uni=dec 3,(XWA+0x04)             reenc=88 04 6b
+  6c  MNEMONIC  llvm=decm8 4, (xwa+4)               uni=dec 4,(XWA+0x04)             reenc=88 04 6c
+  6d  MNEMONIC  llvm=decm8 5, (xwa+4)               uni=dec 5,(XWA+0x04)             reenc=88 04 6d
+  6e  MNEMONIC  llvm=decm8 6, (xwa+4)               uni=dec 6,(XWA+0x04)             reenc=88 04 6e
+  6f  MNEMONIC  llvm=decm8 7, (xwa+4)               uni=dec 7,(XWA+0x04)             reenc=88 04 6f
+
+=== prefix 90 ===  AGREE 163  ASYM 22  MNEMONIC 24  LENGTH 0  LLVM-NONE 9  UNI-NONE 0  BOTH-NONE 38
+  04  MNEMONIC  llvm=pushm (xwa)                    uni=pushw (XWA)                  reenc=90 04
+  27  ASYM      llvm=ld sp, (xwa)                   uni=ld SP,(XWA)                  reenc=REJECTED
+  37  ASYM      llvm=ex (xwa), sp                   uni=ex (XWA),SP                  reenc=REJECTED
+  38  MNEMONIC  llvm=addiw_da (xwa), 0              uni=add (XWA),0x0000             reenc=90 38 00 00
+  39  MNEMONIC  llvm=adcmi16 (xwa), 0               uni=adc (XWA),0x0000             reenc=90 39 00 00
+  3a  MNEMONIC  llvm=submi16 (xwa), 0               uni=sub (XWA),0x0000             reenc=90 3a 00 00
+  3b  MNEMONIC  llvm=sbcmi16 (xwa), 0               uni=sbc (XWA),0x0000             reenc=90 3b 00 00
+  3c  MNEMONIC  llvm=andmi16 (xwa), 0               uni=and (XWA),0x0000             reenc=90 3c 00 00
+  3d  MNEMONIC  llvm=xormi16 (xwa), 0               uni=xor (XWA),0x0000             reenc=90 3d 00 00
+  3e  MNEMONIC  llvm=ormi16 (xwa), 0                uni=or (XWA),0x0000              reenc=90 3e 00 00
+  47  ASYM      llvm=mul sp, (xwa)                  uni=mul XSP,(XWA)                reenc=REJECTED
+  4f  ASYM      llvm=muls sp, (xwa)                 uni=muls XSP,(XWA)               reenc=REJECTED
+  57  ASYM      llvm=div sp, (xwa)                  uni=div XSP,(XWA)                reenc=REJECTED
+  5f  ASYM      llvm=divs sp, (xwa)                 uni=divs XSP,(XWA)               reenc=REJECTED
+  60  MNEMONIC  llvm=incm 8, (xwa)                  uni=incw 0,(XWA)                 reenc=90 60
+  61  MNEMONIC  llvm=incm 1, (xwa)                  uni=incw 1,(XWA)                 reenc=90 61
+  62  MNEMONIC  llvm=incm 2, (xwa)                  uni=incw 2,(XWA)                 reenc=90 62
+  63  MNEMONIC  llvm=incm 3, (xwa)                  uni=incw 3,(XWA)                 reenc=90 63
+  64  MNEMONIC  llvm=incm 4, (xwa)                  uni=incw 4,(XWA)                 reenc=90 64
+  65  MNEMONIC  llvm=incm 5, (xwa)                  uni=incw 5,(XWA)                 reenc=90 65
+  66  MNEMONIC  llvm=incm 6, (xwa)                  uni=incw 6,(XWA)                 reenc=90 66
+  67  MNEMONIC  llvm=incm 7, (xwa)                  uni=incw 7,(XWA)                 reenc=90 67
+  68  MNEMONIC  llvm=decm 8, (xwa)                  uni=decw 0,(XWA)                 reenc=90 68
+  69  MNEMONIC  llvm=decm 1, (xwa)                  uni=decw 1,(XWA)                 reenc=90 69
+  6a  MNEMONIC  llvm=decm 2, (xwa)                  uni=decw 2,(XWA)                 reenc=90 6a
+  6b  MNEMONIC  llvm=decm 3, (xwa)                  uni=decw 3,(XWA)                 reenc=90 6b
+  6c  MNEMONIC  llvm=decm 4, (xwa)                  uni=decw 4,(XWA)                 reenc=90 6c
+  6d  MNEMONIC  llvm=decm 5, (xwa)                  uni=decw 5,(XWA)                 reenc=90 6d
+  6e  MNEMONIC  llvm=decm 6, (xwa)                  uni=decw 6,(XWA)                 reenc=90 6e
+  6f  MNEMONIC  llvm=decm 7, (xwa)                  uni=decw 7,(XWA)                 reenc=90 6f
+  87  ASYM      llvm=add sp, (xwa)                  uni=add SP,(XWA)                 reenc=REJECTED
+  8f  ASYM      llvm=add (xwa), sp                  uni=add (XWA),SP                 reenc=REJECTED
+  97  ASYM      llvm=adc sp, (xwa)                  uni=adc SP,(XWA)                 reenc=REJECTED
+  9f  ASYM      llvm=adc (xwa), sp                  uni=adc (XWA),SP                 reenc=REJECTED
+  a7  ASYM      llvm=sub sp, (xwa)                  uni=sub SP,(XWA)                 reenc=REJECTED
+  af  ASYM      llvm=sub (xwa), sp                  uni=sub (XWA),SP                 reenc=REJECTED
+  b7  ASYM      llvm=sbc sp, (xwa)                  uni=sbc SP,(XWA)                 reenc=REJECTED
+  bf  ASYM      llvm=sbc (xwa), sp                  uni=sbc (XWA),SP                 reenc=REJECTED
+  c7  ASYM      llvm=and sp, (xwa)                  uni=and SP,(XWA)                 reenc=REJECTED
+  cf  ASYM      llvm=and (xwa), sp                  uni=and (XWA),SP                 reenc=REJECTED
+  d7  ASYM      llvm=xor sp, (xwa)                  uni=xor SP,(XWA)                 reenc=REJECTED
+  df  ASYM      llvm=xor (xwa), sp                  uni=xor (XWA),SP                 reenc=REJECTED
+  e7  ASYM      llvm=or sp, (xwa)                   uni=or SP,(XWA)                  reenc=REJECTED
+  ef  ASYM      llvm=or (xwa), sp                   uni=or (XWA),SP                  reenc=REJECTED
+  f7  ASYM      llvm=cp sp, (xwa)                   uni=cp SP,(XWA)                  reenc=REJECTED
+  ff  ASYM      llvm=cp (xwa), sp                   uni=cp (XWA),SP                  reenc=REJECTED
+
+=== prefix 98 04 ===  AGREE 163  ASYM 22  MNEMONIC 24  LENGTH 0  LLVM-NONE 1  UNI-NONE 0  BOTH-NONE 46
+  04  MNEMONIC  llvm=pushm (xwa+4)                  uni=pushw (XWA+0x04)             reenc=98 04 04
+  27  ASYM      llvm=ld sp, (xwa+4)                 uni=ld SP,(XWA+0x04)             reenc=REJECTED
+  37  ASYM      llvm=ex (xwa+4), sp                 uni=ex (XWA+0x04),SP             reenc=REJECTED
+  38  MNEMONIC  llvm=addiw_da (xwa+4), 0            uni=add (XWA+0x04),0x0000        reenc=98 04 38 00 00
+  39  MNEMONIC  llvm=adcmi16 (xwa+4), 0             uni=adc (XWA+0x04),0x0000        reenc=98 04 39 00 00
+  3a  MNEMONIC  llvm=submi16 (xwa+4), 0             uni=sub (XWA+0x04),0x0000        reenc=98 04 3a 00 00
+  3b  MNEMONIC  llvm=sbcmi16 (xwa+4), 0             uni=sbc (XWA+0x04),0x0000        reenc=98 04 3b 00 00
+  3c  MNEMONIC  llvm=andmi16 (xwa+4), 0             uni=and (XWA+0x04),0x0000        reenc=98 04 3c 00 00
+  3d  MNEMONIC  llvm=xormi16 (xwa+4), 0             uni=xor (XWA+0x04),0x0000        reenc=98 04 3d 00 00
+  3e  MNEMONIC  llvm=ormi16 (xwa+4), 0              uni=or (XWA+0x04),0x0000         reenc=98 04 3e 00 00
+  47  ASYM      llvm=mul sp, (xwa+4)                uni=mul XSP,(XWA+0x04)           reenc=REJECTED
+  4f  ASYM      llvm=muls sp, (xwa+4)               uni=muls XSP,(XWA+0x04)          reenc=REJECTED
+  57  ASYM      llvm=div sp, (xwa+4)                uni=div XSP,(XWA+0x04)           reenc=REJECTED
+  5f  ASYM      llvm=divs sp, (xwa+4)               uni=divs XSP,(XWA+0x04)          reenc=REJECTED
+  60  MNEMONIC  llvm=incm 8, (xwa+4)                uni=incw 0,(XWA+0x04)            reenc=98 04 60
+  61  MNEMONIC  llvm=incm 1, (xwa+4)                uni=incw 1,(XWA+0x04)            reenc=98 04 61
+  62  MNEMONIC  llvm=incm 2, (xwa+4)                uni=incw 2,(XWA+0x04)            reenc=98 04 62
+  63  MNEMONIC  llvm=incm 3, (xwa+4)                uni=incw 3,(XWA+0x04)            reenc=98 04 63
+  64  MNEMONIC  llvm=incm 4, (xwa+4)                uni=incw 4,(XWA+0x04)            reenc=98 04 64
+  65  MNEMONIC  llvm=incm 5, (xwa+4)                uni=incw 5,(XWA+0x04)            reenc=98 04 65
+  66  MNEMONIC  llvm=incm 6, (xwa+4)                uni=incw 6,(XWA+0x04)            reenc=98 04 66
+  67  MNEMONIC  llvm=incm 7, (xwa+4)                uni=incw 7,(XWA+0x04)            reenc=98 04 67
+  68  MNEMONIC  llvm=decm 8, (xwa+4)                uni=decw 0,(XWA+0x04)            reenc=98 04 68
+  69  MNEMONIC  llvm=decm 1, (xwa+4)                uni=decw 1,(XWA+0x04)            reenc=98 04 69
+  6a  MNEMONIC  llvm=decm 2, (xwa+4)                uni=decw 2,(XWA+0x04)            reenc=98 04 6a
+  6b  MNEMONIC  llvm=decm 3, (xwa+4)                uni=decw 3,(XWA+0x04)            reenc=98 04 6b
+  6c  MNEMONIC  llvm=decm 4, (xwa+4)                uni=decw 4,(XWA+0x04)            reenc=98 04 6c
+  6d  MNEMONIC  llvm=decm 5, (xwa+4)                uni=decw 5,(XWA+0x04)            reenc=98 04 6d
+  6e  MNEMONIC  llvm=decm 6, (xwa+4)                uni=decw 6,(XWA+0x04)            reenc=98 04 6e
+  6f  MNEMONIC  llvm=decm 7, (xwa+4)                uni=decw 7,(XWA+0x04)            reenc=98 04 6f
+  87  ASYM      llvm=add sp, (xwa+4)                uni=add SP,(XWA+0x04)            reenc=REJECTED
+  8f  ASYM      llvm=add (xwa+4), sp                uni=add (XWA+0x04),SP            reenc=REJECTED
+  97  ASYM      llvm=adc sp, (xwa+4)                uni=adc SP,(XWA+0x04)            reenc=REJECTED
+  9f  ASYM      llvm=adc (xwa+4), sp                uni=adc (XWA+0x04),SP            reenc=REJECTED
+  a7  ASYM      llvm=sub sp, (xwa+4)                uni=sub SP,(XWA+0x04)            reenc=REJECTED
+  af  ASYM      llvm=sub (xwa+4), sp                uni=sub (XWA+0x04),SP            reenc=REJECTED
+  b7  ASYM      llvm=sbc sp, (xwa+4)                uni=sbc SP,(XWA+0x04)            reenc=REJECTED
+  bf  ASYM      llvm=sbc (xwa+4), sp                uni=sbc (XWA+0x04),SP            reenc=REJECTED
+  c7  ASYM      llvm=and sp, (xwa+4)                uni=and SP,(XWA+0x04)            reenc=REJECTED
+  cf  ASYM      llvm=and (xwa+4), sp                uni=and (XWA+0x04),SP            reenc=REJECTED
+  d7  ASYM      llvm=xor sp, (xwa+4)                uni=xor SP,(XWA+0x04)            reenc=REJECTED
+  df  ASYM      llvm=xor (xwa+4), sp                uni=xor (XWA+0x04),SP            reenc=REJECTED
+  e7  ASYM      llvm=or sp, (xwa+4)                 uni=or SP,(XWA+0x04)             reenc=REJECTED
+  ef  ASYM      llvm=or (xwa+4), sp                 uni=or (XWA+0x04),SP             reenc=REJECTED
+  f7  ASYM      llvm=cp sp, (xwa+4)                 uni=cp SP,(XWA+0x04)             reenc=REJECTED
+  ff  ASYM      llvm=cp (xwa+4), sp                 uni=cp (XWA+0x04),SP             reenc=REJECTED
+
+=== prefix A0 ===  AGREE 136  ASYM 0  MNEMONIC 0  LENGTH 0  LLVM-NONE 0  UNI-NONE 0  BOTH-NONE 120
+
+=== prefix A8 04 ===  AGREE 136  ASYM 0  MNEMONIC 0  LENGTH 0  LLVM-NONE 0  UNI-NONE 0  BOTH-NONE 120
+
+=== prefix B0 ===  AGREE 120  ASYM 9  MNEMONIC 24  LENGTH 0  LLVM-NONE 26  UNI-NONE 1  BOTH-NONE 76
+  08  UNI-NONE  llvm=ld (xwa), 0                    uni=                             reenc=
+  20  ASYM      llvm=ld xwa, (xwa)                  uni=lda WA,XWA                   reenc=a0 20
+  21  ASYM      llvm=ld xbc, (xwa)                  uni=lda BC,XWA                   reenc=a0 21
+  22  ASYM      llvm=ld xde, (xwa)                  uni=lda DE,XWA                   reenc=a0 22
+  23  ASYM      llvm=ld xhl, (xwa)                  uni=lda HL,XWA                   reenc=a0 23
+  24  ASYM      llvm=ld xix, (xwa)                  uni=lda IX,XWA                   reenc=a0 24
+  25  ASYM      llvm=ld xiy, (xwa)                  uni=lda IY,XWA                   reenc=a0 25
+  26  ASYM      llvm=ld xiz, (xwa)                  uni=lda IZ,XWA                   reenc=a0 26
+  27  ASYM      llvm=ld xsp, (xwa)                  uni=lda SP,XWA                   reenc=a0 27
+  57  ASYM      llvm=ld (xwa), sp                   uni=ld (XWA),SP                  reenc=REJECTED
+  98  MNEMONIC  llvm=ldcfm 0, (xwa)                 uni=ldcf 0,(XWA)                 reenc=b0 98
+  99  MNEMONIC  llvm=ldcfm 1, (xwa)                 uni=ldcf 1,(XWA)                 reenc=b0 99
+  9a  MNEMONIC  llvm=ldcfm 2, (xwa)                 uni=ldcf 2,(XWA)                 reenc=b0 9a
+  9b  MNEMONIC  llvm=ldcfm 3, (xwa)                 uni=ldcf 3,(XWA)                 reenc=b0 9b
+  9c  MNEMONIC  llvm=ldcfm 4, (xwa)                 uni=ldcf 4,(XWA)                 reenc=b0 9c
+  9d  MNEMONIC  llvm=ldcfm 5, (xwa)                 uni=ldcf 5,(XWA)                 reenc=b0 9d
+  9e  MNEMONIC  llvm=ldcfm 6, (xwa)                 uni=ldcf 6,(XWA)                 reenc=b0 9e
+  9f  MNEMONIC  llvm=ldcfm 7, (xwa)                 uni=ldcf 7,(XWA)                 reenc=b0 9f
+  a0  MNEMONIC  llvm=stcfm 0, (xwa)                 uni=stcf 0,(XWA)                 reenc=b0 a0
+  a1  MNEMONIC  llvm=stcfm 1, (xwa)                 uni=stcf 1,(XWA)                 reenc=b0 a1
+  a2  MNEMONIC  llvm=stcfm 2, (xwa)                 uni=stcf 2,(XWA)                 reenc=b0 a2
+  a3  MNEMONIC  llvm=stcfm 3, (xwa)                 uni=stcf 3,(XWA)                 reenc=b0 a3
+  a4  MNEMONIC  llvm=stcfm 4, (xwa)                 uni=stcf 4,(XWA)                 reenc=b0 a4
+  a5  MNEMONIC  llvm=stcfm 5, (xwa)                 uni=stcf 5,(XWA)                 reenc=b0 a5
+  a6  MNEMONIC  llvm=stcfm 6, (xwa)                 uni=stcf 6,(XWA)                 reenc=b0 a6
+  a7  MNEMONIC  llvm=stcfm 7, (xwa)                 uni=stcf 7,(XWA)                 reenc=b0 a7
+  c0  MNEMONIC  llvm=chgm 0, (xwa)                  uni=chg 0,(XWA)                  reenc=b0 c0
+  c1  MNEMONIC  llvm=chgm 1, (xwa)                  uni=chg 1,(XWA)                  reenc=b0 c1
+  c2  MNEMONIC  llvm=chgm 2, (xwa)                  uni=chg 2,(XWA)                  reenc=b0 c2
+  c3  MNEMONIC  llvm=chgm 3, (xwa)                  uni=chg 3,(XWA)                  reenc=b0 c3
+  c4  MNEMONIC  llvm=chgm 4, (xwa)                  uni=chg 4,(XWA)                  reenc=b0 c4
+  c5  MNEMONIC  llvm=chgm 5, (xwa)                  uni=chg 5,(XWA)                  reenc=b0 c5
+  c6  MNEMONIC  llvm=chgm 6, (xwa)                  uni=chg 6,(XWA)                  reenc=b0 c6
+  c7  MNEMONIC  llvm=chgm 7, (xwa)                  uni=chg 7,(XWA)                  reenc=b0 c7
+
+=== prefix B8 04 ===  AGREE 104  ASYM 9  MNEMONIC 24  LENGTH 0  LLVM-NONE 26  UNI-NONE 1  BOTH-NONE 92
+  08  UNI-NONE  llvm=ld (xwa+4), 0                  uni=                             reenc=
+  20  ASYM      llvm=ld xwa, (xwa+4)                uni=lda WA,XWA+0x04              reenc=a8 04 20
+  21  ASYM      llvm=ld xbc, (xwa+4)                uni=lda BC,XWA+0x04              reenc=a8 04 21
+  22  ASYM      llvm=ld xde, (xwa+4)                uni=lda DE,XWA+0x04              reenc=a8 04 22
+  23  ASYM      llvm=ld xhl, (xwa+4)                uni=lda HL,XWA+0x04              reenc=a8 04 23
+  24  ASYM      llvm=ld xix, (xwa+4)                uni=lda IX,XWA+0x04              reenc=a8 04 24
+  25  ASYM      llvm=ld xiy, (xwa+4)                uni=lda IY,XWA+0x04              reenc=a8 04 25
+  26  ASYM      llvm=ld xiz, (xwa+4)                uni=lda IZ,XWA+0x04              reenc=a8 04 26
+  27  ASYM      llvm=ld xsp, (xwa+4)                uni=lda SP,XWA+0x04              reenc=a8 04 27
+  57  ASYM      llvm=ld (xwa+4), sp                 uni=ld (XWA+0x04),SP             reenc=REJECTED
+  98  MNEMONIC  llvm=ldcfm 0, (xwa+4)               uni=ldcf 0,(XWA+0x04)            reenc=b8 04 98
+  99  MNEMONIC  llvm=ldcfm 1, (xwa+4)               uni=ldcf 1,(XWA+0x04)            reenc=b8 04 99
+  9a  MNEMONIC  llvm=ldcfm 2, (xwa+4)               uni=ldcf 2,(XWA+0x04)            reenc=b8 04 9a
+  9b  MNEMONIC  llvm=ldcfm 3, (xwa+4)               uni=ldcf 3,(XWA+0x04)            reenc=b8 04 9b
+  9c  MNEMONIC  llvm=ldcfm 4, (xwa+4)               uni=ldcf 4,(XWA+0x04)            reenc=b8 04 9c
+  9d  MNEMONIC  llvm=ldcfm 5, (xwa+4)               uni=ldcf 5,(XWA+0x04)            reenc=b8 04 9d
+  9e  MNEMONIC  llvm=ldcfm 6, (xwa+4)               uni=ldcf 6,(XWA+0x04)            reenc=b8 04 9e
+  9f  MNEMONIC  llvm=ldcfm 7, (xwa+4)               uni=ldcf 7,(XWA+0x04)            reenc=b8 04 9f
+  a0  MNEMONIC  llvm=stcfm 0, (xwa+4)               uni=stcf 0,(XWA+0x04)            reenc=b8 04 a0
+  a1  MNEMONIC  llvm=stcfm 1, (xwa+4)               uni=stcf 1,(XWA+0x04)            reenc=b8 04 a1
+  a2  MNEMONIC  llvm=stcfm 2, (xwa+4)               uni=stcf 2,(XWA+0x04)            reenc=b8 04 a2
+  a3  MNEMONIC  llvm=stcfm 3, (xwa+4)               uni=stcf 3,(XWA+0x04)            reenc=b8 04 a3
+  a4  MNEMONIC  llvm=stcfm 4, (xwa+4)               uni=stcf 4,(XWA+0x04)            reenc=b8 04 a4
+  a5  MNEMONIC  llvm=stcfm 5, (xwa+4)               uni=stcf 5,(XWA+0x04)            reenc=b8 04 a5
+  a6  MNEMONIC  llvm=stcfm 6, (xwa+4)               uni=stcf 6,(XWA+0x04)            reenc=b8 04 a6
+  a7  MNEMONIC  llvm=stcfm 7, (xwa+4)               uni=stcf 7,(XWA+0x04)            reenc=b8 04 a7
+  c0  MNEMONIC  llvm=chgm 0, (xwa+4)                uni=chg 0,(XWA+0x04)             reenc=b8 04 c0
+  c1  MNEMONIC  llvm=chgm 1, (xwa+4)                uni=chg 1,(XWA+0x04)             reenc=b8 04 c1
+  c2  MNEMONIC  llvm=chgm 2, (xwa+4)                uni=chg 2,(XWA+0x04)             reenc=b8 04 c2
+  c3  MNEMONIC  llvm=chgm 3, (xwa+4)                uni=chg 3,(XWA+0x04)             reenc=b8 04 c3
+  c4  MNEMONIC  llvm=chgm 4, (xwa+4)                uni=chg 4,(XWA+0x04)             reenc=b8 04 c4
+  c5  MNEMONIC  llvm=chgm 5, (xwa+4)                uni=chg 5,(XWA+0x04)             reenc=b8 04 c5
+  c6  MNEMONIC  llvm=chgm 6, (xwa+4)                uni=chg 6,(XWA+0x04)             reenc=b8 04 c6
+  c7  MNEMONIC  llvm=chgm 7, (xwa+4)                uni=chg 7,(XWA+0x04)             reenc=b8 04 c7
+
+=== prefix C0 34 ===  AGREE 8  ASYM 0  MNEMONIC 0  LENGTH 0  LLVM-NONE 204  UNI-NONE 0  BOTH-NONE 44
+
+=== prefix C1 34 12 ===  AGREE 0  ASYM 0  MNEMONIC 127  LENGTH 0  LLVM-NONE 85  UNI-NONE 0  BOTH-NONE 44
+  19  MNEMONIC  llvm=ldmm8 0, 4660                  uni=ld (0x0000),(0x1234)         reenc=c1 34 12 19 00 00
+  20  MNEMONIC  llvm=ldb_d8 w, (4660)               uni=ld W,(0x1234)                reenc=c1 34 12 20
+  21  MNEMONIC  llvm=ldb_d8 a, (4660)               uni=ld A,(0x1234)                reenc=c1 34 12 21
+  22  MNEMONIC  llvm=ldb_d8 b, (4660)               uni=ld B,(0x1234)                reenc=c1 34 12 22
+  23  MNEMONIC  llvm=ldb_d8 c, (4660)               uni=ld C,(0x1234)                reenc=c1 34 12 23
+  24  MNEMONIC  llvm=ldb_d8 d, (4660)               uni=ld D,(0x1234)                reenc=c1 34 12 24
+  25  MNEMONIC  llvm=ldb_d8 e, (4660)               uni=ld E,(0x1234)                reenc=c1 34 12 25
+  26  MNEMONIC  llvm=ldb_d8 h, (4660)               uni=ld H,(0x1234)                reenc=c1 34 12 26
+  27  MNEMONIC  llvm=ldb_d8 l, (4660)               uni=ld L,(0x1234)                reenc=c1 34 12 27
+  38  MNEMONIC  llvm=adddi8 (4660), 0               uni=add (0x1234),0x00            reenc=c1 34 12 38 00
+  3a  MNEMONIC  llvm=subdi8 (4660), 0               uni=sub (0x1234),0x00            reenc=c1 34 12 3a 00
+  3c  MNEMONIC  llvm=anddi8 (4660), 0               uni=and (0x1234),0x00            reenc=c1 34 12 3c 00
+  3d  MNEMONIC  llvm=xordi8 (4660), 0               uni=xor (0x1234),0x00            reenc=c1 34 12 3d 00
+  3e  MNEMONIC  llvm=ordi8 (4660), 0                uni=or (0x1234),0x00             reenc=c1 34 12 3e 00
+  3f  MNEMONIC  llvm=cpdi8 (4660), 0                uni=cp (0x1234),0x00             reenc=c1 34 12 3f 00
+  60  MNEMONIC  llvm=incdi8 8, (4660)               uni=inc 0,(0x1234)               reenc=c1 34 12 60
+  61  MNEMONIC  llvm=incdi8 1, (4660)               uni=inc 1,(0x1234)               reenc=c1 34 12 61
+  62  MNEMONIC  llvm=incdi8 2, (4660)               uni=inc 2,(0x1234)               reenc=c1 34 12 62
+  63  MNEMONIC  llvm=incdi8 3, (4660)               uni=inc 3,(0x1234)               reenc=c1 34 12 63
+  64  MNEMONIC  llvm=incdi8 4, (4660)               uni=inc 4,(0x1234)               reenc=c1 34 12 64
+  65  MNEMONIC  llvm=incdi8 5, (4660)               uni=inc 5,(0x1234)               reenc=c1 34 12 65
+  66  MNEMONIC  llvm=incdi8 6, (4660)               uni=inc 6,(0x1234)               reenc=c1 34 12 66
+  67  MNEMONIC  llvm=incdi8 7, (4660)               uni=inc 7,(0x1234)               reenc=c1 34 12 67
+  68  MNEMONIC  llvm=decdi8 8, (4660)               uni=dec 0,(0x1234)               reenc=c1 34 12 68
+  69  MNEMONIC  llvm=decdi8 1, (4660)               uni=dec 1,(0x1234)               reenc=c1 34 12 69
+  6a  MNEMONIC  llvm=decdi8 2, (4660)               uni=dec 2,(0x1234)               reenc=c1 34 12 6a
+  6b  MNEMONIC  llvm=decdi8 3, (4660)               uni=dec 3,(0x1234)               reenc=c1 34 12 6b
+  6c  MNEMONIC  llvm=decdi8 4, (4660)               uni=dec 4,(0x1234)               reenc=c1 34 12 6c
+  6d  MNEMONIC  llvm=decdi8 5, (4660)               uni=dec 5,(0x1234)               reenc=c1 34 12 6d
+  6e  MNEMONIC  llvm=decdi8 6, (4660)               uni=dec 6,(0x1234)               reenc=c1 34 12 6e
+  6f  MNEMONIC  llvm=decdi8 7, (4660)               uni=dec 7,(0x1234)               reenc=c1 34 12 6f
+  80  MNEMONIC  llvm=addda8 xwa, (4660)             uni=add W,(0x1234)               reenc=c1 34 12 80
+  81  MNEMONIC  llvm=addda8 xbc, (4660)             uni=add A,(0x1234)               reenc=c1 34 12 81
+  82  MNEMONIC  llvm=addda8 xde, (4660)             uni=add B,(0x1234)               reenc=c1 34 12 82
+  83  MNEMONIC  llvm=addda8 xhl, (4660)             uni=add C,(0x1234)               reenc=c1 34 12 83
+  84  MNEMONIC  llvm=addda8 xix, (4660)             uni=add D,(0x1234)               reenc=c1 34 12 84
+  85  MNEMONIC  llvm=addda8 xiy, (4660)             uni=add E,(0x1234)               reenc=c1 34 12 85
+  86  MNEMONIC  llvm=addda8 xiz, (4660)             uni=add H,(0x1234)               reenc=c1 34 12 86
+  87  MNEMONIC  llvm=addda8 xsp, (4660)             uni=add L,(0x1234)               reenc=c1 34 12 87
+  88  MNEMONIC  llvm=adddm8 (4660), xwa             uni=add (0x1234),W               reenc=c1 34 12 88
+  89  MNEMONIC  llvm=adddm8 (4660), xbc             uni=add (0x1234),A               reenc=c1 34 12 89
+  8a  MNEMONIC  llvm=adddm8 (4660), xde             uni=add (0x1234),B               reenc=c1 34 12 8a
+  8b  MNEMONIC  llvm=adddm8 (4660), xhl             uni=add (0x1234),C               reenc=c1 34 12 8b
+  8c  MNEMONIC  llvm=adddm8 (4660), xix             uni=add (0x1234),D               reenc=c1 34 12 8c
+  8d  MNEMONIC  llvm=adddm8 (4660), xiy             uni=add (0x1234),E               reenc=c1 34 12 8d
+  8e  MNEMONIC  llvm=adddm8 (4660), xiz             uni=add (0x1234),H               reenc=c1 34 12 8e
+  8f  MNEMONIC  llvm=adddm8 (4660), xsp             uni=add (0x1234),L               reenc=c1 34 12 8f
+  a0  MNEMONIC  llvm=subda8 xwa, (4660)             uni=sub W,(0x1234)               reenc=c1 34 12 a0
+  a1  MNEMONIC  llvm=subda8 xbc, (4660)             uni=sub A,(0x1234)               reenc=c1 34 12 a1
+  a2  MNEMONIC  llvm=subda8 xde, (4660)             uni=sub B,(0x1234)               reenc=c1 34 12 a2
+  a3  MNEMONIC  llvm=subda8 xhl, (4660)             uni=sub C,(0x1234)               reenc=c1 34 12 a3
+  a4  MNEMONIC  llvm=subda8 xix, (4660)             uni=sub D,(0x1234)               reenc=c1 34 12 a4
+  a5  MNEMONIC  llvm=subda8 xiy, (4660)             uni=sub E,(0x1234)               reenc=c1 34 12 a5
+  a6  MNEMONIC  llvm=subda8 xiz, (4660)             uni=sub H,(0x1234)               reenc=c1 34 12 a6
+  a7  MNEMONIC  llvm=subda8 xsp, (4660)             uni=sub L,(0x1234)               reenc=c1 34 12 a7
+  a8  MNEMONIC  llvm=subdm8 (4660), xwa             uni=sub (0x1234),W               reenc=c1 34 12 a8
+  a9  MNEMONIC  llvm=subdm8 (4660), xbc             uni=sub (0x1234),A               reenc=c1 34 12 a9
+  aa  MNEMONIC  llvm=subdm8 (4660), xde             uni=sub (0x1234),B               reenc=c1 34 12 aa
+  ab  MNEMONIC  llvm=subdm8 (4660), xhl             uni=sub (0x1234),C               reenc=c1 34 12 ab
+  ac  MNEMONIC  llvm=subdm8 (4660), xix             uni=sub (0x1234),D               reenc=c1 34 12 ac
+  ad  MNEMONIC  llvm=subdm8 (4660), xiy             uni=sub (0x1234),E               reenc=c1 34 12 ad
+  ae  MNEMONIC  llvm=subdm8 (4660), xiz             uni=sub (0x1234),H               reenc=c1 34 12 ae
+  af  MNEMONIC  llvm=subdm8 (4660), xsp             uni=sub (0x1234),L               reenc=c1 34 12 af
+  c0  MNEMONIC  llvm=andda8 xwa, (4660)             uni=and W,(0x1234)               reenc=c1 34 12 c0
+  c1  MNEMONIC  llvm=andda8 xbc, (4660)             uni=and A,(0x1234)               reenc=c1 34 12 c1
+  c2  MNEMONIC  llvm=andda8 xde, (4660)             uni=and B,(0x1234)               reenc=c1 34 12 c2
+  c3  MNEMONIC  llvm=andda8 xhl, (4660)             uni=and C,(0x1234)               reenc=c1 34 12 c3
+  c4  MNEMONIC  llvm=andda8 xix, (4660)             uni=and D,(0x1234)               reenc=c1 34 12 c4
+  c5  MNEMONIC  llvm=andda8 xiy, (4660)             uni=and E,(0x1234)               reenc=c1 34 12 c5
+  c6  MNEMONIC  llvm=andda8 xiz, (4660)             uni=and H,(0x1234)               reenc=c1 34 12 c6
+  c7  MNEMONIC  llvm=andda8 xsp, (4660)             uni=and L,(0x1234)               reenc=c1 34 12 c7
+  c8  MNEMONIC  llvm=anddm8 (4660), xwa             uni=and (0x1234),W               reenc=c1 34 12 c8
+  c9  MNEMONIC  llvm=anddm8 (4660), xbc             uni=and (0x1234),A               reenc=c1 34 12 c9
+  ca  MNEMONIC  llvm=anddm8 (4660), xde             uni=and (0x1234),B               reenc=c1 34 12 ca
+  cb  MNEMONIC  llvm=anddm8 (4660), xhl             uni=and (0x1234),C               reenc=c1 34 12 cb
+  cc  MNEMONIC  llvm=anddm8 (4660), xix             uni=and (0x1234),D               reenc=c1 34 12 cc
+  cd  MNEMONIC  llvm=anddm8 (4660), xiy             uni=and (0x1234),E               reenc=c1 34 12 cd
+  ce  MNEMONIC  llvm=anddm8 (4660), xiz             uni=and (0x1234),H               reenc=c1 34 12 ce
+  cf  MNEMONIC  llvm=anddm8 (4660), xsp             uni=and (0x1234),L               reenc=c1 34 12 cf
+  d0  MNEMONIC  llvm=xorda8 xwa, (4660)             uni=xor W,(0x1234)               reenc=c1 34 12 d0
+  d1  MNEMONIC  llvm=xorda8 xbc, (4660)             uni=xor A,(0x1234)               reenc=c1 34 12 d1
+  d2  MNEMONIC  llvm=xorda8 xde, (4660)             uni=xor B,(0x1234)               reenc=c1 34 12 d2
+  d3  MNEMONIC  llvm=xorda8 xhl, (4660)             uni=xor C,(0x1234)               reenc=c1 34 12 d3
+  d4  MNEMONIC  llvm=xorda8 xix, (4660)             uni=xor D,(0x1234)               reenc=c1 34 12 d4
+  d5  MNEMONIC  llvm=xorda8 xiy, (4660)             uni=xor E,(0x1234)               reenc=c1 34 12 d5
+  d6  MNEMONIC  llvm=xorda8 xiz, (4660)             uni=xor H,(0x1234)               reenc=c1 34 12 d6
+  d7  MNEMONIC  llvm=xorda8 xsp, (4660)             uni=xor L,(0x1234)               reenc=c1 34 12 d7
+  d8  MNEMONIC  llvm=xordm8 (4660), xwa             uni=xor (0x1234),W               reenc=c1 34 12 d8
+  d9  MNEMONIC  llvm=xordm8 (4660), xbc             uni=xor (0x1234),A               reenc=c1 34 12 d9
+  da  MNEMONIC  llvm=xordm8 (4660), xde             uni=xor (0x1234),B               reenc=c1 34 12 da
+  db  MNEMONIC  llvm=xordm8 (4660), xhl             uni=xor (0x1234),C               reenc=c1 34 12 db
+  dc  MNEMONIC  llvm=xordm8 (4660), xix             uni=xor (0x1234),D               reenc=c1 34 12 dc
+  dd  MNEMONIC  llvm=xordm8 (4660), xiy             uni=xor (0x1234),E               reenc=c1 34 12 dd
+  de  MNEMONIC  llvm=xordm8 (4660), xiz             uni=xor (0x1234),H               reenc=c1 34 12 de
+  df  MNEMONIC  llvm=xordm8 (4660), xsp             uni=xor (0x1234),L               reenc=c1 34 12 df
+  e0  MNEMONIC  llvm=orda8 xwa, (4660)              uni=or W,(0x1234)                reenc=c1 34 12 e0
+  e1  MNEMONIC  llvm=orda8 xbc, (4660)              uni=or A,(0x1234)                reenc=c1 34 12 e1
+  e2  MNEMONIC  llvm=orda8 xde, (4660)              uni=or B,(0x1234)                reenc=c1 34 12 e2
+  e3  MNEMONIC  llvm=orda8 xhl, (4660)              uni=or C,(0x1234)                reenc=c1 34 12 e3
+  e4  MNEMONIC  llvm=orda8 xix, (4660)              uni=or D,(0x1234)                reenc=c1 34 12 e4
+  e5  MNEMONIC  llvm=orda8 xiy, (4660)              uni=or E,(0x1234)                reenc=c1 34 12 e5
+  e6  MNEMONIC  llvm=orda8 xiz, (4660)              uni=or H,(0x1234)                reenc=c1 34 12 e6
+  e7  MNEMONIC  llvm=orda8 xsp, (4660)              uni=or L,(0x1234)                reenc=c1 34 12 e7
+  e8  MNEMONIC  llvm=orddm8 (4660), xwa             uni=or (0x1234),W                reenc=c1 34 12 e8
+  e9  MNEMONIC  llvm=orddm8 (4660), xbc             uni=or (0x1234),A                reenc=c1 34 12 e9
+  ea  MNEMONIC  llvm=orddm8 (4660), xde             uni=or (0x1234),B                reenc=c1 34 12 ea
+  eb  MNEMONIC  llvm=orddm8 (4660), xhl             uni=or (0x1234),C                reenc=c1 34 12 eb
+  ec  MNEMONIC  llvm=orddm8 (4660), xix             uni=or (0x1234),D                reenc=c1 34 12 ec
+  ed  MNEMONIC  llvm=orddm8 (4660), xiy             uni=or (0x1234),E                reenc=c1 34 12 ed
+  ee  MNEMONIC  llvm=orddm8 (4660), xiz             uni=or (0x1234),H                reenc=c1 34 12 ee
+  ef  MNEMONIC  llvm=orddm8 (4660), xsp             uni=or (0x1234),L                reenc=c1 34 12 ef
+  f0  MNEMONIC  llvm=cpda8 xwa, (4660)              uni=cp W,(0x1234)                reenc=c1 34 12 f0
+  f1  MNEMONIC  llvm=cpda8 xbc, (4660)              uni=cp A,(0x1234)                reenc=c1 34 12 f1
+  f2  MNEMONIC  llvm=cpda8 xde, (4660)              uni=cp B,(0x1234)                reenc=c1 34 12 f2
+  f3  MNEMONIC  llvm=cpda8 xhl, (4660)              uni=cp C,(0x1234)                reenc=c1 34 12 f3
+  f4  MNEMONIC  llvm=cpda8 xix, (4660)              uni=cp D,(0x1234)                reenc=c1 34 12 f4
+  f5  MNEMONIC  llvm=cpda8 xiy, (4660)              uni=cp E,(0x1234)                reenc=c1 34 12 f5
+  f6  MNEMONIC  llvm=cpda8 xiz, (4660)              uni=cp H,(0x1234)                reenc=c1 34 12 f6
+  f7  MNEMONIC  llvm=cpda8 xsp, (4660)              uni=cp L,(0x1234)                reenc=c1 34 12 f7
+  f8  MNEMONIC  llvm=cpdm8 (4660), xwa              uni=cp (0x1234),W                reenc=c1 34 12 f8
+  f9  MNEMONIC  llvm=cpdm8 (4660), xbc              uni=cp (0x1234),A                reenc=c1 34 12 f9
+  fa  MNEMONIC  llvm=cpdm8 (4660), xde              uni=cp (0x1234),B                reenc=c1 34 12 fa
+  fb  MNEMONIC  llvm=cpdm8 (4660), xhl              uni=cp (0x1234),C                reenc=c1 34 12 fb
+  fc  MNEMONIC  llvm=cpdm8 (4660), xix              uni=cp (0x1234),D                reenc=c1 34 12 fc
+  fd  MNEMONIC  llvm=cpdm8 (4660), xiy              uni=cp (0x1234),E                reenc=c1 34 12 fd
+  fe  MNEMONIC  llvm=cpdm8 (4660), xiz              uni=cp (0x1234),H                reenc=c1 34 12 fe
+  ff  MNEMONIC  llvm=cpdm8 (4660), xsp              uni=cp (0x1234),L                reenc=c1 34 12 ff
+
+=== prefix C2 56 34 12 ===  AGREE 0  ASYM 0  MNEMONIC 128  LENGTH 0  LLVM-NONE 84  UNI-NONE 0  BOTH-NONE 44
+  20  MNEMONIC  llvm=ldb_da w, (1193046)            uni=ld W,(0x123456)              reenc=c2 56 34 12 20
+  21  MNEMONIC  llvm=ldb_da a, (1193046)            uni=ld A,(0x123456)              reenc=c2 56 34 12 21
+  22  MNEMONIC  llvm=ldb_da b, (1193046)            uni=ld B,(0x123456)              reenc=c2 56 34 12 22
+  23  MNEMONIC  llvm=ldb_da c, (1193046)            uni=ld C,(0x123456)              reenc=c2 56 34 12 23
+  24  MNEMONIC  llvm=ldb_da d, (1193046)            uni=ld D,(0x123456)              reenc=c2 56 34 12 24
+  25  MNEMONIC  llvm=ldb_da e, (1193046)            uni=ld E,(0x123456)              reenc=c2 56 34 12 25
+  26  MNEMONIC  llvm=ldb_da h, (1193046)            uni=ld H,(0x123456)              reenc=c2 56 34 12 26
+  27  MNEMONIC  llvm=ldb_da l, (1193046)            uni=ld L,(0x123456)              reenc=c2 56 34 12 27
+  38  MNEMONIC  llvm=adddi8_24 (1193046), 0         uni=add (0x123456),0x00          reenc=c2 56 34 12 38 00
+  39  MNEMONIC  llvm=addci8_24 (1193046), 0         uni=adc (0x123456),0x00          reenc=c2 56 34 12 39 00
+  3a  MNEMONIC  llvm=subdi8_24 (1193046), 0         uni=sub (0x123456),0x00          reenc=c2 56 34 12 3a 00
+  3b  MNEMONIC  llvm=sbcdi8_24 (1193046), 0         uni=sbc (0x123456),0x00          reenc=c2 56 34 12 3b 00
+  3c  MNEMONIC  llvm=anddi8_24 (1193046), 0         uni=and (0x123456),0x00          reenc=c2 56 34 12 3c 00
+  3d  MNEMONIC  llvm=xordi8_24 (1193046), 0         uni=xor (0x123456),0x00          reenc=c2 56 34 12 3d 00
+  3e  MNEMONIC  llvm=ordi8_24 (1193046), 0          uni=or (0x123456),0x00           reenc=c2 56 34 12 3e 00
+  3f  MNEMONIC  llvm=cpib_da (1193046), 0           uni=cp (0x123456),0x00           reenc=c2 56 34 12 3f 00
+  60  MNEMONIC  llvm=incdi8_24 8, (1193046)         uni=inc 0,(0x123456)             reenc=c2 56 34 12 60
+  61  MNEMONIC  llvm=incdi8_24 1, (1193046)         uni=inc 1,(0x123456)             reenc=c2 56 34 12 61
+  62  MNEMONIC  llvm=incdi8_24 2, (1193046)         uni=inc 2,(0x123456)             reenc=c2 56 34 12 62
+  63  MNEMONIC  llvm=incdi8_24 3, (1193046)         uni=inc 3,(0x123456)             reenc=c2 56 34 12 63
+  64  MNEMONIC  llvm=incdi8_24 4, (1193046)         uni=inc 4,(0x123456)             reenc=c2 56 34 12 64
+  65  MNEMONIC  llvm=incdi8_24 5, (1193046)         uni=inc 5,(0x123456)             reenc=c2 56 34 12 65
+  66  MNEMONIC  llvm=incdi8_24 6, (1193046)         uni=inc 6,(0x123456)             reenc=c2 56 34 12 66
+  67  MNEMONIC  llvm=incdi8_24 7, (1193046)         uni=inc 7,(0x123456)             reenc=c2 56 34 12 67
+  68  MNEMONIC  llvm=decdi8_24 8, (1193046)         uni=dec 0,(0x123456)             reenc=c2 56 34 12 68
+  69  MNEMONIC  llvm=decdi8_24 1, (1193046)         uni=dec 1,(0x123456)             reenc=c2 56 34 12 69
+  6a  MNEMONIC  llvm=decdi8_24 2, (1193046)         uni=dec 2,(0x123456)             reenc=c2 56 34 12 6a
+  6b  MNEMONIC  llvm=decdi8_24 3, (1193046)         uni=dec 3,(0x123456)             reenc=c2 56 34 12 6b
+  6c  MNEMONIC  llvm=decdi8_24 4, (1193046)         uni=dec 4,(0x123456)             reenc=c2 56 34 12 6c
+  6d  MNEMONIC  llvm=decdi8_24 5, (1193046)         uni=dec 5,(0x123456)             reenc=c2 56 34 12 6d
+  6e  MNEMONIC  llvm=decdi8_24 6, (1193046)         uni=dec 6,(0x123456)             reenc=c2 56 34 12 6e
+  6f  MNEMONIC  llvm=decdi8_24 7, (1193046)         uni=dec 7,(0x123456)             reenc=c2 56 34 12 6f
+  80  MNEMONIC  llvm=addda8_24 xwa, (1193046)       uni=add W,(0x123456)             reenc=c2 56 34 12 80
+  81  MNEMONIC  llvm=addda8_24 xbc, (1193046)       uni=add A,(0x123456)             reenc=c2 56 34 12 81
+  82  MNEMONIC  llvm=addda8_24 xde, (1193046)       uni=add B,(0x123456)             reenc=c2 56 34 12 82
+  83  MNEMONIC  llvm=addda8_24 xhl, (1193046)       uni=add C,(0x123456)             reenc=c2 56 34 12 83
+  84  MNEMONIC  llvm=addda8_24 xix, (1193046)       uni=add D,(0x123456)             reenc=c2 56 34 12 84
+  85  MNEMONIC  llvm=addda8_24 xiy, (1193046)       uni=add E,(0x123456)             reenc=c2 56 34 12 85
+  86  MNEMONIC  llvm=addda8_24 xiz, (1193046)       uni=add H,(0x123456)             reenc=c2 56 34 12 86
+  87  MNEMONIC  llvm=addda8_24 xsp, (1193046)       uni=add L,(0x123456)             reenc=c2 56 34 12 87
+  88  MNEMONIC  llvm=adddm8_24 (1193046), xwa       uni=add (0x123456),W             reenc=c2 56 34 12 88
+  89  MNEMONIC  llvm=adddm8_24 (1193046), xbc       uni=add (0x123456),A             reenc=c2 56 34 12 89
+  8a  MNEMONIC  llvm=adddm8_24 (1193046), xde       uni=add (0x123456),B             reenc=c2 56 34 12 8a
+  8b  MNEMONIC  llvm=adddm8_24 (1193046), xhl       uni=add (0x123456),C             reenc=c2 56 34 12 8b
+  8c  MNEMONIC  llvm=adddm8_24 (1193046), xix       uni=add (0x123456),D             reenc=c2 56 34 12 8c
+  8d  MNEMONIC  llvm=adddm8_24 (1193046), xiy       uni=add (0x123456),E             reenc=c2 56 34 12 8d
+  8e  MNEMONIC  llvm=adddm8_24 (1193046), xiz       uni=add (0x123456),H             reenc=c2 56 34 12 8e
+  8f  MNEMONIC  llvm=adddm8_24 (1193046), xsp       uni=add (0x123456),L             reenc=c2 56 34 12 8f
+  a0  MNEMONIC  llvm=subda8_24 xwa, (1193046)       uni=sub W,(0x123456)             reenc=c2 56 34 12 a0
+  a1  MNEMONIC  llvm=subda8_24 xbc, (1193046)       uni=sub A,(0x123456)             reenc=c2 56 34 12 a1
+  a2  MNEMONIC  llvm=subda8_24 xde, (1193046)       uni=sub B,(0x123456)             reenc=c2 56 34 12 a2
+  a3  MNEMONIC  llvm=subda8_24 xhl, (1193046)       uni=sub C,(0x123456)             reenc=c2 56 34 12 a3
+  a4  MNEMONIC  llvm=subda8_24 xix, (1193046)       uni=sub D,(0x123456)             reenc=c2 56 34 12 a4
+  a5  MNEMONIC  llvm=subda8_24 xiy, (1193046)       uni=sub E,(0x123456)             reenc=c2 56 34 12 a5
+  a6  MNEMONIC  llvm=subda8_24 xiz, (1193046)       uni=sub H,(0x123456)             reenc=c2 56 34 12 a6
+  a7  MNEMONIC  llvm=subda8_24 xsp, (1193046)       uni=sub L,(0x123456)             reenc=c2 56 34 12 a7
+  a8  MNEMONIC  llvm=subdm8_24 (1193046), xwa       uni=sub (0x123456),W             reenc=c2 56 34 12 a8
+  a9  MNEMONIC  llvm=subdm8_24 (1193046), xbc       uni=sub (0x123456),A             reenc=c2 56 34 12 a9
+  aa  MNEMONIC  llvm=subdm8_24 (1193046), xde       uni=sub (0x123456),B             reenc=c2 56 34 12 aa
+  ab  MNEMONIC  llvm=subdm8_24 (1193046), xhl       uni=sub (0x123456),C             reenc=c2 56 34 12 ab
+  ac  MNEMONIC  llvm=subdm8_24 (1193046), xix       uni=sub (0x123456),D             reenc=c2 56 34 12 ac
+  ad  MNEMONIC  llvm=subdm8_24 (1193046), xiy       uni=sub (0x123456),E             reenc=c2 56 34 12 ad
+  ae  MNEMONIC  llvm=subdm8_24 (1193046), xiz       uni=sub (0x123456),H             reenc=c2 56 34 12 ae
+  af  MNEMONIC  llvm=subdm8_24 (1193046), xsp       uni=sub (0x123456),L             reenc=c2 56 34 12 af
+  c0  MNEMONIC  llvm=andda8_24 xwa, (1193046)       uni=and W,(0x123456)             reenc=c2 56 34 12 c0
+  c1  MNEMONIC  llvm=andda8_24 xbc, (1193046)       uni=and A,(0x123456)             reenc=c2 56 34 12 c1
+  c2  MNEMONIC  llvm=andda8_24 xde, (1193046)       uni=and B,(0x123456)             reenc=c2 56 34 12 c2
+  c3  MNEMONIC  llvm=andda8_24 xhl, (1193046)       uni=and C,(0x123456)             reenc=c2 56 34 12 c3
+  c4  MNEMONIC  llvm=andda8_24 xix, (1193046)       uni=and D,(0x123456)             reenc=c2 56 34 12 c4
+  c5  MNEMONIC  llvm=andda8_24 xiy, (1193046)       uni=and E,(0x123456)             reenc=c2 56 34 12 c5
+  c6  MNEMONIC  llvm=andda8_24 xiz, (1193046)       uni=and H,(0x123456)             reenc=c2 56 34 12 c6
+  c7  MNEMONIC  llvm=andda8_24 xsp, (1193046)       uni=and L,(0x123456)             reenc=c2 56 34 12 c7
+  c8  MNEMONIC  llvm=anddm8_24 (1193046), xwa       uni=and (0x123456),W             reenc=c2 56 34 12 c8
+  c9  MNEMONIC  llvm=anddm8_24 (1193046), xbc       uni=and (0x123456),A             reenc=c2 56 34 12 c9
+  ca  MNEMONIC  llvm=anddm8_24 (1193046), xde       uni=and (0x123456),B             reenc=c2 56 34 12 ca
+  cb  MNEMONIC  llvm=anddm8_24 (1193046), xhl       uni=and (0x123456),C             reenc=c2 56 34 12 cb
+  cc  MNEMONIC  llvm=anddm8_24 (1193046), xix       uni=and (0x123456),D             reenc=c2 56 34 12 cc
+  cd  MNEMONIC  llvm=anddm8_24 (1193046), xiy       uni=and (0x123456),E             reenc=c2 56 34 12 cd
+  ce  MNEMONIC  llvm=anddm8_24 (1193046), xiz       uni=and (0x123456),H             reenc=c2 56 34 12 ce
+  cf  MNEMONIC  llvm=anddm8_24 (1193046), xsp       uni=and (0x123456),L             reenc=c2 56 34 12 cf
+  d0  MNEMONIC  llvm=xorda8_24 xwa, (1193046)       uni=xor W,(0x123456)             reenc=c2 56 34 12 d0
+  d1  MNEMONIC  llvm=xorda8_24 xbc, (1193046)       uni=xor A,(0x123456)             reenc=c2 56 34 12 d1
+  d2  MNEMONIC  llvm=xorda8_24 xde, (1193046)       uni=xor B,(0x123456)             reenc=c2 56 34 12 d2
+  d3  MNEMONIC  llvm=xorda8_24 xhl, (1193046)       uni=xor C,(0x123456)             reenc=c2 56 34 12 d3
+  d4  MNEMONIC  llvm=xorda8_24 xix, (1193046)       uni=xor D,(0x123456)             reenc=c2 56 34 12 d4
+  d5  MNEMONIC  llvm=xorda8_24 xiy, (1193046)       uni=xor E,(0x123456)             reenc=c2 56 34 12 d5
+  d6  MNEMONIC  llvm=xorda8_24 xiz, (1193046)       uni=xor H,(0x123456)             reenc=c2 56 34 12 d6
+  d7  MNEMONIC  llvm=xorda8_24 xsp, (1193046)       uni=xor L,(0x123456)             reenc=c2 56 34 12 d7
+  d8  MNEMONIC  llvm=xordm8_24 (1193046), xwa       uni=xor (0x123456),W             reenc=c2 56 34 12 d8
+  d9  MNEMONIC  llvm=xordm8_24 (1193046), xbc       uni=xor (0x123456),A             reenc=c2 56 34 12 d9
+  da  MNEMONIC  llvm=xordm8_24 (1193046), xde       uni=xor (0x123456),B             reenc=c2 56 34 12 da
+  db  MNEMONIC  llvm=xordm8_24 (1193046), xhl       uni=xor (0x123456),C             reenc=c2 56 34 12 db
+  dc  MNEMONIC  llvm=xordm8_24 (1193046), xix       uni=xor (0x123456),D             reenc=c2 56 34 12 dc
+  dd  MNEMONIC  llvm=xordm8_24 (1193046), xiy       uni=xor (0x123456),E             reenc=c2 56 34 12 dd
+  de  MNEMONIC  llvm=xordm8_24 (1193046), xiz       uni=xor (0x123456),H             reenc=c2 56 34 12 de
+  df  MNEMONIC  llvm=xordm8_24 (1193046), xsp       uni=xor (0x123456),L             reenc=c2 56 34 12 df
+  e0  MNEMONIC  llvm=orda8_24 xwa, (1193046)        uni=or W,(0x123456)              reenc=c2 56 34 12 e0
+  e1  MNEMONIC  llvm=orda8_24 xbc, (1193046)        uni=or A,(0x123456)              reenc=c2 56 34 12 e1
+  e2  MNEMONIC  llvm=orda8_24 xde, (1193046)        uni=or B,(0x123456)              reenc=c2 56 34 12 e2
+  e3  MNEMONIC  llvm=orda8_24 xhl, (1193046)        uni=or C,(0x123456)              reenc=c2 56 34 12 e3
+  e4  MNEMONIC  llvm=orda8_24 xix, (1193046)        uni=or D,(0x123456)              reenc=c2 56 34 12 e4
+  e5  MNEMONIC  llvm=orda8_24 xiy, (1193046)        uni=or E,(0x123456)              reenc=c2 56 34 12 e5
+  e6  MNEMONIC  llvm=orda8_24 xiz, (1193046)        uni=or H,(0x123456)              reenc=c2 56 34 12 e6
+  e7  MNEMONIC  llvm=orda8_24 xsp, (1193046)        uni=or L,(0x123456)              reenc=c2 56 34 12 e7
+  e8  MNEMONIC  llvm=ordm8_24 (1193046), xwa        uni=or (0x123456),W              reenc=c2 56 34 12 e8
+  e9  MNEMONIC  llvm=ordm8_24 (1193046), xbc        uni=or (0x123456),A              reenc=c2 56 34 12 e9
+  ea  MNEMONIC  llvm=ordm8_24 (1193046), xde        uni=or (0x123456),B              reenc=c2 56 34 12 ea
+  eb  MNEMONIC  llvm=ordm8_24 (1193046), xhl        uni=or (0x123456),C              reenc=c2 56 34 12 eb
+  ec  MNEMONIC  llvm=ordm8_24 (1193046), xix        uni=or (0x123456),D              reenc=c2 56 34 12 ec
+  ed  MNEMONIC  llvm=ordm8_24 (1193046), xiy        uni=or (0x123456),E              reenc=c2 56 34 12 ed
+  ee  MNEMONIC  llvm=ordm8_24 (1193046), xiz        uni=or (0x123456),H              reenc=c2 56 34 12 ee
+  ef  MNEMONIC  llvm=ordm8_24 (1193046), xsp        uni=or (0x123456),L              reenc=c2 56 34 12 ef
+  f0  MNEMONIC  llvm=cpda8_24 xwa, (1193046)        uni=cp W,(0x123456)              reenc=c2 56 34 12 f0
+  f1  MNEMONIC  llvm=cpda8_24 xbc, (1193046)        uni=cp A,(0x123456)              reenc=c2 56 34 12 f1
+  f2  MNEMONIC  llvm=cpda8_24 xde, (1193046)        uni=cp B,(0x123456)              reenc=c2 56 34 12 f2
+  f3  MNEMONIC  llvm=cpda8_24 xhl, (1193046)        uni=cp C,(0x123456)              reenc=c2 56 34 12 f3
+  f4  MNEMONIC  llvm=cpda8_24 xix, (1193046)        uni=cp D,(0x123456)              reenc=c2 56 34 12 f4
+  f5  MNEMONIC  llvm=cpda8_24 xiy, (1193046)        uni=cp E,(0x123456)              reenc=c2 56 34 12 f5
+  f6  MNEMONIC  llvm=cpda8_24 xiz, (1193046)        uni=cp H,(0x123456)              reenc=c2 56 34 12 f6
+  f7  MNEMONIC  llvm=cpda8_24 xsp, (1193046)        uni=cp L,(0x123456)              reenc=c2 56 34 12 f7
+  f8  MNEMONIC  llvm=cpdm8_24 (1193046), xwa        uni=cp (0x123456),W              reenc=c2 56 34 12 f8
+  f9  MNEMONIC  llvm=cpdm8_24 (1193046), xbc        uni=cp (0x123456),A              reenc=c2 56 34 12 f9
+  fa  MNEMONIC  llvm=cpdm8_24 (1193046), xde        uni=cp (0x123456),B              reenc=c2 56 34 12 fa
+  fb  MNEMONIC  llvm=cpdm8_24 (1193046), xhl        uni=cp (0x123456),C              reenc=c2 56 34 12 fb
+  fc  MNEMONIC  llvm=cpdm8_24 (1193046), xix        uni=cp (0x123456),D              reenc=c2 56 34 12 fc
+  fd  MNEMONIC  llvm=cpdm8_24 (1193046), xiy        uni=cp (0x123456),E              reenc=c2 56 34 12 fd
+  fe  MNEMONIC  llvm=cpdm8_24 (1193046), xiz        uni=cp (0x123456),H              reenc=c2 56 34 12 fe
+  ff  MNEMONIC  llvm=cpdm8_24 (1193046), xsp        uni=cp (0x123456),L              reenc=c2 56 34 12 ff
+
+=== prefix D0 34 ===  AGREE 0  ASYM 8  MNEMONIC 0  LENGTH 0  LLVM-NONE 202  UNI-NONE 0  BOTH-NONE 46
+  20  ASYM      llvm=ld_sd8b wa, 52                 uni=ld WA,(0x34)                 reenc=REJECTED
+  21  ASYM      llvm=ld_sd8b bc, 52                 uni=ld BC,(0x34)                 reenc=REJECTED
+  22  ASYM      llvm=ld_sd8b de, 52                 uni=ld DE,(0x34)                 reenc=REJECTED
+  23  ASYM      llvm=ld_sd8b hl, 52                 uni=ld HL,(0x34)                 reenc=REJECTED
+  24  ASYM      llvm=ld_sd8b ix, 52                 uni=ld IX,(0x34)                 reenc=REJECTED
+  25  ASYM      llvm=ld_sd8b iy, 52                 uni=ld IY,(0x34)                 reenc=REJECTED
+  26  ASYM      llvm=ld_sd8b iz, 52                 uni=ld IZ,(0x34)                 reenc=REJECTED
+  27  ASYM      llvm=ld_sd8b sp, 52                 uni=ld SP,(0x34)                 reenc=REJECTED
+
+=== prefix D1 34 12 ===  AGREE 7  ASYM 1  MNEMONIC 110  LENGTH 0  LLVM-NONE 92  UNI-NONE 0  BOTH-NONE 46
+  19  MNEMONIC  llvm=ldmm16 0, 4660                 uni=ldw (0x0000),(0x1234)        reenc=d1 34 12 19 00 00
+  27  ASYM      llvm=ldw_d16 sp, (4660)             uni=ld SP,(0x1234)               reenc=REJECTED
+  38  MNEMONIC  llvm=adddi16 (4660), 0              uni=add (0x1234),0x0000          reenc=d1 34 12 38 00 00
+  3a  MNEMONIC  llvm=subdi16 (4660), 0              uni=sub (0x1234),0x0000          reenc=d1 34 12 3a 00 00
+  3c  MNEMONIC  llvm=anddi16 (4660), 0              uni=and (0x1234),0x0000          reenc=d1 34 12 3c 00 00
+  3e  MNEMONIC  llvm=ordi16 (4660), 0               uni=or (0x1234),0x0000           reenc=d1 34 12 3e 00 00
+  3f  MNEMONIC  llvm=cpdi16 (4660), 0               uni=cp (0x1234),0x0000           reenc=d1 34 12 3f 00 00
+  60  MNEMONIC  llvm=incdi16 8, (4660)              uni=incw 0,(0x1234)              reenc=d1 34 12 60
+  61  MNEMONIC  llvm=incdi16 1, (4660)              uni=incw 1,(0x1234)              reenc=d1 34 12 61
+  62  MNEMONIC  llvm=incdi16 2, (4660)              uni=incw 2,(0x1234)              reenc=d1 34 12 62
+  63  MNEMONIC  llvm=incdi16 3, (4660)              uni=incw 3,(0x1234)              reenc=d1 34 12 63
+  64  MNEMONIC  llvm=incdi16 4, (4660)              uni=incw 4,(0x1234)              reenc=d1 34 12 64
+  65  MNEMONIC  llvm=incdi16 5, (4660)              uni=incw 5,(0x1234)              reenc=d1 34 12 65
+  66  MNEMONIC  llvm=incdi16 6, (4660)              uni=incw 6,(0x1234)              reenc=d1 34 12 66
+  67  MNEMONIC  llvm=incdi16 7, (4660)              uni=incw 7,(0x1234)              reenc=d1 34 12 67
+  68  MNEMONIC  llvm=decdi16 8, (4660)              uni=decw 0,(0x1234)              reenc=d1 34 12 68
+  69  MNEMONIC  llvm=decdi16 1, (4660)              uni=decw 1,(0x1234)              reenc=d1 34 12 69
+  6a  MNEMONIC  llvm=decdi16 2, (4660)              uni=decw 2,(0x1234)              reenc=d1 34 12 6a
+  6b  MNEMONIC  llvm=decdi16 3, (4660)              uni=decw 3,(0x1234)              reenc=d1 34 12 6b
+  6c  MNEMONIC  llvm=decdi16 4, (4660)              uni=decw 4,(0x1234)              reenc=d1 34 12 6c
+  6d  MNEMONIC  llvm=decdi16 5, (4660)              uni=decw 5,(0x1234)              reenc=d1 34 12 6d
+  6e  MNEMONIC  llvm=decdi16 6, (4660)              uni=decw 6,(0x1234)              reenc=d1 34 12 6e
+  6f  MNEMONIC  llvm=decdi16 7, (4660)              uni=decw 7,(0x1234)              reenc=d1 34 12 6f
+  80  MNEMONIC  llvm=addda16 xwa, (4660)            uni=add WA,(0x1234)              reenc=d1 34 12 80
+  81  MNEMONIC  llvm=addda16 xbc, (4660)            uni=add BC,(0x1234)              reenc=d1 34 12 81
+  82  MNEMONIC  llvm=addda16 xde, (4660)            uni=add DE,(0x1234)              reenc=d1 34 12 82
+  83  MNEMONIC  llvm=addda16 xhl, (4660)            uni=add HL,(0x1234)              reenc=d1 34 12 83
+  84  MNEMONIC  llvm=addda16 xix, (4660)            uni=add IX,(0x1234)              reenc=d1 34 12 84
+  85  MNEMONIC  llvm=addda16 xiy, (4660)            uni=add IY,(0x1234)              reenc=d1 34 12 85
+  86  MNEMONIC  llvm=addda16 xiz, (4660)            uni=add IZ,(0x1234)              reenc=d1 34 12 86
+  87  MNEMONIC  llvm=addda16 xsp, (4660)            uni=add SP,(0x1234)              reenc=d1 34 12 87
+  88  MNEMONIC  llvm=adddm16 (4660), xwa            uni=add (0x1234),WA              reenc=d1 34 12 88
+  89  MNEMONIC  llvm=adddm16 (4660), xbc            uni=add (0x1234),BC              reenc=d1 34 12 89
+  8a  MNEMONIC  llvm=adddm16 (4660), xde            uni=add (0x1234),DE              reenc=d1 34 12 8a
+  8b  MNEMONIC  llvm=adddm16 (4660), xhl            uni=add (0x1234),HL              reenc=d1 34 12 8b
+  8c  MNEMONIC  llvm=adddm16 (4660), xix            uni=add (0x1234),IX              reenc=d1 34 12 8c
+  8d  MNEMONIC  llvm=adddm16 (4660), xiy            uni=add (0x1234),IY              reenc=d1 34 12 8d
+  8e  MNEMONIC  llvm=adddm16 (4660), xiz            uni=add (0x1234),IZ              reenc=d1 34 12 8e
+  8f  MNEMONIC  llvm=adddm16 (4660), xsp            uni=add (0x1234),SP              reenc=d1 34 12 8f
+  a0  MNEMONIC  llvm=subda16 xwa, (4660)            uni=sub WA,(0x1234)              reenc=d1 34 12 a0
+  a1  MNEMONIC  llvm=subda16 xbc, (4660)            uni=sub BC,(0x1234)              reenc=d1 34 12 a1
+  a2  MNEMONIC  llvm=subda16 xde, (4660)            uni=sub DE,(0x1234)              reenc=d1 34 12 a2
+  a3  MNEMONIC  llvm=subda16 xhl, (4660)            uni=sub HL,(0x1234)              reenc=d1 34 12 a3
+  a4  MNEMONIC  llvm=subda16 xix, (4660)            uni=sub IX,(0x1234)              reenc=d1 34 12 a4
+  a5  MNEMONIC  llvm=subda16 xiy, (4660)            uni=sub IY,(0x1234)              reenc=d1 34 12 a5
+  a6  MNEMONIC  llvm=subda16 xiz, (4660)            uni=sub IZ,(0x1234)              reenc=d1 34 12 a6
+  a7  MNEMONIC  llvm=subda16 xsp, (4660)            uni=sub SP,(0x1234)              reenc=d1 34 12 a7
+  a8  MNEMONIC  llvm=subdm16 (4660), xwa            uni=sub (0x1234),WA              reenc=d1 34 12 a8
+  a9  MNEMONIC  llvm=subdm16 (4660), xbc            uni=sub (0x1234),BC              reenc=d1 34 12 a9
+  aa  MNEMONIC  llvm=subdm16 (4660), xde            uni=sub (0x1234),DE              reenc=d1 34 12 aa
+  ab  MNEMONIC  llvm=subdm16 (4660), xhl            uni=sub (0x1234),HL              reenc=d1 34 12 ab
+  ac  MNEMONIC  llvm=subdm16 (4660), xix            uni=sub (0x1234),IX              reenc=d1 34 12 ac
+  ad  MNEMONIC  llvm=subdm16 (4660), xiy            uni=sub (0x1234),IY              reenc=d1 34 12 ad
+  ae  MNEMONIC  llvm=subdm16 (4660), xiz            uni=sub (0x1234),IZ              reenc=d1 34 12 ae
+  af  MNEMONIC  llvm=subdm16 (4660), xsp            uni=sub (0x1234),SP              reenc=d1 34 12 af
+  c0  MNEMONIC  llvm=andda16 xwa, (4660)            uni=and WA,(0x1234)              reenc=d1 34 12 c0
+  c1  MNEMONIC  llvm=andda16 xbc, (4660)            uni=and BC,(0x1234)              reenc=d1 34 12 c1
+  c2  MNEMONIC  llvm=andda16 xde, (4660)            uni=and DE,(0x1234)              reenc=d1 34 12 c2
+  c3  MNEMONIC  llvm=andda16 xhl, (4660)            uni=and HL,(0x1234)              reenc=d1 34 12 c3
+  c4  MNEMONIC  llvm=andda16 xix, (4660)            uni=and IX,(0x1234)              reenc=d1 34 12 c4
+  c5  MNEMONIC  llvm=andda16 xiy, (4660)            uni=and IY,(0x1234)              reenc=d1 34 12 c5
+  c6  MNEMONIC  llvm=andda16 xiz, (4660)            uni=and IZ,(0x1234)              reenc=d1 34 12 c6
+  c7  MNEMONIC  llvm=andda16 xsp, (4660)            uni=and SP,(0x1234)              reenc=d1 34 12 c7
+  c8  MNEMONIC  llvm=anddm16 (4660), xwa            uni=and (0x1234),WA              reenc=d1 34 12 c8
+  c9  MNEMONIC  llvm=anddm16 (4660), xbc            uni=and (0x1234),BC              reenc=d1 34 12 c9
+  ca  MNEMONIC  llvm=anddm16 (4660), xde            uni=and (0x1234),DE              reenc=d1 34 12 ca
+  cb  MNEMONIC  llvm=anddm16 (4660), xhl            uni=and (0x1234),HL              reenc=d1 34 12 cb
+  cc  MNEMONIC  llvm=anddm16 (4660), xix            uni=and (0x1234),IX              reenc=d1 34 12 cc
+  cd  MNEMONIC  llvm=anddm16 (4660), xiy            uni=and (0x1234),IY              reenc=d1 34 12 cd
+  ce  MNEMONIC  llvm=anddm16 (4660), xiz            uni=and (0x1234),IZ              reenc=d1 34 12 ce
+  cf  MNEMONIC  llvm=anddm16 (4660), xsp            uni=and (0x1234),SP              reenc=d1 34 12 cf
+  d8  MNEMONIC  llvm=xordm16 (4660), xwa            uni=xor (0x1234),WA              reenc=d1 34 12 d8
+  d9  MNEMONIC  llvm=xordm16 (4660), xbc            uni=xor (0x1234),BC              reenc=d1 34 12 d9
+  da  MNEMONIC  llvm=xordm16 (4660), xde            uni=xor (0x1234),DE              reenc=d1 34 12 da
+  db  MNEMONIC  llvm=xordm16 (4660), xhl            uni=xor (0x1234),HL              reenc=d1 34 12 db
+  dc  MNEMONIC  llvm=xordm16 (4660), xix            uni=xor (0x1234),IX              reenc=d1 34 12 dc
+  dd  MNEMONIC  llvm=xordm16 (4660), xiy            uni=xor (0x1234),IY              reenc=d1 34 12 dd
+  de  MNEMONIC  llvm=xordm16 (4660), xiz            uni=xor (0x1234),IZ              reenc=d1 34 12 de
+  df  MNEMONIC  llvm=xordm16 (4660), xsp            uni=xor (0x1234),SP              reenc=d1 34 12 df
+  e0  MNEMONIC  llvm=orda16 xwa, (4660)             uni=or WA,(0x1234)               reenc=d1 34 12 e0
+  e1  MNEMONIC  llvm=orda16 xbc, (4660)             uni=or BC,(0x1234)               reenc=d1 34 12 e1
+  e2  MNEMONIC  llvm=orda16 xde, (4660)             uni=or DE,(0x1234)               reenc=d1 34 12 e2
+  e3  MNEMONIC  llvm=orda16 xhl, (4660)             uni=or HL,(0x1234)               reenc=d1 34 12 e3
+  e4  MNEMONIC  llvm=orda16 xix, (4660)             uni=or IX,(0x1234)               reenc=d1 34 12 e4
+  e5  MNEMONIC  llvm=orda16 xiy, (4660)             uni=or IY,(0x1234)               reenc=d1 34 12 e5
+  e6  MNEMONIC  llvm=orda16 xiz, (4660)             uni=or IZ,(0x1234)               reenc=d1 34 12 e6
+  e7  MNEMONIC  llvm=orda16 xsp, (4660)             uni=or SP,(0x1234)               reenc=d1 34 12 e7
+  e8  MNEMONIC  llvm=orddm16 (4660), xwa            uni=or (0x1234),WA               reenc=d1 34 12 e8
+  e9  MNEMONIC  llvm=orddm16 (4660), xbc            uni=or (0x1234),BC               reenc=d1 34 12 e9
+  ea  MNEMONIC  llvm=orddm16 (4660), xde            uni=or (0x1234),DE               reenc=d1 34 12 ea
+  eb  MNEMONIC  llvm=orddm16 (4660), xhl            uni=or (0x1234),HL               reenc=d1 34 12 eb
+  ec  MNEMONIC  llvm=orddm16 (4660), xix            uni=or (0x1234),IX               reenc=d1 34 12 ec
+  ed  MNEMONIC  llvm=orddm16 (4660), xiy            uni=or (0x1234),IY               reenc=d1 34 12 ed
+  ee  MNEMONIC  llvm=orddm16 (4660), xiz            uni=or (0x1234),IZ               reenc=d1 34 12 ee
+  ef  MNEMONIC  llvm=orddm16 (4660), xsp            uni=or (0x1234),SP               reenc=d1 34 12 ef
+  f0  MNEMONIC  llvm=cpda16 xwa, (4660)             uni=cp WA,(0x1234)               reenc=d1 34 12 f0
+  f1  MNEMONIC  llvm=cpda16 xbc, (4660)             uni=cp BC,(0x1234)               reenc=d1 34 12 f1
+  f2  MNEMONIC  llvm=cpda16 xde, (4660)             uni=cp DE,(0x1234)               reenc=d1 34 12 f2
+  f3  MNEMONIC  llvm=cpda16 xhl, (4660)             uni=cp HL,(0x1234)               reenc=d1 34 12 f3
+  f4  MNEMONIC  llvm=cpda16 xix, (4660)             uni=cp IX,(0x1234)               reenc=d1 34 12 f4
+  f5  MNEMONIC  llvm=cpda16 xiy, (4660)             uni=cp IY,(0x1234)               reenc=d1 34 12 f5
+  f6  MNEMONIC  llvm=cpda16 xiz, (4660)             uni=cp IZ,(0x1234)               reenc=d1 34 12 f6
+  f7  MNEMONIC  llvm=cpda16 xsp, (4660)             uni=cp SP,(0x1234)               reenc=d1 34 12 f7
+  f8  MNEMONIC  llvm=cpdm16 (4660), xwa             uni=cp (0x1234),WA               reenc=d1 34 12 f8
+  f9  MNEMONIC  llvm=cpdm16 (4660), xbc             uni=cp (0x1234),BC               reenc=d1 34 12 f9
+  fa  MNEMONIC  llvm=cpdm16 (4660), xde             uni=cp (0x1234),DE               reenc=d1 34 12 fa
+  fb  MNEMONIC  llvm=cpdm16 (4660), xhl             uni=cp (0x1234),HL               reenc=d1 34 12 fb
+  fc  MNEMONIC  llvm=cpdm16 (4660), xix             uni=cp (0x1234),IX               reenc=d1 34 12 fc
+  fd  MNEMONIC  llvm=cpdm16 (4660), xiy             uni=cp (0x1234),IY               reenc=d1 34 12 fd
+  fe  MNEMONIC  llvm=cpdm16 (4660), xiz             uni=cp (0x1234),IZ               reenc=d1 34 12 fe
+  ff  MNEMONIC  llvm=cpdm16 (4660), xsp             uni=cp (0x1234),SP               reenc=d1 34 12 ff
+
+=== prefix D2 56 34 12 ===  AGREE 8  ASYM 1  MNEMONIC 108  LENGTH 0  LLVM-NONE 93  UNI-NONE 0  BOTH-NONE 46
+  27  ASYM      llvm=ldw_da sp, (1193046)           uni=ld SP,(0x123456)             reenc=REJECTED
+  38  MNEMONIC  llvm=adddi16_24 (1193046), 0        uni=add (0x123456),0x0000        reenc=d2 56 34 12 38 00 00
+  3a  MNEMONIC  llvm=subdi16_24 (1193046), 0        uni=sub (0x123456),0x0000        reenc=d2 56 34 12 3a 00 00
+  3c  MNEMONIC  llvm=anddi16_24 (1193046), 0        uni=and (0x123456),0x0000        reenc=d2 56 34 12 3c 00 00
+  3e  MNEMONIC  llvm=ordi16_24 (1193046), 0         uni=or (0x123456),0x0000         reenc=d2 56 34 12 3e 00 00
+  60  MNEMONIC  llvm=incdi16_24 8, (1193046)        uni=incw 0,(0x123456)            reenc=d2 56 34 12 60
+  61  MNEMONIC  llvm=incdi16_24 1, (1193046)        uni=incw 1,(0x123456)            reenc=d2 56 34 12 61
+  62  MNEMONIC  llvm=incdi16_24 2, (1193046)        uni=incw 2,(0x123456)            reenc=d2 56 34 12 62
+  63  MNEMONIC  llvm=incdi16_24 3, (1193046)        uni=incw 3,(0x123456)            reenc=d2 56 34 12 63
+  64  MNEMONIC  llvm=incdi16_24 4, (1193046)        uni=incw 4,(0x123456)            reenc=d2 56 34 12 64
+  65  MNEMONIC  llvm=incdi16_24 5, (1193046)        uni=incw 5,(0x123456)            reenc=d2 56 34 12 65
+  66  MNEMONIC  llvm=incdi16_24 6, (1193046)        uni=incw 6,(0x123456)            reenc=d2 56 34 12 66
+  67  MNEMONIC  llvm=incdi16_24 7, (1193046)        uni=incw 7,(0x123456)            reenc=d2 56 34 12 67
+  68  MNEMONIC  llvm=decdi16_24 8, (1193046)        uni=decw 0,(0x123456)            reenc=d2 56 34 12 68
+  69  MNEMONIC  llvm=decdi16_24 1, (1193046)        uni=decw 1,(0x123456)            reenc=d2 56 34 12 69
+  6a  MNEMONIC  llvm=decdi16_24 2, (1193046)        uni=decw 2,(0x123456)            reenc=d2 56 34 12 6a
+  6b  MNEMONIC  llvm=decdi16_24 3, (1193046)        uni=decw 3,(0x123456)            reenc=d2 56 34 12 6b
+  6c  MNEMONIC  llvm=decdi16_24 4, (1193046)        uni=decw 4,(0x123456)            reenc=d2 56 34 12 6c
+  6d  MNEMONIC  llvm=decdi16_24 5, (1193046)        uni=decw 5,(0x123456)            reenc=d2 56 34 12 6d
+  6e  MNEMONIC  llvm=decdi16_24 6, (1193046)        uni=decw 6,(0x123456)            reenc=d2 56 34 12 6e
+  6f  MNEMONIC  llvm=decdi16_24 7, (1193046)        uni=decw 7,(0x123456)            reenc=d2 56 34 12 6f
+  80  MNEMONIC  llvm=addda16_24 xwa, (1193046)      uni=add WA,(0x123456)            reenc=d2 56 34 12 80
+  81  MNEMONIC  llvm=addda16_24 xbc, (1193046)      uni=add BC,(0x123456)            reenc=d2 56 34 12 81
+  82  MNEMONIC  llvm=addda16_24 xde, (1193046)      uni=add DE,(0x123456)            reenc=d2 56 34 12 82
+  83  MNEMONIC  llvm=addda16_24 xhl, (1193046)      uni=add HL,(0x123456)            reenc=d2 56 34 12 83
+  84  MNEMONIC  llvm=addda16_24 xix, (1193046)      uni=add IX,(0x123456)            reenc=d2 56 34 12 84
+  85  MNEMONIC  llvm=addda16_24 xiy, (1193046)      uni=add IY,(0x123456)            reenc=d2 56 34 12 85
+  86  MNEMONIC  llvm=addda16_24 xiz, (1193046)      uni=add IZ,(0x123456)            reenc=d2 56 34 12 86
+  87  MNEMONIC  llvm=addda16_24 xsp, (1193046)      uni=add SP,(0x123456)            reenc=d2 56 34 12 87
+  88  MNEMONIC  llvm=adddm16_24 (1193046), xwa      uni=add (0x123456),WA            reenc=d2 56 34 12 88
+  89  MNEMONIC  llvm=adddm16_24 (1193046), xbc      uni=add (0x123456),BC            reenc=d2 56 34 12 89
+  8a  MNEMONIC  llvm=adddm16_24 (1193046), xde      uni=add (0x123456),DE            reenc=d2 56 34 12 8a
+  8b  MNEMONIC  llvm=adddm16_24 (1193046), xhl      uni=add (0x123456),HL            reenc=d2 56 34 12 8b
+  8c  MNEMONIC  llvm=adddm16_24 (1193046), xix      uni=add (0x123456),IX            reenc=d2 56 34 12 8c
+  8d  MNEMONIC  llvm=adddm16_24 (1193046), xiy      uni=add (0x123456),IY            reenc=d2 56 34 12 8d
+  8e  MNEMONIC  llvm=adddm16_24 (1193046), xiz      uni=add (0x123456),IZ            reenc=d2 56 34 12 8e
+  8f  MNEMONIC  llvm=adddm16_24 (1193046), xsp      uni=add (0x123456),SP            reenc=d2 56 34 12 8f
+  a0  MNEMONIC  llvm=subda16_24 xwa, (1193046)      uni=sub WA,(0x123456)            reenc=d2 56 34 12 a0
+  a1  MNEMONIC  llvm=subda16_24 xbc, (1193046)      uni=sub BC,(0x123456)            reenc=d2 56 34 12 a1
+  a2  MNEMONIC  llvm=subda16_24 xde, (1193046)      uni=sub DE,(0x123456)            reenc=d2 56 34 12 a2
+  a3  MNEMONIC  llvm=subda16_24 xhl, (1193046)      uni=sub HL,(0x123456)            reenc=d2 56 34 12 a3
+  a4  MNEMONIC  llvm=subda16_24 xix, (1193046)      uni=sub IX,(0x123456)            reenc=d2 56 34 12 a4
+  a5  MNEMONIC  llvm=subda16_24 xiy, (1193046)      uni=sub IY,(0x123456)            reenc=d2 56 34 12 a5
+  a6  MNEMONIC  llvm=subda16_24 xiz, (1193046)      uni=sub IZ,(0x123456)            reenc=d2 56 34 12 a6
+  a7  MNEMONIC  llvm=subda16_24 xsp, (1193046)      uni=sub SP,(0x123456)            reenc=d2 56 34 12 a7
+  a8  MNEMONIC  llvm=subdm16_24 (1193046), xwa      uni=sub (0x123456),WA            reenc=d2 56 34 12 a8
+  a9  MNEMONIC  llvm=subdm16_24 (1193046), xbc      uni=sub (0x123456),BC            reenc=d2 56 34 12 a9
+  aa  MNEMONIC  llvm=subdm16_24 (1193046), xde      uni=sub (0x123456),DE            reenc=d2 56 34 12 aa
+  ab  MNEMONIC  llvm=subdm16_24 (1193046), xhl      uni=sub (0x123456),HL            reenc=d2 56 34 12 ab
+  ac  MNEMONIC  llvm=subdm16_24 (1193046), xix      uni=sub (0x123456),IX            reenc=d2 56 34 12 ac
+  ad  MNEMONIC  llvm=subdm16_24 (1193046), xiy      uni=sub (0x123456),IY            reenc=d2 56 34 12 ad
+  ae  MNEMONIC  llvm=subdm16_24 (1193046), xiz      uni=sub (0x123456),IZ            reenc=d2 56 34 12 ae
+  af  MNEMONIC  llvm=subdm16_24 (1193046), xsp      uni=sub (0x123456),SP            reenc=d2 56 34 12 af
+  c0  MNEMONIC  llvm=andda16_24 xwa, (1193046)      uni=and WA,(0x123456)            reenc=d2 56 34 12 c0
+  c1  MNEMONIC  llvm=andda16_24 xbc, (1193046)      uni=and BC,(0x123456)            reenc=d2 56 34 12 c1
+  c2  MNEMONIC  llvm=andda16_24 xde, (1193046)      uni=and DE,(0x123456)            reenc=d2 56 34 12 c2
+  c3  MNEMONIC  llvm=andda16_24 xhl, (1193046)      uni=and HL,(0x123456)            reenc=d2 56 34 12 c3
+  c4  MNEMONIC  llvm=andda16_24 xix, (1193046)      uni=and IX,(0x123456)            reenc=d2 56 34 12 c4
+  c5  MNEMONIC  llvm=andda16_24 xiy, (1193046)      uni=and IY,(0x123456)            reenc=d2 56 34 12 c5
+  c6  MNEMONIC  llvm=andda16_24 xiz, (1193046)      uni=and IZ,(0x123456)            reenc=d2 56 34 12 c6
+  c7  MNEMONIC  llvm=andda16_24 xsp, (1193046)      uni=and SP,(0x123456)            reenc=d2 56 34 12 c7
+  c8  MNEMONIC  llvm=anddm16_24 (1193046), xwa      uni=and (0x123456),WA            reenc=d2 56 34 12 c8
+  c9  MNEMONIC  llvm=anddm16_24 (1193046), xbc      uni=and (0x123456),BC            reenc=d2 56 34 12 c9
+  ca  MNEMONIC  llvm=anddm16_24 (1193046), xde      uni=and (0x123456),DE            reenc=d2 56 34 12 ca
+  cb  MNEMONIC  llvm=anddm16_24 (1193046), xhl      uni=and (0x123456),HL            reenc=d2 56 34 12 cb
+  cc  MNEMONIC  llvm=anddm16_24 (1193046), xix      uni=and (0x123456),IX            reenc=d2 56 34 12 cc
+  cd  MNEMONIC  llvm=anddm16_24 (1193046), xiy      uni=and (0x123456),IY            reenc=d2 56 34 12 cd
+  ce  MNEMONIC  llvm=anddm16_24 (1193046), xiz      uni=and (0x123456),IZ            reenc=d2 56 34 12 ce
+  cf  MNEMONIC  llvm=anddm16_24 (1193046), xsp      uni=and (0x123456),SP            reenc=d2 56 34 12 cf
+  d8  MNEMONIC  llvm=xordm16_24 (1193046), xwa      uni=xor (0x123456),WA            reenc=d2 56 34 12 d8
+  d9  MNEMONIC  llvm=xordm16_24 (1193046), xbc      uni=xor (0x123456),BC            reenc=d2 56 34 12 d9
+  da  MNEMONIC  llvm=xordm16_24 (1193046), xde      uni=xor (0x123456),DE            reenc=d2 56 34 12 da
+  db  MNEMONIC  llvm=xordm16_24 (1193046), xhl      uni=xor (0x123456),HL            reenc=d2 56 34 12 db
+  dc  MNEMONIC  llvm=xordm16_24 (1193046), xix      uni=xor (0x123456),IX            reenc=d2 56 34 12 dc
+  dd  MNEMONIC  llvm=xordm16_24 (1193046), xiy      uni=xor (0x123456),IY            reenc=d2 56 34 12 dd
+  de  MNEMONIC  llvm=xordm16_24 (1193046), xiz      uni=xor (0x123456),IZ            reenc=d2 56 34 12 de
+  df  MNEMONIC  llvm=xordm16_24 (1193046), xsp      uni=xor (0x123456),SP            reenc=d2 56 34 12 df
+  e0  MNEMONIC  llvm=orda16_24 xwa, (1193046)       uni=or WA,(0x123456)             reenc=d2 56 34 12 e0
+  e1  MNEMONIC  llvm=orda16_24 xbc, (1193046)       uni=or BC,(0x123456)             reenc=d2 56 34 12 e1
+  e2  MNEMONIC  llvm=orda16_24 xde, (1193046)       uni=or DE,(0x123456)             reenc=d2 56 34 12 e2
+  e3  MNEMONIC  llvm=orda16_24 xhl, (1193046)       uni=or HL,(0x123456)             reenc=d2 56 34 12 e3
+  e4  MNEMONIC  llvm=orda16_24 xix, (1193046)       uni=or IX,(0x123456)             reenc=d2 56 34 12 e4
+  e5  MNEMONIC  llvm=orda16_24 xiy, (1193046)       uni=or IY,(0x123456)             reenc=d2 56 34 12 e5
+  e6  MNEMONIC  llvm=orda16_24 xiz, (1193046)       uni=or IZ,(0x123456)             reenc=d2 56 34 12 e6
+  e7  MNEMONIC  llvm=orda16_24 xsp, (1193046)       uni=or SP,(0x123456)             reenc=d2 56 34 12 e7
+  e8  MNEMONIC  llvm=ordm16_24 (1193046), xwa       uni=or (0x123456),WA             reenc=d2 56 34 12 e8
+  e9  MNEMONIC  llvm=ordm16_24 (1193046), xbc       uni=or (0x123456),BC             reenc=d2 56 34 12 e9
+  ea  MNEMONIC  llvm=ordm16_24 (1193046), xde       uni=or (0x123456),DE             reenc=d2 56 34 12 ea
+  eb  MNEMONIC  llvm=ordm16_24 (1193046), xhl       uni=or (0x123456),HL             reenc=d2 56 34 12 eb
+  ec  MNEMONIC  llvm=ordm16_24 (1193046), xix       uni=or (0x123456),IX             reenc=d2 56 34 12 ec
+  ed  MNEMONIC  llvm=ordm16_24 (1193046), xiy       uni=or (0x123456),IY             reenc=d2 56 34 12 ed
+  ee  MNEMONIC  llvm=ordm16_24 (1193046), xiz       uni=or (0x123456),IZ             reenc=d2 56 34 12 ee
+  ef  MNEMONIC  llvm=ordm16_24 (1193046), xsp       uni=or (0x123456),SP             reenc=d2 56 34 12 ef
+  f0  MNEMONIC  llvm=cpda16_24 xwa, (1193046)       uni=cp WA,(0x123456)             reenc=d2 56 34 12 f0
+  f1  MNEMONIC  llvm=cpda16_24 xbc, (1193046)       uni=cp BC,(0x123456)             reenc=d2 56 34 12 f1
+  f2  MNEMONIC  llvm=cpda16_24 xde, (1193046)       uni=cp DE,(0x123456)             reenc=d2 56 34 12 f2
+  f3  MNEMONIC  llvm=cpda16_24 xhl, (1193046)       uni=cp HL,(0x123456)             reenc=d2 56 34 12 f3
+  f4  MNEMONIC  llvm=cpda16_24 xix, (1193046)       uni=cp IX,(0x123456)             reenc=d2 56 34 12 f4
+  f5  MNEMONIC  llvm=cpda16_24 xiy, (1193046)       uni=cp IY,(0x123456)             reenc=d2 56 34 12 f5
+  f6  MNEMONIC  llvm=cpda16_24 xiz, (1193046)       uni=cp IZ,(0x123456)             reenc=d2 56 34 12 f6
+  f7  MNEMONIC  llvm=cpda16_24 xsp, (1193046)       uni=cp SP,(0x123456)             reenc=d2 56 34 12 f7
+  f8  MNEMONIC  llvm=cpdm16_24 (1193046), xwa       uni=cp (0x123456),WA             reenc=d2 56 34 12 f8
+  f9  MNEMONIC  llvm=cpdm16_24 (1193046), xbc       uni=cp (0x123456),BC             reenc=d2 56 34 12 f9
+  fa  MNEMONIC  llvm=cpdm16_24 (1193046), xde       uni=cp (0x123456),DE             reenc=d2 56 34 12 fa
+  fb  MNEMONIC  llvm=cpdm16_24 (1193046), xhl       uni=cp (0x123456),HL             reenc=d2 56 34 12 fb
+  fc  MNEMONIC  llvm=cpdm16_24 (1193046), xix       uni=cp (0x123456),IX             reenc=d2 56 34 12 fc
+  fd  MNEMONIC  llvm=cpdm16_24 (1193046), xiy       uni=cp (0x123456),IY             reenc=d2 56 34 12 fd
+  fe  MNEMONIC  llvm=cpdm16_24 (1193046), xiz       uni=cp (0x123456),IZ             reenc=d2 56 34 12 fe
+  ff  MNEMONIC  llvm=cpdm16_24 (1193046), xsp       uni=cp (0x123456),SP             reenc=d2 56 34 12 ff
+
+=== prefix E0 34 ===  AGREE 0  ASYM 8  MNEMONIC 0  LENGTH 0  LLVM-NONE 128  UNI-NONE 0  BOTH-NONE 120
+  20  ASYM      llvm=ld_sd8b xwa, 52                uni=ld XWA,(0x34)                reenc=REJECTED
+  21  ASYM      llvm=ld_sd8b xbc, 52                uni=ld XBC,(0x34)                reenc=REJECTED
+  22  ASYM      llvm=ld_sd8b xde, 52                uni=ld XDE,(0x34)                reenc=REJECTED
+  23  ASYM      llvm=ld_sd8b xhl, 52                uni=ld XHL,(0x34)                reenc=REJECTED
+  24  ASYM      llvm=ld_sd8b xix, 52                uni=ld XIX,(0x34)                reenc=REJECTED
+  25  ASYM      llvm=ld_sd8b xiy, 52                uni=ld XIY,(0x34)                reenc=REJECTED
+  26  ASYM      llvm=ld_sd8b xiz, 52                uni=ld XIZ,(0x34)                reenc=REJECTED
+  27  ASYM      llvm=ld_sd8b xsp, 52                uni=ld XSP,(0x34)                reenc=REJECTED
+
+=== prefix E1 34 12 ===  AGREE 0  ASYM 0  MNEMONIC 56  LENGTH 0  LLVM-NONE 80  UNI-NONE 0  BOTH-NONE 120
+  20  MNEMONIC  llvm=ldda32 xwa, (4660)             uni=ld XWA,(0x1234)              reenc=e1 34 12 20
+  21  MNEMONIC  llvm=ldda32 xbc, (4660)             uni=ld XBC,(0x1234)              reenc=e1 34 12 21
+  22  MNEMONIC  llvm=ldda32 xde, (4660)             uni=ld XDE,(0x1234)              reenc=e1 34 12 22
+  23  MNEMONIC  llvm=ldda32 xhl, (4660)             uni=ld XHL,(0x1234)              reenc=e1 34 12 23
+  24  MNEMONIC  llvm=ldda32 xix, (4660)             uni=ld XIX,(0x1234)              reenc=e1 34 12 24
+  25  MNEMONIC  llvm=ldda32 xiy, (4660)             uni=ld XIY,(0x1234)              reenc=e1 34 12 25
+  26  MNEMONIC  llvm=ldda32 xiz, (4660)             uni=ld XIZ,(0x1234)              reenc=e1 34 12 26
+  27  MNEMONIC  llvm=ldda32 xsp, (4660)             uni=ld XSP,(0x1234)              reenc=e1 34 12 27
+  80  MNEMONIC  llvm=addda32 xwa, (4660)            uni=add XWA,(0x1234)             reenc=e1 34 12 80
+  81  MNEMONIC  llvm=addda32 xbc, (4660)            uni=add XBC,(0x1234)             reenc=e1 34 12 81
+  82  MNEMONIC  llvm=addda32 xde, (4660)            uni=add XDE,(0x1234)             reenc=e1 34 12 82
+  83  MNEMONIC  llvm=addda32 xhl, (4660)            uni=add XHL,(0x1234)             reenc=e1 34 12 83
+  84  MNEMONIC  llvm=addda32 xix, (4660)            uni=add XIX,(0x1234)             reenc=e1 34 12 84
+  85  MNEMONIC  llvm=addda32 xiy, (4660)            uni=add XIY,(0x1234)             reenc=e1 34 12 85
+  86  MNEMONIC  llvm=addda32 xiz, (4660)            uni=add XIZ,(0x1234)             reenc=e1 34 12 86
+  87  MNEMONIC  llvm=addda32 xsp, (4660)            uni=add XSP,(0x1234)             reenc=e1 34 12 87
+  88  MNEMONIC  llvm=adddm32 (4660), xwa            uni=add (0x1234),XWA             reenc=e1 34 12 88
+  89  MNEMONIC  llvm=adddm32 (4660), xbc            uni=add (0x1234),XBC             reenc=e1 34 12 89
+  8a  MNEMONIC  llvm=adddm32 (4660), xde            uni=add (0x1234),XDE             reenc=e1 34 12 8a
+  8b  MNEMONIC  llvm=adddm32 (4660), xhl            uni=add (0x1234),XHL             reenc=e1 34 12 8b
+  8c  MNEMONIC  llvm=adddm32 (4660), xix            uni=add (0x1234),XIX             reenc=e1 34 12 8c
+  8d  MNEMONIC  llvm=adddm32 (4660), xiy            uni=add (0x1234),XIY             reenc=e1 34 12 8d
+  8e  MNEMONIC  llvm=adddm32 (4660), xiz            uni=add (0x1234),XIZ             reenc=e1 34 12 8e
+  8f  MNEMONIC  llvm=adddm32 (4660), xsp            uni=add (0x1234),XSP             reenc=e1 34 12 8f
+  a0  MNEMONIC  llvm=subda32 xwa, (4660)            uni=sub XWA,(0x1234)             reenc=e1 34 12 a0
+  a1  MNEMONIC  llvm=subda32 xbc, (4660)            uni=sub XBC,(0x1234)             reenc=e1 34 12 a1
+  a2  MNEMONIC  llvm=subda32 xde, (4660)            uni=sub XDE,(0x1234)             reenc=e1 34 12 a2
+  a3  MNEMONIC  llvm=subda32 xhl, (4660)            uni=sub XHL,(0x1234)             reenc=e1 34 12 a3
+  a4  MNEMONIC  llvm=subda32 xix, (4660)            uni=sub XIX,(0x1234)             reenc=e1 34 12 a4
+  a5  MNEMONIC  llvm=subda32 xiy, (4660)            uni=sub XIY,(0x1234)             reenc=e1 34 12 a5
+  a6  MNEMONIC  llvm=subda32 xiz, (4660)            uni=sub XIZ,(0x1234)             reenc=e1 34 12 a6
+  a7  MNEMONIC  llvm=subda32 xsp, (4660)            uni=sub XSP,(0x1234)             reenc=e1 34 12 a7
+  a8  MNEMONIC  llvm=subdm32 (4660), xwa            uni=sub (0x1234),XWA             reenc=e1 34 12 a8
+  a9  MNEMONIC  llvm=subdm32 (4660), xbc            uni=sub (0x1234),XBC             reenc=e1 34 12 a9
+  aa  MNEMONIC  llvm=subdm32 (4660), xde            uni=sub (0x1234),XDE             reenc=e1 34 12 aa
+  ab  MNEMONIC  llvm=subdm32 (4660), xhl            uni=sub (0x1234),XHL             reenc=e1 34 12 ab
+  ac  MNEMONIC  llvm=subdm32 (4660), xix            uni=sub (0x1234),XIX             reenc=e1 34 12 ac
+  ad  MNEMONIC  llvm=subdm32 (4660), xiy            uni=sub (0x1234),XIY             reenc=e1 34 12 ad
+  ae  MNEMONIC  llvm=subdm32 (4660), xiz            uni=sub (0x1234),XIZ             reenc=e1 34 12 ae
+  af  MNEMONIC  llvm=subdm32 (4660), xsp            uni=sub (0x1234),XSP             reenc=e1 34 12 af
+  f0  MNEMONIC  llvm=cpda32 xwa, (4660)             uni=cp XWA,(0x1234)              reenc=e1 34 12 f0
+  f1  MNEMONIC  llvm=cpda32 xbc, (4660)             uni=cp XBC,(0x1234)              reenc=e1 34 12 f1
+  f2  MNEMONIC  llvm=cpda32 xde, (4660)             uni=cp XDE,(0x1234)              reenc=e1 34 12 f2
+  f3  MNEMONIC  llvm=cpda32 xhl, (4660)             uni=cp XHL,(0x1234)              reenc=e1 34 12 f3
+  f4  MNEMONIC  llvm=cpda32 xix, (4660)             uni=cp XIX,(0x1234)              reenc=e1 34 12 f4
+  f5  MNEMONIC  llvm=cpda32 xiy, (4660)             uni=cp XIY,(0x1234)              reenc=e1 34 12 f5
+  f6  MNEMONIC  llvm=cpda32 xiz, (4660)             uni=cp XIZ,(0x1234)              reenc=e1 34 12 f6
+  f7  MNEMONIC  llvm=cpda32 xsp, (4660)             uni=cp XSP,(0x1234)              reenc=e1 34 12 f7
+  f8  MNEMONIC  llvm=cpdm32 (4660), xwa             uni=cp (0x1234),XWA              reenc=e1 34 12 f8
+  f9  MNEMONIC  llvm=cpdm32 (4660), xbc             uni=cp (0x1234),XBC              reenc=e1 34 12 f9
+  fa  MNEMONIC  llvm=cpdm32 (4660), xde             uni=cp (0x1234),XDE              reenc=e1 34 12 fa
+  fb  MNEMONIC  llvm=cpdm32 (4660), xhl             uni=cp (0x1234),XHL              reenc=e1 34 12 fb
+  fc  MNEMONIC  llvm=cpdm32 (4660), xix             uni=cp (0x1234),XIX              reenc=e1 34 12 fc
+  fd  MNEMONIC  llvm=cpdm32 (4660), xiy             uni=cp (0x1234),XIY              reenc=e1 34 12 fd
+  fe  MNEMONIC  llvm=cpdm32 (4660), xiz             uni=cp (0x1234),XIZ              reenc=e1 34 12 fe
+  ff  MNEMONIC  llvm=cpdm32 (4660), xsp             uni=cp (0x1234),XSP              reenc=e1 34 12 ff
+
+=== prefix E2 56 34 12 ===  AGREE 0  ASYM 0  MNEMONIC 56  LENGTH 0  LLVM-NONE 80  UNI-NONE 0  BOTH-NONE 120
+  20  MNEMONIC  llvm=ldl_da xwa, (1193046)          uni=ld XWA,(0x123456)            reenc=e2 56 34 12 20
+  21  MNEMONIC  llvm=ldl_da xbc, (1193046)          uni=ld XBC,(0x123456)            reenc=e2 56 34 12 21
+  22  MNEMONIC  llvm=ldl_da xde, (1193046)          uni=ld XDE,(0x123456)            reenc=e2 56 34 12 22
+  23  MNEMONIC  llvm=ldl_da xhl, (1193046)          uni=ld XHL,(0x123456)            reenc=e2 56 34 12 23
+  24  MNEMONIC  llvm=ldl_da xix, (1193046)          uni=ld XIX,(0x123456)            reenc=e2 56 34 12 24
+  25  MNEMONIC  llvm=ldl_da xiy, (1193046)          uni=ld XIY,(0x123456)            reenc=e2 56 34 12 25
+  26  MNEMONIC  llvm=ldl_da xiz, (1193046)          uni=ld XIZ,(0x123456)            reenc=e2 56 34 12 26
+  27  MNEMONIC  llvm=ldl_da xsp, (1193046)          uni=ld XSP,(0x123456)            reenc=e2 56 34 12 27
+  80  MNEMONIC  llvm=addda32_24 xwa, (1193046)      uni=add XWA,(0x123456)           reenc=e2 56 34 12 80
+  81  MNEMONIC  llvm=addda32_24 xbc, (1193046)      uni=add XBC,(0x123456)           reenc=e2 56 34 12 81
+  82  MNEMONIC  llvm=addda32_24 xde, (1193046)      uni=add XDE,(0x123456)           reenc=e2 56 34 12 82
+  83  MNEMONIC  llvm=addda32_24 xhl, (1193046)      uni=add XHL,(0x123456)           reenc=e2 56 34 12 83
+  84  MNEMONIC  llvm=addda32_24 xix, (1193046)      uni=add XIX,(0x123456)           reenc=e2 56 34 12 84
+  85  MNEMONIC  llvm=addda32_24 xiy, (1193046)      uni=add XIY,(0x123456)           reenc=e2 56 34 12 85
+  86  MNEMONIC  llvm=addda32_24 xiz, (1193046)      uni=add XIZ,(0x123456)           reenc=e2 56 34 12 86
+  87  MNEMONIC  llvm=addda32_24 xsp, (1193046)      uni=add XSP,(0x123456)           reenc=e2 56 34 12 87
+  88  MNEMONIC  llvm=addl_da (1193046), xwa         uni=add (0x123456),XWA           reenc=e2 56 34 12 88
+  89  MNEMONIC  llvm=addl_da (1193046), xbc         uni=add (0x123456),XBC           reenc=e2 56 34 12 89
+  8a  MNEMONIC  llvm=addl_da (1193046), xde         uni=add (0x123456),XDE           reenc=e2 56 34 12 8a
+  8b  MNEMONIC  llvm=addl_da (1193046), xhl         uni=add (0x123456),XHL           reenc=e2 56 34 12 8b
+  8c  MNEMONIC  llvm=addl_da (1193046), xix         uni=add (0x123456),XIX           reenc=e2 56 34 12 8c
+  8d  MNEMONIC  llvm=addl_da (1193046), xiy         uni=add (0x123456),XIY           reenc=e2 56 34 12 8d
+  8e  MNEMONIC  llvm=addl_da (1193046), xiz         uni=add (0x123456),XIZ           reenc=e2 56 34 12 8e
+  8f  MNEMONIC  llvm=addl_da (1193046), xsp         uni=add (0x123456),XSP           reenc=e2 56 34 12 8f
+  a0  MNEMONIC  llvm=sub32_24 xwa, (1193046)        uni=sub XWA,(0x123456)           reenc=e2 56 34 12 a0
+  a1  MNEMONIC  llvm=sub32_24 xbc, (1193046)        uni=sub XBC,(0x123456)           reenc=e2 56 34 12 a1
+  a2  MNEMONIC  llvm=sub32_24 xde, (1193046)        uni=sub XDE,(0x123456)           reenc=e2 56 34 12 a2
+  a3  MNEMONIC  llvm=sub32_24 xhl, (1193046)        uni=sub XHL,(0x123456)           reenc=e2 56 34 12 a3
+  a4  MNEMONIC  llvm=sub32_24 xix, (1193046)        uni=sub XIX,(0x123456)           reenc=e2 56 34 12 a4
+  a5  MNEMONIC  llvm=sub32_24 xiy, (1193046)        uni=sub XIY,(0x123456)           reenc=e2 56 34 12 a5
+  a6  MNEMONIC  llvm=sub32_24 xiz, (1193046)        uni=sub XIZ,(0x123456)           reenc=e2 56 34 12 a6
+  a7  MNEMONIC  llvm=sub32_24 xsp, (1193046)        uni=sub XSP,(0x123456)           reenc=e2 56 34 12 a7
+  a8  MNEMONIC  llvm=subdm32_24 (1193046), xwa      uni=sub (0x123456),XWA           reenc=e2 56 34 12 a8
+  a9  MNEMONIC  llvm=subdm32_24 (1193046), xbc      uni=sub (0x123456),XBC           reenc=e2 56 34 12 a9
+  aa  MNEMONIC  llvm=subdm32_24 (1193046), xde      uni=sub (0x123456),XDE           reenc=e2 56 34 12 aa
+  ab  MNEMONIC  llvm=subdm32_24 (1193046), xhl      uni=sub (0x123456),XHL           reenc=e2 56 34 12 ab
+  ac  MNEMONIC  llvm=subdm32_24 (1193046), xix      uni=sub (0x123456),XIX           reenc=e2 56 34 12 ac
+  ad  MNEMONIC  llvm=subdm32_24 (1193046), xiy      uni=sub (0x123456),XIY           reenc=e2 56 34 12 ad
+  ae  MNEMONIC  llvm=subdm32_24 (1193046), xiz      uni=sub (0x123456),XIZ           reenc=e2 56 34 12 ae
+  af  MNEMONIC  llvm=subdm32_24 (1193046), xsp      uni=sub (0x123456),XSP           reenc=e2 56 34 12 af
+  f0  MNEMONIC  llvm=cpda32_24 xwa, (1193046)       uni=cp XWA,(0x123456)            reenc=e2 56 34 12 f0
+  f1  MNEMONIC  llvm=cpda32_24 xbc, (1193046)       uni=cp XBC,(0x123456)            reenc=e2 56 34 12 f1
+  f2  MNEMONIC  llvm=cpda32_24 xde, (1193046)       uni=cp XDE,(0x123456)            reenc=e2 56 34 12 f2
+  f3  MNEMONIC  llvm=cpda32_24 xhl, (1193046)       uni=cp XHL,(0x123456)            reenc=e2 56 34 12 f3
+  f4  MNEMONIC  llvm=cpda32_24 xix, (1193046)       uni=cp XIX,(0x123456)            reenc=e2 56 34 12 f4
+  f5  MNEMONIC  llvm=cpda32_24 xiy, (1193046)       uni=cp XIY,(0x123456)            reenc=e2 56 34 12 f5
+  f6  MNEMONIC  llvm=cpda32_24 xiz, (1193046)       uni=cp XIZ,(0x123456)            reenc=e2 56 34 12 f6
+  f7  MNEMONIC  llvm=cpda32_24 xsp, (1193046)       uni=cp XSP,(0x123456)            reenc=e2 56 34 12 f7
+  f8  MNEMONIC  llvm=cpdm32_24 (1193046), xwa       uni=cp (0x123456),XWA            reenc=e2 56 34 12 f8
+  f9  MNEMONIC  llvm=cpdm32_24 (1193046), xbc       uni=cp (0x123456),XBC            reenc=e2 56 34 12 f9
+  fa  MNEMONIC  llvm=cpdm32_24 (1193046), xde       uni=cp (0x123456),XDE            reenc=e2 56 34 12 fa
+  fb  MNEMONIC  llvm=cpdm32_24 (1193046), xhl       uni=cp (0x123456),XHL            reenc=e2 56 34 12 fb
+  fc  MNEMONIC  llvm=cpdm32_24 (1193046), xix       uni=cp (0x123456),XIX            reenc=e2 56 34 12 fc
+  fd  MNEMONIC  llvm=cpdm32_24 (1193046), xiy       uni=cp (0x123456),XIY            reenc=e2 56 34 12 fd
+  fe  MNEMONIC  llvm=cpdm32_24 (1193046), xiz       uni=cp (0x123456),XIZ            reenc=e2 56 34 12 fe
+  ff  MNEMONIC  llvm=cpdm32_24 (1193046), xsp       uni=cp (0x123456),XSP            reenc=e2 56 34 12 ff
+
+=== prefix F0 34 ===  AGREE 84  ASYM 1  MNEMONIC 27  LENGTH 0  LLVM-NONE 51  UNI-NONE 1  BOTH-NONE 92
+  00  MNEMONIC  llvm=stib_d8 52, 0                  uni=ld (0x34),0x00               reenc=f0 34 00 00
+  02  MNEMONIC  llvm=stiw_d8 52, 0, 0               uni=ld (0x34),0x0000             reenc=f0 34 02 00 00
+  04  MNEMONIC  llvm=popb_dd8 52                    uni=pop (0x34)                   reenc=f0 34 04
+  08  UNI-NONE  llvm=call_dd8 52                    uni=                             reenc=
+  2c  MNEMONIC  llvm=stcfa_dd8 52                   uni=stcf A,(0x34)                reenc=f0 34 2c
+  40  MNEMONIC  llvm=st_dd8b w, 52                  uni=ld (0x34),W                  reenc=f0 34 40
+  41  MNEMONIC  llvm=st_dd8b a, 52                  uni=ld (0x34),A                  reenc=f0 34 41
+  42  MNEMONIC  llvm=st_dd8b b, 52                  uni=ld (0x34),B                  reenc=f0 34 42
+  43  MNEMONIC  llvm=st_dd8b c, 52                  uni=ld (0x34),C                  reenc=f0 34 43
+  44  MNEMONIC  llvm=st_dd8b d, 52                  uni=ld (0x34),D                  reenc=f0 34 44
+  45  MNEMONIC  llvm=st_dd8b e, 52                  uni=ld (0x34),E                  reenc=f0 34 45
+  46  MNEMONIC  llvm=st_dd8b h, 52                  uni=ld (0x34),H                  reenc=f0 34 46
+  47  MNEMONIC  llvm=st_dd8b l, 52                  uni=ld (0x34),L                  reenc=f0 34 47
+  50  MNEMONIC  llvm=st_dd8w wa, 52                 uni=ld (0x34),WA                 reenc=f0 34 50
+  51  MNEMONIC  llvm=st_dd8w bc, 52                 uni=ld (0x34),BC                 reenc=f0 34 51
+  52  MNEMONIC  llvm=st_dd8w de, 52                 uni=ld (0x34),DE                 reenc=f0 34 52
+  53  MNEMONIC  llvm=st_dd8w hl, 52                 uni=ld (0x34),HL                 reenc=f0 34 53
+  54  MNEMONIC  llvm=st_dd8w ix, 52                 uni=ld (0x34),IX                 reenc=f0 34 54
+  55  MNEMONIC  llvm=st_dd8w iy, 52                 uni=ld (0x34),IY                 reenc=f0 34 55
+  56  MNEMONIC  llvm=st_dd8w iz, 52                 uni=ld (0x34),IZ                 reenc=f0 34 56
+  57  ASYM      llvm=st_dd8w sp, 52                 uni=ld (0x34),SP                 reenc=REJECTED
+  60  MNEMONIC  llvm=st_dd8l xwa, 52                uni=ld (0x34),XWA                reenc=f0 34 60
+  61  MNEMONIC  llvm=st_dd8l xbc, 52                uni=ld (0x34),XBC                reenc=f0 34 61
+  62  MNEMONIC  llvm=st_dd8l xde, 52                uni=ld (0x34),XDE                reenc=f0 34 62
+  63  MNEMONIC  llvm=st_dd8l xhl, 52                uni=ld (0x34),XHL                reenc=f0 34 63
+  64  MNEMONIC  llvm=st_dd8l xix, 52                uni=ld (0x34),XIX                reenc=f0 34 64
+  65  MNEMONIC  llvm=st_dd8l xiy, 52                uni=ld (0x34),XIY                reenc=f0 34 65
+  66  MNEMONIC  llvm=st_dd8l xiz, 52                uni=ld (0x34),XIZ                reenc=f0 34 66
+  67  MNEMONIC  llvm=st_dd8l xsp, 52                uni=ld (0x34),XSP                reenc=f0 34 67
+
+=== prefix F1 34 12 ===  AGREE 32  ASYM 9  MNEMONIC 25  LENGTH 0  LLVM-NONE 97  UNI-NONE 0  BOTH-NONE 93
+  00  MNEMONIC  llvm=stdi8 (4660), 0                uni=ld (0x1234),0x00             reenc=f1 34 12 00 00
+  02  MNEMONIC  llvm=stdi16 (4660), 0               uni=ld (0x1234),0x0000           reenc=f1 34 12 02 00 00
+  20  ASYM      llvm=ldda32 xwa, (4660)             uni=lda WA,0x1234                reenc=e1 34 12 20
+  21  ASYM      llvm=ldda32 xbc, (4660)             uni=lda BC,0x1234                reenc=e1 34 12 21
+  22  ASYM      llvm=ldda32 xde, (4660)             uni=lda DE,0x1234                reenc=e1 34 12 22
+  23  ASYM      llvm=ldda32 xhl, (4660)             uni=lda HL,0x1234                reenc=e1 34 12 23
+  24  ASYM      llvm=ldda32 xix, (4660)             uni=lda IX,0x1234                reenc=e1 34 12 24
+  25  ASYM      llvm=ldda32 xiy, (4660)             uni=lda IY,0x1234                reenc=e1 34 12 25
+  26  ASYM      llvm=ldda32 xiz, (4660)             uni=lda IZ,0x1234                reenc=e1 34 12 26
+  27  ASYM      llvm=ldda32 xsp, (4660)             uni=lda SP,0x1234                reenc=e1 34 12 27
+  40  MNEMONIC  llvm=stb_d8 (4660), w               uni=ld (0x1234),W                reenc=f1 34 12 40
+  41  MNEMONIC  llvm=stb_d8 (4660), a               uni=ld (0x1234),A                reenc=f1 34 12 41
+  42  MNEMONIC  llvm=stb_d8 (4660), b               uni=ld (0x1234),B                reenc=f1 34 12 42
+  43  MNEMONIC  llvm=stb_d8 (4660), c               uni=ld (0x1234),C                reenc=f1 34 12 43
+  44  MNEMONIC  llvm=stb_d8 (4660), d               uni=ld (0x1234),D                reenc=f1 34 12 44
+  45  MNEMONIC  llvm=stb_d8 (4660), e               uni=ld (0x1234),E                reenc=f1 34 12 45
+  46  MNEMONIC  llvm=stb_d8 (4660), h               uni=ld (0x1234),H                reenc=f1 34 12 46
+  47  MNEMONIC  llvm=stb_d8 (4660), l               uni=ld (0x1234),L                reenc=f1 34 12 47
+  50  MNEMONIC  llvm=stda16 (4660), wa              uni=ld (0x1234),WA               reenc=f1 34 12 50
+  51  MNEMONIC  llvm=stda16 (4660), bc              uni=ld (0x1234),BC               reenc=f1 34 12 51
+  52  MNEMONIC  llvm=stda16 (4660), de              uni=ld (0x1234),DE               reenc=f1 34 12 52
+  53  MNEMONIC  llvm=stda16 (4660), hl              uni=ld (0x1234),HL               reenc=f1 34 12 53
+  54  MNEMONIC  llvm=stda16 (4660), ix              uni=ld (0x1234),IX               reenc=f1 34 12 54
+  55  MNEMONIC  llvm=stda16 (4660), iy              uni=ld (0x1234),IY               reenc=f1 34 12 55
+  56  MNEMONIC  llvm=stda16 (4660), iz              uni=ld (0x1234),IZ               reenc=f1 34 12 56
+  57  ASYM      llvm=stda16 (4660), sp              uni=ld (0x1234),SP               reenc=REJECTED
+  60  MNEMONIC  llvm=stda32 (4660), xwa             uni=ld (0x1234),XWA              reenc=f1 34 12 60
+  61  MNEMONIC  llvm=stda32 (4660), xbc             uni=ld (0x1234),XBC              reenc=f1 34 12 61
+  62  MNEMONIC  llvm=stda32 (4660), xde             uni=ld (0x1234),XDE              reenc=f1 34 12 62
+  63  MNEMONIC  llvm=stda32 (4660), xhl             uni=ld (0x1234),XHL              reenc=f1 34 12 63
+  64  MNEMONIC  llvm=stda32 (4660), xix             uni=ld (0x1234),XIX              reenc=f1 34 12 64
+  65  MNEMONIC  llvm=stda32 (4660), xiy             uni=ld (0x1234),XIY              reenc=f1 34 12 65
+  66  MNEMONIC  llvm=stda32 (4660), xiz             uni=ld (0x1234),XIZ              reenc=f1 34 12 66
+  67  MNEMONIC  llvm=stda32 (4660), xsp             uni=ld (0x1234),XSP              reenc=f1 34 12 67
+
+=== prefix F2 56 34 12 ===  AGREE 64  ASYM 9  MNEMONIC 33  LENGTH 0  LLVM-NONE 57  UNI-NONE 0  BOTH-NONE 93
+  00  MNEMONIC  llvm=stib_da (1193046), 0           uni=ld (0x123456),0x00           reenc=f2 56 34 12 00 00
+  02  MNEMONIC  llvm=stiw_da (1193046), 0           uni=ld (0x123456),0x0000         reenc=f2 56 34 12 02 00 00
+  20  ASYM      llvm=ldl_da xwa, (1193046)          uni=lda WA,0x123456              reenc=e2 56 34 12 20
+  21  ASYM      llvm=ldl_da xbc, (1193046)          uni=lda BC,0x123456              reenc=e2 56 34 12 21
+  22  ASYM      llvm=ldl_da xde, (1193046)          uni=lda DE,0x123456              reenc=e2 56 34 12 22
+  23  ASYM      llvm=ldl_da xhl, (1193046)          uni=lda HL,0x123456              reenc=e2 56 34 12 23
+  24  ASYM      llvm=ldl_da xix, (1193046)          uni=lda IX,0x123456              reenc=e2 56 34 12 24
+  25  ASYM      llvm=ldl_da xiy, (1193046)          uni=lda IY,0x123456              reenc=e2 56 34 12 25
+  26  ASYM      llvm=ldl_da xiz, (1193046)          uni=lda IZ,0x123456              reenc=e2 56 34 12 26
+  27  ASYM      llvm=ldl_da xsp, (1193046)          uni=lda SP,0x123456              reenc=e2 56 34 12 27
+  40  MNEMONIC  llvm=stb_da (1193046), w            uni=ld (0x123456),W              reenc=f2 56 34 12 40
+  41  MNEMONIC  llvm=stb_da (1193046), a            uni=ld (0x123456),A              reenc=f2 56 34 12 41
+  42  MNEMONIC  llvm=stb_da (1193046), b            uni=ld (0x123456),B              reenc=f2 56 34 12 42
+  43  MNEMONIC  llvm=stb_da (1193046), c            uni=ld (0x123456),C              reenc=f2 56 34 12 43
+  44  MNEMONIC  llvm=stb_da (1193046), d            uni=ld (0x123456),D              reenc=f2 56 34 12 44
+  45  MNEMONIC  llvm=stb_da (1193046), e            uni=ld (0x123456),E              reenc=f2 56 34 12 45
+  46  MNEMONIC  llvm=stb_da (1193046), h            uni=ld (0x123456),H              reenc=f2 56 34 12 46
+  47  MNEMONIC  llvm=stb_da (1193046), l            uni=ld (0x123456),L              reenc=f2 56 34 12 47
+  50  MNEMONIC  llvm=stw_da (1193046), wa           uni=ld (0x123456),WA             reenc=f2 56 34 12 50
+  51  MNEMONIC  llvm=stw_da (1193046), bc           uni=ld (0x123456),BC             reenc=f2 56 34 12 51
+  52  MNEMONIC  llvm=stw_da (1193046), de           uni=ld (0x123456),DE             reenc=f2 56 34 12 52
+  53  MNEMONIC  llvm=stw_da (1193046), hl           uni=ld (0x123456),HL             reenc=f2 56 34 12 53
+  54  MNEMONIC  llvm=stw_da (1193046), ix           uni=ld (0x123456),IX             reenc=f2 56 34 12 54
+  55  MNEMONIC  llvm=stw_da (1193046), iy           uni=ld (0x123456),IY             reenc=f2 56 34 12 55
+  56  MNEMONIC  llvm=stw_da (1193046), iz           uni=ld (0x123456),IZ             reenc=f2 56 34 12 56
+  57  ASYM      llvm=stw_da (1193046), sp           uni=ld (0x123456),SP             reenc=REJECTED
+  60  MNEMONIC  llvm=stl_da (1193046), xwa          uni=ld (0x123456),XWA            reenc=f2 56 34 12 60
+  61  MNEMONIC  llvm=stl_da (1193046), xbc          uni=ld (0x123456),XBC            reenc=f2 56 34 12 61
+  62  MNEMONIC  llvm=stl_da (1193046), xde          uni=ld (0x123456),XDE            reenc=f2 56 34 12 62
+  63  MNEMONIC  llvm=stl_da (1193046), xhl          uni=ld (0x123456),XHL            reenc=f2 56 34 12 63
+  64  MNEMONIC  llvm=stl_da (1193046), xix          uni=ld (0x123456),XIX            reenc=f2 56 34 12 64
+  65  MNEMONIC  llvm=stl_da (1193046), xiy          uni=ld (0x123456),XIY            reenc=f2 56 34 12 65
+  66  MNEMONIC  llvm=stl_da (1193046), xiz          uni=ld (0x123456),XIZ            reenc=f2 56 34 12 66
+  67  MNEMONIC  llvm=stl_da (1193046), xsp          uni=ld (0x123456),XSP            reenc=f2 56 34 12 67
+  c0  MNEMONIC  llvm=chgda_24 0, (1193046)          uni=chg 0,(0x123456)             reenc=f2 56 34 12 c0
+  c1  MNEMONIC  llvm=chgda_24 1, (1193046)          uni=chg 1,(0x123456)             reenc=f2 56 34 12 c1
+  c2  MNEMONIC  llvm=chgda_24 2, (1193046)          uni=chg 2,(0x123456)             reenc=f2 56 34 12 c2
+  c3  MNEMONIC  llvm=chgda_24 3, (1193046)          uni=chg 3,(0x123456)             reenc=f2 56 34 12 c3
+  c4  MNEMONIC  llvm=chgda_24 4, (1193046)          uni=chg 4,(0x123456)             reenc=f2 56 34 12 c4
+  c5  MNEMONIC  llvm=chgda_24 5, (1193046)          uni=chg 5,(0x123456)             reenc=f2 56 34 12 c5
+  c6  MNEMONIC  llvm=chgda_24 6, (1193046)          uni=chg 6,(0x123456)             reenc=f2 56 34 12 c6
+  c7  MNEMONIC  llvm=chgda_24 7, (1193046)          uni=chg 7,(0x123456)             reenc=f2 56 34 12 c7
+
+=== prefix C8 ===  AGREE 128  ASYM 4  MNEMONIC 57  LENGTH 0  LLVM-NONE 31  UNI-NONE 2  BOTH-NONE 34
+  12  UNI-NONE  llvm=extz w                         uni=                             reenc=
+  13  UNI-NONE  llvm=exts w                         uni=                             reenc=
+  1c  MNEMONIC  llvm=djnz8 w, 0                     uni=djnz W,0x000003              reenc=c8 1c 00
+  40  MNEMONIC  llvm=mul8rr w, w                    uni=mul ??,W                     reenc=c8 40
+  41  MNEMONIC  llvm=mul8rr a, w                    uni=mul WA,W                     reenc=c8 41
+  42  MNEMONIC  llvm=mul8rr b, w                    uni=mul ??,W                     reenc=c8 42
+  43  MNEMONIC  llvm=mul8rr c, w                    uni=mul BC,W                     reenc=c8 43
+  44  MNEMONIC  llvm=mul8rr d, w                    uni=mul ??,W                     reenc=c8 44
+  45  MNEMONIC  llvm=mul8rr e, w                    uni=mul DE,W                     reenc=c8 45
+  46  MNEMONIC  llvm=mul8rr h, w                    uni=mul ??,W                     reenc=c8 46
+  47  MNEMONIC  llvm=mul8rr l, w                    uni=mul HL,W                     reenc=c8 47
+  48  MNEMONIC  llvm=muls8rr w, w                   uni=muls ??,W                    reenc=c8 48
+  49  MNEMONIC  llvm=muls8rr a, w                   uni=muls WA,W                    reenc=c8 49
+  4a  MNEMONIC  llvm=muls8rr b, w                   uni=muls ??,W                    reenc=c8 4a
+  4b  MNEMONIC  llvm=muls8rr c, w                   uni=muls BC,W                    reenc=c8 4b
+  4c  MNEMONIC  llvm=muls8rr d, w                   uni=muls ??,W                    reenc=c8 4c
+  4d  MNEMONIC  llvm=muls8rr e, w                   uni=muls DE,W                    reenc=c8 4d
+  4e  MNEMONIC  llvm=muls8rr h, w                   uni=muls ??,W                    reenc=c8 4e
+  4f  MNEMONIC  llvm=muls8rr l, w                   uni=muls HL,W                    reenc=c8 4f
+  50  MNEMONIC  llvm=div8rr w, w                    uni=div ??,W                     reenc=c8 50
+  51  MNEMONIC  llvm=div8rr a, w                    uni=div WA,W                     reenc=c8 51
+  52  MNEMONIC  llvm=div8rr b, w                    uni=div ??,W                     reenc=c8 52
+  53  MNEMONIC  llvm=div8rr c, w                    uni=div BC,W                     reenc=c8 53
+  54  MNEMONIC  llvm=div8rr d, w                    uni=div ??,W                     reenc=c8 54
+  55  MNEMONIC  llvm=div8rr e, w                    uni=div DE,W                     reenc=c8 55
+  56  MNEMONIC  llvm=div8rr h, w                    uni=div ??,W                     reenc=c8 56
+  57  MNEMONIC  llvm=div8rr l, w                    uni=div HL,W                     reenc=c8 57
+  58  MNEMONIC  llvm=divs8rr w, w                   uni=divs ??,W                    reenc=c8 58
+  59  MNEMONIC  llvm=divs8rr a, w                   uni=divs WA,W                    reenc=c8 59
+  5a  MNEMONIC  llvm=divs8rr b, w                   uni=divs ??,W                    reenc=c8 5a
+  5b  MNEMONIC  llvm=divs8rr c, w                   uni=divs BC,W                    reenc=c8 5b
+  5c  MNEMONIC  llvm=divs8rr d, w                   uni=divs ??,W                    reenc=c8 5c
+  5d  MNEMONIC  llvm=divs8rr e, w                   uni=divs DE,W                    reenc=c8 5d
+  5e  MNEMONIC  llvm=divs8rr h, w                   uni=divs ??,W                    reenc=c8 5e
+  5f  MNEMONIC  llvm=divs8rr l, w                   uni=divs HL,W                    reenc=c8 5f
+  a8  MNEMONIC  llvm=lds8 w, 0                      uni=ld W,0                       reenc=c8 a8
+  a9  MNEMONIC  llvm=lds8 w, 1                      uni=ld W,1                       reenc=c8 a9
+  aa  MNEMONIC  llvm=lds8 w, 2                      uni=ld W,2                       reenc=c8 aa
+  ab  MNEMONIC  llvm=lds8 w, 3                      uni=ld W,3                       reenc=c8 ab
+  ac  MNEMONIC  llvm=lds8 w, 4                      uni=ld W,4                       reenc=c8 ac
+  ad  MNEMONIC  llvm=lds8 w, 5                      uni=ld W,5                       reenc=c8 ad
+  ae  MNEMONIC  llvm=lds8 w, 6                      uni=ld W,6                       reenc=c8 ae
+  af  MNEMONIC  llvm=lds8 w, 7                      uni=ld W,7                       reenc=c8 af
+  b8  MNEMONIC  llvm=ex8 w, w                       uni=ex W,W                       reenc=c8 b8
+  b9  MNEMONIC  llvm=ex8 a, w                       uni=ex A,W                       reenc=c8 b9
+  ba  MNEMONIC  llvm=ex8 b, w                       uni=ex B,W                       reenc=c8 ba
+  bb  MNEMONIC  llvm=ex8 c, w                       uni=ex C,W                       reenc=c8 bb
+  bc  MNEMONIC  llvm=ex8 d, w                       uni=ex D,W                       reenc=c8 bc
+  bd  MNEMONIC  llvm=ex8 e, w                       uni=ex E,W                       reenc=c8 bd
+  be  MNEMONIC  llvm=ex8 h, w                       uni=ex H,W                       reenc=c8 be
+  bf  MNEMONIC  llvm=ex8 l, w                       uni=ex L,W                       reenc=c8 bf
+  d8  MNEMONIC  llvm=cps w, 0                       uni=cp W,0                       reenc=c8 d8
+  d9  MNEMONIC  llvm=cps w, 1                       uni=cp W,1                       reenc=c8 d9
+  da  MNEMONIC  llvm=cps w, 2                       uni=cp W,2                       reenc=c8 da
+  db  MNEMONIC  llvm=cps w, 3                       uni=cp W,3                       reenc=c8 db
+  dc  MNEMONIC  llvm=cps w, 4                       uni=cp W,4                       reenc=c8 dc
+  dd  MNEMONIC  llvm=cps w, 5                       uni=cp W,5                       reenc=c8 dd
+  de  MNEMONIC  llvm=cps w, 6                       uni=cp W,6                       reenc=c8 de
+  df  MNEMONIC  llvm=cps w, 7                       uni=cp W,7                       reenc=c8 df
+  e8  ASYM      llvm=rlc w                          uni=rlc 0x00,W                   reenc=c8 e8 01
+  e9  ASYM      llvm=rrc w                          uni=rrc 0x00,W                   reenc=c8 e9 01
+  ea  ASYM      llvm=rl w                           uni=rl 0x00,W                    reenc=c8 ea 01
+  eb  ASYM      llvm=rr w                           uni=rr 0x00,W                    reenc=c8 eb 01
+
+=== prefix D8 ===  AGREE 154  ASYM 14  MNEMONIC 24  LENGTH 0  LLVM-NONE 40  UNI-NONE 0  BOTH-NONE 24
+  1c  MNEMONIC  llvm=djnz16 wa, 0                   uni=djnz WA,0x000003             reenc=d8 1c 00
+  87  ASYM      llvm=add sp, wa                     uni=add SP,WA                    reenc=REJECTED
+  8f  ASYM      llvm=ld sp, wa                      uni=ld SP,WA                     reenc=REJECTED
+  97  ASYM      llvm=adc sp, wa                     uni=adc SP,WA                    reenc=REJECTED
+  a7  ASYM      llvm=sub sp, wa                     uni=sub SP,WA                    reenc=REJECTED
+  a8  MNEMONIC  llvm=lds wa, 0                      uni=ld WA,0                      reenc=d8 a8
+  a9  MNEMONIC  llvm=lds wa, 1                      uni=ld WA,1                      reenc=d8 a9
+  aa  MNEMONIC  llvm=lds wa, 2                      uni=ld WA,2                      reenc=d8 aa
+  ab  MNEMONIC  llvm=lds wa, 3                      uni=ld WA,3                      reenc=d8 ab
+  ac  MNEMONIC  llvm=lds wa, 4                      uni=ld WA,4                      reenc=d8 ac
+  ad  MNEMONIC  llvm=lds wa, 5                      uni=ld WA,5                      reenc=d8 ad
+  ae  MNEMONIC  llvm=lds wa, 6                      uni=ld WA,6                      reenc=d8 ae
+  af  MNEMONIC  llvm=lds wa, 7                      uni=ld WA,7                      reenc=d8 af
+  b7  ASYM      llvm=sbc sp, wa                     uni=sbc SP,WA                    reenc=REJECTED
+  b8  MNEMONIC  llvm=ex16 wa, wa                    uni=ex WA,WA                     reenc=d8 b8
+  b9  MNEMONIC  llvm=ex16 bc, wa                    uni=ex BC,WA                     reenc=d8 b9
+  ba  MNEMONIC  llvm=ex16 de, wa                    uni=ex DE,WA                     reenc=d8 ba
+  bb  MNEMONIC  llvm=ex16 hl, wa                    uni=ex HL,WA                     reenc=d8 bb
+  bc  MNEMONIC  llvm=ex16 ix, wa                    uni=ex IX,WA                     reenc=d8 bc
+  bd  MNEMONIC  llvm=ex16 iy, wa                    uni=ex IY,WA                     reenc=d8 bd
+  be  MNEMONIC  llvm=ex16 iz, wa                    uni=ex IZ,WA                     reenc=d8 be
+  bf  ASYM      llvm=ex16 sp, wa                    uni=ex SP,WA                     reenc=REJECTED
+  c7  ASYM      llvm=and sp, wa                     uni=and SP,WA                    reenc=REJECTED
+  d7  ASYM      llvm=xor sp, wa                     uni=xor SP,WA                    reenc=REJECTED
+  d8  MNEMONIC  llvm=cps wa, 0                      uni=cp WA,0                      reenc=d8 d8
+  d9  MNEMONIC  llvm=cps wa, 1                      uni=cp WA,1                      reenc=d8 d9
+  da  MNEMONIC  llvm=cps wa, 2                      uni=cp WA,2                      reenc=d8 da
+  db  MNEMONIC  llvm=cps wa, 3                      uni=cp WA,3                      reenc=d8 db
+  dc  MNEMONIC  llvm=cps wa, 4                      uni=cp WA,4                      reenc=d8 dc
+  dd  MNEMONIC  llvm=cps wa, 5                      uni=cp WA,5                      reenc=d8 dd
+  de  MNEMONIC  llvm=cps wa, 6                      uni=cp WA,6                      reenc=d8 de
+  df  MNEMONIC  llvm=cps wa, 7                      uni=cp WA,7                      reenc=d8 df
+  e7  ASYM      llvm=or sp, wa                      uni=or SP,WA                     reenc=REJECTED
+  e8  ASYM      llvm=rlc wa                         uni=rlc 0x00,WA                  reenc=d8 e8 01
+  e9  ASYM      llvm=rrc wa                         uni=rrc 0x00,WA                  reenc=d8 e9 01
+  ea  ASYM      llvm=rl wa                          uni=rl 0x00,WA                   reenc=d8 ea 01
+  eb  ASYM      llvm=rr wa                          uni=rr 0x00,WA                   reenc=d8 eb 01
+  f7  ASYM      llvm=cp sp, wa                      uni=cp SP,WA                     reenc=REJECTED
+
+=== prefix E8 ===  AGREE 103  ASYM 7  MNEMONIC 17  LENGTH 0  LLVM-NONE 19  UNI-NONE 25  BOTH-NONE 85
+  03  ASYM      llvm=ld xwa, 0                      uni=ld XWA,0x00000000            reenc=40 00 00 00 00
+  04  ASYM      llvm=push xwa                       uni=push XWA                     reenc=38
+  05  ASYM      llvm=pop xwa                        uni=pop XWA                      reenc=58
+  06  UNI-NONE  llvm=cpl xwa                        uni=                             reenc=
+  07  UNI-NONE  llvm=neg xwa                        uni=                             reenc=
+  0d  MNEMONIC  llvm=unlk32 xwa                     uni=unlk XWA                     reenc=e8 0d
+  10  UNI-NONE  llvm=daa xwa                        uni=                             reenc=
+  1c  UNI-NONE  llvm=djnz xwa, 0                    uni=                             reenc=
+  30  UNI-NONE  llvm=res 0, xwa                     uni=                             reenc=
+  31  UNI-NONE  llvm=set 0, xwa                     uni=                             reenc=
+  32  UNI-NONE  llvm=chg 0, xwa                     uni=                             reenc=
+  33  UNI-NONE  llvm=bit 0, xwa                     uni=                             reenc=
+  34  UNI-NONE  llvm=tset 0, xwa                    uni=                             reenc=
+  70  UNI-NONE  llvm=scc f, xwa                     uni=                             reenc=
+  71  UNI-NONE  llvm=scc lt, xwa                    uni=                             reenc=
+  72  UNI-NONE  llvm=scc le, xwa                    uni=                             reenc=
+  73  UNI-NONE  llvm=scc ule, xwa                   uni=                             reenc=
+  74  UNI-NONE  llvm=scc ov, xwa                    uni=                             reenc=
+  75  UNI-NONE  llvm=scc mi, xwa                    uni=                             reenc=
+  76  UNI-NONE  llvm=scc z, xwa                     uni=                             reenc=
+  77  UNI-NONE  llvm=scc c, xwa                     uni=                             reenc=
+  78  UNI-NONE  llvm=scc t, xwa                     uni=                             reenc=
+  79  UNI-NONE  llvm=scc ge, xwa                    uni=                             reenc=
+  7a  UNI-NONE  llvm=scc gt, xwa                    uni=                             reenc=
+  7b  UNI-NONE  llvm=scc ugt, xwa                   uni=                             reenc=
+  7c  UNI-NONE  llvm=scc nov, xwa                   uni=                             reenc=
+  7d  UNI-NONE  llvm=scc pl, xwa                    uni=                             reenc=
+  7e  UNI-NONE  llvm=scc nz, xwa                    uni=                             reenc=
+  7f  UNI-NONE  llvm=scc nc, xwa                    uni=                             reenc=
+  a8  MNEMONIC  llvm=lds32 xwa, 0                   uni=ld XWA,0                     reenc=e8 a8
+  a9  MNEMONIC  llvm=lds32 xwa, 1                   uni=ld XWA,1                     reenc=e8 a9
+  aa  MNEMONIC  llvm=lds32 xwa, 2                   uni=ld XWA,2                     reenc=e8 aa
+  ab  MNEMONIC  llvm=lds32 xwa, 3                   uni=ld XWA,3                     reenc=e8 ab
+  ac  MNEMONIC  llvm=lds32 xwa, 4                   uni=ld XWA,4                     reenc=e8 ac
+  ad  MNEMONIC  llvm=lds32 xwa, 5                   uni=ld XWA,5                     reenc=e8 ad
+  ae  MNEMONIC  llvm=lds32 xwa, 6                   uni=ld XWA,6                     reenc=e8 ae
+  af  MNEMONIC  llvm=lds32 xwa, 7                   uni=ld XWA,7                     reenc=e8 af
+  d8  MNEMONIC  llvm=cps xwa, 0                     uni=cp XWA,0                     reenc=e8 d8
+  d9  MNEMONIC  llvm=cps xwa, 1                     uni=cp XWA,1                     reenc=e8 d9
+  da  MNEMONIC  llvm=cps xwa, 2                     uni=cp XWA,2                     reenc=e8 da
+  db  MNEMONIC  llvm=cps xwa, 3                     uni=cp XWA,3                     reenc=e8 db
+  dc  MNEMONIC  llvm=cps xwa, 4                     uni=cp XWA,4                     reenc=e8 dc
+  dd  MNEMONIC  llvm=cps xwa, 5                     uni=cp XWA,5                     reenc=e8 dd
+  de  MNEMONIC  llvm=cps xwa, 6                     uni=cp XWA,6                     reenc=e8 de
+  df  MNEMONIC  llvm=cps xwa, 7                     uni=cp XWA,7                     reenc=e8 df
+  e8  ASYM      llvm=rlc xwa                        uni=rlc 0x00,XWA                 reenc=e8 e8 01
+  e9  ASYM      llvm=rrc xwa                        uni=rrc 0x00,XWA                 reenc=e8 e9 01
+  ea  ASYM      llvm=rl xwa                         uni=rl 0x00,XWA                  reenc=e8 ea 01
+  eb  ASYM      llvm=rr xwa                         uni=rr 0x00,XWA                  reenc=e8 eb 01
+
+TOTALS  AGREE 1790  ASYM 124  MNEMONIC 910  LENGTH 0  LLVM-NONE 1411  UNI-NONE 30  BOTH-NONE 1623

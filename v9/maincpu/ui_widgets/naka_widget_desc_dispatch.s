@@ -108,7 +108,7 @@ MsgType_ExcSend:	aligned_string "MT_EXCSEND"
 	ldx
 	.byte 0x00			; padding
 	pop xiz
-	jr	po, 16777207
+	jr	po, -9
 	.byte 0x00			; padding
 	.byte 0xda, 0x73
 	ldx

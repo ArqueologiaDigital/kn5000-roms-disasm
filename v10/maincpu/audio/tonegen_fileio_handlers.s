@@ -1187,7 +1187,7 @@ PanelDisplay_DispatchData:
 	jr	nz, 28
 	inc	1, bc
 	cps	bc, 4
-	jr	c, 16777202
+	jr	c, -14
 	jr	t, 0x1d
 	.asciz "B@4="
 	lda_24	xhl, (0x0340fa)

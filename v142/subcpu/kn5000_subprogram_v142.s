@@ -282,7 +282,7 @@ PrevBank_RegHelper:
 	call	130270
 	incb_erp	251, 1
 	cpib_erp	251, 4
-	jr	c, 16777183
+	jr	c, -33
 	pop qiz
 	ret
 
@@ -293,7 +293,7 @@ MUTE_AND_HALT:	; 01FBF4
 
 
 Timer_StatusHelper:
-	jr	t, 16777213
+	jr	t, -3
 	ldb_d8	l, 4154
 	extz	hl
 	ret
@@ -29660,7 +29660,7 @@ VoiceParam_SubSlot_Apply_Catalog50:
 	call	207074
 	incb_erp	250, 1
 	cpib_erp	250, 4
-	jr	c, 16777181
+	jr	c, -35
 	pop qiz
 	inc	2, xsp
 	ret
@@ -29877,10 +29877,10 @@ VoiceParam_CustomTone_Select:
 	ld	(xix), a
 	inc	1, bc
 	cps	bc, 4
-	jr	c, 16777184
+	jr	c, -32
 	inc	1, qiz
 	cp	qiz, 2
-	jr	c, 16777097
+	jr	c, -119
 	pop xiz
 	inc	2, xsp
 	ret
@@ -29957,7 +29957,7 @@ VoiceParam_CustomTone_Apply_Catalog80:
 	ormi8	(xiz+2), 80
 	incm8	1, (xsp+14)
 	cp	(xsp+14), 2
-	jr	c, 16777144
+	jr	c, -72
 	ld	a, (xsp+12)
 	extz	wa
 	add	wa, wa
@@ -31221,7 +31221,7 @@ VoiceAlloc_Apply_Grp0_RoutingLoop:
 	call	209854
 	incb_erp	251, 1
 	cpib_erp	251, 4
-	jr	c, 16777186
+	jr	c, -30
 ; Routing done: call Voice_BuildOutputList and stash the list pointer at (XSP+0x04),
 ; cursor at (XSP+0x08).
 VoiceAlloc_Apply_Grp0_BuildList:
@@ -31285,7 +31285,7 @@ VoiceAlloc_Apply_Grp0_VoiceLoop_Test:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jr	c, 16777089
+	jr	c, -127
 	pop xiz
 	lda	xsp, (xsp+10)
 	ret
@@ -31337,7 +31337,7 @@ VoiceAlloc_Apply_Grp1_RoutingLoop:
 	call	209854
 	incb_erp	251, 1
 	cpib_erp	251, 4
-	jr	c, 16777186
+	jr	c, -30
 ; Voice_BuildOutputList with selector = slot | 4.
 VoiceAlloc_Apply_Grp1_BuildList:
 	ld	a, (xsp+10)
@@ -31400,7 +31400,7 @@ VoiceAlloc_Apply_Grp1_VoiceLoop_Test:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 64
-	jr	c, 16777089
+	jr	c, -127
 	pop xiz
 	inc	0, xsp
 	ret
@@ -31449,7 +31449,7 @@ VoiceAlloc_Apply_Grp2_RoutingLoop:
 	call	209854
 	incb_erp	251, 1
 	cpib_erp	251, 4
-	jr	c, 16777186
+	jr	c, -30
 ; Voice_BuildOutputList with selector = slot | 8.
 VoiceAlloc_Apply_Grp2_BuildList:
 	ld	a, (xsp+10)
@@ -31510,7 +31510,7 @@ VoiceAlloc_Apply_Grp2_VoiceLoop_Test:
 	ld	wa, (xwa)
 	and	wa, 255
 	cp	wa, 128
-	jr	c, 16777099
+	jr	c, -117
 	pop xiz
 	inc	0, xsp
 	ret
@@ -32126,7 +32126,7 @@ DSP_SlotParam_Write_Match_Loop:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	jr	c, 16777184
+	jr	c, -32
 	ret
 ; Shapes differ: switch on cache[0] (1/3 -> 0x02FE05, 2/4 -> 0x02FE4B, 5 -> 0x02FE91,
 ; anything else -> return).
@@ -32176,7 +32176,7 @@ DSP_SlotParam_Write_Shape1Or3_Loop:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	jr	c, 16777184
+	jr	c, -32
 	ret
 ; cache[0] in {2,4}: if the descriptor's shape is 5, write {cache[1], cache[2], 0x7F, 0x01};
 ; otherwise plain copy.
@@ -32212,7 +32212,7 @@ DSP_SlotParam_Write_Shape2Or4_Loop:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	jr	c, 16777184
+	jr	c, -32
 	ret
 ; cache[0] == 5: descriptor shape 1 or 3 -> write {cache[3], cache[4], 0x40, 0x87};
 ; shape 2 or 4 -> write {cache[1], cache[2], 0x40, 0x07}; other shapes -> return.
@@ -32288,7 +32288,7 @@ DSP_SlotParam_Read_Loop:
 	ld	(xix), a
 	inc	1, bc
 	cps	bc, 4
-	jr	c, 16777184
+	jr	c, -32
 	ret
 ; Third command dispatcher, one instance per DSP unit.  Input C = unit 0..3,
 ; XWA = command record.  The opcode is taken from (rec+2) with bit 7 forced low; the value
@@ -32408,7 +32408,7 @@ Audio_Cmd_DSPUnit_Op02_SlotLoop:
 	call	207074
 	inc	1, iz
 	cps	iz, 4
-	jr	c, 16777180
+	jr	c, -36
 	jrl	t, 402
 ; Opcode 0x05: Voice_Query_PartVoices(part) then Pitch_Refresh_Sounding_Voices (0x028D4C).
 Audio_Cmd_DSPUnit_Op05:
@@ -32451,7 +32451,7 @@ Audio_Cmd_DSPUnit_Op06_SlotLoop:
 	call	208853
 	inc	1, iz
 	cps	iz, 4
-	jr	c, 16777156
+	jr	c, -60
 ; Tail of opcode 0x06: the single EFF_RoutingInit call with DE = 0.
 Audio_Cmd_DSPUnit_Op06_Routing:
 	ld	xwa, (xsp+4)
@@ -32507,7 +32507,7 @@ Audio_Cmd_DSPUnit_Op26_SlotLoop:
 	call	208853
 	inc	1, iz
 	cps	iz, 4
-	jr	c, 16777156
+	jr	c, -60
 ; Tail of opcode 0x26: EFF_RoutingInit with DE = 1.
 Audio_Cmd_DSPUnit_Op26_Routing:
 	ld	xwa, (xsp+4)
@@ -32578,7 +32578,7 @@ Audio_Cmd_DSPUnit_Op38_SlotLoop:
 	call	208853
 	inc	1, iz
 	cps	iz, 4
-	jr	c, 16777156
+	jr	c, -60
 ; Tail of opcode 0x38: EFF_RoutingInit with DE = 2.
 Audio_Cmd_DSPUnit_Op38_Routing:
 	ld	xwa, (xsp+4)
@@ -32708,7 +32708,7 @@ DSP_SlotParam_Write_B_Match_Loop:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	jr	c, 16777184
+	jr	c, -32
 	ret
 ; Shapes differ: switch on cache[0] exactly as at 0x02FDEE.
 DSP_SlotParam_Write_B_Remap:
@@ -32756,7 +32756,7 @@ DSP_SlotParam_Write_B_Shape1Or3_Loop:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	jr	c, 16777184
+	jr	c, -32
 	ret
 ; cache[0] in {2,4}: record shape 5 -> {cache[1], cache[2], 0x7F, 0x01}, else plain copy.
 DSP_SlotParam_Write_B_Shape2Or4:
@@ -32791,7 +32791,7 @@ DSP_SlotParam_Write_B_Shape2Or4_Loop:
 	ld	(xix), a
 	inc	1, hl
 	cps	hl, 4
-	jr	c, 16777184
+	jr	c, -32
 	ret
 ; cache[0] == 5: shape 1/3 -> {cache[3], cache[4], 0x40, 0x87}; shape 2/4 ->
 ; {cache[1], cache[2], 0x40, 0x07}.
@@ -32869,7 +32869,7 @@ DSP_SlotParam_Read_B_Loop:
 	ld	(xix), a
 	inc	1, bc
 	cps	bc, 4
-	jr	c, 16777184
+	jr	c, -32
 	ret
 ; Fourth command dispatcher, and the one that ALWAYS answers the main CPU.
 ; Input XWA = command record (kept in XIZ).  Obtains the part's working buffer via
@@ -34190,7 +34190,7 @@ DSP_AlgoCoeffLookup_CopyLoop:
 	ld	(xiy), a
 	inc	1, de
 	cp	de, hl
-	jr	c, 16777185
+	jr	c, -31
 	ret
 
 ; =============================================================================
@@ -34693,7 +34693,7 @@ DSP_SetCoeff_RouteComplex:
 	ld	(xiy), a
 	inc	1, ix
 	cp	ix, hl
-	jr	c, 16777175
+	jr	c, -41
 	jr	t, 59
 	lds	ix, 0
 	cp	ix, hl
@@ -34717,7 +34717,7 @@ DSP_SetCoeff_RouteComplex:
 	ld	(xiy), a
 	inc	1, ix
 	cp	ix, hl
-	jr	c, 16777163
+	jr	c, -53
 	ld	wa, hl
 	inc	6, wa
 	extz	xwa
@@ -35054,7 +35054,7 @@ DSP_SetCoeff_FullPipeline:
 	ld	(xiz), a
 	inc	1, iy
 	cp	iy, hl
-	jr	c, 16777176
+	jr	c, -40
 	ld	wa, hl
 	inc	6, wa
 	extz	xwa
@@ -35149,7 +35149,7 @@ DSP_SetCoeff_WithDispatch:
 	ld	(xiz), a
 	inc	1, de
 	cp	de, hl
-	jr	c, 16777176
+	jr	c, -40
 	pop xiz
 	ret
 ; ----------------------------------------------------------------------------
@@ -35383,7 +35383,7 @@ DSP_SetCoeff_MasterConfig:
 	calr	DSP_VoiceParamReadWrite
 	incm	1, (xsp+2)
 	cp	(xsp+2), iz
-	jr	c, 16777176
+	jr	c, -40
 	jrl	t, 264
 	ld	xwa, (xsp+4)
 	ld	a, (xwa+3)
