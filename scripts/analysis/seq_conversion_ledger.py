@@ -57,6 +57,10 @@ REGIONS = [
      "Voice_BankIndexTable", 36, 0, 0),
     ("Voice_NoteParamTable", "v10/maincpu/sequencer/seq_event_playback.s",
      "Voice_NoteParamTable", 1026, 0, 0),
+    ("AccVoice_OffsetTable", "v10/maincpu/sequencer/accompaniment_engine.s",
+     "AccVoice_OffsetTable", 256, 0, 0),
+    ("AccStyle_TempoMultiplierTable", "v10/maincpu/sequencer/accompaniment_engine.s",
+     "AccStyle_TempoMultiplierTable", 32, 0, 0),
     ("AccVoice_IndexedTableLookup_BaseOffsets",
      "v10/maincpu/sequencer/accompaniment_engine.s",
      "AccVoice_IndexedTableLookup_BaseOffsets", 744, 38, 3),  # +0x2A2 routine, kept
