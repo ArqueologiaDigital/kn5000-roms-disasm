@@ -630,7 +630,7 @@ HDAE5000_HDAETitleFunc:
 
 	; === Case 2: main setup — read/write, format, init filesystem ===
 .Lri_jt_base:					; 0x28354B (jump table base)
-	stib_da (0x22ae3c), 0x00; f2 3c ae 22 00 00
+	ld (0x22ae3c:24), 0x00; f2 3c ae 22 00 00
 	lda xwa, (0x22ada6:24); f2 a6 ad 22 30
 	ld xde, xwa				; e8 8a
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
@@ -643,7 +643,7 @@ HDAE5000_HDAETitleFunc:
 	lds bc, 0				; d9 a8
 	calr HDAE5000_HD_Read_Write		; 1e xx xx
 
-	stib_da (0x22aa4a), 0x00; f2 4a aa 22 00 00
+	ld (0x22aa4a:24), 0x00; f2 4a aa 22 00 00
 	lda xwa, (0x22a2ca:24); f2 ca a2 22 30
 	ld xde, xwa				; e8 8a
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
@@ -656,7 +656,7 @@ HDAE5000_HDAETitleFunc:
 	lds bc, 2				; d9 aa
 	calr HDAE5000_FS_Write_FSB		; 1e xx xx
 
-	stib_da (0x22a2c8), 0x00; f2 c8 a2 22 00 00
+	ld (0x22a2c8:24), 0x00; f2 c8 a2 22 00 00
 	lda xwa, (0x22a0d0:24); f2 d0 a0 22 30
 	ld xde, xwa				; e8 8a
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
@@ -753,7 +753,7 @@ HDAE5000_HDAETitleFunc:
 	jr nz, .Lri_done			; 6e xx
 
 	; Clear flag and register event 0x01CA0000
-	stib_da (0x22ad9b), 0x00; f2 9b ad 22 00 00
+	ld (0x22ad9b:24), 0x00; f2 9b ad 22 00 00
 	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20 — ld xwa, (xwa+0x0e0a)
 	ld xhl, (xwa + 0x0124)             ; e3 e1 24 01 23 — ld xhl, (xwa+0x0124)
@@ -1982,7 +1982,7 @@ HDAE5000_HDD_DIRNAMECheck:
 	pushw 0xa06e
 	call HDAE5000_MemCopy_Reverse
 	lda	xsp, (xsp+10)
-	stib_da	(0x23A07E), 0
+	ld	(0x23A07E:24), 0
 	ld	xhl, xiz
 	jrl t, .LHRW_4594                      ; [78 c9 00] jrl T,0x284594
 .LHRW_44cb:
@@ -3030,7 +3030,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	lds bc, 0
 	lds de, 0
 	calr HDAE5000_HD_Wait_Ready
-	stib_da (0x23a0a2), 0x00; (0x23A0A2) = 0
+	ld (0x23a0a2:24), 0x00; (0x23A0A2) = 0
 .LHD_SC__skip_a2:
 	cpib_da (0x23a0a4), 0x00; cp (0x23A0A4), 0
 	jr z, .LHD_SC__dispatch
@@ -3040,7 +3040,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	lds bc, 0
 	lds de, 0
 	calr HDAE5000_HD_Wait_Ready
-	stib_da (0x23a0a4), 0x00; (0x23A0A4) = 0
+	ld (0x23a0a4:24), 0x00; (0x23A0A4) = 0
 .LHD_SC__dispatch:
 	ld a, (0x22b2f4:24); re-read state byte
 	cps a, 3
@@ -5395,9 +5395,9 @@ HDAE5000_AttenHDFormatSwCatch:
 	call (xhl)
 	jrl t, .LCHSC__done
 .LCHSC__res3:				; Result 3: set flags + validate + check match
-	stib_da (0x229da9), 0x01
-	stib_da (0x229daa), 0x01
-	stib_da (0x229dab), 0x01
+	ld (0x229da9:24), 0x01
+	ld (0x229daa:24), 0x01
+	ld (0x229dab:24), 0x01
 	ld xwa, (0x23a1a2:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld_sril xhl, (xwa + 0x0100)

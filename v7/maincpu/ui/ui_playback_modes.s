@@ -1906,7 +1906,7 @@ DpMdlySmfLyrTtl_Dispatch:
 	jr	nz, 38
 	cp	a, 118
 	jr	z, 19
-	stib_da	(135304), 0
+	ld	(135304:24), 0
 	stiw_da	(135302), 0
 	calr	64890
 	calr	64662
@@ -2229,7 +2229,7 @@ NameGetFuncCall_Dispatch:
 	push	xwa
 	call	16712982
 	lda	xsp, (xsp+10)
-	stib_da	(135296), 0
+	ld	(135296:24), 0
 	jr	3
 	ld	(xwa), 0
 	ld	xwa, 135268
@@ -2438,7 +2438,7 @@ CDlikeSwTtl_SongNavDispatch:
 	call	16423243
 	ld	wa, iz
 	call	16328724
-	stib_da	(135304), 0
+	ld	(135304:24), 0
 	stiw_da	(135302), 0
 	calr	63395
 	calr	63167
@@ -2469,7 +2469,7 @@ CDlikeSwTtl_SongNavBit0:
 	call	16423243
 	ld	wa, iz
 	call	16328724
-	stib_da	(135304), 0
+	ld	(135304:24), 0
 	stiw_da	(135302), 0
 	calr	63282
 	calr	63054
@@ -2496,7 +2496,7 @@ CDlikeSwTtl_SongNavFinishNames:
 CDlikeSwTtl_SongNavNoRedraw:
 	ld wa, iz
 	call NavigateSongList
-	stib_da (0x021088), 0x00
+	ld (0x021088:24), 0x00
 	stiw_da (0x021086), 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
@@ -2909,7 +2909,7 @@ DpSmfTtl_Dispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 16 of 21 slots byte-identical
 	.byte 0xc1, 0x9b, 0x8c, 0x3f, 0x72	; differs from v10 here and llvm-objdump cannot read it
 	jrl	z, 255
-	stib_da	(135304), 0
+	ld	(135304:24), 0
 	stiw_da	(135302), 0
 	calr	62057
 	calr	61829

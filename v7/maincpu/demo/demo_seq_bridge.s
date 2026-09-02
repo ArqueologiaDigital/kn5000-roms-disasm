@@ -486,7 +486,7 @@ CDlikeSwTtl_SendEvent8C_13:
 	jp ApPostEvent
 
 CDlikeSwTtl_SetRecordAndNotify:
-	stib_da (0x021090), 0x01
+	ld (0x021090:24), 0x01
 	ld xwa, NAKA_PerfReg_Container_Root_0x1697
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
@@ -501,7 +501,7 @@ CDlikeSwTtl_SetRecordAndNotify:
 	jp ApPostEvent
 
 SeqInit_PostEventSequence:
-	stib_da (0x021090), 0x00
+	ld (0x021090:24), 0x00
 	ld xwa, NAKA_PerfReg_Container_Root_0x1697
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
@@ -538,8 +538,8 @@ SeqInit_FinalEvent:
 	jp ApPostEvent
 
 SeqRecPlay_EnableRecordOnly:
-	stib_da (0x021092), 0x01
-	stib_da (0x021094), 0x00
+	ld (0x021092:24), 0x01
+	ld (0x021094:24), 0x00
 	ld xwa, 0x6f0025
 	ld xbc, 0x1e000a7
 	lds32 xde, 1
@@ -551,8 +551,8 @@ SeqRecPlay_EnableRecordOnly:
 	jp ApPostEvent
 
 SeqRecPlay_EnablePlayOnly:
-	stib_da (0x021092), 0x00
-	stib_da (0x021094), 0x01
+	ld (0x021092:24), 0x00
+	ld (0x021094:24), 0x01
 	ld xwa, 0x6f0025
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -564,8 +564,8 @@ SeqRecPlay_EnablePlayOnly:
 	jp ApPostEvent
 
 SeqRecPlay_DisableBoth:
-	stib_da (0x021092), 0x00
-	stib_da (0x021094), 0x00
+	ld (0x021092:24), 0x00
+	ld (0x021094:24), 0x00
 	ld xwa, 0x6f0025
 	ld xbc, 0x1e000a7
 	lds32 xde, 0

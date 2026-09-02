@@ -3668,10 +3668,10 @@ Pack104_SetInputs_PartRecord:
 	ldw	wa, 0x5D23                             ; FC4BC4  ld WA,0x5d23
 	add	wa, bc                                 ; FC4BC7  add WA,BC
 	stw_da	(0xE082), wa                        ; FC4BC9  ld (0x00e082),WA
-	stib_da	(0xE08F), 0xFF                     ; FC4BCE  ld (0x00e08f),0xff
-	stib_da	(0xE090), 0xFF                     ; FC4BD4  ld (0x00e090),0xff
-	stib_da	(0xE091), 0xFF                     ; FC4BDA  ld (0x00e091),0xff
-	stib_da	(0xE092), 0xFF                     ; FC4BE0  ld (0x00e092),0xff
+	ld	(0xE08F:24), 0xFF                     ; FC4BCE  ld (0x00e08f),0xff
+	ld	(0xE090:24), 0xFF                     ; FC4BD4  ld (0x00e090),0xff
+	ld	(0xE091:24), 0xFF                     ; FC4BDA  ld (0x00e091),0xff
+	ld	(0xE092:24), 0xFF                     ; FC4BE0  ld (0x00e092),0xff
 	ld	bc, (0xE082:24)                        ; FC4BE6  ld BC,(0x00e082)
 	extz	xbc                                   ; FC4BEB  extz XBC
 	ld	a, (xbc)                                ; FC4BED  ld A,(XBC)

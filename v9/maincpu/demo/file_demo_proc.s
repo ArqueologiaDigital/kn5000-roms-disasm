@@ -943,7 +943,7 @@ Voice_LoadVoiceTable_Loop:
 	ldw wa, 0x19
 	calr Demo_LookupPartTableEntry
 	ld c, (xhl + 13)
-	stib_da (0x025b86), 0x19
+	ld (0x025b86:24), 0x19
 	and c, 0xf
 	stb_da (0x025b88), c
 	push xde
@@ -4650,7 +4650,7 @@ FileIO_ValidateRecord_Ok:
 FileIO_ValidateRecord_Return:
 	stiw_da (0x0272cc), 0x003f
 	stiw_da (0x0272ce), 0x003f
-	stib_da (0x0272d0), 0x00
+	ld (0x0272d0:24), 0x00
 	ld xwa, 0x25eaa
 	ld xbc, Filename_TemplateArea_0x2
 	calr FileIO_CopyString
@@ -4958,7 +4958,7 @@ FileIO_GetRecordByType_Lookup:
 	ld xwa, 0x25eaa
 	lds de, 6
 	calr FileIO_CopyString_WriteNull
-	stib_da (0x025eb0), 0x00
+	ld (0x025eb0:24), 0x00
 	ret
 
 FileIO_GetRecordPtrAlt:
@@ -4970,7 +4970,7 @@ FileIO_WriteRecordName:
 	ld xwa, 0x271f2
 	ldw de, 0xc
 	calr FileIO_CopyString_WriteNull
-	stib_da (0x0271fe), 0x00
+	ld (0x0271fe:24), 0x00
 	ret
 
 FileIO_WriteRecordName_Loop:
@@ -5099,11 +5099,11 @@ FileIO_GetRecordAttr_Default:
 	ret
 
 FileIO_SetModeFlag_Writing:
-	stib_da (0x0272d0), 0x01
+	ld (0x0272d0:24), 0x01
 	ret
 
 FileIO_SetModeFlag_Reading:
-	stib_da (0x0272d0), 0x00
+	ld (0x0272d0:24), 0x00
 	ret
 
 FileIO_CheckRecordValid:
@@ -6246,7 +6246,7 @@ ReadField_Return:
 ParseSMFTrackName:
 	push xiz
 	lds iz, 0
-	stib_da (0x025b90), 0x00
+	ld (0x025b90:24), 0x00
 	ldiw_erp 0xfa, 0
 	calr ReadVariableLengthInt
 	cps hl, 0
@@ -6668,7 +6668,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25bd2
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	stib_da	(0x25be2), 0
+	ld	(0x25be2:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25bd2:24)
 	popw	iz
@@ -6717,7 +6717,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25be8
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	stib_da	(0x25bf8), 0
+	ld	(0x25bf8:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25be8:24)
 	pop	xiz
@@ -6758,7 +6758,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25bfe
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	stib_da	(0x25c0e), 0
+	ld	(0x25c0e:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25bfe:24)
 	popw	iz
@@ -6803,7 +6803,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25c14
 	ld	xbc, 13
 	call	FileIO_ReadBlock
-	stib_da	(0x25c21), 0
+	ld	(0x25c21:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25c14:24)
 	popw	iz
@@ -6845,7 +6845,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25c2a
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	stib_da	(0x25c3a), 0
+	ld	(0x25c3a:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25c2a:24)
 	popw	iz
@@ -6883,7 +6883,7 @@ FileIO_ByteBlock_DemoProc2:
 	ld	xwa, 0x25c40
 	ld	xbc, 16
 	call	FileIO_ReadBlock
-	stib_da	(0x25c50), 0
+	ld	(0x25c50:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25c40:24)
 	popw	iz
@@ -6915,7 +6915,7 @@ FileIO_ByteBlock_DemoProc2:
 	jr	ge, 7
 	ld	xhl, Filename_TemplateArea
 	jr	54
-	stib_da	(0x25c56), 32
+	ld	(0x25c56:24), 32
 	ld	wa, (xsp+26)
 	mul	wa, 80
 	add	wa, 0x4aa7
@@ -6925,7 +6925,7 @@ FileIO_ByteBlock_DemoProc2:
 	lda	xwa, (0x25c57:24)
 	ld	xbc, 13
 	call	FileIO_ReadBlock
-	stib_da	(0x25c64), 0
+	ld	(0x25c64:24), 0
 	call	FileIO_CloseHandle
 	lda	xhl, (0x25c56:24)
 	popw	iz
@@ -7224,7 +7224,7 @@ DetectType_TryOpen:
 	call FileIO_OpenWithMode
 	cps hl, 0
 	jr lt, DetectType_TryExtended
-	stib_da (0x025db6), 0x06
+	ld (0x025db6:24), 0x06
 	ld xwa, 0x10
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
@@ -7254,7 +7254,7 @@ DetectType_TryExtended:
 	call FileIO_OpenWithMode
 	cps hl, 0
 	jr lt, DetectType_NotFound
-	stib_da (0x025db6), 0x07
+	ld (0x025db6:24), 0x07
 	ld xwa, 0x12d8
 	lds bc, 0
 	call FileIO_SeekAndReadBlock
@@ -7765,8 +7765,8 @@ FileIO_BuildFileIndex:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	stib_da (0x027412), 0x00
-	stib_da (0x027414), 0x00
+	ld (0x027412:24), 0x00
+	ld (0x027414:24), 0x00
 	lds iz, 0
 
 BuildIndex_ScanLoop:
@@ -7850,7 +7850,7 @@ ControlState_ProcessCommand:
 	ld xiz, xwa
 	ld xwa, 0xffffffff
 	stl_da (0x027416), xwa
-	stib_da (0x027414), 0x00
+	ld (0x027414:24), 0x00
 	cp (xiz), 0x2
 	jr nz, CtrlCmd_Return
 	ld e, (xiz + 1)
@@ -7864,7 +7864,7 @@ ControlState_ProcessCommand:
 	jr z, CtrlCmd_SetPathAndBuild
 	cps e, 0
 	jr nz, CtrlCmd_Return
-	stib_da (0x0272d2), 0x00
+	ld (0x0272d2:24), 0x00
 	ld (xbc), 0x0
 	jr ControlState_ProcessNext
 

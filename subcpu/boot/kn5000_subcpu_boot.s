@@ -1226,7 +1226,7 @@ SendCmd_E3__wait_ready:
 	bit_dd8 4, 0x34	; Check if main CPU ready
 	jr z, SendCmd_E3__timeout1	; Not ready - check timeout
 	res_dd8 0, 0x34	; Clear our ready flag
-	stib_da (0x120000), 0xe3; Send E3 command to main CPU
+	ld (0x120000:24), 0xe3; Send E3 command to main CPU
 SendCmd_E3__wait_ack:
 	bit_dd8 4, 0x34	; Check for acknowledgment
 	jr nz, SendCmd_E3__timeout2	; Got response - handle in timeout2
@@ -1283,7 +1283,7 @@ SendParams_E2__timeout_wait:
 SendParams_E2__sync_cleared:
 	res_dd8 0, 0x34	; Clear our ready flag
 	ld (1302:16), 1; Set DMA sync flag
-	stib_da (0x120000), 0xe2; Send E2 command to main CPU
+	ld (0x120000:24), 0xe2; Send E2 command to main CPU
 	lds ix, 0	; Reset timeout counter
 SendParams_E2__wait_cpu_ready:
 	bit_dd8 4, 0x34	; Check if main CPU ready
@@ -1358,7 +1358,7 @@ TwoPhase_Transfer__wait_cpu_ready:
 	jrl z, TwoPhase_Transfer__timeout_ready1	; Not ready - timeout handler
 	res_dd8 0, 0x34	; Clear our ready flag
 	ld (1302:16), 2; Set sync flag to E1 mode
-	stib_da (0x120000), 0xe1; Send E1 command
+	ld (0x120000:24), 0xe1; Send E1 command
 	lds iz, 0	; Reset timeout counter
 TwoPhase_Transfer__wait_ack:
 	bit_dd8 4, 0x34	; Check for acknowledgment

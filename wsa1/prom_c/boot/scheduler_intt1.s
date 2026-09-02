@@ -148,7 +148,7 @@ INTT1_HANDLER__advance:
 	jr	nc, INTT1_HANDLER__wrap
 	jr	INTT1_HANDLER__exit
 INTT1_HANDLER__wrap:
-	stib_da	0x00E2E3, 0x00
+	ld	(0x00E2E3:24), 0x00
 INTT1_HANDLER__exit:
 	unlk32	xiz
 	popw	wa

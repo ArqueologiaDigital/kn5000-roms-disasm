@@ -570,7 +570,7 @@ Analog_ScanAndReport:
 	jr z, Analog_ScanAndReport__chan2                            ; F98AA0  jr Z,0xf98acb
 	ld	c, (xiz-5)                              ; F98AA2  ld C,(XIZ+0xfb)
 	stb_da	(0xE2E5), c                         ; F98AA5  ld (0x00e2e5),C
-	stib_da	(0xE2E9), 0xB0                     ; F98AAA  ld (0x00e2e9),0xb0
+	ld	(0xE2E9:24), 0xB0                     ; F98AAA  ld (0x00e2e9),0xb0
 	ld	c, (0xE2E5:24)                         ; F98AB0  ld C,(0x00e2e5)
 	stb_da	(0xE2EA), c                         ; F98AB5  ld (0x00e2ea),C
 	lda	xbc, (0xE2E9:24)                       ; F98ABA  lda XBC,0x00e2e9
@@ -598,7 +598,7 @@ Analog_ScanAndReport__chan2:
 	jr z, Analog_ScanAndReport__done                            ; F98AF2  jr Z,0xf98b1d
 	ld	c, (xiz-5)                              ; F98AF4  ld C,(XIZ+0xfb)
 	stb_da	(0xE2E7), c                         ; F98AF7  ld (0x00e2e7),C
-	stib_da	(0xE2E9), 0xB1                     ; F98AFC  ld (0x00e2e9),0xb1
+	ld	(0xE2E9:24), 0xB1                     ; F98AFC  ld (0x00e2e9),0xb1
 	ld	c, (0xE2E7:24)                         ; F98B02  ld C,(0x00e2e7)
 	stb_da	(0xE2EA), c                         ; F98B07  ld (0x00e2ea),C
 	lda	xbc, (0xE2E9:24)                       ; F98B0C  lda XBC,0x00e2e9
@@ -892,7 +892,7 @@ MAIN__timer_expired:
 	cpib_da	0x007ECC, 0x00
 	jr	z, MAIN__reenable
 	ei	0
-	stib_da	0x007ECC, 0x00
+	ld	(0x007ECC:24), 0x00
 	stiw_da	0x00F2F1, 0x000A
 	pushw	0x0002
 	call	0xF98510

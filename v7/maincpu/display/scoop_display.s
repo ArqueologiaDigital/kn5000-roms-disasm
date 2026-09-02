@@ -40,7 +40,7 @@ Display_ResetDirtyFlags:
 ;   0x205e6 - DISPLAY_ENABLE_FLAG: Update enable flag
 ;=============================================================================
 Display_UpdateDirtyRegions:
-	stib_da (0x0205e6), 0x01
+	ld (0x0205e6:24), 0x01
 	cpw_da (0x0205e4), 0
 	jr z, Display_MarkClean
 	call Display_UpdateRegion0	; Status bar area
@@ -741,7 +741,7 @@ Display_InitParamLoader1:
 	ldb a, 0x0c
 	ldb a, 0x10
 	call Display_DeferOrDrawWall
-	stib_da	(0x03efa8), 0
+	ld	(0x03efa8:24), 0
 	ret
 Display_InitParamLoader2:
 	; --- Param loader 2: C=7, A=0x0c, call FB155F ---
@@ -2563,18 +2563,18 @@ PerfMode_Handler_EvtB:
 	ld	xhl, 3412
 	.byte 0xb3, 0xcb
 	jrl	z, 61
-	stib_da	132584, 255
-	stib_da	132588, 255
-	stib_da	132586, 255
+	ld	(132584:24), 255
+	ld	(132588:24), 255
+	ld	(132586:24), 255
 	ld	a, (3822:16)
 	ld	(10359:16), a
 	call	15734672
 	.byte 0xf1, 0x54, 0x0d, 0xb7
 	ld	(3434:16), 0
 	call	15704416
-	stib_da	132584, 255
-	stib_da	132588, 255
-	stib_da	132586, 255
+	ld	(132584:24), 255
+	ld	(132588:24), 255
+	ld	(132586:24), 255
 	pushw	wa
 	ldb	w, 118
 	call	15687771
@@ -5692,9 +5692,9 @@ PortConfig_Handler_1:
 PortConfig_Handler_3:
 	; --- Init: call FB1536, set 3 flags, call 6 handlers, call FB155F (51 bytes) ---
 	call Display_DeferOrDrawWall
-	stib_da	(0x0205e8), 255
-	stib_da	(0x0205ec), 255
-	stib_da	(0x0205ea), 255
+	ld	(0x0205e8:24), 255
+	ld	(0x0205ec:24), 255
+	ld	(0x0205ea:24), 255
 	call DisplayStr_TempoString_0x6F
 	call DisplayStr_TempoString_0x74
 	call PortConfig_Handler_0_0xD7
@@ -5705,9 +5705,9 @@ PortConfig_Handler_3:
 	ret
 PortConfig_Handler_0:
 	call	16453929
-	stib_da	132584, 255
-	stib_da	132588, 255
-	stib_da	132586, 255
+	ld	(132584:24), 255
+	ld	(132588:24), 255
+	ld	(132586:24), 255
 	call	15725639
 	call	15686497
 	call	15725762
@@ -10741,14 +10741,14 @@ Display_RedrawStatusBar:
 	jrl nz, Scoop_Return
 	cp (0x8c9c:16), 0x8a
 	jrl nz, Scoop_Return
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	call UIRender_LoadTwoDescriptors
 	ld l, (0x0def:16)
 	xor H,H
 	cp L,0x12
 	jr nz, Scoop_SetupDisplayTables
 	call Display_DeferOrDrawWall
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	ld XIY,StyleUI_ParamBlock_AltD
 	ld XIX,StyleUI_ParamBlock_AltE
 	call UIRender_TwoTableGeneral
@@ -11004,7 +11004,7 @@ Scoop_FrameData:
 	nop
 
 Scoop_InitDisplayFull:
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	calr Scoop_DrawFrameLines
 	ld xiy, StyleUI_ParamBlock_AltE
 	ld xix, StyleUI_ParamBlockPtrTable
@@ -11025,7 +11025,7 @@ Scoop_InitDisplayFull:
 Display_RedrawMainContent:
 	cp (0x8c9c:16), 0x8a
 	jr nz, Scoop_RedrawMainContent_End
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	ld XIY,StyleUI_ScreenData_Main_0x1F9
 	call Scoop_CurveUpdate_Direct
 Scoop_RedrawMainContent_End:
@@ -11034,7 +11034,7 @@ Scoop_RedrawMainContent_End:
 Display_RedrawFooter:
 	cp (0x8c9c:16), 0x8a
 	jr nz, Scoop_RedrawFooter_End
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	ld a, (0x0f52:16)
 	ld (0x1191:16), a
 	ld (0x1192:16), a
@@ -11060,7 +11060,7 @@ Scoop_RedrawFooter_End:
 Display_RedrawTitleBar:
 	cp (0x8c9c:16), 0x8a
 	jrl nz, Scoop_TitleBar_End
-	stib_da (0x03efa8), 0x02
+	ld (0x03efa8:24), 0x02
 	calr Scoop_DrawGridLines
 	calr Scoop_TitleBar_SelectPartRange
 	cpdi16 (0x0e4c), 0x0000
@@ -11176,7 +11176,7 @@ Display_RedrawSelection:
 	jr z, Scoop_Selection_RedrawActive
 	jp Scoop_Selection_End
 Scoop_Selection_RedrawActive:
-	stib_da (0x03efa8), 0x01
+	ld (0x03efa8:24), 0x01
 	ld a, (3429:16)
 	cps a, 0
 	jr nz, Scoop_Selection_CheckMode1
@@ -11280,7 +11280,7 @@ Scoop_SidePanel_NextPart:
 	jr Scoop_SidePanel_DrawPartLoop
 
 Scoop_SidePanel_DrawValues:
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	ld a, (3666:16)
 	cp (3660:16), 0
 	jr nz, Scoop_SidePanel_StoreAndDraw
@@ -11307,7 +11307,7 @@ Scoop_SidePanel_DrawOneSlot:
 	pushw bc
 	ld xiy, StyleUI_ScreenData_Main_0xB94
 	lds bc, 4
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	ld xwa, 0x11d4
 	ld (xwa), 0x6
 	ld (xwa + 1), 0x8
@@ -11346,7 +11346,7 @@ Display_RedrawAltContent:
 	cps a, 0
 	jr z, Scoop_AltContent_ClearRegions
 	add xix, xwa
-	stib_da (0x03efa8), 0x02
+	ld (0x03efa8:24), 0x02
 	ld xiy, StyleUI_ScreenData_CtlOnly_0x20
 	lds bc, 3
 	xor hl, hl
@@ -11372,7 +11372,7 @@ Scoop_AltContent_End:
 	ret
 
 Scoop_AltContent_ClearOneRegion:
-	stib_da (0x03efa8), 0x02
+	ld (0x03efa8:24), 0x02
 	ldw bc, 0x20
 	ldw hl, 0xa
 	ld (4586:16), 14
@@ -11387,13 +11387,13 @@ Scoop_AltContent_ClearOneRegion:
 Display_RedrawButtonLabels:
 	cp (0x8c9c:16), 0x8a
 	jr nz, Scoop_ButtonLabels_End
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	call Scoop_ButtonLabels_CopySlotData
 	ld XIY,StyleUI_ScreenData_Main_0xBD4
 	ld XIX,StyleUI_ScreenData_Main_0xD3C
 	call GraphicsRender_TwoTable
 	call Scoop_ButtonLabels_SetupPartButtons
-	stib_da (0x03efa8), 0x02
+	ld (0x03efa8:24), 0x02
 	ld XIY,StyleUI_ScreenData_Main_0x276
 	ld XIX,StyleUI_ScreenData_Main_0x3DE
 	call GraphicsRender_TwoTable
@@ -11862,7 +11862,7 @@ Scoop_EventHandler_SpecialMode:
 	.ascii "z&`XÑ"
 	.byte 0xba
 	pushw	wa
-	stib_da	(0x35216e), 1
+	ld	(0x35216e:24), 1
 	subda16 xiy, (10428)
 	ld	(9874:16), iy
 	ld	iy, (0x28bc:16)

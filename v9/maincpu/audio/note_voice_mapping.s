@@ -15336,7 +15336,7 @@ Voice_CheckAndResetSlotState:
 
 CheckAndResetSlotSta_Block:
 	ordi8_24 (0xcede), 128
-	stib_da (0x00cee4), 0x00
+	ld (0x00cee4:24), 0x00
 	ld e, (0xfc5f:16)
 	and e, 0x30
 	jr nz, Voice_NullRet2
@@ -15370,14 +15370,14 @@ Voice_NullRet2:
 
 NullRet2_Block:
 	stiw_da (0x00ceff), 0x0000
-	stib_da (0x00cee5), 0x00
-	stib_da (0x00cef1), 0x00
-	stib_da (0x00cee0), 0x00
-	stib_da (0x00cedf), 0x00
+	ld (0x00cee5:24), 0x00
+	ld (0x00cef1:24), 0x00
+	ld (0x00cee0:24), 0x00
+	ld (0x00cedf:24), 0x00
 	ordi8_24 (0xcede), 128
 	anddi8_24 (0xcede), 249
-	stib_da (0x00cee1), 0x00
-	stib_da (0x00cee4), 0x00
+	ld (0x00cee1:24), 0x00
+	ld (0x00cee4:24), 0x00
 	calr VoiceSlot_Epilogue_Block2
 	ret
 
@@ -15422,7 +15422,7 @@ EffectState_Dispatch_Block2:
 	ret
 
 EffectState_Dispatch_Block3:
-	stib_da (0x00cee5), 0x04
+	ld (0x00cee5:24), 0x04
 	ld de, (0x00ceff:24)
 	calr VoiceSlot_StoreParams_Block2
 	calr VoiceSlot_StoreParams_LoadReg3
@@ -15432,7 +15432,7 @@ VoiceSlot_StoreParams:
 VoiceSlot_StoreParams_Block:
 	stb_da (0x00cedf), a
 	stb_da (0x00cee0), w
-	stib_da (0x00cee1), 0x00
+	ld (0x00cee1:24), 0x00
 	anddi8_24 (0xcede), 249
 	ret
 
@@ -15446,7 +15446,7 @@ VoiceSlot_StoreParams_Block2:
 	add iy, hl
 	cps de, 0
 	jr nz, VoiceSlot_StoreParams_OrBits
-	stib_da (0x00cee5), 0x00
+	ld (0x00cee5:24), 0x00
 	jr VoiceSlot_StoreParams_Return
 
 VoiceSlot_StoreParams_OrBits:
@@ -15698,7 +15698,7 @@ PitchCalc_Return_Return:
 	ret
 
 PitchCalc_Return_Block:
-	stib_da (0x00cee5), 0x04
+	ld (0x00cee5:24), 0x04
 	ld de, (0x00ceff:24)
 	calr VoiceSlot_StoreParams_Block2
 	cpib_da (0x00cee5), 0x02
@@ -15970,7 +15970,7 @@ Audio_NullRet2_LoopBody:
 	ld wa, (xiz + 4)
 	stw_da (0x00cf33), xwa
 	ordi8_24 (0xcede), 2
-	stib_da (0x00cee5), 0x07
+	ld (0x00cee5:24), 0x07
 	dec 1, de
 	calr VoiceSlot_CheckPitchIntervals
 	jrl Audio_PopIzRet
@@ -15991,7 +15991,7 @@ Audio_NullRet2_LoopCheck:
 	ld wa, (xiz + 4)
 	stw_da (0x00cf33), xwa
 	ordi8_24 (0xcede), 2
-	stib_da (0x00cee5), 0x07
+	ld (0x00cee5:24), 0x07
 	dec 1, de
 	dec 1, de
 	calr VoiceSlot_CheckPitchIntervals
@@ -16008,7 +16008,7 @@ Voice_ProcessSlotEntry:
 	jr z, ProcessSlotEntry_Block
 	stiw_da (0x00cf2f), 0x0000
 	anddi8_24 (0xcede), 253
-	stib_da (0x00cee5), 0x07
+	ld (0x00cee5:24), 0x07
 	ld de, (0x00ceff:24)
 	calr VoiceSlot_CheckPitchIntervals
 	calr NoteBuffer_CompactEn_Block2
@@ -16017,15 +16017,15 @@ Voice_ProcessSlotEntry:
 ProcessSlotEntry_Block:
 	stiw_da (0x00cf2f), 0x0000
 	anddi8_24 (0xcede), 253
-	stib_da (0x00cee1), 0x00
-	stib_da (0x00cee5), 0x07
+	ld (0x00cee1:24), 0x00
+	ld (0x00cee5:24), 0x07
 	ld de, (0x00ceff:24)
 	calr VoiceSlot_CheckPitchIntervals
 	calr NoteBuffer_CompactEn_Block2
 	jr Audio_PopIzRet
 
 ProcessSlotEntry_Block2:
-	stib_da (0x00cee5), 0x00
+	ld (0x00cee5:24), 0x00
 
 Audio_PopIzRet:
 	pop xiz
@@ -16035,7 +16035,7 @@ VoiceSlot_CheckPitchIntervals:
 	push xiz
 	cps de, 0
 	jr nz, VoiceSlot_CheckPitch_LoadReg
-	stib_da (0x00cee5), 0x00
+	ld (0x00cee5:24), 0x00
 	jrl NoteBuffer_CompactEn_Epilogue
 
 VoiceSlot_CheckPitch_LoadReg:
@@ -16342,8 +16342,8 @@ NoteDisplay_InitState:
 	push xiz
 	stb_da (0x00cedf), a
 	stb_da (0x00cee0), w
-	stib_da (0x00cee1), 0x00
-	stib_da (0x00cee4), 0x00
+	ld (0x00cee1:24), 0x00
+	ld (0x00cee4:24), 0x00
 	anddi8_24 (0xcede), 253
 	anddi8_24 (0xcede), 251
 	anddi8_24 (0xcede), 254
@@ -16383,7 +16383,7 @@ NoteDisplay_LookupFromTable:
 
 NoteDisplay_StoreNoCurrent:
 	stb_da (0x00cee1), a
-	stib_da (0x00cee4), 0x00
+	ld (0x00cee4:24), 0x00
 
 NoteDisplay_SetUpdateFlags:
 	anddi8_24 (0xcede), 251
@@ -16396,13 +16396,13 @@ NoteDisplay_SetUpdateFlags:
 NoteDisplay_SameNote:
 	cpw_da (0xcf2f), 0
 	jr z, NoteDisplay_ClearBoth
-	stib_da (0x00cee1), 0x00
+	ld (0x00cee1:24), 0x00
 	stb_da (0x00cee4), w
 	jr NoteDisplay_SetOverlayFlags
 
 NoteDisplay_ClearBoth:
-	stib_da (0x00cee1), 0x00
-	stib_da (0x00cee4), 0x00
+	ld (0x00cee1:24), 0x00
+	ld (0x00cee4:24), 0x00
 
 NoteDisplay_SetOverlayFlags:
 	ordi8_24 (0xcede), 4
@@ -16421,7 +16421,7 @@ VoiceSlot_Epilogue_Epilogue:
 VoiceSlot_Epilogue_Block:
 	stb_da (0x00cedf), a
 	stb_da (0x00cee0), w
-	stib_da (0x00cee1), 0x00
+	ld (0x00cee1:24), 0x00
 	stb_da (0x00cee4), w
 	ordi8_24 (0xcede), 4
 	anddi8_24 (0xcede), 253
@@ -16478,10 +16478,10 @@ InitPartAllocState_Epilogue:
 	ret
 
 InitPartAllocState_Block4:
-	stib_da (0x00cee5), 0x00
+	ld (0x00cee5:24), 0x00
 	stiw_da (0x00cf5f), 0x0000
 	stiw_da (0x00cf77), 0x0000
-	stib_da (0x00cef1), 0x00
+	ld (0x00cef1:24), 0x00
 	ret
 
 InitPartAllocState_TestBit242:

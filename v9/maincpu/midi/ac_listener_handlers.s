@@ -2020,7 +2020,7 @@ MdPresetWithoutFunc:
 	jr nz, MdPresetWith_ReturnSuccess
 	cpib_da (0x024756), 0x00
 	jr z, MdPresetWith_ReturnSuccess
-	stib_da (0x024756), 0x00
+	ld (0x024756:24), 0x00
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
 	lds32 xde, 0
@@ -2067,7 +2067,7 @@ MdPresetWithFunc:
 	jr nz, MdPreset_ReturnSuccess
 	cpib_da (0x024756), 0x01
 	jr z, MdPreset_ReturnSuccess
-	stib_da (0x024756), 0x01
+	ld (0x024756:24), 0x01
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
 	lds32 xde, 0

@@ -804,11 +804,11 @@ MidiIn_ParseRingAndDispatch__FB0A07:
 MidiMsg_SendBootSequence:
 	push	xix                                   ; FB0A0D  push XIX
 	lda	xix, (0xD7D8:24)                       ; FB0A0E  lda XIX,0x00d7d8
-	stib_da	(0xD7DC), 0xC0                     ; FB0A13  ld (0x00d7dc),0xc0
-	stib_da	(0xD7DD), 0                        ; FB0A19  ld (0x00d7dd),0x00
-	stib_da	(0xD7DE), 0                        ; FB0A1F  ld (0x00d7de),0x00
-	stib_da	(0xD7DF), 0                        ; FB0A25  ld (0x00d7df),0x00
-	stib_da	(0xD7E0), 0                        ; FB0A2B  ld (0x00d7e0),0x00
+	ld	(0xD7DC:24), 0xC0                     ; FB0A13  ld (0x00d7dc),0xc0
+	ld	(0xD7DD:24), 0                        ; FB0A19  ld (0x00d7dd),0x00
+	ld	(0xD7DE:24), 0                        ; FB0A1F  ld (0x00d7de),0x00
+	ld	(0xD7DF:24), 0                        ; FB0A25  ld (0x00d7df),0x00
+	ld	(0xD7E0:24), 0                        ; FB0A2B  ld (0x00d7e0),0x00
 	lda	xbc, (0xD7DC:24)                       ; FB0A31  lda XBC,0x00d7dc
 	push	xbc                                   ; FB0A36  push XBC
 	call	0xFB6BA8                              ; FB0A37  call 0xfb6ba8
@@ -818,10 +818,10 @@ MidiMsg_SendBootSequence:
 	ld	(xix+3), 0                              ; FB0A46  ld (XIX+0x03),0x00
 	push	xix                                   ; FB0A4A  push XIX
 	call	0xFAFDA5                              ; FB0A4B  call 0xfafda5
-	stib_da	(0xD7D4), 0x90                     ; FB0A4F  ld (0x00d7d4),0x90
-	stib_da	(0xD7D5), 0                        ; FB0A55  ld (0x00d7d5),0x00
-	stib_da	(0xD7D6), 48                       ; FB0A5B  ld (0x00d7d6),0x30
-	stib_da	(0xD7D7), 1                        ; FB0A61  ld (0x00d7d7),0x01
+	ld	(0xD7D4:24), 0x90                     ; FB0A4F  ld (0x00d7d4),0x90
+	ld	(0xD7D5:24), 0                        ; FB0A55  ld (0x00d7d5),0x00
+	ld	(0xD7D6:24), 48                       ; FB0A5B  ld (0x00d7d6),0x30
+	ld	(0xD7D7:24), 1                        ; FB0A61  ld (0x00d7d7),0x01
 	lda	xbc, (0xD7D4:24)                       ; FB0A67  lda XBC,0x00d7d4
 	push	xbc                                   ; FB0A6C  push XBC
 	call	0xFB3F36                              ; FB0A6D  call 0xfb3f36
@@ -12459,7 +12459,7 @@ sub_FB6CEE__FB6D83:
 	inc	1, h                                   ; FB6D9A  inc 1,H
 	cp	h, 64                                   ; FB6D9C  cp H,0x40
 	jr c, sub_FB6CEE__FB6D81                   ; FB6D9F  jr C,0xfb6d81
-	stib_da	(0xD733), 0xFF                     ; FB6DA1  ld (0x00d733),0xff
+	ld	(0xD733:24), 0xFF                     ; FB6DA1  ld (0x00d733),0xff
 	ld	(0x1509:16), 17                         ; FB6DA7  ld (0x1509),0x11
 	ldw	hl, 0                                  ; FB6DAC  ld HL,0x0000
 	ldw (xiz-2), 0x0019                        ; FB6DAF  ld (XIZ+0xfe),0x0019

@@ -163,11 +163,11 @@ sub_F9915C__counting:
 	ld	a, (xbc)
 	and	a, 1
 	jr	z, sub_F9915C__bit0_clear
-	stib_da	0x00F35F, 1
+	ld	(0x00F35F:24), 1
 	setda_24 7, 0x007ECC
 	jr	sub_F9915C__exit
 sub_F9915C__bit0_clear:
-	stib_da	0x00F35F, 2
+	ld	(0x00F35F:24), 2
 	setda_24 7, 0x007ECC
 sub_F9915C__exit:
 	ret
@@ -349,7 +349,7 @@ INTRX0_HANDLER__no_error:
 	stl_da 0x007ED6, xbc
 	cp (xiz-1), 0xfe
 	jr nz, INTRX0_HANDLER__range_check
-	stib_da 0x00F2F8, 0x01
+	ld (0x00F2F8:24), 0x01
 INTRX0_HANDLER__range_check:
 	cp (xiz-1), 0x00
 	jr ge, INTRX0_HANDLER__enqueue
@@ -973,7 +973,7 @@ MIDI_Watchdogs_And_TransportSwitch__F9950E:
 	ld	(xiz-4), xbc                        ; F99520  ld (XIZ+0xfc),XBC
 	cp	xbc, 0xA5                           ; F99523  cp XBC,0x000000a5
 	jr ule, MIDI_Watchdogs_And_TransportSwitch__F99543                      ; F99529  jr ULE,0xf99543
-	stib_da	(0xF2F8), 0                    ; F9952B  ld (0x00f2f8),0x00
+	ld	(0xF2F8:24), 0                    ; F9952B  ld (0x00f2f8),0x00
 	lda	xwa, (0xFCC5C2:24)                 ; F99531  lda XWA,0xfcc5c2
 	push	xwa                               ; F99536  push XWA
 	pushw	1                                ; F99537  push 0x0001
@@ -994,7 +994,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99543:
 	pushw	1                                ; F99561  push 0x0001
 	pushw	6                                ; F99564  push 0x0006
 	call	0xF98B20                          ; F99567  call 0xf98b20
-	stib_da	(0xF328), 0                    ; F9956B  ld (0x00f328),0x00
+	ld	(0xF328:24), 0                    ; F9956B  ld (0x00f328),0x00
 	inc	8, xsp                             ; F99571  inc 0,XSP
 MIDI_Watchdogs_And_TransportSwitch__F99573:
 	jr MIDI_Watchdogs_And_TransportSwitch__F99595                           ; F99573  jr T,0xf99595
@@ -1006,7 +1006,7 @@ MIDI_Watchdogs_And_TransportSwitch__F99575:
 	pushw	1                                ; F99583  push 0x0001
 	pushw	6                                ; F99586  push 0x0006
 	call	0xF98B20                          ; F99589  call 0xf98b20
-	stib_da	(0xF328), 1                    ; F9958D  ld (0x00f328),0x01
+	ld	(0xF328:24), 1                    ; F9958D  ld (0x00f328),0x01
 	inc	8, xsp                             ; F99593  inc 0,XSP
 MIDI_Watchdogs_And_TransportSwitch__F99595:
 	unlk32 xiz                             ; F99595  unlk XIZ   [llvm-mc cannot encode this]

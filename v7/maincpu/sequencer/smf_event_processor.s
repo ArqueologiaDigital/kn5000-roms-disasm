@@ -4224,14 +4224,14 @@ SeqStep_FileIoFinal:
 	jr lt, SeqStep_FileIoError
 
 SeqStep_FileIoUpdate:
-	stib_da (0x03e3e0), 0x00
+	ld (0x03e3e0:24), 0x00
 	or xhl, xhl
 	jr z, SeqStep_FileIoValidate
 	addiw_da (xhl + 18), 0x14
 	ld wa, (xhl + 18)
 	bit 15, wa
 	jr z, SeqStep_FileIoStore
-	stib_da (0x03e3e0), 0x01
+	ld (0x03e3e0:24), 0x01
 
 SeqStep_FileIoStore:
 	ld wa, (xsp + 22)
@@ -4357,7 +4357,7 @@ SeqStep_FileIoSetupResult:
 	ldw wa, 0x14
 	bit 15, wa
 	jr z, SeqStep_FileIoSetFlag
-	stib_da (0x03e3e0), 0x01
+	ld (0x03e3e0:24), 0x01
 
 SeqStep_FileIoSetFlag:
 	ld xhl, xiz
@@ -7585,7 +7585,7 @@ FDC_StoreDiskType:
 	ld a, (xsp + 4)
 	stb_da (0x03e3e4), a
 	stiw_da (0x03e3e6), 0x0001
-	stib_da (0x03e3be), 0x00
+	ld (0x03e3be:24), 0x00
 	ret
 
 FDC_ClearDiskChangeStatus:
@@ -8556,7 +8556,7 @@ GetVolumeLabel_ScanEntry:
 	lda	xwa, (141088:24)
 	push	xwa
 	call	16713148
-	stib_da	141099, 0
+	ld	(141099:24), 0
 	push	xiz
 	call	16051286
 	lda	xsp, (xsp+14)
@@ -9126,7 +9126,7 @@ SndTable_ByteBlock_ReadOps:
 	ret
 	dec	2, xsp
 	push	xiz
-	stib_da	(0x2357e), 1
+	ld	(0x2357e:24), 1
 	ld	xwa, (0x3e3e8:24)
 	stl_da	(0x2272e), xwa
 	ld	xwa, (0x3e3ee:24)
@@ -9207,7 +9207,7 @@ SndTable_ByteBlock_ReadOps:
 	extz	xwa
 	cpda32_24 xwa, (141102)
 	jrl	ule, -134
-	stib_da	(0x2357e), 0
+	ld	(0x2357e:24), 0
 	call	Show_ScreenGroup_Entry_0x7A
 	pop	xiz
 	inc	2, xsp
@@ -9241,7 +9241,7 @@ TaskBuf_CheckPendingData:
 	ld xwa, (0x023582:24)
 	cpw (xwa + 2), 0x0
 	jr z, TaskBuf_EmptyAndReturn
-	stib_da (0x02358a), 0x02
+	ld (0x02358a:24), 0x02
 	ld xwa, (0x023582:24)
 	ld hl, (xwa + 2)
 	jr TaskBuf_PopIzRet
@@ -9249,7 +9249,7 @@ TaskBuf_CheckPendingData:
 TaskBuf_EmptyAndReturn:
 	cpw_da (0x23580), 0
 	jr nz, TaskBuf_ReadAndDecrement
-	stib_da (0x02358a), 0x02
+	ld (0x02358a:24), 0x02
 	ldw hl, 0xffff
 	jr TaskBuf_PopIzRet
 
@@ -9265,7 +9265,7 @@ TaskBuf_ReadAndDecrement:
 	ld xwa, (0x023582:24)
 	cpw (xwa), 0x400
 	jr z, TaskBuf_SendBufferFull
-	stib_da (0x02358a), 0x02
+	ld (0x02358a:24), 0x02
 	ld hl, iz
 	jr TaskBuf_PopIzRet
 
@@ -9311,7 +9311,7 @@ FDC_WaitQueueEmpty_Loop:
 	jr nz, FDC_WaitQueueEmpty_Loop
 
 FDC_DrainQueue3_Start:
-	stib_da (0x02358a), 0x02
+	ld (0x02358a:24), 0x02
 	lds wa, 3
 	call TaskMsg_TryReceive
 	or xhl, xhl
@@ -9345,9 +9345,9 @@ FDC_DrainCloseFile:
 	ret
 
 SndTable_LookupA:
-	stib_da (0x03e3ec), 0x00
+	ld (0x03e3ec:24), 0x00
 	stiw_da (0x023580), 0x0000
-	stib_da (0x02358a), 0x01
+	ld (0x02358a:24), 0x01
 	lda xbc, (0x022d72:24)
 	stl_da (0x03e3ee), xbc
 	pushw 0xe4
@@ -9359,7 +9359,7 @@ SndTable_LookupA:
 	ld xwa, (0x02357a:24)
 	or xwa, xwa
 	jr nz, SndTable_LookupA_GotFile
-	stib_da (0x02358a), 0x02
+	ld (0x02358a:24), 0x02
 	ldw hl, 0xffff
 	ret
 
@@ -9444,7 +9444,7 @@ SndTable_LookupB:
 
 SndTable_LookupC:
 	calr FDC_DrainQueuesAndReset
-	stib_da (0x03e3ec), 0x00
+	ld (0x03e3ec:24), 0x00
 	jrl FDC_RecalibrateCommand
 
 SndTable_LookupD_CalcAddr:
@@ -9465,16 +9465,16 @@ SndTable_LookupD_CalcAddr:
 	ret
 
 SndTable_LookupD:
-	stib_da (0x03e3ec), 0x01
+	ld (0x03e3ec:24), 0x01
 	stiw_da (0x023580), 0x0000
-	stib_da (0x02358a), 0x01
+	ld (0x02358a:24), 0x01
 	lda xbc, (0x022d72:24)
 	stl_da (0x03e3ee), xbc
 	calr SndTable_LookupD_CalcAddr
 	cps l, 0
 	jr z, SndTable_LookupD_ShowScreen
-	stib_da (0x02358a), 0x02
-	stib_da (0x03e3ec), 0x00
+	ld (0x02358a:24), 0x02
+	ld (0x03e3ec:24), 0x00
 	ldw hl, 0xffff
 	ret
 

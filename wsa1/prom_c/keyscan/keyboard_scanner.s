@@ -184,7 +184,7 @@ KeyScan_ReadEvent:
 	ld	xbc, (0xF2F3:24)                   ; F99749  ld XBC,(0x00f2f3)
 	cp	xbc, 0x3E8                          ; F9974E  cp XBC,0x000003e8
 	jr ule, KeyScan_ReadEvent__F9975C                      ; F99754  jr ULE,0xf9975c
-	stib_da	(0xF329), 1                    ; F99756  ld (0x00f329),0x01
+	ld	(0xF329:24), 1                    ; F99756  ld (0x00f329),0x01
 KeyScan_ReadEvent__F9975C:
 	ldw	wa, 0xFFFF                         ; F9975C  ld WA,0xffff
 	jrl KeyScan_ReadEvent__F997F7                          ; F9975F  jrl T,0xf997f7
@@ -537,9 +537,9 @@ Link_Init:
 	res_dd8	2, TRUN                        ; F99942  res 2,(0x20)
 	ldio	T23MOD, 14                        ; F99945  ld (0x28),0x0e
 	ldio	INTETC23, 85                      ; F99948  ld (0x7a),0x55
-	stib_da	(0x8537), 0                    ; F9994B  ld (0x008537),0x00
-	stib_da	(0x8535), 0                    ; F99951  ld (0x008535),0x00
-	stib_da	(0x8536), 0                    ; F99957  ld (0x008536),0x00
+	ld	(0x8537:24), 0                    ; F9994B  ld (0x008537),0x00
+	ld	(0x8535:24), 0                    ; F99951  ld (0x008535),0x00
+	ld	(0x8536:24), 0                    ; F99957  ld (0x008536),0x00
 	ldio	INTE0AD, 1                        ; F9995D  ld (0x70),0x01
 	ldio	TREG2, 5                          ; F99960  ld (0x26),0x05
 	pushw	8                                ; F99963  push 0x0008
@@ -652,7 +652,7 @@ Link_SendChunk__F999D0:
 	jr Link_SendChunk__F99A3A                           ; F999DF  jr T,0xf99a3a
 Link_SendChunk__F999E1:
 	res_dd8	0, PA                          ; F999E1  res 0,(0x1e)
-	stib_da	(0xF32C), 1                    ; F999E4  ld (0x00f32c),0x01
+	ld	(0xF32C:24), 1                    ; F999E4  ld (0x00f32c),0x01
 	ld	l, h                                ; F999EA  ld L,H
 	dec	1, l                               ; F999EC  dec 1,L
 	ld	c, (xiz+8)                          ; F999EE  ld C,(XIZ+0x08)
@@ -759,7 +759,7 @@ Link_SendCmdE2_MemRead__F99A5C:
 	cpib_da 0x00F32C, 0x00                 ; F99A5C  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdE2_MemRead__F99A51                       ; F99A62  jr NZ,0xf99a51
 	res_dd8	0, PA                          ; F99A64  res 0,(0x1e)
-	stib_da	(0xF32C), 1                    ; F99A67  ld (0x00f32c),0x01
+	ld	(0xF32C:24), 1                    ; F99A67  ld (0x00f32c),0x01
 	ld	xbc, 0x100000                       ; F99A6D  ld XBC,0x00100000
 	ld	(xbc), 0xE2                         ; F99A72  ld (XBC),0xe2
 	ldw	hl, 0                              ; F99A75  ld HL,0x0000
@@ -850,7 +850,7 @@ Link_SendCmdByte__F99AD8:
 	cpib_da 0x00F32C, 0x00                 ; F99AD8  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdByte__F99ACE                       ; F99ADE  jr NZ,0xf99ace
 	res_dd8	0, PA                          ; F99AE0  res 0,(0x1e)
-	stib_da	(0xF32C), 1                    ; F99AE3  ld (0x00f32c),0x01
+	ld	(0xF32C:24), 1                    ; F99AE3  ld (0x00f32c),0x01
 	ld	h, (xiz+8)                          ; F99AE9  ld H,(XIZ+0x08)
 	or	h, 0xE0                             ; F99AEC  or H,0xe0
 	ld	xbc, 0x100000                       ; F99AEF  ld XBC,0x00100000
@@ -861,7 +861,7 @@ Link_SendCmdByte__F99AF9:
 	cps	hl, 0                              ; F99AFB  cp HL,0
 	jr nz, Link_SendCmdByte__F99AF9                       ; F99AFD  jr NZ,0xf99af9
 	set_dd8	0, PA                          ; F99AFF  set 0,(0x1e)
-	stib_da	(0xF32C), 0                    ; F99B02  ld (0x00f32c),0x00
+	ld	(0xF32C:24), 0                    ; F99B02  ld (0x00f32c),0x00
 Link_SendCmdByte__F99B08:
 	popw	de                                ; F99B08  pop DE
 	popw	hl                                ; F99B09  pop HL
@@ -938,7 +938,7 @@ Link_SendCmdE1__F99B29:
 	cpib_da 0x00F32C, 0x00                 ; F99B29  cp (0x00f32c),0x00   [llvm-mc cannot encode this]
 	jr nz, Link_SendCmdE1__F99B1E                       ; F99B2F  jr NZ,0xf99b1e
 	res_dd8	0, PA                          ; F99B31  res 0,(0x1e)
-	stib_da	(0xF32C), 2                    ; F99B34  ld (0x00f32c),0x02
+	ld	(0xF32C:24), 2                    ; F99B34  ld (0x00f32c),0x02
 	ld	xbc, 0x100000                       ; F99B3A  ld XBC,0x00100000
 	ld	(xbc), 0xE1                         ; F99B3F  ld (XBC),0xe1
 	ldw	hl, 0                              ; F99B42  ld HL,0x0000

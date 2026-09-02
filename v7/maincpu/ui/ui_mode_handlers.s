@@ -7525,7 +7525,7 @@ PmemPageCtl_OK_PageSwitch:
 	cps bc, 1
 	jrl nz, SeqLoad_ReturnZeroJmp2
 	incw 1, (xwa)
-	stib_da (0x0340e2), 0x01
+	ld (0x0340e2:24), 0x01
 	ld xwa, 0x450005
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -7538,7 +7538,7 @@ PmemPageCtl_OK_PageSwitch:
 PmemPageCtl_OK_AdvanceTo2:
 	cpib_da (0x0340e2), 0x01
 	jr nz, PmemPageCtl_OK_ResetTo1
-	stib_da (0x0340e2), 0x02
+	ld (0x0340e2:24), 0x02
 	ld xwa, 0x45000d
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -7565,7 +7565,7 @@ PmemPageCtl_OK_Rotate:
 	cps bc, 1
 	jr nz, SeqLoad_ReturnZeroJmp2
 	ldw (xwa), 0x2
-	stib_da (0x0340e2), 0x02
+	ld (0x0340e2:24), 0x02
 	ld xwa, 0x450005
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -7597,7 +7597,7 @@ PmemPageCtl_OK_RotatePost:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call PostEvent
-	stib_da (0x0340e2), 0x01
+	ld (0x0340e2:24), 0x01
 
 SeqLoad_ReturnZeroJmp2:
 	lds32 xhl, 0
@@ -7894,7 +7894,7 @@ PmExpFilter_DrawCentered:
 	jr nz, PmExpFilter_DecAndUpdate
 	cps hl, 2
 	jr nz, PmExpFilter_DecAndUpdate
-	stib_da (0x0340e2), 0x01
+	ld (0x0340e2:24), 0x01
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -7972,7 +7972,7 @@ PmExpFilter_CheckAdvBank:
 	jr nz, PmExpFilter_IncAndUpdate
 	cp hl, 0xa
 	jr nz, PmExpFilter_IncAndUpdate
-	stib_da (0x0340e2), 0x02
+	ld (0x0340e2:24), 0x02
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
 	lds32 xde, 0

@@ -1937,7 +1937,7 @@ DpMdlySmfTtlFunc:
 DpMdlySmfTtl_Dispatch:
 	cp	(0x8d37:16), 118
 	jr	z, 19
-	stib_da	(0x021088), 0
+	ld	(0x021088:24), 0
 	stiw_da	(0x021086), 0
 	calr	65087
 	calr	64859
@@ -2028,7 +2028,7 @@ DpMdlySmfLyrTtl_Dispatch:
 	jr	nz, 38
 	cp	a, 118
 	jr	z, 19
-	stib_da	(0x021088), 0
+	ld	(0x021088:24), 0
 	stiw_da	(0x021086), 0
 	calr	64890
 	calr	64662
@@ -2342,7 +2342,7 @@ NameGetFuncCall_Dispatch:
 	push	xwa
 	call	Strncpy
 	lda	xsp, (xsp+10)
-	stib_da	(0x021080), 0
+	ld	(0x021080:24), 0
 	jr	3
 	ld	(xwa), 0
 	ld	xwa, 0x021064
@@ -2595,7 +2595,7 @@ CDlikeSwTtl_SongNavDispatch:
 	call ApPostEvent
 	ld wa, iz
 	call NavigateSongList
-	stib_da (0x021088), 0x00
+	ld (0x021088:24), 0x00
 	stiw_da (0x021086), 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
@@ -2627,7 +2627,7 @@ CDlikeSwTtl_SongNavBit0:
 	call ApPostEvent
 	ld wa, iz
 	call NavigateSongList
-	stib_da (0x021088), 0x00
+	ld (0x021088:24), 0x00
 	stiw_da (0x021086), 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
@@ -2655,7 +2655,7 @@ CDlikeSwTtl_SongNavFinishNames:
 CDlikeSwTtl_SongNavNoRedraw:
 	ld wa, iz
 	call NavigateSongList
-	stib_da (0x021088), 0x00
+	ld (0x021088:24), 0x00
 	stiw_da (0x021086), 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
@@ -3081,7 +3081,7 @@ DpSmfTtlFunc:
 DpSmfTtl_Dispatch:
 	cp	(0x8d37:16), 114
 	jrl	z, 255
-	stib_da	(0x021088), 0
+	ld	(0x021088:24), 0
 	stiw_da	(0x021086), 0
 	calr	62057
 	calr	61829

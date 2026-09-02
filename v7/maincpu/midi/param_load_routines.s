@@ -65,61 +65,61 @@ ParaLoadOpt_CaseC:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ParaLoadOpt_DispatchTable_A:
-	stib_da	(0x024760), 0
-	stib_da	(0x024762), 0
-	stib_da	(0x024764), 0
-	stib_da	(0x024766), 0
-	stib_da	(0x024768), 0
+	ld	(0x024760:24), 0
+	ld	(0x024762:24), 0
+	ld	(0x024764:24), 0
+	ld	(0x024766:24), 0
+	ld	(0x024768:24), 0
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	201
-	stib_da	(0x024760), 1
+	ld	(0x024760:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	180
-	stib_da	(0x024760), 3
+	ld	(0x024760:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	159
-	stib_da	(0x024762), 1
+	ld	(0x024762:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	138
-	stib_da	(0x024762), 3
+	ld	(0x024762:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	118
-	stib_da	(0x024764), 1
+	ld	(0x024764:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	98
-	stib_da	(0x024764), 3
+	ld	(0x024764:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	78
-	stib_da	(0x024766), 1
+	ld	(0x024766:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	58
-	stib_da	(0x024766), 3
+	ld	(0x024766:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	38
-	stib_da	(0x024768), 1
+	ld	(0x024768:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	18
-	stib_da	(0x024768), 3
+	ld	(0x024768:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
@@ -185,61 +185,61 @@ ParaLoadOpt_CaseF:
 	lda	xix, (16213759:24)
 	jp_rr	8, xix, wa
 ParaLoadOpt_DispatchTable_B:
-	stib_da	(0x024760), 0
-	stib_da	(0x024762), 0
-	stib_da	(0x024764), 0
-	stib_da	(0x024766), 0
-	stib_da	(0x024768), 0
+	ld	(0x024760:24), 0
+	ld	(0x024762:24), 0
+	ld	(0x024764:24), 0
+	ld	(0x024766:24), 0
+	ld	(0x024768:24), 0
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	201
-	stib_da	(0x024760), 2
+	ld	(0x024760:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	180
-	stib_da	(0x024760), 3
+	ld	(0x024760:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	159
-	stib_da	(0x024762), 2
+	ld	(0x024762:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	138
-	stib_da	(0x024762), 3
+	ld	(0x024762:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	118
-	stib_da	(0x024764), 2
+	ld	(0x024764:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	98
-	stib_da	(0x024764), 3
+	ld	(0x024764:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	78
-	stib_da	(0x024766), 2
+	ld	(0x024766:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	58
-	stib_da	(0x024766), 3
+	ld	(0x024766:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	38
-	stib_da	(0x024768), 2
+	ld	(0x024768:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	18
-	stib_da	(0x024768), 3
+	ld	(0x024768:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0

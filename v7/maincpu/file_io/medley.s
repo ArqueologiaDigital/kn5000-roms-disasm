@@ -4415,7 +4415,7 @@ WakeUp_HandleInit:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	stib_da (0x02741a), 0x00
+	ld (0x02741a:24), 0x00
 	jrl WakeUp_ReturnZero
 
 WakeUp_HandleOk:
@@ -4434,7 +4434,7 @@ WakeUp_HandleOk:
 	incdi8_24 1, (0x02741a)
 	cpib_da (0x02741a), 0x07
 	jr nz, WakeUp_ReturnZero
-	stib_da (0x02741a), 0x00
+	ld (0x02741a:24), 0x00
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50000
 	lds32 xde, 1
@@ -4445,7 +4445,7 @@ WakeUp_HandleOk:
 	jr WakeUp_PostEvent
 
 WakeUp_ClearCounter:
-	stib_da (0x02741a), 0x00
+	ld (0x02741a:24), 0x00
 	jr WakeUp_ReturnZero
 
 WakeUp_StoreType:

@@ -102,22 +102,22 @@ SubCPU_Payload_Verify_Entry:
 	lda xwa, (0x00f980:24)
 	cpda16_24 xhl, (0xffd4); Compare with expected checksum
 	jr nz, SubCPU_Payload_Verify_Fail	; First region checksum failed
-	stib_da (0x01e53e), 0x00; Mark as success (so far)
+	ld (0x01e53e:24), 0x00; Mark as success (so far)
 	ldw bc, 0x280	; Size of second region
 	call Checksum_ComputeComplement	; Compute second checksum
 	cpda16_24 xhl, (0xffd2); Compare with expected
 	ret z	; Both match -> success
-	stib_da (0x01e53e), 0xff; Second region failed
+	ld (0x01e53e:24), 0xff; Second region failed
 	ret
 
 SubCPU_Payload_Verify_Fail:
 SubCPU_Payload_Verify_Fail_Entry:
-	stib_da (0x01e53e), 0xff; Mark as failed
+	ld (0x01e53e:24), 0xff; Mark as failed
 	ldw bc, 0x280
 	call Checksum_ComputeComplement
 	cpda16_24 xhl, (0xffd2)
 	ret nz	; Both checksums wrong
-	stib_da (0x01e53e), 0x01; First wrong, second correct (partial)
+	ld (0x01e53e:24), 0x01; First wrong, second correct (partial)
 	ret
 
 ; ===========================================================================
@@ -141,7 +141,7 @@ SubCPU_Payload_GetErrorFlag_Entry:
 	ret
 
 SubCPU_PayloadErrorStore:
-	stib_da (0x01e53e), 0xff
+	ld (0x01e53e:24), 0xff
 	ret
 
 Sys_CheckPowerStableFlag:
@@ -5398,7 +5398,7 @@ InterCPU_E2_WaitIdle:
 InterCPU_E2_ClearAndSend:
 	res_dd8 0, 0x68	; MSTAT0 - clear to initiate E2 command handshake
 	ld (1504:16), 1
-	stib_da (0x140000), 0xe2
+	ld (0x140000:24), 0xe2
 	lds ix, 0
 
 InterCPU_E2_WaitAck:
@@ -5523,7 +5523,7 @@ E1Bulk_WaitSubCPU_Ready:
 	jrl z, E1Bulk_ReadyTimeout_Loop
 	res_dd8 0, 0x68	; MSTAT0 - clear to initiate E1 bulk transfer
 	ld (1504:16), 2
-	stib_da (0x140000), 0xe1
+	ld (0x140000:24), 0xe1
 	lds iz, 0
 
 E1Bulk_WaitAck:
@@ -7807,19 +7807,19 @@ LED_CyclePattern:
 	jr z, LED_CyclePattern_Phase1
 	cps a, 0
 	jr nz, PortWrite_BusyWait
-	stib_da (0x160004), 0x01
+	ld (0x160004:24), 0x01
 	jr PortWrite_BusyWait
 
 LED_CyclePattern_Phase1:
-	stib_da (0x160004), 0x02
+	ld (0x160004:24), 0x02
 	jr PortWrite_BusyWait
 
 LED_CyclePattern_Phase2:
-	stib_da (0x160004), 0x04
+	ld (0x160004:24), 0x04
 	jr PortWrite_BusyWait
 
 LED_CyclePattern_Phase3:
-	stib_da (0x160004), 0x08
+	ld (0x160004:24), 0x08
 
 PortWrite_BusyWait:
 	ld xwa, 0x186a0
@@ -8000,7 +8000,7 @@ HDAE5000_TableData_WordLoop:
 HDAE5000_Init_BytecodeBlock:
 	.incbin "includes/romslices/v7_transplant_HDAE5000_Init_BytecodeBlock.bin"
 HDAE5000_Init_DetectAndVerify:
-	stib_da (0x160004), 0x00
+	ld (0x160004:24), 0x00
 	call HDAE5000_Detect
 	cp xhl, 0xffffffff
 	jr nz, HDAE5000_Init_VerifyROM
@@ -8022,7 +8022,7 @@ HDAE5000_Init_VerifyROM:
 
 HDAE5000_Init_WaitFlashReady:
 	calr LED_CyclePattern
-	stib_da (0x160004), 0x00
+	ld (0x160004:24), 0x00
 	call HDAE5000_Status_Check
 	cp hl, 0xffff
 	jr z, HDAE5000_Init_WaitFlashReady
@@ -8045,13 +8045,13 @@ HDAE5000_Init_HaltLoop:
 
 HDAE5000_Parport_Setup:
 	ld (340:16), 102
-	stib_da (0x160006), 0x82
-	stib_da (0x160000), 0x00
-	stib_da (0x160004), 0x00
-	stib_da (0x160004), 0x0f
+	ld (0x160006:24), 0x82
+	ld (0x160000:24), 0x00
+	ld (0x160004:24), 0x00
+	ld (0x160004:24), 0x0f
 	ld xwa, 0xdbba0
 	calr BusyWait_XWA_Cycles
-	stib_da (0x160004), 0x00
+	ld (0x160004:24), 0x00
 
 Parport_WaitDataReady:
 	ld a, (0x160002:24)

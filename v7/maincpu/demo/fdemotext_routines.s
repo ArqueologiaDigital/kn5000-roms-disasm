@@ -123,7 +123,7 @@ FDemoText_ProcessVoiceFlags_CheckBits:
 	call_24 nz, FDemoText_ScanMIDIChannels
 	bitda_24 7, (0x0247ee)
 	jr z, FDemoText_ProcessChannels
-	stib_da (0x0247f2), 0x00
+	ld (0x0247f2:24), 0x00
 	ldib_erp 0xfb, 0
 
 FDemoText_ProbeVoice_Loop:
@@ -242,8 +242,8 @@ FDemoText_ProcessOutput_NextCh:
 	jr ule, FDemoText_ProcessOutputChannels
 
 FDemoText_ProcessOutput_ClearAll:
-	stib_da (0x0247ec), 0x00
-	stib_da (0x0247f2), 0x00
+	ld (0x0247ec:24), 0x00
+	ld (0x0247f2:24), 0x00
 	anddi8_24 (0x0247ee), 120
 
 FDemoText_ProcessVoiceFlags_Return:

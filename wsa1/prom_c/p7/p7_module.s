@@ -374,7 +374,7 @@ P7Byte_SendCmd__F9A19F:
 	ld	(xiz-2), bc                             ; F9A1B6  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A1B9  cp HL,0
 	jr nz, P7Byte_SendCmd__F9A1C5                  ; F9A1BB  jr NZ,0xf9a1c5
-	stib_da	(0xF35C), 1                        ; F9A1BD  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A1BD  ld (0x00f35c),0x01
 	jr P7Byte_SendCmd__F9A1C7                      ; F9A1C3  jr T,0xf9a1c7
 P7Byte_SendCmd__F9A1C5:
 	jr P7Byte_SendCmd__F9A19F                      ; F9A1C5  jr T,0xf9a19f
@@ -398,7 +398,7 @@ P7Byte_SendCmd__F9A1DD:
 	ld	(xiz-2), bc                             ; F9A1F4  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A1F7  cp HL,0
 	jr nz, P7Byte_SendCmd__F9A203                  ; F9A1F9  jr NZ,0xf9a203
-	stib_da	(0xF35C), 1                        ; F9A1FB  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A1FB  ld (0x00f35c),0x01
 	jr P7Byte_SendCmd__F9A205                      ; F9A201  jr T,0xf9a205
 P7Byte_SendCmd__F9A203:
 	jr P7Byte_SendCmd__F9A1DD                      ; F9A203  jr T,0xf9a1dd
@@ -423,7 +423,7 @@ P7Byte_SendCmd__F9A219:
 	ld	(xiz-2), bc                             ; F9A230  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A233  cp HL,0
 	jr nz, P7Byte_SendCmd__F9A23F                  ; F9A235  jr NZ,0xf9a23f
-	stib_da	(0xF35C), 1                        ; F9A237  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A237  ld (0x00f35c),0x01
 	jr P7Byte_SendCmd__F9A241                      ; F9A23D  jr T,0xf9a241
 P7Byte_SendCmd__F9A23F:
 	jr P7Byte_SendCmd__F9A219                      ; F9A23F  jr T,0xf9a219
@@ -447,7 +447,7 @@ P7Byte_SendCmd__F9A257:
 	ld	(xiz-2), bc                             ; F9A26E  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A271  cp HL,0
 	jr nz, P7Byte_SendCmd__F9A27D                  ; F9A273  jr NZ,0xf9a27d
-	stib_da	(0xF35C), 1                        ; F9A275  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A275  ld (0x00f35c),0x01
 	jr P7Byte_SendCmd__F9A27F                      ; F9A27B  jr T,0xf9a27f
 P7Byte_SendCmd__F9A27D:
 	jr P7Byte_SendCmd__F9A257                      ; F9A27D  jr T,0xf9a257
@@ -472,7 +472,7 @@ P7Byte_SendCmd__F9A293:
 	ld	(xiz-2), bc                             ; F9A2AA  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A2AD  cp HL,0
 	jr nz, P7Byte_SendCmd__F9A2B9                  ; F9A2AF  jr NZ,0xf9a2b9
-	stib_da	(0xF35C), 1                        ; F9A2B1  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A2B1  ld (0x00f35c),0x01
 	jr P7Byte_SendCmd__F9A2BB                      ; F9A2B7  jr T,0xf9a2bb
 P7Byte_SendCmd__F9A2B9:
 	jr P7Byte_SendCmd__F9A293                      ; F9A2B9  jr T,0xf9a293
@@ -496,7 +496,7 @@ P7Byte_SendCmd__F9A2D1:
 	ld	(xiz-2), bc                             ; F9A2E8  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A2EB  cp HL,0
 	jr nz, P7Byte_SendCmd__F9A2F7                  ; F9A2ED  jr NZ,0xf9a2f7
-	stib_da	(0xF35C), 1                        ; F9A2EF  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A2EF  ld (0x00f35c),0x01
 	jr P7Byte_SendCmd__F9A2F9                      ; F9A2F5  jr T,0xf9a2f9
 P7Byte_SendCmd__F9A2F7:
 	jr P7Byte_SendCmd__F9A2D1                      ; F9A2F7  jr T,0xf9a2d1
@@ -599,7 +599,7 @@ P7Byte_SendData__F9A347:
 	ld	(xiz-2), bc                             ; F9A35E  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A361  cp HL,0
 	jr nz, P7Byte_SendData__F9A36D                  ; F9A363  jr NZ,0xf9a36d
-	stib_da	(0xF35C), 1                        ; F9A365  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A365  ld (0x00f35c),0x01
 	jr P7Byte_SendData__F9A36F                      ; F9A36B  jr T,0xf9a36f
 P7Byte_SendData__F9A36D:
 	jr P7Byte_SendData__F9A347                      ; F9A36D  jr T,0xf9a347
@@ -622,7 +622,7 @@ P7Byte_SendData__F9A382:
 	ld	(xiz-2), bc                             ; F9A399  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A39C  cp HL,0
 	jr nz, P7Byte_SendData__F9A3A8                  ; F9A39E  jr NZ,0xf9a3a8
-	stib_da	(0xF35C), 1                        ; F9A3A0  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A3A0  ld (0x00f35c),0x01
 	jr P7Byte_SendData__F9A3AA                      ; F9A3A6  jr T,0xf9a3aa
 P7Byte_SendData__F9A3A8:
 	jr P7Byte_SendData__F9A382                      ; F9A3A8  jr T,0xf9a382
@@ -646,7 +646,7 @@ P7Byte_SendData__F9A3BB:
 	ld	(xiz-2), bc                             ; F9A3D2  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A3D5  cp HL,0
 	jr nz, P7Byte_SendData__F9A3E1                  ; F9A3D7  jr NZ,0xf9a3e1
-	stib_da	(0xF35C), 1                        ; F9A3D9  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A3D9  ld (0x00f35c),0x01
 	jr P7Byte_SendData__F9A3E3                      ; F9A3DF  jr T,0xf9a3e3
 P7Byte_SendData__F9A3E1:
 	jr P7Byte_SendData__F9A3BB                      ; F9A3E1  jr T,0xf9a3bb
@@ -669,7 +669,7 @@ P7Byte_SendData__F9A3F6:
 	ld	(xiz-2), bc                             ; F9A40D  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A410  cp HL,0
 	jr nz, P7Byte_SendData__F9A41C                  ; F9A412  jr NZ,0xf9a41c
-	stib_da	(0xF35C), 1                        ; F9A414  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A414  ld (0x00f35c),0x01
 	jr P7Byte_SendData__F9A41E                      ; F9A41A  jr T,0xf9a41e
 P7Byte_SendData__F9A41C:
 	jr P7Byte_SendData__F9A3F6                      ; F9A41C  jr T,0xf9a3f6
@@ -693,7 +693,7 @@ P7Byte_SendData__F9A42F:
 	ld	(xiz-2), bc                             ; F9A446  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A449  cp HL,0
 	jr nz, P7Byte_SendData__F9A455                  ; F9A44B  jr NZ,0xf9a455
-	stib_da	(0xF35C), 1                        ; F9A44D  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A44D  ld (0x00f35c),0x01
 	jr P7Byte_SendData__F9A457                      ; F9A453  jr T,0xf9a457
 P7Byte_SendData__F9A455:
 	jr P7Byte_SendData__F9A42F                      ; F9A455  jr T,0xf9a42f
@@ -716,7 +716,7 @@ P7Byte_SendData__F9A46A:
 	ld	(xiz-2), bc                             ; F9A481  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A484  cp HL,0
 	jr nz, P7Byte_SendData__F9A490                  ; F9A486  jr NZ,0xf9a490
-	stib_da	(0xF35C), 1                        ; F9A488  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A488  ld (0x00f35c),0x01
 	jr P7Byte_SendData__F9A492                      ; F9A48E  jr T,0xf9a492
 P7Byte_SendData__F9A490:
 	jr P7Byte_SendData__F9A46A                      ; F9A490  jr T,0xf9a46a
@@ -791,7 +791,7 @@ P7Byte_SendArg__F9A4DD:
 	ld	(xiz-2), bc                             ; F9A4F4  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A4F7  cp HL,0
 	jr nz, P7Byte_SendArg__F9A503                  ; F9A4F9  jr NZ,0xf9a503
-	stib_da	(0xF35C), 1                        ; F9A4FB  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A4FB  ld (0x00f35c),0x01
 	jr P7Byte_SendArg__F9A505                      ; F9A501  jr T,0xf9a505
 P7Byte_SendArg__F9A503:
 	jr P7Byte_SendArg__F9A4DD                      ; F9A503  jr T,0xf9a4dd
@@ -814,7 +814,7 @@ P7Byte_SendArg__F9A518:
 	ld	(xiz-2), bc                             ; F9A52F  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A532  cp HL,0
 	jr nz, P7Byte_SendArg__F9A53E                  ; F9A534  jr NZ,0xf9a53e
-	stib_da	(0xF35C), 1                        ; F9A536  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A536  ld (0x00f35c),0x01
 	jr P7Byte_SendArg__F9A540                      ; F9A53C  jr T,0xf9a540
 P7Byte_SendArg__F9A53E:
 	jr P7Byte_SendArg__F9A518                      ; F9A53E  jr T,0xf9a518
@@ -838,7 +838,7 @@ P7Byte_SendArg__F9A551:
 	ld	(xiz-2), bc                             ; F9A568  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A56B  cp HL,0
 	jr nz, P7Byte_SendArg__F9A577                  ; F9A56D  jr NZ,0xf9a577
-	stib_da	(0xF35C), 1                        ; F9A56F  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A56F  ld (0x00f35c),0x01
 	jr P7Byte_SendArg__F9A579                      ; F9A575  jr T,0xf9a579
 P7Byte_SendArg__F9A577:
 	jr P7Byte_SendArg__F9A551                      ; F9A577  jr T,0xf9a551
@@ -861,7 +861,7 @@ P7Byte_SendArg__F9A58C:
 	ld	(xiz-2), bc                             ; F9A5A3  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A5A6  cp HL,0
 	jr nz, P7Byte_SendArg__F9A5B2                  ; F9A5A8  jr NZ,0xf9a5b2
-	stib_da	(0xF35C), 1                        ; F9A5AA  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A5AA  ld (0x00f35c),0x01
 	jr P7Byte_SendArg__F9A5B4                      ; F9A5B0  jr T,0xf9a5b4
 P7Byte_SendArg__F9A5B2:
 	jr P7Byte_SendArg__F9A58C                      ; F9A5B2  jr T,0xf9a58c
@@ -885,7 +885,7 @@ P7Byte_SendArg__F9A5C5:
 	ld	(xiz-2), bc                             ; F9A5DC  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A5DF  cp HL,0
 	jr nz, P7Byte_SendArg__F9A5EB                  ; F9A5E1  jr NZ,0xf9a5eb
-	stib_da	(0xF35C), 1                        ; F9A5E3  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A5E3  ld (0x00f35c),0x01
 	jr P7Byte_SendArg__F9A5ED                      ; F9A5E9  jr T,0xf9a5ed
 P7Byte_SendArg__F9A5EB:
 	jr P7Byte_SendArg__F9A5C5                      ; F9A5EB  jr T,0xf9a5c5
@@ -908,7 +908,7 @@ P7Byte_SendArg__F9A600:
 	ld	(xiz-2), bc                             ; F9A617  ld (XIZ+0xfe),BC
 	cps	hl, 0                                  ; F9A61A  cp HL,0
 	jr nz, P7Byte_SendArg__F9A626                  ; F9A61C  jr NZ,0xf9a626
-	stib_da	(0xF35C), 1                        ; F9A61E  ld (0x00f35c),0x01
+	ld	(0xF35C:24), 1                        ; F9A61E  ld (0x00f35c),0x01
 	jr P7Byte_SendArg__F9A628                      ; F9A624  jr T,0xf9a628
 P7Byte_SendArg__F9A626:
 	jr P7Byte_SendArg__F9A600                      ; F9A626  jr T,0xf9a600
@@ -18783,7 +18783,7 @@ P7Units_ServiceTask__FA5509:
 	calr (0xFA26CB - 0xFA5514)                 ; FA5511  calr 0xfa26cb
 	cpib_da 0x00F35C, 0x00                     ; FA5514  cp (0x00f35c),0x00
 	jr z, P7Units_ServiceTask__FA552E                   ; FA551A  jr Z,0xfa552e
-	stib_da	(0xF35C), 0                        ; FA551C  ld (0x00f35c),0x00
+	ld	(0xF35C:24), 0                        ; FA551C  ld (0x00f35c),0x00
 	calr (0xFA336B - 0xFA5525)                 ; FA5522  calr 0xfa336b
 	calr (0xFA5535 - 0xFA5528)                 ; FA5525  calr 0xfa5535
 	calr (0xFA2DEC - 0xFA552B)                 ; FA5528  calr 0xfa2dec
@@ -18888,17 +18888,17 @@ P7Units_ResolveProgramsAndReload__FA55C5:
 	ld	c, (0x7E97:24)                         ; FA55ED  ld C,(0x007e97)
 	cps	c, 0                                   ; FA55F2  cp C,0
 	jr z, P7Units_ResolveProgramsAndReload__FA55FC                   ; FA55F4  jr Z,0xfa55fc
-	stib_da	(0x7E97), 0                        ; FA55F6  ld (0x007e97),0x00
+	ld	(0x7E97:24), 0                        ; FA55F6  ld (0x007e97),0x00
 P7Units_ResolveProgramsAndReload__FA55FC:
 	ld	c, (0x7EB1:24)                         ; FA55FC  ld C,(0x007eb1)
 	cps	c, 0                                   ; FA5601  cp C,0
 	jr z, P7Units_ResolveProgramsAndReload__FA560B                   ; FA5603  jr Z,0xfa560b
-	stib_da	(0x7EB1), 0                        ; FA5605  ld (0x007eb1),0x00
+	ld	(0x7EB1:24), 0                        ; FA5605  ld (0x007eb1),0x00
 P7Units_ResolveProgramsAndReload__FA560B:
 	ld	c, (0x7ECB:24)                         ; FA560B  ld C,(0x007ecb)
 	cps	c, 0                                   ; FA5610  cp C,0
 	jr z, P7Units_ResolveProgramsAndReload__FA561A                   ; FA5612  jr Z,0xfa561a
-	stib_da	(0x7ECB), 0                        ; FA5614  ld (0x007ecb),0x00
+	ld	(0x7ECB:24), 0                        ; FA5614  ld (0x007ecb),0x00
 P7Units_ResolveProgramsAndReload__FA561A:
 	ei	0                                       ; FA561A  ei 0x00
 	stiw_da	(0xF354), 0                        ; FA561C  ld (0x00f354),0x0000
@@ -18914,7 +18914,7 @@ P7Units_ResolveProgramsAndReload__FA5640:
 	ld	c, (0x8570:24)                         ; FA5645  ld C,(0x008570)
 	cp	c, h                                    ; FA564A  cp C,H
 	jr z, P7Units_ResolveProgramsAndReload__FA5654                   ; FA564C  jr Z,0xfa5654
-	stib_da	(0x85D4), 53                       ; FA564E  ld (0x0085d4),0x35
+	ld	(0x85D4:24), 53                       ; FA564E  ld (0x0085d4),0x35
 P7Units_ResolveProgramsAndReload__FA5654:
 	jr P7Units_ResolveProgramsAndReload__FA5671                      ; FA5654  jr T,0xfa5671
 P7Units_ResolveProgramsAndReload__FA5656:
@@ -18937,7 +18937,7 @@ P7Units_ResolveProgramsAndReload__FA567D:
 	ld	c, (0x858A:24)                         ; FA5682  ld C,(0x00858a)
 	cp	c, h                                    ; FA5687  cp C,H
 	jr z, P7Units_ResolveProgramsAndReload__FA5691                   ; FA5689  jr Z,0xfa5691
-	stib_da	(0x85EE), 53                       ; FA568B  ld (0x0085ee),0x35
+	ld	(0x85EE:24), 53                       ; FA568B  ld (0x0085ee),0x35
 P7Units_ResolveProgramsAndReload__FA5691:
 	jr P7Units_ResolveProgramsAndReload__FA56AE                      ; FA5691  jr T,0xfa56ae
 P7Units_ResolveProgramsAndReload__FA5693:
@@ -18960,7 +18960,7 @@ P7Units_ResolveProgramsAndReload__FA56BA:
 	ld	c, (0x85A4:24)                         ; FA56BF  ld C,(0x0085a4)
 	cp	c, h                                    ; FA56C4  cp C,H
 	jr z, P7Units_ResolveProgramsAndReload__FA56CE                   ; FA56C6  jr Z,0xfa56ce
-	stib_da	(0x8608), 53                       ; FA56C8  ld (0x008608),0x35
+	ld	(0x8608:24), 53                       ; FA56C8  ld (0x008608),0x35
 P7Units_ResolveProgramsAndReload__FA56CE:
 	jr P7Units_ResolveProgramsAndReload__FA56EB                      ; FA56CE  jr T,0xfa56eb
 P7Units_ResolveProgramsAndReload__FA56D0:
@@ -18990,7 +18990,7 @@ P7Units_ResolveProgramsAndReload__FA56EB:
 	ei	0                                       ; FA5713  ei 0x00
 	cpib_da 0x00F35D, 0x01                     ; FA5715  cp (0x00f35d),0x01
 	jr ule, P7Units_ResolveProgramsAndReload__FA5723                 ; FA571B  jr ULE,0xfa5723
-	stib_da	(0xF35D), 1                        ; FA571D  ld (0x00f35d),0x01
+	ld	(0xF35D:24), 1                        ; FA571D  ld (0x00f35d),0x01
 P7Units_ResolveProgramsAndReload__FA5723:
 	ld	c, (0xF35D:24)                         ; FA5723  ld C,(0x00f35d)
 	extpfx5 0xC2, 0x5E, 0xF3, 0x00, 0xF3       ; FA5728  cp C,(0x00f35e)

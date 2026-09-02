@@ -3833,8 +3833,8 @@ HDAE5000_HardTestPage:
 ; --- PPI/IDE Low-Level I/O ---
 HDAE5000_PPI_Init:	; 0x282B98 (13 bytes)
 	; Initialize 8255 PPI: control=0x90 (mode set), port A=0xFF (all bits high)
-	stib_da (0x160006), 0x90; ld (0x160006), 0x90 - PPI control: mode 0, all output
-	stib_da (0x160000), 0xff; ld (0x160000), 0xFF - Port A: set all bits
+	ld (0x160006:24), 0x90; ld (0x160006), 0x90 - PPI control: mode 0, all output
+	ld (0x160000:24), 0xff; ld (0x160000), 0xFF - Port A: set all bits
 	ret
 
 HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)

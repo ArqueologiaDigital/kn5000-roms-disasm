@@ -479,7 +479,7 @@ LoadXaprInit_Entry:
 	add xsp, 0xa
 	cps hl, 0
 	ret nz
-	stib_da (0x03dd04), 0x01
+	ld (0x03dd04:24), 0x01
 	ret
 
 HamaStub1_Entry:
@@ -508,11 +508,11 @@ LoadAndRunXapr_Entry:
 	add xsp, 0xa
 	cps hl, 0
 	jr nz, LoadAndRunXapr_ClearFlag
-	stib_da (0x03dd04), 0x01
+	ld (0x03dd04:24), 0x01
 	jr LoadAndRunXapr_CallIfActive
 
 LoadAndRunXapr_ClearFlag:
-	stib_da (0x03dd04), 0x00
+	ld (0x03dd04:24), 0x00
 
 LoadAndRunXapr_CallIfActive:
 	cpib_da (0x03dd04), 0x00

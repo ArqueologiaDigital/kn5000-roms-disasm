@@ -1990,7 +1990,7 @@ TtMdCtlMsg:
 	jr nz, TtMdCtlMsg_ReturnZero
 	or xde, xde
 	jr nz, TtMdCtlMsg_ReturnZero
-	stib_da (0x024776), 0x00
+	ld (0x024776:24), 0x00
 	ld xwa, 0x520002
 	call GetViewInstance
 	ld xwa, (xhl + 42)
@@ -2610,7 +2610,7 @@ TtMdPart:
 	jr nz, TtMdPart_ReturnZero
 	or xde, xde
 	jr nz, TtMdPart_ReturnZero
-	stib_da (0x024778), 0x00
+	ld (0x024778:24), 0x00
 	ld xwa, 0x510001
 	call GetViewInstance
 	ld xwa, (xhl + 42)

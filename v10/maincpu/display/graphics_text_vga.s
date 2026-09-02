@@ -1880,7 +1880,7 @@ ColorBlit_PalSave_SkipShift:
 	ld (xwa + 6), bc
 	ld c, (0x03efa8:24)
 	ldb_erp C, 0xfb
-	stib_da (0x03efa8), 0x01
+	ld (0x03efa8:24), 0x01
 	ld bc, (0x03efa4:24)
 	calr ColorBlit
 	stb_erp A, 0xfb

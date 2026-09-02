@@ -1728,7 +1728,7 @@ SMF_LoadBank_ReadEntries:
 	ldw de, 0xb1
 	ldw_sri WA, 0x07, 0xec, 0xe8
 	ld (0xf231:16), wa
-	stib_da (0x00ffe3), 0x00
+	ld (0x00ffe3:24), 0x00
 
 SMF_LoadBank_EventLoop:
 	calr SMF_SetupReadPointers

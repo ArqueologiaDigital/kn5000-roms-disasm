@@ -654,7 +654,7 @@ SongEdit_CheckBounds:
 	extz wa
 	add wa, (xbc)
 	ld (xbc), wa
-	stib_da (0x020e4e), 0x00
+	ld (0x020e4e:24), 0x00
 	ld xwa, 0x6f0027
 	ld xbc, 0x1c7000b
 	lds32 xde, 0
@@ -713,7 +713,7 @@ SongEdit_OverflowCheck:
 	extz wa
 	add wa, (xbc)
 	ld (xbc), wa
-	stib_da (0x020e4e), 0x00
+	ld (0x020e4e:24), 0x00
 	ld xwa, 0x6f0027
 	ld xbc, 0x1c7000b
 	lds32 xde, 0
@@ -739,7 +739,7 @@ LyricsTrack_ReadAndParse:
 	inc 4, xsp
 	cp hl, 0x22
 	jr c, LyricsTrack_CheckEmpty
-	stib_da (0x020e6f), 0x00
+	ld (0x020e6f:24), 0x00
 
 LyricsTrack_CheckEmpty:
 	lda xwa, (0x020e4e:24)
@@ -809,7 +809,7 @@ LyricsTrack_HandleSingleChar:
 	inc 1, wa
 	ld (xbc), wa
 	ldw (xde), 0x0
-	stib_da (0x020e4e), 0x00
+	ld (0x020e4e:24), 0x00
 	ret
 
 LyricsTrack_HandleNormalChar:
@@ -891,7 +891,7 @@ LyricsFile_ValidateAndInsert:
 	inc 4, xsp
 	cp hl, 0x22
 	jr c, LyricsFile_CheckFirstByte
-	stib_da (0x020f6f), 0x00
+	ld (0x020f6f:24), 0x00
 
 LyricsFile_CheckFirstByte:
 	ld e, (0x020f4e:24)
@@ -1009,7 +1009,7 @@ LyricsBoxFunc_ResetCursors:
 	ldw (xbc), 0x0
 	ldw (xbc + 2), 0x2
 	ld (xwa), 0x0
-	stib_da (0x020f4e), 0x00
+	ld (0x020f4e:24), 0x00
 	jrl SongName_ReturnZeroJmp
 
 LyricsBoxFunc_SendEvent12:
@@ -1095,7 +1095,7 @@ LyricsBoxFunc_HandleSingleChar:
 	inc 1, wa
 	ld (xbc), wa
 	ldw (xde), 0x0
-	stib_da (0x020e4e), 0x00
+	ld (0x020e4e:24), 0x00
 	jr LyricsBoxFunc_ReadTrack
 
 LyricsBoxFunc_HandleNormalChar:
@@ -3805,7 +3805,7 @@ SMFMuteOnOffFunc:
 SMFMuteOnOff_Enable:
 	cp xde, 0x1
 	jr nz, SMFMuteOnOff_Disable
-	stib_da (0x021088), 0x01
+	ld (0x021088:24), 0x01
 	ld a, (0x02108a:24)
 	extz wa
 	calr SqAftSet_LookupTableEntry
@@ -3815,7 +3815,7 @@ SMFMuteOnOff_Enable:
 	jr SMFMuteOnOff_PostCall
 
 SMFMuteOnOff_Disable:
-	stib_da (0x021088), 0x00
+	ld (0x021088:24), 0x00
 	stiw_da (0x021086), 0x0000
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
@@ -6364,7 +6364,7 @@ NoteEditBox_EventDispatch2:
 	stib_dsp 224, 0
 	cp	xwa, xbc
 	jr	c, -8
-	stib_da	(0x021096), 0
+	ld	(0x021096:24), 0
 	lda	xix, (xsp+28)
 	ldw (xix), 2
 	lda	xde, (xix+4)
@@ -7268,7 +7268,7 @@ EntGrid_PostMainEvent:
 	call SetDialDown
 	lds wa, 1
 	call SetDialEnable
-	stib_da (0x02109e), 0x00
+	ld (0x02109e:24), 0x00
 	jrl Entertainer_ReturnZeroJmp
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -10401,7 +10401,7 @@ SqedtVal2_SendCommonEvents:
 	call SetDialDown
 	lds wa, 1
 	call SetDialEnable
-	stib_da (0x03e2e0), 0x00
+	ld (0x03e2e0:24), 0x00
 	jrl AccIll_ReturnZero2
 
 SqedtVal2_HandleScrollEvent:
@@ -10800,7 +10800,7 @@ SqedtVal2_HandleSelectEvent:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x1
 	jrl nz, SqedtVal2_HandleSelectCase3
-	stib_da (0x03e2e0), 0x00
+	ld (0x03e2e0:24), 0x00
 	ld xwa, (xbc)
 	ld xbc, 0x1e8003a
 	lds32 xde, 0
@@ -10915,7 +10915,7 @@ SqedtVal2_HandleSelectCase3:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x3
 	jrl nz, SqedtVal2_HandleSelectCase2
-	stib_da (0x03e2e0), 0x01
+	ld (0x03e2e0:24), 0x01
 	ld xwa, (xbc)
 	ld xbc, 0x1e8003c
 	lds32 xde, 0
@@ -11031,7 +11031,7 @@ SqedtVal2_HandleSelectCase2:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x2
 	jrl nz, SqedtVal2_HandleSelectCase4
-	stib_da (0x03e2e0), 0x00
+	ld (0x03e2e0:24), 0x00
 	ld xwa, (xbc)
 	ld xbc, 0x1e8003a
 	lds32 xde, 0
@@ -11085,7 +11085,7 @@ SqedtVal2_HandleSelectCase4:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x4
 	jrl nz, AccIll_ReturnZero2
-	stib_da (0x03e2e0), 0x01
+	ld (0x03e2e0:24), 0x01
 	ld xwa, (xbc)
 	ld xbc, 0x1e8003c
 	lds32 xde, 0
@@ -11148,7 +11148,7 @@ SqedtVal2_HandleUpScrollInner:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x1
 	jrl nz, SqedtVal2_HandleDownScrollInner
-	stib_da (0x03e2e0), 0x00
+	ld (0x03e2e0:24), 0x00
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 26)
 	ld xbc, 0x1e8003a
@@ -11290,7 +11290,7 @@ SqedtVal2_HandleDownScrollInner:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x3
 	jrl nz, SqedtVal2_HandleDownCase2
-	stib_da (0x03e2e0), 0x01
+	ld (0x03e2e0:24), 0x01
 	ld xwa, (xbc)
 	ld xbc, 0x1e8003c
 	lds32 xde, 0
@@ -11430,7 +11430,7 @@ SqedtVal2_HandleDownCase2:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x2
 	jrl nz, SqedtVal2_HandleDownCase4
-	stib_da (0x03e2e0), 0x00
+	ld (0x03e2e0:24), 0x00
 	ld xwa, (xbc)
 	ld xbc, 0x1e8003a
 	lds32 xde, 0
@@ -11484,7 +11484,7 @@ SqedtVal2_HandleDownCase4:
 	ld xwa, (xsp + 66)
 	cp xwa, 0x4
 	jrl nz, AccIll_ReturnZero2
-	stib_da (0x03e2e0), 0x01
+	ld (0x03e2e0:24), 0x01
 	ld xwa, (xbc)
 	ld xbc, 0x1e8003c
 	lds32 xde, 0

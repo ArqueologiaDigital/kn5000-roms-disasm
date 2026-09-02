@@ -2503,7 +2503,7 @@ InterCPU_E3_Gate1:
 	bit_dd8	4, 52
 	jr	z, 18
 	res_dd8	0, 52
-	stib_da	(1179648), 227
+	ld	(1179648:24), 227
 ; Poll MSTAT1 low, then raise SSTAT0 and return.
 InterCPU_E3_Gate2:
 	bit_dd8	4, 52
@@ -2550,7 +2550,7 @@ E2_Wait_DMA_Idle:
 E2_DMA_Ready:
 	res_dd8	0, 52
 	ld	(4328:16), 1
-	stib_da	(1179648), 226
+	ld	(1179648:24), 226
 	lds	ix, 0
 	bit_dd8	4, 52
 	jr	nz, 51
@@ -2613,7 +2613,7 @@ E1_Check_MSTAT1:
 	jrl z, E1_Timeout_Retry
 	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge E1 command from Main CPU
 	ld (4328:16), 2
-	stib_da 0x120000, 0xe1
+	ld (0x120000:24), 0xe1
 	lds iz, 0
 
 E1_Start_Transfer:
@@ -15585,7 +15585,7 @@ Voice_TickNoteDecay:
 ; Reload the divider: decrement the counter at 0x04135E and reset 0x04135F to 4.
 Voice_TickNoteDecay_Reload:
 	decdi8_24 1, 267102
-	stib_da 0x04135f, 0x04
+	ld (0x04135f:24), 0x04
 
 ; Restore and return.
 Voice_TickNoteDecay_Done:
@@ -18564,16 +18564,16 @@ ScaleTune_Get_Global_Mode:
 Voice_SetRhythmMode:
 	bit 3, a
 	jr z, Voice_SetRhythmMode_BranchA
-	stib_da 0x04135e, 0x03
+	ld (0x04135e:24), 0x03
 	jr Voice_SetRhythmMode_BranchB
 
 ; BranchA of Voice_SetRhythmMode.
 Voice_SetRhythmMode_BranchA:
-	stib_da 0x04135e, 0x01
+	ld (0x04135e:24), 0x01
 
 ; BranchB of Voice_SetRhythmMode.
 Voice_SetRhythmMode_BranchB:
-	stib_da 0x04135f, 0x01
+	ld (0x04135f:24), 0x01
 	ld c, a
 	and c, 0xF0
 	srl c, 4
@@ -29391,7 +29391,7 @@ VoiceParam_FullSetup_CountActive_Next:
 VoiceParam_FullSetup_CheckAllActive:
 	cps c, 4
 	jr z, VoiceParam_FullSetup_CopySlotParams
-	stib_da 0x0451a7, 0x00
+	ld (0x0451a7:24), 0x00
 
 VoiceParam_FullSetup_CopySlotParams:
 	ldib_erp 0xFB, 0
@@ -35189,7 +35189,7 @@ DSP_SetCoeff_WriteParams:
 	stb_da	(283159), a
 	jr	LABEL_031794
 LABEL_03178E:
-	stib_da	(283159), 0
+	ld	(283159:24), 0
 LABEL_031794:
 	ret
 ; ----------------------------------------------------------------------------
@@ -41045,7 +41045,7 @@ VoiceSlot_ClearAll_SubLoop2:
 
 ; 0x0451A4 = 0xFF, pop XIZ, inc 6,XSP, ret.
 VoiceSlot_ClearAll_Epilogue:
-	stib_da 0x0451a4, 0xff
+	ld (0x0451a4:24), 0xff
 	pop xiz
 	inc 6, xsp
 	ret
@@ -41126,7 +41126,7 @@ DSP_System_Init_Continue:
 	call Voice_Reset_Engine
 	call DSP_ResetWriteBufferPtr
 	call VoiceSlot_ClearAll
-	stib_da 0x041342, 0x00
+	ld (0x041342:24), 0x00
 	jp Voice_ResetAllControllers
 ; A stray one-byte `ret` immediately after DSP_System_Init's tail-jump.  No caller and no
 ; table reference anywhere in the authoritative source -- alignment padding or dead code.

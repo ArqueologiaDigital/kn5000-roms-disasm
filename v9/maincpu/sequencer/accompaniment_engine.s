@@ -34442,7 +34442,7 @@ AccScreen_DataBlock:
 	inc	4, xsp
 	ret
 	calr	1530
-	stib_da	(0x03efa8), 2
+	ld	(0x03efa8:24), 2
 	ld	xiy, AccScreen_UIDataBlock_0x33
 	ld	xix, AccScreen_UIDataBlock_0x15A
 	calr	65375
@@ -34451,11 +34451,11 @@ AccScreen_DataBlock:
 	calr	1176
 	ret
 	calr	726
-	stib_da	(0x03efa8), 1
+	ld	(0x03efa8:24), 1
 	ld	xiy, AccScreen_UIDataBlock_0x291
 	calr	65411
 	calr	1155
-	stib_da	(0x03efa8), 0
+	ld	(0x03efa8:24), 0
 	calr	1492
 	.byte 0xc1, 0xd6
 	ldw	ix, 0xbb19
@@ -34475,7 +34475,7 @@ AccScreen_DataBlock:
 	ld	xiy, AccScreen_UIDataBlock_0x1E7
 	ld	xix, AccScreen_UIDataBlock_0x256
 	calr	65296
-	stib_da	(0x03efa8), 0
+	ld	(0x03efa8:24), 0
 	.byte 0xc1
 	ccf
 	.byte 0x37
@@ -34741,7 +34741,7 @@ AccScreen_DataBlock:
 	call	DrawFunc_StackEntry
 	inc	4, xsp
 	ret
-	stib_da	(0x03efa8), 0
+	ld	(0x03efa8:24), 0
 	calr	813
 	ret
 	.byte 0xc1, 0xe2, 0xe3
@@ -34753,7 +34753,7 @@ AccScreen_DataBlock:
 	call	DrawFunc_StackEntry
 	inc	4, xsp
 	ret
-	stib_da	(0x03efa8), 0
+	ld	(0x03efa8:24), 0
 	calr	781
 	ret
 	.byte 0xc1, 0xe2, 0xe3
@@ -34770,7 +34770,7 @@ AccScreen_DataBlock:
 	call	DrawFunc_StackEntry
 	inc	4, xsp
 	ret
-	stib_da	(0x03efa8), 0
+	ld	(0x03efa8:24), 0
 	.byte 0xc1
 	ex_ff
 	.byte 0x37
@@ -34857,7 +34857,7 @@ AccScreen_DataBlock:
 	ret
 	ret
 	ret
-	stib_da	(0x03efa8), 2
+	ld	(0x03efa8:24), 2
 	.byte 0xc1
 	ccf
 	.byte 0x37
@@ -35033,7 +35033,7 @@ AccScreen_DataBlock:
 	div8rr	a, c
 	ld	(0x39b9:16), a
 	ret
-	stib_da	(0x03efa8), 0
+	ld	(0x03efa8:24), 0
 	.byte 0xc1
 	ccf
 	.byte 0x37
@@ -35121,7 +35121,7 @@ AccScreen_DrawInit_StackWrap:
 	ret
 
 AccScreen_DrawInit_Body:
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	calr AccScreen_DrawTempoDisplay
 	ret
 
@@ -35133,7 +35133,7 @@ AccScreen_UpdateBeat_StackWrap:
 	ret
 
 AccScreen_UpdateBeat_Body:
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	calr AccScreen_UpdateBeatDisplay
 	ret
 
@@ -35145,7 +35145,7 @@ AccScreen_DrawMeasure_StackWrap:
 	ret
 
 AccScreen_DrawMeasure_Body:
-	stib_da (0x03efa8), 0x00
+	ld (0x03efa8:24), 0x00
 	calr AccScreen_DrawMeasureDetail
 	ret
 
@@ -35182,7 +35182,7 @@ AccScreen_UIDataBlock:
 ; Screen data blocks compiled from C source, included as .incbin
 
 ; Accompaniment step recording UI data: 698 bytes
-	stib_da	(0x03efa8), 0
+	ld	(0x03efa8:24), 0
 	ldb	c, 0
 	ldb	a, 12
 	ldb	a, 16
@@ -37788,7 +37788,7 @@ StylCnvTxtTtlFunc:
 	jr nz, StylCnvTxt_ReturnZero
 	cpib_da (0x0ffc00), 0x05
 	jr nz, StylCnvTxt_ReturnZero
-	stib_da (0x0ffc00), 0xff
+	ld (0x0ffc00:24), 0xff
 	calr TableData_JumpToEntry
 	calr FloppyState_Dispatch
 	jr StylCnvTxt_ReturnZero
@@ -38172,7 +38172,7 @@ StylCnvModl_OK_Select_AlignSize:
 	add xbc, 0x80000
 	stda32 0x3d5c, xbc
 	call FileIO_CloseHandle
-	stib_da (0x0ffbfe), 0x00
+	ld (0x0ffbfe:24), 0x00
 	ld wa, (0x3d04:16)
 	ld (0x48ac:16), wa
 	lds iz, 0
@@ -38200,8 +38200,8 @@ StylCnvModl_OK_Select_StoreResult:
 	cp iz, 0x8
 	scc16 z, wa
 	ld (0x48ac:16), wa
-	stib_da (0x0ffc00), 0xff
-	stib_da (0x0ffc01), 0x00
+	ld (0x0ffc00:24), 0xff
+	ld (0x0ffc01:24), 0x00
 	pushw 0x4
 	ld wa, (0x3d04:16)
 	mul wa, 0x25
@@ -38485,7 +38485,7 @@ StylCnvCnvt_OK_Select_WriteStyle:
 	call FileIO_NormalizePath
 
 StylCnvCnvt_OK_Select_Finalize:
-	stib_da (0x0ffc00), 0xff
+	ld (0x0ffc00:24), 0xff
 	calr TableData_JumpToEntry
 	calr FloppyState_Dispatch
 	jr StylCnvCnvt_Return
@@ -38676,7 +38676,7 @@ StylCnvSel_OK_PageDown_Clamp:
 
 StylCnvSel_OK_SelectItem:
 	calr SoundMem_ClearRegion
-	stib_da (0x0ffc00), 0xff
+	ld (0x0ffc00:24), 0xff
 	ld wa, (0x3d04:16)
 	inc 1, a
 	stb_da (0x0ffc01), a
@@ -38737,8 +38737,8 @@ StylCnvCont_HandleOK:
 	jr nz, AccRhythm_ReturnZero
 	ld (0x3d06:16), 0
 	calr SoundMem_ClearRegion
-	stib_da (0x0ffc00), 0xff
-	stib_da (0x0ffc01), 0x00
+	ld (0x0ffc00:24), 0xff
+	ld (0x0ffc01:24), 0x00
 	pushw 0x4
 	pushw 0x0
 	pushw 0x3d58
@@ -39112,7 +39112,7 @@ StylCnv_AppendAndClear:
 	inc 8, xsp
 
 StylCnv_ClearAndFinalize:
-	stib_da (0x0ffc00), 0xff
+	ld (0x0ffc00:24), 0xff
 	jrl StylCnv_FinalizeAndCheckStatus
 
 StylCnv_DispatchByType:
@@ -39267,8 +39267,8 @@ StylCnv_Type3_CloseFile:
 
 StylCnv_Type3_BuildFfcBuffer:
 	calr SoundMem_ClearRegion
-	stib_da (0x0ffc00), 0xff
-	stib_da (0x0ffc01), 0x00
+	ld (0x0ffc00:24), 0xff
+	ld (0x0ffc01:24), 0x00
 	ldw (xsp + 16), 0x0
 	ldiw_erp 0xfa, 0
 	cpw (xsp + 4), 0x0
@@ -39375,8 +39375,8 @@ StylCnv_AbortWithError:
 
 StylCnv_Type4_ClearAndBuild:
 	calr SoundMem_ClearRegion
-	stib_da (0x0ffc00), 0xff
-	stib_da (0x0ffc01), 0x00
+	ld (0x0ffc00:24), 0xff
+	ld (0x0ffc01:24), 0x00
 	pushw 0x4
 	pushw 0x0
 	pushw 0x3d5c
@@ -39492,8 +39492,8 @@ StylCnv_Type6_AdvanceEntry:
 
 StylCnv_Type6_BuildFfcBuffer:
 	calr SoundMem_ClearRegion
-	stib_da (0x0ffc00), 0xff
-	stib_da (0x0ffc01), 0x00
+	ld (0x0ffc00:24), 0xff
+	ld (0x0ffc01:24), 0x00
 	ldw (xsp + 4), 0x0
 	lds iz, 0
 	cpdi16 0x48d8, 0
@@ -39825,8 +39825,8 @@ StylCnv_LSW_CopyExt3_Loop:
 
 FileLoad_ResetAndStartProcessing:
 	calr SoundMem_ClearRegion
-	stib_da (0x0ffc00), 0xff
-	stib_da (0x0ffc01), 0x00
+	ld (0x0ffc00:24), 0xff
+	ld (0x0ffc01:24), 0x00
 	ldw (xsp + 4), 0x0
 	lds iz, 0
 	ld wa, (xsp + 8)

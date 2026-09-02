@@ -1441,7 +1441,7 @@ HDAE5000_FlsNamingCheck:
 	pushw 0xa06e		; dest = tile buffer at 0x23A06E
 	call HDAE5000_MemCopy_Reverse
 	lda xsp, (xsp + 0x0a)
-	stib_da (0x23a07e), 0x00; clear dirty flag (tile updated)
+	ld (0x23a07e:24), 0x00; clear dirty flag (tile updated)
 	ld xhl, xiz
 	jrl t, .LFS_RdFSB__a_exit
 .LFS_RdFSB__a_evt84:                           ; EVT 0x84: Acknowledge — no action needed
@@ -1547,7 +1547,7 @@ HDAE5000_FlsNamingCheck2:
 	pushw 0xa06e		; dest = tile buffer at 0x23A06E
 	call HDAE5000_MemCopy_Reverse
 	lda xsp, (xsp + 0x0a)
-	stib_da (0x23a07e), 0x00; clear dirty flag
+	ld (0x23a07e:24), 0x00; clear dirty flag
 	ld xhl, xiz
 	jrl t, .LFS_RdFSB__b_exit
 .LFS_RdFSB__b_evt84:                           ; EVT 0x84: Acknowledge — no-op
@@ -2137,13 +2137,13 @@ HDAE5000_FlsLoadScreen:
 	jrl z, .LFWF_899f                      ; [76 9e 00] jrl Z,0x28899f
 	cp	(xsp+9), 0x01
 	jr nz, .LFWF_891c                      ; [6e 15] jr NZ,0x28891c
-	stib_da	(0x22AD9A), 1
+	ld	(0x22AD9A:24), 1
 	ld	(0x22ad96), iz
 	ld	wa, qiz
 	ld	(0x22ad98), wa
 	jr t, .LFWF_8922                       ; [68 06] jr T,0x288922
 .LFWF_891c:
-	stib_da	(0x22AD9A), 0
+	ld	(0x22AD9A:24), 0
 .LFWF_8922:
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
@@ -2184,7 +2184,7 @@ HDAE5000_FlsLoadScreen:
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 7b 02] jrl T,0x288c1a
 .LFWF_899f:
-	stib_da	(0x22AD9A), 0
+	ld	(0x22AD9A:24), 0
 	jrl t, .LFWF_8c1a                      ; [78 72 02] jrl T,0x288c1a
 .LFWF_89a8:
 	ld	bc, iz
@@ -2200,14 +2200,14 @@ HDAE5000_FlsLoadScreen:
 	jrl z, .LFWF_8c1a                      ; [76 4a 02] jrl Z,0x288c1a
 	cp	(xsp+9), 0x01
 	jr nz, .LFWF_89f2                      ; [6e 1c] jr NZ,0x2889f2
-	stib_da	(0x22AD9A), 1
+	ld	(0x22AD9A:24), 1
 	ld	wa, (0x23A096:24)
 	ld	(0x22ad96), wa
 	ld	wa, (0x23A098:24)
 	ld	(0x22ad98), wa
 	jr t, .LFWF_89f8                       ; [68 06] jr T,0x2889f8
 .LFWF_89f2:
-	stib_da	(0x22AD9A), 0
+	ld	(0x22AD9A:24), 0
 .LFWF_89f8:
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
@@ -2417,7 +2417,7 @@ HDAE5000_FlsFileLoadSwCatch:
 	cp	xhl, 0x00000006
 	jr nz, .LFWF_8cd1                      ; [6e 19] jr NZ,0x288cd1
 .LFWF_8cb8:
-	stib_da	(0x22AD9A), 0
+	ld	(0x22AD9A:24), 0
 	ld	xwa, (0x23a1a2)
 	ld	xwa, (xwa + 0x0e88)
 	ld_sril	xhl, (xwa + 0x00e8)
@@ -3996,7 +3996,7 @@ HDAE5000_CP_FD_DIRNAMECheck:
 	pushw 0xa06e
 	call HDAE5000_MemCopy_Reverse
 	lda xsp, (xsp + 0x0a)
-	stib_da (0x23a07e), 0x00
+	ld (0x23a07e:24), 0x00
 	ld xhl, xiz
 	jrl t, .LFSD__hB_exit2
 .LFSD__hB_84:				; Event 0x01E00084

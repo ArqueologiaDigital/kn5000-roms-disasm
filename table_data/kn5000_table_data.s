@@ -3298,19 +3298,19 @@ Boot_BlinkLED:
 	jr nz, Boot_BlinkLED__led_delay	; 6e 1e
 
 	; Pattern 0: bit 0
-	stib_da (0x160004), 0x01; LD (0x160004), 0x01
+	ld (0x160004:24), 0x01; LD (0x160004), 0x01
 	jr Boot_BlinkLED__led_delay	; 68 16
 
 Boot_BlinkLED__led_pattern1:
-	stib_da (0x160004), 0x02; LD (0x160004), 0x02
+	ld (0x160004:24), 0x02; LD (0x160004), 0x02
 	jr Boot_BlinkLED__led_delay	; 68 0e
 
 Boot_BlinkLED__led_pattern2:
-	stib_da (0x160004), 0x04; LD (0x160004), 0x04
+	ld (0x160004:24), 0x04; LD (0x160004), 0x04
 	jr Boot_BlinkLED__led_delay	; 68 06
 
 Boot_BlinkLED__led_pattern3:
-	stib_da (0x160004), 0x08; LD (0x160004), 0x08
+	ld (0x160004:24), 0x08; LD (0x160004), 0x08
 
 Boot_BlinkLED__led_delay:
 	ld xwa, 0x186A0	; LD XWA, 0x000186A0 (100000)
@@ -3547,13 +3547,13 @@ HDAE5000_InitializeParallelPort:
 	ldio 0xE3, 0x00	; LD (0xE3), 0x00
 	ldio 0xEB, 0x00	; LD (0xEB), 0x00
 	ld (340:16), 102; LD (0x0154), 0x66
-	stib_da (0x160006), 0x82; LD (0x160006), 0x82 - PPI mode
-	stib_da (0x160000), 0x00; LD (0x160000), 0x00 - Port A
-	stib_da (0x160004), 0x00; LD (0x160004), 0x00 - Port C
-	stib_da (0x160004), 0x0f; LD (0x160004), 0x0F - LED bits on
+	ld (0x160006:24), 0x82; LD (0x160006), 0x82 - PPI mode
+	ld (0x160000:24), 0x00; LD (0x160000), 0x00 - Port A
+	ld (0x160004:24), 0x00; LD (0x160004), 0x00 - Port C
+	ld (0x160004:24), 0x0f; LD (0x160004), 0x0F - LED bits on
 	ld xwa, 0xDBBA0	; LD XWA, 0x000DBBA0 (900000)
 	calr Boot_DelayLoop	; CALR Boot_DelayLoop
-	stib_da (0x160004), 0x00; LD (0x160004), 0x00 - LEDs off
+	ld (0x160004:24), 0x00; LD (0x160004), 0x00 - LEDs off
 HDAE5000_InitializeParallelPort__ppi_wait_loop:
 	ld a, (0x160002:24)	; LD A, (0x160002) - poll PPI Port B handshake
 	extz wa	; EXTZ WA
@@ -3583,7 +3583,7 @@ HDAE5000_InitializeParallelPort__probe_fail_halt:
 
 	; === Erase both flash devices (only if not already blank) ===
 HDAE5000_InitializeParallelPort__erase_flash:
-	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off
+	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off
 	ld xwa, 0x800000	; table-data flash start
 	ld xbc, 0xA00000	; table-data flash end
 	calr Flash_SearchFirstNonEmptyBlock
@@ -3609,7 +3609,7 @@ HDAE5000_InitializeParallelPort__erase_blink:
 
 	; === Program initialization image + custom flash (LED bit 0 while busy) ===
 HDAE5000_InitializeParallelPort__program_flash:
-	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off
+	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off
 	setda_24 0, (0x160004)	; SET 0, (0x160004)
 	calr Flash_ProgramHDAE_Initialization	; program HDAE5000 banks 0-3
 	resda_24 0, (0x160004)	; RES 0, (0x160004)
@@ -3637,7 +3637,7 @@ HDAE5000_InitializeParallelPort__program_flash:
 	call_24 nz, 0xFFC55A	; CALL NZ, LED_ToggleBit3 (boot-time alias of 0x9FC55A; never returns)
 
 	; === Check "hkt_" signature, remap CS2 and jump into the Program ROM ===
-	stib_da (0x160000), 0x07	; LD (0x160000), 0x07 - select HDAE5000 bank 7
+	ld (0x160000:24), 0x07	; LD (0x160000), 0x07 - select HDAE5000 bank 7
 	ld xwa, (0x2fffc0:24)	; LD XWA, (0x2FFFC0) - signature dword
 	cp xwa, 0x5F746B68	; CP XWA, 0x5F746B68 - ASCII "hkt_"
 	jr z, HDAE5000_InitializeParallelPort__handoff	; 66 05
@@ -3672,7 +3672,7 @@ HDAE5000_InitializeParallelPort__handoff:
 ; Callers: HDAE5000_ReinitPPI_ProgramPayload (jrl); no other xref in this ROM
 ; =============================================================================
 HDAE5000_ProgramPayloadOnly:
-	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off
+	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off
 	call 0xFFBC6A	; CALL Flash_ReadID_32bit (boot-time alias of 0x9FBC6A)
 	cp xhl, 0xFFFFFFFF	; CP XHL, 0xFFFFFFFF - no/unknown device?
 	jr nz, HDAE5000_ProgramPayloadOnly__erase_flash	; 6e 07
@@ -3691,7 +3691,7 @@ HDAE5000_ProgramPayloadOnly__erase_flash:
 	jr nz, HDAE5000_ProgramPayloadOnly__program_flash	; 6e 13
 HDAE5000_ProgramPayloadOnly__erase_blink:
 	calr Boot_BlinkLED	; cycle LED pattern while the chip erase runs
-	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off between patterns
+	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off between patterns
 	call 0xFFBE85	; CALL Flash_WaitComplete_32bit
 	cp hl, 0xFFFF
 	jr z, HDAE5000_ProgramPayloadOnly__erase_blink	; 66 ed
@@ -3726,13 +3726,13 @@ HDAE5000_ProgramPayloadOnly__done_halt:
 ; =============================================================================
 HDAE5000_ReinitPPI_ProgramPayload:
 	ld (0x154:16), 0x66	; LD (0x0154), 0x66
-	stib_da (0x160006), 0x82	; LD (0x160006), 0x82 - PPI mode
-	stib_da (0x160000), 0x00	; LD (0x160000), 0x00 - Port A
-	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - Port C
-	stib_da (0x160004), 0x0f	; LD (0x160004), 0x0F - LED bits on
+	ld (0x160006:24), 0x82	; LD (0x160006), 0x82 - PPI mode
+	ld (0x160000:24), 0x00	; LD (0x160000), 0x00 - Port A
+	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - Port C
+	ld (0x160004:24), 0x0f	; LD (0x160004), 0x0F - LED bits on
 	ld xwa, 0xDBBA0	; LD XWA, 0x000DBBA0 (900000)
 	calr Boot_DelayLoop
-	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off
+	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off
 HDAE5000_ReinitPPI_ProgramPayload__ppi_wait_loop:
 	ld a, (0x160002:24)	; LD A, (0x160002) - poll PPI Port B handshake
 	extz wa	; EXTZ WA

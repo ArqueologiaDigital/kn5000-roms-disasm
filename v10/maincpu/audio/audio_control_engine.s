@@ -4360,11 +4360,11 @@ Display_SetupAndPrepareRender:
 	call Get_Region_Code
 	cps l, 2
 	jr nz, Display_SetRegionNon2
-	stib_da (0x00ffc8), 0x01
+	ld (0x00ffc8:24), 0x01
 	jr Display_RegionDone
 
 Display_SetRegionNon2:
-	stib_da (0x00ffc8), 0x02
+	ld (0x00ffc8:24), 0x02
 
 Display_RegionDone:
 	lds wa, 0

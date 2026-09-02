@@ -18801,7 +18801,7 @@ SeqInit_ClearPartDataLoop:
 	calr Part_UnlinkVoiceFromChain
 	ld (0x28b2:16), 0
 	ldw (9832:16), 1
-	stib_da (0x00ffe3), 0x00
+	ld (0x00ffe3:24), 0x00
 	ldw (9500:16), 1
 	ldw (9502:16), 1
 	ldw (9504:16), 1
@@ -25655,7 +25655,7 @@ SeqLoad_AltInitParts:
 	lds bc, 4
 	lds de, 0
 	call Part_WriteByte
-	stib_da (0x00ffe3), 0x00
+	ld (0x00ffe3:24), 0x00
 	call SeqStep_FindLastUsedPart
 	ld a, (0x00ffe3:24)
 	extz wa

@@ -9564,7 +9564,7 @@ sub_FBD858:
 	stb_da	(0xD94B), a                         ; FBD87B  ld (0x00d94b),A
 	jr sub_FBD858__FBD888                      ; FBD880  jr T,0xfbd888
 sub_FBD858__FBD882:
-	stib_da	(0xD94B), 0                        ; FBD882  ld (0x00d94b),0x00
+	ld	(0xD94B:24), 0                        ; FBD882  ld (0x00d94b),0x00
 sub_FBD858__FBD888:
 	ldw	wa, 1                                  ; FBD888  ld WA,0x0001
 	unlk32 xiz                                 ; FBD88B  unlk XIZ

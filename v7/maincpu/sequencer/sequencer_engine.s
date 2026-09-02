@@ -18056,7 +18056,7 @@ SeqInit_ClearPartDataLoop:
 	calr	-4969
 	ld	(10418:16), 0
 	ldw	(9832:16), 1
-	stib_da	65507, 0
+	ld	(65507:24), 0
 	ldw	(9500:16), 1
 	ldw	(9502:16), 1
 	ldw	(9504:16), 1
