@@ -25,6 +25,12 @@ table_data/includes/demo_presets/demo_preset_*.bin
 # the SLIDE8K payload is generated (see the help-database rules in Makefile).
 table_data/includes/help_databases/help_db_*_compressed.bin
 
+# The table_data stale-remnant duplicate (style_records.s + help_databases.s): derived
+# byte-for-byte from help_db_english_compressed.bin + help_db_german_compressed.bin by
+# scripts/generators/gen_stale_help_duplicate.py -- see that script's header.
+table_data/includes/help_databases/stale_style_records_residue.bin
+table_data/includes/help_databases/stale_help_db_german_head.bin
+
 # Test ROM artifacts
 test_ROMs/*.bin
 test_ROMs/*.p

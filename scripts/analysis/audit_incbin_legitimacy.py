@@ -15,9 +15,11 @@ Categories, and why each is legitimate:
                                round-trip converters in scripts/build/
     section_*                  style banks rebuilt from committed .styles event listings
     FTBMP                      genuine Windows BMP files, stored verbatim by the firmware
-    icons_to_strings.bin       two SLIDE8K-compressed remnants (the stale German help DB, and
-                               the copy of the English DB's tail that style_records.s calls
-                               residue) -- compressed, documented, legitimately opaque
+    stale_*.bin (help_databases/) the two former icons_to_strings.bin remnants (stale German
+                               help DB body + the English DB's duplicated tail), now DERIVED
+                               from the live help_db_english/german_compressed.bin build
+                               products by gen_stale_help_duplicate.py -- see that script and
+                               table_data/style_records.s / help_databases.s (2026-09-02)
 
 TWO METHODOLOGY TRAPS, both hit while writing this, both worth keeping:
 
@@ -39,6 +41,8 @@ REPO = pathlib.Path(__file__).resolve().parent.parent.parent
 INC = re.compile(r'\.incbin\s+"([^"]+)"')
 RULES = [
     (('generated/', 'romslices/'), 'generated or committed no-source slice'),
+    (('stale_style_records_residue.bin', 'stale_help_db_german_head.bin'),
+     'derived from the live help_db_*_compressed.bin build products'),
     (('demo_preset', 'help_db'), 'compressed, codec has a committed encoder'),
     (('FTBMP',), 'genuine Windows BMP stored verbatim'),
     (('images/',), 'rebuilt from a committed PNG or palette text'),

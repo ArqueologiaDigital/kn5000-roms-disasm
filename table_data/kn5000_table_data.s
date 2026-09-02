@@ -783,14 +783,30 @@ IconPixels_176_Unreferenced:	.incbin "includes/generated/IconPixels_176.bin"
 ; The file is a verbatim slice of the factory dump covering exactly the region
 ; mapped above: file offset 0 = ROM 0x944D78, last byte = ROM 0x9F9FFF.  It
 ; predates the source conversion, so most of what it holds is now emitted from
-; real source and only 13 sized .incbin slices (126,674 B, 17% of the file)
-; still read from it:
+; real source.
 ;
-;   file 0x00F38-0x078A7  Font0..Font5 glyph banks       fonts.s
-;   file 0x07C28-0x0BCE7  Font6..Font9 glyph banks       fonts.s
-;   file 0x3C7F8-0x3E7DE  StyleRecords_Residue           style_records.s
-;   file 0x3EDCD-0x41287  HelpDB_German_Stale remnant    help_databases.s
-;   file 0x6F288-0x7F287  Composer_FactoryMemoryImage    this file
+; ★ CORRECTED 2026-09-02: this comment used to list 13 sized .incbin slices
+; (126,674 B, 17% of the file) as "still read from it" -- Font0..Font9 and
+; Composer_FactoryMemoryImage.  That was stale: fonts.s has since moved to
+; round-trip PNGs (includes/generated/Font*_Glyphs.bin) and
+; Composer_FactoryMemoryImage below now .incbins includes/generated/
+; Composer_FactoryMemoryImage.bin, rebuilt from custom_data/styles/.  Neither
+; reads this blob's bytes at build time any more (style_events.py's EXTRA
+; entry still reads it, but only to VERIFY the round trip, not to emit).
+;
+; Then style_records.s's StyleRecords_Residue and help_databases.s's
+; HelpDB_German_Stale body (17,570 B total; see table_data_debt.py's
+; 'stale-remnant' class) also stopped reading it, once scripts/generators/
+; gen_stale_help_duplicate.py established they are the live English+German
+; SLIDE8K streams duplicated 0x8000 lower and can be derived from those
+; build products instead (see the module headers in style_records.s and
+; help_databases.s).
+;
+; NET RESULT: as of 2026-09-02, `scripts/analysis/audit_icons_blob_coverage.py`
+; reports ZERO live .incbin slices of this blob anywhere in table_data/.  The
+; file is kept only as a verification reference (its sha256 above, and the
+; EXTRA entry in style_events.py) -- see that script and
+; `python3 scripts/analysis/table_data_debt.py` for the up-to-date accounting.
 ;
 ; ASL MIRROR: archive/asl/table_data/kn5000_table_data.asm bincludes the file
 ; as ONE 0x7F2D8-byte block (ROM 0x944D78-0x9C404F) and then ORGs to 0x9C4050,

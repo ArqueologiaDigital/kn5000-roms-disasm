@@ -20075,10 +20075,19 @@ StyleRec_999:	; Latin / World / Jamaican Swing: "Caribbean Synth" tempo 90
 ; region -- not, as this comment used to say, the torso of a discarded
 ; compressed block whose header no longer exists.  The header is not missing;
 ; it is at 0x98956F, where the live copy still uses it.
-; Byte-exact slice of the dump; do not rebuild.
+;
+; DERIVED, NOT DUMPED (2026-09-02): this slice needs no raw blob.
+; scripts/generators/gen_stale_help_duplicate.py reconstructs it from
+; includes/help_databases/help_db_english_compressed.bin (itself a build
+; product regenerated from a committed decompressed source), sliced at the
+; live-region offset shifted 0x8000 down.  `make verify-stale-help-duplicate`
+; proves the re-derivation is byte-exact against this ROM slice.  See
+; help_databases.s's module header (HelpDB_German_Stale) for the sibling half
+; of the same duplicate and scripts/analysis/verify_stale_band.py for the
+; original discovery.
 ; -----------------------------------------------------------------------------
 StyleRecords_Residue:
-	.incbin	"includes/icons_to_strings.bin", 0x3c7f8, 0x1fe7
+	.incbin	"includes/help_databases/stale_style_records_residue.bin"
 
 ; -----------------------------------------------------------------------------
 ; The tail of the same copied English help database.  The regular structure --
