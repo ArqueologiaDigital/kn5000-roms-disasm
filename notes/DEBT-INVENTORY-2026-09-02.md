@@ -24,8 +24,14 @@ M. Kitajima"*) disassembled as ~35 garbage instructions, and
 **`HDAE5000_RECORD_TABLE` at 0x29C0AA — 6,356 bytes written as ~6,150 lines of
 instruction mnemonics**, whose only references load it as an ADDRESS, with zero
 call or jump sites anywhere in the tree. A smaller instance exists in
-`HDAE5000_Lang_Codes`. **This category is unmeasured across all 13 images**, so
-every "remaining debt" figure in this file is a LOWER BOUND.
+`HDAE5000_Lang_Codes`. ★ **FIRST MEASURED 2026-09-02, on v10: 7,128 B across 264 spans**
+(`scripts/analysis/v10_data_as_code_census.py`, tight rule, 0.3–2.3%
+false-positive against its own control). ⚠ Do NOT quote the raw
+"375,743 B unreached" figure that census also prints — its own null shows a
+17.3% seed-coverage gap, so the raw number is dominated by REAL code reached
+through dispatch mechanisms static analysis cannot follow. The category
+remains unmeasured on the other twelve images, so their figures are still
+LOWER BOUNDS.
 
 A `.byte` run is exactly as un-decoded as an `.incbin`, and it passes every
 "no `.incbin`" test. This project has now shipped that false claim twice.
