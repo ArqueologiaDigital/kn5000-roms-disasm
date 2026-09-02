@@ -1299,3 +1299,31 @@ table. No stride was found that accounts for the whole span, so it is
 left `.incbin`, characterised rather than converted: icon/cursor-shaped
 graphics data, not the "no recognised shape at all" the prior audit
 recorded — a correction to log, even though it did not close any bytes.
+
+**`gen_promB5_spans.py`** (lane promB5, 2026-09-02) closes the six spans the
+round-1 coverage pass left verbatim in prom_b — 0xF283A7 (149 B), 0xF2843D
+(228 B), 0xF28725 (221 B), 0xF296D6 (143 B), 0xF2B2E3 (150 B) and 0xF34CB8
+(224 B), 1,115 B in all — as typed data. The round-1 walk reached each object's
+FIRST byte through a 32-bit pointer and stopped there, because it had no notion
+of how big the pointed-at thing is; the display-list handler that consumes the
+pointer does. Fifteen objects: two bitmaps (extent = the BC×HL that all 32,
+resp. all 17, interpreter-A op-0x03 records naming them carry — 5×30 and 2×9,
+and read column-major they draw a rounded box and a filled dot), five runs of
+interpreter-B records (every length byte equal to its handler's implied length,
+each run landing exactly on the next object), and eight operand tables/arrays
+(entry size fixed by the referring handler, entry count = extent ÷ that, never
+more than the record's `(mask >> shift) + 1` allows). Five of the six spans end
+exactly on a display-list call site's start address; the sixth ends on
+`Data_F28522`, already converted. Nothing is emitted as an instruction —
+`--selftest` asserts that too, along with re-assembling the emitted text back to
+the ROM's own bytes.
+
+    python3 notes/gen_promB5_spans.py --selftest
+    python3 notes/gen_promB5_spans.py --census    # .incbin left in the six spans
+    python3 notes/gen_promB5_spans.py --splice
+
+It also amends, rather than deletes, what it overturns: the round-1 headers on
+`Data_F283A7` and `Data_F2843D` (which typed one byte each and said "the extent
+is the reachability walk's, not the object's") are kept verbatim, fenced and
+quoted, with the corrected header written under them; the two `COVER-R1` band
+headers and the two `not converted` markers are annotated in place.
