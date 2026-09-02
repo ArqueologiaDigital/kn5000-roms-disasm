@@ -418,7 +418,7 @@ INTT1_NoOverflow:
 	cp w, 0x86
 	jr ule, INTT1_StoreCounters
 	ldb w, 0x0
-	ordi8 1065, 16
+	or (1065:16), 16
 	call MIDI_SC0_TX_DISPATCH
 
 INTT1_StoreCounters:
@@ -456,7 +456,7 @@ INTT1_CheckMidiSync:
 	jr nz, UIState_DispatchBranch
 	push	sr
 	ei 6
-	ordi8 1065, 8
+	or (1065:16), 8
 	call MIDI_SC0_TX_DISPATCH
 	pop	sr
 
@@ -484,7 +484,7 @@ INTT1_CheckMidiSyncGate:
 	jr z, INTT1_SkipToDispatch
 	push	sr
 	ei 6
-	ordi8 1065, 1
+	or (1065:16), 1
 	call MIDI_SC0_TX_DISPATCH
 	pop	sr
 
@@ -769,7 +769,7 @@ INTTR4_SeqAutoStart:
 	jr nz, INTTR4_SeqAutoStart_Skip
 	push	sr
 	ei 6
-	ordi8 1065, 2
+	or (1065:16), 2
 	call MIDI_SC0_TX_DISPATCH
 	pop	sr
 
@@ -803,7 +803,7 @@ INTTR4_MetroBeat_OnBeat:
 	jr nz, INTTR4_SeqBeat_Check
 	push	sr
 	ei 6
-	ordi8 1065, 8
+	or (1065:16), 8
 	call MIDI_SC0_TX_DISPATCH
 	pop	sr
 
@@ -831,7 +831,7 @@ INTTR4_MetroQuarter_Check:
 	jr z, INTTR4_SeqAccum_Update
 	push	sr
 	ei 6
-	ordi8 1065, 1
+	or (1065:16), 1
 	call MIDI_SC0_TX_DISPATCH
 	pop	sr
 

@@ -8216,7 +8216,7 @@ MidiStream_ProcessEventBuffer:
 	jrl z, MidiStream_Return
 	calr MidiStream_InitFromLookup
 	ei 6
-	ordi8 1113, 1
+	or (1113:16), 1
 	ld a, (1045:16)
 	ld (0x91c9:16), a
 	ei 0
@@ -10711,7 +10711,7 @@ MidiStream_ApplyPendingParams:
 	and a, 0x7
 	jr z, MidiStream_CallFilterAndAudio
 	call ToneGen_DispatchByMode
-	ordi8 0x90f9, 1
+	or (0x90f9:16), 1
 
 MidiStream_CallFilterAndAudio:
 	call SwbtWr_WriteVoiceParam_PreserveRegs

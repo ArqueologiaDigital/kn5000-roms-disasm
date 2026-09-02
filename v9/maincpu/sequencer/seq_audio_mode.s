@@ -58,7 +58,7 @@ AccPedal_BytecodeBlock1:
 AccPedal_SetFlag13155:
 	pushw wa
 	push xiy
-	ordi8 0x3363, 1
+	or (0x3363:16), 1
 	pop xiy
 	popw wa
 	ret
@@ -171,7 +171,7 @@ AccChannel_MarkDirtyAndSync:
 	calr AccChannel_SetDirtyIfActive
 	calr AccChannel_CheckActivitySetDirty
 	calr AccChannel_CheckPartIndexDirty
-	ordi8 0x330c, 1
+	or (0x330c:16), 1
 
 AccChannel_StoreCurrentState:
 	ld a, (0x32f5:16)
@@ -197,7 +197,7 @@ AccChannel_SetDirtyIfActive:
 	and w, 0x7
 	cps w, 0
 	jr z, AccChannel_SetDirtyDone
-	ordi8 0x3326, 63
+	or (0x3326:16), 63
 
 AccChannel_SetDirtyDone:
 	ret
@@ -212,7 +212,7 @@ AccChannel_CheckActivitySetDirty:
 	jr z, AccChannel_ActivityCheckDone
 	cp (0x32f5:16), 128
 	jr c, AccChannel_ActivityCheckDone
-	ordi8 0x3326, 63
+	or (0x3326:16), 63
 
 AccChannel_ActivityCheckDone:
 	ret
@@ -221,7 +221,7 @@ AccChannel_CheckPartIndexDirty:
 	ld a, (1075:16)
 	cps a, 1
 	jr nz, AccChannel_PartIndexDone
-	ordi8 0x3326, 63
+	or (0x3326:16), 63
 
 AccChannel_PartIndexDone:
 	ret
@@ -241,7 +241,7 @@ AccVoice_ProcessPedalChanges:
 	and (0x3326:16), 192
 
 AccVoice_Pedal0_SetAndCheck:
-	ordi8 0x330a, 1
+	or (0x330a:16), 1
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
@@ -260,7 +260,7 @@ AccVoice_Pedal0_Done:
 	and (0x3326:16), 192
 
 AccVoice_Pedal1_SetAndCheck:
-	ordi8 0x330a, 4
+	or (0x330a:16), 4
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
@@ -279,7 +279,7 @@ AccVoice_Pedal1_Done:
 	and (0x3326:16), 192
 
 AccVoice_Pedal2_SetAndCheck:
-	ordi8 0x330a, 8
+	or (0x330a:16), 8
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
@@ -301,7 +301,7 @@ AccVoice_ProcessLeftPedalChanges:
 	and (0x3326:16), 192
 
 AccVoice_LeftPedal0_SetAndCheck:
-	ordi8 0x3309, 1
+	or (0x3309:16), 1
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
@@ -320,7 +320,7 @@ AccVoice_LeftPedal0_Done:
 	and (0x3326:16), 192
 
 AccVoice_LeftPedal1_SetAndCheck:
-	ordi8 0x3309, 2
+	or (0x3309:16), 2
 	calr AccVoice_CheckBitsAndSetFlags
 	calr AccVoice_CheckChannelSetActive
 
@@ -332,7 +332,7 @@ AccVoice_CheckChannelSetActive:
 	orda8 a, 0x3315
 	and a, 0x3f
 	jr z, AccVoice_ChannelActiveDone
-	ordi8 0x330f, 1
+	or (0x330f:16), 1
 
 AccVoice_ChannelActiveDone:
 	ret
@@ -343,7 +343,7 @@ AccVoice_CheckBitsAndSetFlags:
 	inc 1, d
 	cpda8 d, 1075
 	jr nz, AccVoice_BitsCheckDone
-	ordi8 0x3327, 63
+	or (0x3327:16), 63
 
 AccVoice_BitsCheckDone:
 	ret
@@ -357,7 +357,7 @@ AccPitch_CheckTransposeFlags:
 	inc 1, a
 	cpda8 a, 1075
 	jr nz, AccPitch_UpdateCheck
-	ordi8 0x3329, 63
+	or (0x3329:16), 63
 
 AccPitch_UpdateCheck:
 	bit 7, (0x3470:16)
@@ -368,7 +368,7 @@ AccPitch_UpdateCheck:
 	inc 1, a
 	cpda8 a, 1075
 	jr nz, AccPitch_FinalReturn
-	ordi8 0x3329, 63
+	or (0x3329:16), 63
 
 AccPitch_FinalReturn:
 	ret
@@ -384,7 +384,7 @@ AccChord_ProcessKeyChanges:
 	and (0x3327:16), 192
 	and (0x330b:16), 253
 	and (0x3326:16), 192
-	ordi8 0x330b, 1
+	or (0x330b:16), 1
 	calr AccChannel_SetDirtyIfActive
 
 AccChord_KeyChange0_Done:
@@ -398,7 +398,7 @@ AccChord_KeyChange0_Done:
 	and (0x3327:16), 192
 	and (0x330b:16), 254
 	and (0x3326:16), 192
-	ordi8 0x330b, 2
+	or (0x330b:16), 2
 	calr AccChannel_SetDirtyIfActive
 
 AccChord_KeyChange1_Done:
@@ -547,7 +547,7 @@ AccChord_CompareAndSetDirty:
 	jr z, AccChord_CheckZeroChord
 
 AccChord_SetDirtyBit5:
-	ordi8 0x32f3, 32
+	or (0x32f3:16), 32
 
 AccChord_CheckZeroChord:
 	cp (0x32dc:16), 0
@@ -581,7 +581,7 @@ AccentVoice_CheckModeChange:
 	and a, 0x3
 	cpda8 a, 0x3338
 	jr z, AccentVoice_UpdateParamIndex
-	ordi8 0x330d, 1
+	or (0x330d:16), 1
 
 AccentVoice_UpdateParamIndex:
 	ld a, (0x3305:16)

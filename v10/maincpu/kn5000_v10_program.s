@@ -2684,7 +2684,7 @@ CPanel_RX_ProcessOrInit:
 	ei 6
 	ldw (36253:16), 0
 	ldw (36255:16), 0
-	ordi8 36242, 1	; CP_Flags_B.0 = 1
+	or (36242:16), 1	; CP_Flags_B.0 = 1
 	ei 0
 	jr CPanel_RX_Return
 				; else:

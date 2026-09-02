@@ -788,7 +788,7 @@ MIDI_SYSTEM_EXCLUSIVE_HANDLER:
 	ret
 
 SysEx_SongPositionSetup:
-	ordi8 1063, 66
+	or (1063:16), 66
 	ld c, e
 	ret
 

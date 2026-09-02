@@ -1980,8 +1980,8 @@ AccPlay_DispatchSeqStart:
 	bit 2, (0x0420:16)
 	jr nz, AccPlay_DispatchSeqRet
 	call Seq_DispatcherEntry
-	ordi8 (0x334c), 0x01
-	ordi8 (0x3431), 0x80
+	or (0x334c:16), 0x01
+	or (0x3431:16), 0x80
 	call Seq_DispatcherEntry
 	ld (0x7e6f:16), 0x02
 AccPlay_DispatchSeqRet:
@@ -3155,7 +3155,7 @@ MidiSeqBuf_WriteByte:
 AccPlay_InitAndStartLoop:
 	ld (0x7e6f:16), 0x00
 	call TempoRingBuf_ReInitAndRet
-	ordi8 (0x7e79), 0x04
+	or (0x7e79:16), 0x04
 
 	ldb a, 0x8
 

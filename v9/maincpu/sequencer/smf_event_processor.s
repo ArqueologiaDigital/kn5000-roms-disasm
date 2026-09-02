@@ -906,7 +906,7 @@ SeqPlay_StartWithDisplay:
 	jr SeqPlay_QueueDisplayEvent
 
 SeqPlay_SetFlagAndMode:
-	ordi8 0xfdad, 4
+	or (0xfdad:16), 4
 	ldb a, 0x4
 
 SeqPlay_QueueDisplayEvent:
@@ -2159,7 +2159,7 @@ SMF_NoteOn_FindVoiceSlot:
 	jrl SMF_ProcessEventLoop
 
 SMF_NoteOn_SlotFound:
-	ordi8 4236, 1
+	or (4236:16), 1
 	pushw hl
 	ld c, (4212:16)
 	call SMF_CalcTimeDelta
@@ -11277,7 +11277,7 @@ AccKey_ScanLoop:
 AccKey_FoundActiveKey:
 	andda16 xwa, 0xf19e
 	jr z, AccKey_ScanDone
-	ordi8 0x3284, 2
+	or (0x3284:16), 2
 
 AccKey_ScanDone:
 	pop xbc

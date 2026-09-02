@@ -188,13 +188,13 @@ AccompSeq_ProcessTimedEvent:
 	jr AccompSeq_EventDispatchLoop
 
 AccompSeq_SetTimePending:
-	ordi8 0x7e53, 1
+	or (0x7e53:16), 1
 	jr AccompSeq_EventDispatchLoop
 
 AccompSeq_HandleEndMarker:
 	bit 1, (0x7e53:16)
 	jr z, AccompSeq_EndMarkerCalcTime
-	ordi8 0x7e53, 1
+	or (0x7e53:16), 1
 	jr AccompSeq_EventDispatchLoop
 
 AccompSeq_EndMarkerCalcTime:
@@ -202,11 +202,11 @@ AccompSeq_EndMarkerCalcTime:
 	call AccompSeq_CalcDeltaTime
 	cp a, 0x18
 	jr ule, AccompSeq_EndMarkerAdvance
-	ordi8 0x7e53, 1
+	or (0x7e53:16), 1
 	jp AccompSeq_EventDispatchLoop
 
 AccompSeq_EndMarkerAdvance:
-	ordi8 0x7e53, 2
+	or (0x7e53:16), 2
 	ld wa, (0x7e46:16)
 	inc 1, wa
 	ld (0x7e46:16), wa
@@ -373,12 +373,12 @@ AccompSeq_StopPartCh2:
 	and (0x7e24:16), 253
 
 AccompSeq_CheckRestart:
-	ordi8 0x7e53, 1
+	or (0x7e53:16), 1
 	ld a, (0x7e24:16)
 	and a, 0x3
 	cps a, 0
 	jr nz, AccompSeq_DispatchReturn
-	ordi8 0x7e24, 1
+	or (0x7e24:16), 1
 	call AccompSeq_StopSequence
 
 AccompSeq_DispatchReturn:
@@ -758,7 +758,7 @@ AccompSeq_CheckVelocityFlags:
 	and (0x33e5:16), 251
 	cp a, 0x78
 	jr c, AccompSeq_VelFlags_CheckProgram
-	ordi8 0x33e5, 4
+	or (0x33e5:16), 4
 
 AccompSeq_VelFlags_CheckProgram:
 	push xiy
@@ -766,7 +766,7 @@ AccompSeq_VelFlags_CheckProgram:
 	ld w, (xiy)
 	cp w, 0xf0
 	jr c, AccompSeq_VelFlags_CallDispatch
-	ordi8 0x33e5, 4
+	or (0x33e5:16), 4
 
 AccompSeq_VelFlags_CallDispatch:
 	pop xiy
@@ -780,7 +780,7 @@ AccompSeq_VelFlags_CallDispatch:
 	ret
 
 AccompSeq_CheckVelFlagsExtended:
-	ordi8 0x33e5, 2
+	or (0x33e5:16), 2
 	pushw wa
 	ld a, (0x7e5a:16)
 	ld (0x33e6:16), a
@@ -790,7 +790,7 @@ AccompSeq_CheckVelFlagsExtended:
 	and (0x33e5:16), 251
 	cp a, 0x78
 	jr c, AccompSeq_ExtVelFlags_CheckProg
-	ordi8 0x33e5, 4
+	or (0x33e5:16), 4
 
 AccompSeq_ExtVelFlags_CheckProg:
 	push xiy
@@ -798,7 +798,7 @@ AccompSeq_ExtVelFlags_CheckProg:
 	ld w, (xiy)
 	cp w, 0xf0
 	jr c, AccompSeq_ExtVelFlags_Dispatch
-	ordi8 0x33e5, 4
+	or (0x33e5:16), 4
 
 AccompSeq_ExtVelFlags_Dispatch:
 	pop xiy
@@ -910,11 +910,11 @@ AccompSeq_PortaFade_Return:
 	ret
 
 AccompSeq_ManualMidiMode1:
-	ordi8 0x7f15, 2
+	or (0x7f15:16), 2
 	jr AccompSeq_ManualMidi_CheckAllNotes
 
 AccompSeq_ManualMidiMode2:
-	ordi8 0x7f15, 8
+	or (0x7f15:16), 8
 
 AccompSeq_ManualMidi_CheckAllNotes:
 	cp l, 0x7f
@@ -1204,7 +1204,7 @@ AccompSeq_LoadParams:
 	ld a, (xiy + 16)
 	bit 0, a
 	jr z, AccompSeq_LoadParams_Bit0Set
-	ordi8 0x7e27, 2
+	or (0x7e27:16), 2
 
 AccompSeq_LoadParams_Bit0Set:
 	ld xwa, (xiy + 17)
@@ -1361,7 +1361,7 @@ AccompSeq_InitPlayState:
 	ld (1138:16), a
 	bit 2, (1055:16)
 	jr nz, AccompSeq_InitPlay_SetCounters
-	ordi8 1055, 1
+	or (1055:16), 1
 
 AccompSeq_InitPlay_SetCounters:
 	ei 0
@@ -1548,7 +1548,7 @@ AccompSeq_AllNotesOffImpl:
 	bit 7, (0x7e24:16)
 	jr nz, AccompSeq_AllNotesOff_Stop
 	ldw (0x7e70:16), 2048
-	ordi8 0x7e24, 128
+	or (0x7e24:16), 128
 	jr AccompSeq_AllNotesOff_Send
 
 AccompSeq_AllNotesOff_Stop:
@@ -1610,7 +1610,7 @@ AccompSeq_CleanupSequence:
 	cps a, 0
 	jr z, AccompSeq_Cleanup_ClearFlags
 	and (0x7e24:16), 127
-	ordi8 1055, 8
+	or (1055:16), 8
 	ld a, (0x7e24:16)
 	and a, 0xfc
 	ld (0x7e24:16), a
@@ -1836,8 +1836,8 @@ AccompSeq_ChordChange_CheckOverride:
 	jr nz, AccompSeq_ChordChange_ApplyOverride
 	bit 0, (0x7e5f:16)
 	jr z, AccompSeq_ChordChange_Return
-	ordi8 0x7e6e, 1
-	ordi8 0x7e6f, 1
+	or (0x7e6e:16), 1
+	or (0x7e6f:16), 1
 
 AccompSeq_ChordChange_ApplyOverride:
 	and (0x7e5f:16), 253
@@ -1871,11 +1871,11 @@ AccompSeq_CompareChord:
 	inc 1, w
 	cp a, w
 	jr z, AccompSeq_CompareChord_Match
-	ordi8 0x7e5f, 2
+	or (0x7e5f:16), 2
 	jr AccompSeq_CompareChord_RestorePos
 
 AccompSeq_CompareChord_Match:
-	ordi8 0x7e5f, 1
+	or (0x7e5f:16), 1
 
 AccompSeq_CompareChord_RestorePos:
 	popw wa
@@ -1994,7 +1994,7 @@ AccompSeq_SeqParse_Dispatch:
 
 AccompSeq_SeqParse_EndMark:
 	calr AccompSeq_CleanupSequence
-	ordi8 0x7e53, 1
+	or (0x7e53:16), 1
 	jr AccompSeq_SeqParse_Loop
 
 AccompSeq_SeqParse_TimeAdvance:
@@ -2004,7 +2004,7 @@ AccompSeq_SeqParse_TimeAdvance:
 	xor c, c
 	cp de, bc
 	jr nc, AccompSeq_SeqParse_TimeStore
-	ordi8 0x7e53, 1
+	or (0x7e53:16), 1
 	jr AccompSeq_SeqParse_Loop
 
 AccompSeq_SeqParse_TimeStore:
@@ -2019,7 +2019,7 @@ AccompSeq_SeqParse_MidiEvent:
 	ld b, (0x7e46:16)
 	cp de, bc
 	jr nc, AccompSeq_SeqParse_CheckNoteOn
-	ordi8 0x7e53, 1
+	or (0x7e53:16), 1
 	jp AccompSeq_SeqParse_Loop
 
 AccompSeq_SeqParse_CheckNoteOn:

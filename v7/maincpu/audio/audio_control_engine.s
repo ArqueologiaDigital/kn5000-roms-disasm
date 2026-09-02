@@ -6060,7 +6060,7 @@ MidiStream_ProcessEventBuffer:
 	jrl z, MidiStream_Return
 	calr MidiStream_InitFromLookup
 	ei 0x06
-	ordi8 (0x0459), 0x01
+	or (0x0459:16), 0x01
 	ld a, (0x0415:16)
 	ld (0x912d:16), a
 	ei 0x00

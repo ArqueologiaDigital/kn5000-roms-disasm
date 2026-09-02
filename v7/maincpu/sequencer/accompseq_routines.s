@@ -720,7 +720,7 @@ AccompSeq_CheckVelocityFlags:
 	and (0x3349:16), 0xfb
 	cp A,0x78
 	jr c, .Lc_f6dfb2
-	ordi8 (0x3349), 0x04
+	or (0x3349:16), 0x04
 AccompSeq_VelFlags_CheckProgram:
 .Lc_f6dfb2:
 	push XIY
@@ -728,7 +728,7 @@ AccompSeq_VelFlags_CheckProgram:
 	ld W,(XIY)
 	cp W,0xf0
 	jr c, AccompSeq_VelFlags_CallDispatch
-	ordi8 (0x3349), 0x04
+	or (0x3349:16), 0x04
 AccompSeq_VelFlags_CallDispatch:
 	pop xiy
 	push xde
@@ -741,7 +741,7 @@ AccompSeq_VelFlags_CallDispatch:
 	ret
 
 AccompSeq_CheckVelFlagsExtended:
-	ordi8 (0x3349), 0x02
+	or (0x3349:16), 0x02
 	pushw wa
 	ld a, (0x7dbe:16)
 	ld (0x334a:16), a
@@ -751,7 +751,7 @@ AccompSeq_CheckVelFlagsExtended:
 	and (0x3349:16), 0xfb
 	cp A,0x78
 	jr c, .Lc_f6dff5
-	ordi8 (0x3349), 0x04
+	or (0x3349:16), 0x04
 AccompSeq_ExtVelFlags_CheckProg:
 .Lc_f6dff5:
 	push XIY
@@ -759,7 +759,7 @@ AccompSeq_ExtVelFlags_CheckProg:
 	ld W,(XIY)
 	cp W,0xf0
 	jr c, AccompSeq_ExtVelFlags_Dispatch
-	ordi8 (0x3349), 0x04
+	or (0x3349:16), 0x04
 AccompSeq_ExtVelFlags_Dispatch:
 	pop xiy
 	push xde
@@ -867,10 +867,10 @@ AccompSeq_PortaFade_Return:
 	ret
 
 AccompSeq_ManualMidiMode1:
-	ordi8 (0x7e79), 0x02
+	or (0x7e79:16), 0x02
 	jr t, AccompSeq_ManualMidi_CheckAllNotes
 AccompSeq_ManualMidiMode2:
-	ordi8 (0x7e79), 0x08
+	or (0x7e79:16), 0x08
 
 
 
@@ -1268,7 +1268,7 @@ AccompSeq_InitPlayState:
 	ld (0x0472:16), a
 	bit 2, (0x041f:16)
 	jr nz, AccompSeq_InitPlay_SetCounters
-	ordi8 (0x041f), 0x01
+	or (0x041f:16), 0x01
 AccompSeq_InitPlay_SetCounters:
 	di
 	ld	(32160:16), wa
@@ -1395,7 +1395,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	and (0x7dde:16), 0xfe
 	jr t, .Lc_f6e6a9
 .Lc_f6e66d:
-	ordi8 (0x7dde), 0x01
+	or (0x7dde:16), 0x01
 	ld a, (0x7e6f:16)
 	cps a, 0
 	jr z, .Lc_f6e682
@@ -1412,7 +1412,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	bit 7, (0x7d88:16)
 	jr nz, .Lc_f6e6a6
 	ldw (0x7dd4:16), 0x0800
-	ordi8 (0x7d88), 0x80
+	or (0x7d88:16), 0x80
 	jr t, .Lc_f6e6a9
 .Lc_f6e6a6:
 	calr AccompSeq_CleanupSequence
@@ -1428,7 +1428,7 @@ AccompSeq_AllNotesOffImpl:
 	bit 7, (0x7d88:16)
 	jr nz, AccompSeq_AllNotesOff_Stop
 	ldw (0x7dd4:16), 0x0800
-	ordi8 (0x7d88), 0x80
+	or (0x7d88:16), 0x80
 	jr t, AccompSeq_AllNotesOff_Send
 AccompSeq_AllNotesOff_Stop:
 	calr AccompSeq_CleanupSequence
@@ -1487,7 +1487,7 @@ AccompSeq_CleanupSequence:
 	cps a, 0
 	jr z, .Lc_f6e748
 	and (0x7d88:16), 0x7f
-	ordi8 (0x041f), 0x08
+	or (0x041f:16), 0x08
 	ld a, (0x7d88:16)
 	and A,0xfc
 	ld (0x7d88:16), a

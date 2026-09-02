@@ -1227,7 +1227,7 @@ AccPlay_PostEvent9E_Disable:
 	pop xwa
 
 AccPlay_SetIndicatorAndRet:
-	ordi8 0x7f15, 1
+	or (0x7f15:16), 1
 	ld xhl, 0x1e880a
 	andmi8 (xhl), 0xfe
 	ld xwa, 0x22
@@ -1238,8 +1238,8 @@ AccPlay_DispatchSeqStart:
 	bit 2, (1056:16)
 	jr nz, AccPlay_DispatchSeqRet
 	call Seq_DispatcherEntry
-	ordi8 0x33e8, 1
-	ordi8 0x34cd, 128
+	or (0x33e8:16), 1
+	or (0x34cd:16), 128
 	call Seq_DispatcherEntry
 	ld (0x7f0b:16), 2
 
@@ -1304,7 +1304,7 @@ TempoEvt_CheckHighBit:
 	ld a, l
 	cp a, 0x48
 	jr c, TempoEvt_ContinueProcessing
-	ordi8 0x7f15, 16
+	or (0x7f15:16), 16
 	ld a, (0x7e54:16)
 	ld w, (0x7e55:16)
 	jr TempoEvt_DispatchEvent
@@ -1379,7 +1379,7 @@ AccPlay_StopIfRunning:
 	jr nz, AccPlay_StopRet
 	call Seq_DispatcherEntry
 	and (0x33e8:16), 254
-	ordi8 0x34cd, 128
+	or (0x34cd:16), 128
 	call Seq_DispatcherEntry
 	and (0x7f15:16), 254
 
@@ -2555,7 +2555,7 @@ MidiSeqBuf_WriteByte:
 AccPlay_InitAndStartLoop:
 	ld (0x7f0b:16), 0
 	call TempoRingBuf_ReInitAndRet
-	ordi8 0x7f15, 4
+	or (0x7f15:16), 4
 	ldb a, 0x8
 	call MIDI_SendSysExCmd
 	calr AccPlay_MainUpdateLoop

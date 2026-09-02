@@ -144,7 +144,7 @@ Rhythm_SetupChannel_D7:
 	ld a, (0x32c7:16)
 	ld (0x32cc:16), a
 	and (0x32f4:16), 251
-	ordi8 0x32f4, 8
+	or (0x32f4:16), 8
 	ld (0x33d4:16), 4
 	calr RhythmEvt_ProcessNote
 	ret
@@ -156,7 +156,7 @@ Rhythm_SetupChannel_D4:
 	ld a, (0x32c8:16)
 	ld (0x32cc:16), a
 	and (0x32f4:16), 247
-	ordi8 0x32f4, 4
+	or (0x32f4:16), 4
 	ld (0x33d4:16), 8
 	calr RhythmEvt_ProcessNote
 	ret
@@ -356,7 +356,7 @@ Rhythm_CheckVelocityThreshold:
 	and (0x32f4:16), 239
 	cp a, 0x78
 	jr c, Rhythm_VelThreshReturn
-	ordi8 0x32f4, 16
+	or (0x32f4:16), 16
 
 Rhythm_VelThreshReturn:
 	ret
@@ -406,7 +406,7 @@ Rhythm_CrossVoice_Apply:
 	inc 1, w
 	sub w, 0xc
 	ld (0x332e:16), w
-	ordi8 0x332d, 1
+	or (0x332d:16), 1
 	ld xiy, Display_FontPalette_Table_0x12EA
 	ldb_sri W, 0x03, 0xf4, 0xe0
 	sub a, w
@@ -804,7 +804,7 @@ Rhythm_DispatchCh_D7:
 	ld a, (0x32c7:16)
 	ld (0x32cc:16), a
 	and (0x32f4:16), 251
-	ordi8 0x32f4, 8
+	or (0x32f4:16), 8
 	ldb w, 0x97
 	ld xix, 0x30f4
 
@@ -822,7 +822,7 @@ Rhythm_DispatchCh_D4:
 	ld a, (0x32c8:16)
 	ld (0x32cc:16), a
 	and (0x32f4:16), 247
-	ordi8 0x32f4, 4
+	or (0x32f4:16), 4
 	ldb w, 0x94
 	ld xix, 0x313c
 
@@ -1264,7 +1264,7 @@ Rhythm_SaveState:
 
 Rhythm_SaveState_StoreBits:
 	ld (0x3283:16), a
-	ordi8 0x32f3, 1
+	or (0x32f3:16), 1
 	cp (0x3280:16), 0
 	jr nz, Rhythm_SaveState_CheckFx
 	cp (0x327f:16), 48
@@ -1319,8 +1319,8 @@ Rhythm_VoiceAssignDetect:
 	ld a, (0x3313:16)
 	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_PartAOn
-	ordi8 0xfc5f, 128
-	ordi8 0x32fc, 2
+	or (0xfc5f:16), 128
+	or (0x32fc:16), 2
 
 Rhythm_VoiceAssign_PartAOn:
 	ldb e, 0x48
@@ -1338,8 +1338,8 @@ Rhythm_VoiceAssign_PartAOn:
 	orda8 a, 0x3315
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_PartBDetect
-	ordi8 0x3284, 16
-	ordi8 0x3284, 4
+	or (0x3284:16), 16
+	or (0x3284:16), 4
 
 Rhythm_VoiceAssign_PartBDetect:
 	ld a, (0x3313:16)
@@ -1352,8 +1352,8 @@ Rhythm_VoiceAssign_PartBDetect:
 	ld a, (0x3312:16)
 	and a, 0x3f
 	jr z, Rhythm_VoiceAssign_PartBOn
-	ordi8 0xfc5f, 64
-	ordi8 0x32fc, 1
+	or (0xfc5f:16), 64
+	or (0x32fc:16), 1
 
 Rhythm_VoiceAssign_PartBOn:
 	ldb e, 0x48
@@ -1371,8 +1371,8 @@ Rhythm_VoiceAssign_PartBOn:
 	orda8 a, 0x3315
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext1Detect
-	ordi8 0x3284, 16
-	ordi8 0x3284, 4
+	or (0x3284:16), 16
+	or (0x3284:16), 4
 
 Rhythm_VoiceAssign_Ext1Detect:
 	ld a, (0x3316:16)
@@ -1396,7 +1396,7 @@ Rhythm_VoiceAssign_Ext1Detect:
 	orda8 a, 0x3315
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext2Detect
-	ordi8 0x3284, 8
+	or (0x3284:16), 8
 
 Rhythm_VoiceAssign_Ext2Detect:
 	ld a, (0x3317:16)
@@ -1420,7 +1420,7 @@ Rhythm_VoiceAssign_Ext2Detect:
 	orda8 a, 0x3315
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Ext3Detect
-	ordi8 0x3284, 8
+	or (0x3284:16), 8
 
 Rhythm_VoiceAssign_Ext3Detect:
 	ld a, (0x3318:16)
@@ -1444,7 +1444,7 @@ Rhythm_VoiceAssign_Ext3Detect:
 	orda8 a, 0x3315
 	and a, 0x3f
 	jr nz, Rhythm_VoiceAssign_Perc1Detect
-	ordi8 0x3284, 8
+	or (0x3284:16), 8
 
 Rhythm_VoiceAssign_Perc1Detect:
 	ld a, (0x3314:16)
@@ -1460,7 +1460,7 @@ Rhythm_VoiceAssign_Perc1Detect:
 	ldb w, 0x0
 	calr Rhythm_QueuePartChangeEvent
 	and (0x32fd:16), 254
-	ordi8 0x3284, 4
+	or (0x3284:16), 4
 
 Rhythm_VoiceAssign_Perc2Detect:
 	ld a, (0x3315:16)
@@ -1476,7 +1476,7 @@ Rhythm_VoiceAssign_Perc2Detect:
 	ldb w, 0x0
 	calr Rhythm_QueuePartChangeEvent
 	and (0x32fd:16), 253
-	ordi8 0x3284, 4
+	or (0x3284:16), 4
 
 Rhythm_VoiceAssign_SaveShadow:
 	ld a, (0x3312:16)
@@ -1579,7 +1579,7 @@ Rhythm_TranspMod_Offset1:
 	bit 5, h
 	jr z, Rhythm_TranspMod_MuteCheck
 	ldb a, 0x0
-	ordi8 0x33e5, 1
+	or (0x33e5:16), 1
 	jr Rhythm_TranspMod_Done
 
 Rhythm_TranspMod_MuteCheck:

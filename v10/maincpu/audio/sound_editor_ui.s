@@ -8079,7 +8079,7 @@ SeMenu_ShowConfirmDialog:
 	sla hl, 2
 	ld_sril3 XIY, 0x07, 0xf4, 0xec
 	call (xiy)
-	ordi8 0xe3e2, 8
+	or (0xe3e2:16), 8
 	pop xiy
 	pop xix
 	pop xhl

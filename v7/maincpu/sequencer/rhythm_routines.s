@@ -138,7 +138,7 @@ Rhythm_SetupChannel_D7:
 	ld a, (0x322b:16)
 	ld (0x3230:16), a
 	and (0x3258:16), 0xfb
-	ordi8 (0x3258), 0x08
+	or (0x3258:16), 0x08
 	ld (0x3338:16), 0x04
 	calr RhythmEvt_ProcessNote
 	ret
@@ -149,7 +149,7 @@ Rhythm_SetupChannel_D4:
 	ld a, (0x322c:16)
 	ld (0x3230:16), a
 	and (0x3258:16), 0xf7
-	ordi8 (0x3258), 0x04
+	or (0x3258:16), 0x04
 	ld (0x3338:16), 0x08
 	calr RhythmEvt_ProcessNote
 	ret
@@ -332,7 +332,7 @@ Rhythm_CheckVelocityThreshold:
 	and (0x3258:16), 0xef
 	cp A,0x78
 	jr c, Rhythm_VelThreshReturn
-	ordi8 (0x3258), 0x10
+	or (0x3258:16), 0x10
 Rhythm_VelThreshReturn:
 	ret
 
@@ -381,7 +381,7 @@ Rhythm_CrossVoice_Apply:
 	inc 1,W
 	sub W,0x0c
 	ld (0x3292:16), w
-	ordi8 (0x3291), 0x01
+	or (0x3291:16), 0x01
 	ld XIY,Display_FontPalette_Table_0x12EA
 	ldb_dri w, 0x03, 0xf4, 0xe0
 	sub A,W
@@ -748,7 +748,7 @@ Rhythm_DispatchCh_D7:
 	ld a, (0x322b:16)
 	ld (0x3230:16), a
 	and (0x3258:16), 0xfb
-	ordi8 (0x3258), 0x08
+	or (0x3258:16), 0x08
 	ldb W, 0x97
 	ld XIX,0x00003058
 Rhythm_DispatchCh_D7_Loop:
@@ -764,7 +764,7 @@ Rhythm_DispatchCh_D4:
 	ld a, (0x322c:16)
 	ld (0x3230:16), a
 	and (0x3258:16), 0xf7
-	ordi8 (0x3258), 0x04
+	or (0x3258:16), 0x04
 	ldb W, 0x94
 	ld XIX,0x000030a0
 Rhythm_DispatchCh_D4_Loop:

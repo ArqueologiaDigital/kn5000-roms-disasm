@@ -436,7 +436,7 @@ INTT1_CheckMidiSync:
 	jr nz, UIState_DispatchBranch
 	push SR
 	ei 0x06
-	ordi8 (0x0429), 0x08
+	or (0x0429:16), 0x08
 	call 0xfcf1a1
 	pop SR
 UIState_DispatchBranch:

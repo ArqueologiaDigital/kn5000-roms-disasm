@@ -693,7 +693,7 @@ SetWall_CrossType_Validate:
 	pop xde
 	cp l, 0xc
 	jr nz, SetWall_CrossType_ClearBit0
-	ordi8 0x2879, 1
+	or (0x2879:16), 1
 	jr SetWall_CrossType_CheckDest
 
 SetWall_CrossType_ClearBit0:
@@ -702,7 +702,7 @@ SetWall_CrossType_ClearBit0:
 SetWall_CrossType_CheckDest:
 	cp (0x2873:16), 12
 	jr nz, SetWall_CrossType_ClearBit1
-	ordi8 0x2879, 2
+	or (0x2879:16), 2
 	jr SetWall_CrossType_MapLookup
 
 SetWall_CrossType_ClearBit1:
@@ -1161,7 +1161,7 @@ SetWall_ParseB0ControlChange:
 	jr nz, SetWall_B0CC_ClearFlags
 
 SetWall_B0CC_BankSelect:
-	ordi8 0x289d, 1
+	or (0x289d:16), 1
 	and (3389:16), 254
 	ld (3388:16), a
 	jrl SetWall_B0CC_Return
@@ -1202,7 +1202,7 @@ SetWall_B0CC_Type48:
 	jr SetWall_B0CC_Return
 
 SetWall_B0CC_Type48_SetFlag:
-	ordi8 0x289d, 4
+	or (0x289d:16), 4
 	jr SetWall_B0CC_Return
 
 SetWall_B0CC_Type48_Check12:
@@ -1636,7 +1636,7 @@ SetWall_DualPass_Error:
 	ld (0x287a:16), 0
 	ld a, (1075:16)
 	ld (0x288e:16), a
-	ordi8 0x287b, 32
+	or (0x287b:16), 32
 
 SetWall_DualPass_Done:
 	popw_dd16 0xaf, 0x28
@@ -1700,7 +1700,7 @@ SetWall_Replay_MainLoop:
 	jr z, SetWall_Replay_TypeC0
 	cp w, 0x82
 	jr nz, SetWall_Replay_Type84
-	ordi8 0x287b, 32
+	or (0x287b:16), 32
 	jrl SetWall_Replay_Done
 
 SetWall_Replay_Type84:
@@ -1860,7 +1860,7 @@ SetWall_ForwardSkip_Loop:
 	ld xhl, (4349:16)
 	cpib_sri 0x07, 0xec, 0xf4, 0x82
 	jr nz, SetWall_ForwardSkip_CheckType
-	ordi8 0x287b, 32
+	or (0x287b:16), 32
 	jr SetWall_ForwardSkip_Return
 
 SetWall_ForwardSkip_CheckType:
@@ -1890,7 +1890,7 @@ SetWall_ForwardSkip_TargetFound:
 	ld xhl, (4349:16)
 	cpib_sri 0x07, 0xec, 0xf4, 0x82
 	jr nz, SetWall_ForwardSkip_Check84
-	ordi8 0x287b, 32
+	or (0x287b:16), 32
 	jr SetWall_ForwardSkip_Return
 
 SetWall_ForwardSkip_Check84:
@@ -1908,7 +1908,7 @@ SetWall_ForwardSkip_SaveState:
 	jr SetWall_ForwardSkip_Return
 
 SetWall_ForwardSkip_Error:
-	ordi8 0x287b, 32
+	or (0x287b:16), 32
 	ld (0x287a:16), 0
 
 SetWall_ForwardSkip_Return:
@@ -2112,7 +2112,7 @@ SetWall_SyncToneGenToDRAM:
 	and (0x28a5:16), 254
 	cps wa, 0
 	jr z, SetWall_Sync_CheckPanelBit
-	ordi8 0x28a5, 1
+	or (0x28a5:16), 1
 
 SetWall_Sync_CheckPanelBit:
 	call SeqTimer_PostTempoUpdate
@@ -2127,7 +2127,7 @@ SetWall_Sync_CheckPanelBit:
 SetWall_Sync_PanelOff:
 	bit 2, (0xfdad:16)
 	jr nz, SetWall_Sync_FinalUpdate
-	ordi8 0xfdad, 4
+	or (0xfdad:16), 4
 	ldb a, 0x4
 
 SetWall_Sync_PostEvent:

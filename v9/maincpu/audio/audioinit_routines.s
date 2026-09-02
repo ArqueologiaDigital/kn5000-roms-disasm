@@ -579,7 +579,7 @@ AudioInit_CheckBit2Routing:
 	cp a, 0x7f
 	jr z, AudioInit_UpdateIndicators
 	setda 7, 0xc2ce
-	ordi8 0xc2ce, 127
+	or (0xc2ce:16), 127
 	ordi16 0xc59a, 512
 	jr AudioInit_UpdateIndicators
 

@@ -61,7 +61,7 @@ BootSerial_State04_TxLineRequest:
 	jr	nz, BootSerial_TxIsrEpilogue
 	ld	(0x0f63:16), 0		; not granted: back to idle
 	ld	(0x0f62:16), 0
-	ordi8	(0x0f6a), 0x02		; status: TX arbitration failed
+	or	(0x0f6a:16), 0x02		; status: TX arbitration failed
 	ldio	0xe3, 0x05		; INTEAB
 	ldio	0xeb, 0xff		; INTES1
 	ldio	0xd7, 0x24		; BR1CR
@@ -123,10 +123,10 @@ BootSerial_State14_TxTail:
 ; -----------------------------------------------------------------------------
 BootSerial_State08_TxFirstByte:
 	ldio	0xd7, 0x14		; BR1CR
-	ordi8	(0x0f67), 0x50
+	or	(0x0f67:16), 0x50
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC mode bits high
-	ordi8	(0x0f66), 0x50
+	or	(0x0f66:16), 0x50
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR mode bits high
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
@@ -162,10 +162,10 @@ BootSerial_State08_TxFirstByte__count_set:
 ; -----------------------------------------------------------------------------
 BootSerial_State10_TxNextByte:
 	ldio	0xd7, 0x14		; BR1CR
-	ordi8	(0x0f67), 0x50
+	or	(0x0f67:16), 0x50
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC
-	ordi8	(0x0f66), 0x50
+	or	(0x0f66:16), 0x50
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
@@ -211,7 +211,7 @@ BootSerial_State18_TxFrameDone:
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
-	ordi8	(0x0f66), 0x40
+	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 high (request line)
 	ldio	0xd7, 0x28		; BR1CR
@@ -219,7 +219,7 @@ BootSerial_State18_TxFrameDone:
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
 	ldio	0xeb, 0xd0		; INTES1
 	st_dd8b	a, 0xd4			; dummy SC1BUF write
-	ordi8	(0x0f64), 0x02		; TX-pending flag
+	or	(0x0f64:16), 0x02		; TX-pending flag
 	jrl	t, BootSerial_TxIsrEpilogue
 BootSerial_State18_TxFrameDone__go_idle:
 	and	(0x0f66:16), 0xbf
@@ -268,7 +268,7 @@ BootSerial_State20_RxFirstByte__fwd:
 BootSerial_State20_RxFirstByte__have_free:
 	cps	iy, 3
 	jr	nc, BootSerial_State20_RxFirstByte__room
-	ordi8	(0x0f6a), 0x01		; RX ring overflow
+	or	(0x0f6a:16), 0x01		; RX ring overflow
 	jr	t, BootSerial_State20_RxFirstByte__counted
 BootSerial_State20_RxFirstByte__room:
 	and	(0x0f6a:16), 0xfe
@@ -341,7 +341,7 @@ BootSerial_State24_RxNextByte__rearm:
 ; Callers: BootSerial_StateDispatchTable[0x00/0x1c/0x28]
 ; -----------------------------------------------------------------------------
 BootSerial_State_Abort:
-	ordi8	(0x0f6a), 0x80
+	or	(0x0f6a:16), 0x80
 	jrl	t, BootSerial_RxIsrEpilogue
 
 ; -----------------------------------------------------------------------------
@@ -353,7 +353,7 @@ BootSerial_State_Abort:
 ; -----------------------------------------------------------------------------
 BootSerial_UnusedIsrEpilogue:
 	and	(0x0f64:16), 0xfc
-	ordi8	(0x0f6a), 0x04
+	or	(0x0f6a:16), 0x04
 	ldio	0xf8, 0x23		; INTCLR: INTTX1
 	and_sd8b_im 0xd6, 0xdf		; SC1MOD bit 5 low
 	ldio	0xeb, 0x0f		; INTES1
@@ -429,13 +429,13 @@ BootSerial_PollTX__encode:
 BootSerial_PollTX__have_count:
 	cps	a, 2
 	jr	c, BootSerial_PollTX__exit
-	ordi8	(0x0f64), 0x02		; TX-pending flag
+	or	(0x0f64:16), 0x02		; TX-pending flag
 	ld	(0x0f62:16), 0x04		; state 0x04: TX line request
 	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
-	ordi8	(0x0f66), 0x40
+	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 high (request line)
 	ldio	0xd7, 0x28		; BR1CR
@@ -459,7 +459,7 @@ BootSerial_PollTX__line_busy:
 	ldio	0xeb, 0xdd		; INTES1
 	ldio	0xf8, 0x12		; INTCLR: INTA
 	ldio	0xe3, 0x05		; INTEAB
-	ordi8	(0x0f6a), 0x80		; done/abort status bit
+	or	(0x0f6a:16), 0x80		; done/abort status bit
 	jr	t, BootSerial_PollTX__exit
 
 ; -----------------------------------------------------------------------------
@@ -469,7 +469,7 @@ BootSerial_PollTX__line_busy:
 ; Callers: BootSerial_ResetAndIdent (4 sites in boot_cpserial.s)
 ; -----------------------------------------------------------------------------
 BootSerial_RX_SetBusy:
-	ordi8	(0x0f64), 0x04
+	or	(0x0f64:16), 0x04
 	jr	t, BootSerial_RX_ParsePackets__scan
 
 ; -----------------------------------------------------------------------------
@@ -747,7 +747,7 @@ BootSerial_RxPkt_Discard:
 	ldb_sri	a, 0x07, 0xe8, 0xf4
 	calr	BootSerial_RxRingAdvanceIY
 	ld	(0x0f75:16), iy
-	ordi8	(0x0f6a), 0x08		; status: frame discarded
+	or	(0x0f6a:16), 0x08		; status: frame discarded
 	jrl	t, BootSerial_RX_ParsePackets__next
 BootSerial_RxParseDone:
 	ret

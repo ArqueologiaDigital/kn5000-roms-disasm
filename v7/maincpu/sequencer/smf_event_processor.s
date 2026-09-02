@@ -882,7 +882,7 @@ SeqPlay_StartWithDisplay:
 	jr SeqPlay_QueueDisplayEvent
 
 SeqPlay_SetFlagAndMode:
-	ordi8 0xfdad, 4
+	or (0xfdad:16), 4
 	ldb a, 0x4
 
 SeqPlay_QueueDisplayEvent:
@@ -2139,7 +2139,7 @@ SMF_NoteOn_FindVoiceSlot:
 	jrl SMF_ProcessEventLoop
 
 SMF_NoteOn_SlotFound:
-	ordi8 4236, 1
+	or (4236:16), 1
 	pushw hl
 	ld c, (4212:16)
 	call SMF_CalcTimeDelta

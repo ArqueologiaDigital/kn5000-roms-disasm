@@ -278,7 +278,7 @@ FloppyIO_ConfigureSwitchboard:
 FloppyIO_ConfigSwb_Mode0:
 	or a, 0x4
 	ldb c, 0xff
-	ordi8 0xfdad, 4
+	or (0xfdad:16), 4
 	ld (0xf23d:16), 255
 
 FloppyIO_ConfigSwb_QueueEvent:
@@ -1589,7 +1589,7 @@ MidiSysEx_Cmd_SystemMessage:
 
 SoundGen_ResetVoiceBitmapAndFlag:
 	call ToneGen_SyncVoiceBitmapFromSlots
-	ordi8 0x28b3, 16
+	or (0x28b3:16), 16
 
 SoundGen_ResetBitmapDone:
 	ret
@@ -1652,7 +1652,7 @@ SoundGen_RefreshVoices_Loop:
 	jrl nz, SoundGen_RefreshVoices_Done
 	djnz xbc, SoundGen_RefreshVoices_Loop
 	call ToneGen_WriteChannelRegs
-	ordi8 4236, 1
+	or (4236:16), 1
 	ld (4323:16), 0
 
 SoundGen_RefreshVoices_Done:
@@ -4021,7 +4021,7 @@ VoiceChannel_UpdateParamSet:
 	jr nz, VoiceChannel_ParamSet_Validate
 
 VoiceChannel_ParamSet_IsEnd:
-	ordi8 0x27d2, 1
+	or (0x27d2:16), 1
 	jr VoiceChannel_ParamSet_Done
 
 VoiceChannel_ParamSet_Validate:
@@ -4055,7 +4055,7 @@ ToneGen_ValidateVoiceCh2:
 	jr nz, ToneGen_ValidateCh2_Validate
 
 ToneGen_ValidateCh2_IsEnd:
-	ordi8 0x27d2, 2
+	or (0x27d2:16), 2
 	jr ToneGen_ValidateCh2_Done
 
 ToneGen_ValidateCh2_Validate:

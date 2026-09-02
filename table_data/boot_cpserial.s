@@ -247,7 +247,7 @@ BootSerial_FullInit:
 	or_sd8b_im 0xc8, 0x10		; TAMOD |= 0x10
 	and_sd8b_im 0xc8, 0xf7		; TAMOD &= ~0x08
 	ld	(0x0f69:16), 0x7d
-	ordi8	(0x0f64), 0x40		; link flag bit 6
+	or	(0x0f64:16), 0x40		; link flag bit 6
 	ld	(0x0f63:16), 0		; INTA mode: next INTA enters RX mode
 	and	(0x0f64:16), 0xfc		; clear RX/TX active flags
 	ldw	(0x0fd5:16), 0		; TX send index
@@ -335,7 +335,7 @@ BootSerial_SendTwoBytes_Bitbang:
 	ldio	0xe3, 0x07		; INTEAB
 	ldio	0xf8, 0x12		; INTCLR
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
-	ordi8	(0x0f66), 0x40
+	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR with bit 6 high
 	calr	BootSerial_SpinWait300
@@ -345,10 +345,10 @@ BootSerial_SendTwoBytes_Bitbang:
 	st_dd8b	a, 0x3e			; PFCR bit 6 back low  (clock pulse)
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
-	ordi8	(0x0f67), 0x50
+	or	(0x0f67:16), 0x50
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bits 6:4 pattern 0x50
-	ordi8	(0x0f66), 0x50
+	or	(0x0f66:16), 0x50
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR likewise
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
@@ -552,7 +552,7 @@ BootSerial_TestLoopback:
 	calr	BootSerial_TickWait6
 	cpdi16	(0x0f77), 0
 	jr	z, BootSerial_TestLoopback__no_resp1
-	ordi8	(0x0f6b), 1
+	or	(0x0f6b:16), 1
 BootSerial_TestLoopback__no_resp1:
 	calr	BootSerial_WaitTxIdle
 	ldw	(0x0f75:16), 0
@@ -563,7 +563,7 @@ BootSerial_TestLoopback__no_resp1:
 	calr	BootSerial_TickWait6
 	cpdi16	(0x0f77), 0
 	jr	z, BootSerial_TestLoopback__no_resp2
-	ordi8	(0x0f6b), 8
+	or	(0x0f6b:16), 8
 BootSerial_TestLoopback__no_resp2:
 	ld	a, (0x0f6b:16)
 	ret
@@ -765,7 +765,7 @@ BootSerial_WaitTxIdle__exit:
 	ldio	0xf8, 0x23		; INTCLR: INTTX1
 	ldio	0xeb, 0xdd		; INTES1
 	and_sd8b_im 0xd6, 0xdf		; SC1MOD &= ~0x20
-	ordi8	(0x0f6a), 0x80		; done/abort status bit
+	or	(0x0f6a:16), 0x80		; done/abort status bit
 	ei	0
 	ret
 
@@ -793,7 +793,7 @@ BootSerial_SendFrame:
 	ldw	(0x0fd7:16), 0		; TX pending count = 0
 	ld	(0x0fd9:16), wa		; both frame bytes -> ring head
 	adddi16	(0x0fd7), 2		; two bytes pending
-	ordi8	(0x0f64), 2		; TX-pending flag
+	or	(0x0f64:16), 2		; TX-pending flag
 	and	(0x0f64:16), 0xfe		; clear RX-active flag
 	ld	(0x0f62:16), 4		; state machine -> state 0x04
 	ldio	0xd7, 0x28		; BR1CR
@@ -801,7 +801,7 @@ BootSerial_SendFrame:
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
-	ordi8	(0x0f66), 0x40
+	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 high
 	ldio	0xe3, 0x07		; INTEAB

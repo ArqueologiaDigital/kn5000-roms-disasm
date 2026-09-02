@@ -85,25 +85,25 @@ ScreenGroup_InitState:
 	ld (xbc + 1), 0xff
 	ld (xbc + 2), 0xff
 	ld (xbc + 3), 0xff
-	ordi8 0xc2c2, 127
+	or (0xc2c2:16), 127
 	and (0xc2c3:16), 1
-	ordi8 0xc2c4, 254
+	or (0xc2c4:16), 254
 	and (0xc2c5:16), 1
-	ordi8 0xc2c6, 127
+	or (0xc2c6:16), 127
 	and (0xc2c7:16), 1
-	ordi8 0xc2c8, 254
+	or (0xc2c8:16), 254
 	and (0xc2c9:16), 1
-	ordi8 0xc2ca, 127
+	or (0xc2ca:16), 127
 	and (0xc2cb:16), 1
-	ordi8 0xc2cc, 254
+	or (0xc2cc:16), 254
 	and (0xc2cd:16), 1
-	ordi8 0xc2ce, 127
+	or (0xc2ce:16), 127
 	and (0xc2cf:16), 1
-	ordi8 0xc2d0, 254
+	or (0xc2d0:16), 254
 	and (0xc2d1:16), 1
-	ordi8 0xc2d2, 127
+	or (0xc2d2:16), 127
 	and (0xc2d3:16), 1
-	ordi8 0xc2d4, 254
+	or (0xc2d4:16), 254
 	and (0xc2d5:16), 1
 	lds de, 0
 	cp de, 0x20

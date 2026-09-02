@@ -71,7 +71,7 @@ Handler_INTA:
 	ldio	0xeb, 0x0d		; INTES1: RX enabled
 	or_sd8b_im 0xd6, 0x20		; SC1MOD bit 5
 	ld	(0x0f62:16), 0x20		; state 0x20: RX first byte
-	ordi8	(0x0f64), 0x01		; RX-active flag
+	or	(0x0f64:16), 0x01		; RX-active flag
 	jr	t, Handler_INTA__exit
 Handler_INTA__rx_pacing:
 	cpdi16	(0x0f77), 0
@@ -79,7 +79,7 @@ Handler_INTA__rx_pacing:
 	ldw	(0x0f77:16), 0x005c	; reload with the RX ring size
 Handler_INTA__count_ok:
 	decdi16	1, (0x0f77)
-	ordi8	(0x0f6a), 0x40		; status: INTA seen mid-transfer
+	or	(0x0f6a:16), 0x40		; status: INTA seen mid-transfer
 	and	(0x0f64:16), 0xfd		; clear TX-pending flag
 Handler_INTA__exit:
 	pop	xwa

@@ -552,7 +552,7 @@ ParamDigit_Div100Loop:
 	sub wa, 0x64
 	jr c, ParamDigit_Div100Done
 	inc 1, c
-	ordi8 4485, 2
+	or (4485:16), 2
 	cps wa, 0
 	jr nz, ParamDigit_Div100Loop
 	ld (4481:16), c
@@ -567,7 +567,7 @@ ParamDigit_Div10Loop:
 	sub wa, 0xa
 	jr c, ParamDigit_Div10Done
 	inc 1, c
-	ordi8 4485, 1
+	or (4485:16), 1
 	cps wa, 0
 	jr nz, ParamDigit_Div10Loop
 	ld (4482:16), c
@@ -2088,7 +2088,7 @@ Display_RedrawInd_Ret:
 
 VoiceBank_BitsAndLoad:
 	ld w, (3822:16)
-	ordi8 0x287b, 4
+	or (0x287b:16), 4
 	ret
 
 VoiceBank_StatusDoubleRCF:
@@ -2627,7 +2627,7 @@ ScoopDisp_DispatchTable_Extended:
 	xor WA,WA
 	ldb A, 0xee
 	call SoundCtrl_SendCommand
-	ordi8 (0x8cec), 0x01
+	or (0x8cec:16), 0x01
 	ret
 	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail_tail.bin"
 Display_DirtyRegionDispatch:
@@ -3411,7 +3411,7 @@ ToneParam_Evt09_BytecodeHandler:
 	call ToneParam_HandlerTable_BC_0x4DC
 	ld (0x7ea6:16), 0xff
 .Lc_ef80bb:
-	ordi8 (0x0dd3), 0x01
+	or (0x0dd3:16), 0x01
 	ld l, (0x0d65:16)
 	and HL,0x0003
 	sla HL, 0x02
@@ -3422,7 +3422,7 @@ ToneParam_Evt09_BytecodeHandler:
 	call (XHL)
 	call PortConfig_Handler_0_0xD7
 	resda 2, (0x0d54)
-	ordi8 (0x8cec), 0x01
+	or (0x8cec:16), 0x01
 .Lc_ef80e6:
 	jp ToneParam_Evt09_BytecodeHandler_0xCF
 .Lc_ef80ea:
@@ -3667,7 +3667,7 @@ ToneParam_HandlerTable_BC:
 	ld w, (0x0dcc:16)
 	call VoiceSlot_RetZ
 	ret
-	ordi8 (0xe31c), 0x08
+	or (0xe31c:16), 0x08
 	ld hl, (0x0d5a:16)
 .Lc_ef8653:
 	push XHL
@@ -3676,7 +3676,7 @@ ToneParam_HandlerTable_BC:
 	call Timer_ParamCompareAlt
 	xor A,A
 	.incbin "includes/romslices/v7_transplant_ToneParam_HandlerTable_BC_tail_mid1.bin"
-	ordi8 (0xe31c), 0x08
+	or (0xe31c:16), 0x08
 	call AccPedal_CheckBitAndUpdate
 	cp W,0xff
 	jrl z, .Lc_ef86bb
@@ -3767,7 +3767,7 @@ PeriphReg_Ret:
 	ret
 ; Display mode handler
 Display_ModeHandler:
-	ordi8	3539, 1
+	or	(3539:16), 1
 	xor	a, a
 	ld	(3538:16), a
 	ld	(3413:16), 255
@@ -4171,14 +4171,14 @@ DisplayMode_Handler_3:
 	call DisplayMode_Handler_3_0x4C9
 	call Display_BytecodeBlock_F_0x2A2
 	call Display_UpdateRegion3
-	ordi8 (0xe31c), 0x08
+	or (0xe31c:16), 0x08
 	ret
 	ldw (0x0ef0:16), 0xffff
 	ld (0x0df3:16), 0x02
 	call DisplayMode_Handler_3_0x4C9
 	call Display_BytecodeBlock_F_0x2A2
 	call Display_UpdateRegion3
-	ordi8 (0xe31c), 0x08
+	or (0xe31c:16), 0x08
 	ret
 	.byte 0x1d, 0x5c, 0xd2, 0xef, 0xc8, 0xd8, 0x76, 0x8b
 	.byte 0x00, 0x1d, 0x3f, 0xc3, 0xef, 0xc9, 0xcc, 0xf0
@@ -4439,13 +4439,13 @@ VoiceSlot_TableSetup:
 	push XDE
 	ld XDE,0x0000f250
 	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_head_tail_tail.bin"
-	ordi8 (0xe31c), 0x08
+	or (0xe31c:16), 0x08
 	call AccPedal_CheckBitAndUpdate
 .Lc_ef9545:
 	call Timer_ParamLoadAndCompare
 	xor A,A
 	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_mid1.bin"
-	ordi8 (0xe31c), 0x08
+	or (0xe31c:16), 0x08
 	call AccPedal_CheckBitAndUpdate
 .Lc_ef957a:
 	call Timer_ParamCompareAlt
@@ -4454,7 +4454,7 @@ VoiceSlot_TableSetup:
 AccPedal_CheckBitAndUpdate:
 	bit 0, (3412:16)
 	jrl z, AccPedal_ClearFlagAndJump
-	ordi8 0x287b, 4
+	or (0x287b:16), 4
 
 AccPedal_LoadModeAndChannel:
 	ld w, (3414:16)
@@ -4472,7 +4472,7 @@ AccPedal_StoreAddrAndCheck:
 	cp (3429:16), 3
 	jrl nz, AccPedal_CallEventSwitch
 	ld w, a
-	ordi8 0x287b, 4
+	or (0x287b:16), 4
 
 AccPedal_CallEventSwitch:
 	call Scoop_EventHandler_MenuSwitch
@@ -4544,7 +4544,7 @@ AccPedal_CompareMode85:
 	jp VoiceSlot_ProcessedWordRet
 
 AccPedal_SetBit2Flag:
-	ordi8 3411, 2
+	or (3411:16), 2
 	jp VoiceSlot_ProcessedWordRet
 
 AccPedal_ClearBit2Flag:
@@ -4656,7 +4656,7 @@ VoiceCtrl_CheckAndReset_Code:
 VoiceCtrl_SendNoteOffSequence:
 	push xhl
 	pushw wa
-	ordi8 0x28b3, 64
+	or (0x28b3:16), 64
 	ldb a, 0x90
 	ld hl, wa
 	pushw hl
@@ -5970,7 +5970,7 @@ ControllerMode_UpdateFlags:
 	jrl nz, SysEx_FlagClearAndCompare
 	cp (0x0d65:16), 0x03
 	jrl nz, SysEx_FlagClearAndCompare
-	ordi8 (0x0f56), 0x02
+	or (0x0f56:16), 0x02
 	jp SubCPU_CmdCountdownRet
 SysEx_FlagClearAndCompare:
 	and (3926:16), 253
@@ -6148,7 +6148,7 @@ MemConfig_Handler_0:
 	call MemConfig_Handler_1_0x8B
 .Lc_efadba:
 	ldb W, 0xff
-	ordi8 (0x8cec), 0x01
+	or (0x8cec:16), 0x01
 	jp MemConfig_Handler_0_0x63
 .Lc_efadc5:
 	call VoiceSlot_LoadAndDispatch
@@ -6969,8 +6969,8 @@ SysInit_BytecodeBlock:
 	.incbin "includes/romslices/v7_transplant_SysInit_BytecodeBlock_mid2.bin"
 	ld a, (0x0eee:16)
 	call SysInit_BytecodeBlock_0x499
-	ordi8 (0x8cec), 0x01
-	ordi8 (0x266a), 0x01
+	or (0x8cec:16), 0x01
+	or (0x266a:16), 0x01
 	ret
 	.incbin "includes/romslices/v7_transplant_SysInit_BytecodeBlock_tail.bin"
 VoiceSlot_InitAndProcess:

@@ -889,7 +889,7 @@ SMF_DispatchEvent:
 	cpib_sri 0x07, 0xf0, 0xf4, 0x0f
 	pop xix
 	jr nz, SMF_Dispatch_CheckDrumMode
-	ordi8 4331, 1
+	or (4331:16), 1
 
 SMF_Dispatch_CheckDrumMode:
 	ld (4324:16), 0
@@ -1756,7 +1756,7 @@ SMF_ResetPlaybackState:
 	and (4411:16), 253
 	and (4404:16), 251
 	ld (4419:16), 0
-	ordi8 4393, 2
+	or (4393:16), 2
 	xor a, a
 	ld (3301:16), a
 	calr SMF_DetectFormat
@@ -1781,7 +1781,7 @@ SMF_ParseEvents:
 	ld (0x2873:16), l
 	cp l, 0xf
 	jr nz, SMF_Parse_ClearAutoFlag
-	ordi8 4393, 1
+	or (4393:16), 1
 	jr SMF_Parse_NextChannel
 
 SMF_Parse_ClearAutoFlag:
@@ -2048,7 +2048,7 @@ SMF_Config_ProcessSlotData:
 
 SMF_Config_Count2:
 	calr SMF_SlotParam_TypeD2Handler
-	ordi8 4404, 1
+	or (4404:16), 1
 	jr SMF_Config_PopAndContinue
 
 SMF_Config_Count3:
@@ -2080,7 +2080,7 @@ SMF_Config_Count5:
 
 SMF_Config_Count4:
 	calr SMF_SlotParam_NRPNReturn
-	ordi8 4404, 1
+	or (4404:16), 1
 
 SMF_Config_PopAndContinue:
 	pop xiy
@@ -2386,7 +2386,7 @@ SMF_SlotChain_ResolveInstr:
 SMF_SlotChain_StoreInstr:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x3
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotChain_InstrReturn:
 	ret
@@ -2424,7 +2424,7 @@ SMF_SlotChain_StoreVoice:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x4
 	calr SMF_SlotChain_ExtendedVoice
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotChain_VoiceReturn:
 	ret
@@ -2495,7 +2495,7 @@ SMF_SlotChain_Fmt3CheckStep:
 SMF_SlotChain_Fmt3Resolve:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x5
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotChain_Fmt3Return:
 	ret
@@ -2551,7 +2551,7 @@ SMF_SlotParam_VolumeScale:
 SMF_SlotParam_VolumeStore:
 	ld (xiy + 5), 0x7f
 	andmi8 (xiy), 0xfc
-	ordi8 4411, 1
+	or (4411:16), 1
 	jr SMF_SlotParam_VolumeReturn
 
 SMF_SlotParam_VolumeWrite:
@@ -2580,7 +2580,7 @@ SMF_SlotParam_VolumeOutput:
 SMF_SlotParam_VolumeDone:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x7
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_VolumeReturn:
 	ret
@@ -2597,7 +2597,7 @@ SMF_SlotParam_Pan:
 	ld a, (xiy + 3)
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x8
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_PanReturn:
 	ret
@@ -2614,7 +2614,7 @@ SMF_SlotParam_Expression:
 	ld a, (xiy + 3)
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x9
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_ExprReturn:
 	ret
@@ -2631,7 +2631,7 @@ SMF_SlotParam_Reverb:
 	ld a, (xiy + 3)
 	ld (xiy + 2), a
 	ld (xiy + 3), 0xb
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_ReverbReturn:
 	ret
@@ -2648,7 +2648,7 @@ SMF_SlotParam_Chorus:
 	ld a, (xiy + 3)
 	ld (xiy + 2), a
 	ld (xiy + 3), 0xa
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_ChorusReturn:
 	ret
@@ -2680,7 +2680,7 @@ SMF_SlotParam_ModWheelImpl:
 SMF_SlotParam_ModWheelCalc:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x3
-	ordi8 4411, 1
+	or (4411:16), 1
 	ld a, (xiy + 4)
 	orda8 a, 4395
 	ld w, (xiy + 5)
@@ -2729,7 +2729,7 @@ SMF_SlotParam_PitchBendImpl:
 SMF_SlotParam_PitchBendCalc:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x7
-	ordi8 4411, 1
+	or (4411:16), 1
 	ld a, (xiy + 4)
 	and a, 0x10
 	cps a, 0
@@ -2747,7 +2747,7 @@ SMF_SlotParam_PitchBendReturn:
 	jr nz, SMF_SlotParam_Detune
 	ld (xiy + 5), 0x30
 	call SMF_SlotParam_DetuneImpl
-	ordi8 4404, 4
+	or (4404:16), 4
 
 SMF_SlotParam_Detune:
 	ret
@@ -2822,8 +2822,8 @@ SMF_SlotParam_PortamentoSwitch:
 	jr nz, SMF_SlotParam_PortaReturn
 
 SMF_SlotParam_PortaImpl:
-	ordi8 4404, 2
-	ordi8 4411, 2
+	or (4404:16), 2
+	or (4411:16), 2
 	ld (4419:16), 1
 
 SMF_SlotParam_PortaReturn:
@@ -2862,7 +2862,7 @@ SMF_SlotParam_Sustain:
 SMF_SlotParam_SustainImpl:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x0
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_SustainReturn:
 	ret
@@ -2886,7 +2886,7 @@ SMF_SlotParam_Sostenuto:
 SMF_SlotParam_SostenutoImpl:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x1
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_SostenutoReturn1:
 	ret
@@ -2910,7 +2910,7 @@ SMF_SlotParam_SoftPedal:
 SMF_SlotParam_SoftPedalImpl:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x2
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_SoftPedalReturn:
 	ret
@@ -2950,7 +2950,7 @@ SMF_SlotParam_Format5Check:
 	andmi8 (xiy), 0xfd
 
 SMF_SlotParam_Format5Set:
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_Format5Return:
 	ret
@@ -2997,7 +2997,7 @@ SMF_SlotParam_ReverbTypeOutput:
 
 SMF_SlotParam_ReverbTypeDone:
 	ld (xiy + 2), a
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_ReverbTypeReturn:
 	ret
@@ -3023,7 +3023,7 @@ SMF_SlotParam_ChorusType:
 SMF_SlotParam_ChorusTypeImpl:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x3
-	ordi8 4411, 1
+	or (4411:16), 1
 	jr SMF_SlotParam_ChorusTypeDone
 
 SMF_SlotParam_ChorusTypeCheck:
@@ -3034,8 +3034,8 @@ SMF_SlotParam_ChorusTypeCheck:
 	ld (xiy + 4), a
 	ld (xiy + 5), 0x30
 	calr SMF_SlotParam_ChorusTypeReturn
-	ordi8 4411, 1
-	ordi8 4404, 4
+	or (4411:16), 1
+	or (4404:16), 4
 
 SMF_SlotParam_ChorusTypeDone:
 	ret
@@ -3080,7 +3080,7 @@ SMF_SlotParam_BankSelect:
 SMF_SlotParam_BankSelectImpl:
 	ld (xiy + 2), a
 	ld (xiy + 3), 0x4
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_BankSelectDone:
 	ret
@@ -3107,7 +3107,7 @@ SMF_SlotParam_BankSelectLSB:
 
 SMF_SlotParam_BankLSBImpl:
 	ld (xiy + 2), a
-	ordi8 4411, 1
+	or (4411:16), 1
 	ld a, (xiy + 3)
 	cp a, 0xe
 	jr c, SMF_SlotParam_BankLSBDone
@@ -3134,7 +3134,7 @@ SMF_SlotParam_BankLSBReturn:
 	pop xix
 	ld (xiy + 3), a
 	ld (xiy + 2), 0xad
-	ordi8 4411, 1
+	or (4411:16), 1
 	jr SMF_SlotParam_RPNDone
 
 SMF_SlotParam_RPN:
@@ -3145,7 +3145,7 @@ SMF_SlotParam_RPN:
 	pop xix
 	ld (xiy + 3), a
 	ld (xiy + 2), 0xae
-	ordi8 4411, 1
+	or (4411:16), 1
 
 SMF_SlotParam_RPNDone:
 	ret

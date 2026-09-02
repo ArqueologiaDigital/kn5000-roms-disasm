@@ -552,7 +552,7 @@ ParamDigit_Div100Loop:
 	sub wa, 0x64
 	jr c, ParamDigit_Div100Done
 	inc 1, c
-	ordi8 4485, 2
+	or (4485:16), 2
 	cps wa, 0
 	jr nz, ParamDigit_Div100Loop
 	ld (4481:16), c
@@ -567,7 +567,7 @@ ParamDigit_Div10Loop:
 	sub wa, 0xa
 	jr c, ParamDigit_Div10Done
 	inc 1, c
-	ordi8 4485, 1
+	or (4485:16), 1
 	cps wa, 0
 	jr nz, ParamDigit_Div10Loop
 	ld (4482:16), c
@@ -1258,7 +1258,7 @@ PerfMode_Evt03_FlagHandler_B:
 	ret
 PerfMode_Evt03_ClampAndUpdate:
 	; --- Setup: or flag, load value, clamp, store, calls (30 bytes) ---
-	ordi8	0xe3e2, 8
+	or	(0xe3e2:16), 8
 	ld	a, (0x3716:16)
 	ldb l, 0x00
 	ldb h, 0x03
@@ -1941,7 +1941,7 @@ VoiceParam_Case0B:
 VoiceParam_CommonTail:
 	; --- Common tail ---
 	call Display_UpdateRegion3
-	ordi8	0xe3e2, 8
+	or	(0xe3e2:16), 8
 	ret
 VoiceSlot_ReadParamsWithSaveRestore:
 	; --- Helper 1: guard on W, parameter setup + calls (44 bytes) ---
@@ -2227,7 +2227,7 @@ Display_RedrawInd_Ret:
 
 VoiceBank_BitsAndLoad:
 	ld w, (3822:16)
-	ordi8 0x287b, 4
+	or (0x287b:16), 4
 	ret
 
 VoiceBank_StatusDoubleRCF:
@@ -4311,7 +4311,7 @@ PeriphReg_Ret:
 	ret
 ; Display mode handler
 Display_ModeHandler:
-	ordi8	3539, 1
+	or	(3539:16), 1
 	xor	a, a
 	ld	(3538:16), a
 	ld	(3413:16), 255
@@ -5628,7 +5628,7 @@ VoiceSlot_TableSetup:
 AccPedal_CheckBitAndUpdate:
 	bit 0, (3412:16)
 	jrl z, AccPedal_ClearFlagAndJump
-	ordi8 0x287b, 4
+	or (0x287b:16), 4
 
 AccPedal_LoadModeAndChannel:
 	ld w, (3414:16)
@@ -5646,7 +5646,7 @@ AccPedal_StoreAddrAndCheck:
 	cp (3429:16), 3
 	jrl nz, AccPedal_CallEventSwitch
 	ld w, a
-	ordi8 0x287b, 4
+	or (0x287b:16), 4
 
 AccPedal_CallEventSwitch:
 	call Scoop_EventHandler_MenuSwitch
@@ -5719,7 +5719,7 @@ AccPedal_CompareMode85:
 	jp VoiceSlot_ProcessedWordRet
 
 AccPedal_SetBit2Flag:
-	ordi8 3411, 2
+	or (3411:16), 2
 	jp VoiceSlot_ProcessedWordRet
 
 AccPedal_ClearBit2Flag:
@@ -5830,7 +5830,7 @@ VoiceCtrl_CheckAndReset:
 VoiceCtrl_SendNoteOffSequence:
 	push xhl
 	pushw wa
-	ordi8 0x28b3, 64
+	or (0x28b3:16), 64
 	ldb a, 0x90
 	ld hl, wa
 	pushw hl
@@ -6014,7 +6014,7 @@ VoiceCtrl_ParamSetupBytecode:
 	ldb	a, 28
 	jp	VoiceCtrl_ParamSetupBytecode_0x1CF
 	ld	(3422:16), 0
-	ordi8	3411, 1
+	or	(3411:16), 1
 	exts	wa
 	ld	xhl, 3439
 	add	hl, wa
@@ -7718,7 +7718,7 @@ ControllerMode_UpdateFlags:
 	jrl nz, SysEx_FlagClearAndCompare
 	cp (3429:16), 3
 	jrl nz, SysEx_FlagClearAndCompare
-	ordi8 3926, 2
+	or (3926:16), 2
 	jp SubCPU_CmdCountdownRet
 
 SysEx_FlagClearAndCompare:
@@ -12372,7 +12372,7 @@ SubCPU_ToneDispatch:
 	ret
 SubCPU_ToneHandler_A:
 	; --- Dispatch: set flag, load A, 3-way bounds selection, clamp+calls (70 bytes) ---
-	ordi8	0xe3e2, 8
+	or	(0xe3e2:16), 8
 	ld	a, (4381:16)
 	xor l, l
 	ldb h, 0x7f

@@ -177,14 +177,14 @@ PlayMode_SetupAndDispatch:
 	ld	(0x2875:16), wa
 	ld	(3424:16), 0
 	call AccWrap_PlayModeDispatch
-	ordi8	0x28a7, 4
+	or	(0x28a7:16), 4
 	ret
 PlayMode_TeardownAndRestore:
 	; --- Teardown: load/store/clear flags ---
 	ld	wa, (0x2875:16)
 	ld	(0xf19e:16), wa
 	and	(0x28a7:16), 251
-	ordi8	0x28b3, 16
+	or	(0x28b3:16), 16
 	and	(0x28a7:16), 247
 	ret
 PartLookup_NullRet:
@@ -933,7 +933,7 @@ CDlikeReset_SetTimerFlags:
 	ret
 
 CDlike_InitModeAndLoadBank:
-	ordi8 0xb7e2, 64
+	or (0xb7e2:16), 64
 	ld a, (0xfdad:16)
 	ld (3394:16), a
 	ld (3380:16), 0
@@ -1060,7 +1060,7 @@ SongBank_CheckAccompanimentMode:
 SongBank_EnableAccompaniment:
 	bit 2, (0xfdad:16)
 	jr nz, SongBank_CheckBassMode
-	ordi8 0xfdad, 4
+	or (0xfdad:16), 4
 	ldb a, 0x4
 
 SongBank_SendAccompEvent:
@@ -1079,7 +1079,7 @@ SongBank_CheckBassMode:
 	jr SongBank_SendBassEvent
 
 SongBank_EnableBassMode:
-	ordi8 0xfdad, 1
+	or (0xfdad:16), 1
 	ldb a, 0x1
 
 SongBank_SendBassEvent:
