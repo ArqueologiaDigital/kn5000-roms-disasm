@@ -2666,8 +2666,11 @@ def chain_hdr(slot):
                 "four nulls -- and it was the wrong chain.  This block has a DIFFERENT",
                 "reader and a different chain, and every step of it below is an",
                 "instruction operand re-decoded from prom_c's ROM at the address",
+                # ⚠ the check count is READ OFF the module, not typed: a number
+                # in prose that its own script no longer produces is how this
+                # tree has shipped stale figures before.
                 "cited.  notes/prom_d_drawbar_chain.py, %d checks with two nulls."
-                % 65,
+                % _R14.NCHECK[0],
                 "",
                 "  A pool object is a %d x %d x %d TABLE OF DRAWBAR COMBINATIONS:"
                 % (d["radix"], d["radix"], d["radix"]),
