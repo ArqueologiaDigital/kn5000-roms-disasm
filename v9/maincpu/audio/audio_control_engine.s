@@ -1184,7 +1184,7 @@ FileIO_BytecodeData:
 	ld	(xiz+3), 8
 	ld	xwa, xiz
 	calr	-3032
-	incm	1, (xsp+6)
+	incw	1, (xsp+6)
 	.byte 0x9f, 0x06, 0x3f, 0x10, 0x00
 	jr	c, -75
 	pop	xiz
@@ -4477,7 +4477,7 @@ BitmapTable_CheckOffset:
 	or_srib_mr A, 0x07, 0xf4, 0xe4
 
 BitmapTable_NextEntry:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x1
 	jrl c, BitmapTable_ProcessEntry
 	pop xiz
@@ -5951,7 +5951,7 @@ MidiCh_IterateExpression:
 	pushw	de
 	.byte 0x91
 	calr	1435
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	.byte 0x9f, 0x04
 	push	xsp
 	ldb	w, 0

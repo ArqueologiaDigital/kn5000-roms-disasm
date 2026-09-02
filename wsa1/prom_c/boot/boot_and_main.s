@@ -850,7 +850,7 @@ MAIN__midi_drain:
 	ld	xbc, xix
 	add	xbc, xiz
 	ld	(xbc-42), a
-	incm	1, (xiz-2)
+	incw	1, (xiz-2)
 	cpw	(xiz-2), 0x0020
 	jr	nz, MAIN__midi_more
 	jr	MAIN__midi_done

@@ -2306,7 +2306,7 @@ TextRender_BitMask4_Return:
 TextRender_BitMask5_ProcessCharacter:
 	lds32 xwa, 1
 	add (xsp + 16), xwa
-	incm 1, (xsp + 28)
+	incw 1, (xsp + 28)
 
 TextRender_BitMask4_CheckColumnEnd:
 	ld xwa, (xsp + 4)
@@ -2389,7 +2389,7 @@ TextRender_BitMask5_Return:
 TextRender_BitMask5_AdvancePointer:
 	lds32 xwa, 1
 	add (xsp + 16), xwa
-	incm 1, (xsp + 28)
+	incw 1, (xsp + 28)
 
 TextRender_BitMask5_CheckColumnEnd:
 	ld xwa, (xsp + 4)

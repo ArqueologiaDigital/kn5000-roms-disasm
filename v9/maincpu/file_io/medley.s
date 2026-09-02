@@ -660,7 +660,7 @@ IntMed_ReorderLoop:
 	ld c, (xde)
 	cp c, 0xfd
 	jr ugt, IntMed_NextReorder
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	cp c, (xsp + 4)
 	jr ule, IntMed_NextReorder
 	dec 1, c

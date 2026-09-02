@@ -4888,7 +4888,7 @@ RingBuf128_ReadByte:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x7f
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 
@@ -4962,7 +4962,7 @@ Seq_RingBuf_ReadByte_Dequeue:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0xff
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 Seq_RingBuf_ReadByte_Large:
@@ -5028,7 +5028,7 @@ RingBuf512_CheckFull_Read:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x1ff
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 RingBuf_CheckFull_256:
@@ -5097,7 +5097,7 @@ Seq_RingBuf_Dequeue_1024_Read:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x3ff
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 Seq_RingBuf_ReadData:
@@ -5166,7 +5166,7 @@ Seq_RingBuf_PeekByte_Read:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x7ff
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 Seq_RingBuf_WriteByte_Data:
@@ -7524,7 +7524,7 @@ FDC_WriteSectors_FullTrackInner:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x00, 0x09
 	jr c, FDC_WriteSectors_FullTrackInner
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 8)
 	cp (xsp + 4), wa
 	jr c, FDC_WriteSectors_FullTrackOuter
@@ -7654,7 +7654,7 @@ FDC_WriteCompressed_FullTrackInner:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x00, 0x12
 	jr c, FDC_WriteCompressed_FullTrackInner
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 8)
 	cp (xsp + 4), wa
 	jr c, FDC_WriteCompressed_FullTrackOuter
@@ -8607,7 +8607,7 @@ LZ_Decompress_LiteralByte:
 	extz wa
 	calr Flash_AccumWrite_Byte
 	ld bc, (xsp + 10)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	extz xbc
 	add xbc, (xsp + 16)
 	stb_erp A, 0xf8
@@ -8631,7 +8631,7 @@ LZ_Decompress_MatchRef:
 	or wa, bc
 	ldw_erp WA, 0xfa
 	andmi16 (xsp + 8), 0xf
-	incm 2, (xsp + 8)
+	incw 2, (xsp + 8)
 	ldw (xsp + 6), 0x0
 	cpw (xsp + 8), 0x0
 	jr c, LZ_Decompress_LoopCheck
@@ -8649,13 +8649,13 @@ LZ_Decompress_CopyMatchLoop:
 	extz wa
 	calr Flash_AccumWrite_Byte
 	ld bc, (xsp + 10)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	extz xbc
 	add xbc, (xsp + 12)
 	stb_erp A, 0xf8
 	ld (xbc), a
 	andmi16 (xsp + 10), 0xfff
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	ld wa, (xsp + 6)
 	cp wa, (xsp + 8)
 	jr ule, LZ_Decompress_CopyMatchLoop

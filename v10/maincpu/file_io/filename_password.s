@@ -315,7 +315,7 @@ FileName_DrawItemLoop:
 	ldda32 xwa, (0x7f72)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x14
 	jr lt, FileName_DrawItemLoop
 	jrl FileName_Return
@@ -331,7 +331,7 @@ FileName_HandleScroll:
 	jr nz, FileName_ScrollUp
 	cpw (xsp + 6), 0x13
 	jrl ge, FileName_GetSelection
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	jr FileName_ScrollApply
 
 FileName_ScrollUp:
@@ -697,7 +697,7 @@ FileName_UpdateButtons_Hide:
 	call FileIO_FormatName_Copy
 
 FileName_UpdateButtons_Check:
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x8
 	jr lt, FileName_UpdateButtons_Loop
 	ldw wa, 0x8

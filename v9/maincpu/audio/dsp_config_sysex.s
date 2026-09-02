@@ -2461,7 +2461,7 @@ DSPCfg_WriteParam_Type76_NotType2:
 	ld (xde), a
 
 DSPCfg_WriteParam_IncCounter:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 DSPCfg_WriteParam_SetMask3F:
 	ldb e, 0x3f
@@ -2637,7 +2637,7 @@ DSPCfg_WriteMultiField_AdvanceAddr:
 	ld xwa, xiz
 	calr DSPCfg_PackAddress
 	ld xiz, xhl
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 4)
 	cp wa, (xsp + 12)
 	jr c, DSPCfg_WriteMultiField_Loop
@@ -2698,7 +2698,7 @@ DSPCfg_ReadMultiField_PackAndNext:
 	ld xwa, (xsp + 12)
 	calr DSPCfg_PackAddress
 	ld (xsp + 12), xhl
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 4)
 	cp wa, (xsp + 10)
 	jr c, DSPCfg_ReadMultiField_Loop
@@ -4220,7 +4220,7 @@ DSPCfg_ApplyParamStruct_PackNext:
 	ld xwa, (xsp + 14)
 	calr DSPCfg_PackAddress
 	ld (xsp + 14), xhl
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld wa, (xsp + 6)
 	cp (xsp + 12), wa
 	jr c, DSPCfg_ApplyParamStruct_ReadLoop
@@ -4309,7 +4309,7 @@ DSPCfg_ApplyParamStruct_WritePackNext:
 	ld xwa, (xsp + 14)
 	calr DSPCfg_PackAddress
 	ld (xsp + 14), xhl
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld wa, (xsp + 6)
 	cp (xsp + 12), wa
 	jr c, DSPCfg_ApplyParamStruct_WriteReadLoop

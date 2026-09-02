@@ -11579,7 +11579,7 @@ RingBuf_Read_NoWrap:	; 01F7D3h
 
 RingBuf_Read_Update:	; 01F7D5h
 	ld (xde), xix	; Update write pointer
-	incm 1, (xwa + 20)	; Increment available count
+	incw 1, (xwa + 20)	; Increment available count
 	extz hl
 	ret
 

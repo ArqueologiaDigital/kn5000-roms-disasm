@@ -1585,7 +1585,7 @@ FDC_CmdReadSectors__burst_loop:
 	cps wa, 0	; cp WA,0
 	jr z, FDC_CmdReadSectors__submit	; jr Z,0xffe404
 	lda_d16 xwa, (0x0c76)	; lda XWA,0x0c76
-	incm 1, (xwa)	; incw 1,(XWA)
+	incw 1, (xwa)	; incw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
 	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
 	jr ugt, FDC_CmdReadSectors__submit	; jr UGT,0xffe404
@@ -1694,7 +1694,7 @@ FDC_CmdWriteSectors__burst_loop:
 	cps wa, 0	; cp WA,0
 	jr z, FDC_CmdWriteSectors__submit	; jr Z,0xffe537
 	lda_d16 xwa, (0x0c76)	; lda XWA,0x0c76
-	incm 1, (xwa)	; incw 1,(XWA)
+	incw 1, (xwa)	; incw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
 	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
 	jr ugt, FDC_CmdWriteSectors__submit	; jr UGT,0xffe537

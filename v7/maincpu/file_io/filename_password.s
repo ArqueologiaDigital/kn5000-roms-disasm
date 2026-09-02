@@ -269,7 +269,7 @@ FileName_DrawItemLoop:
 	ldda32	xwa, 32470
 	ld	xbc, 29360143
 	call	16423243
-	incm	1, (xsp+6)
+	incw	1, (xsp+6)
 	.byte 0x9f, 0x06, 0x3f, 0x14, 0x00
 	jr	lt, -98
 	jrl	1377
@@ -284,7 +284,7 @@ FileName_HandleScroll:
 	jr	nz, 13
 	.byte 0x9f, 0x06, 0x3f, 0x13, 0x00
 	jrl	ge, 970
-	incm	1, (xsp+6)
+	incw	1, (xsp+6)
 	jr	72
 FileName_ScrollUp:
 	cp xwa, 0x1c00017
@@ -638,7 +638,7 @@ FileName_UpdateButtons_Hide:
 	call FileIO_FormatName_Copy
 
 FileName_UpdateButtons_Check:
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x8
 	jr lt, FileName_UpdateButtons_Loop
 	ldw wa, 0x8

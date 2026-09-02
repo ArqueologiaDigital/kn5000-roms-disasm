@@ -2525,7 +2525,7 @@ RVari_OK_PageScroll:
 	cpda16_24 xwa, (0x0340bc)
 	jr ge, RVari_OK_PageUp_AtMax
 	ld xwa, (xiz + 44)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ld_sril XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0

@@ -1478,8 +1478,8 @@ CPanel_LED_HandlePacket2:	; FC4B95 -- LED handler for packet types 0, 1, 2
 	stb_dri W, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
-	incm 1, (xiz - 2)		; increment pending LED byte count
-	incm 1, (xiz - 2)		; increment pending LED byte count (+2 total)
+	incw 1, (xiz - 2)		; increment pending LED byte count
+	incw 1, (xiz - 2)		; increment pending LED byte count (+2 total)
 	stda16 (0x8dff), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
 	jrl CPanel_UpdateLEDs__check_next	; check for more events
 
@@ -1496,7 +1496,7 @@ CPanel_LED_HandlePacketN:	; FC4BC5 -- LED handler for packet type 3
 	ld a, c				; A = restore event byte 1
 	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
-	incm 1, (xiz - 2)		; increment pending LED byte count
+	incw 1, (xiz - 2)		; increment pending LED byte count
 
 CPanel_LED_HandlePacketN__loop:	; FC4BE4 -- loop: transfer remaining bytes
 	ldb_sri A, 0x07, 0xf8, 0xf0	; A = next event queue byte at (XIZ + IX)
@@ -1504,7 +1504,7 @@ CPanel_LED_HandlePacketN__loop:	; FC4BE4 -- loop: transfer remaining bytes
 	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
-	incm 1, (xiz - 2)		; increment pending LED byte count
+	incw 1, (xiz - 2)		; increment pending LED byte count
 	stda16 (0x8dff), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
 	dec 1, b			; decrement loop counter
 	cps b, 0			; check if counter reached zero

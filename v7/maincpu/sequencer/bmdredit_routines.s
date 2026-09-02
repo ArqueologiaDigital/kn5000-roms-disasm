@@ -3064,7 +3064,7 @@ BmDrEdit_VelChange_Error:
 
 BmDrEdit_VelChange_LinkVoice:
 	submi16 (xsp + 6), 0xff
-	incm 4, (xsp + 6)
+	incw 4, (xsp + 6)
 
 BmDrEdit_VelChange_WriteParams:
 	ld c, (xsp + 20)
@@ -3171,7 +3171,7 @@ PartCtrl_ReadWordWithBoundsCheck:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 4)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	cpw (xwa), 0xff
 	jr ule, BmDrEdit_BoundsCheck_ReturnZero
 	ld wa, (xiz)
@@ -3288,7 +3288,7 @@ BmDrEdit_ValidateVoice_SkipSections:
 	ld (xwa), hl
 	cpdi8 (0x287a), 0
 	jr nz, BmDrEdit_TrackValidateRet
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	call SeqTrack_ProcessControlBytes
 	cpdi8 (0x287a), 0
 	jr nz, BmDrEdit_TrackValidateRet
@@ -3482,7 +3482,7 @@ BmDrEdit_ScanChannel_UseChannel:
 
 BmDrEdit_ScanChannel_StoreEntry:
 	ldb_d8 l, (0x288e)
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	inc 1, a
 	ld iy, iz
 	extz xiy
@@ -3503,7 +3503,7 @@ BmDrEdit_ScanChannel_NextSlot:
 	jr BmDrEdit_ScanChannel_NextSlot
 
 BmDrEdit_ScanChannel_StoreAndContinue:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	ld xbc, xwa
 	ld de, iz
 	extz xde
@@ -3764,7 +3764,7 @@ BmDrEdit_ProcessVoiceSection:
 	stw_erp BC, 0xe2
 	ld xwa, (xsp)
 	ld (xwa), bc
-	incm 1, (xde)
+	incw 1, (xde)
 	ldb_d8 l, (1075)
 	jr BmDrEdit_ProcessVoice_Epilog
 
@@ -3782,7 +3782,7 @@ BmDrEdit_ProcessVoice_SubtractAndContinue:
 	ld xwa, (xsp)
 	sub (xwa), bc
 	ld xwa, (xsp + 4)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	call SeqTrack_ProcessControlBytes
 	ldb_d8 l, (0x288e)
 

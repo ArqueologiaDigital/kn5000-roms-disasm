@@ -17467,7 +17467,7 @@ sub_F0AC43:
 	inc	8, xsp	; F0AC75  inc 0,XSP
 	cp	(xiz-4), bc	; F0AC77  cp (XIZ+0xfc),BC
 	jr	nc, 50	; F0AC7A  jr NC,0xf0acae
-	incm	1, (xiz-4)	; F0AC7C  incw 1,(XIZ+0xfc)
+	incw	1, (xiz-4)	; F0AC7C  incw 1,(XIZ+0xfc)
 	jr	19	; F0AC7F  jr T,0xf0ac94
 	lda	xbc, (xiz-4)	; F0AC81  lda XBC,XIZ+0xfc
 	push	xbc	; F0AC84  push XBC
@@ -91048,7 +91048,7 @@ DiskFile_CheckSignature:		; <- T_F43430
 	ld	xbc, (xbc-88)	; F48CF5  ld XBC,(XBC+0xa8)
 	m_cp_rm MLD+r6, 0xe0, 1	; F48CF8  cp XBC,(XIZ+0xe0)
 	jr	nz, 6	; F48CFB  jr NZ,0xf48d03
-	incm	1, (xiz-38)	; F48CFD  incw 1,(XIZ+0xda)
+	incw	1, (xiz-38)	; F48CFD  incw 1,(XIZ+0xda)
 	jrl	347	; F48D00  jrl T,0xf48e5e
 	ld	xbc, xix	; F48D03  ld XBC,XIX
 	inc	6, xbc	; F48D05  inc 6,XBC
@@ -91159,7 +91159,7 @@ DiskFile_CheckSignature:		; <- T_F43430
 	ld	xbc, (xiz-24)	; F48E16  ld XBC,(XIZ+0xe8)
 	push	xbc	; F48E19  push XBC
 	call	15995448	; F48E1A  call 0xf41238
-	incm	1, (xiz-38)	; F48E1E  incw 1,(XIZ+0xda)
+	incw	1, (xiz-38)	; F48E1E  incw 1,(XIZ+0xda)
 	inc	8, xsp	; F48E21  inc 0,XSP
 	inc	6, xsp	; F48E23  inc 6,XSP
 	jr	55	; F48E25  jr T,0xf48e5e
@@ -103860,12 +103860,12 @@ Drawbar_DrawColumn:
 	ld	(xix+7), xwa	; F538FE  ld (XIX+0x07),XWA
 	push	xix	; F53901  push XIX
 	calr	38	; F53902  calr 0xf5392b
-	incm	1, (xix+5)	; F53905  incw 1,(XIX+0x05)
+	incw	1, (xix+5)	; F53905  incw 1,(XIX+0x05)
 	ld	xbc, 233	; F53908  ld XBC,0x000000e9
 	add	(xix+7), xbc	; F5390D  add (XIX+0x07),XBC
 	push	xix	; F53910  push XIX
 	calr	23	; F53911  calr 0xf5392b
-	incm	1, (xix+5)	; F53914  incw 1,(XIX+0x05)
+	incw	1, (xix+5)	; F53914  incw 1,(XIX+0x05)
 	ld	xbc, 233	; F53917  ld XBC,0x000000e9
 	add	(xix+7), xbc	; F5391C  add (XIX+0x07),XBC
 	push	xix	; F5391F  push XIX
@@ -106437,7 +106437,7 @@ Queue2C00_Append4:
 	ld	(xbc+3), a	; F5526D  ld (XBC+0x03),A
 	ld	xbc, (xiz-4)	; F55270  ld XBC,(XIZ+0xfc)
 	ld	(xbc+4), 255	; F55273  ld (XBC+0x04),0xff
-	incm	4, (xix)	; F55277  incw 4,(XIX)
+	incw	4, (xix)	; F55277  incw 4,(XIX)
 	pop	xix	; F55279  pop XIX
 	popw	hl	; F5527A  pop HL
 	unlk XIZ	; F5527B  unlk XIZ
@@ -106479,7 +106479,7 @@ Queue2E00_Append4:
 	ld	(xbc+3), a	; F552BB  ld (XBC+0x03),A
 	ld	xbc, (xiz-4)	; F552BE  ld XBC,(XIZ+0xfc)
 	ld	(xbc+4), 255	; F552C1  ld (XBC+0x04),0xff
-	incm	4, (xix)	; F552C5  incw 4,(XIX)
+	incw	4, (xix)	; F552C5  incw 4,(XIX)
 	pop	xix	; F552C7  pop XIX
 	popw	hl	; F552C8  pop HL
 	unlk XIZ	; F552C9  unlk XIZ
@@ -117784,8 +117784,8 @@ SC1_TxOp0_TwoByte:
 	mx_st_mr8 MXD, ra_DE, ra_IY, 0	; F5B2C1  ld (XDE+IY),W
 	calr	95	; F5B2C6  calr 0xf5b328
 	ld	(xiz+6), ix	; F5B2C9  ld (XIZ+0x06),IX
-	incm	1, (xiz+8)	; F5B2CC  incw 1,(XIZ+0x08)
-	incm	1, (xiz+8)	; F5B2CF  incw 1,(XIZ+0x08)
+	incw	1, (xiz+8)	; F5B2CC  incw 1,(XIZ+0x08)
+	incw	1, (xiz+8)	; F5B2CF  incw 1,(XIZ+0x08)
 	stda16	(10978), iy	; F5B2D2  ld (0x2ae2),IY
 	jrl	-133	; F5B2D6  jrl T,0xf5b254
 ; ---------------------------------------------------------------------
@@ -117817,13 +117817,13 @@ SC1_TxOp3_Run:
 	ld	a, c	; F5B2EB  ld A,C
 	mx_st_mr8 MXD, ra_DE, ra_IY, 1	; F5B2ED  ld (XDE+IY),A
 	calr	51	; F5B2F2  calr 0xf5b328
-	incm	1, (xiz+8)	; F5B2F5  incw 1,(XIZ+0x08)
+	incw	1, (xiz+8)	; F5B2F5  incw 1,(XIZ+0x08)
 	mx_ld_rm MXB, ra_IZ, ra_IX, 1	; F5B2F8  ld A,(XIZ+IX)
 	calr	52	; F5B2FD  calr 0xf5b334
 	mx_st_mr8 MXD, ra_DE, ra_IY, 1	; F5B300  ld (XDE+IY),A
 	calr	32	; F5B305  calr 0xf5b328
 	ld	(xiz+6), ix	; F5B308  ld (XIZ+0x06),IX
-	incm	1, (xiz+8)	; F5B30B  incw 1,(XIZ+0x08)
+	incw	1, (xiz+8)	; F5B30B  incw 1,(XIZ+0x08)
 	stda16	(10978), iy	; F5B30E  ld (0x2ae2),IY
 	dec	1, b	; F5B312  dec 1,B
 	cps	b, 0	; F5B314  cp B,0

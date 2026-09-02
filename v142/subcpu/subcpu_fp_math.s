@@ -1293,7 +1293,7 @@ FP_DP_NormalizeMantissa:
 	inc 1, xhl
 	bit_erpw 0xEE, 0x07
 	jr nz, FP_DP_NormalizeMantissa_StoreHL
-	incm 1, (xsp + 256)
+	incw 1, (xsp + 256)
 	srl xhl, 1
 
 ; Store the rounded 24-bit mantissa back into the unpacked record.
@@ -1556,7 +1556,7 @@ FP_DP_AddMantissa:
 	extpfx3 0xD9, 0x23, 0x01
 	stcf_erpw 0xEA, 0x0F
 	extpfx3 0xD9, 0x23, 0x00
-	incm 1, (xwa + 256)
+	incw 1, (xwa + 256)
 	jr nc, FP_DP_AddMantissa_Store
 	add xde, 0x1
 	adc xhl, 0x0
@@ -1577,7 +1577,7 @@ FP_SP_AddMantissa:
 	add xix, (xbc + 4)
 	bit_erpw 0xF2, 0x08
 	jr z, FP_SP_AddMantissa_Store
-	incm 1, (xwa + 256)
+	incw 1, (xwa + 256)
 	srl xix, 1
 	adc xix, 0x0
 
@@ -2369,7 +2369,7 @@ FP_DP_MulMantissaCore_Round:
 	srl xiy, 1
 	extpfx3 0xDC, 0x24, 0x00
 	rrc xix
-	incm 1, (xwa + 256)
+	incw 1, (xwa + 256)
 
 ; Store the quotient mantissa back into the record.
 FP_DP_MulMantissaCore_Store:
@@ -3424,7 +3424,7 @@ FP_DP_MulAdd_Sum2:
 	ld xhl, (xsp + 11)
 	bit_erpw 0xEE, 0x01
 	jr z, FP_DP_MulAdd_Round
-	incm 1, (xwa + 256)
+	incw 1, (xwa + 256)
 	srl xhl, 1
 	extpfx3 0xDA, 0x24, 0x00
 	rrc xde
@@ -3451,7 +3451,7 @@ FP_DP_MulAdd_Round:
 	srl xhl, 1
 	extpfx3 0xDA, 0x24, 0x00
 	rrc xde
-	incm 1, (xwa + 256)
+	incw 1, (xwa + 256)
 
 ; Store the product mantissa back into the record.
 FP_DP_MulAdd_Store:
@@ -3491,7 +3491,7 @@ FP_SP_MulAdd:
 	add xde, xhl
 	bit_erpw 0xEA, 0x0F
 	jr z, FP_SP_MulAdd_NormCheck
-	incm 1, (xiz + 256)
+	incw 1, (xiz + 256)
 	jr FP_SP_MulAdd_Round
 
 ; Leading bit did not land: shift left one instead of incrementing the exponent.
@@ -3508,7 +3508,7 @@ FP_SP_MulAdd_Round:
 	jr nc, FP_SP_MulAdd_Store
 	extpfx3 0xDA, 0x24, 0x00
 	rrc xde
-	incm 1, (xiz + 256)
+	incw 1, (xiz + 256)
 
 ; Drop the guard byte and store the product mantissa.
 FP_SP_MulAdd_Store:

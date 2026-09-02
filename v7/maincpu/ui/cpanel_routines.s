@@ -1050,9 +1050,9 @@ CPanel_LED_HandlePacket2:
 
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 
-	incm 1, (xiz - 2)		; increment pending LED byte count
+	incw 1, (xiz - 2)		; increment pending LED byte count
 
-	incm 1, (xiz - 2)		; increment pending LED byte count (+2 total)
+	incw 1, (xiz - 2)		; increment pending LED byte count (+2 total)
 
 	.byte 0xf1, 0x63, 0x8d, 0x55	; stda16 (0x8dff), iy; store LED write ptr to CPANEL_LED_WRITE_PTR (v7 patched)
 
@@ -1073,7 +1073,7 @@ CPanel_LED_HandlePacketN:	; FC4BC5 -- LED handler for packet type 3
 	ld a, c				; A = restore event byte 1
 	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
-	incm 1, (xiz - 2)		; increment pending LED byte count
+	incw 1, (xiz - 2)		; increment pending LED byte count
 
 CPanel_LED_HandlePacketN__loop:
 	ld_rrb	a, xiz, ix
@@ -1081,7 +1081,7 @@ CPanel_LED_HandlePacketN__loop:
 	st_rrb	a, xde, iy
 	calr	31
 	ld	(xiz-8), ix
-	incm	1, (xiz-2)
+	incw	1, (xiz-2)
 	stda16	36195, iy
 	dec	1, b
 	cps	b, 0

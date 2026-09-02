@@ -568,7 +568,7 @@ AcFileSfx_CallDrawString:
 	ld xwa, (xsp + 24)
 	srl xwa, 1
 	ld (xsp + 24), xwa
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x9
 	jr c, AcFileSfx_DrawLoop
 
@@ -977,7 +977,7 @@ DrawProgH_Loop1:
 	ld wa, (xsp + 6)
 	add (xsp + 20), wa
 	add (xsp + 16), wa
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 	cp (xsp + 14), iz
 	jr c, DrawProgH_Loop1
 
@@ -1026,7 +1026,7 @@ DrawProgH_Loop2:
 	calr DrawLineHelper
 	ld wa, (xsp + 6)
 	add (xsp + 16), wa
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 	ld wa, (xsp + 14)
 	cp wa, (xsp + 4)
 	jr c, DrawProgH_Loop2
@@ -1059,7 +1059,7 @@ DrawProgH_Loop3:
 	calr DrawLineHelper
 	ld wa, (xsp + 6)
 	add (xsp + 16), wa
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 	ld wa, (xsp + 14)
 	cp wa, (xsp + 4)
 	jr c, DrawProgH_Loop3
@@ -2974,9 +2974,9 @@ CtrlPanel_ApplyMarginLoop:
 	lda xwa, (xiz + 4)
 
 CtrlPanel_MarginAdjustStep:
-	incm 1, (xix)
+	incw 1, (xix)
 	decm 1, (xhl)
-	incm 1, (xbc)
+	incw 1, (xbc)
 	decm 1, (xwa)
 	inc 1, xiy
 	cp xiy, xde

@@ -736,7 +736,7 @@ SaveFilter_DeselectAll_Loop:
 	ldda32	xwa, 32618
 	ld	xbc, 29360143
 	call	16423243
-	incm	1, (xsp)
+	incw	1, (xsp)
 	.byte 0x97, 0x3f, 0x08, 0x00
 	jr	lt, -62
 	jrl	421

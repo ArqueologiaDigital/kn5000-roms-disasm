@@ -4165,7 +4165,7 @@ SeqStep_FileIoAdvance:
 	ld xwa, (xhl + 4)
 	cp xwa, (xsp + 14)
 	jr nz, SeqStep_FileIoDone
-	incm 2, (xhl + 18)
+	incw 2, (xhl + 18)
 	ld wa, (xsp + 22)
 	or (xhl + 22), a
 	jrl SeqStep_FileIoPopReturn
@@ -4218,7 +4218,7 @@ SeqStep_FileIoComplete:
 	ld xhl, xix
 
 SeqStep_FileIoFinal:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	lda_dri XIX, 0xf1, 0x1a, 0x02
 	cpw (xsp + 4), 0xa
 	jr lt, SeqStep_FileIoError
@@ -4337,7 +4337,7 @@ SeqStep_FileIoRetryCheck:
 	ld a, (xwa + 58)
 	extz wa
 	ld bc, (xsp + 4)
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cp bc, wa
 	jr lt, SeqStep_FileIoRetryLoop
 
@@ -4426,7 +4426,7 @@ SeqStep_FileBufferAlloc:
 	lda_24 xbc, (0x0210b4)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld (xwa + 6), de
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 SeqStep_FileBufferInit:
 	ld xwa, (xiz)
@@ -4461,7 +4461,7 @@ SeqStep_FileBufferReturn:
 	resm 0, (xbc + 22)
 
 SeqStep_FileBufferError:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	lda_dri XBC, 0xe5, 0x1a, 0x02
 	cpw (xsp + 4), 0xa
 	jr lt, SeqStep_FileBufferReturn
@@ -4508,7 +4508,7 @@ SeqStep_FileBufferFinal:
 	ex_ff
 	push	xix
 	.byte 0x80
-	incm	1, (xsp+6)
+	incw	1, (xsp+6)
 	lda	xiz, (xiz+538)
 	.byte 0x9f, 0x06
 	push	xsp
@@ -5821,7 +5821,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+16)
 	ld	(xwa+42), hl
 	ld	xwa, (xsp+16)
-	incm	1, (xwa+46)
+	incw	1, (xwa+46)
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
 	.byte 0x9f	; v10 does not spell this byte either
@@ -6289,7 +6289,7 @@ SeqByteBlock_ChannelContainer:
 	inc	1, xbc
 	jr	40
 	decm	1, (xsp+18)
-	incm	1, (xsp+2)
+	incw	1, (xsp+2)
 	ldb_spi	e, 228
 	ld	xwa, (xsp+14)
 	lda_dpi	xiy, 224
@@ -6588,14 +6588,14 @@ SeqChan_InitChannelState:
 	lda_dpi	xhl, 232
 	ld	(xsp+16), xwa
 	decm	1, (xsp+20)
-	incm	1, (xsp+2)
+	incw	1, (xsp+2)
 	jr	42
 	ld	xwa, (xsp+16)
 	ldb_spi	c, 224
 	ld	(xde), c
 	ld	(xsp+16), xwa
 	decm	1, (xsp+20)
-	incm	1, (xsp+2)
+	incw	1, (xsp+2)
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+2)
 	cp_spib	a, 232
@@ -6787,7 +6787,7 @@ SeqChan_TraverseAndProcess:
 	inc	4, xsp
 	or	(xsp+6), hl
 	.byte 0x8e, 0x16, 0x3c, 0xe5
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	lda	xiz, (xiz+538)
 	.byte 0x9f, 0x04, 0x3f, 0x0a, 0x00
 	jr	lt, -49
@@ -7397,7 +7397,7 @@ SeqChan_ByteBlockE:
 	.byte 0x8b	; v10 does not spell this byte either
 	.byte 0xbf	; v10 does not spell this byte either
 	ldwio	2, 0
-	incm	1, (xsp+6)
+	incw	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)
 	.byte 0x98	; v10 does not spell this byte either
@@ -7406,7 +7406,7 @@ SeqChan_ByteBlockE:
 	ei	2
 	nop
 	nop
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	jrl	-148
 	ld	xwa, (xsp+22)
 	lda	xwa, (xwa+26)
@@ -7533,7 +7533,7 @@ SeqChan_ByteBlockF:
 	.byte 0x8b	; v10 does not spell this byte either
 	.byte 0xbf	; v10 does not spell this byte either
 	ldwio	2, 0
-	incm	1, (xsp+6)
+	incw	1, (xsp+6)
 	ld	xwa, (xsp+2)
 	ld	bc, (xsp+6)
 	.byte 0x98	; v10 does not spell this byte either
@@ -7542,7 +7542,7 @@ SeqChan_ByteBlockF:
 	ei	2
 	nop
 	nop
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	jrl	-148
 	ld	xwa, (xsp+22)
 	lda	xwa, (xwa+26)
@@ -7929,7 +7929,7 @@ FDC_Format2DD_TrackBody:
 	lds	hl, 0
 	jrl	225	; -> 0xF51E86
 FDC_Format2DD_TrackInc:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 FDC_Format2DD_TrackTest:
 	cpw (xsp + 14), 0x9
@@ -7956,7 +7956,7 @@ FDC_Format2DD_Side1Body:
 	lds	hl, 0
 	jrl	162	; -> 0xF51E86
 FDC_Format2DD_Side1Inc:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 FDC_Format2DD_Side1Test:
 	.byte 0x9f, 0x0e, 0x3f, 0x05, 0x00, 0x63, 0xcd, 0xbf
@@ -8143,7 +8143,7 @@ FDC_Format2HD_TrackBody:
 	lds	hl, 0
 	jrl	470	; -> 0xF521E1
 FDC_Format2HD_TrackInc:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 FDC_Format2HD_TrackTest:
 	.byte 0x9f, 0x0e, 0x3f, 0x0a, 0x00, 0x63, 0xcd, 0x0b
@@ -8188,7 +8188,7 @@ FDC_Format2HD_Side2Body:
 	lds	hl, 0
 	jrl	287	; -> 0xF521E1
 FDC_Format2HD_Side2Inc:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 FDC_Format2HD_Side2Test:
 	.byte 0x9f, 0x0e, 0x3f, 0x12, 0x00, 0x63, 0xcd, 0xbf
@@ -8226,7 +8226,7 @@ FDC_Format2HD_Side1Body:
 	lds	hl, 0
 	jrl	162	; -> 0xF521E1
 FDC_Format2HD_Side1Inc:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 FDC_Format2HD_Side1Test:
 	.byte 0x9f, 0x0e, 0x3f, 0x0f, 0x00, 0x63, 0xcd, 0xbf

@@ -632,7 +632,7 @@ PsFileNameBox_DrawItem_Body:
 	ld (xbc), de
 	lds de, 7
 	call DrawLine
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 
 PsFileNameBox_DrawItem_Check:
 	ld xwa, (xsp + 14)

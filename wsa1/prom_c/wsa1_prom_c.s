@@ -411,7 +411,7 @@ Voice_RecomputeAllThreeBaseCurves__FABEA4:
 	inc	6, xsp                                 ; FABEB1  inc 6,XSP
 Voice_RecomputeAllThreeBaseCurves__FABEB3:
 	add	de, 27                                 ; FABEB3  add DE,0x001b
-	incm	1, (xiz-2)                            ; FABEB7  incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                            ; FABEB7  incw 1,(XIZ+0xfe)
 	cp	de, 0xD80                               ; FABEBA  cp DE,0x0d80
 	jrl c, Voice_RecomputeAllThreeBaseCurves__FABE3F                  ; FABEBE  jrl C,0xfabe3f
 	ldw (xiz-2), 0x0000                        ; FABEC1  ld (XIZ+0xfe),0x0000
@@ -465,7 +465,7 @@ Voice_RecomputeAllThreeBaseCurves__FABF31:
 Voice_RecomputeAllThreeBaseCurves__FABF40:
 	add	de, 27                                 ; FABF40  add DE,0x001b
 	add	ix, 27                                 ; FABF44  add IX,0x001b
-	incm	1, (xiz-2)                            ; FABF48  incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                            ; FABF48  incw 1,(XIZ+0xfe)
 	cp	de, 0x6C0                               ; FABF4B  cp DE,0x06c0
 	jrl c, Voice_RecomputeAllThreeBaseCurves__FABECC                  ; FABF4F  jrl C,0xfabecc
 	ldw (xiz-2), 0x0000                        ; FABF52  ld (XIZ+0xfe),0x0000
@@ -540,7 +540,7 @@ Voice_RecomputeAllThreeBaseCurves__FABFFF:
 Voice_RecomputeAllThreeBaseCurves__FAC00E:
 	add	de, 27                                 ; FAC00E  add DE,0x001b
 	add	ix, 27                                 ; FAC012  add IX,0x001b
-	incm	1, (xiz-2)                            ; FAC016  incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                            ; FAC016  incw 1,(XIZ+0xfe)
 	cp	de, 0xD80                               ; FAC019  cp DE,0x0d80
 	jrl c, Voice_RecomputeAllThreeBaseCurves__FABF5D                  ; FAC01D  jrl C,0xfabf5d
 	popw	ix                                    ; FAC020  pop IX

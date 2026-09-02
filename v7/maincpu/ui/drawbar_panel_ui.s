@@ -10655,7 +10655,7 @@ AudioCtrl_ScanLoop:
 	jr AudioCtrl_MainFuncCallPt
 
 AudioCtrl_ScanNext:
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
 	jr c, AudioCtrl_ScanLoop
 	jr AudioCtrl_MainFuncCallPt
@@ -10832,11 +10832,11 @@ PsMixer_GridLoop:
 	ld xhl, (xhl)
 	call (xhl)
 	inc 1, iz
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	cpw (xsp + 12), 0x8
 	jr c, PsMixer_GridLoop
-	incm 1, (xsp + 8)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 8)
+	incw 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
 	jrl c, PsMixer_ControlHelper
 	ldw_da xwa, (0x024790)
@@ -10874,8 +10874,8 @@ PsMixer_FindActiveLoop:
 	jr PsMixer_ShowEventAndForward
 
 PsMixer_FindActiveNext:
-	incm 1, (xsp + 8)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 8)
+	incw 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
 	jr c, PsMixer_FindActiveLoop
 
@@ -11371,11 +11371,11 @@ AudioCtrl_MixerDispatch:
 
 AudioCtrl_MixerLoopNext:
 	inc 1, iz
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	cpw (xsp + 12), 0x8
 	jrl c, PsMixer_ArrayReadHandler
-	incm 1, (xsp + 8)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 8)
+	incw 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
 	jrl c, PsMixer_MidiScanOuterLoop
 	jrl AudioCtrl_ReturnZero
@@ -11463,11 +11463,11 @@ AudioCtrl_DispatchCallback:
 
 PsMixer_ScanArrayNext:
 	inc 1, iz
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	cpw (xsp + 12), 0x8
 	jrl c, AudioCtrl_ArrayReadHandler
-	incm 1, (xsp + 8)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 8)
+	incw 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
 	jrl c, PsMixer_UnmatchedPartScan
 	jrl AudioCtrl_ReturnZero
@@ -11513,7 +11513,7 @@ PsMixer_VolSel_SearchLoop:
 	cp wa, hl
 	jr z, PsMixer_VolSel_CheckFound
 	inc 1, iz
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	cpw (xsp + 10), 0x8
 	jr c, PsMixer_VolSel_SearchLoop
 
@@ -11650,8 +11650,8 @@ PsMixer_EventForwardHelper:
 	jr AudioCtrl_ReturnZero
 
 PsMixer_EventFwd_Next:
-	incm 1, (xsp + 8)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 8)
+	incw 1, (xsp + 10)
 	cpw (xsp + 10), 0x5
 	jr c, PsMixer_EventForwardHelper
 	jr AudioCtrl_ReturnZero
@@ -11908,9 +11908,9 @@ AudioCtrl_DataBlock:
 	ldw	de, 248
 	call	DrawLine
 	lda	xwa, (xsp+12)
-	incm	1, (xwa)
+	incw	1, (xwa)
 	lda	xbc, (xsp+8)
-	incm	1, (xbc)
+	incw	1, (xbc)
 	ldw	de, 255
 	call	DrawLine
 	.byte 0x9f	; v10 does not spell this byte either
@@ -12318,7 +12318,7 @@ AudioCtrl_DataBlock:
 	ld	bc, (xsp+12)
 	calr	64679
 	lda	xwa, (xsp+20)
-	incm	7, (xwa+2)
+	incw	7, (xwa+2)
 	lds	bc, 7
 	calr	64347
 	jrl	340
@@ -12329,7 +12329,7 @@ AudioCtrl_DataBlock:
 	ld	bc, (xsp+12)
 	calr	64647
 	lda	xwa, (xsp+20)
-	incm	7, (xwa+2)
+	incw	7, (xwa+2)
 	lda	xbc, (xsp+16)
 	ld	de, (xsp+14)
 	calr	64739
@@ -13627,7 +13627,7 @@ AudioCtrl_DataBlock:
 	ld	de, (xsp+10)
 	calr	60973
 	lda	xbc, (xsp+18)
-	incm	1, (xbc)
+	incw	1, (xbc)
 	.byte 0x99	; v10 does not spell this byte either
 	push	sr
 	push	xwa
@@ -13929,9 +13929,9 @@ AudioCtrl_DataBlock:
 	ldw	de, 248
 	call	DrawLine
 	lda	xwa, (xsp+74)
-	incm	1, (xwa)
+	incw	1, (xwa)
 	lda	xbc, (xsp+70)
-	incm	1, (xbc)
+	incw	1, (xbc)
 	ldw	de, 255
 	call	DrawLine
 	ldw_da	wa, (149396)
@@ -13970,8 +13970,8 @@ AudioCtrl_DataBlock:
 	pushw	0
 	pushw	247
 	call	DrawStringCentered
-	incm	1, (xsp+12)
-	incm	1, (xsp+18)
+	incw	1, (xsp+12)
+	incw	1, (xsp+18)
 	.byte 0x9f	; v10 does not spell this byte either
 	ccf
 	push	xsp
@@ -14103,14 +14103,14 @@ AudioCtrl_DataBlock:
 	pushw	0
 	pushw	0
 	call	DrawStringReverse
-	incm	1, (xsp+12)
-	incm	1, (xsp+20)
+	incw	1, (xsp+12)
+	incw	1, (xsp+20)
 	.byte 0x9f	; v10 does not spell this byte either
 	push_a
 	push	xsp
 	ldio	0, 113
 	ld	xiz, 1628086271
-	incm	1, (xsp+18)
+	incw	1, (xsp+18)
 	.byte 0x9f	; v10 does not spell this byte either
 	ccf
 	push	xsp
@@ -14218,9 +14218,9 @@ AudioCtrl_DataBlock:
 	ldw	de, 248
 	call	DrawLine
 	lda	xwa, (xsp+44)
-	incm	1, (xwa)
+	incw	1, (xwa)
 	lda	xbc, (xsp+40)
-	incm	1, (xbc)
+	incw	1, (xbc)
 	ldw	de, 255
 	call	DrawLine
 	ldw_da	iz, (149396)

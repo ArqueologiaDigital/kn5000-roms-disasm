@@ -2188,7 +2188,7 @@ FileDemo_RecordCallback:
 	jr FileIO_RecordLoop_Continue
 
 ParseDir_IncrementCount:
-	incm 1, (xsp + 8)
+	incw 1, (xsp + 8)
 
 FileIO_RecordLoop_Continue:
 	inc 1, iz
@@ -2216,7 +2216,7 @@ FileIO_RecordLoop_Continue:
 	jr FileIO_FinalizeRecordLookup
 
 ParseDir_SongIncrCount:
-	incm 1, (xsp + 8)
+	incw 1, (xsp + 8)
 
 FileIO_FinalizeRecordLookup:
 	cpw (xsp + 8), 0x0
@@ -7671,7 +7671,7 @@ FindFirst_StoreResult:
 	jr FindFirst_Return
 
 FindFirst_NextIndex:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ldb_da a, (0x027412)
 	exts wa
 	cp (xsp + 4), wa

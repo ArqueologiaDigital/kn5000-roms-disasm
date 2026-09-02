@@ -932,8 +932,8 @@ LyricsBox_DrawClientArea:
 	ld xwa, (xsp + 48)
 	call GetClientBox
 	lda xwa, (xsp + 40)
-	incm 2, (xwa)
-	incm 4, (xwa + 2)
+	incw 2, (xwa)
+	incw 4, (xwa + 2)
 	decm 1, (xwa + 4)
 	decm 2, (xwa + 6)
 	ldw (xsp + 8), 0x0
@@ -1083,7 +1083,7 @@ LyricsBox_CopyAndDraw:
 
 LyricsBox_DrawAndAdvance:
 	call DrawString
-	incm 1, (xsp + 8)
+	incw 1, (xsp + 8)
 	ld xwa, (xsp + 12)
 	ld bc, (xsp + 8)
 	cp bc, (xwa + 38)
@@ -1113,9 +1113,9 @@ LyricsBox_DrawCurrentLine:
 
 	lda xwa, (xsp + 40)
 
-	incm 2, (xwa)
+	incw 2, (xwa)
 
-	incm 4, (xwa + 2)
+	incw 4, (xwa + 2)
 
 	decm 1, (xwa + 4)
 
@@ -1231,9 +1231,9 @@ LyricsBox_DrawSelLine:
 
 	lda xwa, (xsp + 40)
 
-	incm 2, (xwa)
+	incw 2, (xwa)
 
-	incm 4, (xwa + 2)
+	incw 4, (xwa + 2)
 
 	decm 1, (xwa + 4)
 
@@ -1344,9 +1344,9 @@ LyricsBox_ScrollAndDraw:
 	ld xwa, (xsp + 48)
 	call GetClientBox
 	lda xiz, (xsp + 40)
-	incm 2, (xiz)
+	incw 2, (xiz)
 	lda xhl, (xiz + 2)
-	incm 4, (xhl)
+	incw 4, (xhl)
 	decm 1, (xiz + 4)
 	decm 2, (xiz + 6)
 	lda xiy, (xsp + 40)
@@ -2874,7 +2874,7 @@ IvNamingExit_ScreenData:
 	ld	(xbc), de
 	lds	de, 7
 	call	16426365
-	incm	1, (xsp+20)
+	incw	1, (xsp+20)
 	ld	xwa, (xsp+22)
 	ld	wa, (xwa+38)
 	cp	(xsp+20), wa
@@ -7707,7 +7707,7 @@ NoteEditBox_EventDispatch2:
 	push	xwa
 	call	16712341
 	lda	xsp, (xsp+10)
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	ldw	(xsp+10), 2
 	jr	41
 	lds32	xwa, 3
@@ -7720,7 +7720,7 @@ NoteEditBox_EventDispatch2:
 	push	xwa
 	call	16712341
 	lda	xsp, (xsp+10)
-	incm	1, (xsp+10)
+	incw	1, (xsp+10)
 	lda	xwa, (xsp+28)
 	ld	bc, (xwa)
 	add	bc, 32
@@ -7795,7 +7795,7 @@ NoteEditBox_EventDispatch2:
 	push	xde
 	call	16712341
 	lda	xsp, (xsp+10)
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	ldw	(xsp+10), 2
 	jr	33
 	lds32	xwa, 3
@@ -7806,7 +7806,7 @@ NoteEditBox_EventDispatch2:
 	push	xde
 	call	16712341
 	lda	xsp, (xsp+10)
-	incm	1, (xsp+10)
+	incw	1, (xsp+10)
 	lda	xwa, (xsp+28)
 	ld	bc, (xwa)
 	add	bc, 32

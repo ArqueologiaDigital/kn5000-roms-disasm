@@ -3496,9 +3496,9 @@ Dev10C_ResetAllChannels__FB81DB:
 	push	xbc                                   ; FB8267  39                push XBC
 	extpfx3 0x9E, 0xF6, 0x04                   ; FB8268  9e f6 04          pushw (XIZ+0xf6)
 	calr (0xFB7A58 - 0xFB826E)                 ; FB826B  1e ea f7          calr 0xfb7a58
-	incm	1, (xiz-2)                            ; FB826E  9e fe 61          incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                            ; FB826E  9e fe 61          incw 1,(XIZ+0xfe)
 	inc	1, de                                  ; FB8271  da 61             inc 1,DE
-	incm	1, (xiz-4)                            ; FB8273  9e fc 61          incw 1,(XIZ+0xfc)
+	incw	1, (xiz-4)                            ; FB8273  9e fc 61          incw 1,(XIZ+0xfc)
 	ld	hl, (xiz-10)                            ; FB8276  9e f6 23          ld HL,(XIZ+0xf6)
 	inc	1, hl                                  ; FB8279  db 61             inc 1,HL
 	add	xsp, 24                                ; FB827B  ef c8 18 00 00 00 add XSP,0x00000018

@@ -9057,7 +9057,7 @@ MIDI_SendPartVol_LookupFallback:
 	jr	97
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa)
-	incm	1, (xwa)
+	incw	1, (xwa)
 	ld	wa, bc
 	extz	xwa
 	ld	xbc, xwa
@@ -9873,7 +9873,7 @@ SeekRecord_Done_DoLookupRe:
 	extz	xbc
 	add	xbc, xwa
 	ld	(xbc), l
-	incm	1, (xsp+10)
+	incw	1, (xsp+10)
 	ld	wa, (xsp+10)
 	exts	xwa
 	.byte 0xaf, 0x02, 0xf0

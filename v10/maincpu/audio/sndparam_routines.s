@@ -3086,7 +3086,7 @@ SndParam_InsertCheckKey:
 	ldw wa, 0xffff
 
 SndParam_InsertIncSlot:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x7ff
 	jr ule, SndParam_InsertNextSlot
 	jr SndParam_InsertFail

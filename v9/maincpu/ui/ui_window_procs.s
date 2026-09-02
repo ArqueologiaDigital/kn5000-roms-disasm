@@ -656,7 +656,7 @@ WndEvt_EventCodeDispatch:
 	add	xix, xhl
 	.byte 0x84, 0xf1
 	jr	nz, 9
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	inc	1, iz
 	cp	iz, de
 	jr	c, -25
@@ -1797,9 +1797,9 @@ ClientFrame2_ProcessThickness:
 	lda xwa, (xiz + 4)
 
 ClientFrame2_InsetLoop:
-	incm 1, (xix)
+	incw 1, (xix)
 	decm 1, (xde)
-	incm 1, (xbc)
+	incw 1, (xbc)
 	decm 1, (xwa)
 	inc 1, xiy
 	cp xiy, xhl
@@ -1832,9 +1832,9 @@ DesignFrame_DrawLoop:
 	ld bc, (xsp + 18)
 	call DrawFrame
 	lda xwa, (xsp + 4)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	decm 1, (xwa + 6)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	decm 1, (xwa + 4)
 	inc 1, xiz
 	ld wa, (xsp + 12)
@@ -2276,7 +2276,7 @@ TextBox_CheckMoreText:
 	ld xiz, xwa
 	cp (xwa), 0x0
 	jr z, TextBox_FreeBuffer
-	incm 1, (xsp + 16)
+	incw 1, (xsp + 16)
 	ld xwa, (xsp + 4)
 	ld bc, (xsp + 16)
 	cp bc, (xwa + 38)
@@ -3350,11 +3350,11 @@ PsListBox_Confirm_ScanPipe:
 	cp a, 0x7c
 	jr nz, PsListBox_Confirm_AdvanceChar
 	ld (xbc), 0x0
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	jr PsListBox_Confirm_DrawItem
 
 PsListBox_Confirm_AdvanceChar:
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 
 PsListBox_Confirm_ScanLoop:
 	ld wa, (xsp + 12)
@@ -3416,7 +3416,7 @@ PsListBox_Confirm_RenderText:
 	ld wa, (xsp + 8)
 	add (xbc + 2), wa
 	add (xbc + 6), wa
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	ld xwa, (xsp + 4)
 	ld bc, (xsp + 10)
 	cp bc, (xwa + 36)
@@ -3458,7 +3458,7 @@ PsListBox_Select:
 	inc 1, bc
 	add hl, bc
 	ld (xix), hl
-	incm 1, (xwa)
+	incw 1, (xwa)
 	decm 1, (xwa + 4)
 	ld bc, (xix)
 	add bc, (xsp + 8)
@@ -3486,11 +3486,11 @@ PsListBox_Select_CheckPipe:
 	cp a, 0x7c
 	jr nz, PsListBox_Select_NextChar
 	ld (xbc), 0x0
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	jr PsListBox_Select_NextItem
 
 PsListBox_Select_NextChar:
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 
 PsListBox_Select_ScanLoop:
 	ld wa, (xsp + 12)
@@ -3502,7 +3502,7 @@ PsListBox_Select_ScanLoop:
 	jr nz, PsListBox_Select_CheckPipe
 
 PsListBox_Select_NextItem:
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 
 PsListBox_Select_CheckDone:
 	ld xhl, (xsp + 4)
@@ -3559,7 +3559,7 @@ PsListBox_Select_UpdateCurrent:
 	inc 1, bc
 	add hl, bc
 	ld (xix), hl
-	incm 1, (xwa)
+	incw 1, (xwa)
 	decm 1, (xwa + 4)
 	ld bc, (xix)
 	add bc, (xsp + 8)
@@ -3587,11 +3587,11 @@ PsListBox_SelectUpd_CheckPipe:
 	cp a, 0x7c
 	jr nz, PsListBox_SelectUpd_NextChar
 	ld (xbc), 0x0
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	jr PsListBox_SelectUpd_NextItem
 
 PsListBox_SelectUpd_NextChar:
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 
 PsListBox_SelectUpd_ScanLoop:
 	ld wa, (xsp + 12)
@@ -3603,7 +3603,7 @@ PsListBox_SelectUpd_ScanLoop:
 	jr nz, PsListBox_SelectUpd_CheckPipe
 
 PsListBox_SelectUpd_NextItem:
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 
 PsListBox_SelectUpd_CheckDone:
 	ld xwa, (xsp + 22)
@@ -4383,9 +4383,9 @@ Draw_StyledBoxWithFrame:
 	cpw (xsp + 72), 0x2
 	jr nz, DrawDesignBox_After2Frame
 	lda xwa, (xsp + 62)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	decm 1, (xwa + 6)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	decm 1, (xwa + 4)
 	lds bc, 0
 	calr DrawFrame_Impl
@@ -4394,9 +4394,9 @@ DrawDesignBox_After2Frame:
 	cpw (xsp + 72), 0x3
 	jr nz, DrawDesignBox_After3Frame
 	lda xwa, (xsp + 62)
-	incm 2, (xwa + 2)
+	incw 2, (xwa + 2)
 	decm 2, (xwa + 6)
-	incm 2, (xwa)
+	incw 2, (xwa)
 	decm 2, (xwa + 4)
 	lds bc, 0
 	calr DrawFrame_Impl
@@ -4541,9 +4541,9 @@ DrawDesignBox_BorderLoop:
 	ld de, (xsp + 4)
 	calr DrawLine_Impl
 	lda xwa, (xsp + 62)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	decm 1, (xwa + 6)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	decm 1, (xwa + 4)
 	lds32 xwa, 1
 	add (xsp + 10), xwa
@@ -4650,9 +4650,9 @@ ColorAttribute_SetupReturn:
 	ld de, (xsp + 4)
 	calr DrawLine_Impl
 	lda xwa, (xsp + 62)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	decm 1, (xwa + 6)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	decm 1, (xwa + 4)
 	lds32 xwa, 1
 	add (xsp + 10), xwa
@@ -4738,7 +4738,7 @@ DrawDesignBox_IconCheckRight:
 
 DrawDesignBox_IconAdjustFrame:
 	lda xwa, (xsp + 62)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	decm 1, (xwa + 6)
 	cpw (xsp + 16), 0x0
 	jr nz, DrawDesignBox_IconLeftWidth
@@ -5051,7 +5051,7 @@ DrawPartGroup_CopyBoxRect:
 	stw_erp BC, 0xfa
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
-	incm 1, (xsp + 62)
+	incw 1, (xsp + 62)
 	ld wa, (xsp + 36)
 	inc 1, wa
 	add (xsp + 54), wa
@@ -5152,7 +5152,7 @@ DrawPartGroup_FillAndBorder:
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
 	lda xwa, (xsp + 54)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	ld xbc, (xsp + 74)
 	ld bc, (xbc + 2)
 	add bc, (xsp + 28)
@@ -5317,7 +5317,7 @@ DrawPartGroup_DrawCAFrames:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	lda xbc, (xsp + 62)
-	incm 2, (xbc)
+	incw 2, (xbc)
 	ld wa, (xsp + 36)
 	add (xsp + 54), wa
 	lda xwa, (xsp + 50)
@@ -5354,7 +5354,7 @@ DrawPartGroup_DrawCAFrames:
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
 	lda xwa, (xsp + 54)
-	incm 2, (xwa + 2)
+	incw 2, (xwa + 2)
 	ld xbc, (xsp + 74)
 	ld bc, (xbc + 2)
 	add bc, (xsp + 28)
@@ -5396,9 +5396,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	lda xbc, (xsp + 38)
-	incm 1, (xbc + 2)
+	incw 1, (xbc + 2)
 	ld de, (xsp + 4)
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5449,9 +5449,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	lda xbc, (xsp + 38)
-	incm 1, (xbc)
+	incw 1, (xbc)
 	ld de, (xsp + 4)
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5501,7 +5501,7 @@ DrawPartGroup_DrawCAFrames:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	lda xbc, (xsp + 62)
-	incm 2, (xbc)
+	incw 2, (xbc)
 	ld wa, (xsp + 36)
 	add (xsp + 54), wa
 	lda xwa, (xsp + 50)
@@ -5523,7 +5523,7 @@ DrawPartGroup_DrawCAFrames:
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
 	lda xwa, (xsp + 54)
-	incm 2, (xwa + 2)
+	incw 2, (xwa + 2)
 	ld xbc, (xsp + 74)
 	ld bc, (xbc + 2)
 	add bc, (xsp + 28)
@@ -5555,9 +5555,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	lda xbc, (xsp + 38)
-	incm 1, (xbc + 2)
+	incw 1, (xbc + 2)
 	ldw de, 0xff
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5612,9 +5612,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	lda xbc, (xsp + 38)
-	incm 1, (xbc)
+	incw 1, (xbc)
 	decm 1, (xbc + 2)
 	ldw de, 0xff
 	calr DrawLine_Impl
@@ -5667,7 +5667,7 @@ DrawPartGroup_DrawCAFrames:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	lda xbc, (xsp + 62)
-	incm 2, (xbc)
+	incw 2, (xbc)
 	ld wa, (xsp + 30)
 	add (xsp + 54), wa
 	lda xwa, (xsp + 50)
@@ -5723,9 +5723,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	lda xbc, (xsp + 38)
-	incm 1, (xbc + 2)
+	incw 1, (xbc + 2)
 	ldw de, 0xff
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5781,9 +5781,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	lda xbc, (xsp + 38)
-	incm 1, (xbc)
+	incw 1, (xbc)
 	ldw de, 0xff
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5808,7 +5808,7 @@ DrawPartGroup_DrawCAFrames:
 	decm 1, (xwa)
 	lda xbc, (xsp + 38)
 	decm 1, (xbc)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	ldw de, 0xf8
 	jrl DrawFunc_DrawLineAndReturn
 	ldw wa, 0x2c
@@ -5853,7 +5853,7 @@ DrawPartGroup_DrawCAFrames:
 	ld de, (xsp + 70)
 	calr DrawFrameSP_Impl
 	lda xbc, (xsp + 62)
-	incm 2, (xbc)
+	incw 2, (xbc)
 	ld wa, (xsp + 36)
 	add (xsp + 54), wa
 	lda xwa, (xsp + 50)
@@ -5890,7 +5890,7 @@ DrawPartGroup_DrawCAFrames:
 	ld bc, (xsp + 70)
 	calr DrawBox_Impl
 	lda xwa, (xsp + 54)
-	incm 2, (xwa + 2)
+	incw 2, (xwa + 2)
 	ld xbc, (xsp + 74)
 	ld bc, (xbc + 2)
 	add bc, (xsp + 28)
@@ -5932,9 +5932,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	incm 1, (xwa + 2)
+	incw 1, (xwa + 2)
 	lda xbc, (xsp + 38)
-	incm 1, (xbc + 2)
+	incw 1, (xbc + 2)
 	ldw de, 0xff
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -5985,9 +5985,9 @@ DrawPartGroup_DrawCAFrames:
 	ldiw
 	ldiw
 	lda xwa, (xsp + 42)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	lda xbc, (xsp + 38)
-	incm 1, (xbc)
+	incw 1, (xbc)
 	ldw de, 0xff
 	calr DrawLine_Impl
 	lda xwa, (xsp + 50)
@@ -6608,7 +6608,7 @@ ImageDecode_SecondPassSetup:
 ImageDecode_CountNonZero:
 	cpw (xwa), 0x0
 	jr z, ImageDecode_CheckNextEntry
-	incm 1, (xsp + 18)
+	incw 1, (xsp + 18)
 
 ImageDecode_CheckNextEntry:
 	inc 2, xwa
@@ -8414,7 +8414,7 @@ ColorBlit2_LargeCodeBlock:
 	push	sr
 	.byte 0x89
 	ld	xwa, (xsp+10)
-	incm	1, (xwa)
+	incw	1, (xwa)
 	incm8	1, (xsp+4)
 	.byte 0x8f, 0x04
 	push	xsp
@@ -8422,7 +8422,7 @@ ColorBlit2_LargeCodeBlock:
 	swi	6
 	lds32	xwa, 1
 	add	(xsp+24), xwa
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	ld	xwa, (xsp+28)
 	lda	xde, (xwa+2)
 	ld	bc, (xde)
@@ -8430,7 +8430,7 @@ ColorBlit2_LargeCodeBlock:
 	sub	wa, bc
 	cp	(xsp+8), wa
 	jrl	c, -340
-	incm	8, (xsp+6)
+	incw	8, (xsp+6)
 	ld	xwa, (xsp+28)
 	ld	bc, (xwa+4)
 	.byte 0x90, 0xa1
@@ -8487,14 +8487,14 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb1, 0xb5
 	ld	a, (xsp+2)
 	add	(xsp+2), a
-	incm	1, (xde)
+	incw	1, (xde)
 	incm8	1, (xsp+4)
 	.byte 0x8f, 0x04
 	push	xsp
 	ldio	103, 179
 	lds32	xwa, 1
 	add	(xsp+24), xwa
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	ld	xwa, (xsp+28)
 	lda	xix, (xwa+2)
 	ld	bc, (xix)
@@ -8502,7 +8502,7 @@ ColorBlit2_LargeCodeBlock:
 	sub	wa, bc
 	cp	(xsp+8), wa
 	jrl	c, -139
-	incm	8, (xsp+6)
+	incw	8, (xsp+6)
 	ld	xwa, (xsp+28)
 	ld	bc, (xwa+4)
 	.byte 0x90, 0xa1
@@ -8558,14 +8558,14 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0xb1, 0xb6
 	ld	a, (xsp+2)
 	add	(xsp+2), a
-	incm	1, (xde)
+	incw	1, (xde)
 	incm8	1, (xsp+4)
 	.byte 0x8f, 0x04
 	push	xsp
 	ldio	103, 178
 	lds32	xwa, 1
 	add	(xsp+24), xwa
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	ld	xwa, (xsp+28)
 	lda	xix, (xwa+2)
 	ld	bc, (xix)
@@ -8573,7 +8573,7 @@ ColorBlit2_LargeCodeBlock:
 	sub	wa, bc
 	cp	(xsp+8), wa
 	jrl	c, -140
-	incm	8, (xsp+6)
+	incw	8, (xsp+6)
 	ld	xwa, (xsp+28)
 	ld	bc, (xwa+4)
 	.byte 0x90, 0xa1

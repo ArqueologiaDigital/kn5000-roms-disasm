@@ -2853,7 +2853,7 @@ Boot_CopySectors__cs_full_loop:
 	inc1w_erp 0xFA	; INC 1, QIZ
 	cp_erpw 0xFA, 0x00, 0x09	; CP QIZ, 0x0900 (18*128)
 	jr c, Boot_CopySectors__cs_full_loop	; 67 de
-	incm 1, (xsp + 4)	; INCW 1, (XSP+0x04)
+	incw 1, (xsp + 4)	; INCW 1, (XSP+0x04)
 	ld wa, (xsp + 8)	; LD WA, (XSP+0x08)
 	cp (xsp + 4), wa	; CP (XSP+0x04), WA
 	jr c, Boot_CopySectors__cs_track_loop	; 67 b3
@@ -2990,7 +2990,7 @@ Boot_CopySectorsEx__cse_full_loop:
 	inc1w_erp 0xFA	; INC 1, QIZ
 	cp_erpw 0xFA, 0x00, 0x12	; CP QIZ, 0x1200 (18*256)
 	jr c, Boot_CopySectorsEx__cse_full_loop	; 67 d9
-	incm 1, (xsp + 4)	; INCW 1, (XSP+0x04)
+	incw 1, (xsp + 4)	; INCW 1, (XSP+0x04)
 	ld wa, (xsp + 8)	; LD WA, (XSP+0x08)
 	cp (xsp + 4), wa	; CP (XSP+0x04), WA
 	jr c, Boot_CopySectorsEx__cse_track_loop	; 67 ae
@@ -4098,7 +4098,7 @@ LZSS_Decompress__flags_valid:
 	calr LZSS_OutputByte	; CALR LZSS_OutputByte
 	; Store byte in sliding window
 	ld bc, (xsp + 10)	; LD BC, (XSP+0x0A) - window position
-	incm 1, (xsp + 10)	; INCW 1, (XSP+0x0A)
+	incw 1, (xsp + 10)	; INCW 1, (XSP+0x0A)
 	extz xbc	; EXTZ XBC
 	add xbc, (xsp + 16)	; ADD XBC, (XSP+0x10) - add window base
 	stb_erp A, 0xF8	; LD A, IZL
@@ -4130,7 +4130,7 @@ LZSS_Decompress__back_reference:
 
 	; Extract length: (byte & 0x0F) + 2
 	andmi16 (xsp + 8), 0xF	; AND (XSP+0x08), 0x000F - extract length
-	incm 2, (xsp + 8)	; INCW 2, (XSP+0x08) - length + 2
+	incw 2, (xsp + 8)	; INCW 2, (XSP+0x08) - length + 2
 
 	; === Copy from sliding window ===
 	ldw (xsp + 6), 0x0	; LD (XSP+0x06), 0x0000 - copy counter
@@ -4153,7 +4153,7 @@ LZSS_Decompress__copy_loop:
 
 	; Store byte in sliding window at write position
 	ld bc, (xsp + 10)	; LD BC, (XSP+0x0A)
-	incm 1, (xsp + 10)	; INCW 1, (XSP+0x0A)
+	incw 1, (xsp + 10)	; INCW 1, (XSP+0x0A)
 	extz xbc	; EXTZ XBC
 	add xbc, (xsp + 12)	; ADD XBC, (XSP+0x0C)
 	stb_erp A, 0xF8	; LD A, IZL
@@ -4161,7 +4161,7 @@ LZSS_Decompress__copy_loop:
 	andmi16 (xsp + 10), 0xFFF	; AND (XSP+0x0A), 0x0FFF - wrap position
 
 	; Increment counter and check if done
-	incm 1, (xsp + 6)	; INCW 1, (XSP+0x06)
+	incw 1, (xsp + 6)	; INCW 1, (XSP+0x06)
 	ld wa, (xsp + 6)	; LD WA, (XSP+0x06)
 	cp wa, (xsp + 8)	; CP WA, (XSP+0x08) - compare with length
 	jr ule, LZSS_Decompress__copy_loop	; JR ULE, .copy_loop

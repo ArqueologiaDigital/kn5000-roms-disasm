@@ -5649,7 +5649,7 @@ FileData_RawDataBlock:
 	or	(xhl), h
 	add	(xwa-21), a
 	calr	1351
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	.byte 0x9f, 0x04
 	push	xsp
 	push_f
@@ -5675,7 +5675,7 @@ FileData_RawDataBlock:
 	nop
 	.byte 0xaf, 0x06, 0x81
 	calr	1869
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	.byte 0x9f, 0x04
 	push	xsp
 	pop	sr
@@ -5722,7 +5722,7 @@ FileData_RawDataBlock:
 	or	(xhl), h
 	add	(xwa-21), a
 	calr	2499
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	.byte 0x9f, 0x04
 	push	xsp
 	push	sr
@@ -5794,7 +5794,7 @@ FileData_RawDataBlock:
 	jr	ule, 20
 	ld	wa, (xsp+8)
 	calr	10986
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	ld	wa, (xsp+12)
 	srl	wa, 3
 	cp	(xsp+8), wa
@@ -5856,7 +5856,7 @@ FileData_RawDataBlock:
 	or	(xhl), h
 	add	(xwa-21), a
 	calr	808
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	.byte 0x9f
 	ldio	63, 24
 	nop
@@ -5879,7 +5879,7 @@ FileData_RawDataBlock:
 	nop
 	.byte 0xaf, 0x04, 0x81
 	calr	1326
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	.byte 0x9f
 	ldio	63, 3
 	nop
@@ -5919,7 +5919,7 @@ FileData_RawDataBlock:
 	or	(xhl), h
 	add	(xwa-21), a
 	calr	1956
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	.byte 0x9f
 	ldio	63, 2
 	nop
@@ -5968,7 +5968,7 @@ FileData_RawDataBlock:
 	ld	xwa, 0xf980
 	ld	xbc, (xsp+4)
 	calr	3907
-	incm	1, (xsp+10)
+	incw	1, (xsp+10)
 	ld	wa, (xsp+10)
 	.byte 0x9f
 	incf
@@ -6043,7 +6043,7 @@ DataBuf_TransferVoiceParams_Loop:
 	ld xwa, xiz
 	ld xbc, xhl
 	calr DataBuf_CopyVoiceBlock24
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x18
 	jr c, DataBuf_TransferVoiceParams_Loop
 	ldw (xsp + 4), 0x0
@@ -6061,7 +6061,7 @@ DataBuf_TransferEffectParams_Loop:
 	add xbc, 0x2a4
 	add xbc, (xsp + 14)
 	calr DataBuf_CopyEffectBlock12
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x3
 	jr c, DataBuf_TransferEffectParams_Loop
 	ld xwa, (xsp + 10)
@@ -6096,7 +6096,7 @@ DataBuf_TransferAuxParams_Loop:
 	ld xwa, xiz
 	ld xbc, xhl
 	calr DataBuf_LoadAndDispatchFormat2
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x2
 	jr c, DataBuf_TransferAuxParams_Loop
 	ld xwa, (xsp + 10)
@@ -7694,7 +7694,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	xwa, xiz
 	ld	xbc, xhl
 	calr	61305
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	cpw	(xsp+4), 2
 	jr	c, -56
 	ld	xiy, (xsp+6)
@@ -8186,7 +8186,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	xwa, xiz
 	ld	xbc, xhl
 	calr	885
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	cpw	(xsp+4), 23
 	jr	c, -60
 	ldw	(xsp+4), 0
@@ -8209,7 +8209,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	xwa, xiz
 	ld	xbc, xhl
 	calr	1411
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	cpw	(xsp+4), 24
 	jr	c, -70
 	ld	xwa, (xsp+10)
@@ -8352,7 +8352,7 @@ DataBuf_CopyBulkBitfields_Large:
 	ld	xwa, 0xf980
 	ld	xbc, (xsp+2)
 	calr	3029
-	incm	1, (xsp+6)
+	incw	1, (xsp+6)
 	cpw	(xsp+6), 24
 	jrl	c, -256
 	lds	wa, 0
@@ -8429,7 +8429,7 @@ FileData_LoadAndParseType3_Error:
 	ld xwa, xiz
 	ld xbc, xhl
 	calr VoiceParam_CopyBitfields_TypeA
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x18
 	jr c, FileData_LoadAndParseType3_Error
 	ld xwa, (xsp + 10)
@@ -10657,7 +10657,7 @@ MidiSysEx_SendPartChanLoop:
 	pushw	14
 	call SeqOut_WriteTimedBytes
 	inc 6, xsp
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	cpw (xsp+4), 0x0010
 	jr c, MidiSysEx_SendPartChanLoop
 	push xiz
@@ -10924,7 +10924,7 @@ VoiceQueue_Append:
 	ret
 
 VoiceQueue_IncrementCount:
-	incm 1, (xbc)
+	incw 1, (xbc)
 	ret
 
 MidiChan_DequeueVoiceEntry:
@@ -12174,7 +12174,7 @@ SeqBuf_FlushLoop:
 	ld (xix), xde
 	ldb_spi E, 0xe0
 	ld (xiy), e
-	incm 1, (xhl)
+	incw 1, (xhl)
 	ld de, bc
 	dec 1, bc
 	cps de, 0
@@ -12228,7 +12228,7 @@ ArpQueue_EnqueueLoop:
 	ld (xix), xde
 	ldb_spi E, 0xe0
 	ld (xiy), e
-	incm 1, (xhl)
+	incw 1, (xhl)
 	ld de, bc
 	dec 1, bc
 	cps de, 0

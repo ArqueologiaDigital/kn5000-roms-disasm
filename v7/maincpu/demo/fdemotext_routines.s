@@ -940,7 +940,7 @@ FDemoText_ScanMIDIChannels:
 	jr nz, FDemoText_ScanMIDI_ReadResponse
 
 FDemoText_ScanMIDI_WaitLoop:
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x2710
 	jr ugt, FDemoText_ScanMIDI_ReadResponse
 	call SeqBuf_NoteEvent_CheckSongEnd
@@ -957,7 +957,7 @@ FDemoText_ScanMIDI_ProcessChannel:
 	jrl nc, FDemoText_ScanMIDI_UpdateFlags
 
 FDemoText_ScanMIDI_AdvanceTimeout:
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	jrl FDemoText_ScanMIDI_ReadNextFrame
 
 FDemoText_ScanMIDI_ReadBytes:
@@ -1551,7 +1551,7 @@ FDemoText_ProcessMarkup_FindNull:
 	jrl FDemoText_ProcessMarkup_Done
 
 FDemoText_ProcessMarkup_NextTag:
-	incm 1, (xsp + 16)
+	incw 1, (xsp + 16)
 
 FDemoText_ProcessMarkup_TagTableLoop:
 	ld bc, (xsp + 16)

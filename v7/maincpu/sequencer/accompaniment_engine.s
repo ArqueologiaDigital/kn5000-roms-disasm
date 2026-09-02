@@ -32361,7 +32361,7 @@ StylCnv_ParseEntry_StoreChar:
 	.byte 0x61, 0x9f, 0x04, 0x61, 0x9f, 0x06, 0x3f, 0x20
 	.byte 0x00, 0x61, 0xc3
 StylCnv_ParseEntry_NextField:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x80
 	jrl lt, StylCnvDisp_ScanFileLoop
 
@@ -32416,8 +32416,8 @@ StylCnv_Type4_CopyChars:
 	jr z, LoopIndex_Reset
 	ld wa, (xsp + 6)
 	stb_dri C, 0x07, 0xe8, 0xe0
-	incm 1, (xsp + 4)
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 4)
+	incw 1, (xsp + 6)
 	cpw (xsp + 4), 0x28
 	jr lt, StylCnv_Type4_CopyChars
 
@@ -32428,7 +32428,7 @@ StylCnv_Type4_FindDot:
 	ld wa, (xsp + 6)
 	cpib_sri 0x07, 0xe8, 0xe0, 0x2e
 	jr z, StylCnv_Type4_CalcExtLen
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x20
 	jr lt, StylCnv_Type4_FindDot
 
@@ -32439,8 +32439,8 @@ StylCnv_Type4_CountExt:
 	ld wa, (xsp + 6)
 	cpib_sri 0x07, 0xe8, 0xe0, 0x00
 	jr z, StylCnv_Type4_CalcCenter
-	incm 1, (xsp + 16)
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 16)
+	incw 1, (xsp + 6)
 	cpw (xsp + 16), 0x20
 	jr lt, StylCnv_Type4_CountExt
 
@@ -32468,7 +32468,7 @@ StylCnv_Type4_CheckNull:
 	.byte 0x48, 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x14, 0x37
 	.byte 0x68, 0x0b
 StylCnv_Type4_Advance:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jrl lt, StylCnv_Type4_MainLoop
 
@@ -32619,7 +32619,7 @@ StylCnv_Type3_EmptyName:
 
 StylCnv_Type3_CloseFile:
 	call FileIO_CloseHandle
-	incm 1, (xsp + 8)
+	incw 1, (xsp + 8)
 	ld wa, (xsp + 8)
 	cp wa, (xsp + 4)
 	jrl lt, StylCnv_Type3_LoadFileLoop
@@ -32693,7 +32693,7 @@ StylCnv_Type3_TerminateName:
 	inc1w_erp 0xfa
 
 StylCnv_Type3_NextBlock:
-	incm 1, (xsp + 16)
+	incw 1, (xsp + 16)
 	ld wa, (xsp + 16)
 	cp wa, (xsp + 4)
 	jrl lt, StylCnv_Type3_CopyBlockLoop
@@ -32754,7 +32754,7 @@ StylCnv_Type4_CopyFieldLoop:
 	ld (xbc), a
 	cps a, 0
 	jrl z, StylCnv_FinalizeAndCheckStatus
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jr lt, StylCnv_Type4_CopyFieldLoop
 	jrl StylCnv_FinalizeAndCheckStatus
@@ -32832,7 +32832,7 @@ StylCnv_Type6_AppendName:
 	ldda32	xwa, (15560)
 	adddm32	(15556), xwa
 StylCnv_Type6_AdvanceEntry:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 	ld wa, (xsp + 4)
 
@@ -32897,7 +32897,7 @@ StylCnv_Type6_CopyNameChars:
 	add xhl, 0xffc00
 	ld (xhl), a
 	inc 1, iz
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x20
 	jr lt, StylCnv_Type6_CopyNameChars
 
@@ -32922,7 +32922,7 @@ StylCnv_Type6_TerminateName:
 	inc 1, iz
 
 StylCnv_Type6_NextBlock:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 	ld wa, (xsp + 4)
 
@@ -32997,7 +32997,7 @@ StylCnv_Single_FindDot:
 	ld bc, (xsp + 4)
 	cpib_sri 0x07, 0xe0, 0xe4, 0x2e
 	jr z, StylCnv_Single_CopyExtension
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jr lt, StylCnv_Single_FindDot
 
@@ -33019,7 +33019,7 @@ StylCnv_Single_FindDot2:
 	ld bc, (xsp + 4)
 	exts xbc
 	add xbc, xwa
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cp (xbc), 0x2e
 	jr z, StylCnv_Single_WriteTMExtension
 	cpw (xsp + 4), 0x20
@@ -33062,7 +33062,7 @@ StylCnv_LSW_FindDot:
 	ld wa, (xsp + 4)
 	cpib_sri 0x07, 0xe4, 0xe0, 0x2e
 	jr z, StylCnv_LSW_CopyExtension
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jr lt, StylCnv_LSW_FindDot
 
@@ -33085,7 +33085,7 @@ StylCnv_LSW_FindDot2:
 	ld bc, (xsp + 4)
 	exts xbc
 	add xbc, xwa
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cp (xbc), 0x2e
 	jr z, StylCnv_LSW_WriteExtension
 	cpw (xsp + 4), 0x20
@@ -33111,7 +33111,7 @@ StylCnv_LSW_WriteExtension:
 	call	16288467
 	cps	hl, 0
 	jrl	lt, 141
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	call	16288556
 	ld	(xsp+14), xhl
 	call	16288515
@@ -33135,7 +33135,7 @@ StylCnv_LSW_FindDot3:
 	ld wa, (xsp + 4)
 	cpib_sri 0x07, 0xe4, 0xe0, 0x2e
 	jr z, StylCnv_LSW_CopyExt3
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jr lt, StylCnv_LSW_FindDot3
 
@@ -33196,7 +33196,7 @@ StylCnv_Final_CopyNameChars:
 	add xhl, 0xffc00
 	ld (xhl), a
 	inc 1, iz
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x20
 	jr lt, StylCnv_Final_CopyNameChars
 
@@ -33221,7 +33221,7 @@ StylCnv_Final_TerminateName:
 	inc 1, iz
 
 StylCnv_Final_NextBlock:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 8)
 	inc 1, wa
 	cp (xsp + 4), wa
@@ -33302,10 +33302,10 @@ StylCnv_Multi_CopyChar:
 	ld wa, (xsp + 6)
 	stb_dri E, 0x07, 0xe4, 0xe0
 	ld (xhl), 0x0
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 
 LoopCounter_Increment:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 4)
 	cp wa, 0x200
 	jrl c, StylCnv_Multi_ParseLoop

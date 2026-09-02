@@ -449,7 +449,7 @@ LoadFilter_DrawLoop:
 	ldda32 xwa, (0x7f82)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, LoadFilter_DrawLoop
 	jrl LoadFilter_Return
@@ -670,7 +670,7 @@ SaveFilter_DrawLoop:
 	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_DrawLoop
 	jrl SaveFilter_Return
@@ -785,7 +785,7 @@ SaveFilter_SelectAll_Update:
 	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_SelectAll_Loop
 	jrl SaveFilter_Return
@@ -817,7 +817,7 @@ SaveFilter_DeselectAll_Loop:
 	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_DeselectAll_Loop
 	jrl SaveFilter_Return
@@ -957,7 +957,7 @@ SaveFilter_ResetAll_Loop:
 	ldda32 xwa, (0x8006)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_ResetAll_Loop
 

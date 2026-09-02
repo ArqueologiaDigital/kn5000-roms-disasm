@@ -1483,7 +1483,7 @@ FDC_CMD_EXEC:
 	cps	wa, 0
 	jr	z, 18
 	lda_d16	xwa, (0x8a48)
-	incm	1, (xwa)
+	incw	1, (xwa)
 	ld	wa, (xwa)
 	.byte 0xd1
 	incf
@@ -1626,7 +1626,7 @@ FDC_CMD_EXEC:
 	cps	wa, 0
 	jr	z, 18
 	lda_d16	xwa, (0x8a48)
-	incm	1, (xwa)
+	incw	1, (xwa)
 	ld	wa, (xwa)
 	.byte 0xd1
 	incf

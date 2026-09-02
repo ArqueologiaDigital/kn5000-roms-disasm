@@ -6237,7 +6237,7 @@ AcMixerVol_Paint:
 	ld bc, (xhl)
 	sub bc, 0x9
 	ld (xwa + 2), bc
-	incm 3, (xwa)
+	incw 3, (xwa)
 	decm 3, (xde)
 	decm 1, (xhl)
 	ldw bc, 0x8
@@ -6739,8 +6739,8 @@ DbMemo_Paint:
 	lds bc, 4
 	ldirw
 	lda xwa, (xsp + 94)
-	incm 4, (xwa + 2)
-	incm 4, (xwa)
+	incw 4, (xwa + 2)
+	incw 4, (xwa)
 	decm 4, (xwa + 4)
 	decm 4, (xwa + 6)
 	ldw bc, 0xc6
@@ -6771,8 +6771,8 @@ DbMemo_DrawContent:
 	ldirw
 	lda xhl, (xsp + 94)
 	lda xde, (xhl + 2)
-	incm 5, (xde)
-	incm 5, (xhl)
+	incw 5, (xde)
+	incw 5, (xhl)
 	lda xwa, (xhl + 4)
 	decm 5, (xwa)
 	lda xbc, (xhl + 6)
@@ -6792,7 +6792,7 @@ DbMemo_DrawContent:
 	lda xix, (xsp + 86)
 	lds bc, 4
 	ldirw
-	incm 8, (xsp + 88)
+	incw 8, (xsp + 88)
 	lda xiy, (xsp + 94)
 	lda xix, (xsp + 78)
 	lds bc, 4
@@ -6921,8 +6921,8 @@ DbMemDump_Paint:
 	lds bc, 4
 	ldirw
 	lda xwa, (xsp + 104)
-	incm 4, (xwa + 2)
-	incm 4, (xwa)
+	incw 4, (xwa + 2)
+	incw 4, (xwa)
 	decm 4, (xwa + 4)
 	decm 4, (xwa + 6)
 	ldw bc, 0xc6
@@ -6959,8 +6959,8 @@ DbMemDump_Confirm:
 	lds bc, 4
 	ldirw
 	lda xwa, (xsp + 104)
-	incm 5, (xwa + 2)
-	incm 5, (xwa)
+	incw 5, (xwa + 2)
+	incw 5, (xwa)
 	decm 5, (xwa + 4)
 	decm 5, (xwa + 6)
 	ldw (xsp + 4), 0x0
@@ -7069,7 +7069,7 @@ DbMemDump_Confirm_SanitizeNext:
 	pushw 0x0
 	pushw 0x7
 	call DrawString
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x10
 	jrl c, DbMemDump_Confirm_RowLoop
 	jrl UI_NameCapture_ReturnSuccess
@@ -7501,7 +7501,7 @@ DbDebugMenu_OK_Advance:
 	lda xwa, (xwa + 42)
 	ld xde, xwa
 	ld xbc, (xwa)
-	incm 1, (xbc)
+	incw 1, (xbc)
 	ld xbc, (xwa)
 	ld wa, (xbc)
 	sla wa, 2
@@ -8201,7 +8201,7 @@ AcTrkSw_Select_Paint:
 	ld (xsp + 10), xwa
 	cp (xwa), 0x0
 	jr z, AcTrkSw_Select_CheckTrackNum
-	incm 1, (xsp + 18)
+	incw 1, (xsp + 18)
 	ld xwa, (xsp + 4)
 	ld bc, (xsp + 18)
 	cp bc, (xwa + 36)
@@ -8793,7 +8793,7 @@ InputDialog_Confirm:
 	add xix, xwa
 	lda_24 xwa, (Str_No_0x5DE)
 	ld (xix), xwa
-	incm 1, (xhl + 8)
+	incw 1, (xhl + 8)
 	ld xhl, (xsp + 8)
 	sll xhl, 0
 	add xhl, (xsp + 12)
@@ -19089,7 +19089,7 @@ DisplayCmd_Execute_Type1:
 	ld_sril3 XHL, 0x07, 0xe8, 0xf0
 	minc4_16 ix, 0x7c
 	ld (xde - 8), ix
-	incm 4, (xde - 2)
+	incw 4, (xde - 2)
 	ret
 
 DisplayCmd_Execute_Type2:

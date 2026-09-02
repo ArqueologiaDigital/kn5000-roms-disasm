@@ -1903,7 +1903,7 @@ MovePixels_Impl_ColLoop:
 	jr le, MovePixels_Impl_ColLoop
 
 MovePixels_Impl_RowAdvance:
-	incm 1, (xsp + 8)
+	incw 1, (xsp + 8)
 	ld bc, (xsp + 8)
 	cp bc, (xsp + 6)
 	jr le, MovePixels_Impl_RowLoop
@@ -2250,7 +2250,7 @@ DrawBitmap_Impl_OddPixelSkip:
 	inc 2, xix
 
 DrawBitmap_Impl_RowAdvance:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 DrawBitmap_Impl_RowCheck:
 	lda xde, (xhl + 2)
@@ -2518,7 +2518,7 @@ DrawIcons_Impl_ColLoop:
 	cp iy, 0xc
 	jr lt, DrawIcons_Impl_ColLoop
 	ld xwa, (xsp + 16)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	lda_dri XHL, 0xed, 0x40, 0x01
 	inc 1, de
 	cp de, 0x18
@@ -2680,7 +2680,7 @@ DrawFrameSP_Impl_OddWidthPad:
 	add (xsp), xwa
 
 DrawFrameSP_Impl_RowAdvance:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld xwa, (xsp + 6)
 	ld de, (xsp + 4)
 	cp de, (xwa)
@@ -2914,7 +2914,7 @@ DrawBitmapSP_Impl_OddPixelAdvance:
 	add (xsp + 22), xwa
 
 DrawBitmapSP_Impl_RowAdvance:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 4)
 	cp wa, (xsp + 6)
 	jrl c, DrawBitmapSP_Impl_RowLoop
@@ -3990,7 +3990,7 @@ DrawString_Impl_RowAdvance:
 	inc 1, xde
 	ld xwa, 0x140
 	add (xsp + 28), xwa
-	incm 1, (xsp + 22)
+	incw 1, (xsp + 22)
 
 DrawString_Impl_RowCheck:
 	ld xwa, (xsp + 4)
@@ -4001,7 +4001,7 @@ DrawString_Impl_RowCheck:
 DrawString_Impl_ColumnAdvance:
 	ld xwa, (xsp + 32)
 	add (xwa), bc
-	incm 1, (xsp + 20)
+	incw 1, (xsp + 20)
 	ld wa, (xsp + 20)
 	cp wa, (xsp + 18)
 	jrl c, DrawString_Impl_ColumnLoop

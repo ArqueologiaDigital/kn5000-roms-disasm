@@ -257,7 +257,7 @@ NoteOn_PostAutoPlay:
 	call AccWrap_AutoPlayStateMachine
 
 NoteOn_AdvanceChannel:
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x1a
 	jrl c, NoteOn_ChannelScanLoop_NoteOn
 	jrl NoteOnProcess_StoreAndAllocate
@@ -449,7 +449,7 @@ NoteOn_CC_UpdateByChannelType:
 ; -----------------------------------------------------------------------------
 
 NoteOnProcess_NextChannel:
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x1a
 	jrl c, NoteOn_ChannelScanCC_Body
 
@@ -2986,7 +2986,7 @@ ParseNoteSequence_Compare:
 	ld (xbc + 1), l
 
 ParseNoteSequence_AdvanceSlot:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld xwa, (xsp + 8)
 	cp (xwa), 0xff
 	jr nz, ParseNoteSequence_ReadBuf
@@ -3036,7 +3036,7 @@ MidiEvent_ProcessNoteEntry:
 	ld xwa, (xsp + 10)
 	ld c, (xiz + 4)
 	ld (xwa + 5), c
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 ProcessNoteEntry_CheckEnd:
 	cp (xiz), 0xff
@@ -3127,7 +3127,7 @@ MidiEvent_ProcessCC_Continue:
 	ld xwa, (xsp + 10)
 	ld c, (xiz + 1)
 	ld (xwa + 3), c
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 ProcessCC_Continue_CheckEnd:
 	cp (xiz), 0xff
@@ -3209,7 +3209,7 @@ ClampAndStoreParam_LoadParam:
 	ld (xbc + 1), l
 
 ClampAndStoreParam_AdvanceSlot:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	jrl ProcessCC_Continue_CheckEnd
 
 ClampAndStoreParam_LoadParam2:
@@ -3263,7 +3263,7 @@ ClampAndStoreParam_LoadParam3:
 	ld (xbc + 1), l
 
 ClampAndStoreParam_AdvanceSlot2:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	jrl ProcessCC_Continue_CheckEnd
 
 ClampAndStoreParam_LoadReg2:
@@ -3338,7 +3338,7 @@ ReadAndParseLoop_LoadParam2:
 	ld xbc, (xsp + 10)
 	ld a, (xwa + 4)
 	ld (xbc + 5), a
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 ReadAndParseLoop_LoadParam3:
 	ld xwa, (xsp + 14)
@@ -3429,7 +3429,7 @@ ReadAndParseLoop_LoadParam6:
 	ld xbc, (xsp + 10)
 	ld a, (xwa + 1)
 	ld (xbc + 3), a
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 ReadAndParseLoop_LoadParam7:
 	ld xwa, (xsp + 14)
@@ -3522,7 +3522,7 @@ FinalizeCount_LoadParam2:
 	add xbc, (xsp + 10)
 	ld wa, (xsp + 8)
 	ld (xbc + 1), a
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	jrl ReadAndParseLoop_LoadParam7
 
 FinalizeCount_LoadReg:
@@ -3567,7 +3567,7 @@ FinalizeCount_LoadReg:
 	ld (xbc + 1), a
 
 FinalizeCount_AdvanceSlot:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	jrl ReadAndParseLoop_LoadParam7
 
 
@@ -3640,7 +3640,7 @@ RhythmBuf_ParseEventLoop:
 	ld xbc, (xsp + 6)
 	ld a, (xwa + 4)
 	ld (xbc + 5), a
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 RhythmParse_ReadFromBuffer:
 	ld xwa, (xsp + 10)
@@ -3700,7 +3700,7 @@ RhythmParse_CheckNoteOnType:
 	ld c, a
 	ld xwa, (xsp + 6)
 	ld (xwa + 3), c
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 NoteMap_CheckEndMarker:
 	ld xwa, (xsp + 10)
@@ -3801,7 +3801,7 @@ NoteMap_ProcessMergeAlloc:
 	inc 4, xbc
 	add xbc, (xsp + 6)
 	ld (xbc + 1), l
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	jrl NoteMap_CheckEndMarker
 
 RhythmParse_AppendNoteEntry:
@@ -3844,7 +3844,7 @@ RhythmParse_AppendNoteEntry:
 	ld (xbc + 1), l
 
 AppendNoteEntry_AdvanceSlot:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	jrl NoteMap_CheckEndMarker
 
 AppendNoteEntry_LoadParam:
@@ -3907,7 +3907,7 @@ SeqEvtBuf_ParseEventLoop:
 	ld xbc, (xsp + 6)
 	ld a, (xwa + 4)
 	ld (xbc + 5), a
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 ParseEventLoop_LoadParam:
 	ld xwa, (xsp + 10)
@@ -3962,7 +3962,7 @@ ParseEventLoop_CheckIdx:
 	ld (xwa + 2), 0x5
 	ld xwa, (xsp + 6)
 	ld (xwa + 3), l
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 NoteMap_EncodeCC_Recheck:
 	ld xwa, (xsp + 10)
@@ -4045,7 +4045,7 @@ EncodeControlChange_CheckIdx:
 	inc 4, xbc
 	add xbc, (xsp + 6)
 	ld (xbc + 1), l
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	jrl NoteMap_EncodeCC_Recheck
 
 EncodeControlChange_LoadIdx:
@@ -4088,7 +4088,7 @@ EncodeControlChange_LoadIdx:
 	ld (xbc + 1), l
 
 EncodeControlChange_AdvanceSlot:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	jrl NoteMap_EncodeCC_Recheck
 
 EncodeControlChange_LoadParam2:
@@ -7934,7 +7934,7 @@ AllocNewVoiceEntry_LoadParam4:
 	setm 1, (xbc + 4)
 
 NoteMap_SlotLoop_Continue:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 SlotLoop_Continue_LoadParam:
 	ld xwa, (xsp + 12)
@@ -8920,7 +8920,7 @@ FindEntry_LoadParam4:
 	setm 1, (xbc + 4)
 
 Voice_LoopAdvance_Next:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 LoopAdvance_Next_LoadParam:
 	ld xwa, (xsp + 12)
@@ -9167,7 +9167,7 @@ MarkEntriesAboveThre_LoadIdx2:
 	stb_d8 (0xcd2f), a
 
 MarkEntriesAboveThre_AdvanceSlot:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 MarkEntriesAboveThre_LoadParam2:
 	ld xwa, (xsp + 6)
@@ -9534,7 +9534,7 @@ ResetTimers_Loop:
 	ldmi16 (xbc + 3), 0x2786
 
 ResetTimers_Loop_AdvanceSlot:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 ResetTimers_CheckCount:
 	ld xwa, (xsp + 18)
@@ -9818,7 +9818,7 @@ SndParam_StoreChannelResult:
 	ld (xbc + 3), a
 
 StoreChannelResult_AdvanceSlot:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 StoreChannelResult_LoadParam:
 	ld xwa, (xsp + 18)
@@ -9991,7 +9991,7 @@ WriteChannelDelay_Lo_LoadParam3:
 	ld (xbc + 2), a
 
 WriteChannelDelay_Lo_AdvanceSlot:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 WriteChannelDelay_Lo_LoadParam4:
 	ld xwa, (xsp + 16)
@@ -10176,7 +10176,7 @@ Synth_WriteChannelParam:
 	ld (xbc + 3), a
 
 Synth_WriteParam_Next:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 Synth_WriteParam_Check:
 	ld xwa, (xsp + 14)
@@ -10361,7 +10361,7 @@ Synth_SetChannelTone_Continue:
 	ld (xbc + 3), a
 
 Synth_InitChannelState_Next:
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 
 Synth_InitChannelState_Check:
 	ld xwa, (xsp + 14)
@@ -13829,7 +13829,7 @@ NonNoteDispatchLoop_LoadParam2:
 	ldw bc, 0xb
 	ldw de, 0x7f
 	call SndParam_NotifyAndReturn
-	incm 1, (xsp + 8)
+	incw 1, (xsp + 8)
 	cpw (xsp + 8), 0x18
 	jr lt, NonNoteDispatchLoop_LoadParam2
 	jrl SeqEvtBuf_NonNoteDispatchLoop
@@ -19504,7 +19504,7 @@ MIDI_SendPartVol_StoreAndSend:
 	ld de, bc
 	lds bc, 7
 	calr MIDI_SendControlChange
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x16
 	jr le, MIDI_SendPartVolumes_Loop
 
@@ -20081,7 +20081,7 @@ FileIO_ReadVariableLengthData:
 ReadVariableLengthDa_LoadParam:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ld wa, bc
 	extz xwa
 	ld xbc, xwa
@@ -20105,7 +20105,7 @@ ReadVariableLengthDa_DoReadNext:
 ReadVariableLengthDa_LoadParam2:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ld wa, bc
 	extz xwa
 	ld xbc, xwa
@@ -21351,7 +21351,7 @@ DecodeMidiEvent_DoReadNext:
 
 DecodeMidiEvent_LoadParam:
 	ld wa, (xsp + 10)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	lda xbc, (xsp + 12)
 	stb_dri L, 0x07, 0xe4, 0xe0
 	ld wa, (xsp + 10)
@@ -21372,7 +21372,7 @@ DecodeMidiEvent_LoadParam:
 
 DecodeMidiEvent_LoadParam2:
 	ld wa, (xsp + 10)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	lda xbc, (xsp + 12)
 	stb_dri L, 0x07, 0xe4, 0xe0
 	ld wa, (xsp + 10)
@@ -21389,7 +21389,7 @@ DecodeMidiEvent_LoadParam2:
 
 DecodeMidiEvent_LoadParam3:
 	ld wa, (xsp + 10)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	lda xbc, (xsp + 12)
 	stb_dri L, 0x07, 0xe4, 0xe0
 	ordi16 0xe9e5, 16
@@ -21479,7 +21479,7 @@ DecodeMidiEvent_DoReadNext3:
 
 DecodeMidiEvent_LoadParam8:
 	ld wa, (xsp + 10)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	lda xbc, (xsp + 12)
 	stb_dri L, 0x07, 0xe4, 0xe0
 	ld wa, (xsp + 10)
@@ -21536,7 +21536,7 @@ SeqPlay_CopyRecordData:
 	ld wa, (xsp + 10)
 	lda xbc, (xsp + 11)
 	ldmmb_dri 0x07, 0xe4, 0xe0, 0x10, 0xec
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 
 SeqPlay_CheckStatusByte:
 	ldb_d8 a, (0xec10)
@@ -21575,7 +21575,7 @@ SeqPlay_StoreByte:
 	extz xbc
 	add xbc, xwa
 	ld (xbc), l
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	ld wa, (xsp + 10)
 	exts xwa
 	cp xwa, (xsp + 2)
@@ -23664,7 +23664,7 @@ SndParam_NotifyLoop_Body:
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	calr InitTrackSlots_Block
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	ld wa, (xsp + 2)
 	cp wa, iz
 	jr c, SndParam_NotifyLoop_Body
@@ -23817,7 +23817,7 @@ SysexRingBuf_WriteBytesLoop:
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	calr SysexRingBuf_WriteByte
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	ld wa, (xsp + 2)
 	cp wa, iz
 	jr c, SysexRingBuf_WriteBytesLoop
@@ -23961,7 +23961,7 @@ StoreAndAdvance_LoadParam:
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	calr MidiRingBuf_WriteByte
-	incm 1, (xsp + 2)
+	incw 1, (xsp + 2)
 	ld wa, (xsp + 2)
 	cp wa, iz
 	jr c, StoreAndAdvance_LoadParam
@@ -27388,7 +27388,7 @@ HdaeRom_DataDispatch:
 	or	(xbc), c
 	.byte 0x88
 	calr	63930
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	ld	a, (xsp+440)
 	inc	1, a
 	extz	wa

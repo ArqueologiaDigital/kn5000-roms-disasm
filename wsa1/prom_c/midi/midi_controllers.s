@@ -6867,7 +6867,7 @@ MidiCtrl_CC16__FAF84F:
 MidiCtrl_CC16__FAF85F:
 	inc	6, xix                                 ; FAF85F  inc 6,XIX
 	inc	2, de                                  ; FAF861  inc 2,DE
-	incm	1, (xiz-6)                            ; FAF863  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FAF863  incw 1,(XIZ+0xfa)
 	cp	de, 12                                  ; FAF866  cp DE,0x000c
 	jrl c, MidiCtrl_CC16__FAF729                  ; FAF86A  jrl C,0xfaf729
 	pop	xix                                    ; FAF86D  pop XIX
@@ -7025,7 +7025,7 @@ MidiCtrl_CC17__FAF9C2:
 MidiCtrl_CC17__FAF9D2:
 	inc	6, xix                                 ; FAF9D2  inc 6,XIX
 	inc	2, de                                  ; FAF9D4  inc 2,DE
-	incm	1, (xiz-6)                            ; FAF9D6  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FAF9D6  incw 1,(XIZ+0xfa)
 	cp	de, 12                                  ; FAF9D9  cp DE,0x000c
 	jrl c, MidiCtrl_CC17__FAF8A0                  ; FAF9DD  jrl C,0xfaf8a0
 	pop	xix                                    ; FAF9E0  pop XIX
