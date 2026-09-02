@@ -18,16 +18,26 @@ READING THE OUTPUT
   known shape is a research candidate.
 
 Measured 2026-09-02 (lane w13/census-structs), before that lane's conversions:
-tree total 1,076,671 bytes.
+tree total 1,076,671 bytes; 1,049,062 after. Both figures reproduce with the
+git ls-files guard below -- and only with it.
 """
-import os,re
+import os,re,subprocess
 root='.'
 tot={}
+
+# ⚠ COUNT THE TREE, NOT THE WORKING DIRECTORY. This walked the filesystem and so
+# counted UNTRACKED artefacts: on 2026-09-02 a tool left flattened
+# wsa1/notes/.image-*.s files (34 MB) in the working tree and the total jumped
+# 1,076,671 -> 1,178,602 with no source change at all. A reader comparing that
+# against the baseline recorded above would have concluded the tree got worse.
+_TRACKED = set(subprocess.run(['git','ls-files','*.s'],
+                              capture_output=True, text=True).stdout.split())
 for dp,dn,fn in os.walk(root):
     if '.git' in dp: continue
     for f in fn:
         if not f.endswith('.s'): continue
         p=os.path.join(dp,f)
+        if os.path.relpath(p, root) not in _TRACKED: continue
         n=0
         for line in open(p,encoding='latin-1'):
             if ';' in line:   # has a comment -> counted as documented
@@ -46,7 +56,6 @@ for dp,dn,fn in os.walk(root):
 for p,n in sorted(tot.items(),key=lambda kv:-kv[1])[:30]:
     print(f'{n:9d}  {p}')
 print('TOTAL uncommented data bytes', sum(tot.values()))
-import os,re
 root='.'
 tot={}
 for dp,dn,fn in os.walk(root):
@@ -54,6 +63,7 @@ for dp,dn,fn in os.walk(root):
     for f in fn:
         if not f.endswith('.s'): continue
         p=os.path.join(dp,f)
+        if os.path.relpath(p, root) not in _TRACKED: continue
         n=0
         for line in open(p,encoding='latin-1'):
             if ';' in line:   # has a comment -> counted as documented
