@@ -40890,7 +40890,20 @@ sub_F99000:   ; entry: branch/call in converted code
 	xor C,C                                              ; F99004  cb d3
 	ldb a, 0x0c                                          ; F99006  21 0c
 	swi 7                                                ; F99008  ff
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x019009, 0x000008
+; ---------------------------------------------------------------------
+; sub_F99000's tail: a second SWI7 call (service 0x10) and the epilogue
+; matching its own entry push order.  reachability.py does not seed past
+; `swi 7` (treated as a possible non-returning trap), but this IS
+; fall-through: the pop order (XDE, XHL, XIX, XIZ) is exactly the reverse
+; of sub_F99000's entry (push XIZ, XIX, XHL, XDE at 0xF99000-0xF99003).
+; ---------------------------------------------------------------------
+	ldb a, 0x10                                          ; F99009  21 10
+	swi 7                                                ; F9900B  ff
+	pop XDE                                              ; F9900C  5a
+	pop XHL                                              ; F9900D  5b
+	pop XIX                                              ; F9900E  5c
+	pop XIZ                                              ; F9900F  5e
+	ret                                                  ; F99010  0e
 sub_F99011:   ; entry: branch/call in converted code
 	push XIZ                                             ; F99011  3e
 	ld XIZ,XSP                                           ; F99012  ef 8e
@@ -40900,7 +40913,15 @@ sub_F99011:   ; entry: branch/call in converted code
 	ldb c, 0x07                                          ; F99017  23 07
 	ldb a, 0x0c                                          ; F99019  21 0c
 	swi 7                                                ; F9901B  ff
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x01901C, 0x000005
+; sub_F99011's epilogue after its own `swi 7` -- same reasoning as
+; sub_F99000's tail just above: reachability.py does not seed past a
+; trap instruction, but this is the fall-through matching the entry's
+; push order (push XIZ, XIX, XHL, XDE at 0xF99011-0xF99016).
+	pop XDE                                              ; F9901C  5a
+	pop XHL                                              ; F9901D  5b
+	pop XIX                                              ; F9901E  5c
+	pop XIZ                                              ; F9901F  5e
+	ret                                                  ; F99020  0e
 ; ==============================================================================
 ; 0xF99021-0xFA1403 -- ★ THE UI SCREEN BLOCK: 34,787 bytes that draw screens and
 ; touch no device at all
