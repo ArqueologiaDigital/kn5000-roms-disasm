@@ -1425,3 +1425,81 @@ Gate: `make gate-wsa1` green, 4 images. Shown able to fail — perturbing the
 `DIFFERS wsa1_prom_b.ic13: 1 byte(s), first at 0x3B65A`, then restores to green.
 
 prom_b's verbatim residue: **481 B in 16 spans → 375 B in 11 spans.**
+
+
+## LANE res05x (2026-09-02) — the other five residue spans
+
+### `prom_b_res05x_spans.py` — 177 B, framed by the code that runs them
+**"What outside `0xF03F81`+46, `0xF04D14`+15, `0xF0540B`+58, `0xF05792`+46 and
+`0xF05CEC`+12 fixes their record boundaries?"** For four of the five: the
+display-list runner's own call site. The interpreters are entered as
+`ld XIY,<start> ; ld XIX,<end> ; call 0xF417F0` (A) or `0xF417F4` (B), so a
+list's first byte and its exclusive end are two 32-bit immediates in code this
+tree already decodes.
+
+    python3 notes/prom_b_res05x_spans.py             # evidence table
+    python3 notes/prom_b_res05x_spans.py --selftest  # asserts every claim
+    python3 notes/prom_b_res05x_spans.py --emit      # the converted source
+    python3 notes/prom_b_res05x_spans.py --verify    # re-assemble it vs the ROM
+    python3 notes/prom_b_res05x_spans.py --splice
+
+* **`0xF03F81`** — `sub_F5C727` names the whole object: `ld XIY,0x00F03F77` and,
+  on a branch, `ld XIX,0x00F0402E` *or* `ld XIX,0x00F03FF3`. The op/len chain
+  from `0xF03F77` lands on **both** ends, 18 interpreter-A records, 183 B.
+* **`0xF04D14`** — `0xF5CE93` runs `0xF04CDE..0xF04CE8`, so the rectangle array
+  starts where that list stops; `0xF5C979` does `ld XIY,0x00F04D10`, so the
+  op-02 record in the middle is a record start named by code; `0xF04D43` is the
+  next list. 5×8 + 15 + 6×6 = 91, no slack.
+* **`0xF0540B`** — the four record starts are **written down 79 bytes later**:
+  the pointer array at `0xF0545A` holds `0x00F05407 0x00F05416 0x00F05425
+  0x00F05434`. Each record's own `+0x07` is `0x00F05443`, which is
+  `0xF05434 + 15` — the reader's pointer names the first byte past the last
+  record. With `+0x0B` = 1 and mask `0x10 >> 4`, the table is exactly `"+"`,
+  `"-"`.
+* **`0xF05CEC`** — three interpreter-A op-03 records (`0xF02B97`, `0xF06307`,
+  `0xF0631D`) each carry `.long 0x00F05CE0`, width 2 **bytes** and 12 rows, so
+  the bitmap is 24 B and ends exactly at `Data_F05CF8`. Both edges and the
+  length come from outside. `Data_F05AB4` 568 → 556 B; the 12 bytes it had
+  over-run are the bitmap's first byte-column.
+  `notes/prom_b_dl_operand_tables.py` reports the same object independently.
+
+**`0xF05792` is the weak one, and the source says so in place.** Nothing in any
+of the four WSA1R ROMs holds `0xF0577F`, `0xF0578E`, `0xF05790` or `0xF05798` as
+a 32-bit word — asserted, and it matters because `ld XIY,imm32` would have put
+one there. Its ends are code (`0xF5D15A` ends a list at `0xF0574D`; `0xF5D168`
+starts one at `0xF057C0`) and the interior rests on the tiling plus three
+agreements: a 26th 2-byte letter slot would be `"1s"`, splitting a word; the
+op-1B record's four words *are* the bounding box of the five rectangles after
+it; and five entries with `[0] == [1]` is what all three externally-sized
+rectangle arrays in this ROM look like (`0xF04CE8`, `0xF05475`,
+`DLTable_F031C9`), as is the ordinal table `"1st" "1st" "2nd" "3rd" "4th"`
+beside it. The competing framing — six rectangles from `0xF05790` — also tiles
+and is recorded and rejected, because it makes `[0]` the bounding box and
+`[1] == [2]`.
+
+★ Every emitted block is re-assembled from its own text and compared with the
+ROM by `--verify` **before** `--splice` writes anything, so a rendering slip is
+caught at the region, not at the whole-image gate.
+
+⚠ Two lessons from writing it, both cheap and both nearly costly:
+`open(path, "w", encoding="latin-1")` **truncates `wsa1_prom_b.s` to zero bytes**
+the moment a character will not encode — a stray `U+26A0` in a comment did it
+twice — so encode first and `os.replace`; and these sources are latin-1 files
+carrying UTF-8 text, so a `⚠` you add must be spelled as its UTF-8 bytes.
+
+### `prom_b_res05x_gate_perturbation.py` — can the gate see the conversion?
+**"Would `make gate-wsa1` actually go red on the bytes this lane converted?"**
+Yes, once per span. It changes ONE byte in each of the five, in a different
+directive kind each time (`.ascii`, `.long`, a scalar `.short`, a `.short` row,
+a `.byte` row), rebuilds, and requires the gate to fail naming that byte's file
+offset — then restores and requires green.
+
+    python3 notes/prom_b_res05x_gate_perturbation.py   # five rebuilds
+
+Result 2026-09-02: RED at `0x3F82`, `0x4D17`, `0x5414`, `0x57A8`, `0x5CEC`, then
+GREEN. ⚠ Its first version compared the gate's message against a **cpu address**
+while the gate speaks in **file offsets**, and so reported "does not name it" on
+four of five perturbations that had in fact been named. A checker's own units
+are part of what has to be checked.
+
+prom_b's verbatim residue: **375 B in 11 spans → 198 B in 6 spans.**

@@ -34,17 +34,17 @@ claim below; PASS as of 2026-09-02).
 | CPU address | bytes | ASCII | what the bytes are |
 |---|---:|---:|---|
 | `0xF03AF8` | 77 | 11% | 12-byte display-list records + a 5-entry LE32 pointer table, stride 0x18, pointing into itself |
-| `0xF0540B` | 58 | 31% | four 15-byte records, pointer field + incrementing counter |
-| `0xF03F81` | 46 | 58% | text records — `AMPLITUDE`, `SOUND EDIT`, `ENV `, `AMP ` |
-| `0xF05792` | 46 | 13% | 8-byte records, 6 of 8 columns constant, first byte stepping +0x20 |
+| `0xF0540B` | 58 | 31% | ~~four 15-byte records~~ **CONVERTED** — the tail of four interpreter-B op-02 records at 0xF05407 (their starts are listed by the pointer array at 0xF0545A) plus the 2-entry table `+` `-` |
+| `0xF03F81` | 46 | 58% | **CONVERTED** — the middle of one 18-record interpreter-A display list, 0xF03F77-0xF0402D, both ends named by `sub_F5C727` |
+| `0xF05792` | 46 | 13% | **CONVERTED** (weakest) — a 5x8 rectangle array at 0xF05798 and the op-1B record before it; interior splits rest on tiling, not on a pointer |
 | `0xF286CC` | 45 | 37% | two records, each naming the string right after it — `ON OFF`, `OFFON ` |
 | `0xF02FFE` | 44 | 27% | pointer + LE16 coordinate quads |
 | `0xF13D34` | 44 | 11% | glyph/bitmap — only **seven distinct byte values** in 44 bytes |
 | `0xF3A443` | 30 | 23% | pointer + LE16 coordinate pairs |
 | `0xF03ADE` | 21 | 0% | same 12-byte record family as `0xF03AF8` |
 | `0xF34350` | 17 | 52% | pointer + the strings ` -1 -2` |
-| `0xF04D14` | 15 | 40% | pointer + the string `LPF+` |
-| `0xF05CEC` | 12 | 33% | 12 small values — a curve or coefficient row |
+| `0xF04D14` | 15 | 40% | **CONVERTED** — the tail of the op-02 record at 0xF04D10 plus the head of the 6x6 filter-name table its +0x07 names |
+| `0xF05CEC` | 12 | 33% | **CONVERTED** — not a curve: the second byte-column of the 2x12 bitmap at 0xF05CE0, whose size three op-03 records state |
 | `0xF32A00` | 9 | 44% | pointer `0xF32A6F` + two fields |
 | `0xF03A26` | 7 | 14% | mid-record: carries the tail of pointer `0x00F0191A` |
 | `0xF03BE6` | 5 | 0% | mid-record in the same family; its neighbour holds `3rd` |
@@ -178,3 +178,49 @@ land exactly where that tiling predicts.
 ★ The lesson is the one this file already argues: **measure an object from the
 thing that names it, never from the `.incbin` boundary**, which was cut by a
 superseded walk and carries no structural information at all.
+
+
+### The five sharp spans were sharp because a CALL SITE named them (lane res05x)
+
+This document said `0xF0540B` needed "the reader, to name the fields". It did,
+and so did three of its four neighbours — and the reader was easier to find than
+expected, because the display-list interpreters are entered by immediate:
+
+    ld XIY,<start> ; ld XIX,<end> ; call 0xF417F0   (interpreter A)
+    ld XIY,<start> ; ld XIX,<end> ; call 0xF417F4   (interpreter B)
+
+so a list's first byte and its **exclusive end** are two 32-bit immediates
+sitting in code this tree already decodes. `sub_F5C727` alone settles
+`0xF03F81` outright: it loads `0x00F03F77` as the start and, on a branch,
+`0x00F0402E` *or* `0x00F03FF3` as the end — and the op/len chain from
+`0xF03F77` lands on **both**. Grepping the converted disassembly for
+`ld XI[XY],0x00f0…` is the cheapest instrument this residue work has, and it
+should be the first thing a later lane tries on the six spans that remain.
+
+Two spans were fixed by a pointer instead of a call site, and one by neither:
+
+* `0xF0540B` — the four record starts are written down 79 bytes later, in the
+  pointer array at `0xF0545A`. The 15-byte stride this document measured off
+  the bytes was right, but it did not need to be guessed at all.
+* `0xF05CEC` — **the "curve or coefficient row" guess in the table above was
+  wrong.** It is the second byte-column of a 24-byte bitmap, and three op-03
+  records state its width (2 bytes) and height (12 rows) explicitly. A guess
+  from 12 small values, on a span cut in the wrong place, was exactly the
+  hazard this document warns about — and it was the "weakest of the five" only
+  until someone asked who points at `0xF05CE0`. It turned out to be the
+  best-anchored of them all.
+* `0xF05792` — nothing in any of the four ROMs points at its interior. Its ends
+  are code; its three interior splits rest on the tiling closing with no slack,
+  plus the `[0] == [1]` idiom shared by all three externally-sized rectangle
+  arrays in the image. The competing 6-entry framing is recorded and rejected
+  in place rather than left unsaid.
+
+★ **A span's difficulty is not its size or its printable fraction.** Of these
+five, the 12-byte one had the strongest external anchor and the 46-byte one with
+an obvious stride had the weakest. Rank residue spans by *who names them*, never
+by what they look like.
+
+Evidence: `wsa1/notes/prom_b_res05x_spans.py --selftest`, and
+`wsa1/notes/prom_b_res05x_gate_perturbation.py` for the gate's ability to see
+the result. prom_b's verbatim residue: **375 B in 11 spans -> 198 B in 6 spans**
+(and 481 B in 16 at the time this document was first written).
