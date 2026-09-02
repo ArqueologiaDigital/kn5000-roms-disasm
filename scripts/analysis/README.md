@@ -152,3 +152,29 @@ all 0xff) retyped as `.fill` (erased flash, not code, despite a clean decode),
 (`v7_no_source_bytes.py`). The 34 CODE-labelled, 25,425 B bucket is otherwise
 blocked by the same tlcs900-backend spelling gap already known from v7's
 general code-as-`.byte` debt.
+
+
+## Added 2026-09-02 (NAKA widget / shared-include lane, `w10/v10naka`)
+
+| script | question it answers |
+|---|---|
+| `naka_lane_split.py` | For every byte of the NAKA dispatchers, `includes/`, `msp_factory_defaults.s` and `extensions/extension_data.s`: is it real CODE, structured data that should be TYPED, or a byte table already correct? (Code: none — 0 control-transfer targets across 12 regions, against 5..652 in each known-code control.) |
+| `blind_start_enrichment_control.py` | Does `byte_run_start_enrichment.py`'s blind-start rate separate code from data *inside* v10? (No. A block PROVEN data by a 956-entry pointer table scores 68.4%; `system_handlers.s`, which 652 control transfers enter, scores 14.8%.) |
+| `gui_format_strings_cells.py` (converters/) | What is the phase of the 4-byte cell grid in `GUI_FormatStrings`? (Phase 0, explaining 50.0% of cells against 19.4/32.6/17.1% for the others.) |
+| `naka_lane_retype.py` (converters/) | Which directive states each raw run correctly, byte-exactly? |
+
+    python3 scripts/analysis/naka_lane_split.py --controls      # the three-way split, both controls
+    python3 scripts/analysis/naka_lane_split.py --chordtable    # the misframed chord table: 64/64 vs 0/64
+    python3 scripts/analysis/blind_start_enrichment_control.py --xrefs
+    python3 scripts/analysis/blind_start_enrichment_control.py --census
+    python3 scripts/converters/naka_lane_retype.py --report     # dry run; --apply to write
+    python3 scripts/converters/gui_format_strings_cells.py --report
+
+`--census` is the per-run answer the rate cannot give: of `extension_data.s`'s
+2,950 pre-conversion `.byte` runs, 2,385 START INSIDE an 18-byte record of the
+956-entry pointer table at 0xEE0198, and 1,590 of its 1,721 undecodable-byte
+starts are in those records, clustered at a few field offsets (+0x0C alone
+48.0%). That is a low-valued parameter field, not an opcode.
+
+All need `scripts/analysis/.amap_v10.json`, built on demand by
+`address_line_map.py --dump` (untracked; delete it after editing any v10 source).
