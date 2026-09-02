@@ -1102,9 +1102,9 @@ PmemOutLGridCheck:
 	lda xbc, (xsp + 36)
 	lda xwa, (0x1ed400:24)
 	ld (xsp + 24), xwa
-	lda_d16 xwa, (0xf9a0)
+	lda xwa, (0xf9a0:16)
 	ld (xsp + 20), xwa
-	lda_d16 xwa, (0xfd2c)
+	lda xwa, (0xfd2c:16)
 	sub xwa, (xsp + 20)
 	ld xiz, xwa
 	lda xiy, (xbc + 2)
@@ -1158,7 +1158,7 @@ PmemOutLGridCheck_JumpTable:
 	lda	xix, (xsp+60)
 	ldw	bc, 11
 	.byte 0x95, 0x11
-	lda_d16	xde, 64812
+	lda	xde, (64812:16)
 	sub	xde, 63904
 	lds32	xwa, 0
 	ldb_da	a, (149362)
@@ -1228,7 +1228,7 @@ PmemOutLGridCheck_JumpTable:
 	lda	xix, (xsp+60)
 	ldw	bc, 11
 	.byte 0x95, 0x11
-	lda_d16	xde, 64812
+	lda	xde, (64812:16)
 	sub	xde, 63904
 	lds32	xwa, 0
 	ldb_da	a, (149362)
@@ -1312,7 +1312,7 @@ PmemOutLGridCheck_JumpTable:
 	lda	xde, (xsp+36)
 	ld	xbc, 31457420
 	call	16422496
-	lda_d16	xde, 64812
+	lda	xde, (64812:16)
 	sub	xde, 63904
 	lds32	xwa, 0
 	ldb_da	a, (149362)
@@ -1670,7 +1670,7 @@ PmemOutRGridCheck:
 	ldirw
 	ld xhl, xde
 	lda xbc, (xsp + 32)
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 	ld (xsp + 20), xwa
 	lda xwa, (0x1ed400:24)
 	ld (xsp + 16), xwa
@@ -1731,7 +1731,7 @@ TtMdCtlMsg_EventDispatch:
 	ldw	bc, 11
 	.byte 0x95
 	scf
-	lda_d16	xwa, (0xf9c4)
+	lda	xwa, (0xf9c4:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1767,7 +1767,7 @@ TtMdCtlMsg_EventDispatch:
 	ldw	bc, 11
 	.byte 0x95
 	scf
-	lda_d16	xwa, (0xf9c5)
+	lda	xwa, (0xf9c5:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1795,7 +1795,7 @@ TtMdCtlMsg_EventDispatch:
 	ldw	bc, 11
 	.byte 0x95
 	scf
-	lda_d16	xwa, (0xf9c7)
+	lda	xwa, (0xf9c7:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1855,7 +1855,7 @@ TtMdCtlMsg_EventDispatch:
 	ldw	bc, 11
 	.byte 0x95
 	scf
-	lda_d16	xwa, (0xf9c4)
+	lda	xwa, (0xf9c4:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1898,7 +1898,7 @@ TtMdCtlMsg_EventDispatch:
 	ldw	bc, 11
 	.byte 0x95
 	scf
-	lda_d16	xwa, (0xf9c5)
+	lda	xwa, (0xf9c5:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1929,7 +1929,7 @@ TtMdCtlMsg_EventDispatch:
 	ldw	bc, 11
 	.byte 0x95
 	scf
-	lda_d16	xwa, (0xf9c7)
+	lda	xwa, (0xf9c7:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1981,7 +1981,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	(xwa), xbc
 	lda	xwa, (0x24772:24)
 	ld	(xsp+24), xiy
-	lda_d16	xbc, (0xf9a0)
+	lda	xbc, (0xf9a0:16)
 	.byte 0xa6, 0xf0
 	jrl	nz, 345
 	ld	xwa, (xsp+24)
@@ -2030,7 +2030,7 @@ TtMdCtlMsg_EventDispatch:
 	ldb	b, 2
 	.byte 0x01
 	nop
-	lda_d16	xwa, (0xf9c5)
+	lda	xwa, (0xf9c5:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -2062,7 +2062,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 0x1e0008c
 	call	SendEvent
 	ldw (xsp+34), 2
-	lda_d16	xwa, (0xf9c7)
+	lda	xwa, (0xf9c7:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -2154,7 +2154,7 @@ TtMdCtlMsg_EventDispatch:
 	ldb	b, 2
 	.byte 0x01
 	nop
-	lda_d16	xwa, (0xf9c5)
+	lda	xwa, (0xf9c5:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -2186,7 +2186,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 0x1e0008c
 	call	SendEvent
 	ldw (xsp+34), 2
-	lda_d16	xwa, (0xf9c7)
+	lda	xwa, (0xf9c7:16)
 	sub	xwa, 0xf9a0
 	ld	(xsp+28), xwa
 	lds32	xwa, 0

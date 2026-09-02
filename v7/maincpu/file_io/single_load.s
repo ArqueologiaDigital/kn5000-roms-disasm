@@ -158,7 +158,7 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	stib_dsp	224, 0
 	ldb_d8	c, 35164
 	extz	bc
@@ -167,10 +167,10 @@ SLSrcBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 34995
+	lda	xwa, (34995:16)
 	ld	xbc, 15337784
 	call	16289030
-	lda_d16	xiz, 34995
+	lda	xiz, (34995:16)
 	ldb_d8	a, 35168
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
@@ -181,7 +181,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 34995
+	lda	xwa, (34995:16)
 	ldw	bc, 16
 	calr	-4482
 	ld	xwa, (xsp+6)
@@ -194,7 +194,7 @@ SLSrcBankList_FuncBody:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+21), 1
 	lda	xiz, (xwa+22)
 	ldb_d8	a, 35168
@@ -205,10 +205,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lda_d16	xwa, 35016
+	lda	xwa, (35016:16)
 	ldw	bc, 16
 	calr	-4552
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
@@ -219,7 +219,7 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
 	ldb_d8	c, 35164
@@ -229,12 +229,12 @@ SLSrcBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35037
+	lda	xwa, (35037:16)
 	ld	xbc, 15337788
 	call	16289030
 	cpdi8	35166, 0
 	jr	nz, 32
-	lda_d16	xiz, 35037
+	lda	xiz, (35037:16)
 	ldb_d8	a, 35168
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
@@ -246,21 +246,21 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 35037
+	lda	xwa, (35037:16)
 	ldw	bc, 16
 	calr	-4679
-	lda_d16	xde, 35036
+	lda	xde, (35036:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
 	cpdi8	35166, 0
 	jr	z, 36
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	xbc, 15337792
 	call	16288975
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
@@ -272,7 +272,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), xwa
 	cpdi8	35166, 0
 	jr	nz, 55
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
 	lda	xiz, (xwa+64)
 	ldb_d8	a, 35168
@@ -281,10 +281,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lda_d16	xwa, 35058
+	lda	xwa, (35058:16)
 	ldw	bc, 16
 	calr	-4794
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
@@ -366,11 +366,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (33070:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 312
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jrl	215
@@ -420,11 +420,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (33070:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 150
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jr	54
@@ -436,11 +436,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (33070:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 94
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
@@ -471,12 +471,12 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), xwa
 	cp	xbc, 29360139
 	jrl	nz, 196
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	stib_dsp	224, 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	-5419
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+21), 1
 	lda	xwa, (xwa+22)
 	ldb_d8	c, 35164
@@ -486,13 +486,13 @@ SLSrcBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35016
+	lda	xwa, (35016:16)
 	ld	xbc, 15337816
 	call	16289030
-	lda_d16	xwa, 35016
+	lda	xwa, (35016:16)
 	ldw	bc, 16
 	calr	-5478
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+42), 2
 	lda	xiz, (xwa+43)
 	lds	wa, 0
@@ -500,10 +500,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lda_d16	xwa, 35037
+	lda	xwa, (35037:16)
 	ldw	bc, 16
 	calr	-5513
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	(xwa), 0
@@ -513,15 +513,15 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 29360143
 	ld	xde, 34994
 	call	16423243
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35036
+	lda	xde, (35036:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
@@ -533,7 +533,7 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	xiz, xwa
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	stib_dsp	224, 0
 	ldb_d8	c, 35164
 	extz	bc
@@ -542,13 +542,13 @@ SLSrcBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 34995
+	lda	xwa, (34995:16)
 	ld	xbc, 15337818
 	call	16289030
-	lda_d16	xwa, 34995
+	lda	xwa, (34995:16)
 	ldw	bc, 16
 	calr	-5668
-	lda_d16	xwa, 35015
+	lda	xwa, (35015:16)
 	ldb_d8	c, 35170
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
@@ -559,7 +559,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 29360143
 	ld	xde, 34994
 	call	16423243
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
@@ -576,7 +576,7 @@ SLSrcBankList_FuncBody:
 	ld	a, w
 	extz	wa
 	ld	(xsp+4), wa
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
 	ldb_d8	c, 35164
@@ -586,25 +586,25 @@ SLSrcBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35037
+	lda	xwa, (35037:16)
 	ld	xbc, 15337822
 	call	16289030
 	cpdi8	35166, 0
 	jr	nz, 18
-	lda_d16	xiz, 35037
+	lda	xiz, (35037:16)
 	ld	wa, (xsp+4)
 	calr	-2038
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 35037
+	lda	xwa, (35037:16)
 	ldw	bc, 16
 	calr	-5832
-	lda_d16	xde, 35036
+	lda	xde, (35036:16)
 	ld	xwa, (xsp+8)
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xbc, 34994
+	lda	xbc, (34994:16)
 	lda	xwa, (xbc+63)
 	cpdi8	35166, 0
 	jr	z, 29
@@ -612,7 +612,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (xbc+64)
 	ld	xbc, 15337826
 	call	16288975
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, (xsp+8)
 	ld	xbc, 29360143
 	jr	39
@@ -625,7 +625,7 @@ SLSrcBankList_FuncBody:
 	pushw 3
 	ld	de, (xsp+6)
 	calr	-2127
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, (xsp+8)
 	ld	xbc, 29360143
 	call	16423243
@@ -645,7 +645,7 @@ SLSrcBankList_FuncBody:
 	jr	nz, 63
 	cps	bc, 4
 	jr	nc, 59
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
 	lda	xiz, (xwa+64)
 	ldb_d8	a, 35170
@@ -656,10 +656,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lda_d16	xwa, 35058
+	lda	xwa, (35058:16)
 	ldw	bc, 16
 	calr	-6012
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
@@ -728,11 +728,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (33078:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 284
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jrl	214
@@ -782,11 +782,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (33078:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 123
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jr	54
@@ -798,11 +798,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (33078:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 67
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
@@ -857,7 +857,7 @@ SLSrcBankList_FuncBody:
 	dec	6, xsp
 	ld	(xsp), c
 	ld	(xsp+2), xwa
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	stib_dsp	224, 0
 	ldb_d8	c, 35164
 	extz	bc
@@ -866,10 +866,10 @@ SLSrcBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 34995
+	lda	xwa, (34995:16)
 	ld	xbc, 15337848
 	call	16289030
-	lda_d16	xwa, 34995
+	lda	xwa, (34995:16)
 	ldw	bc, 16
 	calr	-6680
 	ld	xwa, (xsp+2)
@@ -881,13 +881,13 @@ SLSrcBankList_FuncBody:
 	ldb_d8	c, 35172
 	cp	c, a
 	jr	nc, 31
-	lda_d16	xwa, 35015
+	lda	xwa, (35015:16)
 	extz	bc
 	.byte 0x87, 0x53
 	extz	bc
 	lds	de, 1
 	calr	-2853
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
 	call	16423243
@@ -900,17 +900,17 @@ SLSrcBankList_FuncBody:
 	add	a, c
 	cpdm8	35172, a
 	jr	c, 49
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+21), 1
 	lda	xiz, (xwa+22)
 	call	16293767
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lda_d16	xwa, 35016
+	lda	xwa, (35016:16)
 	ldw	bc, 16
 	calr	-6792
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
@@ -921,7 +921,7 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
 	ldb_d8	c, 35164
@@ -931,7 +931,7 @@ SLSrcBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35037
+	lda	xwa, (35037:16)
 	ld	xbc, 15337852
 	call	16289030
 	cpdi8	35166, 0
@@ -939,7 +939,7 @@ SLSrcBankList_FuncBody:
 	ld	e, (xsp+4)
 	.byte 0x8f, 0x04, 0x85
 	ldb_d8	c, 35172
-	lda_d16	xwa, 35037
+	lda	xwa, (35037:16)
 	cp	c, e
 	jr	c, 21
 	ld	xiz, xwa
@@ -963,21 +963,21 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 35037
+	lda	xwa, (35037:16)
 	ldw	bc, 16
 	calr	-6952
-	lda_d16	xde, 35036
+	lda	xde, (35036:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
 	cpdi8	35166, 0
 	jr	z, 36
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	xbc, 15337856
 	call	16288975
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
@@ -989,7 +989,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), xwa
 	cpdi8	35166, 0
 	jr	nz, 77
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
 	ld	e, c
 	add	e, c
@@ -1008,10 +1008,10 @@ SLSrcBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lda_d16	xwa, 35058
+	lda	xwa, (35058:16)
 	ldw	bc, 16
 	calr	-7089
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
@@ -1108,11 +1108,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (33084:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 449
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jrl	355
@@ -1206,11 +1206,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (33084:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 147
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jr	54
@@ -1222,11 +1222,11 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (33084:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 91
-	lda_d16	xde, 35015
+	lda	xde, (35015:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35057
+	lda	xde, (35057:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
@@ -1260,7 +1260,7 @@ SLSrcBankList_FuncBody:
 	lds	iz, 0
 	ld	de, iz
 	mul	de, 21
-	lda_d16	xbc, 34994
+	lda	xbc, (34994:16)
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
@@ -1275,7 +1275,7 @@ SLSrcBankList_FuncBody:
 	calr	-7911
 	ld	de, iz
 	mul	de, 21
-	lda_d16	xwa, 34994
+	lda	xwa, (34994:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+2)
@@ -1444,7 +1444,7 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	stib_dsp	224, 0
 	ldb_d8	c, 35164
 	extz	bc
@@ -1453,10 +1453,10 @@ SLDstBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35079
+	lda	xwa, (35079:16)
 	ld	xbc, 15337898
 	call	16289030
-	lda_d16	xiz, 35079
+	lda	xiz, (35079:16)
 	ldb_d8	a, 35174
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
@@ -1467,24 +1467,24 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 35079
+	lda	xwa, (35079:16)
 	ldw	bc, 16
 	calr	-8510
-	lda_d16	xwa, 35099
+	lda	xwa, (35099:16)
 	ldb_d8	c, 35174
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
 	lds	de, 1
 	calr	-4886
-	lda_d16	xwa, 35100
+	lda	xwa, (35100:16)
 	ldw	bc, 16
 	calr	-8540
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	ld	xde, 35078
 	call	16423243
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
@@ -1495,7 +1495,7 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xde, 35078
+	lda	xde, (35078:16)
 	ld	(xde+42), 2
 	ld	(xde+63), 3
 	ldb_d8	a, 35164
@@ -1509,21 +1509,21 @@ SLDstBankList_FuncBody:
 	cpdi8	35166, 0
 	jr	z, 42
 	call	16288975
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ld	xbc, 15337902
 	call	16289030
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ldw	bc, 16
 	calr	-8658
-	lda_d16	xwa, 35142
+	lda	xwa, (35142:16)
 	ld	xbc, 15337906
 	call	16288975
 	jr	74
 	call	16288975
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ld	xbc, 15337924
 	call	16289030
-	lda_d16	xiz, 35121
+	lda	xiz, (35121:16)
 	ldb_d8	a, 35174
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
@@ -1535,19 +1535,19 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ldw	bc, 16
 	calr	-8732
-	lda_d16	xwa, 35141
+	lda	xwa, (35141:16)
 	ldb_d8	c, 35174
 	extz	bc
 	lds	de, 3
 	calr	-5057
-	lda_d16	xde, 35120
+	lda	xde, (35120:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
@@ -1612,11 +1612,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (33096:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 37
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
@@ -1669,11 +1669,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (33096:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -133
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jrl	-173
@@ -1685,11 +1685,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (33096:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -191
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jrl	-231
@@ -1722,7 +1722,7 @@ SLDstBankList_FuncBody:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	ld	(xwa+21), 1
 	lda	xwa, (xwa+22)
 	ldb_d8	c, 35164
@@ -1732,10 +1732,10 @@ SLDstBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35100
+	lda	xwa, (35100:16)
 	ld	xbc, 15337932
 	call	16289030
-	lda_d16	xiz, 35100
+	lda	xiz, (35100:16)
 	ldb_d8	a, 35176
 	inc	1, a
 	extz	wa
@@ -1744,10 +1744,10 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 35100
+	lda	xwa, (35100:16)
 	ldw	bc, 16
 	calr	-9388
-	lda_d16	xiz, 35120
+	lda	xiz, (35120:16)
 	ldb_d8	a, 35176
 	extz	wa
 	lds	bc, 2
@@ -1756,11 +1756,11 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35120
+	lda	xde, (35120:16)
 	ld	xwa, (xsp+4)
 	ld	xbc, 29360143
 	call	16423243
@@ -1775,12 +1775,12 @@ SLDstBankList_FuncBody:
 	jr	z, 80
 	cp	xbc, 29360139
 	jr	nz, 122
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	stib_dsp	224, 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	-9493
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	(xwa), 0
@@ -1790,14 +1790,14 @@ SLDstBankList_FuncBody:
 	ld	xbc, 29360143
 	ld	xde, 35078
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
 	ld	xwa, xiz
 	jr	47
 	ldb_d8	w, 35176
-	lda_d16	xhl, 35120
+	lda	xhl, (35120:16)
 	cp	xde, 8
 	jr	nz, 73
 	ld	xde, xbc
@@ -1848,7 +1848,7 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	xiz, xwa
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	stib_dsp	224, 0
 	ldb_d8	c, 35164
 	extz	bc
@@ -1857,13 +1857,13 @@ SLDstBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35079
+	lda	xwa, (35079:16)
 	ld	xbc, 15337938
 	call	16289030
-	lda_d16	xwa, 35079
+	lda	xwa, (35079:16)
 	ldw	bc, 16
 	calr	-9754
-	lda_d16	xwa, 35099
+	lda	xwa, (35099:16)
 	ldb_d8	c, 35178
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
@@ -1874,7 +1874,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 29360143
 	ld	xde, 35078
 	call	16423243
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
@@ -1885,7 +1885,7 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
 	ldb_d8	c, 35164
@@ -1895,12 +1895,12 @@ SLDstBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ld	xbc, 15337942
 	call	16289030
 	cpdi8	35166, 0
 	jr	nz, 28
-	lda_d16	xiz, 35121
+	lda	xiz, (35121:16)
 	ldb_d8	a, 35178
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
@@ -1910,10 +1910,10 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ldw	bc, 16
 	calr	-9912
-	lda_d16	xbc, 35078
+	lda	xbc, (35078:16)
 	lda	xwa, (xbc+63)
 	cpdi8	35166, 0
 	jr	z, 17
@@ -1933,11 +1933,11 @@ SLDstBankList_FuncBody:
 	extz	de
 	pushw 3
 	calr	-6180
-	lda_d16	xde, 35120
+	lda	xde, (35120:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
@@ -2002,11 +2002,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (33100:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 37
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
@@ -2059,11 +2059,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (33100:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -133
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jrl	-173
@@ -2075,11 +2075,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (33100:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -191
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jrl	-231
@@ -2112,7 +2112,7 @@ SLDstBankList_FuncBody:
 	dec	6, xsp
 	ld	(xsp), c
 	ld	(xsp+2), xwa
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	stib_dsp	224, 0
 	ldb_d8	c, 35164
 	extz	bc
@@ -2121,16 +2121,16 @@ SLDstBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35079
+	lda	xwa, (35079:16)
 	ld	xbc, 15337968
 	call	16289030
-	lda_d16	xwa, 35079
+	lda	xwa, (35079:16)
 	ldw	bc, 16
 	calr	-10585
 	ld	e, (xsp)
 	.byte 0x87, 0x85
 	ldb_d8	c, 35180
-	lda_d16	xwa, 35099
+	lda	xwa, (35099:16)
 	cp	c, e
 	jr	nc, 13
 	extz	bc
@@ -2145,7 +2145,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 29360143
 	ld	xde, 35078
 	call	16423243
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
 	call	16423243
@@ -2158,7 +2158,7 @@ SLDstBankList_FuncBody:
 	lda	xde, (15336996:24)
 	cpdi8	35166, 0
 	jr	z, 77
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
 	ldb_d8	c, 35164
@@ -2167,13 +2167,13 @@ SLDstBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ld	xbc, 15337972
 	call	16289030
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ldw	bc, 16
 	calr	-10730
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
 	ld	xbc, 15337976
@@ -2181,7 +2181,7 @@ SLDstBankList_FuncBody:
 	jrl	214
 	ld	l, (xsp+4)
 	.byte 0x8f, 0x04, 0x87
-	lda_d16	xbc, 35078
+	lda	xbc, (35078:16)
 	lda	xwa, (xbc+43)
 	ld	(xbc+42), 2
 	cpdm8	35180, l
@@ -2192,10 +2192,10 @@ SLDstBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ld	xbc, 15337994
 	call	16289030
-	lda_d16	xiz, 35121
+	lda	xiz, (35121:16)
 	ld	c, (xsp+4)
 	.byte 0x8f, 0x04, 0x83
 	ldb_d8	a, 35180
@@ -2207,10 +2207,10 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ldw	bc, 16
 	calr	-10852
-	lda_d16	xwa, 35141
+	lda	xwa, (35141:16)
 	ld	e, (xsp+4)
 	.byte 0x8f, 0x04, 0x85
 	ldb_d8	c, 35180
@@ -2225,10 +2225,10 @@ SLDstBankList_FuncBody:
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	16288975
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ld	xbc, 15337998
 	call	16289030
-	lda_d16	xiz, 35121
+	lda	xiz, (35121:16)
 	ldb_d8	a, 35180
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
@@ -2240,19 +2240,19 @@ SLDstBankList_FuncBody:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	lda_d16	xwa, 35121
+	lda	xwa, (35121:16)
 	ldw	bc, 16
 	calr	-10952
-	lda_d16	xwa, 35141
+	lda	xwa, (35141:16)
 	ldb_d8	c, 35180
 	extz	bc
 	lds	de, 3
 	calr	-7058
-	lda_d16	xde, 35120
+	lda	xde, (35120:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
 	call	16423243
@@ -2341,11 +2341,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (33104:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 37
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
@@ -2442,11 +2442,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (33104:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -273
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jrl	-313
@@ -2458,11 +2458,11 @@ SLDstBankList_FuncBody:
 	ld	xwa, (33104:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, -331
-	lda_d16	xde, 35099
+	lda	xde, (35099:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	call	16423243
-	lda_d16	xde, 35141
+	lda	xde, (35141:16)
 	ld	xwa, xiz
 	ld	xbc, 29360143
 	jrl	-371
@@ -2499,7 +2499,7 @@ SLDstBankList_FuncBody:
 	lds	iz, 0
 	ld	de, iz
 	mul	de, 21
-	lda_d16	xbc, 35078
+	lda	xbc, (35078:16)
 	ld	hl, de
 	extz	xhl
 	add	xhl, xbc
@@ -2514,7 +2514,7 @@ SLDstBankList_FuncBody:
 	calr	-11779
 	ld	de, iz
 	mul	de, 21
-	lda_d16	xwa, 35078
+	lda	xwa, (35078:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+2)
@@ -3321,7 +3321,7 @@ CmpFile_ShowDefault:
 	lda xiz, (Data_SaveLoadMenuTable_0x62:24)
 
 CmpFile_ShowDraw:
-	lda_d16	xwa, (34773)
+	lda	xwa, (34773:16)
 	ld	de, (33124:16)
 	inc	1, de
 	pushw	6
@@ -3375,7 +3375,7 @@ CmpFile_ScrollRedraw:
 	call	16290326
 	ld	xiz, xhl
 CmpFile_RedrawDispatch:
-	lda_d16	xwa, (34773)
+	lda	xwa, (34773:16)
 	ld	de, (33124:16)
 	inc	1, de
 	pushw	6
@@ -3540,7 +3540,7 @@ BuildSlotLabel_WriteContent:
 	ld	(xiz+16), 0
 	ld	wa, (xsp+4)
 	mul	wa, 21
-	lda_d16	xbc, (33126)
+	lda	xbc, (33126:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	xhl, xwa

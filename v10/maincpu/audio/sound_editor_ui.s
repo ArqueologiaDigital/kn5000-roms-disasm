@@ -17208,7 +17208,7 @@ EasyCmp_GridCheck_EventEnc:
 	jr z, EasyCmp_GridEvtEnc_Case2
 	cps bc, 1
 	jr nz, EasyCmp_GridCheck_EventCase3
-	lda_d16 xbc, (0x37ab)
+	lda xbc, (0x37ab:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -17220,7 +17220,7 @@ EasyCmp_GridCheck_EventEnc:
 	jr EasyCmp_GridCheck_EventCase1
 
 EasyCmp_GridEvtEnc_Case2:
-	lda_d16 xbc, (0x37b2)
+	lda xbc, (0x37b2:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -17300,7 +17300,7 @@ EasyCmp_GridEvtCase_Default:
 	jr	75
 	lds32	xhl, 3
 	jr	71
-	lda_d16	xhl, (0x7f3e)
+	lda	xhl, (0x7f3e:16)
 	jr	t, 0x41
 
 ; MspNameBnkFunc dispatch (10-entry, table 0xe1df5c)
@@ -18705,7 +18705,7 @@ MspPlayModeFunc_DataBlock:
 	jr	28
 	lds32	xhl, 1
 	jr	24
-	lda_d16	xhl, (0x7f3f)
+	lda	xhl, (0x7f3f:16)
 	jr	18
 
 ; AcSndArgGridBoxProc dispatch (7-entry, table 0xe1e35e)
@@ -19153,23 +19153,23 @@ SndArgGridCheck_PlayColAudio:
 	jr z, SndArgGridCheck_PlayCol_1
 	cps wa, 0
 	jr nz, SndArgGridCheck_PlayCol_Send
-	lda_d16 xwa, (0x39f8)
+	lda xwa, (0x39f8:16)
 	jr SndArgGridCheck_PlayCol_Strcpy
 
 SndArgGridCheck_PlayCol_1:
-	lda_d16 xwa, (0x3a09)
+	lda xwa, (0x3a09:16)
 	jr SndArgGridCheck_PlayCol_Strcpy
 
 SndArgGridCheck_PlayCol_2:
-	lda_d16 xwa, (0x3a1a)
+	lda xwa, (0x3a1a:16)
 	jr SndArgGridCheck_PlayCol_Strcpy
 
 SndArgGridCheck_PlayCol_3:
-	lda_d16 xwa, (0x3a2b)
+	lda xwa, (0x3a2b:16)
 	jr SndArgGridCheck_PlayCol_Strcpy
 
 SndArgGridCheck_PlayCol_4:
-	lda_d16 xwa, (0x3a3c)
+	lda xwa, (0x3a3c:16)
 
 SndArgGridCheck_PlayCol_Strcpy:
 	push xwa
@@ -19202,23 +19202,23 @@ SndArgGridCheck_PlayRowAudio:
 	jr z, SndArgGridCheck_PlayRow_1
 	cps wa, 0
 	jr nz, SndArgGridCheck_PlayRow_Finalize
-	lda_d16 xwa, (0x39e4)
+	lda xwa, (0x39e4:16)
 	jr SndArgGridCheck_PlayRow_Send
 
 SndArgGridCheck_PlayRow_1:
-	lda_d16 xwa, (0x39e8)
+	lda xwa, (0x39e8:16)
 	jr SndArgGridCheck_PlayRow_Send
 
 SndArgGridCheck_PlayRow_2:
-	lda_d16 xwa, (0x39ec)
+	lda xwa, (0x39ec:16)
 	jr SndArgGridCheck_PlayRow_Send
 
 SndArgGridCheck_PlayRow_3:
-	lda_d16 xwa, (0x39f0)
+	lda xwa, (0x39f0:16)
 	jr SndArgGridCheck_PlayRow_Send
 
 SndArgGridCheck_PlayRow_4:
-	lda_d16 xwa, (0x39f4)
+	lda xwa, (0x39f4:16)
 
 SndArgGridCheck_PlayRow_Send:
 	push xwa
@@ -19591,7 +19591,7 @@ SCTxtBox2_CallInherited:
 	jr SCTxtBox2_SetReturnZero
 
 SCTxtBox2_HandleEvt89:
-	lda_d16 xhl, (0x3d68)
+	lda xhl, (0x3d68:16)
 	jr SCTxtBox2_Epilogue
 
 SCTxtBox2_HandleEvtBC:
@@ -20243,7 +20243,7 @@ StylCnvVer_CallInherited:
 	jr StylCnvVer_SetReturnZero
 
 StylCnvVer_HandleEvt89:
-	lda_d16 xhl, (0x3f68)
+	lda xhl, (0x3f68:16)
 	jr StylCnvVer_Epilogue
 
 StylCnvVer_HandleEvtBC:

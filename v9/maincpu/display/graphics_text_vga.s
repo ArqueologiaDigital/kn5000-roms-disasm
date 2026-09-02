@@ -2632,7 +2632,7 @@ VGA_Init_FinalRegs:
 VGA_Palette_Loop:
 	ld wa, (xsp + 4)
 	sll wa, 2
-	lda_d16 xbc, (0xe3e8)
+	lda xbc, (0xe3e8:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xbc

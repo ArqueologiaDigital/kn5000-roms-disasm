@@ -16,7 +16,7 @@ FmmPasswordFunc:
 	ld wa, iz
 	cp xbc, 0x1e50010
 	jrl z, Password_HandleLoadEvent
-	lda_d16 xde, (0x8a0c)
+	lda xde, (0x8a0c:16)
 	cp xbc, 0x1e5000f
 	jrl z, Password_HandleSaveEvent
 	cp xbc, 0x1e5000e
@@ -41,7 +41,7 @@ Password_ClearAndSetSlot:
 	call ClearAllSongSlots
 	ld wa, iz
 	call SetCurrentSlotIndex
-	lda_d16 xwa, (0x8a0d)
+	lda xwa, (0x8a0d:16)
 	setm 7, (xwa)
 	setm 6, (xwa)
 	jrl Password_Return
@@ -56,7 +56,7 @@ Password_HandleDeleteEvent:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, Password_Delete_CheckLoadOnly
-	lda_d16 xwa, (0x8a0d)
+	lda xwa, (0x8a0d:16)
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
@@ -108,7 +108,7 @@ Password_HandleSaveEvent:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, Password_Save_CheckLoadOnly
-	lda_d16 xwa, (0x8a0d)
+	lda xwa, (0x8a0d:16)
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
@@ -219,7 +219,7 @@ SelectMode_SetBothMode:
 	jr SelectMode_Return
 
 SelectMode_SingleMode:
-	lda_d16 xbc, (0x8a0c)
+	lda xbc, (0x8a0c:16)
 	cpib_erp 0xfa, 0
 	jr z, SelectMode_CheckSaveOnlyMode
 	ld (xbc), 0x1
@@ -287,7 +287,7 @@ FileName_DrawItemLoop:
 	ld wa, (xsp + 6)
 	ld hl, wa
 	sll hl, 5
-	lda_d16 xde, (0x850c)
+	lda xde, (0x850c:16)
 	extz xhl
 	add xhl, xde
 	ld bc, (xsp + 6)
@@ -299,7 +299,7 @@ FileName_DrawItemLoop:
 	sll wa, 5
 	lds hl, 1
 	add hl, wa
-	lda_d16 xix, (0x850c)
+	lda xix, (0x850c:16)
 	extz xhl
 	add xhl, xix
 	inc 1, de
@@ -309,7 +309,7 @@ FileName_DrawItemLoop:
 	call FileIO_ReadHeader_ParseLoop
 	ld de, (xsp + 6)
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f72:16)
@@ -666,7 +666,7 @@ FileName_UpdateDisplay:
 	call ApPostEvent
 	ld de, (xsp + 4)
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f72:16)
@@ -674,7 +674,7 @@ FileName_UpdateDisplay:
 	call ApPostEvent
 	ld de, (0x7f7a:16)
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f72:16)

@@ -176,7 +176,7 @@ SeqStep_EventProcess:
 	ldmm16 0x28af, 0x273c
 	ldmm16 9830, 0x273e
 	call SeqPos_DecrementAndCheck
-	lda_d16 xbc, (0x2830)
+	lda xbc, (0x2830:16)
 	ld wa, (0x28af:16)
 	ld (xbc), wa
 	ldmw2 (xbc + 2), 0x2666
@@ -214,7 +214,7 @@ SeqStep_EventPosCheck:
 	and a, 0xff
 	extz wa
 	stda16 (0x2889), xwa
-	lda_d16 xwa, (0x2830)
+	lda xwa, (0x2830:16)
 	mriw4 0x90, 0x19, 0x87, 0x28
 	mrdw5 0x98, 0x02, 0x19, 0x85, 0x28
 

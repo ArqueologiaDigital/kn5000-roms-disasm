@@ -49,7 +49,7 @@ FCopy_HandleExecute:
 	ld	wa, (32458:16)
 	call	16290326
 	ld	xbc, xhl
-	lda_d16	xwa, (33905)
+	lda	xwa, (33905:16)
 	ld	de, (32458:16)
 	inc	1, de
 	pushw	6
@@ -91,7 +91,7 @@ FCopy_Scroll_Apply:
 	ld	wa, (32458:16)
 	call	16290326
 	ld	xbc, xhl
-	lda_d16	xwa, (33905)
+	lda	xwa, (33905:16)
 	ld	de, (32458:16)
 	inc	1, de
 	pushw	6
@@ -224,7 +224,7 @@ FileRenameFunc:
 	call	16290274
 	cps	hl, 0
 	jr	lt, 89
-	lda_d16	xiz, (34772)
+	lda	xiz, (34772:16)
 	ld	wa, hl
 	call	16290326
 	ld	xbc, xhl
@@ -232,7 +232,7 @@ FileRenameFunc:
 	call	16288975
 	lds	iy, 0
 	lda	xix, (15652728:24)
-	lda_d16	xwa, (34772)
+	lda	xwa, (34772:16)
 	ld	xhl, xwa
 	jr	17
 FRename_PadLoop_CheckChar:
@@ -323,7 +323,7 @@ FileRenameSmfFunc:
 	call	16291514
 	cps	hl, 0
 	jr	lt, 95
-	lda_d16	xiz, (34772)
+	lda	xiz, (34772:16)
 	ld	wa, hl
 	call	16291811
 	ld	xbc, xhl
@@ -331,7 +331,7 @@ FileRenameSmfFunc:
 	call	16288975
 	lds	iy, 0
 	lda	xix, (15652728:24)
-	lda_d16	xwa, (34772)
+	lda	xwa, (34772:16)
 	ld	xhl, xwa
 	jr	17
 FRenameSmf_PadLoop_CheckChar:
@@ -840,7 +840,7 @@ DiskNameFunc:
 	jrl	nz, 193
 	lds	wa, 0
 	calr	60599
-	lda_d16	xiz, (34544)
+	lda	xiz, (34544:16)
 	call	16290176
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -852,15 +852,15 @@ DiskNameFunc:
 DiskName_TextChange:
 	lds	wa, 0
 	calr	60563
-	lda_d16	xiz, (34544)
+	lda	xiz, (34544:16)
 	call	16290176
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
 	lds	iy, 0
-	lda_d16	xix, (34772)
+	lda	xix, (34772:16)
 	lda	xiz, (15652728:24)
-	lda_d16	xde, (34544)
+	lda	xde, (34544:16)
 	ld	xhl, xde
 	jr	22
 DiskName_PadLoop_CheckChar:
@@ -986,7 +986,7 @@ DiskInfo_RenderStrings:
 	ld	xwa, 34610
 	ld	xbc, 15337174
 	call	16289030
-	lda_d16	xwa, 34610
+	lda	xwa, (34610:16)
 	ld	(xsp+12), xwa
 	ld	xwa, (xsp+4)
 	lds	bc, 4
@@ -997,7 +997,7 @@ DiskInfo_RenderStrings:
 	ld	xwa, 34610
 	ld	xbc, 15337178
 	call	16289030
-	lda_d16	xwa, 34610
+	lda	xwa, (34610:16)
 	ld	(xsp+12), xwa
 	ld	xwa, (xsp+8)
 	lds	bc, 3
@@ -1030,14 +1030,14 @@ SongNameFunc:
 	jr	lt, 67
 	lds	wa, 0
 	calr	60075
-	lda_d16	xwa, (34674)
+	lda	xwa, (34674:16)
 	ld	(xsp+2), xwa
 	ld	wa, iz
 	call	16292978
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	call	16288975
-	lda_d16	xwa, (34674)
+	lda	xwa, (34674:16)
 	ld	(xwa+30), 0
 	lda	xbc, (xwa+29)
 	ld	xde, xbc
@@ -1113,7 +1113,7 @@ SaveFileNameFunc:
 	jr	z, 49
 	cp	xbc, 29360139
 	jrl	nz, 160
-	lda_d16	xiz, (34740)
+	lda	xiz, (34740:16)
 	call	16289455
 	ld	xbc, xhl
 	ld	xwa, xiz
@@ -1125,14 +1125,14 @@ SaveFileNameFunc:
 	ld	xde, 34740
 	jr	93
 SaveFileName_TextChange:
-	lda_d16	xiz, (34740)
+	lda	xiz, (34740:16)
 	call	16289455
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
 	lds	iy, 0
 	lda	xix, (15652728:24)
-	lda_d16	xde, (34740)
+	lda	xde, (34740:16)
 	ld	xhl, xde
 	jr	17
 SaveFileName_PadLoop_CheckChar:

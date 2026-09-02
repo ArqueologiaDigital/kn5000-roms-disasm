@@ -147,7 +147,7 @@ CompLoad_DrawItemLoop:
 	ld wa, iz
 	ld hl, wa
 	sll hl, 5
-	lda_d16 xde, (0x850c)
+	lda xde, (0x850c:16)
 	extz xhl
 	add xhl, xde
 	stb_erp C, 0xf8
@@ -170,7 +170,7 @@ CompLoad_DrawItem_Continue:
 	sll wa, 5
 	lds hl, 1
 	add hl, wa
-	lda_d16 xix, (0x850c)
+	lda xix, (0x850c:16)
 	extz xhl
 	add xhl, xix
 	inc 1, de
@@ -180,7 +180,7 @@ CompLoad_DrawItem_Continue:
 	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f7c:16)
@@ -292,7 +292,7 @@ CompLoad_UpdateDisplay:
 	call ApPostEvent
 	ld de, (xsp + 2)
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f7c:16)
@@ -300,7 +300,7 @@ CompLoad_UpdateDisplay:
 	call ApPostEvent
 	ld de, (0x7f80:16)
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f7c:16)
@@ -435,7 +435,7 @@ LoadFilter_HandleShow:
 LoadFilter_DrawLoop:
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, (0x7f86)
+	lda xbc, (0x7f86:16)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -443,7 +443,7 @@ LoadFilter_DrawLoop:
 	calr RenderFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, (0x7f86)
+	lda xbc, (0x7f86:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f82:16)
@@ -515,14 +515,14 @@ LoadFilter_UpdateDisplay:
 	extz bc
 	ld wa, bc
 	sla wa, 4
-	lda_d16 xde, (0x7f86)
+	lda xde, (0x7f86:16)
 	exts xwa
 	add xwa, xde
 	calr RenderFilterDisplay
 	ld xwa, (xsp + 2)
 	extz wa
 	sla wa, 4
-	lda_d16 xbc, (0x7f86)
+	lda xbc, (0x7f86:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x7f82:16)
 	ld xbc, 0x1c0000f
@@ -656,7 +656,7 @@ SaveFilter_HandleShow:
 SaveFilter_DrawLoop:
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, (0x800a)
+	lda xbc, (0x800a:16)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -664,7 +664,7 @@ SaveFilter_DrawLoop:
 	calr RenderSaveFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, (0x800a)
+	lda xbc, (0x800a:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
@@ -737,14 +737,14 @@ SaveFilter_UpdateDisplay:
 	extz bc
 	ld wa, bc
 	sla wa, 4
-	lda_d16 xde, (0x800a)
+	lda xde, (0x800a:16)
 	exts xwa
 	add xwa, xde
 	calr RenderSaveFilterDisplay
 	ld xwa, (xsp + 2)
 	extz wa
 	sla wa, 4
-	lda_d16 xbc, (0x800a)
+	lda xbc, (0x800a:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x8006:16)
 	ld xbc, 0x1c0000f
@@ -771,7 +771,7 @@ SaveFilter_SelectAll_Unlock:
 SaveFilter_SelectAll_Update:
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, (0x800a)
+	lda xbc, (0x800a:16)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -779,7 +779,7 @@ SaveFilter_SelectAll_Update:
 	calr RenderSaveFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, (0x800a)
+	lda xbc, (0x800a:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
@@ -803,7 +803,7 @@ SaveFilter_DeselectAll_Loop:
 	call FileIO_BuildRecordPath_Done
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, (0x800a)
+	lda xbc, (0x800a:16)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -811,7 +811,7 @@ SaveFilter_DeselectAll_Loop:
 	calr RenderSaveFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, (0x800a)
+	lda xbc, (0x800a:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
@@ -943,7 +943,7 @@ SaveFilter_ResetAll_Loop:
 	call FileIO_BuildRecordPath_Return
 	ld wa, (xsp)
 	sll wa, 4
-	lda_d16 xbc, (0x800a)
+	lda xbc, (0x800a:16)
 	extz xwa
 	add xwa, xbc
 	ld bc, (xsp)
@@ -951,7 +951,7 @@ SaveFilter_ResetAll_Loop:
 	calr RenderSaveFilterDisplay
 	ld de, (xsp)
 	sll de, 4
-	lda_d16 xbc, (0x800a)
+	lda xbc, (0x800a:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)

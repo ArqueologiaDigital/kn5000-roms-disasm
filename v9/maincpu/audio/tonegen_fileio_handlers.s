@@ -91,7 +91,7 @@ ToneGen_ApplyMaskLoop:
 ToneGen_DSPCfg_Initialize:
 	calr ToneGen_DSPCfg_ResetAll
 	jrl ToneGen_DSPCfg_ResetAllChannels
-	lda_d16 xwa, (0xf480)
+	lda xwa, (0xf480:16)
 	jrl DSPCfg_InitAllEntries
 
 ToneGen_InitAllChannelEntries_Skip:
@@ -221,27 +221,27 @@ DSPCfg_InitEntryLoop:
 	inc 1, iz
 	cp iz, 0x2e
 	jr c, DSPCfg_InitEntryLoop
-	lda_d16 xbc, (0xfc74)
+	lda xbc, (0xfc74:16)
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 0
 	call DSPCfg_WriteAllSlots_Combined
-	lda_d16 xbc, (0xfc8e)
+	lda xbc, (0xfc8e:16)
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 1
 	call DSPCfg_WriteAllSlots_Combined
-	lda_d16 xbc, (0xfcc2)
+	lda xbc, (0xfcc2:16)
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 2
 	call DSPCfg_WriteAllSlots_Combined
-	lda_d16 xbc, (0xfcdc)
+	lda xbc, (0xfcdc:16)
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 3
 	call DSPCfg_WriteAllSlots_Combined
-	lda_d16 xbc, (0xfca8)
+	lda xbc, (0xfca8:16)
 	sub xbc, 0xf9a0
 	add xbc, (xsp + 2)
 	lds wa, 4
@@ -509,7 +509,7 @@ DSPCfg_InitDispatchData:
 	nop
 	lds	hl, 2
 	ret
-	lda_d16	xwa, (0xf480)
+	lda	xwa, (0xf480:16)
 	jrl	-718
 
 DSPCfg_ResetAuxEntries:
@@ -551,7 +551,7 @@ DSPCfg_SyncBitmapData:
 	push	xiz
 	ld	(xsp+18), xbc
 	ld	xiz, xwa
-	lda_d16	xwa, (0xbd3c)
+	lda	xwa, (0xbd3c:16)
 	ld	(xsp+14), xwa
 	ld	(xsp+10), xwa
 	ld	bc, (0x90de:16)
@@ -656,21 +656,21 @@ SndParam_SyncDisplayBitmap:
 	pushw 0xc8e4
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	lda_d16 xbc, (0xf9a0)
-	lda_d16 xwa, (0xf9b6)
+	lda xbc, (0xf9a0:16)
+	lda xwa, (0xf9b6:16)
 	sub xwa, xbc
 	lda xde, (0x03c8e4:24)
 	add xwa, xde
 	xormi8 (xwa), 0x1
-	lda_d16 xwa, (0xf9d0)
+	lda xwa, (0xf9d0:16)
 	sub xwa, xbc
 	add xwa, xde
 	xormi8 (xwa), 0x1
-	lda_d16 xwa, (0xf9ea)
+	lda xwa, (0xf9ea:16)
 	sub xwa, xbc
 	add xwa, xde
 	xormi8 (xwa), 0x1
-	lda_d16 xwa, (0xfd97)
+	lda xwa, (0xfd97:16)
 	sub xwa, xbc
 	add xwa, xde
 	ormi8 (xwa), 0x7f
@@ -699,7 +699,7 @@ ToneGen_DiffScanAndUpdate:
 	lda xsp, (xsp - 14)
 	pushw iz
 	ld bc, (0x90de:16)
-	lda_d16 xwa, (0xbd3c)
+	lda xwa, (0xbd3c:16)
 	ld (xsp + 12), xwa
 	ld (xsp + 8), xwa
 	lds iz, 0
@@ -723,7 +723,7 @@ ToneGen_DiffScanOuter:
 
 ToneGen_DiffScanInner:
 	inc 1, iz
-	lda_d16 xde, (0xfd60)
+	lda xde, (0xfd60:16)
 	ld xwa, xde
 	sub xwa, 0xf9a0
 	ld hl, iz
@@ -771,7 +771,7 @@ ToneGen_DiffRecordChange:
 	extz xwa
 	ld xix, xwa
 	add xix, (xsp + 8)
-	lda_d16 xhl, (0xfd60)
+	lda xhl, (0xfd60:16)
 	ld de, iz
 	extz xde
 	add xde, xhl
@@ -801,8 +801,8 @@ ToneGen_DiffOuterNext:
 	inc 1, iz
 
 ToneGen_DiffScanCheckEnd:
-	lda_d16 xde, (0xfd60)
-	lda_d16 xwa, (0xffbe)
+	lda xde, (0xfd60:16)
+	lda xwa, (0xffbe:16)
 	sub xwa, xde
 	ld hl, iz
 	extz xhl
@@ -826,8 +826,8 @@ ToneGen_FileIO_SaveAndSync:
 	ldmi16 (xwa), 0xfd50
 	ldmi16 (xwa + 1), 0xfd52
 	ldmi16 (xwa + 2), 0xfd54
-	lda_d16 xwa, (0xfda2)
-	lda_d16 xbc, (0xf9a0)
+	lda xwa, (0xfda2:16)
+	lda xbc, (0xf9a0:16)
 	sub xwa, xbc
 	pushw wa
 	push xiz
@@ -1243,7 +1243,7 @@ Encoder_SyncLoop:
 	ldb_d8 a, (0x8e8e)
 	extz wa
 	sll wa, 2
-	lda_d16 xbc, (0xc039)
+	lda xbc, (0xc039:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xff
@@ -1274,10 +1274,10 @@ Encoder_PrepareCallback:
 
 Encoder_ResolveCallbackAddr:
 	ld_sril3 XIZ, 0x07, 0xe0, 0xe4
-	lda_d16 xbc, (0x8e7c)
+	lda xbc, (0x8e7c:16)
 	ld (xbc + 4), 0xaa
 	ldmi16 (xbc + 5), 0x8e90
-	lda_d16 xde, (0x8e78)
+	lda xde, (0x8e78:16)
 	ld a, (xde + 1)
 	ld (xbc + 6), a
 	ld a, (xde + 2)
@@ -1285,7 +1285,7 @@ Encoder_ResolveCallbackAddr:
 	jr FileIO_MainLoop
 
 FileIO_ProcessMaskAndShift:
-	lda_d16 xhl, (0x8e78)
+	lda xhl, (0x8e78:16)
 	ld e, (xiz + 3)
 	ld d, e
 	and d, (xhl + 1)

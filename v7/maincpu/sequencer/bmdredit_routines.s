@@ -623,7 +623,7 @@ BmDrEdit_AllocateNote_Search:
 	lds iy, 0
 	cps ix, 0
 	ret ule
-	lda_d16 xde, (0x2746)
+	lda xde, (0x2746:16)
 
 BmDrEdit_AllocateNote_Loop:
 	ld hl, iy
@@ -1093,7 +1093,7 @@ BmDrEdit_CountNotesLoop_Retry:
 
 BmDrEdit_CheckChannelActive:
 	ldb e, 0x0
-	lda_d16 xbc, (0xf1a0)
+	lda xbc, (0xf1a0:16)
 
 BmDrEdit_CheckChannelActive_Loop:
 	ld a, e
@@ -1126,7 +1126,7 @@ BmDrEdit_CheckChannelActive_None:
 BmDrEdit_SelectActiveChannel:
 	pushw_erp 0xfa
 	ldib_erp 0xfb, 0
-	lda_d16 xbc, (0xf1a0)
+	lda xbc, (0xf1a0:16)
 
 BmDrEdit_SelectChannel_Loop:
 	stb_erp A, 0xfb
@@ -1226,7 +1226,7 @@ BmDrEdit_SaveSongPosition:
 	dec 1, a
 	extz wa
 	sla wa, 2
-	lda_d16 xbc, (9184)
+	lda xbc, (9184:16)
 	exts xwa
 	add xwa, xbc
 	ld (xwa), hl
@@ -1417,7 +1417,7 @@ BmDrEdit_FindNote_SkipNonNote:
 	jr BmDrEdit_FindNote_Loop
 
 BmDrEdit_ClearAllSlots:
-	lda_d16 xbc, (0x2746)
+	lda xbc, (0x2746:16)
 	ld xwa, xbc
 	lda xbc, (xbc + 24)
 
@@ -1443,7 +1443,7 @@ BmDrEdit_FindNote_SetupLoop:
 	lds iz, 0
 	cps iy, 0
 	jr ule, BmDrEdit_FindNote_NotFound
-	lda_d16 xix, (0x2746)
+	lda xix, (0x2746:16)
 
 BmDrEdit_FindNote_SlotLoop:
 	ld bc, iz
@@ -1480,7 +1480,7 @@ BmDrEdit_FindNote_Return:
 	ret
 
 BmDrEdit_ClearAllSlotsAlt:
-	lda_d16 xbc, (0x2747)
+	lda xbc, (0x2747:16)
 	ld xwa, xbc
 	lda xbc, (xbc + 24)
 
@@ -1493,7 +1493,7 @@ BmDrEdit_ClearSlotsAlt_Loop:
 
 BmDrEdit_CheckSlotsAvailable:
 	lds de, 0
-	lda_d16 xbc, (0x2746)
+	lda xbc, (0x2746:16)
 
 BmDrEdit_CheckSlots_Loop:
 	ld wa, de
@@ -1972,7 +1972,7 @@ BmDrEdit_InsertNotesFromSlots_Loop:
 	mul de, 0x3
 	lds wa, 1
 	add wa, de
-	lda_d16 xbc, (0x2746)
+	lda xbc, (0x2746:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -3471,7 +3471,7 @@ BmDrEdit_ScanChannel_UseChannel:
 	lda xde, (xsp + 4)
 	ld bc, hl
 	calr BmDrEdit_ValidateAndProcessVoice
-	lda_d16 xwa, (0x27a4)
+	lda xwa, (0x27a4:16)
 	cpdi8 (0x287a), 0
 	jr z, BmDrEdit_ScanChannel_StoreAndContinue
 	ld xbc, xwa
@@ -3546,7 +3546,7 @@ BmDrEdit_BuildVoiceList:
 	ld h, c
 	lds ix, 0
 	ldb l, 0x0
-	lda_d16 xde, (0x27a4)
+	lda xde, (0x27a4:16)
 	lds wa, 0
 	jr BmDrEdit_BuildVoice_SearchLoop
 
@@ -3578,7 +3578,7 @@ BmDrEdit_FindNextPageEntry:
 	subda16 xhl, 0x27b2
 	inc 1, l
 	ldb e, 0x0
-	lda_d16 xbc, (0x27a4)
+	lda xbc, (0x27a4:16)
 
 BmDrEdit_FindNextPage_ScanLoop:
 	ld a, e
@@ -3719,7 +3719,7 @@ BmDrEdit_CheckAndAdvancePage:
 	ldb_d8 a, (0x27a2)
 	dec 1, a
 	extz wa
-	lda_d16 xbc, (0x27a4)
+	lda xbc, (0x27a4:16)
 	extz xwa
 	add xwa, xbc
 	cp (xwa), 0x0
@@ -3951,7 +3951,7 @@ BmDrEdit_CalcBeatMeasure:
 	jr z, BmDrEdit_ComputeMeasureAndBeat
 	lds de, 1
 	stdi8 (9688), 1
-	lda_d16 xbc, (0x27a4)
+	lda xbc, (0x27a4:16)
 
 BmDrEdit_CalcBeatMeasure_ScanLoop:
 	ld wa, de
@@ -3992,7 +3992,7 @@ BmDrEdit_CalcSongPosition:
 	jr z, BmDrEdit_CalcSongPos_Store
 	lds de, 1
 	stdi8 (9688), 0
-	lda_d16 xbc, (0x27a4)
+	lda xbc, (0x27a4:16)
 
 BmDrEdit_CalcSongPos_ScanLoop:
 	ld wa, de
@@ -4023,7 +4023,7 @@ BmDrEdit_CalcEventPosition:
 	subda16 xde, 0x27b2
 	inc 1, de
 	lds hl, 0
-	lda_d16 xbc, (0x27a4)
+	lda xbc, (0x27a4:16)
 	ldb_d8 a, (0x27a2)
 	extz wa
 	jr BmDrEdit_CalcEventPos_CompareLoop

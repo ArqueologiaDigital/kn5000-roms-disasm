@@ -156,7 +156,7 @@ FDC_WaitReady:
 	jr	nz, -11
 	ldw	wa, 8
 	calr	65246
-	lda_d16	xiz, (0x8a60)
+	lda	xiz, (0x8a60:16)
 	inc	1, xiz
 	calr	1134
 	calr	65211
@@ -727,7 +727,7 @@ FDC_ResultPhase_Read:
 	cp qiz, 0
 	jr nz, 25
 	calr	63878
-	lda_d16	xwa, (0x8a60)
+	lda	xwa, (0x8a60:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -807,7 +807,7 @@ FDC_ResultPhase_Read:
 	ret
 
 FDC_Exception_Status_Decoder:
-	lda_d16 xde, (0x8a60)
+	lda xde, (0x8a60:16)
 	ld c, (xde + 1)
 	ld a, c
 	and a, 0xc0
@@ -1477,12 +1477,12 @@ FDC_CMD_EXEC:
 	sub	(xhl-34), a
 	ld	wa, (0x8a1e:16)
 	adddm16	(35356), xwa
-	lda_d16	xwa, (0x8a4a)
+	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
 	cps	wa, 0
 	jr	z, 18
-	lda_d16	xwa, (0x8a48)
+	lda	xwa, (0x8a48:16)
 	incw	1, (xwa)
 	ld	wa, (xwa)
 	.byte 0xd1
@@ -1541,7 +1541,7 @@ FDC_CMD_EXEC:
 	nop
 	nop
 	jr	z, 59
-	lda_d16	xbc, (0x8a4c)
+	lda	xbc, (0x8a4c:16)
 	ld	wa, (0x8a1c:16)
 	extz	xwa
 	.byte 0xa1, 0x80
@@ -1558,7 +1558,7 @@ FDC_CMD_EXEC:
 	push	xsp
 	nop
 	jr	nz, 12
-	lda_d16	xwa, (0x8a2b)
+	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
 	stb_d8	(0x8a36), a
@@ -1620,12 +1620,12 @@ FDC_CMD_EXEC:
 	sub	(xhl-34), a
 	ld	wa, (0x8a1e:16)
 	adddm16	(35356), xwa
-	lda_d16	xwa, (0x8a4a)
+	lda	xwa, (0x8a4a:16)
 	decm	1, (xwa)
 	ld	wa, (xwa)
 	cps	wa, 0
 	jr	z, 18
-	lda_d16	xwa, (0x8a48)
+	lda	xwa, (0x8a48:16)
 	incw	1, (xwa)
 	ld	wa, (xwa)
 	.byte 0xd1
@@ -1687,7 +1687,7 @@ FDC_CMD_EXEC:
 	nop
 	nop
 	jr	z, 59
-	lda_d16	xbc, (0x8a4c)
+	lda	xbc, (0x8a4c:16)
 	ld	wa, (0x8a1c:16)
 	extz	xwa
 	.byte 0xa1, 0x80
@@ -1704,7 +1704,7 @@ FDC_CMD_EXEC:
 	push	xsp
 	nop
 	jr	nz, 12
-	lda_d16	xwa, (0x8a2b)
+	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
 	stb_d8	(0x8a36), a
@@ -1786,7 +1786,7 @@ FDC_MODE_CONFIG:
 	stb_d8	(0x8a2c), a
 	cpdi8	(0x8a2c), 0
 	jr	nz, 16
-	lda_d16	xwa, (0x8a2b)
+	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
 	stb_d8	(0x8a36), a
@@ -1823,7 +1823,7 @@ FDC_MC_EXIT:
 	jrl	nz, -3722
 	calr	22
 	stdi8	(0x8a28), 77
-	lda_d16	xwa, (0x8a70)
+	lda	xwa, (0x8a70:16)
 	stda32	0x8a4c, xwa
 	calr	62949
 	calr	63057
@@ -1839,7 +1839,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1849,7 +1849,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1859,7 +1859,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1869,7 +1869,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1879,7 +1879,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1889,7 +1889,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1903,7 +1903,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1917,7 +1917,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), l
@@ -1925,7 +1925,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1942,7 +1942,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1952,7 +1952,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1962,7 +1962,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
@@ -1972,7 +1972,7 @@ FDC_MC_EXIT:
 	ld	a, e
 	inc	1, e
 	extz	wa
-	lda_d16	xbc, (0x8a70)
+	lda	xbc, (0x8a70:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -2357,7 +2357,7 @@ INT4_SendSpecifyCmd:
 	calr FDC_Write_Data
 
 INT4_StoreResultBase:
-	lda_d16 xiz, (0x8a60)
+	lda xiz, (0x8a60:16)
 	inc 1, xiz
 
 INT4_ReadResultLoop:
@@ -2421,7 +2421,7 @@ FDC_Reset_BuildParams:
 	stdi16 (0x8b2e), 0
 	lds32 xwa, 0
 	stda32 0x8b30, xwa
-	lda_d16 xwa, (0x8b24)
+	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry
 	stdi16 (0x8b24), 3
@@ -2430,9 +2430,9 @@ FDC_Reset_BuildParams:
 	stdi16 (0x8b2a), 0
 	stdi16 (0x8b2c), 1
 	stdi16 (0x8b2e), 1
-	lda_d16 xwa, (0x8b34)
+	lda xwa, (0x8b34:16)
 	stda32 0x8b30, xwa
-	lda_d16 xwa, (0x8b24)
+	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry
 	stdi16 (0x8b24), 3
@@ -2441,9 +2441,9 @@ FDC_Reset_BuildParams:
 	stdi16 (0x8b2a), 78
 	stdi16 (0x8b2c), 1
 	stdi16 (0x8b2e), 1
-	lda_d16 xwa, (0x8b34)
+	lda xwa, (0x8b34:16)
 	stda32 0x8b30, xwa
-	lda_d16 xwa, (0x8b24)
+	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry
 	stdi16 (0x8b24), 3
@@ -2452,9 +2452,9 @@ FDC_Reset_BuildParams:
 	stdi16 (0x8b2a), 10
 	stdi16 (0x8b2c), 1
 	stdi16 (0x8b2e), 1
-	lda_d16 xwa, (0x8b34)
+	lda xwa, (0x8b34:16)
 	stda32 0x8b30, xwa
-	lda_d16 xwa, (0x8b24)
+	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry
 	stdi16 (0x8b24), 3
@@ -2463,9 +2463,9 @@ FDC_Reset_BuildParams:
 	stdi16 (0x8b2a), 40
 	stdi16 (0x8b2c), 1
 	stdi16 (0x8b2e), 1
-	lda_d16 xwa, (0x8b34)
+	lda xwa, (0x8b34:16)
 	stda32 0x8b30, xwa
-	lda_d16 xwa, (0x8b24)
+	lda xwa, (0x8b24:16)
 	push xwa
 	calr FDC_CommandEntry
 	lda xsp, (xsp + 20)

@@ -59,7 +59,7 @@ SeMenu_LoadMasterPtr:
 SeMenu_FlushDisplayObj:
 	ld xde, xwa
 	ld xbc, xde
-	lda_d16 xhl, (1689)
+	lda xhl, (1689:16)
 	lda xix, (xde + 9)
 
 SeMenu_FlushDisplayObj_CopyLoop:
@@ -739,15 +739,15 @@ SeMenu_SetDisplayValue_Data:
 	ld	c, (xwa+4)
 	.byte 0x87, 0x3f, 0x01
 	jr	nz, 8
-	lda_d16	xwa, 63952
+	lda	xwa, (63952:16)
 	ld	(xwa), e
 	jr	19
 	.byte 0x87, 0x3f, 0x02
 	jr	nz, 8
-	lda_d16	xwa, 63978
+	lda	xwa, (63978:16)
 	ld	(xwa), e
 	jr	6
-	lda_d16	xwa, 63926
+	lda	xwa, (63926:16)
 	ld	(xwa), e
 	ld	(xwa+1), c
 	extz	bc
@@ -775,18 +775,18 @@ SeMenu_InitTrackInfo:
 	ld C,(XWA+0x04)
 	cp (XSP),0x01
 	jr nz, SeMenu_InitTrackInfo_Part1
-	lda_d16 xwa, (0xf9d0)
+	lda xwa, (0xf9d0:16)
 	ld (XWA),E
 	jr t, SeMenu_InitTrackInfo_Store
 SeMenu_InitTrackInfo_Part1:
 	cp (xsp), 0x2
 	jr nz, SeMenu_InitTrackInfo_Part2
-	lda_d16 xwa, (0xf9ea)
+	lda xwa, (0xf9ea:16)
 	ld (xwa), e
 	jr SeMenu_InitTrackInfo_Store
 
 SeMenu_InitTrackInfo_Part2:
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 	ld (xwa), e
 
 SeMenu_InitTrackInfo_Store:
@@ -1164,7 +1164,7 @@ SeMenu_IsPartEnabled_CheckMask:
 
 SeMenu_StorePartParam:
 	extz wa
-	lda_d16 xde, (1632)
+	lda xde, (1632:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), c
@@ -1172,7 +1172,7 @@ SeMenu_StorePartParam:
 
 SeMenu_LoadPartParam:
 	extz wa
-	lda_d16 xde, (1632)
+	lda xde, (1632:16)
 	extz xwa
 	add xwa, xde
 	ld a, (xwa)
@@ -1540,18 +1540,18 @@ SeMenu_TransferPartValues_EndData:
 	ret
 	cps	a, 0
 	jr	nz, 12
-	lda_d16	xwa, (1677)
+	lda	xwa, (1677:16)
 	cps	c, 0
 	jr	z, 24
 	decm8	1, (xwa)
 	jr	22
 	cps	a, 1
 	jr	nz, 6
-	lda_d16	xwa, (1678)
+	lda	xwa, (1678:16)
 	jr	-18
 	cps	a, 2
 	ret	nz
-	lda_d16	xwa, (1679)
+	lda	xwa, (1679:16)
 	jr	-28
 	incm8	1, (xwa)
 	.byte 0x80
@@ -4958,13 +4958,13 @@ SeMenu_ApplyPartEdit_Data2:
 	dec	1, a
 	extz	wa
 	add	wa, wa
-	lda_d16	xde, 1698
+	lda	xde, (1698:16)
 	st_rrw	bc, xde, wa
 	ret
 	dec	1, a
 	extz	wa
 	add	wa, wa
-	lda_d16	xde, 1698
+	lda	xde, (1698:16)
 	ld_rrw	wa, xde, wa
 	ld	(xbc), wa
 	ret
@@ -5145,7 +5145,7 @@ SeMenu_ApplyFilter_SetupDisplay:
 	dec 1, a
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (1698)
+	lda xbc, (1698:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	lda xhl, (xsp + 2)
 	ld c, (xhl + 15)
@@ -5199,7 +5199,7 @@ SeMenu_ApplySynthParam_Alt:
 	dec 1, a
 	extz wa
 	add wa, wa
-	lda_d16 xbc, (1698)
+	lda xbc, (1698:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	lda xhl, (xsp)
 	ld c, (xhl + 15)
@@ -5517,9 +5517,9 @@ SeMenu_PatchBank_Data:
 	calr	51762
 	ld	a, (xsp+6)
 	extz	wa
-	lda_d16	xix, (0xf9b6)
-	lda_d16	xhl, (0xf9d0)
-	lda_d16	xde, (0xf9ea)
+	lda	xix, (0xf9b6:16)
+	lda	xhl, (0xf9d0:16)
+	lda	xde, (0xf9ea:16)
 	ld	bc, wa
 	extz	xbc
 	add	xbc, xde
@@ -5685,7 +5685,7 @@ SeMenu_OrPartConfig_Data:
 SeMenu_StoreParamByte:
 	dec 1, a
 	extz wa
-	lda_d16 xde, (1722)
+	lda xde, (1722:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), c
@@ -5694,7 +5694,7 @@ SeMenu_StoreParamByte:
 SeMenu_LoadParamByte:
 	dec 1, a
 	extz wa
-	lda_d16 xde, (1722)
+	lda xde, (1722:16)
 	extz xwa
 	add xwa, xde
 	ld a, (xwa)
@@ -5731,7 +5731,7 @@ SeMenu_DisplayState_Data:
 
 SeMenu_StoreEffectParam:
 	extz wa
-	lda_d16 xde, (1726)
+	lda xde, (1726:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), c
@@ -5739,7 +5739,7 @@ SeMenu_StoreEffectParam:
 
 SeMenu_StoreEffectParam_Data:
 	extz	wa
-	lda_d16	xde, (1726)
+	lda	xde, (1726:16)
 	extz	xwa
 	add	xwa, xde
 	ld	a, (xwa)
@@ -5748,7 +5748,7 @@ SeMenu_StoreEffectParam_Data:
 
 SeMenu_StoreEffectCoeff:
 	extz wa
-	lda_d16 xde, (1729)
+	lda xde, (1729:16)
 	extz xwa
 	add xwa, xde
 	ld (xwa), c
@@ -5756,7 +5756,7 @@ SeMenu_StoreEffectCoeff:
 
 SeMenu_StoreEffectCoeff_Data:
 	extz	wa
-	lda_d16	xde, (1729)
+	lda	xde, (1729:16)
 	extz	xwa
 	add	xwa, xde
 	ld	a, (xwa)
@@ -5885,7 +5885,7 @@ SeMenu_StoreEffectCoeff_Data:
 	ret
 
 SeMenu_RefreshPartDisplay:
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 	ld c, (xwa)
 	ld a, (xwa + 1)
 	extz wa
@@ -5894,7 +5894,7 @@ SeMenu_RefreshPartDisplay:
 	pushw bc
 	pushw 0x0
 	call SeMenu_DisplayPartValue
-	lda_d16 xwa, (0xf9d0)
+	lda xwa, (0xf9d0:16)
 	ld c, (xwa)
 	ld a, (xwa + 1)
 	extz wa
@@ -5903,7 +5903,7 @@ SeMenu_RefreshPartDisplay:
 	pushw bc
 	pushw 0x1
 	call SeMenu_DisplayPartValue
-	lda_d16 xwa, (0xf9ea)
+	lda xwa, (0xf9ea:16)
 	ld c, (xwa)
 	ld a, (xwa + 1)
 	extz wa

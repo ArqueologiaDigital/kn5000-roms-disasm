@@ -2009,7 +2009,7 @@ NameGetFuncCall_Dispatch:
 	pushw	0
 	pushw	6888
 	call	16712982
-	lda_d16	xwa, (6888)
+	lda	xwa, (6888:16)
 	ld	(xwa+16), 0
 	push	xwa
 	ldb_da	a, (65507)
@@ -2057,7 +2057,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7284
 	call	16712341
 	lda	xsp, (xsp+14)
-	lda_d16	xwa, (7284)
+	lda	xwa, (7284:16)
 	ld	(xwa+16), 0
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 4294967295
@@ -2073,7 +2073,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7304
 	call	16712982
 	lda	xsp, (xsp+10)
-	lda_d16	xwa, (7304)
+	lda	xwa, (7304:16)
 	ld	(xwa+20), 0
 	ldw	de, 19
 	.byte 0xf3	; v10 does not spell this byte either
@@ -2115,7 +2115,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7326
 	call	16712982
 	lda	xsp, (xsp+10)
-	lda_d16	xwa, (7326)
+	lda	xwa, (7326:16)
 	ld	(xwa+12), 0
 	ldw	de, 11
 	.byte 0xf3	; v10 does not spell this byte either
@@ -2156,7 +2156,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7340
 	call	Free_Compare2
 	inc	8, xsp
-	lda_d16	xwa, (7340)
+	lda	xwa, (7340:16)
 	ld	(xwa+20), 0
 	ldw	de, 19
 	.byte 0xf3	; v10 does not spell this byte either
@@ -2277,7 +2277,7 @@ CDlikeSwTtl_ShowSongTitle:
 	pushw 7198
 	call	16712982
 	lda	xsp, (xsp+10)
-	lda_d16	xbc, 7198
+	lda	xbc, (7198:16)
 	ld	(xbc+12), 0
 	lds	wa, 1
 	call	16693375

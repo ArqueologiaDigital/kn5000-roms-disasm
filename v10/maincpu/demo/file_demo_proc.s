@@ -518,8 +518,8 @@ FDemo_FileOpen_Exit:
 DemoMode_Main_Operation:
 	resda 0, 0x28b1
 	call Voice_InitializeAll
-	lda_d16 xbc, (0xf9a0)
-	lda_d16 xwa, (0xffbe)
+	lda xbc, (0xf9a0:16)
+	lda xwa, (0xffbe:16)
 	sub xwa, xbc
 	inc 2, xwa
 	pushw wa
@@ -617,8 +617,8 @@ Demo_SelectEntry_PreSaveCheck:
 	cpdi8 (0x8d34), 19
 	jr nz, Demo_SelectEntry_CheckVoiceKeys
 	calr Voice_SavePreset
-	lda_d16 xbc, (0xf9a0)
-	lda_d16 xwa, (0xffbe)
+	lda xbc, (0xf9a0:16)
+	lda xwa, (0xffbe:16)
 	sub xwa, xbc
 	inc 2, xwa
 	pushw wa
@@ -902,7 +902,7 @@ Demo_ResetCountdownTimer:
 	ret
 
 Timer7_DisableInterrupt:
-	lda_d16 xbc, (0xfd98)
+	lda xbc, (0xfd98:16)
 	ld e, (xbc)
 	res 7, e
 	ld (xbc), e
@@ -968,7 +968,7 @@ Banner_Loop_Check:
 Banner_Loop_CheckEntry:
 	stb_erp A, 0xfb
 	extz wa
-	lda_d16 xbc, (0xf1a0)
+	lda xbc, (0xf1a0:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -1012,7 +1012,7 @@ Demo_PreSetup:
 
 Demo_ScanActivePartChannels:
 	ldb l, 0x0
-	lda_d16 xix, (0xf1a0)
+	lda xix, (0xf1a0:16)
 
 Demo_ScanPartLoop:
 	ld a, l
@@ -1030,7 +1030,7 @@ Demo_ScanPartLoop:
 	andda16 xbc, 0xf19e
 	jr z, Demo_ScanPartSkipToEnd
 	muls wa, 0x3
-	lda_d16 xbc, (0xf250)
+	lda xbc, (0xf250:16)
 	bit_dri 7, 0x07, 0xe4, 0xe0
 	jr z, Demo_ScanPartSkipToEnd
 	ld a, l
@@ -1734,8 +1734,8 @@ LoadRegion0_OpenSuccess:
 	cps hl, 0
 	jr z, LoadRegion0_AltPath			; mode not available, alt path
 	call PreLswLoad				; primary display setup
-	lda_d16	xwa, (0xf980)
-	lda_d16	xbc, (0xffc0)
+	lda	xwa, (0xf980:16)
+	lda	xbc, (0xffc0:16)
 	ld xde, xwa				; XDE = base (0xf980)
 	sub xbc, xde				; XBC = size (0xffc0-0xf980)
 	call FileIO_ReadBlock				; configure memory range
@@ -2411,8 +2411,8 @@ FileIO_SaveRegion0_VRAM:
 	lda xsp, (xsp - 22)
 	push xiz
 	ld (xsp + 22), xwa			; save arg
-	lda_d16	xbc, (0xffc0)
-	lda_d16	xwa, (0xf980)
+	lda	xbc, (0xffc0:16)
+	lda	xwa, (0xf980:16)
 	ld (xsp + 4), xbc			; save end address
 	sub (xsp + 4), xwa			; size = end - start
 	lda xbc, (0x1e7800:24)
@@ -8895,7 +8895,7 @@ NumToAscii_ClampMin:
 	jr ule, NumToAscii_StartDigits
 
 NumToAscii_PadLeading:
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 
 NumToAscii_PadLoop:
 	ld hl, ix
@@ -8916,7 +8916,7 @@ NumToAscii_StartDigits:
 	div iy, 0x2710
 	ld iz, ix
 	inc 1, ix
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 	extz xiz
 	add xiz, xde
 	stb_erp E, 0xf4
@@ -8931,7 +8931,7 @@ NumToAscii_NoTenThousands:
 	jr c, NumToAscii_ThousandsDigit
 	ld hl, ix
 	inc 1, ix
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 	extz xhl
 	add xhl, xde
 	ld (xhl), 0x20
@@ -8945,7 +8945,7 @@ NumToAscii_ThousandsDigit:
 	div iy, 0x3e8
 	ld iz, ix
 	inc 1, ix
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 	extz xiz
 	add xiz, xde
 	stb_erp E, 0xf4
@@ -8960,7 +8960,7 @@ NumToAscii_NoThousands:
 	jr z, NumToAscii_PadThousands
 	ld iy, ix
 	inc 1, ix
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 	extz xiy
 	add xiy, xde
 	ld (xiy), 0x30
@@ -8971,7 +8971,7 @@ NumToAscii_PadThousands:
 	jr c, NumToAscii_HundredsDigit
 	ld hl, ix
 	inc 1, ix
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 	extz xhl
 	add xhl, xde
 	ld (xhl), 0x20
@@ -8985,7 +8985,7 @@ NumToAscii_HundredsDigit:
 	div iy, 0x64
 	ld iz, ix
 	inc 1, ix
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 	extz xiz
 	add xiz, xde
 	stb_erp E, 0xf4
@@ -9000,7 +9000,7 @@ NumToAscii_NoHundreds:
 	jr z, NumToAscii_PadHundreds
 	ld iy, ix
 	inc 1, ix
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 	extz xiy
 	add xiy, xde
 	ld (xiy), 0x30
@@ -9011,7 +9011,7 @@ NumToAscii_PadHundreds:
 	jr c, NumToAscii_TensDigit
 	ld hl, ix
 	inc 1, ix
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 	extz xhl
 	add xhl, xde
 	ld (xhl), 0x20
@@ -9025,7 +9025,7 @@ NumToAscii_TensDigit:
 	div iy, 0xa
 	ld de, ix
 	inc 1, ix
-	lda_d16 xbc, (0x7f4a)
+	lda xbc, (0x7f4a:16)
 	extz xde
 	add xde, xbc
 	stb_erp C, 0xf4
@@ -9036,7 +9036,7 @@ NumToAscii_TensDigit:
 	jr NumToAscii_OnesDigitAndFinish
 
 NumToAscii_NoTens:
-	lda_d16 xde, (0x7f4a)
+	lda xde, (0x7f4a:16)
 	cp ix, hl
 	jr z, NumToAscii_PadTens
 	ld bc, ix
@@ -9058,7 +9058,7 @@ NumToAscii_PadTens:
 NumToAscii_OnesDigitAndFinish:
 	ld bc, ix
 	inc 1, ix
-	lda_d16 xhl, (0x7f4a)
+	lda xhl, (0x7f4a:16)
 	extz xbc
 	add xbc, xhl
 	add a, 0x30

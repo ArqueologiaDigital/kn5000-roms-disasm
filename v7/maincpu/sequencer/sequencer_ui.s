@@ -2228,7 +2228,7 @@ MeasureBoxFunc_DrawMeasure:
 	.byte 0x02, 0xff, 0xbf, 0x0a, 0x37, 0xee, 0x8b, 0x68
 	.byte 0x04
 MeasureBoxFunc_LoadAddr:
-	lda_d16 xhl, (9832)
+	lda xhl, (9832:16)
 
 MeasureBoxFunc_Epilogue:
 	pop xiz
@@ -3025,7 +3025,7 @@ IvNamingExit_ScreenData:
 	ret
 TrAsGrid_LookupByteTable:
 	extz wa
-	lda_d16 xbc, (0xf1a0)
+	lda xbc, (0xf1a0:16)
 	extz xwa
 	add xwa, xbc
 	ld l, (xwa)
@@ -3502,7 +3502,7 @@ TrAsGrid_CheckTrackType:
 	jr nz, TrAsGrid_CheckCurrentCell
 	ld a, c
 	extz wa
-	lda_d16 xbc, (0xf1a0)
+	lda xbc, (0xf1a0:16)
 	extz xwa
 	add xwa, xbc
 	ld a, (xwa)
@@ -4400,7 +4400,7 @@ SqTrAsPsSong_Dispatch:
 SqTrAsPsSong_ReturnZero:
 	lds32 xhl, 0
 	jr SqTrAsPsSong_Epilogue
-	lda_d16 xhl, (3391)
+	lda xhl, (3391:16)
 
 SqTrAsPsSong_Epilogue:
 	pop xiz
@@ -6651,7 +6651,7 @@ IvSddsp_CheckParam:
 	call	16567590
 	cps	hl, 0
 	jr	nz, 26
-	lda_d16	xwa, (37105)
+	lda	xwa, (37105:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -8426,7 +8426,7 @@ NoteEdit_GetTempoValue:
 	extz xhl
 	jr NoteEdit_Epilogue
 	extz de
-	lda_d16 xbc, (0x27a4)
+	lda xbc, (0x27a4:16)
 	extz xde
 	add xde, xbc
 	lds32 xhl, 0
@@ -9069,7 +9069,7 @@ EntertainerGridCheck:
 	lda xwa, (xsp + 48)
 	ld (xsp + 28), xwa
 	lda xbc, (xsp + 40)
-	lda_d16 xwa, (0x2978)
+	lda xwa, (0x2978:16)
 	ld (xsp + 24), xwa
 	lda xwa, (xbc + 2)
 	ld (xsp + 36), xwa
@@ -15142,43 +15142,43 @@ SqplyFunc_GetValueDispatch:
 	lds32 xhl, 0
 	ldb_da l, (0x02109c)
 	jrl SqplyFunc_Epilogue
-	lda_d16 xhl, (9832)
+	lda xhl, (9832:16)
 	jr SqplyFunc_GetValueReturn
-	lda_d16 xhl, (0x28b1)
+	lda xhl, (0x28b1:16)
 	jr SqplyFunc_GetValueDone
 	call GetTitleNow
 	cp l, 0x82
 	jr nz, SqplyFunc_GetValNonPlay
-	lda_d16 xhl, (9500)
+	lda xhl, (9500:16)
 	jr SqplyFunc_GetValueReturn
 
 SqplyFunc_GetValNonPlay:
-	lda_d16 xhl, (9504)
+	lda xhl, (9504:16)
 	jr SqplyFunc_GetValueReturn
 	call GetTitleNow
 	cp l, 0x82
 	jr nz, SqplyFunc_GetValNonPlay2
-	lda_d16 xhl, (9502)
+	lda xhl, (9502:16)
 	jr SqplyFunc_GetValueReturn
 
 SqplyFunc_GetValNonPlay2:
-	lda_d16 xhl, (9506)
+	lda xhl, (9506:16)
 	jr SqplyFunc_GetValueReturn
-	lda_d16 xhl, (9964)
+	lda xhl, (9964:16)
 	jr SqplyFunc_GetValueReturn
-	lda_d16 xhl, (0xf238)
+	lda xhl, (0xf238:16)
 	jr SqplyFunc_GetValueReturn
-	lda_d16 xhl, (0xf23a)
+	lda xhl, (0xf23a:16)
 	jr SqplyFunc_GetValueReturn
-	lda_d16 xhl, (0xf23f)
+	lda xhl, (0xf23f:16)
 	jr SqplyFunc_GetValueReturn
-	lda_d16 xhl, (0x283a)
+	lda xhl, (0x283a:16)
 
 SqplyFunc_GetValueDone:
 	jrl SqplyFunc_Epilogue
 
 SqplyFunc_GetValueDefault:
-	lda_d16 xhl, (9832)
+	lda xhl, (9832:16)
 
 SqplyFunc_GetValueReturn:
 	jrl SqplyFunc_Epilogue
@@ -15837,7 +15837,7 @@ SqedtFunc_Case1:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x10
-	lda_d16 xwa, (9706)
+	lda xwa, (9706:16)
 	jrl SqedtFunc_ModeC
 
 ; SqedtFunc dispatch case 2
@@ -15896,7 +15896,7 @@ SqedtFunc_ModeA:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x10
-	lda_d16 xwa, (0x2842)
+	lda xwa, (0x2842:16)
 	jr SqedtFunc_ModeC
 
 ; SqedtFunc mode B
@@ -15904,7 +15904,7 @@ SqedtFunc_ModeB:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x10
-	lda_d16 xwa, (0x2852)
+	lda xwa, (0x2852:16)
 
 ; SqedtFunc mode C
 SqedtFunc_ModeC:
@@ -16174,19 +16174,19 @@ SeqFormat_DispatchB:
 	jr z, SeqFmt_Field_LoadA
 	cp xiz, 0x20
 	jr nz, SeqFmt_Field_LoadC
-	lda_d16 xhl, (9706)
+	lda xhl, (9706:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadA:
-	lda_d16 xhl, (0x2728)
+	lda xhl, (0x2728:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadB:
-	lda_d16 xhl, (0x286c)
+	lda xhl, (0x286c:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadC:
-	lda_d16 xhl, (0x2878)
+	lda xhl, (0x2878:16)
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0xb
 	jr z, SeqFmt_Field_LoadF
@@ -16196,23 +16196,23 @@ SeqFmt_Field_LoadC:
 	jr z, SeqFmt_Field_LoadD
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadG
-	lda_d16 xhl, (9744)
+	lda xhl, (9744:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadD:
-	lda_d16 xhl, (9746)
+	lda xhl, (9746:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadE:
-	lda_d16 xhl, (9750)
+	lda xhl, (9750:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadF:
-	lda_d16 xhl, (9816)
+	lda xhl, (9816:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadG:
-	lda_d16 xhl, (9742)
+	lda xhl, (9742:16)
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x4
 	jr z, SeqFmt_Field_LoadI
@@ -16220,33 +16220,33 @@ SeqFmt_Field_LoadG:
 	jr z, SeqFmt_Field_LoadH
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadJ
-	lda_d16 xhl, (9758)
+	lda xhl, (9758:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadH:
-	lda_d16 xhl, (9760)
+	lda xhl, (9760:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadI:
-	lda_d16 xhl, (9762)
+	lda xhl, (9762:16)
 	jrl SqedtFunc_ReturnPath
 
 SeqFmt_Field_LoadJ:
-	lda_d16 xhl, (9756)
+	lda xhl, (9756:16)
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x2
 	jr z, SeqFmt_Field_LoadK
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadL
-	lda_d16 xhl, (0xf1d7)
+	lda xhl, (0xf1d7:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadK:
-	lda_d16 xhl, (9772)
+	lda xhl, (9772:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadL:
-	lda_d16 xhl, (0xf1d6)
+	lda xhl, (0xf1d6:16)
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x6
 	jr z, SeqFmt_Field_LoadN
@@ -16254,19 +16254,19 @@ SeqFmt_Field_LoadL:
 	jr z, SeqFmt_Field_LoadM
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadO
-	lda_d16 xhl, (0xf1dc)
+	lda xhl, (0xf1dc:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadM:
-	lda_d16 xhl, (9766)
+	lda xhl, (9766:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadN:
-	lda_d16 xhl, (0xf1e0)
+	lda xhl, (0xf1e0:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadO:
-	lda_d16 xhl, (0xf1db)
+	lda xhl, (0xf1db:16)
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x9
 	jr z, SeqFmt_Field_LoadS
@@ -16278,27 +16278,27 @@ SeqFmt_Field_LoadO:
 	jr z, SeqFmt_Field_LoadP
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadT
-	lda_d16 xhl, (0xf1f2)
+	lda xhl, (0xf1f2:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadP:
-	lda_d16 xhl, (9724)
+	lda xhl, (9724:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadQ:
-	lda_d16 xhl, (0xf1f6)
+	lda xhl, (0xf1f6:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadR:
-	lda_d16 xhl, (9728)
+	lda xhl, (9728:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadS:
-	lda_d16 xhl, (9730)
+	lda xhl, (9730:16)
 	jrl SqedtFunc_ReturnPath
 
 SeqFmt_Field_LoadT:
-	lda_d16 xhl, (0xf1f1)
+	lda xhl, (0xf1f1:16)
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x5
 	jr z, SeqFmt_Field_LoadV
@@ -16306,33 +16306,33 @@ SeqFmt_Field_LoadT:
 	jr z, SeqFmt_Field_LoadU
 	cp xiz, 0x1
 	jr nz, SeqFmt_Field_LoadW
-	lda_d16 xhl, (0xf229)
+	lda xhl, (0xf229:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadU:
-	lda_d16 xhl, (9722)
+	lda xhl, (9722:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadV:
-	lda_d16 xhl, (0xf22e)
+	lda xhl, (0xf22e:16)
 	jrl SqedtFunc_ReturnPath
 
 SeqFmt_Field_LoadW:
-	lda_d16 xhl, (0xf228)
+	lda xhl, (0xf228:16)
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0xe
 	jr z, SeqFmt_Field_LoadX
 	cp xiz, 0xd
 	jr nz, SeqFmt_Field_LoadY
-	lda_d16 xhl, (0xf1d4)
+	lda xhl, (0xf1d4:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadX:
-	lda_d16 xhl, (0xf1d5)
+	lda xhl, (0xf1d5:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadY:
-	lda_d16 xhl, (0xf1d3)
+	lda xhl, (0xf1d3:16)
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x14
 	jr z, SeqFmt_Field_LoadAC
@@ -16344,27 +16344,27 @@ SeqFmt_Field_LoadY:
 	jr z, SeqFmt_Field_LoadZ
 	cp xiz, 0x10
 	jr nz, SeqFmt_Field_LoadAD
-	lda_d16 xhl, (0xf1ea)
+	lda xhl, (0xf1ea:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadZ:
-	lda_d16 xhl, (9768)
+	lda xhl, (9768:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAA:
-	lda_d16 xhl, (0xf1ee)
+	lda xhl, (0xf1ee:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadAB:
-	lda_d16 xhl, (0xf1ef)
+	lda xhl, (0xf1ef:16)
 	jrl SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAC:
-	lda_d16 xhl, (9770)
+	lda xhl, (9770:16)
 	jrl SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadAD:
-	lda_d16 xhl, (0xf1e9)
+	lda xhl, (0xf1e9:16)
 	jrl SqedtFunc_Epilogue
 	cp xiz, 0x1a
 	jr z, SeqFmt_Field_LoadAH
@@ -16376,27 +16376,27 @@ SeqFmt_Field_LoadAD:
 	jr z, SeqFmt_Field_LoadAE
 	cp xiz, 0x16
 	jr nz, SeqFmt_Field_LoadAI
-	lda_d16 xhl, (0xf1e2)
+	lda xhl, (0xf1e2:16)
 	jr SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAE:
-	lda_d16 xhl, (9774)
+	lda xhl, (9774:16)
 	jr SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAF:
-	lda_d16 xhl, (0xf1e6)
+	lda xhl, (0xf1e6:16)
 	jr SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadAG:
-	lda_d16 xhl, (0xf1e7)
+	lda xhl, (0xf1e7:16)
 	jr SqedtFunc_EpilogueJump
 
 SeqFmt_Field_LoadAH:
-	lda_d16 xhl, (9776)
+	lda xhl, (9776:16)
 	jr SqedtFunc_Epilogue
 
 SeqFmt_Field_LoadAI:
-	lda_d16 xhl, (0xf1e1)
+	lda xhl, (0xf1e1:16)
 	jr SqedtFunc_Epilogue
 
 ; DspItem0CngFunc dispatch
@@ -16407,19 +16407,19 @@ DspItem0_CngFunc:
 	jr z, DspItem0Cng_LoadFieldA
 	cp xiz, 0x1c
 	jr nz, DspItem0Cng_LoadFieldC
-	lda_d16 xhl, (9996)
+	lda xhl, (9996:16)
 	jr SqedtFunc_Epilogue
 
 DspItem0Cng_LoadFieldA:
-	lda_d16 xhl, (9994)
+	lda xhl, (9994:16)
 	jr SqedtFunc_Epilogue
 
 DspItem0Cng_LoadFieldB:
-	lda_d16 xhl, (9998)
+	lda xhl, (9998:16)
 	jr SqedtFunc_Epilogue
 
 DspItem0Cng_LoadFieldC:
-	lda_d16 xhl, (9992)
+	lda xhl, (9992:16)
 	jr SqedtFunc_Epilogue
 
 SqedtFunc_GetFieldAddr_BySelector:
@@ -16429,23 +16429,23 @@ SqedtFunc_GetFieldAddr_BySelector:
 	jr z, SqedtFunc_FieldSel_LoadA
 	cp xiz, 0x1
 	jr nz, SqedtFunc_FieldSel_LoadC
-	lda_d16 xhl, (9734)
+	lda xhl, (9734:16)
 	jr SqedtFunc_EpilogueJump
 
 SqedtFunc_FieldSel_LoadA:
-	lda_d16 xhl, (9736)
+	lda xhl, (9736:16)
 
 SqedtFunc_EpilogueJump:
 	jr SqedtFunc_Epilogue
 
 SqedtFunc_FieldSel_LoadB:
-	lda_d16 xhl, (9740)
+	lda xhl, (9740:16)
 
 SqedtFunc_ReturnPath:
 	jr SqedtFunc_Epilogue
 
 SqedtFunc_FieldSel_LoadC:
-	lda_d16 xhl, (9732)
+	lda xhl, (9732:16)
 
 SqedtFunc_Epilogue:
 	pop xiz
@@ -16469,7 +16469,7 @@ DspItem0CngFunc:
 	cp xix, 0x1e00046
 	jrl z, DspItem0_HandleType2
 	ldb_da l, (0x021098)
-	lda_d16 xwa, (0x2978)
+	lda xwa, (0x2978:16)
 	ld (xsp + 4), xwa
 	ld c, l
 	inc 1, c
@@ -16618,7 +16618,7 @@ DspItem0_TypeChangeHandler:
 
 ; DspItem0 type change dispatch
 DspItem0_TypeDispatch:
-	lda_d16 xhl, (0x2976)
+	lda xhl, (0x2976:16)
 	jrl DspItem0_Epilogue
 	sla bc, 1
 	ld xwa, (xsp + 4)
@@ -16705,7 +16705,7 @@ EqualizerCngFunc:
 	cp xbc, 0x1e80013
 	jr z, Equalizer_DispatchA
 	lda xbc, (NakaData_WidgetDescriptors_0x139A:24)
-	lda_d16 xhl, (0x2978)
+	lda xhl, (0x2978:16)
 	sub xwa, 0x1e80061
 	cp xwa, 0x0
 	jrl lt, Equalizer_ParamString
@@ -16801,7 +16801,7 @@ Equalizer_LookupParamByIndex:
 
 ; Equalizer param by index lookup
 Equalizer_ParamByIndex:
-	lda_d16 xbc, (0x2978)
+	lda xbc, (0x2978:16)
 	dec 1, xde
 	cp xde, 0x0
 	jr c, Equalizer_ReturnParamAddr
@@ -16814,7 +16814,7 @@ Equalizer_ParamByIndex:
 	jrl Equalizer_PopIzRet
 
 Equalizer_ReturnParamAddr:
-	lda_d16 xhl, (0x2978)
+	lda xhl, (0x2978:16)
 	jrl Equalizer_PopIzRet
 	ld xix, xde
 	pushw 0x5
@@ -16995,7 +16995,7 @@ FormatParamValueStr:
 	ld (xiz), 0x20
 	ld c, a
 	extz bc
-	lda_d16 xde, (0x29ac)
+	lda xde, (0x29ac:16)
 	extz xbc
 	add xbc, xde
 	ld w, (xbc)
@@ -17006,7 +17006,7 @@ FormatParamValueStr:
 	jrl z, Equalizer_CopyFixedString
 	ld c, a
 	extz bc
-	lda_d16 xde, (0x2978)
+	lda xde, (0x2978:16)
 	cp w, 0x49
 	jrl z, Equalizer_FormatDefault
 	cp w, 0x47

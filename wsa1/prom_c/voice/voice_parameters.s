@@ -136,7 +136,7 @@ sub_FA7E2C:
 	pushw	hl                                   ; FA7E30  push HL
 	pushw	de                                   ; FA7E31  push DE
 	push	xix                                   ; FA7E32  push XIX
-	lda_d16	xix, (0x1523)                      ; FA7E33  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FA7E33  lda XIX,0x1523
 	ld	h, (xiz+8)                              ; FA7E37  ld H,(XIZ+0x08)
 	ld	c, h                                    ; FA7E3A  ld C,H
 	extz	bc                                    ; FA7E3C  extz BC

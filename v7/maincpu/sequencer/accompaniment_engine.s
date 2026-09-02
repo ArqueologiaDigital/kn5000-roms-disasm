@@ -10774,7 +10774,7 @@ AccTone_LookupByProgram:
 
 AccTone_ReadAndProcess:
 	dec 4, xsp
-	lda_d16 xbc, (0xfc5a)
+	lda xbc, (0xfc5a:16)
 	ld e, (xbc)
 	and e, 0xff
 	lda xwa, (xsp + 2)
@@ -11122,7 +11122,7 @@ AccTone_InlineBytecodeData:
 	extz DE
 	ld BC,DE
 	muls BC,0x0007
-	lda_d16 xhl, (0x31aa)
+	lda xhl, (0x31aa:16)
 	.incbin "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_tail.bin"
 AccVoice_ClearChannelStates:
 	stdi8	(13135), 0
@@ -23010,7 +23010,7 @@ Tempo_DisplayEffectRender:
 
 Tempo_FormatBPM:
 	push	qiz
-	lda_d16	xde, (14588)
+	lda	xde, (14588:16)
 	ld	xbc, xde
 	lda	xde, (xde+10)
 Tempo_FormatBPMDigit:
@@ -23243,7 +23243,7 @@ SeqRec_StartRecord:
 
 SeqRec_StartRecordImpl:
 	calr	533
-	lda_d16	xhl, (14588)
+	lda	xhl, (14588:16)
 	ld	c, (xhl)
 	ld	a, c
 	and	a, 240
@@ -23543,7 +23543,7 @@ VoiceBuffer_CopyLoop:
 	jr ule, VoiceBuf_CopyDone
 
 VoiceBuf_CopyLoop:
-	lda_d16	xbc, (14588)
+	lda	xbc, (14588:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -23604,7 +23604,7 @@ Voice_ScanTableEntries:
 	jr ule, VoiceScan_NotFound
 
 VoiceScan_WriteLoop:
-	lda_d16	xbc, (14588)
+	lda	xbc, (14588:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -27132,10 +27132,10 @@ CmEsyTtl_Dispatch:
 	jrl	219
 	cpdi8	14109, 255
 	jrl	z, 309
-	lda_d16	xiy, 14109
-	lda_d16	xix, 14095
-	lda_d16	xhl, 14116
-	lda_d16	xde, 14102
+	lda	xiy, (14109:16)
+	lda	xix, (14095:16)
+	lda	xhl, (14116:16)
+	lda	xde, (14102:16)
 	lds32	xbc, 0
 	ldb_spi	a, 244
 	lda_dpi	xbc, 240
@@ -27230,10 +27230,10 @@ CmpEsy_DeliverEventAndCheck:
 	pop	xde
 	cpdi8	32422, 0
 	jr	nz, 60
-	lda_d16	xiy, 14095
-	lda_d16	xix, 14109
-	lda_d16	xhl, 14102
-	lda_d16	xde, 14116
+	lda	xiy, (14095:16)
+	lda	xix, (14109:16)
+	lda	xhl, (14102:16)
+	lda	xde, (14116:16)
 	lds32	xbc, 0
 CmpEsyTtl_SubModeB:
 	ldb_spi	a, 244
@@ -27937,7 +27937,7 @@ EventDelivery_ReturnZero:
 __pad_F69788:
 
 MiddleNameFunc:
-	lda_d16	xwa, (13344)
+	lda	xwa, (13344:16)
 	cp	xbc, 31719425
 	jr	z, 33
 	cp	xbc, 31719424
@@ -31064,7 +31064,7 @@ AccBankData_PostModeChange:
 	ret
 
 AccBankData_CopyDataBlock:
-	lda_d16	xbc, (18458)
+	lda	xbc, (18458:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 	stib_dsp	224, 0
@@ -31072,7 +31072,7 @@ AccBankData_CopyDataBlock:
 	jr	c, -8
 	ret
 StyleBuf_ClearAllEntries:
-	lda_d16	xbc, (16108)
+	lda	xbc, (16108:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+2048)
 StyleBuf_ClearEntry_Outer:
@@ -31089,7 +31089,7 @@ StyleBuf_ClearEntry_Inner:
 	ret
 
 StyleConv_ClearWorkBuffer:
-	lda_d16	xbc, (18416)
+	lda	xbc, (18416:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 StyleConv_ClearWorkBuf_Loop:
@@ -31123,7 +31123,7 @@ StyleConv_InitEntryTable:
 StyleConvInit_OuterLoop:
 	ld	hl, ix
 	mul	hl, 37
-	lda_d16	xde, (21832)
+	lda	xde, (21832:16)
 	ld	bc, hl
 	extz	xbc
 	add	xbc, xde
@@ -31168,9 +31168,9 @@ SoundMem_ClearLoop:
 	ret
 
 StyleFile_ClearAllTables:
-	lda_d16	xwa, (21696)
+	lda	xwa, (21696:16)
 	ld	xbc, xwa
-	lda_d16	xde, (18496)
+	lda	xde, (18496:16)
 	lda	xhl, (xwa+128)
 StyleFile_ClearTable_Outer:
 	ld xwa, xde
@@ -31230,7 +31230,7 @@ PostEventSetup_Send:
 	ld	bc, (xsp+4)
 	add	bc, qiz
 	mul	bc, 37
-	lda_d16	xhl, (21832)
+	lda	xhl, (21832:16)
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
@@ -31332,7 +31332,7 @@ StylCnvModlTtlFunc:
 StylCnvModl_ScanMatchingModels:
 	ld	bc, iz
 	mul	bc, 37
-	lda_d16	xwa, (21832)
+	lda	xwa, (21832:16)
 	extz	xbc
 	add	xbc, xwa
 	lda	xwa, (xbc+1)
@@ -31350,7 +31350,7 @@ StylCnvModl_ScanDone:
 StylCnvModl_PadModelNames:
 	cp	iz, 256
 	jr	nc, 55
-	lda_d16	xhl, (21832)
+	lda	xhl, (21832:16)
 	ld	bc, iz
 	mul	bc, 37
 StylCnvModl_PadOuterLoop:
@@ -31383,7 +31383,7 @@ StylCnvModl_InitListDisplay:
 	ld	xbc, 31719471
 	lds32	xde, 0
 	call	16423243
-	lda_d16	xbc, (16076)
+	lda	xbc, (16076:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 StylCnvModl_ClearDisplayBuf:
@@ -31395,7 +31395,7 @@ StylCnvModl_ClearDisplayBuf:
 	lda	xbc, (xsp+36)
 	ld	xwa, 16076
 	call	16296648
-	lda_d16	xwa, (16076)
+	lda	xwa, (16076:16)
 	cps	hl, 0
 	jr	nz, 63
 	pushw	46
@@ -31407,7 +31407,7 @@ StylCnvModl_ClearDisplayBuf:
 	ld	(xhl), 0
 StylCnvModl_FormatFilename:
 	lds	iy, 0
-	lda_d16	xde, (16076)
+	lda	xde, (16076:16)
 StylCnvModl_FormatLoop:
 	ld bc, iy
 	extz xbc
@@ -31535,7 +31535,7 @@ StylCnvModl_OK_UpdateDisplay:
 	cp	wa, bc
 	jrl	nz, 483
 	mul	iz, 37
-	lda_d16	xwa, (21832)
+	lda	xwa, (21832:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xwa
@@ -31544,7 +31544,7 @@ StylCnvModl_OK_UpdateDisplay:
 	call	16423243
 	ld	de, (15464:16)
 	mul	de, 37
-	lda_d16	xwa, (21832)
+	lda	xwa, (21832:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, 1114114
@@ -31601,7 +31601,7 @@ StylCnvModl_OK_PageDown_Clamp:
 	jrl	-237
 StylCnvModl_OK_SelectItem:
 	mul	de, 37
-	lda_d16	xwa, (21833)
+	lda	xwa, (21833:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, xde
@@ -31622,7 +31622,7 @@ StylCnvModl_OK_Select_FillLoop:
 	jr	c, -14
 	ld	bc, (15464:16)
 	mul	bc, 37
-	lda_d16	xwa, (21865)
+	lda	xwa, (21865:16)
 	extz	xbc
 	add	xbc, xwa
 	ld	xbc, (xbc)
@@ -31639,7 +31639,7 @@ StylCnvModl_OK_Select_ShowError:
 StylCnvModl_OK_Select_LoadOK:
 	ld	bc, (15464:16)
 	mul	bc, 37
-	lda_d16	xwa, (21865)
+	lda	xwa, (21865:16)
 	extz	xbc
 	add	xbc, xwa
 	ld	xbc, (xbc)
@@ -31656,10 +31656,10 @@ StylCnvModl_OK_Select_AlignSize:
 	ld	wa, (15464:16)
 	stda16	(18448), wa
 	lds	iz, 0
-	lda_d16	xhl, (58116)
+	lda	xhl, (58116:16)
 	ld	wa, (15464:16)
 	mul	wa, 37
-	lda_d16	xbc, (21832)
+	lda	xbc, (21832:16)
 StylCnvModl_OK_Select_CompareNames:
 	ld ix, iz
 	extz xix
@@ -31694,7 +31694,7 @@ StylCnvModl_OK_Select_StoreResult:
 	lda	xsp, (xsp+10)
 	ld	bc, (15464:16)
 	mul	bc, 37
-	lda_d16	xwa, (21865)
+	lda	xwa, (21865:16)
 	extz	xbc
 	add	xbc, xwa
 	ld	xwa, (xbc)
@@ -31741,7 +31741,7 @@ StylCnvCnvtTtlFunc:
 StylCnvCnvt_ScanMatchingStyles:
 	ld	bc, iz
 	mul	bc, 37
-	lda_d16	xwa, (21832)
+	lda	xwa, (21832:16)
 	extz	xbc
 	add	xbc, xwa
 	lda	xwa, (xbc+1)
@@ -31756,7 +31756,7 @@ StylCnvCnvt_ScanMatchingStyles:
 StylCnvCnvt_PadStyleNames:
 	cp	iz, 256
 	jr	nc, 55
-	lda_d16	xhl, (21832)
+	lda	xhl, (21832:16)
 	ld	bc, iz
 	mul	bc, 37
 StylCnvCnvt_PadOuterLoop:
@@ -31861,7 +31861,7 @@ StylCnvCnvt_OK_UpdateDisplay:
 	cp	wa, bc
 	jrl	nz, 256
 	mul	iz, 37
-	lda_d16	xwa, (21832)
+	lda	xwa, (21832:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xwa
@@ -31870,7 +31870,7 @@ StylCnvCnvt_OK_UpdateDisplay:
 	call	16423243
 	ld	de, (15464:16)
 	mul	de, 37
-	lda_d16	xwa, (21832)
+	lda	xwa, (21832:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, 1179650
@@ -31943,7 +31943,7 @@ StylCnvCnvt_OK_Select_WriteStyle:
 	call	16295943
 	ld	bc, (15464:16)
 	mul	bc, 37
-	lda_d16	xwa, (21833)
+	lda	xwa, (21833:16)
 	extz	xbc
 	add	xbc, xwa
 	ld	xwa, xbc
@@ -32061,7 +32061,7 @@ StylCnvSel_OK_UpdateDisplay:
 	cp	wa, bc
 	jrl	nz, 214
 	mul	iz, 37
-	lda_d16	xbc, (21832)
+	lda	xbc, (21832:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -32070,7 +32070,7 @@ StylCnvSel_OK_UpdateDisplay:
 	call	16423243
 	ld	wa, (15464:16)
 	mul	wa, 37
-	lda_d16	xbc, (21832)
+	lda	xbc, (21832:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -32252,7 +32252,7 @@ StylCnvDisp_CheckType:
 	jrl	z, 754
 	cps	a, 2
 	jr	z, 46
-	lda_d16	xbc, (15564)
+	lda	xbc, (15564:16)
 	cps	a, 1
 	jr	z, 29
 	cps	a, 5
@@ -32284,7 +32284,7 @@ StylCnvDisp_Type2_CheckSubtype:
 	stdi8	(15466), 1
 	ld	xwa, 1047552
 	call	16296216
-	lda_d16	xbc, (15468)
+	lda	xbc, (15468:16)
 	ld	(xbc), 2
 	ld	(xbc+1), 0
 	ld	xwa, 1047554
@@ -32298,7 +32298,7 @@ StylCnvDisp_Subtype10_Process:
 	call	16296216
 	ld	xwa, 1047552
 	push	xwa
-	lda_d16	xwa, (15468)
+	lda	xwa, (15468:16)
 	push	xwa
 StylCnvDisp_CopyAndFinalize:
 	call	16713584
@@ -32369,7 +32369,7 @@ StylCnv_ParseEntry_Done:
 	ldw	(xsp+4), 0
 	ld	ix, (15464:16)
 	mul	ix, 37
-	lda_d16	xhl, (21832)
+	lda	xhl, (21832:16)
 StylCnv_CopyNameLoop:
 	.byte 0x9f, 0x04, 0x20, 0xdc, 0x80, 0xe8, 0x12, 0xeb
 	.byte 0x80, 0x88, 0x01, 0x23, 0xcb, 0xcf, 0x2e, 0x66
@@ -32389,7 +32389,7 @@ ControlState_Type3:
 	jrl	338
 StylCnv_Type4_Init:
 	stdi8	(15466), 4
-	lda_d16	xde, (18458)
+	lda	xde, (18458:16)
 	ld	xwa, xde
 	lda	xbc, (xde+32)
 StylCnv_Type4_ClearLoop:
@@ -32477,7 +32477,7 @@ StylCnv_Type4_BuildOutput:
 	ldw	(xsp+4), 0
 	ld	ix, (15464:16)
 	mul	ix, 37
-	lda_d16	xhl, (21832)
+	lda	xhl, (21832:16)
 StylCnv_Type4_CopyNameLoop2:
 	.byte 0x9f, 0x04, 0x20, 0xdc, 0x80, 0xe8, 0x12, 0xeb
 	.byte 0x80, 0x88, 0x01, 0x25, 0xf1, 0xf0, 0x47, 0x31
@@ -32562,7 +32562,7 @@ StylCnv_Type3_CheckCount:
 StylCnv_Type3_LoadFileLoop:
 	ld	wa, (xsp+8)
 	mul	wa, 100
-	lda_d16	xbc, (18496)
+	lda	xbc, (18496:16)
 	extz	xwa
 	add	xwa, xbc
 	push	xwa
@@ -32577,7 +32577,7 @@ StylCnv_Type3_LoadFileLoop:
 	jrl	lt, 404
 	ld	wa, (xsp+8)
 	sll	wa, 2
-	lda_d16	xbc, (21696)
+	lda	xbc, (21696:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	xbc, (xwa)
@@ -32588,7 +32588,7 @@ StylCnv_Type3_LoadFileLoop:
 	jrl	lt, 364
 	ld	bc, (xsp+8)
 	sll	bc, 2
-	lda_d16	xwa, (18156)
+	lda	xwa, (18156:16)
 	extz	xbc
 	add	xbc, xwa
 	ld	xwa, (xsp+10)
@@ -32603,7 +32603,7 @@ StylCnv_Type3_LoadFileLoop:
 	call	16720173
 	inc	6, xsp
 	ld	wa, (xsp+8)
-	lda_d16	xbc, (16108)
+	lda	xbc, (16108:16)
 	sll	wa, 5
 	extz	xwa
 	add	xwa, xbc
@@ -32637,7 +32637,7 @@ StylCnv_Type3_CopyBlockLoop:
 	pushw	4
 	ld	bc, (xsp+18)
 	sll	bc, 2
-	lda_d16	xwa, (18156)
+	lda	xwa, (18156:16)
 	extz	xbc
 	add	xbc, xwa
 	push	xbc
@@ -32652,7 +32652,7 @@ StylCnv_Type3_CopyBlockLoop:
 	lds	iz, 0
 	ld	bc, (xsp+16)
 	sll	bc, 5
-	lda_d16	xde, (16108)
+	lda	xde, (16108:16)
 StylCnv_Type3_CopyNameChars:
 	ld wa, iz
 	inc 1, wa
@@ -32742,7 +32742,7 @@ StylCnv_Type4_ClearAndBuild:
 	call	16713148
 	lda	xsp, (xsp+10)
 	ldw	(xsp+4), 0
-	lda_d16	xde, (18458)
+	lda	xde, (18458:16)
 StylCnv_Type4_CopyFieldLoop:
 	ld bc, (xsp + 4)
 	inc 6, bc
@@ -32765,7 +32765,7 @@ StylCnv_Type6_Dispatch:
 	jrl z, StylCnv_Type6_Case1_CopyName
 	cps wa, 0
 	jrl nz, StyleConv_DispatchSoundMemState
-	lda_d16 xwa, (0x46ec)
+	lda xwa, (0x46ec:16)
 	ld XBC,XWA
 	.byte 0xf3, 0xe1, 0x00, 0x01, 0x32
 StylCnv_Type6_ClearRegion:
@@ -32775,7 +32775,7 @@ StylCnv_Type6_ClearRegion:
 	.byte 0x48, 0x3f, 0x00, 0x00, 0x73, 0xae, 0x00
 StylCnv_Type6_MainLoop:
 	lds	iz, 0
-	lda_d16	xbc, (18416)
+	lda	xbc, (18416:16)
 StylCnv_Type6_FindDot:
 	cpib_sri 0x07, 0xe4, 0xf8, 0x2e
 	jr z, StylCnv_Type6_ClearRemainder
@@ -32796,7 +32796,7 @@ StylCnv_Type6_ClearLoop:
 StylCnv_Type6_AppendName:
 	ld	de, (xsp+4)
 	sll	de, 5
-	lda_d16	xwa, (16108)
+	lda	xwa, (16108:16)
 	extz	xde
 	add	xde, xwa
 	push	xde
@@ -32824,7 +32824,7 @@ StylCnv_Type6_AppendName:
 	jrl	lt, -284
 	ld	bc, (xsp+4)
 	sll	bc, 2
-	lda_d16	xwa, (18156)
+	lda	xwa, (18156:16)
 	extz	xbc
 	add	xbc, xwa
 	ld	xwa, (15556:16)
@@ -32862,7 +32862,7 @@ StylCnv_Type6_BuildFfcBuffer:
 StylCnv_Type6_CopyBlockLoop:
 	ld	bc, (xsp+4)
 	sll	bc, 2
-	lda_d16	xde, (18156)
+	lda	xde, (18156:16)
 	extz	xbc
 	add	xbc, xde
 	ld	xwa, (xbc)
@@ -32881,7 +32881,7 @@ StylCnv_Type6_CopyBlockLoop:
 	ldw	(xsp+6), 0
 	ld	bc, (xsp+4)
 	sll	bc, 5
-	lda_d16	xde, (16108)
+	lda	xde, (16108:16)
 StylCnv_Type6_CopyNameChars:
 	ld wa, (xsp + 6)
 	inc 1, wa
@@ -32937,7 +32937,7 @@ StylCnv_Type6_NextBlock:
 StylCnv_Type6_FileReadError:
 	ld BC,(XSP+0x04)
 	sll BC, 0x05
-	lda_d16 xwa, (0x3eec)
+	lda xwa, (0x3eec:16)
 	extz XBC
 	add XBC,XWA
 	ld (XBC),0x00
@@ -32947,7 +32947,7 @@ StylCnv_Type6_FileReadError:
 StylCnv_Type6_FileOpenError:
 	ld BC,(XSP+0x04)
 	sll BC, 0x05
-	lda_d16 xwa, (0x3eec)
+	lda xwa, (0x3eec:16)
 	extz XBC
 	add XBC,XWA
 	ld (XBC),0x00
@@ -32957,7 +32957,7 @@ StylCnv_Type6_FileOpenError:
 StylCnv_Type6_Case1_CopyName:
 	ld bc, (0x3c68:16)
 	mul BC,0x0025
-	lda_d16 xwa, (0x5549)
+	lda xwa, (0x5549:16)
 	extz XBC
 	add XBC,XWA
 	push XBC
@@ -33124,7 +33124,7 @@ StylCnv_LSW_WriteExtension:
 	ld	bc, (xsp+8)
 	ld	(xsp+16), bc
 	sla	bc, 2
-	lda_d16	xwa, 18156
+	lda	xwa, (18156:16)
 	extz	xbc
 	add	xbc, xwa
 	ld	xwa, (xsp+10)
@@ -33165,7 +33165,7 @@ StylCnv_Final_CopyBlockLoop:
 	pushw 0x0004
 	ld BC,(XSP+0x06)
 	sll BC, 0x02
-	lda_d16 xwa, (0x46ec)
+	lda xwa, (0x46ec:16)
 	extz XBC
 	add XBC,XWA
 	push XBC
@@ -33180,7 +33180,7 @@ StylCnv_Final_CopyBlockLoop:
 	ldw (XSP+0x06), 0x0000
 	ld BC,(XSP+0x04)
 	sll BC, 0x05
-	lda_d16 xde, (0x3eec)
+	lda xde, (0x3eec:16)
 StylCnv_Final_CopyNameChars:
 	ld wa, (xsp + 6)
 	inc 1, wa
@@ -33245,12 +33245,12 @@ StylCnv_Multi_ClearLoop:
 	lds iz, 0
 
 StylCnv_Multi_ParseLoop:
-	lda_d16 xbc, (0x3ccc)
+	lda xbc, (0x3ccc:16)
 	ld WA,(XSP+0x04)
 	lda_dri xhl, 0x07, 0xe4, 0xe0
 	ld E,(XHL)
 	lda xbc, (xsp + 0x12)
-	lda_d16 xwa, (0x5548)
+	lda xwa, (0x5548:16)
 	ld (XSP+0x0e),XWA
 	cps e, 0
 	jr nz, .Lc_f6d3d7

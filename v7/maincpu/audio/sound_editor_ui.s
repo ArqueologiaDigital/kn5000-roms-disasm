@@ -10375,7 +10375,7 @@ EasyCmp_GridCheck_EventEnc:
 	jr z, EasyCmp_GridEvtEnc_Case2
 	cps bc, 1
 	jr nz, EasyCmp_GridCheck_EventCase3
-	lda_d16 xbc, (0x370f)
+	lda xbc, (0x370f:16)
 	extz XWA
 	add XWA,XBC
 	ld A,(XWA)
@@ -10386,7 +10386,7 @@ EasyCmp_GridCheck_EventEnc:
 	push XWA
 	jr t, EasyCmp_GridCheck_EventCase1
 EasyCmp_GridEvtEnc_Case2:
-	lda_d16	xbc, (14102)
+	lda	xbc, (14102:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -10460,7 +10460,7 @@ EasyCmp_GridEvtCase_Default:
 	jr	75
 	lds32	xhl, 3
 	jr	71
-	lda_d16	xhl, (32418)
+	lda	xhl, (32418:16)
 	jr	65
 MspNameBnk_Dispatch:
 	cp xde, 0x4
@@ -11859,7 +11859,7 @@ MspPlayModeFunc_DataBlock:
 	jr	28
 	lds32	xhl, 1
 	jr	24
-	lda_d16	xhl, (32419)
+	lda	xhl, (32419:16)
 	jr	18
 AcSndArgGrid_BoxProc:
 	ld xwa, 0x1440015
@@ -12301,19 +12301,19 @@ SndArgGridCheck_PlayColAudio:
 	jr	z, 10
 	cps	wa, 0
 	jr	nz, 36
-	lda_d16	xwa, (14684)
+	lda	xwa, (14684:16)
 	jr	22
 SndArgGridCheck_PlayCol_1:
-	lda_d16	xwa, (14701)
+	lda	xwa, (14701:16)
 	jr	16
 SndArgGridCheck_PlayCol_2:
-	lda_d16	xwa, (14718)
+	lda	xwa, (14718:16)
 	jr	10
 SndArgGridCheck_PlayCol_3:
-	lda_d16	xwa, (14735)
+	lda	xwa, (14735:16)
 	jr	4
 SndArgGridCheck_PlayCol_4:
-	lda_d16	xwa, (14752)
+	lda	xwa, (14752:16)
 SndArgGridCheck_PlayCol_Strcpy:
 	push	xwa
 	push	xbc
@@ -12344,19 +12344,19 @@ SndArgGridCheck_PlayRowAudio:
 	jr	z, 10
 	cps	wa, 0
 	jr	nz, 36
-	lda_d16	xwa, (14664)
+	lda	xwa, (14664:16)
 	jr	22
 SndArgGridCheck_PlayRow_1:
-	lda_d16	xwa, (14668)
+	lda	xwa, (14668:16)
 	jr	16
 SndArgGridCheck_PlayRow_2:
-	lda_d16	xwa, (14672)
+	lda	xwa, (14672:16)
 	jr	10
 SndArgGridCheck_PlayRow_3:
-	lda_d16	xwa, (14676)
+	lda	xwa, (14676:16)
 	jr	4
 SndArgGridCheck_PlayRow_4:
-	lda_d16	xwa, (14680)
+	lda	xwa, (14680:16)
 SndArgGridCheck_PlayRow_Send:
 	push	xwa
 	push	xbc
@@ -12623,7 +12623,7 @@ StylCnvStorBnkSel_DataBlock:
 	jr	15
 	ld	xhl, 22
 	jr	8
-	lda_d16	xhl, (14769)
+	lda	xhl, (14769:16)
 	jr	2
 PsSCTxtBox_EventDispatch:
 	lds32 xhl, 0
@@ -12711,7 +12711,7 @@ SCTxtBox2_CallInherited:
 	jr SCTxtBox2_SetReturnZero
 
 SCTxtBox2_HandleEvt89:
-	lda_d16	xhl, (15564)
+	lda	xhl, (15564:16)
 	jr	38
 SCTxtBox2_HandleEvtBC:
 	ld	xwa, xiz
@@ -13359,7 +13359,7 @@ StylCnvVer_CallInherited:
 	jr StylCnvVer_SetReturnZero
 
 StylCnvVer_HandleEvt89:
-	lda_d16	xhl, (16076)
+	lda	xhl, (16076:16)
 	jr	38
 StylCnvVer_HandleEvtBC:
 	ld	xwa, xiz

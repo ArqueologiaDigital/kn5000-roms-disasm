@@ -330,7 +330,7 @@ MidiPkt_ProcessEventQueue:
 	jr z, MidiPkt_ProcessEventQueue_Done
 	bitda 0, (0xb7e7)
 	jr nz, MidiPkt_ProcessEventQueue_Done
-	lda_d16 xbc, (0xbd3c)
+	lda xbc, (0xbd3c:16)
 	ld wa, (0x90e0:16)
 	ld iz, wa
 	extz xiz
@@ -341,7 +341,7 @@ MidiPkt_ProcessEventQueue_Loop:
 	call SeqVoice_StoreEntry
 	inc 4, xsp
 	stda32 0xbd22, xhl
-	lda_d16 xwa, (0xbd22)
+	lda xwa, (0xbd22:16)
 	cp (xwa), 0xff
 	jr z, MidiPkt_ProcessEventQueue_Done
 	cp (xwa), 0xc0
@@ -1267,7 +1267,7 @@ MidiPkt_SysExValidator_Data:
 	.byte 0xf1
 	swi	1
 	.byte 0x90, 0xbf
-	lda_d16	xbc, (0xfdad)
+	lda	xbc, (0xfdad:16)
 	ld	e, (xbc)
 	set	2, e
 	ld	(xbc), e
@@ -1294,7 +1294,7 @@ MidiPkt_SysExProcessor_Data:
 	jr	ugt, 5
 	cp	a, 148
 	ret	nc
-	lda_d16	xbc, (0xfdad)
+	lda	xbc, (0xfdad:16)
 	ld	a, (xbc)
 	bit	2, a
 	ret	z
@@ -1335,7 +1335,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	jrl	641
 	calr	776
 	ret
-	lda_d16	xde, (0x9644)
+	lda	xde, (0x9644:16)
 	ld	c, (xwa)
 	ld	(xde), c
 	ld	c, (xwa+1)
@@ -1354,7 +1354,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	pop	xhl
 	pop	xde
 	ret
-	lda_d16	xde, (0x9644)
+	lda	xde, (0x9644:16)
 	ld	c, (xwa)
 	ld	(xde), c
 	ld	c, (xwa+1)

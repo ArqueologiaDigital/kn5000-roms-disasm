@@ -227,7 +227,7 @@ SaveFileNameSmfFunc:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xde
-	lda_d16	xwa, (34740)
+	lda	xwa, (34740:16)
 	cp	xbc, 31457414
 	jr	z, 121
 	cp	xbc, 31457338
@@ -246,7 +246,7 @@ SaveFN_HandleActivate:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16288975
-	lda_d16	xwa, (34741)
+	lda	xwa, (34741:16)
 	call	16289424
 	ld	xwa, (32752:16)
 	ld	xbc, 29360143
@@ -295,11 +295,11 @@ SmfSeqToSongNumFunc:
 	stda32	(32756), xde
 	jr	60
 SeqToSong_BuildEntry:
-	lda_d16	xwa, (32760)
+	lda	xwa, (32760:16)
 	stib_dsp	224, 0
 	ld	xbc, 15337276
 	call	16288975
-	lda_d16	xiz, (32761)
+	lda	xiz, (32761:16)
 	ldb_d8	a, (34988)
 	inc	1, a
 	extz	wa
@@ -326,11 +326,11 @@ SmfSeqFromSongNumFunc:
 	stda32	(32888), xde
 	jr	60
 SeqFromSong_BuildEntry:
-	lda_d16	xwa, (32892)
+	lda	xwa, (32892:16)
 	stib_dsp	224, 0
 	ld	xbc, 15337288
 	call	16288975
-	lda_d16	xiz, (32893)
+	lda	xiz, (32893:16)
 	ldb_d8	a, (34988)
 	inc	1, a
 	extz	wa
@@ -446,7 +446,7 @@ DisplaySmfFileList:
 DispFileList_LoopBody:
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	stb_erp	a, 248
@@ -459,7 +459,7 @@ DispFileList_LoopBody:
 	sll	wa, 5
 	lds	de, 1
 	add	de, wa
-	lda_d16	xhl, 33904
+	lda	xhl, (33904:16)
 	ld	wa, de
 	extz	xwa
 	add	xwa, xhl
@@ -470,7 +470,7 @@ DispFileList_LoopBody:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
@@ -1076,7 +1076,7 @@ SmfFN_RefreshIfChanged:
 	divs	bc, 10
 	ld	bc, qbc
 	sll	bc, 5
-	lda_d16	xhl, (33904)
+	lda	xhl, (33904:16)
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
@@ -1087,7 +1087,7 @@ SmfFN_RefreshIfChanged:
 	divs	wa, 10
 	ld	wa, qwa
 	sll	wa, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -1107,7 +1107,7 @@ SmfFN_RedrawPage:
 SmfFN_UpdateFilenameField:
 	cpdi8	35994, 107
 	jr	nz, 74
-	lda_d16	xiz, 34740
+	lda	xiz, (34740:16)
 	ld	wa, (33040:16)
 	cpda16 xwa, (33896)
 	jr	lt, 17
@@ -1176,7 +1176,7 @@ DisplaySmfSequenceList:
 DispSeqList_LoopBody:
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	stb_erp	a, 248
@@ -1189,7 +1189,7 @@ DispSeqList_LoopBody:
 	sll	wa, 5
 	lds	de, 1
 	add	de, wa
-	lda_d16	xhl, (33904)
+	lda	xhl, (33904:16)
 	ld	wa, de
 	extz	xwa
 	add	xwa, xhl
@@ -1201,7 +1201,7 @@ DispSeqList_LoopBody:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)

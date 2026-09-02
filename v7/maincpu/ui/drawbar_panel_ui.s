@@ -1089,9 +1089,9 @@ PmemOutLGridCheck:
 	lda xbc, (xsp + 36)
 	lda xwa, (0x1ed400:24)
 	ld (xsp + 24), xwa
-	lda_d16 xwa, (0xf9a0)
+	lda xwa, (0xf9a0:16)
 	ld (xsp + 20), xwa
-	lda_d16 xwa, (0xfd2c)
+	lda xwa, (0xfd2c:16)
 	sub xwa, (xsp + 20)
 	ld xiz, xwa
 	lda xiy, (xbc + 2)
@@ -1241,7 +1241,7 @@ PmemOutRGridCheck:
 	ldirw
 	ld xhl, xde
 	lda xbc, (xsp + 32)
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 	ld (xsp + 20), xwa
 	lda xwa, (0x1ed400:24)
 	ld (xsp + 16), xwa
@@ -1289,7 +1289,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95, 0x11
-	lda_d16	xwa, 63940
+	lda	xwa, (63940:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1323,7 +1323,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95, 0x11
-	lda_d16	xwa, 63941
+	lda	xwa, (63941:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1350,7 +1350,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95, 0x11
-	lda_d16	xwa, 63943
+	lda	xwa, (63943:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1405,7 +1405,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95, 0x11
-	lda_d16	xwa, 63940
+	lda	xwa, (63940:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1444,7 +1444,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95, 0x11
-	lda_d16	xwa, 63941
+	lda	xwa, (63941:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1473,7 +1473,7 @@ TtMdCtlMsg_EventDispatch:
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	.byte 0x95, 0x11
-	lda_d16	xwa, 63943
+	lda	xwa, (63943:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1518,7 +1518,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	(xwa), xbc
 	lda	xwa, (149362:24)
 	ld	(xsp+24), xiy
-	lda_d16	xbc, 63904
+	lda	xbc, (63904:16)
 	.byte 0xa6, 0xf0
 	jrl	nz, 345
 	ld	xwa, (xsp+24)
@@ -1563,7 +1563,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 31457420
 	call	16421459
 	ldw	(xsp+34), 1
-	lda_d16	xwa, 63941
+	lda	xwa, (63941:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1595,7 +1595,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 31457420
 	call	16421459
 	ldw	(xsp+34), 2
-	lda_d16	xwa, 63943
+	lda	xwa, (63943:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1679,7 +1679,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 31457420
 	call	16421459
 	ldw	(xsp+34), 1
-	lda_d16	xwa, 63941
+	lda	xwa, (63941:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
@@ -1711,7 +1711,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xbc, 31457420
 	call	16421459
 	ldw	(xsp+34), 2
-	lda_d16	xwa, 63943
+	lda	xwa, (63943:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0

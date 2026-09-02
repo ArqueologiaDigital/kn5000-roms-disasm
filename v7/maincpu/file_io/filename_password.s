@@ -16,7 +16,7 @@ FmmPasswordFunc:
 	ld	wa, iz
 	cp	xbc, 31784976
 	jrl	z, 339
-	lda_d16	xde, (35184)
+	lda	xde, (35184:16)
 	cp	xbc, 31784975
 	jrl	z, 195
 	cp	xbc, 31784974
@@ -74,7 +74,7 @@ Password_HandleSaveEvent:
 	call CheckIsCurrentSlot
 	cps l, 0
 	jr z, .Lc_f8c61d
-	lda_d16 xwa, (0x8971)
+	lda xwa, (0x8971:16)
 	set 7,(XWA)
 	set 6,(XWA)
 	ld XWA,(XSP+0x04)
@@ -179,7 +179,7 @@ SelectMode_SetBothMode:
 	stb_d8	(35184), a
 	jr	25
 SelectMode_SingleMode:
-	lda_d16	xbc, 35184
+	lda	xbc, (35184:16)
 	cpib_erp	250, 0
 	jr	z, 5
 	ld	(xbc), 1
@@ -241,7 +241,7 @@ FileName_DrawItemLoop:
 	ld	wa, (xsp+6)
 	ld	hl, wa
 	sll	hl, 5
-	lda_d16	xde, 33904
+	lda	xde, (33904:16)
 	extz	xhl
 	add	xhl, xde
 	ld	bc, (xsp+6)
@@ -253,7 +253,7 @@ FileName_DrawItemLoop:
 	sll	wa, 5
 	lds	hl, 1
 	add	hl, wa
-	lda_d16	xix, 33904
+	lda	xix, (33904:16)
 	extz	xhl
 	add	xhl, xix
 	inc	1, de
@@ -263,7 +263,7 @@ FileName_DrawItemLoop:
 	call	16289232
 	ld	de, (xsp+6)
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32470:16)
@@ -608,7 +608,7 @@ FileName_UpdateDisplay:
 	call	ApPostEvent
 	ld	de, (xsp+4)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32470:16)
@@ -616,7 +616,7 @@ FileName_UpdateDisplay:
 	call	ApPostEvent
 	ld	de, (32478:16)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32470:16)

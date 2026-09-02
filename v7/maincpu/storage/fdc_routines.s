@@ -583,7 +583,7 @@ FDC_ResultPhase_Read:
 	.byte 0x1e, 0xe3, 0xf8, 0xf1, 0xc5, 0x89, 0x47, 0xef
 	.byte 0x62, 0x0e
 FDC_Exception_Status_Decoder:
-	lda_d16	xde, (35268)
+	lda	xde, (35268:16)
 	ld	c, (xde+1)
 	ld	a, c
 	and	a, 192
@@ -1209,7 +1209,7 @@ INT4_SendSpecifyCmd:
 	calr FDC_Write_Data
 
 INT4_StoreResultBase:
-	lda_d16	xiz, (35268)
+	lda	xiz, (35268:16)
 	inc	1, xiz
 INT4_ReadResultLoop:
 	calr FDC_Wait_Status_Timeout
@@ -1261,7 +1261,7 @@ FDC_Reset_BuildParams:
 	stdi16	(35474), 0
 	lds32	xwa, 0
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64935
 	stdi16	(35464), 3
@@ -1270,9 +1270,9 @@ FDC_Reset_BuildParams:
 	stdi16	(35470), 0
 	stdi16	(35472), 1
 	stdi16	(35474), 1
-	lda_d16	xwa, (35480)
+	lda	xwa, (35480:16)
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64883
 	stdi16	(35464), 3
@@ -1281,9 +1281,9 @@ FDC_Reset_BuildParams:
 	stdi16	(35470), 78
 	stdi16	(35472), 1
 	stdi16	(35474), 1
-	lda_d16	xwa, (35480)
+	lda	xwa, (35480:16)
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64831
 	stdi16	(35464), 3
@@ -1292,9 +1292,9 @@ FDC_Reset_BuildParams:
 	stdi16	(35470), 10
 	stdi16	(35472), 1
 	stdi16	(35474), 1
-	lda_d16	xwa, (35480)
+	lda	xwa, (35480:16)
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64779
 	stdi16	(35464), 3
@@ -1303,9 +1303,9 @@ FDC_Reset_BuildParams:
 	stdi16	(35470), 40
 	stdi16	(35472), 1
 	stdi16	(35474), 1
-	lda_d16	xwa, (35480)
+	lda	xwa, (35480:16)
 	stda32	(35476), xwa
-	lda_d16	xwa, (35464)
+	lda	xwa, (35464:16)
 	push	xwa
 	calr	64727
 	lda	xsp, (xsp+20)

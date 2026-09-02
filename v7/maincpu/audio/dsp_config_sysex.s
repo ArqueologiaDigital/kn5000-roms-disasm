@@ -310,7 +310,7 @@ SysEx_ApplyVoiceParam_49_128_SkipRestore:
 	dec	4, xsp
 SysEx_ApplyVoiceParam_49_128_IterateSlots:
 	push	qiz
-	lda_d16	xwa, (49138)
+	lda	xwa, (49138:16)
 SysEx_ApplyVoiceParam_49_128_SlotLoop:
 	.byte 0xbf, 0x02, 0x60, 0xc7, 0xfb, 0xa8, 0xc7, 0xfb
 	.byte 0x89, 0xd8, 0x12, 0x1d, 0x29, 0x96, 0xfc, 0xbb
@@ -368,7 +368,7 @@ SysEx_ApplyAndReloadPreset_Type63:
 SysEx_ApplyAndReloadPreset_Type63_Loop:
 	cp	(xwa), a
 	ldw	bc, 35817
-	lda_d16	xwa, (64862)
+	lda	xwa, (64862:16)
 	sub	xwa, xbc
 	ld	de, wa
 	srl	de, 1
@@ -644,13 +644,13 @@ BitMapOut_MergeOutputFields:
 	jr nz, .Lc_fdb297
 	ld WA,IZ
 	inc 1,IZ
-	lda_d16 xbc, (0xc036)
+	lda xbc, (0xc036:16)
 	extz XWA
 	add XWA,XBC
 	ld (XWA),0xf8
 	jr t, .Lc_fdb297
 .Lc_fdb2cc:
-	lda_d16 xwa, (0xc036)
+	lda xwa, (0xc036:16)
 	bitda 1, (0x0429)
 	jr z, .Lc_fdb2ed
 	resda 1, (0x0429)
@@ -692,7 +692,7 @@ BitMapOut_MergeOutputFields:
 	jr z, .Lc_fdb347
 	ld WA,IZ
 	inc 1,IZ
-	lda_d16 xbc, (0xc036)
+	lda xbc, (0xc036:16)
 	extz XWA
 	add XWA,XBC
 	ld (XWA),L
@@ -2581,7 +2581,7 @@ AudioModeChange_Handler:
 	add WA,WA
 	ld BC,WA
 	add BC,0x00e4
-	lda_d16 xde, (0xc163)
+	lda xde, (0xc163:16)
 	ldb_d8 a, (0xfc6a)
 	and A,0xff
 	sub A,0x40

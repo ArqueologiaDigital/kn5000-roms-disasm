@@ -2568,7 +2568,7 @@ FDC_ReadSector:
 	ld xwa, (xsp + 14)	; LD XWA, (XSP+0Eh)
 	ld xbc, 0x12	; 41 12 00 00 00 - param size
 	call 0xFFFC63	; CALL 0xFFFC63
-	lda_d16 xiz, (3088); LDA XIZ, 0x0C10 - FDC params in RAM
+	lda xiz, (3088:16); LDA XIZ, 0x0C10 - FDC params in RAM
 	ldw (xiz + 2), 0x0	; LD (XIZ+02h), 0000h
 	ld wa, hl	; LD WA, HL
 	srl wa, 1	; SRL 1, WA - track = sector >> 1
@@ -2612,7 +2612,7 @@ FDC_ReadSectorWrapper__retry:
 	ld bc, (xsp + 8)	; LD BC, (XSP+08h)
 	ld xde, (xsp + 4)	; LD XDE, (XSP+04h)
 	calr FDC_ReadSector	; CALR FDC_ReadSector
-	lda_d16 xwa, (3088); LDA XWA, 0x0C10
+	lda xwa, (3088:16); LDA XWA, 0x0C10
 	ldw (xwa), 0x3	; LD (XWA), 0003h
 	push xwa	; 38
 	call 0xFFE944	; CALL 0xFFE944
@@ -3836,7 +3836,7 @@ LZSS_ReadByte__exit:
 LZSS_OutputByte:
 	ldb_d8 e, (3126); LD E, (0x0C36) - output index
 	extz de	; EXTZ DE
-	lda_d16 xbc, (3082); LDA XBC, 0x0C0A - temp buffer
+	lda xbc, (3082:16); LDA XBC, 0x0C0A - temp buffer
 	extz xde	; EXTZ XDE
 	add xde, xbc	; ADD XDE, XBC
 	ld (xde), a	; LD (XDE), A - store byte
@@ -3867,7 +3867,7 @@ LZSS_OutputByte__not_full:
 LZSS_OutputByte_Alt:
 	ldb_d8 c, (3126); LD C, (0x0C36)
 	extz bc	; EXTZ BC
-	lda_d16 xde, (3086); LDA XDE, 0x0C0E
+	lda xde, (3086:16); LDA XDE, 0x0C0E
 	extz xbc	; EXTZ XBC
 	add xbc, xde	; ADD XBC, XDE
 	ld (xbc), a	; LD (XBC), A
@@ -4357,7 +4357,7 @@ DrawBitmap_UpdateDisplay__db_next_pixel:
 	ld de, iz	; LD DE, IZ
 	extz xde	; EXTZ XDE
 	add xde, (xsp + 2)	; ADD XDE, (XSP+0x02) - bitmap offset
-	lda_d16 xwa, (4164); LDA XWA, 0x1044
+	lda xwa, (4164:16); LDA XWA, 0x1044
 	stw_erp BC, 0xEE	; LD BC, QHL
 	extz xbc	; EXTZ XBC
 	add xbc, xwa	; ADD XBC, XWA
@@ -4783,7 +4783,7 @@ Handler_INT4__int4_send_cmd:
 	calr FDC_WriteData	; CALR FDC_WriteData
 
 Handler_INT4__int4_setup_buffer:
-	lda_d16 xiz, (3214); LDA XIZ, 0x0C8E - result buffer
+	lda xiz, (3214:16); LDA XIZ, 0x0C8E - result buffer
 	inc 1, xiz	; INC 1, XIZ
 
 Handler_INT4__int4_read_loop:

@@ -1289,7 +1289,7 @@ SendParams_E2__wait_cpu_ready:
 	bit_dd8 4, 0x34	; Check if main CPU ready
 	jr nz, SendParams_E2__timeout2	; Not ready yet - check timeout
 	set_dd8 0, 0x34	; Set our ready flag
-	lda_d16 xhl, (1282); XHL = address of DMA parameter block
+	lda xhl, (1282:16); XHL = address of DMA parameter block
 	ld (xhl), xwa	; Store XWA parameter
 	ld (xhl + 4), xde	; Store XDE parameter
 	ld (xhl + 8), bc	; Store BC parameter
@@ -1365,9 +1365,9 @@ TwoPhase_Transfer__wait_ack:
 	jrl nz, TwoPhase_Transfer__timeout_ack	; Not acknowledged - timeout handler
 	set_dd8 0, 0x34	; Set our ready flag
 	; Phase 1: Set up first DMA transfer
-	lda_d16 xhl, (1342); XHL = 0x053E (second buffer)
+	lda xhl, (1342:16); XHL = 0x053E (second buffer)
 	ld (xhl), xwa	; Store XWA to buffer
-	lda_d16 xwa, (1292); XWA = 0x050C (first buffer)
+	lda xwa, (1292:16); XWA = 0x050C (first buffer)
 	ld (xwa), xde	; Store XDE to first buffer
 	ld (xhl + 4), bc	; Store BC to second buffer+4
 	ld (xwa + 4), bc	; Store BC to first buffer+4
@@ -1394,7 +1394,7 @@ TwoPhase_Transfer__delay1_loop:
 	jr c, TwoPhase_Transfer__delay1_loop	; Continue if < 200
 TwoPhase_Transfer__delay1_done:
 	; Phase 2: Set up second DMA transfer
-	lda_d16 xwa, (1342); XWA = 0x053E (second buffer)
+	lda xwa, (1342:16); XWA = 0x053E (second buffer)
 	ld xbc, (xwa)	; XBC = contents of second buffer
 	ldc_cr32 xbc, 0x08	; DMA source = XBC
 	ld wa, (xwa + 4)	; WA = count from buffer+4
@@ -1477,7 +1477,7 @@ InterCPU_RX_Handler:
 	jr nz, InterCPU_RX_Handler__not_e1
 	; E1: Set up DMA for 6 bytes
 	stdi8 (1304), 2
-	lda_d16 xwa, (1348)
+	lda xwa, (1348:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
 	lds wa, 6
@@ -1488,7 +1488,7 @@ InterCPU_RX_Handler__not_e1:
 	jr nz, InterCPU_RX_Handler__not_e2
 	; E2: Set up DMA for 10 bytes
 	stdi8 (1304), 3
-	lda_d16 xwa, (1354)
+	lda xwa, (1354:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
 	ldw wa, 0xA
@@ -1503,7 +1503,7 @@ InterCPU_RX_Handler__not_e2:
 InterCPU_RX_Handler__default_cmd:
 	; Other commands: variable-length DMA based on low 5 bits
 	stdi8 (1304), 1
-	lda_d16 xwa, (1310)
+	lda xwa, (1310:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
 	ldb_d8 a, (1306)
@@ -1608,7 +1608,7 @@ CMD_Dispatch_Handler:
 	jr CMD_Dispatch_Handler__set_flag_exit
 CMD_Dispatch_Handler__state2:
 	; State 2: Set up secondary DMA transfer
-	lda_d16 xwa, (1348)
+	lda xwa, (1348:16)
 	ld xbc, (xwa)
 	ldc_cr32 xbc, 0x20	; DMA channel 0 destination (from XBC)
 	ld wa, (xwa + 4)
@@ -1681,7 +1681,7 @@ INIT_MEMORY_TEST__no_error:
 	; of 0x0003 is not recoverable from software.  INFERENCE: an enable/reset of the
 	; scanner and its event FIFO, issued once before the endless test loop below.
 	stiw_da (0x110002), 0x0003; 7-byte encoding: f2 02 00 11 02 03 00
-	lda_d16 xbc, (1368)
+	lda xbc, (1368:16)
 	ld xwa, xbc
 	inc 8, xbc	; XBC = 0x0560, the loop bound: INC #3,r encodes 8 as 0, so this is +8 not +1
 INIT_MEMORY_TEST__clear_loop:
@@ -1931,7 +1931,7 @@ SERIAL_INIT:
 	pushw_erp 0xFA
 	ldib_erp 0xFB, 0	; Error accumulator
 	calr CONTROL_PANEL_BIT_SET_CLEAR	; Drain the keybed FIFO into the 0x0558 bitmap
-	lda_d16 xwa, (1368)
+	lda xwa, (1368:16)
 	ld xbc, xwa
 	lda xde, (xwa + 8)
 SERIAL_INIT__check_loop:
@@ -2000,7 +2000,7 @@ CONTROL_PANEL_BIT_SET_CLEAR__loop:
 	ld a, e	; A = bit position
 	ld e, l	; E = byte offset
 	extz de	; Zero-extend DE (byte offset in DE)
-	lda_d16 xix, (1368); XIX = buffer base address
+	lda xix, (1368:16); XIX = buffer base address
 	lds hl, 1	; HL = initial bit mask (1)
 	and a, 0xF	; Mask bit position to 0-15
 	jr z, CONTROL_PANEL_BIT_SET_CLEAR__skip_shift	; If A=0, skip shift (bit already = 1)

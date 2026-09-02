@@ -946,7 +946,7 @@ sub_FAC34D:
 	pushw	hl                                   ; FAC351  push HL
 	pushw	de                                   ; FAC352  push DE
 	push	xix                                   ; FAC353  push XIX
-	lda_d16	xix, (0x14FE)                      ; FAC354  lda XIX,0x14fe
+	lda	xix, (0x14FE:16)                      ; FAC354  lda XIX,0x14fe
 	extz	xix                                   ; FAC358  extz XIX
 	ld	c, (xix+29)                             ; FAC35A  ld C,(XIX+0x1d)
 	cps	c, 0                                   ; FAC35D  cp C,0

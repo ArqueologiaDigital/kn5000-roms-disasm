@@ -3627,7 +3627,7 @@ FileData_RawDataBlock:
 	push	xiz
 	call	PreLswLoad
 	calr	11147
-	lda_d16	xwa, (0xf980)
+	lda	xwa, (0xf980:16)
 	ld	(xsp+6), xwa
 	pushw	1664
 	call	Malloc
@@ -4713,7 +4713,7 @@ DataBuf_LoadAndDispatchFormat2:
 	push xwa
 	call Memset
 	inc 8, xsp
-	lda_d16 xbc, (0xfc74)
+	lda xbc, (0xfc74:16)
 	ld a, (xbc)
 	ld (xsp + 4), a
 	ld xwa, (xsp + 6)
@@ -4762,7 +4762,7 @@ DataBuf_Format2_Type63:
 	push xwa
 	call Memset
 	inc 8, xsp
-	lda_d16 xbc, (0xfc8e)
+	lda xbc, (0xfc8e:16)
 	ld a, (xbc)
 	ld (xsp + 4), a
 	ld xwa, (xsp + 6)
@@ -4828,7 +4828,7 @@ DataBuf_Format2_FormatType2:
 	push xwa
 	call Memset
 	inc 8, xsp
-	lda_d16 xbc, (0xfc74)
+	lda xbc, (0xfc74:16)
 	ld a, (xbc)
 	ld (xsp + 4), a
 	ld xwa, (xsp + 6)
@@ -4882,7 +4882,7 @@ DataBuf_FormatType2_Type63:
 	push xwa
 	call Memset
 	inc 8, xsp
-	lda_d16 xbc, (0xfc8e)
+	lda xbc, (0xfc8e:16)
 	ld a, (xbc)
 	ld (xsp + 4), a
 	ld xwa, (xsp + 6)
@@ -6157,7 +6157,7 @@ DataBuf_CopyBulkBitfields_Large:
 	push	xiz
 	call	PreLswLoad
 	calr	3987
-	lda_d16	xwa, (0xf980)
+	lda	xwa, (0xf980:16)
 	ld	(xsp+6), xwa
 	pushw 1088
 	call	Malloc
@@ -7074,7 +7074,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	push xwa
 	call Memset
 	inc 8, xsp
-	lda_d16 xbc, (0xfc74)
+	lda xbc, (0xfc74:16)
 	ld a, (xbc)
 	ld (xsp + 4), a
 	ld xwa, (xsp + 6)
@@ -7133,7 +7133,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	push xwa
 	call Memset
 	inc 8, xsp
-	lda_d16 xbc, (0xfc8e)
+	lda xbc, (0xfc8e:16)
 	ld a, (xbc)
 	ld (xsp + 4), a
 	ld xwa, (xsp + 6)
@@ -7659,7 +7659,7 @@ DataBuf_Data_FormatDispatch:
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Mem_Copy
-	lda_d16	xwa, (0xf9a0)
+	lda	xwa, (0xf9a0:16)
 	pushw	1568
 	pushw	237
 	pushw	0xb3fc
@@ -7726,7 +7726,7 @@ DataBuf_InitSlotFromPreset:
 	call Mem_Copy
 	lda xbc, (0x00f180:24)
 	add xbc, 0x300
-	lda_d16 xwa, (0xfda2)
+	lda xwa, (0xfda2:16)
 	sub xwa, 0xf9a0
 	pushw wa
 	pushw 0xed
@@ -7755,7 +7755,7 @@ DataBuf_InitSlotFromPreset_Alt:
 	ld xbc, 0xab000
 	add xbc, xwa
 	add xbc, 0x300
-	lda_d16 xwa, (0xfda2)
+	lda xwa, (0xfda2:16)
 	sub xwa, 0xf9a0
 	pushw wa
 	pushw 0xed
@@ -7950,7 +7950,7 @@ SndParam_ApplyModeSpecific:
 	ldb_d8 c, (0xb7f0)
 	cps c, 2
 	ret z
-	lda_d16 xwa, (0xfdad)
+	lda xwa, (0xfdad:16)
 	cps c, 0
 	jr z, SndParam_ClearBits
 	cps c, 1
@@ -8217,16 +8217,16 @@ SndParam_UpdateChan_CopyMemory:
 	ld (xsp), xwa
 	ld xwa, 0x2e0
 	add (xsp), xwa
-	lda_d16 xbc, (0xf980)
-	lda_d16 xwa, (0xfda2)
+	lda xbc, (0xf980:16)
+	lda xwa, (0xfda2:16)
 	sub xwa, xbc
 	pushw wa
 	push xbc
 	ld xwa, (xsp + 6)
 	push xwa
 	call Mem_Copy
-	lda_d16 xbc, (0xf9a0)
-	lda_d16 xwa, (0xffc0)
+	lda xbc, (0xf9a0:16)
+	lda xwa, (0xffc0:16)
 	sub xwa, xbc
 	pushw wa
 	pushw 0x3
@@ -10209,7 +10209,7 @@ SeqBuf_FlushTerminate:
 ArpQueue_Pack21BitValue:
 	dec	4, xsp
 	lda	xwa, (xsp)
-	lda_d16	xde, (0xbcd4)
+	lda	xde, (0xbcd4:16)
 	ld	xbc, (xde)
 	srl	xbc, 14
 	res	7, c
@@ -10291,7 +10291,7 @@ ArpQueue_ProcessAndSort_Data:
 	jr	z, 65
 	lda	xwa, (xsp)
 	lda	xde, (xwa+1)
-	lda_d16	xhl, (0xbccc)
+	lda	xhl, (0xbccc:16)
 	ld	xbc, (xhl)
 	stb_dpi d, 228
 	ld (xhl), xbc
@@ -10306,7 +10306,7 @@ ArpQueue_ProcessAndSort_Data:
 	calr	65359
 	lds32	xwa, 1
 	subdm32	0xbcc4, xwa
-	lda_d16	xbc, (0xbcd4)
+	lda	xbc, (0xbcd4:16)
 	ld	xwa, (xbc)
 	dec	1, xwa
 	ld	(xbc), xwa
@@ -10490,9 +10490,9 @@ SeqVoice_DispatchProcess_Data:
 	lda	xbc, (xiz+6)
 	ld	xix, xbc
 	ld	xhl, xbc
-	lda_d16	xiy, (0xbcec)
+	lda	xiy, (0xbcec:16)
 	ld	xde, xiy
-	lda_d16	xwa, (0xbce4)
+	lda	xwa, (0xbce4:16)
 	ld	(xsp+4), xwa
 	inc	8, xiy
 	ld	(xsp+8), xbc
@@ -10557,12 +10557,12 @@ SeqVoice_DispatchProcess_Data:
 	ldb	h, 0
 	extz	xhl
 	or	xiz, xhl
-	lda_d16	xwa, (0xbcdc)
+	lda	xwa, (0xbcdc:16)
 	ld	xbc, (xwa)
 	add	xbc, xiz
 	ld	(xwa+4), xbc
 	ld	(xwa+8), xiz
-	lda_d16	xwa, (0xbcec)
+	lda	xwa, (0xbcec:16)
 	ld	xbc, (xwa)
 	add	xbc, xiz
 	ld	(xwa+4), xbc
@@ -10572,12 +10572,12 @@ SeqVoice_DispatchProcess_Data:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	lda_d16	xwa, (0xf980)
+	lda	xwa, (0xf980:16)
 	ld	(xiz), xwa
 	calr	763
 	ld	(xsp+4), xhl
 	calr	779
-	lda_d16	xwa, (0xffbe)
+	lda	xwa, (0xffbe:16)
 	sub	xwa, 0xf980
 	add	xwa, 0x12cb2
 	add	xwa, xhl
@@ -10607,9 +10607,9 @@ SeqVoice_DispatchProcess_Data:
 	pop	xiz
 	inc	4, xsp
 	ret
-	lda_d16	xde, (0xf980)
+	lda	xde, (0xf980:16)
 	ld	(xwa), xde
-	lda_d16	xbc, (0xffbe)
+	lda	xbc, (0xffbe:16)
 	sub	xbc, xde
 	ld	xde, xbc
 	add	xde, 0x12cb2
@@ -10619,9 +10619,9 @@ SeqVoice_DispatchProcess_Data:
 	ld	(xwa+4), xhl
 	ld	(xwa+8), xde
 	ret
-	lda_d16	xde, (0xf980)
+	lda	xde, (0xf980:16)
 	ld	(xwa), xde
-	lda_d16	xbc, (0xffbe)
+	lda	xbc, (0xffbe:16)
 	sub	xbc, xde
 	inc	2, xbc
 	ld	xhl, xbc
@@ -10725,7 +10725,7 @@ SeqVoice_DispatchProcess_Data:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	lda_d16	xwa, (0xf180)
+	lda	xwa, (0xf180:16)
 	ld	(xiz), xwa
 	add	xwa, 0x53000
 	ld	(xiz+4), xwa
@@ -10747,7 +10747,7 @@ SeqVoice_DispatchProcess_Data:
 	ld	(xiz+8), xwa
 	pop	xiz
 	ret
-	lda_d16	xbc, (0xf180)
+	lda	xbc, (0xf180:16)
 	ld	(xwa), xbc
 	.byte 0xf3, 0xe5
 	nop
@@ -11318,12 +11318,12 @@ MidiSeq_UpdateToneParam_Lower:
 	ret
 
 MidiSeq_UpdateVolumeScale:
-	lda_d16 xwa, (0xbd1c)
+	lda xwa, (0xbd1c:16)
 	bitm 7, (xwa)
 	ret nz
 	bitda 6, (0xbd18)
 	jr z, MidiSeq_VolScale_Lower
-	lda_d16 xbc, (0xbcbc)
+	lda xbc, (0xbcbc:16)
 	ld xde, (xbc + 8)
 	srl xde, 5
 	ld (xbc + 12), xde
@@ -11331,7 +11331,7 @@ MidiSeq_UpdateVolumeScale:
 	jr MidiSeq_VolScale_SetActive
 
 MidiSeq_VolScale_Lower:
-	lda_d16 xbc, (0xbcdc)
+	lda xbc, (0xbcdc:16)
 	ld xde, (xbc + 8)
 	srl xde, 5
 	ld (xbc + 12), xde
@@ -11346,7 +11346,7 @@ MidiSeq_VolScale_SetActive:
 MidiSeq_ComputeExpression:
 	bitda 6, (0xbd18)
 	jr z, MidiSeq_Expression_Lower
-	lda_d16 xwa, (0xbcbc)
+	lda xwa, (0xbcbc:16)
 	ld xde, (xwa + 8)
 	ld xbc, (xwa + 12)
 	or xde, xde
@@ -11368,7 +11368,7 @@ MidiSeq_ComputeExpression:
 	ret
 
 MidiSeq_Expression_Lower:
-	lda_d16 xwa, (0xbcdc)
+	lda xwa, (0xbcdc:16)
 	ld xde, (xwa + 8)
 	ld xbc, (xwa + 12)
 	or xde, xde
@@ -11390,7 +11390,7 @@ MidiSeq_Expression_Lower:
 	ret
 
 MidiSeq_CheckSyncDirty:
-	lda_d16 xbc, (0xbd1c)
+	lda xbc, (0xbd1c:16)
 	bitda 6, (0xbd18)
 	jr z, MidiSeq_CheckSyncDirty_Lower
 	ldb_d8 a, (0xbd00)
@@ -12765,32 +12765,32 @@ SeqBuf_Timing_Data:
 	ret
 
 MidiChan_ClearStorageFields:
-	lda_d16 xwa, (0xbc68)
+	lda xwa, (0xbc68:16)
 	ld (xwa), 0xff
 	ld (xwa + 1), 0xff
 	ld (xwa + 2), 0xff
-	lda_d16 xwa, (0xbc64)
+	lda xwa, (0xbc64:16)
 	ld (xwa), 0xff
 	ld (xwa + 1), 0xff
 	ld (xwa + 2), 0xff
 	ret
 
 MidiChan_InitAllBufferPtrs:
-	lda_d16 xwa, (0xb7f4)
+	lda xwa, (0xb7f4:16)
 	stda32 0xbc54, xwa
-	lda_d16 xbc, (0xbc6c)
+	lda xbc, (0xbc6c:16)
 	stda32 0xbcac, xbc
-	lda_d16 xde, (0xb90c)
+	lda xde, (0xb90c:16)
 	stda32 0xbc58, xde
-	lda_d16 xde, (0xbc7c)
+	lda xde, (0xbc7c:16)
 	stda32 0xbcb0, xde
-	lda_d16 xde, (0xba24)
+	lda xde, (0xba24:16)
 	stda32 0xbc5c, xde
-	lda_d16 xde, (0xbc8c)
+	lda xde, (0xbc8c:16)
 	stda32 0xbcb4, xde
-	lda_d16 xde, (0xbb3c)
+	lda xde, (0xbb3c:16)
 	stda32 0xbc60, xde
-	lda_d16 xde, (0xbc9c)
+	lda xde, (0xbc9c:16)
 	stda32 0xbcb8, xde
 	calr ArpQueue_InitBuffer
 	ld xwa, (0xbc58:16)
@@ -12928,7 +12928,7 @@ SoundMode_ApplyVoiceParams:
 	lds wa, 4
 	ld xbc, 0xf980
 	call SysEx_ApplyVoiceParam_4B
-	lda_d16 xbc, (0x918d)
+	lda xbc, (0x918d:16)
 	ld xwa, xbc
 	lda xbc, (xbc + 31)
 
@@ -12956,7 +12956,7 @@ SoundMode_SysExConfig_Data:
 	sbc	w, d
 	swi	6
 	and	wa, 511
-	lda_d16	xbc, (0xfc5a)
+	lda	xbc, (0xfc5a:16)
 	ld	l, a
 	ld	(xbc+8), l
 	lda	xde, (xbc+9)
@@ -13026,9 +13026,9 @@ SoundMode_DispatchRender_2:
 SoundMode_PostRender:
 	call BitMapOut_ComputeRegionDelta
 	lda xde, (0x03c8e4:24)
-	lda_d16 xbc, (0xf9a0)
+	lda xbc, (0xf9a0:16)
 	ld xhl, xbc
-	lda_d16 xwa, (0xffbe)
+	lda xwa, (0xffbe:16)
 	sub xwa, xbc
 	inc 2, xwa
 	ld xbc, xwa
@@ -13255,7 +13255,7 @@ SoundMode_ProcessToneAndParams:
 	calr SwbtWr_StubRet_C
 	calr SwbtWr_WriteBankSelect
 	calr MidiBuf_CalcFillRange
-	lda_d16 xde, (0xfc5f)
+	lda xde, (0xfc5f:16)
 	ld c, (xde)
 	res 0, c
 	ld (xde), c
@@ -13267,7 +13267,7 @@ SoundMode_ProcessToneAndParams:
 	ret
 
 TGReg_ClearTerminator:
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 	sub xwa, 0xf9b4
 	lda xbc, (0x03c8e4:24)
 	add xwa, xbc
@@ -13609,7 +13609,7 @@ SoundParam_ApplyBit15Toggle:
 	ld wa, (4597:16)
 	bit 15, wa
 	ret z
-	lda_d16 xbc, (0xfc5a)
+	lda xbc, (0xfc5a:16)
 	ld (xbc + 8), a
 	lda xde, (xbc + 9)
 	ld c, (xde)
@@ -13759,9 +13759,9 @@ SwbtWr_WriteBankSelect:
 	ret
 
 MidiBuf_CalcFillRange:
-	lda_d16 xbc, (0x9674)
+	lda xbc, (0x9674:16)
 	ld xde, xbc
-	lda_d16 xwa, (0x96b3)
+	lda xwa, (0x96b3:16)
 	sub xwa, xbc
 	inc 1, xwa
 	ld c, a
@@ -13858,7 +13858,7 @@ VoiceData_SyncLoop:
 	inc 1, iz
 	cps iz, 7
 	jr c, VoiceData_SyncLoop
-	lda_d16 xbc, (0xfd97)
+	lda xbc, (0xfd97:16)
 	ld a, (xbc)
 	and a, 0x80
 	ld (xbc), a
@@ -13866,7 +13866,7 @@ VoiceData_SyncLoop:
 	res 7, e
 	or a, e
 	ld (xbc), a
-	lda_d16 xwa, (0xfc6f)
+	lda xwa, (0xfc6f:16)
 	cpdi8 (0x8e74), 0
 	jr z, VoiceSync_ClearBit5
 	setm 5, (xwa)
@@ -15057,7 +15057,7 @@ SeqAlt_AssSwb_Cleanup:
 SeqAlt_DualNibblePack:
 	dec 4, xsp
 	push xiz
-	lda_d16 xwa, (0xbd26)
+	lda xwa, (0xbd26:16)
 	ld (xsp + 4), xwa
 	ld xiz, xwa
 	ld xwa, (0xbc54:16)

@@ -512,7 +512,7 @@ INTT1_CheckMetroTimer:
 	jrl INTT1_CheckMidiSync
 
 UIStateMachine_DispatchEntry:
-	lda_d16 xhl, (1055)
+	lda xhl, (1055:16)
 	ld a, (xhl)
 	bitda 2, (0xfd50)
 	jr nz, UIStateMachine_CheckPending
@@ -559,7 +559,7 @@ UI_STATE_1_PROCESS:
 	anddi8 (1058), 110
 	bitda 0, (1042)
 	jr nz, UIState1_AlternateExit
-	lda_d16 xhl, (1116)
+	lda xhl, (1116:16)
 	cp (xhl), 0x0
 	jr z, UIState1_SkipToExit
 	decm8 1, (xhl)
@@ -640,7 +640,7 @@ INTTR4_HANDLER:
 	push xhl
 	push xiy
 	lda xiy, (0x01e753:24)
-	lda_d16 xhl, (1039)
+	lda xhl, (1039:16)
 	incm8 1, (xhl)
 	cp (xhl), 0x60
 	jr c, INTTR4_TickWrapped
@@ -970,7 +970,7 @@ TempoRingBuf_Write_Dequeue:
 
 TempoRingBuf_Write_Enqueue:
 	pushw ix
-	lda_d16 xhl, (1143)
+	lda xhl, (1143:16)
 	ld ix, (1141:16)
 	stib_ind 0x07, 0xec, 0xf0, 0x81
 	inc 1, ix
@@ -1007,7 +1007,7 @@ TempoRingBuf_WritePair_ClearPending:
 
 TempoRingBuf_WritePair_Enqueue:
 	pushw ix
-	lda_d16 xhl, (1143)
+	lda xhl, (1143:16)
 	ld ix, (1141:16)
 	stb_dri A, 0x07, 0xec, 0xf0
 	ldb_d8 a, (1051)
@@ -1203,7 +1203,7 @@ MainLoop_AfterSwbtWr:
 	call SeMenu_ListSelector_Select
 
 MainLoop_AfterSeqBuf_NoteEvent:
-	lda_d16 xiy, (1058)
+	lda xiy, (1058:16)
 	mri_d2 0xb5, 0xae
 	jr nz, MainLoop_AfterDialCheck
 	calr MainLoop_AudioPeriodicCheck
@@ -1254,7 +1254,7 @@ MainLoop_SequencerPhase:
 	jrl MainLoop
 
 Seq_TickWrapper:
-	lda_d16 xiy, (1115)
+	lda xiy, (1115:16)
 	cp (xiy), 0x1
 	jr nz, SeqTick_CheckActive
 	cpdi8 (0xcedf), 0
@@ -1647,7 +1647,7 @@ SeqEvt_ProcessTimedEvents_Idle:
 TempoRingBuf_Consume:
 	push xix
 	pushw hl
-	lda_d16 xix, (1143)
+	lda xix, (1143:16)
 	xor hl, hl
 	ei 6
 
@@ -1677,7 +1677,7 @@ TempoRingBuf_BytecodeSnippet:
 	calr	24
 	ret
 	push	xix
-	lda_d16	xix, (1143)
+	lda	xix, (1143:16)
 	ld	hl, (1141:16)
 	.byte 0xf3
 	reti
@@ -5556,7 +5556,7 @@ InterCPU_E2_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge (goes low)
 	jr nz, InterCPU_E2_TimeoutLoop
 	set_dd8 0, 0x68	; MSTAT0 - set to signal E2 header data ready
-	lda_d16 xhl, (1478)
+	lda xhl, (1478:16)
 	ld (xhl), xwa
 	ld (xhl + 4), xde
 	ld (xhl + 8), bc
@@ -5681,9 +5681,9 @@ E1Bulk_WaitAck:
 	bit_dd8 3, 0x68	; SSTAT1 - wait for Sub CPU to acknowledge E1 (goes low)
 	jrl nz, E1Bulk_AckTimeout_Loop
 	set_dd8 0, 0x68	; MSTAT0 - set to signal 6-byte header data ready
-	lda_d16 xhl, (1544)
+	lda xhl, (1544:16)
 	ld (xhl), xwa
-	lda_d16 xwa, (1488)
+	lda xwa, (1488:16)
 	ld (xwa), xde
 	ld (xhl + 4), bc
 	ld (xwa + 4), bc
@@ -5705,7 +5705,7 @@ E1Bulk_Phase2_Delay:
 	inc 1, wa
 	cp wa, 0xc8
 	jr c, E1Bulk_Phase2_Delay
-	lda_d16 xbc, (1544)
+	lda xbc, (1544:16)
 	ld xwa, (xbc)
 	stda32 1498, xwa
 	mrdw5 0x99, 0x04, 0x19, 0xde, 0x05
@@ -5887,7 +5887,7 @@ INT0_ReadLatch:
 	cp a, 0xe1
 	jr nz, INT0_CheckE2Command
 	stdi8 (1506), 2
-	lda_d16 xwa, (1550)
+	lda xwa, (1550:16)
 	stda32 1494, xwa
 	ldc_cr32 xwa, 0x20
 	lds wa, 6
@@ -5903,7 +5903,7 @@ INT0_CheckE2Command:
 	cp a, 0xe2
 	jr nz, INT0_HandleDataCommand
 	stdi8 (1506), 3
-	lda_d16 xwa, (1556)
+	lda xwa, (1556:16)
 	stda32 1494, xwa
 	ldc_cr32 xwa, 0x20
 	ldw wa, 0xa
@@ -5917,7 +5917,7 @@ INT0_CheckE2Command:
 
 INT0_HandleDataCommand:
 	stdi8 (1506), 1
-	lda_d16 xwa, (1512)
+	lda xwa, (1512:16)
 	stda32 1494, xwa
 	ldc_cr32 xwa, 0x20
 	ldb_d8 a, (1508)
@@ -6001,7 +6001,7 @@ INTTC0_HANDLER:
 
 ; E1DMA ISR - DMA transfer setup (after SeqRingBuf dispatch)
 E1DMA_TransferSetup:
-	lda_d16 xwa, (1550)
+	lda xwa, (1550:16)
 	ld xbc, (xwa)
 	ldc_cr32 xbc, 0x20
 	ld wa, (xwa + 4)
@@ -6039,13 +6039,13 @@ E1DMA_ISR_Epilogue:
 	reti
 E1DMA_ISR_BytecodeBlock:
 	ei	6
-	lda_d16	xwa, (1566)
+	lda	xwa, (1566:16)
 	.byte 0xb0
 	inc	6, l
 	zcf
 	.byte 0xb0, 0xb7
 	di
-	lda_d16	xde, (1556)
+	lda	xde, (1556:16)
 	ld	xwa, (xde)
 	ld	bc, (xde+8)
 	ld	xde, (xde+4)
@@ -7279,7 +7279,7 @@ FDC_SetupSectorParams:
 	ld xwa, (xsp + 14)
 	ld xbc, 0x12
 	call Math_DivideU32
-	lda_d16 xiz, (1582)
+	lda xiz, (1582:16)
 	ldw (xiz + 2), 0x0
 	ld wa, hl
 	srl wa, 1
@@ -7314,7 +7314,7 @@ FDC_ReadSectors_Retry:
 	ld bc, (xsp + 8)
 	ld xde, (xsp + 4)
 	calr FDC_SetupSectorParams
-	lda_d16 xwa, (1582)
+	lda xwa, (1582:16)
 	ldw (xwa), 0x3
 	push xwa
 	call FDC_CommandEntry
@@ -8386,7 +8386,7 @@ Parport_ReadByte_Return:
 Flash_AccumWrite_Byte:
 	ldb_d8 e, (1620)
 	extz de
-	lda_d16 xbc, (1576)
+	lda xbc, (1576:16)
 	extz xde
 	add xde, xbc
 	ld (xde), a
@@ -8412,7 +8412,7 @@ Flash_AccumWrite_ByteDone:
 Flash_AccumWrite_Word:
 	ldb_d8 c, (1620)
 	extz bc
-	lda_d16 xde, (1580)
+	lda xde, (1580:16)
 	extz xbc
 	add xbc, xde
 	ld (xbc), a
@@ -8791,7 +8791,7 @@ DrawBitmap_BitLoop:
 	ld de, iz
 	extz xde
 	add xde, (xsp + 2)
-	lda_d16 xwa, (0xe36a); table of bit masks (equivalent to 1044h on boot "table_data" rom)
+	lda xwa, (0xe36a:16); table of bit masks (equivalent to 1044h on boot "table_data" rom)
 	stw_erp BC, 0xee
 	extz xbc
 	add xbc, xwa	; indexing bit masks with value of QHL

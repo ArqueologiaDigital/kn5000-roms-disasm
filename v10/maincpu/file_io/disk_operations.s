@@ -52,7 +52,7 @@ FCopy_HandleExecute:
 	ld wa, (0x7f66:16)
 	call GetFileEntryPtr
 	ld xbc, xhl
-	lda_d16 xwa, (0x850d)
+	lda xwa, (0x850d:16)
 	ld de, (0x7f66:16)
 	inc 1, de
 	pushw 0x6
@@ -99,7 +99,7 @@ FCopy_Scroll_Apply:
 	ld wa, (0x7f66:16)
 	call GetFileEntryPtr
 	ld xbc, xhl
-	lda_d16 xwa, (0x850d)
+	lda xwa, (0x850d:16)
 	ld de, (0x7f66:16)
 	inc 1, de
 	pushw 0x6
@@ -242,7 +242,7 @@ FileRenameFunc:
 	call GetCurrentFileIndex
 	cps hl, 0
 	jr lt, FRename_TextChange_Error
-	lda_d16 xiz, (0x8870)
+	lda xiz, (0x8870:16)
 	ld wa, hl
 	call GetFileEntryPtr
 	ld xbc, xhl
@@ -250,7 +250,7 @@ FileRenameFunc:
 	call FileIO_CopyString
 	lds iy, 0
 	lda xix, (CharMap_FullPermutation_0x660:24)
-	lda_d16 xwa, (0x8870)
+	lda xwa, (0x8870:16)
 	ld xhl, xwa
 	jr FRename_PadLoop_Cond
 
@@ -345,7 +345,7 @@ FileRenameSmfFunc:
 	call GetFirstPageBase
 	cps hl, 0
 	jr lt, FRenameSmf_TextChange_Error
-	lda_d16 xiz, (0x8870)
+	lda xiz, (0x8870:16)
 	ld wa, hl
 	call GetRecordPtrForFile
 	ld xbc, xhl
@@ -353,7 +353,7 @@ FileRenameSmfFunc:
 	call FileIO_CopyString
 	lds iy, 0
 	lda xix, (CharMap_FullPermutation_0x660:24)
-	lda_d16 xwa, (0x8870)
+	lda xwa, (0x8870:16)
 	ld xhl, xwa
 	jr FRenameSmf_PadLoop_Cond
 
@@ -890,7 +890,7 @@ DiskNameFunc:
 	jrl nz, DiskName_Return
 	lds wa, 0
 	calr InitializeOperationState
-	lda_d16 xiz, (0x878c)
+	lda xiz, (0x878c:16)
 	call FileIO_SearchAndLoadFile
 	ld xbc, xhl
 	ld xwa, xiz
@@ -903,15 +903,15 @@ DiskNameFunc:
 DiskName_TextChange:
 	lds wa, 0
 	calr InitializeOperationState
-	lda_d16 xiz, (0x878c)
+	lda xiz, (0x878c:16)
 	call FileIO_SearchAndLoadFile
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
-	lda_d16 xix, (0x8870)
+	lda xix, (0x8870:16)
 	lda xiz, (CharMap_FullPermutation_0x660:24)
-	lda_d16 xde, (0x878c)
+	lda xde, (0x878c:16)
 	ld xhl, xde
 	jr DiskName_PadLoop_Cond
 
@@ -1050,7 +1050,7 @@ DiskInfo_RenderStrings:
 	ld xwa, 0x87ce
 	ld xbc, DiskOp_ChannelCfgTable_0x6A
 	call FileIO_BuildFilePath
-	lda_d16 xwa, (0x87ce)
+	lda xwa, (0x87ce:16)
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 4)
 	lds bc, 4
@@ -1061,7 +1061,7 @@ DiskInfo_RenderStrings:
 	ld xwa, 0x87ce
 	ld xbc, DiskOp_ChannelCfgTable_0x6E
 	call FileIO_BuildFilePath
-	lda_d16 xwa, (0x87ce)
+	lda xwa, (0x87ce:16)
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
 	lds bc, 3
@@ -1095,14 +1095,14 @@ SongNameFunc:
 	jr lt, SongName_NoSlot
 	lds wa, 0
 	calr InitializeOperationState
-	lda_d16 xwa, (0x880e)
+	lda xwa, (0x880e:16)
 	ld (xsp + 2), xwa
 	ld wa, iz
 	call GetFileEntryByIndex
 	ld xbc, xhl
 	ld xwa, (xsp + 2)
 	call FileIO_CopyString
-	lda_d16 xwa, (0x880e)
+	lda xwa, (0x880e:16)
 	ld (xwa + 30), 0x0
 	lda xbc, (xwa + 29)
 	ld xde, xbc
@@ -1184,7 +1184,7 @@ SaveFileNameFunc:
 	jr z, SaveFileName_TextChange
 	cp xbc, 0x1c0000b
 	jrl nz, SaveFileName_Return
-	lda_d16 xiz, (0x8850)
+	lda xiz, (0x8850:16)
 	call FileIO_GetRecordByType
 	ld xbc, xhl
 	ld xwa, xiz
@@ -1197,14 +1197,14 @@ SaveFileNameFunc:
 	jr SaveFileName_Dispatch
 
 SaveFileName_TextChange:
-	lda_d16 xiz, (0x8850)
+	lda xiz, (0x8850:16)
 	call FileIO_GetRecordByType
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
 	lds iy, 0
 	lda xix, (CharMap_FullPermutation_0x660:24)
-	lda_d16 xde, (0x8850)
+	lda xde, (0x8850:16)
 	ld xhl, xde
 	jr SaveFileName_PadLoop_Cond
 

@@ -30,7 +30,7 @@ MIDI_INIT_SEQUENCES:
 	calr SndParam_RegisterAllWidgets
 	calr SndParam_ClearHashTable
 	calr SndParam_ReregisterAll
-	lda_d16 xbc, (0x9798)
+	lda xbc, (0x9798:16)
 	ld xwa, xbc
 	lda xbc, (xbc + 64)
 

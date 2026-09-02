@@ -358,7 +358,7 @@ FDemoText_SyncVoicePreset:
 	dec 6, xsp
 	pushw_erp 0xfa
 	ld (xsp + 6), a
-	lda_d16 xwa, (0xfc74)
+	lda xwa, (0xfc74:16)
 	ld (xsp + 2), xwa
 	ldb_da a, (0x0247ee)
 	and a, 0x38

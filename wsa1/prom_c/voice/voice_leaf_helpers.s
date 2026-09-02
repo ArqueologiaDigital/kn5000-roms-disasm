@@ -237,7 +237,7 @@ sub_FA59CE:
 	pushw	hl                                   ; FA59D2  push HL
 	pushw	de                                   ; FA59D3  push DE
 	push	xix                                   ; FA59D4  push XIX
-	lda_d16	xix, (0x11FE)                      ; FA59D5  lda XIX,0x11fe
+	lda	xix, (0x11FE:16)                      ; FA59D5  lda XIX,0x11fe
 	ld	h, (xiz+8)                              ; FA59D9  ld H,(XIZ+0x08)
 	ldb	c, 12                                  ; FA59DC  ld C,0x0c
 	mul8rr	c, h                                ; FA59DE  mul BC,H
@@ -300,7 +300,7 @@ sub_FA5A36:
 	pushw	hl                                   ; FA5A3A  push HL
 	pushw	de                                   ; FA5A3B  push DE
 	push	xix                                   ; FA5A3C  push XIX
-	lda_d16	xix, (0x11FE)                      ; FA5A3D  lda XIX,0x11fe
+	lda	xix, (0x11FE:16)                      ; FA5A3D  lda XIX,0x11fe
 	ld	h, (xiz+8)                              ; FA5A41  ld H,(XIZ+0x08)
 	ldb	l, 12                                  ; FA5A44  ld L,0x0c
 	ld	c, h                                    ; FA5A46  ld C,H
@@ -475,7 +475,7 @@ sub_FA5B70:
 	pushw	hl                                   ; FA5B74  push HL
 	pushw	de                                   ; FA5B75  push DE
 	push	xix                                   ; FA5B76  push XIX
-	lda_d16	xix, (0xE3E)                       ; FA5B77  lda XIX,0x0e3e
+	lda	xix, (0xE3E:16)                       ; FA5B77  lda XIX,0x0e3e
 	ld	h, (xiz+8)                              ; FA5B7B  ld H,(XIZ+0x08)
 	ldb	c, 5                                   ; FA5B7E  ld C,0x05
 	mul8rr	c, h                                ; FA5B80  mul BC,H
@@ -531,7 +531,7 @@ sub_FA5BC7:
 	pushw	hl                                   ; FA5BCB  push HL
 	pushw	de                                   ; FA5BCC  push DE
 	push	xix                                   ; FA5BCD  push XIX
-	lda_d16	xix, (0xE3E)                       ; FA5BCE  lda XIX,0x0e3e
+	lda	xix, (0xE3E:16)                       ; FA5BCE  lda XIX,0x0e3e
 	ld	h, (xiz+8)                              ; FA5BD2  ld H,(XIZ+0x08)
 	ldb	c, 5                                   ; FA5BD5  ld C,0x05
 	mul8rr	c, h                                ; FA5BD7  mul BC,H
@@ -3217,7 +3217,7 @@ sub_FA6EA5:
 	pushw	hl                                   ; FA6EA9  push HL
 	pushw	de                                   ; FA6EAA  push DE
 	push	xix                                   ; FA6EAB  push XIX
-	lda_d16	xix, (0x4E8)                       ; FA6EAC  lda XIX,0x04e8
+	lda	xix, (0x4E8:16)                       ; FA6EAC  lda XIX,0x04e8
 	ld	h, (xiz+8)                              ; FA6EB0  ld H,(XIZ+0x08)
 	ldb	c, 23                                  ; FA6EB3  ld C,0x17
 	mul8rr	c, h                                ; FA6EB5  mul BC,H

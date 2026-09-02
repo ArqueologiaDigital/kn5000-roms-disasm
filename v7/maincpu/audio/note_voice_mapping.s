@@ -71,7 +71,7 @@ NoteOn_MergeLayer1:
 	jr	50
 	ld	wa, iz
 	mul	wa, 5
-	lda_d16	xbc, (52102)
+	lda	xbc, (52102:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -80,7 +80,7 @@ NoteOn_MergeLayer1:
 	ld	wa, iz
 	mul	wa, 5
 	inc	4, wa
-	lda_d16	xbc, (52099)
+	lda	xbc, (52099:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -624,7 +624,7 @@ VoiceInit_PartLoop:
 	lda xsp, (xsp+168)
 	ret
 	ret
-	lda_d16 xwa, (0xc162)
+	lda xwa, (0xc162:16)
 	lds bc, 0
 	call 0xfe37ea
 	.byte 0xf1
@@ -637,10 +637,10 @@ VoiceInit_ChannelLoop:
 	.byte 0x30, 0xd9, 0xa8, 0x1d, 0xd2, 0x36, 0xfe, 0xf1
 	.byte 0x62, 0xc1, 0x30, 0xd9, 0xa9, 0x1b, 0xd2, 0x36
 	.byte 0xfe
-	lda_d16 xwa, (0xc162)
+	lda xwa, (0xc162:16)
 	lds bc, 2
 	call 0xfe36d2
-	lda_d16 xwa, (0xc162)
+	lda xwa, (0xc162:16)
 	lds bc, 2
 	jp 0xfe355b
 	ret
@@ -1141,7 +1141,7 @@ VoiceClaimExt_Slot3_SetParam:
 VoiceClaimExt_Slot6_MarkLoop:
 	cp	l, 255
 	ret	z
-	lda_d16	xwa, (49506)
+	lda	xwa, (49506:16)
 	lds	bc, 2
 	call	16660458
 	ret
@@ -1154,13 +1154,13 @@ VoiceClaimExt_Slot6_MarkCheck:
 	ld	wa, de
 	add	wa, wa
 	inc	4, wa
-	lda_d16	xbc, (52836)
+	lda	xbc, (52836:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
 	ld	wa, de
 	inc	1, wa
-	lda_d16	xbc, (52809)
+	lda	xbc, (52809:16)
 VoiceClaim_Extended_Return:
 	.byte 0xc3, 0x07, 0xe4, 0xe0, 0x21, 0xb3, 0x41, 0xda
 	.byte 0x88, 0xd8, 0x80, 0xf1, 0x67, 0xce, 0x31, 0xe8
@@ -3681,13 +3681,13 @@ AllocNewVoiceEntry_LoadParam4:
 	jrl	z, 138
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52310
+	lda	xde, (52310:16)
 	extz	xwa
 	add	xwa, xde
 	ld	(xwa), 144
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52311
+	lda	xde, (52311:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xde
@@ -3698,7 +3698,7 @@ SetChannelParam_LoadDRAM2:
 	ld	xbc, 148408537
 	halt
 	nop
-	lda_d16	xde, (52312)
+	lda	xde, (52312:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xde
@@ -3780,13 +3780,13 @@ SetChannelParam_LoadParam5:
 	jrl	z, 138
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52340
+	lda	xde, (52340:16)
 	extz	xwa
 	add	xwa, xde
 	ld	(xwa), 144
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52341
+	lda	xde, (52341:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xde
@@ -3794,7 +3794,7 @@ SetChannelParam_LoadParam5:
 	ld	(xhl), a
 	ld	wa, bc
 	mul	wa, 5
-	lda_d16	xde, 52342
+	lda	xde, (52342:16)
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xde
@@ -4786,7 +4786,7 @@ Rhythm_DispatchCCCommand:
 	ld	xhl, xwa
 	lda	xwa, (xsp+330)
 	ld	xbc, xwa
-	lda_d16	xwa, (49710)
+	lda	xwa, (49710:16)
 	ld	xde, xwa
 	ld	xwa, xhl
 	call	16667741
@@ -4995,7 +4995,7 @@ CollectEnabledVoices_WriteReg:
 	ldw	wa, 35816
 	lda	xwa, (xsp+330)
 	ld	xbc, xwa
-	lda_d16	xwa, (49714)
+	lda	xwa, (49714:16)
 	ld	xde, xwa
 	ld	xwa, xhl
 	call	16667741
@@ -5327,7 +5327,7 @@ ReallocEnabledVoices_DoFindEntr2:
 	jr	z, 60
 	lda	xwa, (xsp)
 	ld	xhl, xwa
-	lda_d16	xbc, (49506)
+	lda	xbc, (49506:16)
 	ld	a, (xsp+330)
 	ld	e, a
 	extz	de
@@ -5365,7 +5365,7 @@ ReallocVoices_Exit_WriteReg:
 	.byte 0xa6, 0x00, 0x21, 0xbf, 0x03, 0x41, 0xb7
 ReallocVoices_Exit_CheckEnd:
 	ldw	wa, 35816
-	lda_d16	xbc, (49864)
+	lda	xbc, (49864:16)
 	ld	a, (xsp+164)
 ReallocVoices_Exit_Compare:
 	.byte 0xc9, 0x8d, 0xda, 0x12, 0xeb, 0x88, 0x1d, 0xf8
@@ -5431,7 +5431,7 @@ ReallocVoices_Exit_WriteReg4:
 	ld	xde, xwa
 	ld	a, (xsp+330)
 	extz	wa
-	lda_d16	xbc, (49996)
+	lda	xbc, (49996:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -5503,7 +5503,7 @@ VoiceRealloc_LookupVoice:
 	jr	z, 63
 	lda	xwa, (xsp+2)
 	ld	xhl, xwa
-	lda_d16	xbc, (49506)
+	lda	xbc, (49506:16)
 	ld	a, (xsp+332)
 	ld	e, a
 	extz	de
@@ -5614,7 +5614,7 @@ ProcessLayeredNoteOn_WriteReg2:
 	jr nz, .Lc_fe7654
 	cp E,0xff
 	jr z, .Lc_fe7654
-	lda_d16 xde, (0xc2c8)
+	lda xde, (0xc2c8:16)
 	ld A,(XSP)
 	ld C,A
 	extz BC
@@ -5626,13 +5626,13 @@ ProcessLayeredNoteOn_WriteReg2:
 	jr z, .Lc_fe7680
 	cp E,0xff
 	jr z, .Lc_fe7680
-	lda_d16 xde, (0xc2c8)
+	lda xde, (0xc2c8:16)
 	ld A,(XSP)
 	ld C,A
 	extz BC
 	ld XWA,XDE
 	call 0xfe36d2
-	lda_d16 xde, (0xc162)
+	lda xde, (0xc162:16)
 	ld A,(XSP)
 	ld C,A
 	extz BC
@@ -8208,7 +8208,7 @@ HdaeRom_AltProcessBlock:
 	jrl	nz, 340
 	ld	wa, (xsp+2)
 	add	wa, wa
-	lda_d16	xbc, (53044)
+	lda	xbc, (53044:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), iz
@@ -9727,7 +9727,7 @@ ConfigureBanks_Extend:
 ConfigureBanks_InitVal:
 	ldw	hl, 8938
 ConfigureBanks_WriteReg:
-	lda_d16	xwa, (59699)
+	lda	xwa, (59699:16)
 	ld	xbc, xwa
 	ld	wa, de
 	calr	5462
@@ -10867,7 +10867,7 @@ ToneGen_VoiceReset_Return:
 	jr	40
 	ld	bc, (53260:16)
 VoiceReset_Return_RestoreReg:
-	lda_d16	xde, (53266)
+	lda	xde, (53266:16)
 VoiceReset_Return_Prologue:
 	.byte 0xe9, 0x12, 0xea, 0x81, 0xb1, 0x41, 0xd1, 0x10
 	.byte 0xd0, 0x69, 0xd1, 0x0c, 0xd0, 0x3f, 0xff, 0x07
@@ -10937,7 +10937,7 @@ SoundParam_InitDefaultBanks:
 	jr t, .Lc_feda3e
 .Lc_feda16:
 	ld bc, (0xd812:16)
-	lda_d16 xde, (0xd818)
+	lda xde, (0xd818:16)
 	extz XBC
 	add XBC,XDE
 	ld (XBC),A
@@ -10959,7 +10959,7 @@ SoundParam_InitDefaultBanks:
 	jr t, .Lc_feda76
 .Lc_feda4e:
 	ld wa, (0xd814:16)
-	lda_d16 xbc, (0xd818)
+	lda xbc, (0xd818:16)
 	extz XWA
 	add XWA,XBC
 	ld L,(XWA)
@@ -11952,7 +11952,7 @@ Param_SignExtendRetu_Return:
 	jrl	nz, 138
 	cp	xbc, 470
 	jr	ugt, 125
-	lda_d16	xde, 57596
+	lda	xde, (57596:16)
 	ld	(xde), 45
 	ld	xwa, (xsp+20)
 	lda	xhl, (xwa+6)
@@ -12079,7 +12079,7 @@ Param_SignExtendRetu_Return:
 	.byte 0x32, 0xef, 0xbf, 0x04, 0x02, 0x00, 0x00, 0x68
 	.byte 0x05, 0xbf, 0x04, 0x02, 0x01, 0x00, 0x9f, 0x04
 	.byte 0x23, 0x5e, 0xef, 0x64, 0x0e
-	lda_d16 xde, (0xe21c)
+	lda xde, (0xe21c:16)
 	ld (XDE),0x2b
 	ld (XDE+0x01),0x30
 	ld (XDE+0x02),0x7f
@@ -12098,7 +12098,7 @@ Param_SignExtendRetu_Return:
 	call	15676106
 	ldb_d8	l, 57891
 	ret
-	lda_d16	xde, 57894
+	lda	xde, (57894:16)
 	ld	(xde), 43
 	ld	(xde+1), 48
 	ld	(xde+2), 127
@@ -12117,7 +12117,7 @@ Param_SignExtendRetu_Return:
 	call	15676106
 	ldb_d8	l, 57901
 	ret
-	lda_d16	xde, 57904
+	lda	xde, (57904:16)
 	ld	(xde), 43
 	ld	(xde+1), 48
 	ld	(xde+2), 127
@@ -12136,7 +12136,7 @@ Param_SignExtendRetu_Return:
 	call	15676106
 	ldb_d8	l, 57911
 	ret
-	lda_d16	xde, 57914
+	lda	xde, (57914:16)
 	ld	(xde), 43
 	ld	(xde+1), 48
 	ld	(xde+2), 127
@@ -12157,7 +12157,7 @@ Param_SignExtendRetu_Return:
 	ret
 	cps	wa, 4
 	jrl	ugt, 130
-	lda_d16	xde, 57924
+	lda	xde, (57924:16)
 	ld	(xde), 45
 	ld	(xde+1), 0
 	ld	(xde+3), 0
@@ -12212,7 +12212,7 @@ Param_SignExtendRetu_Return:
 	res	7, l
 	ret
 	push XIZ
-	lda_d16 xhl, (0xe284)
+	lda xhl, (0xe284:16)
 	ld (XHL),0x2c
 	ld (XHL+0x01),0x00
 	ld (XHL+0x02),0x08

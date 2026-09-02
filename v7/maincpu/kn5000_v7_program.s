@@ -913,12 +913,12 @@ GetResouceInfo:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; Resource info handlers - 10 handlers for different resource types
 RESOURCE_INFO_HANDLERS:
-	lda_d16 xwa, (63872)
+	lda xwa, (63872:16)
 	ld (xbc), xwa
-	lda_d16 xwa, (65470)
+	lda xwa, (65470:16)
 	ld xde, xwa
 	inc 2, xde
-	lda_d16 xwa, (63872)
+	lda xwa, (63872:16)
 	sub xde, xwa
 	ld (xbc + 4), xde
 	ret
@@ -1298,19 +1298,19 @@ putc_mrx_bf_X:
 midi_out_en_X:
 	jp	16576929
 GetAdr_sqbtof:
-	lda_d16 xhl, (1052)
+	lda xhl, (1052:16)
 	ret
 
 GetAdr_sq_beadt:
-	lda_d16 xhl, (1051)
+	lda xhl, (1051:16)
 	ret
 
 GetAdr_sqsrtc:
-	lda_d16 xhl, (1057)
+	lda xhl, (1057:16)
 	ret
 
 GetAdr_rtmcfg:
-	lda_d16 xhl, (10407)
+	lda xhl, (10407:16)
 	ret
 
 SetGlobalError:

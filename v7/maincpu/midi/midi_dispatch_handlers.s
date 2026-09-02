@@ -1891,7 +1891,7 @@ DataBuf_CopyEffectBlock12:
 	push	xwa
 	call	16713757
 	inc	8, xsp
-	lda_d16	xbc, (64628)
+	lda	xbc, (64628:16)
 	ld	a, (xbc)
 	ld	(xsp+4), a
 	ld	xwa, (xsp+6)
@@ -3485,7 +3485,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	lda xwa, (xsp + 0x10)
 	push XWA
 	call 0xff05bc
-	lda_d16 xwa, (0xf9a0)
+	lda xwa, (0xf9a0:16)
 	pushw 0x0620
 	pushw 0x00ed
 	pushw 0xb3fc
@@ -3549,7 +3549,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	call 0xff05bc
 	lda xbc, (0x00f180:24)
 	add XBC,0x00000300
-	lda_d16 xwa, (0xfda2)
+	lda xwa, (0xfda2:16)
 	sub XWA,0x0000f9a0
 	pushw wa
 	pushw 0x00ed
@@ -3577,7 +3577,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	ld XBC,0x000ab000
 	add XBC,XWA
 	add XBC,0x00000300
-	lda_d16 xwa, (0xfda2)
+	lda xwa, (0xfda2:16)
 	sub XWA,0x0000f9a0
 	pushw wa
 	pushw 0x00ed
@@ -5974,11 +5974,11 @@ SeqChan_StepCmd_Field8to9:
 	.byte 0x27, 0xef, 0x06, 0x00, 0x0e, 0x06, 0x06, 0x1d
 	.byte 0xef, 0x28, 0xef, 0x06, 0x00, 0x0e, 0x06, 0x06
 	.byte 0x1d, 0x41, 0x28, 0xef, 0x06, 0x00, 0x0e
-	lda_d16 xwa, (0xbbcc)
+	lda xwa, (0xbbcc:16)
 	ld (XWA),0xff
 	ld (XWA+0x01),0xff
 	ld (XWA+0x02),0xff
-	lda_d16 xwa, (0xbbc8)
+	lda xwa, (0xbbc8:16)
 	ld (XWA),0xff
 	.byte 0xb8
 SeqChan_StepCmd_Field9to10:
@@ -6074,7 +6074,7 @@ SeqChan_WriteField_Data_A:
 	ld	xbc, 63872
 	call	16623278
 SeqChan_WriteField_Data_B:
-	lda_d16	xbc, (37105)
+	lda	xbc, (37105:16)
 	ld	xwa, xbc
 	lda	xbc, (xbc+31)
 	stib_dsp	224, 35
@@ -6199,7 +6199,7 @@ SeqAlt_CheckInitBuffer:
 	calr	947
 	calr	945
 	calr	1019
-	lda_d16	xde, 64607
+	lda	xde, (64607:16)
 	ld	c, (xde)
 	res	0, c
 	ld	(xde), c
@@ -6209,7 +6209,7 @@ SeqAlt_CheckInitBuffer:
 	ld	(xde), c
 	pop qiz
 	ret
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 	sub XWA,0x0000f9b4
 	lda xbc, (0x03c8e4:24)
 	add XWA,XBC
@@ -6447,9 +6447,9 @@ SoundMode_ProcessToneAndParams:
 	.byte 0x41, 0xf1, 0x8e, 0x90, 0x00, 0x7f, 0x3a, 0x3b
 	.byte 0x3c, 0x3e, 0x1d, 0xda, 0x8e, 0xfc, 0x5e, 0x5c
 	.byte 0x5b, 0x5a, 0x0e
-	lda_d16 xbc, (0x95d8)
+	lda xbc, (0x95d8:16)
 	ld XDE,XBC
-	lda_d16 xwa, (0x9617)
+	lda xwa, (0x9617:16)
 	sub XWA,XBC
 	inc 1,XWA
 	ld C,A
@@ -7280,7 +7280,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	jr z, .Lc_fd989b
 	bitda 0, (0xb74b)
 	jr nz, .Lc_fd989b
-	lda_d16 xbc, (0xbca0)
+	lda xbc, (0xbca0:16)
 	ld wa, (0x9044:16)
 	ld IZ,WA
 	extz XIZ
@@ -7290,7 +7290,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	call 0xfd6495
 	inc 4,XSP
 	stda32 (0xbc86), xhl
-	lda_d16 xwa, (0xbc86)
+	lda xwa, (0xbc86:16)
 	cp (XWA),0xff
 	jr z, .Lc_fd989b
 	cp (XWA),0xc0

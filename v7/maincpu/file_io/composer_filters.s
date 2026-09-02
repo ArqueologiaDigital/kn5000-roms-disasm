@@ -119,7 +119,7 @@ CompLoad_DrawItemLoop:
 	ld	wa, iz
 	ld	hl, wa
 	sll	hl, 5
-	lda_d16	xde, 33904
+	lda	xde, (33904:16)
 	extz	xhl
 	add	xhl, xde
 	stb_erp	c, 248
@@ -141,7 +141,7 @@ CompLoad_DrawItem_Continue:
 	sll	wa, 5
 	lds	hl, 1
 	add	hl, wa
-	lda_d16	xix, (33904)
+	lda	xix, (33904:16)
 	extz	xhl
 	add	xhl, xix
 	inc	1, de
@@ -151,7 +151,7 @@ CompLoad_DrawItem_Continue:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32480:16)
@@ -257,7 +257,7 @@ CompLoad_UpdateDisplay:
 	call	16423243
 	ld	de, (xsp+2)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32480:16)
@@ -265,7 +265,7 @@ CompLoad_UpdateDisplay:
 	call	16423243
 	ld	de, (32484:16)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32480:16)
@@ -465,14 +465,14 @@ LoadFilter_UpdateDisplay:
 	extz	bc
 	ld	wa, bc
 	sla	wa, 4
-	lda_d16	xde, 32490
+	lda	xde, (32490:16)
 	exts	xwa
 	add	xwa, xde
 	calr	-469
 	ld	xwa, (xsp+2)
 	extz	wa
 	sla	wa, 4
-	lda_d16	xbc, 32490
+	lda	xbc, (32490:16)
 	lda_rr	xde, xbc, wa
 	ld	xwa, (32486:16)
 	ld	xbc, 29360143
@@ -671,14 +671,14 @@ SaveFilter_UpdateDisplay:
 	extz	bc
 	ld	wa, bc
 	sla	wa, 4
-	lda_d16	xde, 32622
+	lda	xde, (32622:16)
 	exts	xwa
 	add	xwa, xde
 	calr	-334
 	ld	xwa, (xsp+2)
 	extz	wa
 	sla	wa, 4
-	lda_d16	xbc, 32622
+	lda	xbc, (32622:16)
 	lda_rr	xde, xbc, wa
 	ld	xwa, (32618:16)
 	ld	xbc, 29360143
@@ -722,7 +722,7 @@ SaveFilter_DeselectAll_Loop:
 	call	16289650
 	ld	wa, (xsp)
 	sll	wa, 4
-	lda_d16	xbc, 32622
+	lda	xbc, (32622:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	bc, (xsp)
@@ -730,7 +730,7 @@ SaveFilter_DeselectAll_Loop:
 	calr	-506
 	ld	de, (xsp)
 	sll	de, 4
-	lda_d16	xbc, 32622
+	lda	xbc, (32622:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32618:16)

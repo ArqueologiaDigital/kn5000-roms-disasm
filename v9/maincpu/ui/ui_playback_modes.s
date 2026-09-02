@@ -2126,7 +2126,7 @@ NameGetFuncCall_Dispatch:
 	pushw	0
 	pushw	6888
 	call	Strncpy
-	lda_d16	xwa, (6888)
+	lda	xwa, (6888:16)
 	ld	(xwa+16), 0
 	push	xwa
 	ldb_da	a, (0xffe3)
@@ -2174,7 +2174,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7284
 	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
-	lda_d16	xwa, (7284)
+	lda	xwa, (7284:16)
 	ld	(xwa+16), 0
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
@@ -2190,7 +2190,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7304
 	call	Strncpy
 	lda	xsp, (xsp+10)
-	lda_d16	xwa, (7304)
+	lda	xwa, (7304:16)
 	ld	(xwa+20), 0
 	ldw	de, 19
 	.byte 0xf3
@@ -2231,7 +2231,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7326
 	call	Strncpy
 	lda	xsp, (xsp+10)
-	lda_d16	xwa, (7326)
+	lda	xwa, (7326:16)
 	ld	(xwa+12), 0
 	ldw	de, 11
 	.byte 0xf3
@@ -2271,7 +2271,7 @@ NameGetFuncCall_Dispatch:
 	pushw	7340
 	call	Strcpy
 	inc	8, xsp
-	lda_d16	xwa, (7340)
+	lda	xwa, (7340:16)
 	ld	(xwa+20), 0
 	ldw	de, 19
 	.byte 0xf3
@@ -2392,7 +2392,7 @@ CDlikeSwTtl_ShowSongTitle:
 	pushw 0x1c1e
 	call Strncpy
 	lda xsp, (xsp + 10)
-	lda_d16 xbc, (7198)
+	lda xbc, (7198:16)
 	ld (xbc + 12), 0x0
 	lds wa, 1
 	call Acc_LoadAndStartPlayback
@@ -2416,7 +2416,7 @@ CDlikeSwTtl_ShowDocTitle:
 	pushw 0x1c2c
 	call Strncpy
 	lda xsp, (xsp + 10)
-	lda_d16 xbc, (7212)
+	lda xbc, (7212:16)
 	ld (xbc + 12), 0x0
 	lds wa, 2
 	call Acc_LoadAndStartPlayback
@@ -2440,7 +2440,7 @@ CDlikeSwTtl_ShowPdTitle:
 	pushw 0x1c3a
 	call Strncpy
 	lda xsp, (xsp + 10)
-	lda_d16 xbc, (7226)
+	lda xbc, (7226:16)
 	ld (xbc + 20), 0x0
 	lds wa, 4
 	call Acc_LoadAndStartPlayback

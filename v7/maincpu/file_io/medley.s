@@ -317,14 +317,14 @@ IntMed_CheckSlotLoop:
 	call SongBank_ScanActiveVoices
 	cps l, 0
 	jr z, IntMed_MarkSlotEmpty
-	lda_d16 xwa, (0x87f4)
+	lda xwa, (0x87f4:16)
 	ld BC,IZ
 	extz XBC
 	add XBC,XWA
 	.byte 0xb1, 0x14, 0xfe, 0x87, 0xc1, 0xfe, 0x87, 0x61
 	.byte 0x68, 0x0d
 IntMed_MarkSlotEmpty:
-	lda_d16	xwa, (34804)
+	lda	xwa, (34804:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -345,7 +345,7 @@ IntMed_CheckPlaying:
 	cpda8	a, 34814
 	jr	nc, 76
 	lds	iz, 0
-	lda_d16	xbc, 34804
+	lda	xbc, (34804:16)
 IntMed_FindCurrentSong:
 	ld	de, iz
 	extz	xde
@@ -377,7 +377,7 @@ IntMed_CheckRepeat:
 	jr	z, 87
 	stdi8	34816, 0
 	lds	iz, 0
-	lda_d16	xwa, 34804
+	lda	xwa, (34804:16)
 IntMed_PlayFromStart:
 	ld	bc, iz
 	extz	xbc
@@ -438,10 +438,10 @@ IntMed_InitSlotDisplay:
 IntMed_FormatSlotLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33350)
+	lda	xbc, (33350:16)
 	extz	xwa
 	add	xwa, xbc
-	lda_d16	xbc, (34804)
+	lda	xbc, (34804:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -451,7 +451,7 @@ IntMed_FormatSlotLoop:
 	calr	64956
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33350)
+	lda	xwa, (33350:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
@@ -462,7 +462,7 @@ IntMed_FormatSlotLoop:
 	jr	c, -66
 	jrl	661
 IntMed_HandleNavToggle:
-	lda_d16 xwa, (0x87f4)
+	lda xwa, (0x87f4:16)
 	cp XDE,0x0000000a
 	jrl nz, IntMed_HandleSelectToggle
 	cpdi8 (0x8462), 0x00
@@ -484,7 +484,7 @@ IntMed_CheckAllMarked:
 	lds iz, 0
 
 IntMed_AssignOrderLoop:
-	lda_d16	xwa, (34804)
+	lda	xwa, (34804:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -496,7 +496,7 @@ IntMed_AssignOrderLoop:
 	incdi8	1, (34814)
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xde, (33350)
+	lda	xde, (33350:16)
 	extz	xwa
 	add	xwa, xde
 	ld	c, (xbc)
@@ -505,7 +505,7 @@ IntMed_AssignOrderLoop:
 	calr	64820
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33350)
+	lda	xwa, (33350:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
@@ -521,7 +521,7 @@ IntMed_RemoveOrderLoop:
 	lds iz, 0
 
 IntMed_UnmarkSlotLoop:
-	lda_d16	xwa, (34804)
+	lda	xwa, (34804:16)
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xwa
@@ -532,7 +532,7 @@ IntMed_UnmarkSlotLoop:
 	decdi8	1, (34814)
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xde, (33350)
+	lda	xde, (33350:16)
 	extz	xwa
 	add	xwa, xde
 	ld	c, (xbc)
@@ -541,7 +541,7 @@ IntMed_UnmarkSlotLoop:
 	calr	64735
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33350)
+	lda	xwa, (33350:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
@@ -563,11 +563,11 @@ IntMed_HandleSelectToggle:
 	lds32 xde, 0
 	calr FmmSeqSongNameFunc
 	ld IZ,HL
-	lda_d16 xwa, (0x87f4)
+	lda xwa, (0x87f4:16)
 	ld DE,IZ
 	extz XDE
 	add XDE,XWA
-	lda_d16 xbc, (0x8246)
+	lda xbc, (0x8246:16)
 	ld WA,IZ
 	sll WA, 0x03
 	extz XWA
@@ -584,7 +584,7 @@ IntMed_HandleSelectToggle:
 	calr FormatMedleyNumber
 	ld DE,IZ
 	sll DE, 0x03
-	lda_d16 xbc, (0x8246)
+	lda xbc, (0x8246:16)
 	extz XDE
 	add XDE,XBC
 	ld xwa, (0x823e:16)
@@ -604,7 +604,7 @@ IntMed_RemoveFromOrder:
 	calr FormatMedleyNumber
 	ld DE,IZ
 	sll DE, 0x03
-	lda_d16 xbc, (0x8246)
+	lda xbc, (0x8246:16)
 	extz XDE
 	add XDE,XBC
 	ld xwa, (0x823e:16)
@@ -617,7 +617,7 @@ IntMed_RemoveFromOrder:
 	cps wa, 0
 	jrl ule, IntMed_Exit
 IntMed_ReorderLoop:
-	lda_d16 xwa, (0x87f4)
+	lda xwa, (0x87f4:16)
 	ld DE,IZ
 	extz XDE
 	add XDE,XWA
@@ -717,10 +717,10 @@ DiskMed1_InitLoop:
 DiskMed1_FormatLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33434)
+	lda	xbc, (33434:16)
 	extz	xwa
 	add	xwa, xbc
-	lda_d16	xbc, (34954)
+	lda	xbc, (34954:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -730,7 +730,7 @@ DiskMed1_FormatLoop:
 	calr	64195
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33434)
+	lda	xwa, (33434:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33430:16)
@@ -761,7 +761,7 @@ DiskMed2_FormatLoop:
 	lda	xbc, (33438:24)
 	extz	xwa
 	add	xwa, xbc
-	lda_d16	xbc, (34954)
+	lda	xbc, (34954:16)
 	ld	de, iz
 	extz	xde
 	add	xde, xbc
@@ -805,7 +805,7 @@ DiskMed_PlayNextHelper:
 	cpda8 a, (0x87fe)
 	jr nc, DiskMed_ReturnFinished
 	lds iz, 0
-	lda_d16 xbc, (0x87f4)
+	lda xbc, (0x87f4:16)
 DiskMed_FindSongLoop:
 	ld de, iz
 	extz xde
@@ -837,7 +837,7 @@ DiskMed_CheckSlotLoop:
 	stb_erp	a, 248
 	extz	wa
 	call	15861296
-	lda_d16	xbc, 34804
+	lda	xbc, (34804:16)
 	ld	wa, iz
 	extz	xwa
 	add	xwa, xbc
@@ -1040,7 +1040,7 @@ DiskSel_ClearSelections:
 	lds iz, 0
 
 DiskSel_FindSongLoop:
-	lda_d16 xwa, (0x888a)
+	lda xwa, (0x888a:16)
 	ldb_dri a, 0x07, 0xe0, 0xf8
 	cpda8 a, (0x88a0)
 	jrl nz, DiskSel_NextSongLoop
@@ -1056,7 +1056,7 @@ DiskSel_FindSongLoop:
 DiskSel_SendFileInfo:
 	ld	de, qiz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
@@ -1147,7 +1147,7 @@ DiskSel_RepeatClear:
 	lds iz, 0
 
 DiskSel_RepeatFindLoop:
-	lda_d16 xwa, (0x888a)
+	lda xwa, (0x888a:16)
 	ldb_dri a, 0x07, 0xe0, 0xf8
 	cpda8 a, (0x88a0)
 	jrl nz, DiskSel_RepeatNext
@@ -1163,7 +1163,7 @@ DiskSel_RepeatFindLoop:
 DiskSel_RepeatSendInfo:
 	ld	de, qiz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
@@ -1298,7 +1298,7 @@ DiskSel_DisplayLoop:
 	ld	wa, iz
 	ld	hl, wa
 	sll	hl, 5
-	lda_d16	xde, 33904
+	lda	xde, (33904:16)
 	extz	xhl
 	add	xhl, xde
 	stb_erp	c, 248
@@ -1327,7 +1327,7 @@ DiskSel_FormatEntry:
 	sll	wa, 5
 	lds	hl, 1
 	add	hl, wa
-	lda_d16	xix, (33904)
+	lda	xix, (33904:16)
 	extz	xhl
 	add	xhl, xix
 	inc	1, de
@@ -1337,7 +1337,7 @@ DiskSel_FormatEntry:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
@@ -1386,7 +1386,7 @@ DiskSel_SaveIndex:
 	stda16	(33602), de
 	jrl	547
 DiskSel_HandleToggle:
-	lda_d16	xhl, 34954
+	lda	xhl, (34954:16)
 	ld	xwa, (xsp+6)
 	cp	xwa, 10
 	jr	nz, 100
@@ -1518,7 +1518,7 @@ DiskSel_PlayClearLoop:
 	lds iz, 0
 
 DiskSel_PlayFindLoop:
-	lda_d16 xwa, (0x888a)
+	lda xwa, (0x888a:16)
 	ldb_dri a, 0x07, 0xe0, 0xf8
 	cpda8 a, (0x88a0)
 	jrl nz, DiskSel_PlayNextLoop
@@ -1597,7 +1597,7 @@ DiskSel_UpdateDisplay:
 	call	16423243
 	ld	de, (xsp+4)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
@@ -1605,7 +1605,7 @@ DiskSel_UpdateDisplay:
 	call	16423243
 	ld	de, (33602:16)
 	sll	de, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
@@ -1742,12 +1742,12 @@ SmfFmt_CalcVisible:
 SmfFmt_FormatLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, 33604
+	lda	xbc, (33604:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	bc, qiz
 	add	bc, iz
-	lda_d16	xde, 34820
+	lda	xde, (34820:16)
 	extz	xbc
 	add	xbc, xde
 	ld	c, (xbc)
@@ -1756,7 +1756,7 @@ SmfFmt_FormatLoop:
 	calr	-4238
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, 33604
+	lda	xwa, (33604:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -1772,7 +1772,7 @@ SmfFmt_FillEmpty:
 SmfFmt_EmptyLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33604)
+	lda	xbc, (33604:16)
 	extz	xwa
 	add	xwa, xbc
 	ldw	bc, 255
@@ -1780,7 +1780,7 @@ SmfFmt_EmptyLoop:
 	calr	61239
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33604)
+	lda	xwa, (33604:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -1889,7 +1889,7 @@ SmfMed_SetPlaying:
 	ld	bc, (33692:16)
 	cps	bc, 0
 	jrl	ule, 949	; -> 0xF92E70
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 SmfMed_FindSongLoop:
 	ld	hl, iz
 	extz	xhl
@@ -1929,7 +1929,7 @@ SmfMed_CheckRepeat:
 	ld	wa, (33692:16)
 	cps	wa, 0
 	jrl	ule, 835
-	lda_d16	xbc, 34820
+	lda	xbc, (34820:16)
 SmfMed_RepeatFindLoop:
 	ld	de, iz
 	extz	xde
@@ -2012,7 +2012,7 @@ SmfMed_ClampFileCount:
 	lds	iz, 0
 	cps	bc, 0
 	jr	ule, 21
-	lda_d16	xwa, (34820)
+	lda	xwa, (34820:16)
 SmfMed_ClearSlotsLoop:
 	ld	bc, iz
 	extz	xbc
@@ -2049,7 +2049,7 @@ SmfMed_RefreshDisplay:
 	calr	64606
 	jrl	496
 SmfMed_HandleNavToggle:
-	lda_d16 xwa, (0x8804)
+	lda xwa, (0x8804:16)
 	cp XDE,0x0000000a
 	jr nz, SmfMed_HandleSelectToggle
 	cpdi8 (0x8462), 0x00
@@ -2074,7 +2074,7 @@ SmfMed_CheckAllUnmarked:
 	lds	iz, 0
 	cps	de, 0
 	jr	ule, 73
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 SmfMed_AssignOrderLoop:
 	.byte 0xde, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21
 	.byte 0xc9, 0xcf, 0xff, 0x6e, 0x08, 0xb1, 0x14, 0x84
@@ -2086,7 +2086,7 @@ SmfMed_RemoveOrderLoop:
 	lds	iz, 0
 	cps	de, 0
 	jr	ule, 32
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 SmfMed_UnmarkLoop:
 	ld	bc, iz
 	extz	xbc
@@ -2244,7 +2244,7 @@ PdMed_FormatFileList:
 PdFmt_FormatLoop:
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	stb_erp	a, 248
@@ -2257,7 +2257,7 @@ PdFmt_FormatLoop:
 	sll	wa, 5
 	lds	de, 1
 	add	de, wa
-	lda_d16	xhl, 33904
+	lda	xhl, (33904:16)
 	ld	wa, de
 	extz	xwa
 	add	xwa, xhl
@@ -2268,7 +2268,7 @@ PdFmt_FormatLoop:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
@@ -2395,7 +2395,7 @@ PdName_UpdateDisplay:
 	divs	bc, 10
 	ld	bc, qbc
 	sll	bc, 5
-	lda_d16	xhl, (33904)
+	lda	xhl, (33904:16)
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
@@ -2406,7 +2406,7 @@ PdName_UpdateDisplay:
 	divs	wa, 10
 	ld	wa, qwa
 	sll	wa, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -2492,12 +2492,12 @@ PdFmtSlot_CalcVisible:
 PdFmtSlot_FormatLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, 33704
+	lda	xbc, (33704:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	bc, qiz
 	add	bc, iz
-	lda_d16	xde, 34820
+	lda	xde, (34820:16)
 	extz	xbc
 	add	xbc, xde
 	ld	c, (xbc)
@@ -2506,7 +2506,7 @@ PdFmtSlot_FormatLoop:
 	calr	-6295
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, 33704
+	lda	xwa, (33704:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -2522,7 +2522,7 @@ PdFmtSlot_FillEmpty:
 PdFmtSlot_EmptyLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33704)
+	lda	xbc, (33704:16)
 	extz	xwa
 	add	xwa, xbc
 	ldw	bc, 255
@@ -2530,7 +2530,7 @@ PdFmtSlot_EmptyLoop:
 	calr	59182
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33704)
+	lda	xwa, (33704:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -2590,7 +2590,7 @@ PdMed_CheckPlayMode:
 	jrl	nz, 205	; -> 0xF93315
 	stdi8	(33890), 1
 	ldb_d8	c, (34950)
-	lda_d16	xwa, (34820)
+	lda	xwa, (34820:16)
 	cpda8	xhl, (34948)
 	jr	nc, 80	; -> 0xF932AB
 	lds	hl, 0
@@ -2686,7 +2686,7 @@ PdMed_ClampCount:
 	lds	hl, 0
 	cps	bc, 0
 	jr	ule, 21
-	lda_d16	xwa, (34820)
+	lda	xwa, (34820:16)
 PdMed_ClearSlotsLoop:
 	ld	bc, hl
 	extz	xbc
@@ -2726,7 +2726,7 @@ PdMed_HandleNavToggle:
 	ld WA,BC
 	cps bc, 0
 	jr ule, PdMed_CheckAllUnmarked
-	lda_d16 xbc, (0x8804)
+	lda xbc, (0x8804:16)
 PdMed_FindUnmarkedLoop:
 	ld de, hl
 	extz xde
@@ -2743,7 +2743,7 @@ PdMed_CheckAllUnmarked:
 	lds	hl, 0
 	cps	wa, 0
 	jr	ule, 73
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 PdMed_AssignOrderLoop:
 	.byte 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21
 	.byte 0xc9, 0xcf, 0xff, 0x6e, 0x08, 0xb1, 0x14, 0x84
@@ -2755,7 +2755,7 @@ PdMed_RemoveOrderLoop:
 	lds	hl, 0
 	cps	wa, 0
 	jr	ule, 32
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 PdMed_UnmarkLoop:
 	ld	bc, hl
 	extz	xbc
@@ -2780,7 +2780,7 @@ PdMed_HandleSelectToggle:
 	ld XBC,0x01e50003
 	lds32 xde, 0
 	calr FmmPdFileNameFunc
-	lda_d16 xix, (0x8804)
+	lda xix, (0x8804:16)
 	extz XHL
 	add XHL,XIX
 	ld C,(XHL)
@@ -2846,7 +2846,7 @@ PdMed_HandlePlay:
 	ld	wa, (33792:16)
 	cps	wa, 0
 	jr	ule, 69
-	lda_d16	xbc, 34820
+	lda	xbc, (34820:16)
 PdMed_PlayFindLoop:
 	ld	de, hl
 	extz	xde
@@ -2959,7 +2959,7 @@ DocMed_FormatFileList:
 DocFmt_FormatLoop:
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	stb_erp	a, 248
@@ -2972,7 +2972,7 @@ DocFmt_FormatLoop:
 	sll	wa, 5
 	lds	de, 1
 	add	de, wa
-	lda_d16	xhl, 33904
+	lda	xhl, (33904:16)
 	ld	wa, de
 	extz	xwa
 	add	xwa, xhl
@@ -2984,7 +2984,7 @@ DocFmt_FormatLoop:
 	call	16289232
 	ld	de, iz
 	sll	de, 5
-	lda_d16	xbc, 33904
+	lda	xbc, (33904:16)
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
@@ -3111,7 +3111,7 @@ DocName_UpdateDisplay:
 	divs	bc, 10
 	ld	bc, qbc
 	sll	bc, 5
-	lda_d16	xhl, (33904)
+	lda	xhl, (33904:16)
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
@@ -3122,7 +3122,7 @@ DocName_UpdateDisplay:
 	divs	wa, 10
 	ld	wa, qwa
 	sll	wa, 5
-	lda_d16	xbc, (33904)
+	lda	xbc, (33904:16)
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
@@ -3209,12 +3209,12 @@ DocFmtSlot_CalcVisible:
 DocFmtSlot_FormatLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, 33800
+	lda	xbc, (33800:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	bc, qiz
 	add	bc, iz
-	lda_d16	xde, 34820
+	lda	xde, (34820:16)
 	extz	xbc
 	add	xbc, xde
 	ld	c, (xbc)
@@ -3223,7 +3223,7 @@ DocFmtSlot_FormatLoop:
 	calr	-8258
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, 33800
+	lda	xwa, (33800:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -3239,7 +3239,7 @@ DocFmtSlot_FillEmpty:
 DocFmtSlot_EmptyLoop:
 	ld	wa, iz
 	sll	wa, 3
-	lda_d16	xbc, (33800)
+	lda	xbc, (33800:16)
 	extz	xwa
 	add	xwa, xbc
 	ldw	bc, 255
@@ -3247,7 +3247,7 @@ DocFmtSlot_EmptyLoop:
 	calr	57219
 	ld	de, iz
 	sll	de, 3
-	lda_d16	xwa, (33800)
+	lda	xwa, (33800:16)
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
@@ -3306,7 +3306,7 @@ DocMed_CheckPlayMode:
 	jrl	nz, 205	; -> 0xF93AC0
 	stdi8	(33890), 1
 	ldb_d8	c, (34950)
-	lda_d16	xwa, (34820)
+	lda	xwa, (34820:16)
 	cpda8	xhl, (34948)
 	jr	nc, 80	; -> 0xF93A56
 	lds	hl, 0
@@ -3414,7 +3414,7 @@ DocMed_ClampCount:
 	lds	hl, 0
 	cps	bc, 0
 	jr	ule, 21
-	lda_d16	xwa, (34820)
+	lda	xwa, (34820:16)
 DocMed_ClearSlotsLoop:
 	ld	bc, hl
 	extz	xbc
@@ -3454,7 +3454,7 @@ DocMed_HandleNavToggle:
 	ld WA,BC
 	cps bc, 0
 	jr ule, DocMed_CheckAllUnmarked
-	lda_d16 xbc, (0x8804)
+	lda xbc, (0x8804:16)
 DocMed_FindUnmarkedLoop:
 	ld de, hl
 	extz xde
@@ -3471,7 +3471,7 @@ DocMed_CheckAllUnmarked:
 	lds	hl, 0
 	cps	wa, 0
 	jr	ule, 73
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 DocMed_AssignOrderLoop:
 	.byte 0xdb, 0x89, 0xe9, 0x12, 0xea, 0x81, 0x81, 0x21
 	.byte 0xc9, 0xcf, 0xff, 0x6e, 0x08, 0xb1, 0x14, 0x84
@@ -3483,7 +3483,7 @@ DocMed_RemoveOrderLoop:
 	lds	hl, 0
 	cps	wa, 0
 	jr	ule, 32
-	lda_d16	xde, (34820)
+	lda	xde, (34820:16)
 DocMed_UnmarkLoop:
 	ld	bc, hl
 	extz	xbc
@@ -3508,7 +3508,7 @@ DocMed_HandleSelectToggle:
 	ld XBC,0x01e50003
 	lds32 xde, 0
 	calr FmmDocFileNameFunc
-	lda_d16 xix, (0x8804)
+	lda xix, (0x8804:16)
 	extz XHL
 	add XHL,XIX
 	ld C,(XHL)
@@ -3574,7 +3574,7 @@ DocMed_HandlePlay:
 	ld	wa, (33888:16)
 	cps	wa, 0
 	jr	ule, 69
-	lda_d16	xbc, 34820
+	lda	xbc, (34820:16)
 DocMed_PlayFindLoop:
 	ld	de, hl
 	extz	xde

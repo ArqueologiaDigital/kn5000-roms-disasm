@@ -1029,7 +1029,7 @@ MidiCtrl_CC07:
 	pushw	hl                                   ; FAD6EF  push HL
 	pushw	de                                   ; FAD6F0  push DE
 	push	xix                                   ; FAD6F1  push XIX
-	lda_d16	xix, (0x1523)                      ; FAD6F2  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FAD6F2  lda XIX,0x1523
 	ld	l, (xiz+10)                             ; FAD6F6  ld L,(XIZ+0x0a)
 	ld	h, (xiz+8)                              ; FAD6F9  ld H,(XIZ+0x08)
 	cps	l, 0                                   ; FAD6FC  cp L,0
@@ -1136,7 +1136,7 @@ MidiCtrl_CC11:
 	pushw	hl                                   ; FAD786  push HL
 	pushw	de                                   ; FAD787  push DE
 	push	xix                                   ; FAD788  push XIX
-	lda_d16	xix, (0x1523)                      ; FAD789  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FAD789  lda XIX,0x1523
 	ld	l, (xiz+10)                             ; FAD78D  ld L,(XIZ+0x0a)
 	ld	h, (xiz+8)                              ; FAD790  ld H,(XIZ+0x08)
 	cps	l, 0                                   ; FAD793  cp L,0
@@ -1213,7 +1213,7 @@ MidiCtrl_CC64:
 	pushw	hl                                   ; FAD7FF  push HL
 	pushw	de                                   ; FAD800  push DE
 	push	xix                                   ; FAD801  push XIX
-	lda_d16	xix, (0x1523)                      ; FAD802  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FAD802  lda XIX,0x1523
 	ld	bc, (xiz+8)                             ; FAD806  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD809  extz BC
 	mul	bc, 0x12C                              ; FAD80B  mul BC,0x012c
@@ -1337,7 +1337,7 @@ PartRec_Flags09_Bit14_SetOrClear:
 	pushw	hl                                   ; FAD884  push HL
 	pushw	de                                   ; FAD885  push DE
 	push	xix                                   ; FAD886  push XIX
-	lda_d16	xix, (0x1523)                      ; FAD887  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FAD887  lda XIX,0x1523
 	ld	bc, (xiz+8)                             ; FAD88B  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD88E  extz BC
 	mul	bc, 0x12C                              ; FAD890  mul BC,0x012c
@@ -1511,7 +1511,7 @@ PartRec_Flags09_Bit1_SetOrClear:
 	pushw	hl                                   ; FAD942  push HL
 	pushw	de                                   ; FAD943  push DE
 	push	xix                                   ; FAD944  push XIX
-	lda_d16	xix, (0x1523)                      ; FAD945  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FAD945  lda XIX,0x1523
 	ld	bc, (xiz+8)                             ; FAD949  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD94C  extz BC
 	mul	bc, 0x12C                              ; FAD94E  mul BC,0x012c
@@ -1566,7 +1566,7 @@ MidiCtrl_Int95:
 	pushw	hl                                   ; FAD98B  push HL
 	pushw	de                                   ; FAD98C  push DE
 	push	xix                                   ; FAD98D  push XIX
-	lda_d16	xix, (0x1523)                      ; FAD98E  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FAD98E  lda XIX,0x1523
 	ld	bc, (xiz+8)                             ; FAD992  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAD995  extz BC
 	mul	bc, 0x12C                              ; FAD997  mul BC,0x012c
@@ -1870,7 +1870,7 @@ MidiCtrl_Int9C:
 sub_FADA7C:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADA7C  link XIZ,0x0000
 	push	xix                                   ; FADA80  push XIX
-	lda_d16	xix, (0x14FE)                      ; FADA81  lda XIX,0x14fe
+	lda	xix, (0x14FE:16)                      ; FADA81  lda XIX,0x14fe
 	cp (xiz+8), 0x01                           ; FADA85  cp (XIZ+0x08),0x01
 	jr nz, sub_FADA7C__FADA97                  ; FADA89  jr NZ,0xfada97
 	extz	xix                                   ; FADA8B  extz XIX
@@ -2076,7 +2076,7 @@ sub_FADB0F:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADB0F  link XIZ,0x0000
 	pushw	hl                                   ; FADB13  push HL
 	push	xix                                   ; FADB14  push XIX
-	lda_d16	xix, (0x14FE)                      ; FADB15  lda XIX,0x14fe
+	lda	xix, (0x14FE:16)                      ; FADB15  lda XIX,0x14fe
 	cp (xiz+8), 0x00                           ; FADB19  cp (XIZ+0x08),0x00
 	jr z, sub_FADB0F__FADB38                   ; FADB1D  jr Z,0xfadb38
 	extz	xix                                   ; FADB1F  extz XIX
@@ -2192,7 +2192,7 @@ VoiceDefaults_StoreFromPackedByte:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADB7E  link XIZ,0x0000
 	pushw	hl                                   ; FADB82  push HL
 	push	xix                                   ; FADB83  push XIX
-	lda_d16	xix, (0x14FE)                      ; FADB84  lda XIX,0x14fe
+	lda	xix, (0x14FE:16)                      ; FADB84  lda XIX,0x14fe
 	ld	h, (xiz+8)                              ; FADB88  ld H,(XIZ+0x08)
 	ld	c, h                                    ; FADB8B  ld C,H
 	and	c, 8                                   ; FADB8D  and C,0x08
@@ -2291,7 +2291,7 @@ sub_FADBEE:
 sub_FADBFC:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADBFC  link XIZ,0x0000
 	push	xix                                   ; FADC00  push XIX
-	lda_d16	xix, (0x14FE)                      ; FADC01  lda XIX,0x14fe
+	lda	xix, (0x14FE:16)                      ; FADC01  lda XIX,0x14fe
 	cp (xiz+8), 0x00                           ; FADC05  cp (XIZ+0x08),0x00
 	jr z, sub_FADBFC__FADC14                   ; FADC09  jr Z,0xfadc14
 	extz	xix                                   ; FADC0B  extz XIX
@@ -2405,7 +2405,7 @@ sub_FADC3E:
 GlobalScale_SelectGlobalOrPerTone:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FADC4C  link XIZ,0x0000
 	push	xix                                   ; FADC50  push XIX
-	lda_d16	xix, (0x14FE)                      ; FADC51  lda XIX,0x14fe
+	lda	xix, (0x14FE:16)                      ; FADC51  lda XIX,0x14fe
 	cp (xiz+8), 0x00                           ; FADC55  cp (XIZ+0x08),0x00
 	jr nz, GlobalScale_SelectGlobalOrPerTone__FADC64                  ; FADC59  jr NZ,0xfadc64
 	extz	xix                                   ; FADC5B  extz XIX

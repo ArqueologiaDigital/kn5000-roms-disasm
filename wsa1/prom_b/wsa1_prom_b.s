@@ -23866,7 +23866,7 @@ DL_F0E12D_TEXT:
 Blink_SetEnable:
 	link XIZ,0x0000	; F0E800  link XIZ,0x0000
 	push	xix	; F0E804  push XIX
-	lda_d16	xix, (8309)	; F0E805  lda XIX,0x2075
+	lda	xix, (8309:16)	; F0E805  lda XIX,0x2075
 	ld	c, (xix)	; F0E809  ld C,(XIX)
 	and	c, 2	; F0E80B  and C,0x02
 	jr	z, 11	; F0E80E  jr Z,0xf0e81b
@@ -23944,7 +23944,7 @@ Blink_GetState:
 ; ---------------------------------------------------------------------
 Blink_Tick:
 	push	xix	; F0E83A  push XIX
-	lda_d16	xix, (10451)	; F0E83B  lda XIX,0x28d3
+	lda	xix, (10451:16)	; F0E83B  lda XIX,0x28d3
 	incdi8	1, (10449)	; F0E83F  inc 1,(0x28d1)
 	ldb_d8	c, (8309)	; F0E843  ld C,(0x2075)
 	and	c, 2	; F0E847  and C,0x02
@@ -24182,7 +24182,7 @@ Blink_DrawField_Op07:
 Blink_Command:
 	link XIZ,0xfffa	; F0E9CF  link XIZ,0xfffa
 	push	xix	; F0E9D3  push XIX
-	lda_d16	xix, (10450)	; F0E9D4  lda XIX,0x28d2
+	lda	xix, (10450:16)	; F0E9D4  lda XIX,0x28d2
 	ld	xbc, 6350848	; F0E9D8  ld XBC,0x0060e800
 	ld	(xiz-6), xbc	; F0E9DD  ld (XIZ+0xfa),XBC
 	stdi8	(10451), 1	; F0E9E0  ld (0x28d3),0x01
@@ -24527,7 +24527,7 @@ sub_F0EA9F:
 	ld	xwa, (xiz+8)	; F0EB39  ld XWA,(XIZ+0x08)
 	m_ld_m16m MBI+r0, 0, 0x28d0	; F0EB3C  ld (0x28d0),(XWA)
 	m_ld_m16m MBD+r0, 0x01, 0x28d6	; F0EB40  ld (0x28d6),(XWA+0x01)
-	lda_d16	xix, (10432)	; F0EB45  lda XIX,0x28c0
+	lda	xix, (10432:16)	; F0EB45  lda XIX,0x28c0
 	cps	l, 5	; F0EB49  cp L,5
 	jr	z, 6	; F0EB4B  jr Z,0xf0eb53
 	cp	l, 11	; F0EB4D  cp L,0x0b
@@ -24719,7 +24719,7 @@ sub_F0EC4A:
 	inc	1, d	; F0ECF5  inc 1,D
 	cp	d, l	; F0ECF7  cp D,L
 	jr	c, -10	; F0ECF9  jr C,0xf0ecf1
-	lda_d16	xix, (10432)	; F0ECFB  lda XIX,0x28c0
+	lda	xix, (10432:16)	; F0ECFB  lda XIX,0x28c0
 	ldb_d8	c, (10452)	; F0ECFF  ld C,(0x28d4)
 	m_mul MB16, 0x28d0, 3	; F0ED03  mul BC,(0x28d0)
 	extz	xbc	; F0ED07  extz XBC
@@ -25209,7 +25209,7 @@ sub_F0F0FF:
 ; --------------------------------------------------------------------------
 sub_F0F105:		; <- T_F42F4C
 	push	xix	; F0F105  push XIX
-	lda_d16	xix, (10129)	; F0F106  lda XIX,0x2791
+	lda	xix, (10129:16)	; F0F106  lda XIX,0x2791
 	ldb_d8	c, (8314)	; F0F10A  ld C,(0x207a)
 	m_cp_rm MB16, 0x207b, 3	; F0F10E  cp C,(0x207b)
 	jr	z, 24	; F0F112  jr Z,0xf0f12c
@@ -25343,7 +25343,7 @@ sub_F0F174:
 sub_F0F17C:		; <- T_F42F50
 	link XIZ,0x0000	; F0F17C  link XIZ,0x0000
 	push	xix	; F0F180  push XIX
-	lda_d16	xix, (10129)	; F0F181  lda XIX,0x2791
+	lda	xix, (10129:16)	; F0F181  lda XIX,0x2791
 	m_push MWD+r6, 0x0a	; F0F185  pushw (XIZ+0x0a)
 	m_push MWD+r6, 0x08	; F0F188  pushw (XIZ+0x08)
 	call	16002164	; F0F18B  call 0xf42c74
@@ -25384,7 +25384,7 @@ sub_F0F17C:		; <- T_F42F50
 sub_F0F1BE:
 	pushw	hl	; F0F1BE  push HL
 	push	xix	; F0F1BF  push XIX
-	lda_d16	xix, (8305)	; F0F1C0  lda XIX,0x2071
+	lda	xix, (8305:16)	; F0F1C0  lda XIX,0x2071
 	ldb_d8	c, (10416)	; F0F1C4  ld C,(0x28b0)
 	and	c, 1	; F0F1C8  and C,0x01
 	jrl	nz, 176	; F0F1CB  jrl NZ,0xf0f27e
@@ -26052,7 +26052,7 @@ sub_F0F3EB:
 ; --------------------------------------------------------------------------
 sub_F0F3EC:
 	push	xix	; F0F3EC  push XIX
-	lda_d16	xix, (10129)	; F0F3ED  lda XIX,0x2791
+	lda	xix, (10129:16)	; F0F3ED  lda XIX,0x2791
 	ld	bc, (10128:16)	; F0F3F1  ld BC,(0x2790)
 	extz	bc	; F0F3F5  extz BC
 	extz	xbc	; F0F3F7  extz XBC
@@ -26176,7 +26176,7 @@ sub_F0F441:
 ; --------------------------------------------------------------------------
 sub_F0F443:
 	push	xix	; F0F443  push XIX
-	lda_d16	xix, (10129)	; F0F444  lda XIX,0x2791
+	lda	xix, (10129:16)	; F0F444  lda XIX,0x2791
 	ld	bc, (10128:16)	; F0F448  ld BC,(0x2790)
 	extz	bc	; F0F44C  extz BC
 	extz	xbc	; F0F44E  extz XBC
@@ -26305,7 +26305,7 @@ sub_F0F48D:
 ; --------------------------------------------------------------------------
 sub_F0F4A6:
 	push	xix	; F0F4A6  push XIX
-	lda_d16	xix, (10129)	; F0F4A7  lda XIX,0x2791
+	lda	xix, (10129:16)	; F0F4A7  lda XIX,0x2791
 	ld	bc, (10128:16)	; F0F4AB  ld BC,(0x2790)
 	extz	bc	; F0F4AF  extz BC
 	extz	xbc	; F0F4B1  extz XBC
@@ -27304,7 +27304,7 @@ sub_F0F75B:
 ; --------------------------------------------------------------------------
 sub_F0F788:
 	push	xix	; F0F788  push XIX
-	lda_d16	xix, (10137)	; F0F789  lda XIX,0x2799
+	lda	xix, (10137:16)	; F0F789  lda XIX,0x2799
 	ldb_d8	c, (10129)	; F0F78D  ld C,(0x2791)
 	and	c, 128	; F0F791  and C,0x80
 	jr	z, 17	; F0F794  jr Z,0xf0f7a7
@@ -27444,7 +27444,7 @@ sub_F0F788:
 	pop	xix	; F0F91A  pop XIX
 	ret	; F0F91B  ret
 	push	xix	; F0F91C  push XIX
-	lda_d16	xix, (9536)	; F0F91D  lda XIX,0x2540
+	lda	xix, (9536:16)	; F0F91D  lda XIX,0x2540
 	m_res 1, MD16, 0x2799	; F0F921  res 1,(0x2799)
 	set_dd8	0, 198	; F0F925  set 0,(0xc6)
 	ld	(xix), 1	; F0F928  ld (XIX),0x01
@@ -27516,7 +27516,7 @@ sub_F0F788:
 	ret	; F0F9F0  ret
 	pushw	hl	; F0F9F1  push HL
 	push	xix	; F0F9F2  push XIX
-	lda_d16	xix, (9792)	; F0F9F3  lda XIX,0x2640
+	lda	xix, (9792:16)	; F0F9F3  lda XIX,0x2640
 	m_res 2, MD16, 0x2799	; F0F9F7  res 2,(0x2799)
 	calr	817	; F0F9FB  calr 0xf0fd2f
 	stdi8	(9536), 0	; F0F9FE  ld (0x2540),0x00
@@ -27851,7 +27851,7 @@ sub_F0FD2F:
 ; --------------------------------------------------------------------------
 sub_F0FD5F:
 	push	xix	; F0FD5F  push XIX
-	lda_d16	xix, (10137)	; F0FD60  lda XIX,0x2799
+	lda	xix, (10137:16)	; F0FD60  lda XIX,0x2799
 	ldb_d8	c, (10129)	; F0FD64  ld C,(0x2791)
 	and	c, 128	; F0FD68  and C,0x80
 	jr	z, 17	; F0FD6B  jr Z,0xf0fd7e
@@ -27978,7 +27978,7 @@ sub_F0FD5F:
 	ret	; F0FED5  ret
 	link XIZ,0xfffc	; F0FED6  link XIZ,0xfffc
 	push	xix	; F0FEDA  push XIX
-	lda_d16	xix, (9792)	; F0FEDB  lda XIX,0x2640
+	lda	xix, (9792:16)	; F0FEDB  lda XIX,0x2640
 	m_res 4, MD16, 0x2799	; F0FEDF  res 4,(0x2799)
 	stdi8	(9536), 0	; F0FEE3  ld (0x2540),0x00
 	ld	(xiz-4), xix	; F0FEE8  ld (XIZ+0xfc),XIX
@@ -28165,7 +28165,7 @@ sub_F0FF3F:
 sub_F1008E:
 	pushw	hl	; F1008E  push HL
 	push	xix	; F1008F  push XIX
-	lda_d16	xix, (10137)	; F10090  lda XIX,0x2799
+	lda	xix, (10137:16)	; F10090  lda XIX,0x2799
 	ldb_d8	c, (10129)	; F10094  ld C,(0x2791)
 	and	c, 128	; F10098  and C,0x80
 	jr	z, 37	; F1009B  jr Z,0xf100c2
@@ -28820,7 +28820,7 @@ sub_F105B8:
 	link XIZ,0xfffc	; F105B8  link XIZ,0xfffc
 	pushw	hl	; F105BC  push HL
 	push	xix	; F105BD  push XIX
-	lda_d16	xix, (10132)	; F105BE  lda XIX,0x2794
+	lda	xix, (10132:16)	; F105BE  lda XIX,0x2794
 	pushw	23	; F105C2  push 0x0017
 	ld	bc, (10135:16)	; F105C5  ld BC,(0x2797)
 	extz	bc	; F105C9  extz BC
@@ -30032,7 +30032,7 @@ DspEffect_PaintParamEditor:
 	ld	(xiz-1), a	; F11070  ld (XIZ+0xff),A
 	ldb	e, 0	; F11073  ld E,0x00
 	stdi8	(9536), 0	; F11075  ld (0x2540),0x00
-	lda_d16	xix, (10134)	; F1107A  lda XIX,0x2796
+	lda	xix, (10134:16)	; F1107A  lda XIX,0x2796
 	ldb	h, 0	; F1107E  ld H,0x00
 	pop	xiy	; F11080  pop XIY
 	ld	d, h	; F11081  ld D,H
@@ -30205,7 +30205,7 @@ sub_F111B4:
 	link XIZ,0xfffa	; F111B4  link XIZ,0xfffa
 	push	xix	; F111B8  push XIX
 	lda	xix, (xiz-2)	; F111B9  lda XIX,XIZ+0xfe
-	lda_d16	xbc, (9792)	; F111BC  lda XBC,0x2640
+	lda	xbc, (9792:16)	; F111BC  lda XBC,0x2640
 	ld	(xiz-6), xbc	; F111C0  ld (XIZ+0xfa),XBC
 	push	0	; F111C3  push 0x00
 	m_push MBD+r6, 0x08	; F111C5  push (XIZ+0x08)
@@ -32354,7 +32354,7 @@ sub_F1220B:		; <- T_F434A4
 ; --------------------------------------------------------------------------
 sub_F122C5:		; <- T_F42F68
 	push	xix	; F122C5  push XIX
-	lda_d16	xix, (10137)	; F122C6  lda XIX,0x2799
+	lda	xix, (10137:16)	; F122C6  lda XIX,0x2799
 	ldb_d8	c, (8316)	; F122CA  ld C,(0x207c)
 	m_cp_rm MB16, 0x207d, 3	; F122CE  cp C,(0x207d)
 	jr	z, 17	; F122D2  jr Z,0xf122e5
@@ -32560,7 +32560,7 @@ sub_F123AD:
 	ret	; F123F3  ret
 	link XIZ,0xfffc	; F123F4  link XIZ,0xfffc
 	push	xix	; F123F8  push XIX
-	lda_d16	xix, (9792)	; F123F9  lda XIX,0x2640
+	lda	xix, (9792:16)	; F123F9  lda XIX,0x2640
 	m_res 4, MD16, 0x2799	; F123FD  res 4,(0x2799)
 	stdi8	(9536), 0	; F12401  ld (0x2540),0x00
 	ld	(xiz-4), xix	; F12406  ld (XIZ+0xfc),XIX
@@ -70662,7 +70662,7 @@ sub_F389A2:
 	pushw	hl	; F389A6  push HL
 	pushw	de	; F389A7  push DE
 	push	xix	; F389A8  push XIX
-	lda_d16	xix, (11776)	; F389A9  lda XIX,0x2e00
+	lda	xix, (11776:16)	; F389A9  lda XIX,0x2e00
 	ldw_da	hl, (6352900)	; F389AD  ld HL,(0x60f004)
 	m_cp_mi16 MW24, 0x60f004, 0x00fb	; F389B2  cp (0x60f004),0x00fb
 	jr	nc, 72	; F389B9  jr NC,0xf38a03
@@ -91277,7 +91277,7 @@ sub_F48F19:
 	link XIZ,0xfffc	; F48F19  link XIZ,0xfffc
 	pushw	hl	; F48F1D  push HL
 	push	xix	; F48F1E  push XIX
-	lda_d16	xix, (8648)	; F48F1F  lda XIX,0x21c8
+	lda	xix, (8648:16)	; F48F1F  lda XIX,0x21c8
 	m_or_mi8 MB16, 0x21e7, 0xa0	; F48F23  or (0x21e7),0xa0
 	m_cp_mi8 MB16, 0x207c, 0x54	; F48F28  cp (0x207c),0x54
 	jr	nz, 16	; F48F2D  jr NZ,0xf48f3f
@@ -91318,7 +91318,7 @@ sub_F48F19:
 sub_F48F75:
 	pushw	hl	; F48F75  push HL
 	push	xix	; F48F76  push XIX
-	lda_d16	xix, (8679)	; F48F77  lda XIX,0x21e7
+	lda	xix, (8679:16)	; F48F77  lda XIX,0x21e7
 	m_or_mi8 MBI+r4, 0, 0x02	; F48F7B  or (XIX),0x02
 	call	16000424	; F48F7E  call 0xf425a8
 	ld	h, a	; F48F82  ld H,A
@@ -95954,7 +95954,7 @@ BitMask_F4C3E9:
 ; --------------------------------------------------------------------------
 sub_F4C3F2:		; <- T_F434F0
 	push	xix	; F4C3F2  push XIX
-	lda_d16	xix, (8305)	; F4C3F3  lda XIX,0x2071
+	lda	xix, (8305:16)	; F4C3F3  lda XIX,0x2071
 	m_cp_mi8 MB16, 0x20b8, 0x05	; F4C3F7  cp (0x20b8),0x05
 	jr	nz, 46	; F4C3FC  jr NZ,0xf4c42c
 	ldb_d8	c, (8377)	; F4C3FE  ld C,(0x20b9)
@@ -96222,7 +96222,7 @@ sub_F4C4DC:		; <- T_F434EC
 	lda	xwa, (16040815:24)	; F4C619  lda XWA,0xf4c36f
 	push	xwa	; F4C61E  push XWA
 	call	16002564	; F4C61F  call 0xf42e04
-	lda_d16	xix, (9792)	; F4C623  lda XIX,0x2640
+	lda	xix, (9792:16)	; F4C623  lda XIX,0x2640
 	inc	8, xsp	; F4C627  inc 0,XSP
 	m_cp_mi8 MB16, 0x2870, 0x00	; F4C629  cp (0x2870),0x00
 	jr	nz, 5	; F4C62E  jr NZ,0xf4c635
@@ -102251,7 +102251,7 @@ sub_F53051:		; <- T_F42E50
 ; --------------------------------------------------------------------------
 sub_F53052:
 	push	xix	; F53052  push XIX
-	lda_d16	xix, (10399)	; F53053  lda XIX,0x289f
+	lda	xix, (10399:16)	; F53053  lda XIX,0x289f
 	stdi8	(10396), 0	; F53057  ld (0x289c),0x00
 	ldb_d8	c, (8314)	; F5305C  ld C,(0x207a)
 	m_cp_rm MB16, 0x207b, 3	; F53060  cp C,(0x207b)
@@ -102368,7 +102368,7 @@ sub_F53052:
 ; --------------------------------------------------------------------------
 LcdKeyRow1_DrawbarScreen:
 	push	xix	; F53136  push XIX
-	lda_d16	xix, (10416)	; F53137  lda XIX,0x28b0
+	lda	xix, (10416:16)	; F53137  lda XIX,0x28b0
 	ld	c, (xix)	; F5313B  ld C,(XIX)
 	and	c, 1	; F5313D  and C,0x01
 	jr	z, 18	; F53140  jr Z,0xf53154
@@ -102432,7 +102432,7 @@ LcdKeyRow1_DrawbarScreen:
 ; --------------------------------------------------------------------------
 LcdKeyRow2_DrawbarScreen:
 	push	xix	; F53163  push XIX
-	lda_d16	xix, (10416)	; F53164  lda XIX,0x28b0
+	lda	xix, (10416:16)	; F53164  lda XIX,0x28b0
 	ld	c, (xix)	; F53168  ld C,(XIX)
 	and	c, 1	; F5316A  and C,0x01
 	jr	z, 5	; F5316D  jr Z,0xf53174
@@ -102496,7 +102496,7 @@ LcdKeyRow2_DrawbarScreen:
 ; --------------------------------------------------------------------------
 LcdKeyRow4_DrawbarScreen:
 	push	xix	; F5318E  push XIX
-	lda_d16	xix, (10416)	; F5318F  lda XIX,0x28b0
+	lda	xix, (10416:16)	; F5318F  lda XIX,0x28b0
 	m_cp_mi8 MB16, 0x289e, 0x01	; F53193  cp (0x289e),0x01
 	jr	nz, 25	; F53198  jr NZ,0xf531b3
 	ld	c, (xix)	; F5319A  ld C,(XIX)
@@ -102557,7 +102557,7 @@ LcdKeyRow4_DrawbarScreen:
 ; --------------------------------------------------------------------------
 LcdKeyRow5_DrawbarScreen:
 	push	xix	; F531B5  push XIX
-	lda_d16	xix, (10416)	; F531B6  lda XIX,0x28b0
+	lda	xix, (10416:16)	; F531B6  lda XIX,0x28b0
 	m_cp_mi8 MB16, 0x289e, 0x01	; F531BA  cp (0x289e),0x01
 	jr	nz, 25	; F531BF  jr NZ,0xf531da
 	ld	c, (xix)	; F531C1  ld C,(XIX)
@@ -102603,7 +102603,7 @@ sub_F531DC:
 ; --------------------------------------------------------------------------
 sub_F531F5:
 	push	xix	; F531F5  push XIX
-	lda_d16	xix, (10401)	; F531F6  lda XIX,0x28a1
+	lda	xix, (10401:16)	; F531F6  lda XIX,0x28a1
 	ldb_d8	c, (10416)	; F531FA  ld C,(0x28b0)
 	and	c, 1	; F531FE  and C,0x01
 	jr	z, 10	; F53201  jr Z,0xf5320d
@@ -102632,7 +102632,7 @@ sub_F531F5:
 ; --------------------------------------------------------------------------
 sub_F5321F:
 	push	xix	; F5321F  push XIX
-	lda_d16	xix, (10398)	; F53220  lda XIX,0x289e
+	lda	xix, (10398:16)	; F53220  lda XIX,0x289e
 	ld	c, (xix)	; F53224  ld C,(XIX)
 	cps	c, 0	; F53226  cp C,0
 	jr	nz, 5	; F53228  jr NZ,0xf5322f
@@ -102656,7 +102656,7 @@ sub_F5321F:
 ; --------------------------------------------------------------------------
 sub_F5323E:
 	push	xix	; F5323E  push XIX
-	lda_d16	xix, (10390)	; F5323F  lda XIX,0x2896
+	lda	xix, (10390:16)	; F5323F  lda XIX,0x2896
 	ldb_d8	c, (10416)	; F53243  ld C,(0x28b0)
 	and	c, 1	; F53247  and C,0x01
 	jr	z, 5	; F5324A  jr Z,0xf53251
@@ -102682,7 +102682,7 @@ sub_F5323E:
 ; --------------------------------------------------------------------------
 sub_F53264:
 	push	xix	; F53264  push XIX
-	lda_d16	xix, (10385)	; F53265  lda XIX,0x2891
+	lda	xix, (10385:16)	; F53265  lda XIX,0x2891
 	ldb_d8	c, (10416)	; F53269  ld C,(0x28b0)
 	and	c, 1	; F5326D  and C,0x01
 	jr	z, 30	; F53270  jr Z,0xf53290
@@ -102729,7 +102729,7 @@ sub_F53264:
 ; --------------------------------------------------------------------------
 sub_F532BF:
 	push	xix	; F532BF  push XIX
-	lda_d16	xix, (10385)	; F532C0  lda XIX,0x2891
+	lda	xix, (10385:16)	; F532C0  lda XIX,0x2891
 	ldb_d8	c, (10416)	; F532C4  ld C,(0x28b0)
 	and	c, 1	; F532C8  and C,0x01
 	jr	z, 33	; F532CB  jr Z,0xf532ee
@@ -102778,7 +102778,7 @@ sub_F532BF:
 ; --------------------------------------------------------------------------
 sub_F53320:
 	push	xix	; F53320  push XIX
-	lda_d16	xix, (10384)	; F53321  lda XIX,0x2890
+	lda	xix, (10384:16)	; F53321  lda XIX,0x2890
 	ldb_d8	c, (10416)	; F53325  ld C,(0x28b0)
 	and	c, 1	; F53329  and C,0x01
 	jr	z, 33	; F5332C  jr Z,0xf5334f
@@ -102827,7 +102827,7 @@ sub_F53320:
 ; --------------------------------------------------------------------------
 sub_F53381:
 	push	xix	; F53381  push XIX
-	lda_d16	xix, (10384)	; F53382  lda XIX,0x2890
+	lda	xix, (10384:16)	; F53382  lda XIX,0x2890
 	ldb_d8	c, (10416)	; F53386  ld C,(0x28b0)
 	and	c, 1	; F5338A  and C,0x01
 	jr	z, 30	; F5338D  jr Z,0xf533ad
@@ -102950,7 +102950,7 @@ sub_F533DC:
 SoftKeyCol1_DrawbarScreen:
 	pushw	hl	; F5340D  push HL
 	push	xix	; F5340E  push XIX
-	lda_d16	xix, (10386)	; F5340F  lda XIX,0x2892
+	lda	xix, (10386:16)	; F5340F  lda XIX,0x2892
 	ld	c, (xix)	; F53413  ld C,(XIX)
 	and	c, 15	; F53415  and C,0x0f
 	pushw	bc	; F53418  push BC
@@ -103032,7 +103032,7 @@ SoftKeyCol1_DrawbarScreen:
 SoftKeyCol2_DrawbarScreen:
 	pushw	hl	; F5344F  push HL
 	push	xix	; F53450  push XIX
-	lda_d16	xix, (10387)	; F53451  lda XIX,0x2893
+	lda	xix, (10387:16)	; F53451  lda XIX,0x2893
 	ld	c, (xix)	; F53455  ld C,(XIX)
 	and	c, 15	; F53457  and C,0x0f
 	pushw	bc	; F5345A  push BC
@@ -103114,7 +103114,7 @@ SoftKeyCol2_DrawbarScreen:
 SoftKeyCol3_DrawbarScreen:
 	pushw	hl	; F53491  push HL
 	push	xix	; F53492  push XIX
-	lda_d16	xix, (10386)	; F53493  lda XIX,0x2892
+	lda	xix, (10386:16)	; F53493  lda XIX,0x2892
 	ld	c, (xix)	; F53497  ld C,(XIX)
 	and	c, 240	; F53499  and C,0xf0
 	srl	c, 4	; F5349C  srl 0x04,C
@@ -103199,7 +103199,7 @@ SoftKeyCol3_DrawbarScreen:
 SoftKeyCol4_DrawbarScreen:
 	pushw	hl	; F534DC  push HL
 	push	xix	; F534DD  push XIX
-	lda_d16	xix, (10387)	; F534DE  lda XIX,0x2893
+	lda	xix, (10387:16)	; F534DE  lda XIX,0x2893
 	ld	c, (xix)	; F534E2  ld C,(XIX)
 	and	c, 240	; F534E4  and C,0xf0
 	srl	c, 4	; F534E7  srl 0x04,C
@@ -103282,7 +103282,7 @@ SoftKeyCol4_DrawbarScreen:
 SoftKeyCol5_DrawbarScreen:
 	pushw	hl	; F53527  push HL
 	push	xix	; F53528  push XIX
-	lda_d16	xix, (10388)	; F53529  lda XIX,0x2894
+	lda	xix, (10388:16)	; F53529  lda XIX,0x2894
 	ld	c, (xix)	; F5352D  ld C,(XIX)
 	and	c, 15	; F5352F  and C,0x0f
 	pushw	bc	; F53532  push BC
@@ -103362,7 +103362,7 @@ SoftKeyCol5_DrawbarScreen:
 SoftKeyCol6_DrawbarScreen:
 	pushw	hl	; F53569  push HL
 	push	xix	; F5356A  push XIX
-	lda_d16	xix, (10388)	; F5356B  lda XIX,0x2894
+	lda	xix, (10388:16)	; F5356B  lda XIX,0x2894
 	ld	c, (xix)	; F5356F  ld C,(XIX)
 	and	c, 240	; F53571  and C,0xf0
 	srl	c, 4	; F53574  srl 0x04,C
@@ -103445,7 +103445,7 @@ SoftKeyCol6_DrawbarScreen:
 SoftKeyCol7_DrawbarScreen:
 	pushw	hl	; F535B4  push HL
 	push	xix	; F535B5  push XIX
-	lda_d16	xix, (10389)	; F535B6  lda XIX,0x2895
+	lda	xix, (10389:16)	; F535B6  lda XIX,0x2895
 	ld	c, (xix)	; F535BA  ld C,(XIX)
 	and	c, 15	; F535BC  and C,0x0f
 	pushw	bc	; F535BF  push BC
@@ -103525,7 +103525,7 @@ SoftKeyCol7_DrawbarScreen:
 SoftKeyCol8_DrawbarScreen:
 	pushw	hl	; F535F6  push HL
 	push	xix	; F535F7  push XIX
-	lda_d16	xix, (10389)	; F535F8  lda XIX,0x2895
+	lda	xix, (10389:16)	; F535F8  lda XIX,0x2895
 	ld	c, (xix)	; F535FC  ld C,(XIX)
 	and	c, 240	; F535FE  and C,0xf0
 	srl	c, 4	; F53601  srl 0x04,C
@@ -103574,7 +103574,7 @@ SoftKeyCol8_DrawbarScreen:
 PageKey_DrawbarScreen:
 	pushw	hl	; F53641  push HL
 	push	xix	; F53642  push XIX
-	lda_d16	xix, (10390)	; F53643  lda XIX,0x2896
+	lda	xix, (10390:16)	; F53643  lda XIX,0x2896
 	ld	c, (xix)	; F53647  ld C,(XIX)
 	and	c, 15	; F53649  and C,0x0f
 	pushw	bc	; F5364C  push BC
@@ -103621,7 +103621,7 @@ PageKey_DrawbarScreen:
 ; --------------------------------------------------------------------------
 ExitKey_DrawbarScreen:
 	push	xix	; F53683  push XIX
-	lda_d16	xix, (8305)	; F53684  lda XIX,0x2071
+	lda	xix, (8305:16)	; F53684  lda XIX,0x2071
 	ldb_d8	c, (10416)	; F53688  ld C,(0x28b0)
 	and	c, 1	; F5368C  and C,0x01
 	jr	nz, 41	; F5368F  jr NZ,0xf536ba
@@ -103934,7 +103934,7 @@ Blit_FromStackRecord:
 Drawbar1_16ft_Update:
 	pushw	hl	; F5394C  push HL
 	push	xix	; F5394D  push XIX
-	lda_d16	xix, (10391)	; F5394E  lda XIX,0x2897
+	lda	xix, (10391:16)	; F5394E  lda XIX,0x2897
 	ld	c, (xix)	; F53952  ld C,(XIX)
 	and	c, 15	; F53954  and C,0x0f
 	ld	h, c	; F53957  ld H,C
@@ -104007,7 +104007,7 @@ Drawbar1_16ft_Update:
 Drawbar2_5_1_3ft_Update:
 	pushw	hl	; F539C0  push HL
 	push	xix	; F539C1  push XIX
-	lda_d16	xix, (10392)	; F539C2  lda XIX,0x2898
+	lda	xix, (10392:16)	; F539C2  lda XIX,0x2898
 	ld	c, (xix)	; F539C6  ld C,(XIX)
 	and	c, 15	; F539C8  and C,0x0f
 	ld	h, c	; F539CB  ld H,C
@@ -104080,7 +104080,7 @@ Drawbar2_5_1_3ft_Update:
 Drawbar3_8ft_Update:
 	pushw	hl	; F53A34  push HL
 	push	xix	; F53A35  push XIX
-	lda_d16	xix, (10391)	; F53A36  lda XIX,0x2897
+	lda	xix, (10391:16)	; F53A36  lda XIX,0x2897
 	ld	c, (xix)	; F53A3A  ld C,(XIX)
 	and	c, 240	; F53A3C  and C,0xf0
 	srl	c, 4	; F53A3F  srl 0x04,C
@@ -104162,7 +104162,7 @@ Drawbar3_8ft_Update:
 Drawbar4_4ft_Update:
 	pushw	hl	; F53AC3  push HL
 	push	xix	; F53AC4  push XIX
-	lda_d16	xix, (10392)	; F53AC5  lda XIX,0x2898
+	lda	xix, (10392:16)	; F53AC5  lda XIX,0x2898
 	ld	c, (xix)	; F53AC9  ld C,(XIX)
 	and	c, 240	; F53ACB  and C,0xf0
 	srl	c, 4	; F53ACE  srl 0x04,C
@@ -104244,7 +104244,7 @@ Drawbar4_4ft_Update:
 Drawbar5_2_2_3ft_Update:
 	pushw	hl	; F53B52  push HL
 	push	xix	; F53B53  push XIX
-	lda_d16	xix, (10393)	; F53B54  lda XIX,0x2899
+	lda	xix, (10393:16)	; F53B54  lda XIX,0x2899
 	ld	c, (xix)	; F53B58  ld C,(XIX)
 	and	c, 15	; F53B5A  and C,0x0f
 	ld	h, c	; F53B5D  ld H,C
@@ -104317,7 +104317,7 @@ Drawbar5_2_2_3ft_Update:
 Drawbar6_2ft_Update:
 	pushw	hl	; F53BC6  push HL
 	push	xix	; F53BC7  push XIX
-	lda_d16	xix, (10393)	; F53BC8  lda XIX,0x2899
+	lda	xix, (10393:16)	; F53BC8  lda XIX,0x2899
 	ld	c, (xix)	; F53BCC  ld C,(XIX)
 	and	c, 240	; F53BCE  and C,0xf0
 	srl	c, 4	; F53BD1  srl 0x04,C
@@ -104399,7 +104399,7 @@ Drawbar6_2ft_Update:
 Drawbar7_1_3_5ft_Update:
 	pushw	hl	; F53C55  push HL
 	push	xix	; F53C56  push XIX
-	lda_d16	xix, (10394)	; F53C57  lda XIX,0x289a
+	lda	xix, (10394:16)	; F53C57  lda XIX,0x289a
 	ld	c, (xix)	; F53C5B  ld C,(XIX)
 	and	c, 15	; F53C5D  and C,0x0f
 	ld	h, c	; F53C60  ld H,C
@@ -104472,7 +104472,7 @@ Drawbar7_1_3_5ft_Update:
 Drawbar8_1_1_3ft_Update:
 	pushw	hl	; F53CC9  push HL
 	push	xix	; F53CCA  push XIX
-	lda_d16	xix, (10394)	; F53CCB  lda XIX,0x289a
+	lda	xix, (10394:16)	; F53CCB  lda XIX,0x289a
 	ld	c, (xix)	; F53CCF  ld C,(XIX)
 	and	c, 240	; F53CD1  and C,0xf0
 	srl	c, 4	; F53CD4  srl 0x04,C
@@ -104554,7 +104554,7 @@ Drawbar8_1_1_3ft_Update:
 Drawbar9_1ft_Update:
 	pushw	hl	; F53D58  push HL
 	push	xix	; F53D59  push XIX
-	lda_d16	xix, (10395)	; F53D5A  lda XIX,0x289b
+	lda	xix, (10395:16)	; F53D5A  lda XIX,0x289b
 	ld	c, (xix)	; F53D5E  ld C,(XIX)
 	and	c, 15	; F53D60  and C,0x0f
 	ld	h, c	; F53D63  ld H,C
@@ -104653,7 +104653,7 @@ sub_F53DF4:		; <- T_F42E60
 ; --------------------------------------------------------------------------
 sub_F53E04:		; <- T_F42E64
 	push	xix	; F53E04  push XIX
-	lda_d16	xix, (9008)	; F53E05  lda XIX,0x2330
+	lda	xix, (9008:16)	; F53E05  lda XIX,0x2330
 	extz	xix	; F53E09  extz XIX
 	ld	c, (xix+1)	; F53E0B  ld C,(XIX+0x01)
 	cps	c, 0	; F53E0E  cp C,0
@@ -105084,7 +105084,7 @@ sub_F541FF:		; <- T_F42E68
 sub_F54210:		; <- T_F42E6C
 	pushw	hl	; F54210  push HL
 	push	xix	; F54211  push XIX
-	lda_d16	xix, (10400)	; F54212  lda XIX,0x28a0
+	lda	xix, (10400:16)	; F54212  lda XIX,0x28a0
 	ldw	hl, 0	; F54216  ld HL,0x0000
 	ld	c, (xix)	; F54219  ld C,(XIX)
 	cp	c, 15	; F5421B  cp C,0x0f
@@ -106110,7 +106110,7 @@ PanelCode_ToSlotAndFlags:
 	link XIZ,0x0000	; F55019  link XIZ,0x0000
 	pushw	hl	; F5501D  push HL
 	push	xix	; F5501E  push XIX
-	lda_d16	xix, (10416)	; F5501F  lda XIX,0x28b0
+	lda	xix, (10416:16)	; F5501F  lda XIX,0x28b0
 	ld	hl, (xiz+8)	; F55023  ld HL,(XIZ+0x08)
 	cp	hl, 31	; F55026  cp HL,0x001f
 	jrl	ugt, 116	; F5502A  jrl UGT,0xf550a1
@@ -106500,8 +106500,8 @@ Queue2E00_Append4:
 List2030_Append4:
 	link XIZ,0xfff8	; F552CC  link XIZ,0xfff8
 	push	xix	; F552D0  push XIX
-	lda_d16	xix, (8240)	; F552D1  lda XIX,0x2030
-	lda_d16	xbc, (8300)	; F552D5  lda XBC,0x206c
+	lda	xix, (8240:16)	; F552D1  lda XIX,0x2030
+	lda	xbc, (8300:16)	; F552D5  lda XBC,0x206c
 	ld	(xiz-4), xbc	; F552D9  ld (XIZ+0xfc),XBC
 	ld	c, (xix)	; F552DC  ld C,(XIX)
 	cp	c, 255	; F552DE  cp C,0xff
@@ -107204,7 +107204,7 @@ sub_F556EA:		; <- T_F42CA0
 	pop	xix	; F55728  pop XIX
 	pop	xhl	; F55729  pop XHL
 	pop	xde	; F5572A  pop XDE
-	lda_d16	xbc, (9792)	; F5572B  lda XBC,0x2640
+	lda	xbc, (9792:16)	; F5572B  lda XBC,0x2640
 	ld	(xiz-4), xbc	; F5572F  ld (XIZ+0xfc),XBC
 	ld	xwa, (9792:16)	; F55732  ld XWA,(0x2640)
 	ld	xix, xwa	; F55736  ld XIX,XWA

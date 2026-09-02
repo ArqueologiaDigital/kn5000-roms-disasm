@@ -2882,7 +2882,7 @@ Sprintf_DecimalExponent:
 	push xiz
 	ld wa, (xsp + 16)
 	exts xwa
-	lda_d16 xbc, (301)
+	lda xbc, (301:16)
 	call Math_MultiplyAccumulate
 	ld xiz, xhl
 	cp xiz, 0x0
@@ -2900,11 +2900,11 @@ Sprintf_DecExp_Positive:
 Sprintf_DecExp_ComputeQuotient:
 	ld xiz, (xsp + 4)
 	ld xwa, xiz
-	lda_d16 xbc, (1000)
+	lda xbc, (1000:16)
 	call Free_ClearByte2
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	lda_d16 xbc, (1000)
+	lda xbc, (1000:16)
 	call Math_DivideSigned32
 	ld xiz, xhl
 	ld xwa, (xsp + 8)

@@ -283,7 +283,7 @@ WPLoad_UpdateDisplay:
 	divs bc, 0xa
 	stw_erp BC, 0xe6
 	sll bc, 5
-	lda_d16 xhl, (0x850c)
+	lda xhl, (0x850c:16)
 	ld de, bc
 	extz xde
 	add xde, xhl
@@ -294,7 +294,7 @@ WPLoad_UpdateDisplay:
 	divs wa, 0xa
 	stw_erp WA, 0xe2
 	sll wa, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	ld de, wa
 	extz xde
 	add xde, xbc

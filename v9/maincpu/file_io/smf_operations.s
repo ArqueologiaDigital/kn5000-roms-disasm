@@ -240,7 +240,7 @@ SaveFileNameSmfFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	lda_d16 xwa, (0x8850)
+	lda xwa, (0x8850:16)
 	cp xbc, 0x1e00086
 	jr z, SaveFN_HandleApply
 	cp xbc, 0x1e0003a
@@ -260,7 +260,7 @@ SaveFN_HandleActivate:
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_CopyString
-	lda_d16 xwa, (0x8851)
+	lda xwa, (0x8851:16)
 	call FileIO_GetRecordType_Extended
 	ld xwa, (0x808c:16)
 	ld xbc, 0x1c0000f
@@ -313,11 +313,11 @@ SmfSeqToSongNumFunc:
 	jr SeqToSong_Return
 
 SeqToSong_BuildEntry:
-	lda_d16 xwa, (0x8094)
+	lda xwa, (0x8094:16)
 	stib_dsp 0xe0, 0x00
 	ld xbc, DiskOp_ChannelCfgTable_0xD0
 	call FileIO_CopyString
-	lda_d16 xiz, (0x8095)
+	lda xiz, (0x8095:16)
 	ldb_d8 a, (0x8948)
 	inc 1, a
 	extz wa
@@ -346,11 +346,11 @@ SmfSeqFromSongNumFunc:
 	jr SeqFromSong_Return
 
 SeqFromSong_BuildEntry:
-	lda_d16 xwa, (0x8118)
+	lda xwa, (0x8118:16)
 	stib_dsp 0xe0, 0x00
 	ld xbc, DiskOp_ChannelCfgTable_0xDC
 	call FileIO_CopyString
-	lda_d16 xiz, (0x8119)
+	lda xiz, (0x8119:16)
 	ldb_d8 a, (0x8948)
 	inc 1, a
 	extz wa
@@ -472,7 +472,7 @@ DisplaySmfFileList:
 DispFileList_LoopBody:
 	ld de, iz
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	stb_erp A, 0xf8
@@ -485,7 +485,7 @@ DispFileList_LoopBody:
 	sll wa, 5
 	lds de, 1
 	add de, wa
-	lda_d16 xhl, (0x850c)
+	lda xhl, (0x850c:16)
 	ld wa, de
 	extz xwa
 	add xwa, xhl
@@ -497,7 +497,7 @@ DispFileList_LoopBody:
 	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (xsp + 4)
@@ -1180,7 +1180,7 @@ SmfFN_RefreshIfChanged:
 	divs bc, 0xa
 	stw_erp BC, 0xe6
 	sll bc, 5
-	lda_d16 xhl, (0x850c)
+	lda xhl, (0x850c:16)
 	ld de, bc
 	extz xde
 	add xde, xhl
@@ -1191,7 +1191,7 @@ SmfFN_RefreshIfChanged:
 	divs wa, 0xa
 	stw_erp WA, 0xe2
 	sll wa, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -1213,7 +1213,7 @@ SmfFN_RedrawPage:
 SmfFN_UpdateFilenameField:
 	cpdi8 (0x8d36), 107
 	jr nz, SmfFN_SendOkState
-	lda_d16 xiz, (0x8850)
+	lda xiz, (0x8850:16)
 	ld wa, (0x81ac:16)
 	cpda16 xwa, 0x8504
 	jr lt, SmfFN_FetchFilename
@@ -1287,7 +1287,7 @@ DisplaySmfSequenceList:
 DispSeqList_LoopBody:
 	ld de, iz
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	stb_erp A, 0xf8
@@ -1300,7 +1300,7 @@ DispSeqList_LoopBody:
 	sll wa, 5
 	lds de, 1
 	add de, wa
-	lda_d16 xhl, (0x850c)
+	lda xhl, (0x850c:16)
 	ld wa, de
 	extz xwa
 	add xwa, xhl
@@ -1312,7 +1312,7 @@ DispSeqList_LoopBody:
 	call FileIO_ReadHeader_ParseLoop
 	ld de, iz
 	sll de, 5
-	lda_d16 xbc, (0x850c)
+	lda xbc, (0x850c:16)
 	extz xde
 	add xde, xbc
 	ld xwa, (xsp + 4)

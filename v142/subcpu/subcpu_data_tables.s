@@ -11668,7 +11668,7 @@ Audio_DMA_RingBuf_ReadLoop:
 	jr z, Audio_DMA_RingBuf_CheckSend
 	ld wa, iz
 	inc 1, iz
-	lda_d16 xbc, 1536
+	lda xbc, (1536:16)
 	extz xwa
 	add xwa, xbc
 	ld (xwa), l

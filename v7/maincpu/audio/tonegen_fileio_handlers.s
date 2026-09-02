@@ -90,7 +90,7 @@ ToneGen_ApplyMaskLoop:
 ToneGen_DSPCfg_Initialize:
 	calr ToneGen_DSPCfg_ResetAll
 	jrl ToneGen_DSPCfg_ResetAllChannels
-	lda_d16 xwa, (0xf480)
+	lda xwa, (0xf480:16)
 	jrl DSPCfg_InitAllEntries
 
 ToneGen_InitAllChannelEntries_Skip:
@@ -482,7 +482,7 @@ DSPCfg_InitDispatchData:
 	nop
 	lds	hl, 2
 	ret
-	lda_d16	xwa, (0xf480)
+	lda	xwa, (0xf480:16)
 	jrl	-718
 
 DSPCfg_ResetAuxEntries:
@@ -523,7 +523,7 @@ DSPCfg_SyncBitmapData:
 	push	xiz
 	ld	(xsp+18), xbc
 	ld	xiz, xwa
-	lda_d16	xwa, 48288
+	lda	xwa, (48288:16)
 	ld	(xsp+14), xwa
 	ld	(xsp+10), xwa
 	ld	bc, (36930:16)
@@ -624,8 +624,8 @@ SndParam_SyncDisplayBitmap:
 	pushw 0xc8e4
 	call 0xff05bc
 	lda xsp, (xsp + 0x0a)
-	lda_d16 xbc, (0xf9a0)
-	lda_d16 xwa, (0xf9b6)
+	lda xbc, (0xf9a0:16)
+	lda xwa, (0xf9b6:16)
 	sub XWA,XBC
 	lda xde, (0x03c8e4:24)
 	add XWA,XDE
@@ -656,7 +656,7 @@ ToneGen_DiffScanAndUpdate:
 	lda	xsp, (xsp-14)
 	pushw	iz
 	ld	bc, (36930:16)
-	lda_d16	xwa, (48288)
+	lda	xwa, (48288:16)
 	ld	(xsp+12), xwa
 	ld	(xsp+8), xwa
 	lds	iz, 0
@@ -679,7 +679,7 @@ ToneGen_DiffScanOuter:
 
 ToneGen_DiffScanInner:
 	inc 1, iz
-	lda_d16 xde, (0xfd60)
+	lda xde, (0xfd60:16)
 	ld xwa, xde
 	sub xwa, 0xf9a0
 	ld hl, iz
@@ -727,7 +727,7 @@ ToneGen_DiffRecordChange:
 	extz xwa
 	ld xix, xwa
 	add xix, (xsp + 8)
-	lda_d16 xhl, (0xfd60)
+	lda xhl, (0xfd60:16)
 	ld de, iz
 	extz xde
 	add xde, xhl
@@ -757,9 +757,9 @@ ToneGen_DiffOuterNext:
 	inc 1, iz
 
 ToneGen_DiffScanCheckEnd:
-	lda_d16 xde, (0xfd60)
+	lda xde, (0xfd60:16)
 
-	lda_d16 xwa, (0xffbe)
+	lda xwa, (0xffbe:16)
 
 	sub xwa, xde
 
@@ -796,8 +796,8 @@ ToneGen_FileIO_SaveAndSync:
 	calr SndParam_SyncDisplayBitmap
 	lda xwa, (xsp + 0x04)
 	.byte 0xb0, 0x14, 0x50, 0xfd, 0xb8, 0x01, 0x14, 0x52, 0xfd, 0xb8, 0x02, 0x14, 0x54, 0xfd
-	lda_d16	xwa, 64930
-	lda_d16	xbc, 63904
+	lda	xwa, (64930:16)
+	lda	xbc, (63904:16)
 	sub	xwa, xbc
 	pushw	wa
 	push	xiz
@@ -1202,7 +1202,7 @@ Encoder_SyncLoop:
 	ldb_d8	a, (36338)
 	extz	wa
 	sll	wa, 2
-	lda_d16	xbc, (49053)
+	lda	xbc, (49053:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	(xwa), 255

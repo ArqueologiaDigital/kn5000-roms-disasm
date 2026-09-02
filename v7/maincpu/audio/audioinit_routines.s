@@ -277,7 +277,7 @@ AudioInit_Routing_NoSplitCheckAux:
 AudioInit_Routing_CheckTypeEDFlags:
 	extz	de
 	ld	wa, iz
-	lda_d16	xbc, (49542)
+	lda	xbc, (49542:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -352,7 +352,7 @@ AudioInit_Pan_SetStereoLeft:
 AudioInit_Pan_CheckMode1:
 	and	d, w
 	nop
-	lda_d16	xbc, (49865)
+	lda	xbc, (49865:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	h, (xwa)

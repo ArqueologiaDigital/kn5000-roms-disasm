@@ -915,7 +915,7 @@ Flash_InitBytecodeBlock:
 	call	16114965
 	.byte 0x8f, 0x08, 0x3f, 0x00
 	jrl	nz, 128
-	lda_d16	xwa, 1748
+	lda	xwa, (1748:16)
 	.byte 0x90, 0x3f, 0xff, 0xff
 	jr	nz, 42
 	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
@@ -924,7 +924,7 @@ Flash_InitBytecodeBlock:
 	ld	a, (xsp+4)
 	extz	wa
 	calr	1449
-	lda_d16	xwa, 1850
+	lda	xwa, (1850:16)
 	.byte 0x90, 0x3f, 0xff, 0xff
 	jr	nz, 8
 	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
@@ -1027,7 +1027,7 @@ Flash_InitBytecodeBlock:
 	jr	c, -92
 	.byte 0x8f, 0x08, 0x3f, 0x00
 	jrl	nz, -229
-	lda_d16	xwa, 1748
+	lda	xwa, (1748:16)
 	.byte 0x90, 0x3f, 0xff, 0xff
 	jr	nz, 55
 	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
@@ -1623,7 +1623,7 @@ Flash_ExtendedOpsBlock:
 	pushw iz
 	ld (XSP+0x02),A
 	calr SlotTable_ExtendedOpsBlock
-	lda_d16 xix, (0x06d4)
+	lda xix, (0x06d4:16)
 	cpw (XIX), 0xffff
 	jr z, .Lc_f173a6
 	ldb L, 0x00
@@ -1638,7 +1638,7 @@ Flash_ExtendedOpsBlock:
 	cp A,(XSP+0x02)
 	jr nz, .Lc_f173a0
 .Lc_f1738d:
-	lda_d16 xbc, (0x07a0)
+	lda xbc, (0x07a0:16)
 	ld WA,(XIX)
 	ld (XBC),WA
 	extz HL
@@ -1679,7 +1679,7 @@ Flash_ExtendedOpsBlock:
 	sla de, 2
 	ld IZ,DE
 	inc 4,IZ
-	lda_d16 xiy, (0x07a0)
+	lda xiy, (0x07a0:16)
 	ld WA,(XBC)
 	stw_dri wa, 0x07, 0xf4, 0xf8
 	inc 6,DE
@@ -1752,7 +1752,7 @@ Flash_ExtendedOpsBlock:
 	extz BC
 	lds de, 0
 	calr Util_FrameSetup10
-	lda_d16 xwa, (0x07a0)
+	lda xwa, (0x07a0:16)
 	cp HL,(XWA)
 	jr nz, .Lc_f17562
 	ld HL,(XWA+0x02)
@@ -1773,7 +1773,7 @@ Flash_ExtendedOpsBlock:
 	ld_erpb_rr c, 0xf8
 	extz BC
 	sla bc, 2
-	lda_d16 xwa, (0x07a4)
+	lda xwa, (0x07a4:16)
 	.byte 0xd3, 0x07, 0xe0, 0xe4, 0x3f, 0xff, 0xff, 0x76
 	.byte 0x1a, 0x01, 0xc7, 0xf9, 0xa8, 0x8f, 0x04, 0x21
 	.byte 0xc9, 0xc8, 0x1e, 0xc7, 0xfa, 0x99, 0xc7, 0xf9
@@ -2335,7 +2335,7 @@ DualVoice_ScanRow1Alt:
 	ret
 
 SlotTable_InitBank1748:
-	lda_d16 xbc, (1748)
+	lda xbc, (1748:16)
 	ldw (xbc), 0xffff
 	ldb l, 0x0
 	lds wa, 0
@@ -2351,7 +2351,7 @@ SlotTable_InitBank1748_Loop:
 	ret
 
 SlotTable_InitBank1850:
-	lda_d16 xbc, (1850)
+	lda xbc, (1850:16)
 	ldw (xbc), 0xffff
 	ldb l, 0x0
 	lds wa, 0
@@ -2367,7 +2367,7 @@ SlotTable_InitBank1850_Loop:
 	ret
 
 SlotTable_ExtendedOpsBlock:
-	lda_d16	xde, (1952)
+	lda	xde, (1952:16)
 	ldw (xde), 65535
 	ldw (xde+2), 65535
 	lda	xbc, (xde+6)
@@ -2379,7 +2379,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	xwa, xbc
 	jr	c, -14
 	ret
-	lda_d16	xde, (2156)
+	lda	xde, (2156:16)
 	ldw (xde), 65535
 	ldw (xde+2), 65535
 	lda	xbc, (xde+6)
@@ -2391,7 +2391,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	xwa, xbc
 	jr	c, -14
 	ret
-	lda_d16	xix, (2360)
+	lda	xix, (2360:16)
 	ldw (xix), 65535
 	ldw (xix+2), 65535
 	.byte 0xbc, 0x04
@@ -2414,7 +2414,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	xwa, xbc
 	jr	c, -27
 	ret
-	lda_d16	xix, (2666)
+	lda	xix, (2666:16)
 	ldw (xix), 65535
 	ldw (xix+2), 65535
 	.byte 0xbc, 0x04
@@ -2437,7 +2437,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	xwa, xbc
 	jr	c, -27
 	ret
-	lda_d16	xbc, (3074)
+	lda	xbc, (3074:16)
 	ldw (xbc), 65535
 	ldb	l, 0
 	lds	wa, 0
@@ -2454,7 +2454,7 @@ SlotTable_ExtendedOpsBlock:
 	cp	l, 50
 	jr	c, -20
 	ret
-	lda_d16	xbc, (2972)
+	lda	xbc, (2972:16)
 	ldw (xbc), 65535
 	ldb	l, 0
 	lds	wa, 0
@@ -2474,7 +2474,7 @@ SlotTable_ExtendedOpsBlock:
 
 SlotTable_Insert1748:
 	ldib_erp 0xe2, 0
-	lda_d16 xhl, (1748)
+	lda xhl, (1748:16)
 
 SlotTable_Insert1748_Loop:
 	stb_erp C, 0xe2
@@ -2498,7 +2498,7 @@ SlotTable_Insert1748_Next:
 
 SlotTable_Insert1850:
 	ldib_erp 0xe2, 0
-	lda_d16 xhl, (1850)
+	lda xhl, (1850:16)
 
 SlotTable_Insert1850_Loop:
 	stb_erp C, 0xe2
@@ -2526,7 +2526,7 @@ Flash_WriteBackSlotTable:
 	ld xiy, (3218:16)
 	ldw bc, 0x8000
 	ldirw
-	lda_d16 xwa, (1850)
+	lda xwa, (1850:16)
 	cpw (xwa), 0xffff
 	jr z, Flash_WriteBackSlot_StartLoop
 	ld wa, (xwa)
@@ -2544,7 +2544,7 @@ Flash_WriteBackSlot_Loop:
 	extz wa
 	add wa, wa
 	inc 2, wa
-	lda_d16 xbc, (1850)
+	lda xbc, (1850:16)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	cp wa, 0xffff
 	jr z, Flash_WriteBackSlot_Erase
@@ -2613,7 +2613,7 @@ Flash_SlotUpdateOpsBlock:
 	extz WA
 	add WA,WA
 	inc 2,WA
-	lda_d16 xbc, (0x0c02)
+	lda xbc, (0x0c02:16)
 	stiw_ind 0x07, 0xe4, 0xe0, 0x01, 0x00
 .Lc_f18430:
 	incb_erp 0xfa, 1
@@ -3720,7 +3720,7 @@ DualVoice_LoopCheckNext:
 	ld a, (xsp + 6)
 	extz wa
 	calr NoteEventBuffer_Store
-	lda_d16 xwa, (1850)
+	lda xwa, (1850:16)
 	cpw (xwa), 0xffff
 	jr nz, DualVoice_WriteBackSlots
 	cpw (xwa + 2), 0xffff

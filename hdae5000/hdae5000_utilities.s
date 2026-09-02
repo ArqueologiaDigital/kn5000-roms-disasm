@@ -893,7 +893,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	push xiz
 	ld	wa, (xsp+16)
 	exts xwa                                ; exts XWA
-	lda_d16	xbc, (301)
+	lda	xbc, (301:16)
 	call HDAE5000_Multiply
 	ld	xiz, xhl
 	cp	xiz, 0x00000000
@@ -909,11 +909,11 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 .LMCR_b6d4:
 	ld xiz, (xsp + 0x04)                    ; ld XIZ,(XSP+0x04)
 	ld	xwa, xiz
-	lda_d16	xbc, (1000)
+	lda	xbc, (1000:16)
 	call 0x29b8b7
 	ld (xsp + 0x08), xhl                    ; ld (XSP+0x08),XHL
 	ld	xwa, xiz
-	lda_d16	xbc, (1000)
+	lda	xbc, (1000:16)
 	call 0x29b8bb
 	ld	xiz, xhl
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)

@@ -134,7 +134,7 @@ SongBank_ComputeTableOfs:
 	lda_dri XBC, 0xe5, 0x00, 0x01
 	ld wa, (xsp + 4)
 	mul wa, 0x15
-	lda_d16 xix, (6906)
+	lda xix, (6906:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xix
@@ -164,7 +164,7 @@ SongBank_CopyNameAndFinish:
 	ld (xiz + 16), 0x0
 	ld wa, (xsp + 4)
 	mul wa, 0x15
-	lda_d16 xbc, (6906)
+	lda xbc, (6906:16)
 	extz xwa
 	add xwa, xbc
 	ld xhl, xwa
@@ -279,13 +279,13 @@ SongBank_LookupTableEntry:
 	dec 2, xsp
 	push xiz
 	ld (xsp + 4), wa
-	lda_d16 xix, (4421)
+	lda xix, (4421:16)
 	ld wa, (xsp + 4)
 	extz xwa
 	add xix, xwa
 	ld wa, (xsp + 4)
 	mul wa, 0x7
-	lda_d16 xhl, (7122)
+	lda xhl, (7122:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xhl
@@ -320,7 +320,7 @@ SongBankLookup_BuildAudioCmd:
 	ld	(xiz+4), 0
 	ld	wa, (xsp+4)
 	mul	wa, 7
-	lda_d16	xbc, (7122)
+	lda	xbc, (7122:16)
 	extz	xwa
 	add	xwa, xbc
 	ld	xhl, xwa

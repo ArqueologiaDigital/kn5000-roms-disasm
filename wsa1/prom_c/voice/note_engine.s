@@ -286,7 +286,7 @@ ExtBoard_ProbeAndInstallBases__FB05CD:
 ;          mechanism, not a purpose.
 Toggle14FE_AndDispatch:
 	push	xix                                   ; FB05EC  push XIX
-	lda_d16	xix, (0x14FE)                      ; FB05ED  lda XIX,0x14fe
+	lda	xix, (0x14FE:16)                      ; FB05ED  lda XIX,0x14fe
 	ld	c, (xix)                                ; FB05F1  ld C,(XIX)
 	cps	c, 0                                   ; FB05F3  cp C,0
 	jr nz, Toggle14FE_AndDispatch__FB05FD      ; FB05F5  jr NZ,0xfb05fd
@@ -7405,7 +7405,7 @@ sub_FB44EC:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB44EC  link XIZ,0x0000
 	pushw	hl                                   ; FB44F0  push HL
 	push	xix                                   ; FB44F1  push XIX
-	lda_d16	xix, (0x1523)                      ; FB44F2  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FB44F2  lda XIX,0x1523
 	ld	bc, (xiz+8)                             ; FB44F6  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB44F9  extz BC
 	mul	bc, 0x12C                              ; FB44FB  mul BC,0x012c
@@ -8110,7 +8110,7 @@ sub_FB49EB:
 	pushw	hl                                   ; FB49EF  push HL
 	pushw	de                                   ; FB49F0  push DE
 	push	xix                                   ; FB49F1  push XIX
-	lda_d16	xix, (0x1523)                      ; FB49F2  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FB49F2  lda XIX,0x1523
 	ld	d, (xiz+14)                             ; FB49F6  ld D,(XIZ+0x0e)
 	ld	bc, (xiz+8)                             ; FB49F9  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB49FC  extz BC
@@ -10324,7 +10324,7 @@ sub_FB5C77:
 	pushw	hl                                   ; FB5C7B  push HL
 	pushw	de                                   ; FB5C7C  push DE
 	push	xix                                   ; FB5C7D  push XIX
-	lda_d16	xix, (0x1523)                      ; FB5C7E  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FB5C7E  lda XIX,0x1523
 	ld	d, (xiz+8)                              ; FB5C82  ld D,(XIZ+0x08)
 	ld	c, d                                    ; FB5C85  ld C,D
 	extz	bc                                    ; FB5C87  extz BC
@@ -11040,7 +11040,7 @@ sub_FB6190:
 	pushw	hl                                   ; FB6194  push HL
 	pushw	de                                   ; FB6195  push DE
 	push	xix                                   ; FB6196  push XIX
-	lda_d16	xix, (0x1523)                      ; FB6197  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FB6197  lda XIX,0x1523
 	ld	d, (xiz+8)                              ; FB619B  ld D,(XIZ+0x08)
 	ld	l, (xiz+10)                             ; FB619E  ld L,(XIZ+0x0a)
 	ld	c, d                                    ; FB61A1  ld C,D
@@ -11158,7 +11158,7 @@ sub_FB6272:
 	pushw	hl                                   ; FB6276  push HL
 	pushw	de                                   ; FB6277  push DE
 	push	xix                                   ; FB6278  push XIX
-	lda_d16	xix, (0x1523)                      ; FB6279  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FB6279  lda XIX,0x1523
 	ld	e, (xiz+8)                              ; FB627D  ld E,(XIZ+0x08)
 	ld	d, (xiz+10)                             ; FB6280  ld D,(XIZ+0x0a)
 	ld	c, e                                    ; FB6283  ld C,E
@@ -11451,7 +11451,7 @@ sub_FB64C8:
 	link32 0xEE, 0x0C, 0x00, 0x00              ; FB64C8  link XIZ,0x0000
 	pushw	hl                                   ; FB64CC  push HL
 	push	xix                                   ; FB64CD  push XIX
-	lda_d16	xix, (0x1523)                      ; FB64CE  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FB64CE  lda XIX,0x1523
 	ld	bc, (xiz+8)                             ; FB64D2  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FB64D5  extz BC
 	mul	bc, 0x12C                              ; FB64D7  mul BC,0x012c
@@ -12245,7 +12245,7 @@ sub_FB6BA8:
 	pushw	hl                                   ; FB6BAC  push HL
 	pushw	de                                   ; FB6BAD  push DE
 	push	xix                                   ; FB6BAE  push XIX
-	lda_d16	xix, (0x1523)                      ; FB6BAF  lda XIX,0x1523
+	lda	xix, (0x1523:16)                      ; FB6BAF  lda XIX,0x1523
 	ld	xbc, (xiz+8)                            ; FB6BB3  ld XBC,(XIZ+0x08)
 	ld	h, (xbc+1)                              ; FB6BB6  ld H,(XBC+0x01)
 	cp	h, 33                                   ; FB6BB9  cp H,0x21

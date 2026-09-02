@@ -9,14 +9,14 @@
 
 EffectMode_CopyVoiceParams:
 	pushw iz
-	lda_d16 xbc, (0xfd05)
-	lda_d16 xhl, (0xf9a0)
+	lda xbc, (0xfd05:16)
+	lda xhl, (0xf9a0:16)
 	sub xbc, xhl
 	lda xde, (0x03c2c4:24)
 	add xbc, xde
 	cp (xbc), 0x3
 	jr nz, EffectMode_CopyVoiceParams_Done
-	lda_d16 xix, (0xfa04)
+	lda xix, (0xfa04:16)
 	ld xbc, xix
 	sub xbc, xhl
 	ld xiy, xbc
@@ -110,7 +110,7 @@ SndParam_LoadTransposeValues:
 	stb_d8	(36942), l
 	ld	xwa, 163841
 	call	16567398
-	lda_d16	xwa, (36942)
+	lda	xwa, (36942:16)
 	ld	(xwa+1), l
 	ld	(xwa+2), 72
 	push	xde
@@ -122,7 +122,7 @@ SndParam_LoadTransposeValues:
 	pop	xix
 	pop	xhl
 	pop	xde
-	lda_d16	xbc, (36946)
+	lda	xbc, (36946:16)
 	ld	e, (xbc+1)
 	extz	de
 	ld	a, (xbc)
@@ -219,13 +219,13 @@ EffectMode_ProcessPresetChange_Done:
 
 
 EffectMode_CopyParamByte:
-	lda_d16	xwa, (0xfa07)
-	lda_d16	xde, (0xf9a0)
+	lda	xwa, (0xfa07:16)
+	lda	xde, (0xf9a0:16)
 	sub	xwa, xde
 	lda	xbc, (0x3c2c4:24)
 	ld	xhl, xwa
 	add	xhl, xbc
-	lda_d16	xwa, (0xfba7)
+	lda	xwa, (0xfba7:16)
 	sub	xwa, xde
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -320,7 +320,7 @@ EffectMode_DisplayName_DefaultLookup:
 	push xwa
 
 EffectMode_DisplayName_Render:
-	lda_d16	xwa, (63906)
+	lda	xwa, (63906:16)
 	push	xwa
 	call	16712982
 	lda	xsp, (xsp+10)
@@ -406,8 +406,8 @@ EffectMode_UpdateBitFlags:
 	push	xiz
 	lda	xwa, (xsp+48)
 	ld	(xsp+12), xwa
-	lda_d16	xwa, (63930)
-	lda_d16	xde, (63904)
+	lda	xwa, (63930:16)
+	lda	xde, (63904:16)
 	sub	xwa, xde
 	lda	xbc, (246468:24)
 	ld	(xsp+32), xwa
@@ -419,7 +419,7 @@ EffectMode_UpdateBitFlags:
 	ld	(xix), l
 	lda	xwa, (xix+1)
 	ld	(xsp+24), xwa
-	lda_d16	xwa, (63956)
+	lda	xwa, (63956:16)
 	sub	xwa, xde
 	ld	(xsp+36), xwa
 	add	(xsp+36), xbc
@@ -430,7 +430,7 @@ EffectMode_UpdateBitFlags:
 	ld	(xwa), l
 	lda	xwa, (xix+2)
 	ld	(xsp+20), xwa
-	lda_d16	xwa, (63982)
+	lda	xwa, (63982:16)
 	sub	xwa, xde
 	ld	(xsp+40), xwa
 	add	(xsp+40), xbc
@@ -441,7 +441,7 @@ EffectMode_UpdateBitFlags:
 	ld	(xwa), l
 	lda	xwa, (xix+3)
 	ld	(xsp+16), xwa
-	lda_d16	xwa, (64008)
+	lda	xwa, (64008:16)
 	sub	xwa, xde
 	ld	(xsp+44), xwa
 	add	(xsp+44), xbc
@@ -450,7 +450,7 @@ EffectMode_UpdateBitFlags:
 	and	l, 32
 	ld	xwa, (xsp+16)
 	ld	(xwa), l
-	lda_d16	xwa, (64770)
+	lda	xwa, (64770:16)
 	sub	xwa, xde
 	ld	(xsp+28), xwa
 	add	(xsp+28), xbc
@@ -458,7 +458,7 @@ EffectMode_UpdateBitFlags:
 	ld	a, (xwa)
 	and	a, 59
 	ld	(xsp+4), a
-	lda_d16	xhl, (64623)
+	lda	xhl, (64623:16)
 	sub	xhl, xde
 	add	xhl, xbc
 	ld	a, (xhl)
@@ -547,8 +547,8 @@ EffectMode_UpdateBitFlags_Loop:
 	ret
 
 EffectMode_BackupParamBlock:
-	lda_d16	xbc, (63904)
-	lda_d16	xwa, (64862)
+	lda	xbc, (63904:16)
+	lda	xwa, (64862:16)
 	sub	xwa, xbc
 	inc	2, xwa
 	pushw	wa
@@ -621,7 +621,7 @@ EffectMode_SetRegion_Apply:
 	or	a, h
 	ld	(xbc), a
 	.byte 0xbe, 0x05, 0xb9
-	lda_d16	xbc, 64770
+	lda	xbc, (64770:16)
 	ld	h, (xbc)
 	and	h, 3
 	sub	xbc, 63904
@@ -1593,13 +1593,13 @@ EffectMode_DispatchUpdate:
 	.byte 0x3e, 0x74, 0xfb, 0xe6, 0xc1, 0x9a, 0x8c, 0x3f
 	.byte 0xfb, 0xb0, 0xfe, 0x1e, 0x59, 0x01, 0x0e
 EffectMode_InitSwbWr_DiagMode:
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 
 	stib_dsp 0xe0, 0x00
 
 	andmi8 (xwa), 0x80
 
-	lda_d16 xbc, (0xfdb6)
+	lda xbc, (0xfdb6:16)
 
 	andmi8 (xbc), 0xf0
 
@@ -1642,7 +1642,7 @@ EffectMode_InitSwbWr_DiagMode:
 
 
 EffectMode_RestoreSwbWr_NormalMode:
-	lda_d16 xwa, (0xf9b6)
+	lda xwa, (0xf9b6:16)
 
 	stib_dsp 0xe0, 0x40
 
@@ -1955,7 +1955,7 @@ FDC_PostEvent_Send:
 
 EffectMode_MidiParseLoop:
 	push	xiz
-	lda_d16	xiz, (36048)
+	lda	xiz, (36048:16)
 	ld	xwa, xiz
 	call	16540231
 	cp	hl, 65535
@@ -9787,7 +9787,7 @@ MssName_EventDispatch:
 	jr	19
 	ld	xhl, 512
 	jr	12
-	lda_d16	xhl, (36026)
+	lda	xhl, (36026:16)
 	jr	6
 	lds32	xhl, 2
 	jr	2
@@ -11006,7 +11006,7 @@ PmBkName_ReturnZero:
 	ret
 
 PmBkName_DataBytes:
-	lda_d16	xhl, (36012)
+	lda	xhl, (36012:16)
 	ret
 GmOnOffFunc:
 	.byte 0xbf, 0xf4, 0x37, 0x3e, 0xe8, 0x8e, 0xe9, 0xcf
