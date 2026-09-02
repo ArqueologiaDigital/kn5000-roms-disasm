@@ -483,6 +483,14 @@ def brow(a, n, per=16, tag=""):
     return out
 
 
+def census(addr, n):
+    """(distinct real targets, sentinel slots, zero slots) -- so a header never
+    quotes a count that drifted from the ROM.  A hand-typed `11 slots are the
+    sentinel' was wrong (9 sentinel + 2 zero) for exactly one commit."""
+    v = slots(addr, n)
+    return (len(set(v) - {0, SENTINEL}), v.count(SENTINEL), v.count(0))
+
+
 def slot_note(v):
     if v == 0:
         return "empty"
@@ -503,8 +511,12 @@ def ptr_block(addr, n, label, headline):
     return out
 
 
+MARK_BEGIN = "; --- BEGIN gen_prom_b_f0033f_f0199e 0x%06X-0x%06X ---"
+MARK_END = "; --- END gen_prom_b_f0033f_f0199e 0x%06X-0x%06X ---"
+
+
 def emit_r1():
-    L = []
+    L = [MARK_BEGIN % R1]
     L.append("; " + "=" * 76)
     L.append("; 0xF0033F-0xF007FF -- FOUR TABLES OF 4-BYTE LITTLE-ENDIAN POINTERS,")
     L.append("; AND THE THREE SHORT BYTE OBJECTS BETWEEN THEM")
@@ -583,9 +595,11 @@ def emit_r1():
         ";   0xF003F9' bounds all 120 bounded objects there by abutment of these",
         ";   entries, and notes/gen_prom_b_f78029_module.py read them straight out of",
         ";   the ROM because the address was inside an `.incbin`.  It no longer is.",
-        "; Evidence: 121 of the slots are a distinct address in 0xF7828A-0xF799E8, 50",
-        ";           are the sentinel and 10 are zero; slot 181 leaves that range, which",
-        ";           is where this run is cut.",
+        "; Evidence: %d of the slots are a distinct address in 0xF7828A-0xF799E8, %d"
+        % census(0xF003F9, 181)[:2],
+        ";           are the sentinel and %d are zero; slot 181 leaves that range,"
+        % census(0xF003F9, 181)[2],
+        ";           which is where this run is cut.",
         "; ⚠ The cut at 181 is a statement about the TARGETS, not about how the firmware",
         ";   indexes them: no reader for either run has been found.  The two runs are",
         ";   labelled separately because their target sets do not overlap at all.",
@@ -601,7 +615,9 @@ def emit_r1():
         ";           source already carries as DisplayList_FC4000 (2,095 bytes of",
         ";           DSP-effect / SOUND EDIT label text).  0 of the 24 is an instruction",
         ";           boundary there -- correct, since 0 of that region's 979 addresses",
-        ";           is one: prom_a frames it as data too.  11 slots are the sentinel.",
+        ";           is one: prom_a frames it as data too.  %d slots are the sentinel"
+        % census(0xF006CD, 35)[1],
+        ";           and %d are zero." % census(0xF006CD, 35)[2],
         "; Unknown: what selects a slot.  No reader found.",
         "; --------------------------------------------------------------------------",
     ])
@@ -622,9 +638,11 @@ def emit_r1():
     L += ptr_block(0xF00762, 39, "PtrTable_F00762", [
         "; --------------------------------------------------------------------------",
         "; PtrTable_F00762 -- 39 slots -> prom_a 0xFE28B2-0xFE2F8C",
-        "; Evidence: 21 distinct targets, all inside a 1,755-byte prom_a window; 16",
-        ";           slots are the sentinel and 2 are zero.  The SLOTS are pointers on",
-        ";           the same 290-word test as the rest of the span.",
+        "; Evidence: %d distinct targets, all inside a 1,755-byte prom_a window; %d"
+        % census(0xF00762, 39)[:2],
+        ";           slots are the sentinel and %d are zero.  The SLOTS are pointers"
+        % census(0xF00762, 39)[2],
+        ";           on the same 290-word test as the rest of the span.",
         "; ⚠ WHAT THE TARGETS ARE IS NOT ESTABLISHED.  prom_a's current transcription",
         ";   frames 0xFE28B2-0xFE2F8C as CODE, but only 6 of the 21 targets land on an",
         ";   instruction boundary there -- against 35.7% of ALL addresses in that range,",
@@ -647,12 +665,13 @@ def emit_r1():
     L.append("; --------------------------------------------------------------------------")
     L.append("Data_F007FE:")
     L += brow(0xF007FE, 2, 2, "  purpose unknown")
+    L.append(MARK_END % R1)
     L.append("")
     return L
 
 
 def emit_r2():
-    L = []
+    L = [MARK_BEGIN % R2]
     L.append("; " + "=" * 76)
     L.append("; 0xF0199E-0xF01E71 -- ONE ICON PAGE, ONE WHOLE 12x16 ICON, AND SIX 40x40")
     L.append("; BITMAPS THE 0xF5BECE BLITTER DRAWS")
@@ -750,6 +769,7 @@ def emit_r2():
         for p in range(5):
             L += brow(s + p * 40, 20, 20, "  page %d, columns 0-19" % p)
             L += brow(s + p * 40 + 20, 20, 20, "  page %d, columns 20-39" % p)
+    L.append(MARK_END % R2)
     L.append("")
     return L
 
@@ -872,6 +892,17 @@ def splice():
         good, msg = verify_region(lines, lo, hi)
         if not good:
             raise SystemExit("refusing to splice: " + msg)
+        # Re-runnable: after the first splice the `.incbin` is gone, so the
+        # emission brackets itself and a later run replaces between its own
+        # markers.  A tool that can only run once cannot correct its own text.
+        b, e = MARK_BEGIN % (lo, hi), MARK_END % (lo, hi)
+        if src.count(b) == 1 and src.count(e) == 1:
+            i, j = src.index(b), src.index(e)
+            if j < i:
+                raise SystemExit("markers for 0x%06X are out of order" % lo)
+            src = src[:i] + lines[:-1] + src[j + 1:]
+            print("  (replaced between this file's own markers)")
+            continue
         want = ('\t.incbin "original_ROMs/wsa1_prom_b.ic13", 0x%06X, 0x%06X'
                 % (lo - B_BASE, hi - lo))
         hit = [i for i, l in enumerate(src) if l == want]

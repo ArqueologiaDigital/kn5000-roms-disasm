@@ -626,6 +626,7 @@ sub_F002F4:
 	di	; F0033C  ei 0x00
 	ret	; F0033E  ret
 
+; --- BEGIN gen_prom_b_f0033f_f0199e 0xF0033F-0xF00800 ---
 ; ============================================================================
 ; 0xF0033F-0xF007FF -- FOUR TABLES OF 4-BYTE LITTLE-ENDIAN POINTERS,
 ; AND THE THREE SHORT BYTE OBJECTS BETWEEN THEM
@@ -736,8 +737,8 @@ Data_F003CC:
 ;   entries, and notes/gen_prom_b_f78029_module.py read them straight out of
 ;   the ROM because the address was inside an `.incbin`.  It no longer is.
 ; Evidence: 121 of the slots are a distinct address in 0xF7828A-0xF799E8, 50
-;           are the sentinel and 10 are zero; slot 181 leaves that range, which
-;           is where this run is cut.
+;           are the sentinel and 10 are zero; slot 181 leaves that range,
+;           which is where this run is cut.
 ; ⚠ The cut at 181 is a statement about the TARGETS, not about how the firmware
 ;   indexes them: no reader for either run has been found.  The two runs are
 ;   labelled separately because their target sets do not overlap at all.
@@ -933,7 +934,8 @@ PtrTable_F003F9:
 ;           source already carries as DisplayList_FC4000 (2,095 bytes of
 ;           DSP-effect / SOUND EDIT label text).  0 of the 24 is an instruction
 ;           boundary there -- correct, since 0 of that region's 979 addresses
-;           is one: prom_a frames it as data too.  11 slots are the sentinel.
+;           is one: prom_a frames it as data too.  9 slots are the sentinel
+;           and 2 are zero.
 ; Unknown: what selects a slot.  No reader found.
 ; --------------------------------------------------------------------------
 PtrTable_F006CD:
@@ -988,8 +990,8 @@ Data_F00759:
 ; --------------------------------------------------------------------------
 ; PtrTable_F00762 -- 39 slots -> prom_a 0xFE28B2-0xFE2F8C
 ; Evidence: 21 distinct targets, all inside a 1,755-byte prom_a window; 16
-;           slots are the sentinel and 2 are zero.  The SLOTS are pointers on
-;           the same 290-word test as the rest of the span.
+;           slots are the sentinel and 2 are zero.  The SLOTS are pointers
+;           on the same 290-word test as the rest of the span.
 ; ⚠ WHAT THE TARGETS ARE IS NOT ESTABLISHED.  prom_a's current transcription
 ;   frames 0xFE28B2-0xFE2F8C as CODE, but only 6 of the 21 targets land on an
 ;   instruction boundary there -- against 35.7% of ALL addresses in that range,
@@ -1050,6 +1052,7 @@ PtrTable_F00762:
 ; --------------------------------------------------------------------------
 Data_F007FE:
 	.byte 0x0E, 0x30	; F007FE  purpose unknown
+; --- END gen_prom_b_f0033f_f0199e 0xF0033F-0xF00800 ---
 
 
 ; --------------------------------------------------------------------------
@@ -1617,6 +1620,7 @@ Data_F0191A:
 	.byte	0x40, 0x2A, 0x55, 0x22, 0x41, 0x22, 0x41, 0x22, 0x07, 0x18, 0x20, 0x27, 0x4F, 0x4F, 0x4F, 0x4F	; F0198A  |@*U"A"A".. 'OOOO|
 	.byte	0x27, 0x20, 0x18, 0x07	; F0199A  |' ..|
 
+; --- BEGIN gen_prom_b_f0033f_f0199e 0xF0199E-0xF01E72 ---
 ; ============================================================================
 ; 0xF0199E-0xF01E71 -- ONE ICON PAGE, ONE WHOLE 12x16 ICON, AND SIX 40x40
 ; BITMAPS THE 0xF5BECE BLITTER DRAWS
@@ -2059,6 +2063,7 @@ Bitmap_F01DAA:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x06, 0x0C, 0x18, 0x30, 0x40, 0x80, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01E36  page 3, columns 20-39
 	.byte 0xFE, 0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x13, 0x13	; F01E4A  page 4, columns 0-19
 	.byte 0x13, 0x23, 0x23, 0x43, 0x43, 0x83, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xFF, 0xFF	; F01E5E  page 4, columns 20-39
+; --- END gen_prom_b_f0033f_f0199e 0xF0199E-0xF01E72 ---
 
 
 ; === END COVER-R1 0xF0191A-0xF01E72 ===
