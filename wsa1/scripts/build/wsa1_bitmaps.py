@@ -209,6 +209,23 @@ def build_manifest():
     # The 119-entry display-list glyph array.  DLHandler_Glyph24x24 (0xF31ACE,
     # opcode 0x23) computes 0xF78028 + index*72 and blits BC=3 / HL=24.  The
     # highest index any op-23 record in the four images carries is 118.
+    #
+    # ★ THE COMPETING FRAMING IS SETTLED, AND THIS ONE WON.  An earlier REFUSED
+    #   entry here said the 110 `Bitmap_F78*` labels -- extents taken from the
+    #   pointer table at 0xF003F9 -- were "a SECOND, incompatible reading of the
+    #   same bytes" and left it open.  Resolved by lane RQ-SHEET, 2026-09-02, on
+    #   the consuming code and not on which reading draws nicer pictures:
+    #     * the array ENDS ON THIS GRID -- the 0x0E padding starts at 0xF7A1A0
+    #       and 0xF7A1A0 - 0xF78028 = 8568 = 119 * 72, remainder 0 -- and 119 is
+    #       also max-index-118 plus one, two measurements of different things;
+    #     * exactly 1 of the pointer table's 121 targets in the span is on the
+    #       72-byte grid, against 1.7 by chance, so its targets carry NO
+    #       information about it;
+    #     * that table misses the same way in its OTHER target region (3 of 24
+    #       on a proven DisplayList_FC4000 record boundary, against 1.8), and no
+    #       immediate in any of the four images equals 0xF003F9.
+    #   The 110 labels are gone from prom_b/wsa1_prom_b.s; see
+    #   notes/gen_prom_b_f78028_icon_sheet.py --evidence --selftest.
     for i in range(119):
         ad = 0xF78028 + i * 72
         m.append(entry(f'DLGlyph_{i:03d}_{ad:06X}', 'b', ad, 3, 24,
@@ -247,12 +264,6 @@ def build_manifest():
 
 # Ranges that LOOK like pictures and are deliberately NOT converted.
 REFUSED = [
-    ("prom_b 0xF78xxx `Bitmap_F78*` labels (110 labels)",
-     "Their EXTENTS come from the pointer table at 0xF003F9, whose targets are NOT on "
-     "the 72-byte grid DLHandler_Glyph24x24 computes (0xF7828A - 0xF78028 = 610, not a "
-     "multiple of 72).  This file exports the 72-byte grid, which the handler's own "
-     "arithmetic fixes; the F003F9 framing is a SECOND, incompatible reading of the same "
-     "bytes and is not resolved here."),
     ("prom_a 0xFC48E4-0xFC52F7 `Bitmap1bpp_FC48E4` (2,580 B)",
      "Its committed header reads the range as 172 rows x 15 bytes ROW-MAJOR, 120 px wide, "
      "from a 15-byte autocorrelation peak.  The peak is real but it is the COLUMN HEIGHT "
