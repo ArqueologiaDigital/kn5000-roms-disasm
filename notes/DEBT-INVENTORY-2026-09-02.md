@@ -497,10 +497,35 @@ The same ceiling shows in the confirmed regions: a lane found the strict pool
 down to 15 regions, ALL blocked by an interior-label/decode-boundary conflict,
 with corroboration flat at ~30% below that — and stopped rather than convert.
 
-**So more conversion lanes on v7 will not move it.** The lever is the backend:
-teach `llvm-mc` to spell the forms it currently cannot, and this 46,570 B plus
-the region pool becomes reachable. That is the same lever that unblocked 569 B
-in the sub-CPU payload and made 5 previously-undecodable code slices round-trip.
+**So more conversion lanes on v7 will not move it.** ⚠ **AND NEITHER DOES THE
+BACKEND — CORRECTED 2026-09-02.** This paragraph used to read "the lever is the
+backend: teach `llvm-mc` to spell the forms it currently cannot, and this
+46,570 B plus the region pool becomes reachable", on the strength of the same
+lever having unblocked 569 B in the sub-CPU payload and made 5 slices
+round-trip. A lane was sent to do exactly that and the result was negative:
+
+* the 94/46,570 B and 33/21,956 B totals are **UNCHANGED**;
+* every slice whose blocking form was fixed moved its blocking point **deeper
+  into the same tail** and then hit what reads as a genuine data table;
+* six single-byte opcodes — `0x01`, `0x04`, `0x17`, `0x1a`, `0x1c`, `0x1f` —
+  are **confirmed unmapped anywhere in the decoder**, i.e. real reserved opcode
+  space rather than a spelling gap. `0x01` alone gates 9,424 B across 8 slices.
+
+Reserved opcode space at the head of a tail means those bytes **are not code**,
+so no assembler change can ever make them round-trip as code. The evidence now
+points at v7's remainder being largely DATA that the slice framing calls code —
+which is the *data-as-code* hazard from the top of this file, arriving from the
+other direction. The next instrument for v7 is a **typing** pass, not a
+spelling pass.
+
+The census that produced the ranked blocking table is
+`scripts/analysis/v7_offset_blockers.py` (re-run it after any backend change;
+its header explains why a form's count dropping to 0 does NOT mean the bytes it
+gated are converted).
+
+★ The backend work was still worth doing, for something else entirely: it
+exposed two `llvm-mc` **crashes** reachable from any image and three
+silent-miscompile-class encoding bugs. See TOOLCHAIN_VERSION UPDATE 11.
 
 ## ★ A guard against opcodes that round-trip regardless of meaning
 
