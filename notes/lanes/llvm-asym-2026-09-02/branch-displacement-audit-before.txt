@@ -1,0 +1,43 @@
+36 operand(s) do not fit their displacement field
+
+=== SIGN-EXTENDED: 34 site(s) ===
+  v142/subcpu/kn5000_subprogram_v142.s:285  jr 16777183 -> -33   |jr	c, 16777183
+  v142/subcpu/kn5000_subprogram_v142.s:296  jr 16777213 -> -3   |jr	t, 16777213
+  v142/subcpu/kn5000_subprogram_v142.s:29663  jr 16777181 -> -35   |jr	c, 16777181
+  v142/subcpu/kn5000_subprogram_v142.s:29880  jr 16777184 -> -32   |jr	c, 16777184
+  v142/subcpu/kn5000_subprogram_v142.s:29883  jr 16777097 -> -119   |jr	c, 16777097
+  v142/subcpu/kn5000_subprogram_v142.s:29960  jr 16777144 -> -72   |jr	c, 16777144
+  v142/subcpu/kn5000_subprogram_v142.s:31224  jr 16777186 -> -30   |jr	c, 16777186
+  v142/subcpu/kn5000_subprogram_v142.s:31288  jr 16777089 -> -127   |jr	c, 16777089
+  v142/subcpu/kn5000_subprogram_v142.s:31340  jr 16777186 -> -30   |jr	c, 16777186
+  v142/subcpu/kn5000_subprogram_v142.s:31403  jr 16777089 -> -127   |jr	c, 16777089
+  v142/subcpu/kn5000_subprogram_v142.s:31452  jr 16777186 -> -30   |jr	c, 16777186
+  v142/subcpu/kn5000_subprogram_v142.s:31513  jr 16777099 -> -117   |jr	c, 16777099
+  v142/subcpu/kn5000_subprogram_v142.s:32129  jr 16777184 -> -32   |jr	c, 16777184
+  v142/subcpu/kn5000_subprogram_v142.s:32179  jr 16777184 -> -32   |jr	c, 16777184
+  v142/subcpu/kn5000_subprogram_v142.s:32215  jr 16777184 -> -32   |jr	c, 16777184
+  v142/subcpu/kn5000_subprogram_v142.s:32291  jr 16777184 -> -32   |jr	c, 16777184
+  v142/subcpu/kn5000_subprogram_v142.s:32411  jr 16777180 -> -36   |jr	c, 16777180
+  v142/subcpu/kn5000_subprogram_v142.s:32454  jr 16777156 -> -60   |jr	c, 16777156
+  v142/subcpu/kn5000_subprogram_v142.s:32510  jr 16777156 -> -60   |jr	c, 16777156
+  v142/subcpu/kn5000_subprogram_v142.s:32581  jr 16777156 -> -60   |jr	c, 16777156
+  v142/subcpu/kn5000_subprogram_v142.s:32711  jr 16777184 -> -32   |jr	c, 16777184
+  v142/subcpu/kn5000_subprogram_v142.s:32759  jr 16777184 -> -32   |jr	c, 16777184
+  v142/subcpu/kn5000_subprogram_v142.s:32794  jr 16777184 -> -32   |jr	c, 16777184
+  v142/subcpu/kn5000_subprogram_v142.s:32872  jr 16777184 -> -32   |jr	c, 16777184
+  v142/subcpu/kn5000_subprogram_v142.s:34193  jr 16777185 -> -31   |jr	c, 16777185
+  v142/subcpu/kn5000_subprogram_v142.s:34696  jr 16777175 -> -41   |jr	c, 16777175
+  v142/subcpu/kn5000_subprogram_v142.s:34720  jr 16777163 -> -53   |jr	c, 16777163
+  v142/subcpu/kn5000_subprogram_v142.s:35057  jr 16777176 -> -40   |jr	c, 16777176
+  v142/subcpu/kn5000_subprogram_v142.s:35152  jr 16777176 -> -40   |jr	c, 16777176
+  v142/subcpu/kn5000_subprogram_v142.s:35386  jr 16777176 -> -40   |jr	c, 16777176
+  v7/maincpu/audio/tonegen_fileio_handlers.s:1151  jr 16777202 -> -14   |jr	c, 16777202
+  v9/maincpu/ui_widgets/naka_widget_desc_dispatch.s:111  jr 16777207 -> -9   |jr	po, 16777207
+  v9/maincpu/audio/tonegen_fileio_handlers.s:1190  jr 16777202 -> -14   |jr	c, 16777202
+  v10/maincpu/audio/tonegen_fileio_handlers.s:1190  jr 16777202 -> -14   |jr	c, 16777202
+
+=== TARGET?: 2 site(s) ===
+  wsa1/prom_a/wsa1_prom_a.s:152846  jr 0xfe434d -> 77   |jr T,0xfe434d                                        ; FE42FE  68 4d
+  wsa1/prom_a/wsa1_prom_a.s:154692  jr 0xfe525a -> 90   |jr ULE,0xfe525a                                      ; FE51FE  63 5a
+
+(dry run -- pass --apply to rewrite the operands)
