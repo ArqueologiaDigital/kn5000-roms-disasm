@@ -284,6 +284,40 @@ naive walk there produced 44 plausible records of `[op 0x0E, len 14]`,
 indistinguishable from the ROM's own padding, and measuring the run instead
 revealed 255 B of genuine `.fill` with the real list starting after it.
 
+## ⚠ DISPUTED: AccPatch_VoiceAssignDataBlock (v7, 2,175 B)
+
+**Two lanes reached opposite conclusions about this region on 2026-09-02, and it
+was converted. It is the first thing to re-examine in v7.**
+
+* Lane V7REGIONS2 hand-checked it as its strongest table-tail candidate and
+  called it **a genuine fixed-width data table** — already named `...DataBlock`,
+  with a visible period in the raw bytes. On that basis it left all 135 of its
+  table-tail exclusions alone.
+* Lane V7TABLETAIL, adjudicating the 32 regions where the guard disagreed with
+  100% call-target corroboration, converted it **as code**.
+
+Evidence on both sides, measured directly from the ROM:
+
+* **For data**: the opening bytes carry an unmistakable 8-byte record motif with
+  an incrementing index — `8d 00 21 c9 cf .. 6e ..`, `8d 01 21 c9 cf ..`,
+  `8d 02 21 c9 cf ..` — and a recurring `f1 fe 36 00 00 68 ..` separator.
+* **For code**: every call target in the region resolves to an already-named
+  routine (that was the selection filter), and the converted text reads as
+  coherent routine code — `calr`/`ldw_d16`/`stda16` against a consistent block
+  of RAM addresses, ending in a real `call`.
+* **Against a simple table**: whole-region self-match peaks at only **0.104** at
+  stride 8, with **203 distinct byte values across 2,175 B**. A uniform
+  fixed-width table of small fields would show far stronger periodicity.
+
+⚠ The most likely reading is that BOTH are partly right — a table head followed
+by code, the same head/tail split this lane confirmed elsewhere in
+`DrumKit_GroupAssignTable` + `RhythmROM_LoadDrumKit`. If so the conversion
+absorbed a real table head. **Nothing in the build can detect this**: the bytes
+are unchanged either way.
+
+Resolve by finding the region's reader. If code reaches it via `call`, it is
+code; if something indexes it with a stride, the head is a table.
+
 ## ⚠ The weakest evidence currently in the tree: v7 batch F
 
 Recorded 2026-09-02 so it is not forgotten under an aggregate. v7's confirmed-region
