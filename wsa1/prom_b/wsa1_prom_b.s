@@ -29463,7 +29463,746 @@ Data_F139AB:
 	.byte	0x08, 0x10, 0x10, 0x60, 0x80, 0x00, 0x00, 0x03, 0x0E	; F13D2B  [896..904]
 
 ; --- 0xF13D34-0xF147AB: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x013D34, 0x000A78
+
+; --- 0xF13D34-0xF13F1D: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x013D34, 0x0001EA
+
+; ------------------------------------------------------------------
+; 0xF13F1E-0xF13F31 -- 2 display-list records, 20 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F13F1E:
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x0038
+	.short 0x0045
+	.short 0x0108
+	.short 0x00C6
+	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
+	.short 0x1321
+	.ascii "BYPASS"
+
+; --- 0xF13F32-0xF140B1: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x013F32, 0x000180
+
+; ------------------------------------------------------------------
+; 0xF140B2-0xF14167 -- 19 display-list records, 182 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F140B2:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0074
+	.short 0x005B
+	.short 0x0078
+	.short 0x005B
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0075
+	.short 0x005A
+	.short 0x0077
+	.short 0x005A
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0076
+	.short 0x0059
+	.short 0x0076
+	.short 0x0072
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x008F
+	.short 0x0071
+	.short 0x009D
+	.short 0x0075
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x009F
+	.short 0x0071
+	.short 0x00E0
+	.short 0x0075
+DL_F140E4:
+	.byte 0x17, 0x0B	; op 17, 11 bytes -> handler 0xF31A52
+	.short 0x0082
+	.short 0x00D1
+	.ascii " TYPE"
+	.byte 0x17, 0x0C	; op 17, 12 bytes -> handler 0xF31A52
+	.short 0x00C6
+	.short 0x00D1
+	.ascii "TO REV"
+	.byte 0x17, 0x10	; op 17, 16 bytes -> handler 0xF31A52
+	.short 0x00F4
+	.short 0x00D1
+	.ascii "OUT SELECT"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x244C
+	.byte 0x12	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x245B
+	.byte 0x12	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2461
+	.byte 0x12	; character codes below 0x20
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0030
+	.short 0x00CD
+	.short 0x0133
+	.short 0x00E9
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x0049
+	.short 0x00CE
+	.short 0x0049
+	.short 0x00E8
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x00A7
+	.short 0x00CE
+	.short 0x00A7
+	.short 0x00E8
+	.byte 0x0E, 0x08	; op 0E, 8 bytes -> handler 0xF31A9F
+	.short 0x24C9
+	.short 0x0001
+	.short 0x0005
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0030
+	.short 0x00DA
+	.short 0x0133
+	.short 0x00DA
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00C1
+	.short 0x00CD
+	.short 0x00C1
+	.short 0x00E9
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00F0
+	.short 0x00CD
+	.short 0x00F0
+	.short 0x00E9
+	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
+	.short 0x0031
+	.short 0x00DB
+	.short 0x0132
+	.short 0x00E8
+
+; --- 0xF14168-0xF141D2: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x014168, 0x00006B
+
+; ------------------------------------------------------------------
+; 0xF141D3-0xF1428C -- 22 display-list records, 186 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F141D3:
+	.byte 0x17, 0x09	; op 17, 9 bytes -> handler 0xF31A52
+	.short 0x005F
+	.short 0x0046
+	.ascii "LOW"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x00A6
+	.short 0x0047
+	.ascii "HIGH"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0086
+	.short 0x008F
+	.ascii "FREQ"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1E08
+	.ascii "LOW"
+	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x1E17
+	.ascii "HIGH"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0027
+	.short 0x00D0
+	.ascii "FREQ"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0057
+	.short 0x00D0
+	.ascii "GAIN"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x00A7
+	.short 0x00D0
+	.ascii "FREQ"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x00D7
+	.short 0x00D0
+	.ascii "GAIN"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x226E
+	.ascii "dB"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x227E
+	.ascii "dB"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x241E
+	.byte 0x12	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2424
+	.byte 0x12	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x242E
+	.byte 0x12	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2434
+	.byte 0x12	; character codes below 0x20
+	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
+	.short 0x003E
+	.short 0x0054
+	.short 0x00E5
+	.short 0x008B
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0012
+	.short 0x00CC
+	.short 0x0085
+	.short 0x00E8
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0092
+	.short 0x00CC
+	.short 0x0105
+	.short 0x00E8
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0012
+	.short 0x00DA
+	.short 0x0085
+	.short 0x00DA
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0092
+	.short 0x00DA
+	.short 0x0105
+	.short 0x00DA
+	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
+	.short 0x0013
+	.short 0x00DB
+	.short 0x0084
+	.short 0x00E7
+	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
+	.short 0x0093
+	.short 0x00DB
+	.short 0x0104
+	.short 0x00E7
+
+; --- 0xF1428D-0xF14328: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x01428D, 0x00009C
+
+; ------------------------------------------------------------------
+; 0xF14329-0xF143BF -- 18 display-list records, 151 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F14329:
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1D38
+	.byte 0xA8	; character codes below 0x20
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0011
+	.short 0x00D1
+	.ascii "SEND"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2442
+	.byte 0x12	; character codes below 0x20
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0008
+	.short 0x00CD
+	.short 0x0030
+	.short 0x00E9
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0008
+	.short 0x00DA
+	.short 0x0030
+	.short 0x00DA
+	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
+	.short 0x0009
+	.short 0x00DB
+	.short 0x0132
+	.short 0x00E8
+DL_F1435B:
+	.byte 0x0E, 0x08	; op 0E, 8 bytes -> handler 0xF31A9F
+	.short 0x2008
+	.short 0x0028
+	.short 0x0023
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0B40
+	.byte 0xA8	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1180
+	.byte 0xA8	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x17C0
+	.byte 0xA8	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1D38
+	.byte 0x10	; character codes below 0x20
+	.byte 0x17, 0x10	; op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0059
+	.short 0x00D1
+	.ascii "MAIN   SUB"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x244C
+	.byte 0x12	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2451
+	.byte 0x12	; character codes below 0x20
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0049
+	.short 0x00CD
+	.short 0x00A7
+	.short 0x00E9
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0049
+	.short 0x00DA
+	.short 0x00A7
+	.short 0x00DA
+	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
+	.short 0x004A
+	.short 0x00DB
+	.short 0x00A6
+	.short 0x00E8
+DL_F143AF:
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F143D4	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x0112	; +0x0D -> (0x2530)
+	.short 0x0021	; +0x0F -> (0x2532)
+
+; --- 0xF143C0-0xF143DF: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0143C0, 0x000020
+
+; ------------------------------------------------------------------
+; 0xF143E0-0xF1447C -- 11 display-list records, 157 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F143E0:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F1451D	; +0x07 -> XIY: string table
+	.short 0x0008	; +0x0B -> BC: bytes per entry
+	.short 0x050E	; +0x0D -> IX
+DL_F143EF:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F1452F	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0B40	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F1452E	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1180	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F1452D	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x17C0	; +0x0D -> IX
+DL_F1441C:
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F14532	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+DL_F14427:
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F14532	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+DL_F14432:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x7659	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F1447D	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x0B73	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x7679	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F14485	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x1138	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x7699	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F1448D	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x17B1	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x7659	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F14493	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0B78	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x7699	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F14499	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x17AD	; +0x0D -> IX
+
+; --- 0xF1447D-0xF1449E: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x01447D, 0x000022
+
+; ------------------------------------------------------------------
+; 0xF1449F-0xF1451C -- 8 display-list records, 126 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F1449F:
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F147AC	; +0x07 -> XIY: string table
+	.short 0x0010	; +0x0B -> BC: bytes per entry
+	.short 0x0047	; +0x0D -> (0x2530)
+	.short 0x003A	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2641	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F147AC	; +0x07 -> XIY: string table
+	.short 0x0010	; +0x0B -> BC: bytes per entry
+	.short 0x0020	; +0x0D -> (0x2530)
+	.short 0x007E	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F147AC	; +0x07 -> XIY: string table
+	.short 0x0010	; +0x0B -> BC: bytes per entry
+	.short 0x00A2	; +0x0D -> (0x2530)
+	.short 0x0088	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2643	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00A5	; +0x07 -> (0x2530)
+	.short 0x0063	; +0x09 -> (0x2532)
+	.byte 0x02	; +0x0B digit count
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2644	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0074	; +0x07 -> (0x2530)
+	.short 0x0089	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2645	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x00E6	; +0x0D -> (0x2530)
+	.short 0x004B	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2646	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x00E6	; +0x0D -> (0x2530)
+	.short 0x0070	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2647	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x00EC	; +0x0D -> (0x2530)
+	.short 0x0091	; +0x0F -> (0x2532)
+
+; --- 0xF1451D-0xF14561: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x01451D, 0x000045
+
+; ------------------------------------------------------------------
+; 0xF14562-0xF145D2 -- 8 display-list records, 113 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F14562:
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x001E	; +0x07 -> (0x2530)
+	.short 0x0040	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2641	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x001E	; +0x07 -> (0x2530)
+	.short 0x008D	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x00E6	; +0x0D -> (0x2530)
+	.short 0x00AC	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2643	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x00E6	; +0x0D -> (0x2530)
+	.short 0x00B8	; +0x0F -> (0x2532)
+DL_F1459C:
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x228A	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+DL_F145A6:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F145D3	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x228A	; +0x0D -> IX
+DL_F145B5:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F145D3	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x2293	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2641	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x2298	; +0x0D -> IX
+
+; --- 0xF145D3-0xF145D8: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0145D3, 0x000006
+
+; ------------------------------------------------------------------
+; 0xF145D9-0xF14620 -- 5 display-list records, 72 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F145D9:
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x03	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F14621	; +0x07 -> XIY: string table
+	.short 0x0008	; +0x0B -> BC: bytes per entry
+	.short 0x004E	; +0x0D -> (0x2530)
+	.short 0x00D1	; +0x0F -> (0x2532)
+DL_F145EA:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F147AC	; +0x07 -> XIY: string table
+	.short 0x0010	; +0x0B -> BC: bytes per entry
+	.short 0x228F	; +0x0D -> IX
+DL_F145F9:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F1463F	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x22A8	; +0x0D -> IX
+DL_F14608:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x00	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F14639	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x22A2	; +0x0D -> IX
+DL_F14617:
+	.byte 0x00, 0x0A	; B op 00, 10 bytes -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.short 0x22A2	; +0x07 -> IX
+	.byte 0x03	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+
+; --- 0xF14621-0xF1465E: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x014621, 0x00003E
+
+; ------------------------------------------------------------------
+; 0xF1465F-0xF146A5 -- 5 display-list records, 71 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F1465F:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F15A7C	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x2263	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2641	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F15A7C	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x2273	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F15C93	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x2269	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2643	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F15C93	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x2279	; +0x0D -> IX
+DL_F1469B:
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F146B1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; --- 0xF146A6-0xF146E0: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0146A6, 0x00003B
+
+; ------------------------------------------------------------------
+; 0xF146E1-0xF14727 -- 5 display-list records, 71 bytes -- interpreter A/B
+; mixed by SITE, not by content: reached via the STACK call shapes
+; (lda/push/call 0xF42E00 = A, 0xF42E04 = B, 0xF42E0C = one B record),
+; the shapes notes/prom_b_dl_call_shapes.py finds and this generator
+; splices.  Regenerate: python3 notes/gen_prom_b_dl_shape23_module.py
+; --splice
+; ------------------------------------------------------------------
+DL_F146E1:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F147AC	; +0x07 -> XIY: string table
+	.short 0x0010	; +0x0B -> BC: bytes per entry
+	.short 0x0650	; +0x0D -> IX
+DL_F146F0:
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F14728	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x003A	; +0x0D -> (0x2530)
+	.short 0x004A	; +0x0F -> (0x2532)
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0x02	; +0x04 AND mask
+	.byte 0x01	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F1472A	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x003A	; +0x0D -> (0x2530)
+	.short 0x00BD	; +0x0F -> (0x2532)
+DL_F14712:
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2641	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F1472C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F1472C	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; --- 0xF14728-0xF147AB: not converted ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x014728, 0x000084
 
 ; --------------------------------------------------------------------------
 ; EffectNames_F147AC -- 128 entries of 16 characters, 2,048 bytes.
