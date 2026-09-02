@@ -67,7 +67,20 @@ def macro_names(*roots):
 def list_slices():
     """Every live-referenced romslice: which file/label incbins it, its size,
     and the label that follows it in the SAME v7 file (used only to sanity-check
-    the boundary, e.g. against SeMenu_RefreshPartDisplay_Data's +13 offset)."""
+    the boundary, e.g. against SeMenu_RefreshPartDisplay_Data's +13 offset).
+
+    ⚠ FIXED 2026-09-02 (v7slicesplit lane): the owning-label search used to
+    start at `i - 1`, one line ABOVE the `.incbin`, so an incbin sharing its
+    line with its own label ("Label:\t.incbin ...") was silently attributed to
+    the label BEFORE it instead. Confirmed on `CharMap_ValueData_A` /
+    `CharMap_ValueData_B` in v7/maincpu/ui_widgets/widget_dispatch.s: the
+    romslice actually begins at `CharMap_ValueData_B` (verified by locating its
+    exact bytes in the v7 ROM dump), but was reported under `CharMap_ValueData_A`
+    -- a label that is not even an incbin (it is already real `.byte` data two
+    lines above). Every downstream consumer of this row's `label` (run-extent,
+    the header-value check, roundtrip) inherited the wrong name. Now checks
+    line `i` itself first, matching `classify_at`'s existing same-line handling
+    below."""
     rows, seen = [], set()
     for f in sorted(glob.glob('v7/maincpu/**/*.s', recursive=True)):
         lines = open(f, encoding='latin-1').readlines()
@@ -85,7 +98,7 @@ def list_slices():
             fsz = os.path.getsize(real)
             size = int(ln, 0) if ln else (fsz - int(off, 0) if off else fsz)
             label = None
-            for j in range(i - 1, -1, -1):
+            for j in range(i, -1, -1):
                 mm = LABEL_DEF.match(lines[j].strip())
                 if mm:
                     label = mm.group(1)
