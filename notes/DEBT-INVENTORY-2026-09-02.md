@@ -446,6 +446,40 @@ jump-table base — loaded via `lda_24` then `jp_ind` elsewhere. The converted
 candidate sits well after it, but the label's whole pre-existing body deserves a
 look.
 
+## ⚠ sizing_defect_hunt.py's landing test is weaker than the strict audit
+
+Found 2026-09-02 while acting on that tool's output. Its "zero-drift landing"
+check walks with a looser **op-shape** rule than
+`prom_b_dl_length_audit.py`'s strict per-handler length rule. One of its
+candidates (`Data_F34CA2`/`Data_F34CAD`) would have been typed as an
+interpreter-A record when the ROM's own handler tables say **interpreter-B**.
+
+**Verify every hunt candidate against the real `HTBL_A`/`HTBL_B` tables before
+converting it.** The tool is a lead generator, not an adjudicator — and note it
+says so itself on its weaker verdicts ("structural tail found but NO zero-drift
+walk landed — do not convert on this alone"), which were correctly honoured.
+
+## ⚠ A span is not homogeneous: embedded tables inside code
+
+Two prom_a spans were refused for months on symptoms that turned out to be the
+same cause.
+
+`0xF8C485` was refused because a dispatch target landed **three bytes off** a
+decode boundary beside suspicious mnemonics. Those bytes are three **embedded
+data tables** — a 16-word bitmask sized by its own reader's index range, and two
+3-entry bucket tables whose values match the same routine's hardcoded fallback
+constants. Excise them and 4 of 8 dispatch targets land exactly on the resulting
+code starts.
+
+`0xF8C652`'s recorded "8 undecodable bytes at a ~16-byte stride" **undercounted**:
+two further embedded tables decode as individually valid-looking WRONG
+instructions and never trip an undecodable flag at all.
+
+**The lesson: "mostly code with a few bad bytes" is often code with a table in
+it.** Look for a reader that sizes the anomaly before concluding the framing is
+wrong — an undecodable-byte count only finds the tables that happen not to
+decode.
+
 ## ★ v7's remaining debt is TOOLCHAIN-BLOCKED, not analysis-blocked
 
 Established 2026-09-02, and it changes what the next pass should be.
