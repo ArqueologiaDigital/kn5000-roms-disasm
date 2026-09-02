@@ -195,9 +195,13 @@ is the evidence for each?"**
     python3 scripts/analysis/prom_b_small_span_convert.py --check    # evidence
     python3 scripts/analysis/prom_b_small_span_convert.py --splice   # patch the .s
 
-Holds one verdict per span with its reason, including the 18 REFUSALS, so the
-tool is the lane's audit trail. `--check` is 93 assertions and must print
-`0 failures`. The strongest of them is mutual: all eight entries of the pointer
+Holds one verdict per span with its reason, including the 17 REFUSALS, so the
+tool is the lane's audit trail. `--check` is 95 assertions and must print
+`0 failures`. `--probe-refusals` searches every way of covering a refused span
+with interpreter records and 8-byte-entry arrays whose base something NAMES; it
+finds a unique decomposition for **1 of the 18** spans this lane could not
+otherwise frame, which is why that one (0xF0D9A4) is converted and the other 17
+are not. The strongest of them is mutual: all eight entries of the pointer
 array `Data_F000E5` land on an instruction boundary inside the three code spans
 this lane converted at 0xF00280/0xF0029D/0xF002CD -- the table proves the code is
 code, and the code proves the table is a table.

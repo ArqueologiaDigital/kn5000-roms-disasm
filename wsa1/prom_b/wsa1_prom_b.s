@@ -20087,7 +20087,24 @@ DL_F0D99C:
 	.short 0x0010
 
 ; --- 0xF0D9A4-0xF0D9E1: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00D9A4, 0x00003E
+; --- 0xF0D9A4-0xF0D9E1, 62 B, converted by lane promB6 (DLMIX).
+;     two display-list records with an 8-byte-entry array between them.  The
+;     first record (op 0x03, 11 B) names 0x00F0D9AF at its +0x07 field, which
+;     is exactly where it ends and where the array begins; five 8-byte entries
+;     then land exactly on the second record (op 0x08, 11 B), which ends
+;     exactly on the span end.  A search over every record/array decomposition
+;     of all 18 spans this lane could not otherwise frame (--probe-refusals)
+;     finds a decomposition for THIS ONE ONLY, and only one for it.
+;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
+	.byte 0x03, 0x0B	; F0D9A4  op 03, 11 bytes
+	.byte	0x20, 0x27, 0x07, 0x00, 0x05, 0xAF, 0xD9, 0xF0, 0x00	; F0D9A6  operands
+	.short	0x000C, 0x001E, 0x00E8, 0x003A	; F0D9AF  entry 0
+	.short	0x000C, 0x0045, 0x00E8, 0x0061	; F0D9B7  entry 1
+	.short	0x000C, 0x006C, 0x00E8, 0x0088	; F0D9BF  entry 2
+	.short	0x000C, 0x0093, 0x00E8, 0x00AF	; F0D9C7  entry 3
+	.short	0x000C, 0x00BA, 0x00E8, 0x00D6	; F0D9CF  entry 4
+	.byte 0x08, 0x0B	; F0D9D7  op 08, 11 bytes
+	.byte	0x20, 0x27, 0x07, 0x00, 0x1B, 0xAF, 0xD9, 0xF0, 0x00	; F0D9D9  operands
 
 ; ------------------------------------------------------------------
 ; 0xF0D9E2-0xF0DA92 -- 18 display-list records, 177 bytes -- interpreter A

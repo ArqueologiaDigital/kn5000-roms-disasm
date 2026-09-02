@@ -138,10 +138,14 @@ V = [
   "source; the only candidate base is 2.7 KB away and the fit is arithmetic "
   "coincidence"),
  (0xF05CEC, 0x0C, "REFUSE", None, "font/bitmap-shaped bytes with no declared shape"),
- (0xF0D9A4, 0x3E, "REFUSE", None,
-  "two display-list records with an 8-byte array between them; the array base IS "
-  "named by the first record (0x00F0D9AF) but the second record's own start is "
-  "not anchored, so the span is a mixture this lane will not frame"),
+ (0xF0D9A4, 0x3E, "DLMIX", None,
+  "two display-list records with an 8-byte-entry array between them.  The "
+  "first record (op 0x03, 11 B) names 0x00F0D9AF at its +0x07 field, which is "
+  "exactly where it ends and where the array begins; five 8-byte entries then "
+  "land exactly on the second record (op 0x08, 11 B), which ends exactly on "
+  "the span end.  A search over every record/array decomposition of all 18 "
+  "spans this lane could not otherwise frame (--probe-refusals) finds a "
+  "decomposition for THIS ONE ONLY, and only one for it."),
  (0xF13D34, 0x2C, "REFUSE", None, "font glyph rows; no declared shape"),
  (0xF286CC, 0x2D, "REFUSE", None, "display-list record stream carrying ASCII; not anchored"),
  (0xF28877, 0x1F, "SHORTARR8", (0xF28866, 0xF28896), "declared array base 0xF28866"),
@@ -250,6 +254,11 @@ def check(verbose=True):
             op, rl = d[s - B], d[s - B + 1]
             c(tag + ": op 0x%02X < 0x24, length %d lands on 0x%06X = span end"
               % (op, rl, s + rl), op < 0x24 and s + rl == a + ln)
+        elif kind == "DLMIX":
+            import itertools
+            sols = list(itertools.islice(decompose(a, a + ln), 0, 3))
+            c(tag + ": exactly one record/array decomposition covers the span",
+              len(sols) == 1)
         elif kind == "CODE":
             lines = transcribe(a, ln)
             c(tag + ": the linear decode consumes the span exactly",
@@ -270,6 +279,65 @@ def check(verbose=True):
           t in starts)
     print("\n%d checks, %d failures" % (n, len(fails)))
     return not fails
+
+
+# ------------------------------------------------- the record/array decomposer
+def declared_arrays():
+    """Every 8-byte-entry array base the SOURCE itself declares, from the
+    `-> XIX: array of 8-byte entries` comment a display-list record carries."""
+    txt = open(SRC, encoding="latin-1").read()
+    return set(int(m, 16) for m in re.findall(
+        r'\.long\s+0x00([0-9A-F]{6})\s*;[^\n]*array of 8-byte entries', txt))
+
+
+def decompose(a, end, declared=None, depth=0, path=()):
+    """Every way of covering [a,end) with interpreter records and 8-byte-entry
+    arrays.  A record is (op < 0x24, length at +1).  An array is allowed only
+    where its base is NAMED -- either by the +0x07 pointer of the record just
+    before it, or by a declaration elsewhere in the source.  Yields the paths;
+    a span is only convertible when there is exactly ONE."""
+    if declared is None:
+        declared = declared_arrays()
+    d = rom()
+    if a == end:
+        yield path
+        return
+    if a > end or depth > 14:
+        return
+    op, ln = d[a - B], d[a - B + 1]
+    if op < 0x24 and 2 <= ln <= 64 and a + ln <= end:
+        yield from decompose(a + ln, end, declared, depth + 1, path + (("rec", a, ln),))
+    named = (path and path[-1][0] == "rec" and path[-1][2] >= 11
+             and w(0, d, path[-1][1] + 7, 4) == a) or (a in declared)
+    if named:
+        k = 1
+        while a + 8 * k <= end and k <= 64:
+            yield from decompose(a + 8 * k, end, declared, depth + 1,
+                                 path + (("arr", a, 8 * k),))
+            k += 1
+
+
+def probe_refusals():
+    """How many of the spans this lane refused have a UNIQUE record/array
+    decomposition?  Answer 2026-09-02: 1 of 18 (0xF0D9A4), which is why that one
+    is converted and the other 17 are not.  Also tries a start up to 4 bytes
+    before the span, for the case where the previous object absorbed the
+    record's leading bytes -- that finds nothing extra."""
+    import itertools
+    dec, n = declared_arrays(), 0
+    for a, ln, kind, _g, _note in V:
+        if kind not in ("REFUSE", "DLMIX"):
+            continue
+        for back in range(5):
+            sols = list(itertools.islice(decompose(a - back, a + ln, dec), 0, 4))
+            if sols:
+                break
+        print("0x%06X %-4d back=%d %d solution(s) %s"
+              % (a, ln, back, len(sols),
+                 " ".join("%s@%06X/%d" % t for t in sols[0]) if len(sols) == 1 else ""))
+        n += len(sols) == 1
+    print("\n%d of %d spans have a unique decomposition"
+          % (n, sum(1 for x in V if x[2] in ("REFUSE", "DLMIX"))))
 
 
 # ------------------------------------------------------------------- emission
@@ -316,6 +384,23 @@ def emit(a, ln, kind, arg, note):
         return head + [byte_row(d, a, ln,
                                 "rest of the op 0x%02X record that starts at %06X"
                                 % (d[s - B], s))]
+    if kind == "DLMIX":
+        import itertools
+        sols = list(itertools.islice(decompose(a, end), 0, 2))
+        if len(sols) != 1:
+            raise SystemExit("0x%06X: %d decompositions, expected exactly 1"
+                             % (a, len(sols)))
+        for k, x, n in sols[0]:
+            if k == "rec":
+                out.append("\t.byte 0x%02X, 0x%02X\t; %06X  op %02X, %d bytes"
+                           % (d[x - B], d[x - B + 1], x, d[x - B], n))
+                out.append(byte_row(d, x + 2, n - 2, "operands"))
+            else:
+                for e in range(n // 8):
+                    out.append("\t.short\t%s\t; %06X  entry %d"
+                               % (", ".join("0x%04X" % w(0, d, x + 8 * e + 2 * i, 2)
+                                            for i in range(4)), x + 8 * e, e))
+        return head + out
     if kind == "PTRTAB4":
         base, tend = arg
         p = a
@@ -377,7 +462,7 @@ def emit(a, ln, kind, arg, note):
 
 
 def splice():
-    lines, d, done, skipped = src_lines(), rom(), 0, 0
+    lines, d, done, done_bytes = src_lines(), rom(), 0, 0
     out = []
     todo = {(a - B, ln): (a, ln, k, g, n) for a, ln, k, g, n in V if k != "REFUSE"}
     for line in lines:
@@ -387,6 +472,7 @@ def splice():
             a, ln, k, g, n = todo.pop(key)
             out += emit(a, ln, k, g, n)
             done += 1
+            done_bytes += ln
         else:
             out.append(line)
     if todo:
@@ -394,8 +480,7 @@ def splice():
         print("skipped %d span(s) whose .incbin is already gone: %s"
               % (skipped, " ".join("0x%06X" % (B + k[0]) for k in sorted(todo))))
     open(SRC, "w", encoding="latin-1").write("\n".join(out))
-    print("spliced %d spans, %d bytes"
-          % (done, sum(ln for _a, ln, k, _g, _n in V if k != "REFUSE")))
+    print("spliced %d spans, %d bytes" % (done, done_bytes))
 
 
 def verdicts():
@@ -412,7 +497,9 @@ def verdicts():
 
 
 if __name__ == "__main__":
-    if "--check" in sys.argv:
+    if "--probe-refusals" in sys.argv:
+        probe_refusals()
+    elif "--check" in sys.argv:
         sys.exit(0 if check() else 1)
     elif "--splice" in sys.argv:
         splice()
