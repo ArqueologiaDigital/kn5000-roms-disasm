@@ -67,6 +67,38 @@ from fill_verified_islands import bounds_from_context, looks_like_a_table_tail, 
 
 BASE, SIZE = 0xE00000, 2097152
 BYTE_RE = re.compile(r'^\s*\.byte\s+((?:0x[0-9a-fA-F]{2}\s*,?\s*)+)\s*$')
+# 2026-09-02: 192 `.byte` runs across this tree carry a trailing
+# `; call SomeName (v7 addr)` comment -- a PRIOR pass already decoded these
+# as absolute `call` instructions and resolved the target by name, but left
+# the bytes as `.byte` (this exact regex, anchored with no trailing content
+# allowed, is why: BYTE_RE alone always failed to match the line and
+# collect_span silently reported "0 B collected", the same SKIP every other
+# stale-line-hint case produces, with no way to tell the two apart without
+# reading the line). Recognised narrowly -- ONLY the `(v7 addr)` suffix,
+# never the unrelated and unexplained `(v7 patched)` annotation (380
+# instances elsewhere in this tree, left alone: no note anywhere records
+# why those were kept as .byte, so this tool does not guess).
+#
+# ⚠ 2026-09-02 FINDING: the `(v7 addr)` comment's NAME is frequently WRONG.
+# Three checked by hand against symbols/maincpu_v7_symbols_reference.txt --
+# `; call ApplyProgramChangeAs_Prologue2 (v7 addr)` on bytes 1d 43 df fe
+# (absolute target 0xFEDF43) actually names MidiRingBuf_WriteByte
+# (ApplyProgramChangeAs_Prologue2 is really at 0xFEE35D); `; call
+# Audio_CheckSubsystemReady (v7 addr)` on 1d 9e d6 fd (target 0xFDD69E) --
+# the real Audio_CheckSubsystemReady is at 0xFDDAB8, and 0xFDD69E has no
+# symbol at all; `; call AddswbWr (v7 addr)` on 1d 53 aa fd (target
+# 0xFDAA53) -- the real AddswbWr is at 0xFDAE6D. None of the three
+# comments name the routine actually at the encoded address. This does NOT
+# make the CONVERSION unsafe -- build_replacement decodes the raw ROM
+# bytes only, never reads the comment text, and the byte gate + call-target
+# corroboration both check the real thing -- but it does mean this tool
+# throws the wrong comment away rather than preserving it, which is the
+# right call: keeping a verified-wrong label would be worse than dropping
+# it. Left as a finding for whoever generated `(v7 addr)` originally to
+# investigate; not this lane's tool to fix retroactively everywhere it
+# still stands unconverted.
+BYTE_RE_CALL_ADDR_COMMENT = re.compile(
+    r'^\s*\.byte\s+((?:0x[0-9a-fA-F]{2}\s*,?\s*)+);\s*call\s+\S+\s*\(v7 addr\)\s*$')
 
 
 def is_near_uniform_run(raw, byte_frac=0.4, min_len=3):
@@ -99,7 +131,7 @@ def collect_span(lines, start_idx, size):
     collected = 0
     n_lines = 0
     while i < len(lines):
-        m = BYTE_RE.match(lines[i])
+        m = BYTE_RE.match(lines[i]) or BYTE_RE_CALL_ADDR_COMMENT.match(lines[i])
         if not m:
             break
         vals = re.findall(r'0x([0-9a-fA-F]{2})', m.group(1))
