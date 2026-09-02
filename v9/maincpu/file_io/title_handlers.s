@@ -102,7 +102,7 @@ FmmUtilityTitleFunc:
 	jr ge, FmmUtility_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 FmmUtility_DispatchState:
@@ -116,7 +116,7 @@ FmmUtility_DispatchState:
 	cpdi16 0x8502, 0
 	jr ge, FmmUtility_ScanFormat
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -127,7 +127,7 @@ FmmUtility_ScanFormat:
 	cpdi16 0x8504, 0
 	jr ge, FmmUtility_CheckCapacity
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	calr SignalProgressUpdate
 
 FmmUtility_CheckCapacity:
@@ -234,7 +234,7 @@ FmmSmfUtilityTitleFunc:
 	jr ge, FmmSmfUtility_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 FmmSmfUtility_DispatchState:
@@ -248,7 +248,7 @@ FmmSmfUtility_DispatchState:
 	cpdi16 0x8504, 0
 	jr ge, FmmSmfUtility_ScanFormat
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -259,7 +259,7 @@ FmmSmfUtility_ScanFormat:
 	cpdi16 0x8502, 0
 	jr ge, FmmSmfUtility_CheckCapacity
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 
 FmmSmfUtility_CheckCapacity:

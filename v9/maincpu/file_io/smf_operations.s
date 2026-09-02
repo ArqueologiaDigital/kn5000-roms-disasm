@@ -35,7 +35,7 @@ FmmSmfLoadTitleFunc:
 	jr ge, SmfLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 SmfLoad_DispatchState:
@@ -49,7 +49,7 @@ SmfLoad_DispatchState:
 	cpdi16 0x8504, 0
 	jr ge, SmfLoad_CheckFileCount
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -60,7 +60,7 @@ SmfLoad_CheckFileCount:
 	cpdi16 0x8502, 0
 	jr ge, SmfLoad_CheckSlotCount
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 
 SmfLoad_CheckSlotCount:
@@ -177,7 +177,7 @@ FmmSmfSaveTitleFunc:
 	cpdi16 0x8504, 0
 	jr ge, SmfSave_SendWait
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -570,13 +570,13 @@ SmfFN_JumpTable:
 	cpdi8	(0x8d36), 107
 	jr	z, 20
 	call	GetFirstPageBase
-	stda16	(0x81ac), hl
+	ld	(0x81ac:16), hl
 	cps	hl, 0
 	jr	ge, 26
 	stdi16	(0x81ac), 0
 	jr	18
 	ld	wa, (0x8504:16)
-	stda16	(0x81ac), wa
+	ld	(0x81ac:16), wa
 	cps	wa, 0
 	jr	le, 2
 	dec	1, wa
@@ -678,7 +678,7 @@ SmfFN_PageDown:
 	stw_erp WA, 0xee
 	cps wa, 0
 	jrl z, SmfFN_UpdateDisplay
-	stda16 (0x81ac), xbc
+	ld (0x81ac:16), bc
 	ld hl, bc
 	jrl SmfFN_RefreshIfChanged
 
@@ -692,7 +692,7 @@ SmfFN_PageDown_Add10:
 	add ix, 0xa
 
 SmfFN_StoreIndex:
-	stda16 (0x81ac), xix
+	ld (0x81ac:16), ix
 	ld hl, ix
 	jrl SmfFN_RefreshIfChanged
 
@@ -707,7 +707,7 @@ SmfFN_PageDown_ClampCheck:
 	stw_erp WA, 0xe6
 	cps wa, 0
 	jrl z, SmfFN_UpdateDisplay
-	stda16 (0x81ac), xhl
+	ld (0x81ac:16), hl
 	jrl SmfFN_RefreshIfChanged
 
 SmfFN_HandleSave:
@@ -842,7 +842,7 @@ SmfFN_Open_Execute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -884,7 +884,7 @@ SmfFN_HandleOpen2:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -933,7 +933,7 @@ SmfFN_Delete_Execute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -944,7 +944,7 @@ SmfFN_Delete_Execute:
 	cps wa, 0
 	jr le, SmfFN_Delete_AdjustIndex
 	dec 1, wa
-	stda16 (0x81ac), xwa
+	ld (0x81ac:16), wa
 	ld (xsp + 4), wa
 
 SmfFN_Delete_AdjustIndex:
@@ -969,7 +969,7 @@ SmfFN_HandleDelete2:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -980,7 +980,7 @@ SmfFN_HandleDelete2:
 	cps wa, 0
 	jr le, SmfFN_Delete2_AdjustIndex
 	dec 1, wa
-	stda16 (0x81ac), xwa
+	ld (0x81ac:16), wa
 	ld (xsp + 4), wa
 
 SmfFN_Delete2_AdjustIndex:
@@ -1249,12 +1249,12 @@ SmfFN_SendOkState:
 	jrl SmfFN_ReturnZero
 	stda32 0x81a8, xbc
 	jrl SmfFN_ReturnZero
-	stda16 (0x81ae), xiz
+	ld (0x81ae:16), iz
 	jrl SmfFN_ReturnZero
 	cpdi8 (0x84fe), 0
 	jrl z, SmfFN_ReturnZero
 	ld wa, iz
-	stda16 (0x81ac), xwa
+	ld (0x81ac:16), wa
 	call NavigateToFileIndex
 	ld wa, (0x81ac:16)
 	exts xwa

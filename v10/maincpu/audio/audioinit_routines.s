@@ -1234,7 +1234,7 @@ AudioInit_RefreshToneBank:
 	call NoteMap_FindBestMatch
 	cp l, 0xff
 	call_24 nz, VoiceEvent_DispatchTable
-	stda16 (0xc596), xiz
+	ld (0xc596:16), iz
 	popw iz
 	ret
 

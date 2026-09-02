@@ -297,7 +297,7 @@ SetWall_SlotSetup:
 SetWall_SlotSetup_Active:
 	call CDlikeSwTtl_SendStartEvt
 	ldw_da xwa, (0x00ffec)
-	stda16 (0x2875), xwa
+	ld (0x2875:16), wa
 	ld a, (3295:16)
 	inc 1, a
 	ld (0x2877:16), a
@@ -757,7 +757,7 @@ SetWall_ParsePatternStream:
 	anddi8 (0x287b), 251
 	xor w, w
 	ld (0x287a:16), 0
-	stda16 (0x287d), xwa
+	ld (0x287d:16), wa
 	stdi16 (0x287f), 1
 	call SetWall_SlotResolve
 	cpdi8 (0x287a), 0
@@ -769,11 +769,11 @@ SetWall_ParseStream_Init:
 	ld xhl, (4349:16)
 	stda32 0x2881, xhl
 	pop xhl
-	stda16 (0x2885), xiy
+	ld (0x2885:16), iy
 	ld wa, (0x28af:16)
-	stda16 (0x2887), xwa
-	stda16 (0x2889), xiy
-	stda16 (0x288b), xwa
+	ld (0x2887:16), wa
+	ld (0x2889:16), iy
+	ld (0x288b:16), wa
 	ld ix, iy
 	ld hl, (3376:16)
 
@@ -1015,7 +1015,7 @@ SetWall_ParseStream_End:
 	stb_dri A, 0x07, 0xec, 0xf0
 	pop xhl
 	ld wa, (0x2887:16)
-	stda16 (0x289f), xwa
+	ld (0x289f:16), wa
 	call SetWall_EventOutput
 	call SetWall_EventAdvanceCheck
 
@@ -1026,7 +1026,7 @@ SetWall_ParserInit:
 	push xiy
 	ld (0x28a1:16), 16
 	ld iy, (0x286d:16)
-	stda16 (0x28a2), xiy
+	ld (0x28a2:16), iy
 	ld xiy, (7514:16)
 	stda32 3304, xiy
 	stdi16 (3376), 0
@@ -1042,7 +1042,7 @@ SetWall_AdvanceStreamPos:
 	call SetWall_StreamIndexResolve
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
-	stda16 (0x288b), xwa
+	ld (0x288b:16), wa
 	ld hl, wa
 	call SetWall_StreamIndexResolve
 	ld xhl, (4349:16)
@@ -1065,7 +1065,7 @@ SetWall_AdvanceWritePos:
 	jr ule, SetWall_AdvanceWrite_Return
 	ld xhl, (0x2881:16)
 	ld wa, (xhl + 3)
-	stda16 (0x2887), xwa
+	ld (0x2887:16), wa
 	ld hl, wa
 	call SetWall_StreamIndexResolve
 	ld xhl, (4349:16)
@@ -1255,7 +1255,7 @@ SetWall_EventAdvanceCheck:
 	call SetWall_StreamIndexResolve
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	cp wa, 0xffff
 	jr z, SetWall_EventAdvance_Return
 	cpda16 xwa, 0x28a2
@@ -1314,7 +1314,7 @@ SetWall_SlotResolve_ScanNext:
 	jr SetWall_SlotResolve_Return
 
 SetWall_SlotResolve_FoundMatch:
-	stda16 (3383), xix
+	ld (3383:16), ix
 	inc 1, de
 	push xiz
 	ld xiz, (4349:16)
@@ -1364,7 +1364,7 @@ SetWall_BankInit:
 	xor xhl, xhl
 	lds de, 2
 	ld bc, (0x286d:16)
-	stda16 (0xf231), xbc
+	ld (0xf231:16), bc
 	dec 1, bc
 
 SetWall_BankInit_SlotLoop:
@@ -1521,7 +1521,7 @@ SetWall_SingleSlot_InvalidPos:
 	jr SetWall_SingleSlot_Return
 
 SetWall_SingleSlot_CheckBounds:
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	ld hl, wa
 	call SetWall_StreamIndexResolve
 	ld xhl, (4349:16)
@@ -1578,10 +1578,10 @@ SetWall_DualPass_TypeC0:
 	ld hl, wa
 	rrc a
 	and wa, 0x80
-	stda16 (0x2893), xwa
+	ld (0x2893:16), wa
 	and hl, 0x2
 	rrc_i_8 l, 2
-	stda16 (0x2895), xhl
+	ld (0x2895:16), hl
 	call SetWall_StreamAdvanceBounded
 	cpdi8 (0x287a), 0
 	jrl nz, SetWall_DualPass_Error
@@ -1725,7 +1725,7 @@ SetWall_Replay_TypeC0:
 	ld a, w
 	rrc a
 	and wa, 0x80
-	stda16 (0x2893), xwa
+	ld (0x2893:16), wa
 	call SetWall_StreamAdvanceBounded
 	cpdi8 (0x287a), 0
 	jr z, SetWall_Replay_C0_Byte2
@@ -1836,7 +1836,7 @@ SetWall_StreamAdv_CheckBounds:
 	jr SetWall_StreamAdv_Return
 
 SetWall_StreamAdv_LoadNext:
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	ld hl, wa
 	call SetWall_StreamIndexResolve
 	ld xhl, (4349:16)
@@ -1900,7 +1900,7 @@ SetWall_ForwardSkip_Check84:
 	ld xhl, (0x288f:16)
 
 SetWall_ForwardSkip_SaveState:
-	stda16 (0x289b), xiy
+	ld (0x289b:16), iy
 	push xwa
 	ld xwa, (4349:16)
 	stda32 0x2897, xwa
@@ -1922,7 +1922,7 @@ SetWall_InlineCodeBlock3:
 	push	xiz
 	max
 	ldw_da	wa, (0xffec)
-	stda16	(0xf19e), wa
+	ld	(0xf19e:16), wa
 	push	xix
 	pushw	bc
 	ld	xix, 4421
@@ -2092,9 +2092,9 @@ SetWall_MiscDataAndCode:
 
 SetWall_SyncToneGenToDRAM:
 	ld wa, (0xf22f:16)
-	stda16 (0x286f), xwa
+	ld (0x286f:16), wa
 	ld wa, (0xf231:16)
-	stda16 (0x2871), xwa
+	ld (0x2871:16), wa
 	xor xwa, xwa
 	ldb_da a, (0x00ffe3)
 	sla xwa, 11
@@ -2104,9 +2104,9 @@ SetWall_SyncToneGenToDRAM:
 	ldw bc, 0x800
 	ldir85
 	ld wa, (0x286f:16)
-	stda16 (0xf22f), xwa
+	ld (0xf22f:16), wa
 	ld wa, (0x2871:16)
-	stda16 (0xf231), xwa
+	ld (0xf231:16), wa
 	ld wa, (0xf19e:16)
 	stw_da (0x00ffec), xwa
 	anddi8 (0x28a5), 254
@@ -2150,7 +2150,7 @@ SetWall_Sync_FinalUpdate:
 
 SetWall_LoadBankToToneGen:
 	ldw_da xwa, (0x00ffec)
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	ld xix, 0xab000
 	xor xhl, xhl
 	ldb_da l, (0x00ffe3)

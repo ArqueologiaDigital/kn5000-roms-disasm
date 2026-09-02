@@ -43,7 +43,7 @@ ToneGen_StoreBlockAndLink:
 	ld xhl, (4349:16)
 	ld (xhl + 1), wa
 	ldw (xhl + 3), 0xffff
-	stda16 (3308), xix
+	ld (3308:16), ix
 	lds ix, 5
 
 ToneGen_DispatchReturn:
@@ -64,7 +64,7 @@ ToneGen_DispatchAndLinkBlock:
 	ld bc, (0x28af:16)
 	ld (xhl + 1), bc
 	ldw (xhl + 3), 0xffff
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	stdi16 (9830), 5
 	pop xiy
 	pop xix
@@ -708,7 +708,7 @@ VoiceChannel_StoreVoiceIdx:
 	xor de, de
 	ld e, (4011:16)
 	and e, 0xf
-	stda16 (6751), xde
+	ld (6751:16), de
 	pop xde
 	cpdi16 6751, 9
 	jr nz, VoiceChannel_StoreVoiceReturn
@@ -889,7 +889,7 @@ SMF_RestoreTimerState:
 	bitda 0, (0x28a5)
 	jr z, SMF_SeekReturn
 	ldw_da xwa, (0x00ffec)
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	push xhl
 	call Audio_CheckSubsystemReady
 	pop xhl
@@ -929,7 +929,7 @@ SMF_InitPlaybackState:
 SMF_InitChannelState:
 	xor wa, wa
 	ld (4236:16), a
-	stda16 (4347), xwa
+	ld (4347:16), wa
 	ld (4344:16), a
 	cpw_da (0xffec), 0
 	jr z, SMF_SetStatusAndJump
@@ -969,7 +969,7 @@ SMF_SetStatusAndJump:
 SMF_FoundActiveChannel:
 	call Vga_SetupMultiPlaneDisplay
 	ldw_da xwa, (0x00ffec)
-	stda16 (4325), xwa
+	ld (4325:16), wa
 	ld (4324:16), 255
 	bitda 2, (0xfdad)
 	jr nz, SMF_InitChannelScan
@@ -981,7 +981,7 @@ SMF_InitChannelScan:
 	call SMF_ClearWorkArea
 	call SMF_ClearWorkArea
 	xor wa, wa
-	stda16 (4347), xwa
+	ld (4347:16), wa
 	ld (4236:16), a
 	ld (4344:16), a
 	xor hl, hl
@@ -1007,7 +1007,7 @@ SMF_SetupActiveChannel:
 	ld xde, 0xf250
 	ldw_sri HL, 0x07, 0xe8, 0xec
 	pop xde
-	stda16 (0x28af), xhl
+	ld (0x28af:16), hl
 	stdi16 (9830), 5
 	ld xiy, SMF_HeaderConstants_0x4
 	ld xix, 0x13fa
@@ -1017,8 +1017,8 @@ SMF_SetupActiveChannel:
 	lds bc, 4
 	ldir85
 	xor wa, wa
-	stda16 (4002), xwa
-	stda16 (4004), xwa
+	ld (4002:16), wa
+	ld (4004:16), wa
 	stda32 6705, xix
 	ld wa, (4002:16)
 	stw_dpi WA, 0xf1
@@ -1789,8 +1789,8 @@ SMF_AdvanceChannelScan:
 SMF_FinishChannelAndGetNextEvent:
 	call SMF_ChannelHelperReturn
 	xor wa, wa
-	stda16 (3942), xwa
-	stda16 (3944), xwa
+	ld (3942:16), wa
+	ld (3944:16), wa
 	call SMF_GetNextEvent
 	cp a, 0x82
 	jr z, SMF_ResetEventTimers
@@ -1887,7 +1887,7 @@ SMF_MetaTiming_ApplyMultiplier:
 	mul xwa, xde
 	stw_erp DE, 0xe2
 	adddm16 3938, xwa
-	stda16 (3940), xde
+	ld (3940:16), de
 	stdi16 (3946), 0
 	jrl SMF_ProcessEventLoop
 
@@ -11197,7 +11197,7 @@ Seq_ReadTempoLookup:
 	ld l, a
 	add xhl, Display_FontPalette_Table_0x1DBF
 	ld a, (xhl)
-	stda16 (0x334b), xwa
+	ld (0x334b:16), wa
 	ret
 
 Seq_ProcessAllInputState:
@@ -11225,7 +11225,7 @@ Seq_InputState_StoreFlag:
 	xor hl, hl
 	ld l, (0x327f:16)
 	add bc, hl
-	stda16 (0x327d), xbc
+	ld (0x327d:16), bc
 	ld (0x32e9:16), 24
 	bitda 0, (0x3283)
 	jr z, AccInput_CheckRecordMode

@@ -684,7 +684,7 @@ Encoder_TimingAndOutput:
 	cps	wa, 0
 	jr	z, 6
 	dec	1, wa
-	stda16	(36396), wa
+	ld	(36396:16), wa
 Encoder_CheckTimerDelta:
 	ld	wa, (1033:16)
 	subda16	xwa, (36390)
@@ -3126,7 +3126,7 @@ MIDI_WriteCommandToBuffer:
 	ld hl, (0x9042:16)
 	ld IX,HL
 	inc 1,HL
-	stda16 (0x9042), hl
+	ld (0x9042:16), hl
 	.byte 0xf1, 0xa0, 0xbc, 0x33, 0xec, 0x12, 0xeb, 0x84
 	.byte 0xb4, 0x41, 0xd1, 0x42, 0x90, 0x20, 0xd8, 0x8c
 	.byte 0xd8, 0x61, 0xf1, 0x42, 0x90, 0x50, 0xdc, 0x88
@@ -3654,7 +3654,7 @@ ExtData_ToneParam_MultiChannel:
 	ld	a, (xbc)
 	extz	wa
 	add	wa, de
-	stda16	37063, wa
+	ld	(37063:16), wa
 	ld	a, (64605:16)
 	and	a, 7
 	cps	a, 2
@@ -3736,7 +3736,7 @@ MIDI_WriteResetSequence:
 	ld	wa, (36930:16)
 	ld	de, wa
 	inc	1, wa
-	stda16	(36930), wa
+	ld	(36930:16), wa
 	lda	xbc, (48288:16)
 	extz	xde
 	add	xde, xbc
@@ -3744,14 +3744,14 @@ MIDI_WriteResetSequence:
 	ld	wa, (36930:16)
 	ld	de, wa
 	inc	1, wa
-	stda16	(36930), wa
+	ld	(36930:16), wa
 	extz	xde
 	add	xde, xbc
 	ld	(xde), 0
 	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
-	stda16	(36930), wa
+	ld	(36930:16), wa
 	extz	xhl
 	add	xhl, xbc
 	lda	xde, (64614:16)
@@ -3760,28 +3760,28 @@ MIDI_WriteResetSequence:
 	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
-	stda16	(36930), wa
+	ld	(36930:16), wa
 	extz	xhl
 	add	xhl, xbc
 	ld	(xhl), 31
 	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
-	stda16	(36930), wa
+	ld	(36930:16), wa
 	extz	xhl
 	add	xhl, xbc
 	ld	(xhl), 144
 	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
-	stda16	(36930), wa
+	ld	(36930:16), wa
 	extz	xhl
 	add	xhl, xbc
 	ld	(xhl), 1
 	ld	wa, (36930:16)
 	ld	hl, wa
 	inc	1, wa
-	stda16	(36930), wa
+	ld	(36930:16), wa
 	extz	xhl
 	add	xhl, xbc
 	ld	a, (xde+1)
@@ -3789,7 +3789,7 @@ MIDI_WriteResetSequence:
 	ld	wa, (36930:16)
 	ld	de, wa
 	inc	1, wa
-	stda16	(36930), wa
+	ld	(36930:16), wa
 	extz	xde
 	add	xde, xbc
 	ld	(xde), 31
@@ -4646,7 +4646,7 @@ SndParam_FetchSequencerParams:
 	ld wa, (0x9097:16)
 	ld BC,WA
 	inc 1,WA
-	stda16 (0x9097), wa
+	ld (0x9097:16), wa
 	lda xwa, (0xbf9d:16)
 	extz XBC
 	add XBC,XWA
@@ -5183,7 +5183,7 @@ SwbtWr_AppendFixedParamBlock:
 	ld wa, (0x9042:16)
 	ld DE,WA
 	inc 1,WA
-	stda16 (0x9042), wa
+	ld (0x9042:16), wa
 	lda xbc, (0xbca0:16)
 	extz XDE
 	add XDE,XBC
@@ -5657,7 +5657,7 @@ SndParam_ApplyProgramChange_Safe:
 	push	xix
 	push	xiy
 	push	xiz
-	stda16	(36942), hl
+	ld	(36942:16), hl
 	ld	a, (36954:16)
 	ld	(36944:16), a
 	call	16552650
@@ -5678,7 +5678,7 @@ PartCtrl_WriteProgramChange:
 	push	xix
 	push	xiy
 	push	xiz
-	stda16	(36942), hl
+	ld	(36942:16), hl
 	ld	a, (36955:16)
 	ld	(36944:16), a
 	call	16552779
@@ -5767,8 +5767,8 @@ MIDI_WriteVoiceParamCC:
 	and	e, d
 	or	e, a
 	st_rrb	e, xix, hl
-	stda16	(37003), bc
-	stda16	(37005), de
+	ld	(37003:16), bc
+	ld	(37005:16), de
 MidiWriteVoice_Done:
 	pop xhl
 	popw wa
@@ -5802,8 +5802,8 @@ MIDI_WriteVoiceParamDirect:
 	and	e, d
 	or	e, a
 	st_rrb	e, xix, hl
-	stda16	(37003), bc
-	stda16	(37005), de
+	ld	(37003:16), bc
+	ld	(37005:16), de
 MidiWriteDirect_Done:
 	popw hl
 	popw wa
@@ -5842,7 +5842,7 @@ Audio_WriteBankSelectParams:
 	stdi16 (0x908b), 0x00b0
 	ld e, (0x8e46:16)
 	ldb D, 0x7f
-	stda16 (0x908d), de
+	ld (0x908d:16), de
 	calr SwbtWr_WriteVoiceParam_PreserveRegs
 BankSelect_CheckChannel1:
 .Lc_fc9b2d:
@@ -5852,7 +5852,7 @@ BankSelect_CheckChannel1:
 	stdi16 (0x908b), 0x01b0
 	ld e, (0x8e44:16)
 	ldb D, 0x7f
-	stda16 (0x908d), de
+	ld (0x908d:16), de
 	calr SwbtWr_WriteVoiceParam_PreserveRegs
 BankSelect_Done:
 	popw de
@@ -5880,7 +5880,7 @@ SeqTimer_ClampToDefault:
 	ld (xde + 8), a
 
 SeqTimer_ComputeRegValue:
-	stda16	(48286), wa
+	ld	(48286:16), wa
 	ldw	de, 64
 	mul	xwa, xde
 	ld	xde, 80000000
@@ -5962,7 +5962,7 @@ RegBitManip_Handler_0:
 	jr	nz, 2
 	lds	wa, 1
 RegBitManip_Handler_4:
-	stda16	(64614), wa
+	ld	(64614:16), wa
 	pop	xix
 	popw	hl
 	popw	wa
@@ -6016,7 +6016,7 @@ RegBitManip_Handler_4:
 	pop	xbc
 	pop	xwa
 	ret
-	stda16	(37075), hl
+	ld	(37075:16), hl
 	push	xwa
 	push	xbc
 	push	xde
@@ -6074,10 +6074,10 @@ MidiStream_NextEvent:
 	ld_spiw	wa, 241
 	cp	a, 255
 	jr	z, 76
-	stda16	(37153), wa
+	ld	(37153:16), wa
 	ld_spiw	wa, 241
 	stda32	(37157), xix
-	stda16	(37155), wa
+	ld	(37155:16), wa
 	ld	bc, (37153:16)
 	ld	de, (37155:16)
 	ld	xix, 37174
@@ -6222,10 +6222,10 @@ MidiSeqBuf_NextEvent:
 	ld_spiw	wa, 241
 	cp	a, 255
 	jr	z, 89
-	stda16	(37153), wa
+	ld	(37153:16), wa
 	ld_spiw	wa, 241
 	stda32	(37157), xix
-	stda16	(37155), wa
+	ld	(37155:16), wa
 	calr	115
 	ld	bc, (37153:16)
 	ld	d, (37156:16)
@@ -6379,7 +6379,7 @@ TempoSrc_DirectTempoMode:
 
 
 Tempo_ExpressionStore:
-	stda16	(37161), wa
+	ld	(37161:16), wa
 	pop	xiz
 	ret
 Mod_SelectExpressionSource:
@@ -6412,7 +6412,7 @@ ModExpr_DirectMode:
 
 
 Mod_ExpressionStore:
-	stda16	(37161), wa
+	ld	(37161:16), wa
 	ret
 MidiStream_ProcessTempoRingBuf:
 	push XIZ
@@ -6433,10 +6433,10 @@ TempoRing_NextEvent:
 	ld_spiw	wa, 241
 	cp	a, 255
 	jr	z, 103
-	stda16	(37153), wa
+	ld	(37153:16), wa
 	ld_spiw	wa, 241
 	stda32	(37157), xix
-	stda16	(37155), wa
+	ld	(37155:16), wa
 	calr	161
 	ld	(37163:16), 0
 TempoRing_InitAndScan:
@@ -6557,8 +6557,8 @@ TempoCC_TransmitBytecodeBlock:
 	.byte 0x07, 0xf5, 0xf1, 0x50, 0xb4, 0x00, 0xff, 0xf1
 	.byte 0x2e, 0x91, 0x00, 0x04, 0x1e, 0xc4, 0x00, 0x0e
 MIDI_TransmitTempoCC:
-	stda16 (0x9121), bc
-	stda16 (0x9123), de
+	ld (0x9121:16), bc
+	ld (0x9123:16), de
 	calr MIDI_SelectTempoExpressionSource
 	cpdi16 (0x9129), 0x0000
 	jr z, TempoCC_Return
@@ -6652,7 +6652,7 @@ Audio_ProcessPartExpressions:
 PartExpr_ProcessNextBit:
 	ld	wa, (37161:16)
 	srl	wa, 1
-	stda16	(37161), wa
+	ld	(37161:16), wa
 	jr	nc, 98	; -> 0xFCA45E
 	ld	l, c
 	ld	xix, 61856
@@ -6793,7 +6793,7 @@ Audio_ReinitAndProcessEvents:
 	ret
 Audio_SyncAndProcessSequencer:
 	ld	wa, (36930:16)
-	stda16	(36932), wa
+	ld	(36932:16), wa
 	call	15672379
 AudioSeq_CheckEventPending:
 	.byte 0x44, 0x49, 0xe5, 0x01, 0x00, 0x9c, 0xf6, 0x23
@@ -6867,12 +6867,12 @@ VoiceMode_ParamHandler_4:
 	ld_rrl	xix, xix, hl
 	cp	xix, 4294967295
 	jrl	z, 456
-	stda16	37055, bc
-	stda16	37057, de
+	ld	(37055:16), bc
+	ld	(37057:16), de
 	ld	(36955:16), c
 	ld	hl, de
 	call	16554468
-	stda16	37171, hl
+	ld	(37171:16), hl
 	call	16560581
 	jr	nc, 95
 	cpdi8	37055, 23
@@ -6889,17 +6889,17 @@ VoiceMode4_SetupChannelAndWrite:
 	ld	(xix), a
 	ld	a, (37055:16)
 	ldb	w, 1
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	a, (37058:16)
 	ldb	w, 127
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554376
 	ld	a, (37055:16)
 	ldb	w, 0
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	a, (37057:16)
 	ldb	w, 255
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554376
 	ld	bc, (37055:16)
 	ld	de, (37057:16)
@@ -6984,9 +6984,9 @@ MidiPartCC_WriteAndDispatch:
 	ld	xix, 16560696
 	ld_rrb	c, xix, hl
 	ldb	b, 3
-	stda16	37055, bc
+	ld	(37055:16), bc
 	ldb	d, 127
-	stda16	37057, de
+	ld	(37057:16), de
 	call	16560581
 	jr	nc, 8
 	call	16554583
@@ -7018,9 +7018,9 @@ MidiVoice_DataBlockHandler:
 	jr	nc, 18
 	.byte 0xc1, 0x48, 0x90, 0x3e, 0x20
 	ld	wa, (xiy)
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	wa, (xiy+2)
-	stda16	37005, wa
+	ld	(37005:16), wa
 	extz	hl
 	ld	l, (37164:16)
 	ld	xix, 36914
@@ -7031,9 +7031,9 @@ MidiVoice_DataBlockHandler:
 	jr	nz, 22
 	.byte 0xc1, 0x48, 0x90, 0xe9, 0xc1, 0x48, 0x90, 0x3e, 0xc0
 	ld	wa, (xiy)
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	wa, (xiy+2)
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554376
 	ret
 	extz	hl
@@ -7066,9 +7066,9 @@ MidiVoice_DataBlockHandler:
 	ldb	a, 0
 	ld	(38312:16), a
 	ld	wa, (37147:16)
-	stda16	38312, wa
+	ld	(38312:16), wa
 	ldw	wa, 32512
-	stda16	38314, wa
+	ld	(38314:16), wa
 	call	16563926
 	ld	a, (37146:16)
 	ld	(36956:16), a
@@ -7087,9 +7087,9 @@ MidiVoice_DataBlockHandler:
 	call	16560581
 	jr	nc, 20
 	ld	wa, (37147:16)
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	wa, (37149:16)
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554376
 	extz	hl
 	ld	l, (37164:16)
@@ -7248,15 +7248,15 @@ VoiceParam_WriteExpression:
 	ld_rr8b	l, xix, l
 	ld	xix, 16560696
 	ld_rr8b	b, xix, l
-	stda16	37055, bc
+	ld	(37055:16), bc
 	ldb	d, 127
-	stda16	37057, de
+	ld	(37057:16), de
 	call	16560581
 	jr	nc, 20
 	ld	wa, (37055:16)
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	wa, (37057:16)
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554376
 VoiceParam_ExprCheckGuard:
 	ld	l, (37164:16)
@@ -7296,15 +7296,15 @@ VoiceParam_WriteVolume:
 	ld_rr8b	l, xix, l
 	ld	xix, 16560696
 	ld_rr8b	b, xix, l
-	stda16	37055, bc
+	ld	(37055:16), bc
 	ldb	d, 127
-	stda16	37057, de
+	ld	(37057:16), de
 	call	16560581
 	jr	nc, 20
 	ld	wa, (37055:16)
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	wa, (37057:16)
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554376
 VoiceParam_VolCheckGuard:
 	ld	l, (37164:16)
@@ -7348,15 +7348,15 @@ VoiceParam_WritePan:
 	ld_rr8b	l, xix, l
 	ld	xix, 16560696
 	ld_rr8b	b, xix, l
-	stda16	37055, bc
+	ld	(37055:16), bc
 	and	de, 32639
-	stda16	37057, de
+	ld	(37057:16), de
 	call	16560581
 	jr	nc, 20
 	ld	wa, (37055:16)
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	wa, (37057:16)
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554414
 VoiceParam_PanCheckGuard:
 	ld	l, (37164:16)
@@ -7396,17 +7396,17 @@ VoiceNote_WriteBankAndCC:
 	ld	xix, 16560696
 	ld_rr8b	b, xix, a
 VoiceNote_SetupCCParams:
-	stda16	37055, bc
+	ld	(37055:16), bc
 	ldb	d, 127
-	stda16	37057, de
+	ld	(37057:16), de
 	call	16560581
 	jr	nc, 66
 	cpdi8	37055, 176
 	jr	z, 22
 	ld	wa, (37055:16)
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	wa, (37057:16)
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554376
 	jr	37
 VoiceNote_CheckBankSelect:
@@ -7489,13 +7489,13 @@ MidiPart_ScanDone:
 MidiNote_RhythmPartDispatch:
 	cp	bc, 72
 	jrl	nz, 286
-	stda16	37055, bc
-	stda16	37057, de
+	ld	(37055:16), bc
+	ld	(37057:16), de
 	ld	(37164:16), a
 	ld	(36955:16), c
 	ld	hl, de
 	call	16554468
-	stda16	37171, hl
+	ld	(37171:16), hl
 	call	16560581
 	jr	nc, 50
 	ld	xix, 64602
@@ -7731,18 +7731,18 @@ MidiStream_DispatchData:
 	ret
 	ld	(36956:16), 255
 	ld	wa, (38312:16)
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	wa, (38314:16)
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554376
 	ret
 	calr	1178
 	ret
 	ld	(36956:16), 255
 	ld	wa, (38312:16)
-	stda16	37003, wa
+	ld	(37003:16), wa
 	ld	wa, (38314:16)
-	stda16	37005, wa
+	ld	(37005:16), wa
 	call	16554376
 	ret
 	calr	1148
@@ -7750,8 +7750,8 @@ MidiStream_DispatchData:
 	ld	bc, (38312:16)
 	ld	de, (38314:16)
 	ld	(36956:16), 255
-	stda16	37003, bc
-	stda16	37005, de
+	ld	(37003:16), bc
+	ld	(37005:16), de
 	call	16554376
 	ldb	e, 177
 	ld	d, (38313:16)
@@ -7788,8 +7788,8 @@ MidiStream_DispatchData:
 	ld	bc, (38312:16)
 	ld	de, (38314:16)
 	ld	(36956:16), 255
-	stda16	37003, bc
-	stda16	37005, de
+	ld	(37003:16), bc
+	ld	(37005:16), de
 	call	16554376
 	ret
 	calr	985
@@ -7864,8 +7864,8 @@ MidiStream_LoadMultiLoop:
 	st_rrw	wa, xiy, hl
 	ld	(36956:16), 255
 	ldb	c, 177
-	stda16	37003, bc
-	stda16	37005, wa
+	ld	(37003:16), bc
+	ld	(37005:16), wa
 	call	16554414
 MidiStream_LoadMultiNext:
 	inc 1, b
@@ -7918,9 +7918,9 @@ MidiStream_DispatchLoop:
 	jr z, MidiStream_AdvanceRxPtr
 	ldw_dri bc, 0x07, 0xf0, 0xec
 	inc 2,HL
-	stda16 (0x90bf), bc
+	ld (0x90bf:16), bc
 	ldw_dri de, 0x07, 0xf0, 0xec
-	stda16 (0x90c1), de
+	ld (0x90c1:16), de
 	call (XIY)
 MidiStream_AdvanceRxPtr:
 	incdi8	4, (37015)
@@ -7962,7 +7962,7 @@ MidiStream_HandleNoteCC:
 	ld	xix, (36950:16)
 	ld_rrl	xix, xix, hl
 	ld	wa, (xix)
-	stda16	(36942), wa
+	ld	(36942:16), wa
 	pushw	wa
 	ld	(36944:16), c
 	call	16555051

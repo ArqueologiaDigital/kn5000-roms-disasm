@@ -100,7 +100,7 @@ FmmUtilityTitleFunc:
 	jr	ge, 13
 	call	16290067
 	extz	hl
-	stda16	33892, hl
+	ld	(33892:16), hl
 	calr	-1653
 FmmUtility_DispatchState:
 	ld	wa, (33892:16)
@@ -113,7 +113,7 @@ FmmUtility_DispatchState:
 	cpdi16	33894, 0
 	jr	ge, 19
 	call	16290928
-	stda16	33894, hl
+	ld	(33894:16), hl
 	call	16290176
 	call	16290094
 	calr	-1698
@@ -123,7 +123,7 @@ FmmUtility_ScanFormat:
 	cpdi16	33896, 0
 	jr	ge, 11
 	call	16291947
-	stda16	33896, hl
+	ld	(33896:16), hl
 	calr	-1726
 FmmUtility_CheckCapacity:
 	cpdi16	33896, 0
@@ -225,7 +225,7 @@ FmmSmfUtilityTitleFunc:
 	jr	ge, 13
 	call	16290067
 	extz	hl
-	stda16	33892, hl
+	ld	(33892:16), hl
 	calr	-2052
 FmmSmfUtility_DispatchState:
 	ld	wa, (33892:16)
@@ -238,7 +238,7 @@ FmmSmfUtility_DispatchState:
 	cpdi16	33896, 0
 	jr	ge, 19
 	call	16291947
-	stda16	33896, hl
+	ld	(33896:16), hl
 	call	16290176
 	call	16290094
 	calr	-2097
@@ -248,7 +248,7 @@ FmmSmfUtility_ScanFormat:
 	cpdi16	33894, 0
 	jr	ge, 11
 	call	16290928
-	stda16	33894, hl
+	ld	(33894:16), hl
 	calr	-2125
 FmmSmfUtility_CheckCapacity:
 	cpdi16	33894, 0

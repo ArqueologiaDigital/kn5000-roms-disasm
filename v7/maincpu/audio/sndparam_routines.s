@@ -1231,7 +1231,7 @@ SndParam_Widget1_CallType3:
 	.byte 0xd1, 0x3e, 0xb7, 0x48
 	jr	4
 	ld	wa, (46906:16)
-	stda16	146, wa
+	ld	(146:16), wa
 	ld	(1066:16), 0
 	.byte 0xf1, 0x1f, 0x04, 0xc8
 	jr	z, 5
@@ -1311,7 +1311,7 @@ SndParam_Widget1_CallType3:
 	jr	c, 5
 	sub	a, 96
 	inc	1, w
-	stda16	1120, wa
+	ld	(1120:16), wa
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jr	z, 108
 	.byte 0xc1, 0x1b, 0x04, 0x3c, 0xfc
@@ -1392,7 +1392,7 @@ SndParam_Widget1_CallType3:
 	jr	nz, 80
 	xor	wa, wa
 	ld	(1047:16), a
-	stda16	1048, wa
+	ld	(1048:16), wa
 	.byte 0xf1, 0x20, 0x04
 SndParam_HeapAllocOK:
 	.incbin "includes/romslices/v7_fix_sndparam_heapallocok.bin"

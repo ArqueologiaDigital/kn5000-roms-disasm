@@ -166,7 +166,7 @@ SysEx_ApplyVoiceParam_4B:
 .Lc_fdaae1:
 	ld (XIX),0xff
 	sub XIX,0x0000bca0
-	stda16 (0x9042), ix
+	ld (0x9042:16), ix
 	ld (0xbe9d:16), 0xff
 	stdi16 (0x9046), 0x0000
 	ret
@@ -748,7 +748,7 @@ MidiSeq_ReceiveAndForward:
 	.byte 0xd1, 0x4e, 0xc1, 0xa1, 0xf1, 0x54, 0xc1, 0xc8
 	.byte 0x66, 0x56, 0xd9, 0xcf, 0x0f, 0x00, 0xb0, 0xf7
 MidiSeq_ReceiveAndForward_CompIface:
-	stda16	(49486), wa
+	ld	(49486:16), wa
 	ld	bc, (49490:16)
 	extz	xbc
 	ld	wa, (49500:16)
@@ -913,7 +913,7 @@ MidiOut_ReadSysExByte:
 	ldb a, 219
 	or (xwa+30), b
 	swi 5
-	stda16 (49502), hl
+	ld (49502:16), hl
 	ld bc, (49498:16)
 	lds wa, 1
 	jrl 151
@@ -951,7 +951,7 @@ CompIface_RampDown:
 	.byte 0x89, 0x1e
 CompIface_RampDown_Start:
 	jr	lt, -3
-	stda16	(49500), hl
+	ld	(49500:16), hl
 CompIface_FilterBySource:
 	.byte 0xc1, 0x58, 0xc1, 0x21, 0xd8, 0x12, 0xd1, 0x5a
 	.byte 0xc1, 0x21, 0x1e, 0x50, 0xfd, 0xf1, 0x5e, 0xc1
@@ -960,7 +960,7 @@ CompIface_FromSource2:
 	pop	xde
 	subdm8	(55329), a
 	calr	64807
-	stda16	(49504), hl
+	ld	(49504:16), hl
 	ret
 	extz	xwa
 	ld	xbc, 15623020

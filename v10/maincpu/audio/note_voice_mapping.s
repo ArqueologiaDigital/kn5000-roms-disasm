@@ -2752,7 +2752,7 @@ Voice_FindAndAllocBestMatch:
 Voice_InitSlotData:
 	ld a, (0xcee5:16)
 	extz wa
-	stda16 (0xceff), xwa
+	ld (0xceff:16), wa
 	lds de, 0
 	jr VoiceSlotInit_Check
 
@@ -9047,10 +9047,10 @@ FindEntry_AdvanceSlo_Deref:
 	ld e, (xwa + 2)
 
 FindEntry_AdvanceSlo_StoreDRAM:
-	stda16 (0xceff), xhl
+	ld (0xceff:16), hl
 	ld a, e
 	extz wa
-	stda16 (0xcf01), xwa
+	ld (0xcf01:16), wa
 	lda xwa, (0xceff:16)
 	push xwa
 	call VoiceSlot_CheckAndApply_Prologue
@@ -9289,10 +9289,10 @@ FindBestFreeVoice_Ad_Deref:
 	ld l, (xwa + 2)
 
 FindBestFreeVoice_Ad_StoreDRAM:
-	stda16 (0xce22), xde
+	ld (0xce22:16), de
 	ld a, l
 	extz wa
-	stda16 (0xce24), xwa
+	ld (0xce24:16), wa
 	ret
 
 NoteMap_EmitNoteOnEvents:
@@ -14188,9 +14188,9 @@ UIParam_CompareResult:
 
 UIParam_StoreAndReturn:
 	ld wa, (0xce24:16)
-	stda16 (0xce68), xwa
+	ld (0xce68:16), wa
 	ld wa, (xsp + 2)
-	stda16 (0xce66), xwa
+	ld (0xce66:16), wa
 	popw_erp 0xfa
 	lda xsp, (xsp + 68)
 	ret
@@ -15615,7 +15615,7 @@ ComputeNoteBitPositi_Data:
 	ret
 
 ComputeNoteBitPositi_StoreDRAM:
-	stda16 (0xcefd), xde
+	ld (0xcefd:16), de
 	ldb_da c, (0x00cee5)
 	xor b, b
 
@@ -18566,11 +18566,11 @@ SendEpilogue_Data:
 	extz	wa
 	call	SendPartDataBlock_Block2
 	jrl	1285
-	stda16	(0xcfca), iz
+	ld	(0xcfca:16), iz
 	jrl	1278
-	stda16	(0xcfc8), iz
+	ld	(0xcfc8:16), iz
 	jrl	1271
-	stda16	(0xcfcc), iz
+	ld	(0xcfcc:16), iz
 	jrl	1264
 	stb_erp	a, 248
 	extz	wa
@@ -18594,7 +18594,7 @@ SendEpilogue_Data:
 	jr	z, 14
 	cp	wa, 64
 	jrl	nz, 1200
-	stda16	(0xcfce), iz
+	ld	(0xcfce:16), iz
 	jrl	1193
 	ld	xwa, 0x4142
 	call	SndParam_LookupReadOnly
@@ -19933,7 +19933,7 @@ FileIO_ReadChunk:
 	ld (xsp + 14), wa
 	ldw (xsp + 2), 0x1
 	ld wa, (xsp + 14)
-	stda16 (0xe9f3), xwa
+	ld (0xe9f3:16), wa
 	lds iz, 0
 	cp iz, 0x10
 	jr ge, ReadChunk_RestoreReg
@@ -20226,7 +20226,7 @@ PlayModeStateMachine_DoPlayMode2:
 	call AccWrap_PlayModeStart
 	ei 6
 	ld xwa, (0xd0a4:16)
-	stda16 (1052), xwa
+	ld (1052:16), wa
 	ld xwa, (0xd0a0:16)
 	ld (1051:16), a
 	ei 0
@@ -20285,7 +20285,7 @@ PlayModeStateMachine_Prologue:
 	ld xwa, xiz
 	ld xbc, 0x60
 	call Math_DivideU32
-	stda16 (1052), xhl
+	ld (1052:16), hl
 	ld wa, (1052:16)
 	extz xwa
 	stda32 0xd0a4, xwa
@@ -20599,7 +20599,7 @@ SeqFile_StoreTempoByte1:
 	ld a, l
 	extz wa
 	sla wa, 8
-	stda16 (0xe9f1), xwa
+	ld (0xe9f1:16), wa
 	call TaskBuf_ReadNextByte
 	ld wa, hl
 	cps wa, 0
@@ -20622,7 +20622,7 @@ SeqFile_ReadDivisionByte1:
 	ld a, l
 	extz wa
 	sla wa, 8
-	stda16 (0xe9ef), xwa
+	ld (0xe9ef:16), wa
 	call TaskBuf_ReadNextByte
 	ld wa, hl
 	cps wa, 0
@@ -20721,7 +20721,7 @@ SeqInit_ConfigureBanks:
 	ld wa, hl
 	exts xwa
 	set 15, wa
-	stda16 (4597), xwa
+	ld (4597:16), wa
 	ld xwa, 0xc0
 	call SndParam_LookupReadOnly
 	cps hl, 1
@@ -20938,7 +20938,7 @@ ConfigureBanks_LoadReg3:
 ConfigureBanks_LoadReg4:
 	ld xiz, xwa
 	set 15, wa
-	stda16 (4597), xwa
+	ld (4597:16), wa
 	ld bc, iz
 	lds32 xwa, 4
 	lds de, 3
@@ -21622,7 +21622,7 @@ SeqPlay_CheckSysExMarker:
 	call Mem_Copy
 	lda xsp, (xsp + 10)
 	ld wa, (xsp + 10)
-	stda16 (0xeaf9), xwa
+	ld (0xeaf9:16), wa
 	jr SeqPlay_CopyToMidiBuffer
 
 SeqVoice_InitZeroPath:
@@ -21637,7 +21637,7 @@ SeqPlay_CopyToMidiBuffer:
 	push xwa
 	call Mem_Copy
 	ld wa, (xsp + 20)
-	stda16 (0xebfb), xwa
+	ld (0xebfb:16), wa
 	ldw_sri0 WA, (xsp + 0x0118)
 	pushw wa
 	lda_dri XWA, 0xfd, 0x1c, 0x01
@@ -21880,7 +21880,7 @@ RecordReadOK_Block7:
 RecordReadOK_LoadReg2:
 	ld a, l
 	extz wa
-	stda16 (0xe9f1), xwa
+	ld (0xe9f1:16), wa
 	calr FileIO_ReadNextRecord
 	ld wa, hl
 	cps wa, 0
@@ -22054,7 +22054,7 @@ Epilogue_Prologue:
 	ld wa, hl
 	exts xwa
 	set 15, wa
-	stda16 (4597), xwa
+	ld (4597:16), wa
 	pushw 0x2
 	lds wa, 0
 	lds bc, 0
@@ -22139,7 +22139,7 @@ Epilogue_Prologue2:
 	ld wa, hl
 	exts xwa
 	set 15, wa
-	stda16 (4597), xwa
+	ld (4597:16), wa
 	pushw 0x2
 	lds wa, 0
 	lds bc, 0
@@ -22607,7 +22607,7 @@ Dispatch_Data:
 	call	SeqTimer_UpdateTempoReg
 	ld	xwa, xiz
 	set	15, wa
-	stda16	(4597), wa
+	ld	(4597:16), wa
 	pop	xiz
 	ret
 

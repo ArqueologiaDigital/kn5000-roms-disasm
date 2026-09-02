@@ -1592,7 +1592,7 @@ FDC_CmdReadSectors__burst_loop:
 	inc 1, iz	; inc 1,IZ
 	jr FDC_CmdReadSectors__burst_loop	; jr T,0xffe3de
 FDC_CmdReadSectors__submit:
-	stda16 (0x0c78), iz	; ld (0x0c78),IZ
+	ld (0x0c78:16), iz	; ld (0x0c78),IZ
 	ldmm16 (0x0c76), (0x0d3e)	; ldw (0x0c76),(0x0d3e)
 	calr FDC_SubmitReadDataCmd	; calr 0xffe34d
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
@@ -1619,7 +1619,7 @@ FDC_CmdReadSectors__next_retry:
 FDC_CmdReadSectors__advance:
 	ld wa, (0x0d40:16)	; ld WA,(0x0d40)
 	sub wa, iz	; sub WA,IZ
-	stda16 (0x0c78), wa	; ld (0x0c78),WA
+	ld (0x0c78:16), wa	; ld (0x0c78),WA
 	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
 	jr z, FDC_CmdReadSectors__check_remaining	; jr Z,0xffe49f
 	lda xbc, (0x0c7a:16)	; lda XBC,0x0c7a
@@ -1701,7 +1701,7 @@ FDC_CmdWriteSectors__burst_loop:
 	inc 1, iz	; inc 1,IZ
 	jr FDC_CmdWriteSectors__burst_loop	; jr T,0xffe511
 FDC_CmdWriteSectors__submit:
-	stda16 (0x0c78), iz	; ld (0x0c78),IZ
+	ld (0x0c78:16), iz	; ld (0x0c78),IZ
 	ldmm16 (0x0c76), (0x0d3e)	; ldw (0x0c76),(0x0d3e)
 	calr FDC_SubmitWriteDataCmd	; calr 0xffe5e3
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
@@ -1730,7 +1730,7 @@ FDC_CmdWriteSectors__recover:
 FDC_CmdWriteSectors__advance:
 	ld wa, (0x0d40:16)	; ld WA,(0x0d40)
 	sub wa, iz	; sub WA,IZ
-	stda16 (0x0c78), wa	; ld (0x0c78),WA
+	ld (0x0c78:16), wa	; ld (0x0c78),WA
 	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
 	jr z, FDC_CmdWriteSectors__check_remaining	; jr Z,0xffe5d8
 	lda xbc, (0x0c7a:16)	; lda XBC,0x0c7a
@@ -2181,31 +2181,31 @@ FDC_Request__start:
 	ld (0x0c44:16), 0xa5	; ld (0x0c44),0xa5 - mark busy
 	ei 0x00	; ei 0x00
 	ld wa, (xiz)	; ld WA,(XIZ)
-	stda16 (0x0c6e), wa	; ld (0x0c6e),WA
+	ld (0x0c6e:16), wa	; ld (0x0c6e),WA
 	ld wa, (xiz+0x02)	; ld WA,(XIZ+0x02)
-	stda16 (0x0c70), wa	; ld (0x0c70),WA
+	ld (0x0c70:16), wa	; ld (0x0c70),WA
 	ld wa, (xiz+0x04)	; ld WA,(XIZ+0x04)
-	stda16 (0x0c72), wa	; ld (0x0c72),WA
+	ld (0x0c72:16), wa	; ld (0x0c72),WA
 	ld wa, (xiz+0x06)	; ld WA,(XIZ+0x06)
-	stda16 (0x0c74), wa	; ld (0x0c74),WA
+	ld (0x0c74:16), wa	; ld (0x0c74),WA
 	ld wa, (xiz+0x08)	; ld WA,(XIZ+0x08)
-	stda16 (0x0c76), wa	; ld (0x0c76),WA
+	ld (0x0c76:16), wa	; ld (0x0c76),WA
 	ld wa, (xiz+0x0a)	; ld WA,(XIZ+0x0a)
-	stda16 (0x0c78), wa	; ld (0x0c78),WA
+	ld (0x0c78:16), wa	; ld (0x0c78),WA
 	ld xwa, (xiz+0x0c)	; ld XWA,(XIZ+0x0c)
 	stda32 (0x0c7a), xwa	; ld (0x0c7a),XWA
 	ld wa, (xiz)	; ld WA,(XIZ)
-	stda16 (0x0c7e), wa	; ld (0x0c7e),WA
+	ld (0x0c7e:16), wa	; ld (0x0c7e),WA
 	ld wa, (xiz+0x02)	; ld WA,(XIZ+0x02)
-	stda16 (0x0c80), wa	; ld (0x0c80),WA
+	ld (0x0c80:16), wa	; ld (0x0c80),WA
 	ld wa, (xiz+0x04)	; ld WA,(XIZ+0x04)
-	stda16 (0x0c82), wa	; ld (0x0c82),WA
+	ld (0x0c82:16), wa	; ld (0x0c82),WA
 	ld wa, (xiz+0x06)	; ld WA,(XIZ+0x06)
-	stda16 (0x0c84), wa	; ld (0x0c84),WA
+	ld (0x0c84:16), wa	; ld (0x0c84),WA
 	ld wa, (xiz+0x08)	; ld WA,(XIZ+0x08)
-	stda16 (0x0c86), wa	; ld (0x0c86),WA
+	ld (0x0c86:16), wa	; ld (0x0c86),WA
 	ld wa, (xiz+0x0a)	; ld WA,(XIZ+0x0a)
-	stda16 (0x0c88), wa	; ld (0x0c88),WA
+	ld (0x0c88:16), wa	; ld (0x0c88),WA
 	ld xwa, (xiz+0x0c)	; ld XWA,(XIZ+0x0c)
 	stda32 (0x0c8a), xwa	; ld (0x0c8a),XWA
 	ld (0x0c4e:16), 0	; ld (0x0c4e),0x00

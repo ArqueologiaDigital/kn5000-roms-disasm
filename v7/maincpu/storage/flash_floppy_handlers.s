@@ -2203,7 +2203,7 @@ DualVoice_ScanColumnLoop:
 	jr nz, DualVoice_ScanRow1
 
 DualVoice_StoreBankMatch:
-	stda16 (1748), xwa
+	ld (1748:16), wa
 
 DualVoice_ScanRow1:
 	ld a, (xsp + 2)
@@ -2280,7 +2280,7 @@ DualVoice_ScanColumnLoopAlt:
 	jr nz, DualVoice_ScanRow1Alt
 
 DualVoice_StoreBankMatchAlt:
-	stda16 (1850), xwa
+	ld (1850:16), wa
 
 DualVoice_ScanRow1Alt:
 	ld a, (xsp + 2)

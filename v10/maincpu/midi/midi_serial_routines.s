@@ -274,7 +274,7 @@ ClkTick_HighTempoLoad:
 	ld wa, (0xb7d6:16)
 
 ClkTick_WriteTimingReg:
-	stda16 (146), xwa; LD (TREG5L), WA
+	ld (146:16), wa; LD (TREG5L), WA
 	ld (1066:16), 0
 	bitda 0, (1055)
 	jr z, ClkTick_BeatSubdivCheck
@@ -374,7 +374,7 @@ ClkTick_Src2ErrorAccumulate:
 	inc 1, w
 
 ClkTick_Src2ErrorWriteback:
-	stda16 (1120), xwa
+	ld (1120:16), wa
 
 ClkTick_Src3ClickCheck:
 	bitda 2, (1057)
@@ -481,7 +481,7 @@ StartPlay_Body:
 MIDI_RESET_PLAYBACK_STATE:
 	xor wa, wa
 	ld (1047:16), a
-	stda16 (1048), xwa
+	ld (1048:16), wa
 	ld (1056:16), 1
 	bitda 1, (0x28a7)
 	jr z, ResetPlay_Src3Check
@@ -501,7 +501,7 @@ ResetPlay_Src3Check:
 	jr z, ResetPlay_Return
 	xor wa, wa
 	ld (1051:16), a
-	stda16 (1052), xwa
+	ld (1052:16), wa
 	ld (1057:16), 1
 
 ResetPlay_Return:
@@ -651,7 +651,7 @@ QueueTrack_LinearBufWrite:
 	ld hl, (1141:16)
 	stib_ind 0x07, 0xf0, 0xec, 0x81
 	inc 1, hl
-	stda16 (1141), xhl
+	ld (1141:16), hl
 	ret
 
 MIDI_QUEUE_EVENT_PAIR:
@@ -684,7 +684,7 @@ QueuePair_LinearBufWrite:
 	ld a, (1051:16)
 	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, hl
-	stda16 (1141), xhl
+	ld (1141:16), hl
 	ret
 
 MIDI_CHANNEL_MESSAGE_DISPATCHER:

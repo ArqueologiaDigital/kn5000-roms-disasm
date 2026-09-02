@@ -659,7 +659,7 @@ AccVoice_StorePatchAndLookup:
 	ld xhl, Display_FontPalette_Table_0x1D46
 	sla a, 1
 	ldw_sri WA, 0x03, 0xec, 0xe0
-	stda16 (0x327b), xwa
+	ld (0x327b:16), wa
 	ret
 
 AccStyle_ReadVoiceParam:
@@ -1356,7 +1356,7 @@ RhythmROM_InvalidIncrement:
 	ldb c, 0x1
 	ld wa, (0x3454:16)
 	add wa, 0x1
-	stda16 (0x3454), xwa
+	ld (0x3454:16), wa
 	cps wa, 0
 	jr nz, RhythmROM_CheckDone
 	ldb a, 0xee
@@ -1501,22 +1501,22 @@ AccPatch_SetByChordIndex:
 	jr nz, AccPatch_ChIdx0_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0xd
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0xe
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0xf
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x10
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x11
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx0_Bank1:
@@ -1524,43 +1524,43 @@ AccPatch_ChIdx0_Bank1:
 	jr nz, AccPatch_ChIdx0_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x13
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x14
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x15
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x16
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x17
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx0_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x19
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x1a
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x1b
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x1c
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x1d
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx1_Entry:
@@ -1570,22 +1570,22 @@ AccPatch_ChIdx1_Entry:
 	jr nz, AccPatch_ChIdx1_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0xd
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0xe
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0xf
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x10
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x11
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx1_Bank1:
@@ -1593,43 +1593,43 @@ AccPatch_ChIdx1_Bank1:
 	jr nz, AccPatch_ChIdx1_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x13
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x14
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x15
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x16
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x17
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx1_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x19
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x1a
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x1b
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x1c
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x1d
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx2_Entry:
@@ -1639,22 +1639,22 @@ AccPatch_ChIdx2_Entry:
 	jr nz, AccPatch_ChIdx2_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0xd
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0xe
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0xf
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x10
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x11
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx2_Bank1:
@@ -1662,43 +1662,43 @@ AccPatch_ChIdx2_Bank1:
 	jr nz, AccPatch_ChIdx2_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x13
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x14
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x15
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x16
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x17
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx2_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x19
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x1a
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x1b
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x1c
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x1d
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx3_Entry:
@@ -1708,22 +1708,22 @@ AccPatch_ChIdx3_Entry:
 	jr nz, AccPatch_ChIdx3_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0xd
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0xe
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0xf
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x10
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x11
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx3_Bank1:
@@ -1731,43 +1731,43 @@ AccPatch_ChIdx3_Bank1:
 	jr nz, AccPatch_ChIdx3_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x13
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x14
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x15
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x16
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x17
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx3_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x19
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x1a
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x1b
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x1c
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x1d
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx4_Entry:
@@ -1777,22 +1777,22 @@ AccPatch_ChIdx4_Entry:
 	jr nz, AccPatch_ChIdx4_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0xd
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0xe
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0xf
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x10
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x11
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx4_Bank1:
@@ -1800,43 +1800,43 @@ AccPatch_ChIdx4_Bank1:
 	jr nz, AccPatch_ChIdx4_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x13
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x14
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x15
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x16
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x17
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx4_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x19
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x1a
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x1b
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x1c
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x1d
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx5_Entry:
@@ -1846,22 +1846,22 @@ AccPatch_ChIdx5_Entry:
 	jr nz, AccPatch_ChIdx5_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0xd
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0xe
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0xf
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x10
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x11
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx5_Bank1:
@@ -1869,43 +1869,43 @@ AccPatch_ChIdx5_Bank1:
 	jr nz, AccPatch_ChIdx5_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x13
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x14
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x15
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x16
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x17
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx5_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x19
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x1a
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x1b
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x1c
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x1d
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx6_Entry:
@@ -1915,22 +1915,22 @@ AccPatch_ChIdx6_Entry:
 	jr nz, AccPatch_ChIdx6_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0xd
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0xe
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0xf
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x10
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x11
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx6_Bank1:
@@ -1938,43 +1938,43 @@ AccPatch_ChIdx6_Bank1:
 	jr nz, AccPatch_ChIdx6_Bank2
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x13
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x14
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x15
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x16
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x17
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdx6_Bank2:
 	ldb a, 0x18
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x19
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x1a
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x1b
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x1c
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x1d
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jrl AccPatch_NullReturn
 
 AccPatch_ChIdxDefault_Bank0:
@@ -1982,43 +1982,43 @@ AccPatch_ChIdxDefault_Bank0:
 	jr nz, AccPatch_ChIdxDefault_Bank1
 	ldb a, 0xc
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0xd
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0xe
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0xf
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x10
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x11
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 	jr AccPatch_NullReturn
 
 AccPatch_ChIdxDefault_Bank1:
 	ldb a, 0x12
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3364), xwa
+	ld (0x3364:16), wa
 	ldb a, 0x13
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3366), xwa
+	ld (0x3366:16), wa
 	ldb a, 0x14
 	calr AccPatch_SetVoiceParam
-	stda16 (0x3368), xwa
+	ld (0x3368:16), wa
 	ldb a, 0x15
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336a), xwa
+	ld (0x336a:16), wa
 	ldb a, 0x16
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336c), xwa
+	ld (0x336c:16), wa
 	ldb a, 0x17
 	calr AccPatch_SetVoiceParam
-	stda16 (0x336e), xwa
+	ld (0x336e:16), wa
 
 AccPatch_NullReturn:
 	ret

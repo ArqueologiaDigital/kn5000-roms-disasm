@@ -4047,7 +4047,7 @@ FileIO_ReadByte_Return:
 	jr	lt, 2
 	ld	wa, hl
 FileIO_ReadByte_Extended:
-	stda16	(32428), wa
+	ld	(32428:16), wa
 	ret
 FileIO_ReadByte_BufferHit:
 	pushw	iz
@@ -4082,7 +4082,7 @@ FileIO_SeekAndRead_Return:
 	jr	lt, 2
 	ld	wa, iz
 FileIO_SeekToOffset:
-	stda16	(32428), wa
+	ld	(32428:16), wa
 	ld	hl, iz
 	popw	iz
 	ret
@@ -4153,7 +4153,7 @@ FileIO_WriteBlock_Return:
 	jr	lt, 3
 	ld	wa, (xsp+4)
 FileIO_WriteWord:
-	stda16	(32428), wa
+	ld	(32428:16), wa
 	ld	wa, (xsp+4)
 	exts	xwa
 	ld	(xsp+6), xwa
@@ -4231,7 +4231,7 @@ FileIO_GetPosition:
 	jr	lt, 3
 	ld	wa, (xsp+4)
 FileIO_GetPosition_Return:
-	stda16	(32428), wa
+	ld	(32428:16), wa
 	ld	wa, (xsp+4)
 	exts	xwa
 	ld	(xsp+14), xwa
@@ -4263,7 +4263,7 @@ FileIO_SeekRead_Return:
 	jr	lt, 2
 	ld	wa, hl
 FileIO_SeekRead_Extended:
-	stda16	(32428), wa
+	ld	(32428:16), wa
 	ret
 FileIO_SeekRead_ExtReturn:
 	pushw	iz
@@ -4284,7 +4284,7 @@ FileIO_SeekWrite_Return:
 	jr	lt, 2
 	ld	wa, iz
 FileIO_SeekWriteBlock:
-	stda16	(32428), wa
+	ld	(32428:16), wa
 	ld	hl, iz
 	popw	iz
 	ret
@@ -4313,7 +4313,7 @@ FileIO_SeekWriteBlock_Return:
 	jr	lt, 2
 	ld	wa, hl
 FileIO_SeekWriteBlock_Done:
-	stda16	(32428), wa
+	ld	(32428:16), wa
 	ret
 FileIO_CompareFiles:
 	lda xsp, (xsp - 50)
@@ -8142,7 +8142,7 @@ SeqPhase_OperationStateCheck:
 	jr ge, SeqPhase_CheckMediaType
 	call GetDiskSizeInfo
 	extz HL
-	stda16 (0x8464), hl
+	ld (0x8464:16), hl
 	calr SignalProgressUpdate
 SeqPhase_CheckMediaType:
 	ld	wa, (33892:16)
@@ -8156,7 +8156,7 @@ SeqPhase_MediaIsValid:
 	cpdi16	33894, 0
 	jr	ge, 11
 	call	16290928
-	stda16	33894, hl
+	ld	(33894:16), hl
 	calr	-103
 SeqPhase_CheckEncodedData:
 	cpdi16	33894, 0
@@ -8233,7 +8233,7 @@ FileIO_DiskEventDispatch:
 	jr ge, DiskEvt_CheckMediaType
 	call GetDiskSizeInfo
 	extz HL
-	stda16 (0x8464), hl
+	ld (0x8464:16), hl
 DiskEvt_CheckMediaType:
 	ld	wa, (33892:16)
 	cps	wa, 1
@@ -8285,7 +8285,7 @@ FileIO_DetectFileTypeAndPost:
 	jr ge, DetectType_CheckMediaType
 	call GetDiskSizeInfo
 	extz HL
-	stda16 (0x8464), hl
+	ld (0x8464:16), hl
 DetectType_CheckMediaType:
 	ld	wa, (33892:16)
 	cps	wa, 1
@@ -8334,7 +8334,7 @@ FileIO_GetDiskCapacity:
 	jr ge, DiskCap_CheckMediaType
 	call GetDiskSizeInfo
 	extz HL
-	stda16 (0x8464), hl
+	ld (0x8464:16), hl
 DiskCap_CheckMediaType:
 	ld	wa, (33892:16)
 	cps	wa, 3
@@ -8512,7 +8512,7 @@ FileIO_ErrorCodeByteBlock:
 	jr	ge, 10
 	call	16290067
 	extz	hl
-	stda16	33892, hl
+	ld	(33892:16), hl
 	ld	wa, (33892:16)
 	cps	wa, 1
 	jrl	z, -190

@@ -6181,9 +6181,9 @@ SeMenu_NameEditor_DeleteChar:
 	stib_da	(0x03efa8), 0
 	push xwa
 	stda32	1740, xiy
-	stda16	(1744), ix
-	stda16	(1746), bc
-	stda16	(1748), hl
+	ld	(1744:16), ix
+	ld	(1746:16), bc
+	ld	(1748:16), hl
 	ld xwa, 0x000006ca
 	call DrawText_LayoutAndRender_Variant1_0x616
 	pop xwa
@@ -6309,37 +6309,37 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	ld	wa, (xiz+8)
 	cp	wa, 50
 	jr	nz, 12
-	stda16	(1740), wa
+	ld	(1740:16), wa
 	inc	1, wa
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	jr	30
 	cp	wa, 50
 	jr	nz, 12
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	dec	1, wa
-	stda16	(1740), wa
+	ld	(1740:16), wa
 	jr	12
 	dec	1, wa
-	stda16	(1740), wa
+	ld	(1740:16), wa
 	inc	2, wa
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	ld	wa, (xiz+10)
 	cp	wa, 58
 	jr	nz, 12
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	inc	1, wa
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	jr	30
 	cp	wa, 146
 	jr	nz, 12
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	dec	1, wa
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	jr	12
 	dec	1, wa
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	inc	2, wa
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	stib_da	(0x03efa8), 0
 	call	SeMenu_NameEditor_ChangeCase_Data
 	pop	xiy
@@ -6349,13 +6349,13 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	ld	xiz, xsp
 	.ascii "89:;<="
 	ld	wa, (xiz+8)
-	stda16	(1740), wa
+	ld	(1740:16), wa
 	ld	wa, (xiz+10)
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	ld	wa, (xiz+12)
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	ld	wa, (xiz+14)
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	stib_da	(0x03efa8), 0
 	call	SeMenu_NameEditor_HandleInput_Data
 	pop	xiy
@@ -6373,11 +6373,11 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	cpl	d
 	.byte 0x50
 	ld	wa, (xiz+10)
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	ld	wa, (xiz+12)
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	ld	wa, (xiz+14)
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	stib_da	(0x03efa8), 0
 	call	SeMenu_NameEditor_SelectCharSet_Data
 	pop	xiy
@@ -6607,82 +6607,82 @@ SeMenu_ShowConfirmDialog_Data:
 	jr nz, .Lc_f0f166
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
-	stda16 (0x06cc), ix
+	ld (0x06cc:16), ix
 	adddi16 (0x06cc), 0x00c4
-	stda16 (0x06d0), ix
+	ld (0x06d0:16), ix
 	adddi16 (0x06d0), 0x00c8
-	stda16 (0x06ce), iy
-	stda16 (0x06d2), iy
+	ld (0x06ce:16), iy
+	ld (0x06d2:16), iy
 	adddi16 (0x06d2), 0x000c
 	call SeMenu_NameEditor_ChangeCase_Data
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
 	add IX,0x00c4
-	stda16 (0x06cc), ix
-	stda16 (0x06d0), ix
-	stda16 (0x06ce), iy
+	ld (0x06cc:16), ix
+	ld (0x06d0:16), ix
+	ld (0x06ce:16), iy
 	subdi16 (0x06ce), 0x0005
-	stda16 (0x06d2), iy
+	ld (0x06d2:16), iy
 	subdi16 (0x06d2), 0x0001
 	call SeMenu_NameEditor_ChangeCase_Data
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
-	stda16 (0x06cc), ix
+	ld (0x06cc:16), ix
 	subdi16 (0x06cc), 0x0008
-	stda16 (0x06d0), ix
-	stda16 (0x06ce), iy
-	stda16 (0x06d2), iy
+	ld (0x06d0:16), ix
+	ld (0x06ce:16), iy
+	ld (0x06d2:16), iy
 	adddi16 (0x06d2), 0x000c
 	call SeMenu_NameEditor_ChangeCase_Data
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
-	stda16 (0x06cc), ix
+	ld (0x06cc:16), ix
 	subdi16 (0x06cc), 0x0005
-	stda16 (0x06d0), ix
+	ld (0x06d0:16), ix
 	subdi16 (0x06d0), 0x0003
-	stda16 (0x06ce), iy
+	ld (0x06ce:16), iy
 	adddi16 (0x06ce), 0x0001
-	stda16 (0x06d2), iy
+	ld (0x06d2:16), iy
 	adddi16 (0x06d2), 0x0007
 	call SeMenu_NameEditor_ChangeCase_Data
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
 	sub IX,0x0004
-	stda16 (0x06cc), ix
-	stda16 (0x06d0), ix
-	stda16 (0x06ce), iy
+	ld (0x06cc:16), ix
+	ld (0x06d0:16), ix
+	ld (0x06ce:16), iy
 	adddi16 (0x06ce), 0x0001
-	stda16 (0x06d2), iy
+	ld (0x06d2:16), iy
 	adddi16 (0x06d2), 0x000b
 	call SeMenu_NameEditor_InsertChar
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
-	stda16 (0x06cc), ix
+	ld (0x06cc:16), ix
 	adddi16 (0x06cc), 0x001c
-	stda16 (0x06d0), ix
+	ld (0x06d0:16), ix
 	adddi16 (0x06d0), 0x00ab
-	stda16 (0x06ce), iy
+	ld (0x06ce:16), iy
 	adddi16 (0x06ce), 0x000d
-	stda16 (0x06d2), iy
+	ld (0x06d2:16), iy
 	adddi16 (0x06d2), 0x000e
 	call SeMenu_NameEditor_ChangeCase_Data
 	ret
-	stda16 (0x06cc), ix
-	stda16 (0x06d0), ix
-	stda16 (0x06ce), iy
+	ld (0x06cc:16), ix
+	ld (0x06d0:16), ix
+	ld (0x06ce:16), iy
 	subdi16 (0x06ce), 0x0005
-	stda16 (0x06d2), iy
+	ld (0x06d2:16), iy
 	subdi16 (0x06d2), 0x0001
 	pushw ix
 	pushw iy
 	call SeMenu_NameEditor_InsertChar
 	popw iy
 	popw ix
-	stda16 (0x06cc), ix
-	stda16 (0x06ce), iy
-	stda16 (0x06d0), ix
+	ld (0x06cc:16), ix
+	ld (0x06ce:16), iy
+	ld (0x06d0:16), ix
 	adddi16 (0x06d0), 0x001c
-	stda16 (0x06d2), iy
+	ld (0x06d2:16), iy
 	adddi16 (0x06d2), 0x000c
 	pushw ix
 	pushw iy
@@ -6695,7 +6695,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld HL,(XIZ)
 	ld DE,(XIZ+0x02)
 	add XIZ,0x00000004
-	stda16 (0x06cc), ix
+	ld (0x06cc:16), ix
 	.incbin "includes/romslices/v7_transplant_SeMenu_ShowConfirmDialog_Data_tail_tail_tail.bin"
 SeMenu_WaveformSelect_Init:
 	.long SeBitmap_EnvCurve5

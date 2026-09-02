@@ -28,18 +28,18 @@ FileCopyFunc:
 	jrl nz, FCopy_Return
 	stda32 0x7f60, xiz
 	call GetCurrentFileIndex
-	stda16 (0x7f64), xhl
+	ld (0x7f64:16), hl
 	cps hl, 0
 	jr lt, FCopy_ScrollNeg_Reset
 	cp hl, 0x13
 	jr ge, FCopy_ScrollDown_Clamp
 	inc 1, hl
-	stda16 (0x7f66), xhl
+	ld (0x7f66:16), hl
 	jrl FCopy_Return
 
 FCopy_ScrollDown_Clamp:
 	dec 1, hl
-	stda16 (0x7f66), xhl
+	ld (0x7f66:16), hl
 	jrl FCopy_Return
 
 FCopy_ScrollNeg_Reset:
@@ -74,7 +74,7 @@ FCopy_HandleScroll:
 	cps wa, 0
 	jr le, FCopy_ScrollDown_CheckMin
 	dec 1, wa
-	stda16 (0x7f66), xwa
+	ld (0x7f66:16), wa
 
 FCopy_ScrollDown_CheckMin:
 	ld wa, (0x7f66:16)
@@ -83,11 +83,11 @@ FCopy_ScrollDown_CheckMin:
 	cps wa, 0
 	jr le, FCopy_ScrollDown_RestoreOld
 	dec 1, wa
-	stda16 (0x7f66), xwa
+	ld (0x7f66:16), wa
 	jr FCopy_Scroll_Apply
 
 FCopy_ScrollDown_RestoreOld:
-	stda16 (0x7f66), xde
+	ld (0x7f66:16), de
 
 FCopy_ScrollDown_Reload:
 	ld wa, (0x7f66:16)
@@ -116,7 +116,7 @@ FCopy_ScrollUp_Adjust:
 	cp wa, 0x13
 	jr ge, FCopy_ScrollUp_CheckMax
 	inc 1, wa
-	stda16 (0x7f66), xwa
+	ld (0x7f66:16), wa
 
 FCopy_ScrollUp_CheckMax:
 	ld wa, (0x7f66:16)
@@ -125,7 +125,7 @@ FCopy_ScrollUp_CheckMax:
 	cp wa, 0x13
 	jr ge, FCopy_ScrollDown_RestoreOld
 	inc 1, wa
-	stda16 (0x7f66), xwa
+	ld (0x7f66:16), wa
 	jr FCopy_Scroll_Apply
 
 FCopy_HandleCopyContext:
@@ -169,7 +169,7 @@ FCopy_CopyConfirm_Execute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -206,7 +206,7 @@ FCopy_CopyExecute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -320,7 +320,7 @@ FRename_HandleApply:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -423,7 +423,7 @@ FRenameSmf_HandleApply:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -454,7 +454,7 @@ FmmFormatFunc:
 	jr ge, FmmFmt_InitPhase_CheckDrive
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 FmmFmt_InitPhase_CheckDrive:
@@ -640,7 +640,7 @@ FmmLoadTitleFunc:
 	jr ge, FmmLoadTtl_StateDispatch
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 FmmLoadTtl_StateDispatch:
@@ -654,7 +654,7 @@ FmmLoadTtl_StateDispatch:
 	cpdi16 0x8502, 0
 	jr ge, FmmLoadTtl_CheckFileHandle
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -665,7 +665,7 @@ FmmLoadTtl_CheckFileHandle:
 	cpdi16 0x8504, 0
 	jr ge, FmmLoadTtl_CheckSmfHandle
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	calr SignalProgressUpdate
 
 FmmLoadTtl_CheckSmfHandle:
@@ -821,7 +821,7 @@ FmmSaveTitleFunc:
 	cpdi16 0x8502, 0
 	jr ge, FmmSaveTtl_CheckFont
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -984,7 +984,7 @@ DiskInfoFunc:
 	jr ge, DiskInfo_ReadDriveType
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 
 DiskInfo_ReadDriveType:
 	ld wa, (0x8500:16)

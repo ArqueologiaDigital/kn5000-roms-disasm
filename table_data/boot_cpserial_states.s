@@ -405,7 +405,7 @@ BootSerial_PollTX__inject_free:
 	calr	BootSerial_TxRingAdvanceIY
 	stb_dri a, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A
 	calr	BootSerial_TxRingAdvanceIY
-	stda16	(0x0fd7), iy
+	ld	(0x0fd7:16), iy
 BootSerial_PollTX__inject_done:
 	ei	0
 BootSerial_PollTX__encode:
@@ -573,7 +573,7 @@ BootSerial_RxPkt_TwoByteScrambled__no_carry:
 	ld	(0x0f6e:16), a
 	ld	(xiz - 4), ix		; commit control-ring head
 	decm	3, (xiz - 2)		; 3 slots consumed
-	stda16	(0x0f75), iy		; commit serial-ring tail
+	ld	(0x0f75:16), iy		; commit serial-ring tail
 	jrl	t, BootSerial_RX_ParsePackets__next
 
 ; -----------------------------------------------------------------------------
@@ -599,7 +599,7 @@ BootSerial_RxPkt_TwoByteDecode:
 	cp	hl, 0xffff		; decode failed?
 	jr	nz, BootSerial_RxPkt_TwoByteDecode__store
 	calr	BootSerial_CtrlRingRetreatIX	; drop the stored first byte
-	stda16	(0x0f75), iy
+	ld	(0x0f75:16), iy
 	jr	t, BootSerial_RxPkt_TwoByteDecode__exit
 BootSerial_RxPkt_TwoByteDecode__store:
 	stb_dri l, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), L - decoded byte
@@ -609,7 +609,7 @@ BootSerial_RxPkt_TwoByteDecode__store:
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(xiz - 4), ix		; commit control-ring head
 	decm	3, (xiz - 2)
-	stda16	(0x0f75), iy		; commit serial-ring tail
+	ld	(0x0f75:16), iy		; commit serial-ring tail
 BootSerial_RxPkt_TwoByteDecode__exit:
 	jrl	t, BootSerial_RX_ParsePackets__next
 
@@ -698,7 +698,7 @@ BootSerial_RxPkt_VarLengthRun__store:
 	jr	t, BootSerial_RxPkt_VarLengthRun__drop_pair
 BootSerial_RxPkt_VarLengthRun__drop_pair:
 	calr	BootSerial_CtrlRingRetreatIX	; decode failed: take back tag
-	stda16	(0x0f75), iy
+	ld	(0x0f75:16), iy
 	jrl	t, BootSerial_RxPkt_VarLengthRun__step
 BootSerial_RxPkt_VarLengthRun__decoded:
 	ld	a, (0x0f6e:16)		; A = decoded byte
@@ -727,7 +727,7 @@ BootSerial_RxPkt_VarLengthRun__store_mixed:
 	decm	1, (xiz - 2)
 	decm	1, (xiz - 2)
 BootSerial_RxPkt_VarLengthRun__commit_tail:
-	stda16	(0x0f75), iy		; commit serial-ring tail
+	ld	(0x0f75:16), iy		; commit serial-ring tail
 BootSerial_RxPkt_VarLengthRun__step:
 	inc	1, w			; next run tag
 	dec	1, b
@@ -746,7 +746,7 @@ BootSerial_RxPkt_Discard:
 	calr	BootSerial_RxRingAdvanceIY
 	ldb_sri	a, 0x07, 0xe8, 0xf4
 	calr	BootSerial_RxRingAdvanceIY
-	stda16	(0x0f75), iy
+	ld	(0x0f75:16), iy
 	ordi8	(0x0f6a), 0x08		; status: frame discarded
 	jrl	t, BootSerial_RX_ParsePackets__next
 BootSerial_RxParseDone:
@@ -828,7 +828,7 @@ BootSerial_TxPkt_TwoByte:
 	ld	(xiz - 8), ix		; commit control-ring tail
 	incw	1, (xiz - 2)		; 2 slots freed
 	incw	1, (xiz - 2)
-	stda16	(0x0fd7), iy		; commit pending count
+	ld	(0x0fd7:16), iy		; commit pending count
 	jrl	t, BootSerial_TX_EncodePackets__next
 
 ; -----------------------------------------------------------------------------
@@ -856,7 +856,7 @@ BootSerial_TxPkt_VarLengthRun__loop:
 	calr	BootSerial_TxRingAdvanceIY
 	ld	(xiz - 8), ix		; commit control-ring tail
 	incw	1, (xiz - 2)
-	stda16	(0x0fd7), iy		; commit pending count
+	ld	(0x0fd7:16), iy		; commit pending count
 	dec	1, b
 	cps	b, 0
 	jr	nz, BootSerial_TxPkt_VarLengthRun__loop

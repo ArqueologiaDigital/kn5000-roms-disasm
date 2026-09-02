@@ -881,7 +881,7 @@ Voice_StageRegs_0040_B__FA82D8:
 	ld	bc, (xix)                               ; FA82E2  ld BC,(XIX)
 	stw_da	(0xD760), bc                        ; FA82E4  ld (0x00d760),BC
 	ld	bc, (xix+4)                             ; FA82E9  ld BC,(XIX+0x04)
-	stda16	(0x5A4F), bc                        ; FA82EC  ld (0x5a4f),BC
+	ld	(0x5A4F:16), bc                        ; FA82EC  ld (0x5a4f),BC
 	ld	bc, (0x14FF:16)                       ; FA82F0  ld BC,(0x14ff)
 	and	bc, 4                                  ; FA82F4  and BC,0x0004
 	jr z, Voice_StageRegs_0040_B__FA831D                   ; FA82F8  jr Z,0xfa831d

@@ -2002,7 +2002,7 @@ GlobalTune_StoreFineTune:
 	sub	c, 64                                  ; FADAEE  sub C,0x40
 	add	c, c                                   ; FADAF1  add C,C
 	exts	bc                                    ; FADAF3  exts BC
-	stda16	(0x1503), bc                        ; FADAF5  ld (0x1503),BC
+	ld	(0x1503:16), bc                        ; FADAF5  ld (0x1503),BC
 	unlk32 xiz                                 ; FADAF9  unlk XIZ
 	ret                                        ; FADAFB  ret
 ; --------------------------------------------------------------------------
@@ -2039,7 +2039,7 @@ GlobalTune_StoreTranspose:
 	ld	bc, (xiz+8)                             ; FADB00  ld BC,(XIZ+0x08)
 	exts	bc                                    ; FADB03  exts BC
 	sll	bc, 8                                  ; FADB05  sll 0x08,BC
-	stda16	(0x1505), bc                        ; FADB08  ld (0x1505),BC
+	ld	(0x1505:16), bc                        ; FADB08  ld (0x1505),BC
 	unlk32 xiz                                 ; FADB0C  unlk XIZ
 	ret                                        ; FADB0E  ret
 ; --------------------------------------------------------------------------

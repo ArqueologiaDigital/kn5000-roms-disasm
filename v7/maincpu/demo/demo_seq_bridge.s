@@ -187,7 +187,7 @@ SeqSongNameFunc:
 	stda32 7116, xde
 	ldb_da a, (0x00ffe3)
 	extz wa
-	stda16 (7120), xwa
+	ld (7120:16), wa
 	ld de, wa
 	extz xde
 	ld xwa, (7116:16)
@@ -230,7 +230,7 @@ SeqSongName_CheckPrev:
 	dec 1, wa
 
 SeqSongName_StoreCurrent:
-	stda16 (7120), xwa
+	ld (7120:16), wa
 
 SongBank_StoreCurrentSong:
 	ld de, (7120:16)
@@ -342,7 +342,7 @@ SeqSongMemoryFunc:
 	stda32 7192, xde
 	ldb_da a, (0x00ffe3)
 	extz wa
-	stda16 (7196), xwa
+	ld (7196:16), wa
 	ld de, wa
 	extz xde
 	ld xwa, (7192:16)
@@ -384,7 +384,7 @@ SeqSongMem_CheckPrev:
 	dec 1, wa
 
 SeqSongMem_StoreCurrent:
-	stda16 (7196), xwa
+	ld (7196:16), wa
 
 SongBank_EventCompare:
 	ld de, (7196:16)
@@ -742,7 +742,7 @@ DispatchHandler_InitAllSlots:
 	xor xhl, xhl
 	lds de, 2
 	ld bc, (0x286d:16)
-	stda16 (0xf231), xbc
+	ld (0xf231:16), bc
 	dec 1, bc
 
 SeqSlot_InitEntryLoop:
@@ -811,7 +811,7 @@ DispatchHandler_ResolveSlot:
 	call SeqNode_ResolveSlotPtr
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
-	stda16 (0xf22f), xwa
+	ld (0xf22f:16), wa
 	ld ix, iy
 	cp wa, 0xffff
 	jr z, DispatchResolve_MarkCurrent
@@ -843,9 +843,9 @@ SeqNode_InsertAtPosition:
 	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
-	stda16 (3302), xwa
+	ld (3302:16), wa
 	ld bc, (0xf22f:16)
-	stda16 (0xf22f), xiy
+	ld (0xf22f:16), iy
 	xor wa, wa
 	call SeqNode_ResolveSlotPtr
 	ld xhl, (4349:16)
@@ -946,7 +946,7 @@ VoiceSlot_ScanLoop:
 	ldw_sri IY, 0x07, 0xf0, 0xf8
 	cp iy, 0xffff
 	jrl z, VoiceSlot_AllocNewSlot
-	stda16 (0x28ba), xiy
+	ld (0x28ba:16), iy
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
@@ -954,7 +954,7 @@ VoiceSlot_ScanLoop:
 	ldto_lerp XIX, 0x38
 	xor w, w
 	sla iz, 1
-	stda16 (0x28bc), xwa
+	ld (0x28bc:16), wa
 	ld xix, 0xc9e
 
 VoiceSlot_FindFreeEntry:
@@ -978,7 +978,7 @@ VoiceSlot_CheckOccupied:
 	ldto_lerp XIX, 0x38
 	sla iz, 1
 	and iy, 0xff
-	stda16 (0x28b8), xiy
+	ld (0x28b8:16), iy
 	ld xix, 0xf1f8
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
@@ -991,8 +991,8 @@ VoiceSlot_CheckOccupied:
 	cp wa, 0xff
 	jr ugt, VoiceSlot_Overflow
 	ldw_sri IY, 0x07, 0xf0, 0xf8
-	stda16 (0x289f), xiy
-	stda16 (0x28b6), xwa
+	ld (0x289f:16), iy
+	ld (0x28b6:16), wa
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
@@ -1021,7 +1021,7 @@ VoiceSlot_CheckOccupied:
 
 VoiceSlot_Overflow:
 	sub wa, 0xfb
-	stda16 (0x28b6), xwa
+	ld (0x28b6:16), wa
 	pushw de
 	call DispatchHandler_ResolveSlot
 	popw de
@@ -1039,7 +1039,7 @@ VoiceSlot_Overflow:
 	call SeqNode_ResolveSlotPtr
 	ld xhl, (4349:16)
 	ldw (xhl + 3), 0xffff
-	stda16 (0x289f), xiy
+	ld (0x289f:16), iy
 	ld wa, iy
 	pushw de
 	ld xix, 0xf1f8

@@ -40,7 +40,7 @@ SeqEvt_InitAndProcess:
 	ret
 SeqEvt_ProcessReadLoop:
 	ld	ix, (xhl+6)
-	stda16	(32115), ix
+	ld	(32115:16), ix
 SeqEvt_ProcessLoop_Check:
 	cp (xhl + 4), ix
 	jr nz, SeqEvt_ClassifyEventType
@@ -70,15 +70,15 @@ SeqEvt_CheckTypeD0:
 	jr	z, 12
 	ld	ix, (xhl+4)
 	ld	(xhl+6), ix
-	stda16	(32115), ix
+	ld	(32115:16), ix
 	jr	-75
 SeqEvt_TypeD0_SetCount:
 	ld	(32114:16), 2
 SeqEvt_ReadAndDispatchEntry:
 	ld_rrb	a, xhl, ix
-	stda16	32117, ix
+	ld	(32117:16), ix
 	calr	826
-	stda16	32115, ix
+	ld	(32115:16), ix
 	cpda8	a, 1132
 	jr	ule, 4
 	jp	16189567
@@ -236,13 +236,13 @@ SeqEvt_AdjustNoteOctave:
 	ld	xbc, (32119:16)
 	cpda16	xwa, (32098)
 	jr	nc, 4	; -> 0xF709D3
-	stda16	(32098), wa
+	ld	(32098:16), wa
 SeqEvt_WriteRemainingParams:
 	pop	xwa
 	ex16	iz, ix
 	ld_rrb	a, xhl, ix
 	calr	341
-	stda16	(32115), ix
+	ld	(32115:16), ix
 	ex16	iz, ix
 	stda32	(32119), xhl
 	ld	xhl, xbc
@@ -257,7 +257,7 @@ SeqEvt_WriteRemainingParams:
 	ex16	iz, ix
 	ld_rrb	a, xhl, ix
 	calr	293
-	stda16	(32115), ix
+	ld	(32115:16), ix
 	ex16	iz, ix
 	stda32	(32119), xhl
 	ld	xhl, xbc
@@ -270,7 +270,7 @@ SeqEvt_WriteRemainingParams:
 	ex16	iz, ix
 	ld_rrb	a, xhl, ix
 	calr	250
-	stda16	(32115), ix
+	ld	(32115:16), ix
 	ex16	iz, ix
 	stda32	(32119), xhl
 	ld	xhl, xbc
@@ -330,7 +330,7 @@ SeqEvt_WriteSustainValue:
 	calr SeqEvtBuf_WriteBytePreserve
 
 SeqEvt_SaveReadPosAndRet:
-	stda16	(32115), ix
+	ld	(32115:16), ix
 	ld	(xhl+6), ix
 	ret
 SeqEvt_CalcTempoOffset:
@@ -406,7 +406,7 @@ SeqEvt_InitVoiceScan:
 	ld	xhl, 32024
 	calr	11
 	ld	wa, (32100:16)
-	stda16	(32098), wa
+	ld	(32098:16), wa
 	jr	0
 SeqEvt_VoiceScanDone:
 	ret
@@ -2442,10 +2442,10 @@ AccPlay_WriteNoteRelease:
 	ld	wa, (32374:16)
 	pushw	wa
 	ld	wa, (xhl+3)
-	stda16	(32372), wa
+	ld	(32372:16), wa
 	ld	a, (xhl+5)
 	xor	w, w
-	stda16	(32374), wa
+	ld	(32374:16), wa
 	pushw	de
 	calr	1717
 	calr	1714
@@ -2460,9 +2460,9 @@ AccPlay_WriteNoteRelease:
 	and	a, 127
 	calr	1733
 	popw	wa
-	stda16	(32374), wa
+	ld	(32374:16), wa
 	popw	wa
-	stda16	(32372), wa
+	ld	(32372:16), wa
 AccPlay_NoteReleaseRet:
 	ret
 
@@ -2615,7 +2615,7 @@ AccPlay_TrackMeasureChange:
 	jr	nz, 2
 	inc	1, hl
 AccPlay_MeasureIncrement:
-	stda16	32370, hl
+	ld	(32370:16), hl
 	cpdi8	35996, 201
 	jr	nz, 18
 	push	xwa
@@ -2661,7 +2661,7 @@ AccPlay_TrackVoiceCount:
 	pop XHL
 	pop XWA
 AccPlay_VoiceCountNotify:
-	stda16	(32126), wa
+	ld	(32126:16), wa
 AccPlay_VoiceCountRet:
 	ret
 
@@ -2679,11 +2679,11 @@ AccPlay_SaveCurrentState:
 	ld	a, (64866:16)
 	ld	w, (64867:16)
 	and	w, 127
-	stda16	(32380), wa
+	ld	(32380:16), wa
 	ld	a, (64870:16)
 	and	a, 72
 	xor	w, w
-	stda16	(32382), wa
+	ld	(32382:16), wa
 	ret
 AccPlay_CompareAndSendProg:
 	ld	hl, (32380:16)
@@ -2842,40 +2842,40 @@ AccPlay_ClearSlotDone:
 AccPlay_SaveMuteStates:
 	ld	a, (63939:16)
 	ld	w, (63965:16)
-	stda16	(32384), wa
+	ld	(32384:16), wa
 	ld	a, (63991:16)
 	ld	w, (64017:16)
-	stda16	(32386), wa
+	ld	(32386:16), wa
 	ld	a, (64043:16)
 	ld	w, (64069:16)
-	stda16	(32388), wa
+	ld	(32388:16), wa
 	ld	a, (64095:16)
 	ld	w, (64121:16)
-	stda16	(32390), wa
+	ld	(32390:16), wa
 	ld	a, (64147:16)
 	ld	w, (64173:16)
-	stda16	(32392), wa
+	ld	(32392:16), wa
 	ld	a, (64199:16)
 	ld	w, (64225:16)
-	stda16	(32394), wa
+	ld	(32394:16), wa
 	ld	a, (64251:16)
 	ld	w, (64277:16)
-	stda16	(32396), wa
+	ld	(32396:16), wa
 	ld	a, (64303:16)
 	ld	w, (64329:16)
-	stda16	(32398), wa
+	ld	(32398:16), wa
 	ld	a, (64355:16)
 	ld	w, (64381:16)
-	stda16	(32400), wa
+	ld	(32400:16), wa
 	ld	a, (64407:16)
 	ld	w, (64433:16)
-	stda16	(32402), wa
+	ld	(32402:16), wa
 	ld	a, (64459:16)
 	ld	w, (64485:16)
-	stda16	(32404), wa
+	ld	(32404:16), wa
 	ld	a, (64511:16)
 	ld	w, (64537:16)
-	stda16	(32406), wa
+	ld	(32406:16), wa
 	ldb	a, 192
 	orddm8	(63939), a
 	orddm8	(63965), a
@@ -3109,7 +3109,7 @@ MidiSeqBuf_AdvancePosition:
 	.byte 0xff, 0xbc, 0x01, 0x52, 0x84, 0x3e, 0x80, 0xd1
 	.byte 0x7c, 0x7d, 0x69, 0xd8, 0xae, 0x5b, 0x5a, 0x5c
 MidiSeqBuf_AdvanceDone:
-	stda16	(32374), wa
+	ld	(32374:16), wa
 	ret
 MidiSeqBuf_AdvanceWritePos:
 	ld	wa, (32374:16)
@@ -3123,13 +3123,13 @@ MidiSeqBuf_AdvanceWritePos:
 	ld	de, hl
 	calr	65300
 	ld	wa, (xix+3)
-	stda16	(32372), wa
+	ld	(32372:16), wa
 	lds	wa, 6
 	pop	xhl
 	pop	xde
 	pop	xix
 MidiSeqBuf_WriteAdvDone:
-	stda16	(32374), wa
+	ld	(32374:16), wa
 	ret
 MidiSeqBuf_WriteByte:
 	push xix
@@ -3184,7 +3184,7 @@ AccPlay_CheckAndToggle:
 	lds wa, 0
 	ei 0x06
 	ld (0x046a:16), a
-	stda16 (0x0468), wa
+	ld (0x0468:16), wa
 	ld (0x041f:16), 0x01
 	ei 0x00
 	jr t, AccPlay_ToggleRet
@@ -3200,13 +3200,13 @@ AccPlay_StopAndReset:
 	jr nz, AccPlay_StopResetRet
 	lds wa, 0
 	ld (1047:16), a
-	stda16 (1048), xwa
+	ld (1048:16), wa
 	ld (1045:16), a
 	ld (1046:16), a
 	ld (1076:16), a
 	ld (1077:16), a
 	ld (1130:16), a
-	stda16 (1128), xwa
+	ld (1128:16), wa
 	ld (1056:16), 1
 	ld (1054:16), 1
 	ld (1055:16), 1

@@ -2509,7 +2509,7 @@ BitMapOut_DeltaEncode_ScanLoop:
 
 BitMapOut_DeltaEncode_BufferFull:
 	ld (xbc), 0xff
-	stda16 (0x90e2), xhl
+	ld (0x90e2:16), hl
 	lda xwa, (0xbd3c:16)
 	ld (xsp + 8), xwa
 	ld hl, (0x90de:16)
@@ -2625,11 +2625,11 @@ BitMapOut_DeltaEncode_CheckBounds:
 	ld (xwa), 0xff
 	bitda 2, (0x8d46)
 	jr nz, BitMapOut_DeltaEncode_StoreShortLen
-	stda16 (0x90e2), xhl
+	ld (0x90e2:16), hl
 	jr BitMapOut_DeltaEncode_Return
 
 BitMapOut_DeltaEncode_StoreShortLen:
-	stda16 (0x90de), xhl
+	ld (0x90de:16), hl
 
 BitMapOut_DeltaEncode_Return:
 	popw iz
@@ -3468,7 +3468,7 @@ BitMapOut_RefreshDisplay_Commit:
 	extz xwa
 	add xwa, xhl
 	ld (xwa), 0xff
-	stda16 (0x90e2), xde
+	ld (0x90e2:16), de
 	ld a, (xix)
 	ld (xiy), a
 	lda xbc, (xix + 1)
@@ -3525,7 +3525,7 @@ BitMapOut_CalcMetrics_ComputeGrid:
 	extz xwa
 	add xwa, xiz
 	ld (xwa), 0xff
-	stda16 (0x90e2), xiy
+	ld (0x90e2:16), iy
 	ld a, (xhl)
 	ld (xde), a
 
@@ -3581,7 +3581,7 @@ BitMapOut_PrepareRender_SetParams:
 	extz xwa
 	add xwa, xix
 	ld (xwa), 0xff
-	stda16 (0x90e2), xiy
+	ld (0x90e2:16), iy
 	ld c, (xde)
 	res 6, c
 	ld (xde), c
@@ -3955,7 +3955,7 @@ BitMapOut_ApplyPatch_Store:
 	add bc, wa
 	sll bc, 2
 	inc 2, bc
-	stda16 (0x8d56), xbc
+	ld (0x8d56:16), bc
 
 BitMapOut_ApplyPatch_Done:
 	pop xiz

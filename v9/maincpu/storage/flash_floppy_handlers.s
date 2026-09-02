@@ -336,18 +336,18 @@ FlashWrite_BlockRef_Type6:
 	nop
 	.byte 0x91
 	pop	xde
-	stda16	(0x6800), hl
-	stda16	(0x6800), hl
-	stda16	(0x6800), hl
-	stda16	(0x6800), hl
-	stda16	(0x8600), hl
-	stda16	(0x8600), hl
-	stda16	(0x4a00), hl
-	stda16	(0x4a00), hl
-	stda16	(0x4a00), hl
-	stda16	(0x4a00), hl
-	stda16	(0x2c00), hl
-	stda16	(0x2c00), hl
+	ld	(0x6800:16), hl
+	ld	(0x6800:16), hl
+	ld	(0x6800:16), hl
+	ld	(0x6800:16), hl
+	ld	(0x8600:16), hl
+	ld	(0x8600:16), hl
+	ld	(0x4a00:16), hl
+	ld	(0x4a00:16), hl
+	ld	(0x4a00:16), hl
+	ld	(0x4a00:16), hl
+	ld	(0x2c00:16), hl
+	ld	(0x2c00:16), hl
 	.byte 0xf1
 	nop
 	.ascii "CELESTE 1    CELESTE 2    CHORUS 1     CHORUS 2     ENSEMBLE 1   ENSEMBLE 2   TREMOLO      ORGAN TREMOLOSINGLE DELAY REPEAT DELAY SOLO EFFECT 1SOLO EFFECT 2MONO  STEREO#"
@@ -3839,7 +3839,7 @@ DualVoice_ScanColumnLoop:
 	jr nz, DualVoice_ScanRow1
 
 DualVoice_StoreBankMatch:
-	stda16 (1748), xwa
+	ld (1748:16), wa
 
 DualVoice_ScanRow1:
 	ld a, (xsp + 2)
@@ -3916,7 +3916,7 @@ DualVoice_ScanColumnLoopAlt:
 	jr nz, DualVoice_ScanRow1Alt
 
 DualVoice_StoreBankMatchAlt:
-	stda16 (1850), xwa
+	ld (1850:16), wa
 
 DualVoice_ScanRow1Alt:
 	ld a, (xsp + 2)

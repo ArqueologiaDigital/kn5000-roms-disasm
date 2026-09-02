@@ -49,9 +49,9 @@ SeqStep_NoteByteBlock:
 	ld	a, (0x271c:16)
 	and	a, 255
 	extz	wa
-	stda16	(9830), wa
+	ld	(9830:16), wa
 	ld	xwa, (0x2722:16)
-	stda16	(0x28af), wa
+	ld	(0x28af:16), wa
 	call	SeqData_ReadNextByte
 	ld	(9686:16), l
 	ldw	wa, 129
@@ -209,11 +209,11 @@ SeqStep_EventPosManage:
 
 SeqStep_EventPosCheck:
 	ld xwa, (0x2722:16)
-	stda16 (0x288b), xwa
+	ld (0x288b:16), wa
 	ld a, (0x271c:16)
 	and a, 0xff
 	extz wa
-	stda16 (0x2889), xwa
+	ld (0x2889:16), wa
 	lda xwa, (0x2830:16)
 	mriw4 0x90, 0x19, 0x87, 0x28
 	mrdw5 0x98, 0x02, 0x19, 0x85, 0x28
@@ -233,7 +233,7 @@ SeqStep_EventPosUpdate:
 	ldmm16 0x28af, 0x2726
 	ld a, (0x2720:16)
 	extz wa
-	stda16 (9830), xwa
+	ld (9830:16), wa
 	ldw wa, 0x81
 	call PartCtrl_WriteByte_Indexed
 	jrl SeqStep_EventExit
@@ -393,7 +393,7 @@ SeqStep_VelNoteFwd:
 	cps wa, 1
 	ret z
 	ld c, (9780:16)
-	stda16 (0x287f), xwa
+	ld (0x287f:16), wa
 	extz bc
 	ld wa, bc
 	lds bc, 0
@@ -415,7 +415,7 @@ SeqStep_VelNoteFwdApply:
 SeqStep_VelNoteBwd:
 	ld c, (9780:16)
 	inc 1, wa
-	stda16 (0x287f), xwa
+	ld (0x287f:16), wa
 	extz bc
 	ld wa, bc
 	lds bc, 0
@@ -1071,7 +1071,7 @@ SeqStep_PartCopy:
 	stw_erp WA, 0xfa
 	ld (xsp + 4), wa
 	stw_erp WA, 0xfa
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	ld wa, iz
 	dec 1, wa
 	extz xwa
@@ -1276,7 +1276,7 @@ SeqStep_EventAdvanceCheck:
 
 SeqStep_EventAdvanceLoop:
 	mrdw5 0x9f, 0x04, 0x19, 0xaf, 0x28
-	stda16 (9830), xiz
+	ld (9830:16), iz
 
 SeqStep_EventAdvanceRead:
 	pop xiz
@@ -1333,10 +1333,10 @@ SeqStep_MeasureRead:
 	ld wa, (9830:16)
 	ldw_erp WA, 0xfa
 	ld wa, (0x273c:16)
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	ldmm16 9798, 0x273c
 	ld wa, (0x273e:16)
-	stda16 (9830), xwa
+	ld (9830:16), wa
 	ldmm16 9796, 0x273e
 	call SeqData_ReadNextByte
 	cp l, 0x82
@@ -1399,9 +1399,9 @@ SeqStep_MeasureReadProcess:
 	jr nz, SeqStep_MeasureReadLoop
 
 SeqStep_MeasureReadDone:
-	stda16 (0x28af), xiz
+	ld (0x28af:16), iz
 	stw_erp WA, 0xfa
-	stda16 (9830), xwa
+	ld (9830:16), wa
 	pop xiz
 	ret
 
@@ -1487,7 +1487,7 @@ SeqStep_DecrementCheck:
 	call PartCtrl_ReadWord_Off1
 	cps hl, 0
 	ret z
-	stda16 (0x2726), xhl
+	ld (0x2726:16), hl
 	ld (0x2720:16), 255
 
 SeqStep_DecrementStore:
@@ -1558,13 +1558,13 @@ SeqStep_WalkReadNext:
 	ret
 
 SeqStep_WalkUpdatePos:
-	stda16 (0x28bf), xhl
+	ld (0x28bf:16), hl
 	stdi16 (0x28c1), 255
 	jr SeqStep_WalkAdvanceDone
 
 SeqStep_WalkAdvancePos:
 	inc 1, wa
-	stda16 (0x28c1), xwa
+	ld (0x28c1:16), wa
 
 SeqStep_WalkAdvanceDone:
 	lds hl, 0
@@ -1637,7 +1637,7 @@ SeqStep_InsertError:
 
 SeqStep_InsertDone:
 	mrdw5 0x9f, 0x04, 0x19, 0xaf, 0x28
-	stda16 (9830), xiz
+	ld (9830:16), iz
 	pop xiz
 	inc 2, xsp
 	ret
@@ -1647,25 +1647,25 @@ SeqStep_PrepareReadBack:
 	ld iz, (0x28af:16)
 	ld wa, (9830:16)
 	ldw_erp WA, 0xfa
-	stda16 (0x28c1), xwa
+	ld (0x28c1:16), wa
 	ld wa, (9830:16)
 	cps wa, 5
 	jr nz, SeqStep_PrepareCheck
 	ld wa, (0x28af:16)
 	call PartCtrl_ReadWord_Off1
-	stda16 (0x28af), xhl
+	ld (0x28af:16), hl
 	stdi16 (9830), 255
 	jr SeqStep_PrepareDone
 
 SeqStep_PrepareCheck:
 	dec 1, wa
-	stda16 (9830), xwa
+	ld (9830:16), wa
 
 SeqStep_PrepareDone:
 	call SeqData_ReadNextByte
-	stda16 (0x28af), xiz
+	ld (0x28af:16), iz
 	stw_erp WA, 0xfa
-	stda16 (9830), xwa
+	ld (9830:16), wa
 	pop xiz
 	ret
 
@@ -1771,7 +1771,7 @@ SeqStep_DeleteShiftExit:
 SeqStep_DeleteShiftFinal:
 	call PartCtrl_ReadWordRoutine
 	ld iz, hl
-	stda16 (0x28af), xiz
+	ld (0x28af:16), iz
 	ld wa, iz
 	lds bc, 1
 	call PartCtrl_SetClearBit7
@@ -2047,8 +2047,8 @@ SeqStep_ProcessC0SavePos:
 	cps hl, 0
 	jr nz, SeqStep_ProcessC0Done
 	stw_erp WA, 0xfa
-	stda16 (0x288b), xwa
-	stda16 (0x2889), xiz
+	ld (0x288b:16), wa
+	ld (0x2889:16), iz
 	ld (xsp + 4), 0x0
 	jr SeqStep_ProcessC0ReadParam
 
@@ -2104,8 +2104,8 @@ SeqStep_ProcessB0:
 	ld iz, (0x2889:16)
 	calr SeqStep_ParseRhythm
 	stw_erp WA, 0xfa
-	stda16 (0x288b), xwa
-	stda16 (0x2889), xiz
+	ld (0x288b:16), wa
+	ld (0x2889:16), iz
 	cpdi8 (0x287a), 0
 	jr nz, SeqStep_ProcessB0Error
 	ld a, (0x289d:16)
@@ -2333,8 +2333,8 @@ SeqStep_ProcessC0ExtCheck:
 	cps hl, 0
 	jr nz, SeqStep_ProcessC0ExtFinal
 	stw_erp WA, 0xfa
-	stda16 (0x288b), xwa
-	stda16 (0x2889), xiz
+	ld (0x288b:16), wa
+	ld (0x2889:16), iz
 
 SeqStep_ProcessC0ExtProcess:
 	ld (xsp + 4), 0x0
@@ -2394,8 +2394,8 @@ SeqStep_ProcessB0Ext:
 	ld iz, (0x2889:16)
 	calr SeqPart_EventLoopContinue
 	stw_erp WA, 0xfa
-	stda16 (0x288b), xwa
-	stda16 (0x2889), xiz
+	ld (0x288b:16), wa
+	ld (0x2889:16), iz
 	cpdi8 (0x287a), 0
 	jr nz, SeqStep_ProcessB0ExtExit
 	ld a, (0x289d:16)
@@ -2688,7 +2688,7 @@ SeqStep_CompactDone:
 	dec 1, iz
 	ld wa, iz
 	sll wa, 4
-	stda16 (0xf1ce), xwa
+	ld (0xf1ce:16), wa
 	ld wa, (xsp + 4)
 	calr SeqStep_RebuildPartChain
 	ld hl, iz
@@ -3008,9 +3008,9 @@ SeqStep_ReinitPartTable:
 	ldb_da a, (0x00ffe3)
 	extz wa
 	call VoicePreset_LoadAndInitPan
-	stda16 (0xf1ce), xiz
+	ld (0xf1ce:16), iz
 	stw_erp WA, 0xfa
-	stda16 (0xf22f), xwa
+	ld (0xf22f:16), wa
 	mrdw5 0x9f, 0x08, 0x19, 0x31, 0xf2
 	stw_erp WA, 0xfa
 	call Part_WriteWordBlock_OffsetAF

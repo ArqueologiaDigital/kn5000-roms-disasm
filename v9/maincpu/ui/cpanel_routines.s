@@ -191,7 +191,7 @@ CPanel_SendInitSequence:
 
 
 CPanel_InitLEDBuffer:
-	stda16 (0x8e01), xwa
+	ld (0x8e01:16), wa
 	anddi8 (0x8d8f), 191
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
@@ -333,7 +333,7 @@ Delay3000L_Done:
 
 DELAY_2_TICKS:	; FC4124 - Wait for 2 system timer ticks
 	ld wa, (1033:16)
-	stda16 (0x8d9b), xwa
+	ld (0x8d9b:16), wa
 
 DELAY_2_TICKS__loop:
 	ld wa, (1033:16)
@@ -345,7 +345,7 @@ DELAY_2_TICKS__loop:
 
 DELAY_6_TICKS:
 	ld wa, (1033:16)
-	stda16 (0x8d9b), xwa
+	ld (0x8d9b:16), wa
 
 Delay6T_Loop:
 	ld wa, (1033:16)
@@ -357,7 +357,7 @@ Delay6T_Loop:
 
 DELAY_51_TICKS:
 	ld wa, (1033:16)
-	stda16 (0x8d9b), xwa
+	ld (0x8d9b:16), wa
 
 Delay51T_Loop:
 	ld wa, (1033:16)
@@ -465,7 +465,7 @@ CPanel_ReadAllButtons:
 
 	ei 6
 	ld wa, (0x8d9d:16)
-	stda16 (0x8d9f), xwa
+	ld (0x8d9f:16), wa
 	ordi8 0x8d92, 1	; CP_Flags_B.0 = 1
 	ei 0
 
@@ -642,7 +642,7 @@ CPanel_SendCommand:
 	ei 6
 	stdi16 (0x8dfd), 0
 	stdi16 (0x8dff), 0
-	stda16 (0x8e01), xwa
+	ld (0x8e01:16), wa
 	adddi16 0x8dff, 2
 	ordi8 0x8d8c, 2
 	anddi8 (0x8d8c), 254; CP_Flags_A.10 = 2
@@ -1082,7 +1082,7 @@ PollLoop_TXCheckThreshold:
 	calr CPanel_IncLEDPtr
 	stb_dri A, 0x07, 0xe8, 0xf4
 	calr CPanel_IncLEDPtr
-	stda16 (0x8dff), xiy
+	ld (0x8dff:16), iy
 
 
 ; 0 => 0 do_this
@@ -1261,7 +1261,7 @@ BtnPkt_XORLookup:
 	ld (0x8d96:16), a
 	ld (xiz - 4), ix
 	decm 3, (xiz - 2)
-	stda16 (0x8d9d), xiy
+	ld (0x8d9d:16), iy
 	jrl CPanel_RX_ParseNext
 
 CPanel_RX_EncoderPacket:
@@ -1278,7 +1278,7 @@ CPanel_RX_EncoderPacket:
 	cp hl, 0xffff
 	jr nz, EncPkt_WriteEvent
 	calr CPanel_DecEventPtr
-	stda16 (0x8d9d), xiy
+	ld (0x8d9d:16), iy
 	jr EncPkt_ParseNext
 
 EncPkt_WriteEvent:
@@ -1289,7 +1289,7 @@ EncPkt_WriteEvent:
 	calr CPanel_IncEventPtr
 	ld (xiz - 4), ix
 	decm 3, (xiz - 2)
-	stda16 (0x8d9d), xiy
+	ld (0x8d9d:16), iy
 
 EncPkt_ParseNext:
 	jrl CPanel_RX_ParseNext
@@ -1358,7 +1358,7 @@ MBytePkt_LoopBody:
 
 MBytePkt_EncNoEvent:
 	calr CPanel_DecEventPtr
-	stda16 (0x8d9d), xiy
+	ld (0x8d9d:16), iy
 	jrl MBytePkt_LoopTail
 
 MBytePkt_EncWriteResult:
@@ -1395,7 +1395,7 @@ MBytePkt_CommitAndContinue:
 	decm 1, (xiz - 2)
 
 MBytePkt_CommitRXPtr:
-	stda16 (0x8d9d), xiy
+	ld (0x8d9d:16), iy
 
 MBytePkt_LoopTail:
 	inc 1, w
@@ -1409,7 +1409,7 @@ CPanel_RX_SyncPacket:
 	calr CPanel_IncRXPtr
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	calr CPanel_IncRXPtr
-	stda16 (0x8d9d), xiy
+	ld (0x8d9d:16), iy
 	ordi8 0x8d92, 8	; CP_Flags_B.3 = 1  ; UNUSED
 	jrl CPanel_RX_ParseNext
 
@@ -1480,7 +1480,7 @@ CPanel_LED_HandlePacket2:	; FC4B95 -- LED handler for packet types 0, 1, 2
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 	incw 1, (xiz - 2)		; increment pending LED byte count
 	incw 1, (xiz - 2)		; increment pending LED byte count (+2 total)
-	stda16 (0x8dff), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
+	ld (0x8dff:16), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
 	jrl CPanel_UpdateLEDs__check_next	; check for more events
 
 CPanel_LED_HandlePacketN:	; FC4BC5 -- LED handler for packet type 3
@@ -1505,7 +1505,7 @@ CPanel_LED_HandlePacketN__loop:	; FC4BE4 -- loop: transfer remaining bytes
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 	incw 1, (xiz - 2)		; increment pending LED byte count
-	stda16 (0x8dff), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
+	ld (0x8dff:16), iy; store LED write ptr to CPANEL_LED_WRITE_PTR
 	dec 1, b			; decrement loop counter
 	cps b, 0			; check if counter reached zero
 	jr nz, CPanel_LED_HandlePacketN__loop	; continue loop if bytes remain

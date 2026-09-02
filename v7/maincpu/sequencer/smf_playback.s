@@ -374,9 +374,9 @@ SMF_ResetMidiChanMap_Loop:
 
 SoundBank_LoadToWorkRAM:
 	ld wa, (0xf22f:16)
-	stda16 (0x286f), xwa
+	ld (0x286f:16), wa
 	ld wa, (0xf231:16)
-	stda16 (0x2871), xwa
+	ld (0x2871:16), wa
 	xor xwa, xwa
 	ldb_da a, (0x00ffe3)
 	sla xwa, 11
@@ -386,13 +386,13 @@ SoundBank_LoadToWorkRAM:
 	ldw bc, 0x800
 	ldir85
 	ld wa, (0x286f:16)
-	stda16 (0xf22f), xwa
+	ld (0xf22f:16), wa
 	ld wa, (0x2871:16)
-	stda16 (0xf231), xwa
+	ld (0xf231:16), wa
 	ld wa, (0xf19e:16)
 	stw_da (0x00ffec), xwa
 	xor wa, wa
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	ret
 
 SMF_InitSequencerState:
@@ -552,7 +552,7 @@ SMF_ReadTrackData_Continue:
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	stw_da (0x00ffec), xwa
 	call SeqTrack_AssignFloppyChannels
 	cpdi8 (4323), 0

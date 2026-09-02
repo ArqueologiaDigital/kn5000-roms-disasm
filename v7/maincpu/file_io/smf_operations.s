@@ -19,7 +19,7 @@ FmmSmfLoadTitleFunc:
 	jr	ge, 13
 	call	16290067
 	extz	hl
-	stda16	33892, hl
+	ld	(33892:16), hl
 	calr	-10566
 SmfLoad_DispatchState:
 	ld	wa, (33892:16)
@@ -32,7 +32,7 @@ SmfLoad_DispatchState:
 	cpdi16	33896, 0
 	jr	ge, 19
 	call	16291947
-	stda16	33896, hl
+	ld	(33896:16), hl
 	call	16290176
 	call	16290094
 	calr	-10611
@@ -42,7 +42,7 @@ SmfLoad_CheckFileCount:
 	cpdi16	33894, 0
 	jr	ge, 11
 	call	16290928
-	stda16	33894, hl
+	ld	(33894:16), hl
 	calr	-10639
 SmfLoad_CheckSlotCount:
 	.byte 0xd1, 0x66, 0x84, 0x3f, 0x00, 0x00	; cpdi16 0x8502, 0 (v7 patched)
@@ -165,7 +165,7 @@ FmmSmfSaveTitleFunc:
 	cpdi16	33896, 0
 	jr	ge, 19
 	call	16291947
-	stda16	33896, hl
+	ld	(33896:16), hl
 	call	16290176
 	call	16290094
 	calr	-10989
@@ -542,13 +542,13 @@ SmfFN_JumpTable:
 	cpdi8	35994, 107
 	jr	z, 20
 	call	16291514
-	stda16	33040, hl
+	ld	(33040:16), hl
 	cps	hl, 0
 	jr	ge, 26
 	stdi16	33040, 0
 	jr	18
 	ld	wa, (33896:16)
-	stda16	33040, wa
+	ld	(33040:16), wa
 	cps	wa, 0
 	jr	le, 2
 	dec	1, wa
@@ -624,7 +624,7 @@ SmfFN_PageDown_Add10:
 	add ix, 0xa
 
 SmfFN_StoreIndex:
-	stda16	(33040), ix
+	ld	(33040:16), ix
 	ld	hl, ix
 	jrl	1351
 SmfFN_PageDown_ClampCheck:
@@ -638,7 +638,7 @@ SmfFN_PageDown_ClampCheck:
 	ld	wa, qbc
 	cps	wa, 0
 	jrl	z, 1320
-	stda16	(33040), hl
+	ld	(33040:16), hl
 	jrl	1317
 SmfFN_HandleSave:
 	cp	xiz, 3
@@ -769,7 +769,7 @@ SmfFN_Open_Execute:
 	call	16290139
 	call	16290094
 	call	16291947
-	stda16	(33896), hl
+	ld	(33896:16), hl
 	calr	52865
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -810,7 +810,7 @@ SmfFN_HandleOpen2:
 	call	16290139
 	call	16290094
 	call	16291947
-	stda16	(33896), hl
+	ld	(33896:16), hl
 	calr	52723
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -857,7 +857,7 @@ SmfFN_Delete_Execute:
 	call	16290139
 	call	16290094
 	call	16291947
-	stda16	33896, hl
+	ld	(33896:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -868,7 +868,7 @@ SmfFN_Delete_Execute:
 	cps	wa, 0
 	jr	le, 9
 	dec	1, wa
-	stda16	33040, wa
+	ld	(33040:16), wa
 	ld	(xsp+4), wa
 SmfFN_Delete_AdjustIndex:
 	ldw wa, 0xee
@@ -892,7 +892,7 @@ SmfFN_HandleDelete2:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetFileCountEncoded
-	stda16 (0x8468), hl
+	ld (0x8468:16), hl
 	ld XWA,0x00600026
 	ld XBC,0x01c00002
 	lds32 xde, 0
@@ -1140,12 +1140,12 @@ SmfFN_SendOkState:
 	jrl t, SmfFN_ReturnZero
 	stda32 (0x810c), xbc
 	jrl t, SmfFN_ReturnZero
-	stda16 (0x8112), iz
+	ld (0x8112:16), iz
 	jrl t, SmfFN_ReturnZero
 	cpdi8 (0x8462), 0x00
 	jrl z, SmfFN_ReturnZero
 	ld WA,IZ
-	stda16 (0x8110), wa
+	ld (0x8110:16), wa
 	call NavigateToFileIndex
 	ld wa, (0x8110:16)
 	exts XWA

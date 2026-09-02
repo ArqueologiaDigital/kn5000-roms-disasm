@@ -39,7 +39,7 @@ FmmWallpaperLoadFunc:
 	jr ge, WPLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 WPLoad_DispatchState:
@@ -53,7 +53,7 @@ WPLoad_DispatchState:
 	cpdi16 0x850a, 0
 	jr ge, WPLoad_ContinueWait
 	call FileIO_InitWallpaperNav
-	stda16 (0x850a), xhl
+	ld (0x850a:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -127,7 +127,7 @@ WPLoad_HandleSelection:
 	ld xwa, (xsp + 6)
 	stda32 0x81b0, xwa
 	call FileIO_GetCurrentWallpaperIndex
-	stda16 (0x81b4), xhl
+	ld (0x81b4:16), hl
 	cps hl, 0
 	jr ge, WPLoad_Selection_Positive
 	stdi16 (0x81b4), 0
@@ -198,7 +198,7 @@ WPLoad_PageDown:
 	add hl, 0xa
 
 WPLoad_StorePosition:
-	stda16 (0x81b4), xhl
+	ld (0x81b4:16), hl
 	ld bc, hl
 	jrl WPLoad_UpdateDisplay
 
@@ -217,7 +217,7 @@ WPLoad_PageDown_Boundary:
 	stw_erp WA, 0xea
 	cps wa, 0
 	jr z, WPLoad_GetSelection
-	stda16 (0x81b4), xbc
+	ld (0x81b4:16), bc
 	jr WPLoad_UpdateDisplay
 
 WPLoad_OpLoad:

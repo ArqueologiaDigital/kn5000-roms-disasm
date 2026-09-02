@@ -259,7 +259,7 @@ FmmFileNameFunc:
 	jrl nz, FileName_Return
 	stda32 0x7f72, xbc
 	call GetCurrentFileIndex
-	stda16 (0x7f7a), xhl
+	ld (0x7f7a:16), hl
 	cps hl, 0
 	jr lt, FileName_ListSelect_Negative
 	exts xhl
@@ -472,7 +472,7 @@ FileName_OpLoad_Execute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -508,7 +508,7 @@ FileName_OpFormat:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -563,7 +563,7 @@ FileName_OpDelete_Execute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -589,7 +589,7 @@ FileName_OpFormatVariant:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -611,7 +611,7 @@ FileName_OpNavigate:
 	cp wa, 0x13
 	jr ge, FileName_Navigate_CheckChanged
 	inc 1, bc
-	stda16 (0x7f7a), xbc
+	ld (0x7f7a:16), bc
 	jr FileName_Navigate_CheckChanged
 
 FileName_Navigate_ScrollUp:
@@ -621,7 +621,7 @@ FileName_Navigate_ScrollUp:
 	cps wa, 0
 	jr le, FileName_Navigate_CheckChanged
 	dec 1, bc
-	stda16 (0x7f7a), xbc
+	ld (0x7f7a:16), bc
 
 FileName_Navigate_CheckChanged:
 	ld wa, (xsp + 6)
@@ -641,7 +641,7 @@ FileName_Navigate_CheckChanged:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0

@@ -102,7 +102,7 @@ EffectMode_CheckTransposeAndLookup:
 	bit	7, hl
 	ret	nz
 	calr	5
-	stda16	(36028), hl
+	ld	(36028:16), hl
 	ret
 SndParam_LoadTransposeValues:
 	ld	xwa, 163840
@@ -813,13 +813,13 @@ SndOutput_ReinitByMode_TypeB:
 	ld	a, (36024:16)
 	extz	wa
 	add	bc, wa
-	stda16	(36026), bc
+	ld	(36026:16), bc
 	calr	64189
 	call	15668425
 SndOutput_ReinitByMode_Restore:
 	ld	wa, qiz
-	stda16	(36026), wa
-	stda16	(36028), iz
+	ld	(36026:16), wa
+	ld	(36028:16), iz
 	pop	xiz
 	ret
 SndOutput_ReinitByMode_NotifyParam:

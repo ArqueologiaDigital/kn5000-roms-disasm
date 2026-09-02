@@ -254,7 +254,7 @@ EffectMode_CheckTransposeAndLookup:
 	bit 7, hl
 	ret nz
 	calr SndParam_LoadTransposeValues
-	stda16 (0x8d58), xhl
+	ld (0x8d58:16), hl
 	ret
 
 SndParam_LoadTransposeValues:
@@ -330,7 +330,7 @@ EffectMode_CheckTransposeChanged:
 	calr SndParam_LoadTransposeValues
 	cpda16 xhl, 0x8d58
 	ret z
-	stda16 (0x8d58), xhl
+	ld (0x8d58:16), hl
 	jrl BitMapOut_ApplyPatch_SkipHeader
 
 EffectMode_TransposeInvalid:
@@ -951,14 +951,14 @@ SndOutput_ReinitByMode_TypeB:
 	ld a, (0x8d54:16)
 	extz wa
 	add bc, wa
-	stda16 (0x8d56), xbc
+	ld (0x8d56:16), bc
 	calr EffectMode_ProcessPresetChange
 	call SwbtWr_ReinitOutputBank
 
 SndOutput_ReinitByMode_Restore:
 	stw_erp WA, 0xfa
-	stda16 (0x8d56), xwa
-	stda16 (0x8d58), xiz
+	ld (0x8d56:16), wa
+	ld (0x8d58:16), iz
 	pop xiz
 	ret
 

@@ -1481,7 +1481,7 @@ CountVoiceSlots_NotUsed:
 	jr CountVoiceSlots_Loop
 
 CountVoiceSlots_Done:
-	stda16	(32124), wa
+	ld	(32124:16), wa
 	ret
 Voice_GetSlotAddress:
 	and xhl, 0xffff

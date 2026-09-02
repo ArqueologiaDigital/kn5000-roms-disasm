@@ -37,7 +37,7 @@ FmmComposerLoadFunc:
 	jr ge, CompLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 CompLoad_DispatchState:
@@ -51,7 +51,7 @@ CompLoad_DispatchState:
 	cpdi16 0x8502, 0
 	jr ge, CompLoad_ContinueWait
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -124,7 +124,7 @@ CompLoad_HandleAbort:
 CompLoad_HandleSelection:
 	stda32 0x7f7c, xde
 	call GetCurrentFileIndex
-	stda16 (0x7f80), xhl
+	ld (0x7f80:16), hl
 	cps hl, 0
 	jr lt, CompLoad_Selection_Negative
 	exts xhl
@@ -229,7 +229,7 @@ CompLoad_PageDown:
 	add wa, 0xa
 
 CompLoad_StorePosition:
-	stda16 (0x7f80), xwa
+	ld (0x7f80:16), wa
 	jrl CompLoad_UpdateDisplay
 
 CompLoad_OpLoad:
@@ -871,7 +871,7 @@ SaveFilter_Save_Execute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -908,7 +908,7 @@ SaveFilter_OpFormat:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002

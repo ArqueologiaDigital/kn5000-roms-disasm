@@ -82,7 +82,7 @@ SeqName_CheckPrevKey:
 	dec 1, wa
 
 SeqName_UpdateIndex:
-	stda16	(33340), wa
+	ld	(33340:16), wa
 	ld	de, wa
 	jrl	276
 SeqName_HandlePlayAction:
@@ -127,7 +127,7 @@ SeqName_LoadAndPlay:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	38568
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -153,7 +153,7 @@ SeqName_HandleAction32:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	38480
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -192,7 +192,7 @@ SeqName_SetIndexPlaying:
 	cpdi8 (0x8462), 0x00
 	jrl z, SeqName_ReturnZero
 	ld IZ,HL
-	stda16 (0x823c), de
+	ld (0x823c:16), de
 	extz XDE
 	ld xwa, (0x8238:16)
 	ld XBC,0x01e50002
@@ -951,7 +951,7 @@ FmmDiskMedleySelectFunc:
 	lds32 xde, 5
 	call ApPostEvent
 	call GetEncodedFileSizeData
-	stda16 (0x8466), hl
+	ld (0x8466:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld XWA,0x00600026
@@ -1044,7 +1044,7 @@ DiskSel_FindSongLoop:
 	ldb_dri a, 0x07, 0xe0, 0xf8
 	cpda8 a, (0x88a0)
 	jrl nz, DiskSel_NextSongLoop
-	stda16 (0x8342), iz
+	ld (0x8342:16), iz
 	ld WA,IZ
 	call NotifyUIOfSelectionChange
 	ld de, (0x8342:16)
@@ -1151,7 +1151,7 @@ DiskSel_RepeatFindLoop:
 	ldb_dri a, 0x07, 0xe0, 0xf8
 	cpda8 a, (0x88a0)
 	jrl nz, DiskSel_RepeatNext
-	stda16 (0x8342), iz
+	ld (0x8342:16), iz
 	ld WA,IZ
 	call NotifyUIOfSelectionChange
 	ld de, (0x8342:16)
@@ -1277,7 +1277,7 @@ DiskSel_StoreWindowPtr:
 	ld	xwa, (xsp+6)
 	stda32	(33598), xwa
 	call	16290274
-	stda16	(33602), hl
+	ld	(33602:16), hl
 	cps	hl, 0
 	jr	lt, 16
 	exts	xhl
@@ -1383,7 +1383,7 @@ DiskSel_CheckPageDown:
 	.byte 0xd8, 0xcf, 0x13, 0x00, 0x7a, 0x2a, 0x02, 0xda
 	.byte 0xc8, 0x0a, 0x00
 DiskSel_SaveIndex:
-	stda16	(33602), de
+	ld	(33602:16), de
 	jrl	547
 DiskSel_HandleToggle:
 	lda	xhl, (34954:16)
@@ -1522,7 +1522,7 @@ DiskSel_PlayFindLoop:
 	ldb_dri a, 0x07, 0xe0, 0xf8
 	cpda8 a, (0x88a0)
 	jrl nz, DiskSel_PlayNextLoop
-	stda16 (0x8342), iz
+	ld (0x8342:16), iz
 	ld WA,IZ
 	call NotifyUIOfSelectionChange
 	ld de, (0x8342:16)
@@ -1986,7 +1986,7 @@ SmfMed_InitFromDisk:
 	lds32 xde, 5
 	call ApPostEvent
 	call GetFileCountEncoded
-	stda16 (0x8468), hl
+	ld (0x8468:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld XWA,0x00600026
@@ -2008,7 +2008,7 @@ SmfMed_InitState:
 	jr	ugt, 2
 	ld	bc, wa
 SmfMed_ClampFileCount:
-	stda16	(33692), bc
+	ld	(33692:16), bc
 	lds	iz, 0
 	cps	bc, 0
 	jr	ule, 21
@@ -2303,7 +2303,7 @@ FmmPdFileNameFunc:
 	jr	nz, 62
 	stda32	(33698), xde
 	call	16294075
-	stda16	(33702), hl
+	ld	(33702:16), hl
 	cps	hl, 0
 	jr	ge, 6
 	stdi16	(33702), 0
@@ -2351,7 +2351,7 @@ PdName_CheckPageDown:
 	.byte 0x22, 0xda, 0xf1, 0x69, 0x0a, 0xd8, 0xc8, 0x0a
 	.byte 0x00
 PdName_SaveIndex:
-	stda16	(33702), wa
+	ld	(33702:16), wa
 	jr	37
 PdName_CheckEndBound:
 	ld	bc, de
@@ -2366,7 +2366,7 @@ PdName_CheckEndBound:
 	ld	wa, qde
 	cps	wa, 0
 	jr	z, 4
-	stda16	(33702), bc
+	ld	(33702:16), bc
 PdName_GetCurrentIndex:
 	ld	wa, (33702:16)
 PdName_UpdateDisplay:
@@ -2426,7 +2426,7 @@ PdName_RefreshPage:
 PdName_SetIndexPlaying:
 	cpdi8 (0x8462), 0x00
 	jrl z, PdName_ReturnZero
-	stda16 (0x83a6), de
+	ld (0x83a6:16), de
 
 	ld wa, de
 
@@ -2682,7 +2682,7 @@ PdMed_InitState:
 	jr	ugt, 2
 	ld	bc, wa
 PdMed_ClampCount:
-	stda16	(33792), bc
+	ld	(33792:16), bc
 	lds	hl, 0
 	cps	bc, 0
 	jr	ule, 21
@@ -3019,7 +3019,7 @@ FmmDocFileNameFunc:
 	jr	nz, 62
 	stda32	(33794), xde
 	call	16294849
-	stda16	(33798), hl
+	ld	(33798:16), hl
 	cps	hl, 0
 	jr	ge, 6
 	stdi16	(33798), 0
@@ -3067,7 +3067,7 @@ DocName_CheckPageDown:
 	.byte 0x22, 0xda, 0xf1, 0x69, 0x0a, 0xd8, 0xc8, 0x0a
 	.byte 0x00
 DocName_SaveIndex:
-	stda16	(33798), wa
+	ld	(33798:16), wa
 	jr	37
 DocName_CheckEndBound:
 	ld	bc, de
@@ -3082,7 +3082,7 @@ DocName_CheckEndBound:
 	ld	wa, qde
 	cps	wa, 0
 	jr	z, 4
-	stda16	(33798), bc
+	ld	(33798:16), bc
 DocName_GetCurrentIndex:
 	ld	wa, (33798:16)
 DocName_UpdateDisplay:
@@ -3142,7 +3142,7 @@ DocName_RefreshPage:
 DocName_SetIndexPlaying:
 	cpdi8 (0x8462), 0x00
 	jrl z, DocName_ReturnZero
-	stda16 (0x8406), de
+	ld (0x8406:16), de
 
 	ld wa, de
 
@@ -3390,7 +3390,7 @@ DocMed_InitFromDisk:
 	lds32	xde, 5
 	call	16423243
 	call	16295369
-	stda16	(33900), hl
+	ld	(33900:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -3410,7 +3410,7 @@ DocMed_InitState:
 	jr	ugt, 2
 	ld	bc, wa
 DocMed_ClampCount:
-	stda16	(33888), bc
+	ld	(33888:16), bc
 	lds	hl, 0
 	cps	bc, 0
 	jr	ule, 21

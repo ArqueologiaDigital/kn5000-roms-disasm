@@ -64,7 +64,7 @@ SMF_IncrementPosition:
 	mul xwa, xde
 	stw_erp DE, 0xe2
 	adddm16 3938, xwa
-	stda16 (3940), xde
+	ld (3940:16), de
 	stdi16 (3946), 0
 	pop xde
 	pop xwa
@@ -156,7 +156,7 @@ SMF_Finalize_RestoreAndPlay:
 SMF_FlushAndFinalize:
 	push xhl
 	ld xhl, (6701:16)
-	stda16 (6699), xhl
+	ld (6699:16), hl
 	pop xhl
 	call Vga_RestoreMultiPlaneDisplay
 	ld a, (4599:16)
@@ -367,8 +367,8 @@ SMF_CalcTempoRate:
 	extz xwa
 	muls xwa, xhl
 	stw_erp DE, 0xe2
-	stda16 (3948), xwa
-	stda16 (3950), xde
+	ld (3948:16), wa
+	ld (3950:16), de
 	ret
 
 SMF_OutputCommandSeq:
@@ -745,7 +745,7 @@ SMF_AdvancePosition:
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	lds wa, 5
 	jr SMF_AdvancePos_Store
 
@@ -753,7 +753,7 @@ SMF_AdvancePos_Inc:
 	inc 1, wa
 
 SMF_AdvancePos_Store:
-	stda16 (9830), xwa
+	ld (9830:16), wa
 	ret
 
 SMF_CalcTimeDelta:
@@ -761,7 +761,7 @@ SMF_CalcTimeDelta:
 	push xhl
 	pushw de
 	xor wa, wa
-	stda16 (4229), xwa
+	ld (4229:16), wa
 	ld (4231:16), a
 	ld wa, (3938:16)
 	xor b, b
@@ -773,7 +773,7 @@ SMF_CalcTimeDelta:
 
 SMF_TimeDelta_CheckFirst:
 	sub wa, de
-	stda16 (4229), xwa
+	ld (4229:16), wa
 	bitda 0, (4344)
 	jr nz, SMF_TimeDelta_Store
 	cpdi8 (6710), 0
@@ -782,8 +782,8 @@ SMF_TimeDelta_CheckFirst:
 	ld (4344:16), 1
 
 SMF_TimeDelta_Store:
-	stda16 (3942), xbc
-	stda16 (3952), xde
+	ld (3942:16), bc
+	ld (3952:16), de
 	popw de
 	pop xhl
 	popw wa
@@ -1004,7 +1004,7 @@ SMF_HandleEventType:
 	ld xde, 0xf250
 	ldw_sri HL, 0x07, 0xe8, 0xec
 	pop xde
-	stda16 (0x28af), xhl
+	ld (0x28af:16), hl
 	stdi16 (9830), 5
 	calr SMF_GetNextEvent
 
@@ -1540,7 +1540,7 @@ SMF_UpdateTempo_Loop:
 	pop xde
 	cps l, 0
 	jr nz, SMF_UpdateTempo_SubtractBase
-	stda16 (4229), xwa
+	ld (4229:16), wa
 	jr SMF_UpdateTempo_Encode
 
 SMF_UpdateTempo_SubtractBase:
@@ -1551,7 +1551,7 @@ SMF_UpdateTempo_SubtractBase:
 	lds de, 0
 
 SMF_UpdateTempo_ClampZero:
-	stda16 (4229), xde
+	ld (4229:16), de
 
 SMF_UpdateTempo_Encode:
 	pushw wa
@@ -1563,7 +1563,7 @@ SMF_UpdateTempo_Encode:
 	popw bc
 	pop xhl
 	popw wa
-	stda16 (3942), xwa
+	ld (3942:16), wa
 	push xde
 	ld xde, 0x11f9
 	extz xix
@@ -1590,10 +1590,10 @@ SMF_UpdateTempo_Encode:
 SMF_UpdateTempo_Finalize:
 	ld wa, (3942:16)
 	addda16 xwa, 3952
-	stda16 (3942), xbc
+	ld (3942:16), bc
 	addda16 xbc, 3938
 	sub bc, wa
-	stda16 (4229), xbc
+	ld (4229:16), bc
 	calr SMF_EncodeTimeDelta
 	stdi16 (3938), 0
 	stdi16 (3940), 0
@@ -1601,8 +1601,8 @@ SMF_UpdateTempo_Finalize:
 
 SMF_CalcFilePosition:
 	xor wa, wa
-	stda16 (4002), xwa
-	stda16 (4004), xwa
+	ld (4002:16), wa
+	ld (4004:16), wa
 	ld wa, (4347:16)
 	mul wa, 0x400
 	ld xhl, (4376:16)
@@ -1723,11 +1723,11 @@ SMF_LoadBank_ReadEntries:
 	push xhl
 	ldw de, 0xaf
 	ldw_sri WA, 0x07, 0xec, 0xe8
-	stda16 (0xf22f), xwa
+	ld (0xf22f:16), wa
 	pop xhl
 	ldw de, 0xb1
 	ldw_sri WA, 0x07, 0xec, 0xe8
-	stda16 (0xf231), xwa
+	ld (0xf231:16), wa
 	stib_da (0x00ffe3), 0x00
 
 SMF_LoadBank_EventLoop:
@@ -1743,9 +1743,9 @@ SMF_LoadBank_Return:
 
 SMF_SetupReadPointers:
 	ld wa, (0xf22f:16)
-	stda16 (0x286f), xwa
+	ld (0x286f:16), wa
 	ld wa, (0xf231:16)
-	stda16 (0x2871), xwa
+	ld (0x2871:16), wa
 	call SongBank_LoadToWorkArea
 	ret
 
@@ -1852,7 +1852,7 @@ SMF_ConfigSlot:
 	anddi8 (0x287b), 251
 	xor w, w
 	ld (0x287a:16), 0
-	stda16 (0x287d), xwa
+	ld (0x287d:16), wa
 	stdi16 (0x287f), 1
 	call SetWall_SlotResolve
 	cpdi8 (0x287a), 0
@@ -1867,11 +1867,11 @@ SMF_ConfigSlot_Setup:
 	ld xhl, (4349:16)
 	stda32 0x2881, xhl
 	pop xhl
-	stda16 (0x2885), xiy
+	ld (0x2885:16), iy
 	ld wa, (0x28af:16)
-	stda16 (0x2887), xwa
-	stda16 (0x2889), xiy
-	stda16 (0x288b), xwa
+	ld (0x2887:16), wa
+	ld (0x2889:16), iy
+	ld (0x288b:16), wa
 	ld ix, iy
 	ld hl, (3376:16)
 
@@ -2166,7 +2166,7 @@ SMF_Config_SaveAndRestore:
 	push xde
 	ld xde, 0xc9e
 	ldw_sri BC, 0x07, 0xe8, 0xec
-	stda16 (4412), xbc
+	ld (4412:16), bc
 	ld bc, (0x288b:16)
 	stw_dri BC, 0x07, 0xe8, 0xec
 	srl hl, 1
@@ -2234,7 +2234,7 @@ SMF_ConfigSlot_EndOfTrack:
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 	ld wa, (0x2887:16)
-	stda16 (0x289f), xwa
+	ld (0x289f:16), wa
 	call SetWall_EventOutput
 	call SetWall_EventAdvanceCheck
 
@@ -2246,15 +2246,15 @@ SMF_ConfigSlot_CodeBlock:
 	push	xhl
 	push	xwa
 	ld	wa, (10375:16)
-	stda16	(4415), wa
-	stda16	(4417), iy
+	ld	(4415:16), wa
+	ld	(4417:16), iy
 	incdi16	1, (4417)
 	cpdi16	(4417), 255
 	jr	ule, 47
 	ld	xhl, (10369:16)
 	ld	wa, (xhl+3)
-	stda16	(4415), wa
-	stda16	(10375), wa
+	ld	(4415:16), wa
+	ld	(10375:16), wa
 	ld	hl, wa
 	calr	192
 	ld	xhl, (4349:16)
@@ -2308,7 +2308,7 @@ SMF_AdvanceReadPtr:
 	calr SMF_CalcPageAddress
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
-	stda16 (0x288b), xwa
+	ld (0x288b:16), wa
 	ld hl, wa
 	calr SMF_CalcPageAddress
 	ld xhl, (4349:16)
@@ -2331,7 +2331,7 @@ SMF_AdvanceWritePtr:
 	jr ule, SMF_AdvanceWrite_Return
 	ld xhl, (0x2881:16)
 	ld wa, (xhl + 3)
-	stda16 (0x2887), xwa
+	ld (0x2887:16), wa
 	ld hl, wa
 	calr SMF_CalcPageAddress
 	ld xhl, (4349:16)
@@ -3251,7 +3251,7 @@ SMF_SetupSongBankRead:
 	stda32 0x2881, xhl
 	pop xhl
 	ld wa, (0x28af:16)
-	stda16 (0x2887), xwa
+	ld (0x2887:16), wa
 
 SMF_SetupRead_Adjust:
 	push xhl
@@ -3280,7 +3280,7 @@ SMF_SetupRead_Finalize:
 
 SMF_SetupRead_Return:
 	ldw_da xwa, (0x00ffec)
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	ld xix, 0xab000
 	xor xhl, xhl
 	ldb_da l, (0x00ffe3)

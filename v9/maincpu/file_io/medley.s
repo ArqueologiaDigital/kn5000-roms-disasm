@@ -86,7 +86,7 @@ SeqName_CheckPrevKey:
 	dec 1, wa
 
 SeqName_UpdateIndex:
-	stda16 (0x82d8), xwa
+	ld (0x82d8:16), wa
 	ld de, wa
 	jrl SeqName_UpdateDisplay
 
@@ -141,7 +141,7 @@ SeqName_LoadAndPlay:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -168,7 +168,7 @@ SeqName_HandleAction32:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -210,7 +210,7 @@ SeqName_SetIndexPlaying:
 	cpdi8 (0x84fe), 0
 	jrl z, SeqName_ReturnZero
 	ld iz, hl
-	stda16 (0x82d8), xde
+	ld (0x82d8:16), de
 	extz xde
 	ld xwa, (0x82d4:16)
 	ld xbc, 0x1e50002
@@ -1031,7 +1031,7 @@ FmmDiskMedleySelectFunc:
 	lds32 xde, 5
 	call ApPostEvent
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld xwa, 0x600026
@@ -1131,7 +1131,7 @@ DiskSel_FindSongLoop:
 	ldb_sri A, 0x07, 0xe0, 0xf8
 	cpda8 a, 0x893c
 	jrl nz, DiskSel_NextSongLoop
-	stda16 (0x83de), xiz
+	ld (0x83de:16), iz
 	ld wa, iz
 	call NotifyUIOfSelectionChange
 	ld de, (0x83de:16)
@@ -1243,7 +1243,7 @@ DiskSel_RepeatFindLoop:
 	ldb_sri A, 0x07, 0xe0, 0xf8
 	cpda8 a, 0x893c
 	jrl nz, DiskSel_RepeatNext
-	stda16 (0x83de), xiz
+	ld (0x83de:16), iz
 	ld wa, iz
 	call NotifyUIOfSelectionChange
 	ld de, (0x83de:16)
@@ -1375,7 +1375,7 @@ DiskSel_StoreWindowPtr:
 	ld xwa, (xsp + 6)
 	stda32 0x83da, xwa
 	call GetCurrentFileIndex
-	stda16 (0x83de), xhl
+	ld (0x83de:16), hl
 	cps hl, 0
 	jr lt, DiskSel_DefaultIndex
 	exts xhl
@@ -1498,7 +1498,7 @@ DiskSel_CheckPageDown:
 	add de, 0xa
 
 DiskSel_SaveIndex:
-	stda16 (0x83de), xde
+	ld (0x83de:16), de
 	jrl DiskSel_UpdateDisplay
 
 DiskSel_HandleToggle:
@@ -1647,7 +1647,7 @@ DiskSel_PlayFindLoop:
 	ldb_sri A, 0x07, 0xe0, 0xf8
 	cpda8 a, 0x893c
 	jrl nz, DiskSel_PlayNextLoop
-	stda16 (0x83de), xiz
+	ld (0x83de:16), iz
 	ld wa, iz
 	call NotifyUIOfSelectionChange
 	ld de, (0x83de:16)
@@ -2179,7 +2179,7 @@ SmfMed_InitFromDisk:
 	lds32 xde, 5
 	call ApPostEvent
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld xwa, 0x600026
@@ -2203,7 +2203,7 @@ SmfMed_InitState:
 	ld bc, wa
 
 SmfMed_ClampFileCount:
-	stda16 (0x8438), xbc
+	ld (0x8438:16), bc
 	lds iz, 0
 	cps bc, 0
 	jr ule, SmfMed_FinishInit
@@ -2545,7 +2545,7 @@ FmmPdFileNameFunc:
 	jr nz, PdName_ReturnZero
 	stda32 0x843e, xde
 	call GetCurrentFileIndexAlt
-	stda16 (0x8442), xhl
+	ld (0x8442:16), hl
 	cps hl, 0
 	jr ge, PdName_UpdateIndex
 	stdi16 (0x8442), 0
@@ -2615,7 +2615,7 @@ PdName_CheckPageDown:
 	add wa, 0xa
 
 PdName_SaveIndex:
-	stda16 (0x8442), xwa
+	ld (0x8442:16), wa
 	jr PdName_UpdateDisplay
 
 PdName_CheckEndBound:
@@ -2631,7 +2631,7 @@ PdName_CheckEndBound:
 	stw_erp WA, 0xea
 	cps wa, 0
 	jr z, PdName_GetCurrentIndex
-	stda16 (0x8442), xbc
+	ld (0x8442:16), bc
 
 PdName_GetCurrentIndex:
 	ld wa, (0x8442:16)
@@ -2694,7 +2694,7 @@ PdName_RefreshPage:
 PdName_SetIndexPlaying:
 	cpdi8 (0x84fe), 0
 	jrl z, PdName_ReturnZero
-	stda16 (0x8442), xde
+	ld (0x8442:16), de
 	ld wa, de
 	call SetCurrentFileIndex
 	ld wa, (0x8442:16)
@@ -2953,7 +2953,7 @@ PdMed_InitFromDisk:
 	lds32 xde, 5
 	call ApPostEvent
 	call BuildPageRecordsAlt
-	stda16 (0x8506), xhl
+	ld (0x8506:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -2975,7 +2975,7 @@ PdMed_InitState:
 	ld bc, wa
 
 PdMed_ClampCount:
-	stda16 (0x849c), xbc
+	ld (0x849c:16), bc
 	lds hl, 0
 	cps bc, 0
 	jr ule, PdMed_FinishInit
@@ -3352,7 +3352,7 @@ FmmDocFileNameFunc:
 	jr nz, DocName_ReturnZero
 	stda32 0x849e, xde
 	call FileIO_GetCurrentFileIndex_Alt
-	stda16 (0x84a2), xhl
+	ld (0x84a2:16), hl
 	cps hl, 0
 	jr ge, DocName_UpdateIndex
 	stdi16 (0x84a2), 0
@@ -3422,7 +3422,7 @@ DocName_CheckPageDown:
 	add wa, 0xa
 
 DocName_SaveIndex:
-	stda16 (0x84a2), xwa
+	ld (0x84a2:16), wa
 	jr DocName_UpdateDisplay
 
 DocName_CheckEndBound:
@@ -3438,7 +3438,7 @@ DocName_CheckEndBound:
 	stw_erp WA, 0xea
 	cps wa, 0
 	jr z, DocName_GetCurrentIndex
-	stda16 (0x84a2), xbc
+	ld (0x84a2:16), bc
 
 DocName_GetCurrentIndex:
 	ld wa, (0x84a2:16)
@@ -3501,7 +3501,7 @@ DocName_RefreshPage:
 DocName_SetIndexPlaying:
 	cpdi8 (0x84fe), 0
 	jrl z, DocName_ReturnZero
-	stda16 (0x84a2), xde
+	ld (0x84a2:16), de
 	ld wa, de
 	call FileIO_SelectFileByIndex
 	ld wa, (0x84a2:16)
@@ -3765,7 +3765,7 @@ DocMed_InitFromDisk:
 	lds32 xde, 5
 	call ApPostEvent
 	call FileIO_InitFileNavigation
-	stda16 (0x8508), xhl
+	ld (0x8508:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -3787,7 +3787,7 @@ DocMed_InitState:
 	ld bc, wa
 
 DocMed_ClampCount:
-	stda16 (0x84fc), xbc
+	ld (0x84fc:16), bc
 	lds hl, 0
 	cps bc, 0
 	jr ule, DocMed_FinishInit

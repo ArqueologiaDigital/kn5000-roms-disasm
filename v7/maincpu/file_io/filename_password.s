@@ -217,7 +217,7 @@ FmmFileNameFunc:
 	jrl	nz, 1544
 	stda32	(32470), xbc
 	call	16290274
-	stda16	(32478), hl
+	ld	(32478:16), hl
 	cps	hl, 0
 	jr	lt, 15
 	exts	xhl
@@ -422,7 +422,7 @@ FileName_OpLoad_Execute:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	58517
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -457,7 +457,7 @@ FileName_OpFormat:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	58394
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -511,7 +511,7 @@ FileName_OpDelete_Execute:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -536,7 +536,7 @@ FileName_OpFormatVariant:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -557,7 +557,7 @@ FileName_OpNavigate:
 	cp	wa, 19
 	jr	ge, 28
 	inc	1, bc
-	stda16	(32478), bc
+	ld	(32478:16), bc
 	jr	20
 FileName_Navigate_ScrollUp:
 	cp	xbc, 29360151
@@ -566,7 +566,7 @@ FileName_Navigate_ScrollUp:
 	cps	wa, 0
 	jr	le, 6
 	dec	1, bc
-	stda16	(32478), bc
+	ld	(32478:16), bc
 FileName_Navigate_CheckChanged:
 	ld	wa, (xsp+6)
 	cpda16 xwa, (32478)
@@ -585,7 +585,7 @@ FileName_Navigate_CheckChanged:
 	ld	(32422:16), l
 	calr	-7545
 	call	16290928
-	stda16	33894, hl
+	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0

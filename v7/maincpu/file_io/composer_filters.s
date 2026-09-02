@@ -98,7 +98,7 @@ CompLoad_HandleAbort:
 CompLoad_HandleSelection:
 	stda32	(32480), xde
 	call	16290274
-	stda16	(32484), hl
+	ld	(32484:16), hl
 	cps	hl, 0
 	jr	lt, 16
 	exts	xhl
@@ -198,7 +198,7 @@ CompLoad_PageDown:
 	add wa, 0xa
 
 CompLoad_StorePosition:
-	stda16	(32484), wa
+	ld	(32484:16), wa
 	jrl	146
 CompLoad_OpLoad:
 	cp xde, 0x3
@@ -788,7 +788,7 @@ SaveFilter_Save_Execute:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	55333
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -824,7 +824,7 @@ SaveFilter_OpFormat:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	55208
 	ld	xwa, 6291494
 	ld	xbc, 29360130

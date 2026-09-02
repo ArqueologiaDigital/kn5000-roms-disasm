@@ -4907,7 +4907,7 @@ MainMssSetUp:
 	jr	z, 23
 	cp	xbc, 31588376
 	jr	nz, 20
-	stda16	(36026), de
+	ld	(36026:16), de
 	incdi16	1, (36026)
 	ld	(36018:16), 7
 	jr	5

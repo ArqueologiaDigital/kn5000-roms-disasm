@@ -3526,7 +3526,7 @@ CmpSingleLoadFileFunc:
 	jrl nz, CmpFile_Return
 	stda32 0x81fc, xde
 	call GetCurrentFileIndex
-	stda16 (0x8200), xhl
+	ld (0x8200:16), hl
 	cps hl, 0
 	jr ge, CmpFile_Selection_Clamp
 	stdi16 (0x8200), 0
@@ -3585,7 +3585,7 @@ CmpFile_ScrollDown:
 	dec 1, wa
 
 CmpFile_ScrollStore:
-	stda16 (0x8200), xwa
+	ld (0x8200:16), wa
 
 CmpFile_ScrollRedraw:
 	ld wa, (0x8200:16)
@@ -3655,7 +3655,7 @@ FmmCmpSingleLoadFunc:
 	jr ge, FmmCmpLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 FmmCmpLoad_DispatchState:
@@ -3669,7 +3669,7 @@ FmmCmpLoad_DispatchState:
 	cpdi16 0x8502, 0
 	jr ge, FmmCmpLoad_ContinueLoad
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate

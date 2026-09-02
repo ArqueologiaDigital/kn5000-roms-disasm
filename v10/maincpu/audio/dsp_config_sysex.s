@@ -762,7 +762,7 @@ AssswbWr:
 	ld (xhl), 0xff
 	ld wa, (0x90de:16)
 	inc 4, wa
-	stda16 (0x90de), xwa
+	ld (0x90de:16), wa
 
 AssswbWr_BufferFull:
 	retd 0x2
@@ -782,7 +782,7 @@ AddswbWr:
 	ld (xhl), 0xff
 	ld wa, (0x90e2:16)
 	inc 4, wa
-	stda16 (0x90e2), xwa
+	ld (0x90e2:16), wa
 
 AddswbWr_BufferFull:
 	retd 0x2
@@ -844,7 +844,7 @@ SwbtWr_ProcessAll:
 SwbtWr_ProcessAll_CompactDone:
 	ld (xix), 0xff
 	sub xix, 0xbd3c
-	stda16 (0x90de), xix
+	ld (0x90de:16), ix
 	ld (0xbf39:16), 255
 	stdi16 (0x90e2), 0
 	ret
@@ -905,7 +905,7 @@ SwbtWr_DispatchLoop_ScanCallbacks:
 	jr z, SwbtWr_DispatchLoop_NextEvent
 
 SwbtWr_DispatchLoop_ExecuteCallback:
-	stda16 (0xc07d), xwa
+	ld (0xc07d:16), wa
 	ld (0xc07f:16), c
 	push_sd16w 0x7b, 0xc0
 	push_sd16w 0x81, 0xc0
@@ -1915,7 +1915,7 @@ CompIface_RampControl:
 	jr z, CompIface_RampDown_Apply
 	cp bc, 0xf
 	ret c
-	stda16 (0xc1ea), xwa
+	ld (0xc1ea:16), wa
 	ld bc, (0xc1ee:16)
 	extz xbc
 	ld wa, (0xc1f8:16)
@@ -1926,7 +1926,7 @@ CompIface_RampControl:
 	ld xbc, 0x7f00
 
 CompIface_RampUp_Clamp:
-	stda16 (0xc1ee), xbc
+	ld (0xc1ee:16), bc
 	srl bc, 8
 	ld (0xc1ec:16), c
 	extz bc
@@ -1947,7 +1947,7 @@ CompIface_RampDown_Apply:
 	ret z
 	cp bc, 0xf
 	ret c
-	stda16 (0xc1ea), xwa
+	ld (0xc1ea:16), wa
 	ld bc, (0xc1ee:16)
 	extz xbc
 	ld wa, (0xc1fa:16)
@@ -1957,7 +1957,7 @@ CompIface_RampDown_Apply:
 	lds32 xbc, 0
 
 CompIface_RampDown_Clamp:
-	stda16 (0xc1ee), xbc
+	ld (0xc1ee:16), bc
 	srl bc, 8
 	ld (0xc1ec:16), c
 	extz bc
@@ -2037,7 +2037,7 @@ CompIface_WriteVolume:
 	ld c, a
 	extz bc
 	sll bc, 8
-	stda16 (0xc1ee), xbc
+	ld (0xc1ee:16), bc
 	ld c, a
 	extz bc
 	ld xwa, 0x4005
@@ -2211,7 +2211,7 @@ DSPCfg_CompressorDispatch:
 	ld bc, (0xc1f6:16)
 	ld wa, hl
 	calr CompIface_ScaleAndNormalize
-	stda16 (0xc1f8), xhl
+	ld (0xc1f8:16), hl
 	ret
 
 DSPCfg_CompParam_SubType6:
@@ -2224,7 +2224,7 @@ DSPCfg_CompParam_SubType6:
 	ld bc, (0xc1f6:16)
 	ld wa, hl
 	calr CompIface_ScaleAndNormalize
-	stda16 (0xc1fa), xhl
+	ld (0xc1fa:16), hl
 	ld bc, (0xc1f6:16)
 	lds wa, 1
 	jrl DSPCfg_ScaleFactor_StoreResult
@@ -2269,23 +2269,23 @@ DSPCfg_ScaleFactor_Dispatch:
 DSPCfg_ScaleFactor_Update:
 	lds32 xwa, 4
 	call SndParam_LookupReadOnly
-	stda16 (0xc1f6), xhl
+	ld (0xc1f6:16), hl
 	ld a, (0xc1f2:16)
 	extz wa
 	ld bc, hl
 	calr CompIface_ScaleAndNormalize
-	stda16 (0xc1f8), xhl
+	ld (0xc1f8:16), hl
 	ld a, (0xc1f4:16)
 	extz wa
 	ld bc, (0xc1f6:16)
 	calr CompIface_ScaleAndNormalize
-	stda16 (0xc1fa), xhl
+	ld (0xc1fa:16), hl
 	ld bc, (0xc1f6:16)
 	lds wa, 1
 
 DSPCfg_ScaleFactor_StoreResult:
 	calr CompIface_ScaleValue
-	stda16 (0xc1fc), xhl
+	ld (0xc1fc:16), hl
 	ret
 
 DSPCfg_LookupMidiMap:

@@ -165,7 +165,7 @@ SeqTimer_PostTempoUpdate:
 	ldb w, 0xff
 	call SwbtWr_QueuePostEvent
 	popw wa
-	stda16 (0xfc62), xwa
+	ld (0xfc62:16), wa
 	call SeqTimer_UpdateTempoReg
 	ret
 
@@ -174,7 +174,7 @@ PlayMode_NullRet:
 PlayMode_SetupAndDispatch:
 	; --- Setup: load/store/call/set flag ---
 	ld	wa, (0xf19e:16)
-	stda16	(0x2875), wa
+	ld	(0x2875:16), wa
 	ld	(3424:16), 0
 	call AccWrap_PlayModeDispatch
 	ordi8	0x28a7, 4
@@ -182,7 +182,7 @@ PlayMode_SetupAndDispatch:
 PlayMode_TeardownAndRestore:
 	; --- Teardown: load/store/clear flags ---
 	ld	wa, (0x2875:16)
-	stda16	(0xf19e), wa
+	ld	(0xf19e:16), wa
 	anddi8	(0x28a7), 251
 	ordi8	0x28b3, 16
 	anddi8	(0x28a7), 247
@@ -914,9 +914,9 @@ CDlikeTimer_Return:
 CDlike_ResetPlaybackState:
 	ei 6
 	xor wa, wa
-	stda16 (1052), xwa
+	ld (1052:16), wa
 	ld (1051:16), a
-	stda16 (1048), xwa
+	ld (1048:16), wa
 	ld (1047:16), a
 	bitda 1, (0x28a7)
 	jr z, CDlikeReset_SetTimerFlags
@@ -949,7 +949,7 @@ CDlike_InitModeAndLoadBank:
 	jr z, CDlikeSw_NullRet
 	call SqTrAs_InitWall
 	ld wa, (0xf19e:16)
-	stda16 (0x2875), xwa
+	ld (0x2875:16), wa
 	stdi16 (0xf19e), 0
 	stdi16 (8980), 0
 	ld xiy, 0xf9a0
@@ -968,7 +968,7 @@ CDlike_LoadSongBankData:
 
 CDlikeBankLoad_CheckSavedState:
 	ldw_da xwa, (0x00ffec)
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	ld xiy, 0xf180
 	ld xix, 0xab000
 	xor xwa, xwa
@@ -1008,7 +1008,7 @@ CDlikeExit_CheckPlaybackType:
 	call SwbtWr_ResetAllChannels
 	call SqTrAs_Setup
 	ld wa, (0x2875:16)
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 
 PlayMode_ResetAndSchedule:
 	ld (3380:16), 0
@@ -1023,9 +1023,9 @@ SongBank_SwitchAndUpdateTempo:
 
 SongBank_SaveAndReload:
 	ld wa, (0xf22f:16)
-	stda16 (0x286f), xwa
+	ld (0x286f:16), wa
 	ld wa, (0xf231:16)
-	stda16 (0x2871), xwa
+	ld (0x2871:16), wa
 	call SongBank_LoadToWorkArea
 	call SongBank_CheckAccompanimentMode
 	anddi8 (0x28b1), 254
@@ -1043,9 +1043,9 @@ SongBank_LoadToWorkArea:
 	ld wa, (0xf19e:16)
 	stw_da (0x00ffec), xwa
 	ld wa, (0x286f:16)
-	stda16 (0xf22f), xwa
+	ld (0xf22f:16), wa
 	ld wa, (0x2871:16)
-	stda16 (0xf231), xwa
+	ld (0xf231:16), wa
 	ret
 
 SongBank_CheckAccompanimentMode:

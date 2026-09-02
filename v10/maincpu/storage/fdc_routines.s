@@ -1491,7 +1491,7 @@ FDC_CMD_EXEC:
 	.byte 0x04
 	inc	1, iz
 	jr	-38
-	stda16	(0x8a4a), iz
+	ld	(0x8a4a:16), iz
 	.byte 0xd1
 	rcf
 	.byte 0x8b
@@ -1533,7 +1533,7 @@ FDC_CMD_EXEC:
 	jr	86
 	ld	wa, (0x8b12:16)
 	sub	wa, iz
-	stda16	(0x8a4a), wa
+	ld	(0x8a4a:16), wa
 	.byte 0xd1
 	popw	de
 	.byte 0x8a
@@ -1634,7 +1634,7 @@ FDC_CMD_EXEC:
 	.byte 0x04
 	inc	1, iz
 	jr	-38
-	stda16	(0x8a4a), iz
+	ld	(0x8a4a:16), iz
 	.byte 0xd1
 	rcf
 	.byte 0x8b
@@ -1679,7 +1679,7 @@ FDC_CMD_EXEC:
 	jr	86
 	ld	wa, (0x8b12:16)
 	sub	wa, iz
-	stda16	(0x8a4a), wa
+	ld	(0x8a4a:16), wa
 	.byte 0xd1
 	popw	de
 	.byte 0x8a
@@ -2104,31 +2104,31 @@ FDC_CommandEntry_CopyParams:
 	ld (0x8a16:16), 165
 	ei 0
 	ld wa, (xiz)
-	stda16 (0x8a40), xwa
+	ld (0x8a40:16), wa
 	ld wa, (xiz + 2)
-	stda16 (0x8a42), xwa
+	ld (0x8a42:16), wa
 	ld wa, (xiz + 4)
-	stda16 (0x8a44), xwa
+	ld (0x8a44:16), wa
 	ld wa, (xiz + 6)
-	stda16 (0x8a46), xwa
+	ld (0x8a46:16), wa
 	ld wa, (xiz + 8)
-	stda16 (0x8a48), xwa
+	ld (0x8a48:16), wa
 	ld wa, (xiz + 10)
-	stda16 (0x8a4a), xwa
+	ld (0x8a4a:16), wa
 	ld xwa, (xiz + 12)
 	stda32 0x8a4c, xwa
 	ld wa, (xiz)
-	stda16 (0x8a50), xwa
+	ld (0x8a50:16), wa
 	ld wa, (xiz + 2)
-	stda16 (0x8a52), xwa
+	ld (0x8a52:16), wa
 	ld wa, (xiz + 4)
-	stda16 (0x8a54), xwa
+	ld (0x8a54:16), wa
 	ld wa, (xiz + 6)
-	stda16 (0x8a56), xwa
+	ld (0x8a56:16), wa
 	ld wa, (xiz + 8)
-	stda16 (0x8a58), xwa
+	ld (0x8a58:16), wa
 	ld wa, (xiz + 10)
-	stda16 (0x8a5a), xwa
+	ld (0x8a5a:16), wa
 	ld xwa, (xiz + 12)
 	stda32 0x8a5c, xwa
 	ld (0x8a20:16), 0

@@ -284,8 +284,8 @@ MidiCC_Handler_BitManipulation:
 	ldb d, 192
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	VoiceMode_ParamConfigTables_0xB68
 	ret
 	swi	7
@@ -309,8 +309,8 @@ MidiCC_Handler_PairedParamA:
 	ldb	d, 255
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_ExtendedDispatch_0x298
 	ret
 MidiCC_Handler_PairedParamB:
@@ -331,8 +331,8 @@ MidiCC_Handler_PairedParamB:
 	ldb	e, 255
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_ExtendedDispatch_0x298
 	ret
 MidiCC_Handler_RangeCheck:
@@ -353,8 +353,8 @@ MidiCC_Handler_RangeCheck:
 	ldb	d, 7
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_ApplyPendingParams
 	ret
 	swi	7
@@ -437,8 +437,8 @@ MidiCC_VoiceParam_0:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	calr	1313
 	ret
 MidiCC_VoiceParam_1:
@@ -458,8 +458,8 @@ MidiCC_VoiceParam_1:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xB2
 	ret
 MidiCC_VoiceParam_2:
@@ -479,8 +479,8 @@ MidiCC_VoiceParam_2:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xB2
 	ret
 MidiCC_VoiceParam_3:
@@ -500,8 +500,8 @@ MidiCC_VoiceParam_3:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x81
 	ret
 MidiCC_VoiceParam_4:
@@ -521,8 +521,8 @@ MidiCC_VoiceParam_4:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x16
 	ret
 MidiCC_VoiceParam_5:
@@ -542,8 +542,8 @@ MidiCC_VoiceParam_5:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x42
 	ret
 MidiCC_VoiceParam_6:
@@ -563,8 +563,8 @@ MidiCC_VoiceParam_6:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x191
 	ret
 MidiCC_VoiceParam_7:
@@ -584,8 +584,8 @@ MidiCC_VoiceParam_7:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x191
 	ret
 MidiCC_VoiceParam_8:
@@ -605,8 +605,8 @@ MidiCC_VoiceParam_8:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	calr	794
 	ret
 MidiCC_VoiceParam_9:
@@ -626,8 +626,8 @@ MidiCC_VoiceParam_9:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	cp	c, 96
 	jr	z, 6
 	call	MidiStream_DispatchData_0x191
@@ -655,8 +655,8 @@ MidiCC_VoiceParam_10:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
 	ret
 MidiCC_VoiceParam_11:
@@ -677,8 +677,8 @@ MidiCC_VoiceParam_11_MidEntry:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
 	ret
 MidiCC_VoiceParam_12:
@@ -698,8 +698,8 @@ MidiCC_VoiceParam_12:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
 	ret
 MidiCC_VoiceParam_13:
@@ -719,8 +719,8 @@ MidiCC_VoiceParam_13:
 	ld e, (38454:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
 	ret
 MidiCC_Handler_BankModeSelect:
@@ -774,8 +774,8 @@ MidiCC_Handler_BankModeSelect:
 	ldb	d, 127
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x98
 	ret
 MidiCC_Handler_ExpressionParam:
@@ -814,8 +814,8 @@ MidiCC_Handler_ExpressionParam:
 	ldb	d, 255
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x98
 	ret
 MidiCC_Handler_DirectStoreA:
@@ -866,8 +866,8 @@ MidiCC_Handler_ParamDispatch:
 	ldb	d, 127
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xEE
 	ret
 MidiCC_Handler_TableDispatch:
@@ -884,8 +884,8 @@ MidiCC_Handler_TableDispatch:
 	ldb d, 0x7f
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call MidiStream_DispatchData_0x173
 MidiCC_Handler_TableDispatch_Ret:
 	ret
@@ -898,7 +898,7 @@ MidiCC_Helper_ConditionalESetup:
 	jr c, MidiCC_Helper_ConditionalESetup_Store
 	ld e, d
 MidiCC_Helper_ConditionalESetup_Store:
-	stda16	(0x9646), de
+	ld	(0x9646:16), de
 	call MidiStream_DispatchData_0x4
 	ret
 MidiCC_Helper_EntryWithEqA:
@@ -906,8 +906,8 @@ MidiCC_Helper_EntryWithEqA:
 	ld e, a
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call MidiStream_DispatchData_0x191
 	ret
 
@@ -929,8 +929,8 @@ MidiCC_Handler_CC4_VoiceParam:
 	ldb	d, 255
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_ExtendedDispatch_0x1
 	ret
 MidiCC_Handler_CC6_VoiceParam:
@@ -950,8 +950,8 @@ MidiCC_Handler_CC6_VoiceParam:
 	ld	d, (0x9636:16)
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0x67
 	ret
 MidiCC_Handler_CC5_VoiceParam:
@@ -971,8 +971,8 @@ MidiCC_Handler_CC5_VoiceParam:
 	ldb	d, 127
 	ld	a, (0x9637:16)
 	ld	(0x9648:16), a
-	stda16	(0x9644), bc
-	stda16	(0x9646), de
+	ld	(0x9644:16), bc
+	ld	(0x9646:16), de
 	call	MidiStream_DispatchData_0xD0
 	ret
 ; ============================================================================
@@ -1097,8 +1097,8 @@ MIDI_DispatchCC:
 	jr nz, MidiCC_DispatchCleanupRet
 	bitda 4, (0xfd50)
 	jr nz, MidiCC_DispatchCleanupRet
-	stda16 (0x964c), xbc
-	stda16 (0x964e), xde
+	ld (0x964c:16), bc
+	ld (0x964e:16), de
 	cp c, 0xbf
 	jr ugt, MidiCC_DispatchCleanupRet
 	ld l, c
@@ -1227,11 +1227,11 @@ PanelEvt_Handler_0_NoteOnParam:
 	bit	6, a
 	jr	nz, 24
 	ldw	de, 512
-	stda16	(0x963f), de
+	ld	(0x963f:16), de
 	and	a, 15
 	or	a, 192
 	ld	w, (0x964e:16)
-	stda16	(0x963c), wa
+	ld	(0x963c:16), wa
 	calr	1878
 	ret
 PanelEvt_Handler_3_ValueCheck:
@@ -1733,11 +1733,11 @@ MidiCC_ChannelDispatch_CtrlFlags:
 
 MidiCC_ChannelDispatch_BuildPacket:
 	ldw de, 0x300
-	stda16 (0x963f), xde
+	ld (0x963f:16), de
 	and a, 0xf
 	or a, 0xe0
 	ld w, (0x964e:16)
-	stda16 (0x963c), xwa
+	ld (0x963c:16), wa
 	ld a, (0x964f:16)
 	ld (0x963e:16), a
 	calr FileData_ValidateAndDispatch
@@ -1804,11 +1804,11 @@ MidiCC_ChannelDispatch_CtrlFlags2:
 
 MidiCC_ChannelDispatch_BuildPacket2:
 	ldw de, 0x200
-	stda16 (0x963f), xde
+	ld (0x963f:16), de
 	and a, 0xf
 	or a, 0xd0
 	ld w, (0x964e:16)
-	stda16 (0x963c), xwa
+	ld (0x963c:16), wa
 	calr FileData_ValidateAndDispatch
 
 PanelEvent_NullRet2:
@@ -2109,7 +2109,7 @@ Periodic_TimestampCompare:
 	subda16 xwa, 0xb7e3
 	cp wa, 0x96
 	jr c, Periodic_TimestampCompare_Done
-	stda16 (0xb7e3), xde
+	ld (0xb7e3:16), de
 	ld (1060:16), 0
 
 Periodic_TimestampCompare_Done:
@@ -3557,7 +3557,7 @@ FileData_AllocLoadAndParse:
 	jr	lt, 57
 	ld	xwa, (xsp+2)
 	calr	11187
-	stda16	(0xb7ea), hl
+	ld	(0xb7ea:16), hl
 	cps	hl, 3
 	jr	z, 24
 	cps	hl, 2
@@ -3597,7 +3597,7 @@ FileData_LoadFromSlot:
 	lda xwa, (0x0ab000:24)
 	lda_dri XWA, 0x07, 0xe0, 0xe4
 	calr DataBuf_CheckSubFormat
-	stda16 (0xb7ea), xhl
+	ld (0xb7ea:16), hl
 	ld a, (xsp)
 	extz wa
 	cps hl, 3

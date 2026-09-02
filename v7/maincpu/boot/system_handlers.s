@@ -777,7 +777,7 @@ INTTR4_SeqAccum_PositiveDelta:
 	inc 1, w
 
 INTTR4_SeqAccum_NoWrap:
-	stda16 (1120), xwa
+	ld (1120:16), wa
 
 INTTR4_SeqAccum_Done:
 	pop	sr
@@ -785,8 +785,8 @@ INTTR4_SeqAccum_Done:
 
 INTTR4_SeqAccum_Reset:
 	xor	wa, wa
-	stda16	(1120), wa
-	stda16	(13014), wa
+	ld	(1120:16), wa
+	ld	(13014:16), wa
 	ld	(1122:16), a
 	ld	(13018:16), a
 	ld	(1111:16), a
@@ -846,7 +846,7 @@ INTTR4_SyncAccum_PositiveDelta:
 	inc 1, w
 
 INTTR4_SyncAccum_NoWrap:
-	stda16 (1136), xwa
+	ld (1136:16), wa
 
 INTTR4_SyncAccum_Done:
 	pop	sr
@@ -854,8 +854,8 @@ INTTR4_SyncAccum_Done:
 
 INTTR4_SyncAccum_Reset:
 	xor	wa, wa
-	stda16	(1136), wa
-	stda16	(32098), wa
+	ld	(1136:16), wa
+	ld	(32098:16), wa
 	ld	(1133:16), a
 	ld	(32096:16), a
 	ld	(1138:16), a
@@ -890,7 +890,7 @@ TempoRingBuf_Write_Enqueue:
 	ld ix, (1141:16)
 	stib_ind 0x07, 0xec, 0xf0, 0x81
 	inc 1, ix
-	stda16 (1141), xix
+	ld (1141:16), ix
 	popw ix
 
 TempoRingBuf_Write_Return:
@@ -931,7 +931,7 @@ TempoRingBuf_WritePair_Enqueue:
 	stb_dri A, 0x07, 0xec, 0xf0
 	ld a, (1051:16)
 	inc 1, ix
-	stda16 (1141), xix
+	ld (1141:16), ix
 	popw ix
 	ret
 
@@ -1607,7 +1607,7 @@ SeqTiming_Snapshot:
 	ei 0x06
 	ld wa, (0x0460:16)
 	ld l, (0x0462:16)
-	stda16 (0x045e), wa
+	ld (0x045e:16), wa
 	ld (0x045d:16), l
 	.byte 0xd1, 0xd6, 0x32, 0xf0, 0x67, 0x06, 0xf1, 0x60
 	.byte 0x04, 0x02, 0x00, 0x00
@@ -1621,7 +1621,7 @@ SeqTiming_Snapshot_PostSnap:
 	push	xhl
 	call	AccTiming_InitAllParts
 	xor	wa, wa
-	stda16	(1118), wa
+	ld	(1118:16), wa
 	pop	xhl
 SeqTiming_Snapshot_CheckFracOverflow:
 	.byte 0xc1, 0xda, 0x32, 0xf7, 0x67, 0x04, 0x1d, 0xe7
@@ -1633,7 +1633,7 @@ SyncTiming_Snapshot:
 	ei 0x06
 	ld wa, (0x0470:16)
 	ld l, (0x046d:16)
-	stda16 (0x046e), wa
+	ld (0x046e:16), wa
 	ld (0x046c:16), l
 	.byte 0xd1, 0x62, 0x7d, 0xf0, 0x67, 0x06, 0xf1, 0x70
 	.byte 0x04, 0x02, 0x00, 0x00
@@ -1647,7 +1647,7 @@ SyncTiming_Snapshot_PostSnap:
 	push	xhl
 	call	SeqEvt_EntryPoint2
 	xor	wa, wa
-	stda16	(1134), wa
+	ld	(1134:16), wa
 	pop	xhl
 SyncTiming_Snapshot_CheckFracOverflow:
 	.byte 0xc1, 0x60, 0x7d, 0xf7, 0x67, 0x04, 0x1d, 0x2b
@@ -1838,10 +1838,10 @@ INTT3_HANDLER:
 TaskSched_Init:
 	ld xsp, 0x1e53a
 	xor wa, wa
-	stda16 (1159), xwa
+	ld (1159:16), wa
 	inc 1, wa
 	ldc_cr16 wa, 0x7c
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldw hl, 0x4c5
 	extz xhl
 	lds de, 4
@@ -1970,7 +1970,7 @@ TaskSched_PostInit:
 	ld (1157:16), 0
 	xor wa, wa
 	ldc_cr16 wa, 0x7c
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	jrl TaskSched_Dispatch
 
 TaskSched_AllIdle:
@@ -1993,7 +1993,7 @@ TaskSched_Dispatch:
 	ld (xiy + 4), xsp
 	ld xsp, 0x1e53a
 	xor wa, wa
-	stda16 (1159), xwa
+	ld (1159:16), wa
 
 TaskSched_ScanPriorityQueues:
 	ldb b, 0x3
@@ -2009,7 +2009,7 @@ TaskSched_ScanQueue_Loop:
 	jr TaskSched_AllIdle
 
 TaskSched_FoundReadyTask:
-	stda16 (1159), xhl
+	ld (1159:16), hl
 	extz xhl
 	ld a, (xhl + 11)
 	sll a, 5
@@ -2031,7 +2031,7 @@ TaskSched_ReturnToDispatch:
 TaskSched_TimerTick:
 	ld wa, (1475:16)
 	inc 1, wa
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldc_cr16 wa, 0x7c
 	ei 0
 	ldw ix, 0x5bb
@@ -2055,7 +2055,7 @@ TaskSched_TimerSlot_Skip:
 	ei 6
 	ld wa, (1475:16)
 	dec 1, wa
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldc_cr16 wa, 0x7c
 	ret
 
@@ -2074,14 +2074,14 @@ INTT3_CheckNesting:
 	cps wa, 1
 	jr z, INTT3_EnterScheduler
 	dec 1, wa
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldc_cr16 wa, 0x7c
 	popw wa
 	reti
 
 INTT3_EnterScheduler:
 	xor wa, wa
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldc_cr16 wa, 0x7c
 	popw wa
 	ei 0
@@ -2167,7 +2167,7 @@ Show_ScreenGroup_Entry:
 	ld (xix + 9), 0x0
 	ld (xix + 10), 0x0
 	xor wa, wa
-	stda16 (1159), xwa
+	ld (1159:16), wa
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -5342,7 +5342,7 @@ InterCPU_Send_WaitAck:
 	set_dd8 0, 0x68	; MSTAT0 - set to signal DMA data transfer starting
 	stda32 1498, xde
 	extz bc
-	stda16 (1502), xbc
+	ld (1502:16), bc
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
 	cpdi8 (1504), 0
@@ -5912,7 +5912,7 @@ E1DMA_ISR_BytecodeBlock:
 	incdi16	1, (58052)
 	jr	6
 	stdi16	(58052), 0
-	stda16	(58054), wa
+	ld	(58054:16), wa
 	jr	6
 	stdi16	(58052), 0
 	ld	wa, (58052:16)

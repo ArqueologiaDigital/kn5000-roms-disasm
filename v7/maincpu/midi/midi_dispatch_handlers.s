@@ -79,7 +79,7 @@ MidiCC_NullHandlerBlock:
 MidiCC_Handler_BitManipulation:
 	.incbin "includes/romslices/v7_transplant_MidiCC_Handler_BitManipulation.bin"
 	.byte 0x51
-	stda16	38314, de
+	ld	(38314:16), de
 	call	16563896
 	ret
 	ld	a, (38350:16)
@@ -98,8 +98,8 @@ MidiCC_Handler_BitManipulation:
 	ld	e, (38298:16)
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563896
 	ret
 	ld	a, (38350:16)
@@ -118,8 +118,8 @@ MidiCC_Handler_BitManipulation:
 	ld	e, (38298:16)
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563896
 	ret
 	ld	a, (38350:16)
@@ -138,8 +138,8 @@ MidiCC_Handler_BitManipulation:
 	ld	e, (38298:16)
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563896
 	ret
 	ld	l, (38350:16)
@@ -186,8 +186,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 127
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563840
 	ret
 	ld	l, (38350:16)
@@ -218,8 +218,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 255
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563840
 	ret
 	ld	a, (38298:16)
@@ -261,8 +261,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 127
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563926
 	ret
 	ld	a, (38350:16)
@@ -277,8 +277,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 127
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16564059
 	ret
 	ld	a, (38298:16)
@@ -287,14 +287,14 @@ MidiCC_Handler_BitManipulation:
 	cp	a, 64
 	jr	c, 2
 	ld	e, d
-	stda16	38314, de
+	ld	(38314:16), de
 	call	16563692
 	ret
 	ld	e, a
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16564089
 	ret
 	ld	a, (38350:16)
@@ -311,8 +311,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 255
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16565074
 	ret
 	ld	a, (38350:16)
@@ -329,8 +329,8 @@ MidiCC_Handler_BitManipulation:
 	ld	d, (38298:16)
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563791
 	ret
 	ld	a, (38350:16)
@@ -349,8 +349,8 @@ MidiCC_VoiceParam_8:
 	ldb	d, 127
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563896
 	ret
 	cpdi8	49121, 13
@@ -416,8 +416,8 @@ MidiCC_VoiceParam_12:
 	jr nz, .Lc_fcfdb9
 	bitda 4, (0xfd50)
 	jr nz, .Lc_fcfdb9
-	stda16 (0x95b0), bc
-	stda16 (0x95b2), de
+	ld (0x95b0:16), bc
+	ld (0x95b2:16), de
 	cp C,0xbf
 	jr ugt, .Lc_fcfdb9
 	ld L,C

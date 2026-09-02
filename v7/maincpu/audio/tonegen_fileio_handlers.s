@@ -595,7 +595,7 @@ DSPCfg_SyncBitmapData:
 	extz	xwa
 	.byte 0xaf, 0x0e, 0x80
 	ld	(xwa), 255
-	stda16	36930, bc
+	ld	(36930:16), bc
 	pop	xiz
 	lda	xsp, (xsp+18)
 	ret
@@ -779,7 +779,7 @@ ToneGen_DiffScanCheckEnd:
 
 	ld (xwa), 0xff
 
-	stda16 (36930), bc
+	ld (36930:16), bc
 
 	popw iz
 

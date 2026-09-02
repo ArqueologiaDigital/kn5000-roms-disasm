@@ -859,7 +859,7 @@ INTTR4_SeqAccum_PositiveDelta:
 	inc 1, w
 
 INTTR4_SeqAccum_NoWrap:
-	stda16 (1120), xwa
+	ld (1120:16), wa
 
 INTTR4_SeqAccum_Done:
 	pop	sr
@@ -867,8 +867,8 @@ INTTR4_SeqAccum_Done:
 
 INTTR4_SeqAccum_Reset:
 	xor wa, wa
-	stda16 (1120), xwa
-	stda16 (0x3372), xwa
+	ld (1120:16), wa
+	ld (0x3372:16), wa
 	ld (1122:16), a
 	ld (0x3376:16), a
 	ld (1111:16), a
@@ -929,7 +929,7 @@ INTTR4_SyncAccum_PositiveDelta:
 	inc 1, w
 
 INTTR4_SyncAccum_NoWrap:
-	stda16 (1136), xwa
+	ld (1136:16), wa
 
 INTTR4_SyncAccum_Done:
 	pop	sr
@@ -937,8 +937,8 @@ INTTR4_SyncAccum_Done:
 
 INTTR4_SyncAccum_Reset:
 	xor wa, wa
-	stda16 (1136), xwa
-	stda16 (0x7dfe), xwa
+	ld (1136:16), wa
+	ld (0x7dfe:16), wa
 	ld (1133:16), a
 	ld (0x7dfc:16), a
 	ld (1138:16), a
@@ -974,7 +974,7 @@ TempoRingBuf_Write_Enqueue:
 	ld ix, (1141:16)
 	stib_ind 0x07, 0xec, 0xf0, 0x81
 	inc 1, ix
-	stda16 (1141), xix
+	ld (1141:16), ix
 	popw ix
 
 TempoRingBuf_Write_Return:
@@ -1015,7 +1015,7 @@ TempoRingBuf_WritePair_Enqueue:
 	stb_dri A, 0x07, 0xec, 0xf0
 	ld a, (1051:16)
 	inc 1, ix
-	stda16 (1141), xix
+	ld (1141:16), ix
 	popw ix
 	ret
 
@@ -1730,7 +1730,7 @@ SeqTiming_Snapshot:
 	ei 6
 	ld wa, (1120:16)
 	ld l, (1122:16)
-	stda16 (1118), xwa
+	ld (1118:16), wa
 	ld (1117:16), l
 	cpda16 xwa, 0x3372
 	jr c, SeqTiming_Snapshot_CheckFrac
@@ -1748,7 +1748,7 @@ SeqTiming_Snapshot_PostSnap:
 	push xhl
 	call AccTiming_InitAllParts
 	xor wa, wa
-	stda16 (1118), xwa
+	ld (1118:16), wa
 	pop xhl
 
 SeqTiming_Snapshot_CheckFracOverflow:
@@ -1763,7 +1763,7 @@ SyncTiming_Snapshot:
 	ei 6
 	ld wa, (1136:16)
 	ld l, (1133:16)
-	stda16 (1134), xwa
+	ld (1134:16), wa
 	ld (1132:16), l
 	cpda16 xwa, 0x7dfe
 	jr c, SyncTiming_Snapshot_CheckFrac
@@ -1781,7 +1781,7 @@ SyncTiming_Snapshot_PostSnap:
 	push xhl
 	call SeqEvt_EntryPoint2
 	xor wa, wa
-	stda16 (1134), xwa
+	ld (1134:16), wa
 	pop xhl
 
 SyncTiming_Snapshot_CheckFracOverflow:
@@ -1988,10 +1988,10 @@ INTT3_HANDLER:
 TaskSched_Init:
 	ld xsp, 0x1e53a
 	xor wa, wa
-	stda16 (1159), xwa
+	ld (1159:16), wa
 	inc 1, wa
 	ldc_cr16 wa, 0x7c
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldw hl, 0x4c5
 	extz xhl
 	lds de, 4
@@ -2121,7 +2121,7 @@ TaskSched_PostInit:
 	ld (1157:16), 0
 	xor wa, wa
 	ldc_cr16 wa, 0x7c
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	jrl TaskSched_Dispatch
 
 TaskSched_AllIdle:
@@ -2144,7 +2144,7 @@ TaskSched_Dispatch:
 	ld (xiy + 4), xsp
 	ld xsp, 0x1e53a
 	xor wa, wa
-	stda16 (1159), xwa
+	ld (1159:16), wa
 
 TaskSched_ScanPriorityQueues:
 	ldb b, 0x3
@@ -2160,7 +2160,7 @@ TaskSched_ScanQueue_Loop:
 	jr TaskSched_AllIdle
 
 TaskSched_FoundReadyTask:
-	stda16 (1159), xhl
+	ld (1159:16), hl
 	extz xhl
 	ld a, (xhl + 11)
 	sll a, 5
@@ -2182,7 +2182,7 @@ TaskSched_ReturnToDispatch:
 TaskSched_TimerTick:
 	ld wa, (1475:16)
 	inc 1, wa
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldc_cr16 wa, 0x7c
 	ei 0
 	ldw ix, 0x5bb
@@ -2206,7 +2206,7 @@ TaskSched_TimerSlot_Skip:
 	ei 6
 	ld wa, (1475:16)
 	dec 1, wa
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldc_cr16 wa, 0x7c
 	ret
 
@@ -2225,14 +2225,14 @@ INTT3_CheckNesting:
 	cps wa, 1
 	jr z, INTT3_EnterScheduler
 	dec 1, wa
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldc_cr16 wa, 0x7c
 	popw wa
 	reti
 
 INTT3_EnterScheduler:
 	xor wa, wa
-	stda16 (1475), xwa
+	ld (1475:16), wa
 	ldc_cr16 wa, 0x7c
 	popw wa
 	ei 0
@@ -2318,7 +2318,7 @@ Show_ScreenGroup_Entry:
 	ld (xix + 9), 0x0
 	ld (xix + 10), 0x0
 	xor wa, wa
-	stda16 (1159), xwa
+	ld (1159:16), wa
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -5493,7 +5493,7 @@ InterCPU_Send_WaitAck:
 	set_dd8 0, 0x68	; MSTAT0 - set to signal DMA data transfer starting
 	stda32 1498, xde
 	extz bc
-	stda16 (1502), xbc
+	ld (1502:16), bc
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
 	cpdi8 (1504), 0
@@ -6060,7 +6060,7 @@ E1DMA_ISR_BytecodeBlock:
 	incdi16	1, (0xe360)
 	jr	6
 	stdi16	(0xe360), 0
-	stda16	(0xe362), wa
+	ld	(0xe362:16), wa
 	jr	6
 	stdi16	(0xe360), 0
 	ld	wa, (0xe360:16)

@@ -98,7 +98,7 @@ WPLoad_HandleSelection:
 	ld	xwa, (xsp+6)
 	stda32	(33044), xwa
 	call	16296968
-	stda16	(33048), hl
+	ld	(33048:16), hl
 	cps	hl, 0
 	jr	ge, 6
 	stdi16	(33048), 0
@@ -164,7 +164,7 @@ WPLoad_PageDown:
 	jr	ge, 13
 	add	hl, 10
 WPLoad_StorePosition:
-	stda16	(33048), hl
+	ld	(33048:16), hl
 	ld	bc, hl
 	jrl	158
 WPLoad_PageDown_Boundary:
@@ -182,7 +182,7 @@ WPLoad_PageDown_Boundary:
 	ld	wa, qde
 	cps	wa, 0
 	jr	z, 118
-	stda16	(33048), bc
+	ld	(33048:16), bc
 	jr	116
 WPLoad_OpLoad:
 	ld	xwa, (xsp+6)

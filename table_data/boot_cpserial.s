@@ -325,7 +325,7 @@ BootSerial_HandshakeSequence:
 ;          BootSerial_SpinWait300
 ; -----------------------------------------------------------------------------
 BootSerial_SendTwoBytes_Bitbang:
-	stda16	(0x0fd9), xwa		; frame bytes into TX ring head
+	ld	(0x0fd9:16), wa		; frame bytes into TX ring head
 	anddi8	(0x0f67), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC with bit 6 low
@@ -465,7 +465,7 @@ BootSerial_SpinWait3000__done:
 ; -----------------------------------------------------------------------------
 BootSerial_TickWait2:
 	ld	wa, (0x0c00:16)
-	stda16	(0x0f73), xwa
+	ld	(0x0f73:16), wa
 BootSerial_TickWait2__loop:
 	ld	wa, (0x0c00:16)
 	subda16	xwa, 0x0f73
@@ -475,7 +475,7 @@ BootSerial_TickWait2__loop:
 
 BootSerial_TickWait6:
 	ld	wa, (0x0c00:16)
-	stda16	(0x0f73), xwa
+	ld	(0x0f73:16), wa
 BootSerial_TickWait6__loop:
 	ld	wa, (0x0c00:16)
 	subda16	xwa, 0x0f73
@@ -485,7 +485,7 @@ BootSerial_TickWait6__loop:
 
 BootSerial_TickWait51:
 	ld	wa, (0x0c00:16)
-	stda16	(0x0f73), xwa
+	ld	(0x0f73:16), wa
 BootSerial_TickWait51__loop:
 	ld	wa, (0x0c00:16)
 	subda16	xwa, 0x0f73
@@ -585,7 +585,7 @@ BootSerial_ProbeSequence:
 	ldw	(xhl - 2), 0x80
 	ei	6
 	ld	wa, (0x0f75:16)
-	stda16	(0x0f77), xwa		; (0x0f77) = (0x0f75) snapshot
+	ld	(0x0f77:16), wa		; (0x0f77) = (0x0f75) snapshot
 	ei	0
 	call	0xfff173		; BootSerial_WaitTxIdle (boot-time
 					; absolute; ROM label 0x9ff173)
@@ -791,7 +791,7 @@ BootSerial_SendFrame:
 	ei	6
 	stdi16	(0x0fd5), 0		; TX send index = 0
 	stdi16	(0x0fd7), 0		; TX pending count = 0
-	stda16	(0x0fd9), xwa		; both frame bytes -> ring head
+	ld	(0x0fd9:16), wa		; both frame bytes -> ring head
 	adddi16	(0x0fd7), 2		; two bytes pending
 	ordi8	(0x0f64), 2		; TX-pending flag
 	anddi8	(0x0f64), 0xfe		; clear RX-active flag

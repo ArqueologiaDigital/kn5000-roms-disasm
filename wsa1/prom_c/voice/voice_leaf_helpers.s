@@ -4108,7 +4108,7 @@ KeyZone_Stage_Reg0040_Stride8:
 	ld	bc, (xix)                               ; FA7486  ld BC,(XIX)
 	stw_da	(0xD760), bc                        ; FA7488  ld (0x00d760),BC
 	ld	bc, (xix+6)                             ; FA748D  ld BC,(XIX+0x06)
-	stda16	(0x5A4F), bc                        ; FA7490  ld (0x5a4f),BC
+	ld	(0x5A4F:16), bc                        ; FA7490  ld (0x5a4f),BC
 	ld	bc, (xix+6)                             ; FA7494  ld BC,(XIX+0x06)
 	pushw	bc                                   ; FA7497  push BC
 	ld	c, (xix+5)                              ; FA7498  ld C,(XIX+0x05)
@@ -4214,7 +4214,7 @@ KeyZone_Stage_Reg0040_Stride6B:
 	ld	bc, (xix)                               ; FA750C  ld BC,(XIX)
 	stw_da	(0xD760), bc                        ; FA750E  ld (0x00d760),BC
 	ld	bc, (xix+4)                             ; FA7513  ld BC,(XIX+0x04)
-	stda16	(0x5A4F), bc                        ; FA7516  ld (0x5a4f),BC
+	ld	(0x5A4F:16), bc                        ; FA7516  ld (0x5a4f),BC
 	ld	bc, (xix+4)                             ; FA751A  ld BC,(XIX+0x04)
 	pushw	bc                                   ; FA751D  push BC
 	pushw	0                                    ; FA751E  push 0x0000
@@ -4961,7 +4961,7 @@ sub_FA7810:
 	ld	b, (xbc)                                ; FA785E  ld B,(XBC)
 	ld	c, b                                    ; FA7860  ld C,B
 	exts	bc                                    ; FA7862  exts BC
-	stda16	(0x5A51), bc                        ; FA7864  ld (0x5a51),BC
+	ld	(0x5A51:16), bc                        ; FA7864  ld (0x5a51),BC
 	jr sub_FA7810__FA789F                      ; FA7868  jr T,0xfa789f
 sub_FA7810__FA786A:
 	lda	xbc, (0xFDF156:24)                     ; FA786A  lda XBC,0xfdf156
@@ -4982,7 +4982,7 @@ sub_FA7810__FA786A:
 	ld	b, (xbc)                                ; FA7895  ld B,(XBC)
 	ld	c, b                                    ; FA7897  ld C,B
 	exts	bc                                    ; FA7899  exts BC
-	stda16	(0x5A51), bc                        ; FA789B  ld (0x5a51),BC
+	ld	(0x5A51:16), bc                        ; FA789B  ld (0x5a51),BC
 sub_FA7810__FA789F:
 	ld	bc, de                                  ; FA789F  ld BC,DE
 	or	bc, hl                                  ; FA78A1  or BC,HL

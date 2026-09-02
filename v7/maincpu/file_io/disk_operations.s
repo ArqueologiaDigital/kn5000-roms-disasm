@@ -28,17 +28,17 @@ FileCopyFunc:
 	jrl	nz, 591
 	stda32	(32452), xiz
 	call	16290274
-	stda16	(32456), hl
+	ld	(32456:16), hl
 	cps	hl, 0
 	jr	lt, 24
 	cp	hl, 19
 	jr	ge, 9
 	inc	1, hl
-	stda16	(32458), hl
+	ld	(32458:16), hl
 	jrl	560
 FCopy_ScrollDown_Clamp:
 	dec	1, hl
-	stda16	(32458), hl
+	ld	(32458:16), hl
 	jrl	551
 FCopy_ScrollNeg_Reset:
 	stdi16	(32456), 0
@@ -70,7 +70,7 @@ FCopy_HandleScroll:
 	cps	wa, 0
 	jr	le, 6
 	dec	1, wa
-	stda16	(32458), wa
+	ld	(32458:16), wa
 FCopy_ScrollDown_CheckMin:
 	ld	wa, (32458:16)
 	cpda16	xwa, (32456)
@@ -78,10 +78,10 @@ FCopy_ScrollDown_CheckMin:
 	cps	wa, 0
 	jr	le, 8	; -> 0xF8B85E
 	dec	1, wa
-	stda16	(32458), wa
+	ld	(32458:16), wa
 	jr	8	; -> 0xF8B866
 FCopy_ScrollDown_RestoreOld:
-	stda16	(32458), de
+	ld	(32458:16), de
 FCopy_ScrollDown_Reload:
 	ld	wa, (32458:16)
 FCopy_Scroll_Apply:
@@ -107,7 +107,7 @@ FCopy_ScrollUp_Adjust:
 	cp	wa, 19
 	jr	ge, 6
 	inc	1, wa
-	stda16	(32458), wa
+	ld	(32458:16), wa
 FCopy_ScrollUp_CheckMax:
 	ld	wa, (32458:16)
 	cpda16	xwa, (32456)
@@ -115,7 +115,7 @@ FCopy_ScrollUp_CheckMax:
 	cp	wa, 19
 	jr	ge, -100	; -> 0xF8B85E
 	inc	1, wa
-	stda16	(32458), wa
+	ld	(32458:16), wa
 	jr	-100	; -> 0xF8B866
 FCopy_HandleCopyContext:
 	cp XIZ,0x00000008
@@ -153,7 +153,7 @@ FCopy_CopyConfirm_Execute:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -189,7 +189,7 @@ FCopy_CopyExecute:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -299,7 +299,7 @@ FRename_HandleApply:
 	ld	(32422:16), l
 	calr	62314
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -398,7 +398,7 @@ FRenameSmf_HandleApply:
 	ld	(32422:16), l
 	calr	62047
 	call	16291947
-	stda16	(33896), hl
+	ld	(33896:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -427,7 +427,7 @@ FmmFormatFunc:
 	jr	ge, 13
 	call	16290067
 	extz	hl
-	stda16	33892, hl
+	ld	(33892:16), hl
 	calr	-3594
 FmmFmt_InitPhase_CheckDrive:
 	ld	wa, (33892:16)
@@ -599,7 +599,7 @@ FmmLoadTitleFunc:
 	jr	ge, 13
 	call	16290067
 	extz	hl
-	stda16	33892, hl
+	ld	(33892:16), hl
 	calr	-4139
 FmmLoadTtl_StateDispatch:
 	ld	wa, (33892:16)
@@ -612,7 +612,7 @@ FmmLoadTtl_StateDispatch:
 	cpdi16	33894, 0
 	jr	ge, 19
 	call	16290928
-	stda16	33894, hl
+	ld	(33894:16), hl
 	call	16290176
 	call	16290094
 	calr	-4184
@@ -622,7 +622,7 @@ FmmLoadTtl_CheckFileHandle:
 	cpdi16	33896, 0
 	jr	ge, 11
 	call	16291947
-	stda16	33896, hl
+	ld	(33896:16), hl
 	calr	-4212
 FmmLoadTtl_CheckSmfHandle:
 	.byte 0xd1, 0x68, 0x84, 0x3f, 0x00, 0x00	; cpdi16 0x8504, 0 (v7 patched)
@@ -774,7 +774,7 @@ FmmSaveTitleFunc:
 	cpdi16	33894, 0
 	jr	ge, 19
 	call	16290928
-	stda16	33894, hl
+	ld	(33894:16), hl
 	call	16290176
 	call	16290094
 	calr	-4686
@@ -931,7 +931,7 @@ DiskInfoFunc:
 	jr ge, DiskInfo_ReadDriveType
 	call GetDiskSizeInfo
 	extz HL
-	stda16 (0x8464), hl
+	ld (0x8464:16), hl
 DiskInfo_ReadDriveType:
 	ld	wa, (33892:16)
 	cps	wa, 1

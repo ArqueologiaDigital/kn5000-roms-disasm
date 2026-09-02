@@ -7742,9 +7742,9 @@ SeMenu_NameEditor_DeleteChar:
 	stib_da	(0x03efa8), 0
 	push xwa
 	stda32	1740, xiy
-	stda16	(1744), ix
-	stda16	(1746), bc
-	stda16	(1748), hl
+	ld	(1744:16), ix
+	ld	(1746:16), bc
+	ld	(1748:16), hl
 	ld xwa, 0x000006ca
 	call DrawText_LayoutAndRender_Variant1_0x616
 	pop xwa
@@ -7905,37 +7905,37 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	ld	wa, (xiz+8)
 	cp	wa, 50
 	jr	nz, 12
-	stda16	(1740), wa
+	ld	(1740:16), wa
 	inc	1, wa
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	jr	30
 	cp	wa, 50
 	jr	nz, 12
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	dec	1, wa
-	stda16	(1740), wa
+	ld	(1740:16), wa
 	jr	12
 	dec	1, wa
-	stda16	(1740), wa
+	ld	(1740:16), wa
 	inc	2, wa
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	ld	wa, (xiz+10)
 	cp	wa, 58
 	jr	nz, 12
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	inc	1, wa
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	jr	30
 	cp	wa, 146
 	jr	nz, 12
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	dec	1, wa
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	jr	12
 	dec	1, wa
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	inc	2, wa
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	stib_da	(0x03efa8), 0
 	call	SeMenu_NameEditor_ChangeCase_Data
 	pop	xiy
@@ -7945,13 +7945,13 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	ld	xiz, xsp
 	.ascii "89:;<="
 	ld	wa, (xiz+8)
-	stda16	(1740), wa
+	ld	(1740:16), wa
 	ld	wa, (xiz+10)
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	ld	wa, (xiz+12)
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	ld	wa, (xiz+14)
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	stib_da	(0x03efa8), 0
 	call	SeMenu_NameEditor_HandleInput_Data
 	pop	xiy
@@ -7969,11 +7969,11 @@ SeMenu_DisplayPartValue_Data:	.ascii ">89:;<="
 	cpl	d
 	.byte 0x50
 	ld	wa, (xiz+10)
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	ld	wa, (xiz+12)
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	ld	wa, (xiz+14)
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	stib_da	(0x03efa8), 0
 	call	SeMenu_NameEditor_SelectCharSet_Data
 	pop	xiy
@@ -8237,13 +8237,13 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	xiz, xsp
 	.ascii "89:;<="
 	ld	wa, (xiz+8)
-	stda16	(1740), wa
+	ld	(1740:16), wa
 	ld	wa, (xiz+10)
-	stda16	(1742), wa
+	ld	(1742:16), wa
 	ld	wa, (xiz+12)
-	stda16	(1744), wa
+	ld	(1744:16), wa
 	ld	wa, (xiz+14)
-	stda16	(1746), wa
+	ld	(1746:16), wa
 	stib_da	(0x03efa8), 0
 	call	SeMenu_NameEditor_Complete
 	pop	xiy
@@ -8270,19 +8270,19 @@ SeMenu_ShowConfirmDialog_Data:
 	jr	nz, -20
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
-	stda16	(1740), ix
+	ld	(1740:16), ix
 	.byte 0xd1
 	cpl	d
 	push	xwa
 	.byte 0xc4
 	nop
-	stda16	(1744), ix
+	ld	(1744:16), ix
 	.byte 0xd1, 0xd0, 0x06
 	push	xwa
 	.byte 0xc8
 	nop
-	stda16	(1742), iy
-	stda16	(1746), iy
+	ld	(1742:16), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	incf
@@ -8291,15 +8291,15 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
 	add	ix, 196
-	stda16	(1740), ix
-	stda16	(1744), ix
-	stda16	(1742), iy
+	ld	(1740:16), ix
+	ld	(1744:16), ix
+	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
 	push	xde
 	halt
 	nop
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xde
 	.byte 0x01
@@ -8307,14 +8307,14 @@ SeMenu_ShowConfirmDialog_Data:
 	call	SeMenu_NameEditor_ChangeCase_Data
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
-	stda16	(1740), ix
+	ld	(1740:16), ix
 	.byte 0xd1
 	cpl	d
 	push	xde
 	ldio	0, 241
 	.byte 0xd0, 0x06, 0x54
-	stda16	(1742), iy
-	stda16	(1746), iy
+	ld	(1742:16), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	incf
@@ -8322,24 +8322,24 @@ SeMenu_ShowConfirmDialog_Data:
 	call	SeMenu_NameEditor_ChangeCase_Data
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
-	stda16	(1740), ix
+	ld	(1740:16), ix
 	.byte 0xd1
 	cpl	d
 	push	xde
 	halt
 	nop
-	stda16	(1744), ix
+	ld	(1744:16), ix
 	.byte 0xd1, 0xd0, 0x06
 	push	xde
 	pop	sr
 	nop
-	stda16	(1742), iy
+	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
 	push	xwa
 	.byte 0x01
 	nop
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	reti
@@ -8348,54 +8348,54 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
 	sub	ix, 4
-	stda16	(1740), ix
-	stda16	(1744), ix
-	stda16	(1742), iy
+	ld	(1740:16), ix
+	ld	(1744:16), ix
+	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
 	push	xwa
 	.byte 0x01
 	nop
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	pushw	7424
 	ldw	iy, 0xf0ec
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
-	stda16	(1740), ix
+	ld	(1740:16), ix
 	.byte 0xd1
 	cpl	d
 	push	xwa
 	.byte 0x1c
 	nop
-	stda16	(1744), ix
+	ld	(1744:16), ix
 	.byte 0xd1, 0xd0, 0x06
 	push	xwa
 	.byte 0xab
 	nop
-	stda16	(1742), iy
+	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
 	push	xwa
 	decf
 	nop
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	ret
 	nop
 	call	SeMenu_NameEditor_ChangeCase_Data
 	ret
-	stda16	(1740), ix
-	stda16	(1744), ix
-	stda16	(1742), iy
+	ld	(1740:16), ix
+	ld	(1744:16), ix
+	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
 	push	xde
 	halt
 	nop
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xde
 	.byte 0x01
@@ -8405,14 +8405,14 @@ SeMenu_ShowConfirmDialog_Data:
 	call	SeMenu_NameEditor_InsertChar
 	popw	iy
 	popw	ix
-	stda16	(1740), ix
-	stda16	(1742), iy
-	stda16	(1744), ix
+	ld	(1740:16), ix
+	ld	(1742:16), iy
+	ld	(1744:16), ix
 	.byte 0xd1, 0xd0, 0x06
 	push	xwa
 	.byte 0x1c
 	nop
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	incf
@@ -8427,11 +8427,11 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	hl, (xiz)
 	ld	de, (xiz+2)
 	add	xiz, 4
-	stda16	(1740), ix
+	ld	(1740:16), ix
 	.byte 0xd1
 	cpl	d
 	.byte 0x8b
-	stda16	(1744), ix
+	ld	(1744:16), ix
 	.byte 0xd1, 0xd0, 0x06
 	and	(xde-15), h
 	.byte 0x06, 0x55, 0xd1
@@ -8439,7 +8439,7 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xwa
 	.byte 0x01
 	nop
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	reti
@@ -8457,15 +8457,15 @@ SeMenu_ShowConfirmDialog_Data:
 	jr	nz, -65
 	ldb	c, 6
 	add	ix, 4
-	stda16	(1740), ix
-	stda16	(1744), ix
-	stda16	(1742), iy
+	ld	(1740:16), ix
+	ld	(1744:16), ix
+	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
 	push	xwa
 	.byte 0x01
 	nop
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	pushw	0xcb00
@@ -8511,9 +8511,9 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xwa
 	add	xiz, xwa
 	ld	wa, (xiz)
-	stda16	(1734), wa
+	ld	(1734:16), wa
 	ld	wa, (xiz+2)
-	stda16	(1736), wa
+	ld	(1736:16), wa
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
 	.byte 0x01
@@ -8546,45 +8546,45 @@ SeMenu_ShowConfirmDialog_Data:
 	jr	nz, 106
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
-	stda16	(1740), ix
+	ld	(1740:16), ix
 	.byte 0xd1
 	cpl	d
 	push	xwa
 	.byte 0x01
 	nop
-	stda16	(1744), ix
+	ld	(1744:16), ix
 	.byte 0xd1, 0xd0, 0x06
 	push	xwa
 	ldb	e, 0
-	stda16	(1742), iy
+	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
 	push	xwa
 	.byte 0x01
 	nop
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	ldb	e, 0
 	call	SeMenu_NameEditor_Complete
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
-	stda16	(1740), ix
+	ld	(1740:16), ix
 	.byte 0xd1
 	cpl	d
 	push	xwa
 	.byte 0x01
 	nop
-	stda16	(1744), ix
+	ld	(1744:16), ix
 	.byte 0xd1, 0xd0, 0x06
 	push	xwa
 	ldb	h, 0
-	stda16	(1742), iy
+	ld	(1742:16), iy
 	.byte 0xd1
 	cpl	h
 	push	xwa
 	ldb	h, 0
-	stda16	(1746), iy
+	ld	(1746:16), iy
 	.byte 0xd1, 0xd2, 0x06
 	push	xwa
 	.byte 0x01
@@ -10053,7 +10053,7 @@ Data_UnknownBlock:
 	push	xsp
 	push	sr
 	.ascii "fDEJ:"
-	stda16	(0x4400), ix
+	ld	(0x4400:16), ix
 	push	xde
 	ld	(7424:16), 236
 	.byte 0xf0
@@ -10161,17 +10161,17 @@ Data_UnknownBlock:
 	ld	l, w
 	sla	hl, 1
 	ld_rrw ix, xiz, hl
-	stda16 (1740), ix
+	ld (1740:16), ix
 	add	ix, 8
-	stda16	(1744), ix
+	ld	(1744:16), ix
 	ld	xiz, TuningSystem_Handler_Table_0x71F
 	xor	hl, hl
 	ld	l, a
 	sla	hl, 1
 	ld_rrw ix, xiz, hl
-	stda16 (1742), ix
+	ld (1742:16), ix
 	add	ix, 14
-	stda16	(1746), ix
+	ld	(1746:16), ix
 	call	SeMenu_NameEditor_MoveCursor
 	ret
 SeMenu_PresetInit_Main:

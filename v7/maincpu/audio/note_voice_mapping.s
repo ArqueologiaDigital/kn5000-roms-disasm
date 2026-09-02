@@ -1148,7 +1148,7 @@ VoiceClaimExt_Slot6_MarkLoop:
 	ld	a, (52809:16)
 	extz	wa
 VoiceClaimExt_Slot6_MarkCheck:
-	stda16	(52835), wa
+	ld	(52835:16), wa
 	lds	de, 0
 	jr	48
 	ld	wa, de
@@ -8951,7 +8951,7 @@ SeqVoice_CheckAndRet_Data:
 	ld (XSP+0x0e),WA
 	ldw (XSP+0x02), 0x0001
 	ld WA,(XSP+0x0e)
-	stda16 (0xe92d), wa
+	ld (0xe92d:16), wa
 	lds iz, 0
 	cp IZ,0x0010
 	jr ge, .Lc_feb9ef
@@ -10059,7 +10059,7 @@ DecodeMidiEvent_LoadParam3:
 	jrl	324
 	ld	a, l
 	extz	wa
-	stda16	(59691), wa
+	ld	(59691:16), wa
 	calr	3526
 	ld	wa, hl
 	cps	wa, 0

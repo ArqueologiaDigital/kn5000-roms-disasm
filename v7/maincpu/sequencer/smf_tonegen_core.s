@@ -12,7 +12,7 @@ Sequencer_ResetAfterFloppyIO:
 	call FloppyIO_ReturnReady
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	stw_da (0x00ffec), xwa
 	stdi16 (0xf19c), 0
 	cpdi16 6699, 49
@@ -24,12 +24,12 @@ SeqPlay_ResetAndStop:
 	call FloppyIO_ReturnReady
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	stw_da (0x00ffec), xwa
 	stdi16 (0xf19c), 0
 	push xhl
 	ld xhl, (6701:16)
-	stda16 (6699), xhl
+	ld (6699:16), hl
 	pop xhl
 	jrl SeqPlay_ReadyStateTransition
 
@@ -46,7 +46,7 @@ SeqPlay_FinishFloppyLoadAndStart:
 	call SeqPlay_DelayLoop_Outer
 	call 0xfdadae
 	ldw_da wa, (0x00ffec)
-	stda16 (0xf19e), wa
+	ld (0xf19e:16), wa
 	anddi8 (0x28a7), 0xf7
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_InitChannelParams
@@ -304,9 +304,9 @@ SeqPlay_PrepareAndScanChannels:
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	stw_da (0x00ffec), xwa
-	stda16 (4237), xwa
+	ld (4237:16), wa
 
 SeqPlay_InitTrackLoop:
 	ld (4009:16), 0
@@ -1389,7 +1389,7 @@ SeqTrack_AssignVoices_HaveDispatch:
 	ld de, (0xf251:16)
 	ld hl, de
 	call ToneGen_CopyBlockToVoiceBuffer
-	stda16 (0x27d6), xiy
+	ld (0x27d6:16), iy
 	pushw de
 	lds hl, 1
 
@@ -1630,8 +1630,8 @@ ToneGen_ComputeBlockPtr:
 
 SeqTrack_ClearPartEventParams:
 	xor wa, wa
-	stda16 (4211), xwa
-	stda16 (4213), xwa
+	ld (4211:16), wa
+	ld (4213:16), wa
 	ret
 
 SoundGen_RefreshAllVoices:
@@ -1669,8 +1669,8 @@ SeqTrack_ComputeScaledDelta:
 	ldw hl, 0x60
 	mul xwa, xhl
 	stw_erp DE, 0xe2
-	stda16 (4333), xwa
-	stda16 (4335), xde
+	ld (4333:16), wa
+	ld (4335:16), de
 	xor w, w
 	ld a, (4213:16)
 	mul xwa, xhl
@@ -1936,12 +1936,12 @@ SoundGen_CaptureVoiceParams:
 	sla xiy, 1
 	ld xde, 0xc9e
 	ldw_sri WA, 0x07, 0xe8, 0xf4
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	srl xiy, 1
 	ld xde, 0xcbe
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	xor w, w
-	stda16 (9830), xwa
+	ld (9830:16), wa
 	pop xde
 	ret
 
@@ -1982,7 +1982,7 @@ MidiEvent_ClampVelocityA_Low:
 	ldb h, 0x7f
 
 MidiEvent_ClampVelocityA_High:
-	stda16 (4012), xhl
+	ld (4012:16), hl
 	popw hl
 	ld w, a
 	and w, 0xf0
@@ -2044,7 +2044,7 @@ MidiEvent_ClampVelocityB_Low:
 	ldb h, 0x7f
 
 MidiEvent_ClampVelocityB_High:
-	stda16 (4012), xhl
+	ld (4012:16), hl
 	popw hl
 	ld w, a
 	and w, 0xf0
@@ -2211,13 +2211,13 @@ SetWall_ParamsValid:
 
 SetWall_SlotResolved:
 	ld wa, (0x28af:16)
-	stda16 (0x27d4), xwa
+	ld (0x27d4:16), wa
 	ld a, (9858:16)
 	call SetWall_SingleSlotResolve
 	cpdi8 (0x287a), 0
 	jrl nz, Scoop_NullRet
 	ld wa, (0x28af:16)
-	stda16 (0x27d8), xwa
+	ld (0x27d8:16), wa
 	ld a, (9860:16)
 	cpda8 a, 0x2877
 	jrl z, SetWall_InitVoiceSlots
@@ -2238,22 +2238,22 @@ SetWall_InitVoiceSlots:
 	ld xix, 0x17fa
 	nop
 	ld wa, (0x27d4:16)
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
 	call VoiceChannel_CopyParamBlock
-	stda16 (0x27d6), xiy
+	ld (0x27d6:16), iy
 	xor xhl, xhl
 	ld l, (9858:16)
 	call VoiceChannel_ClearRegisters
 	ld xix, 0x18fa
 	nop
 	ld wa, (0x27d8:16)
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
 	call VoiceChannel_CopyParamBlock
-	stda16 (0x27da), xiy
+	ld (0x27da:16), iy
 	call DispatchHandler_JumpToSubHandler
 	xor hl, hl
 	ld l, (9860:16)
@@ -2265,7 +2265,7 @@ SetWall_InitVoiceSlots:
 	inc 1, xhl
 	stw_dri IX, 0x07, 0xf4, 0xec
 	pop xiy
-	stda16 (3308), xix
+	ld (3308:16), ix
 	ld hl, ix
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
@@ -2850,8 +2850,8 @@ Scoop_ApplyMatchedVoiceEntry:
 	pop xhl
 	push_sd16w 0xaf, 0x28
 	push_sd16w 0x66, 0x26
-	stda16 (0x28af), xhl
-	stda16 (9830), xix
+	ld (0x28af:16), hl
+	ld (9830:16), ix
 	pushw wa
 	call ToneGen_AdvanceBlockPosition
 	popw wa
@@ -3504,8 +3504,8 @@ Scoop_ApplyMatchedVoiceEntryAlt:
 	pop xhl
 	push_sd16w 0xaf, 0x28
 	push_sd16w 0x66, 0x26
-	stda16 (0x28af), xhl
-	stda16 (9830), xix
+	ld (0x28af:16), hl
+	ld (9830:16), ix
 	pushw wa
 	call ToneGen_AdvanceBlockPosition
 	popw wa
@@ -3937,12 +3937,12 @@ SoundGen_ReadVoiceRegs:
 	sla iy, 1
 	ld xde, 0xc9e
 	ldw_sri WA, 0x07, 0xe8, 0xf4
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	srl iy, 1
 	ld xde, 0xcbe
 	ldb_sri A, 0x07, 0xe8, 0xf4
 	xor w, w
-	stda16 (9830), xwa
+	ld (9830:16), wa
 	pop xde
 	ret
 
@@ -4037,7 +4037,7 @@ VoiceChannel_ParamSet_Validate:
 	ldb_sri A, 0x07, 0xf0, 0xf4
 	pop xix
 	ld (0x27dc:16), a
-	stda16 (0x27d6), xiy
+	ld (0x27d6:16), iy
 
 VoiceChannel_ParamSet_Done:
 	ret
@@ -4071,7 +4071,7 @@ ToneGen_ValidateCh2_Validate:
 	ldb_sri A, 0x07, 0xf0, 0xf4
 	pop xix
 	ld (0x27de:16), a
-	stda16 (0x27da), xiy
+	ld (0x27da:16), iy
 
 ToneGen_ValidateCh2_Done:
 	ret
@@ -4089,10 +4089,10 @@ Scoop_HandleEqualCompare:
 	stib_ind 0x07, 0xec, 0xf0, 0x82
 	ld (0x27d2:16), 255
 	ld wa, (3308:16)
-	stda16 (0x289f), xwa
+	ld (0x289f:16), wa
 	xor wa, wa
 	ld a, (9860:16)
-	stda16 (0x287d), xwa
+	ld (0x287d:16), wa
 	call Scoop_AssignVoiceAfterMatch
 	jr Scoop_Equal_Done
 
@@ -4106,16 +4106,16 @@ Scoop_Equal_AdvanceAndRevalidate:
 	nop
 	ld iy, (0x27d6:16)
 	call ToneGen_ValidateAndSelectVoice
-	stda16 (0x27d6), xiy
+	ld (0x27d6:16), iy
 	call VoiceChannel_UpdateParamSet
-	stda16 (0x27d6), xiy
+	ld (0x27d6:16), iy
 	ld xix, 0x18fa
 	nop
 	ld iy, (0x27da:16)
 	call ToneGen_ValidateAndSelectVoice
-	stda16 (0x27da), xiy
+	ld (0x27da:16), iy
 	call ToneGen_ValidateVoiceCh2
-	stda16 (0x27da), xiy
+	ld (0x27da:16), iy
 	pop xix
 
 Scoop_Equal_Done:
@@ -4143,7 +4143,7 @@ VoiceChannel_ValidateAndLoop:
 	nop
 	ld iy, (0x27d6:16)
 	call ToneGen_ValidateAndSelectVoice
-	stda16 (0x27d6), xiy
+	ld (0x27d6:16), iy
 	pop xix
 	call VoiceChannel_AdvanceIndex
 	ld xhl, (4349:16)
@@ -4160,7 +4160,7 @@ VoiceChannel_ValidateAndLoop:
 	jr VoiceChannel_ValidateAndLoop
 
 VoiceChannel_FindNext_StoreAndUpdate:
-	stda16 (0x27d6), xiy
+	ld (0x27d6:16), iy
 	call VoiceChannel_UpdateParamSet
 	ret
 
@@ -4193,7 +4193,7 @@ VoiceChannel_AdvPos_CheckBounds:
 	jr VoiceChannel_StorePosition_Continue
 
 VoiceChannel_AdvPos_LoadBlock:
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
@@ -4208,7 +4208,7 @@ VoiceChannel_AdvPos_CopyBlock:
 	lds iy, 5
 
 VoiceChannel_StorePosition_Continue:
-	stda16 (0x27d6), xiy
+	ld (0x27d6:16), iy
 	ret
 
 ToneGen_WriteParamToBlock:
@@ -4236,7 +4236,7 @@ ToneGen_AdvPos_DispatchLink:
 
 ToneGen_AdvPos_Increment:
 	inc 1, wa
-	stda16 (9830), xwa
+	ld (9830:16), wa
 
 ToneGen_AdvPos_ClearError:
 	ld (4323:16), 0
@@ -4259,7 +4259,7 @@ ToneGen_AdvRefresh_DispatchLink:
 
 ToneGen_AdvRefresh_Increment:
 	inc 1, wa
-	stda16 (9830), xwa
+	ld (9830:16), wa
 
 ToneGen_AdvRefresh_ClearError:
 	ld (4323:16), 0
@@ -4289,7 +4289,7 @@ ToneGen_AdvanceBlockPosition:
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
 	lds wa, 5
@@ -4299,7 +4299,7 @@ ToneGen_AdvBlock_IncrementPos:
 	inc 1, wa
 
 ToneGen_AdvBlock_StorePos:
-	stda16 (9830), xwa
+	ld (9830:16), wa
 	ret
 
 VoiceSynth_HandleBankSelect:
@@ -4491,7 +4491,7 @@ VoiceChannel_ClearChannelFlags:
 	rcf
 	stcf_a_16 de
 	stb_erp A, 0x3c
-	stda16 (4239), xde
+	ld (4239:16), de
 	stw_erp DE, 0x3e
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
@@ -4500,7 +4500,7 @@ VoiceChannel_ClearChannelFlags:
 	rcf
 	stcf_a_16 de
 	stb_erp A, 0x3c
-	stda16 (4241), xde
+	ld (4241:16), de
 	stw_erp DE, 0x3e
 	xor b, b
 	ld iy, bc
@@ -4533,7 +4533,7 @@ VoiceChannel_NoteOnByChannel:
 	ld a, c
 	scf
 	stcf_a_16 de
-	stda16 (4239), xde
+	ld (4239:16), de
 	ld de, (4241:16)
 	ld a, c
 	scf
@@ -4588,7 +4588,7 @@ VoiceChannel_NoteOffByChannel:
 	ld a, c
 	scf
 	stcf_a_16 de
-	stda16 (4241), xde
+	ld (4241:16), de
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
 	ld de, (4239:16)
@@ -4863,7 +4863,7 @@ ToneGen_ValidateVoiceLoop:
 	nop
 	ld iy, (0x27da:16)
 	call ToneGen_ValidateAndSelectVoice
-	stda16 (0x27da), xiy
+	ld (0x27da:16), iy
 	pop xix
 	call VoiceChannel_AdvanceIndex
 	ld xhl, (4349:16)
@@ -4880,7 +4880,7 @@ ToneGen_ValidateVoiceLoop:
 	jr ToneGen_ValidateVoiceLoop
 
 ToneGen_AdvValidate_StoreAndDone:
-	stda16 (0x27da), xiy
+	ld (0x27da:16), iy
 	call ToneGen_ValidateVoiceCh2
 	ret
 
@@ -5402,7 +5402,7 @@ ToneGen_ValidateVoice_CheckBounds:
 	jr ToneGen_SaveVoiceState_Continue
 
 ToneGen_ValidateVoice_LoadBlock:
-	stda16 (0x28af), xwa
+	ld (0x28af:16), wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)

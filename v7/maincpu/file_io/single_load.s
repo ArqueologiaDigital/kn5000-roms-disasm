@@ -3300,7 +3300,7 @@ CmpSingleLoadFileFunc:
 	jrl	nz, 278
 	stda32	(33120), xde
 	call	16290274
-	stda16	(33124), hl
+	ld	(33124:16), hl
 	cps	hl, 0
 	jr	ge, 6
 	stdi16	(33124), 0
@@ -3354,7 +3354,7 @@ CmpFile_ScrollDown:
 	dec 1, wa
 
 CmpFile_ScrollStore:
-	stda16	(33124), wa
+	ld	(33124:16), wa
 CmpFile_ScrollRedraw:
 	ld	wa, (33124:16)
 	cp	wa, hl
@@ -3420,7 +3420,7 @@ FmmCmpSingleLoadFunc:
 	jr	ge, 13
 	call	16290067
 	extz	hl
-	stda16	33892, hl
+	ld	(33892:16), hl
 	calr	-26275
 FmmCmpLoad_DispatchState:
 	ld	wa, (33892:16)
@@ -3433,7 +3433,7 @@ FmmCmpLoad_DispatchState:
 	cpdi16	33894, 0
 	jr	ge, 19
 	call	16290928
-	stda16	33894, hl
+	ld	(33894:16), hl
 	call	16290176
 	call	16290094
 	calr	-26320

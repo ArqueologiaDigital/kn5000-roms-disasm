@@ -501,8 +501,8 @@ SysEx_InProgressReturn:
 	ldb	d, 192
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563580
 	ret
 	swi	7
@@ -523,8 +523,8 @@ SysEx_InProgressReturn:
 	ldb	d, 255
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16565737
 	ret
 	extz	hl
@@ -542,8 +542,8 @@ SysEx_InProgressReturn:
 	ldb	e, 255
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16565737
 	ret
 	ld	a, (38350:16)
@@ -561,8 +561,8 @@ SysEx_InProgressReturn:
 	ldb	d, 7
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563640
 	ret
 	swi	7

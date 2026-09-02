@@ -174,7 +174,7 @@ AudioLoop_CheckPeriodicReinit:
 	ld wa, (61458:16)
 	ld bc, wa
 	inc 1, wa
-	stda16 61458, xwa
+	ld (61458:16), wa
 	cp bc, 0xA
 	jr lt, AudioLoop_DecrementDelay
 	stdi16 61458, 0
@@ -596,10 +596,10 @@ INT16_TaskSwitch_Handler:
 TaskSched_Init:
 	ld xsp, 0x40B1E
 	xor wa, wa
-	stda16 4166, xwa
+	ld (4166:16), wa
 	inc 1, wa
 	ldc_cr16 wa, 0x7C
-	stda16 4306, xwa
+	ld (4306:16), wa
 	ldw hl, 0x106C
 	extz xhl
 	lds de, 4
@@ -729,7 +729,7 @@ TaskSched_ConfigAndDispatch:
 	ld (4164:16), 0
 	xor wa, wa
 	ldc_cr16 wa, 0x7C
-	stda16 4306, xwa
+	ld (4306:16), wa
 	jrl TaskSched_Dispatch
 
 TaskSched_Halt:
@@ -752,7 +752,7 @@ TaskSched_Dispatch:
 	ld (xiy + 4), xsp
 	ld xsp, 0x40B1E
 	xor wa, wa
-	stda16 4166, xwa
+	ld (4166:16), wa
 
 TaskSched_Dispatch_ScanQueues:
 	ldb b, 0x3
@@ -768,7 +768,7 @@ TaskSched_Dispatch_ScanLoop:
 	jr TaskSched_Halt
 
 TaskSched_Dispatch_SwitchTo:
-	stda16 4166, xhl
+	ld (4166:16), hl
 	extz xhl
 	ld a, (xhl + 11)
 	sll a, 5
@@ -800,7 +800,7 @@ TaskSched_ContextRestore:
 TaskSched_SoftTimer_Service:
 	ld	wa, (4306:16)
 	inc	1, wa
-	stda16	(4306), wa
+	ld	(4306:16), wa
 	ldc_cr16	wa, 0x7c
 	di
 	ldw	ix, 4298
@@ -825,7 +825,7 @@ TaskSched_SoftTimer_Unlock:
 	ei	6
 	ld	wa, (4306:16)
 	dec	1, wa
-	stda16	(4306), wa
+	ld	(4306:16), wa
 	ldc_cr16	wa, 0x7c
 	ret
 ; Reload counter from +2, push 0x01FFA8, jp (XIX+4) -- i.e. tail-call the callback.
@@ -843,14 +843,14 @@ TaskSwitch_Countdown:
 	cps wa, 1
 	jr z, TaskSwitch_Expired
 	dec 1, wa
-	stda16 4306, xwa
+	ld (4306:16), wa
 	ldc_cr16 wa, 0x7C
 	popw wa
 	reti
 
 TaskSwitch_Expired:
 	xor wa, wa
-	stda16 4306, xwa
+	ld (4306:16), wa
 	ldc_cr16 wa, 0x7C
 	popw wa
 	ei 0
@@ -921,7 +921,7 @@ TaskSched_SpawnTask:
 	ld (xix + 9), 0x0
 	ld (xix + 10), 0x0
 	xor wa, wa
-	stda16 4166, xwa
+	ld (4166:16), wa
 	extz xix
 	xor xwa, xwa
 	xor xhl, xhl
@@ -2936,7 +2936,7 @@ Cmd_DMA_Reset_Counter:	; 020FEFh
 	stdi16 61466, 0	; Reset stuck counter
 
 Cmd_DMA_Save_Count:	; 020FF5h
-	stda16 61468, xwa	; Save current count
+	ld (61468:16), wa	; Save current count
 	jr Cmd_DMA_Check_Stuck
 
 Cmd_DMA_Idle:	; 020FFBh
@@ -2993,7 +2993,7 @@ ToneGen_Read_Register:
 ; 0x20/0x30 (or 0x40/0x50 when the byte at 0x27E6 is zero) and drops layer slots 1..3 --
 ; i.e. it is a backpressure threshold that thins the polyphony when MIDI falls behind.
 MIDI_Backlog_Publish:
-	stda16 10215, xwa
+	ld (10215:16), wa
 	ret
 
 RingBuf_SetOffsetLo:
@@ -6132,7 +6132,7 @@ WaveSel_Emit_ZoneRecord_S15:
 	ld wa, (xbc)
 	stw_da 0x0451ce, xwa
 	ld wa, (xbc + 13)
-	stda16 10558, xwa
+	ld (10558:16), wa
 	ret
 
 ; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0C.
@@ -6151,7 +6151,7 @@ WaveSel_Emit_ZoneRecord_S12:
 	ld wa, (xbc)
 	stw_da 0x0451ce, xwa
 	ld wa, (xbc + 10)
-	stda16 10558, xwa
+	ld (10558:16), wa
 	ret
 
 ; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0D.
@@ -6206,7 +6206,7 @@ WaveSel_Emit_ZoneRecord_S6:
 	ld wa, (xbc)
 	stw_da 0x0451ce, xwa
 	ld wa, (xbc + 4)
-	stda16 10558, xwa
+	ld (10558:16), wa
 	ret
 
 ; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 4 (index shifted left 2 instead of a
@@ -6596,7 +6596,7 @@ TVF_Lookup_Depth_Amount:
 	add xwa, xbc
 	ld a, (xwa)
 	exts wa
-	stda16 10560, xwa
+	ld (10560:16), wa
 	jr TVF_Lookup_Depth_Amount_Return
 
 ; bit7-clear arm: use the 0x0119FB/FC/FD record set.
@@ -6631,7 +6631,7 @@ TVF_Lookup_Depth_Amount_SetA:
 	add xwa, xbc
 	ld a, (xwa)
 	exts wa
-	stda16 10560, xwa
+	ld (10560:16), wa
 
 ; Merge the two halves into XHL and return.
 TVF_Lookup_Depth_Amount_Return:
@@ -8523,7 +8523,7 @@ WaveSel_StageB_Store_Reg040:
 	stw_da 0x0451ce, xwa
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 4)
-	stda16 10558, xwa
+	ld (10558:16), wa
 	ldw_da xwa, 0x041343
 	bit 2, wa
 	jr z, WaveSel_StageB_Store_Reg040_Return
@@ -41101,8 +41101,8 @@ DSP_System_Init_Clear2_Loop:
 DSP_System_Init_Vars:
 	stdi16 11025, 0	; Clear DSP control variable
 	lds wa, 0
-	stda16 11023, xwa	; Clear control variable
-	stda16 11021, xwa	; Clear control variable
+	ld (11023:16), wa	; Clear control variable
+	ld (11021:16), wa	; Clear control variable
 	bit_dd8 3, 0x44	; Check hardware config pin
 	jr z, DSP_System_Init_SetBit
 	anddi16_24 267075, 65527	; Clear bit 3 of DSP config
@@ -42364,7 +42364,7 @@ ToneGen_SetupPolyVoice:
 	extz wa
 	sll wa, 8
 	set 7, wa
-	stda16 15146, xwa
+	ld (15146:16), wa
 	ld a, e
 	extz wa
 	lda xbc, (0x012177:24)
@@ -42392,7 +42392,7 @@ ToneGen_SetupPolyVoice_Path:
 	add wa, wa
 	lda xbc, (0x01217d:24)
 	ldw_sri WA, 0x07, 0xE4, 0xE0
-	stda16 15134, xwa
+	ld (15134:16), wa
 	ld a, (xsp + 2)
 	extz wa
 	lda xbc, (15132:16)
@@ -42438,7 +42438,7 @@ ToneGen_SetupPercussionVoice:
 	orddm16 15138, xhl
 	ordi16 15136, 4095
 	ldw_da xwa, 0x01217d
-	stda16 15134, xwa
+	ld (15134:16), wa
 	ld a, (xsp)
 	extz wa
 	lda xbc, (15132:16)
@@ -42637,7 +42637,7 @@ Voice_Poly_NoteOn_Epilogue:
 ; the ring byte count sampled at the start of the pass; nothing in this region reads 0x4366
 ; back, so it exists for the debugger / for code outside the region.
 DSP_StoreBufferCount:
-	stda16 17254, xwa
+	ld (17254:16), wa
 	ret
 
 ; ===========================================================================
@@ -42661,8 +42661,8 @@ DSP_StoreBufferCount:
 DSP2_Init:
 	stdi16 15204, 0
 	lds wa, 0
-	stda16 15202, xwa
-	stda16 15200, xwa
+	ld (15202:16), wa
+	ld (15200:16), wa
 	ret
 
 ; --- 0x03582E-0x03582F  Voice_Poly_NoteOn_Data -- two bytes 0x0E 0x0E
@@ -42813,7 +42813,7 @@ CmdHandler60_StreamSizeC:
 	extz wa
 	add wa, bc
 	inc 8, wa
-	stda16 17544, xwa
+	ld (17544:16), wa
 	adddi16 17546, 32
 	stdi16 17548, 1
 	jr DSP_EnqueueOrReturn
@@ -44131,7 +44131,7 @@ EFF_GetSlotBuffer_Epilogue:
 ; 0x036275.
 DSP_StateTable_DefaultData:
 	extz	wa
-	stda16	(17842), wa
+	ld	(17842:16), wa
 	ld	bc, (17844:16)
 	ld	de, (17846:16)
 	jp	245863
@@ -44141,7 +44141,7 @@ DSP_StateTable_DefaultData:
 ; 0x036232. CmdHandler2C global sub-command 0x02.
 DSP_Set_MixParam_45B4:
 	extz	wa
-	stda16	(17844), wa
+	ld	(17844:16), wa
 	ld	wa, (17842:16)
 	ld	bc, (17844:16)
 	ld	de, (17846:16)
@@ -44152,7 +44152,7 @@ DSP_Set_MixParam_45B4:
 ; 0x03624D. CmdHandler2C global sub-command 0x06.
 DSP_Set_MixParam_45B6:
 	extz	wa
-	stda16	(17846), wa
+	ld	(17846:16), wa
 	ld	wa, (17842:16)
 	ld	bc, (17844:16)
 	ld	de, (17846:16)
@@ -44169,7 +44169,7 @@ DSP_Set_Value_45B8:
 	; 22 instructions, of which 3 needed a spelling search because
 	; llvm-mc --disassemble refuses them (it can still ASSEMBLE them).
 	extz	wa
-	stda16	(17848), wa
+	ld	(17848:16), wa
 	cpdi16	(17850), 0
 	ret	z
 	stdi16	(17550), 0
@@ -44186,7 +44186,7 @@ DSP_Set_Value_45B8:
 DSP_Set_Enable_45BA:
 	ld	c, a
 	extz	bc
-	stda16	(17850), bc
+	ld	(17850:16), bc
 	stdi16	(17550), 0
 	cps	a, 0
 	jr	z, 8
@@ -44200,7 +44200,7 @@ DSP_Set_Enable_45BA:
 DSP_Set_CfgWord_4504:
 	stdi16	(17550), 0
 	extz	wa
-	stda16	(17668), wa
+	ld	(17668:16), wa
 	lda	xwa, (17550:16)
 	jp	233009
 ; ★ NEW NAME. Same shape, target (0x453C) = 0x4496 + 0xA6 = slot 2 record + 0x36.
@@ -44208,7 +44208,7 @@ DSP_Set_CfgWord_4504:
 DSP_Set_CfgWord_453C:
 	stdi16	(17550), 0
 	extz	wa
-	stda16	(17724), wa
+	ld	(17724:16), wa
 	lda	xwa, (17550:16)
 	jp	233009
 ; ★ NEW NAME. (0x448E) = 0 ; (0x45B0) = WA ; then WA = (0x4496) (slot 0's algorithm number)
@@ -44218,14 +44218,14 @@ DSP_Set_CfgWord_453C:
 DSP_Set_AlgoType_45B0:
 	stdi16	(17550), 0
 	extz	wa
-	stda16	(17840), wa
+	ld	(17840:16), wa
 	ld	wa, (17558:16)
 	jrl	-593
 ; ★ NEW NAME. Target (0x4574) = 0x4496 + 0xDE = slot 3 record + 0x36. Global sub-command 0x24.
 DSP_Set_CfgWord_4574:
 	stdi16	(17550), 0
 	extz	wa
-	stda16	(17780), wa
+	ld	(17780:16), wa
 	lda	xwa, (17550:16)
 	jp	233009
 ; ★ NEW NAME. Target (0x45AC) = 0x4496 + 0x116 = slot 4 record + 0x36. Global sub-command
@@ -44236,7 +44236,7 @@ DSP_Set_CfgWord_4574:
 DSP_Set_CfgWord_45AC:
 	stdi16	(17550), 0
 	extz	wa
-	stda16	(17836), wa
+	ld	(17836:16), wa
 	lda	xwa, (17550:16)
 	jp	233009
 

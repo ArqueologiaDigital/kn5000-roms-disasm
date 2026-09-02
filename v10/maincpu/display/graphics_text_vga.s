@@ -5332,7 +5332,7 @@ MainMssSetUp:
 	jr z, MainMssSetUp_ClearMode
 	cp xbc, 0x1e20018
 	jr nz, MainMssSetUp_ReturnZero
-	stda16 (0x8d56), xde
+	ld (0x8d56:16), de
 	incdi16 1, (0x8d56)
 	ld (0x8d4e:16), 7
 	jr MainMssSetUp_ReturnZero

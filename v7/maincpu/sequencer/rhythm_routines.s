@@ -210,7 +210,7 @@ RhythmEvt_NoteOnLoop:
 	cp (XHL+0x04),IY
 	jrl z, RhythmEvt_IterDone
 	ldb_dri a, 0x07, 0xec, 0xf4
-	stda16 (0x33c1), iy
+	ld (0x33c1:16), iy
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
 	pushw iy
@@ -1131,7 +1131,7 @@ Rhythm_AdvanceTick:
 	jr c, Rhythm_AdvanceTick_Store
 	xor W,W
 Rhythm_AdvanceTick_Store:
-	stda16	(12871), wa
+	ld	(12871:16), wa
 	ret
 Rhythm_SaveState:
 	ld	a, (12889:16)

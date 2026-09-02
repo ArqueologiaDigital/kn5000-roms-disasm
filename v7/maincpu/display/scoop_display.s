@@ -842,7 +842,7 @@ SoundEvt_LongPacketHandler:
 	sla	wa, 2
 	ld	iy, wa
 	ld	wa, (13950:16)
-	stda16	3816, wa
+	ld	(3816:16), wa
 	ld	a, (3420:16)
 	ld	(3821:16), a
 	push	xhl
@@ -888,7 +888,7 @@ DefaultHandler_Ret:
 	xor D,D
 	sla DE, 0x02
 	ld IY,DE
-	stda16 (0x26c0), bc
+	ld (0x26c0:16), bc
 	push XHL
 	ld XHL,DefaultHandler_Ret_0x2B
 	ldl_dri xiy, 0x07, 0xec, 0xf4
@@ -1876,7 +1876,7 @@ UIState_DispatchHandler:
 	ld	(3923:16), 1
 	pushw	wa
 	ld	wa, (13950:16)
-	stda16	(3816), wa
+	ld	(3816:16), wa
 	popw	wa
 	bit	7, w
 	jrl	z, 8
@@ -1921,7 +1921,7 @@ Display_RedrawParameters:
 
 	dec 1, wa
 
-	stda16 (0x287f), xwa
+	ld (0x287f:16), wa
 
 	cp wa, 0x3e8
 
@@ -1932,14 +1932,14 @@ Display_RedrawParameters:
 
 
 Display_RedrawParams_StoreAndLoad:
-	stda16 (3660), xwa
+	ld (3660:16), wa
 	call VoiceBank_BitsAndLoad
 	ld a, (3424:16)
 	call SetWall_SlotResolve
 	ld (3820:16), a
 	ld wa, (0x28af:16)
-	stda16 (0x28bf), xwa
-	stda16 (0x28c1), xiy
+	ld (0x28bf:16), wa
+	ld (0x28c1:16), iy
 	call VoiceBank_ProcessCommand
 	ld xix, 0xef8
 	call VoiceBank_CheckCommand
@@ -1978,10 +1978,10 @@ Display_RedrawValues:
 
 	ldw wa, 0x3e8
 Display_RedrawValues_Store:
-	stda16	3662, wa
+	ld	(3662:16), wa
 	call	15692621
 	ld	wa, (13950:16)
-	stda16	10367, wa
+	ld	(10367:16), wa
 	call	15691955
 	ld	a, (3424:16)
 	call	15858243
@@ -1993,13 +1993,13 @@ Display_RedrawValues_Store:
 	push	xix
 	ld	xix, 3230
 	ld_rrw	wa, xix, hl
-	stda16	10431, wa
+	ld	(10431:16), wa
 	srl	hl, 1
 	ld	xix, 3262
 	ld_rrw	wa, xix, hl
 	pop	xix
 	and	wa, 255
-	stda16	10433, wa
+	ld	(10433:16), wa
 	call	15723051
 	ld	xix, 3862
 	call	15692107
@@ -2033,7 +2033,7 @@ Display_RedrawIndicators:
 
 	inc 1, wa
 
-	stda16 (0x287f), xwa
+	ld (0x287f:16), wa
 
 	cp wa, 0x3e8
 
@@ -2044,7 +2044,7 @@ Display_RedrawIndicators:
 
 
 Display_RedrawInd_Store:
-	stda16 (3664), xwa
+	ld (3664:16), wa
 	call VoiceBank_BitsAndLoad
 	ld a, (3424:16)
 	call SetWall_SlotResolve
@@ -2057,8 +2057,8 @@ Display_RedrawInd_Store:
 Display_RedrawInd_LoadDirect:
 	ld (3820:16), a
 	ld wa, (0x28af:16)
-	stda16 (0x28bf), xwa
-	stda16 (0x28c1), xiy
+	ld (0x28bf:16), wa
+	ld (0x28c1:16), iy
 	call VoiceBank_ProcessCommand
 	ld xix, 0xf34
 	call VoiceBank_CheckCommand
@@ -3683,7 +3683,7 @@ ToneParam_HandlerTable_BC:
 	ld l, (0x0d5d:16)
 	subda8 l, (0x0d5c)
 	xor H,H
-	stda16 (0x0dcd), hl
+	ld (0x0dcd:16), hl
 	ld (0x0dce:16), 0x00
 	ld (0x7ea6:16), 0xff
 	call DisplayMode_Handler_3_0x30C
@@ -4367,7 +4367,7 @@ VoiceSlot_TableSetup:
 	sla HL, 0x01
 	ld XIX,0x00000c9e
 	ldw_dri wa, 0x07, 0xf0, 0xec
-	stda16 (0x0de8), wa
+	ld (0x0de8:16), wa
 	pop XIX
 	ld c, (0x0de7:16)
 	xor B,B
@@ -4384,7 +4384,7 @@ VoiceSlot_TableSetup:
 	sla HL, 0x01
 	ld XIX,0x00000c9e
 	ldw_dri wa, 0x07, 0xf0, 0xec
-	stda16 (0x0dea), wa
+	ld (0x0dea:16), wa
 	pop XIX
 	call VoiceSlot_TableSetup_0x12C
 	call DisplayStr_StyleSectionNames_0x69
@@ -4394,7 +4394,7 @@ VoiceSlot_TableSetup:
 	jrl c, .Lc_ef90e9
 	ldw WA, 0x03e8
 .Lc_ef90e9:
-	stda16 (0x0e4e), wa
+	ld (0x0e4e:16), wa
 	xor A,A
 	call VoiceSlot_RestoreState
 	call VoiceSlot_TableSetup_0x2E0
@@ -4468,7 +4468,7 @@ AccPedal_LoadAddr0:
 	ld hl, (3416:16)
 
 AccPedal_StoreAddrAndCheck:
-	stda16 (3299), xhl
+	ld (3299:16), hl
 	cpdi8 (3429), 3
 	jrl nz, AccPedal_CallEventSwitch
 	ld w, a
@@ -4478,7 +4478,7 @@ AccPedal_CallEventSwitch:
 	call Scoop_EventHandler_MenuSwitch
 	cpdi8 (0x287a), 0x00
 	jrl nz, AccPedal_SendSysExAndReturn
-	stda16 (0x367e), de
+	ld (0x367e:16), de
 	ld (0x0d5c:16), c
 	ld (0x0d5d:16), a
 	jp AccPedal_Ret
@@ -5170,7 +5170,7 @@ VoiceCtrl_ParamSetupBytecode:
 	ld	w, l
 	rrc	w
 	and	w, 1
-	stda16	3826, wa
+	ld	(3826:16), wa
 	.byte 0xc1, 0x53, 0x0d, 0x3e, 0x10
 	ld	(3538:16), 4
 	ld	xhl, 3567
@@ -5435,8 +5435,8 @@ ScoopParam_ValueTable:
 	call MemConfig_Handler_4_0x15B
 	call PortConfig_SetupBytecode
 	xor WA,WA
-	stda16 (0x0d4f), wa
-	stda16 (0x0d51), wa
+	ld (0x0d4f:16), wa
+	ld (0x0d51:16), wa
 	ld c, (0x0eee:16)
 	dec 1,C
 	.incbin "includes/romslices/v7_transplant_ScoopParam_ValueTable_tail_head.bin"
@@ -6227,9 +6227,9 @@ MemConfig_Handler_3:
 	ret
 	pushw	wa
 	ld	wa, (13950:16)
-	stda16	(3816), wa
+	ld	(3816:16), wa
 	ld	wa, (3416:16)
-	stda16	(3818), wa
+	ld	(3818:16), wa
 	ld	a, (3415:16)
 	ld	(3820:16), a
 	ld	a, (3420:16)
@@ -6731,7 +6731,7 @@ MemConfig_Handler_4:
 	call	15707428
 	call	15706175
 	xor	wa, wa
-	stda16	3416, wa
+	ld	(3416:16), wa
 	ld	(3415:16), a
 	jp	15710012
 	call	15713087
@@ -7062,7 +7062,7 @@ VoiceSlot_RetZ:
 	call	VoiceSlot_ComputeWordIndex
 	ld	xix, 3230
 	ld_rrw iy, xix, iz
-	stda16 (10399), iy
+	ld (10399:16), iy
 	srl	iz, 1
 	ldfr_lerp xix, 56
 	lda_rr xix, xix, iz
@@ -7070,13 +7070,13 @@ VoiceSlot_RetZ:
 	ldto_lerp xix, 56
 	xor	w, w
 	sla	iz, 1
-	stda16	(0x28b6), wa
+	ld	(0x28b6:16), wa
 	xor	b, b
 	add	wa, bc
 	cp	wa, 255
 	jrl	ugt, 12
-	stda16	(0x28ba), iy
-	stda16	(0x28bc), wa
+	ld	(0x28ba:16), iy
+	ld	(0x28bc:16), wa
 	jp	VoiceSlot_RetZ_0x58
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	xhl, (4349:16)
@@ -7570,9 +7570,9 @@ VoiceSlot_FinalRetZ:
 	ld	xde, (7514:16)
 	ld	(xhl), xde
 	pop	xde
-	stda16	3302, wa
+	ld	(3302:16), wa
 	ld	bc, (61999:16)
-	stda16	61999, iy
+	ld	(61999:16), iy
 	xor	wa, wa
 	call	15713910
 	ld	xhl, (4349:16)
@@ -7669,7 +7669,7 @@ VoiceSlot_ComputeIndex:
 VoiceSlot_IndexDone:
 	xor	wa, wa
 	ld	(3428:16), a
-	stda16	3426, wa
+	ld	(3426:16), wa
 	call	15713087
 	cp	a, 129
 	jrl	nz, 14
@@ -7699,7 +7699,7 @@ VoiceSlot_IndexDone:
 	sub	wa, 1
 	jrl	nc, 2
 	xor	wa, wa
-	stda16	3426, wa
+	ld	(3426:16), wa
 	call	15725662
 	jp	15714133
 	.byte 0x95, 0x3f, 0x01, 0x00
@@ -7828,9 +7828,9 @@ VoiceState_RestoreEntry:
 
 VoiceState_RestoreDone:
 	ld wa, (xhl + 4)
-	stda16 (3416), xwa
+	ld (3416:16), wa
 	ld wa, (xhl + 6)
-	stda16 (3418), xwa
+	ld (3418:16), wa
 	ret
 VoiceState_DataBlock2:
 	push	xhl
@@ -8120,13 +8120,13 @@ VoiceState_DataBlock2:
 	push	xde
 	ld	xde, 3230
 	ld_rrw wa, xde, hl
-	stda16	10431, wa
+	ld	(10431:16), wa
 	srl	hl, 1
 	ld	xde, 3262
 	ld_rrb	a, xde, hl
 	pop	xde
 	xor	w, w
-	stda16	10433, wa
+	ld	(10433:16), wa
 	call	15723051
 	ld	xix, 3765
 	ld	a, (xix)
@@ -8228,13 +8228,13 @@ VoiceState_DataBlock2:
 	push	xde
 	ld	xde, 3230
 	ld_rrw	iy, xde, iz
-	stda16	10431, iy
+	ld	(10431:16), iy
 	srl	iz, 1
 	ld	xde, 3262
 	ld_rrb	a, xde, iz
 	pop	xde
 	xor	w, w
-	stda16	10433, wa
+	ld	(10433:16), wa
 	call	15723051
 	ld	a, (3765:16)
 	and	a, 240
@@ -8426,11 +8426,11 @@ VoiceState_DataBlock2:
 	ld	a, (3822:16)
 	ld	(3654:16), a
 	xor	wa, wa
-	stda16	3435, wa
+	ld	(3435:16), wa
 	ld	a, (3822:16)
 	ld	(3822:16), a
 	xor	wa, wa
-	stda16	3652, wa
+	ld	(3652:16), wa
 	call	15717076
 	cps	w, 0
 	jrl	nz, -23
@@ -8456,16 +8456,16 @@ VoiceState_DataBlock2:
 	ld	wa, (3416:16)
 	cpdi8	3429, 0
 	jrl	nz, 8
-	stda16	3416, wa
+	ld	(3416:16), wa
 	jp	15718467
-	stda16	3418, wa
+	ld	(3418:16), wa
 	jp	15718467
 	ld	wa, (3416:16)
 	cpdi8	3429, 0
 	jrl	nz, 8
-	stda16	3416, wa
+	ld	(3416:16), wa
 	jp	15718467
-	stda16	3418, wa
+	ld	(3418:16), wa
 	ld	a, (3654:16)
 	ld	(3822:16), a
 	ret
@@ -9254,7 +9254,7 @@ VoiceBank_UpdateLerpState:
 	call DisplayStr_ComputeTableAddr
 	ld xhl, (4349:16)
 	ld hl, (xhl + 3)
-	stda16 (0x28bf), xhl
+	ld (0x28bf:16), hl
 	lds wa, 5
 	jp VoiceBank_StoreIndex
 
@@ -9262,7 +9262,7 @@ VoiceBank_IncrementIndex:
 	inc 1, wa
 
 VoiceBank_StoreIndex:
-	stda16 (0x28c1), xwa
+	ld (0x28c1:16), wa
 	pop xix
 	pop_lerp 0x38
 	push xiz
@@ -11074,7 +11074,7 @@ Display_RedrawTitleBar:
 	jr t, Scoop_TitleBar_Part1Check
 Scoop_TitleBar_ShowBPM_Part0:
 	ld wa, (3660:16)
-	stda16 (4487), xwa
+	ld (4487:16), wa
 	ld xiy, StyleUI_ScreenData_Main_0x1C2
 	call GraphicsRender_EventCheck
 
@@ -11091,7 +11091,7 @@ Scoop_TitleBar_Part1Check:
 
 Scoop_TitleBar_ShowBPM_Part1:
 	ld wa, (3662:16)
-	stda16 (4489), xwa
+	ld (4489:16), wa
 	ld xiy, StyleUI_ScreenData_Main_0x1CC
 	call GraphicsRender_EventCheck
 
@@ -11108,7 +11108,7 @@ Scoop_TitleBar_Part2Check:
 
 Scoop_TitleBar_ShowBPM_Part2:
 	ld wa, (3664:16)
-	stda16 (4491), xwa
+	ld (4491:16), wa
 	ld xiy, StyleUI_ScreenData_Main_0x1D6
 	call GraphicsRender_EventCheck
 
@@ -11352,7 +11352,7 @@ Display_RedrawAltContent:
 	xor hl, hl
 	ld (4579:16), 6
 	ld (4580:16), 7
-	stda16 (4581), xix
+	ld (4581:16), ix
 	ld (4583:16), 69
 	ld (4584:16), 78
 	ld (4585:16), 68
@@ -11377,9 +11377,9 @@ Scoop_AltContent_ClearOneRegion:
 	ldw hl, 0xa
 	ld (4586:16), 14
 	ld (4587:16), 8
-	stda16 (4588), xiy
-	stda16 (4590), xbc
-	stda16 (4592), xhl
+	ld (4588:16), iy
+	ld (4590:16), bc
+	ld (4592:16), hl
 	ld xiy, 0x11ea
 	call UIRender_ConditionalFBCall
 	ret
@@ -11676,12 +11676,12 @@ Scoop_EventHandler_Scroll:
 	ld iy, (0x28bc:16)
 	sub iy, 0x5
 	inc 1, iy
-	stda16 (9874), xiy
+	ld (9874:16), iy
 	ld iy, (0x28bc:16)
 	ld ix, (0x28b6:16)
 	sub ix, 0x5
 	inc 1, ix
-	stda16 (9876), xix
+	ld (9876:16), ix
 	ld ix, (0x28b6:16)
 	jrl Scoop_ButtonGrid_ProcessCell
 
@@ -11703,11 +11703,11 @@ Scoop_Scroll_Boundary3:
 
 Scoop_Scroll_Apply:
 	subda16 xwa, 0x28bc
-	stda16 (9870), xwa
+	ld (9870:16), wa
 	ldw bc, 0x100
 	sub bc, 0x5
 	sub bc, wa
-	stda16 (9872), xbc
+	ld (9872:16), bc
 	ld iy, (0x28bc:16)
 	ld ix, (0x28b6:16)
 	ld bc, (0x28bc:16)
@@ -11735,10 +11735,10 @@ Scoop_EventHandler_CategorySelect:
 
 Scoop_CategorySelect_Pitch:
 	ld wa, (9870:16)
-	stda16 (9876), xwa
+	ld (9876:16), wa
 	ldw bc, 0x100
 	sub bc, 0x5
-	stda16 (9874), xbc
+	ld (9874:16), bc
 	jrl Scoop_ButtonGrid_ProcessCell
 
 Scoop_CategorySelect_Amplitude:
@@ -11772,18 +11772,18 @@ Scoop_CategorySelect_Filter:
 Scoop_CategorySelect_End:
 	ldw bc, 0x100
 	sub bc, 0x5
-	stda16 (9876), xbc
-	stda16 (9874), xbc
+	ld (9876:16), bc
+	ld (9874:16), bc
 	jrl Scoop_ButtonGrid_ProcessCell
 
 Scoop_CategorySelect_UpdateDisplay:
 	ld wa, (0x28bc:16)
 	subda16 xwa, 0x28b6
-	stda16 (9870), xwa
+	ld (9870:16), wa
 	ldw bc, 0x100
 	sub bc, 0x5
 	sub bc, wa
-	stda16 (9872), xbc
+	ld (9872:16), bc
 	ld iy, (0x28bc:16)
 	ld ix, (0x28b6:16)
 	ld bc, (0x28b6:16)
@@ -11816,17 +11816,17 @@ Scoop_EventHandler_ButtonGrid:
 
 Scoop_ButtonGrid_CheckBounds:
 	ld wa, (9872:16)
-	stda16 (9876), xwa
+	ld (9876:16), wa
 	ldw wa, 0x100
 	sub wa, 0x5
-	stda16 (9874), xwa
+	ld (9874:16), wa
 
 Scoop_ButtonGrid_ProcessCell:
 	ld wa, (0x28b8:16)
 	sub wa, 0x5
 	ld bc, (9874:16)
 	sub bc, wa
-	stda16 (9880), xbc
+	ld (9880:16), bc
 	cpdm16 9876, xbc
 	jr nc, Scoop_ButtonGrid_UpdateValue
 	jr Scoop_ButtonGrid_End
@@ -11864,11 +11864,11 @@ Scoop_EventHandler_SpecialMode:
 	pushw	wa
 	stib_da	(0x35216e), 1
 	subda16 xiy, (10428)
-	stda16	(9874), iy
+	ld	(9874:16), iy
 	ld	iy, (0x28bc:16)
 	ldw	ix, 256
 	subda16 xix, (10422)
-	stda16	(9876), ix
+	ld	(9876:16), ix
 	ld	ix, (0x28b6:16)
 	jrl	431
 	ld	wa, (0x28b6:16)
@@ -11884,11 +11884,11 @@ Scoop_EventHandler_SpecialMode:
 	ldw	bc, 256
 	subda16 xbc, (10428)
 	sub wa, bc
-	stda16	(9870), wa
+	ld	(9870:16), wa
 	ldw	bc, 256
 	sub	bc, 5
 	sub	bc, wa
-	stda16	(9872), bc
+	ld	(9872:16), bc
 	ld	iy, (0x28bc:16)
 	ld	ix, (0x28b6:16)
 	ldw	bc, 256
@@ -11920,10 +11920,10 @@ Scoop_EventHandler_SpecialMode:
 	jr	z, -49
 	jrl	355
 	ld	wa, (9870:16)
-	stda16	(9876), wa
+	ld	(9876:16), wa
 	ldw	bc, 256
 	sub	bc, 5
-	stda16	(9874), bc
+	ld	(9874:16), bc
 	jrl	269
 	ldw	bc, 256
 	subda16 xbc, (10428)
@@ -11962,19 +11962,19 @@ Scoop_EventHandler_SpecialMode:
 	jrl	239
 	ldw	bc, 256
 	sub	bc, 5
-	stda16	(9876), bc
-	stda16	(9874), bc
+	ld	(9876:16), bc
+	ld	(9874:16), bc
 	jrl	157
 	ldw	wa, 256
 	subda16 xwa, (10428)
 	ldw	bc, 256
 	subda16 xbc, (10422)
 	sub wa, bc
-	stda16	(9870), wa
+	ld	(9870:16), wa
 	ldw	bc, 256
 	sub	bc, 5
 	sub	bc, wa
-	stda16	(9872), bc
+	ld	(9872:16), bc
 	ld	iy, (0x28bc:16)
 	ld	ix, (0x28b6:16)
 	ldw	bc, 256
@@ -12014,15 +12014,15 @@ Scoop_EventHandler_SpecialMode:
 	jr	z, -48
 	jr	83
 	ld	wa, (9872:16)
-	stda16	(9876), wa
+	ld	(9876:16), wa
 	ldw	wa, 256
 	sub	wa, 5
-	stda16	(9874), wa
+	ld	(9874:16), wa
 	ldw	wa, 255
 	subda16 xwa, (10424)
 	ld	bc, (9874:16)
 	sub	bc, wa
-	stda16	(9880), bc
+	ld	(9880:16), bc
 	cpdm16 (9876), xbc
 	jr	nc, 2
 	jr	6
@@ -12070,7 +12070,7 @@ Scoop_SpecialMode_Data:
 	ld xiy, (9854:16)
 	stda32 4349, xiy
 	ld wa, (xiy + 1)
-	stda16 (0x28ba), xwa
+	ld (0x28ba:16), wa
 	extz xwa
 	dec 1, xwa
 	sla xwa, 8
@@ -12094,7 +12094,7 @@ Scoop_SpecialMode_Draw:
 	ld xix, (9850:16)
 	stda32 4349, xix
 	ld wa, (xix + 1)
-	stda16 (0x289f), xwa
+	ld (0x289f:16), wa
 	extz xwa
 	dec 1, xwa
 	sla xwa, 8
@@ -12118,7 +12118,7 @@ Scoop_SpecialMode_UpdateParams:
 	ld	xiy, (9854:16)
 	stda32	3304, xiy
 	ld	wa, (xiy+3)
-	stda16	(0x28ba), wa
+	ld	(0x28ba:16), wa
 	extz	xwa
 	dec	1, xwa
 	sla	xwa, 8
@@ -12139,7 +12139,7 @@ Scoop_SpecialMode_UpdateParams:
 	ld	xix, (9850:16)
 	stda32	4349, xix
 	ld	wa, (xix+3)
-	stda16	(0x289f), wa
+	ld	(0x289f:16), wa
 	extz	xwa
 	dec	1, xwa
 	sla	xwa, 8
@@ -12200,7 +12200,7 @@ Scoop_SpecialMode_ValueEdit:
 	ld a, c
 	rcf
 	stcf_a_16 iz
-	stda16 (0x2875), xiz
+	ld (0x2875:16), iz
 	popw bc
 	ld xix, 0xf218
 	stib_ind 0x07, 0xf0, 0xf4, 0x05
@@ -12230,9 +12230,9 @@ Scoop_SpecialMode_ValueEditEnd:
 	ret
 
 Scoop_SpecialMode_ValueSend:
-	stda16 (3302), xwa
+	ld (3302:16), wa
 	ld bc, (0xf22f:16)
-	stda16 (0xf22f), xiy
+	ld (0xf22f:16), iy
 	xor wa, wa
 	call DispatchHandler_SubJumpTable
 	ld xhl, (4349:16)
