@@ -1469,7 +1469,7 @@ SetWall_FullReset_ClearCtrl:
 	cp bc, 0xa
 	jrl c, SetWall_FullReset_SlotLoop
 	ldw (0xf19e:16), 0
-	stiw_da (0x00ffec), 0x0000
+	ldw (0x00ffec:24), 0x0000
 	ld (0xf24b:16), 0
 	ld xix, 0xcef
 	xor wa, wa
@@ -1487,7 +1487,7 @@ SetWall_FullReset_ClearGlobal2:
 	ld (0xf24b:16), 0
 	call SetWall_SendPanelCtrl
 	ldw (0x2875:16), 0
-	stiw_da (0x00ffec), 0x0000
+	ldw (0x00ffec:24), 0x0000
 	ret
 
 SetWall_SingleSlotResolve:

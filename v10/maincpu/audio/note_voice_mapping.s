@@ -15365,7 +15365,7 @@ Voice_NullRet2:
 	ret
 
 NullRet2_Block:
-	stiw_da (0x00ceff), 0x0000
+	ldw (0x00ceff:24), 0x0000
 	ld (0x00cee5:24), 0x00
 	ld (0x00cef1:24), 0x00
 	ld (0x00cee0:24), 0x00
@@ -15433,7 +15433,7 @@ VoiceSlot_StoreParams_Block:
 	ret
 
 VoiceSlot_StoreParams_Block2:
-	stiw_da (0x00cf2f), 0x0000
+	ldw (0x00cf2f:24), 0x0000
 	ld xiy, 0xceff
 	ld xix, 0xcf8f
 	ld hl, de
@@ -15960,7 +15960,7 @@ Audio_NullRet2_LoopBody:
 	ld de, (0x00ceff:24)
 	cps de, 4
 	jr c, Voice_ProcessSlotEntry
-	stiw_da (0x00cf2f), 0x0001
+	ldw (0x00cf2f:24), 0x0001
 	ld xiz, xiy
 	add xiz, xhl
 	ld wa, (xiz + 4)
@@ -15981,7 +15981,7 @@ Audio_NullRet2_LoopCheck:
 	ld de, (0x00ceff:24)
 	cps de, 5
 	jr c, Voice_ProcessSlotEntry
-	stiw_da (0x00cf2f), 0x0001
+	ldw (0x00cf2f:24), 0x0001
 	ld xiz, xiy
 	add xiz, xhl
 	ld wa, (xiz + 4)
@@ -16002,7 +16002,7 @@ Voice_ProcessSlotEntry:
 	and de, 0x200
 	stw_erp DE, 0x3e
 	jr z, ProcessSlotEntry_Block
-	stiw_da (0x00cf2f), 0x0000
+	ldw (0x00cf2f:24), 0x0000
 	anddi8_24 (0xcede), 253
 	ld (0x00cee5:24), 0x07
 	ld de, (0x00ceff:24)
@@ -16011,7 +16011,7 @@ Voice_ProcessSlotEntry:
 	jr Audio_PopIzRet
 
 ProcessSlotEntry_Block:
-	stiw_da (0x00cf2f), 0x0000
+	ldw (0x00cf2f:24), 0x0000
 	anddi8_24 (0xcede), 253
 	ld (0x00cee1:24), 0x00
 	ld (0x00cee5:24), 0x07
@@ -16170,7 +16170,7 @@ NoteBuffer_CompactEn_Increment:
 	sub a, w
 	cps a, 7
 	jr c, NoteBuffer_NullRet
-	stiw_da (0x00cf2f), 0x0001
+	ldw (0x00cf2f:24), 0x0001
 	ordi8_24 (0xcede), 2
 
 NoteBuffer_NullRet:
@@ -16475,8 +16475,8 @@ InitPartAllocState_Epilogue:
 
 InitPartAllocState_Block4:
 	ld (0x00cee5:24), 0x00
-	stiw_da (0x00cf5f), 0x0000
-	stiw_da (0x00cf77), 0x0000
+	ldw (0x00cf5f:24), 0x0000
+	ldw (0x00cf77:24), 0x0000
 	ld (0x00cef1:24), 0x00
 	ret
 
@@ -16548,7 +16548,7 @@ VoiceSlot_SetPitchParams_LoadReg:
 	ld xiz, VoiceSlot_CheckAndApply_Data
 	ldb_sri W, 0x07, 0xf8, 0xec
 	ldb a, 0x40
-	stiw_da (0x00cf77), 0x0001
+	ldw (0x00cf77:24), 0x0001
 	ld (0x00cf7b:24), wa
 	ret
 

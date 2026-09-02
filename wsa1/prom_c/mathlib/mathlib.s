@@ -233,7 +233,7 @@ sub_FC8C45__FC8C81:
 	call	0xFCA121                              ; FC8C95  call 0xfca121
 	cps	wa, 1                                  ; FC8C99  cp WA,1
 	jr nz, sub_FC8C45__FC8CB8                  ; FC8C9B  jr NZ,0xfc8cb8
-	stiw_da	(0xF362), 34                       ; FC8C9D  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC8C9D  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC8CA4  ld XIY,(XSP)
 	ld	xix, (0xFCB2C6:24)                     ; FC8CA6  ld XIX,(0xfcb2c6)
 	stl_dpi	xix, 0xF6                          ; FC8CAB  ld (XIY+),XIX
@@ -252,7 +252,7 @@ sub_FC8C45__FC8CB8:
 	call	0xFCA121                              ; FC8CCC  call 0xfca121
 	cps	wa, 1                                  ; FC8CD0  cp WA,1
 	jr nz, sub_FC8C45__FC8CDB                  ; FC8CD2  jr NZ,0xfc8cdb
-	stiw_da	(0xF362), 34                       ; FC8CD4  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC8CD4  ld (0x00f362),0x0022
 sub_FC8C45__FC8CDB:
 	lda	xbc, (xiz-8)                           ; FC8CDB  lda XBC,XIZ+0xf8
 	push	xbc                                   ; FC8CDE  push XBC
@@ -789,7 +789,7 @@ sub_FC9140__FC9180:
 	call	0xFCA121                              ; FC9194  call 0xfca121
 	cps	wa, 1                                  ; FC9198  cp WA,1
 	jr nz, sub_FC9140__FC91B7                  ; FC919A  jr NZ,0xfc91b7
-	stiw_da	(0xF362), 34                       ; FC919C  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC919C  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC91A3  ld XIY,(XSP)
 	ld	xix, (0xFCB36E:24)                     ; FC91A5  ld XIX,(0xfcb36e)
 	stl_dpi	xix, 0xF6                          ; FC91AA  ld (XIY+),XIX
@@ -808,7 +808,7 @@ sub_FC9140__FC91B7:
 	call	0xFCA121                              ; FC91CB  call 0xfca121
 	cps	wa, 1                                  ; FC91CF  cp WA,1
 	jr nz, sub_FC9140__FC91DA                  ; FC91D1  jr NZ,0xfc91da
-	stiw_da	(0xF362), 34                       ; FC91D3  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC91D3  ld (0x00f362),0x0022
 sub_FC9140__FC91DA:
 	ld	xbc, (xiz+12)                           ; FC91DA  ld XBC,(XIZ+0x0c)
 	push	xbc                                   ; FC91DD  push XBC
@@ -1356,7 +1356,7 @@ sub_FC9576__FC964E:
 	cps	wa, 0                                  ; FC9698  cp WA,0
 	jr z, sub_FC9576__FC96A6                   ; FC969A  jr Z,0xfc96a6
 sub_FC9576__FC969C:
-	stiw_da	(0xF362), 33                       ; FC969C  ld (0x00f362),0x0021
+	ldw	(0xF362:24), 33                       ; FC969C  ld (0x00f362),0x0021
 	jrl sub_FC9576__FC97CF                     ; FC96A3  jrl T,0xfc97cf
 sub_FC9576__FC96A6:
 	ld	xix, 1                                  ; FC96A6  ld XIX,0x00000001
@@ -1479,7 +1479,7 @@ sub_FC9576__FC9730:
 	jrl z, sub_FC9576__FC9832                  ; FC97C3  jrl Z,0xfc9832
 	jr sub_FC9576__FC9814                      ; FC97C6  jr T,0xfc9814
 sub_FC9576__FC97C8:
-	stiw_da	(0xF362), 34                       ; FC97C8  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC97C8  ld (0x00f362),0x0022
 sub_FC9576__FC97CF:
 	ld	xiy, (xsp)                              ; FC97CF  ld XIY,(XSP)
 	ld	xix, (0xFCB3D6:24)                     ; FC97D1  ld XIX,(0xfcb3d6)
@@ -1488,7 +1488,7 @@ sub_FC9576__FC97CF:
 	ld	(xiy), xix                              ; FC97DE  ld (XIY),XIX
 	jr sub_FC9576__FC983F                      ; FC97E0  jr T,0xfc983f
 sub_FC9576__FC97E2:
-	stiw_da	(0xF362), 34                       ; FC97E2  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC97E2  ld (0x00f362),0x0022
 	ld	xbc, xix                                ; FC97E9  ld XBC,XIX
 	or	xbc, xbc                                ; FC97EB  or XBC,XBC
 	jr z, sub_FC9576__FC97F4                   ; FC97ED  jr Z,0xfc97f4
@@ -1590,7 +1590,7 @@ sub_FC9844:
 	ld	(xiy), xix                              ; FC9893  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC9895  jrl T,0xfc9bb5
 sub_FC9844__FC9898:
-	stiw_da	(0xF362), 34                       ; FC9898  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC9898  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC989F  ld XIY,(XSP)
 	ld	xix, (0xFCB41E:24)                     ; FC98A1  ld XIX,(0xfcb41e)
 	stl_dpi	xix, 0xF6                          ; FC98A6  ld (XIY+),XIX
@@ -1627,7 +1627,7 @@ sub_FC9844__FC98B3:
 	ld	(xiy), xix                              ; FC98FA  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC98FC  jrl T,0xfc9bb5
 sub_FC9844__FC98FF:
-	stiw_da	(0xF362), 34                       ; FC98FF  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC98FF  ld (0x00f362),0x0022
 	pushw	0                                    ; FC9906  push 0x0000
 	lda	xiy, (xiz-26)                          ; FC9909  lda XIY,XIZ+0xe6
 	call	0xFC9CCD                              ; FC990C  call 0xfc9ccd
@@ -2008,7 +2008,7 @@ sub_FC9BBC__FC9BEC:
 	add	xix, xwa                               ; FC9C23  add XIX,XWA
 	cp	xix, 0                                  ; FC9C25  cp XIX,0x00000000
 	jr gt, sub_FC9BBC__FC9C48                  ; FC9C2B  jr GT,0xfc9c48
-	stiw_da	(0xF362), 34                       ; FC9C2D  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC9C2D  ld (0x00f362),0x0022
 sub_FC9BBC__FC9C34:
 	ld	xiy, (xsp)                              ; FC9C34  ld XIY,(XSP)
 	ld	xix, (0xFCB46E:24)                     ; FC9C36  ld XIX,(0xfcb46e)
@@ -2027,7 +2027,7 @@ sub_FC9BBC__FC9C48:
 	ld	(xiz-10), xbc                           ; FC9C5C  ld (XIZ+0xf6),XBC
 	sub	xbc, xbc                               ; FC9C5F  sub XBC,XBC
 	ld	(xiz-6), xbc                            ; FC9C61  ld (XIZ+0xfa),XBC
-	stiw_da	(0xF362), 34                       ; FC9C64  ld (0x00f362),0x0022
+	ldw	(0xF362:24), 34                       ; FC9C64  ld (0x00f362),0x0022
 	ldw	de, 0                                  ; FC9C6B  ld DE,0x0000
 	jr sub_FC9BBC__FC9C74                      ; FC9C6E  jr T,0xfc9c74
 sub_FC9BBC__FC9C70:
@@ -2157,7 +2157,7 @@ sub_FC9D12:
 	call	0xFCA121                              ; FC9D2D  call 0xfca121
 	cps	wa, 2                                  ; FC9D31  cp WA,2
 	jr z, sub_FC9D12__FC9D41                   ; FC9D33  jr Z,0xfc9d41
-	stiw_da	(0xF362), 33                       ; FC9D35  ld (0x00f362),0x0021
+	ldw	(0xF362:24), 33                       ; FC9D35  ld (0x00f362),0x0021
 	pushw	0                                    ; FC9D3C  push 0x0000
 	jr sub_FC9D12__FC9D67                      ; FC9D3F  jr T,0xfc9d67
 sub_FC9D12__FC9D41:
@@ -2172,7 +2172,7 @@ sub_FC9D12__FC9D41:
 	call	0xFCA121                              ; FC9D55  call 0xfca121
 	cps	wa, 1                                  ; FC9D59  cp WA,1
 	jr z, sub_FC9D12__FC9D7F                   ; FC9D5B  jr Z,0xfc9d7f
-	stiw_da	(0xF362), 33                       ; FC9D5D  ld (0x00f362),0x0021
+	ldw	(0xF362:24), 33                       ; FC9D5D  ld (0x00f362),0x0021
 	pushw	1                                    ; FC9D64  push 0x0001
 sub_FC9D12__FC9D67:
 	lda	xiy, (xiz-34)                          ; FC9D67  lda XIY,XIZ+0xde

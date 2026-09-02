@@ -942,35 +942,35 @@ HDAE5000_SEL_DIR_Screen:	; 0x2837F2
 	jrl nz, .Lfd_done		; XHL != 0 → exit
 
 	; Case 0: offset = 0x0000
-	stiw_da (0x23a08e), 0x0000
+	ldw (0x23a08e:24), 0x0000
 	ld xwa, 0x007f0025
 	calr HDAE5000_HD_Format_Params
 	jrl t, .Lfd_done
 
 .Lfd_nav_case1:
 	; Case 1: offset = 0x0018
-	stiw_da (0x23a08e), 0x0018
+	ldw (0x23a08e:24), 0x0018
 	ld xwa, 0x007f0025
 	calr HDAE5000_HD_Format_Params
 	jrl t, .Lfd_done
 
 .Lfd_nav_case5:
 	; Case 5: offset = 0x0030
-	stiw_da (0x23a08e), 0x0030
+	ldw (0x23a08e:24), 0x0030
 	ld xwa, 0x007f0025
 	calr HDAE5000_HD_Format_Params
 	jrl t, .Lfd_done
 
 .Lfd_nav_case6:
 	; Case 6: offset = 0x0048
-	stiw_da (0x23a08e), 0x0048
+	ldw (0x23a08e:24), 0x0048
 	ld xwa, 0x007f0025
 	calr HDAE5000_HD_Format_Params
 	jrl t, .Lfd_done
 
 .Lfd_nav_case7:
 	; Case 7: offset = 0x0060
-	stiw_da (0x23a08e), 0x0060
+	ldw (0x23a08e:24), 0x0060
 	ld xwa, 0x007f0025
 	calr HDAE5000_HD_Format_Params
 	jrl t, .Lfd_done
@@ -5886,8 +5886,8 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	ld wa, bc				; d9 88
 	mul wa, 0x0064				; d8 08 64 00
 	ld (0x22aa5e:24), wa; f2 5e aa 22 50 — ld (0x22aa5e), wa
-	stiw_da (0x22aa60), 0x0000; f2 60 aa 22 02 00 00
-	stiw_da (0x22aa5c), 0x0001; f2 5c aa 22 02 01 00
+	ldw (0x22aa60:24), 0x0000; f2 60 aa 22 02 00 00
+	ldw (0x22aa5c:24), 0x0001; f2 5c aa 22 02 01 00
 	pushw 0x0001
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20
 	ld bc, (0x22aa60:24); d2 60 aa 22 21
@@ -5901,7 +5901,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	ld wa, bc				; d9 88
 	mul wa, 0x000a				; d8 08 0a 00
 	adddm16_24 (0x22aa5e), xwa; d2 5e aa 22 88
-	stiw_da (0x22aa5c), 0x0002; f2 5c aa 22 02 02 00
+	ldw (0x22aa5c:24), 0x0002; f2 5c aa 22 02 02 00
 	pushw 0x0001
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20
 	ld bc, (0x22aa60:24); d2 60 aa 22 21
@@ -5913,7 +5913,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	; === Case 2: add BC to cylinder, set state=3 ===
 .Lsw_case2:					; 0x286ED1
 	adddm16_24 (0x22aa5e), xbc; d2 5e aa 22 89
-	stiw_da (0x22aa5c), 0x0003; f2 5c aa 22 02 03 00
+	ldw (0x22aa5c:24), 0x0003; f2 5c aa 22 02 03 00
 	pushw 0x0001
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20
 	ld bc, (0x22aa60:24); d2 60 aa 22 21
@@ -5927,7 +5927,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	ld wa, bc				; d9 88
 	mul wa, 0x000a				; d8 08 0a 00
 	ld (0x22aa60:24), wa; f2 60 aa 22 50
-	stiw_da (0x22aa5c), 0x0004; f2 5c aa 22 02 04 00
+	ldw (0x22aa5c:24), 0x0004; f2 5c aa 22 02 04 00
 	pushw 0x0001
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20
 	ld bc, (0x22aa60:24); d2 60 aa 22 21
@@ -5939,7 +5939,7 @@ HDAE5000_HD_Sector_Write:	; 0x286E50 (646 bytes)
 	; === Case 4: add BC to head, set state=5, then process ===
 .Lsw_case4:					; 0x286F25
 	adddm16_24 (0x22aa60), xbc; d2 60 aa 22 89
-	stiw_da (0x22aa5c), 0x0005; f2 5c aa 22 02 05 00
+	ldw (0x22aa5c:24), 0x0005; f2 5c aa 22 02 05 00
 	pushw 0x0001
 	ld wa, (0x22aa5e:24); d2 5e aa 22 20
 	ld bc, (0x22aa60:24); d2 60 aa 22 21

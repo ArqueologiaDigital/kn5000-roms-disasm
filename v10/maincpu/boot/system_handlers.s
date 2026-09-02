@@ -17,15 +17,15 @@ INTT2_HANDLER:
 	reti
 
 NMI_HANDLER:
-	stiw_da (0x00ffca), 0x0000
+	ldw (0x00ffca:24), 0x0000
 	calr NMI_StorePayloadChecksums
 	bit 2, (0xfdad:16)
 	jr z, NMI_SetPowerOffCode_A5A5
-	stiw_da (0x00ffcc), 0x5a5a
+	ldw (0x00ffcc:24), 0x5a5a
 	jr NMI_ClearGuardAndHalt
 
 NMI_SetPowerOffCode_A5A5:
-	stiw_da (0x00ffcc), 0xa5a5
+	ldw (0x00ffcc:24), 0xa5a5
 
 NMI_ClearGuardAndHalt:
 	ld (1024:16), 0

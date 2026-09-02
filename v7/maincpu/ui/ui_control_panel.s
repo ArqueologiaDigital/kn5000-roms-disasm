@@ -2206,11 +2206,11 @@ RefreshSwEvent:
 	jp ApPostEvent
 
 KeyScan_Enable:
-	stiw_da (0x03ef4e), 0x0001
+	ldw (0x03ef4e:24), 0x0001
 	ret
 
 KeyScan_Disable:
-	stiw_da (0x03ef4e), 0x0000
+	ldw (0x03ef4e:24), 0x0000
 	ret
 
 MainAutoFree:
@@ -2671,12 +2671,12 @@ SeqDemo_SaveCurrentState:
 	.byte 0x8c, 0x19, 0x99, 0x8c, 0x68, 0x68
 MainTitleCtrl_HandleAB:
 	ld (0x0274ac:24), de
-	stiw_da (0x0274ae), 0x000a
+	ldw (0x0274ae:24), 0x000a
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleBA:
 	ld (0x0274a8:24), de
-	stiw_da (0x0274aa), 0x000a
+	ldw (0x0274aa:24), 0x000a
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleBB:
@@ -3709,7 +3709,7 @@ GroupBox_StateCompare_Default:
 	jrl GroupBox_NavDispatch
 	ld xwa, (xsp + 38)
 	call SetCurrentTarget
-	stiw_da (0x03ef50), 0x0000
+	ldw (0x03ef50:24), 0x0000
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)

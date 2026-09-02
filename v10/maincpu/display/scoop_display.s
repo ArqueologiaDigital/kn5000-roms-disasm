@@ -24,8 +24,8 @@
 ; Call this to initialize display state or force a full refresh.
 ;=============================================================================
 Display_ResetDirtyFlags:
-	stiw_da (0x0205e6), 0x0000
-	stiw_da (0x0205e4), 0x0000
+	ldw (0x0205e6:24), 0x0000
+	ldw (0x0205e4:24), 0x0000
 	ret
 
 ;=============================================================================
@@ -56,7 +56,7 @@ Display_UpdateDirtyRegions:
 	call Display_UpdateRegion2	; Selection highlight
 
 Display_MarkClean:
-	stiw_da (0x0205e4), 0xffff
+	ldw (0x0205e4:24), 0xffff
 	ret
 
 ; Undisassembled data block (18 bytes) - possibly lookup table

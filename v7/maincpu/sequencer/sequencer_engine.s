@@ -11238,7 +11238,7 @@ PartRelRange_CheckInitChain:
 	cp (xsp + 10), 0x32
 	jr nz, PartRelRange_OuterLoop
 	calr PartCtrl_InitChainLinkedList
-	stiw_da (0x00ffec), 0x0000
+	ldw (0x00ffec:24), 0x0000
 	calr Part_UnlinkVoiceFromChain
 
 PartRelRange_OuterLoop:
@@ -11836,7 +11836,7 @@ SeqTempo_ApplyAndReturn:
 	jr	nz, 102	; -> 0xF3F9FE
 	ldw	(61854:16), 0
 	call	16635550
-	stiw_da	(65516), 0
+	ldw	(65516:24), 0
 	ldw	(61852:16), 0
 	ld	(62027:16), 0
 	ldib_erp	249, 1
@@ -11931,12 +11931,12 @@ SeqBufPos_Return:
 	cp_erpb	251, 10
 	jr	ule, -122	; -> 0xF3FA0D
 	ldw	(61854:16), 0
-	stiw_da	(65516), 0
+	ldw	(65516:24), 0
 	call	16635550
 	ld	(62027:16), 0
 	calr	16261
 	ldw	(10357:16), 0
-	stiw_da	(65516), 0
+	ldw	(65516:24), 0
 	pop	qiz
 	ret
 SeqAccPlay_InitAndDispatch:
@@ -15342,7 +15342,7 @@ SeqPart_ResetVoicePositions:
 	pushw_erp 0xfa
 	cp (0x2878:16), 10
 	jr nz, SeqPart_ResetPosSingle
-	stiw_da (0x00ffec), 0x0000
+	ldw (0x00ffec:24), 0x0000
 	ldib_erp 0xfb, 1
 
 SeqPart_ResetPosLoop:
@@ -16021,7 +16021,7 @@ SeqStatus_ClearBit2:
 Part_ClearAllVoiceChannels:
 	pushw_erp 0xfa
 	calr PartCtrl_InitChainLinkedList
-	stiw_da (0x00ffec), 0x0000
+	ldw (0x00ffec:24), 0x0000
 	calr Part_UnlinkVoiceFromChain
 	ldib_erp 0xfa, 0
 
@@ -23556,7 +23556,7 @@ MainExe_Handle90:
 	cpda8	a, 10360
 	jr	nz, 13
 	ldw	(10357:16), 0
-	stiw_da	65516, 0
+	ldw	(65516:24), 0
 MainExe_Handle90_Finish:
 	ldw wa, 0x23
 

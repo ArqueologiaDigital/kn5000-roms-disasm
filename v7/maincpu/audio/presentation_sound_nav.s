@@ -1130,9 +1130,9 @@ DirmdEmu_CaseC:
 	ld xde, (xsp + 4)
 	call FuncCall
 	call WakeUpMainTask
-	stiw_da (0x0276c4), 0x0000
+	ldw (0x0276c4:24), 0x0000
 	jrl TaskWake_ZeroReturn
-	stiw_da (0x0276c4), 0x0001
+	ldw (0x0276c4:24), 0x0001
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1144,7 +1144,7 @@ DirmdEmu_CaseC:
 	lds wa, 2
 	call ChangePalette
 	jr TaskWake_ZeroReturn
-	stiw_da (0x0276c4), 0x0001
+	ldw (0x0276c4:24), 0x0001
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00032
@@ -1825,8 +1825,8 @@ AcNaming_CheckDefaultWidget:
 	stl_da (0x0274d2), xwa
 
 AcNaming_InitScrollState:
-	stiw_da (0x0274d8), 0x0000
-	stiw_da (0x0274da), 0x0000
+	ldw (0x0274d8:24), 0x0000
+	ldw (0x0274da:24), 0x0000
 	ld xwa, (0x0274d2:24)
 	ld xbc, 0x1e0007c
 	lds32 xde, 0
@@ -1834,7 +1834,7 @@ AcNaming_InitScrollState:
 	ld (0x0274d6:24), hl
 	cp hl, 0x20
 	jr ule, AcNaming_QueryCharSet
-	stiw_da (0x0274d6), 0x0020
+	ldw (0x0274d6:24), 0x0020
 
 AcNaming_QueryCharSet:
 	ld xwa, (0x0274d2:24)

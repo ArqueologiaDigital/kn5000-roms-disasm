@@ -8521,7 +8521,7 @@ ExitWindow_Init:
 InitializeObjectTable:
 	lda xsp, (xsp - 14)
 	pushw iz
-	stiw_da (0x02bc12), 0x0000
+	ldw (0x02bc12:24), 0x0000
 	lda xwa, (0x027ed2:24)
 	lda xbc, (xwa + 10)
 	lda xde, (xwa + 8)
@@ -17735,7 +17735,7 @@ EventRoute_OwnerMatchDone:
 	ld (xbc + 8), xwa
 	cp de, 0x3ff
 	jr nz, PostEvent_Prologue
-	stiw_da (0x02ec36), 0x0000
+	ldw (0x02ec36:24), 0x0000
 	jr PostEvent_AllocSlot
 
 PostEvent_Prologue:
@@ -17793,7 +17793,7 @@ PostEvent_LinkSlot:
 	ld (xwa), xbc
 	cpw (xsp + 4), 0x3ff
 	jr nz, PostEvent_ReturnOne
-	stiw_da (0x02ec34), 0x0000
+	ldw (0x02ec34:24), 0x0000
 	jr PostEvent_Return
 
 PostEvent_ReturnOne:
@@ -18232,7 +18232,7 @@ MainPostEvent_Allocate:
 	ld wa, (0x02f83a:24)
 	cp wa, 0xff
 	jr nz, MainGetEvent_Prologue
-	stiw_da (0x02f83a), 0x0000
+	ldw (0x02f83a:24), 0x0000
 	jr MainGetEvent_ScanLoop
 
 MainGetEvent_Prologue:
@@ -18281,7 +18281,7 @@ MainGetEvent_ScanDone:
 	ld (xwa), xbc
 	cp de, 0xff
 	jr nz, MainGetEvent_ReturnOne
-	stiw_da (0x02f838), 0x0000
+	ldw (0x02f838:24), 0x0000
 	jr MainGetEvent_ReturnOneAlt
 
 MainGetEvent_ReturnOne:
@@ -18463,7 +18463,7 @@ ObjectSearch_Continue:
 	ld wa, (0x02ec36:24)
 	cp wa, 0x3ff
 	jr nz, ApPostEvent_ReturnZero
-	stiw_da (0x02ec36), 0x0000
+	ldw (0x02ec36:24), 0x0000
 	jr ApPostEvent_Return
 
 ApPostEvent_ReturnZero:
@@ -18551,7 +18551,7 @@ ApDeliveryEvent_Return:
 	ld wa, (0x02ec36:24)
 	cp wa, 0x3ff
 	jr nz, ApTimer_Prologue
-	stiw_da (0x02ec36), 0x0000
+	ldw (0x02ec36:24), 0x0000
 	jr ApTimer_ScanLoop
 
 ApTimer_Prologue:
@@ -18579,7 +18579,7 @@ ApTimer_Deliver:
 InitializeTimer:
 	lds32 xwa, 0
 	stl_da (0x030444), xwa
-	stiw_da (0x030448), 0xffff
+	ldw (0x030448:24), 0xffff
 	lda xwa, (0x02f844:24)
 	lda xbc, (xwa + 8)
 	lda xde, (xwa + 2)
@@ -19298,7 +19298,7 @@ InitializeGraphics:
 	calr InitDrawTask
 	lds wa, 5
 	call Show_ScreenGroup
-	stiw_da (0x03ef92), 0x0001
+	ldw (0x03ef92:24), 0x0001
 	call InitPaletteRGB
 	lds wa, 0
 	calr ChangeWall
@@ -19346,7 +19346,7 @@ InitGraphics_SetupVRAM:
 	jr InitGraphics_SetupVRAM_Loop
 
 InitGraphics_SetupVRAM_Loop:
-	stiw_da (0x030464), 0x0001
+	ldw (0x030464:24), 0x0001
 	jp VGA_ScreenUnblank
 
 ; LcdOff - Disable LCD display output (clears flag at 0x030464)
@@ -19366,7 +19366,7 @@ LcdOn_Done:
 
 LcdOn_Return:
 	call VGA_ScreenBlank
-	stiw_da (0x030464), 0x0000
+	ldw (0x030464:24), 0x0000
 	ret
 
 
@@ -19511,7 +19511,7 @@ Display_CheckDim_CheckWidth:
 	calr InitGraphics_SetupVRAM_Loop
 	ld wa, (0x03ef9e:24)
 	ld (0x03efa0:24), wa
-	stiw_da (0x030460), 0x0000
+	ldw (0x030460:24), 0x0000
 	jr Display_CheckDim_Done
 
 Display_CheckDim_CheckHeight:
@@ -19519,10 +19519,10 @@ Display_CheckDim_CheckHeight:
 	jr z, Display_CheckDim_Return
 
 Display_CheckDim_Done:
-	stiw_da (0x030462), 0x0000
+	ldw (0x030462:24), 0x0000
 
 Display_CheckDim_Return:
-	stiw_da (0x03045e), 0x0000
+	ldw (0x03045e:24), 0x0000
 	lda xwa, (0x030456:24)
 	ldw (xwa + 2), 0xf0
 	ldw (xwa), 0x140
@@ -19557,7 +19557,7 @@ SetChangeRect:
 	call TaskSched_ChangePriority
 
 SetChangeRect_ClampLeft:
-	stiw_da (0x03045e), 0x0001
+	ldw (0x03045e:24), 0x0001
 	lda xde, (0x030456:24)
 	lda xbc, (xde + 2)
 	ld wa, (xiz + 2)

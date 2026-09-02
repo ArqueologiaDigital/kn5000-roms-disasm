@@ -1929,12 +1929,12 @@ DrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawWall_DirectPath
-	stiw_da (0x030450), 0x0001
-	stiw_da (0x03044e), 0x0001
+	ldw (0x030450:24), 0x0001
+	ldw (0x03044e:24), 0x0001
 	jr DrawWall_DoCopy
 
 DrawWall_DirectPath:
-	stiw_da (0x030450), 0x0000
+	ldw (0x030450:24), 0x0000
 	cpw_da (0x03044e), 0
 	jr z, DrawWall_SetCopyFlag
 
@@ -1947,7 +1947,7 @@ DrawWall_WaitVblankBefore:
 	jr nz, DrawWall_WaitVblankBefore
 
 DrawWall_SetCopyFlag:
-	stiw_da (0x030450), 0x0001
+	ldw (0x030450:24), 0x0001
 	cpw_da (0x03044e), 0
 	jr nz, DrawWall_Deferred
 

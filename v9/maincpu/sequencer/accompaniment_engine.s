@@ -36916,7 +36916,7 @@ AccPatch_VoiceAssignDataBlock:
 	push	xbc
 	dec	6, l
 	ldw	ix, 7369
-	stiw_da	(0x3970f1), 0
+	ldw	(0x3970f1:24), 0
 	xor	xbc, xbc
 	ld	bc, (0x3974:16)
 	srl	bc, 2

@@ -881,7 +881,7 @@ MAIN__bit4:
 	ld	(0x00E2DF:24), bc
 	cp	hl, 0x000c
 	jr	le, MAIN__no_wrap
-	stiw_da	0x00E2DF, 0x0000
+	ldw	(0x00E2DF:24), 0x0000
 MAIN__no_wrap:
 	cpw_da	0x00F2F1, 0x0000
 	jr	z, MAIN__timer_expired
@@ -893,7 +893,7 @@ MAIN__timer_expired:
 	jr	z, MAIN__reenable
 	ei	0
 	ld	(0x007ECC:24), 0x00
-	stiw_da	0x00F2F1, 0x000A
+	ldw	(0x00F2F1:24), 0x000A
 	pushw	0x0002
 	call	0xF98510
 	popw	bc

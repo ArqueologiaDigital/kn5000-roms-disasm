@@ -156,7 +156,7 @@ VoiceFloat_MulAddDispatch:
 	and wa, 0x7FF0
 	cp wa, 0x41E0
 	jr c, VoiceFloat_MulAddDispatch_InRange
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	ld xwa, xiz
 	lda xbc, (0x01f63e:24)
 	call FP_DP_Raw8Copy
@@ -251,7 +251,7 @@ VoiceFloat_CompareAndConvert_AfterRange:
 	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoiceFloat_CompareAndConvert_AltPath
-	stiw_da 0x040c22, 0x0021
+	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 62)
 	lda xbc, (0x01f656:24)
 	call FP_DP_Raw8Copy
@@ -269,7 +269,7 @@ VoiceFloat_CompareAndConvert_AltPath:
 	call FP_DP_CmpZero64
 	cps hl, 0
 	jr nz, VoiceFloat_CompareAndConvert_AltPath2
-	stiw_da 0x040c22, 0x0021
+	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 62)
 	lda xbc, (0x01f65e:24)
 	call FP_DP_Raw8Copy
@@ -332,7 +332,7 @@ VoiceFloat_IterationLoop:
 	call FP_DP_CmpZero64
 	cps hl, 0
 	jr nz, VoiceFloat_IterationLoop_LessPath
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	lda xwa, (xsp + 66)
 	lds bc, 2
 	call FP_DP_CmpZero64
@@ -367,7 +367,7 @@ VoiceFloat_IterationLoop_LargeStep:
 	lda xde, (xsp + 66)
 	cp wa, 0x400
 	jr le, VoiceFloat_IterationLoop_SmallStep
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	ld xwa, xde
 	lds bc, 2
 	call FP_DP_CmpZero64
@@ -444,7 +444,7 @@ VoiceFloat_IterationLoop_DifferentPath:
 ; This exponent pre-check is why pow() never actually feeds a huge argument to exp().
 VoiceFloat_ConvergenceLoop:
 	ld iz, (0x040c22:24)
-	stiw_da 0x040c22, 0x0000
+	ldw (0x040c22:24), 0x0000
 	lda xiy, (xsp + 66)
 	ld xix, (xiy + 4)
 	push xix
@@ -510,7 +510,7 @@ VoiceFloat_ConvergenceLoop_SumCheck:
 VoiceFloat_ConvergenceLoop_RangeCheck:
 	cp iz, 0x400
 	jr le, VoiceFloat_ConvergenceLoop_Clamp
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	lda xwa, (xsp + 66)
 	lds bc, 2
 	call FP_DP_CmpZero64
@@ -536,7 +536,7 @@ VoiceFloat_ConvergenceLoop_StoreResult:
 VoiceFloat_ConvergenceLoop_Clamp:
 	cp iz, 0xFC03
 	jr ge, VoiceFloat_ConvergenceLoop_CrossZero
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	ld xwa, (xsp + 62)
 	lda xbc, (0x01f686:24)
 	call FP_DP_Raw8Copy
@@ -782,7 +782,7 @@ VoiceFloat_BlendAndMerge:
 	and wa, 0x7FF0
 	cp wa, 0x41E0
 	jr c, VoiceFloat_BlendAndMerge_InRange
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	ld_sril XWA, (xsp + 0x0088)
 	lda xbc, (0x01f68e:24)
 	call FP_DP_Raw8Copy
@@ -1525,7 +1525,7 @@ FP_DP_ShiftDecode_Overflow:
 
 ; errno (0x040C22) = 0x22 (ERANGE).
 FP_DP_ShiftDecode_SetError:
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	ret
 
 ; NaN/overflow marker in the record: return 0 without touching errno.
@@ -1776,7 +1776,7 @@ FP_DP_Encode_NaN:
 ; Double overflow: errno = ERANGE (0x22) and the result is set to 0x7FEFFFFFFFFFFFFF
 ; (DBL_MAX) with the operand's sign ORed back in.
 FP_DP_Encode_Overflow:
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	lds32 xde, 0
 	dec 1, xde
 	ld (xwa), xde
@@ -1848,7 +1848,7 @@ FP_SP_Encode_Overflow:
 ; errno = ERANGE, store the saturated value, then the same indirect hook call through
 ; the pointer at 0x00F428.
 FP_SP_Encode_Overflow_Store:
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	ld (xwa), xde
 	ld xbc, (0x00f428:24)
 	or xbc, xbc
@@ -2669,7 +2669,7 @@ VoicePitch_SlideEngine_NonZero:
 	call ToneGen_Compare_Voice
 	cps hl, 0
 	jr nz, VoicePitch_SlideEngine_LessPath
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	ld xwa, (xsp + 54)
 	lda xbc, (0x00f420:24)
 	call FP_DP_Raw8Copy
@@ -2762,7 +2762,7 @@ VoiceAmp_ConvergeEngine:
 	call FP_DP_CmpZero64
 	cps hl, 0
 	jr nz, VoiceAmp_ConvergeEngine_InRange
-	stiw_da 0x040c22, 0x0021
+	ldw (0x040c22:24), 0x0021
 	ld xwa, (xsp + 110)
 	lda xbc, (0x01f6de:24)
 	call FP_DP_Raw8Copy
@@ -3196,7 +3196,7 @@ FP_SP_DecodeToInt_Overflow:
 
 ; errno (0x040C22) = 0x22 (ERANGE).
 FP_SP_DecodeToInt_SetError:
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	ret
 
 ; NaN marker: return 0, errno untouched.
@@ -3238,7 +3238,7 @@ VoiceFreq_EnvelopeStep_InRange:
 	lda xhl, (xwa + 7)
 	cp bc, 0x7FF
 	jr le, VoiceFreq_EnvelopeStep_ClampLow
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	lda xbc, (0x00f420:24)
 	bitm 7, (xhl)
 	jr z, VoiceFreq_EnvelopeStep_ClampHigh
@@ -3293,7 +3293,7 @@ VoiceFreq_EnvelopeStep_IncLoop:
 	inc 1, wa
 	cp wa, 0x7FF
 	jr c, VoiceFreq_EnvelopeStep_IncStep
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	lda xbc, (0x00f420:24)
 	ld a, (xix)
 	bit 7, a
@@ -3326,7 +3326,7 @@ VoiceFreq_EnvelopeStep_DecLoop:
 	ld wa, iy
 	sub wa, 0x1
 	jr nz, VoiceFreq_EnvelopeStep_DecStep
-	stiw_da 0x040c22, 0x0022
+	ldw (0x040c22:24), 0x0022
 	lda xbc, (0x01f72e:24)
 	ld xwa, xde
 	call FP_DP_Raw8Copy

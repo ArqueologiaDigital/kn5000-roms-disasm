@@ -7925,8 +7925,8 @@ sub_FC6D6E__FC6F16:
 	extpfx5 0x9E, 0xEA, 0x38, 0x2A, 0x00       ; FC6F70  add (XIZ+0xea),0x002a
 	cp (xiz-23), 0x00                          ; FC6F75  cp (XIZ+0xe9),0x00
 	jrl nz, sub_FC6D6E__FC6E41                 ; FC6F79  jrl NZ,0xfc6e41
-	stiw_da	(0xE093), 0x200                    ; FC6F7C  ld (0x00e093),0x0200
-	stiw_da	(0xE095), 8                        ; FC6F83  ld (0x00e095),0x0008
+	ldw	(0xE093:24), 0x200                    ; FC6F7C  ld (0x00e093),0x0200
+	ldw	(0xE095:24), 8                        ; FC6F83  ld (0x00e095),0x0008
 	lda	xbc, (0xE093:24)                       ; FC6F8A  lda XBC,0x00e093
 	push	xbc                                   ; FC6F8F  push XBC
 	calr (0xFC4269 - 0xFC6F93)                 ; FC6F90  calr 0xfc4269
@@ -8142,8 +8142,8 @@ sub_FC6FFD__FC7142:
 	extpfx5 0x9E, 0xEA, 0x38, 0x2A, 0x00       ; FC719C  add (XIZ+0xea),0x002a
 	cp (xiz-23), 0x00                          ; FC71A1  cp (XIZ+0xe9),0x00
 	jrl nz, sub_FC6FFD__FC706D                 ; FC71A5  jrl NZ,0xfc706d
-	stiw_da	(0xE093), 0x400                    ; FC71A8  ld (0x00e093),0x0400
-	stiw_da	(0xE095), 4                        ; FC71AF  ld (0x00e095),0x0004
+	ldw	(0xE093:24), 0x400                    ; FC71A8  ld (0x00e093),0x0400
+	ldw	(0xE095:24), 4                        ; FC71AF  ld (0x00e095),0x0004
 	lda	xbc, (0xE093:24)                       ; FC71B6  lda XBC,0x00e093
 	push	xbc                                   ; FC71BB  push XBC
 	calr (0xFC4269 - 0xFC71BF)                 ; FC71BC  calr 0xfc4269
@@ -8365,8 +8365,8 @@ sub_FC723F__FC7384:
 	extpfx5 0x9E, 0xEA, 0x38, 0x2A, 0x00       ; FC73DE  add (XIZ+0xea),0x002a
 	cp (xiz-23), 0x00                          ; FC73E3  cp (XIZ+0xe9),0x00
 	jrl nz, sub_FC723F__FC72AF                 ; FC73E7  jrl NZ,0xfc72af
-	stiw_da	(0xE093), 0x400                    ; FC73EA  ld (0x00e093),0x0400
-	stiw_da	(0xE095), 4                        ; FC73F1  ld (0x00e095),0x0004
+	ldw	(0xE093:24), 0x400                    ; FC73EA  ld (0x00e093),0x0400
+	ldw	(0xE095:24), 4                        ; FC73F1  ld (0x00e095),0x0004
 	lda	xbc, (0xE093:24)                       ; FC73F8  lda XBC,0x00e093
 	push	xbc                                   ; FC73FD  push XBC
 	calr (0xFC4269 - 0xFC7401)                 ; FC73FE  calr 0xfc4269

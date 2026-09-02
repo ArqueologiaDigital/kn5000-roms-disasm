@@ -3816,7 +3816,7 @@ SMFMuteOnOff_Enable:
 
 SMFMuteOnOff_Disable:
 	ld (0x021088:24), 0x00
-	stiw_da (0x021086), 0x0000
+	ldw (0x021086:24), 0x0000
 	ld xwa, 0x147001c
 	ld xbc, 0x1e7000b
 	lds32 xde, 0

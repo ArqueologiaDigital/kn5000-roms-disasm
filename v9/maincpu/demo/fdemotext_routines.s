@@ -2084,7 +2084,7 @@ FDemoText_ByteData_LayoutEngine:
 	ld	(0x025b72:24), wa
 	cps	wa, 0
 	jr	ge, 7
-	stiw_da	(0x025b72), 0
+	ldw	(0x025b72:24), 0
 	lda	xbc, (0x025b74:24)
 	ld	wa, (0x025b72:24)
 	.byte 0xf3
@@ -2228,8 +2228,8 @@ FDemoText_ByteData_LayoutEngine:
 	decdi16_24	1, (0x025b60)
 	cps	wa, 0
 	jr	ge, 14
-	stiw_da	(0x025b3e), 0
-	stiw_da	(0x025b60), 0
+	ldw	(0x025b3e:24), 0
+	ldw	(0x025b60:24), 0
 	ld	bc, (0x025b3e:24)
 	sla	bc, 2
 	lda	xde, (0x025b40:24)
@@ -2443,9 +2443,9 @@ FDemoText_ByteData_LayoutEngine:
 	lda	xwa, (0x025b3a:24)
 	ldw	(xwa), 0
 	ldw	(xwa+2), 0
-	stiw_da	(0x025b3e), 0
-	stiw_da	(0x025b60), 0
-	stiw_da	(0x025b72), 0
+	ldw	(0x025b3e:24), 0
+	ldw	(0x025b60:24), 0
+	ldw	(0x025b72:24), 0
 	lda	xhl, (0x025b40:24)
 	lda	xde, (0x025b62:24)
 	lda	xwa, (0x025b74:24)
@@ -2861,7 +2861,7 @@ FDemoText_ByteData_LayoutB:
 Seq_InitVoiceStructures:
 	push xiz
 	ld iz, wa
-	stiw_da (0x025b7c), 0x0000
+	ldw (0x025b7c:24), 0x0000
 	lda xwa, (0x0248c8:24)
 	ld (xwa), 0x0
 	stl_da (0x0248c4), xwa
@@ -2938,7 +2938,7 @@ Seq_InitializeAndStart:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	stiw_da (0x0251d8), 0x0001
+	ldw (0x0251d8:24), 0x0001
 	lds wa, 0
 	calr Seq_InitVoiceStructures
 	ld xwa, (xsp + 4)

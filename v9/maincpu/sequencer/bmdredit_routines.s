@@ -33,7 +33,7 @@ BmDrEdit_AdvanceStreamWrap:
 	extz wa
 	add wa, hl
 	ld (0x0210a4:24), wa
-	stiw_da (0x0210a6), 0x0005
+	ldw (0x0210a6:24), 0x0005
 	ret
 
 BmDrEdit_ScanForwardInit:

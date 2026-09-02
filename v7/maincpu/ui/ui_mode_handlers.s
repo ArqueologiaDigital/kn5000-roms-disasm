@@ -1349,21 +1349,21 @@ Test_Video_RAM_IC207:
 	ld (xsp), a
 	ld xhl, (WidgetStyleDataTable:24)
 	call (xhl)
-	stiw_da (0x1a0000), 0x5a5a; VRAM self-test pattern 1
+	ldw (0x1a0000:24), 0x5a5a; VRAM self-test pattern 1
 	calr DramTest_Loop
 	cpw_da (0x1a0000), 0x5a5a
 	jr z, VramTest_Pattern2
 	setm 3, (xsp)
 
 VramTest_Pattern2:
-	stiw_da (0x1a0004), 0xa5a5; VRAM self-test pattern 2
+	ldw (0x1a0004:24), 0xa5a5; VRAM self-test pattern 2
 	calr DramTest_Loop
 	cpw_da (0x1a0004), 0xa5a5
 	jr z, VramTest_Pattern3
 	setm 3, (xsp)
 
 VramTest_Pattern3:
-	stiw_da (0x1a0008), 0x5a5a
+	ldw (0x1a0008:24), 0x5a5a
 	calr DramTest_Loop
 	cpw_da (0x1a0008), 0x5a5a
 	jr z, VramTest_Done

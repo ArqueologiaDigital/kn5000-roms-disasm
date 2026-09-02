@@ -3051,7 +3051,7 @@ SeqStep_MemAllocWrapper:
 	inc	8, xsp
 	jr	7
 SeqStep_MemAllocFail:
-	stiw_da (0x01e53c), 0x0003
+	ldw (0x01e53c:24), 0x0003
 
 SeqStep_MemAllocReturn:
 	ld xhl, xiz

@@ -214,7 +214,7 @@ Serial0_Init:
 	ldio	SC0CR, 0x00
 	ldio	SC0MOD, 0x29
 	ei	6
-	stiw_da	0x00F2F9, 0x0002
+	ldw	(0x00F2F9:24), 0x0002
 	ld	c, (0x00F2F7:24)
 	and	c, 0x8F
 	or	c, 0x50
@@ -410,7 +410,7 @@ INTTX0_HANDLER:
 	stl_da 0x007ED2, xbc
 	jr INTTX0_HANDLER__exit
 INTTX0_HANDLER__empty:
-	stiw_da 0x00F2F9, 0x0002
+	ldw (0x00F2F9:24), 0x0002
 INTTX0_HANDLER__exit:
 	pop xwa
 	popw hl
@@ -572,7 +572,7 @@ MIDI_Tx_PutByte:
 	ld	(xbc), a                            ; F992DE  ld (XBC),A
 	ld	xbc, (0xF2F3:24)                   ; F992E0  ld XBC,(0x00f2f3)
 	stl_da	(0x7ED2), xbc                   ; F992E5  ld (0x007ed2),XBC
-	stiw_da	(0xF2F9), 1                    ; F992EA  ld (0x00f2f9),0x0001
+	ldw	(0xF2F9:24), 1                    ; F992EA  ld (0x00f2f9),0x0001
 	ldw (xiz-2), 0x0000                    ; F992F1  ld (XIZ+0xfe),0x0000   [llvm-mc cannot encode this]
 	jr MIDI_Tx_PutByte__F9930B                           ; F992F6  jr T,0xf9930b
 MIDI_Tx_PutByte__F992F8:

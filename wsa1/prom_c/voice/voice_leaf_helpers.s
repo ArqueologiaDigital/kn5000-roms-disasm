@@ -2900,7 +2900,7 @@ sub_FA6BB5:
 	ld	a, (xbc+6)                              ; FA6BBF  ld A,(XBC+0x06)
 	and	a, 64                                  ; FA6BC2  and A,0x40
 	jr nz, sub_FA6BB5__FA6BCE                  ; FA6BC5  jr NZ,0xfa6bce
-	stiw_da	(0x87D0), 0                        ; FA6BC7  ld (0x0087d0),0x0000
+	ldw	(0x87D0:24), 0                        ; FA6BC7  ld (0x0087d0),0x0000
 sub_FA6BB5__FA6BCE:
 	ld	xbc, (xiz+8)                            ; FA6BCE  ld XBC,(XIZ+0x08)
 	ld	wa, (xbc)                               ; FA6BD1  ld WA,(XBC)

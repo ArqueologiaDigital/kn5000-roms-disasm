@@ -762,7 +762,7 @@ Flash_ProgramSectorFromBuffer:
 	jr z, Flash_ProgramSectorFromBuffer__FC8933                        ; FC8918  jr Z,0xfc8933
 	ei	6                                   ; FC891A  ei 0x06
 	extpfx4 0xB3, 0x02, 0xAA, 0x00         ; FC891C  ld (XHL),0x00aa   [llvm-mc cannot encode this]
-	stiw_da	(0xE85554), 85                 ; FC8920  ld (0xe85554),0x0055
+	ldw	(0xE85554:24), 85                 ; FC8920  ld (0xe85554),0x0055
 	extpfx4 0xB3, 0x02, 0xA0, 0x00         ; FC8927  ld (XHL),0x00a0   [llvm-mc cannot encode this]
 	ld	(xiy), wa                           ; FC892B  ld (XIY),WA
 	ei	0                                     ; FC892D  ei 0x00
@@ -824,7 +824,7 @@ Flash_ProgramSlice1K:
 	jr z, Flash_ProgramSlice1K__FC8987                        ; FC896C  jr Z,0xfc8987
 	ei	6                                   ; FC896E  ei 0x06
 	extpfx4 0xB3, 0x02, 0xAA, 0x00         ; FC8970  ld (XHL),0x00aa   [llvm-mc cannot encode this]
-	stiw_da	(0xE85554), 85                 ; FC8974  ld (0xe85554),0x0055
+	ldw	(0xE85554:24), 85                 ; FC8974  ld (0xe85554),0x0055
 	extpfx4 0xB3, 0x02, 0xA0, 0x00         ; FC897B  ld (XHL),0x00a0   [llvm-mc cannot encode this]
 	ld	(xiy), wa                           ; FC897F  ld (XIY),WA
 	ei	0                                     ; FC8981  ei 0x00

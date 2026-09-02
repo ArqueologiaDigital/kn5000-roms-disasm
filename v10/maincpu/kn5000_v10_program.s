@@ -627,7 +627,7 @@ User_didnt_request_flash_mem_update:
 	ld a, (1026:16); Load boot combo code
 	extz wa
 	calr Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
-	stiw_da (0x00ffca), 0x0000
+	ldw (0x00ffca:24), 0x0000
 	set_dd8 0, 0x28	; Release Sub-CPU from reset
 	call SubCPU_Init_DMA_Channels	; Initialize DMA for inter-CPU comm
 	ei 0
@@ -653,7 +653,7 @@ Boot_DisplayScreen:
 	lds wa, 3
 	call ScreenGroup_Dispatch
 	ld (1024:16), 128
-	stiw_da (0x00ffd4), 0x0000
+	ldw (0x00ffd4:24), 0x0000
 	ld a, (1026:16); Load boot combo code
 	extz wa
 	calr Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
@@ -871,7 +871,7 @@ FactoryReset_ClearSRAM:
 	stl_dpi XWA, 0xe6
 	cp xbc, 0x200000
 	jr c, FactoryReset_ClearSRAM
-	stiw_da (0x00ffca), 0x5aa5
+	ldw (0x00ffca:24), 0x5aa5
 	jp Boot_InitIOPorts
 FactoryReset_TrailingByte:
 	ret

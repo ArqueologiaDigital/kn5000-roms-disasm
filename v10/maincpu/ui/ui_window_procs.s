@@ -56,8 +56,8 @@ WndScroll_InitSelectionTrack:
 	ld xbc, (xsp + 46)
 	ld xde, (xsp + 42)
 	calr WindowProc
-	stiw_da (0x0274dc), 0xffff
-	stiw_da (0x0274e0), 0xffff
+	ldw (0x0274dc:24), 0xffff
+	ldw (0x0274e0:24), 0xffff
 	ld de, (0x0274d8:24)
 	extz xde
 	ld xwa, (xsp + 50)
@@ -182,7 +182,7 @@ WndScroll_RepaintAll:
 	ld wa, (0x0274dc:24)
 	cpda16_24 xwa, (0x0274da)
 	jrl z, UIDialog_ReturnZeroJmp
-	stiw_da (0x0274e0), 0xffff
+	ldw (0x0274e0:24), 0xffff
 	ld xwa, (xsp + 50)
 	calr GetClientBox
 	lda xwa, (xsp + 34)
@@ -856,14 +856,14 @@ WndScroll_HandleCharInput:
 	ldb_sri C, 0x07, 0xec, 0xe4
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
-	stiw_da (0x0274da), 0x0000
+	ldw (0x0274da:24), 0x0000
 	ldb c, 0x41
 	jr WndScroll_ComputeCharOffset
 
 WndScroll_CharIsUppercase:
 	bit 1, c
 	jr z, WndScroll_CharIsLowercase
-	stiw_da (0x0274da), 0x0001
+	ldw (0x0274da:24), 0x0001
 	ldb c, 0x61
 	jr WndScroll_ComputeCharOffset
 
@@ -872,7 +872,7 @@ WndScroll_CharIsLowercase:
 	jr z, WndScroll_CharIsSpace
 	cpw_da (0x0274da), 2
 	jr nz, WndScroll_SetCategoryZero
-	stiw_da (0x0274da), 0x0000
+	ldw (0x0274da:24), 0x0000
 
 WndScroll_SetCategoryZero:
 	ldb c, 0x15
@@ -894,10 +894,10 @@ WndScroll_CharIsSpace:
 	jrl nz, WndScroll_SendPageEvents
 	cpw_da (0x0274da), 2
 	jr nz, WndScroll_SetSpaceOffset
-	stiw_da (0x0274da), 0x0000
+	ldw (0x0274da:24), 0x0000
 
 WndScroll_SetSpaceOffset:
-	stiw_da (0x0274de), 0x0025
+	ldw (0x0274de:24), 0x0025
 	jr WndScroll_SendPageEvents
 
 WndScroll_CharIsUnderscore:
@@ -905,10 +905,10 @@ WndScroll_CharIsUnderscore:
 	jr nz, WndScroll_SearchCharTable
 	cpw_da (0x0274da), 2
 	jr nz, WndScroll_SetUnderscoreOffset
-	stiw_da (0x0274da), 0x0000
+	ldw (0x0274da:24), 0x0000
 
 WndScroll_SetUnderscoreOffset:
-	stiw_da (0x0274de), 0x001a
+	ldw (0x0274de:24), 0x001a
 	jr WndScroll_SendPageEvents
 
 WndScroll_SearchCharTable:
@@ -932,7 +932,7 @@ WndScroll_CompareCharLoop:
 	ld a, (xbc)
 	cp a, (xsp + 12)
 	jr nz, WndScroll_CharMismatch
-	stiw_da (0x0274da), 0x0002
+	ldw (0x0274da:24), 0x0002
 	ld (0x0274de:24), iz
 
 WndScroll_CharMismatch:
@@ -7111,7 +7111,7 @@ WallPalette_IterateEntries:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0xf0, 0x00
 	jr c, WallPalette_IterateEntries
-	stiw_da (0x030462), 0x0001
+	ldw (0x030462:24), 0x0001
 
 WallPalette_Done:
 	pop xiz
@@ -7191,7 +7191,7 @@ UIRender_IterateCallbacks:
 	cp_erpw 0xfa, 0xe0, 0x00
 	jr c, UIRender_IterateCallbacks
 	ld (0x03ef9e:24), iz
-	stiw_da (0x030460), 0x0001
+	ldw (0x030460:24), 0x0001
 	pop xiz
 	ret
 

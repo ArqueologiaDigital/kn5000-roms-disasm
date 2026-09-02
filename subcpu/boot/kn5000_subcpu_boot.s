@@ -1680,7 +1680,7 @@ INIT_MEMORY_TEST__no_error:
 	; either ROM -- the v1.42 payload only ever reads 0x110000/0x110002 -- so the meaning
 	; of 0x0003 is not recoverable from software.  INFERENCE: an enable/reset of the
 	; scanner and its event FIFO, issued once before the endless test loop below.
-	stiw_da (0x110002), 0x0003; 7-byte encoding: f2 02 00 11 02 03 00
+	ldw (0x110002:24), 0x0003; 7-byte encoding: f2 02 00 11 02 03 00
 	lda xbc, (1368:16)
 	ld xwa, xbc
 	inc 8, xbc	; XBC = 0x0560, the loop bound: INC #3,r encodes 8 as 0, so this is +8 not +1
@@ -2287,9 +2287,9 @@ HARDWARE_CALIBRATION_SEQUENCE:
 	ldw iz, 0xFFFF	; Initialize error flag to -1
 
 	; First hardware write sequence
-	stiw_da (0x100000), 0x0840; Write 0x0840 to hardware reg
+	ldw (0x100000:24), 0x0840; Write 0x0840 to hardware reg
 	nop
-	stiw_da (0x100002), 0xff00; Write 0xFF00 to hardware reg+2
+	ldw (0x100002:24), 0xff00; Write 0xFF00 to hardware reg+2
 	jr __jrt_nop_FF8C95	; Short delay (jump to next instruction)
 __jrt_nop_FF8C95:
 	nop
@@ -2297,9 +2297,9 @@ __jrt_nop_FF8C95:
 	nop
 
 	; Second hardware write sequence
-	stiw_da (0x100000), 0x0800; Write 0x0800 to hardware reg
+	ldw (0x100000:24), 0x0800; Write 0x0800 to hardware reg
 	nop
-	stiw_da (0x100002), 0xff80; Write 0xFF80 to hardware reg+2
+	ldw (0x100002:24), 0xff80; Write 0xFF80 to hardware reg+2
 	jr __jrt_nop_FF8CA9	; Short delay
 __jrt_nop_FF8CA9:
 	nop
@@ -2330,9 +2330,9 @@ HARDWARE_CALIBRATION_SEQUENCE__retry_loop:
 	lds iz, 0	; Clear error flag (will succeed)
 
 	; Repeat first hardware write sequence
-	stiw_da (0x100000), 0x0840
+	ldw (0x100000:24), 0x0840
 	nop
-	stiw_da (0x100002), 0xff00
+	ldw (0x100002:24), 0xff00
 	jr __jrt_nop_FF8CE3
 __jrt_nop_FF8CE3:
 	nop
@@ -2340,9 +2340,9 @@ __jrt_nop_FF8CE3:
 	nop
 
 	; Repeat second hardware write sequence
-	stiw_da (0x100000), 0x0800
+	ldw (0x100000:24), 0x0800
 	nop
-	stiw_da (0x100002), 0xff80
+	ldw (0x100002:24), 0xff80
 	jr __jrt_nop_FF8CF7
 __jrt_nop_FF8CF7:
 	nop
@@ -2542,7 +2542,7 @@ __jrt_nop_FF8E41:
 	; Write IZ directly with constant 0x8100
 	ld (0x100000:24), iz; Write base offset
 	nop
-	stiw_da (0x100002), 0x8100; Write 0x8100
+	ldw (0x100002:24), 0x8100; Write 0x8100
 	jr __jrt_nop_FF8E53
 __jrt_nop_FF8E53:
 	nop

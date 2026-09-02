@@ -6470,7 +6470,7 @@ sub_F9BE3A__F9DE6E:
 	inc	6, xsp                                 ; F9DEDE  inc 6,XSP
 	jrl sub_F9BE3A__F9DFAC                     ; F9DEE0  jrl T,0xf9dfac
 sub_F9BE3A__F9DEE3:
-	stiw_da	(0x8612), 5                        ; F9DEE3  ld (0x008612),0x0005
+	ldw	(0x8612:24), 5                        ; F9DEE3  ld (0x008612),0x0005
 	jrl sub_F9BE3A__F9DFAF                     ; F9DEEA  jrl T,0xf9dfaf
 	jrl sub_F9BE3A__F9DFAC                     ; F9DEED  jrl T,0xf9dfac
 sub_F9BE3A__F9DEF0:
@@ -6831,11 +6831,11 @@ sub_F9E0B7__F9E0BE:
 	ld	xix, (xiz-4)                            ; F9E10B  ld XIX,(XIZ+0xfc)
 	cp	xiy, xix                                ; F9E10E  cp XIY,XIX
 	jr c, sub_F9E0B7__F9E11D                   ; F9E110  jr C,0xf9e11d
-	stiw_da	(0x8612), 4                        ; F9E112  ld (0x008612),0x0004
+	ldw	(0x8612:24), 4                        ; F9E112  ld (0x008612),0x0004
 	jr sub_F9E0B7__F9E137                      ; F9E119  jr T,0xf9e137
 	jr sub_F9E0B7__F9E126                      ; F9E11B  jr T,0xf9e126
 sub_F9E0B7__F9E11D:
-	stiw_da	(0x8612), 0                        ; F9E11D  ld (0x008612),0x0000
+	ldw	(0x8612:24), 0                        ; F9E11D  ld (0x008612),0x0000
 	jr sub_F9E0B7__F9E137                      ; F9E124  jr T,0xf9e137
 sub_F9E0B7__F9E126:
 	jr sub_F9E0B7__F9E12E                      ; F9E126  jr T,0xf9e12e
@@ -6845,7 +6845,7 @@ sub_F9E0B7__F9E128:
 sub_F9E0B7__F9E12E:
 	jr sub_F9E0B7__F9E0BE                      ; F9E12E  jr T,0xf9e0be
 sub_F9E0B7__F9E130:
-	stiw_da	(0x8612), 3                        ; F9E130  ld (0x008612),0x0003
+	ldw	(0x8612:24), 3                        ; F9E130  ld (0x008612),0x0003
 sub_F9E0B7__F9E137:
 	ld	xiy, (xiz+8)                            ; F9E137  ld XIY,(XIZ+0x08)
 	pop	xix                                    ; F9E13A  pop XIX
@@ -6890,7 +6890,7 @@ sub_F9E140__F9E146:
 	jr z, sub_F9E140__F9E19D                   ; F9E168  jr Z,0xf9e19d
 	cpw (xiz+12), 0x0000                       ; F9E16A  cp (XIZ+0x0c),0x0000
 	jr nz, sub_F9E140__F9E190                  ; F9E16F  jr NZ,0xf9e190
-	stiw_da	(0x8612), 0                        ; F9E171  ld (0x008612),0x0000
+	ldw	(0x8612:24), 0                        ; F9E171  ld (0x008612),0x0000
 	ld	wa, (xiz-2)                             ; F9E178  ld WA,(XIZ+0xfe)
 	exts	xwa                                   ; F9E17B  exts XWA
 	add	xbc, xwa                               ; F9E17D  add XBC,XWA
@@ -6907,7 +6907,7 @@ sub_F9E140__F9E190:
 	decm	1, (xiz+12)                           ; F9E198  decw 1,(XIZ+0x0c)
 	jr sub_F9E140__F9E146                      ; F9E19B  jr T,0xf9e146
 sub_F9E140__F9E19D:
-	stiw_da	(0x8612), 2                        ; F9E19D  ld (0x008612),0x0002
+	ldw	(0x8612:24), 2                        ; F9E19D  ld (0x008612),0x0002
 	ld	xiy, (xiz+8)                            ; F9E1A4  ld XIY,(XIZ+0x08)
 sub_F9E140__F9E1A7:
 	popw	de                                    ; F9E1A7  pop DE
@@ -13132,7 +13132,7 @@ sub_FA000B__FA225D:
 	inc	8, xsp                                 ; FA22AC  inc 0,XSP
 	jrl sub_FA000B__FA2378                     ; FA22AE  jrl T,0xfa2378
 sub_FA000B__FA22B1:
-	stiw_da	(0x8612), 5                        ; FA22B1  ld (0x008612),0x0005
+	ldw	(0x8612:24), 5                        ; FA22B1  ld (0x008612),0x0005
 	jrl sub_FA000B__FA2378                     ; FA22B8  jrl T,0xfa2378
 	jrl sub_FA000B__FA2378                     ; FA22BB  jrl T,0xfa2378
 sub_FA000B__FA22BE:
@@ -13477,14 +13477,14 @@ sub_FA237C__FA25B4:
 	add	(xiz+8), xbc                           ; FA25B8  add (XIZ+0x08),XBC
 	jrl sub_FA237C__FA2663                     ; FA25BB  jrl T,0xfa2663
 sub_FA237C__FA25BE:
-	stiw_da	(0x8640), 99                       ; FA25BE  ld (0x008640),0x0063
+	ldw	(0x8640:24), 99                       ; FA25BE  ld (0x008640),0x0063
 	extpfx3 0x9E, 0xF0, 0x04                   ; FA25C5  pushw (XIZ+0xf0)
 	extpfx3 0x9E, 0xFA, 0x04                   ; FA25C8  pushw (XIZ+0xfa)
 	calr (0xF9F9FA - 0xFA25CE)                 ; FA25CB  calr 0xf9f9fa
 	pop	xiy                                    ; FA25CE  pop XIY
 	jrl sub_FA237C__FA2663                     ; FA25CF  jrl T,0xfa2663
 sub_FA237C__FA25D2:
-	stiw_da	(0x8612), 5                        ; FA25D2  ld (0x008612),0x0005
+	ldw	(0x8612:24), 5                        ; FA25D2  ld (0x008612),0x0005
 	jrl sub_FA237C__FA2672                     ; FA25D9  jrl T,0xfa2672
 	jrl sub_FA237C__FA2663                     ; FA25DC  jrl T,0xfa2663
 sub_FA237C__FA25DF:
@@ -13600,7 +13600,7 @@ Rec8644_Store3Bytes_AndFlagChanged:
 	ld	a, (xiz+14)                             ; FA26B3  ld A,(XIZ+0x0e)
 	ld	(xbc), a                                ; FA26B6  ld (XBC),A
 	ei	6                                       ; FA26B8  ei 0x06
-	stiw_da	(0xF2F1), 0                        ; FA26BA  ld (0x00f2f1),0x0000
+	ldw	(0xF2F1:24), 0                        ; FA26BA  ld (0x00f2f1),0x0000
 	setda_24 5, 0x007ECC                       ; FA26C1  set 5,(0x007ecc)
 	ei	0                                       ; FA26C6  ei 0x00
 	unlk32 xiz                                 ; FA26C8  unlk XIZ
@@ -14630,7 +14630,7 @@ P7Mixer_SendGain:
 	extpfx3 0x9E, 0x08, 0x04                   ; FA2E43  pushw (XIZ+0x08)
 	calr (0xFA30B8 - 0xFA2E49)                 ; FA2E46  calr 0xfa30b8
 	ld	(xiz-10), xiy                           ; FA2E49  ld (XIZ+0xf6),XIY
-	stiw_da	(0x861C), 1                        ; FA2E4C  ld (0x00861c),0x0001
+	ldw	(0x861C:24), 1                        ; FA2E4C  ld (0x00861c),0x0001
 	ld	c, (0x861C:24)                         ; FA2E53  ld C,(0x00861c)
 	pop	xwa                                    ; FA2E58  pop XWA
 	pushw	bc                                   ; FA2E59  push BC
@@ -14734,7 +14734,7 @@ P7Mixer_SendGain:
 	pushw	bc                                   ; FA2F78  push BC
 	pushw	3                                    ; FA2F79  push 0x0003
 	call	0xF9A163                              ; FA2F7C  call 0xf9a163
-	stiw_da	(0x861C), 2                        ; FA2F80  ld (0x00861c),0x0002
+	ldw	(0x861C:24), 2                        ; FA2F80  ld (0x00861c),0x0002
 	ld	c, (0x861C:24)                         ; FA2F87  ld C,(0x00861c)
 	pop	xiy                                    ; FA2F8C  pop XIY
 	pushw	bc                                   ; FA2F8D  push BC
@@ -17450,9 +17450,9 @@ P7Unit_SelectStreamsForRecord__FA4828:
 	stl_da	(0x8626), xwa                       ; FA4837  ld (0x008626),XWA
 	lda	xiy, (0xFD3B60:24)                     ; FA483C  lda XIY,0xfd3b60
 	stl_da	(0x862A), xiy                       ; FA4841  ld (0x00862a),XIY
-	stiw_da	(0xF365), 99                       ; FA4846  ld (0x00f365),0x0063
-	stiw_da	(0xF367), 99                       ; FA484D  ld (0x00f367),0x0063
-	stiw_da	(0xF369), 99                       ; FA4854  ld (0x00f369),0x0063
+	ldw	(0xF365:24), 99                       ; FA4846  ld (0x00f365),0x0063
+	ldw	(0xF367:24), 99                       ; FA484D  ld (0x00f367),0x0063
+	ldw	(0xF369:24), 99                       ; FA4854  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA485B  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA485E:
 	lda	xbc, (0xFD28C7:24)                     ; FA485E  lda XBC,0xfd28c7
@@ -17460,9 +17460,9 @@ P7Unit_SelectStreamsForRecord__FA485E:
 	stl_da	(0x8626), xbc                       ; FA4868  ld (0x008626),XBC
 	ld	xwa, (0x8622:24)                       ; FA486D  ld XWA,(0x008622)
 	stl_da	(0x862A), xwa                       ; FA4872  ld (0x00862a),XWA
-	stiw_da	(0xF365), 99                       ; FA4877  ld (0x00f365),0x0063
-	stiw_da	(0xF367), 99                       ; FA487E  ld (0x00f367),0x0063
-	stiw_da	(0xF369), 99                       ; FA4885  ld (0x00f369),0x0063
+	ldw	(0xF365:24), 99                       ; FA4877  ld (0x00f365),0x0063
+	ldw	(0xF367:24), 99                       ; FA487E  ld (0x00f367),0x0063
+	ldw	(0xF369:24), 99                       ; FA4885  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA488C  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA488F:
 	lda	xbc, (0xFD06FA:24)                     ; FA488F  lda XBC,0xfd06fa
@@ -17471,9 +17471,9 @@ P7Unit_SelectStreamsForRecord__FA488F:
 	stl_da	(0x8626), xwa                       ; FA489E  ld (0x008626),XWA
 	lda	xiy, (0xFD06FA:24)                     ; FA48A3  lda XIY,0xfd06fa
 	stl_da	(0x862A), xiy                       ; FA48A8  ld (0x00862a),XIY
-	stiw_da	(0xF365), 99                       ; FA48AD  ld (0x00f365),0x0063
-	stiw_da	(0xF367), 99                       ; FA48B4  ld (0x00f367),0x0063
-	stiw_da	(0xF369), 99                       ; FA48BB  ld (0x00f369),0x0063
+	ldw	(0xF365:24), 99                       ; FA48AD  ld (0x00f365),0x0063
+	ldw	(0xF367:24), 99                       ; FA48B4  ld (0x00f367),0x0063
+	ldw	(0xF369:24), 99                       ; FA48BB  ld (0x00f369),0x0063
 	jrl P7Unit_SelectStreamsForRecord__FA493D                     ; FA48C2  jrl T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA48C5:
 	lda	xbc, (0xFDA4E7:24)                     ; FA48C5  lda XBC,0xfda4e7
@@ -17482,9 +17482,9 @@ P7Unit_SelectStreamsForRecord__FA48C5:
 	stl_da	(0x8626), xwa                       ; FA48D4  ld (0x008626),XWA
 	lda	xiy, (0xFDA554:24)                     ; FA48D9  lda XIY,0xfda554
 	stl_da	(0x862A), xiy                       ; FA48DE  ld (0x00862a),XIY
-	stiw_da	(0xF365), 0x6C                     ; FA48E3  ld (0x00f365),0x006c
-	stiw_da	(0xF367), 0x6C                     ; FA48EA  ld (0x00f367),0x006c
-	stiw_da	(0xF369), 0x6C                     ; FA48F1  ld (0x00f369),0x006c
+	ldw	(0xF365:24), 0x6C                     ; FA48E3  ld (0x00f365),0x006c
+	ldw	(0xF367:24), 0x6C                     ; FA48EA  ld (0x00f367),0x006c
+	ldw	(0xF369:24), 0x6C                     ; FA48F1  ld (0x00f369),0x006c
 	jr P7Unit_SelectStreamsForRecord__FA493D                      ; FA48F8  jr T,0xfa493d
 P7Unit_SelectStreamsForRecord__FA48FA:
 	ld	bc, (xiz-2)                             ; FA48FA  ld BC,(XIZ+0xfe)
@@ -18901,9 +18901,9 @@ P7Units_ResolveProgramsAndReload__FA560B:
 	ld	(0x7ECB:24), 0                        ; FA5614  ld (0x007ecb),0x00
 P7Units_ResolveProgramsAndReload__FA561A:
 	ei	0                                       ; FA561A  ei 0x00
-	stiw_da	(0xF354), 0                        ; FA561C  ld (0x00f354),0x0000
-	stiw_da	(0xF356), 0                        ; FA5623  ld (0x00f356),0x0000
-	stiw_da	(0xF358), 0                        ; FA562A  ld (0x00f358),0x0000
+	ldw	(0xF354:24), 0                        ; FA561C  ld (0x00f354),0x0000
+	ldw	(0xF356:24), 0                        ; FA5623  ld (0x00f356),0x0000
+	ldw	(0xF358:24), 0                        ; FA562A  ld (0x00f358),0x0000
 	calr (0xFA5177 - 0xFA5634)                 ; FA5631  calr 0xfa5177
 	ld	c, (0x8586:24)                         ; FA5634  ld C,(0x008586)
 	extz	bc                                    ; FA5639  extz BC
@@ -18974,7 +18974,7 @@ P7Units_ResolveProgramsAndReload__FA56D0:
 	cp	bc, 55                                  ; FA56E5  cp BC,0x0037
 	jr z, P7Units_ResolveProgramsAndReload__FA56BA                   ; FA56E9  jr Z,0xfa56ba
 P7Units_ResolveProgramsAndReload__FA56EB:
-	stiw_da	(0xF35A), 0                        ; FA56EB  ld (0x00f35a),0x0000
+	ldw	(0xF35A:24), 0                        ; FA56EB  ld (0x00f35a),0x0000
 	pushw	0                                    ; FA56F2  push 0x0000
 	calr (0xFA4E97 - 0xFA56F8)                 ; FA56F5  calr 0xfa4e97
 	popw	bc                                    ; FA56F8  pop BC

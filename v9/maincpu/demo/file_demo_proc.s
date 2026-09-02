@@ -155,7 +155,7 @@ MainPreControl:
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; MainPreControl dispatch (11-entry, table 0xea007a)
 MainPreControl_Dispatch:
-	stiw_da	(0x0251d8), 0
+	ldw	(0x0251d8:24), 0
 
 MainPreControl_ReturnNull:
 	lds32 xhl, 0
@@ -673,7 +673,7 @@ Demo_SelectEntry_ByteTable:
 	.byte 0xf2, 0xf1, 0x29, 0xf2, 0xee
 	calr	827
 	calr	1008
-	stiw_da	(0x25b84), 1
+	ldw	(0x25b84:24), 1
 	ld	(0x8f4e:16), 4
 	cp	(0x8d38:16), 228
 	.byte 0xf2, 0x4d, 0x2a, 0xf2, 0xee
@@ -994,7 +994,7 @@ Banner_Loop_Exit:
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jr c, Banner_Loop_CheckEntry
-	stiw_da (0x025b84), 0x0000
+	ldw (0x025b84:24), 0x0000
 	popw_erp 0xfa
 	inc 4, xsp
 	ret
@@ -1348,7 +1348,7 @@ RecordChain_ReadAdvance:
 	ret ule
 	ld wa, (xde + 3)
 	ld (0x03ec4e:24), wa
-	stiw_da (0x025b8e), 0x0000
+	ldw (0x025b8e:24), 0x0000
 	ret
 
 RecordChain_SkipToStatusByte:
@@ -4648,8 +4648,8 @@ FileIO_ValidateRecord_Ok:
 	ret
 
 FileIO_ValidateRecord_Return:
-	stiw_da (0x0272cc), 0x003f
-	stiw_da (0x0272ce), 0x003f
+	ldw (0x0272cc:24), 0x003f
+	ldw (0x0272ce:24), 0x003f
 	ld (0x0272d0:24), 0x00
 	ld xwa, 0x25eaa
 	ld xbc, Filename_TemplateArea_0x2
@@ -5248,13 +5248,13 @@ InitRecordTable_ExtLoop:
 	lda xwa, (xwa + 82)
 	cp xwa, xde
 	jr c, InitRecordTable_ExtLoop
-	stiw_da (0x025ea8), 0x0000
-	stiw_da (0x0271ea), 0x0000
-	stiw_da (0x0271ec), 0x0000
-	stiw_da (0x0271ee), 0x0000
-	stiw_da (0x0271f0), 0x0000
-	stiw_da (0x0272c8), 0x0000
-	stiw_da (0x0272ca), 0x0000
+	ldw (0x025ea8:24), 0x0000
+	ldw (0x0271ea:24), 0x0000
+	ldw (0x0271ec:24), 0x0000
+	ldw (0x0271ee:24), 0x0000
+	ldw (0x0271f0:24), 0x0000
+	ldw (0x0272c8:24), 0x0000
+	ldw (0x0272ca:24), 0x0000
 	ret
 
 GetDiskSizeInfo:
@@ -6109,8 +6109,8 @@ ValidateAndSearch_Return:
 
 
 GetFileCountEncoded:
-	stiw_da (0x0271ee), 0x0000
-	stiw_da (0x0271f0), 0x003b
+	ldw (0x0271ee:24), 0x0000
+	ldw (0x0271f0:24), 0x003b
 	calr BuildSecondPageRecords
 	lds wa, 0
 	cps hl, 0
@@ -7124,8 +7124,8 @@ GetRecordPtrAlt_Return:
 	ret
 
 BuildPageRecordsAlt:
-	stiw_da (0x0271ee), 0x0000
-	stiw_da (0x0271f0), 0x003b
+	ldw (0x0271ee:24), 0x0000
+	ldw (0x0271f0:24), 0x003b
 	calr BuildPageRecords
 	lds wa, 0
 	cps hl, 0
@@ -7522,8 +7522,8 @@ GetFileEntry_Return:
 	ret
 
 FileIO_InitFileNavigation:
-	stiw_da (0x0271ee), 0x0000
-	stiw_da (0x0271f0), 0x003b
+	ldw (0x0271ee:24), 0x0000
+	ldw (0x0271f0:24), 0x003b
 	calr FileIO_InitDirScan
 	lds wa, 0
 	cps hl, 0
@@ -8314,8 +8314,8 @@ GetWPEntry_Return:
 	ret
 
 FileIO_InitWallpaperNav:
-	stiw_da (0x0271ee), 0x0000
-	stiw_da (0x0271f0), 0x0009
+	ldw (0x0271ee:24), 0x0000
+	ldw (0x0271f0:24), 0x0009
 	calr FileIO_ScanDirEntries
 	lds wa, 0
 	cps hl, 0

@@ -203,9 +203,9 @@ HDAE5000_FS_Init:	; 0x2870D6 (3711 bytes)
 	push xwa
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+10)
-	stiw_da	(0x22AA5E), 0
-	stiw_da	(0x22AA60), 0
-	stiw_da	(0x22AA5C), 0
+	ldw	(0x22AA5E:24), 0
+	ldw	(0x22AA60:24), 0
+	ldw	(0x22AA5C:24), 0
 	pushw 0xffff
 	ld	xwa, 0x007f0098
 	ldw	bc, 0xffff
@@ -1976,23 +1976,23 @@ HDAE5000_SelectFlsScreen:
 	jr z, .LFWF_86f3                       ; [66 12] jr Z,0x2886f3
 	or xhl, xhl                             ; or XHL,XHL
 	jrl nz, .LFWF_881e                     ; [7e 38 01] jrl NZ,0x28881e
-	stiw_da	(0x23A090), 0
+	ldw	(0x23A090:24), 0
 	calr	0xf865
 	jrl t, .LFWF_881e                      ; [78 2b 01] jrl T,0x28881e
 .LFWF_86f3:
-	stiw_da	(0x23A090), 24
+	ldw	(0x23A090:24), 24
 	calr	0xf858
 	jrl t, .LFWF_881e                      ; [78 1e 01] jrl T,0x28881e
 .LFWF_8700:
-	stiw_da	(0x23A090), 48
+	ldw	(0x23A090:24), 48
 	calr	0xf84b
 	jrl t, .LFWF_881e                      ; [78 11 01] jrl T,0x28881e
 .LFWF_870d:
-	stiw_da	(0x23A090), 72
+	ldw	(0x23A090:24), 72
 	calr	0xf83e
 	jrl t, .LFWF_881e                      ; [78 04 01] jrl T,0x28881e
 .LFWF_871a:
-	stiw_da	(0x23A090), 96
+	ldw	(0x23A090:24), 96
 	calr	0xf831
 	jrl t, .LFWF_881e                      ; [78 f7 00] jrl T,0x28881e
 .LFWF_8727:
@@ -2291,7 +2291,7 @@ HDAE5000_FlsLoadScreen:
 	cpw_da	(0x23A096), 0
 	jrl z, .LFWF_8c1a                      ; [76 08 01] jrl Z,0x288c1a
 	decdi16_24	1, (0x23A096)
-	stiw_da	(0x22B272), 16
+	ldw	(0x22B272:24), 16
 	lds	wa, 0
 	lds	bc, 0
 	calr	0xf770
@@ -2306,7 +2306,7 @@ HDAE5000_FlsLoadScreen:
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 cd 00] jrl T,0x288c1a
 .LFWF_8b4d:
-	stiw_da	(0x22B272), 0
+	ldw	(0x22B272:24), 0
 	lds	wa, 0
 	lds	bc, 0
 	calr	0xf73a
@@ -2326,7 +2326,7 @@ HDAE5000_FlsLoadScreen:
 	cpw_da	(0x23A096), 119
 	jrl nc, .LFWF_8c1a                     ; [7f 84 00] jrl NC,0x288c1a
 	incdi16_24	1, (0x23A096)
-	stiw_da	(0x22B272), 0
+	ldw	(0x22B272:24), 0
 	lds	wa, 0
 	lds	bc, 0
 	calr	0xf6ec
@@ -2341,7 +2341,7 @@ HDAE5000_FlsLoadScreen:
 	call	(xhl)
 	jr t, .LFWF_8c1a                       ; [68 4a] jr T,0x288c1a
 .LFWF_8bd0:
-	stiw_da	(0x22B272), 16
+	ldw	(0x22B272:24), 16
 	lds	wa, 0
 	lds	bc, 0
 	calr	0xf6b7
@@ -2615,7 +2615,7 @@ HDAE5000_FlsEditScreen:
 .LFWF_8f59:
 	cpw_da	(0x22B272), 0
 	jrl z, .LFWF_8fe9                      ; [76 86 00] jrl Z,0x288fe9
-	stiw_da	(0x22B272), 0
+	ldw	(0x22B272:24), 0
 	lds	wa, 1
 	lds	bc, 0
 	calr	0xf324
@@ -2632,7 +2632,7 @@ HDAE5000_FlsEditScreen:
 .LFWF_8f98:
 	cpw_da	(0x22B272), 0
 	jr nz, .LFWF_8fe9                      ; [6e 48] jr NZ,0x288fe9
-	stiw_da	(0x22B272), 16
+	ldw	(0x22B272:24), 16
 	lds	wa, 1
 	lds	bc, 0
 	calr	0xf2e6
@@ -2849,27 +2849,27 @@ HDAE5000_FlsDirSelScreen:
 	jr z, .LFWF_9262                       ; [66 17] jr Z,0x289262
 	or xhl, xhl                             ; or XHL,XHL
 	jrl nz, .LFWF_935a                     ; [7e 0a 01] jrl NZ,0x28935a
-	stiw_da	(0x23A08E), 0
+	ldw	(0x23A08E:24), 0
 	ld	xwa, 0x007f0151
 	calr	0xa4af
 	jrl t, .LFWF_935a                      ; [78 f8 00] jrl T,0x28935a
 .LFWF_9262:
-	stiw_da	(0x23A08E), 24
+	ldw	(0x23A08E:24), 24
 	ld	xwa, 0x007f0151
 	calr	0xa49d
 	jrl t, .LFWF_935a                      ; [78 e6 00] jrl T,0x28935a
 .LFWF_9274:
-	stiw_da	(0x23A08E), 48
+	ldw	(0x23A08E:24), 48
 	ld	xwa, 0x007f0151
 	calr	0xa48b
 	jrl t, .LFWF_935a                      ; [78 d4 00] jrl T,0x28935a
 .LFWF_9286:
-	stiw_da	(0x23A08E), 72
+	ldw	(0x23A08E:24), 72
 	ld	xwa, 0x007f0151
 	calr	0xa479
 	jrl t, .LFWF_935a                      ; [78 c2 00] jrl T,0x28935a
 .LFWF_9298:
-	stiw_da	(0x23A08E), 96
+	ldw	(0x23A08E:24), 96
 	ld	xwa, 0x007f0151
 	calr	0xa467
 	jrl t, .LFWF_935a                      ; [78 b0 00] jrl T,0x28935a
@@ -3780,27 +3780,27 @@ HDAE5000_CopyToHDDirSelScreen:
 	or xhl, xhl
 	jrl nz, .LFSD__hA_exit
 	; Page 0: offset = 0x0000
-	stiw_da (0x23a08e), 0x0000
+	ldw (0x23a08e:24), 0x0000
 	ld xwa, 0x007f00e6
 	calr HDAE5000_HD_Format_Params
 	jrl t, .LFSD__hA_exit
 .LFSD__hA_page1:			; Page 1: offset = 0x0018
-	stiw_da (0x23a08e), 0x0018
+	ldw (0x23a08e:24), 0x0018
 	ld xwa, 0x007f00e6
 	calr HDAE5000_HD_Format_Params
 	jrl t, .LFSD__hA_exit
 .LFSD__hA_page5:			; Page 5: offset = 0x0030
-	stiw_da (0x23a08e), 0x0030
+	ldw (0x23a08e:24), 0x0030
 	ld xwa, 0x007f00e6
 	calr HDAE5000_HD_Format_Params
 	jrl t, .LFSD__hA_exit
 .LFSD__hA_page6:			; Page 6: offset = 0x0048
-	stiw_da (0x23a08e), 0x0048
+	ldw (0x23a08e:24), 0x0048
 	ld xwa, 0x007f00e6
 	calr HDAE5000_HD_Format_Params
 	jrl t, .LFSD__hA_exit
 .LFSD__hA_page7:			; Page 7: offset = 0x0060
-	stiw_da (0x23a08e), 0x0060
+	ldw (0x23a08e:24), 0x0060
 	ld xwa, 0x007f00e6
 	calr HDAE5000_HD_Format_Params
 	jrl t, .LFSD__hA_exit
@@ -4371,7 +4371,7 @@ HDAE5000_DelOptSwEventCatch:
 	lda xde, (0x2e1e08:24)
 	calr HDAE5000_HD_Data_Copy
 .LFS_EL__0b_skip:
-	stiw_da (0x22abe6), 0x0000; clear entry
+	ldw (0x22abe6:24), 0x0000; clear entry
 	calr HDAE5000_FS_Entry_Lookup	; recursive call
 .LFS_EL__exit:				; common exit path
 	ld xwa, (xsp + 0x08)		; restore registers
@@ -4409,7 +4409,7 @@ HDAE5000_Display_Update_Offset:	; 0x28A5D3 (1612 bytes)
 	lds bc, 0
 	calr HDAE5000_HD_Data_Copy
 .LDUO__done_p1:
-	stiw_da (0x22abe6), 0x0000
+	ldw (0x22abe6:24), 0x0000
 	ret
 	;
 	; Part 2: Handler A (0x28A617) — event handler with stack frame

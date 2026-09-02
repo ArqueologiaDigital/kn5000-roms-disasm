@@ -644,9 +644,9 @@ HDAE5000_BitmapHdd_icon__type_A3:
 HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 ; LRF: 0x2803C2 (9266 bytes)
 
-	stiw_da	(0x23A08E), 0
-	stiw_da	(0x23A092), 0
-	stiw_da	(0x23A094), 0
+	ldw	(0x23A08E:24), 0
+	ldw	(0x23A092:24), 0
+	ldw	(0x23A094:24), 0
 	ld	xiy, 0x002e1ca2
 	ld	xix, 0x0022aa58
 	lds	bc, 5
@@ -655,7 +655,7 @@ HDAE5000_Register_Frame:	; 0x2803C2 (9266 bytes)
 	ld	xix, 0x0022aa4c
 	lds	bc, 6
 	ldirw                                   ; ldirw
-	stiw_da	(0x22AA4C), 511
+	ldw	(0x22AA4C:24), 511
 	ld	wa, (0x23A092:24)
 	ld	bc, (0x23A094:24)
 	call HDAE5000_Table_Lookup
@@ -2083,8 +2083,8 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	xwa, 0x01200005
 	ld	(0x22a022), xwa
 .LRF_14eb:
-	stiw_da	(0x22A028), 0
-	stiw_da	(0x22A02A), 0
+	ldw	(0x22A028:24), 0
+	ldw	(0x22A02A:24), 0
 	ld	xwa, (0x22a022)
 	ld	xbc, (0x23a1a2)
 	ld	xbc, (xbc + 0x0e0a)
@@ -2095,7 +2095,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	(0x22a026), hl
 	cpw_da	(0x22A026), 32
 	jr ule, .LRF_152b                      ; [63 07] jr ULE,0x28152b
-	stiw_da	(0x22A026), 32
+	ldw	(0x22A026:24), 32
 .LRF_152b:
 	ld	xwa, (0x22a022)
 	ld	xbc, (0x23a1a2)
@@ -2219,8 +2219,8 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
-	stiw_da	(0x22A02C), 65535
-	stiw_da	(0x22A030), 65535
+	ldw	(0x22A02C:24), 65535
+	ldw	(0x22A030:24), 65535
 	ld	de, (0x22A028:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
@@ -2373,7 +2373,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	wa, (0x22A02C:24)
 	cpda16_24	wa, (0x22A02A)
 	jrl z, .LRF_19b5                       ; [76 e5 00] jrl Z,0x2819b5
-	stiw_da	(0x22A030), 65535
+	ldw	(0x22A030:24), 65535
 	lda	xwa, (xsp+32)
 	ld	xbc, xwa
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
@@ -3168,7 +3168,7 @@ HDAE5000_AcHddNamingWindowProc:
 	lda xbc, (0x2f9362:24)
 	bit_dri 0, 0x07, 0xE4, 0xE0	; bit 0,(XBC+WA)
 	jr z, .LRF_2345                        ; [66 24] jr Z,0x282345
-	stiw_da	(0x22A02A), 0
+	ldw	(0x22A02A:24), 0
 	ld	wa, (0x22A028:24)
 	extz xwa
 	ld	xbc, 0x0022a000
@@ -3188,7 +3188,7 @@ HDAE5000_AcHddNamingWindowProc:
 	lda xbc, (0x2f9362:24)
 	bit_dri 1, 0x07, 0xE4, 0xE0	; bit 1,(XBC+WA)
 	jr z, .LRF_2387                        ; [66 24] jr Z,0x282387
-	stiw_da	(0x22A02A), 1
+	ldw	(0x22A02A:24), 1
 	ld	wa, (0x22A028:24)
 	extz xwa
 	ld	xbc, 0x0022a000
@@ -3210,7 +3210,7 @@ HDAE5000_AcHddNamingWindowProc:
 	jr z, .LRF_23d2                        ; [66 2d] jr Z,0x2823d2
 	cpw_da	(0x22A02A), 2
 	jr nz, .LRF_23b5                       ; [6e 07] jr NZ,0x2823b5
-	stiw_da	(0x22A02A), 0
+	ldw	(0x22A02A:24), 0
 .LRF_23b5:
 	ld	wa, (0x22A028:24)
 	extz xwa
@@ -3232,9 +3232,9 @@ HDAE5000_AcHddNamingWindowProc:
 	jrl nz, .LRF_24a2                      ; [7e b3 00] jrl NZ,0x2824a2
 	cpw_da	(0x22A02A), 2
 	jr nz, .LRF_23ff                       ; [6e 07] jr NZ,0x2823ff
-	stiw_da	(0x22A02A), 0
+	ldw	(0x22A02A:24), 0
 .LRF_23ff:
-	stiw_da	(0x22A02E), 37
+	ldw	(0x22A02E:24), 37
 	jrl t, .LRF_24a2                       ; [78 99 00] jrl T,0x2824a2
 .LRF_2409:
 	ld	wa, (0x22A028:24)
@@ -3245,9 +3245,9 @@ HDAE5000_AcHddNamingWindowProc:
 	jr nz, .LRF_2435                       ; [6e 19] jr NZ,0x282435
 	cpw_da	(0x22A02A), 2
 	jr nz, .LRF_242c                       ; [6e 07] jr NZ,0x28242c
-	stiw_da	(0x22A02A), 0
+	ldw	(0x22A02A:24), 0
 .LRF_242c:
-	stiw_da	(0x22A02E), 26
+	ldw	(0x22A02E:24), 26
 	jr t, .LRF_24a2                        ; [68 6d] jr T,0x2824a2
 .LRF_2435:
 	lda xwa, (0x2e20d0:24)
@@ -3274,7 +3274,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	a, (xbc)
 	cp	a, (xsp+10)
 	jr nz, .LRF_2486                       ; [6e 0c] jr NZ,0x282486
-	stiw_da	(0x22A02A), 2
+	ldw	(0x22A02A:24), 2
 	ld	(0x22a02e), iz
 .LRF_2486:
 	inc	1, iz

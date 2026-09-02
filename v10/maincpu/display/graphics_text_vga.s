@@ -122,8 +122,8 @@ GraphicsRender_ByteData:
 	inc	1, iz
 	cp	iz, 192
 	jr	c, -17
-	stiw_da	(0x03ef9e), 4
-	stiw_da	(0x030460), 1
+	ldw	(0x03ef9e:24), 4
+	ldw	(0x030460:24), 1
 	popw	iz
 	inc	4, xsp
 	ret
@@ -169,8 +169,8 @@ GraphicsRender_ByteData:
 	inc	1, iz
 	.long GUI_DisplayStructData
 	jr	c, -39
-	stiw_da	(0x03ef9e), 4
-	stiw_da	(0x030460), 1
+	ldw	(0x03ef9e:24), 4
+	ldw	(0x030460:24), 1
 	popw	iz
 	ret
 
@@ -187,7 +187,7 @@ Display_DeferOrDrawWall:
 	jr Display_DeferOrDrawWall_Direct
 
 Display_DeferOrDrawWall_Direct:
-	stiw_da (0x03ef92), 0x0000
+	ldw (0x03ef92:24), 0x0000
 	lds wa, 0
 	calr SetNeedUpdate
 	jrl DrawWall
@@ -205,7 +205,7 @@ Display_DeferOrUpdateScreen:
 	jr Display_DeferOrUpdateScreen_Direct
 
 Display_DeferOrUpdateScreen_Direct:
-	stiw_da (0x03ef92), 0x0001
+	ldw (0x03ef92:24), 0x0001
 	lds wa, 1
 	calr SetNeedUpdate
 	jrl UpdateScreen

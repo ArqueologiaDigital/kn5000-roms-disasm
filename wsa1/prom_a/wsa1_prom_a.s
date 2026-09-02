@@ -4397,7 +4397,7 @@ Queue2C00_DrainPassAB:
 	call 0xf40f5c                                        ; F823B3  1d 5c 0f f4
 	call 0xf40f60                                        ; F823B7  1d 60 0f f4
 	ld (0x2c00:16), 0xff                                 ; F823BB  f1 00 2c 00 ff
-	stiw_da (0x60f000), 0x00                             ; F823C0  f2 00 f0 60 02 00 00
+	ldw (0x60f000:24), 0x00                             ; F823C0  f2 00 f0 60 02 00 00
 .LF823C7:
 	ret                                                  ; F823C7  0e
 ; ---------------------------------------------------------------------
@@ -4418,7 +4418,7 @@ Queue2C00_DrainPassB:
 	jr z, .LF823DF                                       ; F823CD  66 10
 	call 0xf40f60                                        ; F823CF  1d 60 0f f4
 	ld (0x2c00:16), 0xff                                 ; F823D3  f1 00 2c 00 ff
-	stiw_da (0x60f000), 0x00                             ; F823D8  f2 00 f0 60 02 00 00
+	ldw (0x60f000:24), 0x00                             ; F823D8  f2 00 f0 60 02 00 00
 .LF823DF:
 	ret                                                  ; F823DF  0e
 	ret                                                  ; F823E0  0e
@@ -9367,7 +9367,7 @@ UiEventList_Publish:   ; entry: prom_b directory slot T_UiEventList_Publish (T_F
 	sub XIX,0x00002c00                            ; F860C1  ec ca 00 2c 00 00
 	ld (0x60f000:24), ix                         ; F860C7  f2 00 f0 60 54   ld (0x60f000),IX
 	ld (0x2e00:16), 0xff                          ; F860CC  f1 00 2e 00 ff   ld (0x2e00),0xff
-	stiw_da (0x60f004), 0x00                      ; F860D1  f2 04 f0 60 02 00 00   ld (0x60f004),0x0000
+	ldw (0x60f004:24), 0x00                      ; F860D1  f2 04 f0 60 02 00 00   ld (0x60f004),0x0000
 	ret                                           ; F860D8  0e
 
 ; ---------------------------------------------------------------------
@@ -22406,7 +22406,7 @@ Link_SendCommandE7:
 	ld XBC,(XIZ+0x0c)                                    ; F8E425  ae 0c 21
 	stl_da (0x6007ad), xbc                               ; F8E428  f2 ad 07 60 61
 	m_ld_mi16 MDD+r4, 0x04, 0x0400                       ; F8E42D  bc 04 02 00 04
-	stiw_da (0x6007b1), 0x0400                           ; F8E432  f2 b1 07 60 02 00 04
+	ldw (0x6007b1:24), 0x0400                           ; F8E432  f2 b1 07 60 02 00 04
 	pushw 0x06                                           ; F8E439  0b 06 00
 	lda xbc, (0x6007ad:24)                               ; F8E43C  f2 ad 07 60 31
 	push XBC                                             ; F8E441  39
@@ -37598,7 +37598,7 @@ Paint_SineWaveCheckMode:
 	ld (XIX+0x05),0x00                                   ; F957B3  bc 05 00 00
 	ld (XIX+0x06),0x00                                   ; F957B7  bc 06 00 00
 	ld (XIX+0x07),0x00                                   ; F957BB  bc 07 00 00
-	stiw_da (0x60f004), 0x00                             ; F957BF  f2 04 f0 60 02 00 00
+	ldw (0x60f004:24), 0x00                             ; F957BF  f2 04 f0 60 02 00 00
 	pushw 0x7f                                           ; F957C6  0b 7f 00
 	pushw 0x00                                           ; F957C9  0b 00 00
 	pushw 0x05                                           ; F957CC  0b 05 00
@@ -62802,7 +62802,7 @@ MidiIn_EntryThunks:
 ; ---------------------------------------------------------------------
 MidiIn_PumpPortA:   ; entry: prom_b directory slot T_MidiIn_PumpPortA (T_F40744)
 	call 0xf41dbc                                 ; FA6018  1d bc 1d f4
-	stiw_da (0x60f000), 0x00                      ; FA601C  f2 00 f0 60 02 00 00   ld (0x60f000),0x0000
+	ldw (0x60f000:24), 0x00                      ; FA601C  f2 00 f0 60 02 00 00   ld (0x60f000),0x0000
 .LFA6023:
 	ld XIX,0x00600c1e                             ; FA6023  44 1e 0c 60 00
 	ld wa, (xix-10)                               ; FA6028  9c f6 20   ld WA,(XIX+0xf6)
@@ -62897,7 +62897,7 @@ MidiIn_FetchMessage_PortA:   ; entry: call from 0xFA6034
 ; ---------------------------------------------------------------------
 MidiIn_PumpPortB:   ; entry: prom_b directory slot T_MidiIn_PumpPortB (T_F43358)
 	call 0xf41de0                                 ; FA60C2  1d e0 1d f4
-	stiw_da (0x60f000), 0x00                      ; FA60C6  f2 00 f0 60 02 00 00   ld (0x60f000),0x0000
+	ldw (0x60f000:24), 0x00                      ; FA60C6  f2 00 f0 60 02 00 00   ld (0x60f000),0x0000
 .LFA60CD:
 	ld XIX,0x00601028                             ; FA60CD  44 28 10 60 00
 	ld wa, (xix-10)                               ; FA60D2  9c f6 20   ld WA,(XIX+0xf6)
@@ -70506,7 +70506,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 	m_bit 7, MD16, 0x24f1                                ; FAA320  f1 f1 24 cf
 	jr z, .LFAA340                                       ; FAA324  66 1a
 	m_and_mi8 MB16, 0x24f1, 0x7f                         ; FAA326  c1 f1 24 3c 7f
-	stiw_da (0x60f080), 0xb0                             ; FAA32B  f2 80 f0 60 02 b0 00
+	ldw (0x60f080:24), 0xb0                             ; FAA32B  f2 80 f0 60 02 b0 00
 	ld e, (0x24f1:16)                                   ; FAA332  c1 f1 24 25
 	ldb d, 0x7f                                          ; FAA336  24 7f
 	ld (0x60f082:24), de                                ; FAA338  f2 82 f0 60 52
@@ -71119,7 +71119,7 @@ sub_FAA71F:
 	m_bit 7, MD16, 0x24f1                                ; FAA720  f1 f1 24 cf
 	jr z, .LFAA740                                       ; FAA724  66 1a
 	m_and_mi8 MB16, 0x24f1, 0x7f                         ; FAA726  c1 f1 24 3c 7f
-	stiw_da (0x60f080), 0xb0                             ; FAA72B  f2 80 f0 60 02 b0 00
+	ldw (0x60f080:24), 0xb0                             ; FAA72B  f2 80 f0 60 02 b0 00
 	ld e, (0x24f1:16)                                   ; FAA732  c1 f1 24 25
 	ldb d, 0x7f                                          ; FAA736  24 7f
 	ld (0x60f082:24), de                                ; FAA738  f2 82 f0 60 52
@@ -71242,11 +71242,11 @@ sub_FAA82A:
 	ld (0x2000:16), h                                   ; FAA82D  f1 00 20 46
 	ld (0x2030:16), h                                   ; FAA831  f1 30 20 46
 	ld (0x2c00:16), h                                   ; FAA835  f1 00 2c 46
-	stiw_da (0x60f000), 0x00                             ; FAA839  f2 00 f0 60 02 00 00
-	stiw_da (0x60f002), 0x00                             ; FAA840  f2 02 f0 60 02 00 00
+	ldw (0x60f000:24), 0x00                             ; FAA839  f2 00 f0 60 02 00 00
+	ldw (0x60f002:24), 0x00                             ; FAA840  f2 02 f0 60 02 00 00
 	ld (0x2e00:16), h                                   ; FAA847  f1 00 2e 46
-	stiw_da (0x60f004), 0x00                             ; FAA84B  f2 04 f0 60 02 00 00
-	stiw_da (0x60f08c), 0x00                             ; FAA852  f2 8c f0 60 02 00 00
+	ldw (0x60f004:24), 0x00                             ; FAA84B  f2 04 f0 60 02 00 00
+	ldw (0x60f08c:24), 0x00                             ; FAA852  f2 8c f0 60 02 00 00
 	stb_da (0x60f030), h                                 ; FAA859  f2 30 f0 60 46
 	stb_da (0x60f300), h                                 ; FAA85E  f2 00 f3 60 46
 	stb_da (0x60f308), h                                 ; FAA863  f2 08 f3 60 46
@@ -72327,7 +72327,7 @@ sub_FAB20B:
 	pop XIX                                              ; FAB225  5c
 	pop XHL                                              ; FAB226  5b
 	pop XDE                                              ; FAB227  5a
-	stiw_da (0x60f000), 0x00                             ; FAB228  f2 00 f0 60 02 00 00
+	ldw (0x60f000:24), 0x00                             ; FAB228  f2 00 f0 60 02 00 00
 .LFAB22F:
 	calr 0x1614                                          ; FAB22F  1e 14 16
 .LFAB232:
@@ -72344,7 +72344,7 @@ sub_FAB233:
 	pop XIX                                              ; FAB245  5c
 	pop XHL                                              ; FAB246  5b
 	pop XDE                                              ; FAB247  5a
-	stiw_da (0x60f000), 0x00                             ; FAB248  f2 00 f0 60 02 00 00
+	ldw (0x60f000:24), 0x00                             ; FAB248  f2 00 f0 60 02 00 00
 .LFAB24F:
 	calr 0x15f4                                          ; FAB24F  1e f4 15
 	ret                                                  ; FAB252  0e
@@ -72940,7 +72940,7 @@ sub_FAB7F9:
 sub_FAB81F:
 	push XIX                                             ; FAB81F  3c
 	lda xix, (0x60f000:24)                               ; FAB820  f2 00 f0 60 34
-	stiw_da (0x60f08c), 0x00                             ; FAB825  f2 8c f0 60 02 00 00
+	ldw (0x60f08c:24), 0x00                             ; FAB825  f2 8c f0 60 02 00 00
 	ld BC,(XIX)                                          ; FAB82C  94 21
 	ld (0x60f002:24), bc                                ; FAB82E  f2 02 f0 60 51
 .LFAB833:
@@ -72970,7 +72970,7 @@ sub_FAB81F:
 	pop XIX                                              ; FAB871  5c
 	pop XHL                                              ; FAB872  5b
 	pop XDE                                              ; FAB873  5a
-	stiw_da (0x60f002), 0x00                             ; FAB874  f2 02 f0 60 02 00 00
+	ldw (0x60f002:24), 0x00                             ; FAB874  f2 02 f0 60 02 00 00
 	jr .LFAB833                                          ; FAB87B  68 b6
 .LFAB87D:
 	m_res 4, MD24, 0x60f021                              ; FAB87D  f2 21 f0 60 b4
@@ -76185,7 +76185,7 @@ Evt2030_RunList:
 	bit 0x01,A
 	jr nz, .LFADB90
 .LFADB3A:
-	stiw_da (0x60f08c), 0x00
+	ldw (0x60f08c:24), 0x00
 .LFADB41:
 	ld XIX,0x00002030
 	ld hl, (0x60f08c:24)
@@ -78108,7 +78108,7 @@ sub_FAE84A:   ; entry: pointer-table entry
 	ret
 	ret
 	ret
-	stiw_da (0x60f002), 0x00
+	ldw (0x60f002:24), 0x00
 	calr 0xffa9
 	calr 0xffcf
 	calr .LFAE8CB
@@ -79085,7 +79085,7 @@ sub_FAF0FE:   ; entry: pointer-table entry
 	ldb w, 0xff
 	call 0xf40794
 	ld (0x60f082:24), wa
-	stiw_da (0x60f080), 0x7a
+	ldw (0x60f080:24), 0x7a
 	call 0xf407b4
 .LFAF147:
 	ret
@@ -83049,7 +83049,7 @@ sub_FB3355:
 	popw hl                                              ; FB3469  4b
 	ret                                                  ; FB346A  0e
 sub_FB346B:
-	stiw_da (0x60f000), 0x00                             ; FB346B  f2 00 f0 60 02 00 00
+	ldw (0x60f000:24), 0x00                             ; FB346B  f2 00 f0 60 02 00 00
 	push XDE                                             ; FB3472  3a
 	push XHL                                             ; FB3473  3b
 	push XIX                                             ; FB3474  3c
@@ -93136,7 +93136,7 @@ sub_FB99F5:
 	unlk XIZ                                             ; FB9B2D  ee 0d
 	ret                                                  ; FB9B2F  0e
 sub_FB9B30:
-	stiw_da (0x605149), 0x00                             ; FB9B30  f2 49 51 60 02 00 00
+	ldw (0x605149:24), 0x00                             ; FB9B30  f2 49 51 60 02 00 00
 	calr sub_FB951B                                      ; FB9B37  1e e1 f9
 	calr sub_FB9575                                      ; FB9B3A  1e 38 fa
 	calr sub_FB99F5                                      ; FB9B3D  1e b5 fe
@@ -93156,7 +93156,7 @@ sub_FB9B41:
 	call sub_FB9089                                      ; FB9B6E  1d 89 90 fb
 	ret                                                  ; FB9B72  0e
 sub_FB9B73:
-	stiw_da (0x605068), 0x00                             ; FB9B73  f2 68 50 60 02 00 00
+	ldw (0x605068:24), 0x00                             ; FB9B73  f2 68 50 60 02 00 00
 	ld xbc, (0x605072:24)                               ; FB9B7A  e2 72 50 60 21
 	stl_da (0x60341e), xbc                               ; FB9B7F  f2 1e 34 60 61
 	m_res 2, MD16, 0x34bb                                ; FB9B84  f1 bb 34 b2
@@ -93674,7 +93674,7 @@ sub_FB9FE1:
 	ld XBC,(XIX)                                         ; FBA0AB  a4 21
 	m_cp_rm ML24, 0x605044, r1                           ; FBA0AD  e2 44 50 60 f1
 	jr nc, .LFBA0BD                                      ; FBA0B2  6f 09
-	stiw_da (0x60514b), 0x00                             ; FBA0B4  f2 4b 51 60 02 00 00
+	ldw (0x60514b:24), 0x00                             ; FBA0B4  f2 4b 51 60 02 00 00
 	jr .LFBA108                                          ; FBA0BB  68 4b
 .LFBA0BD:
 	call 0xf4261c                                        ; FBA0BD  1d 1c 26 f4
@@ -93976,7 +93976,7 @@ sub_FBAD82:
 	ld bc, (0x3608:16)                                 ; FBAD91  d1 08 36 21
 	cp WA,BC                                             ; FBAD95  d9 f0
 	jr ule, .LFBADA2                                     ; FBAD97  63 09
-	stiw_da (0x6034b8), 0xffff                           ; FBAD99  f2 b8 34 60 02 ff ff
+	ldw (0x6034b8:24), 0xffff                           ; FBAD99  f2 b8 34 60 02 ff ff
 	jr .LFBADA7                                          ; FBADA0  68 05
 .LFBADA2:
 	ld (0x6034b8:24), wa                                ; FBADA2  f2 b8 34 60 50
@@ -94416,7 +94416,7 @@ sub_FBB20B:
 	call 0xf40ac8                                        ; FBB25B  1d c8 0a f4
 	m_cp_mi16 MW24, 0x603452, 0x0000                     ; FBB25F  d2 52 34 60 3f 00 00
 	jr nz, .LFBB275                                      ; FBB266  6e 0d
-	stiw_da (0x6034b8), 0x01                             ; FBB268  f2 b8 34 60 02 01 00
+	ldw (0x6034b8:24), 0x01                             ; FBB268  f2 b8 34 60 02 01 00
 	call sub_FBAD82                                      ; FBB26F  1d 82 ad fb
 	jr .LFBB2C4                                          ; FBB273  68 4f
 .LFBB275:
@@ -108240,7 +108240,7 @@ sub_FC5B26:
 sub_FC5C7C:
 	push XIX                                             ; FC5C7C  3c
 	lda xix, (0x4c04:16)                                ; FC5C7D  f1 04 4c 34
-	stiw_da (0x602a00), 0x00                             ; FC5C81  f2 00 2a 60 02 00 00
+	ldw (0x602a00:24), 0x00                             ; FC5C81  f2 00 2a 60 02 00 00
 	ld BC,(XIX)                                          ; FC5C88  94 21
 	and BC,0x00a0                                        ; FC5C8A  d9 cc a0 00
 	jr z, .LFC5C93                                       ; FC5C8E  66 03
@@ -109049,7 +109049,7 @@ sub_FC6393:
 	m_set 4, MD24, 0x602493                              ; FC648D  f2 93 24 60 bc
 	sub XBC,XBC                                          ; FC6492  e9 a1
 	stl_da (0x602494), xbc                               ; FC6494  f2 94 24 60 61
-	stiw_da (0x602498), 0x00                             ; FC6499  f2 98 24 60 02 00 00
+	ldw (0x602498:24), 0x00                             ; FC6499  f2 98 24 60 02 00 00
 	pop XIX                                              ; FC64A0  5c
 	popw hl                                              ; FC64A1  4b
 	unlk XIZ                                             ; FC64A2  ee 0d
@@ -110895,7 +110895,7 @@ JumpTable_FC8DB2:
 	ld bc, (xiz-2)                                       ; FC8E63  9e fe 21
 	m_cp_rm MW24, 0x602a00, r1                           ; FC8E66  d2 00 2a 60 f1
 	jrl c, -266                                          ; FC8E6B  77 f6 fe
-	stiw_da (0x602a00), 0x00                             ; FC8E6E  f2 00 2a 60 02 00 00
+	ldw (0x602a00:24), 0x00                             ; FC8E6E  f2 00 2a 60 02 00 00
 	pop XIX                                              ; FC8E75  5c
 	popw de                                              ; FC8E76  4a
 	popw hl                                              ; FC8E77  4b
@@ -146280,7 +146280,7 @@ sub_FE04BE:
 	push XIX                                             ; FE04BE  3c
 	lda xix, (0x21c8:16)                                ; FE04BF  f1 c8 21 34
 	ld (0x178e:24), 0x01                               ; FE04C3  f2 8e 17 00 00 01
-	stiw_da (0x1704), 0x00                               ; FE04C9  f2 04 17 00 02 00 00
+	ldw (0x1704:24), 0x00                               ; FE04C9  f2 04 17 00 02 00 00
 	ld (0x170e:24), 0x01                               ; FE04D0  f2 0e 17 00 00 01
 	extz XIX                                             ; FE04D6  ec 12
 	ld (XIX+0x08),0x4d                                   ; FE04D8  bc 08 00 4d
@@ -146811,7 +146811,7 @@ sub_FE095E:
 sub_FE095F:
 	calr 0x0f95                                          ; FE095F  1e 95 0f
 	ld (0x178e:24), 0x00                               ; FE0962  f2 8e 17 00 00 00
-	stiw_da (0x1780), 0x00                               ; FE0968  f2 80 17 00 02 00 00
+	ldw (0x1780:24), 0x00                               ; FE0968  f2 80 17 00 02 00 00
 	ret                                                  ; FE096F  0e
 sub_FE0970:
 	link XIZ,0x0000                                      ; FE0970  ee 0c 00 00
@@ -147121,8 +147121,8 @@ sub_FE0C08:
 	lda xbc, (0x60a080:24)                               ; FE0C1F  f2 80 a0 60 31
 	ld (XIX),XBC                                         ; FE0C24  b4 61
 .LFE0C26:
-	stiw_da (0x1739), 0x1a                               ; FE0C26  f2 39 17 00 02 1a 00
-	stiw_da (0x173b), 0x00                               ; FE0C2D  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x1a                               ; FE0C26  f2 39 17 00 02 1a 00
+	ldw (0x173b:24), 0x00                               ; FE0C2D  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE0C34  0b 00 00
 	ld XBC,(XIX)                                         ; FE0C37  a4 21
 	push XBC                                             ; FE0C39  39
@@ -147138,8 +147138,8 @@ sub_FE0C45:
 	ldb a, 0x03                                          ; FE0C4C  21 03
 	jr 0x22                                              ; FE0C4E  68 22
 .LFE0C50:
-	stiw_da (0x1739), 0x13                               ; FE0C50  f2 39 17 00 02 13 00
-	stiw_da (0x173b), 0x00                               ; FE0C57  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x13                               ; FE0C50  f2 39 17 00 02 13 00
+	ldw (0x173b:24), 0x00                               ; FE0C57  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE0C5E  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE0C61  f2 8e 17 00 31
 	push XBC                                             ; FE0C66  39
@@ -147189,7 +147189,7 @@ sub_FE0CB9:
 	pushw de                                             ; FE0CBE  2a
 	push XIX                                             ; FE0CBF  3c
 	calr 0x22fd                                          ; FE0CC0  1e fd 22
-	stiw_da (0x170f), 0x00                               ; FE0CC3  f2 0f 17 00 02 00 00
+	ldw (0x170f:24), 0x00                               ; FE0CC3  f2 0f 17 00 02 00 00
 .LFE0CCA:
 	ld bc, (0x170f:24)                                  ; FE0CCA  d2 0f 17 00 21
 	exts XBC                                             ; FE0CCF  e9 13
@@ -147208,12 +147208,12 @@ sub_FE0CB9:
 .LFE0CF9:
 	m_cp_mi16 MW24, 0x00170f, 0x0010                     ; FE0CF9  d2 0f 17 00 3f 10 00
 	jr lt, -27                                           ; FE0D00  61 e5
-	stiw_da (0x170f), 0x00                               ; FE0D02  f2 0f 17 00 02 00 00
+	ldw (0x170f:24), 0x00                               ; FE0D02  f2 0f 17 00 02 00 00
 	ldw bc, 0x10                                         ; FE0D09  31 10 00
 	m_muls MW24, 0x00170f, 1                             ; FE0D0C  d2 0f 17 00 49
 	ld XIX,XBC                                           ; FE0D11  e9 8c
 .LFE0D13:
-	stiw_da (0x1711), 0x00                               ; FE0D13  f2 11 17 00 02 00 00
+	ldw (0x1711:24), 0x00                               ; FE0D13  f2 11 17 00 02 00 00
 	ld bc, (0x1711:24)                                  ; FE0D1A  d2 11 17 00 21
 	exts XBC                                             ; FE0D1F  e9 13
 	add XBC,XIX                                          ; FE0D21  ec 81
@@ -147238,7 +147238,7 @@ sub_FE0CB9:
 	incdi16_24 0x01, (0x170f)                            ; FE0D62  d2 0f 17 00 61
 	m_cp_mi16 MW24, 0x00170f, 0x003c                     ; FE0D67  d2 0f 17 00 3f 3c 00
 	jr lt, -93                                           ; FE0D6E  61 a3
-	stiw_da (0x170f), 0x00                               ; FE0D70  f2 0f 17 00 02 00 00
+	ldw (0x170f:24), 0x00                               ; FE0D70  f2 0f 17 00 02 00 00
 	ld hl, (0x170f:24)                                  ; FE0D77  d2 0f 17 00 23
 	inc 1,HL                                             ; FE0D7C  db 61
 	ldw wa, 0x10                                         ; FE0D7E  30 10 00
@@ -147284,7 +147284,7 @@ sub_FE0CB9:
 	jr lt, -108                                          ; FE0E05  61 94
 	ldw (0x222b:16), 0x05c0                              ; FE0E07  f1 2b 22 02 c0 05
 	calr 0x2176                                          ; FE0E0D  1e 76 21
-	stiw_da (0x170f), 0x00                               ; FE0E10  f2 0f 17 00 02 00 00
+	ldw (0x170f:24), 0x00                               ; FE0E10  f2 0f 17 00 02 00 00
 .LFE0E17:
 	ld bc, (0x170f:24)                                  ; FE0E17  d2 0f 17 00 21
 	extz XBC                                             ; FE0E1C  e9 12
@@ -147296,8 +147296,8 @@ sub_FE0CB9:
 	lda xix, (0x60a080:24)                               ; FE0E31  f2 80 a0 60 34
 	ld (0x21d3:16), xix                                 ; FE0E36  f1 d3 21 64
 	m_res 2, MD16, 0x21e7                                ; FE0E3A  f1 e7 21 b2
-	stiw_da (0x1739), 0x1a                               ; FE0E3E  f2 39 17 00 02 1a 00
-	stiw_da (0x173b), 0x00                               ; FE0E45  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x1a                               ; FE0E3E  f2 39 17 00 02 1a 00
+	ldw (0x173b:24), 0x00                               ; FE0E45  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE0E4C  0b 00 00
 	push XIX                                             ; FE0E4F  3c
 	pushw 0x1a                                           ; FE0E50  0b 1a 00
@@ -147330,8 +147330,8 @@ sub_FE0E89:
 	link XIZ,0xfff8                                      ; FE0E89  ee 0c f8 ff
 	pushw hl                                             ; FE0E8D  2b
 	push XIX                                             ; FE0E8E  3c
-	stiw_da (0x1743), 0x0480                             ; FE0E8F  f2 43 17 00 02 80 04
-	stiw_da (0x173b), 0x00                               ; FE0E96  f2 3b 17 00 02 00 00
+	ldw (0x1743:24), 0x0480                             ; FE0E8F  f2 43 17 00 02 80 04
+	ldw (0x173b:24), 0x00                               ; FE0E96  f2 3b 17 00 02 00 00
 .LFE0E9D:
 	ld ix, (0x1743:24)                                  ; FE0E9D  d2 43 17 00 24
 	exts XIX                                             ; FE0EA2  ec 13
@@ -147558,7 +147558,7 @@ sub_FE10AA:
 	link XIZ,0xfffc                                      ; FE1103  ee 0c fc ff
 	pushw hl                                             ; FE1107  2b
 	push XIX                                             ; FE1108  3c
-	stiw_da (0x1743), 0x0480                             ; FE1109  f2 43 17 00 02 80 04
+	ldw (0x1743:24), 0x0480                             ; FE1109  f2 43 17 00 02 80 04
 	ld c, (0x60a081:24)                                 ; FE1110  c2 81 a0 60 23
 	cp C,0xe5                                            ; FE1115  cb cf e5
 	jrl z, 0xb9                                          ; FE1118  76 b9 00
@@ -147697,8 +147697,8 @@ sub_FE1218:
 	ld (0x21d0:16), 0x4d                                 ; FE126A  f1 d0 21 00 4d
 	ld (0x21d1:16), 0x49                                 ; FE126F  f1 d1 21 00 49
 	ld (0x21d2:16), 0x44                                 ; FE1274  f1 d2 21 00 44
-	stiw_da (0x1739), 0x1a                               ; FE1279  f2 39 17 00 02 1a 00
-	stiw_da (0x173b), 0x00                               ; FE1280  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x1a                               ; FE1279  f2 39 17 00 02 1a 00
+	ldw (0x173b:24), 0x00                               ; FE1280  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1287  0b 00 00
 	lda xbc, (0x60a080:24)                               ; FE128A  f2 80 a0 60 31
 	push XBC                                             ; FE128F  39
@@ -147712,7 +147712,7 @@ sub_FE1218:
 	jrl 0x8c                                             ; FE12A2  78 8c 00
 .LFE12A5:
 	ld (0x2218:16), 0x00                                 ; FE12A5  f1 18 22 00 00
-	stiw_da (0x1743), 0x0480                             ; FE12AA  f2 43 17 00 02 80 04
+	ldw (0x1743:24), 0x0480                             ; FE12AA  f2 43 17 00 02 80 04
 .LFE12B1:
 	ld c, (0x60a081:24)                                 ; FE12B1  c2 81 a0 60 23
 	cp C,0xe5                                            ; FE12B6  cb cf e5
@@ -147826,7 +147826,7 @@ sub_FE139D:
 	ld A,(XBC+0x21c8)                                    ; FE13C3  c3 e5 c8 21 21
 	stb_da (0x1736), a                                   ; FE13C8  f2 36 17 00 41
 	ld (XIX),0x00                                        ; FE13CD  b4 00 00
-	stiw_da (0x173d), 0x25                               ; FE13D0  f2 3d 17 00 02 25 00
+	ldw (0x173d:24), 0x25                               ; FE13D0  f2 3d 17 00 02 25 00
 .LFE13D7:
 	ld C,(XIX)                                           ; FE13D7  84 23
 	extz BC                                              ; FE13D9  d9 12
@@ -148480,8 +148480,8 @@ sub_FE192D:
 	pushw hl                                             ; FE192D  2b
 	ld XBC,0x000000d0                                    ; FE192E  41 d0 00 00 00
 	ld (0x221d:16), xbc                                 ; FE1933  f1 1d 22 61
-	stiw_da (0x1739), 0x00                               ; FE1937  f2 39 17 00 02 00 00
-	stiw_da (0x173b), 0x00                               ; FE193E  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x00                               ; FE1937  f2 39 17 00 02 00 00
+	ldw (0x173b:24), 0x00                               ; FE193E  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1945  0b 00 00
 	ld XWA,0x000000d0                                    ; FE1948  40 d0 00 00 00
 	push XWA                                             ; FE194D  38
@@ -148497,8 +148497,8 @@ sub_FE1962:
 	pushw hl                                             ; FE1962  2b
 	ld XBC,0x000000af                                    ; FE1963  41 af 00 00 00
 	ld (0x221d:16), xbc                                 ; FE1968  f1 1d 22 61
-	stiw_da (0x1739), 0x00                               ; FE196C  f2 39 17 00 02 00 00
-	stiw_da (0x173b), 0x00                               ; FE1973  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x00                               ; FE196C  f2 39 17 00 02 00 00
+	ldw (0x173b:24), 0x00                               ; FE1973  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE197A  0b 00 00
 	ld XWA,0x000000af                                    ; FE197D  40 af 00 00 00
 	push XWA                                             ; FE1982  38
@@ -148527,8 +148527,8 @@ sub_FE1962:
 .LFE19C2:
 	ld XBC,0x000000cf                                    ; FE19C2  41 cf 00 00 00
 	ld (0x221d:16), xbc                                 ; FE19C7  f1 1d 22 61
-	stiw_da (0x1739), 0x00                               ; FE19CB  f2 39 17 00 02 00 00
-	stiw_da (0x173b), 0x01                               ; FE19D2  f2 3b 17 00 02 01 00
+	ldw (0x1739:24), 0x00                               ; FE19CB  f2 39 17 00 02 00 00
+	ldw (0x173b:24), 0x01                               ; FE19D2  f2 3b 17 00 02 01 00
 	pushw 0x01                                           ; FE19D9  0b 01 00
 	ld XWA,0x000000cf                                    ; FE19DC  40 cf 00 00 00
 	push XWA                                             ; FE19E1  38
@@ -148545,8 +148545,8 @@ sub_FE1962:
 sub_FE19FF:
 	pushw hl                                             ; FE19FF  2b
 	calr 0xfd1a                                          ; FE1A00  1e 1a fd
-	stiw_da (0x1739), 0x11                               ; FE1A03  f2 39 17 00 02 11 00
-	stiw_da (0x173b), 0x00                               ; FE1A0A  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x11                               ; FE1A03  f2 39 17 00 02 11 00
+	ldw (0x173b:24), 0x00                               ; FE1A0A  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A11  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE1A14  f2 8e 17 00 31
 	push XBC                                             ; FE1A19  39
@@ -148560,8 +148560,8 @@ sub_FE19FF:
 	ret                                                  ; FE1A2D  0e
 sub_FE1A2E:
 	pushw hl                                             ; FE1A2E  2b
-	stiw_da (0x1739), 0x12                               ; FE1A2F  f2 39 17 00 02 12 00
-	stiw_da (0x173b), 0x00                               ; FE1A36  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x12                               ; FE1A2F  f2 39 17 00 02 12 00
+	ldw (0x173b:24), 0x00                               ; FE1A36  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A3D  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE1A40  f2 8e 17 00 31
 	push XBC                                             ; FE1A45  39
@@ -148576,8 +148576,8 @@ sub_FE1A2E:
 sub_FE1A5A:
 	pushw hl                                             ; FE1A5A  2b
 	calr 0xfcbf                                          ; FE1A5B  1e bf fc
-	stiw_da (0x1739), 0x0f                               ; FE1A5E  f2 39 17 00 02 0f 00
-	stiw_da (0x173b), 0x00                               ; FE1A65  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x0f                               ; FE1A5E  f2 39 17 00 02 0f 00
+	ldw (0x173b:24), 0x00                               ; FE1A65  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A6C  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE1A6F  f2 8e 17 00 31
 	push XBC                                             ; FE1A74  39
@@ -148591,8 +148591,8 @@ sub_FE1A5A:
 	ret                                                  ; FE1A88  0e
 sub_FE1A89:
 	pushw hl                                             ; FE1A89  2b
-	stiw_da (0x1739), 0x83                               ; FE1A8A  f2 39 17 00 02 83 00
-	stiw_da (0x173b), 0x00                               ; FE1A91  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x83                               ; FE1A8A  f2 39 17 00 02 83 00
+	ldw (0x173b:24), 0x00                               ; FE1A91  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1A98  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE1A9B  f2 8e 17 00 31
 	push XBC                                             ; FE1AA0  39
@@ -148606,8 +148606,8 @@ sub_FE1A89:
 	ret                                                  ; FE1AB4  0e
 sub_FE1AB5:
 	pushw hl                                             ; FE1AB5  2b
-	stiw_da (0x1739), 0x80                               ; FE1AB6  f2 39 17 00 02 80 00
-	stiw_da (0x173f), 0x00                               ; FE1ABD  f2 3f 17 00 02 00 00
+	ldw (0x1739:24), 0x80                               ; FE1AB6  f2 39 17 00 02 80 00
+	ldw (0x173f:24), 0x00                               ; FE1ABD  f2 3f 17 00 02 00 00
 	pushw 0x00                                           ; FE1AC4  0b 00 00
 	sub XBC,XBC                                          ; FE1AC7  e9 a1
 	push XBC                                             ; FE1AC9  39
@@ -148622,8 +148622,8 @@ sub_FE1AB5:
 sub_FE1ADE:
 	pushw hl                                             ; FE1ADE  2b
 	calr 0xfc3b                                          ; FE1ADF  1e 3b fc
-	stiw_da (0x1739), 0x16                               ; FE1AE2  f2 39 17 00 02 16 00
-	stiw_da (0x173b), 0x00                               ; FE1AE9  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x16                               ; FE1AE2  f2 39 17 00 02 16 00
+	ldw (0x173b:24), 0x00                               ; FE1AE9  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1AF0  0b 00 00
 sub_FE1AF3:
 	lda xbc, (0x178e:24)                                 ; FE1AF3  f2 8e 17 00 31
@@ -148638,8 +148638,8 @@ sub_FE1AF3:
 	ret                                                  ; FE1B0C  0e
 sub_FE1B0D:
 	pushw hl                                             ; FE1B0D  2b
-	stiw_da (0x1739), 0x84                               ; FE1B0E  f2 39 17 00 02 84 00
-	stiw_da (0x173b), 0x00                               ; FE1B15  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x84                               ; FE1B0E  f2 39 17 00 02 84 00
+	ldw (0x173b:24), 0x00                               ; FE1B15  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1B1C  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE1B1F  f2 8e 17 00 31
 	push XBC                                             ; FE1B24  39
@@ -148653,8 +148653,8 @@ sub_FE1B0D:
 	ret                                                  ; FE1B38  0e
 sub_FE1B39:
 	pushw hl                                             ; FE1B39  2b
-	stiw_da (0x1739), 0x10                               ; FE1B3A  f2 39 17 00 02 10 00
-	stiw_da (0x173b), 0x00                               ; FE1B41  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x10                               ; FE1B3A  f2 39 17 00 02 10 00
+	ldw (0x173b:24), 0x00                               ; FE1B41  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1B48  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE1B4B  f2 8e 17 00 31
 	push XBC                                             ; FE1B50  39
@@ -148669,8 +148669,8 @@ sub_FE1B39:
 sub_FE1B65:
 	pushw hl                                             ; FE1B65  2b
 	calr 0xfbb4                                          ; FE1B66  1e b4 fb
-	stiw_da (0x1739), 0x13                               ; FE1B69  f2 39 17 00 02 13 00
-	stiw_da (0x173b), 0x00                               ; FE1B70  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x13                               ; FE1B69  f2 39 17 00 02 13 00
+	ldw (0x173b:24), 0x00                               ; FE1B70  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1B77  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE1B7A  f2 8e 17 00 31
 	push XBC                                             ; FE1B7F  39
@@ -148683,8 +148683,8 @@ sub_FE1B65:
 	popw hl                                              ; FE1B92  4b
 	ret                                                  ; FE1B93  0e
 	pushw hl                                             ; FE1B94  2b
-	stiw_da (0x1739), 0x85                               ; FE1B95  f2 39 17 00 02 85 00
-	stiw_da (0x173b), 0x00                               ; FE1B9C  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x85                               ; FE1B95  f2 39 17 00 02 85 00
+	ldw (0x173b:24), 0x00                               ; FE1B9C  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE1BA3  0b 00 00
 	lda xbc, (0x178e:24)                                 ; FE1BA6  f2 8e 17 00 31
 	push XBC                                             ; FE1BAB  39
@@ -149181,7 +149181,7 @@ sub_FE1EF1:
 	pushw hl                                             ; FE1EF5  2b
 	pushw de                                             ; FE1EF6  2a
 	pushw ix                                             ; FE1EF7  2c
-	stiw_da (0x1733), 0x00                               ; FE1EF8  f2 33 17 00 02 00 00
+	ldw (0x1733:24), 0x00                               ; FE1EF8  f2 33 17 00 02 00 00
 	calr 0xe16b                                          ; FE1EFF  1e 6b e1
 	ld (0x21d0:16), 0x4d                                 ; FE1F02  f1 d0 21 00 4d
 	ld (0x21d1:16), 0x44                                 ; FE1F07  f1 d1 21 00 44
@@ -149606,8 +149606,8 @@ sub_FE22EF:
 	ld XIX,XBC                                           ; FE22FB  e9 8c
 	addda32 xix, (0x21d3)                                ; FE22FD  e1 d3 21 84
 	stl_da (0x174b), xix                                 ; FE2301  f2 4b 17 00 64
-	stiw_da (0x1739), 0x1a                               ; FE2306  f2 39 17 00 02 1a 00
-	stiw_da (0x173b), 0x00                               ; FE230D  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x1a                               ; FE2306  f2 39 17 00 02 1a 00
+	ldw (0x173b:24), 0x00                               ; FE230D  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE2314  0b 00 00
 	push XIX                                             ; FE2317  3c
 	pushw 0x1a                                           ; FE2318  0b 1a 00
@@ -150103,7 +150103,7 @@ sub_FE2736:
 	pushw de                                             ; FE273B  2a
 	push XIX                                             ; FE273C  3c
 	lda xix, (0xfe280f:24)                               ; FE273D  f2 0f 28 fe 34
-	stiw_da (0x1733), 0x00                               ; FE2742  f2 33 17 00 02 00 00
+	ldw (0x1733:24), 0x00                               ; FE2742  f2 33 17 00 02 00 00
 	ldw hl, 0x76af                                       ; FE2749  33 af 76
 	ldw de, 0x76d1                                       ; FE274C  32 d1 76
 	ld (xiz-1), 0x08                                     ; FE274F  be ff 00 08
@@ -150324,7 +150324,7 @@ sub_FE2993:
 	pushw hl                                             ; FE2993  2b
 	push XIX                                             ; FE2994  3c
 	ld (0x1736:24), 0x00                               ; FE2995  f2 36 17 00 00 00
-	stiw_da (0x173d), 0x4000                             ; FE299B  f2 3d 17 00 02 00 40
+	ldw (0x173d:24), 0x4000                             ; FE299B  f2 3d 17 00 02 00 40
 	pushw 0x4000                                         ; FE29A2  0b 00 40
 	calr 0xfd10                                          ; FE29A5  1e 10 fd
 	ld H,A                                               ; FE29A8  c9 8e
@@ -150379,7 +150379,7 @@ sub_FE2993:
 sub_FE2A21:
 	pushw hl                                             ; FE2A21  2b
 	push XIX                                             ; FE2A22  3c
-	stiw_da (0x173d), 0x1630                             ; FE2A23  f2 3d 17 00 02 30 16
+	ldw (0x173d:24), 0x1630                             ; FE2A23  f2 3d 17 00 02 30 16
 	pushw 0x1630                                         ; FE2A2A  0b 30 16
 	calr 0xfc88                                          ; FE2A2D  1e 88 fc
 	ld H,A                                               ; FE2A30  c9 8e
@@ -150470,8 +150470,8 @@ sub_FE2AA9:
 	add XBC,XIX                                          ; FE2B17  ec 81
 	ld (xiz-26), xbc                                     ; FE2B19  be e6 61
 	stl_da (0x174b), xbc                                 ; FE2B1C  f2 4b 17 00 61
-	stiw_da (0x1739), 0x1a                               ; FE2B21  f2 39 17 00 02 1a 00
-	stiw_da (0x173b), 0x00                               ; FE2B28  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x1a                               ; FE2B21  f2 39 17 00 02 1a 00
+	ldw (0x173b:24), 0x00                               ; FE2B28  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE2B2F  0b 00 00
 	ld xwa, (xiz-26)                                     ; FE2B32  ae e6 20
 	push XWA                                             ; FE2B35  38
@@ -150549,8 +150549,8 @@ sub_FE2AA9:
 	add XBC,XIX                                          ; FE2BF8  ec 81
 	ld (xiz-26), xbc                                     ; FE2BFA  be e6 61
 	stl_da (0x174b), xbc                                 ; FE2BFD  f2 4b 17 00 61
-	stiw_da (0x1739), 0x1a                               ; FE2C02  f2 39 17 00 02 1a 00
-	stiw_da (0x173b), 0x00                               ; FE2C09  f2 3b 17 00 02 00 00
+	ldw (0x1739:24), 0x1a                               ; FE2C02  f2 39 17 00 02 1a 00
+	ldw (0x173b:24), 0x00                               ; FE2C09  f2 3b 17 00 02 00 00
 	pushw 0x00                                           ; FE2C10  0b 00 00
 	ld xwa, (xiz-26)                                     ; FE2C13  ae e6 20
 	push XWA                                             ; FE2C16  38
@@ -151305,13 +151305,13 @@ sub_FE30DD:
 	lda xde, (0x605d58:24)                               ; FE329B  f2 58 5d 60 32
 	cp XHL,0x00040000                                    ; FE32A0  eb cf 00 00 04 00
 	jr nc, 0x0b                                          ; FE32A6  6f 0b
-	stiw_da (0x605d4c), 0x0800                           ; FE32A8  f2 4c 5d 60 02 00 08
+	ldw (0x605d4c:24), 0x0800                           ; FE32A8  f2 4c 5d 60 02 00 08
 	lds32 xwa, 0x02                                      ; FE32AF  e8 aa
 	jr 0x36                                              ; FE32B1  68 36
 .LFE32B3:
 	cp XHL,0x00080000                                    ; FE32B3  eb cf 00 00 08 00
 	jr nc, 0x0b                                          ; FE32B9  6f 0b
-	stiw_da (0x605d4c), 0x1000                           ; FE32BB  f2 4c 5d 60 02 00 10
+	ldw (0x605d4c:24), 0x1000                           ; FE32BB  f2 4c 5d 60 02 00 10
 	lds32 xwa, 0x03                                      ; FE32C2  e8 ab
 	jr 0x23                                              ; FE32C4  68 23
 .LFE32C6:
@@ -151366,7 +151366,7 @@ sub_FE30DD:
 	muls WA,0x003e                                       ; FE334C  d8 09 3e 00
 	add WA,0x0020                                        ; FE3350  d8 c8 20 00
 	ld (XBC),WA                                          ; FE3354  b1 50
-	stiw_da (0x605d64), 0x01                             ; FE3356  f2 64 5d 60 02 01 00
+	ldw (0x605d64:24), 0x01                             ; FE3356  f2 64 5d 60 02 01 00
 	ld WA,HL                                             ; FE335D  db 88
 	inc 1,WA                                             ; FE335F  d8 61
 	ld (0x605d66:24), wa                                ; FE3361  f2 66 5d 60 50
@@ -151397,116 +151397,116 @@ sub_FE30DD:
 	mx_ld_rm MXW, ra_IX, ra_WA, r0                       ; FE33AF  d3 07 f0 e0 20
 	lda xix, (0xfe33be:24)                               ; FE33B4  f2 be 33 fe 34
 	mx_jp_cc MXD, ra_IX, ra_WA, 8                        ; FE33B9  f3 07 f0 e0 d8
-	stiw_da (0x605d3e), 0x07                             ; FE33BE  f2 3e 5d 60 02 07 00
-	stiw_da (0x605d40), 0x0e                             ; FE33C5  f2 40 5d 60 02 0e 00
+	ldw (0x605d3e:24), 0x07                             ; FE33BE  f2 3e 5d 60 02 07 00
+	ldw (0x605d40:24), 0x0e                             ; FE33C5  f2 40 5d 60 02 0e 00
 	lda xiy, (0x605d50:24)                               ; FE33CC  f2 50 5d 60 35
 	m_ld_mi16 MDI+r5, 0, 0x0010                          ; FE33D1  b5 02 10 00
 	lda xix, (0x605d52:24)                               ; FE33D5  f2 52 5d 60 34
 	m_ld_mi16 MDI+r4, 0, 0x0007                          ; FE33DA  b4 02 07 00
-	stiw_da (0x605d54), 0x09                             ; FE33DE  f2 54 5d 60 02 09 00
-	stiw_da (0x605d56), 0x02                             ; FE33E5  f2 56 5d 60 02 02 00
+	ldw (0x605d54:24), 0x09                             ; FE33DE  f2 54 5d 60 02 09 00
+	ldw (0x605d56:24), 0x02                             ; FE33E5  f2 56 5d 60 02 02 00
 	ld XWA,0x000002c9                                    ; FE33EC  40 c9 02 00 00
 	stl_da (0x605d58), xwa                               ; FE33F1  f2 58 5d 60 60
-	stiw_da (0x605d62), 0x08                             ; FE33F6  f2 62 5d 60 02 08 00
-	stiw_da (0x605d64), 0x01                             ; FE33FD  f2 64 5d 60 02 01 00
+	ldw (0x605d62:24), 0x08                             ; FE33F6  f2 62 5d 60 02 08 00
+	ldw (0x605d64:24), 0x01                             ; FE33FD  f2 64 5d 60 02 01 00
 	m_ld_mi16 MDI+r3, 0, 0x0004                          ; FE3404  b3 02 04 00
 	m_ld_mi16 MDI+r2, 0, 0x0002                          ; FE3408  b2 02 02 00
-	stiw_da (0x605d6a), 0x00                             ; FE340C  f2 6a 5d 60 02 00 00
+	ldw (0x605d6a:24), 0x00                             ; FE340C  f2 6a 5d 60 02 00 00
 	ld WA,(XIY)                                          ; FE3413  95 20
 	m_muls MWI+r4, 0, 0                                  ; FE3415  94 48
 	ld (XBC),WA                                          ; FE3417  b1 50
 	jrl 0x01d8                                           ; FE3419  78 d8 01
-	stiw_da (0x605d3e), 0x07                             ; FE341C  f2 3e 5d 60 02 07 00
-	stiw_da (0x605d40), 0x0e                             ; FE3423  f2 40 5d 60 02 0e 00
+	ldw (0x605d3e:24), 0x07                             ; FE341C  f2 3e 5d 60 02 07 00
+	ldw (0x605d40:24), 0x0e                             ; FE3423  f2 40 5d 60 02 0e 00
 	lda xiy, (0x605d50:24)                               ; FE342A  f2 50 5d 60 35
 	m_ld_mi16 MDI+r5, 0, 0x0010                          ; FE342F  b5 02 10 00
 	lda xix, (0x605d52:24)                               ; FE3433  f2 52 5d 60 34
 	m_ld_mi16 MDI+r4, 0, 0x0007                          ; FE3438  b4 02 07 00
-	stiw_da (0x605d54), 0x09                             ; FE343C  f2 54 5d 60 02 09 00
-	stiw_da (0x605d56), 0x02                             ; FE3443  f2 56 5d 60 02 02 00
+	ldw (0x605d54:24), 0x09                             ; FE343C  f2 54 5d 60 02 09 00
+	ldw (0x605d56:24), 0x02                             ; FE3443  f2 56 5d 60 02 02 00
 	ld XWA,0x000002c9                                    ; FE344A  40 c9 02 00 00
 	stl_da (0x605d58), xwa                               ; FE344F  f2 58 5d 60 60
-	stiw_da (0x605d62), 0x08                             ; FE3454  f2 62 5d 60 02 08 00
-	stiw_da (0x605d64), 0x01                             ; FE345B  f2 64 5d 60 02 01 00
+	ldw (0x605d62:24), 0x08                             ; FE3454  f2 62 5d 60 02 08 00
+	ldw (0x605d64:24), 0x01                             ; FE345B  f2 64 5d 60 02 01 00
 	m_ld_mi16 MDI+r3, 0, 0x0004                          ; FE3462  b3 02 04 00
 	m_ld_mi16 MDI+r2, 0, 0x0002                          ; FE3466  b2 02 02 00
-	stiw_da (0x605d6a), 0x00                             ; FE346A  f2 6a 5d 60 02 00 00
+	ldw (0x605d6a:24), 0x00                             ; FE346A  f2 6a 5d 60 02 00 00
 	ld WA,(XIY)                                          ; FE3471  95 20
 	m_muls MWI+r4, 0, 0                                  ; FE3473  94 48
 	ld (XBC),WA                                          ; FE3475  b1 50
 	jrl 0x017a                                           ; FE3477  78 7a 01
-	stiw_da (0x605d3e), 0x05                             ; FE347A  f2 3e 5d 60 02 05 00
-	stiw_da (0x605d40), 0x0b                             ; FE3481  f2 40 5d 60 02 0b 00
+	ldw (0x605d3e:24), 0x05                             ; FE347A  f2 3e 5d 60 02 05 00
+	ldw (0x605d40:24), 0x0b                             ; FE3481  f2 40 5d 60 02 0b 00
 	lda xiy, (0x605d50:24)                               ; FE3488  f2 50 5d 60 35
 	m_ld_mi16 MDI+r5, 0, 0x0020                          ; FE348D  b5 02 20 00
 	lda xix, (0x605d52:24)                               ; FE3491  f2 52 5d 60 34
 	m_ld_mi16 MDI+r4, 0, 0x0006                          ; FE3496  b4 02 06 00
-	stiw_da (0x605d54), 0x08                             ; FE349A  f2 54 5d 60 02 08 00
-	stiw_da (0x605d56), 0x01                             ; FE34A1  f2 56 5d 60 02 01 00
+	ldw (0x605d54:24), 0x08                             ; FE349A  f2 54 5d 60 02 08 00
+	ldw (0x605d56:24), 0x01                             ; FE34A1  f2 56 5d 60 02 01 00
 	ld XWA,0x000004c5                                    ; FE34A8  40 c5 04 00 00
 	stl_da (0x605d58), xwa                               ; FE34AD  f2 58 5d 60 60
-	stiw_da (0x605d62), 0x08                             ; FE34B2  f2 62 5d 60 02 08 00
-	stiw_da (0x605d64), 0x01                             ; FE34B9  f2 64 5d 60 02 01 00
+	ldw (0x605d62:24), 0x08                             ; FE34B2  f2 62 5d 60 02 08 00
+	ldw (0x605d64:24), 0x01                             ; FE34B9  f2 64 5d 60 02 01 00
 	m_ld_mi16 MDI+r3, 0, 0x0003                          ; FE34C0  b3 02 03 00
 	m_ld_mi16 MDI+r2, 0, 0x0002                          ; FE34C4  b2 02 02 00
-	stiw_da (0x605d6a), 0x00                             ; FE34C8  f2 6a 5d 60 02 00 00
+	ldw (0x605d6a:24), 0x00                             ; FE34C8  f2 6a 5d 60 02 00 00
 	ld WA,(XIY)                                          ; FE34CF  95 20
 	m_muls MWI+r4, 0, 0                                  ; FE34D1  94 48
 	ld (XBC),WA                                          ; FE34D3  b1 50
 	jrl 0x011c                                           ; FE34D5  78 1c 01
-	stiw_da (0x605d3e), 0x13                             ; FE34D8  f2 3e 5d 60 02 13 00
-	stiw_da (0x605d40), 0x21                             ; FE34DF  f2 40 5d 60 02 21 00
+	ldw (0x605d3e:24), 0x13                             ; FE34D8  f2 3e 5d 60 02 13 00
+	ldw (0x605d40:24), 0x21                             ; FE34DF  f2 40 5d 60 02 21 00
 	lda xiy, (0x605d50:24)                               ; FE34E6  f2 50 5d 60 35
 	m_ld_mi16 MDI+r5, 0, 0x0010                          ; FE34EB  b5 02 10 00
 	lda xix, (0x605d52:24)                               ; FE34EF  f2 52 5d 60 34
 	m_ld_mi16 MDI+r4, 0, 0x000e                          ; FE34F4  b4 02 0e 00
-	stiw_da (0x605d54), 0x12                             ; FE34F8  f2 54 5d 60 02 12 00
-	stiw_da (0x605d56), 0x01                             ; FE34FF  f2 56 5d 60 02 01 00
+	ldw (0x605d54:24), 0x12                             ; FE34F8  f2 54 5d 60 02 12 00
+	ldw (0x605d56:24), 0x01                             ; FE34FF  f2 56 5d 60 02 01 00
 	ld XWA,0x00000b1f                                    ; FE3506  40 1f 0b 00 00
 	stl_da (0x605d58), xwa                               ; FE350B  f2 58 5d 60 60
-	stiw_da (0x605d62), 0x04                             ; FE3510  f2 62 5d 60 02 04 00
-	stiw_da (0x605d64), 0x01                             ; FE3517  f2 64 5d 60 02 01 00
+	ldw (0x605d62:24), 0x04                             ; FE3510  f2 62 5d 60 02 04 00
+	ldw (0x605d64:24), 0x01                             ; FE3517  f2 64 5d 60 02 01 00
 	m_ld_mi16 MDI+r3, 0, 0x000a                          ; FE351E  b3 02 0a 00
 	m_ld_mi16 MDI+r2, 0, 0x0002                          ; FE3522  b2 02 02 00
-	stiw_da (0x605d6a), 0x00                             ; FE3526  f2 6a 5d 60 02 00 00
+	ldw (0x605d6a:24), 0x00                             ; FE3526  f2 6a 5d 60 02 00 00
 	ld WA,(XIY)                                          ; FE352D  95 20
 	m_muls MWI+r4, 0, 0                                  ; FE352F  94 48
 	ld (XBC),WA                                          ; FE3531  b1 50
 	jrl 0xbe                                             ; FE3533  78 be 00
-	stiw_da (0x605d3e), 0x07                             ; FE3536  f2 3e 5d 60 02 07 00
-	stiw_da (0x605d40), 0x0e                             ; FE353D  f2 40 5d 60 02 0e 00
+	ldw (0x605d3e:24), 0x07                             ; FE3536  f2 3e 5d 60 02 07 00
+	ldw (0x605d40:24), 0x0e                             ; FE353D  f2 40 5d 60 02 0e 00
 	lda xiy, (0x605d50:24)                               ; FE3544  f2 50 5d 60 35
 	m_ld_mi16 MDI+r5, 0, 0x0010                          ; FE3549  b5 02 10 00
 	lda xix, (0x605d52:24)                               ; FE354D  f2 52 5d 60 34
 	m_ld_mi16 MDI+r4, 0, 0x0007                          ; FE3552  b4 02 07 00
-	stiw_da (0x605d54), 0x09                             ; FE3556  f2 54 5d 60 02 09 00
-	stiw_da (0x605d56), 0x02                             ; FE355D  f2 56 5d 60 02 02 00
+	ldw (0x605d54:24), 0x09                             ; FE3556  f2 54 5d 60 02 09 00
+	ldw (0x605d56:24), 0x02                             ; FE355D  f2 56 5d 60 02 02 00
 	ld XWA,0x000002c9                                    ; FE3564  40 c9 02 00 00
 	stl_da (0x605d58), xwa                               ; FE3569  f2 58 5d 60 60
-	stiw_da (0x605d62), 0x08                             ; FE356E  f2 62 5d 60 02 08 00
-	stiw_da (0x605d64), 0x01                             ; FE3575  f2 64 5d 60 02 01 00
+	ldw (0x605d62:24), 0x08                             ; FE356E  f2 62 5d 60 02 08 00
+	ldw (0x605d64:24), 0x01                             ; FE3575  f2 64 5d 60 02 01 00
 	m_ld_mi16 MDI+r3, 0, 0x0004                          ; FE357C  b3 02 04 00
 	m_ld_mi16 MDI+r2, 0, 0x0002                          ; FE3580  b2 02 02 00
-	stiw_da (0x605d6a), 0x00                             ; FE3584  f2 6a 5d 60 02 00 00
+	ldw (0x605d6a:24), 0x00                             ; FE3584  f2 6a 5d 60 02 00 00
 	ld WA,(XIY)                                          ; FE358B  95 20
 	m_muls MWI+r4, 0, 0                                  ; FE358D  94 48
 	ld (XBC),WA                                          ; FE358F  b1 50
 	jr 0x61                                              ; FE3591  68 61
-	stiw_da (0x605d3e), 0x0b                             ; FE3593  f2 3e 5d 60 02 0b 00
-	stiw_da (0x605d40), 0x12                             ; FE359A  f2 40 5d 60 02 12 00
+	ldw (0x605d3e:24), 0x0b                             ; FE3593  f2 3e 5d 60 02 0b 00
+	ldw (0x605d40:24), 0x12                             ; FE359A  f2 40 5d 60 02 12 00
 	lda xde, (0x605d50:24)                               ; FE35A1  f2 50 5d 60 32
 	m_ld_mi16 MDI+r2, 0, 0x0010                          ; FE35A6  b2 02 10 00
 	lda xbc, (0x605d52:24)                               ; FE35AA  f2 52 5d 60 31
 	m_ld_mi16 MDI+r1, 0, 0x0007                          ; FE35AF  b1 02 07 00
-	stiw_da (0x605d54), 0x09                             ; FE35B3  f2 54 5d 60 02 09 00
-	stiw_da (0x605d56), 0x02                             ; FE35BA  f2 56 5d 60 02 02 00
+	ldw (0x605d54:24), 0x09                             ; FE35B3  f2 54 5d 60 02 09 00
+	ldw (0x605d56:24), 0x02                             ; FE35BA  f2 56 5d 60 02 02 00
 	ld XWA,0x000002c7                                    ; FE35C1  40 c7 02 00 00
 	stl_da (0x605d58), xwa                               ; FE35C6  f2 58 5d 60 60
-	stiw_da (0x605d62), 0x08                             ; FE35CB  f2 62 5d 60 02 08 00
-	stiw_da (0x605d64), 0x01                             ; FE35D2  f2 64 5d 60 02 01 00
+	ldw (0x605d62:24), 0x08                             ; FE35CB  f2 62 5d 60 02 08 00
+	ldw (0x605d64:24), 0x01                             ; FE35D2  f2 64 5d 60 02 01 00
 	m_ld_mi16 MDI+r5, 0, 0x0006                          ; FE35D9  b5 02 06 00
-	stiw_da (0x605d68), 0x02                             ; FE35DD  f2 68 5d 60 02 02 00
-	stiw_da (0x605d6a), 0x00                             ; FE35E4  f2 6a 5d 60 02 00 00
+	ldw (0x605d68:24), 0x02                             ; FE35DD  f2 68 5d 60 02 02 00
+	ldw (0x605d6a:24), 0x00                             ; FE35E4  f2 6a 5d 60 02 00 00
 	ld WA,(XDE)                                          ; FE35EB  92 20
 	m_muls MWI+r1, 0, 0                                  ; FE35ED  91 48
 	ld (0x605d4e:24), wa                                ; FE35EF  f2 4e 5d 60 50
@@ -151522,7 +151522,7 @@ sub_FE35F9:
 	jrl z, 0xa9                                          ; FE3603  76 a9 00
 	cps hl, 0x01                                         ; FE3606  db d9
 	jr z, 0x65                                           ; FE3608  66 65
-	stiw_da (0x605d36), 0x00                             ; FE360A  f2 36 5d 60 02 00 00
+	ldw (0x605d36:24), 0x00                             ; FE360A  f2 36 5d 60 02 00 00
 	pushw 0x00                                           ; FE3611  0b 00 00
 	calr 0xfac6                                          ; FE3614  1e c6 fa
 	lda xbc, (0x605d22:24)                               ; FE3617  f2 22 5d 60 31
@@ -151606,7 +151606,7 @@ sub_FE35F9:
 	ldw hl, 0x08                                         ; FE36EF  33 08 00
 	ret                                                  ; FE36F2  0e
 .LFE36F3:
-	stiw_da (0x605d36), 0x05                             ; FE36F3  f2 36 5d 60 02 05 00
+	ldw (0x605d36:24), 0x05                             ; FE36F3  f2 36 5d 60 02 05 00
 	pushw 0x05                                           ; FE36FA  0b 05 00
 	calr 0xf9dd                                          ; FE36FD  1e dd f9
 	inc 2,XSP                                            ; FE3700  ef 62
@@ -151627,7 +151627,7 @@ sub_FE370A:
 	cp (XSP+0x0e),0x01                                   ; FE3721  8f 0e 3f 01
 	jr nz, 0x0e                                          ; FE3725  6e 0e
 	m_ld_mi16 MDD+r7, 0x04, 0x0000                       ; FE3727  bf 04 02 00 00
-	stiw_da (0x606f99), 0xffff                           ; FE372C  f2 99 6f 60 02 ff ff
+	ldw (0x606f99:24), 0xffff                           ; FE372C  f2 99 6f 60 02 ff ff
 	jr 0x1b                                              ; FE3733  68 1b
 .LFE3735:
 	ld_erpb_rr a, 0xf8                                   ; FE3735  c7 f8 89   ld A,IZL
@@ -151641,9 +151641,9 @@ sub_FE370A:
 .LFE374B:
 	m_ld_mi16 MDD+r7, 0x04, 0x0000                       ; FE374B  bf 04 02 00 00
 .LFE3750:
-	stiw_da (0x605d32), 0xffff                           ; FE3750  f2 32 5d 60 02 ff ff
-	stiw_da (0x605d34), 0xffff                           ; FE3757  f2 34 5d 60 02 ff ff
-	stiw_da (0x605d5e), 0xffff                           ; FE375E  f2 5e 5d 60 02 ff ff
+	ldw (0x605d32:24), 0xffff                           ; FE3750  f2 32 5d 60 02 ff ff
+	ldw (0x605d34:24), 0xffff                           ; FE3757  f2 34 5d 60 02 ff ff
+	ldw (0x605d5e:24), 0xffff                           ; FE375E  f2 5e 5d 60 02 ff ff
 	lda xde, (0x605d22:24)                               ; FE3765  f2 22 5d 60 32
 	lda xwa, (0x605d12:24)                               ; FE376A  f2 12 5d 60 30
 	ld (XDE),XWA                                         ; FE376F  b2 60
@@ -151660,8 +151660,8 @@ sub_FE370A:
 	m_ld_mi16 MDD+r0, 0x08, 0x0001                       ; FE378F  b8 08 02 01 00
 	ld XWA,(XDE)                                         ; FE3794  a2 20
 	m_ld_mi16 MDD+r0, 0x0a, 0x0001                       ; FE3796  b8 0a 02 01 00
-	stiw_da (0x605d6c), 0x00                             ; FE379B  f2 6c 5d 60 02 00 00
-	stiw_da (0x605d6e), 0x00                             ; FE37A2  f2 6e 5d 60 02 00 00
+	ldw (0x605d6c:24), 0x00                             ; FE379B  f2 6c 5d 60 02 00 00
+	ldw (0x605d6e:24), 0x00                             ; FE37A2  f2 6e 5d 60 02 00 00
 	pushw iz                                             ; FE37A9  2e
 	calr 0xf930                                          ; FE37AA  1e 30 f9
 	ld xwa, (0x605d22:24)                               ; FE37AD  e2 22 5d 60 20
@@ -152377,7 +152377,7 @@ sub_FE3DB2:
 	m_ld_mi16 MDD+r0, 0x1e, 0x0000                       ; FE3E57  b8 1e 02 00 00
 	ld XWA,(XSP+0x14)                                    ; FE3E5C  af 14 20
 	ld (XWA+0x20),0x00                                   ; FE3E5F  b8 20 00 00
-	stiw_da (0x605d34), 0xffff                           ; FE3E63  f2 34 5d 60 02 ff ff
+	ldw (0x605d34:24), 0xffff                           ; FE3E63  f2 34 5d 60 02 ff ff
 	ld bc, (0x605d50:24)                                ; FE3E6A  d2 50 5d 60 21
 	ld XWA,(XSP+0x14)                                    ; FE3E6F  af 14 20
 	ld WA,(XWA+0x18)                                     ; FE3E72  98 18 20
@@ -152780,13 +152780,13 @@ sub_FE423E:
 	lds hl, 0x00                                         ; FE424A  db a8
 	ret                                                  ; FE424C  0e
 .LFE424D:
-	stiw_da (0x605d6e), 0xffff                           ; FE424D  f2 6e 5d 60 02 ff ff
+	ldw (0x605d6e:24), 0xffff                           ; FE424D  f2 6e 5d 60 02 ff ff
 	calr 0x08f4                                          ; FE4254  1e f4 08
 	cps hl, 0x00                                         ; FE4257  db d8
 	jr nz, 0x12                                          ; FE4259  6e 12
 	calr 0x07f7                                          ; FE425B  1e f7 07
-	stiw_da (0x605d6c), 0x00                             ; FE425E  f2 6c 5d 60 02 00 00
-	stiw_da (0x605d6e), 0x00                             ; FE4265  f2 6e 5d 60 02 00 00
+	ldw (0x605d6c:24), 0x00                             ; FE425E  f2 6c 5d 60 02 00 00
+	ldw (0x605d6e:24), 0x00                             ; FE4265  f2 6e 5d 60 02 00 00
 	ret                                                  ; FE426C  0e
 .LFE426D:
 	ret                                                  ; FE426D  0e
@@ -152814,7 +152814,7 @@ sub_FE426E:
 	lda xix, (0xfe42b4:24)                               ; FE42AA  f2 b4 42 fe 34
 	mx_jp_cc MXD, ra_IX, ra_WA, 8                        ; FE42AF  f3 07 f0 e0 d8
 .LFE42B4:
-	stiw_da (0x605a06), 0xffff                           ; FE42B4  f2 06 5a 60 02 ff ff
+	ldw (0x605a06:24), 0xffff                           ; FE42B4  f2 06 5a 60 02 ff ff
 	ld A,C                                               ; FE42BB  cb 89
 	extz WA                                              ; FE42BD  d8 12
 	pushw wa                                             ; FE42BF  28
@@ -152824,7 +152824,7 @@ sub_FE426E:
 	inc 4,XSP                                            ; FE42C6  ef 64
 	ld xwa, (0x605d22:24)                               ; FE42C8  e2 22 5d 60 20
 	m_ld_mi16 MDD+r0, 0x0a, 0x0001                       ; FE42CD  b8 0a 02 01 00
-	stiw_da (0x605a06), 0x00                             ; FE42D2  f2 06 5a 60 02 00 00
+	ldw (0x605a06:24), 0x00                             ; FE42D2  f2 06 5a 60 02 00 00
 	jr 0x72                                              ; FE42D9  68 72
 	push XDE                                             ; FE42DB  3a
 	calr 0xf5bf                                          ; FE42DC  1e bf f5
@@ -153412,7 +153412,7 @@ sub_FE47BE:
 .LFE4804:
 	m_cp_mi16 MW24, 0x606f99, 0xffff                     ; FE4804  d2 99 6f 60 3f ff ff
 	jr nz, 0x07                                          ; FE480B  6e 07
-	stiw_da (0x606f99), 0x00                             ; FE480D  f2 99 6f 60 02 00 00
+	ldw (0x606f99:24), 0x00                             ; FE480D  f2 99 6f 60 02 00 00
 .LFE4814:
 	ld wa, (0x606f99:24)                                ; FE4814  d2 99 6f 60 20
 	sla wa, 0x08                                         ; FE4819  d8 ec 08
@@ -153527,7 +153527,7 @@ sub_FE48EF:
 	jr nz, 0x2f                                          ; FE48FC  6e 2f
 	m_cp_mi16 MW24, 0x606f99, 0xffff                     ; FE48FE  d2 99 6f 60 3f ff ff
 	jr nz, 0x07                                          ; FE4905  6e 07
-	stiw_da (0x606f99), 0x00                             ; FE4907  f2 99 6f 60 02 00 00
+	ldw (0x606f99:24), 0x00                             ; FE4907  f2 99 6f 60 02 00 00
 .LFE490E:
 	pushw 0x60                                           ; FE490E  0b 60 00
 	pushw 0x5d99                                         ; FE4911  0b 99 5d
@@ -153544,7 +153544,7 @@ sub_FE48EF:
 	jr z, 0x0f                                           ; FE4933  66 0f
 	m_cp_mi8 MB24, 0x605a03, 0x5a                        ; FE4935  c2 03 5a 60 3f 5a
 	jr z, 0x07                                           ; FE493B  66 07
-	stiw_da (0x605d6c), 0x00                             ; FE493D  f2 6c 5d 60 02 00 00
+	ldw (0x605d6c:24), 0x00                             ; FE493D  f2 6c 5d 60 02 00 00
 .LFE4944:
 	m_cp_mi16 MW24, 0x605d6c, 0x005a                     ; FE4944  d2 6c 5d 60 3f 5a 00
 	jrl z, 0xf8                                          ; FE494B  76 f8 00
@@ -153727,7 +153727,7 @@ sub_FE4A55:
 	cps hl, 0x00                                         ; FE4B35  db d8
 	jr z, 0x09                                           ; FE4B37  66 09
 .LFE4B39:
-	stiw_da (0x605d6e), 0x00                             ; FE4B39  f2 6e 5d 60 02 00 00
+	ldw (0x605d6e:24), 0x00                             ; FE4B39  f2 6e 5d 60 02 00 00
 	jr 0x04                                              ; FE4B40  68 04
 .LFE4B42:
 	lds hl, 0x00                                         ; FE4B42  db a8
@@ -155403,7 +155403,7 @@ Fdc_ResetAndIdentifyMedia:
 	jr .LFE5690                                   ; FE5688  68 06
 	ld (0x605a5a:24), 0x03                      ; FE568A  f2 5a 5a 60 00 03
 .LFE5690:
-	stiw_da (0x605a13), 0x00                      ; FE5690  f2 13 5a 60 02 00 00
+	ldw (0x605a13:24), 0x00                      ; FE5690  f2 13 5a 60 02 00 00
 	pushw 0x00                                    ; FE5697  0b 00 00
 	jr .LFE56BC                                   ; FE569A  68 20
 	ld (0x605a5a:24), 0x04                      ; FE569C  f2 5a 5a 60 00 04
@@ -155413,7 +155413,7 @@ Fdc_ResetAndIdentifyMedia:
 .LFE56AC:
 	ld (0x605a5a:24), 0x00                      ; FE56AC  f2 5a 5a 60 00 00
 .LFE56B2:
-	stiw_da (0x605a13), 0x00                      ; FE56B2  f2 13 5a 60 02 00 00
+	ldw (0x605a13:24), 0x00                      ; FE56B2  f2 13 5a 60 02 00 00
 	pushw 0x02                                    ; FE56B9  0b 02 00
 .LFE56BC:
 	calr 0xfe0c                                   ; FE56BC  1e 0c fe
@@ -155638,10 +155638,10 @@ Fdc_SelectFormatParameters:
 	ld (XHL),0x09                                 ; FE5847  b3 00 09
 	ld (XDE),0x1b                                 ; FE584A  b2 00 1b
 	ld (XIX),0x54                                 ; FE584D  b4 00 54
-	stiw_da (0x605aef), 0x4f                      ; FE5850  f2 ef 5a 60 02 4f 00
-	stiw_da (0x605af1), 0x50                      ; FE5857  f2 f1 5a 60 02 50 00
-	stiw_da (0x605af5), 0x09                      ; FE585E  f2 f5 5a 60 02 09 00
-	stiw_da (0x605af7), 0x0a                      ; FE5865  f2 f7 5a 60 02 0a 00
+	ldw (0x605aef:24), 0x4f                      ; FE5850  f2 ef 5a 60 02 4f 00
+	ldw (0x605af1:24), 0x50                      ; FE5857  f2 f1 5a 60 02 50 00
+	ldw (0x605af5:24), 0x09                      ; FE585E  f2 f5 5a 60 02 09 00
+	ldw (0x605af7:24), 0x0a                      ; FE5865  f2 f7 5a 60 02 0a 00
 	jr .LFE58D7                                   ; FE586C  68 69
 .LFE586E:
 	ld (XWA),0x03                                 ; FE586E  b0 00 03
@@ -155650,10 +155650,10 @@ Fdc_SelectFormatParameters:
 	ld (XHL),0x08                                 ; FE5877  b3 00 08
 	ld (XDE),0x53                                 ; FE587A  b2 00 53
 	ld (XIX),0x74                                 ; FE587D  b4 00 74
-	stiw_da (0x605aef), 0x4c                      ; FE5880  f2 ef 5a 60 02 4c 00
-	stiw_da (0x605af1), 0x4d                      ; FE5887  f2 f1 5a 60 02 4d 00
-	stiw_da (0x605af5), 0x08                      ; FE588E  f2 f5 5a 60 02 08 00
-	stiw_da (0x605af7), 0x09                      ; FE5895  f2 f7 5a 60 02 09 00
+	ldw (0x605aef:24), 0x4c                      ; FE5880  f2 ef 5a 60 02 4c 00
+	ldw (0x605af1:24), 0x4d                      ; FE5887  f2 f1 5a 60 02 4d 00
+	ldw (0x605af5:24), 0x08                      ; FE588E  f2 f5 5a 60 02 08 00
+	ldw (0x605af7:24), 0x09                      ; FE5895  f2 f7 5a 60 02 09 00
 	jr .LFE58D7                                   ; FE589C  68 39
 .LFE589E:
 	ld (XWA),0x02                                 ; FE589E  b0 00 02
@@ -155662,10 +155662,10 @@ Fdc_SelectFormatParameters:
 	ld (XHL+0x0a),0x12                            ; FE58A7  bb 0a 00 12
 	ld (XDE),0x1b                                 ; FE58AB  b2 00 1b
 	ld (XIX),0x6c                                 ; FE58AE  b4 00 6c
-	stiw_da (0x605aef), 0x4f                      ; FE58B1  f2 ef 5a 60 02 4f 00
-	stiw_da (0x605af1), 0x50                      ; FE58B8  f2 f1 5a 60 02 50 00
-	stiw_da (0x605af5), 0x12                      ; FE58BF  f2 f5 5a 60 02 12 00
-	stiw_da (0x605af7), 0x13                      ; FE58C6  f2 f7 5a 60 02 13 00
+	ldw (0x605aef:24), 0x4f                      ; FE58B1  f2 ef 5a 60 02 4f 00
+	ldw (0x605af1:24), 0x50                      ; FE58B8  f2 f1 5a 60 02 50 00
+	ldw (0x605af5:24), 0x12                      ; FE58BF  f2 f5 5a 60 02 12 00
+	ldw (0x605af7:24), 0x13                      ; FE58C6  f2 f7 5a 60 02 13 00
 	jr .LFE58D7                                   ; FE58CD  68 08
 .LFE58CF:
 	pushw 0xfe                                    ; FE58CF  0b fe 00
@@ -157251,13 +157251,13 @@ Fdc_Op3_ReadSectors__attempt:
 .LFE607B:
 	ld WA,(XBC)                                   ; FE607B  91 20
 	ld (0x605af3:24), wa                         ; FE607D  f2 f3 5a 60 50
-	stiw_da (0x605a0e), 0x00                      ; FE6082  f2 0e 5a 60 02 00 00
+	ldw (0x605a0e:24), 0x00                      ; FE6082  f2 0e 5a 60 02 00 00
 	m_cp_mi8 MB24, 0x605a5a, 0x02                 ; FE6089  c2 5a 5a 60 3f 02
 	jr nz, .LFE609A                               ; FE608F  6e 09
-	stiw_da (0x605a10), 0x0400                    ; FE6091  f2 10 5a 60 02 00 04
+	ldw (0x605a10:24), 0x0400                    ; FE6091  f2 10 5a 60 02 00 04
 	jr .LFE60A1                                   ; FE6098  68 07
 .LFE609A:
-	stiw_da (0x605a10), 0x0200                    ; FE609A  f2 10 5a 60 02 00 02
+	ldw (0x605a10:24), 0x0200                    ; FE609A  f2 10 5a 60 02 00 02
 .LFE60A1:
 	lda xde, (xde+0x0a)                           ; FE60A1  ba 0a 32
 	ld WA,(XDE)                                   ; FE60A4  92 20
@@ -157404,13 +157404,13 @@ Fdc_Op4_WriteSectors__attempt:
 .LFE61EE:
 	ld WA,(XBC)                                   ; FE61EE  91 20
 	ld (0x605af3:24), wa                         ; FE61F0  f2 f3 5a 60 50
-	stiw_da (0x605a0e), 0x00                      ; FE61F5  f2 0e 5a 60 02 00 00
+	ldw (0x605a0e:24), 0x00                      ; FE61F5  f2 0e 5a 60 02 00 00
 	m_cp_mi8 MB24, 0x605a5a, 0x02                 ; FE61FC  c2 5a 5a 60 3f 02
 	jr nz, .LFE620D                               ; FE6202  6e 09
-	stiw_da (0x605a10), 0x0400                    ; FE6204  f2 10 5a 60 02 00 04
+	ldw (0x605a10:24), 0x0400                    ; FE6204  f2 10 5a 60 02 00 04
 	jr .LFE6214                                   ; FE620B  68 07
 .LFE620D:
-	stiw_da (0x605a10), 0x0200                    ; FE620D  f2 10 5a 60 02 00 02
+	ldw (0x605a10:24), 0x0200                    ; FE620D  f2 10 5a 60 02 00 02
 .LFE6214:
 	lda xde, (xde+0x0a)                           ; FE6214  ba 0a 32
 	ld WA,(XDE)                                   ; FE6217  92 20
@@ -157680,7 +157680,7 @@ Fdc_BuildFormatIdTable:
 	ld (XSP+0x0c),XWA                             ; FE6439  bf 0c 60
 	lda xbc, (xwa+0x05)                           ; FE643C  b8 05 31
 	ld (XBC),0x01                                 ; FE643F  b1 00 01
-	stiw_da (0x605a0e), 0x00                      ; FE6442  f2 0e 5a 60 02 00 00
+	ldw (0x605a0e:24), 0x00                      ; FE6442  f2 0e 5a 60 02 00 00
 	ld wa, (0x605af5:24)                         ; FE6449  d2 f5 5a 60 20
 	srl wa, 0x01                                  ; FE644E  d8 ef 01
 	ld (XSP+0x06),WA                              ; FE6451  bf 06 50
@@ -159056,7 +159056,7 @@ sub_FE6E84:
 	exts XWA                                             ; FE6F1B  e8 13
 	ld (xiz-4), xwa                                      ; FE6F1D  be fc 60
 	ld XIX,0x00603600                                    ; FE6F20  44 00 36 60 00
-	stiw_da (0x601c02), 0x00                             ; FE6F25  f2 02 1c 60 02 00 00
+	ldw (0x601c02:24), 0x00                             ; FE6F25  f2 02 1c 60 02 00 00
 .LFE6F2C:
 	ld bc, (0x601c02:24)                                ; FE6F2C  d2 02 1c 60 21
 	extz XBC                                             ; FE6F31  e9 12
@@ -159364,7 +159364,7 @@ sub_FE715E:
 	ld IY,HL                                             ; FE7180  db 8d
 	srl iy, 0x01                                         ; FE7182  dd ef 01
 	ld HL,IY                                             ; FE7185  dd 8b
-	stiw_da (0x601c02), 0x00                             ; FE7187  f2 02 1c 60 02 00 00
+	ldw (0x601c02:24), 0x00                             ; FE7187  f2 02 1c 60 02 00 00
 	jr 0x15                                              ; FE718E  68 15
 .LFE7190:
 	ld xbc, (xiz-4)                                      ; FE7190  ae fc 21
@@ -159504,12 +159504,12 @@ sub_FE721C:
 Disk_Format720K:
 	pushw hl                                             ; FE7222  2b
 	push XIX                                             ; FE7223  3c
-	stiw_da (0x17c0), 0x00                               ; FE7224  f2 c0 17 00 02 00 00
-	stiw_da (0x17c2), 0x00                               ; FE722B  f2 c2 17 00 02 00 00
-	stiw_da (0x17c4), 0x00                               ; FE7232  f2 c4 17 00 02 00 00
-	stiw_da (0x17c6), 0xe0                               ; FE7239  f2 c6 17 00 02 e0 00
-	stiw_da (0x17c8), 0x01                               ; FE7240  f2 c8 17 00 02 01 00
-	stiw_da (0x17ca), 0x01                               ; FE7247  f2 ca 17 00 02 01 00
+	ldw (0x17c0:24), 0x00                               ; FE7224  f2 c0 17 00 02 00 00
+	ldw (0x17c2:24), 0x00                               ; FE722B  f2 c2 17 00 02 00 00
+	ldw (0x17c4:24), 0x00                               ; FE7232  f2 c4 17 00 02 00 00
+	ldw (0x17c6:24), 0xe0                               ; FE7239  f2 c6 17 00 02 e0 00
+	ldw (0x17c8:24), 0x01                               ; FE7240  f2 c8 17 00 02 01 00
+	ldw (0x17ca:24), 0x01                               ; FE7247  f2 ca 17 00 02 01 00
 	sub XBC,XBC                                          ; FE724E  e9 a1
 	stl_da (0x17cc), xbc                                 ; FE7250  f2 cc 17 00 61
 	lda xbc, (0x17c0:24)                                 ; FE7255  f2 c0 17 00 31
@@ -159519,12 +159519,12 @@ Disk_Format720K:
 	pop XIY                                              ; FE7261  5d
 	cps a, 0x00                                          ; FE7262  c9 d8
 	jrl nz, 0x0195                                       ; FE7264  7e 95 01
-	stiw_da (0x17c0), 0x05                               ; FE7267  f2 c0 17 00 02 05 00
-	stiw_da (0x17c2), 0x00                               ; FE726E  f2 c2 17 00 02 00 00
-	stiw_da (0x17c4), 0x00                               ; FE7275  f2 c4 17 00 02 00 00
-	stiw_da (0x17c6), 0x00                               ; FE727C  f2 c6 17 00 02 00 00
-	stiw_da (0x17c8), 0x01                               ; FE7283  f2 c8 17 00 02 01 00
-	stiw_da (0x17ca), 0x01                               ; FE728A  f2 ca 17 00 02 01 00
+	ldw (0x17c0:24), 0x05                               ; FE7267  f2 c0 17 00 02 05 00
+	ldw (0x17c2:24), 0x00                               ; FE726E  f2 c2 17 00 02 00 00
+	ldw (0x17c4:24), 0x00                               ; FE7275  f2 c4 17 00 02 00 00
+	ldw (0x17c6:24), 0x00                               ; FE727C  f2 c6 17 00 02 00 00
+	ldw (0x17c8:24), 0x01                               ; FE7283  f2 c8 17 00 02 01 00
+	ldw (0x17ca:24), 0x01                               ; FE728A  f2 ca 17 00 02 01 00
 	sub XBC,XBC                                          ; FE7291  e9 a1
 	stl_da (0x17cc), xbc                                 ; FE7293  f2 cc 17 00 61
 	lda xbc, (0x17c0:24)                                 ; FE7298  f2 c0 17 00 31
@@ -159534,12 +159534,12 @@ Disk_Format720K:
 	pop XIY                                              ; FE72A4  5d
 	cps a, 0x00                                          ; FE72A5  c9 d8
 	jrl nz, 0x0152                                       ; FE72A7  7e 52 01
-	stiw_da (0x17c0), 0x04                               ; FE72AA  f2 c0 17 00 02 04 00
-	stiw_da (0x17c2), 0x00                               ; FE72B1  f2 c2 17 00 02 00 00
-	stiw_da (0x17c4), 0x00                               ; FE72B8  f2 c4 17 00 02 00 00
-	stiw_da (0x17c6), 0x00                               ; FE72BF  f2 c6 17 00 02 00 00
-	stiw_da (0x17c8), 0x01                               ; FE72C6  f2 c8 17 00 02 01 00
-	stiw_da (0x17ca), 0x01                               ; FE72CD  f2 ca 17 00 02 01 00
+	ldw (0x17c0:24), 0x04                               ; FE72AA  f2 c0 17 00 02 04 00
+	ldw (0x17c2:24), 0x00                               ; FE72B1  f2 c2 17 00 02 00 00
+	ldw (0x17c4:24), 0x00                               ; FE72B8  f2 c4 17 00 02 00 00
+	ldw (0x17c6:24), 0x00                               ; FE72BF  f2 c6 17 00 02 00 00
+	ldw (0x17c8:24), 0x01                               ; FE72C6  f2 c8 17 00 02 01 00
+	ldw (0x17ca:24), 0x01                               ; FE72CD  f2 ca 17 00 02 01 00
 	lda xbc, (0x60a080:24)                               ; FE72D4  f2 80 a0 60 31
 	stl_da (0x17cc), xbc                                 ; FE72D9  f2 cc 17 00 61
 	lda xbc, (0x17c0:24)                                 ; FE72DE  f2 c0 17 00 31
@@ -159549,12 +159549,12 @@ Disk_Format720K:
 	pop XIY                                              ; FE72EA  5d
 	cps a, 0x00                                          ; FE72EB  c9 d8
 	jrl nz, 0x010c                                       ; FE72ED  7e 0c 01
-	stiw_da (0x17c0), 0x04                               ; FE72F0  f2 c0 17 00 02 04 00
-	stiw_da (0x17c2), 0x00                               ; FE72F7  f2 c2 17 00 02 00 00
-	stiw_da (0x17c4), 0x00                               ; FE72FE  f2 c4 17 00 02 00 00
-	stiw_da (0x17c6), 0x00                               ; FE7305  f2 c6 17 00 02 00 00
-	stiw_da (0x17c8), 0x02                               ; FE730C  f2 c8 17 00 02 02 00
-	stiw_da (0x17ca), 0x03                               ; FE7313  f2 ca 17 00 02 03 00
+	ldw (0x17c0:24), 0x04                               ; FE72F0  f2 c0 17 00 02 04 00
+	ldw (0x17c2:24), 0x00                               ; FE72F7  f2 c2 17 00 02 00 00
+	ldw (0x17c4:24), 0x00                               ; FE72FE  f2 c4 17 00 02 00 00
+	ldw (0x17c6:24), 0x00                               ; FE7305  f2 c6 17 00 02 00 00
+	ldw (0x17c8:24), 0x02                               ; FE730C  f2 c8 17 00 02 02 00
+	ldw (0x17ca:24), 0x03                               ; FE7313  f2 ca 17 00 02 03 00
 	lda xbc, (0x60a280:24)                               ; FE731A  f2 80 a2 60 31
 	ld XIX,XBC                                           ; FE731F  e9 8c
 	stl_da (0x17cc), xbc                                 ; FE7321  f2 cc 17 00 61
@@ -159565,12 +159565,12 @@ Disk_Format720K:
 	pop XIY                                              ; FE7332  5d
 	cps a, 0x00                                          ; FE7333  c9 d8
 	jrl nz, 0xc4                                         ; FE7335  7e c4 00
-	stiw_da (0x17c0), 0x04                               ; FE7338  f2 c0 17 00 02 04 00
-	stiw_da (0x17c2), 0x00                               ; FE733F  f2 c2 17 00 02 00 00
-	stiw_da (0x17c4), 0x00                               ; FE7346  f2 c4 17 00 02 00 00
-	stiw_da (0x17c6), 0x00                               ; FE734D  f2 c6 17 00 02 00 00
-	stiw_da (0x17c8), 0x05                               ; FE7354  f2 c8 17 00 02 05 00
-	stiw_da (0x17ca), 0x03                               ; FE735B  f2 ca 17 00 02 03 00
+	ldw (0x17c0:24), 0x04                               ; FE7338  f2 c0 17 00 02 04 00
+	ldw (0x17c2:24), 0x00                               ; FE733F  f2 c2 17 00 02 00 00
+	ldw (0x17c4:24), 0x00                               ; FE7346  f2 c4 17 00 02 00 00
+	ldw (0x17c6:24), 0x00                               ; FE734D  f2 c6 17 00 02 00 00
+	ldw (0x17c8:24), 0x05                               ; FE7354  f2 c8 17 00 02 05 00
+	ldw (0x17ca:24), 0x03                               ; FE735B  f2 ca 17 00 02 03 00
 	stl_da (0x17cc), xix                                 ; FE7362  f2 cc 17 00 64
 	lda xbc, (0x17c0:24)                                 ; FE7367  f2 c0 17 00 31
 	push XBC                                             ; FE736C  39
@@ -159579,12 +159579,12 @@ Disk_Format720K:
 	pop XIY                                              ; FE7373  5d
 	cps a, 0x00                                          ; FE7374  c9 d8
 	jrl nz, 0x83                                         ; FE7376  7e 83 00
-	stiw_da (0x17c0), 0x03                               ; FE7379  f2 c0 17 00 02 03 00
-	stiw_da (0x17c2), 0x00                               ; FE7380  f2 c2 17 00 02 00 00
-	stiw_da (0x17c4), 0x00                               ; FE7387  f2 c4 17 00 02 00 00
-	stiw_da (0x17c6), 0x4f                               ; FE738E  f2 c6 17 00 02 4f 00
-	stiw_da (0x17c8), 0x09                               ; FE7395  f2 c8 17 00 02 09 00
-	stiw_da (0x17ca), 0x01                               ; FE739C  f2 ca 17 00 02 01 00
+	ldw (0x17c0:24), 0x03                               ; FE7379  f2 c0 17 00 02 03 00
+	ldw (0x17c2:24), 0x00                               ; FE7380  f2 c2 17 00 02 00 00
+	ldw (0x17c4:24), 0x00                               ; FE7387  f2 c4 17 00 02 00 00
+	ldw (0x17c6:24), 0x4f                               ; FE738E  f2 c6 17 00 02 4f 00
+	ldw (0x17c8:24), 0x09                               ; FE7395  f2 c8 17 00 02 09 00
+	ldw (0x17ca:24), 0x01                               ; FE739C  f2 ca 17 00 02 01 00
 	lda xbc, (0x60a080:24)                               ; FE73A3  f2 80 a0 60 31
 	ld XIX,XBC                                           ; FE73A8  e9 8c
 	stl_da (0x17cc), xbc                                 ; FE73AA  f2 cc 17 00 61
@@ -159595,12 +159595,12 @@ Disk_Format720K:
 	pop XIY                                              ; FE73BB  5d
 	cps a, 0x00                                          ; FE73BC  c9 d8
 	jr nz, 0x3c                                          ; FE73BE  6e 3c
-	stiw_da (0x17c0), 0x03                               ; FE73C0  f2 c0 17 00 02 03 00
-	stiw_da (0x17c2), 0x00                               ; FE73C7  f2 c2 17 00 02 00 00
-	stiw_da (0x17c4), 0x00                               ; FE73CE  f2 c4 17 00 02 00 00
-	stiw_da (0x17c6), 0x00                               ; FE73D5  f2 c6 17 00 02 00 00
-	stiw_da (0x17c8), 0x09                               ; FE73DC  f2 c8 17 00 02 09 00
-	stiw_da (0x17ca), 0x01                               ; FE73E3  f2 ca 17 00 02 01 00
+	ldw (0x17c0:24), 0x03                               ; FE73C0  f2 c0 17 00 02 03 00
+	ldw (0x17c2:24), 0x00                               ; FE73C7  f2 c2 17 00 02 00 00
+	ldw (0x17c4:24), 0x00                               ; FE73CE  f2 c4 17 00 02 00 00
+	ldw (0x17c6:24), 0x00                               ; FE73D5  f2 c6 17 00 02 00 00
+	ldw (0x17c8:24), 0x09                               ; FE73DC  f2 c8 17 00 02 09 00
+	ldw (0x17ca:24), 0x01                               ; FE73E3  f2 ca 17 00 02 01 00
 	stl_da (0x17cc), xix                                 ; FE73EA  f2 cc 17 00 64
 	lda xbc, (0x17c0:24)                                 ; FE73EF  f2 c0 17 00 31
 	push XBC                                             ; FE73F4  39
@@ -162276,12 +162276,12 @@ sub_FE8334:
 	add XIY,0x00000000                                   ; FE8338  ed c8 00 00 00 00
 	ret                                                  ; FE833E  0e
 sub_FE833F:
-	stiw_da (0x601f4f), 0x30                             ; FE833F  f2 4f 1f 60 02 30 00
-	stiw_da (0x601f51), 0x30                             ; FE8346  f2 51 1f 60 02 30 00
-	stiw_da (0x601f4b), 0x26                             ; FE834D  f2 4b 1f 60 02 26 00
+	ldw (0x601f4f:24), 0x30                             ; FE833F  f2 4f 1f 60 02 30 00
+	ldw (0x601f51:24), 0x30                             ; FE8346  f2 51 1f 60 02 30 00
+	ldw (0x601f4b:24), 0x26                             ; FE834D  f2 4b 1f 60 02 26 00
 	ld (0x601f53:24), 0x05                             ; FE8354  f2 53 1f 60 00 05
-	stiw_da (0x601f71), 0x28                             ; FE835A  f2 71 1f 60 02 28 00
-	stiw_da (0x601f73), 0x05                             ; FE8361  f2 73 1f 60 02 05 00
+	ldw (0x601f71:24), 0x28                             ; FE835A  f2 71 1f 60 02 28 00
+	ldw (0x601f73:24), 0x05                             ; FE8361  f2 73 1f 60 02 05 00
 	ld (0x601f46:24), 0x64                             ; FE8368  f2 46 1f 60 00 64
 	ret                                                  ; FE836E  0e
 ; ---------------------------------------------------------------------
@@ -162852,7 +162852,7 @@ sub_FE8868:
 	ret                                                  ; FE8881  0e
 .LFE8882:
 	call 0xf42e80                                        ; FE8882  1d 80 2e f4
-	stiw_da (0x601f49), 0x0a                             ; FE8886  f2 49 1f 60 02 0a 00
+	ldw (0x601f49:24), 0x0a                             ; FE8886  f2 49 1f 60 02 0a 00
 	ld wa, (0x601f51:24)                                ; FE888D  d2 51 1f 60 20
 	ld (0x601f4d:24), wa                                ; FE8892  f2 4d 1f 60 50
 	m_set 0, MD24, 0x601f70                              ; FE8897  f2 70 1f 60 b8
@@ -162871,7 +162871,7 @@ sub_FE88AA:
 .LFE88D3:
 	m_cp_mi16 MW24, 0x601f4d, 0x0000                     ; FE88D3  d2 4d 1f 60 3f 00 00
 	jr nz, .LFE88E3                                      ; FE88DA  6e 07
-	stiw_da (0x601f4d), 0x30                             ; FE88DC  f2 4d 1f 60 02 30 00
+	ldw (0x601f4d:24), 0x30                             ; FE88DC  f2 4d 1f 60 02 30 00
 .LFE88E3:
 	ld a, (0x207a:16)                                   ; FE88E3  c1 7a 20 21
 	m_cp_rm MB16, 0x207b, r1                             ; FE88E7  c1 7b 20 f1
@@ -162974,7 +162974,7 @@ sub_FE88AA:
 	calr 0x046d                                          ; FE8A39  1e 6d 04
 	m_cp_mi8 MB16, 0x0d4a, 0x00                          ; FE8A3C  c1 4a 0d 3f 00
 	jr z, .LFE8A58                                       ; FE8A41  66 15
-	stiw_da (0x601f3f), 0x01                             ; FE8A43  f2 3f 1f 60 02 01 00
+	ldw (0x601f3f:24), 0x01                             ; FE8A43  f2 3f 1f 60 02 01 00
 	calr 0x045c                                          ; FE8A4A  1e 5c 04
 	m_cp_mi8 MB16, 0x0d4a, 0x00                          ; FE8A4D  c1 4a 0d 3f 00
 	jr z, .LFE8A58                                       ; FE8A52  66 04
@@ -162982,13 +162982,13 @@ sub_FE88AA:
 	calr sub_FE8BD4                                      ; FE8A54  1e 7d 01
 	ret                                                  ; FE8A57  0e
 .LFE8A58:
-	stiw_da (0x601f54), 0x00                             ; FE8A58  f2 54 1f 60 02 00 00
+	ldw (0x601f54:24), 0x00                             ; FE8A58  f2 54 1f 60 02 00 00
 	calr sub_FE8BF8                                      ; FE8A5F  1e 96 01
 	calr 0x2552                                          ; FE8A62  1e 52 25
 	calr sub_FE8CB4                                      ; FE8A65  1e 4c 02
 	calr sub_FE8A9B                                      ; FE8A68  1e 30 00
 	calr 0x04a3                                          ; FE8A6B  1e a3 04
-	stiw_da (0x601f41), 0x00                             ; FE8A6E  f2 41 1f 60 02 00 00
+	ldw (0x601f41:24), 0x00                             ; FE8A6E  f2 41 1f 60 02 00 00
 	ld (0x601f43:24), 0x00                             ; FE8A75  f2 43 1f 60 00 00
 	calr sub_FE8AE9                                      ; FE8A7B  1e 6b 00
 .LFE8A7E:
@@ -164085,7 +164085,7 @@ sub_FE95C8:
 	jr .LFE9602                                          ; FE95DD  68 23
 .LFE95DF:
 	m_add_mi16 MW24, 0x601f3f, 0x0001                    ; FE95DF  d2 3f 1f 60 38 01 00
-	stiw_da (0x601f41), 0x00                             ; FE95E6  f2 41 1f 60 02 00 00
+	ldw (0x601f41:24), 0x00                             ; FE95E6  f2 41 1f 60 02 00 00
 .LFE95ED:
 	ld wa, (0x601f54:24)                                ; FE95ED  d2 54 1f 60 20
 	ld c, (0x601f75:24)                                 ; FE95F2  c2 75 1f 60 23
@@ -164309,7 +164309,7 @@ sub_FE984B:
 	ld (0x345e:16), iy                                  ; FE986E  f1 5e 34 55
 	m_cp_mi16 MW24, 0x601f41, 0x0000                     ; FE9872  d2 41 1f 60 3f 00 00
 	jr z, .LFE98AF                                       ; FE9879  66 34
-	stiw_da (0x601f6c), 0x00                             ; FE987B  f2 6c 1f 60 02 00 00
+	ldw (0x601f6c:24), 0x00                             ; FE987B  f2 6c 1f 60 02 00 00
 .LFE9882:
 	call 0xff2232                                        ; FE9882  1d 32 22 ff
 	cp A,0x82                                            ; FE9886  c9 cf 82
@@ -164363,7 +164363,7 @@ sub_FE98E7:
 	ld (0x345e:16), iy                                  ; FE990A  f1 5e 34 55
 	m_cp_mi16 MW24, 0x601f41, 0x0000                     ; FE990E  d2 41 1f 60 3f 00 00
 	jr z, .LFE994B                                       ; FE9915  66 34
-	stiw_da (0x601f6c), 0x00                             ; FE9917  f2 6c 1f 60 02 00 00
+	ldw (0x601f6c:24), 0x00                             ; FE9917  f2 6c 1f 60 02 00 00
 .LFE991E:
 	call 0xff2232                                        ; FE991E  1d 32 22 ff
 	cp A,0x82                                            ; FE9922  c9 cf 82
@@ -164743,7 +164743,7 @@ sub_FE9D2E:
 	calr 0x5a47                                          ; FE9D2E  1e 47 5a
 	calr 0x6c55                                          ; FE9D31  1e 55 6c
 	calr 0x5a5f                                          ; FE9D34  1e 5f 5a
-	stiw_da (0x601f54), 0x00                             ; FE9D37  f2 54 1f 60 02 00 00
+	ldw (0x601f54:24), 0x00                             ; FE9D37  f2 54 1f 60 02 00 00
 	calr 0x5a73                                          ; FE9D3E  1e 73 5a
 	calr 0x5a8e                                          ; FE9D41  1e 8e 5a
 	calr 0x5b12                                          ; FE9D44  1e 12 5b
@@ -164757,7 +164757,7 @@ sub_FE9D60:
 	calr 0x5a15                                          ; FE9D60  1e 15 5a
 	calr 0x6c23                                          ; FE9D63  1e 23 6c
 	calr 0x5a2d                                          ; FE9D66  1e 2d 5a
-	stiw_da (0x601f54), 0x00                             ; FE9D69  f2 54 1f 60 02 00 00
+	ldw (0x601f54:24), 0x00                             ; FE9D69  f2 54 1f 60 02 00 00
 	calr 0x5a41                                          ; FE9D70  1e 41 5a
 	calr 0x5a5c                                          ; FE9D73  1e 5c 5a
 	calr 0x5ae0                                          ; FE9D76  1e e0 5a
@@ -164862,7 +164862,7 @@ sub_FE9E04:
 	calr 0xed4c                                          ; FE9E85  1e 4c ed
 	ret                                                  ; FE9E88  0e
 .LFE9E89:
-	stiw_da (0x601f41), 0x00                             ; FE9E89  f2 41 1f 60 02 00 00
+	ldw (0x601f41:24), 0x00                             ; FE9E89  f2 41 1f 60 02 00 00
 	incdi16_24 0x01, (0x601f3f)                          ; FE9E90  d2 3f 1f 60 61
 	ld (0x601f43:24), 0x00                             ; FE9E95  f2 43 1f 60 00 00
 	calr 0x6aeb                                          ; FE9E9B  1e eb 6a
@@ -165242,7 +165242,7 @@ sub_FEA23C:
 	jr ugt, .LFEA261                                     ; FEA255  6b 0a
 	ret                                                  ; FEA257  0e
 .LFEA258:
-	stiw_da (0x601f47), 0x01                             ; FEA258  f2 47 1f 60 02 01 00
+	ldw (0x601f47:24), 0x01                             ; FEA258  f2 47 1f 60 02 01 00
 	jr .LFEA268                                          ; FEA25F  68 07
 .LFEA261:
 	.byte 0xd2, 0x47, 0x1f, 0x60, 0x3a, 0x01, 0x00       ; FEA261  d2 47 1f 60 3a 01 00   sub (0x601f47),0x0001
@@ -165260,7 +165260,7 @@ sub_FEA23C:
 	jr nz, .LFEA29A                                      ; FEA28E  6e 0a
 	ret                                                  ; FEA290  0e
 .LFEA291:
-	stiw_da (0x601f49), 0x01                             ; FEA291  f2 49 1f 60 02 01 00
+	ldw (0x601f49:24), 0x01                             ; FEA291  f2 49 1f 60 02 01 00
 	jr .LFEA2A1                                          ; FEA298  68 07
 .LFEA29A:
 	.byte 0xd2, 0x49, 0x1f, 0x60, 0x3a, 0x01, 0x00       ; FEA29A  d2 49 1f 60 3a 01 00   sub (0x601f49),0x0001
@@ -165295,7 +165295,7 @@ sub_FEA2D4:
 	jr ugt, .LFEA2F2                                     ; FEA2E4  6b 0c
 	ret                                                  ; FEA2E6  0e
 .LFEA2E7:
-	stiw_da (0x601f4d), 0x30                             ; FEA2E7  f2 4d 1f 60 02 30 00
+	ldw (0x601f4d:24), 0x30                             ; FEA2E7  f2 4d 1f 60 02 30 00
 	calr 0x6a12                                          ; FEA2EE  1e 12 6a
 	ret                                                  ; FEA2F1  0e
 .LFEA2F2:
@@ -165310,7 +165310,7 @@ sub_FEA2FD:
 	m_add_mi16 MW24, 0x601f4d, 0x0005                    ; FEA307  d2 4d 1f 60 38 05 00
 	m_cp_mi16 MW24, 0x601f4d, 0x0060                     ; FEA30E  d2 4d 1f 60 3f 60 00
 	jr c, .LFEA31E                                       ; FEA315  67 07
-	stiw_da (0x601f4d), 0x60                             ; FEA317  f2 4d 1f 60 02 60 00
+	ldw (0x601f4d:24), 0x60                             ; FEA317  f2 4d 1f 60 02 60 00
 .LFEA31E:
 	calr 0x69e2                                          ; FEA31E  1e e2 69
 	ret                                                  ; FEA321  0e
@@ -165321,7 +165321,7 @@ sub_FEA322:
 	jr ugt, .LFEA340                                     ; FEA332  6b 0c
 	ret                                                  ; FEA334  0e
 .LFEA335:
-	stiw_da (0x601f4d), 0x30                             ; FEA335  f2 4d 1f 60 02 30 00
+	ldw (0x601f4d:24), 0x30                             ; FEA335  f2 4d 1f 60 02 30 00
 	calr 0x69c4                                          ; FEA33C  1e c4 69
 	ret                                                  ; FEA33F  0e
 .LFEA340:
@@ -165338,7 +165338,7 @@ sub_FEA322:
 	calr 0x69a1                                          ; FEA35F  1e a1 69
 	ret                                                  ; FEA362  0e
 .LFEA363:
-	stiw_da (0x601f4d), 0x01                             ; FEA363  f2 4d 1f 60 02 01 00
+	ldw (0x601f4d:24), 0x01                             ; FEA363  f2 4d 1f 60 02 01 00
 	jr .LFEA35F                                          ; FEA36A  68 f3
 sub_FEA36C:
 	m_bit 7, MD24, 0x601f58                              ; FEA36C  f2 58 1f 60 cf
@@ -165671,7 +165671,7 @@ sub_FEA64D:
 sub_FEA6B1:
 	calr 0xe544                                          ; FEA6B1  1e 44 e5
 sub_FEA6B4:
-	stiw_da (0x601f6c), 0x00                             ; FEA6B4  f2 6c 1f 60 02 00 00
+	ldw (0x601f6c:24), 0x00                             ; FEA6B4  f2 6c 1f 60 02 00 00
 .LFEA6BB:
 	call 0xff2232                                        ; FEA6BB  1d 32 22 ff
 	cp A,0x82                                            ; FEA6BF  c9 cf 82
@@ -165688,7 +165688,7 @@ sub_FEA6B4:
 	ret                                                  ; FEA6D6  0e
 sub_FEA6D7:
 	calr 0xe51e                                          ; FEA6D7  1e 1e e5
-	stiw_da (0x601f6c), 0x00                             ; FEA6DA  f2 6c 1f 60 02 00 00
+	ldw (0x601f6c:24), 0x00                             ; FEA6DA  f2 6c 1f 60 02 00 00
 .LFEA6E1:
 	call 0xff2232                                        ; FEA6E1  1d 32 22 ff
 	cp A,0x82                                            ; FEA6E5  c9 cf 82
@@ -166073,7 +166073,7 @@ sub_FEAAB6:
 	m_add_mi16 MW24, 0x601f3f, 0x000a                    ; FEAAC1  d2 3f 1f 60 38 0a 00
 	m_cp_mi16 MW24, 0x601f3f, 0x03e7                     ; FEAAC8  d2 3f 1f 60 3f e7 03
 	jr ule, .LFEAAD8                                     ; FEAACF  63 07
-	stiw_da (0x601f3f), 0x03e7                           ; FEAAD1  f2 3f 1f 60 02 e7 03
+	ldw (0x601f3f:24), 0x03e7                           ; FEAAD1  f2 3f 1f 60 02 e7 03
 .LFEAAD8:
 	calr sub_FE9D2E                                      ; FEAAD8  1e 53 f2
 sub_FEAADB:
@@ -166095,7 +166095,7 @@ sub_FEAAE0:
 	calr sub_FE9D2E                                      ; FEAAFD  1e 2e f2
 	ret                                                  ; FEAB00  0e
 .LFEAB01:
-	stiw_da (0x601f3f), 0x01                             ; FEAB01  f2 3f 1f 60 02 01 00
+	ldw (0x601f3f:24), 0x01                             ; FEAB01  f2 3f 1f 60 02 01 00
 	jr .LFEAAFD                                          ; FEAB08  68 f3
 .LFEAB0A:
 	calr 0xd532                                          ; FEAB0A  1e 32 d5
@@ -166299,7 +166299,7 @@ sub_FEACD8:
 	m_add_mi16 MW24, 0x601f47, 0x000c                    ; FEACEB  d2 47 1f 60 38 0c 00
 	m_cp_mi16 MW24, 0x601f47, 0x2fff                     ; FEACF2  d2 47 1f 60 3f ff 2f
 	jr ule, .LFEAD02                                     ; FEACF9  63 07
-	stiw_da (0x601f47), 0x2fff                           ; FEACFB  f2 47 1f 60 02 ff 2f
+	ldw (0x601f47:24), 0x2fff                           ; FEACFB  f2 47 1f 60 02 ff 2f
 .LFEAD02:
 	calr 0xecba                                          ; FEAD02  1e ba ec
 	calr 0x5ee9                                          ; FEAD05  1e e9 5e
@@ -166315,7 +166315,7 @@ sub_FEACD8:
 	m_add_mi16 MW24, 0x601f49, 0x000c                    ; FEAD22  d2 49 1f 60 38 0c 00
 	m_cp_mi16 MW24, 0x601f49, 0x2fff                     ; FEAD29  d2 49 1f 60 3f ff 2f
 	jr ule, .LFEAD39                                     ; FEAD30  63 07
-	stiw_da (0x601f49), 0x2fff                           ; FEAD32  f2 49 1f 60 02 ff 2f
+	ldw (0x601f49:24), 0x2fff                           ; FEAD32  f2 49 1f 60 02 ff 2f
 .LFEAD39:
 	calr 0x5ed6                                          ; FEAD39  1e d6 5e
 	ld (0x601f58:24), 0x83                             ; FEAD3C  f2 58 1f 60 00 83
@@ -166332,7 +166332,7 @@ sub_FEAD49:
 	jr ugt, .LFEAD6E                                     ; FEAD62  6b 0a
 	ret                                                  ; FEAD64  0e
 .LFEAD65:
-	stiw_da (0x601f47), 0x01                             ; FEAD65  f2 47 1f 60 02 01 00
+	ldw (0x601f47:24), 0x01                             ; FEAD65  f2 47 1f 60 02 01 00
 	jr .LFEAD82                                          ; FEAD6C  68 14
 .LFEAD6E:
 	ld wa, (0x601f47:24)                                ; FEAD6E  d2 47 1f 60 20
@@ -166357,7 +166357,7 @@ sub_FEAD49:
 	jr nz, .LFEADBD                                      ; FEADB1  6e 0a
 	ret                                                  ; FEADB3  0e
 .LFEADB4:
-	stiw_da (0x601f49), 0x01                             ; FEADB4  f2 49 1f 60 02 01 00
+	ldw (0x601f49:24), 0x01                             ; FEADB4  f2 49 1f 60 02 01 00
 	jr .LFEADD1                                          ; FEADBB  68 14
 .LFEADBD:
 	ld wa, (0x601f49:24)                                ; FEADBD  d2 49 1f 60 20
@@ -166393,7 +166393,7 @@ sub_FEADFB:
 	m_and_mi8 MB24, 0x601f5b, 0xfe                       ; FEAE08  c2 5b 1f 60 3c fe
 	ld wa, (0x601f4d:24)                                ; FEAE0E  d2 4d 1f 60 20
 	pushw wa                                             ; FEAE13  28
-	stiw_da (0x601f4d), 0x60                             ; FEAE14  f2 4d 1f 60 02 60 00
+	ldw (0x601f4d:24), 0x60                             ; FEAE14  f2 4d 1f 60 02 60 00
 	calr sub_FEA709                                      ; FEAE1B  1e eb f8
 	popw wa                                              ; FEAE1E  48
 	ld (0x601f4d:24), wa                                ; FEAE1F  f2 4d 1f 60 50
@@ -166431,7 +166431,7 @@ sub_FEAE58:
 .LFEAE78:
 	ld wa, (0x601f4d:24)                                ; FEAE78  d2 4d 1f 60 20
 	pushw wa                                             ; FEAE7D  28
-	stiw_da (0x601f4d), 0x60                             ; FEAE7E  f2 4d 1f 60 02 60 00
+	ldw (0x601f4d:24), 0x60                             ; FEAE7E  f2 4d 1f 60 02 60 00
 	calr sub_FEA71F                                      ; FEAE85  1e 97 f8
 	popw wa                                              ; FEAE88  48
 	ld (0x601f4d:24), wa                                ; FEAE89  f2 4d 1f 60 50
@@ -170121,7 +170121,7 @@ LCD_DrawVRuleRight_Layer1:
 sub_FEFEBF:
 	calr 0x8e2c                                          ; FEFEBF  1e 2c 8e
 	calr 0x8d33                                          ; FEFEC2  1e 33 8d
-	stiw_da (0x601f6c), 0x00                             ; FEFEC5  f2 6c 1f 60 02 00 00
+	ldw (0x601f6c:24), 0x00                             ; FEFEC5  f2 6c 1f 60 02 00 00
 .LFEFECC:
 	calr 0x2363                                          ; FEFECC  1e 63 23
 	cp A,0x82                                            ; FEFECF  c9 cf 82
@@ -170164,7 +170164,7 @@ sub_FEFEBF:
 sub_FEFF2D:
 	calr 0x8dbe                                          ; FEFF2D  1e be 8d
 	calr 0x8cc5                                          ; FEFF30  1e c5 8c
-	stiw_da (0x601f6c), 0x00                             ; FEFF33  f2 6c 1f 60 02 00 00
+	ldw (0x601f6c:24), 0x00                             ; FEFF33  f2 6c 1f 60 02 00 00
 .LFEFF3A:
 	calr 0x22f5                                          ; FEFF3A  1e f5 22
 	cp A,0x82                                            ; FEFF3D  c9 cf 82
@@ -170484,7 +170484,7 @@ sub_FF0243:
 	ld (0x601f38:24), wa                                ; FF025A  f2 38 1f 60 50
 	m_bit 0, MD24, 0x601f70                              ; FF025F  f2 70 1f 60 c8
 	jr z, .LFF026F                                       ; FF0264  66 09
-	stiw_da (0x601f3b), 0x02                             ; FF0266  f2 3b 1f 60 02 02 00
+	ldw (0x601f3b:24), 0x02                             ; FF0266  f2 3b 1f 60 02 02 00
 	jr .LFF0279                                          ; FF026D  68 0a
 .LFF026F:
 	ld wa, (0x601f47:24)                                ; FF026F  d2 47 1f 60 20

@@ -4561,8 +4561,8 @@ IvSdpart_Init:
 	jr nz, IvSdpart_Init_LoadDescriptor
 
 IvSdpart_Init_ResetPart:
-	stiw_da (0x03e99c), 0x0008
-	stiw_da (0x03e99e), 0x0000
+	ldw (0x03e99c:24), 0x0008
+	ldw (0x03e99e:24), 0x0000
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001b
 	ld xde, 0x8
@@ -4645,7 +4645,7 @@ IvSdpart_OK:
 	ld xbc, 0x1c0001b
 	ld xde, 0x8
 	call SendEvent
-	stiw_da (0x03e99c), 0x0008
+	ldw (0x03e99c:24), 0x0008
 	ld xwa, (MixerPartTable_Start_0x128:24)
 	ld xbc, 0x1c00001
 	lds32 xde, 5
@@ -8460,7 +8460,7 @@ AcPleaseWaitProc:
 	jrl PleaseWait_Epilogue
 
 PleaseWait_Init:
-	stiw_da (0x02477a), 0x0000
+	ldw (0x02477a:24), 0x0000
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
 	ld xde, (xsp + 8)
@@ -8900,8 +8900,8 @@ IvAccordion_ShowHide:
 	ld xwa, (xsp + 4)
 	ld xde, xiz
 	call InheritedProc
-	stiw_da (0x02477c), 0xffff
-	stiw_da (0x024780), 0xffff
+	ldw (0x02477c:24), 0xffff
+	ldw (0x024780:24), 0xffff
 	call GetPartSelect
 	ld (0x02477e:24), hl
 	ld wa, hl
@@ -8919,8 +8919,8 @@ IvAccordion_ShowHide:
 	ld xbc, 0x1c00002
 	lds32 xde, 5
 	call SendEvent
-	stiw_da (0x02477c), 0x0001
-	stiw_da (0x024780), 0x0001
+	ldw (0x02477c:24), 0x0001
+	ldw (0x024780:24), 0x0001
 	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, 0x1c00001
 	lds32 xde, 5
@@ -8931,8 +8931,8 @@ IvAccordion_ShowHide_NoBellows:
 	ld xbc, 0x1c00002
 	lds32 xde, 5
 	call SendEvent
-	stiw_da (0x02477c), 0x0000
-	stiw_da (0x024780), 0x0000
+	ldw (0x02477c:24), 0x0000
+	ldw (0x024780:24), 0x0000
 	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, 0x1c00001
 	lds32 xde, 5
@@ -8971,7 +8971,7 @@ IvAccordion_Scroll:
 	jrl nz, IvAccordion_ReturnHandled
 	cpw_da (0x24780), 0
 	jr nz, IvAccordion_Scroll_SetOff
-	stiw_da (0x024780), 0x0001
+	ldw (0x024780:24), 0x0001
 	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, 0x1c00002
 	lds32 xde, 5
@@ -8994,7 +8994,7 @@ IvAccordion_Scroll:
 	jrl IvAccordion_DispatchEvent
 
 IvAccordion_Scroll_SetOff:
-	stiw_da (0x024780), 0x0000
+	ldw (0x024780:24), 0x0000
 	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, 0x1c00002
 	lds32 xde, 5
@@ -9063,8 +9063,8 @@ IvAccordion_Update:
 	ld xbc, 0x1c00002
 	lds32 xde, 5
 	call SendEvent
-	stiw_da (0x02477c), 0x0000
-	stiw_da (0x024780), 0x0000
+	ldw (0x02477c:24), 0x0000
+	ldw (0x024780:24), 0x0000
 	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, 0x1c00001
 	lds32 xde, 5
@@ -9077,8 +9077,8 @@ IvAccordion_Update_BellowsOn:
 	ld xbc, 0x1c00002
 	lds32 xde, 5
 	call SendEvent
-	stiw_da (0x02477c), 0x0001
-	stiw_da (0x024780), 0x0001
+	ldw (0x02477c:24), 0x0001
+	ldw (0x024780:24), 0x0001
 	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, 0x1c00001
 	lds32 xde, 5
@@ -9988,7 +9988,7 @@ TtSdscltyp:
 	ld xbc, 0x1e0004d
 	lds32 xde, 1
 	call SendEvent
-	stiw_da (0x02478e), 0x0000
+	ldw (0x02478e:24), 0x0000
 
 TtSdscltyp_ReturnZero:
 	lds32 xhl, 0
@@ -10703,7 +10703,7 @@ AcWelcomScreen_Activate_Setup:
 	cps hl, 0
 	jrl z, AcWelcomScreen_ReturnHandled
 	call PaletteBankRotate
-	stiw_da (0x024784), 0x0001
+	ldw (0x024784:24), 0x0001
 	ld xbc, (0x024786:24)
 	ld xwa, 0x1c0000e
 	push xwa
@@ -11223,10 +11223,10 @@ PsMixer_ControlHandler:
 	ld (0x02478a:24), hl
 
 AudioCtrl_InitCounters:
-	stiw_da (0x024794), 0x0000
-	stiw_da (0x024790), 0x0000
-	stiw_da (0x024796), 0x0000
-	stiw_da (0x024792), 0x0000
+	ldw (0x024794:24), 0x0000
+	ldw (0x024790:24), 0x0000
+	ldw (0x024796:24), 0x0000
+	ldw (0x024792:24), 0x0000
 	ldw (xsp + 10), 0x0
 
 AudioCtrl_ScanLoop:
@@ -11665,7 +11665,7 @@ AudioCtrl_PageAdvance:
 	divs wa, 0x8
 	stw_erp WA, 0xe2
 	ld (0x024790:24), wa
-	stiw_da (0x024794), 0x0000
+	ldw (0x024794:24), 0x0000
 	ld wa, (0x024790:24)
 	calr PsMixer_ReadWordArrayEntry
 	ldw_erp HL, 0xfa
@@ -15024,10 +15024,10 @@ IvDrawbarProc:
 	jr nz, IvDrawbar_Init_SetupMode
 
 IvDrawbar_Init_Part03:
-	stiw_da (0x024798), 0x0000
+	ldw (0x024798:24), 0x0000
 	call GetPartSelect
 	ld (0x02479a:24), hl
-	stiw_da (0x03e99e), 0x0000
+	ldw (0x03e99e:24), 0x0000
 	call GetModeNow
 	cp xhl, 0x1800003
 	jr z, IvDrawbar_Init_CheckDualMode
@@ -15239,7 +15239,7 @@ IvDrawbar_OK_Dispatch:
 	jrl IvDrawbar_ReturnHandled
 
 IvDrawbar_OK_PageChange:
-	stiw_da (0x024798), 0x0000
+	ldw (0x024798:24), 0x0000
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001e
 	lds32 xde, 1
@@ -18277,9 +18277,9 @@ AcPresCtrl_SendEventReturn:
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
 	call InheritedProc
-	stiw_da (0x0340fc), 0x0000
-	stiw_da (0x0340fa), 0x0000
-	stiw_da (0x0340fe), 0x0000
+	ldw (0x0340fc:24), 0x0000
+	ldw (0x0340fa:24), 0x0000
+	ldw (0x0340fe:24), 0x0000
 	ld xwa, 0x1210028
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)

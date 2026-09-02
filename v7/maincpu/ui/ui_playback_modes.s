@@ -1650,7 +1650,7 @@ DpMdlyDocTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpMdlyDocTtlFunc title dispatch
 DpMdlyDocTtl_Dispatch:
-	stiw_da	(0x021086), 0
+	ldw	(0x021086:24), 0
 	calr	65452
 	calr	65224
 	push	xde
@@ -1738,7 +1738,7 @@ DpMdlyPdTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpMdlyPdTtlFunc title dispatch
 DpMdlyPdTtl_Dispatch:
-	stiw_da	(0x021086), 0
+	ldw	(0x021086:24), 0
 	calr	65276
 	calr	65048
 	push	xde
@@ -1907,7 +1907,7 @@ DpMdlySmfLyrTtl_Dispatch:
 	cp	a, 118
 	jr	z, 19
 	ld	(135304:24), 0
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	64890
 	calr	64662
 	push	xde
@@ -2439,7 +2439,7 @@ CDlikeSwTtl_SongNavDispatch:
 	ld	wa, iz
 	call	16328724
 	ld	(135304:24), 0
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	63395
 	calr	63167
 	ld	xwa, 4294967295
@@ -2470,7 +2470,7 @@ CDlikeSwTtl_SongNavBit0:
 	ld	wa, iz
 	call	16328724
 	ld	(135304:24), 0
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	63282
 	calr	63054
 	ld	xwa, 4294967295
@@ -2497,7 +2497,7 @@ CDlikeSwTtl_SongNavNoRedraw:
 	ld wa, iz
 	call NavigateSongList
 	ld (0x021088:24), 0x00
-	stiw_da (0x021086), 0x0000
+	ldw (0x021086:24), 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2530,7 +2530,7 @@ CDlikeSwTtl_DocNavDispatch:
 	call	16693581
 	ld	wa, iz
 	call	16328803
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	63095
 	calr	62867
 	ld	xwa, 4294967295
@@ -2548,7 +2548,7 @@ CDlikeSwTtl_DocNavBit0:
 	call	16693581
 	ld	wa, iz
 	call	16328803
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	63034
 	calr	62806
 	ld	xwa, 4294967295
@@ -2566,7 +2566,7 @@ CDlikeSwTtl_DocNavFinishNames:
 CDlikeSwTtl_DocNavNoRedraw:
 	ld wa, iz
 	call NavigateDocList
-	stiw_da (0x021086), 0x0000
+	ldw (0x021086:24), 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2591,7 +2591,7 @@ CDlikeSwTtl_PdNavDispatch:
 	call	16693581
 	ld	wa, iz
 	call	16328863
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	62913
 	calr	62685
 	ld	xwa, 4294967295
@@ -2609,7 +2609,7 @@ CDlikeSwTtl_PdNavBit0:
 	call	16693581
 	ld	wa, iz
 	call	16328863
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	62852
 	calr	62624
 	ld	xwa, 4294967295
@@ -2627,7 +2627,7 @@ CDlikeSwTtl_PdNavFinishNames:
 CDlikeSwTtl_PdNavNoRedraw:
 	ld wa, iz
 	call NavigatePdList
-	stiw_da (0x021086), 0x0000
+	ldw (0x021086:24), 0x0000
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
@@ -2664,7 +2664,7 @@ DpDocTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpDocTtlFunc title dispatch
 DpDocTtl_Dispatch:
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	62678
 	calr	62450
 	calr	64337
@@ -2785,7 +2785,7 @@ DpPdTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpPdTtlFunc title dispatch
 DpPdTtl_Dispatch:
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	62375
 	calr	62147
 	calr	64102
@@ -2910,7 +2910,7 @@ DpSmfTtl_Dispatch:
 	.byte 0xc1, 0x9b, 0x8c, 0x3f, 0x72	; differs from v10 here and llvm-objdump cannot read it
 	jrl	z, 255
 	ld	(135304:24), 0
-	stiw_da	(135302), 0
+	ldw	(135302:24), 0
 	calr	62057
 	calr	61829
 	calr	63632

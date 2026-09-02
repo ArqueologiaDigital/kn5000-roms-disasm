@@ -452,7 +452,7 @@ WaitingFunc:
 	jr nz, WaitingFunc_Return
 	ld xwa, (xsp + 68)
 	ld (0x02748a:24), wa
-	stiw_da (0x02748c), 0x0000
+	ldw (0x02748c:24), 0x0000
 	jr WaitingFunc_Return
 
 WaitingFunc_DrawMessage:

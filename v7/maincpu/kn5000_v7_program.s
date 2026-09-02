@@ -627,7 +627,7 @@ User_didnt_request_flash_mem_update:
 	ld	a, (1026:16)
 	extz	wa
 	calr	514
-	stiw_da	(65482), 0
+	ldw	(65482:24), 0
 	set_dd8	0, 40
 	call	15676020
 	di
@@ -651,7 +651,7 @@ Boot_DisplayScreen:
 	lds	wa, 3
 	call	16634741
 	ld	(1024:16), 128
-	stiw_da	(65492), 0
+	ldw	(65492:24), 0
 	ld	a, (1026:16)
 	extz	wa
 	calr	350
@@ -857,7 +857,7 @@ FactoryReset_ClearSRAM:
 	stl_dpi XWA, 0xe6
 	cp xbc, 0x200000
 	jr c, FactoryReset_ClearSRAM
-	stiw_da (0x00ffca), 0x5aa5
+	ldw (0x00ffca:24), 0x5aa5
 	jp Boot_InitIOPorts
 FactoryReset_TrailingByte:
 	ret

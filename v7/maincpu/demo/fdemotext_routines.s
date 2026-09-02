@@ -2157,7 +2157,7 @@ FDemoText_ByteData_LayoutB:
 Seq_InitVoiceStructures:
 	push xiz
 	ld iz, wa
-	stiw_da (0x025b7c), 0x0000
+	ldw (0x025b7c:24), 0x0000
 	lda xwa, (0x0248c8:24)
 	ld (xwa), 0x0
 	stl_da (0x0248c4), xwa
@@ -2231,7 +2231,7 @@ Seq_InitializeAndStart:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
-	stiw_da	(152024), 1
+	ldw	(152024:24), 1
 	lds	wa, 0
 	calr	65306
 	ld	xwa, (xsp+4)

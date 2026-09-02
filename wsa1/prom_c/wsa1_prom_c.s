@@ -1071,7 +1071,7 @@ sub_FAC42C:
 	pop	xbc                                    ; FAC458  pop XBC
 	cp	xiy, 44                                 ; FAC459  cp XIY,0x0000002c
 	jr nc, sub_FAC42C__FAC480                  ; FAC45F  jr NC,0xfac480
-	stiw_da	(0xD79A), 44                       ; FAC461  ld (0x00d79a),0x002c
+	ldw	(0xD79A:24), 44                       ; FAC461  ld (0x00d79a),0x002c
 	ld	bc, (xiz+8)                             ; FAC468  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC46B  extz BC
 	mul	bc, 0x12C                              ; FAC46D  mul BC,0x012c
@@ -1246,7 +1246,7 @@ sub_FAC58F:
 	pop	xbc                                    ; FAC5BB  pop XBC
 	cp	xiy, 28                                 ; FAC5BC  cp XIY,0x0000001c
 	jr nc, sub_FAC58F__FAC5E3                  ; FAC5C2  jr NC,0xfac5e3
-	stiw_da	(0xD79C), 28                       ; FAC5C4  ld (0x00d79c),0x001c
+	ldw	(0xD79C:24), 28                       ; FAC5C4  ld (0x00d79c),0x001c
 	ld	bc, (xiz+8)                             ; FAC5CB  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC5CE  extz BC
 	mul	bc, 0x12C                              ; FAC5D0  mul BC,0x012c
@@ -1419,7 +1419,7 @@ sub_FAC6F2:
 	popw	bc                                    ; FAC71B  pop BC
 	cp	xiy, 28                                 ; FAC71C  cp XIY,0x0000001c
 	jr nc, sub_FAC6F2__FAC743                  ; FAC722  jr NC,0xfac743
-	stiw_da	(0xD798), 28                       ; FAC724  ld (0x00d798),0x001c
+	ldw	(0xD798:24), 28                       ; FAC724  ld (0x00d798),0x001c
 	ld	bc, (xiz+8)                             ; FAC72B  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC72E  extz BC
 	mul	bc, 0x12C                              ; FAC730  mul BC,0x012c

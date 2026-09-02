@@ -269,17 +269,17 @@ Link_ServiceTask__F99F6C:
 	incdi16_24	1, (0xF32F)                 ; F99F7E  incw 1,(0x00f32f)
 	jr Link_ServiceTask__F99F8C                           ; F99F83  jr T,0xf99f8c
 Link_ServiceTask__F99F85:
-	stiw_da	(0xF32F), 0                    ; F99F85  ld (0x00f32f),0x0000
+	ldw	(0xF32F:24), 0                    ; F99F85  ld (0x00f32f),0x0000
 Link_ServiceTask__F99F8C:
 	call	0xF9A030                          ; F99F8C  call 0xf9a030
 	ld	(0xF331:24), wa                    ; F99F90  ld (0x00f331),WA
 	jr Link_ServiceTask__F99F9E                           ; F99F95  jr T,0xf99f9e
 Link_ServiceTask__F99F97:
-	stiw_da	(0xF32F), 0                    ; F99F97  ld (0x00f32f),0x0000
+	ldw	(0xF32F:24), 0                    ; F99F97  ld (0x00f32f),0x0000
 Link_ServiceTask__F99F9E:
 	extpfx7 0xD2, 0x2F, 0xF3, 0x00, 0x3F, 0x0A, 0x00 ; F99F9E  cp (0x00f32f),0x000a   [llvm-mc cannot encode this]
 	jr ule, Link_ServiceTask__F99FBF                      ; F99FA5  jr ULE,0xf99fbf
-	stiw_da	(0xF32F), 0                    ; F99FA7  ld (0x00f32f),0x0000
+	ldw	(0xF32F:24), 0                    ; F99FA7  ld (0x00f32f),0x0000
 	ldio	DMA3V, 0                          ; F99FAE  ld (0x7f),0x00
 	ld	(0xF32D:24), 0                    ; F99FB1  ld (0x00f32d),0x00
 	set_dd8	1, PA                          ; F99FB7  set 1,(0x1e)

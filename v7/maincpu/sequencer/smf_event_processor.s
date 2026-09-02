@@ -3109,7 +3109,7 @@ FileOpen_DeviceFound:
 	jr nz, FileOpen_CheckPermission
 
 FileOpen_ErrorNoFile:
-	stiw_da (0x01e53c), 0x0007
+	ldw (0x01e53c:24), 0x0007
 	lds32 xhl, 0
 	jrl FileOpen_Return
 
@@ -3123,7 +3123,7 @@ FileOpen_CheckPermission:
 	cpl wa
 	and a, c
 	jr z, FileOpen_FindFreeSlot
-	stiw_da (0x01e53c), 0x0002
+	ldw (0x01e53c:24), 0x0002
 	lds32 xhl, 0
 	jrl FileOpen_Return
 
@@ -3148,7 +3148,7 @@ FileOpen_SlotSearchLoop:
 FileOpen_SlotExhausted:
 	cp (xsp + 14), 0x10
 	jr nz, FileOpen_InitSlot
-	stiw_da (0x01e53c), 0x0004
+	ldw (0x01e53c:24), 0x0004
 	call SeqStep_FileNopB
 	lds32 xhl, 0
 	jrl FileOpen_Return
@@ -3251,14 +3251,14 @@ FileRead:
 	jr nz, SeqStep_FileReadCheck
 
 SeqStep_FileReadSetup:
-	stiw_da (0x01e53c), 0x0011
+	ldw (0x01e53c:24), 0x0011
 	lds hl, 0
 	ret
 
 SeqStep_FileReadCheck:
 	bitm 0, (xbc + 4)
 	jr nz, SeqStep_FileReadProcess
-	stiw_da (0x01e53c), 0x000d
+	ldw (0x01e53c:24), 0x000d
 	lds hl, 0
 	ret
 
@@ -3288,14 +3288,14 @@ FileWrite:
 	jr nz, SeqStep_FileReadLoop
 
 SeqStep_FileReadAdvance:
-	stiw_da (0x01e53c), 0x0011
+	ldw (0x01e53c:24), 0x0011
 	lds hl, 0
 	ret
 
 SeqStep_FileReadLoop:
 	bitm 1, (xbc + 4)
 	jr nz, SeqStep_FileReadDone
-	stiw_da (0x01e53c), 0x000d
+	ldw (0x01e53c:24), 0x000d
 	lds hl, 0
 	ret
 
@@ -3326,14 +3326,14 @@ SeqStep_FileReadReturn:
 	jr nz, SeqStep_FileReadCleanup
 
 SeqStep_FileReadError:
-	stiw_da (0x01e53c), 0x0011
+	ldw (0x01e53c:24), 0x0011
 	ldw hl, 0xffff
 	jr SeqStep_FileReadVtableReturn
 
 SeqStep_FileReadCleanup:
 	bitm 0, (xbc + 4)
 	jr nz, SeqStep_FileReadComplete
-	stiw_da (0x01e53c), 0x000d
+	ldw (0x01e53c:24), 0x000d
 	ldw hl, 0xffff
 	jr SeqStep_FileReadVtableReturn
 
@@ -3370,7 +3370,7 @@ SeqStep_ByteBlockEF56:
 	push	xsp
 	nop
 	jr	nz, 11
-	stiw_da	(0x1e53c), 17
+	ldw	(0x1e53c:24), 17
 	lds32	xhl, 0
 	jr	53
 	.byte 0xb9, 0x04
@@ -3415,14 +3415,14 @@ SeqStep_FileWriteSetup:
 	jr nz, SeqStep_FileWriteCheckMode
 
 SeqStep_FileWriteNoHandle:
-	stiw_da (0x01e53c), 0x0011
+	ldw (0x01e53c:24), 0x0011
 	ldw hl, 0xffff
 	jr SeqStep_FileWriteReturn
 
 SeqStep_FileWriteCheckMode:
 	bitm 1, (xbc + 4)
 	jr nz, SeqStep_FileWriteProcess
-	stiw_da (0x01e53c), 0x000d
+	ldw (0x01e53c:24), 0x000d
 	ldw hl, 0xffff
 	jr SeqStep_FileWriteReturn
 
@@ -3459,7 +3459,7 @@ SeqStep_ByteBlockF002:
 	push	xsp
 	nop
 	jr	nz, 11
-	stiw_da	(0x1e53c), 17
+	ldw	(0x1e53c:24), 17
 	ldw	hl, 0xffff
 	ret
 	.byte 0xb9, 0x04
@@ -3516,7 +3516,7 @@ SeqStep_FileCloseInner:
 	jr z, SeqStep_FileCloseProcess
 
 SeqStep_FileCloseCheck:
-	stiw_da (0x01e53c), 0x0011
+	ldw (0x01e53c:24), 0x0011
 	ldw hl, 0xffff
 	jrl SeqStep_FileCloseFinal
 
@@ -3555,7 +3555,7 @@ SeqStep_FileCloseReturn:
 	jr z, SeqStep_FileCloseCleanup
 	cpw (xsp + 4), 0x0
 	jr nz, SeqStep_FileCloseCleanup
-	stiw_da (0x01e53c), 0x0026
+	ldw (0x01e53c:24), 0x0026
 
 SeqStep_FileCloseCleanup:
 	ld wa, (xsp + 6)
@@ -3602,7 +3602,7 @@ SeqStep_FileCloseExit:
 	call	(xwa)
 	lda	xsp, (xsp+10)
 	jrl	131
-	stiw_da	(0x1e53c), 25
+	ldw	(0x1e53c:24), 25
 	ldw	hl, 0xffff
 	jr	119
 	ld qiz, 0
@@ -3647,7 +3647,7 @@ SeqStep_FileCloseExit:
 	ld	xbc, (xsp+4)
 	or	xbc, xbc
 	jr	nz, 11
-	stiw_da	(0x1e53c), 17
+	ldw	(0x1e53c:24), 17
 	ldw	hl, 0xffff
 	ret
 	lda	xwa, (xsp+8)
@@ -3712,7 +3712,7 @@ SeqStep_ByteBlockF245:
 	push	xiz
 	ld	wa, (0x1e53c:24)
 	ld	(xsp+4), wa
-	stiw_da	(0x1e53c), 0
+	ldw	(0x1e53c:24), 0
 	pushw	228
 	pushw	0x501a
 	ld	xwa, (xsp+14)
@@ -3725,7 +3725,7 @@ SeqStep_ByteBlockF245:
 	push	xiz
 	call	FileClose
 	inc	4, xsp
-	stiw_da	(0x1e53c), 21
+	ldw	(0x1e53c:24), 21
 	ldw	hl, 0xffff
 	jr	75
 	.byte 0xd2
@@ -3771,7 +3771,7 @@ SeqStep_ByteBlockF245:
 	push	xsp
 	nop
 	jr	nz, 11
-	stiw_da	(0x1e53c), 17
+	ldw	(0x1e53c:24), 17
 	ldw	hl, 17
 	ret
 	ld	xwa, (xde+18)
@@ -3784,7 +3784,7 @@ SeqStep_ByteBlockF245:
 	ld	(xbc), xwa
 	lds	hl, 0
 	ret
-	stiw_da	(0x1e53c), 18
+	ldw	(0x1e53c:24), 18
 	ldw	hl, 18
 	ret
 	ld	xbc, (xsp+4)
@@ -3794,7 +3794,7 @@ SeqStep_ByteBlockF245:
 	push	xsp
 	nop
 	jr	nz, 11
-	stiw_da	(0x1e53c), 17
+	ldw	(0x1e53c:24), 17
 	ldw	hl, 17
 	ret
 	ld	xwa, (xsp+8)
@@ -3822,7 +3822,7 @@ SeqStep_FileSeekSetup:
 	jr nz, SeqStep_FileSeekProcess
 
 SeqStep_FileSeekNoHandle:
-	stiw_da (0x01e53c), 0x0011
+	ldw (0x01e53c:24), 0x0011
 	ldw hl, 0x11
 	ret
 
@@ -3902,7 +3902,7 @@ SeqStep_FileSeekStore:
 	jr nz, SeqStep_FileSeekFinal
 
 SeqStep_FileSeekComplete:
-	stiw_da (0x01e53c), 0x0011
+	ldw (0x01e53c:24), 0x0011
 	ld xhl, 0xffffffff
 	ret
 
@@ -3914,7 +3914,7 @@ SeqStep_FileSeekFinal:
 	ret
 
 SeqStep_FileSeekExit:
-	stiw_da (0x01e53c), 0x0012
+	ldw (0x01e53c:24), 0x0012
 	ld xhl, 0xffffffff
 	ret
 
@@ -3948,7 +3948,7 @@ SeqStep_FileSeekCleanup:
 	jr nz, SeqStep_FileTellReturn
 	cpw_da (0x1e53c), 13
 	jr nz, SeqStep_FileTellSetup
-	stiw_da (0x01e53c), 0x0000
+	ldw (0x01e53c:24), 0x0000
 	pushw 0xe4
 	pushw 0x5022
 	ld xwa, (xsp + 18)
@@ -3984,12 +3984,12 @@ SeqStep_FileTellReturn:
 	push xiz
 	call FileClose
 	inc 8, xsp
-	stiw_da (0x01e53c), 0x0015
+	ldw (0x01e53c:24), 0x0015
 	ldw hl, 0xffff
 	jr SeqStep_FileTellExit
 
 SeqStep_FileTellProcess:
-	stiw_da (0x01e53c), 0x0000
+	ldw (0x01e53c:24), 0x0000
 	pushw 0xe4
 	pushw 0x5026
 	ld xwa, (xsp + 22)
@@ -4020,7 +4020,7 @@ SeqStep_FileTellDone:
 	push xwa
 	calr FileOpenDefault
 	lda xsp, (xsp + 12)
-	stiw_da (0x01e53c), 0x001a
+	ldw (0x01e53c:24), 0x001a
 	ldw hl, 0xffff
 	jr SeqStep_FileTellExit
 
@@ -4060,7 +4060,7 @@ SeqStep_FileTellFinal:
 	ld	xwa, (xiz+26)
 	or	xwa, xwa
 	jr	nz, 9
-	stiw_da	(0x1e53c), 13
+	ldw	(0x1e53c:24), 13
 	jr	64
 	pushw	0
 	ld	xwa, 64
@@ -4084,7 +4084,7 @@ SeqStep_FileTellFinal:
 	jr	z, 47
 	cp	(xsp+8), 229
 	jr	z, 19
-	stiw_da	(0x1e53c), 27
+	ldw	(0x1e53c:24), 27
 	push	xiz
 	call	FileClose
 	inc	4, xsp
@@ -6932,7 +6932,7 @@ SeqChan_WriteExtendedPatch:
 	pop	sr
 	.byte 0xbf
 	jr	-19
-	stiw_da	(0x1e53c), 18
+	ldw	(0x1e53c:24), 18
 	ldw	hl, 0xffff
 	pop	xiz
 	ret
@@ -6940,7 +6940,7 @@ SeqChan_WriteExtendedPatch:
 SeqStep_CountValidSectors:
 	push xiz
 	ldiw_erp 0xfa, 0
-	stiw_da (0x01e53c), 0x0000
+	ldw (0x01e53c:24), 0x0000
 	lds iz, 0
 	jr SeqStep_CountLoop_Compare
 
@@ -7005,7 +7005,7 @@ SeqStep_SectorCompareBlock:
 	and	wa, 24
 	cp	wa, bc
 	jr	z, 11
-	stiw_da	(0x1e53c), 13
+	ldw	(0x1e53c:24), 13
 	ldw	hl, 0xffff
 	ret
 	ld	wa, (xsp+10)
@@ -7305,7 +7305,7 @@ SeqChan_ByteBlockE:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 116 of 134 slots byte-identical
 	lda	xsp, (xsp-12)
 	pushw	iz
-	stiw_da	(141086), 0
+	ldw	(141086:24), 0
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa)
 	ld	xwa, (xwa+26)
@@ -7441,7 +7441,7 @@ SeqChan_ByteBlockF:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 116 of 134 slots byte-identical
 	lda	xsp, (xsp-12)
 	pushw	iz
-	stiw_da	(141086), 0
+	ldw	(141086:24), 0
 	ld	xwa, (xsp+22)
 	ld	xwa, (xwa)
 	ld	xwa, (xwa+26)
@@ -7584,12 +7584,12 @@ FDC_ReturnAndPop:
 FDC_StoreDiskType:
 	ld a, (xsp + 4)
 	stb_da (0x03e3e4), a
-	stiw_da (0x03e3e6), 0x0001
+	ldw (0x03e3e6:24), 0x0001
 	ld (0x03e3be:24), 0x00
 	ret
 
 FDC_ClearDiskChangeStatus:
-	stiw_da	(0x3e3e6), 0
+	ldw	(0x3e3e6:24), 0
 	ld	a, (0x3e3e4:24)
 	stb_da	(0x3e3e2), a
 	ret
@@ -7634,23 +7634,23 @@ FDC_SetSectorLength:
 	jr z, FDC_SectorLen_0x21
 	cp wa, 0x2f
 	jr nz, FDC_SectorLen_0x24
-	stiw_da (0x01e53c), 0x001f
+	ldw (0x01e53c:24), 0x001f
 	ret
 
 FDC_SectorLen_0x21:
-	stiw_da (0x01e53c), 0x0021
+	ldw (0x01e53c:24), 0x0021
 	ret
 
 FDC_SectorLen_0x06:
-	stiw_da (0x01e53c), 0x0006
+	ldw (0x01e53c:24), 0x0006
 	ret
 
 FDC_SectorLen_0x20:
-	stiw_da (0x01e53c), 0x0020
+	ldw (0x01e53c:24), 0x0020
 	ret
 
 FDC_SectorLen_0x24:
-	stiw_da (0x01e53c), 0x0024
+	ldw (0x01e53c:24), 0x0024
 	ret
 
 FDC_Format2DD_Start:
@@ -9023,7 +9023,7 @@ FindFirst_SndTable:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xbc
-	stiw_da (0x02272c), 0x0000
+	ldw (0x02272c:24), 0x0000
 	lda xwa, (0x02272c:24)
 	ld xiz, xwa
 	call FileIO_ReadAllDirEntries
@@ -9346,7 +9346,7 @@ FDC_DrainCloseFile:
 
 SndTable_LookupA:
 	ld (0x03e3ec:24), 0x00
-	stiw_da (0x023580), 0x0000
+	ldw (0x023580:24), 0x0000
 	ld (0x02358a:24), 0x01
 	lda xbc, (0x022d72:24)
 	stl_da (0x03e3ee), xbc
@@ -9466,7 +9466,7 @@ SndTable_LookupD_CalcAddr:
 
 SndTable_LookupD:
 	ld (0x03e3ec:24), 0x01
-	stiw_da (0x023580), 0x0000
+	ldw (0x023580:24), 0x0000
 	ld (0x02358a:24), 0x01
 	lda xbc, (0x022d72:24)
 	stl_da (0x03e3ee), xbc
