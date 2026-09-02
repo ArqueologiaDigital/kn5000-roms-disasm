@@ -88,12 +88,8 @@ MidiSerial_ParseStatus_Data:
 	sla	l, 2
 	extz	hl
 	ld	xiz, MidiSerial_CmdJumpTable
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xec
-	ldb	h, 182
-	.byte 0xe8
+	ld_rrl xiz, xiz, hl
+	call (xiz)
 	ret
 	swi	7
 
@@ -137,53 +133,42 @@ MidiSerial_HandleSysCommon_Data:
 MidiSerial_HandleDefault_Data:
 	.byte 0xc1
 	pushw	wa
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ret
 	ldb_d8	a, (0x9634)
 	and	a, 15
 	ld	xhl, 0x94f4
-	.byte 0xc3
-	pop	sr
-	or	xwa, xix
-	ldb	a, 201
-	.byte 0xcf
-	swi	7
+	ld_rr8b a, xhl, a
+	cp a, 255
 	jr	z, 80
 	stb_d8	(0x9668), a
 	ld	xhl, 0x9514
-	.byte 0xc3
-	pop	sr
-	or	xwa, xix
-	ldb	a, 201
-	inc	6, wa
-	push	xiz
+	ld_rr8b a, xhl, a
+	cps a, 0
+	jr z, 62
 	stb_d8	(0x9669), a
 	stb_d8	(0x966b), a
 	incdi8	1, (0x9668)
 	xor	h, h
 	ldb_d8	l, (0x9668)
 	ld	xix, 0x9514
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 241
-	jr	gt, -106
-	ld	xbc, 0x34c1d6ce
-	.byte 0x96
-	ldb	l, 207
-	scc8	f, d
+	ld_rrb a, xix, hl
+	stb_d8 (38506), a
+	xor h, h
+	ldb_d8 l, (38452)
+	and l, 112
 	srl	hl, 2
 	ld	xix, MidiCC_LowRange_Table
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 180
-	and	xbc, xwa
-	jr	ugt, -106
-	jr	ge, 110
-	.byte 0xca
+	ld_rrl xix, xix, hl
+	call (xix)
+	decdi8 1, (38507)
+	jr nz, -54
 	ret
 	swi	7
 
@@ -200,47 +185,37 @@ MidiCC_LowRange_Table:
 MidiCC_Handler_SimpleParamStore:
 	.byte 0xc1
 	pushw	wa
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ret
 MidiCC_Handler_CC3_TableLookup:
 	ld	xix, MidiCC_ChannelMappingData
 	ldb_d8	l, (0x9635)
-	.byte 0xc3
-	pop	sr
-	.byte 0xf0, 0xec
-	ldb	a, 241
-	.byte 0x57, 0x96
-	ld	xbc, 0x66ffcfc9
-	push	xwa
+	ld_rr8b a, xix, l
+	stb_d8 (38487), a
+	cp a, 255
+	jr z, 56
 	extz	wa
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x80
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 216
-	.byte 0xcf
-	swi	7
-	swi	7
+	ld_rrw wa, xix, wa
+	cp wa, 65535
 	jr	z, 14
 	ld	xix, 0xfd57
-	.byte 0xc3
-	pop	sr
-	.byte 0xf0, 0xe1
-	ldb	c, 201
-	.byte 0xc3
+	ld_rr8b c, xix, w
+	and c, a
 	jr	z, 21
 	extz	wa
 	ldb_d8	a, (0x9657)
 	sla	wa, 2
 	ld	xix, MidiCC_ExtendedRange_Table
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	d, 180
-	.byte 0xe8
+	ld_rrl xix, xix, wa
+	call (xix)
 	ret
 
 
@@ -312,12 +287,9 @@ MidiCC_Handler_BitManipulation:
 	cps	a, 2
 	jr	ugt, 10
 	ld	xix, MidiCC_Handler_BitManipulation_0x45
-	.byte 0xc3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	e, 49
-	ld	ix, (xwa+11)
-	.byte 0xc0
+	ld_rr8b e, xix, a
+	ldw bc, 2968
+	ldb d, 192
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -338,12 +310,8 @@ MidiCC_Handler_PairedParamA:
 	pushw	ix
 	sll	hl, 1
 	ld	xix, MidiCC_ChannelMappingData_0x840
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 26
 	ldb_d8	e, (0x9636)
 	ldb	d, 255
@@ -364,12 +332,8 @@ MidiCC_Handler_PairedParamB:
 	pushw	ix
 	sll	hl, 1
 	ld	xix, MidiCC_ChannelMappingData_0x840
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 26
 	ldb_d8	d, (0x9636)
 	ldb	e, 255
@@ -392,12 +356,8 @@ MidiCC_Handler_RangeCheck:
 	cps	a, 3
 	jr	ugt, 10
 	ld	xix, MidiCC_Handler_RangeCheck_0x3F
-	.byte 0xc3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	e, 49
-	popw	wa
-	pop	sr
+	ld_rr8b e, xix, a
+	ldw bc, 840
 	ldb	d, 7
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
@@ -408,6 +368,8 @@ MidiCC_Handler_RangeCheck:
 	swi	7
 	nop
 	push	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	pop	sr
 MidiCC_Handler_ChannelMapping:
@@ -426,14 +388,10 @@ MidiCC_Handler_ChannelMapping:
 	extz	wa
 	sll	wa, 2
 	ld	xix, MidiCC_Handler_ChannelMapping_0x60
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	a, 216
-	jr	le, -45
-	reti
-	.byte 0xf0, 0xe0
-	ldb	b, 41
+	ld_rrw bc, xix, wa
+	inc 2, wa
+	ld_rrw de, xix, wa
+	pushw bc
 	pushw	de
 	stb_d8	(0x3489), b
 	stb_d8	(0x347c), e
@@ -459,6 +417,8 @@ MidiCC_Handler_ChannelMapping:
 	rcf
 	popw	wa
 	halt
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04, 0x04
 	popw	wa
 	halt
@@ -480,19 +440,12 @@ MidiCC_VoiceParam_0:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0xE0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 30
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -508,19 +461,12 @@ MidiCC_VoiceParam_1:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x140
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -536,19 +482,12 @@ MidiCC_VoiceParam_2:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x1A0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -564,19 +503,12 @@ MidiCC_VoiceParam_3:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x200
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -592,19 +524,12 @@ MidiCC_VoiceParam_4:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x260
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -620,19 +545,12 @@ MidiCC_VoiceParam_5:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x2C0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, -34
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -648,19 +566,12 @@ MidiCC_VoiceParam_6:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x320
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, -99
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -676,19 +587,12 @@ MidiCC_VoiceParam_7:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x380
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -704,19 +608,12 @@ MidiCC_VoiceParam_8:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x3E0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 30
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -732,19 +629,12 @@ MidiCC_VoiceParam_9:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x440
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 41
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -768,19 +658,12 @@ MidiCC_VoiceParam_10:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x560
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -797,19 +680,12 @@ MidiCC_VoiceParam_11_MidEntry:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x5C0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -825,19 +701,12 @@ MidiCC_VoiceParam_12:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x620
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -853,19 +722,12 @@ MidiCC_VoiceParam_13:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x680
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -878,22 +740,14 @@ MidiCC_Handler_BankModeSelect:
 	jrl	ugt, 134
 	extz	hl
 	ld	xix, MidiCC_ChannelMappingData_0x820
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 203
-	.byte 0xcf
-	swi	7
+	ld_rrb c, xix, hl
+	cp c, 255
 	jr	z, 117
 	sll	hl, 1
 	ld	xix, 0x9674
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	w, 216
-	add	w, l
-	incm8	6, (xwa)
-	ret
+	ld_rrw wa, xix, hl
+	cp wa, 32896
+	jr z, 14
 	cp	wa, 0x8081
 	jr	z, 29
 	cp	wa, 0x8082
@@ -941,12 +795,8 @@ MidiCC_Handler_ExpressionParam:
 	jr	ugt, 97
 	extz	hl
 	ld	xix, MidiCC_ChannelMappingData_0x820
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 203
-	.byte 0xcf
-	swi	7
+	ld_rrb c, xix, hl
+	cp c, 255
 	jr	z, 80
 	sll	hl, 1
 	ld	xix, 0x9674
@@ -966,12 +816,9 @@ MidiCC_Handler_ExpressionParam:
 	extz	hl
 	ldb_d8	l, (0x966a)
 	sll	hl, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 140
-	ldwio	33, 0x30c9
-	nop
+	ld_rrl xix, xix, hl
+	ld a, (xix+10)
+	res 0, a
 	ldb_d8	e, (0x9636)
 	srl	e, 6
 	or	e, a
@@ -989,15 +836,10 @@ MidiCC_Handler_DirectStoreA:
 	ldb_d8	l, (0x966a)
 	sll	hl, 1
 	ld	xix, 0x9675
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xec
-	ld	xbc, 0x7c369ec
-	.byte 0xf0, 0xec
-	ldb	w, 216
-	.byte 0xcf
-	swi	7
-	swi	7
+	st_rrb a, xix, hl
+	dec 1, xix
+	ld_rrb w, xix, hl
+	cp wa, 65535
 	jr	nz, 7
 	.byte 0xf3
 	reti
@@ -1011,15 +853,10 @@ MidiCC_Handler_DirectStoreB:
 	ldb_d8	l, (0x966a)
 	sll	hl, 1
 	ld	xix, 0x9674
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xec
-	ld	xbc, 0x7c361ec
-	.byte 0xf0, 0xec
-	ldb	w, 216
-	.byte 0xcf
-	swi	7
-	swi	7
+	st_rrb a, xix, hl
+	inc 1, xix
+	ld_rrb w, xix, hl
+	cp wa, 65535
 	jr	nz, 9
 	dec	1, xix
 	.byte 0xf3
@@ -1033,12 +870,8 @@ MidiCC_Handler_ParamDispatch:
 	jr	ugt, 44
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x6E0
-	.byte 0xd3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rr8w bc, xix, a
+	cp c, 255
 	jr	z, 26
 	ldb_d8	e, (0x9636)
 	ldb	d, 127
@@ -1100,12 +933,8 @@ MidiCC_Handler_CC4_VoiceParam:
 	pushw	ix
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x760
-	.byte 0xd3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rr8w bc, xix, a
+	cp c, 255
 	jr	z, 26
 	ldb_d8	e, (0x9635)
 	ldb	d, 255
@@ -1125,12 +954,8 @@ MidiCC_Handler_CC6_VoiceParam:
 	pushw	iz
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x7A0
-	.byte 0xd3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rr8w bc, xix, a
+	cp c, 255
 	jr	z, 28
 	ldb_d8	e, (0x9635)
 	ldb_d8	d, (0x9636)
@@ -1150,12 +975,8 @@ MidiCC_Handler_CC5_VoiceParam:
 	pushw	ix
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x7E0
-	.byte 0xd3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rr8w bc, xix, a
+	cp c, 255
 	jr	z, 26
 	ldb_d8	e, (0x9635)
 	ldb	d, 127
@@ -1243,16 +1064,8 @@ UIState_DisplayUpdate_BitmapHandler:
 	xor	d, d
 	ldb_d8	e, (0x9670)
 	sll	de, 2
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe8
-	ldb	h, 238
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xiz, xiz, de
+	cp xiz, 4294967295
 	jr	z, 33
 	ld	a, (xiz+13)
 	pushw	wa
@@ -1263,11 +1076,9 @@ UIState_DisplayUpdate_BitmapHandler:
 	cp	a, w
 	jr	nz, 15
 	ldb_d8	d, (0x9670)
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ld	xix, 0x6fc161eb
-	incm	1, (xiz)
+	st_rrb d, xiy, hl
+	inc 1, xhl
+	incdi8 1, (38511)
 	incdi8	1, (0x9670)
 	.byte 0xc1
 	jrl	f, 0x3f96
@@ -1412,15 +1223,8 @@ PanelEvt_Handler_0_NoteOnParam:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x3A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 47
 	.byte 0xf1, 0x57
 	swi	5
@@ -1451,15 +1255,8 @@ PanelEvt_Handler_3_ValueCheck:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x427
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xwa
@@ -1481,15 +1278,8 @@ PanelEvt_Handler_5_ValueCheck:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x4A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xwa
@@ -1513,15 +1303,8 @@ PanelEvt_Handler_7_ValueCheck:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x5A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xwa
@@ -1543,15 +1326,8 @@ PanelEvt_Handler_8_ValueCheck:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x628
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xwa
@@ -1573,15 +1349,8 @@ PanelEvt_Handler_9_SingleByteParam:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x6A8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 17
 	.byte 0xf1, 0x57
 	swi	5
@@ -1601,15 +1370,8 @@ PanelEvt_Handler_10_TwoByteParam:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x728
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 23
 	.byte 0xf1, 0x57
 	swi	5
@@ -1632,15 +1394,8 @@ PanelEvt_Handler_11_SingleByteParam:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x7A8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 17
 	.byte 0xf1, 0x57
 	swi	5
@@ -1657,15 +1412,8 @@ PanelEvt_Handler_15_ConditionalSet:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x3A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 21
 	extz	de
 	ldb_d8	e, (0x964e)
@@ -1713,16 +1461,15 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	ldb_d8	e, (0x964e)
 	and	e, 7
 	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0x49
-	.byte 0xc3
-	pop	sr
-	.byte 0xf4, 0xe8
-	ldb	e, 32
-	rcf
+	ld_rr8b e, xiy, e
+	ldb w, 16
 	calr	1110
 	ret
 	swi	7
 	nop
 	push	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	pop	sr
 	nop
@@ -1772,11 +1519,12 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	inc	1, a
 	srl	e, 1
 	jr	nc, -7
-	.byte 0xc3
-	pop	sr
-	.byte 0xf4, 0xe0
-	ldb	e, 30
-	stib_da	(3587), 0
+	ld_rr8b e, xiy, a
+	calr 1010
+	ret
+	nop
+	nop
+	nop
 	pop	sr
 	reti
 	push	sr
@@ -1815,15 +1563,8 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x5A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 21
 	.byte 0xf1
 	pop	xwa
@@ -2115,15 +1856,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xBA8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2141,15 +1875,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xC28
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2167,15 +1894,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xCA8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2193,15 +1913,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xD28
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2219,15 +1932,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xDA8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2245,15 +1951,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xE28
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2313,9 +2012,7 @@ FileData_ProcessWithLookup:
 	and	a, 15
 	or	a, 176
 	ldb	w, 100
-	.byte 0xbd
-	nop
-	.byte 0x50
+	ld (xiy+256), wa
 	ld	(xiy+2), c
 	calr	106
 	ldb	a, 101
@@ -2438,6 +2135,8 @@ Periodic_TimestampCompare_Done:
 
 MidiCC_ChannelMappingData:
 	push_f
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	swi	7
 	swi	7
@@ -2446,6 +2145,8 @@ MidiCC_ChannelMappingData:
 	ldb	w, 2
 	swi	7
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	pop	sr
 	swi	7
@@ -2506,14 +2207,22 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0x01
 	push	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01, 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0x04, 0x01
 	ldio	1, 16
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ldb	w, 1
 	ldb	w, 1
 	ldb	w, 1
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	push	sr
 	push	sr
@@ -2528,6 +2237,8 @@ MidiCC_ChannelMappingData:
 	ld	xwa, 0xffffff02
 	swi	7
 	.fill 8, 1, 0xff
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x80, 0x01, 0x80, 0x01
 	swi	7
 	swi	7
@@ -2536,6 +2247,8 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	push	sr
 	swi	7
@@ -2546,6 +2259,8 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ldio	1, 4
 	ldio	2, 4
@@ -2564,6 +2279,8 @@ MidiCC_ChannelMappingData:
 	ldio	255, 255
 	swi	7
 	rcf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04, 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD0F79-0xFD0F8C (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=69% dist=6 near MidiCC_ChannelMappingData_0xE0+50
 	.byte 0x08, 0x11, 0x04, 0x08, 0x12, 0x04, 0x08, 0x13, 0x04, 0x08, 0xff, 0xff
@@ -2573,6 +2290,8 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xsp), 127
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb7, 0x01
 	jrl	nc, 695
 	jrl	nc, 951
@@ -2600,6 +2319,8 @@ MidiCC_ChannelMappingData:
 	pop_a
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb7, 0x17
 	jrl	nc, 6327
 	jrl	nc, -1
@@ -2609,6 +2330,8 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xiz), 127
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb6, 0x01
 	jrl	nc, 694
 	jrl	nc, 950
@@ -2636,6 +2359,8 @@ MidiCC_ChannelMappingData:
 	pop_a
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb6, 0x17
 	jrl	nc, 6326
 	jrl	nc, -1
@@ -2645,6 +2370,8 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xde), 127
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb2, 0x01
 	jrl	nc, 690
 	jrl	nc, 946
@@ -2672,6 +2399,8 @@ MidiCC_ChannelMappingData:
 	pop_a
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb2, 0x17, 0x7f
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -2701,13 +2430,22 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 789
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x17
 	pop	sr
-	.byte 0x7f
-	.fill 8, 1, 0xff
+	jrl nc, -1
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xhl), 127
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb3, 0x01
 	jrl	nc, 691
 	jrl	nc, 947
@@ -2735,9 +2473,13 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb3, 0x17
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb0, 0x01
 	jrl	nc, -1
 	.fill 8, 1, 0xff
@@ -2773,6 +2515,8 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x17, 0x08, 0x7f
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -2794,39 +2538,68 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 1293
 	jrl	nc, 1294
 	jrl	nc, 1295
-	.byte 0x7f
-	.fill 8, 1, 0xff
+	jrl nc, -1
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0x2400401
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0x4400403
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0x6400405
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0x8400407
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0xa400409
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0xc40040b
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0xe40040d
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0x10ffffff
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0x12400411
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0xff400413
 	swi	7
 	swi	7
 	pop_a
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ld	xwa, 0x17ffffff
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04, 0x40
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
@@ -2856,6 +2629,8 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 1813
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x17
 	reti
 	jrl	nc, -1
@@ -2890,6 +2665,8 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5564
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xbc, 0x17
 	jrl	nc, 6332
 	jrl	nc, -1
@@ -2923,6 +2700,8 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5565
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xbd, 0x17
 	jrl	nc, 6333
 	jrl	nc, -1
@@ -2956,6 +2735,8 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5560
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb8, 0x17
 	jrl	nc, 6328
 	jrl	nc, -1
@@ -2989,6 +2770,8 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5561
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb9, 0x17
 	jrl	nc, 6329
 	jrl	nc, -1
@@ -3022,6 +2805,8 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5562
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xba, 0x17
 	jrl	nc, 6330
 	jrl	nc, -1
@@ -3055,6 +2840,8 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 5563
 	jrl	nc, -1
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xbb, 0x17
 	jrl	nc, 6331
 	jrl	nc, -1
@@ -3063,13 +2850,19 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xad
 	nop
 	sub	(xiy+1), xiy
 	push	sr
 	sub	(xiy+3), xiy
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	sub	(xiy+5), xiy
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06
 	sub	(xiy+7), xiy
 	ldio	173, 9
@@ -3089,13 +2882,19 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xae
 	nop
 	sub	(xiz+1), xiz
 	push	sr
 	sub	(xiz+3), xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	sub	(xiz+5), xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06
 	sub	(xiz+7), xiz
 	ldio	174, 9
@@ -3117,12 +2916,16 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	nop
 	push	sr
 	nop
 	pop	sr
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	halt
@@ -3153,15 +2956,23 @@ MidiCC_ChannelMappingData:
 	nop
 	swi	7
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x17
 	nop
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xbc), 177
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0xb1
 	push	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb1
 	pop	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb1, 0x04, 0xb1
 	halt
 	.byte 0xb1, 0x06, 0xb1
@@ -3191,14 +3002,22 @@ MidiCC_ChannelMappingData:
 	pop_a
 	swi	7
 	swi	7
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb1, 0x17
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xix), 180
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0xb4
 	push	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb4
 	pop	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xb4, 0x04, 0xb4
 	halt
 	.byte 0xb4, 0x06, 0xb4
@@ -3219,9 +3038,13 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	push	sr
 	pop	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	halt
 	ei	7
@@ -3233,12 +3056,16 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	nop
 	push	sr
 	nop
 	pop	sr
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	halt
@@ -3269,6 +3096,8 @@ MidiCC_ChannelMappingData:
 	nop
 	swi	7
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x17
 	nop
 	.fill 8, 1, 0xff
@@ -3977,6 +3806,8 @@ FileData_RawDataBlock:
 	add	(xwa-21), a
 	calr	1351
 	incm	1, (xsp+4)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x9f, 0x04
 	push	xsp
 	push_f
@@ -3996,20 +3827,19 @@ FileData_RawDataBlock:
 	.byte 0xaf, 0x06, 0x81
 	calr	1869
 	incm	1, (xsp+4)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x9f, 0x04
 	push	xsp
 	pop	sr
 	nop
 	jr	c, -47
 	ld	xwa, (xsp+10)
-	.byte 0xf3, 0xe1
-	ld	xix, 0x6af3003
-	ldb	a, 243
-	.byte 0xe5, 0xd8
-	push	sr
-	ldw	bc, 4382
-	ldio	175, 10
-	.byte 0x20
+	lda xwa, (xwa+836)
+	ld xbc, (xsp+6)
+	lda xbc, (xbc+728)
+	calr 2065
+	ld xwa, (xsp+10)
 	lda	xwa, (xwa+852)
 	ld	xbc, (xsp+6)
 	lda	xbc, (xbc+740)
@@ -4046,42 +3876,33 @@ FileData_RawDataBlock:
 	add	(xwa-21), a
 	calr	2499
 	incm	1, (xsp+4)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x9f, 0x04
 	push	xsp
 	push	sr
 	nop
 	jr	c, -56
 	ld	xwa, (xsp+10)
-	.byte 0xf3, 0xe1, 0xaa
-	pop	sr
-	ldw	wa, 1711
-	ldb	a, 243
-	.byte 0xe5, 0x80
-	pop	sr
-	ldw	bc, 8478
-	incf
+	lda xwa, (xwa+938)
+	ld xbc, (xsp+6)
+	lda xbc, (xbc+896)
+	calr 3105
 	ld	xwa, (xsp+10)
-	.byte 0xf3, 0xe1
-	lda	xwa, (xwa+3)
+	lda xwa, (xwa+952)
 	ld	xbc, (xsp+6)
-	.byte 0xf3, 0xe5, 0x8a
-	pop	sr
-	ldw	bc, 0x801e
-	incf
+	lda xbc, (xbc+906)
+	calr 3200
 	ld	xwa, (xsp+10)
 	lda	xwa, (xwa+968)
 	ld	xbc, (xsp+6)
 	lda	xbc, (xbc+922)
 	calr	3356
 	ld	xwa, (xsp+10)
-	.byte 0xf3, 0xe1
-	ld	wa, 0xaf30
-	.byte 0x06
-	ldb	a, 243
-	.byte 0xe5, 0xaa
-	pop	sr
-	ldw	bc, 0x791e
-	decf
+	lda xwa, (xwa+984)
+	ld xbc, (xsp+6)
+	lda xbc, (xbc+938)
+	calr 3449
 	ld	xwa, (xsp+10)
 	lda	xwa, (xwa+990)
 	ld	xbc, (xsp+6)
@@ -4121,9 +3942,7 @@ FileData_RawDataBlock:
 	swi	5
 	ld	wa, (xsp+12)
 	calr	10765
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+8), 0
 	ld	wa, (xsp+12)
 	srl	wa, 3
 	cps	wa, 0
@@ -4142,8 +3961,7 @@ FileData_RawDataBlock:
 	ld	xwa, (xsp+14)
 	or	xwa, xwa
 	jr	z, 53
-	.byte 0xbf
-	ldwio	2, 0
+	ldw (xsp+10), 0
 	.byte 0x9f
 	incf
 	push	xsp
@@ -4162,11 +3980,7 @@ FileData_RawDataBlock:
 	inc	4, xsp
 	ld	hl, iz
 	jrl	412
-	.byte 0xbf
-	incf
-	push	sr
-	push_f
-	nop
+	ldw (xsp+12), 24
 	jr	-117
 	ldw	hl, 0xff38
 	jrl	399
@@ -4179,9 +3993,7 @@ FileData_RawDataBlock:
 	lda_24	xwa, (0x1ed400)
 	add	xwa, xbc
 	ld	(xsp+4), xwa
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+8), 0
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -4195,6 +4007,8 @@ FileData_RawDataBlock:
 	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	add	xhl, 20
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xaf, 0x04
 	or	(xhl), h
 	add	(xwa-21), a
@@ -4216,6 +4030,8 @@ FileData_RawDataBlock:
 	push	sr
 	nop
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xaf, 0x04, 0x81
 	calr	1326
 	incm	1, (xsp+8)
@@ -4241,9 +4057,7 @@ FileData_RawDataBlock:
 	ld	xbc, (xsp+4)
 	lda	xbc, (xbc+716)
 	calr	1994
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+8), 0
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -4256,6 +4070,8 @@ FileData_RawDataBlock:
 	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	add	xhl, 722
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xaf, 0x04
 	or	(xhl), h
 	add	(xwa-21), a
@@ -4313,8 +4129,8 @@ FileData_RawDataBlock:
 	ld	wa, (xsp+10)
 	.byte 0x9f
 	incf
-	.byte 0xf0
-	jrl	c, -427
+	st_dd8w iy, 119
+	swi 6
 	lds	wa, 0
 	call	PostPmLoad
 	ld	xwa, (xsp+14)
@@ -7081,6 +6897,8 @@ VoiceParam_CopyBitfields_LargeBlock:
 	.byte 0xb0, 0x9d, 0xb2, 0xa5, 0xb0, 0x9e, 0xb2, 0xa6
 	.byte 0xb0, 0x9e, 0xb2
 	add	(xsp), xwa
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ldb	a, 201
 	neg	d
@@ -7547,6 +7365,8 @@ DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0x8c
 	swi	6
 	push	xix
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x80
 	or	(xix-2), a
 	ld	a, (xhl-18)
@@ -7555,6 +7375,8 @@ DSPCfg_VoiceSlotB_ExtractData:
 	or	(xix+1), a
 	ld	a, (xhl+18)
 	res	7, a
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x8c
 	swi	7
 	push	xix
@@ -7852,6 +7674,8 @@ DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0x89
 	swi	6
 	push	xix
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x80
 	or	(xbc-2), l
 	ld	l, (xwa+1)
@@ -7863,6 +7687,8 @@ DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0x89
 	swi	7
 	push	xix
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x80
 	or	(xbc-1), l
 	ld	l, (xwa)
@@ -9096,23 +8922,27 @@ MidiStream_PrevBankCheck:
 	push_f
 	ld	(xiy-49), xiz
 	push	xwa
-	.byte 0xc7
-	swi	3
-	.byte 0xa8
+	ldib_erp 251, 0
 	calr	60
 	ldda32	xwa, (0xbcac)
 	.byte 0x80
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jr	z, 47
 	.byte 0x80
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06
 	jr	nz, 6
 	ld	(xwa+4), 32
 	jr	36
 	ldda32	xwa, (0xbc60)
 	calr	3797
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc7
 	swi	3
 	jr	lt, -57
@@ -9127,9 +8957,7 @@ MidiStream_PrevBankCheck:
 	jr	6
 	calr	24
 	calr	5117
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 SeqAlt_ProcessAndFinalize:
@@ -9291,11 +9119,12 @@ MidiChan_NibbleLookup_Data:
 	jr	z, 23
 	lda	xix, (xde+10)
 	ld	xwa, (xix)
-	.byte 0xf5, 0xe0
-	ldw	iy, 0x60b4
-	.byte 0xc5, 0xe4
-	ldb	a, 181
-	ld	xbc, 0x69db88db
+	stb_dpi e, 224
+	ld (xix), xwa
+	ldb_spi a, 228
+	ld (xiy), a
+	ld wa, hl
+	dec 1, hl
 	cps	wa, 0
 	jr	nz, -20
 	ld	xwa, (xde+10)
@@ -10585,11 +10414,15 @@ ArpQueue_EnqueueDone:
 
 ArpQueue_ProcessAndSort_Data:
 	ldda32	xwa, (0xbcac)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x88, 0x04
 	push	xsp
 	nop
 	ret	nz
 	ldda32	xwa, (0xbcac)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x88, 0x04
 	push	xsp
 	nop
@@ -10624,8 +10457,8 @@ ArpQueue_ProcessAndSort_Data:
 	lda	xde, (xwa+1)
 	lda_d16	xhl, (0xbccc)
 	ld	xbc, (xhl)
-	.byte 0xf5, 0xe4
-	ldw	ix, 0x61b3
+	stb_dpi d, 228
+	ld (xhl), xbc
 	ld	c, (xix)
 	ld	(xde), c
 	ld	(xwa), c
@@ -10830,19 +10663,19 @@ SeqVoice_DispatchProcess_Data:
 	lda	xwa, (xiz+10)
 	ld	(xsp+12), xwa
 	ld	xwa, (xix)
-	.byte 0xf5, 0xe0
-	ldw	bc, 0x60b4
+	stb_dpi a, 224
+	ld (xix), xwa
 	ld	c, (xbc)
 	sll	c, 4
 	ld	xwa, (xhl)
-	.byte 0xf5, 0xe0
-	ldw	iz, 0x60b3
+	stb_dpi h, 224
+	ld (xhl), xwa
 	ld	w, (xiz)
 	and	w, 15
 	xor	c, w
 	ld	xwa, (xde)
-	.byte 0xf5, 0xe0
-	ldw	iz, 0x60b2
+	stb_dpi h, 224
+	ld (xde), xwa
 	ld	(xiz), c
 	ld	xwa, (xsp+4)
 	lds32	xbc, 1
@@ -10873,10 +10706,8 @@ SeqVoice_DispatchProcess_Data:
 	ldw	bc, 12
 	calr	61846
 	lds32	xiz, 0
-	.byte 0xc7
-	swi	0
-	or	(xsp-18), iz
-	ret
+	ldb_erp l, 248
+	sll xiz, 14
 	ldda32	xwa, (0xbcac)
 	ldw	bc, 13
 	calr	61828
@@ -10914,6 +10745,8 @@ SeqVoice_DispatchProcess_Data:
 	sub	xwa, 0xf980
 	add	xwa, 0x12cb2
 	add	xwa, xhl
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xaf, 0x04
 	or	(xwa), w
 	.byte 0xc8
@@ -11067,6 +10900,8 @@ SeqVoice_DispatchProcess_Data:
 	.byte 0xf1
 	push_f
 	ld	(xiy-50), xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x17
 	calr	312
 	.byte 0xf3, 0xed
@@ -11452,11 +11287,8 @@ AssSwb_ProcessLoop_Data:
 	ccf
 	ld	c, (xde)
 	extz	bc
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	e, 218
-	ccf
+	ld_rrb e, xix, bc
+	extz de
 	ld	hl, (xhl)
 	extz	hl
 	pushw	hl
@@ -11470,9 +11302,7 @@ AssSwb_ProcessLoop_Data:
 	extz	hl
 	inc	1, hl
 	ld	xde, (xsp+6)
-	.byte 0xc3
-	reti
-	sla	xwa, 37
+	ld_rrb e, xde, hl
 	extz	de
 	ld	hl, (xiz+4)
 	srl	hl, 8
@@ -11510,10 +11340,10 @@ Part_ProcessEntry_Data:
 	dec	1, bc
 	cps	wa, 0
 	ret	z
-	.byte 0xc5, 0xec
-	ldb	a, 245
-	.byte 0xe8
-	ld	xbc, 0x69d988d9
+	ldb_spi a, 236
+	lda_dpi xbc, 232
+	ld wa, bc
+	dec 1, bc
 	cps	wa, 0
 	jr	nz, -14
 	ret
@@ -11524,9 +11354,9 @@ Part_ProcessEntry_Data:
 	dec	1, bc
 	cps	de, 0
 	jr	z, 11
-	.byte 0xc5, 0xe0
-	xor	(xsp), a
-	decm8	1, (xde-39)
+	add_spib l, 224
+	ld de, bc
+	dec 1, bc
 	cps	de, 0
 	jr	nz, -11
 	neg	l
@@ -12530,11 +12360,8 @@ MidiPkt_ArpExtHandler_N_Data:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, (SeqChan_CommandDispatch_Table_0x9C)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 179
-	.byte 0xe8
+	ld_rrl xhl, xbc, hl
+	call (xhl)
 	ret
 SeqChan_ProcessStepCmd:
 	ldda32	xwa, (0xbcac)
@@ -12755,9 +12582,9 @@ SeqChan_StepCmd_Field13Write:
 	cp hl, 0xffff
 	.byte 0xf2
 	cp	(xiy+108), e
-	.byte 0xee
+	or xbc, xiz
+	ld xwa, (xix-68)
 	; --- Section 2: reload XWA, setup BC, call, check L ---
-	ldda32	xwa, (0xbcac)
 	ldw bc, 0x000f
 	call SeqData_ReadFieldByIndex
 	cps	l, 0
@@ -12799,6 +12626,8 @@ SeqChan_WriteField_Data_A:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xbf
 	ret
 SeqChan_WriteField_Data_B:
@@ -12806,6 +12635,8 @@ SeqChan_WriteField_Data_B:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xbe
 	ret
 SeqChan_WriteField_Data_C:
@@ -12813,6 +12644,8 @@ SeqChan_WriteField_Data_C:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xbd
 	ret
 SeqChan_WriteField_Data_D:
@@ -12820,6 +12653,8 @@ SeqChan_WriteField_Data_D:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xbc
 	ret
 SeqChan_RetStub_C:
@@ -12829,6 +12664,8 @@ SeqChan_WriteField_Data_E:
 	lds	bc, 3
 	lds	de, 0
 	call	MIDI_ReadChannelParam
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x1a, 0xbd, 0xba
 	ret
 ; MIDI SysEx processing block with dispatch
@@ -14529,14 +14366,9 @@ SeqData_FormatOutput_Data:
 	ret	gt
 	add	hl, hl
 	lda_24	xix, (SeqData_SubDispatch_Table_0xA0)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	jrl	nz, -625
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (16617342)
+	jp_rr 8, xix, hl
 	jr	18
 	jr	110
 	jrl	200
@@ -14551,12 +14383,11 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	divs	l, 111
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cp_erpb 251, 11
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xE)
 	.byte 0xe3
@@ -14566,17 +14397,12 @@ SeqData_FormatOutput_Data:
 	.byte 0xba, 0x17
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xE)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -14585,9 +14411,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -14595,12 +14419,11 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x66)
 	.byte 0xe3
@@ -14611,17 +14434,12 @@ SeqData_FormatOutput_Data:
 	.byte 0x17
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x66)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -14630,9 +14448,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -14640,37 +14456,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	.byte 0xcf
-	incf
+	ldb_erp l, 251
+	cp_erpb 251, 12
 	jr	nc, 68
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x6E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	swi	7
-	ex_ff
+	ld_rrl xwa, xwa, bc
+	calr 5887
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x6E)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -14679,9 +14481,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	ret
 	.byte 0xd7
@@ -14690,33 +14490,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xCE)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0xa1
-	ex_ff
+	ld_rrl xwa, xwa, bc
+	calr 5793
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xCE)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -14725,9 +14515,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -14735,32 +14523,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xD6)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	ld	xix, 0xffcfdb16
-	swi	7
+	ld_rrl xwa, xwa, bc
+	calr 5700
+	cp hl, 65535
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xD6)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -14769,9 +14548,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -14779,37 +14556,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	.byte 0xcf
-	ret
+	ldb_erp l, 251
+	cp_erpb 251, 14
 	jr	nc, 68
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xDE)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0xe6
-	pop_a
+	ld_rrl xwa, xwa, bc
+	calr 5606
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xDE)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -14818,9 +14581,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 SeqAlt_NibbleSearch_Ret:
@@ -15056,12 +14817,9 @@ SeqAlt_DescriptorBlock_Data:
 	extz	wa
 	muls	wa, 6
 	lda_24	xbc, (ToneKit_FrequencyTable_0x408)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 142
-	ldio	33, 201
-	.byte 0x06
+	ld_rrl xbc, xbc, wa
+	ld a, (xiz+8)
+	cpl a
 	and	(xbc), a
 	ld	a, (xiz+11)
 	and	a, 15
@@ -15155,16 +14913,18 @@ SeqAlt_DescriptorBlock_Data:
 	ld	(xsp+4), l
 	ld	xde, (xsp+10)
 	ld	a, (xde+9)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x8f, 0x04
 	stdi8	(0x857b), 143
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	ldb	c, 138
 	ldwio	243, 0x7d6b
 	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
-	.byte 0xc7
-	swi	0
-	.byte 0x9f
+	ldb_erp l, 248
 	extz	iz
 	sll	iz, 8
 	ldda32	xwa, (0xbc54)
@@ -15182,25 +14942,17 @@ SeqAlt_DescriptorBlock_Data:
 	ld	xwa, (xsp+10)
 	ld	a, (xwa+6)
 	or	a, l
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp a, 251
 	lda	xwa, (xsp+6)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	ld	(xwa+1), 1
-	.byte 0xc7
-	swi	0
-	.byte 0x8b
+	stb_erp c, 248
 	ld	(xwa+2), c
 	ld	(xwa+3), 127
 	call	AssSwb_ApplyBitDescriptor
 	lda	xwa, (xsp+6)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	ld	xde, (xsp+10)
 	ld	c, (xde+7)
@@ -15315,12 +15067,9 @@ SeqAlt_DescriptorBlock_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xA)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	.byte 0x06
-	ldw	bc, 0xd8cf
+	ld_rrl xwa, xbc, wa
+	lda xbc, (xsp+6)
+	cps l, 0
 	jr	nz, 6
 	ld	a, (xwa)
 	ld	(xbc), a
@@ -15764,16 +15513,9 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ret	gt
 	add	hl, hl
 	lda_24	xix, (SeqData_SubDispatch_Table_0xAE)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	push	xiz
-	.byte 0x9a
-	swi	5
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (16620094)
+	jp_rr 8, xix, hl
 	jr	18
 	jr	110
 	jrl	200
@@ -15788,33 +15530,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	divs	l, 111
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cp_erpb 251, 11
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x3A)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	swi	2
-	incf
+	ld_rrl xwa, xwa, bc
+	calr 3322
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x3A)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -15823,9 +15555,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -15833,34 +15563,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x6A)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	xor	(xiy+12), hl
-	.byte 0xcf
-	swi	7
-	swi	7
+	ld_rrl xwa, xwa, bc
+	calr 3229
+	cp hl, 65535
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x6A)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -15869,9 +15588,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -15879,37 +15596,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	.byte 0xcf
-	incf
+	ldb_erp l, 251
+	cp_erpb 251, 12
 	jr	nc, 68
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x9E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	push	xsp
-	incf
+	ld_rrl xwa, xwa, bc
+	calr 3135
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x9E)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -15918,9 +15621,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	ret
 	.byte 0xd7
@@ -15929,34 +15630,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xD2)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0xe1
-	pushw	0xcfdb
-	swi	7
-	swi	7
+	ld_rrl xwa, xwa, bc
+	calr 3041
+	cp hl, 65535
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xD2)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -15965,9 +15655,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -15975,34 +15663,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xDA)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0x84
-	pushw	0xcfdb
-	swi	7
-	swi	7
+	ld_rrl xwa, xwa, bc
+	calr 2948
+	cp hl, 65535
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xDA)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -16011,9 +15688,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -16021,32 +15696,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	mul	l, 111
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cp_erpb 251, 8
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x116)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	ldb	h, 11
+	ld_rrl xwa, xwa, bc
+	calr 2854
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x116)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -16055,9 +15721,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 VoiceParam_MultiBlock_Ret:

@@ -464,6 +464,8 @@ UIRender_DescriptorTable1:
 	.byte 0x1f
 	.ascii "                                      "
 	push	26
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x17
 	.ascii "     "
 	ret
@@ -610,10 +612,8 @@ ScoopDisp_BytecodeBlock1:
 	jr	12
 	stdi8	(4480), 43
 	jr	5
-	.byte 0xf1
-	ldir
-	nop
-	ldb	w, 0x0e
+	stdi8 (4480), 32
+	ret
 	.ascii "9:;<=>…ã “»â»–"
 	call	Scoop_CurveUpdate_DrawSegment_0x20
 	ld	a, l
@@ -809,6 +809,8 @@ SoundEvt_ShortPacketHandler:
 	stdi8	(3923), 0
 	.byte 0xc1
 	ldl_da	xwa, (0x083ee3)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	call	SoundEvt_LongPacketHandler_0x11
 	ret
@@ -828,10 +830,8 @@ SoundEvt_LongPacketHandler:
 	sla	hl, 2
 	push	xix
 	ld	xix, SoundEvt_LongPacketHandler_0x35
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 	inc	1, xwa
@@ -865,9 +865,7 @@ SoundEvt_LongPacketHandler:
 	ldb	e, 91
 	call	(xiy)
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1, 0xe8
-	ret
-	.byte 0xf0
+	cpda16 xwa, (3816)
 	jrl	nz, 48
 	ldb_d8	a, (3420)
 	ldb_d8	w, (3821)
@@ -877,6 +875,8 @@ SoundEvt_LongPacketHandler:
 	pop	xiy
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEF612D-0xEF6143 (22 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=67% dist=14 near SoundEvt_LongPacketHandler_0x35+91
 	.byte 0x73, 0x13, 0x00, 0xc8, 0xdb, 0x7b, 0x09, 0x00, 0xc9, 0xdb, 0x7b, 0x11
@@ -886,6 +886,8 @@ SoundEvt_LongPacketHandler:
 	.byte 0xc1, 0xd3
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	call	VoiceSlot_TableSetup
 	call	Timer_ModeHandler_0_0x107
@@ -896,6 +898,8 @@ ScoopDisp_HandlerData2:
 	jr	lt, 122
 	.byte 0xef
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1c
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x1c
 	jrl	gt, 239
 	inc	1, xwa
@@ -912,15 +916,11 @@ ScoopDisp_HandlerData2:
 	stb_d8	(3821), a
 	push	xhl
 	ld	xhl, ScoopDisp_HandlerData2_0x7F
-	.byte 0xe3
-	reti
-	cp	xix, xix
-	ldb	e, 91
+	ld_rrl xiy, xhl, iy
+	pop xhl
 	call	(xiy)
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1, 0xe8
-	ret
-	.byte 0xf0
+	cpda16 xwa, (3816)
 	jrl	nz, 48
 	ldb_d8	a, (3420)
 	ldb_d8	w, (3821)
@@ -930,6 +930,8 @@ ScoopDisp_HandlerData2:
 	pop	xiy
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	jrl	ule, 19
 	cps	w, 3
@@ -944,6 +946,8 @@ ScoopDisp_HandlerData2:
 	.byte 0xc1, 0xd3
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	call	VoiceSlot_TableSetup
 	ret
@@ -972,10 +976,8 @@ DefaultHandler_Ret:
 	stda16	(9920), bc
 	push	xhl
 	ld	xhl, DefaultHandler_Ret_0x2B
-	.byte 0xe3
-	reti
-	cp	xix, xix
-	ldb	e, 91
+	ld_rrl xiy, xhl, iy
+	pop xhl
 	call	(xiy)
 	ret
 	ldb	c, 98
@@ -1019,10 +1021,8 @@ DefaultHandler_Ret:
 	sla	hl, 2
 	push	xix
 	ld	xix, ScoopDisp_DispatchTable_Small
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	jp	DefaultHandler_Ret_0xA6
 	cp	bc, 15
@@ -1097,14 +1097,14 @@ ToneParam_Evt0F_BytecodeHandler:
 	ld	iy, de
 	push	xhl
 	ld	xhl, PerfMode_ParamHandler_Table
-	.byte 0xe3
-	reti
-	cp	xix, xix
-	ldb	e, 91
+	ld_rrl xiy, xhl, iy
+	pop xhl
 	call	(xiy)
 	.byte 0xc1, 0xd3
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ldw_d16	bc, (9920)
 	cp	bc, 15
@@ -1206,10 +1206,8 @@ PerfMode_ParamHandler_0:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_0
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 PerfMode_EventTable_0:
@@ -1249,8 +1247,9 @@ PerfMode_Evt03_FlagHandler_A:
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
 	ldio	193, 20
-	.byte 0x37
-	ldb	a, 39
+	ldw sp, 10017
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ldb	h, 13
 	call	PerfMode_ClampValue
@@ -1262,8 +1261,7 @@ PerfMode_Evt03_FlagHandler_B:
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
 	ldio	193, 21
-	.byte 0x37
-	ldb	a, 39
+	ldw sp, 10017
 	nop
 	ldb	h, 12
 	call	PerfMode_ClampValue
@@ -1307,10 +1305,8 @@ PerfMode_ParamHandler_1:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_1
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 UIDisp_DefaultInputHandler:
@@ -1380,10 +1376,8 @@ PerfMode_ParamHandler_2:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_ParamHandler_2_0x1B
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 	.byte 0x9c
@@ -1574,10 +1568,8 @@ PerfMode_ParamHandler_7:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_ParamHandler_Data_0x13
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 PerfMode_ParamHandler_Data:
@@ -1747,10 +1739,8 @@ PerfMode_ParamHandler_9:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_9
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 PerfMode_EventTable_9:
@@ -1801,20 +1791,14 @@ PerfMode_Evt04_VolumeHandler:
 	xor	h, h
 	push	xix
 	ld	xix, 0xf1a0
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	l, 219
-	.byte 0xec
-	push	sr
+	ld_rrb l, xix, hl
+	sla hl, 2
 	ld	xix, PerfMode_VoiceAddressTable
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 179
-	ld	xbc, 0x8d3ac15c
-	ldb	e, 36
-	pop	sr
+	ld_rrl xhl, xix, hl
+	ld (xhl), a
+	pop xix
+	ldb_d8 e, (36154)
+	ldb d, 3
 	ldb	w, 127
 	pushw	de
 	call	SwbtWr_QueuePostEvent
@@ -1829,6 +1813,8 @@ PerfMode_Evt04_VolumeHandler:
 	call	Audio_ProcessAllMidiStreams
 	ret
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	push	sr
 	reti
@@ -2080,9 +2066,7 @@ UIState_CallDecHandler:
 	call VoiceSlot_TableSetup_0x56D
 UIState_CheckValueChanged:
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1, 0xe8
-	ret
-	.byte 0xf0
+	cpda16 xwa, (3816)
 	jrl nz, UIState_UpdateAllRegions
 	call Display_UpdateRegion8
 	call Display_UpdateRegion10
@@ -2595,10 +2579,8 @@ PerfMode_BytecodeEntry_C:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_DispatchTable_C
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 PerfMode_DispatchTable_C:
@@ -2732,21 +2714,15 @@ PerfMode_Handler_EvtB:
 	ret
 	ldb_d8	a, (0xc07e)
 	andda8	a, 0xc07f
-	.byte 0xc7
-	push	xix
-	and	(xbc-55), ix
-	pop	sr
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	ldb_erp a, 60
+	and a, 3
+	stb_erp a, 60
 	jrl	nz, 64
 	ldb_d8	a, (0xc07e)
 	xor	c, c
-	.byte 0xc7
-	push	xix
-	.byte 0x99, 0xc7
-	push	xiy
-	add	(xbc-53), bc
+	ldb_erp a, 60
+	ldb_erp a, 61
+	ld a, c
 	.byte 0xc7
 	push	xiy
 	pushw	hl
@@ -2754,16 +2730,12 @@ PerfMode_Handler_EvtB:
 	.byte 0xc7
 	push	xiy
 	pushw	ix
-	.byte 0xc7
-	push	xix
-	.byte 0x89, 0xc7
-	push	xiy
-	incm8	1, (xbc-53)
-	.byte 0xc7
-	push	xix
-	.byte 0x99, 0xc7
-	push	xiy
-	add	(xbc-53), bc
+	stb_erp a, 60
+	stb_erp a, 61
+	inc 1, c
+	ldb_erp a, 60
+	ldb_erp a, 61
+	ld a, c
 	.byte 0xc7
 	push	xiy
 	pushw	hl
@@ -2771,11 +2743,8 @@ PerfMode_Handler_EvtB:
 	.byte 0xc7
 	push	xiy
 	pushw	ix
-	.byte 0xc7
-	push	xix
-	.byte 0x89, 0xc7
-	push	xiy
-	.byte 0x89
+	stb_erp a, 60
+	stb_erp a, 61
 	andda8	a, 0xc07f
 	stb_d8	(3520), a
 	push	xhl
@@ -2821,13 +2790,10 @@ PerfMode_Handler_EvtB:
 	or	a, w
 	xor	w, w
 	ld	iy, wa
-	.ascii ":Biw"
-	.byte 0xef
-	nop
-	.byte 0xc3
-	reti
-	cp	xix, xwa
-	ldb	a, 90
+	push xde
+	ld xde, 15693673
+	ld_rrb a, xde, iy
+	pop xde
 	and	a, 3
 	xor	w, w
 	sla	wa, 2
@@ -2866,6 +2832,8 @@ ScoopDisp_DispatchTable_Extended:
 	pop	sr
 	pop	sr
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	pop	sr
 	pop	sr
@@ -2905,6 +2873,8 @@ ScoopDisp_DispatchTable_Extended:
 	call	SoundCtrl_SendCommand
 	.byte 0xc1, 0x88, 0x8d
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ret
 	ldb_d8	a, (3568)
@@ -3011,14 +2981,14 @@ Timer_ModeHandler_0:
 	scf
 	.byte 0xda
 	pushw	ix
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp a, 60
 	ld	(xiy), de
 	.byte 0xd7
 	push	xiz
 	.byte 0x8a, 0xf1, 0x57
 	retd	0x7ec8
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	call	Display_UpdateRegion4
@@ -3142,6 +3112,8 @@ Timer_ModeHandler_0:
 	pushw	wa
 	push	xiz
 	ld	xwa, 0x3e0f54c1
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	stdi8	(3431), 0
 	call	VoiceAlloc_ScoopDisplayProcess
@@ -3197,9 +3169,13 @@ Timer_ParamCompareAlt:
 	call	ScoopParam_ValueTable_0x84
 	xor	a, a
 	call	VoiceSlot_SaveState
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xd1, 0x1a, 0x37, 0x04, 0xd1
 	pop	xix
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	stdi8	(3522), 0
 	call	Timer_ParamCompareAlt_0x2AF
@@ -3262,9 +3238,13 @@ Timer_ParamCompareAlt:
 	popw	de
 	xor	a, a
 	call	VoiceSlot_SaveState
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xd1, 0x1a, 0x37, 0x04, 0xd1
 	pop	xix
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	call	VoiceSlot_CompareAndBranch_0x7
 	call	VoiceSlot_ReadCurrentParams
@@ -3281,6 +3261,8 @@ Timer_ParamCompareAlt:
 	.byte 0xf1
 	pop	xix
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06, 0xf1, 0x1a, 0x37, 0x06
 	xor	a, a
 	call	VoiceSlot_RestoreState
@@ -3322,8 +3304,12 @@ Timer_ParamCompareAlt:
 	.byte 0xc1, 0x53
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04, 0xc1
 	ld	xwa, 0x7eff3f0d
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	call	SysInit_BytecodeBlock_0xE8
@@ -3347,9 +3333,7 @@ Timer_ParamCompareAlt:
 	call	DisplayMode_Handler_3_0x775
 	jp	Timer_ParamCompareAlt_0x231
 	ldb_d8	a, (3531)
-	.byte 0xc1, 0xc1
-	decf
-	.byte 0xf1
+	cpda8 xbc, (3521)
 	jrl	nz, 32
 	.ascii "8;9:<=>"
 	call	VoiceSlot_DispatchRet
@@ -3379,6 +3363,8 @@ Timer_ParamCompareAlt:
 	.byte 0xf1
 	pop	xix
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06, 0xf1, 0x1a, 0x37, 0x06
 	xor	a, a
 	call	VoiceSlot_RestoreState
@@ -3447,6 +3433,8 @@ ToneParam_ModeGuardEntry:
 	.byte 0xc1
 	jr	mi, 13
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	nz, 103
 	call	SerialPort_ModeHandler_0_0x113
@@ -3465,6 +3453,8 @@ ToneParam_ModeGuardEntry:
 	.byte 0xb2, 0xc1, 0xd3
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	call	VoiceSlot_TableSetup
 	call	Display_UpdateRegion5
@@ -3510,6 +3500,8 @@ MemConfig_Handler_5:
 	call	MemConfig_Handler_5_0xCC
 	.byte 0xc1, 0x88, 0x8d
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 144
@@ -3537,6 +3529,8 @@ MemConfig_Handler_5:
 	call	MemConfig_Handler_5_0xE4
 	.byte 0xc1, 0x88, 0x8d
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jp	MemConfig_Handler_5_0x197
 	call	VoiceSlot_FlagCheck
@@ -3597,6 +3591,8 @@ MemConfig_Handler_5:
 	.byte 0xd1
 	pop	xwa
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	call	VoiceSlot_LoadAndDispatch
 	.byte 0xf1
@@ -3632,10 +3628,9 @@ MemConfig_Handler_5:
 	call	VoiceSlot_FlagCheck
 	stb_d8	(3523), a
 	call	VoiceSlot_FlagCheck
-	.byte 0xc1, 0xc3
-	decf
-	stdi8	(4990), 32
-	.byte 0x06
+	cpda8 xbc, (3523)
+	jrl nz, 19
+	ldb w, 6
 	call	VoiceSlot_RetZ
 	call	VoiceSlot_ReadCurrentParams
 	and	a, 240
@@ -3662,6 +3657,8 @@ MemConfig_Handler_5:
 	swi	1
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 20
 	call	MemConfig_Handler_5_0x286
@@ -3768,28 +3765,28 @@ ToneParam_Evt09_BytecodeHandler:
 	.byte 0xc1, 0xd3
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ldb_d8	l, (3429)
 	and	hl, 3
 	sla	hl, 2
 	push	xix
 	ld	xix, ToneParam_HandlerTable_BC
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	call	PortConfig_Handler_0_0xD7
 	.byte 0xf1, 0x54
 	decf
 	.byte 0xb2, 0xc1, 0x88, 0x8d
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jp	ToneParam_Evt09_BytecodeHandler_0xCF
 	call	VoiceSlot_FlagCheck
-	.byte 0xc1, 0x57
-	decf
-	.byte 0xf1
+	cpda8 xbc, (3415)
 	jrl	nz, -15
 	ld	a, b
 	and	a, 15
@@ -3853,15 +3850,12 @@ ToneParam_HandlerTable_BC:
 	nop
 	jp	ToneParam_HandlerTable_BC_0x18
 	ldw_d16	wa, (3418)
-	.byte 0xd1
-	jr	ugt, 13
-	.byte 0xf0
+	cpda16 xwa, (3435)
 	jrl	c, 33
 	call	ToneParam_HandlerTable_BC_0x4DC
 	ldb_d8	a, (3648)
-	.byte 0xc1
-	ld	xbc, 0x0877f10e
-	nop
+	cpda8 xbc, (3649)
+	jrl c, 8
 	call	ToneParam_HandlerTable_BC_0x2EB
 	jp	ToneParam_HandlerTable_BC_0x82
 	call	ToneParam_HandlerTable_BC_0x357
@@ -3895,24 +3889,20 @@ ToneParam_HandlerTable_BC:
 	ldb_d8	a, (3647)
 	stb_d8	(3649), a
 	ldb_d8	a, (3648)
-	.byte 0xc1
-	ld	xbc, 0x137ef10e
-	nop
+	cpda8 xbc, (3649)
+	jrl nz, 19
 	call	ToneParam_HandlerTable_BC_0x4DC
 	ldb	w, 6
 	ld	xiy, 3471
 	call	SysInit_BytecodeBlock_0x486
 	jp	ToneParam_HandlerTable_BC_0x145
 	ldw_d16	wa, (3418)
-	.byte 0xd1
-	jr	ugt, 13
-	.byte 0xf0
+	cpda16 xwa, (3435)
 	jrl	c, 42
 	call	ToneParam_HandlerTable_BC_0x4DC
 	ldb_d8	a, (3648)
-	.byte 0xc1
-	ld	xbc, 0x0877f10e
-	nop
+	cpda8 xbc, (3649)
+	jrl c, 8
 	call	ToneParam_HandlerTable_BC_0x2EB
 	jp	ToneParam_HandlerTable_BC_0x120
 	call	ToneParam_HandlerTable_BC_0x357
@@ -3934,20 +3924,16 @@ ToneParam_HandlerTable_BC:
 	ldb_d8	a, (3647)
 	stb_d8	(3649), a
 	ldb_d8	a, (3648)
-	.byte 0xc1
-	ld	xbc, 0x067ef10e
-	nop
+	cpda8 xbc, (3649)
+	jrl nz, 6
 	ldb	w, 0
 	jp	ToneParam_HandlerTable_BC_0x1A1
 	ldw_d16	wa, (3418)
-	.byte 0xd1
-	jr	ugt, 13
-	.byte 0xf0
+	cpda16 xwa, (3435)
 	jrl	c, 29
 	ldb_d8	a, (3648)
-	.byte 0xc1
-	ld	xbc, 0x0877f10e
-	nop
+	cpda8 xbc, (3649)
+	jrl c, 8
 	call	ToneParam_HandlerTable_BC_0x2EB
 	jp	ToneParam_HandlerTable_BC_0x187
 	call	ToneParam_HandlerTable_BC_0x357
@@ -4036,12 +4022,9 @@ ToneParam_HandlerTable_BC:
 	cp	a, 72
 	jrl	nz, 63
 	call	VoiceSlot_FinalRetZ
-	.byte 0xc7
-	push	xix
-	and	(xbc-55), ix
-	.byte 0x1f, 0xc7
-	push	xix
-	.byte 0x89
+	ldb_erp a, 60
+	and a, 31
+	stb_erp a, 60
 	jrl	nz, 47
 	srl	a, 5
 	and	a, 3
@@ -4070,14 +4053,9 @@ ToneParam_HandlerTable_BC:
 	ldb	w, 255
 	pushw	de
 	xor	de, de
-	.byte 0xd1
-	pop	xde
-	decf
-	swi	2
+	cpdm16 (3418), xde
 	jrl	nz, 9
-	.byte 0xc1, 0x57
-	decf
-	.byte 0xf5
+	cpda8 xiy, (3415)
 	jrl	nz, 2
 	ldb	w, 0
 	popw	de
@@ -4095,9 +4073,8 @@ ToneParam_HandlerTable_BC:
 	cp	w, 255
 	jrl	z, 51
 	ldb_d8	a, (3651)
-	.byte 0xc1
-	ld	xbc, 0xdd77f10e
-	swi	7
+	cpda8 xbc, (3649)
+	jrl c, -35
 	xor	b, b
 	ldb_d8	c, (3648)
 	subda8	c, 3649
@@ -4150,9 +4127,8 @@ ToneParam_HandlerTable_BC:
 	call	MemConfig_Handler_5_0xE4
 	ldb_d8	a, (3649)
 	subda8	a, 3648
-	.byte 0xc1
-	ld	xhl, 0xb87bf10e
-	swi	7
+	cpda8 xbc, (3651)
+	jrl ugt, -72
 	xor	b, b
 	ldb_d8	c, (3648)
 	call	VoiceSlot_ReadCurrentParams
@@ -4219,23 +4195,17 @@ ToneParam_HandlerTable_BC:
 	sla	a, 1
 	add	a, w
 	xor	w, w
-	.byte 0xd8
-	.ascii "a:BP"
-	.byte 0xf2
-	nop
-	nop
-	.byte 0xd3
-	reti
-	or	xwa, xwa
-	ldb	w, 59
+	inc 1, wa
+	push xde
+	ld xde, 62032
+	ld_rrw wa, xde, wa
+	push xhl
 	xor	hl, hl
 	ldb_d8	l, (3822)
 	dec	1, l
 	sla	l, 1
 	ld	xde, 3230
-	.byte 0xf3
-	reti
-	sla	xwa, 80
+	st_rrw wa, xde, hl
 	srl	l, 1
 	ld	xde, 3262
 	.byte 0xf3
@@ -4255,9 +4225,7 @@ ToneParam_HandlerTable_BC:
 	cp	a, 132
 	jrl	z, 21
 	ldw_d16	wa, (3652)
-	.byte 0xd1
-	jr	ugt, 13
-	.byte 0xf0
+	cpda16 xwa, (3435)
 	jrl	c, -167
 	dec	1, wa
 	stda16	(3435), wa
@@ -4294,10 +4262,7 @@ ToneParam_HandlerTable_BC:
 	nop
 	nop
 	jrl	z, 7
-	.byte 0xd1
-	pop	xde
-	decf
-	.byte 0xf3
+	cpda16 xhl, (3418)
 	jrl	z, -42
 	.byte 0xf1, 0x54
 	decf
@@ -4464,15 +4429,14 @@ DisplayMode_Handler_3:
 	.byte 0xbd, 0x01
 	push	sr
 	ldb	w, 32
-	.byte 0xbd
-	pop	sr
-	push	sr
-	ldb	w, 32
+	ldw (xiy+3), 8224
 	pop	xiy
 	ret
 	.byte 0xc1, 0xd3
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	call	VoiceSlot_ReadCurrentParams
 	ld	w, a
@@ -4518,9 +4482,7 @@ DisplayMode_Handler_3:
 	cp	a, 209
 	jrl	z, 16
 	jp	DisplayMode_Handler_3_0x99
-	.byte 0xc1, 0xd0
-	decf
-	.byte 0xf1
+	cpda8 xbc, (3536)
 	jrl	z, -55
 	stdi8	(3536), 255
 	cp	a, 209
@@ -4571,6 +4533,8 @@ DisplayMode_Handler_3:
 	.byte 0xc1
 	jr	mi, 13
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 10
 	call	TempoRingBuf_ReadByte
@@ -4621,15 +4585,10 @@ DisplayMode_Handler_3:
 	ldb_d8	w, (0xfb3c)
 	call	ScoopDisp_BytecodeBlock1_0x32
 	stb_d8	(0x3718), a
-	.byte 0xe7
-	push	xwa
-	.byte 0x9d, 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 2189
-	ldb	a, 231
-	push	xwa
-	.byte 0x8d
+	ldfr_lerp xiy, 56
+	lda_rr xiy, xiy, hl
+	ld a, (xiy+8)
+	ldto_lerp xiy, 56
 	ld	(xix+3), a
 	stb_d8	(0x3717), a
 	ldb_d8	a, (0x342d)
@@ -4700,21 +4659,15 @@ DisplayMode_Handler_3:
 	xor	h, h
 	ld	xiy, 3542
 	ldb_d8	a, (0x342d)
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ld	xbc, 0x21342ec1
-	.byte 0xe7
-	push	xwa
-	.byte 0x9d, 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 2237
-	ld	xbc, 0xcf8d38e7
-	jr	lt, -15
-	.byte 0xd4
-	decf
-	ld	xsp, 0xf70dd5c1
+	st_rrb a, xiy, hl
+	ldb_d8 a, (13358)
+	ldfr_lerp xiy, 56
+	lda_rr xiy, xiy, hl
+	ld (xiy+8), a
+	ldto_lerp xiy, 56
+	inc 1, l
+	stb_d8 (3540), l
+	cpda8 xsp, (3541)
 	jrl	ule, 4
 	stb_d8	(3541), l
 	pop	xiy
@@ -4732,18 +4685,15 @@ DisplayMode_Handler_3:
 	.byte 0xb9, 0xc1, 0xd3
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ret
 	call	ScoopParam_ValueTable_0x29
 	ldb_d8	l, (3533)
 	xor	h, h
-	.byte 0xd1
-	pop	xde
-	decf
-	.byte 0x83, 0xd1
-	pop	xde
-	decf
-	.byte 0xf3
+	addda16 xhl, (3418)
+	cpda16 xhl, (3418)
 	jrl	z, 18
 	push	xhl
 	call	Timer_ParamLoadAndCompare
@@ -4800,6 +4750,8 @@ DisplayMode_Handler_3:
 	.byte 0xc1
 	jr	mi, 13
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	nz, 138
 	call	VoiceSlot_ReadCurrentParams
@@ -4807,10 +4759,9 @@ DisplayMode_Handler_3:
 	cp	a, 144
 	jrl	nz, 125
 	call	VoiceSlot_FlagCheck
-	.byte 0xc1, 0x57
-	decf
-	stdi8	(0x727e), 201
-	.byte 0xd1
+	cpda8 xbc, (3415)
+	jrl nz, 114
+	xor a, a
 	call	VoiceSlot_SaveState
 	lds	de, 2
 	call	VoiceSlot_FinalRetZ_0xB8
@@ -4906,11 +4857,7 @@ DisplayMode_Handler_3:
 	.byte 0xc1, 0xe2, 0xe3
 	push	xiz
 	ldio	14, 241
-	.byte 0xf0
-	ret
-	push	sr
-	swi	7
-	swi	7
+	stiw_d8 14, 255, 255
 	stdi8	(3571), 2
 	call	DisplayMode_Handler_3_0x4C9
 	call	Display_BytecodeBlock_F_0x2A2
@@ -4943,12 +4890,8 @@ DisplayMode_Handler_3:
 	or	a, c
 	and	w, 1
 	ld	bc, wa
-	.byte 0xd1, 0xf0
-	ret
-	xor	(xwa), w
-	.byte 0xcf
-	pushw	wa
-	nop
+	addda16 xwa, (3824)
+	cp wa, 40
 	jrl	nc, 6
 	ld	wa, bc
 	jp	DisplayMode_Handler_3_0x52C
@@ -4984,9 +4927,9 @@ DisplayMode_Handler_3:
 	pushw	hl
 	call	VoiceSlot_FlagCheck
 	popw	hl
-	.byte 0xc1, 0x57
-	decf
-	stdi8	(0x2a7e), 59
+	cpda8 xbc, (3415)
+	jrl nz, 42
+	push xhl
 	ld	xhl, 0x3721
 	stda32	4366, xhl
 	pop	xhl
@@ -5013,9 +4956,9 @@ DisplayMode_Handler_3:
 	pushw	hl
 	call	VoiceSlot_FlagCheck
 	popw	hl
-	.byte 0xc1, 0x57
-	decf
-	stdi8	(0x2a7e), 59
+	cpda8 xbc, (3415)
+	jrl nz, 42
+	push xhl
 	ld	xhl, 0x3721
 	stda32	4366, xhl
 	pop	xhl
@@ -5041,6 +4984,8 @@ DisplayMode_Handler_3:
 	.byte 0xc1
 	jr	mi, 13
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	nz, 52
 	call	VoiceSlot_ReadCurrentParams
@@ -5067,6 +5012,8 @@ DisplayMode_Handler_3:
 	.byte 0xc1
 	jr	mi, 13
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	nz, 52
 	call	VoiceSlot_ReadCurrentParams
@@ -5163,6 +5110,8 @@ DisplayMode_Handler_3:
 	ret
 	.byte 0xf1, 0x57
 	retd	0x7ec8
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x1a
 	nop
 	ldb_d8	l, (3429)
@@ -5171,10 +5120,8 @@ DisplayMode_Handler_3:
 	sla	hl, 2
 	push	xix
 	ld	xix, DMA_ChannelSelect_Table
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 
@@ -5244,6 +5191,8 @@ VoiceSlot_TableSetup:
 	.byte 0xf1, 0xd3
 	decf
 	scc8	z, w
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	jp	VoiceSlot_TableSetup_0xF
@@ -5292,13 +5241,8 @@ VoiceSlot_TableSetup:
 	incf
 	nop
 	nop
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	w, 241
-	.byte 0xe8
-	decf
-	.byte 0x50
+	ld_rrw wa, xix, hl
+	stda16 (3560), wa
 	pop	xix
 	ldb_d8	c, (3559)
 	xor	b, b
@@ -5321,13 +5265,8 @@ VoiceSlot_TableSetup:
 	incf
 	nop
 	nop
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	w, 241
-	.byte 0xea
-	decf
-	.byte 0x50
+	ld_rrw wa, xix, hl
+	stda16 (3562), wa
 	pop	xix
 	call	VoiceSlot_TableSetup_0x12C
 	call	DisplayStr_StyleSectionNames_0x69
@@ -5344,6 +5283,8 @@ VoiceSlot_TableSetup:
 	call	Display_UpdateRegion1
 	.byte 0xf1, 0x57
 	retd	0x7ec8
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	call	Display_UpdateRegion4
@@ -5368,18 +5309,13 @@ VoiceSlot_TableSetup:
 	sla	hl, 1
 	push	xde
 	ld	xde, 3230
-	.byte 0xf3
-	reti
-	sla	xwa, 80
+	st_rrw wa, xde, hl
 	ldb_d8	a, (3564)
 	srl	hl, 1
 	ld	xde, 3262
-	.byte 0xf3
-	reti
-	.byte 0xe8, 0xec
-	ld	xbc, 0x3732445a
-	nop
-	nop
+	st_rrb a, xde, hl
+	pop xde
+	ld xix, 14130
 	.asciz "<D.7"
 	nop
 	xor	wa, wa
@@ -5401,20 +5337,14 @@ VoiceSlot_TableSetup:
 	sla	hl, 1
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3
-	reti
-	sla	xwa, 32
+	ld_rrw wa, xde, hl
 	pop	xde
-	.byte 0xd1, 0xea
-	decf
-	.byte 0xf0
+	cpda16 xwa, (3562)
 	jrl	nz, 213
 	srl	hl, 1
 	push	xde
 	ld	xde, 3262
-	.byte 0xc3
-	reti
-	sla	xwa, 33
+	ld_rrb a, xde, hl
 	pop	xde
 	.byte 0xc1, 0xed
 	decf
@@ -5438,11 +5368,8 @@ VoiceSlot_TableSetup:
 	srl	xiz, 1
 	push	xde
 	ld	xde, 3262
-	.byte 0xc3
-	reti
-	.byte 0xe8
-	swi	0
-	ldb	a, 90
+	ld_rrb a, xde, iz
+	pop xde
 	push	xix
 	call	VoiceSlot_DispatchRet
 	pop	xix
@@ -5454,20 +5381,14 @@ VoiceSlot_TableSetup:
 	sla	hl, 1
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3
-	reti
-	sla	xwa, 32
+	ld_rrw wa, xde, hl
 	pop	xde
-	.byte 0xd1, 0xea
-	decf
-	.byte 0xf0
+	cpda16 xwa, (3562)
 	jrl	nz, 83
 	srl	hl, 1
 	push	xde
 	ld	xde, 3262
-	.byte 0xc3
-	reti
-	sla	xwa, 33
+	ld_rrb a, xde, hl
 	pop	xde
 	.byte 0xc1, 0xed
 	decf
@@ -5517,15 +5438,12 @@ VoiceSlot_TableSetup:
 	div8rr	a, l
 	ld	c, a
 	pop	xix
-	.byte 0xc7
-	push	xix
-	add	(xbc-53), bc
+	ldb_erp a, 60
+	ld a, c
 	scf
 	.byte 0xb4
 	pushw	ix
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp a, 60
 	push	xix
 	jp	VoiceSlot_TableSetup_0x1F2
 	pop	xix
@@ -5551,8 +5469,12 @@ VoiceSlot_TableSetup:
 	stda16	(3660), wa
 	stb_d8	(3666), a
 	jp	VoiceSlot_TableSetup_0x40E
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xd1, 0x1a, 0x37
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	nop
 	jrl	z, 151
@@ -5560,6 +5482,8 @@ VoiceSlot_TableSetup:
 	pop	xix
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	jrl	c, 67
 	ldw_d16	wa, (0x371a)
@@ -5627,11 +5551,8 @@ VoiceSlot_TableSetup:
 	cp	iy, 1000
 	jrl	c, 3
 	ldw	iy, 1000
-	.byte 0xf1
-	popw	ix
-	ret
-	.asciz "UD.7"
-	nop
+	stda16 (3660), iy
+	ld xix, 14126
 	ldb_d8	a, (3666)
 	stb_d8	(3777), a
 	call	VoiceState_DataBlock2_0x561
@@ -5663,6 +5584,8 @@ VoiceSlot_TableSetup:
 	pop	xiy
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	jrl	ugt, 127
 	ldw_d16	wa, (0x371a)
@@ -5697,6 +5620,8 @@ VoiceSlot_TableSetup:
 	pop	xiy
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	jrl	ule, 2
 	ldb	a, 4
@@ -5733,10 +5658,8 @@ VoiceSlot_TableSetup:
 	cps	c, 4
 	jrl	nz, 17
 	ldb_d8	a, (3668)
-	.byte 0xf1, 0xc1
-	ret
-	.asciz "AD67"
-	nop
+	stb_d8 (3777), a
+	ld xix, 14134
 	call	VoiceState_DataBlock2_0x561
 	ret
 	call	MemConfig_Handler_0
@@ -5908,9 +5831,8 @@ VoiceCtrl_BytecodeHandler:
 	cp	a, 72
 	jrl	nz, 82
 	call	VoiceSlot_FinalRetZ
-	.byte 0xc7
-	push	xwa
-	xor	(xbc-55), iz
+	ldb_erp a, 56
+	cps a, 6
 	jrl	z, 5
 	cps	a, 5
 	jrl	nz, 65
@@ -5933,18 +5855,12 @@ VoiceCtrl_BytecodeHandler:
 	nop
 	or	a, 128
 	ldb	c, 7
-	.byte 0xc7
-	push	xix
-	.byte 0x99, 0xc7
-	push	xiy
-	add	(xbc-53), bc
+	ldb_erp a, 60
+	ldb_erp a, 61
+	ld a, c
 	scf
-	.byte 0xc7
-	push	xiy
-	pushw	de
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	xorcfb_erp 61
+	stb_erp a, 60
 	jrl	nc, 23
 	cps	c, 0
 	jrl	z, 6
@@ -5955,29 +5871,20 @@ VoiceCtrl_BytecodeHandler:
 	call	VoiceSlot_RestoreState
 	jp	VoiceCtrl_BytecodeHandler_0xB9
 	ld	b, c
-	.byte 0xc7
-	push	xix
-	add	(xbc-53), bc
+	ldb_erp a, 60
+	ld a, c
 	scf
 	.byte 0xf1, 0xc7
 	decf
 	pushw	de
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp a, 60
 	jrl	c, 13
-	.byte 0xc7
-	push	xwa
-	scc16	nz, iz
-	.byte 0xde
-	swi	7
+	cpib_erp 56, 6
+	jrl nz, -34
 	add	b, 8
 	jp	VoiceCtrl_BytecodeHandler_0x80
-	.byte 0xc7
-	push	xwa
-	scc16	nz, iz
-	pop	sr
-	nop
+	cpib_erp 56, 6
+	jrl nz, 3
 	add	b, 8
 	set	4, b
 	jp	VoiceCtrl_BytecodeHandler_0x9C
@@ -5988,6 +5895,8 @@ VoiceCtrl_CheckAndReset:
 	push	xiz
 	ldb	w, 193
 	ld	xwa, 0x76003f8d
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	call	VoiceCtrl_SendNoteOffSequence
@@ -6290,12 +6199,9 @@ VoiceCtrl_ParamSetupBytecode:
 	nop
 	or	a, 128
 	stb_d8	(3569), a
-	.byte 0xc7
-	push	xix
-	and	(xbc-55), ix
-	.byte 0xf0, 0xc7
-	push	xix
-	.byte 0x89
+	ldb_erp a, 60
+	and a, 240
+	stb_erp a, 60
 	jrl	z, 4
 	call	VoiceCtrl_ParamSetupBytecode_0x303
 	call	VoiceCtrl_ParamSetupBytecode_0x2A6
@@ -6306,18 +6212,12 @@ VoiceCtrl_ParamSetupBytecode:
 	jrl	nz, 81
 	xor	c, c
 	ldb_d8	w, (3569)
-	.byte 0xc7
-	push	xix
-	.byte 0x99, 0xc7
-	push	xiy
-	add	(xwa-53), bc
+	ldb_erp a, 60
+	ldb_erp w, 61
+	ld a, c
 	scf
-	.byte 0xc7
-	push	xiy
-	pushw	de
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	xorcfb_erp 61
+	stb_erp a, 60
 	jrl	nc, 12
 	inc	1, c
 	cp	c, 8
@@ -6331,11 +6231,15 @@ VoiceCtrl_ParamSetupBytecode:
 	jrl	nz, 3
 	add	a, 8
 	ld	xhl, SystemInit_StepHandler_0_0x9
-	.byte 0xc3
-	pop	sr
-	or	xwa, xix
-	ldb	a, 241
-	.ascii "(7A8;9:<=>"
+	ld_rr8b a, xhl, a
+	stb_d8 (14120), a
+	push xwa
+	push xhl
+	push xbc
+	push xde
+	push xix
+	push xiy
+	push xiz
 	call	VoiceCtrl_ParamSetupBytecode_0x5E0
 	.ascii "^]\\ZY[XH"
 	ret
@@ -6344,11 +6248,17 @@ VoiceCtrl_ParamSetupBytecode:
 	.byte 0xd1
 	pop	xde
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04, 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04, 0xd1, 0x1a, 0x37, 0x04, 0xd1
 	pop	xix
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04, 0xd1, 0x57
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	stdi8	(3533), 0
 	ldb_d8	a, (3415)
@@ -6362,8 +6272,12 @@ VoiceCtrl_ParamSetupBytecode:
 	decf
 	.byte 0x04, 0xd1, 0x91
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04, 0xd1, 0x93
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	stdi8	(0x7f42), 255
 	call	DisplayMode_Handler_3_0x30C
@@ -6393,9 +6307,13 @@ VoiceCtrl_ParamSetupBytecode:
 	ei	0xf1
 	pop	xix
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1a
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06, 0xf1, 0x1a, 0x37, 0x06, 0xf1
 	pop	xde
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x06
 	ldb	a, 1
 	call	VoiceSlot_RestoreState
@@ -6599,10 +6517,8 @@ VoiceCtrl_ParamSetupBytecode:
 	ldb	c, 255
 	push	xix
 	ld	xix, 0xf1a0
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	l, 92
+	ld_rrb l, xix, hl
+	pop xix
 	cp	l, 16
 	jrl	z, 6
 	cp	l, 15
@@ -6618,10 +6534,8 @@ VoiceCtrl_ParamSetupBytecode:
 	ld	iy, wa
 	push	xde
 	ld	xde, SerialPort_ModeSelect_Table
-	.byte 0xe3
-	reti
-	cp	xix, xwa
-	ldb	e, 90
+	ld_rrl xiy, xde, iy
+	pop xde
 	call	(xiy)
 	pop	xhl
 	ret
@@ -6721,10 +6635,8 @@ SerialPort_ModeHandler_0:
 	ret
 	ldb_d8	c, (3533)
 	xor	b, b
-	.byte 0xd1
-	pop	xde
-	decf
-	xor	(xbc-53), w
+	adddm16 (3418), xbc
+	cps c, 0
 	jrl	z, 25
 	push	xwa
 	push	xhl
@@ -6819,6 +6731,8 @@ ScoopParam_ValueTable:
 	ldw	wa, 16384
 	nop
 	jr	f, 0
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc0, 0x00, 0x80, 0x01
 	nop
 	pop	sr
@@ -6857,6 +6771,8 @@ ScoopParam_ValueTable:
 	call	15734714
 	.byte 0xf1, 0x54, 0x0d, 0xb7
 	call	15704458
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc1, 0x88, 0x8d, 0x3e, 0x01
 	pop	xiz
 	pop	xiy
@@ -6925,8 +6841,12 @@ ScoopParam_ValueTable:
 	cp	a, 255
 	jrl	nz, 38
 	jp	15704150
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x85, 0x3e, 0x04
 	ld	(xiy+2), 152
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x8d, 0x02, 0x3c, 0x7f
 	ld	(xiy+3), 1
 	ld	(xiy+4), e
@@ -6947,9 +6867,13 @@ ScoopParam_ValueTable:
 	jp	15704150
 	ret
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	push	sr
 	pop	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	halt
 	ei	0x07
@@ -6972,6 +6896,8 @@ ScoopParam_ValueTable:
 	pop	sr
 	pop	sr
 	pop	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	stdi8	4346, 0
 	ldb_d8	a, 36150
@@ -7069,11 +6995,17 @@ ScoopParam_ValueTable:
 	jp	15704752
 	call	15707409
 	call	15706217
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jrl	z, 4
 	call	16281206
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc1, 0x6e, 0x34, 0x3c, 0xef, 0xc1, 0x5b, 0x04, 0x3c, 0xfc
 	call	15717953
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc1, 0xa7, 0x28, 0x3e, 0x04
 	ld	xiy, 3411
 	.byte 0x85, 0x3e, 0x08, 0x85, 0x3c, 0xdf
@@ -7310,10 +7242,7 @@ PortConfig_SetupBytecode:
 	ld	xix, 0xf1a0
 	.byte 0xf3
 	reti
-	.byte 0xf0
-	swi	0
-	nop
-	decf
+	stib_d8 248, 13
 	pop	xix
 	ret
 	ldb_d8	a, (3429)
@@ -7322,10 +7251,8 @@ PortConfig_SetupBytecode:
 	ld	hl, wa
 	push	xix
 	ld	xix, PortConfig_Select_Table
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 PortConfig_Select_Table:
@@ -7337,6 +7264,8 @@ PortConfig_Handler_1:
 	.byte 0xc1, 0xd3
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	call	VoiceSlot_TableSetup
 	call	Timer_ModeHandler_0_0x13
@@ -7459,19 +7388,12 @@ PortConfig_Handler_0:
 	ld	xix, 3230
 	.byte 0xf3
 	reti
-	.byte 0xf0
-	swi	0
-	push	sr
-	swi	7
-	swi	7
+	stiw_d8 248, 255, 255
 	srl	iz, 1
 	ld	xix, 3262
 	.byte 0xf3
 	reti
-	.byte 0xf0
-	swi	0
-	nop
-	halt
+	stib_d8 248, 5
 	pop	xix
 	jp	PortConfig_Handler_0_0x16E
 	push	xde
@@ -7485,19 +7407,12 @@ PortConfig_Handler_0:
 	ldb	b, 29
 	.byte 0xb4, 0xc6, 0xef
 	ld	xix, 3230
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	.byte 0x52
+	st_rrw de, xix, iz
 	srl	iz, 1
 	ld	xix, 3262
 	.byte 0xf3
 	reti
-	.byte 0xf0
-	swi	0
-	nop
-	halt
+	stib_d8 248, 5
 	pop	xix
 	pop	xde
 	ret
@@ -7522,23 +7437,26 @@ PortConfig_Handler_0:
 	.byte 0x41
 	ret
 PortConfig_DataTable_A:
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0x01
 	.fill 8, 1, 0x01
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0x01, 0x01
 	nop
 	nop
 	push	sr
 	pop	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
 	call	VoiceSlot_ComputeWordIndex
 	srl	xiz, 1
 	push	xix
 	ld	xix, 0xf1a0
-	.byte 0xc3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	a, 92
+	ld_rrb a, xix, iz
+	pop xix
 	cp	a, 15
 	jrl	z, 47
 	cp	a, 16
@@ -7565,6 +7483,8 @@ PortConfig_DataTable_A:
 PortConfig_DataTable_B:
 	nop
 	push	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	reti
 	ldio	9, 10
@@ -7588,13 +7508,12 @@ PortConfig_DataTable_B:
 	ld	xhl, PortConfig_DataTable_B_0x44
 	ldb_d8	a, (3429)
 	and	a, 3
-	.byte 0xc3
-	pop	sr
-	or	xwa, xix
-	ldb	a, 241
-	.byte 0xef
-	decf
-	ld	xbc, 14
+	ld_rr8b a, xhl, a
+	stb_d8 (3567), a
+	ret
+	nop
+	nop
+	nop
 	incf
 	ret
 ClockConfig_Select_Table:
@@ -7613,9 +7532,13 @@ ClockConfig_Handler_0:
 	swi	5
 	ret
 	ret
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	push	sr
 	push	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04, 0xc1
 	jr	mi, 13
 	push	xsp
@@ -7730,6 +7653,8 @@ ClockConfig_Handler_0:
 	swi	6
 	.byte 0xf1, 0x54
 	retd	0x76c8
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	call	VoiceCtrl_SendNoteOffSequence
@@ -7776,6 +7701,8 @@ ClockConfig_Handler_0:
 	.byte 0xc1, 0xa5
 	pushw	wa
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	stdi8	(4596), 0
 	call	BitMapOut_RenderDisplay
@@ -7843,10 +7770,7 @@ ClockConfig_Handler_0:
 	ld	xix, 0xf1a0
 	.byte 0xf3
 	reti
-	.byte 0xf0
-	swi	0
-	nop
-	ret
+	stib_d8 248, 14
 	pop	xix
 	ret
 
@@ -7962,9 +7886,7 @@ SysEx_BytecodeDispatcher:
 	pop	xhl
 	push	xde
 	ld	xde, SysInit_BytecodeBlock_0x6
-	.byte 0xc3
-	reti
-	sla	xwa, 32
+	ld_rrb w, xde, hl
 	pop	xde
 	stb_d8	(3425), w
 	stdi8	(3432), 1
@@ -7988,10 +7910,8 @@ SysEx_BytecodeDispatcher:
 	sla	hl, 2
 	push	xix
 	ld	xix, MemoryConfig_Handler_Table
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	jp	SysEx_BytecodeDispatcher_0xDB
 	call	ScoopParam_ValueTable_0x4E
@@ -8160,6 +8080,8 @@ MemConfig_Handler_0:
 	ldb	w, 255
 	.byte 0xc1, 0x88, 0x8d
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jp	MemConfig_Handler_0_0x63
 	call	VoiceSlot_LoadAndDispatch
@@ -8208,6 +8130,8 @@ MemConfig_Handler_1:
 	ldb	w, 255
 	.byte 0xc1, 0x88, 0x8d
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jp	MemConfig_Handler_1_0x8A
 	ldb	w, 129
@@ -8218,22 +8142,16 @@ MemConfig_Handler_1:
 	call	VoiceSlot_ComputeWordIndex
 	push	xix
 	ld	xix, 3230
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	e, 92
+	ld_rrw iy, xix, iz
+	pop xix
 	cp	iy, 0xffff
 	jrl	nz, 4
 	jp	MemConfig_Handler_1_0x13D
 	srl	iz, 1
 	push	xix
 	ld	xix, 3262
-	.byte 0xc3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	a, 92
+	ld_rrb a, xix, iz
+	pop xix
 	xor	w, w
 	inc	1, wa
 	cp	wa, 255
@@ -8242,27 +8160,17 @@ MemConfig_Handler_1:
 	ld	xix, 0xf218
 	.byte 0xf3
 	reti
-	.byte 0xf0
-	swi	0
-	nop
-	halt
+	stib_d8 248, 5
 	sla	iz, 1
 	ld	xix, 3230
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	e, 92
+	ld_rrw iy, xix, iz
+	pop xix
 	call	VoiceSlot_UpdateCurrentPointer
 	ldda32	xhl, (4349)
 	ld	iy, (xhl+3)
 	push	xix
 	ld	xix, 0xf1f8
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	.byte 0x55
+	st_rrw iy, xix, iz
 	pop	xix
 	cp	iy, 0xffff
 	jrl	z, 69
@@ -8285,20 +8193,9 @@ MemConfig_Handler_1:
 	incf
 	nop
 	nop
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	e, 68
-	swi	0
-	.byte 0xf1
-	nop
-	nop
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	.byte 0x55
+	ld_rrw iy, xix, iz
+	ld xix, 61944
+	st_rrw iy, xix, iz
 	pop	xix
 	jp	MemConfig_Handler_1_0xF8
 	ret
@@ -8474,25 +8371,21 @@ MemConfig_Handler_3:
 	cpda16	xwa, (14106)
 	jrl	nz, 73
 	ldw_d16	wa, (3818)
-	.byte 0xd1
-	pop	xwa
-	decf
-	.byte 0xf0
+	cpda16 xwa, (3416)
 	jrl	nz, 24
 	ldb_d8	a, (3820)
-	.byte 0xc1, 0x57
-	decf
-	stdi8	(0x4476), 29
-	.byte 0xc8
-	srl	xwa, 200
-	scc16	z, wa
-	push	xhl
-	nop
+	cpda8 xbc, (3415)
+	jrl z, 68
+	call 15722696
+	cps w, 0
+	jrl z, 59
 	jp	MemConfig_Handler_3_0x8E
 	.byte 0xc1
 	pop	xiy
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	jrl	ule, 18
 	ldb_d8	a, (3821)
@@ -8519,10 +8412,8 @@ MemConfig_Handler_3:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_JumpTable_Main
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 SndDispatch_JumpTable_Main:
@@ -8548,10 +8439,8 @@ SndDispatch_Handler_1:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_SubTable_1
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 SndDispatch_SubTable_1:
@@ -8572,10 +8461,8 @@ SndDispatch_Handler_2:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_SubTable_2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 SndDispatch_SubTable_2:
@@ -8622,10 +8509,8 @@ SndDispatch_Handler_3:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_SubTable_4
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 SndDispatch_SubTable_4:
@@ -8646,10 +8531,8 @@ SndDispatch_Handler_4:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_Handler_4_0x25
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 	ldio	179, 239
@@ -8840,9 +8723,7 @@ SndDispatch_ProcessCommand:
 	cp	a, 144
 	jrl	nz, 20
 	call	VoiceSlot_FlagCheck
-	.byte 0xc1, 0xc6
-	decf
-	.byte 0xf1
+	cpda8 xbc, (3526)
 	jrl	z, -31
 	stdi8	(3415), 0
 	jp	SndDispatch_ProcessCommand_0x265
@@ -8861,10 +8742,8 @@ SndDispatch_ProcessCommand:
 	stdi8	(3580), 1
 	ldb_d8	a, (3579)
 	exts	wa
-	.byte 0xd1
-	pop	xwa
-	decf
-	add	(xwa-40), b
+	adddm16 (3416), xwa
+	ld de, wa
 	call	VoiceSlot_FinalRetZ_0xB8
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 130
@@ -8965,10 +8844,9 @@ MemConfig_Handler_4:
 	jrl	nz, -26
 	jp	MemConfig_Handler_4_0x7C
 	ldb_d8	a, (3659)
-	.byte 0xc1, 0x57
-	decf
-	stdi8	(6270), 33
-	push	sr
+	cpda8 xbc, (3415)
+	jrl nz, 24
+	ldb a, 2
 	call	VoiceState_DataBlock1
 	jp	MemConfig_Handler_4_0x94
 	stdi8	(3415), 0
@@ -9019,9 +8897,8 @@ MemConfig_Handler_4:
 	cp	a, 144
 	jrl	nz, 19
 	call	VoiceSlot_FlagCheck
-	.byte 0xc1
-	anddm8_24	(0x76f10d), c
-	swi	7
+	cpda8 xbc, (3522)
+	jrl z, -53
 	call	VoiceSlot_LoadAndDispatch
 	jp	MemConfig_Handler_4_0x158
 	cp	a, 129
@@ -9191,10 +9068,8 @@ SystemInit_StepHandler_0:
 	extz	xhl
 	push	xix
 	ld	xix, SystemInit_StepHandler_0_0xBD
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	b, 92
+	ld_rrw de, xix, hl
+	pop xix
 	xor	a, a
 	stb_d8	(3437), a
 	stb_d8	(3438), a
@@ -9210,10 +9085,7 @@ SystemInit_StepHandler_0:
 	stb_d8	(3438), a
 	ldb_d8	a, (0x8d44)
 	stb_d8	(4391), a
-	.byte 0xbe
-	nop
-	nop
-	.byte 0x90
+	ld (xiz+256), 144
 	ldb_d8	a, (3415)
 	ld	(xiz+1), a
 	ld	a, (xiy)
@@ -9226,6 +9098,8 @@ SystemInit_StepHandler_0:
 	jp	SystemInit_StepHandler_0_0x7A
 	ret
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	jr	f, 4
 	nop
@@ -9235,8 +9109,12 @@ SystemInit_StepHandler_0:
 	push	sr
 	jr	f, 2
 	ldw	wa, 0x9001
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jr	f, 1
 	ldw	wa, 0x3000
@@ -9244,10 +9122,14 @@ SystemInit_StepHandler_0:
 SysInit_BytecodeBlock:
 	.byte 0x50
 	ld	xwa, 0x102030
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	push	sr
 	pop	sr
 	halt
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01, 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04, 0x06
 	ldb_d8	b, (0xcef1)
 	sla	b, 1
@@ -9274,9 +9156,7 @@ SysInit_BytecodeBlock:
 	sla	hl, 2
 	push	xde
 	ld	xde, SystemInit_StepHandler_0_0xBD
-	.byte 0xf3
-	reti
-	sla	xwa, 50
+	lda_rr xde, xde, hl
 	ld	bc, (xde+2)
 	pop	xde
 	ld	l, c
@@ -9361,10 +9241,7 @@ SysInit_BytecodeBlock:
 	jrl	z, 4
 	jp	SysInit_BytecodeBlock_0x154
 	xor	wa, wa
-	.byte 0xd1
-	pop	xwa
-	decf
-	swi	0
+	cpdm16 (3416), xwa
 	jrl	nz, 7
 	cpdm8	3415, a
 	jrl	z, 13
@@ -9381,10 +9258,7 @@ SysInit_BytecodeBlock:
 	jrl	z, 4
 	jp	SysInit_BytecodeBlock_0x179
 	xor	wa, wa
-	.byte 0xd1
-	pop	xwa
-	decf
-	swi	0
+	cpdm16 (3416), xwa
 	jrl	nz, 9
 	cpdm8	3415, a
 	jrl	nz, 2
@@ -9397,10 +9271,7 @@ SysInit_BytecodeBlock:
 	jrl	z, 4
 	jp	SysInit_BytecodeBlock_0x1A0
 	xor	wa, wa
-	.byte 0xd1
-	pop	xwa
-	decf
-	swi	0
+	cpdm16 (3416), xwa
 	jrl	nz, 9
 	cpdm8	3415, a
 	jrl	nz, 2
@@ -9417,20 +9288,9 @@ SysInit_BytecodeBlock:
 	call	VoiceSlot_ComputeWordIndex
 	push	xix
 	ld	xix, 0xf1f8
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	w, 68
-	.byte 0x9e
-	incf
-	nop
-	nop
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	.byte 0x50
+	ld_rrw wa, xix, iz
+	ld xix, 3230
+	st_rrw wa, xix, iz
 	srl	xiz, 1
 	ld	xix, 0xf218
 	.byte 0xc3
@@ -9495,19 +9355,12 @@ SysInit_BytecodeBlock:
 	call	VoiceSlot_ComputeWordIndex
 	push	xix
 	ld	xix, 3230
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	.byte 0x52
+	st_rrw de, xix, iz
 	srl	xiz, 1
 	ld	xix, 3262
 	.byte 0xf3
 	reti
-	.byte 0xf0
-	swi	0
-	nop
-	halt
+	stib_d8 248, 5
 	pop	xix
 	ldb	a, 1
 	call	VoiceSlot_SaveState
@@ -9646,15 +9499,12 @@ SysInit_BytecodeBlock:
 	ret
 	pushw	bc
 	xor	c, c
-	.byte 0xc7
-	push	xix
-	add	(xbc-53), bc
+	ldb_erp a, 60
+	ld a, c
 	scf
 	.byte 0xb5
 	pushw	de
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp a, 60
 	jrl	nc, 15
 	inc	1, c
 	cp	c, 8
@@ -9668,30 +9518,24 @@ SysInit_BytecodeBlock:
 	push	xiy
 	pushw	bc
 	xor	c, c
-	.byte 0xc7
-	push	xix
-	add	(xbc-53), bc
+	ldb_erp a, 60
+	ld a, c
 	scf
 	.byte 0xb5
 	pushw	de
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp a, 60
 	jrl	nc, 42
 	inc	1, c
 	cp	c, 8
 	jrl	c, -22
 	xor	c, c
 	inc	1, xiy
-	.byte 0xc7
-	push	xix
-	add	(xbc-53), bc
+	ldb_erp a, 60
+	ld a, c
 	scf
 	.byte 0xb5
 	pushw	de
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp a, 60
 	jrl	nc, 22
 	inc	1, c
 	cp	c, 8
@@ -9710,9 +9554,13 @@ SysInit_BytecodeBlock:
 	call	SysInit_BytecodeBlock_0x499
 	.byte 0xc1, 0x88, 0x8d
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0xc1
 	jr	gt, 38
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ret
 	pushw	bc
@@ -9722,55 +9570,27 @@ SysInit_BytecodeBlock:
 	call	VoiceSlot_ComputeWordIndex
 	ld	xix, 0xf1f8
 	xor	b, b
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	e, 221
-	.byte 0xcf
-	swi	7
-	swi	7
+	ld_rrw iy, xix, iz
+	cp iy, 65535
 	jrl	z, 358
 	stda16	(0x28ba), iy
 	srl	xiz, 1
-	.byte 0xe7
-	push	xwa
-	.byte 0x9c, 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	ldw	ix, 8332
-	ldb	a, 231
-	push	xwa
-	.byte 0x8c
+	ldfr_lerp xix, 56
+	lda_rr xix, xix, iz
+	ld a, (xix+32)
+	ldto_lerp xix, 56
 	xor	w, w
 	sla	iz, 1
 	stda16	(0x28bc), wa
 	ld	xix, 3230
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	b, 218
-	.byte 0xcf
-	swi	7
-	swi	7
+	ld_rrw de, xix, iz
+	cp de, 65535
 	jrl	nz, 30
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	.byte 0x55
+	st_rrw iy, xix, iz
 	srl	iz, 1
-	.byte 0xe7
-	push	xwa
-	.byte 0x9c, 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	ldw	ix, 8380
-	nop
-	halt
+	ldfr_lerp xix, 56
+	lda_rr xix, xix, iz
+	ld (xix+32), 5
 	.byte 0xe7
 	push	xwa
 	or	(xix-34), d
@@ -9792,29 +9612,17 @@ SysInit_BytecodeBlock:
 	stda16	(0x28b8), iy
 	ld	xix, 0xf1f8
 	srl	iz, 1
-	.byte 0xe7
-	push	xwa
-	.byte 0x9c, 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	ldw	ix, 8332
-	ldb	a, 231
-	push	xwa
-	.byte 0x8c
+	ldfr_lerp xix, 56
+	lda_rr xix, xix, iz
+	ld a, (xix+32)
+	ldto_lerp xix, 56
 	xor	w, w
 	sla	iz, 1
 	add	wa, bc
 	cp	wa, 255
 	jrl	ugt, 62
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	e, 241
-	.byte 0x9f
-	pushw	wa
-	.byte 0x55
+	ld_rrw iy, xix, iz
+	stda16 (10399), iy
 	stda16	(0x28b6), wa
 	srl	iz, 1
 	.byte 0xe7
@@ -9861,11 +9669,7 @@ SysInit_BytecodeBlock:
 	.byte 0xec, 0x01
 	call	VoiceSlot_UpdateCurrentPointer
 	ldda32	xhl, (4349)
-	.byte 0xbb
-	pop	sr
-	push	sr
-	swi	7
-	swi	7
+	ldw (xhl+3), 65535
 	stda16	(0x289f), iy
 	ld	wa, iy
 	pushw	de
@@ -9883,9 +9687,12 @@ SysInit_BytecodeBlock:
 	ld	iy, de
 	call	VoiceSlot_UpdateCurrentPointer
 	ldda32	xhl, (4349)
-	.byte 0xbb
-	pop	sr
-	.ascii "PJ*);>"
+	ld (xhl+3), wa
+	popw de
+	pushw de
+	pushw bc
+	push xhl
+	push xiz
 	call	Scoop_EventHandler_Scroll
 	pop	xiz
 	pop	xhl
@@ -9912,21 +9719,11 @@ SysInit_BytecodeBlock:
 	pop	xix
 	cp	w, 255
 	jrl	z, -43
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	.byte 0x55
+	st_rrw iy, xix, iz
 	srl	iz, 1
-	.byte 0xe7
-	push	xwa
-	.byte 0x9c, 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	ldw	ix, 8380
-	nop
-	halt
+	ldfr_lerp xix, 56
+	lda_rr xix, xix, iz
+	ld (xix+32), 5
 	.byte 0xe7
 	push	xwa
 	or	(xix-34), d
@@ -9968,11 +9765,7 @@ SysInit_BytecodeBlock:
 	push	sr
 	nop
 	nop
-	.byte 0xbb
-	pop	sr
-	push	sr
-	swi	7
-	swi	7
+	ldw (xhl+3), 65535
 	jp	SysInit_BytecodeBlock_0x4AF
 	ret
 
@@ -10064,25 +9857,13 @@ VoiceSlot_RetZ:
 	ld	c, w
 	call	VoiceSlot_ComputeWordIndex
 	ld	xix, 3230
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	e, 241
-	.byte 0x9f
-	pushw	wa
-	.byte 0x55
+	ld_rrw iy, xix, iz
+	stda16 (10399), iy
 	srl	iz, 1
-	.byte 0xe7
-	push	xwa
-	.byte 0x9c, 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	ldw	ix, 8332
-	ldb	a, 231
-	push	xwa
-	.byte 0x8c
+	ldfr_lerp xix, 56
+	lda_rr xix, xix, iz
+	ld a, (xix+32)
+	ldto_lerp xix, 56
 	xor	w, w
 	sla	iz, 1
 	stda16	(0x28b6), wa
@@ -10116,8 +9897,14 @@ VoiceSlot_RetZ:
 	.byte 0x8c
 	xor	w, w
 	sla	iz, 1
-	.byte 0xf1, 0xb8
-	.ascii "(P8;9:<=>"
+	stda16 (10424), wa
+	push xwa
+	push xhl
+	push xbc
+	push xde
+	push xix
+	push xiy
+	push xiz
 	call	Scoop_EventHandler_SpecialMode
 	pop	xiz
 	.ascii "]\\ZY[X"
@@ -10144,11 +9931,7 @@ VoiceSlot_RetZ:
 	call	VoiceSlot_UpdateCurrentPointer
 	ldda32	xhl, (4349)
 	ld	de, (xhl+1)
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	.byte 0x52
+	st_rrw de, xix, iz
 	ld	iy, de
 	call	VoiceSlot_UpdateCurrentPointer
 	ldda32	xhl, (4349)
@@ -10199,6 +9982,8 @@ VoiceSlot_CompareAndBranch:
 	.byte 0xd1
 	pop	xwa
 	decf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	call	VoiceSlot_CompareAndBranch
 	.byte 0xf1
@@ -10452,27 +10237,19 @@ VoiceSlot_FinalRetZ:
 	extz	xiz
 	push	xix
 	ld	xix, 3230
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	e, 92
+	ld_rrw iy, xix, iz
+	pop xix
 	call	VoiceSlot_UpdateCurrentPointer
 	srl	iz, 1
 	push	xix
 	ld	xix, 3262
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	e, 92
+	ld_rrw iy, xix, iz
+	pop xix
 	and	iy, 255
 	sla	iz, 1
 	ldda32	xhl, (4349)
-	.byte 0xc3
-	reti
-	cp	xix, xix
-	ldb	a, 74
+	ld_rrb a, xhl, iy
+	popw de
 	pop	xhl
 	ret
 	ld	d, w
@@ -10484,39 +10261,36 @@ VoiceSlot_FinalRetZ:
 	ld	a, e
 	lds	de, 1
 	call	VoiceSlot_FinalRetZ_0xB8
-	.ascii "^]\\ZY[X¡"
-	.byte 0xc4
-	decf
-	ldb	a, 14
+	pop xiz
+	pop xiy
+	pop xix
+	pop xde
+	pop xbc
+	pop xhl
+	pop xwa
+	ldb_d8 a, (3524)
+	ret
 	call	VoiceSlot_ComputeWordIndex
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3
-	reti
-	.byte 0xe8
-	swi	0
-	ldb	e, 90
+	ld_rrw iy, xde, iz
+	pop xde
 	call	VoiceSlot_UpdateCurrentPointer
 	srl	iz, 1
 	push	xde
 	ld	xde, 3262
-	.byte 0xd3
-	reti
-	.byte 0xe8
-	swi	0
-	ldb	e, 90
+	ld_rrw iy, xde, iz
+	pop xde
 	sla	iz, 1
 	and	iy, 255
 	ldda32	xhl, (4349)
-	.byte 0xf3
-	reti
-	cp	xix, xix
-	ld	xwa, 0x0eeec10e
-	ldb	a, 201
-	jr	ge, -15
-	.byte 0xee
-	decf
-	ld	xbc, 0xd6ce8fc9
+	st_rrb w, xhl, iy
+	ret
+	ldb_d8 a, (3822)
+	dec 1, a
+	stb_d8 (3566), a
+	ld l, a
+	xor h, h
 	sla	a, 1
 	ld	c, a
 	xor	b, b
@@ -10534,25 +10308,18 @@ VoiceSlot_FinalRetZ:
 	nop
 	cp	de, 255
 	jrl	ugt, 56
-	.byte 0xd3
-	reti
-	.byte 0xf0
-	swi	0
-	ldb	a, 68
-	swi	0
-	.byte 0xf1
-	nop
-	nop
+	ld_rrw bc, xix, iz
+	ld xix, 61944
 	.byte 0xd3
 	reti
 	.byte 0xf0
 	swi	0
 	stdi8	(3958), 56
 	ld	xwa, 3262
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xec
-	ld	xiy, 0x0e002058
+	st_rrb e, xwa, hl
+	pop xwa
+	ldb w, 0
+	ret
 	.byte 0xe7
 	push	xwa
 	.byte 0x9c, 0xf3
@@ -10571,8 +10338,8 @@ VoiceSlot_FinalRetZ:
 	ldw	bc, 251
 	ld	qwa, de
 	div	xwa, xbc
-	.byte 0xd7, 0xe2
-	incm8	1, (xde-40)
+	ld de, qwa
+	inc 1, wa
 	ld	bc, wa
 	.byte 0xd3
 	reti
@@ -10602,11 +10369,7 @@ VoiceSlot_FinalRetZ:
 	.byte 0xf5
 	jrl	z, 47
 	ld	xix, 3230
-	.byte 0xf3
-	reti
-	.byte 0xf0
-	swi	0
-	.byte 0x55
+	st_rrw iy, xix, iz
 	srl	iz, 1
 	.byte 0xe7
 	push	xwa
@@ -10672,8 +10435,8 @@ VoiceSlot_FinalRetZ:
 	jr	lt, -47
 	.byte 0xe6
 	incf
-	.byte 0xf0
-	jrl	nz, -36
+	jp_dd8 12, 126
+	swi 7
 	dec	1, wa
 	call	VoiceSlot_UpdateCurrentPointer
 	ldda32	xhl, (4349)
@@ -10700,8 +10463,7 @@ VoiceSlot_FinalRetZ:
 	ldda32	xhl, (4349)
 	ld	(xhl+1), ix
 	inc	1, wa
-	.byte 0xd1
-	ldw	bc, 0x88f2
+	adddm16 (62001), xwa
 	jp	VoiceSlot_FinalRetZ_0x286
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	ix, iy
@@ -10794,6 +10556,8 @@ VoiceSlot_IndexDone:
 	jp	VoiceSlot_IndexDone_0xA3
 	.byte 0x95
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	nop
 	jrl	z, 13
@@ -10880,6 +10644,8 @@ VoiceSlot_StatusRet:
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	nz, 8
 	call	DisplayStr_BytecodeBlock_B_0x4
@@ -11066,13 +10832,9 @@ VoiceSlot_StatusRet:
 	push	sr
 	or	a, h
 	stb_d8	(4341), a
-	.byte 0xc7
-	push	xix
-	and	(xbc-55), ix
-	reti
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	ldb_erp a, 60
+	and a, 7
+	stb_erp a, 60
 	jrl	z, 8
 	call	StringData_EffectLabel_0x1DD
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -11080,12 +10842,9 @@ VoiceSlot_StatusRet:
 	jrl	z, 8
 	call	StringData_APCModeNames_0x90
 	jp	VoiceSlot_StatusRet_0x8A0
-	.byte 0xc7
-	push	xix
-	and	(xbc-55), ix
-	.byte 0xe0, 0xc7
-	push	xix
-	.byte 0x89
+	ldb_erp a, 60
+	and a, 224
+	stb_erp a, 60
 	jrl	z, 4
 	call	StringData_APCModeNames_0xE7
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -11113,9 +10872,7 @@ VoiceSlot_StatusRet:
 	call	StringData_APCModeNames_0x1CA
 	jp	VoiceSlot_StatusRet_0x8A0
 	jp	VoiceSlot_StatusRet_0x1C5
-	.byte 0xc7
-	push	xwa
-	.byte 0x99
+	ldb_erp a, 56
 	stb_d8	(4338), a
 	call	VoiceSlot_FinalRetZ
 	ld	c, a
@@ -11135,30 +10892,22 @@ VoiceSlot_StatusRet:
 	nop
 	or	a, 128
 	ld	xiy, 0x3728
-	.byte 0xc7
-	push	xix
-	and	(xbc-55), ix
-	.byte 0xc0, 0xc7
-	push	xix
-	.byte 0x89
+	ldb_erp a, 60
+	and a, 192
+	stb_erp a, 60
 	jrl	nz, 28
-	.byte 0xc7
-	push	xix
-	and	(xbc-55), ix
-	ldw	wa, 0x3cc7
-	.byte 0x89
+	ldb_erp a, 60
+	and a, 48
+	stb_erp a, 60
 	jrl	nz, 60
 	bit	2, a
 	jrl	nz, 86
 	bit	3, a
 	jrl	nz, 102
 	jp	VoiceSlot_StatusRet_0x1C5
-	.byte 0xc7
-	push	xix
-	and	(xhl-53), ix
-	.byte 0xc0, 0xc7
-	push	xix
-	.byte 0x8b
+	ldb_erp c, 60
+	and c, 192
+	stb_erp c, 60
 	jrl	z, 24
 	bit	6, c
 	jrl	z, 7
@@ -11300,14 +11049,10 @@ VoiceSlot_StatusRet:
 	jrl	z, 29
 	cps	l, 3
 	jrl	nz, 203
-	.byte 0xc7
-	push	xix
-	.byte 0x99
+	ldb_erp a, 60
 	ldb_d8	a, (4341)
 	and	a, 1
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp a, 60
 	jrl	z, 187
 	call	StringData_APCModeNames_0x4D8
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -11451,14 +11196,10 @@ VoiceSlot_StatusRet:
 	jp	VoiceSlot_StatusRet_0x8A0
 	call	StringData_EffectLabel_0x67
 	jp	VoiceSlot_StatusRet_0x8A0
-	.byte 0xc7
-	push	xix
-	.byte 0x99
+	ldb_erp a, 60
 	ldb_d8	a, (4341)
 	and	a, 192
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp a, 60
 	jrl	z, -1209
 	call	StringData_APCModeNames_0x464
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -11644,10 +11385,8 @@ VoiceSlot_StatusRet:
 	extz	xhl
 	push	xix
 	ld	xix, VoiceState_SaveAndRestore_0x9
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 VoiceState_SaveAndRestore:
@@ -11663,12 +11402,16 @@ VoiceState_SaveAndRestore:
 	halt
 	halt
 	retd	1536
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	halt
 	pop	sr
 	reti
 	push	sr
 	reti
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	reti
 	reti
@@ -11766,24 +11509,14 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	ld	xix, xwa
 	call	VoiceSlot_ComputeWordIndex
 	ld	xiy, 3230
-	.byte 0xd3
-	reti
-	.byte 0xf4
-	swi	0
-	ldb	w, 148
-	swi	0
+	ld_rrw wa, xiy, iz
+	cp (xix), wa
 	jrl	nz, 44
 	srl	iz, 1
-	.byte 0xe7
-	push	xwa
-	.byte 0x9d, 0xf3
-	reti
-	.byte 0xf4
-	swi	0
-	ldw	iy, 8333
-	ldb	a, 231
-	push	xwa
-	.byte 0x8d
+	ldfr_lerp xiy, 56
+	lda_rr xiy, xiy, iz
+	ld a, (xiy+32)
+	ldto_lerp xiy, 56
 	cp	(xix+2), a
 	jrl	ule, 6
 	ldb	w, 3
@@ -11818,10 +11551,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	add	xwa, 3583
 	ld	xhl, xwa
 	ld	hl, (xhl+4)
-	.byte 0xd1
-	pop	xwa
-	decf
-	.byte 0xf3
+	cpda16 xhl, (3416)
 	jrl	ule, 6
 	ldb	w, 3
 	jp	VoiceState_DataBlock2_0xAB
@@ -11842,10 +11572,8 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	ld	ix, wa
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3
-	reti
-	cp	xwa, xwa
-	ldb	w, 90
+	ld_rrw wa, xde, ix
+	pop xde
 	cp	wa, 0xffff
 	jrl	z, 52
 	cps	wa, 0
@@ -11853,6 +11581,8 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	ld	iy, wa
 	call	VoiceSlot_UpdateCurrentPointer
 	ldda32	xhl, (4349)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x9b, 0x01
 	push	xsp
 	nop
@@ -11890,9 +11620,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	sla	hl, 1
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3
-	reti
-	sla	xwa, 32
+	ld_rrw wa, xde, hl
 	pop	xde
 	cp	wa, 0xffff
 	jrl	z, 52
@@ -12055,15 +11783,11 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	sla	hl, 1
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3
-	reti
-	sla	xwa, 32
+	ld_rrw wa, xde, hl
 	stda16	(0x28bf), wa
 	srl	hl, 1
 	ld	xde, 3262
-	.byte 0xc3
-	reti
-	sla	xwa, 33
+	ld_rrb a, xde, hl
 	pop	xde
 	xor	w, w
 	stda16	(0x28c1), wa
@@ -12096,9 +11820,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	ret
 	push	xwa
 	ldda32	xwa, (4349)
-	.byte 0xe7
-	push	xwa
-	.byte 0x98
+	ldfr_lerp xwa, 56
 	pop	xwa
 	.byte 0xe7
 	push	xwa
@@ -12144,15 +11866,9 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	ldb	e, 222
 	.byte 0xef, 0x01
 	ld	xde, 3262
-	.byte 0xc3
-	reti
-	.byte 0xe8
-	swi	0
-	ldb	a, 90
-	.byte 0xd1
-	swi	7
-	decf
-	.byte 0xf5
+	ld_rrb a, xde, iz
+	pop xde
+	cpda16 xiy, (3583)
 	jrl	nz, 7
 	.byte 0xc1, 0x01
 	ret
@@ -12182,32 +11898,21 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	pop	xbc
 	pop	xhl
 	pop	xwa
-	.byte 0xe7
+	pop_lerp 56
 	push	xwa
-	halt
-	push	xwa
-	.byte 0xe7
-	push	xwa
-	cp	(xwa-15), e
-	rcf
-	jr	f, 88
+	ldto_lerp xwa, 56
+	stda32 (4349), xwa
+	pop xwa
 	ret
 	call	VoiceSlot_ComputeWordIndex
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3
-	reti
-	.byte 0xe8
-	swi	0
-	ldb	e, 241
-	ld	(xsp+40), iy
+	ld_rrw iy, xde, iz
+	stda16 (10431), iy
 	srl	iz, 1
 	ld	xde, 3262
-	.byte 0xc3
-	reti
-	.byte 0xe8
-	swi	0
-	ldb	a, 90
+	ld_rrb a, xde, iz
+	pop xde
 	xor	w, w
 	stda16	(0x28c1), wa
 	call	VoiceBank_ProcessCommand
@@ -12287,10 +11992,8 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	sla	iy, 1
 	push	xix
 	ld	xix, VoiceState_DataBlock2_0x541
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xf4
-	ldb	a, 92
+	ld_rrw bc, xix, iy
+	pop xix
 	andda16_24	bc, (0xffec)
 	cps	bc, 0
 	jrl	z, 52
@@ -12315,8 +12018,12 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	.byte 0xc1, 0x54
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0xc1
 	jrl	ugt, 15912
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	jp	VoiceState_DataBlock2_0x540
 	.byte 0xc1, 0x54
@@ -12328,20 +12035,28 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	swi	3
 	xor	w, w
 	ret
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	nop
 	push	sr
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	ldio	0, 16
 	nop
 	ldb	w, 0
 	ld	xwa, 0x8000
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	nop
 	push	sr
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	nop
 	ldio	0, 16
@@ -12388,21 +12103,16 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	div8rr	a, l
 	pushw	bc
 	ld	c, a
-	.byte 0xc7
-	push	xix
-	add	(xbc-53), bc
+	ldb_erp a, 60
+	ld a, c
 	scf
 	.byte 0xb4
 	pushw	ix
-	.byte 0xc7
-	push	xix
-	.byte 0x89
+	stb_erp a, 60
 	popw	bc
 	jp	VoiceState_DataBlock2_0x563
 	inc	1, c
-	.byte 0xc1, 0xc1
-	ret
-	.byte 0xf3
+	cpda8 xhl, (3777)
 	jrl	z, 6
 	inc	1, xix
 	jp	VoiceState_DataBlock2_0x563
@@ -12519,10 +12229,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	call	VoiceState_DataBlock2_0x7AE
 	ret
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1
-	halt
-	scf
-	.byte 0xf0
+	cpda16 xwa, (4357)
 	jrl	z, 105
 	jrl	ugt, 56
 	ldw_d16	bc, (4357)
@@ -12543,10 +12250,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	nop
 	dec	1, bc
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1
-	halt
-	scf
-	.byte 0xf0
+	cpda16 xwa, (4357)
 	jrl	nz, -46
 	jp	VoiceState_DataBlock2_0x7A8
 	ldw_d16	bc, (4357)
@@ -12564,19 +12268,13 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	popw	bc
 	dec	1, bc
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1
-	halt
-	scf
-	.byte 0xf0
+	cpda16 xwa, (4357)
 	jrl	nz, -38
 	.byte 0xc1, 0x57
 	retd	0xfe3c
 	ret
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1
-	halt
-	scf
-	.byte 0xf0
+	cpda16 xwa, (4357)
 	jrl	z, 63
 	jrl	ugt, 35
 	ldw_d16	bc, (4357)
@@ -12589,10 +12287,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	pushw	wa
 	nop
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1
-	halt
-	scf
-	.byte 0xf0
+	cpda16 xwa, (4357)
 	jrl	nz, -25
 	jp	VoiceState_DataBlock2_0x7F8
 	ldw_d16	bc, (4357)
@@ -12602,17 +12297,11 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	call	VoiceSlot_TableSetup_0x56D
 	popw	bc
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1
-	halt
-	scf
-	.byte 0xf0
+	cpda16 xwa, (4357)
 	jrl	nz, -17
 	ret
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1
-	halt
-	scf
-	.byte 0xf0
+	cpda16 xwa, (4357)
 	jrl	z, 61
 	jrl	ugt, 30
 	ldw_d16	bc, (4357)
@@ -12621,10 +12310,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	call	MemConfig_Handler_1_0x13E
 	popw	bc
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1
-	halt
-	scf
-	.byte 0xf0
+	cpda16 xwa, (4357)
 	jrl	ge, 35
 	djnz16	bc, -20
 	jp	VoiceState_DataBlock2_0x841
@@ -12635,10 +12321,7 @@ VoiceState_DataBlock2:	.ascii ";>=<"
 	call	MemConfig_Handler_1_0x1EF
 	popw	bc
 	ldw_d16	wa, (0x371a)
-	.byte 0xd1
-	halt
-	scf
-	.byte 0xf0
+	cpda16 xwa, (4357)
 	jrl	le, 3
 	djnz16	bc, -20
 	ret
@@ -12678,6 +12361,8 @@ SubCPU_ToneParamDisplay:
 	ldb_d8	a, (4381)
 	ld	xix, 4382
 	ld	(xix), 176
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1c
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc1, 0x1c
 	scf
 	push	xsp
@@ -12687,6 +12372,8 @@ SubCPU_ToneParamDisplay:
 	push	xiz
 	push	sr
 	ld	(xix+4), a
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x8c, 0x04
 	push	xix
 	jrl	nc, 1468
@@ -12696,6 +12383,8 @@ SubCPU_ToneParamDisplay:
 	jrl	z, 3
 	.byte 0x84
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ldb_d8	a, (3415)
 	ld	(xix+1), a
@@ -12704,12 +12393,12 @@ SubCPU_ToneParamDisplay:
 	ldb_d8	l, (4380)
 	exts	hl
 	ld	xiy, SubCPU_ToneDispatch_0x50
-	.byte 0xc3
-	reti
-	.byte 0xf4, 0xec
-	ldb	a, 188
-	pop	sr
-	ld	xbc, 0x3c0e5c5d
+	ld_rrb a, xiy, hl
+	ld (xix+3), a
+	pop xiy
+	pop xix
+	ret
+	push xix
 	xor	hl, hl
 	ldb_d8	l, (3424)
 	dec	1, l
@@ -12735,14 +12424,10 @@ SubCPU_ToneParamDisplay:
 	xor	wa, wa
 	ldb_d8	a, (4380)
 	ld	xix, SubCPU_ToneDispatch_0x50
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	a, 195
-	reti
-	or	xwa, xix
-	ldb	a, 241
-	call	0x5c4111
+	ld_rrb a, xix, wa
+	ld_rrb a, xhl, wa
+	stb_d8 (4381), a
+	pop xix
 	ret
 	ld	xix, 3789
 	ldb	a, 32
@@ -12757,23 +12442,24 @@ SubCPU_ToneParamDisplay:
 	sla	w, 1
 	add	a, w
 	xor	w, w
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xe0
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, wa
+	ld xix, 3791
 	ldw	bc, 10
 	.byte 0x85
 	scf
 	xor	wa, wa
 	ldb_d8	a, (4381)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1c
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc1, 0x1c
 	scf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 15
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x1c
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc1, 0x1c
 	scf
 	push	xsp
@@ -12786,8 +12472,8 @@ SubCPU_ToneParamDisplay:
 	call	ParamDigit_CalrData
 	pop	xix
 	ldb_d8	a, (4480)
-	.byte 0xf5, 0xf0
-	ld	xbc, 0xefdb0a1b
+	lda_dpi xbc, 240
+	jp 15719178
 	push	xix
 	call	ParamDigit_ExtractAndFormat
 	pop	xix
@@ -12925,6 +12611,8 @@ SubCPU_ToneClearRegion:
 	.byte 0xc1, 0xd3
 	decf
 	push	xiz
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	xor	a, a
 	stb_d8	(3538), a
@@ -12968,10 +12656,8 @@ PerfMode_ParamHandler_11:
 	sla	hl, 2
 	push	xix
 	ld	xix, SubCPU_ToneParamRet
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 92
+	ld_rrl xhl, xix, hl
+	pop xix
 	call	(xhl)
 	ret
 SubCPU_ToneParamRet:
@@ -14002,11 +13688,8 @@ OscScope_Handler_7:
 	push	xiz
 	ld	xwa, 0x1114e10e
 	ldb	d, 193
-	.byte 0xc4
-	ret
-	ldb	e, 205
-	.byte 0xec
-	push	sr
+	ld_spdb e, 14
+	sla e, 2
 	xor	d, d
 	extz	xde
 	add	xix, xde
@@ -14061,8 +13744,8 @@ OscScope_UpdateDisplay:
 	ld	c, a
 	ldb	l, 96
 	muls8rr	a, l
-	.byte 0xd1
-	adddm8_24	(0xcba80e), a
+	subdm16 (3778), xwa
+	ld a, c
 	dec	1, a
 	cps	a, 0
 	jrl	z, 13
@@ -14086,8 +13769,8 @@ OscScope_RefreshLoop:
 	jrl	z, 29
 	ldb	a, 96
 	muls8rr	a, c
-	.byte 0xd1
-	xorda8_24	b, (0xcaa80e)
+	subdm16 (3778), xwa
+	xor b, b
 	pushw	bc
 	pushw	de
 	call	DisplayStr_BytecodeBlock_A_0x53
@@ -14120,9 +13803,7 @@ OscScope_RefreshLoop:
 	sla	hl, 1
 	push	xde
 	ld	xde, 3230
-	.byte 0xd3
-	reti
-	sla	xwa, 32
+	ld_rrw wa, xde, hl
 	pop	xde
 	cp	wa, 0xffff
 	jrl	z, 52
@@ -14254,6 +13935,8 @@ OscScope_FinalizeRender:
 	jrl	nz, 9
 	stdi8	(4479), 255
 	jp	OscScope_FinalizeRender_0xCB
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x8c, 0x01
 	push	xsp
 	nop
@@ -14368,11 +14051,8 @@ DisplayStr_BytecodeBlock_A:
 	sla	hl, 2
 	xor	wa, wa
 	ldda32	xiy, (4372)
-	.byte 0xc3
-	reti
-	.byte 0xf4, 0xec
-	ldb	a, 201
-	inc	8, d
+	ld_rrb a, xiy, hl
+	and a, 96
 	cps	a, 0
 	jrl	nz, 7
 	ldb	a, 32
@@ -14386,17 +14066,11 @@ DisplayStr_BytecodeBlock_A:
 	ldw	iy, 445
 	nop
 	pop	sr
-	.byte 0xe7
-	push	xwa
-	.byte 0x8d, 0xe7
-	push	xwa
-	.byte 0x9d, 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 701
-	.byte 0x50, 0xe7
-	push	xwa
-	.byte 0x8d
+	ldto_lerp xiy, 56
+	ldfr_lerp xiy, 56
+	lda_rr xiy, xiy, hl
+	ld (xiy+2), wa
+	ldto_lerp xiy, 56
 	call	DisplayStr_BytecodeBlock_A_0x53
 	ret
 	stdi8	(3830), 0
@@ -14417,9 +14091,7 @@ DisplayStr_BytecodeBlock_A:
 	sla	hl, 2
 	push	xde
 	ld	xde, DisplayStr_BytecodeBlock_A_0x198
-	.byte 0xe3
-	reti
-	sla	xwa, 35
+	ld_rrl xhl, xde, hl
 	pop	xde
 	ld	wa, (xhl)
 	cps	wa, 0
@@ -14440,9 +14112,7 @@ DisplayStr_BytecodeBlock_A:
 	stda32	4372, xwa
 	stb_d8	(3782), l
 	xor	b, b
-	.byte 0xd1, 0xc4
-	ret
-	.byte 0xa9
+	subdm16 (3780), xbc
 	ret
 	stdi8	(3830), 0
 	ldb_d8	c, (3777)
@@ -14452,11 +14122,8 @@ DisplayStr_BytecodeBlock_A:
 	sla	hl, 2
 	xor	wa, wa
 	ldda32	xiy, (4372)
-	.byte 0xc3
-	reti
-	.byte 0xf4, 0xec
-	ldb	a, 201
-	inc	8, d
+	ld_rrb a, xiy, hl
+	and a, 96
 	cps	a, 0
 	jrl	nz, 7
 	ldb	a, 32
@@ -14495,9 +14162,7 @@ DisplayStr_BytecodeBlock_A:
 	sla	hl, 2
 	push	xde
 	ld	xde, DisplayStr_BytecodeBlock_A_0x198
-	.byte 0xe3
-	reti
-	sla	xwa, 35
+	ld_rrl xhl, xde, hl
 	pop	xde
 	ld	wa, (xhl)
 	cps	wa, 0
@@ -14518,9 +14183,7 @@ DisplayStr_BytecodeBlock_A:
 	stda32	4372, xwa
 	stb_d8	(3782), l
 	xor	b, b
-	.byte 0xd1, 0xc4
-	ret
-	.byte 0xa9
+	subdm16 (3780), xbc
 	ret
 	popw	ix
 	ret
@@ -14536,8 +14199,12 @@ DisplayStr_BytecodeBlock_A:
 	nop
 	.byte 0xd1, 0xbf
 	pushw	wa
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04, 0xd1, 0xc1
 	pushw	wa
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	push	xhl
 	push	xiy
@@ -14771,8 +14438,18 @@ DisplayStr_TempoString:	.ascii "  TEMPO  "
 	call	Display_UpdateRegion4
 	ret
 	ldb	w, 32
-	.ascii "                       "
-	.byte 0x1d
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 29
 	or	(xhl+91), l
 	ret
 	ldw_d16	wa, (0x371a)
@@ -14901,9 +14578,7 @@ Display_BytecodeBlock_F:
 	call	Display_UpdateRegion0
 	call	Display_BytecodeBlock_F_0x32D
 	ld	xix, 3786
-	.byte 0xbc
-	push	2
-	ldb	w, 86
+	ldw (xix+9), 22048
 	call	Display_UpdateRegion5
 	call	StringData_KeyNames_0x29E
 	call	StringData_KeyNames_0x180
@@ -14914,14 +14589,13 @@ Display_BytecodeBlock_F:
 	ld	xiy, Display_BytecodeBlock_F_0x104
 	ldb_d8	a, (4539)
 	ld	xhl, Display_BytecodeBlock_F_0xF4
-	.byte 0xc3
-	pop	sr
-	or	xwa, xix
-	ldb	a, 216
-	zcf
+	ld_rr8b a, xhl, a
+	exts wa
 	.byte 0xc1, 0xbb
 	scf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x17
 	jrl	nz, 6
 	ldb	a, 17
@@ -14983,19 +14657,21 @@ Display_BytecodeBlock_F:
 	push	xsp
 	pop	sr
 	jrl	nz, 12
-	.byte 0xb4
-	push	sr
-	popw	sp
-	ld	xiz, 0x460002bc
+	ldw (xix), 17999
+	ld (xix+2), 70
 	jp	Display_BytecodeBlock_F_0xF3
 	ldw	bc, 16
 	.byte 0x85
 	scf
 	ret
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	push	sr
 	pop	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	halt
 	ei	7
@@ -15004,9 +14680,13 @@ Display_BytecodeBlock_F:
 	ret
 	.byte 0x0f
 	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P15 KBP DUALMSP ----"
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	push	sr
 	pop	sr
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x04
 	call	Display_UpdateRegion0
 	call	Display_BytecodeBlock_F_0x32D
@@ -15030,10 +14710,8 @@ Display_BytecodeBlock_F:
 	ldb_d8	l, (0x3720)
 	and	l, 7
 	sla	hl, 3
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 8341
+	lda_rr xiy, xiy, hl
+	ld wa, (xiy)
 	ld	(xix), wa
 	ld	wa, (xiy+2)
 	ld	(xix+2), wa
@@ -15046,6 +14724,8 @@ Display_BytecodeBlock_F:
 	.byte 0xc1
 	ldb	w, 55
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	nz, 8
 	call	Display_BytecodeBlock_F_0x259
@@ -15152,22 +14832,26 @@ Display_BytecodeBlock_F:
 	call	Display_BytecodeBlock_F_0x2A2
 	call	Display_UpdateRegion3
 	ret
-	.byte 0x20
-	.ascii "TEMPO   "
+	ldb w, 84
+	ld xiy, 542068813
+	ldb w, 32
 	pop_a
 	push	xiy
-	.byte 0x09
-	.ascii "        TEMPO   "
+	push 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 84
+	ld xiy, 542068813
+	ldb w, 32
 	.byte 0x93
 	push	xiy
 	push	32
-	.byte 0x20
-	.ascii "     1"
-	retd	0x4400
-	.byte 0xca
-	ret
-	nop
-	nop
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldw bc, 15
+	ld xix, 3786
 	ldw	wa, 8224
 	stw_dpi	wa, 241
 	djnz16	bc, -6
@@ -15176,8 +14860,9 @@ Display_BytecodeBlock_F:
 	ret
 	lds	bc, 7
 	ld	xix, 3796
-	.ascii "<0  ı"
-	.byte 0xf1, 0x50
+	push xix
+	ldw wa, 8224
+	stw_dpi wa, 241
 	djnz16	bc, -6
 	pop	xix
 	.byte 0xd1
@@ -15212,9 +14897,7 @@ Display_BytecodeBlock_F:
 	.byte 0xf0
 	ld	xbc, 0xcf0d64f1
 	jrl	z, 14
-	.byte 0xf5, 0xf0
-	nop
-	pushw	hl
+	stib_dsp 240, 43
 	.byte 0xf1
 	jr	ov, 13
 	scc8	z, l
@@ -15289,25 +14972,32 @@ StringData_KeyNames:	.ascii "  C D"
 	.byte 0x45, 0x88
 	.ascii "E F FåG AàA BàB                 7    Maj7 aug  min  min7 dim  m7à5 mM7  7sus46    aug7   à5 7 à5 79   7 à9 M79  69   m6   m à5 m79  m69  sus4 7 å9 M7à5 M7å5 mM7à5   139å5  à9 13å9 13  à13à9à13å9à13   13  à137 å11m7 11+7å11 add9madd9                                                                                                                  "
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEFF6FD-0xEFF712 (21 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=67% dist=6 near StringData_KeyNames_0x160+4
-	.byte 0x13, 0x20, 0x20, 0x20, 0x14, 0x2e, 0x20, 0x20, 0x14, 0x20, 0x20, 0x20
-	.byte 0x15, 0x20, 0x20, 0x20, 0x15, 0x2e, 0x20, 0x20, 0x16
-	.ascii "   XX  D"
-	.byte 0xd9
-	ret
-	nop
-	nop
+	zcf
+	ldb w, 32
+	ldb w, 20
+	pushw iz
+	ldb w, 32
+	push_a
+	ldb w, 32
+	ldb w, 21
+	ldb w, 32
+	ldb w, 21
+	pushw iz
+	ldb w, 32
+	ex_ff
+	ldb w, 32
+	ldb w, 88
+	pop xwa
+	ldb w, 32
+	ld xix, 3801
 	xor	hl, hl
 	ldb_d8	l, (0x3714)
 	and	l, 15
 	sla	hl, 2
 	ld	xiy, StringData_KeyNames_0x1FE
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 8341
-	.byte 0xbc
-	nop
-	.byte 0x50
+	lda_rr xiy, xiy, hl
+	ld wa, (xiy)
+	ld (xix+256), wa
 	ld	w, (xiy+2)
 	ld	(xix+2), w
 	ld	xix, 3805
@@ -15318,13 +15008,9 @@ StringData_KeyNames:	.ascii "  C D"
 	muls8rr	a, l
 	ld	hl, wa
 	ld	xiy, StringData_KeyNames_0x23E
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 157
-	ldb	w, 188
-	nop
-	.byte 0x50
+	lda_rr xiy, xiy, hl
+	ld wa, (xiy+256)
+	ld (xix+256), wa
 	ld	wa, (xiy+2)
 	ld	(xix+2), wa
 	ld	a, (xiy+4)
@@ -15356,6 +15042,8 @@ StringData_KeyNames:	.ascii "  C D"
 	ldb	w, 23
 	.byte 0x1f
 	ldb	w, 32
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x17
 	ldb	w, 32
 	ldb	w, 22
@@ -15408,14 +15096,14 @@ StringData_KeyNames:	.ascii "  C D"
 	ret
 	nop
 	nop
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x17
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0xc1, 0x17, 0x37
 	push	xsp
 	swi	7
 	jrl	nz, 22
 	ldw	wa, 8224
-	.byte 0xbc
-	nop
-	.byte 0x50
+	ld (xix+256), wa
 	ld	(xix+2), wa
 	ld	(xix+4), wa
 	ld	(xix+6), wa
@@ -15429,19 +15117,15 @@ StringData_KeyNames:	.ascii "  C D"
 	xor	bc, bc
 	ld	c, w
 	sla	bc, 1
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xe4
-	ldw	iy, 8597
+	lda_rr xiy, xiy, bc
+	ld bc, (xiy)
 	ld	(xix), bc
 	ld	xiy, StringData_KeyNames_0x32B
 	xor	bc, bc
 	ld	c, a
 	sla	bc, 1
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xe4
-	ldw	iy, 8341
+	lda_rr xiy, xiy, bc
+	ld wa, (xiy)
 	ld	(xix+2), wa
 	xor	wa, wa
 	ldb_d8	a, (0x3717)
@@ -15508,13 +15192,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xd144
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3793
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -15549,13 +15228,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -15572,18 +15246,17 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	pop	xix
 	inc	1, xix
 	ldb_d8	a, (4480)
-	.byte 0xf5, 0xf0
-	ld	xbc, 0x118145
-	nop
+	lda_dpi xbc, 240
+	ld xiy, 4481
 	lds	bc, 3
 	.byte 0x85
 	scf
 	call	Display_UpdateRegion3
 	ret
 	popw	hl
-	.byte 0x45
-	.ascii "Y SHIFT="
-	.byte 0xc1, 0xef
+	ld xiy, 1213407321
+	popw bc
+	ld xiz, 4022418772
 	decf
 	push	xsp
 	ldwio	118, 9
@@ -15594,13 +15267,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -15617,9 +15285,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	pop	xix
 	inc	1, xix
 	ldb_d8	a, (4480)
-	.byte 0xf5, 0xf0
-	ld	xbc, 0x118145
-	nop
+	lda_dpi xbc, 240
+	ld xiy, 4481
 	lds	bc, 3
 	.byte 0x85
 	scf
@@ -15669,6 +15336,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -15678,13 +15347,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -15711,6 +15375,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.byte 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -15720,13 +15386,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -15749,6 +15410,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	.ascii "DSP EFFECT ¡Ô"
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -15758,13 +15421,8 @@ StringData_PartNames:	.ascii "RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P1
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -15791,6 +15449,8 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -15800,13 +15460,8 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -15828,6 +15483,8 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	.byte 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -15837,13 +15494,8 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -15867,6 +15519,8 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 11
 	stdi8	(3567), 1
@@ -15909,6 +15563,8 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 11
 	stdi8	(3567), 1
@@ -15935,11 +15591,16 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	scf
 	call	Display_UpdateRegion3
 	ret
-	.byte 0x46
-	.ascii "ADE-IN ON OFF"
-	.byte 0xc1, 0xef
-	decf
+	ld xiz, 759514177
+	popw bc
+	popw iz
+	ldb w, 79
+	popw iz
+	ldb w, 79
+	ld xiz, 233816390
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 11
 	stdi8	(3567), 1
@@ -15970,6 +15631,8 @@ StringData_EffectLabel:	.ascii "EFFECT "
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 11
 	stdi8	(3567), 1
@@ -16001,6 +15664,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 11
 	stdi8	(3567), 1
@@ -16032,6 +15697,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 11
 	stdi8	(3567), 1
@@ -16049,13 +15716,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	h, h
 	sla	hl, 4
 	ld	xiy, StringData_APCModeNames_0x141
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	ldw	bc, 16
 	.byte 0x85
 	scf
@@ -16077,6 +15739,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 11
 	stdi8	(3567), 1
@@ -16104,6 +15768,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 11
 	stdi8	(3567), 1
@@ -16132,6 +15798,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 11
 	stdi8	(3567), 1
@@ -16148,24 +15816,20 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_APCModeNames_0x26C
-	.byte 0xd3
-	reti
-	.byte 0xf4, 0xec
-	ldb	w, 180
-	.byte 0x50
+	ld_rrw wa, xiy, hl
+	ld (xix), wa
 	add	hl, 2
 	add	xix, 2
-	.byte 0xd3
-	reti
-	.byte 0xf4, 0xec
-	ldb	w, 180
-	.byte 0x50
+	ld_rrw wa, xiy, hl
+	ld (xix), wa
 	call	Display_UpdateRegion3
 	ret
 	.ascii "<G ><Ab><A ><Bb><B ><C ><Db><D ><Eb><E ><F ><F#>                "
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 13
 	stdi8	(3567), 1
@@ -16183,13 +15847,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ld	bc, hl
 	sla	hl, 4
 	ld	xiy, StringData_APCModeNames_0x324
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	ldw	bc, 16
 	.byte 0x85
 	scf
@@ -16223,6 +15882,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -16232,13 +15893,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xcf44
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3791
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -16273,6 +15929,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -16306,6 +15964,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -16315,13 +15975,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xd144
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3793
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -16360,6 +16015,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -16416,11 +16073,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ldb	d, 222
 	.byte 0xed, 0x01
 	ld	xhl, 3262
-	.byte 0xc3
-	reti
-	.byte 0xec
-	swi	0
-	ldb	a, 91
+	ld_rrb a, xhl, iz
+	pop xhl
 	push	xhl
 	ld	xhl, 3583
 	add	xhl, 40
@@ -16443,32 +16097,21 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ldb	a, 5
 	call	VoiceSlot_RestoreState
 	.ascii "^]\\ZY[X"
-	.byte 0xe7
-	push	xwa
-	halt
+	pop_lerp 56
 	push	xiz
-	.byte 0xe7
-	push	xwa
-	cp	(xiz-15), e
-	rcf
-	jr	z, 94
+	ldto_lerp xiz, 56
+	stda32 (4349), xiz
+	pop xiz
 	ret
 	call	VoiceSlot_ComputeWordIndex
 	push	xhl
 	ld	xhl, 3230
-	.byte 0xd3
-	reti
-	.byte 0xec
-	swi	0
-	ldb	d, 241
-	ld	(xsp+40), ix
+	ld_rrw ix, xhl, iz
+	stda16 (10431), ix
 	sra	iz, 1
 	ld	xhl, 3262
-	.byte 0xc3
-	reti
-	.byte 0xec
-	swi	0
-	ldb	a, 91
+	ld_rrb a, xhl, iz
+	pop xhl
 	xor	w, w
 	stda16	(0x28c1), wa
 	call	VoiceBank_ProcessCommand
@@ -16503,6 +16146,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0xc1, 0xef
 	decf
 	push	xsp
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jrl	z, 9
 	stdi8	(3567), 1
@@ -16512,13 +16157,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ldw	iy, 0xd144
-	ret
-	nop
-	nop
+	lda_rr xiy, xiy, hl
+	ld xix, 3793
 	lds	bc, 4
 	.byte 0x85
 	scf
@@ -16605,8 +16245,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	StringData_APCModeNames_0x9C1
 	ldb_d8	a, (4463)
 	exts	wa
-	.byte 0xd1
-	xorda8_24	h, (0xce880e)
+	adddm16 (3778), xwa
+	xor h, h
 	ldb	l, 96
 	.byte 0xc1, 0xb5
 	ret
@@ -16646,8 +16286,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ldb	c, 96
 	ld	qwa, de
 	div	xwa, xbc
-	.byte 0xd7, 0xe2
-	add	(xde-40), a
+	ld de, qwa
+	ld bc, wa
 	ldw	hl, 96
 	muls	xwa, xhl
 	ld	de, qwa
@@ -16675,6 +16315,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	push	xsp
 	ldw	wa, 0x7e00
 	pop	xiy
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	call	DisplayStr_BytecodeBlock_A_0x120
 	jp	StringData_APCModeNames_0x9AD
@@ -16888,10 +16530,8 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_ComputeTableAddr
 	ldda32	xhl, (4349)
 	ldw_d16	iy, (4472)
-	.byte 0xc3
-	reti
-	cp	xix, xix
-	ldb	a, 14
+	ld_rrb a, xhl, iy
+	ret
 	.byte 0xd1
 	jrl	gt, 1041
 	.byte 0xd1
@@ -16900,15 +16540,15 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	push	xix
 	call	StringData_APCModeNames_0xAAC
 	pop	xix
-	.byte 0xf5, 0xf0
-	ld	xbc, 0x09201d3c
-	.byte 0xf0
+	lda_dpi xbc, 240
+	push xix
+	call 15730976
 	call	StringData_APCModeNames_0xAAC
 	pop	xix
 	bit	7, a
 	jrl	nz, 7
-	.byte 0xf5, 0xf0
-	ld	xbc, 0xf009791b
+	lda_dpi xbc, 240
+	jp 15731065
 	.byte 0xf1
 	jrl	1553
 	.byte 0xf1
@@ -17028,6 +16668,8 @@ Scoop_DisplayData_ButtonLayout:
 	ret
 	jp	2058
 	ldw	de, 4096
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	ld	xde, 0xb42a4500
 	.byte 0xe0
@@ -17046,6 +16688,8 @@ Scoop_DrawGridLines:
 Scoop_GridLineData:
 	jp	2058
 	ldw	de, 4096
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF00AEE-0xF00B0A (28 B), unreached CODE-territory, was disassembled as 18 plausible-but-dead instruction lines; per=78% dist=9 near Scoop_GridLineData+8
 	.byte 0x42, 0x00, 0x1b, 0x0a, 0x05, 0x00, 0x4b, 0x00, 0x05, 0x00, 0x4f, 0x00
@@ -17071,12 +16715,16 @@ Scoop_GridLineData:
 	pop	xsp
 	nop
 	rcf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01
 	jr	nc, 0
 	jp	2058
 	.byte 0x8c
 	nop
 	rcf
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0x9c
 	nop
 
@@ -18001,22 +17649,16 @@ Scoop_EventHandler_SpecialMode:
 	.byte 0xba
 	pushw	wa
 	stib_da	(0x35216e), 1
-	.byte 0xd1, 0xbc
-	pushw	wa
-	.byte 0xa5
+	subda16 xiy, (10428)
 	stda16	(9874), iy
 	ldw_d16	iy, (0x28bc)
 	ldw	ix, 256
-	.byte 0xd1, 0xb6
-	pushw	wa
-	.byte 0xa4
+	subda16 xix, (10422)
 	stda16	(9876), ix
 	ldw_d16	ix, (0x28b6)
 	jrl	431
 	ldw_d16	wa, (0x28b6)
-	.byte 0xd1, 0xbc
-	pushw	wa
-	.byte 0xf0
+	cpda16 xwa, (10428)
 	jr	c, 4
 	jr	z, 4
 	jr	ugt, 5
@@ -18024,14 +17666,10 @@ Scoop_EventHandler_SpecialMode:
 	jrl	143
 	jrl	252
 	ldw	wa, 256
-	.byte 0xd1, 0xb6
-	pushw	wa
-	.byte 0xa0
+	subda16 xwa, (10422)
 	ldw	bc, 256
-	.byte 0xd1, 0xbc
-	pushw	wa
-	xor	(xbc), xbc
-	.byte 0xa0
+	subda16 xbc, (10428)
+	sub wa, bc
 	stda16	(9870), wa
 	ldw	bc, 256
 	sub	bc, 5
@@ -18040,9 +17678,7 @@ Scoop_EventHandler_SpecialMode:
 	ldw_d16	iy, (0x28bc)
 	ldw_d16	ix, (0x28b6)
 	ldw	bc, 256
-	.byte 0xd1, 0xbc
-	pushw	wa
-	.byte 0xa1
+	subda16 xbc, (10428)
 	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams
 	.byte 0xc1
@@ -18050,9 +17686,7 @@ Scoop_EventHandler_SpecialMode:
 	nop
 	jr	z, 3
 	jrl	407
-	.byte 0xd1, 0xba
-	pushw	wa
-	.byte 0xf2
+	cpda16 xde, (10426)
 	jr	nz, 2
 	jr	44
 	ldw_d16	bc, (9870)
@@ -18078,9 +17712,7 @@ Scoop_EventHandler_SpecialMode:
 	stda16	(9874), bc
 	jrl	269
 	ldw	bc, 256
-	.byte 0xd1, 0xbc
-	pushw	wa
-	.byte 0xa1
+	subda16 xbc, (10428)
 	ldw_d16	iy, (0x28bc)
 	ldw_d16	ix, (0x28b6)
 	call	Scoop_SpecialMode_UpdateParams_0x70
@@ -18096,9 +17728,7 @@ Scoop_EventHandler_SpecialMode:
 	nop
 	jr	z, 3
 	jrl	286
-	.byte 0xd1, 0xba
-	pushw	wa
-	.byte 0xf2
+	cpda16 xde, (10426)
 	jr	nz, 2
 	jr	39
 	ldw	bc, 256
@@ -18122,14 +17752,10 @@ Scoop_EventHandler_SpecialMode:
 	stda16	(9874), bc
 	jrl	157
 	ldw	wa, 256
-	.byte 0xd1, 0xbc
-	pushw	wa
-	.byte 0xa0
+	subda16 xwa, (10428)
 	ldw	bc, 256
-	.byte 0xd1, 0xb6
-	pushw	wa
-	xor	(xbc), xbc
-	.byte 0xa0
+	subda16 xbc, (10422)
+	sub wa, bc
 	stda16	(9870), wa
 	ldw	bc, 256
 	sub	bc, 5
@@ -18138,9 +17764,7 @@ Scoop_EventHandler_SpecialMode:
 	ldw_d16	iy, (0x28bc)
 	ldw_d16	ix, (0x28b6)
 	ldw	bc, 256
-	.byte 0xd1, 0xb6
-	pushw	wa
-	.byte 0xa1
+	subda16 xbc, (10422)
 	call	Scoop_SpecialMode_UpdateParams_0x70
 	call	Scoop_SpecialMode_UpdateParams_0x38
 	.byte 0xc1
@@ -18156,9 +17780,7 @@ Scoop_EventHandler_SpecialMode:
 	nop
 	jr	z, 3
 	jrl	133
-	.byte 0xd1, 0xba
-	pushw	wa
-	.byte 0xf2
+	cpda16 xde, (10426)
 	jr	nz, 2
 	jr	42
 	ldw_d16	bc, (9872)
@@ -18183,15 +17805,11 @@ Scoop_EventHandler_SpecialMode:
 	sub	wa, 5
 	stda16	(9874), wa
 	ldw	wa, 255
-	.byte 0xd1, 0xb8
-	pushw	wa
-	.byte 0xa0
+	subda16 xwa, (10424)
 	ldw_d16	bc, (9874)
 	sub	bc, wa
 	stda16	(9880), bc
-	.byte 0xd1
-	ld	iz, (xix)
-	swi	1
+	cpdm16 (9876), xbc
 	jr	nc, 2
 	jr	6
 	call	Scoop_SpecialMode_UpdateParams_0x70
@@ -18205,9 +17823,7 @@ Scoop_EventHandler_SpecialMode:
 	jr	z, 2
 	jr	12
 	ldw_d16	bc, (9880)
-	.byte 0xd1
-	ld	iz, (xix)
-	.byte 0xa1
+	subda16 xbc, (9876)
 	call	Scoop_SpecialMode_UpdateParams_0x70
 	ret
 
@@ -18595,11 +18211,7 @@ Scoop_EnvelopeCalc:
 	ret
 
 Scoop_EnvelopeCalc_Data:
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xbc, xwa
 	ld	iz, (xbc+2)
@@ -18652,11 +18264,10 @@ Scoop_EnvelopeCalc_Data:
 	ld	a, (xhl)
 	extz	wa
 	lda_24	xhl, (StyleUI_ScreenData_CtlOnly_0x23)
-	.byte 0xc3
-	reti
-	or	xwa, xix
-	ldb	a, 180
-	ld	xbc, 0xf5da61dd
+	ld_rrb a, xhl, wa
+	ld (xix), a
+	inc 1, iy
+	cp iy, de
 	jr	c, -49
 	ld	wa, iy
 	extz	xwa
@@ -18708,6 +18319,8 @@ Scoop_EnvelopeCalc_Data:
 	ldio	160, 243
 	swi	5
 	push_a
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x01
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x01, 0x50
 	lda	xwa, (xsp+270)
 	ld	xhl, xwa
@@ -18746,27 +18359,27 @@ Scoop_EnvelopeCalc_Data:
 	extz	wa
 	add	wa, wa
 	ld	xbc, (xbc+7)
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xe0
+	lda_rr xbc, xbc, wa
+	ld wa, (xbc)
+	extz xwa
+	div wa, 40
+	ld (xsp+2), wa
+	ld wa, (xbc)
+	extz xwa
+	div wa, 40
+	ld wa, qwa
+	sll wa, 3
+	ld (xsp+256), wa
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF01B97-0xF01BAB (20 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=89% dist=12 near Scoop_EnvelopeCalc_Data+337
-	.byte 0x31, 0x91, 0x20, 0xe8, 0x12, 0xd8, 0x0a, 0x28, 0x00, 0xbf, 0x02, 0x50
-	.byte 0x91, 0x20, 0xe8, 0x12, 0xd8, 0x0a, 0x28, 0x00
-	.byte 0xd7, 0xe2
-	or	(xwa-40), h
-	pop	sr
-	.byte 0xbf
-	nop
-	.byte 0x50
 	ld	wa, (xsp+2)
+	; (d) BLOCKED: this run cannot be framed until the backend gains 0x04
+	; (byte_run_start_enrichment.py blind set; lane w10/missinginsns). Forcing a reading that round-trips would pass the byte gate and still be wrong.
 	.byte 0x99, 0x04, 0x80
 	ld	(xsp+6), wa
 	ld	wa, (xbc+2)
 	sll	wa, 3
-	.byte 0x9f
-	nop
-	ldb	a, 216
-	.byte 0x81
+	ld bc, (xsp+256)
+	add bc, wa
 	ld	(xsp+4), bc
 	lda	xwa, (xsp)
 	ldw	bc, 245
@@ -18792,13 +18405,9 @@ Scoop_EnvelopeCalc_Data:
 	extz	wa
 	add	wa, wa
 	ld	xbc, (xbc+7)
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xe0
-	ldw	bc, 8337
-	.byte 0xbf
-	nop
-	.byte 0x50
+	lda_rr xbc, xbc, wa
+	ld wa, (xbc)
+	ld (xsp+256), wa
 	ld	wa, (xbc+2)
 	ld	(xsp+2), wa
 	ld	wa, (xbc+4)
@@ -18819,21 +18428,16 @@ Scoop_EnvCalc_Handler0:
 	ld	bc, (xwa+2)
 	extz	xbc
 	div	bc, 40
-	.byte 0xd7, 0xe6
-	or	(xbc-39), h
-	pop	sr
-	.byte 0xbf
-	nop
-	.byte 0x51
+	ld bc, qbc
+	sll bc, 3
+	ld (xsp+256), bc
 	ld	bc, (xsp+2)
 	.byte 0x98, 0x06, 0x81
 	ld	(xsp+6), bc
 	ld	wa, (xwa+4)
 	sll	wa, 3
-	.byte 0x9f
-	nop
-	ldb	a, 216
-	.byte 0x81
+	ld bc, (xsp+256)
+	add bc, wa
 	ld	(xsp+4), bc
 	lda	xwa, (xsp)
 	ldw	bc, 245
@@ -18841,11 +18445,7 @@ Scoop_EnvCalc_Handler0:
 	inc	8, xsp
 	ret
 Scoop_EnvCalc_Handler1:
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	ld	xiy, StyleUI_ScreenData_CtlOnly_0x123
 	lda	xix, (xsp+260)
 	lds	bc, 4
@@ -18885,11 +18485,10 @@ Scoop_EnvCalc_Handler1:
 	ld	c, (xbc)
 	extz	bc
 	lda_24	xiy, (StyleUI_ScreenData_CtlOnly_0x23)
-	.byte 0xc3
-	reti
-	.byte 0xf4, 0xe4
-	ldb	c, 179
-	ld	xhl, 0xf4da61dc
+	ld_rrb c, xiy, bc
+	ld (xhl), c
+	inc 1, ix
+	cp ix, de
 	jr	c, -38
 	ld	wa, ix
 	extz	xwa
@@ -18925,9 +18524,7 @@ Scoop_EnvCalc_Handler2:
 	ld	bc, (xwa+4)
 	ld	(xsp+6), bc
 	ld	bc, (xwa+6)
-	.byte 0xbf
-	nop
-	.byte 0x51
+	ld (xsp+256), bc
 	ld	wa, (xwa+8)
 	ld	(xsp+2), wa
 	lda	xwa, (xsp+4)
@@ -18949,14 +18546,11 @@ Scoop_EnvCalc_Handler3:
 	ld	bc, (xwa+3)
 	extz	xbc
 	div	bc, 40
-	.byte 0xd7, 0xe6
-	or	(xbc-39), h
-	pop	sr
+	ld bc, qbc
+	sll bc, 3
 	ld	(xsp+10), bc
 	ld	a, (xwa+2)
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	ld	wa, (xsp+10)
 	dec	2, wa
@@ -19068,11 +18662,7 @@ Scoop_GlideParam_End:
 	ret
 
 Scoop_GlideParam_Data:
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	ld	xiy, StyleUI_ScreenData_CtlOnly_0x12B
 	lda	xix, (xsp+260)
 	lds	bc, 4
@@ -19116,11 +18706,10 @@ Scoop_GlideParam_Data:
 	ld	c, (xbc)
 	extz	bc
 	lda_24	xiy, (StyleUI_ScreenData_CtlOnly_0x23)
-	.byte 0xc3
-	reti
-	.byte 0xf4, 0xe4
-	ldb	c, 179
-	ld	xhl, 0xf4da61dc
+	ld_rrb c, xiy, bc
+	ld (xhl), c
+	inc 1, ix
+	cp ix, de
 	jr	c, -38
 	ld	wa, ix
 	extz	xwa
@@ -19150,11 +18739,7 @@ Scoop_GlideParam_Data:
 	.byte 0x01, 0x37
 	ret
 Scoop_GlideCalc_Handler0:
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	ld	xiy, StyleUI_ScreenData_CtlOnly_0x133
 	.byte 0xf3
 	swi	5
@@ -19228,9 +18813,7 @@ Scoop_GlideCalc_Handler0:
 Scoop_GlideCalc_Handler1:
 	dec	8, xsp
 	ld	bc, (xwa+2)
-	.byte 0xbf
-	nop
-	.byte 0x51
+	ld (xsp+256), bc
 	ld	bc, (xwa+4)
 	ld	(xsp+2), bc
 	ld	bc, (xwa+6)
@@ -19348,9 +18931,7 @@ Scoop_Dispatch_CallFAA98A:
 	ld bc, (xwa+4)
 	ld (xsp+6), bc
 	ld bc, (xwa+6)
-	.byte 0xbf
-	nop
-	.byte 0x51
+	ld (xsp+256), bc
 	ld wa, (xwa+8)
 	ld (xsp+2), wa
 	lda	xwa, (xsp+4)
@@ -19366,9 +18947,7 @@ Scoop_Dispatch_CallFAB273:
 	; --- Routine 2: copy (XWA+2..8) to stack, call FAB273 with BC=0xf5 (38 bytes) ---
 	dec 8, xsp
 	ld bc, (xwa+2)
-	.byte 0xbf
-	nop
-	.byte 0x51
+	ld (xsp+256), bc
 	ld bc, (xwa+4)
 	ld (xsp+2), bc
 	ld bc, (xwa+6)
@@ -19584,8 +19163,9 @@ Scoop_EnvProcessor_Data:
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
-	.byte 0xbf, 0x0a
-	.asciz "7hR%"
+	lda xsp, (xsp+10)
+	jr 82
+	ldb e, 0
 	ld	wa, hl
 	cps	wa, 2
 	jr	z, 28
@@ -19747,11 +19327,7 @@ Scoop_EventLoop_36Entry_Branch3:
 	ret
 
 Scoop_EventLoop_36Entry_Data:
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, StyleUI_ScreenData_CtlOnly_0x213
@@ -19822,9 +19398,7 @@ Scoop_EventLoop_36Entry_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (Str_No_0xDEE)
-	.byte 0xe3
-	reti
-	ld_spdl	xix, 224
+	ld_rrl xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
 	.byte 0xf3
@@ -19844,11 +19418,7 @@ Scoop_EventLoop_36Entry_Data:
 	incf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	.byte 0x45
@@ -19931,8 +19501,9 @@ Scoop_EventLoop_36Entry_Data:
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
-	.byte 0xbf, 0x0a
-	.asciz "7hR%"
+	lda xsp, (xsp+10)
+	jr 82
+	ldb e, 0
 	ld	a, c
 	cps	a, 2
 	jr	z, 28
@@ -19996,11 +19567,7 @@ Scoop_EventLoop_36Entry_Data:
 	incf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, GUI_FormatStrings_0x20
@@ -20077,11 +19644,7 @@ Scoop_EventLoop_36Entry_Data:
 	incf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf2
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-270)
 	push	xiz
 	ld	xde, xwa
 	ld	xiy, GUI_FormatStrings_0x34

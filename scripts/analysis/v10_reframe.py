@@ -80,43 +80,45 @@ def elf_symbols():
 
 
 def disassemble(data):
-    """-> list of (nbytes, text) covering data exactly; undecodable bytes come
-    back as ('.byte 0x..', 1)."""
-    inp = " ".join("0x%02x" % c for c in data)
-    r = subprocess.run([os.path.join(LLVM, "llvm-mc"), "-triple=tlcs900",
-                        "-disassemble"], input=inp, capture_output=True, text=True)
-    bad = set()
-    for m in re.finditer(r"^<stdin>:1:(\d+): warning: invalid instruction encoding",
-                         r.stderr, re.M):
-        bad.add((int(m.group(1)) - 1) // 5)
-    insns = [l.rstrip() for l in r.stdout.split("\n") if l.strip()]
-    # re-encode the instruction texts in one batch to learn their lengths
-    if insns:
-        enc = subprocess.run([os.path.join(LLVM, "llvm-mc"), "-triple=tlcs900",
-                              "-show-encoding"], input="\n".join(insns),
-                             capture_output=True, text=True)
-        lens = [len(m.group(1).split(",")) for m in
-                re.finditer(r"encoding: \[([^\]]*)\]", enc.stdout)]
-        if len(lens) != len(insns):
-            raise SystemExit("re-encode produced %d encodings for %d instructions"
-                             % (len(lens), len(insns)))
-    else:
-        lens = []
-    out, i, k = [], 0, 0
-    while i < len(data):
-        if i in bad:
-            out.append((1, "\t.byte 0x%02x" % data[i]))
-            i += 1
+    """-> list of (nbytes, text) covering `data` exactly.
+
+    Uses llvm-objdump on a throwaway object rather than `llvm-mc -disassemble`,
+    because objdump prints the offset and the raw bytes of every instruction,
+    which is the only way to learn instruction LENGTHS without re-encoding the
+    text (and re-encoding is not a reliable inverse: the disassembler prints a
+    few forms the assembler spells differently).  A byte the backend cannot
+    decode comes back as `<unknown>` and is emitted as a 1-byte `.byte`, which
+    is exactly how the linear sweep that produced these sources resynced.
+    """
+    import tempfile
+    with tempfile.TemporaryDirectory() as td:
+        src = os.path.join(td, "d.s")
+        obj = os.path.join(td, "d.o")
+        with open(src, "w") as f:
+            f.write(".text\n")
+            for i in range(0, len(data), 16):
+                f.write(".byte " + ",".join("0x%02x" % c for c in data[i:i + 16]) + "\n")
+        subprocess.run([os.path.join(LLVM, "llvm-mc"), "-triple=tlcs900",
+                        "-filetype=obj", "-o", obj, src], check=True,
+                       capture_output=True)
+        out = subprocess.run([os.path.join(LLVM, "llvm-objdump"), "-d", obj],
+                             check=True, capture_output=True, text=True).stdout
+    segs = []
+    pat = re.compile(r"^\s*([0-9a-f]+):\s((?:[0-9a-f]{2} )+)\s*(.*)$")
+    for line in out.split("\n"):
+        m = pat.match(line)
+        if not m:
             continue
-        if k >= len(insns):
-            out.append((1, "\t.byte 0x%02x" % data[i]))
-            i += 1
-            continue
-        n = lens[k]
-        out.append((n, "\t" + insns[k].strip()))
-        i += n
-        k += 1
-    return out
+        raw = m.group(2).split()
+        text = m.group(3).rstrip()
+        if text.startswith("<unknown>"):
+            segs.append((1, "\t.byte 0x%s" % raw[0]))
+        else:
+            segs.append((len(raw), "\t" + re.sub(r"\s+", " ", text.strip(), count=1)))
+    if sum(n for n, _ in segs) != len(data):
+        raise SystemExit("objdump covered %d of %d bytes"
+                         % (sum(n for n, _ in segs), len(data)))
+    return segs
 
 
 def render(spec, rom, syms):
