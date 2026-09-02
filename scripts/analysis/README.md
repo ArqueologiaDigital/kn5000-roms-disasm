@@ -152,3 +152,26 @@ all 0xff) retyped as `.fill` (erased flash, not code, despite a clean decode),
 (`v7_no_source_bytes.py`). The 34 CODE-labelled, 25,425 B bucket is otherwise
 blocked by the same tlcs900-backend spelling gap already known from v7's
 general code-as-`.byte` debt.
+
+## Added 2026-09-02 (lane v10seq, full-disassembly push)
+
+Splits `v10/maincpu/sequencer`'s 11,096 `.byte` operands into what is actually
+debt and what is already correct, then measures what the conversions retired.
+
+| script | question it answers |
+|---|---|
+| `seq_byte_operand_triage.py` | Of a directory's `.byte` operands, how many are (a) real instructions spelled as data, (b) structured data written as an undifferentiated byte soup, (c) a genuine byte table already correct -- and, crossed with those, (d) blocked on one of the five leading bytes the pinned backend cannot decode? Addresses come from `address_line_map.py`, regions from `llvm-nm` on the real linked ELF, and the verdict from a whole-tree branch-vs-address reference test. `--control` scores that test against the 266 spans lanes V10DAC/V10DAC2 adjudicated by hand: **0 of 196 hand-judged DATA called CODE, but 33 of 70 hand-judged CODE called DATA**, so (a) is a LOWER bound and (b)/(c) certainly contain real code. |
+| `seq_blind_start_confound.py` | Can a DATA-AS-CODE misframe inflate `byte_run_start_enrichment.py`'s signal? Yes: a misframed table breaks at every byte the decoder refuses, and a note/channel table's own values include 0x01 and 0x04 constantly. Typing two tables took `seq_event_playback.s` -- v10's highest-rate file -- from 40.9% to 1.7% blind, without converting anything into an instruction. |
+| `seq_conversion_ledger.py` | For each region this lane re-typed, how many of its bytes were previously instruction mnemonics (data-as-code retired) versus already `.byte` (re-typed), with any real subroutine kept inside the block subtracted from both? |
+
+    python3 scripts/analysis/address_line_map.py --dump /tmp/amap.json
+    python3 scripts/analysis/seq_byte_operand_triage.py --amap /tmp/amap.json
+    python3 scripts/analysis/seq_byte_operand_triage.py --amap /tmp/amap.json --control
+    python3 scripts/analysis/seq_byte_operand_triage.py --amap /tmp/amap.json --blocked
+    python3 scripts/analysis/seq_blind_start_confound.py --dir v10/maincpu/sequencer --before a99564a6
+    python3 scripts/analysis/seq_conversion_ledger.py --before a99564a6
+
+Result: 4,511 B re-typed across eight regions -- 1,135 B of data-as-code
+retired, 2,311 B of `.byte` operands given a width, 67 B of real subroutine
+found living inside two of the data blocks and deliberately left alone.
+Full write-up in `notes/lanes/v10seq-2026-09-02.md`.
