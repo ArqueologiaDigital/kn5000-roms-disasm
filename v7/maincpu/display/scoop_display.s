@@ -3715,9 +3715,11 @@ DisplayMode_Handler_2:
 	call	DisplayStr_TempoString_0x32
 	ret
 DisplayMode_Handler_3:
-	.byte 0xf1, 0xef, 0x0d, 0x00, 0x0f, 0x1d, 0x7f, 0xef
-	.byte 0xef, 0xf1, 0x8c, 0x36, 0x00, 0x00, 0x1d, 0x15
-	.byte 0xf0, 0xef, 0x0e
+	stdi8	3567, 15
+	call	15724415
+	stdi8	13964, 0
+	call	15724565
+	ret
 	call VoiceSlot_ReadCurrentParams
 	cp A,0x81
 	jrl z, .Lc_ef8807
@@ -3857,9 +3859,10 @@ DisplayMode_Handler_3:
 	ldb_d8	w, 64316
 	call	15687414
 	stb_d8	13948, a
-	.byte 0xe7, 0x38, 0x9d, 0xf3, 0x07, 0xf4, 0xec, 0x35
+	ldfr_lerp	xiy, 56
+	lda_rr	xiy, xiy, hl
 	ld	a, (xiy+8)
-	.byte 0xe7, 0x38, 0x8d
+	ldto_lerp	xiy, 56
 	ld	(xix+3), a
 	stb_d8	13947, a
 	ldb_d8	a, 13201
@@ -3929,11 +3932,12 @@ DisplayMode_Handler_3:
 	xor	h, h
 	ld	xiy, 3542
 	ldb_d8	a, 13201
-	.byte 0xf3, 0x07, 0xf4, 0xec, 0x41
+	st_rrb	a, xiy, hl
 	ldb_d8	a, 13202
-	.byte 0xe7, 0x38, 0x9d, 0xf3, 0x07, 0xf4, 0xec, 0x35
+	ldfr_lerp	xiy, 56
+	lda_rr	xiy, xiy, hl
 	ld	(xiy+8), a
-	.byte 0xe7, 0x38, 0x8d
+	ldto_lerp	xiy, 56
 	inc	1, l
 	stb_d8	3540, l
 	cpda8	l, 3541
