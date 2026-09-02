@@ -36491,7 +36491,7 @@ AccPatch_VoiceAssignDataBlock:
 	cps	c, 0
 	jr	ugt, -48
 	inc	1, wa
-	.byte 0xd7, 0xe2, 0xf0
+	cp	wa, qwa
 	jr	ule, -64
 	ret
 	ld	xiy, 0x09f200
