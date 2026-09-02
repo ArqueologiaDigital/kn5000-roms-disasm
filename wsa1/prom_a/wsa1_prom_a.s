@@ -59796,7 +59796,63 @@ SeqBuf_AppendMarker_XIX:
 	inc 1,HL                                      ; FA5706  db 61
 	st_dd8w hl, 0xac                              ; FA5708  f0 ac 53
 	ret                                           ; FA570B  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x02570C, 0x000057
+; ---------------------------------------------------------------------
+; SeqBuf_AppendEvent_XIX -- a second copy of SeqBuf_AppendEvent
+;
+; Called from: NOTHING NAMES IT (as SeqBuf_AppendEvent itself; searched by
+;          notes/prom_a_ringbuf_map.py, same negative).
+; Inputs/Outputs: as SeqBuf_AppendEvent -- two bytes appended to ring
+;          0x600A14.
+; Evidence: notes/FINDINGS-prom_a-ring-buffers.md section 3 and
+;          notes/prom_a_byte_checks.py ("SeqBuf twins:") establish this is
+;          an INDEPENDENTLY WRITTEN twin of SeqBuf_AppendEvent (0xF830C6),
+;          not a near-duplicate differing by one byte -- that earlier claim
+;          was retracted 2026-08-25 (round-2 audit, F1).  75 of the 90
+;          positional bytes differ.  What is identical below is transcribed
+;          from SeqBuf_AppendEvent verbatim; what differs is transcribed
+;          from SeqBuf_AppendMarker_XIX immediately above -- the proven
+;          XIX idiom for this same 0x600A14 ring -- and from this file's
+;          own established `push SR`/`ei 0x06`/`pop SR` and
+;          `decm N,(reg+disp)` spellings.  Differences from
+;          SeqBuf_AppendEvent (full table in the header there):
+;            base register     XIX, not XIY
+;            critical section  push SR / ei 0x06 .. pop SR, not push/pop XIY
+;            free count        ONE decm 0x02,(xix-2), not TWO decm 0x01,(xiy-2)
+;            write cursor      ld (xix-4),hl (indexed), not ld (0x600a10),hl
+;            guard cell        (0x600a0c), the READ cursor, not (0x600a12)
+;            trace path        ld XIX,0x000000ae + XIX-relative store, once;
+;                              not extz XHL + XHL-relative, twice (2nd dead)
+; ---------------------------------------------------------------------
+SeqBuf_AppendEvent_XIX:
+	bit_dd8 0x00, 0xaa                                   ; FA570C  f0 aa c8
+	jr nz, SeqBuf_AppendEvent_XIX__trace                 ; FA570F  6e 35
+	m_cp_mi16 MW24, 0x600a0c, 0x0002                     ; FA5711  d2 0c 0a 60 3f 02 00
+	jr c, SeqBuf_AppendEvent_XIX__drop                   ; FA5718  67 27
+	push SR                                              ; FA571A  02
+	ei 0x06                                              ; FA571B  06 06
+	ld XIX,0x00600a14                                    ; FA571D  44 14 0a 60 00
+	ld hl, (xix-4)                                       ; FA5722  9c fc 23
+	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FA5725  f3 07 f0 ec 41
+	minc1_16 hl, 0x01ff                                  ; FA572A  db 38 ff 01
+	ld_sd8b a, 0x93                                      ; FA572E  c0 93 21
+	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FA5731  f3 07 f0 ec 41
+	minc1_16 hl, 0x01ff                                  ; FA5736  db 38 ff 01
+	ld (xix-4), hl                                       ; FA573A  bc fc 53
+	decm 0x02, (xix-2)                                   ; FA573D  9c fe 6a
+	pop SR                                               ; FA5740  03
+SeqBuf_AppendEvent_XIX__drop:
+	ldwio 0xac, 0x00                                     ; FA5741  0a ac 00 00
+	ret                                                  ; FA5745  0e
+SeqBuf_AppendEvent_XIX__trace:
+	ld XIX,0x000000ae                                    ; FA5746  44 ae 00 00 00
+	m_ld_rm MW8, 0xac, r3                                ; FA574B  d0 ac 23
+	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FA574E  f3 07 f0 ec 41
+	inc 1,HL                                             ; FA5753  db 61
+	ld_sd8b a, 0x93                                      ; FA5755  c0 93 21
+	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FA5758  f3 07 f0 ec 41
+	inc 1,HL                                             ; FA575D  db 61
+	st_dd8w hl, 0xac                                     ; FA575F  f0 ac 53
+	ret                                                  ; FA5762  0e
 
 ; ==============================================================================
 ; 0xFA5763-0xFA5941 -- the MIDI input parser, its register context, and the
