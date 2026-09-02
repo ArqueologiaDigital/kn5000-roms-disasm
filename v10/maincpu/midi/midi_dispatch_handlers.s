@@ -1604,30 +1604,27 @@ PanelEvt_Dispatch11Entry:
 	ret
 
 PanelEvt_Dispatch11_TableAndHandlers:
-	swi	7
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	muls	hl, 253
+	; PanelEvt_Dispatch11_TableAndHandlers -- one 0xFF pad byte, then 12 handler
+	; pointers. The pad is not a guess: PanelEvt_Dispatch11_TableAndHandlers_0x1
+	; is defined as this label + 1 in shared/positional_labels.s and is what
+	; PanelEvt_Dispatch11Entry loads (`ld xiy, ..._0x1 / ldb a, 0xb / calr
+	; PanelEvent_DispatchByIndex`), so entry 0 is at +1, not at +0.
+	; 12 entries reach 0xFD09DB, which is also the value of the last entry --
+	; the table is followed immediately by the code it points at.
+	; one pad byte; entry 0 of the table is at +1
+	.byte 0xff
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long 0x00fd09db
 	ldb_d8	a, (0x964f)
 	and	a, 192
 	jr	z, 36

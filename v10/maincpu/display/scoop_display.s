@@ -1041,6 +1041,12 @@ ScoopDisp_FlagSetAndDispatch:
 	call	MemConfig_Handler_1_0x1EF
 	ret
 ScoopDisp_DispatchTable_Small:
+	; ScoopDisp_DispatchTable_Small -- 32 handler pointers, index scaled by 4.
+	; INDEXING RULE, from the only site that loads it (this file, ~40 lines above):
+	;     sla hl, 2 / push xix / ld xix, ScoopDisp_DispatchTable_Small
+	;     ld_rrl xhl, xix, hl / pop xix / call (xhl)
+	; The table was already typed except its LAST entry, which the old sweep read
+	; as `inc 1, xwa / .byte 0xef / nop`. 32 entries reach exactly the next label.
 	.long ScoopDisp_FlagSetAndDispatch
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
@@ -1072,9 +1078,7 @@ ScoopDisp_DispatchTable_Small:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	inc	1, xwa
-	.byte 0xef
-	nop
+	.long DefaultHandler_Ret
 ToneParam_Evt0F_BytecodeHandler:
 	bit	7, w
 	jrl	nz, 17
@@ -1828,20 +1832,46 @@ PerfMode_Evt04_VolumeHandler:
 	decf
 	ret
 PerfMode_VoiceAddressTable:
-	.byte 0xb9, 0xf9, 0x00, 0x00, 0xed
-	.byte 0xf9, 0x00, 0x00, 0xd3, 0xf9, 0x00, 0x00, 0x6f
-	.byte 0xfa, 0x00, 0x00, 0x89, 0xfa, 0x00, 0x00, 0xa3
-	.byte 0xfa, 0x00, 0x00, 0xbd, 0xfa, 0x00, 0x00, 0xd7
-	.byte 0xfa, 0x00, 0x00, 0x21, 0xfa, 0x00, 0x00, 0x3b
-	.byte 0xfa, 0x00, 0x00, 0x55, 0xfa, 0x00, 0x00, 0x07
-	.byte 0xfa, 0x00, 0x00, 0x3f, 0xfb, 0x00, 0x00, 0xdb
-	.byte 0xfb, 0x00, 0x00, 0xdb, 0xfb, 0x00, 0x00, 0xb9
-	.byte 0xf9, 0x00, 0x00, 0xb9, 0xf9, 0x00, 0x00, 0xf1
-	.byte 0xfa, 0x00, 0x00, 0x0b, 0xfb, 0x00, 0x00, 0x25
-	.byte 0xfb, 0x00, 0x00, 0xc8, 0x33, 0x07, 0x7e, 0x0b
-	.byte 0x00, 0xce, 0xf1, 0x76, 0x0d, 0x00, 0xc9, 0x61
-	.byte 0x1b, 0x4f, 0x6c, 0xef, 0xcf, 0xf1, 0x76, 0x02
-	.byte 0x00, 0xc9, 0x69, 0x0e
+	; PerfMode_VoiceAddressTable -- 20 x u32 work-RAM pointers, then the routine
+	; at +80.
+	; INDEXING RULE, from this file: an index byte is fetched from a table at
+	; 0x0000F1A0 (`ld xix, 0xf1a0 / ld_rrb l, xix, hl`), scaled by 4, and used as
+	;     ld xix, PerfMode_VoiceAddressTable / ld_rrl xhl, xix, hl / ld (xhl), a
+	; so entries are DATA pointers written through, not handlers.
+	; EXTENT: PerfMode_VoiceAddressTable_0x50 = this label + 80 and is the target
+	; of six `call`s, so 0xEF6C37 is code, not a 21st entry.
+	.long 0x0000f9b9
+	.long 0x0000f9ed
+	.long 0x0000f9d3
+	.long 0x0000fa6f
+	.long 0x0000fa89
+	.long 0x0000faa3
+	.long 0x0000fabd
+	.long 0x0000fad7
+	.long 0x0000fa21
+	.long 0x0000fa3b
+	.long 0x0000fa55
+	.long 0x0000fa07
+	.long 0x0000fb3f
+	.long 0x0000fbdb
+	.long 0x0000fbdb
+	.long 0x0000f9b9
+	.long 0x0000f9b9
+	.long 0x0000faf1
+	.long 0x0000fb0b
+	.long 0x0000fb25
+
+	; PerfMode_VoiceAddressTable_0x50: called from six sites.
+	bit 7, w
+	jrl nz, 11
+	cp a, h
+	jrl z, 13
+	inc 1, a
+	jp 15690831
+	cp a, l
+	jrl z, 2
+	dec 1, a
+	ret
 PerfMode_ParamHandler_10:
 	ld	hl, bc
 	cp	hl, 31
@@ -12486,57 +12516,20 @@ SubCPU_ToneParamDisplay:
 	.byte 0x50, 0x41
 	.ascii "N      :KEY SHIFT:TUNING   :BEND SENS:"
 SubCPU_ToneDispatch:
-	ret_cc_ri xiz, 9
-	nop
-	nop
-	.byte 0xea
-	swi	1
-	nop
-	nop
-	.byte 0xd0
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEFDB49-0xEFDB5C (19 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=73% dist=7 near SubCPU_ToneDispatch+9
-	.byte 0xf9, 0x00, 0x00, 0x6c, 0xfa, 0x00, 0x00, 0x86, 0xfa, 0x00, 0x00, 0xa0
-	.byte 0xfa, 0x00, 0x00, 0xba, 0xfa, 0x00, 0x00
-	.byte 0xd4
-	swi	2
-	nop
-	nop
-	calr	250
-	nop
-	push	xwa
-	swi	2
-	nop
-	nop
-	.byte 0x52
-	swi	2
-	nop
-	nop
-	.byte 0x04
-	swi	2
-	nop
-	nop
-	push	xix
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	.byte 0xee
-	swi	2
-	nop
-	nop
-	ldio	251, 0
-	nop
-	ldb	b, 251
-	nop
-	nop
+	; SubCPU_ToneDispatch -- 20 x u32: work-RAM parameter-block pointers
+	; (0x0000F9B6, 0x0000F9EA, ... stride 26 within each group) with 0xFFFFFFFF
+	; for an absent index, the same record shape as the MIDI CC record tables.
+	; EXTENT is not inferred from the values: SubCPU_ToneDispatch_0x50 is defined
+	; as this label + 80 in shared/positional_labels.s and is loaded as a BYTE
+	; table (`ld xiy, ..._0x50 / ld_rrb a, xiy, hl`), so 0xEFDB90 is where this
+	; table stops and a different one starts.
+	; Supersedes a v10_data_as_code_census.py note for 0xEFDB49-0xEFDB5C, which
+	; was this array carved 9 bytes in, and so at the wrong entry boundary.
+	.long 0x0000f9b6, 0x0000f9ea, 0x0000f9d0, 0x0000fa6c
+	.long 0x0000fa86, 0x0000faa0, 0x0000faba, 0x0000fad4
+	.long 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa04
+	.long 0x0000fb3c, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0x0000faee, 0x0000fb08, 0x0000fb22
 	ldio	9, 10
 	pushw	0xd7cf
 	bit	7, w
@@ -13642,6 +13635,9 @@ SubCPU_ToneParamRet:
 
 
 OscScope_HandlerTable:
+	; OscScope_HandlerTable -- 16 handler pointers (`ld xde, OscScope_HandlerTable`
+	; in this file). Only the last entry was untyped; 16 entries reach exactly the
+	; next label, SndHandler_DefaultRet.
 	.long SndHandler_DefaultRet
 	.long SndHandler_DefaultRet
 	.long OscScope_Handler_2
@@ -13657,8 +13653,7 @@ OscScope_HandlerTable:
 	.long SndHandler_DefaultRet
 	.long SndHandler_DefaultRet
 	.long SndHandler_DefaultRet
-	.byte 0xa5
-	.byte 0xe7, 0xef, 0x00
+	.long SndHandler_DefaultRet
 SndHandler_DefaultRet:
 	ret
 OscScope_Handler_2:

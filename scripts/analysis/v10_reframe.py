@@ -52,6 +52,7 @@ import sys
 ROM_BASE = 0xE00000
 LLVM = os.environ.get("LLVM_BIN",
                       os.path.expanduser("~/compartilhado/llvm-project/build/bin"))
+LABEL_RE = re.compile(r"^([A-Za-z_.$][A-Za-z0-9_.$]*):\s*(;.*)?$")
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
@@ -202,7 +203,20 @@ def splice(path, lm, a, b, newlines):
                          % (a, b, path))
     first = min(inv[a])
     last = min(inv[b])          # exclusive
-    return src[:first - 1] + newlines + src[last - 1:], first, last
+    # ⚠ Keep any label (or comment) lines that sit AT the start address: they
+    # define symbols other files reference, and dropping them is invisible to
+    # the byte gate but fatal at link time.
+    while first < last and (LABEL_RE.match(src[first - 1])
+                            or src[first - 1].strip().startswith(";")
+                            or src[first - 1].strip() == ""):
+        first += 1
+    before = {l for l in src if LABEL_RE.match(l)}
+    out = src[:first - 1] + newlines + src[last - 1:]
+    after = {l for l in out if LABEL_RE.match(l)}
+    if before != after:
+        raise SystemExit("REFUSED: label definitions would change in %s: %s"
+                         % (path, sorted(before ^ after)[:8]))
+    return out, first, last
 
 
 def main():
