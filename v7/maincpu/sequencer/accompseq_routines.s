@@ -252,7 +252,15 @@ AccompSeq_AdvanceDone:
 	ret
 
 AccompSeq_VRAMHelperData:
-	.incbin "includes/romslices/v7_transplant_AccompSeq_VRAMHelperData_head.bin"
+	.byte 0xc1, 0x89
+AccompSeq_VRAMHelperData_Code:
+	jrl	pl, -32705
+	jr	c, 5
+	calr	9
+	jr	6
+	ldw_d16	wa, (32166)
+	ld	iy, wa
+	ret	
 	ldw_d16 wa, (0x7da6)
 	and XWA,0x00000fff
 	sla xwa, 8
