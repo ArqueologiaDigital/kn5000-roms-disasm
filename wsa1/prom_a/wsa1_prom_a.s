@@ -42038,7 +42038,183 @@ sub_F98ADE:   ; entry: prom_b routine directory
 	pop XHL                                              ; F98DE1  5b
 	unlk XIZ                                             ; F98DE2  ee 0d
 	ret                                                  ; F98DE4  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x018DE5, 0x00021B
+; ---------------------------------------------------------------------
+; PtrTable_F98DE5 -- 134 LE32 pointers (536 B) and a 135th entry TRUNCATED
+; by the module boundary at 0xF99000 (3 B).  Converted 2026-09-02 by
+; notes/gen_prom_a_f98de5_table.py; argument in
+; notes/FINDINGS-prom_a-f98de5-investigation.md, rewritten this pass.
+;
+; ★ THIS OVERTURNS THE REFUSAL RECORDED IN THAT FINDINGS FILE.  Its
+;   technical reason was "indices 118+ : the alignment breaks".  It does
+;   not: all 134 four-byte windows from 0xF98DE5 have a 0x00 top byte and a
+;   value in 0x00F00000-0x00FFFFFF, with ZERO exceptions.  What changes at
+;   index 118 is the VALUE FAMILY (0x00F30xxx after 0x00F2xxxx), which is a
+;   different region of prom_b, not a different stride.
+;
+; Evidence, all re-derived by --audit:
+;   * notes/prom_a_ptr_tables.py -- which shares no code with the emitter --
+;     reports exactly ONE run in 0xF98D00-0xF99010: this one, 134 entries.
+;     Its published null over 24 KiB of already-converted prom_a CODE finds
+;     runs of at most 16 entries and NONE of 17 or more.
+;   * 32 of the 57 distinct 0x00F2xxxx/0x00F3xxxx values are RECORD STARTS
+;     of prom_b's display lists, walked with the interpreter's own
+;     self-checking (opcode, length) framing.
+;   * PtrTable_F99121 (already in this file) is the same object for another
+;     screen set.  Aligning entry 0 here with its entry 49 (0xF991E5) makes
+;     28 of 120 entries byte-identical, including unbroken runs of 10, 12, 4.
+;     Both tails have the same shape, and the two local defaults differ by
+;     exactly 0x400: 0xF99120-0xF98D20 = 0xF99121-0xF98D21 = 0x400.
+;   * Not code: a linear decode has 37 undecodable bytes starting at
+;     0xF98DE5 itself, and no branch/call/jp operand in this file lands
+;     inside the span.
+;
+; ★ THE 3 LEFTOVER BYTES.  539 = 4*134 + 3.  `49 f9 f2` are the low three bytes
+; of 0x00F2F949, which IS a display-list record start like the 32 above.
+; Its top byte would sit at 0xF99000, which holds 0x3E -- the `push XIZ`
+; that opens sub_F99000.  The last entry is CUT IN HALF by the module
+; boundary; the same thing happens at 0xFDFFDF-0xFE0000.  Emitted as
+; `.byte`, not as a `.long`: the fourth byte does not exist.
+;
+; NOT ESTABLISHED: what indexes the table.  No literal 0x00F98DE5, nor any
+; base inside 0xF98D00-0xF99010, exists in any of the four images.
+; PtrTable_F99121 has the same gap and was converted anyway.
+; ---------------------------------------------------------------------
+PtrTable_F98DE5:
+	.long 0x00f2ddbd   ; F98DE5  [  0] prom_b display list, record start
+	.long 0x00f2ddbd   ; F98DE9  [  1] prom_b display list, record start
+	.long 0x00f2de3c   ; F98DED  [  2] prom_b display list, record start
+	.long 0x00f2de3c   ; F98DF1  [  3] prom_b display list, record start
+	.long 0x00f2de6b   ; F98DF5  [  4] prom_b display list, record start
+	.long 0x00f2df1c   ; F98DF9  [  5] prom_b display list, record start
+	.long 0x00f2df6d   ; F98DFD  [  6] prom_b display list, record start
+	.long 0x00f2df6d   ; F98E01  [  7] prom_b display list, record start
+	.long 0x00f2dfec   ; F98E05  [  8] prom_b display list, record start
+	.long 0x00f2dfec   ; F98E09  [  9] prom_b display list, record start
+	.long 0x00f2e06a   ; F98E0D  [ 10] prom_b display list
+	.long 0x00f2e0ec   ; F98E11  [ 11] prom_b display list
+	.long 0x00f2e131   ; F98E15  [ 12] prom_b display list
+	.long 0x00f2e131   ; F98E19  [ 13] prom_b display list
+	.long 0x00f2e1de   ; F98E1D  [ 14] prom_b display list
+	.long 0x00f2e5e3   ; F98E21  [ 15] prom_b display list
+	.long 0x00f2e671   ; F98E25  [ 16] prom_b display list
+	.long 0x00f2e540   ; F98E29  [ 17] prom_b display list
+	.long 0x00f2e5e3   ; F98E2D  [ 18] prom_b display list
+	.long 0x00f2e4c3   ; F98E31  [ 19] prom_b display list, record start
+	.long 0x00f2e540   ; F98E35  [ 20] prom_b display list
+	.long 0x00f2e671   ; F98E39  [ 21] prom_b display list
+	.long 0x00f2e67f   ; F98E3D  [ 22] prom_b display list
+	.long 0x00f2dba6   ; F98E41  [ 23] prom_b display list, record start
+	.long 0x00f2dc3a   ; F98E45  [ 24] prom_b display list, record start
+	.long 0x00f2d800   ; F98E49  [ 25] prom_b display list, record start
+	.long 0x00f2d810   ; F98E4D  [ 26] prom_b display list, record start
+	.long 0x00f2d857   ; F98E51  [ 27] prom_b display list, record start
+	.long 0x00f2d87d   ; F98E55  [ 28] prom_b display list, record start
+	.long 0x00f2d834   ; F98E59  [ 29] prom_b display list, record start
+	.long 0x00f2d857   ; F98E5D  [ 30] prom_b display list, record start
+	.long 0x00f2d810   ; F98E61  [ 31] prom_b display list, record start
+	.long 0x00f2d834   ; F98E65  [ 32] prom_b display list, record start
+	.long 0x00f2db97   ; F98E69  [ 33] prom_b display list, record start
+	.long 0x00f2dba6   ; F98E6D  [ 34] prom_b display list, record start
+	.long 0x00f2e93e   ; F98E71  [ 35] prom_b display list
+	.long 0x00f2e96c   ; F98E75  [ 36] prom_b display list
+	.long 0x00f2d87d   ; F98E79  [ 37] prom_b display list, record start
+	.long 0x00f2d8d4   ; F98E7D  [ 38] prom_b display list, record start
+	.long 0x00f2e716   ; F98E81  [ 39] prom_b display list, record start
+	.long 0x00f2e772   ; F98E85  [ 40] prom_b display list
+	.long 0x00f2e772   ; F98E89  [ 41] prom_b display list
+	.long 0x00f2e7f8   ; F98E8D  [ 42] prom_b display list, record start
+	.long 0x00f2e7f8   ; F98E91  [ 43] prom_b display list, record start
+	.long 0x00f2e88d   ; F98E95  [ 44] prom_b display list
+	.long 0x00f2e88d   ; F98E99  [ 45] prom_b display list
+	.long 0x00f2e8a3   ; F98E9D  [ 46] prom_b display list
+	.long 0x00f2e8a3   ; F98EA1  [ 47] prom_b display list
+	.long 0x00f2e8ba   ; F98EA5  [ 48] prom_b display list
+	.long 0x00f2e8ba   ; F98EA9  [ 49] prom_b display list
+	.long 0x00f2e8df   ; F98EAD  [ 50] prom_b display list
+	.long 0x00f2e8df   ; F98EB1  [ 51] prom_b display list
+	.long 0x00f2e93e   ; F98EB5  [ 52] prom_b display list
+	.long 0x00f2e96c   ; F98EB9  [ 53] prom_b display list
+	.long 0x00f2e976   ; F98EBD  [ 54] prom_b display list
+	.long 0x00f2e96c   ; F98EC1  [ 55] prom_b display list
+	.long 0x00f2e976   ; F98EC5  [ 56] prom_b display list
+	.long 0x00f2e06a   ; F98EC9  [ 57] prom_b display list
+	.long 0x00f2e0ec   ; F98ECD  [ 58] prom_b display list
+	.long 0x00f2ea3f   ; F98ED1  [ 59] prom_b display list
+	.long 0x00f2eaeb   ; F98ED5  [ 60] prom_b display list, record start
+	.long 0x00f2eb9c   ; F98ED9  [ 61] prom_b display list, record start
+	.long 0x00f2ec30   ; F98EDD  [ 62] prom_b display list
+	.long 0x00f2ec30   ; F98EE1  [ 63] prom_b display list
+	.long 0x00f2ed18   ; F98EE5  [ 64] prom_b display list
+	.long 0x00f2eaeb   ; F98EE9  [ 65] prom_b display list, record start
+	.long 0x00f2eb9c   ; F98EED  [ 66] prom_b display list, record start
+	.long 0x00f2ed18   ; F98EF1  [ 67] prom_b display list
+	.long 0x00f2ee30   ; F98EF5  [ 68] prom_b display list
+	.long 0x00f2ee30   ; F98EF9  [ 69] prom_b display list
+	.long 0x00f2eefb   ; F98EFD  [ 70] prom_b display list
+	.long 0x00f2eefb   ; F98F01  [ 71] prom_b display list
+	.long 0x00f2f09b   ; F98F05  [ 72] prom_b display list
+	.long 0x00f2f09b   ; F98F09  [ 73] prom_b display list
+	.long 0x00f2f21a   ; F98F0D  [ 74] prom_b display list
+	.long 0x00f2f21a   ; F98F11  [ 75] prom_b display list
+	.long 0x00f2f2ce   ; F98F15  [ 76] prom_b display list
+	.long 0x00f2de6b   ; F98F19  [ 77] prom_b display list, record start
+	.long 0x00f2de89   ; F98F1D  [ 78] prom_b display list
+	.long 0x00f2de6b   ; F98F21  [ 79] prom_b display list, record start
+	.long 0x00f2de89   ; F98F25  [ 80] prom_b display list
+	.long 0x00f2de6b   ; F98F29  [ 81] prom_b display list, record start
+	.long 0x00f2de89   ; F98F2D  [ 82] prom_b display list
+	.long 0x00f98d20   ; F98F31  [ 83] prom_a local
+	.long 0x00f98d20   ; F98F35  [ 84] prom_a local
+	.long 0x00f98d20   ; F98F39  [ 85] prom_a local
+	.long 0x00f98d20   ; F98F3D  [ 86] prom_a local
+	.long 0x00f98d20   ; F98F41  [ 87] prom_a local
+	.long 0x00f98d20   ; F98F45  [ 88] prom_a local
+	.long 0x00f98d20   ; F98F49  [ 89] prom_a local
+	.long 0x00f98d20   ; F98F4D  [ 90] prom_a local
+	.long 0x00f98d20   ; F98F51  [ 91] prom_a local
+	.long 0x00f98d20   ; F98F55  [ 92] prom_a local
+	.long 0x00f98d20   ; F98F59  [ 93] prom_a local
+	.long 0x00f98d20   ; F98F5D  [ 94] prom_a local
+	.long 0x00f98d20   ; F98F61  [ 95] prom_a local
+	.long 0x00f98d20   ; F98F65  [ 96] prom_a local
+	.long 0x00f98d20   ; F98F69  [ 97] prom_a local
+	.long 0x00f98c85   ; F98F6D  [ 98] prom_a local
+	.long 0x00f98d20   ; F98F71  [ 99] prom_a local
+	.long 0x00f98d20   ; F98F75  [100] prom_a local
+	.long 0x00f98d20   ; F98F79  [101] prom_a local
+	.long 0x00f98d20   ; F98F7D  [102] prom_a local
+	.long 0x00f98d20   ; F98F81  [103] prom_a local
+	.long 0x00f98d20   ; F98F85  [104] prom_a local
+	.long 0x00f98d20   ; F98F89  [105] prom_a local
+	.long 0x00f98d20   ; F98F8D  [106] prom_a local
+	.long 0x00f98d20   ; F98F91  [107] prom_a local
+	.long 0x00f98d20   ; F98F95  [108] prom_a local
+	.long 0x00f98d20   ; F98F99  [109] prom_a local
+	.long 0x00f98d20   ; F98F9D  [110] prom_a local
+	.long 0x00f98d20   ; F98FA1  [111] prom_a local
+	.long 0x00f98d20   ; F98FA5  [112] prom_a local
+	.long 0x00f98d20   ; F98FA9  [113] prom_a local
+	.long 0x00f98d20   ; F98FAD  [114] prom_a local
+	.long 0x00f98d21   ; F98FB1  [115] prom_a local
+	.long 0x00f98d21   ; F98FB5  [116] prom_a local
+	.long 0x00f98d21   ; F98FB9  [117] prom_a local
+	.long 0x00f30180   ; F98FBD  [118] prom_b display list, record start
+	.long 0x00f3006a   ; F98FC1  [119] prom_b display list, record start
+	.long 0x00f30105   ; F98FC5  [120] prom_b display list, record start
+	.long 0x00f2fbe6   ; F98FC9  [121] prom_b display list, record start
+	.long 0x00f2fcae   ; F98FCD  [122] prom_b display list, record start
+	.long 0x00f2fcae   ; F98FD1  [123] prom_b display list, record start
+	.long 0x00f2fcce   ; F98FD5  [124] prom_b display list, record start
+	.long 0x00f2f722   ; F98FD9  [125] prom_b display list, record start
+	.long 0x00f2f77b   ; F98FDD  [126] prom_b display list, record start
+	.long 0x00f2f77b   ; F98FE1  [127] prom_b display list, record start
+	.long 0x00f2f7ed   ; F98FE5  [128] prom_b display list, record start
+	.long 0x00f2f7ed   ; F98FE9  [129] prom_b display list, record start
+	.long 0x00f2f857   ; F98FED  [130] prom_b display list, record start
+	.long 0x00f2f875   ; F98FF1  [131] prom_b display list, record start
+	.long 0x00f2f8ce   ; F98FF5  [132] prom_b display list, record start
+	.long 0x00f2f8ce   ; F98FF9  [133] prom_b display list, record start
+	.byte 0x49, 0xf9, 0xf2               ; F98FFD  [134] TRUNCATED: low 3 bytes of 0x00F2F949
 sub_F99000:   ; entry: branch/call in converted code
 	push XIZ                                             ; F99000  3e
 	push XIX                                             ; F99001  3c
