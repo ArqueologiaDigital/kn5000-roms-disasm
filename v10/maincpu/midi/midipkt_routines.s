@@ -1325,16 +1325,9 @@ MidiPkt_SysExBulkTransfer_Data:
 	ret	gt
 	add	hl, hl
 	lda_24	xix, (MidiPkt_EventType_Table_0x324)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	popw	iy
-	.byte 0xa9
-	swi	5
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (16623949)
+	jp_rr 8, xix, hl
 	jr	98
 	jrl	377
 	jrl	377
@@ -1350,9 +1343,11 @@ MidiPkt_SysExBulkTransfer_Data:
 	ld	c, (xwa+2)
 	ld	(xde+2), c
 	ld	a, (xwa+3)
-	.byte 0xba
-	pop	sr
-	ld	xbc, 0x3e3c3b3a
+	ld (xde+3), a
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	MidiStream_ExtendedDispatch_0x298
 	pop	xiz
 	pop	xix
@@ -1367,9 +1362,11 @@ MidiPkt_SysExBulkTransfer_Data:
 	ld	c, (xwa+2)
 	ld	(xde+2), c
 	ld	a, (xwa+3)
-	.byte 0xba
-	pop	sr
-	ld	xbc, 0x3e3c3b3a
+	ld (xde+3), a
+	push xde
+	push xhl
+	push xix
+	push xiz
 	call	MidiStream_ExtendedDispatch_0x1
 	call	SwbtWr_ReinitOutputBank
 	pop	xiz
@@ -1384,19 +1381,11 @@ MidiPkt_SysExBulkTransfer_Data:
 	ldda32	xwa, (0xbcac)
 	ldw	bc, 9
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	.byte 0xca
-	rcf
-	.byte 0xc7
-	swi	3
-	.byte 0xcf
-	rcf
+	ldb_erp l, 251
+	sub_erpb 251, 16
+	cp_erpb 251, 16
 	jrl	nc, 244
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	lda_24	xbc, (MidiPkt_EventType_Table_0x330)
 	.byte 0xc3
@@ -1412,14 +1401,9 @@ MidiPkt_SysExBulkTransfer_Data:
 	swi	5
 	cps	l, 2
 	jrl	ugt, 210
-	.byte 0xc7
-	swi	3
-	.byte 0xcf
-	retd	0xcb76
-	nop
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	cp_erpb 251, 15
+	jrl z, 203
+	stb_erp a, 251
 	extz	wa
 	cps	l, 0
 	jr	z, 97
@@ -1427,9 +1411,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	lds	bc, 0
 	lds	de, 0
 	call	SndParam_NotifyAndReturn
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
@@ -1442,9 +1424,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0x95
 	rcf
 	lda	xwa, (xsp+10)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	calr	65321
 	ld	xiy, MidiPkt_EventType_Table_0x344
@@ -1454,9 +1434,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0x95
 	rcf
 	lda	xwa, (xsp+6)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	calr	65298
 	ld	xiy, MidiPkt_EventType_Table_0x348
@@ -1466,18 +1444,14 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0x95
 	rcf
 	lda	xwa, (xsp+2)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	jr	94
 	pushw	0
 	lds	bc, 0
 	lds	de, 0
 	call	SndParam_NotifyAndReturn
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
@@ -1490,9 +1464,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0x95
 	rcf
 	lda	xwa, (xsp+10)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	calr	65225
 	ld	xiy, MidiPkt_EventType_Table_0x350
@@ -1502,9 +1474,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0x95
 	rcf
 	lda	xwa, (xsp+6)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	calr	65202
 	ld	xiy, MidiPkt_EventType_Table_0x354
@@ -1514,14 +1484,10 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0x95
 	rcf
 	lda	xwa, (xsp+2)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	calr	65218
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	lda	xsp, (xsp+12)
 	ret
 	jrl	-568
@@ -1542,21 +1508,15 @@ MidiPkt_SysExBulkTransfer_Data:
 	jr	lt, 72
 	ld	xwa, 0x4b04
 	call	DSPCfg_ReadParam_Map0
-	.byte 0xd7
-	swi	2
-	cp	(xhl-41), de
-	inc	1, wa
-	.byte 0x37
+	ld qiz, hl
+	cp qiz, 0
+	jr lt, 55
 	lds	iz, 0
-	.byte 0xd7
-	swi	2
-	inc	2, wa
-	pushw	de
+	cp qiz, 0
+	jr le, 42
 	ld	a, (xsp+4)
 	extz	wa
-	.byte 0xc7
-	swi	0
-	.byte 0x8b
+	stb_erp c, 248
 	extz	bc
 	calr	596
 	ld	bc, hl
@@ -1567,9 +1527,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	add	xwa, 0x4b10
 	call	DSPCfg_WriteParamFull
 	inc	1, iz
-	.byte 0xd7
-	swi	2
-	.byte 0xf6
+	cp iz, qiz
 	jr	lt, -42
 	push	xiz
 	call	SwbtWr_ReinitOutputBank

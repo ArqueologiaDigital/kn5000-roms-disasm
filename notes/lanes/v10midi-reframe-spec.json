@@ -1,0 +1,103 @@
+[
+ {
+  "file": "v10/maincpu/midi/midi_dispatch_handlers.s",
+  "start": "0xFD175E",
+  "end": "0xFD1A5E",
+  "kind": "long",
+  "per_line": 1,
+  "symbols": true,
+  "comment": [
+   "PanelEvt_Handler_4_DualValueCheck_0x77 (0xFD175E) -- MIDI CC handler table.",
+   "INDEXING RULE, from the only site that loads it (MidiCC_Dispatch, this file):",
+   "    cp c, 0xbf / jr ugt, <ret>      ; index = C, valid 0..0xBF",
+   "    ld l, c / extz hl / sll hl, 2   ; scaled by 4",
+   "    ld xix, ..._0x77 / ld_sril3 XIX, 0x07, 0xf0, 0xec   ; xix += hl",
+   "    call (xix)                      ; entry is a CODE address",
+   "=> 192 entries of 4 bytes, index 0 at 0xFD175E, stride 4. Every entry",
+   "resolves to a label in this file, which is what settles CODE-pointer over",
+   "data-pointer. It was previously spelled as 1-byte .byte runs interleaved",
+   "with resync garbage; the byte gate could not see the difference.",
+   "",
+   "Supersedes 3 v10_data_as_code_census.py notes inside this span (the first",
+   "reads: 0xFD17AB-0xFD191E (371 B), unreached CODE-territory, was disassembled",
+   "as 188 plausible-but-dead instruction lines). The census was RIGHT that this",
+   "is data and WRONG about where it starts: it carved from 0xFD17AB, one byte",
+   "past the entry boundary, so every record shown was a rotation of the real",
+   "one. The array starts at 0xFD175E, immediately after the `ret` at 0xFD175D."
+  ]
+ },
+ {
+  "file": "v10/maincpu/midi/midi_dispatch_handlers.s",
+  "start": "0xFD1A5E",
+  "end": "0xFD1A8E",
+  "kind": "byte",
+  "per_line": 8,
+  "record": 8,
+  "comment": [
+   "PanelEvt_Handler_4_DualValueCheck_0x377 (0xFD1A5E) -- 48-entry byte table.",
+   "INDEXING RULE, from MidiChanCfg_SetupParams (this file):",
+   "    cp w, 0x2f / jr ugt, <exit>     ; index = W, valid 0..0x2F",
+   "    ld xiz, ..._0x377 / ldb_sri W, 0x03, 0xf8, 0xe1   ; W = (xiz + W)",
+   "    cp w, 0xff / jr z, <exit>       ; 0xFF means 'no entry'",
+   "=> 48 bytes, stride 1, 0xFF = absent. A genuine byte table: it is printed",
+   "8 per line only to show the six 8-entry groups, not because 8 is a record."
+  ]
+ },
+ {
+  "file": "v10/maincpu/midi/midi_dispatch_handlers.s",
+  "start": "0xFD1A8E",
+  "end": "0xFD268F",
+  "kind": "long",
+  "per_line": 4,
+  "record": 128,
+  "symbols": false,
+  "comment": [
+   "0xFD1A8E..0xFD268F -- 24 records of 32 x u32, stride 0x80.",
+   "INDEXING RULE, from the 26 sites in this file that load a record base",
+   "(PanelEvt_Handler_4_DualValueCheck_0x3A7 .. _0xE28 in shared/positional_labels.s):",
+   "    ldb_d8 l, (0x964c) / cp l, 31 / jr ugt, <skip>   ; index = L, valid 0..31",
+   "    ld xix, <record base> / extz hl / sll l, 2",
+   "    ld_rrl xix, xix, hl             ; xix = record[index]",
+   "    cp xix, 0xffffffff / jr z, <skip>   ; 0xFFFFFFFF means 'no entry'",
+   "=> 32 entries of 4 bytes per record; present entries are work-RAM addresses",
+   "0x0000F9C3 + 26*k (26-byte parameter blocks); absent entries are 0xFFFFFFFF.",
+   "Record bases run 0xFD1A8E + 0x80*k for k=0..4, then 0xFD1D0F + 0x80*k for",
+   "k=0..18 -- there is a ONE-BYTE 0xFF pad at 0xFD1D0E, which is why the",
+   "second block is offset by one and why this span is emitted in three",
+   "segments. The positional labels are the evidence for that offset, not a",
+   "guess: _0x5A7 = base+1447 and _0x628 = base+1576, a gap of 129.",
+   "",
+   "Previously this span was carved by v10_data_as_code_census.py at a start",
+   "offset one byte past the true array start, so each record appeared as",
+   "'.byte <tail>' plus fake instructions ('swi 1 / nop / nop') for its head.",
+   "Those census notes are removed here because the offset they record is the",
+   "wrong one; the census's finding -- that this is data, not code -- stands.",
+   "",
+   "Supersedes 44 v10_data_as_code_census.py notes inside this span, all carved",
+   "one byte late for the same reason (e.g. 0xFD1A93-0xFD1AB2 (31 B) is the tail",
+   "of the record that really starts at 0xFD1A8E)."
+  ],
+  "segments": [
+   {
+    "kind": "long",
+    "len": 640,
+    "per_line": 4,
+    "record": 128
+   },
+   {
+    "kind": "byte",
+    "len": 1,
+    "per_line": 1,
+    "comment": [
+     "one-byte 0xFF pad; the record grid restarts at 0xFD1D0F"
+    ]
+   },
+   {
+    "kind": "long",
+    "len": 2432,
+    "per_line": 4,
+    "record": 128
+   }
+  ]
+ }
+]

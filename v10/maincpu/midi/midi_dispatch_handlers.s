@@ -88,12 +88,8 @@ MidiSerial_ParseStatus_Data:
 	sla	l, 2
 	extz	hl
 	ld	xiz, MidiSerial_CmdJumpTable
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xec
-	ldb	h, 182
-	.byte 0xe8
+	ld_rrl xiz, xiz, hl
+	call (xiz)
 	ret
 	swi	7
 
@@ -137,53 +133,38 @@ MidiSerial_HandleSysCommon_Data:
 MidiSerial_HandleDefault_Data:
 	.byte 0xc1
 	pushw	wa
-	.byte 0x04
+	max
 	push	xiz
-	.byte 0x01
+	normal
 	ret
 	ldb_d8	a, (0x9634)
 	and	a, 15
 	ld	xhl, 0x94f4
-	.byte 0xc3
-	pop	sr
-	or	xwa, xix
-	ldb	a, 201
-	.byte 0xcf
-	swi	7
+	ld_rr8b a, xhl, a
+	cp a, 255
 	jr	z, 80
 	stb_d8	(0x9668), a
 	ld	xhl, 0x9514
-	.byte 0xc3
-	pop	sr
-	or	xwa, xix
-	ldb	a, 201
-	inc	6, wa
-	push	xiz
+	ld_rr8b a, xhl, a
+	cps a, 0
+	jr z, 62
 	stb_d8	(0x9669), a
 	stb_d8	(0x966b), a
 	incdi8	1, (0x9668)
 	xor	h, h
 	ldb_d8	l, (0x9668)
 	ld	xix, 0x9514
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 241
-	jr	gt, -106
-	ld	xbc, 0x34c1d6ce
-	.byte 0x96
-	ldb	l, 207
-	scc8	f, d
+	ld_rrb a, xix, hl
+	stb_d8 (38506), a
+	xor h, h
+	ldb_d8 l, (38452)
+	and l, 112
 	srl	hl, 2
 	ld	xix, MidiCC_LowRange_Table
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 180
-	and	xbc, xwa
-	jr	ugt, -106
-	jr	ge, 110
-	.byte 0xca
+	ld_rrl xix, xix, hl
+	call (xix)
+	decdi8 1, (38507)
+	jr nz, -54
 	ret
 	swi	7
 
@@ -200,47 +181,33 @@ MidiCC_LowRange_Table:
 MidiCC_Handler_SimpleParamStore:
 	.byte 0xc1
 	pushw	wa
-	.byte 0x04
+	max
 	push	xiz
-	.byte 0x01
+	normal
 	ret
 MidiCC_Handler_CC3_TableLookup:
 	ld	xix, MidiCC_ChannelMappingData
 	ldb_d8	l, (0x9635)
-	.byte 0xc3
-	pop	sr
-	.byte 0xf0, 0xec
-	ldb	a, 241
-	.byte 0x57, 0x96
-	ld	xbc, 0x66ffcfc9
-	push	xwa
+	ld_rr8b a, xix, l
+	stb_d8 (38487), a
+	cp a, 255
+	jr z, 56
 	extz	wa
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x80
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 216
-	.byte 0xcf
-	swi	7
-	swi	7
+	ld_rrw wa, xix, wa
+	cp wa, 65535
 	jr	z, 14
 	ld	xix, 0xfd57
-	.byte 0xc3
-	pop	sr
-	.byte 0xf0, 0xe1
-	ldb	c, 201
-	.byte 0xc3
+	ld_rr8b c, xix, w
+	and c, a
 	jr	z, 21
 	extz	wa
 	ldb_d8	a, (0x9657)
 	sla	wa, 2
 	ld	xix, MidiCC_ExtendedRange_Table
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	d, 180
-	.byte 0xe8
+	ld_rrl xix, xix, wa
+	call (xix)
 	ret
 
 
@@ -312,12 +279,9 @@ MidiCC_Handler_BitManipulation:
 	cps	a, 2
 	jr	ugt, 10
 	ld	xix, MidiCC_Handler_BitManipulation_0x45
-	.byte 0xc3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	e, 49
-	ld	ix, (xwa+11)
-	.byte 0xc0
+	ld_rr8b e, xix, a
+	ldw bc, 2968
+	ldb d, 192
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -338,12 +302,8 @@ MidiCC_Handler_PairedParamA:
 	pushw	ix
 	sll	hl, 1
 	ld	xix, MidiCC_ChannelMappingData_0x840
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 26
 	ldb_d8	e, (0x9636)
 	ldb	d, 255
@@ -364,12 +324,8 @@ MidiCC_Handler_PairedParamB:
 	pushw	ix
 	sll	hl, 1
 	ld	xix, MidiCC_ChannelMappingData_0x840
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 26
 	ldb_d8	d, (0x9636)
 	ldb	e, 255
@@ -392,12 +348,8 @@ MidiCC_Handler_RangeCheck:
 	cps	a, 3
 	jr	ugt, 10
 	ld	xix, MidiCC_Handler_RangeCheck_0x3F
-	.byte 0xc3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	e, 49
-	popw	wa
-	pop	sr
+	ld_rr8b e, xix, a
+	ldw bc, 840
 	ldb	d, 7
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
@@ -408,7 +360,7 @@ MidiCC_Handler_RangeCheck:
 	swi	7
 	nop
 	push	sr
-	.byte 0x01
+	normal
 	pop	sr
 MidiCC_Handler_ChannelMapping:
 	ldb_d8	a, (0x966a)
@@ -426,14 +378,10 @@ MidiCC_Handler_ChannelMapping:
 	extz	wa
 	sll	wa, 2
 	ld	xix, MidiCC_Handler_ChannelMapping_0x60
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	a, 216
-	jr	le, -45
-	reti
-	.byte 0xf0, 0xe0
-	ldb	b, 41
+	ld_rrw bc, xix, wa
+	inc 2, wa
+	ld_rrw de, xix, wa
+	pushw bc
 	pushw	de
 	stb_d8	(0x3489), b
 	stb_d8	(0x347c), e
@@ -459,7 +407,8 @@ MidiCC_Handler_ChannelMapping:
 	rcf
 	popw	wa
 	halt
-	.byte 0x04, 0x04
+	max
+	max
 	popw	wa
 	halt
 	nop
@@ -480,19 +429,12 @@ MidiCC_VoiceParam_0:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0xE0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 30
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -508,19 +450,12 @@ MidiCC_VoiceParam_1:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x140
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -536,19 +471,12 @@ MidiCC_VoiceParam_2:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x1A0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -564,19 +492,12 @@ MidiCC_VoiceParam_3:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x200
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -592,19 +513,12 @@ MidiCC_VoiceParam_4:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x260
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -620,19 +534,12 @@ MidiCC_VoiceParam_5:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x2C0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, -34
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -648,19 +555,12 @@ MidiCC_VoiceParam_6:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x320
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, -99
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -676,19 +576,12 @@ MidiCC_VoiceParam_7:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x380
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -704,19 +597,12 @@ MidiCC_VoiceParam_8:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x3E0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 30
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -732,19 +618,12 @@ MidiCC_VoiceParam_9:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x440
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 41
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -768,19 +647,12 @@ MidiCC_VoiceParam_10:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x560
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -797,19 +669,12 @@ MidiCC_VoiceParam_11_MidEntry:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x5C0
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -825,19 +690,12 @@ MidiCC_VoiceParam_12:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x620
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -853,19 +711,12 @@ MidiCC_VoiceParam_13:
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_ChannelMappingData_0x680
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rrw bc, xix, hl
+	cp c, 255
 	jr	z, 31
 	inc	2, xix
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 193
-	ldw	iz, 9622
+	ld_rrb d, xix, hl
+	ldb_d8 e, (38454)
 	ldb_d8	a, (0x9637)
 	stb_d8	(0x9648), a
 	stda16	(0x9644), bc
@@ -878,22 +729,14 @@ MidiCC_Handler_BankModeSelect:
 	jrl	ugt, 134
 	extz	hl
 	ld	xix, MidiCC_ChannelMappingData_0x820
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 203
-	.byte 0xcf
-	swi	7
+	ld_rrb c, xix, hl
+	cp c, 255
 	jr	z, 117
 	sll	hl, 1
 	ld	xix, 0x9674
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	w, 216
-	add	w, l
-	incm8	6, (xwa)
-	ret
+	ld_rrw wa, xix, hl
+	cp wa, 32896
+	jr z, 14
 	cp	wa, 0x8081
 	jr	z, 29
 	cp	wa, 0x8082
@@ -941,12 +784,8 @@ MidiCC_Handler_ExpressionParam:
 	jr	ugt, 97
 	extz	hl
 	ld	xix, MidiCC_ChannelMappingData_0x820
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 203
-	.byte 0xcf
-	swi	7
+	ld_rrb c, xix, hl
+	cp c, 255
 	jr	z, 80
 	sll	hl, 1
 	ld	xix, 0x9674
@@ -966,12 +805,9 @@ MidiCC_Handler_ExpressionParam:
 	extz	hl
 	ldb_d8	l, (0x966a)
 	sll	hl, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 140
-	ldwio	33, 0x30c9
-	nop
+	ld_rrl xix, xix, hl
+	ld a, (xix+10)
+	res 0, a
 	ldb_d8	e, (0x9636)
 	srl	e, 6
 	or	e, a
@@ -989,15 +825,10 @@ MidiCC_Handler_DirectStoreA:
 	ldb_d8	l, (0x966a)
 	sll	hl, 1
 	ld	xix, 0x9675
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xec
-	ld	xbc, 0x7c369ec
-	.byte 0xf0, 0xec
-	ldb	w, 216
-	.byte 0xcf
-	swi	7
-	swi	7
+	st_rrb a, xix, hl
+	dec 1, xix
+	ld_rrb w, xix, hl
+	cp wa, 65535
 	jr	nz, 7
 	.byte 0xf3
 	reti
@@ -1011,15 +842,10 @@ MidiCC_Handler_DirectStoreB:
 	ldb_d8	l, (0x966a)
 	sll	hl, 1
 	ld	xix, 0x9674
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xec
-	ld	xbc, 0x7c361ec
-	.byte 0xf0, 0xec
-	ldb	w, 216
-	.byte 0xcf
-	swi	7
-	swi	7
+	st_rrb a, xix, hl
+	inc 1, xix
+	ld_rrb w, xix, hl
+	cp wa, 65535
 	jr	nz, 9
 	dec	1, xix
 	.byte 0xf3
@@ -1033,12 +859,8 @@ MidiCC_Handler_ParamDispatch:
 	jr	ugt, 44
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x6E0
-	.byte 0xd3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rr8w bc, xix, a
+	cp c, 255
 	jr	z, 26
 	ldb_d8	e, (0x9636)
 	ldb	d, 127
@@ -1100,12 +922,8 @@ MidiCC_Handler_CC4_VoiceParam:
 	pushw	ix
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x760
-	.byte 0xd3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rr8w bc, xix, a
+	cp c, 255
 	jr	z, 26
 	ldb_d8	e, (0x9635)
 	ldb	d, 255
@@ -1125,12 +943,8 @@ MidiCC_Handler_CC6_VoiceParam:
 	pushw	iz
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x7A0
-	.byte 0xd3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rr8w bc, xix, a
+	cp c, 255
 	jr	z, 28
 	ldb_d8	e, (0x9635)
 	ldb_d8	d, (0x9636)
@@ -1150,12 +964,8 @@ MidiCC_Handler_CC5_VoiceParam:
 	pushw	ix
 	sll	a, 1
 	ld	xix, MidiCC_ChannelMappingData_0x7E0
-	.byte 0xd3
-	pop	sr
-	.byte 0xf0, 0xe0
-	ldb	a, 203
-	.byte 0xcf
-	swi	7
+	ld_rr8w bc, xix, a
+	cp c, 255
 	jr	z, 26
 	ldb_d8	e, (0x9635)
 	ldb	d, 127
@@ -1243,16 +1053,8 @@ UIState_DisplayUpdate_BitmapHandler:
 	xor	d, d
 	ldb_d8	e, (0x9670)
 	sll	de, 2
-	.byte 0xe3
-	reti
-	swi	0
-	.byte 0xe8
-	ldb	h, 238
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xiz, xiz, de
+	cp xiz, 4294967295
 	jr	z, 33
 	ld	a, (xiz+13)
 	pushw	wa
@@ -1263,11 +1065,9 @@ UIState_DisplayUpdate_BitmapHandler:
 	cp	a, w
 	jr	nz, 15
 	ldb_d8	d, (0x9670)
-	.byte 0xf3
-	reti
-	.byte 0xf4, 0xec
-	ld	xix, 0x6fc161eb
-	incm	1, (xiz)
+	st_rrb d, xiy, hl
+	inc 1, xhl
+	incdi8 1, (38511)
 	incdi8	1, (0x9670)
 	.byte 0xc1
 	jrl	f, 0x3f96
@@ -1412,15 +1212,8 @@ PanelEvt_Handler_0_NoteOnParam:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x3A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 47
 	.byte 0xf1, 0x57
 	swi	5
@@ -1451,15 +1244,8 @@ PanelEvt_Handler_3_ValueCheck:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x427
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xwa
@@ -1481,15 +1267,8 @@ PanelEvt_Handler_5_ValueCheck:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x4A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xwa
@@ -1513,15 +1292,8 @@ PanelEvt_Handler_7_ValueCheck:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x5A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xwa
@@ -1543,15 +1315,8 @@ PanelEvt_Handler_8_ValueCheck:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x628
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xwa
@@ -1573,15 +1338,8 @@ PanelEvt_Handler_9_SingleByteParam:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x6A8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 17
 	.byte 0xf1, 0x57
 	swi	5
@@ -1601,15 +1359,8 @@ PanelEvt_Handler_10_TwoByteParam:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x728
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 23
 	.byte 0xf1, 0x57
 	swi	5
@@ -1632,15 +1383,8 @@ PanelEvt_Handler_11_SingleByteParam:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x7A8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 17
 	.byte 0xf1, 0x57
 	swi	5
@@ -1657,15 +1401,8 @@ PanelEvt_Handler_15_ConditionalSet:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x3A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 21
 	extz	de
 	ldb_d8	e, (0x964e)
@@ -1713,17 +1450,14 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	ldb_d8	e, (0x964e)
 	and	e, 7
 	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0x49
-	.byte 0xc3
-	pop	sr
-	.byte 0xf4, 0xe8
-	ldb	e, 32
-	rcf
+	ld_rr8b e, xiy, e
+	ldb w, 16
 	calr	1110
 	ret
 	swi	7
 	nop
 	push	sr
-	.byte 0x01
+	normal
 	pop	sr
 	nop
 	nop
@@ -1772,11 +1506,12 @@ PanelEvt_Dispatch6_TableAndHandlers:
 	inc	1, a
 	srl	e, 1
 	jr	nc, -7
-	.byte 0xc3
-	pop	sr
-	.byte 0xf4, 0xe0
-	ldb	e, 30
-	stib_da	(3587), 0
+	ld_rr8b e, xiy, a
+	calr 1010
+	ret
+	nop
+	nop
+	nop
 	pop	sr
 	reti
 	push	sr
@@ -1815,15 +1550,8 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0x5A7
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 21
 	.byte 0xf1
 	pop	xwa
@@ -1863,30 +1591,27 @@ PanelEvt_Dispatch11Entry:
 	ret
 
 PanelEvt_Dispatch11_TableAndHandlers:
-	swi	7
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	muls	hl, 253
+	; PanelEvt_Dispatch11_TableAndHandlers -- one 0xFF pad byte, then 12 handler
+	; pointers. The pad is not a guess: PanelEvt_Dispatch11_TableAndHandlers_0x1
+	; is defined as this label + 1 in shared/positional_labels.s and is what
+	; PanelEvt_Dispatch11Entry loads (`ld xiy, ..._0x1 / ldb a, 0xb / calr
+	; PanelEvent_DispatchByIndex`), so entry 0 is at +1, not at +0.
+	; 12 entries reach 0xFD09DB, which is also the value of the last entry --
+	; the table is followed immediately by the code it points at.
+	; one pad byte; entry 0 of the table is at +1
+	.byte 0xff
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long 0x00fd09db
 	ldb_d8	a, (0x964f)
 	and	a, 192
 	jr	z, 36
@@ -2115,15 +1840,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xBA8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2141,15 +1859,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xC28
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2167,15 +1878,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xCA8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2193,15 +1897,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xD28
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2219,15 +1916,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xDA8
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2245,15 +1935,8 @@ MidiCC_ChannelDispatch_MultiHandler:
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xE28
 	extz	hl
 	sll	l, 2
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ldb	d, 236
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xix, xix, hl
+	cp xix, 4294967295
 	jr	z, 15
 	.byte 0xf1
 	pop	xbc
@@ -2313,9 +1996,7 @@ FileData_ProcessWithLookup:
 	and	a, 15
 	or	a, 176
 	ldb	w, 100
-	.byte 0xbd
-	nop
-	.byte 0x50
+	ld (xiy+256), wa
 	ld	(xiy+2), c
 	calr	106
 	ldb	a, 101
@@ -2438,7 +2119,7 @@ Periodic_TimestampCompare_Done:
 
 MidiCC_ChannelMappingData:
 	push_f
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	swi	7
@@ -2446,7 +2127,7 @@ MidiCC_ChannelMappingData:
 	ldb	w, 2
 	swi	7
 	swi	7
-	.byte 0x04
+	max
 	pop	sr
 	swi	7
 	swi	7
@@ -2506,15 +2187,18 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x01, 0x01
+	normal
+	normal
 	push	sr
-	.byte 0x01, 0x04, 0x01
+	normal
+	max
+	normal
 	ldio	1, 16
-	.byte 0x01
+	normal
 	ldb	w, 1
 	ldb	w, 1
 	ldb	w, 1
-	.byte 0x04
+	max
 	push	sr
 	push	sr
 	push	sr
@@ -2536,7 +2220,7 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 	swi	7
@@ -2546,7 +2230,7 @@ MidiCC_ChannelMappingData:
 	swi	7
 	.fill 8, 1, 0xff
 	nop
-	.byte 0x04
+	max
 	ldio	1, 4
 	ldio	2, 4
 	ldio	3, 4
@@ -2701,10 +2385,14 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 789
 	jrl	nc, -1
 	swi	7
-	.byte 0x17
-	pop	sr
-	.byte 0x7f
-	.fill 8, 1, 0xff
+	ldf 3
+	jrl nc, -1
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xhl), 127
@@ -2773,8 +2461,14 @@ MidiCC_ChannelMappingData:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x17, 0x08, 0x7f
-	.fill 8, 1, 0xff
+	ldf 8
+	jrl nc, -1
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
@@ -2794,41 +2488,50 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 1293
 	jrl	nc, 1294
 	jrl	nc, 1295
-	.byte 0x7f
-	.fill 8, 1, 0xff
+	jrl nc, -1
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
+	swi 7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
-	.byte 0x04
+	max
 	ld	xwa, 0x2400401
-	.byte 0x04
+	max
 	ld	xwa, 0x4400403
-	.byte 0x04
+	max
 	ld	xwa, 0x6400405
-	.byte 0x04
+	max
 	ld	xwa, 0x8400407
-	.byte 0x04
+	max
 	ld	xwa, 0xa400409
-	.byte 0x04
+	max
 	ld	xwa, 0xc40040b
-	.byte 0x04
+	max
 	ld	xwa, 0xe40040d
-	.byte 0x04
+	max
 	ld	xwa, 0x10ffffff
-	.byte 0x04
+	max
 	ld	xwa, 0x12400411
-	.byte 0x04
+	max
 	ld	xwa, 0xff400413
 	swi	7
 	swi	7
 	pop_a
-	.byte 0x04
+	max
 	ld	xwa, 0x17ffffff
-	.byte 0x04, 0x40
-	.fill 8, 1, 0xff
+	max
+	ld xwa, 4294967295
+	swi 7
+	swi 7
+	swi 7
+	swi 7
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
@@ -2856,8 +2559,7 @@ MidiCC_ChannelMappingData:
 	jrl	nc, 1813
 	jrl	nc, -1
 	swi	7
-	.byte 0x17
-	reti
+	ldf 7
 	jrl	nc, -1
 	swi	7
 	jr	f, 1
@@ -3117,13 +2819,13 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	push	sr
 	nop
 	pop	sr
 	nop
-	.byte 0x04
+	max
 	nop
 	halt
 	nop
@@ -3153,15 +2855,12 @@ MidiCC_ChannelMappingData:
 	nop
 	swi	7
 	swi	7
-	.byte 0x17
-	nop
+	ldf 0
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xbc), 177
-	.byte 0x01, 0xb1
-	push	sr
-	.byte 0xb1
-	pop	sr
+	normal
+	ldw (xbc), 945
 	.byte 0xb1, 0x04, 0xb1
 	halt
 	.byte 0xb1, 0x06, 0xb1
@@ -3195,10 +2894,8 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	ld	(xix), 180
-	.byte 0x01, 0xb4
-	push	sr
-	.byte 0xb4
-	pop	sr
+	normal
+	ldw (xix), 948
 	.byte 0xb4, 0x04, 0xb4
 	halt
 	.byte 0xb4, 0x06, 0xb4
@@ -3219,10 +2916,10 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -3233,13 +2930,13 @@ MidiCC_ChannelMappingData:
 	.fill 8, 1, 0xff
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	push	sr
 	nop
 	pop	sr
 	nop
-	.byte 0x04
+	max
 	nop
 	halt
 	nop
@@ -3269,8 +2966,7 @@ MidiCC_ChannelMappingData:
 	nop
 	swi	7
 	nop
-	.byte 0x17
-	nop
+	ldf 0
 	.fill 8, 1, 0xff
 	.fill 8, 1, 0xff
 PanelEvt_Handler_4_DualValueCheck:
@@ -3339,1224 +3035,473 @@ PanelEvt_Handler_4_DualValueCheck:
 	ldb	w, 6
 	calr	62902
 	ret
-	.byte 0x90
-	halt
-	swi	5
-	nop
-	.byte 0xa7
-	halt
-	swi	5
-	nop
-	.byte 0xbe
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xd5
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	halt
-	swi	5
-	nop
-	.byte 0xe0
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD17AB-0xFD191E (371 B), unreached CODE-territory, was disassembled as 188 plausible-but-dead instruction lines; per=97% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x77+77
-	.byte 0x05, 0xfd, 0x00, 0xf1, 0x05, 0xfd, 0x00, 0xe0, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x6b, 0x08, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x34, 0x09, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00
-	.byte 0x84
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD191F-0xFD1A22 (259 B), unreached CODE-territory, was disassembled as 130 plausible-but-dead instruction lines; per=94% dist=11 near PanelEvt_Handler_4_DualValueCheck_0x77+449
-	.byte 0x09, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x22, 0x0a, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x9f, 0x09, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x46, 0x0a, 0xfd, 0x00, 0x74, 0x0a, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x9c, 0x0a, 0xfd, 0x00
-	.byte 0xb9
-	ldwio	253, 4352
-	pushw	253
-	ld	xbc, 0x7100fd0b
-	pushw	253
-	.byte 0xc1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1A33-0xFD1A5E (43 B), unreached CODE-territory, was disassembled as 21 plausible-but-dead instruction lines; per=97% dist=5 near PanelEvt_Handler_4_DualValueCheck_0x77+725
-	.byte 0x0b, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00, 0x8f
-	.byte 0x05, 0xfd, 0x00, 0x8f, 0x05, 0xfd, 0x00
-	ld	xwa, 0xa0b0701
-	pop	xiy
-	pop	xiz
-	pop	xhl
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x50, 0x52, 0x53
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	nop
-	ldb	w, 255
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0x06
-	ldb	h, 101
-	jr	ov, -1
-	swi	7
-	swi	7
-	swi	7
-	jrl	ge, -136
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1A93-0xFD1AB2 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x3A7+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1ABB-0xFD1ADA (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=74% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x3A7+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.byte 0xcb
-	swi	3
-	nop
-	nop
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1B13-0xFD1B32 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x427+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1B3B-0xFD1B5A (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=74% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x427+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.byte 0xcb
-	swi	3
-	nop
-	nop
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1B93-0xFD1BB2 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x4A7+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1BBB-0xFD1BCF (20 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=69% dist=7 near PanelEvt_Handler_4_DualValueCheck_0x4A7+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1C13-0xFD1C32 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x527+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1C3B-0xFD1C5A (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x527+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1C93-0xFD1CB2 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x5A7+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1CBB-0xFD1CDA (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=74% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x5A7+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.byte 0xcb
-	swi	3
-	nop
-	nop
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	pop_f
-	swi	4
-	nop
-	nop
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1D14-0xFD1D33 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x628+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1D3C-0xFD1D5B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x628+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1D94-0xFD1DB3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x6A8+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1E14-0xFD1E33 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x728+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1E94-0xFD1EB3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x7A8+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1F14-0xFD1F33 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x828+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1F3C-0xFD1F4F (19 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=73% dist=6 near PanelEvt_Handler_4_DualValueCheck_0x828+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1F94-0xFD1FB3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x8A8+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD1FBC-0xFD1FCF (19 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=73% dist=6 near PanelEvt_Handler_4_DualValueCheck_0x8A8+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2014-0xFD2033 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x928+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD203C-0xFD205B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x928+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2094-0xFD20B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0x9A8+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD20BC-0xFD20DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0x9A8+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2114-0xFD2133 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xA28+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD213C-0xFD215B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=74% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xA28+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0x49, 0xfb, 0x00, 0x00, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	pop_f
-	swi	4
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2194-0xFD21B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xAA8+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	swi	2
-	nop
-	nop
-	swi	3
-	swi	2
-	nop
-	nop
-	pop_a
-	swi	3
-	nop
-	nop
-	pushw	sp
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2214-0xFD2233 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xB28+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD223C-0xFD225B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xB28+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2294-0xFD22B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xBA8+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD22BC-0xFD22DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xBA8+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2314-0xFD2333 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xC28+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD233C-0xFD235B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xC28+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2394-0xFD23B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xCA8+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD23BC-0xFD23DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xCA8+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2414-0xFD2433 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xD28+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD243C-0xFD245B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xD28+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2494-0xFD24B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xDA8+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD24BC-0xFD24DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xDA8+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2514-0xFD2533 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xE28+5
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD253C-0xFD255B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xE28+45
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2594-0xFD25B3 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xE28+133
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD25BC-0xFD25DB (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xE28+173
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.byte 0xc3
-	swi	1
-	nop
-	nop
-	.byte 0xdd
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD2614-0xFD2633 (31 B), unreached CODE-territory, was disassembled as 24 plausible-but-dead instruction lines; per=74% dist=10 near PanelEvt_Handler_4_DualValueCheck_0xE28+261
-	.byte 0xf9, 0x00, 0x00, 0xf7, 0xf9, 0x00, 0x00, 0x11, 0xfa, 0x00, 0x00, 0x2b
-	.byte 0xfa, 0x00, 0x00, 0x45, 0xfa, 0x00, 0x00, 0x5f, 0xfa, 0x00, 0x00, 0x79
-	.byte 0xfa, 0x00, 0x00, 0x93, 0xfa, 0x00, 0x00
-	.byte 0xad
-	swi	2
-	nop
-	nop
-	.byte 0xc7
-	swi	2
-	nop
-	nop
-	.byte 0xe1
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFD263C-0xFD265B (31 B), unreached CODE-territory, was disassembled as 27 plausible-but-dead instruction lines; per=67% dist=9 near PanelEvt_Handler_4_DualValueCheck_0xE28+301
-	.byte 0xfa, 0x00, 0x00, 0xfb, 0xfa, 0x00, 0x00, 0x15, 0xfb, 0x00, 0x00, 0x2f
-	.byte 0xfb, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0x63, 0xfb, 0x00, 0x00, 0x7d
-	.byte 0xfb, 0x00, 0x00, 0x97, 0xfb, 0x00, 0x00
-	.byte 0xb1
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.byte 0xe5
-	swi	3
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	jr	nc, -3
-	nop
-	nop
-	.byte 0x89
-	swi	5
-	nop
-	nop
-	swi	7
-	swi	7
-	swi	7
-	swi	7
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
-	.fill 8, 1, 0xff
+	; PanelEvt_Handler_4_DualValueCheck_0x77 (0xFD175E) -- MIDI CC handler table.
+	; INDEXING RULE, from the only site that loads it (MidiCC_Dispatch, this file):
+	;     cp c, 0xbf / jr ugt, <ret>      ; index = C, valid 0..0xBF
+	;     ld l, c / extz hl / sll hl, 2   ; scaled by 4
+	;     ld xix, ..._0x77 / ld_sril3 XIX, 0x07, 0xf0, 0xec   ; xix += hl
+	;     call (xix)                      ; entry is a CODE address
+	; => 192 entries of 4 bytes, index 0 at 0xFD175E, stride 4. Every entry
+	; resolves to a label in this file, which is what settles CODE-pointer over
+	; data-pointer. It was previously spelled as 1-byte .byte runs interleaved
+	; with resync garbage; the byte gate could not see the difference.
 
+	; Supersedes 3 v10_data_as_code_census.py notes inside this span (the first
+	; reads: 0xFD17AB-0xFD191E (371 B), unreached CODE-territory, was disassembled
+	; as 188 plausible-but-dead instruction lines). The census was RIGHT that this
+	; is data and WRONG about where it starts: it carved from 0xFD17AB, one byte
+	; past the entry boundary, so every record shown was a rotation of the real
+	; one. The array starts at 0xFD175E, immediately after the `ret` at 0xFD175D.
+	.long PanelEvt_CheckFlag7_Dispatch_A
+	.long PanelEvt_CheckFlag7_Dispatch_B
+	.long PanelEvt_CheckFlag7_Dispatch_C
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_UnconditionalDispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long PanelEvt_CheckChanZero_Dispatch
+	.long PanelEvt_CheckFlag6_Dispatch
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch6Entry
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch3Entry_A
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch3Entry_B
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_ChannelDispatch_TableA
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long PanelEvt_Dispatch11Entry
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_ChannelDispatch_Ctrl40
+	.long MidiCC_ChannelDispatch_Ctrl41
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_ChannelDispatch_SpecialCh1
+	.long MidiCC_ChannelDispatch_CtrlFlags
+	.long MidiCC_ChannelDispatch_Ctrl1
+	.long MidiCC_ChannelDispatch_Ctrl3
+	.long MidiCC_ChannelDispatch_CtrlFlags2
+	.long MidiCC_ChannelDispatch_Ctrl0
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	.long MidiCC_DispatchStubRet
+	; PanelEvt_Handler_4_DualValueCheck_0x377 (0xFD1A5E) -- 48-entry byte table.
+	; INDEXING RULE, from MidiChanCfg_SetupParams (this file):
+	;     cp w, 0x2f / jr ugt, <exit>     ; index = W, valid 0..0x2F
+	;     ld xiz, ..._0x377 / ldb_sri W, 0x03, 0xf8, 0xe1   ; W = (xiz + W)
+	;     cp w, 0xff / jr z, <exit>       ; 0xFF means 'no entry'
+	; => 48 bytes, stride 1, 0xFF = absent. A genuine byte table: it is printed
+	; 8 per line only to show the six 8-entry groups, not because 8 is a record.
+	.byte 0x40, 0x01, 0x07, 0x0b, 0x0a, 0x5d, 0x5e, 0x5b
+
+	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x50, 0x52, 0x53, 0xff, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x00, 0x20, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x06, 0x26, 0x65, 0x64, 0xff, 0xff, 0xff, 0xff
+
+	.byte 0x79, 0x78, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	; 0xFD1A8E..0xFD268F -- 24 records of 32 x u32, stride 0x80.
+	; INDEXING RULE, from the 26 sites in this file that load a record base
+	; (PanelEvt_Handler_4_DualValueCheck_0x3A7 .. _0xE28 in shared/positional_labels.s):
+	;     ldb_d8 l, (0x964c) / cp l, 31 / jr ugt, <skip>   ; index = L, valid 0..31
+	;     ld xix, <record base> / extz hl / sll l, 2
+	;     ld_rrl xix, xix, hl             ; xix = record[index]
+	;     cp xix, 0xffffffff / jr z, <skip>   ; 0xFFFFFFFF means 'no entry'
+	; => 32 entries of 4 bytes per record; present entries are work-RAM addresses
+	; 0x0000F9C3 + 26*k (26-byte parameter blocks); absent entries are 0xFFFFFFFF.
+	; Record bases run 0xFD1A8E + 0x80*k for k=0..4, then 0xFD1D0F + 0x80*k for
+	; k=0..18 -- there is a ONE-BYTE 0xFF pad at 0xFD1D0E, which is why the
+	; second block is offset by one and why this span is emitted in three
+	; segments. The positional labels are the evidence for that offset, not a
+	; guess: _0x5A7 = base+1447 and _0x628 = base+1576, a gap of 129.
+
+	; Previously this span was carved by v10_data_as_code_census.py at a start
+	; offset one byte past the true array start, so each record appeared as
+	; '.byte <tail>' plus fake instructions ('swi 1 / nop / nop') for its head.
+	; Those census notes are removed here because the offset they record is the
+	; wrong one; the census's finding -- that this is data, not code -- stands.
+
+	; Supersedes 44 v10_data_as_code_census.py notes inside this span, all carved
+	; one byte late for the same reason (e.g. 0xFD1A93-0xFD1AB2 (31 B) is the tail
+	; of the record that really starts at 0xFD1A8E).
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0x0000fc19, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	; one-byte 0xFF pad; the record grid restarts at 0xFD1D0F
+	.byte 0xff
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0x0000fb49
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0x0000fc19, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
+	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 FileData_ValidateFormat:
 	pushw wa
 	dec 2, xsp
@@ -4753,14 +3698,11 @@ FileData_RawDataBlock:
 	nop
 	jr	c, -47
 	ld	xwa, (xsp+10)
-	.byte 0xf3, 0xe1
-	ld	xix, 0x6af3003
-	ldb	a, 243
-	.byte 0xe5, 0xd8
-	push	sr
-	ldw	bc, 4382
-	ldio	175, 10
-	.byte 0x20
+	lda xwa, (xwa+836)
+	ld xbc, (xsp+6)
+	lda xbc, (xbc+728)
+	calr 2065
+	ld xwa, (xsp+10)
 	lda	xwa, (xwa+852)
 	ld	xbc, (xsp+6)
 	lda	xbc, (xbc+740)
@@ -4803,36 +3745,25 @@ FileData_RawDataBlock:
 	nop
 	jr	c, -56
 	ld	xwa, (xsp+10)
-	.byte 0xf3, 0xe1, 0xaa
-	pop	sr
-	ldw	wa, 1711
-	ldb	a, 243
-	.byte 0xe5, 0x80
-	pop	sr
-	ldw	bc, 8478
-	incf
+	lda xwa, (xwa+938)
+	ld xbc, (xsp+6)
+	lda xbc, (xbc+896)
+	calr 3105
 	ld	xwa, (xsp+10)
-	.byte 0xf3, 0xe1
-	lda	xwa, (xwa+3)
+	lda xwa, (xwa+952)
 	ld	xbc, (xsp+6)
-	.byte 0xf3, 0xe5, 0x8a
-	pop	sr
-	ldw	bc, 0x801e
-	incf
+	lda xbc, (xbc+906)
+	calr 3200
 	ld	xwa, (xsp+10)
 	lda	xwa, (xwa+968)
 	ld	xbc, (xsp+6)
 	lda	xbc, (xbc+922)
 	calr	3356
 	ld	xwa, (xsp+10)
-	.byte 0xf3, 0xe1
-	ld	wa, 0xaf30
-	.byte 0x06
-	ldb	a, 243
-	.byte 0xe5, 0xaa
-	pop	sr
-	ldw	bc, 0x791e
-	decf
+	lda xwa, (xwa+984)
+	ld xbc, (xsp+6)
+	lda xbc, (xbc+938)
+	calr 3449
 	ld	xwa, (xsp+10)
 	lda	xwa, (xwa+990)
 	ld	xbc, (xsp+6)
@@ -4872,9 +3803,7 @@ FileData_RawDataBlock:
 	swi	5
 	ld	wa, (xsp+12)
 	calr	10765
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+8), 0
 	ld	wa, (xsp+12)
 	srl	wa, 3
 	cps	wa, 0
@@ -4893,8 +3822,7 @@ FileData_RawDataBlock:
 	ld	xwa, (xsp+14)
 	or	xwa, xwa
 	jr	z, 53
-	.byte 0xbf
-	ldwio	2, 0
+	ldw (xsp+10), 0
 	.byte 0x9f
 	incf
 	push	xsp
@@ -4913,11 +3841,7 @@ FileData_RawDataBlock:
 	inc	4, xsp
 	ld	hl, iz
 	jrl	412
-	.byte 0xbf
-	incf
-	push	sr
-	push_f
-	nop
+	ldw (xsp+12), 24
 	jr	-117
 	ldw	hl, 0xff38
 	jrl	399
@@ -4930,9 +3854,7 @@ FileData_RawDataBlock:
 	lda_24	xwa, (0x1ed400)
 	add	xwa, xbc
 	ld	(xsp+4), xwa
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+8), 0
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -4992,9 +3914,7 @@ FileData_RawDataBlock:
 	ld	xbc, (xsp+4)
 	lda	xbc, (xbc+716)
 	calr	1994
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+8), 0
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, xwa
@@ -5064,8 +3984,8 @@ FileData_RawDataBlock:
 	ld	wa, (xsp+10)
 	.byte 0x9f
 	incf
-	.byte 0xf0
-	jrl	c, -427
+	st_dd8w iy, 119
+	swi 6
 	lds	wa, 0
 	call	PostPmLoad
 	ld	xwa, (xsp+14)
@@ -7832,7 +6752,7 @@ VoiceParam_CopyBitfields_LargeBlock:
 	.byte 0xb0, 0x9d, 0xb2, 0xa5, 0xb0, 0x9e, 0xb2, 0xa6
 	.byte 0xb0, 0x9e, 0xb2
 	add	(xsp), xwa
-	.byte 0x01
+	normal
 	ldb	a, 201
 	neg	d
 	.byte 0x89
@@ -8603,10 +7523,12 @@ DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0x89
 	swi	6
 	push	xix
-	.byte 0x80
-	or	(xbc-2), l
-	ld	l, (xwa+1)
-	and	l, 127
+	add (xwa), a
+	swi 6
+	ld xwa, xsp
+	normal
+	ldb l, 207
+	scc nc, d
 	andmi8	(xbc+1), 128
 	or	(xbc+1), l
 	ld	l, (xwa-1)
@@ -8614,14 +7536,13 @@ DSPCfg_VoiceSlotB_ExtractData:
 	.byte 0x89
 	swi	7
 	push	xix
-	.byte 0x80
-	or	(xbc-1), l
-	ld	l, (xwa)
-	ld	(xbc), l
-	lda	xbc, (xbc+26)
-	lda	xwa, (xwa+26)
-	cp	xwa, xde
-	jr	c, -53
+	add (xwa), a
+	swi 7
+	add xwa, xsp
+	ldb l, 177
+	ld xsp, 3090225849
+	jp16 59952
+	bit_dd8 3, 103
 	ret
 
 DataBuf_TransferSlotBitfields:
@@ -9847,14 +8768,12 @@ MidiStream_PrevBankCheck:
 	push_f
 	ld	(xiy-49), xiz
 	push	xwa
-	.byte 0xc7
-	swi	3
-	.byte 0xa8
+	ldib_erp 251, 0
 	calr	60
 	ldda32	xwa, (0xbcac)
 	.byte 0x80
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 47
 	.byte 0x80
 	push	xsp
@@ -9878,9 +8797,7 @@ MidiStream_PrevBankCheck:
 	jr	6
 	calr	24
 	calr	5117
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 SeqAlt_ProcessAndFinalize:
@@ -10042,11 +8959,12 @@ MidiChan_NibbleLookup_Data:
 	jr	z, 23
 	lda	xix, (xde+10)
 	ld	xwa, (xix)
-	.byte 0xf5, 0xe0
-	ldw	iy, 0x60b4
-	.byte 0xc5, 0xe4
-	ldb	a, 181
-	ld	xbc, 0x69db88db
+	stb_dpi e, 224
+	ld (xix), xwa
+	ldb_spi a, 228
+	ld (xiy), a
+	ld wa, hl
+	dec 1, hl
 	cps	wa, 0
 	jr	nz, -20
 	ld	xwa, (xde+10)
@@ -11375,8 +10293,8 @@ ArpQueue_ProcessAndSort_Data:
 	lda	xde, (xwa+1)
 	lda_d16	xhl, (0xbccc)
 	ld	xbc, (xhl)
-	.byte 0xf5, 0xe4
-	ldw	ix, 0x61b3
+	stb_dpi d, 228
+	ld (xhl), xbc
 	ld	c, (xix)
 	ld	(xde), c
 	ld	(xwa), c
@@ -11581,19 +10499,19 @@ SeqVoice_DispatchProcess_Data:
 	lda	xwa, (xiz+10)
 	ld	(xsp+12), xwa
 	ld	xwa, (xix)
-	.byte 0xf5, 0xe0
-	ldw	bc, 0x60b4
+	stb_dpi a, 224
+	ld (xix), xwa
 	ld	c, (xbc)
 	sll	c, 4
 	ld	xwa, (xhl)
-	.byte 0xf5, 0xe0
-	ldw	iz, 0x60b3
+	stb_dpi h, 224
+	ld (xhl), xwa
 	ld	w, (xiz)
 	and	w, 15
 	xor	c, w
 	ld	xwa, (xde)
-	.byte 0xf5, 0xe0
-	ldw	iz, 0x60b2
+	stb_dpi h, 224
+	ld (xde), xwa
 	ld	(xiz), c
 	ld	xwa, (xsp+4)
 	lds32	xbc, 1
@@ -11624,10 +10542,8 @@ SeqVoice_DispatchProcess_Data:
 	ldw	bc, 12
 	calr	61846
 	lds32	xiz, 0
-	.byte 0xc7
-	swi	0
-	or	(xsp-18), iz
-	ret
+	ldb_erp l, 248
+	sll xiz, 14
 	ldda32	xwa, (0xbcac)
 	ldw	bc, 13
 	calr	61828
@@ -11818,8 +10734,9 @@ SeqVoice_DispatchProcess_Data:
 	.byte 0xf1
 	push_f
 	ld	(xiy-50), xiz
-	.byte 0x17
-	calr	312
+	ldf 30
+	push xwa
+	normal
 	.byte 0xf3, 0xed
 	nop
 	pop	xwa
@@ -12203,11 +11120,8 @@ AssSwb_ProcessLoop_Data:
 	ccf
 	ld	c, (xde)
 	extz	bc
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	e, 218
-	ccf
+	ld_rrb e, xix, bc
+	extz de
 	ld	hl, (xhl)
 	extz	hl
 	pushw	hl
@@ -12221,9 +11135,7 @@ AssSwb_ProcessLoop_Data:
 	extz	hl
 	inc	1, hl
 	ld	xde, (xsp+6)
-	.byte 0xc3
-	reti
-	sla	xwa, 37
+	ld_rrb e, xde, hl
 	extz	de
 	ld	hl, (xiz+4)
 	srl	hl, 8
@@ -12261,10 +11173,10 @@ Part_ProcessEntry_Data:
 	dec	1, bc
 	cps	wa, 0
 	ret	z
-	.byte 0xc5, 0xec
-	ldb	a, 245
-	.byte 0xe8
-	ld	xbc, 0x69d988d9
+	ldb_spi a, 236
+	lda_dpi xbc, 232
+	ld wa, bc
+	dec 1, bc
 	cps	wa, 0
 	jr	nz, -14
 	ret
@@ -12275,9 +11187,9 @@ Part_ProcessEntry_Data:
 	dec	1, bc
 	cps	de, 0
 	jr	z, 11
-	.byte 0xc5, 0xe0
-	xor	(xsp), a
-	decm8	1, (xde-39)
+	add_spib l, 224
+	ld de, bc
+	dec 1, bc
 	cps	de, 0
 	jr	nz, -11
 	neg	l
@@ -13281,11 +12193,8 @@ MidiPkt_ArpExtHandler_N_Data:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, (SeqChan_CommandDispatch_Table_0x9C)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 179
-	.byte 0xe8
+	ld_rrl xhl, xbc, hl
+	call (xhl)
 	ret
 SeqChan_ProcessStepCmd:
 	ldda32	xwa, (0xbcac)
@@ -13506,9 +12415,9 @@ SeqChan_StepCmd_Field13Write:
 	cp hl, 0xffff
 	.byte 0xf2
 	cp	(xiy+108), e
-	.byte 0xee
+	or xbc, xiz
+	ld xwa, (xix-68)
 	; --- Section 2: reload XWA, setup BC, call, check L ---
-	ldda32	xwa, (0xbcac)
 	ldw bc, 0x000f
 	call SeqData_ReadFieldByIndex
 	cps	l, 0
@@ -15280,14 +14189,9 @@ SeqData_FormatOutput_Data:
 	ret	gt
 	add	hl, hl
 	lda_24	xix, (SeqData_SubDispatch_Table_0xA0)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	jrl	nz, -625
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (16617342)
+	jp_rr 8, xix, hl
 	jr	18
 	jr	110
 	jrl	200
@@ -15302,32 +14206,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	divs	l, 111
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cp_erpb 251, 11
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xE)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0xba, 0x17
+	ld_rrl xwa, xwa, bc
+	calr 6074
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xE)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -15336,9 +14231,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -15346,33 +14239,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x66)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	pop	xiy
-	.byte 0x17
+	ld_rrl xwa, xwa, bc
+	calr 5981
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x66)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -15381,9 +14264,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -15391,37 +14272,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	.byte 0xcf
-	incf
+	ldb_erp l, 251
+	cp_erpb 251, 12
 	jr	nc, 68
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x6E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	swi	7
-	ex_ff
+	ld_rrl xwa, xwa, bc
+	calr 5887
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x6E)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -15430,9 +14297,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	ret
 	.byte 0xd7
@@ -15441,33 +14306,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xCE)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0xa1
-	ex_ff
+	ld_rrl xwa, xwa, bc
+	calr 5793
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xCE)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -15476,9 +14331,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -15486,32 +14339,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xD6)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	ld	xix, 0xffcfdb16
-	swi	7
+	ld_rrl xwa, xwa, bc
+	calr 5700
+	cp hl, 65535
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xD6)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -15520,9 +14364,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -15530,37 +14372,23 @@ SeqData_FormatOutput_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	.byte 0xcf
-	ret
+	ldb_erp l, 251
+	cp_erpb 251, 14
 	jr	nc, 68
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xDE)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0xe6
-	pop_a
+	ld_rrl xwa, xwa, bc
+	calr 5606
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xDE)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
@@ -15569,9 +14397,7 @@ SeqData_FormatOutput_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 SeqAlt_NibbleSearch_Ret:
@@ -15807,12 +14633,9 @@ SeqAlt_DescriptorBlock_Data:
 	extz	wa
 	muls	wa, 6
 	lda_24	xbc, (ToneKit_FrequencyTable_0x408)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 142
-	ldio	33, 201
-	.byte 0x06
+	ld_rrl xbc, xbc, wa
+	ld a, (xiz+8)
+	cpl a
 	and	(xbc), a
 	ld	a, (xiz+11)
 	and	a, 15
@@ -15908,14 +14731,12 @@ SeqAlt_DescriptorBlock_Data:
 	ld	a, (xde+9)
 	.byte 0x8f, 0x04
 	stdi8	(0x857b), 143
-	.byte 0x04
+	max
 	ldb	c, 138
 	ldwio	243, 0x7d6b
 	ldda32	xwa, (0xbc54)
 	call	MIDI_PackNibbleParam
-	.byte 0xc7
-	swi	0
-	.byte 0x9f
+	ldb_erp l, 248
 	extz	iz
 	sll	iz, 8
 	ldda32	xwa, (0xbc54)
@@ -15933,25 +14754,17 @@ SeqAlt_DescriptorBlock_Data:
 	ld	xwa, (xsp+10)
 	ld	a, (xwa+6)
 	or	a, l
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp a, 251
 	lda	xwa, (xsp+6)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	ld	(xwa+1), 1
-	.byte 0xc7
-	swi	0
-	.byte 0x8b
+	stb_erp c, 248
 	ld	(xwa+2), c
 	ld	(xwa+3), 127
 	call	AssSwb_ApplyBitDescriptor
 	lda	xwa, (xsp+6)
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	ld	(xwa), c
 	ld	xde, (xsp+10)
 	ld	c, (xde+7)
@@ -16066,12 +14879,9 @@ SeqAlt_DescriptorBlock_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xA)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	.byte 0x06
-	ldw	bc, 0xd8cf
+	ld_rrl xwa, xbc, wa
+	lda xbc, (xsp+6)
+	cps l, 0
 	jr	nz, 6
 	ld	a, (xwa)
 	ld	(xbc), a
@@ -16515,16 +15325,9 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ret	gt
 	add	hl, hl
 	lda_24	xix, (SeqData_SubDispatch_Table_0xAE)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	push	xiz
-	.byte 0x9a
-	swi	5
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (16620094)
+	jp_rr 8, xix, hl
 	jr	18
 	jr	110
 	jrl	200
@@ -16539,33 +15342,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	divs	l, 111
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cp_erpb 251, 11
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x3A)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	swi	2
-	incf
+	ld_rrl xwa, xwa, bc
+	calr 3322
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x3A)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -16574,9 +15367,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -16584,34 +15375,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x6A)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	xor	(xiy+12), hl
-	.byte 0xcf
-	swi	7
-	swi	7
+	ld_rrl xwa, xwa, bc
+	calr 3229
+	cp hl, 65535
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x6A)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -16620,9 +15400,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -16630,37 +15408,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	.byte 0xcf
-	incf
+	ldb_erp l, 251
+	cp_erpb 251, 12
 	jr	nc, 68
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x9E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	push	xsp
-	incf
+	ld_rrl xwa, xwa, bc
+	calr 3135
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x9E)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -16669,9 +15433,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	ret
 	.byte 0xd7
@@ -16680,34 +15442,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xD2)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0xe1
-	pushw	0xcfdb
-	swi	7
-	swi	7
+	ld_rrl xwa, xwa, bc
+	calr 3041
+	cp hl, 65535
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xD2)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -16716,9 +15467,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -16726,34 +15475,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	dec	7, bc
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cpib_erp 251, 1
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0xDA)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	.byte 0x84
-	pushw	0xcfdb
-	swi	7
-	swi	7
+	ld_rrl xwa, xwa, bc
+	calr 2948
+	cp hl, 65535
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0xDA)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -16762,9 +15500,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	.byte 0xd7
 	swi	2
@@ -16772,32 +15508,23 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ldda32	xwa, (0xbcac)
 	lds	bc, 2
 	call	SeqData_ReadFieldByIndex
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	mul	l, 111
-	ld	xix, 0xd98bfbc7
-	ccf
+	ldb_erp l, 251
+	cp_erpb 251, 8
+	jr nc, 68
+	stb_erp c, 251
+	extz bc
 	sla	bc, 2
 	lda_24	xwa, (WidgetParam_SelfRef_Table_0x116)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 30
-	ldb	h, 11
+	ld_rrl xwa, xwa, bc
+	calr 2854
 	cp	hl, 0xffff
 	jr	z, 41
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (WidgetParam_SelfRef_Table_0x116)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	a, 233
-	.byte 0x88
+	ld_rrl xbc, xbc, wa
+	ld xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
@@ -16806,9 +15533,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	xbc, xde
 	ld	xhl, (xbc)
 	call	(xhl)
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 VoiceParam_MultiBlock_Ret:

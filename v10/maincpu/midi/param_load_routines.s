@@ -805,12 +805,9 @@ ParaLoadOpt_GridDispatch:
 	inc	3, xbc
 	.byte 0xa4, 0xf1
 	jrl	nz, 265
-	.byte 0xb0
-	push	sr
-	ldio	0, 162
-	ldb	w, 232
-	.byte 0xee
-	push	sr
+	ldw (xwa), 8
+	ld xwa, (xde)
+	sll xwa, 2
 	ld	xbc, (xsp+4)
 	add	xbc, xwa
 	ld	xwa, (xbc)

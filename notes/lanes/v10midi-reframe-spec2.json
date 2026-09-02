@@ -1,0 +1,80 @@
+[
+ {
+  "file": "v10/maincpu/display/scoop_display.s",
+  "start": "0xEF62A7", "end": "0xEF6327",
+  "kind": "long", "per_line": 1, "symbols": true,
+  "comment": [
+   "ScoopDisp_DispatchTable_Small -- 32 handler pointers, index scaled by 4.",
+   "INDEXING RULE, from the only site that loads it (this file, ~40 lines above):",
+   "    sla hl, 2 / push xix / ld xix, ScoopDisp_DispatchTable_Small",
+   "    ld_rrl xhl, xix, hl / pop xix / call (xhl)",
+   "The table was already typed except its LAST entry, which the old sweep read",
+   "as `inc 1, xwa / .byte 0xef / nop`. 32 entries reach exactly the next label."
+  ]
+ },
+ {
+  "file": "v10/maincpu/display/scoop_display.s",
+  "start": "0xEFE765", "end": "0xEFE7A5",
+  "kind": "long", "per_line": 1, "symbols": true,
+  "comment": [
+   "OscScope_HandlerTable -- 16 handler pointers (`ld xde, OscScope_HandlerTable`",
+   "in this file). Only the last entry was untyped; 16 entries reach exactly the",
+   "next label, SndHandler_DefaultRet."
+  ]
+ },
+ {
+  "file": "v10/maincpu/display/scoop_display.s",
+  "start": "0xEFDB40", "end": "0xEFDB90",
+  "kind": "long", "per_line": 4, "symbols": false,
+  "comment": [
+   "SubCPU_ToneDispatch -- 20 x u32: work-RAM parameter-block pointers",
+   "(0x0000F9B6, 0x0000F9EA, ... stride 26 within each group) with 0xFFFFFFFF",
+   "for an absent index, the same record shape as the MIDI CC record tables.",
+   "EXTENT is not inferred from the values: SubCPU_ToneDispatch_0x50 is defined",
+   "as this label + 80 in shared/positional_labels.s and is loaded as a BYTE",
+   "table (`ld xiy, ..._0x50 / ld_rrb a, xiy, hl`), so 0xEFDB90 is where this",
+   "table stops and a different one starts.",
+   "Supersedes a v10_data_as_code_census.py note for 0xEFDB49-0xEFDB5C, which",
+   "was this array carved 9 bytes in, and so at the wrong entry boundary."
+  ]
+ },
+ {
+  "file": "v10/maincpu/display/scoop_display.s",
+  "start": "0xEF6BE7", "end": "0xEF6C50",
+  "kind": "long",
+  "comment": [
+   "PerfMode_VoiceAddressTable -- 20 x u32 work-RAM pointers, then the routine",
+   "at +80.",
+   "INDEXING RULE, from this file: an index byte is fetched from a table at",
+   "0x0000F1A0 (`ld xix, 0xf1a0 / ld_rrb l, xix, hl`), scaled by 4, and used as",
+   "    ld xix, PerfMode_VoiceAddressTable / ld_rrl xhl, xix, hl / ld (xhl), a",
+   "so entries are DATA pointers written through, not handlers.",
+   "EXTENT: PerfMode_VoiceAddressTable_0x50 = this label + 80 and is the target",
+   "of six `call`s, so 0xEF6C37 is code, not a 21st entry."
+  ],
+  "segments": [
+   {"kind": "long", "len": 80, "per_line": 1, "symbols": false},
+   {"kind": "code", "len": 25, "symbols": true,
+    "comment": ["", "PerfMode_VoiceAddressTable_0x50: called from six sites."]}
+  ]
+ },
+ {
+  "file": "v10/maincpu/midi/midi_dispatch_handlers.s",
+  "start": "0xFD09AA", "end": "0xFD09DB",
+  "kind": "long",
+  "comment": [
+   "PanelEvt_Dispatch11_TableAndHandlers -- one 0xFF pad byte, then 12 handler",
+   "pointers. The pad is not a guess: PanelEvt_Dispatch11_TableAndHandlers_0x1",
+   "is defined as this label + 1 in shared/positional_labels.s and is what",
+   "PanelEvt_Dispatch11Entry loads (`ld xiy, ..._0x1 / ldb a, 0xb / calr",
+   "PanelEvent_DispatchByIndex`), so entry 0 is at +1, not at +0.",
+   "12 entries reach 0xFD09DB, which is also the value of the last entry --",
+   "the table is followed immediately by the code it points at."
+  ],
+  "segments": [
+   {"kind": "byte", "len": 1, "per_line": 1,
+    "comment": ["one pad byte; entry 0 of the table is at +1"]},
+   {"kind": "long", "len": 48, "per_line": 1, "symbols": true}
+  ]
+ }
+]
