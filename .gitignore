@@ -81,3 +81,5 @@ census-work/
 # NAKA lane: cached v10 address<->line map (35 MB build product,
 # regenerate with scripts/analysis/address_line_map.py --dump)
 scripts/analysis/.amap_v10.json
+# tier2byte lane: address-map/decode cache for scripts/analysis/tier2_byte_split_census.py
+.tier2cache/

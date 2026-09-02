@@ -707,7 +707,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x00
 	.byte 0xec, 0x98  ; "ì"
 	.asciz "#"
-	xor	(xiz), e
+	.byte 0x86, 0xdd
 	.asciz ")"
 	.byte 0xff
 	.fill 3, 1, 0xff
@@ -772,7 +772,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x00
 	.byte 0xee, 0x98  ; "î"
 	.asciz "#"
-	cps	xwa, 5
+	.byte 0xe8, 0xdd
 	.asciz ")"
 	.byte 0x85  ; ""
 	.byte 0x00
@@ -863,13 +863,13 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	ex_ff
-	nop
-	pushw de
-	normal
+	.byte 0x00
+	.byte 0x16
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz ")"
 	.ascii "`"
 	.byte 0x01
@@ -885,11 +885,11 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
-	nop
-	incf
-	nop
-	popw de
-	normal
+	.byte 0x00
+	.byte 0x0c
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
 	.asciz "i"
 	.ascii "`"
 	.byte 0x01
@@ -1387,11 +1387,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 3
 	.asciz "`"
 	.byte 0x1f
-	nop
-	jrl	nc, 3328
-	nop
-	popw de
-	normal
+	.byte 0x00
+	.byte 0x7f, 0x00, 0x0d
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
 	.byte 0x08, 0x00
 	.ascii "j"
 	.byte 0x01, 0x18
@@ -1486,13 +1486,13 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	normal
-	nop
-	popw de
-	normal
+	.byte 0x00
+	.byte 0x01
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
 	.zero 2
 	.ascii "j"
 	.byte 0x01
@@ -1516,13 +1516,13 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 2
 	.byte 0x03
 	.zero 3
-	swi	7
-	nop
-	normal
-	nop
-	popw de
-	normal
-	incf
+	.byte 0xff
+	.byte 0x00
+	.byte 0x01
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
+	.byte 0x0c
 	.byte 0x99
 	.asciz "#"
 	.byte 0x02
@@ -1734,12 +1734,12 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz ","
 	.byte 0xff
 	.fill 5, 1, 0xff
-	ldio	0, 15
-	normal
+	.byte 0x08, 0x00, 0x0f
+	.byte 0x01
 	.byte 0xca, 0x00
-	ldw	de, 56321
-	nop
-	or	hl, (xix)
+	.byte 0x32, 0x01, 0xdc
+	.byte 0x00
+	.byte 0x94, 0xe3
 	.asciz ")"
 	.zero 6
 	.asciz "EDIT"
@@ -1777,7 +1777,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.ascii "?"
 	.byte 0x01
 	.asciz "_"
-	or	hl, ix
+	.byte 0xdc, 0xe3
 	.asciz ")"
 	.zero 4
 	.byte 0xf4  ; "ô"
@@ -1884,7 +1884,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.ascii ")"
 	.byte 0x01
 	.asciz "<"
-	or	ix, (xde)
+	.byte 0x92, 0xe4
 	.asciz ")"
 	.zero 6
 	.asciz "OK"
@@ -2342,10 +2342,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x24
 	.byte 0x99  ; ""
 	.asciz "#"
-	push	sr
-	nop
+	.byte 0x02
+	.byte 0x00
 	.byte 0x0a, 0x00
-	pushw wa
+	.byte 0x28
 	.byte 0x99  ; ""
 	.asciz "#"
 	.zero 4
@@ -2371,10 +2371,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	pushw ix
+	.byte 0x2c
 	.byte 0x99  ; ""
 	.asciz "#"
-	or	xsp, (xiz)
+	.byte 0xa6, 0xe7
 	.asciz ")"
 	.byte 0x83  ; ""
 	.byte 0x00
@@ -2611,11 +2611,11 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
-	nop
-	pop	sr
-	nop
-	popw de
-	normal
+	.byte 0x00
+	.byte 0x03
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -2640,12 +2640,12 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.byte 0xff
 	.zero 8
-	pushw 1536
-	nop
-	normal
-	nop
-	pushw de
-	normal
+	.byte 0x0b, 0x00, 0x06
+	.byte 0x00
+	.byte 0x01
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -2688,10 +2688,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 8
 	.byte 0x0a
 	.zero 3
-	normal
-	nop
-	pushw de
-	normal
+	.byte 0x01
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -2722,13 +2722,13 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	normal
-	nop
-	pushw de
-	normal
+	.byte 0x00
+	.byte 0x01
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -2755,10 +2755,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x8a  ; ""
 	.byte 0x00
 	.zero 2
-	normal
-	nop
-	pushw de
-	normal
+	.byte 0x01
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -2825,7 +2825,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x44
 	.byte 0x99  ; ""
 	.asciz "#"
-	or	(xix), b
+	.byte 0x84, 0xea
 	.asciz ")"
 	.byte 0xad  ; "­"
 	.byte 0x00
@@ -2843,13 +2843,13 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	push	sr
-	nop
-	pushw de
-	normal
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -2874,12 +2874,12 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.byte 0xff
 	.zero 8
-	pushw 1536
-	nop
-	push	sr
-	nop
-	pushw de
-	normal
+	.byte 0x0b, 0x00, 0x06
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -2923,10 +2923,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x8a  ; ""
 	.byte 0x00
 	.zero 2
-	push	sr
-	nop
-	pushw de
-	normal
+	.byte 0x02
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -3050,13 +3050,13 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	pop	sr
-	nop
-	pushw de
-	normal
+	.byte 0x00
+	.byte 0x03
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "F"
 	.ascii "`"
 	.byte 0x01
@@ -3137,7 +3137,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x56
 	.byte 0x99  ; ""
 	.asciz "#"
-	or	(xiz), d
+	.byte 0x86, 0xec
 	.asciz ")"
 	.byte 0x83  ; ""
 	.byte 0x00
@@ -3161,7 +3161,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	pop xwa
+	.byte 0x58
 	.byte 0x99  ; ""
 	.asciz "#"
 	.byte 0xb8, 0xec  ; "¸ì"
@@ -3180,13 +3180,13 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	max
-	nop
-	pushw de
-	normal
+	.byte 0x00
+	.byte 0x04
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.zero 2
 	.ascii "j"
 	.byte 0x01
@@ -3214,8 +3214,8 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xff
 	.zero 3
 	.ascii "@"
-	normal
-	pop xix
+	.byte 0x01
+	.byte 0x5c
 	.byte 0x99  ; ""
 	.asciz "#"
 	.byte 0x01
@@ -3488,10 +3488,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.ascii "n"
 	.byte 0x99  ; ""
 	.asciz "#"
-	scf
-	nop
-	pushw de
-	normal
+	.byte 0x11
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.ascii "p"
 	.byte 0x99  ; ""
 	.asciz "#"
@@ -3563,10 +3563,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.ascii "t"
 	.byte 0x99  ; ""
 	.asciz "#"
-	zcf
-	nop
-	pushw de
-	normal
+	.byte 0x13
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.ascii "v"
 	.byte 0x99  ; ""
 	.asciz "#"
@@ -3609,10 +3609,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.ascii "z"
 	.byte 0x99  ; ""
 	.asciz "#"
-	pop_a
-	nop
-	pushw de
-	normal
+	.byte 0x15
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x7c, 0x99
 	.asciz "#"
 	.asciz "JUMP AFTER LD.:"
@@ -3639,21 +3639,21 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xba, 0xef  ; "ºï"
 	.asciz ")"
 	.zero 4
-	swi	7
-	nop
-	push	sr
-	nop
-	max
-	nop
+	.byte 0xff
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x04
+	.byte 0x00
 	.byte 0x8a, 0x00, 0x01
-	nop
-	adc	(xwa), a
+	.byte 0x00
+	.byte 0x80, 0x99
 	.asciz "#"
-	ccf
-	nop
-	pushw de
-	normal
-	adc	(xde), a
+	.byte 0x12
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
+	.byte 0x82, 0x99
 	.asciz "#"
 	.zero 2
 	.byte 0x0a
@@ -3711,20 +3711,20 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xf0  ; "ð"
 	.asciz ")"
 	.zero 4
-	swi	7
-	nop
-	normal
-	nop
-	push	sr
-	nop
+	.byte 0xff
+	.byte 0x00
+	.byte 0x01
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
 	.byte 0x8c, 0x00, 0x01
-	nop
-	adc	(xiz), a
+	.byte 0x00
+	.byte 0x86, 0x99
 	.asciz "#"
-	push_a
-	nop
-	pushw de
-	normal
+	.byte 0x14
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x88, 0x99
 	.asciz "#"
 	.asciz "LD BY NUM. M.:"
@@ -3784,7 +3784,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 4
 	.byte 0x8e, 0x99  ; ""
 	.asciz "#"
-	adc	(xde), bc
+	.byte 0x92, 0x99
 	.asciz "#"
 	.asciz "A"
 	.ascii "`"
@@ -3813,7 +3813,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 8
 	.byte 0x8c  ; ""
 	.byte 0x00
-	adc	(xiz), bc
+	.byte 0x96, 0x99
 	.asciz "#"
 	.byte 0xd0, 0xf0  ; "Ðð"
 	.asciz ")"
@@ -3917,10 +3917,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x1f
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "_"
-	max
-	nop
-	popw de
-	normal
+	.byte 0x04
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
 	.asciz "! HD FORMAT !"
 	.asciz "i"
 	.ascii "`"
@@ -4137,21 +4137,21 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0xd0, 0xf2  ; "Ðò"
 	.asciz ")"
 	.zero 4
-	swi	7
-	nop
-	push	sr
-	nop
-	rcf
-	nop
+	.byte 0xff
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x10
+	.byte 0x00
 	.byte 0x89, 0x00, 0x01
-	nop
-	adc	(xde), xbc
+	.byte 0x00
+	.byte 0xa2, 0x99
 	.asciz "#"
-	halt
-	nop
-	pushw de
-	normal
-	adc	(xix), xbc
+	.byte 0x05
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
+	.byte 0xa4, 0x99
 	.asciz "#"
 	.zero 2
 	.byte 0x1b
@@ -4243,8 +4243,8 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.asciz "#"
 	.asciz "="
 	.ascii "*"
-	normal
-	ldcfm	1, (xwa)
+	.byte 0x01
+	.byte 0xb0, 0x99
 	.asciz "#"
 	.zero 2
 	.byte 0x0a
@@ -4401,7 +4401,7 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	ldcfm	1, (xix)
+	.byte 0xb4, 0x99
 	.asciz "#"
 	.byte 0x1c
 	.byte 0xf4  ; "ô"
@@ -4588,12 +4588,12 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.byte 0x00
 	.byte 0xff
 	.fill 5, 1, 0xff
-	ldio	0, 9
-	normal
+	.byte 0x08, 0x00, 0x09
+	.byte 0x01
 	.byte 0xcc, 0x00
-	ldw	ix, 56833
-	nop
-	pushw de
+	.byte 0x34, 0x01, 0xde
+	.byte 0x00
+	.byte 0x2a
 	.byte 0xf5  ; "õ"
 	.asciz ")"
 	.zero 6
@@ -4743,18 +4743,18 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "6"
 	.ascii "`"
-	normal
+	.byte 0x01
 	.byte 0x95, 0x00, 0x9e, 0x00, 0xa0
-	nop
+	.byte 0x00
 	.byte 0x9c, 0x00, 0x08
-	nop
-	max
-	nop
+	.byte 0x00
+	.byte 0x04
+	.byte 0x00
 	.byte 0xae, 0x00, 0xc7
-	nop
+	.byte 0x00
 	.byte 0xee, 0x00, 0xf5, 0x00, 0xc0
-	nop
-	pushw wa
+	.byte 0x00
+	.byte 0x28
 	.byte 0xf6  ; "ö"
 	.asciz ")"
 	.zero 6
@@ -4836,10 +4836,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "J"
 	.byte 0xeb, 0x00
-	reti
-	nop
+	.byte 0x07
+	.byte 0x00
 	.byte 0xc0, 0x00
-	cp	xiz, (xwa)
+	.byte 0xa0, 0xf6
 	.asciz ")"
 	.zero 8
 	.asciz "2"
@@ -4861,10 +4861,10 @@ HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "J"
 	.byte 0xcc, 0x00
-	reti
-	nop
+	.byte 0x07
+	.byte 0x00
 	.byte 0xc0, 0x00
-	cp	h, w
+	.byte 0xc8, 0xf6
 	.asciz ")"
 	.zero 8
 	.asciz "3"
@@ -6427,7 +6427,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	pushw de
+	.byte 0x2a
 	.byte 0x9a  ; ""
 	.asciz "#"
 	.byte 0xb4  ; "´"
@@ -6573,9 +6573,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 8
 	.byte 0x0a
 	.byte 0x00
-	popw de
-	normal
-	pushw iz
+	.byte 0x4a
+	.byte 0x01
+	.byte 0x2e
 	.byte 0x9a  ; ""
 	.asciz "#"
 	.byte 0x02
@@ -6900,11 +6900,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.byte 0x03
 	.zero 3
-	swi	7
-	nop
+	.byte 0xff
+	.byte 0x00
 	.byte 0x0b, 0x00
-	popw de
-	normal
+	.byte 0x4a
+	.byte 0x01
 	.byte 0x42, 0x9a
 	.asciz "#"
 	.byte 0x02
@@ -6914,11 +6914,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x46
 	.byte 0x9a  ; ""
 	.asciz "#"
-	normal
-	nop
-	normal
-	nop
-	popw wa
+	.byte 0x01
+	.byte 0x00
+	.byte 0x01
+	.byte 0x00
+	.byte 0x48
 	.byte 0x9a  ; ""
 	.asciz "#"
 	.zero 2
@@ -7198,11 +7198,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x0b, 0x00
-	popw de
-	normal
-	ei	0
+	.byte 0x4a
+	.byte 0x01
+	.byte 0x06, 0x00
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -7220,7 +7220,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	popw de
+	.byte 0x4a
 	.byte 0x9a  ; ""
 	.asciz "#"
 	.ascii ">"
@@ -7537,13 +7537,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.byte 0x03
 	.zero 3
-	swi	7
-	nop
-	halt
-	nop
-	popw de
-	normal
-	popw iz
+	.byte 0xff
+	.byte 0x00
+	.byte 0x05
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
+	.byte 0x4e
 	.byte 0x9a  ; ""
 	.asciz "#"
 	.byte 0x02
@@ -7578,11 +7578,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
-	nop
-	halt
-	nop
-	popw de
-	normal
+	.byte 0x00
+	.byte 0x05
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
 	.asciz "0"
 	.ascii "`"
 	.byte 0x01
@@ -7707,8 +7707,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.zero 3
 	.ascii "@"
-	normal
-	pop xiz
+	.byte 0x01
+	.byte 0x5e
 	.byte 0x9a  ; ""
 	.asciz "#"
 	.byte 0x01
@@ -7743,12 +7743,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.byte 0x03
 	.zero 3
-	swi	7
-	nop
-	push	sr
-	nop
-	popw de
-	normal
+	.byte 0xff
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
 	.ascii "f"
 	.byte 0x9a  ; ""
 	.asciz "#"
@@ -7908,11 +7908,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a, 0x01, 0x08, 0x01, 0x08
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "N"
-	ei	0
+	.byte 0x06, 0x00
 	.byte 0xeb, 0x00
-	push_f
-	nop
-	pushw de
+	.byte 0x18
+	.byte 0x00
+	.byte 0x2a
 	.byte 0x08
 	.asciz "*"
 	.byte 0x04
@@ -7944,8 +7944,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "`"
 	.byte 0x01, 0x0a, 0x01
 	.fill 4, 1, 0xff
-	pushw 0x0801
-	nop
+	.byte 0x0b, 0x01, 0x08
+	.byte 0x00
 	.byte 0x0b, 0x00
 	.asciz "+"
 	.asciz " "
@@ -8092,9 +8092,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.byte 0x08
 	.byte 0x00
-	pushw de
-	normal
-	adc	(xwa), b
+	.byte 0x2a
+	.byte 0x01
+	.byte 0x80, 0x9a
 	.asciz "#"
 	.asciz "CURRENT PANEL          "
 	.byte 0x1f
@@ -8357,8 +8357,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "~"
 	.byte 0xca, 0x00, 0x99, 0x00, 0xd4
-	nop
-	pop xde
+	.byte 0x00
+	.byte 0x5a
 	.byte 0x0b
 	.asciz "*"
 	.byte 0x03
@@ -8496,13 +8496,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0xff
 	.zero 3
-	adc	(xix), b
+	.byte 0x84, 0x9a
 	.asciz "#"
 	.byte 0x0a
 	.byte 0x00
-	pushw de
-	normal
-	adc	(xiz), b
+	.byte 0x2a
+	.byte 0x01
+	.byte 0x86, 0x9a
 	.asciz "#"
 	.asciz "SEQUENCER              "
 	.byte 0x1b
@@ -8540,8 +8540,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.byte 0x0b
 	.byte 0x00
-	pushw de
-	normal
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x8c, 0x9a
 	.asciz "#"
 	.asciz "COMPOSER               "
@@ -8577,13 +8577,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0xff
 	.zero 3
-	adc	(xwa), de
+	.byte 0x90, 0x9a
 	.asciz "#"
-	incf
-	nop
-	pushw de
-	normal
-	adc	(xde), de
+	.byte 0x0c
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
+	.byte 0x92, 0x9a
 	.asciz "#"
 	.asciz "SOUND MEMORY           "
 	.byte 0x1b
@@ -8605,8 +8605,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xf5  ; "õ"
 	.byte 0x00
 	.zero 2
-	ei	0
-	pushw wa
+	.byte 0x06, 0x00
+	.byte 0x28
 	.byte 0x0d
 	.asciz "*"
 	.zero 4
@@ -8618,12 +8618,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0xff
 	.zero 3
-	adc	(xiz), de
+	.byte 0x96, 0x9a
 	.asciz "#"
-	decf
-	nop
-	pushw de
-	normal
+	.byte 0x0d
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x98, 0x9a
 	.asciz "#"
 	.asciz "MSP                    "
@@ -8662,10 +8662,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 3
 	.byte 0x9c, 0x9a  ; ""
 	.asciz "#"
-	ret
-	nop
-	pushw de
-	normal
+	.byte 0x0e
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x9e, 0x9a
 	.asciz "#"
 	.asciz "RHYTHM CUSTOM          "
@@ -8675,9 +8675,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.ascii "*"
-	normal
-	pushw wa
-	normal
+	.byte 0x01
+	.byte 0x28
+	.byte 0x01
 	.byte 0x08, 0x00
 	.asciz "0"
 	.byte 0xb4  ; "´"
@@ -8702,13 +8702,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0xff
 	.zero 3
-	adc	(xde), xde
+	.byte 0xa2, 0x9a
 	.asciz "#"
-	rcf
-	nop
-	pushw de
-	normal
-	adc	(xix), xde
+	.byte 0x10
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
+	.byte 0xa4, 0x9a
 	.asciz "#"
 	.asciz "TECHNICS LYRICS        "
 	.asciz "."
@@ -8716,9 +8716,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.ascii "+"
-	normal
-	pushw bc
-	normal
+	.byte 0x01
+	.byte 0x29
+	.byte 0x01
 	.byte 0x08, 0x00
 	.asciz "*"
 	.byte 0xc6  ; "Æ"
@@ -8736,9 +8736,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.ascii ","
-	normal
-	pushw de
-	normal
+	.byte 0x01
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x08, 0x00
 	.asciz "*"
 	.byte 0x18
@@ -8766,10 +8766,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 3
 	.byte 0xa8, 0x9a  ; "¨"
 	.asciz "#"
-	reti
-	nop
-	pushw de
-	normal
+	.byte 0x07
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.byte 0xaa, 0x9a
 	.asciz "#"
 	.zero 2
@@ -8779,9 +8779,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.ascii "-"
-	normal
-	pushw hl
-	normal
+	.byte 0x01
+	.byte 0x2b
+	.byte 0x01
 	.byte 0x08, 0x00
 	.asciz "0"
 	.asciz "D"
@@ -8806,10 +8806,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 3
 	.byte 0xae, 0x9a  ; "®"
 	.asciz "#"
-	push 0
-	pushw de
-	normal
-	ldcfm	2, (xwa)
+	.byte 0x09, 0x00
+	.byte 0x2a
+	.byte 0x01
+	.byte 0xb0, 0x9a
 	.asciz "#"
 	.asciz "PANEL MEMORY           "
 	.asciz "."
@@ -8817,11 +8817,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.ascii "."
-	normal
-	pushw ix
-	normal
-	ldio	0, 7
-	normal
+	.byte 0x01
+	.byte 0x2c
+	.byte 0x01
+	.byte 0x08, 0x00, 0x07
+	.byte 0x01
 	.asciz "2"
 	.byte 0x07, 0x01
 	.byte 0xc5  ; "Å"
@@ -8835,11 +8835,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x10, 0x01
 	.fill 2, 1, 0xff
 	.ascii "0"
-	normal
-	pushw iz
-	normal
-	ldio	0, 6
-	nop
+	.byte 0x01
+	.byte 0x2e
+	.byte 0x01
+	.byte 0x08, 0x00, 0x06
+	.byte 0x00
 	.byte 0x94, 0x00
 	.asciz "'"
 	.byte 0x9e  ; ""
@@ -8884,13 +8884,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0xff
 	.zero 3
-	ldcfm	2, (xix)
+	.byte 0xb4, 0x9a
 	.asciz "#"
 	.byte 0x0f
 	.byte 0x00
-	pushw de
-	normal
-	ldcfm	2, (xiz)
+	.byte 0x2a
+	.byte 0x01
+	.byte 0xb6, 0x9a
 	.asciz "#"
 	.asciz "USER MIDI SETTINGS     "
 	.asciz "."
@@ -8985,12 +8985,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	ldf	0
-	pushw de
-	normal
+	.byte 0x00
+	.byte 0x17, 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -9036,11 +9036,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0xff
 	.zero 8
-	pushw 1536
-	nop
-	ldf	0
-	pushw de
-	normal
+	.byte 0x0b, 0x00, 0x06
+	.byte 0x00
+	.byte 0x17, 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -9068,9 +9068,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x8a  ; ""
 	.byte 0x00
 	.zero 2
-	ldf	0
-	pushw de
-	normal
+	.byte 0x17, 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
@@ -9371,14 +9371,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.zero 4
 	.ascii "j"
-	normal
-	push xde
-	normal
+	.byte 0x01
+	.byte 0x3a
+	.byte 0x01
 	.byte 0x46, 0x01
-	popw wa
-	normal
-	ld	xix, 134219777
-	nop
+	.byte 0x48
+	.byte 0x01
+	.byte 0x44, 0x01, 0x08, 0x00, 0x08
+	.byte 0x00
 	.asciz " "
 	.byte 0xc5  ; "Å"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -9465,15 +9465,15 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "AL"
 	.zero 3
 	.ascii "j"
-	normal
-	push xde
-	normal
-	popw bc
-	normal
-	popw hl
-	normal
-	ld	xiy, 134219777
-	nop
+	.byte 0x01
+	.byte 0x3a
+	.byte 0x01
+	.byte 0x49
+	.byte 0x01
+	.byte 0x4b
+	.byte 0x01
+	.byte 0x45, 0x01, 0x08, 0x00, 0x08
+	.byte 0x00
 	.asciz "4"
 	.byte 0xe8  ; "è"
 	.byte 0x00
@@ -9486,11 +9486,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.byte 0x03
 	.zero 3
-	swi	7
-	nop
-	ei	0
-	popw de
-	normal
+	.byte 0xff
+	.byte 0x00
+	.byte 0x06, 0x00
+	.byte 0x4a
+	.byte 0x01
 	.byte 0xda, 0x9a
 	.asciz "#"
 	.byte 0x01
@@ -9508,9 +9508,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz "."
 	.ascii "`"
-	normal
-	popw wa
-	normal
+	.byte 0x01
+	.byte 0x48
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "J"
 	.byte 0x01
@@ -9530,9 +9530,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "."
 	.ascii "`"
-	normal
-	popw wa
-	normal
+	.byte 0x01
+	.byte 0x48
+	.byte 0x01
 	.fill 4, 1, 0xff
 	.ascii "I"
 	.byte 0x01, 0x08
@@ -9555,11 +9555,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "L"
-	normal
-	popw wa
-	normal
-	push_f
-	nop
+	.byte 0x01
+	.byte 0x48
+	.byte 0x01
+	.byte 0x18
+	.byte 0x00
 	.ascii " "
 	.byte 0x01
 	.zero 2
@@ -9571,11 +9571,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.asciz "\""
 	.ascii "`"
-	normal
-	push xde
-	normal
-	popw iy
-	normal
+	.byte 0x01
+	.byte 0x3a
+	.byte 0x01
+	.byte 0x4d
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "K"
 	.byte 0x01, 0x08
@@ -9600,15 +9600,15 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 3
 	.asciz "+"
 	.ascii "`"
-	normal
-	popw ix
-	normal
+	.byte 0x01
+	.byte 0x4c
+	.byte 0x01
 	.fill 6, 1, 0xff
-	ldio	0, 2
-	normal
+	.byte 0x08, 0x00, 0x02
+	.byte 0x01
 	.byte 0xdd, 0x00
-	pushw iy
-	normal
+	.byte 0x2d
+	.byte 0x01
 	.byte 0xef, 0x00
 	.ascii "t"
 	.byte 0x13
@@ -9646,9 +9646,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "F.L.S. DIR SELECT"
 	.asciz "I"
 	.ascii "`"
-	normal
-	popw iz
-	normal
+	.byte 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "P"
 	.byte 0x01
@@ -9656,16 +9656,16 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	push xde
-	normal
-	jrl	nc, 7936
-	nop
-	jr	f, 1
-	popw iz
-	normal
+	.byte 0x00
+	.byte 0x3a
+	.byte 0x01
+	.byte 0x7f, 0x00, 0x1f
+	.byte 0x00
+	.byte 0x60, 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "Q"
 	.byte 0x01
@@ -9688,9 +9688,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x06
 	.zero 3
 	.ascii "j"
-	normal
-	popw iz
-	normal
+	.byte 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "R"
 	.byte 0x01
@@ -9710,11 +9710,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.byte 0x03
 	.zero 3
-	swi	7
-	nop
+	.byte 0xff
+	.byte 0x00
 	.byte 0x08, 0x00
-	popw de
-	normal
+	.byte 0x4a
+	.byte 0x01
 	.byte 0xe6, 0x9a
 	.asciz "#"
 	.byte 0x02
@@ -9732,9 +9732,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz ">"
 	.ascii "`"
-	normal
-	popw iz
-	normal
+	.byte 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "S"
 	.byte 0x01
@@ -9764,9 +9764,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "01-24"
 	.asciz ">"
 	.ascii "`"
-	normal
-	popw iz
-	normal
+	.byte 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "T"
 	.byte 0x01
@@ -9797,9 +9797,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "25-48"
 	.asciz "\""
 	.ascii "`"
-	normal
-	popw iz
-	normal
+	.byte 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "U"
 	.byte 0x01
@@ -9826,9 +9826,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ">"
 	.ascii "`"
-	normal
-	popw iz
-	normal
+	.byte 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "V"
 	.byte 0x01
@@ -9861,9 +9861,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "49-72"
 	.asciz ">"
 	.ascii "`"
-	normal
-	popw iz
-	normal
+	.byte 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "W"
 	.byte 0x01
@@ -9895,9 +9895,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "73-96"
 	.asciz ">"
 	.ascii "`"
-	normal
-	popw iz
-	normal
+	.byte 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "X"
 	.byte 0x01
@@ -9930,9 +9930,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz ")"
 	.ascii "`"
-	normal
-	popw iz
-	normal
+	.byte 0x01
+	.byte 0x4e
+	.byte 0x01
 	.fill 4, 1, 0xff
 	.ascii "W"
 	.byte 0x01, 0x18
@@ -9941,11 +9941,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 3
 	.asciz ";"
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x08, 0x00
-	popw de
-	normal
-	ei	0
+	.byte 0x4a
+	.byte 0x01
+	.byte 0x06, 0x00
 	.ascii "j"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -9974,9 +9974,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "I"
 	.ascii "`"
-	normal
-	pop xbc
-	normal
+	.byte 0x01
+	.byte 0x59
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "["
 	.byte 0x01
@@ -9984,22 +9984,22 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	popw iz
-	normal
+	.byte 0x00
+	.byte 0x4e
+	.byte 0x01
 	.byte 0x7f
 	.zero 3
 	.ascii "j"
-	normal
-	pop xbc
-	normal
+	.byte 0x01
+	.byte 0x59
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "\\"
-	normal
-	pop xde
-	normal
+	.byte 0x01
+	.byte 0x5a
+	.byte 0x01
 	.byte 0x08, 0x00
 	.asciz ","
 	.asciz " "
@@ -10030,14 +10030,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.zero 4
 	.ascii "j"
-	normal
-	pop xbc
-	normal
+	.byte 0x01
+	.byte 0x59
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "]"
-	normal
-	pop xhl
-	normal
+	.byte 0x01
+	.byte 0x5b
+	.byte 0x01
 	.byte 0x08, 0x00
 	.asciz ","
 	.asciz "0"
@@ -10052,12 +10052,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.byte 0x03
 	.zero 3
-	swi	7
-	nop
-	push 0
-	popw de
-	normal
-	swi	2
+	.byte 0xff
+	.byte 0x00
+	.byte 0x09, 0x00
+	.byte 0x4a
+	.byte 0x01
+	.byte 0xfa
 	.byte 0x9a
 	.asciz "#"
 	.byte 0x01
@@ -10075,14 +10075,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz "\""
 	.ascii "`"
-	normal
-	pop xbc
-	normal
+	.byte 0x01
+	.byte 0x59
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "^"
-	normal
-	pop xix
-	normal
+	.byte 0x01
+	.byte 0x5c
+	.byte 0x01
 	.byte 0x08, 0x00
 	.asciz "T"
 	.byte 0xdc  ; "Ü"
@@ -10096,22 +10096,22 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xc9  ; "É"
 	.byte 0x00
 	.zero 10
-	push	sr
-	nop
-	max
-	nop
-	pop	sr
-	nop
+	.byte 0x02
+	.byte 0x00
+	.byte 0x04
+	.byte 0x00
+	.byte 0x03
+	.byte 0x00
 	.byte 0x1f
-	nop
-	jr	f, 1
-	pop xbc
-	normal
+	.byte 0x00
+	.byte 0x60, 0x01
+	.byte 0x59
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "_"
-	normal
-	pop xiy
-	normal
+	.byte 0x01
+	.byte 0x5d
+	.byte 0x01
 	.byte 0x08, 0x00
 	.asciz ","
 	.byte 0xdc  ; "Ü"
@@ -10125,41 +10125,41 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0x02
 	.zero 9
-	normal
-	nop
-	retd	7936
-	nop
-	jr	f, 1
-	pop xbc
-	normal
+	.byte 0x01
+	.byte 0x00
+	.byte 0x0f, 0x00, 0x1f
+	.byte 0x00
+	.byte 0x60, 0x01
+	.byte 0x59
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "`"
-	normal
-	pop xiz
-	normal
-	ldio	0, 204
-	nop
+	.byte 0x01
+	.byte 0x5e
+	.byte 0x01
+	.byte 0x08, 0x00, 0xcc
+	.byte 0x00
 	.byte 0xdc, 0x00, 0xeb, 0x00, 0xed, 0x00
-	reti
-	nop
+	.byte 0x07
+	.byte 0x00
 	.byte 0xc9, 0x00
-	normal
+	.byte 0x01
 	.zero 9
 	.byte 0x05
 	.byte 0x00
 	.byte 0x10
 	.zero 3
 	.ascii "j"
-	normal
-	pop xbc
-	normal
+	.byte 0x01
+	.byte 0x59
+	.byte 0x01
 	.fill 2, 1, 0xff
 	.ascii "a"
-	normal
-	pop xsp
-	normal
-	ldio	0, 236
-	nop
+	.byte 0x01
+	.byte 0x5f
+	.byte 0x01
+	.byte 0x08, 0x00, 0xec
+	.byte 0x00
 	.asciz "D"
 	.ascii "?"
 	.byte 0x01
@@ -10191,10 +10191,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.zero 2
 	.byte 0x1f
-	nop
-	jr	f, 1
-	pop xbc
-	normal
+	.byte 0x00
+	.byte 0x60, 0x01
+	.byte 0x59
+	.byte 0x01
 	.ascii "b"
 	.byte 0x01
 	.fill 2, 1, 0xff
@@ -10426,11 +10426,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.byte 0x03
 	.zero 5
-	reti
-	nop
-	popw de
-	normal
-	ex_ff
+	.byte 0x07
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
+	.byte 0x16
 	.byte 0x9b
 	.asciz "#"
 	.byte 0x01
@@ -10571,13 +10571,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "p"
 	.byte 0x01
 	.fill 2, 1, 0xff
-	ldio	0, 12
-	normal
+	.byte 0x08, 0x00, 0x0c
+	.byte 0x01
 	.byte 0xc3, 0x00, 0x27
-	normal
+	.byte 0x01
 	.byte 0xcd, 0x00
-	pop xix
-	pop_f
+	.byte 0x5c
+	.byte 0x19
 	.asciz "*"
 	.byte 0x03
 	.zero 3
@@ -10854,10 +10854,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x26
 	.byte 0x9b  ; ""
 	.asciz "#"
-	normal
-	nop
-	push 0
-	pushw de
+	.byte 0x01
+	.byte 0x00
+	.byte 0x09, 0x00
+	.byte 0x2a
 	.byte 0x9b  ; ""
 	.asciz "#"
 	.zero 4
@@ -10880,11 +10880,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
-	nop
-	reti
-	nop
-	popw de
-	normal
+	.byte 0x00
+	.byte 0x07
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
 	.asciz "."
 	.ascii "`"
 	.byte 0x01
@@ -10941,7 +10941,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	pushw iz
+	.byte 0x2e
 	.byte 0x9b  ; ""
 	.asciz "#"
 	.ascii "r"
@@ -10984,10 +10984,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x1f
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "?"
-	pop_f
-	nop
-	pushw de
-	normal
+	.byte 0x19
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -11012,12 +11012,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0xff
 	.zero 8
-	pushw 1536
-	nop
-	pop_f
-	nop
-	pushw de
-	normal
+	.byte 0x0b, 0x00, 0x06
+	.byte 0x00
+	.byte 0x19
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz " "
 	.ascii "`"
 	.byte 0x01
@@ -11045,19 +11045,19 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x8a  ; ""
 	.byte 0x00
 	.zero 2
-	pop_f
-	nop
-	pushw de
-	normal
+	.byte 0x19
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "+"
 	.ascii "`"
 	.byte 0x01
 	.byte 0x7b
 	.byte 0x01
 	.fill 4, 1, 0xff
-	jrl	nc, 0x0801
-	nop
-	push 0
+	.byte 0x7f, 0x01, 0x08
+	.byte 0x00
+	.byte 0x09, 0x00
 	.asciz "w"
 	.asciz "$"
 	.byte 0x89  ; ""
@@ -11410,7 +11410,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "K"
 	.byte 0xd4  ; "Ô"
 	.byte 0x00
-	pushw iz
+	.byte 0x2e
 	.byte 0x1e
 	.asciz "*"
 	.byte 0x03
@@ -11616,8 +11616,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.byte 0x0b
 	.byte 0x00
-	pushw de
-	normal
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x40, 0x9b
 	.asciz "#"
 	.asciz "COMPOSER               "
@@ -11660,9 +11660,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "D"
 	.byte 0x9b  ; ""
 	.asciz "#"
-	ei	0
-	pushw de
-	normal
+	.byte 0x06, 0x00
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x46, 0x9b
 	.asciz "#"
 	.zero 2
@@ -11705,9 +11705,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.byte 0x08
 	.byte 0x00
-	pushw de
-	normal
-	popw ix
+	.byte 0x2a
+	.byte 0x01
+	.byte 0x4c
 	.byte 0x9b  ; ""
 	.asciz "#"
 	.asciz "CURRENT PANEL          "
@@ -11746,9 +11746,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "P"
 	.byte 0x9b  ; ""
 	.asciz "#"
-	push 0
-	pushw de
-	normal
+	.byte 0x09, 0x00
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x52, 0x9b
 	.asciz "#"
 	.asciz "PANEL MEMORY           "
@@ -11790,9 +11790,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.byte 0x0a
 	.byte 0x00
-	pushw de
-	normal
-	pop xwa
+	.byte 0x2a
+	.byte 0x01
+	.byte 0x58
 	.byte 0x9b  ; ""
 	.asciz "#"
 	.asciz "SEQUENCER              "
@@ -11833,11 +11833,11 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "\\"
 	.byte 0x9b  ; ""
 	.asciz "#"
-	incf
-	nop
-	pushw de
-	normal
-	pop xiz
+	.byte 0x0c
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
+	.byte 0x5e
 	.byte 0x9b  ; ""
 	.asciz "#"
 	.asciz "SOUND MEMORY           "
@@ -11878,10 +11878,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "b"
 	.byte 0x9b  ; ""
 	.asciz "#"
-	decf
-	nop
-	pushw de
-	normal
+	.byte 0x0d
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.ascii "d"
 	.byte 0x9b  ; ""
 	.asciz "#"
@@ -11923,10 +11923,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "h"
 	.byte 0x9b  ; ""
 	.asciz "#"
-	ret
-	nop
-	pushw de
-	normal
+	.byte 0x0e
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.ascii "j"
 	.byte 0x9b  ; ""
 	.asciz "#"
@@ -11971,8 +11971,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.byte 0x0f
 	.byte 0x00
-	pushw de
-	normal
+	.byte 0x2a
+	.byte 0x01
 	.ascii "p"
 	.byte 0x9b  ; ""
 	.asciz "#"
@@ -12072,18 +12072,18 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1b, 0x00
-	pushw de
-	normal
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x1f
-	nop
-	jr	f, 1
+	.byte 0x00
+	.byte 0x60, 0x01
 	.byte 0x82, 0x01, 0xa3, 0x01, 0xa4, 0x01, 0xa1, 0x01
-	ldio	0, 13
-	normal
+	.byte 0x08, 0x00, 0x0d
+	.byte 0x01
 	.byte 0x1e, 0x00, 0x37
-	normal
+	.byte 0x01
 	.asciz "7"
 	.byte 0xf2  ; "ò"
 	.byte 0x00
@@ -12291,10 +12291,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "t"
 	.byte 0x9b  ; ""
 	.asciz "#"
-	rcf
-	nop
-	pushw de
-	normal
+	.byte 0x10
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.ascii "v"
 	.byte 0x9b  ; ""
 	.asciz "#"
@@ -12674,7 +12674,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 4
 	.byte 0xff
 	.zero 3
-	adc	(xde), c
+	.byte 0x82, 0x9b
 	.asciz "#"
 	.asciz "ABC"
 	.asciz "ABC"
@@ -13139,9 +13139,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.byte 0x1e
 	.byte 0x00
-	pushw de
-	normal
-	adc	(xwa), hl
+	.byte 0x2a
+	.byte 0x01
+	.byte 0x90, 0x9b
 	.asciz "#"
 	.asciz "CURRENT PANEL     "
 	.byte 0x00
@@ -13176,13 +13176,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0xff
 	.zero 3
-	adc	(xix), hl
+	.byte 0x94, 0x9b
 	.asciz "#"
 	.byte 0x1f
-	nop
-	pushw de
-	normal
-	adc	(xiz), hl
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
+	.byte 0x96, 0x9b
 	.asciz "#"
 	.asciz "PANEL MEMORY      "
 	.byte 0x00
@@ -13259,12 +13259,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0xff
 	.zero 3
-	adc	(xwa), xhl
+	.byte 0xa0, 0x9b
 	.asciz "#"
 	.asciz "!"
 	.ascii "*"
-	normal
-	adc	(xde), xhl
+	.byte 0x01
+	.byte 0xa2, 0x9b
 	.asciz "#"
 	.asciz "COMPOSER          "
 	.byte 0x00
@@ -13300,7 +13300,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0xff
 	.zero 3
-	adc	(xiz), xhl
+	.byte 0xa6, 0x9b
 	.asciz "#"
 	.asciz "\""
 	.ascii "*"
@@ -13386,12 +13386,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x00
 	.byte 0xff
 	.zero 3
-	ldcfm	3, (xde)
+	.byte 0xb2, 0x9b
 	.asciz "#"
 	.asciz "$"
 	.ascii "*"
-	normal
-	ldcfm	3, (xix)
+	.byte 0x01
+	.byte 0xb4, 0x9b
 	.asciz "#"
 	.asciz "RHYTHM CUSTOM     "
 	.byte 0x00
@@ -13682,20 +13682,20 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz "?"
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1c, 0x00
-	pushw de
-	normal
+	.byte 0x2a
+	.byte 0x01
 	.byte 0x1f
-	nop
-	jr	f, 1
-	orda8_24	b, 123137
-	normal
+	.byte 0x00
+	.byte 0x60, 0x01
+	.byte 0xc2, 0x01, 0xe1, 0x01, 0xe2
+	.byte 0x01
 	.byte 0xdf, 0x01
-	ldio	0, 13
-	normal
+	.byte 0x08, 0x00, 0x0d
+	.byte 0x01
 	.byte 0x1e, 0x00, 0x37
-	normal
+	.byte 0x01
 	.asciz "7"
 	.byte 0xf2  ; "ò"
 	.byte 0x00
@@ -13861,8 +13861,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "#"
 	.byte 0x1d
 	.byte 0x00
-	pushw de
-	normal
+	.byte 0x2a
+	.byte 0x01
 	.byte 0xc0, 0x9b
 	.asciz "#"
 	.zero 2
@@ -14800,8 +14800,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "j"
 	.byte 0x01, 0x0a, 0x02
 	.fill 4, 1, 0xff
-	pushw 0x0802
-	nop
+	.byte 0x0b, 0x02, 0x08
+	.byte 0x00
 	.asciz ","
 	.asciz "l"
 	.byte 0x13, 0x01
@@ -15252,8 +15252,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.ascii "j"
 	.byte 0x01, 0x1b, 0x02
 	.fill 4, 1, 0xff
-	calr	0x0802
-	nop
+	.byte 0x1e, 0x02, 0x08
+	.byte 0x00
 	.asciz "&"
 	.asciz "."
 	.byte 0x19, 0x01
@@ -15490,9 +15490,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "*"
-	push	sr
-	pushw wa
-	push	sr
+	.byte 0x02
+	.byte 0x28
+	.byte 0x02
 	.byte 0x08, 0x00
 	.asciz "d"
 	.byte 0x0c
@@ -15513,10 +15513,10 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "HD-INFO"
 	.zero 2
 	.ascii "j"
-	normal
-	ldb	l, 2
-	pushw hl
-	push	sr
+	.byte 0x01
+	.byte 0x27, 0x02
+	.byte 0x2b
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii ")"
 	.byte 0x02, 0x08
@@ -15555,9 +15555,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz "."
 	.ascii "`"
-	normal
-	pushw de
-	push	sr
+	.byte 0x01
+	.byte 0x2a
+	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
 	.byte 0x00
@@ -15600,9 +15600,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.asciz "DEBUG MEMO SCREEN"
 	.asciz "I"
 	.ascii "`"
-	normal
-	pushw ix
-	push	sr
+	.byte 0x01
+	.byte 0x2c
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "."
 	.byte 0x02
@@ -15617,9 +15617,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "F"
 	.ascii "`"
-	normal
-	pushw ix
-	push	sr
+	.byte 0x01
+	.byte 0x2c
+	.byte 0x02
 	.fill 4, 1, 0xff
 	.ascii "-"
 	.byte 0x02, 0x08
@@ -15997,12 +15997,12 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1a, 0x00
-	pushw de
-	normal
+	.byte 0x2a
+	.byte 0x01
 	.asciz "?"
 	.ascii "`"
 	.byte 0x01
@@ -16246,13 +16246,13 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x18
 	.zero 5
 	.byte 0x1f
-	nop
+	.byte 0x00
 	.byte 0x1f
-	nop
-	push_f
-	nop
-	pushw de
-	normal
+	.byte 0x00
+	.byte 0x18
+	.byte 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "I"
 	.ascii "`"
 	.byte 0x01
@@ -16297,17 +16297,17 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0xff
 	.byte 0xff
 	.zero 8
-	pushw 1536
-	nop
-	ldf	0
-	pushw de
-	normal
+	.byte 0x0b, 0x00, 0x06
+	.byte 0x00
+	.byte 0x17, 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz " "
 	.ascii "`"
-	normal
+	.byte 0x01
 	.byte 0x44, 0x02
-	popw bc
-	push	sr
+	.byte 0x49
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "G"
 	.byte 0x02, 0x08
@@ -16328,14 +16328,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x8a  ; ""
 	.byte 0x00
 	.zero 2
-	ldf	0
-	pushw de
-	normal
+	.byte 0x17, 0x00
+	.byte 0x2a
+	.byte 0x01
 	.asciz "+"
 	.ascii "`"
-	normal
-	popw wa
-	push	sr
+	.byte 0x01
+	.byte 0x48
+	.byte 0x02
 	.fill 6, 1, 0xff
 	.byte 0x08
 	.byte 0x00
@@ -16376,9 +16376,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 6
 	.asciz "R"
 	.ascii "`"
-	normal
-	popw de
-	push	sr
+	.byte 0x01
+	.byte 0x4a
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "L"
 	.byte 0x02
@@ -16394,25 +16394,25 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01
 	.asciz "?"
 	.ascii "`"
-	normal
-	popw de
-	push	sr
+	.byte 0x01
+	.byte 0x4a
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "M"
-	push	sr
-	popw hl
-	push	sr
-	ldio	0, 244
-	nop
+	.byte 0x02
+	.byte 0x4b
+	.byte 0x02
+	.byte 0x08, 0x00, 0xf4
+	.byte 0x00
 	.byte 0xd8, 0x00
-	push xhl
-	normal
+	.byte 0x3b
+	.byte 0x01
 	.byte 0xee, 0x00
-	reti
-	nop
+	.byte 0x07
+	.byte 0x00
 	.byte 0xc9, 0x00
-	swi	7
-	swi	7
+	.byte 0xff
+	.byte 0xff
 	.zero 8
 	.byte 0x06
 	.byte 0x00
@@ -16422,15 +16422,15 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 2
 	.asciz "6"
 	.ascii "`"
-	normal
-	popw de
-	push	sr
-	popw iz
-	push	sr
+	.byte 0x01
+	.byte 0x4a
+	.byte 0x02
+	.byte 0x4e
+	.byte 0x02
 	.byte 0x50
-	push	sr
-	popw ix
-	push	sr
+	.byte 0x02
+	.byte 0x4c
+	.byte 0x02
 	.byte 0x08, 0x00
 	.asciz "("
 	.asciz "T"
@@ -16449,9 +16449,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
-	normal
-	popw iy
-	push	sr
+	.byte 0x01
+	.byte 0x4d
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "O"
 	.byte 0x02
@@ -16480,9 +16480,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x0a
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
-	normal
-	popw iy
-	push	sr
+	.byte 0x01
+	.byte 0x4d
+	.byte 0x02
 	.fill 4, 1, 0xff
 	.ascii "N"
 	.byte 0x02, 0x08
@@ -16507,14 +16507,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x0a
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
-	normal
-	popw de
-	push	sr
+	.byte 0x01
+	.byte 0x4a
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "Q"
-	push	sr
-	popw iy
-	push	sr
+	.byte 0x02
+	.byte 0x4d
+	.byte 0x02
 	.byte 0x08, 0x00
 	.asciz "("
 	.asciz "^"
@@ -16534,9 +16534,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x0a
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
-	normal
-	popw de
-	push	sr
+	.byte 0x01
+	.byte 0x4a
+	.byte 0x02
 	.fill 4, 1, 0xff
 	.ascii "P"
 	.byte 0x02, 0x08
@@ -16745,9 +16745,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "Z"
-	push	sr
-	pop xwa
-	push	sr
+	.byte 0x02
+	.byte 0x58
+	.byte 0x02
 	.byte 0x08, 0x00
 	.asciz "("
 	.asciz "z"
@@ -16774,9 +16774,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "["
-	push	sr
-	pop xbc
-	push	sr
+	.byte 0x02
+	.byte 0x59
+	.byte 0x02
 	.byte 0x08, 0x00
 	.asciz "'"
 	.asciz "^"
@@ -16845,9 +16845,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 6
 	.asciz "6"
 	.ascii "`"
-	normal
-	pop xix
-	push	sr
+	.byte 0x01
+	.byte 0x5c
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "^"
 	.byte 0x02
@@ -16872,14 +16872,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x0a
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
-	normal
-	pop xix
-	push	sr
+	.byte 0x01
+	.byte 0x5c
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "_"
-	push	sr
-	pop xiy
-	push	sr
+	.byte 0x02
+	.byte 0x5d
+	.byte 0x02
 	.byte 0x08, 0x00
 	.asciz "("
 	.asciz "z"
@@ -16901,14 +16901,14 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x0a
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
-	normal
-	pop xix
-	push	sr
+	.byte 0x01
+	.byte 0x5c
+	.byte 0x02
 	.fill 2, 1, 0xff
 	.ascii "`"
-	push	sr
-	pop xiz
-	push	sr
+	.byte 0x02
+	.byte 0x5e
+	.byte 0x02
 	.byte 0x08, 0x00
 	.asciz "'"
 	.asciz "^"
@@ -16928,9 +16928,9 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x01, 0x0a
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "j"
-	normal
-	pop xix
-	push	sr
+	.byte 0x01
+	.byte 0x5c
+	.byte 0x02
 	.fill 4, 1, 0xff
 	.ascii "_"
 	.byte 0x02, 0x08
@@ -16969,7 +16969,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	pushw de
+	.byte 0x2a
 	.byte 0x9c  ; ""
 	.asciz "#"
 	.byte 0xa6  ; "¦"
@@ -17100,7 +17100,7 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	pushw iz
+	.byte 0x2e
 	.byte 0x9c  ; ""
 	.asciz "#"
 	.asciz "zB*"
@@ -17763,8 +17763,8 @@ HDAE5000_Panel_Save_UI:	; 0x29F9B2
 	.byte 0x7e
 	.byte 0x02
 	.fill 4, 1, 0xff
-	jrl	nc, 0x0802
-	nop
+	.byte 0x7f, 0x02, 0x08
+	.byte 0x00
 	.asciz "("
 	.asciz "z"
 	.byte 0x17, 0x01
@@ -18385,7 +18385,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	popw iz
+	.byte 0x4e
 	.byte 0x9c  ; ""
 	.asciz "#"
 	.asciz "R"
@@ -18759,7 +18759,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	pop xde
+	.byte 0x5a
 	.byte 0x9c  ; ""
 	.asciz "#"
 	.asciz "I"
@@ -18928,7 +18928,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	pop xiz
+	.byte 0x5e
 	.byte 0x9c  ; ""
 	.asciz "#"
 	.asciz "I"
@@ -19800,11 +19800,11 @@ HDAE5000_Credits:	; 0x2A477C
 	.zero 3
 	.asciz "`"
 	.byte 0x1f
-	nop
-	jrl	nc, 3328
-	nop
-	popw de
-	normal
+	.byte 0x00
+	.byte 0x7f, 0x00, 0x0d
+	.byte 0x00
+	.byte 0x4a
+	.byte 0x01
 	.byte 0x08, 0x00
 	.ascii "j"
 	.byte 0x01
@@ -19853,7 +19853,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.ascii "|"
 	.byte 0x9c  ; ""
 	.asciz "#"
-	adc	(xwa), d
+	.byte 0x80, 0x9c
 	.asciz "#"
 	.byte 0x1f
 	.byte 0x00
@@ -19941,8 +19941,8 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0xff
 	.zero 3
 	.ascii "@"
-	normal
-	adc	(xix), d
+	.byte 0x01
+	.byte 0x84, 0x9c
 	.asciz "#"
 	.byte 0x01
 	.byte 0x00
@@ -20134,14 +20134,14 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0x01
 	.byte 0x8c, 0x9c  ; ""
 	.asciz "#"
-	normal
-	nop
-	normal
-	nop
-	adc	(xwa), ix
+	.byte 0x01
+	.byte 0x00
+	.byte 0x01
+	.byte 0x00
+	.byte 0x90, 0x9c
 	.asciz "#"
 	.zero 4
-	adc	(xde), ix
+	.byte 0x92, 0x9c
 	.asciz "#"
 	.zero 2
 	.asciz "6"
@@ -20544,7 +20544,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	adc	(xix), ix
+	.byte 0x94, 0x9c
 	.asciz "#"
 	.byte 0x04
 	.asciz "X*"
@@ -21032,7 +21032,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.zero 3
 	.byte 0x9e, 0x9c  ; ""
 	.asciz "#"
-	adc	(xwa), xix
+	.byte 0xa0, 0x9c
 	.asciz "#"
 	.byte 0x06
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -21051,7 +21051,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	adc	(xde), xix
+	.byte 0xa2, 0x9c
 	.asciz "#"
 	.asciz ",[*"
 	.zero 6
@@ -21113,7 +21113,7 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.zero 5
 	.byte 0xa0  ; " "
 	.byte 0x01
-	adc	(xiz), xix
+	.byte 0xa6, 0x9c
 	.asciz "#"
 	.byte 0xac  ; "¬"
 	.asciz "[*"
@@ -21215,20 +21215,20 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.zero 4
 	.asciz "v\\*"
 	.zero 4
-	swi	7
-	nop
-	push	sr
-	nop
-	max
-	nop
+	.byte 0xff
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x04
+	.byte 0x00
 	.byte 0x8a, 0x00, 0x01
-	nop
-	ldcfm	4, (xwa)
+	.byte 0x00
+	.byte 0xb0, 0x9c
 	.asciz "#"
 	.asciz "C"
 	.ascii "*"
-	normal
-	ldcfm	4, (xde)
+	.byte 0x01
+	.byte 0xb2, 0x9c
 	.asciz "#"
 	.zero 2
 	.byte 0x0a
@@ -21279,15 +21279,15 @@ HDAE5000_Demo_Data:	; 0x2A5634
 	.byte 0xdc  ; "Ü"
 	.asciz "\\*"
 	.zero 4
-	swi	7
-	nop
-	push	sr
-	nop
-	max
-	nop
+	.byte 0xff
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x04
+	.byte 0x00
 	.byte 0x8b, 0x00, 0x01
-	nop
-	ldcfm	4, (xiz)
+	.byte 0x00
+	.byte 0xb6, 0x9c
 	.asciz "#"
 	.asciz "D"
 	.ascii "*"
@@ -24047,8 +24047,8 @@ HDAE5000_Config_Strings:	; 0x2E1C82
 	.asciz "050354"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "965768"
-	nop
-	popw wa
+	.byte 0x00
+	.byte 0x48
 	.byte 0x1e
 	.asciz "."
 	.ascii "D"
@@ -24513,10 +24513,10 @@ HDAE5000_Config_Strings:	; 0x2E1C82
 	.asciz "L"
 	.byte 0x9d  ; ""
 	.byte 0x00
-	pop xhl
-	normal
+	.byte 0x5b
+	.byte 0x01
 	.byte 0xb7, 0x03, 0xb5, 0x04, 0x44, 0x05, 0xd3, 0x05
-	pop xhl
+	.byte 0x5b
 	.byte 0x07
 
 HDAE5000_Test_Strings:	; 0x2E21D8
@@ -24572,13 +24572,13 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "HDAE"
 	.zero 3
-	jrl	nc, 20992
-	push	sr
-	jrl	nc, 22272
-	push	sr
+	.byte 0x7f, 0x00, 0x52
+	.byte 0x02
+	.byte 0x7f, 0x00, 0x57
+	.byte 0x02
 	.byte 0x7f, 0x00
-	pop xix
-	push	sr
+	.byte 0x5c
+	.byte 0x02
 	.byte 0x7f, 0x00
 	.ascii "a"
 	.byte 0x02, 0x7f
@@ -24654,20 +24654,20 @@ HDAE5000_Test_Strings:	; 0x2E21D8
 	.ascii "             "
 	.byte 0x09
 	.zero 2
-	max
-	normal
+	.byte 0x04
+	.byte 0x01
 	.byte 0x7f, 0x00
-	pop xhl
-	normal
-	jrl	nc, 768
-	normal
+	.byte 0x5b
+	.byte 0x01
+	.byte 0x7f, 0x00, 0x03
+	.byte 0x01
 	.byte 0x7f, 0x00
-	pop xix
-	normal
-	jrl	nc, 512
-	normal
-	jrl	nc, 24576
-	normal
+	.byte 0x5c
+	.byte 0x01
+	.byte 0x7f, 0x00, 0x02
+	.byte 0x01
+	.byte 0x7f, 0x00, 0x60
+	.byte 0x01
 	.byte 0x7f, 0x00
 
 HDAE5000_Dir_Strings:	; 0x2E2500
@@ -25302,11 +25302,11 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.zero 3
 	.asciz "U"
 	.byte 0x89, 0x00, 0xbd
-	nop
-	push_a
-	normal
-	popw bc
-	normal
+	.byte 0x00
+	.byte 0x14
+	.byte 0x01
+	.byte 0x49
+	.byte 0x01
 	.byte 0xbb, 0x01
 	.asciz "                          "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -25486,10 +25486,10 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.byte 0x01, 0x7f
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "f"
-	normal
+	.byte 0x01
 	.byte 0x7f, 0x00
-	popw wa
-	normal
+	.byte 0x48
+	.byte 0x01
 	.byte 0x7f, 0x00
 	.ascii "i"
 	.byte 0x01, 0x7f
@@ -25504,16 +25504,16 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.byte 0x01, 0x7f
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.ascii "w"
-	normal
+	.byte 0x01
 	.byte 0x7f, 0x00
-	popw bc
-	normal
+	.byte 0x49
+	.byte 0x01
 	.byte 0x7f, 0x00
 	.ascii "k"
-	normal
+	.byte 0x01
 	.byte 0x7f, 0x00
-	popw de
-	normal
+	.byte 0x4a
+	.byte 0x01
 	.byte 0x7f, 0x00
 	.ascii "j"
 	.byte 0x01, 0x7f
@@ -25686,101 +25686,101 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TLBN"
 	.zero 5
-	normal
-	normal
-	normal
-	nop
-	push	sr
-	push	sr
-	push	sr
-	nop
-	pop	sr
-	pop	sr
-	pop	sr
-	nop
-	max
-	max
-	max
-	nop
-	halt
-	halt
-	halt
-	nop
-	ei	6
-	ei	0
-	reti
-	reti
-	reti
-	nop
-	ldio	8, 8
-	nop
-	push 9
-	push 0
+	.byte 0x01
+	.byte 0x01
+	.byte 0x01
+	.byte 0x00
+	.byte 0x02
+	.byte 0x02
+	.byte 0x02
+	.byte 0x00
+	.byte 0x03
+	.byte 0x03
+	.byte 0x03
+	.byte 0x00
+	.byte 0x04
+	.byte 0x04
+	.byte 0x04
+	.byte 0x00
+	.byte 0x05
+	.byte 0x05
+	.byte 0x05
+	.byte 0x00
+	.byte 0x06, 0x06
+	.byte 0x06, 0x00
+	.byte 0x07
+	.byte 0x07
+	.byte 0x07
+	.byte 0x00
+	.byte 0x08, 0x08, 0x08
+	.byte 0x00
+	.byte 0x09, 0x09
+	.byte 0x09, 0x00
 	.byte 0x0a, 0x0a, 0x0a, 0x00
-	pushw 2827
-	nop
-	incf
-	incf
-	incf
-	nop
-	decf
-	decf
-	decf
-	nop
-	ret
-	ret
-	ret
-	nop
-	retd	3855
-	nop
-	rcf
-	rcf
-	rcf
-	nop
-	scf
-	scf
-	scf
-	nop
-	ccf
-	ccf
-	ccf
-	nop
-	zcf
-	zcf
-	zcf
-	nop
-	push_a
-	push_a
-	push_a
-	nop
-	pop_a
-	pop_a
-	pop_a
-	nop
-	ex_ff
-	ex_ff
-	ex_ff
-	nop
-	ldf	23
-	ldf	0
-	push_f
-	push_f
-	push_f
-	nop
-	pop_f
-	pop_f
-	pop_f
-	nop
-	jp16	6682
-	nop
-	jp	6939
-	call16	7196
-	nop
-	call	7453
-	calr	0x1e1e
-	nop
+	.byte 0x0b, 0x0b, 0x0b
+	.byte 0x00
+	.byte 0x0c
+	.byte 0x0c
+	.byte 0x0c
+	.byte 0x00
+	.byte 0x0d
+	.byte 0x0d
+	.byte 0x0d
+	.byte 0x00
+	.byte 0x0e
+	.byte 0x0e
+	.byte 0x0e
+	.byte 0x00
+	.byte 0x0f, 0x0f, 0x0f
+	.byte 0x00
+	.byte 0x10
+	.byte 0x10
+	.byte 0x10
+	.byte 0x00
+	.byte 0x11
+	.byte 0x11
+	.byte 0x11
+	.byte 0x00
+	.byte 0x12
+	.byte 0x12
+	.byte 0x12
+	.byte 0x00
+	.byte 0x13
+	.byte 0x13
+	.byte 0x13
+	.byte 0x00
+	.byte 0x14
+	.byte 0x14
+	.byte 0x14
+	.byte 0x00
+	.byte 0x15
+	.byte 0x15
+	.byte 0x15
+	.byte 0x00
+	.byte 0x16
+	.byte 0x16
+	.byte 0x16
+	.byte 0x00
+	.byte 0x17, 0x17
+	.byte 0x17, 0x00
+	.byte 0x18
+	.byte 0x18
+	.byte 0x18
+	.byte 0x00
+	.byte 0x19
+	.byte 0x19
+	.byte 0x19
+	.byte 0x00
+	.byte 0x1a, 0x1a, 0x1a
+	.byte 0x00
+	.byte 0x1b, 0x1b, 0x1b, 0x00
+	.byte 0x1c, 0x1c, 0x1c
+	.byte 0x00
+	.byte 0x1d, 0x1d, 0x1d, 0x00
+	.byte 0x1e, 0x1e, 0x1e
+	.byte 0x00
 	.byte 0x1f, 0x1f, 0x1f
-	nop
+	.byte 0x00
 	.asciz "   "
 	.asciz "!!!"
 	.asciz "\"\"\""
@@ -25876,257 +25876,257 @@ HDAE5000_Char_Tables:	; 0x2E2E76
 	.asciz "|||"
 	.asciz "}}}"
 	.asciz "~~~"
-	jrl	nc, 0x7f7f
-	nop
-	add	w, (xwa)
+	.byte 0x7f, 0x7f, 0x7f
+	.byte 0x00
+	.byte 0x80, 0x80
 	.byte 0x80, 0x00
-	add	a, (xbc)
+	.byte 0x81, 0x81
 	.byte 0x81, 0x00
-	add	b, (xde)
+	.byte 0x82, 0x82
 	.byte 0x82, 0x00
-	add	c, (xhl)
+	.byte 0x83, 0x83
 	.byte 0x83, 0x00
-	add	d, (xix)
+	.byte 0x84, 0x84
 	.byte 0x84, 0x00
-	add	e, (xiy)
+	.byte 0x85, 0x85
 	.byte 0x85, 0x00
-	add	h, (xiz)
+	.byte 0x86, 0x86
 	.byte 0x86, 0x00
-	add	l, (xsp)
+	.byte 0x87, 0x87
 	.byte 0x87, 0x00
-	add	(xwa-120), w
-	nop
-	add	(xbc-119), a
-	nop
-	add	(xde-118), b
-	nop
-	add	(xhl-117), c
-	nop
-	add	(xix-116), d
-	nop
-	add	(xiy-115), e
-	nop
-	add	(xiz-114), h
-	nop
+	.byte 0x88, 0x88, 0x88
+	.byte 0x00
+	.byte 0x89, 0x89, 0x89
+	.byte 0x00
+	.byte 0x8a, 0x8a, 0x8a
+	.byte 0x00
+	.byte 0x8b, 0x8b, 0x8b
+	.byte 0x00
+	.byte 0x8c, 0x8c, 0x8c
+	.byte 0x00
+	.byte 0x8d, 0x8d, 0x8d
+	.byte 0x00
+	.byte 0x8e, 0x8e, 0x8e
+	.byte 0x00
 	.byte 0x8f, 0x8f, 0x8f
-	nop
-	adc	wa, (xwa)
+	.byte 0x00
+	.byte 0x90, 0x90
 	.byte 0x90, 0x00
-	adc	bc, (xbc)
+	.byte 0x91, 0x91
 	.byte 0x91, 0x00
-	adc	de, (xde)
+	.byte 0x92, 0x92
 	.byte 0x92, 0x00
-	adc	hl, (xhl)
+	.byte 0x93, 0x93
 	.byte 0x93, 0x00
-	adc	ix, (xix)
+	.byte 0x94, 0x94
 	.byte 0x94, 0x00
-	adc	iy, (xiy)
+	.byte 0x95, 0x95
 	.byte 0x95, 0x00
-	adc	iz, (xiz)
+	.byte 0x96, 0x96
 	.byte 0x96, 0x00, 0x97, 0x97, 0x97, 0x00
-	adc	(xwa-104), wa
-	nop
-	adc	(xbc-103), bc
-	nop
-	adc	(xde-102), de
-	nop
-	adc	(xhl-101), hl
-	nop
-	adc	(xix-100), ix
-	nop
-	adc	(xiy-99), iy
-	nop
-	adc	(xiz-98), iz
-	nop
+	.byte 0x98, 0x98, 0x98
+	.byte 0x00
+	.byte 0x99, 0x99, 0x99
+	.byte 0x00
+	.byte 0x9a, 0x9a, 0x9a
+	.byte 0x00
+	.byte 0x9b, 0x9b, 0x9b
+	.byte 0x00
+	.byte 0x9c, 0x9c, 0x9c
+	.byte 0x00
+	.byte 0x9d, 0x9d, 0x9d
+	.byte 0x00
+	.byte 0x9e, 0x9e, 0x9e
+	.byte 0x00
 	.byte 0x9f, 0x9f, 0x9f
-	nop
-	sub	xwa, (xwa)
+	.byte 0x00
+	.byte 0xa0, 0xa0
 	.byte 0xa0, 0x00
-	sub	xbc, (xbc)
+	.byte 0xa1, 0xa1
 	.byte 0xa1, 0x00
-	sub	xde, (xde)
+	.byte 0xa2, 0xa2
 	.byte 0xa2, 0x00
-	sub	xhl, (xhl)
+	.byte 0xa3, 0xa3
 	.byte 0xa3, 0x00
-	sub	xix, (xix)
+	.byte 0xa4, 0xa4
 	.byte 0xa4, 0x00
-	sub	xiy, (xiy)
+	.byte 0xa5, 0xa5
 	.byte 0xa5, 0x00
-	sub	xiz, (xiz)
+	.byte 0xa6, 0xa6
 	.byte 0xa6, 0x00
-	sub	xsp, (xsp)
+	.byte 0xa7, 0xa7
 	.byte 0xa7, 0x00
-	sub	(xwa-88), xwa
-	nop
-	sub	(xbc-87), xbc
-	nop
-	sub	(xde-86), xde
-	nop
-	sub	(xhl-85), xhl
-	nop
-	sub	(xix-84), xix
-	nop
-	sub	(xiy-83), xiy
-	nop
-	sub	(xiz-82), xiz
-	nop
-	sub	(xsp-81), xsp
-	nop
-	resm	0, (xwa)
-	ld	(xwa), 177
-	resm	1, (xbc)
-	nop
-	resm	2, (xde)
-	ld	(xde), 179
-	resm	3, (xhl)
-	nop
-	resm	4, (xix)
-	ld	(xix), 181
-	resm	5, (xiy)
-	nop
-	resm	6, (xiz)
-	ld	(xiz), 183
-	resm	7, (xsp)
-	nop
-	setm	0, (xwa-72)
-	nop
-	setm	1, (xbc-71)
-	nop
-	setm	2, (xde-70)
-	nop
-	setm	3, (xhl-69)
-	nop
-	setm	4, (xix-68)
-	nop
-	setm	5, (xiy-67)
-	nop
-	setm	6, (xiz-66)
-	nop
-	setm	7, (xsp-65)
-	nop
+	.byte 0xa8, 0xa8, 0xa8
+	.byte 0x00
+	.byte 0xa9, 0xa9, 0xa9
+	.byte 0x00
+	.byte 0xaa, 0xaa, 0xaa
+	.byte 0x00
+	.byte 0xab, 0xab, 0xab
+	.byte 0x00
+	.byte 0xac, 0xac, 0xac
+	.byte 0x00
+	.byte 0xad, 0xad, 0xad
+	.byte 0x00
+	.byte 0xae, 0xae, 0xae
+	.byte 0x00
+	.byte 0xaf, 0xaf, 0xaf
+	.byte 0x00
+	.byte 0xb0, 0xb0
+	.byte 0xb0, 0x00, 0xb1
+	.byte 0xb1, 0xb1
+	.byte 0x00
+	.byte 0xb2, 0xb2
+	.byte 0xb2, 0x00, 0xb3
+	.byte 0xb3, 0xb3
+	.byte 0x00
+	.byte 0xb4, 0xb4
+	.byte 0xb4, 0x00, 0xb5
+	.byte 0xb5, 0xb5
+	.byte 0x00
+	.byte 0xb6, 0xb6
+	.byte 0xb6, 0x00, 0xb7
+	.byte 0xb7, 0xb7
+	.byte 0x00
+	.byte 0xb8, 0xb8, 0xb8
+	.byte 0x00
+	.byte 0xb9, 0xb9, 0xb9
+	.byte 0x00
+	.byte 0xba, 0xba, 0xba
+	.byte 0x00
+	.byte 0xbb, 0xbb, 0xbb
+	.byte 0x00
+	.byte 0xbc, 0xbc, 0xbc
+	.byte 0x00
+	.byte 0xbd, 0xbd, 0xbd
+	.byte 0x00
+	.byte 0xbe, 0xbe, 0xbe
+	.byte 0x00
+	.byte 0xbf, 0xbf, 0xbf
+	.byte 0x00
 	.byte 0xc0, 0xc0, 0xc0
-	nop
+	.byte 0x00
 	.byte 0xc1, 0xc1, 0xc1, 0x00
-	andda8_24	c, (49858)
+	.byte 0xc2, 0xc2, 0xc2, 0x00, 0xc3
 	.byte 0xc3, 0xc3, 0x00, 0xc4, 0xc4, 0xc4
-	nop
+	.byte 0x00
 	.byte 0xc5, 0xc5, 0xc5
-	nop
+	.byte 0x00
 	.byte 0xc6, 0xc6, 0xc6
-	nop
+	.byte 0x00
 	.byte 0xc7, 0xc7, 0xc7
-	nop
-	add	w, 0xc8
-	nop
-	adc	a, 0xc9
-	nop
-	sub	b, 0xca
-	nop
-	sbc	c, 0xcb
-	nop
-	and	d, 0xcc
-	nop
-	xor	e, 0xcd
-	nop
-	or	h, 0xce
-	nop
-	cp l, 0xcf		; "ÏÏÏ"
-	nop
+	.byte 0x00
+	.byte 0xc8, 0xc8, 0xc8
+	.byte 0x00
+	.byte 0xc9, 0xc9, 0xc9
+	.byte 0x00
+	.byte 0xca, 0xca, 0xca
+	.byte 0x00
+	.byte 0xcb, 0xcb, 0xcb
+	.byte 0x00
+	.byte 0xcc, 0xcc, 0xcc
+	.byte 0x00
+	.byte 0xcd, 0xcd, 0xcd
+	.byte 0x00
+	.byte 0xce, 0xce, 0xce
+	.byte 0x00
+	.byte 0xcf, 0xcf, 0xcf	; "ÏÏÏ"
+	.byte 0x00
 	.byte 0xd0, 0xd0, 0xd0
-	nop
+	.byte 0x00
 	.byte 0xd1, 0xd1, 0xd1, 0x00
-	xorda16_24	hl, (53970)
+	.byte 0xd2, 0xd2, 0xd2, 0x00, 0xd3
 	.byte 0xd3, 0xd3, 0x00, 0xd4, 0xd4, 0xd4
-	nop
+	.byte 0x00
 	.byte 0xd5, 0xd5, 0xd5
-	nop
+	.byte 0x00
 	.byte 0xd6, 0xd6, 0xd6
-	nop
+	.byte 0x00
 	.byte 0xd7, 0xd7, 0xd7
-	nop
-	cps	wa, 0
+	.byte 0x00
+	.byte 0xd8, 0xd8
 	.byte 0xd8, 0x00
-	cps	bc, 1
+	.byte 0xd9, 0xd9
 	.byte 0xd9, 0x00
-	cps	de, 2
+	.byte 0xda, 0xda
 	.byte 0xda, 0x00
-	cps	hl, 3
+	.byte 0xdb, 0xdb
 	.byte 0xdb, 0x00
-	cps	ix, 4
+	.byte 0xdc, 0xdc
 	.byte 0xdc, 0x00
-	cps	iy, 5
+	.byte 0xdd, 0xdd
 	.byte 0xdd, 0x00
-	cps	iz, 6
+	.byte 0xde, 0xde
 	.byte 0xde, 0x00, 0xdf, 0xdf, 0xdf, 0x00, 0xe0, 0xe0
 	.byte 0xe0
-	nop
+	.byte 0x00
 	.byte 0xe1, 0xe1, 0xe1, 0x00
-	orda32_24	xhl, (58082)
+	.byte 0xe2, 0xe2, 0xe2, 0x00, 0xe3
 	.byte 0xe3, 0xe3, 0x00, 0xe4, 0xe4, 0xe4
-	nop
+	.byte 0x00
 	.byte 0xe5, 0xe5, 0xe5
-	nop
+	.byte 0x00
 	.byte 0xe6, 0xe6, 0xe6
-	nop
+	.byte 0x00
 	.byte 0xe7, 0xe7, 0xe7
-	nop
+	.byte 0x00
 	.byte 0xe8, 0xe8, 0xe8
-	nop
+	.byte 0x00
 	.byte 0xe9, 0xe9, 0xe9
-	nop
+	.byte 0x00
 	.byte 0xea, 0xea, 0xea
-	nop
+	.byte 0x00
 	.byte 0xeb, 0xeb, 0xeb
-	nop
-	sla	xix, 0xec
-	nop
-	sra	xiy, 0xed
-	nop
-	sll	xiz, 0xee
-	nop
-	srl	xsp, 0xef
-	nop
+	.byte 0x00
+	.byte 0xec, 0xec, 0xec
+	.byte 0x00
+	.byte 0xed, 0xed, 0xed
+	.byte 0x00
+	.byte 0xee, 0xee, 0xee
+	.byte 0x00
+	.byte 0xef, 0xef, 0xef
+	.byte 0x00
 	.byte 0xf0, 0xf0, 0xf0
-	nop
-	stdi8	(61937), 242
+	.byte 0x00
+	.byte 0xf1, 0xf1, 0xf1, 0x00, 0xf2
 	.byte 0xf2, 0xf2, 0x00, 0xf3, 0xf3, 0xf3, 0x00, 0xf4
 	.byte 0xf4, 0xf4, 0x00, 0xf5
-	stib_dsp	245, 246
+	.byte 0xf5, 0xf5, 0x00, 0xf6
 	.byte 0xf6, 0xf6
-	nop
-	ldx
-	ldx
-	ldx
-	nop
-	swi	0
-	swi	0
-	swi	0
-	nop
-	swi	1
-	swi	1
-	swi	1
-	nop
-	swi	2
-	swi	2
-	swi	2
-	nop
-	swi	3
-	swi	3
-	swi	3
-	nop
-	swi	4
-	swi	4
-	swi	4
-	nop
-	swi	5
-	swi	5
-	swi	5
-	nop
-	swi	6
-	swi	6
-	swi	6
-	nop
-	swi	7
+	.byte 0x00
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0x00
+	.byte 0xf8
+	.byte 0xf8
+	.byte 0xf8
+	.byte 0x00
+	.byte 0xf9
+	.byte 0xf9
+	.byte 0xf9
+	.byte 0x00
+	.byte 0xfa
+	.byte 0xfa
+	.byte 0xfa
+	.byte 0x00
+	.byte 0xfb
+	.byte 0xfb
+	.byte 0xfb
+	.byte 0x00
+	.byte 0xfc
+	.byte 0xfc
+	.byte 0xfc
+	.byte 0x00
+	.byte 0xfd
+	.byte 0xfd
+	.byte 0xfd
+	.byte 0x00
+	.byte 0xfe
+	.byte 0xfe
+	.byte 0xfe
+	.byte 0x00
+	.byte 0xff
 	.fill 2, 1, 0xff
 	.zero 44
 
@@ -26146,29 +26146,29 @@ HDAE5000_Path_Strings:	; 0x2E348F
 	.zero 3
 	.asciz "{{{{ZB"
 	.ascii "BZ"
-	sub	(xix-83), iy
-	nop
-	ldx
-	ldx
-	ldx
-	nop
-	cp	xsp, (xiy-9)
-	nop
-	ldx
-	ldx
+	.byte 0x9c, 0xad, 0xad
+	.byte 0x00
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0x00
+	.byte 0xad, 0xf7, 0xf7
+	.byte 0x00
+	.byte 0xf7
+	.byte 0xf7
 	.byte 0xad, 0x00, 0xf7
-	ldx
-	ldx
-	nop
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0x00
 	.byte 0xad, 0xad, 0x00
-	ldx
-	ldx
-	ldx
-	nop
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0x00
 	.byte 0xad, 0xad, 0x00
-	ldx
-	ldx
-	ldx
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0xf7
 	.byte 0xad, 0xad, 0xad
 	.asciz "{kB"
 	.ascii "BZ{"
@@ -26192,35 +26192,35 @@ HDAE5000_Path_Strings:	; 0x2E348F
 	.byte 0xde, 0xde, 0xf7  ; "ÞÞ÷"
 	.byte 0x00
 	.zero 2
-	cps	iz, 6
-	cps	iz, 6
-	nop
-	cps	iz, 6
+	.byte 0xde, 0xde
+	.byte 0xde, 0xde
+	.byte 0x00
+	.byte 0xde, 0xde
 	.byte 0xde, 0x00
-	cps	iz, 6
+	.byte 0xde, 0xde
 	.byte 0xde, 0x00
-	cps	iz, 6
-	nop
-	cps	iz, 6
+	.byte 0xde, 0xde
+	.byte 0x00
+	.byte 0xde, 0xde
 	.byte 0xde, 0x00
-	cps	iz, 6
-	nop
+	.byte 0xde, 0xde
+	.byte 0x00
 	.zero 2
 	.byte 0xde, 0xde, 0xde, 0xc6  ; "ÞÞÞÆ"
 	.asciz "{ZB"
 	.ascii "BZ{"
-	srl	xsp, 239
-	ldx
-	ldx
-	ldx
-	nop
-	srl	xsp, 0xef
-	nop
-	srl	xsp, 0xef
-	nop
-	srl	xsp, 0xef
-	nop
-	srl	xsp, 0
+	.byte 0xef, 0xef, 0xef
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0xf7
+	.byte 0x00
+	.byte 0xef, 0xef, 0xef
+	.byte 0x00
+	.byte 0xef, 0xef, 0xef
+	.byte 0x00
+	.byte 0xef, 0xef, 0xef
+	.byte 0x00
+	.byte 0xef, 0xef, 0x00
 	.zero 3
 	.byte 0xf7, 0xef, 0xef  ; "÷ïï"
 	.byte 0x00
@@ -26263,21 +26263,21 @@ HDAE5000_Path_Strings:	; 0x2E348F
 	.byte 0xc6, 0xc6, 0xc6, 0xc6, 0xc6, 0xb5  ; "ÆÆÆÆÆµ"
 	.asciz "{Z)"
 	.ascii ")Z{"
-	cp	xsp, (xiy-83)
-	nop
+	.byte 0xad, 0xad, 0xf7
+	.byte 0x00
 	.zero 2
 	.byte 0xf7, 0xad, 0xad, 0xad  ; "÷­­­"
 	.byte 0x00
 	.byte 0xad, 0xad, 0xad, 0xf7  ; "­­­÷"
 	.byte 0x00
 	.zero 2
-	ldx
+	.byte 0xf7
 	.byte 0xad, 0xad, 0x00
-	cp	xsp, (xiy-83)
-	nop
+	.byte 0xad, 0xad, 0xf7
+	.byte 0x00
 	.byte 0xad, 0xad, 0x00
 	.zero 3
-	sub	(xiy-83), xiy
+	.byte 0xad, 0xad, 0xad
 	.asciz "{Z)"
 	.ascii ")Z{"
 	.byte 0x9c, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0x9c, 0xf7, 0x9c, 0x9c, 0xf7, 0xf7, 0xf7, 0xf7, 0x9c, 0x9c, 0x8c  ; "÷÷÷÷÷÷÷÷÷÷÷÷÷"
@@ -26757,14 +26757,14 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.byte 0x24
 	.byte 0x01
 	.ascii "m"
-	normal
+	.byte 0x01
 	.byte 0xb6, 0x01
-	swi	7
-	normal
-	popw wa
-	push	sr
+	.byte 0xff
+	.byte 0x01
+	.byte 0x48
+	.byte 0x02
 	.byte 0x91, 0x02, 0xda, 0x02
-	ldb	c, 3
+	.byte 0x23, 0x03
 	.ascii "l"
 	.byte 0x03
 	.byte 0xb5  ; "µ"
@@ -27030,16 +27030,16 @@ HDAE5000_Display_Params:	; 0x2F8DCE
 	.byte 0x00
 	.byte 0x98, 0x8e
 	.asciz "/"
-	max
-	nop
-	push	sr
-	nop
-	add	(xix), iz
+	.byte 0x04
+	.byte 0x00
+	.byte 0x02
+	.byte 0x00
+	.byte 0x94, 0x8e
 	.asciz "/"
 	.zero 2
-	push	sr
-	nop
-	add	(xwa), iz
+	.byte 0x02
+	.byte 0x00
+	.byte 0x90, 0x8e
 	.asciz "/"
 	.byte 0x05
 	.byte 0x00
