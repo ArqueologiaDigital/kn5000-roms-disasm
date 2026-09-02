@@ -205,3 +205,13 @@ are not. The strongest of them is mutual: all eight entries of the pointer
 array `Data_F000E5` land on an instruction boundary inside the three code spans
 this lane converted at 0xF00280/0xF0029D/0xF002CD -- the table proves the code is
 code, and the code proves the table is a table.
+
+## `prom_b_small_span_gate_visibility.py`
+**"Can the byte gate SEE lane promB6's tiny conversions?"** A green gate is least
+informative on a 1-, 2- or 3-byte span, so this perturbs one byte of four of
+them, runs the real gate, and requires it to go RED at that byte's address.
+
+    python3 scripts/analysis/prom_b_small_span_gate_visibility.py
+
+Run from `wsa1/`. Result 2026-09-02: 4 of 4 probes red at the expected address
+(0x0001B4, 0x00003A, 0x0054EA, 0x034C9B), tree green before and after.

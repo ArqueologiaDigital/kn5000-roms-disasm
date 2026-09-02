@@ -178,15 +178,20 @@ record boundary into the tree that the byte gate would happily certify.
 
 prom_b's whole `.incbin` debt went from 71 spans / 10,664 B to 33 / 9,853 B.
 Measured by `scripts/analysis/prom_b_small_span_classify.py` (`--all` for the
-whole-image figure).  The byte gate is green in this worktree, and was shown to
-go RED on a deliberate one-byte poison of a converted `.long`:
+whole-image figure).  The byte gate (`make gate-wsa1`, 4 images -- the KN5000 half cannot be affected
+by a change confined to `wsa1/`) is green in this worktree, and it was shown to
+SEE these conversions rather than merely tolerate them:
 
-    # in wsa1/, change the entry this lane emitted at 0xF05105
-    sed -i 's/0x00F050DD\t; F05105  entry 5/0x00F050DE\t; F05105  entry 5/' \
-        prom_b/wsa1_prom_b.s
-    make all && python3 scripts/analysis/assert_byte_identical.py
-    # -> DIFFERS  wsa1_prom_b.ic13: 1 byte(s), first at 0x5105   /  FAIL
-    # then put the DD back and rebuild.
+    python3 scripts/analysis/prom_b_small_span_gate_visibility.py
+    # baseline: green
+    # ok     poison at 0x0001B4 -> gate red, first differing byte 0x1B4
+    # ok     poison at 0x00003A -> gate red, first differing byte 0x3A
+    # ok     poison at 0x0054EA -> gate red, first differing byte 0x54EA
+    # ok     poison at 0x034C9B -> gate red, first differing byte 0x34C9B
+    # restored: green
 
-A gate that cannot go red on the change under test certifies nothing, and this
-tree has been burned by exactly that before.
+Those four are the least informative conversions in the lane -- a 1-byte `ret`
+pad, a 2-byte routine trailer, the 3-byte lead of a pointer-array entry the walk
+cut in half, and a display-list record tail.  A gate that cannot go red on the
+change under test certifies nothing, and this tree has been burned by exactly
+that before.
