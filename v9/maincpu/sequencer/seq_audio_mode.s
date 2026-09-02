@@ -1361,7 +1361,7 @@ RhythmROM_InvalidIncrement:
 	jr nz, RhythmROM_CheckDone
 	ldb a, 0xee
 	ld (0xe3dc:16), a
-	stdi8 (0xe3de), 64
+	ld (0xe3de:16), 64
 
 RhythmROM_CheckDone:
 	ret

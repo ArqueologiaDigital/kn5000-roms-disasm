@@ -523,7 +523,7 @@ SeqRecPlay_DisableBoth:
 SqTrSel_CaseD:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
-	stdi8 (7498), 0
+	ld (7498:16), 0
 	ret
 
 ; SqTrSelTtl case E
@@ -534,14 +534,14 @@ SqTrSel_CaseE:
 	ld xbc, 0x1c70009
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (7498), 0
+	ld (7498:16), 0
 	ret
 
 ; SqTrSelTtl case F
 SqTrSel_CaseF:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
-	stdi8 (7498), 0
+	ld (7498:16), 0
 	ret
 
 PlayMode_SendStopEvent:
@@ -641,7 +641,7 @@ PlayMode_SwitchToModeAndNotify:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ldw wa, 0xee
 	jp SoundCtrl_SendCommand
 DispatchHandler_ConditionalJump:
@@ -1025,7 +1025,7 @@ VoiceSlot_SendErrorAndReset:
 	ldb w, 0x68
 	call MIDI_SendSysExCmd
 	anddi8 (0xe3e2), 111
-	stdi8 (0x7f42), 15
+	ld (0x7f42:16), 15
 	stdi16 (0xe3dc), 0x40ee
 	popw bc
 	ret

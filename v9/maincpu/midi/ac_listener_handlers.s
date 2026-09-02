@@ -2230,14 +2230,14 @@ MainMpstFunc:
 	ld xwa, (xsp)
 	ld (0xb7ec:16), a
 	call SndParam_ApplyAndSync
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	jr MainMpst_PostEvent
 
 MainMpst_HandlePresetCopy:
-	stdi8 (0x7f42), 37
+	ld (0x7f42:16), 37
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -2245,7 +2245,7 @@ MainMpst_HandlePresetCopy:
 	ld xwa, (xsp)
 	extz wa
 	call SndParam_AllocAndCopyPreset
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee

@@ -4153,7 +4153,7 @@ WallHomeEdit_EventDispatch:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16421701
-	stdi8	(32422), 72
+	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -4316,14 +4316,14 @@ MainWallSetFlashFunc:
 	jr	z, 62
 	cp	xbc, 31588372
 	jrl	nz, 165
-	stdi8	(32422), 40
+	ld	(32422:16), 40
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	call	16423243
 	ldw	wa, 8
 	call	16535006
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -4334,7 +4334,7 @@ MainWallFlash_DispatchAudio:
 	jr MainWallFlash_ReturnZero
 
 MainWallFlash_ClearAndRestore:
-	stdi8	(32422), 40
+	ld	(32422:16), 40
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -4352,7 +4352,7 @@ MainWallFlash_ClearAndRestore:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -4431,7 +4431,7 @@ WallUsrShowHideFunc:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16421701
-	stdi8	(32422), 72
+	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -4792,7 +4792,7 @@ MainSysControl:
 	ld	(xsp+2), xde
 	cp	xbc, 31588371
 	jr	nz, 121
-	stdi8	32422, 40
+	ld	(32422:16), 40
 	ldw	wa, 238
 	call	16355504
 	ld	xwa, (xsp+2)
@@ -4873,7 +4873,7 @@ MainSysCtrl_DelayInner:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ldw	wa, 238
 	call	16355504
 	lds32	xhl, 0
@@ -4909,10 +4909,10 @@ MainMssSetUp:
 	jr	nz, 20
 	stda16	(36026), de
 	incdi16	1, (36026)
-	stdi8	(36018), 7
+	ld	(36018:16), 7
 	jr	5
 MainMssSetUp_ClearMode:
-	stdi8	(36018), 0
+	ld	(36018:16), 0
 MainMssSetUp_ReturnZero:
 	lds32 xhl, 0
 	ret

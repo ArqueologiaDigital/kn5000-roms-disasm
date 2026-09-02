@@ -189,7 +189,7 @@ FDemo_DisplayCtrlJumpHandler:
 FDemo_DispatchEventPost:
 	call ApPostEvent				; dispatch event
 	jr MainPreControl_ReturnNull		; return null
-	stdi8	(0x28a4), 19
+	ld	(0x28a4:16), 19
 	call Demo_SelectEntry_ProcessSongList			; additional handler
 	jr MainPreControl_ReturnNull
 	cpw_da	(0x251d8), 0
@@ -551,14 +551,14 @@ FDemo_IndicatorSetup:
 	lds bc, 0
 	lds de, 0
 	call CtrlPanel_IndicatorDispatch
-	stdi8 (0x8f4e), 4
+	ld (0x8f4e:16), 4
 	ret
 
 DemoMode_Initialize:
 	calr Demo_PreSetup
-	stdi8 (0x2966), 0
-	stdi8 (3379), 0
-	stdi8 (3375), 0
+	ld (0x2966:16), 0
+	ld (3379:16), 0
+	ld (3375:16), 0
 	resda 7, 0x28ae
 	call MidiChannel_ResetAndConfigure
 	calr Audio_WaitForReady
@@ -586,9 +586,9 @@ FDemo_PostBannerCheck:
 
 Demo_SelectionEntryHandler:
 	calr Demo_PreSetup
-	stdi8 (0x2966), 0
-	stdi8 (3379), 0
-	stdi8 (3375), 0
+	ld (0x2966:16), 0
+	ld (3379:16), 0
+	ld (3375:16), 0
 	calr Audio_WaitForReady
 	call SeqStep_PlaybackStateMachine
 	resda 3, 0x28ad
@@ -606,11 +606,11 @@ Demo_SelectionEntryHandler:
 	ld a, (0xc07e:16)
 	and a, 0x13
 	jr z, Demo_SelectEntry_NoNewButton
-	stdi8 (3379), 16
+	ld (3379:16), 16
 	ret
 
 Demo_SelectEntry_NoNewButton:
-	stdi8 (3379), 0
+	ld (3379:16), 0
 	ret
 
 Demo_SelectEntry_PreSaveCheck:
@@ -674,7 +674,7 @@ Demo_SelectEntry_ByteTable:
 	calr	827
 	calr	1008
 	stiw_da	(0x25b84), 1
-	stdi8	(0x8f4e), 4
+	ld	(0x8f4e:16), 4
 	cpdi8	(0x8d38), 228
 	.byte 0xf2, 0x4d, 0x2a, 0xf2, 0xee
 	ld	a, (0x28a4:16)
@@ -684,9 +684,9 @@ Demo_SelectEntry_ByteTable:
 	cpdi8	(0x8d38), 228
 	jr	z, 11
 	call	CDlikeSwTtl_SetRecordAndNotify
-	stdi8	(4440), 0
+	ld	(4440:16), 0
 	jr	5
-	stdi8	(4440), 18
+	ld	(4440:16), 18
 	jrl	t, 0x00e3
 
 Demo_SelectEntry_ProcessSongList:
@@ -718,7 +718,7 @@ Demo_SelectEntry_ToCountdown:
 	jrl Demo_ResetCountdownTimer
 
 Demo_SelectEntry_StartAutoPlay:
-	stdi8 (0x8f4e), 4
+	ld (0x8f4e:16), 4
 	cpdi8 (0x8d38), 228
 	call_24 nz, SeqInit_FinalEvent
 	ld a, (0x28a4:16)
@@ -748,7 +748,7 @@ Demo_SelectEntry_CheckCountdown:
 	jrl z, Demo_SelectEntry_StartPlayback
 	cps a, 1
 	ret nz
-	stdi8 (0x2966), 133
+	ld (0x2966:16), 133
 	ret
 
 Demo_SelectEntry_CheckCPanel:
@@ -781,14 +781,14 @@ Demo_SelectEntry_AfterSongLoad:
 	ld a, (0x28a4:16)
 	extz wa
 	call Seq_DispatchEventType6
-	stdi8 (0x8f4e), 4
+	ld (0x8f4e:16), 4
 	bitda 3, (0x28ad)
 	ret z
 	cpdi8 (0x8d38), 228
 	jr z, Demo_SelectEntry_CheckSongCount
 	cpdi8 (4440), 18
 	jr c, Demo_SelectEntry_UpdateDisplay
-	stdi8 (4440), 0
+	ld (4440:16), 0
 	jr Demo_SelectEntry_UpdateDisplay
 
 Demo_SelectEntry_CheckSongCount:
@@ -804,7 +804,7 @@ Demo_SelectEntry_CheckLimit18:
 	jr ule, Demo_SelectEntry_UpdateDisplay
 
 Demo_SelectEntry_ClampSongIdx:
-	stdi8 (4440), 18
+	ld (4440:16), 18
 
 Demo_SelectEntry_UpdateDisplay:
 	calr Demo_SelectEntry_LoadPattern
@@ -857,7 +857,7 @@ Demo_SelectEntry_PlaySong:
 	pop xhl
 	pop xde
 	call SeqTimer_UpdateTempoReg
-	stdi8 (0x8f4e), 6
+	ld (0x8f4e:16), 6
 	ld a, (0x28a4:16)
 	extz wa
 	call Seq_DispatchEventType5
@@ -885,7 +885,7 @@ Audio_WaitForReady_PollLoop:
 	jr nz, Audio_WaitForReady_PollLoop
 
 Audio_WaitForReady_Dispatch:
-	stdi8 (0x32f6), 255
+	ld (0x32f6:16), 255
 	push xde
 	push xhl
 	push xix
@@ -898,7 +898,7 @@ Audio_WaitForReady_Dispatch:
 	ret
 
 Demo_ResetCountdownTimer:
-	stdi8 (3375), 15
+	ld (3375:16), 15
 	ret
 
 Timer7_DisableInterrupt:
@@ -1007,7 +1007,7 @@ Demo_PreSetup:
 	call AccWrap_PlayModeDispatch
 	call SeqBuf_Init
 	call SeqPlay_EmergencyStopAll
-	stdi8 (1073), 0
+	ld (1073:16), 0
 	ret
 
 Demo_ScanActivePartChannels:
@@ -8344,7 +8344,7 @@ ResetProgressIndication:
 	ret
 
 FileIO_DiskInserted:
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	calr ResetProgressIndication
 	jp FileIO_ValidateRecord_Return
 
@@ -8355,7 +8355,7 @@ FileIO_DiskInserted_Stub2:
 	ret
 
 FileIO_DiskRemoved:
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	calr ResetProgressIndication
 	call FileIO_ValidateRecord_Return
 	call GetAprStatus_Entry
@@ -8465,7 +8465,7 @@ SeqPhase_FormatNameLoop:
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, SeqPhase_FormatNameLoop
-	stdi8 (0x7f42), 37
+	ld (0x7f42:16), 37
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	call FileIO_ParseDirectoryEntry
@@ -8475,11 +8475,11 @@ SeqPhase_FormatNameLoop:
 	calr CancelOperationCleanup
 	cps iz, 0
 	jr ge, SeqPhase_LoadSuccess
-	stdi8 (0x7f42), 1
+	ld (0x7f42:16), 1
 	jr SeqPhase_SendSoundCmd
 
 SeqPhase_LoadSuccess:
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 
 SeqPhase_SendSoundCmd:
 	ldw wa, 0xee
@@ -8496,7 +8496,7 @@ FileIO_MidiOutSendByte:
 	call SndParam_LookupReadOnly
 	cps hl, 0
 	jr z, MidiOutSend_Return
-	stdi8 (1060), 243
+	ld (1060:16), 243
 	ei 6
 	pushw 0xf3
 	call SeqBuf_MidiOut_WriteByte
@@ -8549,7 +8549,7 @@ DiskEvt_UseAltChannel:
 	jr DiskEvt_PostModeEvent
 
 DiskEvt_TypeIsUSB:
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr DiskEvt_SendSoundCmd
 
@@ -8562,7 +8562,7 @@ DiskEvt_PostModeEvent:
 
 DiskEvt_TypeIsCard:
 	calr ResetProgressIndication
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 DiskEvt_SendSoundCmd:
@@ -8617,7 +8617,7 @@ UI_PostEventCommon:
 
 DetectType_IsCardReset:
 	calr ResetProgressIndication
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	ret
@@ -8643,7 +8643,7 @@ DiskCap_CheckMediaType:
 	jr z, DiskCap_TypeIsNone
 	cps wa, 5
 	jr nz, DiskCap_Return
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr DiskCap_SendSoundCmd
 
@@ -8653,7 +8653,7 @@ DiskCap_TypeIsNone:
 
 DiskCap_TypeIsCardReset:
 	calr ResetProgressIndication
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 DiskCap_SendSoundCmd:

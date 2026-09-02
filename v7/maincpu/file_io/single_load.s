@@ -321,8 +321,8 @@ SLSrcBankList_FuncBody:
 	calr	-167
 	lds32	xwa, 0
 	stda32	33070, xwa
-	stdi8	33074, 0
-	stdi8	33076, 0
+	ld	(33074:16), 0
+	ld	(33076:16), 0
 	jrl	453
 	ld	e, (35168:16)
 	ld	xwa, (xsp+4)
@@ -361,8 +361,8 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (15337810)
 	ld	xwa, xiz
 	calr	-477
-	stdi8	33076, 1
-	stdi8	33074, 1
+	ld	(33076:16), 1
+	ld	(33074:16), 1
 	ld	xwa, (33070:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 312
@@ -416,7 +416,7 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (15337810)
 	ld	xwa, xiz
 	calr	-644
-	stdi8	33074, 1
+	ld	(33074:16), 1
 	ld	xwa, (33070:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 150
@@ -455,13 +455,13 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (15337810)
 	ld	xwa, xiz
 	calr	-851
-	stdi8	33076, 0
+	ld	(33076:16), 0
 	cpdi8	33074, 0
 	jr	z, 15
 	ldb_da	c, (15337810)
 	ld	xwa, xiz
 	calr	-634
-	stdi8	33074, 0
+	ld	(33074:16), 0
 	lds32	xhl, 0
 	pop	xiz
 	inc	4, xsp
@@ -724,7 +724,7 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (15337844)
 	ld	xwa, xiz
 	calr	-497
-	stdi8	33082, 1
+	ld	(33082:16), 1
 	ld	xwa, (33078:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 284
@@ -778,7 +778,7 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (15337844)
 	ld	xwa, xiz
 	calr	-659
-	stdi8	33082, 1
+	ld	(33082:16), 1
 	ld	xwa, (33078:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 123
@@ -816,7 +816,7 @@ SLSrcBankList_FuncBody:
 	jr	z, 10
 	ld	xwa, xiz
 	calr	-576
-	stdi8	33082, 0
+	ld	(33082:16), 0
 	lds32	xhl, 0
 	pop	xiz
 	inc	4, xsp
@@ -1043,8 +1043,8 @@ SLSrcBankList_FuncBody:
 	calr	-169
 	lds32	xwa, 0
 	stda32	33084, xwa
-	stdi8	33088, 0
-	stdi8	33090, 0
+	ld	(33088:16), 0
+	ld	(33090:16), 0
 	jrl	648
 	ld	l, (35172:16)
 	ld	xwa, (xsp+4)
@@ -1103,8 +1103,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	calr	-857
-	stdi8	33090, 1
-	stdi8	33088, 1
+	ld	(33090:16), 1
+	ld	(33088:16), 1
 	ld	xwa, (33084:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 449
@@ -1202,7 +1202,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	calr	-1164
-	stdi8	33088, 1
+	ld	(33088:16), 1
 	ld	xwa, (33084:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 147
@@ -1241,13 +1241,13 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	ld	c, e
 	calr	-1081
-	stdi8	33090, 0
+	ld	(33090:16), 0
 	cpdi8	33088, 0
 	jr	z, 15
 	ldb_da	c, (15337874)
 	ld	xwa, xiz
 	calr	-831
-	stdi8	33088, 0
+	ld	(33088:16), 0
 	lds32	xhl, 0
 	pop	xiz
 	inc	4, xsp
@@ -2575,10 +2575,10 @@ SLDst_ShowHide_Dispatch:
 	call	16281577
 	cps	hl, 0
 	jr	z, 7
-	stdi8	35182, 1
+	ld	(35182:16), 1
 	jr	5
 SLDst_ClearFloppyFlag:
-	stdi8	(35182), 0
+	ld	(35182:16), 0
 SLDst_Return:
 	lds32 xhl, 0
 	jrl SLDst_Epilogue
@@ -3310,7 +3310,7 @@ CmpFile_Selection_Clamp:
 	ld	xde, 4294967295
 	jr	65
 CmpFile_HandleShow:
-	stdi8	34772, 0
+	ld	(34772:16), 0
 	cpdi8	35164, 2
 	jr	nz, 12
 	ld	wa, (33124:16)
@@ -3360,9 +3360,9 @@ CmpFile_ScrollRedraw:
 	cp	wa, hl
 	jr	z, 118
 	call	16290296
-	stdi8	(34772), 0
+	ld	(34772:16), 0
 	lda	xiz, (15338066:24)
-	stdi8	(35164), 4
+	ld	(35164:16), 4
 	lds	wa, 3
 	call	16289732
 	cps	l, 0
@@ -3370,7 +3370,7 @@ CmpFile_ScrollRedraw:
 	call	16281313
 	cps	hl, 0
 	jr	z, 15
-	stdi8	(35164), 2
+	ld	(35164:16), 2
 	ld	wa, (33124:16)
 	call	16290326
 	ld	xiz, xhl
@@ -3438,7 +3438,7 @@ FmmCmpLoad_DispatchState:
 	call	16290094
 	calr	-26320
 FmmCmpLoad_ContinueLoad:
-	stdi8	(35164), 4
+	ld	(35164:16), 4
 	lds	wa, 3
 	call	16289732
 	cps	l, 0
@@ -3446,7 +3446,7 @@ FmmCmpLoad_ContinueLoad:
 	call	16281313
 	cps	hl, 0
 	jr	z, 5
-	stdi8	(35164), 2
+	ld	(35164:16), 2
 FmmCmpLoad_SignalProgress:
 	calr SignalProgressUpdate
 
@@ -3459,8 +3459,8 @@ FmmCmpLoad_CloseProgress:
 	ld	xbc, 29360138
 	lds32	xde, 0
 	call	16423243
-	stdi8	(35170), 0
-	stdi8	(35178), 0
+	ld	(35170:16), 0
+	ld	(35178:16), 0
 	jr	101
 FmmCmpLoad_HandleCancel:
 	ld	xwa, 6291494
@@ -3469,7 +3469,7 @@ FmmCmpLoad_HandleCancel:
 	call	16423243
 	ldw	wa, 176
 	call	16355459
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	59
 FmmCmpLoad_HandleError:
@@ -3489,7 +3489,7 @@ FmmCmpLoad_HandleSuccess:
 	call	16423243
 	ldw	wa, 176
 	call	16355459
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 FmmCmpLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand

@@ -2348,7 +2348,7 @@ NoteMap_UpdateEntry:
 	.byte 0x1e, 0x71, 0x06
 NoteMap_FallbackAllocEmit:
 	stdi16	(52682), 0
-	stdi8	(52758), 0
+	ld	(52758:16), 0
 	ld	a, (xsp+4)
 	ld	e, a
 	extz	de
@@ -6297,7 +6297,7 @@ SeqEvtBuf_NonNoteDispatchLoop:
 	ld l, (52750:16)
 	ret
 	stdi16 (0xcdca), 0x0000
-	stdi8 (0xce16), 0x00
+	ld (0xce16:16), 0x00
 	ret
 	.byte 0xbf, 0xbc, 0x37, 0xd7, 0xfa, 0x04, 0xf1, 0x16
 	.byte 0xce, 0x00, 0x00, 0xc1, 0x0f, 0xce, 0x3f, 0x0f
@@ -10322,7 +10322,7 @@ RecordReadOK_Block6:
 	.byte 0x14, 0x00, 0x1d, 0x5e, 0xa9
 RecordReadOK_NextIter:
 	swi	5
-	stdi8	(64660), 80
+	ld	(64660:16), 80
 RecordReadOK_Block7:
 	.byte 0xde, 0xa8, 0xde, 0xcf, 0x08, 0x00, 0x69, 0x21
 	.byte 0xde, 0x89, 0xf1, 0x8e, 0xfc, 0x30, 0xc3, 0x07
@@ -10841,7 +10841,7 @@ ProcessMidiConverge_LoadDRAM:
 	lds32	xwa, 0
 	stda32	60215, xwa
 	stdi16	60219, 0
-	stdi8	59646, 0
+	ld	(59646:16), 0
 	calr	6
 	calr	304
 	jrl	589
@@ -11054,7 +11054,7 @@ ReadNextRecord_Block:
 	ret
 	ret
 	ret
-	stdi8	(57502), 0
+	ld	(57502:16), 0
 ReadNextRecord_Block2:
 	.byte 0xf1, 0x9f, 0xe0, 0x00, 0x01, 0x42, 0x9e
 ReadNextRecord_Block3:
@@ -12308,17 +12308,17 @@ Param_SignExtendRetu_Block3:
 	pop	xiz
 	inc	6, xsp
 	ret
-	stdi8	(58042), 1
-	stdi8	(58043), 255
-	stdi8	(58044), 255
-	stdi8	(58045), 255
-	stdi8	(58046), 255
-	stdi8	(58037), 255
-	stdi8	(58038), 255
-	stdi8	(58039), 255
-	stdi8	(58047), 255
-	stdi8	(58040), 255
-	stdi8	(58048), 255
+	ld	(58042:16), 1
+	ld	(58043:16), 255
+	ld	(58044:16), 255
+	ld	(58045:16), 255
+	ld	(58046:16), 255
+	ld	(58037:16), 255
+	ld	(58038:16), 255
+	ld	(58039:16), 255
+	ld	(58047:16), 255
+	ld	(58040:16), 255
+	ld	(58048:16), 255
 	ret
 Param_SignExtendRetu_Block4:
 	.byte 0x68, 0xc6, 0x0e, 0x0e, 0xf0, 0x38, 0x9c, 0xc9

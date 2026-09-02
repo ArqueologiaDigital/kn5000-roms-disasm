@@ -394,7 +394,7 @@ MidiCC_Handler_ChannelMapping:
 	inc	1, b
 	ld	(0x3489:16), b
 	ld	(0x347c:16), e
-	stdi8	(0x347d), 4
+	ld	(0x347d:16), 4
 	call	AccWrap_ReplaySavedExpr
 	ret
 	popw	wa
@@ -1007,7 +1007,7 @@ UIState_DisplayUpdate_BitmapHandler:
 	nop
 	.byte 0x80
 	calr	13
-	stdi8	(0x966d), 64
+	ld	(0x966d:16), 64
 	calr	5
 	call	VoiceChannels_InitPanFromPreset
 	ret
@@ -1044,11 +1044,11 @@ UIState_DisplayUpdate_BitmapHandler:
 	nop
 	ld	xiy, 0x95b4
 	stda32	0x9664, xiy
-	stdi8	(0x966e), 0
+	ld	(0x966e:16), 0
 	ldb	w, 0
 	lds32	xhl, 1
-	stdi8	(0x966f), 0
-	stdi8	(0x9670), 0
+	ld	(0x966f:16), 0
+	ld	(0x9670:16), 0
 	ld	xiz, (0x90f2:16)
 	xor	d, d
 	ld	e, (0x9670:16)
@@ -2110,7 +2110,7 @@ Periodic_TimestampCompare:
 	cp wa, 0x96
 	jr c, Periodic_TimestampCompare_Done
 	stda16 (0xb7e3), xde
-	stdi8 (1060), 0
+	ld (1060:16), 0
 
 Periodic_TimestampCompare_Done:
 	popw de
@@ -7803,17 +7803,17 @@ SndParam_ApplyAndSync:
 	ld a, (0xb7ec:16)
 	bit 7, a
 	jr z, SndParam_CheckBit6
-	stdi8 (0xb7f0), 1
+	ld (0xb7f0:16), 1
 	jr SndParam_ReadAndApply
 
 SndParam_CheckBit6:
 	bit 6, a
 	jr z, SndParam_SetMode2
-	stdi8 (0xb7f0), 0
+	ld (0xb7f0:16), 0
 	jr SndParam_ReadAndApply
 
 SndParam_SetMode2:
-	stdi8 (0xb7f0), 2
+	ld (0xb7f0:16), 2
 
 SndParam_ReadAndApply:
 	ld a, (0xb7ec:16)
@@ -10383,7 +10383,7 @@ SeqOut_FlushWithChunking:
 	ld xiz, xwa
 	ld wa, (xiz)
 	ld (xsp + 4), wa
-	stdi8 (1060), 240
+	ld (1060:16), 240
 	ld xwa, xiz
 	calr MidiStream_RetStub2
 	lda xiz, (xiz + 14)
@@ -10419,7 +10419,7 @@ SeqOut_FlushTimedBuffer:
 	ld xiz, xwa
 	ld wa, (xiz)
 	ld (xsp + 4), wa
-	stdi8 (1060), 240
+	ld (1060:16), 240
 	ld xwa, xiz
 	calr MidiStream_RetStub2
 	lda xiz, (xiz + 14)
@@ -11204,20 +11204,20 @@ Part_ProcessEntry_Data:
 	ret
 
 MidiChan_ClearAllStates:
-	stdi8 (0xbd00), 0
-	stdi8 (0xbd02), 0
-	stdi8 (0xbd04), 0
-	stdi8 (0xbd06), 0
-	stdi8 (0xbd08), 0
-	stdi8 (0xbd0a), 0
-	stdi8 (0xbd0c), 0
-	stdi8 (0xbd0e), 0
-	stdi8 (0xbd10), 0
-	stdi8 (0xbd12), 0
-	stdi8 (0xbd14), 0
-	stdi8 (0xbd16), 0
-	stdi8 (0xbd36), 0
-	stdi8 (0xbd38), 0
+	ld (0xbd00:16), 0
+	ld (0xbd02:16), 0
+	ld (0xbd04:16), 0
+	ld (0xbd06:16), 0
+	ld (0xbd08:16), 0
+	ld (0xbd0a:16), 0
+	ld (0xbd0c:16), 0
+	ld (0xbd0e:16), 0
+	ld (0xbd10:16), 0
+	ld (0xbd12:16), 0
+	ld (0xbd14:16), 0
+	ld (0xbd16:16), 0
+	ld (0xbd36:16), 0
+	ld (0xbd38:16), 0
 	calr MidiChan_SetStateMode
 	calr MidiChan_SetVoiceBaseState
 	jrl MidiSeq_ApplyPendingParams
@@ -11225,12 +11225,12 @@ MidiChan_ClearAllStates:
 MidiChan_SetStateMode:
 	bitda 6, (0xbd18)
 	jr z, MidiChan_SetStateMode2
-	stdi8 (0xbd36), 1
+	ld (0xbd36:16), 1
 	ldb a, 0x1
 	jr MidiChan_CompareAndFlag
 
 MidiChan_SetStateMode2:
-	stdi8 (0xbd36), 2
+	ld (0xbd36:16), 2
 	ld a, (0xbd36:16)
 
 MidiChan_CompareAndFlag:
@@ -11243,11 +11243,11 @@ MidiChan_CompareAndFlag:
 MidiChan_SetVoiceBaseState:
 	bitda 6, (0xbd18)
 	jr z, MidiChan_SetBaseState128
-	stdi8 (0xbd00), 128
+	ld (0xbd00:16), 128
 	ret
 
 MidiChan_SetBaseState128:
-	stdi8 (0xbd0c), 128
+	ld (0xbd0c:16), 128
 	ret
 
 MidiSeq_UpdateAllParams:
@@ -11327,7 +11327,7 @@ MidiSeq_UpdateVolumeScale:
 	ld xde, (xbc + 8)
 	srl xde, 5
 	ld (xbc + 12), xde
-	stdi8 (0xbd04), 160
+	ld (0xbd04:16), 160
 	jr MidiSeq_VolScale_SetActive
 
 MidiSeq_VolScale_Lower:
@@ -11335,7 +11335,7 @@ MidiSeq_VolScale_Lower:
 	ld xde, (xbc + 8)
 	srl xde, 5
 	ld (xbc + 12), xde
-	stdi8 (0xbd10), 160
+	ld (0xbd10:16), 160
 
 MidiSeq_VolScale_SetActive:
 	or xde, xde
@@ -11441,7 +11441,7 @@ MidiSeq_PartLookup_Data:
 	.byte 0xf6
 	call	SeqStep_PlaybackNop
 	ret
-	stdi8	(0x7f42), 35
+	ld	(0x7f42:16), 35
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
 	ret
@@ -11964,7 +11964,7 @@ MidiPkt_InitSingleField_Data:
 	push	xsp
 	nop
 	ret	nz
-	stdi8	(0xbd20), 1
+	ld	(0xbd20:16), 1
 	ld	xwa, MidiPkt_EventType_Table_0x578
 	lds	bc, 7
 	call	SeqBuf_FlushNoteOffs
@@ -11986,7 +11986,7 @@ MidiPkt_HandleCmdCode01:
 	call SeqData_ReadFieldByIndex
 	ld	(0xbc6a:16), l
 	setda	7, 0xbd18
-	stdi8	(0xbd20), 2
+	ld	(0xbd20:16), 2
 	ret
 MidiPkt_SetSlot18:
 	ld	xwa, (0xbcac:16)
@@ -12894,13 +12894,13 @@ SoundMode_ResetAllParams:
 	calr MidiChan_InitAllBufferPtrs
 	calr MidiChan_ClearStorageFields
 	calr MidiChan_InitSoundRegisters
-	stdi8 (0xbd18), 0
-	stdi8 (0xbd1a), 0
-	stdi8 (0xbd1c), 0
-	stdi8 (0xbd1e), 0
-	stdi8 (0xbd20), 0
-	stdi8 (0xbcfc), 0
-	stdi8 (0xbd00), 0
+	ld (0xbd18:16), 0
+	ld (0xbd1a:16), 0
+	ld (0xbd1c:16), 0
+	ld (0xbd1e:16), 0
+	ld (0xbd20:16), 0
+	ld (0xbcfc:16), 0
+	ld (0xbd00:16), 0
 	ret
 
 SoundMode_ResetJump:
@@ -12966,10 +12966,10 @@ SoundMode_SysExConfig_Data:
 	srl	wa, 8
 	or	c, a
 	ld	(xde), c
-	stdi8	(0x9127), 72
-	stdi8	(0x9128), 8
+	ld	(0x9127:16), 72
+	ld	(0x9128:16), 8
 	ld	(0x9129:16), l
-	stdi8	(0x912a), 255
+	ld	(0x912a:16), 255
 	push	xde
 	push	xhl
 	push	xix
@@ -13541,19 +13541,19 @@ SoundMode_SetReverbType:
 	jr z, SoundMode_ReverbType2
 	cps a, 1
 	jr z, SoundMode_ReverbType1
-	stdi8 (0xb7ec), 128
+	ld (0xb7ec:16), 128
 	jr SoundParam_SyncAndReturn
 
 SoundMode_ReverbType1:
-	stdi8 (0xb7ec), 155
+	ld (0xb7ec:16), 155
 	jr SoundParam_SyncAndReturn
 
 SoundMode_ReverbType2:
-	stdi8 (0xb7ec), 156
+	ld (0xb7ec:16), 156
 	jr SoundParam_SyncAndReturn
 
 SoundMode_ReverbType3:
-	stdi8 (0xb7ec), 157
+	ld (0xb7ec:16), 157
 
 SoundParam_SyncAndReturn:
 	jp SndParam_ApplyAndSync
@@ -13566,15 +13566,15 @@ SoundMode_SetChorusType:
 	jr z, SoundMode_ChorusType2
 	cps a, 1
 	ret nz
-	stdi8 (0xb7ec), 91
+	ld (0xb7ec:16), 91
 	jr SoundMode_ChorusSyncAndRet
 
 SoundMode_ChorusType2:
-	stdi8 (0xb7ec), 92
+	ld (0xb7ec:16), 92
 	jr SoundMode_ChorusSyncAndRet
 
 SoundMode_ChorusType3:
-	stdi8 (0xb7ec), 93
+	ld (0xb7ec:16), 93
 
 SoundMode_ChorusSyncAndRet:
 	jp SndParam_ApplyAndSync
@@ -13645,12 +13645,12 @@ TGReg_WriteCC12_Check:
 	ret
 
 SwbtWr_InitAndWrite_CC_B1:
-	stdi8 (0x9127), 177
-	stdi8 (0x9129), 0
-	stdi8 (0x9128), 0
+	ld (0x9127:16), 177
+	ld (0x9129:16), 0
+	ld (0x9128:16), 0
 
 SwbtWr_WriteLoop_CC_B1:
-	stdi8 (0x912a), 64
+	ld (0x912a:16), 64
 	push xde
 	push xhl
 	push xix
@@ -13671,12 +13671,12 @@ SwbtWr_WriteLoop_CC_B1_Ret:
 	ret
 
 SwbtWr_InitAndWrite_CC_B2:
-	stdi8 (0x9127), 178
-	stdi8 (0x9129), 0
-	stdi8 (0x9128), 0
+	ld (0x9127:16), 178
+	ld (0x9129:16), 0
+	ld (0x9128:16), 0
 
 SwbtWr_WriteLoop_CC_B2:
-	stdi8 (0x912a), 127
+	ld (0x912a:16), 127
 	push xde
 	push xhl
 	push xix
@@ -13694,12 +13694,12 @@ SwbtWr_WriteLoop_CC_B2:
 	ret
 
 SwbtWr_InitAndWriteAllBlocks:
-	stdi8 (0x9127), 179
-	stdi8 (0x9129), 127
-	stdi8 (0x9128), 0
+	ld (0x9127:16), 179
+	ld (0x9129:16), 127
+	ld (0x9128:16), 0
 
 SwbtWr_WriteLoop_CC_B3:
-	stdi8 (0x912a), 127
+	ld (0x912a:16), 127
 	push xde
 	push xhl
 	push xix
@@ -13726,12 +13726,12 @@ SwbtWr_StubRet_C:
 	ret
 
 SwbtWr_WriteBankSelect:
-	stdi8 (0x9127), 176
-	stdi8 (0x9128), 0
+	ld (0x9127:16), 176
+	ld (0x9128:16), 0
 	ld a, (0x8ee6:16)
 	res 7, a
 	ld (0x9129:16), a
-	stdi8 (0x912a), 127
+	ld (0x912a:16), 127
 	push xde
 	push xhl
 	push xix
@@ -13741,12 +13741,12 @@ SwbtWr_WriteBankSelect:
 	pop xix
 	pop xhl
 	pop xde
-	stdi8 (0x9127), 176
-	stdi8 (0x9128), 1
+	ld (0x9127:16), 176
+	ld (0x9128:16), 1
 	ld a, (0x8ee4:16)
 	res 7, a
 	ld (0x9129:16), a
-	stdi8 (0x912a), 127
+	ld (0x912a:16), 127
 	push xde
 	push xhl
 	push xix
@@ -13919,7 +13919,7 @@ SysEx_SendDispatch:
 	call	MidiSeq_PartLookup_Data
 
 SysEx_ResetAndReturn:
-	stdi8 (0xbd18), 0
+	ld (0xbd18:16), 0
 	jp SoundMode_ResetAllParams
 SysEx_DispatchCalls_Data:
 	call	MidiSeq_PartConfigure_Data_0x1D
@@ -13938,7 +13938,7 @@ SysEx_DispatchCalls_Data:
 
 SysEx_ParseAndDispatch:
 	pushw_erp 0xfa
-	stdi8 (0xbd18), 0
+	ld (0xbd18:16), 0
 
 SysEx_ParserLoop:
 	call SeqBuf2_ReadByte
@@ -13955,7 +13955,7 @@ SysEx_ParserLoop:
 	jr nz, SysEx_ParseState2_CheckBit7
 	cp_erpb 0xfb, 0xf0
 	jr nz, SysEx_ParserLoop
-	stdi8 (0xbd1e), 1
+	ld (0xbd1e:16), 1
 	jr SysEx_ParseState_AppendToQueue
 
 SysEx_ParseState1_CheckManufID:
@@ -13967,11 +13967,11 @@ SysEx_ParseState1_CheckManufID:
 	jr nz, SysEx_ParseState_Reset
 
 SysEx_ParseState1_SetState2:
-	stdi8 (0xbd1e), 2
+	ld (0xbd1e:16), 2
 	jr SysEx_ParseState_AppendToQueue
 
 SysEx_ParseState_Reset:
-	stdi8 (0xbd1e), 0
+	ld (0xbd1e:16), 0
 
 SysEx_ParseState_DispatchByte:
 	call MidiSeq_ReinitCurrentBuffer
@@ -13989,7 +13989,7 @@ SysEx_ParseState_AppendToQueue:
 	jr SysEx_ParserLoop
 
 SysEx_ParseState2_EndOfSysEx:
-	stdi8 (0xbd1e), 0
+	ld (0xbd1e:16), 0
 	cp_erpb 0xfb, 0xf7
 	jr nz, SysEx_ParseState_DispatchByte
 	call VoiceQueue_Append
@@ -14730,7 +14730,7 @@ SeqAlt_DescriptorBlock_Data:
 	ld	xde, (xsp+10)
 	ld	a, (xde+9)
 	.byte 0x8f, 0x04
-	stdi8	(0x857b), 143
+	ld	(0x857b:16), 143
 	max
 	ldb	c, 138
 	ldwio	243, 0x7d6b
@@ -15266,17 +15266,17 @@ VoiceParam_MultiModeDispatch:
 	jr z, VoiceParam_MultiMode_Case1
 	cps l, 0
 	jr nz, VoiceParam_LoopExit
-	stdi8 (0x3489), 5
-	stdi8 (0x347c), 0
-	stdi8 (0x347d), 4
+	ld (0x3489:16), 5
+	ld (0x347c:16), 0
+	ld (0x347d:16), 4
 	call MidiStream_ReplaySavedExpr
-	stdi8 (0x3489), 6
-	stdi8 (0x347c), 0
-	stdi8 (0x347d), 4
+	ld (0x3489:16), 6
+	ld (0x347c:16), 0
+	ld (0x347d:16), 4
 	jr VoiceParam_MultiMode_Dispatch
 
 VoiceParam_MultiMode_Case1:
-	stdi8 (0x3489), 5
+	ld (0x3489:16), 5
 	ld a, (xwa)
 	and a, 0xf
 	jr z, VoiceParam_MultiMode_Case1_NoShift
@@ -15287,7 +15287,7 @@ VoiceParam_MultiMode_Case1_NoShift:
 	jr VoiceParam_MultiMode_SetupHW
 
 VoiceParam_MultiMode_Case2:
-	stdi8 (0x3489), 6
+	ld (0x3489:16), 6
 	ld a, (xwa)
 	dec 1, a
 	and a, 0xf

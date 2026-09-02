@@ -13,14 +13,14 @@
 ;       Tone Generation, DSP Protocol
 ; =============================================================================
 RESET:	; 01F924
-	stdi8 256, 0
-	stdi8 258, 0
-	stdi8 265, 0
-	stdi8 264, 0
+	ld (256:16), 0
+	ld (258:16), 0
+	ld (265:16), 0
+	ld (264:16), 0
 	ldio 0xF8, 0x00
-	stdi8 272, 0
-	stdi8 273, 177
-	stdi8 266, 4
+	ld (272:16), 0
+	ld (273:16), 177
+	ld (266:16), 4
 	ldio 0x07, 0xFF
 	ldio 0x0B, 0xFF
 	ldio 0x0F, 0xFF
@@ -68,18 +68,18 @@ RESET:	; 01F924
 	ldio 0x9F, 0x00
 	ldio 0x9E, 0x00
 	set_dd8 7, 0x9E	; prescaler: run
-	stdi8 323, 16
-	stdi8 327, 17
-	stdi8 331, 255
-	stdi8 335, 0
-	stdi8 339, 18
-	stdi8 343, 19
-	stdi8 322, 7
-	stdi8 326, 3
-	stdi8 330, 1
-	stdi8 334, 31
-	stdi8 338, 1
-	stdi8 342, 1
+	ld (323:16), 16
+	ld (327:16), 17
+	ld (331:16), 255
+	ld (335:16), 0
+	ld (339:16), 18
+	ld (343:16), 19
+	ld (322:16), 7
+	ld (326:16), 3
+	ld (330:16), 1
+	ld (334:16), 31
+	ld (338:16), 1
+	ld (342:16), 1
 	ldio 0xD2, 0x01
 	ldio 0xD1, 0x00
 	and_sd8b_im 0xD3, 0xCF
@@ -93,25 +93,25 @@ RESET:	; 01F924
 	ldio 0xD5, 0x00	; parity addition: disable
 	and_sd8b_im 0xD7, 0xCF	; T0 (4/fc)
 	and_sd8b_im 0xD7, 0xF0	; divide by 16
-	stdi8 304, 255
-	stdi8 305, 255
-	stdi8 306, 3
-	stdi8 357, 113
-	stdi8 354, 139
-	stdi8 355, 88
+	ld (304:16), 255
+	ld (305:16), 255
+	ld (306:16), 3
+	ld (357:16), 113
+	ld (354:16), 139
+	ld (355:16), 88
 	resda 4, 358
-	stdi8 320, 85
-	stdi8 324, 85
-	stdi8 328, 34
-	stdi8 332, 34
-	stdi8 336, 98
-	stdi8 340, 102
-	stdi8 321, 129
-	stdi8 325, 129
-	stdi8 329, 192
-	stdi8 333, 138
-	stdi8 337, 128
-	stdi8 341, 129
+	ld (320:16), 85
+	ld (324:16), 85
+	ld (328:16), 34
+	ld (332:16), 34
+	ld (336:16), 98
+	ld (340:16), 102
+	ld (321:16), 129
+	ld (325:16), 129
+	ld (329:16), 192
+	ld (333:16), 138
+	ld (337:16), 128
+	ld (341:16), 129
 	ldio 0xF6, 0x00
 	lds32 xwa, 0
 	stda32 4160, xwa
@@ -242,14 +242,14 @@ AudioTick_StoreTick:
 
 AudioTick_Variant_6:
 	setda 2, 4158
-	stdi8 61460, 0
+	ld (61460:16), 0
 	ld a, (61462:16)
 	inc 1, a
 	ld (61462:16), a
 	cp a, 0x8
 	jr c, AudioTick_Done
 	setda 5, 4158
-	stdi8 61462, 0
+	ld (61462:16), 0
 
 AudioTick_Done:
 	pop xix
@@ -726,7 +726,7 @@ TaskSched_ConfigAndDispatch:
 	ldb a, 0x1
 	calr TaskSched_SpawnTask
 	ei 6
-	stdi8 4164, 0
+	ld (4164:16), 0
 	xor wa, wa
 	ldc_cr16 wa, 0x7C
 	stda16 4306, xwa
@@ -734,13 +734,13 @@ TaskSched_ConfigAndDispatch:
 
 TaskSched_Halt:
 	ei 0
-	stdi8 305, 255
+	ld (305:16), 255
 
 TaskSched_HaltLoop:
 	jr TaskSched_HaltLoop
 
 TaskSched_Dispatch:
-	stdi8 305, 0
+	ld (305:16), 0
 	ld wa, (4306:16)
 	or wa, wa
 	jr nz, TaskSched_ContextRestore
@@ -2377,8 +2377,8 @@ InterCPU_Latch_Setup:
 	ldc_cr32 xwa, 0x00
 	ldb a, 0x0
 	ldc_cr8 a, 0x42
-	stdi8 4328, 0
-	stdi8 4330, 0
+	ld (4328:16), 0
+	ld (4330:16), 0
 	ret
 
 ; ===========================================================================
@@ -2443,7 +2443,7 @@ DMA_Chunk_Start:
 	bit_dd8 4, 0x34	; MSTAT1 - test if Main CPU is requesting handshake
 	jr z, DMA_Chunk_Wait_MSTAT1_Clear
 	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge Main CPU handshake request
-	stdi8 4328, 1
+	ld (4328:16), 1
 	ld l, c
 	dec 1, l
 	sll a, 5
@@ -2458,7 +2458,7 @@ DMA_Chunk_Transfer:
 	ldc_cr32 xde, 0x08
 	extz bc
 	ldc_cr16 bc, 0x48
-	stdi8 258, 22
+	ld (258:16), 22
 	set_dd8 2, 0x80
 	cpdi8 4328, 0
 	ret z
@@ -2549,7 +2549,7 @@ E2_Wait_DMA_Idle:
 ; TX engine idle: assert SSTAT0, mark busy, push the 0xE2 header into the latch.
 E2_DMA_Ready:
 	res_dd8	0, 52
-	stdi8	(4328), 1
+	ld	(4328:16), 1
 	stib_da	(1179648), 226
 	lds	ix, 0
 	bit_dd8	4, 52
@@ -2612,7 +2612,7 @@ E1_Check_MSTAT1:
 	bit_dd8 4, 0x34	; MSTAT1 - test if Main CPU is initiating E1 transfer
 	jrl z, E1_Timeout_Retry
 	res_dd8 0, 0x34	; SSTAT0 - clear to acknowledge E1 command from Main CPU
-	stdi8 4328, 2
+	ld (4328:16), 2
 	stib_da 0x120000, 0xe1
 	lds iz, 0
 
@@ -2629,7 +2629,7 @@ E1_Start_Transfer:
 	ldc_cr32 xwa, 0x08
 	lds wa, 6
 	ldc_cr16 wa, 0x48
-	stdi8 258, 22
+	ld (258:16), 22
 	set_dd8 2, 0x80
 	cpdi8 4328, 1
 	jr z, E1_Delay_Loop1
@@ -2655,7 +2655,7 @@ E1_Phase2_Setup:
 	ldc_cr32 xbc, 0x08
 	ld wa, (xwa + 4)
 	ldc_cr16 wa, 0x48
-	stdi8 258, 22
+	ld (258:16), 22
 	set_dd8 2, 0x80
 	cpdi8 4328, 0
 	jr z, E1_Delay_Loop2
@@ -2733,7 +2733,7 @@ INT0_HANDLER:	; 20E86
 	ld (4332:16), a
 	cp a, 0xE1
 	jr nz, INT0_Check_E2
-	stdi8 4330, 2	; E1 command - state 2
+	ld (4330:16), 2	; E1 command - state 2
 	lda xwa, (4374:16)	; E1 data buffer
 	stda32 4324, xwa	; Save DMA target
 	ldc_cr32 xwa, 0x20
@@ -2744,7 +2744,7 @@ INT0_HANDLER:	; 20E86
 INT0_Check_E2:	; 020EB1h
 	cp a, 0xE2
 	jr nz, INT0_Check_E3
-	stdi8 4330, 3	; E2 command - state 3
+	ld (4330:16), 3	; E2 command - state 3
 	lda xwa, (4380:16)	; E2 data buffer
 	stda32 4324, xwa
 	ldc_cr32 xwa, 0x20
@@ -2759,7 +2759,7 @@ INT0_Check_E3:	; 020ECEh
 	jr INT0_Ack
 
 INT0_Standard_Cmd:	; 020ED9h - standard variable-length command
-	stdi8 4330, 1	; State 1
+	ld (4330:16), 1	; State 1
 	lda xwa, (4336:16)	; Standard command buffer
 	stda32 4324, xwa
 	ldc_cr32 xwa, 0x20
@@ -2770,7 +2770,7 @@ INT0_Standard_Cmd:	; 020ED9h - standard variable-length command
 	ldc_cr16 wa, 0x40
 
 INT0_Start_DMA:	; 020EF7h
-	stdi8 256, 10	; Start DMA channel 0
+	ld (256:16), 10	; Start DMA channel 0
 
 INT0_Ack:	; 020EFCh
 	res_dd8 1, 0x34	; SSTAT1 - clear to acknowledge command received from Main CPU
@@ -2799,13 +2799,13 @@ MICRODMA_CH2_HANDLER:	; Channel #2 completion		; 20F01
 	res_dd8 2, 0x80
 	cpdi8 4328, 1
 	jr nz, MICRODMA_CH2_State2
-	stdi8 4328, 0
+	ld (4328:16), 0
 	jr MICRODMA_CH2_Done
 
 MICRODMA_CH2_State2:	; 020F12h - two-phase transfer, go to state 1
 	cpdi8 4328, 2
 	jr nz, MICRODMA_CH2_Done
-	stdi8 4328, 1
+	ld (4328:16), 1
 
 MICRODMA_CH2_Done:	; 020F1Eh
 	reti
@@ -2857,7 +2857,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0
 	call (xwa)	; Dispatch to handler
 	inc 6, xsp
-	stdi8 4330, 0
+	ld (4330:16), 0
 	jr CH0_Ack
 
 CH0_State2_E1:	; 020F6Dh - E1 command phase 1 complete, start phase 2
@@ -2866,19 +2866,19 @@ CH0_State2_E1:	; 020F6Dh - E1 command phase 1 complete, start phase 2
 	ldc_cr32 xbc, 0x20
 	ld wa, (xwa + 4)	; Get DMA byte count
 	ldc_cr16 wa, 0x40
-	stdi8 256, 10	; Start DMA
-	stdi8 4330, 4	; Move to state 4
+	ld (256:16), 10	; Start DMA
+	ld (4330:16), 4	; Move to state 4
 	jr CH0_Timer_Reset
 
 CH0_State3_E2:	; 020F88h - E2 command complete
-	stdi8 4334, 255
-	stdi8 4330, 0
+	ld (4334:16), 255
+	ld (4330:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - set to signal ready for next command from Main CPU
 	setda 7, 4390	; Set E2 pending flag
 	jr CH0_Timer_Reset
 
 CH0_State4_E1_Done:	; 020F9Bh - E1 two-phase transfer complete
-	stdi8 4330, 0
+	ld (4330:16), 0
 	resda 7, 1278
 
 CH0_Ack:	; 020FA4h
@@ -2948,8 +2948,8 @@ Cmd_DMA_Check_Stuck:	; 021001h
 	ret ule
 	; Timeout recovery - abort stuck DMA
 	stdi16 61466, 0
-	stdi8 256, 0	; Stop DMA
-	stdi8 4330, 0
+	ld (256:16), 0	; Stop DMA
+	ld (4330:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - timeout recovery: force ready state after DMA abort
 	incdi8 1, 61464	; Increment error counter
 	ret
@@ -57541,7 +57541,7 @@ Audio_CmdHandler_A0_BF:
 	jr nz, CmdA0BF_Return
 	cp (xbc + 1), 0x1
 	jr nz, CmdA0BF_Return
-	stdi8 19018, 1
+	ld (19018:16), 1
 	jr CmdA0BF_Return
 
 ; payload[0]==1 arm: range-check payload[1] against 9 and store it to (0x004A48).
@@ -57567,7 +57567,7 @@ CmdA0BF_Return:
 ; generator -- see [UNCERTAIN].  Two instructions: (0x004A48) = 6 (default touch curve) then
 ; `jrl ToneGen_Poll_Init`.  Called once from the sub-CPU boot path.
 ToneGen_Init:	; 03D016h
-	stdi8 19016, 6	; Set tone gen mode to 6
+	ld (19016:16), 6	; Set tone gen mode to 6
 	jrl ToneGen_Poll_Init	; Continue to main processing
 
 ; ----------------------------------------------------------------------------
@@ -57615,7 +57615,7 @@ ToneGen_Note_Loop:	; 03D02Eh
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0xFF	; Mark slot as note-on
-	stdi8 19010, 144	; DMA command: note on
+	ld (19010:16), 144	; DMA command: note on
 	ld a, (xsp + 256)
 	ld (19011:16), a	; Store note number
 	ld a, (xsp + 1)
@@ -57644,7 +57644,7 @@ ToneGen_Note_Off_Slot:	; 03D06Dh
 	extz xwa
 	add xwa, xbc
 	ld (xwa), 0x0	; Clear slot
-	stdi8 19010, 144	; DMA command: note off
+	ld (19010:16), 144	; DMA command: note off
 	ld a, (xsp + 256)
 	ld (19011:16), a
 	ld a, (xsp + 1)

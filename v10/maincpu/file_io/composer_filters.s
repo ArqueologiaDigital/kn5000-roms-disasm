@@ -26,7 +26,7 @@ FmmComposerLoadFunc:
 	jrl z, CompLoad_HandleAbort
 	cp xde, 0x2
 	jrl nz, CompLoad_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -81,7 +81,7 @@ CompLoad_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr CompLoad_CallStatusDisplay
 
@@ -110,7 +110,7 @@ CompLoad_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 CompLoad_CallStatusDisplay:

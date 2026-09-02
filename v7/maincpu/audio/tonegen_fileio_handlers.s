@@ -1168,7 +1168,7 @@ DSPCfg_Param_Default:
 	ret
 
 Encoder_MarkInvalid:
-	stdi8	(49053), 255
+	ld	(49053:16), 255
 	ret
 Encoder_Stub1:
 	ret
@@ -1183,8 +1183,8 @@ Encoder_AlignByte:
 	ret
 
 Encoder_ValueScanAndSync:
-	stdi8	(36336), 0
-	stdi8	(36338), 0
+	ld	(36336:16), 0
+	ld	(36338:16), 0
 	jr	6
 Encoder_ScanAndSync:
 	calr Encoder_ReadNextEntry

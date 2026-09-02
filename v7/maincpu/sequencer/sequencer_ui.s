@@ -6363,7 +6363,7 @@ HelpLangChk_CheckIzZero:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16421701
-	stdi8	(32422), 72
+	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -6435,7 +6435,7 @@ HelpFunc_CheckIzZero:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16421701
-	stdi8	(32422), 72
+	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -6802,7 +6802,7 @@ IvPlayExit_CheckSendEvent:
 	ld	xbc, 29360148
 	call	16421701
 IvPlayExit_ClearFlag:
-	stdi8	(58098), 0
+	ld	(58098:16), 0
 IvPlayExit_PrepareInherited:
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
@@ -8726,7 +8726,7 @@ PlySngSelFunc:
 	ld	xbc, xhl
 	ld	xde, 8454166
 	call	16424232
-	stdi8	(58098), 1
+	ld	(58098:16), 1
 	jr	70
 PlySngSel_HandleTimerEvent:
 	call GetTitleNow
@@ -8738,7 +8738,7 @@ PlySngSel_HandleTimerEvent:
 	call SendEvent
 
 PlySngSel_ClearFlagAndReturn:
-	stdi8	(58098), 0
+	ld	(58098:16), 0
 	jr	35
 PlySngSel_HandleSelectEvent:
 	ld xwa, 0xc8
@@ -9819,7 +9819,7 @@ SqplyVal_CheckMode81:
 	ld	xbc, 29360129
 	lds32	xde, 5
 	call	16421459
-	stdi8	(58098), 0
+	ld	(58098:16), 0
 SqplyVal_DispatchUpdate:
 	ld xde, (xsp + 68)
 	ld xwa, 0x1480003

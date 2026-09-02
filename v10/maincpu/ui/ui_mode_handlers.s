@@ -122,7 +122,7 @@ EffectMode_ByteData_Block2:
 	call	ApPostEvent
 	ldw	wa, 18
 	call	UI_PostPartChangeEvent
-	stdi8	(0x8d4e), 15
+	ld	(0x8d4e:16), 15
 	ret
 	.byte 0xc1
 	popw	iz
@@ -136,7 +136,7 @@ EffectMode_ByteData_Block2:
 	call	ApPostEvent
 	ldw	wa, 193
 	call	UI_PostModeChangeEvent
-	stdi8	(0x8d4e), 0
+	ld	(0x8d4e:16), 0
 	ret
 EffectMode_ByteData_Block3:
 	ld	a, (0xc07d:16)
@@ -245,7 +245,7 @@ EffectMode_ApplyTranspose:
 	call UI_PostPartChangeEvent
 
 EffectMode_ApplyTranspose_StoreTimer:
-	stdi8 (0x8d4e), 0
+	ld (0x8d4e:16), 0
 	jr EffectMode_CheckTransposeAndLookup
 
 EffectMode_CheckTransposeAndLookup:
@@ -1526,7 +1526,7 @@ SelfTest_FirmwareVersionCheck:
 	ldw wa, 0xfb
 	call UI_PostModeChangeEvent
 	call SubCPU_PayloadErrorStore
-	stdi8 (0x8d82), 2
+	ld (0x8d82:16), 2
 	jrl EffectMode_PopRetFA
 
 SelfTest_InterCPU_Send:
@@ -1730,7 +1730,7 @@ EffectMode_CheckAndDispatch:
 	ld a, (0x8d82:16)
 	cps a, 1
 	jr z, EffectMode_DispatchUpdate
-	stdi8 (0x8d82), 1
+	ld (0x8d82:16), 1
 	calr EffectMode_InitSwbWr_DiagMode
 	calr EffectMode_SetAllLEDs
 	jr EffectMode_DispatchUpdate
@@ -1743,14 +1743,14 @@ EffectMode_CheckAndDispatch_Bit4Clear:
 	ld a, (0x8d82:16)
 	cps a, 0
 	jr z, EffectMode_DispatchUpdate
-	stdi8 (0x8d82), 0
+	ld (0x8d82:16), 0
 	calr EffectMode_RestoreSwbWr_NormalMode
 	calr LED_SetAll_WithBlank
-	stdi8 (0xe3de), 16
+	ld (0xe3de:16), 16
 	jr EffectMode_DispatchUpdate
 
 EffectMode_ResetDiagMode:
-	stdi8 (0x8d82), 0
+	ld (0x8d82:16), 0
 	calr LED_SetAll_WithBlank
 	calr EffectMode_RestoreSwbWr_NormalMode
 
@@ -1888,7 +1888,7 @@ EffectMode_TimerEvent_Step96:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x8d7a), 220
+	ld (0x8d7a:16), 220
 	ret
 
 EffectMode_TimerEvent_Default:
@@ -1949,7 +1949,7 @@ EffectMode_DiagSeq_AnimFrame:
 	ld a, (0x8d7a:16)
 	cps a, 5
 	jr nz, EffectMode_DiagSeq_IncFrame
-	stdi8 (0x8d7a), 1
+	ld (0x8d7a:16), 1
 	jr EffectMode_DiagSeq_SetDelay
 
 EffectMode_DiagSeq_IncFrame:
@@ -1957,7 +1957,7 @@ EffectMode_DiagSeq_IncFrame:
 	ld (0x8d7a:16), a
 
 EffectMode_DiagSeq_SetDelay:
-	stdi8 (0x8d78), 30
+	ld (0x8d78:16), 30
 	ret
 
 EffectMode_DiagSeq_DecrementDelay:
@@ -9130,7 +9130,7 @@ DispTimeSet_SelectInit:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 72
+	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -9928,14 +9928,14 @@ MainTimeFlashFunc:
 	jr z, MainTimeFlash_DispatchCmd
 	cp xbc, 0x1e20014
 	jr nz, MainTimeFlash_ReturnZero
-	stdi8 (0x7f42), 40
+	ld (0x7f42:16), 40
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	lds wa, 5
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -9983,7 +9983,7 @@ NormScreen_InitHandler:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 36
+	ld (0x7f42:16), 36
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -11644,7 +11644,7 @@ AcPmBkEdit_OK_Load:
 	jr AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_OK_LoadEmpty:
-	stdi8 (0x7f42), 73
+	ld (0x7f42:16), 73
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee

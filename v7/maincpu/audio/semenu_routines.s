@@ -35,7 +35,7 @@ SeMenu_LoadRawAddr:
 
 SeMenu_TriggerNotification:
 	ld (0x7ea6:16), a
-	stdi8 (0xe316), 0xee
+	ld (0xe316:16), 0xee
 	setda 6, (0xe318)
 	ret
 SeMenu_ClearNotification:
@@ -1021,7 +1021,7 @@ SeMenu_SetupMenuDisplay_Finalize_Data:
 	jr	ugt, 5
 	ld	(1629:16), a
 	ret
-	stdi8	(1629), 1
+	ld	(1629:16), 1
 	ret
 
 SeMenu_ValidatePartNumber:
@@ -1040,7 +1040,7 @@ SeMenu_ValidatePartNumber:
 SeMenu_ValidatePartNumber_Default:
 	ld xwa, (xsp + 2)
 	ld (xwa), 0x1
-	stdi8 (1629), 1
+	ld (1629:16), 1
 
 SeMenu_ValidatePartNumber_CheckEnabled:
 	ld xwa, (xsp + 2)
@@ -1512,7 +1512,7 @@ SeMenu_TransferPartValues_EndData:
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
-	stdi8	(1678), 1
+	ld	(1678:16), 1
 	ld	a, (1678:16)
 	jr	56
 	cps	a, 0
@@ -1522,7 +1522,7 @@ SeMenu_TransferPartValues_EndData:
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
-	stdi8	(1677), 1
+	ld	(1677:16), 1
 	ld	a, (1677:16)
 	jr	29
 	cps	a, 2
@@ -1532,7 +1532,7 @@ SeMenu_TransferPartValues_EndData:
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
-	stdi8	(1679), 1
+	ld	(1679:16), 1
 	ld	a, (1679:16)
 	jr	2
 	ldb	a, 1
@@ -1924,7 +1924,7 @@ SeMenu_SetCurrentStep:
 	ret
 
 SeMenu_ResetSubIndex:
-	stdi8 (1684), 0
+	ld (1684:16), 0
 	ret
 
 SeMenu_AdvanceSubIndex:
@@ -5922,9 +5922,9 @@ SeMenu_RefreshPartDisplay_Data:
 	; 13 bytes end -- and v9/v10's own bytes at offsets 0 and 6 are the identical
 	; "stdi8 (1709),0 / ret" pair this decodes to. Structural match, not just a
 	; clean decode.
-	stdi8	(1709), 0
+	ld	(1709:16), 0
 	ret
-	stdi8	(1709), 0
+	ld	(1709:16), 0
 	ret
 	ret
 	dec 4,XSP

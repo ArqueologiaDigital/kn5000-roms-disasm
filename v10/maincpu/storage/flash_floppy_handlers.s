@@ -4615,110 +4615,110 @@ ToneParam_ExtendedOpsBlock:
 	ld	xwa, (xsp)
 	cp	xwa, 11
 	jr	ule, -34
-	stdi8	(0x39ac), 12
-	stdi8	(0x39ad), 12
+	ld	(0x39ac:16), 12
+	ld	(0x39ad:16), 12
 	calr	353
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 13
-	stdi8	(0x39ad), 14
+	ld	(0x39ac:16), 13
+	ld	(0x39ad:16), 14
 	calr	333
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 14
-	stdi8	(0x39ad), 15
+	ld	(0x39ac:16), 14
+	ld	(0x39ad:16), 15
 	calr	313
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 15
-	stdi8	(0x39ad), 16
+	ld	(0x39ac:16), 15
+	ld	(0x39ad:16), 16
 	calr	293
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 16
-	stdi8	(0x39ad), 24
+	ld	(0x39ac:16), 16
+	ld	(0x39ad:16), 24
 	calr	273
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 17
-	stdi8	(0x39ad), 26
+	ld	(0x39ac:16), 17
+	ld	(0x39ad:16), 26
 	calr	253
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 18
-	stdi8	(0x39ad), 27
+	ld	(0x39ac:16), 18
+	ld	(0x39ad:16), 27
 	calr	233
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 19
-	stdi8	(0x39ad), 28
+	ld	(0x39ac:16), 19
+	ld	(0x39ad:16), 28
 	calr	213
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 12
-	stdi8	(0x39ad), 18
+	ld	(0x39ac:16), 12
+	ld	(0x39ad:16), 18
 	calr	193
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 13
-	stdi8	(0x39ad), 20
+	ld	(0x39ac:16), 13
+	ld	(0x39ad:16), 20
 	calr	173
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 14
-	stdi8	(0x39ad), 21
+	ld	(0x39ac:16), 14
+	ld	(0x39ad:16), 21
 	calr	153
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 15
-	stdi8	(0x39ad), 22
+	ld	(0x39ac:16), 15
+	ld	(0x39ad:16), 22
 	calr	133
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 12
-	stdi8	(0x39ad), 13
+	ld	(0x39ac:16), 12
+	ld	(0x39ad:16), 13
 	calr	113
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 15
-	stdi8	(0x39ad), 17
+	ld	(0x39ac:16), 15
+	ld	(0x39ad:16), 17
 	calr	93
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 16
-	stdi8	(0x39ad), 25
+	ld	(0x39ac:16), 16
+	ld	(0x39ad:16), 25
 	calr	73
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 19
-	stdi8	(0x39ad), 29
+	ld	(0x39ac:16), 19
+	ld	(0x39ad:16), 29
 	calr	53
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 12
-	stdi8	(0x39ad), 19
+	ld	(0x39ac:16), 12
+	ld	(0x39ad:16), 19
 	calr	33
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 15
-	stdi8	(0x39ad), 23
+	ld	(0x39ac:16), 15
+	ld	(0x39ad:16), 23
 	calr	13
 	cps	hl, 0
 	jr	z, 3
@@ -4791,27 +4791,27 @@ ToneParam_ExtendedOpsBlock:
 	jrl	lt, -4583
 	ldw	ix, 0xeff1
 	ldw	ix, 1024
-	stdi8	(0x34d6), 12
+	ld	(0x34d6:16), 12
 	ld	wa, hl
 	calr	322
-	stdi8	(0x34ef), 5
-	stdi8	(0x34d6), 13
+	ld	(0x34ef:16), 5
+	ld	(0x34d6:16), 13
 	ld	wa, hl
 	calr	307
-	stdi8	(0x34ef), 6
-	stdi8	(0x34d6), 16
+	ld	(0x34ef:16), 6
+	ld	(0x34d6:16), 16
 	ld	wa, hl
 	calr	292
-	stdi8	(0x34ef), 7
-	stdi8	(0x34d6), 17
+	ld	(0x34ef:16), 7
+	ld	(0x34d6:16), 17
 	ld	wa, hl
 	calr	277
-	stdi8	(0x34ef), 10
-	stdi8	(0x34d6), 14
+	ld	(0x34ef:16), 10
+	ld	(0x34d6:16), 14
 	ld	wa, hl
 	calr	262
-	stdi8	(0x34ef), 11
-	stdi8	(0x34d6), 15
+	ld	(0x34ef:16), 11
+	ld	(0x34d6:16), 15
 	ld	wa, hl
 	calr	247
 	ld	xbc, (3182:16)
@@ -4826,27 +4826,27 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0xee
 	ldw	ix, 0xeff1
 	ldw	ix, 1024
-	stdi8	(0x34d6), 18
+	ld	(0x34d6:16), 18
 	ld	wa, hl
 	calr	210
-	stdi8	(0x34ef), 5
-	stdi8	(0x34d6), 19
+	ld	(0x34ef:16), 5
+	ld	(0x34d6:16), 19
 	ld	wa, hl
 	calr	195
-	stdi8	(0x34ef), 6
-	stdi8	(0x34d6), 22
+	ld	(0x34ef:16), 6
+	ld	(0x34d6:16), 22
 	ld	wa, hl
 	calr	180
-	stdi8	(0x34ef), 7
-	stdi8	(0x34d6), 23
+	ld	(0x34ef:16), 7
+	ld	(0x34d6:16), 23
 	ld	wa, hl
 	calr	165
-	stdi8	(0x34ef), 10
-	stdi8	(0x34d6), 20
+	ld	(0x34ef:16), 10
+	ld	(0x34d6:16), 20
 	ld	wa, hl
 	calr	150
-	stdi8	(0x34ef), 11
-	stdi8	(0x34d6), 21
+	ld	(0x34ef:16), 11
+	ld	(0x34d6:16), 21
 	ld	wa, hl
 	calr	135
 	ld	xbc, (3182:16)
@@ -4861,27 +4861,27 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0xee
 	ldw	ix, 0xeff1
 	ldw	ix, 1024
-	stdi8	(0x34d6), 24
+	ld	(0x34d6:16), 24
 	ld	wa, hl
 	calr	98
-	stdi8	(0x34ef), 5
-	stdi8	(0x34d6), 25
+	ld	(0x34ef:16), 5
+	ld	(0x34d6:16), 25
 	ld	wa, hl
 	calr	83
-	stdi8	(0x34ef), 6
-	stdi8	(0x34d6), 28
+	ld	(0x34ef:16), 6
+	ld	(0x34d6:16), 28
 	ld	wa, hl
 	calr	68
-	stdi8	(0x34ef), 7
-	stdi8	(0x34d6), 29
+	ld	(0x34ef:16), 7
+	ld	(0x34d6:16), 29
 	ld	wa, hl
 	calr	53
-	stdi8	(0x34ef), 10
-	stdi8	(0x34d6), 26
+	ld	(0x34ef:16), 10
+	ld	(0x34d6:16), 26
 	ld	wa, hl
 	calr	38
-	stdi8	(0x34ef), 11
-	stdi8	(0x34d6), 27
+	ld	(0x34ef:16), 11
+	ld	(0x34d6:16), 27
 	ld	wa, hl
 	calr	23
 	stb_erp c, 251

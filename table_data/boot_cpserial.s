@@ -246,9 +246,9 @@ BootSerial_FullInit:
 	ldio	0xf8, 0x23		; INTCLR: clear INTTX1
 	or_sd8b_im 0xc8, 0x10		; TAMOD |= 0x10
 	and_sd8b_im 0xc8, 0xf7		; TAMOD &= ~0x08
-	stdi8	(0x0f69), 0x7d
+	ld	(0x0f69:16), 0x7d
 	ordi8	(0x0f64), 0x40		; link flag bit 6
-	stdi8	(0x0f63), 0		; INTA mode: next INTA enters RX mode
+	ld	(0x0f63:16), 0		; INTA mode: next INTA enters RX mode
 	anddi8	(0x0f64), 0xfc		; clear RX/TX active flags
 	stdi16	(0x0fd5), 0		; TX send index
 	stdi16	(0x0fd7), 0		; TX pending count
@@ -542,7 +542,7 @@ Boot_ClassifyDeviceID__ret:
 ;          factory/diagnostic code
 ; -----------------------------------------------------------------------------
 BootSerial_TestLoopback:
-	stdi8	(0x0f6b), 0
+	ld	(0x0f6b:16), 0
 	calr	BootSerial_WaitTxIdle
 	stdi16	(0x0f75), 0
 	stdi16	(0x0f77), 0
@@ -686,8 +686,8 @@ BootSerial_ResetAndIdent:
 	ldw	(xhl - 8), 0
 	ldw	(xhl - 2), 0x80
 	ei	6
-	stdi8	(0x0f75), 0		; byte store (word store elsewhere)
-	stdi8	(0x0f77), 0		; byte store
+	ld	(0x0f75:16), 0		; byte store (word store elsewhere)
+	ld	(0x0f77:16), 0		; byte store
 	ei	0
 	calr	BootSerial_WaitTxIdle
 	ldb	a, 0x2b			; frame (0x2b, 0x00)
@@ -736,7 +736,7 @@ BootSerial_ResetAndIdent:
 ;          BootSerial_ResetAndIdent (x4)
 ; -----------------------------------------------------------------------------
 BootSerial_WaitTxIdle:
-	stdi8	(0x0f6f), 0xc8		; 200 retries
+	ld	(0x0f6f:16), 0xc8		; 200 retries
 BootSerial_WaitTxIdle__outer:
 	ei	6			; sample state with serial ints masked
 	bit_dd8	6, 0x3c			; PF bit 6 must be high
@@ -795,7 +795,7 @@ BootSerial_SendFrame:
 	adddi16	(0x0fd7), 2		; two bytes pending
 	ordi8	(0x0f64), 2		; TX-pending flag
 	anddi8	(0x0f64), 0xfe		; clear RX-active flag
-	stdi8	(0x0f62), 4		; state machine -> state 0x04
+	ld	(0x0f62:16), 4		; state machine -> state 0x04
 	ldio	0xd7, 0x28		; BR1CR
 	anddi8	(0x0f67), 0xbf
 	ld	a, (0x0f67:16)

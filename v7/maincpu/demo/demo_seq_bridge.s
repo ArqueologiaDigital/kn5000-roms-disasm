@@ -580,7 +580,7 @@ SeqRecPlay_DisableBoth:
 SqTrSel_CaseD:
 	calr	65484
 	call	16693581
-	stdi8	(7498), 0
+	ld	(7498:16), 0
 	ret
 SqTrSel_CaseE:
 	calr	65471
@@ -589,12 +589,12 @@ SqTrSel_CaseE:
 	ld	xbc, 29818889
 	lds32	xde, 0
 	call	16423243
-	stdi8	(7498), 0
+	ld	(7498:16), 0
 	ret
 SqTrSel_CaseF:
 	calr	65442
 	call	16693581
-	stdi8	(7498), 0
+	ld	(7498:16), 0
 	ret
 PlayMode_SendStopEvent:
 	ld xwa, 0x6f0026
@@ -691,7 +691,7 @@ PlayMode_SwitchToModeAndNotify:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ldw	wa, 238
 	jp	16355504
 DispatchHandler_ConditionalJump:

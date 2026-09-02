@@ -104,11 +104,11 @@ FDC_MediaConfigAndRecalibrate:
 	calr FDC_IsMediaProbeInit	; calr 0xffe216
 	cp hl, 0xffff	; cp HL,0xffff
 	jr z, FDC_MediaConfigAndRecalibrate__guard_check	; jr Z,0xffd8c0
-	stdi8 (0x0d32), 0xff	; ld (0x0d32),0xff
+	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 FDC_MediaConfigAndRecalibrate__guard_check:
 	cpdi8 (0x0c4e), 0xff	; cp (0x0c4e),0xff
 	jrl z, FDC_MediaConfigAndRecalibrate__done	; jrl Z,0xffda68
-	stdi8 (0x0c4e), 0xff	; ld (0x0c4e),0xff
+	ld (0x0c4e:16), 0xff	; ld (0x0c4e),0xff
 	ldw wa, 0x36	; ld WA,0x0036 - aux cmd 0x36 = uPD72068 software reset
 	calr FDC_WriteStatus	; calr 0xffd7f4
 	lds wa, 2	; ld WA,2
@@ -123,7 +123,7 @@ FDC_MediaConfigAndRecalibrate__guard_check:
 	calr FDC_CmdControllerReset	; calr 0xffda6a
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_MediaConfigAndRecalibrate__drain_results	; jr Z,0xffd8ff
-	stdi8 (0x0c4e), 0	; ld (0x0c4e),0x00
+	ld (0x0c4e:16), 0	; ld (0x0c4e),0x00
 	jrl FDC_MediaConfigAndRecalibrate__done	; jrl T,0xffda68
 FDC_MediaConfigAndRecalibrate__drain_results:
 	calr FDC_ReadStatus	; calr 0xffd7e8
@@ -165,14 +165,14 @@ FDC_MediaConfigAndRecalibrate__send_specify:
 	calr FDC_IssueCommand	; calr 0xffdfc3
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_MediaConfigAndRecalibrate__select_format	; jr Z,0xffd964
-	stdi8 (0x0c4e), 0	; ld (0x0c4e),0x00
+	ld (0x0c4e:16), 0	; ld (0x0c4e),0x00
 	jrl FDC_MediaConfigAndRecalibrate__done	; jrl T,0xffda68
 FDC_MediaConfigAndRecalibrate__select_format:
 	ldw wa, 0x4f	; ld WA,0x004f - 0x4F = aux select format (IBM format)
 	calr FDC_IssueCommand	; calr 0xffdfc3
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_MediaConfigAndRecalibrate__media_dispatch	; jr Z,0xffd979
-	stdi8 (0x0c4e), 0	; ld (0x0c4e),0x00
+	ld (0x0c4e:16), 0	; ld (0x0c4e),0x00
 	jrl FDC_MediaConfigAndRecalibrate__done	; jrl T,0xffda68
 FDC_MediaConfigAndRecalibrate__media_dispatch:
 	ld a, (0x0c9c:16)	; ld A,(0x0c9c)
@@ -200,49 +200,49 @@ FDC_MediaConfigAndRecalibrate__media_dispatch:
 ; Types 6-15 use the _Default stanza (same body as type 0).
 ; -----------------------------------------------------------------------------
 FDC_MediaStanza_Type0:
-	stdi8 (0x0c9a), 0	; ld (0x0c9a),0x00
+	ld (0x0c9a:16), 0	; ld (0x0c9a),0x00
 	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
 	ldib_erp 0xfb, 0	; ld QIZH,0
 	lds wa, 2	; ld WA,2
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type1:
-	stdi8 (0x0c9a), 0	; ld (0x0c9a),0x00
+	ld (0x0c9a:16), 0	; ld (0x0c9a),0x00
 	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
 	ldi_erpb 0xfb, 0xc0	; ld QIZH,0xc0
 	lds wa, 2	; ld WA,2
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type2:
-	stdi8 (0x0c9a), 2	; ld (0x0c9a),0x02
+	ld (0x0c9a:16), 2	; ld (0x0c9a),0x02
 	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
 	ldi_erpb 0xfb, 0x40	; ld QIZH,0x40
 	lds wa, 0	; ld WA,0
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type3:
-	stdi8 (0x0c9a), 3	; ld (0x0c9a),0x03
+	ld (0x0c9a:16), 3	; ld (0x0c9a),0x03
 	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
 	ldi_erpb 0xfb, 0x40	; ld QIZH,0x40
 	lds wa, 0	; ld WA,0
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type4:
-	stdi8 (0x0c9a), 4	; ld (0x0c9a),0x04
+	ld (0x0c9a:16), 4	; ld (0x0c9a),0x04
 	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
 	ldib_erp 0xfb, 0	; ld QIZH,0
 	lds wa, 2	; ld WA,2
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type5:
-	stdi8 (0x0c9a), 5	; ld (0x0c9a),0x05
+	ld (0x0c9a:16), 5	; ld (0x0c9a),0x05
 	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
 	ldib_erp 0xfb, 0	; ld QIZH,0
 	lds wa, 2	; ld WA,2
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Default:
-	stdi8 (0x0c9a), 0	; ld (0x0c9a),0x00
+	ld (0x0c9a:16), 0	; ld (0x0c9a),0x00
 	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
 	ldib_erp 0xfb, 0	; ld QIZH,0
 	lds wa, 2	; ld WA,2
@@ -260,17 +260,17 @@ FDC_MediaStanza_Submit:
 	calr FDC_IssueCommand	; calr 0xffdfc3
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_MediaStanza_Submit__motor_on	; jr Z,0xffda4f
-	stdi8 (0x0c4e), 0	; ld (0x0c4e),0x00
+	ld (0x0c4e:16), 0	; ld (0x0c4e),0x00
 	jr FDC_MediaConfigAndRecalibrate__done	; jr T,0xffda68
 FDC_MediaStanza_Submit__motor_on:
 	calr FDC_CmdMotorOn	; calr 0xffe89b
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_MediaStanza_Submit__recalibrate	; jr Z,0xffda60
-	stdi8 (0x0c4e), 0	; ld (0x0c4e),0x00
+	ld (0x0c4e:16), 0	; ld (0x0c4e),0x00
 	jr FDC_MediaConfigAndRecalibrate__done	; jr T,0xffda68
 FDC_MediaStanza_Submit__recalibrate:
 	calr FDC_CmdRecalibrate	; calr 0xffe2d6
-	stdi8 (0x0c4e), 0	; ld (0x0c4e),0x00
+	ld (0x0c4e:16), 0	; ld (0x0c4e),0x00
 FDC_MediaConfigAndRecalibrate__done:
 	pop xiz	; pop XIZ
 	ret	; ret
@@ -304,7 +304,7 @@ FDC_CmdControllerReset__present:
 ; Twin:    maincpu FDC_COMMAND_DISPATCHER (fdc_routines.s:329)
 ; -----------------------------------------------------------------------------
 FDC_ValidateRequest:
-	stdi8 (0x0c58), 0	; ld (0x0c58),0x00
+	ld (0x0c58:16), 0	; ld (0x0c58),0x00
 	ld wa, (0x0c6e:16)	; ld WA,(0x0c6e)
 	cp wa, 0x0b	; cp WA,0x000b
 	jr ugt, FDC_Validate_DriveTrackSector	; jr UGT,0xffdab9
@@ -463,36 +463,36 @@ FDC_SetGeometryForDiskType:
 	cps a, 0	; cp A,0
 	jrl nz, FDC_SetGeometryForDiskType__bad_type	; jrl NZ,0xffdc76
 FDC_SetGeometryForDiskType__geom_2dd9:
-	stdi8 (0x0c5c), 2	; ld (0x0c5c),0x02
-	stdi8 (0x0c63), 1	; ld (0x0c63),0x01
-	stdi8 (0x0c5d), 9	; ld (0x0c5d),0x09
-	stdi8 (0x0c60), 9	; ld (0x0c60),0x09
-	stdi8 (0x0c5e), 0x1b	; ld (0x0c5e),0x1b
-	stdi8 (0x0c61), 0x54	; ld (0x0c61),0x54
+	ld (0x0c5c:16), 2	; ld (0x0c5c),0x02
+	ld (0x0c63:16), 1	; ld (0x0c63),0x01
+	ld (0x0c5d:16), 9	; ld (0x0c5d),0x09
+	ld (0x0c60:16), 9	; ld (0x0c60),0x09
+	ld (0x0c5e:16), 0x1b	; ld (0x0c5e),0x1b
+	ld (0x0c61:16), 0x54	; ld (0x0c61),0x54
 	stdi16 (0x0d34), 0x4f	; ld (0x0d34),0x004f
 	stdi16 (0x0d36), 0x50	; ld (0x0d36),0x0050
 	stdi16 (0x0d38), 9	; ld (0x0d38),0x0009
 	stdi16 (0x0d3a), 0x0a	; ld (0x0d3a),0x000a
 	jr FDC_SetGeometryForDiskType__common	; jr T,0xffdc7c
 FDC_SetGeometryForDiskType__geom_2dd8_1024:
-	stdi8 (0x0c5c), 3	; ld (0x0c5c),0x03
-	stdi8 (0x0c63), 1	; ld (0x0c63),0x01
-	stdi8 (0x0c5d), 8	; ld (0x0c5d),0x08
-	stdi8 (0x0c60), 8	; ld (0x0c60),0x08
-	stdi8 (0x0c5e), 0x53	; ld (0x0c5e),0x53
-	stdi8 (0x0c61), 0x74	; ld (0x0c61),0x74
+	ld (0x0c5c:16), 3	; ld (0x0c5c),0x03
+	ld (0x0c63:16), 1	; ld (0x0c63),0x01
+	ld (0x0c5d:16), 8	; ld (0x0c5d),0x08
+	ld (0x0c60:16), 8	; ld (0x0c60),0x08
+	ld (0x0c5e:16), 0x53	; ld (0x0c5e),0x53
+	ld (0x0c61:16), 0x74	; ld (0x0c61),0x74
 	stdi16 (0x0d34), 0x4c	; ld (0x0d34),0x004c
 	stdi16 (0x0d36), 0x4d	; ld (0x0d36),0x004d
 	stdi16 (0x0d38), 8	; ld (0x0d38),0x0008
 	stdi16 (0x0d3a), 9	; ld (0x0d3a),0x0009
 	jr FDC_SetGeometryForDiskType__common	; jr T,0xffdc7c
 FDC_SetGeometryForDiskType__geom_2hd18:
-	stdi8 (0x0c5c), 2	; ld (0x0c5c),0x02
-	stdi8 (0x0c63), 1	; ld (0x0c63),0x01
-	stdi8 (0x0c5d), 0x12	; ld (0x0c5d),0x12
-	stdi8 (0x0c60), 0x12	; ld (0x0c60),0x12
-	stdi8 (0x0c5e), 0x1b	; ld (0x0c5e),0x1b
-	stdi8 (0x0c61), 0x6c	; ld (0x0c61),0x6c
+	ld (0x0c5c:16), 2	; ld (0x0c5c),0x02
+	ld (0x0c63:16), 1	; ld (0x0c63),0x01
+	ld (0x0c5d:16), 0x12	; ld (0x0c5d),0x12
+	ld (0x0c60:16), 0x12	; ld (0x0c60),0x12
+	ld (0x0c5e:16), 0x1b	; ld (0x0c5e),0x1b
+	ld (0x0c61:16), 0x6c	; ld (0x0c61),0x6c
 	stdi16 (0x0d34), 0x4f	; ld (0x0d34),0x004f
 	stdi16 (0x0d36), 0x50	; ld (0x0d36),0x0050
 	stdi16 (0x0d38), 0x12	; ld (0x0d38),0x0012
@@ -506,16 +506,16 @@ FDC_SetGeometryForDiskType__common:
 	srl a, 4	; srl 0x04,A
 	and a, 0x0f	; and A,0x0f
 	ld (0x0c65:16), a	; ld (0x0c65),A
-	stdi8 (0x0c5f), 0xff	; ld (0x0c5f),0xff
-	stdi8 (0x0c62), 0	; ld (0x0c62),0x00
-	stdi8 (0x0c66), 0x0f	; ld (0x0c66),0x0f
-	stdi8 (0x0c67), 1	; ld (0x0c67),0x01
-	stdi8 (0x0c6a), 0	; ld (0x0c6a),0x00
-	stdi8 (0x0c69), 0	; ld (0x0c69),0x00
-	stdi8 (0x0c6b), 0	; ld (0x0c6b),0x00
-	stdi8 (0x0c6c), 0	; ld (0x0c6c),0x00
-	stdi8 (0x0c6d), 0	; ld (0x0c6d),0x00
-	stdi8 (0x0c68), 0	; ld (0x0c68),0x00
+	ld (0x0c5f:16), 0xff	; ld (0x0c5f),0xff
+	ld (0x0c62:16), 0	; ld (0x0c62),0x00
+	ld (0x0c66:16), 0x0f	; ld (0x0c66),0x0f
+	ld (0x0c67:16), 1	; ld (0x0c67),0x01
+	ld (0x0c6a:16), 0	; ld (0x0c6a),0x00
+	ld (0x0c69:16), 0	; ld (0x0c69),0x00
+	ld (0x0c6b:16), 0	; ld (0x0c6b),0x00
+	ld (0x0c6c:16), 0	; ld (0x0c6c),0x00
+	ld (0x0c6d:16), 0	; ld (0x0c6d),0x00
+	ld (0x0c68:16), 0	; ld (0x0c68),0x00
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -612,7 +612,7 @@ Boot_UpdateDisplayThunk:
 ; The flag byte is consumed by the boot main loop's progress display.
 ; -----------------------------------------------------------------------------
 Boot_UpdateDisplay:
-	stdi8 (0x0103), 0x0c	; ld (0x0103),0x0c
+	ld (0x0103:16), 0x0c	; ld (0x0103),0x0c
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -933,7 +933,7 @@ FDC_ProcessResults:
 	ldb l, 0	; ld L,0x00
 	ret	; ret
 FDC_ProcessResults__st0_ready_changed:
-	stdi8 (0x0d2e), 0xff	; ld (0x0d2e),0xff - ST0 = 11: ready line changed (disk removed)
+	ld (0x0d2e:16), 0xff	; ld (0x0d2e),0xff - ST0 = 11: ready line changed (disk removed)
 	ldb l, 0	; ld L,0x00
 	ret	; ret
 FDC_ProcessResults__st0_invalid_command:
@@ -1379,14 +1379,14 @@ FDC_Error__return:
 ; FDC_ClearError - clear the sticky request status (0x0C52)
 ; -----------------------------------------------------------------------------
 FDC_ClearError:
-	stdi8 (0x0c52), 0	; ld (0x0c52),0x00
+	ld (0x0c52:16), 0	; ld (0x0c52),0x00
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
 ; FDC_ClearResultBuf - mark the result buffer empty (0x0C8E = 0xFF)
 ; -----------------------------------------------------------------------------
 FDC_ClearResultBuf:
-	stdi8 (0x0c8e), 0xff	; ld (0x0c8e),0xff
+	ld (0x0c8e:16), 0xff	; ld (0x0c8e),0xff
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -1454,8 +1454,8 @@ Boot_Delay40:
 FDC_CmdInitialize:
 	calr Boot_UpdateDisplayThunk	; calr 0xffdd24 - cmd 0 entry
 	calr FDC_PulseTC	; calr 0xffdd17
-	stdi8 (0x0c98), 0	; ld (0x0c98),0x00
-	stdi8 (0x0d2e), 0	; ld (0x0d2e),0x00
+	ld (0x0c98:16), 0	; ld (0x0c98),0x00
+	ld (0x0d2e:16), 0	; ld (0x0d2e),0x00
 	calr FDC_EnableIntAndDMA	; calr 0xffdfa2
 	calr FDC_Seek	; calr 0xffd894
 	jrl FDC_MediaConfigAndRecalibrate	; jrl T,0xffd8a5
@@ -1471,17 +1471,17 @@ FDC_CmdRecalibrate:
 	pushw_erp 0xfa	; push QIZ - cmd 1 entry
 	ld a, (0x0c64:16)	; ld A,(0x0c64)
 	ldb_erp a, 0xfb	; ld QIZH,A
-	stdi8 (0x0c64), 5	; ld (0x0c64),0x05
-	stdi8 (0x0d32), 0xff	; ld (0x0d32),0xff - recalibrate homes via track 5 first (head-load settling)
+	ld (0x0c64:16), 5	; ld (0x0c64),0x05
+	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff - recalibrate homes via track 5 first (head-load settling)
 	calr FDC_CmdSeek	; calr 0xffe31a
-	stdi8 (0x0d32), 0	; ld (0x0d32),0x00
+	ld (0x0d32:16), 0	; ld (0x0d32),0x00
 	calr FDC_ClearResultBuf	; calr 0xffe260
 	lds wa, 7	; ld WA,7 - 0x07 = RECALIBRATE
 	calr FDC_IssueCommand	; calr 0xffdfc3
 	calr FDC_WaitResult	; calr 0xffe266
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_CmdRecalibrate__restore	; jr Z,0xffe309
-	stdi8 (0x0d32), 0xff	; ld (0x0d32),0xff
+	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 FDC_CmdRecalibrate__restore:
 	stb_erp a, 0xfb	; ld A,QIZH
 	ld (0x0c64:16), a	; ld (0x0c64),A
@@ -1509,7 +1509,7 @@ FDC_CmdSeek:
 	calr FDC_WaitResult	; calr 0xffe266
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_CmdSeek__settle	; jr Z,0xffe347
-	stdi8 (0x0d32), 0xff	; ld (0x0d32),0xff
+	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 FDC_CmdSeek__settle:
 	ldw wa, 16	; ld WA,0x0010
 	jrl Boot_Delay	; jrl T,0xffe296
@@ -1518,7 +1518,7 @@ FDC_CmdSeek__settle:
 ; FDC_SubmitReadDataCmd - arm DMA and issue MT|MF READ DATA (0xC6)
 ; -----------------------------------------------------------------------------
 FDC_SubmitReadDataCmd:
-	stdi8 (0x0c56), 0xc6	; ld (0x0c56),0xc6 - 0xC6 = MT|MF READ DATA
+	ld (0x0c56:16), 0xc6	; ld (0x0c56),0xc6 - 0xC6 = MT|MF READ DATA
 	calr FDC_SetupDMAMode	; calr 0xffdd2c
 	calr FDC_ClearResultBuf	; calr 0xffe260
 	ldw wa, 0xc6	; ld WA,0x00c6
@@ -1542,13 +1542,13 @@ FDC_CmdReadSectors:
 	calr FDC_IsMediaProbeRead	; calr 0xffe1c8
 	cps hl, 0	; cp HL,0
 	jr nz, FDC_CmdReadSectors__single_retry	; jr NZ,0xffe378
-	stdi8 (0x0c96), 8	; ld (0x0c96),0x08 - normal request: up to 8 retries
+	ld (0x0c96:16), 8	; ld (0x0c96),0x08 - normal request: up to 8 retries
 	jrl FDC_CmdReadSectors__check_remaining	; jrl T,0xffe49f
 FDC_CmdReadSectors__single_retry:
-	stdi8 (0x0c96), 1	; ld (0x0c96),0x01 - media-probe read: a single attempt
+	ld (0x0c96:16), 1	; ld (0x0c96),0x01 - media-probe read: a single attempt
 	jrl FDC_CmdReadSectors__check_remaining	; jrl T,0xffe49f
 FDC_CmdReadSectors__retry:
-	stdi8 (0x0c52), 0	; ld (0x0c52),0x00
+	ld (0x0c52:16), 0	; ld (0x0c52),0x00
 	calr FDC_CmdSeek	; calr 0xffe31a
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_CmdReadSectors__seek_ok	; jr Z,0xffe3a5
@@ -1606,7 +1606,7 @@ FDC_CmdReadSectors__recover:
 	cp hl, 0xffff	; cp HL,0xffff
 	jr z, FDC_CmdReadSectors__next_retry	; jr Z,0xffe439
 	calr FDC_MediaConfigAndRecalibrate	; calr 0xffd8a5
-	stdi8 (0x0d32), 0xff	; ld (0x0d32),0xff
+	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 	calr FDC_CmdSeek	; calr 0xffe31a
 FDC_CmdReadSectors__next_retry:
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
@@ -1614,7 +1614,7 @@ FDC_CmdReadSectors__next_retry:
 	ld a, (0x0c96:16)	; ld A,(0x0c96)
 	cps a, 0	; cp A,0
 	jr nz, FDC_CmdReadSectors__check_remaining	; jr NZ,0xffe49f
-	stdi8 (0x0c52), 0x10	; ld (0x0c52),0x10 - error 0x10 = read retries exhausted
+	ld (0x0c52:16), 0x10	; ld (0x0c52),0x10 - error 0x10 = read retries exhausted
 	jr FDC_CmdReadSectors__done	; jr T,0xffe4a8
 FDC_CmdReadSectors__advance:
 	ld wa, (0x0d40:16)	; ld WA,(0x0d40)
@@ -1628,7 +1628,7 @@ FDC_CmdReadSectors__advance:
 	add xwa, (xbc)	; add XWA,(XBC)
 	ld (xbc), xwa	; ld (XBC),XWA
 	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
-	stdi8 (0x0c5b), 1	; ld (0x0c5b),0x01
+	ld (0x0c5b:16), 1	; ld (0x0c5b),0x01
 	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
 	ld (0x0c57:16), a	; ld (0x0c57),A
@@ -1654,10 +1654,10 @@ FDC_CmdReadSectors__done:
 ; -----------------------------------------------------------------------------
 FDC_CmdWriteSectors:
 	pushw iz	; push IZ - cmd 4 entry
-	stdi8 (0x0c96), 8	; ld (0x0c96),0x08
+	ld (0x0c96:16), 8	; ld (0x0c96),0x08
 	jrl FDC_CmdWriteSectors__check_remaining	; jrl T,0xffe5d8
 FDC_CmdWriteSectors__retry:
-	stdi8 (0x0c52), 0	; ld (0x0c52),0x00
+	ld (0x0c52:16), 0	; ld (0x0c52),0x00
 	calr FDC_CmdSeek	; calr 0xffe31a
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_CmdWriteSectors__seek_ok	; jr Z,0xffe4d8
@@ -1718,14 +1718,14 @@ FDC_CmdWriteSectors__check_wp:
 	jr FDC_CmdWriteSectors__done	; jr T,0xffe5e1
 FDC_CmdWriteSectors__recover:
 	calr FDC_MediaConfigAndRecalibrate	; calr 0xffd8a5
-	stdi8 (0x0d32), 0xff	; ld (0x0d32),0xff
+	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 	calr FDC_CmdSeek	; calr 0xffe31a
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
 	decdi8 1, (0x0c96)	; dec 1,(0x0c96)
 	ld a, (0x0c96:16)	; ld A,(0x0c96)
 	cps a, 0	; cp A,0
 	jr nz, FDC_CmdWriteSectors__check_remaining	; jr NZ,0xffe5d8
-	stdi8 (0x0c52), 0x20	; ld (0x0c52),0x20 - error 0x20 = write retries exhausted
+	ld (0x0c52:16), 0x20	; ld (0x0c52),0x20 - error 0x20 = write retries exhausted
 	jr FDC_CmdWriteSectors__done	; jr T,0xffe5e1
 FDC_CmdWriteSectors__advance:
 	ld wa, (0x0d40:16)	; ld WA,(0x0d40)
@@ -1739,7 +1739,7 @@ FDC_CmdWriteSectors__advance:
 	add xwa, (xbc)	; add XWA,(XBC)
 	ld (xbc), xwa	; ld (XBC),XWA
 	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
-	stdi8 (0x0c5b), 1	; ld (0x0c5b),0x01
+	ld (0x0c5b:16), 1	; ld (0x0c5b),0x01
 	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
 	ld (0x0c57:16), a	; ld (0x0c57),A
@@ -1761,7 +1761,7 @@ FDC_CmdWriteSectors__done:
 ; FDC_SubmitWriteDataCmd - arm DMA and issue MT|MF WRITE DATA (0xC5)
 ; -----------------------------------------------------------------------------
 FDC_SubmitWriteDataCmd:
-	stdi8 (0x0c56), 0xc5	; ld (0x0c56),0xc5 - 0xC5 = MT|MF WRITE DATA
+	ld (0x0c56:16), 0xc5	; ld (0x0c56),0xc5 - 0xC5 = MT|MF WRITE DATA
 	calr FDC_SetupDMAMode	; calr 0xffdd2c
 	calr FDC_ClearResultBuf	; calr 0xffe260
 	ldw wa, 0xc5	; ld WA,0x00c5
@@ -1801,22 +1801,22 @@ FDC_CmdFormat:
 	cps a, 0	; cp A,0
 	jr nz, FDC_CmdFormat__start	; jr NZ,0xffe659
 FDC_CmdFormat__gap_9spt:
-	stdi8 (0x0c5c), 2	; ld (0x0c5c),0x02
-	stdi8 (0x0c61), 0x50	; ld (0x0c61),0x50
+	ld (0x0c5c:16), 2	; ld (0x0c5c),0x02
+	ld (0x0c61:16), 0x50	; ld (0x0c61),0x50
 	jr FDC_CmdFormat__start	; jr T,0xffe659
 FDC_CmdFormat__gap_18spt:
-	stdi8 (0x0c5c), 2	; ld (0x0c5c),0x02
-	stdi8 (0x0c61), 0x6c	; ld (0x0c61),0x6c
+	ld (0x0c5c:16), 2	; ld (0x0c5c),0x02
+	ld (0x0c61:16), 0x6c	; ld (0x0c61),0x6c
 	jr FDC_CmdFormat__start	; jr T,0xffe659
 FDC_CmdFormat__gap_8spt_1024:
-	stdi8 (0x0c5c), 3	; ld (0x0c5c),0x03
-	stdi8 (0x0c61), 0x74	; ld (0x0c61),0x74
+	ld (0x0c5c:16), 3	; ld (0x0c5c),0x03
+	ld (0x0c61:16), 0x74	; ld (0x0c61),0x74
 FDC_CmdFormat__start:
-	stdi8 (0x0c64), 0	; ld (0x0c64),0x00
-	stdi8 (0x0c59), 0	; ld (0x0c59),0x00
-	stdi8 (0x0c62), 0xe5	; ld (0x0c62),0xe5
-	stdi8 (0x0c5a), 0	; ld (0x0c5a),0x00
-	stdi8 (0x0c57), 0	; ld (0x0c57),0x00
+	ld (0x0c64:16), 0	; ld (0x0c64),0x00
+	ld (0x0c59:16), 0	; ld (0x0c59),0x00
+	ld (0x0c62:16), 0xe5	; ld (0x0c62),0xe5
+	ld (0x0c5a:16), 0	; ld (0x0c5a),0x00
+	ld (0x0c57:16), 0	; ld (0x0c57),0x00
 	jr FDC_CmdFormat__check_more_tracks	; jr T,0xffe6aa
 FDC_CmdFormat__track_loop:
 	ldmm8 (0x0c40), (0x0c64)	; ld (0x0c40),(0x0c64) - publish the track being formatted for the progress display
@@ -1843,7 +1843,7 @@ FDC_CmdFormat__finish:
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	call_24 nz, 0xffd8a5	; call NZ,0xffd8a5 - on error, re-run the media configuration (F2-form CALL cannot take a label; 0xFFD8A5 = FDC_MediaConfigAndRecalibrate)
 	calr FDC_CmdRecalibrate	; calr 0xffe2d6
-	stdi8 (0x0d32), 0xff	; ld (0x0d32),0xff
+	ld (0x0d32:16), 0xff	; ld (0x0d32),0xff
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -1856,7 +1856,7 @@ FDC_FormatOneTrack:
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jrl nz, FDC_MediaConfigAndRecalibrate	; jrl NZ,0xffd8a5
 	calr FDC_BuildFormatFieldBuffer	; calr 0xffe6ed
-	stdi8 (0x0c56), 0x4d	; ld (0x0c56),0x4d - 0x4D = MF FORMAT TRACK
+	ld (0x0c56:16), 0x4d	; ld (0x0c56),0x4d - 0x4D = MF FORMAT TRACK
 	lda xwa, (0x0c9e:16)	; lda XWA,0x0c9e
 	stda32 (0x0c7a), xwa	; ld (0x0c7a),XWA
 	calr FDC_SetupDMAMode	; calr 0xffdd2c
@@ -1870,7 +1870,7 @@ FDC_FormatOneTrack:
 ; layout), plus an odd-count tail.  Counts bytes into 0x0C4A for DMA.
 ; -----------------------------------------------------------------------------
 FDC_BuildFormatFieldBuffer:
-	stdi8 (0x0c5b), 1	; ld (0x0c5b),0x01
+	ld (0x0c5b:16), 1	; ld (0x0c5b),0x01
 	stdi16 (0x0c4a), 0	; ld (0x0c4a),0x0000
 	ld ix, (0x0d38:16)	; ld IX,(0x0d38)
 	srl ix, 1	; srl 0x01,IX
@@ -2030,7 +2030,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 ; FDC_SubmitFormatTrackCmd - arm DMA and issue MF FORMAT TRACK (0x4D)
 ; -----------------------------------------------------------------------------
 FDC_SubmitFormatTrackCmd:
-	stdi8 (0x0c56), 0x4d	; ld (0x0c56),0x4d - cmd submit: 0x4D = MF FORMAT TRACK
+	ld (0x0c56:16), 0x4d	; ld (0x0c56),0x4d - cmd submit: 0x4D = MF FORMAT TRACK
 	calr FDC_SetupDMAMode	; calr 0xffdd2c
 	calr FDC_ClearResultBuf	; calr 0xffe260
 	ldw wa, 0x4d	; ld WA,0x004d
@@ -2103,10 +2103,10 @@ FDC_CmdSetDiskChanged__bad_flag:
 	calr FDC_Error	; calr 0xffe231
 	ret	; ret
 FDC_CmdSetDiskChanged__set:
-	stdi8 (0x0c98), 0xff	; ld (0x0c98),0xff
+	ld (0x0c98:16), 0xff	; ld (0x0c98),0xff
 	ret	; ret
 FDC_CmdSetDiskChanged__clear:
-	stdi8 (0x0c98), 0	; ld (0x0c98),0x00
+	ld (0x0c98:16), 0	; ld (0x0c98),0x00
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -2167,7 +2167,7 @@ FDC_Request:
 	ld xiz, (xsp+0x08)	; ld XIZ,(XSP+0x08)
 	cpw (xiz), 0	; cp (XIZ),0x0000 - cmd 0 (initialize) may always preempt: clear the busy latch
 	jr nz, FDC_Request__check_busy	; jr NZ,0xffe953
-	stdi8 (0x0c44), 0	; ld (0x0c44),0x00
+	ld (0x0c44:16), 0	; ld (0x0c44),0x00
 FDC_Request__check_busy:
 	ei 0x06	; ei 0x06
 	cpdi8 (0x0c44), 0xa5	; cp (0x0c44),0xa5 - busy latch still 0xA5: request already executing
@@ -2178,7 +2178,7 @@ FDC_Request__check_busy:
 	extz hl	; extz HL
 	jrl FDC_Request__return	; jrl T,0xffea54
 FDC_Request__start:
-	stdi8 (0x0c44), 0xa5	; ld (0x0c44),0xa5 - mark busy
+	ld (0x0c44:16), 0xa5	; ld (0x0c44),0xa5 - mark busy
 	ei 0x00	; ei 0x00
 	ld wa, (xiz)	; ld WA,(XIZ)
 	stda16 (0x0c6e), wa	; ld (0x0c6e),WA
@@ -2208,9 +2208,9 @@ FDC_Request__start:
 	stda16 (0x0c88), wa	; ld (0x0c88),WA
 	ld xwa, (xiz+0x0c)	; ld XWA,(XIZ+0x0c)
 	stda32 (0x0c8a), xwa	; ld (0x0c8a),XWA
-	stdi8 (0x0c4e), 0	; ld (0x0c4e),0x00
+	ld (0x0c4e:16), 0	; ld (0x0c4e),0x00
 	ldmm8 (0x0c54), (0x0c52)	; ld (0x0c54),(0x0c52)
-	stdi8 (0x0c52), 0	; ld (0x0c52),0x00
+	ld (0x0c52:16), 0	; ld (0x0c52),0x00
 	calr FDC_ValidateRequest	; calr 0xffda86
 	cps l, 0	; cp L,0
 	jr nz, FDC_Request__finish	; jr NZ,0xffea49 - L != 0: validation rejected the request
@@ -2269,7 +2269,7 @@ FDC_Request__invalid_command:
 	ldw wa, 0xff	; ld WA,0x00ff - error 0xFF = no such command
 	calr FDC_Error	; calr 0xffe231
 FDC_Request__finish:
-	stdi8 (0x0c44), 0x5a	; ld (0x0c44),0x5a - release the busy latch
+	ld (0x0c44:16), 0x5a	; ld (0x0c44),0x5a - release the busy latch
 	ld l, (0x0c52:16)	; ld L,(0x0c52) - return the sticky status, sign-extended into HL
 	exts hl	; exts HL
 FDC_Request__return:

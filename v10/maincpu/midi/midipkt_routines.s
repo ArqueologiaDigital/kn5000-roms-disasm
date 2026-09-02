@@ -1185,22 +1185,22 @@ MidiPkt_DispatchViaTable_4DCE:
 	ret
 
 MidiPkt_DispatchData_Chan4:
-	stdi8	(0xbcfc), 4
+	ld	(0xbcfc:16), 4
 	jr	57
 MidiPkt_DispatchData_Chan3:
-	stdi8	(0xbcfc), 3
+	ld	(0xbcfc:16), 3
 	jr	50
 MidiPkt_DispatchData_Chan1:
-	stdi8	(0xbcfc), 1
+	ld	(0xbcfc:16), 1
 	jr	43
 MidiPkt_DispatchData_Chan2:
-	stdi8	(0xbcfc), 2
+	ld	(0xbcfc:16), 2
 	jr	36
 MidiPkt_DispatchData_Chan5:
-	stdi8	(0xbcfc), 5
+	ld	(0xbcfc:16), 5
 	jr	29
 MidiPkt_DispatchData_Chan6:
-	stdi8	(0xbcfc), 6
+	ld	(0xbcfc:16), 6
 	jr	t, 0x16
 	push	xde
 	push	xhl

@@ -30,7 +30,7 @@ FmmPasswordFunc:
 	cps	l, 0
 	jr	z, 15
 Password_ShowError:
-	stdi8	(32422), 10
+	ld	(32422:16), 10
 	ldw	wa, 238
 	call	16355504
 	jrl	317
@@ -61,7 +61,7 @@ Password_ForwardToFileName:
 	jrl Password_Return
 
 Password_ShowErrorStatus:
-	stdi8	(32422), 11
+	ld	(32422:16), 11
 	ldw	wa, 238
 	jrl	166
 Password_HandleSaveEvent:
@@ -111,7 +111,7 @@ Password_ForwardToSaveFilter:
 	jr Password_Return
 
 Password_SaveErrorStatus:
-	stdi8	(32422), 11
+	ld	(32422:16), 11
 	ldw	wa, 238
 	jr	35
 Password_HandleLoadEvent:
@@ -125,7 +125,7 @@ Password_HandleLoadEvent:
 	calr FmmSeqSongNameFunc
 	jr t, Password_Return
 Password_LoadErrorStatus:
-	stdi8	(32422), 11
+	ld	(32422:16), 11
 	ldw	wa, 238
 Password_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -600,7 +600,7 @@ FileName_UpdateDisplay:
 	cp	(xsp+4), wa
 	jrl	z, 363	; -> 0xF8CD60
 	call	NotifyUIOfSelectionChange
-	stdi8	(35164), 4
+	ld	(35164:16), 4
 	ld	de, (32478:16)
 	exts	xde
 	ld	xwa, (32470:16)

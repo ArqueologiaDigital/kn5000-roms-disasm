@@ -370,7 +370,7 @@ ParaLoadOpt_GridReturn:
 	ld XBC,0x01e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7ea6), 0x48
+	ld (0x7ea6:16), 0x48
 	ld XWA,0xffffffff
 	ld XBC,0x01c00016
 	ld XDE,0x01a000ee

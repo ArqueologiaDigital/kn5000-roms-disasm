@@ -48,7 +48,7 @@ FCopy_ScrollNeg_Reset:
 	jrl FCopy_Return
 
 FCopy_HandleExecute:
-	stdi8 (0x850c), 0
+	ld (0x850c:16), 0
 	ld wa, (0x7f66:16)
 	call GetFileEntryPtr
 	ld xbc, xhl
@@ -95,7 +95,7 @@ FCopy_ScrollDown_Reload:
 FCopy_Scroll_Apply:
 	cp wa, de
 	jrl z, FCopy_Return
-	stdi8 (0x850c), 0
+	ld (0x850c:16), 0
 	ld wa, (0x7f66:16)
 	call GetFileEntryPtr
 	ld xbc, xhl
@@ -470,7 +470,7 @@ FmmFmt_InitPhase_DriveType23:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	jr FmmFmt_InitPhase_SetActive
 
 FmmFmt_InitPhase_OtherDrive:
@@ -478,16 +478,16 @@ FmmFmt_InitPhase_OtherDrive:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x84fe), 2
+	ld (0x84fe:16), 2
 
 FmmFmt_InitPhase_SetActive:
-	stdi8 (0x7f6c), 1
+	ld (0x7f6c:16), 1
 	jrl FmmFmt_Return
 
 FmmFmt_HandleCancel:
 	calr CancelOperationCleanup
-	stdi8 (0x84fe), 0
-	stdi8 (0x7f6c), 0
+	ld (0x84fe:16), 0
+	ld (0x7f6c:16), 0
 	jrl FmmFmt_Return
 
 FmmFmt_HandleProgress:
@@ -530,7 +530,7 @@ FmmFmt_HandleProgress:
 	ld a, (0x7f6a:16)
 	extz wa
 	call UI_PostModeChangeEvent
-	stdi8 (0x7f6c), 0
+	ld (0x7f6c:16), 0
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
@@ -552,13 +552,13 @@ FmmFmt_FormatSuccess:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x84fe), 1
+	ld (0x84fe:16), 1
 	jr FmmFmt_Return
 
 FmmFmt_ExecutePhase2:
 	cps a, 2
 	jr nz, FmmFmt_Return
-	stdi8 (0x7f68), 3
+	ld (0x7f68:16), 3
 	ld xwa, 0x7b003f
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -573,13 +573,13 @@ FmmFmt_HandleAbort:
 	cps c, 0
 	jr nz, FmmFmt_AbortPhase2
 	call UI_PostModeChangeEvent
-	stdi8 (0x7f6c), 0
+	ld (0x7f6c:16), 0
 	jr FmmFmt_Return
 
 FmmFmt_AbortPhase2:
 	cps e, 2
 	jr nz, FmmFmt_Return
-	stdi8 (0x7f68), 2
+	ld (0x7f68:16), 2
 	ld xwa, 0x7b003f
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -594,10 +594,10 @@ FmmFmt_DispatchAndNotify:
 
 FmmFmt_HandleAbortFinal:
 	call UI_PostModeChangeEvent
-	stdi8 (0x7f6c), 0
+	ld (0x7f6c:16), 0
 
 FmmFmt_NotifyComplete:
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 
 FmmFmt_Return:
 	lds32 xhl, 0
@@ -627,7 +627,7 @@ FmmLoadTitleFunc:
 	jrl z, FmmLoadTtl_HandleScrollNav
 	cp xde, 0x2
 	jrl nz, FmmLoadTtl_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	ldmm16 0x7f70, 0x8500
 	lds wa, 1
 	calr InitializeOperationState
@@ -696,7 +696,7 @@ FmmLoadTtl_StateCancelLoad:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr FmmLoadTtl_NotifyComplete
 
@@ -725,7 +725,7 @@ FmmLoadTtl_StateSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 FmmLoadTtl_NotifyComplete:
@@ -741,13 +741,13 @@ FmmLoadTtl_LoadSlots:
 	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x89fc), 0
-	stdi8 (0x89fe), 0
-	stdi8 (0x8a00), 0
-	stdi8 (0x8a02), 0
-	stdi8 (0x8a04), 0
-	stdi8 (0x8a06), 0
-	stdi8 (0x8a08), 0
+	ld (0x89fc:16), 0
+	ld (0x89fe:16), 0
+	ld (0x8a00:16), 0
+	ld (0x8a02:16), 0
+	ld (0x8a04:16), 0
+	ld (0x8a06:16), 0
+	ld (0x8a08:16), 0
 	lds iz, 0
 
 FmmLoadTtl_SlotLoop:
@@ -757,7 +757,7 @@ FmmLoadTtl_SlotLoop:
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, FmmLoadTtl_SlotLoop
-	stdi8 (0x89f8), 4
+	ld (0x89f8:16), 4
 	jr FmmLoadTtl_Return
 
 FmmLoadTtl_HandleScrollNav:
@@ -811,7 +811,7 @@ FmmSaveTitleFunc:
 	jrl z, FmmSaveTtl_HandleCancel
 	cp xde, 0x2
 	jrl nz, FmmSaveTtl_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -1125,7 +1125,7 @@ SongName_TrimDone:
 	jr SongName_SendDisplay
 
 SongName_NoSlot:
-	stdi8 (0x880e), 0
+	ld (0x880e:16), 0
 
 SongName_SendDisplay:
 	ld xwa, (xsp + 6)
@@ -1160,7 +1160,7 @@ SaveFileNameNumFunc:
 	jr SaveFileNum_SendDisplay
 
 SaveFileNum_NoSlot:
-	stdi8 (0x8850), 0
+	ld (0x8850:16), 0
 
 SaveFileNum_SendDisplay:
 	ld xwa, (xsp + 2)
@@ -1281,7 +1281,7 @@ CurFileNameFunc:
 	jr CurFileName_SendDisplay
 
 CurFileName_NoSlot:
-	stdi8 (0x8870), 0
+	ld (0x8870:16), 0
 
 CurFileName_SendDisplay:
 	ld xwa, (xsp + 2)

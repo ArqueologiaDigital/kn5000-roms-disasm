@@ -8783,7 +8783,7 @@ S2cShowHideFunc:
 	jr	nz, 9
 	or	xde, xde
 	jr	nz, 5
-	stdi8	(14811), 3
+	ld	(14811:16), 3
 S2cShow_ReturnZero:
 	lds32 xhl, 0
 	ret
@@ -10483,7 +10483,7 @@ EasyCmp_GridEvtCase_Epilogue:
 	pushw	13344
 	call	16712982
 	lda	xsp, (xsp+10)
-	stdi8	(13360), 0
+	ld	(13360:16), 0
 MspNaming_CleanupExit:
 	lds32 xhl, 0
 	pop xiz
@@ -11498,7 +11498,7 @@ MspRGrpSetBnkFunc:
 	.byte 0x6e, 0x07, 0xf1, 0xa1, 0x7e, 0x00, 0x01, 0x68
 	.byte 0x05
 MspRGrpSetBnk_SetToZero:
-	stdi8	(32417), 0
+	ld	(32417:16), 0
 MspRGrpSetBnk_UpdateLsw:
 	ld c, (32417:16)
 

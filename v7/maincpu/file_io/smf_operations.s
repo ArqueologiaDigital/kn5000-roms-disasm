@@ -7,7 +7,7 @@ FmmSmfLoadTitleFunc:
 	jrl	z, 373
 	cp	xde, 2
 	jrl	nz, 396
-	stdi8	33890, 0
+	ld	(33890:16), 0
 	lds	wa, 1
 	calr	-10615
 	ld	xwa, 6291494
@@ -83,7 +83,7 @@ SmfLoad_AbortPartial:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	91
 SmfLoad_ErrorCancel:
@@ -111,7 +111,7 @@ SmfLoad_Success:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 SmfLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -155,7 +155,7 @@ FmmSmfSaveTitleFunc:
 	jr	z, 95
 	cp	xde, 2
 	jr	nz, 90
-	stdi8	33890, 0
+	ld	(33890:16), 0
 	lds	wa, 1
 	calr	-11038
 	ld	xwa, 6291494
@@ -923,10 +923,10 @@ SmfFN_IgnoredEvents:
 	ld	xwa, (xsp+28)
 	cp	xwa, 29360151
 	jr	nz, 8
-	stdi8	34982, 1
+	ld	(34982:16), 1
 	jrl	363
 SmfFN_SetScrollDir0:
-	stdi8	(34982), 0
+	ld	(34982:16), 0
 	jrl	355
 SmfFN_HandleScrollFlag1:
 	cp	xiz, 21
@@ -943,7 +943,7 @@ SmfFN_HandleScrollFlag1:
 	lds32	xde, 0
 	jr	15
 SmfFN_LoadAs_Wrap:
-	stdi8	(34986), 0
+	ld	(34986:16), 0
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0
@@ -957,10 +957,10 @@ SmfFN_HandleScrollFlag2:
 	ld	xwa, (xsp+28)
 	cp	xwa, 29360151
 	jr	nz, 8
-	stdi8	(34990), 1
+	ld	(34990:16), 1
 	jrl	269
 SmfFN_SetTrackFlag0:
-	stdi8	(34990), 0
+	ld	(34990:16), 0
 	jrl	261
 SmfFN_HandleScrollFlag3:
 	ld	xwa, (xsp+28)
@@ -968,20 +968,20 @@ SmfFN_HandleScrollFlag3:
 	jr	nz, 24
 	cp	xwa, 29360151
 	jr	nz, 8
-	stdi8	(34992), 1
+	ld	(34992:16), 1
 	jrl	234
 SmfFN_SetTransposeFlag0:
-	stdi8	(34992), 0
+	ld	(34992:16), 0
 	jrl	226
 SmfFN_HandleScrollFlag4:
 	cp	xiz, 24
 	jr	nz, 24
 	cp	xwa, 29360151
 	jr	nz, 8
-	stdi8	(34984), 1
+	ld	(34984:16), 1
 	jrl	202
 SmfFN_SetFlag35140_0:
-	stdi8	(34984), 0
+	ld	(34984:16), 0
 	jrl	194
 SmfFN_HandleSeqSongNum:
 	ld	c, (34988:16)
@@ -1002,7 +1002,7 @@ SmfFN_HandleSeqSongNum:
 	lds32	xde, 0
 	jr	102
 SmfFN_SeqToSong_Wrap:
-	stdi8	(34988), 0
+	ld	(34988:16), 0
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0
@@ -1027,7 +1027,7 @@ SmfFN_HandleSeqFromSong:
 	lds32	xde, 0
 	jr	28
 SmfFN_SeqFromSong_Wrap:
-	stdi8	(34988), 0
+	ld	(34988:16), 0
 	ld	xwa, (xsp+32)
 	ld	xbc, 29360139
 	lds32	xde, 0

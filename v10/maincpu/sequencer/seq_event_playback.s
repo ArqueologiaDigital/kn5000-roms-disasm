@@ -15,11 +15,11 @@ SeqEvt_EntryPoint2:
 	jp SeqEvt_InitVoiceScan
 
 SeqEvt_InitAndProcess:
-	stdi8 (0x7dfd), 95
+	ld (0x7dfd:16), 95
 	stdi16 (0x7e02), 9
 	stdi16 (0x7e04), 72
-	stdi8 (0x7e06), 16
-	stdi8 (0x7e07), 1
+	ld (0x7e06:16), 16
+	ld (0x7e07:16), 1
 	ld a, (0x7e08:16)
 	ld (0x7e0a:16), a
 	ld xhl, 0x7aec
@@ -27,7 +27,7 @@ SeqEvt_InitAndProcess:
 	calr SeqEvt_ProcessReadLoop
 	ld a, (0x7e0a:16)
 	ld (0x7e08:16), a
-	stdi8 (0x7e07), 2
+	ld (0x7e07:16), 2
 	ld a, (0x7e09:16)
 	ld (0x7e0a:16), a
 	ld xhl, 0x7bec
@@ -54,20 +54,20 @@ SeqEvt_ClassifyEventType:
 	ld w, a
 	cp a, 0x90
 	jr nz, SeqEvt_CheckType91
-	stdi8 (0x7e0e), 5
+	ld (0x7e0e:16), 5
 	jr SeqEvt_ReadAndDispatchEntry
 
 SeqEvt_CheckType91:
 	cp a, 0x91
 	jr nz, SeqEvt_CheckTypeC0
-	stdi8 (0x7e0e), 7
+	ld (0x7e0e:16), 7
 	jr SeqEvt_ReadAndDispatchEntry
 
 SeqEvt_CheckTypeC0:
 	and a, 0xf0
 	cp a, 0xc0
 	jr nz, SeqEvt_CheckTypeD0
-	stdi8 (0x7e0e), 4
+	ld (0x7e0e:16), 4
 	jr SeqEvt_ReadAndDispatchEntry
 
 SeqEvt_CheckTypeD0:
@@ -79,7 +79,7 @@ SeqEvt_CheckTypeD0:
 	jr SeqEvt_ProcessLoop_Check
 
 SeqEvt_TypeD0_SetCount:
-	stdi8 (0x7e0e), 2
+	ld (0x7e0e:16), 2
 
 SeqEvt_ReadAndDispatchEntry:
 	ldb_sri A, 0x07, 0xec, 0xf0
@@ -202,7 +202,7 @@ SeqEvt_WriteNoteOnRotating:
 	ld a, (0x7e0a:16)
 	cpda8 a, 0x7e06
 	jr c, SeqEvt_RotateIndexDone
-	stdi8 (0x7e0a), 0
+	ld (0x7e0a:16), 0
 
 SeqEvt_RotateIndexDone:
 	ld a, w
@@ -445,10 +445,10 @@ SeqEvt_InitVoiceScan:
 	stdi16 (0x7e00), 0xff5f
 	stdi16 (0x7e02), 9
 	stdi16 (0x7e04), 72
-	stdi8 (0x7e07), 1
+	ld (0x7e07:16), 1
 	ld xhl, 0x7d6c
 	calr Voice_ScanSlotMetric
-	stdi8 (0x7e07), 2
+	ld (0x7e07:16), 2
 	ld xhl, 0x7db4
 	calr Voice_ScanSlotMetric
 	ld wa, (0x7e00:16)
@@ -1129,7 +1129,7 @@ AccPlay_UpdateStateFlags:
 	cpdi8 (0x8d36), 1
 	jr nz, AccPlay_DispatchRet
 	anddi8 (0x7f15), 251
-	stdi8 (0x7f42), 15
+	ld (0x7f42:16), 15
 	call DrumVoice_NotifyEE
 
 AccPlay_DispatchRet:
@@ -1142,7 +1142,7 @@ AccPlay_InitializeStart:
 	call AudioInit_CheckMIDIAndDispatch
 	calr AccPlay_SaveMuteStates
 	stdi16 (0x7f0e), 0xfffe
-	stdi8 (0x7f34), 0
+	ld (0x7f34:16), 0
 	push xwa
 	push xhl
 	push xbc
@@ -1171,12 +1171,12 @@ AccPlay_InitializeStart:
 	lds32 xbc, 0
 	lds32 xde, 0
 	call CtrlPanel_IndicatorDispatch
-	stdi8 (0x8f4e), 4
+	ld (0x8f4e:16), 4
 	ret
 
 AccPlay_MainUpdateLoop:
 	call AccWrap_PlayModeDispatch
-	stdi8 (1055), 12
+	ld (1055:16), 12
 	calr AccPlay_ExtractVoiceSlot
 	push xwa
 	push xhl
@@ -1241,7 +1241,7 @@ AccPlay_DispatchSeqStart:
 	ordi8 0x33e8, 1
 	ordi8 0x34cd, 128
 	call Seq_DispatcherEntry
-	stdi8 (0x7f0b), 2
+	ld (0x7f0b:16), 2
 
 AccPlay_DispatchSeqRet:
 	ret
@@ -1485,7 +1485,7 @@ AccPlay_SetupSoundParams:
 	call SwbtWr_QueuePostEvent
 	ldb h, 0x0
 	ldb l, 0x0
-	stdi8 (0x90f7), 23
+	ld (0x90f7:16), 23
 	call PartCtrl_WriteProgramChange
 	ld xbc, 0xff7e
 	stb_dri H, 0x03, 0xe4, 0xec
@@ -2553,7 +2553,7 @@ MidiSeqBuf_WriteByte:
 	ret
 
 AccPlay_InitAndStartLoop:
-	stdi8 (0x7f0b), 0
+	ld (0x7f0b:16), 0
 	call TempoRingBuf_ReInitAndRet
 	ordi8 0x7f15, 4
 	ldb a, 0x8
@@ -2566,7 +2566,7 @@ AccPlay_ToggleCodeFragment:
 	pushw	0x3f7f
 	nop
 	jr	z, 12
-	stdi8	(0x7f0b), 0
+	ld	(0x7f0b:16), 0
 	call	TempoRingBuf_ReInitAndRet
 	calr	62399
 	ret
@@ -2581,12 +2581,12 @@ AccPlay_CheckAndToggle:
 	ei 6
 	ld (1130:16), a
 	stda16 (1128), xwa
-	stdi8 (1055), 1
+	ld (1055:16), 1
 	ei 0
 	jr AccPlay_ToggleRet
 
 AccPlay_ToggleRestart:
-	stdi8 (0x7f0b), 0
+	ld (0x7f0b:16), 0
 	call TempoRingBuf_ReInitAndRet
 	calr AccPlay_MainUpdateLoop
 
@@ -2605,9 +2605,9 @@ AccPlay_StopAndReset:
 	ld (1077:16), a
 	ld (1130:16), a
 	stda16 (1128), xwa
-	stdi8 (1056), 1
-	stdi8 (1054), 1
-	stdi8 (1055), 1
+	ld (1056:16), 1
+	ld (1054:16), 1
+	ld (1055:16), 1
 
 AccPlay_StopResetRet:
 	ret
@@ -3880,7 +3880,7 @@ MainVocalistPage1OKFunc:
 VocalistPage1OK_Dispatch:
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
-	stdi8	(0xb7ec), 11
+	ld	(0xb7ec:16), 11
 	call	SndParam_ApplyAndSync
 	ld	xwa, (xsp)
 	srl	xwa, 0
@@ -3895,12 +3895,12 @@ VocalistPage1OK_Dispatch:
 	lds	bc, 0
 	lds	de, 2
 	call	SoundParam_NotifyChange
-	stdi8	(0x7f42), 35
+	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000ee
 	call	ApPostEvent
-	stdi8	(0x7f40), 1
+	ld	(0x7f40:16), 1
 	call	MidiSysEx_SendAllParams
 	.byte 0xf1, 0x40
 	jrl	nc, 0x0000
@@ -3914,7 +3914,7 @@ VocalistPage_Handler:
 VocalistPage1_DispatchData:
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
-	stdi8	(0xb7ec), 2
+	ld	(0xb7ec:16), 2
 	call	SndParam_ApplyAndSync
 	ld	xwa, (xsp)
 	srl	xwa, 0
@@ -3929,7 +3929,7 @@ VocalistPage1_DispatchData:
 	lds	bc, 0
 	lds	de, 2
 	call	SoundParam_NotifyChange
-	stdi8	(0x7f42), 35
+	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000ee
@@ -3937,7 +3937,7 @@ VocalistPage1_DispatchData:
 	ld	wa, bc
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
-	stdi8	(0xb7ec), 24
+	ld	(0xb7ec:16), 24
 	call	SndParam_ApplyAndSync
 	ld	xwa, 0x4201
 	lds	bc, 3
@@ -3956,7 +3956,7 @@ VocalistPage1_DispatchData:
 	lds	bc, 0
 	lds	de, 2
 	call	SoundParam_NotifyChange
-	stdi8	(0x7f42), 35
+	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000ee
@@ -3964,11 +3964,11 @@ VocalistPage1_DispatchData:
 	ld	wa, bc
 	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
-	stdi8	(0xb7ec), 1
+	ld	(0xb7ec:16), 1
 	call	SndParam_ApplyAndSync
 	lds	wa, 1
 	call	SmfMedley_RawData
-	stdi8	(0x7f42), 35
+	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c00016
 	ld	xde, 0x01a000ee
@@ -3978,7 +3978,7 @@ MainVocalistPage2OKFunc:
 	cp xbc, 0x1e30008
 	jr nz, VocalistPage2_ReturnZero
 	call MidiSysEx_SendAllParams
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -4484,7 +4484,7 @@ GMYesFunc:
 	ld xbc, 0x1c00002
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee

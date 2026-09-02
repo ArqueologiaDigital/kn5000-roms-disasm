@@ -31,7 +31,7 @@ FmmPasswordFunc:
 	jr z, Password_ClearAndSetSlot
 
 Password_ShowError:
-	stdi8 (0x7f42), 10
+	ld (0x7f42:16), 10
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl Password_Return
@@ -94,7 +94,7 @@ Password_ForwardToFileName:
 	jrl Password_Return
 
 Password_ShowErrorStatus:
-	stdi8 (0x7f42), 11
+	ld (0x7f42:16), 11
 	ldw wa, 0xee
 	jrl Password_CallStatusDisplay
 
@@ -146,7 +146,7 @@ Password_ForwardToSaveFilter:
 	jr Password_Return
 
 Password_SaveErrorStatus:
-	stdi8 (0x7f42), 11
+	ld (0x7f42:16), 11
 	ldw wa, 0xee
 	jr Password_CallStatusDisplay
 
@@ -162,7 +162,7 @@ Password_HandleLoadEvent:
 	jr Password_Return
 
 Password_LoadErrorStatus:
-	stdi8 (0x7f42), 11
+	ld (0x7f42:16), 11
 	ldw wa, 0xee
 
 Password_CallStatusDisplay:
@@ -658,7 +658,7 @@ FileName_UpdateDisplay:
 	cp (xsp + 4), wa
 	jrl z, FileName_Return
 	call NotifyUIOfSelectionChange
-	stdi8 (0x89f8), 4
+	ld (0x89f8:16), 4
 	ld de, (0x7f7a:16)
 	exts xde
 	ld xwa, (0x7f72:16)

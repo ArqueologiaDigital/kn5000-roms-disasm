@@ -58,7 +58,7 @@ AccompSeq_SetupChannel1:
 .Lc_f6d915:
 	bitda 0, (0x7d88)
 	jr z, .Lc_f6d97e
-	stdi8 (0x7db6), 0x00
+	ld (0x7db6:16), 0x00
 	ld XWA,0x00007a50
 	stda32 (0x7db0), xwa
 	ld XWA,0x00007da4
@@ -86,7 +86,7 @@ AccompSeq_SetupChannel2:
 .Lc_f6d97e:
 	bitda 1, (0x7d88)
 	jr z, AccompSeq_ChannelSetupDone
-	stdi8 (0x7db6), 0x01
+	ld (0x7db6:16), 0x01
 	ld XWA,0x00007b50
 	stda32 (0x7db0), xwa
 	ld XWA,0x00007da5
@@ -888,13 +888,13 @@ AccompSeq_ManualMidi_SaveAndCall:
 	push	xhl
 	call	16193008
 	call	16190484
-	stdi8	(49122), 1
+	ld	(49122:16), 1
 	cps	h, 0
 	jr	z, 14
-	stdi8	(49122), 2
+	ld	(49122:16), 2
 	cps	h, 1
 	jr	z, 5
-	stdi8	(49122), 4
+	ld	(49122:16), 4
 AccompSeq_ManualMidi_SetChannel:
 	pop	xhl
 	call	16179781
@@ -1176,8 +1176,8 @@ AccompSeq_InitMidiEvents:
 	ldb W, 0x03
 	ldb E, 0x00
 	calr AccompSeq_WriteMidiToBuffer
-	stdi8 (0x7dd6), 0x7f
-	stdi8 (0x7dd7), 0x7f
+	ld (0x7dd6:16), 0x7f
+	ld (0x7dd7:16), 0x7f
 	ld wa, (0x7d8c:16)
 	ld QWA,WA
 	ld wa, (0x7d8e:16)
@@ -1326,7 +1326,7 @@ AccompSeq_HandleSpecialMode:
 	jr	z, 5
 	cp	a, 14
 	jr	nz, 37
-	stdi8	(32367), 1
+	ld	(32367:16), 1
 	calr	64858
 	and	l, 15
 	ld	(32376:16), l
@@ -1339,7 +1339,7 @@ AccompSeq_HandleSpecialMode:
 	jr	nz, 2
 	ldb	a, 4
 	jr	15
-	stdi8	(32422), 57
+	ld	(32422:16), 57
 	call	16143598
 	ldb	a, 8
 	call	16692690
@@ -1510,8 +1510,8 @@ AccompSeq_SendAllOff:
 	ldb	w, 3
 	ldb	e, 0
 	calr	65230
-	stdi8	(32214), 127
-	stdi8	(32215), 127
+	ld	(32214:16), 127
+	ld	(32215:16), 127
 	ld	xhl, 31312
 	ld	wa, (xhl+4)
 	ld	(xhl+6), wa

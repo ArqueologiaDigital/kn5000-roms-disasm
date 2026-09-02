@@ -15,11 +15,11 @@ SeqEvt_EntryPoint2:
 	jp SeqEvt_InitVoiceScan
 
 SeqEvt_InitAndProcess:
-	stdi8	(32097), 95
+	ld	(32097:16), 95
 	stdi16	(32102), 9
 	stdi16	(32104), 72
-	stdi8	(32106), 16
-	stdi8	(32107), 1
+	ld	(32106:16), 16
+	ld	(32107:16), 1
 	ld	a, (32108:16)
 	ld	(32110:16), a
 	ld	xhl, 31312
@@ -27,7 +27,7 @@ SeqEvt_InitAndProcess:
 	calr	51
 	ld	a, (32110:16)
 	ld	(32108:16), a
-	stdi8	(32107), 2
+	ld	(32107:16), 2
 	ld	a, (32109:16)
 	ld	(32110:16), a
 	ld	xhl, 31568
@@ -52,18 +52,18 @@ SeqEvt_ClassifyEventType:
 	ld	w, a
 	cp	a, 144
 	jr	nz, 7
-	stdi8	32114, 5
+	ld	(32114:16), 5
 	jr	49
 SeqEvt_CheckType91:
 	cp	a, 145
 	jr	nz, 7
-	stdi8	(32114), 7
+	ld	(32114:16), 7
 	jr	37
 SeqEvt_CheckTypeC0:
 	and	a, 240
 	cp	a, 192
 	jr	nz, 7
-	stdi8	(32114), 4
+	ld	(32114:16), 4
 	jr	22
 SeqEvt_CheckTypeD0:
 	cp	a, 208
@@ -73,7 +73,7 @@ SeqEvt_CheckTypeD0:
 	stda16	(32115), ix
 	jr	-75
 SeqEvt_TypeD0_SetCount:
-	stdi8	(32114), 2
+	ld	(32114:16), 2
 SeqEvt_ReadAndDispatchEntry:
 	ld_rrb	a, xhl, ix
 	stda16	32117, ix
@@ -399,10 +399,10 @@ SeqEvt_InitVoiceScan:
 	stdi16	(32100), 65375
 	stdi16	(32102), 9
 	stdi16	(32104), 72
-	stdi8	(32107), 1
+	ld	(32107:16), 1
 	ld	xhl, 31952
 	calr	24
-	stdi8	(32107), 2
+	ld	(32107:16), 2
 	ld	xhl, 32024
 	calr	11
 	ld	wa, (32100:16)
@@ -1883,7 +1883,7 @@ AccPlay_InitializeStart:
 	call 0xfdd726
 	calr AccPlay_SaveMuteStates
 	stdi16 (0x7e72), 0xfffe
-	stdi8 (0x7e98), 0x00
+	ld (0x7e98:16), 0x00
 	push XWA
 	push XHL
 	push XBC
@@ -1912,7 +1912,7 @@ AccPlay_InitializeStart:
 	.byte 0xf1, 0xb2, 0x8e, 0x00, 0x04, 0x0e
 AccPlay_MainUpdateLoop:
 	call AccWrap_PlayModeDispatch
-	stdi8 (0x041f), 0x0c
+	ld (0x041f:16), 0x0c
 	calr AccPlay_ExtractVoiceSlot
 	push XWA
 	push XHL
@@ -1983,7 +1983,7 @@ AccPlay_DispatchSeqStart:
 	ordi8 (0x334c), 0x01
 	ordi8 (0x3431), 0x80
 	call Seq_DispatcherEntry
-	stdi8 (0x7e6f), 0x02
+	ld (0x7e6f:16), 0x02
 AccPlay_DispatchSeqRet:
 	ret
 
@@ -2188,7 +2188,7 @@ AccPlay_SetupSoundParams:
 	call SysEx_ApplyVoiceParam_49
 	ldb H, 0x00
 	ldb L, 0x00
-	stdi8 (0x905b), 0x17
+	ld (0x905b:16), 0x17
 	call PartCtrl_WriteProgramChange
 	ld XBC,0x0000ff7e
 	st_rr8b	h, xbc, l
@@ -3153,7 +3153,7 @@ MidiSeqBuf_WriteByte:
 
 
 AccPlay_InitAndStartLoop:
-	stdi8 (0x7e6f), 0x00
+	ld (0x7e6f:16), 0x00
 	call TempoRingBuf_ReInitAndRet
 	ordi8 (0x7e79), 0x04
 
@@ -3170,7 +3170,7 @@ AccPlay_InitAndStartLoop:
 AccPlay_ToggleCodeFragment:
 	cpdi8 (0x7e6f), 0x00
 	jr z, .Lc_f7273d
-	stdi8 (0x7e6f), 0x00
+	ld (0x7e6f:16), 0x00
 	call TempoRingBuf_ReInitAndRet
 	calr AccPlay_MainUpdateLoop
 .Lc_f7273d:
@@ -3185,11 +3185,11 @@ AccPlay_CheckAndToggle:
 	ei 0x06
 	ld (0x046a:16), a
 	stda16 (0x0468), wa
-	stdi8 (0x041f), 0x01
+	ld (0x041f:16), 0x01
 	ei 0x00
 	jr t, AccPlay_ToggleRet
 AccPlay_ToggleRestart:
-	stdi8	(32367), 0
+	ld	(32367:16), 0
 	call	16125820
 	calr	62349
 AccPlay_ToggleRet:
@@ -3207,9 +3207,9 @@ AccPlay_StopAndReset:
 	ld (1077:16), a
 	ld (1130:16), a
 	stda16 (1128), xwa
-	stdi8 (1056), 1
-	stdi8 (1054), 1
-	stdi8 (1055), 1
+	ld (1056:16), 1
+	ld (1054:16), 1
+	ld (1055:16), 1
 
 AccPlay_StopResetRet:
 	ret
@@ -4966,7 +4966,7 @@ MainVocalistPage1OKFunc:
 VocalistPage1OK_Dispatch:
 	call	16602217
 	call	16602124
-	stdi8	(46928), 11
+	ld	(46928:16), 11
 	call	16600229
 	ld	xwa, (xsp)
 	srl	xwa, 0
@@ -4981,14 +4981,14 @@ VocalistPage1OK_Dispatch:
 	lds	bc, 0
 	lds	de, 2
 	call	16566832
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	call	16423243
-	stdi8	(32420), 1
+	ld	(32420:16), 1
 	call	16601121
-	stdi8	(32420), 0
+	ld	(32420:16), 0
 VocalistPage_Handler:
 	lds32 xhl, 0
 	inc 4, xsp
@@ -4997,7 +4997,7 @@ VocalistPage_Handler:
 VocalistPage1_DispatchData:
 	call	16602217
 	call	16602124
-	stdi8	(46928), 2
+	ld	(46928:16), 2
 	call	16600229
 	ld	xwa, (xsp)
 	srl	xwa, 0
@@ -5012,7 +5012,7 @@ VocalistPage1_DispatchData:
 	lds	bc, 0
 	lds	de, 2
 	call	16566832
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -5020,7 +5020,7 @@ VocalistPage1_DispatchData:
 	ld	wa, bc
 	call	16602217
 	call	16602124
-	stdi8	(46928), 24
+	ld	(46928:16), 24
 	call	16600229
 	ld	xwa, 16897
 	lds	bc, 3
@@ -5039,7 +5039,7 @@ VocalistPage1_DispatchData:
 	lds	bc, 0
 	lds	de, 2
 	call	16566832
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -5047,11 +5047,11 @@ VocalistPage1_DispatchData:
 	ld	wa, bc
 	call	16602217
 	call	16602124
-	stdi8	(46928), 1
+	ld	(46928:16), 1
 	call	16600229
 	lds	wa, 1
 	call	16328715
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -5060,7 +5060,7 @@ MainVocalistPage2OKFunc:
 	cp	xbc, 31653896
 	jr	nz, 28
 	call	16601121
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -5561,7 +5561,7 @@ GMYesFunc:
 	ld	xbc, 29360130
 	lds32	xde, 0
 	call	16421701
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214

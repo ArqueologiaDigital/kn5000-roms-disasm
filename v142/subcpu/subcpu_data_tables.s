@@ -11633,7 +11633,7 @@ Serial1_CommandHandler_RX_F4F5:
 	jr z, Serial1_F5_BaudRate_Switch
 	cp a, 0xF4
 	ret nz
-	stdi8 4152, 3
+	ld (4152:16), 3
 	setda 2, 4148
 	ei 6
 	ldio 0xD6, 0x2B
@@ -11641,7 +11641,7 @@ Serial1_CommandHandler_RX_F4F5:
 	ret
 
 Serial1_F5_BaudRate_Switch:
-	stdi8 4152, 2
+	ld (4152:16), 2
 	setda 2, 4148
 	ret
 
@@ -11732,9 +11732,9 @@ Audio_Process_Final:
 	jrl Audio_CheckQueuedData_Send
 
 INIT_RING_BUFFERS:
-	stdi8 4148, 0
+	ld (4148:16), 0
 	setda 0, 4148
-	stdi8 4152, 0
+	ld (4152:16), 0
 	ld xiy, 0xF434
 	ld xix, 0xE00
 	ldw bc, 0xB

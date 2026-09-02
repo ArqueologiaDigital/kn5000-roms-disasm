@@ -415,7 +415,7 @@ SMF_InitSequencerState:
 	push xwa
 	lds32 xwa, 0
 	stda32 6883, xwa
-	stdi8 (6887), 0
+	ld (6887:16), 0
 	pop xwa
 
 SMF_ReadMThd_Start:
@@ -444,7 +444,7 @@ SMF_ReadMThd_Mismatch:
 
 SMF_ReadMThd_Matched:
 	djnz xbc, SMF_ReadMThd_ByteLoop
-	stdi8 (6887), 1
+	ld (6887:16), 1
 	call FloppyIO_ReadNextByte
 	ld (6886:16), a
 	call FloppyIO_ReadNextByte
@@ -453,7 +453,7 @@ SMF_ReadMThd_Matched:
 	ld (6884:16), a
 	call FloppyIO_ReadNextByte
 	ld (6883:16), a
-	stdi8 (6887), 0
+	ld (6887:16), 0
 	call FloppyIO_ReadNextByte
 	ld (3933:16), a
 	call FloppyIO_ReadNextByte
@@ -560,7 +560,7 @@ SMF_ReadTrackData_Continue:
 	cpdi8 (3830), 0
 	jrl nz, SeqPlay_ResetAndStop
 	call SoundGen_InitAllVoiceChannels
-	stdi8 (4236), 0
+	ld (4236:16), 0
 
 SMF_ReadLoopWithRetry:
 	call FloppyIO_ReadToTrackBuffer

@@ -1308,7 +1308,7 @@ DirmdEmulator_Dispatch:
 	pop	xhl
 	pop	xde
 	jr	113
-	stdi8	(58138), 0
+	ld	(58138:16), 0
 	ldw	wa, 255
 	call	16453699
 	ldw	wa, 245
@@ -1327,7 +1327,7 @@ DirmdEmulator_Dispatch:
 	pop	xhl
 	pop	xde
 	jr	69
-	stdi8	(58138), 16
+	ld	(58138:16), 16
 	push	xde
 	push	xhl
 	push	xix
@@ -1338,7 +1338,7 @@ DirmdEmulator_Dispatch:
 	pop	xix
 	pop	xhl
 	pop	xde
-	stdi8	(58138), 0
+	ld	(58138:16), 0
 	jr	45
 	cp	xde, 255
 	jr	ugt, 37
@@ -1392,12 +1392,12 @@ DirmdEmu_CheckBit4:
 	lds wa, 1
 	call UI_PostEvent_0x6E
 DirmdEmu_ClearAllFlags:
-	stdi8	(58136), 0
-	stdi8	(58134), 0
-	stdi8	(58138), 0
-	stdi8	(58140), 0
-	stdi8	(58142), 255
-	stdi8	(58144), 255
+	ld	(58136:16), 0
+	ld	(58134:16), 0
+	ld	(58138:16), 0
+	ld	(58140:16), 0
+	ld	(58142:16), 255
+	ld	(58144:16), 255
 	lds32	xhl, 0
 	pop	xiz
 	ret

@@ -101,14 +101,14 @@ MainFlashFunc:
 	jr	z, 64
 	cp	xbc, 31653893
 	jr	nz, 62
-	stdi8	(32422), 37
+	ld	(32422:16), 37
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	call	16423243
 	lds	wa, 7
 	call	16535006
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -2148,12 +2148,12 @@ WakeUpApTask:
 	jrl MainTaskControl
 
 RefreshApTask:
-	stdi8	(58134), 0
-	stdi8	(58136), 0
-	stdi8	(58138), 0
-	stdi8	(58140), 0
-	stdi8	(58142), 255
-	stdi8	(58144), 255
+	ld	(58134:16), 0
+	ld	(58136:16), 0
+	ld	(58138:16), 0
+	ld	(58140:16), 0
+	ld	(58142:16), 255
+	ld	(58144:16), 255
 	lds32	xwa, 0
 	stl_da	(160922), xwa
 	stl_da	(160926), xwa
@@ -2595,11 +2595,11 @@ MainPmanCtrl_CheckSoundParam:
 	cps	l, 5
 	jr	nz, 9
 MainPmanCtrl_SetPartSelectOne:
-	stdi8	(35998), 1
+	ld	(35998:16), 1
 	ldb	e, 1
 	jr	9
 MainPmanCtrl_SetPartSelectZero:
-	stdi8	(35998), 0
+	ld	(35998:16), 0
 MainPmanCtrl_LoadPartSelect:
 	ld	e, (35998:16)
 MainPmanCtrl_CompareAndUpdate:

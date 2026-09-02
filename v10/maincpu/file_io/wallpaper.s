@@ -28,7 +28,7 @@ FmmWallpaperLoadFunc:
 	jrl z, WPLoad_HandleAbort
 	cp xwa, 0x2
 	jrl nz, WPLoad_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -83,7 +83,7 @@ WPLoad_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr WPLoad_CallStatusDisplay
 
@@ -112,7 +112,7 @@ WPLoad_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 WPLoad_CallStatusDisplay:

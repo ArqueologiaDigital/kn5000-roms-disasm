@@ -353,8 +353,8 @@ SLSrcBankList_FuncBody:
 	calr	65369
 	lds32	xwa, 0
 	stda32	0x81ca, xwa
-	stdi8	(0x81ce), 0
-	stdi8	(0x81d0), 0
+	ld	(0x81ce:16), 0
+	ld	(0x81d0:16), 0
 	jrl	453
 	ld	e, (0x89fc:16)
 	ld	xwa, (xsp+4)
@@ -394,8 +394,8 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
 	ld	xwa, xiz
 	calr	65059
-	stdi8	(0x81d0), 1
-	stdi8	(0x81ce), 1
+	ld	(0x81d0:16), 1
+	ld	(0x81ce:16), 1
 	ld	xwa, (0x81ca:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 312
@@ -449,7 +449,7 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
 	ld	xwa, xiz
 	calr	64892
-	stdi8	(0x81ce), 1
+	ld	(0x81ce:16), 1
 	ld	xwa, (0x81ca:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 150
@@ -490,7 +490,7 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
 	ld	xwa, xiz
 	calr	64685
-	stdi8	(0x81d0), 0
+	ld	(0x81d0:16), 0
 	.byte 0xc1
 	add	a, h
 	push	xsp
@@ -499,7 +499,7 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
 	ld	xwa, xiz
 	calr	64902
-	stdi8	(0x81ce), 0
+	ld	(0x81ce:16), 0
 	lds32	xhl, 0
 	pop	xiz
 	inc	4, xsp
@@ -789,7 +789,7 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
 	ld	xwa, xiz
 	calr	65039
-	stdi8	(0x81d6), 1
+	ld	(0x81d6:16), 1
 	ld	xwa, (0x81d2:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 284
@@ -843,7 +843,7 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
 	ld	xwa, xiz
 	calr	64877
-	stdi8	(0x81d6), 1
+	ld	(0x81d6:16), 1
 	ld	xwa, (0x81d2:16)
 	.byte 0xaf, 0x04, 0xf0
 	jr	z, 123
@@ -883,7 +883,7 @@ SLSrcBankList_FuncBody:
 	jr	z, 10
 	ld	xwa, xiz
 	calr	64960
-	stdi8	(0x81d6), 0
+	ld	(0x81d6:16), 0
 	lds32	xhl, 0
 	pop	xiz
 	inc	4, xsp
@@ -1131,8 +1131,8 @@ SLSrcBankList_FuncBody:
 	calr	65367
 	lds32	xwa, 0
 	stda32	0x81d8, xwa
-	stdi8	(0x81dc), 0
-	stdi8	(0x81de), 0
+	ld	(0x81dc:16), 0
+	ld	(0x81de:16), 0
 	jrl	648
 	ld	l, (0x8a00:16)
 	ld	xwa, (xsp+4)
@@ -1191,8 +1191,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
 	calr	64679
-	stdi8	(0x81de), 1
-	stdi8	(0x81dc), 1
+	ld	(0x81de:16), 1
+	ld	(0x81dc:16), 1
 	ld	xwa, (0x81d8:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 449
@@ -1290,7 +1290,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, (xsp+8)
 	ld	xde, 0x8a00
 	calr	64372
-	stdi8	(0x81dc), 1
+	ld	(0x81dc:16), 1
 	ld	xwa, (0x81d8:16)
 	.byte 0xaf, 0x04, 0xf0
 	jrl	z, 147
@@ -1332,7 +1332,7 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	ld	c, e
 	calr	64455
-	stdi8	(0x81de), 0
+	ld	(0x81de:16), 0
 	.byte 0xc1
 	add	bc, ix
 	push	xsp
@@ -1341,7 +1341,7 @@ SLSrcBankList_FuncBody:
 	ldb_da	c, (Str_AllOption_EA0980_0x12)
 	ld	xwa, xiz
 	calr	64705
-	stdi8	(0x81dc), 0
+	ld	(0x81dc:16), 0
 	lds32	xhl, 0
 	pop	xiz
 	inc	4, xsp
@@ -2752,11 +2752,11 @@ SLDst_ShowHide_Dispatch:
 	call FileIO_ValidateWithExtHeader
 	cps hl, 0
 	jr z, SLDst_ClearFloppyFlag
-	stdi8 (0x8a0a), 1
+	ld (0x8a0a:16), 1
 	jr SLDst_Return
 
 SLDst_ClearFloppyFlag:
-	stdi8 (0x8a0a), 0
+	ld (0x8a0a:16), 0
 
 SLDst_Return:
 	lds32 xhl, 0
@@ -3538,7 +3538,7 @@ CmpFile_Selection_Clamp:
 	jr CmpFile_ShowDispatch
 
 CmpFile_HandleShow:
-	stdi8 (0x8870), 0
+	ld (0x8870:16), 0
 	cpdi8 (0x89f8), 2
 	jr nz, CmpFile_ShowDefault
 	ld wa, (0x8200:16)
@@ -3592,9 +3592,9 @@ CmpFile_ScrollRedraw:
 	cp wa, hl
 	jr z, CmpFile_Return
 	call NotifyUIOfSelectionChange
-	stdi8 (0x8870), 0
+	ld (0x8870:16), 0
 	lda xiz, (Data_SaveLoadMenuTable_0x62:24)
-	stdi8 (0x89f8), 4
+	ld (0x89f8:16), 4
 	lds wa, 3
 	call FileIO_CheckRecordValid
 	cps l, 0
@@ -3602,7 +3602,7 @@ CmpFile_ScrollRedraw:
 	call FileIO_ValidateAndOpenFile
 	cps hl, 0
 	jr z, CmpFile_RedrawDispatch
-	stdi8 (0x89f8), 2
+	ld (0x89f8:16), 2
 	ld wa, (0x8200:16)
 	call GetFileEntryPtr
 	ld xiz, xhl
@@ -3675,7 +3675,7 @@ FmmCmpLoad_DispatchState:
 	calr SignalProgressUpdate
 
 FmmCmpLoad_ContinueLoad:
-	stdi8 (0x89f8), 4
+	ld (0x89f8:16), 4
 	lds wa, 3
 	call FileIO_CheckRecordValid
 	cps l, 0
@@ -3683,7 +3683,7 @@ FmmCmpLoad_ContinueLoad:
 	call FileIO_ValidateAndOpenFile
 	cps hl, 0
 	jr z, FmmCmpLoad_SignalProgress
-	stdi8 (0x89f8), 2
+	ld (0x89f8:16), 2
 
 FmmCmpLoad_SignalProgress:
 	calr SignalProgressUpdate
@@ -3697,8 +3697,8 @@ FmmCmpLoad_CloseProgress:
 	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x89fe), 0
-	stdi8 (0x8a06), 0
+	ld (0x89fe:16), 0
+	ld (0x8a06:16), 0
 	jr FmmCmpLoad_Return
 
 FmmCmpLoad_HandleCancel:
@@ -3708,7 +3708,7 @@ FmmCmpLoad_HandleCancel:
 	call ApPostEvent
 	ldw wa, 0xb0
 	call UI_PostModeChangeEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr FmmCmpLoad_CallStatusDisplay
 
@@ -3729,7 +3729,7 @@ FmmCmpLoad_HandleSuccess:
 	call ApPostEvent
 	ldw wa, 0xb0
 	call UI_PostModeChangeEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 FmmCmpLoad_CallStatusDisplay:

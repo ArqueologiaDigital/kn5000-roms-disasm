@@ -23,7 +23,7 @@ FmmSmfLoadTitleFunc:
 	jrl z, SmfLoad_CancelCleanup
 	cp xde, 0x2
 	jrl nz, SmfLoad_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -91,7 +91,7 @@ SmfLoad_AbortPartial:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr SmfLoad_CallStatusDisplay
 
@@ -120,7 +120,7 @@ SmfLoad_Success:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 SmfLoad_CallStatusDisplay:
@@ -167,7 +167,7 @@ FmmSmfSaveTitleFunc:
 	jr z, SmfSave_CancelCleanup
 	cp xde, 0x2
 	jr nz, SmfSave_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
@@ -1006,11 +1006,11 @@ SmfFN_IgnoredEvents:
 	ld xwa, (xsp + 28)
 	cp xwa, 0x1c00017
 	jr nz, SmfFN_SetScrollDir0
-	stdi8 (0x8942), 1
+	ld (0x8942:16), 1
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_SetScrollDir0:
-	stdi8 (0x8942), 0
+	ld (0x8942:16), 0
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_HandleScrollFlag1:
@@ -1029,7 +1029,7 @@ SmfFN_HandleScrollFlag1:
 	jr SmfFN_LoadAs_Apply
 
 SmfFN_LoadAs_Wrap:
-	stdi8 (0x8946), 0
+	ld (0x8946:16), 0
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -1044,11 +1044,11 @@ SmfFN_HandleScrollFlag2:
 	ld xwa, (xsp + 28)
 	cp xwa, 0x1c00017
 	jr nz, SmfFN_SetTrackFlag0
-	stdi8 (0x894a), 1
+	ld (0x894a:16), 1
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_SetTrackFlag0:
-	stdi8 (0x894a), 0
+	ld (0x894a:16), 0
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_HandleScrollFlag3:
@@ -1057,11 +1057,11 @@ SmfFN_HandleScrollFlag3:
 	jr nz, SmfFN_HandleScrollFlag4
 	cp xwa, 0x1c00017
 	jr nz, SmfFN_SetTransposeFlag0
-	stdi8 (0x894c), 1
+	ld (0x894c:16), 1
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_SetTransposeFlag0:
-	stdi8 (0x894c), 0
+	ld (0x894c:16), 0
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_HandleScrollFlag4:
@@ -1069,11 +1069,11 @@ SmfFN_HandleScrollFlag4:
 	jr nz, SmfFN_HandleSeqSongNum
 	cp xwa, 0x1c00017
 	jr nz, SmfFN_SetFlag35140_0
-	stdi8 (0x8944), 1
+	ld (0x8944:16), 1
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_SetFlag35140_0:
-	stdi8 (0x8944), 0
+	ld (0x8944:16), 0
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_HandleSeqSongNum:
@@ -1096,7 +1096,7 @@ SmfFN_HandleSeqSongNum:
 	jr SmfFN_SeqSongName_Dispatch
 
 SmfFN_SeqToSong_Wrap:
-	stdi8 (0x8948), 0
+	ld (0x8948:16), 0
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
@@ -1123,7 +1123,7 @@ SmfFN_HandleSeqFromSong:
 	jr SmfFN_SeqSongName_Dispatch
 
 SmfFN_SeqFromSong_Wrap:
-	stdi8 (0x8948), 0
+	ld (0x8948:16), 0
 	ld xwa, (xsp + 32)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0

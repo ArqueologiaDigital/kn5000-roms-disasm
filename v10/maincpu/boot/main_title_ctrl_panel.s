@@ -38,7 +38,7 @@ MainTitle_InitGraphicsAndEvents:
 	jp PostEvent
 
 MainTitle_SetBootFlag:
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ret
 
 MainTitle_TeardownAndLoop:

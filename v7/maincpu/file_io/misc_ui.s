@@ -122,7 +122,7 @@ SetupExitFunc:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16421701
-	stdi8	(32422), 72
+	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214

@@ -59,8 +59,8 @@ BootSerial_State04_TxLineRequest:
 	mul	a, 1			; timing filler
 	bit_dd8	6, 0x3c			; PF bit 6: line granted?
 	jr	nz, BootSerial_TxIsrEpilogue
-	stdi8	(0x0f63), 0		; not granted: back to idle
-	stdi8	(0x0f62), 0
+	ld	(0x0f63:16), 0		; not granted: back to idle
+	ld	(0x0f62:16), 0
 	ordi8	(0x0f6a), 0x02		; status: TX arbitration failed
 	ldio	0xe3, 0x05		; INTEAB
 	ldio	0xeb, 0xff		; INTES1
@@ -141,7 +141,7 @@ BootSerial_State08_TxFirstByte:
 	jr	c, BootSerial_State08_TxFirstByte__no_wrap
 	stdi16	(0x0fd5), 0
 BootSerial_State08_TxFirstByte__no_wrap:
-	stdi8	(0x0f63), 0x02		; default: 2-byte frame
+	ld	(0x0f63:16), 0x02		; default: 2-byte frame
 	ld	a, (xiy)
 	and	a, 0x3f
 	cp	a, 0x30
@@ -200,13 +200,13 @@ BootSerial_State10_TxNextByte__last:
 ; Callers: BootSerial_StateDispatchTable[0x18]
 ; -----------------------------------------------------------------------------
 BootSerial_State18_TxFrameDone:
-	stdi8	(0x0f63), 0
-	stdi8	(0x0f62), 0
+	ld	(0x0f63:16), 0
+	ld	(0x0f62:16), 0
 	ld	wa, (0x0fd7:16)		; pending count
 	subda16	xwa, 0x0fd5		; - send index
 	cps	wa, 2
 	jr	c, BootSerial_State18_TxFrameDone__go_idle
-	stdi8	(0x0f62), 0x04		; next frame: state 0x04
+	ld	(0x0f62:16), 0x04		; next frame: state 0x04
 	anddi8	(0x0f67), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
@@ -277,7 +277,7 @@ BootSerial_State20_RxFirstByte__room:
 	jr	c, BootSerial_State20_RxFirstByte__counted
 	stdi16	(0x0f77), 0
 BootSerial_State20_RxFirstByte__counted:
-	stdi8	(0x0f63), 0x02		; default: 2-byte frame
+	ld	(0x0f63:16), 0x02		; default: 2-byte frame
 	and	a, 0x3f
 	cp	a, 0x30
 	jr	c, BootSerial_State20_RxFirstByte__count_set
@@ -312,9 +312,9 @@ BootSerial_State24_RxNextByte__no_advance:
 	decdi8	1, (0x0f63)
 	cpdi8	(0x0f63), 0x01
 	jr	nz, BootSerial_State24_RxNextByte__rearm
-	stdi8	(0x0f63), 0		; frame complete
+	ld	(0x0f63:16), 0		; frame complete
 	anddi8	(0x0f64), 0xfe		; clear RX-active flag
-	stdi8	(0x0f62), 0		; state -> idle
+	ld	(0x0f62:16), 0		; state -> idle
 	anddi8	(0x0f66), 0x9f
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
@@ -396,7 +396,7 @@ BootSerial_PollTX__inject_fwd:
 BootSerial_PollTX__inject_free:
 	cps	hl, 3
 	jr	c, BootSerial_PollTX__inject_done
-	stdi8	(0x0f72), 0
+	ld	(0x0f72:16), 0
 	ldb	w, 0x20			; sync frame (0x20, 0x10)
 	ldb	a, 0x10
 	ld	iy, (0x0fd7:16)
@@ -430,7 +430,7 @@ BootSerial_PollTX__have_count:
 	cps	a, 2
 	jr	c, BootSerial_PollTX__exit
 	ordi8	(0x0f64), 0x02		; TX-pending flag
-	stdi8	(0x0f62), 0x04		; state 0x04: TX line request
+	ld	(0x0f62:16), 0x04		; state 0x04: TX line request
 	anddi8	(0x0f67), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low

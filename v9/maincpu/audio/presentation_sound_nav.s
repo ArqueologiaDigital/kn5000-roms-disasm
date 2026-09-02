@@ -1331,7 +1331,7 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 	pop	xhl
 	pop	xde
 	jr	113
-	stdi8	58336, 0
+	ld	(58336:16), 0
 	ldw	wa, 255
 	call	16454736
 	ldw	wa, 245
@@ -1350,7 +1350,7 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 	pop	xhl
 	pop	xde
 	jr	69
-	stdi8	58336, 16
+	ld	(58336:16), 16
 	push	xde
 	push	xhl
 	push	xix
@@ -1361,7 +1361,7 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 	pop	xix
 	pop	xhl
 	pop	xde
-	stdi8	58336, 0
+	ld	(58336:16), 0
 	jr	45
 	cp	xde, 255
 	jr	ugt, 37
@@ -1418,12 +1418,12 @@ DirmdEmu_CheckBit4:
 	call UI_PostEvent_0x6E
 
 DirmdEmu_ClearAllFlags:
-	stdi8 (0xe3de), 0
-	stdi8 (0xe3dc), 0
-	stdi8 (0xe3e0), 0
-	stdi8 (0xe3e2), 0
-	stdi8 (0xe3e4), 255
-	stdi8 (0xe3e6), 255
+	ld (0xe3de:16), 0
+	ld (0xe3dc:16), 0
+	ld (0xe3e0:16), 0
+	ld (0xe3e2:16), 0
+	ld (0xe3e4:16), 255
+	ld (0xe3e6:16), 255
 	lds32 xhl, 0
 	pop xiz
 	ret

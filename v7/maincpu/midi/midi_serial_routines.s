@@ -72,9 +72,9 @@ IntTx0_DequeueAndSend:
 IntTx0_CheckQueueEmpty:
 	push	xix
 	swi	6
-	stdi8	(1054), 6
+	ld	(1054:16), 6
 	ret
-	stdi8	(1066), 0
+	ld	(1066:16), 0
 	pushw	wa
 	ld	a, (1056:16)
 	and	a, 5
@@ -207,7 +207,7 @@ ClkTick_Src1CoarseUpdate:
 	.byte 0xf1, 0x27, 0x04, 0xba
 	incdi8	1, (46913)
 	ret
-	stdi8	1059, 0
+	ld	(1059:16), 0
 	cp	d, 240
 	jr	z, 22
 	cp	d, 242
@@ -219,7 +219,7 @@ ClkTick_Src1CoarseUpdate:
 	ld	c, e
 	ret
 	jrl	-158
-	stdi8	1074, 1
+	ld	(1074:16), 1
 	cp	e, 80
 	jr	z, 10
 	cp	e, 65
@@ -289,9 +289,9 @@ StartPlay_Return:
 StartPlay_Body:
 	nop
 	nop
-	stdi8	(1088), 0
-	stdi8	(1092), 0
-	stdi8	(1096), 0
+	ld	(1088:16), 0
+	ld	(1092:16), 0
+	ld	(1096:16), 0
 MIDI_RESET_PLAYBACK_STATE:
 	.byte 0xf1, 0x4c, 0x04, 0x00, 0x00, 0xf1, 0x50, 0x04
 	.byte 0x00, 0x00, 0x0e, 0x06, 0x06, 0xf1, 0xd2, 0x00
@@ -321,11 +321,11 @@ MIDI_APPLY_STARTUP_TIMING:
 	ei 0x06
 	cpdi8 (0x0474), 0x55
 	jr z, .Lc_fcf1d1
-	stdi8 (0x00ea), 0xdd
+	ld (0x00ea:16), 0xdd
 	jr t, .Lc_fcf1da
 .Lc_fcf1d1:
 	call SeqBuf_MidiOut_Init
-	stdi8 (0x0429), 0x00
+	ld (0x0429:16), 0x00
 .Lc_fcf1da:
 	pop SR
 	ret

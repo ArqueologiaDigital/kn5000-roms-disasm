@@ -70,7 +70,7 @@ Handler_INTA:
 	ldio	0xe3, 0x05		; INTEAB
 	ldio	0xeb, 0x0d		; INTES1: RX enabled
 	or_sd8b_im 0xd6, 0x20		; SC1MOD bit 5
-	stdi8	(0x0f62), 0x20		; state 0x20: RX first byte
+	ld	(0x0f62:16), 0x20		; state 0x20: RX first byte
 	ordi8	(0x0f64), 0x01		; RX-active flag
 	jr	t, Handler_INTA__exit
 Handler_INTA__rx_pacing:

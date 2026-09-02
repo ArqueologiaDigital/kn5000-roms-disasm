@@ -277,15 +277,15 @@ MidiPkt_EnqueueControl_335C:
 	.byte 0xb3, 0xe8, 0x5e, 0xef, 0x60, 0x0e, 0xf1, 0x60
 	.byte 0xbc, 0x00, 0x04, 0x68, 0x39
 MidiPkt_EnqueueControl_335C_ZeroData:
-	stdi8	(48224), 3
+	ld	(48224:16), 3
 	jr	50
-	stdi8	(48224), 1
+	ld	(48224:16), 1
 	jr	43
-	stdi8	(48224), 2
+	ld	(48224:16), 2
 	jr	36
-	stdi8	(48224), 5
+	ld	(48224:16), 5
 	jr	29
-	stdi8	(48224), 6
+	ld	(48224:16), 6
 	jr	22
 	push	xde
 	push	xhl

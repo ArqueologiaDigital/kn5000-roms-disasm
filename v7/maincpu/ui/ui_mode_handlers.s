@@ -94,7 +94,7 @@ EffectMode_ApplyTranspose:
 	.byte 0x9a, 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x4b
 	.byte 0x99, 0xfa, 0xd8, 0xa9, 0x1d, 0x56, 0x90, 0xf9
 EffectMode_ApplyTranspose_StoreTimer:
-	stdi8	(36018), 0
+	ld	(36018:16), 0
 	jr	0
 EffectMode_CheckTransposeAndLookup:
 	ld	xwa, 163840
@@ -1383,7 +1383,7 @@ SelfTest_FirmwareVersionCheck:
 	ldw	wa, 251
 	call	16355459
 	call	15665495
-	stdi8	(36070), 2
+	ld	(36070:16), 2
 	jrl	404
 SelfTest_InterCPU_Send:
 	ld	xwa, 61442
@@ -1566,7 +1566,7 @@ EffectMode_CheckAndDispatch:
 	ld a, (0x8ce6:16)
 	cps a, 1
 	jr z, EffectMode_DispatchUpdate
-	stdi8 (0x8ce6), 0x01
+	ld (0x8ce6:16), 0x01
 	calr EffectMode_InitSwbWr_DiagMode
 	calr EffectMode_SetAllLEDs
 	jr t, EffectMode_DispatchUpdate
@@ -1578,13 +1578,13 @@ EffectMode_CheckAndDispatch_Bit4Clear:
 	ld	a, (36070:16)
 	cps	a, 0
 	jr	z, 29
-	stdi8	(36070), 0
+	ld	(36070:16), 0
 	calr	116
 	calr	867
-	stdi8	(58136), 16
+	ld	(58136:16), 16
 	jr	11
 EffectMode_ResetDiagMode:
-	stdi8	(36070), 0
+	ld	(36070:16), 0
 	calr	852
 	calr	95
 EffectMode_DispatchUpdate:
@@ -1757,7 +1757,7 @@ EffectMode_TimerEvent_Step96:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
-	stdi8	(36062), 220
+	ld	(36062:16), 220
 	ret
 EffectMode_TimerEvent_Default:
 	inc	1, a
@@ -1815,13 +1815,13 @@ EffectMode_DiagSeq_AnimFrame:
 	ld	a, (36062:16)
 	cps	a, 5
 	jr	nz, 7	; -> 0xFB7379
-	stdi8	(36062), 1
+	ld	(36062:16), 1
 	jr	6	; -> 0xFB737F
 EffectMode_DiagSeq_IncFrame:
 	inc	1, a
 	ld	(36062:16), a
 EffectMode_DiagSeq_SetDelay:
-	stdi8	(36060), 30
+	ld	(36060:16), 30
 	ret
 EffectMode_DiagSeq_DecrementDelay:
 	dec	1, c
@@ -8466,7 +8466,7 @@ DispTimeSet_SelectInit:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16421701
-	stdi8	(32422), 72
+	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -9170,14 +9170,14 @@ MainTimeFlashFunc:
 	jr	z, 64
 	cp	xbc, 31588372
 	jr	nz, 62
-	stdi8	(32422), 40
+	ld	(32422:16), 40
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	call	16423243
 	lds	wa, 5
 	call	16535006
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -9223,7 +9223,7 @@ NormScreen_InitHandler:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16421701
-	stdi8	32422, 36
+	ld	(32422:16), 36
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -10942,7 +10942,7 @@ AcPmBkEdit_OK_Load:
 	call	16421701
 	jr	82
 AcPmBkEdit_OK_LoadEmpty:
-	stdi8	(32422), 73
+	ld	(32422:16), 73
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214

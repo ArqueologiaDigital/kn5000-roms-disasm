@@ -65,12 +65,12 @@ SetupFlashFunc:
 	jr	z, 40
 	cp	xbc, 31784971
 	jr	nz, 38
-	stdi8	(32422), 37
+	ld	(32422:16), 37
 	ldw	wa, 238
 	call	16355504
 	lds	wa, 6
 	call	16535006
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ldw	wa, 238
 	call	16355504
 	jr	6
@@ -88,7 +88,7 @@ FmmUtilityTitleFunc:
 	jrl	z, 375
 	cp	xde, 2
 	jrl	nz, 369
-	stdi8	33890, 0
+	ld	(33890:16), 0
 	lds	wa, 1
 	calr	-1702
 	ld	xwa, 8060947
@@ -152,7 +152,7 @@ FmmUtility_HandleCancel:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	94
 FmmUtility_HandleError:
@@ -183,7 +183,7 @@ FmmUtility_HandleSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 FmmUtility_ShowStatus:
 	call SoundCtrl_SendCommand
@@ -213,7 +213,7 @@ FmmSmfUtilityTitleFunc:
 	jrl	z, 375
 	cp	xde, 2
 	jrl	nz, 369
-	stdi8	33890, 0
+	ld	(33890:16), 0
 	lds	wa, 1
 	calr	-2101
 	ld	xwa, 8060970
@@ -277,7 +277,7 @@ FmmSmfUtility_HandleCancel:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	94
 FmmSmfUtility_HandleError:
@@ -308,7 +308,7 @@ FmmSmfUtility_HandleSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 FmmSmfUtility_ShowStatus:
 	call SoundCtrl_SendCommand

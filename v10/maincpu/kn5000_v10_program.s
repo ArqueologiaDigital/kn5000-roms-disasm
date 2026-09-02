@@ -518,9 +518,9 @@ RESET_HANDLER:
 	and_sd8b_im 0xd3, 0xf0
 
 Boot_InitIOPorts:
-	stdi8 (304), 255
-	stdi8 (305), 255
-	stdi8 (306), 3
+	ld (304:16), 255
+	ld (305:16), 255
+	ld (306:16), 3
 	ldio 0x3a, 0x20
 	ld xsp, 0xc00
 	calr Boot_InitWorkRAM
@@ -543,9 +543,9 @@ We_seem_to_be_running_boot_ROM_code:
 Boot_PostSelfTest:
 	lds32 xwa, 0
 	stda32 1033, xwa
-	stdi8 (1024), 2
+	ld (1024:16), 2
 	call TaskSched_Init
-	stdi8 (1024), 3
+	ld (1024:16), 3
 Boot_InitPeripherals:
 	calr Boot_ClearConfigFlag7
 	lda_dd8l XBC, (0xe4)
@@ -649,10 +649,10 @@ Boot_PayloadError:
 
 Boot_DisplayScreen:
 	call ScreenGroup_Dispatch	; Display appropriate screen group
-	stdi8 (1024), 6
+	ld (1024:16), 6
 	lds wa, 3
 	call ScreenGroup_Dispatch
-	stdi8 (1024), 128
+	ld (1024:16), 128
 	stiw_da (0x00ffd4), 0x0000
 	ld a, (1026:16); Load boot combo code
 	extz wa

@@ -3546,7 +3546,7 @@ HDAE5000_InitializeParallelPort:
 	ldio 0xED, 0x00	; LD (0xED), 0x00
 	ldio 0xE3, 0x00	; LD (0xE3), 0x00
 	ldio 0xEB, 0x00	; LD (0xEB), 0x00
-	stdi8 (340), 102; LD (0x0154), 0x66
+	ld (340:16), 102; LD (0x0154), 0x66
 	stib_da (0x160006), 0x82; LD (0x160006), 0x82 - PPI mode
 	stib_da (0x160000), 0x00; LD (0x160000), 0x00 - Port A
 	stib_da (0x160004), 0x00; LD (0x160004), 0x00 - Port C
@@ -3725,7 +3725,7 @@ HDAE5000_ProgramPayloadOnly__done_halt:
 ;          jig / ICE). Kept because it is genuine reachable-by-entry code.
 ; =============================================================================
 HDAE5000_ReinitPPI_ProgramPayload:
-	stdi8 (0x154), 0x66	; LD (0x0154), 0x66
+	ld (0x154:16), 0x66	; LD (0x0154), 0x66
 	stib_da (0x160006), 0x82	; LD (0x160006), 0x82 - PPI mode
 	stib_da (0x160000), 0x00	; LD (0x160000), 0x00 - Port A
 	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - Port C
@@ -3853,7 +3853,7 @@ LZSS_OutputByte:
 	ld xbc, (xbc)	; LD XBC, (XBC) - load 4 bytes from buffer
 	ld xwa, xde	; LD XWA, XDE
 	call 0xFFBCD7	; CALL 0xFFBCD7 (write to dest)
-	stdi8 (3126), 0; LD (0x0C36), 0x00 - reset index
+	ld (3126:16), 0; LD (0x0C36), 0x00 - reset index
 LZSS_OutputByte__not_full:
 	lds32 xwa, 1	; LD XWA, 1
 	adddm32 3108, xwa	; ADD (0x0C24), XWA - increment output pos
@@ -3883,7 +3883,7 @@ LZSS_OutputByte_Alt:
 	ld de, (xde)	; LD DE, (XDE)
 	lds wa, 1	; LD WA, 1
 	call 0xFFB903	; CALL 0xFFB903
-	stdi8 (3126), 0; LD (0x0C36), 0x00
+	ld (3126:16), 0; LD (0x0C36), 0x00
 LZSS_OutputByte_Alt__not_full:
 	lds32 xwa, 1	; LD XWA, 1
 	adddm32 3108, xwa	; ADD (0x0C24), XWA
@@ -3897,7 +3897,7 @@ LZSS_OutputByte_Alt__not_full:
 LZSS_ParseHeader:
 	dec 6, xsp	; DEC 6, XSP (allocate 6 bytes)
 	pushw iz	; PUSH IZ
-	stdi8 (3126), 0; LD (0x0C36), 0x00
+	ld (3126:16), 0; LD (0x0C36), 0x00
 	lda xwa, (0x300000:24); LDA XWA, 0x300000
 	add xwa, 0xE0000	; ADD XWA, 0x000E0000 (XWA = 0x3E0000)
 	stda32 3128, xwa	; LD (0x0C38), XWA - store source ptr
@@ -4001,7 +4001,7 @@ LZSS_Decompress__prefill_loop:
 	; === Initialize decompression state ===
 	ldw (xsp + 10), 0xFEE	; LD (XSP+0x0A), 0x0FEE - window write pos
 	ldw (xsp + 4), 0x0	; LD (XSP+0x04), 0x0000 - flag byte
-	stdi8 (3126), 0; LD (0x0C36), 0x00 - output counter
+	ld (3126:16), 0; LD (0x0C36), 0x00 - output counter
 	lds32 xwa, 0	; LD XWA, 0
 	stda32 3108, xwa	; LD (0x0C24), XWA - output position
 
@@ -4682,7 +4682,7 @@ FDC_Seek:
 	calr FDC_WriteStatus	; CALR FDC_WriteStatus
 	lds wa, 2	; LD WA, 2 - delay parameter
 	calr Boot_Delay	; CALR Boot_Delay
-	stdi8 (3378), 255; LD (0x0D32), 0xFF - track cache = unknown
+	ld (3378:16), 255; LD (0x0D32), 0xFF - track cache = unknown
 	ret	; 0e
 
 ; =============================================================================
@@ -4805,7 +4805,7 @@ Handler_INT4__int4_check_more:
 	jr nz, Handler_INT4__int4_wait_rqm	; 6e af - not done, continue
 
 Handler_INT4__int4_done:
-	stdi8 (3214), 0; LD (0x0C8E), 0x0000 - clear buffer
+	ld (3214:16), 0; LD (0x0C8E), 0x0000 - clear buffer
 	pop xwa	; 58
 	pop xbc	; 59
 	pop xde	; 5a

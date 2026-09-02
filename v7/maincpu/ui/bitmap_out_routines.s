@@ -286,7 +286,7 @@ BitMapOut_StorePresetValue:
 	ld	(36002:16), a
 	ret
 BitMapOut_SetDefaultTimer:
-	stdi8	(36000), 64
+	ld	(36000:16), 64
 	ret
 BitMapOut_DecrementTimer:
 	call	16405594
@@ -1930,26 +1930,26 @@ BitMapOut_ApplyIOChange_Port0:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	c, (36016:16)
-	stdi8	(36016), 15
+	ld	(36016:16), 15
 	ld	b, (36016:16)
 	ld	a, (63941:16)
 	and	a, 255
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 255
+	ld	(36016:16), 255
 	ld	d, (36016:16)
 	call	16579981
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	c, (36016:16)
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	b, (36016:16)
 	ld	a, (63940:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -1962,26 +1962,26 @@ BitMapOut_ApplyIOChange_Port1:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 1
+	ld	(36016:16), 1
 	ld	c, (36016:16)
-	stdi8	(36016), 15
+	ld	(36016:16), 15
 	ld	b, (36016:16)
 	ld	a, (63967:16)
 	and	a, 255
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 255
+	ld	(36016:16), 255
 	ld	d, (36016:16)
 	call	16579981
-	stdi8	(36016), 1
+	ld	(36016:16), 1
 	ld	c, (36016:16)
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	b, (36016:16)
 	ld	a, (63966:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -1994,26 +1994,26 @@ BitMapOut_ApplyIOChange_Port2:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 2
+	ld	(36016:16), 2
 	ld	c, (36016:16)
-	stdi8	(36016), 15
+	ld	(36016:16), 15
 	ld	b, (36016:16)
 	ld	a, (63993:16)
 	and	a, 255
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 255
+	ld	(36016:16), 255
 	ld	d, (36016:16)
 	call	16579981
-	stdi8	(36016), 2
+	ld	(36016:16), 2
 	ld	c, (36016:16)
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	b, (36016:16)
 	ld	a, (63992:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -2026,15 +2026,15 @@ BitMapOut_ApplyIOChange_Port3:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	c, (36016:16)
-	stdi8	(36016), 3
+	ld	(36016:16), 3
 	ld	b, (36016:16)
 	ld	a, (63943:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -2047,15 +2047,15 @@ BitMapOut_ApplyIOChange_Port4:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 1
+	ld	(36016:16), 1
 	ld	c, (36016:16)
-	stdi8	(36016), 3
+	ld	(36016:16), 3
 	ld	b, (36016:16)
 	ld	a, (63969:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -2068,15 +2068,15 @@ BitMapOut_ApplyIOChange_Port5:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 2
+	ld	(36016:16), 2
 	ld	c, (36016:16)
-	stdi8	(36016), 3
+	ld	(36016:16), 3
 	ld	b, (36016:16)
 	ld	a, (63995:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz

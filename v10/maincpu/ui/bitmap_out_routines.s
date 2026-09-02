@@ -123,7 +123,7 @@ BitMapOut_ByteData_RenderB:
 	.byte 0xc1
 	push	xde
 	.byte 0x8d
-	stdi8	(0x867e), 193
+	ld	(0x867e:16), 193
 	jrl	pl, 16320
 	nop
 	jr	nz, 127
@@ -290,7 +290,7 @@ BitMapOut_StorePresetValue:
 	ret
 
 BitMapOut_SetDefaultTimer:
-	stdi8 (0x8d3c), 64
+	ld (0x8d3c:16), 64
 	ret
 
 BitMapOut_DecrementTimer:
@@ -2657,26 +2657,26 @@ BitMapOut_ApplyIOChange_Port0:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 15
+	ld (0x8d4c:16), 15
 	ld b, (0x8d4c:16)
 	ld a, (0xf9c5:16)
 	and a, 0xff
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 255
+	ld (0x8d4c:16), 255
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld b, (0x8d4c:16)
 	ld a, (0xf9c4:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2690,26 +2690,26 @@ BitMapOut_ApplyIOChange_Port1:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 1
+	ld (0x8d4c:16), 1
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 15
+	ld (0x8d4c:16), 15
 	ld b, (0x8d4c:16)
 	ld a, (0xf9df:16)
 	and a, 0xff
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 255
+	ld (0x8d4c:16), 255
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
-	stdi8 (0x8d4c), 1
+	ld (0x8d4c:16), 1
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld b, (0x8d4c:16)
 	ld a, (0xf9de:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2723,26 +2723,26 @@ BitMapOut_ApplyIOChange_Port2:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 2
+	ld (0x8d4c:16), 2
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 15
+	ld (0x8d4c:16), 15
 	ld b, (0x8d4c:16)
 	ld a, (0xf9f9:16)
 	and a, 0xff
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 255
+	ld (0x8d4c:16), 255
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
-	stdi8 (0x8d4c), 2
+	ld (0x8d4c:16), 2
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld b, (0x8d4c:16)
 	ld a, (0xf9f8:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2756,15 +2756,15 @@ BitMapOut_ApplyIOChange_Port3:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 3
+	ld (0x8d4c:16), 3
 	ld b, (0x8d4c:16)
 	ld a, (0xf9c7:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2778,15 +2778,15 @@ BitMapOut_ApplyIOChange_Port4:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 1
+	ld (0x8d4c:16), 1
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 3
+	ld (0x8d4c:16), 3
 	ld b, (0x8d4c:16)
 	ld a, (0xf9e1:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2800,15 +2800,15 @@ BitMapOut_ApplyIOChange_Port5:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 2
+	ld (0x8d4c:16), 2
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 3
+	ld (0x8d4c:16), 3
 	ld b, (0x8d4c:16)
 	ld a, (0xf9fb:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz

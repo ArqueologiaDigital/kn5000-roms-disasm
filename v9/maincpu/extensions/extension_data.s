@@ -645,7 +645,7 @@ Str_StoreTotalSetting_DE:	.asciz "Speichert die gesamte Einstellung einschlieﬂli
 	ldb	w, 0
 	.zero 8
 	.byte 0xf1, 0x01, 0xf1, 0x01
-	stdi8	(0x5901), 101
+	ld	(0x5901:16), 101
 	normal
 	pop	xbc
 	nop
@@ -2377,7 +2377,7 @@ MethodNameStr_MT_SvariIni:	aligned_string "MT_SvariIni"
 	xor	xhl, xix
 	swi	3
 	nop
-	stdi8	(0xfbcd), 208
+	ld	(0xfbcd:16), 208
 	ld	(xbc-5), 187
 	cp	(xsp), xhl
 	nop

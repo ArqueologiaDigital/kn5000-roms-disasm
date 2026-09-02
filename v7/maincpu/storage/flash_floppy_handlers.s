@@ -205,7 +205,7 @@ FlashWrite_BlockData_Type6:
 	nop
 	ldb	w, 167
 	push_a
-	stdi8	(768), 11
+	ld	(768:16), 11
 	pushw	2560
 	jr	le, 6	; -> 0xF15A5D
 	swi	7

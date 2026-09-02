@@ -170,7 +170,7 @@ SeqStep_EventProcess:
 	push xiz
 	ld (xsp + 8), bc
 	ld iz, wa
-	stdi8 (0x271e), 0
+	ld (0x271e:16), 0
 	ldmw2 (xsp + 6), 0x28af
 	ldmw2 (xsp + 4), 0x2666
 	ldmm16 0x28af, 0x273c
@@ -187,18 +187,18 @@ SeqStep_EventProcess:
 	jr z, SeqStep_EventPosManage
 	cp a, 0xa
 	jrl nz, SeqStep_EventExit
-	stdi8 (0x287a), 0
+	ld (0x287a:16), 0
 	cpdi16 9778, 1
 	jr nz, SeqStep_EventPosManage
 	cps iz, 0
 	jr nz, SeqStep_EventPosManage
 	cpw (xsp + 8), 0x0
 	jr nz, SeqStep_EventPosManage
-	stdi8 (0x271e), 1
+	ld (0x271e:16), 1
 
 SeqStep_EventPosManage:
-	stdi8 (9824), 0
-	stdi8 (9826), 0
+	ld (9824:16), 0
+	ld (9826:16), 0
 	bitda 0, (0x287b)
 	jrl nz, SeqStep_EventPosConsumeAdvance
 	jrl SeqStep_EventExit
@@ -561,7 +561,7 @@ SeqStep_DeletePopReturn:
 SeqStep_TrackChange:
 	dec 4, xsp
 	push xiz
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld c, (9996:16)
 	cp c, 0x11
 	jr nz, SeqStep_TrackChangeCheck
@@ -676,7 +676,7 @@ SeqStep_TrackChangeNonDrum:
 	jr nz, SeqStep_TrackChangeLoopDone
 
 SeqStep_TrackChangeLoop:
-	stdi8 (0x7f42), 15
+	ld (0x7f42:16), 15
 	jrl SeqStep_TrackChangeValidate
 
 SeqStep_TrackChangeLoopCheck:
@@ -781,7 +781,7 @@ SeqStep_TrackChangeValidate:
 	dec 1, a
 	ld (0x271a:16), a
 	calr SeqStep_BoundaryReturn
-	stdi8 (0x7f42), 15
+	ld (0x7f42:16), 15
 	jrl SeqStep_TrackChangeExit
 
 SeqStep_TrackChangeFinal:
@@ -967,7 +967,7 @@ SeqStep_TrackChangeExit:
 SeqStep_MultiTrackProcess:
 	lda xsp, (xsp - 22)
 	push xiz
-	stdi8 (0x2877), 0
+	ld (0x2877:16), 0
 
 SeqStep_MultiTrackLoop:
 	cpdi16 0xf231, 0
@@ -1042,7 +1042,7 @@ SeqStep_MultiTrackCleanup:
 	call SeqVoice_InitAllChannelParams
 	stb_erp A, 0xfb
 	ld (0x2878:16), a
-	stdi8 (0x7f42), 15
+	ld (0x7f42:16), 15
 	jrl SeqStep_VoiceReassignFinalExit
 
 SeqStep_PartCopy:
@@ -1531,10 +1531,10 @@ SeqStep_DecrementCheck:
 	cps hl, 0
 	ret z
 	stda16 (0x2726), xhl
-	stdi8 (0x2720), 255
+	ld (0x2720:16), 255
 
 SeqStep_DecrementStore:
-	stdi8 (9826), 1
+	ld (9826:16), 1
 	ret
 
 SeqStep_WalkWithCallback:
@@ -2224,7 +2224,7 @@ SeqStep_ParseRhythm:
 	call PartCtrl_AdvanceReadPos
 	cpdi8 (0x287a), 0
 	jr nz, SeqStep_ParseRhythmCheck
-	stdi8 (3387), 255
+	ld (3387:16), 255
 	call SeqPart_ReadByte_Secondary
 	res 7, l
 	ld a, (4340:16)
@@ -3049,7 +3049,7 @@ SeqStep_ByteBlockEA5F:
 	ret
 	ld	a, (62023:16)
 	stb_da	65507, a
-	stdi8	62023, 0
+	ld	(62023:16), 0
 	ld	wa, (62024:16)
 	stw_da	65516, wa
 	stdi16	62024, 0

@@ -4728,7 +4728,7 @@ HelpLangChk_CheckIzZero:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 72
+	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -4801,7 +4801,7 @@ HelpFunc_CheckIzZero:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 72
+	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -5178,7 +5178,7 @@ IvPlayExit_CheckSendEvent:
 	call PostEvent
 
 IvPlayExit_ClearFlag:
-	stdi8 (0xe38e), 0
+	ld (0xe38e:16), 0
 
 IvPlayExit_PrepareInherited:
 	ld xwa, xiz
@@ -7140,7 +7140,7 @@ PlySngSelFunc:
 	ld xbc, xhl
 	ld xde, 0x810016
 	call SetApTimer
-	stdi8 (0xe38e), 1
+	ld (0xe38e:16), 1
 	jr PlaySong_ReturnZero
 
 PlySngSel_HandleTimerEvent:
@@ -7153,7 +7153,7 @@ PlySngSel_HandleTimerEvent:
 	call SendEvent
 
 PlySngSel_ClearFlagAndReturn:
-	stdi8 (0xe38e), 0
+	ld (0xe38e:16), 0
 	jr PlaySong_ReturnZero
 
 PlySngSel_HandleSelectEvent:
@@ -8243,7 +8243,7 @@ SqplyVal_CheckMode81:
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call SendEvent
-	stdi8 (0xe38e), 0
+	ld (0xe38e:16), 0
 
 SqplyVal_DispatchUpdate:
 	ld xde, (xsp + 68)

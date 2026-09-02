@@ -4545,7 +4545,7 @@ WallHomeEdit_EventDispatch:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 72
+	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -4712,14 +4712,14 @@ MainWallSetFlashFunc:
 	jr z, MainWallFlash_DispatchAudio
 	cp xbc, 0x1e20014
 	jrl nz, MainWallFlash_ReturnZero
-	stdi8 (0x7f42), 40
+	ld (0x7f42:16), 40
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	ldw wa, 0x8
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -4731,7 +4731,7 @@ MainWallFlash_DispatchAudio:
 	jr MainWallFlash_ReturnZero
 
 MainWallFlash_ClearAndRestore:
-	stdi8 (0x7f42), 40
+	ld (0x7f42:16), 40
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -4749,7 +4749,7 @@ MainWallFlash_ClearAndRestore:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -4829,7 +4829,7 @@ WallUsrShowHideFunc:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 72
+	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -5213,7 +5213,7 @@ MainSysControl:
 	ld (xsp + 2), xde
 	cp xbc, 0x1e20013
 	jr nz, MainSysControl_PostDispatchFinalize
-	stdi8 (0x7f42), 40
+	ld (0x7f42:16), 40
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	ld xwa, (xsp + 2)
@@ -5297,7 +5297,7 @@ MainSysCtrl_DelayInner:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	lds32 xhl, 0
@@ -5334,11 +5334,11 @@ MainMssSetUp:
 	jr nz, MainMssSetUp_ReturnZero
 	stda16 (0x8d56), xde
 	incdi16 1, (0x8d56)
-	stdi8 (0x8d4e), 7
+	ld (0x8d4e:16), 7
 	jr MainMssSetUp_ReturnZero
 
 MainMssSetUp_ClearMode:
-	stdi8 (0x8d4e), 0
+	ld (0x8d4e:16), 0
 
 MainMssSetUp_ReturnZero:
 	lds32 xhl, 0

@@ -111,7 +111,7 @@ FDC_WaitReady:
 	calr FDC_Send_Command
 	lds wa, 2
 	calr SOME_DELAY
-	stdi8 (0x8a68), 0xff
+	ld (0x8a68:16), 0xff
 	ret
 	.byte 0x3e, 0x1e, 0x02, 0x0a, 0x1e, 0x6d, 0x09, 0xdb
 	.byte 0xcf, 0xff, 0xff, 0x66, 0x0e, 0x1e, 0xb2, 0x09
@@ -183,7 +183,7 @@ FDC_WaitReady:
 	lds hl, 0
 	ret
 FDC_COMMAND_DISPATCHER:
-	stdi8	(35214), 0
+	ld	(35214:16), 0
 	ld	wa, (35236:16)
 	cp	wa, 11
 	jr	ugt, 36	; -> 0xF969D7
@@ -292,36 +292,36 @@ FDC_SetupFormatParams:
 	cps	a, 0
 	jrl	nz, 168
 FDC_FormatHD:
-	stdi8	(35218), 2
-	stdi8	(35225), 1
-	stdi8	(35219), 9
-	stdi8	(35222), 9
-	stdi8	(35220), 27
-	stdi8	(35223), 84
+	ld	(35218:16), 2
+	ld	(35225:16), 1
+	ld	(35219:16), 9
+	ld	(35222:16), 9
+	ld	(35220:16), 27
+	ld	(35223:16), 84
 	stdi16	(35434), 79
 	stdi16	(35436), 80
 	stdi16	(35438), 9
 	stdi16	(35440), 10
 	jr	118
 FDC_FormatDD:
-	stdi8	(35218), 3
-	stdi8	(35225), 1
-	stdi8	(35219), 8
-	stdi8	(35222), 8
-	stdi8	(35220), 83
-	stdi8	(35223), 116
+	ld	(35218:16), 3
+	ld	(35225:16), 1
+	ld	(35219:16), 8
+	ld	(35222:16), 8
+	ld	(35220:16), 83
+	ld	(35223:16), 116
 	stdi16	(35434), 76
 	stdi16	(35436), 77
 	stdi16	(35438), 8
 	stdi16	(35440), 9
 	jr	62
 FDC_Format1440K:
-	stdi8	(35218), 2
-	stdi8	(35225), 1
-	stdi8	(35219), 18
-	stdi8	(35222), 18
-	stdi8	(35220), 27
-	stdi8	(35223), 108
+	ld	(35218:16), 2
+	ld	(35225:16), 1
+	ld	(35219:16), 18
+	ld	(35222:16), 18
+	ld	(35220:16), 27
+	ld	(35223:16), 108
 	stdi16	(35434), 79
 	stdi16	(35436), 80
 	stdi16	(35438), 18
@@ -336,16 +336,16 @@ FDC_InitStateVars:
 	srl	a, 4
 	and	a, 15
 	ld	(35227:16), a
-	stdi8	(35221), 255
-	stdi8	(35224), 0
-	stdi8	(35228), 15
-	stdi8	(35229), 1
-	stdi8	(35232), 0
-	stdi8	(35231), 0
-	stdi8	(35233), 0
-	stdi8	(35234), 0
-	stdi8	(35235), 0
-	stdi8	(35230), 0
+	ld	(35221:16), 255
+	ld	(35224:16), 0
+	ld	(35228:16), 15
+	ld	(35229:16), 1
+	ld	(35232:16), 0
+	ld	(35231:16), 0
+	ld	(35233:16), 0
+	ld	(35234:16), 0
+	ld	(35235:16), 0
+	ld	(35230:16), 0
 	ret
 FDC_CheckHead:
 	ld wa, (0x89a8:16)
@@ -598,7 +598,7 @@ FDC_Exception_Status_Decoder:
 	ldb	l, 0
 	ret
 FDC_StatusDecode_DriveNotReady:
-	stdi8	(35428), 255
+	ld	(35428:16), 255
 	ldb	l, 0
 	ret
 FDC_StatusDecode_InvalidCommand:
@@ -806,9 +806,9 @@ FDC_SetStatus_Return:
 	ld	l, (35208:16)
 	ret
 FDC_ClearStatus_InitTimer:
-	stdi8 (0x8988), 0x00
+	ld (0x8988:16), 0x00
 	ret
-	stdi8 (0x89c4), 0xff
+	ld (0x89c4:16), 0xff
 	ret
 	push XIZ
 	ldw QIZ, 0x01f4
@@ -856,8 +856,8 @@ FDC_InitSequence_Short:
 FDC_InitSequence_Full:
 	calr	64019
 	calr	64003
-	stdi8	(35278), 0
-	stdi8	(35428), 0
+	ld	(35278:16), 0
+	ld	(35428:16), 0
 	calr	64636
 	calr	62832
 	jrl	-2690
@@ -991,9 +991,9 @@ FDC_STATUS_COPY_Code:
 	ldw	wa, 254
 	calr	63806
 	ret	
-	stdi8	(35278), 255
+	ld	(35278:16), 255
 	ret	
-	stdi8	(35278), 0
+	ld	(35278:16), 0
 	ret	
 FDC_INTERRUPT_HANDLER:
 	.byte 0xd7, 0xfa, 0x04, 0xc1, 0x88, 0x89, 0x3f, 0x00
@@ -1025,7 +1025,7 @@ FDC_CommandEntry:
 	ld XIZ,(XSP+0x08)
 	cpw (XIZ), 0x0000
 	jr nz, .Lc_f978cc
-	stdi8 (0x897a), 0x00
+	ld (0x897a:16), 0x00
 FDC_CommandEntry_EnableIRQ:
 .Lc_f978cc:
 	ei 0x06
@@ -1038,7 +1038,7 @@ FDC_CommandEntry_EnableIRQ:
 	jrl t, FDC_Handler_Return
 FDC_CommandEntry_CopyParams:
 .Lc_f978e2:
-	stdi8 (0x897a), 0xa5
+	ld (0x897a:16), 0xa5
 	ei 0x00
 	ld WA,(XIZ)
 	stda16 (0x89a4), wa
@@ -1126,7 +1126,7 @@ FDC_Handler_InvalidCommand:
 	calr FDC_Set_Status
 
 FDC_Handler_ExitStatus:
-	stdi8	(35194), 90
+	ld	(35194:16), 90
 	ld	l, (35208:16)
 	exts	hl
 FDC_Handler_Return:
@@ -1164,7 +1164,7 @@ INTTC3_HANDLER:
 
 
 INT5_HANDLER:	; F97E4A	"FDCIRQ"
-	stdi8 (265), 8
+	ld (265:16), 8
 	reti
 
 
@@ -1227,7 +1227,7 @@ INT4_WaitResultReady:
 	cpdi8	35269, 128
 	jr	nz, -81
 INT4_ExitRestore:
-	stdi8	(35268), 0
+	ld	(35268:16), 0
 	pop	xwa
 	pop	xbc
 	pop	xde

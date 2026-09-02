@@ -124,7 +124,7 @@ SetupExitFunc:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 72
+	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee

@@ -363,9 +363,9 @@ MidiCC_VoiceParam_8:
 	.byte 0xf1, 0xd0, 0x95, 0xc8
 	jr	z, 24
 	.byte 0xf1, 0xd0, 0x95, 0xb0
-	stdi8	38353, 128
+	ld	(38353:16), 128
 	calr	13
-	stdi8	38353, 64
+	ld	(38353:16), 64
 	calr	5
 	call	16553566
 	ret
@@ -3615,13 +3615,13 @@ DSPCfg_VoiceSlotB_ExtractData:
 	ld	a, (46928:16)
 	bit	7, a
 	jr	z, 7
-	stdi8	46932, 1
+	ld	(46932:16), 1
 	jr	17
 	bit	6, a
 	jr	z, 7
-	stdi8	46932, 0
+	ld	(46932:16), 0
 	jr	5
-	stdi8	46932, 2
+	ld	(46932:16), 2
 	ld	a, (46928:16)
 	and	a, 63
 	ldb_erp	a, 251
@@ -6338,9 +6338,9 @@ SoundMode_FullRenderUpdate:
 	.byte 0x50, 0xb7, 0x00, 0x5b, 0x68
 SoundMode_RenderWithNotify:
 	incf
-	stdi8	(46928), 92
+	ld	(46928:16), 92
 	jr	5
-	stdi8	(46928), 93
+	ld	(46928:16), 93
 	jp	16600229
 	lda	xbc, (15609654:24)
 	ld	xwa, xbc
@@ -6377,11 +6377,11 @@ SoundMode_AlternateRender:
 	.byte 0x30, 0x80, 0x3f, 0x0f, 0x63, 0xe6, 0xef
 MidiCtrl_ModeSwitchHandler:
 	jr ov, 14
-	stdi8 (0x908b), 0xb1
-	stdi8 (0x908d), 0x00
-	stdi8 (0x908c), 0x00
+	ld (0x908b:16), 0xb1
+	ld (0x908d:16), 0x00
+	ld (0x908c:16), 0x00
 .Lc_fd8306:
-	stdi8 (0x908e), 0x40
+	ld (0x908e:16), 0x40
 	push XDE
 	push XHL
 	push XIX
@@ -6411,11 +6411,11 @@ MidiCtrl_CheckAltCommand:
 	jr	ule, -32
 MidiCtrl_FullReconfigure:
 	ret
-	stdi8 (0x908b), 0xb3
-	stdi8 (0x908d), 0x7f
-	stdi8 (0x908c), 0x00
+	ld (0x908b:16), 0xb3
+	ld (0x908d:16), 0x7f
+	ld (0x908c:16), 0x00
 .Lc_fd8367:
-	stdi8 (0x908e), 0x7f
+	ld (0x908e:16), 0x7f
 	push XDE
 	push XHL
 	push XIX
@@ -6535,7 +6535,7 @@ TGReg_WriteCC4_Body:
 	.byte 0x1d, 0x88, 0x72, 0xfd, 0x1d, 0x90, 0x6d
 TGReg_WriteCC4_Check:
 	swi	5
-	stdi8	(48252), 0
+	ld	(48252:16), 0
 	jp	16612592
 TGReg_WriteCC5_Modulation:
 	.byte 0x1d, 0x5b, 0x6e, 0xfd, 0x68, 0xe9, 0x1d, 0x67
@@ -6569,7 +6569,7 @@ TGReg_WriteCC7_Check:
 	swi	3
 	mul8rr	a, l
 	jr	nz, 7
-	stdi8	(48258), 2
+	ld	(48258:16), 2
 TGReg_WriteCC8_Chorus:
 	.byte 0x68, 0x1b, 0xf1, 0x82, 0xbc, 0x00, 0x00, 0x1d
 	.byte 0x9d, 0x7c, 0xfd, 0x68, 0xad, 0xc7, 0xfb, 0x33
@@ -6866,7 +6866,7 @@ SeqData_FormatOutput_Loop:
 ArpQueue_Flush_Return:
 	.byte 0x09, 0x21, 0xcf
 SeqData_FormatOutput_Dispatch:
-	stdi8	(38266), 142
+	ld	(38266:16), 142
 	ldwio	35, 63435
 	jrl	gt, 141
 	lda	xbc, (xsp+4)

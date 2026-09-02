@@ -61,7 +61,7 @@ AccompSeq_CheckChannelActive:
 AccompSeq_SetupChannel1:
 	bitda 0, (0x7e24)
 	jr z, AccompSeq_SetupChannel2
-	stdi8 (0x7e52), 0
+	ld (0x7e52:16), 0
 	ld xwa, 0x7aec
 	stda32 0x7e4c, xwa
 	ld xwa, 0x7e40
@@ -89,7 +89,7 @@ AccompSeq_SetupChannel1:
 AccompSeq_SetupChannel2:
 	bitda 1, (0x7e24)
 	jr z, AccompSeq_ChannelSetupDone
-	stdi8 (0x7e52), 1
+	ld (0x7e52:16), 1
 	ld xwa, 0x7bec
 	stda32 0x7e4c, xwa
 	ld xwa, 0x7e41
@@ -930,13 +930,13 @@ AccompSeq_ManualMidi_SaveAndCall:
 	push xhl
 	call Voice_DecodeNoteParam
 	call Voice_DecodeNoteChannel
-	stdi8 (0xc07e), 1
+	ld (0xc07e:16), 1
 	cps h, 0
 	jr z, AccompSeq_ManualMidi_SetChannel
-	stdi8 (0xc07e), 2
+	ld (0xc07e:16), 2
 	cps h, 1
 	jr z, AccompSeq_ManualMidi_SetChannel
-	stdi8 (0xc07e), 4
+	ld (0xc07e:16), 4
 
 AccompSeq_ManualMidi_SetChannel:
 	pop xhl
@@ -1260,8 +1260,8 @@ AccompSeq_InitMidiEvents:
 	ldb w, 0x3
 	ldb e, 0x0
 	calr AccompSeq_WriteMidiToBuffer
-	stdi8 (0x7e72), 127
-	stdi8 (0x7e73), 127
+	ld (0x7e72:16), 127
+	ld (0x7e73:16), 127
 	ld wa, (0x7e28:16)
 	ldw_erp WA, 0xe2
 	ld wa, (0x7e2a:16)
@@ -1423,7 +1423,7 @@ AccompSeq_HandleSpecialMode:
 	jr	z, 5
 	cp	a, 14
 	jr	nz, 37
-	stdi8	(0x7f0b), 1
+	ld	(0x7f0b:16), 1
 	calr	64858
 	and	l, 15
 	ld	(0x7f14:16), l
@@ -1436,7 +1436,7 @@ AccompSeq_HandleSpecialMode:
 	jr	nz, 2
 	ldb	a, 4
 	jr	15
-	stdi8	(0x7f42), 57
+	ld	(0x7f42:16), 57
 	call	DrumVoice_NotifyEE
 	ldb	a, 8
 	call	MIDI_SendSysExCmd
@@ -1630,8 +1630,8 @@ AccompSeq_SendAllOff:
 	ldb w, 0x3
 	ldb e, 0x0
 	calr AccompSeq_WriteMidiToBuffer
-	stdi8 (0x7e72), 127
-	stdi8 (0x7e73), 127
+	ld (0x7e72:16), 127
+	ld (0x7e73:16), 127
 	ld xhl, 0x7aec
 	ld wa, (xhl + 4)
 	ld (xhl + 6), wa
@@ -1687,7 +1687,7 @@ AccompSeq_MidiFilterCodeBlock:
 	jr	nz, 2
 	ldb	a, 0
 	ld	(0xfd12:16), a
-	stdi8	(0x7e78), 0
+	ld	(0x7e78:16), 0
 	.byte 0xc1, 0xe0, 0xe3
 	push	xiz
 	rcf
@@ -1697,7 +1697,7 @@ AccompSeq_MidiFilterCodeBlock:
 	nop
 	jr	nz, 16
 	ld	(0x7e79:16), a
-	stdi8	(0x7e78), 1
+	ld	(0x7e78:16), 1
 	.byte 0xc1
 	or	hl, iz
 	push	xiz
@@ -1713,7 +1713,7 @@ AccompSeq_MidiFilterCodeBlock:
 	jr	ule, 2
 	ld	a, e
 	ld	(0xfd12:16), a
-	stdi8	(0x7e78), 0
+	ld	(0x7e78:16), 0
 	.byte 0xc1
 	or	hl, iz
 	push	xiz
@@ -1899,7 +1899,7 @@ AccompSeq_SetupChannels:
 	ei 0
 	bitda 0, (0x7e24)
 	jr z, AccompSeq_SetupCh2
-	stdi8 (0x7e52), 0
+	ld (0x7e52:16), 0
 	ld xwa, 0x7e40
 	stda32 0x7e48, xwa
 	ld xwa, 0x7e72
@@ -1925,7 +1925,7 @@ AccompSeq_SetupChannels:
 AccompSeq_SetupCh2:
 	bitda 1, (0x7e24)
 	jr z, AccompSeq_SetupCh_Return
-	stdi8 (0x7e52), 1
+	ld (0x7e52:16), 1
 	ld xwa, 0x7e41
 	stda32 0x7e48, xwa
 	ld xwa, 0x7e73

@@ -76,7 +76,7 @@ FDemo_DisplayCtrlJumpHandler:
 FDemo_DispatchEventPost:
 	call ApPostEvent				; dispatch event
 	jr MainPreControl_ReturnNull		; return null
-	stdi8	(0x28a4), 19
+	ld	(0x28a4:16), 19
 	call Demo_SelectEntry_ProcessSongList			; additional handler
 	jr MainPreControl_ReturnNull
 	cpw_da	(0x251d8), 0
@@ -426,7 +426,7 @@ FDemo_IndicatorSetup:
 	lds	bc, 0
 	lds	de, 0
 	call	16544183
-	stdi8	(36530), 4
+	ld	(36530:16), 4
 	ret
 DemoMode_Initialize:
 	.byte 0x1e, 0x95, 0x04, 0xf1, 0x66, 0x29, 0x00, 0x00
@@ -453,9 +453,9 @@ FDemo_PostBannerCheck:
 
 Demo_SelectionEntryHandler:
 	calr Demo_PreSetup
-	stdi8 (0x2966), 0x00
-	stdi8 (0x0d33), 0x00
-	stdi8 (0x0d2f), 0x00
+	ld (0x2966:16), 0x00
+	ld (0x0d33:16), 0x00
+	ld (0x0d2f:16), 0x00
 	calr Audio_WaitForReady
 	call SeqStep_PlaybackStateMachine
 	resda 3, (0x28ad)
@@ -473,10 +473,10 @@ Demo_SelectionEntryHandler:
 	ld	a, (49122:16)
 	and	a, 19
 	jr	z, 6
-	stdi8	3379, 16
+	ld	(3379:16), 16
 	ret
 Demo_SelectEntry_NoNewButton:
-	stdi8 (3379), 0
+	ld (3379:16), 0
 	ret
 
 Demo_SelectEntry_PreSaveCheck:
@@ -537,7 +537,7 @@ Demo_SelectEntry_ByteTable:
 	calr	827
 	calr	1008
 	stiw_da	154500, 1
-	stdi8	36530, 4
+	ld	(36530:16), 4
 	cpdi8	35996, 228
 	.byte 0xf2, 0x23, 0x2a, 0xf2, 0xee
 	ld	a, (10404:16)
@@ -547,9 +547,9 @@ Demo_SelectEntry_ByteTable:
 	cpdi8	35996, 228
 	jr	z, 11
 	call	15870353
-	stdi8	4440, 0
+	ld	(4440:16), 0
 	jr	5
-	stdi8	4440, 18
+	ld	(4440:16), 18
 	jrl	227
 Demo_SelectEntry_ProcessSongList:
 	cpdi16 (0x28b4), 0x0000
@@ -597,7 +597,7 @@ Demo_SelectEntry_CheckCountdown:
 	jrl z, Demo_SelectEntry_StartPlayback
 	cps a, 1
 	ret nz
-	stdi8 (0x2966), 133
+	ld (0x2966:16), 133
 	ret
 Demo_SelectEntry_CheckCPanel:
 	cpdi8	35992, 19
@@ -629,14 +629,14 @@ Demo_SelectEntry_AfterSongLoad:
 	ld	a, (10404:16)
 	extz	wa
 	call	16269993
-	stdi8	36530, 4
+	ld	(36530:16), 4
 	.byte 0xf1, 0xad, 0x28, 0xcb
 	ret	z
 	cpdi8	35996, 228
 	jr	z, 14
 	cpdi8	4440, 18
 	jr	c, 36
-	stdi8	4440, 0
+	ld	(4440:16), 0
 	jr	29
 Demo_SelectEntry_CheckSongCount:
 	call Seq_IsMelodyActive
@@ -651,7 +651,7 @@ Demo_SelectEntry_CheckLimit18:
 	jr ule, Demo_SelectEntry_UpdateDisplay
 
 Demo_SelectEntry_ClampSongIdx:
-	stdi8 (4440), 18
+	ld (4440:16), 18
 
 Demo_SelectEntry_UpdateDisplay:
 	calr Demo_SelectEntry_LoadPattern
@@ -716,7 +716,7 @@ Demo_SelectEntry_PlaySong:
 	pop XHL
 	pop XDE
 	call SeqTimer_UpdateTempoReg
-	stdi8 (0x8eb2), 0x06
+	ld (0x8eb2:16), 0x06
 	ld a, (0x28a4:16)
 	extz WA
 	call Seq_DispatchEventType5
@@ -742,7 +742,7 @@ Audio_WaitForReady_PollLoop:
 	jr nz, Audio_WaitForReady_PollLoop
 
 Audio_WaitForReady_Dispatch:
-	stdi8	(12890), 255
+	ld	(12890:16), 255
 	push	xde
 	push	xhl
 	push	xix
@@ -754,7 +754,7 @@ Audio_WaitForReady_Dispatch:
 	pop	xde
 	ret
 Demo_ResetCountdownTimer:
-	stdi8 (3375), 15
+	ld (3375:16), 15
 	ret
 
 Timer7_DisableInterrupt:
@@ -862,7 +862,7 @@ Demo_PreSetup:
 	call AccWrap_PlayModeDispatch
 	call SeqBuf_Init
 	call SeqPlay_EmergencyStopAll
-	stdi8 (1073), 0
+	ld (1073:16), 0
 	ret
 
 Demo_ScanActivePartChannels:
@@ -8069,7 +8069,7 @@ ResetProgressIndication:
 	ldiw
 	ret
 FileIO_DiskInserted:
-	stdi8	(33890), 0
+	ld	(33890:16), 0
 	calr	65475
 	jp	16288930
 FileIO_DiskInserted_Stub1:
@@ -8079,7 +8079,7 @@ FileIO_DiskInserted_Stub2:
 	ret
 
 FileIO_DiskRemoved:
-	stdi8	(33890), 0
+	ld	(33890:16), 0
 	calr	65461
 	call	16288930
 	call	15853945
@@ -8180,7 +8180,7 @@ SeqPhase_FormatNameLoop:
 	inc	1, iz
 	cp	iz, 8
 	jr	lt, -17
-	stdi8	32422, 37
+	ld	(32422:16), 37
 	ldw	wa, 238
 	call	16355504
 	call	16283131
@@ -8190,10 +8190,10 @@ SeqPhase_FormatNameLoop:
 	calr	-218
 	cps	iz, 0
 	jr	ge, 7
-	stdi8	32422, 1
+	ld	(32422:16), 1
 	jr	5
 SeqPhase_LoadSuccess:
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 SeqPhase_SendSoundCmd:
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
@@ -8209,7 +8209,7 @@ FileIO_MidiOutSendByte:
 	call	16567398
 	cps	hl, 0
 	jr	z, 35
-	stdi8	(1060), 243
+	ld	(1060:16), 243
 	ei	6
 	pushw	243
 	call	15673329
@@ -8259,7 +8259,7 @@ DiskEvt_UseAltChannel:
 	jr DiskEvt_PostModeEvent
 
 DiskEvt_TypeIsUSB:
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	20
 DiskEvt_TypeIsNone:
@@ -8271,7 +8271,7 @@ DiskEvt_PostModeEvent:
 
 DiskEvt_TypeIsCard:
 	calr	64979
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 DiskEvt_SendSoundCmd:
 	call SoundCtrl_SendCommand
@@ -8323,7 +8323,7 @@ UI_PostEventCommon:
 
 DetectType_IsCardReset:
 	calr	64884
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 	call	16355504
 	ret
@@ -8347,7 +8347,7 @@ DiskCap_CheckMediaType:
 	jr	z, 14
 	cps	wa, 5
 	jr	nz, 40
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	16
 DiskCap_TypeIsNone:
@@ -8356,7 +8356,7 @@ DiskCap_TypeIsNone:
 
 DiskCap_TypeIsCardReset:
 	calr	64807
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 DiskCap_SendSoundCmd:
 	call SoundCtrl_SendCommand

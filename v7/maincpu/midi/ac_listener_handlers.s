@@ -2212,13 +2212,13 @@ MainMpstFunc:
 	ld	xwa, (xsp)
 	ld	(46928:16), a
 	call	16600229
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	jr	52
 MainMpst_HandlePresetCopy:
-	stdi8	(32422), 37
+	ld	(32422:16), 37
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -2226,7 +2226,7 @@ MainMpst_HandlePresetCopy:
 	ld	xwa, (xsp)
 	extz	wa
 	call	16600558
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214

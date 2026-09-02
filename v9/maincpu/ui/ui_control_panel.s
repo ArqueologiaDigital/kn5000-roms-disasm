@@ -89,14 +89,14 @@ MainFlashFunc:
 	jr z, MainFlash_AudioDispatch
 	cp xbc, 0x1e30005
 	jr nz, MainFlash_ReturnZero
-	stdi8 (0x7f42), 37
+	ld (0x7f42:16), 37
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	lds wa, 7
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -2140,12 +2140,12 @@ WakeUpApTask:
 	jrl MainTaskControl
 
 RefreshApTask:
-	stdi8 (0xe3dc), 0
-	stdi8 (0xe3de), 0
-	stdi8 (0xe3e0), 0
-	stdi8 (0xe3e2), 0
-	stdi8 (0xe3e4), 255
-	stdi8 (0xe3e6), 255
+	ld (0xe3dc:16), 0
+	ld (0xe3de:16), 0
+	ld (0xe3e0:16), 0
+	ld (0xe3e2:16), 0
+	ld (0xe3e4:16), 255
+	ld (0xe3e6:16), 255
 	lds32 xwa, 0
 	stl_da (0x02749a), xwa
 	stl_da (0x02749e), xwa
@@ -2651,12 +2651,12 @@ MainPmanCtrl_CheckSoundParam:
 	jr nz, MainPmanCtrl_SetPartSelectZero
 
 MainPmanCtrl_SetPartSelectOne:
-	stdi8 (0x8d3a), 1
+	ld (0x8d3a:16), 1
 	ldb e, 0x1
 	jr MainPmanCtrl_CompareAndUpdate
 
 MainPmanCtrl_SetPartSelectZero:
-	stdi8 (0x8d3a), 0
+	ld (0x8d3a:16), 0
 
 MainPmanCtrl_LoadPartSelect:
 	ld e, (0x8d3a:16)

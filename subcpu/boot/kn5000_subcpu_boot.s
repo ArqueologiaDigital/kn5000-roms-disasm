@@ -557,9 +557,9 @@ ToneGen_ProbeVoice_ParamBlock:
 
 BOOT_INIT:
 	; Initialize memory controller registers
-	stdi8 (272), 0
-	stdi8 (273), 177
-	stdi8 (266), 4
+	ld (272:16), 0
+	ld (273:16), 177
+	ld (266:16), 4
 
 	; Initialize port function control registers (set all pins to function mode)
 	ldio 0x07, 0xFF	; Port 0 all function
@@ -613,26 +613,26 @@ BOOT_INIT:
 	set_dd8 7, 0x9E
 
 	; Initialize timer registers
-	stdi8 (323), 16
-	stdi8 (327), 17
-	stdi8 (331), 255
-	stdi8 (335), 0
-	stdi8 (339), 18
-	stdi8 (343), 19
-	stdi8 (322), 7
-	stdi8 (326), 3
-	stdi8 (330), 1
+	ld (323:16), 16
+	ld (327:16), 17
+	ld (331:16), 255
+	ld (335:16), 0
+	ld (339:16), 18
+	ld (343:16), 19
+	ld (322:16), 7
+	ld (326:16), 3
+	ld (330:16), 1
 
 	; Check bit 0 of register 0x40 for clock configuration
 	bit_dd8 0, 0x40
 	jr nz, BOOT_INIT__clock_alt
-	stdi8 (334), 31
+	ld (334:16), 31
 	jr BOOT_INIT__clock_done
 BOOT_INIT__clock_alt:
-	stdi8 (334), 15
+	ld (334:16), 15
 BOOT_INIT__clock_done:
-	stdi8 (338), 1
-	stdi8 (342), 1
+	ld (338:16), 1
+	ld (342:16), 1
 
 	; Initialize serial/DMA registers
 	ldio 0xD2, 0x01
@@ -650,32 +650,32 @@ BOOT_INIT__clock_done:
 	and_sd8b_im 0xD7, 0xF0
 
 	; Initialize DRAM refresh
-	stdi8 (357), 113
-	stdi8 (354), 139
-	stdi8 (355), 88
+	ld (357:16), 113
+	ld (354:16), 139
+	ld (355:16), 88
 	resda 4, 358
 
 	; More timer configuration
-	stdi8 (320), 102
-	stdi8 (324), 102
-	stdi8 (328), 34
-	stdi8 (332), 34
-	stdi8 (336), 102
-	stdi8 (340), 102
-	stdi8 (321), 129
-	stdi8 (325), 129
-	stdi8 (329), 192
+	ld (320:16), 102
+	ld (324:16), 102
+	ld (328:16), 34
+	ld (332:16), 34
+	ld (336:16), 102
+	ld (340:16), 102
+	ld (321:16), 129
+	ld (325:16), 129
+	ld (329:16), 192
 
 	; Check clock config again
 	bit_dd8 0, 0x40
 	jr nz, BOOT_INIT__clock_alt2
-	stdi8 (333), 138
+	ld (333:16), 138
 	jr BOOT_INIT__clock_done2
 BOOT_INIT__clock_alt2:
-	stdi8 (333), 137
+	ld (333:16), 137
 BOOT_INIT__clock_done2:
-	stdi8 (337), 128
-	stdi8 (341), 129
+	ld (337:16), 128
+	ld (341:16), 129
 	ldio 0xF6, 0x00
 
 	; Set up stack pointer
@@ -1055,8 +1055,8 @@ INIT_DMA_SERIAL:
 	ldc_cr8 a, 0x42	; DMA channel 0 mode = 0
 
 	; Clear variables
-	stdi8 (1302), 0
-	stdi8 (1304), 0
+	ld (1302:16), 0
+	ld (1304:16), 0
 	ret
 
 ; ==============================================================================
@@ -1166,7 +1166,7 @@ SendData_Block__wait_ready1:
 	bit_dd8 4, 0x34	; Check if other CPU ready
 	jr z, SendData_Block__timeout1	; Not ready - check timeout
 	res_dd8 0, 0x34	; Clear our ready flag
-	stdi8 (1302), 1; Set DMA sync flag
+	ld (1302:16), 1; Set DMA sync flag
 	ld l, c	; L = byte count
 	dec 1, l	; L = count - 1
 	sll a, 5	; A = command << 5
@@ -1180,7 +1180,7 @@ SendData_Block__wait_ready2:
 	ldc_cr32 xde, 0x08	; DMA source = XDE
 	extpfx2 0xD9, 0x12	; Zero-extend BC (count)
 	ldc_cr16 bc, 0x48	; DMA count = BC
-	stdi8 (258), 22; Set DMA mode
+	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
 	cpdi8 (1302), 0; Is DMA complete?
 	ret z	; Yes - return
@@ -1282,7 +1282,7 @@ SendParams_E2__timeout_wait:
 	jr nz, SendParams_E2__timeout_wait	; Still not clear - keep waiting
 SendParams_E2__sync_cleared:
 	res_dd8 0, 0x34	; Clear our ready flag
-	stdi8 (1302), 1; Set DMA sync flag
+	ld (1302:16), 1; Set DMA sync flag
 	stib_da (0x120000), 0xe2; Send E2 command to main CPU
 	lds ix, 0	; Reset timeout counter
 SendParams_E2__wait_cpu_ready:
@@ -1296,7 +1296,7 @@ SendParams_E2__wait_cpu_ready:
 	ldc_cr32 xhl, 0x08	; DMA source = XHL (param block addr)
 	ldw wa, 0xA	; WA = 10 (DMA count)
 	ldc_cr16 wa, 0x48	; DMA count = 10
-	stdi8 (258), 22; Set DMA mode
+	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
 	setda 7, 1278	; Set DMA ready flag
 	cpdi8 (1302), 0; Is DMA complete?
@@ -1357,7 +1357,7 @@ TwoPhase_Transfer__wait_cpu_ready:
 	bit_dd8 4, 0x34	; Check if CPU ready
 	jrl z, TwoPhase_Transfer__timeout_ready1	; Not ready - timeout handler
 	res_dd8 0, 0x34	; Clear our ready flag
-	stdi8 (1302), 2; Set sync flag to E1 mode
+	ld (1302:16), 2; Set sync flag to E1 mode
 	stib_da (0x120000), 0xe1; Send E1 command
 	lds iz, 0	; Reset timeout counter
 TwoPhase_Transfer__wait_ack:
@@ -1374,7 +1374,7 @@ TwoPhase_Transfer__wait_ack:
 	ldc_cr32 xwa, 0x08	; DMA source = first buffer (0x050C)
 	lds wa, 6	; WA = 6 (DMA count)
 	ldc_cr16 wa, 0x48	; DMA count = 6
-	stdi8 (258), 22; Set DMA mode
+	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
 	; Wait for first transfer to complete (sync flag = 1)
 	cpdi8 (1302), 1; Is sync flag = 1?
@@ -1399,7 +1399,7 @@ TwoPhase_Transfer__delay1_done:
 	ldc_cr32 xbc, 0x08	; DMA source = XBC
 	ld wa, (xwa + 4)	; WA = count from buffer+4
 	ldc_cr16 wa, 0x48	; DMA count = WA
-	stdi8 (258), 22; Set DMA mode
+	ld (258:16), 22; Set DMA mode
 	set_dd8 2, 0x80	; Start DMA transfer
 	; Wait for second transfer to complete (sync flag = 0)
 	cpdi8 (1302), 0; Is sync flag = 0?
@@ -1476,7 +1476,7 @@ InterCPU_RX_Handler:
 	cp a, 0xE1	; Command E1?
 	jr nz, InterCPU_RX_Handler__not_e1
 	; E1: Set up DMA for 6 bytes
-	stdi8 (1304), 2
+	ld (1304:16), 2
 	lda xwa, (1348:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
@@ -1487,7 +1487,7 @@ InterCPU_RX_Handler__not_e1:
 	cp a, 0xE2	; Command E2?
 	jr nz, InterCPU_RX_Handler__not_e2
 	; E2: Set up DMA for 10 bytes
-	stdi8 (1304), 3
+	ld (1304:16), 3
 	lda xwa, (1354:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
@@ -1502,7 +1502,7 @@ InterCPU_RX_Handler__not_e2:
 	jr InterCPU_RX_Handler__clear_flag
 InterCPU_RX_Handler__default_cmd:
 	; Other commands: variable-length DMA based on low 5 bits
-	stdi8 (1304), 1
+	ld (1304:16), 1
 	lda xwa, (1310:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
@@ -1512,7 +1512,7 @@ InterCPU_RX_Handler__default_cmd:
 	extz wa
 	ldc_cr16 wa, 0x40	; DMA channel 0 count
 InterCPU_RX_Handler__start_dma:
-	stdi8 (256), 10; Trigger DMA
+	ld (256:16), 10; Trigger DMA
 InterCPU_RX_Handler__clear_flag:
 	res_dd8 1, 0x34
 InterCPU_RX_Handler__exit:
@@ -1539,12 +1539,12 @@ DMA_Complete_Handler:
 	res_dd8 2, 0x80	; Clear watchdog bit
 	cpdi8 (1302), 1; State 1?
 	jr nz, DMA_Complete_Handler__not_state1
-	stdi8 (1302), 0; -> State 0
+	ld (1302:16), 0; -> State 0
 	jr DMA_Complete_Handler__done
 DMA_Complete_Handler__not_state1:
 	cpdi8 (1302), 2; State 2?
 	jr nz, DMA_Complete_Handler__done
-	stdi8 (1302), 1; -> State 1
+	ld (1302:16), 1; -> State 1
 DMA_Complete_Handler__done:
 	reti
 
@@ -1604,7 +1604,7 @@ CMD_Dispatch_Handler:
 	ld_sril3 XWA, 0x07, 0xE4, 0xE0	; Get handler address
 	call (xwa)	; Call handler (if valid)
 	inc 6, xsp	; Clean up stack
-	stdi8 (1304), 0
+	ld (1304:16), 0
 	jr CMD_Dispatch_Handler__set_flag_exit
 CMD_Dispatch_Handler__state2:
 	; State 2: Set up secondary DMA transfer
@@ -1613,19 +1613,19 @@ CMD_Dispatch_Handler__state2:
 	ldc_cr32 xbc, 0x20	; DMA channel 0 destination (from XBC)
 	ld wa, (xwa + 4)
 	ldc_cr16 wa, 0x40	; DMA channel 0 count
-	stdi8 (256), 10; Trigger DMA
-	stdi8 (1304), 4; -> State 4
+	ld (256:16), 10; Trigger DMA
+	ld (1304:16), 4; -> State 4
 	jr CMD_Dispatch_Handler__check_watchdog
 CMD_Dispatch_Handler__state3:
 	; State 3: Set completion flags
-	stdi8 (1308), 255
-	stdi8 (1304), 0
+	ld (1308:16), 255
+	ld (1304:16), 0
 	set_dd8 1, 0x34
 	setda 7, 1364
 	jr CMD_Dispatch_Handler__check_watchdog
 CMD_Dispatch_Handler__state4:
 	; State 4: Final state, clear ready flag
-	stdi8 (1304), 0
+	ld (1304:16), 0
 	resda 7, 1278
 CMD_Dispatch_Handler__set_flag_exit:
 	set_dd8 1, 0x34
@@ -1654,7 +1654,7 @@ CMD_Dispatch_Handler__exit:
 	.org 0xFF8956 - 0xFE0000, 0xFF
 
 INIT_MEMORY_TEST:
-	stdi8 (1366), 0
+	ld (1366:16), 0
 	set_dd8 1, 0x30
 	bit_dd8 0, 0x30
 	ret nz	; Return if bit set
@@ -2184,7 +2184,7 @@ INTER_CPU_LATCH_READ_DISPATCH__done:
 	.org 0xFF8BD2 - 0xFE0000, 0xFF
 
 NOTE_VELOCITY_LOOKUP_CALCULATE:
-	stdi8 (1376), 6; Set mode/flag byte
+	ld (1376:16), 6; Set mode/flag byte
 	ld l, c	; L = note index
 	res 7, l	; Clear bit 7
 	add l, 0x24	; Add 0x24 offset

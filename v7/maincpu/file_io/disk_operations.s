@@ -45,7 +45,7 @@ FCopy_ScrollNeg_Reset:
 	stdi16	(32458), 1
 	jrl	536
 FCopy_HandleExecute:
-	stdi8	(33904), 0
+	ld	(33904:16), 0
 	ld	wa, (32458:16)
 	call	16290326
 	ld	xbc, xhl
@@ -87,7 +87,7 @@ FCopy_ScrollDown_Reload:
 FCopy_Scroll_Apply:
 	cp	wa, de
 	jrl	z, 416
-	stdi8	(33904), 0
+	ld	(33904:16), 0
 	ld	wa, (32458:16)
 	call	16290326
 	ld	xbc, xhl
@@ -441,21 +441,21 @@ FmmFmt_InitPhase_DriveType23:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
-	stdi8	(33890), 0
+	ld	(33890:16), 0
 	jr	21
 FmmFmt_InitPhase_OtherDrive:
 	ld	xwa, 8060991
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
-	stdi8	(33890), 2
+	ld	(33890:16), 2
 FmmFmt_InitPhase_SetActive:
-	stdi8	(32464), 1
+	ld	(32464:16), 1
 	jrl	348
 FmmFmt_HandleCancel:
 	calr	61843
-	stdi8	(33890), 0
-	stdi8	(32464), 0
+	ld	(33890:16), 0
+	ld	(32464:16), 0
 	jrl	332
 FmmFmt_HandleProgress:
 	cpdi8	32464, 0
@@ -497,7 +497,7 @@ FmmFmt_HandleProgress:
 	ld	a, (32462:16)
 	extz	wa
 	call	16355459
-	stdi8	32464, 0
+	ld	(32464:16), 0
 	ld	xwa, 4294967295
 	ld	xbc, 31457438
 	lds32	xde, 0
@@ -518,12 +518,12 @@ FmmFmt_FormatSuccess:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
-	stdi8	(33890), 1
+	ld	(33890:16), 1
 	jr	113
 FmmFmt_ExecutePhase2:
 	cps	a, 2
 	jr	nz, 109
-	stdi8	(32460), 3
+	ld	(32460:16), 3
 	ld	xwa, 8060991
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -537,12 +537,12 @@ FmmFmt_HandleAbort:
 	cps	c, 0
 	jr	nz, 11
 	call	16355459
-	stdi8	(32464), 0
+	ld	(32464:16), 0
 	jr	57
 FmmFmt_AbortPhase2:
 	cps	e, 2
 	jr	nz, 53
-	stdi8	(32460), 2
+	ld	(32460:16), 2
 	ld	xwa, 8060991
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -556,9 +556,9 @@ FmmFmt_DispatchAndNotify:
 
 FmmFmt_HandleAbortFinal:
 	call	16355459
-	stdi8	(32464), 0
+	ld	(32464:16), 0
 FmmFmt_NotifyComplete:
-	stdi8	(33890), 0
+	ld	(33890:16), 0
 FmmFmt_Return:
 	lds32 xhl, 0
 	popw iz
@@ -586,7 +586,7 @@ FmmLoadTitleFunc:
 	jrl	z, 439
 	cp	xde, 2
 	jrl	nz, 512
-	stdi8	33890, 0
+	ld	(33890:16), 0
 	.byte 0xd1, 0x64, 0x84, 0x19, 0xd4, 0x7e
 	lds	wa, 1
 	calr	-4188
@@ -663,7 +663,7 @@ FmmLoadTtl_StateCancelLoad:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	91
 FmmLoadTtl_StateIdle:
@@ -691,7 +691,7 @@ FmmLoadTtl_StateSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 FmmLoadTtl_NotifyComplete:
 	call SoundCtrl_SendCommand
@@ -706,13 +706,13 @@ FmmLoadTtl_LoadSlots:
 	ld	xbc, 29360138
 	lds32	xde, 0
 	call	16423243
-	stdi8	(35168), 0
-	stdi8	(35170), 0
-	stdi8	(35172), 0
-	stdi8	(35174), 0
-	stdi8	(35176), 0
-	stdi8	(35178), 0
-	stdi8	(35180), 0
+	ld	(35168:16), 0
+	ld	(35170:16), 0
+	ld	(35172:16), 0
+	ld	(35174:16), 0
+	ld	(35176:16), 0
+	ld	(35178:16), 0
+	ld	(35180:16), 0
 	lds	iz, 0
 FmmLoadTtl_SlotLoop:
 	stb_erp	a, 248
@@ -721,7 +721,7 @@ FmmLoadTtl_SlotLoop:
 	inc	1, iz
 	cp	iz, 8
 	jr	lt, -17	; -> 0xF8BFD9
-	stdi8	(35164), 4
+	ld	(35164:16), 4
 	jr	82	; -> 0xF8C043
 FmmLoadTtl_HandleScrollNav:
 	.byte 0xd1, 0xd4, 0x7e, 0x3f, 0x00, 0x00, 0x61, 0x4a
@@ -764,7 +764,7 @@ FmmSaveTitleFunc:
 	jrl	z, 144
 	cp	xde, 2
 	jrl	nz, 171
-	stdi8	33890, 0
+	ld	(33890:16), 0
 	lds	wa, 1
 	calr	-4735
 	ld	xwa, 6291494
@@ -1059,7 +1059,7 @@ SongName_TrimDone:
 	jr SongName_SendDisplay
 
 SongName_NoSlot:
-	stdi8	(34674), 0
+	ld	(34674:16), 0
 SongName_SendDisplay:
 	ld	xwa, (xsp+6)
 	ld	xbc, 29360143
@@ -1091,7 +1091,7 @@ SaveFileNameNumFunc:
 	call	16289232
 	jr	5
 SaveFileNum_NoSlot:
-	stdi8	(34740), 0
+	ld	(34740:16), 0
 SaveFileNum_SendDisplay:
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143
@@ -1206,7 +1206,7 @@ CurFileNameFunc:
 	call	16289232
 	jr	5
 CurFileName_NoSlot:
-	stdi8	(34772), 0
+	ld	(34772:16), 0
 CurFileName_SendDisplay:
 	ld	xwa, (xsp+2)
 	ld	xbc, 29360143

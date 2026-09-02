@@ -170,7 +170,7 @@ SeqStep_EventProcess:
 	push xiz
 	ld (xsp + 8), bc
 	ld iz, wa
-	stdi8 (0x271e), 0
+	ld (0x271e:16), 0
 	ldmw2 (xsp + 6), 0x28af
 	ldmw2 (xsp + 4), 0x2666
 	ldmm16 0x28af, 0x273c
@@ -187,18 +187,18 @@ SeqStep_EventProcess:
 	jr z, SeqStep_EventPosManage
 	cp a, 0xa
 	jrl nz, SeqStep_EventExit
-	stdi8 (0x287a), 0
+	ld (0x287a:16), 0
 	cpdi16 9778, 1
 	jr nz, SeqStep_EventPosManage
 	cps iz, 0
 	jr nz, SeqStep_EventPosManage
 	cpw (xsp + 8), 0x0
 	jr nz, SeqStep_EventPosManage
-	stdi8 (0x271e), 1
+	ld (0x271e:16), 1
 
 SeqStep_EventPosManage:
-	stdi8 (9824), 0
-	stdi8 (9826), 0
+	ld (9824:16), 0
+	ld (9826:16), 0
 	bitda 0, (0x287b)
 	jrl nz, SeqStep_EventPosConsumeAdvance
 	jrl SeqStep_EventExit
@@ -561,7 +561,7 @@ SeqStep_DeletePopReturn:
 SeqStep_TrackChange:
 	dec 4,XSP
 	push XIZ
-	stdi8 (0x7ea6), 0x23
+	ld (0x7ea6:16), 0x23
 	ld c, (0x270c:16)
 	cp C,0x11
 	jr nz, SeqStep_TrackChangeCheck
@@ -675,7 +675,7 @@ SeqStep_TrackChangeNonDrum:
 	jr nz, SeqStep_TrackChangeLoopDone
 
 SeqStep_TrackChangeLoop:
-	stdi8	(32422), 15
+	ld	(32422:16), 15
 	jrl	240
 SeqStep_TrackChangeLoopCheck:
 	cp l, 0xd
@@ -779,7 +779,7 @@ SeqStep_TrackChangeValidate:
 	dec	1, a
 	ld	(10010:16), a
 	calr	2668
-	stdi8	(32422), 15
+	ld	(32422:16), 15
 	jrl	448
 SeqStep_TrackChangeFinal:
 	call Part_ProcessAndDecrementVoice
@@ -964,7 +964,7 @@ SeqStep_TrackChangeExit:
 SeqStep_MultiTrackProcess:
 	lda xsp, (xsp - 22)
 	push xiz
-	stdi8 (0x2877), 0
+	ld (0x2877:16), 0
 
 SeqStep_MultiTrackLoop:
 	cpdi16 0xf231, 0
@@ -1488,10 +1488,10 @@ SeqStep_DecrementCheck:
 	cps hl, 0
 	ret z
 	stda16 (0x2726), xhl
-	stdi8 (0x2720), 255
+	ld (0x2720:16), 255
 
 SeqStep_DecrementStore:
-	stdi8 (9826), 1
+	ld (9826:16), 1
 	ret
 
 SeqStep_WalkWithCallback:
@@ -2181,7 +2181,7 @@ SeqStep_ParseRhythm:
 	call PartCtrl_AdvanceReadPos
 	cpdi8 (0x287a), 0
 	jr nz, SeqStep_ParseRhythmCheck
-	stdi8 (3387), 255
+	ld (3387:16), 255
 	call SeqPart_ReadByte_Secondary
 	res 7, l
 	ld a, (4340:16)

@@ -56,7 +56,7 @@ WPLoad_HandleCancel:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	92
 WPLoad_HandleError:
@@ -84,7 +84,7 @@ WPLoad_HandleSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 WPLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand

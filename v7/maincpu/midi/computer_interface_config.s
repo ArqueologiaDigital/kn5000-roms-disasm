@@ -32,7 +32,7 @@ TtComputerConnection:
 	call	16626534
 	cps	l, 0
 	jr	nz, 24
-	stdi8	(32422), 70
+	ld	(32422:16), 70
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214

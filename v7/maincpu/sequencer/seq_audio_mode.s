@@ -1440,7 +1440,7 @@ RhythmROM_InvalidIncrement:
 	jr	nz, 11
 	ldb	a, 238
 	ld	(58134:16), a
-	stdi8	(58136), 64
+	ld	(58136:16), 64
 RhythmROM_CheckDone:
 	ret
 

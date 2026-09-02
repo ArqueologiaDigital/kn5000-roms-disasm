@@ -258,7 +258,7 @@ ExtBoard_ProbeAndInstallBases__FB05CD:
 	call	0xFA664B                              ; FB05D4  call 0xfa664b
 	call	0xFC7CF9                              ; FB05D8  call 0xfc7cf9
 	call	0xFB6CEE                              ; FB05DC  call 0xfb6cee
-	stdi8	(0x14FE), 0                          ; FB05E0  ld (0x14fe),0x00
+	ld	(0x14FE:16), 0                          ; FB05E0  ld (0x14fe),0x00
 	popw	bc                                    ; FB05E5  pop BC
 	pop	xix                                    ; FB05E6  pop XIX
 	popw	de                                    ; FB05E7  pop DE
@@ -12460,7 +12460,7 @@ sub_FB6CEE__FB6D83:
 	cp	h, 64                                   ; FB6D9C  cp H,0x40
 	jr c, sub_FB6CEE__FB6D81                   ; FB6D9F  jr C,0xfb6d81
 	stib_da	(0xD733), 0xFF                     ; FB6DA1  ld (0x00d733),0xff
-	stdi8	(0x1509), 17                         ; FB6DA7  ld (0x1509),0x11
+	ld	(0x1509:16), 17                         ; FB6DA7  ld (0x1509),0x11
 	ldw	hl, 0                                  ; FB6DAC  ld HL,0x0000
 	ldw (xiz-2), 0x0019                        ; FB6DAF  ld (XIZ+0xfe),0x0019
 	ldw	de, 23                                 ; FB6DB4  ld DE,0x0017

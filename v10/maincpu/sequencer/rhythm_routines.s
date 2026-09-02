@@ -145,7 +145,7 @@ Rhythm_SetupChannel_D7:
 	ld (0x32cc:16), a
 	anddi8 (0x32f4), 251
 	ordi8 0x32f4, 8
-	stdi8 (0x33d4), 4
+	ld (0x33d4:16), 4
 	calr RhythmEvt_ProcessNote
 	ret
 
@@ -157,7 +157,7 @@ Rhythm_SetupChannel_D4:
 	ld (0x32cc:16), a
 	anddi8 (0x32f4), 247
 	ordi8 0x32f4, 4
-	stdi8 (0x33d4), 8
+	ld (0x33d4:16), 8
 	calr RhythmEvt_ProcessNote
 	ret
 
@@ -168,7 +168,7 @@ Rhythm_SetupChannel_D5:
 	ld a, (0x32c9:16)
 	ld (0x32cc:16), a
 	anddi8 (0x32f4), 243
-	stdi8 (0x33d4), 16
+	ld (0x33d4:16), 16
 	calr RhythmEvt_ProcessNote
 	ret
 
@@ -179,7 +179,7 @@ Rhythm_SetupChannel_D6:
 	ld a, (0x32ca:16)
 	ld (0x32cc:16), a
 	anddi8 (0x32f4), 243
-	stdi8 (0x33d4), 32
+	ld (0x33d4:16), 32
 	calr RhythmEvt_ProcessNote
 	ret
 
@@ -411,8 +411,8 @@ Rhythm_CrossVoice_Apply:
 	ldb_sri W, 0x03, 0xf4, 0xe0
 	sub a, w
 	pop xiy
-	stdi8 (0x3433), 0
-	stdi8 (0x3434), 0
+	ld (0x3433:16), 0
+	ld (0x3434:16), 0
 
 Rhythm_CrossVoice_ClearFlag:
 	anddi8 (0x32f3), 223
@@ -427,8 +427,8 @@ Rhythm_NoteRangeCheck:
 	ldb_sri W, 0x03, 0xf4, 0xe0
 	sub a, w
 	pop xiy
-	stdi8 (0x3433), 0
-	stdi8 (0x3434), 0
+	ld (0x3433:16), 0
+	ld (0x3434:16), 0
 
 Rhythm_NoteRangeReturn:
 	ret
@@ -809,7 +809,7 @@ Rhythm_DispatchCh_D7:
 	ld xix, 0x30f4
 
 Rhythm_DispatchCh_D7_Loop:
-	stdi8 (0x33d4), 4
+	ld (0x33d4:16), 4
 	calr Rhythm_SingleNoteHandler
 	add xix, 0x9
 	cp xix, 0x313c
@@ -827,7 +827,7 @@ Rhythm_DispatchCh_D4:
 	ld xix, 0x313c
 
 Rhythm_DispatchCh_D4_Loop:
-	stdi8 (0x33d4), 8
+	ld (0x33d4:16), 8
 	calr Rhythm_SingleNoteHandler
 	add xix, 0x9
 	cp xix, 0x3184
@@ -844,7 +844,7 @@ Rhythm_DispatchCh_D5:
 	ld xix, 0x3184
 
 Rhythm_DispatchCh_D5_Loop:
-	stdi8 (0x33d4), 16
+	ld (0x33d4:16), 16
 	calr Rhythm_SingleNoteHandler
 	add xix, 0x9
 	cp xix, 0x31cc
@@ -861,7 +861,7 @@ Rhythm_DispatchCh_D6:
 	ld xix, 0x31cc
 
 Rhythm_DispatchCh_D6_Loop:
-	stdi8 (0x33d4), 32
+	ld (0x33d4:16), 32
 	calr Rhythm_SingleNoteHandler
 	add xix, 0x9
 	cp xix, 0x3214

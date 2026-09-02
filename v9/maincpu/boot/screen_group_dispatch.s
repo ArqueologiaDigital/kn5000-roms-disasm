@@ -263,11 +263,11 @@ ScreenGroup_InitWordPairsLoop:
 	jr lt, ScreenGroup_InitWordPairsLoop
 
 ScreenGroup_InitFinalize:
-	stdi8 (0xca6a), 8
-	stdi8 (0xca6b), 0
-	stdi8 (0xca6c), 8
-	stdi8 (0xca6d), 0
-	stdi8 (0xca6e), 16
-	stdi8 (0xca6f), 0
+	ld (0xca6a:16), 8
+	ld (0xca6b:16), 0
+	ld (0xca6c:16), 8
+	ld (0xca6d:16), 0
+	ld (0xca6e:16), 16
+	ld (0xca6f:16), 0
 	jp COMM_SendDataReturn
 

@@ -31,7 +31,7 @@ ToneGen_DispatchSubHandler:
 	pop xiz
 	cpda16 xix, 0x286d
 	jr ule, ToneGen_StoreBlockAndLink
-	stdi8 (0x287a), 5
+	ld (0x287a:16), 5
 	jr ToneGen_DispatchReturn
 
 ToneGen_StoreBlockAndLink:
@@ -206,7 +206,7 @@ VoiceChannel_SelectChannelBank:
 	jr nz, VoiceChannel_NullRet
 	call ToneGen_SetSustainBit
 	call ToneGen_WriteChannelRegs
-	stdi8 (4323), 0
+	ld (4323:16), 0
 
 VoiceChannel_NullRet:
 	ret
@@ -263,7 +263,7 @@ SoundGen_ClampUpdateVoice:
 	jr nz, VoiceChannel_NullRet2
 	call ToneGen_SetSustainBit
 	call SoundGen_WriteVoiceParams
-	stdi8 (4323), 0
+	ld (4323:16), 0
 
 VoiceChannel_NullRet2:
 	ret
@@ -561,7 +561,7 @@ SoundGen_ApplyChannelParam:
 
 SoundGen_CommitChannelRegs:
 	call ToneGen_WriteChannelRegs
-	stdi8 (4323), 0
+	ld (4323:16), 0
 
 SoundGen_PopIyRet:
 	pop xiy
@@ -603,8 +603,8 @@ SoundGen_InitAllVoiceChannels:
 	push xhl
 	push xix
 	push xiy
-	stdi8 (6749), 176
-	stdi8 (6750), 154
+	ld (6749:16), 176
+	ld (6750:16), 154
 	bitda 7, (6750)
 	jr nz, SoundGen_SetInitFlags
 	jp SoundGen_InitLoopStart
@@ -780,7 +780,7 @@ Seq_ReturnToDispatcher:
 	ret
 
 SysEx_ReadBytesLoop_Init:
-	stdi8 (6880), 0
+	ld (6880:16), 0
 
 SysEx_ReadBytesLoop:
 	cpdi8 (4211), 0
@@ -808,7 +808,7 @@ SysEx_ReadBytes_StoreByte:
 	jp SysEx_ReadBytesLoop
 
 SysEx_ReadBytes_SetOverflow:
-	stdi8 (6880), 255
+	ld (6880:16), 255
 
 SysEx_ReadBytesReturn:
 	ret
@@ -910,7 +910,7 @@ SeqPlay_SetFlagAndMode:
 	ldb a, 0x4
 
 SeqPlay_QueueDisplayEvent:
-	stdi8 (4330), 1
+	ld (4330:16), 1
 	ldb e, 0x91
 	ldb d, 0x3
 	ldb w, 0x4
@@ -970,10 +970,10 @@ SMF_FoundActiveChannel:
 	call Vga_SetupMultiPlaneDisplay
 	ldw_da xwa, (0x00ffec)
 	stda16 (4325), xwa
-	stdi8 (4324), 255
+	ld (4324:16), 255
 	bitda 2, (0xfdad)
 	jr nz, SMF_InitChannelScan
-	stdi8 (4324), 0
+	ld (4324:16), 0
 
 SMF_InitChannelScan:
 	call SMF_ScanChannels
@@ -1034,7 +1034,7 @@ SMF_SetupActiveChannel:
 	ldir85
 	stda32 4376, xix
 	stdi16 (4206), 0
-	stdi8 (4208), 0
+	ld (4208:16), 0
 	ld xiy, 0x106e
 	ld xix, (4376:16)
 
@@ -1120,7 +1120,7 @@ SMF_WriteChannel_Continue:
 	cpdi8 (6709), 0
 	jrl z, SMF_FinishChannelAndGetNextEvent
 	call BitMapOut_ComputeRegionDelta
-	stdi8 (0x2877), 0
+	ld (0x2877:16), 0
 
 SMF_ScanAndProcessChannel:
 	ld xiy, 0xf460
@@ -2307,7 +2307,7 @@ SMF_ProgramChange_WriteBankMSB_Underflow:
 
 SMF_ProgramChange_WriteBankMSB_Data:
 	stdi16 (4206), 0
-	stdi8 (4208), 0
+	ld (4208:16), 0
 	ldb w, 0x20
 	ld l, (6743:16)
 	call SMF_WriteByteLoop
@@ -2374,7 +2374,7 @@ SMF_ProgramChange_SendConfig_Underflow:
 
 SMF_ProgramChange_SendConfig_Data:
 	stdi16 (4206), 0
-	stdi8 (4208), 0
+	ld (4208:16), 0
 	ldb w, 0x20
 	ld h, (4211:16)
 	and h, 0xc
@@ -2537,7 +2537,7 @@ SMF_CC_RPN_WriteCC101_Underflow:
 SMF_CC_RPN_WriteCC100:
 	ldb w, 0x64
 	ldb l, 0x1
-	stdi8 (4206), 0
+	ld (4206:16), 0
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2665,7 +2665,7 @@ SMF_CC_PitchBendSens_WriteCC101_Underflow:
 SMF_CC_PitchBendSens_WriteCC100:
 	ldb w, 0x64
 	ldb l, 0x0
-	stdi8 (4206), 0
+	ld (4206:16), 0
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2784,7 +2784,7 @@ SMF_CC_Modulation_WriteCC101_Underflow:
 SMF_CC_Modulation_WriteCC100:
 	ldb w, 0x64
 	ldb l, 0x2
-	stdi8 (4206), 0
+	ld (4206:16), 0
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -11226,7 +11226,7 @@ Seq_InputState_StoreFlag:
 	ld l, (0x327f:16)
 	add bc, hl
 	stda16 (0x327d), xbc
-	stdi8 (0x32e9), 24
+	ld (0x32e9:16), 24
 	bitda 0, (0x3283)
 	jr z, AccInput_CheckRecordMode
 	call AccTuning_DisableIfNoStyle
@@ -11323,13 +11323,13 @@ AccChord_CheckKeyFlags:
 	jr nz, AccChord_CheckUIStateExit
 
 AccChord_SetDefaultKeys:
-	stdi8 (0x32d7), 0
-	stdi8 (0x32d8), 1
-	stdi8 (0x8d42), 1
+	ld (0x32d7:16), 0
+	ld (0x32d8:16), 1
+	ld (0x8d42:16), 1
 	bitda 4, (0x34ea)
 	jr z, AccChord_ReadChannelKeys
-	stdi8 (0x32d8), 5
-	stdi8 (0x8d42), 5
+	ld (0x32d8:16), 5
+	ld (0x8d42:16), 5
 
 AccChord_ReadChannelKeys:
 	ld a, (0x34e9:16)
@@ -11377,7 +11377,7 @@ AccChord_CheckModeAndUpdate:
 	ld (8964:16), a
 	cpda8 a, 0x32dd
 	jr nz, AccChord_CompareNoteC
-	stdi8 (0x8d44), 0
+	ld (0x8d44:16), 0
 
 AccChord_CompareNoteC:
 	ld a, (0x32db:16)

@@ -10055,7 +10055,7 @@ Data_UnknownBlock:
 	.ascii "fDEJ:"
 	stda16	(0x4400), ix
 	push	xde
-	stdi8	(7424), 236
+	ld	(7424:16), 236
 	.byte 0xf0
 	ld	xiy, TuningSystem_Handler_Table_0x633
 	ld	xix, TuningSystem_Handler_Table_0x64F
@@ -11291,7 +11291,7 @@ SeBitmap_EnvCurve5:
 	scf
 	call	0x0a0003
 	nop
-	stdi8	(0xf113), 241
+	ld	(0xf113:16), 241
 	zcf
 	.byte 0xf1
 	nop
@@ -11362,7 +11362,7 @@ SeBitmap_EnvCurve5:
 	retd	1280
 	.byte 0x89
 	push_a
-	stdi8	(2048), 73
+	ld	(2048:16), 73
 	nop
 	ldb	b, 0
 	.byte 0x56
@@ -13778,14 +13778,14 @@ SeBitmap_EnvCurve5:
 	jrl	nc, 8192
 	.byte 0xf2
 	push	xix
-	stdi8	(1280), 146
+	ld	(1280:16), 146
 	ldb	b, 2
 	retd	1635
 	reti
 	nop
 	ldb	w, 230
 	pushw	iy
-	stdi8	(768), 152
+	ld	(768:16), 152
 	ldb	b, 34
 	pushw	iz
 	.byte 0xf1
@@ -13815,27 +13815,27 @@ SeBitmap_EnvCurve5:
 	jrl	nc, 8192
 	.byte 0xf2
 	push	xix
-	stdi8	(1280), 140
+	ld	(1280:16), 140
 	ldb	b, 2
 	retd	1635
 	reti
 	nop
 	ldb	w, 218
 	pushw	iy
-	stdi8	(512), 146
+	ld	(512:16), 146
 	ldb	b, 2
 	retd	1636
 	jrl	nc, 8192
 	.byte 0xf2
 	push	xix
-	stdi8	(1280), 152
+	ld	(1280:16), 152
 	ldb	b, 2
 	retd	1637
 	reti
 	nop
 	ldb	w, 218
 	pushw	iy
-	stdi8	(512), 158
+	ld	(512:16), 158
 	ldb	b, 101
 	pushw	iz
 	.byte 0xf1
@@ -14136,7 +14136,7 @@ TuningSystem_Handler_Table:
 	.byte 0x80, 0x07
 	ldb	w, 209
 	push_a
-	stdi8	(768), 171
+	ld	(768:16), 171
 	ldb	b, 3
 	pushw 1632
 	reti
@@ -15500,11 +15500,11 @@ TuningSystem_Handler_Table:
 	.byte 0x80, 0x07
 	ldb	w, 215
 	push_a
-	stdi8	(768), 186
+	ld	(768:16), 186
 	pushw 3842
 	jr	f, 6
 	ld	xwa, 0x5b9d2006
-	stdi8	(1536), 170
+	ld	(1536:16), 170
 	scf
 	halt
 	pushw 1640
@@ -15533,7 +15533,7 @@ S2cShowHideFunc:
 	jr nz, S2cShow_ReturnZero
 	or xde, xde
 	jr nz, S2cShow_ReturnZero
-	stdi8 (0x3a77), 3
+	ld (0x3a77:16), 3
 
 S2cShow_ReturnZero:
 	lds32 xhl, 0
@@ -17325,7 +17325,7 @@ EasyCmp_GridEvtCase_Epilogue:
 	pushw 0x34bc
 	call Strncpy
 	lda xsp, (xsp + 10)
-	stdi8 (0x34cc), 0
+	ld (0x34cc:16), 0
 
 MspNaming_CleanupExit:
 	lds32 xhl, 0
@@ -18337,11 +18337,11 @@ MspRGrpSetBnkFunc:
 	jr nz, MspRGrpSetBnk_ReturnZero
 	cpdi8 (0x7f3d), 0
 	jr nz, MspRGrpSetBnk_SetToZero
-	stdi8 (0x7f3d), 1
+	ld (0x7f3d:16), 1
 	jr MspRGrpSetBnk_UpdateLsw
 
 MspRGrpSetBnk_SetToZero:
-	stdi8 (0x7f3d), 0
+	ld (0x7f3d:16), 0
 
 MspRGrpSetBnk_UpdateLsw:
 	ld c, (0x7f3d:16)

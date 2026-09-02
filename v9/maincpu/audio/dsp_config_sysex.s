@@ -836,7 +836,7 @@ SwbtWr_ProcessAll_CompactDone:
 	ld (xix), 0xff
 	sub xix, 0xbd3c
 	stda16 (0x90de), xix
-	stdi8 (0xbf39), 255
+	ld (0xbf39:16), 255
 	stdi16 (0x90e2), 0
 	ret
 
@@ -1613,7 +1613,7 @@ MidiSysEx_ApplyChannel:
 	push xde
 	pushm (xsp + 12)
 	calr SeqOut_WriteTimedBytes
-	stdi8 (1060), 0
+	ld (1060:16), 0
 	ld xwa, (xsp + 10)
 	push xwa
 	call Free
@@ -1662,7 +1662,7 @@ MIDI_BroadcastCC_CommLoop:
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x0f
 	jr ule, MIDI_BroadcastCC_CommLoop
-	stdi8 (1060), 0
+	ld (1060:16), 0
 	popw_erp 0xfa
 	inc 8, xsp
 	ret
@@ -5282,15 +5282,15 @@ AudioInit_ProcessModeChange:
 	jr AudioModeChange_Handler
 
 AudioModeChange_ClearVoiceFlags:
-	stdi8 (0xc1fe), 0
+	ld (0xc1fe:16), 0
 
 ; Audio mode change handler
 AudioModeChange_Handler:
 	resda 3, 0xc1fe
-	stdi8 (0xc2b4), 255
-	stdi8 (0xc2bc), 255
-	stdi8 (0xc200), 255
-	stdi8 (0xc201), 255
+	ld (0xc2b4:16), 255
+	ld (0xc2bc:16), 255
+	ld (0xc200:16), 255
+	ld (0xc201:16), 255
 	ordi16 0xc59c, 257
 	ld a, (0x8d34:16)
 	extz wa
@@ -5324,15 +5324,15 @@ Audio_CheckSubsystemReady:
 	jr AudioSubsystem_Callback
 
 AudioSubsystem_ClearVoiceFlags:
-	stdi8 (0xc1fe), 0
+	ld (0xc1fe:16), 0
 
 ; Audio subsystem callback
 AudioSubsystem_Callback:
 	resda 3, 0xc1fe
-	stdi8 (0xc2b4), 255
-	stdi8 (0xc2bc), 255
-	stdi8 (0xc200), 255
-	stdi8 (0xc201), 255
+	ld (0xc2b4:16), 255
+	ld (0xc2bc:16), 255
+	ld (0xc200:16), 255
+	ld (0xc201:16), 255
 	ordi16 0xc59c, 257
 	ld a, (0x8d34:16)
 	extz wa
@@ -5373,7 +5373,7 @@ AudioDispatch_ClearAccFlags:
 	anddi16 0xc596, 0xfdff
 	resda 0, 0x3284
 	call AudioInit_RefreshToneBank
-	stdi8 (0xc5a0), 0
+	ld (0xc5a0:16), 0
 	jr AudioDispatch_CheckStereoMode
 
 AudioDispatch_SetAccMode:
@@ -5382,11 +5382,11 @@ AudioDispatch_SetAccMode:
 	ld wa, (0xc596:16)
 	and wa, 0x7
 	jr z, AudioDispatch_SetTimerBase
-	stdi8 (0xc5a0), 31
+	ld (0xc5a0:16), 31
 	jr AudioDispatch_CheckStereoMode
 
 AudioDispatch_SetTimerBase:
-	stdi8 (0xc5a0), 16
+	ld (0xc5a0:16), 16
 
 AudioDispatch_CheckStereoMode:
 	bitda 1, (0xfc67)
@@ -5398,7 +5398,7 @@ AudioDispatch_CheckStereoMode:
 	jr AudioDispatch_SetBusyFlag
 
 AudioDispatch_ClearVoiceFlags:
-	stdi8 (0xc1fe), 0
+	ld (0xc1fe:16), 0
 
 AudioDispatch_SetBusyFlag:
 	ordi16 0xc59c, 1
@@ -5439,15 +5439,15 @@ AudioMode_ResetVoiceState:
 	jr AudioVoiceReset_Handler
 
 AudioVoiceReset_ClearFlags:
-	stdi8 (0xc1fe), 0
+	ld (0xc1fe:16), 0
 
 ; Audio voice reset handler
 AudioVoiceReset_Handler:
 	resda 3, 0xc1fe
-	stdi8 (0xc2b4), 255
-	stdi8 (0xc2bc), 255
-	stdi8 (0xc200), 255
-	stdi8 (0xc201), 255
+	ld (0xc2b4:16), 255
+	ld (0xc2bc:16), 255
+	ld (0xc200:16), 255
+	ld (0xc201:16), 255
 	ordi16 0xc59c, 257
 	anddi16 0xc594, 0xfffd
 	ld a, (0x8d34:16)
@@ -5469,7 +5469,7 @@ AudioVoiceReset_Handler:
 	ret
 
 AudioMode_ConfigureExternal:
-	stdi8 (0xc1fe), 0
+	ld (0xc1fe:16), 0
 	cps a, 0
 	jr z, AudioMode_ConfigExternal_Off
 	ordi16 0xc594, 16
@@ -5620,7 +5620,7 @@ UIStateEvt_ToneChange:
 	ld (xwa), 0xff
 	cp l, 0x13
 	jr nz, Tone_WriteEndMarker
-	stdi8 (0xc218), 255
+	ld (0xc218:16), 255
 	jr Tone_WriteEndMarker
 
 UIStateEvt_ToneChange_Set:
@@ -5640,7 +5640,7 @@ UIStateEvt_ToneChange_Set:
 	ld (xix), a
 	cp l, 0x13
 	jr nz, Tone_WriteEndMarker
-	stdi8 (0xc218), 22
+	ld (0xc218:16), 22
 
 Tone_WriteEndMarker:
 	ordi16 0xc59c, 4
@@ -5798,9 +5798,9 @@ UIStateEvt_ParamEdit_Data:
 	ld	wa, (0xc596:16)
 	and	wa, 7
 	jr	z, 7
-	stdi8	(0xc5a0), 31
+	ld	(0xc5a0:16), 31
 	jr	5
-	stdi8	(0xc5a0), 16
+	ld	(0xc5a0:16), 16
 	.byte 0xf1
 	jrl	nc, -13376
 	jrl	z, 379
@@ -5924,9 +5924,9 @@ UIStateEvt_ParamEdit_Data:
 	ld	wa, (0xc596:16)
 	and	wa, 7
 	jr	z, 7
-	stdi8	(0xc5a0), 31
+	ld	(0xc5a0:16), 31
 	jr	117
-	stdi8	(0xc5a0), 16
+	ld	(0xc5a0:16), 16
 	jr	110
 	ld	a, (0xc07f:16)
 	and	a, 252
@@ -6007,7 +6007,7 @@ UIStateEvt_VolumeMixer_Data:
 	ld	wa, (0xc594:16)
 	bit	4, wa
 	ret	z
-	stdi8	(0xc1fe), 0
+	ld	(0xc1fe:16), 0
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6046,7 +6046,7 @@ UIStateEvt_VolumeMixer_Data:
 	ld	wa, (0xc594:16)
 	bit	4, wa
 	ret	z
-	stdi8	(0xc1fe), 0
+	ld	(0xc1fe:16), 0
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	.byte 0x04
@@ -6172,19 +6172,19 @@ UIStateEvt_EffectSelect_Data:
 	nop
 	max
 	jr	37
-	stdi8	(0xc5a2), 55
+	ld	(0xc5a2:16), 55
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
 	max
 	jr	24
-	stdi8	(0xc5a2), 60
+	ld	(0xc5a2:16), 60
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
 	max
 	jr	11
-	stdi8	(0xc5a2), 67
+	ld	(0xc5a2:16), 67
 	.byte 0xd1, 0x9a, 0xc5
 	push	xiz
 	nop
@@ -6457,15 +6457,15 @@ UIStateEvt_ChannelConfig_Data:
 	jr	z, 15
 	cps	hl, 0
 	ret	nz
-	stdi8	(0xc362), 0
-	stdi8	(0xc363), 255
+	ld	(0xc362:16), 0
+	ld	(0xc363:16), 255
 	ret
 	ld	xwa, 0x5001
 	call	SndParam_LookupReadOnly
 	ld	(0xc362:16), l
-	stdi8	(0xc363), 255
+	ld	(0xc363:16), 255
 	ret
-	stdi8	(0xc362), 0
+	ld	(0xc362:16), 0
 	ld	xwa, 0x5002
 	call	SndParam_LookupReadOnly
 	ld	(0xc363:16), l

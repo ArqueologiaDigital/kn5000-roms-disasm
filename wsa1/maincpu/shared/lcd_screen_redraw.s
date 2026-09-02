@@ -84,7 +84,7 @@ LCD_ScreenRedraw_Begin:
 	swi 7                                         ; F999F4/F7E2DD  ff   swi 7
 	ldb a, 0x10                                   ; F999F5/F7E2DE  21 10   ld A,0x10
 	swi 7                                         ; F999F7/F7E2E0  ff   swi 7
-	stdi8 (0x2540), 0x00                          ; F999F8/F7E2E1  f1 40 25 00 00   ld (0x2540),0x00
+	ld (0x2540:16), 0x00                          ; F999F8/F7E2E1  f1 40 25 00 00   ld (0x2540),0x00
 	ret                                           ; F999FD/F7E2E6  0e   ret
 
 ; >>>>>> prom_a/wsa1_prom_a.s's header, moved here verbatim >>>>>>>>>>>>>>>>>>>>>

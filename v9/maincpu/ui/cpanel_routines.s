@@ -116,10 +116,10 @@ CPanel_InitHardware:
 	ldio 0xf8, 0x23	; INTTX1: Serial send 1
 	or_sd8b_im 0xc8, 0x10
 	and_sd8b_im 0xc8, 0xf7
-	stdi8 (0x8d91), 125; This looks pointless...
+	ld (0x8d91:16), 125; This looks pointless...
 
 	ordi8 0x8d8c, 64	; CP_Flags_A.6 = 1
-	stdi8 (0x8d8b), 0
+	ld (0x8d8b:16), 0
 	anddi8 (0x8d8c), 252; CP_Flags_A.10 = 00
 	stdi16 (0x8dfd), 0
 	stdi16 (0x8dff), 0
@@ -420,7 +420,7 @@ CPanel_CheckSpecialCombos_Return:
 
 
 CPanel_PanelDetection:
-	stdi8 (0x8d93), 0
+	ld (0x8d93:16), 0
 	calr CPanel_WaitTXReady
 	ei 6
 	stdi16 (0x8d9d), 0
@@ -556,8 +556,8 @@ CPanel_InitButtonState:	; do that
 	ldw (xhl - 2), 0x80
 
 	ei 6
-	stdi8 (0x8d9d), 0
-	stdi8 (0x8d9f), 0
+	ld (0x8d9d:16), 0
+	ld (0x8d9f:16), 0
 	ordi8 0x8d92, 1	; CP_Flags_B.0 = 1
 	ei 0
 
@@ -598,7 +598,7 @@ CPanel_InitButtonState:	; do that
 
 
 CPanel_WaitTXReady:
-	stdi8 (0x8d97), 200; =200
+	ld (0x8d97:16), 200; =200
 
 CPanel_WaitTXReady_Poll:
 	ei 6
@@ -646,7 +646,7 @@ CPanel_SendCommand:
 	adddi16 0x8dff, 2
 	ordi8 0x8d8c, 2
 	anddi8 (0x8d8c), 254; CP_Flags_A.10 = 2
-	stdi8 (0x8d8a), 4; ROUTINE_1
+	ld (0x8d8a:16), 4; ROUTINE_1
 	ldio 0xd7, 0x28	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
@@ -671,7 +671,7 @@ CPanel_SendCommand:
 
 
 INTA_HANDLER:
-	stdi8 (0x8d98), 0
+	ld (0x8d98:16), 0
 	push xwa
 	cpdi8 (0x8d8b), 0
 	jr nz, INTA_HandleCountdown
@@ -684,7 +684,7 @@ INTA_HANDLER:
 	ldio 0xe3, 0x05
 	ldio 0xeb, 0x0d
 	or_sd8b_im 0xd6, 0x20	; parity addition: enable
-	stdi8 (0x8d8a), 32;		ROUTINE_7
+	ld (0x8d8a:16), 32;		ROUTINE_7
 	ordi8 0x8d8c, 1	; CP_Flags_A.0 = 1
 	jr INTA_HANDLER_END
 
@@ -783,8 +783,8 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 
 
 						; If we receive a SCLK1 LOW, does it mean CPANEL is trying to spreak and we revert to IDLE state (ROUTINE_0) ?
-	stdi8 (0x8d8b), 0
-	stdi8 (0x8d8a), 0; ROUTINE_0
+	ld (0x8d8b:16), 0
+	ld (0x8d8a:16), 0; ROUTINE_0
 	ordi8 0x8d92, 2	; CP_Flags_B.1 = 1  ; UNUSED
 	ldio 0xe3, 0x05
 	ldio 0xeb, 0xff
@@ -856,7 +856,7 @@ CPanel_SM_SendByte1:
 	stdi16 (0x8dfd), 0
 
 SendByte1_InspectByte:
-	stdi8 (0x8d8b), 2
+	ld (0x8d8b:16), 2
 	ld a, (xiy)
 	and a, 0x3f
 	cp a, 0x30
@@ -907,13 +907,13 @@ SendByteN_AdvanceState:
 
 
 CPanel_SM_TXComplete:
-	stdi8 (0x8d8b), 0
-	stdi8 (0x8d8a), 0; ROUTINE_0
+	ld (0x8d8b:16), 0
+	ld (0x8d8a:16), 0; ROUTINE_0
 	ld wa, (0x8dff:16)
 	subda16 xwa, 0x8dfd
 	cps wa, 2
 	jr c, TXComplete_BufferEmpty
-	stdi8 (0x8d8a), 4; ROUTINE_1
+	ld (0x8d8a:16), 4; ROUTINE_1
 	anddi8 (0x8d8f), 191; disable CPanel serial clk
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
@@ -984,7 +984,7 @@ RXByte1_AdvanceWritePtr:
 	stdi16 (0x8d9f), 0
 
 RXByte1_InspectByte:
-	stdi8 (0x8d8b), 2
+	ld (0x8d8b:16), 2
 	and a, 0x3f
 	cp a, 0x30
 	jr c, RXByte1_AdvanceState
@@ -1013,9 +1013,9 @@ RXByteN_CheckDone:
 	decdi8 1, 0x8d8b
 	cpdi8 (0x8d8b), 1
 	jr nz, RXByteN_ContinueRX
-	stdi8 (0x8d8b), 0
+	ld (0x8d8b:16), 0
 	anddi8 (0x8d8c), 254; CP_Flags_A.0 = 0
-	stdi8 (0x8d8a), 0; ROUTINE_0
+	ld (0x8d8a:16), 0; ROUTINE_0
 	anddi8 (0x8d8e), 159
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
@@ -1073,7 +1073,7 @@ PollLoop_TXForwardDist:
 PollLoop_TXCheckThreshold:
 	cps hl, 3
 	jr c, PollLoop_DispatchWork
-	stdi8 (0x8d9a), 0
+	ld (0x8d9a:16), 0
 	ldb w, 0xe0
 	ldb a, 0x13
 	ld iy, (0x8dff:16)
@@ -1135,7 +1135,7 @@ PollLoop_StartTX:
 	cps a, 2
 	jr c, PollLoop_Return
 	ordi8 0x8d8c, 2	; CP_Flags_A.1 = 1
-	stdi8 (0x8d8a), 4; ROUTINE_1
+	ld (0x8d8a:16), 4; ROUTINE_1
 	anddi8 (0x8d8f), 191; disable CPanel serial clk
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f

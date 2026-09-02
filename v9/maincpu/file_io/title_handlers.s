@@ -65,12 +65,12 @@ SetupFlashFunc:
 	jr z, SetupFlash_HandleLoadEvent
 	cp xbc, 0x1e5000b
 	jr nz, SetupFlash_Return
-	stdi8 (0x7f42), 37
+	ld (0x7f42:16), 37
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	lds wa, 6
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jr SetupFlash_Return
@@ -90,7 +90,7 @@ FmmUtilityTitleFunc:
 	jrl z, FmmUtility_HandleAbort
 	cp xde, 0x2
 	jrl nz, FmmUtility_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x7b0013
@@ -158,7 +158,7 @@ FmmUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr FmmUtility_ShowStatus
 
@@ -190,7 +190,7 @@ FmmUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 FmmUtility_ShowStatus:
@@ -222,7 +222,7 @@ FmmSmfUtilityTitleFunc:
 	jrl z, FmmSmfUtility_HandleAbort
 	cp xde, 0x2
 	jrl nz, FmmSmfUtility_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x7b002a
@@ -290,7 +290,7 @@ FmmSmfUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr FmmSmfUtility_ShowStatus
 
@@ -322,7 +322,7 @@ FmmSmfUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 FmmSmfUtility_ShowStatus:
