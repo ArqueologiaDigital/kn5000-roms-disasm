@@ -1507,3 +1507,89 @@ prom_b's verbatim residue is **88 B in 2 spans** — `0xF02FFE`+44 and
 `0xF13D34`+44 — from 481 B in 16. Re-measure with
 `python3 notes/prom_b_residue_481.py --selftest`, whose guard now refuses to
 pass if a span it calls closed still carries an `.incbin`, or the reverse.
+
+## LANE res02f (2026-09-02) — two of the last 481 verbatim bytes
+
+### `gen_res02f_spans.py` — 88 B at `0xF02FFE` and `0xF13D34`
+**"`notes/FINDINGS-prom_b-last-481-bytes.md` calls these two spans 'pointer +
+LE16 coordinate quads' and 'a glyph/bitmap with only seven distinct byte
+values'. What is the ENTRY/ROW WIDTH, and what proves it?"**
+Answer: not the stride the bytes suggest — that document is explicit that a
+stride read off a span known to start mid-record is not a layout to emit,
+because any framing of the right bytes reproduces the ROM. Both widths here
+come from the record that names the object and the handler that consumes its
+pointer.
+
+`0xF02FFE` is **not a table**. It is the `+0x07` pointer FIELD of the
+interpreter-B record at `0xF02FF7`, of which round 1 typed only the first 7
+bytes as `Data_F02FF7`, plus the 40-byte operand array that pointer names. The
+record is `03 0B` → `HTBL_B[3]` = `0xF31B57`, which does `sla 0x03,HL` before
+`add XIX,XHL`, so the entries are **8 bytes**; the array runs from `0xF03002` to
+`0xF0302A`, a proven display-list start, so there are **5** of them — not the
+`(mask >> shift) + 1 = 16` the record would allow. The four words of the
+selected entry go to `(0x2530)`, `(0x2532)`, `(0x2534)`, `(0x2536)` = X0, Y0,
+X1, Y1, so X is the constant pair and Y the stepping one: five 26×13 extents 37
+rows apart, in the same x range `DL_F02FED` (op `0x1B` = `LCD_Svc_1B_EraseRect`)
+clears over the whole y range just before it. `T_F4181C` is `jp 0xF31B57`, so
+`ld XIY,0x00F02FF7 / call 0xF4181C` at `0xF5BBA1` hands the record straight to
+its handler — which answers what `UiPaint_Ordinals`' own header records as open.
+
+`0xF13D34` is the tail of a **24-byte bitmap at `0xF13D30`** and the whole one
+at `0xF13D48`. Six interpreter-A `03 0C` records (handler `0xF31ABE`) name four
+bitmaps here — `0xF13D00`, `0xF13D18`, `0xF13D30`, `0xF13D48` — and every one
+carries `BC=2`, `HL=12`, so each is BC×HL = 24 B and the four tile
+`0xF13D00-0xF13D5F` exactly, ending on `0xF13D60`. Column-major on all four
+(4-neighbour edge density 0.258/0.275/0.149/0.112 against row-major
+0.292/0.312/0.208/0.152), which is the reading in which `0xF13D00` draws a
+closed circle.
+
+    python3 notes/gen_res02f_spans.py --selftest   # every claim, re-derived
+    python3 notes/gen_res02f_spans.py --census     # .incbin left in the two spans
+    python3 notes/gen_res02f_spans.py --render     # the four bitmaps, both orderings
+    python3 notes/gen_res02f_spans.py --splice     # rewrite the source
+
+**Two nulls, both of which nearly cost this lane a wrong answer.**
+`0xF13D60` is NOT a call-site start — nothing in the image passes it to an
+interpreter — so the anchor is the op/len walk: 45 records from `0xF13D60`,
+every length byte equal to its handler's implied length, landing on `0xF13F1E`
+with zero drift, while the same walk from `0xF13D34`, `0xF13D38`, `0xF13D48` or
+`0xF13D5C` fails on its FIRST record. And the pointer scan: six 32-bit words in
+prom_b land in `0xF13D00-0xF13D5F` and all six are a record's `+2` field, but
+widening the window sixteen bytes DOWN adds **six more, all false** — prom_a
+words reading `0xF13CFF`, each straddling `link XIZ,0xffee` / `push XIX` /
+`lda_d16 XIX,(0x2900)`. A raw 4-byte pointer scan over code produces false
+positives at that rate, so the test used is the record test (opcode < `0x24`,
+handler `0xF31ABE`, length byte 12), never the pointer value alone.
+
+**Refused, and why — with the fear measured rather than asserted.** The span
+starts four bytes INSIDE the `0xF13D30` bitmap. `0xF13D30-0xF13D33` is the tail
+of `Data_F139AB`'s `.byte` run, which `gen_prom_b_f0ea9f_module.py` emits from
+`("data", 0xF139AB, 0x0389)` and whose `--checks` asserts that LAYOUT covers
+`0xF0EA9F-0xF13D33` exactly. Closing the bitmap is a one-line change — `LO, HI`
+in `prom_b_f0ea9f_layout.py` from `0xF13D34` to `0xF13D30`, and that size from
+`0x0389` to `0x0385`.
+
+The obvious objection is that this re-runs that module's whole code walk, which
+is the failure the byte gate cannot see. **It does not.**
+`res02f_f0ea9f_hi_shift_probe.py` emits the module both ways and the two differ
+in exactly SIX lines, all six being the four bytes themselves — `21141 → 21137`
+twice, `Data_F139AB` `905 → 901`, its printable preview, and the last `.byte`
+line. **81 segments and 23 unsplit `.byte` runs both ways**; not one label,
+instruction or segment boundary moves.
+
+    python3 notes/res02f_f0ea9f_hi_shift_probe.py --diff   # ~6 min, two emissions
+
+What actually stopped this lane is narrower, and is written down so it can be
+closed: `prom_b_f0ea9f_layout` is imported by four other modules
+(`gen_prom_b_f6d002_module`, `prom_b_f067a6_layout`, `prom_b_f4f000_layout`,
+`prom_b_f4f000_verify`), and the probe calls `emit()` directly so it never runs
+that module's `--checks`. Neither was measured; neither is this lane's. Until
+then the bitmap is emitted as its span-visible tail, with the whole picture in
+the header.
+
+Gate: `make gate-wsa1` green, and shown RED at `0x3014` and at `0x13D59` by
+perturbing one emitted byte in each span. That proof is reproducible, not a
+transcript — `--falsify` does both perturbations, rebuilds, asserts the gate
+names those two addresses, and restores the source:
+
+    python3 notes/gen_res02f_spans.py --falsify

@@ -109,6 +109,14 @@ V = [
  (0xF0029D, 0x2C, "CODE", None, "entries 0x00F002B9 0x00F002B6 0x00F002B3 of Data_F000E5"),
  (0xF002CD, 0x27, "CODE", None, "entry 0x00F002EB of Data_F000E5"),
  (0xF02FFE, 0x2C, "REFUSE", None,
+  # ⚠ OVERTURNED 2026-09-02 by lane res02f (notes/gen_res02f_spans.py), which
+  # converted this span.  The reason below is kept verbatim because it is what
+  # THIS pass concluded, and it was wrong in one word: the array's base IS
+  # declared in the source -- by the `03 0B` record's own +0x07 field, four
+  # bytes of which this pass left inside the `.incbin`.  The stride is 8,
+  # fixed by handler 0xF31B57's `sla 0x03,HL`, and the count is 5, fixed by
+  # the extent to the display-list start at 0xF0302A.  This entry stays
+  # REFUSE: this converter is not the one that closed the span.
   "Data_F02FF7 begins with a display-list record (`03 0B`) and the span is a "
   "16-bit array behind it; nothing in the source declares that array's base, so "
   "its stride is unestablished"),
