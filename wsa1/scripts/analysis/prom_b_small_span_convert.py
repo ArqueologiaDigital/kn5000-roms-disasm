@@ -174,10 +174,13 @@ V = [
   "single table"),
  (0xF3A443, 0x1E, "REFUSE", None, "display-list record then an undeclared array"),
  (0xF3B656, 0x05, "REFUSE", None,
-  "⚠ AN OFF-BY-ONE SOMEONE SHOULD LOOK AT.  Data_F3B651 starts `00 0B` -- op "
-  "0x00, length 11 -- which would end at 0xF3B65C, but the next object, "
-  "DL_F3B65B, is labelled one byte earlier.  Either the length byte or that "
-  "list's start is wrong and this lane cannot tell which, so the span stays"),
+  "⚠ A ONE-BYTE INCONSISTENCY SOMEONE SHOULD LOOK AT.  Data_F3B651 "
+  "starts `00 0B`; read as op 0x00 with length 11 the record would end at "
+  "0xF3B65C, but the next record demonstrably starts at 0xF3B65B (`02 0F 41 "
+  "26 ...`, op 0x02 length 15, and the chain from there is clean).  So either "
+  "op 0x00 does not carry its length at +1 in this interpreter, or "
+  "DL_F3B65B's start is off by one.  This lane cannot tell which, so the "
+  "span stays"),
  (0xF3C47E, 0x57, "SHORTARR8", (0xF3C37D, 0xF3C4D5), "declared array base 0xF3C37D"),
 ]
 
