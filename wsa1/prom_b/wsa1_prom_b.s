@@ -45912,6 +45912,13 @@ DL_F2837D:
 	.short 0x0031
 
 ; === COVER-R1 0xF283A7-0xF28802 ===
+; ⚠ AMENDED 2026-09-02 (lane promB5, notes/gen_promB5_spans.py).  Of the 687 B
+; this band left `.incbin`, 598 are now typed data -- two bitmaps, eleven
+; interpreter-B records and ten operand tables; 44 B more were closed earlier
+; by notes/gen_prom_b_dl_shape1_gap_f286f9.py, leaving 45 B at 0xF286CC.
+; Round 1 reached each object's FIRST byte through a 32-bit pointer and
+; stopped there; the display-list handler that consumes the pointer also
+; fixes the object's SIZE, which is what closes them.
 ; 0xF283A7-0xF28801, coverage round 1: 428 of this span's 1115 bytes are
 ; reachable -- 0 as CODE (an entry point in the routine directory, or a branch
 ; prom_b's own converted instructions decode) in 0 runs, and 428 as DATA (only
@@ -45919,37 +45926,237 @@ DL_F2837D:
 ; is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
 
-; --------------------------------------------------------------------------
-; Data_F283A7 -- 1 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F283A7 appears as a 32-bit word at 0xF27C3C 0xF27C48
-;               0xF27C54 0xF27C60 0xF27C6C +27 more.  No routine-directory
-;               slot and no branch decoded in converted code names it.
-; Measured: 0% printable ASCII; a linear decode runs 1 instructions and ends
-;           `reti`, with 0% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
+
+; ==== round-1 header, KEPT VERBATIM and SUPERSEDED below (lane promB5, 2026-09-02) ====
+; | ; --------------------------------------------------------------------------
+; | ; Data_F283A7 -- 1 bytes, EMITTED AS DATA (not promoted to code).
+; | ; Reached from: 0x00F283A7 appears as a 32-bit word at 0xF27C3C 0xF27C48
+; | ;               0xF27C54 0xF27C60 0xF27C6C +27 more.  No routine-directory
+; | ;               slot and no branch decoded in converted code names it.
+; | ; Measured: 0% printable ASCII; a linear decode runs 1 instructions and ends
+; | ;           `reti`, with 0% of the bytes in spellings llvm-mc will not encode.
+; | ; ⚠ The extent is the reachability walk's, not the object's; the rest of
+; | ;   this span is unreachable and stays `.incbin`.  Why this is data and
+; | ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; | ; --------------------------------------------------------------------------
+; | Data_F283A7:
+; | 	.byte	0x07	; F283A7  |.|
+; ==== end of the superseded round-1 header ====
+
+; ------------------------------------------------------------------
+; Data_F283A7 -- the 5 x 30 BITMAP (150 bytes) that 32 interpreter-A
+; op-0x03 records draw.  Each carries +2 = this address, +8 = BC = 5
+; bytes wide, +0x0A = HL = 30 rows, and `swi 7` fn 3 = draw bitmap;
+; 5 x 30 = 150.  All 32 agree on BC and HL.
+; Drawn by the records at (the RECORD's own address; the superseded
+; header above lists the same sites at +2, where the pointer sits):
+;   0xF27C3A 0xF27C46 0xF27C52 0xF27C5E 0xF27C6A 0xF27C76 0xF27C82 0xF27C8E
+;   0xF280C1 0xF280CD 0xF280D9 0xF280E5 0xF280F1 0xF280FD 0xF28109 0xF28115
+;   0xF2897D 0xF28989 0xF28995 0xF289A1 0xF289AD 0xF289B9 0xF289C5 0xF289D1
+;   0xF28E5B 0xF28E67 0xF28E73 0xF28E7F 0xF28E8B 0xF28E97 0xF28EA3 0xF28EAF
+; ⚠ SUPERSEDES the round-1 header kept above, which gave this object
+;   1 byte and said "the extent is the reachability walk's, not the
+;   object's".  The extent IS the object's: the records that name it
+;   fix it.  And its "a linear decode runs 1 instructions and ends
+;   `reti`" was a decode of picture bytes -- nothing calls or branches
+;   into this span, every reference loads the ADDRESS, so it is data.
+;   (lane promB5, 2026-09-02, notes/gen_promB5_spans.py)
+; Picture, read column-major (byte column c, row r at +c*30+r):
+;   .....#############################......
+;   ....#.............................#.....
+;   ...#...............................#....
+;   ..#.................................#...
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..####################################..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ..#.................................##..
+;   ...#...............................###..
+;   ....#.............................###...
+;   .....###############################....
+;   ......#############################.....
+; ------------------------------------------------------------------
 Data_F283A7:
-	.byte	0x07	; F283A7  |.|
+	.byte	0x07, 0x08, 0x10, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3F	; column 0, rows 0..14
+	.byte	0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x10, 0x08, 0x07, 0x03	; column 0, rows 15..29
+	.byte	0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF	; column 1, rows 0..14
+	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; column 1, rows 15..29
+	.byte	0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF	; column 2, rows 0..14
+	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; column 2, rows 15..29
+	.byte	0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF	; column 3, rows 0..14
+	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; column 3, rows 15..29
+	.byte	0xC0, 0x20, 0x10, 0x08, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0xFC	; column 4, rows 0..14
+	.byte	0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x0C, 0x1C, 0x38, 0xF0, 0xE0	; column 4, rows 15..29
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0283A8, 0x000095
 
-; --------------------------------------------------------------------------
-; Data_F2843D -- 1 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F2843D appears as a 32-bit word at 0xF27C02 0xF27C0E
-;               0xF27C1A 0xF27C26 0xF2808E +12 more.  No routine-directory
-;               slot and no branch decoded in converted code names it.
-; Measured: 0% printable ASCII; a linear decode runs 1 instructions and ends
-;           `reti`, with 0% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
+; ==== round-1 header, KEPT VERBATIM and SUPERSEDED below (lane promB5, 2026-09-02) ====
+; | ; --------------------------------------------------------------------------
+; | ; Data_F2843D -- 1 bytes, EMITTED AS DATA (not promoted to code).
+; | ; Reached from: 0x00F2843D appears as a 32-bit word at 0xF27C02 0xF27C0E
+; | ;               0xF27C1A 0xF27C26 0xF2808E +12 more.  No routine-directory
+; | ;               slot and no branch decoded in converted code names it.
+; | ; Measured: 0% printable ASCII; a linear decode runs 1 instructions and ends
+; | ;           `reti`, with 0% of the bytes in spellings llvm-mc will not encode.
+; | ; ⚠ The extent is the reachability walk's, not the object's; the rest of
+; | ;   this span is unreachable and stays `.incbin`.  Why this is data and
+; | ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; | ; --------------------------------------------------------------------------
+; | Data_F2843D:
+; | 	.byte	0x07	; F2843D  |.|
+; ==== end of the superseded round-1 header ====
+
+; ------------------------------------------------------------------
+; Data_F2843D -- the 2 x 9 BITMAP (18 bytes) that 17 interpreter-A
+; op-0x03 records draw.  Each carries +2 = this address, +8 = BC = 2
+; bytes wide, +0x0A = HL = 9 rows, and `swi 7` fn 3 = draw bitmap;
+; 2 x 9 = 18.  All 17 agree on BC and HL.
+; Drawn by the records at (the RECORD's own address; the superseded
+; header above lists the same sites at +2, where the pointer sits):
+;   0xF27C00 0xF27C0C 0xF27C18 0xF27C24 0xF2808C 0xF28098 0xF280A4 0xF280B0
+;   0xF2837D 0xF28938 0xF28944 0xF28950 0xF2895C 0xF28E1B 0xF28E27 0xF28E33
+;   0xF28E3F
+; ⚠ SUPERSEDES the round-1 header kept above, which gave this object
+;   1 byte and said "the extent is the reachability walk's, not the
+;   object's".  The extent IS the object's: the records that name it
+;   fix it.  And its "a linear decode runs 1 instructions and ends
+;   `reti`" was a decode of picture bytes -- nothing calls or branches
+;   into this span, every reference loads the ADDRESS, so it is data.
+;   (lane promB5, 2026-09-02, notes/gen_promB5_spans.py)
+; Picture, read column-major (byte column c, row r at +c*9+r):
+;   .....#####......
+;   ....##...##.....
+;   ...##.###.##....
+;   ...#.#######....
+;   ...#.#######....
+;   ...#.#######....
+;   ...##.######....
+;   ....#######.....
+;   .....#####......
+; ------------------------------------------------------------------
 Data_F2843D:
-	.byte	0x07	; F2843D  |.|
+	.byte	0x07, 0x0C, 0x1B, 0x17, 0x17, 0x17, 0x1B, 0x0F, 0x07	; column 0, rows 0..8
+	.byte	0xC0, 0x60, 0xB0, 0xF0, 0xF0, 0xF0, 0xF0, 0xE0, 0xC0	; column 1, rows 0..8
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02843E, 0x0000E4
+; ------------------------------------------------------------------
+; 0xF2844F-0xF284A1 -- 6 interpreter-B display-list records, 83 bytes.
+; Every length byte equals its handler's implied length (HTBL_B at
+; 0xF31DB1), and the run lands exactly on 0xF284A2.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
+; ------------------------------------------------------------------
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0031	; +0x07 -> (0x2530)
+	.short 0x00E2	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x0B, 0x0D	; B op 0B, 13 bytes -> handler 0xF31C56 -- decimal readout, signed, two extra words
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0031	; +0x07 -> (0x2530)
+	.short 0x00E2	; +0x09 -> (0x2532)
+	.byte 0x02	; +0x0B digit count
+	.byte 0x1E	; +0x0C bit 7 set = unsigned, clear = signed
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2641	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F28522	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x005A	; +0x0D -> (0x2530)
+	.short 0x00E2	; +0x0F -> (0x2532)
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2642	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x0082	; +0x07 -> (0x2530)
+	.short 0x00E2	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
+	.short 0x2643	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.short 0x00D2	; +0x07 -> (0x2530)
+	.short 0x00E2	; +0x09 -> (0x2532)
+	.byte 0x03	; +0x0B digit count
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2645	; +0x02 source variable, 16-bit address
+	.byte 0x1F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F284A2	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x0120	; +0x0D -> (0x2530)
+	.short 0x00E2	; +0x0F -> (0x2532)
+
+; ------------------------------------------------------------------
+; DLTable_F284A2 -- 32 entries of 4 bytes (128 bytes).
+; Referenced by interpreter-B display-list record 0xF28491, whose +7
+; pointer lands here and whose handler fixes the entry size.  32
+; entries is the EXTENT (128 / 4); the record's (mask >> shift) + 1
+; would allow up to 32.
+; ------------------------------------------------------------------
+DLTable_F284A2:
+	.ascii "1-01"	; [0]
+	.ascii "1-02"	; [1]
+	.ascii "1-03"	; [2]
+	.ascii "1-04"	; [3]
+	.ascii "1-05"	; [4]
+	.ascii "1-06"	; [5]
+	.ascii "1-07"	; [6]
+	.ascii "1-08"	; [7]
+	.ascii "1-09"	; [8]
+	.ascii "1-10"	; [9]
+	.ascii "1-11"	; [10]
+	.ascii "1-12"	; [11]
+	.ascii "1-13"	; [12]
+	.ascii "1-14"	; [13]
+	.ascii "1-15"	; [14]
+	.ascii "1-16"	; [15]
+	.ascii "2-01"	; [16]
+	.ascii "2-02"	; [17]
+	.ascii "2-03"	; [18]
+	.ascii "2-04"	; [19]
+	.ascii "2-05"	; [20]
+	.ascii "2-06"	; [21]
+	.ascii "2-07"	; [22]
+	.ascii "2-08"	; [23]
+	.ascii "2-09"	; [24]
+	.ascii "2-10"	; [25]
+	.ascii "2-11"	; [26]
+	.ascii "2-12"	; [27]
+	.ascii "2-13"	; [28]
+	.ascii "2-14"	; [29]
+	.ascii "2-15"	; [30]
+	.ascii "2-16"	; [31]
 
 ; --------------------------------------------------------------------------
 ; Data_F28522 -- 426 bytes, EMITTED AS DATA (not promoted to code).
@@ -46022,7 +46229,176 @@ DL_F286F9:
 	.short 0xF287
 	.byte 0x00	; operand bytes the handler does not read
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x028725, 0x0000DD
+
+; ------------------------------------------------------------------
+; DLTable_F28725 -- 2 entries of 8 bytes (16 bytes).
+; Referenced by interpreter-B display-list record 0xF286F9, whose +7
+; pointer lands here and whose handler fixes the entry size.  2
+; entries is the EXTENT (16 / 8); the record's (mask >> shift) + 1
+; would allow up to 2.
+; ------------------------------------------------------------------
+DLTable_F28725:
+	.short 0x00A7, 0x0084, 0x0111, 0x008F	; [0]
+	.short 0x002F, 0x0084, 0x0099, 0x008F	; [1]
+
+; ------------------------------------------------------------------
+; DLTable_F28735 -- 2 entries of 8 bytes (16 bytes).
+; Referenced by interpreter-B display-list record 0xF28704, whose +7
+; pointer lands here and whose handler fixes the entry size.  2
+; entries is the EXTENT (16 / 8); the record's (mask >> shift) + 1
+; would allow up to 2.
+; ------------------------------------------------------------------
+DLTable_F28735:
+	.short 0x00A7, 0x0098, 0x0111, 0x00A3	; [0]
+	.short 0x002F, 0x0098, 0x0099, 0x00A3	; [1]
+
+; ------------------------------------------------------------------
+; DLTable_F28745 -- 2 entries of 8 bytes (16 bytes).
+; Referenced by interpreter-B display-list record 0xF2870F, whose +7
+; pointer lands here and whose handler fixes the entry size.  2
+; entries is the EXTENT (16 / 8); the record's (mask >> shift) + 1
+; would allow up to 2.
+; ------------------------------------------------------------------
+DLTable_F28745:
+	.short 0x002F, 0x0084, 0x0099, 0x008F	; [0]
+	.short 0x00A7, 0x0084, 0x0111, 0x008F	; [1]
+
+; ------------------------------------------------------------------
+; DLTable_F28755 -- 2 entries of 8 bytes (16 bytes).
+; Referenced by interpreter-B display-list record 0xF2871A, whose +7
+; pointer lands here and whose handler fixes the entry size.  2
+; entries is the EXTENT (16 / 8); the record's (mask >> shift) + 1
+; would allow up to 2.
+; ------------------------------------------------------------------
+DLTable_F28755:
+	.short 0x002F, 0x0098, 0x0099, 0x00A3	; [0]
+	.short 0x00A7, 0x0098, 0x0111, 0x00A3	; [1]
+
+; ------------------------------------------------------------------
+; 0xF28765-0xF28790 -- 4 interpreter-B display-list records, 44 bytes.
+; Every length byte equals its handler's implied length (HTBL_B at
+; 0xF31DB1), and the run lands exactly on 0xF28791.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
+; ------------------------------------------------------------------
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F28791	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F287A1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F287B1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F287C1	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; ------------------------------------------------------------------
+; DLTable_F28791 -- 2 entries of 8 bytes (16 bytes).
+; Referenced by interpreter-B display-list record 0xF28765, whose +7
+; pointer lands here and whose handler fixes the entry size.  2
+; entries is the EXTENT (16 / 8); the record's (mask >> shift) + 1
+; would allow up to 2.
+; ------------------------------------------------------------------
+DLTable_F28791:
+	.short 0x0036, 0x008D, 0x00A2, 0x009A	; [0]
+	.short 0x002F, 0x0084, 0x0099, 0x008F	; [1]
+
+; ------------------------------------------------------------------
+; DLTable_F287A1 -- 2 entries of 8 bytes (16 bytes).
+; Referenced by interpreter-B display-list record 0xF28770, whose +7
+; pointer lands here and whose handler fixes the entry size.  2
+; entries is the EXTENT (16 / 8); the record's (mask >> shift) + 1
+; would allow up to 2.
+; ------------------------------------------------------------------
+DLTable_F287A1:
+	.short 0x0036, 0x00A1, 0x00A2, 0x00AE	; [0]
+	.short 0x002F, 0x0084, 0x0099, 0x008F	; [1]
+
+; ------------------------------------------------------------------
+; DLTable_F287B1 -- 2 entries of 8 bytes (16 bytes).
+; Referenced by interpreter-B display-list record 0xF2877B, whose +7
+; pointer lands here and whose handler fixes the entry size.  2
+; entries is the EXTENT (16 / 8); the record's (mask >> shift) + 1
+; would allow up to 2.
+; ------------------------------------------------------------------
+DLTable_F287B1:
+	.short 0x002F, 0x0084, 0x0099, 0x008F	; [0]
+	.short 0x0036, 0x008D, 0x00A2, 0x009A	; [1]
+
+; ------------------------------------------------------------------
+; DLTable_F287C1 -- 2 entries of 8 bytes (16 bytes).
+; Referenced by interpreter-B display-list record 0xF28786, whose +7
+; pointer lands here and whose handler fixes the entry size.  2
+; entries is the EXTENT (16 / 8); the record's (mask >> shift) + 1
+; would allow up to 2.
+; ------------------------------------------------------------------
+DLTable_F287C1:
+	.short 0x002F, 0x0084, 0x0099, 0x008F	; [0]
+	.short 0x0036, 0x00A1, 0x00A2, 0x00AE	; [1]
+
+; ------------------------------------------------------------------
+; 0xF287D1-0xF287E1 -- 1 interpreter-B display-list record, 17 bytes.
+; Every length byte equals its handler's implied length (HTBL_B at
+; 0xF31DB1), and the run lands exactly on 0xF287E2.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
+; ------------------------------------------------------------------
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2647	; +0x02 source variable, 16-bit address
+	.byte 0x7F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F287E2	; +0x07 -> XIY: string table
+	.short 0x0002	; +0x0B -> BC: bytes per entry
+	.short 0x000D	; +0x0D -> (0x2530)
+	.short 0x00E2	; +0x0F -> (0x2532)
+
+; ------------------------------------------------------------------
+; DLTable_F287E2 -- 16 entries of 2 bytes (32 bytes).
+; Referenced by interpreter-B display-list record 0xF287D1, whose +7
+; pointer lands here and whose handler fixes the entry size.  16
+; entries is the EXTENT (32 / 2); the record's (mask >> shift) + 1
+; would allow up to 128.
+; ------------------------------------------------------------------
+DLTable_F287E2:
+	.ascii "-3"	; [0]
+	.ascii "-2"	; [1]
+	.ascii "-1"	; [2]
+	.ascii " 0"	; [3]
+	.ascii "+1"	; [4]
+	.ascii "+2"	; [5]
+	.ascii "+3"	; [6]
+	.ascii " 0"	; [7]
+	.ascii " 0"	; [8]
+	.ascii " 0"	; [9]
+	.ascii " 0"	; [10]
+	.ascii " 0"	; [11]
+	.ascii " 0"	; [12]
+	.ascii " 0"	; [13]
+	.ascii " 0"	; [14]
+	.ascii " 0"	; [15]
 
 ; === END COVER-R1 0xF283A7-0xF28802 ===
 
@@ -47945,8 +48321,86 @@ DL_F296CC:
 	.short 0x0025
 	.short 0x00A2
 
-; --- 0xF296D6-0xF29764: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0296D6, 0x00008F
+; --- 0xF296D6-0xF29764: CONVERTED 2026-09-02, lane promB5 (notes/gen_promB5_spans.py) ---
+
+; ------------------------------------------------------------------
+; 0xF296D6-0xF296E6 -- 1 interpreter-B display-list record, 17 bytes.
+; Every length byte equals its handler's implied length (HTBL_B at
+; 0xF31DB1), and the run lands exactly on 0xF296E7.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
+; ------------------------------------------------------------------
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2250	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F296E7	; +0x07 -> XIY: string table
+	.short 0x0005	; +0x0B -> BC: bytes per entry
+	.short 0x004D	; +0x0D -> (0x2530)
+	.short 0x001B	; +0x0F -> (0x2532)
+
+; ------------------------------------------------------------------
+; DLTable_F296E7 -- 8 entries of 5 bytes (40 bytes).
+; Referenced by interpreter-B display-list record 0xF296D6, whose +7
+; pointer lands here and whose handler fixes the entry size.  8
+; entries is the EXTENT (40 / 5); the record's (mask >> shift) + 1
+; would allow up to 8.
+; ------------------------------------------------------------------
+DLTable_F296E7:
+	.ascii "PART1"	; [0]
+	.ascii "PART2"	; [1]
+	.ascii "PART3"	; [2]
+	.ascii "PART4"	; [3]
+	.ascii "PART5"	; [4]
+	.ascii "PART6"	; [5]
+	.ascii "PART7"	; [6]
+	.ascii "PART8"	; [7]
+
+; ------------------------------------------------------------------
+; 0xF2970F-0xF29724 -- 2 interpreter-B display-list records, 22 bytes.
+; Every length byte equals its handler's implied length (HTBL_B at
+; 0xF31DB1), and the run lands exactly on 0xF29725.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
+; ------------------------------------------------------------------
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x267E	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F29725	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2250	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F29725	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; ------------------------------------------------------------------
+; DLTable_F29725 -- 8 entries of 8 bytes (64 bytes).
+; Referenced by interpreter-B display-list records 0xF2970F 0xF2971A, whose +7
+; pointer lands here and whose handler fixes the entry size.  8
+; entries is the EXTENT (64 / 8); the record's (mask >> shift) + 1
+; would allow up to 8.
+; ------------------------------------------------------------------
+DLTable_F29725:
+	.short 0x0006, 0x00E2, 0x0022, 0x00EC	; [0]
+	.short 0x002E, 0x00E2, 0x004A, 0x00EC	; [1]
+	.short 0x0056, 0x00E2, 0x0072, 0x00EC	; [2]
+	.short 0x007E, 0x00E2, 0x009A, 0x00EC	; [3]
+	.short 0x00A6, 0x00E2, 0x00C2, 0x00EC	; [4]
+	.short 0x00CE, 0x00E2, 0x00EA, 0x00EC	; [5]
+	.short 0x00F6, 0x00E2, 0x0112, 0x00EC	; [6]
+	.short 0x011E, 0x00E2, 0x013A, 0x00EC	; [7]
 
 ; ------------------------------------------------------------------
 ; 0xF29765-0xF2979F -- 4 display-list records, 59 bytes -- interpreter B
@@ -50517,8 +50971,56 @@ DL_SoundGroupMenuReMap1ReMap2:
 	.short 0x00EE
 	.short 0x00EC
 
-; --- 0xF2B2E3-0xF2B378: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02B2E3, 0x000096
+; --- 0xF2B2E3-0xF2B378: CONVERTED 2026-09-02, lane promB5 (notes/gen_promB5_spans.py) ---
+
+; ------------------------------------------------------------------
+; 0xF2B2E3-0xF2B2F8 -- 2 interpreter-B display-list records, 22 bytes.
+; Every length byte equals its handler's implied length (HTBL_B at
+; 0xF31DB1), and the run lands exactly on 0xF2B2F9.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
+; ------------------------------------------------------------------
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2674	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F2B2F9	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x216A	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F2B2F9	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; ------------------------------------------------------------------
+; DLTable_F2B2F9 -- 16 entries of 8 bytes (128 bytes).
+; Referenced by interpreter-B display-list records 0xF2B2E3 0xF2B2EE, whose +7
+; pointer lands here and whose handler fixes the entry size.  16
+; entries is the EXTENT (128 / 8); the record's (mask >> shift) + 1
+; would allow up to 16.
+; ------------------------------------------------------------------
+DLTable_F2B2F9:
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [0]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [1]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [2]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [3]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [4]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [5]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [6]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [7]
+	.short 0x0007, 0x00C7, 0x0029, 0x00D1	; [8]
+	.short 0x0034, 0x00C7, 0x0056, 0x00D1	; [9]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [10]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [11]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [12]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [13]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [14]
+	.short 0x0061, 0x00C7, 0x008F, 0x00D1	; [15]
 
 ; ------------------------------------------------------------------
 ; 0xF2B379-0xF2B38E -- 2 display-list records, 22 bytes -- interpreter B
@@ -62619,6 +63121,10 @@ DL_SequencerPlayS0ngCycleMeasure:
 	.short 0x00DC
 
 ; === COVER-R1 0xF34C6E-0xF34D98 ===
+; ⚠ AMENDED 2026-09-02 (lane promB5, notes/gen_promB5_spans.py): 224 of the 243 B
+; this band left `.incbin` are now typed data -- the 16x6 and 16x8 operand
+; arrays that the two interpreter-B records just above them point at.  7 B at
+; 0xF34C9B remain; the other 12 were closed by gen_prom_b_f34ca2_fix_module.py.
 ; 0xF34C6E-0xF34D97, coverage round 1: 55 of this span's 298 bytes are
 ; reachable -- 0 as CODE (an entry point in the routine directory, or a branch
 ; prom_b's own converted instructions decode) in 0 runs, and 55 as DATA (only
@@ -62686,7 +63192,56 @@ Data_F34C6E:
 ; pass and stays .incbin.
 	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler (HTBL_B[4])
 	.byte 0xF6, 0x12, 0xFF, 0x00, 0x0E, 0xB8, 0x4C, 0xF3, 0x00
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034CB8, 0x0000E0
+
+; ------------------------------------------------------------------
+; DLTable_F34CB8 -- 16 entries of 6 bytes (96 bytes).
+; Referenced by interpreter-B display-list record 0xF34CAD, whose +7
+; pointer lands here and whose handler fixes the entry size.  16
+; entries is the EXTENT (96 / 6); the record's (mask >> shift) + 1
+; would allow up to 256.
+; ------------------------------------------------------------------
+DLTable_F34CB8:
+	.short 0x1900, 0x0005, 0x000E	; [0]
+	.short 0x1905, 0x0005, 0x000E	; [1]
+	.short 0x190A, 0x0005, 0x000E	; [2]
+	.short 0x190F, 0x0005, 0x000E	; [3]
+	.short 0x1914, 0x0005, 0x000E	; [4]
+	.short 0x1919, 0x0005, 0x000E	; [5]
+	.short 0x191E, 0x0005, 0x000E	; [6]
+	.short 0x1923, 0x0005, 0x000E	; [7]
+	.short 0x20D0, 0x0005, 0x000E	; [8]
+	.short 0x20D5, 0x0005, 0x000E	; [9]
+	.short 0x20DA, 0x0005, 0x000E	; [10]
+	.short 0x20DF, 0x0005, 0x000E	; [11]
+	.short 0x20E4, 0x0005, 0x000E	; [12]
+	.short 0x20E9, 0x0005, 0x000E	; [13]
+	.short 0x20EE, 0x0005, 0x000E	; [14]
+	.short 0x20F3, 0x0005, 0x000E	; [15]
+
+; ------------------------------------------------------------------
+; DLTable_F34D18 -- 16 entries of 8 bytes (128 bytes).
+; Referenced by interpreter-B display-list records 0xF34000 0xF3400B 0xF34CA2, whose +7
+; pointer lands here and whose handler fixes the entry size.  16
+; entries is the EXTENT (128 / 8); the record's (mask >> shift) + 1
+; would allow up to 256.
+; ------------------------------------------------------------------
+DLTable_F34D18:
+	.short 0x0006, 0x00A1, 0x0022, 0x00AC	; [0]
+	.short 0x002E, 0x00A1, 0x004A, 0x00AC	; [1]
+	.short 0x0056, 0x00A1, 0x0072, 0x00AC	; [2]
+	.short 0x007E, 0x00A1, 0x009A, 0x00AC	; [3]
+	.short 0x00A6, 0x00A1, 0x00C2, 0x00AC	; [4]
+	.short 0x00CE, 0x00A1, 0x00EA, 0x00AC	; [5]
+	.short 0x00F6, 0x00A1, 0x0112, 0x00AC	; [6]
+	.short 0x011E, 0x00A1, 0x013A, 0x00AC	; [7]
+	.short 0x0006, 0x00D0, 0x0022, 0x00DB	; [8]
+	.short 0x002E, 0x00D0, 0x004A, 0x00DB	; [9]
+	.short 0x0056, 0x00D0, 0x0072, 0x00DB	; [10]
+	.short 0x007E, 0x00D0, 0x009A, 0x00DB	; [11]
+	.short 0x00A6, 0x00D0, 0x00C2, 0x00DB	; [12]
+	.short 0x00CE, 0x00D0, 0x00EA, 0x00DB	; [13]
+	.short 0x00F6, 0x00D0, 0x0112, 0x00DB	; [14]
+	.short 0x011E, 0x00D0, 0x013A, 0x00DB	; [15]
 
 ; === END COVER-R1 0xF34C6E-0xF34D98 ===
 
