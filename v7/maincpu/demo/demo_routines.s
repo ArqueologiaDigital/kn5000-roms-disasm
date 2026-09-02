@@ -113,17 +113,17 @@ DemoStyle_InputHandler:
 	jr nz, DemoStyleTtlFunc_Exit
 
 DemoStyle_EncoderHandler:
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, DemoStyleTtlFunc_Exit
-	cpdi8 (3375), 0
+	cp (3375:16), 0
 	jr nz, DemoStyleTtlFunc_Exit
 	ldw wa, 0xe2
 	jr DemoStyle_PostEventCommon
 
 DemoStyle_DirectionHandler:
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, DemoStyleTtlFunc_Exit
-	cpdi8 (3375), 0
+	cp (3375:16), 0
 	jr nz, DemoStyleTtlFunc_Exit
 	ldw wa, 0xe3
 
@@ -191,17 +191,17 @@ DemoSound_InputHandler:
 	jr nz, DemoSoundTtlFunc_Exit
 
 DemoSound_EncoderHandler:
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, DemoSoundTtlFunc_Exit
-	cpdi8 (3375), 0
+	cp (3375:16), 0
 	jr nz, DemoSoundTtlFunc_Exit
 	ldw wa, 0xe1
 	jr DemoSound_PostEventCommon
 
 DemoSound_DirectionHandler:
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, DemoSoundTtlFunc_Exit
-	cpdi8 (3375), 0
+	cp (3375:16), 0
 	jr nz, DemoSoundTtlFunc_Exit
 	ldw wa, 0xe3
 
@@ -269,17 +269,17 @@ DemoRhythm_InputHandler:
 	jr nz, DemoRhyTtlFunc_Exit
 
 DemoRhythm_EncoderHandler:
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, DemoRhyTtlFunc_Exit
-	cpdi8 (3375), 0
+	cp (3375:16), 0
 	jr nz, DemoRhyTtlFunc_Exit
 	ldw wa, 0xe1
 	jr DemoRhythm_PostEventCommon
 
 DemoRhythm_DirectionHandler:
-	cpdi16 0x28b4, 0
+	cpw (0x28b4:16), 0
 	jr nz, DemoRhyTtlFunc_Exit
-	cpdi8 (3375), 0
+	cp (3375:16), 0
 	jr nz, DemoRhyTtlFunc_Exit
 	ldw wa, 0xe2
 

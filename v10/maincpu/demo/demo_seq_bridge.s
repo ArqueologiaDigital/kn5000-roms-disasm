@@ -143,10 +143,10 @@ SeqSongNameFunc:
 	jr z, SeqSongName_RefreshAll
 	cp xbc, 0x1e70002
 	jrl nz, SongBank_ReturnZero
-	stda32 7116, xde
-	ldb_da a, (0x00ffe3)
+	ld (7116:16), xde
+	ld a, (0x00ffe3:24)
 	extz wa
-	stda16 (7120), xwa
+	ld (7120:16), wa
 	ld de, wa
 	extz xde
 	ld xwa, (7116:16)
@@ -189,7 +189,7 @@ SeqSongName_CheckPrev:
 	dec 1, wa
 
 SeqSongName_StoreCurrent:
-	stda16 (7120), xwa
+	ld (7120:16), wa
 
 SongBank_StoreCurrentSong:
 	ld de, (7120:16)
@@ -299,10 +299,10 @@ SeqSongMemoryFunc:
 	jr z, SeqSongMem_RefreshAll
 	cp xbc, 0x1e70002
 	jrl nz, SongBank_EventHandler_Return
-	stda32 7192, xde
-	ldb_da a, (0x00ffe3)
+	ld (7192:16), xde
+	ld a, (0x00ffe3:24)
 	extz wa
-	stda16 (7196), xwa
+	ld (7196:16), wa
 	ld de, wa
 	extz xde
 	ld xwa, (7192:16)
@@ -344,7 +344,7 @@ SeqSongMem_CheckPrev:
 	dec 1, wa
 
 SeqSongMem_StoreCurrent:
-	stda16 (7196), xwa
+	ld (7196:16), wa
 
 SongBank_EventCompare:
 	ld de, (7196:16)
@@ -429,7 +429,7 @@ CDlikeSwTtl_SendEvent8C_13:
 	jp ApPostEvent
 
 CDlikeSwTtl_SetRecordAndNotify:
-	stib_da (0x021090), 0x01
+	ld (0x021090:24), 0x01
 	ld xwa, NAKA_PerfReg_Container_Root_0x1697
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
@@ -444,7 +444,7 @@ CDlikeSwTtl_SetRecordAndNotify:
 	jp ApPostEvent
 
 SeqInit_PostEventSequence:
-	stib_da (0x021090), 0x00
+	ld (0x021090:24), 0x00
 	ld xwa, NAKA_PerfReg_Container_Root_0x1697
 	ld xbc, 0x1c0000c
 	lds32 xde, 0
@@ -481,40 +481,40 @@ SeqInit_FinalEvent:
 	jp ApPostEvent
 
 SeqRecPlay_EnableRecordOnly:
-	stib_da (0x021092), 0x01
-	stib_da (0x021094), 0x00
+	ld (0x021092:24), 0x01
+	ld (0x021094:24), 0x00
 	ld xwa, 0x6f0025
 	ld xbc, 0x1e000a7
 	lds32 xde, 1
 	call ApPostEvent
 	lds32 xde, 0
-	ldb_da e, (0x021094)
+	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
 	ld xbc, 0x1e000a7
 	jp ApPostEvent
 
 SeqRecPlay_EnablePlayOnly:
-	stib_da (0x021092), 0x00
-	stib_da (0x021094), 0x01
+	ld (0x021092:24), 0x00
+	ld (0x021094:24), 0x01
 	ld xwa, 0x6f0025
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
 	call ApPostEvent
 	lds32 xde, 0
-	ldb_da e, (0x021094)
+	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
 	ld xbc, 0x1e000a7
 	jp ApPostEvent
 
 SeqRecPlay_DisableBoth:
-	stib_da (0x021092), 0x00
-	stib_da (0x021094), 0x00
+	ld (0x021092:24), 0x00
+	ld (0x021094:24), 0x00
 	ld xwa, 0x6f0025
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
 	call ApPostEvent
 	lds32 xde, 0
-	ldb_da e, (0x021094)
+	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
 	ld xbc, 0x1e000a7
 	jp ApPostEvent
@@ -523,7 +523,7 @@ SeqRecPlay_DisableBoth:
 SqTrSel_CaseD:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
-	stdi8 (7498), 0
+	ld (7498:16), 0
 	ret
 
 ; SqTrSelTtl case E
@@ -534,14 +534,14 @@ SqTrSel_CaseE:
 	ld xbc, 0x1c70009
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (7498), 0
+	ld (7498:16), 0
 	ret
 
 ; SqTrSelTtl case F
 SqTrSel_CaseF:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
-	stdi8 (7498), 0
+	ld (7498:16), 0
 	ret
 
 PlayMode_SendStopEvent:
@@ -617,7 +617,7 @@ SqTrSel_CaseG_Thunk4:
 
 
 PlayMode_CheckAndAbort:
-	cpdi8 (0x8d36), 114
+	cp (0x8d36:16), 114
 	ret z
 	call SeqState_GetFlags
 	bit 0, hl
@@ -641,7 +641,7 @@ PlayMode_SwitchToModeAndNotify:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ldw wa, 0xee
 	jp SoundCtrl_SendCommand
 DispatchHandler_ConditionalJump:
@@ -687,12 +687,12 @@ DispatchHandler_InitAllSlots:
 	pop xde
 	lds iy, 1
 	call SeqNode_ResolveSlotPtr
-	stdi16 (0xf22f), 1
+	ldw (0xf22f:16), 1
 	ld xiy, (4349:16)
 	xor xhl, xhl
 	lds de, 2
 	ld bc, (0x286d:16)
-	stda16 (0xf231), xbc
+	ld (0xf231:16), bc
 	dec 1, bc
 
 SeqSlot_InitEntryLoop:
@@ -761,7 +761,7 @@ DispatchHandler_ResolveSlot:
 	call SeqNode_ResolveSlotPtr
 	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
-	stda16 (0xf22f), xwa
+	ld (0xf22f:16), wa
 	ld ix, iy
 	cp wa, 0xffff
 	jr z, DispatchResolve_MarkCurrent
@@ -777,7 +777,7 @@ DispatchResolve_MarkCurrent:
 	ormi8 (xhl), 0x80
 	decdi16 1, 0xf231
 	pop xde
-	stda32 4349, xde
+	ld (4349:16), xde
 	ldb w, 0x0
 	pop xde
 	ret
@@ -793,9 +793,9 @@ SeqNode_InsertAtPosition:
 	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
-	stda16 (3302), xwa
+	ld (3302:16), wa
 	ld bc, (0xf22f:16)
-	stda16 (0xf22f), xiy
+	ld (0xf22f:16), iy
 	xor wa, wa
 	call SeqNode_ResolveSlotPtr
 	ld xhl, (4349:16)
@@ -863,7 +863,7 @@ SeqNodeInsert_EmptyList:
 	ld iy, (xhl + 3)
 	cp iy, 0xffff
 	jr nz, SeqNodeInsert_UnmarkAndCount
-	stdi16 (3302), 0
+	ldw (3302:16), 0
 	ld iy, ix
 	andmi8 (xhl), 0x7f
 	jr SeqNodeInsert_LinkPrev
@@ -874,7 +874,7 @@ SeqNode_ResolveSlotPtr:
 	dec 1, hl
 	sla xhl, 8
 	addda32 xhl, 4362
-	stda32 4349, xhl
+	ld (4349:16), xhl
 	xor xhl, xhl
 	ret
 
@@ -884,7 +884,7 @@ VoiceSlot_AssignWrapper:
 
 VoiceSlot_AssignToChannel:
 	pushw bc
-	stda32 4353, xiy
+	ld (4353:16), xiy
 	ld (3822:16), a
 	ld c, w
 	call VoiceSlot_ComputeWordIndex
@@ -896,7 +896,7 @@ VoiceSlot_ScanLoop:
 	ldw_sri IY, 0x07, 0xf0, 0xf8
 	cp iy, 0xffff
 	jrl z, VoiceSlot_AllocNewSlot
-	stda16 (0x28ba), xiy
+	ld (0x28ba:16), iy
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
@@ -904,7 +904,7 @@ VoiceSlot_ScanLoop:
 	ldto_lerp XIX, 0x38
 	xor w, w
 	sla iz, 1
-	stda16 (0x28bc), xwa
+	ld (0x28bc:16), wa
 	ld xix, 0xc9e
 
 VoiceSlot_FindFreeEntry:
@@ -928,7 +928,7 @@ VoiceSlot_CheckOccupied:
 	ldto_lerp XIX, 0x38
 	sla iz, 1
 	and iy, 0xff
-	stda16 (0x28b8), xiy
+	ld (0x28b8:16), iy
 	ld xix, 0xf1f8
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
@@ -941,8 +941,8 @@ VoiceSlot_CheckOccupied:
 	cp wa, 0xff
 	jr ugt, VoiceSlot_Overflow
 	ldw_sri IY, 0x07, 0xf0, 0xf8
-	stda16 (0x289f), xiy
-	stda16 (0x28b6), xwa
+	ld (0x289f:16), iy
+	ld (0x28b6:16), wa
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
@@ -971,7 +971,7 @@ VoiceSlot_CheckOccupied:
 
 VoiceSlot_Overflow:
 	sub wa, 0xfb
-	stda16 (0x28b6), xwa
+	ld (0x28b6:16), wa
 	pushw de
 	call DispatchHandler_ResolveSlot
 	popw de
@@ -989,7 +989,7 @@ VoiceSlot_Overflow:
 	call SeqNode_ResolveSlotPtr
 	ld xhl, (4349:16)
 	ldw (xhl + 3), 0xffff
-	stda16 (0x289f), xiy
+	ld (0x289f:16), iy
 	ld wa, iy
 	pushw de
 	ld xix, 0xf1f8
@@ -1024,9 +1024,9 @@ VoiceSlot_Overflow:
 VoiceSlot_SendErrorAndReset:
 	ldb w, 0x68
 	call MIDI_SendSysExCmd
-	anddi8 (0xe3e2), 111
-	stdi8 (0x7f42), 15
-	stdi16 (0xe3dc), 0x40ee
+	and (0xe3e2:16), 111
+	ld (0x7f42:16), 15
+	ldw (0xe3dc:16), 0x40ee
 	popw bc
 	ret
 

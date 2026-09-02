@@ -744,33 +744,33 @@ NoteEvent_CopySlotData_Body:
 
 Flash_InitExtMemAddrs:
 	lda xwa, (0x300000:24)
-	stda32 3190, xwa
+	ld (3190:16), xwa
 	ld xbc, xwa
 	add xbc, 0x19800
-	stda32 3194, xbc
+	ld (3194:16), xbc
 	ld xbc, xwa
 	add xbc, 0x30000
-	stda32 3198, xbc
+	ld (3198:16), xbc
 	ld xbc, xwa
 	add xbc, 0x49800
-	stda32 3202, xbc
+	ld (3202:16), xbc
 	ld xbc, xwa
 	add xbc, 0x60000
-	stda32 3206, xbc
+	ld (3206:16), xbc
 	ld xbc, xwa
 	add xbc, 0x79800
-	stda32 3210, xbc
+	ld (3210:16), xbc
 	ld xbc, xwa
 	add xbc, 0x90000
-	stda32 3214, xbc
+	ld (3214:16), xbc
 	ld xbc, xwa
 	add xbc, 0xb0000
-	stda32 3218, xbc
+	ld (3218:16), xbc
 	lda xwa, (0x094800:24)
-	stda32 3182, xwa
+	ld (3182:16), xwa
 	lda xwa, (0x069800:24)
-	stda32 3186, xwa
-	stda32 3222, xwa
+	ld (3186:16), xwa
+	ld (3222:16), xwa
 	ret
 
 Flash_InitBytecodeBlock:
@@ -807,7 +807,7 @@ Flash_InitBytecodeBlock:
 	ld_rrb a, xbc, wa
 	ld (xsp+6), a
 	ld xwa, (3186:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ldib_erp 251, 0
 	ld	c, (xsp+6)
 	extz	bc
@@ -828,9 +828,9 @@ Flash_InitBytecodeBlock:
 	cp_erpb 251, 10
 	jr c, -43
 	ld	xwa, (3182:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ld	xwa, (3186:16)
-	stda32	0x39b2, xwa
+	ld	(0x39b2:16), xwa
 	.byte 0xf1
 	lda	xiy, (xwa)
 	.byte 0xb0, 0xc7
@@ -948,7 +948,7 @@ Flash_InitBytecodeBlock:
 	ld_rrb a, xbc, wa
 	ld (xsp+6), a
 	ld xwa, (3186:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ldib_erp 251, 0
 	ld	c, (xsp+10)
 	extz	bc
@@ -971,9 +971,9 @@ Flash_InitBytecodeBlock:
 	ld	a, (xsp+12)
 	extz	wa
 	calr	320
-	stda32	0x39ae, xhl
+	ld	(0x39ae:16), xhl
 	ld	xwa, (3186:16)
-	stda32	0x39b2, xwa
+	ld	(0x39b2:16), xwa
 	.byte 0xf1
 	lda	xiy, (xwa)
 	.byte 0xb0, 0xc7
@@ -1007,7 +1007,7 @@ Flash_InitBytecodeBlock:
 	jr	z, 24
 	ld	(xsp+8), 1
 	ld	xwa, (0x39b2:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	.byte 0xc1, 0xad
 	push	xbc
 	pop_f
@@ -1624,7 +1624,7 @@ Flash_EraseAndWriteFinal:
 
 Flash_StoreBaseAndInitAccPatch:
 	ld xwa, (3186:16)
-	stda32 0x39ae, xwa
+	ld (0x39ae:16), xwa
 	jp AccPatch_InitSlotChain_Wrap
 Flash_ExtendedOpsBlock:
 	push	xiz
@@ -3020,7 +3020,7 @@ DualVoice_ScanColumnLoop:
 	jr nz, DualVoice_ScanRow1
 
 DualVoice_StoreBankMatch:
-	stda16 (1748), xwa
+	ld (1748:16), wa
 
 DualVoice_ScanRow1:
 	ld a, (xsp + 2)
@@ -3097,7 +3097,7 @@ DualVoice_ScanColumnLoopAlt:
 	jr nz, DualVoice_ScanRow1Alt
 
 DualVoice_StoreBankMatchAlt:
-	stda16 (1850), xwa
+	ld (1850:16), wa
 
 DualVoice_ScanRow1Alt:
 	ld a, (xsp + 2)
@@ -4598,9 +4598,9 @@ ToneParam_ExtendedOpsBlock:
 	rcf
 	call	cmp_ld_mae
 	ld	xwa, (3186:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ld	xwa, (3182:16)
-	stda32	0x39b2, xwa
+	ld	(0x39b2:16), xwa
 	lds32	xwa, 0
 	ld	(xsp), xwa
 	ld	xwa, (xsp)
@@ -4615,110 +4615,110 @@ ToneParam_ExtendedOpsBlock:
 	ld	xwa, (xsp)
 	cp	xwa, 11
 	jr	ule, -34
-	stdi8	(0x39ac), 12
-	stdi8	(0x39ad), 12
+	ld	(0x39ac:16), 12
+	ld	(0x39ad:16), 12
 	calr	353
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 13
-	stdi8	(0x39ad), 14
+	ld	(0x39ac:16), 13
+	ld	(0x39ad:16), 14
 	calr	333
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 14
-	stdi8	(0x39ad), 15
+	ld	(0x39ac:16), 14
+	ld	(0x39ad:16), 15
 	calr	313
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 15
-	stdi8	(0x39ad), 16
+	ld	(0x39ac:16), 15
+	ld	(0x39ad:16), 16
 	calr	293
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 16
-	stdi8	(0x39ad), 24
+	ld	(0x39ac:16), 16
+	ld	(0x39ad:16), 24
 	calr	273
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 17
-	stdi8	(0x39ad), 26
+	ld	(0x39ac:16), 17
+	ld	(0x39ad:16), 26
 	calr	253
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 18
-	stdi8	(0x39ad), 27
+	ld	(0x39ac:16), 18
+	ld	(0x39ad:16), 27
 	calr	233
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 19
-	stdi8	(0x39ad), 28
+	ld	(0x39ac:16), 19
+	ld	(0x39ad:16), 28
 	calr	213
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 12
-	stdi8	(0x39ad), 18
+	ld	(0x39ac:16), 12
+	ld	(0x39ad:16), 18
 	calr	193
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 13
-	stdi8	(0x39ad), 20
+	ld	(0x39ac:16), 13
+	ld	(0x39ad:16), 20
 	calr	173
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 14
-	stdi8	(0x39ad), 21
+	ld	(0x39ac:16), 14
+	ld	(0x39ad:16), 21
 	calr	153
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 15
-	stdi8	(0x39ad), 22
+	ld	(0x39ac:16), 15
+	ld	(0x39ad:16), 22
 	calr	133
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 12
-	stdi8	(0x39ad), 13
+	ld	(0x39ac:16), 12
+	ld	(0x39ad:16), 13
 	calr	113
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 15
-	stdi8	(0x39ad), 17
+	ld	(0x39ac:16), 15
+	ld	(0x39ad:16), 17
 	calr	93
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 16
-	stdi8	(0x39ad), 25
+	ld	(0x39ac:16), 16
+	ld	(0x39ad:16), 25
 	calr	73
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 19
-	stdi8	(0x39ad), 29
+	ld	(0x39ac:16), 19
+	ld	(0x39ad:16), 29
 	calr	53
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 12
-	stdi8	(0x39ad), 19
+	ld	(0x39ac:16), 12
+	ld	(0x39ad:16), 19
 	calr	33
 	cps	hl, 0
 	jr	z, 3
 	ld	(xsp+4), hl
-	stdi8	(0x39ac), 15
-	stdi8	(0x39ad), 23
+	ld	(0x39ac:16), 15
+	ld	(0x39ad:16), 23
 	calr	13
 	cps	hl, 0
 	jr	z, 3
@@ -4737,7 +4737,7 @@ ToneParam_ExtendedOpsBlock:
 	bit	0, wa
 	jr	z, 29
 	ld	xwa, (0x39b2:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	.byte 0xc1, 0xad
 	push	xbc
 	pop_f
@@ -4745,7 +4745,7 @@ ToneParam_ExtendedOpsBlock:
 	push	xbc
 	call	AccPatch_InitFromSlotIndex
 	ld	xwa, (3186:16)
-	stda32	0x39ae, xwa
+	ld	(0x39ae:16), xwa
 	ldw	iz, 0xff95
 	ld	hl, iz
 	popw	iz
@@ -4791,27 +4791,27 @@ ToneParam_ExtendedOpsBlock:
 	jrl	lt, -4583
 	ldw	ix, 0xeff1
 	ldw	ix, 1024
-	stdi8	(0x34d6), 12
+	ld	(0x34d6:16), 12
 	ld	wa, hl
 	calr	322
-	stdi8	(0x34ef), 5
-	stdi8	(0x34d6), 13
+	ld	(0x34ef:16), 5
+	ld	(0x34d6:16), 13
 	ld	wa, hl
 	calr	307
-	stdi8	(0x34ef), 6
-	stdi8	(0x34d6), 16
+	ld	(0x34ef:16), 6
+	ld	(0x34d6:16), 16
 	ld	wa, hl
 	calr	292
-	stdi8	(0x34ef), 7
-	stdi8	(0x34d6), 17
+	ld	(0x34ef:16), 7
+	ld	(0x34d6:16), 17
 	ld	wa, hl
 	calr	277
-	stdi8	(0x34ef), 10
-	stdi8	(0x34d6), 14
+	ld	(0x34ef:16), 10
+	ld	(0x34d6:16), 14
 	ld	wa, hl
 	calr	262
-	stdi8	(0x34ef), 11
-	stdi8	(0x34d6), 15
+	ld	(0x34ef:16), 11
+	ld	(0x34d6:16), 15
 	ld	wa, hl
 	calr	247
 	ld	xbc, (3182:16)
@@ -4826,27 +4826,27 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0xee
 	ldw	ix, 0xeff1
 	ldw	ix, 1024
-	stdi8	(0x34d6), 18
+	ld	(0x34d6:16), 18
 	ld	wa, hl
 	calr	210
-	stdi8	(0x34ef), 5
-	stdi8	(0x34d6), 19
+	ld	(0x34ef:16), 5
+	ld	(0x34d6:16), 19
 	ld	wa, hl
 	calr	195
-	stdi8	(0x34ef), 6
-	stdi8	(0x34d6), 22
+	ld	(0x34ef:16), 6
+	ld	(0x34d6:16), 22
 	ld	wa, hl
 	calr	180
-	stdi8	(0x34ef), 7
-	stdi8	(0x34d6), 23
+	ld	(0x34ef:16), 7
+	ld	(0x34d6:16), 23
 	ld	wa, hl
 	calr	165
-	stdi8	(0x34ef), 10
-	stdi8	(0x34d6), 20
+	ld	(0x34ef:16), 10
+	ld	(0x34d6:16), 20
 	ld	wa, hl
 	calr	150
-	stdi8	(0x34ef), 11
-	stdi8	(0x34d6), 21
+	ld	(0x34ef:16), 11
+	ld	(0x34d6:16), 21
 	ld	wa, hl
 	calr	135
 	ld	xbc, (3182:16)
@@ -4861,27 +4861,27 @@ ToneParam_ExtendedOpsBlock:
 	.byte 0xee
 	ldw	ix, 0xeff1
 	ldw	ix, 1024
-	stdi8	(0x34d6), 24
+	ld	(0x34d6:16), 24
 	ld	wa, hl
 	calr	98
-	stdi8	(0x34ef), 5
-	stdi8	(0x34d6), 25
+	ld	(0x34ef:16), 5
+	ld	(0x34d6:16), 25
 	ld	wa, hl
 	calr	83
-	stdi8	(0x34ef), 6
-	stdi8	(0x34d6), 28
+	ld	(0x34ef:16), 6
+	ld	(0x34d6:16), 28
 	ld	wa, hl
 	calr	68
-	stdi8	(0x34ef), 7
-	stdi8	(0x34d6), 29
+	ld	(0x34ef:16), 7
+	ld	(0x34d6:16), 29
 	ld	wa, hl
 	calr	53
-	stdi8	(0x34ef), 10
-	stdi8	(0x34d6), 26
+	ld	(0x34ef:16), 10
+	ld	(0x34d6:16), 26
 	ld	wa, hl
 	calr	38
-	stdi8	(0x34ef), 11
-	stdi8	(0x34d6), 27
+	ld	(0x34ef:16), 11
+	ld	(0x34d6:16), 27
 	ld	wa, hl
 	calr	23
 	stb_erp c, 251
@@ -4917,7 +4917,7 @@ DualVoice_LoadAndScan:
 	ld (xsp + 4), 0x0
 	ld (xsp + 10), 0x0
 	calr Flash_InitExtMemAddrs
-	stda32 3182, xiz
+	ld (3182:16), xiz
 	cp (xsp + 14), 0xa
 	jrl nc, DualVoice_LoadDoneRetVal
 	ld a, (xsp + 14)
@@ -4940,7 +4940,7 @@ DualVoice_LoadAndScan:
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	ld (xsp + 8), a
 	ld xwa, (3186:16)
-	stda32 0x39ae, xwa
+	ld (0x39ae:16), xwa
 	ldib_erp 0xfb, 0
 
 DualVoice_AccPatchLoop:
@@ -4958,9 +4958,9 @@ DualVoice_AccPatchLoop:
 	cp_erpb 0xfb, 0x0a
 	jr c, DualVoice_AccPatchLoop
 	ld xwa, (3182:16)
-	stda32 0x39ae, xwa
+	ld (0x39ae:16), xwa
 	ld xwa, (3186:16)
-	stda32 0x39b2, xwa
+	ld (0x39b2:16), xwa
 	resda 0, 0x35b0
 	ldib_erp 0xfb, 0
 
@@ -5074,7 +5074,7 @@ FileHdr_CopyDataLoop:
 
 FileHdr_InitBasePointer:
 	lda xwa, (0x1e8800:24)
-	stda32 3226, xwa
+	ld (3226:16), xwa
 	ret
 
 ToneData_SetupCopyPointers:
@@ -5405,7 +5405,7 @@ CmpSetP1_TtlDispatch:
 	ld xwa, xiz
 	call GetViewInstance
 	ld a, (xhl + 50)
-	stb_da (0x094810), a
+	ld (0x094810:24), a
 
 GridBoxProc_Return:
 	lds32 xhl, 0
@@ -6383,7 +6383,7 @@ PsS2cFmeas_HandleScroll:
 	lda xsp, (xsp + 10)
 	lda xbc, (xiz + 22)
 	lda xwa, (xiz + 32)
-	cpdi8 (0x3a77), 0
+	cp (0x3a77:16), 0
 	jr nz, PsS2cFmeas_SetActive
 	ldw (xwa), 0x0
 	ldw (xbc), 0xff
@@ -6437,7 +6437,7 @@ PsS2cLmeas_HandleScroll:
 	lda xsp, (xsp + 10)
 	lda xbc, (xiz + 22)
 	lda xwa, (xiz + 32)
-	cpdi8 (0x3a77), 1
+	cp (0x3a77:16), 1
 	jr nz, PsS2cLmeas_SetActive
 	ldw (xwa), 0x0
 	ldw (xbc), 0xff
@@ -6479,7 +6479,7 @@ PsSeqSongNoBoxProc:
 PsSeqSongNo_HandleScroll:
 	ld xwa, xiz
 	call InheritedProc
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	pushw wa
@@ -6531,7 +6531,7 @@ PsS2cTrans_HandleScroll:
 	inc 8, xsp
 	lda xwa, (xiz + 22)
 	lda xbc, (xiz + 32)
-	cpdi8 (0x3a77), 2
+	cp (0x3a77:16), 2
 	jr nz, SndArg_GridBnk_Case0
 	ldw (xbc), 0x0
 	ldw (xwa), 0xff
@@ -6598,7 +6598,7 @@ FdcFormat_DialGrid:
 	ld xwa, (xsp + 16)
 	call GetViewInstance
 	ld (xsp + 8), xhl
-	cpdi8 (0x3a77), 3
+	cp (0x3a77:16), 3
 	jrl nz, FdcFormat_ReturnZeroJmp
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1e0008f

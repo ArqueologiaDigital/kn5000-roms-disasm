@@ -2002,7 +2002,7 @@ GlobalTune_StoreFineTune:
 	sub	c, 64                                  ; FADAEE  sub C,0x40
 	add	c, c                                   ; FADAF1  add C,C
 	exts	bc                                    ; FADAF3  exts BC
-	stda16	(0x1503), bc                        ; FADAF5  ld (0x1503),BC
+	ld	(0x1503:16), bc                        ; FADAF5  ld (0x1503),BC
 	unlk32 xiz                                 ; FADAF9  unlk XIZ
 	ret                                        ; FADAFB  ret
 ; --------------------------------------------------------------------------
@@ -2039,7 +2039,7 @@ GlobalTune_StoreTranspose:
 	ld	bc, (xiz+8)                             ; FADB00  ld BC,(XIZ+0x08)
 	exts	bc                                    ; FADB03  exts BC
 	sll	bc, 8                                  ; FADB05  sll 0x08,BC
-	stda16	(0x1505), bc                        ; FADB08  ld (0x1505),BC
+	ld	(0x1505:16), bc                        ; FADB08  ld (0x1505),BC
 	unlk32 xiz                                 ; FADB0C  unlk XIZ
 	ret                                        ; FADB0E  ret
 ; --------------------------------------------------------------------------
@@ -2480,7 +2480,7 @@ Dev10C_SetReg0201_FromNibblePair__FADC93:
 	sll	bc, 8                                  ; FADCA6  sll 0x08,BC
 	ld	hl, bc                                  ; FADCA9  ld HL,BC
 Dev10C_SetReg0201_FromNibblePair__FADCAB:
-	ldw_da	bc, (0xFE12B7)                      ; FADCAB  ld BC,(0xfe12b7)
+	ld	bc, (0xFE12B7:24)                      ; FADCAB  ld BC,(0xfe12b7)
 	and	bc, 0xF9F                              ; FADCB0  and BC,0x0f9f
 	or	bc, ix                                  ; FADCB4  or BC,IX
 	or	bc, hl                                  ; FADCB6  or BC,HL
@@ -3785,13 +3785,13 @@ Voice_Restage_Reg0440_BaseCurve_ForPart__FAE404:
 	inc	4, bc                                  ; FAE447  inc 4,BC
 	extz	xbc                                   ; FAE449  extz XBC
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE44B  or (XBC+0x1523),0x0008
-	stiw_da	(0xD79E), 0                        ; FAE452  ld (0x00d79e),0x0000
+	ldw	(0xD79E:24), 0                        ; FAE452  ld (0x00d79e),0x0000
 	jr Voice_Restage_Reg0440_BaseCurve_ForPart__FAE469                      ; FAE459  jr T,0xfae469
 Voice_Restage_Reg0440_BaseCurve_ForPart__FAE45B:
 	push	0                                     ; FAE45B  push 0x00
 	push	h                                     ; FAE45D  push H
 	call	0xFA796D                              ; FAE45F  call 0xfa796d
-	stw_da	(0xD79E), wa                        ; FAE463  ld (0x00d79e),WA
+	ld	(0xD79E:24), wa                        ; FAE463  ld (0x00d79e),WA
 	popw	bc                                    ; FAE468  pop BC
 Voice_Restage_Reg0440_BaseCurve_ForPart__FAE469:
 	lda	xbc, (0xD75E:24)                       ; FAE469  lda XBC,0x00d75e
@@ -3945,7 +3945,7 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE53D:
 	inc	4, bc                                  ; FAE57B  inc 4,BC
 	extz	xbc                                   ; FAE57D  extz XBC
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE57F  or (XBC+0x1523),0x0008
-	stiw_da	(0xD79E), 0                        ; FAE586  ld (0x00d79e),0x0000
+	ldw	(0xD79E:24), 0                        ; FAE586  ld (0x00d79e),0x0000
 	lda	xbc, (0xD75E:24)                       ; FAE58D  lda XBC,0x00d75e
 	push	xbc                                   ; FAE592  push XBC
 	ld	a, h                                    ; FAE593  ld A,H
@@ -3958,7 +3958,7 @@ Voice_Restage_Reg0440_ValueCurve_ForPart__FAE59F:
 	push	0                                     ; FAE59F  push 0x00
 	push	h                                     ; FAE5A1  push H
 	call	0xFA79F4                              ; FAE5A3  call 0xfa79f4
-	stw_da	(0xD79A), wa                        ; FAE5A7  ld (0x00d79a),WA
+	ld	(0xD79A:24), wa                        ; FAE5A7  ld (0x00d79a),WA
 	lda	xbc, (0xD75E:24)                       ; FAE5AC  lda XBC,0x00d75e
 	push	xbc                                   ; FAE5B1  push XBC
 	ld	a, h                                    ; FAE5B2  ld A,H
@@ -4111,13 +4111,13 @@ Voice_Restage_Reg0180_BaseCurve_ForPart__FAE683:
 	inc	4, bc                                  ; FAE6C6  inc 4,BC
 	extz	xbc                                   ; FAE6C8  extz XBC
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE6CA  or (XBC+0x1523),0x0008
-	stiw_da	(0xD796), 0                        ; FAE6D1  ld (0x00d796),0x0000
+	ldw	(0xD796:24), 0                        ; FAE6D1  ld (0x00d796),0x0000
 	jr Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6E8                      ; FAE6D8  jr T,0xfae6e8
 Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6DA:
 	push	0                                     ; FAE6DA  push 0x00
 	push	h                                     ; FAE6DC  push H
 	call	0xFA7A4B                              ; FAE6DE  call 0xfa7a4b
-	stw_da	(0xD796), wa                        ; FAE6E2  ld (0x00d796),WA
+	ld	(0xD796:24), wa                        ; FAE6E2  ld (0x00d796),WA
 	popw	bc                                    ; FAE6E7  pop BC
 Voice_Restage_Reg0180_BaseCurve_ForPart__FAE6E8:
 	lda	xbc, (0xD75E:24)                       ; FAE6E8  lda XBC,0x00d75e
@@ -4272,7 +4272,7 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE7BE:
 	inc	4, bc                                  ; FAE7FC  inc 4,BC
 	extz	xbc                                   ; FAE7FE  extz XBC
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE800  or (XBC+0x1523),0x0008
-	stiw_da	(0xD796), 0                        ; FAE807  ld (0x00d796),0x0000
+	ldw	(0xD796:24), 0                        ; FAE807  ld (0x00d796),0x0000
 	lda	xbc, (0xD75E:24)                       ; FAE80E  lda XBC,0x00d75e
 	push	xbc                                   ; FAE813  push XBC
 	ld	a, h                                    ; FAE814  ld A,H
@@ -4285,7 +4285,7 @@ Voice_Restage_Reg0180_ValueCurve_ForPart__FAE820:
 	push	0                                     ; FAE820  push 0x00
 	push	h                                     ; FAE822  push H
 	call	0xFA7AD6                              ; FAE824  call 0xfa7ad6
-	stw_da	(0xD798), wa                        ; FAE828  ld (0x00d798),WA
+	ld	(0xD798:24), wa                        ; FAE828  ld (0x00d798),WA
 	lda	xbc, (0xD75E:24)                       ; FAE82D  lda XBC,0x00d75e
 	push	xbc                                   ; FAE832  push XBC
 	ld	a, h                                    ; FAE833  ld A,H
@@ -4438,8 +4438,8 @@ Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE904:
 	inc	4, bc                                  ; FAE947  inc 4,BC
 	extz	xbc                                   ; FAE949  extz XBC
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAE94B  or (XBC+0x1523),0x0008
-	stiw_da	(0xD796), 0                        ; FAE952  ld (0x00d796),0x0000
-	stiw_da	(0xD7A0), 0                        ; FAE959  ld (0x00d7a0),0x0000
+	ldw	(0xD796:24), 0                        ; FAE952  ld (0x00d796),0x0000
+	ldw	(0xD7A0:24), 0                        ; FAE959  ld (0x00d7a0),0x0000
 	jr Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE96B                      ; FAE960  jr T,0xfae96b
 Voice_Restage_Reg04C0_BaseCurve_ForPart__FAE962:
 	push	0                                     ; FAE962  push 0x00
@@ -4599,8 +4599,8 @@ Voice_Restage_Reg04C0_ValueCurve_ForPart__FAEA41:
 	inc	4, bc                                  ; FAEA80  inc 4,BC
 	extz	xbc                                   ; FAEA82  extz XBC
 	extpfx7 0xD3, 0xE5, 0x23, 0x15, 0x3E, 0x08, 0x00 ; FAEA84  or (XBC+0x1523),0x0008
-	stiw_da	(0xD796), 0                        ; FAEA8B  ld (0x00d796),0x0000
-	stiw_da	(0xD7A0), 0                        ; FAEA92  ld (0x00d7a0),0x0000
+	ldw	(0xD796:24), 0                        ; FAEA8B  ld (0x00d796),0x0000
+	ldw	(0xD7A0:24), 0                        ; FAEA92  ld (0x00d7a0),0x0000
 	lda	xbc, (0xD75E:24)                       ; FAEA99  lda XBC,0x00d75e
 	push	xbc                                   ; FAEA9E  push XBC
 	ld	a, h                                    ; FAEA9F  ld A,H

@@ -32,7 +32,7 @@ SeMenu_LoadRawAddr:
 
 SeMenu_TriggerNotification:
 	ld (0x7f42:16), a
-	stdi8 (0xe3dc), 238
+	ld (0xe3dc:16), 238
 	setda 6, 0xe3de
 	ret
 
@@ -52,7 +52,7 @@ SeMenu_LoadObjectPtr_Data:
 	ret
 
 SeMenu_LoadMasterPtr:
-	ldb_da c, (0x008d3a)
+	ld c, (0x008d3a:24)
 	ld (xwa), c
 	ret
 
@@ -1028,7 +1028,7 @@ SeMenu_SetupMenuDisplay_Finalize_Data:
 	jr	ugt, 5
 	ld	(1629:16), a
 	ret
-	stdi8	(1629), 1
+	ld	(1629:16), 1
 	ret
 
 SeMenu_ValidatePartNumber:
@@ -1047,7 +1047,7 @@ SeMenu_ValidatePartNumber:
 SeMenu_ValidatePartNumber_Default:
 	ld xwa, (xsp + 2)
 	ld (xwa), 0x1
-	stdi8 (1629), 1
+	ld (1629:16), 1
 
 SeMenu_ValidatePartNumber_CheckEnabled:
 	ld xwa, (xsp + 2)
@@ -1519,7 +1519,7 @@ SeMenu_TransferPartValues_EndData:
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
-	stdi8	(1678), 1
+	ld	(1678:16), 1
 	ld	a, (1678:16)
 	jr	56
 	cps	a, 0
@@ -1529,7 +1529,7 @@ SeMenu_TransferPartValues_EndData:
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
-	stdi8	(1677), 1
+	ld	(1677:16), 1
 	ld	a, (1677:16)
 	jr	29
 	cps	a, 2
@@ -1539,7 +1539,7 @@ SeMenu_TransferPartValues_EndData:
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
-	stdi8	(1679), 1
+	ld	(1679:16), 1
 	ld	a, (1679:16)
 	jr	2
 	ldb	a, 1
@@ -1931,7 +1931,7 @@ SeMenu_SetCurrentStep:
 	ret
 
 SeMenu_ResetSubIndex:
-	stdi8 (1684), 0
+	ld (1684:16), 0
 	ret
 
 SeMenu_AdvanceSubIndex:
@@ -2242,7 +2242,7 @@ SeMenu_SetupPartDisplay_End:
 	ldb	w, 176
 	nop
 	nop
-	stdi8	(1709), 0
+	ld	(1709:16), 0
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
@@ -4885,7 +4885,7 @@ SeMenu_ApplyPartEdit_Data2:
 	pushw	wa
 	.byte 0x9f
 	ldwio	4, 0x491d
-	stda32	0xeff0, xwa
+	ld	(0xeff0:16), xwa
 	ld	a, (xsp+22)
 	extz	wa
 	lda	xbc, (xsp+18)
@@ -5597,7 +5597,7 @@ SeMenu_ApplyPartEdit_Data2:
 	ld_rrw wa, xde, wa
 	ld (xbc), wa
 	ret
-	stda16	(1706), wa
+	ld	(1706:16), wa
 	ret
 	.byte 0xb0
 	ex_ff
@@ -5625,7 +5625,7 @@ SeMenu_ProcessEffect:
 	ld a, (xde)
 	extz wa
 	add bc, wa
-	stda16 (1706), xbc
+	ld (1706:16), bc
 	mrdb5 0x8a, 0x02, 0x19, 0xac, 0x06
 	ldib_erp 0xfb, 0
 	jr SeMenu_ProcessEffect_CompareLoop
@@ -5663,7 +5663,7 @@ SeMenu_ProcessEffect_AltPath:
 	ld a, (xde)
 	extz wa
 	add bc, wa
-	stda16 (1714), xbc
+	ld (1714:16), bc
 	jrl SeMenu_ProcessEffect_Data3
 
 SeMenu_ProcessEffect_AltStore:
@@ -5678,7 +5678,7 @@ SeMenu_ProcessEffect_AltStore:
 	ld a, (xde)
 	extz wa
 	add hl, wa
-	stda16 (1706), xhl
+	ld (1706:16), hl
 	mrib4 0x81, 0x19, 0xac, 0x06
 	ldib_erp 0xfb, 0
 	jr SeMenu_ProcessEffect_AltData2
@@ -5711,7 +5711,7 @@ SeMenu_ProcessEffect_AltEnd:
 	ld a, (xde)
 	extz wa
 	add hl, wa
-	stda16 (1706), xhl
+	ld (1706:16), hl
 	mrib4 0x81, 0x19, 0xac, 0x06
 	ldib_erp 0xfb, 0
 	jr SeMenu_ProcessEffect_Section2_End
@@ -5809,7 +5809,7 @@ SeMenu_ApplySynthParam:
 	ld a, (xde + 14)
 	extz wa
 	add bc, wa
-	stda16 (1712), xbc
+	ld (1712:16), bc
 	lda xsp, (xsp + 36)
 	ret
 
@@ -5933,13 +5933,13 @@ SeMenu_SetMode:
 	ret
 
 SeMenu_SetMode_Data:
-	stda16	(1712), wa
+	ld	(1712:16), wa
 	ret
 	.byte 0xb0
 	ex_ff
 	.byte 0xb0, 0x06
 	ret
-	stda16	(1714), wa
+	ld	(1714:16), wa
 	ret
 	.byte 0xb0
 	ex_ff
@@ -6571,9 +6571,9 @@ SeMenu_RefreshPartDisplay:
 	ret
 
 SeMenu_RefreshPartDisplay_Data:
-	stdi8	(1709), 0
+	ld	(1709:16), 0
 	ret
-	stdi8	(1709), 0
+	ld	(1709:16), 0
 	ret
 	ret
 	dec	4, xsp

@@ -26,18 +26,18 @@ FmmComposerLoadFunc:
 	jrl z, CompLoad_HandleAbort
 	cp xde, 0x2
 	jrl nz, CompLoad_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, CompLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 CompLoad_DispatchState:
@@ -48,10 +48,10 @@ CompLoad_DispatchState:
 	jr z, CompLoad_HandleError
 	cps wa, 5
 	jr z, CompLoad_HandleCancel
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, CompLoad_ContinueWait
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -81,7 +81,7 @@ CompLoad_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr CompLoad_CallStatusDisplay
 
@@ -110,7 +110,7 @@ CompLoad_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 CompLoad_CallStatusDisplay:
@@ -122,9 +122,9 @@ CompLoad_HandleAbort:
 	jrl CompLoad_Return
 
 CompLoad_HandleSelection:
-	stda32 0x7f7c, xde
+	ld (0x7f7c:16), xde
 	call GetCurrentFileIndex
-	stda16 (0x7f80), xhl
+	ld (0x7f80:16), hl
 	cps hl, 0
 	jr lt, CompLoad_Selection_Negative
 	exts xhl
@@ -134,7 +134,7 @@ CompLoad_HandleSelection:
 	jrl CompLoad_DispatchWidget
 
 CompLoad_Selection_Negative:
-	stdi16 (0x7f80), 0
+	ldw (0x7f80:16), 0
 	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1e50002
 	lds32 xde, 0
@@ -229,7 +229,7 @@ CompLoad_PageDown:
 	add wa, 0xa
 
 CompLoad_StorePosition:
-	stda16 (0x7f80), xwa
+	ld (0x7f80:16), wa
 	jrl CompLoad_UpdateDisplay
 
 CompLoad_OpLoad:
@@ -426,7 +426,7 @@ FmmLoadFilterFunc:
 	cp xbc, 0x1e50004
 	jrl nz, LoadFilter_Return
 	ld xwa, (xsp + 2)
-	stda32 0x7f82, xwa
+	ld (0x7f82:16), xwa
 	jrl LoadFilter_Return
 
 LoadFilter_HandleShow:
@@ -563,7 +563,7 @@ LoadFilter_OpLoad:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
 	call FileIO_WriteRecordName_Done
@@ -647,7 +647,7 @@ FmmSaveFilterFunc:
 	cp xbc, 0x1e50004
 	jrl nz, SaveFilter_Return
 	ld xwa, (xsp + 2)
-	stda32 0x8006, xwa
+	ld (0x8006:16), xwa
 	jrl SaveFilter_Return
 
 SaveFilter_HandleShow:
@@ -871,7 +871,7 @@ SaveFilter_Save_Execute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -908,7 +908,7 @@ SaveFilter_OpFormat:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002

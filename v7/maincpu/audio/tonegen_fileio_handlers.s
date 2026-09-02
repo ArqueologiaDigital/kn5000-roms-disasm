@@ -595,7 +595,7 @@ DSPCfg_SyncBitmapData:
 	extz	xwa
 	.byte 0xaf, 0x0e, 0x80
 	ld	(xwa), 255
-	stda16	36930, bc
+	ld	(36930:16), bc
 	pop	xiz
 	lda	xsp, (xsp+18)
 	ret
@@ -779,7 +779,7 @@ ToneGen_DiffScanCheckEnd:
 
 	ld (xwa), 0xff
 
-	stda16 (36930), bc
+	ld (36930:16), bc
 
 	popw iz
 
@@ -1168,7 +1168,7 @@ DSPCfg_Param_Default:
 	ret
 
 Encoder_MarkInvalid:
-	stdi8	(49053), 255
+	ld	(49053:16), 255
 	ret
 Encoder_Stub1:
 	ret
@@ -1183,8 +1183,8 @@ Encoder_AlignByte:
 	ret
 
 Encoder_ValueScanAndSync:
-	stdi8	(36336), 0
-	stdi8	(36338), 0
+	ld	(36336:16), 0
+	ld	(36338:16), 0
 	jr	6
 Encoder_ScanAndSync:
 	calr Encoder_ReadNextEntry
@@ -1237,7 +1237,7 @@ Encoder_PrepareCallback:
 	extz BC
 	sla BC, 0x02
 	ld XWA,NakaInst_ExtDevice_Screens_0x3452
-	cpdi8 (0x8c98), 0x14
+	cp (0x8c98:16), 0x14
 	jr nz, .Lc_fc501b
 	ld XWA,NakaInst_ExtDevice_Screens_0x34D2
 Encoder_ResolveCallbackAddr:

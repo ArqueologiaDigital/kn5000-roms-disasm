@@ -277,7 +277,7 @@ Link_Ch0_AppendToRing__F98DB0:
 Link_Ch0_AppendToRing__F98DB5:
 	ld	xbc, (xiz+10)                       ; F98DB5  ld XBC,(XIZ+0x0a)
 	ld	h, (xbc)                            ; F98DB8  ld H,(XBC)
-	ldw_da	wa, (0xE2EB)                    ; F98DBA  ld WA,(0x00e2eb)
+	ld	wa, (0xE2EB:24)                    ; F98DBA  ld WA,(0x00e2eb)
 	and	wa, 0xFFF                          ; F98DBF  and WA,0x0fff
 	exts	xwa                               ; F98DC3  exts XWA
 	inc	6, xwa                             ; F98DC5  inc 6,XWA
@@ -380,9 +380,9 @@ Link_Ch1_WriteParamBlock__F98E2D:
 	setda_24 0, 0x007ECC                   ; F98E38  set 0,(0x007ecc)   [llvm-mc cannot encode this]
 	ld	xbc, (xiz+10)                       ; F98E3D  ld XBC,(XIZ+0x0a)
 	ld	a, (xbc)                            ; F98E40  ld A,(XBC)
-	stb_da	(0xF361), a                     ; F98E42  ld (0x00f361),A
+	ld	(0xF361:24), a                     ; F98E42  ld (0x00f361),A
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98E47  jrl T,0xf98fd1
-	stib_da	(0x7E97), 1                    ; F98E4A  ld (0x007e97),0x01
+	ld	(0x7E97:24), 1                    ; F98E4A  ld (0x007e97),0x01
 	setda_24 1, 0x007ECC                   ; F98E50  set 1,(0x007ecc)   [llvm-mc cannot encode this]
 	ld	bc, (xiz-2)                         ; F98E55  ld BC,(XIZ+0xfe)
 	extz	bc                                ; F98E58  extz BC
@@ -412,7 +412,7 @@ Link_Ch1_WriteParamBlock__F98E7B:
 	jr Link_Ch1_WriteParamBlock__F98E76                           ; F98E91  jr T,0xf98e76
 Link_Ch1_WriteParamBlock__F98E93:
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98E93  jrl T,0xf98fd1
-	stib_da	(0x7EB1), 1                    ; F98E96  ld (0x007eb1),0x01
+	ld	(0x7EB1:24), 1                    ; F98E96  ld (0x007eb1),0x01
 	setda_24 2, 0x007ECC                   ; F98E9C  set 2,(0x007ecc)   [llvm-mc cannot encode this]
 	lda	xix, (0x7E98:24)                   ; F98EA1  lda XIX,0x007e98
 	ld	bc, (xiz-2)                         ; F98EA6  ld BC,(XIZ+0xfe)
@@ -443,7 +443,7 @@ Link_Ch1_WriteParamBlock__F98EC8:
 	jr Link_Ch1_WriteParamBlock__F98EC3                           ; F98EDE  jr T,0xf98ec3
 Link_Ch1_WriteParamBlock__F98EE0:
 	jrl Link_Ch1_WriteParamBlock__F98FD1                          ; F98EE0  jrl T,0xf98fd1
-	stib_da	(0x7ECB), 1                    ; F98EE3  ld (0x007ecb),0x01
+	ld	(0x7ECB:24), 1                    ; F98EE3  ld (0x007ecb),0x01
 	setda_24 3, 0x007ECC                   ; F98EE9  set 3,(0x007ecc)   [llvm-mc cannot encode this]
 	lda	xix, (0x7EB2:24)                   ; F98EEE  lda XIX,0x007eb2
 	ld	bc, (xiz-2)                         ; F98EF3  ld BC,(XIZ+0xfe)
@@ -583,7 +583,7 @@ Link_Ch2_ForwardBytes__F98FDB:
 	ld	a, (xbc)                            ; F98FEF  ld A,(XBC)
 	cp	a, 0xFA                             ; F98FF1  cp A,0xfa
 	jr nz, Link_Ch2_ForwardBytes__F99003                       ; F98FF4  jr NZ,0xf99003
-	stib_da	(0xF328), 0xFF                 ; F98FF6  ld (0x00f328),0xff
+	ld	(0xF328:24), 0xFF                 ; F98FF6  ld (0x00f328),0xff
 	inc	1, xbc                             ; F98FFC  inc 1,XBC
 	ld	(xiz+10), xbc                       ; F98FFE  ld (XIZ+0x0a),XBC
 	jr Link_Ch2_ForwardBytes__F99015                           ; F99001  jr T,0xf99015

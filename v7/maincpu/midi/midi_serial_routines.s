@@ -72,9 +72,9 @@ IntTx0_DequeueAndSend:
 IntTx0_CheckQueueEmpty:
 	push	xix
 	swi	6
-	stdi8	(1054), 6
+	ld	(1054:16), 6
 	ret
-	stdi8	(1066), 0
+	ld	(1066:16), 0
 	pushw	wa
 	ld	a, (1056:16)
 	and	a, 5
@@ -207,7 +207,7 @@ ClkTick_Src1CoarseUpdate:
 	.byte 0xf1, 0x27, 0x04, 0xba
 	incdi8	1, (46913)
 	ret
-	stdi8	1059, 0
+	ld	(1059:16), 0
 	cp	d, 240
 	jr	z, 22
 	cp	d, 242
@@ -219,7 +219,7 @@ ClkTick_Src1CoarseUpdate:
 	ld	c, e
 	ret
 	jrl	-158
-	stdi8	1074, 1
+	ld	(1074:16), 1
 	cp	e, 80
 	jr	z, 10
 	cp	e, 65
@@ -289,9 +289,9 @@ StartPlay_Return:
 StartPlay_Body:
 	nop
 	nop
-	stdi8	(1088), 0
-	stdi8	(1092), 0
-	stdi8	(1096), 0
+	ld	(1088:16), 0
+	ld	(1092:16), 0
+	ld	(1096:16), 0
 MIDI_RESET_PLAYBACK_STATE:
 	.byte 0xf1, 0x4c, 0x04, 0x00, 0x00, 0xf1, 0x50, 0x04
 	.byte 0x00, 0x00, 0x0e, 0x06, 0x06, 0xf1, 0xd2, 0x00
@@ -319,20 +319,20 @@ MIDI_APPLY_STARTUP_TIMING:
 	ret
 	push SR
 	ei 0x06
-	cpdi8 (0x0474), 0x55
+	cp (0x0474:16), 0x55
 	jr z, .Lc_fcf1d1
-	stdi8 (0x00ea), 0xdd
+	ld (0x00ea:16), 0xdd
 	jr t, .Lc_fcf1da
 .Lc_fcf1d1:
 	call SeqBuf_MidiOut_Init
-	stdi8 (0x0429), 0x00
+	ld (0x0429:16), 0x00
 .Lc_fcf1da:
 	pop SR
 	ret
 	.byte 0x0e, 0xf1, 0x50, 0xfd, 0xcc, 0x6e, 0x4f
 StartTiming_Src1Adjust:
 	call	15673249
-	stdi16	(36930), 0
+	ldw	(36930:16), 0
 	ld	xix, 127867
 StartTiming_Src2Adjust:
 	.byte 0x9c, 0xf6, 0x20, 0x9c, 0xfa, 0xf0, 0x66, 0x25
@@ -489,7 +489,7 @@ SysEx_InProgressReturn:
 	ld	a, (38350:16)
 	cp	a, 25
 	jr	nz, 52
-	cpdi8	38331, 18
+	cp	(38331:16), 18
 	jr	nz, 45
 	xor	e, e
 	ld	a, (38298:16)
@@ -501,8 +501,8 @@ SysEx_InProgressReturn:
 	ldb	d, 192
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563580
 	ret
 	swi	7
@@ -523,8 +523,8 @@ SysEx_InProgressReturn:
 	ldb	d, 255
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16565737
 	ret
 	extz	hl
@@ -542,14 +542,14 @@ SysEx_InProgressReturn:
 	ldb	e, 255
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16565737
 	ret
 	ld	a, (38350:16)
 	cp	a, 16
 	jr	nz, 52
-	cpdi8	38331, 16
+	cp	(38331:16), 16
 	jr	nz, 45
 	xor	e, e
 	ld	a, (38298:16)
@@ -561,8 +561,8 @@ SysEx_InProgressReturn:
 	ldb	d, 7
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563640
 	ret
 	swi	7
@@ -573,7 +573,7 @@ SysEx_InProgressReturn:
 	ld	a, (38350:16)
 	cp	a, 20
 	jr	nz, 86
-	cpdi8	38331, 17
+	cp	(38331:16), 17
 	jr	nz, 79
 	ldb	b, 5
 	ldw	de, 64512

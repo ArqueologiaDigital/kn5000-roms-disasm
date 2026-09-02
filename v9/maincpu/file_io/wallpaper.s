@@ -28,18 +28,18 @@ FmmWallpaperLoadFunc:
 	jrl z, WPLoad_HandleAbort
 	cp xwa, 0x2
 	jrl nz, WPLoad_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	call ApPostEvent
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, WPLoad_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 WPLoad_DispatchState:
@@ -50,10 +50,10 @@ WPLoad_DispatchState:
 	jr z, WPLoad_HandleError
 	cps wa, 5
 	jr z, WPLoad_HandleCancel
-	cpdi16 0x850a, 0
+	cpw (0x850a:16), 0
 	jr ge, WPLoad_ContinueWait
 	call FileIO_InitWallpaperNav
-	stda16 (0x850a), xhl
+	ld (0x850a:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
@@ -83,7 +83,7 @@ WPLoad_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr WPLoad_CallStatusDisplay
 
@@ -112,7 +112,7 @@ WPLoad_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 WPLoad_CallStatusDisplay:
@@ -125,12 +125,12 @@ WPLoad_HandleAbort:
 
 WPLoad_HandleSelection:
 	ld xwa, (xsp + 6)
-	stda32 0x81b0, xwa
+	ld (0x81b0:16), xwa
 	call FileIO_GetCurrentWallpaperIndex
-	stda16 (0x81b4), xhl
+	ld (0x81b4:16), hl
 	cps hl, 0
 	jr ge, WPLoad_Selection_Positive
-	stdi16 (0x81b4), 0
+	ldw (0x81b4:16), 0
 
 WPLoad_Selection_Positive:
 	ld wa, (0x81b4:16)
@@ -198,7 +198,7 @@ WPLoad_PageDown:
 	add hl, 0xa
 
 WPLoad_StorePosition:
-	stda16 (0x81b4), xhl
+	ld (0x81b4:16), hl
 	ld bc, hl
 	jrl WPLoad_UpdateDisplay
 
@@ -217,7 +217,7 @@ WPLoad_PageDown_Boundary:
 	stw_erp WA, 0xea
 	cps wa, 0
 	jr z, WPLoad_GetSelection
-	stda16 (0x81b4), xbc
+	ld (0x81b4:16), bc
 	jr WPLoad_UpdateDisplay
 
 WPLoad_OpLoad:
@@ -325,7 +325,7 @@ WP_ScanAvailability:
 	push xiz
 	call CheckFileSystemStatus
 	ldw_erp HL, 0xfa
-	stdi16 (0x89f6), 0
+	ldw (0x89f6:16), 0
 	lds iz, 0
 
 WPScan_LoopBody:
@@ -360,7 +360,7 @@ WPScan_CheckAvail:
 
 WPScan_MarkAvailable:
 	orddm16 0x89f6, xde
-	cpdi8 (0x89f8), 4
+	cp (0x89f8:16), 4
 	jr nc, WPScan_LimitReached
 	jr WPScan_LoopContinue
 
@@ -386,7 +386,7 @@ WPScan_TypeNotThree:
 
 WPScan_TypeTwo_Mark:
 	orddm16 0x89f6, xde
-	cpdi8 (0x89f8), 4
+	cp (0x89f8:16), 4
 	jr nc, WPScan_LimitReached
 	jr WPScan_LoopContinue
 
@@ -406,7 +406,7 @@ WPScan_TypeGeneric:
 
 WPScan_Generic_Mark:
 	orddm16 0x89f6, xde
-	cpdi8 (0x89f8), 4
+	cp (0x89f8:16), 4
 	jr c, WPScan_LoopContinue
 
 WPScan_LimitReached:

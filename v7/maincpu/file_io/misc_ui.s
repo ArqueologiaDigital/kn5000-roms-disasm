@@ -122,7 +122,7 @@ SetupExitFunc:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16421701
-	stdi8	(32422), 72
+	ld	(32422:16), 72
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -451,8 +451,8 @@ WaitingFunc:
 	cp xbc, 0x1c00001
 	jr nz, WaitingFunc_Return
 	ld xwa, (xsp + 68)
-	stw_da (0x02748a), xwa
-	stiw_da (0x02748c), 0x0000
+	ld (0x02748a:24), wa
+	ldw (0x02748c:24), 0x0000
 	jr WaitingFunc_Return
 
 WaitingFunc_DrawMessage:

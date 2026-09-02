@@ -165,11 +165,11 @@ Link_ServiceTask:
 	jr z, Link_ServiceTask__F99E8E                        ; F99E6C  jr Z,0xf99e8e
 	extpfx5 0xF2, 0x2A, 0x85, 0x00, 0xB7   ; F99E6E  res 7,(0x00852a)   [llvm-mc cannot encode this]
 	ei	0                                     ; F99E73  ei 0x00
-	ldl_da	xbc, (0x8524)                   ; F99E75  ld XBC,(0x008524)
+	ld	xbc, (0x8524:24)                   ; F99E75  ld XBC,(0x008524)
 	push	xbc                               ; F99E7A  push XBC
-	ldw_da	bc, (0x8528)                    ; F99E7B  ld BC,(0x008528)
+	ld	bc, (0x8528:24)                    ; F99E7B  ld BC,(0x008528)
 	pushw	bc                               ; F99E80  push BC
-	ldl_da	xbc, (0x8520)                   ; F99E81  ld XBC,(0x008520)
+	ld	xbc, (0x8520:24)                   ; F99E81  ld XBC,(0x008520)
 	push	xbc                               ; F99E86  push XBC
 	calr (0xF99B0D - 0xF99E8A)             ; F99E87  calr 0xf99b0d
 	inc	8, xsp                             ; F99E8A  inc 0,XSP
@@ -181,14 +181,14 @@ Link_ServiceTask__F99E8E:
 	jr z, Link_ServiceTask__F99EC9                        ; F99E97  jr Z,0xf99ec9
 	extpfx5 0xF2, 0x2C, 0x85, 0x00, 0xB7   ; F99E99  res 7,(0x00852c)   [llvm-mc cannot encode this]
 	ei	0                                     ; F99E9E  ei 0x00
-	stib_da	(0x8537), 0                    ; F99EA0  ld (0x008537),0x00
-	stib_da	(0x8535), 0                    ; F99EA6  ld (0x008535),0x00
+	ld	(0x8537:24), 0                    ; F99EA0  ld (0x008537),0x00
+	ld	(0x8535:24), 0                    ; F99EA6  ld (0x008535),0x00
 	ld	(xix), 0                            ; F99EAC  ld (XIX),0x00
-	ldl_da	xbc, (0x852D)                   ; F99EAF  ld XBC,(0x00852d)
+	ld	xbc, (0x852D:24)                   ; F99EAF  ld XBC,(0x00852d)
 	push	xbc                               ; F99EB4  push XBC
 	call	0xFC89AF                          ; F99EB5  call 0xfc89af
 	call	0xFC856C                          ; F99EB9  call 0xfc856c
-	ldl_da	xbc, (0x852D)                   ; F99EBD  ld XBC,(0x00852d)
+	ld	xbc, (0x852D:24)                   ; F99EBD  ld XBC,(0x00852d)
 	push	xbc                               ; F99EC2  push XBC
 	call	0xFC8646                          ; F99EC3  call 0xfc8646
 	inc	8, xsp                             ; F99EC7  inc 0,XSP
@@ -201,13 +201,13 @@ Link_ServiceTask__F99EC9:
 	ei	0                                     ; F99ED9  ei 0x00
 	call	0xFC856C                          ; F99EDB  call 0xfc856c
 Link_ServiceTask__F99EDF:
-	ldl_da	xbc, (0x8531)                   ; F99EDF  ld XBC,(0x008531)
+	ld	xbc, (0x8531:24)                   ; F99EDF  ld XBC,(0x008531)
 	push	xbc                               ; F99EE4  push XBC
 	call	0xFC898F                          ; F99EE5  call 0xfc898f
 	pop	xiy                                ; F99EE9  pop XIY
 	cp	wa, 0xFFFF                          ; F99EEA  cp WA,0xffff
 	jr z, Link_ServiceTask__F99EDF                        ; F99EEE  jr Z,0xf99edf
-	ldl_da	xbc, (0x8531)                   ; F99EF0  ld XBC,(0x008531)
+	ld	xbc, (0x8531:24)                   ; F99EF0  ld XBC,(0x008531)
 	push	xbc                               ; F99EF5  push XBC
 	call	0xFC88F9                          ; F99EF6  call 0xfc88f9
 	pushw	6                                ; F99EFA  push 0x0006
@@ -223,7 +223,7 @@ Link_ServiceTask__F99F02:
 	ld	c, (xix)                            ; F99F14  ld C,(XIX)
 	cps	c, 0                               ; F99F16  cp C,0
 	jr nz, Link_ServiceTask__F99F4F                       ; F99F18  jr NZ,0xf99f4f
-	ldl_da	xbc, (0x8568)                   ; F99F1A  ld XBC,(0x008568)
+	ld	xbc, (0x8568:24)                   ; F99F1A  ld XBC,(0x008568)
 	push	xbc                               ; F99F1F  push XBC
 	call	0xFC898F                          ; F99F20  call 0xfc898f
 	pop	xiy                                ; F99F24  pop XIY
@@ -235,7 +235,7 @@ Link_ServiceTask__F99F2D:
 	pushw	bc                               ; F99F2F  push BC
 	incm8	1, (xix)                         ; F99F30  inc 1,(XIX)
 	call	0xFC893B                          ; F99F32  call 0xfc893b
-	stib_da	(0x8537), 1                    ; F99F36  ld (0x008537),0x01
+	ld	(0x8537:24), 1                    ; F99F36  ld (0x008537),0x01
 	popw	bc                                ; F99F3C  pop BC
 Link_ServiceTask__F99F3D:
 	ld	c, (xix)                            ; F99F3D  ld C,(XIX)
@@ -269,19 +269,19 @@ Link_ServiceTask__F99F6C:
 	incdi16_24	1, (0xF32F)                 ; F99F7E  incw 1,(0x00f32f)
 	jr Link_ServiceTask__F99F8C                           ; F99F83  jr T,0xf99f8c
 Link_ServiceTask__F99F85:
-	stiw_da	(0xF32F), 0                    ; F99F85  ld (0x00f32f),0x0000
+	ldw	(0xF32F:24), 0                    ; F99F85  ld (0x00f32f),0x0000
 Link_ServiceTask__F99F8C:
 	call	0xF9A030                          ; F99F8C  call 0xf9a030
-	stw_da	(0xF331), wa                    ; F99F90  ld (0x00f331),WA
+	ld	(0xF331:24), wa                    ; F99F90  ld (0x00f331),WA
 	jr Link_ServiceTask__F99F9E                           ; F99F95  jr T,0xf99f9e
 Link_ServiceTask__F99F97:
-	stiw_da	(0xF32F), 0                    ; F99F97  ld (0x00f32f),0x0000
+	ldw	(0xF32F:24), 0                    ; F99F97  ld (0x00f32f),0x0000
 Link_ServiceTask__F99F9E:
 	extpfx7 0xD2, 0x2F, 0xF3, 0x00, 0x3F, 0x0A, 0x00 ; F99F9E  cp (0x00f32f),0x000a   [llvm-mc cannot encode this]
 	jr ule, Link_ServiceTask__F99FBF                      ; F99FA5  jr ULE,0xf99fbf
-	stiw_da	(0xF32F), 0                    ; F99FA7  ld (0x00f32f),0x0000
+	ldw	(0xF32F:24), 0                    ; F99FA7  ld (0x00f32f),0x0000
 	ldio	DMA3V, 0                          ; F99FAE  ld (0x7f),0x00
-	stib_da	(0xF32D), 0                    ; F99FB1  ld (0x00f32d),0x00
+	ld	(0xF32D:24), 0                    ; F99FB1  ld (0x00f32d),0x00
 	set_dd8	1, PA                          ; F99FB7  set 1,(0x1e)
 	incdi8_24	1, (0xF32E)                  ; F99FBA  inc 1,(0x00f32e)
 Link_ServiceTask__F99FBF:
@@ -414,7 +414,7 @@ Link_WaitBlockDone__poll:
 	cp bc, 0x01f4                              ; F99FD3  d9 cf f4 01   500 ticks
 	jr le, Link_WaitBlockDone__poll            ; F99FD7  62 ed
 	ldio DMA3V, 0x00                           ; F99FD9  08 7f 00   timed out: stop INT0 feeding the DMA engine
-	stib_da 0x00F32D, 0x00                     ; F99FDC  f2 2d f3 00 00 00   transfer state := idle
+	ld (0x00F32D:24), 0x00                     ; F99FDC  f2 2d f3 00 00 00   transfer state := idle
 	set_dd8 1, PA                              ; F99FE2  f0 1e b9   raise the handshake line
 	resda_24 7, 0x00852B                       ; F99FE5  f2 2b 85 00 b7   clear the outstanding flag ourselves
 	incdi8_24 1, 0x00F333                      ; F99FEA  c2 33 f3 00 61   the timeout counter

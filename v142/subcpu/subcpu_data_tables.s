@@ -11474,7 +11474,7 @@ INTRX1_HANDLER:	; 1F736
 	jr Serial1_RX_Exit
 
 Serial1_RX_NoError:	; 01F74Fh
-	bitda 2, 4148	; Check if RX enabled
+	bit 2, (4148:16)	; Check if RX enabled
 	jr z, Serial1_RX_Exit
 	ld xwa, 0xE00	; Ring buffer descriptor at 0x0E00
 	calr SAVE_BYTE_TO_RING_BUFFER
@@ -11503,7 +11503,7 @@ INTTX1_HANDLER:	; 01F765h
 	push xde
 	push xbc
 	push xwa
-	bitda 0, 4148	; Check sync flag
+	bit 0, (4148:16)	; Check sync flag
 	jr z, Serial1_TX_Normal
 	resda 0, 4148
 	ldio 0xD4, 0xFE	; Send sync byte
@@ -11517,7 +11517,7 @@ Serial1_TX_Normal:	; 01F77Bh
 	st_dd8b L, 0xD4	; Send byte
 
 Serial1_TX_CheckEmpty:	; 01F78Ch
-	bitda 0, 4148
+	bit 0, (4148:16)
 	jr nz, Serial1_TX_Exit
 	ld xwa, 0x1016
 	calr RING_BUFFER_HAS_OVERRUN
@@ -11633,7 +11633,7 @@ Serial1_CommandHandler_RX_F4F5:
 	jr z, Serial1_F5_BaudRate_Switch
 	cp a, 0xF4
 	ret nz
-	stdi8 4152, 3
+	ld (4152:16), 3
 	setda 2, 4148
 	ei 6
 	ldio 0xD6, 0x2B
@@ -11641,7 +11641,7 @@ Serial1_CommandHandler_RX_F4F5:
 	ret
 
 Serial1_F5_BaudRate_Switch:
-	stdi8 4152, 2
+	ld (4152:16), 2
 	setda 2, 4148
 	ret
 
@@ -11652,7 +11652,7 @@ Audio_CheckQueuedData_Send:
 	sub xde, xwa
 	cp xde, 0x87
 	ret c
-	stda32 4140, xbc
+	ld (4140:16), xbc
 	setda 0, 4148
 	calr Serial1_Enable_TX_Interrupt
 	ret
@@ -11695,7 +11695,7 @@ Serial1_DataTransmit_Loop:
 	jr z, Serial1_TX_Done
 
 Serial1_TX_LoopBody:
-	bitda 2, 4148
+	bit 2, (4148:16)
 	jr nz, Serial1_TX_ViaRingBuf
 	ld xwa, (xsp + 6)
 	ldb_spi C, 0xE0
@@ -11732,9 +11732,9 @@ Audio_Process_Final:
 	jrl Audio_CheckQueuedData_Send
 
 INIT_RING_BUFFERS:
-	stdi8 4148, 0
+	ld (4148:16), 0
 	setda 0, 4148
-	stdi8 4152, 0
+	ld (4152:16), 0
 	ld xiy, 0xF434
 	ld xix, 0xE00
 	ldw bc, 0xB

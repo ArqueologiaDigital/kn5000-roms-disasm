@@ -26,7 +26,7 @@ Sprintf_ParseFormatSpec:
 	ldw (xsp + 8), 0x0
 	ldw (xsp + 10), 0x0
 	ldw (xsp + 6), 0x0
-	stiw_da (0x03c220), 0x0020
+	ldw (0x03c220:24), 0x0020
 
 Sprintf_ReadFormatChar:
 	ld xwa, (xsp + 82)
@@ -85,7 +85,7 @@ Sprintf_Flag_Minus:
 	jr Sprintf_ReadFormatChar
 
 Sprintf_Flag_Zero:
-	stiw_da (0x03c220), 0x0030
+	ldw (0x03c220:24), 0x0030
 	jrl Sprintf_ReadFormatChar
 
 Sprintf_ParseWidthDigit:
@@ -1076,7 +1076,7 @@ Sprintf_FormatFloat_Dispatch:
 	pushw wa
 	calr Sprintf_FormatFloat
 	lda xsp, (xsp + 16)
-	ldw_da xwa, (0x03c222)
+	ld wa, (0x03c222:24)
 	add (xsp + 4), wa
 
 Sprintf_MainLoop_ReadNext:
@@ -1209,7 +1209,7 @@ Sprintf_FormatFloat:
 	push xwa
 	call Sprintf_FormatGGeneral
 	lda xsp, (xsp + 18)
-	stiw_da (0x03c222), 0x0000
+	ldw (0x03c222:24), 0x0000
 	lda xde, (xsp + 8)
 	ld xiy, xde
 	ld c, (xsp + 34)

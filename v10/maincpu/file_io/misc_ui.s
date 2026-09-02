@@ -124,7 +124,7 @@ SetupExitFunc:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 72
+	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -464,12 +464,12 @@ WaitingFunc:
 	cp xbc, 0x1c00001
 	jr nz, WaitingFunc_Return
 	ld xwa, (xsp + 68)
-	stw_da (0x02748a), xwa
-	stiw_da (0x02748c), 0x0000
+	ld (0x02748a:24), wa
+	ldw (0x02748c:24), 0x0000
 	jr WaitingFunc_Return
 
 WaitingFunc_DrawMessage:
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (DiskWarning_ConfirmStrings_0xA6C:24)
@@ -483,7 +483,7 @@ WaitingFunc_DrawMessage:
 	ld xbc, xiz
 	ld de, hl
 	calr DrawString_Centered
-	stw_da (0x02748c), xhl
+	ld (0x02748c:24), hl
 	ld xwa, (xsp + 68)
 	lda xde, (xsp + 4)
 	ld xbc, 0x1c0000f

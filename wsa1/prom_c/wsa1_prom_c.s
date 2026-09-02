@@ -381,11 +381,11 @@ Voice_RecomputeAllThreeBaseCurves__FABE3F:
 	ld	c, (xiz-2)                              ; FABE5C  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABE5F  push BC
 	calr (0xFA796D - 0xFABE63)                 ; FABE60  calr 0xfa796d
-	stw_da	(0xD79E), wa                        ; FABE63  ld (0x00d79e),WA
+	ld	(0xD79E:24), wa                        ; FABE63  ld (0x00d79e),WA
 	popw	bc                                    ; FABE68  pop BC
 	cp	hl, 0x100                               ; FABE69  cp HL,0x0100
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABEA4                   ; FABE6D  jr Z,0xfabea4
-	ldw_da	ix, (0xD79E)                        ; FABE6F  ld IX,(0x00d79e)
+	ld	ix, (0xD79E:24)                        ; FABE6F  ld IX,(0x00d79e)
 	ld	bc, ix                                  ; FABE74  ld BC,IX
 	and	bc, 0x1FFF                             ; FABE76  and BC,0x1fff
 	extz	xbc                                   ; FABE7A  extz XBC
@@ -398,11 +398,11 @@ Voice_RecomputeAllThreeBaseCurves__FABE3F:
 	ld	(xiz-10), xiy                           ; FABE89  ld (XIZ+0xf6),XIY
 	ld	hl, ix                                  ; FABE8C  ld HL,IX
 	and	hl, 0xE000                             ; FABE8E  and HL,0xe000
-	stw_da	(0xD79E), hl                        ; FABE92  ld (0x00d79e),HL
+	ld	(0xD79E:24), hl                        ; FABE92  ld (0x00d79e),HL
 	ld	xiy, (xiz-10)                           ; FABE97  ld XIY,(XIZ+0xf6)
 	srl	xiy, 8                                 ; FABE9A  srl 0x08,XIY
 	or	iy, hl                                  ; FABE9D  or IY,HL
-	stw_da	(0xD79E), iy                        ; FABE9F  ld (0x00d79e),IY
+	ld	(0xD79E:24), iy                        ; FABE9F  ld (0x00d79e),IY
 Voice_RecomputeAllThreeBaseCurves__FABEA4:
 	lda	xbc, (0xD75E:24)                       ; FABEA4  lda XBC,0x00d75e
 	push	xbc                                   ; FABEA9  push XBC
@@ -434,11 +434,11 @@ Voice_RecomputeAllThreeBaseCurves__FABECC:
 	ld	c, (xiz-2)                              ; FABEE7  ld C,(XIZ+0xfe)
 	pushw	bc                                   ; FABEEA  push BC
 	calr (0xFA7A4B - 0xFABEEE)                 ; FABEEB  calr 0xfa7a4b
-	stw_da	(0xD796), wa                        ; FABEEE  ld (0x00d796),WA
+	ld	(0xD796:24), wa                        ; FABEEE  ld (0x00d796),WA
 	popw	bc                                    ; FABEF3  pop BC
 	cp	hl, 0x100                               ; FABEF4  cp HL,0x0100
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABF31                   ; FABEF8  jr Z,0xfabf31
-	ldw_da	bc, (0xD796)                        ; FABEFA  ld BC,(0x00d796)
+	ld	bc, (0xD796:24)                        ; FABEFA  ld BC,(0x00d796)
 	ld	(xiz-4), bc                             ; FABEFF  ld (XIZ+0xfc),BC
 	and	bc, 0x1FFF                             ; FABF02  and BC,0x1fff
 	extz	xbc                                   ; FABF06  extz XBC
@@ -451,11 +451,11 @@ Voice_RecomputeAllThreeBaseCurves__FABECC:
 	ld	(xiz-12), xiy                           ; FABF15  ld (XIZ+0xf4),XIY
 	ld	hl, (xiz-4)                             ; FABF18  ld HL,(XIZ+0xfc)
 	and	hl, 0xE000                             ; FABF1B  and HL,0xe000
-	stw_da	(0xD796), hl                        ; FABF1F  ld (0x00d796),HL
+	ld	(0xD796:24), hl                        ; FABF1F  ld (0x00d796),HL
 	ld	xiy, (xiz-12)                           ; FABF24  ld XIY,(XIZ+0xf4)
 	srl	xiy, 8                                 ; FABF27  srl 0x08,XIY
 	or	iy, hl                                  ; FABF2A  or IY,HL
-	stw_da	(0xD796), iy                        ; FABF2C  ld (0x00d796),IY
+	ld	(0xD796:24), iy                        ; FABF2C  ld (0x00d796),IY
 Voice_RecomputeAllThreeBaseCurves__FABF31:
 	lda	xbc, (0xD75E:24)                       ; FABF31  lda XBC,0x00d75e
 	push	xbc                                   ; FABF36  push XBC
@@ -493,7 +493,7 @@ Voice_RecomputeAllThreeBaseCurves__FABF5D:
 	jrl z, Voice_RecomputeAllThreeBaseCurves__FABFFF                  ; FABF86  jrl Z,0xfabfff
 	cp	de, 0x6C0                               ; FABF89  cp DE,0x06c0
 	jr nc, Voice_RecomputeAllThreeBaseCurves__FABFC8                  ; FABF8D  jr NC,0xfabfc8
-	ldw_da	bc, (0xD796)                        ; FABF8F  ld BC,(0x00d796)
+	ld	bc, (0xD796:24)                        ; FABF8F  ld BC,(0x00d796)
 	ld	(xiz-4), bc                             ; FABF94  ld (XIZ+0xfc),BC
 	and	bc, 0x1FFF                             ; FABF97  and BC,0x1fff
 	extz	xbc                                   ; FABF9B  extz XBC
@@ -506,14 +506,14 @@ Voice_RecomputeAllThreeBaseCurves__FABF5D:
 	ld	(xiz-12), xiy                           ; FABFAA  ld (XIZ+0xf4),XIY
 	ld	hl, (xiz-4)                             ; FABFAD  ld HL,(XIZ+0xfc)
 	and	hl, 0xE000                             ; FABFB0  and HL,0xe000
-	stw_da	(0xD796), hl                        ; FABFB4  ld (0x00d796),HL
+	ld	(0xD796:24), hl                        ; FABFB4  ld (0x00d796),HL
 	ld	xiy, (xiz-12)                           ; FABFB9  ld XIY,(XIZ+0xf4)
 	srl	xiy, 8                                 ; FABFBC  srl 0x08,XIY
 	or	iy, hl                                  ; FABFBF  or IY,HL
-	stw_da	(0xD796), iy                        ; FABFC1  ld (0x00d796),IY
+	ld	(0xD796:24), iy                        ; FABFC1  ld (0x00d796),IY
 	jr Voice_RecomputeAllThreeBaseCurves__FABFFF                      ; FABFC6  jr T,0xfabfff
 Voice_RecomputeAllThreeBaseCurves__FABFC8:
-	ldw_da	bc, (0xD7A0)                        ; FABFC8  ld BC,(0x00d7a0)
+	ld	bc, (0xD7A0:24)                        ; FABFC8  ld BC,(0x00d7a0)
 	ld	(xiz-4), bc                             ; FABFCD  ld (XIZ+0xfc),BC
 	and	bc, 0x1FFF                             ; FABFD0  and BC,0x1fff
 	extz	xbc                                   ; FABFD4  extz XBC
@@ -526,11 +526,11 @@ Voice_RecomputeAllThreeBaseCurves__FABFC8:
 	ld	(xiz-12), xiy                           ; FABFE3  ld (XIZ+0xf4),XIY
 	ld	hl, (xiz-4)                             ; FABFE6  ld HL,(XIZ+0xfc)
 	and	hl, 0xE000                             ; FABFE9  and HL,0xe000
-	stw_da	(0xD7A0), hl                        ; FABFED  ld (0x00d7a0),HL
+	ld	(0xD7A0:24), hl                        ; FABFED  ld (0x00d7a0),HL
 	ld	xiy, (xiz-12)                           ; FABFF2  ld XIY,(XIZ+0xf4)
 	srl	xiy, 8                                 ; FABFF5  srl 0x08,XIY
 	or	iy, hl                                  ; FABFF8  or IY,HL
-	stw_da	(0xD7A0), iy                        ; FABFFA  ld (0x00d7a0),IY
+	ld	(0xD7A0:24), iy                        ; FABFFA  ld (0x00d7a0),IY
 Voice_RecomputeAllThreeBaseCurves__FABFFF:
 	lda	xbc, (0xD75E:24)                       ; FABFFF  lda XBC,0x00d75e
 	push	xbc                                   ; FAC004  push XBC
@@ -1071,7 +1071,7 @@ sub_FAC42C:
 	pop	xbc                                    ; FAC458  pop XBC
 	cp	xiy, 44                                 ; FAC459  cp XIY,0x0000002c
 	jr nc, sub_FAC42C__FAC480                  ; FAC45F  jr NC,0xfac480
-	stiw_da	(0xD79A), 44                       ; FAC461  ld (0x00d79a),0x002c
+	ldw	(0xD79A:24), 44                       ; FAC461  ld (0x00d79a),0x002c
 	ld	bc, (xiz+8)                             ; FAC468  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC46B  extz BC
 	mul	bc, 0x12C                              ; FAC46D  mul BC,0x012c
@@ -1081,7 +1081,7 @@ sub_FAC42C:
 	jr sub_FAC42C__FAC49B                      ; FAC47E  jr T,0xfac49b
 sub_FAC42C__FAC480:
 	ld	hl, ix                                  ; FAC480  ld HL,IX
-	stw_da	(0xD79A), hl                        ; FAC482  ld (0x00d79a),HL
+	ld	(0xD79A:24), hl                        ; FAC482  ld (0x00d79a),HL
 	ld	bc, (xiz+8)                             ; FAC487  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC48A  extz BC
 	mul	bc, 0x12C                              ; FAC48C  mul BC,0x012c
@@ -1108,7 +1108,7 @@ sub_FAC42C__FAC49B:
 	call	0xFCB11B                              ; FAC4C4  call 0xfcb11b
 	srl	xiy, 8                                 ; FAC4C8  srl 0x08,XIY
 	ld	de, iy                                  ; FAC4CB  ld DE,IY
-	stw_da	(0xD79E), iy                        ; FAC4CD  ld (0x00d79e),IY
+	ld	(0xD79E:24), iy                        ; FAC4CD  ld (0x00d79e),IY
 	ld	bc, (xiz+8)                             ; FAC4D2  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC4D5  extz BC
 	mul	bc, 0x12C                              ; FAC4D7  mul BC,0x012c
@@ -1170,12 +1170,12 @@ sub_FAC526:
 	push	0                                     ; FAC530  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC532  push (XIZ+0x08)
 	call	0xFB59D2                              ; FAC535  call 0xfb59d2
-	stw_da	(0xD79A), wa                        ; FAC539  ld (0x00d79a),WA
+	ld	(0xD79A:24), wa                        ; FAC539  ld (0x00d79a),WA
 	pushw	1                                    ; FAC53E  push 0x0001
 	push	0                                     ; FAC541  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC543  push (XIZ+0x08)
 	call	0xFB582A                              ; FAC546  call 0xfb582a
-	stw_da	(0xD79E), wa                        ; FAC54A  ld (0x00d79e),WA
+	ld	(0xD79E:24), wa                        ; FAC54A  ld (0x00d79e),WA
 	pushw	0                                    ; FAC54F  push 0x0000
 	pushw	13                                   ; FAC552  push 0x000d
 	push	0                                     ; FAC555  push 0x00
@@ -1246,7 +1246,7 @@ sub_FAC58F:
 	pop	xbc                                    ; FAC5BB  pop XBC
 	cp	xiy, 28                                 ; FAC5BC  cp XIY,0x0000001c
 	jr nc, sub_FAC58F__FAC5E3                  ; FAC5C2  jr NC,0xfac5e3
-	stiw_da	(0xD79C), 28                       ; FAC5C4  ld (0x00d79c),0x001c
+	ldw	(0xD79C:24), 28                       ; FAC5C4  ld (0x00d79c),0x001c
 	ld	bc, (xiz+8)                             ; FAC5CB  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC5CE  extz BC
 	mul	bc, 0x12C                              ; FAC5D0  mul BC,0x012c
@@ -1256,7 +1256,7 @@ sub_FAC58F:
 	jr sub_FAC58F__FAC5FE                      ; FAC5E1  jr T,0xfac5fe
 sub_FAC58F__FAC5E3:
 	ld	hl, ix                                  ; FAC5E3  ld HL,IX
-	stw_da	(0xD79C), hl                        ; FAC5E5  ld (0x00d79c),HL
+	ld	(0xD79C:24), hl                        ; FAC5E5  ld (0x00d79c),HL
 	ld	bc, (xiz+8)                             ; FAC5EA  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC5ED  extz BC
 	mul	bc, 0x12C                              ; FAC5EF  mul BC,0x012c
@@ -1283,7 +1283,7 @@ sub_FAC58F__FAC5FE:
 	call	0xFCB11B                              ; FAC627  call 0xfcb11b
 	srl	xiy, 8                                 ; FAC62B  srl 0x08,XIY
 	ld	de, iy                                  ; FAC62E  ld DE,IY
-	stw_da	(0xD7A0), iy                        ; FAC630  ld (0x00d7a0),IY
+	ld	(0xD7A0:24), iy                        ; FAC630  ld (0x00d7a0),IY
 	ld	bc, (xiz+8)                             ; FAC635  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC638  extz BC
 	mul	bc, 0x12C                              ; FAC63A  mul BC,0x012c
@@ -1345,12 +1345,12 @@ sub_FAC689:
 	push	0                                     ; FAC693  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC695  push (XIZ+0x08)
 	call	0xFB59D2                              ; FAC698  call 0xfb59d2
-	stw_da	(0xD79C), wa                        ; FAC69C  ld (0x00d79c),WA
+	ld	(0xD79C:24), wa                        ; FAC69C  ld (0x00d79c),WA
 	pushw	0                                    ; FAC6A1  push 0x0000
 	push	0                                     ; FAC6A4  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC6A6  push (XIZ+0x08)
 	call	0xFB582A                              ; FAC6A9  call 0xfb582a
-	stw_da	(0xD7A0), wa                        ; FAC6AD  ld (0x00d7a0),WA
+	ld	(0xD7A0:24), wa                        ; FAC6AD  ld (0x00d7a0),WA
 	pushw	0                                    ; FAC6B2  push 0x0000
 	pushw	12                                   ; FAC6B5  push 0x000c
 	push	0                                     ; FAC6B8  push 0x00
@@ -1419,7 +1419,7 @@ sub_FAC6F2:
 	popw	bc                                    ; FAC71B  pop BC
 	cp	xiy, 28                                 ; FAC71C  cp XIY,0x0000001c
 	jr nc, sub_FAC6F2__FAC743                  ; FAC722  jr NC,0xfac743
-	stiw_da	(0xD798), 28                       ; FAC724  ld (0x00d798),0x001c
+	ldw	(0xD798:24), 28                       ; FAC724  ld (0x00d798),0x001c
 	ld	bc, (xiz+8)                             ; FAC72B  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC72E  extz BC
 	mul	bc, 0x12C                              ; FAC730  mul BC,0x012c
@@ -1429,7 +1429,7 @@ sub_FAC6F2:
 	jr sub_FAC6F2__FAC75E                      ; FAC741  jr T,0xfac75e
 sub_FAC6F2__FAC743:
 	ld	hl, ix                                  ; FAC743  ld HL,IX
-	stw_da	(0xD798), hl                        ; FAC745  ld (0x00d798),HL
+	ld	(0xD798:24), hl                        ; FAC745  ld (0x00d798),HL
 	ld	bc, (xiz+8)                             ; FAC74A  ld BC,(XIZ+0x08)
 	extz	bc                                    ; FAC74D  extz BC
 	mul	bc, 0x12C                              ; FAC74F  mul BC,0x012c
@@ -1491,7 +1491,7 @@ sub_FAC79C:
 	push	0                                     ; FAC7A3  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FAC7A5  push (XIZ+0x08)
 	call	0xFB5C77                              ; FAC7A8  call 0xfb5c77
-	stw_da	(0xD798), wa                        ; FAC7AC  ld (0x00d798),WA
+	ld	(0xD798:24), wa                        ; FAC7AC  ld (0x00d798),WA
 	pushw	0                                    ; FAC7B1  push 0x0000
 	pushw	16                                   ; FAC7B4  push 0x0010
 	push	0                                     ; FAC7B7  push 0x00
@@ -2247,7 +2247,7 @@ sub_FACC75:
 	pop	xiy                                    ; FACC8C  pop XIY
 	cp (xiz+10), 0x00                          ; FACC8D  cp (XIZ+0x0a),0x00
 	jr nz, sub_FACC75__FACCD4                  ; FACC91  jr NZ,0xfaccd4
-	stw_da	(0xD7A0), wa                        ; FACC93  ld (0x00d7a0),WA
+	ld	(0xD7A0:24), wa                        ; FACC93  ld (0x00d7a0),WA
 	pushw	0                                    ; FACC98  push 0x0000
 	ld	c, (xiz+10)                             ; FACC9B  ld C,(XIZ+0x0a)
 	or	c, 12                                   ; FACC9E  or C,0x0c
@@ -2273,7 +2273,7 @@ sub_FACC75__FACCD0:
 	inc	6, xsp                                 ; FACCD0  inc 6,XSP
 	jr sub_FACC75__FACCB2                      ; FACCD2  jr T,0xfaccb2
 sub_FACC75__FACCD4:
-	stw_da	(0xD79E), hl                        ; FACCD4  ld (0x00d79e),HL
+	ld	(0xD79E:24), hl                        ; FACCD4  ld (0x00d79e),HL
 	pushw	0                                    ; FACCD9  push 0x0000
 	ld	c, (xiz+10)                             ; FACCDC  ld C,(XIZ+0x0a)
 	or	c, 12                                   ; FACCDF  or C,0x0c
@@ -2337,7 +2337,7 @@ sub_FACD1B:
 	pop	xiy                                    ; FACD32  pop XIY
 	cp (xiz+10), 0x00                          ; FACD33  cp (XIZ+0x0a),0x00
 	jr nz, sub_FACD1B__FACD7A                  ; FACD37  jr NZ,0xfacd7a
-	stw_da	(0xD79C), wa                        ; FACD39  ld (0x00d79c),WA
+	ld	(0xD79C:24), wa                        ; FACD39  ld (0x00d79c),WA
 	pushw	0                                    ; FACD3E  push 0x0000
 	ld	c, (xiz+10)                             ; FACD41  ld C,(XIZ+0x0a)
 	or	c, 12                                   ; FACD44  or C,0x0c
@@ -2363,7 +2363,7 @@ sub_FACD1B__FACD76:
 	inc	6, xsp                                 ; FACD76  inc 6,XSP
 	jr sub_FACD1B__FACD58                      ; FACD78  jr T,0xfacd58
 sub_FACD1B__FACD7A:
-	stw_da	(0xD79A), hl                        ; FACD7A  ld (0x00d79a),HL
+	ld	(0xD79A:24), hl                        ; FACD7A  ld (0x00d79a),HL
 	pushw	0                                    ; FACD7F  push 0x0000
 	ld	c, (xiz+10)                             ; FACD82  ld C,(XIZ+0x0a)
 	or	c, 12                                   ; FACD85  or C,0x0c
@@ -2419,7 +2419,7 @@ sub_FACDC1:
 	push	0                                     ; FACDC8  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACDCA  push (XIZ+0x08)
 	call	0xFB5BAA                              ; FACDCD  call 0xfb5baa
-	stw_da	(0xD796), wa                        ; FACDD1  ld (0x00d796),WA
+	ld	(0xD796:24), wa                        ; FACDD1  ld (0x00d796),WA
 	pushw	0                                    ; FACDD6  push 0x0000
 	pushw	16                                   ; FACDD9  push 0x0010
 	push	0                                     ; FACDDC  push 0x00
@@ -2472,7 +2472,7 @@ sub_FACE14:
 	push	0                                     ; FACE1B  push 0x00
 	extpfx3 0x8E, 0x08, 0x04                   ; FACE1D  push (XIZ+0x08)
 	call	0xFB5C77                              ; FACE20  call 0xfb5c77
-	stw_da	(0xD798), wa                        ; FACE24  ld (0x00d798),WA
+	ld	(0xD798:24), wa                        ; FACE24  ld (0x00d798),WA
 	pushw	0                                    ; FACE29  push 0x0000
 	pushw	16                                   ; FACE2C  push 0x0010
 	push	0                                     ; FACE2F  push 0x00

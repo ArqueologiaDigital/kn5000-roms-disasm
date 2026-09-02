@@ -123,7 +123,7 @@ BitMapOut_ByteData_RenderB:
 	.byte 0xc1
 	push	xde
 	.byte 0x8d
-	stdi8	(0x867e), 193
+	ld	(0x867e:16), 193
 	jrl	pl, 16320
 	nop
 	jr	nz, 127
@@ -275,7 +275,7 @@ BitMapOut_ByteData_RenderE:
 	ret
 
 BitMapOut_CheckDiskAndApply:
-	cpdi8 (0x8d38), 138
+	cp (0x8d38:16), 138
 	jp_24 z, Interrupt_ModeGuardCheck
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c20000
@@ -290,7 +290,7 @@ BitMapOut_StorePresetValue:
 	ret
 
 BitMapOut_SetDefaultTimer:
-	stdi8 (0x8d3c), 64
+	ld (0x8d3c:16), 64
 	ret
 
 BitMapOut_DecrementTimer:
@@ -676,9 +676,9 @@ BitMapOut_Snapshot_PostProcess:
 	pop xhl
 	pop xde
 	calr BitMapOut_DetectChanges
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, BitMapOut_Snapshot_CheckActive
-	bitda 1, (0xfd2c)
+	bit 1, (0xfd2c:16)
 	call_24 nz, BitMapOut_DispatchIOChanges
 
 BitMapOut_Snapshot_CheckActive:
@@ -686,7 +686,7 @@ BitMapOut_Snapshot_CheckActive:
 	call SndParam_LookupReadOnly
 	cps hl, 1
 	jr nz, BitMapOut_Snapshot_SetFlags
-	bitda 6, (0xfd9e)
+	bit 6, (0xfd9e:16)
 	call_24 z, MidiSysEx_SendAllParams
 
 BitMapOut_Snapshot_SetFlags:
@@ -925,7 +925,7 @@ BitMapOut_RestoreVoiceFields:
 	resm 7, (xwa)
 	resm 7, (xwa + 1)
 	resm 7, (xwa + 2)
-	bitda 3, (0x8d52)
+	bit 3, (0x8d52:16)
 	jr z, BitMapOut_RestoreFields_PostCheck
 	ld c, (xiy)
 	res 4, c
@@ -2412,7 +2412,7 @@ BitMapOut_DetectChanges:
 	calr BitMapOut_GetRenderMode
 	bit 0, l
 	jr nz, BitMapOut_DetectChanges_CheckMode
-	cpdi8 (0x8d34), 19
+	cp (0x8d34:16), 19
 	jr z, BitMapOut_DetectChanges_CheckMode
 	lda xhl, (0xf9a0:16)
 	lda xde, (0xfc5a:16)
@@ -2435,7 +2435,7 @@ BitMapOut_DetectChanges:
 	ld (xbc), a
 
 BitMapOut_DetectChanges_CheckMode:
-	bitda 5, (0x8e76)
+	bit 5, (0x8e76:16)
 	jr nz, BitMapOut_DetectChanges_UseShortList
 	calr BitMapOut_GetRenderMode
 	bit 0, l
@@ -2462,7 +2462,7 @@ BitMapOut_DeltaEncode_Init:
 	jrl BitMapOut_DeltaEncode_CheckBounds
 
 BitMapOut_DeltaEncode_ReadEntry:
-	anddi8 (0x8d46), 252
+	and (0x8d46:16), 252
 	ld wa, iz
 	extz xwa
 	add xwa, xbc
@@ -2509,7 +2509,7 @@ BitMapOut_DeltaEncode_ScanLoop:
 
 BitMapOut_DeltaEncode_BufferFull:
 	ld (xbc), 0xff
-	stda16 (0x90e2), xhl
+	ld (0x90e2:16), hl
 	lda xwa, (0xbd3c:16)
 	ld (xsp + 8), xwa
 	ld hl, (0x90de:16)
@@ -2623,13 +2623,13 @@ BitMapOut_DeltaEncode_CheckBounds:
 	extz xwa
 	add xwa, (xsp + 8)
 	ld (xwa), 0xff
-	bitda 2, (0x8d46)
+	bit 2, (0x8d46:16)
 	jr nz, BitMapOut_DeltaEncode_StoreShortLen
-	stda16 (0x90e2), xhl
+	ld (0x90e2:16), hl
 	jr BitMapOut_DeltaEncode_Return
 
 BitMapOut_DeltaEncode_StoreShortLen:
-	stda16 (0x90de), xhl
+	ld (0x90de:16), hl
 
 BitMapOut_DeltaEncode_Return:
 	popw iz
@@ -2637,17 +2637,17 @@ BitMapOut_DeltaEncode_Return:
 	ret
 
 BitMapOut_DispatchIOChanges:
-	bitda 7, (0xf9c4)
+	bit 7, (0xf9c4:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port0
-	bitda 7, (0xf9c7)
+	bit 7, (0xf9c7:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port3
-	bitda 7, (0xf9de)
+	bit 7, (0xf9de:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port1
-	bitda 7, (0xf9e1)
+	bit 7, (0xf9e1:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port4
-	bitda 7, (0xf9f8)
+	bit 7, (0xf9f8:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port2
-	bitda 7, (0xf9fb)
+	bit 7, (0xf9fb:16)
 	ret nz
 	calr BitMapOut_ApplyIOChange_Port5
 	ret
@@ -2657,26 +2657,26 @@ BitMapOut_ApplyIOChange_Port0:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 15
+	ld (0x8d4c:16), 15
 	ld b, (0x8d4c:16)
 	ld a, (0xf9c5:16)
 	and a, 0xff
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 255
+	ld (0x8d4c:16), 255
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld b, (0x8d4c:16)
 	ld a, (0xf9c4:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2690,26 +2690,26 @@ BitMapOut_ApplyIOChange_Port1:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 1
+	ld (0x8d4c:16), 1
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 15
+	ld (0x8d4c:16), 15
 	ld b, (0x8d4c:16)
 	ld a, (0xf9df:16)
 	and a, 0xff
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 255
+	ld (0x8d4c:16), 255
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
-	stdi8 (0x8d4c), 1
+	ld (0x8d4c:16), 1
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld b, (0x8d4c:16)
 	ld a, (0xf9de:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2723,26 +2723,26 @@ BitMapOut_ApplyIOChange_Port2:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 2
+	ld (0x8d4c:16), 2
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 15
+	ld (0x8d4c:16), 15
 	ld b, (0x8d4c:16)
 	ld a, (0xf9f9:16)
 	and a, 0xff
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 255
+	ld (0x8d4c:16), 255
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
-	stdi8 (0x8d4c), 2
+	ld (0x8d4c:16), 2
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld b, (0x8d4c:16)
 	ld a, (0xf9f8:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2756,15 +2756,15 @@ BitMapOut_ApplyIOChange_Port3:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 0
+	ld (0x8d4c:16), 0
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 3
+	ld (0x8d4c:16), 3
 	ld b, (0x8d4c:16)
 	ld a, (0xf9c7:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2778,15 +2778,15 @@ BitMapOut_ApplyIOChange_Port4:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 1
+	ld (0x8d4c:16), 1
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 3
+	ld (0x8d4c:16), 3
 	ld b, (0x8d4c:16)
 	ld a, (0xf9e1:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2800,15 +2800,15 @@ BitMapOut_ApplyIOChange_Port5:
 	push xhl
 	push xix
 	push xiz
-	stdi8 (0x8d4c), 2
+	ld (0x8d4c:16), 2
 	ld c, (0x8d4c:16)
-	stdi8 (0x8d4c), 3
+	ld (0x8d4c:16), 3
 	ld b, (0x8d4c:16)
 	ld a, (0xf9fb:16)
 	res 7, a
 	ld (0x8d4c:16), a
 	ld e, (0x8d4c:16)
-	stdi8 (0x8d4c), 127
+	ld (0x8d4c:16), 127
 	ld d, (0x8d4c:16)
 	call MIDI_DispatchCC
 	pop xiz
@@ -2872,7 +2872,7 @@ BitMapOut_DeltaEncode_TypeDefaultB:
 	res 7, a
 	cp a, w
 	jrl z, BitMapOut_DeltaEncode_HelperReturn
-	bitda 0, (0x8d46)
+	bit 0, (0x8d46:16)
 	jrl nz, BitMapOut_DeltaEncode_HelperReturn
 	ld de, hl
 	inc 1, hl
@@ -3072,7 +3072,7 @@ BitMapOut_DeltaEncode_Type48Loop:
 	res 7, a
 	cp a, c
 	jrl z, BitMapOut_DeltaEncode_Type48Return
-	bitda 0, (0x8d46)
+	bit 0, (0x8d46:16)
 	jrl nz, BitMapOut_DeltaEncode_Type48Return
 	ld bc, hl
 	inc 1, hl
@@ -3468,7 +3468,7 @@ BitMapOut_RefreshDisplay_Commit:
 	extz xwa
 	add xwa, xhl
 	ld (xwa), 0xff
-	stda16 (0x90e2), xde
+	ld (0x90e2:16), de
 	ld a, (xix)
 	ld (xiy), a
 	lda xbc, (xix + 1)
@@ -3525,7 +3525,7 @@ BitMapOut_CalcMetrics_ComputeGrid:
 	extz xwa
 	add xwa, xiz
 	ld (xwa), 0xff
-	stda16 (0x90e2), xiy
+	ld (0x90e2:16), iy
 	ld a, (xhl)
 	ld (xde), a
 
@@ -3581,7 +3581,7 @@ BitMapOut_PrepareRender_SetParams:
 	extz xwa
 	add xwa, xix
 	ld (xwa), 0xff
-	stda16 (0x90e2), xiy
+	ld (0x90e2:16), iy
 	ld c, (xde)
 	res 6, c
 	ld (xde), c
@@ -3909,7 +3909,7 @@ BitMapOut_ByteData_WidgetTable:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi16	(0x8d58), 0xffff
+	ldw	(0x8d58:16), 0xffff
 	calr	2476
 	pop	xiz
 	pop	xix
@@ -3927,7 +3927,7 @@ BitMapOut_ApplyPatch_SkipHeader:
 	ld a, (0x8d5c:16)
 	cp a, 0x80
 	jr c, BitMapOut_ApplyPatch_Execute
-	stdi16 (0x8d56), 0
+	ldw (0x8d56:16), 0
 	jr BitMapOut_ApplyPatch_Done
 
 BitMapOut_ApplyPatch_Execute:
@@ -3955,7 +3955,7 @@ BitMapOut_ApplyPatch_Store:
 	add bc, wa
 	sll bc, 2
 	inc 2, bc
-	stda16 (0x8d56), xbc
+	ld (0x8d56:16), bc
 
 BitMapOut_ApplyPatch_Done:
 	pop xiz

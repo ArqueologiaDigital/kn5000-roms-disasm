@@ -70,7 +70,7 @@ BitMapOut_ByteData_RenderA:
 	call	16405594
 	cp	xhl, 27263222
 	ret	z
-	cpdi8	49121, 0
+	cp	(49121:16), 0
 	ret	nz
 	calr	605
 	cps	l, 0
@@ -119,7 +119,7 @@ BitMapOut_ByteData_RenderB:
 	ld	a, (49124:16)
 	cpda8	a, 35998
 	jrl	nz, 134
-	cpdi8	49121, 0
+	cp	(49121:16), 0
 	jr	nz, 127
 	calr	429
 	cps	l, 0
@@ -274,7 +274,7 @@ BitMapOut_ByteData_RenderE:
 	calr	32
 	ret
 BitMapOut_CheckDiskAndApply:
-	cpdi8 (0x8c9c), 0x8a
+	cp (0x8c9c:16), 0x8a
 	jp_24 z, (Interrupt_ModeGuardCheck)
 	ld XWA,0xffffffff
 	ld XBC,0x01c20000
@@ -286,7 +286,7 @@ BitMapOut_StorePresetValue:
 	ld	(36002:16), a
 	ret
 BitMapOut_SetDefaultTimer:
-	stdi8	(36000), 64
+	ld	(36000:16), 64
 	ret
 BitMapOut_DecrementTimer:
 	call	16405594
@@ -1674,7 +1674,7 @@ BitMapOut_DetectChanges:
 	calr BitMapOut_GetRenderMode
 	bit 0x00,L
 	jr nz, .Lc_fb4e26
-	cpdi8 (0x8c98), 0x13
+	cp (0x8c98:16), 0x13
 	jr z, .Lc_fb4e26
 	lda xhl, (0xf9a0:16)
 	lda xde, (0xfc5a:16)
@@ -1697,7 +1697,7 @@ BitMapOut_DetectChanges:
 	ld (XBC),A
 BitMapOut_DetectChanges_CheckMode:
 .Lc_fb4e26:
-	bitda 5, (0x8dda)
+	bit 5, (0x8dda:16)
 	jr nz, .Lc_fb4e34
 	calr BitMapOut_GetRenderMode
 	bit 0x00,L
@@ -1785,7 +1785,7 @@ BitMapOut_DeltaEncode_ScanLoop:
 	jr c, BitMapOut_DeltaEncode_EncodeChange
 BitMapOut_DeltaEncode_BufferFull:
 	ld	(xbc), 255
-	stda16	(36934), hl
+	ld	(36934:16), hl
 	lda	xwa, (48288:16)
 	ld	(xsp+8), xwa
 	ld	hl, (36930:16)
@@ -1898,29 +1898,29 @@ BitMapOut_DeltaEncode_CheckBounds:
 	extz XWA
 	add XWA,(XSP+0x08)
 	ld (XWA),0xff
-	bitda 2, (0x8caa)
+	bit 2, (0x8caa:16)
 	jr nz, BitMapOut_DeltaEncode_StoreShortLen
-	stda16 (0x9046), hl
+	ld (0x9046:16), hl
 	jr t, BitMapOut_DeltaEncode_Return
 BitMapOut_DeltaEncode_StoreShortLen:
-	stda16	(36930), hl
+	ld	(36930:16), hl
 BitMapOut_DeltaEncode_Return:
 	popw iz
 	lda xsp, (xsp + 10)
 	ret
 
 BitMapOut_DispatchIOChanges:
-	bitda 7, (0xf9c4)
+	bit 7, (0xf9c4:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port0
-	bitda 7, (0xf9c7)
+	bit 7, (0xf9c7:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port3
-	bitda 7, (0xf9de)
+	bit 7, (0xf9de:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port1
-	bitda 7, (0xf9e1)
+	bit 7, (0xf9e1:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port4
-	bitda 7, (0xf9f8)
+	bit 7, (0xf9f8:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port2
-	bitda 7, (0xf9fb)
+	bit 7, (0xf9fb:16)
 	ret nz
 	calr BitMapOut_ApplyIOChange_Port5
 	ret
@@ -1930,26 +1930,26 @@ BitMapOut_ApplyIOChange_Port0:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	c, (36016:16)
-	stdi8	(36016), 15
+	ld	(36016:16), 15
 	ld	b, (36016:16)
 	ld	a, (63941:16)
 	and	a, 255
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 255
+	ld	(36016:16), 255
 	ld	d, (36016:16)
 	call	16579981
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	c, (36016:16)
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	b, (36016:16)
 	ld	a, (63940:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -1962,26 +1962,26 @@ BitMapOut_ApplyIOChange_Port1:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 1
+	ld	(36016:16), 1
 	ld	c, (36016:16)
-	stdi8	(36016), 15
+	ld	(36016:16), 15
 	ld	b, (36016:16)
 	ld	a, (63967:16)
 	and	a, 255
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 255
+	ld	(36016:16), 255
 	ld	d, (36016:16)
 	call	16579981
-	stdi8	(36016), 1
+	ld	(36016:16), 1
 	ld	c, (36016:16)
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	b, (36016:16)
 	ld	a, (63966:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -1994,26 +1994,26 @@ BitMapOut_ApplyIOChange_Port2:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 2
+	ld	(36016:16), 2
 	ld	c, (36016:16)
-	stdi8	(36016), 15
+	ld	(36016:16), 15
 	ld	b, (36016:16)
 	ld	a, (63993:16)
 	and	a, 255
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 255
+	ld	(36016:16), 255
 	ld	d, (36016:16)
 	call	16579981
-	stdi8	(36016), 2
+	ld	(36016:16), 2
 	ld	c, (36016:16)
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	b, (36016:16)
 	ld	a, (63992:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -2026,15 +2026,15 @@ BitMapOut_ApplyIOChange_Port3:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 0
+	ld	(36016:16), 0
 	ld	c, (36016:16)
-	stdi8	(36016), 3
+	ld	(36016:16), 3
 	ld	b, (36016:16)
 	ld	a, (63943:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -2047,15 +2047,15 @@ BitMapOut_ApplyIOChange_Port4:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 1
+	ld	(36016:16), 1
 	ld	c, (36016:16)
-	stdi8	(36016), 3
+	ld	(36016:16), 3
 	ld	b, (36016:16)
 	ld	a, (63969:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -2068,15 +2068,15 @@ BitMapOut_ApplyIOChange_Port5:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi8	(36016), 2
+	ld	(36016:16), 2
 	ld	c, (36016:16)
-	stdi8	(36016), 3
+	ld	(36016:16), 3
 	ld	b, (36016:16)
 	ld	a, (63995:16)
 	res	7, a
 	ld	(36016:16), a
 	ld	e, (36016:16)
-	stdi8	(36016), 127
+	ld	(36016:16), 127
 	ld	d, (36016:16)
 	call	16579981
 	pop	xiz
@@ -2730,7 +2730,7 @@ BitMapOut_RefreshDisplay_Commit:
 
 	ld (xwa), 0xff
 
-	stda16 (36934), de
+	ld (36934:16), de
 
 	ld a, (xix)
 
@@ -2799,7 +2799,7 @@ BitMapOut_CalcMetrics_ComputeGrid:
 	extz	xwa
 	add	xwa, xiz
 	ld	(xwa), 255
-	stda16	(36934), iy
+	ld	(36934:16), iy
 	ld	a, (xhl)
 	ld	(xde), a
 BitMapOut_CalcMetrics_Done:
@@ -2853,7 +2853,7 @@ BitMapOut_PrepareRender_SetParams:
 	extz	xwa
 	add	xwa, xix
 	ld	(xwa), 255
-	stda16	(36934), iy
+	ld	(36934:16), iy
 	ld	c, (xde)
 	res	6, c
 	ld	(xde), c
@@ -2888,7 +2888,7 @@ BitMapOut_GetRenderMode_Return:
 	ret
 BitMapOut_ByteData_RenderState:
 	push	xiz
-	cpdi8	49121, 4
+	cp	(49121:16), 4
 	jrl	nz, 179
 	ld	a, (49122:16)
 	andda8	a, 49123
@@ -3138,7 +3138,7 @@ BitMapOut_ByteData_WidgetTable:
 
 	push	xiz
 
-	stdi16 (36028), 65535
+	ldw (36028:16), 65535
 
 	calr	2476
 
@@ -3164,7 +3164,7 @@ BitMapOut_ApplyPatch_SkipHeader:
 	ld	a, (36032:16)
 	cp	a, 128
 	jr	c, 8
-	stdi16	(36026), 0
+	ldw	(36026:16), 0
 	jr	55
 BitMapOut_ApplyPatch_Execute:
 	lds iz, 0
@@ -3190,7 +3190,7 @@ BitMapOut_ApplyPatch_Store:
 	add	bc, wa
 	sll	bc, 2
 	inc	2, bc
-	stda16	(36026), bc
+	ld	(36026:16), bc
 BitMapOut_ApplyPatch_Done:
 	pop xiz
 	ret

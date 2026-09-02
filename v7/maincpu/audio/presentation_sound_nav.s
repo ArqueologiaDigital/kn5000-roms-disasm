@@ -333,11 +333,11 @@ GroupBox_Epilogue:
 	ret
 
 SetDialEnable:
-	stw_da (0x03ef50), xwa
+	ld (0x03ef50:24), wa
 	ret
 
 GetDialEnableState:
-	ldw_da xhl, (0x03ef50)
+	ld hl, (0x03ef50:24)
 	ret
 
 SetDialFocus:
@@ -357,7 +357,7 @@ GetDialFocus:
 	ret
 
 GetDialFocus_Active:
-	ldl_da xhl, (0x03ef6a)
+	ld xhl, (0x03ef6a:24)
 	ret
 
 SetDialUp:
@@ -1130,9 +1130,9 @@ DirmdEmu_CaseC:
 	ld xde, (xsp + 4)
 	call FuncCall
 	call WakeUpMainTask
-	stiw_da (0x0276c4), 0x0000
+	ldw (0x0276c4:24), 0x0000
 	jrl TaskWake_ZeroReturn
-	stiw_da (0x0276c4), 0x0001
+	ldw (0x0276c4:24), 0x0001
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1144,7 +1144,7 @@ DirmdEmu_CaseC:
 	lds wa, 2
 	call ChangePalette
 	jr TaskWake_ZeroReturn
-	stiw_da (0x0276c4), 0x0001
+	ldw (0x0276c4:24), 0x0001
 	call GetTitleNow
 	ld xwa, xhl
 	ld xbc, 0x1e00032
@@ -1227,7 +1227,7 @@ IvDirmd_Epilogue:
 PostTitle_Function:
 
 GetDirmdFlag:
-	ldw_da xhl, (0x0276c4)
+	ld hl, (0x0276c4:24)
 	ret
 
 DirmdTitleFunc:
@@ -1308,7 +1308,7 @@ DirmdEmulator_Dispatch:
 	pop	xhl
 	pop	xde
 	jr	113
-	stdi8	(58138), 0
+	ld	(58138:16), 0
 	ldw	wa, 255
 	call	16453699
 	ldw	wa, 245
@@ -1327,7 +1327,7 @@ DirmdEmulator_Dispatch:
 	pop	xhl
 	pop	xde
 	jr	69
-	stdi8	(58138), 16
+	ld	(58138:16), 16
 	push	xde
 	push	xhl
 	push	xix
@@ -1338,7 +1338,7 @@ DirmdEmulator_Dispatch:
 	pop	xix
 	pop	xhl
 	pop	xde
-	stdi8	(58138), 0
+	ld	(58138:16), 0
 	jr	45
 	cp	xde, 255
 	jr	ugt, 37
@@ -1362,42 +1362,42 @@ DirmdEmulator_Dispatch:
 	pop	xhl
 	pop	xde
 DirmdEmu_DefaultCase:
-	bitda 1, (0xe318)
+	bit 1, (0xe318:16)
 	jr z, .Lc_f9ab49
 	ld a, (0xe316:16)
 	extz WA
 	call UI_PostPartChangeEvent
 DirmdEmu_CheckModeChange:
 .Lc_f9ab49:
-	bitda 7, (0xe318)
+	bit 7, (0xe318:16)
 	jr z, .Lc_f9ab59
 	ld a, (0xe316:16)
 	extz WA
 	call UI_PostModeChangeEvent
 DirmdEmu_CheckSoundCtrl:
 .Lc_f9ab59:
-	bitda 6, (0xe318)
+	bit 6, (0xe318:16)
 	jr z, .Lc_f9ab69
 	ld a, (0xe316:16)
 	extz WA
 	call SoundCtrl_SendCommand
 DirmdEmu_CheckBit4:
 .Lc_f9ab69:
-	bitda 4, (0xe318)
+	bit 4, (0xe318:16)
 	call_24 nz, (UI_PostRefreshEvent)
-	bitda 4, (0xe31a)
+	bit 4, (0xe31a:16)
 	call_24 nz, (UI_PostTimerResetEvent)
-	bitda 3, (0xe31c)
+	bit 3, (0xe31c:16)
 	jr z, DirmdEmu_ClearAllFlags
 	lds wa, 1
 	call UI_PostEvent_0x6E
 DirmdEmu_ClearAllFlags:
-	stdi8	(58136), 0
-	stdi8	(58134), 0
-	stdi8	(58138), 0
-	stdi8	(58140), 0
-	stdi8	(58142), 255
-	stdi8	(58144), 255
+	ld	(58136:16), 0
+	ld	(58134:16), 0
+	ld	(58138:16), 0
+	ld	(58140:16), 0
+	ld	(58142:16), 255
+	ld	(58144:16), 255
 	lds32	xhl, 0
 	pop	xiz
 	ret
@@ -1818,30 +1818,30 @@ AcNamingWindowProc:
 	jrl nz, WndScroll_InitWindowProc
 
 AcNaming_CheckDefaultWidget:
-	ldl_da xwa, (0x0274d2)
+	ld xwa, (0x0274d2:24)
 	or xwa, xwa
 	jr nz, AcNaming_InitScrollState
 	ld xwa, 0x1200005
 	stl_da (0x0274d2), xwa
 
 AcNaming_InitScrollState:
-	stiw_da (0x0274d8), 0x0000
-	stiw_da (0x0274da), 0x0000
-	ldl_da xwa, (0x0274d2)
+	ldw (0x0274d8:24), 0x0000
+	ldw (0x0274da:24), 0x0000
+	ld xwa, (0x0274d2:24)
 	ld xbc, 0x1e0007c
 	lds32 xde, 0
 	call ApFuncCall
-	stw_da (0x0274d6), xhl
+	ld (0x0274d6:24), hl
 	cp hl, 0x20
 	jr ule, AcNaming_QueryCharSet
-	stiw_da (0x0274d6), 0x0020
+	ldw (0x0274d6:24), 0x0020
 
 AcNaming_QueryCharSet:
-	ldl_da xwa, (0x0274d2)
+	ld xwa, (0x0274d2:24)
 	ld xbc, 0x1e00084
 	lds32 xde, 0
 	call ApFuncCall
-	stw_da (0x0274e2), xhl
+	ld (0x0274e2:24), hl
 	ld wa, hl
 	extz xwa
 	sll xwa, 2

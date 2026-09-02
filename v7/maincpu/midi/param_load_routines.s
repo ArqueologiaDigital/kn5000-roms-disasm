@@ -23,11 +23,11 @@ ParaLoadOpt_AudioFlagCheck:
 	lds32	xde, 0
 	call	16423243
 ParaLoadOpt_CaseA:
-	ldb_da a, (0x02475c)
+	ld a, (0x02475c:24)
 	cp a, (xsp + 2)
 	jr z, ParaLoadOpt_CaseB
 	ld a, (xsp + 2)
-	stb_da (0x02475c), a
+	ld (0x02475c:24), a
 	ld xwa, 0x570010
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -35,11 +35,11 @@ ParaLoadOpt_CaseA:
 
 ; ParaLoadOpt case B
 ParaLoadOpt_CaseB:
-	ldb_da a, (0x02475e)
+	ld a, (0x02475e:24)
 	cp a, (xsp)
 	jr z, ParaLoadOpt_CaseC
 	ld a, (xsp)
-	stb_da (0x02475e), a
+	ld (0x02475e:24), a
 	ld xwa, 0x570010
 	ld xbc, 0x1e000a7
 	lds32 xde, 0
@@ -47,11 +47,11 @@ ParaLoadOpt_CaseB:
 
 ; ParaLoadOpt case C
 ParaLoadOpt_CaseC:
-	ldb_da a, (0x02475a)
+	ld a, (0x02475a:24)
 	cp a, (xsp + 4)
 	jrl z, MidiFunc_SendEvtReturnAlt
 	ld a, (xsp + 4)
-	stb_da (0x02475a), a
+	ld (0x02475a:24), a
 	ld a, (xsp + 4)
 	extz wa
 	cps wa, 0
@@ -65,61 +65,61 @@ ParaLoadOpt_CaseC:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 ParaLoadOpt_DispatchTable_A:
-	stib_da	(0x024760), 0
-	stib_da	(0x024762), 0
-	stib_da	(0x024764), 0
-	stib_da	(0x024766), 0
-	stib_da	(0x024768), 0
+	ld	(0x024760:24), 0
+	ld	(0x024762:24), 0
+	ld	(0x024764:24), 0
+	ld	(0x024766:24), 0
+	ld	(0x024768:24), 0
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	201
-	stib_da	(0x024760), 1
+	ld	(0x024760:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	180
-	stib_da	(0x024760), 3
+	ld	(0x024760:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	159
-	stib_da	(0x024762), 1
+	ld	(0x024762:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	138
-	stib_da	(0x024762), 3
+	ld	(0x024762:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	118
-	stib_da	(0x024764), 1
+	ld	(0x024764:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	98
-	stib_da	(0x024764), 3
+	ld	(0x024764:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	78
-	stib_da	(0x024766), 1
+	ld	(0x024766:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	58
-	stib_da	(0x024766), 3
+	ld	(0x024766:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	38
-	stib_da	(0x024768), 1
+	ld	(0x024768:24), 1
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	18
-	stib_da	(0x024768), 3
+	ld	(0x024768:24), 3
 	ld	xwa, 0x57000a
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
@@ -150,7 +150,7 @@ ParaLoadOpt_CaseD:
 	res	7, a
 	ld	(48244:16), a
 	ld	a, (xsp+2)
-	stb_da	(149340), a
+	ld	(149340:24), a
 	ld	xwa, 5701659
 	ld	xbc, 31457447
 	lds32	xde, 0
@@ -162,7 +162,7 @@ ParaLoadOpt_CaseE:
 	res	7, a
 	ld	(48248:16), a
 	ld	a, (xsp)
-	stb_da	(149342), a
+	ld	(149342:24), a
 	ld	xwa, 5701659
 	ld	xbc, 31457447
 	lds32	xde, 0
@@ -185,61 +185,61 @@ ParaLoadOpt_CaseF:
 	lda	xix, (16213759:24)
 	jp_rr	8, xix, wa
 ParaLoadOpt_DispatchTable_B:
-	stib_da	(0x024760), 0
-	stib_da	(0x024762), 0
-	stib_da	(0x024764), 0
-	stib_da	(0x024766), 0
-	stib_da	(0x024768), 0
+	ld	(0x024760:24), 0
+	ld	(0x024762:24), 0
+	ld	(0x024764:24), 0
+	ld	(0x024766:24), 0
+	ld	(0x024768:24), 0
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	201
-	stib_da	(0x024760), 2
+	ld	(0x024760:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	180
-	stib_da	(0x024760), 3
+	ld	(0x024760:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	159
-	stib_da	(0x024762), 2
+	ld	(0x024762:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jrl	138
-	stib_da	(0x024762), 3
+	ld	(0x024762:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	118
-	stib_da	(0x024764), 2
+	ld	(0x024764:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	98
-	stib_da	(0x024764), 3
+	ld	(0x024764:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	78
-	stib_da	(0x024766), 2
+	ld	(0x024766:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	58
-	stib_da	(0x024766), 3
+	ld	(0x024766:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	38
-	stib_da	(0x024768), 2
+	ld	(0x024768:24), 2
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
 	jr	18
-	stib_da	(0x024768), 3
+	ld	(0x024768:24), 3
 	ld	xwa, 0x570015
 	ld	xbc, 0x01c0000b
 	lds32	xde, 0
@@ -370,7 +370,7 @@ ParaLoadOpt_GridReturn:
 	ld XBC,0x01e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7ea6), 0x48
+	ld (0x7ea6:16), 0x48
 	ld XWA,0xffffffff
 	ld XBC,0x01c00016
 	ld XDE,0x01a000ee

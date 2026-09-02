@@ -2002,7 +2002,7 @@ MdPresetWithoutFunc:
 	jr nz, MdPresetWith_ReturnSuccess
 	cpib_da (0x024756), 0x00
 	jr z, MdPresetWith_ReturnSuccess
-	stib_da (0x024756), 0x00
+	ld (0x024756:24), 0x00
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
 	lds32 xde, 0
@@ -2049,7 +2049,7 @@ MdPresetWithFunc:
 	jr nz, MdPreset_ReturnSuccess
 	cpib_da (0x024756), 0x01
 	jr z, MdPreset_ReturnSuccess
-	stib_da (0x024756), 0x01
+	ld (0x024756:24), 0x01
 	ld xwa, 0x560001
 	ld xbc, 0x1e00056
 	lds32 xde, 0
@@ -2102,7 +2102,7 @@ MdPresetOKFunc:
 	jrl z, MdPresetOK_Slot4Path
 	cps l, 3
 	jrl z, MdPresetOK_Slot3Path
-	ldb_da a, (0x024756)
+	ld a, (0x024756:24)
 	cps l, 2
 	jr z, MdPresetOK_CheckSlotB
 	cps l, 1
@@ -2184,7 +2184,7 @@ MdPresetOK_Slot4Path:
 	ld xbc, 0x1e0006b
 	lds32 xde, 0
 	call SendEvent
-	stb_da (0x024758), l
+	ld (0x024758:24), l
 	ld xwa, 0x560025
 	ld xbc, 0x1e00090
 	lds32 xde, 0
@@ -2212,13 +2212,13 @@ MainMpstFunc:
 	ld	xwa, (xsp)
 	ld	(46928:16), a
 	call	16600229
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
 	jr	52
 MainMpst_HandlePresetCopy:
-	stdi8	(32422), 37
+	ld	(32422:16), 37
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -2226,7 +2226,7 @@ MainMpst_HandlePresetCopy:
 	ld	xwa, (xsp)
 	extz	wa
 	call	16600558
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
@@ -2239,7 +2239,7 @@ MainMpst_ReturnZero:
 	ret
 
 MainMpst_ReadPresetIndex:
-	ldb_da l, (0x024758)
+	ld l, (0x024758:24)
 	ret
 
 TtMdExc:

@@ -166,9 +166,9 @@ SysEx_ApplyVoiceParam_4B:
 .Lc_fdaae1:
 	ld (XIX),0xff
 	sub XIX,0x0000bca0
-	stda16 (0x9042), ix
-	stdi8 (0xbe9d), 0xff
-	stdi16 (0x9046), 0x0000
+	ld (0x9042:16), ix
+	ld (0xbe9d:16), 0xff
+	ldw (0x9046:16), 0x0000
 	ret
 	.byte 0x45, 0x86, 0x77, 0xee, 0x00, 0xf1, 0xe5, 0xbf
 	.byte 0x65, 0x45, 0xa3, 0x7c, 0xee, 0x00, 0xf1, 0xe9
@@ -230,7 +230,7 @@ SysEx_ApplyVoiceParam_4B_128_RestoreSlotId:
 SysEx_ApplyVoiceParam_4B_128_Return:
 	.byte 0x90, 0x38, 0x04, 0x0e
 SysEx_ApplyVoiceParam_49:
-	cpdi16 (0x9046), 0x00fb
+	cpw (0x9046:16), 0x00fb
 	jr ugt, .Lc_fdac40
 	ld XHL,0x0000be9d
 	addda16 xhl, 0x9046
@@ -628,7 +628,7 @@ BitMapOut_MergeOutputFields:
 	.byte 0x0e
 	pushw iz
 	lds iz, 0
-	cpdi8 (0xb744), 0x00
+	cp (0xb744:16), 0x00
 	jrl z, .Lc_fdb35a
 .Lc_fdb297:
 	cp IZ,0x0108
@@ -637,10 +637,10 @@ BitMapOut_MergeOutputFields:
 	ld a, (0x0429:16)
 	and A,0x1f
 	jr z, .Lc_fdb329
-	bitda 0, (0x0429)
+	bit 0, (0x0429:16)
 	jr z, .Lc_fdb2cc
 	resda 0, (0x0429)
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fdb297
 	ld WA,IZ
 	inc 1,IZ
@@ -651,10 +651,10 @@ BitMapOut_MergeOutputFields:
 	jr t, .Lc_fdb297
 .Lc_fdb2cc:
 	lda xwa, (0xc036:16)
-	bitda 1, (0x0429)
+	bit 1, (0x0429:16)
 	jr z, .Lc_fdb2ed
 	resda 1, (0x0429)
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fdb297
 	ld BC,IZ
 	inc 1,IZ
@@ -663,10 +663,10 @@ BitMapOut_MergeOutputFields:
 	ld (XBC),0xfa
 	jr t, .Lc_fdb297
 .Lc_fdb2ed:
-	bitda 2, (0x0429)
+	bit 2, (0x0429:16)
 	jr z, .Lc_fdb30a
 	resda 2, (0x0429)
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fdb297
 	ld BC,IZ
 	inc 1,IZ
@@ -675,10 +675,10 @@ BitMapOut_MergeOutputFields:
 	ld (XBC),0xfb
 	jr t, .Lc_fdb297
 .Lc_fdb30a:
-	bitda 3, (0x0429)
+	bit 3, (0x0429:16)
 	jr z, .Lc_fdb297
 	resda 3, (0x0429)
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jrl nz, .Lc_fdb297
 	ld BC,IZ
 	inc 1,IZ
@@ -748,7 +748,7 @@ MidiSeq_ReceiveAndForward:
 	.byte 0xd1, 0x4e, 0xc1, 0xa1, 0xf1, 0x54, 0xc1, 0xc8
 	.byte 0x66, 0x56, 0xd9, 0xcf, 0x0f, 0x00, 0xb0, 0xf7
 MidiSeq_ReceiveAndForward_CompIface:
-	stda16	(49486), wa
+	ld	(49486:16), wa
 	ld	bc, (49490:16)
 	extz	xbc
 	ld	wa, (49500:16)
@@ -783,7 +783,7 @@ MidiSeq_SendMultiByte_PC2SendLoop:
 MidiSeq_SendMultiByte_PC2NextByte:
 	.byte 0x4e, 0x00, 0xd9, 0xa9, 0xda, 0xa8, 0x1d, 0xb7
 	.byte 0x71, 0xfc, 0x0e
-	bitda 2, (0xc154)
+	bit 2, (0xc154:16)
 MidiSeq_SendMultiByte_SerialCountInit:
 	ret Z
 	resda 2, (0xc154)
@@ -913,7 +913,7 @@ MidiOut_ReadSysExByte:
 	ldb a, 219
 	or (xwa+30), b
 	swi 5
-	stda16 (49502), hl
+	ld (49502:16), hl
 	ld bc, (49498:16)
 	lds wa, 1
 	jrl 151
@@ -951,7 +951,7 @@ CompIface_RampDown:
 	.byte 0x89, 0x1e
 CompIface_RampDown_Start:
 	jr	lt, -3
-	stda16	(49500), hl
+	ld	(49500:16), hl
 CompIface_FilterBySource:
 	.byte 0xc1, 0x58, 0xc1, 0x21, 0xd8, 0x12, 0xd1, 0x5a
 	.byte 0xc1, 0x21, 0x1e, 0x50, 0xfd, 0xf1, 0x5e, 0xc1
@@ -960,7 +960,7 @@ CompIface_FromSource2:
 	pop	xde
 	subdm8	(55329), a
 	calr	64807
-	stda16	(49504), hl
+	ld	(49504:16), hl
 	ret
 	extz	xwa
 	ld	xbc, 15623020
@@ -2539,13 +2539,13 @@ DSPCfg_EventType51:
 	ld wa, (0xc4fc:16)
 	bit 0x02,WA
 	jr z, .Lc_fdd756
-	bitda 0, (0x28b2)
+	bit 0, (0x28b2:16)
 	jr z, .Lc_fdd756
 .Lc_fdd741:
 	anddi16 (0xc4fa), 0xfdff
 	resda 0, (0x31e8)
 	call 0xfdee26
-	stdi8 (0xc504), 0x00
+	ld (0xc504:16), 0x00
 	jr t, .Lc_fdd776
 .Lc_fdd756:
 	.byte 0xd1, 0xfa, 0xc4, 0x3e

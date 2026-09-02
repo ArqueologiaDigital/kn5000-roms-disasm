@@ -97,7 +97,7 @@ BootSerial_Init_Nop1:
 BootSerial_ModeSwitch:
 	ld	a, (0x0f64:16)
 	and	a, 0xc0			; isolate mode field
-	anddi8	(0x0f64), 0x3f		; strip it from the flags byte
+	and	(0x0f64:16), 0x3f		; strip it from the flags byte
 	cps	a, 0
 	jr	z, BootSerial_ModeSwitch__parse	; mode 0: just re-arm + parse
 	cp	a, 0x40
@@ -121,8 +121,8 @@ BootSerial_ModeSwitch__apply:
 	ldw	(xhl - 8), 0		; tail (0x9882) = 0
 	ldw	(xhl - 2), 0x80		; wrap size (0x9888) = 0x80
 	ei	6			; mask serial interrupts
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ei	0
 BootSerial_ModeSwitch__parse:
 	calr	BootSerial_RX_ParsePackets
@@ -246,20 +246,20 @@ BootSerial_FullInit:
 	ldio	0xf8, 0x23		; INTCLR: clear INTTX1
 	or_sd8b_im 0xc8, 0x10		; TAMOD |= 0x10
 	and_sd8b_im 0xc8, 0xf7		; TAMOD &= ~0x08
-	stdi8	(0x0f69), 0x7d
-	ordi8	(0x0f64), 0x40		; link flag bit 6
-	stdi8	(0x0f63), 0		; INTA mode: next INTA enters RX mode
-	anddi8	(0x0f64), 0xfc		; clear RX/TX active flags
-	stdi16	(0x0fd5), 0		; TX send index
-	stdi16	(0x0fd7), 0		; TX pending count
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ld	(0x0f69:16), 0x7d
+	or	(0x0f64:16), 0x40		; link flag bit 6
+	ld	(0x0f63:16), 0		; INTA mode: next INTA enters RX mode
+	and	(0x0f64:16), 0xfc		; clear RX/TX active flags
+	ldw	(0x0fd5:16), 0		; TX send index
+	ldw	(0x0fd7:16), 0		; TX pending count
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	calr	BootSerial_TickWait6
 	ldb	a, 0x1f			; opening frame (0x1f, 0xda)
 	ldb	w, 0xda
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
 	calr	BootSerial_HandshakeSequence
 	ret
@@ -278,20 +278,20 @@ BootSerial_HandshakeSequence:
 	ldb	w, 0x1a
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
 	ldb	a, 0x1d			; frame (0x1d, 0x00)
 	ldb	w, 0x00
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
 	calr	BootSerial_SpinWait3000
 	ldb	a, 0xdd			; frame (0xdd, 0x03)
 	ldb	w, 0x03
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
 	calr	BootSerial_SpinWait3000
 	ldb	a, 0x1e			; frame (0x1e, 0x80)
@@ -307,8 +307,8 @@ BootSerial_HandshakeSequence:
 	and_sd8b_im 0xd6, 0xdf		; SC1MOD &= ~0x20
 	ldio	0xf8, 0x12		; INTCLR
 	ldio	0xe3, 0x05		; INTEAB
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ei	0
 	ret
 
@@ -325,8 +325,8 @@ BootSerial_HandshakeSequence:
 ;          BootSerial_SpinWait300
 ; -----------------------------------------------------------------------------
 BootSerial_SendTwoBytes_Bitbang:
-	stda16	(0x0fd9), xwa		; frame bytes into TX ring head
-	anddi8	(0x0f67), 0xbf
+	ld	(0x0fd9:16), wa		; frame bytes into TX ring head
+	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC with bit 6 low
 	ldio	0xeb, 0xff		; INTES1
@@ -335,20 +335,20 @@ BootSerial_SendTwoBytes_Bitbang:
 	ldio	0xe3, 0x07		; INTEAB
 	ldio	0xf8, 0x12		; INTCLR
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
-	ordi8	(0x0f66), 0x40
+	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR with bit 6 high
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
-	anddi8	(0x0f66), 0xbf
+	and	(0x0f66:16), 0xbf
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 back low  (clock pulse)
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
-	ordi8	(0x0f67), 0x50
+	or	(0x0f67:16), 0x50
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bits 6:4 pattern 0x50
-	ordi8	(0x0f66), 0x50
+	or	(0x0f66:16), 0x50
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR likewise
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
@@ -371,10 +371,10 @@ BootSerial_SendTwoBytes_Bitbang:
 	calr	BootSerial_SpinWait300
 	or_sd8b_im 0xd5, 0x01		; pulse SC1CR bit 0
 	and_sd8b_im 0xd5, 0xfd		; SC1CR bit 1 low
-	anddi8	(0x0f66), 0xaf
+	and	(0x0f66:16), 0xaf
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; restore PFCR
-	anddi8	(0x0f67), 0xaf
+	and	(0x0f67:16), 0xaf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; restore PFFC
 	ret
@@ -465,7 +465,7 @@ BootSerial_SpinWait3000__done:
 ; -----------------------------------------------------------------------------
 BootSerial_TickWait2:
 	ld	wa, (0x0c00:16)
-	stda16	(0x0f73), xwa
+	ld	(0x0f73:16), wa
 BootSerial_TickWait2__loop:
 	ld	wa, (0x0c00:16)
 	subda16	xwa, 0x0f73
@@ -475,7 +475,7 @@ BootSerial_TickWait2__loop:
 
 BootSerial_TickWait6:
 	ld	wa, (0x0c00:16)
-	stda16	(0x0f73), xwa
+	ld	(0x0f73:16), wa
 BootSerial_TickWait6__loop:
 	ld	wa, (0x0c00:16)
 	subda16	xwa, 0x0f73
@@ -485,7 +485,7 @@ BootSerial_TickWait6__loop:
 
 BootSerial_TickWait51:
 	ld	wa, (0x0c00:16)
-	stda16	(0x0f73), xwa
+	ld	(0x0f73:16), wa
 BootSerial_TickWait51__loop:
 	ld	wa, (0x0c00:16)
 	subda16	xwa, 0x0f73
@@ -507,22 +507,22 @@ BootSerial_TickWait51__loop:
 ; Callers: Boot_ProbeExternalDevice (boot 0xffed1a)
 ; -----------------------------------------------------------------------------
 Boot_ClassifyDeviceID:
-	cpdi8	(0x1036), 0x6c
+	cp	(0x1036:16), 0x6c
 	jr	nz, Boot_ClassifyDeviceID__not3
 	lds	hl, 3
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__not3:
-	cpdi8	(0x1023), 0x70
+	cp	(0x1023:16), 0x70
 	jr	nz, Boot_ClassifyDeviceID__not2
 	lds	hl, 2
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__not2:
-	cpdi8	(0x1038), 0x38
+	cp	(0x1038:16), 0x38
 	jr	nz, Boot_ClassifyDeviceID__not1
 	lds	hl, 1
 	jr	Boot_ClassifyDeviceID__ret
 Boot_ClassifyDeviceID__not1:
-	cpdi8	(0x1028), 0x0f
+	cp	(0x1028:16), 0x0f
 	jr	nz, Boot_ClassifyDeviceID__none
 	lds	hl, 4
 	jr	Boot_ClassifyDeviceID__ret
@@ -542,28 +542,28 @@ Boot_ClassifyDeviceID__ret:
 ;          factory/diagnostic code
 ; -----------------------------------------------------------------------------
 BootSerial_TestLoopback:
-	stdi8	(0x0f6b), 0
+	ld	(0x0f6b:16), 0
 	calr	BootSerial_WaitTxIdle
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ldb	a, 0x20			; test frame (0x20, 0x00)
 	ldb	w, 0x00
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
-	cpdi16	(0x0f77), 0
+	cpw	(0x0f77:16), 0
 	jr	z, BootSerial_TestLoopback__no_resp1
-	ordi8	(0x0f6b), 1
+	or	(0x0f6b:16), 1
 BootSerial_TestLoopback__no_resp1:
 	calr	BootSerial_WaitTxIdle
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ldb	a, 0xe0			; test frame (0xe0, 0x00)
 	ldb	w, 0x00
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
-	cpdi16	(0x0f77), 0
+	cpw	(0x0f77:16), 0
 	jr	z, BootSerial_TestLoopback__no_resp2
-	ordi8	(0x0f6b), 8
+	or	(0x0f6b:16), 8
 BootSerial_TestLoopback__no_resp2:
 	ld	a, (0x0f6b:16)
 	ret
@@ -585,7 +585,7 @@ BootSerial_ProbeSequence:
 	ldw	(xhl - 2), 0x80
 	ei	6
 	ld	wa, (0x0f75:16)
-	stda16	(0x0f77), xwa		; (0x0f77) = (0x0f75) snapshot
+	ld	(0x0f77:16), wa		; (0x0f77) = (0x0f75) snapshot
 	ei	0
 	call	0xfff173		; BootSerial_WaitTxIdle (boot-time
 					; absolute; ROM label 0x9ff173)
@@ -633,8 +633,8 @@ BootSerial_WaitDeviceIdent:
 	ldw	(xhl - 8), 0
 	ldw	(xhl - 2), 0x80
 	ei	6
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ei	0
 BootSerial_WaitDeviceIdent__poll:
 	calr	BootSerial_WaitTxIdle
@@ -661,10 +661,10 @@ BootSerial_WaitDeviceIdent__have:
 	ldw	(xhl - 8), 0
 	ldw	(xhl - 2), 0x80
 	ei	6
-	stdi16	(0x0fd5), 0
-	stdi16	(0x0fd7), 0
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0fd5:16), 0
+	ldw	(0x0fd7:16), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ei	0
 	ret
 
@@ -686,8 +686,8 @@ BootSerial_ResetAndIdent:
 	ldw	(xhl - 8), 0
 	ldw	(xhl - 2), 0x80
 	ei	6
-	stdi8	(0x0f75), 0		; byte store (word store elsewhere)
-	stdi8	(0x0f77), 0		; byte store
+	ld	(0x0f75:16), 0		; byte store (word store elsewhere)
+	ld	(0x0f77:16), 0		; byte store
 	ei	0
 	calr	BootSerial_WaitTxIdle
 	ldb	a, 0x2b			; frame (0x2b, 0x00)
@@ -736,21 +736,21 @@ BootSerial_ResetAndIdent:
 ;          BootSerial_ResetAndIdent (x4)
 ; -----------------------------------------------------------------------------
 BootSerial_WaitTxIdle:
-	stdi8	(0x0f6f), 0xc8		; 200 retries
+	ld	(0x0f6f:16), 0xc8		; 200 retries
 BootSerial_WaitTxIdle__outer:
 	ei	6			; sample state with serial ints masked
 	bit_dd8	6, 0x3c			; PF bit 6 must be high
 	jr	z, BootSerial_WaitTxIdle__busy
 	bit_dd8	5, 0x38			; PE bit 5 must be low
 	jr	nz, BootSerial_WaitTxIdle__busy
-	bitda	1, (0x0f64)		; TX-pending flag clear?
+	bit	1, (0x0f64:16)		; TX-pending flag clear?
 	jr	nz, BootSerial_WaitTxIdle__busy
-	bitda	0, (0x0f64)		; RX-active flag clear?
+	bit	0, (0x0f64:16)		; RX-active flag clear?
 	jr	nz, BootSerial_WaitTxIdle__busy
 	jr	BootSerial_WaitTxIdle__check_tx
 BootSerial_WaitTxIdle__busy:
 	decdi8	1, (0x0f6f)
-	cpdi8	(0x0f6f), 0
+	cp	(0x0f6f:16), 0
 	jr	z, BootSerial_WaitTxIdle__exit	; timed out
 	ei	0
 	calr	BootSerial_SpinWait1500
@@ -765,7 +765,7 @@ BootSerial_WaitTxIdle__exit:
 	ldio	0xf8, 0x23		; INTCLR: INTTX1
 	ldio	0xeb, 0xdd		; INTES1
 	and_sd8b_im 0xd6, 0xdf		; SC1MOD &= ~0x20
-	ordi8	(0x0f6a), 0x80		; done/abort status bit
+	or	(0x0f6a:16), 0x80		; done/abort status bit
 	ei	0
 	ret
 
@@ -789,19 +789,19 @@ BootSerial_WaitTxIdle__exit:
 ; -----------------------------------------------------------------------------
 BootSerial_SendFrame:
 	ei	6
-	stdi16	(0x0fd5), 0		; TX send index = 0
-	stdi16	(0x0fd7), 0		; TX pending count = 0
-	stda16	(0x0fd9), xwa		; both frame bytes -> ring head
+	ldw	(0x0fd5:16), 0		; TX send index = 0
+	ldw	(0x0fd7:16), 0		; TX pending count = 0
+	ld	(0x0fd9:16), wa		; both frame bytes -> ring head
 	adddi16	(0x0fd7), 2		; two bytes pending
-	ordi8	(0x0f64), 2		; TX-pending flag
-	anddi8	(0x0f64), 0xfe		; clear RX-active flag
-	stdi8	(0x0f62), 4		; state machine -> state 0x04
+	or	(0x0f64:16), 2		; TX-pending flag
+	and	(0x0f64:16), 0xfe		; clear RX-active flag
+	ld	(0x0f62:16), 4		; state machine -> state 0x04
 	ldio	0xd7, 0x28		; BR1CR
-	anddi8	(0x0f67), 0xbf
+	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
-	ordi8	(0x0f66), 0x40
+	or	(0x0f66:16), 0x40
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 high
 	ldio	0xe3, 0x07		; INTEAB

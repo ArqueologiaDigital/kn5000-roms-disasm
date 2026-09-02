@@ -56,7 +56,7 @@ WPLoad_HandleCancel:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	92
 WPLoad_HandleError:
@@ -84,7 +84,7 @@ WPLoad_HandleSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 WPLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -96,12 +96,12 @@ WPLoad_HandleAbort:
 
 WPLoad_HandleSelection:
 	ld	xwa, (xsp+6)
-	stda32	(33044), xwa
+	ld	(33044:16), xwa
 	call	16296968
-	stda16	(33048), hl
+	ld	(33048:16), hl
 	cps	hl, 0
 	jr	ge, 6
-	stdi16	(33048), 0
+	ldw	(33048:16), 0
 WPLoad_Selection_Positive:
 	ld	wa, (33048:16)
 	exts	xwa
@@ -164,7 +164,7 @@ WPLoad_PageDown:
 	jr	ge, 13
 	add	hl, 10
 WPLoad_StorePosition:
-	stda16	(33048), hl
+	ld	(33048:16), hl
 	ld	bc, hl
 	jrl	158
 WPLoad_PageDown_Boundary:
@@ -182,7 +182,7 @@ WPLoad_PageDown_Boundary:
 	ld	wa, qde
 	cps	wa, 0
 	jr	z, 118
-	stda16	(33048), bc
+	ld	(33048:16), bc
 	jr	116
 WPLoad_OpLoad:
 	ld	xwa, (xsp+6)
@@ -285,7 +285,7 @@ WP_ScanAvailability:
 	push	xiz
 	call	16289841
 	ld	qiz, hl
-	stdi16	(35162), 0
+	ldw	(35162:16), 0
 	lds	iz, 0
 WPScan_LoopBody:
 	ld bc, iz

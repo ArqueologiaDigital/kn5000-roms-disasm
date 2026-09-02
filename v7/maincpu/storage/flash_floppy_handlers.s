@@ -205,7 +205,7 @@ FlashWrite_BlockData_Type6:
 	nop
 	ldb	w, 167
 	push_a
-	stdi8	(768), 11
+	ld	(768:16), 11
 	pushw	2560
 	jr	le, 6	; -> 0xF15A5D
 	swi	7
@@ -443,7 +443,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe0e95c)
+	ld wa, (0xe0e95c:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe0e944:24)
 	ld (XBC+0x0a),XWA
@@ -454,7 +454,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe0e962)
+	ld wa, (0xe0e962:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe0e95e:24)
 	ld (XBC+0x0a),XWA
@@ -465,7 +465,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe0e968)
+	ld wa, (0xe0e968:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe0e964:24)
 	ld (XBC+0x0a),XWA
@@ -810,33 +810,33 @@ NoteEvent_CopySlotData_Body:
 
 Flash_InitExtMemAddrs:
 	lda xwa, (0x300000:24)
-	stda32 3190, xwa
+	ld (3190:16), xwa
 	ld xbc, xwa
 	add xbc, 0x19800
-	stda32 3194, xbc
+	ld (3194:16), xbc
 	ld xbc, xwa
 	add xbc, 0x30000
-	stda32 3198, xbc
+	ld (3198:16), xbc
 	ld xbc, xwa
 	add xbc, 0x49800
-	stda32 3202, xbc
+	ld (3202:16), xbc
 	ld xbc, xwa
 	add xbc, 0x60000
-	stda32 3206, xbc
+	ld (3206:16), xbc
 	ld xbc, xwa
 	add xbc, 0x79800
-	stda32 3210, xbc
+	ld (3210:16), xbc
 	ld xbc, xwa
 	add xbc, 0x90000
-	stda32 3214, xbc
+	ld (3214:16), xbc
 	ld xbc, xwa
 	add xbc, 0xb0000
-	stda32 3218, xbc
+	ld (3218:16), xbc
 	lda xwa, (0x094800:24)
-	stda32 3182, xwa
+	ld (3182:16), xwa
 	lda xwa, (0x069800:24)
-	stda32 3186, xwa
-	stda32 3222, xwa
+	ld (3186:16), xwa
+	ld (3222:16), xwa
 	ret
 Flash_InitBytecodeBlock:
 	lda	xsp, (xsp-12)
@@ -868,7 +868,7 @@ Flash_InitBytecodeBlock:
 	ld_rrb	a, xbc, wa
 	ld	(xsp+6), a
 	ld	xwa, (3186:16)
-	stda32	14610, xwa
+	ld	(14610:16), xwa
 	ldib_erp	251, 0
 	ld	c, (xsp+6)
 	extz	bc
@@ -884,9 +884,9 @@ Flash_InitBytecodeBlock:
 	cp_erpb	251, 10
 	jr	c, -43
 	ld	xwa, (3182:16)
-	stda32	14610, xwa
+	ld	(14610:16), xwa
 	ld	xwa, (3186:16)
-	stda32	14614, xwa
+	ld	(14614:16), xwa
 	.byte 0xf1, 0x14, 0x35, 0xb0
 	ldib_erp	251, 0
 	ld	e, (xsp+12)
@@ -975,7 +975,7 @@ Flash_InitBytecodeBlock:
 	ld_rrb	a, xbc, wa
 	ld	(xsp+6), a
 	ld	xwa, (3186:16)
-	stda32	14610, xwa
+	ld	(14610:16), xwa
 	ldib_erp	251, 0
 	ld	c, (xsp+10)
 	extz	bc
@@ -993,9 +993,9 @@ Flash_InitBytecodeBlock:
 	ld	a, (xsp+12)
 	extz	wa
 	calr	320
-	stda32	14610, xhl
+	ld	(14610:16), xhl
 	ld	xwa, (3186:16)
-	stda32	14614, xwa
+	ld	(14614:16), xwa
 	.byte 0xf1, 0x14, 0x35, 0xb0
 	ldib_erp	251, 0
 	ld	e, (xsp+6)
@@ -1018,7 +1018,7 @@ Flash_InitBytecodeBlock:
 	jr	z, 24
 	ld	(xsp+8), 1
 	ld	xwa, (14614:16)
-	stda32	14610, xwa
+	ld	(14610:16), xwa
 	.byte 0xc1, 0x11, 0x39, 0x19, 0x10, 0x39
 	call	16116212
 	jr	9
@@ -1590,7 +1590,7 @@ Flash_EraseAndWriteFinal:
 
 Flash_StoreBaseAndInitAccPatch:
 	ld	xwa, (3186:16)
-	stda32	(14610), xwa
+	ld	(14610:16), xwa
 	jp	16166403
 Flash_ExtendedOpsBlock:
 	.byte 0x3e, 0xda, 0x12, 0xf2, 0xc0, 0x60, 0xe1, 0x34
@@ -1737,7 +1737,7 @@ Flash_ExtendedOpsBlock:
 	dec 2,XSP
 	push XIZ
 	ld (XSP+0x04),A
-	cpdi16 (0x07a0), 0xffff
+	cpw (0x07a0:16), 0xffff
 	jr z, .Lc_f1756b
 	lds_erpb 0xf9, 0
 .Lc_f17529:
@@ -2203,7 +2203,7 @@ DualVoice_ScanColumnLoop:
 	jr nz, DualVoice_ScanRow1
 
 DualVoice_StoreBankMatch:
-	stda16 (1748), xwa
+	ld (1748:16), wa
 
 DualVoice_ScanRow1:
 	ld a, (xsp + 2)
@@ -2280,7 +2280,7 @@ DualVoice_ScanColumnLoopAlt:
 	jr nz, DualVoice_ScanRow1Alt
 
 DualVoice_StoreBankMatchAlt:
-	stda16 (1850), xwa
+	ld (1850:16), wa
 
 DualVoice_ScanRow1Alt:
 	ld a, (xsp + 2)
@@ -3533,11 +3533,11 @@ ToneParam_ExtendedOpsBlock:
 	bit 0x00,WA
 	jr z, .Lc_f19194
 	ld xwa, (0x3916:16)
-	stda32 (0x3912), xwa
+	ld (0x3912:16), xwa
 	ldmm8 0x3910, 0x3911
 	call AccPatch_InitFromSlotIndex
 	ld xwa, (0x0c72:16)
-	stda32 (0x3912), xwa
+	ld (0x3912:16), xwa
 	ldw IZ, 0xff95
 .Lc_f19194:
 	ld HL,IZ
@@ -3636,7 +3636,7 @@ DualVoice_LoadAndScan:
 	ld	(xsp+4), 0
 	ld	(xsp+10), 0
 	calr	-10598
-	stda32	3182, xiz
+	ld	(3182:16), xiz
 	.byte 0x8f, 0x0e, 0x3f, 0x0a
 	jrl	nc, 201
 	ld	a, (xsp+14)
@@ -3659,7 +3659,7 @@ DualVoice_LoadAndScan:
 	ld_rrb	a, xbc, wa
 	ld	(xsp+8), a
 	ld	xwa, (3186:16)
-	stda32	14610, xwa
+	ld	(14610:16), xwa
 	ldib_erp	251, 0
 DualVoice_AccPatchLoop:
 	ld	c, (xsp+8)
@@ -3676,9 +3676,9 @@ DualVoice_AccPatchLoop:
 	cp_erpb	251, 10
 	jr	c, -43
 	ld	xwa, (3182:16)
-	stda32	14610, xwa
+	ld	(14610:16), xwa
 	ld	xwa, (3186:16)
-	stda32	14614, xwa
+	ld	(14614:16), xwa
 	.byte 0xf1, 0x14, 0x35, 0xb0
 	ldib_erp	251, 0
 DualVoice_ParamCompareLoop:
@@ -3790,7 +3790,7 @@ FileHdr_CopyDataLoop:
 
 FileHdr_InitBasePointer:
 	lda xwa, (0x1e8800:24)
-	stda32 3226, xwa
+	ld (3226:16), xwa
 	ret
 
 ToneData_SetupCopyPointers:
@@ -3893,7 +3893,7 @@ InitializeSuna:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe17322)
+	ld wa, (0xe17322:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe16c86:24)
 	ld (XBC+0x0a),XWA
@@ -3904,7 +3904,7 @@ InitializeSuna:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe17328)
+	ld wa, (0xe17328:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe17324:24)
 	ld (XBC+0x0a),XWA
@@ -3915,7 +3915,7 @@ InitializeSuna:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe176d2)
+	ld wa, (0xe176d2:24)
 	ld (XBC+0x08),WA
 	lda xwa, (NakaMethodTable_PtrsStart:24)
 	ld (XBC+0x0a),XWA
@@ -4895,7 +4895,7 @@ CmpSetP1_TtlDispatch:
 	ld xwa, xiz
 	call GetViewInstance
 	ld a, (xhl + 50)
-	stb_da (0x094810), a
+	ld (0x094810:24), a
 
 GridBoxProc_Return:
 	lds32 xhl, 0
@@ -5861,7 +5861,7 @@ PsS2cFmeas_HandleScroll:
 	lda	xsp, (xsp+10)
 	lda	xbc, (xiz+22)
 	lda	xwa, (xiz+32)
-	cpdi8	14811, 0
+	cp	(14811:16), 0
 	jr	nz, 10
 	ldw	(xwa), 0
 	ldw	(xbc), 255
@@ -5911,7 +5911,7 @@ PsS2cLmeas_HandleScroll:
 	lda	xsp, (xsp+10)
 	lda	xbc, (xiz+22)
 	lda	xwa, (xiz+32)
-	cpdi8	14811, 1
+	cp	(14811:16), 1
 	jr	nz, 10
 	ldw	(xwa), 0
 	ldw	(xbc), 255
@@ -5952,7 +5952,7 @@ PsSeqSongNoBoxProc:
 PsSeqSongNo_HandleScroll:
 	ld	xwa, xiz
 	call	16400380
-	ldb_da	a, (65507)
+	ld	a, (65507:24)
 	inc	1, a
 	extz	wa
 	pushw	wa
@@ -6002,7 +6002,7 @@ PsS2cTrans_HandleScroll:
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
-	cpdi8	14811, 2
+	cp	(14811:16), 2
 	jr	nz, 10
 	ldw	(xbc), 0
 	ldw	(xwa), 255
@@ -6065,7 +6065,7 @@ FdcFormat_DialGrid:
 	ld	xwa, (xsp+16)
 	call	16408153
 	ld	(xsp+8), xhl
-	cpdi8	14811, 3
+	cp	(14811:16), 3
 	jrl	nz, 538
 	ld	xwa, (xsp+16)
 	ld	xbc, 31457423

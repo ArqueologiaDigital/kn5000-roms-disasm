@@ -19,11 +19,11 @@
 ; =============================================================================
 
 FDC_Read_Status:
-	ldb_da l, (0x110008)
+	ld l, (0x110008:24)
 	ret
 
 FDC_Read_Data:
-	ldb_da l, (0x11000a)
+	ld l, (0x11000a:24)
 	ret
 
 ; --- FDC_Send_Command: Write command byte to FDC data register ---
@@ -31,13 +31,13 @@ FDC_Read_Data:
 ; waits for FDC ready via status register polling,
 ; then returns. Uses (R+d16) addressing for FDC port access.
 FDC_Send_Command:
-	stb_da (0x110008), a
+	ld (0x110008:24), a
 	ret
 	ldmm8 0x8a84, 0x8a86
 	ld (0x8a86:16), a
 	ret
 FDC_Write_Data:
-	stb_da (0x11000a), a
+	ld (0x11000a:24), a
 	ret
 
 ; --- FDC_WaitReady: Wait for FDC ready with timeout and DMA transfer ---
@@ -111,7 +111,7 @@ FDC_WaitReady:
 	calr FDC_Send_Command
 	lds wa, 2
 	calr SOME_DELAY
-	stdi8 (0x8a68), 0xff
+	ld (0x8a68:16), 0xff
 	ret
 	.byte 0x3e, 0x1e, 0x02, 0x0a, 0x1e, 0x6d, 0x09, 0xdb
 	.byte 0xcf, 0xff, 0xff, 0x66, 0x0e, 0x1e, 0xb2, 0x09
@@ -183,7 +183,7 @@ FDC_WaitReady:
 	lds hl, 0
 	ret
 FDC_COMMAND_DISPATCHER:
-	stdi8	(35214), 0
+	ld	(35214:16), 0
 	ld	wa, (35236:16)
 	cp	wa, 11
 	jr	ugt, 36	; -> 0xF969D7
@@ -206,7 +206,7 @@ FDC_ErrorInvalidDrive:
 FDC_CheckDriveCount:
 	ld	wa, (35238:16)
 	ld	(35214:16), a
-	cpdi8	35214, 1
+	cp	(35214:16), 1
 	jr	ule, 6
 	ldw	wa, 254
 	jrl	1972
@@ -292,40 +292,40 @@ FDC_SetupFormatParams:
 	cps	a, 0
 	jrl	nz, 168
 FDC_FormatHD:
-	stdi8	(35218), 2
-	stdi8	(35225), 1
-	stdi8	(35219), 9
-	stdi8	(35222), 9
-	stdi8	(35220), 27
-	stdi8	(35223), 84
-	stdi16	(35434), 79
-	stdi16	(35436), 80
-	stdi16	(35438), 9
-	stdi16	(35440), 10
+	ld	(35218:16), 2
+	ld	(35225:16), 1
+	ld	(35219:16), 9
+	ld	(35222:16), 9
+	ld	(35220:16), 27
+	ld	(35223:16), 84
+	ldw	(35434:16), 79
+	ldw	(35436:16), 80
+	ldw	(35438:16), 9
+	ldw	(35440:16), 10
 	jr	118
 FDC_FormatDD:
-	stdi8	(35218), 3
-	stdi8	(35225), 1
-	stdi8	(35219), 8
-	stdi8	(35222), 8
-	stdi8	(35220), 83
-	stdi8	(35223), 116
-	stdi16	(35434), 76
-	stdi16	(35436), 77
-	stdi16	(35438), 8
-	stdi16	(35440), 9
+	ld	(35218:16), 3
+	ld	(35225:16), 1
+	ld	(35219:16), 8
+	ld	(35222:16), 8
+	ld	(35220:16), 83
+	ld	(35223:16), 116
+	ldw	(35434:16), 76
+	ldw	(35436:16), 77
+	ldw	(35438:16), 8
+	ldw	(35440:16), 9
 	jr	62
 FDC_Format1440K:
-	stdi8	(35218), 2
-	stdi8	(35225), 1
-	stdi8	(35219), 18
-	stdi8	(35222), 18
-	stdi8	(35220), 27
-	stdi8	(35223), 108
-	stdi16	(35434), 79
-	stdi16	(35436), 80
-	stdi16	(35438), 18
-	stdi16	(35440), 19
+	ld	(35218:16), 2
+	ld	(35225:16), 1
+	ld	(35219:16), 18
+	ld	(35222:16), 18
+	ld	(35220:16), 27
+	ld	(35223:16), 108
+	ldw	(35434:16), 79
+	ldw	(35436:16), 80
+	ldw	(35438:16), 18
+	ldw	(35440:16), 19
 	jr	6
 FDC_FormatUnknown:
 	ldw wa, 0xfe
@@ -336,29 +336,29 @@ FDC_InitStateVars:
 	srl	a, 4
 	and	a, 15
 	ld	(35227:16), a
-	stdi8	(35221), 255
-	stdi8	(35224), 0
-	stdi8	(35228), 15
-	stdi8	(35229), 1
-	stdi8	(35232), 0
-	stdi8	(35231), 0
-	stdi8	(35233), 0
-	stdi8	(35234), 0
-	stdi8	(35235), 0
-	stdi8	(35230), 0
+	ld	(35221:16), 255
+	ld	(35224:16), 0
+	ld	(35228:16), 15
+	ld	(35229:16), 1
+	ld	(35232:16), 0
+	ld	(35231:16), 0
+	ld	(35233:16), 0
+	ld	(35234:16), 0
+	ld	(35235:16), 0
+	ld	(35230:16), 0
 	ret
 FDC_CheckHead:
 	ld wa, (0x89a8:16)
 	ld (0x8990:16), a
 	ld (0x898d:16), a
-	cpdi8 (0x898d), 0x00
+	cp (0x898d:16), 0x00
 	ret Z
 	.byte 0xc1, 0x8d, 0x89, 0x3f, 0x01, 0xb0, 0xf6, 0x30
 	.byte 0xfe, 0x00, 0x1e, 0xa5, 0x05, 0x0e
 FDC_Command5_Epilogue:
 	ret
 FDC_Validate_Drive_Head:
-	cpdi16	35240, 0
+	cpw	(35240:16), 0
 
 	ret z
 
@@ -598,7 +598,7 @@ FDC_Exception_Status_Decoder:
 	ldb	l, 0
 	ret
 FDC_StatusDecode_DriveNotReady:
-	stdi8	(35428), 255
+	ld	(35428:16), 255
 	ldb	l, 0
 	ret
 FDC_StatusDecode_InvalidCommand:
@@ -780,7 +780,7 @@ FDC_HardwareSetup:
 	ret
 	.byte 0x0e
 FDC_Set_Status:
-	cpdi8 (0x8988), 0x00
+	cp (0x8988:16), 0x00
 	jr nz, FDC_SetStatus_AlreadySet
 	ld (0x8988:16), a
 	cp A,0x36
@@ -806,16 +806,16 @@ FDC_SetStatus_Return:
 	ld	l, (35208:16)
 	ret
 FDC_ClearStatus_InitTimer:
-	stdi8 (0x8988), 0x00
+	ld (0x8988:16), 0x00
 	ret
-	stdi8 (0x89c4), 0xff
+	ld (0x89c4:16), 0xff
 	ret
 	push XIZ
 	ldw QIZ, 0x01f4
 	ld iz, (0x0409:16)
 	lds bc, 0
 .Lc_f971e1:
-	cpdi8 (0x89c4), 0xff
+	cp (0x89c4:16), 0xff
 	jr z, .Lc_f971eb
 	ldw BC, 0xffff
 .Lc_f971eb:
@@ -856,8 +856,8 @@ FDC_InitSequence_Short:
 FDC_InitSequence_Full:
 	calr	64019
 	calr	64003
-	stdi8	(35278), 0
-	stdi8	(35428), 0
+	ld	(35278:16), 0
+	ld	(35428:16), 0
 	calr	64636
 	calr	62832
 	jrl	-2690
@@ -991,9 +991,9 @@ FDC_STATUS_COPY_Code:
 	ldw	wa, 254
 	calr	63806
 	ret	
-	stdi8	(35278), 255
+	ld	(35278:16), 255
 	ret	
-	stdi8	(35278), 0
+	ld	(35278:16), 0
 	ret	
 FDC_INTERRUPT_HANDLER:
 	.byte 0xd7, 0xfa, 0x04, 0xc1, 0x88, 0x89, 0x3f, 0x00
@@ -1025,11 +1025,11 @@ FDC_CommandEntry:
 	ld XIZ,(XSP+0x08)
 	cpw (XIZ), 0x0000
 	jr nz, .Lc_f978cc
-	stdi8 (0x897a), 0x00
+	ld (0x897a:16), 0x00
 FDC_CommandEntry_EnableIRQ:
 .Lc_f978cc:
 	ei 0x06
-	cpdi8 (0x897a), 0xa5
+	cp (0x897a:16), 0xa5
 	jr nz, .Lc_f978e2
 	ei 0x00
 	ldw WA, 0x00fb
@@ -1038,20 +1038,20 @@ FDC_CommandEntry_EnableIRQ:
 	jrl t, FDC_Handler_Return
 FDC_CommandEntry_CopyParams:
 .Lc_f978e2:
-	stdi8 (0x897a), 0xa5
+	ld (0x897a:16), 0xa5
 	ei 0x00
 	ld WA,(XIZ)
-	stda16 (0x89a4), wa
+	ld (0x89a4:16), wa
 	ld WA,(XIZ+0x02)
-	stda16 (0x89a6), wa
+	ld (0x89a6:16), wa
 	ld WA,(XIZ+0x04)
-	stda16 (0x89a8), wa
+	ld (0x89a8:16), wa
 	ld WA,(XIZ+0x06)
-	stda16 (0x89aa), wa
+	ld (0x89aa:16), wa
 	ld WA,(XIZ+0x08)
-	stda16 (0x89ac), wa
+	ld (0x89ac:16), wa
 	ld WA,(XIZ+0x0a)
-	stda16 (0x89ae), wa
+	ld (0x89ae:16), wa
 	ld XWA,(XIZ+0x0c)
 	.byte 0xf1, 0xb0, 0x89, 0x60, 0x96, 0x20, 0xf1, 0xb4
 	.byte 0x89, 0x50, 0x9e, 0x02, 0x20, 0xf1, 0xb6, 0x89
@@ -1126,7 +1126,7 @@ FDC_Handler_InvalidCommand:
 	calr FDC_Set_Status
 
 FDC_Handler_ExitStatus:
-	stdi8	(35194), 90
+	ld	(35194:16), 90
 	ld	l, (35208:16)
 	exts	hl
 FDC_Handler_Return:
@@ -1164,7 +1164,7 @@ INTTC3_HANDLER:
 
 
 INT5_HANDLER:	; F97E4A	"FDCIRQ"
-	stdi8 (265), 8
+	ld (265:16), 8
 	reti
 
 
@@ -1224,10 +1224,10 @@ INT4_WaitResultReady:
 	bit	6, l
 	jr	nz, -25
 	calr	-3192
-	cpdi8	35269, 128
+	cp	(35269:16), 128
 	jr	nz, -81
 INT4_ExitRestore:
-	stdi8	(35268), 0
+	ld	(35268:16), 0
 	pop	xwa
 	pop	xbc
 	pop	xde
@@ -1247,64 +1247,64 @@ Reset_Floppy_Disk_Controller:
 	bit_dd8	6, 52
 	ret	nz
 	ldb	a, 0
-	stdi16	(35464), 0
-	stdi16	(35466), 0
-	stdi16	(35468), 0
+	ldw	(35464:16), 0
+	ldw	(35466:16), 0
+	ldw	(35468:16), 0
 	cps	a, 0
 	jr	nz, 8
-	stdi16	(35470), 224
+	ldw	(35470:16), 224
 	jr	6
 FDC_Reset_SetDD_SectorCount:
-	stdi16	(35470), 211
+	ldw	(35470:16), 211
 FDC_Reset_BuildParams:
-	stdi16	(35472), 0
-	stdi16	(35474), 0
+	ldw	(35472:16), 0
+	ldw	(35474:16), 0
 	lds32	xwa, 0
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64935
-	stdi16	(35464), 3
-	stdi16	(35466), 0
-	stdi16	(35468), 0
-	stdi16	(35470), 0
-	stdi16	(35472), 1
-	stdi16	(35474), 1
+	ldw	(35464:16), 3
+	ldw	(35466:16), 0
+	ldw	(35468:16), 0
+	ldw	(35470:16), 0
+	ldw	(35472:16), 1
+	ldw	(35474:16), 1
 	lda	xwa, (35480:16)
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64883
-	stdi16	(35464), 3
-	stdi16	(35466), 0
-	stdi16	(35468), 0
-	stdi16	(35470), 78
-	stdi16	(35472), 1
-	stdi16	(35474), 1
+	ldw	(35464:16), 3
+	ldw	(35466:16), 0
+	ldw	(35468:16), 0
+	ldw	(35470:16), 78
+	ldw	(35472:16), 1
+	ldw	(35474:16), 1
 	lda	xwa, (35480:16)
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64831
-	stdi16	(35464), 3
-	stdi16	(35466), 0
-	stdi16	(35468), 0
-	stdi16	(35470), 10
-	stdi16	(35472), 1
-	stdi16	(35474), 1
+	ldw	(35464:16), 3
+	ldw	(35466:16), 0
+	ldw	(35468:16), 0
+	ldw	(35470:16), 10
+	ldw	(35472:16), 1
+	ldw	(35474:16), 1
 	lda	xwa, (35480:16)
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64779
-	stdi16	(35464), 3
-	stdi16	(35466), 0
-	stdi16	(35468), 0
-	stdi16	(35470), 40
-	stdi16	(35472), 1
-	stdi16	(35474), 1
+	ldw	(35464:16), 3
+	ldw	(35466:16), 0
+	ldw	(35468:16), 0
+	ldw	(35470:16), 40
+	ldw	(35472:16), 1
+	ldw	(35474:16), 1
 	lda	xwa, (35480:16)
-	stda32	(35476), xwa
+	ld	(35476:16), xwa
 	lda	xwa, (35464:16)
 	push	xwa
 	calr	64727

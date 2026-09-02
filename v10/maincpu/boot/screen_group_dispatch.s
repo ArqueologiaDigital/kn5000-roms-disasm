@@ -85,26 +85,26 @@ ScreenGroup_InitState:
 	ld (xbc + 1), 0xff
 	ld (xbc + 2), 0xff
 	ld (xbc + 3), 0xff
-	ordi8 0xc2c2, 127
-	anddi8 (0xc2c3), 1
-	ordi8 0xc2c4, 254
-	anddi8 (0xc2c5), 1
-	ordi8 0xc2c6, 127
-	anddi8 (0xc2c7), 1
-	ordi8 0xc2c8, 254
-	anddi8 (0xc2c9), 1
-	ordi8 0xc2ca, 127
-	anddi8 (0xc2cb), 1
-	ordi8 0xc2cc, 254
-	anddi8 (0xc2cd), 1
-	ordi8 0xc2ce, 127
-	anddi8 (0xc2cf), 1
-	ordi8 0xc2d0, 254
-	anddi8 (0xc2d1), 1
-	ordi8 0xc2d2, 127
-	anddi8 (0xc2d3), 1
-	ordi8 0xc2d4, 254
-	anddi8 (0xc2d5), 1
+	or (0xc2c2:16), 127
+	and (0xc2c3:16), 1
+	or (0xc2c4:16), 254
+	and (0xc2c5:16), 1
+	or (0xc2c6:16), 127
+	and (0xc2c7:16), 1
+	or (0xc2c8:16), 254
+	and (0xc2c9:16), 1
+	or (0xc2ca:16), 127
+	and (0xc2cb:16), 1
+	or (0xc2cc:16), 254
+	and (0xc2cd:16), 1
+	or (0xc2ce:16), 127
+	and (0xc2cf:16), 1
+	or (0xc2d0:16), 254
+	and (0xc2d1:16), 1
+	or (0xc2d2:16), 127
+	and (0xc2d3:16), 1
+	or (0xc2d4:16), 254
+	and (0xc2d5:16), 1
 	lds de, 0
 	cp de, 0x20
 	jrl ge, ScreenGroup_InitParams16
@@ -263,11 +263,11 @@ ScreenGroup_InitWordPairsLoop:
 	jr lt, ScreenGroup_InitWordPairsLoop
 
 ScreenGroup_InitFinalize:
-	stdi8 (0xca6a), 8
-	stdi8 (0xca6b), 0
-	stdi8 (0xca6c), 8
-	stdi8 (0xca6d), 0
-	stdi8 (0xca6e), 16
-	stdi8 (0xca6f), 0
+	ld (0xca6a:16), 8
+	ld (0xca6b:16), 0
+	ld (0xca6c:16), 8
+	ld (0xca6d:16), 0
+	ld (0xca6e:16), 16
+	ld (0xca6f:16), 0
 	jp COMM_SendDataReturn
 

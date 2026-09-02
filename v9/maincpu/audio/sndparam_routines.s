@@ -1099,7 +1099,7 @@ SndParam_RegisterEntry_Data:
 	ld	a, (xix)
 	ld	(xhl+7), a
 	jr	6
-	stdi16	(0x96e0), 0xffff
+	ldw	(0x96e0:16), 0xffff
 	ld	xhl, 0x96e0
 	pop	xiz
 	lda	xsp, (xsp+10)
@@ -1185,7 +1185,7 @@ SndParam_RegisterEntryAlt_Data:
 	ld	a, (xix)
 	ld	(xbc+7), a
 	jr	6
-	stdi16	(0x96ec), 0xffff
+	ldw	(0x96ec:16), 0xffff
 	ld	xhl, 0x96ec
 	popw	iz
 	inc	8, xsp
@@ -1314,7 +1314,7 @@ SndParam_RegisterMultiField_Data:
 	ld	a, (xix)
 	ld	(xbc+7), a
 	jr	6
-	stdi16	(0x9704), 0xffff
+	ldw	(0x9704:16), 0xffff
 	ld	xhl, 0x9704
 	pop	xiz
 	lda	xsp, (xsp+10)
@@ -1389,7 +1389,7 @@ SndParam_RegisterBitfield_Data:
 	ld	a, (xbc)
 	ld	(xix+11), a
 	jr	6
-	stdi16	(0x9710), 0xffff
+	ldw	(0x9710:16), 0xffff
 	ld	xhl, 0x9710
 	pop	xiz
 	inc	2, xsp
@@ -1506,7 +1506,7 @@ SndParam_RegisterLinked_Data:
 	ld	c, (xhl+6)
 	ld	(xde+7), c
 	jr	6
-	stdi16	(0x971c), 0xffff
+	ldw	(0x971c:16), 0xffff
 	ld	xhl, 0x971c
 	lda	xsp, (xsp+18)
 	ret
@@ -1649,7 +1649,7 @@ SndParam_RegisterLinked2_Data:
 	ld	a, (xbc)
 	ld	(xix+7), a
 	jr	6
-	stdi16	(0x9728), 0xffff
+	ldw	(0x9728:16), 0xffff
 	ld	xhl, 0x9728
 	pop	xiz
 	lda	xsp, (xsp+10)
@@ -1710,7 +1710,7 @@ SndParam_RegisterSimple_Data:
 	ld	(xix), a
 	ld	(xiy), 255
 	jr	6
-	stdi16	(0x9734), 0xffff
+	ldw	(0x9734:16), 0xffff
 	ld	xhl, 0x9734
 	pop	xiz
 	inc	6, xsp
@@ -1828,7 +1828,7 @@ SndParam_RegisterChained_Data:
 	ld	a, (xwa)
 	ld	(xbc+7), a
 	jr	6
-	stdi16	(0x974c), 0xffff
+	ldw	(0x974c:16), 0xffff
 	ld	xhl, 0x974c
 	pop	xiz
 	lda	xsp, (xsp+16)
@@ -1934,7 +1934,7 @@ SndParam_RegisterChained2_Data:
 	ld	a, (xwa)
 	ld	(xbc+7), a
 	jr	6
-	stdi16	(0x9758), 0xffff
+	ldw	(0x9758:16), 0xffff
 	ld	xhl, 0x9758
 	pop	xiz
 	lda	xsp, (xsp+14)
@@ -2058,7 +2058,7 @@ SndParam_RegisterComplex_Data:
 	ld	a, (xiy)
 	ld	(xix+7), a
 	jr	6
-	stdi16	(0x9764), 0xffff
+	ldw	(0x9764:16), 0xffff
 	ld	xhl, 0x9764
 	lda	xsp, (xsp+16)
 	ret
@@ -2094,7 +2094,7 @@ SndParam_NotifyQuick_Data:
 	ld	xwa, xiz
 	ld	de, (xsp+4)
 	calr	63612
-	stda32	0x9770, xhl
+	ld	(0x9770:16), xhl
 	ld	xhl, (0x9770:16)
 	pop	xiz
 	inc	4, xsp
@@ -2226,7 +2226,7 @@ SndParam_RegisterDual_Data:
 	ld	a, (xwa)
 	ld	(xde+7), a
 	jr	6
-	stdi16	(0x9774), 0xffff
+	ldw	(0x9774:16), 0xffff
 	ld	xhl, 0x9774
 	lda	xsp, (xsp+20)
 	ret
@@ -2296,7 +2296,7 @@ SndParam_RegisterOffset_Data:
 	ld	xwa, (xsp+4)
 	ld	(xwa), 255
 	jr	6
-	stdi16	(0x9780), 0xffff
+	ldw	(0x9780:16), 0xffff
 	ld	xhl, 0x9780
 	popw	iz
 	lda	xsp, (xsp+10)
@@ -2417,7 +2417,7 @@ SndParam_RegisterWide_Data:
 	ld	a, (xwa)
 	ld	(xiz+7), a
 	jr	6
-	stdi16	(0x978c), 0xffff
+	ldw	(0x978c:16), 0xffff
 	ld	xhl, 0x978c
 	pop	xiz
 	lda	xsp, (xsp+22)
@@ -2473,7 +2473,7 @@ SndParam_EncodeFieldSub_Data:
 	extz	hl
 	ret
 SndParam_ClampReverbTime:
-	ldl_da	xwa, (Naka_MainDispatch_Table_0xF70)
+	ld	xwa, (Naka_MainDispatch_Table_0xF70:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2541,7 +2541,7 @@ SndParam_DecodeFieldAlt_Data:
 	extz	hl
 	ret
 SndParam_ClampDelayTime:
-	ldl_da	xwa, (Naka_MainDispatch_Table_0xF70)
+	ld	xwa, (Naka_MainDispatch_Table_0xF70:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2804,7 +2804,7 @@ SndParam_WidgetDispatch:
 	jr z, SndParam_WidgetAppendType2
 	cps hl, 1
 	jr nz, SndParam_WidgetDispatchDone
-	cpdi16 0x90de, 508
+	cpw (0x90de:16), 508
 	call_24 nc, SwbtWr_ReinitBothBanks
 	lda xbc, (0xbd3c:16)
 	ld de, (0x90de:16)
@@ -2821,7 +2821,7 @@ SndParam_WidgetDispatch:
 	jr SndParam_WidgetAppendTail
 
 SndParam_WidgetAppendType2:
-	cpdi16 0x90de, 508
+	cpw (0x90de:16), 508
 	call_24 nc, SwbtWr_ReinitOutputBank
 	lda xbc, (0xbd3c:16)
 	ld de, (0x90de:16)
@@ -2875,7 +2875,7 @@ SndParam_WidgetNotifyType1:
 	jr z, SndParam_Widget1_AppendType2
 	cps wa, 1
 	jrl nz, SndParam_Widget1_Done
-	cpdi16 0x90de, 504
+	cpw (0x90de:16), 504
 	call_24 nc, SwbtWr_ReinitBothBanks
 	lda xbc, (0xbd3c:16)
 	ld de, (0x90de:16)
@@ -2900,7 +2900,7 @@ SndParam_WidgetNotifyType1:
 	jr SndParam_Widget1_AppendTail
 
 SndParam_Widget1_AppendType2:
-	cpdi16 0x90de, 504
+	cpw (0x90de:16), 504
 	call_24 nc, SwbtWr_ReinitOutputBank
 	lda xbc, (0xbd3c:16)
 	ld de, (0x90de:16)

@@ -1023,7 +1023,7 @@ HDAE5000_Multiply:	; 0x29B72D
 	orb_erp b, 0xef		; or B,QH
 	ld	qde, bc
 .LMUL_b7c9:
-	stiw_da	(0x230ECA), 34
+	ldw	(0x230ECA:24), 34
 	ld (xwa), xde                           ; ld (XWA),XDE
 	ld	xbc, (0x23a1a8)
 	or xbc, xbc                             ; or XBC,XBC
@@ -1259,7 +1259,7 @@ HDAE5000_Divide_Signed:	; 0x29B8C5
 	bit_erpb 0xee, 0x00		; bit 0x00,QL
 	jr nz, .LDIV_b975                      ; [6e f4] jr NZ,0x29b975
 .LDIV_b981:
-	stiw_da	(0x230ECA), 34
+	ldw	(0x230ECA:24), 34
 	lds32	xde, 0
 	dec	1, xde
 	ld (xwa), xde                           ; ld (XWA),XDE

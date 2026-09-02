@@ -30,7 +30,7 @@ FmmPasswordFunc:
 	cps	l, 0
 	jr	z, 15
 Password_ShowError:
-	stdi8	(32422), 10
+	ld	(32422:16), 10
 	ldw	wa, 238
 	call	16355504
 	jrl	317
@@ -61,7 +61,7 @@ Password_ForwardToFileName:
 	jrl Password_Return
 
 Password_ShowErrorStatus:
-	stdi8	(32422), 11
+	ld	(32422:16), 11
 	ldw	wa, 238
 	jrl	166
 Password_HandleSaveEvent:
@@ -83,7 +83,7 @@ Password_HandleSaveEvent:
 	jr t, Password_ForwardToSaveFilter
 Password_Save_CheckLoadOnly:
 .Lc_f8c61d:
-	cpdi8 (0x8970), 0x01
+	cp (0x8970:16), 0x01
 	jr nz, .Lc_f8c641
 	ld WA,IZ
 	call CheckSlotIsSelected
@@ -96,7 +96,7 @@ Password_Save_CheckLoadOnly:
 	jr t, Password_ForwardToSaveFilter
 Password_Save_CheckSaveOnly:
 .Lc_f8c641:
-	cpdi8 (0x8970), 0x02
+	cp (0x8970:16), 0x02
 	jr nz, Password_SaveErrorStatus
 	ld WA,IZ
 	call CheckIsCurrentSlot
@@ -111,7 +111,7 @@ Password_ForwardToSaveFilter:
 	jr Password_Return
 
 Password_SaveErrorStatus:
-	stdi8	(32422), 11
+	ld	(32422:16), 11
 	ldw	wa, 238
 	jr	35
 Password_HandleLoadEvent:
@@ -125,7 +125,7 @@ Password_HandleLoadEvent:
 	calr FmmSeqSongNameFunc
 	jr t, Password_Return
 Password_LoadErrorStatus:
-	stdi8	(32422), 11
+	ld	(32422:16), 11
 	ldw	wa, 238
 Password_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -147,7 +147,7 @@ SelectPasswordMode:
 	call CheckAnySlotHasData
 	cps l, 0
 	jr z, .Lc_f8c6c1
-	bitda 7, (0x8971)
+	bit 7, (0x8971:16)
 	jr nz, .Lc_f8c6c1
 	lds_erpb 0xfa, 1
 SelectMode_CheckSaveAvail:
@@ -159,7 +159,7 @@ SelectMode_CheckSaveAvail:
 	call CheckSlotIndexValid
 	cps l, 0
 	jr z, SelectMode_DetermineMode
-	bitda 6, (0x8971)
+	bit 6, (0x8971:16)
 	jr nz, SelectMode_DetermineMode
 	lds_erpb 0xfb, 1
 SelectMode_DetermineMode:
@@ -215,9 +215,9 @@ FmmFileNameFunc:
 	jr	z, 70
 	cp	xwa, 31784964
 	jrl	nz, 1544
-	stda32	(32470), xbc
+	ld	(32470:16), xbc
 	call	16290274
-	stda16	(32478), hl
+	ld	(32478:16), hl
 	cps	hl, 0
 	jr	lt, 15
 	exts	xhl
@@ -226,14 +226,14 @@ FmmFileNameFunc:
 	ld	xde, xhl
 	jr	17
 FileName_ListSelect_Negative:
-	stdi16	(32478), 0
+	ldw	(32478:16), 0
 	ld	xwa, (32470:16)
 	ld	xbc, 31784962
 	lds32	xde, 0
 FileName_ListSelect_Forward:
 	call	16423243
 	lds32	xwa, 0
-	stda32	(32474), xwa
+	ld	(32474:16), xwa
 	jrl	1483
 FileName_HandleShow:
 	ldw (xsp + 6), 0x0
@@ -348,7 +348,7 @@ FileName_OpSave:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	cpdi16	61854, 0
+	cpw	(61854:16), 0
 	jr	z, 36
 	lds	wa, 2
 	call	16289512
@@ -422,7 +422,7 @@ FileName_OpLoad_Execute:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	58517
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -457,7 +457,7 @@ FileName_OpFormat:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	58394
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -511,7 +511,7 @@ FileName_OpDelete_Execute:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -536,7 +536,7 @@ FileName_OpFormatVariant:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -557,7 +557,7 @@ FileName_OpNavigate:
 	cp	wa, 19
 	jr	ge, 28
 	inc	1, bc
-	stda16	(32478), bc
+	ld	(32478:16), bc
 	jr	20
 FileName_Navigate_ScrollUp:
 	cp	xbc, 29360151
@@ -566,7 +566,7 @@ FileName_Navigate_ScrollUp:
 	cps	wa, 0
 	jr	le, 6
 	dec	1, bc
-	stda16	(32478), bc
+	ld	(32478:16), bc
 FileName_Navigate_CheckChanged:
 	ld	wa, (xsp+6)
 	cpda16 xwa, (32478)
@@ -585,7 +585,7 @@ FileName_Navigate_CheckChanged:
 	ld	(32422:16), l
 	calr	-7545
 	call	16290928
-	stda16	33894, hl
+	ld	(33894:16), hl
 	ld	xwa, 6291494
 	ld	xbc, 29360130
 	lds32	xde, 0
@@ -600,7 +600,7 @@ FileName_UpdateDisplay:
 	cp	(xsp+4), wa
 	jrl	z, 363	; -> 0xF8CD60
 	call	NotifyUIOfSelectionChange
-	stdi8	(35164), 4
+	ld	(35164:16), 4
 	ld	de, (32478:16)
 	exts	xde
 	ld	xwa, (32470:16)
@@ -656,7 +656,7 @@ FileName_CheckCallback:
 	ld	xwa, (32474:16)
 	or	xwa, xwa
 	jrl	z, 200
-	cpdi8	35994, 103
+	cp	(35994:16), 103
 	jr	z, 71
 	call	16289841
 	ld	iz, hl
@@ -694,8 +694,8 @@ FileName_Callback_Simple:
 	ld	xde, xhl
 	jr	99
 FileName_HandleRegister:
-	stda32 (0x7eda), xbc
-	cpdi8 (0x8c9a), 0x67
+	ld (0x7eda:16), xbc
+	cp (0x8c9a:16), 0x67
 	jr z, FileName_Register_Simple
 	call CheckFileSystemStatus
 	ld IZ,HL

@@ -31,7 +31,7 @@ FmmPasswordFunc:
 	jr z, Password_ClearAndSetSlot
 
 Password_ShowError:
-	stdi8 (0x7f42), 10
+	ld (0x7f42:16), 10
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jrl Password_Return
@@ -65,7 +65,7 @@ Password_HandleDeleteEvent:
 	jr Password_ForwardToFileName
 
 Password_Delete_CheckLoadOnly:
-	cpdi8 (0x8a0c), 1
+	cp (0x8a0c:16), 1
 	jr nz, Password_Delete_CheckSaveOnly
 	ld wa, iz
 	call CheckSlotIsSelected
@@ -78,7 +78,7 @@ Password_Delete_CheckLoadOnly:
 	jr Password_ForwardToFileName
 
 Password_Delete_CheckSaveOnly:
-	cpdi8 (0x8a0c), 2
+	cp (0x8a0c:16), 2
 	jr nz, Password_ShowErrorStatus
 	ld wa, iz
 	call CheckIsCurrentSlot
@@ -94,7 +94,7 @@ Password_ForwardToFileName:
 	jrl Password_Return
 
 Password_ShowErrorStatus:
-	stdi8 (0x7f42), 11
+	ld (0x7f42:16), 11
 	ldw wa, 0xee
 	jrl Password_CallStatusDisplay
 
@@ -117,7 +117,7 @@ Password_HandleSaveEvent:
 	jr Password_ForwardToSaveFilter
 
 Password_Save_CheckLoadOnly:
-	cpdi8 (0x8a0c), 1
+	cp (0x8a0c:16), 1
 	jr nz, Password_Save_CheckSaveOnly
 	ld wa, iz
 	call CheckSlotIsSelected
@@ -130,7 +130,7 @@ Password_Save_CheckLoadOnly:
 	jr Password_ForwardToSaveFilter
 
 Password_Save_CheckSaveOnly:
-	cpdi8 (0x8a0c), 2
+	cp (0x8a0c:16), 2
 	jr nz, Password_SaveErrorStatus
 	ld wa, iz
 	call CheckIsCurrentSlot
@@ -146,7 +146,7 @@ Password_ForwardToSaveFilter:
 	jr Password_Return
 
 Password_SaveErrorStatus:
-	stdi8 (0x7f42), 11
+	ld (0x7f42:16), 11
 	ldw wa, 0xee
 	jr Password_CallStatusDisplay
 
@@ -162,7 +162,7 @@ Password_HandleLoadEvent:
 	jr Password_Return
 
 Password_LoadErrorStatus:
-	stdi8 (0x7f42), 11
+	ld (0x7f42:16), 11
 	ldw wa, 0xee
 
 Password_CallStatusDisplay:
@@ -185,7 +185,7 @@ SelectPasswordMode:
 	call CheckAnySlotHasData
 	cps l, 0
 	jr z, SelectMode_CheckSaveAvail
-	bitda 7, (0x8a0d)
+	bit 7, (0x8a0d:16)
 	jr nz, SelectMode_CheckSaveAvail
 	ldib_erp 0xfa, 1
 
@@ -197,7 +197,7 @@ SelectMode_CheckSaveAvail:
 	call CheckSlotIndexValid
 	cps l, 0
 	jr z, SelectMode_DetermineMode
-	bitda 6, (0x8a0d)
+	bit 6, (0x8a0d:16)
 	jr nz, SelectMode_DetermineMode
 	ldib_erp 0xfb, 1
 
@@ -257,9 +257,9 @@ FmmFileNameFunc:
 	jr z, FileName_HandleShow
 	cp xwa, 0x1e50004
 	jrl nz, FileName_Return
-	stda32 0x7f72, xbc
+	ld (0x7f72:16), xbc
 	call GetCurrentFileIndex
-	stda16 (0x7f7a), xhl
+	ld (0x7f7a:16), hl
 	cps hl, 0
 	jr lt, FileName_ListSelect_Negative
 	exts xhl
@@ -269,7 +269,7 @@ FmmFileNameFunc:
 	jr FileName_ListSelect_Forward
 
 FileName_ListSelect_Negative:
-	stdi16 (0x7f7a), 0
+	ldw (0x7f7a:16), 0
 	ld xwa, (0x7f72:16)
 	ld xbc, 0x1e50002
 	lds32 xde, 0
@@ -277,7 +277,7 @@ FileName_ListSelect_Negative:
 FileName_ListSelect_Forward:
 	call ApPostEvent
 	lds32 xwa, 0
-	stda32 0x7f76, xwa
+	ld (0x7f76:16), xwa
 	jrl FileName_Return
 
 FileName_HandleShow:
@@ -396,7 +396,7 @@ FileName_OpSave:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	cpdi16 0xf19e, 0
+	cpw (0xf19e:16), 0
 	jr z, FileName_OpSave_ShowCode1
 	lds wa, 2
 	call FileIO_WriteRecordName_Done
@@ -472,7 +472,7 @@ FileName_OpLoad_Execute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -508,7 +508,7 @@ FileName_OpFormat:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
@@ -563,7 +563,7 @@ FileName_OpDelete_Execute:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -589,7 +589,7 @@ FileName_OpFormatVariant:
 	call FileIO_ResetCurrentRecord
 	call GetEncodedFreeSpaceData
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -611,7 +611,7 @@ FileName_OpNavigate:
 	cp wa, 0x13
 	jr ge, FileName_Navigate_CheckChanged
 	inc 1, bc
-	stda16 (0x7f7a), xbc
+	ld (0x7f7a:16), bc
 	jr FileName_Navigate_CheckChanged
 
 FileName_Navigate_ScrollUp:
@@ -621,7 +621,7 @@ FileName_Navigate_ScrollUp:
 	cps wa, 0
 	jr le, FileName_Navigate_CheckChanged
 	dec 1, bc
-	stda16 (0x7f7a), xbc
+	ld (0x7f7a:16), bc
 
 FileName_Navigate_CheckChanged:
 	ld wa, (xsp + 6)
@@ -641,7 +641,7 @@ FileName_Navigate_CheckChanged:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	ld xwa, 0x600026
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -658,7 +658,7 @@ FileName_UpdateDisplay:
 	cp (xsp + 4), wa
 	jrl z, FileName_Return
 	call NotifyUIOfSelectionChange
-	stdi8 (0x89f8), 4
+	ld (0x89f8:16), 4
 	ld de, (0x7f7a:16)
 	exts xde
 	ld xwa, (0x7f72:16)
@@ -715,7 +715,7 @@ FileName_CheckCallback:
 	ld xwa, (0x7f76:16)
 	or xwa, xwa
 	jrl z, FileName_Return
-	cpdi8 (0x8d36), 103
+	cp (0x8d36:16), 103
 	jr z, FileName_Callback_Simple
 	call CheckFileSystemStatus
 	ld iz, hl
@@ -756,8 +756,8 @@ FileName_Callback_Simple:
 	jr FileName_DispatchWidget
 
 FileName_HandleRegister:
-	stda32 0x7f76, xbc
-	cpdi8 (0x8d36), 103
+	ld (0x7f76:16), xbc
+	cp (0x8d36:16), 103
 	jr z, FileName_Register_Simple
 	call CheckFileSystemStatus
 	ld iz, hl

@@ -79,7 +79,7 @@ MidiCC_NullHandlerBlock:
 MidiCC_Handler_BitManipulation:
 	.incbin "includes/romslices/v7_transplant_MidiCC_Handler_BitManipulation.bin"
 	.byte 0x51
-	stda16	38314, de
+	ld	(38314:16), de
 	call	16563896
 	ret
 	ld	a, (38350:16)
@@ -98,8 +98,8 @@ MidiCC_Handler_BitManipulation:
 	ld	e, (38298:16)
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563896
 	ret
 	ld	a, (38350:16)
@@ -118,8 +118,8 @@ MidiCC_Handler_BitManipulation:
 	ld	e, (38298:16)
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563896
 	ret
 	ld	a, (38350:16)
@@ -138,8 +138,8 @@ MidiCC_Handler_BitManipulation:
 	ld	e, (38298:16)
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563896
 	ret
 	ld	l, (38350:16)
@@ -186,8 +186,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 127
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563840
 	ret
 	ld	l, (38350:16)
@@ -218,8 +218,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 255
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563840
 	ret
 	ld	a, (38298:16)
@@ -261,8 +261,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 127
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563926
 	ret
 	ld	a, (38350:16)
@@ -277,8 +277,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 127
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16564059
 	ret
 	ld	a, (38298:16)
@@ -287,14 +287,14 @@ MidiCC_Handler_BitManipulation:
 	cp	a, 64
 	jr	c, 2
 	ld	e, d
-	stda16	38314, de
+	ld	(38314:16), de
 	call	16563692
 	ret
 	ld	e, a
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16564089
 	ret
 	ld	a, (38350:16)
@@ -311,8 +311,8 @@ MidiCC_Handler_BitManipulation:
 	ldb	d, 255
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16565074
 	ret
 	ld	a, (38350:16)
@@ -329,8 +329,8 @@ MidiCC_Handler_BitManipulation:
 	ld	d, (38298:16)
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563791
 	ret
 	ld	a, (38350:16)
@@ -349,11 +349,11 @@ MidiCC_VoiceParam_8:
 	ldb	d, 127
 	ld	a, (38299:16)
 	ld	(38316:16), a
-	stda16	38312, bc
-	stda16	38314, de
+	ld	(38312:16), bc
+	ld	(38314:16), de
 	call	16563896
 	ret
-	cpdi8	49121, 13
+	cp	(49121:16), 13
 	jr	nz, 13
 	ld	a, (49123:16)
 	and	a, 255
@@ -363,14 +363,14 @@ MidiCC_VoiceParam_8:
 	.byte 0xf1, 0xd0, 0x95, 0xc8
 	jr	z, 24
 	.byte 0xf1, 0xd0, 0x95, 0xb0
-	stdi8	38353, 128
+	ld	(38353:16), 128
 	calr	13
-	stdi8	38353, 64
+	ld	(38353:16), 64
 	calr	5
 	call	16553566
 	ret
 	ld	xix, 37976
-	cpdi8	38353, 128
+	cp	(38353:16), 128
 	jr	z, 5
 	ld	xix, 38136
 	ldw	wa, 65535
@@ -378,7 +378,7 @@ MidiCC_VoiceParam_8:
 	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ld	xix, 38008
-	cpdi8	38353, 128
+	cp	(38353:16), 128
 	jr	z, 5
 	ld	xix, 38168
 	xor	wa, wa
@@ -412,12 +412,12 @@ MidiCC_VoiceParam_12:
 	.byte 0x45, 0xeb, 0x85, 0xec, 0x61, 0xc8, 0x61, 0xc1
 	.byte 0xd2, 0x95, 0x61, 0xc1, 0xd2, 0x95, 0x3f, 0x20
 	.byte 0x6e, 0x88, 0x0e
-	bitda 0, (0xb74b)
+	bit 0, (0xb74b:16)
 	jr nz, .Lc_fcfdb9
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fcfdb9
-	stda16 (0x95b0), bc
-	stda16 (0x95b2), de
+	ld (0x95b0:16), bc
+	ld (0x95b2:16), de
 	cp C,0xbf
 	jr ugt, .Lc_fcfdb9
 	ld L,C
@@ -3615,18 +3615,18 @@ DSPCfg_VoiceSlotB_ExtractData:
 	ld	a, (46928:16)
 	bit	7, a
 	jr	z, 7
-	stdi8	46932, 1
+	ld	(46932:16), 1
 	jr	17
 	bit	6, a
 	jr	z, 7
-	stdi8	46932, 0
+	ld	(46932:16), 0
 	jr	5
-	stdi8	46932, 2
+	ld	(46932:16), 2
 	ld	a, (46928:16)
 	and	a, 63
 	ldb_erp	a, 251
 	ld	(46928:16), a
-	cpdi8	46932, 0
+	cp	(46932:16), 0
 	jr	nz, 36
 	ld	xwa, 192
 	lds	bc, 0
@@ -5103,7 +5103,7 @@ SeqVoice_StoreEntry:
 	pop XIX
 	pop XHL
 	pop XDE
-	ldw_da hl, (0x1e881c)
+	ld hl, (0x1e881c:24)
 	extz XHL
 	sll xhl, 4
 	ret
@@ -5116,7 +5116,7 @@ SeqVoice_DispatchProcess_Data:
 	.byte 0x81, 0xed, 0xc1, 0x27, 0x04, 0x3c, 0xd3, 0x06
 	.byte 0x00, 0x0e
 	ldw DE, 0x09c4
-	bitda 2, (0xbc7c)
+	bit 2, (0xbc7c:16)
 	jr z, .Lc_fd68fc
 	ldw DE, 0x03e8
 .Lc_fd68fc:
@@ -6338,9 +6338,9 @@ SoundMode_FullRenderUpdate:
 	.byte 0x50, 0xb7, 0x00, 0x5b, 0x68
 SoundMode_RenderWithNotify:
 	incf
-	stdi8	(46928), 92
+	ld	(46928:16), 92
 	jr	5
-	stdi8	(46928), 93
+	ld	(46928:16), 93
 	jp	16600229
 	lda	xbc, (15609654:24)
 	ld	xwa, xbc
@@ -6377,11 +6377,11 @@ SoundMode_AlternateRender:
 	.byte 0x30, 0x80, 0x3f, 0x0f, 0x63, 0xe6, 0xef
 MidiCtrl_ModeSwitchHandler:
 	jr ov, 14
-	stdi8 (0x908b), 0xb1
-	stdi8 (0x908d), 0x00
-	stdi8 (0x908c), 0x00
+	ld (0x908b:16), 0xb1
+	ld (0x908d:16), 0x00
+	ld (0x908c:16), 0x00
 .Lc_fd8306:
-	stdi8 (0x908e), 0x40
+	ld (0x908e:16), 0x40
 	push XDE
 	push XHL
 	push XIX
@@ -6411,11 +6411,11 @@ MidiCtrl_CheckAltCommand:
 	jr	ule, -32
 MidiCtrl_FullReconfigure:
 	ret
-	stdi8 (0x908b), 0xb3
-	stdi8 (0x908d), 0x7f
-	stdi8 (0x908c), 0x00
+	ld (0x908b:16), 0xb3
+	ld (0x908d:16), 0x7f
+	ld (0x908c:16), 0x00
 .Lc_fd8367:
-	stdi8 (0x908e), 0x7f
+	ld (0x908e:16), 0x7f
 	push XDE
 	push XHL
 	push XIX
@@ -6535,7 +6535,7 @@ TGReg_WriteCC4_Body:
 	.byte 0x1d, 0x88, 0x72, 0xfd, 0x1d, 0x90, 0x6d
 TGReg_WriteCC4_Check:
 	swi	5
-	stdi8	(48252), 0
+	ld	(48252:16), 0
 	jp	16612592
 TGReg_WriteCC5_Modulation:
 	.byte 0x1d, 0x5b, 0x6e, 0xfd, 0x68, 0xe9, 0x1d, 0x67
@@ -6569,7 +6569,7 @@ TGReg_WriteCC7_Check:
 	swi	3
 	mul8rr	a, l
 	jr	nz, 7
-	stdi8	(48258), 2
+	ld	(48258:16), 2
 TGReg_WriteCC8_Chorus:
 	.byte 0x68, 0x1b, 0xf1, 0x82, 0xbc, 0x00, 0x00, 0x1d
 	.byte 0x9d, 0x7c, 0xfd, 0x68, 0xad, 0xc7, 0xfb, 0x33
@@ -6866,7 +6866,7 @@ SeqData_FormatOutput_Loop:
 ArpQueue_Flush_Return:
 	.byte 0x09, 0x21, 0xcf
 SeqData_FormatOutput_Dispatch:
-	stdi8	(38266), 142
+	ld	(38266:16), 142
 	ldwio	35, 63435
 	jrl	gt, 141
 	lda	xbc, (xsp+4)
@@ -7274,11 +7274,11 @@ VoiceParam_MultiMode_StubRet:
 VoiceParam_AssSwb_MultiBlock_Data:
 	.incbin "includes/romslices/v7_transplant_VoiceParam_AssSwb_MultiBlock_Data_head.bin"
 	push XIZ
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fd989b
-	bitda 3, (0xfd56)
+	bit 3, (0xfd56:16)
 	jr z, .Lc_fd989b
-	bitda 0, (0xb74b)
+	bit 0, (0xb74b:16)
 	jr nz, .Lc_fd989b
 	lda xbc, (0xbca0:16)
 	ld wa, (0x9044:16)
@@ -7289,7 +7289,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	push XIZ
 	call 0xfd6495
 	inc 4,XSP
-	stda32 (0xbc86), xhl
+	ld (0xbc86:16), xhl
 	lda xwa, (0xbc86:16)
 	cp (XWA),0xff
 	jr z, .Lc_fd989b

@@ -106,12 +106,12 @@ FDemoText_ProcessVoiceFlags_ReadState:
 	call	15665005
 	cps	hl, 0
 	jrl	z, 353
-	ldb_da	a, (149486)
+	ld	a, (149486:24)
 	bit	6, a
 	jr	z, 29
 	set	7, a
 	res	6, a
-	stb_da	(149486), a
+	ld	(149486:24), a
 	pushw	0
 	ldw	wa, 68
 	ldw	bc, 8
@@ -123,7 +123,7 @@ FDemoText_ProcessVoiceFlags_CheckBits:
 	call_24 nz, FDemoText_ScanMIDIChannels
 	bitda_24 7, (0x0247ee)
 	jr z, FDemoText_ProcessChannels
-	stib_da (0x0247f2), 0x00
+	ld (0x0247f2:24), 0x00
 	ldib_erp 0xfb, 0
 
 FDemoText_ProbeVoice_Loop:
@@ -157,7 +157,7 @@ FDemoText_ProcessChannels_Loop:
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
-	ldb_da e, (0x0247ee)
+	ld e, (0x0247ee:24)
 	and c, e
 	jr z, FDemoText_ProcessChannel_CheckMask
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
@@ -204,7 +204,7 @@ FDemoText_ProcessChannel_CheckMask:
 
 FDemoText_ProcessOutputChannels:
 	lda xhl, (DemoDiskPrompt_English1_0x92:24)
-	ldb_da c, (0x0247ec)
+	ld c, (0x0247ec:24)
 	bit 6, c
 	jr z, FDemoText_ProcessOutput_CheckFlags
 	stb_erp E, 0xfb
@@ -214,7 +214,7 @@ FDemoText_ProcessOutputChannels:
 	andda8_24 a, (0x0247ee)
 	jr z, FDemoText_ProcessOutput_CheckFlags
 	or_srib_rm C, 0x07, 0xec, 0xe8
-	stb_da (0x0247ec), c
+	ld (0x0247ec:24), c
 
 FDemoText_ProcessOutput_CheckFlags:
 	stb_erp A, 0xfb
@@ -225,7 +225,7 @@ FDemoText_ProcessOutput_CheckFlags:
 	jr z, FDemoText_ProcessOutput_NextCh
 	lda xbc, (DemoDiskPrompt_English1_0x8E:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
-	ldb_da e, (0x0247ec)
+	ld e, (0x0247ec:24)
 	and c, e
 	jr z, FDemoText_ProcessOutput_AltUpdate
 	calr FDemoText_SendVoiceParams
@@ -242,8 +242,8 @@ FDemoText_ProcessOutput_NextCh:
 	jr ule, FDemoText_ProcessOutputChannels
 
 FDemoText_ProcessOutput_ClearAll:
-	stib_da (0x0247ec), 0x00
-	stib_da (0x0247f2), 0x00
+	ld (0x0247ec:24), 0x00
+	ld (0x0247f2:24), 0x00
 	anddi8_24 (0x0247ee), 120
 
 FDemoText_ProcessVoiceFlags_Return:
@@ -305,7 +305,7 @@ FDemoText_UpdateVoiceDisplay:
 	.byte 0xd8, 0x12, 0x0b, 0x7f, 0x00, 0xd9, 0xaf, 0x32
 	.byte 0x5a, 0x00, 0x1d, 0x53, 0xaa, 0xfd
 FDemoText_UpdateVoiceDisplay_CheckSend:
-	ldb_da a, (0x0247ee)
+	ld a, (0x0247ee:24)
 	and a, 0x38
 	jr nz, FDemoText_UpdateVoiceDisplay_Done
 	ld c, (0xfc26:16)
@@ -326,7 +326,7 @@ FDemoText_SyncVoicePreset:
 	ld (xsp + 6), a
 	lda xwa, (0xfc74:16)
 	ld (xsp + 2), xwa
-	ldb_da a, (0x0247ee)
+	ld a, (0x0247ee:24)
 	and a, 0x38
 	jr z, FDemoText_SyncPreset_DirectCopy
 	ldib_erp 0xfb, 0
@@ -458,7 +458,7 @@ FDemoText_ParseControlMessage:
 	ld A,(XBC+0x01)
 	cpda8 a, (0x8c9e)
 	ret NZ
-	cpdi8	35996, 234
+	cp	(35996:16), 234
 	ret	nz
 	ld	a, (xbc)
 	cp	a, 131
@@ -475,14 +475,14 @@ FDemoText_ParseControlMessage:
 	jr	nz, 85
 	lds	wa, 6
 	call	16267494
-	ldb_da	a, (134201)
+	ld	a, (134201:24)
 	srl	a, 4
 	and	a, 15
 	ld	c, a
 	extz	bc
 	lds	wa, 2
 	call	16267494
-	ldb_da	c, (134201)
+	ld	c, (134201:24)
 	and	c, 15
 	extz	bc
 	lds	wa, 0
@@ -490,14 +490,14 @@ FDemoText_ParseControlMessage:
 FDemoText_ParseCtrl_Type82:
 	ldw wa, 0x8
 	call DemoMenu_BuildItemWorkspace
-	ldb_da a, (0x020c39)
+	ld a, (0x020c39:24)
 	srl a, 4
 	and a, 0xf
 	ld c, a
 	extz bc
 	lds wa, 5
 	call DemoMenu_BuildItemWorkspace
-	ldb_da c, (0x020c39)
+	ld c, (0x020c39:24)
 	and c, 0xf
 	extz bc
 	lds wa, 3
@@ -517,14 +517,14 @@ FDemoText_ParseCtrl_SecondHalf:
 	extz bc
 	lds wa, 7
 	call DemoMenu_BuildItemWorkspace
-	ldb_da a, (0x020c39)
+	ld a, (0x020c39:24)
 	srl a, 4
 	and a, 0xf
 	ld c, a
 	extz bc
 	lds wa, 4
 	call DemoMenu_BuildItemWorkspace
-	ldb_da c, (0x020c39)
+	ld c, (0x020c39:24)
 	and c, 0xf
 	extz bc
 	lds wa, 1
@@ -536,7 +536,7 @@ FDemoText_ParseCtrl_FormatC3:
 	extz bc
 	ldw wa, 0xa
 	call DemoMenu_BuildItemWorkspace
-	ldb_da a, (0x020c39)
+	ld a, (0x020c39:24)
 	srl a, 1
 	and a, 0x1
 	ld c, a
@@ -1836,13 +1836,13 @@ FDemoText_UpdateCursorPosition:
 	lda xbc, (xsp + 2)
 	ld xwa, 0x25b3a
 	calr FDemoText_ScaleDownCoords
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	call GetCenteredDelta
 	ld iz, hl
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
@@ -1922,13 +1922,13 @@ FDemoText_RenderTextLine:
 	lda xix, (xsp + 24)
 	lds bc, 4
 	ldirw
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	call GetCharHeight
 	ld iz, hl
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
@@ -1971,7 +1971,7 @@ FDemoText_Layout_Setup:
 	lda	xwa, (xsp+20)
 	calr	-437
 	ld	(xsp+4), hl
-	ldw_da	wa, (154430)
+	ld	wa, (154430:24)
 	sla	wa, 2
 	lda	xbc, (154432:24)
 	ld_rrl	xbc, xbc, wa
@@ -1996,7 +1996,7 @@ FDemoText_Layout_NoWrap:
 	ldw (xsp + 14), 0x0
 
 FDemoText_Layout_ProcessLine:
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
@@ -2006,7 +2006,7 @@ FDemoText_Layout_ProcessLine:
 	cps iz, 0
 	jr z, FDemoText_Layout_UpdatePosition
 	lda xbc, (0x025b74:24)
-	ldw_da xwa, (0x025b72)
+	ld wa, (0x025b72:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	lda xbc, (xsp + 20)
 	cps a, 2
@@ -2035,12 +2035,12 @@ FDemoText_Layout_AlignRight:
 FDemoText_Layout_DrawText:
 	lda xwa, (xsp + 24)
 	lda xbc, (xsp + 20)
-	ldw_da xde, (0x025b3e)
+	ld de, (0x025b3e:24)
 	sla de, 2
 	lda xhl, (0x025b40:24)
 	ld_sril3 XDE, 0x07, 0xec, 0xe8
 	push xde
-	ldw_da xde, (0x025b60)
+	ld de, (0x025b60:24)
 	sla de, 1
 	lda xhl, (0x025b62:24)
 	push_sriw 0x07, 0xec, 0xe8
@@ -2051,7 +2051,7 @@ FDemoText_Layout_DrawText:
 FDemoText_Layout_UpdatePosition:
 	ld wa, (xsp + 20)
 	add wa, (xsp + 8)
-	stw_da (0x025b3a), xwa
+	ld (0x025b3a:24), wa
 	cpw (xsp + 14), 0x0
 	jr z, FDemoText_Layout_FreeBuffer
 	calr FDemoText_UpdateCursorPosition
@@ -2073,13 +2073,13 @@ FDemoText_ByteData_LayoutB:
 	lda	xsp, (xsp-14)
 	pushw	iz
 	ld	(xsp+12), xwa
-	ldw_da	wa, (154430)
+	ld	wa, (154430:24)
 	sla	wa, 2
 	lda	xbc, (154432:24)
 	ld_rrl	xwa, xbc, wa
 	call	16458237
 	ld	iz, hl
-	ldw_da	wa, (154430)
+	ld	wa, (154430:24)
 	sla	wa, 2
 	lda	xbc, (154432:24)
 	ld_rrl	xwa, xbc, wa
@@ -2116,7 +2116,7 @@ FDemoText_ByteData_LayoutB:
 	sub	(xwa+2), iz
 	calr	-853
 	lda	xbc, (154484:24)
-	ldw_da	wa, (154482)
+	ld	wa, (154482:24)
 	ld_rrb	a, xbc, wa
 	lda	xbc, (xsp+8)
 	cps	a, 2
@@ -2150,14 +2150,14 @@ FDemoText_ByteData_LayoutB:
 	call	16431151
 	ld	wa, (xsp+8)
 	.byte 0x9f, 0x02, 0x80
-	stw_da	154426, wa
+	ld	(154426:24), wa
 	popw	iz
 	lda	xsp, (xsp+14)
 	ret
 Seq_InitVoiceStructures:
 	push xiz
 	ld iz, wa
-	stiw_da (0x025b7c), 0x0000
+	ldw (0x025b7c:24), 0x0000
 	lda xwa, (0x0248c8:24)
 	ld (xwa), 0x0
 	stl_da (0x0248c4), xwa
@@ -2186,11 +2186,11 @@ Seq_InitVoiceLoop:
 	inc 1, qiz
 	cpw	qiz, 64
 	jr	lt, -79
-	stw_da	154498, iz
+	ld	(154498:24), iz
 	pop	xiz
 	ret
 Seq_PostProcessDisplay:
-	ldw_da	wa, (0x025b82)
+	ld	wa, (0x025b82:24)
 	jr	0
 
 Seq_CopyResourcePtrs:
@@ -2219,11 +2219,11 @@ Seq_CopyPtrLoop:
 	jr Seq_StoreResultAddr
 
 Seq_UseFallbackAddr:
-	ldl_da xwa, (0x0249d0)
+	ld xwa, (0x0249d0:24)
 	stl_da (0x0249cc), xwa
 
 Seq_StoreResultAddr:
-	ldl_da xwa, (0x0249cc)
+	ld xwa, (0x0249cc:24)
 	stl_da (0x0249d4), xwa
 	ret
 
@@ -2231,7 +2231,7 @@ Seq_InitializeAndStart:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa
-	stiw_da	(152024), 1
+	ldw	(152024:24), 1
 	lds	wa, 0
 	calr	65306
 	ld	xwa, (xsp+4)
@@ -2372,17 +2372,17 @@ Seq_NamedResource_Epilogue:
 FDemoText_ProcessMarkupLoop:
 	pushw iz
 	ld iz, wa
-	ldl_da xwa, (0x0249cc)
+	ld xwa, (0x0249cc:24)
 	stl_da (0x0249d4), xwa
 	cp (xwa), 0x0
 	jr z, FDemoText_MarkupDone
 
 FDemoText_MarkupLoop:
-	ldl_da xwa, (0x0249d4)
+	ld xwa, (0x0249d4:24)
 	ld bc, iz
 	calr FDemoText_ProcessTextMarkup
 	stl_da (0x0249d4), xhl
-	ldl_da xwa, (0x0249d4)
+	ld xwa, (0x0249d4:24)
 	cp (xwa), 0x0
 	jr nz, FDemoText_MarkupLoop
 

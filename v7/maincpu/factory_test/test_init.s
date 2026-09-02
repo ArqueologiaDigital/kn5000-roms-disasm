@@ -92,7 +92,7 @@ InitializeHama:
 	ld	(xsp+256), xwa
 	lda	xwa, (16400597:24)
 	ld	(xsp+4), xwa
-	ldw_da	wa, (14807228)
+	ld	wa, (14807228:24)
 	ld	(xsp+8), wa
 	lda	xwa, (14807168:24)
 	ld	(xsp+10), xwa
@@ -104,7 +104,7 @@ InitializeHama:
 	ld	(xsp+256), xwa
 	lda	xwa, (16405742:24)
 	ld	(xsp+4), xwa
-	ldw_da	wa, (14807252)
+	ld	wa, (14807252:24)
 	ld	(xsp+8), wa
 	lda	xwa, (14807230:24)
 	ld	(xsp+10), xwa
@@ -116,7 +116,7 @@ InitializeHama:
 	ld	(xsp+256), xwa
 	lda	xwa, (16405819:24)
 	ld	(xsp+4), xwa
-	ldw_da	wa, (14807274)
+	ld	wa, (14807274:24)
 	ld	(xsp+8), wa
 	lda	xwa, (14807254:24)
 	ld	(xsp+10), xwa
@@ -432,17 +432,17 @@ RunTestCounters_IncrNG:
 RunTestCounters_Display:
 	lda xwa, (FDTest_String_TestTitleFunc_0xEA:24)
 	calr FDTest_PrintDiag
-	ldw_da de, (0x03dcfe)
+	ld de, (0x03dcfe:24)
 	exts xde
 	ld xwa, 0x00fc0001
 	ld xbc, 0x01c0000f
 	call ApPostEvent
-	ldw_da de, (0x03dd00)
+	ld de, (0x03dd00:24)
 	exts xde
 	ld xwa, 0x00fc0003
 	ld xbc, 0x01c0000f
 	call ApPostEvent
-	ldw_da de, (0x03dd02)
+	ld de, (0x03dd02:24)
 	exts xde
 	ld xwa, 0x00fc0002
 	ld xbc, 0x01c0000f
@@ -599,7 +599,7 @@ LoadExtROM_JumpEntry:
 	jp (xhl)
 
 GetAprStatus_Entry:
-	ldb_da l, (0x03dd04)
+	ld l, (0x03dd04:24)
 	ret
 
 LoadXaprInit_Entry:
@@ -612,7 +612,7 @@ LoadXaprInit_Entry:
 	add	xsp, 10
 	cps	hl, 0
 	ret	nz
-	stib_da	(253188), 1
+	ld	(253188:24), 1
 	ret
 HamaStub1_Entry:
 	ret
@@ -640,10 +640,10 @@ LoadAndRunXapr_Entry:
 	add	xsp, 10
 	cps	hl, 0
 	jr	nz, 8
-	stib_da	(253188), 1
+	ld	(253188:24), 1
 	jr	6
 LoadAndRunXapr_ClearFlag:
-	stib_da (0x03dd04), 0x00
+	ld (0x03dd04:24), 0x00
 
 LoadAndRunXapr_CallIfActive:
 	cpib_da (0x03dd04), 0x00

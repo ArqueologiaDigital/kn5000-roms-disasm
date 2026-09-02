@@ -57,7 +57,7 @@ CompLoad_HandleCancel:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 0
+	ld	(32422:16), 0
 	ldw	wa, 238
 	jr	91
 CompLoad_HandleError:
@@ -85,7 +85,7 @@ CompLoad_HandleSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 0
 	call	16423243
-	stdi8	(32422), 2
+	ld	(32422:16), 2
 	ldw	wa, 238
 CompLoad_CallStatusDisplay:
 	call SoundCtrl_SendCommand
@@ -96,9 +96,9 @@ CompLoad_HandleAbort:
 	jrl CompLoad_Return
 
 CompLoad_HandleSelection:
-	stda32	(32480), xde
+	ld	(32480:16), xde
 	call	16290274
-	stda16	(32484), hl
+	ld	(32484:16), hl
 	cps	hl, 0
 	jr	lt, 16
 	exts	xhl
@@ -107,7 +107,7 @@ CompLoad_HandleSelection:
 	ld	xde, xhl
 	jrl	463
 CompLoad_Selection_Negative:
-	stdi16	(32484), 0
+	ldw	(32484:16), 0
 	ld	xwa, (32480:16)
 	ld	xbc, 31784962
 	lds32	xde, 0
@@ -198,7 +198,7 @@ CompLoad_PageDown:
 	add wa, 0xa
 
 CompLoad_StorePosition:
-	stda16	(32484), wa
+	ld	(32484:16), wa
 	jrl	146
 CompLoad_OpLoad:
 	cp xde, 0x3
@@ -390,7 +390,7 @@ FmmLoadFilterFunc:
 	cp	xbc, 31784964
 	jrl	nz, 425
 	ld	xwa, (xsp+2)
-	stda32	(32486), xwa
+	ld	(32486:16), xwa
 	jrl	415
 LoadFilter_HandleShow:
 	ldw (xsp), 0x0
@@ -512,7 +512,7 @@ LoadFilter_OpLoad:
 	ld XBC,0x01e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	cpdi16 (0xf19e), 0x0000
+	cpw (0xf19e:16), 0x0000
 	jr z, LoadFilter_Load_ShowCode1
 	lds wa, 2
 	call FileIO_WriteRecordName_Done
@@ -595,7 +595,7 @@ FmmSaveFilterFunc:
 	cp	xbc, 31784964
 	jrl	nz, 848
 	ld	xwa, (xsp+2)
-	stda32	(32618), xwa
+	ld	(32618:16), xwa
 	jrl	838
 SaveFilter_HandleShow:
 	ldw (xsp), 0x0
@@ -788,7 +788,7 @@ SaveFilter_Save_Execute:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	55333
 	ld	xwa, 6291494
 	ld	xbc, 29360130
@@ -824,7 +824,7 @@ SaveFilter_OpFormat:
 	call	16290139
 	call	16290094
 	call	16290928
-	stda16	(33894), hl
+	ld	(33894:16), hl
 	calr	55208
 	ld	xwa, 6291494
 	ld	xbc, 29360130

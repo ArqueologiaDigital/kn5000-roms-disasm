@@ -89,14 +89,14 @@ MainFlashFunc:
 	jr z, MainFlash_AudioDispatch
 	cp xbc, 0x1e30005
 	jr nz, MainFlash_ReturnZero
-	stdi8 (0x7f42), 37
+	ld (0x7f42:16), 37
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	lds wa, 7
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -2141,12 +2141,12 @@ WakeUpApTask:
 	jrl MainTaskControl
 
 RefreshApTask:
-	stdi8 (0xe3dc), 0
-	stdi8 (0xe3de), 0
-	stdi8 (0xe3e0), 0
-	stdi8 (0xe3e2), 0
-	stdi8 (0xe3e4), 255
-	stdi8 (0xe3e6), 255
+	ld (0xe3dc:16), 0
+	ld (0xe3de:16), 0
+	ld (0xe3e0:16), 0
+	ld (0xe3e2:16), 0
+	ld (0xe3e4:16), 255
+	ld (0xe3e6:16), 255
 	lds32 xwa, 0
 	stl_da (0x02749a), xwa
 	stl_da (0x02749e), xwa
@@ -2200,11 +2200,11 @@ RefreshSwEvent:
 	jp ApPostEvent
 
 KeyScan_Enable:
-	stiw_da (0x03ef4e), 0x0001
+	ldw (0x03ef4e:24), 0x0001
 	ret
 
 KeyScan_Disable:
-	stiw_da (0x03ef4e), 0x0000
+	ldw (0x03ef4e:24), 0x0000
 	ret
 
 MainAutoFree:
@@ -2652,12 +2652,12 @@ MainPmanCtrl_CheckSoundParam:
 	jr nz, MainPmanCtrl_SetPartSelectZero
 
 MainPmanCtrl_SetPartSelectOne:
-	stdi8 (0x8d3a), 1
+	ld (0x8d3a:16), 1
 	ldb e, 0x1
 	jr MainPmanCtrl_CompareAndUpdate
 
 MainPmanCtrl_SetPartSelectZero:
-	stdi8 (0x8d3a), 0
+	ld (0x8d3a:16), 0
 
 MainPmanCtrl_LoadPartSelect:
 	ld e, (0x8d3a:16)
@@ -2757,32 +2757,32 @@ SeqDemo_SaveCurrentState:
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleAB:
-	stw_da (0x0274ac), xde
-	stiw_da (0x0274ae), 0x000a
+	ld (0x0274ac:24), de
+	ldw (0x0274ae:24), 0x000a
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleBA:
-	stw_da (0x0274a8), xde
-	stiw_da (0x0274aa), 0x000a
+	ld (0x0274a8:24), de
+	ldw (0x0274aa:24), 0x000a
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleBB:
-	ldw_da xwa, (0x0274aa)
+	ld wa, (0x0274aa:24)
 	cps wa, 0
 	jr z, MainTitleCtrl_CheckSecondTimer
 	dec 1, wa
-	stw_da (0x0274aa), xwa
+	ld (0x0274aa:24), wa
 	cps wa, 0
 	jr nz, MainTitleCtrl_CheckSecondTimer
-	ldw_da xwa, (0x0274a8)
-	stw_da (0x0274a6), xwa
+	ld wa, (0x0274a8:24)
+	ld (0x0274a6:24), wa
 
 MainTitleCtrl_CheckSecondTimer:
-	ldw_da xwa, (0x0274ae)
+	ld wa, (0x0274ae:24)
 	cps wa, 0
 	jr z, UIWidget_ReturnZero
 	dec 1, wa
-	stw_da (0x0274ae), xwa
+	ld (0x0274ae:24), wa
 	cps wa, 0
 	jr nz, UIWidget_ReturnZero
 	cpw_da (0x274ac), 0
@@ -2802,7 +2802,7 @@ UIWidget_ReturnZero:
 	ret
 
 CtrlPanel_GetSelectionState:
-	ldw_da xwa, (0x0274a6)
+	ld wa, (0x0274a6:24)
 	bit 0, wa
 	jr z, CtrlPanel_CheckBit1
 	lds hl, 1
@@ -3798,7 +3798,7 @@ GroupBox_StateCompare_Default:
 	jrl GroupBox_NavDispatch
 	ld xwa, (xsp + 38)
 	call SetCurrentTarget
-	stiw_da (0x03ef50), 0x0000
+	ldw (0x03ef50:24), 0x0000
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
 	ld xbc, (xsp + 34)
@@ -3861,15 +3861,15 @@ GroupBox_HandleCursorNav:
 	jr z, GroupBox_CursorNav_AddLsw
 	cp xwa, 0x0
 	jr ge, GroupBox_CursorNav_LoadPositive
-	ldl_da xwa, (0x03ef56)
-	ldl_da xbc, (0x03ef5e)
-	ldl_da xde, (0x03ef66)
+	ld xwa, (0x03ef56:24)
+	ld xbc, (0x03ef5e:24)
+	ld xde, (0x03ef66:24)
 	jr GroupBox_CursorNav_SendAndTitle
 
 GroupBox_CursorNav_LoadPositive:
-	ldl_da xwa, (0x03ef52)
-	ldl_da xbc, (0x03ef5a)
-	ldl_da xde, (0x03ef62)
+	ld xwa, (0x03ef52:24)
+	ld xbc, (0x03ef5a:24)
+	ld xde, (0x03ef62:24)
 
 GroupBox_CursorNav_SendAndTitle:
 	call SendEvent

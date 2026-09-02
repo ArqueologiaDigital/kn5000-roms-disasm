@@ -1119,7 +1119,7 @@ DrawBox_Impl_FillRowLoop:
 	jr DrawBox_Impl_SetChangeRect
 
 DrawBox_Impl_PatternSetup:
-	ldl_da xwa, (0x030452)
+	ld xwa, (0x030452:24)
 	ld (xsp + 6), xwa
 	ld xwa, (xsp + 14)
 	ld wa, (xwa)
@@ -2057,12 +2057,12 @@ DrawWall:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawWall_DirectPath
-	stiw_da (0x030450), 0x0001
-	stiw_da (0x03044e), 0x0001
+	ldw (0x030450:24), 0x0001
+	ldw (0x03044e:24), 0x0001
 	jr DrawWall_DoCopy
 
 DrawWall_DirectPath:
-	stiw_da (0x030450), 0x0000
+	ldw (0x030450:24), 0x0000
 	cpw_da (0x03044e), 0
 	jr z, DrawWall_SetCopyFlag
 
@@ -2075,7 +2075,7 @@ DrawWall_WaitVblankBefore:
 	jr nz, DrawWall_WaitVblankBefore
 
 DrawWall_SetCopyFlag:
-	stiw_da (0x030450), 0x0001
+	ldw (0x030450:24), 0x0001
 	cpw_da (0x03044e), 0
 	jr nz, DrawWall_Deferred
 
@@ -2099,7 +2099,7 @@ DrawWall_Deferred:
 DrawWall_DoCopy:
 	lda xsp, (xsp - 12)
 	push xiz
-	ldl_da xiz, (0x030452)
+	ld xiz, (0x030452:24)
 	lda xwa, (0x043c00:24)
 	ld (xsp + 4), xwa
 	pushw 0x9600

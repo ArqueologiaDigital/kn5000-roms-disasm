@@ -65,12 +65,12 @@ SetupFlashFunc:
 	jr z, SetupFlash_HandleLoadEvent
 	cp xbc, 0x1e5000b
 	jr nz, SetupFlash_Return
-	stdi8 (0x7f42), 37
+	ld (0x7f42:16), 37
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	lds wa, 6
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ldw wa, 0xee
 	call SoundCtrl_SendCommand
 	jr SetupFlash_Return
@@ -90,7 +90,7 @@ FmmUtilityTitleFunc:
 	jrl z, FmmUtility_HandleAbort
 	cp xde, 0x2
 	jrl nz, FmmUtility_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x7b0013
@@ -98,11 +98,11 @@ FmmUtilityTitleFunc:
 	lds32 xde, 0
 	call ApDeliveryEvent
 	ldmm8 0x7f5c, 0x8d37
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, FmmUtility_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 FmmUtility_DispatchState:
@@ -113,27 +113,27 @@ FmmUtility_DispatchState:
 	jrl z, FmmUtility_HandleError
 	cps wa, 5
 	jr z, FmmUtility_HandleCancel
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, FmmUtility_ScanFormat
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
 FmmUtility_ScanFormat:
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jrl nz, FmmUtility_ContinueWait
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr ge, FmmUtility_CheckCapacity
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	calr SignalProgressUpdate
 
 FmmUtility_CheckCapacity:
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jrl le, FmmUtility_ContinueWait
-	cpdi8 (0x7f5c), 124
+	cp (0x7f5c:16), 124
 	jrl z, FmmUtility_ContinueWait
 	ld xwa, 0x7b0013
 	ld xbc, 0x1e50006
@@ -158,7 +158,7 @@ FmmUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr FmmUtility_ShowStatus
 
@@ -190,7 +190,7 @@ FmmUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 FmmUtility_ShowStatus:
@@ -222,7 +222,7 @@ FmmSmfUtilityTitleFunc:
 	jrl z, FmmSmfUtility_HandleAbort
 	cp xde, 0x2
 	jrl nz, FmmSmfUtility_Return
-	stdi8 (0x84fe), 0
+	ld (0x84fe:16), 0
 	lds wa, 1
 	calr InitializeOperationState
 	ld xwa, 0x7b002a
@@ -230,11 +230,11 @@ FmmSmfUtilityTitleFunc:
 	lds32 xde, 0
 	call ApDeliveryEvent
 	ldmm8 0x7f5e, 0x8d37
-	cpdi16 0x8500, 0
+	cpw (0x8500:16), 0
 	jr ge, FmmSmfUtility_DispatchState
 	call GetDiskSizeInfo
 	extz hl
-	stda16 (0x8500), xhl
+	ld (0x8500:16), hl
 	calr SignalProgressUpdate
 
 FmmSmfUtility_DispatchState:
@@ -245,27 +245,27 @@ FmmSmfUtility_DispatchState:
 	jrl z, FmmSmfUtility_HandleError
 	cps wa, 5
 	jr z, FmmSmfUtility_HandleCancel
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jr ge, FmmSmfUtility_ScanFormat
 	call GetFileCountEncoded
-	stda16 (0x8504), xhl
+	ld (0x8504:16), hl
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	calr SignalProgressUpdate
 
 FmmSmfUtility_ScanFormat:
-	cpdi16 0x8504, 0
+	cpw (0x8504:16), 0
 	jrl nz, FmmSmfUtility_ContinueWait
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jr ge, FmmSmfUtility_CheckCapacity
 	call GetEncodedFileSizeData
-	stda16 (0x8502), xhl
+	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 
 FmmSmfUtility_CheckCapacity:
-	cpdi16 0x8502, 0
+	cpw (0x8502:16), 0
 	jrl le, FmmSmfUtility_ContinueWait
-	cpdi8 (0x7f5e), 123
+	cp (0x7f5e:16), 123
 	jrl z, FmmSmfUtility_ContinueWait
 	ld xwa, 0x7b002a
 	ld xbc, 0x1e50006
@@ -290,7 +290,7 @@ FmmSmfUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 0
+	ld (0x7f42:16), 0
 	ldw wa, 0xee
 	jr FmmSmfUtility_ShowStatus
 
@@ -322,7 +322,7 @@ FmmSmfUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x7f42), 2
+	ld (0x7f42:16), 2
 	ldw wa, 0xee
 
 FmmSmfUtility_ShowStatus:

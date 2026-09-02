@@ -60,9 +60,9 @@
 ; -----------------------------------------------------------------------------
 Handler_INTA:
 	push	xwa
-	cpdi8	(0x0f63), 0
+	cp	(0x0f63:16), 0
 	jr	nz, Handler_INTA__rx_pacing
-	anddi8	(0x0f66), 0x9f		; PFCR shadow: SC1 pins to RX mode
+	and	(0x0f66:16), 0x9f		; PFCR shadow: SC1 pins to RX mode
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	or_sd8b_im 0xd5, 0x01		; SC1CR bit 0 high
@@ -70,17 +70,17 @@ Handler_INTA:
 	ldio	0xe3, 0x05		; INTEAB
 	ldio	0xeb, 0x0d		; INTES1: RX enabled
 	or_sd8b_im 0xd6, 0x20		; SC1MOD bit 5
-	stdi8	(0x0f62), 0x20		; state 0x20: RX first byte
-	ordi8	(0x0f64), 0x01		; RX-active flag
+	ld	(0x0f62:16), 0x20		; state 0x20: RX first byte
+	or	(0x0f64:16), 0x01		; RX-active flag
 	jr	t, Handler_INTA__exit
 Handler_INTA__rx_pacing:
-	cpdi16	(0x0f77), 0
+	cpw	(0x0f77:16), 0
 	jr	nz, Handler_INTA__count_ok
-	stdi16	(0x0f77), 0x005c	; reload with the RX ring size
+	ldw	(0x0f77:16), 0x005c	; reload with the RX ring size
 Handler_INTA__count_ok:
 	decdi16	1, (0x0f77)
-	ordi8	(0x0f6a), 0x40		; status: INTA seen mid-transfer
-	anddi8	(0x0f64), 0xfd		; clear TX-pending flag
+	or	(0x0f6a:16), 0x40		; status: INTA seen mid-transfer
+	and	(0x0f64:16), 0xfd		; clear TX-pending flag
 Handler_INTA__exit:
 	pop	xwa
 	ldio	0xf8, 0x12		; INTCLR: INTA

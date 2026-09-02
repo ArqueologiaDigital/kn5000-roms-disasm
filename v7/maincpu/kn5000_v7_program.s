@@ -518,9 +518,9 @@ RESET_HANDLER:
 	and_sd8b_im 0xd3, 0xf0
 
 Boot_InitIOPorts:
-	stdi8 (304), 255
-	stdi8 (305), 255
-	stdi8 (306), 3
+	ld (304:16), 255
+	ld (305:16), 255
+	ld (306:16), 3
 	ldio 0x3a, 0x20
 	ld xsp, 0xc00
 	calr Boot_InitWorkRAM
@@ -542,10 +542,10 @@ We_seem_to_be_running_boot_ROM_code:
 
 Boot_PostSelfTest:
 	lds32 xwa, 0
-	stda32 1033, xwa
-	stdi8 (1024), 2
+	ld (1033:16), xwa
+	ld (1024:16), 2
 	call TaskSched_Init
-	stdi8 (1024), 3
+	ld (1024:16), 3
 Boot_InitPeripherals:
 	calr Boot_ClearConfigFlag7
 	lda_dd8l XBC, (0xe4)
@@ -581,7 +581,7 @@ Boot_FlashAndExtensions:
 BootInit_SeqAndPanel:
 	call Seq_FullInit
 	ei 0
-	ldl_da xhl, (CPanel_InitDispatchTable)
+	ld xhl, (CPanel_InitDispatchTable:24)
 	call (xhl)
 	call CPanel_ScanButtons
 	ld (1026:16), l
@@ -591,7 +591,7 @@ BootInit_SeqAndPanel:
 	call Check_for_Floppy_Disk_Change
 	cps hl, 0
 	jr z, User_didnt_request_flash_mem_update
-	cpdi8 (1026), 4
+	cp (1026:16), 4
 	jr nz, User_didnt_request_flash_mem_update
 	call FLASH_MEM_UPDATE
 
@@ -627,7 +627,7 @@ User_didnt_request_flash_mem_update:
 	ld	a, (1026:16)
 	extz	wa
 	calr	514
-	stiw_da	(65482), 0
+	ldw	(65482:24), 0
 	set_dd8	0, 40
 	call	15676020
 	di
@@ -647,11 +647,11 @@ Boot_PayloadError:
 
 Boot_DisplayScreen:
 	call	16634741
-	stdi8	(1024), 6
+	ld	(1024:16), 6
 	lds	wa, 3
 	call	16634741
-	stdi8	(1024), 128
-	stiw_da	(65492), 0
+	ld	(1024:16), 128
+	ldw	(65492:24), 0
 	ld	a, (1026:16)
 	extz	wa
 	calr	350
@@ -857,7 +857,7 @@ FactoryReset_ClearSRAM:
 	stl_dpi XWA, 0xe6
 	cp xbc, 0x200000
 	jr c, FactoryReset_ClearSRAM
-	stiw_da (0x00ffca), 0x5aa5
+	ldw (0x00ffca:24), 0x5aa5
 	jp Boot_InitIOPorts
 FactoryReset_TrailingByte:
 	ret
@@ -1269,7 +1269,7 @@ PlayHalt_SkipSetFlag:
 	inc	2, xsp
 	ret
 PlayStandBy:
-	bitda 2, (10407)
+	bit 2, (10407:16)
 	jr z, PlayStandBy_SkipClearFlag
 	resda 2, 10407
 
@@ -1481,7 +1481,7 @@ CountVoiceSlots_NotUsed:
 	jr CountVoiceSlots_Loop
 
 CountVoiceSlots_Done:
-	stda16	(32124), wa
+	ld	(32124:16), wa
 	ret
 Voice_GetSlotAddress:
 	and xhl, 0xffff
@@ -1586,7 +1586,7 @@ Voice_FactoryPresetData:
 	jrl	206
 	cp	(xsp+24), 1
 	jrl	ugt, 196
-	ldb_da	l, (257962)
+	ld	l, (257962:24)
 	ld	xwa, (xsp+34)
 	ld	wa, (xwa)
 	exts	xwa
@@ -1621,7 +1621,7 @@ Voice_FactoryPresetData:
 	cp	wa, de
 	jr	nz, 54
 	jr	105
-	ldl_da	xiy, (197714)
+	ld	xiy, (197714:24)
 	ld	de, (xhl)
 	exts	xde
 	ld	wa, (xhl+2)
@@ -1703,8 +1703,8 @@ Voice_FactoryPresetData:
 	calr	38931
 	cps	hl, 0
 	jr	z, 29
-	ldb_da	a, (257960)
-	stb_da	(257962), a
+	ld	a, (257960:24)
+	ld	(257962:24), a
 	cpw_da	(197710), 0
 	jr	z, 51
 	ld	xwa, xiz
@@ -1722,7 +1722,7 @@ Voice_FactoryPresetData:
 	ldirw
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	ldb_da	c, (257960)
+	ld	c, (257960:24)
 	ld	(xwa+14), c
 	calr	38403
 	pop	xiz
@@ -1732,7 +1732,7 @@ Voice_FactoryPresetData:
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
-	stb_da	(257962), c
+	ld	(257962:24), c
 	cpw_da	(197710), 0
 	ret	z
 	ld	bc, de
@@ -1839,8 +1839,8 @@ DrawText_QueueOrDirect:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawText_QueueDeferred
-	ldb_da a, (0x03efa8)
-	stb_da (0x03efaa), a
+	ld a, (0x03efa8:24)
+	ld (0x03efaa:24), a
 	cpw_da (197710), 0
 	jrl z, DrawText_PopAndReturn
 	ld xwa, (xsp + 28)
@@ -1880,7 +1880,7 @@ DrawText_PopAndReturn:
 	ld ix, (xiz + 24)
 	ld de, (xiz + 26)
 	ld a, (xiz + 28)
-	stb_da (0x03efaa), a
+	ld (0x03efaa:24), a
 	cpw_da (197710), 0
 	jr z, DrawText_DeferredFreeAndReturn
 	push xiy
@@ -2158,7 +2158,7 @@ TextRender_ScanLineLoop:
 	ldw (xsp + 24), 0x8
 
 TextRender_SelectDrawMode:
-	ldb_da a, (0x03efaa)
+	ld a, (0x03efaa:24)
 	cps a, 2
 	jrl z, TextRender_XorMode_Init
 	cps a, 1
@@ -2731,7 +2731,7 @@ Debug_SWI_JumpTable:
 	ret
 
 Get_Firmware_Version:
-	ldb_da l, (FIRMWARE_VERSION)
+	ld l, (FIRMWARE_VERSION:24)
 	ret
 
 ROM_PaddingFF:

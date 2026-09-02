@@ -144,7 +144,7 @@ Encoder_ProcessBreath:
 	ld c, (0x379b:16); Get system mode flags
 	and c, 0xf	; Mask relevant bits
 	jr nz, Encoder_ProcessBreath_WithModeAdjustment	; If mode active, process
-	cpdi8 (0x7f0b), 0; Check alternate condition
+	cp (0x7f0b:16), 0; Check alternate condition
 	jr z, Encoder_ProcessBreath_SimplePassthrough	; Simple processing if clear
 
 Encoder_ProcessBreath_WithModeAdjustment:

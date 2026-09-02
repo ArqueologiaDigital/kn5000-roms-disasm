@@ -214,7 +214,7 @@ Flash_ReadDeviceId:
 	extpfx4 0xB1, 0x02, 0x90, 0x00         ; FC85CA  ld (XBC),0x0090   [llvm-mc cannot encode this]
 	ld	xbc, (xiz-4)                        ; FC85CE  ld XBC,(XIZ+0xfc)
 	ld	de, (xbc)                           ; FC85D1  ld DE,(XBC)
-	stw_da	(0xE29F), de                    ; FC85D3  ld (0x00e29f),DE
+	ld	(0xE29F:24), de                    ; FC85D3  ld (0x00e29f),DE
 	ld	hl, (xbc+2)                         ; FC85D8  ld HL,(XBC+0x02)
 	cps	de, 1                              ; FC85DB  cp DE,1
 	jr z, Flash_ReadDeviceId__FC85E3                        ; FC85DD  jr Z,0xfc85e3
@@ -655,7 +655,7 @@ Flash_WriteTwoBlocksIntoSector__FC8882:
 Flash_ProbeAndStoreDeviceId:
 	calr (0xFC856C - 0xFC88A3)             ; FC88A0  calr 0xfc856c
 	calr (0xFC859E - 0xFC88A6)             ; FC88A3  calr 0xfc859e
-	stw_da	(0xE29D), wa                    ; FC88A6  ld (0x00e29d),WA
+	ld	(0xE29D:24), wa                    ; FC88A6  ld (0x00e29d),WA
 	ret                                    ; FC88AB  ret
 ; --------------------------------------------------------------------------
 ; MemFillWordRamp -- fill a word array with 0, 1, 2, ... n-1.
@@ -762,7 +762,7 @@ Flash_ProgramSectorFromBuffer:
 	jr z, Flash_ProgramSectorFromBuffer__FC8933                        ; FC8918  jr Z,0xfc8933
 	ei	6                                   ; FC891A  ei 0x06
 	extpfx4 0xB3, 0x02, 0xAA, 0x00         ; FC891C  ld (XHL),0x00aa   [llvm-mc cannot encode this]
-	stiw_da	(0xE85554), 85                 ; FC8920  ld (0xe85554),0x0055
+	ldw	(0xE85554:24), 85                 ; FC8920  ld (0xe85554),0x0055
 	extpfx4 0xB3, 0x02, 0xA0, 0x00         ; FC8927  ld (XHL),0x00a0   [llvm-mc cannot encode this]
 	ld	(xiy), wa                           ; FC892B  ld (XIY),WA
 	ei	0                                     ; FC892D  ei 0x00
@@ -824,7 +824,7 @@ Flash_ProgramSlice1K:
 	jr z, Flash_ProgramSlice1K__FC8987                        ; FC896C  jr Z,0xfc8987
 	ei	6                                   ; FC896E  ei 0x06
 	extpfx4 0xB3, 0x02, 0xAA, 0x00         ; FC8970  ld (XHL),0x00aa   [llvm-mc cannot encode this]
-	stiw_da	(0xE85554), 85                 ; FC8974  ld (0xe85554),0x0055
+	ldw	(0xE85554:24), 85                 ; FC8974  ld (0xe85554),0x0055
 	extpfx4 0xB3, 0x02, 0xA0, 0x00         ; FC897B  ld (XHL),0x00a0   [llvm-mc cannot encode this]
 	ld	(xiy), wa                           ; FC897F  ld (XIY),WA
 	ei	0                                     ; FC8981  ei 0x00

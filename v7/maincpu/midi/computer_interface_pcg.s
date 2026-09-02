@@ -317,7 +317,7 @@ PcgOutCheckGridDataStructure:
 	jr z, PcgOutCheck_SendPreset1
 	cps de, 0
 	jrl nz, PcgOutGridCheckComplete
-	ldb_da a, (0x02476a)
+	ld a, (0x02476a:24)
 	inc 1,A
 	extz WA
 	pushw wa
@@ -332,7 +332,7 @@ PcgOutCheckGridDataStructure:
 	ld XBC,0x01e0008c
 	jrl t, PcgOutCheck_SetFinalProp
 PcgOutCheck_SendPreset1:
-	ldb_da	a, (149356)
+	ld	a, (149356:24)
 	inc	1, a
 	extz	wa
 	pushw	wa
@@ -358,7 +358,7 @@ PcgOutCheck_SendPreset2:
 	.byte 0xeb, 0x88, 0xbf, 0x04, 0x32, 0x41, 0x8c, 0x00
 	.byte 0xe0, 0x01, 0x78, 0x6b, 0x01
 PcgOutCheck_SendPreset2Named:
-	ldb_da	a, (149358)
+	ld	a, (149358:24)
 	exts	wa
 	pushw	wa
 	pushw	231
@@ -372,9 +372,9 @@ PcgOutCheck_SendPreset2Named:
 	ld	xbc, 31457420
 	call	SendEvent
 	ldw	(xsp+6), 4
-	ldb_da	c, (149360)
+	ld	c, (149360:24)
 	exts	bc
-	ldb_da	a, (149358)
+	ld	a, (149358:24)
 	exts	wa
 	sll	wa, 7
 	add	wa, bc
@@ -407,7 +407,7 @@ PcgOutCheck_SendPreset3:
 	.byte 0xc3, 0x40, 0xfa, 0xeb, 0x88, 0xbf, 0x04, 0x32
 	.byte 0x41, 0x8c, 0x00, 0xe0, 0x01, 0x78, 0x90, 0x00
 PcgOutCheck_SendPreset3Named:
-	ldb_da	a, (149358)
+	ld	a, (149358:24)
 	exts	wa
 	pushw	wa
 	pushw	231
@@ -421,7 +421,7 @@ PcgOutCheck_SendPreset3Named:
 	ld	xbc, 31457420
 	call	SendEvent
 	ldw	(xsp+6), 3
-	ldb_da	a, (149360)
+	ld	a, (149360:24)
 	exts	wa
 	pushw	wa
 	pushw	231
@@ -436,9 +436,9 @@ PcgOutCheck_SendPreset3Named:
 	ld	xbc, 31457420
 	call	SendEvent
 	ldw	(xsp+6), 4
-	ldb_da	c, (149360)
+	ld	c, (149360:24)
 	exts	bc
-	ldb_da	a, (149358)
+	ld	a, (149358:24)
 	exts	wa
 	sll	wa, 7
 	add	wa, bc
@@ -466,12 +466,12 @@ PcgOutSendFunc:
 	cp xbc, 0x1c00008
 	jr nz, PcgOutSendFunc_Exit
 	lda xde, (0x024752:24)
-	ldb_da a, (0x02476a)
+	ld a, (0x02476a:24)
 	ld (xde), a
-	ldb_da a, (0x02476c)
+	ld a, (0x02476c:24)
 	ld (xde + 1), a
 	lda xbc, (xde + 2)
-	ldb_da l, (0x024770)
+	ld l, (0x024770:24)
 	cp l, 0xff
 	jr nz, PcgOutSend_StoreBankIndex
 	ldw (xbc), 0xffff
@@ -479,7 +479,7 @@ PcgOutSendFunc:
 
 PcgOutSend_StoreBankIndex:
 	exts hl
-	ldb_da a, (0x02476e)
+	ld a, (0x02476e:24)
 	exts wa
 	sla wa, 7
 	add wa, hl

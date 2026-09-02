@@ -1,0 +1,27 @@
+  4000/51030  8000/51030  12000/51030  16000/51030  20000/51030  24000/51030  28000/51030  32000/51030  36000/51030  40000/51030  44000/51030  48000/51030  51030/51030
+assembler /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap
+  sha256 850b013e0e8f14d9a90b95ff1995a858ad8575b8c35a8749970b47ffc613f1a1
+changed .s files: 242
+changed lines: 51030   files not line-for-line: 0
+trailing comments on changed lines: 12480 before, 12480 after, 0 text mismatches
+
+old mnemonic verified
+stdi8         10895
+stda16         7764
+cpdi8          5191
+bitda          3669
+ldw_da         3329
+ldl_da         2924
+stdi16         2652
+ldb_da         2425
+stib_da        1967
+stw_da         1829
+anddi8         1791
+stda32         1780
+stiw_da        1300
+ordi8          1279
+cpdi16         1119
+stb_da         1116
+TOTAL         51030
+
+PASS: every changed line encodes identically under this assembler.

@@ -313,7 +313,7 @@ SoundBank_DefaultNamePadding:	.ascii "          ______"
 SMF_SelectBankAndLoad:
 	ld (4599:16), a
 	ld (4600:16), c
-	cpdi8 (4600), 2
+	cp (4600:16), 2
 	jr nz, SMF_SelectBank_AfterReset
 	call SMF_ResetMidiChannelMap
 
@@ -326,12 +326,12 @@ SMF_SelectBank_AfterReset:
 	cpda8_24 a, (0xffe3)
 	jrl z, SMF_SelectBank_AfterToneLoad
 	ld a, (4599:16)
-	stb_da (0x00ffe3), a
+	ld (0x00ffe3:24), a
 	call SoundBank_LoadToWorkRAM
 
 SMF_SelectBank_AfterToneLoad:
 	call SMF_InitSequencerState
-	anddi8 (0x28b1), 254
+	and (0x28b1:16), 254
 	pop xde
 	pop xix
 	pop xiz
@@ -374,11 +374,11 @@ SMF_ResetMidiChanMap_Loop:
 
 SoundBank_LoadToWorkRAM:
 	ld wa, (0xf22f:16)
-	stda16 (0x286f), xwa
+	ld (0x286f:16), wa
 	ld wa, (0xf231:16)
-	stda16 (0x2871), xwa
+	ld (0x2871:16), wa
 	xor xwa, xwa
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	sla xwa, 11
 	ld xiy, 0xab000
 	add xiy, xwa
@@ -386,13 +386,13 @@ SoundBank_LoadToWorkRAM:
 	ldw bc, 0x800
 	ldir85
 	ld wa, (0x286f:16)
-	stda16 (0xf22f), xwa
+	ld (0xf22f:16), wa
 	ld wa, (0x2871:16)
-	stda16 (0xf231), xwa
+	ld (0xf231:16), wa
 	ld wa, (0xf19e:16)
-	stw_da (0x00ffec), xwa
+	ld (0x00ffec:24), wa
 	xor wa, wa
-	stda16 (0xf19e), xwa
+	ld (0xf19e:16), wa
 	ret
 
 SMF_InitSequencerState:
@@ -409,13 +409,13 @@ SMF_InitSequencerState:
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jrl lt, SeqPlay_ResetAndStop
-	stdi16 (6699), 1
+	ldw (6699:16), 1
 	ld xwa, 0x13fa
-	stda32 4376, xwa
+	ld (4376:16), xwa
 	push xwa
 	lds32 xwa, 0
-	stda32 6883, xwa
-	stdi8 (6887), 0
+	ld (6883:16), xwa
+	ld (6887:16), 0
 	pop xwa
 
 SMF_ReadMThd_Start:
@@ -431,20 +431,20 @@ SMF_ReadMThd_ByteLoop:
 	cp_spib A, 0xf4
 	jrl z, SMF_ReadMThd_Matched
 	incdi8 1, (4343)
-	cpdi8 (4343), 1
+	cp (4343:16), 1
 	jrl nz, SMF_ReadMThd_Mismatch
 	ld xwa, 0x13fa
 	add xwa, 0x80
-	stda32 4376, xwa
+	ld (4376:16), xwa
 	jrl SMF_ReadMThd_Start
 
 SMF_ReadMThd_Mismatch:
-	stdi16 (6699), 49
+	ldw (6699:16), 49
 	jrl SeqPlay_FloppyReady
 
 SMF_ReadMThd_Matched:
 	djnz xbc, SMF_ReadMThd_ByteLoop
-	stdi8 (6887), 1
+	ld (6887:16), 1
 	call FloppyIO_ReadNextByte
 	ld (6886:16), a
 	call FloppyIO_ReadNextByte
@@ -453,7 +453,7 @@ SMF_ReadMThd_Matched:
 	ld (6884:16), a
 	call FloppyIO_ReadNextByte
 	ld (6883:16), a
-	stdi8 (6887), 0
+	ld (6887:16), 0
 	call FloppyIO_ReadNextByte
 	ld (3933:16), a
 	call FloppyIO_ReadNextByte
@@ -468,9 +468,9 @@ SMF_ReadMThd_Matched:
 	jrl nz, SeqPlay_SetState48AndFloppyReady
 	call FloppyIO_ReadNextByte
 	ld (3936:16), a
-	cpdi16 3936, 0
+	cpw (3936:16), 0
 	jrl nz, FloppyIO_WaitReadComplete
-	stdi16 (6699), 48
+	ldw (6699:16), 48
 	jrl SeqPlay_FloppyReady
 
 FloppyIO_WaitReadComplete:
@@ -487,20 +487,20 @@ FloppyIO_WaitReadComplete:
 SMF_AfterFloppyWait:
 	ld a, (4600:16)
 	call SeqTrack_ClearPartParamBuffers
-	cpdi16 3932, 0
+	cpw (3932:16), 0
 	jrl z, FloppyIO_ReadAndValidateHeader
-	cpdi16 3932, 1
+	cpw (3932:16), 1
 	jrl nz, SeqPlay_SetState48AndFloppyReady
-	cpdi16 3934, 1
+	cpw (3934:16), 1
 	jrl z, FloppyIO_ReadAndValidateHeader
 	call FloppyIO_SelectReadMode
 	call FloppyIO_ConfigureSwitchboard
 	call SeqPlay_PrepareAndScanChannels
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
-	cpdi8 (3830), 0
+	cp (3830:16), 0
 	jrl z, SeqPlay_FinishFloppyLoadAndStart
-	cpdi16 6699, 49
+	cpw (6699:16), 49
 	jrl SeqPlay_ResetAndStop
 
 FloppyIO_ReadAndValidateHeader:
@@ -517,7 +517,7 @@ SMF_ReadMTrk_ByteLoop:
 	popw bc
 	cp_spib A, 0xf4
 	jrl z, SMF_ReadMTrk_Matched
-	stdi16 (6699), 49
+	ldw (6699:16), 49
 	jrl SeqPlay_FloppyReady
 
 SMF_ReadMTrk_Matched:
@@ -552,15 +552,15 @@ SMF_ReadTrackData_Continue:
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa
-	stda16 (0xf19e), xwa
-	stw_da (0x00ffec), xwa
+	ld (0xf19e:16), wa
+	ld (0x00ffec:24), wa
 	call SeqTrack_AssignFloppyChannels
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
-	cpdi8 (3830), 0
+	cp (3830:16), 0
 	jrl nz, SeqPlay_ResetAndStop
 	call SoundGen_InitAllVoiceChannels
-	stdi8 (4236), 0
+	ld (4236:16), 0
 
 SMF_ReadLoopWithRetry:
 	call FloppyIO_ReadToTrackBuffer
@@ -627,9 +627,9 @@ SMF_MetaEvent_FloppyErr:
 	jp SeqPlay_ResetAndStop
 
 SMF_MetaEvent_CheckResult:
-	cpdi8 (4009), 255
+	cp (4009:16), 255
 	jrl z, SMF_ActivateVoicesAndFinish
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl z, SMF_ReadLoopWithRetry
 	jrl Sequencer_ResetAfterFloppyIO
 
@@ -685,7 +685,7 @@ SMF_MidiEvent_FloppyErr:
 	jp SeqPlay_ResetAndStop
 
 SMF_MidiEvent_CheckResult:
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
 	jrl SMF_ReadLoopWithRetry
 
@@ -707,7 +707,7 @@ SMF_RunningStatus_FloppyErr:
 	jp SeqPlay_ResetAndStop
 
 SMF_RunningStatus_CheckResult:
-	cpdi8 (4323), 0
+	cp (4323:16), 0
 	jrl nz, Sequencer_ResetAfterFloppyIO
 	jrl SMF_ReadLoopWithRetry
 

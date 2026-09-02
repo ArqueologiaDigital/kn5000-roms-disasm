@@ -1111,7 +1111,7 @@ SndParam_Widget1_AppendType2:
 	call	15673385
 	and	hl, hl
 	jr	nz, 5
-	stdi8	(234), 253
+	ld	(234:16), 253
 	popw	hl
 	popw	wa
 	reti
@@ -1128,7 +1128,7 @@ SndParam_Widget1_AppendType2:
 	push	xiy
 	push	xiz
 	ld	a, (208:16)
-	stdi8	(1061), 0
+	ld	(1061:16), 0
 SndParam_Widget1_AppendTail:
 	dec	2, xsp
 	ld	(xsp), a
@@ -1175,12 +1175,12 @@ SndParam_Widget1_CallType3:
 	pushw	wa
 	call	15673503
 	inc	2, xsp
-	stdi8	1074, 4
-	stdi8	1059, 0
+	ld	(1074:16), 4
+	ld	(1059:16), 0
 	.byte 0xc1, 0x32, 0x04, 0x3c, 0xcc
 	jr	15
-	stdi8	1074, 16
-	stdi8	1059, 0
+	ld	(1074:16), 16
+	ld	(1059:16), 0
 	jr	3
 	calr	1191
 	calr	1515
@@ -1202,7 +1202,7 @@ SndParam_Widget1_CallType3:
 	jr	nc, -12
 	.byte 0xf1, 0x46, 0xb7, 0xce
 	jr	nz, -18
-	cpdi8	32367, 0
+	cp	(32367:16), 0
 	jr	z, 19
 	cp	a, 250
 	jr	nz, 5
@@ -1231,20 +1231,20 @@ SndParam_Widget1_CallType3:
 	.byte 0xd1, 0x3e, 0xb7, 0x48
 	jr	4
 	ld	wa, (46906:16)
-	stda16	146, wa
-	stdi8	1066, 0
+	ld	(146:16), wa
+	ld	(1066:16), 0
 	.byte 0xf1, 0x1f, 0x04, 0xc8
 	jr	z, 5
-	stdi8	1055, 6
+	ld	(1055:16), 6
 	.byte 0xf1, 0x1f, 0x04, 0xca
 	jr	z, 35
 	.byte 0xc1, 0x6a, 0x04, 0x3c, 0xfc
 	incdi8	4, (1130)
-	cpdi8	1130, 96
+	cp	(1130:16), 96
 	jr	nz, 19
-	stdi8	1130, 0
+	ld	(1130:16), 0
 	incdi16	1, (1128)
-	cpdi8	32367, 0
+	cp	(32367:16), 0
 	jr	z, 3
 	calr	845
 	ld	a, (1056:16)
@@ -1256,29 +1256,29 @@ SndParam_Widget1_CallType3:
 	jrl	nz, 315
 	bit	0, a
 	jr	z, 30
-	stdi8	1056, 6
+	ld	(1056:16), 6
 	.byte 0xf1, 0x1e, 0x04, 0xc8
 	jr	z, 5
-	stdi8	1054, 6
+	ld	(1054:16), 6
 	.byte 0xf1, 0x21, 0x04, 0xc8
 	jr	z, 5
-	stdi8	1057, 6
+	ld	(1057:16), 6
 	jrl	280
 	bit	2, a
 	jr	z, 25
 	.byte 0xc1, 0x17, 0x04, 0x3c, 0xfc
 	incdi8	4, (1047)
-	cpdi8	1047, 96
+	cp	(1047:16), 96
 	jr	nz, 9
-	stdi8	1047, 0
+	ld	(1047:16), 0
 	incdi16	1, (1048)
 	.byte 0xf1, 0x1e, 0x04, 0xca
 	jr	z, 81
 	.byte 0xc1, 0x15, 0x04, 0x3c, 0xfc
 	incdi8	4, (1045)
-	cpdi8	1045, 96
+	cp	(1045:16), 96
 	jr	nz, 65
-	stdi8	1045, 0
+	ld	(1045:16), 0
 	incdi8	1, (1046)
 	ld	a, (14079:16)
 	and	a, 31
@@ -1289,13 +1289,13 @@ SndParam_Widget1_CallType3:
 	.byte 0xc1, 0x58, 0x04, 0x30
 	cp	a, w
 	jr	c, 28
-	stdi8	1046, 0
+	ld	(1046:16), 0
 	incdi8	1, (1076)
 	incdi8	1, (1077)
 	ld	a, (1077:16)
 	cpda8	a, 13371
 	jr	ule, 5
-	stdi8	1077, 0
+	ld	(1077:16), 0
 	ld	a, (1045:16)
 	ld	w, a
 	subda8	a, 1111
@@ -1311,7 +1311,7 @@ SndParam_Widget1_CallType3:
 	jr	c, 5
 	sub	a, 96
 	inc	1, w
-	stda16	1120, wa
+	ld	(1120:16), wa
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jr	z, 108
 	.byte 0xc1, 0x1b, 0x04, 0x3c, 0xfc
@@ -1322,8 +1322,8 @@ SndParam_Widget1_CallType3:
 	cpda8	a, 1071
 	jr	nz, 22
 	.byte 0xf1, 0x31, 0x04, 0xb0
-	stdi8	1054, 1
-	cpdi16	10410, 0
+	ld	(1054:16), 1
+	cpw	(10410:16), 0
 	jr	z, 5
 	ldb	a, 133
 	calr	643
@@ -1332,36 +1332,36 @@ SndParam_Widget1_CallType3:
 	cpda8	a, 1072
 	jr	nz, 22
 	.byte 0xf1, 0x31, 0x04, 0xb3
-	stdi8	1054, 8
-	cpdi16	10410, 0
+	ld	(1054:16), 8
+	cpw	(10410:16), 0
 	jr	z, 5
 	ldb	a, 134
 	calr	609
-	cpdi8	1051, 96
+	cp	(1051:16), 96
 	jr	nz, 99
-	stdi8	1051, 0
+	ld	(1051:16), 0
 	incdi16	1, (1052)
-	cpdi16	10410, 0
+	cpw	(10410:16), 0
 	jr	z, 3
 	calr	512
 	.byte 0xf1, 0x52, 0xfd, 0xca
 	jr	z, 73
 	cp	d, 252
 	jr	nz, 68
-	stdi8	1056, 16
+	ld	(1056:16), 16
 	.byte 0xf1, 0x1e, 0x04, 0xca
 	jr	z, 28
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jr	z, 4
 	.byte 0xf1, 0xde, 0x33, 0xba
-	stdi8	1054, 16
-	cpdi16	10410, 0
+	ld	(1054:16), 16
+	cpw	(10410:16), 0
 	jr	z, 5
 	ldb	a, 134
 	calr	532
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jr	z, 23
-	stdi8	1057, 16
+	ld	(1057:16), 16
 	pushw	wa
 	ld	a, (1045:16)
 	ld	(1078:16), a
@@ -1378,7 +1378,7 @@ SndParam_Widget1_CallType3:
 	cp	d, 251
 	jrl	z, 200
 	ret
-	cpdi16	61854, 0
+	cpw	(61854:16), 0
 	jr	z, 10
 	push	sr
 	ei	0x06
@@ -1387,12 +1387,12 @@ SndParam_Widget1_CallType3:
 	pop	sr
 	ret
 	.byte 0xf1, 0xac, 0x28, 0xbd
-	stdi8	1108, 0
-	cpdi16	61854, 0
+	ld	(1108:16), 0
+	cpw	(61854:16), 0
 	jr	nz, 80
 	xor	wa, wa
 	ld	(1047:16), a
-	stda16	1048, wa
+	ld	(1048:16), wa
 	.byte 0xf1, 0x20, 0x04
 SndParam_HeapAllocOK:
 	.incbin "includes/romslices/v7_fix_sndparam_heapallocok.bin"

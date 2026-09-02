@@ -569,10 +569,10 @@ Analog_ScanAndReport:
 	cps	a, 0                                   ; F98A9E  cp A,0
 	jr z, Analog_ScanAndReport__chan2                            ; F98AA0  jr Z,0xf98acb
 	ld	c, (xiz-5)                              ; F98AA2  ld C,(XIZ+0xfb)
-	stb_da	(0xE2E5), c                         ; F98AA5  ld (0x00e2e5),C
-	stib_da	(0xE2E9), 0xB0                     ; F98AAA  ld (0x00e2e9),0xb0
-	ldb_da	c, (0xE2E5)                         ; F98AB0  ld C,(0x00e2e5)
-	stb_da	(0xE2EA), c                         ; F98AB5  ld (0x00e2ea),C
+	ld	(0xE2E5:24), c                         ; F98AA5  ld (0x00e2e5),C
+	ld	(0xE2E9:24), 0xB0                     ; F98AAA  ld (0x00e2e9),0xb0
+	ld	c, (0xE2E5:24)                         ; F98AB0  ld C,(0x00e2e5)
+	ld	(0xE2EA:24), c                         ; F98AB5  ld (0x00e2ea),C
 	lda	xbc, (0xE2E9:24)                       ; F98ABA  lda XBC,0x00e2e9
 	push	xbc                                   ; F98ABF  push XBC
 	pushw	2                                    ; F98AC0  push 0x0002
@@ -597,10 +597,10 @@ Analog_ScanAndReport__chan2:
 	cps	a, 0                                   ; F98AF0  cp A,0
 	jr z, Analog_ScanAndReport__done                            ; F98AF2  jr Z,0xf98b1d
 	ld	c, (xiz-5)                              ; F98AF4  ld C,(XIZ+0xfb)
-	stb_da	(0xE2E7), c                         ; F98AF7  ld (0x00e2e7),C
-	stib_da	(0xE2E9), 0xB1                     ; F98AFC  ld (0x00e2e9),0xb1
-	ldb_da	c, (0xE2E7)                         ; F98B02  ld C,(0x00e2e7)
-	stb_da	(0xE2EA), c                         ; F98B07  ld (0x00e2ea),C
+	ld	(0xE2E7:24), c                         ; F98AF7  ld (0x00e2e7),C
+	ld	(0xE2E9:24), 0xB1                     ; F98AFC  ld (0x00e2e9),0xb1
+	ld	c, (0xE2E7:24)                         ; F98B02  ld C,(0x00e2e7)
+	ld	(0xE2EA:24), c                         ; F98B07  ld (0x00e2ea),C
 	lda	xbc, (0xE2E9:24)                       ; F98B0C  lda XBC,0x00e2e9
 	push	xbc                                   ; F98B11  push XBC
 	pushw	2                                    ; F98B12  push 0x0002
@@ -826,7 +826,7 @@ MAIN:
 	call	0xF98000
 	call	0xF997FA
 	calr	(0xF98A02 - 0xF98BA0)
-	ldw_da	bc, 0x00FFFFEF
+	ld	bc, (0x00FFFFEF:24)
 	extz	bc
 	pushw	bc
 	calr	(0xF990FA - 0xF98BAB)
@@ -866,7 +866,7 @@ MAIN__midi_done:
 	call	0xF9997E
 	inc	8, xsp
 MAIN__bit4:
-	ldb_da	c, 0x007ED1
+	ld	c, (0x007ED1:24)
 	and	c, 0x10
 	srl	c, 4
 	cps	c, 0
@@ -874,14 +874,14 @@ MAIN__bit4:
 	resda_24 4, 0x007ED1
 	call	0xF99E5F
 	call	0xFB05EC
-	ldw_da	hl, 0x00E2DF
+	ld	hl, (0x00E2DF:24)
 	ld	bc, hl
 	inc	1, bc
 	ld	(xiz-56), bc
-	stw_da	0x00E2DF, bc
+	ld	(0x00E2DF:24), bc
 	cp	hl, 0x000c
 	jr	le, MAIN__no_wrap
-	stiw_da	0x00E2DF, 0x0000
+	ldw	(0x00E2DF:24), 0x0000
 MAIN__no_wrap:
 	cpw_da	0x00F2F1, 0x0000
 	jr	z, MAIN__timer_expired
@@ -892,15 +892,15 @@ MAIN__timer_expired:
 	cpib_da	0x007ECC, 0x00
 	jr	z, MAIN__reenable
 	ei	0
-	stib_da	0x007ECC, 0x00
-	stiw_da	0x00F2F1, 0x000A
+	ld	(0x007ECC:24), 0x00
+	ldw	(0x00F2F1:24), 0x000A
 	pushw	0x0002
 	call	0xF98510
 	popw	bc
 MAIN__reenable:
 	ei	0
 MAIN__bit5:
-	ldb_da	c, 0x007ED1
+	ld	c, (0x007ED1:24)
 	and	c, 0x20
 	srl	c, 5
 	cps	c, 0
@@ -908,7 +908,7 @@ MAIN__bit5:
 	resda_24 5, 0x007ED1
 	calr	(0xF98A75 - 0xF98C8A)
 MAIN__bit3:
-	ldb_da	c, 0x007ED1
+	ld	c, (0x007ED1:24)
 	and	c, 0x08
 	srl	c, 3
 	cps	c, 0

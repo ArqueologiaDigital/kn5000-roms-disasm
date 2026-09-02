@@ -7,11 +7,11 @@
 ; =============================================================================
 
 Rhythm_CompareAndTrigger:
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jrl z, Rhythm_SaveNoteState
-	bitda 6, (0x28ac)
+	bit 6, (0x28ac:16)
 	jr z, .Lc_f54842
-	bitda 2, (0x0421)
+	bit 2, (0x0421:16)
 	jr z, .Lc_f54842
 	ld a, (0x31e3:16)
 	cp A,0x12
@@ -21,7 +21,7 @@ Rhythm_CompareAndTrigger:
 	jrl t, Rhythm_SaveNoteState
 Rhythm_CompareAndTriggerNotes:
 .Lc_f54842:
-	bitda 1, (0x323b)
+	bit 1, (0x323b:16)
 	jr nz, Rhythm_CompareNoteA_Only
 	ld a, (0x323c:16)
 	ld w, (0x323d:16)
@@ -137,9 +137,9 @@ Rhythm_SetupChannel_D7:
 	ld (0x322f:16), a
 	ld a, (0x322b:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xfb
-	ordi8 (0x3258), 0x08
-	stdi8 (0x3338), 0x04
+	and (0x3258:16), 0xfb
+	or (0x3258:16), 0x08
+	ld (0x3338:16), 0x04
 	calr RhythmEvt_ProcessNote
 	ret
 Rhythm_SetupChannel_D4:
@@ -148,9 +148,9 @@ Rhythm_SetupChannel_D4:
 	ld (0x322f:16), a
 	ld a, (0x322c:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf7
-	ordi8 (0x3258), 0x04
-	stdi8 (0x3338), 0x08
+	and (0x3258:16), 0xf7
+	or (0x3258:16), 0x04
+	ld (0x3338:16), 0x08
 	calr RhythmEvt_ProcessNote
 	ret
 Rhythm_SetupChannel_D5:
@@ -159,8 +159,8 @@ Rhythm_SetupChannel_D5:
 	ld (0x322f:16), a
 	ld a, (0x322d:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf3
-	stdi8 (0x3338), 0x10
+	and (0x3258:16), 0xf3
+	ld (0x3338:16), 0x10
 	calr RhythmEvt_ProcessNote
 	ret
 Rhythm_SetupChannel_D6:
@@ -169,12 +169,12 @@ Rhythm_SetupChannel_D6:
 	ld (0x322f:16), a
 	ld a, (0x322e:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf3
-	stdi8 (0x3338), 0x20
+	and (0x3258:16), 0xf3
+	ld (0x3338:16), 0x20
 	calr RhythmEvt_ProcessNote
 	ret
 RhythmEvt_ProcessNote:
-	cpdi8 (0x3249), 0xf0
+	cp (0x3249:16), 0xf0
 	jr c, RhythmEvt_AlternateProcess
 	ld a, (0x327a:16)
 	orda8 a, (0x327b)
@@ -210,7 +210,7 @@ RhythmEvt_NoteOnLoop:
 	cp (XHL+0x04),IY
 	jrl z, RhythmEvt_IterDone
 	ldb_dri a, 0x07, 0xec, 0xf4
-	stda16 (0x33c1), iy
+	ld (0x33c1:16), iy
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
 	pushw iy
@@ -269,9 +269,9 @@ RhythmEvt_FullLoop:
 	call RingBuf_AdvanceIndex
 	ldb_dri a, 0x07, 0xec, 0xf4
 	calr Rhythm_CheckVelocityThreshold
-	bitda 4, (0x3258)
+	bit 4, (0x3258:16)
 	jr nz, RhythmEvt_Full90_PostTransp
-	bitda 3, (0x3258)
+	bit 3, (0x3258:16)
 	jr z, RhythmEvt_Full90_PostRange
 	calr Rhythm_CrossVoiceCorrect
 RhythmEvt_Full90_PostRange:
@@ -329,10 +329,10 @@ RhythmEvt_FullDone:
 	ret
 
 Rhythm_CheckVelocityThreshold:
-	anddi8 (0x3258), 0xef
+	and (0x3258:16), 0xef
 	cp A,0x78
 	jr c, Rhythm_VelThreshReturn
-	ordi8 (0x3258), 0x10
+	or (0x3258:16), 0x10
 Rhythm_VelThreshReturn:
 	ret
 
@@ -362,16 +362,16 @@ Rhythm_AdvanceDone:
 	ret
 
 Rhythm_CrossVoiceCorrect:
-	bitda 0, (0x323b)
+	bit 0, (0x323b:16)
 	jr nz, .Lc_f54bfa
-	bitda 1, (0x323b)
+	bit 1, (0x323b:16)
 	jr nz, .Lc_f54bfa
 	ld w, (0x327a:16)
 	orda8 w, (0x327b)
 	orda8 w, (0x327c)
 	and W,0x3f
 	jr nz, .Lc_f54c26
-	bitda 5, (0x3257)
+	bit 5, (0x3257:16)
 	jr z, .Lc_f54c26
 Rhythm_CrossVoice_Apply:
 .Lc_f54bfa:
@@ -381,23 +381,23 @@ Rhythm_CrossVoice_Apply:
 	inc 1,W
 	sub W,0x0c
 	ld (0x3292:16), w
-	ordi8 (0x3291), 0x01
+	or (0x3291:16), 0x01
 	ld XIY,Display_FontPalette_Table_0x12EA
 	ldb_dri w, 0x03, 0xf4, 0xe0
 	sub A,W
 	pop XIY
-	stdi8 (0x3397), 0x00
-	stdi8 (0x3398), 0x00
+	ld (0x3397:16), 0x00
+	ld (0x3398:16), 0x00
 Rhythm_CrossVoice_ClearFlag:
 .Lc_f54c26:
-	anddi8 (0x3257), 0xdf
+	and (0x3257:16), 0xdf
 
 	ret
 
 
 
 Rhythm_NoteRangeCheck:
-	bitda 0, (0x323b)
+	bit 0, (0x323b:16)
 	jr z, Rhythm_NoteRangeReturn
 	push XIY
 	ld W,A
@@ -405,8 +405,8 @@ Rhythm_NoteRangeCheck:
 	ld_rr8b	w, xiy, a
 	sub	a, w
 	pop	xiy
-	stdi8	13207, 0
-	stdi8	13208, 0
+	ld	(13207:16), 0
+	ld	(13208:16), 0
 Rhythm_NoteRangeReturn:
 	ret
 
@@ -418,15 +418,15 @@ Rhythm_VelocityLookup_A:
 	push XHL
 	ld W,A
 	calr Rhythm_InstrBaseLookup
-	cpdi8 (0x323c), 0x00
+	cp (0x323c:16), 0x00
 	jr nz, .Lc_f54c61
 	ldb A, 0x00
 	jr t, Rhythm_VelLookA_Done
 Rhythm_VelLookA_CheckEmpty:
 .Lc_f54c61:
-	bitda 4, (0x3258)
+	bit 4, (0x3258:16)
 	jr z, Rhythm_VelLookA_CheckRange
-	anddi8 (0x3258), 0xef
+	and (0x3258:16), 0xef
 	ld A,W
 	jr t, Rhythm_VelLookA_Done
 Rhythm_VelLookA_CheckRange:
@@ -486,7 +486,7 @@ Rhythm_InstrMapTable_Default:
 
 Rhythm_TransposeNote:
 	ld a, (0x323d:16)
-	bitda 3, (0x3258)
+	bit 3, (0x3258:16)
 	jr z, Rhythm_Transp_CheckZero
 	ld a, (0x323e:16)
 Rhythm_Transp_CheckZero:
@@ -532,15 +532,15 @@ Rhythm_Transp_Done:
 Rhythm_VoiceMapLookup:
 	push XIY
 	push XHL
-	cpdi8 (0x323c), 0x00
+	cp (0x323c:16), 0x00
 	jr nz, .Lc_f54dc7
 	ldb A, 0x00
 	jrl t, Rhythm_VoiceMap_Done
 Rhythm_VoiceMap_CheckInstr:
 .Lc_f54dc7:
-	bitda 4, (0x3258)
+	bit 4, (0x3258:16)
 	jr z, Rhythm_VoiceMap_CheckBit4
-	anddi8 (0x3258), 0xef
+	and (0x3258:16), 0xef
 	jrl t, Rhythm_VoiceMap_Done
 Rhythm_VoiceMap_CheckBit4:
 	ld	l, (12860:16)
@@ -686,15 +686,15 @@ Rhythm_VelocityCompute:
 	push XHL
 	ld W,A
 	calr Rhythm_InstrBaseLookup
-	cpdi8 (0x323c), 0x00
+	cp (0x323c:16), 0x00
 	jr nz, .Lc_f54edf
 	ldb A, 0x00
 	jr t, Rhythm_VelComp_Done
 Rhythm_VelComp_CheckBit4:
 .Lc_f54edf:
-	bitda 4, (0x3258)
+	bit 4, (0x3258:16)
 	jr z, Rhythm_VelComp_ClampInstr
-	anddi8 (0x3258), 0xef
+	and (0x3258:16), 0xef
 	ld A,W
 	jr t, Rhythm_VelComp_Done
 Rhythm_VelComp_ClampInstr:
@@ -747,12 +747,12 @@ Rhythm_DispatchCh_D7:
 	ld (0x322f:16), a
 	ld a, (0x322b:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xfb
-	ordi8 (0x3258), 0x08
+	and (0x3258:16), 0xfb
+	or (0x3258:16), 0x08
 	ldb W, 0x97
 	ld XIX,0x00003058
 Rhythm_DispatchCh_D7_Loop:
-	stdi8	(13112), 4
+	ld	(13112:16), 4
 	calr	173
 	add	xix, 9
 	cp	xix, 12448
@@ -763,12 +763,12 @@ Rhythm_DispatchCh_D4:
 	ld (0x322f:16), a
 	ld a, (0x322c:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf7
-	ordi8 (0x3258), 0x04
+	and (0x3258:16), 0xf7
+	or (0x3258:16), 0x04
 	ldb W, 0x94
 	ld XIX,0x000030a0
 Rhythm_DispatchCh_D4_Loop:
-	stdi8	(13112), 8
+	ld	(13112:16), 8
 	calr	117
 	add	xix, 9
 	cp	xix, 12520
@@ -779,11 +779,11 @@ Rhythm_DispatchCh_D5:
 	ld (0x322f:16), a
 	ld a, (0x322d:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf3
+	and (0x3258:16), 0xf3
 	ldb W, 0x95
 	ld XIX,0x000030e8
 Rhythm_DispatchCh_D5_Loop:
-	stdi8	(13112), 16
+	ld	(13112:16), 16
 	calr	66
 	add	xix, 9
 	cp	xix, 12592
@@ -794,11 +794,11 @@ Rhythm_DispatchCh_D6:
 	ld (0x322f:16), a
 	ld a, (0x322e:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf3
+	and (0x3258:16), 0xf3
 	ldb W, 0x96
 	ld XIX,0x00003130
 Rhythm_DispatchCh_D6_Loop:
-	stdi8	(13112), 32
+	ld	(13112:16), 32
 	calr	15
 	add	xix, 9
 	cp	xix, 12664
@@ -846,7 +846,7 @@ Rhythm_SendByte:
 	ret
 
 Rhythm_ValidateAndSend:
-	cpdi8 (0x3249), 0xf0
+	cp (0x3249:16), 0xf0
 	jr c, Rhythm_Validate_Mismatch
 	ld a, (0x327a:16)
 	orda8 a, (0x327b)
@@ -907,9 +907,9 @@ Rhythm_MismatchedPhrase:
 	pushw wa
 	ld A,(XIX+0x06)
 	calr Rhythm_CheckVelocityThreshold
-	bitda 4, (0x3258)
+	bit 4, (0x3258:16)
 	jr nz, Rhythm_Mismatch90_Output
-	bitda 3, (0x3258)
+	bit 3, (0x3258:16)
 	jr z, Rhythm_Mismatch90_PostRange
 	calr Rhythm_CrossVoiceCorrect
 Rhythm_Mismatch90_PostRange:
@@ -983,7 +983,7 @@ Rhythm_AllNotesOff_Dispatch:
 	ret
 
 Rhythm_AllNotesOff_D7:
-	cpdi8 (0x3293), 0x00
+	cp (0x3293:16), 0x00
 	jr z, Rhythm_AllNotesOff_D7_Skip
 	ldb A, 0xd7
 	ldb W, 0x03
@@ -993,7 +993,7 @@ Rhythm_AllNotesOff_D7_Skip:
 	ret
 
 Rhythm_AllNotesOff_D4:
-	cpdi8 (0x3294), 0x00
+	cp (0x3294:16), 0x00
 	jr z, Rhythm_AllNotesOff_D4_Skip
 	ldb A, 0xd4
 	ldb W, 0x03
@@ -1003,7 +1003,7 @@ Rhythm_AllNotesOff_D4_Skip:
 	ret
 
 Rhythm_AllNotesOff_D5:
-	cpdi8 (0x3295), 0x00
+	cp (0x3295:16), 0x00
 	jr z, Rhythm_AllNotesOff_D5_Skip
 	ldb A, 0xd5
 	ldb W, 0x03
@@ -1013,7 +1013,7 @@ Rhythm_AllNotesOff_D5_Skip:
 	ret
 
 Rhythm_AllNotesOff_D6:
-	cpdi8 (0x3296), 0x00
+	cp (0x3296:16), 0x00
 	jr z, Rhythm_AllNotesOff_D6_Done
 	ldb A, 0xd6
 	ldb W, 0x03
@@ -1030,7 +1030,7 @@ Rhythm_SendVolume_Dispatch:
 	ret
 
 Rhythm_SendVolume_D7:
-	cpdi8 (0x3293), 0x00
+	cp (0x3293:16), 0x00
 	jr z, Rhythm_SendVolume_D7_Skip
 	ldb A, 0xd7
 	ldb W, 0x03
@@ -1040,7 +1040,7 @@ Rhythm_SendVolume_D7_Skip:
 	ret
 
 Rhythm_SendVolume_D4:
-	cpdi8 (0x3294), 0x00
+	cp (0x3294:16), 0x00
 	jr z, Rhythm_SendVolume_D4_Skip
 	ldb A, 0xd4
 	ldb W, 0x03
@@ -1050,7 +1050,7 @@ Rhythm_SendVolume_D4_Skip:
 	ret
 
 Rhythm_SendVolume_D5:
-	cpdi8 (0x3295), 0x00
+	cp (0x3295:16), 0x00
 	jr z, Rhythm_SendVolume_D5_Skip
 	ldb A, 0xd5
 	ldb W, 0x03
@@ -1060,7 +1060,7 @@ Rhythm_SendVolume_D5_Skip:
 	ret
 
 Rhythm_SendVolume_D6:
-	cpdi8 (0x3296), 0x00
+	cp (0x3296:16), 0x00
 	jr z, Rhythm_SendVolume_D6_Done
 	ldb A, 0xd6
 	ldb W, 0x03
@@ -1077,7 +1077,7 @@ Rhythm_NoteOffMax_Dispatch:
 	ret
 
 Rhythm_NoteOffMax_D7:
-	cpdi8 (0x3293), 0x00
+	cp (0x3293:16), 0x00
 	jr z, Rhythm_NoteOffMax_D7_Skip
 	ldb A, 0x90
 	ldb W, 0x7f
@@ -1087,7 +1087,7 @@ Rhythm_NoteOffMax_D7_Skip:
 	ret
 
 Rhythm_NoteOffMax_D4:
-	cpdi8 (0x3294), 0x00
+	cp (0x3294:16), 0x00
 	jr z, Rhythm_NoteOffMax_D4_Skip
 	ldb A, 0x90
 	ldb W, 0x7f
@@ -1097,7 +1097,7 @@ Rhythm_NoteOffMax_D4_Skip:
 	ret
 
 Rhythm_NoteOffMax_D5:
-	cpdi8 (0x3295), 0x00
+	cp (0x3295:16), 0x00
 	jr z, Rhythm_NoteOffMax_D5_Skip
 	ldb A, 0x90
 	ldb W, 0x7f
@@ -1107,7 +1107,7 @@ Rhythm_NoteOffMax_D5_Skip:
 	ret
 
 Rhythm_NoteOffMax_D6:
-	cpdi8 (0x3296), 0x00
+	cp (0x3296:16), 0x00
 	jr z, Rhythm_NoteOffMax_D6_Done
 	ldb A, 0x90
 	ldb W, 0x7f
@@ -1131,7 +1131,7 @@ Rhythm_AdvanceTick:
 	jr c, Rhythm_AdvanceTick_Store
 	xor W,W
 Rhythm_AdvanceTick_Store:
-	stda16	(12871), wa
+	ld	(12871:16), wa
 	ret
 Rhythm_SaveState:
 	ld	a, (12889:16)
@@ -1305,9 +1305,9 @@ Rhythm_VoiceAssign_SaveShadow:
 	calr	1
 	ret
 Rhythm_SeqResetCheck:
-	bitda 2, (0x3433)
+	bit 2, (0x3433:16)
 	jr z, Rhythm_SeqReset_UpdateFlags
-	bitda 4, (0x3433)
+	bit 4, (0x3433:16)
 	jr nz, Rhythm_SeqReset_UpdateFlags
 	ld l, (0x36ff:16)
 	xor H,H
@@ -1332,16 +1332,16 @@ Rhythm_SeqReset_Store:
 Rhythm_SeqResetTable:
 	.incbin "includes/romslices/v7_transplant_Rhythm_SeqResetTable.bin"
 Rhythm_TransposeWithMod:
-	cpdi8 (0x323c), 0x00
+	cp (0x323c:16), 0x00
 	jr z, Rhythm_TranspMod_Return
-	cpdi8 (0x323d), 0x00
+	cp (0x323d:16), 0x00
 	jr z, Rhythm_TranspMod_Return
-	bitda 2, (0x3349)
+	bit 2, (0x3349:16)
 	jr nz, Rhythm_TranspMod_Return
-	bitda 1, (0x3349)
+	bit 1, (0x3349:16)
 	jr z, Rhythm_TranspMod_ApplyBoth
 	calr Rhythm_TranspMod_ModCheck
-	bitda 0, (0x3349)
+	bit 0, (0x3349:16)
 	jr nz, Rhythm_TranspMod_Return
 Rhythm_TranspMod_ApplyBoth:
 	calr Rhythm_TranspMod_BaseApply
@@ -1351,7 +1351,7 @@ Rhythm_TranspMod_Return:
 	ret
 
 Rhythm_TranspMod_ModCheck:
-	anddi8 (0x3349), 0xfe
+	and (0x3349:16), 0xfe
 	ld l, (0x323c:16)
 	cp L,0x30
 	jr c, .Lc_f55706

@@ -217,42 +217,42 @@ Delay3000L_Done:
 
 DELAY_2_TICKS:
 	ld	wa, (1033:16)
-	stda16	(36095), wa
+	ld	(36095:16), wa
 DELAY_2_TICKS__loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
 	.byte 0xd8, 0xda, 0x61, 0xf4, 0x0e
 DELAY_6_TICKS:
 	ld	wa, (1033:16)
-	stda16	(36095), wa
+	ld	(36095:16), wa
 Delay6T_Loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
 	.byte 0xd8, 0xde, 0x61, 0xf4, 0x0e
 DELAY_51_TICKS:
 	ld	wa, (1033:16)
-	stda16	(36095), wa
+	ld	(36095:16), wa
 Delay51T_Loop:
 	.byte 0xd1, 0x09, 0x04, 0x20, 0xd1, 0xff, 0x8c, 0xa0
 	.byte 0xd8, 0xcf, 0x33, 0x00, 0x61, 0xf2, 0x0e
 CPanel_CheckSpecialCombos:
-	cpdi8 (0x8dc2), 0x6c
+	cp (0x8dc2:16), 0x6c
 	jr nz, .Lc_fc39a5
 	lds hl, 3
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_CheckAllInitSetting:
 .Lc_fc39a5:
-	cpdi8 (0x8daf), 0x70
+	cp (0x8daf:16), 0x70
 	jr nz, .Lc_fc39b0
 	lds hl, 2
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_CheckFactoryReset:
 .Lc_fc39b0:
-	cpdi8 (0x8dc4), 0x38
+	cp (0x8dc4:16), 0x38
 	jr nz, .Lc_fc39bb
 	lds hl, 1
 	jr t, CPanel_CheckSpecialCombos_Return
 CPanel_Combo_CheckFlashUpdate:
 .Lc_fc39bb:
-	cpdi8 (0x8db4), 0x0f
+	cp (0x8db4:16), 0x0f
 	jr nz, CPanel_Combo_NormalBoot
 	lds hl, 4
 	jr t, CPanel_CheckSpecialCombos_Return
@@ -264,35 +264,35 @@ CPanel_CheckSpecialCombos_Return:
 
 
 CPanel_PanelDetection:
-	stdi8 (0x8cf7), 0x00
+	ld (0x8cf7:16), 0x00
 	calr CPanel_WaitTXReady
 	ei 0x06
-	stdi16 (0x8d01), 0x0000
-	stdi16 (0x8d03), 0x0000
-	ordi8 (0x8cf6), 0x01
+	ldw (0x8d01:16), 0x0000
+	ldw (0x8d03:16), 0x0000
+	or (0x8cf6:16), 0x01
 	ei 0x00
 	ldb A, 0x20
 	ldb W, 0x00
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpdi16 (0x8d03), 0x0000
+	cpw (0x8d03:16), 0x0000
 	jr z, .Lc_fc39fd
-	ordi8 (0x8cf7), 0x01
+	or (0x8cf7:16), 0x01
 PanelDet_ProbeRight:
 .Lc_fc39fd:
 	calr CPanel_WaitTXReady
 	ei 0x06
-	stdi16 (0x8d01), 0x0000
-	stdi16 (0x8d03), 0x0000
-	ordi8 (0x8cf6), 0x01
+	ldw (0x8d01:16), 0x0000
+	ldw (0x8d03:16), 0x0000
+	or (0x8cf6:16), 0x01
 	ei 0x00
 	ldb A, 0xe0
 	ldb W, 0x00
 	calr CPanel_SendCommand
 	calr DELAY_6_TICKS
-	cpdi16 (0x8d03), 0x0000
+	cpw (0x8d03:16), 0x0000
 	jr z, PanelDet_Return
-	ordi8 (0x8cf7), 0x08
+	or (0x8cf7:16), 0x08
 PanelDet_Return:
 	ld	a, (36087:16)
 	ret
@@ -375,7 +375,7 @@ CPanel_InitButtonState:
 	.byte 0x1e, 0xcb, 0xfd, 0x1e, 0xc8, 0xfd, 0x1e, 0x9a
 	.byte 0x05, 0x0e
 CPanel_WaitTXReady:
-	stdi8	(36091), 200
+	ld	(36091:16), 200
 CPanel_WaitTXReady_Poll:
 	.byte 0x06, 0x06, 0xf0, 0x3c, 0xce, 0x66, 0x13, 0xf0
 	.byte 0x38, 0xcd, 0x6e, 0x0e, 0xf1, 0xf0, 0x8c, 0xc9
@@ -411,13 +411,13 @@ WaitTX_ConfigAndReturn:
 
 CPanel_SendCommand:
 	ei 0x06
-	stdi16 (0x8d61), 0x0000
-	stdi16 (0x8d63), 0x0000
-	stda16 (0x8d65), wa
+	ldw (0x8d61:16), 0x0000
+	ldw (0x8d63:16), 0x0000
+	ld (0x8d65:16), wa
 	adddi16 (0x8d63), 0x0002
-	ordi8 (0x8cf0), 0x02
-	anddi8 (0x8cf0), 0xfe
-	stdi8 (0x8cee), 0x04
+	or (0x8cf0:16), 0x02
+	and (0x8cf0:16), 0xfe
+	ld (0x8cee:16), 0x04
 	.byte 0x08, 0xd7, 0x28, 0xc1, 0xf3, 0x8c, 0x3c, 0xbf
 	.byte 0xc1, 0xf3, 0x8c, 0x21, 0xf0, 0x3f, 0x41, 0xc0
 	.byte 0x3c, 0x3c, 0xbf, 0xc1, 0xf2, 0x8c, 0x3e, 0x40
@@ -545,7 +545,7 @@ CPanel_SM_SendByte1:
 	.byte 0x61, 0x8d, 0x3f, 0x3c, 0x00, 0x67, 0x06, 0xf1
 	.byte 0x61, 0x8d, 0x02, 0x00, 0x00
 SendByte1_InspectByte:
-	stdi8	(36079), 2
+	ld	(36079:16), 2
 	ld	a, (xiy)
 	and	a, 63
 	cp	a, 48
@@ -636,7 +636,7 @@ RXByte1_AdvanceWritePtr:
 	.byte 0x61, 0xd1, 0x03, 0x8d, 0x3f, 0x5c, 0x00, 0x67
 	.byte 0x06, 0xf1, 0x03, 0x8d, 0x02, 0x00, 0x00
 RXByte1_InspectByte:
-	stdi8	(36079), 2
+	ld	(36079:16), 2
 	and	a, 63
 	cp	a, 48
 	jr	c, 10
@@ -715,7 +715,7 @@ CPanel_SM_Idle:
 
 CPanel_InterruptPoll_MainLoop:
 	incdi8 1, 0x8cfe
-	cpdi8 (0x8cfe), 0x2a
+	cp (0x8cfe:16), 0x2a
 	jr ule, PollLoop_DispatchWork
 	ei 0x06
 	ld wa, (0x8d63:16)
@@ -728,7 +728,7 @@ PollLoop_TXForwardDist:
 PollLoop_TXCheckThreshold:
 	cps	hl, 3
 	jr	c, 38	; -> 0xFC4090
-	stdi8	(36094), 0
+	ld	(36094:16), 0
 	ldb	w, 224
 	ldb	a, 19
 	ld	iy, (36195:16)
@@ -737,7 +737,7 @@ PollLoop_TXCheckThreshold:
 	calr	964
 	st_rrb	a, xde, iy
 	calr	956
-	stda16	(36195), iy
+	ld	(36195:16), iy
 PollLoop_DispatchWork:
 	.byte 0x06, 0x00, 0xc1, 0xf0, 0x8c, 0x21, 0xc9, 0xcc
 	.byte 0xc0, 0xc9, 0xd8, 0x66, 0x0f, 0xc1, 0xf0, 0x8c
@@ -775,10 +775,10 @@ PollLoop_BusyRetry:
 	.byte 0x12, 0x08, 0xe3, 0x05, 0xc1, 0xf6, 0x8c, 0x3e
 	.byte 0x80, 0x68, 0xda
 CPanel_RX_ProcessWithFlag:
-	ordi8 (0x8cf0), 0x04
+	or (0x8cf0:16), 0x04
 	jr t, CPanel_RX_DispatchLoop
 CPanel_RX_Process:
-	anddi8 (0x8cf0), 0xfb
+	and (0x8cf0:16), 0xfb
 
 
 
@@ -858,7 +858,7 @@ CPanel_RX_EncoderPacket:
 	cp	hl, 65535
 	jr	nz, 9	; -> 0xFC4249
 	calr	539
-	stda16	(36097), iy
+	ld	(36097:16), iy
 	jr	31	; -> 0xFC4268
 EncPkt_WriteEvent:
 	.byte 0xf3, 0x07, 0xf8, 0xf0, 0x47, 0x1e, 0x02, 0x02
@@ -930,7 +930,7 @@ MBytePkt_LoopBody:
 	jr t, MBytePkt_EncNoEvent
 MBytePkt_EncNoEvent:
 	calr	367
-	stda16	(36097), iy
+	ld	(36097:16), iy
 	jrl	67
 MBytePkt_EncWriteResult:
 	ld	a, (36090:16)
@@ -955,7 +955,7 @@ MBytePkt_CommitAndContinue:
 	decm 1, (xiz - 2)
 
 MBytePkt_CommitRXPtr:
-	stda16	(36097), iy
+	ld	(36097:16), iy
 MBytePkt_LoopTail:
 	inc 1, w
 	dec 1, b
@@ -1082,7 +1082,7 @@ CPanel_LED_HandlePacketN__loop:
 	calr	31
 	ld	(xiz-8), ix
 	incw	1, (xiz-2)
-	stda16	36195, iy
+	ld	(36195:16), iy
 	dec	1, b
 	cps	b, 0
 	jr	nz, -32

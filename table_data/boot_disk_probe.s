@@ -64,68 +64,68 @@ FDC_ProbeDiskFormat:
 	ret	nz			; no disk -> abort probe
 	ldb	a, 0
 	; --- request 1: recalibrate (cmd 0) ---
-	stdi16	(0x0d52), 0		; +0x00 cmd = 0 (recalibrate)
-	stdi16	(0x0d54), 0		; +0x02 = 0
-	stdi16	(0x0d56), 0		; +0x04 head = 0
+	ldw	(0x0d52:16), 0		; +0x00 cmd = 0 (recalibrate)
+	ldw	(0x0d54:16), 0		; +0x02 = 0
+	ldw	(0x0d56:16), 0		; +0x04 head = 0
 	cps	a, 0			; A is 0 -> always EQ (0x00d3 arm is dead)
 	jr	nz, FDC_ProbeDiskFormat__recal_alt
-	stdi16	(0x0d58), 0xe0		; +0x06 track/format field = 0x00e0
+	ldw	(0x0d58:16), 0xe0		; +0x06 track/format field = 0x00e0
 	jr	FDC_ProbeDiskFormat__recal_done
 FDC_ProbeDiskFormat__recal_alt:
-	stdi16	(0x0d58), 0xd3		; dead code: alternate format field
+	ldw	(0x0d58:16), 0xd3		; dead code: alternate format field
 FDC_ProbeDiskFormat__recal_done:
-	stdi16	(0x0d5a), 0		; +0x08 sector = 0
-	stdi16	(0x0d5c), 0		; +0x0a count = 0
+	ldw	(0x0d5a:16), 0		; +0x08 sector = 0
+	ldw	(0x0d5c:16), 0		; +0x0a count = 0
 	lds32	xwa, 0
-	stda32	(0x0d5e), xwa		; +0x0c buffer = NULL
+	ld	(0x0d5e:16), xwa		; +0x0c buffer = NULL
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
 	; --- request 2: read track 0, sector 1, count 1 ---
-	stdi16	(0x0d52), 3		; cmd = 3 (read sectors)
-	stdi16	(0x0d54), 0
-	stdi16	(0x0d56), 0
-	stdi16	(0x0d58), 0		; track 0
-	stdi16	(0x0d5a), 1		; sector 1
-	stdi16	(0x0d5c), 1		; count 1
+	ldw	(0x0d52:16), 3		; cmd = 3 (read sectors)
+	ldw	(0x0d54:16), 0
+	ldw	(0x0d56:16), 0
+	ldw	(0x0d58:16), 0		; track 0
+	ldw	(0x0d5a:16), 1		; sector 1
+	ldw	(0x0d5c:16), 1		; count 1
 	lda	xwa, (0x0d62:16)
-	stda32	(0x0d5e), xwa		; buffer = 0x0d62
+	ld	(0x0d5e:16), xwa		; buffer = 0x0d62
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
 	; --- request 3: read track 78 ---
-	stdi16	(0x0d52), 3
-	stdi16	(0x0d54), 0
-	stdi16	(0x0d56), 0
-	stdi16	(0x0d58), 78
-	stdi16	(0x0d5a), 1
-	stdi16	(0x0d5c), 1
+	ldw	(0x0d52:16), 3
+	ldw	(0x0d54:16), 0
+	ldw	(0x0d56:16), 0
+	ldw	(0x0d58:16), 78
+	ldw	(0x0d5a:16), 1
+	ldw	(0x0d5c:16), 1
 	lda	xwa, (0x0d62:16)
-	stda32	(0x0d5e), xwa
+	ld	(0x0d5e:16), xwa
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
 	; --- request 4: read track 10 ---
-	stdi16	(0x0d52), 3
-	stdi16	(0x0d54), 0
-	stdi16	(0x0d56), 0
-	stdi16	(0x0d58), 10
-	stdi16	(0x0d5a), 1
-	stdi16	(0x0d5c), 1
+	ldw	(0x0d52:16), 3
+	ldw	(0x0d54:16), 0
+	ldw	(0x0d56:16), 0
+	ldw	(0x0d58:16), 10
+	ldw	(0x0d5a:16), 1
+	ldw	(0x0d5c:16), 1
 	lda	xwa, (0x0d62:16)
-	stda32	(0x0d5e), xwa
+	ld	(0x0d5e:16), xwa
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request
 	; --- request 5: read track 40 ---
-	stdi16	(0x0d52), 3
-	stdi16	(0x0d54), 0
-	stdi16	(0x0d56), 0
-	stdi16	(0x0d58), 40
-	stdi16	(0x0d5a), 1
-	stdi16	(0x0d5c), 1
+	ldw	(0x0d52:16), 3
+	ldw	(0x0d54:16), 0
+	ldw	(0x0d56:16), 0
+	ldw	(0x0d58:16), 40
+	ldw	(0x0d5a:16), 1
+	ldw	(0x0d5c:16), 1
 	lda	xwa, (0x0d62:16)
-	stda32	(0x0d5e), xwa
+	ld	(0x0d5e:16), xwa
 	lda	xwa, (0x0d52:16)
 	push	xwa
 	calr	FDC_Request

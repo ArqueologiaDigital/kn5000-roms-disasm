@@ -324,11 +324,11 @@ MidiPkt_BuildZeroData:
 
 MidiPkt_ProcessEventQueue:
 	push xiz
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiPkt_ProcessEventQueue_Done
-	bitda 3, (0xfd56)
+	bit 3, (0xfd56:16)
 	jr z, MidiPkt_ProcessEventQueue_Done
-	bitda 0, (0xb7e7)
+	bit 0, (0xb7e7:16)
 	jr nz, MidiPkt_ProcessEventQueue_Done
 	lda xbc, (0xbd3c:16)
 	ld wa, (0x90e0:16)
@@ -340,7 +340,7 @@ MidiPkt_ProcessEventQueue_Loop:
 	push xiz
 	call SeqVoice_StoreEntry
 	inc 4, xsp
-	stda32 0xbd22, xhl
+	ld (0xbd22:16), xhl
 	lda xwa, (0xbd22:16)
 	cp (xwa), 0xff
 	jr z, MidiPkt_ProcessEventQueue_Done
@@ -1185,22 +1185,22 @@ MidiPkt_DispatchViaTable_4DCE:
 	ret
 
 MidiPkt_DispatchData_Chan4:
-	stdi8	(0xbcfc), 4
+	ld	(0xbcfc:16), 4
 	jr	57
 MidiPkt_DispatchData_Chan3:
-	stdi8	(0xbcfc), 3
+	ld	(0xbcfc:16), 3
 	jr	50
 MidiPkt_DispatchData_Chan1:
-	stdi8	(0xbcfc), 1
+	ld	(0xbcfc:16), 1
 	jr	43
 MidiPkt_DispatchData_Chan2:
-	stdi8	(0xbcfc), 2
+	ld	(0xbcfc:16), 2
 	jr	36
 MidiPkt_DispatchData_Chan5:
-	stdi8	(0xbcfc), 5
+	ld	(0xbcfc:16), 5
 	jr	29
 MidiPkt_DispatchData_Chan6:
-	stdi8	(0xbcfc), 6
+	ld	(0xbcfc:16), 6
 	jr	t, 0x16
 	push	xde
 	push	xhl
@@ -1217,7 +1217,7 @@ MidiPkt_DispatchData_Chan6:
 	ld	a, (0x8d36:16)
 	cp	a, 87
 	jr	z, 11
-	cpdi8	(0x8d34), 1
+	cp	(0x8d34:16), 1
 	jr	nz, 6
 	cps	a, 1
 	jr	nz, 2

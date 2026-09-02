@@ -59,7 +59,7 @@ EffectMode_CopyVoiceParams_Done:
 
 
 EffectMode_ByteData_Block1:
-	stdi16	(0x8d58), 0xffff
+	ldw	(0x8d58:16), 0xffff
 	jrl	648
 EffectMode_ByteData_Block2:
 	.byte 0xc1
@@ -122,7 +122,7 @@ EffectMode_ByteData_Block2:
 	call	ApPostEvent
 	ldw	wa, 18
 	call	UI_PostPartChangeEvent
-	stdi8	(0x8d4e), 15
+	ld	(0x8d4e:16), 15
 	ret
 	.byte 0xc1
 	popw	iz
@@ -136,7 +136,7 @@ EffectMode_ByteData_Block2:
 	call	ApPostEvent
 	ldw	wa, 193
 	call	UI_PostModeChangeEvent
-	stdi8	(0x8d4e), 0
+	ld	(0x8d4e:16), 0
 	ret
 EffectMode_ByteData_Block3:
 	ld	a, (0xc07d:16)
@@ -235,7 +235,7 @@ EffectMode_ByteData_Block4:
 
 EffectMode_ApplyTranspose:
 	calr EffectMode_ProcessPresetChange
-	cpdi8 (0x8d36), 192
+	cp (0x8d36:16), 192
 	jr nz, EffectMode_ApplyTranspose_StoreTimer
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009a
@@ -245,7 +245,7 @@ EffectMode_ApplyTranspose:
 	call UI_PostPartChangeEvent
 
 EffectMode_ApplyTranspose_StoreTimer:
-	stdi8 (0x8d4e), 0
+	ld (0x8d4e:16), 0
 	jr EffectMode_CheckTransposeAndLookup
 
 EffectMode_CheckTransposeAndLookup:
@@ -254,7 +254,7 @@ EffectMode_CheckTransposeAndLookup:
 	bit 7, hl
 	ret nz
 	calr SndParam_LoadTransposeValues
-	stda16 (0x8d58), xhl
+	ld (0x8d58:16), hl
 	ret
 
 SndParam_LoadTransposeValues:
@@ -293,7 +293,7 @@ EffectMode_TimerCountdown:
 	ld (0x8d4e:16), a
 	cps a, 0
 	ret nz
-	cpdi16 0x8d56, 0
+	cpw (0x8d56:16), 0
 	jr z, EffectMode_TimerCountdown_CheckMode
 	push xde
 	push xhl
@@ -330,12 +330,12 @@ EffectMode_CheckTransposeChanged:
 	calr SndParam_LoadTransposeValues
 	cpda16 xhl, 0x8d58
 	ret z
-	stda16 (0x8d58), xhl
+	ld (0x8d58:16), hl
 	jrl BitMapOut_ApplyPatch_SkipHeader
 
 EffectMode_TransposeInvalid:
-	stdi16 (0x8d58), 0xffff
-	stdi16 (0x8d56), 0
+	ldw (0x8d58:16), 0xffff
+	ldw (0x8d56:16), 0
 	ret
 
 EffectMode_ProcessPresetChange:
@@ -349,13 +349,13 @@ EffectMode_ProcessPresetChange:
 	jr EffectMode_ProcessPresetChange_Apply
 
 EffectMode_ProcessPresetChange_CheckBit7:
-	bitda 7, (0xb7e2)
+	bit 7, (0xb7e2:16)
 	jr nz, EffectMode_ProcessPresetChange_Done
 
 EffectMode_ProcessPresetChange_Apply:
 	calr EffectMode_ClampAndLookupPreset
 	ld xwa, xhl
-	stda32 0x8d60, xwa
+	ld (0x8d60:16), xwa
 	calr EffectMode_UpdateDisplay
 	lda xwa, (0xfc5a:16)
 	ld (xsp + 4), xwa
@@ -742,7 +742,7 @@ EffectMode_CopyHoldPedalBits:
 	ret z
 	cp e, 0xc5
 	ret z
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	ret z
 	ld l, (xwa + 8)
 	and l, 0xff
@@ -795,7 +795,7 @@ EffectMode_SetRegion_Apply:
 	jr nz, EffectMode_PopIzRet
 
 EffectMode_CheckPedalType:
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr nz, EffectMode_PopIzRet
 	ld wa, (0x8d56:16)
 	bit 0, wa
@@ -841,7 +841,7 @@ EffectMode_Nop:
 
 EffectMode_CopyPresetBits:
 	ld xde, xbc
-	bitda 7, (0xb7e2)
+	bit 7, (0xb7e2:16)
 	ret z
 	ld c, (xwa)
 	ld (xde), c
@@ -880,7 +880,7 @@ EffectMode_ReinitSoundOutput:
 	call BitMapOut_SnapshotFromROM
 	calr EffectMode_DisplayPresetName
 	resda 4, 0x8d52
-	cpdi8 (0x8d50), 1
+	cp (0x8d50:16), 1
 	jr z, EffectMode_ReinitSound_NotifyBank1
 	ld xwa, 0x302
 	lds bc, 0
@@ -942,7 +942,7 @@ SndOutput_ReinitByMode_TypeB:
 	ld iz, (0x8d58:16)
 	ld wa, (0x8d56:16)
 	ldw_erp WA, 0xfa
-	stdi16 (0x8d58), 0xffff
+	ldw (0x8d58:16), 0xffff
 	calr EffectMode_CheckTransposeChanged
 	ld bc, (0x8d56:16)
 	cps bc, 0
@@ -951,14 +951,14 @@ SndOutput_ReinitByMode_TypeB:
 	ld a, (0x8d54:16)
 	extz wa
 	add bc, wa
-	stda16 (0x8d56), xbc
+	ld (0x8d56:16), bc
 	calr EffectMode_ProcessPresetChange
 	call SwbtWr_ReinitOutputBank
 
 SndOutput_ReinitByMode_Restore:
 	stw_erp WA, 0xfa
-	stda16 (0x8d56), xwa
-	stda16 (0x8d58), xiz
+	ld (0x8d56:16), wa
+	ld (0x8d58:16), iz
 	pop xiz
 	ret
 
@@ -1490,23 +1490,23 @@ LcdTest_Done:
 Test_Video_RAM_IC207:
 	dec 2, xsp
 	ld (xsp), a
-	ldl_da xhl, (WidgetStyleDataTable)
+	ld xhl, (WidgetStyleDataTable:24)
 	call (xhl)
-	stiw_da (0x1a0000), 0x5a5a; VRAM self-test pattern 1
+	ldw (0x1a0000:24), 0x5a5a; VRAM self-test pattern 1
 	calr DramTest_Loop
 	cpw_da (0x1a0000), 0x5a5a
 	jr z, VramTest_Pattern2
 	setm 3, (xsp)
 
 VramTest_Pattern2:
-	stiw_da (0x1a0004), 0xa5a5; VRAM self-test pattern 2
+	ldw (0x1a0004:24), 0xa5a5; VRAM self-test pattern 2
 	calr DramTest_Loop
 	cpw_da (0x1a0004), 0xa5a5
 	jr z, VramTest_Pattern3
 	setm 3, (xsp)
 
 VramTest_Pattern3:
-	stiw_da (0x1a0008), 0x5a5a
+	ldw (0x1a0008:24), 0x5a5a
 	calr DramTest_Loop
 	cpw_da (0x1a0008), 0x5a5a
 	jr z, VramTest_Done
@@ -1526,7 +1526,7 @@ SelfTest_FirmwareVersionCheck:
 	ldw wa, 0xfb
 	call UI_PostModeChangeEvent
 	call SubCPU_PayloadErrorStore
-	stdi8 (0x8d82), 2
+	ld (0x8d82:16), 2
 	jrl EffectMode_PopRetFA
 
 SelfTest_InterCPU_Send:
@@ -1545,7 +1545,7 @@ SelfTest_WaitBitLoop_Copy:
 	jr z, SelfTest_WaitDone_CountBits
 
 SelfTest_WaitBitLoop_Check:
-	bitda 7, (1568)
+	bit 7, (1568:16)
 	jr nz, SelfTest_WaitBitLoop_Copy
 
 SelfTest_WaitDone_CountBits:
@@ -1715,7 +1715,7 @@ SelfTest_PopCount_ShiftNext:
 	ret
 
 EffectMode_CheckAndDispatch:
-	cpdi8 (0x8d36), 251
+	cp (0x8d36:16), 251
 	jr nz, EffectMode_DispatchUpdate
 	ld a, (0x8d82:16)
 	cps a, 2
@@ -1730,7 +1730,7 @@ EffectMode_CheckAndDispatch:
 	ld a, (0x8d82:16)
 	cps a, 1
 	jr z, EffectMode_DispatchUpdate
-	stdi8 (0x8d82), 1
+	ld (0x8d82:16), 1
 	calr EffectMode_InitSwbWr_DiagMode
 	calr EffectMode_SetAllLEDs
 	jr EffectMode_DispatchUpdate
@@ -1743,23 +1743,23 @@ EffectMode_CheckAndDispatch_Bit4Clear:
 	ld a, (0x8d82:16)
 	cps a, 0
 	jr z, EffectMode_DispatchUpdate
-	stdi8 (0x8d82), 0
+	ld (0x8d82:16), 0
 	calr EffectMode_RestoreSwbWr_NormalMode
 	calr LED_SetAll_WithBlank
-	stdi8 (0xe3de), 16
+	ld (0xe3de:16), 16
 	jr EffectMode_DispatchUpdate
 
 EffectMode_ResetDiagMode:
-	stdi8 (0x8d82), 0
+	ld (0x8d82:16), 0
 	calr LED_SetAll_WithBlank
 	calr EffectMode_RestoreSwbWr_NormalMode
 
 EffectMode_DispatchUpdate:
-	cpdi8 (0x8d36), 248
+	cp (0x8d36:16), 248
 	call_24 z, EffectMode_HandleTimerEvents
-	cpdi8 (0x8d36), 247
+	cp (0x8d36:16), 247
 	call_24 z, EffectMode_ModeChangeTransition
-	cpdi8 (0x8d36), 251
+	cp (0x8d36:16), 251
 	ret nz
 	calr EffectMode_RunDiagSequence
 	ret
@@ -1793,7 +1793,7 @@ EffectMode_RestoreSwbWr_NormalMode:
 	lda xwa, (0xf9b6:16)
 	stib_dsp 0xe0, 0x40
 	andmi8 (xwa), 0x80
-	anddi8 (0xfdb6), 240
+	and (0xfdb6:16), 240
 	ld e, (xwa)
 	extz de
 	pushw 0x7f
@@ -1888,7 +1888,7 @@ EffectMode_TimerEvent_Step96:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	stdi8 (0x8d7a), 220
+	ld (0x8d7a:16), 220
 	ret
 
 EffectMode_TimerEvent_Default:
@@ -1949,7 +1949,7 @@ EffectMode_DiagSeq_AnimFrame:
 	ld a, (0x8d7a:16)
 	cps a, 5
 	jr nz, EffectMode_DiagSeq_IncFrame
-	stdi8 (0x8d7a), 1
+	ld (0x8d7a:16), 1
 	jr EffectMode_DiagSeq_SetDelay
 
 EffectMode_DiagSeq_IncFrame:
@@ -1957,7 +1957,7 @@ EffectMode_DiagSeq_IncFrame:
 	ld (0x8d7a:16), a
 
 EffectMode_DiagSeq_SetDelay:
-	stdi8 (0x8d78), 30
+	ld (0x8d78:16), 30
 	ret
 
 EffectMode_DiagSeq_DecrementDelay:
@@ -2019,7 +2019,7 @@ EffectMode_ByteData_DiagEvents:
 	ret
 
 Voice_EmitNoteWithVelocity:
-	cpdi8 (0x8d36), 246
+	cp (0x8d36:16), 246
 	ret nz
 	ld (0x8d84:16), a
 	ld (0x8d86:16), c
@@ -2435,7 +2435,7 @@ SysIniNoFunc:
 	ret
 
 SysIniYesFunc:
-	ldl_da xde, (0x0340de)
+	ld xde, (0x0340de:24)
 	ld xwa, 0x142000a
 	ld xbc, 0x1e20013
 	call MainFuncCall
@@ -2652,7 +2652,7 @@ MasterSetup_HandleDialTurn:
 	jr MasterSetup_DialTurn_UpdateView
 
 MasterSetup_DialTurn_Underflow:
-	ldl_da xwa, (StyleSong_MasterTable_0x176A)
+	ld xwa, (StyleSong_MasterTable_0x176A:24)
 	push xwa
 	lda xwa, (xsp + 16)
 	push xwa
@@ -2762,7 +2762,7 @@ MasterSetup_DialTurn_ScrollUp:
 	jr MasterSetup_ScrollUp_UpdateView
 
 MasterSetup_ScrollUp_Overflow:
-	ldl_da xwa, (StyleSong_MasterTable)
+	ld xwa, (StyleSong_MasterTable:24)
 	push xwa
 	push xbc
 	call Strcpy
@@ -3617,7 +3617,7 @@ MstStyle_EventDispatch:
 	muls wa, 0xa
 	sub wa, 0xa
 	add wa, iy
-	stw_da (0x0340c4), xwa
+	ld (0x0340c4:24), wa
 	jrl SeqFileAlt_ReturnZeroJmp
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
@@ -3649,7 +3649,7 @@ MstStyle_EventDispatch:
 	ld wa, (xwa)
 	muls wa, 0xa
 	dec 1, wa
-	stw_da (0x0340c4), xwa
+	ld (0x0340c4:24), wa
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -3739,7 +3739,7 @@ MstStyle_FallbackEvent:
 	ld wa, (xwa)
 	muls wa, 0xa
 	sub wa, 0xa
-	stw_da (0x0340c4), xwa
+	ld (0x0340c4:24), wa
 	ld xwa, (xsp + 16)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -4118,7 +4118,7 @@ MstStyle1_EventDispatch:
 	ld xwa, (xsp + 58)
 	or xwa, xwa
 	jrl nz, SeqFile_ReturnZeroJmp
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	sll xwa, 3
 	lda xbc, (StyleGroup_LatinDance_Table:24)
@@ -4144,13 +4144,13 @@ MstStyle1Sub_CountEntries_Done:
 	dec 1, c
 
 MstStyle1Sub_CountEntries_Adjust:
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	ld xde, 0x340c8
 	add xde, xwa
 	ld a, (xde)
 	extz wa
-	stw_da (0x0340c6), xwa
+	ld (0x0340c6:24), wa
 	ld xhl, (xsp + 8)
 	ld xde, (xhl + 74)
 	ld a, c
@@ -4164,7 +4164,7 @@ MstStyle1Sub_CountEntries_Adjust:
 	ld (xde), bc
 	ld xwa, xhl
 	ld xbc, (xwa + 82)
-	ldw_da xwa, (0x0340c6)
+	ld wa, (0x0340c6:24)
 	extz xwa
 	div wa, 0xa
 	inc 1, wa
@@ -4178,7 +4178,7 @@ MstStyle1Sub_HandleScroll:
 	call InheritedProc
 	ld xwa, (xsp + 66)
 	call GetViewInstance
-	ldw_da xwa, (0x0340c6)
+	ld wa, (0x0340c6:24)
 	extz xwa
 	div wa, 0xa
 	stw_erp DE, 0xe2
@@ -4196,7 +4196,7 @@ MstStyle1Sub_HandleSubSelect:
 	call InheritedProc
 	ld xwa, (xsp + 66)
 	call GetViewInstance
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	sll xwa, 3
 	lda xbc, (StyleGroup_LatinDance_Table:24)
@@ -4222,13 +4222,13 @@ MstStyle1Sub_SubSel_CountDone:
 	dec 1, c
 
 MstStyle1Sub_SubSel_Adjust:
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	ld xde, 0x340c8
 	add xde, xwa
 	ld a, (xde)
 	extz wa
-	stw_da (0x0340c6), xwa
+	ld (0x0340c6:24), wa
 	ld xde, (xhl + 74)
 	ld a, c
 	extz wa
@@ -4240,7 +4240,7 @@ MstStyle1Sub_SubSel_Adjust:
 	extz bc
 	ld (xde), bc
 	ld xbc, (xhl + 82)
-	ldw_da xwa, (0x0340c6)
+	ld wa, (0x0340c6:24)
 	extz xwa
 	div wa, 0xa
 	inc 1, wa
@@ -4280,8 +4280,8 @@ MstStyle1Sub_SubSel_Adjust:
 	ld wa, (xwa)
 	muls wa, 0xa
 	dec 1, wa
-	stw_da (0x0340c6), xwa
-	ldw_da xde, (0x0340c4)
+	ld (0x0340c6:24), wa
+	ld de, (0x0340c4:24)
 	extz xde
 	add xbc, xde
 	ld (xbc), a
@@ -4299,10 +4299,10 @@ MstStyle1Sub_SubSel_Adjust:
 	jr MstStyle1Sub_DialDown_SetAutoInc
 
 MstStyle1Sub_DialDown_Decrement:
-	ldw_da xwa, (0x0340c6)
+	ld wa, (0x0340c6:24)
 	dec 1, wa
-	stw_da (0x0340c6), xwa
-	ldw_da xde, (0x0340c4)
+	ld (0x0340c6:24), wa
+	ld de, (0x0340c4:24)
 	extz xde
 	add xbc, xde
 	ld (xbc), a
@@ -4376,7 +4376,7 @@ MstStyle1Sub_FallbackEvent:
 	ld de, wa
 	extz xde
 	add xde, 0xffff0000
-	ldw_da xbc, (0x0340c6)
+	ld bc, (0x0340c6:24)
 	ld wa, (xiy)
 	cp wa, (xix)
 	jr ge, MstStyle1Sub_DialUp_CheckLimit
@@ -4388,8 +4388,8 @@ MstStyle1Sub_FallbackEvent:
 	ld wa, (xwa)
 	muls wa, 0xa
 	sub wa, 0xa
-	stw_da (0x0340c6), xwa
-	ldw_da xbc, (0x0340c4)
+	ld (0x0340c6:24), wa
+	ld bc, (0x0340c4:24)
 	extz xbc
 	add xix, xbc
 	ld (xix), a
@@ -4408,8 +4408,8 @@ MstStyle1Sub_FallbackEvent:
 
 MstStyle1Sub_DialUp_Increment:
 	inc 1, bc
-	stw_da (0x0340c6), xbc
-	ldw_da xwa, (0x0340c4)
+	ld (0x0340c6:24), bc
+	ld wa, (0x0340c4:24)
 	extz xwa
 	add xix, xwa
 	ld (xix), c
@@ -4431,8 +4431,8 @@ MstStyle1Sub_DialUp_CheckLimit:
 	cp hl, wa
 	jrl ge, SeqFile_ReturnZeroJmp
 	inc 1, bc
-	stw_da (0x0340c6), xbc
-	ldw_da xwa, (0x0340c4)
+	ld (0x0340c6:24), bc
+	ld wa, (0x0340c4:24)
 	extz xwa
 	ld xhl, 0x340c8
 	add xhl, xwa
@@ -4813,7 +4813,7 @@ MstStyle1Page_EventDispatch:
 	jrl z, MstStyle2_HandleSpecialEvent
 	or xwa, xwa
 	jrl nz, SeqData_ReturnZero
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	sll xwa, 3
 	lda xbc, (StyleGroup_LatinDance_Table:24)
@@ -4852,16 +4852,16 @@ MstStyle2_CountEntries_Adjust:
 	ld (xhl), bc
 	ld xhl, (xsp + 4)
 	ld xbc, (xhl + 82)
-	ldw_da xwa, (0x0340c6)
+	ld wa, (0x0340c6:24)
 	srl wa, 1
 	inc 1, wa
 	ld (xbc), wa
 	ld xbc, (xhl + 86)
-	ldw_da xwa, (0x0340c6)
+	ld wa, (0x0340c6:24)
 	ld (xbc), wa
 	ld xwa, (xhl + 90)
 	ldw (xwa), 0x1
-	ldw_da xwa, (0x0340c6)
+	ld wa, (0x0340c6:24)
 	bit 0, wa
 	jrl nz, MstStyle2_InitOdd_Setup
 	extz xwa
@@ -4894,7 +4894,7 @@ MstStyle2_CountSubEntries_AdjA:
 	ld (xhl), bc
 	ld xwa, (xde)
 	ld bc, (xwa)
-	ldw_da xwa, (0x0340c6)
+	ld wa, (0x0340c6:24)
 	cp bc, wa
 	jr ule, MstStyle2_InitDone_PostEvent
 	inc 1, wa
@@ -4967,7 +4967,7 @@ MstStyle2_InitOdd_CountAdjA:
 	ld xde, (xwa + 94)
 	extz bc
 	ld (xde), bc
-	ldw_da xwa, (0x0340c6)
+	ld wa, (0x0340c6:24)
 	extz xwa
 	sll xwa, 3
 	addda32_24 xwa, (0x340d2)
@@ -5067,7 +5067,7 @@ MstStyle2_HandleDialTurn:
 	cps wa, 0
 	jr z, MstStyle2_DialDown_PageDec
 	decm 1, (xix)
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	add xbc, xwa
 	ld xwa, (xde)
@@ -5160,7 +5160,7 @@ MstStyle2_PageDec_CountAdj2:
 MstStyle2_DialDown_UpdateAndPost:
 	ld xwa, (xde)
 	decm 1, (xwa)
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	ld xbc, 0x340c8
 	add xbc, xwa
@@ -5197,7 +5197,7 @@ MstStyle2_DialUp_Scroll:
 	cps wa, 0
 	jr nz, MstStyle2_DialUp_PageInc
 	incw 1, (xiy)
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	add xbc, xwa
 	ld xwa, (xde)
@@ -5251,12 +5251,12 @@ MstStyle2_PageInc_CountAdj:
 	ld (xhl), bc
 	ld xwa, (xix)
 	ld wa, (xwa)
-	stw_da (0x0340bc), xwa
+	ld (0x0340bc:24), wa
 	ld xwa, (xiy)
 	ld wa, (xwa)
 	sla wa, 1
 	dec 2, wa
-	stw_da (0x0340be), xwa
+	ld (0x0340be:24), wa
 	cpdm16_24 (0x340bc), xwa
 	jr le, MstStyle2_DialUp_UpdateAndPost
 	ld xwa, (xiy)
@@ -5295,7 +5295,7 @@ MstStyle2_PageInc_CountAdj2:
 MstStyle2_DialUp_UpdateAndPost:
 	ld xwa, (xde)
 	incw 1, (xwa)
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	ld xbc, 0x340c8
 	add xbc, xwa
@@ -5342,13 +5342,13 @@ MstStyle2_DialUp_UpdateAndPost:
 	lda xde, (xhl + 82)
 	ld xwa, (xde)
 	ld wa, (xwa)
-	stw_da (0x0340bc), xwa
+	ld (0x0340bc:24), wa
 	cps wa, 1
 	jrl le, MstStyle2_DialScroll_SetAutoInc
 	lda xhl, (xhl + 86)
 	ld xwa, (xhl)
 	decm 1, (xwa)
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	add xbc, xwa
 	ld xwa, (xhl)
@@ -5454,7 +5454,7 @@ MstStyle2_DialScrollUp_Middle:
 	lda xde, (xhl + 86)
 	ld xwa, (xde)
 	decm 1, (xwa)
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	add xbc, xwa
 	ld xwa, (xde)
@@ -5553,7 +5553,7 @@ MstStyle2_FallbackEvent:
 	lda xbc, (xiz + 86)
 	ld xwa, (xbc)
 	incw 1, (xwa)
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	ld xde, 0x340c8
 	add xde, xwa
@@ -5580,10 +5580,10 @@ MstStyle2_DialScrollUp_NextPage:
 	lda xix, (xbc + 82)
 	ld xwa, (xix)
 	ld wa, (xwa)
-	stw_da (0x0340bc), xwa
+	ld (0x0340bc:24), wa
 	ld xwa, (xbc + 78)
 	ld wa, (xwa)
-	stw_da (0x0340be), xwa
+	ld (0x0340be:24), wa
 	cpdm16_24 (0x340bc), xwa
 	jrl ge, MstStyle2_DialScroll_AutoInc
 	ld xwa, (xix)
@@ -5661,7 +5661,7 @@ MstStyle2_DialScroll_IncAndPost:
 	lda xbc, (xiz + 86)
 	ld xwa, (xbc)
 	incw 1, (xwa)
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	ld xde, 0x340c8
 	add xde, xwa
@@ -5906,7 +5906,7 @@ MstStyle2_NameB_Render:
 	ld wa, (xbc)
 	add wa, 0x14
 	ld (xde + 6), wa
-	ldw_da xwa, (0x0340c4)
+	ld wa, (0x0340c4:24)
 	extz xwa
 	sll xwa, 3
 	ld xbc, StyleGroup_LatinWorld_PairTable_0x2FA
@@ -6059,7 +6059,7 @@ MstGrid2_CellSelect:
 	add xwa, xbc
 	add xwa, xwa
 	ld (xsp + 16), xwa
-	ldl_da xwa, (0x0340da)
+	ld xwa, (0x0340da:24)
 	add (xsp + 16), xwa
 	ld xwa, (xsp + 8)
 	ld xbc, (xwa + 98)
@@ -8173,7 +8173,7 @@ PmemPageCtl_OK_PageSwitch:
 	cps bc, 1
 	jrl nz, SeqLoad_ReturnZeroJmp2
 	incw 1, (xwa)
-	stib_da (0x0340e2), 0x01
+	ld (0x0340e2:24), 0x01
 	ld xwa, 0x450005
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -8186,7 +8186,7 @@ PmemPageCtl_OK_PageSwitch:
 PmemPageCtl_OK_AdvanceTo2:
 	cpib_da (0x0340e2), 0x01
 	jr nz, PmemPageCtl_OK_ResetTo1
-	stib_da (0x0340e2), 0x02
+	ld (0x0340e2:24), 0x02
 	ld xwa, 0x45000d
 	ld xbc, 0x1c00001
 	lds32 xde, 0
@@ -8213,7 +8213,7 @@ PmemPageCtl_OK_Rotate:
 	cps bc, 1
 	jr nz, SeqLoad_ReturnZeroJmp2
 	ldw (xwa), 0x2
-	stib_da (0x0340e2), 0x02
+	ld (0x0340e2:24), 0x02
 	ld xwa, 0x450005
 	ld xbc, 0x1c00002
 	lds32 xde, 0
@@ -8245,7 +8245,7 @@ PmemPageCtl_OK_RotatePost:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call PostEvent
-	stib_da (0x0340e2), 0x01
+	ld (0x0340e2:24), 0x01
 
 SeqLoad_ReturnZeroJmp2:
 	lds32 xhl, 0
@@ -8546,7 +8546,7 @@ PmExpFilter_DrawCentered:
 	jr nz, PmExpFilter_DecAndUpdate
 	cps hl, 2
 	jr nz, PmExpFilter_DecAndUpdate
-	stib_da (0x0340e2), 0x01
+	ld (0x0340e2:24), 0x01
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -8613,7 +8613,7 @@ PmExpFilter_FallbackForward:
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
-	ldb_da a, (0x0340e2)
+	ld a, (0x0340e2:24)
 	cps a, 2
 	jr nz, PmExpFilter_CheckAdvBank
 	cp hl, 0xa
@@ -8624,7 +8624,7 @@ PmExpFilter_CheckAdvBank:
 	jr nz, PmExpFilter_IncAndUpdate
 	cp hl, 0xa
 	jr nz, PmExpFilter_IncAndUpdate
-	stib_da (0x0340e2), 0x02
+	ld (0x0340e2:24), 0x02
 	ld xwa, xiz
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -8799,7 +8799,7 @@ PmExpFilter_EventDispatch:
 	ld	(xwa+2), de
 	cpw	(xwa), 1
 	jrl	nz, 619
-	ldb_da	c, (0x340e2)
+	ld	c, (0x340e2:24)
 	ld	wa, de
 	sla	wa, 2
 	dec	8, wa
@@ -8845,7 +8845,7 @@ PmExpFilter_EventDispatch:
 	dec	8, wa
 	cpw	(xbc), 1
 	jrl	nz, 488
-	ldb_da	c, (0x340e2)
+	ld	c, (0x340e2:24)
 	cps	c, 2
 	jr	z, 33
 	cps	c, 1
@@ -8869,7 +8869,7 @@ PmExpFilter_EventDispatch:
 	lds	de, 2
 	call	MainLswAdd
 	jrl	413
-	ldb_da	a, (0x340e2)
+	ld	a, (0x340e2:24)
 	cps	a, 2
 	jr	z, 103
 	cps	a, 1
@@ -8971,7 +8971,7 @@ PmExpFilterCheck_CellDecode:
 	sla bc, 2
 	cpw (xhl), 0x1
 	jrl nz, SeqLoad_StoreReturnZero
-	ldb_da l, (0x0340e2)
+	ld l, (0x0340e2:24)
 	dec 8, bc
 	cps l, 2
 	jr z, PmExpFilterCheck_AltDecode
@@ -9130,7 +9130,7 @@ DispTimeSet_SelectInit:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 72
+	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -9781,7 +9781,7 @@ DispTimeSetCheck_CellDecode:
 	jr nz, DispTimeSetCheck_TryRow3
 	cpw (xwa), 0x2
 	jr nz, DispTimeSetCheck_TryRow3
-	ldb_da a, (0x0340e6)
+	ld a, (0x0340e6:24)
 	extz wa
 	sla wa, 2
 	lda xde, (ParamStr_Table_03:24)
@@ -9804,7 +9804,7 @@ DispTimeSetCheck_TryRow3:
 	jr nz, DispTimeSetCheck_TryRow4
 	cpw (xwa), 0x3
 	jr nz, DispTimeSetCheck_TryRow4
-	ldb_da a, (0x0340e8)
+	ld a, (0x0340e8:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
@@ -9825,7 +9825,7 @@ DispTimeSetCheck_TryRow4:
 	jr nz, DispTimeSetCheck_TryRow5
 	cpw (xwa), 0x4
 	jr nz, DispTimeSetCheck_TryRow5
-	ldb_da a, (0x0340ea)
+	ld a, (0x0340ea:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
@@ -9846,7 +9846,7 @@ DispTimeSetCheck_TryRow5:
 	jr nz, DispTimeSetCheck_TryRow6
 	cpw (xwa), 0x5
 	jr nz, DispTimeSetCheck_TryRow6
-	ldb_da a, (0x0340ec)
+	ld a, (0x0340ec:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
@@ -9867,7 +9867,7 @@ DispTimeSetCheck_TryRow6:
 	jr nz, DispTimeSetCheck_TryRow7
 	cpw (xwa), 0x6
 	jr nz, DispTimeSetCheck_TryRow7
-	ldb_da a, (0x0340ee)
+	ld a, (0x0340ee:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
@@ -9888,7 +9888,7 @@ DispTimeSetCheck_TryRow7:
 	jr nz, DispTimeSet_ReturnZero
 	cpw (xwa), 0x7
 	jr nz, DispTimeSet_ReturnZero
-	ldb_da a, (0x0340f0)
+	ld a, (0x0340f0:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
@@ -9928,14 +9928,14 @@ MainTimeFlashFunc:
 	jr z, MainTimeFlash_DispatchCmd
 	cp xbc, 0x1e20014
 	jr nz, MainTimeFlash_ReturnZero
-	stdi8 (0x7f42), 40
+	ld (0x7f42:16), 40
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	lds wa, 5
 	call CtrlPanel_IndicatorJumpTable
-	stdi8 (0x7f42), 35
+	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -9983,7 +9983,7 @@ NormScreen_InitHandler:
 	ld xbc, 0x1e0009e
 	lds32 xde, 0
 	call PostEvent
-	stdi8 (0x7f42), 36
+	ld (0x7f42:16), 36
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee
@@ -11644,7 +11644,7 @@ AcPmBkEdit_OK_Load:
 	jr AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_OK_LoadEmpty:
-	stdi8 (0x7f42), 73
+	ld (0x7f42:16), 73
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	ld xde, 0x1a000ee

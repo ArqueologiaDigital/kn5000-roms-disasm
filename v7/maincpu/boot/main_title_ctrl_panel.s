@@ -38,7 +38,7 @@ MainTitle_InitGraphicsAndEvents:
 	jp PostEvent
 
 MainTitle_SetBootFlag:
-	stdi8	(32422), 35
+	ld	(32422:16), 35
 	ret
 MainTitle_TeardownAndLoop:
 	ld xwa, 0xffffffff
@@ -185,7 +185,7 @@ CtrlPanel_CheckButtonRelease:
 	anddm32_24 (0x02749e), xwa
 
 CtrlPanel_DispatchCombinedState:
-	ldl_da xwa, (0x02749e)
+	ld xwa, (0x02749e:24)
 	andda32_24 xwa, (0x02749a)
 	stl_da (0x0274a2), xwa
 	cp xwa, 0x1100
@@ -221,9 +221,9 @@ CtrlPanel_HandleFirmwareCheck:
 	cp l, 0xff
 	call_24 z, CaptureLcd
 CtrlPanel_HandlePortCommands:
-	cpdi8	49121, 32
+	cp	(49121:16), 32
 	jr	nz, 47
-	cpdi8	49122, 0
+	cp	(49122:16), 0
 	jr	z, 40
 	ld	xwa, 4294967295
 	ld	xbc, 29360187
@@ -235,9 +235,9 @@ CtrlPanel_HandlePortCommands:
 	ld	xbc, 29360187
 	call	16423243
 CtrlPanel_HandleSerialPort:
-	cpdi8	49121, 33
+	cp	(49121:16), 33
 	jrl	nz, 835
-	cpdi8	49122, 0
+	cp	(49122:16), 0
 	jrl	z, 827
 	ld	xwa, 4294967295
 	ld	xbc, 29360159
@@ -296,7 +296,7 @@ CtrlPanel_EventType_AA:
 	jrl	z, 657
 	bit	1, a
 	jrl	z, 651
-	ldl_da	xwa, (160912)
+	ld	xwa, (160912:24)
 	cp	xwa, 1
 	jrl	nz, 637
 	call	16776933
