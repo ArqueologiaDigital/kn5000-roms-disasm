@@ -7,9 +7,9 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 58fb7f2afaed (58fb7f2afaed21f7c63feb4f50aab06f5183b2da)
+Commit: 6f456a19f05b (6f456a19f05bf94696728e89e74a53ed62dc9adf)
 Date: 2026-09-02
-Subject: [TLCS900] Narrow the ALU-direct-address register fix; add GPR-typed _da24 siblings
+Subject: [TLCS900] Decode the five leading bytes the disassembler always refused
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # What this pin adds over dbb72df07371, all DECODER-side (no encoding changed,
@@ -45,6 +45,7 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # real code from every automated audit for months.
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 58fb7f2afaed  [TLCS900] Narrow the ALU-direct-address register fix; add GPR-typed _da24 siblings
 #   Commit: 6fe210fb0a81  [TLCS900] Add a regression test for the signed-d8 spelling-trap warning
 #   Commit: 63ff7d92fb5f  [TLCS900] Disambiguate the (Xrr) vs explicit (Xrr+d8=0) print collision
 #   Commit: 975a2c17d683  [TLCS900] Corroborate the ERP/SriRR decoders with real v10 + WSA1R bytes
@@ -348,3 +349,70 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # SX-WSA1R ROMs byte-identical. That the gate is green ACROSS AN ENCODING
 # CHANGE is the finding: nothing in either tree was relying on the wrong
 # register substitution.
+
+
+# UPDATE 12 (2026-09-02): moved to 6f456a19f05b, one commit on top of
+# 58fb7f2afaed, from the lane sent to add the five instructions UPDATE 11 named.
+#
+# ⚠ UPDATE 11's LAST SENTENCE IS WRONG AND IS CORRECTED HERE. It says of the
+# five missing instructions "All of it is assembler work". It is not: NONE of it
+# was. `normal`, `max`, `ldf 3`, `jp16 0x2075` and `call16 0x2075` all assembled
+# correctly at 58fb7f2afaed, to 0x01 / 0x04 / 0x17 nn / 0x1a nnnn / 0x1c nnnn.
+# JP16 and CALL16 have been in TLCS900InstrInfo.td since the branch's early
+# history. The gap was DECODE-ONLY -- the top-level byte dispatch in
+# TLCS900Disassembler.cpp had no case for any of the five, so each came back
+# "invalid instruction encoding" whatever followed it.
+#
+# ★ That is this file's rule firing a NINTH time, in its mirror image. The rule
+#   so far has been "the backend cannot do this" meaning "a spelling nobody
+#   tried". Here the claim "this is assembler work" was made without anyone
+#   trying to assemble a single line. One `llvm-mc -show-encoding` per mnemonic,
+#   five commands, would have settled it. TRY THE LINE FIRST, IN BOTH
+#   DIRECTIONS.
+#
+# What 6f456a19f05b adds, all DECODER-side (no encoding changed; all 13 images
+# still rebuild byte-identically):
+#   * 0x01 normal and 0x04 max, single byte.
+#   * 0x17 ldf #n, 2 bytes. The operand is passed through UNMASKED -- the
+#     encoder writes the immediate verbatim, so masking the architecturally
+#     meaningless upper bits would make a byte like 0x17 0xc7 (a real
+#     wsa1_prom_c byte pair) reassemble as 0x17 0x03. unidasm prints it raw too.
+#   * 0x1a jp nnnn and 0x1c call nnnn, 3 bytes, 16-bit ABSOLUTE control flow.
+#     These are separate opcodes from the 0x1b / 0x1d addr24 forms and do not
+#     change how those encode: per UPDATE 7 the address WIDTH IS REQUESTED IN
+#     THE SOURCE and is never inferred from whether the value fits.
+#     llvm/test/MC/TLCS900/missing-leading-bytes.s pins both directions and
+#     carries two explicit guards that `jp 0x2075` and `call 0x2075` still
+#     produce the 4-byte 0x1b / 0x1d encodings.
+#
+# ⚠ AND THE MOTIVATING FINDING DOES NOT SURVIVE THE FIX. UPDATE 11 and
+# byte_run_start_enrichment.py read a 46x enrichment of these five bytes among
+# v10's `.byte` run-starts as evidence that v10's residue is largely undecoded
+# CODE. Two measurements, both committed, say otherwise:
+#
+#   * scripts/analysis/blind_run_decode_census.py. Of v10's 3,395
+#     blind-starting runs (8,503 B), 0 B decoded before this commit and 6,687 B
+#     (78.6%) do now, 2,810 runs (82.8%) end-to-end clean. But the SHUFFLE NULL
+#     -- the same bytes permuted -- scores 82.1%. Real and shuffled are
+#     indistinguishable, so those runs carry no instruction structure. Only in
+#     the 96 runs of >= 12 bytes does a gap open (38.5% vs 17.7% fully clean),
+#     and inspecting those shows the structure is DATA regularity: power-of-two
+#     mask tables, 4-byte pointer tables, index ramps.
+#   * scripts/analysis/blind_byte_rom_sites.py. Across six committed images,
+#     not one occurrence of any of the five survives as code. Every candidate
+#     that passes the shape filters still sits in a byte ramp, a mask table, a
+#     pointer table, a string or a parameter block.
+#
+# ★ THE ENRICHMENT RATIO HAS A STRUCTURAL CONFOUND, and it is worth writing down
+#   because the number looked decisive. Where a region was converted by a LINEAR
+#   FORCE-DISASSEMBLY pass, a `.byte` run begins exactly at the byte the decoder
+#   refused -- so a DECODABLE control byte can almost never start a run, it gets
+#   eaten by the surrounding instruction stream instead. The control rate is
+#   pinned near zero by construction, whatever the region is. And 0x01 and 0x04
+#   -- two of the commonest data values there are -- account for 93.6% of v10's
+#   blind run-starts (2,188 + 993 of 3,395). The 46x is mostly measuring how
+#   often 0x01 and 0x04 occur.
+#
+# So this commit is still right -- five real TLCS-900/H instructions that
+# unidasm decodes and this backend refused are now readable, and a decoder blind
+# spot is silent by nature. It is NOT a route to converting v10's residue.

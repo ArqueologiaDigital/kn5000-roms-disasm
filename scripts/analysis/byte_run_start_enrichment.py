@@ -49,63 +49,7 @@ and the comparison stops meaning anything.
 
 ⚠ WHAT THIS DOES NOT DO. It is a per-image statistic, not a per-run verdict. A
 high enrichment says "this image's residue is largely undecoded code, go look";
-it does NOT license converting any individual run.
-
-★★ AND IT DOES NOT LOCALISE. MEASURED, 2026-09-02, AND IT COST A LANE TIME.
-On the strength of v10's 46x I sent per-FILE blind-start rates to seven lanes
-as if they were actionable. The first one to check reported back that the
-signal is absent in its own file:
-
-    v10/maincpu/ui_widgets/widget_dispatch.s
-        blind 10.9%  control 5.1%  =  2.1x     (below this script's own 3x)
-    v10/maincpu as a whole
-                                      46.5x
-
-⚠ THE PER-FILE BLIND RATE ALONE IS NOT THE SIGNAL -- the CONTROL rate is what
-kills it. Quoting "10.9% of this file's runs start with a blind byte" without
-its control is exactly the mistake this script exists to prevent, and I made it
-in the covering message rather than in the code.
-
-★ AND THE CONFOUND IS WORTH KNOWING. 65 of that file's 74 blind starts are
-`0x01` at a regular cadence inside six-byte `{u16 tag, u32 pointer}` records:
-the 0x01 is a TAG's LOW BYTE, and the run boundary in front of it was
-MANUFACTURED by an interposed `.long`. So a data structure with a low-valued
-16-bit field, chopped by an existing conversion, generates blind starts at
-whatever rate its stride dictates -- with no undecoded code anywhere near.
-None of those 74 runs is a call/jump target or fall-through reachable.
-
-★★ AND THE DEEPER CORRECTION: WHAT THIS ACTUALLY MEASURES IS MIS-FRAMING,
-NOT "UNDECODED CODE". A second lane cleared the DATA-AS-CODE misframes out of
-`v10/maincpu/sequencer/seq_event_playback.s` -- retiring garbage mnemonics to
-typed data, converting NOTHING into an instruction -- and the file's blind-start
-rate collapsed:
-
-    before (a99564a6)  137 runs   56 blind  40.9%
-    after  (merged)     59 runs    1 blind   1.7%
-
-Re-derivable: `git show a99564a6:<file>` against the current one.
-
-The mechanism is obvious in hindsight and I did not see it. **A wrong
-instruction stream breaks at every byte the decoder refuses**, so a misframed
-region is chopped into many short `.byte` runs, each of which necessarily STARTS
-with a refused byte. Data framed as code therefore generates this signature in
-bulk -- more strongly than the undecoded code the script was written to find.
-
-So a high ratio means **"this region is framed wrongly"**, and there are TWO
-causes with OPPOSITE fixes:
-  * code spelled as data  -> decode it (what I originally claimed);
-  * data spelled as code  -> type it (what the sequencer lane actually found).
-Both are real debt. Reporting the first without excluding the second is the
-error, and I made it in the covering message to seven lanes.
-
-⚠ ALSO: with a control count of ZERO the ratio is infinite regardless of the
-blind count, so the printed "ratio" is unstable on small populations. Both
-figures above have control 0. Read the RAW COUNTS, not the ratio, whenever the
-control is in single digits.
-
-Use this script at image granularity, which is where its control is
-calibrated. To ask about one file, compute that file's own control -- and clear
-that file's known misframes first, or you are measuring them. Deciding a specific run is
+it does NOT license converting any individual run. Deciding a specific run is
 code still needs the usual evidence -- what references it, whether anything
 calls or jumps into it. Data-as-code remains the standing hazard in the other
 direction.
@@ -128,6 +72,62 @@ extension_data.s 58.3%, seq_event_playback.s 40.9%, ui_mode_handlers.s 29.6%.
 prom_b and prom_d show no enrichment, which is the negative control the
 instrument needs: the same script over comparable trees does NOT cry code
 everywhere, so v10's number is not an artefact of the method.
+
+⚠⚠ CORRECTION 2026-09-02, AFTER THE FIVE BLIND BYTES WERE TAUGHT TO THE DECODER
+(tlcs900_backend@6f456a19f05b). THE "CODE, ~48x" READING ABOVE DOES NOT HOLD, and
+this script has a structural confound that the WSA1R negative control does not
+catch.
+
+Where a region was converted by a LINEAR FORCE-DISASSEMBLY pass, a `.byte` run
+begins at exactly the byte the decoder refused. A DECODABLE control byte
+therefore can almost never START a run -- it is consumed into the surrounding
+instruction stream instead. The control rate is pinned near zero BY
+CONSTRUCTION, whatever the region really contains, so the blind/control ratio
+is close to tautological for any force-disassembled region. The WSA1R images do
+not show enrichment because their residue was not produced that way, not
+because their residue is more data-like.
+
+And the composition matters: 0x01 and 0x04 -- two of the commonest data values
+in any image -- are 2,188 and 993 of v10's 3,395 blind run-starts, 93.6% of the
+total. 0x1a and 0x1c, the CONTROL-FLOW bytes that made the finding look
+important, are 28 and 62.
+
+TWO FURTHER CONFOUNDS, each found by a different lane, both pointing the same
+way as the retraction above:
+
+  * IT DOES NOT LOCALISE. `ui_widgets/widget_dispatch.s` scores 2.1x against
+    46.5x image-wide -- below this script's own 3x threshold. 65 of its 74 blind
+    starts are `0x01` as a TAG's LOW BYTE inside six-byte {u16 tag, u32 ptr}
+    records, at a run boundary manufactured by an interposed `.long`. A data
+    structure with a low-valued 16-bit field generates blind starts at whatever
+    rate its stride dictates, with no code anywhere near.
+
+  * A DATA-AS-CODE MISFRAME MANUFACTURES THE SIGNAL IN BULK. Clearing the
+    misframes out of `sequencer/seq_event_playback.s` -- retiring garbage
+    mnemonics to typed data, converting NOTHING into an instruction -- took it
+    from 137 runs / 56 blind (40.9%) to 59 runs / 1 blind (1.7%). Re-derivable
+    with `git show a99564a6:<file>`. Same mechanism as the structural confound
+    above, observed directly: the wrong stream breaks at every refused byte.
+
+  ⚠ Not every corner is confounded, which is why the retraction rests on the
+    shuffle null rather than on these. `audio/sound_editor_ui.s` tested whether
+    its blind bytes were ScreenData opcodes (0x01 HLINE, 0x04 CTRL, 0x17
+    PARAM_LABEL, 0x1C FIELD_LABEL) and found 0.79x -- no enrichment, confound
+    absent there.
+
+  ⚠ AND THE RATIO IS UNSTABLE ON SMALL POPULATIONS: with a control count of
+    zero it is infinite regardless of the blind count. Read the raw counts.
+
+Two committed measurements now contradict the code reading directly:
+  * scripts/analysis/blind_run_decode_census.py -- with the five bytes decodable,
+    82.8% of v10's blind runs decode end-to-end clean, but a SHUFFLE of the same
+    bytes scores 82.1%. No instruction structure.
+  * scripts/analysis/blind_byte_rom_sites.py -- across six committed images not
+    one occurrence of the five survives inspection as code; every site is a byte
+    ramp, a mask table, a pointer table, a string or a parameter block.
+
+Keep this script: the per-file table is still a useful pointer at where residue
+concentrates. Do NOT quote its ratio as evidence of code.
 
 RUN
     python3 scripts/analysis/byte_run_start_enrichment.py [root ...]

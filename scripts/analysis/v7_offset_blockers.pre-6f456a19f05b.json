@@ -112,13 +112,12 @@
   "anchor_offset": 2,
   "tail_len": 1157,
   "blocker": {
-   "status": "SILENT_MISCOMPILE",
-   "offset": 39,
-   "text": "ret\\tnov",
-   "claims": "b0 fc",
-   "stream": "b9 c6 fc 00 32 c1 fc 00"
+   "status": "HARD_DECODE",
+   "offset": 3,
+   "byte": "0x04",
+   "context": "04 cb d8 66 16 c1 50 fd"
   },
-  "form": "SILENT_MISCOMPILE ret\\tnov"
+  "form": "HARD_DECODE byte=0x04"
  },
  {
   "file": "v7/maincpu/audio/audio_control_engine.s",
@@ -330,11 +329,12 @@
   "anchor_offset": 80,
   "tail_len": 592,
   "blocker": {
-   "status": "UNPARSEABLE_PRINT",
-   "offset": 88,
-   "text": "ld_sd8b\\txwa, 5"
+   "status": "HARD_DECODE",
+   "offset": 28,
+   "byte": "0x17",
+   "context": "17 03 00 0a 64 06 7f 00"
   },
-  "form": "UNPARSEABLE_PRINT ld_sd8b\\txwa,"
+  "form": "HARD_DECODE byte=0x17"
  },
  {
   "file": "v7/maincpu/boot/system_handlers.s",
@@ -354,11 +354,11 @@
   "tail_len": 348,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 87,
-   "byte": "0xf2",
-   "context": "f2 04 00 16 ba c7 fb a9"
+   "offset": 1,
+   "byte": "0x04",
+   "context": "04 c7 fb a8 08 e4 00 08"
   },
-  "form": "HARD_DECODE byte=0xf2"
+  "form": "HARD_DECODE byte=0x04"
  },
  {
   "file": "v7/maincpu/demo/fdemotext_routines.s",
@@ -497,9 +497,12 @@
   "anchor_offset": 3,
   "tail_len": 114,
   "blocker": {
-   "status": "CLEAN"
+   "status": "HARD_DECODE",
+   "offset": 95,
+   "byte": "0x01",
+   "context": "01 02 07 08 09 0a 0b 04"
   },
-  "form": "CLEAN"
+  "form": "HARD_DECODE byte=0x01"
  },
  {
   "file": "v7/maincpu/display/scoop_display.s",
@@ -518,9 +521,12 @@
   "anchor_offset": 2,
   "tail_len": 22,
   "blocker": {
-   "status": "CLEAN"
+   "status": "HARD_DECODE",
+   "offset": 0,
+   "byte": "0x01",
+   "context": "01 01 01 01 01 01 01 01"
   },
-  "form": "CLEAN"
+  "form": "HARD_DECODE byte=0x01"
  },
  {
   "file": "v7/maincpu/display/scoop_display.s",
@@ -540,11 +546,11 @@
   "tail_len": 269,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 8,
-   "byte": "0xc1",
-   "context": "c1 65 0d 3f 03 7e 8b 00"
+   "offset": 4,
+   "byte": "0x04",
+   "context": "04 02 02 04 c1 65 0d 3f"
   },
-  "form": "HARD_DECODE byte=0xc1"
+  "form": "HARD_DECODE byte=0x04"
  },
  {
   "file": "v7/maincpu/display/scoop_display.s",
@@ -612,11 +618,11 @@
   "tail_len": 11,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 10,
-   "byte": "0x06",
-   "context": "06"
+   "offset": 5,
+   "byte": "0x01",
+   "context": "01 02 03 05 04 06"
   },
-  "form": "HARD_DECODE byte=0x06"
+  "form": "HARD_DECODE byte=0x01"
  },
  {
   "file": "v7/maincpu/display/scoop_display.s",
@@ -683,13 +689,12 @@
   "anchor_offset": 2,
   "tail_len": 97,
   "blocker": {
-   "status": "SILENT_MISCOMPILE",
-   "offset": 92,
-   "text": "setda\\t2, (3412)",
-   "claims": "f1 54 0d ba",
-   "stream": "f1 54 0d b2 0e"
+   "status": "HARD_DECODE",
+   "offset": 2,
+   "byte": "0x01",
+   "context": "01 c9 d1 f1 d2 0d 41 f1"
   },
-  "form": "SILENT_MISCOMPILE setda\\t2,"
+  "form": "HARD_DECODE byte=0x01"
  },
  {
   "file": "v7/maincpu/display/scoop_display.s",
@@ -1040,11 +1045,11 @@
   "tail_len": 86,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 25,
-   "byte": "0x80",
-   "context": "80 3f 0f 63 f2 ef 64 0e"
+   "offset": 0,
+   "byte": "0x01",
+   "context": "01 00 07 b8 02 00 28 b8"
   },
-  "form": "HARD_DECODE byte=0x80"
+  "form": "HARD_DECODE byte=0x01"
  },
  {
   "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
@@ -1394,11 +1399,12 @@
   "anchor_offset": 8,
   "tail_len": 135,
   "blocker": {
-   "status": "UNPARSEABLE_PRINT",
-   "offset": 99,
-   "text": "set\\t0, xsp"
+   "status": "HARD_DECODE",
+   "offset": 3,
+   "byte": "0x01",
+   "context": "01 32 00 00 03 32 00 00"
   },
-  "form": "UNPARSEABLE_PRINT set\\t0,"
+  "form": "HARD_DECODE byte=0x01"
  },
  {
   "file": "v7/maincpu/sequencer/accompaniment_engine.s",
@@ -1652,11 +1658,11 @@
   "tail_len": 68,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 37,
-   "byte": "0xd9",
-   "context": "d9 fc cf d8 66 06 d1 16"
+   "offset": 1,
+   "byte": "0x04",
+   "context": "04 c7 fb a8 c7 fb 8b cb"
   },
-  "form": "HARD_DECODE byte=0xd9"
+  "form": "HARD_DECODE byte=0x04"
  },
  {
   "file": "v7/maincpu/sequencer/sequencer_engine.s",
@@ -1676,11 +1682,11 @@
   "tail_len": 70,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 9,
-   "byte": "0xc2",
-   "context": "c2 e3 ff 00 19 78 28 1d"
+   "offset": 1,
+   "byte": "0x04",
+   "context": "04 c1 78 28 21 c7 fb 99"
   },
-  "form": "HARD_DECODE byte=0xc2"
+  "form": "HARD_DECODE byte=0x04"
  },
  {
   "file": "v7/maincpu/sequencer/sequencer_engine.s",
@@ -1700,11 +1706,11 @@
   "tail_len": 117,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 10,
-   "byte": "0xf1",
-   "context": "f1 7b 28 cb 6e 61 c1 e6"
+   "offset": 1,
+   "byte": "0x04",
+   "context": "04 c1 30 26 21 c9 d8 66"
   },
-  "form": "HARD_DECODE byte=0xf1"
+  "form": "HARD_DECODE byte=0x04"
  },
  {
   "file": "v7/maincpu/sequencer/sequencer_engine.s",
@@ -1748,11 +1754,11 @@
   "tail_len": 738,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 99,
-   "byte": "0xc1",
-   "context": "c1 7a 28 3f 00 7e ea 00"
+   "offset": 1,
+   "byte": "0x04",
+   "context": "04 1d ed fe f3 1d 5c f7"
   },
-  "form": "HARD_DECODE byte=0xc1"
+  "form": "HARD_DECODE byte=0x04"
  },
  {
   "file": "v7/maincpu/storage/fdc_routines.s",
@@ -1772,11 +1778,11 @@
   "tail_len": 67,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 38,
-   "byte": "0xc1",
-   "context": "c1 88 89 3f 00 66 05 f1"
+   "offset": 1,
+   "byte": "0x04",
+   "context": "04 c1 9a 89 21 c7 fb 99"
   },
-  "form": "HARD_DECODE byte=0xc1"
+  "form": "HARD_DECODE byte=0x04"
  },
  {
   "file": "v7/maincpu/storage/fdc_routines.s",
@@ -1916,11 +1922,11 @@
   "tail_len": 104,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 2,
-   "byte": "0xc1",
-   "context": "c1 98 8c 3f 0e 66 57 f1"
+   "offset": 1,
+   "byte": "0x04",
+   "context": "04 c1 98 8c 3f 0e 66 57"
   },
-  "form": "HARD_DECODE byte=0xc1"
+  "form": "HARD_DECODE byte=0x04"
  },
  {
   "file": "v7/maincpu/ui/drawbar_panel_ui.s",
@@ -2132,11 +2138,11 @@
   "tail_len": 232,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 20,
-   "byte": "0xee",
-   "context": "ee 00 25 09 78 36 ee 00"
+   "offset": 0,
+   "byte": "0x1a",
+   "context": "1a 49 ee 00 ff 09 78 36"
   },
-  "form": "HARD_DECODE byte=0xee"
+  "form": "HARD_DECODE byte=0x1a"
  },
  {
   "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
@@ -2156,11 +2162,11 @@
   "tail_len": 979,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 27,
-   "byte": "0x91",
-   "context": "91 02 ff 00 01 00 01 00"
+   "offset": 23,
+   "byte": "0x01",
+   "context": "01 00 00 01 91 02 ff 00"
   },
-  "form": "HARD_DECODE byte=0x91"
+  "form": "HARD_DECODE byte=0x01"
  },
  {
   "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
@@ -2180,11 +2186,11 @@
   "tail_len": 422,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 8,
-   "byte": "0xee",
-   "context": "ee 00 e8 49 ee 00 fc 49"
+   "offset": 0,
+   "byte": "0x1c",
+   "context": "1c 4e ee 00 00 7f 24 4e"
   },
-  "form": "HARD_DECODE byte=0xee"
+  "form": "HARD_DECODE byte=0x1c"
  },
  {
   "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
@@ -2204,11 +2210,11 @@
   "tail_len": 7980,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 16,
-   "byte": "0x53",
-   "context": "53 00 fe 00 10 11 12 13"
+   "offset": 5,
+   "byte": "0x01",
+   "context": "01 02 15 ff ff ff ff 7f"
   },
-  "form": "HARD_DECODE byte=0x53"
+  "form": "HARD_DECODE byte=0x01"
  },
  {
   "file": "v7/maincpu/ui_widgets/widget_dispatch.s",
@@ -2228,10 +2234,10 @@
   "tail_len": 3075,
   "blocker": {
    "status": "HARD_DECODE",
-   "offset": 50,
-   "byte": "0x55",
-   "context": "55 56 57 1d 76 6f 77 3b"
+   "offset": 24,
+   "byte": "0x1c",
+   "context": "1c 34 35 36 37 38 39 3a"
   },
-  "form": "HARD_DECODE byte=0x55"
+  "form": "HARD_DECODE byte=0x1c"
  }
 ]

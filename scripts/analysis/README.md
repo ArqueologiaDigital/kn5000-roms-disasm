@@ -224,3 +224,54 @@ Full write-up in `notes/lanes/v10seq-2026-09-02.md`.
 | `grep_skips_latin1_probe.py` | Which sources will a `-I` grep silently skip? The discriminator is UTF-8 DECODABILITY, not "has bytes >= 0x80" -- which is why the brief's falsification of the claim did not reproduce: its control file's high bytes form valid UTF-8. 4 of `v10/maincpu/sequencer`'s 15 `.s` files do not decode as UTF-8, and in the agent shell (where `grep` execs ugrep with `-I`) they vanish from a tree-wide search with no diagnostic at all. |
 
     python3 scripts/analysis/grep_skips_latin1_probe.py v10/maincpu/sequencer
+
+## Added 2026-09-02 (lane MISSINGINSNS, full-disassembly push)
+
+The five leading opcode bytes with no decode anywhere in tlcs900_backend --
+0x01 `normal`, 0x04 `max`, 0x17 `ldf`, 0x1a `jp nnnn`, 0x1c `call nnnn` -- were
+taught to the disassembler in tlcs900_backend@6f456a19f05b. These two scripts
+are the before/after evidence, and they also **retract the reading that
+motivated the work**: `byte_run_start_enrichment.py`'s 46x ratio is not
+evidence that v10's `.byte` residue is code. Its header now carries the
+correction; the ratio is measured against a control that is pinned near zero by
+construction wherever a region was force-disassembled linearly.
+
+| script | question it answers |
+|---|---|
+| `blind_run_decode_census.py` | Given a run's own bytes, how far does the decoder get -- and is "it decodes" worth anything on an opcode space this dense? Scores every `.byte` run that starts with one of the five against two nulls, the SAME BYTES SHUFFLED and uniform random of the same length, stratified by run length because the mean run is ~2.5 B and a shuffle of a 2-byte run is barely a null. v10: 0 B of 8,503 decoded before, 6,687 B (78.6%) after, 2,810/3,395 runs (82.8%) end-to-end clean -- **against a shuffle null of 82.1%**. |
+| `blind_byte_rom_sites.py` | Where do these bytes occur in the committed dumps, and is any site CODE? Boundary agreement with an independent decoder plus shape filters (no `db`, no nop runs, no byte ramps, no repeating table rows). `--check` re-reads the ten offsets quoted by `llvm/test/MC/TLCS900/missing-leading-bytes.s` from the dumps so the test's provenance is verifiable. ⚠ Across six images **no site survives as code**; every one is a ramp, mask table, pointer table, string or parameter block. |
+
+    python3 scripts/analysis/blind_run_decode_census.py v10/maincpu
+    # the `before` column: build a baseline llvm-mc from the PREVIOUS pin,
+    # tlcs900_backend@58fb7f2afaed, copy it aside, restore, then
+    LLVM_MC=/path/to/58fb7f2afaed/llvm-mc \
+        python3 scripts/analysis/blind_run_decode_census.py v10/maincpu
+    python3 scripts/analysis/blind_byte_rom_sites.py --check
+    python3 scripts/analysis/blind_byte_rom_sites.py --rom kn5000_v10
+
+Result: a decoder blind spot closed (it was silent -- a tool that cannot
+disassemble a region reports nothing there), 26/26 TLCS900 MC lit tests green,
+13/13 images still byte-identical. **No v10 bytes were converted and none
+should be on this evidence.**
+
+### v7 blocked-slice movement across the same LLVM commit
+
+`v7_offset_blockers.py` was re-run after the five bytes were taught to the
+decoder. `v7_blocker_delta.py` diffs the two runs and refuses to print a
+headline without the honest bottom line:
+
+| script | question it answers |
+|---|---|
+| `v7_blocker_delta.py` | What did a backend change do to v7's 94 NO_OFFSET_FOUND slices? Prints total blocked bytes before/after, the bytes that cleared the specific gate, where each of those slices now stops instead, and which slices newly reach CLEAN. ⚠ Built so the trap `v7_offset_blockers.py` warns about cannot be reported as progress. |
+
+    python3 scripts/analysis/v7_offset_blockers.py
+    python3 scripts/analysis/v7_blocker_delta.py \
+        scripts/analysis/v7_offset_blockers.pre-6f456a19f05b.json
+
+Result: **21 slices / 16,683 B cleared the five-byte gate and the total blocked
+bytes did not move at all — 45,454 B before, 45,454 B after.** Every one of the
+21 stopped a few bytes later on a different form (0x53 grew 622 -> 8,602 B,
+0x55 0 -> 3,075 B, 0xc1 6,434 -> 7,612 B). Two slices, 136 B, newly round-trip
+CLEAN; both are in `v7/maincpu/display/scoop_display.s` and neither was
+converted, because a clean round trip is not evidence of code (random bytes
+round-trip clean 24% of the time — `blind_run_decode_census.py`).
