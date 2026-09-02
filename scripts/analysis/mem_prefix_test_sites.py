@@ -37,6 +37,7 @@ firmware was found using them.
 
 RUN
     python3 scripts/analysis/mem_prefix_test_sites.py --check
+    python3 scripts/analysis/mem_prefix_test_sites.py --foil   # can it fail?
     python3 scripts/analysis/mem_prefix_test_sites.py --emit   # the lit test
 """
 import os
@@ -404,6 +405,19 @@ SITES = [
      'bitda_24 7, (132580)',
      'bit 7,(0x0205e4)'),
 
+    # --- 32-bit AND / OR through a 24-bit direct address ---
+    # The decoder's direct-address ALU table had 0 in both 32-bit slots for
+    # AND and OR.  Only the 16-bit-address half is genuinely undefined;
+    # AND32_da24 / OR32_da24 / AND32m_da24 / OR32m_da24 all exist.
+    ("32-bit AND / OR through a 24-bit direct address", "v10", 0x1981C5,
+     "e29e7402c0", 'andda32_24 xwa, (160926)', 'and XWA,(0x02749e)'),
+    ("32-bit AND / OR through a 24-bit direct address", "v10", 0x198202,
+     "e29a7402c8", 'anddm32_24 (160922), xwa', 'and (0x02749a),XWA'),
+    ("32-bit AND / OR through a 24-bit direct address", "v10", 0x0FAA5A,
+     "e29e7402e0", 'orda32_24 xwa, (160926)', 'or XWA,(0x02749e)'),
+    ("32-bit AND / OR through a 24-bit direct address", "v10", 0x1981BE,
+     "e29a7402e8", 'ordm32_24 (160922), xwa', 'or (0x02749a),XWA'),
+
     # --- LINK / UNLK -- register prefix, sub-opcodes 0x0C and 0x0D ---
     # ⚠ These two are the only entries whose asm text is NOT what the tree's
     # source writes.  The source spells the LINK as its four raw bytes
@@ -572,5 +586,35 @@ def emit():
     return 0
 
 
+def foil():
+    """Prove --check can FAIL.
+
+    A checker that has only ever passed is not evidence.  This flips one bit of
+    one site's expected bytes and requires check() to report exactly one
+    failure, then puts it back and requires zero.  It exercises all three of
+    check()'s claims at once, because a wrong byte string disagrees with the
+    ROM, with what llvm-mc encodes, and with what llvm-objdump prints.
+    """
+    victim = next(i for i, s in enumerate(SITES) if s[1] != "no-rom-site")
+    grp, img, off, hx, asm, uni = SITES[victim]
+    bad = bytearray(bytes.fromhex(hx))
+    bad[-1] ^= 0x01
+    print("foil: flipping the low bit of the last byte of %s +0x%06X\n"
+          "      %s -> %s\n" % (img, off, hx, bad.hex()))
+    SITES[victim] = (grp, img, off, bad.hex(), asm, uni)
+    rc_bad = check()
+    SITES[victim] = (grp, img, off, hx, asm, uni)
+    print("\nfoil: restored; re-running clean\n")
+    rc_good = check()
+    ok = (rc_bad == 1 and rc_good == 0)
+    print("\n%s -- the check %s on a corrupted site and %s on the real one"
+          % ("PASS" if ok else "FAIL",
+             "failed" if rc_bad else "PASSED (it cannot fail!)",
+             "passed" if not rc_good else "failed"))
+    return 0 if ok else 1
+
+
 if __name__ == "__main__":
-    sys.exit(emit() if "--emit" in sys.argv else check())
+    if "--emit" in sys.argv:
+        sys.exit(emit())
+    sys.exit(foil() if "--foil" in sys.argv else check())
