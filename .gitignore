@@ -49,3 +49,7 @@ mame_driver/build_error.txt
 hdae5000/includes/generated/*.bin
 table_data/includes/generated/*.bin
 custom_data/includes/section_*.bin
+
+# v10 data-as-code census: regenerable analysis cache (16 MB+), rebuilt by
+# `python3 scripts/analysis/v10_data_as_code_census.py --census --fresh`
+notes/v10-data-as-code/cache.pkl
