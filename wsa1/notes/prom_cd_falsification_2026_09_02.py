@@ -39,6 +39,17 @@ So this script does NOT re-run the coverage tool.  It attacks the claim:
      and diffing against the dump, so the extents are the assembler's and not a
      comment's.
 
+⚠ WHICH DECODER IS ASKED.  Q6 -- the only test here that speaks about the ROM's
+BYTES -- decodes with MAME's `unidasm`, the framing authority named in
+original_ROMs/README-unidasm.md, and never asks the LLVM backend whether a byte
+is an instruction.  That distinction is not pedantry: on 2026-09-02 this tree
+retracted a conclusion built on a backend refusal (0x01/0x04/0x17/0x1a/0x1c have
+no decode in tlcs900_backend and unidasm decodes all five as real instructions,
+two of them control flow -- notes/DEBT-INVENTORY-2026-09-02.md).  `llvm-mc`
+appears only in Q5 and Q7, and only against the SOURCE: Q5 counts how many
+statements the assembler turned into instructions, Q7 rebuilds with the fill
+values XORed.  Neither infers "data" from a refusal to decode.
+
 USAGE
     python3 notes/prom_cd_falsification_2026_09_02.py            # all checks
     python3 notes/prom_cd_falsification_2026_09_02.py --quick    # skip Q6/Q7
@@ -212,6 +223,41 @@ check("prom_d's window is NOT enriched -- it sits inside the empty-window band",
           ptr["NULL-B  0xE00000 (512K, NO ROM)"]), True)
 note("A jump table into prom_d would have to be a pile of such words.  There is")
 note("no pile: the count is indistinguishable from address-space noise.")
+note("⚠ THAT COMPARISON IS NOT PERFECTLY MATCHED -- the four windows need"
+     " different high bytes and prom_c does not contain them equally often.")
+note("So here is the sharp form of the same question: a jump table is not a")
+note("SCATTER of pointers, it is a RUN of CONSECUTIVE aligned ones.")
+
+
+def longest_ptr_run(buf, lo, hi, align=4):
+    best, at = 0, None
+    for phase in range(align):
+        run = 0
+        for i in range(phase, len(buf) - 3, align):
+            v = buf[i] | buf[i+1] << 8 | buf[i+2] << 16 | buf[i+3] << 24
+            if lo <= v <= hi:
+                run += 1
+                if run > best:
+                    best, at = run, i - align * (run - 1)
+            else:
+                run = 0
+    return best, at
+
+
+runs = {}
+for k, (lo, hi) in (("prom_d  0xF00000", (0xF00000, 0xF7FFFF)),
+                    ("NULL-A  0xD00000", (0xD00000, 0xD7FFFF)),
+                    ("NULL-B  0xE00000", (0xE00000, 0xE7FFFF)),
+                    ("POS     0xF80000", (0xF80000, 0xFFFFFF))):
+    n, at = longest_ptr_run(c, lo, hi)
+    runs[k] = n
+    note(f"{k}: longest run of consecutive 4-aligned pointers = {n}"
+         + (f" (at file 0x{at:05X})" if at is not None else ""))
+check("prom_c really does contain a pointer TABLE into itself",
+      runs["POS     0xF80000"], 81)
+check("into prom_d, the longest run is the same as into an empty window",
+      runs["prom_d  0xF00000"] == runs["NULL-A  0xD00000"] ==
+      runs["NULL-B  0xE00000"] == 2, True)
 
 
 # ---------------------------------------------------------------------------

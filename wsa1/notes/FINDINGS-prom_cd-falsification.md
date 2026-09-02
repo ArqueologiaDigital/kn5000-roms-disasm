@@ -42,6 +42,45 @@ Q5 is the only one that speaks to "asm 0" directly, and it is worth being clear
 about what it is: an assembler-side census that never reads the `.s` text.
 **It cannot see code that was framed as data.** Q6 is the test that can.
 
+## ⚠ WHICH DECODER WAS ASKED — and where llvm-mc is and is not used
+
+On 2026-09-02 this tree retracted a conclusion built on a backend refusal: six
+leading opcode bytes were called "reserved space" because `tlcs900_backend` had
+no decode for them, and regions gated by them were called not-code. MAME's
+`unidasm` decodes five of them as real TLCS-900 instructions — `0x01 normal`,
+`0x04 max`, `0x17 ldf`, `0x1a JP nnnn`, `0x1c CALL nnnn`, **two of them control
+flow**. **Never conclude anything about the ROM from a backend refusal.**
+
+Nothing here rests on one:
+
+* **Q6, the only test that speaks about the BYTES, uses MAME's `unidasm`** — the
+  framing authority named in `original_ROMs/README-unidasm.md` — and nothing
+  else. It never asks the LLVM backend whether a byte is an instruction.
+* **`llvm-mc` appears only in Q5 and Q7, and only on the SOURCE.** Q5 counts
+  DWARF line rows, which is a census of what the source *declares* — how many
+  statements the assembler turned into instructions — not a claim that any byte
+  is undecodable. Q7 rebuilds with the fill values XORed and diffs; a refusal
+  there would be a build failure, not a verdict.
+* An earlier version of Q6 also reported unidasm's `db` rate. It was dropped: it
+  measures the decoder, not the ROM.
+
+## Corroboration from an instrument this lane did not build
+
+`scripts/analysis/byte_run_start_enrichment.py` (on main, `15115eae`) asks
+whether an image's leftover `.byte` runs start disproportionately with a byte the
+LLVM backend refuses — which is what would happen if a conversion pass had left
+undecodable *code* behind. Re-run in this worktree:
+
+    python3 scripts/analysis/byte_run_start_enrichment.py wsa1/prom_c wsa1/prom_d
+
+    wsa1/prom_c    818 runs   blind  3.4%   control  5.4%   ratio 0.6x   data
+    wsa1/prom_d   5092 runs   blind 12.2%   control  8.3%   ratio 1.5x   data
+
+against KN5000 v10's ~48x. ⚠ Treated as **one input, not the answer**: it is a
+per-image statistic over `.byte` run STARTS, it licenses no per-run verdict, and
+it says nothing at all about prom_d's typed `.long` and `.fill` regions — which
+is exactly where code-typed-as-data would hide. Q6 is what covers those.
+
 ## Q6 — the code-likeness test, and its two calibrations
 
 Metric: **branch-target coherence, normalised by boundary density.** Linear-decode
