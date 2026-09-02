@@ -830,13 +830,13 @@ SysEx_InProgressReturn:
 	ret
 
 MIDI_RX_CONTEXT_RESTORE:
-	ldda32 xwa, (1080)
-	ldda32 xbc, (1084)
-	ldda32 xde, (1088)
-	ldda32 xhl, (1092)
-	ldda32 xix, (1096)
-	ldda32 xiy, (1100)
-	ldda32 xiz, (1104)
+	ld xwa, (1080:16)
+	ld xbc, (1084:16)
+	ld xde, (1088:16)
+	ld xhl, (1092:16)
+	ld xix, (1096:16)
+	ld xiy, (1100:16)
+	ld xiz, (1104:16)
 	ret
 
 MIDI_RX_CONTEXT_SAVE:

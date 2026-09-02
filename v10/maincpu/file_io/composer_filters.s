@@ -128,14 +128,14 @@ CompLoad_HandleSelection:
 	cps hl, 0
 	jr lt, CompLoad_Selection_Negative
 	exts xhl
-	ldda32 xwa, (0x7f7c)
+	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1e50002
 	ld xde, xhl
 	jrl CompLoad_DispatchWidget
 
 CompLoad_Selection_Negative:
 	stdi16 (0x7f80), 0
-	ldda32 xwa, (0x7f7c)
+	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1e50002
 	lds32 xde, 0
 	jrl CompLoad_DispatchWidget
@@ -183,7 +183,7 @@ CompLoad_DrawItem_Continue:
 	lda_d16 xbc, (0x850c)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x7f7c)
+	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	inc 1, iz
@@ -287,7 +287,7 @@ CompLoad_UpdateDisplay:
 	call NotifyUIOfSelectionChange
 	ldw_d16 xde, (0x7f80)
 	exts xde
-	ldda32 xwa, (0x7f7c)
+	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1e50002
 	call ApPostEvent
 	ld de, (xsp + 2)
@@ -295,7 +295,7 @@ CompLoad_UpdateDisplay:
 	lda_d16 xbc, (0x850c)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x7f7c)
+	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	ldw_d16 xde, (0x7f80)
@@ -303,7 +303,7 @@ CompLoad_UpdateDisplay:
 	lda_d16 xbc, (0x850c)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x7f7c)
+	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1c0000f
 
 CompLoad_DispatchWidget:
@@ -446,10 +446,10 @@ LoadFilter_DrawLoop:
 	lda_d16 xbc, (0x7f86)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x7f82)
+	ld xwa, (0x7f82:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, LoadFilter_DrawLoop
 	jrl LoadFilter_Return
@@ -524,7 +524,7 @@ LoadFilter_UpdateDisplay:
 	sla wa, 4
 	lda_d16 xbc, (0x7f86)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
-	ldda32 xwa, (0x7f82)
+	ld xwa, (0x7f82:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	jrl LoadFilter_Return
@@ -667,10 +667,10 @@ SaveFilter_DrawLoop:
 	lda_d16 xbc, (0x800a)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x8006)
+	ld xwa, (0x8006:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_DrawLoop
 	jrl SaveFilter_Return
@@ -746,7 +746,7 @@ SaveFilter_UpdateDisplay:
 	sla wa, 4
 	lda_d16 xbc, (0x800a)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
-	ldda32 xwa, (0x8006)
+	ld xwa, (0x8006:16)
 	ld xbc, 0x1c0000f
 	jrl SaveFilter_DispatchWidget
 
@@ -782,10 +782,10 @@ SaveFilter_SelectAll_Update:
 	lda_d16 xbc, (0x800a)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x8006)
+	ld xwa, (0x8006:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_SelectAll_Loop
 	jrl SaveFilter_Return
@@ -814,10 +814,10 @@ SaveFilter_DeselectAll_Loop:
 	lda_d16 xbc, (0x800a)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x8006)
+	ld xwa, (0x8006:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_DeselectAll_Loop
 	jrl SaveFilter_Return
@@ -954,10 +954,10 @@ SaveFilter_ResetAll_Loop:
 	lda_d16 xbc, (0x800a)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x8006)
+	ld xwa, (0x8006:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpw (xsp), 0x8
 	jr lt, SaveFilter_ResetAll_Loop
 

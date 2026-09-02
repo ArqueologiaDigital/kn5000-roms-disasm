@@ -50,7 +50,7 @@ SeqStep_NoteByteBlock:
 	and	a, 255
 	extz	wa
 	stda16	(9830), wa
-	ldda32	xwa, (0x2722)
+	ld	xwa, (0x2722:16)
 	stda16	(0x28af), wa
 	call	SeqData_ReadNextByte
 	stb_d8	(9686), l
@@ -208,7 +208,7 @@ SeqStep_EventPosManage:
 	call_24 z, SeqStep_DecrementPos
 
 SeqStep_EventPosCheck:
-	ldda32 xwa, (0x2722)
+	ld xwa, (0x2722:16)
 	stda16 (0x288b), xwa
 	ldb_d8 a, (0x271c)
 	and a, 0xff
@@ -2764,7 +2764,7 @@ SeqStep_SwapTwoParts:
 SeqStep_CopyPartData:
 	dec 4, xsp
 	push xiz
-	ldda32 xde, (7514)
+	ld xde, (7514:16)
 	ld (xsp + 4), xde
 	ld iy, wa
 	extz xiy

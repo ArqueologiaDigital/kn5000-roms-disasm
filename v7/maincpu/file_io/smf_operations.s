@@ -248,7 +248,7 @@ SaveFN_HandleActivate:
 	call	16288975
 	lda_d16	xwa, (34741)
 	call	16289424
-	ldda32	xwa, (32752)
+	ld	xwa, (32752:16)
 	ld	xbc, 29360143
 	ld	xde, 34740
 	jr	38
@@ -308,7 +308,7 @@ SeqToSong_BuildEntry:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	ldda32	xwa, (32756)
+	ld	xwa, (32756:16)
 	ld	xbc, 29360143
 	ld	xde, 32760
 	call	16423243
@@ -339,7 +339,7 @@ SeqFromSong_BuildEntry:
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	16289030
-	ldda32	xwa, (32888)
+	ld	xwa, (32888:16)
 	ld	xbc, 29360143
 	ld	xde, 32892
 	call	16423243
@@ -362,7 +362,7 @@ SeqSongName_BuildEntry:
 	lds	de, 0
 	calr	15000
 	ld	xde, xhl
-	ldda32	xwa, (33020)
+	ld	xwa, (33020:16)
 	ld	xbc, 29360143
 	call	16423243
 SeqSongName_Return:
@@ -382,7 +382,7 @@ SmfLoadAs_Apply:
 	sla	wa, 2
 	lda_24	xbc, 15337300
 	ld_rrl	xde, xbc, wa
-	ldda32	xwa, 33024
+	ld	xwa, (33024:16)
 	ld	xbc, 29360143
 	call	16423243
 SmfLoadAs_Return:
@@ -515,7 +515,7 @@ FmmSmfFileNameFunc:
 	ld (XSP+0x1c),XBC
 	ld (XSP+0x20),XWA
 	ld XDE,(XSP+0x1c)
-	ldda32	xwa, 33028
+	ld	xwa, (33028:16)
 	ld	xbc, (xsp+28)
 	cp	xbc, 29360152
 	jrl	z, 171
@@ -558,7 +558,7 @@ SmfFN_JumpTable:
 	divs	wa, 10
 	ld	de, qwa
 	exts	xde
-	ldda32	xwa, 33028
+	ld	xwa, (33028:16)
 	ld	xbc, 31784962
 	jrl	1929
 SmfFN_HandleActivate:
@@ -1059,7 +1059,7 @@ SmfFN_RefreshIfChanged:
 	divs	wa, 10
 	ld	de, qwa
 	exts	xde
-	ldda32	xwa, (33028)
+	ld	xwa, (33028:16)
 	ld	xbc, 31784962
 	call	16423243
 	ldw_d16	bc, (33040)
@@ -1068,7 +1068,7 @@ SmfFN_RefreshIfChanged:
 	ld	de, (xsp+4)
 	exts	xde
 	divs	de, 10
-	ldda32	xwa, (33028)
+	ld	xwa, (33028:16)
 	cp	de, bc
 	jr	nz, 75
 	ld	bc, (xsp+4)
@@ -1091,7 +1091,7 @@ SmfFN_RefreshIfChanged:
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
-	ldda32	xwa, (33028)
+	ld	xwa, (33028:16)
 	ld	xbc, 29360143
 	call	16423243
 	jr	27
@@ -1132,7 +1132,7 @@ SmfFN_WriteFilenameField:
 	lds32	xde, 0
 	calr	62818
 SmfFN_SendOkState:
-	ldda32 xwa, (0x8104)
+	ld xwa, (0x8104:16)
 	ld XBC,0x01c50001
 	lds32 xde, 0
 	jr t, SmfFN_DispatchFinalEvent
@@ -1152,7 +1152,7 @@ SmfFN_SendOkState:
 	divs WA,0x000a
 	ld DE,QWA
 	exts XDE
-	ldda32 xwa, (0x8104)
+	ld xwa, (0x8104:16)
 	ld XBC,0x01e50002
 SmfFN_DispatchFinalEvent:
 	call	16423243

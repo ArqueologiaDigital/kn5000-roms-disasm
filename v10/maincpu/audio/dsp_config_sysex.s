@@ -21,7 +21,7 @@ SysEx_ClampVoiceIndex8_DoLookup:
 SysEx_ApplyToSlot4B_Data:
 	dec	2, xsp
 	push	xiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -76,7 +76,7 @@ SysEx_ClampVoiceIndex128_DoLookup:
 SysEx_ApplyToSlot49_Data:
 	dec	2, xsp
 	push	xiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -133,7 +133,7 @@ SysEx_ClampVoiceIndex8_49_DoLookup:
 SysEx_ApplyToSlot49_Format_Data:
 	dec	2, xsp
 	push	xiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -883,11 +883,11 @@ SwbtWr_DispatchLoop_Init:
 	stdi16 (0xc07b), 0
 
 SwbtWr_DispatchLoop:
-	ldda32 xiy, (0xc089)
+	ld xiy, (0xc089:16)
 	addda16 xiy, 0xc07b
 	cp (xiy), 0xff
 	jr z, SwbtWr_DispatchLoop_PostCallbacks
-	ldda32 xix, (0xc081)
+	ld xix, (0xc081:16)
 	xor hl, hl
 	ld l, (xiy)
 	stb_d8 (0xc080), l
@@ -939,7 +939,7 @@ SwbtWr_DispatchLoop_NextEvent:
 	jrl SwbtWr_DispatchLoop
 
 SwbtWr_DispatchLoop_PostCallbacks:
-	ldda32 xix, (0xc085)
+	ld xix, (0xc085:16)
 
 SwbtWr_PostCallback_Loop:
 	cpw (xix), 0xffff
@@ -2468,7 +2468,7 @@ DSPCfg_WriteParam_Type76_NotType2:
 	ld (xde), a
 
 DSPCfg_WriteParam_IncCounter:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 DSPCfg_WriteParam_SetMask3F:
 	ldb e, 0x3f
@@ -2644,7 +2644,7 @@ DSPCfg_WriteMultiField_AdvanceAddr:
 	ld xwa, xiz
 	calr DSPCfg_PackAddress
 	ld xiz, xhl
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 4)
 	cp wa, (xsp + 12)
 	jr c, DSPCfg_WriteMultiField_Loop
@@ -2705,7 +2705,7 @@ DSPCfg_ReadMultiField_PackAndNext:
 	ld xwa, (xsp + 12)
 	calr DSPCfg_PackAddress
 	ld (xsp + 12), xhl
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 4)
 	cp wa, (xsp + 10)
 	jr c, DSPCfg_ReadMultiField_Loop
@@ -4218,7 +4218,7 @@ DSPCfg_ApplyParamStruct_PackNext:
 	ld xwa, (xsp + 14)
 	calr DSPCfg_PackAddress
 	ld (xsp + 14), xhl
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld wa, (xsp + 6)
 	cp (xsp + 12), wa
 	jr c, DSPCfg_ApplyParamStruct_ReadLoop
@@ -4307,7 +4307,7 @@ DSPCfg_ApplyParamStruct_WritePackNext:
 	ld xwa, (xsp + 14)
 	calr DSPCfg_PackAddress
 	ld (xsp + 14), xhl
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld wa, (xsp + 6)
 	cp (xsp + 12), wa
 	jr c, DSPCfg_ApplyParamStruct_WriteReadLoop

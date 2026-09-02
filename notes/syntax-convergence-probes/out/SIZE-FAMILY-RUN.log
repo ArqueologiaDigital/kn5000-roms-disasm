@@ -1,0 +1,44 @@
+# w16/conv-size run, 2026-09-02T22:15:32Z
+# llvm-project tlcs900_backend@7e541b8ddb07 (7e541b8ddb078055894739a1c1ff1d7dd35c0f6d)
+
+$ size_family_convert.py --triage
+llvm-mc sha256 52563be155f9bfaf (copied from /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc)
+family    old spelling           proposed native          old bytes                  new bytes                  verdict
+cps       cps a, 4               cp a, 4                  0xc9,0xdc                  0xc9,0xcf,0x04             DIFFERS  (b) form-selector
+cps       cps wa, 4              cp wa, 4                 0xd8,0xdc                  0xd8,0xcf,0x04,0x00        DIFFERS  (b) form-selector
+cps       cps xwa, 4             cp xwa, 4                0xe8,0xdc                  0xe8,0xcf,0x04,0x00,0x00,0x00 DIFFERS  (b) form-selector
+lds       lds hl, 0              ld hl, 0                 0xdb,0xa8                  0xdb,0x03,0x00,0x00        DIFFERS  (b) form-selector
+lds32     lds32 xiz, 0           ld xiz, 0                0xee,0xa8                  0x46,0x00,0x00,0x00,0x00   DIFFERS  (b) form-selector
+lds32     lds32 xiz, 0           lds xiz, 0               0xee,0xa8                  -                          REFUSED  (b) form-selector, no syntax
+ldb       ldb d, 0x4             ld d, 0x4                0x24,0x04                  0xcc,0x03,0x04             DIFFERS  (b) form-selector
+ldda32    ldda32 xwa, 4160       ld xwa, (4160:16)        0xe1,0x40,0x10,0x20        0xe1,0x40,0x10,0x20        SAME     (a) pure spelling
+cpw       cpw (xsp + 6), 0x0     cp (xsp + 6), 0x0        0x9f,0x06,0x3f,0x00,0x00   0x8f,0x06,0x3f,0x00        DIFFERS  (b) form-selector
+stb_erp   stb_erp a, 0xFB        ld (0xFB), a             0xc7,0xfb,0x89             0xf2,0xfb,0x00,0x00,0x41   DIFFERS  (b) form-selector
+ldb_erp   ldb_erp a, 0xFB        ld a, (0xFB)             0xc7,0xfb,0x99             0xc2,0xfb,0x00,0x00,0x21   DIFFERS  (b) form-selector
+incm      incm 1, (xsp + 4)      incw 1, (xsp + 4)        0x9f,0x04,0x61             0x9f,0x04,0x61             SAME     (a) pure spelling
+incm      incm 1, (xsp + 4)      inc 1, (xsp + 4)         0x9f,0x04,0x61             0x8f,0x04,0x61             DIFFERS  (b) form-selector
+ldio      ldio 0x07, 0xFF        ld (0x07:8), 0xFF        0x08,0x07,0xff             0xf0,0x07,0x00,0xff        DIFFERS  (b) form-selector
+ldio      ldio 0x07, 0xFF        ld (0x07), 0xFF          0x08,0x07,0xff             0xf2,0x07,0x00,0x00,0x00,0xff DIFFERS  (b) form-selector
+ldwio     ldwio 237, 0x8e00      ldw (237:8), 0x8e00      0x0a,0xed,0x00,0x8e        0xf0,0xed,0x02,0x00,0x8e   DIFFERS  (b) form-selector
+ldwio     ldwio 237, 0x8e00      ldw (237), 0x8e00        0x0a,0xed,0x00,0x8e        0xf2,0xed,0x00,0x00,0x02,0x00,0x8e DIFFERS  (b) form-selector
+
+$ size_family_convert.py --collisions
+llvm-mc sha256 52563be155f9bfaf (copied from /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc)
+insn size     sites  imm in 0..7
+cp   8        10850            0
+cp   16        6100            0
+cp   32       14742         2658
+ld   8            7            3
+ld   16          11            0
+ld   32       35958           53
+
+$ size_family_convert.py --sentinel
+llvm-mc sha256 52563be155f9bfaf (copied from /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc)
+(Xrr+256) sentinel sites: 1132 in 6 trees
+  v9              299
+  v10             277
+  v7              232
+  hdae5000        206
+  v142            117
+  wsa1              1
+  spelled: {'256': 931, '0x0100': 200, '0x100': 1}

@@ -826,8 +826,8 @@ BootSerial_TxPkt_TwoByte:
 	stb_dri w, 0x07, 0xe8, 0xf4	; LD (XDE+IY), W
 	calr	BootSerial_TxRingAdvanceIY
 	ld	(xiz - 8), ix		; commit control-ring tail
-	incm	1, (xiz - 2)		; 2 slots freed
-	incm	1, (xiz - 2)
+	incw	1, (xiz - 2)		; 2 slots freed
+	incw	1, (xiz - 2)
 	stda16	(0x0fd7), iy		; commit pending count
 	jrl	t, BootSerial_TX_EncodePackets__next
 
@@ -848,14 +848,14 @@ BootSerial_TxPkt_VarLengthRun:
 	ld	a, c
 	stb_dri a, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A - emit header
 	calr	BootSerial_TxRingAdvanceIY
-	incm	1, (xiz - 2)
+	incw	1, (xiz - 2)
 BootSerial_TxPkt_VarLengthRun__loop:
 	ldb_sri	a, 0x07, 0xf8, 0xf0	; LD A, (XIZ+IX)
 	calr	BootSerial_CtrlRingAdvanceIX_Dup
 	stb_dri a, 0x07, 0xe8, 0xf4	; LD (XDE+IY), A
 	calr	BootSerial_TxRingAdvanceIY
 	ld	(xiz - 8), ix		; commit control-ring tail
-	incm	1, (xiz - 2)
+	incw	1, (xiz - 2)
 	stda16	(0x0fd7), iy		; commit pending count
 	dec	1, b
 	cps	b, 0

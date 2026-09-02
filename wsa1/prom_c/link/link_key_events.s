@@ -272,7 +272,7 @@ Link_Ch0_AppendToRing__F98DA4:
 	jr nc, Link_Ch0_AppendToRing__F98DE2                       ; F98DAC  jr NC,0xf98de2
 	jr Link_Ch0_AppendToRing__F98DB5                           ; F98DAE  jr T,0xf98db5
 Link_Ch0_AppendToRing__F98DB0:
-	incm	1, (xiz-2)                        ; F98DB0  incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                        ; F98DB0  incw 1,(XIZ+0xfe)
 	jr Link_Ch0_AppendToRing__F98DA4                           ; F98DB3  jr T,0xf98da4
 Link_Ch0_AppendToRing__F98DB5:
 	ld	xbc, (xiz+10)                       ; F98DB5  ld XBC,(XIZ+0x0a)
@@ -397,7 +397,7 @@ Link_Ch1_WriteParamBlock__F98E6A:
 	jr nc, Link_Ch1_WriteParamBlock__F98E93                       ; F98E72  jr NC,0xf98e93
 	jr Link_Ch1_WriteParamBlock__F98E7B                           ; F98E74  jr T,0xf98e7b
 Link_Ch1_WriteParamBlock__F98E76:
-	incm	1, (xiz-10)                       ; F98E76  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                       ; F98E76  incw 1,(XIZ+0xf6)
 	jr Link_Ch1_WriteParamBlock__F98E6A                           ; F98E79  jr T,0xf98e6a
 Link_Ch1_WriteParamBlock__F98E7B:
 	ld	xbc, (xiz+10)                       ; F98E7B  ld XBC,(XIZ+0x0a)
@@ -428,7 +428,7 @@ Link_Ch1_WriteParamBlock__F98EB7:
 	jr nc, Link_Ch1_WriteParamBlock__F98EE0                       ; F98EBF  jr NC,0xf98ee0
 	jr Link_Ch1_WriteParamBlock__F98EC8                           ; F98EC1  jr T,0xf98ec8
 Link_Ch1_WriteParamBlock__F98EC3:
-	incm	1, (xiz-10)                       ; F98EC3  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                       ; F98EC3  incw 1,(XIZ+0xf6)
 	jr Link_Ch1_WriteParamBlock__F98EB7                           ; F98EC6  jr T,0xf98eb7
 Link_Ch1_WriteParamBlock__F98EC8:
 	ld	xbc, (xiz+10)                       ; F98EC8  ld XBC,(XIZ+0x0a)
@@ -459,7 +459,7 @@ Link_Ch1_WriteParamBlock__F98F04:
 	jr nc, Link_Ch1_WriteParamBlock__F98F2D                       ; F98F0C  jr NC,0xf98f2d
 	jr Link_Ch1_WriteParamBlock__F98F15                           ; F98F0E  jr T,0xf98f15
 Link_Ch1_WriteParamBlock__F98F10:
-	incm	1, (xiz-10)                       ; F98F10  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                       ; F98F10  incw 1,(XIZ+0xf6)
 	jr Link_Ch1_WriteParamBlock__F98F04                           ; F98F13  jr T,0xf98f04
 Link_Ch1_WriteParamBlock__F98F15:
 	ld	xbc, (xiz+10)                       ; F98F15  ld XBC,(XIZ+0x0a)
@@ -488,7 +488,7 @@ Link_Ch1_WriteParamBlock__F98F4A:
 	jr nc, Link_Ch1_WriteParamBlock__F98F73                       ; F98F52  jr NC,0xf98f73
 	jr Link_Ch1_WriteParamBlock__F98F5B                           ; F98F54  jr T,0xf98f5b
 Link_Ch1_WriteParamBlock__F98F56:
-	incm	1, (xiz-10)                       ; F98F56  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                       ; F98F56  incw 1,(XIZ+0xf6)
 	jr Link_Ch1_WriteParamBlock__F98F4A                           ; F98F59  jr T,0xf98f4a
 Link_Ch1_WriteParamBlock__F98F5B:
 	ld	xbc, (xiz+10)                       ; F98F5B  ld XBC,(XIZ+0x0a)

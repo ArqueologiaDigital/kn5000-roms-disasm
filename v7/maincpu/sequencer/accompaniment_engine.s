@@ -343,9 +343,9 @@ AccStyle_ApplyStandardStyle:
 	stda32	(12850), xiy
 	call	16071076
 	call	16069751
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 	call	16080751
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 	ldb_d8	a, (12899)
 	and	a, 7
 	jr	z, 5
@@ -483,10 +483,10 @@ Seq_ProcessAndContinue:
 	jr AccStyle_ApplyExt_UpdateTuning
 
 AccStyle_ApplyExt_SelectPart:
-	ldda32	xiy, (12855)
+	ld	xiy, (12855:16)
 	calr	8
 AccStyle_ApplyExt_UpdateTuning:
-	ldda32	xiy, (12855)
+	ld	xiy, (12855:16)
 	calr	493
 	ret
 AccVoice_SelectPartOffset:
@@ -502,7 +502,7 @@ AccVoice_SelectPartOffset_Resolved:
 	calr AccStyle_SetupPartAddressesByHL
 	cpdi8 (0x3249), 0x80
 	jr c, .Lc_f55dac
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	call AccTuning_CopyAllPartsFromStyle
 	jr t, AccVoice_SelectPartOffset_Apply63
 AccVoice_SelectPartOffset_Bound:
@@ -597,7 +597,7 @@ AccPart_InitPositionsAndBase:
 	stda32	(12791), xwa
 	ret
 AccPart_ResetAndCopyTuning:
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	calr AccPart_InitPositionsAndBase
 	call AccTuning_CopyAllPartsFromStyle
 	ordi8 (0x3290), 0x3f
@@ -1476,7 +1476,7 @@ AccPart_ResolveStyleAddr:
 	stdi16 (0x333c), 0x0006
 	jr t, AccPart_ResolveStyle_Return
 AccPart_ResolveStyle_Bound:
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 	ldb_d8	a, (13113)
 	call	16081274
 	calr	342
@@ -1487,7 +1487,7 @@ AccPart_ResolveStyle_Return:
 AccPart_IncrementIndex:
 	cpdi8 (0x3249), 0x80
 	jr nc, AccPart_IncrementIndex_Return
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	incdi8	1, (13113)
 	xor	xhl, xhl
 	ldb_d8	w, 13113
@@ -1506,7 +1506,7 @@ AccPart_ResolveWithPedal:
 	bitda 0, (0x32c7)
 	jr nz, AccPart_ResolveWithPedal_DirB
 	calr AccPedal_DirectionA
-	ldda32 xiy, (0x3237)
+	ld xiy, (0x3237:16)
 	calr AccPart_GetParamAddr
 	stda16 (0x333c), wa
 	jr t, AccPart_ResolveWithPedal_Return
@@ -1520,14 +1520,14 @@ AccPart_ResolveWithPedal_DirB:
 	jr	14
 AccPart_ResolveWithPedal_Bound:
 	calr	507
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 	calr	229
 	stda16	(13116), wa
 AccPart_ResolveWithPedal_Return:
 	ret
 
 AccPart_LoadParamOffsetTable:
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 	ldb_d8	a, (13113)
 	ldb	w, 0
 	call	16081026
@@ -1679,7 +1679,7 @@ AccPart_SubtractBaseAddr:
 	ret
 
 AccPart_SelectSource:
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	cpdi8 (0x3338), 0x01
 	jr z, AccPart_SelectKbd
 	cpdi8 (0x3338), 0x02
@@ -2350,7 +2350,7 @@ AccSeq_ScanPattern:
 AccSeq_ScanLoop:
 	bitda 0, (0x3258)
 	jrl nz, AccSeq_ScanDone
-	ldda32 xhl, (0x31f7)
+	ld xhl, (0x31f7:16)
 	ld A,(XHL)
 	cp A,0x83
 	jr nz, AccSeq_CheckMarker81
@@ -2413,12 +2413,12 @@ AccSeq_ScanDone:
 	ret
 
 AccSeq_ReadNextByte:
-	ldda32	xhl, (12791)
+	ld	xhl, (12791:16)
 	inc	1, xhl
 	ld	a, (xhl)
 	ret
 AccSeq_AdvancePointer:
-	ldda32	xhl, (12791)
+	ld	xhl, (12791:16)
 	inc	1, xhl
 	stda32	(12791), xhl
 	ret
@@ -2514,7 +2514,7 @@ AccVoice_ScanInstruments:
 AccVoice_ScanLoop:
 	cpda8	xiy, (13113)
 	jr	z, 32	; -> 0xF571F2
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 	ld	a, e
 	call	AccPart_LookupBoundVoiceParam
 	call	AccPart_GetParamAddr
@@ -4144,7 +4144,7 @@ AccStyle_LoadAndApply:
 	call	16071062
 	stda32	12855, xiy
 	call	16080751
-	ldda32	xiy, 12850
+	ld	xiy, (12850:16)
 	call	16071249
 	.byte 0xc1, 0x90, 0x32, 0x3e, 0x3f
 	ldb_d8	w, 12873
@@ -4168,10 +4168,10 @@ AccInit_ClearAllFlags:
 AccVoice_SetupAllParts:
 	cpdi8 (0x3249), 0x80
 	jr c, AccVoice_SetupAll_Extended
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	jr t, AccVoice_SetupAll_Dispatch
 AccVoice_SetupAll_Extended:
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 	ld	a, (xiy+977)
 	stb_d8	(12777), a
 AccVoice_SetupAll_Dispatch:
@@ -4305,10 +4305,10 @@ AccVoice_ResetAll:
 	calr AccVoice_Reassign
 	jr t, AccVoice_Reset_SetMasks
 AccVoice_Reset_UseSecondary:
-	ldda32	xiy, (12855)
+	ld	xiy, (12855:16)
 	jr	4
 AccVoice_Reset_UseStyle:
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 AccVoice_Reset_SelectMode:
 	.byte 0x33, 0x20, 0x00, 0xf1, 0x6e, 0x32, 0xc8, 0x6e
 	.byte 0x0c, 0x33, 0x22, 0x00, 0xf1, 0x6e, 0x32, 0xca
@@ -4374,7 +4374,7 @@ AccVoice_Reassign:
 	ldb W, 0x00
 	ldb A, 0x00
 	call Rhythm_QueuePartChangeEvent
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	jr t, AccVoice_Reassign_Apply
 AccVoice_Reassign_MatchA:
 	ldb_d8	a, (13001)
@@ -4399,7 +4399,7 @@ AccVoice_Reassign_Mode3:
 	ldb W, 0x00
 	ldb A, 0x00
 	call Rhythm_QueuePartChangeEvent
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	jr t, AccVoice_Reassign_Apply
 AccVoice_Reassign_MatchB:
 	ldb_d8	a, (13003)
@@ -4408,7 +4408,7 @@ AccVoice_Reassign_Apply:
 	.byte 0x1e, 0xe7, 0x01, 0x1d, 0x51, 0x3a, 0xf5, 0xc1
 	.byte 0x90, 0x32, 0x3e, 0x3f, 0x68, 0x18
 AccVoice_Reassign_Fallback:
-	ldda32 xiy, (12855)
+	ld xiy, (12855:16)
 
 	ldw hl, 0x22
 
@@ -4441,10 +4441,10 @@ AccVoice_SplitPointSetup:
 	calr AccVoice_SplitReassign
 	jr t, AccVoice_Split_SetForward
 AccVoice_Split_UseSecondary:
-	ldda32	xiy, (12855)
+	ld	xiy, (12855:16)
 	jr	4
 AccVoice_Split_UseStyle:
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 AccVoice_Split_LoadAndApply:
 	ldb_d8	a, 12807
 	call	16081590
@@ -4453,7 +4453,7 @@ AccVoice_Split_LoadAndApply:
 	call	16081662
 	cpdi8	12873, 128
 	jr	c, 10
-	ldda32	xiy, 12850
+	ld	xiy, (12850:16)
 	call	16071249
 	jr	14
 AccVoice_Split_StyleMode:
@@ -4500,7 +4500,7 @@ AccVoice_SplitReassign:
 	ldb W, 0x00
 	ldb A, 0x00
 	call Rhythm_QueuePartChangeEvent
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	jr t, AccVoice_SplitReassign_Apply
 AccVoice_SplitReassign_MatchFwd:
 	ldb_d8	a, (13005)
@@ -4581,10 +4581,10 @@ AccVoice_ThirdLayer:
 	calr AccVoice_ThirdLayerReassign
 	jr t, AccVoice_ThirdLayer_SetMasks
 AccVoice_ThirdLayer_Secondary:
-	ldda32	xiy, (12855)
+	ld	xiy, (12855:16)
 	jr	4
 AccVoice_ThirdLayer_Style:
-	ldda32	xiy, (12850)
+	ld	xiy, (12850:16)
 AccVoice_ThirdLayer_SelectMode:
 	.byte 0x33, 0x24, 0x00, 0xf1, 0x6f, 0x32, 0xc8, 0x6e
 	.byte 0x03, 0x33, 0x24, 0x04
@@ -4635,7 +4635,7 @@ AccVoice_ThirdLayerReassign:
 	ldb W, 0x00
 	ldb A, 0x00
 	call Rhythm_QueuePartChangeEvent
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	jr t, AccVoice_ThirdReassign_Apply
 AccVoice_ThirdReassign_MatchFwd:
 	ldb_d8	a, (13009)
@@ -11114,7 +11114,7 @@ AccTone_InlineBytecodeData:
 	call 0xfdaa53
 	ret
 	.incbin "includes/romslices/v7_transplant_AccTone_InlineBytecodeData_head_tail.bin"
-	ldda32 xix, (0x338a)
+	ld xix, (0x338a:16)
 	ld C,A
 	extz BC
 	lda_24 xde, (0xe4a01a)
@@ -11957,7 +11957,7 @@ AccPatch_InitFromIndex_Valid:
 
 	add xhl, 0x60
 
-	ldda32 xiy, (14610)
+	ld xiy, (14610:16)
 
 	add xiy, xhl
 
@@ -12651,7 +12651,7 @@ AccPatch_CountSlots_Store:
 	stda16	(13368), wa
 	ret
 AccPatch_CountSlotsAlt_Body:
-	ldda32	xix, (14610)
+	ld	xix, (14610:16)
 	push	xix
 	ld	xix, 432128
 	stda32	(14610), xix
@@ -13488,7 +13488,7 @@ AccPatch_ResolveSlotAddr:
 	lds32	xhl, 0
 	popw	hl
 	sll	xhl, 8
-	ldda32	xix, (14610)
+	ld	xix, (14610:16)
 	add	xix, 5120
 	add	xix, xhl
 	popw	hl
@@ -13595,7 +13595,7 @@ AccPatch_InitSlotAlt_Valid:
 
 	add xhl, 0x60
 
-	ldda32 xiy, (14610)
+	ld xiy, (14610:16)
 
 	add xiy, xhl
 
@@ -13757,11 +13757,11 @@ AccPatch_ReadModeFlags_Active:
 	.byte 0x34, 0x21, 0xc9, 0xce, 0x04, 0xf1, 0x33, 0x34
 	.byte 0x41
 AccPatch_ReadModeFlags_Check400:
-	ldda32	xwa, (4560)
+	ld	xwa, (4560:16)
 	and	xwa, 1024
 	cp	xwa, 0
 	jr	z, 29
-	ldda32	xwa, (14660)
+	ld	xwa, (14660:16)
 	and	xwa, 1024
 	cp	xwa, 0
 	jr	nz, 11
@@ -15375,9 +15375,9 @@ DSP_BlockCopyReverse:
 
 	and xix, 0xff
 
-	ldda32 xwa, (13744)
+	ld xwa, (13744:16)
 
-	ldda32 xhl, (13748)
+	ld xhl, (13748:16)
 
 	push xwa
 
@@ -15422,9 +15422,9 @@ DSP_BlockCopyForward:
 
 	and xix, 0xff
 
-	ldda32 xwa, (13744)
+	ld xwa, (13744:16)
 
-	ldda32 xhl, (13748)
+	ld xhl, (13748:16)
 
 	push xwa
 
@@ -15594,7 +15594,7 @@ BlockCopyBounds_Return:
 
 AccPatch_AdvanceNextEntry_IY:
 	push XIX
-	ldda32 xiy, (0x35b4)
+	ld xiy, (0x35b4:16)
 	ld HL,(XIY+0x01)
 	stda16 (0x35bc), hl
 	calr AccPatch_GetEntryAddr
@@ -15609,7 +15609,7 @@ AdvNextEntry_IY_Return:
 	ret
 
 AccPatch_AdvanceNextEntry_IX:
-	ldda32 xix, (0x35b0)
+	ld xix, (0x35b0:16)
 	ld HL,(XIX+0x01)
 	stda16 (0x35be), hl
 	calr AccPatch_GetEntryAddr
@@ -15839,7 +15839,7 @@ AccPatch_DoneBlockCopy:
 	ret
 
 AccPatch_AdvancePrevEntry_IX:
-	ldda32 xix, (0x35b0)
+	ld xix, (0x35b0:16)
 	ld HL,(XIX+0x03)
 	stda16 (0x35be), hl
 	calr AccPatch_GetEntryAddr
@@ -15856,7 +15856,7 @@ AdvPrevEntry_IX_Return:
 
 AccPatch_AdvancePrevEntry_IY:
 	push XIX
-	ldda32 xix, (0x35b4)
+	ld xix, (0x35b4:16)
 	ld HL,(XIX+0x03)
 	stda16 (0x35bc), hl
 	calr AccPatch_GetEntryAddr
@@ -17423,7 +17423,7 @@ AccPlayback_UpdateVoiceState:
 
 ToneGen_AdvanceSeqList:
 	calr ToneGen_InitPlaybackState
-	ldda32 xhl, (0x34ac)
+	ld xhl, (0x34ac:16)
 	ld WA,(XHL)
 	.byte 0xd1, 0xab, 0x33, 0xf0, 0x66, 0x09, 0xd1, 0xa5
 	.byte 0x33, 0x22, 0x1e, 0xde, 0x00, 0x68, 0x0f
@@ -17440,12 +17440,12 @@ AccPlayback_VoiceState_CalcOff:
 	ldw_d16	hl, (13464)
 	calr	62105
 	ld	hl, (xhl+3)
-	ldda32	xix, (13484)
+	ld	xix, (13484:16)
 	ld	(xix), hl
 	lds	ix, 6
 	sub	de, 255
 	add	ix, de
-	ldda32	xhl, (13488)
+	ld	xhl, (13488:16)
 	ld	(xhl), ix
 AccPlayback_VoiceState_Return:
 	ret
@@ -17610,11 +17610,11 @@ ToneGen_ScanPos_AdjustBit1:
 	cps	c, 6
 	jr	c, 22
 	stb_d8	(13209), c
-	ldda32	xix, (13488)
+	ld	xix, (13488:16)
 	ld	wa, (xix)
 	sub	wa, iy
 	ld	(xix), wa
-	ldda32	xix, (13484)
+	ld	xix, (13484:16)
 	ld	(xix), de
 	jr	31
 ToneGen_ScanPos_WrapBlock:
@@ -17623,11 +17623,11 @@ ToneGen_ScanPos_WrapBlock:
 	ld	hl, de
 	calr	61485
 	ld	wa, (xhl+1)
-	ldda32	xix, (13484)
+	ld	xix, (13484:16)
 	ld	(xix), wa
 	xor	w, w
 	ld	a, c
-	ldda32	xix, (13488)
+	ld	xix, (13488:16)
 	ld	(xix), iy
 PlaybackState_InitDone:
 	ret
@@ -17657,7 +17657,7 @@ ToneGen_InitPlay_SetupTables:
 	stda32	13488, xix
 	ld	hl, (xix)
 	stda16	13221, hl
-	ldda32	xix, 13484
+	ld	xix, (13484:16)
 	ld	hl, (xix)
 	stda16	13464, hl
 	ret
@@ -19047,7 +19047,7 @@ AccPat_CleanupAndFree:
 	popw	wa
 	stb_d8	(13393), a
 	stb_d8	(13394), w
-	ldda32	xwa, (13512)
+	ld	xwa, (13512:16)
 	push	xwa
 	call	16712469
 	add	xsp, 4
@@ -19131,7 +19131,7 @@ AccPat_DualVoice_DataBlock:
 	.byte 0xc4, 0x34	; differs from v10 here and llvm-objdump cannot read it
 	jr	mi, 14
 AccPat_DualVoice_ReadParamsA:
-	ldda32 xiy, (13504)
+	ld xiy, (13504:16)
 
 	ld hl, (xiy + 256)
 
@@ -19162,7 +19162,7 @@ __pad_F6333A:
 	nop
 
 AccPatch_LoadDualVoiceParamsB:
-	ldda32 xiy, (13508)
+	ld xiy, (13508:16)
 
 	ld hl, (xiy + 256)
 
@@ -19246,7 +19246,7 @@ __pad_F633E3:
 	.byte 0x85, 0x11, 0x78, 0x73, 0xff
 ToneBank_CopyComplete_Return:
 	ldw_d16	hl, (13562)
-	ldda32	xwa, (14614)
+	ld	xwa, (14614:16)
 	calr	8
 	ldw	wa, 65535
 	ld	(xhl+3), wa
@@ -19392,12 +19392,12 @@ RhythmROM_PatternDisp_InitLoop:
 	neg	wa
 
 RhythmROM_PatternDisp_ReadByte:
-	ldda32	xiy, (13512)
+	ld	xiy, (13512:16)
 	add	xiy, xwa
 	ld	a, (xiy)
 	stb_d8	(13589), a
-	ldda32	xiy, (13512)
-	ldda32	xix, (13508)
+	ld	xiy, (13512:16)
+	ld	xix, (13508:16)
 	add	xix, 12
 	ld	a, (xiy+976)
 	ld	(xix), a
@@ -19457,9 +19457,9 @@ RhythmROM_PatternDisp_CheckCmd:
 	reti
 
 RhythmROM_PatternDisp_Handle90:
-	ldda32	xiy, (13512)
+	ld	xiy, (13512:16)
 	add	xiy, xwa
-	ldda32	xix, (13508)
+	ld	xix, (13508:16)
 	add	xix, 24
 	ldb	a, 5
 RhythmROM_PatternDisp_Check91:
@@ -19493,7 +19493,7 @@ RhythmROM_PatternDisp_Return:
 	nop
 
 __pad_F636FB:
-	ldda32	xhl, (13512)
+	ld	xhl, (13512:16)
 	add	xhl, 280
 	calr	211
 	stb_d8	(13591), e
@@ -19517,26 +19517,26 @@ RhythmVoice_WriteParam_Return:
 	jp RhythmROM_NullRet
 
 __pad_F63748:
-	ldda32	xhl, (13512)
+	ld	xhl, (13512:16)
 	add	xhl, 312
 	cps	a, 4
 	jr	z, 44
-	ldda32	xhl, (13512)
+	ld	xhl, (13512:16)
 	add	xhl, 316
 	cps	a, 6
 	jr	z, 30
-	ldda32	xhl, (13512)
+	ld	xhl, (13512:16)
 	add	xhl, 1336
 	cps	a, 5
 	jr	z, 16
-	ldda32	xhl, (13512)
+	ld	xhl, (13512:16)
 	add	xhl, 1340
 	cps	a, 7
 	jr	z, 2
 	jr	42
 RhythmROM_ProcessPattern:
 	calr	86
-	ldda32	xhl, (13508)
+	ld	xhl, (13508:16)
 	xor	wa, wa
 	ld	a, (xhl+12)
 	ld	xhl, 16136900
@@ -19581,7 +19581,7 @@ RhythmVoice_SetupChan_Finalize:
 
 RhythmROM_CountEntries:
 	push	xhl
-	ldda32	xhl, (13512)
+	ld	xhl, (13512:16)
 	add	xhl, 977
 	ld	w, (xhl)
 	pop	xhl
@@ -19626,8 +19626,8 @@ __pad_F63813:
 	nop
 
 DrumKit_DataTable_Entry0:
-	ldda32 xix, (0x34c8)
-	ldda32 xiy, (0x34c8)
+	ld xix, (0x34c8:16)
+	ld xiy, (0x34c8:16)
 	cpdi8 (0x3453), 0x00
 	jr nz, .Lc_f63445
 	add XIX,0x00000000
@@ -19750,7 +19750,7 @@ ToneData_LookupEffectParam:
 
 	push xix
 
-	ldda32 xix, (13512)
+	ld xix, (13512:16)
 
 	add xix, 0x3d1
 
@@ -20096,7 +20096,7 @@ __pad_F63EC6:
 	.byte 0x08
 
 RhythmBuf_FillEmptyPattern:
-	ldda32 xiy, (0x34c4)
+	ld xiy, (0x34c4:16)
 	ld L,(XIY+0x0c)
 	xor H,H
 	ld XIX,__pad_F63EC6_0x2
@@ -22290,7 +22290,7 @@ TimeSig_DisplayStrings:
 	.byte 0xf1, 0x8a, 0x38, 0xc8
 	jr	nz, 18
 	lds32	xbc, 4
-	ldda32	xiy, 14466
+	ld	xiy, (14466:16)
 	ld	xix, 14450
 	.byte 0x85, 0x11
 	stdi8	14449, 0
@@ -22467,7 +22467,7 @@ TimeSig_DisplayStrings:
 	st_rr8b	b, xix, a
 	ret
 	lds32	xbc, 4
-	ldda32	xix, 14466
+	ld	xix, (14466:16)
 	ld	xiy, 14450
 	.byte 0x85, 0x11
 	ret
@@ -29837,14 +29837,14 @@ AccPatch_InitSlotChain_WithAddr:
 AccPatch_InitSlotChain:
 	xor	xwa, xwa
 	xor	xbc, xbc
-	ldda32	xhl, (14610)
+	ld	xhl, (14610:16)
 	add	xhl, 5120
 	stda32	(14034), xhl
 	ld	wa, (xhl+3)
 	stda16	(14050), wa
 	ldw	bc, 150
 	stda16	(14066), bc
-	ldda32	xhl, (14610)
+	ld	xhl, (14610:16)
 	add	xhl, 43520
 	stda32	(14030), xhl
 	ldw	bc, 150
@@ -29855,7 +29855,7 @@ AccPatch_IterateSlotChain:
 	.byte 0xbe, 0x36, 0x66, 0xd1, 0xf2, 0x36, 0xf3, 0x66
 	.byte 0x06, 0x1e, 0xad, 0x00, 0x1e, 0x5d, 0x00
 AccPatch_IterateSlot_Advance:
-	ldda32	xiz, (14030)
+	ld	xiz, (14030:16)
 	ld	wa, (xiz+3)
 	stda16	(14050), wa
 	incdi16	1, (14066)
@@ -29866,7 +29866,7 @@ AccPatch_IterateSlot_Advance:
 AccPatch_IterateSlot_NextBlock:
 	ld	xiz, 256
 	adddm32	(14034), xiz
-	ldda32	xiz, (14034)
+	ld	xiz, (14034:16)
 	ld	wa, (xiz+3)
 	stda16	(14050), wa
 	djnz16	bc, -82
@@ -29879,7 +29879,7 @@ AccPatch_IterateSlot_NextBlock:
 	add	xwa, 1023
 	and	xwa, 4294966272
 	srl	xwa, 4
-	ldda32	xiy, (14610)
+	ld	xiy, (14610:16)
 	ld	(xiy+46), wa
 	ret
 AccPatch_SwapSlotBuffers:
@@ -29896,12 +29896,12 @@ AccPatch_SwapSlotBuffers:
 AccPatch_UpdateLinkPointers:
 	xor	xwa, xwa
 	xor	xhl, xhl
-	ldda32	xiy, (14014)
+	ld	xiy, (14014:16)
 	ld	wa, (xiy+3)
 	stda16	(14475), wa
 	ld	wa, (xiy+1)
 	stda16	(14477), wa
-	ldda32	xix, (14030)
+	ld	xix, (14030:16)
 	ld	wa, (xix+3)
 	stda16	(14479), wa
 	ld	wa, (xix+1)
@@ -29946,7 +29946,7 @@ AccPatch_CalcSlotBufferAddr:
 AccPatch_VoiceAssignDataBlock:
 	ret
 	ret
-	ldda32	xiy, 14002
+	ld	xiy, (14002:16)
 	ld	a, (xiy+256)
 	cp	a, 109
 	jr	nz, 23
@@ -30808,7 +30808,7 @@ AccDisplay_CopyToFrontBuffer:
 AccBankData_InitAllSlots:
 	pushw_erp 0xfa
 
-	ldda32 xwa, (15552)
+	ld xwa, (15552:16)
 
 	stda32 (21824), xwa
 
@@ -30856,7 +30856,7 @@ AccBankData_ProcessSlot:
 	stb_erp	a, 251
 	stb_d8	14608, a
 	call	16116212
-	ldda32	xwa, 15552
+	ld	xwa, (15552:16)
 	stda32	14610, xwa
 	lda_24	xwa, 432128
 	stda32	14614, xwa
@@ -30936,13 +30936,13 @@ AccBankData_ProcessWithCopy:
 
 	ld (xsp + 2), a
 
-	ldda32 xbc, (15552)
+	ld xbc, (15552:16)
 
 	stda32 (21824), xbc
 
 	pushw 0xd
 
-	ldda32 xwa, (15552)
+	ld xwa, (15552:16)
 
 	add xwa, 0x16802
 
@@ -30962,7 +30962,7 @@ AccBankData_ProcessWithCopy:
 AccBankData_CopyLoop:
 	ld	de, bc
 	add	de, 160
-	ldda32	xwa, 21824
+	ld	xwa, (21824:16)
 	lda_rr	xwa, xwa, de
 	ld	e, (xwa)
 	cps	e, 0
@@ -30980,7 +30980,7 @@ AccBankData_CopyLoop_NonZero:
 	ld	c, (xsp+2)
 	inc	7, c
 	extz	bc
-	ldda32	xde, 15552
+	ld	xde, (15552:16)
 	lds	wa, 0
 	call	15831932
 	call	15665911
@@ -31005,7 +31005,7 @@ AccBankData_SlotScan_Loop:
 	lda_24	xwa, 14991636
 	.byte 0xc3, 0x07, 0xe0, 0xe8, 0x19, 0x10, 0x39
 	call	16116212
-	ldda32	xwa, 15552
+	ld	xwa, (15552:16)
 	stda32	14610, xwa
 	lda_24	xwa, 432128
 	stda32	14614, xwa
@@ -31049,7 +31049,7 @@ AccBankData_ReInit_ScanLoop:
 	.byte 0xe9, 0xf5, 0xc7, 0xfb, 0x61, 0xc7, 0xfb, 0xcf
 	.byte 0x0a, 0x67, 0xd5, 0x68, 0x18
 AccBankData_NotifyAndUpdateTempo:
-	ldda32	xwa, (15552)
+	ld	xwa, (15552:16)
 	add	xwa, 92160
 	ld	bc, (xwa)
 	lds32	xwa, 4
@@ -31938,7 +31938,7 @@ StylCnvCnvt_OK_SelectItem:
 	jr	z, 36
 	jr	58
 StylCnvCnvt_OK_Select_WriteStyle:
-	ldda32	xwa, (15552)
+	ld	xwa, (15552:16)
 	stda32	(15556), xwa
 	call	16295943
 	ldw_d16	bc, (15464)
@@ -32361,7 +32361,7 @@ StylCnv_ParseEntry_StoreChar:
 	.byte 0x61, 0x9f, 0x04, 0x61, 0x9f, 0x06, 0x3f, 0x20
 	.byte 0x00, 0x61, 0xc3
 StylCnv_ParseEntry_NextField:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x80
 	jrl lt, StylCnvDisp_ScanFileLoop
 
@@ -32416,8 +32416,8 @@ StylCnv_Type4_CopyChars:
 	jr z, LoopIndex_Reset
 	ld wa, (xsp + 6)
 	stb_dri C, 0x07, 0xe8, 0xe0
-	incm 1, (xsp + 4)
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 4)
+	incw 1, (xsp + 6)
 	cpw (xsp + 4), 0x28
 	jr lt, StylCnv_Type4_CopyChars
 
@@ -32428,7 +32428,7 @@ StylCnv_Type4_FindDot:
 	ld wa, (xsp + 6)
 	cpib_sri 0x07, 0xe8, 0xe0, 0x2e
 	jr z, StylCnv_Type4_CalcExtLen
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x20
 	jr lt, StylCnv_Type4_FindDot
 
@@ -32439,8 +32439,8 @@ StylCnv_Type4_CountExt:
 	ld wa, (xsp + 6)
 	cpib_sri 0x07, 0xe8, 0xe0, 0x00
 	jr z, StylCnv_Type4_CalcCenter
-	incm 1, (xsp + 16)
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 16)
+	incw 1, (xsp + 6)
 	cpw (xsp + 16), 0x20
 	jr lt, StylCnv_Type4_CountExt
 
@@ -32468,7 +32468,7 @@ StylCnv_Type4_CheckNull:
 	.byte 0x48, 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x14, 0x37
 	.byte 0x68, 0x0b
 StylCnv_Type4_Advance:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jrl lt, StylCnv_Type4_MainLoop
 
@@ -32523,7 +32523,7 @@ StylCnv_Type2_CheckSoundMem:
 
 
 StylCnv_Type3_ProcessFiles:
-	ldda32	xwa, (15552)
+	ld	xwa, (15552:16)
 	ld	(xsp+10), xwa
 	ldw	(xsp+4), 0
 	calr	61593
@@ -32593,7 +32593,7 @@ StylCnv_Type3_LoadFileLoop:
 	add	xbc, xwa
 	ld	xwa, (xsp+10)
 	ld	(xbc), xwa
-	ldda32	xwa, (18412)
+	ld	xwa, (18412:16)
 	add	(xsp+10), xwa
 	ld	xwa, (xsp+10)
 	stda32	(15556), xwa
@@ -32619,7 +32619,7 @@ StylCnv_Type3_EmptyName:
 
 StylCnv_Type3_CloseFile:
 	call FileIO_CloseHandle
-	incm 1, (xsp + 8)
+	incw 1, (xsp + 8)
 	ld wa, (xsp + 8)
 	cp wa, (xsp + 4)
 	jrl lt, StylCnv_Type3_LoadFileLoop
@@ -32693,7 +32693,7 @@ StylCnv_Type3_TerminateName:
 	inc1w_erp 0xfa
 
 StylCnv_Type3_NextBlock:
-	incm 1, (xsp + 16)
+	incw 1, (xsp + 16)
 	ld wa, (xsp + 16)
 	cp wa, (xsp + 4)
 	jrl lt, StylCnv_Type3_CopyBlockLoop
@@ -32713,13 +32713,13 @@ StylCnv_Type4_OpenFile:
 	call	16288556
 	stda32	(15560), xhl
 	call	16288515
-	ldda32	xwa, (18450)
+	ld	xwa, (18450:16)
 	lds	bc, 0
 	call	16288467
 	cps	hl, 0
 	jr	lt, 20
-	ldda32	xwa, (15552)
-	ldda32	xbc, (18454)
+	ld	xwa, (15552:16)
+	ld	xbc, (18454:16)
 	call	16288103
 	cp	xhl, 0
 	jr	ge, 10
@@ -32754,7 +32754,7 @@ StylCnv_Type4_CopyFieldLoop:
 	ld (xbc), a
 	cps a, 0
 	jrl z, StylCnv_FinalizeAndCheckStatus
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jr lt, StylCnv_Type4_CopyFieldLoop
 	jrl StylCnv_FinalizeAndCheckStatus
@@ -32816,8 +32816,8 @@ StylCnv_Type6_AppendName:
 	call	16288556
 	stda32	(15560), xhl
 	call	16288515
-	ldda32	xwa, (15556)
-	ldda32	xbc, (15560)
+	ld	xwa, (15556:16)
+	ld	xbc, (15560:16)
 	call	16288103
 	call	16287803
 	cp	xhl, 0
@@ -32827,12 +32827,12 @@ StylCnv_Type6_AppendName:
 	lda_d16	xwa, (18156)
 	extz	xbc
 	add	xbc, xwa
-	ldda32	xwa, (15556)
+	ld	xwa, (15556:16)
 	ld	(xbc), xwa
-	ldda32	xwa, (15560)
+	ld	xwa, (15560:16)
 	adddm32	(15556), xwa
 StylCnv_Type6_AdvanceEntry:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 	ld wa, (xsp + 4)
 
@@ -32897,7 +32897,7 @@ StylCnv_Type6_CopyNameChars:
 	add xhl, 0xffc00
 	ld (xhl), a
 	inc 1, iz
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x20
 	jr lt, StylCnv_Type6_CopyNameChars
 
@@ -32922,7 +32922,7 @@ StylCnv_Type6_TerminateName:
 	inc 1, iz
 
 StylCnv_Type6_NextBlock:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 	ld wa, (xsp + 4)
 
@@ -32965,7 +32965,7 @@ StylCnv_Type6_Case1_CopyName:
 	push XWA
 	call Free_Compare2
 	inc 0,XSP
-	ldda32 xwa, (0x3cc0)
+	ld xwa, (0x3cc0:16)
 	ld (XSP+0x0a),XWA
 	ldw (XSP+0x08), 0x0000
 	lda xwa, (xsp + 0x12)
@@ -32997,7 +32997,7 @@ StylCnv_Single_FindDot:
 	ld bc, (xsp + 4)
 	cpib_sri 0x07, 0xe0, 0xe4, 0x2e
 	jr z, StylCnv_Single_CopyExtension
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jr lt, StylCnv_Single_FindDot
 
@@ -33019,7 +33019,7 @@ StylCnv_Single_FindDot2:
 	ld bc, (xsp + 4)
 	exts xbc
 	add xbc, xwa
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cp (xbc), 0x2e
 	jr z, StylCnv_Single_WriteTMExtension
 	cpw (xsp + 4), 0x20
@@ -33062,7 +33062,7 @@ StylCnv_LSW_FindDot:
 	ld wa, (xsp + 4)
 	cpib_sri 0x07, 0xe4, 0xe0, 0x2e
 	jr z, StylCnv_LSW_CopyExtension
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jr lt, StylCnv_LSW_FindDot
 
@@ -33085,7 +33085,7 @@ StylCnv_LSW_FindDot2:
 	ld bc, (xsp + 4)
 	exts xbc
 	add xbc, xwa
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cp (xbc), 0x2e
 	jr z, StylCnv_LSW_WriteExtension
 	cpw (xsp + 4), 0x20
@@ -33111,7 +33111,7 @@ StylCnv_LSW_WriteExtension:
 	call	16288467
 	cps	hl, 0
 	jrl	lt, 141
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 	call	16288556
 	ld	(xsp+14), xhl
 	call	16288515
@@ -33135,7 +33135,7 @@ StylCnv_LSW_FindDot3:
 	ld wa, (xsp + 4)
 	cpib_sri 0x07, 0xe4, 0xe0, 0x2e
 	jr z, StylCnv_LSW_CopyExt3
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x20
 	jr lt, StylCnv_LSW_FindDot3
 
@@ -33196,7 +33196,7 @@ StylCnv_Final_CopyNameChars:
 	add xhl, 0xffc00
 	ld (xhl), a
 	inc 1, iz
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x20
 	jr lt, StylCnv_Final_CopyNameChars
 
@@ -33221,7 +33221,7 @@ StylCnv_Final_TerminateName:
 	inc 1, iz
 
 StylCnv_Final_NextBlock:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 8)
 	inc 1, wa
 	cp (xsp + 4), wa
@@ -33302,10 +33302,10 @@ StylCnv_Multi_CopyChar:
 	ld wa, (xsp + 6)
 	stb_dri E, 0x07, 0xe4, 0xe0
 	ld (xhl), 0x0
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 
 LoopCounter_Increment:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 4)
 	cp wa, 0x200
 	jrl c, StylCnv_Multi_ParseLoop

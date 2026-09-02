@@ -1581,7 +1581,7 @@ sub_FA6269__FA6296:
 sub_FA6269__FA62C6:
 	inc	5, de                                  ; FA62C6  inc 5,DE
 	inc	5, hl                                  ; FA62C8  inc 5,HL
-	incm	1, (xiz-2)                            ; FA62CA  incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                            ; FA62CA  incw 1,(XIZ+0xfe)
 	ld	bc, (xiz-2)                             ; FA62CD  ld BC,(XIZ+0xfe)
 	cp	bc, ix                                  ; FA62D0  cp BC,IX
 	jr c, sub_FA6269__FA6296                   ; FA62D2  jr C,0xfa6296
@@ -2262,7 +2262,7 @@ VoiceSubsystem_Init__FA6695:
 	extpfx4 0xB1, 0x02, 0x00, 0x7E             ; FA66C7  ld (XBC),0x7e00
 	inc	1, de                                  ; FA66CB  inc 1,DE
 	inc	1, hl                                  ; FA66CD  inc 1,HL
-	incm	1, (xiz-2)                            ; FA66CF  incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                            ; FA66CF  incw 1,(XIZ+0xfe)
 	incm8	1, (xiz-7)                           ; FA66D2  inc 1,(XIZ+0xf9)
 	cp (xiz-7), 0x40                           ; FA66D5  cp (XIZ+0xf9),0x40
 	jr c, VoiceSubsystem_Init__FA6695                   ; FA66D9  jr C,0xfa6695
@@ -2364,7 +2364,7 @@ VoiceSubsystem_Init__FA67C3:
 	dec	1, d                                   ; FA67DF  dec 1,D
 	cps	d, 0                                   ; FA67E1  cp D,0
 	jr nz, VoiceSubsystem_Init__FA67C3                  ; FA67E3  jr NZ,0xfa67c3
-	incm	2, (xiz-4)                            ; FA67E5  incw 2,(XIZ+0xfc)
+	incw	2, (xiz-4)                            ; FA67E5  incw 2,(XIZ+0xfc)
 	inc	6, hl                                  ; FA67E8  inc 6,HL
 	decm8	1, (xiz-7)                           ; FA67EA  dec 1,(XIZ+0xf9)
 	cp (xiz-7), 0x00                           ; FA67ED  cp (XIZ+0xf9),0x00

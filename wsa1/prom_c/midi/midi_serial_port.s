@@ -771,7 +771,7 @@ Queue_Get_IrqGuarded__F99410:
 Queue_Get_IrqGuarded__F9941A:
 	ei	6                                   ; F9941A  ei 0x06
 	ld	xbc, (xiz+8)                        ; F9941C  ld XBC,(XIZ+0x08)
-	incm	1, (xbc+20)                       ; F9941F  incw 1,(XBC+0x14)
+	incw	1, (xbc+20)                       ; F9941F  incw 1,(XBC+0x14)
 	ei	0                                     ; F99422  ei 0x00
 	ld	bc, (xiz-1)                         ; F99424  ld BC,(XIZ+0xff)
 	extz	bc                                ; F99427  extz BC
@@ -826,7 +826,7 @@ Queue_Get__F9946B:
 	add	(xbc+8), xwa                       ; F99472  add (XBC+0x08),XWA
 Queue_Get__F99475:
 	ld	xbc, (xiz+8)                        ; F99475  ld XBC,(XIZ+0x08)
-	incm	1, (xbc+20)                       ; F99478  incw 1,(XBC+0x14)
+	incw	1, (xbc+20)                       ; F99478  incw 1,(XBC+0x14)
 	ld	bc, (xiz-1)                         ; F9947B  ld BC,(XIZ+0xff)
 	extz	bc                                ; F9947E  extz BC
 	ld	wa, bc                              ; F99480  ld WA,BC

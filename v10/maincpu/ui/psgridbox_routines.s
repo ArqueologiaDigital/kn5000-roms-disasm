@@ -106,10 +106,10 @@ PsGridBox_ShowHide:
 PsGridBox_ShowHide_CountPipe:
 	cp a, 0x7c
 	jr nz, PsGridBox_ShowHide_CountNext
-	incm 1, (xsp + 18)
+	incw 1, (xsp + 18)
 
 PsGridBox_ShowHide_CountNext:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 PsGridBox_ShowHide_CountLoop:
 	ld bc, (xsp + 14)
@@ -157,11 +157,11 @@ PsGridBox_ShowHide_ScanPipe:
 	cp a, 0x7c
 	jr nz, PsGridBox_ShowHide_AdvChar
 	ld (xbc), 0x0
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 	jr PsGridBox_ShowHide_CalcWidth
 
 PsGridBox_ShowHide_AdvChar:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 PsGridBox_ShowHide_ScanLoop:
 	ld wa, (xsp + 14)
@@ -199,7 +199,7 @@ PsGridBox_ShowHide_CalcWidth:
 	add xbc, xbc
 	add xwa, xbc
 	ld (xwa), de
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld bc, (xsp + 12)
 	cp bc, (xix + 38)
 	jr ule, PsGridBox_ShowHide_CalcWidths
@@ -233,11 +233,11 @@ PsGridBox_ShowHide_RowPipe:
 	cp a, 0x7c
 	jr nz, PsGridBox_ShowHide_RowNext
 	ld (xbc), 0x0
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 	jr PsGridBox_ShowHide_ClassifyCell
 
 PsGridBox_ShowHide_RowNext:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 PsGridBox_ShowHide_RowLoop:
 	ld wa, (xsp + 14)
@@ -309,7 +309,7 @@ PsGridBox_ShowHide_AccumHeight:
 	add xwa, xbc
 	ld wa, (xwa)
 	add (xsp + 10), wa
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 12)
 	cp bc, (xwa)
@@ -361,7 +361,7 @@ PsGridBox_ShowHide_BoundLoop:
 	ld xwa, (xix)
 	add xwa, xbc
 	ld (xwa), iz
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 12)
 	cp bc, (xwa)
@@ -440,11 +440,11 @@ PsGridBox_Confirm_ColPipe:
 	cp a, 0x7c
 	jr nz, PsGridBox_Confirm_ColNext
 	ld (xbc), 0x0
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 	jr PsGridBox_Confirm_DrawCol
 
 PsGridBox_Confirm_ColNext:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 PsGridBox_Confirm_ColLoop:
 	ld wa, (xsp + 14)
@@ -492,7 +492,7 @@ PsGridBox_Confirm_DrawCol:
 	ld xwa, xde
 	ld xde, (xsp + 26)
 	call DrawStringAlignment
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 12)
 	cp bc, (xwa + 38)
@@ -531,11 +531,11 @@ PsGridBox_Confirm_RowPipe:
 	cp a, 0x7c
 	jr nz, PsGridBox_Confirm_RowAdv
 	ld (xbc), 0x0
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 	jr PsGridBox_Confirm_DrawRow
 
 PsGridBox_Confirm_RowAdv:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 
 PsGridBox_Confirm_RowLoop:
 	ld wa, (xsp + 14)
@@ -625,7 +625,7 @@ PsGridBox_Confirm_DrawSep:
 	call DrawLine
 
 PsGridBox_Confirm_RowDone:
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 12)
 	cp bc, (xwa + 36)
@@ -663,14 +663,14 @@ PsGridBox_Confirm_InnerLoop:
 	call SendEvent
 
 PsGridBox_Confirm_InnerNext:
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 12)
 	cp bc, (xwa + 38)
 	jr c, PsGridBox_Confirm_InnerLoop
 
 PsGridBox_Confirm_OuterNext:
-	incm 1, (xsp + 14)
+	incw 1, (xsp + 14)
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 14)
 	cp bc, (xwa + 36)
@@ -717,7 +717,7 @@ PsGridBox_Select:
 	inc 1, hl
 	lda_dri XWA, 0xfd, 0x3e, 0x01
 	ld (xwa + 2), hl
-	incm 1, (xwa)
+	incw 1, (xwa)
 	decm 1, (xwa + 4)
 	ld xbc, (xbc)
 	ld hl, (xbc)
@@ -776,7 +776,7 @@ PsGridBox_Select_ScrollLoop:
 	ld (xbc), de
 	ldw de, 0xff
 	call DrawLine
-	incm 1, (xsp + 12)
+	incw 1, (xsp + 12)
 	ld xwa, (xsp + 20)
 	ld bc, (xsp + 12)
 	cp bc, (xwa + 38)
@@ -832,7 +832,7 @@ PsGridBox_Select_SendCurr:
 	inc 1, hl
 	lda_dri XWA, 0xfd, 0x3e, 0x01
 	ld (xwa + 2), hl
-	incm 1, (xwa)
+	incw 1, (xwa)
 	decm 1, (xwa + 4)
 	ld xbc, (xbc)
 	ld hl, (xbc)

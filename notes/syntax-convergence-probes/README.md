@@ -23,6 +23,7 @@ the assessment is a line of it.
 | `diff_causes.py` | When re-assembling unidasm's text gives different bytes, what did unidasm's text fail to say? |
 | `native_convergence.py` | How much of that is recovered by the one annotation UPDATE 7 already supports — the address width, `(0x2075:16)`? |
 | `decoder_disagreements.py` | Where are the sites unidasm refuses, in the sources? |
+| `size_family_convert.py` | For each size/form mnemonic: is the name a spelling the operand syntax can already express, or a selector between two legal encodings? And, for the spellings, rewrite every site — but only after assembling both spellings at all of them. |
 
 ## What the signals mean
 
@@ -72,3 +73,29 @@ the assessment is a line of it.
   errors are `Could not find incbin file` — those drop DATA, never an
   instruction encoding, so the harvest is complete either way. The run prints
   the error census so this stays checkable.
+
+## `size_family_convert.py` — lane `w16/conv-size`
+
+Added 2026-09-02 by the lane executing §8 of the assessment for the class-2
+mnemonics. It writes to the sources, so it is the one script here that is not
+read-only, and it refuses to write if a single site's bytes move.
+
+    python3 notes/syntax-convergence-probes/size_family_convert.py --triage
+    python3 notes/syntax-convergence-probes/size_family_convert.py --collisions
+    python3 notes/syntax-convergence-probes/size_family_convert.py --sentinel
+    python3 notes/syntax-convergence-probes/size_family_convert.py --family incm
+    python3 notes/syntax-convergence-probes/size_family_convert.py --family incm --foil
+    python3 notes/syntax-convergence-probes/size_family_convert.py --family incm --apply
+
+| mode | the question it answers |
+|---|---|
+| `--triage` | Does the native spelling of each mnemonic emit the same bytes? |
+| `--collisions` | Would "let the assembler pick the short form when the immediate fits" be safe? (No — 2,714 long-form sites already hold a short-fitting immediate.) |
+| `--sentinel` | How many sites spell the explicit `d8 = 0` encoding as the magic displacement 256? |
+| `--family X` | Assemble the old and new spelling of **every** site of X and report any whose bytes differ. Writes nothing. |
+| `--family X --foil` | ⚠ The control: substitute a plausible but wrong native spelling; every site must come back a mismatch. Never writes. |
+| `--family X --apply` | Same as `--family X`, then rewrite the sources — only if zero sites disagree. |
+
+`out/SIZE-FAMILY-RUN.log` is the transcript, with the toolchain commit and the
+`llvm-mc` sha256 the numbers were taken at. The verdicts are written up in
+`notes/TRIAGE-size-form-mnemonics-2026-09-02.md`.

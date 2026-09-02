@@ -3100,7 +3100,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	1, wa
 	cp	(xsp+2), wa
 	jr	nc, 45
-	incm	1, (xsp+2)
+	incw	1, (xsp+2)
 	jr	10
 	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00
 	jr	z, 33
@@ -3424,7 +3424,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	1, wa
 	cp	(xsp+6), wa
 	jr	nc, 23
-	incm	1, (xsp+6)
+	incw	1, (xsp+6)
 	ld	wa, (xsp+6)
 	call	15754651
 	ldw	wa, 32
@@ -3814,7 +3814,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	1, wa
 	cp	(xsp+2), wa
 	jr	nc, 45
-	incm	1, (xsp+2)
+	incw	1, (xsp+2)
 	jr	10
 	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00
 	jr	z, 33
@@ -4797,7 +4797,7 @@ SeMenu_CopyWriteUpdate_Data:
 	dec	1, wa
 	cp	(xsp+2), wa
 	jr	nc, 55
-	incm	1, (xsp+2)
+	incw	1, (xsp+2)
 	jr	10
 	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00
 	jr	z, 43
@@ -12870,7 +12870,7 @@ StylCnvStorOkFunc_DataBlock:
 	ld	wa, (xsp+6)
 	add	(xsp+20), wa
 	add	(xsp+16), wa
-	incm	1, (xsp+14)
+	incw	1, (xsp+14)
 	cp	(xsp+14), iz
 	jr	c, -32
 	lda	xwa, (xsp+24)
@@ -12921,7 +12921,7 @@ StylCnvStorOkFunc_DataBlock:
 	swi	6
 	ld	wa, (xsp+6)
 	add	(xsp+16), wa
-	incm	1, (xsp+14)
+	incw	1, (xsp+14)
 	ld	wa, (xsp+14)
 	.byte 0x9f, 0x04, 0xf0
 	jr	c, -32
@@ -12957,7 +12957,7 @@ StylCnvStorOkFunc_DataBlock:
 	swi	6
 	ld	wa, (xsp+6)
 	add	(xsp+16), wa
-	incm	1, (xsp+14)
+	incw	1, (xsp+14)
 	ld	wa, (xsp+14)
 	.byte 0x9f, 0x04, 0xf0
 	jr	c, -32

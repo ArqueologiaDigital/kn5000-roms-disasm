@@ -657,7 +657,7 @@ FDC_SetupDMAMode__to_fdc:
 FDC_SetupDMAMode__dma_from_fdc:
 	ld xhl, 0x120000	; ld XHL,0x00120000
 	ldc_cr32 xhl, 0x0c	; ldc DMAS3,XHL - DMAS3 = FDC DMA-acknowledge data port
-	ldda32 xhl, (0x0c7a)	; ld XHL,(0x0c7a)
+	ld xhl, (0x0c7a:16)	; ld XHL,(0x0c7a)
 	ldc_cr32 xhl, 0x2c	; ldc unknown,XHL - DMAD3 = caller's buffer
 	ldb a, 0	; ld A,0x00
 	ldc_cr8 a, 0x4e	; ldc unknown,A - DMAM3 mode 0x00 = I/O -> memory, destination increments
@@ -669,7 +669,7 @@ FDC_SetupDMAMode__dma_from_fdc:
 ; Twin: maincpu FDC_Setup_DMA_Src_Ack (fdc_routines.s:654)
 ; -----------------------------------------------------------------------------
 FDC_SetupDMA_WriteToFDC:
-	ldda32 xhl, (0x0c7a)	; ld XHL,(0x0c7a)
+	ld xhl, (0x0c7a:16)	; ld XHL,(0x0c7a)
 	ldc_cr32 xhl, 0x0c	; ldc DMAS3,XHL - DMAS3 = caller's buffer
 	ld xhl, 0x120000	; ld XHL,0x00120000
 	ldc_cr32 xhl, 0x2c	; ldc unknown,XHL - DMAD3 = FDC DMA-acknowledge data port
@@ -1585,7 +1585,7 @@ FDC_CmdReadSectors__burst_loop:
 	cps wa, 0	; cp WA,0
 	jr z, FDC_CmdReadSectors__submit	; jr Z,0xffe404
 	lda_d16 xwa, (0x0c76)	; lda XWA,0x0c76
-	incm 1, (xwa)	; incw 1,(XWA)
+	incw 1, (xwa)	; incw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
 	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
 	jr ugt, FDC_CmdReadSectors__submit	; jr UGT,0xffe404
@@ -1694,7 +1694,7 @@ FDC_CmdWriteSectors__burst_loop:
 	cps wa, 0	; cp WA,0
 	jr z, FDC_CmdWriteSectors__submit	; jr Z,0xffe537
 	lda_d16 xwa, (0x0c76)	; lda XWA,0x0c76
-	incm 1, (xwa)	; incw 1,(XWA)
+	incw 1, (xwa)	; incw 1,(XWA)
 	ld wa, (xwa)	; ld WA,(XWA)
 	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
 	jr ugt, FDC_CmdWriteSectors__submit	; jr UGT,0xffe537
@@ -2293,7 +2293,7 @@ FDC_PIO_ReadTransfer:
 	cps wa, 3	; cp WA,3
 	ret nz	; ret NZ
 	ldb_da c, (0x120000)	; ld C,(0x120000) - read one byte from the FDC DMA-acknowledge port
-	ldda32 xhl, (0x0c7c)	; ld XHL,(0x0c7c) - NOTE: pointer kept at 0x0C7C = +2 into the 32-bit buffer field at 0x0C7A; the maincpu twin has the same +2 quirk (0x8A4E vs buffer at 0x8A4C) -- apparent shared latent defect; the DMA path is what ships
+	ld xhl, (0x0c7c:16)	; ld XHL,(0x0c7c) - NOTE: pointer kept at 0x0C7C = +2 into the 32-bit buffer field at 0x0C7A; the maincpu twin has the same +2 quirk (0x8A4E vs buffer at 0x8A4C) -- apparent shared latent defect; the DMA path is what ships
 	ld (xhl), c	; ld (XHL),C
 	inc 1, xhl	; inc 1,XHL
 	stda32 (0x0c7c), xhl	; ld (0x0c7c),XHL
@@ -2308,7 +2308,7 @@ FDC_PIO_CountAndFinish:
 ; FDC_PIO_WriteTransfer - PIO write direction (see FDC_PIO_ReadTransfer)
 ; -----------------------------------------------------------------------------
 FDC_PIO_WriteTransfer:
-	ldda32 xhl, (0x0c7c)	; ld XHL,(0x0c7c)
+	ld xhl, (0x0c7c:16)	; ld XHL,(0x0c7c)
 	ld c, (xhl)	; ld C,(XHL)
 	stb_da (0x120000), c	; ld (0x120000),C - write one byte to the FDC DMA-acknowledge port
 	inc 1, xhl	; inc 1,XHL

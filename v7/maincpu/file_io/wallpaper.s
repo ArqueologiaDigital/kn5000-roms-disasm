@@ -108,7 +108,7 @@ WPLoad_Selection_Positive:
 	divs	wa, 10
 	ld	de, qwa
 	exts	xde
-	ldda32	xwa, (33044)
+	ld	xwa, (33044:16)
 	ld	xbc, 31784962
 	jrl	468
 WPLoad_HandleShow:
@@ -228,7 +228,7 @@ WPLoad_UpdateDisplay:
 	divs	wa, 10
 	ld	de, qwa
 	exts	xde
-	ldda32	xwa, (33044)
+	ld	xwa, (33044:16)
 	ld	xbc, 31784962
 	call	16423243
 	ldw_d16	bc, (33048)
@@ -237,7 +237,7 @@ WPLoad_UpdateDisplay:
 	ld	de, (xsp+4)
 	exts	xde
 	divs	de, 10
-	ldda32	xwa, (33044)
+	ld	xwa, (33044:16)
 	cp	de, bc
 	jr	nz, 75
 	ld	bc, (xsp+4)
@@ -260,7 +260,7 @@ WPLoad_UpdateDisplay:
 	ld	de, wa
 	extz	xde
 	add	xde, xbc
-	ldda32	xwa, (33044)
+	ld	xwa, (33044:16)
 	ld	xbc, 29360143
 	call	16423243
 	jr	7
@@ -269,7 +269,7 @@ WPLoad_RedrawPage:
 	calr DisplaySmfSequenceList
 
 WPLoad_SendState:
-	ldda32	xwa, (33044)
+	ld	xwa, (33044:16)
 	ld	xbc, 29687809
 	lds32	xde, 0
 WPLoad_DispatchWidget:

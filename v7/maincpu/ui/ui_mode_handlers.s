@@ -464,7 +464,7 @@ EffectMode_UpdateBitFlags:
 	ld	a, (xhl)
 	and	a, 32
 	ld	(xsp+6), a
-	ldda32	xwa, (36036)
+	ld	xwa, (36036:16)
 	ld	(xsp+8), xwa
 	lds	iy, 0
 	jr	40
@@ -2851,7 +2851,7 @@ MstStyleAlp_PageForward:
 	ld wa, (xwa)
 	cp wa, (xbc)
 	jrl z, SeqFile_ReturnZeroJmp2
-	incm 1, (xbc)
+	incw 1, (xbc)
 	ld xwa, (xsp + 74)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
@@ -3355,7 +3355,7 @@ MstStyle_FallbackEvent:
 	jrl ge, MstStyle_DialUp_CheckLimit
 	cp iy, 0x9
 	jr nz, MstStyle_DialUp_Increment
-	incm 1, (xde)
+	incw 1, (xde)
 	ld xwa, (xhl)
 	ld wa, (xwa)
 	muls wa, 0xa
@@ -3966,7 +3966,7 @@ MstStyle1Sub_FallbackEvent:
 	lda_24 xix, (0x0340c8)
 	cp hl, 0x9
 	jr nz, MstStyle1Sub_DialUp_Increment
-	incm 1, (xiy)
+	incw 1, (xiy)
 	ld xwa, (xiz)
 	ld wa, (xwa)
 	muls wa, 0xa
@@ -4745,7 +4745,7 @@ MstStyle2_DialUp_Scroll:
 	stw_erp WA, 0xe2
 	cps wa, 0
 	jr nz, MstStyle2_DialUp_PageInc
-	incm 1, (xiy)
+	incw 1, (xiy)
 	ldw_da xwa, (0x0340c4)
 	extz xwa
 	add xbc, xwa
@@ -4765,7 +4765,7 @@ MstStyle2_DialUp_Scroll:
 MstStyle2_DialUp_PageInc:
 	ld xiy, xhl
 	ld xwa, (xhl)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ld xwa, (xhl)
 	ld wa, (xwa)
 	sla wa, 1
@@ -4843,7 +4843,7 @@ MstStyle2_PageInc_CountAdj2:
 
 MstStyle2_DialUp_UpdateAndPost:
 	ld xwa, (xde)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ldw_da xwa, (0x0340c4)
 	extz xwa
 	ld xbc, 0x340c8
@@ -5101,7 +5101,7 @@ MstStyle2_FallbackEvent:
 	jrl le, MstStyle2_DialScroll_AutoInc
 	lda xbc, (xiz + 86)
 	ld xwa, (xbc)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ldw_da xwa, (0x0340c4)
 	extz xwa
 	ld xde, 0x340c8
@@ -5136,7 +5136,7 @@ MstStyle2_DialScrollUp_NextPage:
 	cpdm16_24 (0x340bc), xwa
 	jrl ge, MstStyle2_DialScroll_AutoInc
 	ld xwa, (xix)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ld xwa, (xix)
 	ld wa, (xwa)
 	sla wa, 1
@@ -5209,7 +5209,7 @@ MstStyle2_DialScroll_CountAdjE:
 MstStyle2_DialScroll_IncAndPost:
 	lda xbc, (xiz + 86)
 	ld xwa, (xbc)
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ldw_da xwa, (0x0340c4)
 	extz xwa
 	ld xde, 0x340c8
@@ -5864,7 +5864,7 @@ MstStylePgCtl_HandleScroll:
 	ld xwa, (xbc)
 	cpw (xwa), 0x1
 	jr nz, MstStylePgCtl_ReturnZero
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ld xwa, (xde)
 	ld de, (xwa)
 	exts xde
@@ -7524,7 +7524,7 @@ PmemPageCtl_OK_PageSwitch:
 	jr z, PmemPageCtl_OK_AdvanceTo2
 	cps bc, 1
 	jrl nz, SeqLoad_ReturnZeroJmp2
-	incm 1, (xwa)
+	incw 1, (xwa)
 	stib_da (0x0340e2), 0x01
 	ld xwa, 0x450005
 	ld xbc, 0x1c00002
@@ -9354,7 +9354,7 @@ IvWindowPgCtl_OkHandler:
 	ld xwa, (xwa + 22)
 	cpw (xwa), 0x4
 	jr ge, IvWindowPgCtl_TryNextPage
-	incm 1, (xwa)
+	incw 1, (xwa)
 	ld xwa, 0x1400001
 	ld xbc, 0x1e000ab
 	lds32 xde, 1
@@ -12649,7 +12649,7 @@ VariScreen_OK_PageScroll:
 	inc 1, wa
 	cp (xbc), wa
 	jr ge, VariScreen_OK_PageScrollWrap
-	incm 1, (xbc)
+	incw 1, (xbc)
 	ld_sril XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0

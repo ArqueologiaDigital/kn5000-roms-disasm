@@ -28,7 +28,7 @@ SeqPlay_ResetAndStop:
 	stw_da (0x00ffec), xwa
 	stdi16 (0xf19c), 0
 	push xhl
-	ldda32 xhl, (6701)
+	ld xhl, (6701:16)
 	stda16 (6699), xhl
 	pop xhl
 	jrl SeqPlay_ReadyStateTransition
@@ -118,7 +118,7 @@ SeqTrack_ClearPlaybackBuf2_Loop:
 ; ============================================================================
 FloppyIO_ReadNextByte:
 	push xix
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	ldb_spi A, 0xf0
 	cp xix, 0x17f9
 	jrl ule, FloppyIO_ReadNextByte_StorePtr
@@ -151,7 +151,7 @@ FloppyIO_ReadNextByte_StorePtr:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6883)
+	ld xwa, (6883:16)
 	cp xwa, xbc
 	jp_24 z, FloppyIO_ReadNextByte_UpdateRemaining
 	cpdi8 (6887), 1
@@ -359,7 +359,7 @@ SeqTrack_AssignChannel_Loop:
 	pushw wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ormi8 (xhl), 0x80
 	ldw (xhl + 1), 0x0
 	ldw (xhl + 3), 0xffff
@@ -404,7 +404,7 @@ FloppyIO_ReadTrackBuf_ReadLoop:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, FloppyIO_ReadTrackBuf_EarlyExit
 	pop xbc
@@ -659,7 +659,7 @@ SMF_ParseTrackEvent:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_EarlyExit
 	pop xbc
@@ -687,7 +687,7 @@ SMF_ParseTrack_Dispatch:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_ValidateExit
 	pop xbc
@@ -708,7 +708,7 @@ SMF_ParseTrack_MetaEvt02:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta02_EarlyExit
 	pop xbc
@@ -729,7 +729,7 @@ SMF_ParseTrack_MetaEvt03:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta03_EarlyExit
 	pop xbc
@@ -750,7 +750,7 @@ SMF_ParseTrack_MetaEvt2F:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta2F_EarlyExit
 	pop xbc
@@ -771,7 +771,7 @@ SMF_ParseTrack_MetaEvt51:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta51_Read1_EarlyExit
 	pop xbc
@@ -788,7 +788,7 @@ SMF_ParseTrack_Meta51_ReadByte2:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta51_Read2_EarlyExit
 	pop xbc
@@ -809,7 +809,7 @@ SMF_ParseTrack_MetaEvt58:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ParseTrack_Meta58_EarlyExit
 	pop xbc
@@ -895,7 +895,7 @@ SMF_ReadMidiEvt_ReadLoop:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ReadMidiEvt_ReadFailed
 	pop xbc
@@ -962,7 +962,7 @@ FloppyIO_ReadMidiEvtBytes_CheckDone:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, FloppyIO_ReadMidiEvtBytes_ReadFailed
 	pop xbc
@@ -1076,7 +1076,7 @@ SMF_VoiceSetup_AssignToTrack:
 	pushw wa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ormi8 (xhl), 0x80
 	ldw (xhl + 1), 0x0
 	ldw (xhl + 3), 0xffff
@@ -1130,7 +1130,7 @@ SMF_MTrk_ReadByteLoop:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_MTrk_ReadFailed
 	pop xbc
@@ -1165,7 +1165,7 @@ SMF_MTrk_SignatureMatch:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_MTrk_FileSizeReadFailed
 	pop xbc
@@ -1187,7 +1187,7 @@ SMF_ProcessVoiceData:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_CheckFailed
 	pop xbc
@@ -1205,7 +1205,7 @@ SMF_VoiceData_ReadTrackBuffer:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_ReadTrackFailed
 	pop xbc
@@ -1228,7 +1228,7 @@ SMF_VoiceData_DispatchAndParse:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_ParseFailed
 	pop xbc
@@ -1248,7 +1248,7 @@ SMF_VoiceData_CheckMetaFlag:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_MetaParseFailed
 	pop xbc
@@ -1273,7 +1273,7 @@ SMF_VoiceData_HandleEndOfTrack:
 	call SeqTrack_ReleaseVoiceAtEndOfTrack
 
 SMF_VoiceData_DrainRemaining:
-	ldda32 xbc, (6883)
+	ld xbc, (6883:16)
 	lds32 xwa, 0
 	cp xbc, xwa
 	jp_24 z, SMF_VoiceData_DrainDone
@@ -1297,7 +1297,7 @@ SMF_VoiceData_HandleSysEx:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_SysExFailed
 	pop xbc
@@ -1322,7 +1322,7 @@ SMF_VoiceData_CheckMidiStatus:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_MidiStatusFailed
 	pop xbc
@@ -1344,7 +1344,7 @@ SMF_VoiceData_ReadMidiRunning:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_VoiceData_RunningMidiFailed
 	pop xbc
@@ -1618,7 +1618,7 @@ SeqTrack_ChannelMapIdentity:
 
 ToneGen_ComputeBlockPtr:
 	push xiy
-	ldda32 xiy, (7514)
+	ld xiy, (7514:16)
 	extz xhl
 	dec 1, xhl
 	sla xhl, 8
@@ -1709,7 +1709,7 @@ Sequencer_ValidateFileData:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, Sequencer_Validate_ReadFailed
 	pop xbc
@@ -1728,7 +1728,7 @@ Sequencer_Validate_Done:
 	ret
 
 Sequencer_AdvanceBlockPosition:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	addda32 xix, 4211
 	cp xix, 0x17f9
 	jrl ule, Sequencer_Advance_StorePtr
@@ -1759,7 +1759,7 @@ Sequencer_Advance_StorePtr:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6883)
+	ld xwa, (6883:16)
 	cp xwa, xbc
 	jp_24 z, Sequencer_Advance_UpdateRemaining
 	cpdi8 (6887), 1
@@ -1780,7 +1780,7 @@ SMF_SetTempoFromMetaEvent:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_SetTempo_ReadByte1Failed
 	pop xbc
@@ -1798,7 +1798,7 @@ SMF_SetTempo_StoreByte1:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_SetTempo_ReadByte2Failed
 	pop xbc
@@ -1949,7 +1949,7 @@ ToneGen_LoadBlockValidate:
 	push xhl
 	ldw_d16 xhl, (0x28af)
 	call ToneGen_ComputeBlockPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ldw_d16 xiy, (9830)
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
@@ -2140,7 +2140,7 @@ SMF_ReadMidiStatus_ReadLoop:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_ReadMidiStatus_ReadFailed
 	pop xbc
@@ -2268,7 +2268,7 @@ SetWall_InitVoiceSlots:
 	stda16 (3308), xix
 	ld hl, ix
 	call ToneGen_ComputeBlockPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stda32 0x2881, xhl
 	lds ix, 5
 	ldw (xhl + 1), 0x0
@@ -2333,7 +2333,7 @@ Scoop_NullRet:
 
 ToneGen_CopyBlockToVoiceBuffer:
 	push xiz
-	ldda32 xiz, (4349)
+	ld xiz, (4349:16)
 	ldfr_lerp XIZ, 0x38
 	pop xiz
 	push_lerp 0x38
@@ -2341,7 +2341,7 @@ ToneGen_CopyBlockToVoiceBuffer:
 	push xhl
 	call ToneGen_ComputeBlockPtr
 	xor xiy, xiy
-	ldda32 xiy, (4349)
+	ld xiy, (4349:16)
 	ld xix, 0x17fa
 	ldw bc, 0x100
 	ldir85
@@ -2580,7 +2580,7 @@ FloppyIO_ReadVarLen_ReadLoop:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, FloppyIO_ReadVarLen_ReadFailed
 	pop xbc
@@ -2845,7 +2845,7 @@ MidiNoteOff_ScanActiveA_Loop:
 	ldb w, 0x5
 
 Scoop_ApplyMatchedVoiceEntry:
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stb_dri W, 0x07, 0xec, 0xf0
 	pop xhl
 	push_sd16w 0xaf, 0x28
@@ -2857,7 +2857,7 @@ Scoop_ApplyMatchedVoiceEntry:
 	popw wa
 	push xix
 	push xiy
-	ldda32 xix, (4349)
+	ld xix, (4349:16)
 	ldw_d16 xiy, (9830)
 	and iy, 0xff
 	stb_dri A, 0x07, 0xf0, 0xf4
@@ -3499,7 +3499,7 @@ MidiNoteOff_ScanActiveB_Loop:
 	ldb w, 0x5
 
 Scoop_ApplyMatchedVoiceEntryAlt:
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stb_dri W, 0x07, 0xec, 0xf0
 	pop xhl
 	push_sd16w 0xaf, 0x28
@@ -3510,7 +3510,7 @@ Scoop_ApplyMatchedVoiceEntryAlt:
 	call ToneGen_AdvanceBlockPosition
 	popw wa
 	ldw_d16 xix, (9830)
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stb_dri A, 0x07, 0xec, 0xf0
 	popw_dd16 0x66, 0x26
 	popw_dd16 0xaf, 0x28
@@ -3988,11 +3988,11 @@ VoiceChannel_CopyParamBlock:
 	pushw bc
 	push xhl
 	push xiz
-	ldda32 xiz, (4349)
+	ld xiz, (4349:16)
 	ldfr_lerp XIZ, 0x38
 	pop xiz
 	push_lerp 0x38
-	ldda32 xiy, (4349)
+	ld xiy, (4349:16)
 	ldw bc, 0x100
 	ldir85
 	ldw_d16 xiy, (0x28af)
@@ -4085,7 +4085,7 @@ VoiceChannel_FindNextLoop:
 Scoop_HandleEqualCompare:
 	cp c, 0x82
 	jr nz, Scoop_Equal_AdvanceAndRevalidate
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stib_ind 0x07, 0xec, 0xf0, 0x82
 	stdi8 (0x27d2), 255
 	ldw_d16 xwa, (3308)
@@ -4097,10 +4097,10 @@ Scoop_HandleEqualCompare:
 	jr Scoop_Equal_Done
 
 Scoop_Equal_AdvanceAndRevalidate:
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stib_ind 0x07, 0xec, 0xf0, 0x81
 	call VoiceChannel_AdvanceIndex
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	push xix
 	ld xix, 0x17fa
 	nop
@@ -4128,12 +4128,12 @@ ToneGen_AdvanceVoiceLoop:
 	ret
 
 VoiceChannel_FindNextValid:
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stb_dri C, 0x07, 0xec, 0xf0
 	bitda 0, (0x27d2)
 	jr nz, VoiceChannel_ValidateAndLoop
 	call VoiceChannel_AdvanceIndex
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ldb_d8 a, (0x27dc)
 	stb_dri A, 0x07, 0xec, 0xf0
 
@@ -4146,7 +4146,7 @@ VoiceChannel_ValidateAndLoop:
 	stda16 (0x27d6), xiy
 	pop xix
 	call VoiceChannel_AdvanceIndex
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	push xde
 	ld xde, 0x17fa
 	bit_dri 7, 0x07, 0xe8, 0xf4
@@ -4196,7 +4196,7 @@ VoiceChannel_AdvPos_LoadBlock:
 	stda16 (0x28af), xwa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, VoiceChannel_AdvPos_CopyBlock
 	stdi8 (0x287a), 11
@@ -4287,7 +4287,7 @@ ToneGen_AdvanceBlockPosition:
 	jr nz, ToneGen_AdvBlock_IncrementPos
 	ldw_d16 xhl, (0x28af)
 	call ToneGen_ComputeBlockPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
 	stda16 (0x28af), xwa
 	ld hl, wa
@@ -4848,12 +4848,12 @@ VoiceParam_Chorus_SetParams:
 	ret
 
 ToneGen_AdvanceAndValidateVoice:
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stb_dri B, 0x07, 0xec, 0xf0
 	bitda 1, (0x27d2)
 	jr nz, ToneGen_ValidateVoiceLoop
 	call VoiceChannel_AdvanceIndex
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ldb_d8 a, (0x27de)
 	stb_dri A, 0x07, 0xec, 0xf0
 
@@ -4866,7 +4866,7 @@ ToneGen_ValidateVoiceLoop:
 	stda16 (0x27da), xiy
 	pop xix
 	call VoiceChannel_AdvanceIndex
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	push xix
 	ld xix, 0x18fa
 	bit_dri 7, 0x07, 0xf0, 0xf4
@@ -5378,7 +5378,7 @@ VoiceParam_ReadUpdate_11:
 
 ToneGen_ValidateAndSelectVoice:
 	push xiz
-	ldda32 xiz, (4349)
+	ld xiz, (4349:16)
 	ldfr_lerp XIZ, 0x38
 	pop xiz
 	push_lerp 0x38
@@ -5405,7 +5405,7 @@ ToneGen_ValidateVoice_LoadBlock:
 	stda16 (0x28af), xwa
 	ld hl, wa
 	call ToneGen_ComputeBlockPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, ToneGen_ValidateVoice_CopyParams
 	stdi8 (0x287a), 11
@@ -5425,7 +5425,7 @@ ToneGen_SaveVoiceState_Continue:
 Scoop_AssignVoiceAfterMatch:
 	push xiy
 	push xiz
-	ldda32 xiz, (4349)
+	ld xiz, (4349:16)
 	ldfr_lerp XIZ, 0x38
 	pop xiz
 	push_lerp 0x38

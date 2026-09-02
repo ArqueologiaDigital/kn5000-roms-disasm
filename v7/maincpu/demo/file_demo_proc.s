@@ -931,7 +931,7 @@ Voice_CopyPreset:
 Demo_LookupPartTableEntry:
 	extz	wa
 	sla	wa, 2
-	ldda32	xbc, (36950)
+	ld	xbc, (36950:16)
 	exts	xwa
 	add	xwa, xbc
 	ld	xhl, (xwa)
@@ -2188,7 +2188,7 @@ FileDemo_RecordCallback:
 	jr FileIO_RecordLoop_Continue
 
 ParseDir_IncrementCount:
-	incm 1, (xsp + 8)
+	incw 1, (xsp + 8)
 
 FileIO_RecordLoop_Continue:
 	inc 1, iz
@@ -2216,7 +2216,7 @@ FileIO_RecordLoop_Continue:
 	jr FileIO_FinalizeRecordLookup
 
 ParseDir_SongIncrCount:
-	incm 1, (xsp + 8)
+	incw 1, (xsp + 8)
 
 FileIO_FinalizeRecordLookup:
 	cpw (xsp + 8), 0x0
@@ -3934,7 +3934,7 @@ FileIO_OpenMode_Return:
 	ret
 
 FileIO_CloseHandle:
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	or	xwa, xwa
 	jr	z, 13
 	push	xwa
@@ -4023,7 +4023,7 @@ FileIO_CopyOpen_Return:
 	ret
 
 FileIO_ReadByte:
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	or	xwa, xwa
 	jr	z, 16
 	push	xwa
@@ -4052,7 +4052,7 @@ FileIO_ReadByte_Extended:
 FileIO_ReadByte_BufferHit:
 	pushw	iz
 	lds	iz, 0
-	ldda32	xbc, (32424)
+	ld	xbc, (32424:16)
 	or	xbc, xbc
 	jr	z, 40
 	push	xbc
@@ -4062,7 +4062,7 @@ FileIO_ReadByte_BufferHit:
 	inc	6, xsp
 	cps	hl, 0
 	jr	ge, 29
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	ld	wa, (xwa+6)
 	res	15, wa
 	cp	wa, 31
@@ -4093,7 +4093,7 @@ FileIO_ReadBlock:
 	ldw (XSP+0x04), 0x0000
 	lds32	xwa, 0
 	ld	(xsp+6), xwa
-	ldda32	xwa, 32424
+	ld	xwa, (32424:16)
 	or	xwa, xwa
 	jr	z, 110
 	ld	(xsp+14), xbc
@@ -4108,7 +4108,7 @@ FileIO_ReadBlock_Loop:
 
 FileIO_ReadBlock_Done:
 	ld	(xsp+10), xiz
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	push	xwa
 	ld	wa, iz
 	pushw	wa
@@ -4129,7 +4129,7 @@ FileIO_ReadBlock_Done:
 	jr	gt, -73
 	jr	31
 FileIO_WriteBlock_NoHandle:
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	ld	wa, (xwa+6)
 	bit	15, wa
 	jr	z, 5
@@ -4169,7 +4169,7 @@ FileIO_WriteByte_Impl:
 	ld (XSP+0x0e),XBC
 	ld (XSP+0x12),XWA
 	ldw (XSP+0x04), 0x0000
-	ldda32	xwa, 32424
+	ld	xwa, (32424:16)
 	or	xwa, xwa
 	jr	z, 116
 	ld	xwa, (xsp+14)
@@ -4185,7 +4185,7 @@ FileIO_WriteByte_NoHandle:
 
 FileIO_WriteByte_Return:
 	ld	(xsp+6), xiz
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	push	xwa
 	ld	wa, iz
 	pushw	wa
@@ -4197,7 +4197,7 @@ FileIO_WriteByte_Return:
 	exts	xhl
 	cp	xhl, xiz
 	jr	ge, 30	; -> 0xF88A90
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	ld	wa, (xwa+6)
 	res	15, wa
 	cp	wa, 31
@@ -4242,7 +4242,7 @@ FileIO_CheckHandle:
 	ret
 
 FileIO_SeekAndReadBlock:
-	ldda32	xde, (32424)
+	ld	xde, (32424:16)
 	or	xde, xde
 	jr	z, 22
 	pushw	bc
@@ -4268,7 +4268,7 @@ FileIO_SeekRead_Extended:
 FileIO_SeekRead_ExtReturn:
 	pushw	iz
 	lds	iz, 0
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	or	xwa, xwa
 	jr	z, 9
 	push	xwa
@@ -4289,7 +4289,7 @@ FileIO_SeekWriteBlock:
 	popw	iz
 	ret
 FileIO_SeekWriteBlock_Impl:
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	or	xwa, xwa
 	jr	z, 22
 	push	xwa
@@ -4422,7 +4422,7 @@ FileIO_ParseHeader_Return:
 	lda	xsp, (xsp+12)
 	cp	hl, iz
 	jr	z, -99	; -> 0xF88C03
-	ldda32	xwa, (32424)
+	ld	xwa, (32424:16)
 	ld	wa, (xwa+6)
 	res	15, wa
 	cp	wa, 31
@@ -7671,7 +7671,7 @@ FindFirst_StoreResult:
 	jr FindFirst_Return
 
 FindFirst_NextIndex:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ldb_da a, (0x027412)
 	exts wa
 	cp (xsp + 4), wa

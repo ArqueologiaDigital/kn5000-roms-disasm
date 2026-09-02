@@ -1196,7 +1196,7 @@ HDAE5000_SelectListProc:
 	lds	de, 7
 	call	(xhl)
 .LRF_0a7e:
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 .LRF_0a81:
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld	wa, (xwa+42)
@@ -1268,7 +1268,7 @@ HDAE5000_SelectListProc:
 	lda	xbc, (xsp+22)
 	ld	wa, (xsp+20)
 	stib_ind 0x07, 0xE4, 0xE0, 0x00	; ld (XBC+WA),0x00
-	incm	1, (xsp+10)
+	incw	1, (xsp+10)
 	ldw (xsp + 0x14), 0
 	jr t, .LRF_0b79                        ; [68 2a] jr T,0x280b79
 .LRF_0b4f:
@@ -1280,8 +1280,8 @@ HDAE5000_SelectListProc:
 	ld	wa, (xsp+20)
 	ld	c, (xbc)
 	stb_dri c, 0x07, 0xE8, 0xE0	; ld (XDE+WA),C
-	incm	1, (xsp+20)
-	incm	1, (xsp+10)
+	incw	1, (xsp+20)
+	incw	1, (xsp+10)
 .LRF_0b6c:
 	ld	wa, (xsp+10)
 	extz xwa
@@ -1476,7 +1476,7 @@ HDAE5000_SelectListProc:
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
 .LRF_0db2:
-	incm	1, (xsp+8)
+	incw	1, (xsp+8)
 .LRF_0db5:
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld	bc, (xwa+42)
@@ -1896,8 +1896,8 @@ HDAE5000_DbMemoClProc:
 	lda	xix, (xsp+98)
 	lds	bc, 4
 	ldirw                                   ; ldirw
-	incm	4, (xsp+100)
-	incm	4, (xsp+98)
+	incw	4, (xsp+100)
+	incw	4, (xsp+98)
 	decm	4, (xsp+102)
 	decm	4, (xsp+104)
 	lda	xwa, (xsp+98)
@@ -1931,8 +1931,8 @@ HDAE5000_DbMemoClProc:
 	lda	xix, (xsp+98)
 	lds	bc, 4
 	ldirw                                   ; ldirw
-	incm	5, (xsp+100)
-	incm	5, (xsp+98)
+	incw	5, (xsp+100)
+	incw	5, (xsp+98)
 	decm	5, (xsp+102)
 	decm	5, (xsp+104)
 	ld	wa, (xsp+102)
@@ -1949,7 +1949,7 @@ HDAE5000_DbMemoClProc:
 	lda	xix, (xsp+90)
 	lds	bc, 4
 	ldirw                                   ; ldirw
-	incm	8, (xsp+92)
+	incw	8, (xsp+92)
 	lda	xiy, (xsp+98)
 	lda	xix, (xsp+82)
 	lds	bc, 4
@@ -2913,7 +2913,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	a, (xwa)
 	cp	a, (xbc)
 	jr nz, .LRF_2002                       ; [6e 0c] jr NZ,0x282002
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	inc	1, iz
 	cpda16_24	iz, (0x22A026)
 	jr c, .LRF_1fe0                        ; [67 de] jr C,0x281fe0
@@ -2936,7 +2936,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	a, (xwa)
 	cp	a, (xbc)
 	jr nz, .LRF_2044                       ; [6e 0c] jr NZ,0x282044
-	incm	1, (xsp+6)
+	incw	1, (xsp+6)
 	inc	1, iz
 	cpda16_24	iz, (0x22A026)
 	jr c, .LRF_201b                        ; [67 d7] jr C,0x28201b

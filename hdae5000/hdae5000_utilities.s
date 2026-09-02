@@ -429,7 +429,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	extz xwa
 	div wa, 0x000a
 	ld	(xhl), a
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 .LMCR_b2c4:
 	ld	ix, de
 	inc	1, de
@@ -438,7 +438,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	div wa, 0x000a
 	ld	wa, qwa
 	stb_dri a, 0x07, 0xEC, 0xF0	; ld (XHL+IX),A
-	incm	1, (xsp+4)
+	incw	1, (xsp+4)
 	ld	qiz, 1
 	jr t, .LMCR_b2f6                       ; [68 16] jr T,0x29b2f6
 .LMCR_b2e0:
@@ -745,7 +745,7 @@ HDAE5000_MemCopy_Reverse:	; 0x29AFF0
 	ld	wa, (xbc)
 	bit	0x07, wa
 	jr z, .LMCR_b59a                       ; [66 03] jr Z,0x29b59a
-	incm	1, (xhl+28)
+	incw	1, (xhl+28)
 .LMCR_b59a:
 	ldw	(xbc), 0x0000
 	popw iz                                 ; pop IZ

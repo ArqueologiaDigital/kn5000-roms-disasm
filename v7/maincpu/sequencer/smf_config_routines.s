@@ -20,7 +20,7 @@ SMF_ProcessTimedEvent_Continue:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop1_BufferEmpty
 	pop xbc
@@ -37,7 +37,7 @@ SMF_WriteLoop1_Continue:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop2_BufferEmpty
 	pop xbc
@@ -74,7 +74,7 @@ SMF_IncrementPosition:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_IncrPos_BufferEmpty
 	pop xbc
@@ -94,7 +94,7 @@ SMF_IncrPos_WriteEndMarker:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_EndMarker_BufferEmpty
 	pop xbc
@@ -113,7 +113,7 @@ SMF_EndMarker_CheckPlayback:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_Flush_BufferEmpty
 	pop xbc
@@ -155,7 +155,7 @@ SMF_Finalize_RestoreAndPlay:
 ; ============================================================================
 SMF_FlushAndFinalize:
 	push xhl
-	ldda32 xhl, (6701)
+	ld xhl, (6701:16)
 	stda16 (6699), xhl
 	pop xhl
 	call Vga_RestoreMultiPlaneDisplay
@@ -373,7 +373,7 @@ SMF_CalcTempoRate:
 
 SMF_OutputCommandSeq:
 	ld xiy, 0x106e
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 
 SMF_OutputCmd_ReadByte:
 	ldb_spi A, 0xf4
@@ -386,7 +386,7 @@ SMF_OutputCmd_ReadByte:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck1
 	pop xbc
@@ -399,7 +399,7 @@ SMF_OutputCmd_ErrorCheck1:
 	jp SMF_OutputCmd_Return
 
 SMF_OutputCmd_SendFF:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	bit 7, a
 	jr nz, SMF_OutputCmd_ReadByte
 	ldb a, 0xff
@@ -408,7 +408,7 @@ SMF_OutputCmd_SendFF:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck2
 	pop xbc
@@ -421,14 +421,14 @@ SMF_OutputCmd_ErrorCheck2:
 	jp SMF_OutputCmd_Return
 
 SMF_OutputCmd_Send51:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	ldb a, 0x51
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck3
 	pop xbc
@@ -441,14 +441,14 @@ SMF_OutputCmd_ErrorCheck3:
 	jp SMF_OutputCmd_Return
 
 SMF_OutputCmd_Send03:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	ldb a, 0x3
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck4
 	pop xbc
@@ -461,14 +461,14 @@ SMF_OutputCmd_ErrorCheck4:
 	jp SMF_OutputCmd_Return
 
 SMF_OutputCmd_SendTempoH:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	ldb_d8 a, (3950)
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck5
 	pop xbc
@@ -481,14 +481,14 @@ SMF_OutputCmd_ErrorCheck5:
 	jp SMF_OutputCmd_Return
 
 SMF_OutputCmd_SendTempoM:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	ldb_d8 a, (3949)
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck6
 	pop xbc
@@ -501,14 +501,14 @@ SMF_OutputCmd_ErrorCheck6:
 	jp SMF_OutputCmd_Return
 
 SMF_OutputCmd_SendTempoL:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	ldb_d8 a, (3948)
 	lda_dpi XBC, 0xf0
 	call SMF_WriteByte
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_OutputCmd_ErrorCheck7
 	pop xbc
@@ -521,7 +521,7 @@ SMF_OutputCmd_ErrorCheck7:
 	jp SMF_OutputCmd_Return
 
 SMF_OutputCmd_Finalize:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 
 SMF_OutputCmd_Return:
 	ret
@@ -549,7 +549,7 @@ SMF_WriteByte_SectorCheck:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteByte_SectorError
 	pop xbc
@@ -591,7 +591,7 @@ SMF_WriteByte_AlignCheck:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteByte_AlignError
 	pop xbc
@@ -617,7 +617,7 @@ SMF_WriteByte_Done:
 
 SMF_WriteByteLoop:
 	push xiy
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	ld xiy, 0x106e
 	pushw wa
 
@@ -634,7 +634,7 @@ SMF_WriteLoop_ReadByte:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_Error
 	pop xbc
@@ -648,7 +648,7 @@ SMF_WriteLoop_Error:
 	jp SMF_WriteLoop_Done
 
 SMF_WriteLoop_Continue:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	bit 7, a
 	jr nz, SMF_WriteLoop_ReadByte
 	popw wa
@@ -662,7 +662,7 @@ SMF_WriteLoop_Continue:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_SendFF
 	pop xbc
@@ -675,7 +675,7 @@ SMF_WriteLoop_SendFF:
 	jp SMF_WriteLoop_Done
 
 SMF_WriteLoop_AfterFF:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	ld a, w
 	lda_dpi XBC, 0xf0
 	pushw hl
@@ -684,7 +684,7 @@ SMF_WriteLoop_AfterFF:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_Send51
 	pop xbc
@@ -697,7 +697,7 @@ SMF_WriteLoop_Send51:
 	jp SMF_WriteLoop_Done
 
 SMF_WriteLoop_After51:
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	and h, 0xf0
 	cp h, 0xc0
 	jr z, SMF_WriteLoop_Done
@@ -709,7 +709,7 @@ SMF_WriteLoop_After51:
 	push xwa
 	push xbc
 	lds32 xbc, 0
-	ldda32 xwa, (6701)
+	ld xwa, (6701:16)
 	cp xwa, xbc
 	jr lt, SMF_WriteLoop_FinalError
 	pop xbc
@@ -723,7 +723,7 @@ SMF_WriteLoop_FinalError:
 
 SMF_WriteLoop_Done:
 	pop xiy
-	ldda32 xix, (4376)
+	ld xix, (4376:16)
 	ret
 
 SMF_ChannelHelperReturn:
@@ -732,7 +732,7 @@ SMF_ChannelHelperReturn:
 SMF_GetNextEvent:
 	ldw_d16 xhl, (0x28af)
 	call ToneGen_ComputeBlockPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ldw_d16 xiy, (9830)
 	ldb_sri A, 0x07, 0xec, 0xf4
 	ret
@@ -743,7 +743,7 @@ SMF_AdvancePosition:
 	jr nz, SMF_AdvancePos_Inc
 	ldw_d16 xhl, (0x28af)
 	call ToneGen_ComputeBlockPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
 	stda16 (0x28af), xwa
 	lds wa, 5
@@ -1605,7 +1605,7 @@ SMF_CalcFilePosition:
 	stda16 (4004), xwa
 	ldw_d16 xwa, (4347)
 	mul wa, 0x400
-	ldda32 xhl, (4376)
+	ld xhl, (4376:16)
 	sub xhl, 0x13fa
 	add xwa, xhl
 	sub xwa, 0x16
@@ -1864,7 +1864,7 @@ SMF_ConfigSlot_Setup:
 	calr SMF_SetupSongBankRead
 	pop xiy
 	push xhl
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stda32 0x2881, xhl
 	pop xhl
 	stda16 (0x2885), xiy
@@ -1877,7 +1877,7 @@ SMF_ConfigSlot_Setup:
 
 SMF_ConfigSlot_EventLoop:
 	push xde
-	ldda32 xde, (4349)
+	ld xde, (4349:16)
 	ldb_sri A, 0x07, 0xe8, 0xf0
 	pop xde
 	ldb w, 0xf0
@@ -1900,7 +1900,7 @@ SMF_ConfigSlot_EventLoop:
 
 SMF_ConfigSlot_DefaultHandler:
 	push xhl
-	ldda32 xhl, (0x2881)
+	ld xhl, (0x2881:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 
@@ -1914,12 +1914,12 @@ SMF_ConfigSlot_AdvanceEvent:
 	cpdi8 (0x287a), 0
 	jrl nz, SMF_ConfigSlot_Return
 	push xde
-	ldda32 xde, (4349)
+	ld xde, (4349:16)
 	bit_dri 7, 0x07, 0xe8, 0xf0
 	pop xde
 	jr nz, SMF_ConfigSlot_EventLoop
 	push xde
-	ldda32 xde, (4349)
+	ld xde, (4349:16)
 	ldb_sri A, 0x07, 0xe8, 0xf0
 	pop xde
 	jr SMF_ConfigSlot_DefaultHandler
@@ -1966,7 +1966,7 @@ SMF_ConfigSlot_ReadDataLoop:
 	popw hl
 	pop xiy
 	push xde
-	ldda32 xde, (4349)
+	ld xde, (4349:16)
 	ldb_sri A, 0x07, 0xe8, 0xf0
 	pop xde
 	stb_dri A, 0x07, 0xf4, 0xec
@@ -2109,7 +2109,7 @@ SMF_Config_WriteOutput:
 	ld xix, 0x112c
 	ld a, (xix)
 	push xhl
-	ldda32 xhl, (0x2881)
+	ld xhl, (0x2881:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 
@@ -2122,7 +2122,7 @@ SMF_Config_WriteLoop:
 	pop xix
 	ldb_sri A, 0x07, 0xf0, 0xec
 	push xhl
-	ldda32 xhl, (0x2881)
+	ld xhl, (0x2881:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 	cpda16 xhl, 4402
@@ -2230,7 +2230,7 @@ SMF_Config_ClearFlags:
 
 SMF_ConfigSlot_EndOfTrack:
 	push xhl
-	ldda32 xhl, (0x2881)
+	ld xhl, (0x2881:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	pop xhl
 	ldw_d16 xwa, (0x2887)
@@ -2251,13 +2251,13 @@ SMF_ConfigSlot_CodeBlock:
 	incdi16	1, (4417)
 	cpdi16	(4417), 255
 	jr	ule, 47
-	ldda32	xhl, (10369)
+	ld	xhl, (10369:16)
 	ld	wa, (xhl+3)
 	stda16	(4415), wa
 	stda16	(10375), wa
 	ld	hl, wa
 	calr	192
-	ldda32	xhl, (4349)
+	ld	xhl, (4349:16)
 	.byte 0xb3	; v10 does not spell this byte either
 	.byte 0xcf	; v10 does not spell this byte either
 	jr	nz, 7
@@ -2306,12 +2306,12 @@ SMF_AdvanceReadPtr:
 	jr ule, SMF_AdvanceRead_Return
 	ldw_d16 xhl, (0x288b)
 	calr SMF_CalcPageAddress
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
 	stda16 (0x288b), xwa
 	ld hl, wa
 	calr SMF_CalcPageAddress
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, SMF_AdvanceRead_NewPage
 	stdi8 (0x287a), 2
@@ -2324,17 +2324,17 @@ SMF_AdvanceRead_Return:
 	ret
 
 SMF_AdvanceWritePtr:
-	ldda32 xwa, (4349)
+	ld xwa, (4349:16)
 	push xwa
 	inc 1, iy
 	cp iy, 0xff
 	jr ule, SMF_AdvanceWrite_Return
-	ldda32 xhl, (0x2881)
+	ld xhl, (0x2881:16)
 	ld wa, (xhl + 3)
 	stda16 (0x2887), xwa
 	ld hl, wa
 	calr SMF_CalcPageAddress
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	jr nz, SMF_AdvanceWrite_NewPage
 	stdi8 (0x287a), 2
@@ -3247,7 +3247,7 @@ SMF_SlotParam_Type80Handler:
 
 SMF_SetupSongBankRead:
 	push xhl
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	stda32 0x2881, xhl
 	pop xhl
 	ldw_d16 xwa, (0x28af)
@@ -3255,7 +3255,7 @@ SMF_SetupSongBankRead:
 
 SMF_SetupRead_Adjust:
 	push xhl
-	ldda32 xhl, (0x2881)
+	ld xhl, (0x2881:16)
 	ldb_sri A, 0x07, 0xec, 0xf4
 	pop xhl
 	cp a, 0x82

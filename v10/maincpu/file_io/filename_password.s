@@ -263,14 +263,14 @@ FmmFileNameFunc:
 	cps hl, 0
 	jr lt, FileName_ListSelect_Negative
 	exts xhl
-	ldda32 xwa, (0x7f72)
+	ld xwa, (0x7f72:16)
 	ld xbc, 0x1e50002
 	ld xde, xhl
 	jr FileName_ListSelect_Forward
 
 FileName_ListSelect_Negative:
 	stdi16 (0x7f7a), 0
-	ldda32 xwa, (0x7f72)
+	ld xwa, (0x7f72:16)
 	ld xbc, 0x1e50002
 	lds32 xde, 0
 
@@ -312,10 +312,10 @@ FileName_DrawItemLoop:
 	lda_d16 xbc, (0x850c)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x7f72)
+	ld xwa, (0x7f72:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x14
 	jr lt, FileName_DrawItemLoop
 	jrl FileName_Return
@@ -331,7 +331,7 @@ FileName_HandleScroll:
 	jr nz, FileName_ScrollUp
 	cpw (xsp + 6), 0x13
 	jrl ge, FileName_GetSelection
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	jr FileName_ScrollApply
 
 FileName_ScrollUp:
@@ -661,7 +661,7 @@ FileName_UpdateDisplay:
 	stdi8 (0x89f8), 4
 	ldw_d16 xde, (0x7f7a)
 	exts xde
-	ldda32 xwa, (0x7f72)
+	ld xwa, (0x7f72:16)
 	ld xbc, 0x1e50002
 	call ApPostEvent
 	ld de, (xsp + 4)
@@ -669,7 +669,7 @@ FileName_UpdateDisplay:
 	lda_d16 xbc, (0x850c)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x7f72)
+	ld xwa, (0x7f72:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	ldw_d16 xde, (0x7f7a)
@@ -677,7 +677,7 @@ FileName_UpdateDisplay:
 	lda_d16 xbc, (0x850c)
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x7f72)
+	ld xwa, (0x7f72:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	ldw (xsp + 6), 0x0
@@ -697,7 +697,7 @@ FileName_UpdateButtons_Hide:
 	call FileIO_FormatName_Copy
 
 FileName_UpdateButtons_Check:
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x8
 	jr lt, FileName_UpdateButtons_Loop
 	ldw wa, 0x8
@@ -712,7 +712,7 @@ FileName_UpdateButtons_Check:
 	call FileIO_FormatName_Loop
 
 FileName_CheckCallback:
-	ldda32 xwa, (0x7f76)
+	ld xwa, (0x7f76:16)
 	or xwa, xwa
 	jrl z, FileName_Return
 	cpdi8 (0x8d36), 103
@@ -743,14 +743,14 @@ FileName_Callback_SetFilter:
 FileName_Callback_Send:
 	ld de, iz
 	extz xde
-	ldda32 xwa, (0x7f76)
+	ld xwa, (0x7f76:16)
 	ld xbc, 0x1e50001
 	jr FileName_DispatchWidget
 
 FileName_Callback_Simple:
 	call FileIO_FormatName_Done
 	extz xhl
-	ldda32 xwa, (0x7f76)
+	ld xwa, (0x7f76:16)
 	ld xbc, 0x1e50001
 	ld xde, xhl
 	jr FileName_DispatchWidget
@@ -785,14 +785,14 @@ FileName_Register_SetFilter:
 FileName_Register_Send:
 	ld de, iz
 	extz xde
-	ldda32 xwa, (0x7f76)
+	ld xwa, (0x7f76:16)
 	ld xbc, 0x1e50001
 	jr FileName_DispatchWidget
 
 FileName_Register_Simple:
 	call FileIO_FormatName_Done
 	extz xhl
-	ldda32 xwa, (0x7f76)
+	ld xwa, (0x7f76:16)
 	ld xbc, 0x1e50001
 	ld xde, xhl
 

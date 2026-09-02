@@ -89,7 +89,7 @@ MidiPkt_BuildControl:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -119,7 +119,7 @@ MidiPkt_BuildControl:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -153,7 +153,7 @@ MidiPkt_BuildControl:
 	calr	2344
 	cp	hl, 0xffff
 	jrl	z, 168
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -205,7 +205,7 @@ MidiPkt_BuildControl:
 	lds	bc, 3
 	call	ArpQueue_Enqueue
 	call	ArpQueue_ComputeAndEnqueue
-	ldda32	xwa, (0xbc5c)
+	ld	xwa, (0xbc5c:16)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
 	pop	xiz
@@ -218,7 +218,7 @@ MidiPkt_BuildControl:
 	ld	xwa, (xsp+18)
 	cp	(xwa+14), 255
 	jr	z, 108
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -549,7 +549,7 @@ MidiPkt_DispatchSpecialType:
 	ld xwa, MidiPkt_EventType_Table_0x584
 	lds bc, 6
 	call ArpQueue_Enqueue
-	ldda32 xwa, (0xbc5c)
+	ld xwa, (0xbc5c:16)
 	jr MidiPkt_DispatchSpecialType_SendAndUpdate
 
 MidiPkt_DispatchSpecialType_Type10:
@@ -558,7 +558,7 @@ MidiPkt_DispatchSpecialType_Type10:
 	ld xwa, MidiPkt_EventType_Table_0x58A
 	lds bc, 6
 	call ArpQueue_Enqueue
-	ldda32 xwa, (0xbc5c)
+	ld xwa, (0xbc5c:16)
 
 MidiPkt_DispatchSpecialType_SendAndUpdate:
 	call SeqOut_FlushTimedBuffer
@@ -654,7 +654,7 @@ MidiPkt_EnqueueControl_3354_ShiftBits:
 	lds bc, 3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
+	ld xwa, (0xbc5c:16)
 	call SeqOut_FlushTimedBuffer
 	call ArpQueue_SwapBuffers
 
@@ -712,7 +712,7 @@ MidiPkt_EnqueueExtended_Data:
 	lds	bc, 3
 	call	ArpQueue_Enqueue
 	call	ArpQueue_ComputeAndEnqueue
-	ldda32	xwa, (0xbc5c)
+	ld	xwa, (0xbc5c:16)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
 	pop	xiz
@@ -764,7 +764,7 @@ MidiPkt_EnqueueControl_335C_ZeroData:
 	lds bc, 3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
+	ld xwa, (0xbc5c:16)
 	call SeqOut_FlushTimedBuffer
 	call ArpQueue_SwapBuffers
 
@@ -800,7 +800,7 @@ MidiPkt_EnqueueControl_3358:
 	ld xwa, (xiz + 4)
 	lds bc, 6
 	call ArpQueue_Enqueue
-	ldda32 xhl, (0x90f2)
+	ld xhl, (0x90f2:16)
 	ld xwa, (xiz)
 	ld a, (xwa)
 	extz wa
@@ -850,7 +850,7 @@ MidiPkt_EnqueueControl_3358_SplitNibbles:
 	lds bc, 5
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
+	ld xwa, (0xbc5c:16)
 	call SeqOut_FlushTimedBuffer
 	call ArpQueue_SwapBuffers
 
@@ -912,7 +912,7 @@ MidiPkt_EnqueueControl_335E_SplitNibbles:
 	lds bc, 5
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
+	ld xwa, (0xbc5c:16)
 	call SeqOut_FlushTimedBuffer
 	call ArpQueue_SwapBuffers
 
@@ -972,7 +972,7 @@ MidiPkt_EnqueueControl_3364_FormatData:
 	lds bc, 3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
+	ld xwa, (0xbc5c:16)
 	call SeqOut_FlushTimedBuffer
 	call ArpQueue_SwapBuffers
 
@@ -1048,7 +1048,7 @@ MidiPkt_EnqueueControl_3368_FormatData:
 	lds bc, 3
 	call ArpQueue_Enqueue
 	call ArpQueue_ComputeAndEnqueue
-	ldda32 xwa, (0xbc5c)
+	ld xwa, (0xbc5c:16)
 	call SeqOut_FlushTimedBuffer
 	call ArpQueue_SwapBuffers
 
@@ -1117,7 +1117,7 @@ MidiPkt_EnqueueExtended2_Data:
 	lds	bc, 3
 	call	ArpQueue_Enqueue
 	call	ArpQueue_ComputeAndEnqueue
-	ldda32	xwa, (0xbc5c)
+	ld	xwa, (0xbc5c:16)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
 	pop	xiz
@@ -1222,18 +1222,18 @@ MidiPkt_DispatchData_Chan6:
 	cps	a, 1
 	jr	nz, 2
 	jr	-44
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	lds	bc, 4
 	ldw	de, 17
 	jp	MIDI_ReadChannelParam
 
 MidiPkt_SendBankSelect:
-	ldda32 xwa, (0xbcac)
+	ld xwa, (0xbcac:16)
 	lds bc, 4
 	call SeqData_ReadFieldByIndex
 	cps l, 0
 	ret z
-	ldda32 xwa, (0xbcac)
+	ld xwa, (0xbcac:16)
 	lds bc, 5
 	call SeqData_ReadFieldByIndex
 	cp l, 0x2b
@@ -1245,7 +1245,7 @@ MidiPkt_SendBankSelect_Send:
 	ld xwa, MidiPkt_EventType_Table_0x560
 	lds bc, 5
 	call ArpQueue_Enqueue
-	ldda32 xwa, (0xbc5c)
+	ld xwa, (0xbc5c:16)
 	call SeqOut_FlushTimedBuffer
 	call ArpQueue_SwapBuffers
 	ret
@@ -1314,7 +1314,7 @@ MidiPkt_SysExProcessor_Data:
 	pop	xiz
 	ret
 MidiPkt_SysExBulkTransfer_Data:
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	lds	bc, 1
 	call	SeqData_ReadFieldByIndex
 	extz	hl
@@ -1378,7 +1378,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	.byte 0xd7
 	swi	2
 	.byte 0x04
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 9
 	call	SeqData_ReadFieldByIndex
 	ldb_erp l, 251
@@ -1493,7 +1493,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	jrl	-568
 	dec	2, xsp
 	push	xiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l

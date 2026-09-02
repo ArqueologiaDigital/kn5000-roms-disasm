@@ -1376,7 +1376,7 @@ sub_FC3B24__FC3C3D:
 	inc	2, xsp                                 ; FC3C83  inc 2,XSP
 	cps	h, 0                                   ; FC3C85  cp H,0
 	jrl nz, sub_FC3B24__FC3C03                 ; FC3C87  jrl NZ,0xfc3c03
-	incm	2, (xiz-8)                            ; FC3C8A  incw 2,(XIZ+0xf8)
+	incw	2, (xiz-8)                            ; FC3C8A  incw 2,(XIZ+0xf8)
 	add	de, 0x96                               ; FC3C8D  add DE,0x0096
 	decm8	1, (xiz-5)                           ; FC3C91  dec 1,(XIZ+0xfb)
 	cp (xiz-5), 0x00                           ; FC3C94  cp (XIZ+0xfb),0x00
@@ -2663,7 +2663,7 @@ sub_FC4269__FC435B:
 	add	xix, xbc                               ; FC4373  add XIX,XBC
 	add	(xiz-12), xbc                          ; FC4375  add (XIZ+0xf4),XBC
 	add	(xiz-16), xbc                          ; FC4378  add (XIZ+0xf0),XBC
-	incm	1, (xiz-44)                           ; FC437B  incw 1,(XIZ+0xd4)
+	incw	1, (xiz-44)                           ; FC437B  incw 1,(XIZ+0xd4)
 	popw	wa                                    ; FC437E  pop WA
 	ld	wa, (xiz-44)                            ; FC437F  ld WA,(XIZ+0xd4)
 	extpfx3 0x9E, 0xB8, 0xF0                   ; FC4382  cp WA,(XIZ+0xb8)
@@ -2933,7 +2933,7 @@ sub_FC4269__FC460E:
 	add	(xiz-30), xbc                          ; FC461F  add (XIZ+0xe2),XBC
 	add	(xiz-18), xbc                          ; FC4622  add (XIZ+0xee),XBC
 	add	(xiz-14), xbc                          ; FC4625  add (XIZ+0xf2),XBC
-	incm	1, (xiz-44)                           ; FC4628  incw 1,(XIZ+0xd4)
+	incw	1, (xiz-44)                           ; FC4628  incw 1,(XIZ+0xd4)
 	ld	wa, (xiz-44)                            ; FC462B  ld WA,(XIZ+0xd4)
 	extpfx3 0x9E, 0xB8, 0xF0                   ; FC462E  cp WA,(XIZ+0xb8)
 	jrl lt, sub_FC4269__FC43E5                 ; FC4631  jrl LT,0xfc43e5
@@ -2974,7 +2974,7 @@ sub_FC4269__FC4634:
 	add	(xiz-54), xbc                          ; FC468A  add (XIZ+0xca),XBC
 	add	xbc, xix                               ; FC468D  add XBC,XIX
 	ld	(xiz-58), xbc                           ; FC468F  ld (XIZ+0xc6),XBC
-	incm	1, (xiz-76)                           ; FC4692  incw 1,(XIZ+0xb4)
+	incw	1, (xiz-76)                           ; FC4692  incw 1,(XIZ+0xb4)
 	inc	8, xsp                                 ; FC4695  inc 0,XSP
 	inc	8, xsp                                 ; FC4697  inc 0,XSP
 	ld	wa, (xiz-76)                            ; FC4699  ld WA,(XIZ+0xb4)

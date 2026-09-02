@@ -159,7 +159,7 @@ sub_FB828E__FB8298:
 	jr nc, sub_FB828E__FB82BF                  ; FB829E  jr NC,0xfb82bf
 	jr sub_FB828E__FB82A7                      ; FB82A0  jr T,0xfb82a7
 sub_FB828E__FB82A2:
-	incm	1, (xiz-2)                            ; FB82A2  incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                            ; FB82A2  incw 1,(XIZ+0xfe)
 	jr sub_FB828E__FB8298                      ; FB82A5  jr T,0xfb8298
 sub_FB828E__FB82A7:
 	ld	xbc, (xiz+8)                            ; FB82A7  ld XBC,(XIZ+0x08)
@@ -1117,7 +1117,7 @@ Voice_RecomputeEnv_AndWriteSlot2__FB8A64:
 	jrl nc, Voice_RecomputeEnv_AndWriteSlot2__FB8AF2                 ; FB8A7B  jrl NC,0xfb8af2
 	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A85                      ; FB8A7E  jr T,0xfb8a85
 Voice_RecomputeEnv_AndWriteSlot2__FB8A80:
-	incm	1, (xiz-4)                            ; FB8A80  incw 1,(XIZ+0xfc)
+	incw	1, (xiz-4)                            ; FB8A80  incw 1,(XIZ+0xfc)
 	jr Voice_RecomputeEnv_AndWriteSlot2__FB8A64                      ; FB8A83  jr T,0xfb8a64
 Voice_RecomputeEnv_AndWriteSlot2__FB8A85:
 	ld	bc, (xiz-4)                             ; FB8A85  ld BC,(XIZ+0xfc)
@@ -1243,7 +1243,7 @@ Voice_RecomputeEnv_AndWriteSlot1__FB8B64:
 	jrl nc, Voice_RecomputeEnv_AndWriteSlot1__FB8BF2                 ; FB8B7B  jrl NC,0xfb8bf2
 	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B85                      ; FB8B7E  jr T,0xfb8b85
 Voice_RecomputeEnv_AndWriteSlot1__FB8B80:
-	incm	1, (xiz-4)                            ; FB8B80  incw 1,(XIZ+0xfc)
+	incw	1, (xiz-4)                            ; FB8B80  incw 1,(XIZ+0xfc)
 	jr Voice_RecomputeEnv_AndWriteSlot1__FB8B64                      ; FB8B83  jr T,0xfb8b64
 Voice_RecomputeEnv_AndWriteSlot1__FB8B85:
 	ld	bc, (xiz-4)                             ; FB8B85  ld BC,(XIZ+0xfc)
@@ -1369,7 +1369,7 @@ Voice_RecomputeEnv_AndWriteSlot1or3__FB8C64:
 	jrl nc, Voice_RecomputeEnv_AndWriteSlot1or3__FB8CE8                 ; FB8C7B  jrl NC,0xfb8ce8
 	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C85                      ; FB8C7E  jr T,0xfb8c85
 Voice_RecomputeEnv_AndWriteSlot1or3__FB8C80:
-	incm	1, (xiz-4)                            ; FB8C80  incw 1,(XIZ+0xfc)
+	incw	1, (xiz-4)                            ; FB8C80  incw 1,(XIZ+0xfc)
 	jr Voice_RecomputeEnv_AndWriteSlot1or3__FB8C64                      ; FB8C83  jr T,0xfb8c64
 Voice_RecomputeEnv_AndWriteSlot1or3__FB8C85:
 	ld	bc, (xiz-4)                             ; FB8C85  ld BC,(XIZ+0xfc)
@@ -1507,7 +1507,7 @@ sub_FB8CEC__FB8DBE:
 	jr nc, sub_FB8CEC__FB8E0A                  ; FB8DC3  jr NC,0xfb8e0a
 	jr sub_FB8CEC__FB8DCC                      ; FB8DC5  jr T,0xfb8dcc
 sub_FB8CEC__FB8DC7:
-	incm	1, (xiz-10)                           ; FB8DC7  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FB8DC7  incw 1,(XIZ+0xf6)
 	jr sub_FB8CEC__FB8DBE                      ; FB8DCA  jr T,0xfb8dbe
 sub_FB8CEC__FB8DCC:
 	ldw	bc, 6                                  ; FB8DCC  ld BC,0x0006
@@ -1546,7 +1546,7 @@ sub_FB8CEC__FB8E25:
 	jr nc, sub_FB8CEC__FB8E71                  ; FB8E2A  jr NC,0xfb8e71
 	jr sub_FB8CEC__FB8E33                      ; FB8E2C  jr T,0xfb8e33
 sub_FB8CEC__FB8E2E:
-	incm	1, (xiz-10)                           ; FB8E2E  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FB8E2E  incw 1,(XIZ+0xf6)
 	jr sub_FB8CEC__FB8E25                      ; FB8E31  jr T,0xfb8e25
 sub_FB8CEC__FB8E33:
 	ldw	bc, 6                                  ; FB8E33  ld BC,0x0006
@@ -1650,7 +1650,7 @@ sub_FB8CEC__FB8F47:
 	jrl nc, sub_FB8CEC__FB8FD4                 ; FB8F4C  jrl NC,0xfb8fd4
 	jr sub_FB8CEC__FB8F56                      ; FB8F4F  jr T,0xfb8f56
 sub_FB8CEC__FB8F51:
-	incm	1, (xiz-10)                           ; FB8F51  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FB8F51  incw 1,(XIZ+0xf6)
 	jr sub_FB8CEC__FB8F47                      ; FB8F54  jr T,0xfb8f47
 sub_FB8CEC__FB8F56:
 	ldw	bc, 6                                  ; FB8F56  ld BC,0x0006
@@ -1721,7 +1721,7 @@ sub_FB8CEC__FB9003:
 	jrl nc, sub_FB8CEC__FB9090                 ; FB9008  jrl NC,0xfb9090
 	jr sub_FB8CEC__FB9012                      ; FB900B  jr T,0xfb9012
 sub_FB8CEC__FB900D:
-	incm	1, (xiz-10)                           ; FB900D  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FB900D  incw 1,(XIZ+0xf6)
 	jr sub_FB8CEC__FB9003                      ; FB9010  jr T,0xfb9003
 sub_FB8CEC__FB9012:
 	ldw	bc, 6                                  ; FB9012  ld BC,0x0006
@@ -1914,7 +1914,7 @@ ToneDB_SourceNameList1_SelectEntry__FB91BF:
 	jr nc, ToneDB_SourceNameList1_SelectEntry__FB91E3                  ; FB91C4  jr NC,0xfb91e3
 	jr ToneDB_SourceNameList1_SelectEntry__FB91CD                      ; FB91C6  jr T,0xfb91cd
 ToneDB_SourceNameList1_SelectEntry__FB91C8:
-	incm	1, (xiz-14)                           ; FB91C8  incw 1,(XIZ+0xf2)
+	incw	1, (xiz-14)                           ; FB91C8  incw 1,(XIZ+0xf2)
 	jr ToneDB_SourceNameList1_SelectEntry__FB91BF                      ; FB91CB  jr T,0xfb91bf
 ToneDB_SourceNameList1_SelectEntry__FB91CD:
 	ld	c, (xiz-14)                             ; FB91CD  ld C,(XIZ+0xf2)
@@ -2200,7 +2200,7 @@ sub_FB9414__FB9427:
 	jrl nc, sub_FB9414__FB952F                 ; FB942C  jrl NC,0xfb952f
 	jr sub_FB9414__FB9436                      ; FB942F  jr T,0xfb9436
 sub_FB9414__FB9431:
-	incm	1, (xiz-14)                           ; FB9431  incw 1,(XIZ+0xf2)
+	incw	1, (xiz-14)                           ; FB9431  incw 1,(XIZ+0xf2)
 	jr sub_FB9414__FB9427                      ; FB9434  jr T,0xfb9427
 sub_FB9414__FB9436:
 	ldb	c, 0x96                                ; FB9436  ld C,0x96
@@ -2230,7 +2230,7 @@ sub_FB9414__FB9484:
 	jr nc, sub_FB9414__FB94AF                  ; FB9489  jr NC,0xfb94af
 	jr sub_FB9414__FB9492                      ; FB948B  jr T,0xfb9492
 sub_FB9414__FB948D:
-	incm	1, (xiz-16)                           ; FB948D  incw 1,(XIZ+0xf0)
+	incw	1, (xiz-16)                           ; FB948D  incw 1,(XIZ+0xf0)
 	jr sub_FB9414__FB9484                      ; FB9490  jr T,0xfb9484
 sub_FB9414__FB9492:
 	ld	ix, (xiz-16)                            ; FB9492  ld IX,(XIZ+0xf0)
@@ -7023,7 +7023,7 @@ sub_FBC10A__FBC15C:
 	jr nc, sub_FBC10A__FBC187                  ; FBC161  jr NC,0xfbc187
 	jr sub_FBC10A__FBC16A                      ; FBC163  jr T,0xfbc16a
 sub_FBC10A__FBC165:
-	incm	1, (xiz-10)                           ; FBC165  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBC165  incw 1,(XIZ+0xf6)
 	jr sub_FBC10A__FBC15C                      ; FBC168  jr T,0xfbc15c
 sub_FBC10A__FBC16A:
 	ld	ix, (xiz-10)                            ; FBC16A  ld IX,(XIZ+0xf6)
@@ -7072,7 +7072,7 @@ sub_FBC10A__FBC1D2:
 	jr nc, sub_FBC10A__FBC1FD                  ; FBC1D7  jr NC,0xfbc1fd
 	jr sub_FBC10A__FBC1E0                      ; FBC1D9  jr T,0xfbc1e0
 sub_FBC10A__FBC1DB:
-	incm	1, (xiz-10)                           ; FBC1DB  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBC1DB  incw 1,(XIZ+0xf6)
 	jr sub_FBC10A__FBC1D2                      ; FBC1DE  jr T,0xfbc1d2
 sub_FBC10A__FBC1E0:
 	ld	ix, (xiz-10)                            ; FBC1E0  ld IX,(XIZ+0xf6)
@@ -7116,7 +7116,7 @@ sub_FBC10A__FBC23E:
 	jr nc, sub_FBC10A__FBC269                  ; FBC243  jr NC,0xfbc269
 	jr sub_FBC10A__FBC24C                      ; FBC245  jr T,0xfbc24c
 sub_FBC10A__FBC247:
-	incm	1, (xiz-10)                           ; FBC247  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBC247  incw 1,(XIZ+0xf6)
 	jr sub_FBC10A__FBC23E                      ; FBC24A  jr T,0xfbc23e
 sub_FBC10A__FBC24C:
 	ld	ix, (xiz-10)                            ; FBC24C  ld IX,(XIZ+0xf6)
@@ -7261,7 +7261,7 @@ sub_FBC31B__FBC36D:
 	jr nc, sub_FBC31B__FBC398                  ; FBC372  jr NC,0xfbc398
 	jr sub_FBC31B__FBC37B                      ; FBC374  jr T,0xfbc37b
 sub_FBC31B__FBC376:
-	incm	1, (xiz-10)                           ; FBC376  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBC376  incw 1,(XIZ+0xf6)
 	jr sub_FBC31B__FBC36D                      ; FBC379  jr T,0xfbc36d
 sub_FBC31B__FBC37B:
 	ld	ix, (xiz-10)                            ; FBC37B  ld IX,(XIZ+0xf6)
@@ -7381,7 +7381,7 @@ sub_FBC39D__FBC455:
 	jr nc, sub_FBC39D__FBC489                  ; FBC45A  jr NC,0xfbc489
 	jr sub_FBC39D__FBC463                      ; FBC45C  jr T,0xfbc463
 sub_FBC39D__FBC45E:
-	incm	1, (xiz-6)                            ; FBC45E  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FBC45E  incw 1,(XIZ+0xfa)
 	jr sub_FBC39D__FBC455                      ; FBC461  jr T,0xfbc455
 sub_FBC39D__FBC463:
 	ld	c, (xiz-6)                              ; FBC463  ld C,(XIZ+0xfa)
@@ -7433,7 +7433,7 @@ sub_FBC39D__FBC4CA:
 	jr nc, sub_FBC39D__FBC4FE                  ; FBC4CF  jr NC,0xfbc4fe
 	jr sub_FBC39D__FBC4D8                      ; FBC4D1  jr T,0xfbc4d8
 sub_FBC39D__FBC4D3:
-	incm	1, (xiz-6)                            ; FBC4D3  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FBC4D3  incw 1,(XIZ+0xfa)
 	jr sub_FBC39D__FBC4CA                      ; FBC4D6  jr T,0xfbc4ca
 sub_FBC39D__FBC4D8:
 	ld	c, (xiz-6)                              ; FBC4D8  ld C,(XIZ+0xfa)
@@ -7501,7 +7501,7 @@ sub_FBC39D__FBC55F:
 	jr nc, sub_FBC39D__FBC593                  ; FBC564  jr NC,0xfbc593
 	jr sub_FBC39D__FBC56D                      ; FBC566  jr T,0xfbc56d
 sub_FBC39D__FBC568:
-	incm	1, (xiz-6)                            ; FBC568  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FBC568  incw 1,(XIZ+0xfa)
 	jr sub_FBC39D__FBC55F                      ; FBC56B  jr T,0xfbc55f
 sub_FBC39D__FBC56D:
 	ld	c, (xiz-6)                              ; FBC56D  ld C,(XIZ+0xfa)
@@ -7737,7 +7737,7 @@ sub_FBC725__FBC7DE:
 	jr nc, sub_FBC725__FBC809                  ; FBC7EB  jr NC,0xfbc809
 	jr sub_FBC725__FBC7F4                      ; FBC7ED  jr T,0xfbc7f4
 sub_FBC725__FBC7EF:
-	incm	1, (xiz-16)                           ; FBC7EF  incw 1,(XIZ+0xf0)
+	incw	1, (xiz-16)                           ; FBC7EF  incw 1,(XIZ+0xf0)
 	jr sub_FBC725__FBC7DE                      ; FBC7F2  jr T,0xfbc7de
 sub_FBC725__FBC7F4:
 	ld	ix, (xiz-16)                            ; FBC7F4  ld IX,(XIZ+0xf0)
@@ -7880,7 +7880,7 @@ sub_FBC80E__FBC91A:
 	jr nc, sub_FBC80E__FBC945                  ; FBC927  jr NC,0xfbc945
 	jr sub_FBC80E__FBC930                      ; FBC929  jr T,0xfbc930
 sub_FBC80E__FBC92B:
-	incm	1, (xiz-20)                           ; FBC92B  incw 1,(XIZ+0xec)
+	incw	1, (xiz-20)                           ; FBC92B  incw 1,(XIZ+0xec)
 	jr sub_FBC80E__FBC91A                      ; FBC92E  jr T,0xfbc91a
 sub_FBC80E__FBC930:
 	ld	ix, (xiz-20)                            ; FBC930  ld IX,(XIZ+0xec)
@@ -8835,7 +8835,7 @@ sub_FBD1D3__FBD229:
 	jr nc, sub_FBD1D3__FBD254                  ; FBD22E  jr NC,0xfbd254
 	jr sub_FBD1D3__FBD237                      ; FBD230  jr T,0xfbd237
 sub_FBD1D3__FBD232:
-	incm	1, (xiz-10)                           ; FBD232  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBD232  incw 1,(XIZ+0xf6)
 	jr sub_FBD1D3__FBD229                      ; FBD235  jr T,0xfbd229
 sub_FBD1D3__FBD237:
 	ld	ix, (xiz-10)                            ; FBD237  ld IX,(XIZ+0xf6)
@@ -8884,7 +8884,7 @@ sub_FBD1D3__FBD29F:
 	jr nc, sub_FBD1D3__FBD2CA                  ; FBD2A4  jr NC,0xfbd2ca
 	jr sub_FBD1D3__FBD2AD                      ; FBD2A6  jr T,0xfbd2ad
 sub_FBD1D3__FBD2A8:
-	incm	1, (xiz-10)                           ; FBD2A8  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBD2A8  incw 1,(XIZ+0xf6)
 	jr sub_FBD1D3__FBD29F                      ; FBD2AB  jr T,0xfbd29f
 sub_FBD1D3__FBD2AD:
 	ld	ix, (xiz-10)                            ; FBD2AD  ld IX,(XIZ+0xf6)
@@ -8928,7 +8928,7 @@ sub_FBD1D3__FBD30B:
 	jr nc, sub_FBD1D3__FBD336                  ; FBD310  jr NC,0xfbd336
 	jr sub_FBD1D3__FBD319                      ; FBD312  jr T,0xfbd319
 sub_FBD1D3__FBD314:
-	incm	1, (xiz-10)                           ; FBD314  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBD314  incw 1,(XIZ+0xf6)
 	jr sub_FBD1D3__FBD30B                      ; FBD317  jr T,0xfbd30b
 sub_FBD1D3__FBD319:
 	ld	ix, (xiz-10)                            ; FBD319  ld IX,(XIZ+0xf6)
@@ -9073,7 +9073,7 @@ sub_FBD3E8__FBD43B:
 	jr nc, sub_FBD3E8__FBD466                  ; FBD440  jr NC,0xfbd466
 	jr sub_FBD3E8__FBD449                      ; FBD442  jr T,0xfbd449
 sub_FBD3E8__FBD444:
-	incm	1, (xiz-10)                           ; FBD444  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBD444  incw 1,(XIZ+0xf6)
 	jr sub_FBD3E8__FBD43B                      ; FBD447  jr T,0xfbd43b
 sub_FBD3E8__FBD449:
 	ld	ix, (xiz-10)                            ; FBD449  ld IX,(XIZ+0xf6)
@@ -10280,7 +10280,7 @@ sub_FBDCD3__FBDD0A:
 	jrl nc, sub_FBDCD3__FBDE8F                 ; FBDD0F  jrl NC,0xfbde8f
 	jr sub_FBDCD3__FBDD19                      ; FBDD12  jr T,0xfbdd19
 sub_FBDCD3__FBDD14:
-	incm	1, (xiz-10)                           ; FBDD14  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBDD14  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBDD0A                      ; FBDD17  jr T,0xfbdd0a
 sub_FBDCD3__FBDD19:
 	ld	bc, (xiz-10)                            ; FBDD19  ld BC,(XIZ+0xf6)
@@ -10438,7 +10438,7 @@ sub_FBDCD3__FBDEA9:
 	jrl nc, sub_FBDCD3__FBDFC2                 ; FBDEAE  jrl NC,0xfbdfc2
 	jr sub_FBDCD3__FBDEB8                      ; FBDEB1  jr T,0xfbdeb8
 sub_FBDCD3__FBDEB3:
-	incm	1, (xiz-10)                           ; FBDEB3  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBDEB3  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBDEA9                      ; FBDEB6  jr T,0xfbdea9
 sub_FBDCD3__FBDEB8:
 	ld	bc, (xiz-10)                            ; FBDEB8  ld BC,(XIZ+0xf6)
@@ -10555,7 +10555,7 @@ sub_FBDCD3__FBDFDC:
 	cpw (xiz-10), 0x0004                       ; FBDFDC  cp (XIZ+0xf6),0x0004
 	jrl nc, sub_FBDCD3__FBE0D4                 ; FBDFE1  jrl NC,0xfbe0d4
 	jr sub_FBDCD3__FBDFEB                      ; FBDFE4  jr T,0xfbdfeb
-	incm	1, (xiz-10)                           ; FBDFE6  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBDFE6  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBDFDC                      ; FBDFE9  jr T,0xfbdfdc
 sub_FBDCD3__FBDFEB:
 	ldw	bc, 81                                 ; FBDFEB  ld BC,0x0051
@@ -10664,7 +10664,7 @@ sub_FBDCD3__FBE0FC:
 	jr nc, sub_FBDCD3__FBE131                  ; FBE101  jr NC,0xfbe131
 	jr sub_FBDCD3__FBE10A                      ; FBE103  jr T,0xfbe10a
 sub_FBDCD3__FBE105:
-	incm	1, (xiz-10)                           ; FBE105  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE105  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE0FC                      ; FBE108  jr T,0xfbe0fc
 sub_FBDCD3__FBE10A:
 	ldw	bc, 81                                 ; FBE10A  ld BC,0x0051
@@ -10702,7 +10702,7 @@ sub_FBDCD3__FBE159:
 	jr nc, sub_FBDCD3__FBE18E                  ; FBE15E  jr NC,0xfbe18e
 	jr sub_FBDCD3__FBE167                      ; FBE160  jr T,0xfbe167
 sub_FBDCD3__FBE162:
-	incm	1, (xiz-10)                           ; FBE162  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE162  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE159                      ; FBE165  jr T,0xfbe159
 sub_FBDCD3__FBE167:
 	ldw	bc, 81                                 ; FBE167  ld BC,0x0051
@@ -10740,7 +10740,7 @@ sub_FBDCD3__FBE1B6:
 	jr nc, sub_FBDCD3__FBE1EB                  ; FBE1BB  jr NC,0xfbe1eb
 	jr sub_FBDCD3__FBE1C4                      ; FBE1BD  jr T,0xfbe1c4
 sub_FBDCD3__FBE1BF:
-	incm	1, (xiz-10)                           ; FBE1BF  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE1BF  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE1B6                      ; FBE1C2  jr T,0xfbe1b6
 sub_FBDCD3__FBE1C4:
 	ldw	bc, 81                                 ; FBE1C4  ld BC,0x0051
@@ -10778,7 +10778,7 @@ sub_FBDCD3__FBE213:
 	jr nc, sub_FBDCD3__FBE248                  ; FBE218  jr NC,0xfbe248
 	jr sub_FBDCD3__FBE221                      ; FBE21A  jr T,0xfbe221
 sub_FBDCD3__FBE21C:
-	incm	1, (xiz-10)                           ; FBE21C  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE21C  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE213                      ; FBE21F  jr T,0xfbe213
 sub_FBDCD3__FBE221:
 	ldw	bc, 81                                 ; FBE221  ld BC,0x0051
@@ -10816,7 +10816,7 @@ sub_FBDCD3__FBE270:
 	jr nc, sub_FBDCD3__FBE2A5                  ; FBE275  jr NC,0xfbe2a5
 	jr sub_FBDCD3__FBE27E                      ; FBE277  jr T,0xfbe27e
 sub_FBDCD3__FBE279:
-	incm	1, (xiz-10)                           ; FBE279  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE279  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE270                      ; FBE27C  jr T,0xfbe270
 sub_FBDCD3__FBE27E:
 	ldw	bc, 81                                 ; FBE27E  ld BC,0x0051
@@ -10854,7 +10854,7 @@ sub_FBDCD3__FBE2CD:
 	jr nc, sub_FBDCD3__FBE302                  ; FBE2D2  jr NC,0xfbe302
 	jr sub_FBDCD3__FBE2DB                      ; FBE2D4  jr T,0xfbe2db
 sub_FBDCD3__FBE2D6:
-	incm	1, (xiz-10)                           ; FBE2D6  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE2D6  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE2CD                      ; FBE2D9  jr T,0xfbe2cd
 sub_FBDCD3__FBE2DB:
 	ldw	bc, 81                                 ; FBE2DB  ld BC,0x0051
@@ -10892,7 +10892,7 @@ sub_FBDCD3__FBE32A:
 	jr nc, sub_FBDCD3__FBE35F                  ; FBE32F  jr NC,0xfbe35f
 	jr sub_FBDCD3__FBE338                      ; FBE331  jr T,0xfbe338
 sub_FBDCD3__FBE333:
-	incm	1, (xiz-10)                           ; FBE333  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE333  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE32A                      ; FBE336  jr T,0xfbe32a
 sub_FBDCD3__FBE338:
 	ldw	bc, 81                                 ; FBE338  ld BC,0x0051
@@ -10930,7 +10930,7 @@ sub_FBDCD3__FBE387:
 	jr nc, sub_FBDCD3__FBE3BC                  ; FBE38C  jr NC,0xfbe3bc
 	jr sub_FBDCD3__FBE395                      ; FBE38E  jr T,0xfbe395
 sub_FBDCD3__FBE390:
-	incm	1, (xiz-10)                           ; FBE390  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE390  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE387                      ; FBE393  jr T,0xfbe387
 sub_FBDCD3__FBE395:
 	ldw	bc, 81                                 ; FBE395  ld BC,0x0051
@@ -10968,7 +10968,7 @@ sub_FBDCD3__FBE3E4:
 	jr nc, sub_FBDCD3__FBE419                  ; FBE3E9  jr NC,0xfbe419
 	jr sub_FBDCD3__FBE3F2                      ; FBE3EB  jr T,0xfbe3f2
 sub_FBDCD3__FBE3ED:
-	incm	1, (xiz-10)                           ; FBE3ED  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE3ED  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE3E4                      ; FBE3F0  jr T,0xfbe3e4
 sub_FBDCD3__FBE3F2:
 	ldw	bc, 81                                 ; FBE3F2  ld BC,0x0051
@@ -11006,7 +11006,7 @@ sub_FBDCD3__FBE441:
 	jr nc, sub_FBDCD3__FBE476                  ; FBE446  jr NC,0xfbe476
 	jr sub_FBDCD3__FBE44F                      ; FBE448  jr T,0xfbe44f
 sub_FBDCD3__FBE44A:
-	incm	1, (xiz-10)                           ; FBE44A  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE44A  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE441                      ; FBE44D  jr T,0xfbe441
 sub_FBDCD3__FBE44F:
 	ldw	bc, 81                                 ; FBE44F  ld BC,0x0051
@@ -11044,7 +11044,7 @@ sub_FBDCD3__FBE49E:
 	jr nc, sub_FBDCD3__FBE4D3                  ; FBE4A3  jr NC,0xfbe4d3
 	jr sub_FBDCD3__FBE4AC                      ; FBE4A5  jr T,0xfbe4ac
 sub_FBDCD3__FBE4A7:
-	incm	1, (xiz-10)                           ; FBE4A7  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE4A7  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE49E                      ; FBE4AA  jr T,0xfbe49e
 sub_FBDCD3__FBE4AC:
 	ldw	bc, 81                                 ; FBE4AC  ld BC,0x0051
@@ -11082,7 +11082,7 @@ sub_FBDCD3__FBE4FB:
 	jr nc, sub_FBDCD3__FBE530                  ; FBE500  jr NC,0xfbe530
 	jr sub_FBDCD3__FBE509                      ; FBE502  jr T,0xfbe509
 sub_FBDCD3__FBE504:
-	incm	1, (xiz-10)                           ; FBE504  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE504  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE4FB                      ; FBE507  jr T,0xfbe4fb
 sub_FBDCD3__FBE509:
 	ldw	bc, 81                                 ; FBE509  ld BC,0x0051
@@ -11120,7 +11120,7 @@ sub_FBDCD3__FBE558:
 	jr nc, sub_FBDCD3__FBE58D                  ; FBE55D  jr NC,0xfbe58d
 	jr sub_FBDCD3__FBE566                      ; FBE55F  jr T,0xfbe566
 sub_FBDCD3__FBE561:
-	incm	1, (xiz-10)                           ; FBE561  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE561  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE558                      ; FBE564  jr T,0xfbe558
 sub_FBDCD3__FBE566:
 	ldw	bc, 81                                 ; FBE566  ld BC,0x0051
@@ -11158,7 +11158,7 @@ sub_FBDCD3__FBE5B5:
 	jr nc, sub_FBDCD3__FBE5EA                  ; FBE5BA  jr NC,0xfbe5ea
 	jr sub_FBDCD3__FBE5C3                      ; FBE5BC  jr T,0xfbe5c3
 sub_FBDCD3__FBE5BE:
-	incm	1, (xiz-10)                           ; FBE5BE  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE5BE  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE5B5                      ; FBE5C1  jr T,0xfbe5b5
 sub_FBDCD3__FBE5C3:
 	ldw	bc, 81                                 ; FBE5C3  ld BC,0x0051
@@ -11196,7 +11196,7 @@ sub_FBDCD3__FBE612:
 	jr nc, sub_FBDCD3__FBE647                  ; FBE617  jr NC,0xfbe647
 	jr sub_FBDCD3__FBE620                      ; FBE619  jr T,0xfbe620
 sub_FBDCD3__FBE61B:
-	incm	1, (xiz-10)                           ; FBE61B  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE61B  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE612                      ; FBE61E  jr T,0xfbe612
 sub_FBDCD3__FBE620:
 	ldw	bc, 81                                 ; FBE620  ld BC,0x0051
@@ -11234,7 +11234,7 @@ sub_FBDCD3__FBE66F:
 	jr nc, sub_FBDCD3__FBE6A4                  ; FBE674  jr NC,0xfbe6a4
 	jr sub_FBDCD3__FBE67D                      ; FBE676  jr T,0xfbe67d
 sub_FBDCD3__FBE678:
-	incm	1, (xiz-10)                           ; FBE678  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE678  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE66F                      ; FBE67B  jr T,0xfbe66f
 sub_FBDCD3__FBE67D:
 	ldw	bc, 81                                 ; FBE67D  ld BC,0x0051
@@ -11272,7 +11272,7 @@ sub_FBDCD3__FBE6CC:
 	jr nc, sub_FBDCD3__FBE701                  ; FBE6D1  jr NC,0xfbe701
 	jr sub_FBDCD3__FBE6DA                      ; FBE6D3  jr T,0xfbe6da
 sub_FBDCD3__FBE6D5:
-	incm	1, (xiz-10)                           ; FBE6D5  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE6D5  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE6CC                      ; FBE6D8  jr T,0xfbe6cc
 sub_FBDCD3__FBE6DA:
 	ldw	bc, 81                                 ; FBE6DA  ld BC,0x0051
@@ -11310,7 +11310,7 @@ sub_FBDCD3__FBE729:
 	jr nc, sub_FBDCD3__FBE75E                  ; FBE72E  jr NC,0xfbe75e
 	jr sub_FBDCD3__FBE737                      ; FBE730  jr T,0xfbe737
 sub_FBDCD3__FBE732:
-	incm	1, (xiz-10)                           ; FBE732  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE732  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE729                      ; FBE735  jr T,0xfbe729
 sub_FBDCD3__FBE737:
 	ldw	bc, 81                                 ; FBE737  ld BC,0x0051
@@ -11348,7 +11348,7 @@ sub_FBDCD3__FBE786:
 	jr nc, sub_FBDCD3__FBE7BB                  ; FBE78B  jr NC,0xfbe7bb
 	jr sub_FBDCD3__FBE794                      ; FBE78D  jr T,0xfbe794
 sub_FBDCD3__FBE78F:
-	incm	1, (xiz-10)                           ; FBE78F  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE78F  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE786                      ; FBE792  jr T,0xfbe786
 sub_FBDCD3__FBE794:
 	ldw	bc, 81                                 ; FBE794  ld BC,0x0051
@@ -11386,7 +11386,7 @@ sub_FBDCD3__FBE7E3:
 	jr nc, sub_FBDCD3__FBE818                  ; FBE7E8  jr NC,0xfbe818
 	jr sub_FBDCD3__FBE7F1                      ; FBE7EA  jr T,0xfbe7f1
 sub_FBDCD3__FBE7EC:
-	incm	1, (xiz-10)                           ; FBE7EC  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE7EC  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE7E3                      ; FBE7EF  jr T,0xfbe7e3
 sub_FBDCD3__FBE7F1:
 	ldw	bc, 81                                 ; FBE7F1  ld BC,0x0051
@@ -11424,7 +11424,7 @@ sub_FBDCD3__FBE840:
 	jr nc, sub_FBDCD3__FBE875                  ; FBE845  jr NC,0xfbe875
 	jr sub_FBDCD3__FBE84E                      ; FBE847  jr T,0xfbe84e
 sub_FBDCD3__FBE849:
-	incm	1, (xiz-10)                           ; FBE849  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE849  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE840                      ; FBE84C  jr T,0xfbe840
 sub_FBDCD3__FBE84E:
 	ldw	bc, 81                                 ; FBE84E  ld BC,0x0051
@@ -11462,7 +11462,7 @@ sub_FBDCD3__FBE89D:
 	jr nc, sub_FBDCD3__FBE8D2                  ; FBE8A2  jr NC,0xfbe8d2
 	jr sub_FBDCD3__FBE8AB                      ; FBE8A4  jr T,0xfbe8ab
 sub_FBDCD3__FBE8A6:
-	incm	1, (xiz-10)                           ; FBE8A6  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE8A6  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE89D                      ; FBE8A9  jr T,0xfbe89d
 sub_FBDCD3__FBE8AB:
 	ldw	bc, 81                                 ; FBE8AB  ld BC,0x0051
@@ -11500,7 +11500,7 @@ sub_FBDCD3__FBE8FA:
 	jr nc, sub_FBDCD3__FBE92F                  ; FBE8FF  jr NC,0xfbe92f
 	jr sub_FBDCD3__FBE908                      ; FBE901  jr T,0xfbe908
 sub_FBDCD3__FBE903:
-	incm	1, (xiz-10)                           ; FBE903  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE903  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE8FA                      ; FBE906  jr T,0xfbe8fa
 sub_FBDCD3__FBE908:
 	ldw	bc, 81                                 ; FBE908  ld BC,0x0051
@@ -11538,7 +11538,7 @@ sub_FBDCD3__FBE957:
 	jr nc, sub_FBDCD3__FBE98C                  ; FBE95C  jr NC,0xfbe98c
 	jr sub_FBDCD3__FBE965                      ; FBE95E  jr T,0xfbe965
 sub_FBDCD3__FBE960:
-	incm	1, (xiz-10)                           ; FBE960  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE960  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE957                      ; FBE963  jr T,0xfbe957
 sub_FBDCD3__FBE965:
 	ldw	bc, 81                                 ; FBE965  ld BC,0x0051
@@ -11571,7 +11571,7 @@ sub_FBDCD3__FBE9A6:
 	jrl nc, sub_FBDCD3__FBEA50                 ; FBE9AB  jrl NC,0xfbea50
 	jr sub_FBDCD3__FBE9B5                      ; FBE9AE  jr T,0xfbe9b5
 sub_FBDCD3__FBE9B0:
-	incm	1, (xiz-10)                           ; FBE9B0  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBE9B0  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBE9A6                      ; FBE9B3  jr T,0xfbe9a6
 sub_FBDCD3__FBE9B5:
 	pushw	0                                    ; FBE9B5  push 0x0000
@@ -11651,7 +11651,7 @@ sub_FBDCD3__FBEA87:
 	jrl nc, sub_FBDCD3__FBEB5C                 ; FBEA8C  jrl NC,0xfbeb5c
 	jr sub_FBDCD3__FBEA96                      ; FBEA8F  jr T,0xfbea96
 sub_FBDCD3__FBEA91:
-	incm	1, (xiz-10)                           ; FBEA91  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEA91  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEA87                      ; FBEA94  jr T,0xfbea87
 sub_FBDCD3__FBEA96:
 	pushw	0                                    ; FBEA96  push 0x0000
@@ -11736,7 +11736,7 @@ sub_FBDCD3__FBEB76:
 	jr nc, sub_FBDCD3__FBEBB6                  ; FBEB7B  jr NC,0xfbebb6
 	jr sub_FBDCD3__FBEB84                      ; FBEB7D  jr T,0xfbeb84
 sub_FBDCD3__FBEB7F:
-	incm	1, (xiz-10)                           ; FBEB7F  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEB7F  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEB76                      ; FBEB82  jr T,0xfbeb76
 sub_FBDCD3__FBEB84:
 	pushw	0                                    ; FBEB84  push 0x0000
@@ -11771,7 +11771,7 @@ sub_FBDCD3__FBEBD0:
 	jr nc, sub_FBDCD3__FBEC10                  ; FBEBD5  jr NC,0xfbec10
 	jr sub_FBDCD3__FBEBDE                      ; FBEBD7  jr T,0xfbebde
 sub_FBDCD3__FBEBD9:
-	incm	1, (xiz-10)                           ; FBEBD9  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEBD9  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEBD0                      ; FBEBDC  jr T,0xfbebd0
 sub_FBDCD3__FBEBDE:
 	pushw	0                                    ; FBEBDE  push 0x0000
@@ -11806,7 +11806,7 @@ sub_FBDCD3__FBEC2A:
 	jr nc, sub_FBDCD3__FBEC6A                  ; FBEC2F  jr NC,0xfbec6a
 	jr sub_FBDCD3__FBEC38                      ; FBEC31  jr T,0xfbec38
 sub_FBDCD3__FBEC33:
-	incm	1, (xiz-10)                           ; FBEC33  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEC33  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEC2A                      ; FBEC36  jr T,0xfbec2a
 sub_FBDCD3__FBEC38:
 	pushw	0                                    ; FBEC38  push 0x0000
@@ -11841,7 +11841,7 @@ sub_FBDCD3__FBEC84:
 	jrl nc, sub_FBDCD3__FBECF5                 ; FBEC89  jrl NC,0xfbecf5
 	jr sub_FBDCD3__FBEC93                      ; FBEC8C  jr T,0xfbec93
 sub_FBDCD3__FBEC8E:
-	incm	1, (xiz-10)                           ; FBEC8E  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEC8E  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEC84                      ; FBEC91  jr T,0xfbec84
 sub_FBDCD3__FBEC93:
 	pushw	0                                    ; FBEC93  push 0x0000
@@ -11891,7 +11891,7 @@ sub_FBDCD3__FBED0F:
 	jrl nc, sub_FBDCD3__FBED80                 ; FBED14  jrl NC,0xfbed80
 	jr sub_FBDCD3__FBED1E                      ; FBED17  jr T,0xfbed1e
 sub_FBDCD3__FBED19:
-	incm	1, (xiz-10)                           ; FBED19  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBED19  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBED0F                      ; FBED1C  jr T,0xfbed0f
 sub_FBDCD3__FBED1E:
 	pushw	0xFFC4                               ; FBED1E  push 0xffc4
@@ -11941,7 +11941,7 @@ sub_FBDCD3__FBED9A:
 	jr nc, sub_FBDCD3__FBEDDA                  ; FBED9F  jr NC,0xfbedda
 	jr sub_FBDCD3__FBEDA8                      ; FBEDA1  jr T,0xfbeda8
 sub_FBDCD3__FBEDA3:
-	incm	1, (xiz-10)                           ; FBEDA3  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEDA3  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBED9A                      ; FBEDA6  jr T,0xfbed9a
 sub_FBDCD3__FBEDA8:
 	pushw	0xFF9C                               ; FBEDA8  push 0xff9c
@@ -11976,7 +11976,7 @@ sub_FBDCD3__FBEDF4:
 	jr nc, sub_FBDCD3__FBEE34                  ; FBEDF9  jr NC,0xfbee34
 	jr sub_FBDCD3__FBEE02                      ; FBEDFB  jr T,0xfbee02
 sub_FBDCD3__FBEDFD:
-	incm	1, (xiz-10)                           ; FBEDFD  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEDFD  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEDF4                      ; FBEE00  jr T,0xfbedf4
 sub_FBDCD3__FBEE02:
 	pushw	0                                    ; FBEE02  push 0x0000
@@ -12011,7 +12011,7 @@ sub_FBDCD3__FBEE4E:
 	jr nc, sub_FBDCD3__FBEE8E                  ; FBEE53  jr NC,0xfbee8e
 	jr sub_FBDCD3__FBEE5C                      ; FBEE55  jr T,0xfbee5c
 sub_FBDCD3__FBEE57:
-	incm	1, (xiz-10)                           ; FBEE57  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEE57  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEE4E                      ; FBEE5A  jr T,0xfbee4e
 sub_FBDCD3__FBEE5C:
 	pushw	0                                    ; FBEE5C  push 0x0000
@@ -12088,7 +12088,7 @@ sub_FBDCD3__FBEF12:
 	jr nc, sub_FBDCD3__FBEF52                  ; FBEF17  jr NC,0xfbef52
 	jr sub_FBDCD3__FBEF20                      ; FBEF19  jr T,0xfbef20
 sub_FBDCD3__FBEF1B:
-	incm	1, (xiz-10)                           ; FBEF1B  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEF1B  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEF12                      ; FBEF1E  jr T,0xfbef12
 sub_FBDCD3__FBEF20:
 	pushw	0                                    ; FBEF20  push 0x0000
@@ -12123,7 +12123,7 @@ sub_FBDCD3__FBEF6C:
 	jr nc, sub_FBDCD3__FBEFAC                  ; FBEF71  jr NC,0xfbefac
 	jr sub_FBDCD3__FBEF7A                      ; FBEF73  jr T,0xfbef7a
 sub_FBDCD3__FBEF75:
-	incm	1, (xiz-10)                           ; FBEF75  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEF75  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEF6C                      ; FBEF78  jr T,0xfbef6c
 sub_FBDCD3__FBEF7A:
 	pushw	0                                    ; FBEF7A  push 0x0000
@@ -12158,7 +12158,7 @@ sub_FBDCD3__FBEFC6:
 	jrl nc, sub_FBDCD3__FBF037                 ; FBEFCB  jrl NC,0xfbf037
 	jr sub_FBDCD3__FBEFD5                      ; FBEFCE  jr T,0xfbefd5
 sub_FBDCD3__FBEFD0:
-	incm	1, (xiz-10)                           ; FBEFD0  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBEFD0  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBEFC6                      ; FBEFD3  jr T,0xfbefc6
 sub_FBDCD3__FBEFD5:
 	pushw	0                                    ; FBEFD5  push 0x0000
@@ -12208,7 +12208,7 @@ sub_FBDCD3__FBF051:
 	jr nc, sub_FBDCD3__FBF091                  ; FBF056  jr NC,0xfbf091
 	jr sub_FBDCD3__FBF05F                      ; FBF058  jr T,0xfbf05f
 sub_FBDCD3__FBF05A:
-	incm	1, (xiz-10)                           ; FBF05A  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF05A  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBF051                      ; FBF05D  jr T,0xfbf051
 sub_FBDCD3__FBF05F:
 	pushw	0                                    ; FBF05F  push 0x0000
@@ -12242,7 +12242,7 @@ sub_FBDCD3__FBF0AB:
 	cpw (xiz-10), 0x0004                       ; FBF0AB  cp (XIZ+0xf6),0x0004
 	jrl nc, sub_FBDCD3__FBF1A3                 ; FBF0B0  jrl NC,0xfbf1a3
 	jr sub_FBDCD3__FBF0BA                      ; FBF0B3  jr T,0xfbf0ba
-	incm	1, (xiz-10)                           ; FBF0B5  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF0B5  incw 1,(XIZ+0xf6)
 	jr sub_FBDCD3__FBF0AB                      ; FBF0B8  jr T,0xfbf0ab
 sub_FBDCD3__FBF0BA:
 	ldw	bc, 81                                 ; FBF0BA  ld BC,0x0051
@@ -12453,7 +12453,7 @@ sub_FBF280__FBF2B7:
 	jrl nc, sub_FBF280__FBF455                 ; FBF2BC  jrl NC,0xfbf455
 	jr sub_FBF280__FBF2C6                      ; FBF2BF  jr T,0xfbf2c6
 sub_FBF280__FBF2C1:
-	incm	1, (xiz-10)                           ; FBF2C1  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF2C1  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF2B7                      ; FBF2C4  jr T,0xfbf2b7
 sub_FBF280__FBF2C6:
 	ld	bc, (xiz-10)                            ; FBF2C6  ld BC,(XIZ+0xf6)
@@ -12621,7 +12621,7 @@ sub_FBF280__FBF46F:
 	jrl nc, sub_FBF280__FBF593                 ; FBF474  jrl NC,0xfbf593
 	jr sub_FBF280__FBF47E                      ; FBF477  jr T,0xfbf47e
 sub_FBF280__FBF479:
-	incm	1, (xiz-10)                           ; FBF479  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF479  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF46F                      ; FBF47C  jr T,0xfbf46f
 sub_FBF280__FBF47E:
 	ld	bc, (xiz-10)                            ; FBF47E  ld BC,(XIZ+0xf6)
@@ -12742,7 +12742,7 @@ sub_FBF280__FBF5AD:
 	cpw (xiz-10), 0x0002                       ; FBF5AD  cp (XIZ+0xf6),0x0002
 	jrl nc, sub_FBF280__FBF699                 ; FBF5B2  jrl NC,0xfbf699
 	jr sub_FBF280__FBF5BC                      ; FBF5B5  jr T,0xfbf5bc
-	incm	1, (xiz-10)                           ; FBF5B7  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF5B7  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF5AD                      ; FBF5BA  jr T,0xfbf5ad
 sub_FBF280__FBF5BC:
 	ldb	c, 0x96                                ; FBF5BC  ld C,0x96
@@ -12845,7 +12845,7 @@ sub_FBF280__FBF6B3:
 	jrl nc, sub_FBF280__FBF749                 ; FBF6B8  jrl NC,0xfbf749
 	jr sub_FBF280__FBF6C2                      ; FBF6BB  jr T,0xfbf6c2
 sub_FBF280__FBF6BD:
-	incm	1, (xiz-10)                           ; FBF6BD  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF6BD  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF6B3                      ; FBF6C0  jr T,0xfbf6b3
 sub_FBF280__FBF6C2:
 	ldb	c, 0x96                                ; FBF6C2  ld C,0x96
@@ -12922,7 +12922,7 @@ sub_FBF280__FBF780:
 	jrl nc, sub_FBF280__FBF841                 ; FBF785  jrl NC,0xfbf841
 	jr sub_FBF280__FBF78F                      ; FBF788  jr T,0xfbf78f
 sub_FBF280__FBF78A:
-	incm	1, (xiz-10)                           ; FBF78A  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF78A  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF780                      ; FBF78D  jr T,0xfbf780
 sub_FBF280__FBF78F:
 	ldb	c, 0x96                                ; FBF78F  ld C,0x96
@@ -13004,7 +13004,7 @@ sub_FBF280__FBF85B:
 	jr nc, sub_FBF280__FBF8A6                  ; FBF860  jr NC,0xfbf8a6
 	jr sub_FBF280__FBF869                      ; FBF862  jr T,0xfbf869
 sub_FBF280__FBF864:
-	incm	1, (xiz-10)                           ; FBF864  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF864  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF85B                      ; FBF867  jr T,0xfbf85b
 sub_FBF280__FBF869:
 	pushw	0                                    ; FBF869  push 0x0000
@@ -13043,7 +13043,7 @@ sub_FBF280__FBF8C0:
 	jr nc, sub_FBF280__FBF90B                  ; FBF8C5  jr NC,0xfbf90b
 	jr sub_FBF280__FBF8CE                      ; FBF8C7  jr T,0xfbf8ce
 sub_FBF280__FBF8C9:
-	incm	1, (xiz-10)                           ; FBF8C9  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF8C9  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF8C0                      ; FBF8CC  jr T,0xfbf8c0
 sub_FBF280__FBF8CE:
 	pushw	0                                    ; FBF8CE  push 0x0000
@@ -13082,7 +13082,7 @@ sub_FBF280__FBF925:
 	jr nc, sub_FBF280__FBF970                  ; FBF92A  jr NC,0xfbf970
 	jr sub_FBF280__FBF933                      ; FBF92C  jr T,0xfbf933
 sub_FBF280__FBF92E:
-	incm	1, (xiz-10)                           ; FBF92E  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF92E  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF925                      ; FBF931  jr T,0xfbf925
 sub_FBF280__FBF933:
 	pushw	0                                    ; FBF933  push 0x0000
@@ -13121,7 +13121,7 @@ sub_FBF280__FBF98A:
 	jrl nc, sub_FBF280__FBFA11                 ; FBF98F  jrl NC,0xfbfa11
 	jr sub_FBF280__FBF999                      ; FBF992  jr T,0xfbf999
 sub_FBF280__FBF994:
-	incm	1, (xiz-10)                           ; FBF994  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBF994  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBF98A                      ; FBF997  jr T,0xfbf98a
 sub_FBF280__FBF999:
 	pushw	0                                    ; FBF999  push 0x0000
@@ -13180,7 +13180,7 @@ sub_FBF280__FBFA2B:
 	jrl nc, sub_FBF280__FBFAB2                 ; FBFA30  jrl NC,0xfbfab2
 	jr sub_FBF280__FBFA3A                      ; FBFA33  jr T,0xfbfa3a
 sub_FBF280__FBFA35:
-	incm	1, (xiz-10)                           ; FBFA35  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBFA35  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFA2B                      ; FBFA38  jr T,0xfbfa2b
 sub_FBF280__FBFA3A:
 	pushw	0xFFC4                               ; FBFA3A  push 0xffc4
@@ -13239,7 +13239,7 @@ sub_FBF280__FBFACC:
 	jr nc, sub_FBF280__FBFB17                  ; FBFAD1  jr NC,0xfbfb17
 	jr sub_FBF280__FBFADA                      ; FBFAD3  jr T,0xfbfada
 sub_FBF280__FBFAD5:
-	incm	1, (xiz-10)                           ; FBFAD5  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBFAD5  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFACC                      ; FBFAD8  jr T,0xfbfacc
 sub_FBF280__FBFADA:
 	pushw	0xFF9C                               ; FBFADA  push 0xff9c
@@ -13278,7 +13278,7 @@ sub_FBF280__FBFB31:
 	jr nc, sub_FBF280__FBFB7C                  ; FBFB36  jr NC,0xfbfb7c
 	jr sub_FBF280__FBFB3F                      ; FBFB38  jr T,0xfbfb3f
 sub_FBF280__FBFB3A:
-	incm	1, (xiz-10)                           ; FBFB3A  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBFB3A  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFB31                      ; FBFB3D  jr T,0xfbfb31
 sub_FBF280__FBFB3F:
 	pushw	0                                    ; FBFB3F  push 0x0000
@@ -13317,7 +13317,7 @@ sub_FBF280__FBFB96:
 	jr nc, sub_FBF280__FBFBE1                  ; FBFB9B  jr NC,0xfbfbe1
 	jr sub_FBF280__FBFBA4                      ; FBFB9D  jr T,0xfbfba4
 sub_FBF280__FBFB9F:
-	incm	1, (xiz-10)                           ; FBFB9F  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBFB9F  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFB96                      ; FBFBA2  jr T,0xfbfb96
 sub_FBF280__FBFBA4:
 	pushw	0                                    ; FBFBA4  push 0x0000
@@ -13404,7 +13404,7 @@ sub_FBF280__FBFC81:
 	jr nc, sub_FBF280__FBFCCC                  ; FBFC86  jr NC,0xfbfccc
 	jr sub_FBF280__FBFC8F                      ; FBFC88  jr T,0xfbfc8f
 sub_FBF280__FBFC8A:
-	incm	1, (xiz-10)                           ; FBFC8A  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBFC8A  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFC81                      ; FBFC8D  jr T,0xfbfc81
 sub_FBF280__FBFC8F:
 	pushw	0                                    ; FBFC8F  push 0x0000
@@ -13443,7 +13443,7 @@ sub_FBF280__FBFCE6:
 	jr nc, sub_FBF280__FBFD31                  ; FBFCEB  jr NC,0xfbfd31
 	jr sub_FBF280__FBFCF4                      ; FBFCED  jr T,0xfbfcf4
 sub_FBF280__FBFCEF:
-	incm	1, (xiz-10)                           ; FBFCEF  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBFCEF  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFCE6                      ; FBFCF2  jr T,0xfbfce6
 sub_FBF280__FBFCF4:
 	pushw	0                                    ; FBFCF4  push 0x0000
@@ -13482,7 +13482,7 @@ sub_FBF280__FBFD4B:
 	jrl nc, sub_FBF280__FBFDD2                 ; FBFD50  jrl NC,0xfbfdd2
 	jr sub_FBF280__FBFD5A                      ; FBFD53  jr T,0xfbfd5a
 sub_FBF280__FBFD55:
-	incm	1, (xiz-10)                           ; FBFD55  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBFD55  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFD4B                      ; FBFD58  jr T,0xfbfd4b
 sub_FBF280__FBFD5A:
 	pushw	0                                    ; FBFD5A  push 0x0000
@@ -13541,7 +13541,7 @@ sub_FBF280__FBFDEC:
 	jr nc, sub_FBF280__FBFE37                  ; FBFDF1  jr NC,0xfbfe37
 	jr sub_FBF280__FBFDFA                      ; FBFDF3  jr T,0xfbfdfa
 sub_FBF280__FBFDF5:
-	incm	1, (xiz-10)                           ; FBFDF5  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBFDF5  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFDEC                      ; FBFDF8  jr T,0xfbfdec
 sub_FBF280__FBFDFA:
 	pushw	0                                    ; FBFDFA  push 0x0000
@@ -13579,7 +13579,7 @@ sub_FBF280__FBFE51:
 	cpw (xiz-10), 0x0002                       ; FBFE51  cp (XIZ+0xf6),0x0002
 	jrl nc, sub_FBF280__FBFF3D                 ; FBFE56  jrl NC,0xfbff3d
 	jr sub_FBF280__FBFE60                      ; FBFE59  jr T,0xfbfe60
-	incm	1, (xiz-10)                           ; FBFE5B  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FBFE5B  incw 1,(XIZ+0xf6)
 	jr sub_FBF280__FBFE51                      ; FBFE5E  jr T,0xfbfe51
 sub_FBF280__FBFE60:
 	ldb	c, 0x96                                ; FBFE60  ld C,0x96
@@ -14120,7 +14120,7 @@ ToneQuery_ReplyToneName__FC032D:
 	jr nc, ToneQuery_ReplyToneName__FC0356                  ; FC0333  jr NC,0xfc0356
 	jr ToneQuery_ReplyToneName__FC033C                      ; FC0335  jr T,0xfc033c
 ToneQuery_ReplyToneName__FC0337:
-	incm	1, (xiz-8)                            ; FC0337  incw 1,(XIZ+0xf8)
+	incw	1, (xiz-8)                            ; FC0337  incw 1,(XIZ+0xf8)
 	jr ToneQuery_ReplyToneName__FC032D                      ; FC033A  jr T,0xfc032d
 ToneQuery_ReplyToneName__FC033C:
 	ld	ix, (xiz-8)                             ; FC033C  ld IX,(XIZ+0xf8)
@@ -14295,7 +14295,7 @@ ToneQuery_ReplySourceName1_ViaIndexMap__FC04B2:
 	jr nc, ToneQuery_ReplySourceName1_ViaIndexMap__FC04E4                  ; FC04B8  jr NC,0xfc04e4
 	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC04C1                      ; FC04BA  jr T,0xfc04c1
 ToneQuery_ReplySourceName1_ViaIndexMap__FC04BC:
-	incm	1, (xiz-16)                           ; FC04BC  incw 1,(XIZ+0xf0)
+	incw	1, (xiz-16)                           ; FC04BC  incw 1,(XIZ+0xf0)
 	jr ToneQuery_ReplySourceName1_ViaIndexMap__FC04B2                      ; FC04BF  jr T,0xfc04b2
 ToneQuery_ReplySourceName1_ViaIndexMap__FC04C1:
 	ldw	bc, 16                                 ; FC04C1  ld BC,0x0010
@@ -14470,7 +14470,7 @@ ToneQuery_ReplySourceName2_ViaIndexMap__FC0640:
 	jr nc, ToneQuery_ReplySourceName2_ViaIndexMap__FC0672                  ; FC0646  jr NC,0xfc0672
 	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC064F                      ; FC0648  jr T,0xfc064f
 ToneQuery_ReplySourceName2_ViaIndexMap__FC064A:
-	incm	1, (xiz-16)                           ; FC064A  incw 1,(XIZ+0xf0)
+	incw	1, (xiz-16)                           ; FC064A  incw 1,(XIZ+0xf0)
 	jr ToneQuery_ReplySourceName2_ViaIndexMap__FC0640                      ; FC064D  jr T,0xfc0640
 ToneQuery_ReplySourceName2_ViaIndexMap__FC064F:
 	ldw	bc, 16                                 ; FC064F  ld BC,0x0010
@@ -14579,7 +14579,7 @@ ToneQuery_ReplySourceName1_ByRow__FC070C:
 	jr nc, ToneQuery_ReplySourceName1_ByRow__FC073E                  ; FC0712  jr NC,0xfc073e
 	jr ToneQuery_ReplySourceName1_ByRow__FC071B                      ; FC0714  jr T,0xfc071b
 ToneQuery_ReplySourceName1_ByRow__FC0716:
-	incm	1, (xiz-16)                           ; FC0716  incw 1,(XIZ+0xf0)
+	incw	1, (xiz-16)                           ; FC0716  incw 1,(XIZ+0xf0)
 	jr ToneQuery_ReplySourceName1_ByRow__FC070C                      ; FC0719  jr T,0xfc070c
 ToneQuery_ReplySourceName1_ByRow__FC071B:
 	ldw	bc, 16                                 ; FC071B  ld BC,0x0010
@@ -14684,7 +14684,7 @@ ToneQuery_ReplySourceName2_ByRow__FC07DD:
 	jr nc, ToneQuery_ReplySourceName2_ByRow__FC080F                  ; FC07E3  jr NC,0xfc080f
 	jr ToneQuery_ReplySourceName2_ByRow__FC07EC                      ; FC07E5  jr T,0xfc07ec
 ToneQuery_ReplySourceName2_ByRow__FC07E7:
-	incm	1, (xiz-16)                           ; FC07E7  incw 1,(XIZ+0xf0)
+	incw	1, (xiz-16)                           ; FC07E7  incw 1,(XIZ+0xf0)
 	jr ToneQuery_ReplySourceName2_ByRow__FC07DD                      ; FC07EA  jr T,0xfc07dd
 ToneQuery_ReplySourceName2_ByRow__FC07EC:
 	ldw	bc, 16                                 ; FC07EC  ld BC,0x0010
@@ -14931,7 +14931,7 @@ ToneQuery_ReplyPartElementSourceName1__FC0A38:
 	jr nc, ToneQuery_ReplyPartElementSourceName1__FC0A6A                  ; FC0A3E  jr NC,0xfc0a6a
 	jr ToneQuery_ReplyPartElementSourceName1__FC0A47                      ; FC0A40  jr T,0xfc0a47
 ToneQuery_ReplyPartElementSourceName1__FC0A42:
-	incm	1, (xiz-24)                           ; FC0A42  incw 1,(XIZ+0xe8)
+	incw	1, (xiz-24)                           ; FC0A42  incw 1,(XIZ+0xe8)
 	jr ToneQuery_ReplyPartElementSourceName1__FC0A38                      ; FC0A45  jr T,0xfc0a38
 ToneQuery_ReplyPartElementSourceName1__FC0A47:
 	ldw	bc, 16                                 ; FC0A47  ld BC,0x0010
@@ -14960,7 +14960,7 @@ ToneQuery_ReplyPartElementSourceName1__FC0A6A:
 	inc	6, xbc                                 ; FC0A85  inc 6,XBC
 	add	xbc, 0xD945                            ; FC0A87  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC0A8D  ld (XBC),H
-	incm	1, (xiz-22)                           ; FC0A8F  incw 1,(XIZ+0xea)
+	incw	1, (xiz-22)                           ; FC0A8F  incw 1,(XIZ+0xea)
 	ld	bc, (xiz-28)                            ; FC0A92  ld BC,(XIZ+0xe4)
 	add	(xiz-20), bc                           ; FC0A95  add (XIZ+0xec),BC
 	ld	a, (xiz-20)                             ; FC0A98  ld A,(XIZ+0xec)
@@ -14971,7 +14971,7 @@ ToneQuery_ReplyPartElementSourceName1__FC0A6A:
 	inc	6, xwa                                 ; FC0AA5  inc 6,XWA
 	add	xwa, 0xD945                            ; FC0AA7  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC0AAD  ld (XWA),H
-	incm	1, (xiz-22)                           ; FC0AAF  incw 1,(XIZ+0xea)
+	incw	1, (xiz-22)                           ; FC0AAF  incw 1,(XIZ+0xea)
 	ld	bc, (xiz-20)                            ; FC0AB2  ld BC,(XIZ+0xec)
 	srl	bc, 8                                  ; FC0AB5  srl 0x08,BC
 	ld	h, c                                    ; FC0AB8  ld H,C
@@ -14980,7 +14980,7 @@ ToneQuery_ReplyPartElementSourceName1__FC0A6A:
 	inc	6, xbc                                 ; FC0ABF  inc 6,XBC
 	add	xbc, 0xD945                            ; FC0AC1  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC0AC7  ld (XBC),H
-	incm	1, (xiz-22)                           ; FC0AC9  incw 1,(XIZ+0xea)
+	incw	1, (xiz-22)                           ; FC0AC9  incw 1,(XIZ+0xea)
 	ld	wa, (xiz-22)                            ; FC0ACC  ld WA,(XIZ+0xea)
 	pop	xix                                    ; FC0ACF  pop XIX
 	popw	hl                                    ; FC0AD0  pop HL
@@ -15225,7 +15225,7 @@ ToneQuery_ReplyPartElementSourceName2__FC0D18:
 	jr nc, ToneQuery_ReplyPartElementSourceName2__FC0D4A                  ; FC0D1E  jr NC,0xfc0d4a
 	jr ToneQuery_ReplyPartElementSourceName2__FC0D27                      ; FC0D20  jr T,0xfc0d27
 ToneQuery_ReplyPartElementSourceName2__FC0D22:
-	incm	1, (xiz-24)                           ; FC0D22  incw 1,(XIZ+0xe8)
+	incw	1, (xiz-24)                           ; FC0D22  incw 1,(XIZ+0xe8)
 	jr ToneQuery_ReplyPartElementSourceName2__FC0D18                      ; FC0D25  jr T,0xfc0d18
 ToneQuery_ReplyPartElementSourceName2__FC0D27:
 	ldw	bc, 16                                 ; FC0D27  ld BC,0x0010
@@ -15254,7 +15254,7 @@ ToneQuery_ReplyPartElementSourceName2__FC0D4A:
 	inc	6, xbc                                 ; FC0D65  inc 6,XBC
 	add	xbc, 0xD945                            ; FC0D67  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC0D6D  ld (XBC),H
-	incm	1, (xiz-22)                           ; FC0D6F  incw 1,(XIZ+0xea)
+	incw	1, (xiz-22)                           ; FC0D6F  incw 1,(XIZ+0xea)
 	ld	bc, (xiz-28)                            ; FC0D72  ld BC,(XIZ+0xe4)
 	add	(xiz-20), bc                           ; FC0D75  add (XIZ+0xec),BC
 	ld	a, (xiz-20)                             ; FC0D78  ld A,(XIZ+0xec)
@@ -15265,7 +15265,7 @@ ToneQuery_ReplyPartElementSourceName2__FC0D4A:
 	inc	6, xwa                                 ; FC0D85  inc 6,XWA
 	add	xwa, 0xD945                            ; FC0D87  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC0D8D  ld (XWA),H
-	incm	1, (xiz-22)                           ; FC0D8F  incw 1,(XIZ+0xea)
+	incw	1, (xiz-22)                           ; FC0D8F  incw 1,(XIZ+0xea)
 	ld	bc, (xiz-20)                            ; FC0D92  ld BC,(XIZ+0xec)
 	srl	bc, 8                                  ; FC0D95  srl 0x08,BC
 	ld	h, c                                    ; FC0D98  ld H,C
@@ -15274,7 +15274,7 @@ ToneQuery_ReplyPartElementSourceName2__FC0D4A:
 	inc	6, xbc                                 ; FC0D9F  inc 6,XBC
 	add	xbc, 0xD945                            ; FC0DA1  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC0DA7  ld (XBC),H
-	incm	1, (xiz-22)                           ; FC0DA9  incw 1,(XIZ+0xea)
+	incw	1, (xiz-22)                           ; FC0DA9  incw 1,(XIZ+0xea)
 	ld	wa, (xiz-22)                            ; FC0DAC  ld WA,(XIZ+0xea)
 	pop	xix                                    ; FC0DAF  pop XIX
 	popw	hl                                    ; FC0DB0  pop HL
@@ -15407,7 +15407,7 @@ ToneQuery_ReplyCatalogueListFooter__FC0EAB:
 	jr nc, ToneQuery_ReplyCatalogueListFooter__FC0ED8                  ; FC0EB1  jr NC,0xfc0ed8
 	jr ToneQuery_ReplyCatalogueListFooter__FC0EBA                      ; FC0EB3  jr T,0xfc0eba
 ToneQuery_ReplyCatalogueListFooter__FC0EB5:
-	incm	1, (xiz-22)                           ; FC0EB5  incw 1,(XIZ+0xea)
+	incw	1, (xiz-22)                           ; FC0EB5  incw 1,(XIZ+0xea)
 	jr ToneQuery_ReplyCatalogueListFooter__FC0EAB                      ; FC0EB8  jr T,0xfc0eab
 ToneQuery_ReplyCatalogueListFooter__FC0EBA:
 	ld	xix, (xiz-12)                           ; FC0EBA  ld XIX,(XIZ+0xf4)
@@ -15439,7 +15439,7 @@ ToneQuery_ReplyCatalogueListFooter__FC0F01:
 	jr nc, ToneQuery_ReplyCatalogueListFooter__FC0F31                  ; FC0F07  jr NC,0xfc0f31
 	jr ToneQuery_ReplyCatalogueListFooter__FC0F10                      ; FC0F09  jr T,0xfc0f10
 ToneQuery_ReplyCatalogueListFooter__FC0F0B:
-	incm	1, (xiz-22)                           ; FC0F0B  incw 1,(XIZ+0xea)
+	incw	1, (xiz-22)                           ; FC0F0B  incw 1,(XIZ+0xea)
 	jr ToneQuery_ReplyCatalogueListFooter__FC0F01                      ; FC0F0E  jr T,0xfc0f01
 ToneQuery_ReplyCatalogueListFooter__FC0F10:
 	ld	ix, (xiz-22)                            ; FC0F10  ld IX,(XIZ+0xea)
@@ -15537,7 +15537,7 @@ sub_FC0F83__FC0FB5:
 	jr nc, sub_FC0F83__FC0FE7                  ; FC0FBB  jr NC,0xfc0fe7
 	jr sub_FC0F83__FC0FC4                      ; FC0FBD  jr T,0xfc0fc4
 sub_FC0F83__FC0FBF:
-	incm	1, (xiz-4)                            ; FC0FBF  incw 1,(XIZ+0xfc)
+	incw	1, (xiz-4)                            ; FC0FBF  incw 1,(XIZ+0xfc)
 	jr sub_FC0F83__FC0FB5                      ; FC0FC2  jr T,0xfc0fb5
 sub_FC0F83__FC0FC4:
 	ld	ix, (xiz-4)                             ; FC0FC4  ld IX,(XIZ+0xfc)
@@ -15561,7 +15561,7 @@ sub_FC0F83__FC0FF4:
 	jr nc, sub_FC0F83__FC1057                  ; FC0FF9  jr NC,0xfc1057
 	jr sub_FC0F83__FC1002                      ; FC0FFB  jr T,0xfc1002
 sub_FC0F83__FC0FFD:
-	incm	1, (xiz-4)                            ; FC0FFD  incw 1,(XIZ+0xfc)
+	incw	1, (xiz-4)                            ; FC0FFD  incw 1,(XIZ+0xfc)
 	jr sub_FC0F83__FC0FF4                      ; FC1000  jr T,0xfc0ff4
 sub_FC0F83__FC1002:
 	ldw	bc, 41                                 ; FC1002  ld BC,0x0029
@@ -15592,7 +15592,7 @@ sub_FC0F83__FC1002:
 	and	a, 32                                  ; FC104B  and A,0x20
 	cps	a, 0                                   ; FC104E  cp A,0
 	jr nz, sub_FC0F83__FC1055                  ; FC1050  jr NZ,0xfc1055
-	incm	1, (xiz-6)                            ; FC1052  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC1052  incw 1,(XIZ+0xfa)
 sub_FC0F83__FC1055:
 	jr sub_FC0F83__FC0FFD                      ; FC1055  jr T,0xfc0ffd
 sub_FC0F83__FC1057:
@@ -15605,7 +15605,7 @@ sub_FC0F83__FC1063:
 	jr nc, sub_FC0F83__FC108E                  ; FC1069  jr NC,0xfc108e
 	jr sub_FC0F83__FC1072                      ; FC106B  jr T,0xfc1072
 sub_FC0F83__FC106D:
-	incm	1, (xiz-4)                            ; FC106D  incw 1,(XIZ+0xfc)
+	incw	1, (xiz-4)                            ; FC106D  incw 1,(XIZ+0xfc)
 	jr sub_FC0F83__FC1063                      ; FC1070  jr T,0xfc1063
 sub_FC0F83__FC1072:
 	ld	ix, (xiz-4)                             ; FC1072  ld IX,(XIZ+0xfc)
@@ -15628,7 +15628,7 @@ sub_FC0F83__FC1095:
 	jr nc, sub_FC0F83__FC10B6                  ; FC109B  jr NC,0xfc10b6
 	jr sub_FC0F83__FC10A4                      ; FC109D  jr T,0xfc10a4
 sub_FC0F83__FC109F:
-	incm	1, (xiz-4)                            ; FC109F  incw 1,(XIZ+0xfc)
+	incw	1, (xiz-4)                            ; FC109F  incw 1,(XIZ+0xfc)
 	jr sub_FC0F83__FC1095                      ; FC10A2  jr T,0xfc1095
 sub_FC0F83__FC10A4:
 	ld	bc, (xiz-4)                             ; FC10A4  ld BC,(XIZ+0xfc)
@@ -15904,7 +15904,7 @@ ToneQuery_ReplyDrumNameForCurrentPart__FC12BC:
 	jr nc, ToneQuery_ReplyDrumNameForCurrentPart__FC12E5                  ; FC12C2  jr NC,0xfc12e5
 	jr ToneQuery_ReplyDrumNameForCurrentPart__FC12CB                      ; FC12C4  jr T,0xfc12cb
 ToneQuery_ReplyDrumNameForCurrentPart__FC12C6:
-	incm	1, (xiz-16)                           ; FC12C6  incw 1,(XIZ+0xf0)
+	incw	1, (xiz-16)                           ; FC12C6  incw 1,(XIZ+0xf0)
 	jr ToneQuery_ReplyDrumNameForCurrentPart__FC12BC                      ; FC12C9  jr T,0xfc12bc
 ToneQuery_ReplyDrumNameForCurrentPart__FC12CB:
 	ld	ix, (xiz-16)                            ; FC12CB  ld IX,(XIZ+0xf0)
@@ -16014,7 +16014,7 @@ ToneQuery_ReplyDrumSourceName_ByRow__FC137C:
 	jr nc, ToneQuery_ReplyDrumSourceName_ByRow__FC13AE                  ; FC1382  jr NC,0xfc13ae
 	jr ToneQuery_ReplyDrumSourceName_ByRow__FC138B                      ; FC1384  jr T,0xfc138b
 ToneQuery_ReplyDrumSourceName_ByRow__FC1386:
-	incm	1, (xiz-16)                           ; FC1386  incw 1,(XIZ+0xf0)
+	incw	1, (xiz-16)                           ; FC1386  incw 1,(XIZ+0xf0)
 	jr ToneQuery_ReplyDrumSourceName_ByRow__FC137C                      ; FC1389  jr T,0xfc137c
 ToneQuery_ReplyDrumSourceName_ByRow__FC138B:
 	ldw	bc, 16                                 ; FC138B  ld BC,0x0010
@@ -16154,7 +16154,7 @@ ToneQuery_ReplyDrumSourceNameAndIndex__FC149B:
 	jr nc, ToneQuery_ReplyDrumSourceNameAndIndex__FC14C4                  ; FC14A1  jr NC,0xfc14c4
 	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC14AA                      ; FC14A3  jr T,0xfc14aa
 ToneQuery_ReplyDrumSourceNameAndIndex__FC14A5:
-	incm	1, (xiz-28)                           ; FC14A5  incw 1,(XIZ+0xe4)
+	incw	1, (xiz-28)                           ; FC14A5  incw 1,(XIZ+0xe4)
 	jr ToneQuery_ReplyDrumSourceNameAndIndex__FC149B                      ; FC14A8  jr T,0xfc149b
 ToneQuery_ReplyDrumSourceNameAndIndex__FC14AA:
 	ld	ix, (xiz-28)                            ; FC14AA  ld IX,(XIZ+0xe4)
@@ -16197,7 +16197,7 @@ ToneQuery_ReplyDrumSourceNameAndIndex__FC14F7:
 	add	xbc, 0xD945                            ; FC150E  add XBC,0x0000d945
 	ld	(xbc), l                                ; FC1514  ld (XBC),L
 ToneQuery_ReplyDrumSourceNameAndIndex__FC1516:
-	incm	1, (xiz-26)                           ; FC1516  incw 1,(XIZ+0xe6)
+	incw	1, (xiz-26)                           ; FC1516  incw 1,(XIZ+0xe6)
 	ld	c, (xiz-24)                             ; FC1519  ld C,(XIZ+0xe8)
 	ld	h, c                                    ; FC151C  ld H,C
 	and	h, 0xFF                                ; FC151E  and H,0xff
@@ -16206,7 +16206,7 @@ ToneQuery_ReplyDrumSourceNameAndIndex__FC1516:
 	inc	6, xbc                                 ; FC1526  inc 6,XBC
 	add	xbc, 0xD945                            ; FC1528  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC152E  ld (XBC),H
-	incm	1, (xiz-26)                           ; FC1530  incw 1,(XIZ+0xe6)
+	incw	1, (xiz-26)                           ; FC1530  incw 1,(XIZ+0xe6)
 	ld	bc, (xiz-24)                            ; FC1533  ld BC,(XIZ+0xe8)
 	srl	bc, 8                                  ; FC1536  srl 0x08,BC
 	ld	h, c                                    ; FC1539  ld H,C
@@ -16215,7 +16215,7 @@ ToneQuery_ReplyDrumSourceNameAndIndex__FC1516:
 	inc	6, xbc                                 ; FC1540  inc 6,XBC
 	add	xbc, 0xD945                            ; FC1542  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC1548  ld (XBC),H
-	incm	1, (xiz-26)                           ; FC154A  incw 1,(XIZ+0xe6)
+	incw	1, (xiz-26)                           ; FC154A  incw 1,(XIZ+0xe6)
 	ld	wa, (xiz-26)                            ; FC154D  ld WA,(XIZ+0xe6)
 	pop	xix                                    ; FC1550  pop XIX
 	popw	hl                                    ; FC1551  pop HL
@@ -16414,7 +16414,7 @@ ToneQuery_ReplyPercSourceName1_ByRow__FC16DC:
 	jr nc, ToneQuery_ReplyPercSourceName1_ByRow__FC170E                  ; FC16E2  jr NC,0xfc170e
 	jr ToneQuery_ReplyPercSourceName1_ByRow__FC16EB                      ; FC16E4  jr T,0xfc16eb
 ToneQuery_ReplyPercSourceName1_ByRow__FC16E6:
-	incm	1, (xiz-16)                           ; FC16E6  incw 1,(XIZ+0xf0)
+	incw	1, (xiz-16)                           ; FC16E6  incw 1,(XIZ+0xf0)
 	jr ToneQuery_ReplyPercSourceName1_ByRow__FC16DC                      ; FC16E9  jr T,0xfc16dc
 ToneQuery_ReplyPercSourceName1_ByRow__FC16EB:
 	ldw	bc, 16                                 ; FC16EB  ld BC,0x0010
@@ -16514,7 +16514,7 @@ ToneQuery_ReplyPercSourceName1AndIndex__FC178B:
 	jr nc, ToneQuery_ReplyPercSourceName1AndIndex__FC17B4                  ; FC1791  jr NC,0xfc17b4
 	jr ToneQuery_ReplyPercSourceName1AndIndex__FC179A                      ; FC1793  jr T,0xfc179a
 ToneQuery_ReplyPercSourceName1AndIndex__FC1795:
-	incm	1, (xiz-34)                           ; FC1795  incw 1,(XIZ+0xde)
+	incw	1, (xiz-34)                           ; FC1795  incw 1,(XIZ+0xde)
 	jr ToneQuery_ReplyPercSourceName1AndIndex__FC178B                      ; FC1798  jr T,0xfc178b
 ToneQuery_ReplyPercSourceName1AndIndex__FC179A:
 	ld	ix, (xiz-34)                            ; FC179A  ld IX,(XIZ+0xde)
@@ -16557,7 +16557,7 @@ ToneQuery_ReplyPercSourceName1AndIndex__FC17E7:
 	add	xbc, 0xD945                            ; FC17FE  add XBC,0x0000d945
 	ld	(xbc), l                                ; FC1804  ld (XBC),L
 ToneQuery_ReplyPercSourceName1AndIndex__FC1806:
-	incm	1, (xiz-32)                           ; FC1806  incw 1,(XIZ+0xe0)
+	incw	1, (xiz-32)                           ; FC1806  incw 1,(XIZ+0xe0)
 	ld	c, (xiz-30)                             ; FC1809  ld C,(XIZ+0xe2)
 	ld	h, c                                    ; FC180C  ld H,C
 	and	h, 0xFF                                ; FC180E  and H,0xff
@@ -16566,7 +16566,7 @@ ToneQuery_ReplyPercSourceName1AndIndex__FC1806:
 	inc	6, xbc                                 ; FC1816  inc 6,XBC
 	add	xbc, 0xD945                            ; FC1818  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC181E  ld (XBC),H
-	incm	1, (xiz-32)                           ; FC1820  incw 1,(XIZ+0xe0)
+	incw	1, (xiz-32)                           ; FC1820  incw 1,(XIZ+0xe0)
 	ld	bc, (xiz-30)                            ; FC1823  ld BC,(XIZ+0xe2)
 	srl	bc, 8                                  ; FC1826  srl 0x08,BC
 	ld	h, c                                    ; FC1829  ld H,C
@@ -16575,7 +16575,7 @@ ToneQuery_ReplyPercSourceName1AndIndex__FC1806:
 	inc	6, xbc                                 ; FC1830  inc 6,XBC
 	add	xbc, 0xD945                            ; FC1832  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC1838  ld (XBC),H
-	incm	1, (xiz-32)                           ; FC183A  incw 1,(XIZ+0xe0)
+	incw	1, (xiz-32)                           ; FC183A  incw 1,(XIZ+0xe0)
 	ld	wa, (xiz-32)                            ; FC183D  ld WA,(XIZ+0xe0)
 	pop	xix                                    ; FC1840  pop XIX
 	popw	hl                                    ; FC1841  pop HL
@@ -16766,7 +16766,7 @@ ToneQuery_ReplyPercSourceName2AndIndex__FC1A05:
 	jr nc, ToneQuery_ReplyPercSourceName2AndIndex__FC1A37                  ; FC1A0B  jr NC,0xfc1a37
 	jr ToneQuery_ReplyPercSourceName2AndIndex__FC1A14                      ; FC1A0D  jr T,0xfc1a14
 ToneQuery_ReplyPercSourceName2AndIndex__FC1A0F:
-	incm	1, (xiz-38)                           ; FC1A0F  incw 1,(XIZ+0xda)
+	incw	1, (xiz-38)                           ; FC1A0F  incw 1,(XIZ+0xda)
 	jr ToneQuery_ReplyPercSourceName2AndIndex__FC1A05                      ; FC1A12  jr T,0xfc1a05
 ToneQuery_ReplyPercSourceName2AndIndex__FC1A14:
 	ldw	bc, 16                                 ; FC1A14  ld BC,0x0010
@@ -16795,7 +16795,7 @@ ToneQuery_ReplyPercSourceName2AndIndex__FC1A37:
 	inc	6, xbc                                 ; FC1A52  inc 6,XBC
 	add	xbc, 0xD945                            ; FC1A54  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC1A5A  ld (XBC),H
-	incm	1, (xiz-36)                           ; FC1A5C  incw 1,(XIZ+0xdc)
+	incw	1, (xiz-36)                           ; FC1A5C  incw 1,(XIZ+0xdc)
 	ld	bc, (xiz-42)                            ; FC1A5F  ld BC,(XIZ+0xd6)
 	add	(xiz-34), bc                           ; FC1A62  add (XIZ+0xde),BC
 	ld	a, (xiz-34)                             ; FC1A65  ld A,(XIZ+0xde)
@@ -16806,7 +16806,7 @@ ToneQuery_ReplyPercSourceName2AndIndex__FC1A37:
 	inc	6, xwa                                 ; FC1A72  inc 6,XWA
 	add	xwa, 0xD945                            ; FC1A74  add XWA,0x0000d945
 	ld	(xwa), h                                ; FC1A7A  ld (XWA),H
-	incm	1, (xiz-36)                           ; FC1A7C  incw 1,(XIZ+0xdc)
+	incw	1, (xiz-36)                           ; FC1A7C  incw 1,(XIZ+0xdc)
 	ld	bc, (xiz-34)                            ; FC1A7F  ld BC,(XIZ+0xde)
 	srl	bc, 8                                  ; FC1A82  srl 0x08,BC
 	ld	h, c                                    ; FC1A85  ld H,C
@@ -16815,7 +16815,7 @@ ToneQuery_ReplyPercSourceName2AndIndex__FC1A37:
 	inc	6, xbc                                 ; FC1A8C  inc 6,XBC
 	add	xbc, 0xD945                            ; FC1A8E  add XBC,0x0000d945
 	ld	(xbc), h                                ; FC1A94  ld (XBC),H
-	incm	1, (xiz-36)                           ; FC1A96  incw 1,(XIZ+0xdc)
+	incw	1, (xiz-36)                           ; FC1A96  incw 1,(XIZ+0xdc)
 	ld	wa, (xiz-36)                            ; FC1A99  ld WA,(XIZ+0xdc)
 	pop	xix                                    ; FC1A9C  pop XIX
 	popw	hl                                    ; FC1A9D  pop HL
@@ -17058,7 +17058,7 @@ ToneQuery_Dispatch__FC1BE9:
 	jr nc, ToneQuery_Dispatch__FC1C0E                  ; FC1BEE  jr NC,0xfc1c0e
 	jr ToneQuery_Dispatch__FC1BF7                      ; FC1BF0  jr T,0xfc1bf7
 ToneQuery_Dispatch__FC1BF2:
-	incm	1, (xiz-6)                            ; FC1BF2  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC1BF2  incw 1,(XIZ+0xfa)
 	jr ToneQuery_Dispatch__FC1BE9                      ; FC1BF5  jr T,0xfc1be9
 ToneQuery_Dispatch__FC1BF7:
 	ld	ix, (xiz-6)                             ; FC1BF7  ld IX,(XIZ+0xfa)
@@ -17508,7 +17508,7 @@ LinkQuery_ReplyPartRecordBytes__FC1FD2:
 	jr nc, LinkQuery_ReplyPartRecordBytes__FC1FF7                  ; FC1FD7  jr NC,0xfc1ff7
 	jr LinkQuery_ReplyPartRecordBytes__FC1FE0                      ; FC1FD9  jr T,0xfc1fe0
 LinkQuery_ReplyPartRecordBytes__FC1FDB:
-	incm	1, (xiz-6)                            ; FC1FDB  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC1FDB  incw 1,(XIZ+0xfa)
 	jr LinkQuery_ReplyPartRecordBytes__FC1FD2                      ; FC1FDE  jr T,0xfc1fd2
 LinkQuery_ReplyPartRecordBytes__FC1FE0:
 	ld	ix, (xiz-6)                             ; FC1FE0  ld IX,(XIZ+0xfa)
@@ -17542,7 +17542,7 @@ LinkQuery_ReplyPartRecordBytes__FC201E:
 	jr nc, LinkQuery_ReplyPartRecordBytes__FC204F                  ; FC2029  jr NC,0xfc204f
 	jr LinkQuery_ReplyPartRecordBytes__FC2032                      ; FC202B  jr T,0xfc2032
 LinkQuery_ReplyPartRecordBytes__FC202D:
-	incm	1, (xiz-6)                            ; FC202D  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC202D  incw 1,(XIZ+0xfa)
 	jr LinkQuery_ReplyPartRecordBytes__FC201E                      ; FC2030  jr T,0xfc201e
 LinkQuery_ReplyPartRecordBytes__FC2032:
 	ld	xbc, (xiz-4)                            ; FC2032  ld XBC,(XIZ+0xfc)
@@ -17599,7 +17599,7 @@ sub_FC206F__FC207A:
 	jr nc, sub_FC206F__FC209F                  ; FC207F  jr NC,0xfc209f
 	jr sub_FC206F__FC2088                      ; FC2081  jr T,0xfc2088
 sub_FC206F__FC2083:
-	incm	1, (xiz-6)                            ; FC2083  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC2083  incw 1,(XIZ+0xfa)
 	jr sub_FC206F__FC207A                      ; FC2086  jr T,0xfc207a
 sub_FC206F__FC2088:
 	ld	ix, (xiz-6)                             ; FC2088  ld IX,(XIZ+0xfa)
@@ -17662,7 +17662,7 @@ sub_FC206F__FC210F:
 	jr nc, sub_FC206F__FC2140                  ; FC211A  jr NC,0xfc2140
 	jr sub_FC206F__FC2123                      ; FC211C  jr T,0xfc2123
 sub_FC206F__FC211E:
-	incm	1, (xiz-6)                            ; FC211E  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC211E  incw 1,(XIZ+0xfa)
 	jr sub_FC206F__FC210F                      ; FC2121  jr T,0xfc210f
 sub_FC206F__FC2123:
 	ld	xbc, (xiz-4)                            ; FC2123  ld XBC,(XIZ+0xfc)
@@ -17719,7 +17719,7 @@ sub_FC2160__FC216B:
 	jr nc, sub_FC2160__FC2190                  ; FC2170  jr NC,0xfc2190
 	jr sub_FC2160__FC2179                      ; FC2172  jr T,0xfc2179
 sub_FC2160__FC2174:
-	incm	1, (xiz-6)                            ; FC2174  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC2174  incw 1,(XIZ+0xfa)
 	jr sub_FC2160__FC216B                      ; FC2177  jr T,0xfc216b
 sub_FC2160__FC2179:
 	ld	ix, (xiz-6)                             ; FC2179  ld IX,(XIZ+0xfa)
@@ -17782,7 +17782,7 @@ sub_FC2160__FC2200:
 	jr nc, sub_FC2160__FC2231                  ; FC220B  jr NC,0xfc2231
 	jr sub_FC2160__FC2214                      ; FC220D  jr T,0xfc2214
 sub_FC2160__FC220F:
-	incm	1, (xiz-6)                            ; FC220F  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC220F  incw 1,(XIZ+0xfa)
 	jr sub_FC2160__FC2200                      ; FC2212  jr T,0xfc2200
 sub_FC2160__FC2214:
 	ld	xbc, (xiz-4)                            ; FC2214  ld XBC,(XIZ+0xfc)
@@ -17839,7 +17839,7 @@ sub_FC2251__FC225C:
 	jr nc, sub_FC2251__FC2281                  ; FC2261  jr NC,0xfc2281
 	jr sub_FC2251__FC226A                      ; FC2263  jr T,0xfc226a
 sub_FC2251__FC2265:
-	incm	1, (xiz-6)                            ; FC2265  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC2265  incw 1,(XIZ+0xfa)
 	jr sub_FC2251__FC225C                      ; FC2268  jr T,0xfc225c
 sub_FC2251__FC226A:
 	ld	ix, (xiz-6)                             ; FC226A  ld IX,(XIZ+0xfa)
@@ -17926,7 +17926,7 @@ sub_FC2251__FC2337:
 	jr nc, sub_FC2251__FC2368                  ; FC2342  jr NC,0xfc2368
 	jr sub_FC2251__FC234B                      ; FC2344  jr T,0xfc234b
 sub_FC2251__FC2346:
-	incm	1, (xiz-6)                            ; FC2346  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC2346  incw 1,(XIZ+0xfa)
 	jr sub_FC2251__FC2337                      ; FC2349  jr T,0xfc2337
 sub_FC2251__FC234B:
 	ld	xbc, (xiz-4)                            ; FC234B  ld XBC,(XIZ+0xfc)
@@ -17983,7 +17983,7 @@ sub_FC2388__FC2393:
 	jr nc, sub_FC2388__FC23B8                  ; FC2398  jr NC,0xfc23b8
 	jr sub_FC2388__FC23A1                      ; FC239A  jr T,0xfc23a1
 sub_FC2388__FC239C:
-	incm	1, (xiz-6)                            ; FC239C  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC239C  incw 1,(XIZ+0xfa)
 	jr sub_FC2388__FC2393                      ; FC239F  jr T,0xfc2393
 sub_FC2388__FC23A1:
 	ld	ix, (xiz-6)                             ; FC23A1  ld IX,(XIZ+0xfa)
@@ -18017,7 +18017,7 @@ sub_FC2388__FC23DF:
 	jr nc, sub_FC2388__FC2410                  ; FC23EA  jr NC,0xfc2410
 	jr sub_FC2388__FC23F3                      ; FC23EC  jr T,0xfc23f3
 sub_FC2388__FC23EE:
-	incm	1, (xiz-6)                            ; FC23EE  incw 1,(XIZ+0xfa)
+	incw	1, (xiz-6)                            ; FC23EE  incw 1,(XIZ+0xfa)
 	jr sub_FC2388__FC23DF                      ; FC23F1  jr T,0xfc23df
 sub_FC2388__FC23F3:
 	ld	xbc, (xiz-4)                            ; FC23F3  ld XBC,(XIZ+0xfc)
@@ -18078,7 +18078,7 @@ sub_FC2430__FC2444:
 	jr nc, sub_FC2430__FC2469                  ; FC2449  jr NC,0xfc2469
 	jr sub_FC2430__FC2452                      ; FC244B  jr T,0xfc2452
 sub_FC2430__FC244D:
-	incm	1, (xiz-10)                           ; FC244D  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FC244D  incw 1,(XIZ+0xf6)
 	jr sub_FC2430__FC2444                      ; FC2450  jr T,0xfc2444
 sub_FC2430__FC2452:
 	ld	ix, (xiz-10)                            ; FC2452  ld IX,(XIZ+0xf6)
@@ -18120,7 +18120,7 @@ sub_FC2430__FC24A5:
 	jr nc, sub_FC2430__FC24D6                  ; FC24B0  jr NC,0xfc24d6
 	jr sub_FC2430__FC24B9                      ; FC24B2  jr T,0xfc24b9
 sub_FC2430__FC24B4:
-	incm	1, (xiz-10)                           ; FC24B4  incw 1,(XIZ+0xf6)
+	incw	1, (xiz-10)                           ; FC24B4  incw 1,(XIZ+0xf6)
 	jr sub_FC2430__FC24A5                      ; FC24B7  jr T,0xfc24a5
 sub_FC2430__FC24B9:
 	ld	xbc, (xiz-8)                            ; FC24B9  ld XBC,(XIZ+0xf8)
@@ -18182,7 +18182,7 @@ sub_FC24F6__FC250A:
 	jr nc, sub_FC24F6__FC252F                  ; FC250F  jr NC,0xfc252f
 	jr sub_FC24F6__FC2518                      ; FC2511  jr T,0xfc2518
 sub_FC24F6__FC2513:
-	incm	1, (xiz-18)                           ; FC2513  incw 1,(XIZ+0xee)
+	incw	1, (xiz-18)                           ; FC2513  incw 1,(XIZ+0xee)
 	jr sub_FC24F6__FC250A                      ; FC2516  jr T,0xfc250a
 sub_FC24F6__FC2518:
 	ld	ix, (xiz-18)                            ; FC2518  ld IX,(XIZ+0xee)
@@ -18248,7 +18248,7 @@ sub_FC24F6__FC25AF:
 	jr nc, sub_FC24F6__FC25E0                  ; FC25BA  jr NC,0xfc25e0
 	jr sub_FC24F6__FC25C3                      ; FC25BC  jr T,0xfc25c3
 sub_FC24F6__FC25BE:
-	incm	1, (xiz-18)                           ; FC25BE  incw 1,(XIZ+0xee)
+	incw	1, (xiz-18)                           ; FC25BE  incw 1,(XIZ+0xee)
 	jr sub_FC24F6__FC25AF                      ; FC25C1  jr T,0xfc25af
 sub_FC24F6__FC25C3:
 	ld	xbc, (xiz-16)                           ; FC25C3  ld XBC,(XIZ+0xf0)

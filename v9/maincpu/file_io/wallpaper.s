@@ -12,7 +12,7 @@ FmmWallpaperLoadFunc:
 	push xiz
 	ld (xsp + 6), xde
 	ld xiz, xbc
-	ldda32 xwa, (0x81b0)
+	ld xwa, (0x81b0:16)
 	cp xiz, 0x1c00018
 	jrl z, WPLoad_HandleScroll
 	cp xiz, 0x1c00017
@@ -138,7 +138,7 @@ WPLoad_Selection_Positive:
 	divs wa, 0xa
 	stw_erp DE, 0xe2
 	exts xde
-	ldda32 xwa, (0x81b0)
+	ld xwa, (0x81b0:16)
 	ld xbc, 0x1e50002
 	jrl WPLoad_DispatchWidget
 
@@ -266,7 +266,7 @@ WPLoad_UpdateDisplay:
 	divs wa, 0xa
 	stw_erp DE, 0xe2
 	exts xde
-	ldda32 xwa, (0x81b0)
+	ld xwa, (0x81b0:16)
 	ld xbc, 0x1e50002
 	call ApPostEvent
 	ldw_d16 xbc, (0x81b4)
@@ -275,7 +275,7 @@ WPLoad_UpdateDisplay:
 	ld de, (xsp + 4)
 	exts xde
 	divs de, 0xa
-	ldda32 xwa, (0x81b0)
+	ld xwa, (0x81b0:16)
 	cp de, bc
 	jr nz, WPLoad_RedrawPage
 	ld bc, (xsp + 4)
@@ -298,7 +298,7 @@ WPLoad_UpdateDisplay:
 	ld de, wa
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x81b0)
+	ld xwa, (0x81b0:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	jr WPLoad_SendState
@@ -308,7 +308,7 @@ WPLoad_RedrawPage:
 	calr DisplaySmfSequenceList
 
 WPLoad_SendState:
-	ldda32 xwa, (0x81b0)
+	ld xwa, (0x81b0:16)
 	ld xbc, 0x1c50001
 	lds32 xde, 0
 

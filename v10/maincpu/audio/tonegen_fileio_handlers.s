@@ -39,7 +39,7 @@ ToneGen_Config_InitAllChannels:
 ToneGen_Config_InitChannelLoop:
 	ld xwa, xiz
 	calr DSPCfg_InitAllEntries
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	lda_dri XIZ, 0xf9, 0xc0, 0x03
 	cpw (xsp + 4), 0x50
 	jr c, ToneGen_Config_InitChannelLoop
@@ -137,7 +137,7 @@ Voice_InitChannelLoop:
 	stb_dri C, 0x07, 0xe0, 0xe8
 
 Voice_InitChannelNext:
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	cpw (xsp + 10), 0x17
 	jr c, Voice_InitChannelLoop
 	pop xiz
@@ -169,7 +169,7 @@ ToneGen_DSPCfg_ResetAllChannels:
 ToneGen_DSPCfg_ResetChannelLoop:
 	ld xwa, xiz
 	calr DSPCfg_ResetEntryByTable
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	lda_dri XIZ, 0xf9, 0xc0, 0x03
 	cpw (xsp + 4), 0x50
 	jr c, ToneGen_DSPCfg_ResetChannelLoop

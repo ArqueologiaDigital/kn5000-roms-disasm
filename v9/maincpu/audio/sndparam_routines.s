@@ -2095,7 +2095,7 @@ SndParam_NotifyQuick_Data:
 	ld	de, (xsp+4)
 	calr	63612
 	stda32	0x9770, xhl
-	ldda32	xhl, (0x9770)
+	ld	xhl, (0x9770:16)
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -3092,7 +3092,7 @@ SndParam_InsertCheckKey:
 	ldw wa, 0xffff
 
 SndParam_InsertIncSlot:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x7ff
 	jr ule, SndParam_InsertNextSlot
 	jr SndParam_InsertFail

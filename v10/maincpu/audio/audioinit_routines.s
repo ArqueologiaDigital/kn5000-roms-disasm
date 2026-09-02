@@ -976,7 +976,7 @@ AudioInit_CheckGroupB_Channel:
 	ldw_sri WA, 0x07, 0xf0, 0xe0
 	and wa, bc
 	jrl z, AudioInit_ChannelLoop_Next
-	incm 1, (xsp)
+	incw 1, (xsp)
 	cpdi8 (0xc59e), 255
 	jr nz, AudioInit_GroupB_CheckType
 	ld a, d

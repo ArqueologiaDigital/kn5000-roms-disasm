@@ -565,7 +565,7 @@ AccVoice_LookupWithOffset:
 AccVoice_SelectAndApplyPatch:
 	cpdi8 (0x3249), 0x80
 	jr nc, AccVoice_PatchFromDirect
-	ldda32 xiy, (0x3232)
+	ld xiy, (0x3232:16)
 	calr AccStyle_ReadVoiceParam
 	stb_d8 (0x3253), w
 	jr t, AccVoice_StorePatchAndLookup
@@ -1459,7 +1459,7 @@ RhythmROM_BytecodeBlock4:
 	push	xwa
 	call	16712469
 	add	xsp, 4
-	ldda32	xwa, (13504)
+	ld	xwa, (13504:16)
 	push	xwa
 	call	16712469
 	add	xsp, 4

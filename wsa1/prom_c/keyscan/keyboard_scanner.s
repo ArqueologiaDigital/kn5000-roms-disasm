@@ -305,7 +305,7 @@ NoteTrim_BuildFromCalibration__F99816:
 	jr ge, NoteTrim_BuildFromCalibration__F99834                       ; F9981B  jr GE,0xf99834
 	jr NoteTrim_BuildFromCalibration__F99824                           ; F9981D  jr T,0xf99824
 NoteTrim_BuildFromCalibration__F9981F:
-	incm	1, (xiz-2)                        ; F9981F  incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                        ; F9981F  incw 1,(XIZ+0xfe)
 	jr NoteTrim_BuildFromCalibration__F99816                           ; F99822  jr T,0xf99816
 NoteTrim_BuildFromCalibration__F99824:
 	ld	bc, (xiz-2)                         ; F99824  ld BC,(XIZ+0xfe)
@@ -322,7 +322,7 @@ NoteTrim_BuildFromCalibration__F9983B:
 	jr ge, NoteTrim_BuildFromCalibration__F99889                       ; F99840  jr GE,0xf99889
 	jr NoteTrim_BuildFromCalibration__F99849                           ; F99842  jr T,0xf99849
 NoteTrim_BuildFromCalibration__F99844:
-	incm	1, (xiz-2)                        ; F99844  incw 1,(XIZ+0xfe)
+	incw	1, (xiz-2)                        ; F99844  incw 1,(XIZ+0xfe)
 	jr NoteTrim_BuildFromCalibration__F9983B                           ; F99847  jr T,0xf9983b
 NoteTrim_BuildFromCalibration__F99849:
 	ld	bc, (xiz-2)                         ; F99849  ld BC,(XIZ+0xfe)

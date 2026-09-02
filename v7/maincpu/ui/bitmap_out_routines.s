@@ -1449,7 +1449,7 @@ BitMapOut_RestoreParts_CheckPartEnd:
 	cp xiz, xwa
 	jr le, BitMapOut_RestoreParts_CopyByte
 	add de, 0x1a
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0xc
 	jrl ule, BitMapOut_RestoreParts_OuterLoop
 

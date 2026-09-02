@@ -54,7 +54,7 @@ TextRender_BitMask6_Return:
 TextRender_AdvancePointerAndUpdateLine:
 	lds32 xwa, 1
 	add (xsp + 16), xwa
-	incm 1, (xsp + 28)
+	incw 1, (xsp + 28)
 
 TextRender_CheckColumnEnd:
 	ld xwa, (xsp + 4)
@@ -65,7 +65,7 @@ TextRender_CheckColumnEnd:
 TextRender_AdvanceToNextLine:
 	ld wa, (xsp + 24)
 	add_sriw_mr WA, 0xfd, 0x2a, 0x01
-	incm 1, (xsp + 26)
+	incw 1, (xsp + 26)
 	ld wa, (xsp + 26)
 	cp wa, (xsp + 22)
 	jrl c, TextRender_ScanLineLoop
@@ -1847,7 +1847,7 @@ Wordwrap_ScanWordChars:
 	cp (xiz), 0x20
 	jr z, Wordwrap_CheckSpaces
 	inc 1, xiz
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cp (xiz), 0x0
 	jr nz, Wordwrap_ScanWordChars
 
@@ -1859,7 +1859,7 @@ Wordwrap_SkipSpaces:
 	cp (xiz), 0x20
 	jr nz, Wordwrap_MeasureWidth
 	inc 1, xiz
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cp (xiz), 0x0
 	jr nz, Wordwrap_SkipSpaces
 
@@ -2287,7 +2287,7 @@ VGA_Palette_BlueLow:
 
 VGA_Palette_WriteBlue:
 	calr _Write_VGA_Register
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cpw (xsp + 4), 0x100
 	jrl c, VGA_Palette_Loop
 	calr VGA_ConfigExtSequencer

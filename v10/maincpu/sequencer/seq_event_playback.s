@@ -102,7 +102,7 @@ SeqEvt_ProcessNoteOn:
 	ldb_sri W, 0x07, 0xec, 0xf0
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	xor ix, ix
 
 SeqEvt_SlotScanLoop:
@@ -137,7 +137,7 @@ SeqEvt_FindFreeSlotLoop:
 	jr nz, SeqEvt_AdvanceFreeSlotIdx
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	jr SeqEvt_WriteEventAndContinue
 
 SeqEvt_AdvanceFreeSlotIdx:
@@ -188,7 +188,7 @@ SeqEvt_WriteNoteOnRotating:
 	ldb_sri W, 0x07, 0xec, 0xf0
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	and a, 0xf0
 	orda8 a, 0x7e07
 	calr SeqEvtBuf_WriteBytePreserve
@@ -214,7 +214,7 @@ SeqEvt_WriteVoiceParams:
 	calr SeqEvtBuf_WriteBytePreserve
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	ld a, w
 	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
@@ -223,7 +223,7 @@ SeqEvt_WriteVoiceParams:
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	ex16 iz, ix
 	ldw_d16 xix, (0x7e0f)
 	ldb_sri A, 0x07, 0xec, 0xf0
@@ -232,12 +232,12 @@ SeqEvt_WriteVoiceParams:
 	calr SeqEvtBuf_WriteBytePreserve
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	ex16 iz, ix
 	ldb_sri A, 0x07, 0xec, 0xf0
 	calr SeqEvtBuf_AdvanceReadPos
@@ -245,12 +245,12 @@ SeqEvt_WriteVoiceParams:
 	calr SeqEvtBuf_WriteBytePreserve
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	push xwa
 	ex16 iz, ix
 	ldb_sri A, 0x07, 0xec, 0xf0
@@ -267,12 +267,12 @@ SeqEvt_WriteVoiceParams:
 SeqEvt_AdjustNoteOctave:
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	stw_dri WA, 0x07, 0xec, 0xf0
 	inc 2, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	cpda16 xwa, 0x7dfe
 	jr nc, SeqEvt_WriteRemainingParams
 	stda16 (0x7dfe), xwa
@@ -286,12 +286,12 @@ SeqEvt_WriteRemainingParams:
 	ex16 iz, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	cp w, 0x90
 	jr z, SeqEvt_UpdateReadPosition
 	ex16 iz, ix
@@ -301,12 +301,12 @@ SeqEvt_WriteRemainingParams:
 	ex16 iz, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	ex16 iz, ix
 	ldb_sri A, 0x07, 0xec, 0xf0
 	calr SeqEvtBuf_AdvanceReadPos
@@ -314,12 +314,12 @@ SeqEvt_WriteRemainingParams:
 	ex16 iz, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 	stb_dri A, 0x07, 0xec, 0xf0
 	inc 1, ix
 	stda32 0x7e13, xhl
 	ld xhl, xbc
-	ldda32 xbc, (0x7e13)
+	ld xbc, (0x7e13:16)
 
 SeqEvt_UpdateReadPosition:
 	ldw_d16 xix, (0x7e0f)

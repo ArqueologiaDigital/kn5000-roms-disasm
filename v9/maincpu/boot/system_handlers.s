@@ -4888,7 +4888,7 @@ RingBuf128_ReadByte:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x7f
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 
@@ -4962,7 +4962,7 @@ Seq_RingBuf_ReadByte_Dequeue:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0xff
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 Seq_RingBuf_ReadByte_Large:
@@ -5028,7 +5028,7 @@ RingBuf512_CheckFull_Read:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x1ff
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 RingBuf_CheckFull_256:
@@ -5097,7 +5097,7 @@ Seq_RingBuf_Dequeue_1024_Read:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x3ff
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 Seq_RingBuf_ReadData:
@@ -5166,7 +5166,7 @@ Seq_RingBuf_PeekByte_Read:
 	ldb_sri L, 0x07, 0xe8, 0xf0
 	minc1_16 ix, 0x7ff
 	ld (xde - 8), ix
-	incm 1, (xde - 2)
+	incw 1, (xde - 2)
 	ret
 
 Seq_RingBuf_WriteByte_Data:
@@ -5615,7 +5615,7 @@ Audio_DMA_Transfer_CheckSize:
 	ret ule
 
 Audio_DMA_Transfer_ByteLoop:
-	ldda32 xwa, (1498)
+	ld xwa, (1498:16)
 	stb_dpi A, 0xe0
 	stda32 1498, xwa
 	ld a, (xbc)
@@ -7076,7 +7076,7 @@ SLIDE_Decompress_4K_Continue:
 	jrl c, SLIDE_Decompress_4K_MainLoop
 
 SLIDE_Decompress_4K_Done:
-	ldda32 xwa, (1570)
+	ld xwa, (1570:16)
 	push xwa
 	call Free
 	inc 4, xsp
@@ -7199,7 +7199,7 @@ SLIDE_Decompress_8K_Continue:
 	jrl c, SLIDE_Decompress_8K_MainLoop
 
 SLIDE_Decompress_8K_Done:
-	ldda32 xwa, (1570)
+	ld xwa, (1570:16)
 	push xwa
 	call Free
 	inc 4, xsp
@@ -7524,7 +7524,7 @@ FDC_WriteSectors_FullTrackInner:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x00, 0x09
 	jr c, FDC_WriteSectors_FullTrackInner
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 8)
 	cp (xsp + 4), wa
 	jr c, FDC_WriteSectors_FullTrackOuter
@@ -7654,7 +7654,7 @@ FDC_WriteCompressed_FullTrackInner:
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x00, 0x12
 	jr c, FDC_WriteCompressed_FullTrackInner
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ld wa, (xsp + 8)
 	cp (xsp + 4), wa
 	jr c, FDC_WriteCompressed_FullTrackOuter
@@ -7771,7 +7771,7 @@ Flash_BurnWithProgress:
 	jr nz, FlashBurn_Done
 
 FlashBurn_ProgressLoop:
-	ldda32 xwa, (1033)
+	ld xwa, (1033:16)
 	cp xwa, 0x1f4
 	jr ule, FlashBurn_CheckDone
 	inc 8, iz
@@ -8338,7 +8338,7 @@ Parport_WaitDataReady:
 
 Parport_ReadNextByte:
 	pushw iz
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	cpda32 xwa, 1598
 	jr c, Parport_ReadByte_FromBuffer
 	ldw hl, 0xffff
@@ -8373,7 +8373,7 @@ Parport_RefillBuffer_Loop:
 	stda32 1610, xwa
 
 Parport_ReadByte_Emit:
-	ldda32 xwa, (1610)
+	ld xwa, (1610:16)
 	stb_dpi A, 0xe0
 	stda32 1610, xwa
 	ld l, (xbc)
@@ -8396,7 +8396,7 @@ Flash_AccumWrite_Byte:
 	stb_d8 (1620), a
 	cps e, 3
 	jr nz, Flash_AccumWrite_ByteDone
-	ldda32 xwa, (1606)
+	ld xwa, (1606:16)
 	stb_dpi B, 0xe2
 	stda32 1606, xwa
 	ld xbc, (xbc)
@@ -8422,7 +8422,7 @@ Flash_AccumWrite_Word:
 	stb_d8 (1620), a
 	cps c, 1
 	jr nz, Flash_AccumWrite_WordDone
-	ldda32 xwa, (1622)
+	ld xwa, (1622:16)
 	stb_dpi A, 0xe1
 	stda32 1622, xwa
 	ld de, (xde)
@@ -8484,7 +8484,7 @@ LZSS_Decompress_StreamHeaderBytes:
 	jr c, LZSS_Decompress_StreamHeaderBytes
 	stdi16 (1614), 42
 	stdi16 (1616), 200
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	cpda32 xwa, 1598
 	jr nc, LZSS_Decompress_ReturnOK
 
@@ -8493,7 +8493,7 @@ LZSS_Decompress_StreamData:
 	extz hl
 	ld wa, hl
 	calr Flash_AccumWrite_Word
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	cpda32 xwa, 1598
 	jr c, LZSS_Decompress_StreamData
 
@@ -8518,11 +8518,11 @@ LZ_Decompress_Init:
 	stda32 1602, xwa
 
 LZ_Decompress_ClearRing:
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	ld xbc, (xsp + 16)
 	add xbc, xwa
 	ld (xbc), 0x0
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	inc 1, xwa
 	stda32 1602, xwa
 	cp xwa, 0xfee
@@ -8577,7 +8577,7 @@ LZ_Decompress_ReadSizeField:
 	adddm32 1598, xhl
 	calr Parport_ReadNextByte
 	extz xhl
-	ldda32 xwa, (1598)
+	ld xwa, (1598:16)
 	add xwa, xhl
 	stda32 1598, xwa
 	cpdm32 1602, xwa
@@ -8607,7 +8607,7 @@ LZ_Decompress_LiteralByte:
 	extz wa
 	calr Flash_AccumWrite_Byte
 	ld bc, (xsp + 10)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	extz xbc
 	add xbc, (xsp + 16)
 	stb_erp A, 0xf8
@@ -8631,7 +8631,7 @@ LZ_Decompress_MatchRef:
 	or wa, bc
 	ldw_erp WA, 0xfa
 	andmi16 (xsp + 8), 0xf
-	incm 2, (xsp + 8)
+	incw 2, (xsp + 8)
 	ldw (xsp + 6), 0x0
 	cpw (xsp + 8), 0x0
 	jr c, LZ_Decompress_LoopCheck
@@ -8649,19 +8649,19 @@ LZ_Decompress_CopyMatchLoop:
 	extz wa
 	calr Flash_AccumWrite_Byte
 	ld bc, (xsp + 10)
-	incm 1, (xsp + 10)
+	incw 1, (xsp + 10)
 	extz xbc
 	add xbc, (xsp + 12)
 	stb_erp A, 0xf8
 	ld (xbc), a
 	andmi16 (xsp + 10), 0xfff
-	incm 1, (xsp + 6)
+	incw 1, (xsp + 6)
 	ld wa, (xsp + 6)
 	cp wa, (xsp + 8)
 	jr ule, LZ_Decompress_CopyMatchLoop
 
 LZ_Decompress_LoopCheck:
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	cpda32 xwa, 1598
 	jrl c, LZ_Decompress_MainLoop
 

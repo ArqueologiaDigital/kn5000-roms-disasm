@@ -55,7 +55,7 @@ FCopy_HandleExecute:
 	pushw	6
 	pushw	0
 	call	16289232
-	ldda32	xwa, (32452)
+	ld	xwa, (32452:16)
 	ld	xbc, 29360143
 	ld	xde, 33904
 	call	16423243
@@ -97,7 +97,7 @@ FCopy_Scroll_Apply:
 	pushw	6
 	pushw	0
 	call	16289232
-	ldda32	xwa, (32452)
+	ld	xwa, (32452:16)
 	ld	xbc, 29360143
 	ld	xde, 33904
 	jr	110

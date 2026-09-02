@@ -440,42 +440,42 @@ MidiIn_ParseRingAndDispatch__FB0682:
 	ld	xbc, (xiz-4)                            ; FB0694  ld XBC,(XIZ+0xfc)
 	ld	a, (xbc)                                ; FB0697  ld A,(XBC)
 	stb_da	(0xD7C8), a                         ; FB0699  ld (0x00d7c8),A
-	incm	1, (xix)                              ; FB069E  incw 1,(XIX)
+	incw	1, (xix)                              ; FB069E  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06A0  ld BC,(XIX)
 	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06A2  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06A5  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB06A7  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06AA  ld A,(XBC)
 	stb_da	(0xD7C9), a                         ; FB06AC  ld (0x00d7c9),A
-	incm	1, (xix)                              ; FB06B1  incw 1,(XIX)
+	incw	1, (xix)                              ; FB06B1  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06B3  ld BC,(XIX)
 	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06B5  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06B8  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB06BA  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06BD  ld A,(XBC)
 	stb_da	(0xD7CA), a                         ; FB06BF  ld (0x00d7ca),A
-	incm	1, (xix)                              ; FB06C4  incw 1,(XIX)
+	incw	1, (xix)                              ; FB06C4  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06C6  ld BC,(XIX)
 	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06C8  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06CB  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB06CD  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06D0  ld A,(XBC)
 	stb_da	(0xD7CB), a                         ; FB06D2  ld (0x00d7cb),A
-	incm	1, (xix)                              ; FB06D7  incw 1,(XIX)
+	incw	1, (xix)                              ; FB06D7  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06D9  ld BC,(XIX)
 	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06DB  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06DE  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB06E0  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06E3  ld A,(XBC)
 	stb_da	(0xD7CC), a                         ; FB06E5  ld (0x00d7cc),A
-	incm	1, (xix)                              ; FB06EA  incw 1,(XIX)
+	incw	1, (xix)                              ; FB06EA  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB06EC  ld BC,(XIX)
 	extpfx3 0x9E, 0xF2, 0xC1                   ; FB06EE  and BC,(XIZ+0xf2)
 	exts	xbc                                   ; FB06F1  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB06F3  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB06F6  ld A,(XBC)
 	stb_da	(0xD7CD), a                         ; FB06F8  ld (0x00d7cd),A
-	incm	1, (xix)                              ; FB06FD  incw 1,(XIX)
+	incw	1, (xix)                              ; FB06FD  incw 1,(XIX)
 	ld	xbc, (xiz-12)                           ; FB06FF  ld XBC,(XIZ+0xf4)
 	decm	6, (xbc)                              ; FB0702  decw 6,(XBC)
 	dec	6, de                                  ; FB0704  dec 6,DE
@@ -493,42 +493,42 @@ MidiIn_ParseRingAndDispatch__FB070F:
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0723  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0726  ld A,(XBC)
 	stb_da	(0xD7CE), a                         ; FB0728  ld (0x00d7ce),A
-	incm	1, (xix)                              ; FB072D  incw 1,(XIX)
+	incw	1, (xix)                              ; FB072D  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB072F  ld BC,(XIX)
 	extpfx3 0x9E, 0xF0, 0xC1                   ; FB0731  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB0734  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0736  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0739  ld A,(XBC)
 	stb_da	(0xD7CF), a                         ; FB073B  ld (0x00d7cf),A
-	incm	1, (xix)                              ; FB0740  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0740  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0742  ld BC,(XIX)
 	extpfx3 0x9E, 0xF0, 0xC1                   ; FB0744  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB0747  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0749  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB074C  ld A,(XBC)
 	stb_da	(0xD7D0), a                         ; FB074E  ld (0x00d7d0),A
-	incm	1, (xix)                              ; FB0753  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0753  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0755  ld BC,(XIX)
 	extpfx3 0x9E, 0xF0, 0xC1                   ; FB0757  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB075A  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB075C  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB075F  ld A,(XBC)
 	stb_da	(0xD7D1), a                         ; FB0761  ld (0x00d7d1),A
-	incm	1, (xix)                              ; FB0766  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0766  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0768  ld BC,(XIX)
 	extpfx3 0x9E, 0xF0, 0xC1                   ; FB076A  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB076D  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB076F  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0772  ld A,(XBC)
 	stb_da	(0xD7D2), a                         ; FB0774  ld (0x00d7d2),A
-	incm	1, (xix)                              ; FB0779  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0779  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB077B  ld BC,(XIX)
 	extpfx3 0x9E, 0xF0, 0xC1                   ; FB077D  and BC,(XIZ+0xf0)
 	exts	xbc                                   ; FB0780  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0782  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0785  ld A,(XBC)
 	stb_da	(0xD7D3), a                         ; FB0787  ld (0x00d7d3),A
-	incm	1, (xix)                              ; FB078C  incw 1,(XIX)
+	incw	1, (xix)                              ; FB078C  incw 1,(XIX)
 	ld	xbc, (xiz-12)                           ; FB078E  ld XBC,(XIZ+0xf4)
 	decm	6, (xbc)                              ; FB0791  decw 6,(XBC)
 	dec	6, de                                  ; FB0793  dec 6,DE
@@ -543,28 +543,28 @@ MidiIn_ParseRingAndDispatch__FB07A3:
 	cps	de, 4                                  ; FB07A3  cp DE,4
 	jrl c, MidiIn_ParseRingAndDispatch__FB09ED ; FB07A5  jrl C,0xfb09ed
 	stb_da	(0xD7D4), h                         ; FB07A8  ld (0x00d7d4),H
-	incm	1, (xix)                              ; FB07AD  incw 1,(XIX)
+	incw	1, (xix)                              ; FB07AD  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB07AF  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB07B1  and BC,0x0fff
 	exts	xbc                                   ; FB07B5  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB07B7  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB07BA  ld A,(XBC)
 	stb_da	(0xD7D5), a                         ; FB07BC  ld (0x00d7d5),A
-	incm	1, (xix)                              ; FB07C1  incw 1,(XIX)
+	incw	1, (xix)                              ; FB07C1  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB07C3  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB07C5  and BC,0x0fff
 	exts	xbc                                   ; FB07C9  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB07CB  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB07CE  ld A,(XBC)
 	stb_da	(0xD7D6), a                         ; FB07D0  ld (0x00d7d6),A
-	incm	1, (xix)                              ; FB07D5  incw 1,(XIX)
+	incw	1, (xix)                              ; FB07D5  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB07D7  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB07D9  and BC,0x0fff
 	exts	xbc                                   ; FB07DD  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB07DF  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB07E2  ld A,(XBC)
 	stb_da	(0xD7D7), a                         ; FB07E4  ld (0x00d7d7),A
-	incm	1, (xix)                              ; FB07E9  incw 1,(XIX)
+	incw	1, (xix)                              ; FB07E9  incw 1,(XIX)
 	ld	xbc, (xiz-12)                           ; FB07EB  ld XBC,(XIZ+0xf4)
 	decm	4, (xbc)                              ; FB07EE  decw 4,(XBC)
 	dec	4, de                                  ; FB07F0  dec 4,DE
@@ -582,28 +582,28 @@ MidiIn_ParseRingAndDispatch__FB080E:
 	cps	de, 4                                  ; FB080E  cp DE,4
 	jrl c, MidiIn_ParseRingAndDispatch__FB09ED ; FB0810  jrl C,0xfb09ed
 	stb_da	(0xD7D8), h                         ; FB0813  ld (0x00d7d8),H
-	incm	1, (xix)                              ; FB0818  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0818  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB081A  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB081C  and BC,0x0fff
 	exts	xbc                                   ; FB0820  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0822  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0825  ld A,(XBC)
 	stb_da	(0xD7D9), a                         ; FB0827  ld (0x00d7d9),A
-	incm	1, (xix)                              ; FB082C  incw 1,(XIX)
+	incw	1, (xix)                              ; FB082C  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB082E  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0830  and BC,0x0fff
 	exts	xbc                                   ; FB0834  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0836  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0839  ld A,(XBC)
 	stb_da	(0xD7DA), a                         ; FB083B  ld (0x00d7da),A
-	incm	1, (xix)                              ; FB0840  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0840  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0842  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0844  and BC,0x0fff
 	exts	xbc                                   ; FB0848  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB084A  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB084D  ld A,(XBC)
 	stb_da	(0xD7DB), a                         ; FB084F  ld (0x00d7db),A
-	incm	1, (xix)                              ; FB0854  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0854  incw 1,(XIX)
 	ld	xbc, (xiz-12)                           ; FB0856  ld XBC,(XIZ+0xf4)
 	decm	4, (xbc)                              ; FB0859  decw 4,(XBC)
 	dec	4, de                                  ; FB085B  dec 4,DE
@@ -615,35 +615,35 @@ MidiIn_ParseRingAndDispatch__FB086A:
 	cps	de, 5                                  ; FB086A  cp DE,5
 	jrl c, MidiIn_ParseRingAndDispatch__FB09ED ; FB086C  jrl C,0xfb09ed
 	stb_da	(0xD7DC), h                         ; FB086F  ld (0x00d7dc),H
-	incm	1, (xix)                              ; FB0874  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0874  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0876  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0878  and BC,0x0fff
 	exts	xbc                                   ; FB087C  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB087E  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0881  ld A,(XBC)
 	stb_da	(0xD7DD), a                         ; FB0883  ld (0x00d7dd),A
-	incm	1, (xix)                              ; FB0888  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0888  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB088A  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB088C  and BC,0x0fff
 	exts	xbc                                   ; FB0890  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0892  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0895  ld A,(XBC)
 	stb_da	(0xD7DE), a                         ; FB0897  ld (0x00d7de),A
-	incm	1, (xix)                              ; FB089C  incw 1,(XIX)
+	incw	1, (xix)                              ; FB089C  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB089E  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB08A0  and BC,0x0fff
 	exts	xbc                                   ; FB08A4  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB08A6  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB08A9  ld A,(XBC)
 	stb_da	(0xD7DF), a                         ; FB08AB  ld (0x00d7df),A
-	incm	1, (xix)                              ; FB08B0  incw 1,(XIX)
+	incw	1, (xix)                              ; FB08B0  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB08B2  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB08B4  and BC,0x0fff
 	exts	xbc                                   ; FB08B8  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB08BA  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB08BD  ld A,(XBC)
 	stb_da	(0xD7E0), a                         ; FB08BF  ld (0x00d7e0),A
-	incm	1, (xix)                              ; FB08C4  incw 1,(XIX)
+	incw	1, (xix)                              ; FB08C4  incw 1,(XIX)
 	ld	xbc, (xiz-12)                           ; FB08C6  ld XBC,(XIZ+0xf4)
 	decm	5, (xbc)                              ; FB08C9  decw 5,(XBC)
 	dec	5, de                                  ; FB08CB  dec 5,DE
@@ -655,28 +655,28 @@ MidiIn_ParseRingAndDispatch__FB08DA:
 	cps	de, 4                                  ; FB08DA  cp DE,4
 	jrl c, MidiIn_ParseRingAndDispatch__FB09ED ; FB08DC  jrl C,0xfb09ed
 	stb_da	(0xD7E1), h                         ; FB08DF  ld (0x00d7e1),H
-	incm	1, (xix)                              ; FB08E4  incw 1,(XIX)
+	incw	1, (xix)                              ; FB08E4  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB08E6  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB08E8  and BC,0x0fff
 	exts	xbc                                   ; FB08EC  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB08EE  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB08F1  ld A,(XBC)
 	stb_da	(0xD7E2), a                         ; FB08F3  ld (0x00d7e2),A
-	incm	1, (xix)                              ; FB08F8  incw 1,(XIX)
+	incw	1, (xix)                              ; FB08F8  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB08FA  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB08FC  and BC,0x0fff
 	exts	xbc                                   ; FB0900  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0902  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0905  ld A,(XBC)
 	stb_da	(0xD7E3), a                         ; FB0907  ld (0x00d7e3),A
-	incm	1, (xix)                              ; FB090C  incw 1,(XIX)
+	incw	1, (xix)                              ; FB090C  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB090E  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0910  and BC,0x0fff
 	exts	xbc                                   ; FB0914  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0916  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0919  ld A,(XBC)
 	stb_da	(0xD7E4), a                         ; FB091B  ld (0x00d7e4),A
-	incm	1, (xix)                              ; FB0920  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0920  incw 1,(XIX)
 	ld	xbc, (xiz-12)                           ; FB0922  ld XBC,(XIZ+0xf4)
 	decm	4, (xbc)                              ; FB0925  decw 4,(XBC)
 	dec	4, de                                  ; FB0927  dec 4,DE
@@ -688,28 +688,28 @@ MidiIn_ParseRingAndDispatch__FB0936:
 	cps	de, 4                                  ; FB0936  cp DE,4
 	jrl c, MidiIn_ParseRingAndDispatch__FB09ED ; FB0938  jrl C,0xfb09ed
 	stb_da	(0xD7E5), h                         ; FB093B  ld (0x00d7e5),H
-	incm	1, (xix)                              ; FB0940  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0940  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0942  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0944  and BC,0x0fff
 	exts	xbc                                   ; FB0948  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB094A  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB094D  ld A,(XBC)
 	stb_da	(0xD7E6), a                         ; FB094F  ld (0x00d7e6),A
-	incm	1, (xix)                              ; FB0954  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0954  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB0956  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB0958  and BC,0x0fff
 	exts	xbc                                   ; FB095C  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB095E  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0961  ld A,(XBC)
 	stb_da	(0xD7E7), a                         ; FB0963  ld (0x00d7e7),A
-	incm	1, (xix)                              ; FB0968  incw 1,(XIX)
+	incw	1, (xix)                              ; FB0968  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB096A  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB096C  and BC,0x0fff
 	exts	xbc                                   ; FB0970  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB0972  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB0975  ld A,(XBC)
 	stb_da	(0xD7E8), a                         ; FB0977  ld (0x00d7e8),A
-	incm	1, (xix)                              ; FB097C  incw 1,(XIX)
+	incw	1, (xix)                              ; FB097C  incw 1,(XIX)
 	ld	xbc, (xiz-12)                           ; FB097E  ld XBC,(XIZ+0xf4)
 	decm	4, (xbc)                              ; FB0981  decw 4,(XBC)
 	dec	4, de                                  ; FB0983  dec 4,DE
@@ -721,28 +721,28 @@ MidiIn_ParseRingAndDispatch__FB0992:
 	cps	de, 4                                  ; FB0992  cp DE,4
 	jr c, MidiIn_ParseRingAndDispatch__FB09ED  ; FB0994  jr C,0xfb09ed
 	stb_da	(0xD7E9), h                         ; FB0996  ld (0x00d7e9),H
-	incm	1, (xix)                              ; FB099B  incw 1,(XIX)
+	incw	1, (xix)                              ; FB099B  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB099D  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB099F  and BC,0x0fff
 	exts	xbc                                   ; FB09A3  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB09A5  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB09A8  ld A,(XBC)
 	stb_da	(0xD7EA), a                         ; FB09AA  ld (0x00d7ea),A
-	incm	1, (xix)                              ; FB09AF  incw 1,(XIX)
+	incw	1, (xix)                              ; FB09AF  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB09B1  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB09B3  and BC,0x0fff
 	exts	xbc                                   ; FB09B7  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB09B9  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB09BC  ld A,(XBC)
 	stb_da	(0xD7EB), a                         ; FB09BE  ld (0x00d7eb),A
-	incm	1, (xix)                              ; FB09C3  incw 1,(XIX)
+	incw	1, (xix)                              ; FB09C3  incw 1,(XIX)
 	ld	bc, (xix)                               ; FB09C5  ld BC,(XIX)
 	and	bc, 0xFFF                              ; FB09C7  and BC,0x0fff
 	exts	xbc                                   ; FB09CB  exts XBC
 	extpfx3 0xAE, 0xF8, 0x81                   ; FB09CD  add XBC,(XIZ+0xf8)
 	ld	a, (xbc)                                ; FB09D0  ld A,(XBC)
 	stb_da	(0xD7EC), a                         ; FB09D2  ld (0x00d7ec),A
-	incm	1, (xix)                              ; FB09D7  incw 1,(XIX)
+	incw	1, (xix)                              ; FB09D7  incw 1,(XIX)
 	ld	xbc, (xiz-12)                           ; FB09D9  ld XBC,(XIZ+0xf4)
 	decm	4, (xbc)                              ; FB09DC  decw 4,(XBC)
 	dec	4, de                                  ; FB09DE  dec 4,DE
@@ -757,7 +757,7 @@ MidiIn_ParseRingAndDispatch__FB09F1:
 	dec	1, de                                  ; FB09F1  dec 1,DE
 	ld	xbc, (xiz-12)                           ; FB09F3  ld XBC,(XIZ+0xf4)
 	decm	1, (xbc)                              ; FB09F6  decw 1,(XBC)
-	incm	1, (xix)                              ; FB09F8  incw 1,(XIX)
+	incw	1, (xix)                              ; FB09F8  incw 1,(XIX)
 MidiIn_ParseRingAndDispatch__FB09FA:
 	cps	de, 0                                  ; FB09FA  cp DE,0
 	jr nz, MidiIn_ParseRingAndDispatch__FB09F1 ; FB09FC  jr NZ,0xfb09f1
@@ -9580,7 +9580,7 @@ sub_FB53C5__FB5612:
 	extpfx3 0x9E, 0xF8, 0x80                   ; FB561E  add WA,(XIZ+0xf8)
 	ld	(xwa), bc                               ; FB5621  ld (XWA),BC
 sub_FB53C5__FB5623:
-	incm	4, (xiz-10)                           ; FB5623  incw 4,(XIZ+0xf6)
+	incw	4, (xiz-10)                           ; FB5623  incw 4,(XIZ+0xf6)
 	incm8	1, (xiz-17)                          ; FB5626  inc 1,(XIZ+0xef)
 	cp (xiz-17), 0x04                          ; FB5629  cp (XIZ+0xef),0x04
 	jrl c, sub_FB53C5__FB5421                  ; FB562D  jrl C,0xfb5421
@@ -11619,7 +11619,7 @@ sub_FB6500__FB6657:
 	inc	1, hl                                  ; FB6669  inc 1,HL
 	cps	hl, 2                                  ; FB666B  cp HL,2
 	jr c, sub_FB6500__FB6657                   ; FB666D  jr C,0xfb6657
-	incm	2, (xiz-2)                            ; FB666F  incw 2,(XIZ+0xfe)
+	incw	2, (xiz-2)                            ; FB666F  incw 2,(XIZ+0xfe)
 	inc	2, de                                  ; FB6672  inc 2,DE
 	cpw (xiz-2), 0x000C                        ; FB6674  cp (XIZ+0xfe),0x000c
 	jr c, sub_FB6500__FB664E                   ; FB6679  jr C,0xfb664e
@@ -12087,7 +12087,7 @@ sub_FB68DD__FB6A83:
 	cp (xiz-1), 0x00                           ; FB6A8A  cp (XIZ+0xff),0x00
 	jrl nz, sub_FB68DD__FB6A06                 ; FB6A8E  jrl NZ,0xfb6a06
 sub_FB68DD__FB6A91:
-	incm	4, (xiz-8)                            ; FB6A91  incw 4,(XIZ+0xf8)
+	incw	4, (xiz-8)                            ; FB6A91  incw 4,(XIZ+0xf8)
 	incm8	1, (xiz-13)                          ; FB6A94  inc 1,(XIZ+0xf3)
 	cp (xiz-13), 0x04                          ; FB6A97  cp (XIZ+0xf3),0x04
 	jrl c, sub_FB68DD__FB6950                  ; FB6A9B  jrl C,0xfb6950

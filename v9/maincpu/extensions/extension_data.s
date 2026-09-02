@@ -1391,11 +1391,11 @@ TransposeNoteStr_C:
 	aligned_string "RROR "
 	.byte 0x9c
 	nop
-	incm 8, (xix+256)
+	incw 8, (xix+256)
 	nop
 	jr	f, 0
 	jr	f, 0
-	incm 8, (xix+256)
+	incw 8, (xix+256)
 	nop
 	.byte 0xa0
 	nop

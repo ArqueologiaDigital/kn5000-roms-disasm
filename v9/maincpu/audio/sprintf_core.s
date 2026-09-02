@@ -19,7 +19,7 @@ Sprintf_OutputLiteral:
 	ld xwa, (xsp + 92)
 	call (xwa)
 	inc 2, xsp
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	jrl Sprintf_MainLoop_ReadNext
 
 Sprintf_ParseFormatSpec:
@@ -217,7 +217,7 @@ Sprintf_Format_Percent:
 	jr Sprintf_Format_CharOrPercent
 
 Sprintf_Percent_PadLeft:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	pushw_da 0x20, 0xc2, 0x03
 	ld xwa, (xsp + 92)
 	call (xwa)
@@ -229,7 +229,7 @@ Sprintf_Percent_PadLeftLoop:
 	jr gt, Sprintf_Percent_PadLeft
 
 Sprintf_Format_CharOrPercent:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	cp iz, 0x63
 	jr nz, Sprintf_Percent_LiteralPush
 	ld xbc, (xsp + 86)
@@ -252,7 +252,7 @@ Sprintf_Percent_OutputChar:
 	jrl Sprintf_MainLoop_ReadNext
 
 Sprintf_Percent_PadRight:
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	pushw 0x20
 	ld xwa, (xsp + 92)
 	call (xwa)
@@ -1605,7 +1605,7 @@ Sprintf_FFixed_FracLeadZeroBody:
 
 Sprintf_FFixed_FracLeadZeroDone:
 	incdi16_24 1, (0x3c222)
-	incm 1, (xsp + 26)
+	incw 1, (xsp + 26)
 
 Sprintf_FFixed_FracLeadZeroLoop:
 	cpw (xsp + 26), 0x0
@@ -1887,7 +1887,7 @@ Sprintf_ESci_LeadDigit:
 	incdi16_24 1, (0x3c222)
 	cpw (xsp + 26), 0x0
 	jr ge, Sprintf_ESci_Overflow_DecExp
-	incm 1, (xsp + 26)
+	incw 1, (xsp + 26)
 	jr Sprintf_ESci_DecimalPoint
 
 Sprintf_ESci_Overflow_DecExp:
@@ -2346,7 +2346,7 @@ Sprintf_GGen_RoundLoop:
 	extz xwa
 	div wa, 0xa
 	ld (xhl), a
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 
 Sprintf_GGen_ExtractResult:
 	ld ix, de
@@ -2356,7 +2356,7 @@ Sprintf_GGen_ExtractResult:
 	div wa, 0xa
 	stw_erp WA, 0xe2
 	stb_dri A, 0x07, 0xec, 0xf0
-	incm 1, (xsp + 4)
+	incw 1, (xsp + 4)
 	ldiw_erp 0xfa, 1
 	jr Sprintf_GGen_CopyLoop
 
@@ -2701,7 +2701,7 @@ Sprintf_MulByTen_Next:
 	ld wa, (xbc)
 	bit 7, wa
 	jr z, Sprintf_MulByTen_HandleOverflow
-	incm 1, (xhl + 28)
+	incw 1, (xhl + 28)
 
 Sprintf_MulByTen_HandleOverflow:
 	ldw (xbc), 0x0
