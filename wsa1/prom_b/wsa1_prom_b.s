@@ -62126,10 +62126,13 @@ Data_F34C6E:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F34CA2:
-	.byte	0x03, 0x0B, 0xF6, 0x12, 0xFF	; F34CA2  |.....|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034CA7, 0x000006
+; ABSORBED 2026-09-02 -- see notes/gen_prom_b_f34ca2_fix_module.py: this
+; 5 B object plus the 6 B .incbin that followed it is ONE interpreter-B
+; op-0x03 record (handler 0xF31B57, fixed 11 B, verified against the
+; ROM's own HTBL_B table -- interpreter A's op-0x03 rule is fixed-12 and
+; does NOT fit these 11 bytes).  Lands exactly on Data_F34CAD, below.
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57
+	.byte 0xF6, 0x12, 0xFF, 0x00, 0x05, 0x18, 0x4D, 0xF3, 0x00
 
 ; --------------------------------------------------------------------------
 ; Data_F34CAD -- 5 bytes, EMITTED AS DATA (not promoted to code).
@@ -62144,10 +62147,14 @@ Data_F34CA2:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F34CAD:
-	.byte	0x04, 0x0B, 0xF6, 0x12, 0xFF	; F34CAD  |.....|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034CB2, 0x0000E6
+; NARROWED 2026-09-02 -- see notes/gen_prom_b_f34ca2_fix_module.py: this
+; 5 B object plus the FIRST 6 of the 230 B .incbin that followed it is
+; ONE interpreter-B op-0x04 record (fixed 11 B, verified against the
+; ROM's own HTBL_B table).  The remaining 224 B is NOT walked by this
+; pass and stays .incbin.
+	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler (HTBL_B[4])
+	.byte 0xF6, 0x12, 0xFF, 0x00, 0x0E, 0xB8, 0x4C, 0xF3, 0x00
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034CB8, 0x0000E0
 
 ; === END COVER-R1 0xF34C6E-0xF34D98 ===
 
