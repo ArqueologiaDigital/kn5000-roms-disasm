@@ -66837,6 +66837,12 @@ DL_F39551:
 	.short 0x00F0
 
 ; === COVER-R1 0xF39559-0xF3972D ===
+; ⚠ CLOSED 2026-09-02 (lane promB4).  The verdict below -- "everything
+;   else is NOT reachable and stays `.incbin`" -- was true of the round-1
+;   REACHABILITY WALK and false of the ROM: the remainder is display-list
+;   operand arrays, reached by pointer from records the walk never enters
+;   because nothing CALLS them.  0 bytes of this block are `.incbin` now.
+;   Evidence and regeneration: notes/gen_prom_b_promB4_operand_arrays.py
 ; 0xF39559-0xF3972C, coverage round 1: 398 of this span's 468 bytes are
 ; reachable -- 0 as CODE (an entry point in the routine directory, or a branch
 ; prom_b's own converted instructions decode) in 0 runs, and 398 as DATA (only
@@ -66845,7 +66851,11 @@ DL_F39551:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F39559 -- 398 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F39559 -- 393 bytes, EMITTED AS DATA (not promoted to code).
+; ⚠ CORRECTED 2026-09-02 (lane promB4): this header said 398 bytes.
+;   The last 5 bytes were the head of the interpreter-B record at 0xF396E2,
+;   which prom_b 0xF7E966 loads into XIY before calling T_F4181C.  The
+;   string table here is 32 entries of 7 bytes ending exactly at 0xF396E2.
 ; Reached from: 0x00F39559 appears as a 32-bit word at 0xF7E2F3 0xF7F008
 ;               0xF7F338 0xF7F676 0xF7F9AA +1 more; converted code at 0xF7E2F2
 ;               0xF7F007 0xF7F337 0xF7F675 loads it as a 32-bit immediate.  No
@@ -66883,9 +66893,52 @@ Data_F39559:
 	.byte	0x34, 0x50, 0x41, 0x52, 0x54, 0x20, 0x32, 0x35, 0x50, 0x41, 0x52, 0x54, 0x20, 0x32, 0x36, 0x50	; F396A9  |4PART 25PART 26P|
 	.byte	0x41, 0x52, 0x54, 0x20, 0x32, 0x37, 0x50, 0x41, 0x52, 0x54, 0x20, 0x32, 0x38, 0x50, 0x41, 0x52	; F396B9  |ART 27PART 28PAR|
 	.byte	0x54, 0x20, 0x32, 0x39, 0x50, 0x41, 0x52, 0x54, 0x20, 0x33, 0x30, 0x50, 0x41, 0x52, 0x54, 0x20	; F396C9  |T 29PART 30PART |
-	.byte	0x33, 0x31, 0x50, 0x41, 0x52, 0x54, 0x20, 0x33, 0x32, 0x03, 0x0B, 0x40, 0x26, 0xFF	; F396D9  |31PART 32..@&.|
+	.byte	0x33, 0x31, 0x50, 0x41, 0x52, 0x54, 0x20, 0x33, 0x32	; F396D9  |31PART 32|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0396E7, 0x000046
+; ==================================================================
+; 0xF396E2-0xF3972C -- display-list RECORDS and the OPERAND ARRAYS they
+;                    point at (75 bytes) -- converted 2026-09-02,
+;                    lane promB4, notes/gen_prom_b_promB4_operand_arrays.py
+; ==================================================================
+;
+; Right edge anchored on DL_F3972D, a converted interpreter-A op-1B record
+; whose four words (0x0038, 0x003E, 0x0117, 0x00B5) are the bounding box of
+; the 8 entries below.
+;
+; ⚠ THE 398-BYTE EXTENT OF Data_F39559 ABOVE OVERSHOT BY 5 BYTES, and its
+;   own header said so: "the extent is the reachability walk's, not the
+;   object's".  0xF396E2 is a record start -- prom_b 0xF7E966 does
+;   `ld XIY,0x00F396E2` then calls T_F4181C (`jp 0xF31B57`, the
+;   interpreter-B op-03 handler).  The string table above it is 32 entries
+;   of 7 bytes, "PART 1 " .. "PART 32", ending exactly at 0xF396E2.
+;   Data_F39559 is therefore 393 bytes, not 398.
+;
+Data_F396E2:
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F396ED	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; ------------------------------------------------------------------
+; DLTable_F396ED -- 8 entries of 8 bytes, 0xF396ED-0xF3972C
+; Referenced by: display-list record 0xF396E2
+;   Width is the HANDLER's (0xF31B57 `sla 3,HL` => 8; 0xF31B86
+;   `mul HL,6` => 6; 0xF31B21 takes it from the record's +0x0B).
+;   The COUNT is the extent divided by that width, and the extent
+;   is fixed by the anchors on both sides -- NOT by the record's
+;   AND mask, which bounds the index only.
+; ------------------------------------------------------------------
+DLTable_F396ED:
+	.short 0x0038, 0x003E, 0x0117, 0x004C	; [0]
+	.short 0x0038, 0x004D, 0x0117, 0x005B	; [1]
+	.short 0x0038, 0x005C, 0x0117, 0x006A	; [2]
+	.short 0x0038, 0x006B, 0x0117, 0x0079	; [3]
+	.short 0x0038, 0x007A, 0x0117, 0x0088	; [4]
+	.short 0x0038, 0x0089, 0x0117, 0x0097	; [5]
+	.short 0x0038, 0x0098, 0x0117, 0x00A6	; [6]
+	.short 0x0038, 0x00A7, 0x0117, 0x00B5	; [7]
 
 ; === END COVER-R1 0xF39559-0xF3972D ===
 
@@ -68093,6 +68146,12 @@ DL_F3A0D1:
 	.short 0x004B
 
 ; === COVER-R1 0xF3A0D9-0xF3A1CF ===
+; ⚠ CLOSED 2026-09-02 (lane promB4).  The verdict below -- "everything
+;   else is NOT reachable and stays `.incbin`" -- was true of the round-1
+;   REACHABILITY WALK and false of the ROM: the remainder is display-list
+;   operand arrays, reached by pointer from records the walk never enters
+;   because nothing CALLS them.  0 bytes of this block are `.incbin` now.
+;   Evidence and regeneration: notes/gen_prom_b_promB4_operand_arrays.py
 ; 0xF3A0D9-0xF3A1CE, coverage round 1: 10 of this span's 246 bytes are
 ; reachable -- 0 as CODE (an entry point in the routine directory, or a branch
 ; prom_b's own converted instructions decode) in 0 runs, and 10 as DATA (only
@@ -68120,7 +68179,11 @@ Data_F3A0D9:
 	.byte 0x03, 0x0B, 0xF6, 0x12, 0xFF, 0x00, 0x05, 0x4F, 0xA1, 0xF3, 0x00	; B op 03, 11 bytes -> handler HTBL_B[3]
 
 ; --------------------------------------------------------------------------
-; Data_F3A0E4 -- 5 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F3A0E4 -- 11 bytes, EMITTED AS DATA (not promoted to code).
+; ⚠ CORRECTED 2026-09-02 (lane promB4): this header said 5 bytes.
+;   This object was the first 5 bytes of an 11-byte interpreter-B op-04
+;   record; the .incbin behind it held the rest of the record and the two
+;   operand arrays it and its neighbour 0xF3A0D9 name.
 ; Reached from: 0x00F3A0E4 appears as a 32-bit word at 0xF7E3E1; converted
 ;               code at 0xF7E3E0 loads it as a 32-bit immediate.  No routine-
 ;               directory slot and no branch decoded in converted code names
@@ -68132,10 +68195,81 @@ Data_F3A0D9:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
+; ==================================================================
+; 0xF3A0E4-0xF3A1CE -- display-list RECORDS and the OPERAND ARRAYS they
+;                    point at (235 bytes) -- converted 2026-09-02,
+;                    lane promB4, notes/gen_prom_b_promB4_operand_arrays.py
+; ==================================================================
+;
+; Right edge anchored on DL_F3A1CF, a converted display-list span header;
+; and the 6-byte array's end 0xF3A14F is named by the already-converted
+; records at 0xF3A0D9, 0xF39000 and 0xF3900B.
+;
+; The 5 bytes previously typed here were the head of an 11-byte
+; interpreter-B op-04 record; the .incbin held its remaining 6 bytes and
+; the two arrays it and its neighbour 0xF3A0D9 name.
+;
 Data_F3A0E4:
-	.byte	0x04, 0x0B, 0xF6, 0x12, 0xFF	; F3A0E4  |.....|
+	.byte 0x04, 0x0B	; B op 04, 11 bytes -> handler 0xF31B86 -- entry[value] -> IY, BC, HL
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x0E	; +0x06 swi 7 function
+	.long 0x00F3A0EF	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A0E9, 0x0000E6
+; ------------------------------------------------------------------
+; DLTable_F3A0EF -- 16 entries of 6 bytes, 0xF3A0EF-0xF3A14E
+; Referenced by: display-list record 0xF3A0E4
+;   Width is the HANDLER's (0xF31B57 `sla 3,HL` => 8; 0xF31B86
+;   `mul HL,6` => 6; 0xF31B21 takes it from the record's +0x0B).
+;   The COUNT is the extent divided by that width, and the extent
+;   is fixed by the anchors on both sides -- NOT by the record's
+;   AND mask, which bounds the index only.
+; ------------------------------------------------------------------
+DLTable_F3A0EF:
+	.short 0x1900, 0x0005, 0x000E	; [0]
+	.short 0x1905, 0x0005, 0x000E	; [1]
+	.short 0x190A, 0x0005, 0x000E	; [2]
+	.short 0x190F, 0x0005, 0x000E	; [3]
+	.short 0x1914, 0x0005, 0x000E	; [4]
+	.short 0x1919, 0x0005, 0x000E	; [5]
+	.short 0x191E, 0x0005, 0x000E	; [6]
+	.short 0x1923, 0x0005, 0x000E	; [7]
+	.short 0x20D0, 0x0005, 0x000E	; [8]
+	.short 0x20D5, 0x0005, 0x000E	; [9]
+	.short 0x20DA, 0x0005, 0x000E	; [10]
+	.short 0x20DF, 0x0005, 0x000E	; [11]
+	.short 0x20E4, 0x0005, 0x000E	; [12]
+	.short 0x20E9, 0x0005, 0x000E	; [13]
+	.short 0x20EE, 0x0005, 0x000E	; [14]
+	.short 0x20F3, 0x0005, 0x000E	; [15]
+
+; ------------------------------------------------------------------
+; DLTable_F3A14F -- 16 entries of 8 bytes, 0xF3A14F-0xF3A1CE
+; Referenced by: display-list records 0xF39000, 0xF3900B, 0xF3A0D9
+;   Width is the HANDLER's (0xF31B57 `sla 3,HL` => 8; 0xF31B86
+;   `mul HL,6` => 6; 0xF31B21 takes it from the record's +0x0B).
+;   The COUNT is the extent divided by that width, and the extent
+;   is fixed by the anchors on both sides -- NOT by the record's
+;   AND mask, which bounds the index only.
+; ------------------------------------------------------------------
+DLTable_F3A14F:
+	.short 0x0006, 0x00A1, 0x0022, 0x00AC	; [0]
+	.short 0x002E, 0x00A1, 0x004A, 0x00AC	; [1]
+	.short 0x0056, 0x00A1, 0x0072, 0x00AC	; [2]
+	.short 0x007E, 0x00A1, 0x009A, 0x00AC	; [3]
+	.short 0x00A6, 0x00A1, 0x00C2, 0x00AC	; [4]
+	.short 0x00CE, 0x00A1, 0x00EA, 0x00AC	; [5]
+	.short 0x00F6, 0x00A1, 0x0112, 0x00AC	; [6]
+	.short 0x011E, 0x00A1, 0x013A, 0x00AC	; [7]
+	.short 0x0006, 0x00D0, 0x0022, 0x00DB	; [8]
+	.short 0x002E, 0x00D0, 0x004A, 0x00DB	; [9]
+	.short 0x0056, 0x00D0, 0x0072, 0x00DB	; [10]
+	.short 0x007E, 0x00D0, 0x009A, 0x00DB	; [11]
+	.short 0x00A6, 0x00D0, 0x00C2, 0x00DB	; [12]
+	.short 0x00CE, 0x00D0, 0x00EA, 0x00DB	; [13]
+	.short 0x00F6, 0x00D0, 0x0112, 0x00DB	; [14]
+	.short 0x011E, 0x00D0, 0x013A, 0x00DB	; [15]
 
 ; === END COVER-R1 0xF3A0D9-0xF3A1CF ===
 
@@ -72233,6 +72367,12 @@ DL_F3C367:
 	.long 0x00F3C3AD	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3C37D-0xF3C4D5 ===
+; ⚠ CLOSED 2026-09-02 (lane promB4).  The verdict below -- "everything
+;   else is NOT reachable and stays `.incbin`" -- was true of the round-1
+;   REACHABILITY WALK and false of the ROM: the remainder is display-list
+;   operand arrays, reached by pointer from records the walk never enters
+;   because nothing CALLS them.  0 bytes of this block are `.incbin` now.
+;   Evidence and regeneration: notes/gen_prom_b_promB4_operand_arrays.py
 ; 0xF3C37D-0xF3C4D4, coverage round 1: 257 of this span's 344 bytes are
 ; reachable -- 0 as CODE (an entry point in the routine directory, or a branch
 ; prom_b's own converted instructions decode) in 0 runs, and 257 as DATA (only
@@ -72241,7 +72381,11 @@ DL_F3C367:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3C37D -- 257 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F3C37D -- 48 bytes, EMITTED AS DATA (not promoted to code).
+; ⚠ CORRECTED 2026-09-02 (lane promB4): this header said 257 bytes.
+;   The 257-byte extent ran through a whole SECOND operand array and one
+;   byte into its 27th entry.  Retyped as the two arrays the records at
+;   0xF3C367 and 0xF3C372 point at; this label stays on the first.
 ; Reached from: 0x00F3C37D appears as a 32-bit word at 0xF3C358 0xF3C36E.  No
 ;               routine-directory slot and no branch decoded in converted code
 ;               names it.
@@ -72252,26 +72396,86 @@ DL_F3C367:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
+; ==================================================================
+; 0xF3C37D-0xF3C4D4 -- display-list RECORDS and the OPERAND ARRAYS they
+;                    point at (344 bytes) -- converted 2026-09-02,
+;                    lane promB4, notes/gen_prom_b_promB4_operand_arrays.py
+; ==================================================================
+;
+; Right edge anchored on DL_ACurrentTrackWillBeClearedAutomaticaly at
+; 0xF3C4D5, a converted display-list span header; both array starts are
+; named by the converted records at 0xF3C367 and 0xF3C372.
+;
+; The 257-byte Data_F3C37D was two whole arrays plus the first byte of
+; the 27th entry of the second one -- again "the reachability walk's
+; extent, not the object's".  Retyped as the two arrays; the label
+; Data_F3C37D is kept on the first of them, which starts at its address.
+;
+; ------------------------------------------------------------------
+; DLTable_F3C37D -- 6 entries of 8 bytes, 0xF3C37D-0xF3C3AC
+; Referenced by: display-list record 0xF3C367
+;   Width is the HANDLER's (0xF31B57 `sla 3,HL` => 8; 0xF31B86
+;   `mul HL,6` => 6; 0xF31B21 takes it from the record's +0x0B).
+;   The COUNT is the extent divided by that width, and the extent
+;   is fixed by the anchors on both sides -- NOT by the record's
+;   AND mask, which bounds the index only.
+; ------------------------------------------------------------------
 Data_F3C37D:
-	.byte	0x80, 0x00, 0x3B, 0x00, 0x90, 0x00, 0x4E, 0x00, 0x90, 0x00, 0x3B, 0x00, 0xA0, 0x00, 0x4E, 0x00	; F3C37D  |..;...N...;...N.|
-	.byte	0xA0, 0x00, 0x3B, 0x00, 0xB0, 0x00, 0x4E, 0x00, 0xB0, 0x00, 0x3B, 0x00, 0xC0, 0x00, 0x4E, 0x00	; F3C38D  |..;...N...;...N.|
-	.byte	0xC0, 0x00, 0x3B, 0x00, 0xD0, 0x00, 0x4E, 0x00, 0xD0, 0x00, 0x3B, 0x00, 0xE0, 0x00, 0x4E, 0x00	; F3C39D  |..;...N...;...N.|
-	.byte	0x38, 0x00, 0x74, 0x00, 0x40, 0x00, 0x7F, 0x00, 0x48, 0x00, 0x74, 0x00, 0x50, 0x00, 0x7F, 0x00	; F3C3AD  |8.t.@...H.t.P...|
-	.byte	0x58, 0x00, 0x74, 0x00, 0x60, 0x00, 0x7F, 0x00, 0x68, 0x00, 0x74, 0x00, 0x70, 0x00, 0x7F, 0x00	; F3C3BD  |X.t.`...h.t.p...|
-	.byte	0x78, 0x00, 0x74, 0x00, 0x80, 0x00, 0x7F, 0x00, 0x88, 0x00, 0x74, 0x00, 0x90, 0x00, 0x7F, 0x00	; F3C3CD  |x.t.......t.....|
-	.byte	0x98, 0x00, 0x74, 0x00, 0xA0, 0x00, 0x7F, 0x00, 0xA8, 0x00, 0x74, 0x00, 0xB0, 0x00, 0x7F, 0x00	; F3C3DD  |..t.......t.....|
-	.byte	0xB8, 0x00, 0x74, 0x00, 0xC0, 0x00, 0x7F, 0x00, 0xC8, 0x00, 0x74, 0x00, 0xD0, 0x00, 0x7F, 0x00	; F3C3ED  |..t.......t.....|
-	.byte	0xD8, 0x00, 0x74, 0x00, 0xE0, 0x00, 0x7F, 0x00, 0xE8, 0x00, 0x74, 0x00, 0xF0, 0x00, 0x7F, 0x00	; F3C3FD  |..t.......t.....|
-	.byte	0xF8, 0x00, 0x74, 0x00, 0x00, 0x01, 0x7F, 0x00, 0x08, 0x01, 0x74, 0x00, 0x10, 0x01, 0x7F, 0x00	; F3C40D  |..t.......t.....|
-	.byte	0x38, 0x00, 0x83, 0x00, 0x40, 0x00, 0x8E, 0x00, 0x48, 0x00, 0x83, 0x00, 0x50, 0x00, 0x8E, 0x00	; F3C41D  |8...@...H...P...|
-	.byte	0x58, 0x00, 0x83, 0x00, 0x60, 0x00, 0x8E, 0x00, 0x68, 0x00, 0x83, 0x00, 0x70, 0x00, 0x8E, 0x00	; F3C42D  |X...`...h...p...|
-	.byte	0x78, 0x00, 0x83, 0x00, 0x80, 0x00, 0x8E, 0x00, 0x88, 0x00, 0x83, 0x00, 0x90, 0x00, 0x8E, 0x00	; F3C43D  |x...............|
-	.byte	0x98, 0x00, 0x83, 0x00, 0xA0, 0x00, 0x8E, 0x00, 0xA8, 0x00, 0x83, 0x00, 0xB0, 0x00, 0x8E, 0x00	; F3C44D  |................|
-	.byte	0xB8, 0x00, 0x83, 0x00, 0xC0, 0x00, 0x8E, 0x00, 0xC8, 0x00, 0x83, 0x00, 0xD0, 0x00, 0x8E, 0x00	; F3C45D  |................|
-	.byte	0xD8, 0x00, 0x83, 0x00, 0xE0, 0x00, 0x8E, 0x00, 0xE8, 0x00, 0x83, 0x00, 0xF0, 0x00, 0x8E, 0x00	; F3C46D  |................|
-	.byte	0xF8	; F3C47D  |.|
+DLTable_F3C37D:
+	.short 0x0080, 0x003B, 0x0090, 0x004E	; [0]
+	.short 0x0090, 0x003B, 0x00A0, 0x004E	; [1]
+	.short 0x00A0, 0x003B, 0x00B0, 0x004E	; [2]
+	.short 0x00B0, 0x003B, 0x00C0, 0x004E	; [3]
+	.short 0x00C0, 0x003B, 0x00D0, 0x004E	; [4]
+	.short 0x00D0, 0x003B, 0x00E0, 0x004E	; [5]
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03C47E, 0x000057
+; ------------------------------------------------------------------
+; DLTable_F3C3AD -- 37 entries of 8 bytes, 0xF3C3AD-0xF3C4D4
+; Referenced by: display-list record 0xF3C372
+;   Width is the HANDLER's (0xF31B57 `sla 3,HL` => 8; 0xF31B86
+;   `mul HL,6` => 6; 0xF31B21 takes it from the record's +0x0B).
+;   The COUNT is the extent divided by that width, and the extent
+;   is fixed by the anchors on both sides -- NOT by the record's
+;   AND mask, which bounds the index only.
+; ------------------------------------------------------------------
+DLTable_F3C3AD:
+	.short 0x0038, 0x0074, 0x0040, 0x007F	; [0]
+	.short 0x0048, 0x0074, 0x0050, 0x007F	; [1]
+	.short 0x0058, 0x0074, 0x0060, 0x007F	; [2]
+	.short 0x0068, 0x0074, 0x0070, 0x007F	; [3]
+	.short 0x0078, 0x0074, 0x0080, 0x007F	; [4]
+	.short 0x0088, 0x0074, 0x0090, 0x007F	; [5]
+	.short 0x0098, 0x0074, 0x00A0, 0x007F	; [6]
+	.short 0x00A8, 0x0074, 0x00B0, 0x007F	; [7]
+	.short 0x00B8, 0x0074, 0x00C0, 0x007F	; [8]
+	.short 0x00C8, 0x0074, 0x00D0, 0x007F	; [9]
+	.short 0x00D8, 0x0074, 0x00E0, 0x007F	; [10]
+	.short 0x00E8, 0x0074, 0x00F0, 0x007F	; [11]
+	.short 0x00F8, 0x0074, 0x0100, 0x007F	; [12]
+	.short 0x0108, 0x0074, 0x0110, 0x007F	; [13]
+	.short 0x0038, 0x0083, 0x0040, 0x008E	; [14]
+	.short 0x0048, 0x0083, 0x0050, 0x008E	; [15]
+	.short 0x0058, 0x0083, 0x0060, 0x008E	; [16]
+	.short 0x0068, 0x0083, 0x0070, 0x008E	; [17]
+	.short 0x0078, 0x0083, 0x0080, 0x008E	; [18]
+	.short 0x0088, 0x0083, 0x0090, 0x008E	; [19]
+	.short 0x0098, 0x0083, 0x00A0, 0x008E	; [20]
+	.short 0x00A8, 0x0083, 0x00B0, 0x008E	; [21]
+	.short 0x00B8, 0x0083, 0x00C0, 0x008E	; [22]
+	.short 0x00C8, 0x0083, 0x00D0, 0x008E	; [23]
+	.short 0x00D8, 0x0083, 0x00E0, 0x008E	; [24]
+	.short 0x00E8, 0x0083, 0x00F0, 0x008E	; [25]
+	.short 0x00F8, 0x0083, 0x0100, 0x008E	; [26]
+	.short 0x0038, 0x0093, 0x0040, 0x009E	; [27]
+	.short 0x0048, 0x0093, 0x0050, 0x009E	; [28]
+	.short 0x0058, 0x0093, 0x0060, 0x009E	; [29]
+	.short 0x0068, 0x0093, 0x0070, 0x009E	; [30]
+	.short 0x0078, 0x0093, 0x0080, 0x009E	; [31]
+	.short 0x0088, 0x0093, 0x0090, 0x009E	; [32]
+	.short 0x0098, 0x0093, 0x00A0, 0x009E	; [33]
+	.short 0x00A8, 0x0093, 0x00B0, 0x009E	; [34]
+	.short 0x00B8, 0x0093, 0x00C0, 0x009E	; [35]
+	.short 0x00C8, 0x0093, 0x00D0, 0x009E	; [36]
 
 ; === END COVER-R1 0xF3C37D-0xF3C4D5 ===
 
@@ -74944,8 +75148,122 @@ DL_F3DA6F:
 	.short 0x0021
 	.short 0x000D
 
-; --- 0xF3DA77-0xF3DBFF: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03DA77, 0x000189
+; ==================================================================
+; 0xF3DA77-0xF3DBFF -- display-list RECORDS and the OPERAND ARRAYS they
+;                    point at (393 bytes) -- converted 2026-09-02,
+;                    lane promB4, notes/gen_prom_b_promB4_operand_arrays.py
+; ==================================================================
+;
+; Right edge anchored on DL_F3DC00, a converted display-list span header.
+;
+; All three records are named from prom_a, which calls the interpreter-B
+; op-03 handler directly: 0xF81E93, 0xF81EE3 -> 0xF3DA77; 0xF81EAE ->
+; 0xF3DAA2; 0xF81ECC -> 0xF3DAED, each followed by `call T_F4181C`
+; (`jp 0xF31B57`).  The first record's own mask/shift (0x0C >> 2) + 1 = 4
+; equals its array's extent exactly -- the one place in this lane where
+; the index bound and the measured size agree.
+;
+Data_F3DA77:
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x1303	; +0x02 source variable, 16-bit address
+	.byte 0x0C	; +0x04 AND mask
+	.byte 0x82	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3DA82	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; ------------------------------------------------------------------
+; DLTable_F3DA82 -- 4 entries of 8 bytes, 0xF3DA82-0xF3DAA1
+; Referenced by: display-list record 0xF3DA77
+;   Width is the HANDLER's (0xF31B57 `sla 3,HL` => 8; 0xF31B86
+;   `mul HL,6` => 6; 0xF31B21 takes it from the record's +0x0B).
+;   The COUNT is the extent divided by that width, and the extent
+;   is fixed by the anchors on both sides -- NOT by the record's
+;   AND mask, which bounds the index only.
+; ------------------------------------------------------------------
+DLTable_F3DA82:
+	.short 0x0008, 0x006F, 0x0010, 0x007B	; [0]
+	.short 0x0008, 0x006F, 0x0010, 0x007B	; [1]
+	.short 0x0008, 0x006F, 0x0010, 0x007B	; [2]
+	.short 0x0008, 0x006F, 0x0010, 0x007B	; [3]
+
+Data_F3DAA2:
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x1300	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3DAAD	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; ------------------------------------------------------------------
+; DLTable_F3DAAD -- 8 entries of 8 bytes, 0xF3DAAD-0xF3DAEC
+; Referenced by: display-list record 0xF3DAA2
+;   Width is the HANDLER's (0xF31B57 `sla 3,HL` => 8; 0xF31B86
+;   `mul HL,6` => 6; 0xF31B21 takes it from the record's +0x0B).
+;   The COUNT is the extent divided by that width, and the extent
+;   is fixed by the anchors on both sides -- NOT by the record's
+;   AND mask, which bounds the index only.
+; ------------------------------------------------------------------
+DLTable_F3DAAD:
+	.short 0x0008, 0x006F, 0x0010, 0x007B	; [0]
+	.short 0x0028, 0x006F, 0x0030, 0x007B	; [1]
+	.short 0x0048, 0x006F, 0x0050, 0x007B	; [2]
+	.short 0x0068, 0x006F, 0x0070, 0x007B	; [3]
+	.short 0x0088, 0x006F, 0x0090, 0x007B	; [4]
+	.short 0x00A8, 0x006F, 0x00B0, 0x007B	; [5]
+	.short 0x00C8, 0x006F, 0x00D0, 0x007B	; [6]
+	.short 0x00E8, 0x006F, 0x00F0, 0x007B	; [7]
+
+Data_F3DAED:
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12FE	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F3DAF8	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; ------------------------------------------------------------------
+; DLTable_F3DAF8 -- 33 entries of 8 bytes, 0xF3DAF8-0xF3DBFF
+; Referenced by: display-list record 0xF3DAED
+;   Width is the HANDLER's (0xF31B57 `sla 3,HL` => 8; 0xF31B86
+;   `mul HL,6` => 6; 0xF31B21 takes it from the record's +0x0B).
+;   The COUNT is the extent divided by that width, and the extent
+;   is fixed by the anchors on both sides -- NOT by the record's
+;   AND mask, which bounds the index only.
+; ------------------------------------------------------------------
+DLTable_F3DAF8:
+	.short 0x0000, 0x0000, 0x0000, 0x0000	; [0]
+	.short 0x0008, 0x006F, 0x0010, 0x007B	; [1]
+	.short 0x0010, 0x006F, 0x0018, 0x007B	; [2]
+	.short 0x0018, 0x006F, 0x0020, 0x007B	; [3]
+	.short 0x0020, 0x006F, 0x0028, 0x007B	; [4]
+	.short 0x0028, 0x006F, 0x0030, 0x007B	; [5]
+	.short 0x0030, 0x006F, 0x0038, 0x007B	; [6]
+	.short 0x0038, 0x006F, 0x0040, 0x007B	; [7]
+	.short 0x0040, 0x006F, 0x0048, 0x007B	; [8]
+	.short 0x0048, 0x006F, 0x0050, 0x007B	; [9]
+	.short 0x0050, 0x006F, 0x0058, 0x007B	; [10]
+	.short 0x0058, 0x006F, 0x0060, 0x007B	; [11]
+	.short 0x0060, 0x006F, 0x0068, 0x007B	; [12]
+	.short 0x0068, 0x006F, 0x0070, 0x007B	; [13]
+	.short 0x0070, 0x006F, 0x0078, 0x007B	; [14]
+	.short 0x0078, 0x006F, 0x0080, 0x007B	; [15]
+	.short 0x0080, 0x006F, 0x0088, 0x007B	; [16]
+	.short 0x0088, 0x006F, 0x0090, 0x007B	; [17]
+	.short 0x0090, 0x006F, 0x0098, 0x007B	; [18]
+	.short 0x0098, 0x006F, 0x00A0, 0x007B	; [19]
+	.short 0x00A0, 0x006F, 0x00A8, 0x007B	; [20]
+	.short 0x00A8, 0x006F, 0x00B0, 0x007B	; [21]
+	.short 0x00B0, 0x006F, 0x00B8, 0x007B	; [22]
+	.short 0x00B8, 0x006F, 0x00C0, 0x007B	; [23]
+	.short 0x00C0, 0x006F, 0x00C8, 0x007B	; [24]
+	.short 0x00C8, 0x006F, 0x00D0, 0x007B	; [25]
+	.short 0x00D0, 0x006F, 0x00D8, 0x007B	; [26]
+	.short 0x00D8, 0x006F, 0x00E0, 0x007B	; [27]
+	.short 0x00E0, 0x006F, 0x00E8, 0x007B	; [28]
+	.short 0x00E8, 0x006F, 0x00F0, 0x007B	; [29]
+	.short 0x00F0, 0x006F, 0x00F8, 0x007B	; [30]
+	.short 0x00F8, 0x006F, 0x0100, 0x007B	; [31]
+	.short 0x0100, 0x006F, 0x0108, 0x007B	; [32]
 
 ; ------------------------------------------------------------------
 ; 0xF3DC00-0xF3DC20 -- 3 display-list records, 33 bytes -- interpreter B
@@ -74973,6 +75291,12 @@ DL_F3DC00:
 	.long 0x00F3DC5D	; +0x07 -> XIX: array of 6-byte entries, indexed by the value
 
 ; === COVER-R1 0xF3DC21-0xF3DE26 ===
+; ⚠ CLOSED 2026-09-02 (lane promB4).  The verdict below -- "everything
+;   else is NOT reachable and stays `.incbin`" -- was true of the round-1
+;   REACHABILITY WALK and false of the ROM: the remainder is display-list
+;   operand arrays, reached by pointer from records the walk never enters
+;   because nothing CALLS them.  0 bytes of this block are `.incbin` now.
+;   Evidence and regeneration: notes/gen_prom_b_promB4_operand_arrays.py
 ; 0xF3DC21-0xF3DE25, coverage round 1: 158 of this span's 517 bytes are
 ; reachable -- 0 as CODE (an entry point in the routine directory, or a branch
 ; prom_b's own converted instructions decode) in 0 runs, and 158 as DATA (only
@@ -74981,7 +75305,10 @@ DL_F3DC00:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3DC21 -- 158 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F3DC21 -- 154 bytes, EMITTED AS DATA (not promoted to code).
+; ⚠ CORRECTED 2026-09-02 (lane promB4): this header said 158 bytes.
+;   The last 4 bytes were the head of the interpreter-B record at 0xF3DCBB,
+;   the first of 24 that run to 0xF3DE23.
 ; Reached from: 0x00F3DC21 appears as a 32-bit word at 0xF3DC07.  No routine-
 ;               directory slot and no branch decoded in converted code names
 ;               it.
@@ -75002,9 +75329,259 @@ Data_F3DC21:
 	.byte	0x91, 0x91, 0x91, 0x2A, 0x91, 0x91, 0x2A, 0x2A, 0x91, 0x91, 0x91, 0x91, 0x2A, 0x91, 0x2A, 0x91	; F3DC81  |...*..**....*.*.|
 	.byte	0x2A, 0x91, 0x91, 0x2A, 0x2A, 0x91, 0x2A, 0x2A, 0x2A, 0x91, 0x91, 0x91, 0x91, 0x2A, 0x2A, 0x91	; F3DC91  |*..**.***....**.|
 	.byte	0x91, 0x2A, 0x91, 0x2A, 0x91, 0x2A, 0x2A, 0x2A, 0x91, 0x2A, 0x91, 0x91, 0x2A, 0x2A, 0x2A, 0x91	; F3DCA1  |.*.*.***.*..***.|
-	.byte	0x2A, 0x2A, 0x91, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x02, 0x0F, 0x58, 0x26	; F3DCB1  |**.*******..X&|
+	.byte	0x2A, 0x2A, 0x91, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A, 0x2A	; F3DCB1  |**.*******|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03DCBF, 0x000167
+; ==================================================================
+; 0xF3DCBB-0xF3DE25 -- display-list RECORDS and the OPERAND ARRAYS they
+;                    point at (363 bytes) -- converted 2026-09-02,
+;                    lane promB4, notes/gen_prom_b_promB4_operand_arrays.py
+; ==================================================================
+;
+; Right edge anchored on DL_F3DE26, a converted display-list span header;
+; and the 3-byte table start 0xF3DE23 is named by the converted records at
+; 0xF3D3C3, 0xF3D3E1 and 0xF3D3FF as well as by all 24 records here.
+;
+; ⚠ NO call site and no 32-bit word anywhere in the four ROMs names
+;   0xF3DCBB, so these 24 records are framed from the RIGHT: walking
+;   15-byte op-02 records backward from 0xF3DE23 lands here after exactly
+;   24 of them and no further -- the byte before is 0x2A, past the 0x24
+;   opcode bound.  The run is maximal and self-terminating, every record
+;   has the identical shape, and the source variables (0x2658..0x265F,
+;   0x1301..0x1310) and screen positions (0x0A51/0x1159/0x1861 + 4k) are
+;   three clean arithmetic runs of eight.
+;   Data_F3DC21 above shrinks from 158 to 154 bytes for the same reason
+;   span 1's blob did: its last 4 bytes were this first record's head.
+;
+Data_F3DCBB:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2658	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0A51	; +0x0D -> IX
+Data_F3DCCA:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x2659	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0A55	; +0x0D -> IX
+Data_F3DCD9:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x265A	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0A59	; +0x0D -> IX
+Data_F3DCE8:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x265B	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0A5D	; +0x0D -> IX
+Data_F3DCF7:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x265C	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0A61	; +0x0D -> IX
+Data_F3DD06:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x265D	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0A65	; +0x0D -> IX
+Data_F3DD15:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x265E	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0A69	; +0x0D -> IX
+Data_F3DD24:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x265F	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x0A6D	; +0x0D -> IX
+Data_F3DD33:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1301	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1159	; +0x0D -> IX
+Data_F3DD42:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1302	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x115D	; +0x0D -> IX
+Data_F3DD51:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1303	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1161	; +0x0D -> IX
+Data_F3DD60:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1304	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1165	; +0x0D -> IX
+Data_F3DD6F:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1305	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1169	; +0x0D -> IX
+Data_F3DD7E:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1306	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x116D	; +0x0D -> IX
+Data_F3DD8D:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1307	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1171	; +0x0D -> IX
+Data_F3DD9C:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1308	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1175	; +0x0D -> IX
+Data_F3DDAB:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1309	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1861	; +0x0D -> IX
+Data_F3DDBA:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x130A	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1865	; +0x0D -> IX
+Data_F3DDC9:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x130B	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1869	; +0x0D -> IX
+Data_F3DDD8:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x130C	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x186D	; +0x0D -> IX
+Data_F3DDE7:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x130D	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1871	; +0x0D -> IX
+Data_F3DDF6:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x130E	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1875	; +0x0D -> IX
+Data_F3DE05:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x130F	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x1879	; +0x0D -> IX
+Data_F3DE14:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x1310	; +0x02 source variable, 16-bit address
+	.byte 0x60	; +0x04 AND mask
+	.byte 0x85	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F3DE23	; +0x07 -> XIY: string table
+	.short 0x0001	; +0x0B -> BC: bytes per entry
+	.short 0x187D	; +0x0D -> IX
+
+; ------------------------------------------------------------------
+; DLTable_F3DE23 -- 3 entries of 1 bytes, 0xF3DE23-0xF3DE25
+; Referenced by: display-list records 0xF3D3C3, 0xF3D3E1, 0xF3D3FF, 0xF3DCBB
+;   Width is the HANDLER's (0xF31B57 `sla 3,HL` => 8; 0xF31B86
+;   `mul HL,6` => 6; 0xF31B21 takes it from the record's +0x0B).
+;   The COUNT is the extent divided by that width, and the extent
+;   is fixed by the anchors on both sides -- NOT by the record's
+;   AND mask, which bounds the index only.
+; ------------------------------------------------------------------
+DLTable_F3DE23:
+	.byte 0x20	; [0] | |
+	.byte 0x2A	; [1] |*|
+	.byte 0x91	; [2] |.|
 
 ; === END COVER-R1 0xF3DC21-0xF3DE26 ===
 

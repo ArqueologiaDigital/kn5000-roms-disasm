@@ -1299,3 +1299,42 @@ table. No stride was found that accounts for the whole span, so it is
 left `.incbin`, characterised rather than converted: icon/cursor-shaped
 graphics data, not the "no recognised shape at all" the prior audit
 recorded — a correction to log, even though it did not close any bytes.
+
+
+## LANE promB4 (2026-09-02) — the five high-region `.incbin` spans
+
+### `gen_prom_b_promB4_operand_arrays.py` — the lane's whole conversion
+**"What is in `.incbin` 0x0396E7+70, 0x03A0E9+230, 0x03C47E+87, 0x03DA77+393
+and 0x03DCBF+359, and what proves it?"**
+Answer: interpreter-B display-list RECORDS and the fixed-stride OPERAND ARRAYS
+their `+0x07` pointers name — 1,139 B, all emitted as typed data, no
+instructions. Each record is licensed by the ROM's own handler tables (exactly
+one interpreter's implied-length rule fits, never both); each array by a
+record's pointer landing on its first byte, the handler fixing the entry width
+(`0xF31B57` `sla 3,HL` ⇒ 8; `0xF31B86` `mul HL,6` ⇒ 6; `0xF31B21` takes it from
+the record's own `+0x0B`), and an extent that is a whole number of entries
+ending on a boundary established independently of the span.
+
+Three record starts are confirmed from OUTSIDE prom_b's own data: prom_b
+`0xF7E966` and prom_a `0xF81E93`/`0xF81EAE`/`0xF81ECC` load them into XIY and
+call `T_F4181C` (`jp 0xF31B57`) directly. That is what overturned the 398-byte
+extent of `Data_F39559` — it had swallowed the first 5 bytes of the record at
+`0xF396E2`.
+
+```
+python3 notes/gen_prom_b_promB4_operand_arrays.py --check     # the evidence table
+python3 notes/gen_prom_b_promB4_operand_arrays.py --apply     # rewrite the source
+python3 scripts/analysis/assert_byte_identical.py             # must stay green
+python3 notes/gen_prom_b_promB4_operand_arrays.py --falsify   # gate must go RED
+```
+`--falsify` perturbs one `.short` this script emitted and shows the gate
+reporting `DIFFERS wsa1_prom_b.ic13: 1 byte(s), first at 0x3DBF8`, then
+restores. A gate that cannot go red certifies nothing.
+
+**Not claimed:** span 5's 24 records are reached by no call site this tree
+knows and no 32-bit word anywhere in the four ROMs names `0xF3DCBB`. They are
+framed from the right instead — walking 15-byte `op 02` records backward from
+`0xF3DE23` (an address three other records already point at) lands on
+`0xF3DCBB` after exactly 24 and no further, the preceding byte `0x2A` being
+past the `0x24` opcode bound. Maximal and self-terminating, but weaker
+provenance than the other four spans, and recorded as such.
