@@ -1,0 +1,185 @@
+loaded /tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/census-inventory/census-all.json (234962 regions)
+
+RECONCILIATION
+  image              dump     census      delta  inert
+  v10             2097152    2097152          0  yes
+  v9              2097152    2097152          0  yes
+  v7              2097152    2097152          0  yes
+  v142             196608     196608          0  yes
+  subboot          131072     131072          0  yes
+  tabledata       2097152    2097152          0  yes
+  customdata      1048576    1048576          0  yes
+  hdae5000         524288     524288          0  yes
+  prom_a           524288     524288          0  yes
+  prom_b           524288     524288          0  yes
+  prom_c           524288     524288          0  yes
+  prom_d           524288     524288          0  yes
+  TOTAL          12386304   12386304          0
+  every byte of every image is in exactly one bucket.
+
+PER-IMAGE CENSUS (bytes)
+  image             CODE   KNOWN-A   KNOWN-B   UNKNOWN    FILLER
+  v10             987011    177349    868436      1291     63065
+  v9             1013313    157943    860586      1277     64033
+  v7              719106    156484   1157905      3510     60147
+  v142            127464     47291     21797         8        48
+  subboot           3604       868        37         0    126563
+  tabledata        18676    716439   1164976         0    197061
+  customdata           0    660657         0         0    387919
+  hdae5000        112335    330533     50845         0     30575
+  prom_a          327427     60890     70580      2295     63096
+  prom_b          198037    130391    115821      9034     71005
+  prom_c          207511     84547    102394       620    129216
+  prom_d               0    225863     95886      8772    193767
+  --------------------------------------------------------------
+  TOTAL          3714484   2749255   4509263     26807   1386495
+
+  per-image share explained by the raw census (before the false-positive correction):
+    v10            2095861 /   2097152 =  99.94%   (strict A-only:  58.53%)
+    v9             2095875 /   2097152 =  99.94%   (strict A-only:  58.90%)
+    v7             2093642 /   2097152 =  99.83%   (strict A-only:  44.62%)
+    v142            196600 /    196608 = 100.00%   (strict A-only:  88.91%)
+    subboot         131072 /    131072 = 100.00%   (strict A-only:  99.97%)
+    tabledata      2097152 /   2097152 = 100.00%   (strict A-only:  44.45%)
+    customdata     1048576 /   1048576 = 100.00%   (strict A-only: 100.00%)
+    hdae5000        524288 /    524288 = 100.00%   (strict A-only:  90.30%)
+    prom_a          521993 /    524288 =  99.56%   (strict A-only:  86.10%)
+    prom_b          515254 /    524288 =  98.28%   (strict A-only:  76.19%)
+    prom_c          523668 /    524288 =  99.88%   (strict A-only:  80.35%)
+    prom_d          515516 /    524288 =  98.33%   (strict A-only:  80.04%)
+  KNOWN regions >=   8192 B:   133 regions,   3413250 B (47.0% of the explained figure)
+  KNOWN regions >=  32768 B:    23 regions,   1609518 B (22.2% of the explained figure)
+
+  explained (CODE + KNOWN-A/B + FILLER) : 12359497 / 12386304 = 99.78%
+  strict (CODE + KNOWN-A + FILLER)      : 7850234 / 12386304 = 63.38%
+
+LARGEST PURPOSE-UNKNOWN RANGES
+  prom_d      0x044B26-0x045C3C     4374  DrawbarPreset_EnvDescTable_P prom_d/tone_database_aux.s:35261  [name:sequence]
+  prom_d      0x045C3C-0x046D52     4374  DrawbarPreset_EnvDescTable_P prom_d/tone_database_aux.s:35539  [name:sequence]
+  v7          0x110374-0x110785     1041  Data_UnknownBlock            audio/sound_editor_ui.s:7716  []
+  v7          0x163B8B-0x163D36      427  __pad_F63F8F                 sequencer/accompaniment_engine.s:19517  [] CODE-SUSPECT
+  v10         0x055BCA-0x055CE0      278  -                            ui_widgets/naka_widget_desc_dispatch.s:7  [text]
+  v7          0x1637D6-0x1638A8      210  __pad_F63BDA                 sequencer/accompaniment_engine.s:19263  [] CODE-SUSPECT
+  prom_c      0x0613D6-0x0614A0      202  Curve_FE13D6                 prom_c/data_tables/tail_data_zone.s:1366  []
+  prom_b      0x07828A-0x078346      188  Bitmap_F7828A                prom_b/wsa1_prom_b.s:167713  [name:bitmap]
+  prom_b      0x078346-0x078402      188  Bitmap_F78346                prom_b/wsa1_prom_b.s:167729  [name:bitmap]
+  prom_b      0x078402-0x0784B2      176  Bitmap_F78402                prom_b/wsa1_prom_b.s:167745  [name:bitmap]
+  prom_b      0x0784B2-0x078562      176  Bitmap_F784B2                prom_b/wsa1_prom_b.s:167760  [name:bitmap]
+  prom_b      0x078DA7-0x078E4C      165  Bitmap_F78DA7                prom_b/wsa1_prom_b.s:168121  [name:bitmap]
+  prom_b      0x078E68-0x078F09      161  Bitmap_F78E68                prom_b/wsa1_prom_b.s:168142  [name:bitmap]
+  prom_b      0x0793AF-0x07944F      160  Bitmap_F793AF                prom_b/wsa1_prom_b.s:168317  [bitmap-like,name:bitmap]
+  v9          0x055C36-0x055CD4      158  -                            ui_widgets/naka_widget_desc_dispatch.s:27  [text]
+  v7          0x055C36-0x055CD4      158  -                            ui_widgets/naka_widget_desc_dispatch.s:27  [text]
+  prom_b      0x0785FC-0x078697      155  Bitmap_F785FC                prom_b/wsa1_prom_b.s:167789  [name:bitmap]
+  prom_b      0x078697-0x078732      155  Bitmap_F78697                prom_b/wsa1_prom_b.s:167803  [name:bitmap]
+  prom_b      0x078562-0x0785FC      154  Bitmap_F78562                prom_b/wsa1_prom_b.s:167775  [name:bitmap]
+  prom_b      0x078F09-0x078F9B      146  Bitmap_F78F09                prom_b/wsa1_prom_b.s:168157  [name:bitmap]
+  v7          0x162FDF-0x16306C      141  __pad_F633E3                 sequencer/accompaniment_engine.s:18625  []
+  prom_b      0x0792A9-0x079334      139  Bitmap_F792A9                prom_b/wsa1_prom_b.s:168292  [name:bitmap]
+  v7          0x161E2C-0x161EB6      138  __pad_F62230                 sequencer/accompaniment_engine.s:16968  [bitmap-like]
+  v10         0x0EFF78-0x0F0000      136  -                            ui/char_encoding_naka_state.s:6  [text]
+  v9          0x0EFF78-0x0F0000      136  -                            ui/char_encoding_naka_state.s:6  [text]
+  v7          0x0EFF4E-0x0EFFD6      136  -                            ui/char_encoding_naka_state.s:6  [text]
+  prom_a      0x013557-0x0135D7      128  DisplayListPtrs_F93557       prom_a/wsa1_prom_a.s:33945  [ptr-table]
+  prom_a      0x013839-0x0138B9      128  DisplayListPtrs_F93839       prom_a/wsa1_prom_a.s:34260  [ptr-table]
+  prom_a      0x01408E-0x01410E      128  DisplayListPtrs_F9408E       prom_a/wsa1_prom_a.s:35152  [ptr-table]
+  prom_a      0x01A78E-0x01A80E      128  JumpTable_F9A78E             prom_a/wsa1_prom_a.s:44682  [ptr-table]
+  prom_a      0x01AA89-0x01AB09      128  JumpTable_F9AA89             prom_a/wsa1_prom_a.s:45031  [ptr-table]
+  prom_b      0x079334-0x0793AF      123  Bitmap_F79334                prom_b/wsa1_prom_b.s:168305  [name:bitmap]
+  prom_b      0x07944F-0x0794CA      123  Bitmap_F7944F                prom_b/wsa1_prom_b.s:168331  [bitmap-like,name:bitmap]
+  v7          0x1102D2-0x110340      110  Data_UnknownBlock            audio/sound_editor_ui.s:7689  []
+  prom_c      0x05A554-0x05A5C1      109  P7Stream_Data_FDA554         prom_c/p7/p7_stream_pool.s:7088  []
+  prom_c      0x05A5C1-0x05A62E      109  P7Stream_Data_FDA5C1         prom_c/p7/p7_stream_pool.s:7098  []
+  v7          0x16135C-0x1613C3      103  __pad_F61760                 sequencer/accompaniment_engine.s:15895  [] CODE-SUSPECT
+  prom_c      0x053B60-0x053BC4      100  P7Stream_Data_FD3B60         prom_c/p7/p7_stream_pool.s:3664  []
+  prom_c      0x054E13-0x054E77      100  P7Stream_Data_FD4E13         prom_c/p7/p7_stream_pool.s:4387  []
+  prom_b      0x0787BE-0x078818       90  Bitmap_F787BE                prom_b/wsa1_prom_b.s:167839  [name:bitmap]
+
+  KNOWN-B by reason (bytes) -- the bucket the FP sample is drawn from:
+    descriptive name only                                  4151831
+    descriptive name + header                               282412
+    section header only (address-derived label)              34715
+    short/non-uniform fill: descriptive name only            29205
+    file header + local header                               10035
+    short/non-uniform fill: descriptive name + header         1050
+    short/non-uniform fill: file header + local header          14
+    short/non-uniform fill: section header only (address-derived label)         1
+
+  CODE-SHAPED LABEL on a DATA region: 26853 regions, 542405 B
+    positive control (regions the source itself frames as CODE): 47.2% of 145694
+    NULL (data regions of table_data/custom_data/prom_d, where a hit can only be wrong): 4.7% of 7611
+
+  EMBEDDED-IN-CODE (undocumented data between two instruction regions in the same file):
+    34999 regions, 222810 B -- KNOWN-B 217112 B, UNKNOWN 5698 B
+
+  self-admitted-ignorance regions: 1530 (207203 B) -- research targets whatever their grade
+
+  code-suspect data regions: 1089 (85536 B)
+  format hints (bytes): name:bitmap=2222274, bitmap-like=1143008, name:sequence=934805, ptr-table=925380, text=797153, name:midi=352155, bmp=318468, name:text=247441, name:glyph=229360, name:coefficients=177815, name:palette=132345, name:pcm=39316, midi=898
+
+RESEARCH TARGETS -- ranges whose purpose is NOT established
+  36265 merged ranges, 435048 bytes total (3.51% of 12,386,304)
+    embedded-in-code        222810 B (apportioned where a merged range has more than one reason)
+    self-admitted           195038 B (apportioned where a merged range has more than one reason)
+    no-explanation           17200 B (apportioned where a merged range has more than one reason)
+  image       range                  bytes label(s)                       why
+  prom_b      0x01EAB0-0x024DC0    25360 Font_Svc1C_16x .. Font_Svc1F_1 self-admitted  [bitmap-like,name:glyph]
+  prom_a      0x06B5C4-0x06F746    16770 DrumKitNames                   self-admitted  [text]
+  prom_a      0x078000-0x07A580     9600 SplashImage_DitherA            self-admitted  [bitmap-like,name:bitmap]
+  prom_b      0x006800-0x008CD8     9432 ScaleTuningOff .. SoundCodeByG self-admitted  [ptr-table,text]
+  prom_d      0x044B26-0x046D6A     8772 DrawbarPreset_ .. DrawbarPrese no-explanation  [name:sequence]
+  tabledata   0x057914-0x05959D     7305 ToneDB_EnvDescTable            self-admitted
+  v7          0x1804E2-0x1820C0     7134 AudioCtrl_DataBlock            embedded-in-code
+  prom_b      0x078029-0x0799E8     6591 Data_F78029 .. Bitmap_F799D0 ( no-explanation+self-admitted  [bitmap-like,name:bitmap,text]
+  prom_b      0x07669D-0x0779D5     4920 Data_F7669D .. Data_F77836 (6) self-admitted  [midi,ptr-table]
+  prom_b      0x04FF61-0x0511C7     4710 LinkTable_F4FF61               self-admitted
+  v7          0x10D7E7-0x10E905     4382 .Lc_f0d7e3                     embedded-in-code
+  prom_d      0x01C8CF-0x01D965     4246 PercInst_Templ .. ToneDB_ToneI self-admitted  [ptr-table]
+  prom_d      0x02DF5C-0x02EFF2     4246 ToneDB_PercSou .. PercInst_000 self-admitted  [bitmap-like,ptr-table]
+  prom_b      0x07D2D8-0x07E2D8     4096 ButtonTable_Ed .. ButtonTable_ self-admitted  [name:sequence,ptr-table]
+  prom_d      0x021A3B-0x022A3B     4096 ToneDB_ToneInd .. ToneDB_ToneI self-admitted  [ptr-table]
+  prom_d      0x04809A-0x04909A     4096 ToneDB_SourceI .. ToneDB_Sourc self-admitted  [ptr-table]
+  prom_d      0x04A44C-0x04B44C     4096 ToneDB_SourceI .. ToneDB_Sourc self-admitted  [ptr-table]
+  v7          0x103E6F-0x104E34     4037 .Lc_f03e6c                     embedded-in-code
+  prom_b      0x0124A6-0x013264     3518 Data_F124A6 .. ScreenTable_F1  self-admitted  [bitmap-like,name:coefficients,ptr-]
+  prom_a      0x04F000-0x04FDA7     3495 DispatchTable_ .. ModuleTables self-admitted  [ptr-table]
+  prom_a      0x04B3D3-0x04C06B     3224 Ram3800_DataIm .. Gap_FCC06A ( self-admitted  [bitmap-like,name:bitmap,ptr-table]
+  prom_b      0x0511DD-0x051E20     3139 RecordArray_F511DD             self-admitted
+  v7          0x1C50A9-0x1C5CB4     3083 FileIO_BytecodeData            embedded-in-code
+  v7          0x0FFE77-0x10096F     2808 StringData_APCModeNames        embedded-in-code  [name:pcm,name:text]
+  prom_b      0x01B400-0x01BEF0     2800 Font_Svc06_8x14                self-admitted  [name:glyph]
+  prom_a      0x0717E2-0x072269     2695 Data_FF17E2                    self-admitted
+  prom_a      0x0382A0-0x038CA6     2566 RecordTables_FB82A0            self-admitted
+  prom_b      0x03F400-0x03FD60     2400 Rec_F3F400 .. Rec_F3FD38 (77)  no-explanation+self-admitted  [ptr-table,text]
+  prom_b      0x0133E4-0x013D34     2384 ByteMap_F133E4 .. Data_F139AB  self-admitted  [bitmap-like,ptr-table,text]
+  prom_a      0x02C8E6-0x02D20A     2340 Gap_FAC8E6 .. Bytes_00_to_1F ( self-admitted  [bitmap-like,name:coefficients,ptr-]
+  prom_b      0x015024-0x015898     2164 EffectParamNam .. DLB_Records_ self-admitted  [name:coefficients,text]
+  v7          0x16A5D3-0x16AE03     2096 AccScreen_UIDataBlock          embedded-in-code
+  prom_a      0x044000-0x04482F     2095 DisplayList_FC4000             self-admitted
+  prom_b      0x0147AC-0x014FAC     2048 EffectNames_F147AC             self-admitted  [text]
+  prom_d      0x04F0DC-0x04F8DC     2048 ToneDB_PercSourceIndexMapB     self-admitted  [bitmap-like,ptr-table]
+  prom_d      0x0502FA-0x050AFA     2048 ToneDB_PercSourceIndexMapC     self-admitted  [bitmap-like,ptr-table]
+  v7          0x11757A-0x117CB1     1847 .Lc_f1756e                     embedded-in-code
+  v7          0x185325-0x185A4C     1831 FDemoText_ByteData_LayoutEngin embedded-in-code  [name:text]
+  v7          0x17860D-0x178CFE     1777 PmemOutLGridCheck_JumpTable    embedded-in-code
+  prom_b      0x074FCF-0x075685     1718 Data_F74FCF .. Data_F75675 (3) self-admitted  [ptr-table]
+  v7          0x14FCE8-0x15035E     1654 SeqByteBlock_StyleBitmapRef    embedded-in-code  [name:bitmap]
+  v7          0x19B432-0x19BA29     1527 WndEvt_EventCodeDispatch       embedded-in-code
+  v7          0x167313-0x1678D1     1470 AccVoice_SetupSlots_DataBlock  embedded-in-code
+  v7          0x1682F3-0x168812     1311 CmpNcpTtl_Dispatch2            embedded-in-code
+  v7          0x12DF42-0x12E442     1280 InitializeKubo                 embedded-in-code
+  prom_b      0x005AB4-0x005F78     1220 Data_F05AB4 .. Data_F05CF8 (3) self-admitted  [name:bitmap,text]
+  prom_b      0x000340-0x0007FE     1214 PtrTable_F0034 .. PtrTable_F00 self-admitted  [ptr-table]
+  v7          0x134A32-0x134EEC     1210 Sqedt_ParamDispatch            embedded-in-code  [name:coefficients]
+  v7          0x1772B9-0x177742     1161 PcgOutGridCheckJumpTable       embedded-in-code
+  prom_a      0x0669BF-0x066E3A     1147 DiskImage_Hard .. Table_FE6DBF self-admitted  [bitmap-like,name:bitmap]
+  v7          0x1756DA-0x175B22     1096 Data_InOutGridDispatch         embedded-in-code
+  prom_d      0x000B80-0x000FC8     1096 ToneDB_ToneOffsetTable         self-admitted  [ptr-table]
+  v7          0x1650AC-0x1654EE     1090 DrumVoice_Handler7             embedded-in-code
+  v7          0x110374-0x110785     1041 Data_UnknownBlock              embedded-in-code
+  v9          0x171A24-0x171E26     1026 Voice_NoteParamTable           embedded-in-code  [name:coefficients]
+  v7          0x171620-0x171A22     1026 Voice_NoteParamTable           embedded-in-code  [name:coefficients]
+  prom_b      0x04C000-0x04C3F2     1010 DL_F4C000 .. BitMask_F4C3E9 (3 self-admitted  [ptr-table]
+  v7          0x1024D9-0x102864      907 Scoop_EventLoop_36Entry_Data   embedded-in-code
+  prom_b      0x0558AE-0x055C2E      896 SelectorRoutin .. SelectorRout self-admitted  [ptr-table]
+  prom_b      0x032FE6-0x033362      892 Data_F32FE6                    self-admitted  [text]

@@ -1,0 +1,230 @@
+
+FALSE-POSITIVE SAMPLE (40 of 53193 KNOWN-A,KNOWN-B regions, size-weighted: a byte is as likely to be drawn as any other byte in the pool, so the rate applies to the FIGURE, not to region count)
+
+--- tabledata kn5000_table_data.s:285  0x0ED000..0x0FFC00 (76800 B)  grade KNOWN-A (documented + evidence)
+    label: Wallpaper_0   hints: name:bitmap
+    | =============================================================================
+    | PRESET WALLPAPERS
+    | These 320x240 8bpp wallpaper images are referenced by the SetWallPaper
+    | routine in the Main CPU ROM via the wallpaper table at 0xEAAE62.
+    | Each wallpaper is 76,800 bytes (320 * 240).
+
+--- tabledata preset_banks.s:2186  0x0086A4..0x0090B2 (2574 B)  grade KNOWN-A (documented + evidence)
+    label: PresetBank_Sec05   hints: bitmap-like,name:sequence
+    | -----------------------------------------------------------------------------
+    | Section 5 (0x8086A4, 4,884 bytes)
+    | 222 records x 22 bytes -- third copy of the section 3 bank.
+
+--- v7 ui_widgets/widget_dispatch.s:6106  0x0ED118..0x0EDD36 (3102 B)  grade KNOWN-A (descriptive name + documented + evidence)
+    label: CharMap_FullPermutation   hints: 
+    | Character mapping table - full permutation variant L (sequential layout)
+
+--- v9 ui_widgets/widget_descriptors.s:367  0x03F660..0x044478 (19992 B)  grade KNOWN-B (descriptive name only)
+    label: Bitmap_Dredt0d   hints: bitmap-like,ptr-table,name:bitmap
+    | (no header)
+
+--- v7 ui_widgets/widget_dispatch.s:2431  0x0E563E..0x0E565C (30 B)  grade KNOWN-B (descriptive name only)
+    label: ToneKit_ParamBlock_034   hints: name:coefficients
+    | (no header)
+
+--- v10 ui_widgets/naka_widget_tables_2.s:421  0x074132..0x07BE12 (31968 B)  grade KNOWN-B (descriptive name only)
+    label: Bitmap_MIDIConnections_3   hints: bitmap-like,ptr-table,name:bitmap,name:bitmap,name:midi
+    | (no header)
+
+--- prom_d prom_d/tone_database_aux.s:37854  0x04B45E..0x04D3CE (8048 B)  grade KNOWN-A (documented + evidence)
+    label: ToneDB_DrumSourceNameList   hints: text
+    | ==========================================================================
+    | ToneDB_DrumSourceNameList -- directory slot +0x80
+    | file 0x4B45E .. 0x4D3CD   (8048 bytes)
+    | --------------------------------------------------------------------------
+    | 503 rows of 16 bytes: a 13-character ASCII name followed by 3 bytes.
+    | The row count is CONFIRMED by the block's own footer at directory slot
+    | +0x84, whose leading LE16 is 503.
+    | KN5000 label at the same directory slot: ToneDB_DrumSourceNameList.
+    | 
+    | Evidence: prom_c reads directory slot +0x80 at 5 sites.  The first is
+    | 0xFB9563 `ld XWA,(0x00D7F1)` -- prom_d's base 0x00F00000 -- followed at
+    | 0xFB9584 by `ld XBC,(XWA+0x80)`.  All 5: 0xFB9584, 0xFC111F, 0xFC11AA, 0xFC130F, 0xFC1362.
+    | Every one re-decoded from prom_c's ROM bytes at the cited address by
+    | notes/prom_d_documentation_round3.py Q2 (99 reads over 33 slots, 0 that
+
+--- v9 ui_widgets/effects_sequencer_screens.s:5  0x027FA4..0x02DB96 (23538 B)  grade KNOWN-A (documented + evidence)
+    label: Naka_ReverbScreen_EmptyStr   hints: 
+    | Effects & Sequencer screen widgets (555 widgets, 36540 bytes)
+    | Source: maincpu/ui_widgets/naka_effects_seq.c (C struct with named fields)
+
+--- v10 ui_widgets/debug_naming_panel_sim.s:9  0x0B2E7E..0x0B3BDE (3424 B)  grade KNOWN-A (documented + evidence)
+    label: NakaDbg_LowerCaseChars2   hints: 
+    | Debug/Naming Panel Simulator screen widgets (55 widgets, 18112 bytes)
+    | Source: maincpu/ui_widgets/naka_debug_naming.c (C struct with named fields)
+
+--- v7 display/scoop_display.s:10168  0x0FF90F..0x0FF965 (86 B)  grade KNOWN-B (descriptive name only)
+    label: StringData_PartNames   hints: text
+    | (no header)
+
+--- v7 midi/midi_dispatch_handlers.s:6907  0x1D8E1E..0x1D8E26 (8 B)  grade KNOWN-B (descriptive name only)
+    label: SeqAlt_NibbleSearch_DecLoop   hints: 
+    | (no header)
+
+--- tabledata kn5000_table_data.s:1010  0x1EA1F2..0x1EDFFC (15882 B)  grade KNOWN-B (descriptive name only)
+    label: DemoSongPreset11   hints: name:sequence,name:sequence
+    | (no header)
+
+--- v10 ui_widgets/debug_naming_panel_sim.s:14  0x0B3FDE..0x0B43DE (1024 B)  grade KNOWN-B (descriptive name only)
+    label: NakaColor_Palette2   hints: bitmap-like,ptr-table,name:palette
+    | (no header)
+
+--- v7 ui_widgets/performance_style_screens.s:5  0x00E974..0x01344E (19162 B)  grade KNOWN-A (documented + evidence)
+    label: NAKA_PerfReg_Container_Root   hints: 
+    | Performance & Style screen widgets (477 widgets, 29164 bytes)
+    | Source: maincpu/ui_widgets/naka_perf_style.c (C struct with named fields)
+
+--- v10 ui_widgets/effects_sequencer_screens.s:5  0x027FA4..0x02DB96 (23538 B)  grade KNOWN-A (documented + evidence)
+    label: Naka_ReverbScreen_EmptyStr   hints: 
+    | Effects & Sequencer screen widgets (555 widgets, 36540 bytes)
+    | Source: maincpu/ui_widgets/naka_effects_seq.c (C struct with named fields)
+
+--- hdae5000 hdae5000_data_tables.s:23911  0x02898E..0x03B58E (76800 B)  grade KNOWN-A (documented + evidence)
+    label: HDAE5000_Bitmap_TitleLogo   hints: text,name:bitmap
+    | 320 x 240 @ 8bpp = 0x12C00 B.  The "HD-AE5000" wordmark embossed over
+    | a photograph of a bare hard-disk mechanism.  Moved as two halves,
+    | 0x2A898E -> 0x056800 and 0x2B1F8E -> 0x05FE00.  Already extracted as
+    | hdae5000/images/HDAE5000_Logo.bin (byte-identical to this slice).
+    | Built from images/HDAE5000_Logo.png by scripts/build/hdae5000_images.py.
+    | Was: .incbin "includes/code_29af2d_2fffff.bin", 55905, 76800
+
+--- v9 ui_widgets/style_bitmaps.s:243  0x0C2116..0x0C219E (136 B)  grade KNOWN-B (descriptive name only)
+    label: NakaInst_Dance_Island_104   hints: text
+    | (no header)
+
+--- prom_d prom_d/tone_database_records.s:11154  0x017EE5..0x017F36 (81 B)  grade KNOWN-B (descriptive name only)
+    label: ToneRec_0D9_WarmSynthPad_Elem1   hints: 
+    | (no header)
+
+--- tabledata ui_bitmaps.s:241  0x12B4B8..0x12DDA0 (10472 B)  grade KNOWN-A (descriptive name + documented + evidence)
+    label: SectionBank31_DrumEditRows   hints: bitmap-like,ptr-table
+    | 88x119; ruled instrument rows for the drum-edit screen ("dredt0k"); maincpu copy at 0xe3cd78
+
+--- prom_b prom_b/wsa1_prom_b.s:166722  0x077836..0x0779D5 (415 B)  grade KNOWN-B (section header only (address-derived label))
+    label: Data_F77836   hints: midi
+    | --------------------------------------------------------------------------
+    | Data_F77836 -- 415 bytes this block could not split.  No content rule
+    | framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
+    | ASCII -- and the code walk never reached it from a thunk
+    | slot, a proven call site, an opcode-anchored call or an
+    | entry of a table the firmware transfers to.  So it is
+    | emitted as bytes rather than guessed.
+    | Contains: printable bytes |MThd.........`MTrk........WSA    ..@.......@...
+    | ..@.......@.......@.......@.......@.......@...............P...P.
+    | l. .......#....`...............D...E...@...A.0`....@......P...R0
+    | @....@...........3.]....P.....f..a3...@......P...R.E.......$..!.
+    | .A......$.3.n.!...A......$!Q..A......$!...A......$...!..A......$
+    | ...!..A......$...!..A......$....!.......F..(;*.....P...A.~.
+    | .......".....P.h..n..>..f....8...h......Q...RJ[H....|
+
+--- v7 ui_widgets/naka_widget_tables_2.s:413  0x062FE2..0x063BAA (3016 B)  grade KNOWN-B (descriptive name only)
+    label: Bitmap_SplitPoint_Bb   hints: name:bitmap
+    | (no header)
+
+--- tabledata panel_memory_presets.s:2658  0x1A9A64..0x1A9D06 (674 B)  grade KNOWN-B (descriptive name only)
+    label: PanelMemory_Preset_66   hints: name:sequence
+    | (no header)
+
+--- tabledata style_records.s:1753  0x1550F8..0x1551BE (198 B)  grade KNOWN-B (descriptive name only)
+    label: StyleRec_084   hints: 
+    | (no header)
+
+--- v9 ui_widgets/technichord_string_data.s:634  0x09A382..0x09A3FE (124 B)  grade KNOWN-B (descriptive name only)
+    label: Str_DiskErr43_Spanish   hints: text
+    | (no header)
+
+--- tabledata preset_banks.s:834  0x002D88..0x005920 (11160 B)  grade KNOWN-A (documented + evidence)
+    label: PresetBank_Sec01   hints: name:sequence
+    | -----------------------------------------------------------------------------
+    | Section 1 (0x802D10, 11,400 bytes)
+    | 95 records x 120 bytes.  Byte-for-byte identical to section 0
+    | except that every 0xF8 there reads 0x0A here (3,280 positions, no
+    | other difference) -- one image, two per-entry marker values.
+
+--- customdata kn5000_custom_data.s:71  0x000060..0x017000 (94112 B)  grade KNOWN-A (documented + evidence)
+    label: CustomData_Section_0   hints: 
+    | --- style directory at ROM 0x300060: 30 records, 96 B each ---
+    | The 16-char name at +0x40 is the only field established. The rest is typed
+    | out rather than incbin'd so the names are visible and greppable in source;
+    | [INFERENCE] no field semantics beyond the name are claimed.
+    | [00] 'Bolero puro  '
+
+--- customdata kn5000_custom_data.s:954  0x060060..0x077000 (94112 B)  grade KNOWN-A (documented + evidence)
+    label: CustomData_Sections_3_4   hints: 
+    | --- style directory at ROM 0x360060: 30 records, 96 B each ---
+    | The 16-char name at +0x40 is the only field established. The rest is typed
+    | out rather than incbin'd so the names are visible and greppable in source;
+    | [INFERENCE] no field semantics beyond the name are claimed.
+    | [00] '   Techno    CE '
+
+--- tabledata style_records.s:10893  0x16B26E..0x16B334 (198 B)  grade KNOWN-B (descriptive name only)
+    label: StyleRec_541   hints: 
+    | (no header)
+
+--- v7 ui_widgets/direct_play_medley_screens.s:208  0x022142..0x0221B8 (118 B)  grade KNOWN-B (descriptive name only)
+    label: NakaWidget_DocMdlyMic   hints: 
+    | (no header)
+
+--- v9 ui_widgets/style_bitmaps.s:145  0x0C0796..0x0C081E (136 B)  grade KNOWN-B (descriptive name only)
+    label: NakaInst_Hip_Keys_108   hints: text
+    | (no header)
+
+--- tabledata ui_bitmaps.s:195  0x1180BA..0x1184BA (1024 B)  grade KNOWN-B (descriptive name only)
+    label: Bitmap_SoundIcon_Trumpet   hints: name:bitmap,name:bitmap
+    | (no header)
+
+--- v10 ui_widgets/disk_warning_strings.s:13  0x0AB1A0..0x0ACCDA (6970 B)  grade KNOWN-B (descriptive name only)
+    label: Data_CharMapFormatBlock   hints: 
+    | (no header)
+
+--- v10 ui_widgets/style_ui_params.s:106  0x00BB90..0x00C95B (3531 B)  grade KNOWN-B (descriptive name only)
+    label: StyleUI_ScreenData_Main   hints: 
+    | (no header)
+
+--- tabledata kn5000_table_data.s:950  0x1C9018..0x1CE17C (20836 B)  grade KNOWN-B (descriptive name only)
+    label: DemoSongPreset01   hints: name:sequence,name:sequence
+    | (no header)
+
+--- v10 ui_widgets/widget_descriptors.s:401  0x04C0D2..0x055260 (37262 B)  grade KNOWN-B (descriptive name only)
+    label: NakaInst_OFF_Str   hints: 
+    | (no header)
+
+--- tabledata fonts.s:110  0x145CB0..0x146AB0 (3584 B)  grade KNOWN-A (documented + evidence)
+    label: Font0_Glyphs   hints: name:glyph,name:glyph
+    | -----------------------------------------------------------------------------
+    | Glyph banks 0-5 (1bpp, column-major, chars 0x20-0xFF; offsets are into
+    | includes/icons_to_strings.bin, whose file offset 0 = ROM 0x944D78)
+
+--- v7 ui_widgets/effects_sequencer_screens.s:9  0x02E6A4..0x0300C0 (6684 B)  grade KNOWN-A (documented + evidence)
+    label: EmbeddedPtrTable_v7_naka_effects_seq_006700   hints: 
+    | Effects & Sequencer screen widgets (555 widgets, 36540 bytes)
+    | Source: maincpu/ui_widgets/naka_effects_seq.c (C struct with named fields)
+
+--- v9 ui_widgets/technichord_string_data.s:626  0x099E34..0x09A2C8 (1172 B)  grade KNOWN-B (descriptive name only)
+    label: Str_DiskErr41_French   hints: text
+    | (no header)
+
+--- tabledata kn5000_table_data.s:188  0x0BAFE6..0x0CE01C (77878 B)  grade KNOWN-B (descriptive name only)
+    label: Feature_Bitmap_6   hints: bmp,name:bitmap
+    | (no header)
+
+--- hdae5000 hdae5000_data_tables.s:5773  0x01FC3C..0x01FC55 (25 B)  grade KNOWN-A (documented + evidence)
+    label: HDAE5000_Panel_Save_UI   hints: 
+    | MISNOMER retained for cross-reference (the ASL mirror, the symbols
+    | reference and six .set bases in hdae5000_init_data.s use this name).
+    | RETRACTED: "Panel memory save/load UI strings".  0x29F9B2 is byte
+    | +0x3A of object #177 (record 0x29F978-0x29F9C9, 82 bytes, class
+    | 0160:001B, a child of object #175 LBN_P2) - it is that ONE object's
+    | inline caption, named by the .long at +0x1C of the record, and the
+    | nearest record boundary is 0x3A bytes ABOVE this label.  LBN_P2 is a
+    | root screen that carries no title of its own; [INFERENCE] "LOAD BY
+    | NUMBER page 2", from the abbreviation and from the separate object
+    | #143 LOAD_BY_NUM titled "LOAD BY NUMBER".  The six
+    | HDAE5000_Str_CharSet_* symbols expressed as offsets from this label
+    | are unrelated to it: they live at +0x28..+0x3C of object #442, 0x2CA4
+    | bytes further on.  See the pool header at HDAE5000_UI_Descriptors.

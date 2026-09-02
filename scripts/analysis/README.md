@@ -447,3 +447,17 @@ hdae5000_data_tables.s, the WSA1R display lists) at the top and they need no wor
 
 Tree total 1,076,671 B on 2026-09-02 before lane w13/census-structs, 1,049,062 B
 after it.
+
+## Added 2026-09-02 (per-range data census -- lane `w13/census-inventory`)
+
+| script | question it answers |
+|---|---|
+| `data_range_census.py` | For every byte of all twelve gated images: is it CODE, data whose purpose is stated **with evidence**, data under a descriptive name only, data nobody has explained, or verified uniform filler? Reconciles to the dump sizes and aborts on a non-zero delta; every mirror is proven inert against the dump. Raw answer 99.78% explained; corrected for a measured 222,810 B `embedded-in-code` column and a hand-audited 3/40 false-positive rate, **93.8%**. Full account, error bar and the ranked research-target list: `notes/DATA-CENSUS-2026-09-02.md`. |
+
+    python3 scripts/analysis/data_range_census.py --selftest
+    python3 scripts/analysis/data_range_census.py --json /tmp/census.json --targets 60
+    python3 scripts/analysis/data_range_census.py --load /tmp/census.json --sample 40 --seed 90902
+
+WARNING: run `make all` first -- the census assembles each image from source,
+and several `.incbin` targets are build products that do not exist on a clean
+tree.
