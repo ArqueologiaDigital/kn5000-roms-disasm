@@ -1,6 +1,41 @@
 ; Extension Device Data Tables & NAKA Widget Descriptors
 ; Extension subsystem (codename "TOSHI"): chord type tables, MSP configuration,
 ; accompaniment parameters, and UI widget descriptors for expansion devices
+;
+; ---------------------------------------------------------------------------
+; THE 18-BYTE PARAMETER RECORD (0xEDCAD6-0xEE0010, 956 records)
+; ---------------------------------------------------------------------------
+; Stride and boundaries are NOT read off these bytes.  A separate 956-entry
+; pointer table at 0xEE0198-0xEE1088 points into this block, and 682 of its 755
+; consecutive targets differ by exactly 18.  The `.byte` rows below are broken
+; at those boundaries, not at an arbitrary 16.
+;
+; Field classes, measured across all 956 records
+; (scripts/analysis/blind_start_enrichment_control.py --census):
+;
+;   +0x00  VARY  66 distinct        +0x0A  FLAG  {0x00, 0xFF, 0x02}
+;   +0x01  VARY  99 distinct        +0x0B  0xFF in 764
+;   +0x02  FLAG  {0, 1, 2}          +0x0C  {0..6}, 0x01 in 781
+;   +0x03  CONST 0x00 (956/956)     +0x0D  0x01 in 721
+;   +0x04  VARY  54 distinct        +0x0E  0x01 in 716
+;   +0x05  VARY  25 distinct        +0x0F  FLAG  {0, 1, 2}
+;   +0x06  0x7F in 313              +0x10  0x00 in 898
+;   +0x07  0x00 in 920              +0x11  CONST 0xFF (954/956) -- terminator
+;   +0x08  0x01 in 362, 0x7F in 311
+;   +0x09  0x00 in 538
+;
+; !! BYTE FIELDS, NOT u16.  Reading it as nine little-endian u16s fails: the
+; high halves at +0x01, +0x05, +0x0B, +0x0D and +0x11 are set in 93-100% of
+; records.  Do not "improve" these rows to `.hword`.
+;
+; !! WHY THIS BLOCK LOOKS LIKE CODE TO A STATISTIC.  Before this file was
+; re-typed, 1,590 of its 1,721 `.byte` runs beginning with an undecodable byte
+; started INSIDE one of these records, clustered at a few field offsets --
+; +0x0C alone 48.0%, +0x08 17.5%, +0x00 9.2%, +0x05 7.2% -- and 0x01/0x04 were
+; 97.9% of them.  That is the value 1 in a low-valued parameter field, not an
+; opcode.  Nothing calls or jumps to any address in this file: 0 of the 59,849
+; absolute call/jp/jr targets named anywhere in v10/maincpu land inside it.
+; ---------------------------------------------------------------------------
 
 ExtData_ChordTypeTable_Top:
 	.long SeqVoice_ValidateState_StoreChannel

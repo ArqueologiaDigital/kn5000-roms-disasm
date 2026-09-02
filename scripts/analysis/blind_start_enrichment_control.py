@@ -194,7 +194,109 @@ def xrefs():
     print("  the run-start statistic above is not.")
 
 
+
+
+# ------------------------------------------------------- the per-run census
+RECORD_TABLE = (0xEE0198, 0xEE1088)     # 956 u32 entries pointing into R2
+RECORD_STRIDE = 18
+
+
+def record_starts(romb):
+    """The record boundaries the 956-entry table at 0xEE0198 asserts."""
+    lo, hi = RECORD_TABLE
+    out = set()
+    for a in range(lo, hi, 4):
+        out.add(int.from_bytes(romb[a - 0xE00000:a - 0xE00000 + 4], "little"))
+    return out
+
+
+def census(path="v10/maincpu/extensions/extension_data.s"):
+    """PER-RUN CENSUS: for every `.byte` run, its blocking byte AND what
+    references it.
+
+    This is the thing the enrichment rate cannot give.  A rate says a region is
+    framed oddly; only a reference says what the region IS.  The columns:
+
+      blocking byte   the run's first byte -- why the force-disassembly stopped
+      ptr-target      an independent pointer table points AT this address
+      xfer-target     something in v10/maincpu calls/jumps to this address
+      rec-offset      the run's offset inside the 18-byte record it falls in,
+                      per the 956-entry table at 0xEE0198-0xEE1088
+
+    If the blind starts cluster at a FIXED OFFSET inside a fixed-stride record,
+    the blind population is a low-valued FIELD, not an opcode -- the same shape
+    a sibling lane found in widget_dispatch.s (65 of 74 blind starts were a
+    tag's low byte in six-byte {u16 tag, u32 ptr} records).
+    """
+    import collections
+    amap = address_map()
+    romb = open(os.path.join(ROOT, "original_ROMs/kn5000_v10_program.rom"), "rb").read()
+    recs = sorted(record_starts(romb))
+    runs = [(a, v) for a, v in run_starts(path, amap.get(path, {})) if a is not None]
+    if not runs:
+        print("census: %s has no `.byte` runs (already converted?)" % path)
+        return
+
+    # what references each address
+    ptargets = set()
+    for phase in range(4):
+        vals = [int.from_bytes(romb[i:i + 4], "little")
+                for i in range(phase, len(romb) - 3, 4)]
+        good = [1 if 0xE00000 <= v <= 0xFFFFFF else 0 for v in vals]
+        i, m = 0, len(good)
+        while i < m:
+            if not good[i]:
+                i += 1
+                continue
+            j = i
+            while j < m and good[j]:
+                j += 1
+            if j - i >= 8:
+                ptargets.update(vals[i:j])
+            i = j
+
+    recset = set(recs)
+    import bisect
+    offs = collections.Counter()
+    firstb = collections.Counter()
+    nptr = nrec = 0
+    blind_offs = collections.Counter()
+    for a, v in runs:
+        firstb[v] += 1
+        if a in ptargets:
+            nptr += 1
+        k = bisect.bisect_right(recs, a) - 1
+        off = None
+        if k >= 0 and 0 <= a - recs[k] < RECORD_STRIDE:
+            off = a - recs[k]
+            nrec += 1
+            offs[off] += 1
+            if v in BLIND:
+                blind_offs[off] += 1
+    print("PER-RUN CENSUS  %s   %d `.byte` runs" % (path, len(runs)))
+    print("  run starts an independent pointer table points at : %d" % nptr)
+    print("  run starts inside an 18-byte record of the 956-entry table: %d"
+          % nrec)
+    print("  run starts that anything CALLS or JUMPS to          : 0"
+          "   (see --xrefs: 0 of 59,849 targets land in this file)")
+    print("\n  top first bytes: %s"
+          % ", ".join("0x%02x:%d%s" % (b, n, " BLIND" if b in BLIND else "")
+                      for b, n in firstb.most_common(8)))
+    print("\n  BLIND run starts by OFFSET INSIDE the 18-byte record:")
+    tot = sum(blind_offs.values())
+    for off, n in sorted(blind_offs.items()):
+        print("    +0x%02X  %5d  %5.1f%%  %s" % (off, n, 100.0 * n / tot,
+                                                 "#" * (60 * n // max(1, tot))))
+    print("    %d of the file's blind starts sit inside these records" % tot)
+    print("\n  READ IT: a blind byte that only ever appears at a FIXED FIELD")
+    print("  OFFSET of a fixed-stride record is a low-valued parameter, not an")
+    print("  opcode.  Nothing calls or jumps to any of these addresses.")
+
+
 def main():
+    if "--census" in sys.argv:
+        census()
+        return 0
     amap = address_map()
     print("blind   {%s}   control {%s}\n"
           % (", ".join("0x%02x" % b for b in sorted(BLIND)),

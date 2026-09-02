@@ -1,4 +1,4 @@
-; ⚠ THIS FILE IS NOT IN ANY BUILD. It emits zero bytes into any ROM.
+; !! THIS FILE IS NOT IN ANY BUILD. It emits zero bytes into any ROM.
 ; Nothing `.include`s it; kn5000_v10_program.s takes 0xE0CFDE-0xE0E406 from
 ; includes/generated/gui_display_struct_data.bin, compiled by
 ; `clang -target tlcs900` from includes/gui_display_struct_data.c -- which
