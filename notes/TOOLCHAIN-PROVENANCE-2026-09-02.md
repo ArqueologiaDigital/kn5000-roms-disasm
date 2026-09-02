@@ -1,0 +1,58 @@
+# The assembler that certified tonight's results
+
+**Status: the binary is pinned and preserved; it is NOT yet reproducible from a
+commit.** This note exists so that nobody later mistakes the second property for
+the first.
+
+## What is pinned
+
+    /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap
+    sha256 53c6621d5f6dd3c13e21e087fb88a19cf97bc93e304f4169035fbf8e9ebcecd7
+
+Every gate run and every per-site byte comparison from 2026-09-02 23:21 onward
+uses this file, passed explicitly:
+
+    make LLVM_MC=/home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap gate-all
+
+## Why a snapshot was needed
+
+`~/compartilhado/llvm-project` is a **shared** working tree, and one lane
+develops the backend in it while other lanes gate against its output. On the
+night of 2026-09-02 the built `llvm-mc` was re-linked at least five times —
+
+    52563be1 -> ... -> 8c211d2f -> 53c6621d (snapshotted)
+
+— while `git rev-parse HEAD` reported an unchanged `7e541b8ddb07` throughout,
+because the tree carried **eight uncommitted modified backend files**. A lane
+could therefore verify a rename against one assembler and gate it with another,
+and nothing in either result would show the difference.
+
+Per-lane build directories are the clean fix and are not currently affordable:
+`/home` sits at 95–96%, with under 1 GB free. A 10.9 MB snapshot is.
+
+## The gap that remains
+
+`llvm-project` at `7e541b8ddb07` is **dirty**, so a clean checkout of that
+commit does not necessarily rebuild this binary. Until the backend lane commits
+its work:
+
+* the snapshot is the only copy of the assembler that produced these numbers —
+  **do not delete it**;
+* `TOOLCHAIN_VERSION`'s commit line names a tree state that is not what built
+  the binary, which is why this note exists beside it;
+* the honest description of tonight's byte gates is *"green under a preserved
+  assembler"*, not *"green under llvm-project 7e541b8ddb07"*.
+
+**To close the gap:** once the backend lane commits, rebuild from the clean rev,
+compare the sha against the snapshot, and re-run `gate-all`. If the sha differs
+but the gate stays green on all thirteen images, record both shas here and the
+gap is closed by equivalence rather than by identity. If the gate goes red, the
+snapshot was carrying an uncommitted behaviour change and every result measured
+under it needs re-derivation.
+
+## Related
+
+* `scripts/analysis/assert_toolchain_is_a_prerequisite.py` — asserts that a
+  changed assembler actually rebuilds every image, in both trees. Before its
+  fix, the WSA1R Makefile rebuilt **0 of 4**.
+* `notes/lanes/BRIEF-2026-09-01.md` — the standing rule for lanes.
