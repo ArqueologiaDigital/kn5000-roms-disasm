@@ -7,9 +7,9 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 63ff7d92fb5f (63ff7d92fb5f0289e8106c043f596167cac062dc)
+Commit: 6fe210fb0a81 (6fe210fb0a81f50050b854007880d5e3d140234a)
 Date: 2026-09-02
-Subject: [TLCS900] Disambiguate the (Xrr) vs explicit (Xrr+d8=0) print collision
+Subject: [TLCS900] Add a regression test for the signed-d8 spelling-trap warning
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # What this pin adds over dbb72df07371, all DECODER-side (no encoding changed,
@@ -23,6 +23,15 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #                   stub returning Fail). ~30 mnemonics the assembler had
 #                   always encoded correctly.
 #   * 975a2c17d683  54 lit regression tests built from real ROM bytes.
+#   * 9b2e86706020  a WARNING when a register-indirect displacement lands in
+#                   128..255, naming the signed spelling that would select the
+#                   2-byte d8 form. ⚠ NOT a miscompile fix: (Xrr+d8) is SIGNED,
+#                   +151 and -105 are DIFFERENT ADDRESSES, and both spellings
+#                   already assembled correctly. An error was ruled out because
+#                   the tree has 585+ legitimate sites in that range; silent
+#                   re-encoding was ruled out by the never-change-an-existing-
+#                   spelling rule. A real build produced 271 warnings, 0 errors.
+#   * 6fe210fb0a81  its lit regression test (test-only).
 #   * 63ff7d92fb5f  the (Xrr) vs (Xrr+d8=0) print collision. The printer
 #                   rendered a zero displacement as nothing, so both encodings
 #                   printed identically and reassembly always took the shorter.
@@ -36,6 +45,7 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # real code from every automated audit for months.
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 63ff7d92fb5f  [TLCS900] Disambiguate the (Xrr) vs explicit (Xrr+d8=0) print collision
 #   Commit: 975a2c17d683  [TLCS900] Corroborate the ERP/SriRR decoders with real v10 + WSA1R bytes
 #   Commit: dbb72df07371  [TLCS900] A regression guard for the SX-WSA1R's sound-code C7 forms
 #   Commit: 4149d0474bf8  [TLCS900] The last KN5000 sound forms, and an inverted 8-bit index address
