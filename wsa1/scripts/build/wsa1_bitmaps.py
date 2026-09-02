@@ -662,10 +662,67 @@ def cmd_list(_):
     return 0
 
 
+# --------------------------------------------------------------------------
+# Browsing aids.  ⚠ DERIVED, not authoritative: every one of these is rebuilt
+# from the per-range PNGs by `sheet`, they are never read back, and nothing in
+# the build depends on them.  They exist because 204 files of 16x12 are not
+# something a person can actually look through, and because the splash
+# COMPOSITE is a picture that neither of its two halves shows.
+# --------------------------------------------------------------------------
+SHEETS = [
+    ('b', 'CONTACT_DLGlyph_IconSheet',   'DLGlyph_*.png',     12, 2,
+     "the 119-cell 24x24 UI icon sheet at 0xF78028"),
+    ('b', 'CONTACT_ValueGlyph',          'ValueGlyph_*.png',  10, 2,
+     "the 29-step rotary knob at 0xF31EE1"),
+    ('b', 'CONTACT_Curve',               'Curve_*.png',        6, 2,
+     "the six 40x40 response curves at 0xF019C2"),
+    ('a', 'CONTACT_KeyboardRuler',       'Bitmap_FF*.png',    10, 2,
+     "the ten 16x129 keyboard strips at 0xFF17E2, C-2 through C8"),
+    ('a', 'CONTACT_Widget',              'Widget_*.png',       4, 3,
+     "the eight 48x15 pictograms at 0xFC48D7"),
+]
+
+
+def cmd_sheet(_):
+    import glob
+    for img, name, pat, cols, scale, what in SHEETS:
+        d = ROOT / f'prom_{img}' / 'images'
+        files = sorted(glob.glob(str(d / pat)))
+        if not files:
+            continue
+        ims = [Image.open(f).convert('L') for f in files]
+        w = max(i.width for i in ims)
+        h = max(i.height for i in ims)
+        rows = (len(ims) + cols - 1) // cols
+        pad = 2
+        S = Image.new('L', (cols * (w + pad) + pad, rows * (h + pad) + pad), 160)
+        for k, i in enumerate(ims):
+            S.paste(i, (pad + (k % cols) * (w + pad), pad + (k // cols) * (h + pad)))
+        S = S.resize((S.width * scale, S.height * scale), Image.NEAREST)
+        S.save(d / f'{name}.png')
+        print(f"  {name}.png  {len(ims)} cells -- {what}")
+
+    # ★ The splash COMPOSITE.  DitherA and DitherB are disjoint half-tones the
+    #   SED1330 OR-composites across two layers, so neither file alone is the
+    #   picture the user sees; this is.  (AND of the two = 0, popcounts equal.)
+    d = ROOT / 'prom_a' / 'images'
+    a = Image.open(d / 'SplashImage_DitherA.png').convert('L')
+    b = Image.open(d / 'SplashImage_DitherB.png').convert('L')
+    comp = Image.new('L', a.size)
+    pa, pb, pc = a.load(), b.load(), comp.load()
+    for y in range(a.height):
+        for x in range(a.width):
+            pc[x, y] = 0 if (pa[x, y] == 0 or pb[x, y] == 0) else 255
+    comp.save(d / 'CONTACT_SplashImage_Composite.png')
+    print("  CONTACT_SplashImage_Composite.png  -- DitherA OR DitherB, the picture "
+          "the panel actually shows: `WSA`")
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('command', choices=['census', 'probe', 'export', 'verify',
-                                        'check', 'rewrite', 'list'])
+                                        'check', 'rewrite', 'list', 'sheet'])
     a = ap.parse_args()
     return globals()['cmd_' + a.command](a)
 

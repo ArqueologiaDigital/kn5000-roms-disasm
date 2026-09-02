@@ -18,3 +18,12 @@ file's evidence.  Ink is black.
 * `Widget_FC48D7.png` .. -- eight 48x15 pictograms (a flat bar, a cylinder,
   tapered wedges, a parallelogram, a spool, an arrow, a bolt).
 * `Bitmap_F82BB0.png`, `Bitmap_F82C00.png` -- two op-03 targets inside prom_a.
+
+## `CONTACT_*.png` are DERIVED
+
+Rebuilt from the per-range PNGs by `wsa1_bitmaps.py sheet`, never read back, and
+nothing in the build depends on them.  They exist so a person can actually look
+through the set.  `CONTACT_SplashImage_Composite.png` is the one that earns its
+place on content rather than convenience: DitherA and DitherB are disjoint
+half-tones the SED1330 OR-composites across two layers, so **neither file alone
+is the picture the panel shows** -- the composite is, and it reads `WSA`.

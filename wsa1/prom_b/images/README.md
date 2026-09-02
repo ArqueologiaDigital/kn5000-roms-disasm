@@ -21,3 +21,10 @@ evidence.  Ink is black.
 * `Bitmap_F283A7.png`, `Bitmap_F2CAC3.png` -- 40x30 rounded UI frames.
 * `Bitmap_F54718.png`, `Bitmap_F54790.png` (48x20), `Bitmap_F54D7E.png` (304x6),
   `Bitmap_F17C59.png` (24x17), `Bitmap_F05CE0.png` (16x12).
+
+## `CONTACT_*.png` are DERIVED
+
+Rebuilt from the per-range PNGs by `wsa1_bitmaps.py sheet`, never read back, and
+nothing in the build depends on them.  `CONTACT_DLGlyph_IconSheet.png` is the
+one to open first: 119 icons at once is what makes the `0xF78028` grid
+self-evidently right, where any single 24x24 cell is not.
