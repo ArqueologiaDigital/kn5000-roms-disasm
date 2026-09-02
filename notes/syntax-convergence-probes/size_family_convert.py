@@ -225,6 +225,37 @@ def collisions():
                      n[(insn, cls, 'fits_short')]))
 
 
+def sentinel():
+    """How many sites now spell the explicit d8=0 encoding as `(Xrr+256)`?
+
+    `TLCS900MCCodeEmitter.cpp:283` documents 256 as a SENTINEL meaning "force
+    the d8 form with displacement 0" -- introduced 2026-09-02 (llvm-project
+    63ff7d92fb5f) so that `(Xrr)` and `(Xrr+0x00)`, two different encodings,
+    stop printing the same text.  It works; the point of counting is that it is
+    a form selector spelled as a magic NUMBER where every other form selector in
+    this backend is spelled as a `:width` annotation.  See
+    scripts/analysis/census_rid8_zero_disp.py for the lane that owns the
+    conversion itself.
+    """
+    # ⚠ Match on the VALUE, not on the text `256`: the tree spells the same
+    # sentinel `256` (931), `0x0100` (200) and `0x100` (1), and a text match
+    # undercounts it by 201 sites.
+    pat = re.compile(r'\((x[a-z]{2})\s*\+\s*(0x[0-9a-fA-F]+|\d+)\s*\)')
+    n = collections.Counter()
+    spell = collections.Counter()
+    for path in sources():
+        with open(path, encoding='latin-1') as fh:
+            for line in fh:
+                for m in pat.finditer(line):
+                    if int(m.group(2), 0) == 256:
+                        n[path.split('/')[0]] += 1
+                        spell[m.group(2)] += 1
+    print('(Xrr+256) sentinel sites: %d in %d trees' % (sum(n.values()), len(n)))
+    for k, v in n.most_common():
+        print('  %-12s %6d' % (k, v))
+    print('  spelled: %s' % dict(spell.most_common()))
+
+
 def one(mc, line):
     with tempfile.NamedTemporaryFile('w', suffix='.s', delete=False) as fh:
         fh.write(line + '\n')
@@ -244,6 +275,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--family', choices=sorted(FAMILIES))
     ap.add_argument('--triage', action='store_true')
+    ap.add_argument('--sentinel', action='store_true',
+                    help='count sites spelling the explicit d8=0 encoding as '
+                         'the magic displacement 256')
     ap.add_argument('--collisions', action='store_true',
                     help='count long-form sites a "pick the short form when it '
                          'fits" rule would silently rewrite')
@@ -261,6 +295,10 @@ def main():
     sha = hashlib.sha256(open(mc, 'rb').read()).hexdigest()
     print('llvm-mc sha256 %s (copied from %s)' % (sha[:16], a.mc))
 
+    if a.sentinel:
+        sentinel()
+        return
+
     if a.collisions:
         collisions()
         return
@@ -270,7 +308,7 @@ def main():
         return
 
     if not a.family:
-        raise SystemExit('need --family, --triage or --collisions')
+        raise SystemExit('need --family, --triage, --collisions or --sentinel')
 
     if a.foil and a.apply:
         raise SystemExit('--foil never writes')
