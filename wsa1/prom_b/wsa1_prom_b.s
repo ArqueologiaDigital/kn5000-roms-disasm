@@ -19745,22 +19745,203 @@ DL_F0D081:
 	.byte 0x00	; operand bytes the handler does not read
 
 	
-; --- 0xF0D4D2-0xF0D697: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00D4D2, 0x0001C6
+
+; ==================================================================
+; 0xF0D4D2-0xF0D697 -- interpreter-B operand tables and their records, a
+; 33-byte ramp, and the head of an 80x24 bitmap (454 bytes)
+; ==================================================================
+;
+; ⚠ THE STATED REASON THIS SPAN CARRIED IS OVERTURNED, AND REWRITTEN HERE.
+;   It read "decodes as neither interpreter's records and is not a uniform
+;   fill".  The first half of that is true and is not the point: the span does
+;   not BEGIN with records, so no op/len walk from 0xF0D4D2 can frame it.  Its
+;   first byte is the low half of a 16-bit coordinate in the TABLE that the two
+;   records immediately IN FRONT of the span point at.  Records and tables then
+;   alternate the whole way through:
+;
+;     0xF0D4D2 +72   9 x 8-byte entries    <- +7 of the records at 0xF0D4BC/0xF0D4C7
+;     0xF0D51A +11   B record, op 08       -> 0xF0D530
+;     0xF0D525 +11   B record, op 03       -> 0xF0D530
+;     0xF0D530 +72   9 x 8-byte entries
+;     0xF0D578 +11   B record, op 08       -> 0xF0D58E
+;     0xF0D583 +11   B record, op 03       -> 0xF0D58E
+;     0xF0D58E +16   2 x 8-byte entries
+;     0xF0D59E +33   byte ramp, entry k = k + 1
+;     0xF0D5BF +217  the first 217 bytes of a 240-byte bitmap
+;
+; Evidence for the tables -- POINTERS, not a walk.  Interpreter B's ops 03 and
+; 08 both reach handler 0xF31B57, which does `sla 3,HL` before adding the +7
+; long: 8-byte entries (notes/FINDINGS-ui-display-list-interpreter-b.md).  Six
+; such records name three addresses, and every one of the six pointers sits at
+; record+7 exactly -- 0xF0D4C3 and 0xF0D4CE name 0xF0D4D2, 0xF0D521 and
+; 0xF0D52C name 0xF0D530, 0xF0D57F and 0xF0D58A name 0xF0D58E
+; (notes/lane_promB3/xref_scan.py 0xF0D4D2 0xF0D698).  Each table's EXTENT is
+; forced rather than chosen: it runs to the next named address, and 72, 72 and
+; 16 are all whole numbers of 8-byte entries.  The entry count the AND mask
+; would allow is 256, an upper bound on the INDEX and not a measurement -- the
+; extent is the measurement, which is the rule notes/prom_b_dl_operand_tables.py
+; states.
+;
+; ⚠ The two records in front of the span, at 0xF0D4BC and 0xF0D4C7, are printed
+;   above with INTERPRETER A's field layout, which puts a 32-bit pointer at +2
+;   and reads 0x00FF2720 there.  The +7 reading -- interpreter B's -- reads
+;   0x00F0D4D2, which is where this table is.  Both emit the same bytes; only
+;   one of them lands on an object.  Left as they are: they are outside this
+;   span, and this note is the record of it.
+; ==================================================================
+DLTable_F0D4D2:
+	.short 0x0098, 0x003B, 0x0108, 0x0046	; [0]
+	.short 0x0098, 0x004B, 0x0108, 0x0056	; [1]
+	.short 0x0098, 0x005B, 0x0108, 0x0066	; [2]
+	.short 0x0098, 0x006B, 0x0108, 0x0076	; [3]
+	.short 0x0098, 0x007B, 0x0108, 0x0086	; [4]
+	.short 0x0098, 0x008B, 0x0108, 0x0096	; [5]
+	.short 0x0098, 0x009B, 0x0108, 0x00A6	; [6]
+	.short 0x0098, 0x00AB, 0x0108, 0x00B6	; [7]
+	.short 0x0098, 0x00BB, 0x0108, 0x00C6	; [8]
+
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2721	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long DLTable_F0D530	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2720	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long DLTable_F0D530	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+DLTable_F0D530:
+	.short 0x0008, 0x003B, 0x0078, 0x0046	; [0]
+	.short 0x0008, 0x004B, 0x0078, 0x0056	; [1]
+	.short 0x0008, 0x005B, 0x0078, 0x0066	; [2]
+	.short 0x0008, 0x006B, 0x0078, 0x0076	; [3]
+	.short 0x0008, 0x007B, 0x0078, 0x0086	; [4]
+	.short 0x0008, 0x008B, 0x0078, 0x0096	; [5]
+	.short 0x0008, 0x009B, 0x0078, 0x00A6	; [6]
+	.short 0x0008, 0x00AB, 0x0078, 0x00B6	; [7]
+	.short 0x0008, 0x00AB, 0x0078, 0x00B6	; [8]
+
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2741	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long DLTable_F0D58E	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2742	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long DLTable_F0D58E	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+DLTable_F0D58E:
+	.short 0x0048, 0x00E2, 0x00A2, 0x00EC	; [0]
+	.short 0x00F0, 0x00E2, 0x0130, 0x00EC	; [1]
 
 ; ------------------------------------------------------------------
-; 0xF0D698-0xF0D79B -- 23 display-list records, 260 bytes -- interpreter A
+; Data_F0D59E -- 33 bytes: entry k = k + 1, for k = 0..32 (0x01..0x21)
+; Evidence: the run is bounded below by the 2-entry table above, which ends at
+;           0xF0D59D, and above by the bitmap, whose start is fixed by the
+;           24-row alignment argument below.  Nothing in any of the four images
+;           holds a pointer to 0xF0D59E, so what INDEXES it is not established
+;           -- only that it is 33 bytes of monotone byte data and not records.
+; ------------------------------------------------------------------
+Data_F0D59E:
+	.byte 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B	; F0D59E
+	.byte 0x0C, 0x0D, 0x0E, 0x0F, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16	; F0D5A9
+	.byte 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F, 0x20, 0x21	; F0D5B4
+
+; ------------------------------------------------------------------
+; Bitmap_F0D5BF_80x24 -- 10 bytes x 24 rows = 240 bytes, COLUMN-MAJOR
+; ⚠ IT DOES NOT END INSIDE THIS SPAN.  217 of its 240 bytes are here; the last
+;   23 are at 0xF0D698, where they were framed as the operand run of an op-0C
+;   record -- see the correction printed there.
+; Evidence, in the order that forces the shape:
+;   1. swi 7 service 3 (prom_a 0xF8EDB4) is the blitter.  Its outer loop runs BC
+;      times, once per DESTINATION COLUMN, and its inner loop reads HL bytes
+;      consecutively from XIY (`ld E,(XIY)` / `inc 1,XIY` at 0xF8EE0A) -- so a
+;      bitmap is stored column by column, HL bytes per column, BC columns.
+;      DrawValueGlyph_24x24 in this file calls it with BC = 3, HL = 24 for the
+;      72-byte glyphs at 0xF31EE1, the same arrangement.
+;   2. The run must END at 0xF0D6AF: that is the first byte of the `op 23, 5
+;      bytes` glyph record whose length lands on 0xF0D6B4, the already-converted
+;      "SYSEX BULK DUMP" record.  Two 24-aligned starts below it clear the
+;      2-entry table -- 0xF0D5A7 and 0xF0D5BF -- and the lower one falls
+;      strictly inside the 0x01..0x21 ramp, which it would have to split.  That
+;      leaves 0xF0D5BF, giving exactly 10 columns.
+;   3. At that width and only at that width the bytes are a single connected
+;      line drawing: the long horizontal rules run unbroken across all ten byte
+;      columns and the diagonals advance one pixel per row across every column
+;      boundary.  `python3 notes/lane_promB3/gen_promB3_spans.py --render`
+;      prints it; one column more or fewer shears it into noise.
+;   What is NOT claimed: that one blit draws all ten columns.  Service 3
+;   writes BC columns at consecutive destination x, so two adjacent narrower
+;   blits would put the same bytes in the same order and look the same on
+;   screen.  The BYTE LAYOUT is what the argument above fixes.
+;   Nothing holds a pointer to 0xF0D5BF, so WHO draws it is not established.
+; ------------------------------------------------------------------
+Bitmap_F0D5BF_80x24:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x03, 0x03, 0x06, 0x0C, 0x18, 0x31	; F0D5BF  column 0
+	.byte 0x3F, 0x21, 0x21, 0x3F, 0x20, 0x20, 0x20, 0x3F, 0x00, 0x00, 0x00, 0x00	; F0D5CB  column 0
+	.byte 0x3F, 0x40, 0xD5, 0x80, 0xBA, 0x00, 0x00, 0xFF, 0x20, 0x48, 0x91, 0x00	; F0D5D7  column 1
+	.byte 0x49, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00	; F0D5E3  column 1
+	.byte 0xFF, 0x00, 0x7F, 0x00, 0xFE, 0x00, 0x00, 0xFF, 0x04, 0x88, 0x11, 0x00	; F0D5EF  column 2
+	.byte 0x24, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00	; F0D5FB  column 2
+	.byte 0xFF, 0x00, 0x70, 0x00, 0xB0, 0x00, 0x01, 0xFF, 0x44, 0x88, 0x11, 0x00	; F0D607  column 3
+	.byte 0x92, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00	; F0D613  column 3
+	.byte 0xFF, 0x00, 0x7F, 0x40, 0x81, 0x81, 0xFE, 0xFF, 0x44, 0x88, 0x11, 0x00	; F0D61F  column 4
+	.byte 0x49, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00	; F0D62B  column 4
+	.byte 0xFF, 0x00, 0x9D, 0x80, 0x1C, 0x00, 0x00, 0xFF, 0x44, 0x88, 0x11, 0x00	; F0D637  column 5
+	.byte 0x24, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00	; F0D643  column 5
+	.byte 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0xFF, 0x44, 0x88, 0x11, 0x00	; F0D64F  column 6
+	.byte 0x92, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00	; F0D65B  column 6
+	.byte 0xFF, 0x00, 0xB2, 0x00, 0xD8, 0x00, 0x00, 0xFF, 0x44, 0x88, 0x11, 0x00	; F0D667  column 7
+	.byte 0x49, 0xFF, 0x00, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00	; F0D673  column 7
+	.byte 0xFF, 0x00, 0x50, 0x98, 0x08, 0x00, 0x00, 0xFF, 0x45, 0x89, 0x13, 0x06	; F0D67F  column 8
+	.byte 0x2C, 0xFC, 0x04, 0xFC, 0x04, 0x05, 0x07, 0xFE, 0x00, 0x00, 0x00, 0x00	; F0D68B  column 8
+	.byte 0xFC	; F0D697  column 9
+
+; ------------------------------------------------------------------
+; 0xF0D6AF-0xF0D79B -- 22 display-list records, 237 bytes -- interpreter A
 ; NOT reached by any known call shape (reachability.py: prom_b has 0
 ; bytes with start evidence) and not named by any converted record's
 ; own table field either -- found because a plain op/len walk, starting
-; 454 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; 477 bytes into this span, lands with ZERO DRIFT exactly on the span's
 ; declared end, and every record's length satisfies ITS OWN handler's
 ; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
+; ⚠ IT SAID 454 BYTES AND 23 RECORDS UNTIL 2026-09-02.  The record that walk
+;   began with -- `op 0C, 28 bytes` at 0xF0D698 -- was the last 23 bytes of
+;   Bitmap_F0D5BF_80x24 plus the `op 23, 5 bytes` glyph record at 0xF0D6AF.
+;   op 0C's handler, 0xF31AEB, is a bare `ret`: its length byte asserted
+;   NOTHING, any value at all would have walked, and the per-handler rule
+;   that rejects this module's other false positives is vacuous on it.
+;   Starting at +477 walks the same stream minus that one record, still
+;   landing on 0xF0D79C with zero drift.  Corrected by
+;   notes/lane_promB3/gen_promB3_spans.py --splice.
 ; ------------------------------------------------------------------
-	.byte 0x0C, 0x1C	; op 0C, 28 bytes -> handler 0xF31AEB
-	.byte 0x34, 0x24, 0x44, 0xC4, 0x84, 0x84, 0x84, 0x04, 0x04, 0x0C, 0x18, 0x30, 0x60, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x23, 0x05, 0x1D, 0x07, 0x00	; operand bytes the handler does not read
+; --- 0xF0D698-0xF0D6AE: the last 23 bytes of Bitmap_F0D5BF_80x24 (see its
+;     header above) -- rows 1-23 of its last byte column, column 9, whose row 0
+;     is the last byte of the span above.
+; ⚠ WAS FRAMED AS `op 0C, 28 bytes -> handler 0xF31AEB`, with 26 "operand bytes
+;   the handler does not read".  That is the whole objection: 0xF31AEB is a bare
+;   `ret`, so a record on it asserts NOTHING -- any length byte at all would
+;   have walked, and this one swallowed the bitmap's tail and the glyph record
+;   that follows it.  gen_prom_b_untouched_pool_module.py's own docstring
+;   excludes a different span for exactly this reason; the offset-454 walk it
+;   chose here slipped through because it only required SOME record in the walk
+;   to be non-weak, not the FIRST one.  Starting at +477 instead walks the same
+;   records minus this one, still landing on 0xF0D79C with zero drift.
+;     Rewritten by notes/lane_promB3/gen_promB3_spans.py --splice.
+	.byte 0x0C, 0x1C, 0x34, 0x24, 0x44, 0xC4, 0x84, 0x84, 0x84, 0x04, 0x04, 0x0C	; F0D698  bitmap tail
+	.byte 0x18, 0x30, 0x60, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F0D6A4  bitmap tail
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x1D	; +0x02 glyph index
+	.short 0x0007	; +0x03 -> IX
 	.byte 0x1C, 0x15	; op 1C, 21 bytes -> handler 0xF31A52
 	.short 0x0057
 	.short 0x0005
@@ -19888,8 +20069,147 @@ DL_SystemExclusivePleaseWait:
 	.short 0x0583
 	.ascii "RECEIVING"
 
-; --- 0xF0D7E2-0xF0D99B: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00D7E2, 0x0001BA
+
+; ==================================================================
+; 0xF0D7E2-0xF0D99B -- the bulk-dump progress lines, the two tables that pick
+; one of them, and two loose character codes (442 bytes)
+; ==================================================================
+;
+;   0xF0D7E2 +352  16 interpreter-A records, all op 07 (handler 0xF31A3A)
+;   0xF0D942 +44   11 x 4-byte pointers into those records
+;   0xF0D96E +44   11 x 4-byte pointers into those records
+;   0xF0D99A +2    two character codes, one per row, for swi 7 service 7
+;
+; Evidence:
+;   * prom_a 0xF99C61 `ld XIY,0x00F0D7E2` / `ld XIX,0x00F0D82E` (or 0x00F0D81B
+;     at 0xF99C71) / `call 0xF417F0` -- interpreter A.  Walking the length bytes
+;     from 0xF0D7E2 lands with zero drift on 0xF0D942, the first byte of the
+;     first pointer table; 12 of the 16 record starts are also named directly by
+;     that table.
+;   * prom_a 0xF99BDB `ld XIY,0x00F0D942` and 0xF99CFA `ld XIY,0x00F0D96E`, both
+;     falling into 0xF99C5C, which does `sla 0x02,HL` / `ld IY,(XIY+HL)` /
+;     `call 0xF4182C` -- 4-byte entries indexed by a flag byte the same routine
+;     compares against 7 and 8.  Each table's extent is forced by the next named
+;     address: 0xF0D942 + 11*4 = 0xF0D96E, and 0xF0D96E + 11*4 = 0xF0D99A.
+;     Entry [0] of each is 0, and the other 20 are all record starts above.
+;   * prom_a 0xF99C1F and 0xF99C49 `ld XIY,0x00F0D99A` with BC = 1 and HL = 0 or
+;     1, then `ld A,7` / `swi 7`.  Service 7 (prom_a 0xF8F130) reads
+;     `(XIY + HL*BC + i)` for i in 0..BC-1 and uses each byte x 16 as an index
+;     into the 16-byte glyph font at 0xF1BEF0: XIY is a character array of BC
+;     per row and HL is the row.  Two rows of one byte is exactly the 2 bytes
+;     the tables leave.
+; ==================================================================
+DL_F0D7E2:
+	.byte 0x07, 0x13	; op 07, 19 bytes -> handler 0xF31A3A
+	.short 0x151F
+	.ascii "SYS,PART&MIDI :"
+DL_F0D7F5:
+	.byte 0x07, 0x13	; op 07, 19 bytes -> handler 0xF31A3A
+	.short 0x1907
+	.ascii "SOUND         :"
+DL_F0D808:
+	.byte 0x07, 0x13	; op 07, 19 bytes -> handler 0xF31A3A
+	.short 0x1CEF
+	.ascii "COMBINATION   :"
+DL_F0D81B:
+	.byte 0x07, 0x13	; op 07, 19 bytes -> handler 0xF31A3A
+	.short 0x20D7
+	.ascii "SEQUENCER     :"
+DL_F0D82E:
+	.byte 0x07, 0x1B	; op 07, 27 bytes -> handler 0xF31A3A
+	.short 0x151F
+	.ascii "SYS,PART&MIDI : SENDING"
+DL_F0D849:
+	.byte 0x07, 0x1D	; op 07, 29 bytes -> handler 0xF31A3A
+	.short 0x151F
+	.ascii "SYS,PART&MIDI : RECEIVING"
+DL_F0D866:
+	.byte 0x07, 0x0D	; op 07, 13 bytes -> handler 0xF31A3A
+	.short 0x152F
+	.ascii "COMPLETED"
+DL_F0D873:
+	.byte 0x07, 0x1B	; op 07, 27 bytes -> handler 0xF31A3A
+	.short 0x1907
+	.ascii "SOUND         : SENDING"
+DL_F0D88E:
+	.byte 0x07, 0x1D	; op 07, 29 bytes -> handler 0xF31A3A
+	.short 0x1907
+	.ascii "SOUND         : RECEIVING"
+DL_F0D8AB:
+	.byte 0x07, 0x0D	; op 07, 13 bytes -> handler 0xF31A3A
+	.short 0x1917
+	.ascii "COMPLETED"
+DL_F0D8B8:
+	.byte 0x07, 0x1B	; op 07, 27 bytes -> handler 0xF31A3A
+	.short 0x1CEF
+	.ascii "COMBINATION   : SENDING"
+DL_F0D8D3:
+	.byte 0x07, 0x1D	; op 07, 29 bytes -> handler 0xF31A3A
+	.short 0x1CEF
+	.ascii "COMBINATION   : RECEIVING"
+DL_F0D8F0:
+	.byte 0x07, 0x0D	; op 07, 13 bytes -> handler 0xF31A3A
+	.short 0x1CFF
+	.ascii "COMPLETED"
+DL_F0D8FD:
+	.byte 0x07, 0x1B	; op 07, 27 bytes -> handler 0xF31A3A
+	.short 0x20D7
+	.ascii "SEQUENCER     : SENDING"
+DL_F0D918:
+	.byte 0x07, 0x1D	; op 07, 29 bytes -> handler 0xF31A3A
+	.short 0x20D7
+	.ascii "SEQUENCER     : RECEIVING"
+DL_F0D935:
+	.byte 0x07, 0x0D	; op 07, 13 bytes -> handler 0xF31A3A
+	.short 0x20E7
+	.ascii "COMPLETED"
+
+; ------------------------------------------------------------------
+; DLPtrTable_F0D942 -- 11 entries of 4 bytes, row 0
+; Evidence: prom_a 0xF99BDB `ld XIY,0x00F0D942` reaches 0xF99C5C's
+;           `sla 0x02,HL` / `ld IY,(XIY+HL)`; the extent runs to the
+;           next address prom_a names.
+; ------------------------------------------------------------------
+DLPtrTable_F0D942:
+	.long 0x00000000	; [0]
+	.long DL_F0D82E	; [1]
+	.long DL_F0D866	; [2]
+	.long DL_F0D873	; [3]
+	.long DL_F0D8AB	; [4]
+	.long DL_F0D8B8	; [5]
+	.long DL_F0D8F0	; [6]
+	.long DL_F0D8FD	; [7]
+	.long DL_F0D935	; [8]
+	.long DL_F0D8B8	; [9]
+	.long DL_F0D8F0	; [10]
+
+; ------------------------------------------------------------------
+; DLPtrTable_F0D96E -- 11 entries of 4 bytes, row 1
+; Evidence: prom_a 0xF99CFA `ld XIY,0x00F0D96E` reaches 0xF99C5C's
+;           `sla 0x02,HL` / `ld IY,(XIY+HL)`; the extent runs to the
+;           next address prom_a names.
+; ------------------------------------------------------------------
+DLPtrTable_F0D96E:
+	.long 0x00000000	; [0]
+	.long DL_F0D849	; [1]
+	.long DL_F0D866	; [2]
+	.long DL_F0D88E	; [3]
+	.long DL_F0D8AB	; [4]
+	.long DL_F0D8D3	; [5]
+	.long DL_F0D8F0	; [6]
+	.long DL_F0D918	; [7]
+	.long DL_F0D935	; [8]
+	.long DL_F0D8D3	; [9]
+	.long DL_F0D8F0	; [10]
+
+; ------------------------------------------------------------------
+; Chars_F0D99A -- 2 rows of 1 character, drawn by swi 7 service 7
+; Evidence: prom_a 0xF99C1F (HL = 0) and 0xF99C49 (HL = 1), both with
+;           BC = 1 and XIY = 0x00F0D99A.
+; ------------------------------------------------------------------
+Chars_F0D99A:
+	.byte 0x2E	; row 0  '.'
+	.byte 0x92	; row 1
 
 ; ------------------------------------------------------------------
 ; 0xF0D99C-0xF0D9A3 -- 1 display-list records, 8 bytes -- interpreter A
@@ -50251,7 +50571,126 @@ Data_F2B38F:
 	.byte	0xA3, 0x05, 0xC3, 0x08, 0xE3, 0x0B, 0x03, 0x0F, 0x23, 0x12, 0x43, 0x15, 0x63, 0x18, 0x83, 0x1B	; F2B40F  |........#.C.c...|
 	.byte	0xB7, 0x05, 0xD7	; F2B41F  |...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02B422, 0x000152
+
+; ==================================================================
+; 0xF2B422-0xF2B573 -- the tail of a word array, three interpreter-B records,
+; two operand tables, a pointer table and the five arrays it names (338 bytes)
+; ==================================================================
+;
+;   0xF2B422 +13   the last 13 bytes of the 16-byte word array at 0xF2B41F
+;   0xF2B42F +11   B record, op 03       -> 0xF2B445
+;   0xF2B43A +11   B record, op 03       -> 0xF2B445
+;   0xF2B445 +128  16 x 8-byte entries
+;   0xF2B4C5 +11   B record, op 03       -> 0xF2B4D0
+;   0xF2B4D0 +64   8 x 8-byte entries
+;   0xF2B510 +40   10 x 4-byte pointers  -> the five arrays below
+;   0xF2B538 +60   five word arrays of 2, 4, 6, 8 and 10 entries
+;
+; Evidence:
+;   * The three record starts are named by prom_a as single records, not lists:
+;     0xF928C3 `ld XIY,0x00F2B42F` / `call 0xF41820`, 0xF928CC
+;     `ld XIY,0x00F2B43A` / `call 0xF4181C`, and 0xF933D4 / 0xF93433 / 0xF93E64 /
+;     0xF93EC3 `ld XIY,0x00F2B4C5`.  Their +7 longs land on 0xF2B445 and
+;     0xF2B4D0, and handler 0xF31B57's `sla 3,HL` makes those 8-byte entries;
+;     128 and 64 are whole numbers of them, each running to the next named
+;     address.
+;   * 0xF2B510: prom_a 0xF934CB and 0xF93EF0 `ld XIZ,0x00F2B510` immediately
+;     after `sla 0x02,HL`, then `ld XIZ,(XIZ+HL)` -- 4-byte entries.  All ten
+;     hold one of five addresses, and those five tile 0xF2B538-0xF2B573 with no
+;     slack, ending exactly on 0xF2B574, a proven interpreter-A list start.
+;   * ⚠ THE SPAN OPENS MID-OBJECT.  0xF2B41F-0xF2B42E is eight 16-bit values in
+;     arithmetic progression, step 0x320: 0x05B7 0x08D7 0x0BF7 0x0F17 0x1237
+;     0x1557 0x1877 0x1B97.  Its first three bytes are the last `.byte` row of
+;     Data_F2B38F above, whose own header says its extent is the reachability
+;     walk's and not the object's -- this is that seam.  The array is the twin
+;     of the one at 0xF2B40F, same eight elements and same 0x320 step, starting
+;     0x05A3 instead of 0x05B7.  Only its last 13 bytes can be typed here.
+; ==================================================================
+	.byte 0x08	; F2B422  high half of 0x08D7, the 2nd element of the array at 0xF2B41F
+	.short 0x0BF7, 0x0F17, 0x1237, 0x1557, 0x1877, 0x1B97	; F2B423  elements 3-8, step 0x320
+
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long DLTable_F2B445	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2169	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long DLTable_F2B445	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+DLTable_F2B445:
+	.short 0x0004, 0x0022, 0x009D, 0x0032	; [0]
+	.short 0x0004, 0x0036, 0x009D, 0x0046	; [1]
+	.short 0x0004, 0x004A, 0x009D, 0x005A	; [2]
+	.short 0x0004, 0x005E, 0x009D, 0x006E	; [3]
+	.short 0x0004, 0x0072, 0x009D, 0x0082	; [4]
+	.short 0x0004, 0x0086, 0x009D, 0x0096	; [5]
+	.short 0x0004, 0x009A, 0x009D, 0x00AA	; [6]
+	.short 0x0004, 0x00AE, 0x009D, 0x00BE	; [7]
+	.short 0x009F, 0x0022, 0x013B, 0x0032	; [8]
+	.short 0x009F, 0x0036, 0x013B, 0x0046	; [9]
+	.short 0x009F, 0x004A, 0x013B, 0x005A	; [10]
+	.short 0x009F, 0x005E, 0x013B, 0x006E	; [11]
+	.short 0x009F, 0x0072, 0x013B, 0x0082	; [12]
+	.short 0x009F, 0x0086, 0x013B, 0x0096	; [13]
+	.short 0x009F, 0x009A, 0x013B, 0x00AA	; [14]
+	.short 0x009F, 0x00AE, 0x013B, 0x00BE	; [15]
+
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x2671	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long DLTable_F2B4D0	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+DLTable_F2B4D0:
+	.short 0x000D, 0x0022, 0x009D, 0x0032	; [0]
+	.short 0x000D, 0x0049, 0x009D, 0x0059	; [1]
+	.short 0x000D, 0x0070, 0x009D, 0x0080	; [2]
+	.short 0x000D, 0x0097, 0x009D, 0x00A7	; [3]
+	.short 0x009F, 0x0022, 0x0132, 0x0032	; [4]
+	.short 0x009F, 0x0049, 0x0132, 0x0059	; [5]
+	.short 0x009F, 0x0070, 0x0132, 0x0080	; [6]
+	.short 0x009F, 0x0097, 0x0132, 0x00A7	; [7]
+
+; ------------------------------------------------------------------
+; DLPtrTable_F2B510 -- 10 entries of 4 bytes
+; Evidence: prom_a 0xF934CB / 0xF93EF0 `ld XIZ,0x00F2B510` after
+;           `sla 0x02,HL`, then `ld XIZ,(XIZ+HL)`.  The extent ends where
+;           its own lowest target begins.
+; ------------------------------------------------------------------
+DLPtrTable_F2B510:
+	.long WordArray_F2B538	; [0]
+	.long WordArray_F2B538	; [1]
+	.long WordArray_F2B53C	; [2]
+	.long WordArray_F2B53C	; [3]
+	.long WordArray_F2B544	; [4]
+	.long WordArray_F2B544	; [5]
+	.long WordArray_F2B550	; [6]
+	.long WordArray_F2B550	; [7]
+	.long WordArray_F2B560	; [8]
+	.long WordArray_F2B560	; [9]
+
+; ------------------------------------------------------------------
+; The five arrays DLPtrTable_F2B510 names, 2/4/6/8/10 16-bit values.  Each
+; is two halves of n/2: the first half starts 0x05A3 and the second 0x05B5,
+; both stepping 0x618, with the last array repeating its final value in each
+; half.  They tile 0xF2B538-0xF2B573 exactly.
+; ------------------------------------------------------------------
+WordArray_F2B538:
+	.short 0x05A3, 0x05B5
+WordArray_F2B53C:
+	.short 0x05A3, 0x0BBB, 0x05B5, 0x0BCD
+WordArray_F2B544:
+	.short 0x05A3, 0x0BBB, 0x11D3, 0x05B5, 0x0BCD, 0x11E5
+WordArray_F2B550:
+	.short 0x05A3, 0x0BBB, 0x11D3, 0x17EB, 0x05B5, 0x0BCD, 0x11E5, 0x17FD
+WordArray_F2B560:
+	.short 0x05A3, 0x0BBB, 0x11D3, 0x17EB, 0x17EB, 0x05B5, 0x0BCD, 0x11E5, 0x17FD, 0x17FD
 
 ; === END COVER-R1 0xF2B38F-0xF2B574 ===
 
@@ -50957,8 +51396,98 @@ DL_F2BB03:
 	.short 0x00A2
 	.short 0x00ED
 
-; --- 0xF2BB0D-0xF2BD17: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02BB0D, 0x00020B
+
+; ==================================================================
+; 0xF2BB0D-0xF2BD17 -- one interpreter-B record and the 64-entry operand table
+; its own AND mask sizes exactly (523 bytes)
+; ==================================================================
+;
+;   0xF2BB0D +11   B record, op 03, mask 0x3F -> 0xF2BB18
+;   0xF2BB18 +512  64 x 8-byte entries
+;
+; Evidence: prom_a names 0xF2BB0D six times -- 0xF92A06 and 0xF92A36
+;           `ld XIY,0x00F2BB0D` / `call 0xF4181C` run it as a single record, and
+;           0xF929D1, 0xF929F8, 0xF92A2D, 0xF92A4A use it as the XIX end of the
+;           list that starts at the already-converted DL_F2BB03.  Its +7 long is
+;           0xF2BB18 and handler 0xF31B57's `sla 3,HL` makes 8-byte entries.
+;           The size is EXACT rather than tiled, which is the strong case in
+;           notes/prom_b_dl_operand_tables.py: mask 0x3F with shift 0 allows
+;           (0x3F >> 0) + 1 = 64 indices, 64 x 8 = 512, and 0xF2BB18 + 512 =
+;           0xF2BD18, the first byte of the proven interpreter-A list DL_Usr1.
+;           The implied count and the measured extent agree with no slack.
+; ==================================================================
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x216A	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long DLTable_F2BB18	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+DLTable_F2BB18:
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [0]
+	.short 0x002F, 0x00E1, 0x0051, 0x00EC	; [1]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [2]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [3]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [4]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [5]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [6]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [7]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [8]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [9]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [10]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [11]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [12]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [13]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [14]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [15]
+	.short 0x007F, 0x00E1, 0x00A1, 0x00EC	; [16]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [17]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [18]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [19]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [20]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [21]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [22]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [23]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [24]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [25]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [26]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [27]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [28]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [29]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [30]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [31]
+	.short 0x0057, 0x00E1, 0x0079, 0x00EC	; [32]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [33]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [34]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [35]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [36]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [37]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [38]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [39]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [40]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [41]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [42]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [43]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [44]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [45]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [46]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [47]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [48]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [49]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [50]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [51]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [52]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [53]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [54]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [55]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [56]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [57]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [58]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [59]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [60]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [61]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [62]
+	.short 0x0007, 0x00E1, 0x0029, 0x00EC	; [63]
 
 ; ------------------------------------------------------------------
 ; 0xF2BD18-0xF2BE34 -- 30 display-list records, 285 bytes -- interpreter A (28 records) and B (2)
