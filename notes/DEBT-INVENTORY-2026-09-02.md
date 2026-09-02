@@ -107,10 +107,14 @@ Every one was fixed this push; none could have turned the byte gate red.
 1. The coverage regex matched `.incbin` inside dead `; Was: .incbin ...`
    comments, counting 313,076 B of HD-AE5000 graphics **twice** — 626,152 B
    against a 524,288 B ROM, giving a NEGATIVE source figure.
-2. `reachability.py`'s `FLOW_END` never matched a short jump, because `unidasm`
-   writes even the unconditional one as `jr T,0xaddr`; and `jp\s` matched
-   CONDITIONAL jumps, hiding their fallthrough. Corrected, debt RISES: ANY
-   1,702 → 2,071 in 37 spans.
+2. `reachability.py` was wrong TWICE, both understating. Its `FLOW_END` never
+   matched a short jump, because `unidasm` writes even the unconditional one as
+   `jr T,0xaddr`, while the `jp` pattern matched CONDITIONAL jumps and hid their
+   fallthrough. And its `BRANCH` alternation listed only short forms — a `jr`
+   word boundary cannot match inside `jrl`, so **every long relative jump and
+   call target was invisible**, to seeding and to the walk itself, in every
+   image. Both corrected; debt RISES each time. Current figure: **STRONG 9,
+   ANY 3,877, in 55 spans** (was ANY 1,372 in 34 before the `jrl` fix).
 3. `prom_a_f85ff9_layout.py` and `corpus_bytes` were blind to 1,038 shared-source
    instructions — and the blindness was deliberately MIRRORED so the two agreed
    perfectly over an incomplete corpus.
