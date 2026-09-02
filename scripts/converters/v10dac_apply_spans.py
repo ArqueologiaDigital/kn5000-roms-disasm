@@ -26,7 +26,7 @@ BASE = 0xE00000
 SCRATCH = "/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad"
 
 rom = open(os.path.join(REPO, "original_ROMs/kn5000_v10_program.rom"), "rb").read()
-plan = json.load(open(os.path.join(SCRATCH, "span_plan.json")))
+plan = json.load(open(os.path.join(SCRATCH, "span_plan_final.json")))
 try:
     report_rows = json.load(open(os.path.join(SCRATCH, "report_rows.json")))
 except Exception:
@@ -54,12 +54,10 @@ converted_list = []
 
 for fn, spans in byfile.items():
     spans.sort(key=lambda r: r["l0"])
-    # verify no overlap (defensive)
     for i in range(1, len(spans)):
         assert spans[i]["l0"] > spans[i-1]["l1"], f"overlap in {fn}"
     lines = open(fn, encoding="utf-8", errors="surrogateescape").read().split("\n")
     orig_len = len(lines)
-    # apply bottom-up
     for r in sorted(spans, key=lambda r: -r["l0"]):
         a, b, l0, l1 = r["a"], r["b"], r["l0"], r["l1"]
         raw = rom[a:b]
@@ -82,4 +80,4 @@ for fn, spans in byfile.items():
         print(f"[dry-run] {fn}: {len(spans)} spans")
 
 print(f"\nTOTAL: {total_spans} spans, {total_bytes:,} B" + (" -- WRITTEN" if WRITE else " -- DRY RUN, pass --write to apply"))
-json.dump(converted_list, open(os.path.join(SCRATCH, "converted_list.json"), "w"), indent=1)
+json.dump(converted_list, open(os.path.join(SCRATCH, "converted_list_final.json"), "w"), indent=1)
