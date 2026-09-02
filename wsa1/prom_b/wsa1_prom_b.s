@@ -69780,59 +69780,96 @@ DL_F3B3DA:
 	.byte 0x37
 	.short 0x0057
 
-; --------------------------------------------------------------------------
-; Data_F3B5A9 -- 16 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F3B5A9 appears as a 32-bit word at 0xF7E48B 0xF7E494;
-;               converted code at 0xF7E48A 0xF7E493 loads it as a 32-bit
-;               immediate.  No routine-directory slot and no branch decoded in
-;               converted code names it.
-; Measured: 44% printable ASCII; a linear decode runs 8 instructions and ends
-;           `reti`, with 44% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F3B5A9:
-	.byte	0x06, 0x0A, 0xD5, 0x1E, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4E, 0x07, 0x05, 0xE1, 0x20, 0x8D, 0x07	; F3B5A9  |....ASSIGN... ..|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B5B9, 0x000018
+; ------------------------------------------------------------------
+; 0xF3B5A9-0xF3B5D0 -- 5 display-list records, 40 bytes -- interpreter A
+; Formerly Data_F3B5A9 -- that was the LEADING BYTES of this list, not a
+; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
+; ------------------------------------------------------------------
+DL_F3B5A9:
+	.byte 0x06, 0x0A	; op 06, 10 bytes -> handler 0xF31A3A
+	.short 0x1ED5
+	.ascii "ASSIGN"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x20E1
+	.byte 0x8D	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2311
+	.byte 0x8E	; character codes below 0x20
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x007D
+	.short 0x00D3
+	.short 0x009A
+	.short 0x00EB
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x007D
+	.short 0x00DF
+	.short 0x009C
+	.short 0x00DF
 
-; --------------------------------------------------------------------------
-; Data_F3B5D1 -- 3 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F3B5D1 appears as a 32-bit word at 0xF7E499 0xF7E8A8;
-;               converted code at 0xF7E498 0xF7E8A7 loads it as a 32-bit
-;               immediate.  No routine-directory slot and no branch decoded in
-;               converted code names it.
-; Measured: 0% printable ASCII; a linear decode runs 2 instructions and ends
-;           `reti`, with 67% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F3B5D1:
-	.byte	0x06, 0x08, 0x07	; F3B5D1  |...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B5D4, 0x00003D
+; ------------------------------------------------------------------
+; 0xF3B5D1-0xF3B610 -- 8 display-list records, 64 bytes -- interpreter A
+; Formerly Data_F3B5D1 -- that was the LEADING BYTES of this list, not a
+; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
+; ------------------------------------------------------------------
+DL_F3B5D1:
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x0A07
+	.ascii "TR 1"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x0C5F
+	.ascii "TR 2"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x0EB7
+	.ascii "TR 3"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x110F
+	.ascii "TR 4"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x1367
+	.ascii "TR 5"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x15BF
+	.ascii "TR 6"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x1817
+	.ascii "TR 7"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x1A6F
+	.ascii "TR 8"
 
-; --------------------------------------------------------------------------
-; Data_F3B611 -- 3 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F3B611 appears as a 32-bit word at 0xF7E8AD 0xF7E8BF;
-;               converted code at 0xF7E8AC 0xF7E8BE loads it as a 32-bit
-;               immediate.  No routine-directory slot and no branch decoded in
-;               converted code names it.
-; Measured: 0% printable ASCII; a linear decode runs 2 instructions and ends
-;           `reti`, with 67% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F3B611:
-	.byte	0x06, 0x08, 0x07	; F3B611  |...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B614, 0x00003D
+; ------------------------------------------------------------------
+; 0xF3B611-0xF3B650 -- 8 display-list records, 64 bytes -- interpreter A
+; Formerly Data_F3B611 -- that was the LEADING BYTES of this list, not a
+; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
+; ------------------------------------------------------------------
+DL_F3B611:
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x0A07
+	.ascii "TR 9"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x0C5F
+	.ascii "TR10"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x0EB7
+	.ascii "TR11"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x110F
+	.ascii "TR12"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x1367
+	.ascii "TR13"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x15BF
+	.ascii "TR14"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x1817
+	.ascii "TR15"
+	.byte 0x06, 0x08	; op 06, 8 bytes -> handler 0xF31A3A
+	.short 0x1A6F
+	.ascii "TR16"
 
 ; --------------------------------------------------------------------------
 ; Data_F3B651 -- 5 bytes, EMITTED AS DATA (not promoted to code).
@@ -69852,59 +69889,173 @@ Data_F3B651:
 
 	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B656, 0x000005
 
-; --------------------------------------------------------------------------
-; Data_F3B65B -- 4 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F3B65B appears as a 32-bit word at 0xF7E79F 0xF7E8E5
-;               0xF7E90B; converted code at 0xF7E79E 0xF7E8E4 0xF7E90A loads
-;               it as a 32-bit immediate.  No routine-directory slot and no
-;               branch decoded in converted code names it.
-; Measured: 50% printable ASCII; a linear decode runs 2 instructions and ends
-;           `retd 0x2641`, with 0% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F3B65B:
-	.byte	0x02, 0x0F, 0x41, 0x26	; F3B65B  |..A&|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B65F, 0x000074
+; ------------------------------------------------------------------
+; 0xF3B65B-0xF3B6D2 -- 8 display-list records, 120 bytes -- interpreter A
+; Formerly Data_F3B65B -- that was the LEADING BYTES of this list, not a
+; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
+; ------------------------------------------------------------------
+DL_F3B65B:
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2641
+	.short 0x00FF
+	.short 0xE806
+	.short 0xF3B7
+	.byte 0x00, 0x07, 0x00, 0x0C, 0x0A	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2642
+	.short 0x00FF
+	.short 0xE806
+	.short 0xF3B7
+	.byte 0x00, 0x07, 0x00, 0x64, 0x0C	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2643
+	.short 0x00FF
+	.short 0xE806
+	.short 0xF3B7
+	.byte 0x00, 0x07, 0x00, 0xBC, 0x0E	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2644
+	.short 0x00FF
+	.short 0xE806
+	.short 0xF3B7
+	.byte 0x00, 0x07, 0x00, 0x14, 0x11	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2645
+	.short 0x00FF
+	.short 0xE806
+	.short 0xF3B7
+	.byte 0x00, 0x07, 0x00, 0x6C, 0x13	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2646
+	.short 0x00FF
+	.short 0xE806
+	.short 0xF3B7
+	.byte 0x00, 0x07, 0x00, 0xC4, 0x15	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2647
+	.short 0x00FF
+	.short 0xE806
+	.short 0xF3B7
+	.byte 0x00, 0x07, 0x00, 0x1C, 0x18	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x2648
+	.short 0x00FF
+	.short 0xE806
+	.short 0xF3B7
+	.byte 0x00, 0x07, 0x00, 0x74, 0x1A	; operand bytes the handler does not read
 
-; --------------------------------------------------------------------------
-; Data_F3B6D3 -- 4 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F3B6D3 appears as a 32-bit word at 0xF7E853 0xF7E8EA
-;               0xF7E910; converted code at 0xF7E852 0xF7E8E9 0xF7E90F loads
-;               it as a 32-bit immediate.  No routine-directory slot and no
-;               branch decoded in converted code names it.
-; Measured: 0% printable ASCII; a linear decode runs 2 instructions and ends
-;           `retd 0x12f6`, with 0% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F3B6D3:
-	.byte	0x02, 0x0F, 0xF6, 0x12	; F3B6D3  |....|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B6D7, 0x000074
+; ------------------------------------------------------------------
+; 0xF3B6D3-0xF3B74A -- 8 display-list records, 120 bytes -- interpreter A
+; Formerly Data_F3B6D3 -- that was the LEADING BYTES of this list, not a
+; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
+; ------------------------------------------------------------------
+DL_F3B6D3:
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0x9406
+	.short 0xF3B9
+	.byte 0x00, 0x03, 0x00, 0x16, 0x0A	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0x9406
+	.short 0xF3B9
+	.byte 0x00, 0x03, 0x00, 0x6E, 0x0C	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0x9406
+	.short 0xF3B9
+	.byte 0x00, 0x03, 0x00, 0xC6, 0x0E	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0x9406
+	.short 0xF3B9
+	.byte 0x00, 0x03, 0x00, 0x1E, 0x11	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0x9406
+	.short 0xF3B9
+	.byte 0x00, 0x03, 0x00, 0x76, 0x13	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0x9406
+	.short 0xF3B9
+	.byte 0x00, 0x03, 0x00, 0xCE, 0x15	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0x9406
+	.short 0xF3B9
+	.byte 0x00, 0x03, 0x00, 0x26, 0x18	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0x9406
+	.short 0xF3B9
+	.byte 0x00, 0x03, 0x00, 0x7E, 0x1A	; operand bytes the handler does not read
 
-; --------------------------------------------------------------------------
-; Data_F3B74B -- 4 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F3B74B appears as a 32-bit word at 0xF7E820; converted
-;               code at 0xF7E81F loads it as a 32-bit immediate.  No routine-
-;               directory slot and no branch decoded in converted code names
-;               it.
-; Measured: 0% printable ASCII; a linear decode runs 2 instructions and ends
-;           `retd 0x12f6`, with 0% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F3B74B:
-	.byte	0x02, 0x0F, 0xF6, 0x12	; F3B74B  |....|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B74F, 0x000074
+; ------------------------------------------------------------------
+; 0xF3B74B-0xF3B7C2 -- 8 display-list records, 120 bytes -- interpreter A
+; Formerly Data_F3B74B -- that was the LEADING BYTES of this list, not a
+; separate object.  Zero-drift walk, notes/gen_prom_b_oversized_round3_module.py
+; ------------------------------------------------------------------
+DL_F3B74B:
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0xC806
+	.short 0xF3B8
+	.byte 0x00, 0x06, 0x00, 0x1C, 0x0A	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0xC806
+	.short 0xF3B8
+	.byte 0x00, 0x06, 0x00, 0x74, 0x0C	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0xC806
+	.short 0xF3B8
+	.byte 0x00, 0x06, 0x00, 0xCC, 0x0E	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0xC806
+	.short 0xF3B8
+	.byte 0x00, 0x06, 0x00, 0x24, 0x11	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0xC806
+	.short 0xF3B8
+	.byte 0x00, 0x06, 0x00, 0x7C, 0x13	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0xC806
+	.short 0xF3B8
+	.byte 0x00, 0x06, 0x00, 0xD4, 0x15	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0xC806
+	.short 0xF3B8
+	.byte 0x00, 0x06, 0x00, 0x2C, 0x18	; operand bytes the handler does not read
+	.byte 0x02, 0x0F	; op 02, 15 bytes -> handler 0xF31A75
+	.short 0x12F6
+	.short 0x00FF
+	.short 0xC806
+	.short 0xF3B8
+	.byte 0x00, 0x06, 0x00, 0x84, 0x1A	; operand bytes the handler does not read
 
 ; === END COVER-R1 0xF3B3B2-0xF3B7C3 ===
 
