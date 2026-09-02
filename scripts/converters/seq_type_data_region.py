@@ -30,7 +30,7 @@ INPUT
                    hold commas), else `,`:
                      b  = .byte, 16 per line;  bN = N per line (b8 lays out an
                           8-byte record grid one record to a line)
-                     w  = .short (LE16), 8 per line
+                     w  = .short (LE16), 8 per line; wN = N per line
                      l  = .long  (LE32), 4 per line
                      a  = .ascii      z = .zero (asserts the bytes are zero)
                    Each segment is `COUNT:kind[#note]`; COUNT is a byte count,
@@ -102,11 +102,12 @@ def emit(kind, chunk):
             txt = "".join(chr(x) if 0x20 <= x <= 0x7E else "." for x in row)
             lines.append("\t.byte " + ", ".join("0x%02x" % x for x in row)
                          + "\t; |%s|" % txt)
-    elif kind == "w":
+    elif kind[0] == "w":
+        per = int(kind[1:]) if len(kind) > 1 else 8
         assert len(chunk) % 2 == 0, "short segment is not a multiple of 2"
         vals = [chunk[i] | (chunk[i + 1] << 8) for i in range(0, len(chunk), 2)]
-        for i in range(0, len(vals), 8):
-            lines.append("\t.short " + ", ".join("0x%04x" % v for v in vals[i:i + 8]))
+        for i in range(0, len(vals), per):
+            lines.append("\t.short " + ", ".join("0x%04x" % v for v in vals[i:i + per]))
     elif kind == "l":
         assert len(chunk) % 4 == 0, "long segment is not a multiple of 4"
         vals = [int.from_bytes(chunk[i:i + 4], "little") for i in range(0, len(chunk), 4)]
