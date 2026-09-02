@@ -103,6 +103,15 @@ status was settled first by independent evidence:
 | region | runs | blind | control |
 |---|---:|---:|---:|
 | 18-byte records 0xEDCAD6–0xEE0010 — **PROVEN DATA** | 1,873 | **68.4%** | 0.0% |
+
+⚠ **CORRECTED 2026-09-02 by the structs lane: that block is 974 records at
+`0xEDBA44`–`0xEE0154`, not 956 at `0xEDCAD6`.** The extent above and the "956"
+figure were both wrong; `SndParam_RegisterAllWidgets` walks 972 pointers from
+`0xEE01A0` and the record array is bounded by them. The blind-start
+*percentages* in this section were computed over the range as then framed and
+are unaffected in kind, but do not quote the record count from here. Also: the
+six `SndParam_*` label prefixes in that region were assigned by address-range
+bucketing, so they are naming convention and **not** evidence of a grouping.
 | `extensions/extension_data.s` — whole file | 2,950 | 58.3% | 0.0% |
 | `boot/system_handlers.s` — **KNOWN CODE**, 652 call targets | 88 | **14.8%** | 0.0% |
 
@@ -116,8 +125,8 @@ as the structural argument above predicts.
 
 ★ And `extension_data.s`, the file whose 58.3% I told a lane to treat as a code
 candidate, **is data**: 1,590 of its 1,721 blind starts sit inside 18-byte
-records of a 956-entry pointer table, clustered at field offsets (+0x0C alone
-48.0%, which holds the value 1 in 781 of 956 records), `0x01`/`0x04` are 97.9%
+records of a pointer table, clustered at field offsets (+0x0C alone 48.0%),
+`0x01`/`0x04` are 97.9%
 of them, and **0 of 59,849** absolute call/jp/jr targets in `v10/maincpu` land
 anywhere in the file. The stride hypothesis raised on `widget_dispatch.s` is
 confirmed here at twenty times the scale, and it accounts for the whole of that
