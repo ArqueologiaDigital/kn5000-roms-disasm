@@ -67,7 +67,15 @@ everything: all wsa1
 # each root source.  The byte gate reads `make`'s answer and therefore inherits
 # `make`'s blind spots; on 2026-09-01 an incomplete prerequisite list let it
 # certify objects from a toolchain that no longer accepted the sources.
-gate:
+# ⚠ GENERATED PREREQUISITES MUST EXIST BEFORE THE ASSEMBLE CHECK. Sources
+# .incbin files that generators produce (round-trip images, the derived
+# stale-help duplicate, C-compiled data). On a CLEAN tree those do not exist
+# yet, so assert_images_assemble.py fails with "Could not find incbin file"
+# on a tree that is perfectly sound -- which is a false red, and a false red
+# trains people to ignore the gate. Depending on the generated set fixes it
+# without weakening anything: the assemble check still asks the assembler
+# directly, it just is not asked before its inputs exist.
+gate: $(STALE_HELP_DUPLICATE)
 	python3 scripts/analysis/assert_images_assemble.py
 	python3 scripts/analysis/assert_byte_identical.py
 
