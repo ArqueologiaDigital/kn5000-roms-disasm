@@ -147,11 +147,23 @@ def encode_map(texts):
         for m in re.finditer(r"^\S+:(\d+):\d+: error:", r.stderr, re.M):
             errs.add(int(m.group(1)) - 2)   # -1 for .text, -1 for 1-based
         if not errs:
-            encs = [bytes(int(x, 16) for x in m.group(1).replace("0x", "").split(","))
+            # ⚠ An `encoding: []` is a text that assembles to NO BYTES -- a
+            # pseudo-instruction or an alias the assembler folds away.  Emitting
+            # it would silently drop bytes from the image, so it is a REFUSAL,
+            # not a crash: the old code fed the empty token to int(x, 16) and
+            # died with `invalid literal for int() with base 16: ''` after
+            # processing every file, losing the whole run.  Found 2026-09-02
+            # running this pass over all 156 v10 sources at once.
+            encs = [bytes(int(x, 16) for x in m.group(1).replace("0x", "").split(",")
+                          if x.strip())
                     for m in re.finditer(r"encoding: \[([^\]]*)\]", r.stdout)]
             if len(encs) != len(cand):
                 raise SystemExit("encode_map: %d encodings for %d texts"
                                  % (len(encs), len(cand)))
+            empty = [t for t, e in zip(cand, encs) if not e]
+            if empty:
+                bad.update(empty)
+                continue
             return dict(zip(cand, encs)), bad
         for i in errs:
             if 0 <= i < len(cand):
