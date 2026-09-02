@@ -74,8 +74,38 @@ MANUFACTURED by an interposed `.long`. So a data structure with a low-valued
 whatever rate its stride dictates -- with no undecoded code anywhere near.
 None of those 74 runs is a call/jump target or fall-through reachable.
 
+★★ AND THE DEEPER CORRECTION: WHAT THIS ACTUALLY MEASURES IS MIS-FRAMING,
+NOT "UNDECODED CODE". A second lane cleared the DATA-AS-CODE misframes out of
+`v10/maincpu/sequencer/seq_event_playback.s` -- retiring garbage mnemonics to
+typed data, converting NOTHING into an instruction -- and the file's blind-start
+rate collapsed:
+
+    before (a99564a6)  137 runs   56 blind  40.9%
+    after  (merged)     59 runs    1 blind   1.7%
+
+Re-derivable: `git show a99564a6:<file>` against the current one.
+
+The mechanism is obvious in hindsight and I did not see it. **A wrong
+instruction stream breaks at every byte the decoder refuses**, so a misframed
+region is chopped into many short `.byte` runs, each of which necessarily STARTS
+with a refused byte. Data framed as code therefore generates this signature in
+bulk -- more strongly than the undecoded code the script was written to find.
+
+So a high ratio means **"this region is framed wrongly"**, and there are TWO
+causes with OPPOSITE fixes:
+  * code spelled as data  -> decode it (what I originally claimed);
+  * data spelled as code  -> type it (what the sequencer lane actually found).
+Both are real debt. Reporting the first without excluding the second is the
+error, and I made it in the covering message to seven lanes.
+
+⚠ ALSO: with a control count of ZERO the ratio is infinite regardless of the
+blind count, so the printed "ratio" is unstable on small populations. Both
+figures above have control 0. Read the RAW COUNTS, not the ratio, whenever the
+control is in single digits.
+
 Use this script at image granularity, which is where its control is
-calibrated. To ask about one file, compute that file's own control. Deciding a specific run is
+calibrated. To ask about one file, compute that file's own control -- and clear
+that file's known misframes first, or you are measuring them. Deciding a specific run is
 code still needs the usual evidence -- what references it, whether anything
 calls or jumps into it. Data-as-code remains the standing hazard in the other
 direction.
