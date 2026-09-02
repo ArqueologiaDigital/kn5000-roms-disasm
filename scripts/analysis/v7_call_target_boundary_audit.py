@@ -56,7 +56,7 @@ def walk_boundary(rom, label_addr, target, window=400):
     off = label_addr - BASE
     tend = min(target - BASE + 2, off + window)
     blob = rom[off:tend]
-    tmp = "/tmp/audit_ctx.bin"
+    tmp = "/tmp/v7islands2_audit_ctx.bin"
     open(tmp, "wb").write(blob)
     out = subprocess.run([UNI, tmp, "-arch", "tlcs900", "-basepc", hex(label_addr)],
                          capture_output=True, text=True).stdout
