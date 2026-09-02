@@ -1,0 +1,368 @@
+
+FALSE-POSITIVE SAMPLE (40 of 54251 KNOWN-A,KNOWN-B regions, size-weighted: a byte is as likely to be drawn as any other byte in the pool, so the rate applies to the FIGURE, not to region count)
+
+--- tabledata tone_database_records.s:3940  0x03C347..0x03C3FE (183 B)  grade KNOWN-B (descriptive name only)
+    label: ToneRec_165   hints: 
+    | (no header)
+
+--- v9 sequencer/composer_msp_defaults.s:88  0x015C6A..0x015C6C (2 B)  grade KNOWN-A (descriptive name + documented + evidence)
+    label: MSP_Default_Tempo   hints: 
+    | ---------------------------------------------------------------------------
+    | Sub-block 2: Sequencer Defaults (offset 0xe0, 96 bytes)
+
+--- v10 ui_widgets/widget_descriptors.s:363  0x035668..0x03CD78 (30480 B)  grade KNOWN-A (documented + evidence)
+    label: Bitmap_Ntedt0d   hints: bitmap-like,ptr-table,name:bitmap
+    | =============================================================================
+    | Widget Descriptor Tables & Grid Data  (ROM 0xE30E60-0xE55BC7, 150888 bytes)
+    | Source: maincpu/ui_widgets/naka_widget_descriptors.c (compiled, then .incbin'd)
+    | One packed C struct covering the whole blob.  Most of it is NAKA widget
+    | descriptor material; the labels below name the parts that other modules
+    | reach into.
+    | 
+    | DSP EFFECT NAMING ZONE (0xE32418-0xE33579)
+    | -----------------------------------------
+    | The user-facing naming layer of the effects DSP.  Four tables, all consumed
+    | by the effect-editor handlers in sequencer/sequencer_ui.s:
+    | 0xE32418  DspParamUnit_Table     86 x  2  parameter unit  ("Hz", "ms", "s ")
+    | 0xE324C4  DspParamName_Table     86 x 17  parameter name + ':' separator
+    | 0xE32A7A  DspEffectName_PtrTable 128 x u32, indexed by EFFECT NUMBER
+
+--- tabledata kn5000_table_data.s:1022  0x1EEC62..0x1F0E72 (8720 B)  grade KNOWN-A (documented + evidence)
+    label: DemoSongPreset13   hints: name:sequence,name:sequence
+    | -----------------------------------------------------------------------------
+    | SLIDE4K-compressed demo song presets, entries 0-17 (entry 18 is at 0x8E0000).
+    | Each block: 8-byte "SLIDE4K\0" magic + 24-bit BIG-ENDIAN uncompressed size
+    | (see the Makefile's demo-preset section for the endianness evidence), then
+    | the LZSS payload, which the Makefile regenerates from the decompressed source
+    | in includes/demo_presets/ (byte-identical via compress_lzss.py --reference).
+    | The blocks run end to end from 0x9C4050 to 0x9F94CA, with one 0xFF alignment
+    | byte at 0x9C9017 and 2,869 bytes of 0xFF fill from 0x9F94CB to 0x9F9FFF.
+    | 
+    | The same bytes also survive verbatim in the dead tail of
+    | includes/icons_to_strings.bin (file offsets 0x7F2D8-0xB5287): a pre-conversion
+    | duplicate that no build reads -- see the backing-blob note in the region
+    | banner above.
+
+--- tabledata preset_banks.s:834  0x002D88..0x005920 (11160 B)  grade KNOWN-A (documented + evidence)
+    label: PresetBank_Sec01   hints: name:sequence
+    | -----------------------------------------------------------------------------
+    | Section 1 (0x802D10, 11,400 bytes)
+    | 95 records x 120 bytes.  Byte-for-byte identical to section 0
+    | except that every 0xF8 there reads 0x0A here (3,280 positions, no
+    | other difference) -- one image, two per-entry marker values.
+
+--- v7 audio/note_voice_mapping.s:11351  0x1EE08A..0x1EE0B2 (40 B)  grade KNOWN-B (descriptive name only)
+    label: CharMap_ActivePreamb_Prologue   hints: 
+    | (no header)
+
+--- v7 ui_widgets/disk_warning_strings.s:13  0x0AB1A0..0x0ACCDA (6970 B)  grade KNOWN-A (documented + evidence)
+    label: Data_CharMapFormatBlock   hints: 
+    | Multilingual Disk Operation Warning Strings (30 widgets, 16430 bytes)
+    | Source: maincpu/ui_widgets/naka_disk_warning.c (C struct with named fields)
+
+--- v7 ui_widgets/widget_descriptors.s:401  0x04C0D2..0x055260 (37262 B)  grade KNOWN-A (documented + evidence)
+    label: NakaInst_OFF_Str   hints: 
+    | =============================================================================
+    | Widget Descriptor Tables & Grid Data  (ROM 0xE30E60-0xE55BC7, 150888 bytes)
+    | Source: maincpu/ui_widgets/naka_widget_descriptors.c (compiled, then .incbin'd)
+    | One packed C struct covering the whole blob.  Most of it is NAKA widget
+    | descriptor material; the labels below name the parts that other modules
+    | reach into.
+    | 
+    | DSP EFFECT NAMING ZONE (0xE32418-0xE33579)
+    | -----------------------------------------
+    | The user-facing naming layer of the effects DSP.  Four tables, all consumed
+    | by the effect-editor handlers in sequencer/sequencer_ui.s:
+    | 0xE32418  DspParamUnit_Table     86 x  2  parameter unit  ("Hz", "ms", "s ")
+    | 0xE324C4  DspParamName_Table     86 x 17  parameter name + ':' separator
+    | 0xE32A7A  DspEffectName_PtrTable 128 x u32, indexed by EFFECT NUMBER
+
+--- v9 ui_widgets/technichord_part_settings.s:7  0x082E00..0x085ACE (11470 B)  grade KNOWN-A (documented + evidence)
+    label: Naka_KeyScaling_NavTrail   hints: 
+    | Technichord Part Settings screen widgets (221 widgets, 17024 bytes)
+    | Source: maincpu/ui_widgets/naka_technichord_part.c (C struct with named fields)
+
+--- tabledata kn5000_table_data.s:315  0x100000..0x112C00 (76800 B)  grade KNOWN-A (documented + evidence)
+    label: Wallpaper_1   hints: name:bitmap
+    | Wallpaper_0 trailer (0x8FFC00 - 0x8FFFFF, formerly includes/
+    | wallpaper_gap.bin -- the file stays on disk for the archived ASL
+    | mirror).  Like Wallpaper_1's trailer (see ui_bitmaps.s), the +0x380
+    | slot holds a 16-entry shade ramp of ascending {r, g, b, 0x00}
+    | quadruplets; this one matches WallpaperRamp_Navy.  No code reference
+    | found yet, so the RGB interpretation is tentative.
+
+--- tabledata kn5000_table_data.s:229  0x0CE0AC..0x0E0000 (73556 B)  grade KNOWN-A (short/non-uniform fill: documented + evidence)
+    label: FeatureDemo_FileEntry6   hints: 
+    | Feature-demo slide images: standard Windows 3.x BMP files (8bpp indexed,
+    | 256-color palette, 320 px wide), stored verbatim; the sizes and addresses
+    | are echoed by the FeatureDemo_FileEntry records below.
+
+--- v10 ui_widgets/widget_descriptors.s:43  0x030E60..0x032C7A (7706 B)  grade KNOWN-A (documented + evidence)
+    label: NakaData_WidgetDescriptors   hints: text
+    | =============================================================================
+    | Widget Descriptor Tables & Grid Data  (ROM 0xE30E60-0xE55BC7, 150888 bytes)
+    | Source: maincpu/ui_widgets/naka_widget_descriptors.c (compiled, then .incbin'd)
+    | One packed C struct covering the whole blob.  Most of it is NAKA widget
+    | descriptor material; the labels below name the parts that other modules
+    | reach into.
+    | 
+    | DSP EFFECT NAMING ZONE (0xE32418-0xE33579)
+    | -----------------------------------------
+    | The user-facing naming layer of the effects DSP.  Four tables, all consumed
+    | by the effect-editor handlers in sequencer/sequencer_ui.s:
+    | 0xE32418  DspParamUnit_Table     86 x  2  parameter unit  ("Hz", "ms", "s ")
+    | 0xE324C4  DspParamName_Table     86 x 17  parameter name + ':' separator
+    | 0xE32A7A  DspEffectName_PtrTable 128 x u32, indexed by EFFECT NUMBER
+
+--- prom_c prom_c/data_tables/tail_data_zone.s:1715  0x0618F4..0x061AF4 (512 B)  grade KNOWN-A (descriptive name + documented + evidence)
+    label: MathTable_Log2_256_B   hints: 
+    | ----------------------------------------------------------------------------
+    | MathTable_Log2_256_B -- 0xFE18F4-0xFE1AF3  (512 bytes)
+    | 
+    | Byte-identical to MathTable_Log2_256 (0xFE0CC9), 512 bytes, except 0 byte(s).
+    | Copy-B address = copy-A address + 0xC2B.
+
+--- tabledata kn5000_table_data.s:182  0x0A753A..0x0B0F70 (39478 B)  grade KNOWN-A (documented + evidence)
+    label: Feature_Bitmap_3   hints: bmp,name:bitmap
+    | Feature-demo slide images: standard Windows 3.x BMP files (8bpp indexed,
+    | 256-color palette, 320 px wide), stored verbatim; the sizes and addresses
+    | are echoed by the FeatureDemo_FileEntry records below.
+
+--- v9 ui_widgets/widget_descriptors.s:389  0x044E58..0x04C044 (29164 B)  grade KNOWN-A (documented + evidence)
+    label: Display_FontPalette_Table   hints: name:glyph,name:palette
+    | =============================================================================
+    | Widget Descriptor Tables & Grid Data  (ROM 0xE30E60-0xE55BC7, 150888 bytes)
+    | Source: maincpu/ui_widgets/naka_widget_descriptors.c (compiled, then .incbin'd)
+    | One packed C struct covering the whole blob.  Most of it is NAKA widget
+    | descriptor material; the labels below name the parts that other modules
+    | reach into.
+    | 
+    | DSP EFFECT NAMING ZONE (0xE32418-0xE33579)
+    | -----------------------------------------
+    | The user-facing naming layer of the effects DSP.  Four tables, all consumed
+    | by the effect-editor handlers in sequencer/sequencer_ui.s:
+    | 0xE32418  DspParamUnit_Table     86 x  2  parameter unit  ("Hz", "ms", "s ")
+    | 0xE324C4  DspParamName_Table     86 x 17  parameter name + ':' separator
+    | 0xE32A7A  DspEffectName_PtrTable 128 x u32, indexed by EFFECT NUMBER
+
+--- v9 ui_widgets/widget_descriptors.s:389  0x044E58..0x04C044 (29164 B)  grade KNOWN-A (documented + evidence)
+    label: Display_FontPalette_Table   hints: name:glyph,name:palette
+    | =============================================================================
+    | Widget Descriptor Tables & Grid Data  (ROM 0xE30E60-0xE55BC7, 150888 bytes)
+    | Source: maincpu/ui_widgets/naka_widget_descriptors.c (compiled, then .incbin'd)
+    | One packed C struct covering the whole blob.  Most of it is NAKA widget
+    | descriptor material; the labels below name the parts that other modules
+    | reach into.
+    | 
+    | DSP EFFECT NAMING ZONE (0xE32418-0xE33579)
+    | -----------------------------------------
+    | The user-facing naming layer of the effects DSP.  Four tables, all consumed
+    | by the effect-editor handlers in sequencer/sequencer_ui.s:
+    | 0xE32418  DspParamUnit_Table     86 x  2  parameter unit  ("Hz", "ms", "s ")
+    | 0xE324C4  DspParamName_Table     86 x 17  parameter name + ':' separator
+    | 0xE32A7A  DspEffectName_PtrTable 128 x u32, indexed by EFFECT NUMBER
+
+--- tabledata help_databases.s:175  0x188690..0x18BB3A (13482 B)  grade KNOWN-A (documented + evidence)
+    label: HelpDB_English   hints: 
+    | -----------------------------------------------------------------------------
+    | The five live SLIDE8K help databases (see module header for format and
+    | build).  Blocks tile contiguously: each *_compressed.bin ends with the one
+    | alignment pad byte, so the next block starts immediately after it.
+
+--- prom_b prom_b/wsa1_prom_b.s:6708  0x0036EE..0x003892 (420 B)  grade KNOWN-A (documented + evidence)
+    label: DL_F036EE   hints: 
+    | ------------------------------------------------------------------
+    | 0xF036EE-0xF03891 -- 51 display-list records, 420 bytes -- interpreter A
+    | The 83 bytes here had been folded into Data_F036C2 above (now
+    | shrunk to its real 44-byte, 11-entry pointer-table extent);
+    | walking from here lands with ZERO DRIFT on the ALREADY call-
+    | verified DL_T0neLayerSoundEditTrigGer ("entered at: 0xF03892"),
+    | a few lines below.  notes/gen_prom_b_f036c2_module.py
+
+--- customdata kn5000_custom_data.s:954  0x060060..0x077000 (94112 B)  grade KNOWN-A (documented + evidence)
+    label: CustomData_Sections_3_4   hints: 
+    | --- style directory at ROM 0x360060: 30 records, 96 B each ---
+    | The 16-char name at +0x40 is the only field established. The rest is typed
+    | out rather than incbin'd so the names are visible and greppable in source;
+    | [INFERENCE] no field semantics beyond the name are claimed.
+    | [00] '   Techno    CE '
+
+--- tabledata kn5000_table_data.s:185  0x0B0F70..0x0BAFE6 (41078 B)  grade KNOWN-A (documented + evidence)
+    label: Feature_Bitmap_4   hints: bmp,name:bitmap
+    | Feature-demo slide images: standard Windows 3.x BMP files (8bpp indexed,
+    | 256-color palette, 320 px wide), stored verbatim; the sizes and addresses
+    | are echoed by the FeatureDemo_FileEntry records below.
+
+--- v10 sequencer/seq_event_playback.s:947  0x171A24..0x171E26 (1026 B)  grade KNOWN-A (documented + evidence)
+    label: Voice_NoteParamTable   hints: name:coefficients
+    | REGRIDDED 2026-09-02 (lane v10seq). The bytes were already correct;
+    | they were laid out 8 to a line but starting at +0x00, which put every
+    | record across two lines. The only reference to this block is
+    | `ld xix, Voice_NoteParamTable_0x2`, and 1026 B is exactly 2 + 128*8.
+    | +0x00 (2 B) head; the grid below is based at +0x02
+
+--- v10 ui_widgets/widget_descriptors.s:363  0x035668..0x03CD78 (30480 B)  grade KNOWN-A (documented + evidence)
+    label: Bitmap_Ntedt0d   hints: bitmap-like,ptr-table,name:bitmap
+    | =============================================================================
+    | Widget Descriptor Tables & Grid Data  (ROM 0xE30E60-0xE55BC7, 150888 bytes)
+    | Source: maincpu/ui_widgets/naka_widget_descriptors.c (compiled, then .incbin'd)
+    | One packed C struct covering the whole blob.  Most of it is NAKA widget
+    | descriptor material; the labels below name the parts that other modules
+    | reach into.
+    | 
+    | DSP EFFECT NAMING ZONE (0xE32418-0xE33579)
+    | -----------------------------------------
+    | The user-facing naming layer of the effects DSP.  Four tables, all consumed
+    | by the effect-editor handlers in sequencer/sequencer_ui.s:
+    | 0xE32418  DspParamUnit_Table     86 x  2  parameter unit  ("Hz", "ms", "s ")
+    | 0xE324C4  DspParamName_Table     86 x 17  parameter name + ':' separator
+    | 0xE32A7A  DspEffectName_PtrTable 128 x u32, indexed by EFFECT NUMBER
+
+--- v9 ui_widgets/style_ui_params.s:21  0x00B843..0x00B8DE (155 B)  grade KNOWN-A (descriptive name + documented + evidence)
+    label: StyleUI_ParamBlock_Medium   hints: name:coefficients
+    | ===========================================================================
+    | Style UI Parameter Blocks & Screen Data
+    | 
+    | Style UI widget definitions for the accompaniment style editor.
+    | ParamBlock variants define different parameter layouts (BAL, VALUE, MEAS,
+    | Short, Medium, Extended, Common, Alt A-E). The pointer table maps UI
+    | screen indices to the appropriate ParamBlock.
+    | ScreenData blocks define full screen layouts (Main, MeasCursor, YesCtl,
+    | CtlOnly) referenced by the style editor's display system.
+
+--- tabledata kn5000_table_data.s:285  0x0ED000..0x0FFC00 (76800 B)  grade KNOWN-A (documented + evidence)
+    label: Wallpaper_0   hints: name:bitmap
+    | =============================================================================
+    | PRESET WALLPAPERS
+    | These 320x240 8bpp wallpaper images are referenced by the SetWallPaper
+    | routine in the Main CPU ROM via the wallpaper table at 0xEAAE62.
+    | Each wallpaper is 76,800 bytes (320 * 240).
+
+--- v9 ui_widgets/effects_sequencer_screens.s:5  0x027FA4..0x02DB96 (23538 B)  grade KNOWN-A (documented + evidence)
+    label: Naka_ReverbScreen_EmptyStr   hints: 
+    | Effects & Sequencer screen widgets (555 widgets, 36540 bytes)
+    | Source: maincpu/ui_widgets/naka_effects_seq.c (C struct with named fields)
+
+--- v9 ui_widgets/naka_widget_tables_2.s:421  0x074132..0x07BE12 (31968 B)  grade KNOWN-B (descriptive name only)
+    label: Bitmap_MIDIConnections_3   hints: bitmap-like,ptr-table,name:bitmap,name:bitmap,name:midi
+    | (no header)
+
+--- v7 ui_widgets/style_bitmaps.s:1057  0x0CCD24..0x0CCD8A (102 B)  grade KNOWN-B (descriptive name only)
+    label: NakaInst_Nashville_Steel_116   hints: text
+    | (no header)
+
+--- v9 boot/boot_data_tables.s:79  0x00018E..0x0003F6 (616 B)  grade KNOWN-A (documented + evidence)
+    label: SLIDE_STRING_2   hints: name:text
+    | DMA ISR event router: dispatches incoming sequencer data to ring buffers
+    | Index: DRAM[1508] bits [7:5] (top 3 bits of status byte), 8 entries
+    | Called from E1DMA_ISR handler (system_handlers.s)
+    | 
+    | Each entry routes DMA event bytes to a specific ring buffer, consumed by:
+    | NoteEvent  (0x0203d5) -> note_voice_mapping, sound_editor_ui
+    | SoundEdit  (via EF2E39) -> sound_editor_ui
+    | VoiceMap   (0x0201c1) -> note_voice_mapping
+    | DspSysEx   (0x01fca3) -> dsp_config_sysex
+    | MidiOut    (0x01f785) -> midi_serial_routines  (not in this table)
+
+--- v9 ui_widgets/naka_widget_tables_2.s:417  0x064772..0x06C452 (31968 B)  grade KNOWN-B (descriptive name only)
+    label: Bitmap_MIDIConnections_1   hints: bitmap-like,ptr-table,name:bitmap,name:bitmap,name:midi
+    | (no header)
+
+--- hdae5000 hdae5000_data_tables.s:23928  0x03B98E..0x04E58E (76800 B)  grade KNOWN-A (documented + evidence)
+    label: HDAE5000_Bitmap_DriveMech   hints: text,name:bitmap
+    | 320 x 240 @ 8bpp.  The same drive-mechanism photograph WITHOUT the
+    | wordmark -- the second frame of the title sequence.  Halves at
+    | 0x2BB98E and 0x2C4F8E.  Extracted as images/HDAE5000_Hands.bin, whose
+    | "Hands operating HD-AE5000 unit" caption is wrong: no hands appear in
+    | the picture (see the hdae-docs / gallery follow-up).
+    | Built from images/HDAE5000_Hands.png by scripts/build/hdae5000_images.py.
+    | Was: .incbin "includes/code_29af2d_2fffff.bin", 133729, 76800
+
+--- v7 boot/boot_data_tables.s:81  0x001266..0x0014CE (616 B)  grade KNOWN-A (documented + evidence)
+    label: Bitmap_1bit_Illegal_Disk   hints: name:bitmap
+    | DMA ISR event router: dispatches incoming sequencer data to ring buffers
+    | Index: DRAM[1508] bits [7:5] (top 3 bits of status byte), 8 entries
+    | Called from E1DMA_ISR handler (system_handlers.s)
+    | 
+    | Each entry routes DMA event bytes to a specific ring buffer, consumed by:
+    | NoteEvent  (0x0203d5) -> note_voice_mapping, sound_editor_ui
+    | SoundEdit  (via EF2E39) -> sound_editor_ui
+    | VoiceMap   (0x0201c1) -> note_voice_mapping
+    | DspSysEx   (0x01fca3) -> dsp_config_sysex
+    | MidiOut    (0x01f785) -> midi_serial_routines  (not in this table)
+
+--- customdata kn5000_custom_data.s:1180  0x079860..0x090060 (92160 B)  grade KNOWN-A (documented + evidence)
+    label: CustomData_Sections_5_6   hints: 
+    | --- style directory at ROM 0x379860: 30 records, 96 B each ---
+    | The 16-char name at +0x40 is the only field established. The rest is typed
+    | out rather than incbin'd so the names are visible and greppable in source;
+    | [INFERENCE] no field semantics beyond the name are claimed.
+    | [00] 'Guarania 3   '
+
+--- tabledata style_records.s:20090  0x181570..0x183557 (8167 B)  grade KNOWN-A (documented + evidence)
+    label: StyleRecords_Residue   hints: 
+    | -----------------------------------------------------------------------------
+    | Unreferenced residue after the record grid (see module header).  It is the
+    | TAIL OF THE ENGLISH HELP DATABASE, copied here 0x8000 lower than the live
+    | region -- not, as this comment used to say, the torso of a discarded
+    | compressed block whose header no longer exists.  The header is not missing;
+    | it is at 0x98956F, where the live copy still uses it.
+    | 
+    | DERIVED, NOT DUMPED (2026-09-02): this slice needs no raw blob.
+    | scripts/generators/gen_stale_help_duplicate.py reconstructs it from
+    | includes/help_databases/help_db_english_compressed.bin (itself a build
+    | product regenerated from a committed decompressed source), sliced at the
+    | live-region offset shifted 0x8000 down.  `make verify-stale-help-duplicate`
+    | proves the re-derivation is byte-exact against this ROM slice.  See
+    | help_databases.s's module header (HelpDB_German_Stale) for the sibling half
+
+--- customdata kn5000_custom_data.s:954  0x060060..0x077000 (94112 B)  grade KNOWN-A (documented + evidence)
+    label: CustomData_Sections_3_4   hints: 
+    | --- style directory at ROM 0x360060: 30 records, 96 B each ---
+    | The 16-char name at +0x40 is the only field established. The rest is typed
+    | out rather than incbin'd so the names are visible and greppable in source;
+    | [INFERENCE] no field semantics beyond the name are claimed.
+    | [00] '   Techno    CE '
+
+--- customdata kn5000_custom_data.s:71  0x000060..0x017000 (94112 B)  grade KNOWN-A (documented + evidence)
+    label: CustomData_Section_0   hints: 
+    | --- style directory at ROM 0x300060: 30 records, 96 B each ---
+    | The 16-char name at +0x40 is the only field established. The rest is typed
+    | out rather than incbin'd so the names are visible and greppable in source;
+    | [INFERENCE] no field semantics beyond the name are claimed.
+    | [00] 'Bolero puro  '
+
+--- v9 ui_widgets/sequencer_channel_containers.s:40  0x0EEDD4..0x0EEFC0 (492 B)  grade KNOWN-A (documented + evidence)
+    label: MidiPart_ConfigNameTable   hints: ptr-table,name:midi,name:text
+    | Sequencer Channel Containers + Drawbar/Mixer Data (13 widgets, 7936 bytes)
+    | Source: maincpu/ui_widgets/naka_sequencer_channels.c (C struct with named fields)
+
+--- tabledata tone_database_aux.s:13815  0x079091..0x079891 (2048 B)  grade KNOWN-A (documented + evidence)
+    label: ToneDB_PercSourceIndexMapC   hints: bitmap-like,ptr-table
+    | -----------------------------------------------------------------------------
+    | 1024 LE16 tone indices (dir +0x60).  Values 0-143: indices into the 144-entry ToneDB_PercSourceNameList2.
+
+--- v10 ui_widgets/naka_widget_tables_2.s:423  0x07BE12..0x07ECF2 (12000 B)  grade KNOWN-B (descriptive name only)
+    label: Bitmap_Bmphk   hints: name:bitmap
+    | (no header)
+
+--- v7 ui_widgets/widget_descriptors.s:401  0x04C0D2..0x055260 (37262 B)  grade KNOWN-A (documented + evidence)
+    label: NakaInst_OFF_Str   hints: 
+    | =============================================================================
+    | Widget Descriptor Tables & Grid Data  (ROM 0xE30E60-0xE55BC7, 150888 bytes)
+    | Source: maincpu/ui_widgets/naka_widget_descriptors.c (compiled, then .incbin'd)
+    | One packed C struct covering the whole blob.  Most of it is NAKA widget
+    | descriptor material; the labels below name the parts that other modules
+    | reach into.
+    | 
+    | DSP EFFECT NAMING ZONE (0xE32418-0xE33579)
+    | -----------------------------------------
+    | The user-facing naming layer of the effects DSP.  Four tables, all consumed
+    | by the effect-editor handlers in sequencer/sequencer_ui.s:
+    | 0xE32418  DspParamUnit_Table     86 x  2  parameter unit  ("Hz", "ms", "s ")
+    | 0xE324C4  DspParamName_Table     86 x 17  parameter name + ':' separator
+    | 0xE32A7A  DspEffectName_PtrTable 128 x u32, indexed by EFFECT NUMBER
+
+--- v7 ui_widgets/style_bitmaps.s:985  0x0CBE5C..0x0CBF24 (200 B)  grade KNOWN-B (descriptive name only)
+    label: NakaInst_Hula_Dance_130   hints: text
+    | (no header)

@@ -928,6 +928,25 @@ def report(results, recs):
     print("  " + "-" * 62)
     print("  %-12s %9d %9d %9d %9d %9d" % ("TOTAL", agg["CODE"], agg["KNOWN-A"],
                                           agg["KNOWN-B"], agg["UNKNOWN"], agg["FILLER"]))
+    print("\n  per-image share explained by the raw census (before the "
+          "false-positive correction):")
+    for r in results:
+        t = r["totals"]
+        e = r["size"] - t["UNKNOWN"]
+        print("    %-12s %9d / %9d = %6.2f%%   (strict A-only: %6.2f%%)" % (
+            r["key"], e, r["size"], 100.0 * e / r["size"],
+            100.0 * (e - t["KNOWN-B"]) / r["size"]))
+    # ⚠ COARSE GRANULARITY.  A region is only as explained as the ONE label and
+    # header attached to it, so a very large region resting on a single name is
+    # the shape most likely to be a false positive -- the sample found a 37,262 B
+    # span whose label names a 3-byte string, because a C-compiled `.incbin` is
+    # ONE directive and the labels around it are offsets into it.
+    for lim in (8192, 32768):
+        big = [r for r in recs if r["grade"].startswith("KNOWN") and r["size"] >= lim]
+        print("  KNOWN regions >= %6d B: %5d regions, %9d B (%.1f%% of the "
+              "explained figure)" % (lim, len(big), sum(r["size"] for r in big),
+                                     100.0 * sum(r["size"] for r in big) /
+                                     max(1, agg["KNOWN-A"] + agg["KNOWN-B"])))
     tot = sum(agg.values())
     expl = tot - agg["UNKNOWN"]
     print("\n  explained (CODE + KNOWN-A/B + FILLER) : %d / %d = %.2f%%" %
@@ -1029,6 +1048,20 @@ def print_targets(recs, n):
     print("\nRESEARCH TARGETS -- ranges whose purpose is NOT established")
     print("  %d merged ranges, %d bytes total (%.2f%% of 12,386,304)"
           % (len(merged), tot, 100.0 * tot / TOTAL_BYTES))
+    # ⚠ THE THREE REASONS ARE NOT THE SAME STRENGTH OF CLAIM, so they are
+    # broken out rather than summed into one headline.  `no-explanation` is the
+    # genuine "nobody can say what this is".  `self-admitted` is the TREE'S OWN
+    # open question and is a SUPERSET: a header saying "Unknown: the encoding"
+    # about a font whose role is otherwise fully established lands here, and
+    # that font's purpose IS known.  `embedded-in-code` is undocumented data
+    # between two instruction regions -- most likely undecoded code.
+    tags = {}
+    for m in merged:
+        for w in m["why"]:
+            tags[w] = tags.get(w, 0) + (m["hi"] - m["lo"]) / len(m["why"])
+    for k, v in sorted(tags.items(), key=lambda t: -t[1]):
+        print("    %-20s %9d B (apportioned where a merged range has more "
+              "than one reason)" % (k, round(v)))
     print("  %-11s %-19s %8s %-30s %s" % ("image", "range", "bytes", "label(s)", "why"))
     for m in merged[:n]:
         labs = m["labels"][0] if m["parts"] == 1 else \
@@ -1182,6 +1215,7 @@ def main():
         res, recs = d["results"], d["regions"]
         print("loaded %s (%d regions)" % (a.load, len(recs)))
         reconcile(res, hard=False)
+        report(res, recs)
     else:
         res, recs = run(keys)
         reconcile(res, hard=not keys)
