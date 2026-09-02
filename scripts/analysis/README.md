@@ -175,3 +175,9 @@ Result: 4,511 B re-typed across eight regions -- 1,135 B of data-as-code
 retired, 2,311 B of `.byte` operands given a width, 67 B of real subroutine
 found living inside two of the data blocks and deliberately left alone.
 Full write-up in `notes/lanes/v10seq-2026-09-02.md`.
+
+| script | question it answers |
+|---|---|
+| `grep_skips_latin1_probe.py` | Which sources will a `-I` grep silently skip? The discriminator is UTF-8 DECODABILITY, not "has bytes >= 0x80" -- which is why the brief's falsification of the claim did not reproduce: its control file's high bytes form valid UTF-8. 4 of `v10/maincpu/sequencer`'s 15 `.s` files do not decode as UTF-8, and in the agent shell (where `grep` execs ugrep with `-I`) they vanish from a tree-wide search with no diagnostic at all. |
+
+    python3 scripts/analysis/grep_skips_latin1_probe.py v10/maincpu/sequencer
