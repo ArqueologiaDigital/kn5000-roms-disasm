@@ -150,7 +150,24 @@ def is_near_uniform_run(raw, byte_frac=0.4, min_len=3):
     it decodes. Runs shorter than min_len are left to the other checks --
     at that length "one byte value repeats" is not yet a meaningful signal
     (e.g. a single legitimate 2-byte instruction with equal operand
-    bytes)."""
+    bytes).
+
+    ⚠ 2026-09-02, lane V7ISLANDS2: hit the EXACT gap this docstring warned
+    about, live -- slice [4800:5400) accepted `Rhythm_NoteRangeData:
+    .byte 0x00, 0x00` (2 B, below min_len=3) as context-verified, and
+    build_replacement spelled it `nop; nop`. This is the SAME shape as one
+    of the four hand-reverted conversions from the immediately preceding
+    session (a 2-byte zero field "below the uniform-run guard's floor",
+    per notes/DEBT-INVENTORY-2026-09-02.md) -- caught here only because
+    the label itself says `..._Data`, not by any byte-level check, and
+    reverted by hand before commit. A 2-byte run where BOTH bytes are
+    identical is now rejected outright regardless of min_len: the "single
+    legitimate 2-byte instruction with equal operand bytes" counter-case
+    this function was written to protect is real but rare, and the cost
+    of missing a few such instructions is far lower than a second
+    confirmed silent data-as-nop corruption of this precise shape."""
+    if len(raw) == 2 and raw[0] == raw[1]:
+        return True
     if len(raw) < min_len:
         return False
     common = Counter(raw).most_common(1)[0][1]
