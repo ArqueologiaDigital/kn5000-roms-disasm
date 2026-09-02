@@ -9864,7 +9864,7 @@ AccVoiceReg_WritePart2_StoreBit4:
 
 	ldb l, 0x2
 
-	.byte 0x1e, 0xf3, 0x00	; calr AccVoiceState_DispatchChange (v7 displacement)
+	calr	243
 
 
 
@@ -11545,7 +11545,7 @@ RhythmProc_CopySlotData_Wrap:
 	ret
 
 RhythmProc_CopySlotData:
-	.byte 0x1e, 0x36, 0x00	; calr AccPatch_GetCurrentSlotAddr (v7 displacement)
+	calr	54
 
 	ld xbc, 0x40
 
@@ -11982,7 +11982,7 @@ AccPatch_CheckConfig_Done:
 	ret
 
 AccPatch_InitAllSentinels:
-	.byte 0x1e, 0x52, 0x00	; calr AccPatch_ReadVoiceStride (v7 displacement)
+	calr	82
 
 	lds32 xwa, 0
 
@@ -12000,23 +12000,23 @@ AccPatch_InitAllSentinels:
 
 	ld hl, (xiy + 256)
 
-	.byte 0x1e, 0x19, 0x00	; calr AccPatch_InitSlotSentinels (v7 displacement)
+	calr	25
 
 	ld hl, (xiy + 4)
 
-	.byte 0x1e, 0x13, 0x00	; calr AccPatch_InitSlotSentinels (v7 displacement)
+	calr	19
 
 	ld hl, (xiy + 6)
 
-	.byte 0x1e, 0x0d, 0x00	; calr AccPatch_InitSlotSentinels (v7 displacement)
+	calr	13
 
 	ld hl, (xiy + 8)
 
-	.byte 0x1e, 0x07, 0x00	; calr AccPatch_InitSlotSentinels (v7 displacement)
+	calr	7
 
 	ld hl, (xiy + 10)
 
-	.byte 0x1e, 0x01, 0x00	; calr AccPatch_InitSlotSentinels (v7 displacement)
+	calr	1
 
 	ret
 
@@ -22342,10 +22342,15 @@ Tempo_DisplayBPMValue:
 
 
 Tempo_DisplayBPMFraction:
-	.byte 0xc7, 0xfa, 0xd8, 0x66, 0x22, 0x1e, 0x18, 0x04
-	.byte 0x1e, 0xe9, 0x05, 0xc1, 0xfc, 0x38, 0x21, 0xc9
-	.byte 0xcf, 0x81, 0x6e, 0x05, 0xc7, 0xfa, 0x69, 0x68
-	.byte 0x05
+	cpib_erp	250, 0
+	jr	z, 34
+	calr	1048
+	calr	1513
+	ldb_d8	a, 14588
+	cp	a, 129
+	jr	nz, 5
+	dec1b_erp	250
+	jr	5
 Tempo_DisplayBPMNoFrac:
 	cp a, 0x83
 	jr z, Tempo_DisplayBPMWithDec
@@ -22362,9 +22367,14 @@ Tempo_DisplayBPMWithDec:
 	ldib_erp 0xfb, 0
 
 Tempo_DisplayBPMFinal:
-	.byte 0xf1, 0xfc, 0x38, 0x00, 0x81, 0x1e, 0x47, 0x04
-	.byte 0xcf, 0xd9, 0x66, 0x19, 0xc7, 0xfb, 0x61, 0xc7
-	.byte 0xfb, 0x89, 0xc7, 0xfa, 0xf1, 0x6e, 0xe9
+	stdi8	14588, 129
+	calr	1095
+	cps	l, 1
+	jr	z, 25
+	inc1b_erp	251
+	stb_erp	a, 251
+	cpb_erp	a, 250
+	jr	nz, -23
 Tempo_DisplayBPMClean:
 	stdi8	(14588), 131
 	calr	1072
@@ -23429,10 +23439,15 @@ MultiVoice_SetupChannel:
 	jr	z, 4
 	orddm8	(14124), w
 MultiVoice_Setup_Loop:
-	.byte 0xc8, 0xee, 0x01, 0xd9, 0x61, 0xd9, 0xdf, 0x61
-	.byte 0xeb, 0xc1, 0x3a, 0x34, 0x21, 0xc1, 0x2b, 0x37
-	.byte 0xf1, 0x66, 0x06, 0x22, 0x7f, 0xf1, 0x2c, 0x37
-	.byte 0x42
+	sll	w, 1
+	inc	1, bc
+	cps	bc, 7
+	jr	lt, -21
+	ldb_d8	a, 13370
+	cpda8	a, 14123
+	jr	z, 6
+	ldb	b, 127
+	stb_d8	14124, b
 MultiVoice_Setup_WriteParam:
 	ret
 
@@ -25171,7 +25186,7 @@ CmpBkslSTtl_FillIn4:
 
 	lds hl, 4
 
-	.byte 0x1d, 0x1b, 0x4b, 0xf6	; call RhythmFillIn_Wrapper (v7 addr)
+	call	16141083
 
 	pop xiz
 
@@ -26230,7 +26245,7 @@ MainCstmNameFunc:
 CstmName_HandleEvent2C:
 	pushw 0x11
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	ld xiz, xhl
 
@@ -26252,7 +26267,7 @@ CstmName_HandleEvent2C:
 
 	push xiz
 
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call	16713148
 
 	lda xsp, (xsp + 12)
 
@@ -26850,10 +26865,15 @@ SoundCtrl_CalcTempo_Clamp:
 	stb_d8	(14607), l
 	ret
 AccGuard_ProgramChangeCheck:
-	.byte 0xc1, 0xe2, 0xbf, 0x23, 0xc1, 0xe1, 0xbf, 0x21
-	.byte 0xc9, 0xdd, 0x6e, 0x0d, 0xc1, 0xe3, 0xbf, 0x3f
-	.byte 0x00, 0x66, 0x06, 0xcb, 0xda, 0xb0, 0xfe, 0x68
-	.byte 0x27
+	ldb_d8	c, 49122
+	ldb_d8	a, 49121
+	cps	a, 5
+	jr	nz, 13
+	cpdi8	49123, 0
+	jr	z, 6
+	cps	c, 2
+	ret	nz
+	jr	39
 AccGuard_CheckMode09:
 	cp a, 0x09
 
@@ -26879,7 +26899,7 @@ AccGuard_CheckMode09:
 
 	ldw wa, 0x00c8
 
-	.byte 0x1d, 0xb0, 0x90, 0xf9	; call SoundCtrl_SendCommand (v7 addr)
+	call	16355504
 
 	ret
 
@@ -27355,7 +27375,7 @@ SndArgNm_ProcessEntry:
 
 	ld_sril3 XDE, 0x07, 0xec, 0xe8
 
-	.byte 0x1d, 0x7b, 0xde, 0xfe	; call SndParam_ApplyProgramChangeAsync (v7 addr)
+	call	16703099
 
 	stb_erp A, 0xfb
 
@@ -27436,7 +27456,7 @@ SndArgNm_HandleEvent21_Copy:
 
 	push xwa
 
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call	16713148
 
 	lda xsp, (xsp + 10)
 

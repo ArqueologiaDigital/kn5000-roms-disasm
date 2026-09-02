@@ -220,7 +220,7 @@ WndScroll_DrawCurrentItem:
 
 	stw_da (0x0274e0), xwa
 
-	.byte 0x78, 0xca, 0x09	; jrl UIDialog_ReturnZeroJmp (v7 displacement)
+	jrl	2506
 
 
 

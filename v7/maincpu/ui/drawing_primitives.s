@@ -2015,7 +2015,7 @@ DrawWall_DoCopy:
 
 	ldw (xwa + 6), 0xef
 
-	.byte 0x1e, 0x2b, 0xeb	; calr SetChangeRect (v7 displacement)
+	calr	-5333
 
 	pop xiz
 

@@ -10002,19 +10002,19 @@ EventDispatch_DefaultProc:
 
 	ld xbc, 0x1c00016
 
-	.byte 0x1e, 0x34, 0xf8	; calr MainFuncCall (v7 displacement)
+	calr	-1996
 
 	lds wa, 1
 
-	.byte 0x1e, 0x3f, 0x06	; calr SetInterruptTime (v7 displacement)
+	calr	1599
 
 	lds wa, 2
 
-	.byte 0x1e, 0x8e, 0x06	; calr TitleProc_SetResourceDirtyFlag (v7 displacement)
+	calr	1678
 
 	ldw wa, 0x10
 
-	.byte 0x78, 0x6c, 0x05	; jrl TitleProc_ClearAndReturn (v7 displacement)
+	jrl	1388
 
 
 
@@ -10143,7 +10143,7 @@ EnumList_Init_TypeB:
 
 	ld (xhl + 14), xwa
 
-	.byte 0x78, 0x9d, 0x04	; jrl TitleProc_ReturnZero (v7 displacement)
+	jrl	1181
 
 
 
@@ -10459,7 +10459,7 @@ EnumList_OK_Next:
 
 	extz xhl
 
-	.byte 0x78, 0xa9, 0x01	; jrl TitleFunc_Epilogue34 (v7 displacement)
+	jrl	425
 
 
 
@@ -11011,7 +11011,7 @@ Viewable_SetName_Copy:
 
 	inc 8, xsp
 
-	.byte 0x78, 0x40, 0xff	; jrl Viewable_ReturnZero (v7 displacement)
+	jrl	-192
 
 
 
@@ -13329,7 +13329,7 @@ TabDraw_TopEdge_CalcWidth:
 TabDraw_TopEdge_CalcHeight:
 	ld xwa, (xsp + 8)
 
-	.byte 0x1e, 0x5a, 0x24	; calr IDCursorAdvance (v7 displacement)
+	calr	9306
 
 	lda xbc, (xhl - 4)
 
@@ -13441,7 +13441,7 @@ EdgeVariant_A_CalcHeight2:
 EdgeVariant_A_Execute:
 	ld xwa, (xsp + 8)
 
-	.byte 0x1e, 0x83, 0x23	; calr IDCursorAdvance (v7 displacement)
+	calr	9091
 
 	lda xbc, (xhl - 4)
 

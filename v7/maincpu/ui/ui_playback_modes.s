@@ -534,7 +534,7 @@ SongMode_SendStopCommand:
 SongMode_AbortAndClearBit2:
 	anddi8 (0x28ac), 251
 
-	.byte 0x1d, 0x4d, 0xb9, 0xfe	; call Song_AbortPlayback (v7 addr)
+	call	16693581
 
 	ret
 

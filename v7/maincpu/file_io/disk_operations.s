@@ -633,7 +633,7 @@ FmmLoadTtl_CheckSmfHandle:
 
 	ldw wa, 0x64
 
-	.byte 0x78, 0x51, 0x01	; jrl FmmLoadTtl_PlaySound (v7 displacement)
+	jrl	337
 
 
 

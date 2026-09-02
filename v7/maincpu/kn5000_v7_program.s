@@ -2384,7 +2384,8 @@ UI_EventHandler_PopAndReturn:
 	ret
 
 ChordProc_TrailingData:
-	.byte 0x43, 0x03, 0x00, 0x02, 0x01, 0x0e
+	ld	xhl, 16908291
+	ret
 AcChordBoxProc_Entry:
 
 AcChordBoxProc:

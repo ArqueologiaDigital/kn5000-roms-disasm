@@ -574,11 +574,11 @@ AccompSeq_NoteOn6_VelClamp:
 
 	stb_dri A, 0x07, 0xec, 0xf4
 
-	.byte 0x1e, 0xdb, 0x01	; calr AccompSeq_AdvanceBufferPtr (v7 displacement)
+	calr	475
 
 	stb_dri E, 0x07, 0xec, 0xf4
 
-	.byte 0x1e, 0xd3, 0x01	; calr AccompSeq_AdvanceBufferPtr (v7 displacement)
+	calr	467
 
 	ld (xhl + 4), iy
 

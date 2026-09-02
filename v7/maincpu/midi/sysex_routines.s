@@ -88,7 +88,8 @@ ExcDotFunc_InvalidIndex_Exit:
 	ret
 
 ExcDotFunc_HandlerJumpTable_Ext:
-	.byte 0xf2, 0x5e, 0x47, 0x02, 0x33, 0x0e
+	lda_24	xhl, 149342
+	ret
 
 ExcPmemFunc:
 	push xiz

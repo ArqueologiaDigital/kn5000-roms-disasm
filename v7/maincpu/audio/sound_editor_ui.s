@@ -9558,7 +9558,7 @@ AcCmpRecBox_AdjustTable:
 
 	push xbc
 
-	.byte 0x1d, 0x95, 0x02, 0xff	; call Sprintf_Locked (v7 addr)
+	call	16712341
 
 	inc 8, xsp
 
@@ -11439,7 +11439,7 @@ MspRGrpSetBnk_UpdateLsw:
 
 	lds de, 0
 
-	.byte 0x1d, 0x7d, 0xf4, 0xf9	; call MainLswPut (v7 addr)
+	call	16381053
 
 	ld xwa, 0xcc0007
 
@@ -11447,7 +11447,7 @@ MspRGrpSetBnk_UpdateLsw:
 
 	lds32 xde, 0
 
-	.byte 0x1d, 0x53, 0x92, 0xfa	; call SendEvent (v7 addr)
+	call	16421459
 
 	ldib_erp 0xfa, 2
 
