@@ -1,5 +1,40 @@
 #!/usr/bin/env python3
-"""Close 12 sites in the "~7,600 B of medium/small spans nobody re-tested"
+"""⚠⚠ THIS MODULE IS NON-FUNCTIONAL AND ITS FINDINGS BELOW ARE HISTORY (2026-09-02)
+
+`find_site()` returns None for EVERY one of the 12 sites, so `--selftest` cannot
+pass and `--splice` would emit nothing. Do not reach for it as a working tool;
+read it as the record of what it once established.
+
+⚠ AND IT DID NOT BREAK TONIGHT. Measured, not assumed: checked out at
+`a99564a6` — the commit this push branched from, before any prom_b lane ran —
+with the crash below repaired, `find_site` already failed for all 12 sites,
+including `0xF0D4D2`, which was still `.incbin` at that revision. So the
+conversions did not do this; the module was already dead.
+
+    git worktree add --detach /tmp/base a99564a6
+    cp <this file> /tmp/base/wsa1/notes/ && cd /tmp/base/wsa1
+    python3 notes/gen_prom_b_untouched_pool_module.py --selftest
+
+★ WHY NOBODY NOTICED, WHICH IS THE TRANSFERABLE PART. `--selftest` asserted
+"all 12 sites are still one .incbin directive each" and then indexed the span
+dict — so once a later lane converted any site it died with a bare `KeyError`
+BEFORE reaching the checks that would have exposed the real breakage. A test
+that fails on SUCCESS masked a test that could not pass at all. The crash was
+repaired 2026-09-02 (converted sites are now reported and skipped, and a guard
+shouts if every site is gone); repairing it is what revealed the deeper fault.
+
+⚠ AND ONE CLAIM IN THE PROSE BELOW IS DISPROVED. It calls 0xF0D4D2's leading
+tables "genuinely unexplained". Lane promB3 explained them: the span does not
+BEGIN with records, it begins with the operand table that the two interpreter-B
+records IN FRONT OF IT name at record+7 — six such pointers, all at +7 exactly.
+It also found an 80x24 column-major bitmap there running 23 bytes past the span
+into an `op 0C, 28 bytes` record whose handler is a bare `ret`, so that length
+byte asserted nothing and had swallowed both the bitmap tail and a glyph record.
+See `wsa1/notes/lane_promB3/`.
+
+Original documentation follows, unmodified.
+
+Close 12 sites in the "~7,600 B of medium/small spans nobody re-tested"
 pool named by the PROMBFINAL lane brief -- the largest untouched debt pool
 left in prom_b after the reachability walk and the oversized-object hunt
 both reached fixpoint.
@@ -241,15 +276,48 @@ def main():
         want = {
             0xF02F6F: (7, "A", 3),  0xF03A26: (7, "A", 3), 0xF03AF8: (77, "A", 4),
             0xF03BE6: (5, "A", 3), 0xF03C12: (11, "A", 8), 0xF05621: (5, "A", 3),
-            0xF0D4D2: (454, "A", 23), 0xF13D34: (44, "A", 45), 0xF2B8F9: (153, "A", 3),
+            # ⚠ 0xF0D4D2's (454, 23) is the MISFRAME lane promB3 overturned:
+            # the 80x24 bitmap runs 23 bytes past this span into what was
+            # framed as an "op 0C, 28 bytes" record at 0xF0D698, and op 0C's
+            # handler 0xF31AEB is a BARE ret -- so any length byte would have
+            # walked. The corrected walk is skip 477 / 22 records. The site is
+            # converted now so this entry is never exercised; it is kept as the
+            # record of what the strict rule still let through, because the
+            # rule required only SOME record in the walk to be non-weak, not
+            # the first.
+            0xF0D4D2: (477, "A", 22), 0xF13D34: (44, "A", 45), 0xF2B8F9: (153, "A", 3),
             0xF32709: (247, "A", 4), 0xF32839: (7, "A", 3), 0xF32A00: (9, "B", 3),
         }
         text = open(os.path.join(ROOT, S_FILE), encoding="utf-8").read()
         spans = {s: (s, e) for s, e, _line in incbin_spans(text) if s in SITES}
-        check("all 12 sites are still one .incbin directive each", sorted(spans), sorted(SITES))
+
+        # ⚠ A SITE THAT IS NO LONGER AN .incbin HAS BEEN CONVERTED BY A LATER
+        # LANE. That is the GOAL of this project, not a regression, and this
+        # selftest used to assert "all 12 sites are still one .incbin directive
+        # each" and then die on a KeyError the moment one of them was closed --
+        # so it stopped running entirely, silently, exactly when the tree was
+        # improving. A test that fails on success is a test nobody runs.
+        # Corrected 2026-09-02: converted sites are REPORTED and skipped; the
+        # remaining ones are still fully checked.
+        remaining = sorted(spans)
+        converted = sorted(set(SITES) - set(spans))
+        for s in converted:
+            print("  0x%06X CONVERTED by a later lane -- no longer .incbin, "
+                  "skipped" % s)
+        check("every site is either still .incbin or converted (none vanished)",
+              sorted(set(remaining) | set(converted)), sorted(SITES))
+
+        # ⚠ AND THE GUARD THAT KEEPS THIS HONEST. If every site has been
+        # converted, the loop below checks NOTHING and the run would print
+        # "0 failures" -- a criterion that cannot fail. Say so loudly instead.
+        if not remaining:
+            print("  ⚠ ALL 12 SITES ARE CONVERTED. This module has nothing "
+                  "left to verify and its per-site expectations below are now "
+                  "pure history. Retire it rather than reading a green run as "
+                  "evidence of anything.")
 
         total_bytes = 0
-        for s in SITES:
+        for s in remaining:
             sp_s, sp_e = spans[s]
             found = find_site(b, sp_s, sp_e, ta, tb)
             check("0x%06X site found" % s, found is not None, True)
@@ -266,13 +334,14 @@ def main():
                 if raw[0] != op or raw[1] != ln:
                     FAIL.append("0x%06X round-trip mismatch" % p)
             total_bytes += (sp_e - sp_s)
-        check("total bytes across the 12 sites", total_bytes,
-              sum(spans[s][1] - spans[s][0] for s in SITES))
+        check("total bytes across the sites still present", total_bytes,
+              sum(spans[s][1] - spans[s][0] for s in remaining))
         # the one uniform-fill site is exactly 0x0E for exactly 247 bytes
         s = 0xF32709
-        lead = b[s - B_BASE:s - B_BASE + 247]
-        check("0xF32709 lead-in is a pure 0x0E run of exactly 247 bytes",
-              (len(lead), len(set(lead))), (247, 1))
+        if s in spans:
+            lead = b[s - B_BASE:s - B_BASE + 247]
+            check("0xF32709 lead-in is a pure 0x0E run of exactly 247 bytes",
+                  (len(lead), len(set(lead))), (247, 1))
         print("FAILURES: %d" % len(FAIL))
         return 1 if FAIL else 0
 
