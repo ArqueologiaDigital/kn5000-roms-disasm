@@ -36,6 +36,7 @@ CLANG=$(LLVM_BIN)/clang
 .SECONDARY:
 
 .PHONY: decompress-demo-presets rebuild-demo-presets verify-demo-presets demo-midi demo-sidecars
+.PHONY: style-midi verify-style-midi
 .PHONY: decompress-help-databases rebuild-help-databases verify-help-databases
 .PHONY: verify-stale-help-duplicate
 .PHONY: audit-icons-blob
@@ -765,6 +766,17 @@ rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom: rebuilt_ROMs/kn5000_subcpu_boot.llvm.e
 # trip is byte-exact, so the readable form is the source rather than a view of a blob.
 style-events:
 	python3 scripts/build/style_events.py build
+
+# The 240 factory accompaniment styles as Standard MIDI Files, one per directory
+# record. DERIVED AND PLAYABLE, NOT A BUILD INPUT: `custom_data/styles/*.styles` is
+# what the ROM is built from and it holds what MIDI cannot (cell allocation and link
+# topology, the PAD bytes after 0x83, explicit-vs-running status). Deliberately NOT a
+# prerequisite of any ROM target, so a change here can never move a ROM byte.
+style-midi:
+	python3 scripts/build/style_to_midi.py build
+
+verify-style-midi:
+	python3 scripts/build/style_to_midi.py verify
 
 indexed-images:
 	python3 scripts/build/indexed_images.py build
