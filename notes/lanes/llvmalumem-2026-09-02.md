@@ -105,6 +105,15 @@ invalidated other lanes' in-flight measurements.
 definition beside an existing one. `make gate-all` is green: 9/9 KN5000 images
 assemble, 13/13 ROMs byte-identical.
 
+⚠ **The gate at this toolchain also needs `w15/llvm-asym`'s `358a0d35`.** That
+lane's commit `e4326acd28aa` in llvm-project made JR/JRcc/DJNZ refuse a
+displacement that does not fit their 8-bit field, which 34 operands in this tree
+(sign-extended to 24 bits by the disassembly that produced them) do not. Those
+34 truncations were reproduced locally in this worktree to run the gate above,
+verified line-for-line identical to `358a0d35`, and then reverted rather than
+committed twice. Until that branch merges, `make gate-all` on `main` fails at
+those 34 sites for a reason unrelated to this lane.
+
 ## What resisted, and why
 
 **294 samples in 20 shapes still refuse.** They are not scattered; they are
