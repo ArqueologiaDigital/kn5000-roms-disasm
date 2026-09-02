@@ -18,7 +18,7 @@ TextRender_PixelLoop:
 	ld bc, (xde)
 	add bc, hl
 	ld (xix), bc
-	ld_sril XIY, (xsp + 0x013a)
+	ld XIY, (xsp + 0x013a)
 	cp bc, (xiy)
 	jr lt, TextRender_BitMask6_Return
 	ld wa, (xix)
@@ -1191,7 +1191,7 @@ DrawText_ExtendedLayout:
 	lda_dri XIX, 0xfd, 0x14, 0x01
 	lds bc, 4
 	ldirw
-	ld_sril XDE, (xsp + 0x011c)
+	ld XDE, (xsp + 0x011c)
 	ld iy, (xde + 2)
 	extz xiy
 	ld c, (xde + 4)
@@ -1258,7 +1258,7 @@ DrawText_ExtLayout_NullAndDraw:
 	ld (xsp + 8), xwa
 	add xwa, xhl
 	ld (xwa), 0x0
-	ld_sril XWA, (xsp + 0x011c)
+	ld XWA, (xsp + 0x011c)
 	ld a, (xwa + 6)
 	and a, 0x3f
 	extz wa
@@ -3614,15 +3614,15 @@ PmBankScreenProc:
 	jr z, PmBank_Show
 	cp xiz, 0x1c00001
 	jrl nz, PmBank_Default
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	jr PmBank_ForwardToHandler
 
 PmBank_Show:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
 	ld xwa, 0x1420008
 	ld xbc, 0x1e2000f
@@ -3630,36 +3630,36 @@ PmBank_Show:
 	jrl PmBank_DispatchBankSelect
 
 PmBank_EnumNotify:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ldb_erp A, 0xfb
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
 	lds32 xde, 0
 	stb_erp E, 0xfb
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000e
 	call SendEvent
 	jrl PmBank_ReturnZero
 
 PmBank_Paint:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 
 PmBank_ForwardToHandler:
 	call InheritedProc
 	jrl PmBank_ReturnZero
 
 PmBank_Select:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -3670,7 +3670,7 @@ PmBank_Select:
 	ld wa, (xwa)
 	ld (xbc), wa
 	ld xbc, (xde)
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	extz wa
 	ld (xbc), wa
 	ld xwa, (xhl)
@@ -3711,7 +3711,7 @@ PmBank_Select_DrawFirstRow:
 	stl_dri XWA, 0xfd, 0x14, 0x01
 	ld xwa, 0x1420008
 	ld xbc, 0x1e20010
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call MainFuncCall
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 48)
@@ -3752,15 +3752,15 @@ PmBank_Select_DrawSecondRow:
 	stl_dri XWA, 0xfd, 0x14, 0x01
 	ld xwa, 0x1420008
 	ld xbc, 0x1e20010
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	jrl PmBank_DispatchBankSelect
 
 PmBank_Confirm:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ldib_erp 0xfb, 0
 
@@ -3770,7 +3770,7 @@ PmBank_Confirm_Loop:
 	stl_dri XWA, 0xfd, 0x14, 0x01
 	ld xwa, 0x1420008
 	ld xbc, 0x1e20010
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call MainFuncCall
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x09
@@ -3778,12 +3778,12 @@ PmBank_Confirm_Loop:
 	jrl PmBank_ReturnZero
 
 PmBank_BankChanged:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), 0xff
 	ld (xsp + 6), 0xf5
 	ld xbc, (xhl + 48)
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld a, (xwa)
 	extz wa
 	cp wa, (xbc)
@@ -3792,14 +3792,14 @@ PmBank_BankChanged:
 	ld (xsp + 6), 0x7
 
 PmBank_BankChanged_Lookup:
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld a, (xwa)
 	extz wa
 	lda xbc, (SeqChan_Map_10ch:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
 	call DrawEditSw
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld a, (xwa)
 	extz wa
 	lda xbc, (SeqChan_Map_10ch:24)
@@ -3829,7 +3829,7 @@ PmBank_BankChanged_RightSide:
 
 PmBank_BankChanged_DrawSlot:
 	decm 8, (xbc)
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld a, (xwa)
 	inc 1, a
 	extz wa
@@ -3876,7 +3876,7 @@ PmBank_BankChanged_SecondRight:
 	ldw (xbc), 0x137
 
 PmBank_BankChanged_DrawIndicator:
-	ld_sril XBC, (xsp + 0x0114)
+	ld XBC, (xsp + 0x0114)
 	lda xhl, (xbc + 1)
 	lds32 xbc, 1
 	push xbc
@@ -3892,13 +3892,13 @@ PmBank_BankChanged_DrawIndicator:
 	jrl PmBank_ReturnZero
 
 PmBank_OK:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	cp xwa, 0xc
 	jrl z, PmBank_OK_Slot9
 	cp xwa, 0xb
@@ -3942,9 +3942,9 @@ PmBank_OK_SaveDelete:
 	call PostEvent
 
 PmBank_OK_Forward:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	jrl PmBank_CallHandler
 
 PmBank_OK_Slot0:
@@ -4014,9 +4014,9 @@ PmBank_ReturnZero:
 	jr PmBank_Epilogue
 
 PmBank_Default:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 
 PmBank_CallHandler:
 	call InheritedProc
@@ -4049,9 +4049,9 @@ SineWaveScreenProc:
 	jr z, PmBank_InitDisplay
 	cp xiz, 0x1c00001
 	jrl nz, PmBank_DefaultPassthrough
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	jr PmBank_CallInherited
 
 PmBank_InitDisplay:
@@ -4059,16 +4059,16 @@ PmBank_InitDisplay:
 	ld xbc, 0x1e20001
 	lds32 xde, 0
 	call MainFuncCall
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 
 PmBank_CallInherited:
 	call InheritedProc
 	jrl ToneGen_InitDone
 
 PmBank_OnBankChanged:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld xde, (xhl + 48)
 	lda xbc, (xhl + 44)
@@ -4076,11 +4076,11 @@ PmBank_OnBankChanged:
 	ld wa, (xwa)
 	ld (xde), wa
 	ld xbc, (xbc)
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld a, (xwa)
 	extz wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	jrl PmBank_SendEventAndDone
@@ -4134,9 +4134,9 @@ PmBank_DrawRegionInfo:
 	jrl ToneGen_InitDone
 
 PmBank_OnPaint:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
 	lda_dri XBC, 0xfd, 0x08, 0x01
 	ldw (xbc), 0xa
@@ -4222,7 +4222,7 @@ PmBank_OnPaint:
 	pushw 0xf5
 	ld xde, TransposeNoteStr_C_0x64
 	call DrawString
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 
@@ -4231,11 +4231,11 @@ PmBank_SendEventAndDone:
 	jrl ToneGen_InitDone
 
 PmBank_OnSelect:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -4276,11 +4276,11 @@ PmBank_OnSelect:
 	jr PmBank_WriteLastParam
 
 PmBank_OnConfirm:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	lds wa, 0
 	ldw bc, 0xff
@@ -4311,21 +4311,21 @@ ToneGen_InitDone:
 	jr PmBank_OnDefault
 
 PmBank_OnEnumNotify:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	jr PmBank_CallInheritedDirect
 
 PmBank_DefaultPassthrough:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 
 PmBank_CallInheritedDirect:
 	call InheritedProc
@@ -5360,31 +5360,31 @@ AcFreeSplitBoxProc:
 	jr z, AcFreeSplit_Release
 	cp xbc, 0x1c00001
 	jr z, AcFreeSplit_Init
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	jrl AcFreeSplit_PopAndReturn
 
 AcFreeSplit_Init:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x4180
 	call SetLswFilter
 	jrl UI_AccChordBoxProc_Return
 
 AcFreeSplit_Release:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x4180
 	call ResetLswFilter
 	jrl UI_AccChordBoxProc_Return
 
 AcFreeSplit_ShowHide:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, 0x4180
@@ -5392,7 +5392,7 @@ AcFreeSplit_ShowHide:
 	jrl UI_AccChordBoxProc_Return
 
 AcFreeSplit_ValueChanged:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, (xiz)
@@ -5436,7 +5436,7 @@ AcFreeSplit_LookupNoteLabel:
 
 AcFreeSplit_SendConfirmEvent:
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	jrl AcFreeSplit_SendEventAndReturn
 
@@ -5482,7 +5482,7 @@ AcFreeSplit_LookupSecondNote:
 
 AcFreeSplit_SendSecondConfirm:
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 
 AcFreeSplit_SendEventAndReturn:
@@ -5516,31 +5516,31 @@ AcTransposeBoxProc:
 	jr z, AcTranspose_Release
 	cp xbc, 0x1c00001
 	jr z, AcTranspose_Init
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	jrl UI_EventHandler_PopAndReturn
 
 AcTranspose_Init:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	lds32 xbc, 3
 	call SetLswFilter
 	jrl UI_EventHandler_InitReturnZero
 
 AcTranspose_Release:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	lds32 xbc, 3
 	call ResetLswFilter
 	jr UI_EventHandler_InitReturnZero
 
 AcTranspose_ShowHide:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	lds32 xwa, 3
@@ -5548,7 +5548,7 @@ AcTranspose_ShowHide:
 	jr UI_EventHandler_InitReturnZero
 
 AcTranspose_ValueChanged:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, (xiz)

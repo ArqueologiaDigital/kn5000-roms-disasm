@@ -3290,7 +3290,7 @@ FloppyDisk_ComputeToneParams:
 	add xwa, xhl
 	ld (xbc + 28), xwa
 	ld xiz, xwa
-	ld_sril XIX, (xsp + 0x0418)
+	ld XIX, (xsp + 0x0418)
 	call (xix)
 	cp xhl, xiz
 	jr ge, FloppyDisk_CopyNoteBuffers
@@ -3300,10 +3300,10 @@ FloppyDisk_ComputeToneParams:
 ; Floppy disk copy note buffers to slots and write tone data
 FloppyDisk_CopyNoteBuffers:
 	lda xwa, (xsp + 16)
-	ld_sril XIX, (xsp + 0x0414)
+	ld XIX, (xsp + 0x0414)
 	ld xbc, 0x400
 	call (xix)
-	ld_sril XIX, (xsp + 0x0410)
+	ld XIX, (xsp + 0x0410)
 	call (xix)
 	cps hl, 0
 	jrl lt, FloppyCtrl_PopIzStoreRet
@@ -3317,9 +3317,9 @@ FloppyDisk_CopyNoteBuffers:
 	sla xbc, 8
 	add xbc, xde
 	sla xbc, 4
-	ld_sril XIX, (xsp + 0x0414)
+	ld XIX, (xsp + 0x0414)
 	call (xix)
-	ld_sril XIX, (xsp + 0x0410)
+	ld XIX, (xsp + 0x0410)
 	call (xix)
 	cps hl, 0
 	jrl lt, FloppyCtrl_PopIzStoreRet
@@ -3333,9 +3333,9 @@ FloppyDisk_CopyNoteBuffers:
 	sla xbc, 8
 	add xbc, xde
 	sla xbc, 4
-	ld_sril XIX, (xsp + 0x0414)
+	ld XIX, (xsp + 0x0414)
 	call (xix)
-	ld_sril XIX, (xsp + 0x0410)
+	ld XIX, (xsp + 0x0410)
 	call (xix)
 	cps hl, 0
 	jrl lt, FloppyCtrl_PopIzStoreRet
@@ -3349,9 +3349,9 @@ FloppyDisk_CopyNoteBuffers:
 	sla xbc, 8
 	add xbc, xde
 	sla xbc, 4
-	ld_sril XIX, (xsp + 0x0414)
+	ld XIX, (xsp + 0x0414)
 	call (xix)
-	ld_sril XIX, (xsp + 0x0410)
+	ld XIX, (xsp + 0x0410)
 	call (xix)
 	cps hl, 0
 	jrl lt, FloppyCtrl_PopIzStoreRet
@@ -3365,9 +3365,9 @@ FloppyDisk_CopyNoteBuffers:
 	sla xbc, 8
 	add xbc, xde
 	sla xbc, 4
-	ld_sril XIX, (xsp + 0x0414)
+	ld XIX, (xsp + 0x0414)
 	call (xix)
-	ld_sril XIX, (xsp + 0x0410)
+	ld XIX, (xsp + 0x0410)
 	call (xix)
 	cps hl, 0
 	jrl lt, FloppyCtrl_PopIzStoreRet
@@ -3381,10 +3381,10 @@ FloppyDisk_CopyNoteBuffers:
 	sla xbc, 8
 	add xbc, xde
 	sla xbc, 4
-	ld_sril XIX, (xsp + 0x0414)
+	ld XIX, (xsp + 0x0414)
 	ld xwa, xhl
 	call (xix)
-	ld_sril XIX, (xsp + 0x0410)
+	ld XIX, (xsp + 0x0410)
 	call (xix)
 	cps hl, 0
 	jr lt, FloppyCtrl_PopIzStoreRet
@@ -3398,10 +3398,10 @@ FloppyDisk_CopyNoteBuffers:
 	sla xbc, 8
 	add xbc, xde
 	sla xbc, 4
-	ld_sril XIX, (xsp + 0x0414)
+	ld XIX, (xsp + 0x0414)
 	ld xwa, xhl
 	call (xix)
-	ld_sril XIX, (xsp + 0x0410)
+	ld XIX, (xsp + 0x0410)
 	call (xix)
 	cps hl, 0
 	jr lt, FloppyCtrl_PopIzStoreRet
@@ -3415,18 +3415,18 @@ FloppyDisk_CopyNoteBuffers:
 	sla xbc, 8
 	add xbc, xde
 	sla xbc, 4
-	ld_sril XIX, (xsp + 0x0414)
+	ld XIX, (xsp + 0x0414)
 	ld xwa, xhl
 	call (xix)
-	ld_sril XIX, (xsp + 0x0410)
+	ld XIX, (xsp + 0x0410)
 	call (xix)
 	cps hl, 0
 	jr lt, FloppyCtrl_PopIzStoreRet
 	ld xwa, (3218:16)
-	ld_sril XIX, (xsp + 0x0414)
+	ld XIX, (xsp + 0x0414)
 	ld xbc, 0xf400
 	call (xix)
-	ld_sril XIX, (xsp + 0x0410)
+	ld XIX, (xsp + 0x0410)
 	call (xix)
 
 FloppyCtrl_PopIzStoreRet:
@@ -5845,7 +5845,7 @@ PsS2cFmeasBoxProc:
 	jr z, PsS2cFmeas_HandleScroll
 	cp xbc, 0x1c0000b
 	jr z, PsS2cFmeas_HandleScroll
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	call InheritedProc
 	jr PsS2cFmeas_PopReturn
 PsS2cFmeas_HandleScroll:
@@ -5871,12 +5871,12 @@ PsS2cFmeas_SetActive:
 	ldw (xbc), 0xf5
 
 PsS2cFmeas_SendUpdateEvents:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	call SendEvent
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
 	lds32 xhl, 0
@@ -5895,7 +5895,7 @@ PsS2cLmeasBoxProc:
 	jr z, PsS2cLmeas_HandleScroll
 	cp xbc, 0x1c0000b
 	jr z, PsS2cLmeas_HandleScroll
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	call InheritedProc
 	jr PsS2cLmeas_PopReturn
 PsS2cLmeas_HandleScroll:
@@ -5921,12 +5921,12 @@ PsS2cLmeas_SetActive:
 	ldw (xbc), 0xf5
 
 PsS2cLmeas_SendUpdateEvents:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	call SendEvent
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
 	lds32 xhl, 0
@@ -5981,7 +5981,7 @@ PsS2cTransBoxProc:
 	jr z, PsS2cTrans_HandleScroll
 	cp xbc, 0x1c0000b
 	jr z, PsS2cTrans_HandleScroll
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	call InheritedProc
 	jr SndArg_GridBnk_Case2
 PsS2cTrans_HandleScroll:
@@ -6013,12 +6013,12 @@ SndArg_GridBnk_Case0:
 
 ; SndArgGridBnk case 1
 SndArg_GridBnk_Case1:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	call SendEvent
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
 	lds32 xhl, 0

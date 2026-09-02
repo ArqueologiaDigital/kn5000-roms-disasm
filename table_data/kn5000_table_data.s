@@ -2082,7 +2082,7 @@ Flash_Reset_32bit__wait_ready:
 	ld xwa, 0xF000F0	; Software reset command (both chips)
 	ld (xbc), xwa	; Send reset
 
-	ld_sril XWA, (xde + 0x6464)             ; LD XWA, (XDE+6464h) - completion read
+	ld XWA, (xde + 0x6464)             ; LD XWA, (XDE+6464h) - completion read
 	ret
 
 ; -----------------------------------------------------------------------------

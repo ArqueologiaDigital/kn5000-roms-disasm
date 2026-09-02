@@ -13480,7 +13480,7 @@ Scoop_EventLoop_36Entry_Branch2:
 
 
 Scoop_EventLoop_36Entry_Branch3:
-	ld_sril XWA, (xsp + 0x0112)
+	ld XWA, (xsp + 0x0112)
 	ld a, (xwa + 6)
 	and a, 0x3f
 	extz wa

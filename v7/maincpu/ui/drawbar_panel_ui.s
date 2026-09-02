@@ -9140,33 +9140,33 @@ PsLabelBoxProc:
 	jr z, PsLabel_Confirm
 	cp xbc, 0x1c0000d
 	jrl nz, PsLabel_ForwardToBase
-	ld_sril XWA, (xsp + 0x0114)
-	ld_sril XDE, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0110)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	jrl PsLabelBox_SendEvent_Continue
 
 PsLabel_Confirm:
 	lda_dri XBC, 0xfd, 0x08, 0x01
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	call GetClientBox
 	lda_dri XWA, 0xfd, 0x08, 0x01
 	lda_dri XBC, 0xfd, 0x04, 0x01
 	call GetBoxCenter
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	call GetViewInstance
 	ld xiz, xhl
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	or xwa, xwa
 	jr nz, PsLabel_CopyDataStr
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld xbc, 0x1e0003a
 	call SendEvent
 	cp (xsp + 4), 0x0
@@ -9197,20 +9197,20 @@ PsLabel_DrawReverse:
 	jrl LswMaster_ReturnZeroJmp
 
 PsLabel_Select:
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	call GetViewInstance
 	ld xwa, (xhl + 40)
 	ld de, (xwa)
 	exts xde
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld xbc, 0x1e0004e
 	jrl PsLabelBox_SendEvent_Continue
 
 PsLabel_Notify:
-	ld_sril XWA, (xsp + 0x0114)
-	ld_sril XDE, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0110)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	call GetViewInstance
 	ld xiz, xhl
 	ld wa, (xiz + 26)
@@ -9220,7 +9220,7 @@ PsLabel_Notify:
 	ld xwa, (xiz + 40)
 	cpw (xwa), 0x0
 	jr z, PsLabel_CheckSecondWidget
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld xbc, 0x1e0004d
 	lds32 xde, 0
 	call SendEvent
@@ -9229,13 +9229,13 @@ PsLabel_CheckSecondWidget:
 	ld xwa, (xiz + 44)
 	cpw (xwa), 0x0
 	jrl z, LswMaster_ReturnZeroJmp
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld xbc, 0x1e00087
 	lds32 xde, 0
 	jrl PsLabelBox_SendEvent_Continue
 
 PsLabel_HandleWidget1:
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 40)
@@ -9243,7 +9243,7 @@ PsLabel_HandleWidget1:
 	exts xwa
 	cpl_sri_rm XWA, 0xfd, 0x10, 0x01
 	jrl z, LswMaster_ReturnZeroJmp
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	cps wa, 1
 	jr nz, PsLabel_StoreWidget1
 	ld de, (xiz + 26)
@@ -9254,15 +9254,15 @@ PsLabel_HandleWidget1:
 
 PsLabel_StoreWidget1:
 	ld xbc, (xiz + 40)
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	jr PsLabelBox_SendEvent_Continue
 
 PsLabel_HandleWidget2:
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 44)
@@ -9270,7 +9270,7 @@ PsLabel_HandleWidget2:
 	exts xwa
 	cpl_sri_rm XWA, 0xfd, 0x10, 0x01
 	jr z, LswMaster_ReturnZeroJmp
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	cps wa, 1
 	jr nz, PsLabel_StoreWidget2
 	ld de, (xiz + 26)
@@ -9281,9 +9281,9 @@ PsLabel_HandleWidget2:
 
 PsLabel_StoreWidget2:
 	ld xbc, (xiz + 44)
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 
@@ -9305,8 +9305,8 @@ LswMaster_ReturnZeroJmp:
 	jr PsLabel_Epilogue
 
 PsLabel_ForwardToBase:
-	ld_sril XWA, (xsp + 0x0114)
-	ld_sril XDE, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0110)
 	call InheritedProc
 
 PsLabel_Epilogue:
@@ -16940,7 +16940,7 @@ PsVariBoxProc:
 	jr z, PsVari_Paint
 	cp xiz, 0x1e0004d
 	jrl nz, PsVari_ForwardToBase
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	lda xwa, (xhl + 38)
 	ld xbc, (xwa)
@@ -16949,30 +16949,30 @@ PsVariBoxProc:
 	cpl_sri_rm XBC, 0xfd, 0x14, 0x01
 	jrl z, AudioView_ReturnZeroJmp
 	ld xbc, (xwa)
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	jrl AudioView_SendEventCall
 
 PsVari_Paint:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 38)
 	cpw (xwa), 0x0
 	jr z, PsVari_PaintEmpty
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
 	jr PsVari_DrawEditSw
 
 PsVari_PaintEmpty:
 	lda_dri XBC, 0xfd, 0x08, 0x01
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetBox
 	lda_dri XWA, 0xfd, 0x08, 0x01
 	ldw bc, 0xf5
@@ -16982,23 +16982,23 @@ PsVari_DrawEditSw:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 36)
 	call DrawEditSw
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	jrl AudioView_SendEventCall
 
 PsVari_Confirm:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	lda_dri XBC, 0xfd, 0x08, 0x01
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetClientBox
 	lda_dri XWA, 0xfd, 0x08, 0x01
 	lda_dri XBC, 0xfd, 0x10, 0x01
 	call GetBoxCenter
 	lda xde, (xsp + 8)
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1e0003a
 	call SendEvent
 	ld xwa, (xsp + 4)
@@ -17050,7 +17050,7 @@ PsVari_GetText:
 	lda xsp, (xsp + 0x0a)
 	jr t, AudioView_ReturnZeroJmp
 PsVari_OK:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld wa, (xhl + 36)
 	extz xwa
@@ -17063,23 +17063,23 @@ PsVari_OK:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c0001b
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1e0004d
 	lds32 xde, 1
 	jr AudioView_SendEventCall
 
 PsVari_OKForward:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	jr PsVari_CallInherited
 
 PsVari_Notify:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld wa, (xhl + 26)
 	exts xwa
@@ -17088,7 +17088,7 @@ PsVari_Notify:
 	ld xwa, (xhl + 38)
 	cpw (xwa), 0x0
 	jrl z, AudioView_ReturnZeroJmp
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1e0004d
 	lds32 xde, 0
 
@@ -17097,7 +17097,7 @@ AudioView_SendEventCall:
 	jrl AudioView_ReturnZeroJmp
 
 PsVari_CheckDirty:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld wa, (xhl + 26)
 	exts xwa
@@ -17110,9 +17110,9 @@ PsVari_CheckDirty:
 	jr PsVari_Epilogue
 
 PsVari_ForwardToBase:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 
 PsVari_CallInherited:
 	call InheritedProc

@@ -24364,7 +24364,7 @@ StoreDRAMInit_ReadBuf2:
 
 StoreDRAMInit_ReadBuf3:
 	call SeqBuf_VoiceMap_ReadByte
-	ld_sril XWA, (xsp + 0x0136)
+	ld XWA, (xsp + 0x0136)
 	lda_dpi XSP, 0xe0
 	stl_dri XWA, 0xfd, 0x36, 0x01
 	inc 1, iz

@@ -1960,10 +1960,10 @@ TextRender_BeginDraw:
 	push xiz
 	stl_dri XDE, 0xfd, 0x36, 0x01
 	stl_dri XWA, 0xfd, 0x3a, 0x01
-	ld_sril XWA, (xsp + 0x0136)
+	ld XWA, (xsp + 0x0136)
 	cp (xwa), 0x0
 	jrl z, TextRender_PopAndReturn
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	inc 2, xwa
 	ld (xsp + 34), xwa
 	cpw (xwa), 0x0
@@ -1972,20 +1972,20 @@ TextRender_BeginDraw:
 	ldw (xwa), 0x0
 
 TextRender_ClampYOrigin:
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cpw (xwa), 0x0
 	jr ge, TextRender_ClampXOrigin
 	ldw (xwa), 0x0
 
 TextRender_ClampXOrigin:
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	inc 4, xwa
 	cpw (xwa), 0x140
 	jr lt, TextRender_ClampXRight
 	ldw (xwa), 0x13f
 
 TextRender_ClampXRight:
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	lda xde, (xwa + 6)
 	cpw (xde), 0xf0
 	jr lt, TextRender_SetupColorAndFont
@@ -1996,7 +1996,7 @@ TextRender_SetupColorAndFont:
 	lda_dri XIX, 0xfd, 0x2a, 0x01
 	ldiw
 	ldiw
-	ld_sril XIX, (xsp + 0x0146)
+	ld XIX, (xsp + 0x0146)
 	or xix, xix
 	jr nz, TextRender_ClampNullXStart
 	dec_sriw 2, 0xfd, 0x2c, 0x01
@@ -2070,7 +2070,7 @@ TextRender_DefaultFontWidth:
 	ld (xbc), wa
 
 TextRender_CustomFontWidth:
-	ld_sril XWA, (xsp + 0x0136)
+	ld XWA, (xsp + 0x0136)
 	push xwa
 	lda xwa, (xsp + 42)
 	push xwa
@@ -2119,7 +2119,7 @@ TextRender_AddToDrawPos:
 	add_sriw_mr WA, 0xfd, 0x32, 0x01
 	lda_dri XWA, 0xfd, 0x2e, 0x01
 	lda xde, (xwa + 2)
-	ld_sril XBC, (xsp + 0x013a)
+	ld XBC, (xsp + 0x013a)
 	ld bc, (xbc + 2)
 	cp (xde), bc
 	jr ge, TextRender_ClampGlyphTop
@@ -2127,7 +2127,7 @@ TextRender_AddToDrawPos:
 
 TextRender_ClampGlyphTop:
 	ld de, (xwa)
-	ld_sril XBC, (xsp + 0x013a)
+	ld XBC, (xsp + 0x013a)
 	cp de, (xbc)
 	jr ge, TextRender_ClampGlyphLeft
 	ld bc, (xbc)
@@ -2135,7 +2135,7 @@ TextRender_ClampGlyphTop:
 
 TextRender_ClampGlyphLeft:
 	lda xde, (xwa + 4)
-	ld_sril XBC, (xsp + 0x013a)
+	ld XBC, (xsp + 0x013a)
 	ld bc, (xbc + 4)
 	cp (xde), bc
 	jr le, TextRender_ClampGlyphRight
@@ -2143,7 +2143,7 @@ TextRender_ClampGlyphLeft:
 
 TextRender_ClampGlyphRight:
 	lda xde, (xwa + 6)
-	ld_sril XBC, (xsp + 0x013a)
+	ld XBC, (xsp + 0x013a)
 	ld bc, (xbc + 6)
 	cp (xde), bc
 	jr le, TextRender_ClampGlyphBottom
@@ -2239,7 +2239,7 @@ TextRender_BitMask4_DrawPixel:
 	add hl, (xsp + 28)
 	ld de, hl
 	ld (xbc + 2), hl
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cp hl, (xwa + 2)
 	jrl lt, TextRender_BitMask5_ProcessCharacter
 	cp de, (xwa + 6)
@@ -2265,7 +2265,7 @@ TextRender_BitMask4_PixelLoop:
 	ld de, (xwa)
 	add de, hl
 	ld (xbc), de
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cp de, (xwa)
 	jr lt, TextRender_BitMask4_Return
 	ld de, (xbc)
@@ -2329,7 +2329,7 @@ TextRender_BitMask5_DrawPixel:
 	add hl, (xsp + 28)
 	ld bc, hl
 	ld (xix + 2), hl
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cp hl, (xwa + 2)
 	jr lt, TextRender_BitMask5_AdvancePointer
 	cp bc, (xwa + 6)
@@ -2353,7 +2353,7 @@ TextRender_BitMask5_PixelLoop:
 	ld bc, (xde)
 	add bc, hl
 	ld (xix), bc
-	ld_sril XIY, (xsp + 0x013a)
+	ld XIY, (xsp + 0x013a)
 	cp bc, (xiy)
 	jr lt, TextRender_BitMask5_Return
 	ld wa, (xix)
@@ -2412,7 +2412,7 @@ TextRender_XorMode_DrawPixel:
 	add hl, (xsp + 28)
 	ld bc, hl
 	ld (xix + 2), hl
-	ld_sril XWA, (xsp + 0x013a)
+	ld XWA, (xsp + 0x013a)
 	cp hl, (xwa + 2)
 	jr lt, TextRender_AdvancePointerAndUpdateLine
 	cp bc, (xwa + 6)
@@ -2431,7 +2431,7 @@ TextRender_XorMode_DrawPixel:
 
 ChordProc_SendRefreshEvent:
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
 
@@ -2459,13 +2459,13 @@ AcChordBoxProc:
 	jr z, AcChordBox_HandleInitOrSelect
 	cp xbc, 0x1c20000
 	jr z, AcChordBox_HandleInitOrSelect
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	jr AcChordBox_PopAndReturn
 
 AcChordBox_HandleInitOrSelect:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, 0x1420007
@@ -2475,7 +2475,7 @@ AcChordBox_HandleInitOrSelect:
 	jr AcChordBox_ReturnZero
 
 AcChordBox_HandleChordUpdate:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	push xiz
@@ -2490,7 +2490,7 @@ AcChordBox_HandleChordUpdate:
 	cps hl, 0
 	jr nz, AcChordBox_ReturnZero
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
 

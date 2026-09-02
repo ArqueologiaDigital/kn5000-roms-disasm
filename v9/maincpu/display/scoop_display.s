@@ -19002,12 +19002,12 @@ Scoop_EventLoop_36Entry:
 	lda_dri XIX, 0xfd, 0x0a, 0x01
 	lds bc, 4
 	ldirw
-	ld_sril XWA, (xsp + 0x0112)
+	ld XWA, (xsp + 0x0112)
 	ld de, (xwa + 2)
 	extz xde
-	ld_sril XWA, (xsp + 0x0112)
+	ld XWA, (xsp + 0x0112)
 	ld bc, (xwa + 7)
-	ld_sril XWA, (xsp + 0x0112)
+	ld XWA, (xsp + 0x0112)
 	ld a, (xwa + 9)
 	ld l, a
 	extz hl
@@ -19055,7 +19055,7 @@ Scoop_EventLoop_36Entry_Branch2:
 	lda xsp, (xsp + 10)
 
 Scoop_EventLoop_36Entry_Branch3:
-	ld_sril XWA, (xsp + 0x0112)
+	ld XWA, (xsp + 0x0112)
 	ld a, (xwa + 6)
 	and a, 0x3f
 	extz wa

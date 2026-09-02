@@ -5982,32 +5982,32 @@ CtrlPanel_CompareAndUpdateIndicators:
 	push xiz
 	stl_dri XBC, 0xfd, 0x6e, 0x01
 	stl_dri XWA, 0xfd, 0x72, 0x01
-	ld_sril XWA, (xsp + 0x0172)
+	ld XWA, (xsp + 0x0172)
 	calr CtrlPanel_BuildIndicatorBitmask
 	ld (xsp + 4), xhl
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	calr CtrlPanel_BuildIndicatorBitmask
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
 	xor xwa, xiz
 	and xwa, xiz
 	calr Part_BitmaskToIndexList
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
 	ldw wa, 0x80
 	calr Audio_IteratePartsWithExpression
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
 	lds wa, 0
 	calr Audio_IteratePartsWithVolume
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
 	lds wa, 0
 	calr Audio_IteratePartsWithPan
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	cp c, 0xff
 	jr z, CtrlPanelRefresh_ProcessRemoved
@@ -6022,26 +6022,26 @@ CtrlPanelRefresh_ProcessRemoved:
 	calr Part_BitmaskToIndexList
 	ldb_d8 a, (0x8ee8)
 	extz wa
-	ld_sril XBC, (xsp + 0x0172)
+	ld XBC, (xsp + 0x0172)
 	ld c, (xbc + 1)
 	extz bc
 	calr Audio_IteratePartsWithExpression
 	ldb_d8 a, (0x8eea)
 	res 7, a
 	extz wa
-	ld_sril XBC, (xsp + 0x0172)
+	ld XBC, (xsp + 0x0172)
 	ld c, (xbc + 1)
 	extz bc
 	calr Audio_IteratePartsWithVolume
 	ldb_d8 a, (0x8ef4)
 	extz wa
-	ld_sril XBC, (xsp + 0x0172)
+	ld XBC, (xsp + 0x0172)
 	ld c, (xbc + 1)
 	extz bc
 	calr Audio_IteratePartsWithPan
-	ld_sril XWA, (xsp + 0x0172)
+	ld XWA, (xsp + 0x0172)
 	lda xbc, (xwa + 1)
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	cp (xwa + 1), 0xff
 	jr nz, CtrlPanelRefresh_DispatchVoiceCC
 	cp (xbc), 0xff
@@ -6056,10 +6056,10 @@ CtrlPanelRefresh_DispatchVoiceCC:
 	calr MIDI_DispatchVoiceParamCC
 
 CtrlPanelRefresh_CheckMigration:
-	ld_sril XBC, (xsp + 0x016e)
+	ld XBC, (xsp + 0x016e)
 	cp (xbc + 1), 0xff
 	jr nz, CtrlPanelRefresh_Done
-	ld_sril XWA, (xsp + 0x0172)
+	ld XWA, (xsp + 0x0172)
 	cp (xwa + 1), 0xff
 	jr z, CtrlPanelRefresh_Done
 	ld xiy, xbc
@@ -6074,7 +6074,7 @@ CtrlPanelRefresh_CheckMigration:
 	xor xwa, xiz
 	and xwa, xiz
 	calr Part_BitmaskToIndexList
-	ld_sril XWA, (xsp + 0x0172)
+	ld XWA, (xsp + 0x0172)
 	ld c, (xwa + 1)
 	extz bc
 	ldw wa, 0x7f
@@ -6086,7 +6086,7 @@ CtrlPanelRefresh_CheckMigration:
 	ldb_d8 a, (0x8ee4)
 	res 7, a
 	extz wa
-	ld_sril XBC, (xsp + 0x0172)
+	ld XBC, (xsp + 0x0172)
 	ld c, (xbc + 1)
 	extz bc
 	calr MIDI_DispatchVoiceParamCC

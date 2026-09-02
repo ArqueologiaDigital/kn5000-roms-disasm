@@ -13429,7 +13429,7 @@ EffectBoxProc:
 	lda xix, (xsp + 8)
 	ldiw
 	ldiw
-	ld_sril XWA, (xsp + 0x0152)
+	ld XWA, (xsp + 0x0152)
 	cp xwa, 0x1c00018
 	jrl z, EffectBox_HandleCase0_Post
 	cp xwa, 0x1c00017
@@ -13446,11 +13446,11 @@ EffectBoxProc:
 	jrl z, EffectBox_HandleInitEvent
 	cp xwa, 0x1c0000b
 	jrl nz, EffectBox_HandleInherited
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
@@ -13461,19 +13461,19 @@ EffectBoxProc:
 	ld xbc, 0x1e8000a
 	lds32 xde, 0
 	call ApFuncCall
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
-	ld_sril XDE, (xsp + 0x0156)
+	ld XDE, (xsp + 0x0156)
 	ld xwa, 0x1480002
-	ld_sril XBC, (xsp + 0x0152)
+	ld XBC, (xsp + 0x0152)
 	call MainPostEvent
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c00017
 	lds32 xde, 2
 	call SetDialUp
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
@@ -13481,11 +13481,11 @@ EffectBoxProc:
 	jrl EffectBox_SetDialDownAndEnable
 
 EffectBox_HandleInitEvent:
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
@@ -13512,7 +13512,7 @@ EffectBox_HandleInitEvent:
 	ld bc, (xwa)
 	add bc, 0xdf
 	ld (xwa + 4), bc
-	ld_sril XBC, (xsp + 0x014e)
+	ld XBC, (xsp + 0x014e)
 	cp xbc, 0x1
 	jr nz, EffectBox_DrawWithViewFrame
 	pushw 0xf2
@@ -13530,32 +13530,32 @@ EffectBox_CallDrawDesignFrame:
 	jrl EffectBoxProc_ReturnZero
 
 EffectBox_HandleEvent0:
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80000
 	lds32 xde, 0
 	jr EffectBox_SendEventCommon
 
 EffectBox_HandleEvent1:
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld xwa, (xhl + 28)
 	ld xbc, 0x1e8000d
 	lds32 xde, 0
 	call ApFuncCall
 	sub_sril_mr XHL, 0xfd, 0x4e, 0x01
-	ld_sril XWA, (xsp + 0x014e)
+	ld XWA, (xsp + 0x014e)
 	cp xwa, 0x8
 	jrl nc, EffectBoxProc_ReturnZero
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
-	ld_sril XDE, (xsp + 0x014e)
+	ld XDE, (xsp + 0x014e)
 
 EffectBox_SendEventCommon:
 	call SendEvent
 	jrl EffectBoxProc_ReturnZero
 
 EffectBox_HandleScrollEvent:
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -13837,7 +13837,7 @@ EffectBox_DrawField2:
 EffectBox_DrawAndSendLoop:
 	ld de, iz
 	extz xde
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
 	inc 1, iz
@@ -13846,10 +13846,10 @@ EffectBox_DrawAndSendLoop:
 	jrl EffectBoxProc_ReturnZero
 
 EffectBox_HandleSelectEvent:
-	ld_sril XWA, (xsp + 0x014e)
+	ld XWA, (xsp + 0x014e)
 	cp xwa, 0x7
 	jrl ugt, EffectBoxProc_ReturnZero
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -13899,7 +13899,7 @@ EffectBox_NameSetup:
 	stib_dsp 0xe0, 0x00
 	cp xwa, xbc
 	jr c, EffectBox_NameSetup
-	ld_sril XDE, (xsp + 0x014e)
+	ld XDE, (xsp + 0x014e)
 	inc 1, xde
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
@@ -13909,7 +13909,7 @@ EffectBox_NameSetup:
 	ld (xde), xhl
 	lda xwa, (xsp + 58)
 	ld (xde + 18), xwa
-	ld_sril XHL, (xsp + 0x014e)
+	ld XHL, (xsp + 0x014e)
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 28)
 	dec 1, xhl
@@ -13968,11 +13968,11 @@ EffectBox_DrawWithFBColor:
 
 EffectBox_DrawStringAndSetDial:
 	call DrawStringLeftJustify
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c00017
 	lds32 xde, 2
 	call SetDialUp
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c00018
 	lds32 xde, 2
 	call SetDialDown
@@ -13983,16 +13983,16 @@ EffectBox_SetDialDownAndEnable:
 	jrl EffectBoxProc_ReturnZero
 
 EffectBox_HandleDefaultEvent:
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	lda xbc, (xwa + 28)
-	ld_sril XWA, (xsp + 0x014e)
+	ld XWA, (xsp + 0x014e)
 	cp xwa, 0x1
 	jrl nz, EffectBox_HandleCase2
 	ld xwa, (xbc)
@@ -14002,7 +14002,7 @@ EffectBox_HandleDefaultEvent:
 	ldb_erp L, 0xfa
 	cpib_erp 0xfa, 0
 	jr z, EffectBox_RedrawAfterChange
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
@@ -14015,18 +14015,18 @@ EffectBox_HandleDefaultEvent:
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000a
 	call ApFuncCall
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
 	lds32 xde, 0
 	stb_erp E, 0xfa
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
 	lds32 xde, 0
 	stb_erp E, 0xfb
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
 	jr EffectBoxProc_RestoreAndJumpToDispatch
@@ -14047,7 +14047,7 @@ EffectBox_RedrawAfterChange:
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000c
 	call ApFuncCall
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80000
 	lds32 xde, 0
 	call SendEvent
@@ -14056,7 +14056,7 @@ EffectBox_RedrawAfterChange:
 EffectBox_SendLoopValue:
 	ld de, iz
 	extz xde
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
 	inc 1, iz
@@ -14064,13 +14064,13 @@ EffectBox_SendLoopValue:
 	jr c, EffectBox_SendLoopValue
 
 EffectBoxProc_RestoreAndJumpToDispatch:
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	jrl EffectBox_SetAutoInc
 
 EffectBox_HandleCase2:
-	ld_sril XWA, (xsp + 0x014e)
+	ld XWA, (xsp + 0x014e)
 	cp xwa, 0x2
 	jr nz, EffectBox_HandleCaseOther
 	ld xwa, (xbc)
@@ -14092,20 +14092,20 @@ EffectBox_HandleCase2:
 	ld xwa, 0x1480002
 	ld xbc, 0x1e80012
 	call MainPostEvent
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	jrl EffectBox_SetAutoInc
 
 EffectBox_HandleCaseOther:
-	ld_sril XWA, (xsp + 0x014e)
+	ld XWA, (xsp + 0x014e)
 	or xwa, xwa
 	jrl nz, EffectBoxProc_ReturnZero
 	ld xwa, 0x1480002
 	ld xbc, 0x1e80011
 	lds32 xde, 1
 	call MainPostEvent
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
@@ -14119,26 +14119,26 @@ EffectBox_HandleCaseOther:
 	ld xbc, 0x1e8000a
 	lds32 xde, 0
 	call ApFuncCall
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	jrl EffectBox_SetAutoInc
 
 EffectBox_HandleCase0_Post:
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
-	ld_sril XBC, (xsp + 0x014e)
+	ld XBC, (xsp + 0x014e)
 	cp xbc, 0x1
 	jrl nz, EffectBox_HandleAppFunc
 	ld xbc, 0x1e8000b
@@ -14158,7 +14158,7 @@ EffectBox_HandleCase0_Post:
 	call ApFuncCall
 	or xhl, xhl
 	jrl z, EffectBox_SetAutoIncAfterLoop
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
@@ -14171,18 +14171,18 @@ EffectBox_HandleCase0_Post:
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000a
 	call ApFuncCall
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
 	lds32 xde, 0
 	stb_erp E, 0xfa
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
 	lds32 xde, 0
 	stb_erp E, 0xfb
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
 	jrl EffectBox_SetAutoIncAfterLoop
@@ -14218,7 +14218,7 @@ EffectBox_RedrawFullLoop:
 	ld xwa, (xwa + 28)
 	ld xbc, 0x1e8000c
 	call ApFuncCall
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80000
 	lds32 xde, 0
 	call SendEvent
@@ -14227,7 +14227,7 @@ EffectBox_RedrawFullLoop:
 EffectBox_SendMultipleValues:
 	ld de, iz
 	extz xde
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c80001
 	call SendEvent
 	inc 1, iz
@@ -14235,13 +14235,13 @@ EffectBox_SendMultipleValues:
 	jr c, EffectBox_SendMultipleValues
 
 EffectBox_SetAutoIncAfterLoop:
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	jrl EffectBox_SetAutoInc
 
 EffectBox_HandleAppFunc:
-	ld_sril XBC, (xsp + 0x014e)
+	ld XBC, (xsp + 0x014e)
 	cp xbc, 0x2
 	jr nz, EffectBox_HandleCase0_Direct
 	ld xbc, 0x1e8000d
@@ -14262,20 +14262,20 @@ EffectBox_HandleAppFunc:
 	ld xwa, 0x1480002
 	ld xbc, 0x1e80012
 	call MainPostEvent
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	jr EffectBox_SetAutoInc
 
 EffectBox_HandleCase0_Direct:
-	ld_sril XWA, (xsp + 0x014e)
+	ld XWA, (xsp + 0x014e)
 	or xwa, xwa
 	jr nz, EffectBoxProc_ReturnZero
 	ld xwa, 0x1480002
 	ld xbc, 0x1e80011
 	ld xde, 0xffffffff
 	call MainPostEvent
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
@@ -14289,13 +14289,13 @@ EffectBox_HandleCase0_Direct:
 	ld xbc, 0x1e8000a
 	lds32 xde, 0
 	call ApFuncCall
-	ld_sril XWA, (xsp + 0x0156)
+	ld XWA, (xsp + 0x0156)
 	ld xbc, 0x1c0000e
 	lds32 xde, 1
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 
 EffectBox_SetAutoInc:
 	call SetAutoInc
@@ -14305,9 +14305,9 @@ EffectBoxProc_ReturnZero:
 	jr EffectBox_Epilogue
 
 EffectBox_HandleInherited:
-	ld_sril XWA, (xsp + 0x0156)
-	ld_sril XBC, (xsp + 0x0152)
-	ld_sril XDE, (xsp + 0x014e)
+	ld XWA, (xsp + 0x0156)
+	ld XBC, (xsp + 0x0152)
+	ld XDE, (xsp + 0x014e)
 	call InheritedProc
 
 EffectBox_Epilogue:

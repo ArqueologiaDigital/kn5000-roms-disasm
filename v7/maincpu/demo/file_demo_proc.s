@@ -3839,7 +3839,7 @@ SearchAndOpen:
 
 SearchOpen_DoSearch:
 	lda xbc, (xsp + 2)
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 	call _findfirst
 	ld xwa, xhl
 	cp xwa, 0x0
@@ -3847,7 +3847,7 @@ SearchOpen_DoSearch:
 	ld wa, iz
 	call GetRecordPtrForFile
 	ld xwa, xhl
-	ld_sril XBC, (xsp + 0x010c)
+	ld XBC, (xsp + 0x010c)
 	call FileIO_CopyAndOpen
 	jr SearchOpen_Return
 
@@ -7612,9 +7612,9 @@ FileIO_FindFirstMatch:
 	push xiz
 	stl_dri XBC, 0xfd, 0x10, 0x01
 	stl_dri XWA, 0xfd, 0x14, 0x01
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld (xwa), 0x0
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	lds32 xbc, 0
 	ld (xwa), xbc
 	ldb_da a, (0x027414)
@@ -7648,18 +7648,18 @@ FindFirst_BuildPathLoop:
 	cp xiz, 0x0
 	jr lt, FindFirst_NextIndex
 	lda xbc, (xsp + 12)
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	calr FileIO_CopyString
 	lda xbc, (xsp + 6)
 	bitm 4, (xbc)
 	jr z, FindFirst_StoreFileSize
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	ld xbc, 0xffffffff
 	ld (xwa), xbc
 	jr FindFirst_StoreResult
 
 FindFirst_StoreFileSize:
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	ld xbc, (xbc + 2)
 	ld (xwa), xbc
 
@@ -7698,7 +7698,7 @@ FileIO_FindNextMatch:
 	cps hl, 0
 	jr z, FindNext_CopyName
 	ld (xiz), 0x0
-	ld_sril XWA, (xsp + 0x010e)
+	ld XWA, (xsp + 0x010e)
 	lds32 xbc, 0
 	ld (xwa), xbc
 	ldl_da xwa, (0x027416)
@@ -7715,13 +7715,13 @@ FindNext_CopyName:
 	lda xbc, (xsp + 4)
 	bitm 4, (xbc)
 	jr z, FindNext_StoreFileSize
-	ld_sril XWA, (xsp + 0x010e)
+	ld XWA, (xsp + 0x010e)
 	ld xbc, 0xffffffff
 	ld (xwa), xbc
 	jr FindNext_Ok
 
 FindNext_StoreFileSize:
-	ld_sril XWA, (xsp + 0x010e)
+	ld XWA, (xsp + 0x010e)
 	ld xbc, (xbc + 2)
 	ld (xwa), xbc
 

@@ -3389,13 +3389,13 @@ DrawBitmapFile_Impl:
 	pushw 0x2
 	pushw 0xea
 	pushw 0xadf2
-	ld_sril XWA, (xsp + 0x043a)
+	ld XWA, (xsp + 0x043a)
 	push xwa
 	call String_Compare
 	add xsp, 0xa
 	cps hl, 0
 	jrl nz, DrawBitmapFile_Impl_Return
-	ld_sril XWA, (xsp + 0x0434)
+	ld XWA, (xsp + 0x0434)
 	lda xwa, (xwa + 14)
 	ld (xsp + 36), xwa
 	ld (xsp + 4), xwa
@@ -3413,7 +3413,7 @@ DrawBitmapFile_Impl:
 	ld xwa, (xwa + 32)
 	cp xwa, 0x100
 	jrl ugt, DrawBitmapFile_Impl_Return
-	ld_sril XWA, (xsp + 0x0434)
+	ld XWA, (xsp + 0x0434)
 	ld xwa, (xwa + 10)
 	ld (xsp + 32), xwa
 	ld xwa, 0x36
@@ -3423,7 +3423,7 @@ DrawBitmapFile_Impl:
 	jrl ugt, DrawBitmapFile_Impl_Return
 	ld xwa, (xsp + 32)
 	pushw wa
-	ld_sril XWA, (xsp + 0x0436)
+	ld XWA, (xsp + 0x0436)
 	lda xwa, (xwa + 54)
 	push xwa
 	lda xwa, (xsp + 58)
@@ -3556,7 +3556,7 @@ DrawBitmapFile_Impl_ComputeStride:
 DrawBitmapFile_Impl_DecodeRowLoop:
 	ld xwa, (xsp + 20)
 	pushw wa
-	ld_sril XWA, (xsp + 0x0436)
+	ld XWA, (xsp + 0x0436)
 	push xwa
 	ld xwa, (xsp + 30)
 	push xwa
@@ -3665,7 +3665,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	call Free
 	inc 4, xsp
 	calr Gfx_DecodeImageToBuffer
-	ld_sril XWA, (xsp + 0x0438)
+	ld XWA, (xsp + 0x0438)
 	calr IsPointOnScreen
 	cps hl, 0
 	jrl z, DrawBitmapFile_Impl_Return
@@ -3674,7 +3674,7 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	ld (xsp + 40), wa
 	ld xwa, (xbc + 8)
 	ld (xsp + 42), wa
-	ld_sril XHL, (xsp + 0x0438)
+	ld XHL, (xsp + 0x0438)
 	ld bc, (xhl + 2)
 	ld wa, bc
 	exts xwa
@@ -3717,7 +3717,7 @@ DrawBitmapFile_Impl_VRAMRowLoop:
 
 DrawBitmapFile_Impl_BuildDirtyRect:
 	lda xwa, (xsp + 44)
-	ld_sril XHL, (xsp + 0x0438)
+	ld XHL, (xsp + 0x0438)
 	lda xde, (xhl + 2)
 	ld bc, (xde)
 	ld (xwa + 2), bc
@@ -3855,30 +3855,30 @@ DrawString_Impl:
 	push xiz
 	stl_dri XDE, 0xfd, 0x38, 0x01
 	stl_dri XWA, 0xfd, 0x3c, 0x01
-	ld_sril XWA, (xsp + 0x0138)
+	ld XWA, (xsp + 0x0138)
 	cp (xwa), 0x0
 	jrl z, DrawString_Impl_Return
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	lda xde, (xwa + 2)
 	cpw (xde), 0x0
 	jr ge, DrawString_Impl_ClipYMin
 	ldw (xde), 0x0
 
 DrawString_Impl_ClipYMin:
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	cpw (xwa), 0x0
 	jr ge, DrawString_Impl_ClipXMin
 	ldw (xwa), 0x0
 
 DrawString_Impl_ClipXMin:
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	inc 4, xwa
 	cpw (xwa), 0x140
 	jr lt, DrawString_Impl_ClipXMax
 	ldw (xwa), 0x13f
 
 DrawString_Impl_ClipXMax:
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	lda xhl, (xwa + 6)
 	cpw (xhl), 0xf0
 	jr lt, DrawString_Impl_ClipYMax
@@ -3901,7 +3901,7 @@ DrawString_Impl_ClipCursorXMin:
 	ldw (xbc), 0x0
 
 DrawString_Impl_ClipCursorYMin:
-	ld_sril XWA, (xsp + 0x0148)
+	ld XWA, (xsp + 0x0148)
 	ld (xsp + 4), xwa
 	sll xwa, 4
 	ld (xsp + 4), xwa
@@ -3951,7 +3951,7 @@ DrawString_Impl_ClampDirtyTop:
 
 DrawString_Impl_ClampDirtyBottom:
 	lda xbc, (xsp + 40)
-	ld_sril XWA, (xsp + 0x0138)
+	ld XWA, (xsp + 0x0138)
 	call ConvertStrings
 	lda xwa, (xsp + 40)
 	ld (xsp + 24), xwa
@@ -3996,7 +3996,7 @@ DrawString_Impl_ComputeDirtyRect:
 	add_sriw_mr WA, 0xfd, 0x34, 0x01
 	lda_dri XWA, 0xfd, 0x30, 0x01
 	lda xde, (xwa + 2)
-	ld_sril XBC, (xsp + 0x013c)
+	ld XBC, (xsp + 0x013c)
 	ld bc, (xbc + 2)
 	cp (xde), bc
 	jr ge, DrawString_Impl_ClampDirtyLeft
@@ -4004,7 +4004,7 @@ DrawString_Impl_ComputeDirtyRect:
 
 DrawString_Impl_ClampDirtyLeft:
 	ld de, (xwa)
-	ld_sril XBC, (xsp + 0x013c)
+	ld XBC, (xsp + 0x013c)
 	cp de, (xbc)
 	jr ge, DrawString_Impl_ClampDirtyRight
 	ld bc, (xbc)
@@ -4012,7 +4012,7 @@ DrawString_Impl_ClampDirtyLeft:
 
 DrawString_Impl_ClampDirtyRight:
 	lda xde, (xwa + 4)
-	ld_sril XBC, (xsp + 0x013c)
+	ld XBC, (xsp + 0x013c)
 	ld bc, (xbc + 4)
 	cp (xde), bc
 	jr le, DrawString_Impl_ClampDirtyRight2
@@ -4020,7 +4020,7 @@ DrawString_Impl_ClampDirtyRight:
 
 DrawString_Impl_ClampDirtyRight2:
 	lda xde, (xwa + 6)
-	ld_sril XBC, (xsp + 0x013c)
+	ld XBC, (xsp + 0x013c)
 	ld bc, (xbc + 6)
 	cp (xde), bc
 	jr le, DrawString_Impl_FillBackground
@@ -4115,7 +4115,7 @@ DrawString_Impl_RowLoop:
 	ld ix, wa
 	ld iy, ix
 	ld (xhl + 2), ix
-	ld_sril XWA, (xsp + 0x013c)
+	ld XWA, (xsp + 0x013c)
 	cp ix, (xwa + 2)
 	jr lt, DrawString_Impl_RowAdvance
 	ld xix, (xsp + 28)
@@ -4130,7 +4130,7 @@ DrawString_Impl_PixelLoop:
 	ld wa, (xwa)
 	add wa, iy
 	ld (xhl), wa
-	ld_sril XIZ, (xsp + 0x013c)
+	ld XIZ, (xsp + 0x013c)
 	cp wa, (xiz)
 	jr lt, DrawString_Impl_PixelAdvance
 	ld wa, (xhl)
@@ -4215,15 +4215,15 @@ DrawStringCentered:
 	ld xwa, xde
 	call ConvertStrings
 	lda xwa, (xsp + 4)
-	ld_sril XBC, (xsp + 0x0118)
+	ld XBC, (xsp + 0x0118)
 	call CalcTotalWidth
 	ld iz, hl
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetCharHeight
 	ld (xsp + 2), hl
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetCharDescent
-	ld_sril XWA, (xsp + 0x0108)
+	ld XWA, (xsp + 0x0108)
 	ld xiy, xwa
 	lda_dri XIX, 0xfd, 0x04, 0x01
 	ldiw
@@ -4238,16 +4238,16 @@ DrawStringCentered:
 	exts xwa
 	divs wa, 0x2
 	sub (xbc + 2), wa
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetCenteredDelta
 	lda_dri XBC, 0xfd, 0x04, 0x01
 	add (xbc + 2), hl
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	push xwa
 	push_sriw 0xfd, 0x1a, 0x01
 	push_sriw 0xfd, 0x1a, 0x01
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	calr DrawString
 	popw iz
 	lda_dri XSP, 0xfd, 0x0e, 0x01
@@ -4312,7 +4312,7 @@ DrawStringRightJustify:
 	ld xwa, xde
 	call ConvertStrings
 	lda xwa, (xsp + 8)
-	ld_sril XIZ, (xsp + 0x011c)
+	ld XIZ, (xsp + 0x011c)
 	ld xbc, xiz
 	call CalcTotalWidth
 	ld (xsp + 4), hl
@@ -4321,13 +4321,13 @@ DrawStringRightJustify:
 	ld (xsp + 6), hl
 	ld xwa, xiz
 	call GetCharDescent
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 	ld xiy, xwa
 	lda_dri XIX, 0xfd, 0x08, 0x01
 	ldiw
 	ldiw
 	lda_dri XBC, 0xfd, 0x08, 0x01
-	ld_sril XWA, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0110)
 	ld wa, (xwa + 4)
 	dec 4, wa
 	sub wa, (xsp + 4)
@@ -4345,7 +4345,7 @@ DrawStringRightJustify:
 	push xiz
 	push_sriw 0xfd, 0x1e, 0x01
 	push_sriw 0xfd, 0x1e, 0x01
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	calr DrawString
 	pop xiz
 	lda_dri XSP, 0xfd, 0x10, 0x01

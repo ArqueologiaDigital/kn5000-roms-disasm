@@ -23185,7 +23185,7 @@ Voice_Slot_ApplyPortamentoDelta_BranchA:
 	ei 6
 	ld xwa, (4160:16)
 	ld (xsp + 4), xwa
-	ld_sril XWA, (xiz + 0x0114)
+	ld XWA, (xiz + 0x0114)
 	sub (xsp + 4), xwa
 	ei 0
 	ld xwa, (xsp + 4)
@@ -53901,7 +53901,7 @@ DSP_BiquadCoeff_Compute:
 	push xwa
 	ld_sril XWA, (xsp + 0x0100)
 	push xwa
-	ld_sril XWA, (xsp + 0x010a)
+	ld XWA, (xsp + 0x010a)
 	push xwa
 	ld wa, de
 	lda_dri XBC, 0xFD, 0xF6, 0x00

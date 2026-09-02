@@ -4307,32 +4307,32 @@ CtrlPanel_CompareAndUpdateIndicators:
 	push xiz
 	stl_dri XBC, 0xfd, 0x6e, 0x01
 	stl_dri XWA, 0xfd, 0x72, 0x01
-	ld_sril XWA, (xsp + 0x0172)
+	ld XWA, (xsp + 0x0172)
 	calr CtrlPanel_BuildIndicatorBitmask
 	ld (xsp + 4), xhl
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	calr CtrlPanel_BuildIndicatorBitmask
 	ld xiz, xhl
 	ld xwa, (xsp + 4)
 	xor xwa, xiz
 	and xwa, xiz
 	calr Part_BitmaskToIndexList
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
 	ldw wa, 0x80
 	calr Audio_IteratePartsWithExpression
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
 	lds wa, 0
 	calr Audio_IteratePartsWithVolume
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	extz bc
 	lds wa, 0
 	calr Audio_IteratePartsWithPan
-	ld_sril XWA, (xsp + 0x016e)
+	ld XWA, (xsp + 0x016e)
 	ld c, (xwa + 1)
 	cp c, 0xff
 	jr z, CtrlPanelRefresh_ProcessRemoved

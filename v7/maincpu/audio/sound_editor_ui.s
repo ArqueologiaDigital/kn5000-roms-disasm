@@ -8916,27 +8916,27 @@ PsCmpCpFGrpBoxProc:
 	jr z, PsCmpCpFGrpBox_HandleEvt2
 	cp xbc, 0x1c00001
 	jr z, PsCmpCpFGrpBox_HandleEvt1
-	ld_sril XWA, (xsp + 0x0110)
-	ld_sril XDE, (xsp + 0x010c)
+	ld XWA, (xsp + 0x0110)
+	ld XDE, (xsp + 0x010c)
 	call InheritedProc
 	jrl PsCmpCpFGrpBox_Epilogue
 
 PsCmpCpFGrpBox_HandleEvt1:
-	ld_sril XWA, (xsp + 0x0110)
-	ld_sril XDE, (xsp + 0x010c)
+	ld XWA, (xsp + 0x0110)
+	ld XDE, (xsp + 0x010c)
 	jr PsCmpCpFGrpBox_CallInherited
 
 PsCmpCpFGrpBox_HandleEvt2:
-	ld_sril XWA, (xsp + 0x0110)
-	ld_sril XDE, (xsp + 0x010c)
+	ld XWA, (xsp + 0x0110)
+	ld XDE, (xsp + 0x010c)
 
 PsCmpCpFGrpBox_CallInherited:
 	call InheritedProc
 	jrl PsCmpCpFGrpBox_ReturnZero
 
 PsCmpCpFGrpBox_HandleEvtBC:
-	ld_sril XWA, (xsp + 0x0110)
-	ld_sril XDE, (xsp + 0x010c)
+	ld XWA, (xsp + 0x0110)
+	ld XDE, (xsp + 0x010c)
 	call InheritedProc
 	ld xwa, 0x144000b
 	ld xbc, 0x1e40002
@@ -9013,27 +9013,27 @@ PsCmpCpFVariBoxProc:
 	jr z, PsCmpCpFVariBox_HandleEvt2
 	cp xbc, 0x1c00001
 	jr z, PsCmpCpFVariBox_HandleEvt1
-	ld_sril XWA, (xsp + 0x0110)
-	ld_sril XDE, (xsp + 0x010c)
+	ld XWA, (xsp + 0x0110)
+	ld XDE, (xsp + 0x010c)
 	call InheritedProc
 	jrl PsCmpCpFVariBox_Epilogue
 
 PsCmpCpFVariBox_HandleEvt1:
-	ld_sril XWA, (xsp + 0x0110)
-	ld_sril XDE, (xsp + 0x010c)
+	ld XWA, (xsp + 0x0110)
+	ld XDE, (xsp + 0x010c)
 	jr PsCmpCpFVariBox_CallInherited
 
 PsCmpCpFVariBox_HandleEvt2:
-	ld_sril XWA, (xsp + 0x0110)
-	ld_sril XDE, (xsp + 0x010c)
+	ld XWA, (xsp + 0x0110)
+	ld XDE, (xsp + 0x010c)
 
 PsCmpCpFVariBox_CallInherited:
 	call InheritedProc
 	jrl DesignFrame_Return
 
 PsCmpCpFVariBox_HandleEvtBC:
-	ld_sril XWA, (xsp + 0x0110)
-	ld_sril XDE, (xsp + 0x010c)
+	ld XWA, (xsp + 0x0110)
+	ld XDE, (xsp + 0x010c)
 	call InheritedProc
 	ld xwa, 0x144000b
 	ld xbc, 0x1e40003
@@ -9111,16 +9111,16 @@ PsCmpCpFPtnBoxProc:
 	jr z, PsCmpCpFPtnBox_HandleEvt2
 	cp xbc, 0x1c00001
 	jr z, PsCmpCpFPtnBox_HandleEvt1
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 	call InheritedProc
 	jrl PsCmpCpFPtnBox_Epilogue
 
 PsCmpCpFPtnBox_HandleEvt1:
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 	jr PsCmpCpFPtnBox_CallInherited
 
 PsCmpCpFPtnBox_HandleEvt2:
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 
 PsCmpCpFPtnBox_CallInherited:
 	call InheritedProc
@@ -9330,18 +9330,18 @@ PsCstmCpNameBoxProc:
 	cp xbc, 0x1c00001
 	jr z, PsCstmCpNameBox_HandleEvt1
 	ld xwa, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 	call InheritedProc
 	jrl PsCstmCpNameBox_Epilogue
 
 PsCstmCpNameBox_HandleEvt1:
 	ld xwa, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 	jr PsCstmCpNameBox_CallInherited
 
 PsCstmCpNameBox_HandleEvt2:
 	ld xwa, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 
 PsCstmCpNameBox_CallInherited:
 	call InheritedProc
@@ -9466,16 +9466,16 @@ AcMemNoBoxProc:
 	jr z, AcMemNoBox_HandleEvt2
 	cp xbc, 0x1c00001
 	jr z, AcMemNoBox_HandleEvt1
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 	call InheritedProc
 	jrl AcMemNoBox_Epilogue
 
 AcMemNoBox_HandleEvt1:
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 	jr AcMemNoBox_CallInherited
 
 AcMemNoBox_HandleEvt2:
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 
 AcMemNoBox_CallInherited:
 	call InheritedProc
@@ -9559,7 +9559,7 @@ AcCmpRecBoxProc:
 	stl_dri XDE, 0xfd, 0x10, 0x01
 	stl_dri XBC, 0xfd, 0x14, 0x01
 	stl_dri XWA, 0xfd, 0x18, 0x01
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	cp xwa, 0x1c0000c
 	jr z, AcCmpRecBox_HandleEvtBC
 	cp xwa, 0x1c0000b
@@ -9568,22 +9568,22 @@ AcCmpRecBoxProc:
 	jr z, AcCmpRecBox_HandleEvt2
 	cp xwa, 0x1c00001
 	jr z, AcCmpRecBox_HandleEvt1
-	ld_sril XWA, (xsp + 0x0118)
-	ld_sril XBC, (xsp + 0x0114)
-	ld_sril XDE, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0118)
+	ld XBC, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0110)
 	call InheritedProc
 	jrl AcCmpRecBox_Epilogue
 
 AcCmpRecBox_HandleEvt1:
-	ld_sril XWA, (xsp + 0x0118)
-	ld_sril XBC, (xsp + 0x0114)
-	ld_sril XDE, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0118)
+	ld XBC, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0110)
 	jr AcCmpRecBox_CallInherited
 
 AcCmpRecBox_HandleEvt2:
-	ld_sril XWA, (xsp + 0x0118)
-	ld_sril XBC, (xsp + 0x0114)
-	ld_sril XDE, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0118)
+	ld XBC, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0110)
 
 AcCmpRecBox_CallInherited:
 	call InheritedProc
@@ -9640,12 +9640,12 @@ AcCmpRecBox_AdjustTable:
 
 
 AcCmpRecBox_InheritAndSend:
-	ld_sril XWA, (xsp + 0x0118)
-	ld_sril XBC, (xsp + 0x0114)
-	ld_sril XDE, (xsp + 0x0110)
+	ld XWA, (xsp + 0x0118)
+	ld XBC, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0110)
 	call InheritedProc
 	lda xde, (xsp + 16)
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000f
 	call SendEvent
 
@@ -9727,22 +9727,22 @@ PsCmpMeasBoxProc:
 	jr z, PsCmpMeasBox_HandleEvt2
 	cp xiz, 0x1c00001
 	jr z, PsCmpMeasBox_HandleEvt1
-	ld_sril XWA, (xsp + 0x0108)
+	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 	call InheritedProc
 	jr PsCmpMeasBox_Epilogue
 
 PsCmpMeasBox_HandleEvt1:
-	ld_sril XWA, (xsp + 0x0108)
+	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 	jr PsCmpMeasBox_CallInherited
 
 PsCmpMeasBox_HandleEvt2:
-	ld_sril XWA, (xsp + 0x0108)
+	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 
 PsCmpMeasBox_CallInherited:
 	call InheritedProc
@@ -9795,22 +9795,22 @@ PsCmpMemBoxProc:
 	jr z, PsCmpMemBox_HandleEvt2
 	cp xiz, 0x1c00001
 	jr z, PsCmpMemBox_HandleEvt1
-	ld_sril XWA, (xsp + 0x0108)
+	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 	call InheritedProc
 	jr PsCmpMemBox_Epilogue
 
 PsCmpMemBox_HandleEvt1:
-	ld_sril XWA, (xsp + 0x0108)
+	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 	jr PsCmpMemBox_CallInherited
 
 PsCmpMemBox_HandleEvt2:
-	ld_sril XWA, (xsp + 0x0108)
+	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 
 PsCmpMemBox_CallInherited:
 	call InheritedProc
@@ -9863,31 +9863,31 @@ AcCmpTempoBoxProc:
 	jr z, AcCmpTempoBox_HandleEvt2
 	cp xbc, 0x1c00001
 	jr z, AcCmpTempoBox_HandleEvt1
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	jr AcCmpTempoBox_Epilogue
 
 AcCmpTempoBox_HandleEvt1:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	lds32 xbc, 4
 	call SetLswFilter
 	jr CmpFunc_Return
 
 AcCmpTempoBox_HandleEvt2:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	lds32 xbc, 4
 	call ResetLswFilter
 	jr CmpFunc_Return
 
 AcCmpTempoBox_HandleEvtBC:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	lds32 xwa, 4
@@ -9975,16 +9975,16 @@ PsNameMemBoxProc:
 	jr z, PsNameMemBox_HandleEvt2
 	cp xbc, 0x1c00001
 	jr z, PsNameMemBox_HandleEvt1
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 	call InheritedProc
 	jrl EasyCmp_TtlCase3
 
 PsNameMemBox_HandleEvt1:
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 	jr PsNameMemBox_CallInherited
 
 PsNameMemBox_HandleEvt2:
-	ld_sril XWA, (xsp + 0x010c)
+	ld XWA, (xsp + 0x010c)
 
 PsNameMemBox_CallInherited:
 	call InheritedProc
@@ -10618,7 +10618,7 @@ VwVariBoxProc:
 	jr z, VwVariBox_Init
 	cp xiz, 0x1e0004d
 	jrl nz, VwVariBox_Default
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	lda xwa, (xhl + 38)
 	ld xbc, (xwa)
@@ -10627,9 +10627,9 @@ VwVariBoxProc:
 	cpl_sri_rm XBC, 0xfd, 0x14, 0x01
 	jrl z, VwVariBox_ReturnHandled
 	ld xbc, (xwa)
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	jrl VwVariBox_DispatchAndReturn
@@ -10641,15 +10641,15 @@ VwVariBox_Init:
 
 	ld (xsp + 6), hl
 
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 
 	ld xbc, xiz
 
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 
 	.byte 0x1d, 0xfc, 0x3f, 0xfa	; call InheritedProc (v7 addr)
 
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 
 	.byte 0x1d, 0x59, 0x5e, 0xfa	; call GetViewInstance (v7 addr)
 
@@ -10667,7 +10667,7 @@ VwVariBox_Init:
 
 	ld (xbc), wa
 
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 
 	ld xbc, 0x1c0000d
 
@@ -10737,28 +10737,28 @@ VwVariBox_Match_DispatchConfirm:
 	call ApDeliveryEvent
 
 VwVariBox_Match_Repaint:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	jrl VwVariBox_DispatchAndReturn
 
 VwVariBox_Paint:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 38)
 	cpw (xwa), 0x0
 	jr z, VwVariBox_Paint_Greyed
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
 	jr VwVariBox_Paint_DrawLabel
 
 VwVariBox_Paint_Greyed:
 	lda_dri XBC, 0xfd, 0x08, 0x01
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetBox
 	lda_dri XWA, 0xfd, 0x08, 0x01
 	ldw bc, 0xf5
@@ -10768,17 +10768,17 @@ VwVariBox_Paint_DrawLabel:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 36)
 	call DrawEditSw
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	jrl VwVariBox_DispatchAndReturn
 
 VwVariBox_Confirm:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	lda_dri XBC, 0xfd, 0x08, 0x01
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetClientBox
 	lda_dri XWA, 0xfd, 0x08, 0x01
 	lda_dri XBC, 0xfd, 0x10, 0x01
@@ -10791,7 +10791,7 @@ VwVariBox_Confirm_ClearBuf:
 	stib_dsp 0xe0, 0x00
 	cp xwa, xbc
 	jr c, VwVariBox_Confirm_ClearBuf
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1e0003a
 	call SendEvent
 	ld xwa, (xsp + 4)
@@ -10832,7 +10832,7 @@ VwVariBox_ReturnHandled:
 	jrl VwVariBox_Return
 
 VwVariBox_GetText:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	lda xwa, (xhl + 42)
 	cp (xwa), 0xd
@@ -10913,17 +10913,17 @@ VwVariBox_OK:
 	call MainLswPut
 	jrl t, VwVariBox_ReturnHandled
 VwVariBox_OK_Forward:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	jr VwVariBox_ForwardToBase
 
 VwVariBox_Release:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld wa, (xhl + 26)
 	exts xwa
@@ -10932,7 +10932,7 @@ VwVariBox_Release:
 	ld xwa, (xhl + 38)
 	cpw (xwa), 0x0
 	jrl z, VwVariBox_ReturnHandled
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1e0004d
 	lds32 xde, 0
 
@@ -10941,7 +10941,7 @@ VwVariBox_DispatchAndReturn:
 	jrl VwVariBox_ReturnHandled
 
 VwVariBox_CanScroll:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld wa, (xhl + 26)
 	exts xwa
@@ -10954,9 +10954,9 @@ VwVariBox_CanScroll:
 	jr VwVariBox_Return
 
 VwVariBox_Default:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 
 VwVariBox_ForwardToBase:
 	call InheritedProc
@@ -11171,12 +11171,12 @@ PsMspBnkNameBoxProc:
 	cp xbc, 0x1c00001
 	jrl nz, RgpSetBnk_GridCheck_Case2
 	ld xwa, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 	jr MspBnkNameBox_CallInherited
 
 MspBnkNameBox_HandleEvt2:
 	ld xwa, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 
 MspBnkNameBox_CallInherited:
 	call InheritedProc
@@ -11184,7 +11184,7 @@ MspBnkNameBox_CallInherited:
 
 MspBnkNameBox_HandleEvtD:
 	ld xwa, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 	call InheritedProc
 	ld xwa, xiz
 	call GetViewInstance
@@ -11285,7 +11285,7 @@ RgpSetBnk_GridCheck_Case1:
 ; RgpSetBnkCheck case 2
 RgpSetBnk_GridCheck_Case2:
 	ld xwa, xiz
-	ld_sril XDE, (xsp + 0x0104)
+	ld XDE, (xsp + 0x0104)
 	call InheritedProc
 
 ; RgpSetBnkCheck case 3

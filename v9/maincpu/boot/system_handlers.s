@@ -6665,7 +6665,7 @@ TableDataROM_IdentifyChip_WaitReady:
 	add xbc, 0x15554
 	ld xwa, StringData_APCModeNames_0x24F
 	ld (xbc), xwa
-	ld_sril XWA, (xde + 0x6464)
+	ld XWA, (xde + 0x6464)
 	ret
 
 ; ===========================================================================

@@ -2881,7 +2881,7 @@ MasterSetup_ScrollUp_Search_Done:
 	jr MasterSetup_DialDown_UpdateView
 
 MasterSetup_DialDown_Underflow:
-	ld_sril XWA, (xhl + 0x176a)
+	ld XWA, (xhl + 0x176a)
 	push xwa
 	push xde
 	call Strcpy
@@ -8262,10 +8262,10 @@ AcPmExpFilterGridBoxProc:
 	stl_dri XDE, 0xfd, 0x20, 0x01
 	stl_dri XBC, 0xfd, 0x24, 0x01
 	ld xiz, xwa
-	ld_sril XBC, (xsp + 0x0124)
+	ld XBC, (xsp + 0x0124)
 	cp xbc, 0x1c00007
 	jrl z, PmExpFilter_OkHandler
-	ld_sril XWA, (xsp + 0x0124)
+	ld XWA, (xsp + 0x0124)
 	cp xwa, 0x1e0008d
 	jrl z, PmExpFilter_ForwardToView
 	cp xwa, 0x1e0008b
@@ -8292,8 +8292,8 @@ AcPmExpFilterGridBoxProc:
 ; IvPmemWindowPageCtl event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1420)
 PmemPageCtl_EventDispatch:
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call InheritedProc
 	ld xwa, xiz
 	call GetViewInstance
@@ -8330,8 +8330,8 @@ PmemPageCtl_EventDispatch:
 
 PmExpFilter_ShowHide:
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1c0000e
@@ -8341,8 +8341,8 @@ PmExpFilter_ShowHide:
 
 PmExpFilter_Repaint:
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call InheritedProc
 	lda xbc, (xsp + 12)
 	ldw (xbc), 0x3a
@@ -8529,12 +8529,12 @@ PmExpFilter_DrawCentered:
 	call DrawStringCentered
 	jrl SeqLoad_ReturnZeroJmp
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1e00050
-	ld_sril XDE, (xsp + 0x0120)
+	ld XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
 	jr z, PmExpFilter_FallbackForward
@@ -8567,45 +8567,45 @@ PmExpFilter_DecAndUpdate:
 PmExpFilter_SendSelEvent:
 	call SendEvent
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call SetAutoInc
 	jrl SeqLoad_ReturnZeroJmp
 
 PmExpFilter_FallbackForward:
 	ld xwa, xiz
 	ld xbc, 0x1e00091
-	ld_sril XDE, (xsp + 0x0120)
+	ld XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
 	jrl z, SeqLoad_ReturnZeroJmp
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call ApFuncCall
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call SetAutoInc
 	ld xwa, xiz
 	ld xbc, 0x1c00017
-	ld_sril XDE, (xsp + 0x0120)
+	ld XDE, (xsp + 0x0120)
 	call SetDialUp
 	ld xwa, xiz
 	ld xbc, 0x1c00018
-	ld_sril XDE, (xsp + 0x0120)
+	ld XDE, (xsp + 0x0120)
 	call SetDialDown
 	lds wa, 1
 	jrl PmExpFilter_SetDialEnable
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, 0x1e00050
-	ld_sril XDE, (xsp + 0x0120)
+	ld XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
 	jr z, PmExpFilter_FallbackForward2
@@ -8645,35 +8645,35 @@ PmExpFilter_IncAndUpdate:
 PmExpFilter_SendSelEvent2:
 	call SendEvent
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call SetAutoInc
 	jrl SeqLoad_ReturnZeroJmp
 
 PmExpFilter_FallbackForward2:
 	ld xwa, xiz
 	ld xbc, 0x1e00091
-	ld_sril XDE, (xsp + 0x0120)
+	ld XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
 	jrl z, SeqLoad_ReturnZeroJmp
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call ApFuncCall
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	call SetAutoInc
 	ld xwa, xiz
 	ld xbc, 0x1c00017
-	ld_sril XDE, (xsp + 0x0120)
+	ld XDE, (xsp + 0x0120)
 	call SetDialUp
 	ld xwa, xiz
 	ld xbc, 0x1c00018
-	ld_sril XDE, (xsp + 0x0120)
+	ld XDE, (xsp + 0x0120)
 	call SetDialDown
 	lds wa, 1
 
@@ -8695,7 +8695,7 @@ PmExpFilter_GetNameCommon:
 	add xhl, xiz
 	ld xwa, (xhl)
 	push xwa
-	ld_sril XWA, (xsp + 0x0124)
+	ld XWA, (xsp + 0x0124)
 	push xwa
 	call Strcpy
 	inc 8, xsp
@@ -8703,16 +8703,16 @@ PmExpFilter_GetNameCommon:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	jr PmExpFilter_ForwardApFunc
 
 PmExpFilter_ForwardToView:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 70)
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 
 PmExpFilter_ForwardApFunc:
 	call ApFuncCall
@@ -8722,7 +8722,7 @@ SeqLoad_ReturnZeroJmp:
 	jr PmExpFilter_Epilogue
 
 PmExpFilter_OkHandler:
-	ld_sril XWA, (xsp + 0x0120)
+	ld XWA, (xsp + 0x0120)
 	cp xwa, 0xf
 	jr nz, PmExpFilter_OK_InheritedFwd
 	call GetTitleNow
@@ -8747,14 +8747,14 @@ PmExpFilter_OK_Navigate:
 
 PmExpFilter_OK_InheritedFwd:
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 	jr PmExpFilter_CallInherited
 
 PmExpFilter_DefaultInherited:
 	ld xwa, xiz
-	ld_sril XBC, (xsp + 0x0124)
-	ld_sril XDE, (xsp + 0x0120)
+	ld XBC, (xsp + 0x0124)
+	ld XDE, (xsp + 0x0120)
 
 PmExpFilter_CallInherited:
 	call InheritedProc
@@ -10580,31 +10580,31 @@ AcPmBkNoBoxProc:
 	jr z, AcPmBkNoBox_Focus
 	cp xbc, 0x1c00001
 	jr z, AcPmBkNoBox_Init
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	jrl AcPmBkNoBox_Epilogue
 
 AcPmBkNoBox_Init:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x300
 	call SetLswFilter
 	jrl UI_AcPmBkNoBoxProc_Return
 
 AcPmBkNoBox_Focus:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x300
 	call ResetLswFilter
 	jr UI_AcPmBkNoBoxProc_Return
 
 AcPmBkNoBox_ShowHide:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, 0x300
@@ -10612,7 +10612,7 @@ AcPmBkNoBox_ShowHide:
 	jr UI_AcPmBkNoBoxProc_Return
 
 AcPmBkNoBox_Match:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, (xiz)
@@ -10649,7 +10649,7 @@ AcPmBkNoBox_FormatBankNo:
 
 AcPmBkNoBox_SendConfirm:
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
 
@@ -10677,31 +10677,31 @@ AcBkNoBoxProc:
 	jr z, AcBkNoBox_Focus
 	cp xbc, 0x1c00001
 	jr z, AcBkNoBox_Init
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	jrl AcBkNoBox_Epilogue
 
 AcBkNoBox_Init:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x300
 	call SetLswFilter
 	jr UI_AcBkNoBoxProc_Return
 
 AcBkNoBox_Focus:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x300
 	call ResetLswFilter
 	jr UI_AcBkNoBoxProc_Return
 
 AcBkNoBox_ShowHide:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, 0x300
@@ -10709,7 +10709,7 @@ AcBkNoBox_ShowHide:
 	jr UI_AcBkNoBoxProc_Return
 
 AcBkNoBox_Match:
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
 	ld xwa, (xiz)
@@ -10726,7 +10726,7 @@ AcBkNoBox_Match:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	ld_sril XWA, (xsp + 0x0104)
+	ld XWA, (xsp + 0x0104)
 	ld xbc, 0x1c0000f
 	call SendEvent
 
@@ -11001,31 +11001,31 @@ PmemModeBoxProc:
 	jr z, PmemMode_Show
 	cp xiz, 0x1c00001
 	jrl nz, PmemMode_Default
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
 	jrl PmemMode_ReturnZero
 
 PmemMode_Show:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld xwa, 0x302
 	call MainLswGet
 	jrl PmemMode_ReturnZero
 
 PmemMode_Match:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
-	ld_sril XIX, (xsp + 0x0114)
+	ld XIX, (xsp + 0x0114)
 	ld xwa, (xix)
 	cp xwa, 0x302
 	jrl nz, PmemMode_ReturnZero
@@ -11037,15 +11037,15 @@ PmemMode_Match:
 	ld xbc, (xbc)
 	ld wa, (xix + 4)
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	jrl PmemMode_DispatchSelect
 
 PmemMode_Paint:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
 	lda_dri XWA, 0xfd, 0x0c, 0x01
 	ldw (xwa + 2), 0x6
@@ -11086,7 +11086,7 @@ PmemMode_Paint:
 	pushw 0x0
 	pushw 0xf7
 	call DrawStringCentered
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 
@@ -11095,11 +11095,11 @@ PmemMode_DispatchSelect:
 	jrl PmemMode_ReturnZero
 
 PmemMode_Select:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
@@ -11171,13 +11171,13 @@ PmemMode_Select_DrawHighlight2:
 	jr PmemMode_ReturnZero
 
 PmemMode_OK:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
-	ld_sril XWA, (xsp + 0x0114)
+	ld XWA, (xsp + 0x0114)
 	cp xwa, 0x8b
 	jr z, PmemMode_OK_Cmd8B
 	cp xwa, 0x89
@@ -11223,15 +11223,15 @@ PmemMode_OK_Navigate:
 	call PostEvent
 
 PmemMode_OK_DefaultForward:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 	jr PmemMode_CallHandler
 
 PmemMode_Default:
-	ld_sril XWA, (xsp + 0x0118)
+	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
-	ld_sril XDE, (xsp + 0x0114)
+	ld XDE, (xsp + 0x0114)
 
 PmemMode_CallHandler:
 	call InheritedProc
@@ -11275,9 +11275,9 @@ AcPmBkEditBoxProc:
 	jr z, AcPmBkEdit_BankChanged
 	cp xbc, 0x1e0003a
 	jrl nz, AcPmBkEdit_Default
-	ld_sril XWA, (xsp + 0x012e)
+	ld XWA, (xsp + 0x012e)
 	ld (xwa), 0x0
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
 	ld xwa, (xhl + 54)
 	ld xwa, (xwa)
@@ -11286,12 +11286,12 @@ AcPmBkEditBoxProc:
 	stl_dri XWA, 0xfd, 0x2e, 0x01
 	ld xwa, 0x1420008
 	ld xbc, 0x1e20010
-	ld_sril XDE, (xsp + 0x012e)
+	ld XDE, (xsp + 0x012e)
 	call MainFuncCall
 	jrl AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_BankChanged:
-	ld_sril XWA, (xsp + 0x012e)
+	ld XWA, (xsp + 0x012e)
 	ld (xsp + 4), xwa
 	ld a, (xwa)
 	inc 1, a
@@ -11302,7 +11302,7 @@ AcPmBkEdit_BankChanged:
 	ld xwa, (xsp + 14)
 	push xwa
 	call Sprintf_Locked
-	ld_sril XWA, (xsp + 0x0138)
+	ld XWA, (xsp + 0x0138)
 	inc 1, xwa
 	push xwa
 	lda xwa, (xsp + 60)
@@ -11310,7 +11310,7 @@ AcPmBkEdit_BankChanged:
 	call Strcat
 	lda xsp, (xsp + 18)
 	lda xde, (xsp + 46)
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1c0000f
 	call SendEvent
 	ldib_erp 0xfb, 1
@@ -11325,7 +11325,7 @@ AcPmBkEdit_BankChanged_UpdateLoop:
 	stl_dri XWA, 0xfd, 0x2e, 0x01
 	ld xwa, 0x1420008
 	ld xbc, 0x1e20012
-	ld_sril XDE, (xsp + 0x012e)
+	ld XDE, (xsp + 0x012e)
 	call MainFuncCall
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x08
@@ -11335,7 +11335,7 @@ AcPmBkEdit_BankChanged_UpdateLoop:
 AcPmBkEdit_BankEdit:
 	lda xbc, (xsp + 12)
 	ldw (xbc), 0x23
-	ld_sril XDE, (xsp + 0x012e)
+	ld XDE, (xsp + 0x012e)
 	ld a, (xde)
 	dec 1, a
 	and a, 0x7
@@ -11359,7 +11359,7 @@ AcPmBkEdit_BankEdit:
 	ld xwa, (xsp + 14)
 	push xwa
 	call Sprintf_Locked
-	ld_sril XWA, (xsp + 0x0138)
+	ld XWA, (xsp + 0x0138)
 	inc 2, xwa
 	push xwa
 	lda xwa, (xsp + 60)
@@ -11369,7 +11369,7 @@ AcPmBkEdit_BankEdit:
 	lda xhl, (xsp + 46)
 	lda xwa, (xsp + 16)
 	lda xde, (xsp + 12)
-	ld_sril XIX, (xsp + 0x012e)
+	ld XIX, (xsp + 0x012e)
 	ld c, (xix + 1)
 	cp c, (xix)
 	jr nz, AcPmBkEdit_BankEdit_DrawDiff
@@ -11394,7 +11394,7 @@ AcPmBkEdit_BankEdit_DrawCall:
 	jrl AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_SetValue:
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
@@ -11410,7 +11410,7 @@ AcPmBkEdit_SetValue:
 	call ApFuncCall
 	lda xwa, (xsp + 24)
 	ld (xwa + 4), hl
-	ld_sril XBC, (xsp + 0x012e)
+	ld XBC, (xsp + 0x012e)
 	ld (xwa + 14), xbc
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
@@ -11429,7 +11429,7 @@ AcPmBkEdit_SetValue:
 	jrl AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_AddDelta:
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
@@ -11445,7 +11445,7 @@ AcPmBkEdit_AddDelta:
 	call ApFuncCall
 	lda xwa, (xsp + 24)
 	ld (xwa + 4), hl
-	ld_sril XBC, (xsp + 0x012e)
+	ld XBC, (xsp + 0x012e)
 	ld (xwa + 14), xbc
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
@@ -11464,10 +11464,10 @@ AcPmBkEdit_AddDelta:
 	jrl AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_ShowHide:
-	ld_sril XWA, (xsp + 0x0132)
-	ld_sril XDE, (xsp + 0x012e)
+	ld XWA, (xsp + 0x0132)
+	ld XDE, (xsp + 0x012e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
@@ -11485,38 +11485,38 @@ AcPmBkEdit_ShowHide:
 	jrl AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_Assign:
-	ld_sril XWA, (xsp + 0x0132)
-	ld_sril XDE, (xsp + 0x012e)
+	ld XWA, (xsp + 0x0132)
+	ld XDE, (xsp + 0x012e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
 	ld xbc, 0x1e00045
 	lds32 xde, 0
 	call ApFuncCall
-	ld_sril XDE, (xsp + 0x012e)
+	ld XDE, (xsp + 0x012e)
 	ld xwa, (xde)
 	cp xwa, xhl
 	jrl nz, AcPmBkEdit_ReturnZero
 	ld xbc, (xiz + 54)
 	ld xwa, (xde + 14)
 	ld (xbc), xwa
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	jrl AcPmBkEdit_DispatchAndReturn
 
 AcPmBkEdit_AutoIncUp:
-	ld_sril XWA, (xsp + 0x0132)
-	ld_sril XDE, (xsp + 0x012e)
+	ld XWA, (xsp + 0x0132)
+	ld XDE, (xsp + 0x012e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
 	ld xiz, xhl
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1e0003c
-	ld_sril XDE, (xsp + 0x012e)
+	ld XDE, (xsp + 0x012e)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcPmBkEdit_ReturnZero
@@ -11525,20 +11525,20 @@ AcPmBkEdit_AutoIncUp:
 	lds32 xde, 0
 	call ApFuncCall
 	ld xde, xhl
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1e0003d
 	jrl AcPmBkEdit_DispatchAndReturn
 
 AcPmBkEdit_ScrollUp:
-	ld_sril XWA, (xsp + 0x0132)
-	ld_sril XDE, (xsp + 0x012e)
+	ld XWA, (xsp + 0x0132)
+	ld XDE, (xsp + 0x012e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
 	ld xiz, xhl
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1e0003c
-	ld_sril XDE, (xsp + 0x012e)
+	ld XDE, (xsp + 0x012e)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcPmBkEdit_ReturnZero
@@ -11547,20 +11547,20 @@ AcPmBkEdit_ScrollUp:
 	lds32 xde, 0
 	call ApFuncCall
 	ld xde, xhl
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1e0003d
 	jrl AcPmBkEdit_DispatchAndReturn
 
 AcPmBkEdit_ScrollDown:
-	ld_sril XWA, (xsp + 0x0132)
-	ld_sril XDE, (xsp + 0x012e)
+	ld XWA, (xsp + 0x0132)
+	ld XDE, (xsp + 0x012e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
 	ld xiz, xhl
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1e0003c
-	ld_sril XDE, (xsp + 0x012e)
+	ld XDE, (xsp + 0x012e)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcPmBkEdit_ReturnZero
@@ -11571,21 +11571,21 @@ AcPmBkEdit_ScrollDown:
 	cpl hl
 	cplw_erp 0xee
 	inc 1, xhl
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1e0003d
 	ld xde, xhl
 	jr AcPmBkEdit_DispatchAndReturn
 
 AcPmBkEdit_AutoIncDown:
-	ld_sril XWA, (xsp + 0x0132)
-	ld_sril XDE, (xsp + 0x012e)
+	ld XWA, (xsp + 0x0132)
+	ld XDE, (xsp + 0x012e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
 	ld xiz, xhl
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1e0003c
-	ld_sril XDE, (xsp + 0x012e)
+	ld XDE, (xsp + 0x012e)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcPmBkEdit_ReturnZero
@@ -11596,7 +11596,7 @@ AcPmBkEdit_AutoIncDown:
 	cpl hl
 	cplw_erp 0xee
 	inc 1, xhl
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	ld xbc, 0x1e0003d
 	ld xde, xhl
 
@@ -11605,12 +11605,12 @@ AcPmBkEdit_DispatchAndReturn:
 	jrl AcPmBkEdit_ReturnZero
 
 AcPmBkEdit_OK:
-	ld_sril XWA, (xsp + 0x0132)
-	ld_sril XDE, (xsp + 0x012e)
+	ld XWA, (xsp + 0x0132)
+	ld XDE, (xsp + 0x012e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0132)
+	ld XWA, (xsp + 0x0132)
 	call GetViewInstance
-	ld_sril XWA, (xsp + 0x012e)
+	ld XWA, (xsp + 0x012e)
 	cp xwa, 0x10
 	jrl z, AcPmBkEdit_OK_SaveDelete
 	cp xwa, 0x90
@@ -11675,8 +11675,8 @@ AcPmBkEdit_ReturnZero:
 	jr AcPmBkEdit_Epilogue
 
 AcPmBkEdit_Default:
-	ld_sril XWA, (xsp + 0x0132)
-	ld_sril XDE, (xsp + 0x012e)
+	ld XWA, (xsp + 0x0132)
+	ld XDE, (xsp + 0x012e)
 	call InheritedProc
 
 AcPmBkEdit_Epilogue:
@@ -11808,7 +11808,7 @@ VariScreenProc:
 	stl_dri XDE, 0xfd, 0x2e, 0x02
 	stl_dri XBC, 0xfd, 0x32, 0x02
 	stl_dri XWA, 0xfd, 0x36, 0x02
-	ld_sril XWA, (xsp + 0x0232)
+	ld XWA, (xsp + 0x0232)
 	cp xwa, 0x1c00007
 	jrl z, VariScreen_HandleOK
 	cp xwa, 0x1e20005
@@ -11825,25 +11825,25 @@ VariScreenProc:
 	jr z, VariScreen_RefreshAfterInit
 	cp xwa, 0x1c00001
 	jrl nz, VariScreen_DefaultHandler
-	ld_sril XWA, (xsp + 0x0236)
-	ld_sril XBC, (xsp + 0x0232)
-	ld_sril XDE, (xsp + 0x022e)
+	ld XWA, (xsp + 0x0236)
+	ld XBC, (xsp + 0x0232)
+	ld XDE, (xsp + 0x022e)
 	jrl VariScreen_CallInherited
 
 VariScreen_RefreshAfterInit:
-	ld_sril XWA, (xsp + 0x0236)
-	ld_sril XBC, (xsp + 0x0232)
-	ld_sril XDE, (xsp + 0x022e)
+	ld XWA, (xsp + 0x0236)
+	ld XBC, (xsp + 0x0232)
+	ld XDE, (xsp + 0x022e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	call GetViewInstance
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000b
 	lds32 xde, 0
 	jrl VariScreen_SendAndReturn
 
 VariScreen_HandleShow:
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld (xsp + 24), xhl
 	ld xwa, (xsp + 24)
@@ -11890,20 +11890,20 @@ VariScreen_HandleShow:
 	divs wa, 0xa
 	inc 1, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0236)
-	ld_sril XBC, (xsp + 0x0232)
-	ld_sril XDE, (xsp + 0x022e)
+	ld XWA, (xsp + 0x0236)
+	ld XBC, (xsp + 0x0232)
+	ld XDE, (xsp + 0x022e)
 
 VariScreen_CallInherited:
 	call InheritedProc
 	jrl FileBrowser_ReturnZero
 
 VariScreen_HandlePaint:
-	ld_sril XWA, (xsp + 0x0236)
-	ld_sril XBC, (xsp + 0x0232)
-	ld_sril XDE, (xsp + 0x022e)
+	ld XWA, (xsp + 0x0236)
+	ld XBC, (xsp + 0x0232)
+	ld XDE, (xsp + 0x022e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld (xsp + 24), xhl
 	lda_dri XHL, 0xfd, 0x22, 0x02
@@ -12015,11 +12015,11 @@ VariScreen_HandlePaint:
 	pushw 0xff
 	pushw 0xf7
 	call DrawString
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 
@@ -12028,11 +12028,11 @@ VariScreen_SendAndReturn:
 	jrl FileBrowser_ReturnZero
 
 VariScreen_HandleSelect:
-	ld_sril XWA, (xsp + 0x0236)
-	ld_sril XBC, (xsp + 0x0232)
-	ld_sril XDE, (xsp + 0x022e)
+	ld XWA, (xsp + 0x0236)
+	ld XBC, (xsp + 0x0232)
+	ld XDE, (xsp + 0x022e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld (xsp + 24), xhl
 	ld xwa, (xsp + 24)
@@ -12624,11 +12624,11 @@ VariScreen_DrawRightDefVoiceString:
 	jrl FileBrowser_DrawString
 
 VariScreen_HandleConfirm:
-	ld_sril XWA, (xsp + 0x0236)
-	ld_sril XBC, (xsp + 0x0232)
-	ld_sril XDE, (xsp + 0x022e)
+	ld XWA, (xsp + 0x0236)
+	ld XBC, (xsp + 0x0232)
+	ld XDE, (xsp + 0x022e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld (xsp + 16), xhl
 	ld xwa, (xsp + 16)
@@ -12928,10 +12928,10 @@ VariScreen_ConfirmDrawStringAndLoop:
 	jrl FileBrowser_ReturnZero
 
 VariScreen_HandleEnumNotify:
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld (xsp + 24), xhl
-	ld_sril XWA, (xsp + 0x022e)
+	ld XWA, (xsp + 0x022e)
 	ld (xsp + 20), xwa
 	ld (xsp + 8), 0x9
 	ld xwa, (xsp + 24)
@@ -12970,7 +12970,7 @@ VariScreen_EnumRowReady:
 	ld de, (xde)
 	muls de, 0xa
 	sub de, 0xa
-	ld_sril XWA, (xsp + 0x022e)
+	ld XWA, (xsp + 0x022e)
 	ld a, (xwa)
 	extz wa
 	add wa, de
@@ -12985,7 +12985,7 @@ VariScreen_EnumHighlightColors:
 	extz bc
 	sla bc, 2
 	lda xde, (0x03f214:24)
-	ld_sril XWA, (xsp + 0x022e)
+	ld XWA, (xsp + 0x022e)
 	ld l, (xwa)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -12997,7 +12997,7 @@ VariScreen_EnumHighlightColors:
 	extz bc
 	sla bc, 2
 	lda xde, (0x03f214:24)
-	ld_sril XWA, (xsp + 0x022e)
+	ld XWA, (xsp + 0x022e)
 	ld l, (xwa)
 	extz hl
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
@@ -13089,7 +13089,7 @@ VariScreen_EnumSetVoiceRightBounds:
 	ldw (xbc), 0x137
 
 VariScreen_EnumDrawVoiceString:
-	ld_sril XBC, (xsp + 0x022e)
+	ld XBC, (xsp + 0x022e)
 	lda xde, (xbc + 1)
 	lds32 xbc, 1
 	push xbc
@@ -13124,7 +13124,7 @@ VariScreen_EnumSetDefVoiceRightBounds:
 	ldw (xbc), 0x137
 
 VariScreen_EnumDrawDefVoiceString:
-	ld_sril XBC, (xsp + 0x022e)
+	ld XBC, (xsp + 0x022e)
 	lda xhl, (xbc + 1)
 	lds32 xbc, 1
 	push xbc
@@ -13142,11 +13142,11 @@ FileBrowser_DrawString:
 	jrl FileBrowser_ReturnZero
 
 VariScreen_HandleOK:
-	ld_sril XWA, (xsp + 0x0236)
-	ld_sril XBC, (xsp + 0x0232)
-	ld_sril XDE, (xsp + 0x022e)
+	ld XWA, (xsp + 0x0236)
+	ld XBC, (xsp + 0x0232)
+	ld XDE, (xsp + 0x022e)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld (xsp + 16), xhl
 	ld xde, (xsp + 16)
@@ -13177,7 +13177,7 @@ VariScreen_HandleOK:
 	ld (xsp + 8), c
 
 VariScreen_OK_Dispatch:
-	ld_sril XBC, (xsp + 0x022e)
+	ld XBC, (xsp + 0x022e)
 	cp xbc, 0xc
 	jrl z, VariScreen_OK_CalcRow4
 	cp xbc, 0xb
@@ -13217,11 +13217,11 @@ VariScreen_OK_Dispatch:
 	muls wa, 0xa
 	sub wa, 0xa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_HalfRange1:
@@ -13241,11 +13241,11 @@ VariScreen_OK_HalfRange1:
 	muls wa, 0xa
 	sub wa, 0x9
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_HalfRange2:
@@ -13265,11 +13265,11 @@ VariScreen_OK_HalfRange2:
 	muls wa, 0xa
 	dec 8, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_HalfRange3:
@@ -13289,11 +13289,11 @@ VariScreen_OK_HalfRange3:
 	muls wa, 0xa
 	dec 7, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_HalfRange4:
@@ -13313,11 +13313,11 @@ VariScreen_OK_HalfRange4:
 	muls wa, 0xa
 	dec 6, wa
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_CalcRow0:
@@ -13344,11 +13344,11 @@ VariScreen_OK_CalcRow0:
 	add de, hl
 	ld xwa, (xbc + 60)
 	ld (xwa), de
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_CalcRow1:
@@ -13377,11 +13377,11 @@ VariScreen_OK_CalcRow1:
 	add de, hl
 	ld xwa, (xbc + 60)
 	ld (xwa), de
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_CalcRow2:
@@ -13410,11 +13410,11 @@ VariScreen_OK_CalcRow2:
 	add de, hl
 	ld xwa, (xbc + 60)
 	ld (xwa), de
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	jrl RVari_NotifyAndReturn
 
 VariScreen_OK_CalcRow3:
@@ -13443,11 +13443,11 @@ VariScreen_OK_CalcRow3:
 	add de, hl
 	ld xwa, (xbc + 60)
 	ld (xwa), de
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	jr RVari_NotifyAndReturn
 
 VariScreen_OK_CalcRow4:
@@ -13476,11 +13476,11 @@ VariScreen_OK_CalcRow4:
 	add de, hl
 	ld xwa, (xbc + 60)
 	ld (xwa), de
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 
 RVari_NotifyAndReturn:
 	calr RVari_UpdateDisplayNotify
@@ -13490,7 +13490,7 @@ FileBrowser_ReturnZero:
 	jrl VariScreen_Epilogue
 
 VariScreen_OK_PageScroll:
-	ld_sril XWA, (xsp + 0x022e)
+	ld XWA, (xsp + 0x022e)
 	cp xwa, 0x10
 	jr nz, VariScreen_OK_PageScrollDown
 	ld xwa, (xsp + 24)
@@ -13504,7 +13504,7 @@ VariScreen_OK_PageScroll:
 	cp (xbc), wa
 	jr ge, VariScreen_OK_PageScrollWrap
 	incw 1, (xbc)
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	jr VariScreen_OK_PageSendEvent
@@ -13513,7 +13513,7 @@ VariScreen_OK_PageScrollWrap:
 	cps wa, 1
 	jr le, VariScreen_OK_PageScrollDown
 	ldw (xbc), 0x1
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 
@@ -13521,7 +13521,7 @@ VariScreen_OK_PageSendEvent:
 	call SendEvent
 
 VariScreen_OK_PageScrollDown:
-	ld_sril XWA, (xsp + 0x022e)
+	ld XWA, (xsp + 0x022e)
 	cp xwa, 0x90
 	jr nz, VariScreen_OK_ForwardToInherited
 	ld xwa, (xsp + 16)
@@ -13529,7 +13529,7 @@ VariScreen_OK_PageScrollDown:
 	cpw (xbc), 0x1
 	jr le, VariScreen_OK_PageScrollDownWrap
 	decm 1, (xbc)
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 	jr VariScreen_OK_PageDownSendEvent
@@ -13544,7 +13544,7 @@ VariScreen_OK_PageScrollDownWrap:
 	cps wa, 1
 	jr le, VariScreen_OK_ForwardToInherited
 	ld (xbc), wa
-	ld_sril XWA, (xsp + 0x0236)
+	ld XWA, (xsp + 0x0236)
 	ld xbc, 0x1c0000d
 	lds32 xde, 0
 
@@ -13552,15 +13552,15 @@ VariScreen_OK_PageDownSendEvent:
 	call SendEvent
 
 VariScreen_OK_ForwardToInherited:
-	ld_sril XWA, (xsp + 0x0236)
-	ld_sril XBC, (xsp + 0x0232)
-	ld_sril XDE, (xsp + 0x022e)
+	ld XWA, (xsp + 0x0236)
+	ld XBC, (xsp + 0x0232)
+	ld XDE, (xsp + 0x022e)
 	jr VariScreen_CallInheritedAndReturn
 
 VariScreen_DefaultHandler:
-	ld_sril XWA, (xsp + 0x0236)
-	ld_sril XBC, (xsp + 0x0232)
-	ld_sril XDE, (xsp + 0x022e)
+	ld XWA, (xsp + 0x0236)
+	ld XBC, (xsp + 0x0232)
+	ld XDE, (xsp + 0x022e)
 
 VariScreen_CallInheritedAndReturn:
 	call InheritedProc
@@ -13599,7 +13599,7 @@ RVariScreenProc:
 	stl_dri XDE, 0xfd, 0x20, 0x02
 	stl_dri XBC, 0xfd, 0x24, 0x02
 	stl_dri XWA, 0xfd, 0x28, 0x02
-	ld_sril XBC, (xsp + 0x0224)
+	ld XBC, (xsp + 0x0224)
 	cp xbc, 0x1c00007
 	jrl z, RVari_OK
 	cp xbc, 0x1e2000b
@@ -13614,7 +13614,7 @@ RVariScreenProc:
 	jrl z, RVari_Show
 	cp xbc, 0x1c00001
 	jrl nz, RVari_Default
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, 0x28000
@@ -13670,27 +13670,27 @@ RVari_Init_TypeNotE:
 	ld (xbc), wa
 
 RVari_Init_ForwardEvent:
-	ld_sril XWA, (xsp + 0x0228)
-	ld_sril XBC, (xsp + 0x0224)
-	ld_sril XDE, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0228)
+	ld XBC, (xsp + 0x0224)
+	ld XDE, (xsp + 0x0220)
 	call InheritedProc
 	lds32 xhl, 0
 	jrl RVari_Epilogue
 
 RVari_Show:
-	ld_sril XWA, (xsp + 0x0228)
-	ld_sril XBC, (xsp + 0x0224)
-	ld_sril XDE, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0228)
+	ld XBC, (xsp + 0x0224)
+	ld XDE, (xsp + 0x0220)
 	call InheritedProc
 	lds32 xhl, 0
 	jrl RVari_Epilogue
 
 RVari_Paint:
-	ld_sril XWA, (xsp + 0x0228)
-	ld_sril XBC, (xsp + 0x0224)
-	ld_sril XDE, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0228)
+	ld XBC, (xsp + 0x0224)
+	ld XDE, (xsp + 0x0220)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	call GetViewInstance
 	lda_dri XHL, 0xfd, 0x14, 0x02
 	ldw (xhl), 0x4
@@ -13777,11 +13777,11 @@ RVari_Paint:
 	pushw 0xfb
 	pushw 0xf7
 	call DrawString
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000f
 	lds32 xde, 0
 	call SendEvent
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	call SendEvent
@@ -13789,11 +13789,11 @@ RVari_Paint:
 	jrl RVari_Epilogue
 
 RVari_Select:
-	ld_sril XWA, (xsp + 0x0228)
-	ld_sril XBC, (xsp + 0x0224)
-	ld_sril XDE, (xsp + 0x0220)
+	ld XWA, (xsp + 0x0228)
+	ld XBC, (xsp + 0x0224)
+	ld XDE, (xsp + 0x0220)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x0228)
+	ld XWA, (xsp + 0x0228)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xhl + 56)
