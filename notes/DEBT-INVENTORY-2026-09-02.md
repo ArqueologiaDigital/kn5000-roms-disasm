@@ -446,6 +446,39 @@ jump-table base — loaded via `lda_24` then `jp_ind` elsewhere. The converted
 candidate sits well after it, but the label's whole pre-existing body deserves a
 look.
 
+## ★ v7's remaining debt is TOOLCHAIN-BLOCKED, not analysis-blocked
+
+Established 2026-09-02, and it changes what the next pass should be.
+
+Of v7's 153 header-plus-code romslices (69,634 B), only 1,108 B converted. The
+rest did not resist analysis — it resisted the assembler:
+
+| outcome | slices | bytes |
+|---|---:|---:|
+| converted | 26 | 1,108 |
+| symbolic `.long` headers, refused for cause | 33 | 21,956 |
+| **no offset round-trips cleanly — llvm-mc spelling gap** | **94** | **46,570** |
+
+The same ceiling shows in the confirmed regions: a lane found the strict pool
+down to 15 regions, ALL blocked by an interior-label/decode-boundary conflict,
+with corroboration flat at ~30% below that — and stopped rather than convert.
+
+**So more conversion lanes on v7 will not move it.** The lever is the backend:
+teach `llvm-mc` to spell the forms it currently cannot, and this 46,570 B plus
+the region pool becomes reachable. That is the same lever that unblocked 569 B
+in the sub-CPU payload and made 5 previously-undecodable code slices round-trip.
+
+## ★ A guard against opcodes that round-trip regardless of meaning
+
+`nop` and `swi` are fixed one-byte opcodes, so a run of them re-assembles to the
+same bytes whatever those bytes actually are. A candidate that is 20% or more
+trivial opcodes is now rejected outright — this caught a documented false
+positive and two mostly-zero data tables before they were committed as code.
+
+It generalises the uniform-fill hazard: the problem was never `0xFF`
+specifically, it is **any byte sequence whose decoding is insensitive to whether
+it is code**.
+
 ## Where the next pass should aim
 
 1. ~~A round-trip generator for table_data's six BMPs~~ — **DONE, as a refusal:
