@@ -5,9 +5,17 @@ QUESTION ANSWERED
 -----------------
 `scripts/analysis/byte_run_start_enrichment.py` shows, image-wide, that v10's
 leftover `.byte` runs start with one of {0x01, 0x04, 0x17, 0x1a, 0x1c} far more
-often than with a decodable byte of similar magnitude, and reads that as
-undecoded CODE: those five bytes have no encoding in the tlcs900 backend, while
-MAME's unidasm decodes them as normal / max / ldf / JP nnnn / CALL nnnn.
+often than with a decodable byte of similar magnitude.
+
+⚠ SCOPE, CORRECTED 2026-09-02. When this script was written the enrichment was
+read as UNDECODED CODE. Commit 3309e94e retracted that: the signature measures
+MIS-FRAMING, and data-framed-as-code produces it more strongly than undecoded
+code does. This script tests ONE specific alternative explanation -- "the run
+starts on a ScreenData opcode at a known block entry" -- and nothing more. Its
+negative result rules out THAT explanation. It does NOT establish that the runs
+are undecoded code, and the sentence below that once said "the (d) tag stands"
+was over-reading it. se_blind_start_is_misframing.py is the script that
+actually addresses the question, and it comes out the other way.
 
 But four of those five bytes are ALSO ScreenData opcodes in this very corner of
 the ROM.  From `scripts/generators/screendata_parser.py`:
@@ -154,6 +162,9 @@ def main():
           % (len(oin), len(other), ro))
     print("  enrichment of blind-start runs inside screen-data territory:"
           " %.2fx" % (rb / ro if ro else float("inf")))
+    print("  -> rules out 'it is a ScreenData opcode at a known entry point'.")
+    print("     It does NOT rule out data-as-code in general; see")
+    print("     se_blind_start_is_misframing.py, which finds exactly that.")
 
     # --- the null ------------------------------------------------------------
     random.seed(23)
