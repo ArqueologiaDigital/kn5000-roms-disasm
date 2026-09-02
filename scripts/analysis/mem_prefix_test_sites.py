@@ -405,6 +405,14 @@ SITES = [
      'bitda_24 7, (132580)',
      'bit 7,(0x0205e4)'),
 
+    # --- ALU (addr8), #imm8 through the 8-bit-direct (I/O) prefix 0xC0 ---
+    # Only AND and OR of the 0x38-0x3F row have a definition for this prefix;
+    # the other six stay refused.
+    ("ALU (addr8), #imm8 through the 8-bit-direct prefix", "v10", 0x0F03DE,
+     "c02c3cf0", 'and_sd8b_im 44, 240', 'and (0x2c),0xf0'),
+    ("ALU (addr8), #imm8 through the 8-bit-direct prefix", "v10", 0x1C3F5B,
+     "c0c83e10", 'or_sd8b_im 200, 16', 'or (0xc8),0x10'),
+
     # --- 32-bit AND / OR through a 24-bit direct address ---
     # The decoder's direct-address ALU table had 0 in both 32-bit slots for
     # AND and OR.  Only the 16-bit-address half is genuinely undefined;
