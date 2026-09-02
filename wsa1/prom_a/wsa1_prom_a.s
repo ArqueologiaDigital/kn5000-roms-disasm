@@ -23023,6 +23023,10 @@ MemCopyWords:
 ; notes/FINDINGS-prom_a-f8e6fa-boundary.md.  0xF8E77C-0xF8E7CD (81 B)
 ; REMAINS .incbin below, refused: no reader in the ROM cites it and the
 ; apparent pointer table's own alignment breaks partway through.
+; ★ SUPERSEDED 2026-09-02: those 81 bytes are converted.  "No reader" still
+;   holds and is restated there.  "The alignment breaks" does not: there are
+;   TWO tables on TWO grids with 13 bytes of identified residue between them.
+;   See the block at 0xF8E77C.
 ; ---------------------------------------------------------------------
 	ret                                           ; F8E6FA  0e
 	push XIX                                      ; F8E6FB  3c
@@ -23079,7 +23083,69 @@ MemCopyWords:
 ZeroInitData_F8E773:   ; 9 B, all zero -- LDIR source named by the
 ; init routine above: `lda XIY,(0xf8e773)` / `ld XBC,0x00000009`
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F8E773
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00E77C, 0x000051
+; ---------------------------------------------------------------------
+; 0xF8E77C-0xF8E7CD (81 B) -- TWO LE32 ADDRESS TABLES with 13 bytes of
+; identified residue between them.  Converted 2026-09-02 by
+; notes/gen_prom_a_f8e77c_tables.py; argument in
+; notes/FINDINGS-prom_a-f8e6fa-boundary.md, extended this pass.
+;
+; ★ THIS OVERTURNS THE REFUSAL IN THAT FINDINGS FILE.  Its reason was that
+;   "the following 'pointers' are off by ONE byte relative to a fixed 4-byte
+;   grid".  They are not off by one: there are TWO tables on TWO grids with
+;   13 bytes between them, and notes/prom_a_ptr_tables.py -- which knows
+;   nothing about this file -- finds both:
+;       0xF8E774  10 entries (the first two are 0x00000000, inside the
+;                  9-byte zero pad that precedes the table)
+;       0xF8E7A1  11 entries (the first two are 0x00000000, inside the
+;                  9-byte zero pad that precedes the table)
+;   The second table is simply not 4-aligned, which this ROM does elsewhere.
+;
+; ★ WHY RUNS THIS SHORT ARE BELIEVED.  The detector's `--null` control over
+;   0xFB2000-0xFB8000 reports 5 runs, two of them 16 entries -- which looks
+;   like a false-positive rate that would sink a 10-entry run.  It is not.
+;   ALL FIVE control hits (0xFB2081, 0xFB3517, 0xFB42D1, 0xFB6240, 0xFB62F6)
+;   are the FIRST ENTRY of a `.long` table already declared in this file.
+;   The detector's false-positive count on code in the control is ZERO.
+;
+; Also pinned: the second table ends EXACTLY at 0xF8E7CD, where the
+; byte-verified 51-byte 0x0E pad begins; all 17 values are addresses inside
+; this module's own 0xF8E000-0xF8E70C; and the 13-byte gap is BYTE-IDENTICAL
+; to 0xF8E76F-0xF8E77C -- the last four bytes of the init routine at 0xF8E74B
+; plus the nine-byte LDIR source it names -- a string that occurs in prom_a
+; exactly twice, here and there.  Residue of the same shape, not a broken
+; record; the same slack seen at 0xFDFFDF-0xFE0000.
+;
+; ⚠ NOT ESTABLISHED.  No reader: a whole-image LE24/LE32 scan for 0xF8E77C
+;   and 0xF8E7A9 finds zero hits.  And these are NOT routine-entry tables --
+;   only 5 of the 17 values land on an instruction boundary, about what
+;   chance gives here.  `AddrTable` names the record SHAPE (LE32 in-image
+;   addresses), not a role; what they address is unknown.
+; ---------------------------------------------------------------------
+AddrTable_F8E77C:   ; 8 entries
+	.long 0x00f8e68b   ; F8E77C  [0]
+	.long 0x00f8e67a   ; F8E780  [1]
+	.long 0x00f8e000   ; F8E784  [2]
+	.long 0x00f8e69c   ; F8E788  [3]  instruction boundary
+	.long 0x00f8e6ad   ; F8E78C  [4]
+	.long 0x00f8e6df   ; F8E790  [5]
+	.long 0x00f8e6be   ; F8E794  [6]
+	.long 0x00f8e000   ; F8E798  [7]
+; 0xF8E79C-0xF8E7A9 (13 B) -- RESIDUE, byte-identical to 0xF8E76F-0xF8E77C:
+; `jr nz / ret / reti` closing the init routine at 0xF8E74B, then the
+; nine-byte LDIR source that follows it.  Left as bytes on purpose: framing
+; these four as instructions would assert a control path nothing reaches.
+	.byte 0x6e, 0xf7, 0x0e, 0x07                         ; F8E79C
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; F8E7A0
+AddrTable_F8E7A9:   ; 9 entries; ends exactly where the 0x0E pad begins
+	.long 0x00f8e6da   ; F8E7A9  [0]  instruction boundary
+	.long 0x00f8e6c9   ; F8E7AD  [1]  instruction boundary
+	.long 0x00f8e001   ; F8E7B1  [2]  instruction boundary
+	.long 0x00f8e6eb   ; F8E7B5  [3]
+	.long 0x00f8e000   ; F8E7B9  [4]
+	.long 0x00f8e70c   ; F8E7BD  [5]  instruction boundary
+	.long 0x00f8e029   ; F8E7C1  [6]
+	.long 0x00f8e000   ; F8E7C5  [7]
+	.long 0x00f8e000   ; F8E7C9  [8]
 ; 0xF8E7CD-0xF8E7FF -- 51 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
 	.fill 51, 1, 0x0E
