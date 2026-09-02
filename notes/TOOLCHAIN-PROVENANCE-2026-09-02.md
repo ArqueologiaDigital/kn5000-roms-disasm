@@ -56,8 +56,11 @@ because the tree carried **eight uncommitted modified backend files**. A lane
 could therefore verify a rename against one assembler and gate it with another,
 and nothing in either result would show the difference.
 
-Per-lane build directories are the clean fix and are not currently affordable:
-`/home` sits at 95–96%, with under 1 GB free. A 10.9 MB snapshot is.
+Per-lane build directories are the clean fix, and the claim that they were
+unaffordable was **wrong**: the 95–96% reading is the *root* filesystem, while
+the trees live on a virtiofs mount with **57 GB free** — fourteen times a 3.9 GB
+LLVM build directory. The snapshot below was a sound mitigation for a constraint
+that did not exist. Next time, give each lane its own build.
 
 ## The gap that remains
 
