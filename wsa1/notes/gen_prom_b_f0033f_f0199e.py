@@ -153,17 +153,26 @@ NOTHING HERE CAN BREAK THE GATE
   green gate over a region certifies nothing if the object was built from a
   stale prerequisite, so the emission was falsified once, 2026-09-02:
 
-      # flip ONE nibble of one emitted slot: in prom_b/wsa1_prom_b.s change
-      #     .long 0x00F7828A   ; F003F9  [  0]
-      # to  .long 0x00F7828B   ; F003F9  [  0]
-      make all && python3 scripts/analysis/assert_byte_identical.py
-      #   DIFFERS  wsa1_prom_b.ic13: 1 byte(s), first at 0x3F9
-      #   FAIL: 1 ROM(s) differ.            <- the gate sees it
-      # restore that one character, rebuild:
-      #   PASS: every rebuilt ROM is byte-identical.
+  ONE PERTURBATION PER SPAN, since a gate proved to see span 1 says nothing
+  about span 2.  Both were run from the repo root with `make gate-wsa1`:
 
-  The reported offset is 0x3F9, the slot that was touched -- so the bytes the
-  gate compares really are the ones these directives emit.
+      span 1 -- in PtrTable_F003F9 change
+                    .long 0x00F7828A   ; F003F9  [  0]
+                to  .long 0x00F7828B   ; F003F9  [  0]
+                ->  DIFFERS  wsa1_prom_b.ic13: 1 byte(s), first at 0x3F9
+                    FAIL: 1 ROM(s) differ.
+
+      span 2 -- in Bitmap_F01DAA's `page 4, columns 0-19` row change the
+                second byte 0x02 to 0x03
+                ->  DIFFERS  wsa1_prom_b.ic13: 1 byte(s), first at 0x1E4B
+                    FAIL: 1 ROM(s) differ.
+
+      restore either one character and rebuild:
+                ->  PASS: every rebuilt ROM is byte-identical.
+
+  Each reported offset is exactly the byte that was touched -- 0x3F9 is the
+  slot, 0x1E4B is the bitmap byte -- so the bytes the gate compares really are
+  the ones these directives emit, in both spans.
 
 RUN
   python3 notes/gen_prom_b_f0033f_f0199e.py            # both spans' assembly
