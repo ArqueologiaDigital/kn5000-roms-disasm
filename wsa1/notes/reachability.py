@@ -113,7 +113,13 @@ LINE = re.compile(r'^\s*([0-9a-f]{6}):\s+((?:[0-9a-f]{2} )+)\s*(.*)$')
 # symmetric: T (true = always) ends the flow for both mnemonics; every other
 # condition does not, because its fallthrough executes too.
 FLOW_END = re.compile(r'^\s*(ret|reti|retd|halt|swi|jrl?\s+T\s*,|jp\s+T\s*,)', re.I)
-BRANCH = re.compile(r'\b(?:jr|jp|call|calr)\b[^;]*?0x([0-9a-f]{6})', re.I)
+# ⚠ `jrl`/`calr`-style LONG forms must be listed explicitly. `\bjr\b` cannot
+# match inside "jrl" -- there is no word boundary between the r and the l -- so
+# an alternation of just (jr|jp|call|calr) silently misses EVERY long relative
+# jump and call target, in every image, both when collecting seeds and when the
+# walk follows its own targets. Longest-first alternation matters too: put jrl
+# before jr, or the shorter branch wins and swallows the match.
+BRANCH = re.compile(r'\b(?:jrl|jr|jpl|jp|call|calr)\b[^;]*?0x([0-9a-f]{6})', re.I)
 
 
 def rom(img):
