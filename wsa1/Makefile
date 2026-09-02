@@ -45,7 +45,29 @@ MAINCPU_SHARED = maincpu/shared/indexed_table.s maincpu/shared/lcd_screen_redraw
 PROM_C_SRC = prom_c/wsa1_prom_c.s \
              $(filter-out prom_c/wsa1_prom_c.s,$(wildcard prom_c/*.s prom_c/*/*.s))
 
-.PHONY: all clean
+.PHONY: all clean images-check images-export images-rewrite
+
+# ---------------------------------------------------------------- images
+# Every ROM range that is pixel data is committed as a PNG beside the source,
+# and the `.byte` rows are regenerated from it.  `images-check` re-derives every
+# one of those values from the committed PNG and asserts the assembly already
+# holds exactly it -- 216 images, 93,656 bytes.  See notes/FINDINGS-image-files.md.
+#
+# ⚠ NOT a prerequisite of `all` ON PURPOSE, for now: a dozen lanes are editing
+#   prom_b concurrently and a reframing that moves a range out of plain `.byte`
+#   lines would hard-fail every one of their builds rather than just this check.
+#   The integrator should wire it into the gate once the push settles.
+images-check:
+	python3 scripts/build/wsa1_bitmaps.py check
+	python3 scripts/build/wsa1_fonts.py check
+
+images-export:
+	python3 scripts/build/wsa1_bitmaps.py export
+	python3 scripts/build/wsa1_fonts.py export
+
+images-rewrite:
+	python3 scripts/build/wsa1_bitmaps.py rewrite
+	python3 scripts/build/wsa1_fonts.py rewrite
 .SECONDARY:
 
 all: rebuilt_ROMs/wsa1_prom_a.llvm.rom rebuilt_ROMs/wsa1_prom_b.llvm.rom rebuilt_ROMs/wsa1_prom_c.llvm.rom rebuilt_ROMs/wsa1_prom_d.llvm.rom

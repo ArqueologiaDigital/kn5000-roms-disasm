@@ -107137,6 +107137,21 @@ Unclassified_FC48D8:
 ; notes/gen_prom_a_fc4000_module.py --render-control renders 14/15/16
 ; side by side: only 15 produces coherent rectangular icon shapes.
 ; No claim beyond "1bpp bitmap, this row width" -- content unnamed.
+;
+; ⚠⚠ SUPERSEDED 2026-09-02, lane IMAGE -- THE ROW WIDTH ABOVE IS THE TRANSPOSE.
+;   The 15-byte peak is real, but 15 is the COLUMN HEIGHT of a column-major
+;   object, not a row stride.  prom_b 0xF09B7B is a pointer table of exactly
+;   EIGHT entries, 0xFC48D7 + k * 90, stride 0x5A = 6 * 15; its consumer at
+;   0xF09B29 is `ldb A,0x03 / ldw BC,0x0006 / ldw HL,0x000F / swi 7`, so each
+;   object is 48 x 15 and 90 bytes -- exactly the stride.  Eight is not assumed:
+;   the index table driving it, 0xF09B3B, is 64 bytes whose maximum value is 7.
+;   The objects start at 0xFC48D7, THIRTEEN BYTES BEFORE this label.
+;   Rendered column-major they are eight connected pictograms (a flat bar, a
+;   cylinder, tapered wedges, a parallelogram, a spool, an arrow, a bolt);
+;   rendered row-major at the width above they are disconnected noise.
+;   They are committed as images/Widget_FC48D7.png ..  The remaining 1,860
+;   bytes of this range are named by nothing and their object grid is UNKNOWN.
+;   Evidence and the rendering: notes/FINDINGS-image-files.md section 4.
 ; ---------------------------------------------------------------------
 Bitmap1bpp_FC48E4:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FC48E4
@@ -182544,8 +182559,16 @@ sub_FF79DB:
 ;
 ; ⚠ WHAT THE ARTWORK SAYS IS NOT ESTABLISHED for images 0 and 1.  The preview
 ;   below shows a large italic script logotype in four glyph-like clusters,
-;   occupying rows 72-153 of the panel.  This file does not name it.  Image 2 is
-;   different: it is plainly the word `Technics` in a bold face, and the preview
+;   occupying rows 72-153 of the panel.  This file does not name it.
+; ★ CLOSED 2026-09-02, lane IMAGE.  Images 0 and 1 are committed as PNGs --
+;   images/SplashImage_DitherA.png and images/SplashImage_DitherB.png -- and
+;   opened together (they are disjoint half-tones the panel OR-composites) they
+;   read `WSA` in a brush script.  ASCII art at 2x3 could not show that; an
+;   image file can.  See notes/FINDINGS-image-files.md section 3.  ⚠ Felipe's
+;   hardware testimony still outranks this: a photograph of a real SX-WSA1 at
+;   power-on is the last word.
+;
+;   Image 2 is different: it is plainly the word `Technics` in a bold face, and the preview
 ;   shows it.  ⚠ MIXED CASE, corrected 2026-08-25 -- an earlier draft of this
 ;   line wrote it TECHNICS.  Re-rendered from the ROM at full resolution with
 ;   this file's own formula (bit 7-x%8 of byte (x/8)*240+y over the 320 x 240
