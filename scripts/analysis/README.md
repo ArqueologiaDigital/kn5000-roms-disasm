@@ -461,3 +461,29 @@ after it.
 WARNING: run `make all` first -- the census assembles each image from source,
 and several `.incbin` targets are build products that do not exist on a clean
 tree.
+
+## Added 2026-09-02 (decoder memory-prefix gap -- lane `w15/llvm-alumem`)
+
+| script | question it answers |
+|---|---|
+| `mem_subopcode_gap_census.py` | Which **(prefix table, sub-opcode)** pairs can `llvm-objdump` not read, how many statements each blocks, does every decode it *does* produce re-assemble to the ROM's bytes, and does MAME's independently written `unidasm` read the same length and the same operation? The leading byte is not the unit of the gap -- `9f 06 81` was refused while `9f 08 23` read fine -- so it groups by what the decoder actually dispatches on. |
+| `mem_prefix_test_sites.py` | Are the 111 byte sequences in `llvm/test/MC/TLCS900/mem-prefix-subopcodes.s` really at the ROM offsets they claim, and does each one survive both directions of the toolchain? `--check` re-reads every offset from the dump, re-assembles every asm line and re-disassembles every byte string. `--emit` regenerates the lit test; edit this script, never the test. |
+
+    python3 scripts/analysis/mem_subopcode_gap_census.py --selftest
+    python3 scripts/analysis/mem_subopcode_gap_census.py             # v10, by (table, sub-opcode)
+    python3 scripts/analysis/mem_subopcode_gap_census.py --roundtrip # v7+v9+v10, decode -> re-assemble
+    python3 scripts/analysis/mem_subopcode_gap_census.py --oracle    # vs MAME unidasm
+    python3 scripts/analysis/mem_prefix_test_sites.py --check
+
+Measured with LLVM `tlcs900_backend@e816cddb6e2d`, against this tree:
+
+| | before (`6f456a19f05b`) | after (`e816cddb6e2d`) |
+|---|---|---|
+| `decoder_gap_ranking.py`, v10 statements refused or mis-sized | 171 / 655 | 26 / 655 |
+| distinct v10 memory-prefix samples refused | 2,665 | 358 |
+| decoded samples that do NOT re-assemble to the ROM's bytes (v7+v9+v10) | 157 | 0 |
+| our decode vs unidasm: length disagreements | 0 | 0 |
+
+WARNING: every number here is a property of the DECODER as much as of the bytes,
+so quote the toolchain commit beside it. `--roundtrip` and `--oracle` take a few
+minutes each; `--check` is seconds and needs no `make`.
