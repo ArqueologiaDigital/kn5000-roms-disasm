@@ -6730,7 +6730,7 @@ SeMenu_StoreEffectCoeff_Data:
 	reti
 	sla	xwa, 53
 	ld	a, (xiy)
-	.byte 0xc7, 0xee, 0x99
+	ldb_erp	a, 238
 	lda	xwa, (xsp+26)
 	.byte 0xf3
 	reti

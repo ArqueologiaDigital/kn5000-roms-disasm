@@ -6782,9 +6782,9 @@ SerialPort_ModeHandler_0:
 	ld	wa, de
 	xor	de, de
 	lds	hl, 5
-	.byte 0xd7, 0xe2, 0x9a
+	ld	qwa, de
 	div	xwa, xhl
-	.byte 0xd7, 0xe2, 0x8a
+	ld	de, qwa
 	jp	SerialPort_ModeHandler_0_0x19D
 	cps	a, 0
 	jrl	nz, 28
@@ -6795,9 +6795,9 @@ SerialPort_ModeHandler_0:
 	add	wa, de
 	xor	de, de
 	ldw	hl, 20
-	.byte 0xd7, 0xe2, 0x9a
+	ld	qwa, de
 	div	xwa, xhl
-	.byte 0xd7, 0xe2, 0x8a
+	ld	de, qwa
 	jp	SerialPort_ModeHandler_0_0x19D
 	cps	a, 2
 	jrl	nz, 9
@@ -6818,7 +6818,7 @@ ScoopParam_ValueTable:
 	nop
 	rcf
 	nop
-	.byte 0x18
+	push_f
 	nop
 	ldb	w, 0
 	ldw	wa, 16384
@@ -6881,7 +6881,8 @@ ScoopParam_ValueTable:
 	xor	bc, bc
 	ld	wa, bc
 	ld	xhl, 3439
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21, 0xf3, 0x07, 0xec, 0xe4, 0x33
+	ld_rr8b	a, xhl, a
+	lda_rr	xhl, xhl, bc
 	ld	(xhl), 255
 	ld	e, a
 	cp	a, 255
@@ -6907,7 +6908,7 @@ ScoopParam_ValueTable:
 	cp	a, 15
 	jrl	ugt, 16
 	ld	xhl, 15704335
-	.byte 0xc3, 0x03, 0xec, 0xe0, 0x21
+	ld_rr8b	a, xhl, a
 	ldb	w, 3
 	jp	15704311
 	cp	a, 27
@@ -6922,9 +6923,9 @@ ScoopParam_ValueTable:
 	xor	h, h
 	push	xix
 	ld	xix, 15704351
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	ld	xix, 15704362
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x20
+	ld_rrb	w, xix, hl
 	pop	xix
 	cp	a, 255
 	jrl	nz, 38
@@ -6958,12 +6959,14 @@ ScoopParam_ValueTable:
 	halt
 	ei	0x07
 	ldio	9, 10
-	.byte 0x0b, 0x0c, 0x0d
+	pushw	3340
 	ret
 	retd	0x1110
 	ccf
 	zcf
-	.byte 0x14, 0x15, 0x16
+	push_a
+	pop_a
+	ex_ff
 	jrl	f, -104
 	swi	7
 	pop	sr
@@ -7400,7 +7403,7 @@ PortConfig_Handler_0:
 	ld	xix, 3786
 	ldw	wa, 8224
 	ldw	bc, 15
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	pop	xix
 	popw	bc
@@ -7711,7 +7714,7 @@ ClockConfig_Handler_0:
 	push	xix
 	ld	xix, 3439
 	ldw	bc, 16
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	pop	xix
 	popw	bc
@@ -8040,10 +8043,10 @@ MemoryConfig_Handler_Table:
 	ldb	a, 176
 	ld	(xix), a
 	ldb_d8	a, (3415)
-	.byte 0xe7, 0x38, 0x9d
+	ldfr_lerp	xiy, 56
 	lda_rr	xiy, xiy, hl
 	add	a, (xiy+2)
-	.byte 0xe7, 0x38, 0x8d
+	ldto_lerp	xiy, 56
 	ld	(xix+1), a
 	ld	(xix+2), 72
 	ldb	a, 5
@@ -8059,10 +8062,10 @@ MemoryConfig_Handler_Table:
 	ld	(xix+4), w
 	jp	MemoryConfig_Handler_Table_0x67
 	ld	(xix+4), a
-	.byte 0xe7, 0x38, 0x9d
+	ldfr_lerp	xiy, 56
 	lda_rr	xiy, xiy, hl
 	ld	a, (xiy+1)
-	.byte 0xe7, 0x38, 0x8d
+	ldto_lerp	xiy, 56
 	bit	7, a
 	jrl	z, 10
 	ormi8	(xix), 2
@@ -8473,7 +8476,7 @@ MemConfig_Handler_3:
 	ret
 	call	AccPedal_CheckBitAndUpdate
 	ldw_d16	wa, (3816)
-	.byte 0xd1, 0x1a, 0x37, 0xf0
+	cpda16	xwa, (14106)
 	jrl	nz, 73
 	ldw_d16	wa, (3818)
 	.byte 0xd1
@@ -10571,7 +10574,7 @@ VoiceSlot_FinalRetZ:
 	ld	wa, de
 	xor	de, de
 	ldw	bc, 251
-	.byte 0xd7, 0xe2, 0x9a
+	ld	qwa, de
 	div	xwa, xbc
 	.byte 0xd7, 0xe2
 	incm8	1, (xde-40)
@@ -13768,13 +13771,13 @@ SubCPU_ToneParamRet:
 	ld	xbc, 0xf0f5d1c9
 	ld	xbc, 0x200d43c1
 	ldb_d8	a, (3396)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ret
 	pushw	bc
 	xor	wa, wa
 	lds	bc, 3
 	ld	xix, 4457
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	popw	bc
 	stdi8	(4478), 1
@@ -14183,19 +14186,19 @@ OscScope_RenderBlock:
 	ld	xix, 3669
 	ldw	bc, 16
 	xor	wa, wa
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ret
 	ld	xix, 3701
 	ldw	bc, 16
 	xor	wa, wa
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ret
 	ld	xix, 3733
 	ldw	bc, 16
 	xor	wa, wa
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ret
 	ld	xiy, 3669
@@ -14600,7 +14603,7 @@ DisplayStr_BytecodeBlock_B:
 	ld	xix, 3786
 	ldw	wa, 8224
 	ldw	bc, 15
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	djnz16	bc, -6
 	ld	xiy, DisplayStr_BytecodeBlock_B_0x5C
 	ld	xix, 3791

@@ -1251,7 +1251,7 @@ FDemoText_ByteData_DisplayRefresh:
 	lds32	xde, 0
 	call	SendEvent
 	ld	xwa, xiz
-	.byte 0xd7, 0xe2, 0xa8
+	ld	qwa, 0
 	pushw	wa
 	.long Bitmap_TechnichordBackground_2
 	pushw	0xfdd6

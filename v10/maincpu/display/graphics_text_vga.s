@@ -1622,7 +1622,7 @@ DrawFunc_Init_Variant1:
 	lda_24	xbc, (Str_No_0xCEE)
 	.byte 0xe3
 	reti
-	.byte 0xe4, 0xe0, 0x23
+	ld_spdl	xhl, 224
 	lda	xwa, (xsp+264)
 	.byte 0xf3
 	swi	5
@@ -1700,7 +1700,7 @@ DrawFunc_Init_Variant1:
 	lds32	xhl, 0
 	.byte 0xc3
 	reti
-	.byte 0xe4, 0xe0, 0x27
+	ld_spdl	xsp, 224
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1876,7 +1876,7 @@ DrawFunc_Init_Variant1:
 	lds32	xhl, 0
 	.byte 0xc3
 	reti
-	.byte 0xe4, 0xe0, 0x27
+	ld_spdl	xsp, 224
 	lda	xwa, (xsp+264)
 	.byte 0xf3
 	swi	5

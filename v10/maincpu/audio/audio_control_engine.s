@@ -166,7 +166,7 @@ FileIO_BytecodeData:
 	ld	xwa, 15572278
 	jr	5
 	ld	xwa, 15572280
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21
+	ld_rrb	a, xwa, hl
 	ld	(xde), a
 	jr	-114
 	ld	xwa, xiz
@@ -369,7 +369,7 @@ FileIO_BytecodeData:
 	pop	xiz
 	ret
 	dec	4, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push	qiz
 	ld	(xsp+2), xwa
 	ld	xwa, (xsp+2)
 	ld	c, (xwa+2)
@@ -402,7 +402,7 @@ FileIO_BytecodeData:
 	cp	a, 12
 	jrl	nz, 193
 	ld	xwa, 15572284
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21
+	ld_rrb	a, xwa, hl
 	ld	(xde), a
 	cp	a, 17
 	jr	ule, 17
@@ -416,22 +416,22 @@ FileIO_BytecodeData:
 	cp	l, 255
 	jrl	z, 147
 	call	16356446
-	.byte 0xc7, 0xfb, 0x9f
+	ldb_erp	l, 251
 	ld	xwa, (xsp+2)
 	inc	2, xwa
-	.byte 0xc7, 0xfb, 0xda
+	cpib_erp	251, 2
 	jr	ule, 5
 	.byte 0x80, 0x3f, 0x0c
 	jr	z, 125
-	.byte 0xc7, 0xfb, 0xcf, 0x0f
+	cp_erpb	251, 15
 	jr	z, 6
-	.byte 0xc7, 0xfb, 0xcf, 0x14
+	cp_erpb	251, 20
 	jr	nz, 5
 	.byte 0x80, 0x3f, 0x0f
 	jr	nz, 108
-	.byte 0xc7, 0xfb, 0xcf, 0x10
+	cp_erpb	251, 16
 	jr	c, 15
-	.byte 0xc7, 0xfb, 0xcf, 0x13
+	cp_erpb	251, 19
 	jr	ugt, 9
 	ld	xwa, (xsp+2)
 	.byte 0x88, 0x02, 0x3f, 0x0f
@@ -447,7 +447,7 @@ FileIO_BytecodeData:
 	cp	a, 16
 	jr	nz, 2
 	jr	56
-	.byte 0xc7, 0xfb, 0xcf, 0x0e
+	cp_erpb	251, 14
 	jr	ugt, 5
 	cp	a, 15
 	jr	z, 45
@@ -467,7 +467,7 @@ FileIO_BytecodeData:
 	add	(xsp+2), xwa
 	ld	xwa, (xsp+2)
 	calr	-1112
-	.byte 0xd7, 0xfa, 0x05
+	pop	qiz
 	inc	4, xsp
 	ret
 	push	xiz
@@ -506,7 +506,7 @@ FileIO_BytecodeData:
 	cps	a, 0
 	jr	nz, 71
 	ld	xwa, 15572302
-	.byte 0xc3, 0x07, 0xe0, 0xec, 0x21
+	ld_rrb	a, xwa, hl
 	ld	(xde), a
 	ld	c, a
 	cp	c, 15
@@ -704,7 +704,7 @@ FileIO_BytecodeData:
 	call	16546867
 	extz	hl
 	lda_24	xbc, 15572320
-	.byte 0xc3, 0x07, 0xe4, 0xec, 0x21
+	ld_rrb	a, xbc, hl
 	ld	(xiz+2), a
 	stb_d8	36154, a
 	ld	(xiz+3), 255
@@ -859,7 +859,7 @@ FileIO_BytecodeData:
 	pop	xiz
 	ret
 	dec	4, xsp
-	.byte 0xd7, 0xfa, 0x04
+	push	qiz
 	ld	(xsp+2), xwa
 	cpdi8	36148, 19
 	jrl	z, 136
@@ -872,10 +872,10 @@ FileIO_BytecodeData:
 	extz	wa
 	extz	xwa
 	call	16546867
-	.byte 0xc7, 0xfb, 0x9f
+	ldb_erp	l, 251
 	ld	xwa, 165888
 	call	16569399
-	.byte 0xc7, 0xfb, 0x8b
+	stb_erp	c, 251
 	extz	bc
 	ld	wa, bc
 	sla	wa, 2
@@ -884,20 +884,20 @@ FileIO_BytecodeData:
 	cp	hl, 17
 	jr	nz, 58
 	lda_24	xde, 15572348
-	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x23
+	ld_rrb	c, xde, bc
 	lda_24	xde, 15572324
-	.byte 0xf3, 0x07, 0xe8, 0xe0, 0x32
+	lda_rr	xde, xde, wa
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	jr	35
 	lda_24	xde, 15572378
-	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x23
+	ld_rrb	c, xde, bc
 	lda_24	xde, 15572354
-	.byte 0xf3, 0x07, 0xe8, 0xe0, 0x32
+	lda_rr	xde, xde, wa
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	jr	6
 	ld	xwa, (xsp+2)
 	calr	-2253
@@ -905,15 +905,16 @@ FileIO_BytecodeData:
 	add	(xsp+2), xwa
 	ld	xwa, (xsp+2)
 	calr	-2264
-	.byte 0xd7, 0xfa, 0x05
+	pop	qiz
 	inc	4, xsp
 	ret
 	lda	xsp, (xsp-10)
-	.byte 0xd7, 0xfa, 0x04
+	push	qiz
 	ld	(xsp+8), xwa
 	ld	xwa, (xsp+8)
 	ld	a, (xwa+2)
-	.byte 0xc7, 0xfb, 0x99, 0xc7, 0xfb, 0xd8
+	ldb_erp	a, 251
+	cpib_erp	251, 0
 	jrl	z, 164
 	ldb_d8	a, 36148
 	cp	a, 14
@@ -921,9 +922,9 @@ FileIO_BytecodeData:
 	cp	a, 19
 	jr	z, 90
 	lds32	xwa, 0
-	.byte 0xc7, 0xfb, 0x89
+	stb_erp	a, 251
 	call	16546867
-	.byte 0xc7, 0xfb, 0x9f
+	ldb_erp	l, 251
 	ld	(xsp+4), 72
 	ld	xwa, 163840
 	call	16569399
@@ -939,10 +940,10 @@ FileIO_BytecodeData:
 	lda	xde, (xwa+3)
 	.byte 0x83, 0x3f, 0x0e
 	jr	nc, 28
-	.byte 0xc7, 0xfb, 0x89
+	stb_erp	a, 251
 	extz	wa
 	lda_24	xhl, 15572384
-	.byte 0xc3, 0x07, 0xec, 0xe0, 0x21
+	ld_rrb	a, xhl, wa
 	ld	(xbc), a
 	ld	(xde), 48
 	.byte 0xf1, 0x52, 0x8d, 0xbb
@@ -955,7 +956,7 @@ FileIO_BytecodeData:
 	ld	a, (xhl+1)
 	srl	a, 2
 	sll	a, 2
-	.byte 0xc7, 0xfb, 0x81
+	addb_erp	a, 251
 	ld	l, a
 	ld	(xde), l
 	ld	a, (xbc)
@@ -970,7 +971,7 @@ FileIO_BytecodeData:
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
 	calr	-2458
-	.byte 0xd7, 0xfa, 0x05
+	pop	qiz
 	lda	xsp, (xsp+10)
 	ret
 	push	xiz
@@ -1133,7 +1134,7 @@ FileIO_BytecodeData:
 	ret
 	extz	bc
 	lda_24	xde, 15572388
-	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x25
+	ld_rrb	e, xde, bc
 	cp	e, 22
 	ret	ugt
 	extz	de
@@ -1142,7 +1143,7 @@ FileIO_BytecodeData:
 	exts	xde
 	add	xde, xhl
 	ld	xhl, (xde)
-	.byte 0xb3, 0xe8
+	call	(xhl)
 	ret
 	dec	4, xsp
 	push	xiz
@@ -8439,7 +8440,7 @@ MidiStream_ProcessHandler_0:
 	ld	xix, 0x91ad
 	ldb	a, 209
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldb_d8	a, (0x91bf)
 	ldb	w, 255
 	ld	(xix), wa
@@ -8450,7 +8451,7 @@ MidiStream_ProcessHandler_1:
 	ld	xix, 0x91ad
 	ldb	a, 210
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldb_d8	a, (0x91c0)
 	ldb	w, 255
 	ld	(xix), wa
@@ -8461,7 +8462,7 @@ MidiStream_ProcessHandler_2:
 	ld	xix, 0x91ad
 	ldb	a, 211
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldb_d8	a, (0x91bf)
 	ldb	w, 255
 	ld	(xix), wa
@@ -8487,7 +8488,7 @@ MidiStream_ProcessHandler_4:
 	ld	xix, 0x91ad
 	ldb	a, 213
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldb_d8	a, (0x91bf)
 	ldb	w, 255
 	ld	(xix), wa
@@ -8827,9 +8828,9 @@ TempoCC_TransmitBytecodeBlock:
 	ld	xix, 0x91ad
 	ldb	a, 192
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldw_d16	wa, (0x91bd)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldda32	xiy, (0x90f2)
 	extz	wa
 	sll	wa, 2
@@ -8849,14 +8850,14 @@ TempoCC_TransmitBytecodeBlock:
 	.byte 0xf1, 0xad, 0x91, 0xb9, 0xf5, 0xf1, 0x50
 	ldb_d8	a, (0x91c7)
 	ldb	w, 255
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	stdi8	(0x91ca), 7
 	calr	490
 	ret
 	ld	xix, 0x91ad
 	ldb	a, 176
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldw_d16	wa, (0x91bd)
 	bit	7, a
 	jr	z, 7
@@ -8874,27 +8875,27 @@ TempoCC_TransmitBytecodeBlock:
 	.byte 0xf1, 0xad, 0x91, 0xb9, 0xf5, 0xf1, 0x50
 	ldb_d8	a, (0x91c7)
 	ldb	w, 255
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	stdi8	(0x91ca), 7
 	calr	408
 	ret
 	ld	xix, 0x91ad
 	ldb	a, 210
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldw_d16	wa, (0x91bf)
 	and	wa, 0x7f7f
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldb_d8	a, (0x91c7)
 	ldb	w, 255
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	stdi8	(0x91ca), 37
 	calr	365
 	ret
 	ld	xix, 0x91ad
 	ldb	a, 209
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldb_d8	a, (0x91bf)
 	ldb_d8	w, (0x91c7)
 	.byte 0xf5
@@ -8905,7 +8906,7 @@ TempoCC_TransmitBytecodeBlock:
 	ld	xix, 0x91ad
 	ldb	a, 211
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldb_d8	a, (0x91bf)
 	ldb_d8	w, (0x91c7)
 	.byte 0xf5
@@ -8921,7 +8922,7 @@ TempoCC_TransmitBytecodeBlock:
 	nop
 	ldb	a, 208
 	ldb_d8	w, (0x91c9)
-	.byte 0xf5, 0xf1, 0x50
+	stw_dpi	wa, 241
 	ldb_d8	a, (0x91bf)
 	ldb_d8	w, (0x91c7)
 	.byte 0xf5
@@ -9395,7 +9396,7 @@ MidiCtrl_ModeDispatch_Table:
 	xor	h, h
 	ldb_d8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	set	7, a
 	stb_d8	37093, a
 	ldw_d16	bc, 37211
@@ -9415,7 +9416,7 @@ MidiCtrl_ModeDispatch_Table:
 	extz	hl
 	ldb_d8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	set	7, a
 	stb_d8	37093, a
 	ldb_d8	c, 37211
@@ -9445,7 +9446,7 @@ MidiCtrl_ModeDispatch_Table:
 	extz	hl
 	ldb_d8	l, 37320
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	set	7, a
 	stb_d8	37093, a
 	ldb_d8	c, 37211
@@ -9528,7 +9529,7 @@ VoiceMode3_DispatchTable:
 	extz	hl
 	ldb_d8	l, 37320
 	ld	xix, 61856
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 14
 	jr	nz, 2
 	ldb	b, 4
@@ -9550,7 +9551,7 @@ VoiceMode3_DispatchTable:
 	.byte 0xc3, 0x07, 0xf0, 0xec, 0x3f, 0x0f
 	jr	nz, 37
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 22
 	set	7, a
@@ -9568,18 +9569,18 @@ VoiceMode3_DispatchTable:
 	ld	l, c
 	sll	hl, 2
 	ldda32	xix, 37106
-	.byte 0xe3, 0x07, 0xf0, 0xec, 0x24
+	ld_rrl	xix, xix, hl
 	cp	xix, 4294967295
 	jr	z, 114
 	extz	hl
 	ld	l, b
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	ld	w, d
 	xor	w, 255
 	and	a, w
 	and	e, d
 	or	e, a
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x45
+	st_rrb	e, xix, hl
 	stda16	37159, bc
 	stda16	37161, de
 	call	16556371
@@ -9589,7 +9590,7 @@ VoiceMode3_DispatchTable:
 	extz	hl
 	ldb_d8	l, 37320
 	ld	xix, 61856
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 15
 	jr	z, 44
 	cp	a, 14
@@ -9597,7 +9598,7 @@ VoiceMode3_DispatchTable:
 	cp	a, 13
 	jr	z, 34
 	ld	xix, 37070
-	.byte 0xc3, 0x07, 0xf0, 0xec, 0x21
+	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, 19
 	set	7, a
@@ -9617,7 +9618,7 @@ VoiceMode3_DispatchTable:
 	jr	z, 52
 	set	7, e
 	ld	xix, 38066
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x45
+	st_rrb	e, xix, hl
 	ret
 
 MidiPartCC_WriteAndDispatch:
@@ -10874,7 +10875,7 @@ MidiStream_DispatchData:
 	sll	b, 1
 	.byte 0xf3
 	pop	sr
-	.byte 0xf0, 0xe5, 0x52
+	st_dd8w	de, 229
 	ret
 	calr	1257
 	ret
@@ -11726,7 +11727,7 @@ MidiStream_ExtendedDispatch:
 	ldb	w, 216
 	scc8	nc, d
 	jrl	nc, 2035
-	.byte 0xf0, 0xec, 0x50
+	st_dd8w	wa, 236
 	srl	hl, 1
 	ldb_d8	b, (0xfd50)
 	and	b, 3

@@ -5525,7 +5525,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xde), a
 	jr	2
 	decm8	1, (xde)
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	extz	wa
 	lda	xhl, (xsp+12)
 	.byte 0xf3
@@ -5536,7 +5536,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 17
 	.byte 0xc7, 0xe2
 	incm8	1, (xbc-55)
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	extz	ix
 	inc	1, c
 	.byte 0xf3
@@ -5592,7 +5592,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 71
 	ld	a, (xsp+4)
 	sub	a, w
-	.byte 0xc7, 0xe2, 0x99
+	ldb_erp	a, 226
 	cp	a, c
 	jr	nc, 59
 	.byte 0xc7
@@ -5614,7 +5614,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xf1
 	jr	ule, 2
 	ld	b, a
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	cp	a, b
 	jr	nc, 13
 	.byte 0xc7
@@ -5624,7 +5624,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 3
 	ld	b, (xsp+4)
 	ld	(xiy), b
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	ld	(xix), a
 	.byte 0xc7
 	swi	3
@@ -6432,7 +6432,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8b
 	cp	wa, ix
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 206
@@ -6497,7 +6497,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	w, 242
 	ldw	iz, 0xf0dd
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 0
@@ -6555,7 +6555,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xc7
 	cp	wa, iy
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	lda	xwa, (xsp)
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0
@@ -15854,7 +15854,7 @@ TuningSystem_Handler_Table:
 	normal
 	.byte 0xc2, 0x00, 0x0a, 0x0a, 0x05
 	nop
-	.byte 0xd2, 0x00, 0x22, 0x00, 0xea
+	ordm16_24	(8704), xde
 	nop
 	.byte 0x0a, 0x0a, 0x2d, 0x00, 0xd2, 0x00, 0x4a, 0x00
 	.byte 0xea
@@ -15875,7 +15875,7 @@ TuningSystem_Handler_Table:
 	.byte 0xea
 	nop
 	ldwio	10, 285
-	.byte 0xd2, 0x00, 0x3a, 0x01, 0xea
+	ordm16_24	(80384), xde
 	nop
 	normal
 	ldwio	245, 0xde00
@@ -15889,12 +15889,12 @@ TuningSystem_Handler_Table:
 	normal
 	.byte 0x51
 	nop
-	.byte 0x0a, 0x0a, 0x4d, 0x00
+	ldwio	10, 77
 	push xhl
 	nop
 	.byte 0xe5, 0x00, 0x51
 	nop
-	.byte 0x0a, 0x0a, 0x4d, 0x00
+	ldwio	10, 77
 	push xhl
 	nop
 	jr	po, 0
@@ -15976,7 +15976,7 @@ TuningSystem_Handler_Table:
 	nop
 	pop xix
 	nop
-	.byte 0x4f
+	popw	sp
 	nop
 	pop xix
 	nop
@@ -15992,9 +15992,9 @@ TuningSystem_Handler_Table:
 	nop
 	jrl	le, 15872
 	nop
-	.byte 0x7d, 0x00, 0x4f
+	jrl	pl, 20224
 	nop
-	.byte 0x7d, 0x00, 0x3e
+	jrl	pl, 15872
 	nop
 	.byte 0x88, 0x00, 0x4f
 	nop
@@ -16008,7 +16008,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0x9e, 0x00, 0x3e, 0x00, 0xa9
 	nop
-	.byte 0x4f
+	popw	sp
 	nop
 	.byte 0xa9, 0x00, 0x3e
 	nop
@@ -16028,9 +16028,9 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0xd5, 0x00, 0x4f
 	nop
-	.byte 0xd5, 0x00, 0x3e, 0x00, 0xe0
+	or_spiw_im	0, 0, 224
 	nop
-	.byte 0x4f
+	popw	sp
 	nop
 	.byte 0xe0, 0x00, 0x3e
 	nop
@@ -16042,7 +16042,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0xf6
 	nop
-	.byte 0x4f
+	popw	sp
 	nop
 	.byte 0xf6
 	nop
@@ -16065,7 +16065,7 @@ TuningSystem_Handler_Table:
 	nop
 	.byte 0xd0, 0x00, 0xe0
 	nop
-	.byte 0xf0, 0x00, 0x00, 0x01
+	stib_d8	0, 1
 	rcf
 	normal
 	jr	c, 0
@@ -16130,7 +16130,7 @@ TuningSystem_Handler_Table:
 	ei	5
 	jrl	f, 4119
 	ldf	12
-	.byte 0xf7
+	ldx
 	nop
 	.byte 0x9e, 0x00
 	.ascii "REVERB"
@@ -16229,7 +16229,7 @@ TuningSystem_Handler_Table:
 	push	sr
 	ldwio	174, 0x3800
 	nop
-	.byte 0xae, 0x00, 0xca
+	and	(xiz+256), xde
 	nop
 	halt
 	ldwio	244, 0xb400
@@ -16368,11 +16368,11 @@ TuningSystem_Handler_Table:
 	nop
 	ld	xix, 0x080a1100
 	nop
-	.byte 0x4f
+	popw	sp
 	nop
 	push_f
 	nop
-	.byte 0x4f
+	popw	sp
 	nop
 	scf
 	ldwio	24, 0x6400
@@ -16469,7 +16469,7 @@ TuningSystem_Handler_Table:
 	.byte 0x80, 0x07
 	ldb	w, 118
 	ld	xiz, 0x0700f1
-	.byte 0x4f
+	popw	sp
 	decf
 	push	sr
 	retd	0x0663
@@ -16481,7 +16481,7 @@ TuningSystem_Handler_Table:
 	.byte 0x80, 0x07
 	ldb	w, 118
 	ld	xiz, 0x0700f1
-	.byte 0x4f
+	popw	sp
 	ldf	2
 	retd	0x0665
 	.byte 0x80, 0x07
@@ -16584,7 +16584,7 @@ TuningSystem_Handler_Table:
 	.byte 0xcf, 0x11
 	scf
 	ldf	11
-	.byte 0x0a, 0x00, 0x86, 0x00
+	ldwio	0, 134
 	ld	xbc, 0x52455446
 	ldf	11
 	pushw iz

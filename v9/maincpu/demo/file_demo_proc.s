@@ -3457,7 +3457,7 @@ FileIO_ByteBlock_DemoProc1:
 	ld	wa, iz
 	extz	xwa
 	div	wa, 20
-	.byte 0xd7, 0xe2, 0x88
+	ld	wa, qwa
 	ld	(xsp+14), a
 	jr	71
 	sub	wa, 40

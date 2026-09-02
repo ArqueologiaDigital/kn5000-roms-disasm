@@ -5525,7 +5525,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ld	(xde), a
 	jr	2
 	decm8	1, (xde)
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	extz	wa
 	lda	xhl, (xsp+12)
 	.byte 0xf3
@@ -5536,7 +5536,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	z, 17
 	.byte 0xc7, 0xe2
 	incm8	1, (xbc-55)
-	.byte 0xc7, 0xf0, 0x99
+	ldb_erp	a, 240
 	extz	ix
 	inc	1, c
 	.byte 0xf3
@@ -5592,7 +5592,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 71
 	ld	a, (xsp+4)
 	sub	a, w
-	.byte 0xc7, 0xe2, 0x99
+	ldb_erp	a, 226
 	cp	a, c
 	jr	nc, 59
 	.byte 0xc7
@@ -5614,7 +5614,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xf1
 	jr	ule, 2
 	ld	b, a
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	cp	a, b
 	jr	nc, 13
 	.byte 0xc7
@@ -5624,7 +5624,7 @@ SeMenu_CopyWriteUpdate_Data:
 	jr	nc, 3
 	ld	b, (xsp+4)
 	ld	(xiy), b
-	.byte 0xc7, 0xe2, 0x89
+	stb_erp	a, 226
 	ld	(xix), a
 	.byte 0xc7
 	swi	3
@@ -6432,7 +6432,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0x8b
 	cp	wa, ix
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 206
@@ -6497,7 +6497,7 @@ SeMenu_CopyWriteUpdate_Data:
 	ldb	w, 242
 	ldw	iz, 0xf0dd
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 0
@@ -6555,7 +6555,7 @@ SeMenu_CopyWriteUpdate_Data:
 	.byte 0xc7
 	cp	wa, iy
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	lda	xwa, (xsp)
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0

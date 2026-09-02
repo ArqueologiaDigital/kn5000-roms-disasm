@@ -17809,7 +17809,7 @@ HdaeRom_TableEntry2:
 	.byte 0xac
 	swi	6
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	ld	a, (xsp+3)
 	and	a, 255
 	jr	z, 98
@@ -18869,7 +18869,7 @@ SendEpilogue_Data:
 	sbc	xix, xiz
 	swi	6
 	ldw	ix, 2035
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	ldw	wa, 127
 	cps	iz, 0
 	jr	nz, 2
@@ -19898,7 +19898,7 @@ MIDI_WriteChannelData_Block:
 	ldb	w, 242
 	ld	xiy, 0xf334febf
 	reti
-	.byte 0xf0, 0xe0, 0xd8
+	jp_dd8	8, 224
 	ldb	l, 1
 	ret
 
@@ -25416,7 +25416,7 @@ Param_SignExtendRetu_Data:
 	or	(xbc), iy
 	swi	6
 	ldw	ix, 2035
-	.byte 0xf0, 0xe4, 0xd8
+	jp_dd8	8, 228
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
