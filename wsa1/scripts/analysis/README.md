@@ -171,3 +171,33 @@ within one commit and no lane owned it.
 
 ⚠ It measures **territory, not understanding** -- a `.byte` run counts as converted while
 telling you nothing. A floor on effort, never a claim about documentation quality.
+
+## `prom_b_small_span_classify.py`
+**"Of the `.incbin` spans left in prom_b, what are the SMALL ones (<= 128 bytes)
+and what sits immediately before and after each of them in the source?"**
+
+    python3 scripts/analysis/prom_b_small_span_classify.py
+
+Run from `wsa1/`. Prints one row per span -- line, ROM address, length, the kind
+of the nearest real source line before and after it, whether the bytes are a
+uniform fill, and the first 16 bytes -- then tallies. The lane hypothesis it
+tests is that a tiny `.incbin` between two converted regions is an ARTEFACT OF
+FRAMING, not an undecoded mystery. Result 2026-09-02: 55 spans, 1,362 bytes;
+**44 of them follow a data directive and 48 are followed by a label**, i.e. they
+are the tail of the object above them, cut by coverage round 1's reachability
+walk in the middle of an array entry.
+
+## `prom_b_small_span_convert.py`
+**"Which of those 55 spans can be replaced by real source on evidence, and what
+is the evidence for each?"**
+
+    python3 scripts/analysis/prom_b_small_span_convert.py            # verdicts
+    python3 scripts/analysis/prom_b_small_span_convert.py --check    # evidence
+    python3 scripts/analysis/prom_b_small_span_convert.py --splice   # patch the .s
+
+Holds one verdict per span with its reason, including the 18 REFUSALS, so the
+tool is the lane's audit trail. `--check` is 93 assertions and must print
+`0 failures`. The strongest of them is mutual: all eight entries of the pointer
+array `Data_F000E5` land on an instruction boundary inside the three code spans
+this lane converted at 0xF00280/0xF0029D/0xF002CD -- the table proves the code is
+code, and the code proves the table is a table.
