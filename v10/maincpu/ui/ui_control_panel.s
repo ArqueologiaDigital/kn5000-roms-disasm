@@ -2767,18 +2767,18 @@ MainTitleCtrl_HandleBA:
 	jr UIWidget_ReturnZero
 
 MainTitleCtrl_HandleBB:
-	ldw_da xwa, (0x0274aa)
+	ld wa, (0x0274aa:24)
 	cps wa, 0
 	jr z, MainTitleCtrl_CheckSecondTimer
 	dec 1, wa
 	stw_da (0x0274aa), xwa
 	cps wa, 0
 	jr nz, MainTitleCtrl_CheckSecondTimer
-	ldw_da xwa, (0x0274a8)
+	ld wa, (0x0274a8:24)
 	stw_da (0x0274a6), xwa
 
 MainTitleCtrl_CheckSecondTimer:
-	ldw_da xwa, (0x0274ae)
+	ld wa, (0x0274ae:24)
 	cps wa, 0
 	jr z, UIWidget_ReturnZero
 	dec 1, wa
@@ -2802,7 +2802,7 @@ UIWidget_ReturnZero:
 	ret
 
 CtrlPanel_GetSelectionState:
-	ldw_da xwa, (0x0274a6)
+	ld wa, (0x0274a6:24)
 	bit 0, wa
 	jr z, CtrlPanel_CheckBit1
 	lds hl, 1

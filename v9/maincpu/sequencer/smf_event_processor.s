@@ -888,7 +888,7 @@ SMF_Seek_WritePosition:
 SMF_RestoreTimerState:
 	bit 0, (0x28a5:16)
 	jr z, SMF_SeekReturn
-	ldw_da xwa, (0x00ffec)
+	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
 	push xhl
 	call Audio_CheckSubsystemReady
@@ -936,7 +936,7 @@ SMF_InitChannelState:
 	xor c, c
 
 SMF_ScanChannelLoop:
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -968,7 +968,7 @@ SMF_SetStatusAndJump:
 
 SMF_FoundActiveChannel:
 	call Vga_SetupMultiPlaneDisplay
-	ldw_da xwa, (0x00ffec)
+	ld wa, (0x00ffec:24)
 	ld (4325:16), wa
 	ld (4324:16), 255
 	bit 2, (0xfdad:16)
@@ -3737,7 +3737,7 @@ SeqStep_FileOpenSetupVtable:
 SeqStep_ByteBlockF245:
 	dec	2, xsp
 	push	xiz
-	ldw_da	wa, (0x1e53c)
+	ld	wa, (0x1e53c:24)
 	ld	(xsp+4), wa
 	stiw_da	(0x1e53c), 0
 	pushw	228
@@ -8727,7 +8727,7 @@ FDC_ClearDiskChangeStatus:
 	ldb_da	a, (0x3e3e4)
 	stb_da	(0x3e3e2), a
 	ret
-	ldw_da	hl, (0x3e3e6)
+	ld	hl, (0x3e3e6:24)
 	ret
 
 FDC_ReadDiskType:
@@ -10714,13 +10714,13 @@ FDC_ExecuteSectorCommand:
 FDC_SectorCmd_ByteBlock:
 	push	xiz
 	ld	xiz, xwa
-	ldw_da	wa, (0x2358c)
+	ld	wa, (0x2358c:24)
 	ld	xbc, xiz
 	calr	65445
 	incdi16_24	1, (0x2358c)
 	cps	hl, 0
 	jr	nz, 22
-	ldw_da	de, (0x2358c)
+	ld	de, (0x2358c:24)
 	lda	xwa, (xiz+512)
 	ld	xbc, xwa
 	ld	wa, de
@@ -10747,7 +10747,7 @@ SndTable_LookupD_CalcAddr:
 	lda xbc, (0x0235a6:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	stw_da (0x02474e), xwa
-	ldw_da xwa, (0x02474e)
+	ld wa, (0x02474e:24)
 	extz xwa
 	sll xwa, 9
 	stl_da (0x03e3e8), xwa

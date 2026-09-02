@@ -967,7 +967,7 @@ CDlike_LoadSongBankData:
 	ld (6882:16), 1
 
 CDlikeBankLoad_CheckSavedState:
-	ldw_da xwa, (0x00ffec)
+	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
 	ld xiy, 0xf180
 	ld xix, 0xab000
@@ -1737,9 +1737,9 @@ DisplayMode_BatchEventSend:
 	ret
 
 DisplayMode_RefreshState:
-	ldw_da xwa, (0x021086)
+	ld wa, (0x021086:24)
 	calr DkMdlyPly_CheckState
-	ldw_da xwa, (0x021086)
+	ld wa, (0x021086:24)
 	jp FileIO_ReadChunk
 
 DpMdlyDocTtlFunc:

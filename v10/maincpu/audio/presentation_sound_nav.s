@@ -349,7 +349,7 @@ SetDialEnable:
 	ret
 
 GetDialEnableState:
-	ldw_da xhl, (0x03ef50)
+	ld hl, (0x03ef50:24)
 	ret
 
 SetDialFocus:
@@ -1252,7 +1252,7 @@ IvDirmd_Epilogue:
 PostTitle_Function:
 
 GetDirmdFlag:
-	ldw_da xhl, (0x0276c4)
+	ld hl, (0x0276c4:24)
 	ret
 
 DirmdTitleFunc:

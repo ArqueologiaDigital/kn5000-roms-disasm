@@ -9903,7 +9903,7 @@ TitleProc:
 	ld xwa, (xwa)
 	ld (xsp + 4), xwa
 	ld xde, xiz
-	ldw_da xwa, (0x02bc30)
+	ld wa, (0x02bc30:24)
 	and wa, 0x11
 	ld (xsp + 28), wa
 	cp xiz, 0x1c00013
@@ -9937,7 +9937,7 @@ TitleProc:
 	jrl z, EnumList_PartChange_B
 	cp xiz, 0x1e00079
 	jrl z, EnumList_ShowHide_B
-	ldw_da xwa, (0x02bc32)
+	ld wa, (0x02bc32:24)
 	exts xwa
 	ld (xsp + 18), xwa
 	ld wa, (xsp + 28)
@@ -10289,7 +10289,7 @@ EventDispatch_Return:
 	call Math_MultiplyAccumulate
 	add xhl, (xsp + 4)
 	ldw (xhl + 20), 0xffff
-	ldw_da xwa, (0x02bc32)
+	ld wa, (0x02bc32:24)
 	exts xwa
 	ld xbc, 0x1c00028
 	push xbc
@@ -10489,7 +10489,7 @@ EnumList_Confirm_Init:
 	jrl TitleProc_ClearAndReturn
 
 EnumList_Confirm_Forward:
-	ldw_da xwa, (0x02bc30)
+	ld wa, (0x02bc30:24)
 	and wa, 0x1
 	cps wa, 0
 	scc16 nz, hl
@@ -10553,7 +10553,7 @@ EnumList_ReturnZero:
 	jrl TitleProc_ClearAndReturn
 
 EnumList_Return:
-	ldw_da xwa, (0x02bc30)
+	ld wa, (0x02bc30:24)
 	bit 0, wa
 	jr z, EnumList_OK
 	ld wa, (xsp + 22)
@@ -10601,7 +10601,7 @@ EnumList_OK:
 	call KillApTimer
 
 TitleProc_ToggleFlag:
-	ldw_da xde, (0x02bc30)
+	ld de, (0x02bc30:24)
 	xor de, 0x1
 	stw_da (0x02bc30), xde
 	extz xde
@@ -10752,7 +10752,7 @@ EnumList_HitTest_NoMatch:
 	ld xbc, 0x1c00039
 	lds32 xde, 0
 	call SendEvent
-	ldw_da xwa, (0x02bc30)
+	ld wa, (0x02bc30:24)
 	bit 5, wa
 	jr z, TitleProc_ReturnZero
 	ld wa, (xsp + 22)
@@ -10798,7 +10798,7 @@ GetTitleOld:
 SetInterruptTime:
 	pushw iz
 	ld iz, wa
-	ldw_da xwa, (0x02bc30)
+	ld wa, (0x02bc30:24)
 	bit 1, wa
 	jr z, EnumList_Reset
 	cps iz, 2
@@ -10818,7 +10818,7 @@ EnumList_Reset:
 	ret
 
 CheckNotDrawFlag:
-	ldw_da xwa, (0x02bc30)
+	ld wa, (0x02bc30:24)
 	and wa, 0x4
 	cps wa, 0
 	scc16 z, hl
@@ -10846,7 +10846,7 @@ EnumList_Reset_Send:
 
 TitleProc_SetResourceDirtyFlag:
 	ordm16_24 (0x02bc30), xwa
-	ldw_da xde, (0x02bc30)
+	ld de, (0x02bc30:24)
 	extz xde
 	ld xwa, 0x1400001
 	ld xbc, 0x1e000ba
@@ -10855,7 +10855,7 @@ TitleProc_SetResourceDirtyFlag:
 TitleProc_ClearResourceDirtyFlag:
 	cpl wa
 	anddm16_24 (0x02bc30), xwa
-	ldw_da xde, (0x02bc30)
+	ld de, (0x02bc30:24)
 	extz xde
 	ld xwa, 0x1400001
 	ld xbc, 0x1e000ba
@@ -14842,7 +14842,7 @@ FontIDProc:
 	jr SliderH_CalcThumb
 
 SliderH_Setup:
-	ldw_da xhl, (NakaData_WidgetNames_0x624)
+	ld hl, (NakaData_WidgetNames_0x624:24)
 	exts xhl
 	jrl SliderH_ReturnAlt5
 
@@ -14967,7 +14967,7 @@ IconIDProc:
 	jr SliderV_CalcThumb
 
 SliderV_Setup:
-	ldw_da xhl, (Str_InitializeRoot_0x10)
+	ld hl, (Str_InitializeRoot_0x10:24)
 	extz xhl
 	jrl BitmapIDProc_Return
 
@@ -15091,7 +15091,7 @@ BitmapIDProc:
 	jr DrawHelper_A_CalcThumb
 
 DrawHelper_A_Setup:
-	ldw_da xhl, (Data_CharMapFormatBlock_0x22A)
+	ld hl, (Data_CharMapFormatBlock_0x22A:24)
 	extz xhl
 	jrl ApFuncIDProc_Return
 
@@ -17701,8 +17701,8 @@ PostEvent:
 	ld xiz, xwa
 	lds wa, 4
 	call TaskSched_WaitForEvent
-	ldw_da xbc, (0x02ec34)
-	ldw_da xde, (0x02ec36)
+	ld bc, (0x02ec34:24)
+	ld de, (0x02ec36:24)
 	ld wa, de
 	inc 1, wa
 	cp wa, bc
@@ -17758,7 +17758,7 @@ GetEvent:
 	ld xiz, xwa
 	lds wa, 4
 	call TaskSched_WaitForEvent
-	ldw_da xwa, (0x02ec34)
+	ld wa, (0x02ec34:24)
 	cpda16_24 xwa, (0x02ec36)
 	jr nz, PostEvent_FillSlot
 	lds wa, 4
@@ -17768,7 +17768,7 @@ GetEvent:
 
 PostEvent_FillSlot:
 	decdi16_24 1, (0x02f840)
-	ldw_da xwa, (0x02ec34)
+	ld wa, (0x02ec34:24)
 	ld (xsp + 4), wa
 	ld bc, (xsp + 4)
 	muls bc, 0xc
@@ -17816,8 +17816,8 @@ DeleteEvent:
 	ld xiz, xwa
 	lds wa, 4
 	call TaskSched_WaitForEvent
-	ldw_da xbc, (0x02ec36)
-	ldw_da xwa, (0x02ec34)
+	ld bc, (0x02ec36:24)
+	ld wa, (0x02ec34:24)
 	cp wa, bc
 	jr nz, GetEvent_ScanLoop
 	lds wa, 4
@@ -17874,8 +17874,8 @@ DeleteSpecificEvent:
 	ld xiz, xwa
 	lds wa, 4
 	call TaskSched_WaitForEvent
-	ldw_da xbc, (0x02ec36)
-	ldw_da xwa, (0x02ec34)
+	ld bc, (0x02ec36:24)
+	ld wa, (0x02ec34:24)
 	cp wa, bc
 	jr nz, DeleteEvent_Prologue
 	lds wa, 4
@@ -17961,8 +17961,8 @@ EventDispatch_Direct:
 	; --- Check if ring buffer is empty ---
 	lds	wa, 4
 	call TaskSched_WaitForEvent				; acquire lock/semaphore (id=4)
-	ldw_da	bc, (0x02ec36)
-	ldw_da	de, (0x02ec34)
+	ld	bc, (0x02ec36:24)
+	ld	de, (0x02ec34:24)
 	cp de, bc				; compare read/write positions
 	jr nz, DeleteSpecEvent_Prologue			; buffer not empty, process events
 	; --- Buffer empty: release lock, dispatch directly ---
@@ -18205,31 +18205,31 @@ MainPostEvent_VirtDispatch_Prologue:
 
 MainPostEvent_Allocate:
 	call TaskSched_WaitForEvent
-	ldw_da xwa, (0x02f83a)
+	ld wa, (0x02f83a:24)
 	ld de, wa
 	inc 1, de
-	ldw_da xbc, (0x02f838)
+	ld bc, (0x02f838:24)
 	cp de, bc
 	jr z, MainPostEvent_VirtDispatch_Prologue
 	sub wa, 0xff
 	cp wa, bc
 	jr z, MainPostEvent_VirtDispatch_Prologue
 	incdi16_24 1, (0x02f842)
-	ldw_da xwa, (0x02f83a)
+	ld wa, (0x02f83a:24)
 	muls wa, 0xc
 	lda xbc, (0x02ec38:24)
 	stl_dri XIZ, 0x07, 0xe4, 0xe0
-	ldw_da xwa, (0x02f83a)
+	ld wa, (0x02f83a:24)
 	muls wa, 0xc
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 8)
 	ld (xde + 4), xwa
-	ldw_da xwa, (0x02f83a)
+	ld wa, (0x02f83a:24)
 	muls wa, 0xc
 	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 4)
 	ld (xbc + 8), xwa
-	ldw_da xwa, (0x02f83a)
+	ld wa, (0x02f83a:24)
 	cp wa, 0xff
 	jr nz, MainGetEvent_Prologue
 	stiw_da (0x02f83a), 0x0000
@@ -18256,7 +18256,7 @@ MainGetEvent:
 	ld xiz, xwa
 	lds wa, 7
 	call TaskSched_WaitForEvent
-	ldw_da xwa, (0x02f838)
+	ld wa, (0x02f838:24)
 	cpda16_24 xwa, (0x02f83a)
 	jr nz, MainGetEvent_ScanDone
 	lds wa, 7
@@ -18266,7 +18266,7 @@ MainGetEvent:
 
 MainGetEvent_ScanDone:
 	decdi16_24 1, (0x02f842)
-	ldw_da xde, (0x02f838)
+	ld de, (0x02f838:24)
 	ld bc, de
 	muls bc, 0xc
 	lda xwa, (0x02ec38:24)
@@ -18304,8 +18304,8 @@ MainDeleteEvent:
 	ld xiz, xwa
 	lds wa, 7
 	call TaskSched_WaitForEvent
-	ldw_da xbc, (0x02f83a)
-	ldw_da xwa, (0x02f838)
+	ld bc, (0x02f83a:24)
+	ld wa, (0x02f838:24)
 	cp wa, bc
 	jr nz, MainDeleteEvent_Prologue
 	lds wa, 7
@@ -18362,8 +18362,8 @@ MainDeleteSpecificEvent:
 	ld xiz, xwa
 	lds wa, 7
 	call TaskSched_WaitForEvent
-	ldw_da xbc, (0x02f83a)
-	ldw_da xwa, (0x02f838)
+	ld bc, (0x02f83a:24)
+	ld wa, (0x02f838:24)
 	cp wa, bc
 	jr nz, MainDeleteSpecEvent_Prologue
 	lds wa, 7
@@ -18436,31 +18436,31 @@ ObjectSearch_CheckLoop:
 
 ObjectSearch_Continue:
 	call TaskSched_WaitForEvent
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	ld de, wa
 	inc 1, de
-	ldw_da xbc, (0x02ec34)
+	ld bc, (0x02ec34:24)
 	cp de, bc
 	jr z, ObjectSearch_CheckLoop
 	sub wa, 0x3ff
 	cp wa, bc
 	jr z, ObjectSearch_CheckLoop
 	incdi16_24 1, (0x02f840)
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda xbc, (0x02bc34:24)
 	stl_dri XIZ, 0x07, 0xe4, 0xe0
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 8)
 	ld (xde + 4), xwa
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 4)
 	ld (xbc + 8), xwa
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	cp wa, 0x3ff
 	jr nz, ApPostEvent_ReturnZero
 	stiw_da (0x02ec36), 0x0000
@@ -18502,10 +18502,10 @@ ApDeliveryEvent_ScanLoop:
 
 ApDeliveryEvent_Deliver:
 	call TaskSched_WaitForEvent
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	ld de, wa
 	inc 1, de
-	ldw_da xbc, (0x02ec34)
+	ld bc, (0x02ec34:24)
 	cp de, bc
 	jr z, ApDeliveryEvent_ScanLoop
 	sub wa, 0x3ff
@@ -18534,21 +18534,21 @@ ApDeliveryEvent_ReturnZero:
 
 ApDeliveryEvent_Return:
 	incdi16_24 1, (0x02f840)
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda xbc, (0x02bc34:24)
 	stl_dri XIZ, 0x07, 0xe4, 0xe0
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 12)
 	ld (xde + 4), xwa
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 8)
 	ld (xbc + 8), xwa
-	ldw_da xwa, (0x02ec36)
+	ld wa, (0x02ec36:24)
 	cp wa, 0x3ff
 	jr nz, ApTimer_Prologue
 	stiw_da (0x02ec36), 0x0000
@@ -18618,7 +18618,7 @@ ApTimer_VirtDispatch_Prologue:
 	ld xiz, xhl
 
 ApTimer_VirtDispatch_Return:
-	ldw_da xwa, (0x030448)
+	ld wa, (0x030448:24)
 	muls wa, 0x18
 	lda xhl, (0x02f844:24)
 	lda_dri XIX, 0x07, 0xec, 0xe0
@@ -18628,12 +18628,12 @@ ApTimer_VirtDispatch_Return:
 	ld xde, xhl
 	ld bc, (xwa)
 	ldw (xix), 0xffff
-	ldw_da xwa, (0x030448)
+	ld wa, (0x030448:24)
 	muls wa, 0x18
 	exts xwa
 	add xwa, xhl
 	ldw (xwa + 2), 0xffff
-	ldw_da xwa, (0x030448)
+	ld wa, (0x030448:24)
 	muls wa, 0x18
 	lda_dri XHL, 0x07, 0xec, 0xe0
 	ld xwa, 0xffffffff
@@ -18660,12 +18660,12 @@ SetApTimer_Prologue:
 	ld xde, xhl
 	ld bc, (xwa)
 	ldw (xix), 0xffff
-	ldw_da xwa, (0x030448)
+	ld wa, (0x030448:24)
 	muls wa, 0x18
 	exts xwa
 	add xwa, xhl
 	ldw (xwa + 2), 0xffff
-	ldw_da xwa, (0x030448)
+	ld wa, (0x030448:24)
 	muls wa, 0x18
 	lda_dri XHL, 0x07, 0xec, 0xe0
 	ld xwa, 0xffffffff
@@ -18714,19 +18714,19 @@ RootContext_Setup:
 	sll xbc, 3
 	add xbc, xde
 	ld xde, (xbc)
-	ldw_da xwa, (0x030448)
+	ld wa, (0x030448:24)
 	muls wa, 0x18
 	lda xhl, (0x02f844:24)
 	exts xwa
 	add xwa, xhl
 	ld bc, (xwa + 2)
 	ldw (xwa), 0xffff
-	ldw_da xwa, (0x030448)
+	ld wa, (0x030448:24)
 	muls wa, 0x18
 	exts xwa
 	add xwa, xhl
 	ldw (xwa + 2), 0xffff
-	ldw_da xwa, (0x030448)
+	ld wa, (0x030448:24)
 	muls wa, 0x18
 	lda_dri XIX, 0x07, 0xec, 0xe0
 	ld xwa, 0xffffffff
@@ -18748,7 +18748,7 @@ ApTimer_VirtualDispatch:
 	jr z, ApTimer_IncrementCounter
 
 SetApTimer_Return:
-	ldw_da xbc, (0x030448)
+	ld bc, (0x030448:24)
 	muls bc, 0x18
 	lda xwa, (0x02f844:24)
 	exts xbc
@@ -18798,7 +18798,7 @@ ResetApTimer_Prologue:
 	ld (xhl + 16), xwa
 	ld xwa, (xsp + 24)
 	ld (xhl + 20), xwa
-	ldw_da xix, (0x030448)
+	ld ix, (0x030448:24)
 	cp ix, 0xffff
 	jr z, ResetApTimer_ReturnAlt
 	ldw iy, 0xffff
@@ -18903,7 +18903,7 @@ KillApTimer:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	ldw_da xix, (0x030448)
+	ld ix, (0x030448:24)
 	cp ix, 0xffff
 	jrl z, KillApTimer_CheckNextEntry_Return
 	lda xiy, (0x02f844:24)
@@ -18997,7 +18997,7 @@ DrawTask_FuncDispatch:
 	jr DrawTask_EventLoop
 
 DrawTask_DequeueLoop:
-	ldw_da xwa, (0x030450)
+	ld wa, (0x030450:24)
 	stw_da (0x03044e), xwa
 	lds wa, 1
 	call Audio_Lock_Acquire
@@ -19115,7 +19115,7 @@ DisplayCmd_Execute_Type3:
 	ret
 
 DisplayCmd_Return:
-	ldw_da xix, (0x032474)
+	ld ix, (0x032474:24)
 	stw_da (0x032472), xix
 	ret
 
@@ -19414,7 +19414,7 @@ UpdateScreen:
 	cps hl, 0
 	jr z, UpdateScreen_Prologue
 	calr Gfx_BlitDirtyRegions
-	ldw_da xwa, (0x030450)
+	ld wa, (0x030450:24)
 	cps wa, 0
 	ret nz
 	stw_da (0x03044e), xwa
@@ -19443,7 +19443,7 @@ Gfx_BlitDirtyRegions:
 	jrl z, SetChangeRect_Prologue
 	cpw_da (0x030460), 0
 	jr z, Gfx_BlitDirty_ScanMatch
-	ldw_da xwa, (0x03ef9e)
+	ld wa, (0x03ef9e:24)
 	cps wa, 4
 	jr nz, Gfx_BlitDirty_Prologue
 	cpw_da (0x03efa0), 4
@@ -19509,7 +19509,7 @@ Display_CheckDim_CheckWidth:
 	cpw_da (0x030460), 0
 	jr z, Display_CheckDim_CheckHeight
 	calr InitGraphics_SetupVRAM_Loop
-	ldw_da xwa, (0x03ef9e)
+	ld wa, (0x03ef9e:24)
 	stw_da (0x03efa0), xwa
 	stiw_da (0x030460), 0x0000
 	jr Display_CheckDim_Done

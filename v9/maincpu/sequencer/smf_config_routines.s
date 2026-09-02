@@ -202,7 +202,7 @@ SMF_ScanChannels:
 SMF_ScanChannels_Loop:
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -251,7 +251,7 @@ SMF_CountActiveChannels:
 	xor bc, bc
 
 SMF_CountActive_Loop:
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -277,7 +277,7 @@ SMF_CountActive_Next:
 	xor bc, bc
 
 SMF_FindFreeChannel:
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -310,7 +310,7 @@ SMF_FindFree_CheckPart:
 	incdi8 1, (0x2877)
 
 SMF_AssignRemainingChannels:
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -919,7 +919,7 @@ SMF_Dispatch_DrumSearch:
 	ld bc, iy
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -971,7 +971,7 @@ SMF_Dispatch_Ch15Search:
 	ld bc, iy
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -1127,7 +1127,7 @@ SMF_ProgChg_Found:
 	ld c, l
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -1198,7 +1198,7 @@ SMF_CtrlChg_Found:
 	ld c, l
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -1440,7 +1440,7 @@ SMF_Resolve_DrumSearch:
 	ld bc, iy
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -1489,7 +1489,7 @@ SMF_Resolve_Ch15Search:
 	ld bc, iy
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -1672,7 +1672,7 @@ SMF_GlobalCh_SearchLoop:
 	ld bc, iy
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -3277,7 +3277,7 @@ SMF_SetupRead_Finalize:
 	ret
 
 SMF_SetupRead_Return:
-	ldw_da xwa, (0x00ffec)
+	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
 	ld xix, 0xab000
 	xor xhl, xhl

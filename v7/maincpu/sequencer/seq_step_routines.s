@@ -1212,7 +1212,7 @@ SeqStep_VoiceReassignProcess:
 	dec 1, a
 	cpda8_24 a, (0xffe3)
 	jr nz, SeqStep_VoiceReassignValidate
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	jr SeqStep_VoiceReassignStore
 
 SeqStep_VoiceReassignValidate:
@@ -2995,7 +2995,7 @@ SeqStep_ReinitPartTable:
 	lds wa, 1
 	ldw bc, 0xc7
 	call Part_WriteByte
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	lds wa, 1
 	ldw bc, 0xc8
 	call Part_WriteWord

@@ -1361,7 +1361,7 @@ VoiceParams_Compute_A:
 	call	0xFCB23C                              ; FB0EA6  call 0xfcb23c
 	ld	d, a                                    ; FB0EAA  ld D,A
 	ld	hl, ix                                  ; FB0EAC  ld HL,IX
-	ldw_da	bc, (0xFDE695)                      ; FB0EAE  ld BC,(0xfde695)
+	ld	bc, (0xFDE695:24)                      ; FB0EAE  ld BC,(0xfde695)
 	and	bc, hl                                 ; FB0EB3  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB1099       ; FB0EB5  jrl Z,0xfb1099
 	cps	a, 2                                   ; FB0EB8  cp A,2
@@ -1551,7 +1551,7 @@ VoiceParams_Compute_A__FB10AA:
 	call	0xFCB23C                              ; FB10C5  call 0xfcb23c
 	ld	d, a                                    ; FB10C9  ld D,A
 	ld	hl, ix                                  ; FB10CB  ld HL,IX
-	ldw_da	bc, (0xFDE695)                      ; FB10CD  ld BC,(0xfde695)
+	ld	bc, (0xFDE695:24)                      ; FB10CD  ld BC,(0xfde695)
 	and	bc, hl                                 ; FB10D2  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB12A8       ; FB10D4  jrl Z,0xfb12a8
 	cps	a, 2                                   ; FB10D7  cp A,2
@@ -1744,7 +1744,7 @@ VoiceParams_Compute_A__FB12B6:
 	call	0xFCB23C                              ; FB12EE  call 0xfcb23c
 	ld	d, a                                    ; FB12F2  ld D,A
 	ld	hl, ix                                  ; FB12F4  ld HL,IX
-	ldw_da	bc, (0xFDE697)                      ; FB12F6  ld BC,(0xfde697)
+	ld	bc, (0xFDE697:24)                      ; FB12F6  ld BC,(0xfde697)
 	and	bc, hl                                 ; FB12FB  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB1555       ; FB12FD  jrl Z,0xfb1555
 	cps	a, 2                                   ; FB1300  cp A,2
@@ -1979,7 +1979,7 @@ VoiceParams_Compute_A__FB1566:
 	call	0xFCB23C                              ; FB1581  call 0xfcb23c
 	ld	d, a                                    ; FB1585  ld D,A
 	ld	hl, ix                                  ; FB1587  ld HL,IX
-	ldw_da	bc, (0xFDE697)                      ; FB1589  ld BC,(0xfde697)
+	ld	bc, (0xFDE697:24)                      ; FB1589  ld BC,(0xfde697)
 	and	bc, hl                                 ; FB158E  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB17EF       ; FB1590  jrl Z,0xfb17ef
 	cps	a, 2                                   ; FB1593  cp A,2
@@ -2222,7 +2222,7 @@ VoiceParams_Compute_A__FB17FD:
 	inc	6, bc                                  ; FB182E  inc 6,BC
 	extz	xbc                                   ; FB1830  extz XBC
 	ld	hl, (xbc+0x1523)                        ; FB1832  ld HL,(XBC+0x1523)
-	ldw_da	bc, (0xFDE699)                      ; FB1837  ld BC,(0xfde699)
+	ld	bc, (0xFDE699:24)                      ; FB1837  ld BC,(0xfde699)
 	and	bc, hl                                 ; FB183C  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB1AC1       ; FB183E  jrl Z,0xfb1ac1
 	cps	a, 2                                   ; FB1841  cp A,2
@@ -2465,7 +2465,7 @@ VoiceParams_Compute_A__FB1ACF:
 	inc	6, bc                                  ; FB1B00  inc 6,BC
 	extz	xbc                                   ; FB1B02  extz XBC
 	ld	hl, (xbc+0x1523)                        ; FB1B04  ld HL,(XBC+0x1523)
-	ldw_da	bc, (0xFDE69B)                      ; FB1B09  ld BC,(0xfde69b)
+	ld	bc, (0xFDE69B:24)                      ; FB1B09  ld BC,(0xfde69b)
 	and	bc, hl                                 ; FB1B0E  and BC,HL
 	jrl z, VoiceParams_Compute_A__FB1D93       ; FB1B10  jrl Z,0xfb1d93
 	cps	a, 2                                   ; FB1B13  cp A,2

@@ -443,7 +443,7 @@ VoiceFloat_IterationLoop_DifferentPath:
 ; y*log(x) (FP_DP_Add_Outer) and call VoicePitch_SlideEngine (= exp, 0x03E64B).
 ; This exponent pre-check is why pow() never actually feeds a huge argument to exp().
 VoiceFloat_ConvergenceLoop:
-	ldw_da xiz, 0x040c22
+	ld iz, (0x040c22:24)
 	stiw_da 0x040c22, 0x0000
 	lda xiy, (xsp + 66)
 	ld xix, (xiy + 4)

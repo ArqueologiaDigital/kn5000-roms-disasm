@@ -453,7 +453,7 @@ LyricsBox_DrawCurrentLine:
 	decm 1, (xwa + 4)
 	decm 2, (xwa + 6)
 	lda xwa, (0x020e46:24)
-	ldw_da xbc, (0x020e4a)
+	ld bc, (0x020e4a:24)
 	sub bc, (xwa)
 	inc 1, bc
 	ld (xsp + 10), bc
@@ -522,7 +522,7 @@ LyricsBox_DrawSelLine:
 	decm 1, (xwa + 4)
 	decm 2, (xwa + 6)
 	lda xwa, (0x020e3e:24)
-	ldw_da xbc, (0x020e42)
+	ld bc, (0x020e42:24)
 	sub bc, (xwa)
 	ld (xsp + 10), bc
 	pushm (xsp + 10)
@@ -3827,25 +3827,25 @@ SMFMuteOnOff_PostCall:
 	ret
 
 SMFMute_GetBit0Status:
-	ldw_da xhl, (0x021086)
+	ld hl, (0x021086:24)
 	and hl, 0x1
 	extz xhl
 	ret
 
 SMFMute_GetBit1Status:
-	ldw_da xhl, (0x021086)
+	ld hl, (0x021086:24)
 	and hl, 0x2
 	extz xhl
 	ret
 
 SMFMute_GetUpperBits:
-	ldw_da xhl, (0x021086)
+	ld hl, (0x021086:24)
 	and hl, 0xfffc
 	extz xhl
 	ret
 
 SMFMute_ClearBit0:
-	ldw_da xhl, (0x021086)
+	ld hl, (0x021086:24)
 	res 0, hl
 	extz xhl
 	ret

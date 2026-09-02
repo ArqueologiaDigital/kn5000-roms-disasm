@@ -385,7 +385,7 @@ Voice_RecomputeAllThreeBaseCurves__FABE3F:
 	popw	bc                                    ; FABE68  pop BC
 	cp	hl, 0x100                               ; FABE69  cp HL,0x0100
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABEA4                   ; FABE6D  jr Z,0xfabea4
-	ldw_da	ix, (0xD79E)                        ; FABE6F  ld IX,(0x00d79e)
+	ld	ix, (0xD79E:24)                        ; FABE6F  ld IX,(0x00d79e)
 	ld	bc, ix                                  ; FABE74  ld BC,IX
 	and	bc, 0x1FFF                             ; FABE76  and BC,0x1fff
 	extz	xbc                                   ; FABE7A  extz XBC
@@ -438,7 +438,7 @@ Voice_RecomputeAllThreeBaseCurves__FABECC:
 	popw	bc                                    ; FABEF3  pop BC
 	cp	hl, 0x100                               ; FABEF4  cp HL,0x0100
 	jr z, Voice_RecomputeAllThreeBaseCurves__FABF31                   ; FABEF8  jr Z,0xfabf31
-	ldw_da	bc, (0xD796)                        ; FABEFA  ld BC,(0x00d796)
+	ld	bc, (0xD796:24)                        ; FABEFA  ld BC,(0x00d796)
 	ld	(xiz-4), bc                             ; FABEFF  ld (XIZ+0xfc),BC
 	and	bc, 0x1FFF                             ; FABF02  and BC,0x1fff
 	extz	xbc                                   ; FABF06  extz XBC
@@ -493,7 +493,7 @@ Voice_RecomputeAllThreeBaseCurves__FABF5D:
 	jrl z, Voice_RecomputeAllThreeBaseCurves__FABFFF                  ; FABF86  jrl Z,0xfabfff
 	cp	de, 0x6C0                               ; FABF89  cp DE,0x06c0
 	jr nc, Voice_RecomputeAllThreeBaseCurves__FABFC8                  ; FABF8D  jr NC,0xfabfc8
-	ldw_da	bc, (0xD796)                        ; FABF8F  ld BC,(0x00d796)
+	ld	bc, (0xD796:24)                        ; FABF8F  ld BC,(0x00d796)
 	ld	(xiz-4), bc                             ; FABF94  ld (XIZ+0xfc),BC
 	and	bc, 0x1FFF                             ; FABF97  and BC,0x1fff
 	extz	xbc                                   ; FABF9B  extz XBC
@@ -513,7 +513,7 @@ Voice_RecomputeAllThreeBaseCurves__FABF5D:
 	stw_da	(0xD796), iy                        ; FABFC1  ld (0x00d796),IY
 	jr Voice_RecomputeAllThreeBaseCurves__FABFFF                      ; FABFC6  jr T,0xfabfff
 Voice_RecomputeAllThreeBaseCurves__FABFC8:
-	ldw_da	bc, (0xD7A0)                        ; FABFC8  ld BC,(0x00d7a0)
+	ld	bc, (0xD7A0:24)                        ; FABFC8  ld BC,(0x00d7a0)
 	ld	(xiz-4), bc                             ; FABFCD  ld (XIZ+0xfc),BC
 	and	bc, 0x1FFF                             ; FABFD0  and BC,0x1fff
 	extz	xbc                                   ; FABFD4  extz XBC

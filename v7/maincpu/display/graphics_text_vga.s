@@ -738,7 +738,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), hl
 	ld	de, (xde+8)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	58578
 	inc	8, xsp
 	ret
@@ -754,7 +754,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), hl
 	ld	de, (xde+8)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	58536
 	inc	8, xsp
 	ret
@@ -770,7 +770,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), hl
 	ld	de, (xde+8)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	58494
 	inc	8, xsp
 	ret
@@ -786,7 +786,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), hl
 	ld	de, (xde+8)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	60477
 	inc	8, xsp
 	ret
@@ -802,7 +802,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), hl
 	ld	de, (xde+8)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	60435
 	inc	8, xsp
 	ret
@@ -818,7 +818,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), hl
 	ld	de, (xde+8)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	60393
 	inc	8, xsp
 	ret
@@ -832,7 +832,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc+4), de
 	ld	wa, (xwa+8)
 	ld	(xbc+6), wa
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
 	calr	61981
@@ -850,7 +850,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xwa+4), bc
 	ld	bc, (xiz+8)
 	ld	(xwa+6), bc
-	ldw_da	bc, (0x03efa4)
+	ld	bc, (0x03efa4:24)
 	calr	61938
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
@@ -867,7 +867,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xiz+8)
 	inc	1, de
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	58238
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
@@ -884,7 +884,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xiz+8)
 	inc	2, de
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	58193
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
@@ -901,7 +901,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xhl)
 	inc	1, de
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	58148
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
@@ -918,7 +918,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xhl)
 	inc	2, de
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	58103
 	pop	xiz
 	lda	xsp, (xsp+16)
@@ -937,7 +937,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), de
 	ld	de, (xhl)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	60081
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
@@ -950,7 +950,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), de
 	ld	de, (xhl)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	60044
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+2)
@@ -963,7 +963,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), de
 	ld	de, (xiz+8)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	60007
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
@@ -976,7 +976,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc), de
 	ld	de, (xiz+8)
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	59970
 	pop	xiz
 	inc	8, xsp
@@ -993,7 +993,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xwa+4), bc
 	ld	bc, (xiz+8)
 	ld	(xwa+6), bc
-	ldw_da	bc, (0x03efa4)
+	ld	bc, (0x03efa4:24)
 	calr	61556
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
@@ -1010,7 +1010,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xiz+8)
 	inc	1, de
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	57856
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
@@ -1027,7 +1027,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	de, (xhl)
 	inc	1, de
 	ld	(xbc+2), de
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	calr	57811
 	pop	xiz
 	lda	xsp, (xsp+16)
@@ -1056,7 +1056,7 @@ DrawText_LayoutAndRender_Variant1:
 	add	de, bc
 	ld	(xhl+4), de
 	ld	xbc, (xwa+2)
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	ld	xwa, xhl
 	calr	56835
 	inc	8, xsp
@@ -1124,7 +1124,7 @@ DrawText_LayoutAndRender_Variant1:
 	pop	sr
 	nop
 	.byte 0x01
-	ldw_da	de, (0x03efa4)
+	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
 	calr	55432
@@ -1160,7 +1160,7 @@ ColorBlit_ComputeRectAndBlit:
 	ld de, (xwa)
 	add de, bc
 	ld (xwa + 4), de
-	ldw_da xbc, (0x03efa2)
+	ld bc, (0x03efa2:24)
 	calr ColorBlit2
 	inc 8, xsp
 	ret
@@ -1176,7 +1176,7 @@ ColorBlit_ByteData:
 	ld	(xbc+4), de
 	ld	wa, (xwa+8)
 	ld	(xbc+6), wa
-	ldw_da	de, (0x03efa2)
+	ld	de, (0x03efa2:24)
 	ld	xwa, xbc
 	ld	bc, de
 	calr	55897
@@ -1505,7 +1505,7 @@ ColorBlit_PalSave_SkipShift:
 	ldb_da c, (0x03efa8)
 	ldb_erp C, 0xfb
 	stib_da (0x03efa8), 0x01
-	ldw_da xbc, (0x03efa4)
+	ld bc, (0x03efa4:24)
 	calr ColorBlit
 	stb_erp A, 0xfb
 	stb_da (0x03efa8), a
@@ -1554,7 +1554,7 @@ ColorBlit_Variant_ByteData:
 	ld	de, (xwa)
 	add	de, bc
 	ld	(xwa+4), de
-	ldw_da	bc, (0x03efa2)
+	ld	bc, (0x03efa2:24)
 	calr	54048
 	inc	8, xsp
 	ret
@@ -1586,7 +1586,7 @@ ColorBlit_Variant_ByteData:
 	ld	(xwa+4), bc
 	ld	bc, (xde+6)
 	ld	(xwa+6), bc
-	ldw_da	bc, (0x03efa2)
+	ld	bc, (0x03efa2:24)
 	calr	53968
 	inc	8, xsp
 	ret

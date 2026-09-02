@@ -2701,7 +2701,7 @@ RVari_OK_PageDown_AtMin:
 	cpw_da (0x0340bc), 1
 	jr le, RVari_OK_ForwardDefault
 	ld xbc, (xiz + 44)
-	ldw_da xwa, (0x0340bc)
+	ld wa, (0x0340bc:24)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
 	ld xbc, 0x1c0000b

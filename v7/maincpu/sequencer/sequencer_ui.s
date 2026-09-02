@@ -13,7 +13,7 @@ InitializeYoko:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe20cae)
+	ld wa, (0xe20cae:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe208ec:24)
 	ld (XBC+0x0a),XWA
@@ -24,7 +24,7 @@ InitializeYoko:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe20e22)
+	ld wa, (0xe20e22:24)
 	ld (XBC+0x08),WA
 	lda xwa, (EvtName_PtrTable:24)
 	ld (XBC+0x0a),XWA
@@ -35,7 +35,7 @@ InitializeYoko:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe2106a)
+	ld wa, (0xe2106a:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe20e24:24)
 	ld (XBC+0x0a),XWA
@@ -1123,7 +1123,7 @@ LyricsBox_DrawCurrentLine:
 
 	lda xwa, (0x020e46:24)
 
-	ldw_da xbc, (0x020e4a)
+	ld bc, (0x020e4a:24)
 
 	sub bc, (xwa)
 
@@ -1241,7 +1241,7 @@ LyricsBox_DrawSelLine:
 
 	lda xwa, (0x020e3e:24)
 
-	ldw_da xbc, (0x020e42)
+	ld bc, (0x020e42:24)
 
 	sub bc, (xwa)
 
@@ -4577,25 +4577,25 @@ SMFMuteOnOff_PostCall:
 	ret
 
 SMFMute_GetBit0Status:
-	ldw_da xhl, (0x021086)
+	ld hl, (0x021086:24)
 	and hl, 0x1
 	extz xhl
 	ret
 
 SMFMute_GetBit1Status:
-	ldw_da xhl, (0x021086)
+	ld hl, (0x021086:24)
 	and hl, 0x2
 	extz xhl
 	ret
 
 SMFMute_GetUpperBits:
-	ldw_da xhl, (0x021086)
+	ld hl, (0x021086:24)
 	and hl, 0xfffc
 	extz xhl
 	ret
 
 SMFMute_ClearBit0:
-	ldw_da xhl, (0x021086)
+	ld hl, (0x021086:24)
 	res 0, hl
 	extz xhl
 	ret
@@ -5008,7 +5008,7 @@ InitializeKubo:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe27596)
+	ld wa, (0xe27596:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe27180:24)
 	ld (XBC+0x0a),XWA
@@ -5019,7 +5019,7 @@ InitializeKubo:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe275f8)
+	ld wa, (0xe275f8:24)
 	ld (XBC+0x08),WA
 	lda xwa, (EvtEffDraw_PtrTable:24)
 	ld (XBC+0x0a),XWA
@@ -5030,7 +5030,7 @@ InitializeKubo:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (EffectsEditor_GapByte)
+	ld wa, (EffectsEditor_GapByte:24)
 	ld (XBC+0x08),WA
 	lda xwa, (MT_FuncName_PtrTable:24)
 	ld (XBC+0x0a),XWA

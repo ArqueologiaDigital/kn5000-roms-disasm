@@ -45,7 +45,7 @@ SeqPlay_FinishFloppyLoadAndStart:
 	stdi16 (6699), 1
 	call SeqPlay_DelayLoop_Outer
 	call BitMapOut_RenderDisplay
-	ldw_da xwa, (0x00ffec)
+	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
 	anddi8 (0x28a7), 247
 	call SeqPlay_CheckStartConditions
@@ -861,7 +861,7 @@ SoundGen_ScanActiveVoiceBitmap:
 	xor c, c
 
 SoundGen_ScanBitmap_Loop:
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -1923,7 +1923,7 @@ SoundGen_ScaleAndWriteTempo:
 
 SoundGen_SetVoiceBitAndWriteRegs:
 	ld bc, iy
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	stcf_a_16 de
@@ -2494,7 +2494,7 @@ ToneGen_SetChannelFlag:
 	ld a, c
 	scf
 	stcfa_dd16 0xfa, 0x19
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	stcf_a_16 de
@@ -2522,7 +2522,7 @@ ToneGen_SyncVoiceBitmapFromSlots:
 ToneGen_SyncBitmap_Loop:
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	xorcf_a_16 de
@@ -4401,7 +4401,7 @@ ToneGen_SetSustainBit:
 	and iy, 0xf
 	ld bc, iy
 	xor b, b
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, c
 	scf
 	stcf_a_16 de

@@ -22,7 +22,7 @@ InitializeToshi:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xed2d02)
+	ld wa, (0xed2d02:24)
 	ld (XBC+0x08),WA
 	lda xwa, (ExtData_NormScreenProc_Ptr:24)
 	ld (XBC+0x0a),XWA
@@ -33,7 +33,7 @@ InitializeToshi:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xed2d92)
+	ld wa, (0xed2d92:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xed2d04:24)
 	ld (XBC+0x0a),XWA
@@ -44,7 +44,7 @@ InitializeToshi:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xed2f64)
+	ld wa, (0xed2f64:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xed2d94:24)
 	ld (XBC+0x0a),XWA

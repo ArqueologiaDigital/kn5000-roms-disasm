@@ -2087,11 +2087,11 @@ CONTROL_PANEL_BIT_SET_CLEAR__done:
 INTER_CPU_LATCH_READ_DISPATCH:
 	push xiz
 	ld xiz, xwa	; Save parameter pointer in XIZ
-	ldw_da xhl, (0x110002); Read status register
+	ld hl, (0x110002:24); Read status register
 	bit 0, hl	; Check bit 0 (data available?)
 	jr z, INTER_CPU_LATCH_READ_DISPATCH__error	; If not set, return error
 
-	ldw_da xwa, (0x110000); Read the keybed DATA word
+	ld wa, (0x110000:24); Read the keybed DATA word
 	ld b, a	; B = low byte
 	and b, 0xFF	; Mask to byte
 	srl wa, 8	; WA >>= 8 (get high byte in A)
@@ -2198,13 +2198,13 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	lda xde, (0xff804c:24); XDE = ToneGen_Velocity_Input_Curve
 	lds32 xhl, 0	; Clear XHL
 	ldb_sri L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
-	ldw_da xbc, (0xff802a); BC = ToneGen_VelCurve_Pivot (77)
+	ld bc, (0xff802a:24); BC = ToneGen_VelCurve_Pivot (77)
 	sub hl, bc	; HL = L - BC
 	lda xde, (0xff8040:24); XDE = ToneGen_VelCurve_ModeParams_Mode6
 	ld c, (xde)	; C = table[0]
 	extz bc	; Zero-extend BC
 	muls xbc, xhl	; XBC = BC * HL (signed)
-	ldw_da xhl, (0xff802c); HL = ToneGen_VelCurve_Divisor (128)
+	ld hl, (0xff802c:24); HL = ToneGen_VelCurve_Divisor (128)
 	exts xbc	; Sign-extend XBC
 	divs xbc, xhl	; XBC = XBC / HL (signed)
 	ld hl, bc	; HL = quotient
@@ -2268,7 +2268,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__zero_velocity:
 
 AUDIO_HW_WRITE_READ:
 	stw_da (0x100000), xwa; Write WA to hardware register
-	ldw_da xhl, (0x100004); Read status/result
+	ld hl, (0x100004:24); Read status/result
 	ret
 
 ; ==============================================================================
@@ -2312,7 +2312,7 @@ __jrt_nop_FF8CA9:
 	calr HARDWARE_PARAM_BLOCK_WRITE	; Write parameters to hardware
 
 	; Read back and verify
-	ldw_da xbc, (0xff824c); BC = ToneGen_ProbeVoice_ParamBlock word 0 (0xF000)
+	ld bc, (0xff824c:24); BC = ToneGen_ProbeVoice_ParamBlock word 0 (0xF000)
 	lds wa, 0
 	calr HARDWARE_VERIFY_WRITE	; Call verification routine
 

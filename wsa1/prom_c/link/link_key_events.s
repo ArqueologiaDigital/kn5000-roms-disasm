@@ -277,7 +277,7 @@ Link_Ch0_AppendToRing__F98DB0:
 Link_Ch0_AppendToRing__F98DB5:
 	ld	xbc, (xiz+10)                       ; F98DB5  ld XBC,(XIZ+0x0a)
 	ld	h, (xbc)                            ; F98DB8  ld H,(XBC)
-	ldw_da	wa, (0xE2EB)                    ; F98DBA  ld WA,(0x00e2eb)
+	ld	wa, (0xE2EB:24)                    ; F98DBA  ld WA,(0x00e2eb)
 	and	wa, 0xFFF                          ; F98DBF  and WA,0x0fff
 	exts	xwa                               ; F98DC3  exts XWA
 	inc	6, xwa                             ; F98DC5  inc 6,XWA

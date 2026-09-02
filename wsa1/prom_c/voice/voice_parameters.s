@@ -770,7 +770,7 @@ Voice_SelectKeyZone_Reg0040__FA8231:
 	ld	bc, (0x14FF:16)                       ; FA8233  ld BC,(0x14ff)
 	and	bc, 4                                  ; FA8237  and BC,0x0004
 	jr z, Voice_SelectKeyZone_Reg0040__FA8266                   ; FA823B  jr Z,0xfa8266
-	ldw_da	de, (0xD760)                        ; FA823D  ld DE,(0x00d760)
+	ld	de, (0xD760:24)                        ; FA823D  ld DE,(0x00d760)
 	ld	hl, de                                  ; FA8242  ld HL,DE
 	and	hl, 0xF000                             ; FA8244  and HL,0xf000
 	cp	hl, 0x6000                              ; FA8248  cp HL,0x6000
@@ -885,7 +885,7 @@ Voice_StageRegs_0040_B__FA82D8:
 	ld	bc, (0x14FF:16)                       ; FA82F0  ld BC,(0x14ff)
 	and	bc, 4                                  ; FA82F4  and BC,0x0004
 	jr z, Voice_StageRegs_0040_B__FA831D                   ; FA82F8  jr Z,0xfa831d
-	ldw_da	hl, (0xD760)                        ; FA82FA  ld HL,(0x00d760)
+	ld	hl, (0xD760:24)                        ; FA82FA  ld HL,(0x00d760)
 	ld	bc, hl                                  ; FA82FF  ld BC,HL
 	and	bc, 0xF000                             ; FA8301  and BC,0xf000
 	ld	de, bc                                  ; FA8305  ld DE,BC
@@ -3763,7 +3763,7 @@ Voice_StageRegs_0500_08C0_AB__FA96CE:
 	ld	bc, ix                                  ; FA96CE  ld BC,IX
 	and	bc, 0xFF                               ; FA96D0  and BC,0x00ff
 	ordm16_24	(0xD774), bc                     ; FA96D4  or (0x00d774),BC
-	ldw_da	bc, (0xD77E)                        ; FA96D9  ld BC,(0x00d77e)
+	ld	bc, (0xD77E:24)                        ; FA96D9  ld BC,(0x00d77e)
 	ld	hl, bc                                  ; FA96DE  ld HL,BC
 	sll	hl, 8                                  ; FA96E0  sll 0x08,HL
 	ld	bc, (xiz-2)                             ; FA96E3  ld BC,(XIZ+0xfe)
@@ -3843,7 +3843,7 @@ Voice_StageRegs_CD:
 	push	xwa                                   ; FA975E  push XWA
 	pushw	bc                                   ; FA975F  push BC
 	call	0xFC7FCA                              ; FA9760  call 0xfc7fca
-	ldw_da	bc, (0xD77E)                        ; FA9764  ld BC,(0x00d77e)
+	ld	bc, (0xD77E:24)                        ; FA9764  ld BC,(0x00d77e)
 	sll	bc, 8                                  ; FA9769  sll 0x08,BC
 	ordm16_24	(0xD77C), bc                     ; FA976C  or (0x00d77c),BC
 	inc	6, xsp                                 ; FA9771  inc 6,XSP
@@ -4428,7 +4428,7 @@ Voice_StageChanSel_Reg0440_Reg0480__FA9BF3:
 	sub	xbc, xiy                               ; FA9C1D  sub XBC,XIY
 	ld	(xiz-12), xbc                           ; FA9C1F  ld (XIZ+0xf4),XBC
 	extpfx7 0xD2, 0xA0, 0xD7, 0x00, 0x3C, 0x00, 0xE0 ; FA9C22  and (0x00d7a0),0xe000
-	ldw_da	ix, (0xD7A0)                        ; FA9C29  ld IX,(0x00d7a0)
+	ld	ix, (0xD7A0:24)                        ; FA9C29  ld IX,(0x00d7a0)
 	ld	bc, (xiz-12)                            ; FA9C2E  ld BC,(XIZ+0xf4)
 	or	bc, ix                                  ; FA9C31  or BC,IX
 	stw_da	(0xD7A0), bc                        ; FA9C33  ld (0x00d7a0),BC

@@ -325,7 +325,7 @@ INTTC3_HANDLER:
 	push xix
 	lda xix, (0x008568:24)
 	pushw_erp 0xE2
-	ldw_da bc, 0x00F32D
+	ld bc, (0x00F32D:24)
 	extz bc
 	extz xbc
 	dec 1, bc

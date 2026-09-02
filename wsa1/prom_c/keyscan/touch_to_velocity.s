@@ -335,7 +335,7 @@ ToneGen_BlackKeyTrim_Table:
 	.long	0x00F996A7
 	.long	0x00F9968B
 ToneGen_VelocityFromTouch__offset:
-	ldw_da	bc, 0x00F32B
+	ld	bc, (0x00F32B:24)
 	extz	bc
 	extz	xbc
 	sub	xbc, 80

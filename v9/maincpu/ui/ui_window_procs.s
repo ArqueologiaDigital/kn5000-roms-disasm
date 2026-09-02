@@ -58,7 +58,7 @@ WndScroll_InitSelectionTrack:
 	calr WindowProc
 	stiw_da (0x0274dc), 0xffff
 	stiw_da (0x0274e0), 0xffff
-	ldw_da xde, (0x0274d8)
+	ld de, (0x0274d8:24)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e00080
@@ -77,14 +77,14 @@ WndScroll_HandleSelectionChange:
 	jrl z, UIDialog_ReturnZeroJmp
 	ld xwa, (xsp + 50)
 	calr GetClientBox
-	ldw_da xwa, (0x0274da)
+	ld wa, (0x0274da:24)
 	extz xwa
 	sll xwa, 2
 	ld xbc, Data_SoundEditorCharsLayout
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 4), xwa
-	ldw_da xwa, (0x0274e0)
+	ld wa, (0x0274e0:24)
 	cp wa, 0xffff
 	jr z, WndScroll_DrawCurrentItem
 	extz xwa
@@ -93,7 +93,7 @@ WndScroll_HandleSelectionChange:
 	lda xbc, (xsp + 12)
 	ld xwa, (xwa)
 	call ConvertStrings
-	ldw_da xwa, (0x0274e0)
+	ld wa, (0x0274e0:24)
 	extz xwa
 	div wa, 0xd
 	mul wa, 0x18
@@ -104,7 +104,7 @@ WndScroll_HandleSelectionChange:
 	add wa, de
 	lda xde, (xsp + 26)
 	ld (xde + 2), wa
-	ldw_da xwa, (0x0274e0)
+	ld wa, (0x0274e0:24)
 	extz xwa
 	div wa, 0xd
 	stw_erp HL, 0xe2
@@ -131,14 +131,14 @@ WndScroll_HandleSelectionChange:
 	call DrawFrame
 
 WndScroll_DrawCurrentItem:
-	ldw_da xwa, (0x0274de)
+	ld wa, (0x0274de:24)
 	extz xwa
 	sll xwa, 2
 	add xwa, (xsp + 4)
 	lda xbc, (xsp + 12)
 	ld xwa, (xwa)
 	call ConvertStrings
-	ldw_da xwa, (0x0274de)
+	ld wa, (0x0274de:24)
 	extz xwa
 	div wa, 0xd
 	mul wa, 0x18
@@ -149,7 +149,7 @@ WndScroll_DrawCurrentItem:
 	add wa, de
 	lda xde, (xsp + 26)
 	ld (xde + 2), wa
-	ldw_da xwa, (0x0274de)
+	ld wa, (0x0274de:24)
 	extz xwa
 	div wa, 0xd
 	stw_erp HL, 0xe2
@@ -174,12 +174,12 @@ WndScroll_DrawCurrentItem:
 	ld (xwa + 6), bc
 	ldw bc, 0xf2
 	call DrawFrame
-	ldw_da xwa, (0x0274de)
+	ld wa, (0x0274de:24)
 	stw_da (0x0274e0), xwa
 	jrl UIDialog_ReturnZeroJmp
 
 WndScroll_RepaintAll:
-	ldw_da xwa, (0x0274dc)
+	ld wa, (0x0274dc:24)
 	cpda16_24 xwa, (0x0274da)
 	jrl z, UIDialog_ReturnZeroJmp
 	stiw_da (0x0274e0), 0xffff
@@ -188,7 +188,7 @@ WndScroll_RepaintAll:
 	lda xwa, (xsp + 34)
 	ldw bc, 0xf5
 	call DrawBox
-	ldw_da xwa, (0x0274da)
+	ld wa, (0x0274da:24)
 	extz xwa
 	sll xwa, 2
 	ld xbc, Data_SoundEditorCharsLayout
@@ -232,9 +232,9 @@ WndScroll_DrawSingleItem:
 	inc 1, iz
 
 WndScroll_ItemCountCheck:
-	ldw_da xbc, (0x0274e2)
+	ld bc, (0x0274e2:24)
 	mul bc, 0x3
-	ldw_da xwa, (0x0274da)
+	ld wa, (0x0274da:24)
 	add bc, wa
 	extz xbc
 	add xbc, xbc
@@ -265,7 +265,7 @@ WndEvt_DispatchByEventCode:
 
 ; Window event dispatch by event code
 WndEvt_EventCodeDispatch:
-	ldw_da	wa, (0x0274d8)
+	ld	wa, (0x0274d8:24)
 	cps	wa, 0
 	jrl	z, 2252
 	dec	1, wa
@@ -280,7 +280,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0xaf
 	.ascii "*\"x6"
 	pop	sr
-	ldw_da	wa, (0x0274d8)
+	ld	wa, (0x0274d8:24)
 	ld	bc, wa
 	inc	1, bc
 	cpda16_24 xbc, (160982)
@@ -296,10 +296,10 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	770
-	ldw_da	bc, (0x0274de)
+	ld	bc, (0x0274de:24)
 	cps	bc, 0
 	jrl	z, 2155
-	ldw_da	wa, (0x0274da)
+	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
 	ld	xde, Data_SoundEditorCharsLayout
@@ -315,7 +315,7 @@ WndEvt_EventCodeDispatch:
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
 	call	ConvertStrings
-	ldw_da	wa, (0x0274d8)
+	ld	wa, (0x0274d8:24)
 	extz	xwa
 	lda	xde, (0x0274b0:24)
 	ld	xbc, xde
@@ -325,7 +325,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	call	SendEvent
-	ldw_da	de, (0x0274de)
+	ld	de, (0x0274de:24)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01c0000e
@@ -346,12 +346,12 @@ WndEvt_EventCodeDispatch:
 	jr	z, 9
 	cp	xwa, 0x01c00019
 	jrl	nz, 1992
-	ldw_da	bc, (0x0274de)
+	ld	bc, (0x0274de:24)
 	cp	bc, 13
 	jrl	c, 1980
 	sub	bc, 13
 	stw_da	(0x0274de), bc
-	ldw_da	wa, (0x0274da)
+	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
 	add	xde, xwa
@@ -363,7 +363,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xbc)
 	ld	xbc, (xsp+8)
 	call	ConvertStrings
-	ldw_da	wa, (0x0274d8)
+	ld	wa, (0x0274d8:24)
 	extz	xwa
 	lda	xde, (0x0274b0:24)
 	ld	xbc, xde
@@ -373,7 +373,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	call	SendEvent
-	ldw_da	de, (0x0274de)
+	ld	de, (0x0274de:24)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01c0000e
@@ -382,20 +382,20 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	476
-	ldw_da	wa, (0x0274da)
+	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
-	ldw_da	wa, (0x0274de)
+	ld	wa, (0x0274de:24)
 	extz	xwa
 	sll	xwa, 2
 	.byte 0xaf, 0x04, 0x80
 	ld	xwa, (xwa)
 	ld	xbc, (xsp+8)
 	call	ConvertStrings
-	ldw_da	wa, (0x0274e2)
+	ld	wa, (0x0274e2:24)
 	mul	wa, 3
 	addda16_24	wa, (0x0274da)
 	extz	xwa
@@ -403,7 +403,7 @@ WndEvt_EventCodeDispatch:
 	lda	xde, (Data_SoundEditorCharsLayout_0xC:24)
 	ld	xbc, xde
 	add	xbc, xwa
-	ldw_da	wa, (0x0274de)
+	ld	wa, (0x0274de:24)
 	ld	hl, wa
 	add	hl, 12
 	.byte 0x91, 0xf3
@@ -415,14 +415,14 @@ WndEvt_EventCodeDispatch:
 	jr	nz, 7
 	dec	1, wa
 	stw_da	(0x0274de), wa
-	ldw_da	bc, (0x0274e2)
+	ld	bc, (0x0274e2:24)
 	mul	bc, 3
-	ldw_da	wa, (0x0274da)
+	ld	wa, (0x0274da:24)
 	add	bc, wa
 	extz	xbc
 	add	xbc, xbc
 	add	xde, xbc
-	ldw_da	wa, (0x0274de)
+	ld	wa, (0x0274de:24)
 	ld	bc, wa
 	add	bc, 13
 	.byte 0x92, 0xf1
@@ -430,7 +430,7 @@ WndEvt_EventCodeDispatch:
 	ld	bc, wa
 	add	bc, 13
 	stw_da	(0x0274de), bc
-	ldw_da	wa, (0x0274da)
+	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
 	.byte 0x42
@@ -454,7 +454,7 @@ WndEvt_EventCodeDispatch:
 	push	xsp
 	.byte 0x50
 	jr	nz, 22
-	ldw_da	bc, (0x0274d8)
+	ld	bc, (0x0274d8:24)
 	extz	xbc
 	ld	xde, xwa
 	add	xde, xbc
@@ -462,7 +462,7 @@ WndEvt_EventCodeDispatch:
 	ld	a, (xwa)
 	ld	(xde), a
 	jr	11
-	ldw_da	de, (0x0274d8)
+	ld	de, (0x0274d8:24)
 	extz	xde
 	add	xwa, xde
 	ld	(xwa), c
@@ -470,7 +470,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x0274b0
 	call	SendEvent
-	ldw_da	de, (0x0274de)
+	ld	de, (0x0274de:24)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01c0000e
@@ -479,7 +479,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, (xsp+46)
 	ld	xde, (xsp+42)
 	jrl	181
-	ldw_da	bc, (0x0274da)
+	ld	bc, (0x0274da:24)
 	ld	wa, bc
 	extz	xwa
 	sll	xwa, 2
@@ -487,14 +487,14 @@ WndEvt_EventCodeDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
-	ldw_da	wa, (0x0274e2)
+	ld	wa, (0x0274e2:24)
 	mul	wa, 3
 	add	wa, bc
 	extz	xwa
 	add	xwa, xwa
 	ld	xbc, Data_SoundEditorCharsLayout_0xC
 	add	xbc, xwa
-	ldw_da	wa, (0x0274de)
+	ld	wa, (0x0274de:24)
 	ld	de, wa
 	inc	1, de
 	.byte 0x91, 0xf2
@@ -509,7 +509,7 @@ WndEvt_EventCodeDispatch:
 	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
-	ldw_da	wa, (0x0274d8)
+	ld	wa, (0x0274d8:24)
 	extz	xwa
 	cp	c, 83
 	jr	nz, 24
@@ -530,7 +530,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x0274b0
 	call	SendEvent
-	ldw_da	de, (0x0274de)
+	ld	de, (0x0274de:24)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01c0000e
@@ -540,7 +540,7 @@ WndEvt_EventCodeDispatch:
 	ld	xde, (xsp+42)
 	calr	59928
 	jrl	1389
-	ldw_da	iz, (0x0274d6)
+	ld	iz, (0x0274d6:24)
 	dec	1, iz
 	cpda16_24 xiz, (160984)
 	jr	ule, 47
@@ -563,7 +563,7 @@ WndEvt_EventCodeDispatch:
 	dec	1, xbc
 	cpda16_24 xiz, (160984)
 	jr	ugt, -31
-	ldw_da	wa, (0x0274d8)
+	ld	wa, (0x0274d8:24)
 	extz	xwa
 	lda	xde, (0x0274b0:24)
 	ld	xbc, xde
@@ -574,12 +574,12 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	call	SendEvent
-	ldw_da	de, (0x0274d8)
+	ld	de, (0x0274d8:24)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
 	jrl	1267
-	ldw_da	iz, (0x0274d8)
+	ld	iz, (0x0274d8:24)
 	cpda16_24 xiz, (160982)
 	jr	nc, 47
 	lda	xde, (0x0274b0:24)
@@ -601,7 +601,7 @@ WndEvt_EventCodeDispatch:
 	inc	1, xbc
 	cpda16_24 xiz, (160982)
 	jr	c, -34
-	ldw_da	wa, (0x0274d6)
+	ld	wa, (0x0274d6:24)
 	dec	1, wa
 	extz	xwa
 	lda	xde, (0x0274b0:24)
@@ -613,14 +613,14 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
 	call	SendEvent
-	ldw_da	de, (0x0274d8)
+	ld	de, (0x0274d8:24)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
 	jrl	1149
 	ld qiz, 0
 	lds iz, 0
-	ldw_da	de, (0x0274d6)
+	ld	de, (0x0274d6:24)
 	cps	de, 0
 	jr	ule, 28
 	lda	xhl, (0x0274b0:24)
@@ -677,7 +677,7 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	Strcpy
-	ldw_da	wa, (0x0274d6)
+	ld	wa, (0x0274d6:24)
 	.byte 0xd7
 	swi	2
 	.byte 0xa0, 0x9f
@@ -721,7 +721,7 @@ WndEvt_EventCodeDispatch:
 	.byte 0xd7
 	swi	2
 	.byte 0x89, 0x9f, 0x04, 0x81, 0x9f, 0x06, 0xa1
-	ldw_da	wa, (0x0274d6)
+	ld	wa, (0x0274d6:24)
 	ld	iz, wa
 	sub	iz, bc
 	cp	iz, wa
@@ -743,7 +743,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 0x01c0000f
 	ld	xde, 0x0274b0
 	call	SendEvent
-	ldw_da	de, (0x0274d8)
+	ld	de, (0x0274d8:24)
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
@@ -817,12 +817,12 @@ WndScroll_HandleIndexChange:
 	call SendEvent
 
 WndScroll_SendSelectionEvents:
-	ldw_da xde, (0x0274da)
+	ld de, (0x0274da:24)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1c0000f
 	call SendEvent
-	ldw_da xwa, (0x0274da)
+	ld wa, (0x0274da:24)
 	extz xwa
 	sll xwa, 2
 	ld xbc, DiskWarning_ConfirmStrings_0xF46
@@ -844,7 +844,7 @@ WndScroll_HandleCharInput:
 	ld xbc, 0x1c0000f
 	ld xde, 0x274b0
 	call SendEvent
-	ldw_da xbc, (0x0274d8)
+	ld bc, (0x0274d8:24)
 	extz xbc
 	lda xde, (0x0274b0:24)
 	ld xwa, xde
@@ -878,7 +878,7 @@ WndScroll_SetCategoryZero:
 	ldb c, 0x15
 
 WndScroll_ComputeCharOffset:
-	ldw_da xwa, (0x0274d8)
+	ld wa, (0x0274d8:24)
 	extz xwa
 	add xde, xwa
 	ld a, (xde)
@@ -925,7 +925,7 @@ WndScroll_CompareCharLoop:
 	lda xbc, (xsp + 12)
 	ld xwa, (xwa)
 	call ConvertStrings
-	ldw_da xwa, (0x0274d8)
+	ld wa, (0x0274d8:24)
 	extz xwa
 	ld xbc, 0x274b0
 	add xbc, xwa
@@ -939,7 +939,7 @@ WndScroll_CharMismatch:
 	inc 1, iz
 
 WndScroll_CheckTableEnd:
-	ldw_da xwa, (0x0274e2)
+	ld wa, (0x0274e2:24)
 	mul wa, 0x3
 	inc 2, wa
 	extz xwa
@@ -950,25 +950,25 @@ WndScroll_CheckTableEnd:
 	jr ule, WndScroll_CompareCharLoop
 
 WndScroll_SendPageEvents:
-	ldw_da xde, (0x0274da)
+	ld de, (0x0274da:24)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e0007f
 	call SendEvent
-	ldw_da xde, (0x0274de)
+	ld de, (0x0274de:24)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1c0000e
 	jrl WndScroll_SendAndReturn
 
 WndScroll_HandleCharSet:
-	ldw_da xwa, (0x0274d8)
+	ld wa, (0x0274d8:24)
 	extz xwa
 	ld xbc, 0x274b0
 	add xbc, xwa
 	ld xwa, (xsp + 42)
 	ld (xbc), a
-	ldw_da xde, (0x0274d8)
+	ld de, (0x0274d8:24)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e00080
@@ -990,7 +990,7 @@ WndScroll_HandleDialPage:
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1e0007f
 	call SendEvent
-	ldw_da xwa, (0x0274e2)
+	ld wa, (0x0274e2:24)
 	mul wa, 0x3
 	addda16_24 xwa, (0x0274da)
 	ld bc, wa
@@ -1004,14 +1004,14 @@ WndScroll_HandleDialPage:
 	stw_da (0x0274de), xwa
 
 WndScroll_ClampPageCount:
-	ldw_da xwa, (0x0274da)
+	ld wa, (0x0274da:24)
 	extz xwa
 	sll xwa, 2
 	ld xbc, Data_SoundEditorCharsLayout
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (xsp + 4), xwa
-	ldw_da xwa, (0x0274de)
+	ld wa, (0x0274de:24)
 	extz xwa
 	sll xwa, 2
 	add xwa, (xsp + 4)
@@ -1039,7 +1039,7 @@ WndScroll_CheckSPMarker:
 
 WndScroll_SendConfirmEvent:
 	call SendEvent
-	ldw_da xde, (0x0274de)
+	ld de, (0x0274de:24)
 	extz xde
 	ld xwa, (xsp + 50)
 	ld xbc, 0x1c0000e
@@ -7090,7 +7090,7 @@ ChangeWallPalette_QueueCallback:
 ChangeWallPalette_Impl:
 	push xiz
 	ld iz, wa
-	ldw_da xwa, (0x03ef9c)
+	ld wa, (0x03ef9c:24)
 	cps wa, 2
 	jr z, WallPalette_Done
 	cps wa, 0

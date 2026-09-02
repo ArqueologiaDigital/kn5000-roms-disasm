@@ -12861,7 +12861,7 @@ SeqVoice_DispatchProcess_Data:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ldw_da	hl, (0x9482e)
+	ld	hl, (0x9482e:24)
 	extz	xhl
 	sll	xhl, 4
 	ret
@@ -12887,7 +12887,7 @@ SeqVoice_DispatchProcess_Data:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ldw_da	hl, (0x1e881c)
+	ld	hl, (0x1e881c:24)
 	extz	xhl
 	sll	xhl, 4
 	ret

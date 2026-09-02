@@ -1340,7 +1340,7 @@ RhythmBuf_ProcessEvents:
 	calr SeqTiming_Snapshot
 
 RhythmBuf_ProcessLoop:
-	ldw_da xwa, (0x01ef59)
+	ld wa, (0x01ef59:24)
 	cpda16_24 xwa, (0x1ef55)
 	jr z, RhythmBuf_ProcessLoop_Done
 	calr RhythmBuf_DispatchEvent
@@ -1358,8 +1358,8 @@ RhythmBuf_DispatchEvent:
 RhythmBuf_Dispatch_NonNoteOn:
 	call	16677892
 RhythmBuf_Dispatch_UpdateReadPos:
-	ldw_da xwa, (0x01ef57)
-	ldw_da xbc, (0x01ef55)
+	ld wa, (0x01ef57:24)
+	ld bc, (0x01ef55:24)
 	stw_da (0x01ef55), xwa
 	sub wa, bc
 	jr ge, RhythmBuf_Dispatch_NoWrap
@@ -3217,7 +3217,7 @@ SeqBuf_WriteBytes_Loop:
 	ret
 
 SeqBuf_InlineBytecode:
-	ldw_da	hl, (0x1e545)
+	ld	hl, (0x1e545:24)
 	.byte 0xd2
 	ld	xbc, 0xdbf301e5
 	.byte 0xa8
@@ -3226,7 +3226,7 @@ SeqBuf_InlineBytecode:
 	ret
 
 SeqBuf_GetWritePos:
-	ldw_da xhl, (0x01e547)
+	ld hl, (0x01e547:24)
 	ret
 
 SeqBuf_Init:
@@ -3240,7 +3240,7 @@ SeqBuf_Init:
 
 SeqBuf_SaveReadPos:
 	pushw hl
-	ldw_da xhl, (0x01e541)
+	ld hl, (0x01e541:24)
 	stw_da (0x01e53f), xhl
 	popw hl
 	ret
@@ -3263,14 +3263,14 @@ SeqBuf_ReadAlternate2:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1e543)
+	ld	hl, (0x1e543:24)
 	stw_da	(0x1e541), hl
 	popw	hl
 	ret
 
 SeqBuf_SaveWritePos:
 	pushw hl
-	ldw_da xhl, (0x01e545)
+	ld hl, (0x01e545:24)
 	stw_da (0x01e543), xhl
 	popw hl
 	ret
@@ -3317,7 +3317,7 @@ TempoRingBuf_WriteBytes_Loop:
 	ret
 
 TempoRingBuf_CheckEmpty:
-	ldw_da xhl, (0x01e74f)
+	ld hl, (0x01e74f:24)
 	cpda16_24 xhl, (0x1e74b)
 	lds hl, 0
 	jr z, TempoRingBuf_CheckEmpty_Return
@@ -3327,7 +3327,7 @@ TempoRingBuf_CheckEmpty_Return:
 	ret
 
 TempoRingBuf_BytecodeSnippet2:
-	ldw_da	hl, (0x1e751)
+	ld	hl, (0x1e751:24)
 	ret
 
 TempoRingBuf_Init:
@@ -3341,7 +3341,7 @@ TempoRingBuf_Init:
 
 TempoRingBuf_SaveReadPos:
 	pushw hl
-	ldw_da xhl, (0x01e74b)
+	ld hl, (0x01e74b:24)
 	stw_da (0x01e749), xhl
 	popw hl
 	ret
@@ -3366,12 +3366,12 @@ TempoRingBuf_ReadAlternate:
 
 TempoRingBuf_SaveWritePos:
 	pushw	hl
-	ldw_da	hl, (0x1e74d)
+	ld	hl, (0x1e74d:24)
 	stw_da	(0x1e74b), hl
 	popw	hl
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1e74f)
+	ld	hl, (0x1e74f:24)
 	stw_da	(0x1e74d), hl
 	popw	hl
 	ret
@@ -3414,7 +3414,7 @@ RhythmBuf_InlineBytecode:
 	ret
 
 RhythmBuf_CheckEmpty:
-	ldw_da xhl, (0x01ef59)
+	ld hl, (0x01ef59:24)
 	cpda16_24 xhl, (0x1ef55)
 	lds hl, 0
 	jr z, RhythmBuf_CheckEmpty_Return
@@ -3424,7 +3424,7 @@ RhythmBuf_CheckEmpty_Return:
 	ret
 
 RhythmBuf_BytecodeSnippet:
-	ldw_da	hl, (0x1ef5b)
+	ld	hl, (0x1ef5b:24)
 	ret
 
 RhythmBuf_Init:
@@ -3438,7 +3438,7 @@ RhythmBuf_Init:
 
 RhythmBuf_SaveWritePos:
 	pushw hl
-	ldw_da xhl, (0x01ef55)
+	ld hl, (0x01ef55:24)
 	stw_da (0x01ef53), xhl
 	popw hl
 	ret
@@ -3461,12 +3461,12 @@ RhythmBuf_InlineBytecode2:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1ef57)
+	ld	hl, (0x1ef57:24)
 	stw_da	(0x1ef55), hl
 	popw	hl
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1ef59)
+	ld	hl, (0x1ef59:24)
 	stw_da	(0x1ef57), hl
 	popw	hl
 	ret
@@ -3509,7 +3509,7 @@ AltEvtBuf_WriteBytes_Loop:
 	ret
 
 AltEvtBuf_InlineBytecode:
-	ldw_da	hl, (0x1f163)
+	ld	hl, (0x1f163:24)
 	.byte 0xd2
 	pop	xsp
 	.byte 0xf1, 0x01, 0xf3
@@ -3517,7 +3517,7 @@ AltEvtBuf_InlineBytecode:
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
-	ldw_da	hl, (0x1f165)
+	ld	hl, (0x1f165:24)
 	ret
 
 AltEvtBuf_Init:
@@ -3531,7 +3531,7 @@ AltEvtBuf_Init:
 
 AltEvtBuf_Helpers:
 	pushw	hl
-	ldw_da	hl, (0x1f15f)
+	ld	hl, (0x1f15f:24)
 	stw_da	(0x1f15d), hl
 	popw	hl
 	ret
@@ -3550,12 +3550,12 @@ AltEvtBuf_Helpers:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1f161)
+	ld	hl, (0x1f161:24)
 	stw_da	(0x1f15f), hl
 	popw	hl
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1f163)
+	ld	hl, (0x1f163:24)
 	stw_da	(0x1f161), hl
 	popw	hl
 	ret
@@ -3596,7 +3596,7 @@ SeqEvtBuf_InlineBytecode:
 	pop	xiy
 	unlk	xiz
 	ret
-	ldw_da	hl, (0x1f26d)
+	ld	hl, (0x1f26d:24)
 	cpda16_24	hl, (0x1f269)
 	lds	hl, 0
 	jr	z, 3
@@ -3618,7 +3618,7 @@ SeqEvtBuf_Init:
 
 SeqEvtBuf_SaveReadPos:
 	pushw hl
-	ldw_da xhl, (0x01f269)
+	ld hl, (0x01f269:24)
 	stw_da (0x01f267), xhl
 	popw hl
 	ret
@@ -3644,14 +3644,14 @@ SeqEvtBuf_ReadAlternate2:
 SeqEvtBuf_SaveReadPos2:
 	; --- Sub 2: copy (0x01f26b)->HL->(0x01f269) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x1f26b)
+	ld	hl, (0x1f26b:24)
 	stw_da	(0x1f269), hl
 	popw hl
 	ret
 SeqEvtBuf_SaveReadPos3:
 	; --- Sub 3: copy (0x01f26d)->HL->(0x01f26b) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x1f26d)
+	ld	hl, (0x1f26d:24)
 	stw_da	(0x1f26b), hl
 	popw hl
 	ret
@@ -3699,7 +3699,7 @@ SeqMain_WriteBytes_Loop:
 	ret
 
 Seq_CheckSongEnd:
-	ldw_da xhl, (0x01f377)
+	ld hl, (0x01f377:24)
 	cpda16_24 xhl, (0x1f373)
 	lds hl, 0
 	jr z, Seq_CheckSongEnd_Return
@@ -3709,7 +3709,7 @@ Seq_CheckSongEnd_Return:
 	ret
 
 SeqMain_GetTimingValue:
-	ldw_da xhl, (0x01f379)
+	ld hl, (0x01f379:24)
 	ret
 
 SeqMain_InitBuffer:
@@ -3723,7 +3723,7 @@ SeqMain_InitBuffer:
 
 SeqMain_SaveWritePos:
 	pushw hl
-	ldw_da xhl, (0x01f373)
+	ld hl, (0x01f373:24)
 	stw_da (0x01f371), xhl
 	popw hl
 	ret
@@ -3746,12 +3746,12 @@ SeqMain_ReadAlternate:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1f375)
+	ld	hl, (0x1f375:24)
 	stw_da	(0x1f373), hl
 	popw	hl
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1f377)
+	ld	hl, (0x1f377:24)
 	stw_da	(0x1f375), hl
 	popw	hl
 	ret
@@ -3798,7 +3798,7 @@ SeqBuf_MidiOut_WriteBytes_Loop:
 	ret
 
 SeqBuf_MidiOut_CheckEmpty:
-	ldw_da xhl, (0x01f781)
+	ld hl, (0x01f781:24)
 	cpda16_24 xhl, (0x1f77d)
 	lds hl, 0
 	jr z, SeqBuf_MidiOut_CheckEmpty_Return
@@ -3808,7 +3808,7 @@ SeqBuf_MidiOut_CheckEmpty_Return:
 	ret
 
 SeqBuf_MidiOut_GetTimingValue:
-	ldw_da xhl, (0x01f783)
+	ld hl, (0x01f783:24)
 	ret
 
 SeqBuf_MidiOut_Init:
@@ -3823,7 +3823,7 @@ SeqBuf_MidiOut_Init:
 SeqBuf_MidiOut_SaveReadPos:
 	; --- Sub 1: copy (0x01f77d)->HL->(0x01f77b) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x1f77d)
+	ld	hl, (0x1f77d:24)
 	stw_da	(0x1f77b), hl
 	popw hl
 	ret
@@ -3848,14 +3848,14 @@ SeqBuf_MidiOut_ReadAlternate2:
 SeqBuf_MidiOut_SaveReadPos2:
 	; --- Sub 4: copy (0x01f77f)->HL->(0x01f77d) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x1f77f)
+	ld	hl, (0x1f77f:24)
 	stw_da	(0x1f77d), hl
 	popw hl
 	ret
 SeqBuf_MidiOut_SaveReadPos3:
 	; --- Sub 5: copy (0x01f781)->HL->(0x01f77f) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x1f781)
+	ld	hl, (0x1f781:24)
 	stw_da	(0x1f77f), hl
 	popw hl
 	ret
@@ -3903,7 +3903,7 @@ SeqBuf2_WriteBytes_Loop:
 	ret
 
 SeqBuf2_InlineBytecode:
-	ldw_da	hl, (0x1f88b)
+	ld	hl, (0x1f88b:24)
 	.byte 0xd2
 	cp	(xsp), w
 	.byte 0x01, 0xf3
@@ -3911,7 +3911,7 @@ SeqBuf2_InlineBytecode:
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
-	ldw_da	hl, (0x1f88d)
+	ld	hl, (0x1f88d:24)
 	ret
 
 SeqBuf2_Init:
@@ -3926,7 +3926,7 @@ SeqBuf2_Init:
 SeqBuf2_SaveReadPos:
 	; --- Sub 1: copy (0x01f887)->HL->(0x01f885) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x1f887)
+	ld	hl, (0x1f887:24)
 	stw_da	(0x1f885), hl
 	popw hl
 	ret
@@ -3951,14 +3951,14 @@ SeqBuf2_ReadAlternate2:
 SeqBuf2_SaveReadPos2:
 	; --- Sub 4: copy (0x01f889)->HL->(0x01f887) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x1f889)
+	ld	hl, (0x1f889:24)
 	stw_da	(0x1f887), hl
 	popw hl
 	ret
 SeqBuf2_SaveReadPos3:
 	; --- Sub 5: copy (0x01f88b)->HL->(0x01f889) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x1f88b)
+	ld	hl, (0x1f88b:24)
 	stw_da	(0x1f889), hl
 	popw hl
 	ret
@@ -4006,7 +4006,7 @@ SeqBuf3_WriteBytes_Loop:
 	ret
 
 SeqBuf3_InlineBytecode:
-	ldw_da	hl, (0x1fa95)
+	ld	hl, (0x1fa95:24)
 	.byte 0xd2
 	cp	(xbc), de
 	.byte 0x01, 0xf3
@@ -4016,7 +4016,7 @@ SeqBuf3_InlineBytecode:
 	ret
 
 SeqBuf3_GetTimingValue:
-	ldw_da xhl, (0x01fa97)
+	ld hl, (0x01fa97:24)
 	ret
 
 SeqBuf3_Init:
@@ -4030,7 +4030,7 @@ SeqBuf3_Init:
 
 SeqBuf3_Helpers:
 	pushw	hl
-	ldw_da	hl, (0x1fa91)
+	ld	hl, (0x1fa91:24)
 	stw_da	(0x1fa8f), hl
 	popw	hl
 	ret
@@ -4049,12 +4049,12 @@ SeqBuf3_Helpers:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1fa93)
+	ld	hl, (0x1fa93:24)
 	stw_da	(0x1fa91), hl
 	popw	hl
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1fa95)
+	ld	hl, (0x1fa95:24)
 	stw_da	(0x1fa93), hl
 	popw	hl
 	ret
@@ -4103,7 +4103,7 @@ SeqBuf_DspSysEx_WriteBytes_Loop:
 
 
 SeqBuf_DspSysEx_CheckSongEnd:
-	ldw_da xhl, (0x01fc9f)
+	ld hl, (0x01fc9f:24)
 	cpda16_24 xhl, (0x1fc9b)
 	lds hl, 0
 	jr z, SeqBuf_DspSysEx_CheckSongEnd_Return
@@ -4113,7 +4113,7 @@ SeqBuf_DspSysEx_CheckSongEnd_Return:
 	ret
 
 SeqBuf_DspSysEx_OrphanData:
-	ldw_da	hl, (0x1fca1)
+	ld	hl, (0x1fca1:24)
 	ret
 
 SeqBuf_DspSysEx_InitBuffer:
@@ -4127,7 +4127,7 @@ SeqBuf_DspSysEx_InitBuffer:
 
 SeqBuf_DspSysEx_CopyPointers:
 	pushw	hl
-	ldw_da	hl, (0x1fc9b)
+	ld	hl, (0x1fc9b:24)
 	stw_da	(0x1fc99), hl
 	popw	hl
 	ret
@@ -4146,12 +4146,12 @@ SeqBuf_DspSysEx_CopyPointers:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1fc9d)
+	ld	hl, (0x1fc9d:24)
 	stw_da	(0x1fc9b), hl
 	popw	hl
 	ret
 	pushw	hl
-	ldw_da	hl, (0x1fc9f)
+	ld	hl, (0x1fc9f:24)
 	stw_da	(0x1fc9d), hl
 	popw	hl
 	ret
@@ -4194,13 +4194,13 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	pop	xiy
 	unlk	xiz
 	ret
-	ldw_da	hl, (0x200a9)
+	ld	hl, (0x200a9:24)
 	cpda16_24 xhl, (131237)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
-	ldw_da	hl, (0x200ab)
+	ld	hl, (0x200ab:24)
 	ret
 	pushw	ix
 	push	xde
@@ -4210,7 +4210,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x200a5)
+	ld	hl, (0x200a5:24)
 	stw_da	(0x200a3), hl
 	popw	hl
 	ret
@@ -4229,12 +4229,12 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x200a7)
+	ld	hl, (0x200a7:24)
 	stw_da	(0x200a5), hl
 	popw	hl
 	ret
 	pushw	hl
-	ldw_da	hl, (0x200a9)
+	ld	hl, (0x200a9:24)
 	stw_da	(0x200a7), hl
 	popw	hl
 	ret
@@ -4277,7 +4277,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	pop	xiy
 	unlk	xiz
 	ret
-	ldw_da	hl, (0x20133)
+	ld	hl, (0x20133:24)
 	.byte 0xd2
 	pushw	sp
 	.byte 0x01
@@ -4287,7 +4287,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
-	ldw_da	hl, (0x20135)
+	ld	hl, (0x20135:24)
 	ret
 	pushw	ix
 	push	xde
@@ -4297,7 +4297,7 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x2012f)
+	ld	hl, (0x2012f:24)
 	stw_da	(0x2012d), hl
 	popw	hl
 	ret
@@ -4316,12 +4316,12 @@ SeqBuf_TimerEvent_BytecodeBlock2:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x20131)
+	ld	hl, (0x20131:24)
 	stw_da	(0x2012f), hl
 	popw	hl
 	ret
 	pushw	hl
-	ldw_da	hl, (0x20133)
+	ld	hl, (0x20133:24)
 	stw_da	(0x20131), hl
 	popw	hl
 	ret
@@ -4371,7 +4371,7 @@ SeqBuf_VoiceMap_WriteBlock_Loop:
 	ret
 
 SeqBuf_VoiceMap_CheckEmpty:
-	ldw_da xhl, (0x0201bd)
+	ld hl, (0x0201bd:24)
 	cpda16_24 xhl, (0x201b9)
 	lds hl, 0
 	jr z, SeqBuf_VoiceMap_CheckEmpty_Done
@@ -4382,7 +4382,7 @@ SeqBuf_VoiceMap_CheckEmpty_Done:
 
 
 SeqBuf_VoiceMap_GetWritePos:
-	ldw_da xhl, (0x0201bf)
+	ld hl, (0x0201bf:24)
 	ret
 
 
@@ -4398,7 +4398,7 @@ SeqBuf_VoiceMap_Flush:
 SeqBuf_VoiceMap_SaveWritePtr:
 	; --- Sub 1: copy (0x0201b9)->HL->(0x0201b7) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x201b9)
+	ld	hl, (0x201b9:24)
 	stw_da	(0x201b7), hl
 	popw hl
 	ret
@@ -4423,14 +4423,14 @@ SeqBuf_VoiceMap_RollbackWrite:
 SeqBuf_VoiceMap_SaveReadPtr:
 	; --- Sub 4: copy (0x0201bb)->HL->(0x0201b9) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x201bb)
+	ld	hl, (0x201bb:24)
 	stw_da	(0x201b9), hl
 	popw hl
 	ret
 SeqBuf_VoiceMap_AdvanceCheckpoint:
 	; --- Sub 5: copy (0x0201bd)->HL->(0x0201bb) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x201bd)
+	ld	hl, (0x201bd:24)
 	stw_da	(0x201bb), hl
 	popw hl
 	ret
@@ -4472,13 +4472,13 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	pop	xiy
 	unlk	xiz
 	ret
-	ldw_da	hl, (0x202c7)
+	ld	hl, (0x202c7:24)
 	cpda16_24 xhl, (131779)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
-	ldw_da	hl, (0x202c9)
+	ld	hl, (0x202c9:24)
 	ret
 
 SeqBuf_NoteEvent_Flush:
@@ -4493,7 +4493,7 @@ SeqBuf_NoteEvent_Flush:
 
 SeqBuf_NoteEvent_SaveWritePtr:
 	pushw	hl
-	ldw_da	hl, (0x202c3)
+	ld	hl, (0x202c3:24)
 	stw_da	(0x202c1), hl
 	popw	hl
 	ret
@@ -4512,12 +4512,12 @@ SeqBuf_NoteEvent_SaveWritePtr:
 	popw	ix
 	ret
 	pushw	hl
-	ldw_da	hl, (0x202c5)
+	ld	hl, (0x202c5:24)
 	stw_da	(0x202c3), hl
 	popw	hl
 	ret
 	pushw	hl
-	ldw_da	hl, (0x202c7)
+	ld	hl, (0x202c7:24)
 	stw_da	(0x202c5), hl
 	popw	hl
 	ret
@@ -4556,13 +4556,13 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	pop	xiy
 	unlk	xiz
 	ret
-	ldw_da	hl, (0x203d1)
+	ld	hl, (0x203d1:24)
 	cpda16_24 xhl, (132045)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
 	ret
-	ldw_da	hl, (0x203d3)
+	ld	hl, (0x203d3:24)
 	ret
 
 SeqBuf_SoundEdit_Flush:
@@ -4577,7 +4577,7 @@ SeqBuf_SoundEdit_Flush:
 SeqBuf_SoundEdit_SaveWritePtr:
 	; --- Sub 1: copy (0x0203cd)->HL->(0x0203cb) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x203cd)
+	ld	hl, (0x203cd:24)
 	stw_da	(0x203cb), hl
 	popw hl
 	ret
@@ -4602,14 +4602,14 @@ SeqBuf_SoundEdit_RollbackWrite:
 SeqBuf_SoundEdit_SaveReadPtr:
 	; --- Sub 4: copy (0x0203cf)->HL->(0x0203cd) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x203cf)
+	ld	hl, (0x203cf:24)
 	stw_da	(0x203cd), hl
 	popw hl
 	ret
 SeqBuf_SoundEdit_AdvanceCheckpoint:
 	; --- Sub 5: copy (0x0203d1)->HL->(0x0203cf) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x203d1)
+	ld	hl, (0x203d1:24)
 	stw_da	(0x203cf), hl
 	popw hl
 	ret
@@ -4653,7 +4653,7 @@ SeqBuf_SoundEdit_BytecodeBlock:
 	ret
 
 SeqBuf_NoteEvent_CheckSongEnd:
-	ldw_da xhl, (0x0204db)
+	ld hl, (0x0204db:24)
 	cpda16_24 xhl, (0x204d7)
 	lds hl, 0
 	jr z, SeqBuf_NoteEvent_CheckSongEnd_Return
@@ -4663,7 +4663,7 @@ SeqBuf_NoteEvent_CheckSongEnd_Return:
 	ret
 
 SeqBuf_NoteEvent_OrphanData:
-	ldw_da	hl, (0x204dd)
+	ld	hl, (0x204dd:24)
 	ret
 
 SeqBuf_NoteEvent_InitBuffer:
@@ -4677,7 +4677,7 @@ SeqBuf_NoteEvent_InitBuffer:
 
 SeqBuf_NoteEvent_CopyPointers:
 	pushw hl
-	ldw_da xhl, (0x0204d7)
+	ld hl, (0x0204d7:24)
 	stw_da (0x0204d5), xhl
 	popw hl
 	ret
@@ -4704,14 +4704,14 @@ Seq_RingBuf_ReadSmall:
 RingBuf_CopyPtr_Sub1:
 	; --- Sub 1: copy (0x0204d9)->HL->(0x0204d7) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x204d9)
+	ld	hl, (0x204d9:24)
 	stw_da	(0x204d7), hl
 	popw hl
 	ret
 RingBuf_CopyPtr_Sub2:
 	; --- Sub 2: copy (0x0204db)->HL->(0x0204d9) (13 bytes) ---
 	pushw hl
-	ldw_da	hl, (0x204db)
+	ld	hl, (0x204db:24)
 	stw_da	(0x204d9), hl
 	popw hl
 	ret

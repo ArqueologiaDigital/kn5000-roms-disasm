@@ -9339,7 +9339,7 @@ AccompMode_ClearFlag:
 	resda 0, 0x28a5
 
 AccompMode_ApplyAndNotify:
-	ldw_da	wa, (65516)
+	ld	wa, (65516:24)
 	ld	(61854:16), wa
 	call	16635550
 	ldw	wa, 76

@@ -5103,7 +5103,7 @@ SeqVoice_StoreEntry:
 	pop XIX
 	pop XHL
 	pop XDE
-	ldw_da hl, (0x1e881c)
+	ld hl, (0x1e881c:24)
 	extz XHL
 	sll xhl, 4
 	ret

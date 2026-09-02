@@ -4162,7 +4162,7 @@ SetCurrentSlotIndex:
 
 GetCurrentSlotIndex_Entry:
 GetCurrentSlotIndex:
-	ldw_da xhl, (0x09480e)
+	ld hl, (0x09480e:24)
 	ret
 
 CheckIsCurrentSlot_Entry:
@@ -4430,7 +4430,7 @@ PwdOk_HandleConfirm:
 	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call PostEvent
-	ldw_da xde, (0x02741c)
+	ld de, (0x02741c:24)
 	extz xde
 	ld xwa, 0x1450038
 	ld xbc, 0x1e5000d

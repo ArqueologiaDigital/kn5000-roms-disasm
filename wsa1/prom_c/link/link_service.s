@@ -167,7 +167,7 @@ Link_ServiceTask:
 	ei	0                                     ; F99E73  ei 0x00
 	ldl_da	xbc, (0x8524)                   ; F99E75  ld XBC,(0x008524)
 	push	xbc                               ; F99E7A  push XBC
-	ldw_da	bc, (0x8528)                    ; F99E7B  ld BC,(0x008528)
+	ld	bc, (0x8528:24)                    ; F99E7B  ld BC,(0x008528)
 	pushw	bc                               ; F99E80  push BC
 	ldl_da	xbc, (0x8520)                   ; F99E81  ld XBC,(0x008520)
 	push	xbc                               ; F99E86  push XBC

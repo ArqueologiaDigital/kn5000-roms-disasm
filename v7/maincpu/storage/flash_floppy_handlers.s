@@ -443,7 +443,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe0e95c)
+	ld wa, (0xe0e95c:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe0e944:24)
 	ld (XBC+0x0a),XWA
@@ -454,7 +454,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe0e962)
+	ld wa, (0xe0e962:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe0e95e:24)
 	ld (XBC+0x0a),XWA
@@ -465,7 +465,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe0e968)
+	ld wa, (0xe0e968:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe0e964:24)
 	ld (XBC+0x0a),XWA
@@ -3893,7 +3893,7 @@ InitializeSuna:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe17322)
+	ld wa, (0xe17322:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe16c86:24)
 	ld (XBC+0x0a),XWA
@@ -3904,7 +3904,7 @@ InitializeSuna:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe17328)
+	ld wa, (0xe17328:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe17324:24)
 	ld (XBC+0x0a),XWA
@@ -3915,7 +3915,7 @@ InitializeSuna:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe176d2)
+	ld wa, (0xe176d2:24)
 	ld (XBC+0x08),WA
 	lda xwa, (NakaMethodTable_PtrsStart:24)
 	ld (XBC+0x0a),XWA

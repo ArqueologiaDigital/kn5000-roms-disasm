@@ -2480,7 +2480,7 @@ Dev10C_SetReg0201_FromNibblePair__FADC93:
 	sll	bc, 8                                  ; FADCA6  sll 0x08,BC
 	ld	hl, bc                                  ; FADCA9  ld HL,BC
 Dev10C_SetReg0201_FromNibblePair__FADCAB:
-	ldw_da	bc, (0xFE12B7)                      ; FADCAB  ld BC,(0xfe12b7)
+	ld	bc, (0xFE12B7:24)                      ; FADCAB  ld BC,(0xfe12b7)
 	and	bc, 0xF9F                              ; FADCB0  and BC,0x0f9f
 	or	bc, ix                                  ; FADCB4  or BC,IX
 	or	bc, hl                                  ; FADCB6  or BC,HL

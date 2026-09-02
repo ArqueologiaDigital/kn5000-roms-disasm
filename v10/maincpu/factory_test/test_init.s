@@ -299,17 +299,17 @@ RunTestCounters_IncrNG:
 RunTestCounters_Display:
 	lda xwa, (FDTest_String_TestTitleFunc_0xEA:24)
 	calr FDTest_PrintDiag
-	ldw_da de, (0x03dcfe)
+	ld de, (0x03dcfe:24)
 	exts xde
 	ld xwa, 0x00fc0001
 	ld xbc, 0x01c0000f
 	call ApPostEvent
-	ldw_da de, (0x03dd00)
+	ld de, (0x03dd00:24)
 	exts xde
 	ld xwa, 0x00fc0003
 	ld xbc, 0x01c0000f
 	call ApPostEvent
-	ldw_da de, (0x03dd02)
+	ld de, (0x03dd02:24)
 	exts xde
 	ld xwa, 0x00fc0002
 	ld xbc, 0x01c0000f

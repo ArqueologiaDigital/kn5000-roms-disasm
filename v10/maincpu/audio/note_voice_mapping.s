@@ -15142,7 +15142,7 @@ PlayMode_UpdateAndReturn:
 	calr Voice_DispatchByTimingState
 	calr VoiceSlot_CheckAndApply_LoadReg
 	anddi8_24 (0xcede), 191
-	ldw_da xhl, (0x00cf01)
+	ld hl, (0x00cf01:24)
 	anddi16_24 0xcf01, 255
 	cp h, 0xff
 	jr z, PlayMode_SetZeroResult
@@ -15183,7 +15183,7 @@ PlayMode_ClearBit6_Alt:
 PlayMode_CheckSlotAndReturn:
 	calr Voice_CheckAndResetSlotState
 	anddi8_24 (0xcede), 191
-	ldw_da xhl, (0x00cf01)
+	ld hl, (0x00cf01:24)
 	anddi16_24 0xcf01, 255
 	cp h, 0xff
 	jr z, PlayMode_SetZero_Alt
@@ -15201,7 +15201,7 @@ PlayMode_Epilogue:
 	ret
 
 Voice_DispatchByTimingState:
-	ldw_da xbc, (0x00ceff)
+	ld bc, (0x00ceff:24)
 	cps bc, 0
 	jr z, VoiceTiming_ResetSlot
 	bitda_24 0, (0xcede)
@@ -15322,7 +15322,7 @@ VoicePair_Return:
 	ret
 
 Voice_CheckAndResetSlotState:
-	ldw_da xbc, (0x00ceff)
+	ld bc, (0x00ceff:24)
 	ld (0xceb3:16), 0
 	ld (0xceb4:16), 0
 	cps bc, 0
@@ -15419,7 +15419,7 @@ EffectState_Dispatch_Block2:
 
 EffectState_Dispatch_Block3:
 	stib_da (0x00cee5), 0x04
-	ldw_da xde, (0x00ceff)
+	ld de, (0x00ceff:24)
 	calr VoiceSlot_StoreParams_Block2
 	calr VoiceSlot_StoreParams_LoadReg3
 	jr VoiceSlot_StoreParams
@@ -15495,7 +15495,7 @@ VoiceSlot_StoreParams_Return:
 
 VoiceSlot_StoreParams_LoadReg3:
 	ld xiy, 0xceff
-	ldw_da xbc, (0x00ceff)
+	ld bc, (0x00ceff:24)
 	xor a, a
 	xor h, h
 	cps bc, 0
@@ -15695,7 +15695,7 @@ PitchCalc_Return_Return:
 
 PitchCalc_Return_Block:
 	stib_da (0x00cee5), 0x04
-	ldw_da xde, (0x00ceff)
+	ld de, (0x00ceff:24)
 	calr VoiceSlot_StoreParams_Block2
 	cpib_da (0x00cee5), 0x02
 	jr ugt, PitchCalc_Return_Block2
@@ -15856,7 +15856,7 @@ VoiceSlot_LoadResult_Data2:
 
 VoiceSlot_LoadResult_Block3:
 	calr Audio_NullRet2_Prologue
-	ldw_da xwa, (0x00cf2f)
+	ld wa, (0x00cf2f:24)
 	addda8_24 a, (0xcee5)
 	cps a, 2
 	jr ugt, VoiceSlot_LoadResult_TestBit24
@@ -15942,7 +15942,7 @@ Audio_NullRet2:
 Audio_NullRet2_Prologue:
 	push xiz
 	ld xiy, 0xceff
-	ldw_da xhl, (0x00ceff)
+	ld hl, (0x00ceff:24)
 	extz xhl
 	dec 1, xhl
 	sla xhl, 1
@@ -15957,7 +15957,7 @@ Audio_NullRet2_Prologue:
 	jr Voice_ProcessSlotEntry
 
 Audio_NullRet2_LoopBody:
-	ldw_da xde, (0x00ceff)
+	ld de, (0x00ceff:24)
 	cps de, 4
 	jr c, Voice_ProcessSlotEntry
 	stiw_da (0x00cf2f), 0x0001
@@ -15978,7 +15978,7 @@ Audio_NullRet2_LoopCheck:
 	sub a, (xiz + 3)
 	cp a, 0x8
 	jr c, Audio_NullRet2_LoopBody
-	ldw_da xde, (0x00ceff)
+	ld de, (0x00ceff:24)
 	cps de, 5
 	jr c, Voice_ProcessSlotEntry
 	stiw_da (0x00cf2f), 0x0001
@@ -15994,7 +15994,7 @@ Audio_NullRet2_LoopCheck:
 	jr Audio_PopIzRet
 
 Voice_ProcessSlotEntry:
-	ldw_da xde, (0x00ceff)
+	ld de, (0x00ceff:24)
 	cps de, 3
 	jr c, ProcessSlotEntry_Block2
 	ldw_erp DE, 0x3e
@@ -16005,7 +16005,7 @@ Voice_ProcessSlotEntry:
 	stiw_da (0x00cf2f), 0x0000
 	anddi8_24 (0xcede), 253
 	stib_da (0x00cee5), 0x07
-	ldw_da xde, (0x00ceff)
+	ld de, (0x00ceff:24)
 	calr VoiceSlot_CheckPitchIntervals
 	calr NoteBuffer_CompactEn_Block2
 	jr Audio_PopIzRet
@@ -16015,7 +16015,7 @@ ProcessSlotEntry_Block:
 	anddi8_24 (0xcede), 253
 	stib_da (0x00cee1), 0x00
 	stib_da (0x00cee5), 0x07
-	ldw_da xde, (0x00ceff)
+	ld de, (0x00ceff:24)
 	calr VoiceSlot_CheckPitchIntervals
 	calr NoteBuffer_CompactEn_Block2
 	jr Audio_PopIzRet
@@ -16149,8 +16149,8 @@ NoteBuffer_CompactEn_Block2:
 	jr z, NoteBuffer_NullRet
 	cpw_da (0xcf2f), 0
 	jr nz, NoteBuffer_NullRet
-	ldw_da xwa, (0x00cf33)
-	ldw_da xbc, (0x00ceff)
+	ld wa, (0x00cf33:24)
+	ld bc, (0x00ceff:24)
 	ld xiy, 0xceff
 
 NoteBuffer_CompactEn_Compare:
@@ -16654,7 +16654,7 @@ VoiceSlot_IterateAlloc_Block2:
 	ret
 
 VoiceSlot_IterateAlloc_Block3:
-	ldw_da xbc, (0x00ceff)
+	ld bc, (0x00ceff:24)
 	stw_da (0x00cf5f), xbc
 	cps bc, 0
 	jr z, VoiceSlot_IterateAlloc_Return2

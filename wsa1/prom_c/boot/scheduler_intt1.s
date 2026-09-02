@@ -95,7 +95,7 @@ INTT1_HANDLER:
 	sub	xbc, xbc
 	inc	1, xbc
 	addl_da	0x00F2F3, xbc
-	ldw_da	wa, 0x00E2E3
+	ld	wa, (0x00E2E3:24)
 	extz	wa
 	ld	(xiz-2), wa
 	jr	INTT1_HANDLER__dispatch

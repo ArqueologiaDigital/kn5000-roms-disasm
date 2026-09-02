@@ -826,7 +826,7 @@ MAIN:
 	call	0xF98000
 	call	0xF997FA
 	calr	(0xF98A02 - 0xF98BA0)
-	ldw_da	bc, 0x00FFFFEF
+	ld	bc, (0x00FFFFEF:24)
 	extz	bc
 	pushw	bc
 	calr	(0xF990FA - 0xF98BAB)
@@ -874,7 +874,7 @@ MAIN__bit4:
 	resda_24 4, 0x007ED1
 	call	0xF99E5F
 	call	0xFB05EC
-	ldw_da	hl, 0x00E2DF
+	ld	hl, (0x00E2DF:24)
 	ld	bc, hl
 	inc	1, bc
 	ld	(xiz-56), bc

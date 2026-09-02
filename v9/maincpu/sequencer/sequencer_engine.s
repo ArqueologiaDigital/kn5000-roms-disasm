@@ -9657,7 +9657,7 @@ AccompMode_ClearFlag:
 	resda 0, 0x28a5
 
 AccompMode_ApplyAndNotify:
-	ldw_da xwa, (0x00ffec)
+	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
 	call Audio_CheckSubsystemReady
 	ldw wa, 0x4c

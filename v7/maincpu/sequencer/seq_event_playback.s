@@ -3221,7 +3221,7 @@ InitializeEast:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe55cd4)
+	ld wa, (0xe55cd4:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe559ea:24)
 	ld (XBC+0x0a),XWA
@@ -3232,7 +3232,7 @@ InitializeEast:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe55cda)
+	ld wa, (0xe55cda:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe55cd6:24)
 	ld (XBC+0x0a),XWA
@@ -3243,7 +3243,7 @@ InitializeEast:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xe55dac)
+	ld wa, (0xe55dac:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xe55cdc:24)
 	ld (XBC+0x0a),XWA

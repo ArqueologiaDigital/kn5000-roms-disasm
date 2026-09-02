@@ -8,7 +8,7 @@
 ; =============================================================================
 
 BmDrEdit_AdvanceStreamPos:
-	ldw_da xwa, (0x0210a6)
+	ld wa, (0x0210a6:24)
 	cp wa, 0xff
 	jr nc, BmDrEdit_AdvanceStreamWrap
 	inc 1, wa
@@ -16,7 +16,7 @@ BmDrEdit_AdvanceStreamPos:
 	ret
 
 BmDrEdit_AdvanceStreamWrap:
-	ldw_da xbc, (0x0210a4)
+	ld bc, (0x0210a4:24)
 	dec 1, bc
 	extz xbc
 	sll xbc, 8
@@ -59,9 +59,9 @@ BmDrEdit_ScanForwardInit:
 	jrl ule, BmDrEdit_ScanForward_Done
 
 BmDrEdit_ScanForwardLoop:
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -84,9 +84,9 @@ BmDrEdit_ScanForward_CheckNote:
 	cp a, 0x90
 	jr nz, BmDrEdit_ScanForward_NextByte
 	calr BmDrEdit_AdvanceStreamPos
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -97,9 +97,9 @@ BmDrEdit_ScanForward_CheckNote:
 	extz wa
 	stw_da (0x0210a2), xwa
 	calr BmDrEdit_AdvanceStreamPos
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -115,9 +115,9 @@ BmDrEdit_ScanForward_CheckNote:
 
 BmDrEdit_ScanForward_NextByte:
 	calr BmDrEdit_AdvanceStreamPos
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -155,9 +155,9 @@ BmDrEdit_ScanBackwardInit:
 	jrl ule, BmDrEdit_ScanBackward_Done
 
 BmDrEdit_ScanBackwardLoop:
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -188,9 +188,9 @@ BmDrEdit_ScanBackward_CheckNote:
 
 BmDrEdit_ScanBackward_ReadNoteParams:
 	calr BmDrEdit_AdvanceStreamPos
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -201,9 +201,9 @@ BmDrEdit_ScanBackward_ReadNoteParams:
 	extz wa
 	ld (0x2800:16), wa
 	calr BmDrEdit_AdvanceStreamPos
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -219,9 +219,9 @@ BmDrEdit_ScanBackward_ReadNoteParams:
 
 BmDrEdit_ScanBackward_NextByte:
 	calr BmDrEdit_AdvanceStreamPos
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -265,7 +265,7 @@ BmDrEdit_RenderNoteBlock_StoreCoords:
 
 BmDrEdit_CalcNotePosition:
 	pushw_erp 0xfa
-	ldw_da xbc, (0x0210a0)
+	ld bc, (0x0210a0:24)
 	mul bc, 0x60
 	addda16_24 xbc, (0x0210a2)
 	ld wa, (0x27f6:16)
@@ -291,9 +291,9 @@ BmDrEdit_CalcNotePos_VerticalMode:
 BmDrEdit_CalcNotePos_ReadFields:
 	calr BmDrEdit_AdvanceStreamPos
 	calr BmDrEdit_AdvanceStreamPos
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -303,9 +303,9 @@ BmDrEdit_CalcNotePos_ReadFields:
 	ld a, (xbc)
 	ldb_erp A, 0xfb
 	calr BmDrEdit_AdvanceStreamPos
-	ldw_da xbc, (0x0210a6)
+	ld bc, (0x0210a6:24)
 	extz xbc
-	ldw_da xwa, (0x0210a4)
+	ld wa, (0x0210a4:24)
 	dec 1, wa
 	extz xwa
 	sll xwa, 8
@@ -405,7 +405,7 @@ BmDrEdit_RenderSecondaryHoriz:
 	srl wa, 2
 	add wa, 0x16
 	ld (0x27c2:16), wa
-	ldw_da xwa, (0x0210b2)
+	ld wa, (0x0210b2:24)
 	srl wa, 2
 	addda16 xwa, 0x27c2
 	ld (0x27c4:16), wa
@@ -424,7 +424,7 @@ BmDrEdit_RenderSecondaryVert:
 	srl wa, 2
 	add wa, 0x5b
 	ld (0x27c2:16), wa
-	ldw_da xwa, (0x0210b2)
+	ld wa, (0x0210b2:24)
 	srl wa, 2
 	addda16 xwa, 0x27c2
 	ld (0x27c4:16), wa

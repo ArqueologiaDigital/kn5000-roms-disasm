@@ -296,7 +296,7 @@ SetWall_SlotSetup:
 
 SetWall_SlotSetup_Active:
 	call CDlikeSwTtl_SendStartEvt
-	ldw_da xwa, (0x00ffec)
+	ld wa, (0x00ffec:24)
 	ld (0x2875:16), wa
 	ld a, (3295:16)
 	inc 1, a
@@ -744,7 +744,7 @@ SetWall_SlotOrderTable:
 SetWall_SlotBitUpdate:
 	ldb_erp A, 0x3c
 	ldw_erp DE, 0x3e
-	ldw_da xde, (0x00ffec)
+	ld de, (0x00ffec:24)
 	ld a, (3295:16)
 	rcf
 	stcf_a_16 de
@@ -1921,7 +1921,7 @@ SetWall_InlineCodeBlock3:
 	pushw	wa
 	push	xiz
 	max
-	ldw_da	wa, (0xffec)
+	ld	wa, (0xffec:24)
 	ld	(0xf19e:16), wa
 	push	xix
 	pushw	bc
@@ -2149,7 +2149,7 @@ SetWall_Sync_FinalUpdate:
 	ret
 
 SetWall_LoadBankToToneGen:
-	ldw_da xwa, (0x00ffec)
+	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
 	ld xix, 0xab000
 	xor xhl, xhl

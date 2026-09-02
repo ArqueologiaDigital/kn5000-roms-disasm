@@ -1990,7 +1990,7 @@ FIFO1K_Put_Block:
 	.byte 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
 ; HL = 0xFFFF when write index (0x040C2A) == read index (0x040C26), else 0.
 FIFO1K_Is_Empty:
-	ldw_da	hl, (265258)
+	ld	hl, (265258:24)
 	cpda16_24	xhl, (265254)
 	lds	hl, 0
 	jr	z, 3
@@ -1998,7 +1998,7 @@ FIFO1K_Is_Empty:
 	ret
 ; HL = the free-space counter word at 0x040C2C.
 FIFO1K_Free_Space:
-	ldw_da	hl, (265260)
+	ld	hl, (265260:24)
 	ret
 
 RingBuf_Init_1K:
@@ -2014,7 +2014,7 @@ RingBuf_Init_1K:
 ; consumed from here on can be re-read from the mark by FIFO1K_Get_Marked.
 RingBuf_ReadWrite_Opaque_A:
 	pushw	hl
-	ldw_da	hl, (265254)
+	ld	hl, (265254:24)
 	stw_da	(265252), hl
 	popw	hl
 	ret
@@ -2041,14 +2041,14 @@ FIFO1K_Get_From_Mark:
 ; Advances the read index (0x040C26) to the commit index (0x040C28).
 FIFO1K_Commit:
 	pushw	hl
-	ldw_da	hl, (265256)
+	ld	hl, (265256:24)
 	stw_da	(265254), hl
 	popw	hl
 	ret
 ; Advances the commit index (0x040C28) to the current write index (0x040C2A).
 FIFO1K_Set_Commit:
 	pushw	hl
-	ldw_da	hl, (265258)
+	ld	hl, (265258:24)
 	stw_da	(265256), hl
 	popw	hl
 	ret
@@ -2075,7 +2075,7 @@ FIFO256_Put_Block:
 	.byte 0x1c, 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
 ; HL = 0xFFFF when write index (0x041034) == read index (0x041030).
 FIFO256_Is_Empty:
-	ldw_da	hl, (266292)
+	ld	hl, (266292:24)
 	cpda16_24	xhl, (266288)
 	lds	hl, 0
 	jr	z, 3
@@ -2083,7 +2083,7 @@ FIFO256_Is_Empty:
 	ret
 ; HL = free-space counter at 0x041036.
 FIFO256_Free_Space:
-	ldw_da	hl, (266294)
+	ld	hl, (266294:24)
 	ret
 
 RingBuf_Init_256:
@@ -2098,7 +2098,7 @@ RingBuf_Init_256:
 ; Read index (0x041030) -> mark cursor (0x04102E).
 RingBuf_ReadWrite_Opaque_B:
 	pushw	hl
-	ldw_da	hl, (266288)
+	ld	hl, (266288:24)
 	stw_da	(266286), hl
 	popw	hl
 	ret
@@ -2123,14 +2123,14 @@ FIFO256_Get_From_Mark:
 ; Commit index (0x041032) -> read index (0x041030).
 FIFO256_Commit:
 	pushw	hl
-	ldw_da	hl, (266290)
+	ld	hl, (266290:24)
 	stw_da	(266288), hl
 	popw	hl
 	ret
 ; Write index (0x041034) -> commit index (0x041032).
 FIFO256_Set_Commit:
 	pushw	hl
-	ldw_da	hl, (266292)
+	ld	hl, (266292:24)
 	stw_da	(266290), hl
 	popw	hl
 	ret
@@ -2157,7 +2157,7 @@ FIFO512_Put_Block:
 	.byte 0x1c, 0xf6, 0x5a, 0x5c, 0x5d, 0xee, 0x0d, 0x0e
 ; HL = 0xFFFF when write index (0x04113E) == read index (0x04113A).
 FIFO512_Is_Empty:
-	ldw_da	hl, (266558)
+	ld	hl, (266558:24)
 	cpda16_24	xhl, (266554)
 	lds	hl, 0
 	jr	z, 3
@@ -2165,7 +2165,7 @@ FIFO512_Is_Empty:
 	ret
 ; HL = free-space counter at 0x041140.
 FIFO512_Free_Space:
-	ldw_da	hl, (266560)
+	ld	hl, (266560:24)
 	ret
 
 RingBuf_Init_512:
@@ -2184,7 +2184,7 @@ RingBuf_Init_512:
 ; Read index (0x04113A) -> mark cursor (0x041138).
 AudioBuf_PtrUtils:
 	pushw	hl
-	ldw_da	hl, 266554
+	ld	hl, (266554:24)
 	stw_da	266552, hl
 	popw	hl
 	ret
@@ -2209,14 +2209,14 @@ FIFO512_Get_From_Mark:
 ; Commit index (0x04113C) -> read index (0x04113A).
 FIFO512_Commit:
 	pushw	hl
-	ldw_da	hl, 266556
+	ld	hl, (266556:24)
 	stw_da	266554, hl
 	popw	hl
 	ret
 ; Write index (0x04113E) -> commit index (0x04113C).
 FIFO512_Set_Commit:
 	pushw	hl
-	ldw_da	hl, 266558
+	ld	hl, (266558:24)
 	stw_da	266556, hl
 	popw	hl
 	ret
@@ -2983,7 +2983,7 @@ Cmd_DMA_Check_Stuck:	; 021001h
 ToneGen_Read_Register:
 	res_dd8 7, 0x18
 	stw_da 0x100000, xwa
-	ldw_da xhl, 0x100000
+	ld hl, (0x100000:24)
 	ret
 
 ; MIDI_Backlog_Publish(WA = the MIDI ring's current byte count) -- was
@@ -5959,7 +5959,7 @@ BitTest_Mode2_L_v2_AllClear:
 ; Fallback: (C & 0x0F) indexes the byte table at 0x011ACF, sign-extends and shifts
 ; left 8 (one semitone = 0x100). Called from Voice_Pitch_Compute (0x0235F1).
 Pitch_Get_Patch_Octave_Shift:
-	ldw_da xde, 0x041343
+	ld de, (0x041343:24)
 	bit 1, de
 	jr z, Pitch_Get_Patch_Octave_Shift_Dispatch
 	lds hl, 0
@@ -8524,10 +8524,10 @@ WaveSel_StageB_Store_Reg040:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 4)
 	ld (10558:16), wa
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 2, wa
 	jr z, WaveSel_StageB_Store_Reg040_Return
-	ldw_da xwa, 0x0451ce
+	ld wa, (0x0451ce:24)
 	and wa, 0xF000
 	add wa, wa
 	anddi16_24 283086, 4095
@@ -11033,7 +11033,7 @@ Voice_Chan_SecondaryPitch_ComputeDelta:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 87)
 	stw_da 0x04520e, xwa
-	ldw_da xiz, 0x04520e
+	ld iz, (0x04520e:24)
 	extz xiz
 	and xiz, 0x1FFF
 	ld xwa, (xsp + 22)
@@ -13667,7 +13667,7 @@ Voice_ComputePitch:
 ; paramA+25 == 0xE0.
 Voice_ComputePitch_CheckSysExTune:
 	and bc, 0x7F
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 0, wa
 	jr nz, Voice_ComputePitch_SysExTable
 	ld xwa, (xsp + 2)
@@ -13688,7 +13688,7 @@ Voice_ComputePitch_SysExTable:
 
 ; Second entry point to the alternate mapping, gated on 0x041343 bit 1.
 Voice_ComputePitch_CheckAltTune:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 1, wa
 	jr z, Voice_ComputePitch_NormalTune
 	ld wa, bc
@@ -13860,7 +13860,7 @@ Voice_ComputePitch_Mono:
 	ld e, a
 	extz de
 	and de, 0x7F
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 0, wa
 	jr nz, Voice_ComputePitch_Mono_SysExTable
 	cp (xiz + 7), 0xE0
@@ -13880,7 +13880,7 @@ Voice_ComputePitch_Mono_SysExTable:
 
 ; Second gate on 0x041343 bit 1 into the alternate mapping.
 Voice_ComputePitch_Mono_CheckAltTune:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 1, wa
 	jr z, Voice_ComputePitch_Mono_CheckPorta
 	ld wa, de
@@ -14000,7 +14000,7 @@ Voice_ApplyPortamento_ApplyDetune:
 	ld c, (xbc + 34)
 	exts bc
 	add de, bc
-	ldw_da xbc, 0x041343
+	ld bc, (0x041343:24)
 	bit 1, bc
 	jr z, Voice_ApplyPortamento_Done
 	cp (xwa + 4), 0x1
@@ -14043,7 +14043,7 @@ Voice_ApplyPortamento2_NoChanDetune:
 
 ; Key-shift arm gated on 0x041343 bit 1; computes the tonerec[+12] vibrato term.
 Voice_ApplyPortamento2_ApplyDetune:
-	ldw_da xbc, 0x041343
+	ld bc, (0x041343:24)
 	bit 1, bc
 	jr z, Voice_ApplyPortamento2_Done
 	ld xbc, (xwa + 35)
@@ -14812,7 +14812,7 @@ Voice_UpdateAllLFO_Loop1:
 	stw_da 0x04520c, xhl
 	cp_erpw 0xFA, 0x00, 0x01
 	jr z, Voice_UpdateAllLFO_DispatchVoice1
-	ldw_da xhl, 0x04520c
+	ld hl, (0x04520c:24)
 	extz xhl
 	and xhl, 0x1FFF
 	stw_erp BC, 0xFA
@@ -14864,7 +14864,7 @@ Voice_UpdateAllLFO_Loop2_Body:
 	stw_da 0x045204, xhl
 	cp_erpw 0xFA, 0x00, 0x01
 	jr z, Voice_UpdateAllLFO_DispatchVoice2
-	ldw_da xhl, 0x045204
+	ld hl, (0x045204:24)
 	extz xhl
 	and xhl, 0x1FFF
 	stw_erp BC, 0xFA
@@ -14917,7 +14917,7 @@ Voice_UpdateAllLFO_Loop3_Body:
 	jr z, Voice_UpdateAllLFO_DispatchVoice3
 	cp iz, 0x40
 	jr nc, Voice_UpdateAllLFO_DispatchGroup3_High
-	ldw_da xhl, 0x045204
+	ld hl, (0x045204:24)
 	extz xhl
 	and xhl, 0x1FFF
 	stw_erp BC, 0xFA
@@ -14932,7 +14932,7 @@ Voice_UpdateAllLFO_Loop3_Body:
 ; Slots 0x40..0x7F of group 3 fold their result into scratch 0x04520E instead of
 ; 0x045204.
 Voice_UpdateAllLFO_DispatchGroup3_High:
-	ldw_da xhl, 0x04520e
+	ld hl, (0x04520e:24)
 	extz xhl
 	and xhl, 0x1FFF
 	stw_erp BC, 0xFA
@@ -15404,7 +15404,7 @@ Voice_Step_ExprRamp_StoreDone:
 	ret
 
 Pitch_Bend_Ramp_Tick:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 11, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit12
 	incdi16_24 1, 267100
@@ -15431,7 +15431,7 @@ Pitch_Bend_Ramp_Tick:
 ; 26-byte table are 0x00, and both the +1 and +2 step sequences from index 0 land on 24.
 ; Also read by Voice_ComputePitch (bits 0/1) and Voice_ApplyPortamento (bit 1).
 Pitch_Bend_Ramp_Tick_Bit12:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 12, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit13Check
 	incdi16_24 1, 267100
@@ -15440,14 +15440,14 @@ Pitch_Bend_Ramp_Tick_Bit12:
 
 ; bit 13 clear -> ClearMode; set -> choose the +2 (bit 14) or +1 (bit 15) step.
 Pitch_Bend_Ramp_Tick_Bit13Check:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 13, wa
 	jrl z, Pitch_Bend_Ramp_Tick_ClearMode
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 14, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit14Clear
 	incdi16_24 2, 267100
-	ldw_da xwa, 0x04135c
+	ld wa, (0x04135c:24)
 	extz xwa
 	ld xbc, 0x11C7C
 	add xbc, xwa
@@ -15460,12 +15460,12 @@ Pitch_Bend_Ramp_Tick_Bit13Check:
 
 ; bit 14 clear: if bit 15 is set take the +1 step, otherwise zero the offset.
 Pitch_Bend_Ramp_Tick_Bit14Clear:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	extz xwa
 	bit 15, wa
 	jr z, Pitch_Bend_Ramp_Tick_ZeroPitch
 	incdi16_24 1, 267100
-	ldw_da xwa, 0x04135c
+	ld wa, (0x04135c:24)
 	extz xwa
 	ld xbc, 0x11C7C
 	add xbc, xwa
@@ -15507,7 +15507,7 @@ Pitch_Bend_Ramp_Tick_ClearMode:
 ; 0x0430BB + ch*0x47.
 Voice_InitVoiceState:
 	stiw_da 0x0451ce, 0x0000
-	ldw_da xbc, 0x041360
+	ld bc, (0x041360:24)
 	stw_da 0x0451da, xbc
 	stiw_da 0x0451ec, 0x0000
 	stiw_da 0x0451ee, 0x0000
@@ -15525,11 +15525,11 @@ Voice_InitVoiceState:
 	stiw_da 0x0451e0, 0x0000
 	stiw_da 0x0451d2, 0x0000
 	stiw_da 0x0451e4, 0xff7f
-	ldw_da xbc, 0x041362
+	ld bc, (0x041362:24)
 	stw_da 0x0451e6, xbc
-	ldw_da xbc, 0x041362
+	ld bc, (0x041362:24)
 	stw_da 0x0451e8, xbc
-	ldw_da xbc, 0x041364
+	ld bc, (0x041364:24)
 	add bc, bc
 	lda xde, (0x010764:24)
 	ldw_sri BC, 0x07, 0xE8, 0xE4
@@ -16439,7 +16439,7 @@ Audio_Tick_ServiceVoices_B:
 	push xiz
 	calr Voice_TickNoteDecay
 	calr Pitch_Bend_Ramp_Tick
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 10, wa
 	jrl z, Audio_Tick_ServiceVoices_B_LoopB_Start
 	call Voice_Query_AllChannels
@@ -18135,7 +18135,7 @@ LABEL_028836:
 Voice_CC_SetVolume:
 	cps c, 0
 	jr z, VoiceCC_SetVolume_Mute
-	ldw_da xde, 0x041343
+	ld de, (0x041343:24)
 	bit 0, de
 	jr z, VoiceCC_SetVolume_Bit1Set
 	extz wa
@@ -18152,7 +18152,7 @@ Voice_CC_SetVolume:
 
 ; Bit1Set of VoiceCC_SetVolume.
 VoiceCC_SetVolume_Bit1Set:
-	ldw_da xde, 0x041343
+	ld de, (0x041343:24)
 	bit 1, de
 	jr z, VoiceCC_SetVolume_RawSub
 	extz wa
@@ -18205,7 +18205,7 @@ Voice_CC_SetPan:
 Voice_CC_SetExpression:
 	cps c, 0
 	jr z, VoiceCC_SetExpression_Mute
-	ldw_da xde, 0x041343
+	ld de, (0x041343:24)
 	bit 0, de
 	jr z, VoiceCC_SetExpression_Bit1Set
 	extz wa
@@ -18222,7 +18222,7 @@ Voice_CC_SetExpression:
 
 ; Bit1Set of VoiceCC_SetExpression.
 VoiceCC_SetExpression_Bit1Set:
-	ldw_da xde, 0x041343
+	ld de, (0x041343:24)
 	bit 1, de
 	jr z, VoiceCC_SetExpression_RawSub
 	extz wa
@@ -18510,7 +18510,7 @@ Voice_SetPitchBendRange:
 Voice_SetKeyShiftEnable:
 	cps a, 0
 	jr z, Voice_SetKeyShiftRange
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 12, wa
 	ret nz
 	ordi16_24 267075, 2048
@@ -18521,10 +18521,10 @@ Voice_SetKeyShiftEnable:
 ; clears bits 12/13 (mask 0xFFFF2FFF), sets bit 13, and then sets bit 15 if the word at
 ; 0x04135C is > 20, bit 14 otherwise.  Finally zeroes 0x04135C.
 Voice_SetKeyShiftRange:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 12, wa
 	ret z
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	extz xwa
 	and xwa, 0xFFFF2FFF
 	set 13, wa
@@ -18771,7 +18771,7 @@ ScaleTune_Set_Global_Enabled_Clear:
 
 ; Returns HL = 0x041343 & 0x0200.  Getter for the bit the routine above writes.
 ScaleTune_Is_Global_Enabled:
-	ldw_da xhl, 0x041343
+	ld hl, (0x041343:24)
 	and hl, 0x200
 	ret
 
@@ -23815,7 +23815,7 @@ Voice_Build_Partial_Descriptor_BranchB:
 	ld a, (xsp + 34)
 	set 7, a
 	ld (xiz + 5), a
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 1, wa
 	jr z, Voice_Build_Partial_Descriptor_BranchD
 	cp (xsp + 20), 0x0
@@ -24821,7 +24821,7 @@ Voice_Allocate_Type2:
 	ld a, (xsp + 38)
 	set 7, a
 	ld (xiz + 5), a
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 1, wa
 	jr z, Voice_Allocate_Type2_BranchA
 	ld a, (xsp + 36)
@@ -26483,7 +26483,7 @@ Voice_NoteOn_Exit:
 Voice_SetPanning:
 	push xiz
 	ld xiz, xwa
-	ldw_da xwa, 0x041360
+	ld wa, (0x041360:24)
 	srl wa, 8
 	or wa, 0x1480
 	ld (xiz), wa
@@ -26501,9 +26501,9 @@ Voice_SetPanning:
 	muls wa, 0x47
 	lda xbc, (0x04308e:24)
 	lda_dri XBC, 0x07, 0xE4, 0xE0
-	ldw_da xwa, 0x041360
+	ld wa, (0x041360:24)
 	ld (xbc + 8), wa
-	ldw_da xwa, 0x041360
+	ld wa, (0x041360:24)
 	ld (xbc + 6), wa
 	ldw (xbc + 1), 0x1
 	lds32 xwa, 0
@@ -26518,7 +26518,7 @@ Voice_SetPanning:
 	ld (xbc + 39), xwa
 	ld (xbc + 12), 0x0
 	ld (xbc + 4), 0x14
-	ldw_da xwa, 0x041360
+	ld wa, (0x041360:24)
 	srl wa, 8
 	ld (xbc + 5), a
 	ld a, (xiz + 10)
@@ -27706,7 +27706,7 @@ ToneGen_WriteVoiceParams_Ext2_NopCont4:
 ToneGen_WriteGlobalConfig:
 	push xiz
 	ld xiz, xwa
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 3, wa
 	jr z, ToneGen_WriteGlobalConfig_BranchA
 	andmi16 (xiz), 0xFFF7
@@ -36193,7 +36193,7 @@ ToneDB_Find_PatchRecord_Return:
 ; Checks flag at 0x041343 and dispatches to one of two lookup functions.
 ; Referenced 10 times throughout the DSP processing code.
 ToneDB_Find_ToneRecord:
-	ldw_da xde, 0x041343
+	ld de, (0x041343:24)
 	bit 0, de
 	jr z, VoiceBuf_TypeSelector_EFFMatch
 	calr ToneDB_Find_ToneRecord_CoeffPath
@@ -36962,7 +36962,7 @@ WaveSel_StageA2_FindSetDesc:
 ; SET families 0x00 and 0xC0; ToneGen_GlobalFlags bit 2 chooses Root->+0x9C
 ; over Root->+0x24.
 VoiceTablePtr_Select:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 2, wa
 	jr z, VoiceTablePtr_SelectA
 	ldl_da xwa, 0x045314
@@ -36984,7 +36984,7 @@ VoiceTablePtr_SelectB:
 
 ; SET family 0x40; bit 2 chooses Root->+0xA4 over Root->+0x2C.
 VoiceTablePtr_SelectC:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 2, wa
 	jr z, VoiceTablePtr_SelectD
 	ldl_da xwa, 0x045314
@@ -37006,7 +37006,7 @@ VoiceTablePtr_Common:
 
 ; SET family 0x80; bit 2 chooses Root->+0xA0 over Root->+0x28.
 VoiceTablePtr_Epilogue:
-	ldw_da xwa, 0x041343
+	ld wa, (0x041343:24)
 	bit 2, wa
 	jr z, VoiceTablePtr_Data
 	ldl_da xwa, 0x045314
@@ -40497,7 +40497,7 @@ Voice_ActiveFlag_Set:
 ; records (i = 0..3 x j = 0..2 at part + 0x10*j + 4*i).
 ; Callers: 6 sites including Voice_ProgChange_Path2 and VoiceSlot_ClearAll_MidNext.
 Voice_NoteState_Clear:
-	ldw_da xbc, 0x041343
+	ld bc, (0x041343:24)
 	bit 0, bc
 	ret nz
 	ld c, a
@@ -42437,7 +42437,7 @@ ToneGen_SetupPercussionVoice:
 	calr DSP_GetEffectRouting
 	orddm16 15138, xhl
 	ordi16 15136, 4095
-	ldw_da xwa, 0x01217d
+	ld wa, (0x01217d:24)
 	ld (15134:16), wa
 	ld a, (xsp)
 	extz wa
@@ -47008,7 +47008,7 @@ DSP_Config_ClampNext:
 ; Disassembles exactly as `ld HL,(0x045566) / add HL,(0x045444) / ret`, i.e. another
 ; unreachable routine tail, not a data table.
 DSP_Config_ClampData:
-	ldw_da	hl, (284006)
+	ld	hl, (284006:24)
 	addda16_24	hl, (283716)
 	ret
 
@@ -57720,12 +57720,12 @@ Keybed_Read_Event:	; 03D0C5h
 	ld xiz, xwa
 	set_dd8 7, 0x18	; Assert A23 for status read
 	nop
-	ldw_da xbc, 0x110002                 ; Read status register
+	ld bc, (0x110002:24)                 ; Read status register
 	bit 0, bc	; Check data ready bit
 	jr z, Keybed_Read_Event_NotReady
 	res_dd8 7, 0x18	; Deassert A23 for data read
 	nop
-	ldw_da xwa, 0x110000                 ; Read voice data (16-bit)
+	ld wa, (0x110000:24)                 ; Read voice data (16-bit)
 	ld l, a	; L = note byte (low)
 	and l, 0xFF
 	srl wa, 8
@@ -57818,7 +57818,7 @@ Keybed_Decode_Event:	; 03D11Fh
 	extz bc
 	extz xbc
 	ld xde, xbc
-	ldw_da xbc, 0x01f418
+	ld bc, (0x01f418:24)
 	ld hl, de
 	sub hl, bc
 	ld c, (19016:16)
@@ -57828,7 +57828,7 @@ Keybed_Decode_Event:	; 03D11Fh
 	ldb_sri C, 0x07, 0xE8, 0xE4
 	extz bc
 	muls xbc, xhl
-	ldw_da xde, 0x01f41a
+	ld de, (0x01f41a:24)
 	exts xbc
 	divs xbc, xde
 	ld hl, bc
@@ -57961,10 +57961,10 @@ ToneGen_Poll_Delay:	; 03D227h
 ToneGen_Poll_Read:	; 03D230h
 	set_dd8 7, 0x18	; A23 pin tied to D5VNAD (both pins "NAD" and "EXADL0" of of tone generator)
 	nop
-	ldw_da xwa, 0x110002
+	ld wa, (0x110002:24)
 	res_dd8 7, 0x18
 	nop
-	ldw_da xwa, 0x110000
+	ld wa, (0x110000:24)
 	ld c, a
 	and c, 0xFF
 	srl wa, 8

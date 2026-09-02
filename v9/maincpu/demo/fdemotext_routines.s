@@ -2063,7 +2063,7 @@ FDemoText_ByteData_LayoutEngine:
 	cps	de, 0
 	jr	nz, 32
 	calr	1161
-	ldw_da	wa, (0x025b72)
+	ld	wa, (0x025b72:24)
 	inc	1, wa
 	stw_da	(0x025b72), wa
 	cp	wa, 8
@@ -2079,14 +2079,14 @@ FDemoText_ByteData_LayoutEngine:
 	cps	de, 0
 	jr	nz, 42
 	calr	1118
-	ldw_da	wa, (0x025b72)
+	ld	wa, (0x025b72:24)
 	dec	1, wa
 	stw_da	(0x025b72), wa
 	cps	wa, 0
 	jr	ge, 7
 	stiw_da	(0x025b72), 0
 	lda	xbc, (0x025b74:24)
-	ldw_da	wa, (0x025b72)
+	ld	wa, (0x025b72:24)
 	.byte 0xf3
 	reti
 	.byte 0xe4, 0xe0
@@ -2099,7 +2099,7 @@ FDemoText_ByteData_LayoutEngine:
 	ld	(xsp+142), de
 	ld	(xsp+144), xbc
 	ld (xsp+148), wa
-	ldw_da	wa, (0x025b3e)
+	ld	wa, (0x025b3e:24)
 	sla	wa, 2
 	lda	xbc, (0x025b40:24)
 	.byte 0xe3
@@ -2192,10 +2192,10 @@ FDemoText_ByteData_LayoutEngine:
 	jr	z, 76
 	cpw	(xsp+142), 0
 	jr	nz, 67
-	ldw_da	bc, (0x025b3e)
+	ld	bc, (0x025b3e:24)
 	inc	1, bc
 	stw_da	(0x025b3e), bc
-	ldw_da	wa, (0x025b60)
+	ld	wa, (0x025b60:24)
 	inc	1, wa
 	stw_da	(0x025b60), wa
 	cp	bc, 8
@@ -2222,7 +2222,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	z, 79
 	cps	de, 0
 	jr	nz, 75
-	ldw_da	wa, (0x025b3e)
+	ld	wa, (0x025b3e:24)
 	dec	1, wa
 	stw_da	(0x025b3e), wa
 	decdi16_24	1, (0x025b60)
@@ -2230,7 +2230,7 @@ FDemoText_ByteData_LayoutEngine:
 	jr	ge, 14
 	stiw_da	(0x025b3e), 0
 	stiw_da	(0x025b60), 0
-	ldw_da	bc, (0x025b3e)
+	ld	bc, (0x025b3e:24)
 	sla	bc, 2
 	lda	xde, (0x025b40:24)
 	lds32	xwa, 5
@@ -2525,13 +2525,13 @@ FDemoText_UpdateCursorPosition:
 	lda xbc, (xsp + 2)
 	ld xwa, 0x25b3a
 	calr FDemoText_ScaleDownCoords
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	call GetCenteredDelta
 	ld iz, hl
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
@@ -2611,13 +2611,13 @@ FDemoText_RenderTextLine:
 	lda xix, (xsp + 24)
 	lds bc, 4
 	ldirw
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	call GetCharHeight
 	ld iz, hl
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
@@ -2662,7 +2662,7 @@ FDemoText_Layout_Setup:
 	lda xwa, (xsp + 20)
 	calr FDemoText_CalcTextExtent
 	ld (xsp + 4), hl
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
@@ -2688,7 +2688,7 @@ FDemoText_Layout_NoWrap:
 	ldw (xsp + 14), 0x0
 
 FDemoText_Layout_ProcessLine:
-	ldw_da xwa, (0x025b3e)
+	ld wa, (0x025b3e:24)
 	sla wa, 2
 	lda xbc, (0x025b40:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
@@ -2698,7 +2698,7 @@ FDemoText_Layout_ProcessLine:
 	cps iz, 0
 	jr z, FDemoText_Layout_UpdatePosition
 	lda xbc, (0x025b74:24)
-	ldw_da xwa, (0x025b72)
+	ld wa, (0x025b72:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	lda xbc, (xsp + 20)
 	cps a, 2
@@ -2727,12 +2727,12 @@ FDemoText_Layout_AlignRight:
 FDemoText_Layout_DrawText:
 	lda xwa, (xsp + 24)
 	lda xbc, (xsp + 20)
-	ldw_da xde, (0x025b3e)
+	ld de, (0x025b3e:24)
 	sla de, 2
 	lda xhl, (0x025b40:24)
 	ld_sril3 XDE, 0x07, 0xec, 0xe8
 	push xde
-	ldw_da xde, (0x025b60)
+	ld de, (0x025b60:24)
 	sla de, 1
 	lda xhl, (0x025b62:24)
 	push_sriw 0x07, 0xec, 0xe8
@@ -2766,7 +2766,7 @@ FDemoText_ByteData_LayoutB:
 	lda	xsp, (xsp-14)
 	pushw	iz
 	ld	(xsp+12), xwa
-	ldw_da	wa, (0x025b3e)
+	ld	wa, (0x025b3e:24)
 	sla	wa, 2
 	lda	xbc, (0x025b40:24)
 	.byte 0xe3
@@ -2775,7 +2775,7 @@ FDemoText_ByteData_LayoutB:
 	ldb	w, 29
 	ldwio	38, 0xdbfb
 	.byte 0x8e
-	ldw_da	wa, (0x025b3e)
+	ld	wa, (0x025b3e:24)
 	sla	wa, 2
 	lda	xbc, (0x025b40:24)
 	.byte 0xe3
@@ -2817,7 +2817,7 @@ FDemoText_ByteData_LayoutB:
 	sub	(xwa+2), iz
 	calr	64683
 	lda	xbc, (0x025b74:24)
-	ldw_da	wa, (0x025b72)
+	ld	wa, (0x025b72:24)
 	ld_rrb a, xbc, wa
 	lda xbc, (xsp+8)
 	cps a, 2
@@ -2897,7 +2897,7 @@ Seq_InitVoiceLoop:
 	ret
 
 Seq_PostProcessDisplay:
-	ldw_da	wa, (0x025b82)
+	ld	wa, (0x025b82:24)
 	jr	0
 
 Seq_CopyResourcePtrs:

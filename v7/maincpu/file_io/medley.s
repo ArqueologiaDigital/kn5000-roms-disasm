@@ -3751,7 +3751,7 @@ SetCurrentSlotIndex:
 
 GetCurrentSlotIndex_Entry:
 GetCurrentSlotIndex:
-	ldw_da xhl, (0x09480e)
+	ld hl, (0x09480e:24)
 	ret
 
 CheckIsCurrentSlot_Entry:
@@ -3778,7 +3778,7 @@ InitializeCheap:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xea1186)
+	ld wa, (0xea1186:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xea0f46:24)
 	ld (XBC+0x0a),XWA
@@ -3789,7 +3789,7 @@ InitializeCheap:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xea11f2)
+	ld wa, (0xea11f2:24)
 	ld (XBC+0x08),WA
 	lda xwa, (PtrTbl_EventNames_EA1188:24)
 	ld (XBC+0x0a),XWA
@@ -3800,7 +3800,7 @@ InitializeCheap:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ldw_da wa, (0xea1358)
+	ld wa, (0xea1358:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xea11f4:24)
 	ld (XBC+0x0a),XWA
@@ -4510,7 +4510,7 @@ PwdOk_HandleConfirm:
 	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call PostEvent
-	ldw_da xde, (0x02741c)
+	ld de, (0x02741c:24)
 	extz xde
 	ld xwa, 0x1450038
 	ld xbc, 0x1e5000d

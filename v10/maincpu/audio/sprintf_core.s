@@ -1076,7 +1076,7 @@ Sprintf_FormatFloat_Dispatch:
 	pushw wa
 	calr Sprintf_FormatFloat
 	lda xsp, (xsp + 16)
-	ldw_da xwa, (0x03c222)
+	ld wa, (0x03c222:24)
 	add (xsp + 4), wa
 
 Sprintf_MainLoop_ReadNext:

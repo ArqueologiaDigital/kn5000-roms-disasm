@@ -3057,7 +3057,7 @@ sub_FA6BB5__FA6D43:
 	inc	4, xsp                                 ; FA6D61  inc 4,XSP
 	cpdm16_24	(0x87D0), bc                     ; FA6D63  cp (0x0087d0),BC
 	jr z, sub_FA6BB5__FA6DBB                   ; FA6D68  jr Z,0xfa6dbb
-	ldw_da	hl, (0x87D0)                        ; FA6D6A  ld HL,(0x0087d0)
+	ld	hl, (0x87D0:24)                        ; FA6D6A  ld HL,(0x0087d0)
 	extz	xde                                   ; FA6D6F  extz XDE
 	ld	ix, (xde+8)                             ; FA6D71  ld IX,(XDE+0x08)
 	ldw (xiz-25), 0x000A                       ; FA6D74  ld (XIZ+0xe7),0x000a
