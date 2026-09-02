@@ -16,6 +16,11 @@ which re-derives, and fails on, figures the `wsa1/` notes already published
 (297 streams, 1,832 records, the nine IC310 effects, the four shared runs).
 Toolchain-independent: it reads ROM bytes, not disassembler output.
 
+**Gate:** `make gate-all` PASS in this worktree — all 13 images IDENTICAL. This
+lane added two files under `notes/` and changed no build input; the gate is
+recorded because the lane brief requires it, not because anything could have
+moved.
+
 ---
 
 ## 0. THE ANSWER, FIRST
@@ -233,6 +238,13 @@ Opcode census over the two corpora (`… grammar`):
 
 \* ⚠ The WSA1R op-0 count is **contaminated** — see §5.
 
+⚠ **DENOMINATORS.** The KN5000 column counts records over the **100 distinct
+stream addresses** the two pointer arrays name, deduplicated — 42 effect numbers
+share one stream trio, so a per-effect tally over 200 pointers gives larger
+numbers for the same bytes. `second-dsp-and-ready.md` B5's *"op-D occurs 34
+times"* is that other denominator and does not contradict the 28 here. Quote one
+convention.
+
 ### 3.1 ★ What the chip actually sees, per opcode
 
 The record format is a **host-side container**. What reaches the chip is one
@@ -247,7 +259,12 @@ arm, from the ROM bytes (`… handlers`):
 | 3 | 1 / 3 | 1 / 3 | **SAME** — 2 head + a 1-byte tail loop |
 | 4 | 1 / 0 | 1 / 0 | **SAME** |
 | 5 | 1 / 12 | 1 / 12 | **SAME** — 2 head + 2 branches × 5 |
-| 14 | 1 / 1 | 1 / 1 | **SAME** — command + raw tail loop |
+| 14 † | 1 / 1 | 1 / 1 | **SAME** — command + raw tail loop |
+
+† The KN5000's `0x0D` and `0x0E` handlers lie **outside** the six offset-table
+arms, so the probe's ROM census does not cover them; that row is counted from the
+decoded source (`DSP_Bytecode_Op0E_SendCommand` plus `_DataLoop`: one command,
+then a one-byte data loop). Every other row is a ROM-byte census on both sides.
 
 ★ **Every arm but one emits the same number of wire bytes with the same branch
 structure on both products.** Two independently written drivers, same traffic
@@ -279,8 +296,10 @@ finding that op 2 agrees.
 
 ★ **Opcode 0x0D emits nothing at all** — it is a host scheduling directive
 (SPI bus-idle + task yield) that the chip never sees. It occurs 28 times on the
-KN5000, always adjacent to IC310 traffic, and **zero times** anywhere in the
-WSA1R pool. On a device model it is invisible; on a *host* model it is a yield
+KN5000 (100-stream denominator), **zero times** anywhere in the WSA1R pool, and
+`second-dsp-and-ready.md` B5 reports that on the 200-stream denominator all 34
+occurrences immediately follow a command-`0x30` record — i.e. it belongs to the
+IC310 link, which has no ready bit and needs a settle marker instead. On a device model it is invisible; on a *host* model it is a yield
 point.
 
 ### 3.2 Is there a header, a length, an entry point?
@@ -341,9 +360,11 @@ The KN5000 census separates them cleanly:
 * `0x0000 0x003C 0x0040 0x0047 0x0054 0x00C8` are **I-RAM word addresses** —
   0 / 60 / 64 / 71 / 84 / 200, the kernel, the epilogue, the two link words the
   host rewrites, and the two body entry points;
-* **`0x0160` is a POKE PORT, not an I-RAM address.** All 312 runtime parameter
-  writes go there, and register and D-RAM traffic share it. `0x0161` is the
-  24-bit coefficient port used by command `0x02`.
+* **`0x0160` is a POKE PORT, not an I-RAM address.** Every runtime parameter
+  write is aimed there — 312 records over the 100 canned parameter streams
+  (`host_side.py hostif`, per-effect denominator), matched one-for-one by 312
+  end-of-transaction `0x03` commands — and register and D-RAM traffic share it.
+  `0x0161` is the 24-bit coefficient port used by command `0x02`.
 
 ⚠ That `0x0160`/`0x0161` are ports rather than addresses is an inference from
 their traffic (they carry heterogeneous destinations that the *payload* then
