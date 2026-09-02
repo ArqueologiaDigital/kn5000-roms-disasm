@@ -25,3 +25,22 @@ What the sheets show at a glance, which the `.byte` rows did not:
   ADJACENT cells form a compound word, which suggests the private encoding of
   `FINDINGS-fonts.md` section 5 numbers the kanji in the order the UI's own
   message text first needs them.  Not established here.
+
+  ★ **FOLLOWED UP AND CONFIRMED, 2026-09-02** (lane `rq-fonts`).  All 224 cells
+  are transcribed in `notes/fonts-kanji/kanji_transcription.txt`, and the
+  adjacency is not an impression: **72** adjacent code pairs are EDICT2
+  headwords against a shuffle null of **24.8 ± 4.8** over 10,000 permutations
+  of the same 224 characters — 9.9 sd, 0 of 10,000 permutations reach it —
+  while distance-2 through distance-8 controls sit on the null.
+  `python3 scripts/analysis/kanji_order_hypothesis.py`.
+  ⚠ The half of the guess about *the UI's own message text* did **not**
+  survive: there is no Japanese text in any of the four images
+  (`FINDINGS-fonts.md` §6.1).  The order is a document's order; the document is
+  not in this ROM.
+
+* `Font_Svc06_8x14` and the other Latin faces -- above `0x7F` they are not
+  latin-1, not CP437 and not CP850, but per-language RUNS appended one after
+  another: German `0x80`-`0x86`, music and arrow symbols, French `0x99`-`0xA7`,
+  more symbols, a blank cell at `0xAF`, then **Spanish** `0xB0`-`0xBC`
+  (Á É Ñ á ó ú ñ í ì ¿).  That last block answers a question the source header
+  had left open in as many words.

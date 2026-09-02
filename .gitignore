@@ -83,3 +83,7 @@ census-work/
 scripts/analysis/.amap_v10.json
 # tier2byte lane: address-map/decode cache for scripts/analysis/tier2_byte_split_census.py
 .tier2cache/
+
+# Built from EDICT2 on demand by scripts/analysis/japanese_text_census.py
+# --build-dict; 2.7 MB and fully regenerable, so not tracked.
+wsa1/notes/fonts-kanji/kana_words.txt
