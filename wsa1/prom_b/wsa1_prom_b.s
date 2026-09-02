@@ -2978,6 +2978,28 @@ Data_F0191A:
 ;
 ; Re-derive all of it with
 ;     python3 notes/gen_prom_b_f0033f_f0199e.py --evidence --render
+;
+; ⚠⚠ CORRECTED 2026-09-02, lane IMAGE -- THE TWO READINGS ABOVE ARE TRANSPOSED,
+;   AND THE 24-BYTE GRID IS WRONG.
+;   1. "5 pages of 40 columns (a byte is one column, MSB the top row of its
+;      page)": service 3 stores 5 COLUMNS of 40 bytes, one byte = 8 HORIZONTAL
+;      pixels -- still 40 x 40, but byte c*40+r, not the transpose.  The same
+;      formula applied to prom_a 0xFFCB00 renders the word `Technics`, which is
+;      the calibration this reading has and the other does not.
+;   2. "A 24-byte cell rendered as 12 columns * 2 pages is a 12x16 icon": the
+;      TEN op-03 records that name 0xF019AA all carry BC=2, HL=12, so the cell
+;      is 16 x 12.  Both readings draw a circle, because a circle is nearly
+;      symmetric under transposition -- which is exactly why the eye cannot
+;      settle it and the record must.
+;   3. "SEVEN 24-byte cells" is refuted by those same records: 0xF0191A,
+;      0xF01938, 0xF01956 and 0xF01974 are each BC=3 HL=10 = 30 BYTES, and only
+;      0xF01992 and 0xF019AA are 24.  4*30 + 2*24 = 168 = 7*24, so the total is
+;      the same and the BOUNDARIES are not.  Bitmap_F0199E below is therefore
+;      byte-column 1 of the 16 x 12 cell at 0xF01992, not its "lower page".
+;   All of them are committed as PNGs -- images/Curve_F019C2.png .. (six
+;   response-curve thumbnails), images/Bitmap_F0191A.png .., images/
+;   Bitmap_F019AA.png.  Evidence: notes/FINDINGS-image-files.md sections 1-2,
+;   and `python3 scripts/build/wsa1_bitmaps.py census`.
 ; ============================================================================
 
 ; --------------------------------------------------------------------------
@@ -12066,6 +12088,10 @@ Data_F05AB4:
 
 ; ------------------------------------------------------------------
 ; Bitmap_F05CE0 -- 24 bytes, 2 bytes wide x 12 rows.
+; ⚠ "2 bytes wide x 12 rows" names the SIZE correctly and the LAYOUT wrongly:
+;   service 3 stores COLUMN-MAJOR, so this is 2 byte-columns of 12 bytes = a
+;   16 x 12 picture, byte c*12+r.  Committed as images/Bitmap_F05CE0.png; see
+;   notes/FINDINGS-image-files.md section 1.
 ; Referenced by: three interpreter-A op-03 records, at 0xF02B97,
 ; 0xF06307 and 0xF0631D.  Each is `.long 0x00F05CE0`, a VRAM address,
 ; `.short 0x0002` (width in BYTES) and `.short 0x000C` (rows); handler
@@ -39891,6 +39917,9 @@ DL_F17C4F:
 ; --------------------------------------------------------------------------
 ; Bitmap_F17C59_24x17 -- bitmap, 0xF17C59-0xF17C8B (51 bytes)
 ; Shape: 17 entries of 3 bytes = 51 bytes, which is the whole segment.
+; ⚠ "3 bytes per row x 17 rows" is the SIZE right and the LAYOUT transposed:
+;   service 3 stores COLUMN-MAJOR, so it is 3 byte-columns of 17 bytes = a
+;   24 x 17 picture, byte c*17+r.  images/Bitmap_F17C59.png.
 ; Evidence: 3 bytes per row x 17 rows, from the BC and HL fields of the
 ;           op-03 record at 0xF1AAA9
 ; ★ CORRECTION C5: the layout calls this an index_map.  It is a BITMAP: the
@@ -105680,6 +105709,11 @@ ParamCursorRect_Single:
 ;          +6, BC from +8 and HL from +10 -- so BC IS the width in bytes and
 ;          HL the row count.  Every one of them carries BC = 6 and HL = 20.
 ; Evidence: 6 x 20 = 120 and 0xF54718 + 120 = 0xF54790, the next object in
+; ⚠ "BC IS the width in bytes and HL the row count" is the SIZE right and the
+;   LAYOUT transposed: LCD_Svc_03_BlitColumns issues CSRDIR DOWN and steps the
+;   destination ONE BYTE between columns, so BC is the COLUMN count and HL is
+;   bytes DOWN each column -- 48 x 20, byte c*20+r.  Applies to 0xF54790 and
+;   0xF54D7E too.  images/Bitmap_F54718.png; notes/FINDINGS-image-files.md.
 ;           address order.
 ; --------------------------------------------------------------------------
 Bitmap_F54718_48x20:
@@ -105834,6 +105868,8 @@ Bitmap_DrawbarB:
 ;          from +8 and HL from +10 -- so BC IS the width in bytes and HL the
 ;          row count.  Every one of them carries BC = 38 and HL = 6.
 ; Evidence: 38 x 6 = 228 and 0xF54D7E + 228 = 0xF54E62, the next object in
+; ⚠ COLUMN-MAJOR: 38 byte-columns of 6 bytes = 304 x 6, byte c*6+r.  See the
+;   correction on Bitmap_F54718_48x20 above.  images/Bitmap_F54D7E.png.
 ;           address order.
 ; --------------------------------------------------------------------------
 Bitmap_F54D7E_304x6:
