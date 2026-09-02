@@ -26,7 +26,9 @@ THE EXTENT IS BRACKETED BY A FLAG, NOT GUESSED
     (0x21E7)/(0x21E8) 64 times and none of that was looked at here.
 
 THE OUTPUT TEMPLATE IS A STANDARD MIDI FILE, BYTE FOR BYTE
-    0xF7493F and 0xF760BF hold the same 32 bytes:
+    0xF7493F and 0xF760BF hold the same 33 bytes (⚠ CORRECTED 2026-09-02: this
+    said 32; the fields listed below sum to 33, and 14+8+11 is what the three
+    block moves copy -- notes/FINDINGS-prom_b-smf-writer.md):
 
       4D 54 68 64  "MThd"
       00 00 00 06   chunk length 6

@@ -30,6 +30,31 @@ the tree's owner commits it; as of round 9 that is round 8's
 `notes/prom_b_filefield_checks.py`**. Re-check with
 `git status --porcelain notes/`.
 
+## LANE w14/rq-midi (2026-09-02) — the SMF writer
+
+### `gen_prom_b_smf_writer_module.py` — ★ the "MIDI file" that is a TEMPLATE
+**"prom_b 0xF7669D-0xF779D4 is 4,920 bytes the census graded self-admitted, with
+a Standard MIDI File header at 0xF77836 whose MTrk length is ZERO. What is that
+object's real extent, what does it contain, who reads it, and what is the rest?"**
+
+The header is **33 bytes**, not 415 and not 99: the firmware copies it in three
+runs of 14 + 8 + 11 and then reads the next address, +0x21, as a 66-byte word
+table. The zero length is a placeholder 0xF7789A backfills from a byte count.
+Everything else in the range is code, two GM System On/Off SysEx records and an
+8-entry byte table. Emits all of it, verified by re-assembly, and splices it.
+
+    python3 notes/gen_prom_b_smf_writer_module.py --selftest        # 87 checks
+    python3 notes/gen_prom_b_smf_writer_module.py --layout          # segments
+    python3 notes/gen_prom_b_smf_writer_module.py --debt 08d0c4e8   # before
+    python3 notes/gen_prom_b_smf_writer_module.py --debt            # after
+    python3 notes/gen_prom_b_smf_writer_module.py --splice
+    python3 notes/gen_prom_b_smf_writer_module.py --splice-siblings
+
+⚠ Its most transferable finding is a NEGATIVE one: 24 bytes of DATA inside the
+range round-trip perfectly as instructions, and only the `ld XRR,imm32` operands
+that point at them say otherwise. The byte gate cannot see the difference.
+Write-up: `FINDINGS-prom_b-smf-writer.md`.
+
 ## WAVE 8 (2026-08-31) — the naming round's six scripts
 
 ### `prom_b_msgline.py` — ★ what RAM 0x0FE4 is

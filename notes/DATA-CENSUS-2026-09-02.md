@@ -184,7 +184,7 @@ it, can a reader say what these bytes represent?**
 | # | region | why it fails |
 |---|---|---|
 | 11 | `v7 midi/midi_dispatch_handlers.s:6907` `SeqAlt_NibbleSearch_DecLoop`, 8 B | not data at all — undecoded code under a routine name |
-| 20 | `prom_b 0x077836` `Data_F77836`, 415 B | its own header says *"415 bytes this block could not split. No content rule framed it … emitted as bytes rather than guessed"* — an admission my phrase list did not catch |
+| 20 | `prom_b 0x077836` `Data_F77836`, 415 B | its own header says *"415 bytes this block could not split. No content rule framed it … emitted as bytes rather than guessed"* — an admission my phrase list did not catch. ✅ **CLEARED 2026-09-02**: 33 B SMF template + 66 B word table + 316 B code (§9) |
 | 35 | `v10 ui_widgets/widget_descriptors.s:401` `NakaInst_OFF_Str`, **37,262 B** | the label names a three-byte string; the region is 37 KB (see §5) |
 
 **A further 8 of 40 (20 %) pass only at a coarse granularity** — the label or
@@ -334,7 +334,7 @@ Regenerate with `--targets N`. Largest 40:
 | table data | 0x057914-0x05959D | 7,305 | `ToneDB_EnvDescTable` | self-admitted | — |
 | v7 | 0x1804E2-0x1820C0 | 7,134 | `AudioCtrl_DataBlock` | embedded-in-code | — |
 | prom_b | 0x078029-0x0799E8 | 6,591 | ~~`Data_F78029` … `Bitmap_F799D0`~~ → `DLGlyph_*` | ~~no-explanation~~ **CLOSED**, see §8.3 | bitmap (**not** text) |
-| prom_b | 0x07669D-0x0779D5 | 4,920 | `Data_F7669D` … `Data_F77836` | self-admitted | **MIDI**, ptr-table |
+| prom_b | 0x07669D-0x0779D5 | 4,920 | ~~`Data_F7669D` … `Data_F77836`~~ | ✅ **CLEARED 2026-09-02** | SMF export template + writer code — see §9 |
 | prom_b | 0x04FF61-0x0511C7 | 4,710 | `LinkTable_F4FF61` | self-admitted | — |
 | v7 | 0x10D7E7-0x10E905 | 4,382 | `.Lc_f0d7e3` | embedded-in-code | — |
 | prom_d | 0x01C8CF-0x01D965 | 4,246 | `PercInst_Template_Silent` … `ToneDB_ToneIndexMapA` | self-admitted | ptr-table |
@@ -483,9 +483,18 @@ at file offset 0x77836:
     00 FF 03 0F  57 53 41 20 20 20 20 …                 meta 0x03 track name "WSA    "
 
 **The `MTrk` length field is zero**, which is exactly why no walker ever framed
-it: a conformant reader consumes nothing and stops. The block is 415 bytes of
-real MIDI events after that. This is the single most convertible unknown in the
-tree and the first thing a MIDI lane should take.
+it: a conformant reader consumes nothing and stops.
+
+⚠ **RESOLVED 2026-09-02, and the guess above was wrong.** It is *not* "415 bytes
+of real MIDI events": it is a 33-byte EXPORT TEMPLATE — the file's opening,
+which the writer copies into its output buffer before emitting events at run
+time — followed by an unrelated 66-byte word table and 316 bytes of code. The
+zero length is a placeholder that 0xF7789A backfills from a byte count once the
+track is closed. The whole 4,920-byte range is now real source: 4,186 bytes of
+code in six spans, 352 of typed data, 382 of `.byte` rows standing in for
+instructions llvm-mc cannot encode. Evidence and 87 checks:
+`wsa1/notes/FINDINGS-prom_b-smf-writer.md` and
+`wsa1/notes/gen_prom_b_smf_writer_module.py --selftest`.
 
 ---
 

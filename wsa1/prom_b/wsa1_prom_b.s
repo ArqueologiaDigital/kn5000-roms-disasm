@@ -163361,49 +163361,62 @@ sub_F7492F:
 	ldw	bc, 4	; F74939  ld BC,0x0004
 	m_ldirw MWI+r5	; F7493C  ldirw
 	ret	; F7493E  ret
-
 ; --------------------------------------------------------------------------
-; SmfFileTemplate_F7493F -- 0xF7493F, 99 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |MThd.........`MTrk........WSA    ..@.......@...
-;           ..@.......@.......@.......@.......@.......@.........|
-; Read by: 1 byte-scan hit: 1 instruction operand -- `ld XIY,0x00f7493f` at
-;          0xF73A23 (operand field 1 byte in)
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Name:    named 2026-08-31 -- a STANDARD MIDI FILE header, byte for byte:
-;            4D 54 68 64             `MThd`
-;            00 00 00 06             chunk length 6
-;            00 00                   format 0
-;            00 01                   one track
-;            00 60                   division, 96 ticks per quarter note
-;            4D 54 72 6B             `MTrk`
-;            00 00 00 00             track length -- a placeholder
-;            00 FF 03 0F             delta 0, meta FF 03 (track name), length 15
-;            57 53 41 20 20 20 20    `WSA    `
-; Read by: the writer copies template+0x0E (`MTrk`) and the 11 bytes at
-;          template+0x16, then eight more from the filename field at RAM
-;          (0x21C8).  7 + 8 = 15, which is the length the meta event declares.
-; Evidence: the bytes are re-read on every emit, and the format claim is
-;          notes/prom_b_smf_reader.py's 40 checks plus the arithmetic above.
-; ⚠ CORRECTED 2026-08-31: this header's `Unknown: everything about it except its
-;          bytes` no longer holds.
-; Unknown: what the 0x40-strided bytes after offset 0x21 are.  They are NOT
-;          claimed here.
+; SmfFileTemplate_F7493F -- the 33-byte STANDARD MIDI FILE header this
+;          firmware copies into its output buffer before writing a track.
+;          Named 2026-08-31 by notes/prom_b_apply_smf_names.py, on
+;          notes/prom_b_smf_reader.py's 40 checks.
+;          ⚠ NOT MUSIC: no note, no end-of-track.
+; ⚠ CORRECTED 2026-09-02: that pass called the object 99 bytes and 32 of
+;                         them the header. It is 33 bytes of header
+;                         (14+8+11, the three block moves) and then a
+;                         SEPARATE 66-byte word table -- see
+;                         SmfPartOffsets_F74960 below, which retires this
+;                         header's standing `Unknown: what the 0x40-strided
+;                         bytes after offset 0x21 are`.
+; Read by: `ld XIY,0x00F7493F` at 0xF73A23, and the image spells +0x0E and
+;          +0x16 as well -- the three copy sources. 14+8+11 = 33 = 0x21,
+;          which is where the table starts.
+; Length:  the `00 00 00 00` at +0x12 is a PLACEHOLDER; 0xF7789A computes
+;          the real value into (0x10C4)-(0x10C7), most significant byte
+;          first. ★ Copy 0xF7493F PROVES it: at +0x0E it runs `ldir` with
+;          BC=4 -- `MTrk` only -- and then writes (0x10C4) and (0x10C6) into
+;          the file in the placeholder's place.
+; Evidence: notes/gen_prom_b_smf_writer_module.py --selftest.
 ; --------------------------------------------------------------------------
 SmfFileTemplate_F7493F:
-	.byte	0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x60, 0x4D, 0x54	; F7493F  [0..15]
-	.byte	0x72, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0x0F, 0x57, 0x53, 0x41, 0x20, 0x20, 0x20	; F7494F  [16..31]
-	.byte	0x20, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01, 0x40, 0x01, 0x80, 0x01, 0xC0	; F7495F  [32..47]
-	.byte	0x01, 0x40, 0x02, 0x80, 0x02, 0xC0, 0x02, 0x00, 0x03, 0x40, 0x03, 0x80, 0x03, 0xC0, 0x03, 0x00	; F7496F  [48..63]
-	.byte	0x04, 0x40, 0x04, 0x80, 0x04, 0xC0, 0x04, 0x00, 0x05, 0x40, 0x05, 0x80, 0x05, 0xC0, 0x05, 0x00	; F7497F  [64..79]
-	.byte	0x06, 0x40, 0x06, 0x80, 0x06, 0xC0, 0x06, 0x00, 0x07, 0x40, 0x07, 0x80, 0x07, 0xC0, 0x07, 0x00	; F7498F  [80..95]
-	.byte	0x08, 0xFF, 0xFF	; F7499F  [96..98]
+	.ascii	"MThd"	; F7493F  header chunk tag
+	.byte	0x00, 0x00, 0x00, 0x06	; F74943  chunk length 6, most significant byte first
+	.byte	0x00, 0x00	; F74947  format 0 -- one multi-channel track
+	.byte	0x00, 0x01	; F74949  ntrks 1
+	.byte	0x00, 0x60	; F7494B  division 0x0060 = 96 ticks per quarter note
+	.ascii	"MTrk"	; F7494D  track chunk tag
+	.byte	0x00, 0x00, 0x00, 0x00	; F74951  track length PLACEHOLDER -- backfilled by 0xF7789A
+	.byte	0x00	; F74955  delta time 0
+	.byte	0xFF, 0x03	; F74956  meta event FF 03 -- sequence/track name
+	.byte	0x0F	; F74958  ... declared length 15
+	.ascii	"WSA    "	; F74959  name bytes 1-7; 8-15 come from RAM (0x21C8)
+
+; --------------------------------------------------------------------------
+; SmfPartOffsets_F74960 -- 32 little-endian 16-bit BYTE OFFSETS and a
+;          0xFFFF terminator.  NOT MIDI, and not part of the file: it only
+;          happens to sit 0x21 bytes after the template.
+;          0x0000, 0x0040 ... 0x0800, step 0x40 -- one record per slot in the
+;          0x40-strided array at RAM 0x006036A0.
+; Read by: five instructions spell 0x00F74960: 0xF76FB9 is `ld XDE,<base>`
+;          followed by `ld HL,(XDE+HL)` with HL = (byte from RAM 0x603422) *
+;          2, and the result reaches `lda XIY,XIY+HL` on XIY = 0x006036A0.
+; ⚠ Note:  the step is 0x40 everywhere EXCEPT between slots 7 and 8, where
+;          it is 0x80: the record at 0x0200 is skipped. That is in the ROM
+;          and identical in all four copies. What occupies the skipped slot
+;          is NOT established.
+; --------------------------------------------------------------------------
+SmfPartOffsets_F74960:
+	.short	0x0000, 0x0040, 0x0080, 0x00C0, 0x0100, 0x0140, 0x0180, 0x01C0	; F74960  slots  0- 7
+	.short	0x0240, 0x0280, 0x02C0, 0x0300, 0x0340, 0x0380, 0x03C0, 0x0400	; F74970  slots  8-15
+	.short	0x0440, 0x0480, 0x04C0, 0x0500, 0x0540, 0x0580, 0x05C0, 0x0600	; F74980  slots 16-23
+	.short	0x0640, 0x0680, 0x06C0, 0x0700, 0x0740, 0x0780, 0x07C0, 0x0800	; F74990  slots 24-31
+	.short	0xFFFF	; F749A0  terminator
 
 
 ; --------------------------------------------------------------------------
@@ -165445,50 +165458,62 @@ ByteMap_F7609E:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F7609E  [0..15]
 	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F	; F760AE  [16..31]
 	.byte	0x7F	; F760BE  [32..32]
-
-
 ; --------------------------------------------------------------------------
-; SmfFileTemplate_F760BF -- 0xF760BF, 99 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |MThd.........`MTrk........WSA    ..@.......@...
-;           ..@.......@.......@.......@.......@.......@.........|
-; Read by: 1 byte-scan hit: 1 instruction operand -- `ld XIY,0x00f760bf` at
-;          0xF756C6 (operand field 1 byte in)
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Name:    named 2026-08-31 -- a STANDARD MIDI FILE header, byte for byte:
-;            4D 54 68 64             `MThd`
-;            00 00 00 06             chunk length 6
-;            00 00                   format 0
-;            00 01                   one track
-;            00 60                   division, 96 ticks per quarter note
-;            4D 54 72 6B             `MTrk`
-;            00 00 00 00             track length -- a placeholder
-;            00 FF 03 0F             delta 0, meta FF 03 (track name), length 15
-;            57 53 41 20 20 20 20    `WSA    `
-; Read by: the writer copies template+0x0E (`MTrk`) and the 11 bytes at
-;          template+0x16, then eight more from the filename field at RAM
-;          (0x21C8).  7 + 8 = 15, which is the length the meta event declares.
-; Evidence: the bytes are re-read on every emit, and the format claim is
-;          notes/prom_b_smf_reader.py's 40 checks plus the arithmetic above.
-; ⚠ CORRECTED 2026-08-31: this header's `Unknown: everything about it except its
-;          bytes` no longer holds.
-; Unknown: what the 0x40-strided bytes after offset 0x21 are.  They are NOT
-;          claimed here.
+; SmfFileTemplate_F760BF -- the 33-byte STANDARD MIDI FILE header this
+;          firmware copies into its output buffer before writing a track.
+;          Named 2026-08-31 by notes/prom_b_apply_smf_names.py, on
+;          notes/prom_b_smf_reader.py's 40 checks.
+;          ⚠ NOT MUSIC: no note, no end-of-track.
+; ⚠ CORRECTED 2026-09-02: that pass called the object 99 bytes and 32 of
+;                         them the header. It is 33 bytes of header
+;                         (14+8+11, the three block moves) and then a
+;                         SEPARATE 66-byte word table -- see
+;                         SmfPartOffsets_F760E0 below, which retires this
+;                         header's standing `Unknown: what the 0x40-strided
+;                         bytes after offset 0x21 are`.
+; Read by: `ld XIY,0x00F760BF` at 0xF756C6, and the image spells +0x0E and
+;          +0x16 as well -- the three copy sources. 14+8+11 = 33 = 0x21,
+;          which is where the table starts.
+; Length:  the `00 00 00 00` at +0x12 is a PLACEHOLDER; 0xF7789A computes
+;          the real value into (0x10C4)-(0x10C7), most significant byte
+;          first. ★ Copy 0xF7493F PROVES it: at +0x0E it runs `ldir` with
+;          BC=4 -- `MTrk` only -- and then writes (0x10C4) and (0x10C6) into
+;          the file in the placeholder's place.
+; Evidence: notes/gen_prom_b_smf_writer_module.py --selftest.
 ; --------------------------------------------------------------------------
 SmfFileTemplate_F760BF:
-	.byte	0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x60, 0x4D, 0x54	; F760BF  [0..15]
-	.byte	0x72, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0x0F, 0x57, 0x53, 0x41, 0x20, 0x20, 0x20	; F760CF  [16..31]
-	.byte	0x20, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01, 0x40, 0x01, 0x80, 0x01, 0xC0	; F760DF  [32..47]
-	.byte	0x01, 0x40, 0x02, 0x80, 0x02, 0xC0, 0x02, 0x00, 0x03, 0x40, 0x03, 0x80, 0x03, 0xC0, 0x03, 0x00	; F760EF  [48..63]
-	.byte	0x04, 0x40, 0x04, 0x80, 0x04, 0xC0, 0x04, 0x00, 0x05, 0x40, 0x05, 0x80, 0x05, 0xC0, 0x05, 0x00	; F760FF  [64..79]
-	.byte	0x06, 0x40, 0x06, 0x80, 0x06, 0xC0, 0x06, 0x00, 0x07, 0x40, 0x07, 0x80, 0x07, 0xC0, 0x07, 0x00	; F7610F  [80..95]
-	.byte	0x08, 0xFF, 0xFF	; F7611F  [96..98]
+	.ascii	"MThd"	; F760BF  header chunk tag
+	.byte	0x00, 0x00, 0x00, 0x06	; F760C3  chunk length 6, most significant byte first
+	.byte	0x00, 0x00	; F760C7  format 0 -- one multi-channel track
+	.byte	0x00, 0x01	; F760C9  ntrks 1
+	.byte	0x00, 0x60	; F760CB  division 0x0060 = 96 ticks per quarter note
+	.ascii	"MTrk"	; F760CD  track chunk tag
+	.byte	0x00, 0x00, 0x00, 0x00	; F760D1  track length PLACEHOLDER -- backfilled by 0xF7789A
+	.byte	0x00	; F760D5  delta time 0
+	.byte	0xFF, 0x03	; F760D6  meta event FF 03 -- sequence/track name
+	.byte	0x0F	; F760D8  ... declared length 15
+	.ascii	"WSA    "	; F760D9  name bytes 1-7; 8-15 come from RAM (0x21C8)
+
+; --------------------------------------------------------------------------
+; SmfPartOffsets_F760E0 -- 32 little-endian 16-bit BYTE OFFSETS and a
+;          0xFFFF terminator.  NOT MIDI, and not part of the file: it only
+;          happens to sit 0x21 bytes after the template.
+;          0x0000, 0x0040 ... 0x0800, step 0x40 -- one record per slot in the
+;          0x40-strided array at RAM 0x006036A0.
+; Read by: five instructions spell 0x00F760E0: 0xF76FB9 is `ld XDE,<base>`
+;          followed by `ld HL,(XDE+HL)` with HL = (byte from RAM 0x603422) *
+;          2, and the result reaches `lda XIY,XIY+HL` on XIY = 0x006036A0.
+; ⚠ Note:  the step is 0x40 everywhere EXCEPT between slots 7 and 8, where
+;          it is 0x80: the record at 0x0200 is skipped. That is in the ROM
+;          and identical in all four copies. What occupies the skipped slot
+;          is NOT established.
+; --------------------------------------------------------------------------
+SmfPartOffsets_F760E0:
+	.short	0x0000, 0x0040, 0x0080, 0x00C0, 0x0100, 0x0140, 0x0180, 0x01C0	; F760E0  slots  0- 7
+	.short	0x0240, 0x0280, 0x02C0, 0x0300, 0x0340, 0x0380, 0x03C0, 0x0400	; F760F0  slots  8-15
+	.short	0x0440, 0x0480, 0x04C0, 0x0500, 0x0540, 0x0580, 0x05C0, 0x0600	; F76100  slots 16-23
+	.short	0x0640, 0x0680, 0x06C0, 0x0700, 0x0740, 0x0780, 0x07C0, 0x0800	; F76110  slots 24-31
+	.short	0xFFFF	; F76120  terminator
 
 
 ; --------------------------------------------------------------------------
@@ -166350,45 +166375,105 @@ sub_F7668A:
 	ld	xwa, 6335232	; F76693  ld XWA,0x0060ab00
 	stda32	(8663), xwa	; F76698  ld (0x21d7),XWA
 	ret	; F7669C  ret
-
 ; --------------------------------------------------------------------------
-; Data_F7669D -- 286 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |.>..f.....v.....'...h..>..f.....vi....'...#(+.X
-;           ....KH.8.?.~......8.?.~..xA.x>.#..5.....8.?.~..!. /'..f..8.?.~..
-;           .l.?..n..K}....8.@..~j.....x...(.#.....v..)"....4>.hj..(?.f,E.Y.
-;           .D.!..1......!.?..!.?..!.?..('+..%.K..(G.Y..)"..h-.
-;           ...(...)"..h..8.?.f..8.'...+...K..(Gh..)"....!<.H.%'A.q <..|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; sub_F7669D
+; Called from: no call site is known.  The label marks where a
+;              converted run STARTS, so that a tool walking this file
+;              by label does not attribute the run to its neighbour.
+; Evidence: 0xF7669D is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-Data_F7669D:
-	.byte	0xF1, 0x3E, 0x13, 0xC8, 0x66, 0x07, 0xF1, 0xB1, 0x11, 0xC8, 0x76, 0x7F, 0xF9, 0xC1, 0x9C, 0x11	; F7669D  [0..15]
-	.byte	0x27, 0xCF, 0xCC, 0x7F, 0x68, 0x11, 0xF1, 0x3E, 0x13, 0xC8, 0x66, 0x07, 0xF1, 0xB1, 0x11, 0xC8	; F766AD  [16..31]
-	.byte	0x76, 0x69, 0xF9, 0xC1, 0x9C, 0x11, 0x27, 0xC1, 0x99, 0x11, 0x23, 0x28, 0x2B, 0x1E, 0x58, 0x03	; F766BD  [32..47]
-	.byte	0x1E, 0xCB, 0x04, 0x4B, 0x48, 0xC1, 0x38, 0x12, 0x3F, 0x03, 0x7E, 0xB3, 0x00, 0x1E, 0x8D, 0x03	; F766CD  [48..63]
-	.byte	0xC1, 0x38, 0x12, 0x3F, 0x03, 0x7E, 0xA8, 0x00, 0x78, 0x41, 0xF9, 0x78, 0x3E, 0xF9, 0x23, 0x00	; F766DD  [64..79]
-	.byte	0x1E, 0x35, 0x03, 0x1E, 0xA8, 0x04, 0xC1, 0x38, 0x12, 0x3F, 0x03, 0x7E, 0x92, 0x00, 0x21, 0xFF	; F766ED  [80..95]
-	.byte	0x20, 0x2F, 0x27, 0x00, 0x1E, 0x66, 0x03, 0xC1, 0x38, 0x12, 0x3F, 0x03, 0x7E, 0x81, 0x00, 0xD1	; F766FD  [96..111]
-	.byte	0x6C, 0x12, 0x3F, 0x00, 0x00, 0x6E, 0x0F, 0x1D, 0x4B, 0x7D, 0xF7, 0xC9, 0x88, 0xF1, 0x38, 0x12	; F7670D  [112..127]
-	.byte	0x40, 0xC8, 0xDB, 0x7E, 0x6A, 0x00, 0x1E, 0xAE, 0x16, 0x1E, 0x78, 0x01, 0xF1, 0x80, 0x28, 0x00	; F7671D  [128..143]
-	.byte	0x23, 0x1D, 0x00, 0x16, 0xF4, 0x1E, 0x76, 0xE9, 0xF1, 0x29, 0x22, 0x00, 0x00, 0xC1, 0xD4, 0x34	; F7672D  [144..159]
-	.byte	0x3E, 0x10, 0x68, 0x6A, 0xC1, 0x80, 0x28, 0x3F, 0x02, 0x66, 0x2C, 0x45, 0xA2, 0x59, 0xF7, 0x00	; F7673D  [160..175]
-	.byte	0x44, 0xC8, 0x21, 0x00, 0x00, 0x31, 0x08, 0x00, 0x85, 0x11, 0xF1, 0xD0, 0x21, 0x00, 0x3F, 0xF1	; F7674D  [176..191]
-	.byte	0xD1, 0x21, 0x00, 0x3F, 0xF1, 0xD2, 0x21, 0x00, 0x3F, 0xC1, 0x80, 0x28, 0x27, 0x2B, 0x1D, 0xB0	; F7675D  [192..207]
-	.byte	0x25, 0xF4, 0x4B, 0xF1, 0x80, 0x28, 0x47, 0x1E, 0x59, 0x01, 0xF1, 0x29, 0x22, 0x00, 0x00, 0x68	; F7676D  [208..223]
-	.byte	0x2D, 0x1E, 0x20, 0x01, 0xF1, 0x80, 0x28, 0x00, 0x1E, 0xF1, 0x29, 0x22, 0x00, 0x00, 0x68, 0x1E	; F7677D  [224..239]
-	.byte	0xC1, 0x38, 0x12, 0x3F, 0x07, 0x66, 0xEA, 0xC1, 0x38, 0x12, 0x27, 0x1E, 0x1D, 0xE9, 0x2B, 0x1E	; F7678D  [240..255]
-	.byte	0x02, 0x01, 0x4B, 0xF1, 0x80, 0x28, 0x47, 0x68, 0x05, 0xF1, 0x29, 0x22, 0x00, 0x02, 0xC1, 0xE8	; F7679D  [256..271]
-	.byte	0x21, 0x3C, 0x7F, 0x48, 0xF1, 0x25, 0x27, 0x41, 0xC1, 0x71, 0x20, 0x3C, 0xFD, 0x0E	; F767AD  [272..285]
+sub_F7669D:
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F7669D  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F766A1  jr Z,0xf766aa
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F766A3  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1665	; F766A7  jrl Z,0xf76029
+	ldb_d8	l, (4508)	; F766AA  ld L,(0x119c)
+	and	l, 127	; F766AE  and L,0x7f
+	jr	17	; F766B1  jr T,0xf766c4
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F766B3  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F766B7  jr Z,0xf766c0
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F766B9  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1687	; F766BD  jrl Z,0xf76029
+	ldb_d8	l, (4508)	; F766C0  ld L,(0x119c)
+	ldb_d8	c, (4505)	; F766C4  ld C,(0x1199)
+	pushw	wa	; F766C8  push WA
+	pushw	hl	; F766C9  push HL
+	calr	856	; F766CA  calr 0xf76a25
+	calr	1227	; F766CD  calr 0xf76b9b
+	popw	hl	; F766D0  pop HL
+	popw	wa	; F766D1  pop WA
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F766D2  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jrl	nz, 179	; F766D7  jrl NZ,0xf7678d
+	calr	909	; F766DA  calr 0xf76a6a
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F766DD  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jrl	nz, 168	; F766E2  jrl NZ,0xf7678d
+	jrl	-1727	; F766E5  jrl T,0xf76029
+	jrl	-1730	; F766E8  jrl T,0xf76029
+	ldb	c, 0	; F766EB  ld C,0x00
+	calr	821	; F766ED  calr 0xf76a25
+	calr	1192	; F766F0  calr 0xf76b9b
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F766F3  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jrl	nz, 146	; F766F8  jrl NZ,0xf7678d
+	ldb	a, 255	; F766FB  ld A,0xff
+	ldb	w, 47	; F766FD  ld W,0x2f
+	ldb	l, 0	; F766FF  ld L,0x00
+	calr	870	; F76701  calr 0xf76a6a
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76704  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jrl	nz, 129	; F76709  jrl NZ,0xf7678d
+	.byte 0xD1, 0x6C, 0x12, 0x3F, 0x00, 0x00	; F7670C  cp (0x126c),0x0000   [llvm-mc cannot encode this]
+	jr	nz, 15	; F76712  jr NZ,0xf76723
+	call	16219467	; F76714  call 0xf77d4b
+	ld	w, a	; F76718  ld W,A
+	stb_d8	(4664), w	; F7671A  ld (0x1238),W
+	cps	w, 3	; F7671E  cp W,3
+	jrl	nz, 106	; F76720  jrl NZ,0xf7678d
+	calr	5806	; F76723  calr 0xf77dd4
+	calr	376	; F76726  calr 0xf768a1
+	stdi8	(10368), 35	; F76729  ld (0x2880),0x23
+	call	15996416	; F7672E  call 0xf41600
+	calr	59766	; F76732  calr 0xf750ab
+	stdi8	(8745), 0	; F76735  ld (0x2229),0x00
+	.byte 0xC1, 0xD4, 0x34, 0x3E, 0x10	; F7673A  or (0x34d4),0x10   [llvm-mc cannot encode this]
+	jr	106	; F7673F  jr T,0xf767ab
+	.byte 0xC1, 0x80, 0x28, 0x3F, 0x02	; F76741  cp (0x2880),0x02   [llvm-mc cannot encode this]
+	jr	z, 44	; F76746  jr Z,0xf76774
+	ld	xiy, 16210338	; F76748  ld XIY,0x00f759a2
+	ld	xix, 8648	; F7674D  ld XIX,0x000021c8
+	ldw	bc, 8	; F76752  ld BC,0x0008
+	.byte 0x85, 0x11	; F76755  ldir   [llvm-mc cannot encode this]
+	stdi8	(8656), 63	; F76757  ld (0x21d0),0x3f
+	stdi8	(8657), 63	; F7675C  ld (0x21d1),0x3f
+	stdi8	(8658), 63	; F76761  ld (0x21d2),0x3f
+	ldb_d8	l, (10368)	; F76766  ld L,(0x2880)
+	pushw	hl	; F7676A  push HL
+	call	16000432	; F7676B  call 0xf425b0
+	popw	hl	; F7676F  pop HL
+	stb_d8	(10368), l	; F76770  ld (0x2880),L
+	calr	345	; F76774  calr 0xf768d0
+	stdi8	(8745), 0	; F76777  ld (0x2229),0x00
+	jr	45	; F7677C  jr T,0xf767ab
+	calr	288	; F7677E  calr 0xf768a1
+	stdi8	(10368), 30	; F76781  ld (0x2880),0x1e
+	stdi8	(8745), 0	; F76786  ld (0x2229),0x00
+	jr	30	; F7678B  jr T,0xf767ab
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x07	; F7678D  cp (0x1238),0x07   [llvm-mc cannot encode this]
+	jr	z, -22	; F76792  jr Z,0xf7677e
+	ldb_d8	l, (4664)	; F76794  ld L,(0x1238)
+	calr	59677	; F76798  calr 0xf750b8
+	pushw	hl	; F7679B  push HL
+	calr	258	; F7679C  calr 0xf768a1
+	popw	hl	; F7679F  pop HL
+	stb_d8	(10368), l	; F767A0  ld (0x2880),L
+	jr	5	; F767A4  jr T,0xf767ab
+	stdi8	(8745), 2	; F767A6  ld (0x2229),0x02
+	.byte 0xC1, 0xE8, 0x21, 0x3C, 0x7F	; F767AB  and (0x21e8),0x7f   [llvm-mc cannot encode this]
+	popw	wa	; F767B0  pop WA
+	stb_d8	(10021), a	; F767B1  ld (0x2725),A
+	.byte 0xC1, 0x71, 0x20, 0x3C, 0xFD	; F767B5  and (0x2071),0xfd   [llvm-mc cannot encode this]
+	ret	; F767BA  ret
 
 
 ; --------------------------------------------------------------------------
@@ -166448,351 +166533,1698 @@ ByteMap_F767FB:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F767FB  [0..15]
 	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F	; F7680B  [16..31]
 	.byte	0x7F	; F7681B  [32..32]
+; --------------------------------------------------------------------------
+; sub_F7681C
+; Called from: no call site is known.  The label marks where a
+;              converted run STARTS, so that a tool walking this file
+;              by label does not attribute the run to its neighbour.
+; Evidence: 0xF7681C is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F7681C:
+	ret	; F7681C  ret
+	ld	l, c	; F7681D  ld L,C
+	xor	h, h	; F7681F  xor H,H
+	push	xix	; F76821  push XIX
+	ld	xix, 16214062	; F76822  ld XIX,0x00f7682e
+	ld_rrb	l, xix, hl	; F76827  ld L,(XIX+HL)
+	pop	xix	; F7682C  pop XIX
+	ret	; F7682D  ret
+
+; --------------------------------------------------------------------------
+; Table_F7682E -- an 8-entry BYTE lookup table: 0x00, 0x00, 0x00, 0x40, 0x40, 0x60, 0x60, 0x7F.
+;          Non-decreasing, 0x00 to 0x7F.  What the index and the value MEAN
+;          is not established here.
+; Read by: 0xF76822 `ld XIX,0x00F7682E` followed by `ld L,(XIX+HL)` at
+;          0xF76827, with HL = C zero-extended -- the whole of the
+;          three-instruction routine at 0xF7681D.
+; ⚠ Why:   the linear decode frames the first five bytes as three `nop`s and
+;          an `ld XWA,0x7f606040`. They are DATA; the byte gate cannot tell,
+;          the operand can.
+; --------------------------------------------------------------------------
+Table_F7682E:
+	.byte	0x00, 0x00, 0x00, 0x40, 0x40, 0x60, 0x60, 0x7F	; F7682E  entries 0-7
 
 
 ; --------------------------------------------------------------------------
-; Data_F7681C -- 4089 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes
-;           |.....<D.h......'\....@@``.9<D..`....$'!.....#.!...?
-;           n....h.!.h.\Y.;)=<....D..`..........4E.!......!..n..a.a..c..$'C 
-;           .h..a..cc...\]I[.E.Y..D.!..1.....%'....%...!.?..!.?..!.?..%.....
-;           E:...D.!..1.....E.!..D:...1.....MThd.........`MTrk........WSA
-;           ..@.......@.....@.......@.......@.......@.......@.......@.......
-;           ..2..0.'....P...3d......H......P...R.E.......$..!..A(=.U.]H.8.?.
-;           ~.....$.3.n.!...A.:..8.?.~i....$!Q..A.&..8.?.nV...$!...A....8.?.
-;           nC...$...!..A....8.?.n....$...!..A....8.?.n....$...!..A....8.?.n
-;           ....$....!.......F..(;*.....P...A.~. .......".....P.h..n..>..f..
-;           ..8...h......Q...RJ[H....=...$E....(..!..A(+=.^.]KH.8.?.f.HhK...
-;           $.3.n.H....A(+.=.KH.8.?.n....$....A+.'.K.8.?.n....$......f....f.
-;           ....A...]...$.;).8.......`.k....dhe.l.?..n...).K}.I...8.@..nKh8.
-;           ..H.a(;)*.H. ..3......P.....n.<..&.\JI[H)...I...8.@..n..l.a@..`.
-;           ...`....I[.<=;9.}.E..`..$''.........5D.!..1......!.?..!.?..!.?..
-;           %..:.Y[]\..8....H.......<DZ0.......\fS<DZ0......4..
-;           \....c.....<DZ0........P\h*:B........CBZ0......2..
-;           B........2..PZ.........a.. c......f.....~.............ff.....?.f
-;           ]E....D........5....4.?.fA..
-;           .'...f-...k.............k.h..!.'.G.A.. ..#..S..P..h.......`.c...
-;           .....!E..........!...ff...........:BZ0......
-;           Z..n....Ph..........R(;)<.Z.\I[H...P:BZ0........
-;           Z;'.)<.n.\I[:BZ0......<?Z....h.... .......Q.~.......Q....~......
-;           ....................?.n....?..s.....?.?cV...?.c.................
-;           ..!..............'......................#...........C...G...Ah8.
-;           ..!..............'...............G...Ah....!..........A.<D....1`
-;           .0....A...\.D......1....P.....\4#.~..n.#.^4%....!..^4
-;           ....n..\4#._..n.#.. .\4P0..h..a.^4P.()<..DZ0..1....P...\IH....~.
-;           ......~........:B.5`......Zn......a...{..h..p.C.a:B.5`.....#Z.\4
-;           S.^4........E6x..D..`.1....EDx..1.......d...$ELx..1....E.!..1...
-;           ....d...........E.......$..!..A.3.n.0.X..P!...4` ..P0....P!...A.
-;           ..d..~'..)..~".......I.......9...Edn...M..n.Eln...9......$1....!
-;           ..A)=<...\]I...$......d.>..v..E.6`..p......p.'...F."....*w..<D"4
-;           `.....'\.......:BWx......#Z....vn...f.;..[h...f.[xh.....5..#..$.
-;           ."..%..!...A..!.P.A..!.N.A.p.<..9.?.na.p.!.....`G.....`F.'...`G)
-;           *....JI.p.!........`'()*..y.JIH  ...`')*..y.JI.p.!......`
-;           ...)*.j.JIxC..p.!... .....8...)*.O.JI.p.!...
-;           ........)*.7.JI.p.!........)*.$.JI.p.!... ...(*...JH
-;           ]...'(*...JH ^.P.'(*...JH [.N.'(...H.p.'..<D"4`.....'\.......:BW
-;           x......#Z....v#..p.!.....E.6`..8.....5..'.8. .(...H e'.(...H
-;           d'.(...H.p.'..<D"4`.....'...DWx......#\E.6`.....5..'........
-;           .().O.IH........ &(.?.H e'.(.6.H
-;           d'.(.-.H.p.'..<D"4`.....'...DWx......#\E.6`..8.....5..'.8.
-;           .(...H &..(...H e'.(...H
-;           d'.(...H.p.'..<D"4`.....'...DWx......#\E.6`.....5..' .(...H ...(
-;           ...H.p.a.p.?.sL..Q......P...P.b....f....f..\4..^4..b..J..^4..\4.
-;           ...A.......~............;....#.[...ve.:B........AZ+.!....K.a.3.f
-;           ....!...v@....v2.........v%....v.....v.....v.....v.....v=....v..
-;           x.....a......n....a...h.... 2`....H....~.....R......x_...f<..~V.
-;           ...#.T.......#................(...
-;           ..........H.l....x.....#(......H.........
-;           ...N.x....~.....#(......H...... ....'.+.x....~.....#(......H...
-;           ...'...x....~............#(....g.H...... ....'...x....~....:BZ0.
-;           ......Zf.........c.xs....>.+...#.k.."....!...
-;           ...'...KDZ0......4!...A...!..A...!..A...! `.I.....'....Px ...~..
-;           ...?.v.....!..~...>..f.....v.....#(......H.9.?.v.....'..........
-;           .!.....`G.........!........`F<.....'D"4`.....'D.x......'...`G\..
-;           ..!.... ..........`'(..y.H...........  ...`'..y.!.... ........`
-;           .....xS. ....'..8....;............  ...'............!....
-;           ........ ...].x....~.....?.vu....'...!... ...........f.hN...'...
-;           vP....v....wE....{?.x..x..x..x..x.....#(+....q.KH!........
-;           @...'..y.x....w.....{..!.... ..... ...v....vi...vk...v{...v.....
-;           v"....v.....f....fo~P..>..v......vB....#(;.>....[H!.... .....
-;           e'.(.k.H d'......(.].H ....'...&...........(.C.H
-;           &...'......(.2.Hx...>..v......v.....#(+......KH!.... .....
-;           e'.(...H d'......(...H ....'(...H
-;           &'....x...>..f.....v.....#(+....7.KH!........ e'.(...H
-;           d'......(...H ....'(...H
-;           &'....xA..>..f.....v4....#(+.0....KH!.... .....
-;           ....'.\.x.....!x...>..f.....v.. ]...'hQ.>..f.....v..
-;           ]...'h<.>..f.....v.. @h+ ['..>..f.....v.....'...h..>..f.....v...
-;           ..'...#(+....U.KH...x..x..#.....B.!. /'........|
-; Read by: nothing in prom_a or prom_b spells this address as a 32-bit word,
-;          so whatever reaches it computes the address
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; sub_F76836
+; Called from: no call site is known.  The label marks where a
+;              converted run STARTS, so that a tool walking this file
+;              by label does not attribute the run to its neighbour.
+; Evidence: 0xF76836 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
 ; --------------------------------------------------------------------------
-Data_F7681C:
-	.byte	0x0E, 0xCB, 0x8F, 0xCE, 0xD6, 0x3C, 0x44, 0x2E, 0x68, 0xF7, 0x00, 0xC3, 0x07, 0xF0, 0xEC, 0x27	; F7681C  [0..15]
-	.byte	0x5C, 0x0E, 0x00, 0x00, 0x00, 0x40, 0x40, 0x60, 0x60, 0x7F, 0x39, 0x3C, 0x44, 0x80, 0xA4, 0x60	; F7682C  [16..31]
-	.byte	0x00, 0xE8, 0xD0, 0xC1, 0x24, 0x27, 0x21, 0xE8, 0xEC, 0x03, 0xE8, 0x84, 0x23, 0x08, 0x21, 0x00	; F7683C  [32..47]
-	.byte	0xC5, 0xF0, 0x3F, 0x20, 0x6E, 0x05, 0xCB, 0x1C, 0xF7, 0x68, 0x04, 0x21, 0xFE, 0x68, 0x00, 0x5C	; F7684C  [48..63]
-	.byte	0x59, 0x0E, 0x3B, 0x29, 0x3D, 0x3C, 0xD9, 0xD1, 0xC8, 0xD0, 0x44, 0x80, 0xA4, 0x60, 0x00, 0xD9	; F7685C  [64..79]
-	.byte	0x8B, 0xDB, 0xEC, 0x03, 0xF3, 0x07, 0xF0, 0xEC, 0x34, 0x45, 0xC8, 0x21, 0x00, 0x00, 0xDB, 0xD3	; F7686C  [80..95]
-	.byte	0xC5, 0xF4, 0x21, 0x84, 0xF1, 0x6E, 0x10, 0xEC, 0x61, 0xCF, 0x61, 0xCF, 0xDF, 0x63, 0xF1, 0xF1	; F7687C  [96..111]
-	.byte	0x24, 0x27, 0x43, 0x20, 0xFF, 0x68, 0x09, 0xCB, 0x61, 0xCB, 0xCF, 0x63, 0x63, 0xCC, 0xC8, 0xD0	; F7688C  [112..127]
-	.byte	0x5C, 0x5D, 0x49, 0x5B, 0x0E, 0x45, 0xA2, 0x59, 0xF7, 0x00, 0x44, 0xC8, 0x21, 0x00, 0x00, 0x31	; F7689C  [128..143]
-	.byte	0x0B, 0x00, 0x85, 0x11, 0xF1, 0x25, 0x27, 0x00, 0x01, 0x1D, 0xC8, 0x25, 0xF4, 0xF1, 0xD0, 0x21	; F768AC  [144..159]
-	.byte	0x00, 0x3F, 0xF1, 0xD1, 0x21, 0x00, 0x3F, 0xF1, 0xD2, 0x21, 0x00, 0x3F, 0x1D, 0xB0, 0x25, 0xF4	; F768BC  [160..175]
-	.byte	0x1E, 0x01, 0x00, 0x0E, 0x45, 0x3A, 0x12, 0x00, 0x00, 0x44, 0xC8, 0x21, 0x00, 0x00, 0x31, 0x04	; F768CC  [176..191]
-	.byte	0x00, 0x95, 0x11, 0x0E, 0x45, 0xC8, 0x21, 0x00, 0x00, 0x44, 0x3A, 0x12, 0x00, 0x00, 0x31, 0x04	; F768DC  [192..207]
-	.byte	0x00, 0x95, 0x11, 0x0E, 0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01	; F768EC  [208..223]
-	.byte	0x00, 0x60, 0x4D, 0x54, 0x72, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0x0F, 0x57, 0x53	; F768FC  [224..239]
-	.byte	0x41, 0x20, 0x20, 0x20, 0x20, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01, 0x40	; F7690C  [240..255]
-	.byte	0x01, 0x80, 0x01, 0xC0, 0x01, 0x40, 0x02, 0x80, 0x02, 0xC0, 0x02, 0x00, 0x03, 0x40, 0x03, 0x80	; F7691C  [256..271]
-	.byte	0x03, 0xC0, 0x03, 0x00, 0x04, 0x40, 0x04, 0x80, 0x04, 0xC0, 0x04, 0x00, 0x05, 0x40, 0x05, 0x80	; F7692C  [272..287]
-	.byte	0x05, 0xC0, 0x05, 0x00, 0x06, 0x40, 0x06, 0x80, 0x06, 0xC0, 0x06, 0x00, 0x07, 0x40, 0x07, 0x80	; F7693C  [288..303]
-	.byte	0x07, 0xC0, 0x07, 0x00, 0x08, 0xFF, 0xFF, 0x32, 0x09, 0x00, 0x30, 0xC0, 0x27, 0xD7, 0xE2, 0x9A	; F7694C  [304..319]
-	.byte	0xDB, 0x50, 0xD7, 0xE2, 0x8A, 0x33, 0x64, 0x00, 0xDA, 0xD2, 0xE8, 0x12, 0xDB, 0x48, 0xD7, 0xE2	; F7695C  [320..335]
-	.byte	0x8A, 0xF1, 0x8C, 0x10, 0x50, 0xF1, 0x8E, 0x10, 0x52, 0x0E, 0x45, 0x93, 0x11, 0x00, 0x00, 0xE1	; F7696C  [336..351]
-	.byte	0x88, 0x10, 0x24, 0xC5, 0xF4, 0x21, 0xF5, 0xF0, 0x41, 0x28, 0x3D, 0x1E, 0x55, 0x01, 0x5D, 0x48	; F7697C  [352..367]
-	.byte	0xC1, 0x38, 0x12, 0x3F, 0x03, 0x7E, 0x82, 0x00, 0xE1, 0x88, 0x10, 0x24, 0xC9, 0x33, 0x07, 0x6E	; F7698C  [368..383]
-	.byte	0xE2, 0x21, 0xFF, 0xF5, 0xF0, 0x41, 0x1E, 0x3A, 0x01, 0xC1, 0x38, 0x12, 0x3F, 0x03, 0x7E, 0x69	; F7699C  [384..399]
-	.byte	0x00, 0xE1, 0x88, 0x10, 0x24, 0x21, 0x51, 0xF5, 0xF0, 0x41, 0x1E, 0x26, 0x01, 0xC1, 0x38, 0x12	; F769AC  [400..415]
-	.byte	0x3F, 0x03, 0x6E, 0x56, 0xE1, 0x88, 0x10, 0x24, 0x21, 0x03, 0xF5, 0xF0, 0x41, 0x1E, 0x13, 0x01	; F769BC  [416..431]
-	.byte	0xC1, 0x38, 0x12, 0x3F, 0x03, 0x6E, 0x43, 0xE1, 0x88, 0x10, 0x24, 0xC1, 0x8E, 0x10, 0x21, 0xF5	; F769CC  [432..447]
-	.byte	0xF0, 0x41, 0x1E, 0xFE, 0x00, 0xC1, 0x38, 0x12, 0x3F, 0x03, 0x6E, 0x2E, 0xE1, 0x88, 0x10, 0x24	; F769DC  [448..463]
-	.byte	0xC1, 0x8D, 0x10, 0x21, 0xF5, 0xF0, 0x41, 0x1E, 0xE9, 0x00, 0xC1, 0x38, 0x12, 0x3F, 0x03, 0x6E	; F769EC  [464..479]
-	.byte	0x19, 0xE1, 0x88, 0x10, 0x24, 0xC1, 0x8C, 0x10, 0x21, 0xF5, 0xF0, 0x41, 0x1E, 0xD4, 0x00, 0xC1	; F769FC  [480..495]
-	.byte	0x38, 0x12, 0x3F, 0x03, 0x6E, 0x04, 0xE1, 0x88, 0x10, 0x24, 0x0E, 0xC1, 0x9A, 0x11, 0x21, 0xC9	; F76A0C  [496..511]
-	.byte	0xCC, 0x0F, 0xC9, 0xCE, 0xB0, 0x1E, 0x46, 0x00, 0x0E, 0x28, 0x3B, 0x2A, 0xD8, 0xD0, 0xF1, 0xAA	; F76A1C  [512..527]
-	.byte	0x11, 0x50, 0xF1, 0xAC, 0x11, 0x41, 0xD1, 0x7E, 0x10, 0x20, 0xCA, 0xD2, 0xD9, 0x80, 0xD1, 0x82	; F76A2C  [528..543]
-	.byte	0x10, 0x22, 0xDA, 0xA0, 0xF1, 0xAA, 0x11, 0x50, 0xF1, 0x68, 0x12, 0xC8, 0x6E, 0x11, 0xF1, 0x3E	; F76A3C  [544..559]
-	.byte	0x13, 0xC9, 0x66, 0x0B, 0xD1, 0xAA, 0x11, 0x38, 0x80, 0x01, 0xF1, 0x68, 0x12, 0x00, 0x01, 0xF1	; F76A4C  [560..575]
-	.byte	0x82, 0x10, 0x51, 0xF1, 0x90, 0x10, 0x52, 0x4A, 0x5B, 0x48, 0x1E, 0xCF, 0x02, 0x0E, 0x3D, 0xE1	; F76A5C  [576..591]
-	.byte	0x88, 0x10, 0x24, 0x45, 0x93, 0x11, 0x00, 0x00, 0x28, 0xC5, 0xF4, 0x21, 0xF5, 0xF0, 0x41, 0x28	; F76A6C  [592..607]
-	.byte	0x2B, 0x3D, 0x1E, 0x5E, 0x00, 0x5D, 0x4B, 0x48, 0xC1, 0x38, 0x12, 0x3F, 0x03, 0x66, 0x03, 0x48	; F76A7C  [608..623]
-	.byte	0x68, 0x4B, 0xE1, 0x88, 0x10, 0x24, 0xC9, 0x33, 0x07, 0x6E, 0xDE, 0x48, 0xC9, 0x8E, 0xF5, 0xF0	; F76A8C  [624..639]
-	.byte	0x41, 0x28, 0x2B, 0x1E, 0x3D, 0x00, 0x4B, 0x48, 0xC1, 0x38, 0x12, 0x3F, 0x03, 0x6E, 0x2E, 0xE1	; F76A9C  [640..655]
-	.byte	0x88, 0x10, 0x24, 0xC8, 0x89, 0xF5, 0xF0, 0x41, 0x2B, 0x1E, 0x27, 0x00, 0x4B, 0xC1, 0x38, 0x12	; F76AAC  [656..671]
-	.byte	0x3F, 0x03, 0x6E, 0x19, 0xE1, 0x88, 0x10, 0x24, 0xCE, 0xCC, 0xF0, 0xCE, 0xCF, 0xC0, 0x66, 0x0D	; F76ABC  [672..687]
-	.byte	0xCE, 0xCF, 0xD0, 0x66, 0x08, 0xCF, 0x89, 0xF5, 0xF0, 0x41, 0x1E, 0x06, 0x00, 0x5D, 0xE1, 0x88	; F76ACC  [688..703]
-	.byte	0x10, 0x24, 0x0E, 0x3B, 0x29, 0xF1, 0x38, 0x12, 0x00, 0x03, 0xEC, 0xCF, 0xFF, 0xAA, 0x60, 0x00	; F76ADC  [704..719]
-	.byte	0x6B, 0x06, 0xF1, 0x88, 0x10, 0x64, 0x68, 0x65, 0xD1, 0x6C, 0x12, 0x3F, 0x00, 0x00, 0x6E, 0x14	; F76AEC  [720..735]
-	.byte	0xC9, 0x8B, 0x29, 0x1D, 0x4B, 0x7D, 0xF7, 0x49, 0xC9, 0x88, 0xF1, 0x38, 0x12, 0x40, 0xC8, 0xDB	; F76AFC  [736..751]
-	.byte	0x6E, 0x4B, 0x68, 0x38, 0xC9, 0x8B, 0xD1, 0x48, 0x12, 0x61, 0x28, 0x3B, 0x29, 0x2A, 0xD1, 0x48	; F76B0C  [752..767]
-	.byte	0x12, 0x20, 0xDA, 0xD2, 0x33, 0x04, 0x00, 0xD7, 0xE2, 0x9A, 0xDB, 0x50, 0xD7, 0xE2, 0x8A, 0xDA	; F76B1C  [768..783]
-	.byte	0xD8, 0x6E, 0x06, 0x3C, 0x1D, 0x04, 0x26, 0xF4, 0x5C, 0x4A, 0x49, 0x5B, 0x48, 0x29, 0x1E, 0x89	; F76B2C  [784..799]
-	.byte	0x12, 0x49, 0xC9, 0x88, 0xF1, 0x38, 0x12, 0x40, 0xC8, 0xDB, 0x6E, 0x11, 0xD1, 0x6C, 0x12, 0x61	; F76B3C  [800..815]
-	.byte	0x40, 0x00, 0xA7, 0x60, 0x00, 0xF1, 0x88, 0x10, 0x60, 0xE8, 0x8C, 0xCB, 0x89, 0x49, 0x5B, 0x0E	; F76B4C  [816..831]
-	.byte	0x3C, 0x3D, 0x3B, 0x39, 0x1E, 0x7D, 0xFD, 0x45, 0x80, 0xA4, 0x60, 0x00, 0xC1, 0x24, 0x27, 0x27	; F76B5C  [832..847]
-	.byte	0xCE, 0xD6, 0xDB, 0xEC, 0x03, 0xF3, 0x07, 0xF4, 0xEC, 0x35, 0x44, 0xC8, 0x21, 0x00, 0x00, 0x31	; F76B6C  [848..863]
-	.byte	0x04, 0x00, 0x95, 0x11, 0xF1, 0xD0, 0x21, 0x00, 0x3F, 0xF1, 0xD1, 0x21, 0x00, 0x3F, 0xF1, 0xD2	; F76B7C  [864..879]
-	.byte	0x21, 0x00, 0x3F, 0x1D, 0xB0, 0x25, 0xF4, 0x1E, 0x3A, 0xFD, 0x59, 0x5B, 0x5D, 0x5C, 0x0E, 0xF1	; F76B8C  [880..895]
-	.byte	0x38, 0x12, 0x00, 0x03, 0x1E, 0x48, 0x02, 0xDB, 0xD3, 0xD9, 0xD1, 0xDD, 0xD5, 0x3C, 0x44, 0x5A	; F76B9C  [896..911]
-	.byte	0x30, 0x00, 0x00, 0xF3, 0x07, 0xF0, 0xEC, 0xCF, 0x5C, 0x66, 0x53, 0x3C, 0x44, 0x5A, 0x30, 0x00	; F76BAC  [912..927]
-	.byte	0x00, 0xF3, 0x07, 0xF0, 0xEC, 0x34, 0x9C, 0x03, 0x20, 0x5C, 0xD1, 0xAA, 0x11, 0xF0, 0x63, 0x14	; F76BBC  [928..943]
-	.byte	0xD1, 0xAA, 0x11, 0xA0, 0x3C, 0x44, 0x5A, 0x30, 0x00, 0x00, 0xEB, 0x12, 0xEB, 0x84, 0xBC, 0x03	; F76BCC  [944..959]
-	.byte	0x50, 0x5C, 0x68, 0x2A, 0x3A, 0x42, 0xD3, 0x10, 0x00, 0x00, 0xF3, 0x07, 0xE8, 0xF4, 0x43, 0x42	; F76BDC  [960..975]
-	.byte	0x5A, 0x30, 0x00, 0x00, 0xF3, 0x07, 0xE8, 0xEC, 0x32, 0x9A, 0x03, 0x20, 0x42, 0xD3, 0x10, 0x00	; F76BEC  [976..991]
-	.byte	0x00, 0xF3, 0x07, 0xE8, 0xF4, 0x32, 0xBA, 0x01, 0x50, 0x5A, 0xDD, 0xC8, 0x03, 0x00, 0xDB, 0xC8	; F76BFC  [992..1007]
-	.byte	0x05, 0x00, 0xD9, 0x61, 0xCB, 0xCF, 0x20, 0x63, 0x94, 0xDD, 0xEF, 0x01, 0xDD, 0xD8, 0x66, 0x03	; F76C0C  [1008..1023]
-	.byte	0x1E, 0x0D, 0x00, 0xF1, 0x7E, 0x10, 0x02, 0x00, 0x00, 0xF1, 0x80, 0x10, 0x02, 0x00, 0x00, 0x0E	; F76C1C  [1024..1039]
-	.byte	0xDD, 0xD8, 0x66, 0x66, 0xDA, 0xD2, 0xC1, 0xD3, 0x10, 0x3F, 0xFF, 0x66, 0x5D, 0x45, 0xD3, 0x10	; F76C2C  [1040..1055]
-	.byte	0x00, 0x00, 0x44, 0xD6, 0x10, 0x00, 0x00, 0xF3, 0x07, 0xF4, 0xE8, 0x35, 0xF3, 0x07, 0xF0, 0xE8	; F76C3C  [1056..1071]
-	.byte	0x34, 0x85, 0x3F, 0xFF, 0x66, 0x41, 0x9D, 0x01, 0x20, 0x84, 0x27, 0xCF, 0xCF, 0xFF, 0x66, 0x2D	; F76C4C  [1072..1087]
-	.byte	0x9C, 0x01, 0xF0, 0x6B, 0x10, 0xEC, 0xC8, 0x03, 0x00, 0x00, 0x00, 0xEC, 0xCF, 0x90, 0x11, 0x00	; F76C5C  [1088..1103]
-	.byte	0x00, 0x6B, 0x1A, 0x68, 0xE4, 0x85, 0x21, 0x84, 0x27, 0xB5, 0x47, 0xB4, 0x41, 0x9D, 0x01, 0x20	; F76C6C  [1104..1119]
-	.byte	0x9C, 0x01, 0x23, 0xBD, 0x01, 0x53, 0xBC, 0x01, 0x50, 0xDA, 0xD2, 0x68, 0xB0, 0xDA, 0xC8, 0x03	; F76C7C  [1120..1135]
-	.byte	0x00, 0xDA, 0xCF, 0x60, 0x00, 0x63, 0xA6, 0x1E, 0x01, 0x00, 0x0E, 0xD1, 0x82, 0x10, 0x21, 0x45	; F76C8C  [1136..1151]
-	.byte	0xD3, 0x10, 0x00, 0x00, 0xDB, 0xD3, 0xC3, 0x07, 0xF4, 0xEC, 0x21, 0xC9, 0xCF, 0xFF, 0x66, 0x66	; F76C9C  [1152..1167]
-	.byte	0xC8, 0xD0, 0xD8, 0x8C, 0xEC, 0x12, 0xDC, 0xEC, 0x02, 0xD8, 0x84, 0x3A, 0x42, 0x5A, 0x30, 0x00	; F76CAC  [1168..1183]
-	.byte	0x00, 0xEC, 0x82, 0x9A, 0x03, 0x20, 0x5A, 0xCF, 0xD8, 0x6E, 0x06, 0xF1, 0xAA, 0x11, 0x50, 0x68	; F76CBC  [1184..1199]
-	.byte	0x0A, 0xD8, 0x8A, 0xD1, 0x82, 0x10, 0xA2, 0xF1, 0xAA, 0x11, 0x52, 0x28, 0x3B, 0x29, 0x3C, 0x1E	; F76CCC  [1200..1215]
-	.byte	0x5A, 0x00, 0x5C, 0x49, 0x5B, 0x48, 0xF1, 0x82, 0x10, 0x50, 0x3A, 0x42, 0x5A, 0x30, 0x00, 0x00	; F76CDC  [1216..1231]
-	.byte	0xEC, 0x12, 0xEC, 0x82, 0x9A, 0x01, 0x20, 0x5A, 0x3B, 0x27, 0x00, 0x29, 0x3C, 0x1E, 0x6E, 0xFD	; F76CEC  [1232..1247]
-	.byte	0x5C, 0x49, 0x5B, 0x3A, 0x42, 0x5A, 0x30, 0x00, 0x00, 0xC3, 0x07, 0xE8, 0xF0, 0x3C, 0x3F, 0x5A	; F76CFC  [1248..1263]
-	.byte	0xDB, 0xC8, 0x03, 0x00, 0x68, 0x90, 0xD1, 0x82, 0x10, 0x20, 0xD1, 0x90, 0x10, 0x80, 0xF1, 0x82	; F76D0C  [1264..1279]
-	.byte	0x10, 0x51, 0xD1, 0x7E, 0x10, 0x81, 0xD8, 0xA1, 0xF1, 0xAA, 0x11, 0x51, 0x1E, 0x0D, 0x00, 0xF1	; F76D1C  [1280..1295]
-	.byte	0x7E, 0x10, 0x02, 0x00, 0x00, 0xF1, 0x80, 0x10, 0x02, 0x00, 0x00, 0x0E, 0xF1, 0x93, 0x11, 0x02	; F76D2C  [1296..1311]
-	.byte	0x00, 0x00, 0xF1, 0x95, 0x11, 0x02, 0x00, 0x00, 0xC1, 0xAC, 0x11, 0x3F, 0x00, 0x6E, 0x11, 0xD1	; F76D3C  [1312..1327]
-	.byte	0xAA, 0x11, 0x3F, 0x7F, 0x00, 0x73, 0x87, 0x00, 0xD1, 0xAA, 0x11, 0x3F, 0xFF, 0x3F, 0x63, 0x56	; F76D4C  [1328..1343]
-	.byte	0xC1, 0xAC, 0x11, 0x3F, 0x1F, 0x63, 0x0F, 0xF1, 0xAC, 0x11, 0x00, 0x1F, 0xF1, 0xAB, 0x11, 0x00	; F76D5C  [1344..1359]
-	.byte	0xFF, 0xF1, 0xAA, 0x11, 0x00, 0xFF, 0xC1, 0xAA, 0x11, 0x21, 0xC9, 0x88, 0xC8, 0xCC, 0x80, 0xC9	; F76D6C  [1360..1375]
-	.byte	0xCC, 0x7F, 0xC8, 0xE8, 0x01, 0xC1, 0xAB, 0x11, 0x27, 0xCF, 0x8E, 0xCE, 0xCC, 0xC0, 0xCE, 0xE8	; F76D7C  [1376..1391]
-	.byte	0x02, 0xCF, 0xEC, 0x01, 0xCF, 0xCC, 0x01, 0xC8, 0xE7, 0xCF, 0xCE, 0x80, 0xC1, 0xAC, 0x11, 0x23	; F76D8C  [1392..1407]
-	.byte	0xCB, 0xEC, 0x02, 0xCE, 0xE3, 0xCB, 0xCE, 0x80, 0xF1, 0x93, 0x11, 0x43, 0xF1, 0x94, 0x11, 0x47	; F76D9C  [1408..1423]
-	.byte	0xF1, 0x95, 0x11, 0x41, 0x68, 0x38, 0xC1, 0xAA, 0x11, 0x21, 0xC9, 0x88, 0xC9, 0xCC, 0x7F, 0xC8	; F76DAC  [1424..1439]
-	.byte	0xCC, 0x80, 0xC8, 0xE8, 0x01, 0xC1, 0xAB, 0x11, 0x27, 0xCF, 0x8E, 0xCF, 0xEC, 0x01, 0xC8, 0xE7	; F76DBC  [1440..1455]
-	.byte	0xCF, 0xCE, 0x80, 0xCB, 0xD3, 0xF1, 0x93, 0x11, 0x47, 0xF1, 0x94, 0x11, 0x41, 0x68, 0x0F, 0xC1	; F76DCC  [1456..1471]
-	.byte	0xAA, 0x11, 0x21, 0xC9, 0xCC, 0x7F, 0xCF, 0xD7, 0xCB, 0xD3, 0xF1, 0x93, 0x11, 0x41, 0x0E, 0x3C	; F76DDC  [1472..1487]
-	.byte	0x44, 0xD3, 0x10, 0x00, 0x00, 0x31, 0x60, 0x00, 0x30, 0xFF, 0x00, 0xF5, 0xF0, 0x41, 0xD9, 0x1C	; F76DEC  [1488..1503]
-	.byte	0xFA, 0x5C, 0x0E, 0x44, 0x98, 0x11, 0x00, 0x00, 0xD8, 0xD0, 0x31, 0x04, 0x00, 0xF5, 0xF1, 0x50	; F76DFC  [1504..1519]
-	.byte	0xD9, 0x1C, 0xFA, 0x0E, 0xD1, 0x5C, 0x34, 0x23, 0x1E, 0x7E, 0xE2, 0xE1, 0x6E, 0x12, 0x23, 0xD1	; F76E0C  [1520..1535]
-	.byte	0x5E, 0x34, 0x25, 0xC3, 0x07, 0xEC, 0xF4, 0x21, 0x0E, 0xD1, 0x5E, 0x34, 0x20, 0xD8, 0xCF, 0xFF	; F76E1C  [1536..1551]
-	.byte	0x00, 0x6E, 0x17, 0xD1, 0x5C, 0x34, 0x23, 0x1E, 0x5F, 0xE2, 0xE1, 0x6E, 0x12, 0x23, 0x9B, 0x03	; F76E2C  [1552..1567]
-	.byte	0x20, 0xF1, 0x5C, 0x34, 0x50, 0x30, 0x05, 0x00, 0x68, 0x02, 0xD8, 0x61, 0xF1, 0x5E, 0x34, 0x50	; F76E3C  [1568..1583]
-	.byte	0x0E, 0x28, 0x29, 0x3C, 0xD8, 0xD0, 0x44, 0x5A, 0x30, 0x00, 0x00, 0x31, 0x00, 0x01, 0xF5, 0xF1	; F76E4C  [1584..1599]
-	.byte	0x50, 0xD9, 0x1C, 0xFA, 0x5C, 0x49, 0x48, 0x0E, 0x00, 0xF0, 0x05, 0x7E, 0x7F, 0x09, 0x01, 0xF7	; F76E5C  [1600..1615]
-	.byte	0x00, 0xF0, 0x05, 0x7E, 0x7F, 0x09, 0x02, 0xF7, 0xDB, 0xD3, 0xD9, 0xD1, 0x3A, 0x42, 0x00, 0x35	; F76E6C  [1616..1631]
-	.byte	0x60, 0x00, 0xF3, 0x07, 0xE8, 0xEC, 0xCF, 0x5A, 0x6E, 0x0E, 0xDB, 0xC8, 0x03, 0x00, 0xCB, 0x61	; F76E7C  [1632..1647]
-	.byte	0xCB, 0xCF, 0x10, 0x7B, 0x82, 0x09, 0x68, 0xE4, 0xF1, 0x70, 0x0C, 0x43, 0xDB, 0x61, 0x3A, 0x42	; F76E8C  [1648..1663]
-	.byte	0x00, 0x35, 0x60, 0x00, 0xD3, 0x07, 0xE8, 0xEC, 0x23, 0x5A, 0xF1, 0x5C, 0x34, 0x53, 0xF1, 0x5E	; F76E9C  [1664..1679]
-	.byte	0x34, 0x02, 0x05, 0x00, 0xF1, 0xB1, 0x11, 0x00, 0x00, 0x45, 0x36, 0x78, 0xF7, 0x00, 0x44, 0x00	; F76EAC  [1680..1695]
-	.byte	0xA7, 0x60, 0x00, 0x31, 0x07, 0x00, 0x95, 0x11, 0x45, 0x44, 0x78, 0xF7, 0x00, 0x31, 0x04, 0x00	; F76EBC  [1696..1711]
-	.byte	0x95, 0x11, 0xF1, 0x88, 0x10, 0x64, 0xE1, 0x88, 0x10, 0x24, 0x45, 0x4C, 0x78, 0xF7, 0x00, 0x31	; F76ECC  [1712..1727]
-	.byte	0x0B, 0x00, 0x85, 0x11, 0x45, 0xC8, 0x21, 0x00, 0x00, 0x31, 0x08, 0x00, 0x85, 0x11, 0xF1, 0x88	; F76EDC  [1728..1743]
-	.byte	0x10, 0x64, 0xF1, 0x93, 0x11, 0x02, 0x00, 0x00, 0xF1, 0x95, 0x11, 0x00, 0x00, 0x45, 0x93, 0x11	; F76EEC  [1744..1759]
-	.byte	0x00, 0x00, 0xE1, 0x88, 0x10, 0x24, 0xC5, 0xF4, 0x21, 0xF5, 0xF0, 0x41, 0xC9, 0x33, 0x07, 0x6E	; F76EFC  [1760..1775]
-	.byte	0xF5, 0x30, 0xFF, 0x58, 0xF5, 0xF1, 0x50, 0x21, 0x04, 0xC2, 0xD7, 0x34, 0x60, 0x20, 0xF5, 0xF1	; F76F0C  [1776..1791]
-	.byte	0x50, 0x30, 0x02, 0x18, 0xF5, 0xF1, 0x50, 0x21, 0x08, 0xF5, 0xF0, 0x41, 0xF1, 0x88, 0x10, 0x64	; F76F1C  [1792..1807]
-	.byte	0xC1, 0xE2, 0x7E, 0x27, 0xCE, 0xD6, 0x29, 0xC1, 0xE3, 0x7E, 0x22, 0xCA, 0xCC, 0x01, 0xCB, 0xD3	; F76F2C  [1808..1823]
-	.byte	0xD9, 0xE3, 0x49, 0x1E, 0x90, 0x09, 0x1E, 0xD3, 0x09, 0xF1, 0x39, 0x12, 0x00, 0xFF, 0x45, 0x64	; F76F3C  [1824..1839]
-	.byte	0x6E, 0xF7, 0x00, 0xF1, 0x4D, 0x7F, 0xCA, 0x6E, 0x0A, 0x45, 0x6C, 0x6E, 0xF7, 0x00, 0xF1, 0x39	; F76F4C  [1840..1855]
-	.byte	0x12, 0x00, 0x00, 0xE1, 0x88, 0x10, 0x24, 0x31, 0x08, 0x00, 0xC5, 0xF4, 0x21, 0xF5, 0xF0, 0x41	; F76F5C  [1856..1871]
-	.byte	0x29, 0x3D, 0x3C, 0x1E, 0xB6, 0x0A, 0x5C, 0x5D, 0x49, 0xE1, 0x88, 0x10, 0x24, 0xD9, 0x1C, 0xEA	; F76F6C  [1872..1887]
-	.byte	0xF1, 0x88, 0x10, 0x64, 0xF1, 0x3E, 0x13, 0xC8, 0x76, 0xBE, 0x02, 0x45, 0xA0, 0x36, 0x60, 0x00	; F76F7C  [1888..1903]
-	.byte	0xF1, 0x70, 0x0C, 0x00, 0x00, 0xEB, 0xD3, 0xC1, 0x70, 0x0C, 0x27, 0xCF, 0x8B, 0xD1, 0x46, 0x12	; F76F8C  [1904..1919]
-	.byte	0x22, 0xCB, 0x89, 0x11, 0xDA, 0x2A, 0x77, 0x94, 0x02, 0x3C, 0x44, 0x22, 0x34, 0x60, 0x00, 0xC3	; F76F9C  [1920..1935]
-	.byte	0x07, 0xF0, 0xEC, 0x27, 0x5C, 0xCF, 0x8A, 0xCF, 0xEC, 0x01, 0xCE, 0xD6, 0x3A, 0x42, 0x57, 0x78	; F76FAC  [1936..1951]
-	.byte	0xF7, 0x00, 0xD3, 0x07, 0xE8, 0xEC, 0x23, 0x5A, 0xDB, 0xCF, 0xFF, 0xFF, 0x76, 0x6E, 0x02, 0xCB	; F76FBC  [1952..1967]
-	.byte	0xD8, 0x66, 0x0E, 0x3B, 0xDB, 0xD3, 0x5B, 0x68, 0x08, 0xCB, 0xF7, 0x66, 0xF9, 0x5B, 0x78, 0x68	; F76FCC  [1968..1983]
-	.byte	0x02, 0xF3, 0x07, 0xF4, 0xEC, 0x35, 0x8D, 0x02, 0x23, 0x8D, 0x03, 0x24, 0x8D, 0x05, 0x22, 0x8D	; F76FDC  [1984..1999]
-	.byte	0x06, 0x25, 0x8D, 0x07, 0x21, 0xF1, 0x9B, 0x12, 0x41, 0x8D, 0x08, 0x21, 0xF1, 0x50, 0x13, 0x41	; F76FEC  [2000..2015]
-	.byte	0x8D, 0x09, 0x21, 0xF1, 0x4E, 0x12, 0x41, 0xC1, 0x70, 0x0C, 0x3C, 0x0F, 0xC1, 0x39, 0x12, 0x3F	; F76FFC  [2016..2031]
-	.byte	0xFF, 0x6E, 0x61, 0xC1, 0x70, 0x0C, 0x21, 0xCB, 0x8F, 0xF2, 0x10, 0xF0, 0x60, 0x47, 0xCC, 0x8E	; F7700C  [2032..2047]
-	.byte	0xF2, 0x11, 0xF0, 0x60, 0x46, 0x85, 0x27, 0xF2, 0x12, 0xF0, 0x60, 0x47, 0x29, 0x2A, 0x1D, 0x08	; F7701C  [2048..2063]
-	.byte	0x10, 0xF4, 0x4A, 0x49, 0xC1, 0x70, 0x0C, 0x21, 0xC9, 0xCE, 0xB0, 0xC8, 0xD0, 0xC2, 0x15, 0xF0	; F7702C  [2064..2079]
-	.byte	0x60, 0x27, 0x28, 0x29, 0x2A, 0x1D, 0xD5, 0x79, 0xF7, 0x4A, 0x49, 0x48, 0x20, 0x20, 0xC2, 0x14	; F7703C  [2080..2095]
-	.byte	0xF0, 0x60, 0x27, 0x29, 0x2A, 0x1D, 0xD5, 0x79, 0xF7, 0x4A, 0x49, 0xC1, 0x70, 0x0C, 0x21, 0xC9	; F7704C  [2096..2111]
-	.byte	0xCE, 0xC0, 0xC2, 0x16, 0xF0, 0x60, 0x20, 0xC8, 0xCC, 0x7F, 0x29, 0x2A, 0x1E, 0x6A, 0x09, 0x4A	; F7705C  [2112..2127]
-	.byte	0x49, 0x78, 0x43, 0x00, 0xC1, 0x70, 0x0C, 0x21, 0xC9, 0xCE, 0xB0, 0x20, 0x00, 0xCC, 0x8F, 0xCF	; F7706C  [2128..2143]
-	.byte	0xCC, 0x38, 0xCF, 0xEF, 0x03, 0x29, 0x2A, 0x1E, 0x4F, 0x09, 0x4A, 0x49, 0xC1, 0x70, 0x0C, 0x21	; F7707C  [2144..2159]
-	.byte	0xC9, 0xCE, 0xB0, 0x20, 0x20, 0xCC, 0x8F, 0xCF, 0xCC, 0x07, 0xCF, 0xEC, 0x04, 0x29, 0x2A, 0x1E	; F7708C  [2160..2175]
-	.byte	0x37, 0x09, 0x4A, 0x49, 0xC1, 0x70, 0x0C, 0x21, 0xC9, 0xCE, 0xC0, 0xCB, 0x88, 0xC8, 0xCC, 0x7F	; F7709C  [2176..2191]
-	.byte	0x29, 0x2A, 0x1E, 0x24, 0x09, 0x4A, 0x49, 0xC1, 0x70, 0x0C, 0x21, 0xC9, 0xCE, 0xB0, 0x20, 0x07	; F770AC  [2192..2207]
-	.byte	0xCA, 0x8F, 0x28, 0x2A, 0x1E, 0x12, 0x09, 0x4A, 0x48, 0x20, 0x5D, 0xC1, 0x9B, 0x12, 0x27, 0x28	; F770BC  [2208..2223]
-	.byte	0x2A, 0x1E, 0x05, 0x09, 0x4A, 0x48, 0x20, 0x5E, 0xC1, 0x50, 0x13, 0x27, 0x28, 0x2A, 0x1E, 0xF8	; F770CC  [2224..2239]
-	.byte	0x08, 0x4A, 0x48, 0x20, 0x5B, 0xC1, 0x4E, 0x12, 0x27, 0x28, 0x1E, 0xEC, 0x08, 0x48, 0xC1, 0x70	; F770DC  [2240..2255]
-	.byte	0x0C, 0x27, 0xCE, 0xD6, 0x3C, 0x44, 0x22, 0x34, 0x60, 0x00, 0xC3, 0x07, 0xF0, 0xEC, 0x27, 0x5C	; F770EC  [2256..2271]
-	.byte	0xCF, 0x8A, 0xCE, 0xD6, 0xCF, 0xEC, 0x01, 0x3A, 0x42, 0x57, 0x78, 0xF7, 0x00, 0xD3, 0x07, 0xE8	; F770FC  [2272..2287]
-	.byte	0xEC, 0x23, 0x5A, 0xDB, 0xCF, 0xFF, 0xFF, 0x76, 0x23, 0x01, 0xC1, 0x70, 0x0C, 0x21, 0xC9, 0xCE	; F7710C  [2288..2303]
-	.byte	0xB0, 0xCF, 0x8B, 0x45, 0xA0, 0x36, 0x60, 0x00, 0xE7, 0x38, 0x9D, 0xF3, 0x07, 0xF4, 0xEC, 0x35	; F7711C  [2304..2319]
-	.byte	0x8D, 0x0A, 0x27, 0xE7, 0x38, 0x8D, 0x20, 0x0A, 0x28, 0x1E, 0x9D, 0x08, 0x48, 0x20, 0x65, 0x27	; F7712C  [2320..2335]
-	.byte	0x00, 0x28, 0x1E, 0x94, 0x08, 0x48, 0x20, 0x64, 0x27, 0x01, 0x28, 0x1E, 0x8B, 0x08, 0x48, 0xC1	; F7713C  [2336..2351]
-	.byte	0x70, 0x0C, 0x27, 0xCE, 0xD6, 0x3C, 0x44, 0x22, 0x34, 0x60, 0x00, 0xC3, 0x07, 0xF0, 0xEC, 0x27	; F7714C  [2352..2367]
-	.byte	0xDB, 0xEC, 0x01, 0x44, 0x57, 0x78, 0xF7, 0x00, 0xD3, 0x07, 0xF0, 0xEC, 0x23, 0x5C, 0x45, 0xA0	; F7715C  [2368..2383]
-	.byte	0x36, 0x60, 0x00, 0xF3, 0x07, 0xF4, 0xEC, 0x35, 0x8D, 0x0C, 0x27, 0xCF, 0x8B, 0xCF, 0xEF, 0x01	; F7716C  [2384..2399]
-	.byte	0xCF, 0xCC, 0x7F, 0x20, 0x06, 0x28, 0x29, 0x1E, 0x4F, 0x08, 0x49, 0x48, 0xCB, 0x8F, 0xCF, 0xE9	; F7717C  [2400..2415]
-	.byte	0x01, 0xCF, 0xCC, 0x7F, 0x20, 0x26, 0x28, 0x1E, 0x3F, 0x08, 0x48, 0x20, 0x65, 0x27, 0x00, 0x28	; F7718C  [2416..2431]
-	.byte	0x1E, 0x36, 0x08, 0x48, 0x20, 0x64, 0x27, 0x02, 0x28, 0x1E, 0x2D, 0x08, 0x48, 0xC1, 0x70, 0x0C	; F7719C  [2432..2447]
-	.byte	0x27, 0xCE, 0xD6, 0x3C, 0x44, 0x22, 0x34, 0x60, 0x00, 0xC3, 0x07, 0xF0, 0xEC, 0x27, 0xDB, 0xEC	; F771AC  [2448..2463]
-	.byte	0x01, 0x44, 0x57, 0x78, 0xF7, 0x00, 0xD3, 0x07, 0xF0, 0xEC, 0x23, 0x5C, 0x45, 0xA0, 0x36, 0x60	; F771BC  [2464..2479]
-	.byte	0x00, 0xE7, 0x38, 0x9D, 0xF3, 0x07, 0xF4, 0xEC, 0x35, 0x8D, 0x0B, 0x27, 0xE7, 0x38, 0x8D, 0x20	; F771CC  [2480..2495]
-	.byte	0x06, 0x28, 0x1E, 0xF4, 0x07, 0x48, 0x20, 0x26, 0xCF, 0xD7, 0x28, 0x1E, 0xEB, 0x07, 0x48, 0x20	; F771DC  [2496..2511]
-	.byte	0x65, 0x27, 0x00, 0x28, 0x1E, 0xE2, 0x07, 0x48, 0x20, 0x64, 0x27, 0x00, 0x28, 0x1E, 0xD9, 0x07	; F771EC  [2512..2527]
-	.byte	0x48, 0xC1, 0x70, 0x0C, 0x27, 0xCE, 0xD6, 0x3C, 0x44, 0x22, 0x34, 0x60, 0x00, 0xC3, 0x07, 0xF0	; F771FC  [2528..2543]
-	.byte	0xEC, 0x27, 0xDB, 0xEC, 0x01, 0x44, 0x57, 0x78, 0xF7, 0x00, 0xD3, 0x07, 0xF0, 0xEC, 0x23, 0x5C	; F7720C  [2544..2559]
-	.byte	0x45, 0xA0, 0x36, 0x60, 0x00, 0xF3, 0x07, 0xF4, 0xEC, 0x35, 0x8D, 0x0D, 0x27, 0x20, 0x06, 0x28	; F7721C  [2560..2575]
-	.byte	0x1E, 0xA6, 0x07, 0x48, 0x20, 0x06, 0xCF, 0xD7, 0x28, 0x1E, 0x9D, 0x07, 0x48, 0xC1, 0x70, 0x0C	; F7722C  [2576..2591]
-	.byte	0x61, 0xC1, 0x70, 0x0C, 0x3F, 0x0F, 0x73, 0x4C, 0xFD, 0x1E, 0x51, 0x06, 0xD8, 0xD0, 0xF1, 0x82	; F7723C  [2592..2607]
-	.byte	0x10, 0x50, 0xF1, 0x84, 0x10, 0x50, 0x1E, 0x62, 0x0A, 0xC9, 0xCF, 0x82, 0x66, 0x1F, 0xC9, 0xCF	; F7724C  [2608..2623]
-	.byte	0x81, 0x66, 0x1A, 0xD1, 0x5C, 0x34, 0x04, 0xD1, 0x5E, 0x34, 0x04, 0x1E, 0x62, 0x0A, 0x1E, 0x4A	; F7725C  [2624..2639]
-	.byte	0x0A, 0xF1, 0x5E, 0x34, 0x06, 0xF1, 0x5C, 0x34, 0x06, 0xF1, 0x84, 0x10, 0x41, 0xF1, 0x86, 0x10	; F7726C  [2640..2655]
-	.byte	0x02, 0x00, 0x00, 0xF1, 0x7E, 0x10, 0x02, 0x00, 0x00, 0xF1, 0x80, 0x10, 0x02, 0x00, 0x00, 0xDB	; F7727C  [2656..2671]
-	.byte	0xD3, 0x3B, 0x1E, 0x15, 0x0A, 0x1E, 0x23, 0x0A, 0x5B, 0xC9, 0xCF, 0x82, 0x76, 0x65, 0x05, 0x3A	; F7728C  [2672..2687]
-	.byte	0x42, 0x98, 0x11, 0x00, 0x00, 0xF3, 0x07, 0xE8, 0xEC, 0x41, 0x5A, 0x2B, 0x1E, 0x21, 0x0A, 0x1E	; F7729C  [2688..2703]
-	.byte	0x09, 0x0A, 0x4B, 0xDB, 0x61, 0xC9, 0x33, 0x07, 0x66, 0xE5, 0xC1, 0x98, 0x11, 0x21, 0xC9, 0xCF	; F772AC  [2704..2719]
-	.byte	0x82, 0x76, 0x40, 0x05, 0xC9, 0xCF, 0x81, 0x76, 0x32, 0x00, 0xC9, 0x88, 0xC8, 0xCC, 0xF0, 0xC8	; F772BC  [2720..2735]
-	.byte	0xCF, 0x90, 0x76, 0x25, 0x01, 0xC8, 0xCF, 0xB0, 0x76, 0xA4, 0x02, 0xC8, 0xCF, 0xC0, 0x76, 0x8E	; F772CC  [2736..2751]
-	.byte	0x01, 0xC8, 0xCF, 0xD0, 0x76, 0xA7, 0x00, 0xC8, 0xCF, 0xF0, 0x76, 0xE3, 0x00, 0xC8, 0xCF, 0xA0	; F772DC  [2752..2767]
-	.byte	0x76, 0x3D, 0x00, 0xC8, 0xCF, 0xE0, 0x76, 0xB8, 0x00, 0x78, 0x93, 0xFF, 0xD1, 0x86, 0x10, 0x61	; F772EC  [2768..2783]
-	.byte	0x1E, 0xB8, 0x09, 0xC9, 0xCF, 0x81, 0x6E, 0x09, 0xD1, 0x86, 0x10, 0x61, 0x1E, 0xC1, 0x09, 0x68	; F772FC  [2784..2799]
-	.byte	0xEF, 0xD1, 0x86, 0x10, 0x20, 0x32, 0x60, 0x00, 0xE8, 0x12, 0xDA, 0x48, 0xD7, 0xE2, 0x8A, 0xD1	; F7730C  [2800..2815]
-	.byte	0x7E, 0x10, 0x88, 0xF1, 0x80, 0x10, 0x52, 0xF1, 0x86, 0x10, 0x02, 0x00, 0x00, 0x78, 0x5F, 0xFF	; F7731C  [2816..2831]
-	.byte	0xDB, 0xDB, 0x66, 0x3C, 0xDB, 0xDC, 0x7E, 0x56, 0xFF, 0xC1, 0x99, 0x11, 0x23, 0x1E, 0x54, 0x06	; F7732C  [2832..2847]
-	.byte	0x1E, 0x0B, 0x07, 0xD1, 0x9A, 0x11, 0x23, 0xCF, 0xCC, 0x7F, 0xCE, 0xCC, 0x01, 0xCE, 0xE9, 0x01	; F7733C  [2848..2863]
-	.byte	0xCE, 0xCC, 0x80, 0xCE, 0xE7, 0xCE, 0xD6, 0x28, 0xC1, 0x9B, 0x11, 0x20, 0xC8, 0xCC, 0x02, 0xC8	; F7734C  [2864..2879]
-	.byte	0xEF, 0x01, 0xC9, 0xD1, 0xD8, 0xE3, 0x48, 0x1E, 0x6C, 0x05, 0x1E, 0xAF, 0x05, 0x78, 0x1F, 0xFF	; F7735C  [2880..2895]
-	.byte	0xC1, 0x99, 0x11, 0x23, 0x28, 0x1E, 0x1C, 0x06, 0x1E, 0xD3, 0x06, 0x48, 0xC9, 0xCC, 0x0F, 0xC9	; F7736C  [2896..2911]
-	.byte	0xCE, 0xD0, 0xC1, 0x9A, 0x11, 0x20, 0xCF, 0xD7, 0x1E, 0x4E, 0x06, 0x78, 0x01, 0xFF, 0xDB, 0xDB	; F7737C  [2912..2927]
-	.byte	0x7E, 0xFC, 0xFE, 0xC1, 0x99, 0x11, 0x23, 0x28, 0x1E, 0xF9, 0x05, 0x1E, 0xB0, 0x06, 0x48, 0xC9	; F7738C  [2928..2943]
-	.byte	0xCC, 0x0F, 0xC9, 0xCE, 0xB0, 0x20, 0x01, 0xC1, 0x9A, 0x11, 0x27, 0x1E, 0x2B, 0x06, 0x78, 0xDE	; F7739C  [2944..2959]
-	.byte	0xFE, 0xDB, 0xDC, 0x7E, 0xD9, 0xFE, 0xC1, 0x99, 0x11, 0x23, 0x28, 0x1E, 0xD6, 0x05, 0x1E, 0x8D	; F773AC  [2960..2975]
-	.byte	0x06, 0x48, 0xC1, 0x9A, 0x11, 0x20, 0xC1, 0x9B, 0x11, 0x27, 0x1E, 0x0C, 0x06, 0x78, 0xBF, 0xFE	; F773BC  [2976..2991]
-	.byte	0xDB, 0xDB, 0x7E, 0xBA, 0xFE, 0xC9, 0x8F, 0xCF, 0xCC, 0x0F, 0xCE, 0xD6, 0xC1, 0x99, 0x11, 0x23	; F773CC  [2992..3007]
-	.byte	0x28, 0x1E, 0xB0, 0x05, 0x1E, 0x67, 0x06, 0x48, 0xC9, 0xCC, 0x0F, 0xC9, 0xCE, 0xB0, 0x20, 0x0B	; F773DC  [3008..3023]
-	.byte	0xC1, 0x9A, 0x11, 0x27, 0x1E, 0xE2, 0x05, 0x78, 0x95, 0xFE, 0xDB, 0xDE, 0x7E, 0x90, 0xFE, 0xDB	; F773EC  [3024..3039]
-	.byte	0xD3, 0x3A, 0x42, 0x5A, 0x30, 0x00, 0x00, 0xF3, 0x07, 0xE8, 0xEC, 0xCF, 0x5A, 0x66, 0x0D, 0xDB	; F773FC  [3040..3055]
-	.byte	0xC8, 0x05, 0x00, 0xDB, 0xCF, 0xA0, 0x00, 0x63, 0xE8, 0x78, 0x73, 0xFE, 0xC1, 0xB1, 0x11, 0x3E	; F7740C  [3056..3071]
-	.byte	0x01, 0x2B, 0xC1, 0x99, 0x11, 0x23, 0x1E, 0x6B, 0x05, 0x1E, 0x22, 0x06, 0xC1, 0x98, 0x11, 0x21	; F7741C  [3072..3087]
-	.byte	0xC1, 0x9A, 0x11, 0x20, 0xC1, 0x9B, 0x11, 0x27, 0x1E, 0x9E, 0x05, 0x4B, 0x44, 0x5A, 0x30, 0x00	; F7742C  [3088..3103]
-	.byte	0x00, 0xF3, 0x07, 0xF0, 0xEC, 0x34, 0x21, 0x80, 0xF5, 0xF0, 0x41, 0xC1, 0x98, 0x11, 0x21, 0xF5	; F7743C  [3104..3119]
-	.byte	0xF0, 0x41, 0xC1, 0x9A, 0x11, 0x21, 0xF5, 0xF0, 0x41, 0xC1, 0x9D, 0x11, 0x21, 0x20, 0x60, 0xC8	; F7744C  [3120..3135]
-	.byte	0x49, 0xDB, 0xD3, 0xC1, 0x9C, 0x11, 0x27, 0xDB, 0x80, 0xF5, 0xF1, 0x50, 0x78, 0x20, 0xFE, 0xDB	; F7745C  [3136..3151]
-	.byte	0xDE, 0x7E, 0x1B, 0xFE, 0xC1, 0x9A, 0x11, 0x3F, 0x7F, 0x76, 0x13, 0xFE, 0xC1, 0x9B, 0x11, 0x21	; F7746C  [3152..3167]
-	.byte	0xC9, 0xD8, 0x7E, 0x0A, 0xFE, 0xF1, 0x3E, 0x13, 0xC8, 0x66, 0x07, 0xF1, 0xB1, 0x11, 0xC8, 0x76	; F7747C  [3168..3183]
-	.byte	0xFD, 0xFD, 0xC1, 0x99, 0x11, 0x23, 0x28, 0x1E, 0xFA, 0x04, 0x1E, 0xB1, 0x05, 0x48, 0xC1, 0x39	; F7748C  [3184..3199]
-	.byte	0x12, 0x3F, 0x00, 0x76, 0x96, 0x00, 0xC1, 0x98, 0x11, 0x27, 0xCF, 0x8E, 0xCF, 0xCC, 0x01, 0xCF	; F7749C  [3200..3215]
-	.byte	0xE9, 0x01, 0xC1, 0x9C, 0x11, 0x21, 0xC9, 0xE7, 0xF2, 0x10, 0xF0, 0x60, 0x47, 0xCE, 0xCC, 0x02	; F774AC  [3216..3231]
-	.byte	0xCE, 0xE9, 0x02, 0xC1, 0x9D, 0x11, 0x21, 0xC9, 0xCC, 0x7F, 0xC9, 0xE6, 0xF2, 0x11, 0xF0, 0x60	; F774BC  [3232..3247]
-	.byte	0x46, 0x3C, 0xDB, 0xD3, 0xC1, 0x9A, 0x11, 0x27, 0x44, 0x22, 0x34, 0x60, 0x00, 0xC3, 0x07, 0xF0	; F774CC  [3248..3263]
-	.byte	0xEC, 0x27, 0x44, 0x15, 0x78, 0xF7, 0x00, 0xC3, 0x07, 0xF0, 0xEC, 0x27, 0xF2, 0x12, 0xF0, 0x60	; F774DC  [3264..3279]
-	.byte	0x47, 0x5C, 0x1D, 0x08, 0x10, 0xF4, 0x21, 0xB0, 0xC1, 0x9A, 0x11, 0x20, 0xC8, 0xCC, 0x0F, 0xC8	; F774EC  [3280..3295]
-	.byte	0xE1, 0xC8, 0xD0, 0xC2, 0x15, 0xF0, 0x60, 0x27, 0x28, 0x1D, 0xD5, 0x79, 0xF7, 0x48, 0xF1, 0x93	; F774FC  [3296..3311]
-	.byte	0x11, 0x02, 0x00, 0x00, 0xF1, 0x95, 0x11, 0x00, 0x00, 0x20, 0x20, 0xC2, 0x14, 0xF0, 0x60, 0x27	; F7750C  [3312..3327]
-	.byte	0x1D, 0xD5, 0x79, 0xF7, 0x21, 0xC0, 0xC1, 0x9A, 0x11, 0x20, 0xC8, 0xCC, 0x0F, 0xC8, 0xE1, 0xC2	; F7751C  [3328..3343]
-	.byte	0x16, 0xF0, 0x60, 0x20, 0xCF, 0xD7, 0x1E, 0xA0, 0x04, 0x78, 0x53, 0xFD, 0x20, 0x00, 0xC1, 0x9D	; F7752C  [3344..3359]
-	.byte	0x11, 0x27, 0xCF, 0xCC, 0x38, 0xCF, 0xEF, 0x03, 0x1E, 0x3B, 0x04, 0xF1, 0x93, 0x11, 0x02, 0x00	; F7753C  [3360..3375]
-	.byte	0x00, 0xF1, 0x95, 0x11, 0x00, 0x00, 0x20, 0x20, 0xC1, 0x9D, 0x11, 0x27, 0xCF, 0xCC, 0x07, 0xCF	; F7754C  [3376..3391]
-	.byte	0xEC, 0x04, 0xCF, 0xCC, 0x7F, 0x1E, 0x1E, 0x04, 0x21, 0xC0, 0xC1, 0x9A, 0x11, 0x20, 0xC8, 0xCC	; F7755C  [3392..3407]
-	.byte	0x0F, 0xC8, 0xE1, 0xC1, 0x9C, 0x11, 0x20, 0xCF, 0xD7, 0x1E, 0x5D, 0x04, 0x78, 0x10, 0xFD, 0xDB	; F7756C  [3408..3423]
-	.byte	0xDE, 0x7E, 0x0B, 0xFD, 0xC1, 0x9A, 0x11, 0x3F, 0x7F, 0x76, 0x75, 0x02, 0xC1, 0x9B, 0x11, 0x27	; F7757C  [3424..3439]
-	.byte	0xC1, 0x9A, 0x11, 0x21, 0xC1, 0x98, 0x11, 0x20, 0xC8, 0xCC, 0x04, 0xC8, 0xEC, 0x05, 0xC8, 0xE1	; F7758C  [3440..3455]
-	.byte	0xC9, 0xCF, 0xB5, 0x66, 0x02, 0x68, 0x4E, 0xC1, 0x9B, 0x11, 0x27, 0xCF, 0xCF, 0x7F, 0x76, 0x50	; F7759C  [3456..3471]
-	.byte	0x02, 0xC9, 0xCF, 0xB5, 0x76, 0x1A, 0x00, 0xCF, 0xD8, 0x77, 0x45, 0x02, 0xCF, 0xCF, 0x10, 0x7B	; F775AC  [3472..3487]
-	.byte	0x3F, 0x02, 0x78, 0xCA, 0xFC, 0x78, 0xC7, 0xFC, 0x78, 0xC4, 0xFC, 0x78, 0xC1, 0xFC, 0x78, 0xBE	; F775BC  [3488..3503]
-	.byte	0xFC, 0xC1, 0x99, 0x11, 0x23, 0x28, 0x2B, 0x1E, 0xBA, 0x03, 0x1E, 0x71, 0x04, 0x4B, 0x48, 0x21	; F775CC  [3504..3519]
-	.byte	0xB0, 0xCF, 0x88, 0xC8, 0xCC, 0x0F, 0xC8, 0xE1, 0x20, 0x40, 0xC1, 0x9C, 0x11, 0x27, 0x1D, 0xD5	; F775DC  [3520..3535]
-	.byte	0x79, 0xF7, 0x78, 0x9A, 0xFC, 0xCF, 0xDB, 0x77, 0x95, 0xFC, 0xCF, 0xCF, 0x0B, 0x7B, 0x8F, 0xFC	; F775EC  [3536..3551]
-	.byte	0x21, 0xB0, 0xC1, 0x9A, 0x11, 0x20, 0xC8, 0xCC, 0x0F, 0xC8, 0xE1, 0x20, 0x07, 0xCF, 0xDB, 0x76	; F775FC  [3552..3567]
-	.byte	0xCA, 0x01, 0xCF, 0xDC, 0x76, 0x69, 0x01, 0xCF, 0xDD, 0x76, 0x6B, 0x01, 0xCF, 0xDE, 0x76, 0x7B	; F7760C  [3568..3583]
-	.byte	0x01, 0xCF, 0xDF, 0x76, 0x9C, 0x01, 0xCF, 0xCF, 0x08, 0x76, 0x22, 0x01, 0xCF, 0xCF, 0x09, 0x76	; F7761C  [3584..3599]
-	.byte	0xCC, 0x00, 0xCF, 0xCF, 0x0A, 0x66, 0x08, 0xCF, 0xCF, 0x0B, 0x66, 0x6F, 0x7E, 0x50, 0xFC, 0xF1	; F7762C  [3600..3615]
-	.byte	0x3E, 0x13, 0xC8, 0x76, 0x07, 0x00, 0xF1, 0xB1, 0x11, 0xC8, 0x76, 0x42, 0xFC, 0xC1, 0x99, 0x11	; F7763C  [3616..3631]
-	.byte	0x23, 0x28, 0x3B, 0x1E, 0x3E, 0x03, 0x1E, 0xF5, 0x03, 0x5B, 0x48, 0x21, 0xB0, 0xC1, 0x9A, 0x11	; F7764C  [3632..3647]
-	.byte	0x20, 0xC8, 0xCC, 0x0F, 0xC8, 0xE1, 0x20, 0x65, 0x27, 0x00, 0x28, 0x1E, 0x6B, 0x03, 0x48, 0x20	; F7765C  [3648..3663]
-	.byte	0x64, 0x27, 0x01, 0xF1, 0x93, 0x11, 0x00, 0x00, 0x28, 0x1E, 0x5D, 0x03, 0x48, 0x20, 0x06, 0xC1	; F7766C  [3664..3679]
-	.byte	0x9C, 0x11, 0x27, 0xC1, 0x98, 0x11, 0x26, 0xCE, 0xCC, 0x01, 0xCE, 0xE9, 0x02, 0xCF, 0xEF, 0x01	; F7767C  [3680..3695]
-	.byte	0xCE, 0xE7, 0x28, 0x1E, 0x43, 0x03, 0x48, 0x20, 0x26, 0xC1, 0x9C, 0x11, 0x27, 0xCF, 0xCC, 0x01	; F7768C  [3696..3711]
-	.byte	0xCF, 0xE9, 0x02, 0x28, 0x1E, 0x32, 0x03, 0x48, 0x78, 0xE4, 0xFB, 0xF1, 0x3E, 0x13, 0xC8, 0x76	; F7769C  [3712..3727]
-	.byte	0x07, 0x00, 0xF1, 0xB1, 0x11, 0xC8, 0x76, 0xD6, 0xFB, 0xC1, 0x99, 0x11, 0x23, 0x28, 0x2B, 0x1E	; F776AC  [3728..3743]
-	.byte	0xD2, 0x02, 0x1E, 0x89, 0x03, 0x4B, 0x48, 0x21, 0xB0, 0xC1, 0x9A, 0x11, 0x20, 0xC8, 0xCC, 0x0F	; F776BC  [3744..3759]
-	.byte	0xC8, 0xE1, 0x20, 0x65, 0x27, 0x00, 0x28, 0x1E, 0xFF, 0x02, 0x48, 0x20, 0x64, 0x27, 0x00, 0xF1	; F776CC  [3760..3775]
-	.byte	0x93, 0x11, 0x00, 0x00, 0x28, 0x1E, 0xF1, 0x02, 0x48, 0x20, 0x06, 0xC1, 0x9C, 0x11, 0x27, 0x28	; F776DC  [3776..3791]
-	.byte	0x1E, 0xE6, 0x02, 0x48, 0x20, 0x26, 0x27, 0x00, 0x1E, 0xDE, 0x02, 0x78, 0x91, 0xFB, 0xF1, 0x3E	; F776EC  [3792..3807]
-	.byte	0x13, 0xC8, 0x66, 0x07, 0xF1, 0xB1, 0x11, 0xC8, 0x76, 0x84, 0xFB, 0xC1, 0x99, 0x11, 0x23, 0x28	; F776FC  [3808..3823]
-	.byte	0x2B, 0x1E, 0x80, 0x02, 0x1E, 0x37, 0x03, 0x4B, 0x48, 0x21, 0xB0, 0xCF, 0x88, 0xC8, 0xCC, 0x0F	; F7770C  [3824..3839]
-	.byte	0xC8, 0xE1, 0x20, 0x65, 0x27, 0x00, 0x28, 0x1E, 0xAF, 0x02, 0x48, 0x20, 0x64, 0x27, 0x02, 0xF1	; F7771C  [3840..3855]
-	.byte	0x93, 0x11, 0x00, 0x00, 0x28, 0x1E, 0xA1, 0x02, 0x48, 0x20, 0x06, 0xC1, 0x9C, 0x11, 0x27, 0x28	; F7772C  [3856..3871]
-	.byte	0x1E, 0x96, 0x02, 0x48, 0x20, 0x26, 0x27, 0x00, 0x1E, 0x8E, 0x02, 0x78, 0x41, 0xFB, 0xF1, 0x3E	; F7773C  [3872..3887]
-	.byte	0x13, 0xC8, 0x66, 0x07, 0xF1, 0xB1, 0x11, 0xC8, 0x76, 0x34, 0xFB, 0xC1, 0x99, 0x11, 0x23, 0x28	; F7774C  [3888..3903]
-	.byte	0x2B, 0x1E, 0x30, 0x02, 0x1E, 0xE7, 0x02, 0x4B, 0x48, 0x21, 0xB0, 0xC1, 0x9B, 0x11, 0x20, 0xC8	; F7775C  [3904..3919]
-	.byte	0xCC, 0x0F, 0xC8, 0xE1, 0x20, 0x0A, 0xC1, 0x9C, 0x11, 0x27, 0x1E, 0x5C, 0x02, 0x78, 0x0F, 0xFB	; F7776C  [3920..3935]
-	.byte	0xD1, 0x9C, 0x11, 0x21, 0x78, 0x08, 0xFB, 0xF1, 0x3E, 0x13, 0xC8, 0x66, 0x07, 0xF1, 0xB1, 0x11	; F7777C  [3936..3951]
-	.byte	0xC8, 0x76, 0xFB, 0xFA, 0x20, 0x5D, 0xC1, 0x9C, 0x11, 0x27, 0x68, 0x51, 0xF1, 0x3E, 0x13, 0xC8	; F7778C  [3952..3967]
-	.byte	0x66, 0x07, 0xF1, 0xB1, 0x11, 0xC8, 0x76, 0xE6, 0xFA, 0x20, 0x5D, 0xC1, 0x9C, 0x11, 0x27, 0x68	; F7779C  [3968..3983]
-	.byte	0x3C, 0xF1, 0x3E, 0x13, 0xC8, 0x66, 0x07, 0xF1, 0xB1, 0x11, 0xC8, 0x76, 0xD1, 0xFA, 0x20, 0x40	; F777AC  [3984..3999]
-	.byte	0x68, 0x2B, 0x20, 0x5B, 0x27, 0x00, 0xF1, 0x3E, 0x13, 0xC8, 0x66, 0x07, 0xF1, 0xB1, 0x11, 0xC8	; F777BC  [4000..4015]
-	.byte	0x76, 0xBC, 0xFA, 0xC1, 0x9C, 0x11, 0x27, 0xCF, 0xCC, 0x7F, 0x68, 0x11, 0xF1, 0x3E, 0x13, 0xC8	; F777CC  [4016..4031]
-	.byte	0x66, 0x07, 0xF1, 0xB1, 0x11, 0xC8, 0x76, 0xA6, 0xFA, 0xC1, 0x9C, 0x11, 0x27, 0xC1, 0x99, 0x11	; F777DC  [4032..4047]
-	.byte	0x23, 0x28, 0x2B, 0x1E, 0x9E, 0x01, 0x1E, 0x55, 0x02, 0x4B, 0x48, 0x1E, 0xDB, 0x01, 0x78, 0x8E	; F777EC  [4048..4063]
-	.byte	0xFA, 0x78, 0x8B, 0xFA, 0x23, 0x00, 0x1E, 0x8B, 0x01, 0x1E, 0x42, 0x02, 0x21, 0xFF, 0x20, 0x2F	; F777FC  [4064..4079]
-	.byte	0x27, 0x00, 0x1E, 0xC4, 0x01, 0x1E, 0x86, 0x00, 0x0E	; F7780C  [4080..4088]
+sub_F76836:
+	push	xbc	; F76836  push XBC
+	push	xix	; F76837  push XIX
+	ld	xix, 6333568	; F76838  ld XIX,0x0060a480
+	xor	xwa, xwa	; F7683D  xor XWA,XWA
+	ldb_d8	a, (10020)	; F7683F  ld A,(0x2724)
+	sla	xwa, 3	; F76843  sla 0x03,XWA
+	add	xix, xwa	; F76846  add XIX,XWA
+	ldb	c, 8	; F76848  ld C,0x08
+	ldb	a, 0	; F7684A  ld A,0x00
+	cp_spib_im	240, 32	; F7684C  cp (XIX+),0x20
+	jr	nz, 5	; F76850  jr NZ,0xf76857
+	djnz8	c, -9	; F76852  djnz C,0xf7684c
+	jr	4	; F76855  jr T,0xf7685b
+	ldb	a, 254	; F76857  ld A,0xfe
+	jr	0	; F76859  jr T,0xf7685b
+	pop	xix	; F7685B  pop XIX
+	pop	xbc	; F7685C  pop XBC
+	ret	; F7685D  ret
+	push	xhl	; F7685E  push XHL
+	pushw	bc	; F7685F  push BC
+	push	xiy	; F76860  push XIY
+	push	xix	; F76861  push XIX
+	xor	bc, bc	; F76862  xor BC,BC
+	xor	w, w	; F76864  xor W,W
+	ld	xix, 6333568	; F76866  ld XIX,0x0060a480
+	ld	hl, bc	; F7686B  ld HL,BC
+	sla	hl, 3	; F7686D  sla 0x03,HL
+	lda_rr	xix, xix, hl	; F76870  lda XIX,XIX+HL
+	ld	xiy, 8648	; F76875  ld XIY,0x000021c8
+	xor	hl, hl	; F7687A  xor HL,HL
+	ldb_spi	a, 244	; F7687C  ld A,(XIY+)
+	.byte 0x84, 0xF1	; F7687F  cp A,(XIX)   [llvm-mc cannot encode this]
+	jr	nz, 16	; F76881  jr NZ,0xf76893
+	inc	1, xix	; F76883  inc 1,XIX
+	inc	1, l	; F76885  inc 1,L
+	cps	l, 7	; F76887  cp L,7
+	jr	ule, -15	; F76889  jr ULE,0xf7687c
+	stb_d8	(10020), c	; F7688B  ld (0x2724),C
+	ldb	w, 255	; F7688F  ld W,0xff
+	jr	9	; F76891  jr T,0xf7689c
+	inc	1, c	; F76893  inc 1,C
+	cp	c, 99	; F76895  cp C,0x63
+	jr	ule, -52	; F76898  jr ULE,0xf76866
+	xor	w, w	; F7689A  xor W,W
+	pop	xix	; F7689C  pop XIX
+	pop	xiy	; F7689D  pop XIY
+	popw	bc	; F7689E  pop BC
+	pop	xhl	; F7689F  pop XHL
+	ret	; F768A0  ret
+
+; --------------------------------------------------------------------------
+; sub_F768A1
+; Called from: 0xF76726, 0xF7677E, 0xF7679C
+; Evidence: 0xF768A1 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F768A1:
+	ld	xiy, 16210338	; F768A1  ld XIY,0x00f759a2
+	ld	xix, 8648	; F768A6  ld XIX,0x000021c8
+	ldw	bc, 11	; F768AB  ld BC,0x000b
+	.byte 0x85, 0x11	; F768AE  ldir   [llvm-mc cannot encode this]
+	stdi8	(10021), 1	; F768B0  ld (0x2725),0x01
+	call	16000456	; F768B5  call 0xf425c8
+	stdi8	(8656), 63	; F768B9  ld (0x21d0),0x3f
+	stdi8	(8657), 63	; F768BE  ld (0x21d1),0x3f
+	stdi8	(8658), 63	; F768C3  ld (0x21d2),0x3f
+	call	16000432	; F768C8  call 0xf425b0
+	calr	1	; F768CC  calr 0xf768d0
+	ret	; F768CF  ret
+
+; --------------------------------------------------------------------------
+; sub_F768D0
+; Called from: 0xF76774, 0xF768CC, 0xF76B93
+; Evidence: 0xF768D0 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F768D0:
+	ld	xiy, 4666	; F768D0  ld XIY,0x0000123a
+	ld	xix, 8648	; F768D5  ld XIX,0x000021c8
+	ldw	bc, 4	; F768DA  ld BC,0x0004
+	.byte 0x95, 0x11	; F768DD  ldirw   [llvm-mc cannot encode this]
+	ret	; F768DF  ret
+
+; --------------------------------------------------------------------------
+; sub_F768E0
+; Called from: 0xF76B60
+; Evidence: 0xF768E0 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F768E0:
+	ld	xiy, 8648	; F768E0  ld XIY,0x000021c8
+	ld	xix, 4666	; F768E5  ld XIX,0x0000123a
+	ldw	bc, 4	; F768EA  ld BC,0x0004
+	.byte 0x95, 0x11	; F768ED  ldirw   [llvm-mc cannot encode this]
+	ret	; F768EF  ret
+
+; --------------------------------------------------------------------------
+; SmfFileTemplate_F768F0 -- the 33-byte STANDARD MIDI FILE header this
+;          firmware copies into its output buffer before writing a track.
+;          Format 0, one track, division 96 ticks per quarter note.
+;          ⚠ NOT MUSIC: no note, no end-of-track.  The events are written
+;          at run time by the code below; this is only the file's opening.
+; Read by: NOTHING. Not one 32-bit word in any of the four images holds an
+;          address in [0xF768F0, 0xF76953) -- while each of the three live
+;          copies is spelled at four interior offsets. This copy is an
+;          ORPHAN. ⚠ A computed address cannot be excluded by a scan; the
+;          claim is about the scan.
+; Length:  the `00 00 00 00` at +0x12 is a PLACEHOLDER. 0xF7789A computes
+;          (0x126C)*1024 + (cursor - 0x60A700) - 22 and stores it most
+;          significant byte first into (0x10C4)-(0x10C7). 22 = `MThd` + its
+;          6 payload bytes + `MTrk`. That is why every chunk walker that
+;          trusts the field steps nowhere.
+; Evidence: notes/gen_prom_b_smf_writer_module.py --selftest re-derives every
+;           byte and every reader from the ROM.
+; --------------------------------------------------------------------------
+SmfFileTemplate_F768F0:
+	.ascii	"MThd"	; F768F0  header chunk tag
+	.byte	0x00, 0x00, 0x00, 0x06	; F768F4  chunk length 6, most significant byte first
+	.byte	0x00, 0x00	; F768F8  format 0 -- one multi-channel track
+	.byte	0x00, 0x01	; F768FA  ntrks 1
+	.byte	0x00, 0x60	; F768FC  division 0x0060 = 96 ticks per quarter note
+	.ascii	"MTrk"	; F768FE  track chunk tag
+	.byte	0x00, 0x00, 0x00, 0x00	; F76902  track length PLACEHOLDER -- backfilled by 0xF7789A
+	.byte	0x00	; F76906  delta time 0
+	.byte	0xFF, 0x03	; F76907  meta event FF 03 -- sequence/track name
+	.byte	0x0F	; F76909  ... declared length 15
+	.ascii	"WSA    "	; F7690A  name bytes 1-7; 8-15 come from RAM (0x21C8)
+
+; --------------------------------------------------------------------------
+; SmfPartOffsets_F76911 -- 32 little-endian 16-bit BYTE OFFSETS and a
+;          0xFFFF terminator.  NOT MIDI, and not part of the file: it only
+;          happens to sit 0x21 bytes after the template.
+;          0x0000, 0x0040 ... 0x0800, step 0x40 -- one record per slot in the
+;          0x40-strided array at RAM 0x006036A0.
+; Read by: nothing -- this copy is the orphan's.
+; ⚠ Note:  the step is 0x40 everywhere EXCEPT between slots 7 and 8, where
+;          it is 0x80: the record at 0x0200 is skipped. That is in the ROM
+;          and identical in all four copies. What occupies the skipped slot
+;          is NOT established.
+; --------------------------------------------------------------------------
+SmfPartOffsets_F76911:
+	.short	0x0000, 0x0040, 0x0080, 0x00C0, 0x0100, 0x0140, 0x0180, 0x01C0	; F76911  slots  0- 7
+	.short	0x0240, 0x0280, 0x02C0, 0x0300, 0x0340, 0x0380, 0x03C0, 0x0400	; F76921  slots  8-15
+	.short	0x0440, 0x0480, 0x04C0, 0x0500, 0x0540, 0x0580, 0x05C0, 0x0600	; F76931  slots 16-23
+	.short	0x0640, 0x0680, 0x06C0, 0x0700, 0x0740, 0x0780, 0x07C0, 0x0800	; F76941  slots 24-31
+	.short	0xFFFF	; F76951  terminator
+
+; --------------------------------------------------------------------------
+; sub_F76953
+; Called from: no call site is known.  The label marks where a
+;              converted run STARTS, so that a tool walking this file
+;              by label does not attribute the run to its neighbour.
+; Evidence: 0xF76953 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76953:
+	ldw	de, 9	; F76953  ld DE,0x0009
+	ldw	wa, 10176	; F76956  ld WA,0x27c0
+	ld	qwa, de	; F76959  ld QWA,DE
+	div	xwa, xhl	; F7695C  div XWA,HL
+	ld	de, qwa	; F7695E  ld DE,QWA
+	ldw	hl, 100	; F76961  ld HL,0x0064
+	xor	de, de	; F76964  xor DE,DE
+	extz	xwa	; F76966  extz XWA
+	muls	xwa, xhl	; F76968  muls XWA,HL
+	ld	de, qwa	; F7696A  ld DE,QWA
+	stda16	(4236), wa	; F7696D  ld (0x108c),WA
+	stda16	(4238), de	; F76971  ld (0x108e),DE
+	ret	; F76975  ret
+	ld	xiy, 4499	; F76976  ld XIY,0x00001193
+	ldda32	xix, (4232)	; F7697B  ld XIX,(0x1088)
+	ldb_spi	a, 244	; F7697F  ld A,(XIY+)
+	lda_dpi	xbc, 240	; F76982  ld (XIX+),A
+	pushw	wa	; F76985  push WA
+	push	xiy	; F76986  push XIY
+	calr	341	; F76987  calr 0xf76adf
+	pop	xiy	; F7698A  pop XIY
+	popw	wa	; F7698B  pop WA
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F7698C  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jrl	nz, 130	; F76991  jrl NZ,0xf76a16
+	ldda32	xix, (4232)	; F76994  ld XIX,(0x1088)
+	bit	7, a	; F76998  bit 0x07,A
+	jr	nz, -30	; F7699B  jr NZ,0xf7697f
+	ldb	a, 255	; F7699D  ld A,0xff
+	lda_dpi	xbc, 240	; F7699F  ld (XIX+),A
+	calr	314	; F769A2  calr 0xf76adf
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769A5  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jrl	nz, 105	; F769AA  jrl NZ,0xf76a16
+	ldda32	xix, (4232)	; F769AD  ld XIX,(0x1088)
+	ldb	a, 81	; F769B1  ld A,0x51
+	lda_dpi	xbc, 240	; F769B3  ld (XIX+),A
+	calr	294	; F769B6  calr 0xf76adf
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769B9  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jr	nz, 86	; F769BE  jr NZ,0xf76a16
+	ldda32	xix, (4232)	; F769C0  ld XIX,(0x1088)
+	ldb	a, 3	; F769C4  ld A,0x03
+	lda_dpi	xbc, 240	; F769C6  ld (XIX+),A
+	calr	275	; F769C9  calr 0xf76adf
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769CC  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jr	nz, 67	; F769D1  jr NZ,0xf76a16
+	ldda32	xix, (4232)	; F769D3  ld XIX,(0x1088)
+	ldb_d8	a, (4238)	; F769D7  ld A,(0x108e)
+	lda_dpi	xbc, 240	; F769DB  ld (XIX+),A
+	calr	254	; F769DE  calr 0xf76adf
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769E1  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jr	nz, 46	; F769E6  jr NZ,0xf76a16
+	ldda32	xix, (4232)	; F769E8  ld XIX,(0x1088)
+	ldb_d8	a, (4237)	; F769EC  ld A,(0x108d)
+	lda_dpi	xbc, 240	; F769F0  ld (XIX+),A
+	calr	233	; F769F3  calr 0xf76adf
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F769F6  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jr	nz, 25	; F769FB  jr NZ,0xf76a16
+	ldda32	xix, (4232)	; F769FD  ld XIX,(0x1088)
+	ldb_d8	a, (4236)	; F76A01  ld A,(0x108c)
+	lda_dpi	xbc, 240	; F76A05  ld (XIX+),A
+	calr	212	; F76A08  calr 0xf76adf
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76A0B  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jr	nz, 4	; F76A10  jr NZ,0xf76a16
+	ldda32	xix, (4232)	; F76A12  ld XIX,(0x1088)
+	ret	; F76A16  ret
+	ldb_d8	a, (4506)	; F76A17  ld A,(0x119a)
+	and	a, 15	; F76A1B  and A,0x0f
+	or	a, 176	; F76A1E  or A,0xb0
+	calr	70	; F76A21  calr 0xf76a6a
+	ret	; F76A24  ret
+
+; --------------------------------------------------------------------------
+; sub_F76A25
+; Called from: 0xF766CA, 0xF766ED
+; Evidence: 0xF76A25 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76A25:
+	pushw	wa	; F76A25  push WA
+	push	xhl	; F76A26  push XHL
+	pushw	de	; F76A27  push DE
+	xor	wa, wa	; F76A28  xor WA,WA
+	stda16	(4522), wa	; F76A2A  ld (0x11aa),WA
+	stb_d8	(4524), a	; F76A2E  ld (0x11ac),A
+	ldw_d16	wa, (4222)	; F76A32  ld WA,(0x107e)
+	xor	b, b	; F76A36  xor B,B
+	add	wa, bc	; F76A38  add WA,BC
+	ldw_d16	de, (4226)	; F76A3A  ld DE,(0x1082)
+	sub	wa, de	; F76A3E  sub WA,DE
+	stda16	(4522), wa	; F76A40  ld (0x11aa),WA
+	.byte 0xF1, 0x68, 0x12, 0xC8	; F76A44  bit 0,(0x1268)   [llvm-mc cannot encode this]
+	jr	nz, 17	; F76A48  jr NZ,0xf76a5b
+	.byte 0xF1, 0x3E, 0x13, 0xC9	; F76A4A  bit 1,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 11	; F76A4E  jr Z,0xf76a5b
+	.byte 0xD1, 0xAA, 0x11, 0x38, 0x80, 0x01	; F76A50  add (0x11aa),0x0180   [llvm-mc cannot encode this]
+	stdi8	(4712), 1	; F76A56  ld (0x1268),0x01
+	stda16	(4226), bc	; F76A5B  ld (0x1082),BC
+	stda16	(4240), de	; F76A5F  ld (0x1090),DE
+	popw	de	; F76A63  pop DE
+	pop	xhl	; F76A64  pop XHL
+	popw	wa	; F76A65  pop WA
+	calr	719	; F76A66  calr 0xf76d38
+	ret	; F76A69  ret
+
+; --------------------------------------------------------------------------
+; sub_F76A6A
+; Called from: 0xF766DA, 0xF76701, 0xF76A21, 0xF76CF9
+; Evidence: 0xF76A6A is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76A6A:
+	push	xiy	; F76A6A  push XIY
+	ldda32	xix, (4232)	; F76A6B  ld XIX,(0x1088)
+	ld	xiy, 4499	; F76A6F  ld XIY,0x00001193
+	pushw	wa	; F76A74  push WA
+	ldb_spi	a, 244	; F76A75  ld A,(XIY+)
+	lda_dpi	xbc, 240	; F76A78  ld (XIX+),A
+	pushw	wa	; F76A7B  push WA
+	pushw	hl	; F76A7C  push HL
+	push	xiy	; F76A7D  push XIY
+	calr	94	; F76A7E  calr 0xf76adf
+	pop	xiy	; F76A81  pop XIY
+	popw	hl	; F76A82  pop HL
+	popw	wa	; F76A83  pop WA
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76A84  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jr	z, 3	; F76A89  jr Z,0xf76a8e
+	popw	wa	; F76A8B  pop WA
+	jr	75	; F76A8C  jr T,0xf76ad9
+	ldda32	xix, (4232)	; F76A8E  ld XIX,(0x1088)
+	bit	7, a	; F76A92  bit 0x07,A
+	jr	nz, -34	; F76A95  jr NZ,0xf76a75
+	popw	wa	; F76A97  pop WA
+	ld	h, a	; F76A98  ld H,A
+	lda_dpi	xbc, 240	; F76A9A  ld (XIX+),A
+	pushw	wa	; F76A9D  push WA
+	pushw	hl	; F76A9E  push HL
+	calr	61	; F76A9F  calr 0xf76adf
+	popw	hl	; F76AA2  pop HL
+	popw	wa	; F76AA3  pop WA
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76AA4  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jr	nz, 46	; F76AA9  jr NZ,0xf76ad9
+	ldda32	xix, (4232)	; F76AAB  ld XIX,(0x1088)
+	ld	a, w	; F76AAF  ld A,W
+	lda_dpi	xbc, 240	; F76AB1  ld (XIX+),A
+	pushw	hl	; F76AB4  push HL
+	calr	39	; F76AB5  calr 0xf76adf
+	popw	hl	; F76AB8  pop HL
+	.byte 0xC1, 0x38, 0x12, 0x3F, 0x03	; F76AB9  cp (0x1238),0x03   [llvm-mc cannot encode this]
+	jr	nz, 25	; F76ABE  jr NZ,0xf76ad9
+	ldda32	xix, (4232)	; F76AC0  ld XIX,(0x1088)
+	and	h, 240	; F76AC4  and H,0xf0
+	cp	h, 192	; F76AC7  cp H,0xc0
+	jr	z, 13	; F76ACA  jr Z,0xf76ad9
+	cp	h, 208	; F76ACC  cp H,0xd0
+	jr	z, 8	; F76ACF  jr Z,0xf76ad9
+	ld	a, l	; F76AD1  ld A,L
+	lda_dpi	xbc, 240	; F76AD3  ld (XIX+),A
+	calr	6	; F76AD6  calr 0xf76adf
+	pop	xiy	; F76AD9  pop XIY
+	ldda32	xix, (4232)	; F76ADA  ld XIX,(0x1088)
+	ret	; F76ADE  ret
+
+; --------------------------------------------------------------------------
+; sub_F76ADF
+; Called from: 0xF76987, 0xF769A2, 0xF769B6, 0xF769C9, 0xF769DE, 0xF769F3,
+;              0xF76A08, 0xF76A7E, 0xF76A9F, 0xF76AB5, 0xF76AD6
+; Evidence: 0xF76ADF is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76ADF:
+	push	xhl	; F76ADF  push XHL
+	pushw	bc	; F76AE0  push BC
+	stdi8	(4664), 3	; F76AE1  ld (0x1238),0x03
+	cp	xix, 6335231	; F76AE6  cp XIX,0x0060aaff
+	jr	ugt, 6	; F76AEC  jr UGT,0xf76af4
+	stda32	(4232), xix	; F76AEE  ld (0x1088),XIX
+	jr	101	; F76AF2  jr T,0xf76b59
+	.byte 0xD1, 0x6C, 0x12, 0x3F, 0x00, 0x00	; F76AF4  cp (0x126c),0x0000   [llvm-mc cannot encode this]
+	jr	nz, 20	; F76AFA  jr NZ,0xf76b10
+	ld	c, a	; F76AFC  ld C,A
+	pushw	bc	; F76AFE  push BC
+	call	16219467	; F76AFF  call 0xf77d4b
+	popw	bc	; F76B03  pop BC
+	ld	w, a	; F76B04  ld W,A
+	stb_d8	(4664), w	; F76B06  ld (0x1238),W
+	cps	w, 3	; F76B0A  cp W,3
+	jr	nz, 75	; F76B0C  jr NZ,0xf76b59
+	jr	56	; F76B0E  jr T,0xf76b48
+	ld	c, a	; F76B10  ld C,A
+	incdi16	1, (4680)	; F76B12  incw 1,(0x1248)
+	pushw	wa	; F76B16  push WA
+	push	xhl	; F76B17  push XHL
+	pushw	bc	; F76B18  push BC
+	pushw	de	; F76B19  push DE
+	ldw_d16	wa, (4680)	; F76B1A  ld WA,(0x1248)
+	xor	de, de	; F76B1E  xor DE,DE
+	ldw	hl, 4	; F76B20  ld HL,0x0004
+	ld	qwa, de	; F76B23  ld QWA,DE
+	div	xwa, xhl	; F76B26  div XWA,HL
+	ld	de, qwa	; F76B28  ld DE,QWA
+	cps	de, 0	; F76B2B  cp DE,0
+	jr	nz, 6	; F76B2D  jr NZ,0xf76b35
+	push	xix	; F76B2F  push XIX
+	call	16000516	; F76B30  call 0xf42604
+	pop	xix	; F76B34  pop XIX
+	popw	de	; F76B35  pop DE
+	popw	bc	; F76B36  pop BC
+	pop	xhl	; F76B37  pop XHL
+	popw	wa	; F76B38  pop WA
+	pushw	bc	; F76B39  push BC
+	calr	4745	; F76B3A  calr 0xf77dc6
+	popw	bc	; F76B3D  pop BC
+	ld	w, a	; F76B3E  ld W,A
+	stb_d8	(4664), w	; F76B40  ld (0x1238),W
+	cps	w, 3	; F76B44  cp W,3
+	jr	nz, 17	; F76B46  jr NZ,0xf76b59
+	incdi16	1, (4716)	; F76B48  incw 1,(0x126c)
+	ld	xwa, 6334208	; F76B4C  ld XWA,0x0060a700
+	stda32	(4232), xwa	; F76B51  ld (0x1088),XWA
+	ld	xix, xwa	; F76B55  ld XIX,XWA
+	ld	a, c	; F76B57  ld A,C
+	popw	bc	; F76B59  pop BC
+	pop	xhl	; F76B5A  pop XHL
+	ret	; F76B5B  ret
+	push	xix	; F76B5C  push XIX
+	push	xiy	; F76B5D  push XIY
+	push	xhl	; F76B5E  push XHL
+	push	xbc	; F76B5F  push XBC
+	calr	64893	; F76B60  calr 0xf768e0
+	ld	xiy, 6333568	; F76B63  ld XIY,0x0060a480
+	ldb_d8	l, (10020)	; F76B68  ld L,(0x2724)
+	xor	h, h	; F76B6C  xor H,H
+	sla	hl, 3	; F76B6E  sla 0x03,HL
+	lda_rr	xiy, xiy, hl	; F76B71  lda XIY,XIY+HL
+	ld	xix, 8648	; F76B76  ld XIX,0x000021c8
+	ldw	bc, 4	; F76B7B  ld BC,0x0004
+	.byte 0x95, 0x11	; F76B7E  ldirw   [llvm-mc cannot encode this]
+	stdi8	(8656), 63	; F76B80  ld (0x21d0),0x3f
+	stdi8	(8657), 63	; F76B85  ld (0x21d1),0x3f
+	stdi8	(8658), 63	; F76B8A  ld (0x21d2),0x3f
+	call	16000432	; F76B8F  call 0xf425b0
+	calr	64826	; F76B93  calr 0xf768d0
+	pop	xbc	; F76B96  pop XBC
+	pop	xhl	; F76B97  pop XHL
+	pop	xiy	; F76B98  pop XIY
+	pop	xix	; F76B99  pop XIX
+	ret	; F76B9A  ret
+
+; --------------------------------------------------------------------------
+; sub_F76B9B
+; Called from: 0xF766CD, 0xF766F0
+; Evidence: 0xF76B9B is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76B9B:
+	stdi8	(4664), 3	; F76B9B  ld (0x1238),0x03
+	calr	584	; F76BA0  calr 0xf76deb
+	xor	hl, hl	; F76BA3  xor HL,HL
+	xor	bc, bc	; F76BA5  xor BC,BC
+	xor	iy, iy	; F76BA7  xor IY,IY
+	push	xix	; F76BA9  push XIX
+	ld	xix, 12378	; F76BAA  ld XIX,0x0000305a
+	.byte 0xF3, 0x07, 0xF0, 0xEC, 0xCF	; F76BAF  bit 7,(XIX+HL)   [llvm-mc cannot encode this]
+	pop	xix	; F76BB4  pop XIX
+	jr	z, 83	; F76BB5  jr Z,0xf76c0a
+	push	xix	; F76BB7  push XIX
+	ld	xix, 12378	; F76BB8  ld XIX,0x0000305a
+	lda_rr	xix, xix, hl	; F76BBD  lda XIX,XIX+HL
+	ld	wa, (xix+3)	; F76BC2  ld WA,(XIX+0x03)
+	pop	xix	; F76BC5  pop XIX
+	cpda16	xwa, (4522)	; F76BC6  cp WA,(0x11aa)
+	jr	ule, 20	; F76BCA  jr ULE,0xf76be0
+	subda16	xwa, (4522)	; F76BCC  sub WA,(0x11aa)
+	push	xix	; F76BD0  push XIX
+	ld	xix, 12378	; F76BD1  ld XIX,0x0000305a
+	extz	xhl	; F76BD6  extz XHL
+	add	xix, xhl	; F76BD8  add XIX,XHL
+	ld	(xix+3), wa	; F76BDA  ld (XIX+0x03),WA
+	pop	xix	; F76BDD  pop XIX
+	jr	42	; F76BDE  jr T,0xf76c0a
+	push	xde	; F76BE0  push XDE
+	ld	xde, 4307	; F76BE1  ld XDE,0x000010d3
+	st_rrb	c, xde, iy	; F76BE6  ld (XDE+IY),C
+	ld	xde, 12378	; F76BEB  ld XDE,0x0000305a
+	lda_rr	xde, xde, hl	; F76BF0  lda XDE,XDE+HL
+	ld	wa, (xde+3)	; F76BF5  ld WA,(XDE+0x03)
+	ld	xde, 4307	; F76BF8  ld XDE,0x000010d3
+	lda_rr	xde, xde, iy	; F76BFD  lda XDE,XDE+IY
+	ld	(xde+1), wa	; F76C02  ld (XDE+0x01),WA
+	pop	xde	; F76C05  pop XDE
+	add	iy, 3	; F76C06  add IY,0x0003
+	add	hl, 5	; F76C0A  add HL,0x0005
+	inc	1, bc	; F76C0E  inc 1,BC
+	cp	c, 32	; F76C10  cp C,0x20
+	jr	ule, -108	; F76C13  jr ULE,0xf76ba9
+	srl	iy, 1	; F76C15  srl 0x01,IY
+	cps	iy, 0	; F76C18  cp IY,0
+	jr	z, 3	; F76C1A  jr Z,0xf76c1f
+	calr	13	; F76C1C  calr 0xf76c2c
+	stdi16	(4222), 0	; F76C1F  ld (0x107e),0x0000
+	stdi16	(4224), 0	; F76C25  ld (0x1080),0x0000
+	ret	; F76C2B  ret
+
+; --------------------------------------------------------------------------
+; sub_F76C2C
+; Called from: 0xF76C1C
+; Evidence: 0xF76C2C is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76C2C:
+	cps	iy, 0	; F76C2C  cp IY,0
+	jr	z, 102	; F76C2E  jr Z,0xf76c96
+	xor	de, de	; F76C30  xor DE,DE
+	.byte 0xC1, 0xD3, 0x10, 0x3F, 0xFF	; F76C32  cp (0x10d3),0xff   [llvm-mc cannot encode this]
+	jr	z, 93	; F76C37  jr Z,0xf76c96
+	ld	xiy, 4307	; F76C39  ld XIY,0x000010d3
+	ld	xix, 4310	; F76C3E  ld XIX,0x000010d6
+	lda_rr	xiy, xiy, de	; F76C43  lda XIY,XIY+DE
+	lda_rr	xix, xix, de	; F76C48  lda XIX,XIX+DE
+	.byte 0x85, 0x3F, 0xFF	; F76C4D  cp (XIY),0xff   [llvm-mc cannot encode this]
+	jr	z, 65	; F76C50  jr Z,0xf76c93
+	ld	wa, (xiy+1)	; F76C52  ld WA,(XIY+0x01)
+	ld	l, (xix)	; F76C55  ld L,(XIX)
+	cp	l, 255	; F76C57  cp L,0xff
+	jr	z, 45	; F76C5A  jr Z,0xf76c89
+	.byte 0x9C, 0x01, 0xF0	; F76C5C  cp WA,(XIX+0x01)   [llvm-mc cannot encode this]
+	jr	ugt, 16	; F76C5F  jr UGT,0xf76c71
+	add	xix, 3	; F76C61  add XIX,0x00000003
+	cp	xix, 4496	; F76C67  cp XIX,0x00001190
+	jr	ugt, 26	; F76C6D  jr UGT,0xf76c89
+	jr	-28	; F76C6F  jr T,0xf76c55
+	ld	a, (xiy)	; F76C71  ld A,(XIY)
+	ld	l, (xix)	; F76C73  ld L,(XIX)
+	ld	(xiy), l	; F76C75  ld (XIY),L
+	ld	(xix), a	; F76C77  ld (XIX),A
+	ld	wa, (xiy+1)	; F76C79  ld WA,(XIY+0x01)
+	ld	hl, (xix+1)	; F76C7C  ld HL,(XIX+0x01)
+	ld	(xiy+1), hl	; F76C7F  ld (XIY+0x01),HL
+	ld	(xix+1), wa	; F76C82  ld (XIX+0x01),WA
+	xor	de, de	; F76C85  xor DE,DE
+	jr	-80	; F76C87  jr T,0xf76c39
+	add	de, 3	; F76C89  add DE,0x0003
+	cp	de, 96	; F76C8D  cp DE,0x0060
+	jr	ule, -90	; F76C91  jr ULE,0xf76c39
+	calr	1	; F76C93  calr 0xf76c97
+	ret	; F76C96  ret
+
+; --------------------------------------------------------------------------
+; sub_F76C97
+; Called from: 0xF76C93
+; Evidence: 0xF76C97 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76C97:
+	ldw_d16	bc, (4226)	; F76C97  ld BC,(0x1082)
+	ld	xiy, 4307	; F76C9B  ld XIY,0x000010d3
+	xor	hl, hl	; F76CA0  xor HL,HL
+	ld_rrb	a, xiy, hl	; F76CA2  ld A,(XIY+HL)
+	cp	a, 255	; F76CA7  cp A,0xff
+	jr	z, 102	; F76CAA  jr Z,0xf76d12
+	xor	w, w	; F76CAC  xor W,W
+	ld	ix, wa	; F76CAE  ld IX,WA
+	extz	xix	; F76CB0  extz XIX
+	sla	ix, 2	; F76CB2  sla 0x02,IX
+	add	ix, wa	; F76CB5  add IX,WA
+	push	xde	; F76CB7  push XDE
+	ld	xde, 12378	; F76CB8  ld XDE,0x0000305a
+	add	xde, xix	; F76CBD  add XDE,XIX
+	ld	wa, (xde+3)	; F76CBF  ld WA,(XDE+0x03)
+	pop	xde	; F76CC2  pop XDE
+	cps	l, 0	; F76CC3  cp L,0
+	jr	nz, 6	; F76CC5  jr NZ,0xf76ccd
+	stda16	(4522), wa	; F76CC7  ld (0x11aa),WA
+	jr	10	; F76CCB  jr T,0xf76cd7
+	ld	de, wa	; F76CCD  ld DE,WA
+	subda16	xde, (4226)	; F76CCF  sub DE,(0x1082)
+	stda16	(4522), de	; F76CD3  ld (0x11aa),DE
+	pushw	wa	; F76CD7  push WA
+	push	xhl	; F76CD8  push XHL
+	pushw	bc	; F76CD9  push BC
+	push	xix	; F76CDA  push XIX
+	calr	90	; F76CDB  calr 0xf76d38
+	pop	xix	; F76CDE  pop XIX
+	popw	bc	; F76CDF  pop BC
+	pop	xhl	; F76CE0  pop XHL
+	popw	wa	; F76CE1  pop WA
+	stda16	(4226), wa	; F76CE2  ld (0x1082),WA
+	push	xde	; F76CE6  push XDE
+	ld	xde, 12378	; F76CE7  ld XDE,0x0000305a
+	extz	xix	; F76CEC  extz XIX
+	add	xde, xix	; F76CEE  add XDE,XIX
+	ld	wa, (xde+1)	; F76CF0  ld WA,(XDE+0x01)
+	pop	xde	; F76CF3  pop XDE
+	push	xhl	; F76CF4  push XHL
+	ldb	l, 0	; F76CF5  ld L,0x00
+	pushw	bc	; F76CF7  push BC
+	push	xix	; F76CF8  push XIX
+	calr	64878	; F76CF9  calr 0xf76a6a
+	pop	xix	; F76CFC  pop XIX
+	popw	bc	; F76CFD  pop BC
+	pop	xhl	; F76CFE  pop XHL
+	push	xde	; F76CFF  push XDE
+	ld	xde, 12378	; F76D00  ld XDE,0x0000305a
+	.byte 0xC3, 0x07, 0xE8, 0xF0, 0x3C, 0x3F	; F76D05  and (XDE+IX),0x3f   [llvm-mc cannot encode this]
+	pop	xde	; F76D0B  pop XDE
+	add	hl, 3	; F76D0C  add HL,0x0003
+	jr	-112	; F76D10  jr T,0xf76ca2
+	ldw_d16	wa, (4226)	; F76D12  ld WA,(0x1082)
+	addda16	xwa, (4240)	; F76D16  add WA,(0x1090)
+	stda16	(4226), bc	; F76D1A  ld (0x1082),BC
+	addda16	xbc, (4222)	; F76D1E  add BC,(0x107e)
+	sub	bc, wa	; F76D22  sub BC,WA
+	stda16	(4522), bc	; F76D24  ld (0x11aa),BC
+	calr	13	; F76D28  calr 0xf76d38
+	stdi16	(4222), 0	; F76D2B  ld (0x107e),0x0000
+	stdi16	(4224), 0	; F76D31  ld (0x1080),0x0000
+	ret	; F76D37  ret
+
+; --------------------------------------------------------------------------
+; sub_F76D38
+; Called from: 0xF76A66, 0xF76CDB, 0xF76D28
+; Evidence: 0xF76D38 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76D38:
+	stdi16	(4499), 0	; F76D38  ld (0x1193),0x0000
+	stdi16	(4501), 0	; F76D3E  ld (0x1195),0x0000
+	.byte 0xC1, 0xAC, 0x11, 0x3F, 0x00	; F76D44  cp (0x11ac),0x00   [llvm-mc cannot encode this]
+	jr	nz, 17	; F76D49  jr NZ,0xf76d5c
+	.byte 0xD1, 0xAA, 0x11, 0x3F, 0x7F, 0x00	; F76D4B  cp (0x11aa),0x007f   [llvm-mc cannot encode this]
+	jrl	ule, 135	; F76D51  jrl ULE,0xf76ddb
+	.byte 0xD1, 0xAA, 0x11, 0x3F, 0xFF, 0x3F	; F76D54  cp (0x11aa),0x3fff   [llvm-mc cannot encode this]
+	jr	ule, 86	; F76D5A  jr ULE,0xf76db2
+	.byte 0xC1, 0xAC, 0x11, 0x3F, 0x1F	; F76D5C  cp (0x11ac),0x1f   [llvm-mc cannot encode this]
+	jr	ule, 15	; F76D61  jr ULE,0xf76d72
+	stdi8	(4524), 31	; F76D63  ld (0x11ac),0x1f
+	stdi8	(4523), 255	; F76D68  ld (0x11ab),0xff
+	stdi8	(4522), 255	; F76D6D  ld (0x11aa),0xff
+	ldb_d8	a, (4522)	; F76D72  ld A,(0x11aa)
+	ld	w, a	; F76D76  ld W,A
+	and	w, 128	; F76D78  and W,0x80
+	and	a, 127	; F76D7B  and A,0x7f
+	rlc	w	; F76D7E  rlc 0x01,W
+	ldb_d8	l, (4523)	; F76D81  ld L,(0x11ab)
+	ld	h, l	; F76D85  ld H,L
+	and	h, 192	; F76D87  and H,0xc0
+	.byte 0xCE, 0xE8, 0x02	; F76D8A  rlc 0x02,H   [llvm-mc cannot encode this]
+	sla	l, 1	; F76D8D  sla 0x01,L
+	and	l, 1	; F76D90  and L,0x01
+	or	l, w	; F76D93  or L,W
+	or	l, 128	; F76D95  or L,0x80
+	ldb_d8	c, (4524)	; F76D98  ld C,(0x11ac)
+	sla	c, 2	; F76D9C  sla 0x02,C
+	or	c, h	; F76D9F  or C,H
+	or	c, 128	; F76DA1  or C,0x80
+	stb_d8	(4499), c	; F76DA4  ld (0x1193),C
+	stb_d8	(4500), l	; F76DA8  ld (0x1194),L
+	stb_d8	(4501), a	; F76DAC  ld (0x1195),A
+	jr	56	; F76DB0  jr T,0xf76dea
+	ldb_d8	a, (4522)	; F76DB2  ld A,(0x11aa)
+	ld	w, a	; F76DB6  ld W,A
+	and	a, 127	; F76DB8  and A,0x7f
+	and	w, 128	; F76DBB  and W,0x80
+	rlc	w	; F76DBE  rlc 0x01,W
+	ldb_d8	l, (4523)	; F76DC1  ld L,(0x11ab)
+	ld	h, l	; F76DC5  ld H,L
+	sla	l, 1	; F76DC7  sla 0x01,L
+	or	l, w	; F76DCA  or L,W
+	or	l, 128	; F76DCC  or L,0x80
+	xor	c, c	; F76DCF  xor C,C
+	stb_d8	(4499), l	; F76DD1  ld (0x1193),L
+	stb_d8	(4500), a	; F76DD5  ld (0x1194),A
+	jr	15	; F76DD9  jr T,0xf76dea
+	ldb_d8	a, (4522)	; F76DDB  ld A,(0x11aa)
+	and	a, 127	; F76DDF  and A,0x7f
+	xor	l, l	; F76DE2  xor L,L
+	xor	c, c	; F76DE4  xor C,C
+	stb_d8	(4499), a	; F76DE6  ld (0x1193),A
+	ret	; F76DEA  ret
+
+; --------------------------------------------------------------------------
+; sub_F76DEB
+; Called from: 0xF76BA0
+; Evidence: 0xF76DEB is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76DEB:
+	push	xix	; F76DEB  push XIX
+	ld	xix, 4307	; F76DEC  ld XIX,0x000010d3
+	ldw	bc, 96	; F76DF1  ld BC,0x0060
+	ldw	wa, 255	; F76DF4  ld WA,0x00ff
+	lda_dpi	xbc, 240	; F76DF7  ld (XIX+),A
+	djnz16	bc, -6	; F76DFA  djnz BC,0xf76df7
+	pop	xix	; F76DFD  pop XIX
+	ret	; F76DFE  ret
+	ld	xix, 4504	; F76DFF  ld XIX,0x00001198
+	xor	wa, wa	; F76E04  xor WA,WA
+	ldw	bc, 4	; F76E06  ld BC,0x0004
+	stw_dpi	wa, 241	; F76E09  ld (XIX+),WA
+	djnz16	bc, -6	; F76E0C  djnz BC,0xf76e09
+	ret	; F76E0F  ret
+	ldw_d16	hl, (13404)	; F76E10  ld HL,(0x345c)
+	calr	57982	; F76E14  calr 0xf75095
+	ldda32	xhl, (4718)	; F76E17  ld XHL,(0x126e)
+	ldw_d16	iy, (13406)	; F76E1B  ld IY,(0x345e)
+	ld_rrb	a, xhl, iy	; F76E1F  ld A,(XHL+IY)
+	ret	; F76E24  ret
+	ldw_d16	wa, (13406)	; F76E25  ld WA,(0x345e)
+	cp	wa, 255	; F76E29  cp WA,0x00ff
+	jr	nz, 23	; F76E2D  jr NZ,0xf76e46
+	ldw_d16	hl, (13404)	; F76E2F  ld HL,(0x345c)
+	calr	57951	; F76E33  calr 0xf75095
+	ldda32	xhl, (4718)	; F76E36  ld XHL,(0x126e)
+	ld	wa, (xhl+3)	; F76E3A  ld WA,(XHL+0x03)
+	stda16	(13404), wa	; F76E3D  ld (0x345c),WA
+	ldw	wa, 5	; F76E41  ld WA,0x0005
+	jr	2	; F76E44  jr T,0xf76e48
+	inc	1, wa	; F76E46  inc 1,WA
+	stda16	(13406), wa	; F76E48  ld (0x345e),WA
+	ret	; F76E4C  ret
+	pushw	wa	; F76E4D  push WA
+	pushw	bc	; F76E4E  push BC
+	push	xix	; F76E4F  push XIX
+	xor	wa, wa	; F76E50  xor WA,WA
+	ld	xix, 12378	; F76E52  ld XIX,0x0000305a
+	ldw	bc, 256	; F76E57  ld BC,0x0100
+	stw_dpi	wa, 241	; F76E5A  ld (XIX+),WA
+	djnz16	bc, -6	; F76E5D  djnz BC,0xf76e5a
+	pop	xix	; F76E60  pop XIX
+	popw	bc	; F76E61  pop BC
+	popw	wa	; F76E62  pop WA
+	ret	; F76E63  ret
+
+; --------------------------------------------------------------------------
+; GmSystemSysEx_F76E64 -- TWO 8-byte STANDARD MIDI FILE SysEx EVENTS, one
+;          of which the writer copies into the output as the track's first
+;          event.  `00 F0 05 7E 7F 09 01 F7` is delta 0 + a 5-byte SysEx =
+;          universal non-real-time, all devices, General MIDI, GM System On;
+;          the second differs in ONE byte, 0x02 = GM System Off.
+; Read by: 0xF76F4A `ld XIY,0x00F76E64`, then `bit 2,(0x7f4d)` and `jr NZ`
+;          past 0xF76F55 `ld XIY,0x00F76E6C`; the chosen record is written a
+;          byte at a time by the loop at 0xF76F66 with `ld BC,0x0008`. Set
+;          -> On, clear -> Off.
+; ⚠ Why:   the linear decode frames these 16 bytes as `nop`, an unencodable
+;          `db` and `ldx`. They are DATA, and the byte gate cannot tell the
+;          difference -- the two `ld XIY` operands can.
+; --------------------------------------------------------------------------
+GmSystemSysEx_F76E64:
+	.byte	0x00	; F76E64  delta time 0
+	.byte	0xF0, 0x05	; F76E65  SysEx event, 5 bytes follow
+	.byte	0x7E, 0x7F	; F76E67  universal NON-real-time, device 0x7F = all
+	.byte	0x09, 0x01	; F76E69  sub-ID 09 = General MIDI, 0x01 = GM System On
+	.byte	0xF7	; F76E6B  end of exclusive
+
+	.byte	0x00	; F76E6C  delta time 0
+	.byte	0xF0, 0x05	; F76E6D  SysEx event, 5 bytes follow
+	.byte	0x7E, 0x7F	; F76E6F  universal NON-real-time, device 0x7F = all
+	.byte	0x09, 0x02	; F76E71  sub-ID 09 = General MIDI, 0x02 = GM System Off
+	.byte	0xF7	; F76E73  end of exclusive
+
+
+; --------------------------------------------------------------------------
+; sub_F76E74
+; Called from: no call site is known.  The label marks where a
+;              converted run STARTS, so that a tool walking this file
+;              by label does not attribute the run to its neighbour.
+; Evidence: 0xF76E74 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F76E74:
+	xor	hl, hl	; F76E74  xor HL,HL
+	xor	bc, bc	; F76E76  xor BC,BC
+	push	xde	; F76E78  push XDE
+	ld	xde, 6305024	; F76E79  ld XDE,0x00603500
+	.byte 0xF3, 0x07, 0xE8, 0xEC, 0xCF	; F76E7E  bit 7,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F76E83  pop XDE
+	jr	nz, 14	; F76E84  jr NZ,0xf76e94
+	add	hl, 3	; F76E86  add HL,0x0003
+	inc	1, c	; F76E8A  inc 1,C
+	cp	c, 16	; F76E8C  cp C,0x10
+	jrl	ugt, 2434	; F76E8F  jrl UGT,0xf77814
+	jr	-28	; F76E92  jr T,0xf76e78
+	stb_d8	(3184), c	; F76E94  ld (0x0c70),C
+	inc	1, hl	; F76E98  inc 1,HL
+	push	xde	; F76E9A  push XDE
+	ld	xde, 6305024	; F76E9B  ld XDE,0x00603500
+	ld_rrw	hl, xde, hl	; F76EA0  ld HL,(XDE+HL)
+	pop	xde	; F76EA5  pop XDE
+	stda16	(13404), hl	; F76EA6  ld (0x345c),HL
+	stdi16	(13406), 5	; F76EAA  ld (0x345e),0x0005
+	stdi8	(4529), 0	; F76EB0  ld (0x11b1),0x00
+	ld	xiy, 16218166	; F76EB5  ld XIY,0x00f77836
+	ld	xix, 6334208	; F76EBA  ld XIX,0x0060a700
+	ldw	bc, 7	; F76EBF  ld BC,0x0007
+	.byte 0x95, 0x11	; F76EC2  ldirw   [llvm-mc cannot encode this]
+	ld	xiy, 16218180	; F76EC4  ld XIY,0x00f77844
+	ldw	bc, 4	; F76EC9  ld BC,0x0004
+	.byte 0x95, 0x11	; F76ECC  ldirw   [llvm-mc cannot encode this]
+	stda32	(4232), xix	; F76ECE  ld (0x1088),XIX
+	ldda32	xix, (4232)	; F76ED2  ld XIX,(0x1088)
+	ld	xiy, 16218188	; F76ED6  ld XIY,0x00f7784c
+	ldw	bc, 11	; F76EDB  ld BC,0x000b
+	.byte 0x85, 0x11	; F76EDE  ldir   [llvm-mc cannot encode this]
+	ld	xiy, 8648	; F76EE0  ld XIY,0x000021c8
+	ldw	bc, 8	; F76EE5  ld BC,0x0008
+	.byte 0x85, 0x11	; F76EE8  ldir   [llvm-mc cannot encode this]
+	stda32	(4232), xix	; F76EEA  ld (0x1088),XIX
+	stdi16	(4499), 0	; F76EEE  ld (0x1193),0x0000
+	stdi8	(4501), 0	; F76EF4  ld (0x1195),0x00
+	ld	xiy, 4499	; F76EF9  ld XIY,0x00001193
+	ldda32	xix, (4232)	; F76EFE  ld XIX,(0x1088)
+	ldb_spi	a, 244	; F76F02  ld A,(XIY+)
+	lda_dpi	xbc, 240	; F76F05  ld (XIX+),A
+	bit	7, a	; F76F08  bit 0x07,A
+	jr	nz, -11	; F76F0B  jr NZ,0xf76f02
+	ldw	wa, 22783	; F76F0D  ld WA,0x58ff
+	stw_dpi	wa, 241	; F76F10  ld (XIX+),WA
+	ldb	a, 4	; F76F13  ld A,0x04
+	ldb_da	w, (6304983)	; F76F15  ld W,(0x6034d7)
+	stw_dpi	wa, 241	; F76F1A  ld (XIX+),WA
+	ldw	wa, 6146	; F76F1D  ld WA,0x1802
+	stw_dpi	wa, 241	; F76F20  ld (XIX+),WA
+	ldb	a, 8	; F76F23  ld A,0x08
+	lda_dpi	xbc, 240	; F76F25  ld (XIX+),A
+	stda32	(4232), xix	; F76F28  ld (0x1088),XIX
+	ldb_d8	l, (32482)	; F76F2C  ld L,(0x7ee2)
+	xor	h, h	; F76F30  xor H,H
+	pushw	bc	; F76F32  push BC
+	ldb_d8	b, (32483)	; F76F33  ld B,(0x7ee3)
+	and	b, 1	; F76F37  and B,0x01
+	xor	c, c	; F76F3A  xor C,C
+	or	hl, bc	; F76F3C  or HL,BC
+	popw	bc	; F76F3E  pop BC
+	calr	2448	; F76F3F  calr 0xf778d2
+	calr	2515	; F76F42  calr 0xf77918
+	stdi8	(4665), 255	; F76F45  ld (0x1239),0xff
+	ld	xiy, 16215652	; F76F4A  ld XIY,0x00f76e64
+	.byte 0xF1, 0x4D, 0x7F, 0xCA	; F76F4F  bit 2,(0x7f4d)   [llvm-mc cannot encode this]
+	jr	nz, 10	; F76F53  jr NZ,0xf76f5f
+	ld	xiy, 16215660	; F76F55  ld XIY,0x00f76e6c
+	stdi8	(4665), 0	; F76F5A  ld (0x1239),0x00
+	ldda32	xix, (4232)	; F76F5F  ld XIX,(0x1088)
+	ldw	bc, 8	; F76F63  ld BC,0x0008
+	ldb_spi	a, 244	; F76F66  ld A,(XIY+)
+	lda_dpi	xbc, 240	; F76F69  ld (XIX+),A
+	pushw	bc	; F76F6C  push BC
+	push	xiy	; F76F6D  push XIY
+	push	xix	; F76F6E  push XIX
+	calr	2742	; F76F6F  calr 0xf77a28
+	pop	xix	; F76F72  pop XIX
+	pop	xiy	; F76F73  pop XIY
+	popw	bc	; F76F74  pop BC
+	ldda32	xix, (4232)	; F76F75  ld XIX,(0x1088)
+	djnz16	bc, -22	; F76F79  djnz BC,0xf76f66
+	stda32	(4232), xix	; F76F7C  ld (0x1088),XIX
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F76F80  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jrl	z, 702	; F76F84  jrl Z,0xf77245
+	ld	xiy, 6305440	; F76F87  ld XIY,0x006036a0
+	stdi8	(3184), 0	; F76F8C  ld (0x0c70),0x00
+	xor	xhl, xhl	; F76F91  xor XHL,XHL
+	ldb_d8	l, (3184)	; F76F93  ld L,(0x0c70)
+	ld	c, l	; F76F97  ld C,L
+	ldw_d16	de, (4678)	; F76F99  ld DE,(0x1246)
+	ld	a, c	; F76F9D  ld A,C
+	scf	; F76F9F  scf
+	.byte 0xDA, 0x2A	; F76FA0  xorcf A,DE   [llvm-mc cannot encode this]
+	jrl	c, 660	; F76FA2  jrl C,0xf77239
+	push	xix	; F76FA5  push XIX
+	ld	xix, 6304802	; F76FA6  ld XIX,0x00603422
+	ld_rrb	l, xix, hl	; F76FAB  ld L,(XIX+HL)
+	pop	xix	; F76FB0  pop XIX
+	ld	b, l	; F76FB1  ld B,L
+	sla	l, 1	; F76FB3  sla 0x01,L
+	xor	h, h	; F76FB6  xor H,H
+	push	xde	; F76FB8  push XDE
+	ld	xde, 16218199	; F76FB9  ld XDE,0x00f77857
+	ld_rrw	hl, xde, hl	; F76FBE  ld HL,(XDE+HL)
+	pop	xde	; F76FC3  pop XDE
+	cp	hl, 65535	; F76FC4  cp HL,0xffff
+	jrl	z, 622	; F76FC8  jrl Z,0xf77239
+	cps	c, 0	; F76FCB  cp C,0
+	jr	z, 14	; F76FCD  jr Z,0xf76fdd
+	push	xhl	; F76FCF  push XHL
+	xor	hl, hl	; F76FD0  xor HL,HL
+	pop	xhl	; F76FD2  pop XHL
+	jr	8	; F76FD3  jr T,0xf76fdd
+	cp	l, c	; F76FD5  cp L,C
+	jr	z, -7	; F76FD7  jr Z,0xf76fd2
+	pop	xhl	; F76FD9  pop XHL
+	jrl	616	; F76FDA  jrl T,0xf77245
+	lda_rr	xiy, xiy, hl	; F76FDD  lda XIY,XIY+HL
+	ld	c, (xiy+2)	; F76FE2  ld C,(XIY+0x02)
+	ld	d, (xiy+3)	; F76FE5  ld D,(XIY+0x03)
+	ld	b, (xiy+5)	; F76FE8  ld B,(XIY+0x05)
+	ld	e, (xiy+6)	; F76FEB  ld E,(XIY+0x06)
+	ld	a, (xiy+7)	; F76FEE  ld A,(XIY+0x07)
+	stb_d8	(4763), a	; F76FF1  ld (0x129b),A
+	ld	a, (xiy+8)	; F76FF5  ld A,(XIY+0x08)
+	stb_d8	(4944), a	; F76FF8  ld (0x1350),A
+	ld	a, (xiy+9)	; F76FFC  ld A,(XIY+0x09)
+	stb_d8	(4686), a	; F76FFF  ld (0x124e),A
+	.byte 0xC1, 0x70, 0x0C, 0x3C, 0x0F	; F77003  and (0x0c70),0x0f   [llvm-mc cannot encode this]
+	.byte 0xC1, 0x39, 0x12, 0x3F, 0xFF	; F77008  cp (0x1239),0xff   [llvm-mc cannot encode this]
+	jr	nz, 97	; F7700D  jr NZ,0xf77070
+	ldb_d8	a, (3184)	; F7700F  ld A,(0x0c70)
+	ld	l, c	; F77013  ld L,C
+	stb_da	(6352912), l	; F77015  ld (0x60f010),L
+	ld	h, d	; F7701A  ld H,D
+	stb_da	(6352913), h	; F7701C  ld (0x60f011),H
+	ld	l, (xiy)	; F77021  ld L,(XIY)
+	stb_da	(6352914), l	; F77023  ld (0x60f012),L
+	pushw	bc	; F77028  push BC
+	pushw	de	; F77029  push DE
+	call	15994888	; F7702A  call 0xf41008
+	popw	de	; F7702E  pop DE
+	popw	bc	; F7702F  pop BC
+	ldb_d8	a, (3184)	; F77030  ld A,(0x0c70)
+	or	a, 176	; F77034  or A,0xb0
+	xor	w, w	; F77037  xor W,W
+	ldb_da	l, (6352917)	; F77039  ld L,(0x60f015)
+	pushw	wa	; F7703E  push WA
+	pushw	bc	; F7703F  push BC
+	pushw	de	; F77040  push DE
+	call	16218581	; F77041  call 0xf779d5
+	popw	de	; F77045  pop DE
+	popw	bc	; F77046  pop BC
+	popw	wa	; F77047  pop WA
+	ldb	w, 32	; F77048  ld W,0x20
+	ldb_da	l, (6352916)	; F7704A  ld L,(0x60f014)
+	pushw	bc	; F7704F  push BC
+	pushw	de	; F77050  push DE
+	call	16218581	; F77051  call 0xf779d5
+	popw	de	; F77055  pop DE
+	popw	bc	; F77056  pop BC
+	ldb_d8	a, (3184)	; F77057  ld A,(0x0c70)
+	or	a, 192	; F7705B  or A,0xc0
+	ldb_da	w, (6352918)	; F7705E  ld W,(0x60f016)
+	and	w, 127	; F77063  and W,0x7f
+	pushw	bc	; F77066  push BC
+	pushw	de	; F77067  push DE
+	calr	2410	; F77068  calr 0xf779d5
+	popw	de	; F7706B  pop DE
+	popw	bc	; F7706C  pop BC
+	jrl	67	; F7706D  jrl T,0xf770b3
+	ldb_d8	a, (3184)	; F77070  ld A,(0x0c70)
+	or	a, 176	; F77074  or A,0xb0
+	ldb	w, 0	; F77077  ld W,0x00
+	ld	l, d	; F77079  ld L,D
+	and	l, 56	; F7707B  and L,0x38
+	srl	l, 3	; F7707E  srl 0x03,L
+	pushw	bc	; F77081  push BC
+	pushw	de	; F77082  push DE
+	calr	2383	; F77083  calr 0xf779d5
+	popw	de	; F77086  pop DE
+	popw	bc	; F77087  pop BC
+	ldb_d8	a, (3184)	; F77088  ld A,(0x0c70)
+	or	a, 176	; F7708C  or A,0xb0
+	ldb	w, 32	; F7708F  ld W,0x20
+	ld	l, d	; F77091  ld L,D
+	and	l, 7	; F77093  and L,0x07
+	sla	l, 4	; F77096  sla 0x04,L
+	pushw	bc	; F77099  push BC
+	pushw	de	; F7709A  push DE
+	calr	2359	; F7709B  calr 0xf779d5
+	popw	de	; F7709E  pop DE
+	popw	bc	; F7709F  pop BC
+	ldb_d8	a, (3184)	; F770A0  ld A,(0x0c70)
+	or	a, 192	; F770A4  or A,0xc0
+	ld	w, c	; F770A7  ld W,C
+	and	w, 127	; F770A9  and W,0x7f
+	pushw	bc	; F770AC  push BC
+	pushw	de	; F770AD  push DE
+	calr	2340	; F770AE  calr 0xf779d5
+	popw	de	; F770B1  pop DE
+	popw	bc	; F770B2  pop BC
+	ldb_d8	a, (3184)	; F770B3  ld A,(0x0c70)
+	or	a, 176	; F770B7  or A,0xb0
+	ldb	w, 7	; F770BA  ld W,0x07
+	ld	l, b	; F770BC  ld L,B
+	pushw	wa	; F770BE  push WA
+	pushw	de	; F770BF  push DE
+	calr	2322	; F770C0  calr 0xf779d5
+	popw	de	; F770C3  pop DE
+	popw	wa	; F770C4  pop WA
+	ldb	w, 93	; F770C5  ld W,0x5d
+	ldb_d8	l, (4763)	; F770C7  ld L,(0x129b)
+	pushw	wa	; F770CB  push WA
+	pushw	de	; F770CC  push DE
+	calr	2309	; F770CD  calr 0xf779d5
+	popw	de	; F770D0  pop DE
+	popw	wa	; F770D1  pop WA
+	ldb	w, 94	; F770D2  ld W,0x5e
+	ldb_d8	l, (4944)	; F770D4  ld L,(0x1350)
+	pushw	wa	; F770D8  push WA
+	pushw	de	; F770D9  push DE
+	calr	2296	; F770DA  calr 0xf779d5
+	popw	de	; F770DD  pop DE
+	popw	wa	; F770DE  pop WA
+	ldb	w, 91	; F770DF  ld W,0x5b
+	ldb_d8	l, (4686)	; F770E1  ld L,(0x124e)
+	pushw	wa	; F770E5  push WA
+	calr	2284	; F770E6  calr 0xf779d5
+	popw	wa	; F770E9  pop WA
+	ldb_d8	l, (3184)	; F770EA  ld L,(0x0c70)
+	xor	h, h	; F770EE  xor H,H
+	push	xix	; F770F0  push XIX
+	ld	xix, 6304802	; F770F1  ld XIX,0x00603422
+	ld_rrb	l, xix, hl	; F770F6  ld L,(XIX+HL)
+	pop	xix	; F770FB  pop XIX
+	ld	b, l	; F770FC  ld B,L
+	xor	h, h	; F770FE  xor H,H
+	sla	l, 1	; F77100  sla 0x01,L
+	push	xde	; F77103  push XDE
+	ld	xde, 16218199	; F77104  ld XDE,0x00f77857
+	ld_rrw	hl, xde, hl	; F77109  ld HL,(XDE+HL)
+	pop	xde	; F7710E  pop XDE
+	cp	hl, 65535	; F7710F  cp HL,0xffff
+	jrl	z, 291	; F77113  jrl Z,0xf77239
+	ldb_d8	a, (3184)	; F77116  ld A,(0x0c70)
+	or	a, 176	; F7711A  or A,0xb0
+	ld	c, l	; F7711D  ld C,L
+	ld	xiy, 6305440	; F7711F  ld XIY,0x006036a0
+	ldfr_lerp	xiy, 56	; F77124  ld XDE3,XIY
+	lda_rr	xiy, xiy, hl	; F77127  lda XIY,XIY+HL
+	ld	l, (xiy+10)	; F7712C  ld L,(XIY+0x0a)
+	ldto_lerp	xiy, 56	; F7712F  ld XIY,XDE3
+	ldb	w, 10	; F77132  ld W,0x0a
+	pushw	wa	; F77134  push WA
+	calr	2205	; F77135  calr 0xf779d5
+	popw	wa	; F77138  pop WA
+	ldb	w, 101	; F77139  ld W,0x65
+	ldb	l, 0	; F7713B  ld L,0x00
+	pushw	wa	; F7713D  push WA
+	calr	2196	; F7713E  calr 0xf779d5
+	popw	wa	; F77141  pop WA
+	ldb	w, 100	; F77142  ld W,0x64
+	ldb	l, 1	; F77144  ld L,0x01
+	pushw	wa	; F77146  push WA
+	calr	2187	; F77147  calr 0xf779d5
+	popw	wa	; F7714A  pop WA
+	ldb_d8	l, (3184)	; F7714B  ld L,(0x0c70)
+	xor	h, h	; F7714F  xor H,H
+	push	xix	; F77151  push XIX
+	ld	xix, 6304802	; F77152  ld XIX,0x00603422
+	ld_rrb	l, xix, hl	; F77157  ld L,(XIX+HL)
+	sla	hl, 1	; F7715C  sla 0x01,HL
+	ld	xix, 16218199	; F7715F  ld XIX,0x00f77857
+	ld_rrw	hl, xix, hl	; F77164  ld HL,(XIX+HL)
+	pop	xix	; F77169  pop XIX
+	ld	xiy, 6305440	; F7716A  ld XIY,0x006036a0
+	lda_rr	xiy, xiy, hl	; F7716F  lda XIY,XIY+HL
+	ld	l, (xiy+12)	; F77174  ld L,(XIY+0x0c)
+	ld	c, l	; F77177  ld C,L
+	srl	l, 1	; F77179  srl 0x01,L
+	and	l, 127	; F7717C  and L,0x7f
+	ldb	w, 6	; F7717F  ld W,0x06
+	pushw	wa	; F77181  push WA
+	pushw	bc	; F77182  push BC
+	calr	2127	; F77183  calr 0xf779d5
+	popw	bc	; F77186  pop BC
+	popw	wa	; F77187  pop WA
+	ld	l, c	; F77188  ld L,C
+	rrc	l	; F7718A  rrc 0x01,L
+	and	l, 127	; F7718D  and L,0x7f
+	ldb	w, 38	; F77190  ld W,0x26
+	pushw	wa	; F77192  push WA
+	calr	2111	; F77193  calr 0xf779d5
+	popw	wa	; F77196  pop WA
+	ldb	w, 101	; F77197  ld W,0x65
+	ldb	l, 0	; F77199  ld L,0x00
+	pushw	wa	; F7719B  push WA
+	calr	2102	; F7719C  calr 0xf779d5
+	popw	wa	; F7719F  pop WA
+	ldb	w, 100	; F771A0  ld W,0x64
+	ldb	l, 2	; F771A2  ld L,0x02
+	pushw	wa	; F771A4  push WA
+	calr	2093	; F771A5  calr 0xf779d5
+	popw	wa	; F771A8  pop WA
+	ldb_d8	l, (3184)	; F771A9  ld L,(0x0c70)
+	xor	h, h	; F771AD  xor H,H
+	push	xix	; F771AF  push XIX
+	ld	xix, 6304802	; F771B0  ld XIX,0x00603422
+	ld_rrb	l, xix, hl	; F771B5  ld L,(XIX+HL)
+	sla	hl, 1	; F771BA  sla 0x01,HL
+	ld	xix, 16218199	; F771BD  ld XIX,0x00f77857
+	ld_rrw	hl, xix, hl	; F771C2  ld HL,(XIX+HL)
+	pop	xix	; F771C7  pop XIX
+	ld	xiy, 6305440	; F771C8  ld XIY,0x006036a0
+	ldfr_lerp	xiy, 56	; F771CD  ld XDE3,XIY
+	lda_rr	xiy, xiy, hl	; F771D0  lda XIY,XIY+HL
+	ld	l, (xiy+11)	; F771D5  ld L,(XIY+0x0b)
+	ldto_lerp	xiy, 56	; F771D8  ld XIY,XDE3
+	ldb	w, 6	; F771DB  ld W,0x06
+	pushw	wa	; F771DD  push WA
+	calr	2036	; F771DE  calr 0xf779d5
+	popw	wa	; F771E1  pop WA
+	ldb	w, 38	; F771E2  ld W,0x26
+	xor	l, l	; F771E4  xor L,L
+	pushw	wa	; F771E6  push WA
+	calr	2027	; F771E7  calr 0xf779d5
+	popw	wa	; F771EA  pop WA
+	ldb	w, 101	; F771EB  ld W,0x65
+	ldb	l, 0	; F771ED  ld L,0x00
+	pushw	wa	; F771EF  push WA
+	calr	2018	; F771F0  calr 0xf779d5
+	popw	wa	; F771F3  pop WA
+	ldb	w, 100	; F771F4  ld W,0x64
+	ldb	l, 0	; F771F6  ld L,0x00
+	pushw	wa	; F771F8  push WA
+	calr	2009	; F771F9  calr 0xf779d5
+	popw	wa	; F771FC  pop WA
+	ldb_d8	l, (3184)	; F771FD  ld L,(0x0c70)
+	xor	h, h	; F77201  xor H,H
+	push	xix	; F77203  push XIX
+	ld	xix, 6304802	; F77204  ld XIX,0x00603422
+	ld_rrb	l, xix, hl	; F77209  ld L,(XIX+HL)
+	sla	hl, 1	; F7720E  sla 0x01,HL
+	ld	xix, 16218199	; F77211  ld XIX,0x00f77857
+	ld_rrw	hl, xix, hl	; F77216  ld HL,(XIX+HL)
+	pop	xix	; F7721B  pop XIX
+	ld	xiy, 6305440	; F7721C  ld XIY,0x006036a0
+	lda_rr	xiy, xiy, hl	; F77221  lda XIY,XIY+HL
+	ld	l, (xiy+13)	; F77226  ld L,(XIY+0x0d)
+	ldb	w, 6	; F77229  ld W,0x06
+	pushw	wa	; F7722B  push WA
+	calr	1958	; F7722C  calr 0xf779d5
+	popw	wa	; F7722F  pop WA
+	ldb	w, 6	; F77230  ld W,0x06
+	xor	l, l	; F77232  xor L,L
+	pushw	wa	; F77234  push WA
+	calr	1949	; F77235  calr 0xf779d5
+	popw	wa	; F77238  pop WA
+	incdi8	1, (3184)	; F77239  inc 1,(0x0c70)
+	.byte 0xC1, 0x70, 0x0C, 0x3F, 0x0F	; F7723D  cp (0x0c70),0x0f   [llvm-mc cannot encode this]
+	jrl	ule, -692	; F77242  jrl ULE,0xf76f91
+	calr	1617	; F77245  calr 0xf77899
+	xor	wa, wa	; F77248  xor WA,WA
+	stda16	(4226), wa	; F7724A  ld (0x1082),WA
+	stda16	(4228), wa	; F7724E  ld (0x1084),WA
+	calr	2658	; F77252  calr 0xf77cb7
+	cp	a, 130	; F77255  cp A,0x82
+	jr	z, 31	; F77258  jr Z,0xf77279
+	cp	a, 129	; F7725A  cp A,0x81
+	jr	z, 26	; F7725D  jr Z,0xf77279
+	.byte 0xD1, 0x5C, 0x34, 0x04	; F7725F  pushw (0x345c)   [llvm-mc cannot encode this]
+	.byte 0xD1, 0x5E, 0x34, 0x04	; F77263  pushw (0x345e)   [llvm-mc cannot encode this]
+	calr	2658	; F77267  calr 0xf77ccc
+	calr	2634	; F7726A  calr 0xf77cb7
+	.byte 0xF1, 0x5E, 0x34, 0x06	; F7726D  popw (0x345e)   [llvm-mc cannot encode this]
+	.byte 0xF1, 0x5C, 0x34, 0x06	; F77271  popw (0x345c)   [llvm-mc cannot encode this]
+	stb_d8	(4228), a	; F77275  ld (0x1084),A
+	stdi16	(4230), 0	; F77279  ld (0x1086),0x0000
+	stdi16	(4222), 0	; F7727F  ld (0x107e),0x0000
+	stdi16	(4224), 0	; F77285  ld (0x1080),0x0000
+	xor	hl, hl	; F7728B  xor HL,HL
+	push	xhl	; F7728D  push XHL
+	calr	2581	; F7728E  calr 0xf77ca6
+	calr	2595	; F77291  calr 0xf77cb7
+	pop	xhl	; F77294  pop XHL
+	cp	a, 130	; F77295  cp A,0x82
+	jrl	z, 1381	; F77298  jrl Z,0xf77800
+	push	xde	; F7729B  push XDE
+	ld	xde, 4504	; F7729C  ld XDE,0x00001198
+	st_rrb	a, xde, hl	; F772A1  ld (XDE+HL),A
+	pop	xde	; F772A6  pop XDE
+	pushw	hl	; F772A7  push HL
+	calr	2593	; F772A8  calr 0xf77ccc
+	calr	2569	; F772AB  calr 0xf77cb7
+	popw	hl	; F772AE  pop HL
+	inc	1, hl	; F772AF  inc 1,HL
+	bit	7, a	; F772B1  bit 0x07,A
+	jr	z, -27	; F772B4  jr Z,0xf7729b
+	ldb_d8	a, (4504)	; F772B6  ld A,(0x1198)
+	cp	a, 130	; F772BA  cp A,0x82
+	jrl	z, 1344	; F772BD  jrl Z,0xf77800
+	cp	a, 129	; F772C0  cp A,0x81
+	jrl	z, 50	; F772C3  jrl Z,0xf772f8
+	ld	w, a	; F772C6  ld W,A
+	and	w, 240	; F772C8  and W,0xf0
+	cp	w, 144	; F772CB  cp W,0x90
+	jrl	z, 293	; F772CE  jrl Z,0xf773f6
+	cp	w, 176	; F772D1  cp W,0xb0
+	jrl	z, 676	; F772D4  jrl Z,0xf7757b
+	cp	w, 192	; F772D7  cp W,0xc0
+	jrl	z, 398	; F772DA  jrl Z,0xf7746b
+	cp	w, 208	; F772DD  cp W,0xd0
+	jrl	z, 167	; F772E0  jrl Z,0xf7738a
+	cp	w, 240	; F772E3  cp W,0xf0
+	jrl	z, 227	; F772E6  jrl Z,0xf773cc
+	cp	w, 160	; F772E9  cp W,0xa0
+	jrl	z, 61	; F772EC  jrl Z,0xf7732c
+	cp	w, 224	; F772EF  cp W,0xe0
+	jrl	z, 184	; F772F2  jrl Z,0xf773ad
+	jrl	-109	; F772F5  jrl T,0xf7728b
+	incdi16	1, (4230)	; F772F8  incw 1,(0x1086)
+	calr	2488	; F772FC  calr 0xf77cb7
+	cp	a, 129	; F772FF  cp A,0x81
+	jr	nz, 9	; F77302  jr NZ,0xf7730d
+	incdi16	1, (4230)	; F77304  incw 1,(0x1086)
+	calr	2497	; F77308  calr 0xf77ccc
+	jr	-17	; F7730B  jr T,0xf772fc
+	ldw_d16	wa, (4230)	; F7730D  ld WA,(0x1086)
+	ldw	de, 96	; F77311  ld DE,0x0060
+	extz	xwa	; F77314  extz XWA
+	muls	xwa, xde	; F77316  muls XWA,DE
+	ld	de, qwa	; F77318  ld DE,QWA
+	adddm16	(4222), xwa	; F7731B  add (0x107e),WA
+	stda16	(4224), de	; F7731F  ld (0x1080),DE
+	stdi16	(4230), 0	; F77323  ld (0x1086),0x0000
+	jrl	-161	; F77329  jrl T,0xf7728b
+	cps	hl, 3	; F7732C  cp HL,3
+	jr	z, 60	; F7732E  jr Z,0xf7736c
+	cps	hl, 4	; F77330  cp HL,4
+	jrl	nz, -170	; F77332  jrl NZ,0xf7728b
+	ldb_d8	c, (4505)	; F77335  ld C,(0x1199)
+	calr	1620	; F77339  calr 0xf77990
+	calr	1803	; F7733C  calr 0xf77a4a
+	ldw_d16	hl, (4506)	; F7733F  ld HL,(0x119a)
+	and	l, 127	; F77343  and L,0x7f
+	and	h, 1	; F77346  and H,0x01
+	rrc	h	; F77349  rrc 0x01,H
+	and	h, 128	; F7734C  and H,0x80
+	or	l, h	; F7734F  or L,H
+	xor	h, h	; F77351  xor H,H
+	pushw	wa	; F77353  push WA
+	ldb_d8	w, (4507)	; F77354  ld W,(0x119b)
+	and	w, 2	; F77358  and W,0x02
+	srl	w, 1	; F7735B  srl 0x01,W
+	xor	a, a	; F7735E  xor A,A
+	or	hl, wa	; F77360  or HL,WA
+	popw	wa	; F77362  pop WA
+	calr	1388	; F77363  calr 0xf778d2
+	calr	1455	; F77366  calr 0xf77918
+	jrl	-225	; F77369  jrl T,0xf7728b
+	ldb_d8	c, (4505)	; F7736C  ld C,(0x1199)
+	pushw	wa	; F77370  push WA
+	calr	1564	; F77371  calr 0xf77990
+	calr	1747	; F77374  calr 0xf77a4a
+	popw	wa	; F77377  pop WA
+	and	a, 15	; F77378  and A,0x0f
+	or	a, 208	; F7737B  or A,0xd0
+	ldb_d8	w, (4506)	; F7737E  ld W,(0x119a)
+	xor	l, l	; F77382  xor L,L
+	calr	1614	; F77384  calr 0xf779d5
+	jrl	-255	; F77387  jrl T,0xf7728b
+	cps	hl, 3	; F7738A  cp HL,3
+	jrl	nz, -260	; F7738C  jrl NZ,0xf7728b
+	ldb_d8	c, (4505)	; F7738F  ld C,(0x1199)
+	pushw	wa	; F77393  push WA
+	calr	1529	; F77394  calr 0xf77990
+	calr	1712	; F77397  calr 0xf77a4a
+	popw	wa	; F7739A  pop WA
+	and	a, 15	; F7739B  and A,0x0f
+	or	a, 176	; F7739E  or A,0xb0
+	ldb	w, 1	; F773A1  ld W,0x01
+	ldb_d8	l, (4506)	; F773A3  ld L,(0x119a)
+	calr	1579	; F773A7  calr 0xf779d5
+	jrl	-290	; F773AA  jrl T,0xf7728b
+	cps	hl, 4	; F773AD  cp HL,4
+	jrl	nz, -295	; F773AF  jrl NZ,0xf7728b
+	ldb_d8	c, (4505)	; F773B2  ld C,(0x1199)
+	pushw	wa	; F773B6  push WA
+	calr	1494	; F773B7  calr 0xf77990
+	calr	1677	; F773BA  calr 0xf77a4a
+	popw	wa	; F773BD  pop WA
+	ldb_d8	w, (4506)	; F773BE  ld W,(0x119a)
+	ldb_d8	l, (4507)	; F773C2  ld L,(0x119b)
+	calr	1548	; F773C6  calr 0xf779d5
+	jrl	-321	; F773C9  jrl T,0xf7728b
+	cps	hl, 3	; F773CC  cp HL,3
+	jrl	nz, -326	; F773CE  jrl NZ,0xf7728b
+	ld	l, a	; F773D1  ld L,A
+	and	l, 15	; F773D3  and L,0x0f
+	xor	h, h	; F773D6  xor H,H
+	ldb_d8	c, (4505)	; F773D8  ld C,(0x1199)
+	pushw	wa	; F773DC  push WA
+	calr	1456	; F773DD  calr 0xf77990
+	calr	1639	; F773E0  calr 0xf77a4a
+	popw	wa	; F773E3  pop WA
+	and	a, 15	; F773E4  and A,0x0f
+	or	a, 176	; F773E7  or A,0xb0
+	ldb	w, 11	; F773EA  ld W,0x0b
+	ldb_d8	l, (4506)	; F773EC  ld L,(0x119a)
+	calr	1506	; F773F0  calr 0xf779d5
+	jrl	-363	; F773F3  jrl T,0xf7728b
+	cps	hl, 6	; F773F6  cp HL,6
+	jrl	nz, -368	; F773F8  jrl NZ,0xf7728b
+	xor	hl, hl	; F773FB  xor HL,HL
+	push	xde	; F773FD  push XDE
+	ld	xde, 12378	; F773FE  ld XDE,0x0000305a
+	.byte 0xF3, 0x07, 0xE8, 0xEC, 0xCF	; F77403  bit 7,(XDE+HL)   [llvm-mc cannot encode this]
+	pop	xde	; F77408  pop XDE
+	jr	z, 13	; F77409  jr Z,0xf77418
+	add	hl, 5	; F7740B  add HL,0x0005
+	cp	hl, 160	; F7740F  cp HL,0x00a0
+	jr	ule, -24	; F77413  jr ULE,0xf773fd
+	jrl	-397	; F77415  jrl T,0xf7728b
+	.byte 0xC1, 0xB1, 0x11, 0x3E, 0x01	; F77418  or (0x11b1),0x01   [llvm-mc cannot encode this]
+	pushw	hl	; F7741D  push HL
+	ldb_d8	c, (4505)	; F7741E  ld C,(0x1199)
+	calr	1387	; F77422  calr 0xf77990
+	calr	1570	; F77425  calr 0xf77a4a
+	ldb_d8	a, (4504)	; F77428  ld A,(0x1198)
+	ldb_d8	w, (4506)	; F7742C  ld W,(0x119a)
+	ldb_d8	l, (4507)	; F77430  ld L,(0x119b)
+	calr	1438	; F77434  calr 0xf779d5
+	popw	hl	; F77437  pop HL
+	ld	xix, 12378	; F77438  ld XIX,0x0000305a
+	lda_rr	xix, xix, hl	; F7743D  lda XIX,XIX+HL
+	ldb	a, 128	; F77442  ld A,0x80
+	lda_dpi	xbc, 240	; F77444  ld (XIX+),A
+	ldb_d8	a, (4504)	; F77447  ld A,(0x1198)
+	lda_dpi	xbc, 240	; F7744B  ld (XIX+),A
+	ldb_d8	a, (4506)	; F7744E  ld A,(0x119a)
+	lda_dpi	xbc, 240	; F77452  ld (XIX+),A
+	ldb_d8	a, (4509)	; F77455  ld A,(0x119d)
+	ldb	w, 96	; F77459  ld W,0x60
+	muls8rr	a, w	; F7745B  muls WA,W
+	xor	hl, hl	; F7745D  xor HL,HL
+	ldb_d8	l, (4508)	; F7745F  ld L,(0x119c)
+	add	wa, hl	; F77463  add WA,HL
+	stw_dpi	wa, 241	; F77465  ld (XIX+),WA
+	jrl	-480	; F77468  jrl T,0xf7728b
+	cps	hl, 6	; F7746B  cp HL,6
+	jrl	nz, -485	; F7746D  jrl NZ,0xf7728b
+	.byte 0xC1, 0x9A, 0x11, 0x3F, 0x7F	; F77470  cp (0x119a),0x7f   [llvm-mc cannot encode this]
+	jrl	z, -493	; F77475  jrl Z,0xf7728b
+	ldb_d8	a, (4507)	; F77478  ld A,(0x119b)
+	cps	a, 0	; F7747C  cp A,0
+	jrl	nz, -502	; F7747E  jrl NZ,0xf7728b
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F77481  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F77485  jr Z,0xf7748e
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77487  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -515	; F7748B  jrl Z,0xf7728b
+	ldb_d8	c, (4505)	; F7748E  ld C,(0x1199)
+	pushw	wa	; F77492  push WA
+	calr	1274	; F77493  calr 0xf77990
+	calr	1457	; F77496  calr 0xf77a4a
+	popw	wa	; F77499  pop WA
+	.byte 0xC1, 0x39, 0x12, 0x3F, 0x00	; F7749A  cp (0x1239),0x00   [llvm-mc cannot encode this]
+	jrl	z, 150	; F7749F  jrl Z,0xf77538
+	ldb_d8	l, (4504)	; F774A2  ld L,(0x1198)
+	ld	h, l	; F774A6  ld H,L
+	and	l, 1	; F774A8  and L,0x01
+	rrc	l	; F774AB  rrc 0x01,L
+	ldb_d8	a, (4508)	; F774AE  ld A,(0x119c)
+	or	l, a	; F774B2  or L,A
+	stb_da	(6352912), l	; F774B4  ld (0x60f010),L
+	and	h, 2	; F774B9  and H,0x02
+	.byte 0xCE, 0xE9, 0x02	; F774BC  rrc 0x02,H   [llvm-mc cannot encode this]
+	ldb_d8	a, (4509)	; F774BF  ld A,(0x119d)
+	and	a, 127	; F774C3  and A,0x7f
+	or	h, a	; F774C6  or H,A
+	stb_da	(6352913), h	; F774C8  ld (0x60f011),H
+	push	xix	; F774CD  push XIX
+	xor	hl, hl	; F774CE  xor HL,HL
+	ldb_d8	l, (4506)	; F774D0  ld L,(0x119a)
+	ld	xix, 6304802	; F774D4  ld XIX,0x00603422
+	ld_rrb	l, xix, hl	; F774D9  ld L,(XIX+HL)
+	ld	xix, 16218133	; F774DE  ld XIX,0x00f77815
+	ld_rrb	l, xix, hl	; F774E3  ld L,(XIX+HL)
+	stb_da	(6352914), l	; F774E8  ld (0x60f012),L
+	pop	xix	; F774ED  pop XIX
+	call	15994888	; F774EE  call 0xf41008
+	ldb	a, 176	; F774F2  ld A,0xb0
+	ldb_d8	w, (4506)	; F774F4  ld W,(0x119a)
+	and	w, 15	; F774F8  and W,0x0f
+	or	a, w	; F774FB  or A,W
+	xor	w, w	; F774FD  xor W,W
+	ldb_da	l, (6352917)	; F774FF  ld L,(0x60f015)
+	pushw	wa	; F77504  push WA
+	call	16218581	; F77505  call 0xf779d5
+	popw	wa	; F77509  pop WA
+	stdi16	(4499), 0	; F7750A  ld (0x1193),0x0000
+	stdi8	(4501), 0	; F77510  ld (0x1195),0x00
+	ldb	w, 32	; F77515  ld W,0x20
+	ldb_da	l, (6352916)	; F77517  ld L,(0x60f014)
+	call	16218581	; F7751C  call 0xf779d5
+	ldb	a, 192	; F77520  ld A,0xc0
+	ldb_d8	w, (4506)	; F77522  ld W,(0x119a)
+	and	w, 15	; F77526  and W,0x0f
+	or	a, w	; F77529  or A,W
+	ldb_da	w, (6352918)	; F7752B  ld W,(0x60f016)
+	xor	l, l	; F77530  xor L,L
+	calr	1184	; F77532  calr 0xf779d5
+	jrl	-685	; F77535  jrl T,0xf7728b
+	ldb	w, 0	; F77538  ld W,0x00
+	ldb_d8	l, (4509)	; F7753A  ld L,(0x119d)
+	and	l, 56	; F7753E  and L,0x38
+	srl	l, 3	; F77541  srl 0x03,L
+	calr	1083	; F77544  calr 0xf77982
+	stdi16	(4499), 0	; F77547  ld (0x1193),0x0000
+	stdi8	(4501), 0	; F7754D  ld (0x1195),0x00
+	ldb	w, 32	; F77552  ld W,0x20
+	ldb_d8	l, (4509)	; F77554  ld L,(0x119d)
+	and	l, 7	; F77558  and L,0x07
+	sla	l, 4	; F7755B  sla 0x04,L
+	and	l, 127	; F7755E  and L,0x7f
+	calr	1054	; F77561  calr 0xf77982
+	ldb	a, 192	; F77564  ld A,0xc0
+	ldb_d8	w, (4506)	; F77566  ld W,(0x119a)
+	and	w, 15	; F7756A  and W,0x0f
+	or	a, w	; F7756D  or A,W
+	ldb_d8	w, (4508)	; F7756F  ld W,(0x119c)
+	xor	l, l	; F77573  xor L,L
+	calr	1117	; F77575  calr 0xf779d5
+	jrl	-752	; F77578  jrl T,0xf7728b
+	cps	hl, 6	; F7757B  cp HL,6
+	jrl	nz, -757	; F7757D  jrl NZ,0xf7728b
+	.byte 0xC1, 0x9A, 0x11, 0x3F, 0x7F	; F77580  cp (0x119a),0x7f   [llvm-mc cannot encode this]
+	jrl	z, 629	; F77585  jrl Z,0xf777fd
+	ldb_d8	l, (4507)	; F77588  ld L,(0x119b)
+	ldb_d8	a, (4506)	; F7758C  ld A,(0x119a)
+	ldb_d8	w, (4504)	; F77590  ld W,(0x1198)
+	and	w, 4	; F77594  and W,0x04
+	sla	w, 5	; F77597  sla 0x05,W
+	or	a, w	; F7759A  or A,W
+	cp	a, 181	; F7759C  cp A,0xb5
+	jr	z, 2	; F7759F  jr Z,0xf775a3
+	jr	78	; F775A1  jr T,0xf775f1
+	ldb_d8	l, (4507)	; F775A3  ld L,(0x119b)
+	cp	l, 127	; F775A7  cp L,0x7f
+	jrl	z, 592	; F775AA  jrl Z,0xf777fd
+	cp	a, 181	; F775AD  cp A,0xb5
+	jrl	z, 26	; F775B0  jrl Z,0xf775cd
+	cps	l, 0	; F775B3  cp L,0
+	jrl	c, 581	; F775B5  jrl C,0xf777fd
+	cp	l, 16	; F775B8  cp L,0x10
+	jrl	ugt, 575	; F775BB  jrl UGT,0xf777fd
+	jrl	-822	; F775BE  jrl T,0xf7728b
+	jrl	-825	; F775C1  jrl T,0xf7728b
+	jrl	-828	; F775C4  jrl T,0xf7728b
+	jrl	-831	; F775C7  jrl T,0xf7728b
+	jrl	-834	; F775CA  jrl T,0xf7728b
+	ldb_d8	c, (4505)	; F775CD  ld C,(0x1199)
+	pushw	wa	; F775D1  push WA
+	pushw	hl	; F775D2  push HL
+	calr	954	; F775D3  calr 0xf77990
+	calr	1137	; F775D6  calr 0xf77a4a
+	popw	hl	; F775D9  pop HL
+	popw	wa	; F775DA  pop WA
+	ldb	a, 176	; F775DB  ld A,0xb0
+	ld	w, l	; F775DD  ld W,L
+	and	w, 15	; F775DF  and W,0x0f
+	or	a, w	; F775E2  or A,W
+	ldb	w, 64	; F775E4  ld W,0x40
+	ldb_d8	l, (4508)	; F775E6  ld L,(0x119c)
+	call	16218581	; F775EA  call 0xf779d5
+	jrl	-870	; F775EE  jrl T,0xf7728b
+	cps	l, 3	; F775F1  cp L,3
+	jrl	c, -875	; F775F3  jrl C,0xf7728b
+	cp	l, 11	; F775F6  cp L,0x0b
+	jrl	ugt, -881	; F775F9  jrl UGT,0xf7728b
+	ldb	a, 176	; F775FC  ld A,0xb0
+	ldb_d8	w, (4506)	; F775FE  ld W,(0x119a)
+	and	w, 15	; F77602  and W,0x0f
+	or	a, w	; F77605  or A,W
+	ldb	w, 7	; F77607  ld W,0x07
+	cps	l, 3	; F77609  cp L,3
+	jrl	z, 458	; F7760B  jrl Z,0xf777d8
+	cps	l, 4	; F7760E  cp L,4
+	jrl	z, 361	; F77610  jrl Z,0xf7777c
+	cps	l, 5	; F77613  cp L,5
+	jrl	z, 363	; F77615  jrl Z,0xf77783
+	cps	l, 6	; F77618  cp L,6
+	jrl	z, 379	; F7761A  jrl Z,0xf77798
+	cps	l, 7	; F7761D  cp L,7
+	jrl	z, 412	; F7761F  jrl Z,0xf777be
+	cp	l, 8	; F77622  cp L,0x08
+	jrl	z, 290	; F77625  jrl Z,0xf7774a
+	cp	l, 9	; F77628  cp L,0x09
+	jrl	z, 204	; F7762B  jrl Z,0xf776fa
+	cp	l, 10	; F7762E  cp L,0x0a
+	jr	z, 8	; F77631  jr Z,0xf7763b
+	cp	l, 11	; F77633  cp L,0x0b
+	jr	z, 111	; F77636  jr Z,0xf776a7
+	jrl	nz, -944	; F77638  jrl NZ,0xf7728b
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F7763B  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jrl	z, 7	; F7763F  jrl Z,0xf77649
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77642  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -958	; F77646  jrl Z,0xf7728b
+	ldb_d8	c, (4505)	; F77649  ld C,(0x1199)
+	pushw	wa	; F7764D  push WA
+	push	xhl	; F7764E  push XHL
+	calr	830	; F7764F  calr 0xf77990
+	calr	1013	; F77652  calr 0xf77a4a
+	pop	xhl	; F77655  pop XHL
+	popw	wa	; F77656  pop WA
+	ldb	a, 176	; F77657  ld A,0xb0
+	ldb_d8	w, (4506)	; F77659  ld W,(0x119a)
+	and	w, 15	; F7765D  and W,0x0f
+	or	a, w	; F77660  or A,W
+	ldb	w, 101	; F77662  ld W,0x65
+	ldb	l, 0	; F77664  ld L,0x00
+	pushw	wa	; F77666  push WA
+	calr	875	; F77667  calr 0xf779d5
+	popw	wa	; F7766A  pop WA
+	ldb	w, 100	; F7766B  ld W,0x64
+	ldb	l, 1	; F7766D  ld L,0x01
+	stdi8	(4499), 0	; F7766F  ld (0x1193),0x00
+	pushw	wa	; F77674  push WA
+	calr	861	; F77675  calr 0xf779d5
+	popw	wa	; F77678  pop WA
+	ldb	w, 6	; F77679  ld W,0x06
+	ldb_d8	l, (4508)	; F7767B  ld L,(0x119c)
+	ldb_d8	h, (4504)	; F7767F  ld H,(0x1198)
+	and	h, 1	; F77683  and H,0x01
+	.byte 0xCE, 0xE9, 0x02	; F77686  rrc 0x02,H   [llvm-mc cannot encode this]
+	srl	l, 1	; F77689  srl 0x01,L
+	or	l, h	; F7768C  or L,H
+	pushw	wa	; F7768E  push WA
+	calr	835	; F7768F  calr 0xf779d5
+	popw	wa	; F77692  pop WA
+	ldb	w, 38	; F77693  ld W,0x26
+	ldb_d8	l, (4508)	; F77695  ld L,(0x119c)
+	and	l, 1	; F77699  and L,0x01
+	.byte 0xCF, 0xE9, 0x02	; F7769C  rrc 0x02,L   [llvm-mc cannot encode this]
+	pushw	wa	; F7769F  push WA
+	calr	818	; F776A0  calr 0xf779d5
+	popw	wa	; F776A3  pop WA
+	jrl	-1052	; F776A4  jrl T,0xf7728b
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F776A7  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jrl	z, 7	; F776AB  jrl Z,0xf776b5
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F776AE  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1066	; F776B2  jrl Z,0xf7728b
+	ldb_d8	c, (4505)	; F776B5  ld C,(0x1199)
+	pushw	wa	; F776B9  push WA
+	pushw	hl	; F776BA  push HL
+	calr	722	; F776BB  calr 0xf77990
+	calr	905	; F776BE  calr 0xf77a4a
+	popw	hl	; F776C1  pop HL
+	popw	wa	; F776C2  pop WA
+	ldb	a, 176	; F776C3  ld A,0xb0
+	ldb_d8	w, (4506)	; F776C5  ld W,(0x119a)
+	and	w, 15	; F776C9  and W,0x0f
+	or	a, w	; F776CC  or A,W
+	ldb	w, 101	; F776CE  ld W,0x65
+	ldb	l, 0	; F776D0  ld L,0x00
+	pushw	wa	; F776D2  push WA
+	calr	767	; F776D3  calr 0xf779d5
+	popw	wa	; F776D6  pop WA
+	ldb	w, 100	; F776D7  ld W,0x64
+	ldb	l, 0	; F776D9  ld L,0x00
+	stdi8	(4499), 0	; F776DB  ld (0x1193),0x00
+	pushw	wa	; F776E0  push WA
+	calr	753	; F776E1  calr 0xf779d5
+	popw	wa	; F776E4  pop WA
+	ldb	w, 6	; F776E5  ld W,0x06
+	ldb_d8	l, (4508)	; F776E7  ld L,(0x119c)
+	pushw	wa	; F776EB  push WA
+	calr	742	; F776EC  calr 0xf779d5
+	popw	wa	; F776EF  pop WA
+	ldb	w, 38	; F776F0  ld W,0x26
+	ldb	l, 0	; F776F2  ld L,0x00
+	calr	734	; F776F4  calr 0xf779d5
+	jrl	-1135	; F776F7  jrl T,0xf7728b
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F776FA  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F776FE  jr Z,0xf77707
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77700  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1148	; F77704  jrl Z,0xf7728b
+	ldb_d8	c, (4505)	; F77707  ld C,(0x1199)
+	pushw	wa	; F7770B  push WA
+	pushw	hl	; F7770C  push HL
+	calr	640	; F7770D  calr 0xf77990
+	calr	823	; F77710  calr 0xf77a4a
+	popw	hl	; F77713  pop HL
+	popw	wa	; F77714  pop WA
+	ldb	a, 176	; F77715  ld A,0xb0
+	ld	w, l	; F77717  ld W,L
+	and	w, 15	; F77719  and W,0x0f
+	or	a, w	; F7771C  or A,W
+	ldb	w, 101	; F7771E  ld W,0x65
+	ldb	l, 0	; F77720  ld L,0x00
+	pushw	wa	; F77722  push WA
+	calr	687	; F77723  calr 0xf779d5
+	popw	wa	; F77726  pop WA
+	ldb	w, 100	; F77727  ld W,0x64
+	ldb	l, 2	; F77729  ld L,0x02
+	stdi8	(4499), 0	; F7772B  ld (0x1193),0x00
+	pushw	wa	; F77730  push WA
+	calr	673	; F77731  calr 0xf779d5
+	popw	wa	; F77734  pop WA
+	ldb	w, 6	; F77735  ld W,0x06
+	ldb_d8	l, (4508)	; F77737  ld L,(0x119c)
+	pushw	wa	; F7773B  push WA
+	calr	662	; F7773C  calr 0xf779d5
+	popw	wa	; F7773F  pop WA
+	ldb	w, 38	; F77740  ld W,0x26
+	ldb	l, 0	; F77742  ld L,0x00
+	calr	654	; F77744  calr 0xf779d5
+	jrl	-1215	; F77747  jrl T,0xf7728b
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F7774A  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F7774E  jr Z,0xf77757
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77750  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1228	; F77754  jrl Z,0xf7728b
+	ldb_d8	c, (4505)	; F77757  ld C,(0x1199)
+	pushw	wa	; F7775B  push WA
+	pushw	hl	; F7775C  push HL
+	calr	560	; F7775D  calr 0xf77990
+	calr	743	; F77760  calr 0xf77a4a
+	popw	hl	; F77763  pop HL
+	popw	wa	; F77764  pop WA
+	ldb	a, 176	; F77765  ld A,0xb0
+	ldb_d8	w, (4507)	; F77767  ld W,(0x119b)
+	and	w, 15	; F7776B  and W,0x0f
+	or	a, w	; F7776E  or A,W
+	ldb	w, 10	; F77770  ld W,0x0a
+	ldb_d8	l, (4508)	; F77772  ld L,(0x119c)
+	calr	604	; F77776  calr 0xf779d5
+	jrl	-1265	; F77779  jrl T,0xf7728b
+	ldw_d16	bc, (4508)	; F7777C  ld BC,(0x119c)
+	jrl	-1272	; F77780  jrl T,0xf7728b
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F77783  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F77787  jr Z,0xf77790
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F77789  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1285	; F7778D  jrl Z,0xf7728b
+	ldb	w, 93	; F77790  ld W,0x5d
+	ldb_d8	l, (4508)	; F77792  ld L,(0x119c)
+	jr	81	; F77796  jr T,0xf777e9
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F77798  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F7779C  jr Z,0xf777a5
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F7779E  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1306	; F777A2  jrl Z,0xf7728b
+	ldb	w, 93	; F777A5  ld W,0x5d
+	ldb_d8	l, (4508)	; F777A7  ld L,(0x119c)
+	jr	60	; F777AB  jr T,0xf777e9
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F777AD  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F777B1  jr Z,0xf777ba
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F777B3  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1327	; F777B7  jrl Z,0xf7728b
+	ldb	w, 64	; F777BA  ld W,0x40
+	jr	43	; F777BC  jr T,0xf777e9
+	ldb	w, 91	; F777BE  ld W,0x5b
+	ldb	l, 0	; F777C0  ld L,0x00
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F777C2  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F777C6  jr Z,0xf777cf
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F777C8  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1348	; F777CC  jrl Z,0xf7728b
+	ldb_d8	l, (4508)	; F777CF  ld L,(0x119c)
+	and	l, 127	; F777D3  and L,0x7f
+	jr	17	; F777D6  jr T,0xf777e9
+	.byte 0xF1, 0x3E, 0x13, 0xC8	; F777D8  bit 0,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 7	; F777DC  jr Z,0xf777e5
+	.byte 0xF1, 0xB1, 0x11, 0xC8	; F777DE  bit 0,(0x11b1)   [llvm-mc cannot encode this]
+	jrl	z, -1370	; F777E2  jrl Z,0xf7728b
+	ldb_d8	l, (4508)	; F777E5  ld L,(0x119c)
+	ldb_d8	c, (4505)	; F777E9  ld C,(0x1199)
+	pushw	wa	; F777ED  push WA
+	pushw	hl	; F777EE  push HL
+	calr	414	; F777EF  calr 0xf77990
+	calr	597	; F777F2  calr 0xf77a4a
+	popw	hl	; F777F5  pop HL
+	popw	wa	; F777F6  pop WA
+	calr	475	; F777F7  calr 0xf779d5
+	jrl	-1394	; F777FA  jrl T,0xf7728b
+	jrl	-1397	; F777FD  jrl T,0xf7728b
+	ldb	c, 0	; F77800  ld C,0x00
+	calr	395	; F77802  calr 0xf77990
+	calr	578	; F77805  calr 0xf77a4a
+	ldb	a, 255	; F77808  ld A,0xff
+	ldb	w, 47	; F7780A  ld W,0x2f
+	ldb	l, 0	; F7780C  ld L,0x00
+	calr	452	; F7780E  calr 0xf779d5
+	calr	134	; F77811  calr 0xf7789a
+	ret	; F77814  ret
 
 
 ; --------------------------------------------------------------------------
@@ -166819,57 +168251,227 @@ ByteMap_F77815:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F77815  [0..15]
 	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F	; F77825  [16..31]
 	.byte	0x7F	; F77835  [32..32]
-
+; --------------------------------------------------------------------------
+; SmfFileTemplate_F77836 -- the 33-byte STANDARD MIDI FILE header this
+;          firmware copies into its output buffer before writing a track.
+;          Format 0, one track, division 96 ticks per quarter note.
+;          ⚠ NOT MUSIC: no note, no end-of-track.  The events are written
+;          at run time by the code below; this is only the file's opening.
+; Read by: three `ld XIY,imm32` copy sources -- +0x00 with `ld
+;          BC,0x0007`/`ldirw` (14 bytes), +0x0E with `ld BC,0x0004`/`ldirw`
+;          (8), +0x16 with `ld BC,0x000B`/`ldir` (11). 14+8+11 = 33, which
+;          is why this object ends here and the word table below begins at
+;          +0x21.
+; Then:    `ld XIY,0x21C8` / `ld BC,0x0008` / `ldir` appends eight RAM
+;          bytes, so the meta event's declared length of 15 is 7 from ROM +
+;          8 from RAM.
+; Length:  the `00 00 00 00` at +0x12 is a PLACEHOLDER. 0xF7789A computes
+;          (0x126C)*1024 + (cursor - 0x60A700) - 22 and stores it most
+;          significant byte first into (0x10C4)-(0x10C7). 22 = `MThd` + its
+;          6 payload bytes + `MTrk`. That is why every chunk walker that
+;          trusts the field steps nowhere.
+; Evidence: notes/gen_prom_b_smf_writer_module.py --selftest re-derives every
+;           byte and every reader from the ROM.
+; --------------------------------------------------------------------------
+SmfFileTemplate_F77836:
+	.ascii	"MThd"	; F77836  header chunk tag
+	.byte	0x00, 0x00, 0x00, 0x06	; F7783A  chunk length 6, most significant byte first
+	.byte	0x00, 0x00	; F7783E  format 0 -- one multi-channel track
+	.byte	0x00, 0x01	; F77840  ntrks 1
+	.byte	0x00, 0x60	; F77842  division 0x0060 = 96 ticks per quarter note
+	.ascii	"MTrk"	; F77844  track chunk tag
+	.byte	0x00, 0x00, 0x00, 0x00	; F77848  track length PLACEHOLDER -- backfilled by 0xF7789A
+	.byte	0x00	; F7784C  delta time 0
+	.byte	0xFF, 0x03	; F7784D  meta event FF 03 -- sequence/track name
+	.byte	0x0F	; F7784F  ... declared length 15
+	.ascii	"WSA    "	; F77850  name bytes 1-7; 8-15 come from RAM (0x21C8)
 
 ; --------------------------------------------------------------------------
-; Data_F77836 -- 415 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |MThd.........`MTrk........WSA    ..@.......@...
-;           ..@.......@.......@.......@.......@.......@...............P...P.
-;           l. .......#....`...............D...E...@...A.0`....@......P...R0
-;           @....@...........3.]....P.....f..a3...@......P...R.E.......$..!.
-;           .A......$.3.n.!...A......$!Q..A......$!...A......$...!..A......$
-;           ...!..A......$...!..A......$....!.......F..(;*.....P...A.~.
-;           .......".....P.h..n..>..f....8...h......Q...RJ[H....|
-; Read by: 1 byte-scan hit: 1 instruction operand -- `ld XIY,0x00f77836` at
-;          0xF76EB5 (operand field 1 byte in) -- inside Data_F7681C, a run
-;          this block emits as bytes, so it has no instruction line here
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Unknown: everything about it except its bytes.
+; SmfPartOffsets_F77857 -- 32 little-endian 16-bit BYTE OFFSETS and a
+;          0xFFFF terminator.  NOT MIDI, and not part of the file: it only
+;          happens to sit 0x21 bytes after the template.
+;          0x0000, 0x0040 ... 0x0800, step 0x40 -- one record per slot in the
+;          0x40-strided array at RAM 0x006036A0.
+; Read by: five instructions spell 0x00F77857: 0xF76FB9 is `ld XDE,<base>`
+;          followed by `ld HL,(XDE+HL)` with HL = (byte from RAM 0x603422) *
+;          2, and the result reaches `lda XIY,XIY+HL` on XIY = 0x006036A0.
+; ⚠ Note:  the step is 0x40 everywhere EXCEPT between slots 7 and 8, where
+;          it is 0x80: the record at 0x0200 is skipped. That is in the ROM
+;          and identical in all four copies. What occupies the skipped slot
+;          is NOT established.
 ; --------------------------------------------------------------------------
-Data_F77836:
-	.byte	0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x60, 0x4D, 0x54	; F77836  [0..15]
-	.byte	0x72, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0x0F, 0x57, 0x53, 0x41, 0x20, 0x20, 0x20	; F77846  [16..31]
-	.byte	0x20, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01, 0x40, 0x01, 0x80, 0x01, 0xC0	; F77856  [32..47]
-	.byte	0x01, 0x40, 0x02, 0x80, 0x02, 0xC0, 0x02, 0x00, 0x03, 0x40, 0x03, 0x80, 0x03, 0xC0, 0x03, 0x00	; F77866  [48..63]
-	.byte	0x04, 0x40, 0x04, 0x80, 0x04, 0xC0, 0x04, 0x00, 0x05, 0x40, 0x05, 0x80, 0x05, 0xC0, 0x05, 0x00	; F77876  [64..79]
-	.byte	0x06, 0x40, 0x06, 0x80, 0x06, 0xC0, 0x06, 0x00, 0x07, 0x40, 0x07, 0x80, 0x07, 0xC0, 0x07, 0x00	; F77886  [80..95]
-	.byte	0x08, 0xFF, 0xFF, 0x0E, 0xD8, 0xD0, 0xF1, 0xC4, 0x10, 0x50, 0xF1, 0xC6, 0x10, 0x50, 0xD1, 0x6C	; F77896  [96..111]
-	.byte	0x12, 0x20, 0xD8, 0x08, 0x00, 0x04, 0xE1, 0x88, 0x10, 0x23, 0xEB, 0xCA, 0x00, 0xA7, 0x60, 0x00	; F778A6  [112..127]
-	.byte	0xEB, 0x80, 0xE8, 0xCA, 0x16, 0x00, 0x00, 0x00, 0xD7, 0xE2, 0x8A, 0xF1, 0xC4, 0x10, 0x44, 0xF1	; F778B6  [128..143]
-	.byte	0xC5, 0x10, 0x45, 0xF1, 0xC6, 0x10, 0x40, 0xF1, 0xC7, 0x10, 0x41, 0x0E, 0x30, 0x60, 0xEA, 0xE8	; F778C6  [144..159]
-	.byte	0x12, 0xDB, 0x40, 0xD7, 0xE2, 0x8A, 0xF1, 0x8C, 0x10, 0x50, 0xF1, 0x8E, 0x10, 0x52, 0x30, 0x40	; F778D6  [160..175]
-	.byte	0x9C, 0xE8, 0x12, 0xDB, 0x40, 0xD7, 0xE2, 0x8A, 0xD1, 0x8C, 0x10, 0x80, 0xD1, 0x8E, 0x10, 0x92	; F778E6  [176..191]
-	.byte	0x33, 0xC0, 0x5D, 0xD7, 0xE2, 0x9A, 0xDB, 0x50, 0xD7, 0xE2, 0x8A, 0xDA, 0xD8, 0x66, 0x02, 0xD8	; F778F6  [192..207]
-	.byte	0x61, 0x33, 0xE8, 0x03, 0xDB, 0x40, 0xD7, 0xE2, 0x8A, 0xF1, 0x8C, 0x10, 0x50, 0xF1, 0x8E, 0x10	; F77906  [208..223]
-	.byte	0x52, 0x0E, 0x45, 0x93, 0x11, 0x00, 0x00, 0xE1, 0x88, 0x10, 0x24, 0xC5, 0xF4, 0x21, 0xF5, 0xF0	; F77916  [224..239]
-	.byte	0x41, 0x1E, 0xFE, 0x00, 0xE1, 0x88, 0x10, 0x24, 0xC9, 0x33, 0x07, 0x6E, 0xEE, 0x21, 0xFF, 0xF5	; F77926  [240..255]
-	.byte	0xF0, 0x41, 0x1E, 0xED, 0x00, 0xE1, 0x88, 0x10, 0x24, 0x21, 0x51, 0xF5, 0xF0, 0x41, 0x1E, 0xE1	; F77936  [256..271]
-	.byte	0x00, 0xE1, 0x88, 0x10, 0x24, 0x21, 0x03, 0xF5, 0xF0, 0x41, 0x1E, 0xD5, 0x00, 0xE1, 0x88, 0x10	; F77946  [272..287]
-	.byte	0x24, 0xC1, 0x8E, 0x10, 0x21, 0xF5, 0xF0, 0x41, 0x1E, 0xC7, 0x00, 0xE1, 0x88, 0x10, 0x24, 0xC1	; F77956  [288..303]
-	.byte	0x8D, 0x10, 0x21, 0xF5, 0xF0, 0x41, 0x1E, 0xB9, 0x00, 0xE1, 0x88, 0x10, 0x24, 0xC1, 0x8C, 0x10	; F77966  [304..319]
-	.byte	0x21, 0xF5, 0xF0, 0x41, 0x1E, 0xAB, 0x00, 0xE1, 0x88, 0x10, 0x24, 0x0E, 0xC1, 0x9A, 0x11, 0x21	; F77976  [320..335]
-	.byte	0xC9, 0xCC, 0x0F, 0xC9, 0xCE, 0xB0, 0x1E, 0x46, 0x00, 0x0E, 0x28, 0x3B, 0x2A, 0xD8, 0xD0, 0xF1	; F77986  [336..351]
-	.byte	0xAA, 0x11, 0x50, 0xF1, 0xAC, 0x11, 0x41, 0xD1, 0x7E, 0x10, 0x20, 0xCA, 0xD2, 0xD9, 0x80, 0xD1	; F77996  [352..367]
-	.byte	0x82, 0x10, 0x22, 0xDA, 0xA0, 0xF1, 0xAA, 0x11, 0x50, 0xF1, 0x68, 0x12, 0xC8, 0x6E, 0x11, 0xF1	; F779A6  [368..383]
-	.byte	0x3E, 0x13, 0xC9, 0x66, 0x0B, 0xD1, 0xAA, 0x11, 0x38, 0x80, 0x01, 0xF1, 0x68, 0x12, 0x00, 0x01	; F779B6  [384..399]
-	.byte	0xF1, 0x82, 0x10, 0x51, 0xF1, 0x90, 0x10, 0x52, 0x4A, 0x5B, 0x48, 0x1E, 0x0B, 0x02, 0x0E	; F779C6  [400..414]
+SmfPartOffsets_F77857:
+	.short	0x0000, 0x0040, 0x0080, 0x00C0, 0x0100, 0x0140, 0x0180, 0x01C0	; F77857  slots  0- 7
+	.short	0x0240, 0x0280, 0x02C0, 0x0300, 0x0340, 0x0380, 0x03C0, 0x0400	; F77867  slots  8-15
+	.short	0x0440, 0x0480, 0x04C0, 0x0500, 0x0540, 0x0580, 0x05C0, 0x0600	; F77877  slots 16-23
+	.short	0x0640, 0x0680, 0x06C0, 0x0700, 0x0740, 0x0780, 0x07C0, 0x0800	; F77887  slots 24-31
+	.short	0xFFFF	; F77897  terminator
+
+; --------------------------------------------------------------------------
+; sub_F77899
+; Called from: 0xF77245
+; Evidence: 0xF77899 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F77899:
+	ret	; F77899  ret
+
+; --------------------------------------------------------------------------
+; sub_F7789A
+; Called from: 0xF77811
+; Evidence: 0xF7789A is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F7789A:
+	xor	wa, wa	; F7789A  xor WA,WA
+	stda16	(4292), wa	; F7789C  ld (0x10c4),WA
+	stda16	(4294), wa	; F778A0  ld (0x10c6),WA
+	ldw_d16	wa, (4716)	; F778A4  ld WA,(0x126c)
+	mul	wa, 1024	; F778A8  mul WA,0x0400
+	ldda32	xhl, (4232)	; F778AC  ld XHL,(0x1088)
+	sub	xhl, 6334208	; F778B0  sub XHL,0x0060a700
+	add	xwa, xhl	; F778B6  add XWA,XHL
+	sub	xwa, 22	; F778B8  sub XWA,0x00000016
+	ld	de, qwa	; F778BE  ld DE,QWA
+	stb_d8	(4292), d	; F778C1  ld (0x10c4),D
+	stb_d8	(4293), e	; F778C5  ld (0x10c5),E
+	stb_d8	(4294), w	; F778C9  ld (0x10c6),W
+	stb_d8	(4295), a	; F778CD  ld (0x10c7),A
+	ret	; F778D1  ret
+
+; --------------------------------------------------------------------------
+; sub_F778D2
+; Called from: 0xF76F3F, 0xF77363
+; Evidence: 0xF778D2 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F778D2:
+	ldw	wa, 60000	; F778D2  ld WA,0xea60
+	extz	xwa	; F778D5  extz XWA
+	mul	xwa, xhl	; F778D7  mul XWA,HL
+	ld	de, qwa	; F778D9  ld DE,QWA
+	stda16	(4236), wa	; F778DC  ld (0x108c),WA
+	stda16	(4238), de	; F778E0  ld (0x108e),DE
+	ldw	wa, 40000	; F778E4  ld WA,0x9c40
+	extz	xwa	; F778E7  extz XWA
+	mul	xwa, xhl	; F778E9  mul XWA,HL
+	ld	de, qwa	; F778EB  ld DE,QWA
+	addda16	xwa, (4236)	; F778EE  add WA,(0x108c)
+	.byte 0xD1, 0x8E, 0x10, 0x92	; F778F2  adc DE,(0x108e)   [llvm-mc cannot encode this]
+	ldw	hl, 24000	; F778F6  ld HL,0x5dc0
+	ld	qwa, de	; F778F9  ld QWA,DE
+	div	xwa, xhl	; F778FC  div XWA,HL
+	ld	de, qwa	; F778FE  ld DE,QWA
+	cps	de, 0	; F77901  cp DE,0
+	jr	z, 2	; F77903  jr Z,0xf77907
+	inc	1, wa	; F77905  inc 1,WA
+	ldw	hl, 1000	; F77907  ld HL,0x03e8
+	mul	xwa, xhl	; F7790A  mul XWA,HL
+	ld	de, qwa	; F7790C  ld DE,QWA
+	stda16	(4236), wa	; F7790F  ld (0x108c),WA
+	stda16	(4238), de	; F77913  ld (0x108e),DE
+	ret	; F77917  ret
+
+; --------------------------------------------------------------------------
+; sub_F77918
+; Called from: 0xF76F42, 0xF77366
+; Evidence: 0xF77918 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F77918:
+	ld	xiy, 4499	; F77918  ld XIY,0x00001193
+	ldda32	xix, (4232)	; F7791D  ld XIX,(0x1088)
+	ldb_spi	a, 244	; F77921  ld A,(XIY+)
+	lda_dpi	xbc, 240	; F77924  ld (XIX+),A
+	calr	254	; F77927  calr 0xf77a28
+	ldda32	xix, (4232)	; F7792A  ld XIX,(0x1088)
+	bit	7, a	; F7792E  bit 0x07,A
+	jr	nz, -18	; F77931  jr NZ,0xf77921
+	ldb	a, 255	; F77933  ld A,0xff
+	lda_dpi	xbc, 240	; F77935  ld (XIX+),A
+	calr	237	; F77938  calr 0xf77a28
+	ldda32	xix, (4232)	; F7793B  ld XIX,(0x1088)
+	ldb	a, 81	; F7793F  ld A,0x51
+	lda_dpi	xbc, 240	; F77941  ld (XIX+),A
+	calr	225	; F77944  calr 0xf77a28
+	ldda32	xix, (4232)	; F77947  ld XIX,(0x1088)
+	ldb	a, 3	; F7794B  ld A,0x03
+	lda_dpi	xbc, 240	; F7794D  ld (XIX+),A
+	calr	213	; F77950  calr 0xf77a28
+	ldda32	xix, (4232)	; F77953  ld XIX,(0x1088)
+	ldb_d8	a, (4238)	; F77957  ld A,(0x108e)
+	lda_dpi	xbc, 240	; F7795B  ld (XIX+),A
+	calr	199	; F7795E  calr 0xf77a28
+	ldda32	xix, (4232)	; F77961  ld XIX,(0x1088)
+	ldb_d8	a, (4237)	; F77965  ld A,(0x108d)
+	lda_dpi	xbc, 240	; F77969  ld (XIX+),A
+	calr	185	; F7796C  calr 0xf77a28
+	ldda32	xix, (4232)	; F7796F  ld XIX,(0x1088)
+	ldb_d8	a, (4236)	; F77973  ld A,(0x108c)
+	lda_dpi	xbc, 240	; F77977  ld (XIX+),A
+	calr	171	; F7797A  calr 0xf77a28
+	ldda32	xix, (4232)	; F7797D  ld XIX,(0x1088)
+	ret	; F77981  ret
+
+; --------------------------------------------------------------------------
+; sub_F77982
+; Called from: 0xF77544, 0xF77561
+; Evidence: 0xF77982 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F77982:
+	ldb_d8	a, (4506)	; F77982  ld A,(0x119a)
+	and	a, 15	; F77986  and A,0x0f
+	or	a, 176	; F77989  or A,0xb0
+	calr	70	; F7798C  calr 0xf779d5
+	ret	; F7798F  ret
+
+; --------------------------------------------------------------------------
+; sub_F77990
+; Called from: 0xF77339, 0xF77371, 0xF77394, 0xF773B7, 0xF773DD, 0xF77422,
+;              0xF77493, 0xF775D3, 0xF7764F, 0xF776BB, 0xF7770D, 0xF7775D,
+;              0xF777EF, 0xF77802
+; Evidence: 0xF77990 is an instruction boundary of this transcription,
+;           re-asserted on every emit.  The name IS the address.
+; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
+;          stated, per this tree's rule that a stated gap beats a guess.
+; --------------------------------------------------------------------------
+sub_F77990:
+	pushw	wa	; F77990  push WA
+	push	xhl	; F77991  push XHL
+	pushw	de	; F77992  push DE
+	xor	wa, wa	; F77993  xor WA,WA
+	stda16	(4522), wa	; F77995  ld (0x11aa),WA
+	stb_d8	(4524), a	; F77999  ld (0x11ac),A
+	ldw_d16	wa, (4222)	; F7799D  ld WA,(0x107e)
+	xor	b, b	; F779A1  xor B,B
+	add	wa, bc	; F779A3  add WA,BC
+	ldw_d16	de, (4226)	; F779A5  ld DE,(0x1082)
+	sub	wa, de	; F779A9  sub WA,DE
+	stda16	(4522), wa	; F779AB  ld (0x11aa),WA
+	.byte 0xF1, 0x68, 0x12, 0xC8	; F779AF  bit 0,(0x1268)   [llvm-mc cannot encode this]
+	jr	nz, 17	; F779B3  jr NZ,0xf779c6
+	.byte 0xF1, 0x3E, 0x13, 0xC9	; F779B5  bit 1,(0x133e)   [llvm-mc cannot encode this]
+	jr	z, 11	; F779B9  jr Z,0xf779c6
+	.byte 0xD1, 0xAA, 0x11, 0x38, 0x80, 0x01	; F779BB  add (0x11aa),0x0180   [llvm-mc cannot encode this]
+	stdi8	(4712), 1	; F779C1  ld (0x1268),0x01
+	stda16	(4226), bc	; F779C6  ld (0x1082),BC
+	stda16	(4240), de	; F779CA  ld (0x1090),DE
+	popw	de	; F779CE  pop DE
+	pop	xhl	; F779CF  pop XHL
+	popw	wa	; F779D0  pop WA
+	calr	523	; F779D1  calr 0xf77bdf
+	ret	; F779D4  ret
 
 
 ; --------------------------------------------------------------------------
