@@ -1,8 +1,37 @@
 # The assembler that certified tonight's results
 
-**Status: the binary is pinned and preserved; it is NOT yet reproducible from a
-commit.** This note exists so that nobody later mistakes the second property for
-the first.
+**Status: CLOSED, 2026-09-02, by equivalence.** The gap described below was
+real for about two hours. It is recorded rather than deleted, because the
+mitigation is worth reusing and because the closing argument is the interesting
+part.
+
+## How it closed
+
+The backend lane committed its work as `86332721969d` and left `llvm-project`
+**clean**, so `build/bin/llvm-mc` (sha256 `850b013e`) is now reproducible from a
+commit. Running the full gate under it, on the tree that the *preserved* binary
+had certified:
+
+    make LLVM_MC=<clean-commit build> gate-all    ->  13/13 IDENTICAL, 8/8 assembling
+
+So two different assemblers — `53c6621d`, built from a **dirty** `7e541b8ddb07`,
+and `850b013e`, built from a **clean** `86332721969d` — produce byte-identical
+ROMs from the same sources. That does not prove the two binaries are the same
+program, and it is not meant to: it proves the uncommitted state the snapshot
+was carrying **made no difference to any of the 12,386,304 bytes under test**,
+which is the only property tonight's results depended on.
+
+★ Closing by *equivalence* rather than by *identity* is the honest move when the
+sha cannot match by construction — the clean commit contains features the dirty
+tree was mid-way through adding, so an identical hash was never available. State
+which of the two you have.
+
+`toolchain-snapshot/llvm-mc.snap` has been re-taken at `850b013e` and is now
+reproducible: rebuild `86332721969d` and compare.
+
+---
+
+*The original note follows, describing the gap as it stood.*
 
 ## What is pinned
 
