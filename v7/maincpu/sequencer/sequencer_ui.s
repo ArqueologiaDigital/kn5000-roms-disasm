@@ -1028,7 +1028,7 @@ LyricsBox_CopyAndDraw:
 
 	push xbc
 
-	.byte 0x1d, 0x70, 0x07, 0xff	; call Strcpy (v7 addr)
+	call	16713584
 
 	inc 8, xsp
 
@@ -1092,7 +1092,7 @@ LyricsBox_DrawCurrentLine:
 
 	ld xwa, (xsp + 48)
 
-	.byte 0x1d, 0xd0, 0x91, 0xf9	; call GetClientBox (v7 addr)
+	call	16355792
 
 	lda xwa, (xsp + 40)
 
@@ -1132,7 +1132,7 @@ LyricsBox_DrawCurrentLine:
 
 	pushw 0xdfe
 
-	.byte 0x1d, 0x16, 0x05, 0xff	; call Strncpy (v7 addr)
+	call	16712982
 
 	lda xsp, (xsp + 10)
 
@@ -1182,7 +1182,7 @@ LyricsBox_DrawCurrentLine:
 
 	pushw 0x7
 
-	.byte 0x1d, 0xbd, 0xc6, 0xfa	; call DrawString (v7 addr)
+	call	16434877
 
 
 
@@ -1210,7 +1210,7 @@ LyricsBox_DrawSelLine:
 
 	ld xwa, (xsp + 48)
 
-	.byte 0x1d, 0xd0, 0x91, 0xf9	; call GetClientBox (v7 addr)
+	call	16355792
 
 	lda xwa, (xsp + 40)
 
@@ -1248,7 +1248,7 @@ LyricsBox_DrawSelLine:
 
 	pushw 0xdfe
 
-	.byte 0x1d, 0x16, 0x05, 0xff	; call Strncpy (v7 addr)
+	call	16712982
 
 	lda xsp, (xsp + 10)
 
@@ -1298,7 +1298,7 @@ LyricsBox_DrawSelLine:
 
 	pushw 0x7
 
-	.byte 0x1d, 0xbd, 0xc6, 0xfa	; call DrawString (v7 addr)
+	call	16434877
 
 
 
@@ -1441,7 +1441,7 @@ SongEdit_OverflowCheck:
 
 	lds32 xde, 0
 
-	.byte 0x1d, 0x53, 0x92, 0xfa	; call SendEvent (v7 addr)
+	call	16421459
 
 	lda_24 xde, (0x020e46)
 
@@ -1491,7 +1491,7 @@ SongEdit_OverflowCheck:
 
 	push xwa
 
-	.byte 0x1d, 0x16, 0x05, 0xff	; call Strncpy (v7 addr)
+	call	16712982
 
 	lda xsp, (xsp + 10)
 
@@ -1630,7 +1630,7 @@ LyricsTrack_ResetBufferLoop:
 
 	push xwa
 
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call	16713148
 
 	lda xsp, (xsp + 10)
 
@@ -3653,12 +3653,20 @@ TrAsGridChk_Part1_AdjustUp:
 	calr TrAsGrid_LookupByteTable
 
 TrAsGridChk_Part1_SendAudio:
-	.byte 0xdb, 0x12, 0xdb, 0xec, 0x02, 0x41, 0xca, 0x62
-	.byte 0xe2, 0x00, 0xe3, 0x07, 0xe4, 0xec, 0x20, 0x38
-	.byte 0xbf, 0x08, 0x30, 0x38, 0x1d, 0x95, 0x02, 0xff
-	.byte 0xef, 0x60, 0x1d, 0xc3, 0x40, 0xfa, 0xeb, 0x88
-	.byte 0xbf, 0x0e, 0x32, 0x41, 0x8c, 0x00, 0xe0, 0x01
-	.byte 0x78, 0xcf, 0x01
+	extz	hl
+	sla	hl, 2
+	ld	xbc, 14836426
+	ld_rrl	xwa, xbc, hl
+	push	xwa
+	lda	xwa, (xsp+8)
+	push	xwa
+	call	16712341
+	inc	8, xsp
+	call	16400579
+	ld	xwa, xhl
+	lda	xde, (xsp+14)
+	ld	xbc, 31457420
+	jrl	463
 TrAsGridChk_Part2_Start:
 	bitda 0, (3296)
 	jr nz, TrAsGridChk_Part2_UpDir
@@ -6371,10 +6379,15 @@ HelpTtlFunc_ClampMin:
 	ldw wa, 0x31
 
 HelpTtlFunc_LookupSlide:
-	.byte 0xd8, 0xee, 0x02, 0xf2, 0xee, 0x43, 0xe3, 0x34
-	.byte 0xe3, 0x07, 0xf0, 0xe0, 0x20, 0x38, 0xaa, 0x12
-	.byte 0x20, 0x38, 0x1d, 0x70, 0x07, 0xff, 0xef, 0x60
-	.byte 0xee, 0x8b
+	sll	wa, 2
+	lda_24	xix, 14894062
+	ld_rrl	xwa, xix, wa
+	push	xwa
+	ld	xwa, (xde+18)
+	push	xwa
+	call	16713584
+	inc	8, xsp
+	ld	xhl, xiz
 HelpTtlFunc_Epilogue:
 	pop xiz
 	ret
@@ -6610,13 +6623,22 @@ IvPlayExit_CopyString:
 	lds32	xhl, 0
 	jr	71
 IvPlayExit_CheckSendEvent:
-	.byte 0xee, 0x88, 0x1d, 0x59, 0x5e, 0xfa, 0xbf, 0x04
-	.byte 0x63, 0xee, 0x88, 0x41, 0x53, 0x00, 0xe0, 0x01
-	.byte 0xaf, 0x08, 0x22, 0x1d, 0x53, 0x92, 0xfa, 0xeb
-	.byte 0xe3, 0x66, 0x20, 0xc1, 0xf2, 0xe2, 0x3f, 0x00
-	.byte 0x6e, 0x14, 0xaf, 0x04, 0x20, 0xa8, 0x16, 0x22
-	.byte 0x40, 0xff, 0xff, 0xff, 0xff, 0x41, 0x14, 0x00
-	.byte 0xc0, 0x01, 0x1d, 0x45, 0x93, 0xfa
+	ld	xwa, xiz
+	call	16408153
+	ld	(xsp+4), xhl
+	ld	xwa, xiz
+	ld	xbc, 31457363
+	ld	xde, (xsp+8)
+	call	16421459
+	or	xhl, xhl
+	jr	z, 32
+	cpdi8	58098, 0
+	jr	nz, 20
+	ld	xwa, (xsp+4)
+	ld	xde, (xwa+22)
+	ld	xwa, 4294967295
+	ld	xbc, 29360148
+	call	16421701
 IvPlayExit_ClearFlag:
 	stdi8	(58098), 0
 IvPlayExit_PrepareInherited:
@@ -8783,11 +8805,11 @@ EntGridCheck_Handle4E13:
 
 	push xwa
 
-	.byte 0x1d, 0x95, 0x02, 0xff	; call Sprintf_Locked (v7 addr)
+	call	16712341
 
 	lda xsp, (xsp + 10)
 
-	.byte 0x1d, 0xc3, 0x40, 0xfa	; call GetFocusObject (v7 addr)
+	call	16400579
 
 	ld xwa, xhl
 
@@ -8832,13 +8854,13 @@ EntGridCheck_Return:
 
 	push xde
 
-	.byte 0x1d, 0x16, 0x05, 0xff	; call Strncpy (v7 addr)
+	call	16712982
 
 	lda xsp, (xsp + 10)
 
 	ld (xsp + 57), 0x0
 
-	.byte 0x1d, 0xc3, 0x40, 0xfa	; call GetFocusObject (v7 addr)
+	call	16400579
 
 	ld xwa, xhl
 

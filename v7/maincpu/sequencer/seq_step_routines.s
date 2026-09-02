@@ -1041,7 +1041,7 @@ SeqStep_MultiTrackCleanup:
 
 	stb_d8 (0x2878), a
 
-	.byte 0x1d, 0xa1, 0xf8, 0xf3	; call SeqVoice_InitAllChannelParams (v7 addr)
+	call	15988897
 
 	stb_erp A, 0xfb
 
