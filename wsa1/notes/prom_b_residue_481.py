@@ -133,6 +133,13 @@ CLOSED = {
     0x003ADE: "res03a: tail of 0xF03AD9, all of 0xF03AE5, head of 0xF03AF1",
     0x003AF8: "res03a: tail of 0xF03AF1, lists 3-4 and the table of block 3",
     0x003BE6: "res03a: tail of block 6 list 3's op-03 record at 0xF03BDF",
+    # lane res05x, notes/prom_b_res05x_spans.py -- four of the five bounded by
+    # a `ld XIY,<start>` / `ld XIX,<end>` pair in prom_b's own converted code
+    0x003F81: "res05x: middle of one 18-record list, both ends named by sub_F5C727",
+    0x004D14: "res05x: tail of the record at 0xF04D10 + head of the table it names",
+    0x00540B: "res05x: four op-02 records listed by the pointer array at 0xF0545A",
+    0x005792: "res05x: 5x8 rect array; interior splits rest on tiling, not a pointer",
+    0x005CEC: "res05x: NOT a curve row -- byte-column 1 of the 2x12 bitmap 0xF05CE0",
 }
 S_FILE = _os.path.join(WSA1, "prom_b/wsa1_prom_b.s")
 
