@@ -19906,15 +19906,19 @@ Bitmap_F0D5BF_80x24:
 ; bytes with start evidence) and not named by any converted record's
 ; own table field either -- found because a plain op/len walk, starting
 ; 477 bytes into this span, lands with ZERO DRIFT exactly on the span's
-; declared end.  ⚠ IT SAID 454 UNTIL 2026-09-02: the record that walk began
-; with, `op 0C, 28 bytes` at 0xF0D698, was the bitmap's tail plus the glyph
-; record at 0xF0D6AF, and op 0C's handler is a bare `ret` so its length
-; asserted nothing.  See Bitmap_F0D5BF_80x24 above.  Original text follows:
-; ...lands with ZERO DRIFT exactly on the span's
 ; declared end, and every record's length satisfies ITS OWN handler's
 ; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
+; ⚠ IT SAID 454 BYTES AND 23 RECORDS UNTIL 2026-09-02.  The record that walk
+;   began with -- `op 0C, 28 bytes` at 0xF0D698 -- was the last 23 bytes of
+;   Bitmap_F0D5BF_80x24 plus the `op 23, 5 bytes` glyph record at 0xF0D6AF.
+;   op 0C's handler, 0xF31AEB, is a bare `ret`: its length byte asserted
+;   NOTHING, any value at all would have walked, and the per-handler rule
+;   that rejects this module's other false positives is vacuous on it.
+;   Starting at +477 walks the same stream minus that one record, still
+;   landing on 0xF0D79C with zero drift.  Corrected by
+;   notes/lane_promB3/gen_promB3_spans.py --splice.
 ; ------------------------------------------------------------------
 ; --- 0xF0D698-0xF0D6AE: the last 23 bytes of Bitmap_F0D5BF_80x24 (see its
 ;     header above) -- rows 1-23 of its last byte column, column 9, whose row 0

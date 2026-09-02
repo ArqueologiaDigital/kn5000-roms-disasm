@@ -457,13 +457,39 @@ EDITS = [
 # two numbers the correction moves are changed; the prose is kept.
 HDR_OLD = ("; 0xF0D698-0xF0D79B -- 23 display-list records, 260 bytes -- interpreter A\n")
 HDR_NEW = ("; 0xF0D6AF-0xF0D79B -- 22 display-list records, 237 bytes -- interpreter A\n")
-HDR_OLD2 = ("; 454 bytes into this span, lands with ZERO DRIFT exactly on the span's\n")
-HDR_NEW2 = ("; 477 bytes into this span, lands with ZERO DRIFT exactly on the span's\n"
-            "; declared end.  ⚠ IT SAID 454 UNTIL 2026-09-02: the record that walk began\n"
-            "; with, `op 0C, 28 bytes` at 0xF0D698, was the bitmap's tail plus the glyph\n"
-            "; record at 0xF0D6AF, and op 0C's handler is a bare `ret` so its length\n"
-            "; asserted nothing.  See Bitmap_F0D5BF_80x24 above.  Original text follows:\n"
-            "; ...lands with ZERO DRIFT exactly on the span's\n")
+# The pool module's header for the block that holds the bitmap's tail.  The
+# whole paragraph is matched at once (it is unique) and rewritten so the two
+# numbers the correction moves change IN PLACE and the original wording of the
+# rest survives verbatim, with the correction appended after it.
+HDR_OLD = (
+    "; 0xF0D698-0xF0D79B -- 23 display-list records, 260 bytes -- interpreter A\n"
+    "; NOT reached by any known call shape (reachability.py: prom_b has 0\n"
+    "; bytes with start evidence) and not named by any converted record's\n"
+    "; own table field either -- found because a plain op/len walk, starting\n"
+    "; 454 bytes into this span, lands with ZERO DRIFT exactly on the span's\n"
+    "; declared end, and every record's length satisfies ITS OWN handler's\n"
+    "; implied-length rule (notes/prom_b_dl_length_audit.py), not merely\n"
+    "; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py\n"
+    "; --splice\n")
+HDR_NEW = (
+    "; 0xF0D6AF-0xF0D79B -- 22 display-list records, 237 bytes -- interpreter A\n"
+    "; NOT reached by any known call shape (reachability.py: prom_b has 0\n"
+    "; bytes with start evidence) and not named by any converted record's\n"
+    "; own table field either -- found because a plain op/len walk, starting\n"
+    "; 477 bytes into this span, lands with ZERO DRIFT exactly on the span's\n"
+    "; declared end, and every record's length satisfies ITS OWN handler's\n"
+    "; implied-length rule (notes/prom_b_dl_length_audit.py), not merely\n"
+    "; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py\n"
+    "; --splice\n"
+    "; ⚠ IT SAID 454 BYTES AND 23 RECORDS UNTIL 2026-09-02.  The record that walk\n"
+    ";   began with -- `op 0C, 28 bytes` at 0xF0D698 -- was the last 23 bytes of\n"
+    ";   Bitmap_F0D5BF_80x24 plus the `op 23, 5 bytes` glyph record at 0xF0D6AF.\n"
+    ";   op 0C's handler, 0xF31AEB, is a bare `ret`: its length byte asserted\n"
+    ";   NOTHING, any value at all would have walked, and the per-handler rule\n"
+    ";   that rejects this module's other false positives is vacuous on it.\n"
+    ";   Starting at +477 walks the same stream minus that one record, still\n"
+    ";   landing on 0xF0D79C with zero drift.  Corrected by\n"
+    ";   notes/lane_promB3/gen_promB3_spans.py --splice.\n")
 
 
 def render_bitmap(b):
@@ -566,7 +592,7 @@ def main():
             if cur.count(o) != 1:
                 raise SystemExit("expected exactly one %r, found %d" % (old[:60], cur.count(o)))
             cur = cur.replace(o, "".join(fn(b)).encode("utf-8"), 1)
-        for old, new in ((D698_OLD, "".join(d698_fix(b))), (HDR_OLD, HDR_NEW), (HDR_OLD2, HDR_NEW2)):
+        for old, new in ((D698_OLD, "".join(d698_fix(b))), (HDR_OLD, HDR_NEW)):
             o = old.encode("utf-8")
             if cur.count(o) != 1:
                 raise SystemExit("expected exactly one %r, found %d" % (old[:60], cur.count(o)))
