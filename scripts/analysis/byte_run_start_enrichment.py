@@ -49,7 +49,33 @@ and the comparison stops meaning anything.
 
 ⚠ WHAT THIS DOES NOT DO. It is a per-image statistic, not a per-run verdict. A
 high enrichment says "this image's residue is largely undecoded code, go look";
-it does NOT license converting any individual run. Deciding a specific run is
+it does NOT license converting any individual run.
+
+★★ AND IT DOES NOT LOCALISE. MEASURED, 2026-09-02, AND IT COST A LANE TIME.
+On the strength of v10's 46x I sent per-FILE blind-start rates to seven lanes
+as if they were actionable. The first one to check reported back that the
+signal is absent in its own file:
+
+    v10/maincpu/ui_widgets/widget_dispatch.s
+        blind 10.9%  control 5.1%  =  2.1x     (below this script's own 3x)
+    v10/maincpu as a whole
+                                      46.5x
+
+⚠ THE PER-FILE BLIND RATE ALONE IS NOT THE SIGNAL -- the CONTROL rate is what
+kills it. Quoting "10.9% of this file's runs start with a blind byte" without
+its control is exactly the mistake this script exists to prevent, and I made it
+in the covering message rather than in the code.
+
+★ AND THE CONFOUND IS WORTH KNOWING. 65 of that file's 74 blind starts are
+`0x01` at a regular cadence inside six-byte `{u16 tag, u32 pointer}` records:
+the 0x01 is a TAG's LOW BYTE, and the run boundary in front of it was
+MANUFACTURED by an interposed `.long`. So a data structure with a low-valued
+16-bit field, chopped by an existing conversion, generates blind starts at
+whatever rate its stride dictates -- with no undecoded code anywhere near.
+None of those 74 runs is a call/jump target or fall-through reachable.
+
+Use this script at image granularity, which is where its control is
+calibrated. To ask about one file, compute that file's own control. Deciding a specific run is
 code still needs the usual evidence -- what references it, whether anything
 calls or jumps into it. Data-as-code remains the standing hazard in the other
 direction.
