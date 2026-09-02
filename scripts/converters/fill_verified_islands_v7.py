@@ -18,19 +18,45 @@ WHY A SEPARATE FILE
 
 RUN
     python3 scripts/converters/fill_verified_islands_v7.py --work WORKDIR \
-        [--exclude-file NAME.s ...] [--apply] [--limit N]
+        [--exclude-file NAME.s ...] [--start N] [--count N] [--apply] [--limit N]
 
   Dry run by default. --apply writes ONLY v7/<relpath>.
+
+  --start/--count slice the CANDIDATE LIST (sorted by ROM address) BEFORE
+  the expensive per-candidate unidasm classification loop runs, not after
+  it like --limit does. 2026-09-02: v7's current island population is
+  6,874 code-flanked byteblobs (up from the 2,268 measured before this
+  session's confirmed-region conversions widened the island set -- see
+  notes/lanes/ISLANDS-V7-2026-09-02.md), and classifying the whole list in
+  one process before converting or committing anything already cost one
+  budget its entire run with zero commits to show for it. Slice into
+  batches of ~150-300, convert+gate+commit each slice, and resume with the
+  next --start. The address sort makes slices stable across runs (nothing
+  else in this tool's candidate selection is randomised).
 
 PROVENANCE
   Lane V7CODE2 of the 2026-09-01 full-disassembly push, worktree
   ~/compartilhado/disasm-lanes/v7code2 (branch w6/v7code2).
+
+  Sliced batching + the near-uniform-run guard added by lane V7ISLANDS,
+  worktree ~/compartilhado/disasm-lanes/v7islands (branch w7/v7islands),
+  2026-09-02, after a coordinator review of the first (unsliced) run: (1)
+  classifying all ~6,874 candidates before converting or committing any of
+  them risks losing the whole computation if the session ends mid-run, and
+  (2) no converter in this tree previously defended against a uniform or
+  near-uniform byte run decoding cleanly (e.g. a run of 0xFF as repeated
+  `swi 7`) -- context tiling, looks_like_a_table_tail and call-target
+  corroboration all aim at OTHER failure shapes and none of them grips
+  this one, because a uniform run re-encodes byte-exact and a short run
+  can sit inside looks_like_a_table_tail's 150 B window dominated by real
+  preceding code, diluting the periodicity signal below its threshold.
 """
 import argparse
 import os
 import re
 import sys
 import tempfile
+from collections import Counter
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
@@ -41,6 +67,31 @@ from fill_verified_islands import bounds_from_context, looks_like_a_table_tail, 
 
 BASE, SIZE = 0xE00000, 2097152
 BYTE_RE = re.compile(r'^\s*\.byte\s+((?:0x[0-9a-fA-F]{2}\s*,?\s*)+)\s*$')
+
+
+def is_near_uniform_run(raw, byte_frac=0.4, min_len=3):
+    """2026-09-02: a run of a single repeated byte (or dominated by one
+    byte value) can decode as a chain of identical, perfectly-spellable,
+    byte-round-tripping instructions -- 0xFF repeated is `swi 7` repeated,
+    and a lane elsewhere in this push found a converter about to turn 55 of
+    64 B of pure padding into a fake program this exact way. Context
+    tiling and looks_like_a_table_tail() do not catch it: the run re-
+    encodes byte-exact (so tiling "succeeds" the same way real code does),
+    and looks_like_a_table_tail's periodicity window reaches back up to
+    150 B into whatever precedes the run, which for a short island is
+    mostly real established CODE -- diluting a short uniform run's own
+    repetition below the window-level threshold. This checks the
+    candidate's OWN bytes directly, no window, no context: any run at
+    least `min_len` bytes long where a single byte value accounts for
+    `byte_frac` or more of it is treated as data regardless of how cleanly
+    it decodes. Runs shorter than min_len are left to the other checks --
+    at that length "one byte value repeats" is not yet a meaningful signal
+    (e.g. a single legitimate 2-byte instruction with equal operand
+    bytes)."""
+    if len(raw) < min_len:
+        return False
+    common = Counter(raw).most_common(1)[0][1]
+    return (common / len(raw)) >= byte_frac
 
 
 def collect_span(lines, start_idx, size):
@@ -66,24 +117,56 @@ def main():
     ap.add_argument('--apply', action='store_true')
     ap.add_argument('--limit', type=int, default=None)
     ap.add_argument('--exclude-file', action='append', default=[])
+    ap.add_argument('--start', type=int, default=0,
+                     help='slice the candidate list (sorted by ROM address) '
+                          'starting at this index, BEFORE the expensive '
+                          'per-candidate unidasm classification loop -- '
+                          'unlike --limit, which only trims the ALREADY-'
+                          'classified accepted list.')
+    ap.add_argument('--count', type=int, default=None,
+                     help='classify at most this many candidates from '
+                          '--start onward (default: all remaining).')
+    ap.add_argument('--max-size', type=int, default=63,
+                     help='exclude any candidate run LARGER than this '
+                          '(default 63 = the <64 B "island" shape this '
+                          'lane owns, per the 2026-09-01 brief -- v7\'s '
+                          '>=64 B code-flanked runs are the CONFIRMED-'
+                          'REGION shape owned by a sibling lane\'s '
+                          'judge()/worklist pipeline, w7/v7regions2. '
+                          'Without this cap the unbounded byteblob scan '
+                          'below picks up ~876 of those too, which would '
+                          'double-count / collide with that lane\'s '
+                          'territory -- the same trap the census tool\'s '
+                          'own --max-island flag exists to avoid.')
     a = ap.parse_args()
 
     terr, blobs, rom = load('v7', a.work)
     tmp = tempfile.NamedTemporaryFile(suffix=".bin", delete=False).name
 
-    isl = [b for b in blobs if b["kind"] == "byteblob" and 0 < b["start"]
-           and b["end"] < SIZE and terr[b["start"] - 1] == 1 and terr[b["end"]] == 1]
-    print(f"v7: {len(isl):,} code-flanked byteblobs to classify")
+    isl_all = sorted(
+        (b for b in blobs if b["kind"] == "byteblob" and 0 < b["start"]
+         and b["end"] < SIZE and terr[b["start"] - 1] == 1 and terr[b["end"]] == 1
+         and b["size"] <= a.max_size),
+        key=lambda b: b["start"])
+    isl = isl_all[a.start:a.start + a.count] if a.count else isl_all[a.start:]
+    print(f"v7: {len(isl_all):,} code-flanked byteblobs total (<= {a.max_size} B, "
+          f"this lane's island territory); classifying slice "
+          f"[{a.start}:{a.start + len(isl)}) = {len(isl):,}")
 
     excluded_names = set(a.exclude_file)
     excluded_count = excluded_bytes = 0
     accepted = []
     counts = {}
     table_tail_rejects = 0
+    uniform_rejects = 0
     for b in isl:
         if os.path.basename(b["file"]) in excluded_names:
             excluded_count += 1
             excluded_bytes += b["size"]
+            continue
+        raw = rom[b["start"]:b["end"]]
+        if is_near_uniform_run(raw):
+            uniform_rejects += 1
             continue
         fr, ok = bounds_from_context(rom, terr, b["start"], b["end"], tmp)
         key = (fr, ok)
@@ -98,6 +181,8 @@ def main():
     if excluded_names:
         print(f"   (skipped {excluded_count} runs / {excluded_bytes} B in "
               f"excluded files: {sorted(excluded_names)})")
+    print(f"   ({uniform_rejects} rejected outright as a near-uniform byte "
+          f"run -- see is_near_uniform_run, never reaches unidasm)")
     print(f"   (of the tiling ones, {table_tail_rejects} also rejected as a "
           f"likely DATA-record tail -- see looks_like_a_table_tail)")
     print(f"=> {len(accepted):,} context-verified candidates (no reframing needed)")
