@@ -177,3 +177,61 @@ after merge.
 regions) were hand-audited as real DATA in the 2026-09-01 session and
 re-confirmed here; the only larger debt this census's `--judge` mode can
 still see is the `--islands` shape above, out of this lane's scope.
+
+## 2026-09-02 update: lane ISLANDS attempted both left-open shapes
+
+Lane ISLANDS of the 2026-09-01 parallel push (worktree
+`~/compartilhado/disasm-lanes/islands`, branch `w2/islands`) picked up both
+items this file left open, in parallel with lane V10CODE above (a
+coordination gap, not a plan -- see that section's provenance note: the two
+sessions' diffs on the 12 regions matched line-for-line, and V10CODE's is
+the one that reached `main` first, so `w2/islands` was rebased to drop its
+own copy of that work rather than duplicate it).
+
+**The `--islands` shape** (misframed runs, ~14,727 B/image) --
+`scripts/converters/fill_verified_islands.py`, reproducing this script's
+own `islands()` classification (decode forward from real established CODE
+up to 48 B earlier; accept only a run that tiles exactly, no reframing of
+anything outside it) plus an llvm-mc spellability check. First attempt
+(commit `69a26118`) excluded 7 files independently identified as DATA
+tables by their header comments and applied 283 "verified" runs (1,136 B).
+**A post-hoc audit by enclosing label found two real DATA tables had
+slipped through anyway** -- `TuningSystem_Handler_Table` (an arithmetic
+progression: `ldwio 10, N` / `ordm16_24 (M), xde` with N stepping by 40, M
+by 10240) and `SeBitmap_EnvCurve5` (a 5-record `{byte, 0x17, 0xf1}` table,
+first byte stepping by 12) -- in both cases only the table's LAST record
+happened to sit next to genuine code, so it alone tiled cleanly from
+context even though its siblings weren't even code-flanked. **Reverted the
+whole batch** (`cefe1854`) rather than trying to hand-pick the good ones out
+of 283.
+
+Added `looks_like_a_table_tail()`: reuses THIS file's own calibrated
+CODE/DATA rule (`per%` specifically) over a window spanning the candidate
+run and back into whatever precedes it -- a repeating record's periodicity
+only shows up once several records are in view, which the run-only tiling
+check cannot see. Re-ran: rejected 1,339 of 2,899 candidates (confirmed the
+two known-bad ones among them), applied 807 B (v10) / 801 B (v9) of the
+survivors, spot-checked by enclosing label afterward (varied, non-periodic
+content in every label sampled, including two more misnomers --
+`Flash_ExtendedOpsBlock`'s hits sit right after `reti`, i.e. they open the
+NEXT handler, not a table; `FileIO_BytecodeData` is an
+independently-documented misnomer already).
+
+One further candidate (`note_voice_mapping.s`, 6 B, v10 only -- its ROM
+bytes genuinely diverge from v9 at that address) turned out, once this
+branch was rebased onto `main`, to already be covered by lane
+`w4/postdec10`'s separate 332-run/1,274 B pass -- an empty diff after
+rebase, dropped rather than committed as a no-op.
+
+Remaining `--islands` debt (SPANS -- the true reframe shape, where the real
+instruction runs past the flanked `.byte` and consuming it means rewriting
+an already-existing following line too) was NOT attempted: ~9,757 runs in
+genuine-code context after exclusions, no tractable way to corroborate at
+that volume in the time available. `ctx_data`-context runs (lower
+confidence per this file's own top section) were also left alone.
+
+Net this lane's unique contribution: **807 B (v10) / 801 B (v9)** converted
+from misframed `.byte` to real instructions, on top of lane V10CODE's 12
+regions above, gate green throughout
+(`rebuilt_ROMs/kn5000_v{9,10}_program.llvm.rom` byte-identical to their
+originals after every commit).
