@@ -38139,7 +38139,190 @@ sub_F96C8A:   ; entry: branch/call in converted code
 	ld (XHL),WA                                          ; F96C9F  b3 50
 	djnz16 bc, .LF96C99                                  ; F96CA1  d9 1c f5
 	ret                                                  ; F96CA4  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016CA5, 0x0001E4
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016CA5, 0x000001
+; ---------------------------------------------------------------------
+; RamInitTable_F96CA6 -- 80 (address, value) pairs, split as two parallel
+; arrays: 80 LE32 RAM addresses here, then 80 LE16 values at 0xF96DE6.
+;
+; Evidence: sub_F96C8A (0xF96C8A) is the ONLY reader.  It sets
+;          XIY=0x00F96DE6, XIX=0x00F96CA6, BC=0x0050 (80), then loops
+;          `ld_spiw wa, 0xf5` / `ld_spil xhl, 0xf2` / `ld (XHL),WA` --
+;          0xF5 and 0xF2 are this file's own established selector bytes
+;          for `(XIY+)` and `(XIX+)` (see e.g. 0xFA7FB4's inline comment)
+;          -- i.e. WA = *(XIY)++ (a word from THIS array), XHL = *(XIX)++
+;          (a 32-bit address from the array below), then *(XHL) = WA.
+;          80 iterations consumes exactly 320 + 160 = 480 bytes, landing
+;          EXACTLY on 0xF96E86 -- three bytes short of the incbin's own
+;          end at 0xF96E89, which is the already-documented 1400-byte
+;          0x0E fill run.  So: init-time writer, RAM addresses here,
+;          their reset values in the sibling array.  What the fields
+;          at these addresses MEAN is not established; the layout is.
+; ---------------------------------------------------------------------
+RamInitTable_F96CA6_Addrs:
+	.long 0x00007620                                 ; F96CA6  [  0]
+	.long 0x00007632                                 ; F96CAA  [  1]
+	.long 0x00007640                                 ; F96CAE  [  2]
+	.long 0x00007660                                 ; F96CB2  [  3]
+	.long 0x00007680                                 ; F96CB6  [  4]
+	.long 0x000076a0                                 ; F96CBA  [  5]
+	.long 0x000076c0                                 ; F96CBE  [  6]
+	.long 0x000076e0                                 ; F96CC2  [  7]
+	.long 0x00007700                                 ; F96CC6  [  8]
+	.long 0x00007720                                 ; F96CCA  [  9]
+	.long 0x00007740                                 ; F96CCE  [ 10]
+	.long 0x00007760                                 ; F96CD2  [ 11]
+	.long 0x00007780                                 ; F96CD6  [ 12]
+	.long 0x000077a0                                 ; F96CDA  [ 13]
+	.long 0x000077c0                                 ; F96CDE  [ 14]
+	.long 0x000077e0                                 ; F96CE2  [ 15]
+	.long 0x00007800                                 ; F96CE6  [ 16]
+	.long 0x00007820                                 ; F96CEA  [ 17]
+	.long 0x00007840                                 ; F96CEE  [ 18]
+	.long 0x00007860                                 ; F96CF2  [ 19]
+	.long 0x00007880                                 ; F96CF6  [ 20]
+	.long 0x000078a0                                 ; F96CFA  [ 21]
+	.long 0x000078b0                                 ; F96CFE  [ 22]
+	.long 0x000078de                                 ; F96D02  [ 23]
+	.long 0x000078e0                                 ; F96D06  [ 24]
+	.long 0x00007900                                 ; F96D0A  [ 25]
+	.long 0x00007920                                 ; F96D0E  [ 26]
+	.long 0x00007940                                 ; F96D12  [ 27]
+	.long 0x00007960                                 ; F96D16  [ 28]
+	.long 0x00007980                                 ; F96D1A  [ 29]
+	.long 0x000079a0                                 ; F96D1E  [ 30]
+	.long 0x000079c0                                 ; F96D22  [ 31]
+	.long 0x000079e0                                 ; F96D26  [ 32]
+	.long 0x00007a00                                 ; F96D2A  [ 33]
+	.long 0x00007a20                                 ; F96D2E  [ 34]
+	.long 0x00007a40                                 ; F96D32  [ 35]
+	.long 0x00007a60                                 ; F96D36  [ 36]
+	.long 0x00007a80                                 ; F96D3A  [ 37]
+	.long 0x00007aa0                                 ; F96D3E  [ 38]
+	.long 0x00007ac0                                 ; F96D42  [ 39]
+	.long 0x00007ae0                                 ; F96D46  [ 40]
+	.long 0x00007b00                                 ; F96D4A  [ 41]
+	.long 0x00007b20                                 ; F96D4E  [ 42]
+	.long 0x00007b40                                 ; F96D52  [ 43]
+	.long 0x00007b60                                 ; F96D56  [ 44]
+	.long 0x00007b80                                 ; F96D5A  [ 45]
+	.long 0x00007ba0                                 ; F96D5E  [ 46]
+	.long 0x00007bc0                                 ; F96D62  [ 47]
+	.long 0x00007be0                                 ; F96D66  [ 48]
+	.long 0x00007c00                                 ; F96D6A  [ 49]
+	.long 0x00007c20                                 ; F96D6E  [ 50]
+	.long 0x00007c40                                 ; F96D72  [ 51]
+	.long 0x00007c60                                 ; F96D76  [ 52]
+	.long 0x00007c80                                 ; F96D7A  [ 53]
+	.long 0x00007ca0                                 ; F96D7E  [ 54]
+	.long 0x00007cc0                                 ; F96D82  [ 55]
+	.long 0x00007ce0                                 ; F96D86  [ 56]
+	.long 0x00007d00                                 ; F96D8A  [ 57]
+	.long 0x00007d20                                 ; F96D8E  [ 58]
+	.long 0x00007d40                                 ; F96D92  [ 59]
+	.long 0x00007d60                                 ; F96D96  [ 60]
+	.long 0x00007d80                                 ; F96D9A  [ 61]
+	.long 0x00007da0                                 ; F96D9E  [ 62]
+	.long 0x00007dc0                                 ; F96DA2  [ 63]
+	.long 0x00007de0                                 ; F96DA6  [ 64]
+	.long 0x00007e00                                 ; F96DAA  [ 65]
+	.long 0x00007e20                                 ; F96DAE  [ 66]
+	.long 0x00007e40                                 ; F96DB2  [ 67]
+	.long 0x00007e60                                 ; F96DB6  [ 68]
+	.long 0x00007e80                                 ; F96DBA  [ 69]
+	.long 0x00007ea0                                 ; F96DBE  [ 70]
+	.long 0x00007ec0                                 ; F96DC2  [ 71]
+	.long 0x00007ee0                                 ; F96DC6  [ 72]
+	.long 0x00007efe                                 ; F96DCA  [ 73]
+	.long 0x00007f00                                 ; F96DCE  [ 74]
+	.long 0x00007f10                                 ; F96DD2  [ 75]
+	.long 0x00007f30                                 ; F96DD6  [ 76]
+	.long 0x00007f48                                 ; F96DDA  [ 77]
+	.long 0x00007f58                                 ; F96DDE  [ 78]
+	.long 0x00007f7e                                 ; F96DE2  [ 79]
+; RamInitTable_F96CA6_Values -- the 80 LE16 values written to the
+; addresses in RamInitTable_F96CA6_Addrs above, same index, same loop.
+RamInitTable_F96CA6_Values:
+	.short 0x1078                                     ; F96DE6  [  0]
+	.short 0x0c60                                     ; F96DE8  [  1]
+	.short 0x1e61                                     ; F96DEA  [  2]
+	.short 0x1e62                                     ; F96DEC  [  3]
+	.short 0x1e63                                     ; F96DEE  [  4]
+	.short 0x1e00                                     ; F96DF0  [  5]
+	.short 0x1e20                                     ; F96DF2  [  6]
+	.short 0x1e01                                     ; F96DF4  [  7]
+	.short 0x1e21                                     ; F96DF6  [  8]
+	.short 0x1e02                                     ; F96DF8  [  9]
+	.short 0x1e22                                     ; F96DFA  [ 10]
+	.short 0x1e03                                     ; F96DFC  [ 11]
+	.short 0x1e23                                     ; F96DFE  [ 12]
+	.short 0x1e04                                     ; F96E00  [ 13]
+	.short 0x1e24                                     ; F96E02  [ 14]
+	.short 0x1e05                                     ; F96E04  [ 15]
+	.short 0x1e25                                     ; F96E06  [ 16]
+	.short 0x1e06                                     ; F96E08  [ 17]
+	.short 0x1e26                                     ; F96E0A  [ 18]
+	.short 0x1e07                                     ; F96E0C  [ 19]
+	.short 0x1e27                                     ; F96E0E  [ 20]
+	.short 0x0e92                                     ; F96E10  [ 21]
+	.short 0x2c79                                     ; F96E12  [ 22]
+	.short 0xffff                                     ; F96E14  [ 23]
+	.short 0x1e08                                     ; F96E16  [ 24]
+	.short 0x1e28                                     ; F96E18  [ 25]
+	.short 0x1e09                                     ; F96E1A  [ 26]
+	.short 0x1e29                                     ; F96E1C  [ 27]
+	.short 0x1e0a                                     ; F96E1E  [ 28]
+	.short 0x1e2a                                     ; F96E20  [ 29]
+	.short 0x1e0b                                     ; F96E22  [ 30]
+	.short 0x1e2b                                     ; F96E24  [ 31]
+	.short 0x1e0c                                     ; F96E26  [ 32]
+	.short 0x1e2c                                     ; F96E28  [ 33]
+	.short 0x1e0d                                     ; F96E2A  [ 34]
+	.short 0x1e2d                                     ; F96E2C  [ 35]
+	.short 0x1e0e                                     ; F96E2E  [ 36]
+	.short 0x1e2e                                     ; F96E30  [ 37]
+	.short 0x1e0f                                     ; F96E32  [ 38]
+	.short 0x1e2f                                     ; F96E34  [ 39]
+	.short 0x1e10                                     ; F96E36  [ 40]
+	.short 0x1e30                                     ; F96E38  [ 41]
+	.short 0x1e11                                     ; F96E3A  [ 42]
+	.short 0x1e31                                     ; F96E3C  [ 43]
+	.short 0x1e12                                     ; F96E3E  [ 44]
+	.short 0x1e32                                     ; F96E40  [ 45]
+	.short 0x1e13                                     ; F96E42  [ 46]
+	.short 0x1e33                                     ; F96E44  [ 47]
+	.short 0x1e14                                     ; F96E46  [ 48]
+	.short 0x1e34                                     ; F96E48  [ 49]
+	.short 0x1e15                                     ; F96E4A  [ 50]
+	.short 0x1e35                                     ; F96E4C  [ 51]
+	.short 0x1e16                                     ; F96E4E  [ 52]
+	.short 0x1e36                                     ; F96E50  [ 53]
+	.short 0x1e17                                     ; F96E52  [ 54]
+	.short 0x1e37                                     ; F96E54  [ 55]
+	.short 0x1e18                                     ; F96E56  [ 56]
+	.short 0x1e38                                     ; F96E58  [ 57]
+	.short 0x1e19                                     ; F96E5A  [ 58]
+	.short 0x1e39                                     ; F96E5C  [ 59]
+	.short 0x1e1a                                     ; F96E5E  [ 60]
+	.short 0x1e3a                                     ; F96E60  [ 61]
+	.short 0x1e1b                                     ; F96E62  [ 62]
+	.short 0x1e3b                                     ; F96E64  [ 63]
+	.short 0x1e1c                                     ; F96E66  [ 64]
+	.short 0x1e3c                                     ; F96E68  [ 65]
+	.short 0x1e1d                                     ; F96E6A  [ 66]
+	.short 0x1e3d                                     ; F96E6C  [ 67]
+	.short 0x1e1e                                     ; F96E6E  [ 68]
+	.short 0x1e3e                                     ; F96E70  [ 69]
+	.short 0x1e1f                                     ; F96E72  [ 70]
+	.short 0x1e3f                                     ; F96E74  [ 71]
+	.short 0x1c7a                                     ; F96E76  [ 72]
+	.short 0xffff                                     ; F96E78  [ 73]
+	.short 0x0e98                                     ; F96E7A  [ 74]
+	.short 0x1e99                                     ; F96E7C  [ 75]
+	.short 0x1680                                     ; F96E7E  [ 76]
+	.short 0x0e91                                     ; F96E80  [ 77]
+	.short 0x2493                                     ; F96E82  [ 78]
+	.short 0xffff                                     ; F96E84  [ 79]
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016E86, 0x000003
 ; 0xF96E89-0xF97400 -- 1400 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
 	.fill 1400, 1, 0x0E
@@ -40707,7 +40890,20 @@ sub_F99000:   ; entry: branch/call in converted code
 	xor C,C                                              ; F99004  cb d3
 	ldb a, 0x0c                                          ; F99006  21 0c
 	swi 7                                                ; F99008  ff
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x019009, 0x000008
+; ---------------------------------------------------------------------
+; sub_F99000's tail: a second SWI7 call (service 0x10) and the epilogue
+; matching its own entry push order.  reachability.py does not seed past
+; `swi 7` (treated as a possible non-returning trap), but this IS
+; fall-through: the pop order (XDE, XHL, XIX, XIZ) is exactly the reverse
+; of sub_F99000's entry (push XIZ, XIX, XHL, XDE at 0xF99000-0xF99003).
+; ---------------------------------------------------------------------
+	ldb a, 0x10                                          ; F99009  21 10
+	swi 7                                                ; F9900B  ff
+	pop XDE                                              ; F9900C  5a
+	pop XHL                                              ; F9900D  5b
+	pop XIX                                              ; F9900E  5c
+	pop XIZ                                              ; F9900F  5e
+	ret                                                  ; F99010  0e
 sub_F99011:   ; entry: branch/call in converted code
 	push XIZ                                             ; F99011  3e
 	ld XIZ,XSP                                           ; F99012  ef 8e
@@ -40717,7 +40913,15 @@ sub_F99011:   ; entry: branch/call in converted code
 	ldb c, 0x07                                          ; F99017  23 07
 	ldb a, 0x0c                                          ; F99019  21 0c
 	swi 7                                                ; F9901B  ff
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x01901C, 0x000005
+; sub_F99011's epilogue after its own `swi 7` -- same reasoning as
+; sub_F99000's tail just above: reachability.py does not seed past a
+; trap instruction, but this is the fall-through matching the entry's
+; push order (push XIZ, XIX, XHL, XDE at 0xF99011-0xF99016).
+	pop XDE                                              ; F9901C  5a
+	pop XHL                                              ; F9901D  5b
+	pop XIX                                              ; F9901E  5c
+	pop XIZ                                              ; F9901F  5e
+	ret                                                  ; F99020  0e
 ; ==============================================================================
 ; 0xF99021-0xFA1403 -- ★ THE UI SCREEN BLOCK: 34,787 bytes that draw screens and
 ; touch no device at all
@@ -54286,6 +54490,21 @@ sub_FA1304:
 ; Boundaries: notes/reachability.py's walk, frozen against this file's own output.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
+;
+; ★ FOLLOW-UP 2026-09-02 (lane PROMASECOND): the two gaps at 0xFA1428 (10 B) and
+; 0xFA146F (87 B) were part of the "16021 bytes that nothing reaches" figure
+; above, NOT of the separate 701-byte "outside CODE_BLOCKS" list -- they sit
+; INSIDE notes/prom_a_fa1404_identify.py's own CODE_HEAD_A/JUMPTAB/CODE_HEAD_B
+; partition, which that file's `code_blocks()` decodes with a PROVEN boundary
+; (decode reaches the stated end exactly, no `db`) and `--selftest` (23/23)
+; already checked before this file existed.  round 1's static walk missed them
+; because they are reached only through the computed jump `jp (xbc)` at
+; 0xFA146D -- a dynamic dispatch no linear/seed walk follows -- not because
+; their content was in doubt.  Converted straight from that tool's own decode,
+; byte-compared against the ROM by the gate.  0xFA146F's jump table is 7 LE32
+; entries read by exactly that dispatch; JUMPTAB in the same tool gives the
+; identical partition.  16021 -> 15924 bytes of this span remain undecided
+; after this follow-up.
 sub_FA1404:   ; entry: reachable-run entry
 	push XBC                                             ; FA1404  39
 	lda_24 xwa, (0xfa2fb9)                               ; FA1405  f2 b9 2f fa 30
@@ -54300,7 +54519,9 @@ sub_FA1404:   ; entry: reachable-run entry
 	inc 0,XSP                                            ; FA1423  ef 60
 	inc 0,XSP                                            ; FA1425  ef 60
 	ret                                                  ; FA1427  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x021428, 0x00000A
+	m_set 1, MD16, 0x2071                                ; FA1428  f1 71 20 b9
+	stdi8 (0x2070), 0x01                                 ; FA142C  f1 70 20 00 01
+	ret                                                  ; FA1431  0e
 sub_FA1432:   ; entry: reachable-run entry
 	ldb_d8 c, (0x28b0)                                   ; FA1432  c1 b0 28 23
 	and C,0x01                                           ; FA1436  cb cc 01
@@ -54326,7 +54547,40 @@ sub_FA1432:   ; entry: reachable-run entry
 	add XBC,0x00fa146f                                   ; FA1465  e9 c8 6f 14 fa 00
 	ld XBC,(XBC)                                         ; FA146B  a1 21
 	jp (xbc)                                             ; FA146D  b1 d8
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x02146F, 0x000057
+JumpTable_FA146F:
+	.long 0x00fa148b                                 ; FA146F  [  0]
+	.long 0x00fa1499                                 ; FA1473  [  1]
+	.long 0x00fa149f                                 ; FA1477  [  2]
+	.long 0x00fa14ac                                 ; FA147B  [  3]
+	.long 0x00fa14b2                                 ; FA147F  [  4]
+	.long 0x00fa14bc                                 ; FA1483  [  5]
+	.long 0x00fa14c2                                 ; FA1487  [  6]
+sub_FA148B:   ; entry: jump-table target (JumpTable_FA146F[0])
+	call 0xf40034                                        ; FA148B  1d 34 00 f4
+	call 0xf40a00                                        ; FA148F  1d 00 0a f4
+	call 0xf43450                                        ; FA1493  1d 50 34 f4
+	jr .LFA14A7                                       ; FA1497  68 0e
+; entry: jump-table target (JumpTable_FA146F[1])
+	call 0xf43440                                        ; FA1499  1d 40 34 f4
+	jr sub_FA14C6                                     ; FA149D  68 27
+; entry: jump-table target (JumpTable_FA146F[2])
+	call 0xf415c4                                        ; FA149F  1d c4 15 f4
+	call 0xf43444                                        ; FA14A3  1d 44 34 f4
+.LFA14A7:
+	calr sub_FA0DCC                                      ; FA14A7  1e 22 f9
+	jr sub_FA14C6                                     ; FA14AA  68 1a
+; entry: jump-table target (JumpTable_FA146F[3])
+	call 0xf4077c                                        ; FA14AC  1d 7c 07 f4
+	jr sub_FA14C6                                     ; FA14B0  68 14
+; entry: jump-table target (JumpTable_FA146F[4])
+	call 0xf41048                                        ; FA14B2  1d 48 10 f4
+	call 0xf4104c                                        ; FA14B6  1d 4c 10 f4
+	jr sub_FA14C6                                     ; FA14BA  68 0a
+; entry: jump-table target (JumpTable_FA146F[5])
+	call 0xf41050                                        ; FA14BC  1d 50 10 f4
+	jr sub_FA14C6                                     ; FA14C0  68 04
+; entry: jump-table target (JumpTable_FA146F[6])
+	call 0xf40a18                                        ; FA14C2  1d 18 0a f4
 sub_FA14C6:   ; entry: reachable-run entry
 	m_and_mi8 MB16, 0x2075, 0x6f                         ; FA14C6  c1 75 20 3c 6f
 	stdi8 (0x2880), 0x23                                 ; FA14CB  f1 80 28 00 23
@@ -59746,7 +60000,63 @@ SeqBuf_AppendMarker_XIX:
 	inc 1,HL                                      ; FA5706  db 61
 	st_dd8w hl, 0xac                              ; FA5708  f0 ac 53
 	ret                                           ; FA570B  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x02570C, 0x000057
+; ---------------------------------------------------------------------
+; SeqBuf_AppendEvent_XIX -- a second copy of SeqBuf_AppendEvent
+;
+; Called from: NOTHING NAMES IT (as SeqBuf_AppendEvent itself; searched by
+;          notes/prom_a_ringbuf_map.py, same negative).
+; Inputs/Outputs: as SeqBuf_AppendEvent -- two bytes appended to ring
+;          0x600A14.
+; Evidence: notes/FINDINGS-prom_a-ring-buffers.md section 3 and
+;          notes/prom_a_byte_checks.py ("SeqBuf twins:") establish this is
+;          an INDEPENDENTLY WRITTEN twin of SeqBuf_AppendEvent (0xF830C6),
+;          not a near-duplicate differing by one byte -- that earlier claim
+;          was retracted 2026-08-25 (round-2 audit, F1).  75 of the 90
+;          positional bytes differ.  What is identical below is transcribed
+;          from SeqBuf_AppendEvent verbatim; what differs is transcribed
+;          from SeqBuf_AppendMarker_XIX immediately above -- the proven
+;          XIX idiom for this same 0x600A14 ring -- and from this file's
+;          own established `push SR`/`ei 0x06`/`pop SR` and
+;          `decm N,(reg+disp)` spellings.  Differences from
+;          SeqBuf_AppendEvent (full table in the header there):
+;            base register     XIX, not XIY
+;            critical section  push SR / ei 0x06 .. pop SR, not push/pop XIY
+;            free count        ONE decm 0x02,(xix-2), not TWO decm 0x01,(xiy-2)
+;            write cursor      ld (xix-4),hl (indexed), not ld (0x600a10),hl
+;            guard cell        (0x600a0c), the READ cursor, not (0x600a12)
+;            trace path        ld XIX,0x000000ae + XIX-relative store, once;
+;                              not extz XHL + XHL-relative, twice (2nd dead)
+; ---------------------------------------------------------------------
+SeqBuf_AppendEvent_XIX:
+	bit_dd8 0x00, 0xaa                                   ; FA570C  f0 aa c8
+	jr nz, SeqBuf_AppendEvent_XIX__trace                 ; FA570F  6e 35
+	m_cp_mi16 MW24, 0x600a0c, 0x0002                     ; FA5711  d2 0c 0a 60 3f 02 00
+	jr c, SeqBuf_AppendEvent_XIX__drop                   ; FA5718  67 27
+	push SR                                              ; FA571A  02
+	ei 0x06                                              ; FA571B  06 06
+	ld XIX,0x00600a14                                    ; FA571D  44 14 0a 60 00
+	ld hl, (xix-4)                                       ; FA5722  9c fc 23
+	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FA5725  f3 07 f0 ec 41
+	minc1_16 hl, 0x01ff                                  ; FA572A  db 38 ff 01
+	ld_sd8b a, 0x93                                      ; FA572E  c0 93 21
+	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FA5731  f3 07 f0 ec 41
+	minc1_16 hl, 0x01ff                                  ; FA5736  db 38 ff 01
+	ld (xix-4), hl                                       ; FA573A  bc fc 53
+	decm 0x02, (xix-2)                                   ; FA573D  9c fe 6a
+	pop SR                                               ; FA5740  03
+SeqBuf_AppendEvent_XIX__drop:
+	ldwio 0xac, 0x00                                     ; FA5741  0a ac 00 00
+	ret                                                  ; FA5745  0e
+SeqBuf_AppendEvent_XIX__trace:
+	ld XIX,0x000000ae                                    ; FA5746  44 ae 00 00 00
+	m_ld_rm MW8, 0xac, r3                                ; FA574B  d0 ac 23
+	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FA574E  f3 07 f0 ec 41
+	inc 1,HL                                             ; FA5753  db 61
+	ld_sd8b a, 0x93                                      ; FA5755  c0 93 21
+	mx_st_mr8 MXD, ra_IX, ra_HL, r1                      ; FA5758  f3 07 f0 ec 41
+	inc 1,HL                                             ; FA575D  db 61
+	st_dd8w hl, 0xac                                     ; FA575F  f0 ac 53
+	ret                                                  ; FA5762  0e
 
 ; ==============================================================================
 ; 0xFA5763-0xFA5941 -- the MIDI input parser, its register context, and the
