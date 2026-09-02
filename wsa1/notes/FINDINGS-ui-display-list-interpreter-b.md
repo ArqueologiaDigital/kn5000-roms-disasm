@@ -167,6 +167,14 @@ but left as `.incbin`: `"FIX MOVE"` at `0xF03478`, `"OFF ON"` at `0xF034D2`,
 `"PT1".."PT8"`, `"ON OFF"`, `"OFFON "`, `"...PART3PART4PART5PART6PART7PART8"`,
 `"TR13".."TR16"`, `"...R53R54R55R56R57R58R59R60R61R62R63"`.
 
+⚠ Stale in part as of 2026-09-02: `"PT1".."PT8"`, `"ON OFF"` and `"OFFON "` —
+the three tables around `0xF286A2`—`0xF286F8` — are no longer `.incbin`.
+Lane res3xx framed them together with the three opcode-07 records that
+name them (`notes/gen_prom_b_res3xx_spans.py`). The gap did tile exactly
+after all; what did not fit was the 426-byte extent the reachability walk
+had given `Data_F28522`, which had swallowed the first record. The rest of
+the sentence still stands.
+
 ## The five call sites whose lists do not frame
 
 Un-merged, 243 of 244 interpreter-A sites and 158 of 162 interpreter-B sites walk
@@ -193,6 +201,17 @@ which is past `XIX = 0xF3B65B`, and the loop test `cp XIX,XIY / jr ULE` stops.
 So the machine draws the record and stops; only a walker that insists on landing
 *exactly* on the end address calls this a failure. It is the only record in the
 image whose length byte over-declares.
+
+★ Confirmed and now written into the source (2026-09-02, lane res3xx). The
+general form of the reading above is that a record has **two** sizes: the
+ADVANCE at `+1`, which the interpreter adds to XIY for every opcode without
+looking at the opcode (`ld A,(XIY+0x01)` at `0xF31B15`), and the EXTENT,
+which is the highest byte the handler touches plus one. They agree for every
+record in the image except this one. `0xF3B651` is therefore 10 bytes of
+data, `0xF3B651-0xF3B65A`, and `DL_F3B65B` starts exactly where prom_b
+`0xF7E79E` says it does. That was lane promB6's open question — either op
+`0x00` does not carry its length at `+1`, or `DL_F3B65B` is off by one — and
+the answer is neither.
 
 The other four start inside data that a **neighbouring, correctly framing record
 points at**:
@@ -278,3 +297,19 @@ spliced them earlier. The cost merging *had* is described correctly; the
 consequence has since been paid off.
 
 Reproduce: `python3 notes/gen_promB5_spans.py --selftest`.
+
+## UPDATE 2026-09-02 — five more residue spans are source (lane res3xx)
+
+`notes/gen_prom_b_res3xx_spans.py` converts 106 of the 481 verbatim bytes
+`notes/FINDINGS-prom_b-last-481-bytes.md` catalogued: `0xF286CC`+45,
+`0xF32A00`+9, `0xF34350`+17, `0xF3A443`+30 and `0xF3B656`+5. All five are
+interpreter-B records plus the operand tables their `+0x07` pointers name, and
+in four of the five the span had been cut mid-record by a neighbouring `Data_`
+object declared too long: `Data_F28522` 426 → 384 B, `Data_F32992` 110 → 104 B,
+`Data_F3434C` and `Data_F3A43E` absorbed whole.
+
+The boundaries come from outside the bytes in every case — a `ld XIY`/`ld XIX`
+immediate in converted code, a framed neighbour's own `(pointer, width, mask)`
+declaration, or an already-framed list start the tiling has to close onto.
+`--selftest` asserts all 64 of those facts against the ROM. prom_b's verbatim
+residue goes 481 B / 16 spans → 375 B / 11 spans.
