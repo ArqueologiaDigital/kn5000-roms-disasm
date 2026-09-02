@@ -59,3 +59,33 @@ tell a genuine short instruction from a coincidental one that happens to tile to
 the exact length. ⚠ Even so, tiling is not proof that the bytes are code: a
 wrong frame reproduces the same bytes and the gate cannot object. Corroborate
 with call targets before converting.
+
+## convert_flash_record_stream.py
+
+Types 0xF15907-0xF1612F in `v10/maincpu/storage/flash_floppy_handlers.s` as the
+`[flags:u8][len:u8]` record stream it is, rather than the instructions it was
+written as. Reads every byte from `original_ROMs/` and refuses to write unless
+its own emission equals the ROM. Evidence:
+`scripts/analysis/lane_v10storage_record_stream_evidence.py`.
+
+    python3 scripts/converters/convert_flash_record_stream.py --dry-run
+
+## convert_v10storage_islands.py
+
+Spells one-instruction `.byte` islands in this lane's six v10 directories as
+instructions, only where a linear unidasm walk from the enclosing entry point
+puts a boundary at both ends and llvm-mc reproduces the exact bytes. Carries a
+stale-address-map guard that demands the ROM byte equal the byte the source line
+itself states -- a batch of conversions was already reverted for want of it.
+
+    python3 scripts/analysis/address_line_map.py --dump /tmp/amap.json
+    python3 scripts/converters/convert_v10storage_islands.py /tmp/amap.json --dry-run
+
+## convert_flash_se_setup_descriptors.py
+
+Wires `se_setup_editor_full.c` and `se_setup_sel4.c` -- committed, typed, and
+byte-exact, but never listed in the Makefile's SE_NAMES -- into the build, and
+replaces the 276 bytes they describe in `flash_floppy_handlers.s` with `.incbin`
+of the compiled descriptors.
+
+    python3 scripts/converters/convert_flash_se_setup_descriptors.py /tmp/amap.json --dry-run

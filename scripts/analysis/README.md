@@ -186,3 +186,12 @@ against a 1.0% measured null.
 undecoded" region left in the tree -- actually undecoded?
 
     python3 scripts/analysis/adjudicate_groupbox_ssf_marker.py
+
+## lane_v10storage_island_feasibility.py
+
+*What question does it answer?* Of this lane's code-as-`.byte` runs, how many
+hold exactly one instruction, how many are mis-framed fragments of a longer one,
+and which instruction forms the assembler cannot spell?
+
+    python3 scripts/analysis/address_line_map.py --dump /tmp/amap.json
+    python3 scripts/analysis/lane_v10storage_island_feasibility.py /tmp/amap.json
