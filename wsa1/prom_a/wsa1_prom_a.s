@@ -38535,7 +38535,11 @@ sub_F96C65:   ; entry: branch/call in converted code
 	and (XIX),A                                          ; F96C75  84 c9
 	djnz16 bc, .LF96C6D                                  ; F96C77  d9 1c f3
 	ret                                                  ; F96C7A  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016C7B, 0x00000F
+ReservedRecordTable_F96C7B:   ; 3 x 5-byte (addr32,mask8) records, read by sub_F96C65 (above) which processes only record 0
+	.long 0x00007f32   ; F96C7B  record 0 addr
+	.byte 0xfb         ; F96C7F  record 0 mask
+	.long 0x00000000, 0x00000000   ; F96C80  records 1-2 addr, unused/reserved
+	.byte 0x00, 0x00   ; F96C88  records 1-2 mask, unused/reserved
 sub_F96C8A:   ; entry: branch/call in converted code
 	ld XIY,0x00f96de6                                    ; F96C8A  45 e6 6d f9 00
 	ld XIX,0x00f96ca6                                    ; F96C8F  44 a6 6c f9 00
@@ -38546,7 +38550,8 @@ sub_F96C8A:   ; entry: branch/call in converted code
 	ld (XHL),WA                                          ; F96C9F  b3 50
 	djnz16 bc, .LF96C99                                  ; F96CA1  d9 1c f5
 	ret                                                  ; F96CA4  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016CA5, 0x000001
+; 0xF96CA5 -- 1 B of 0x0E (this file's own erased-flash/RET-padding value), between sub_F96C8A's ret and RamInitTable_F96CA6_Addrs.
+	.fill 1, 1, 0x0E   ; F96CA5
 ; ---------------------------------------------------------------------
 ; RamInitTable_F96CA6 -- 80 (address, value) pairs, split as two parallel
 ; arrays: 80 LE32 RAM addresses here, then 80 LE16 values at 0xF96DE6.
@@ -38729,11 +38734,22 @@ RamInitTable_F96CA6_Values:
 	.short 0x0e91                                     ; F96E80  [ 77]
 	.short 0x2493                                     ; F96E82  [ 78]
 	.short 0xffff                                     ; F96E84  [ 79]
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016E86, 0x000003
+; 0xF96E86-0xF96E89 -- 3 B, unclassified.  RamInitTable_F96CA6's own
+; header comment already proves its 480 B end exactly here, so these
+; bytes are NOT part of either array.  No reader anywhere in the ROM
+; cites this address (checked: 0 raw pointer hits).  Left untyped.
+Unclassified_F96E86:
+	.byte 0x24, 0xff, 0xff   ; F96E86
 ; 0xF96E89-0xF97400 -- 1400 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
 	.fill 1400, 1, 0x0E
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x017401, 0x000017
+; 0xF97401-0xF97418 -- 23 B, unclassified.  Bounded by the already-
+; verified 1400 B 0x0E fill run (ends exactly here) and sub_F97418
+; (starts exactly at the far end).  Not a clean tile of the fill
+; (mostly zero, one 0x0E every 4th byte, and 23 is not a multiple
+; of 4) and no reader anywhere in the ROM cites this address.
+Unclassified_F97401:
+	.byte 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00, 0x0e, 0x00, 0x00, 0x00   ; F97401
 sub_F97418:   ; entry: reachable-run entry
 	push XIZ                                             ; F97418  3e
 	push XIX                                             ; F97419  3c
