@@ -66,6 +66,7 @@ import tier2_byte_split_census as C          # noqa: E402
 TAG = "hdae5000"
 BASE, LENGTH = 0x280000, 0x80000
 MIN_RUN = 24                 # bytes; a shorter island is not a "region"
+MIN_INTERLEAVE = 0.30        # of a region's bytes already written as data
 W_SCORE = None               # runs are scored at their own length
 UNI_LINE = re.compile(r'^\s*([0-9a-fA-F]{4,8}):\s+((?:[0-9a-fA-F]{2} )+)\s*(\S+)\s*(.*)$')
 FLOW = {"jr", "jrl", "jp", "call", "calr", "djnz"}
@@ -75,45 +76,59 @@ DECNUM = re.compile(r'\b(\d{6,8})\b')
 
 
 def code_regions(amap):
-    """[(rel, line, name, start, size)] -- one region per LABEL, running from
-    the label to the next label (or to the first data directive after it),
-    counting only bytes that are INSTRUCTIONS in the source.
+    """[(rel, line, name, start, size, instr_bytes)] -- one region per LABEL,
+    running to the NEXT LABEL, for every region that contains at least one
+    instruction line.
 
-    ⚠ THE GRANULARITY IS THE POINT, and the first version of this tool got it
-    wrong. Merging maximal runs of instruction lines gave 15 regions for the
-    whole image, one of them 50 KB: a 6,356 B data island inside such a run is
-    invisible, because SOMETHING in a 50 KB span is always called. The
-    calibration case this census exists to generalise --
-    HDAE5000_RECORD_TABLE -- is a LABELLED region, and so is every other
-    object the tree names. Labels are therefore the unit.
+    ⚠ TWO GRANULARITY MISTAKES, both caught by a region this missed.
+
+    First version: maximal runs of instruction LINES, merged. That gave 15
+    regions for the whole image, one of them 50 KB -- and something in a 50 KB
+    span is always called, so a data island inside one is invisible.
+
+    Second version: label to the next label OR the first data directive,
+    whichever came first. That splits a region whose data-as-code framing is
+    INTERLEAVED -- mnemonics, then a short `.byte` the decoder refused, then
+    more mnemonics -- into dozens of sub-24-byte fragments that every test
+    then declines to examine. `HDAE5000_Char_Tables` (0x2E2E76, 1,561 B, 353
+    data lines interleaved with 295 instruction lines, an ascending byte ramp
+    with no call or jump into it anywhere) fell straight through that gap, and
+    it is exactly what this census exists to find. Interleaving is the
+    SIGNATURE of the defect, not a reason to stop looking.
+
+    So a region now runs label to label, and its size counts every byte in
+    between; `instr_bytes` records how much of it the source frames as
+    instructions.
     """
     out = []
     for rel in C.source_files(TAG):
         lines = open(os.path.join(ROOT, TAG, rel), encoding="latin-1").read().split("\n")
         ad = amap[rel]
-        cur = None
+        marks = []
         for i in range(1, len(ad) - 1):
-            if ad[i] is None or ad[i + 1] is None:
+            if ad[i] is None:
                 continue
-            txt = lines[i - 1] if i - 1 < len(lines) else ""
-            m = C.LABEL_DEF.match(txt)
+            m = C.LABEL_DEF.match(lines[i - 1] if i - 1 < len(lines) else "")
             if m:
-                if cur and cur[4] > 0:
-                    out.append(tuple(cur))
-                cur = [rel, i, m.group(1), ad[i], 0]
-                if not txt.split(":", 1)[1].strip():
+                marks.append((i, m.group(1), ad[i]))
+        end_of_file = max((a for a in ad if a is not None), default=None)
+        for k, (i, nm, a) in enumerate(marks):
+            stop_line = marks[k + 1][0] if k + 1 < len(marks) else len(ad) - 1
+            stop_addr = marks[k + 1][2] if k + 1 < len(marks) else end_of_file
+            if stop_addr is None or stop_addr <= a:
+                continue
+            ib = 0
+            for j in range(i, stop_line):
+                if ad[j] is None or ad[j + 1] is None:
                     continue
-            sz = ad[i + 1] - ad[i]
-            if sz == 0 or cur is None:
-                continue
-            if C.LINE_DIR.match(txt):
-                if cur[4] > 0:
-                    out.append(tuple(cur))
-                cur = None
-                continue
-            cur[4] += sz
-        if cur and cur[4] > 0:
-            out.append(tuple(cur))
+                sz = ad[j + 1] - ad[j]
+                if sz == 0:
+                    continue
+                t = lines[j - 1] if j - 1 < len(lines) else ""
+                if not C.LINE_DIR.match(t):
+                    ib += sz
+            if ib:
+                out.append((rel, i, nm, a, stop_addr - a, ib))
     return out
 
 
@@ -229,7 +244,7 @@ def main():
 
     called, addr_only, unref = [], [], []
     for r in runs:
-        _rel, _l0, _nm, st, sz = r
+        _rel, _l0, _nm, st, sz, _ib = r
         if any(a in tgts for a in range(st, st + sz)):
             called.append(r)
         elif any(a in refs for a in range(st, st + sz)):
@@ -353,7 +368,7 @@ def main():
         return (",".join(kinds[:3]), frac) if frac >= COVER else None
 
     def no_exit(r):
-        rel, l0, _nm, st, sz = r
+        rel, l0, _nm, st, sz, _ib = r
         ls = open(os.path.join(ROOT, TAG, rel), encoding="latin-1").read().split("\n")
         ad = amap[rel]
         i = l0
@@ -375,30 +390,41 @@ def main():
           % (both_fp, len(called), 100.0 * both_fp / len(called)))
 
     print()
-    print("CANDIDATES -- framed as code, NEVER the target of a call or jump")
-    findings = []
-    for r in addr_only + unref:
-        c = content(r)
-        x = no_exit(r)
-        s, t = coherence(r[3] - BASE, r[4])
-        if c or x or (s is not None and s < floor):
-            findings.append((r, c, x, s))
-    print("   %d of the %d candidate regions carry a second signal, %d B"
-          % (len(findings), len(addr_only) + len(unref),
-             sum(f[0][4] for f in findings)))
-    strong = [f for f in findings if f[1] and f[2]]
-    print("   of which %d carry BOTH content and no-exit, %d B  <- the findings"
-          % (len(strong), sum(f[0][4] for f in strong)))
-    for r, c, x, sc in sorted(strong, key=lambda f: -f[0][4])[:nlist or 40]:
-        rel, l0, nm, st, sz = r
-        print("      %-24s %-24s 0x%06X %6d B  %3.0f%% structured  %s"
-              % (rel[:24], nm[:24], st, sz, 100 * c[1], c[0][:34]))
-    if not strong:
-        print("      (none)")
+    print("THE FINDING RULE -- and it is not the content test")
+    print("   ⚠ The content test above cannot decide a region whose data is")
+    print("   MIXED (records, then strings, then a byte ramp): no single signal")
+    print("   owns enough of it. HDAE5000_Char_Tables covers only 5%, and it is")
+    print("   the clearest data-as-code region in the image. What separates")
+    print("   cleanly is the INTERLEAVE: the fraction of a region's bytes the")
+    print("   source ALREADY writes as data directives. A misframed data region")
+    print("   is mostly typed already, with mnemonics scattered through it")
+    print("   wherever the original force-disassembly found something it liked.")
+    print("   Rule: nothing calls or jumps into the region, AND >= %.0f%% of its"
+          % (100 * MIN_INTERLEAVE))
+    print("   bytes are already data directives.")
+    big = [r for r in runs if r[4] >= 64]
+    bcalled = [r for r in big if any(a in tgts for a in range(r[3], r[3] + r[4]))]
+    bcand = [r for r in big if r not in bcalled]
+
+    def interleave(r):
+        return 1.0 - r[5] / float(r[4])
+
+    fp = sum(1 for r in bcalled if interleave(r) >= MIN_INTERLEAVE)
+    print("   NULL: %d of %d proven-called regions of >= 64 B would be flagged"
+          % (fp, len(bcalled)))
+    print("         = %.2f%% false positive" % (100.0 * fp / len(bcalled)
+                                                if bcalled else 0.0))
+    hits = [r for r in bcand if interleave(r) >= MIN_INTERLEAVE]
     print()
-    print("   the remaining %d single-signal candidates are NOT reported as"
-          % (len(findings) - len(strong)))
-    print("   findings: one signal at these false-positive rates is not enough.")
+    print("FINDINGS: %d regions, %d B of region, %d B of it framed as CODE"
+          % (len(hits), sum(r[4] for r in hits), sum(r[5] for r in hits)))
+    for r in sorted(hits, key=lambda r: -r[5])[:nlist or 20]:
+        rel, l0, nm, st, sz, ib = r
+        print("      %-32s 0x%06X %6d B  %3.0f%% already data, %d B as code"
+              % (nm[:32], st, sz, 100 * interleave(r), ib))
+    if not hits:
+        print("      (none -- converted by "
+              "hdae5000/tools/convert_misframed_data_regions.py)")
     return 0
 
 
