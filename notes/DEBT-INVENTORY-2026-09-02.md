@@ -200,6 +200,25 @@ spellings assemble to — the one thing this backend forbids. It is therefore a
 **warning**, added in `TLCS900MCCodeEmitter.cpp`, naming the signed spelling to
 use.
 
+## ⚠ A recurring sizing defect worth hunting in other images
+
+Found three times in `prom_b` on 2026-09-02, each time by a different span. An
+earlier coverage round sized several `Data_Fxxxxxx` reachability objects **2 to
+83 bytes TOO LARGE**, so each silently swallowed the leading records of the
+display list beginning immediately after it. The symptom is invisible: the
+oversized object looks like ordinary unconverted data, and the truncated list
+looks like it simply starts later.
+
+The fix each time was to shrink the object back to its independently verifiable
+extent — a coordinate or pointer table with recomputable structure — and walk
+from the recovered boundary, which then lands with **zero drift** on a neighbour
+that is already call-site documented or already converted. That zero-drift
+landing is the corroboration; without it the shrink would be a guess.
+
+**1,890 B recovered in prom_b this way.** Nobody has looked for the same shape
+in prom_a, v10 or the KN5000 data images, and the generating pass was not
+prom_b-specific.
+
 ## Where the next pass should aim
 
 1. ~~A round-trip generator for table_data's six BMPs~~ — **DONE, as a refusal:
