@@ -688,6 +688,9 @@ def bitops(img, sfr):
     return r
 
 
+DATAPORT_WRITE = bytes([0x8E, 0x08, 0x19, 0x13, 0x00])  # ld (0x0013),(XIZ+0x08)
+
+
 def count(img, pat):
     n, i = 0, 0
     while True:
@@ -707,6 +710,22 @@ def cmd_transport():
             ("WSA1R prom_a (CPU 1)", open(WS_A, "rb").read()),
             ("WSA1R prom_b (CPU 1)", open(WS_B, "rb").read()),
             ("WSA1R prom_d", open(WS_D, "rb").read())]
+
+    print("\n  WHICH IMAGE CARRIES THE BYTE TRANSPORT AT ALL")
+    print("  The data-port write, spelt `ld (0x0013),(XIZ+0x08)` = 8E 08 19 13 00.")
+    for nm, img in imgs[1:]:
+        print(f"    {nm:>22}  {img.count(DATAPORT_WRITE):>3} site(s)")
+    print("  -> only CPU 2 drives it; CPU 1's two EPROMs have none.")
+
+    print("\n  ARE THE TWO PRODUCTS' TRANSPORTS THE SAME CODE?  NO.")
+    ws_send = WC[0xF9A163 - WS_BASE:0xF9A319 - WS_BASE]
+    best = max((L for L in range(4, 33)
+                if any(ws_send[i:i + L] in KN
+                       for i in range(len(ws_send) - L))), default=0)
+    print(f"    longest run of P7Byte_SendCmd (439 B) occurring anywhere in the")
+    print(f"    KN5000 Sub CPU ROM, searched up to 32 bytes: {best} bytes.")
+    print("    Two separately written drivers -- which is what makes anything")
+    print("    they AGREE about evidence rather than a shared source file.")
 
     print("\n  THE 0x1F40 TIMEOUT LITERAL -- 8000 poll iterations")
     print("  UPPER BOUND: a 16-bit literal can occur inside data.  The zeroes "
@@ -983,6 +1002,10 @@ def selftest():
         "every WSA1R arm emits exactly ONE command byte")
 
     print("\nTransport")
+    chk(open(WS_A, "rb").read().count(DATAPORT_WRITE) == 0
+        and open(WS_B, "rb").read().count(DATAPORT_WRITE) == 0
+        and WC.count(DATAPORT_WRITE) == 9,
+        "the 9 data-port writes are all in prom_c; CPU 1 has none")
     chk(count(KN, bytes([0x08, 0x46, 0x07])) >= 1,
         "the KN5000 payload writes PHCR := 0x07 (PH0 an OUTPUT)")
     chk(count(WC, bytes([0x40, 0x1F])) >= 18,

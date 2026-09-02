@@ -16,7 +16,7 @@ Selftests:
 ```
 python3 notes/sound/kn5000_sound_boundary.py --selftest      # 11 invariants
 python3 notes/sound/kn5000_unspellable_forms.py --selftest   # the work list is the test
-python3 notes/sound/dsp_protocol_cross_product.py --selftest # 24 invariants, incl.
+python3 notes/sound/dsp_protocol_cross_product.py --selftest # 28 invariants, incl.
                                                              # figures published in
                                                              # the wsa1/ notes
 ```
