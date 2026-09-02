@@ -23018,7 +23018,68 @@ MemCopyWords:
 	ldirw                                         ; F8E6F6  95 11
 	pop XIX                                       ; F8E6F8  5c
 	ret                                           ; F8E6F9  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00E6FA, 0x0000D3
+; ---------------------------------------------------------------------
+; 0xF8E6FA-0xF8E77C (130 B) -- CONVERTED, see
+; notes/FINDINGS-prom_a-f8e6fa-boundary.md.  0xF8E77C-0xF8E7CD (81 B)
+; REMAINS .incbin below, refused: no reader in the ROM cites it and the
+; apparent pointer table's own alignment breaks partway through.
+; ---------------------------------------------------------------------
+	ret                                           ; F8E6FA  0e
+	push XIX                                      ; F8E6FB  3c
+	ld BC,(XSP+0x10)                              ; F8E6FC  9f 10 21
+	ld XIY,(XSP+0x08)                             ; F8E6FF  af 08 25
+	ld XIX,(XSP+0x0c)                             ; F8E702  af 0c 24
+	bit 0x00,BC                                   ; F8E705  d9 33 00
+	jr z, .LF8E70C                                ; F8E708  66 02
+	ldi85                                         ; F8E70A  85 10
+.LF8E70C:
+	srl bc, 0x01                                  ; F8E70C  d9 ef 01
+	ldirw                                         ; F8E70F  95 11
+	pop XIX                                       ; F8E711  5c
+	ret                                           ; F8E712  0e
+	jr c, .LF8E731                                ; F8E713  67 1c
+	jr z, .LF8E723                                ; F8E715  66 0c
+	add (xix-4), bc                               ; F8E717  9c fc 89
+	lda_rr xix, xix, de                           ; F8E71A  f3 07 f0 e8 34
+	ldir85                                        ; F8E71F  85 11
+	jr .LF8E747                                   ; F8E721  68 24
+.LF8E723:
+	ldw (xix-4), 0x00                             ; F8E723  bc fc 02 00 00
+	lda_rr xix, xix, de                           ; F8E728  f3 07 f0 e8 34
+	ldir85                                        ; F8E72D  85 11
+	jr .LF8E747                                   ; F8E72F  68 16
+.LF8E731:
+	lda_rr xix, xix, de                           ; F8E731  f3 07 f0 e8 34
+	ld DE,BC                                      ; F8E736  d9 8a
+	ld BC,WA                                      ; F8E738  d8 89
+	sub DE,WA                                     ; F8E73A  d8 a2
+	ldir85                                        ; F8E73C  85 11
+	ld BC,DE                                      ; F8E73E  da 89
+	ld XIX,XHL                                    ; F8E740  eb 8c
+	ld (xix-4), de                                ; F8E742  bc fc 52
+	ldir85                                        ; F8E745  85 11
+.LF8E747:
+	popw de                                       ; F8E747  4a
+	pop XIX                                       ; F8E748  5c
+	pop XHL                                       ; F8E749  5b
+	ret                                           ; F8E74A  0e
+	lda_24 xiy, (0xf8e773)                        ; F8E74B  f2 73 e7 f8 35
+	lda_24 xix, (0x6007d3)                        ; F8E750  f2 d3 07 60 34
+	ld XBC,0x00000009                             ; F8E755  41 09 00 00 00
+	ldir85                                        ; F8E75A  85 11
+	ld XBC,0x00000053                             ; F8E75C  41 53 00 00 00
+	lda_24 xix, (0x600780)                        ; F8E761  f2 80 07 60 34
+	xor WA,WA                                     ; F8E766  d8 d0
+.LF8E768:
+	lda_dpi xbc, 0xf0                             ; F8E768  f5 f0 41
+	sub BC,0x0001                                 ; F8E76B  d9 ca 01 00
+	jr nz, .LF8E768                               ; F8E76F  6e f7
+	ret                                           ; F8E771  0e
+	reti                                          ; F8E772  07
+ZeroInitData_F8E773:   ; 9 B, all zero -- LDIR source named by the
+; init routine above: `lda XIY,(0xf8e773)` / `ld XBC,0x00000009`
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00   ; F8E773
+	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x00E77C, 0x000051
 ; 0xF8E7CD-0xF8E7FF -- 51 bytes of 0x0E (RET), module padding.
 ; Checked byte by byte, not sampled: verified against original_ROMs/wsa1_prom_a.ic12.
 	.fill 51, 1, 0x0E
