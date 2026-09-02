@@ -1646,3 +1646,49 @@ fails rather than letting the old framing creep back.
 Supersedes `gen_prom_b_f78029_module.py`, which is kept with a banner because
 the reasoning it contains is the reasoning that was overturned. Narrative:
 `notes/FINDINGS-image-files.md` section 8.
+
+
+---
+
+## `orphan_tables_f0033f.py` — the four orphan tables in `0xF0033F-0xF007FF`
+
+**Question it answers.** *Three pointer runs and two byte tables sit there under
+names, and nothing was ever found that reads them. Are they four unrelated
+objects, and is "no reader" a fact or a failed search?*
+
+    python3 notes/orphan_tables_f0033f.py               # the whole argument
+    python3 notes/orphan_tables_f0033f.py --selftest    # 15 checks
+
+**Answer: ONE array type instantiated three times, 18 four-byte slots per
+record.** The width is a *reader-side* fact — the four dispatchers at `0xF00CCF
+/ 0xF00D10 / 0xF00D51 / 0xF00D92` do `add XBC,BASE / ld XBC,(XBC) / jp XBC`
+with `BASE` = `0xF002AC`, `0xF002F4`, `0xF0033C`, `0xF00384`, **four bases at an
+exact stride of 72**. c13/c14 are the `0x00FDB10E` filler and c17 is zero in all
+16 records; read in the order `c0..c12, c16, c15` the live pointers form a
+single ascending chain (144/144, 25/25, 19/20), so the targets are objects laid
+out consecutively in one pool and the deltas are their sizes.
+
+★ The reader search that earlier passes could not have run is `--readers`'s
+**base-minus-index sweep**: the idiom is `add XBC, TABLE - 4*k`, so searching
+for the table *head* cannot find a reader that subtracts an index offset. It
+finds run 1's four readers and nothing for runs 2 and 3.
+
+**Every flag below is a NULL for one claim, and none of the numbers means
+anything without its null.** Each prints observation and null side by side:
+
+| flag | the control it computes |
+|---|---|
+| `--extents` | run boundaries from the bytes, not the labels |
+| `--period` | the 18-slot period, vs a label-shuffle null for every p in 12..36 |
+| `--readers` | six search forms, four images + the KN5000 tree; carries the 0.125-per-3-byte-pattern and 32.0-per-16-bit-value chance rates that kill most raw hits |
+| `--targets` | the `EE 0C` prologue control against its *measured* density (25/26 vs 0.98 for run 1; 0/145 and 0/21 for the others) |
+| `--bytetables` | `Data_F003CC` and `Data_F00759`, byte for byte |
+| `--chain` | ★ shuffle the SAME targets over the SAME occupied cells, 20 000 trials → **0** ascending |
+| `--relocation` | ★ does a constant shift restore the icon grid (max bucket 6 vs a 3σ of 5.5) or a DL record boundary (7/24, and 5 shifts tie, where ~2.8 ties are expected)? No. |
+| `--dlparse` | ★ op/len walk from 20 000 RANDOM starts with the same size multiset (0.0040) vs the 143 real targets (0/143) |
+| `--handlers` | the 26 handlers of the one table that does have a reader |
+
+⚠ It also **downgrades a control this README relies on above**: run 1 has a
+consumer, but that consumer has no findable caller either, and two of its four
+bases aim at records that do not exist. Narrative and graded verdicts:
+`notes/ORPHAN-TABLES-F0033F-2026-09-02.md`.
