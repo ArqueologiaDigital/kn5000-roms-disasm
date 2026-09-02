@@ -389,3 +389,35 @@ owning lane, and it should be tested the same way: perturb one pixel, gate, expe
 
 This is the same failure the sound-coverage findings record in their §0 — the gate green
 while its inputs were not really being read — reached by a different route.
+
+---
+
+## 11. Completeness: where *could* music still be hiding?
+
+The PCM lanes answer "is this sample data". They say nothing about **sequence** data,
+which is small-integer event bytes and looks like any other table. So the complementary
+question is asked by signature — `python3 notes/sound/pcm_discriminator.py --magics`
+sweeps every image for every music container this project knows, plus a shape census for
+the 256-byte style/song cell.
+
+| image | signatures found | verdict |
+|---|---|---|
+| v10 / v9 / v7 program | `H\0K\0` x11, `MThd` x4 (1 valid), `MTrk` x5 | **string constants, not containers.** Every `H\0K\0` is unaligned with 0 cells behind it. The `MThd`/`MTrk` are the SMF reader's magic (`SMF_HeaderMagic_MThdMTrk`, `sequencer/smf_tonegen_core.s`) and the **export template** at ROM `0xF2823E` — `MThd 00 00 00 06 00 00 00 01 00 60`, format 0, one track, **division 0x60 = 96 ticks/beat**, copied verbatim by the buffered writer at `0xF2718C` (`docs/kn5000-sequencer-and-smf.md`). |
+| sub-CPU v1.42 / boot IC30 | none | no music of any kind in the sound sub-CPU |
+| sub-CPU v1.42 compressed | `SLIDE4K` x1 | its own compression container |
+| table data | `H\0K\0` x3 (**1 real**, 0x100-aligned at file `0x1B4000` with 236 cells), `SLIDE4K` x19, `SLIDE8K` x6 | the Composer factory memory image, the 19 demo songs, the 6 help databases — **all three accounted for in §6** |
+| custom data IC19 | `H\0K\0` x8, all 0x100-aligned, 2,380 cells | the 7 style banks plus section 7 (header + erased flash, 0 cells, as documented) |
+| HD-AE5000 IC4 | `H\0K\0` x3 | all three unaligned and adjacent, inside the ASCII display-parameter block right after the splash bitmap. Not banks. |
+| SX-WSA1R prom_a | `MThd`/`MTrk` x1 | unaligned, header length invalid — coincidental bytes |
+| SX-WSA1R prom_b | `MThd` x5 (**4 valid**), `MTrk` x6 | the SX-WSA1R's own SMF magic at `0xF6F528` and **four copies of the same export template** — `MThd 00 00 00 06 00 00 00 01 00 60 MTrk 00 00 00 00 00 FF 03 0F "WSA     "`. Already documented in `wsa1/prom_b/wsa1_prom_b.s`. |
+| SX-WSA1R prom_c / prom_d | `H\0K\0` x2 in prom_d, unaligned, 0 cells | coincidental bytes in the tone database |
+
+★ **A useful corroboration falls out of this.** Both products' SMF export templates carry
+division `0x0060` = **96 ticks per quarter note** — independently of each other and
+independently of the internal event formats. That is the same 96 the demo-song MIDIs and
+the style MIDIs are written at, so the timebase those conversions rest on is confirmed by
+a third route: the firmware's own choice of what to write into a file other equipment must
+read.
+
+**There is no embedded Standard MIDI File in any of the 13 images**, and every style bank
+and song container is accounted for in §6.

@@ -498,6 +498,43 @@ def cmd_sounddata(win8=1024):
     return flagged
 
 
+def cmd_magics():
+    """Where could MUSIC be hiding?  A sweep for every music container this project knows.
+
+    The PCM lanes answer "is this sample data".  They say nothing about SEQUENCE data,
+    which is small-integer event bytes and looks like any other table.  So this asks the
+    complementary question by signature: the IC19 style-bank magic, the two LZSS block
+    magics, and the Standard MIDI File chunk tags -- plus a shape census for the 256-byte
+    style/song cell.  A magic with no cells behind it is a string constant, not a bank.
+    """
+    magics = [(b'H\x00K\x00', 'IC19 style-bank magic'),
+              (b'SLIDE4K', 'demo-song LZSS block'),
+              (b'SLIDE8K', 'help-database LZSS block'),
+              (b'MThd', 'SMF header chunk tag'),
+              (b'MTrk', 'SMF track chunk tag')]
+    for name, path in IMAGES:
+        if not os.path.exists(path):
+            continue
+        d = open(path, 'rb').read()
+        parts = []
+        for m, lab in magics:
+            c = d.count(m)
+            if c:
+                extra = ''
+                if m == b'MThd':
+                    v = sum(1 for i in range(len(d) - 8)
+                            if d[i:i + 4] == b'MThd' and d[i + 4:i + 8] == b'\x00\x00\x00\x06')
+                    extra = f' ({v} with a valid 6-byte header length)'
+                parts.append(f'{lab} x{c}{extra}')
+        cells = sum(1 for o in range(0, len(d) - 256, 256)
+                    if d[o + 5] == 0x87 and d[o + 255] == 0x87 and d[o] in (0x80, 0x00))
+        if cells:
+            parts.append(f'256-byte cell shape x{cells}')
+        print(f"  {name:38s} {'; '.join(parts) if parts else '-'}")
+    print("\n  A magic is not a container.  See "
+          "FINDINGS-audio-and-music-ranges-2026-09-02.md section 11 for what each is.")
+
+
 def cmd_selftest():
     """The separation, as assertions.  These are the numbers the findings quote."""
     d = _ic307()
@@ -564,12 +601,14 @@ def main():
     ap.add_argument('--census', action='store_true')
     ap.add_argument('--containers', action='store_true')
     ap.add_argument('--sounddata', action='store_true')
+    ap.add_argument('--magics', action='store_true')
     ap.add_argument('--selftest', action='store_true')
     ap.add_argument('--win', type=int, default=4096)
     ap.add_argument('--step', type=int, default=None)
     ap.add_argument('--win8', type=int, default=1024)
     a = ap.parse_args()
-    if not any((a.calibrate, a.census, a.containers, a.sounddata, a.selftest)):
+    if not any((a.calibrate, a.census, a.containers, a.sounddata, a.magics,
+                a.selftest)):
         ap.print_help()
         return
     if a.calibrate:
@@ -580,6 +619,8 @@ def main():
         cmd_containers(a.win, a.step, a.win8)
     if a.sounddata:
         cmd_sounddata(a.win8)
+    if a.magics:
+        cmd_magics()
     if a.selftest:
         cmd_selftest()
 
