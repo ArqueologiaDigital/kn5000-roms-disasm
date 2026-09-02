@@ -15,6 +15,11 @@ QUESTION ANSWERED
   rests on the evidence below, not on the gate.
 
 THE EVIDENCE, PER TABLE (all in audio_control_engine.s)
+  F  VoiceParam_ModeDispatch_Table   0xFCB46F   4 entries
+  G  MidiVoiceNote_Dispatch_Table    0xFCB6F9   4 entries
+       both `and <reg>,0x3 ; sll <reg>,2 ; ld xix,<table> ; ld XIX,(XIX+<reg>) ;
+       call/jp (xix)` -- the same *4-scaled indexed indirect branch, and each
+       table's entry[0] is again the byte immediately after the table.
   A  MidiSeqBuf_ProcessorTable_0x1   0xFCA697   8 entries
        `and w,0x7 ; sll w,2 ; ld xix,<table> ; ld_sril3 XIX,... ; call (xix)`
        -- a *4-scaled index and an INDIRECT CALL through the loaded word.
@@ -80,6 +85,8 @@ TABLES = [
     ("VoiceMode3_DispatchTable_0x1",      0xFCB025, 16, None, 1),
     ("VoiceMode_ParamConfigTables_0x68",  0xFCBA47, 20, "VoiceMode_ParamConfigTables", 0),
     ("VoiceMode_ParamConfigTables_0x5C4", 0xFCBFA3, 20, "VoiceMode_ParamConfigTables", 0),
+    ("VoiceParam_ModeDispatch_Table",      0xFCB46F,  4, None, 0),
+    ("MidiVoiceNote_Dispatch_Table",       0xFCB6F9,  4, None, 0),
 ]
 
 LABEL_RE = re.compile(r'^\s*[A-Za-z_.$][\w.$]*\s*:')
@@ -150,6 +157,9 @@ def main():
         assert l0 and l1, name
         span_start, span_end = start_of(l0), next_line_addr(l1)
         body = lines[l0 - 1:l1]
+        if any(".long" in t for t in body):
+            print(f"{name}: already .long -- skipping")
+            continue
         for t in body:
             if LABEL_RE.match(t):
                 sys.exit(f"{name}: label inside span at line: {t!r} -- refusing")

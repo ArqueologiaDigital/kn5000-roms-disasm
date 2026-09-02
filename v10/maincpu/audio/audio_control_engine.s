@@ -9899,8 +9899,10 @@ VoiceParam_DispatchDone:
 	ret
 
 VoiceParam_ModeDispatch_Table:
-	.byte 0x7f, 0xb4, 0xfc, 0x00, 0x09, 0xb5, 0xfc, 0x00
-	.byte 0x93, 0xb5, 0xfc, 0x00, 0x26, 0xb6, 0xfc, 0x00
+	.long VoiceParam_StoreExpression
+	.long VoiceParam_StoreVolume
+	.long VoiceParam_StorePan
+	.long VoiceNote_StoreBankSelect
 
 VoiceParam_StoreExpression:
 	extz hl
@@ -10122,8 +10124,10 @@ MidiVoiceNote_Dispatch:
 	ld_sril3 XIX, 0x03, 0xf0, 0xec
 	jp (xix)
 MidiVoiceNote_Dispatch_Table:
-	.byte 0x09, 0xb7, 0xfc, 0x00, 0x19, 0xb7, 0xfc, 0x00
-	.byte 0x29, 0xb7, 0xfc, 0x00, 0x39, 0xb7, 0xfc, 0x00
+	.long MidiVoiceNote_LookupMode0
+	.long MidiVoiceNote_LookupMode1
+	.long MidiVoiceNote_LookupMode2
+	.long MidiVoiceNote_LookupMode3
 
 MidiVoiceNote_LookupMode0:
 	ld xiy, VoiceMode_ParamConfigTables_0x47
