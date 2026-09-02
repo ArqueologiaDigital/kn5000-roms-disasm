@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
-"""convert_align_pads.py -- reclassify proven word-alignment padding bytes in
-hdae5000_data_tables.s from bare, undocumented `.byte 0x00` into a real
-`.balign 2, 0x00` directive.
+"""convert_align_pads.py -- reclassify proven word-alignment padding bytes in an hdae5000 source
+file from bare, undocumented `.byte 0x00` into a real `.balign 2, 0x00` directive.
+
+Originally written for hdae5000_data_tables.s only; 2026-09-02 generalised (see next_content()'s
+LABEL_ONLY_RE skip) so the same rule and the same evidence-gathering shape apply to any file this
+tree's Makefile assembles, given that file's own get_lprobe_addrs.py run -- see
+hdae5000_utilities.s's registered-object name pool for the case that motivated it: labels there
+sit on their own source line immediately before the `.asciz` they name, which the original
+next_content() (data_tables.s never does this) would stop on and therefore convert nothing.
 
 WHAT QUESTION THIS ANSWERS: which of the file's ~13,215 undocumented `.byte`
 operand bytes are not unknown data at all, but the (always-zero) padding byte
@@ -90,11 +96,17 @@ def main():
         f"{src_file} has {len(lines)} lines but {addr_file} has {len(addr)} addresses -- "
         f"regenerate get_lprobe_addrs.py's output against the CURRENT file first")
 
+    LABEL_ONLY_RE = re.compile(r'^\s*\S+\s*:\s*$')
+
     def next_content(i):
+        # Skip blank/comment-only lines AND bare "Label:" lines with no directive on the same
+        # line -- hdae5000_utilities.s (unlike hdae5000_data_tables.s) routinely puts a label on
+        # its own line immediately before the .asciz it names, so stopping at the label would
+        # always report "not asciz/ascii" and silently convert nothing in that file.
         j = i + 1
         while j <= len(lines):
             code, _ = strip_comment(lines[j - 1])
-            if code.strip():
+            if code.strip() and not LABEL_ONLY_RE.match(code):
                 return j
             j += 1
         return None
