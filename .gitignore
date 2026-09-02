@@ -64,6 +64,11 @@ notes/v10-data-as-code/cache.pkl
 # regenerable in ~10s by `python3 scripts/analysis/v10dac2_line_probe.py --build`
 notes/v10-data-as-code/line_probe_cache.json
 
+# v7tabletail_line_probe.py's address->(file,line) map (lane V7TABLETAIL,
+# 2026-09-02): 18 MB+, regenerable in well under a minute by
+# `python3 scripts/analysis/v7tabletail_line_probe.py --build`
+notes/v7-table-tail-32/line_probe_cache.json
+
 # v9_v10_undisassembled_census.py scratch work directory (a full v7/v9/v10
 # copy plus rebuilt ROMs/ELFs/pickles -- several hundred MB, regenerate with
 # --prepare, never commit)
