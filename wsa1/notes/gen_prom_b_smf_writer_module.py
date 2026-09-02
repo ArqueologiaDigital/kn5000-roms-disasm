@@ -94,6 +94,8 @@ RUN
   python3 notes/gen_prom_b_smf_writer_module.py --selftest  # the evidence
   python3 notes/gen_prom_b_smf_writer_module.py             # the assembly
   python3 notes/gen_prom_b_smf_writer_module.py --splice    # write it into the .s
+  python3 notes/gen_prom_b_smf_writer_module.py --splice-siblings
+                                          # type the two copies OUTSIDE the range
 Then, always:
   python3 scripts/analysis/assert_byte_identical.py
 """
@@ -761,6 +763,79 @@ def checks(verbose=True):
     return not FAIL
 
 
+# ----------------------------------------------------------------- siblings
+SIBLINGS = (0xF7493F, 0xF760BF)
+
+
+def sibling_lines(a):
+    """0xF7493F and 0xF760BF were NAMED on 2026-08-31 and left as seven `.byte`
+    rows, with a standing `Unknown: what the 0x40-strided bytes after offset
+    0x21 are.  They are NOT claimed here.`  This types them the way the two
+    copies inside the census range are typed, and retires that Unknown.
+    ★ The 2026-08-31 attribution and its own correction note are kept."""
+    L = ["; SmfFileTemplate_%06X -- the 33-byte STANDARD MIDI FILE header this" % a,
+         ";          firmware copies into its output buffer before writing a track.",
+         ";          Named 2026-08-31 by notes/prom_b_apply_smf_names.py, on",
+         ";          notes/prom_b_smf_reader.py's 40 checks.",
+         ";          ⚠ NOT MUSIC: no note, no end-of-track."]
+    L += wrap("; ⚠ CORRECTED 2026-09-02: ",
+              "that pass called the object 99 bytes and 32 of them the header. It is "
+              "33 bytes of header (14+8+11, the three block moves) and then a "
+              "SEPARATE 66-byte word table -- see SmfPartOffsets_%06X below, which "
+              "retires this header's standing `Unknown: what the 0x40-strided bytes "
+              "after offset 0x21 are`." % (a + TAB_OFF))
+    L += wrap("; Read by: ", "`ld XIY,0x00%06X` at 0x%06X, and the image spells "
+                             "+0x0E and +0x16 as well -- the three copy sources. "
+                             "14+8+11 = 33 = 0x21, which is where the table starts."
+                             % (a, ref_site(a)))
+    L += wrap("; Length:  ", "the `00 00 00 00` at +0x12 is a PLACEHOLDER; 0xF7789A "
+                             "computes the real value into (0x10C4)-(0x10C7), most "
+                             "significant byte first. ★ Copy 0xF7493F PROVES it: at "
+                             "+0x0E it runs `ldir` with BC=4 -- `MTrk` only -- and "
+                             "then writes (0x10C4) and (0x10C6) into the file in the "
+                             "placeholder's place.")
+    L += ["; Evidence: notes/gen_prom_b_smf_writer_module.py --selftest."]
+    out = header(L)
+    out.append("SmfFileTemplate_%06X:" % a)
+    out += tpl_lines(a)
+    out += [""]
+    out += tab_header(a + TAB_OFF, True)
+    out.append("SmfPartOffsets_%06X:" % (a + TAB_OFF))
+    out += tab_lines(a + TAB_OFF)
+    return out
+
+
+def ref_site(a):
+    d = rom()
+    return d.find(struct.pack("<I", a)) - 1 + B_BASE
+
+
+def splice_siblings():
+    src = open(SRCB, encoding="utf-8").read().split("\n")
+    for a in sorted(SIBLINGS, reverse=True):
+        lines = sibling_lines(a)
+        ok, msg = verify(lines, a, a + 99)
+        if not ok:
+            raise SystemExit("refusing to splice 0x%06X: %s" % (a, msg))
+        lab = "SmfFileTemplate_%06X:" % a
+        hit = [i for i, l in enumerate(src) if l == lab]
+        if len(hit) != 1:
+            raise SystemExit("cannot locate %s: %d hits" % (lab, len(hit)))
+        i = hit[0]
+        top = i
+        while top and (src[top - 1].startswith(";") or not src[top - 1].strip()):
+            top -= 1
+        bot = i
+        while bot + 1 < len(src) and src[bot + 1].startswith("\t.byte"):
+            bot += 1
+        if bot - i != 7:
+            raise SystemExit("%s: expected 7 `.byte` rows, found %d" % (lab, bot - i))
+        src[top:bot + 1] = lines
+        print("retyped 0x%06X: %d lines replace %d; %s" % (a, len(lines), bot + 1 - top, msg))
+    open(SRCB, "w", encoding="utf-8").write("\n".join(src))
+    return 0
+
+
 # ------------------------------------------------------------------ splice
 BLOCK_LABELS = {0xF7669D: "Data_F7669D", 0xF7681C: "Data_F7681C",
                 0xF77836: "Data_F77836"}
@@ -808,6 +883,8 @@ def main():
         return 0
     if "--selftest" in a:
         return 0 if checks() else 1
+    if "--splice-siblings" in a:
+        return splice_siblings()
     if "--splice" in a:
         return splice()
     print("\n".join(emit()))

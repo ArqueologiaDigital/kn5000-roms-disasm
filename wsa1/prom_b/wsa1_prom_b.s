@@ -163272,49 +163272,62 @@ sub_F7492F:
 	ldw	bc, 4	; F74939  ld BC,0x0004
 	m_ldirw MWI+r5	; F7493C  ldirw
 	ret	; F7493E  ret
-
 ; --------------------------------------------------------------------------
-; SmfFileTemplate_F7493F -- 0xF7493F, 99 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |MThd.........`MTrk........WSA    ..@.......@...
-;           ..@.......@.......@.......@.......@.......@.........|
-; Read by: 1 byte-scan hit: 1 instruction operand -- `ld XIY,0x00f7493f` at
-;          0xF73A23 (operand field 1 byte in)
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Name:    named 2026-08-31 -- a STANDARD MIDI FILE header, byte for byte:
-;            4D 54 68 64             `MThd`
-;            00 00 00 06             chunk length 6
-;            00 00                   format 0
-;            00 01                   one track
-;            00 60                   division, 96 ticks per quarter note
-;            4D 54 72 6B             `MTrk`
-;            00 00 00 00             track length -- a placeholder
-;            00 FF 03 0F             delta 0, meta FF 03 (track name), length 15
-;            57 53 41 20 20 20 20    `WSA    `
-; Read by: the writer copies template+0x0E (`MTrk`) and the 11 bytes at
-;          template+0x16, then eight more from the filename field at RAM
-;          (0x21C8).  7 + 8 = 15, which is the length the meta event declares.
-; Evidence: the bytes are re-read on every emit, and the format claim is
-;          notes/prom_b_smf_reader.py's 40 checks plus the arithmetic above.
-; ⚠ CORRECTED 2026-08-31: this header's `Unknown: everything about it except its
-;          bytes` no longer holds.
-; Unknown: what the 0x40-strided bytes after offset 0x21 are.  They are NOT
-;          claimed here.
+; SmfFileTemplate_F7493F -- the 33-byte STANDARD MIDI FILE header this
+;          firmware copies into its output buffer before writing a track.
+;          Named 2026-08-31 by notes/prom_b_apply_smf_names.py, on
+;          notes/prom_b_smf_reader.py's 40 checks.
+;          ⚠ NOT MUSIC: no note, no end-of-track.
+; ⚠ CORRECTED 2026-09-02: that pass called the object 99 bytes and 32 of
+;                         them the header. It is 33 bytes of header
+;                         (14+8+11, the three block moves) and then a
+;                         SEPARATE 66-byte word table -- see
+;                         SmfPartOffsets_F74960 below, which retires this
+;                         header's standing `Unknown: what the 0x40-strided
+;                         bytes after offset 0x21 are`.
+; Read by: `ld XIY,0x00F7493F` at 0xF73A23, and the image spells +0x0E and
+;          +0x16 as well -- the three copy sources. 14+8+11 = 33 = 0x21,
+;          which is where the table starts.
+; Length:  the `00 00 00 00` at +0x12 is a PLACEHOLDER; 0xF7789A computes
+;          the real value into (0x10C4)-(0x10C7), most significant byte
+;          first. ★ Copy 0xF7493F PROVES it: at +0x0E it runs `ldir` with
+;          BC=4 -- `MTrk` only -- and then writes (0x10C4) and (0x10C6) into
+;          the file in the placeholder's place.
+; Evidence: notes/gen_prom_b_smf_writer_module.py --selftest.
 ; --------------------------------------------------------------------------
 SmfFileTemplate_F7493F:
-	.byte	0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x60, 0x4D, 0x54	; F7493F  [0..15]
-	.byte	0x72, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0x0F, 0x57, 0x53, 0x41, 0x20, 0x20, 0x20	; F7494F  [16..31]
-	.byte	0x20, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01, 0x40, 0x01, 0x80, 0x01, 0xC0	; F7495F  [32..47]
-	.byte	0x01, 0x40, 0x02, 0x80, 0x02, 0xC0, 0x02, 0x00, 0x03, 0x40, 0x03, 0x80, 0x03, 0xC0, 0x03, 0x00	; F7496F  [48..63]
-	.byte	0x04, 0x40, 0x04, 0x80, 0x04, 0xC0, 0x04, 0x00, 0x05, 0x40, 0x05, 0x80, 0x05, 0xC0, 0x05, 0x00	; F7497F  [64..79]
-	.byte	0x06, 0x40, 0x06, 0x80, 0x06, 0xC0, 0x06, 0x00, 0x07, 0x40, 0x07, 0x80, 0x07, 0xC0, 0x07, 0x00	; F7498F  [80..95]
-	.byte	0x08, 0xFF, 0xFF	; F7499F  [96..98]
+	.ascii	"MThd"	; F7493F  header chunk tag
+	.byte	0x00, 0x00, 0x00, 0x06	; F74943  chunk length 6, most significant byte first
+	.byte	0x00, 0x00	; F74947  format 0 -- one multi-channel track
+	.byte	0x00, 0x01	; F74949  ntrks 1
+	.byte	0x00, 0x60	; F7494B  division 0x0060 = 96 ticks per quarter note
+	.ascii	"MTrk"	; F7494D  track chunk tag
+	.byte	0x00, 0x00, 0x00, 0x00	; F74951  track length PLACEHOLDER -- backfilled by 0xF7789A
+	.byte	0x00	; F74955  delta time 0
+	.byte	0xFF, 0x03	; F74956  meta event FF 03 -- sequence/track name
+	.byte	0x0F	; F74958  ... declared length 15
+	.ascii	"WSA    "	; F74959  name bytes 1-7; 8-15 come from RAM (0x21C8)
+
+; --------------------------------------------------------------------------
+; SmfPartOffsets_F74960 -- 32 little-endian 16-bit BYTE OFFSETS and a
+;          0xFFFF terminator.  NOT MIDI, and not part of the file: it only
+;          happens to sit 0x21 bytes after the template.
+;          0x0000, 0x0040 ... 0x0800, step 0x40 -- one record per slot in the
+;          0x40-strided array at RAM 0x006036A0.
+; Read by: five instructions spell 0x00F74960: 0xF76FB9 is `ld XDE,<base>`
+;          followed by `ld HL,(XDE+HL)` with HL = (byte from RAM 0x603422) *
+;          2, and the result reaches `lda XIY,XIY+HL` on XIY = 0x006036A0.
+; ⚠ Note:  the step is 0x40 everywhere EXCEPT between slots 7 and 8, where
+;          it is 0x80: the record at 0x0200 is skipped. That is in the ROM
+;          and identical in all four copies. What occupies the skipped slot
+;          is NOT established.
+; --------------------------------------------------------------------------
+SmfPartOffsets_F74960:
+	.short	0x0000, 0x0040, 0x0080, 0x00C0, 0x0100, 0x0140, 0x0180, 0x01C0	; F74960  slots  0- 7
+	.short	0x0240, 0x0280, 0x02C0, 0x0300, 0x0340, 0x0380, 0x03C0, 0x0400	; F74970  slots  8-15
+	.short	0x0440, 0x0480, 0x04C0, 0x0500, 0x0540, 0x0580, 0x05C0, 0x0600	; F74980  slots 16-23
+	.short	0x0640, 0x0680, 0x06C0, 0x0700, 0x0740, 0x0780, 0x07C0, 0x0800	; F74990  slots 24-31
+	.short	0xFFFF	; F749A0  terminator
 
 
 ; --------------------------------------------------------------------------
@@ -165356,50 +165369,62 @@ ByteMap_F7609E:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F	; F7609E  [0..15]
 	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D, 0x1E, 0x1F	; F760AE  [16..31]
 	.byte	0x7F	; F760BE  [32..32]
-
-
 ; --------------------------------------------------------------------------
-; SmfFileTemplate_F760BF -- 0xF760BF, 99 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
-; Contains: printable bytes |MThd.........`MTrk........WSA    ..@.......@...
-;           ..@.......@.......@.......@.......@.......@.........|
-; Read by: 1 byte-scan hit: 1 instruction operand -- `ld XIY,0x00f760bf` at
-;          0xF756C6 (operand field 1 byte in)
-; Evidence: the bytes are re-read on every emit; the classification is
-;           NEGATIVE (no rule matched, no walk arrived) and is stated as
-;           such.
-; Name:    named 2026-08-31 -- a STANDARD MIDI FILE header, byte for byte:
-;            4D 54 68 64             `MThd`
-;            00 00 00 06             chunk length 6
-;            00 00                   format 0
-;            00 01                   one track
-;            00 60                   division, 96 ticks per quarter note
-;            4D 54 72 6B             `MTrk`
-;            00 00 00 00             track length -- a placeholder
-;            00 FF 03 0F             delta 0, meta FF 03 (track name), length 15
-;            57 53 41 20 20 20 20    `WSA    `
-; Read by: the writer copies template+0x0E (`MTrk`) and the 11 bytes at
-;          template+0x16, then eight more from the filename field at RAM
-;          (0x21C8).  7 + 8 = 15, which is the length the meta event declares.
-; Evidence: the bytes are re-read on every emit, and the format claim is
-;          notes/prom_b_smf_reader.py's 40 checks plus the arithmetic above.
-; ⚠ CORRECTED 2026-08-31: this header's `Unknown: everything about it except its
-;          bytes` no longer holds.
-; Unknown: what the 0x40-strided bytes after offset 0x21 are.  They are NOT
-;          claimed here.
+; SmfFileTemplate_F760BF -- the 33-byte STANDARD MIDI FILE header this
+;          firmware copies into its output buffer before writing a track.
+;          Named 2026-08-31 by notes/prom_b_apply_smf_names.py, on
+;          notes/prom_b_smf_reader.py's 40 checks.
+;          ⚠ NOT MUSIC: no note, no end-of-track.
+; ⚠ CORRECTED 2026-09-02: that pass called the object 99 bytes and 32 of
+;                         them the header. It is 33 bytes of header
+;                         (14+8+11, the three block moves) and then a
+;                         SEPARATE 66-byte word table -- see
+;                         SmfPartOffsets_F760E0 below, which retires this
+;                         header's standing `Unknown: what the 0x40-strided
+;                         bytes after offset 0x21 are`.
+; Read by: `ld XIY,0x00F760BF` at 0xF756C6, and the image spells +0x0E and
+;          +0x16 as well -- the three copy sources. 14+8+11 = 33 = 0x21,
+;          which is where the table starts.
+; Length:  the `00 00 00 00` at +0x12 is a PLACEHOLDER; 0xF7789A computes
+;          the real value into (0x10C4)-(0x10C7), most significant byte
+;          first. ★ Copy 0xF7493F PROVES it: at +0x0E it runs `ldir` with
+;          BC=4 -- `MTrk` only -- and then writes (0x10C4) and (0x10C6) into
+;          the file in the placeholder's place.
+; Evidence: notes/gen_prom_b_smf_writer_module.py --selftest.
 ; --------------------------------------------------------------------------
 SmfFileTemplate_F760BF:
-	.byte	0x4D, 0x54, 0x68, 0x64, 0x00, 0x00, 0x00, 0x06, 0x00, 0x00, 0x00, 0x01, 0x00, 0x60, 0x4D, 0x54	; F760BF  [0..15]
-	.byte	0x72, 0x6B, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0x03, 0x0F, 0x57, 0x53, 0x41, 0x20, 0x20, 0x20	; F760CF  [16..31]
-	.byte	0x20, 0x00, 0x00, 0x40, 0x00, 0x80, 0x00, 0xC0, 0x00, 0x00, 0x01, 0x40, 0x01, 0x80, 0x01, 0xC0	; F760DF  [32..47]
-	.byte	0x01, 0x40, 0x02, 0x80, 0x02, 0xC0, 0x02, 0x00, 0x03, 0x40, 0x03, 0x80, 0x03, 0xC0, 0x03, 0x00	; F760EF  [48..63]
-	.byte	0x04, 0x40, 0x04, 0x80, 0x04, 0xC0, 0x04, 0x00, 0x05, 0x40, 0x05, 0x80, 0x05, 0xC0, 0x05, 0x00	; F760FF  [64..79]
-	.byte	0x06, 0x40, 0x06, 0x80, 0x06, 0xC0, 0x06, 0x00, 0x07, 0x40, 0x07, 0x80, 0x07, 0xC0, 0x07, 0x00	; F7610F  [80..95]
-	.byte	0x08, 0xFF, 0xFF	; F7611F  [96..98]
+	.ascii	"MThd"	; F760BF  header chunk tag
+	.byte	0x00, 0x00, 0x00, 0x06	; F760C3  chunk length 6, most significant byte first
+	.byte	0x00, 0x00	; F760C7  format 0 -- one multi-channel track
+	.byte	0x00, 0x01	; F760C9  ntrks 1
+	.byte	0x00, 0x60	; F760CB  division 0x0060 = 96 ticks per quarter note
+	.ascii	"MTrk"	; F760CD  track chunk tag
+	.byte	0x00, 0x00, 0x00, 0x00	; F760D1  track length PLACEHOLDER -- backfilled by 0xF7789A
+	.byte	0x00	; F760D5  delta time 0
+	.byte	0xFF, 0x03	; F760D6  meta event FF 03 -- sequence/track name
+	.byte	0x0F	; F760D8  ... declared length 15
+	.ascii	"WSA    "	; F760D9  name bytes 1-7; 8-15 come from RAM (0x21C8)
+
+; --------------------------------------------------------------------------
+; SmfPartOffsets_F760E0 -- 32 little-endian 16-bit BYTE OFFSETS and a
+;          0xFFFF terminator.  NOT MIDI, and not part of the file: it only
+;          happens to sit 0x21 bytes after the template.
+;          0x0000, 0x0040 ... 0x0800, step 0x40 -- one record per slot in the
+;          0x40-strided array at RAM 0x006036A0.
+; Read by: five instructions spell 0x00F760E0: 0xF76FB9 is `ld XDE,<base>`
+;          followed by `ld HL,(XDE+HL)` with HL = (byte from RAM 0x603422) *
+;          2, and the result reaches `lda XIY,XIY+HL` on XIY = 0x006036A0.
+; ⚠ Note:  the step is 0x40 everywhere EXCEPT between slots 7 and 8, where
+;          it is 0x80: the record at 0x0200 is skipped. That is in the ROM
+;          and identical in all four copies. What occupies the skipped slot
+;          is NOT established.
+; --------------------------------------------------------------------------
+SmfPartOffsets_F760E0:
+	.short	0x0000, 0x0040, 0x0080, 0x00C0, 0x0100, 0x0140, 0x0180, 0x01C0	; F760E0  slots  0- 7
+	.short	0x0240, 0x0280, 0x02C0, 0x0300, 0x0340, 0x0380, 0x03C0, 0x0400	; F760F0  slots  8-15
+	.short	0x0440, 0x0480, 0x04C0, 0x0500, 0x0540, 0x0580, 0x05C0, 0x0600	; F76100  slots 16-23
+	.short	0x0640, 0x0680, 0x06C0, 0x0700, 0x0740, 0x0780, 0x07C0, 0x0800	; F76110  slots 24-31
+	.short	0xFFFF	; F76120  terminator
 
 
 ; --------------------------------------------------------------------------
