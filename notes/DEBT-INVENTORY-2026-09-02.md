@@ -284,6 +284,30 @@ naive walk there produced 44 plausible records of `[op 0x0E, len 14]`,
 indistinguishable from the ROM's own padding, and measuring the run instead
 revealed 255 B of genuine `.fill` with the real list starting after it.
 
+## ⚠ The weakest evidence currently in the tree: v7 batch F
+
+Recorded 2026-09-02 so it is not forgotten under an aggregate. v7's confirmed-region
+conversions were done in four batches of decreasing selectivity, and the
+call-target corroboration fell with it:
+
+| batch | regions | targets resolving to already-named routines |
+|---|---:|---|
+| A | 11 | 37/37 = **100%** |
+| C | 21 | 142/157 = 90% |
+| E | 46 | 78/103 = 76% |
+| **F** | **22** | **11/20 = 55%** |
+| total | 100 | 243/281 = 86% |
+
+**Batch F's 55% is the weakest evidence supporting any conversion in this
+tree.** Its defence is CROSS-REGION CONVERGENCE — five unnamed targets reached
+independently from separate regions, which is genuine but strictly weaker than a
+target landing on a name that existed beforehand. Re-examine batch F before
+building anything on it, and prefer it as the first place to look if a v7
+conversion is ever found wrong.
+
+⚠ Note the shape: the 86% aggregate is true and hides this. Quote the gradient,
+not the average.
+
 ## Where the next pass should aim
 
 1. ~~A round-trip generator for table_data's six BMPs~~ — **DONE, as a refusal:
