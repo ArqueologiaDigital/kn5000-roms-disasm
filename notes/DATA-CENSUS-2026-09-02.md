@@ -333,7 +333,7 @@ Regenerate with `--targets N`. Largest 40:
 | **prom_d** | **0x044B26-0x046D6A** | **8,772** | `DrawbarPreset_EnvDescTable_Pool_B000/B001` | **no-explanation** | — |
 | table data | 0x057914-0x05959D | 7,305 | `ToneDB_EnvDescTable` | self-admitted | — |
 | v7 | 0x1804E2-0x1820C0 | 7,134 | `AudioCtrl_DataBlock` | embedded-in-code | — |
-| prom_b | 0x078029-0x0799E8 | 6,591 | `Data_F78029` … `Bitmap_F799D0` | no-explanation + self-admitted | bitmap, text |
+| prom_b | 0x078029-0x0799E8 | 6,591 | ~~`Data_F78029` … `Bitmap_F799D0`~~ → `DLGlyph_*` | ~~no-explanation~~ **CLOSED**, see §8.3 | bitmap (**not** text) |
 | prom_b | 0x07669D-0x0779D5 | 4,920 | `Data_F7669D` … `Data_F77836` | self-admitted | **MIDI**, ptr-table |
 | prom_b | 0x04FF61-0x0511C7 | 4,710 | `LinkTable_F4FF61` | self-admitted | — |
 | v7 | 0x10D7E7-0x10E905 | 4,382 | `.Lc_f0d7e3` | embedded-in-code | — |
@@ -379,9 +379,41 @@ nobody can say anything at all:
    the `embedded-in-code` column. 222,810 B sitting between decoded routines
    under routine names: this is v7/v9/v10's known code-as-`.byte` debt located
    range by range, and converting it is a *disassembly* job, not a data job.
-3. **`prom_b 0x078029-0x0799E8`, 6,591 B**, the 121-object bitmap sheet whose
-   index at `PtrTable_F003F9` is understood and whose *contents* are not — the
-   header says so in as many words.
+3. ~~**`prom_b 0x078029-0x0799E8`, 6,591 B**, the 121-object bitmap sheet whose
+   index at `PtrTable_F003F9` is understood and whose *contents* are not.~~
+   **CLOSED 2026-09-02 by lane RQ-SHEET, and it closed the other way round from
+   how it was posed.** The *contents* are understood — the span is part of the
+   UI icon sheet at `0xF78028`, **119 cells of 24x24** on the 72-byte grid
+   `DLHandler_Glyph24x24` (`0xF31ACE`) computes, now 119 `DLGlyph_*` cells in
+   `wsa1/prom_b/wsa1_prom_b.s` with a PNG each. It is the **index** that is not
+   understood: `PtrTable_F003F9` is not this sheet's index and not
+   `DisplayList_FC4000`'s either. Evidence, both directions, with a control:
+
+   | test | observed | chance |
+   |---|---:|---:|
+   | the sheet ends exactly on the grid | `0xF7A1A0 - 0xF78028 = 8568 = 119*72`, rem **0** | 1 in 72 |
+   | highest op-`0x23` record index, independently | **118** → 119 cells | — |
+   | `PtrTable_F003F9` targets in the sheet that are on the grid | **1** of 121 | 1.7 |
+   | its targets on a proven `DisplayList_FC4000` record boundary | **3** of 24 | 1.8 |
+   | immediates equal to `0xF003F9` in the four images | **0** | — |
+   | CONTROL: the live table at `0xF00340`, targets starting `EE 0C` | **25** of 26 | 3.8 % |
+
+   **What goes back on the list, sharper:** `PtrTable_F003F9` is ONE table of
+   **216 slots** (`0xF003F9-0xF00758`, 864 B — the tree's old "181 + 35" cut is
+   not structural), shaped **18 columns × 12 rows**: column 17 zero in every
+   row, columns 13/14 the `0x00FDB10E` filler in every row, columns 15/16 always
+   descending, and the target-to-target delta nearly constant *down* a column
+   (column 15 = 52 B in six successive rows, then 32 in three). Rows 0-9 point
+   into the icon sheet, rows 10-11 into prom_a `0xFC4082-0xFC4454`. So it
+   describes a real 12-screen × 18-field structure whose objects are not, in
+   this build, where it says they are. Reproduce with
+   `python3 wsa1/notes/gen_prom_b_f78028_icon_sheet.py --evidence --layout
+   --selftest`; narrative in `wsa1/notes/FINDINGS-image-files.md` §8.
+
+   ⚠ The `text` shape hint the census attached to this range does not survive:
+   the only ASCII in the neighbourhood is `DLB_BlankField_8`'s eight spaces at
+   `0xF78020-0xF78027`, which were already `.ascii` and are *below* the range.
+   Nothing inside `0xF78028-0xF7A19F` is text; it is 8,568 bytes of pixels.
 
 ---
 

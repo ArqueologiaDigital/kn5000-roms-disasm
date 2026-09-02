@@ -1593,3 +1593,31 @@ transcript — `--falsify` does both perturbations, rebuilds, asserts the gate
 names those two addresses, and restores the source:
 
     python3 notes/gen_res02f_spans.py --falsify
+
+
+---
+
+## `gen_prom_b_f78028_icon_sheet.py` — the UI icon sheet, and the framing fight it settles
+
+**Question it answers.** *Two lanes framed prom_b `0xF78028-0xF7A19F` two
+incompatible ways — a 72-byte 24x24 glyph grid fixed by `DLHandler_Glyph24x24`,
+and 121 variable-size objects bounded by `PtrTable_F003F9`. Which is right, on
+the consuming code's arithmetic rather than on which one draws nicer pictures?*
+
+    python3 notes/gen_prom_b_f78028_icon_sheet.py --evidence   # every number, from the ROMs
+    python3 notes/gen_prom_b_f78028_icon_sheet.py --layout     # PtrTable_F003F9 as its 18x12 grid
+    python3 notes/gen_prom_b_f78028_icon_sheet.py --emit       # the assembly for the 119 cells
+    python3 notes/gen_prom_b_f78028_icon_sheet.py --selftest   # 13 checks, incl. emitted bytes == ROM
+
+**Answer: the grid.** The array ends exactly on it (`0xF7A1A0 - 0xF78028 = 8568
+= 119 * 72`, remainder 0) and 119 is also the highest op-`0x23` record index
+plus one — two measurements of different things agreeing. `PtrTable_F003F9` is
+not its index: 1 of its 121 targets here is on the grid against 1.7 by chance,
+and it misses the same way in prom_a's `DisplayList_FC4000` (3 of 24 on a record
+boundary against 1.8). ⚠ `--selftest` **asserts the refutation** — if those
+counts ever rise, or if an immediate `0xF003F9` ever appears in a ROM image, it
+fails rather than letting the old framing creep back.
+
+Supersedes `gen_prom_b_f78029_module.py`, which is kept with a banner because
+the reasoning it contains is the reasoning that was overturned. Narrative:
+`notes/FINDINGS-image-files.md` section 8.

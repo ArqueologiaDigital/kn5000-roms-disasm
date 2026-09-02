@@ -1,4 +1,20 @@
 #!/usr/bin/env python3
+"""⚠⚠ SUPERSEDED 2026-09-02 -- ITS FRAMING OF 0xF78029 IS REFUTED.  DO NOT RUN
+   IT TO REGENERATE THE SOURCE.
+
+   This file bounded 121 objects in prom_b 0xF78029-0xF799E8 by abutment of the
+   pointer table at 0xF003F9.  That table is NOT the index of that span: the
+   span is the UI icon sheet, 119 cells of 24x24 on the 72-byte grid
+   DLHandler_Glyph24x24 (0xF31ACE) computes, and exactly 1 of the table's 121
+   targets is on that grid against 1.7 expected by chance.  The replacement,
+   with the full argument and a selftest, is
+
+       notes/gen_prom_b_f78028_icon_sheet.py --evidence --selftest
+
+   It is kept, not deleted, because the reasoning below is the reasoning that
+   was overturned and the next reader deserves to see it rather than to
+   rediscover it.  See notes/FINDINGS-image-files.md section 8.
+"""
 """Emit the assembly for prom_b 0xF78029-0xF7A3FF -- a 121-object BITMAP SHEET,
 its unreferenced head, an unbounded tail, and 608 bytes of `ret` padding.
 

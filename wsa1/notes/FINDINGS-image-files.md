@@ -192,14 +192,9 @@ Those eight (720 B) are exported as `Widget_FC48D7.png` .. The remaining
 
 `wsa1_bitmaps.py list` prints this list with the tool, so it cannot drift from it.
 
-* **The 110 `Bitmap_F78*` labels.** Their EXTENTS come from the pointer table at
-  `0xF003F9`, whose targets are **not** on the 72-byte grid
-  `DLHandler_Glyph24x24` computes (`0xF7828A - 0xF78028 = 610`, not a multiple
-  of 72). The 72-byte grid is exported, because the handler's own arithmetic
-  fixes it and the sheet is plainly an icon set; the `0xF003F9` framing is a
-  SECOND, incompatible reading of the same bytes. ⚠ **Whoever owns those labels
-  should re-examine them against the icon sheet** — one of the two framings is
-  wrong and this lane did not settle which.
+* ~~**The 110 `Bitmap_F78*` labels.**~~ **RESOLVED 2026-09-02 by lane RQ-SHEET —
+  see section 8.** The 72-byte grid is right, the `0xF003F9` framing is not, and
+  the 110 labels are gone from the source.
 * **`0xFC48E4-0xFC52F7` beyond the eight widgets** — 1,860 bytes, section 4.
 * **`Bitmap_DrawbarA` / `Bitmap_DrawbarB`** (699 B each). The source header
   establishes 3 slices of 233 bytes blitted 1 byte x 0x7B rows with the source
@@ -265,3 +260,67 @@ lane's gate is `make gate-wsa1` and not `make gate-all`.
 * prom_c and prom_d carry **no** bitmaps this lane can find: the op-03 record
   scan returns 6 and 2 raw `03 0C` pairs in them and **0 plausible records**
   from either. prom_c is the sub-CPU and does not drive the panel.
+
+---
+
+## 8. ★ The two framings of `0xF78028` are settled: THE GRID WINS
+
+Lane RQ-SHEET, 2026-09-02, on the target this note's section 5 handed on. The
+rule it followed is the one section 1.2 argues for: **only the consuming code
+decides**, because a wrong framing renders plausibly and round-trips
+byte-exactly.
+
+Everything below: `python3 notes/gen_prom_b_f78028_icon_sheet.py --evidence
+--layout --selftest` (selftest passes, 13 checks, and it refuses if any number
+moves).
+
+### 8.1 What settled it — four things, none of them a picture
+
+| evidence | number |
+|---|---|
+| `DLHandler_Glyph24x24` (`0xF31ACE`) computes `0xF78028 + index * 0x48` and blits `BC=3 / HL=24` | `0x48 = 72 = 3 * 24`: stride **equals** blit size |
+| ★ the array **ends exactly on that grid** — the `0x0E` padding begins at `0xF7A1A0` | `0xF7A1A0 - 0xF78028 = 8568 = 119 * 72`, **remainder 0** |
+| ★ and 119 is also the highest op-`0x23` index plus one | max index **118**, over 167 records |
+| the only immediate `0xF78028` in all four ROM images | **1** hit — that `ld XIY` |
+| blank-margin phase test over all 72 phases (row 0 and row 23 of each column) | phase **0** wins, 0.6469 vs 0.5749 for the runner-up |
+
+The third row is the one that carries the argument: the **end of the data** and
+the **largest index the UI ever asks for** are measurements of different things,
+and they give the same count. A wrong stride has a 1-in-72 chance of even
+dividing the span.
+
+⚠ The phase test is **not** the edge-density statistic section 1.2 shows cannot
+find grid phase. It is a different quantity, and it is offered as corroboration
+of an answer the code already gives — never as the reason.
+
+### 8.2 Why `PtrTable_F003F9` is not the sheet's index — measured, both ways
+
+| test | observed | chance |
+|---|---:|---:|
+| its 121 targets in the sheet that are on the 72-byte grid | **1** | 1.7 |
+| its 24 targets in prom_a's `DisplayList_FC4000` that are on a **record boundary** of that region's *proven* framing (155 records, zero resyncs) | **3** | 1.8 |
+| immediates equal to `0xF003F9` in the four ROM images | **0** | — |
+| ★ CONTROL — the table 185 B earlier at `0xF00340`, which *does* have a consumer (`add XBC,0x00F0033C` at `0xF00D51`), whose targets start `EE 0C` (`link XIZ,0`) | **25 of 26** | 3.8% |
+
+A table that indexes neither of the two things it points at is not an index of
+either — and the control says the instrument can still find a live table.
+
+### 8.3 What replaced them, and what is left
+
+`prom_b/wsa1_prom_b.s` now carries **119 `DLGlyph_NNN_XXXXXX` cells** over
+`0xF78028-0xF7A19F`, one `.byte` line per 8-pixel column, each naming its PNG.
+The 110 `Bitmap_F78*` labels, `Data_F78029` (609 B) and `Data_F799E8` (1,976 B)
+are gone. `make images-check` and `make gate-wsa1` both green; both were shown
+to go red at `0x7A15F` on a one-byte perturbation of a converted cell.
+
+**Still open, but sharper.** `PtrTable_F003F9` is ONE table of 216 slots
+(`0xF003F9-0xF00758`), shaped **18 columns x 12 rows** — column 17 zero in every
+row, columns 13/14 the `0x00FDB10E` filler in every row, columns 15/16 always in
+descending address order, and the delta between consecutive targets nearly
+constant *down* a column (column 15 is 52 bytes in six successive rows, then 32
+in three). Rows 0-9 point into the icon sheet, rows 10-11 into prom_a
+`0xFC4082-0xFC4454`. So it is a real 12-screen x 18-field structure whose
+objects are not, in this build, where it says they are. `--layout` prints the
+grid. The question for the next lane is no longer *what is in the icon sheet*
+(119 icons) but **what these 216 slots indexed**, and there is no second build
+of this firmware to test the obvious "vestigial index" hypothesis against.
