@@ -215,6 +215,16 @@ from the recovered boundary, which then lands with **zero drift** on a neighbour
 that is already call-site documented or already converted. That zero-drift
 landing is the corroboration; without it the shrink would be a guess.
 
+★ **28 KNOWN INSTANCES AS OF 2026-09-02, all in prom_b** — 3 original fixes
+(1,890 B), 2 found by the detector, and 23 more across three further rounds
+(2,071 B). This is not a handful of slips; it is a systematic property of one
+coverage-generation pass, and **~3,961 B has been recovered from it so far**.
+
+⚠ The false-positive shape is now characterised too: SINGLE-record walk hits
+with no second signal. Nine were excluded, one of which began midway through a
+bitmap raster table rather than at any declared object boundary. Require a
+multi-record landing.
+
 **1,890 B recovered in prom_b this way**, plus two further instances found
 2026-09-02 (`Data_F02F52`, `Data_F3281C`, identical shape: 29 B declared against
 a real 24 B pointer table, each freeing a 48-byte span that frames as 4 records
