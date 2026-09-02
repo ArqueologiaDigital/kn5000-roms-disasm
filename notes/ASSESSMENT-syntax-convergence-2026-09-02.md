@@ -120,18 +120,24 @@ that assemble to a relocation):
 
 | verdict | spellings | sites | share |
 |---|---:|---:|---:|
-| `UNI_ASSEMBLES_SAME` — the backend already accepts it | 35,523 | 692,958 | 66.1% |
-| `UNI_ASSEMBLES_DIFF` — **accepted, wrong bytes** | 25,547 | **246,857** | **23.5%** |
-| `UNI_REJECTS` — the backend would have to learn it | 13,337 | 108,771 | 10.4% |
+| `UNI_ASSEMBLES_SAME` — the backend already accepts it | 36,280 | 701,697 | 66.9% |
+| `UNI_ASSEMBLES_DIFF` — **accepted, wrong bytes** | 25,553 | **246,622** | **23.5%** |
+| `UNI_REJECTS` — the backend would have to learn it | 12,574 | 100,267 | 9.6% |
 
-The 10.4% is the cheap part: 13,337 spellings to teach the parser. **The 23.5%
+Re-measured 2026-09-02 against the preserved assembler `llvm-mc.snap`
+(sha256 `53c6621d`), after the size-family conversions landed. The earlier
+reading of this table was taken at a binary that no longer exists; the shares
+moved by under a point and **no verdict changed**, which is the point of
+re-running it. See `notes/TOOLCHAIN-PROVENANCE-2026-09-02.md`.
+
+The 9.6% is the cheap part: 12,574 spellings to teach the parser. **The 23.5%
 is the disqualifying part, because it is silent** — the assembler accepts the
 line and emits a different byte string, which is exactly the failure class
 UPDATE 7 and UPDATE 8 spent two backend commits eliminating.
 
 ### 3.1 Why: unidasm's text is many-to-one on encodings
 
-`diff_causes.py` buckets those 246,857 sites by what unidasm's text failed to
+`diff_causes.py` buckets those 246,622 sites by what unidasm's text failed to
 say:
 
 | cause | spellings | sites |
@@ -164,7 +170,7 @@ same text?
 | syntax | distinct texts | ambiguous texts | sites under them |
 |---|---:|---:|---:|
 | unidasm | 133,690 | **134** | 3,172 |
-| this tree's LLVM text | 89,917 | **0** | 0 |
+| this tree's LLVM text | 89,904 | **0** | 0 |
 
 The second row is the control, and it is what makes the first row a statement
 about unidasm's notation rather than about the corpus. `ldirw` stands for both
@@ -299,7 +305,7 @@ a source language and Option A would become the right answer, since one
 notation shared with the rest of MAME beats two.
 
 The trigger is exact: re-run `oracle_ab.py`. **If `UNI_ASSEMBLES_DIFF` falls to
-approximately zero, the argument flips.** Today it stands at 246,857 sites.
+approximately zero, the argument flips.** Today it stands at 246,622 sites.
 
 Two smaller things would also move it: if the 98 raw-byte pseudo-instructions
 (22,135 sites) were given modelled operands, the residual difference between
