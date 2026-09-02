@@ -22,10 +22,23 @@ end-to-end clean — and a SHUFFLE of the same bytes scores 82.1%.** Real and
 permuted are indistinguishable, so the runs carry **no instruction structure**.
 (Uniform random scores 24.2%: that is the architecture's base rate, and the gap
 between 24% and 82% is what "these bytes look like data of this shape" is worth,
-not what "these bytes are code" is worth.) Only the 96 runs of ≥12 B open any
-gap at all, and the longest of those are
-`04 00 00 00 08 00 00 00 10 00 00 00 …` — data regularity, not code.
-`scripts/analysis/blind_run_decode_census.py`.
+not what "these bytes are code" is worth.)
+
+Re-run centrally after all merges (`scripts/analysis/blind_run_decode_census.py`,
+2026-09-02, 3,104 runs / 7,676 B — the population shrinks as lanes convert):
+
+    whole population   real 82.2% fully clean   shuffled 81.8%   random 24.3%
+    runs >= 6 bytes    real 45.3%               shuffled 33.6%   random  5.5%
+    runs >= 12 bytes   real 38.9%               shuffled 21.1%   random  2.2%
+
+⚠ **State the population with the number.** On the WHOLE population real and
+shuffled are indistinguishable, which is what kills the code reading. On the 90
+runs of ≥12 B there IS a real gap — 38.9% against 21.1%, and 69.9% against
+41.1% by clean prefix. That gap is not nothing, and it is also not a licence:
+the longest of those runs are `04 00 00 00 08 00 00 00 10 00 00 00 …`, which is
+**data regularity** — a shuffle destroys a stride as surely as it destroys a
+program, so a shuffle null cannot tell those two apart. Anyone converting on
+the ≥12 B gap needs a different null, one that preserves stride.
 
 Separately, across six committed images, **not one occurrence of the five
 survives inspection as executed code**: every site is a byte ramp, a
