@@ -26,15 +26,29 @@ tool splits every operand three ways:
       se_c_descriptor_vs_rom.py).  A run inside such a span is untyped data
       with a ready-made type.
 
-  (d) BLOCKED ON A KNOWN DECODER GAP -- the run STARTS with one of the five
-      leading opcode bytes the tlcs900 backend has no encoding for at all,
-      {0x01, 0x04, 0x17, 0x1a, 0x1c} = normal / max / ldf / JP nnnn /
-      CALL nnnn (see scripts/analysis/byte_run_start_enrichment.py and
-      leading_byte_reserved_probe.py).  These CANNOT be converted until lane
-      w10/missinginsns lands the five instructions; forcing them now risks a
-      wrong reading that re-assembles to the same bytes and passes the gate.
-      Reported as a TAG, not a verdict -- the enrichment behind it is a
-      per-image statistic.  --enrichment recomputes it for these two files.
+  (d) FRAMING SUSPECT -- the run STARTS with one of the five leading opcode
+      bytes the tlcs900 backend has no encoding for, {0x01, 0x04, 0x17, 0x1a,
+      0x1c} = normal / max / ldf / JP nnnn / CALL nnnn.
+
+      ⚠ CORRECTED 2026-09-02 (coordinator commit 3309e94e, and confirmed
+      independently here -- see se_blind_start_is_misframing.py). This tag was
+      first written as "blocked on a backend gap", i.e. UNDECODED CODE waiting
+      for the assembler. That reading is wrong, or rather it is only half the
+      story. What the signature actually detects is MIS-FRAMING, and the
+      commoner cause is the OPPOSITE defect: a wrong instruction stream breaks
+      at every byte the decoder refuses, so DATA framed as code is chopped into
+      many short `.byte` runs, each necessarily starting with a refused byte.
+
+      Two causes, opposite fixes:
+        * code spelled as data -> decode it (needs w10/missinginsns);
+        * data spelled as code -> TYPE it (needs no toolchain change at all).
+
+      In THIS corner the evidence points at the second. The `.byte` runs inside
+      the spans this lane converted -- spans certified DATA by a byte-exact C
+      compile, so provably not undecoded code -- carried a HIGHER blind-start
+      rate (20.1%) than the rest of the same file (15.6%). So (d) here means
+      "look again at how these bytes are framed", never "the assembler is the
+      blocker".
 
   (c) GENUINE BYTE TABLE -- everything else: byte-valued content that `.byte`
       already represents correctly (bitmap rows, single padding/fill bytes,
@@ -255,8 +269,9 @@ def main():
                                         "" if wired else " (NOT yet in the build)"))
         elif r["first"] in BLIND:
             r["cls"] = "d"
-            r["why"] = ("starts with 0x%02X (%s) -- no encoding in the "
-                        "tlcs900 backend; blocked until w10/missinginsns lands"
+            r["why"] = ("starts with 0x%02X (%s), a byte the backend cannot "
+                        "encode -- framing is suspect. Check for data spelled "
+                        "as code BEFORE assuming code spelled as data"
                         % (r["first"], BLIND[r["first"]]))
         elif flanked and dl is not None and dl >= r["nbytes"]:
             r["cls"] = "a"
@@ -291,7 +306,7 @@ def main():
     print("  %-4s %-38s %6s %8s" % ("cls", "meaning", "runs", "bytes"))
     print("  %-4s %-38s %6d %8d" % ("(a)", "code-as-.byte (unspellable form)", *tot["a"]))
     print("  %-4s %-38s %6d %8d" % ("(b)", "structured data, typed C available", *tot["b"]))
-    print("  %-4s %-38s %6d %8d" % ("(d)", "blocked: run starts on a backend gap", *tot["d"]))
+    print("  %-4s %-38s %6d %8d" % ("(d)", "framing suspect (see (d) in the header)", *tot["d"]))
     print("  %-4s %-38s %6d %8d" % ("(c)", "genuine byte table (already right)", *tot["c"]))
     print("  %-4s %-38s %6d %8d" % ("", "TOTAL mapped", len(mapped),
                                     sum(r["nbytes"] for r in mapped)))
@@ -321,17 +336,23 @@ def main():
         print()
         print("RUN-START ENRICHMENT for these two files")
         print("  method of scripts/analysis/byte_run_start_enrichment.py:")
-        print("  a residue of UNDECODED CODE starts disproportionately with a")
-        print("  byte the backend refuses; a data residue does not.")
+        print("  a MIS-FRAMED residue starts disproportionately with a byte the")
+        print("  backend refuses -- data-as-code produces this MORE strongly")
+        print("  than undecoded code does (3309e94e). A high rate says the")
+        print("  framing is wrong, not which of the two directions it is wrong in.")
         for t in TARGETS:
             sel = [r for r in mapped if r["file"] == t]
             nb = sum(1 for r in sel if r["first"] in BLIND)
             nc = sum(1 for r in sel if r["first"] in CONTROL_BYTES)
             n = len(sel)
             rb, rc = 100.0 * nb / n, 100.0 * nc / n
+            # ⚠ 3309e94e: with a zero (or single-digit) control count the
+            # ratio is infinite/unstable regardless of the blind count. Print
+            # the RAW COUNTS; show a ratio only when the control can carry one.
+            ratio = ("%.0fx" % (rb / rc)) if nc >= 10 \
+                else "ratio n/a (control=%d, too small)" % nc
             print("    %-24s blind %5.1f%% (%d/%d)   control %5.1f%% (%d/%d)"
-                  "   %.0fx" % (os.path.basename(t), rb, nb, n, rc, nc, n,
-                                (rb / rc) if rc else float("inf")))
+                  "   %s" % (os.path.basename(t), rb, nb, n, rc, nc, n, ratio))
         per = {}
         for r in mapped:
             if r["first"] in BLIND:
