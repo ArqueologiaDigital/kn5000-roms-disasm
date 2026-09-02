@@ -29,14 +29,30 @@ call or jump sites anywhere in the tree. A smaller instance exists in
 false-positive against its own control). ⚠ Do NOT quote the raw
 "375,743 B unreached" figure that census also prints — its own null shows a
 17.3% seed-coverage gap, so the raw number is dominated by REAL code reached
-through dispatch mechanisms static analysis cannot follow. ★ **ALSO MEASURED on all four WSA1R images 2026-09-02**
-(`wsa1/notes/data_as_code_audit.py`, null 2.24% by bytes): **no defect in any
-of them.** prom_c has zero HIGH candidates; prom_d has zero code regions at all,
-confirmed by a byte closure (0 + 330,521 + 193,767 = 524,288); prom_a's one HIGH
-candidate is a corroborated false positive. That method flattens with the
-ASSEMBLER rather than the disassembler, so the decoder blind spots cannot
-affect it. The category remains unmeasured on the remaining eight images, whose
-figures are still LOWER BOUNDS.
+through dispatch mechanisms static analysis cannot follow. ★ **ALL THIRTEEN IMAGES ARE NOW MEASURED** (2026-09-02). Detectors:
+`scripts/analysis/v10_data_as_code_census.py`, `wsa1/notes/data_as_code_audit.py`,
+`scripts/analysis/kn5000_rest_data_as_code_audit.py`. Null across them: 0.3–2.3%.
+
+| image | verdict |
+|---|---|
+| subcpu boot, table_data, custom_data | **CLEAN — caveat lifted** |
+| prom_a, prom_b, prom_c, prom_d | **CLEAN — caveat lifted** |
+| v10 | measured; 196 spans / 5,633 B converted |
+| HD-AE5000 | measured, partial; RECORD_TABLE (6,356 B) converted |
+| **v9, v7, v142** | ⚠ **caveat NOT lifted** |
+
+⚠ **WHY THE CAVEAT SURVIVES FOR v9, v7 AND v142.** Their seed-coverage gaps are
+**51–74%** — that fraction of proven code is not reachable from address-taken
+seeds, because it is reached through indirect or computed dispatch that static
+analysis cannot follow. So their LOW buckets (751 KB for v9, 365 KB for v7) are
+**dominated by real code and must not be quoted as debt**, exactly as v10's raw
+375,743 B figure must not be. Their HIGH-confidence findings are small and
+usable: v9 7,796 B / 141 spans, v7 1,702 B / 44, v142 0.
+
+⚠ **A MEASUREMENT BUG WORTH REMEMBERING**: `.org` is SECTION-RELATIVE, and
+treating it as absolute-minus-base silently no-ops it. That undercounted v7 by
+55,570 B, subcpu boot by 28,259 B, table_data by 56,868 B and v142 by 1,024 B
+before it was caught.
 
 A `.byte` run is exactly as un-decoded as an `.incbin`, and it passes every
 "no `.incbin`" test. This project has now shipped that false claim twice.
