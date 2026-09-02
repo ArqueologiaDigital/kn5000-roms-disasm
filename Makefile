@@ -75,7 +75,15 @@ everything: all wsa1
 # trains people to ignore the gate. Depending on the generated set fixes it
 # without weakening anything: the assemble check still asks the assembler
 # directly, it just is not asked before its inputs exist.
-gate: $(STALE_HELP_DUPLICATE)
+# ⚠ CORRECTED 2026-09-02: this dependency used to name only
+# $(STALE_HELP_DUPLICATE), and the comment above claimed that covered "the
+# generated set". It did not. `make clean-all && make gate-all` on a sound
+# tree still went red with 3,790 errors per main-CPU image, all of them
+# "Could not find incbin file 'includes/generated/sound_data_*.bin'" -- the
+# round-trip sound images, which only `all` produces. Depending on `all` is
+# also the honest statement of what the gate needs: assert_byte_identical.py
+# compares rebuilt_ROMs/*, so the gate could never have run without it.
+gate: all
 	python3 scripts/analysis/assert_images_assemble.py
 	python3 scripts/analysis/assert_byte_identical.py
 
