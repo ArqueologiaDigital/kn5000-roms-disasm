@@ -36,9 +36,10 @@ SRC = os.path.join(REPO, 'v10/maincpu')
 ROM_PATH = os.path.join(REPO, 'original_ROMs/kn5000_v10_program.rom')
 BASE = 0xE00000
 MANIFEST_PATH = os.path.join(REPO, 'notes/v10-data-as-code/v10dac_conversion_manifest.json')
+SCRATCH = os.environ['SP']
 
-EXCLUDED_LOCS = set(l.strip() for l in open(
-    '/tmp/claude-1000/-home-fsanches-compartilhado-KN7000/af5fe695-af5e-4caf-a2c2-2624dd161081/scratchpad/excluded_locs.txt') if l.strip())
+EXCLUDED_LOCS_FILE = os.path.join(SCRATCH, 'excluded_locs.txt')
+EXCLUDED_LOCS = set(l.strip() for l in open(EXCLUDED_LOCS_FILE) if l.strip())
 
 EXCLUDE_REASONS = {
     'KeyScaleNoteStr_G_0x18+37': (
@@ -124,7 +125,6 @@ def main():
 
     print(f"{len(accepted)} accepted, {len(rejected)} rejected (of {len(targets)} target spans)")
 
-    # Group by file, apply edits bottom-to-top so line numbers stay valid within a file.
     by_file = {}
     for a in accepted:
         by_file.setdefault(a['file'], []).append(a)
@@ -133,6 +133,9 @@ def main():
     total_bytes = 0
     for relfile, spans in by_file.items():
         spans.sort(key=lambda a: a['start_line'], reverse=True)
+        # sanity: no overlap between spans in this file
+        for i in range(len(spans) - 1):
+            assert spans[i]['start_line'] > spans[i+1]['end_line'], (relfile, spans[i], spans[i+1])
         path = os.path.join(SRC, relfile)
         lines = open(path, encoding='latin-1').read().split('\n')
         for a in spans:
@@ -146,20 +149,12 @@ def main():
             header = (f"\t; data-as-code (v10_data_as_code_census.py, STRICT rule): "
                       f"0x{lo:06X}-0x{hi:06X} ({size} B), unreached CODE-territory, was "
                       f"disassembled as {nlines_orig} plausible-but-dead instruction lines; "
-                      f"per={e['per']}% dist={e['dist']}% near {e['loc']}"
-                      .replace('%%', '%'))
-            # per is already a percentage value stored as e.g. "100"; dist is a count, not a
-            # percent -- match the exact style used by the existing converted-span headers.
-            header = (f"\t; data-as-code (v10_data_as_code_census.py, STRICT rule): "
-                      f"0x{lo:06X}-0x{hi:06X} ({size} B), unreached CODE-territory, was "
-                      f"disassembled as {nlines_orig} plausible-but-dead instruction lines; "
                       f"per={e['per']}% dist={e['dist']} near {e['loc']}")
             byte_lines = []
             for i in range(0, size, 12):
                 chunk = rom_bytes[i:i + 12]
                 byte_lines.append("\t.byte " + ", ".join(f"0x{b:02x}" for b in chunk))
             new_lines = [header] + byte_lines
-            # Replace physical lines [start_line, end_line] (1-indexed, inclusive).
             s, en = a['start_line'], a['end_line']
             lines[s - 1:en] = new_lines
             converted_manifest_entries.append(dict(
