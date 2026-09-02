@@ -7,9 +7,21 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 6f456a19f05b (6f456a19f05bf94696728e89e74a53ed62dc9adf)
+Commit: 86332721969d (86332721969de2d2b4c2ac16bc217b5cdee5cca5)
 Date: 2026-09-02
-Subject: [TLCS900] Decode the five leading bytes the disassembler always refused
+Subject: [TLCS900] Model (Xrr+Rn) and the memory-to-memory loads
+
+Binary: llvm-mc sha256 850b013e0e8f14d9a90b95ff1995a858ad8575b8c35a8749970b47ffc613f1a1
+        preserved at ~/compartilhado/toolchain-snapshot/llvm-mc.snap
+
+⚠ NAME THE BINARY, NOT ONLY THE COMMIT. On 2026-09-02 the shared llvm-mc was
+re-linked at least five times while `git rev-parse HEAD` reported an unchanged
+7e541b8ddb07, because the working tree carried eight uncommitted files. A lane
+verified a rename against one assembler and gated it with another; a bisect
+against the moving binary produced a confident WRONG answer, fingering a file
+that assembles byte-identically either way. The commit line above is necessary
+and is not sufficient -- quote the sha256 with any figure that depends on the
+build. See notes/TOOLCHAIN-PROVENANCE-2026-09-02.md.
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # What this pin adds over dbb72df07371, all DECODER-side (no encoding changed,
@@ -470,3 +482,37 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # plus scripts/analysis/assert_images_assemble.py on all 8 KN5000 images, and
 # llvm-lit clean on all 28 TLCS900 MC tests. That the gate is green ACROSS the
 # new diagnostic is the finding: truncation was all the old assembler did.
+
+# ============================================================================
+# UPDATE 14 (2026-09-02) -- 86332721969d: (Xrr+Rn) and memory-to-memory loads
+# ============================================================================
+#
+# Models (Xrr+Rn) as a distinct parser operand kind -- current-bank,
+# previous-bank and 8-bit-index flavours -- and `ld (mem),(nn)` / `ld (nn),(mem)`
+# including the register-indexed variant. UPDATE 8 had deliberately left
+# (Xrr+Rn) as a DIAGNOSTIC rather than a guess; this replaces the diagnostic
+# with a model, and re-encodes no existing spelling.
+#
+# 19,765 of 22,136 raw-byte pseudo-instruction sites (89.3%) now have a modelled
+# operand whose text round-trips to the ROM's bytes; 18,485 also carry a name
+# unidasm corroborates.
+#
+# Three DECODER defects fixed, all wrong-answer rather than refusal:
+#   * LDA-with-8-bit-index decoded five bytes as three instructions;
+#   * the previous-bank index was refused as non-existent;
+#   * `CALL cc,(base+idx)` sat at sub-opcode 0x08 instead of 0xE0 -- which is
+#     where UPDATE 13's 16 `ldmm_dri` length errors came from.
+#
+# ★ ADDING AN OPERAND CLASS IS AS DANGEROUS AS CHANGING AN ENCODING, when the
+#   classes overlap. Giving the new address operand the existing `directaddr`
+#   class silently moved `ldw (xwa), 36152` from `b0 02 38 8d` to `b0 16 38 8d`,
+#   because that class also accepts a bare immediate. Caught by a guard line,
+#   not by reasoning.
+#
+# Verified: `make gate-all` under a binary built from this CLEAN commit --
+# 13/13 byte-identical, 8/8 KN5000 images assembling, and the new
+# assert_toolchain_is_a_prerequisite.py green at 8/8 and 4/4. The same tree had
+# been certified hours earlier by a binary built from a DIRTY 7e541b8ddb07, so
+# the uncommitted state moved none of the 12,386,304 bytes under test -- the
+# provenance gap closed by EQUIVALENCE, an identical sha never having been
+# available.
