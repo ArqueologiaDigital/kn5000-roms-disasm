@@ -196,6 +196,28 @@ def classify_incbin(root, s_file, rel_path):
         if os.path.exists(os.path.join(REPO, d, stem + ".png")):
             return "roundtrip", resolved
 
+    # `logical` above assumes the incbin path resolves relative to the
+    # INCLUDING .s file's own directory. That is wrong when the .s file lives
+    # in a subdirectory but the target is actually found via the assembler's
+    # `-I <product>/maincpu` search path instead -- confirmed 2026-09-02 for
+    # v10 (and v9, byte-identical) maincpu/boot/boot_data_tables.s's eight
+    # `.incbin "images/Bitmap_1bit_*.bin"` lines: no `boot/images/` directory
+    # exists, so `-I v10/maincpu` finds `v10/maincpu/images/Bitmap_1bit_*.bin`
+    # instead, which mono_images.py already round-trips from a committed PNG
+    # (`mono_images.py verify`: "ROUND TRIP EXACT: all 8 banners x 2
+    # revisions"). `logical`'s guessed directory
+    # (`v10/maincpu/boot/images/`) has no PNG, so the check above never fires
+    # and these eight files were being counted as verbatim debt even though
+    # they are the same roundtrip mechanism as the other 42 maincpu images.
+    # Re-run the same sibling-PNG check against `resolved` -- the directory
+    # this tool actually found the file in and will size -- as a fallback.
+    if resolved:
+        rd, rbase = os.path.split(resolved)
+        if os.path.basename(rd) == "images":
+            rstem = os.path.splitext(rbase)[0]
+            if os.path.exists(os.path.join(rd, rstem + ".png")):
+                return "roundtrip", resolved
+
     # Demo-song presets (midi_to_preset.py + compress_lzss.py, from checked-in
     # .mid + .yaml) and help databases (compress_slide8k.py, from the checked-in
     # decompressed help_db_<lang>.bin) -- see Makefile's DEMO_PRESET_COMPRESSED /
