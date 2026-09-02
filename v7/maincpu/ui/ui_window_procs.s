@@ -3766,7 +3766,7 @@ DrawDesignBox_QueueCallback:
 	ld	de, (xwa+14)
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -6773,11 +6773,7 @@ ClipBlit_Replace_CalcVRAMAddr:
 	sll xbc, 2
 	add xbc, xde
 	sll xbc, 6
-	.byte 0xf3
-	reti
-	.byte 0xe4
-	swi	2
-	.byte 0x33
+	lda_rrq xhl, xbc, qiz
 	lda_24	xwa, (0x043c00)
 	add xwa, xhl
 	ld (xsp + 16), xwa
@@ -7013,7 +7009,7 @@ ColorBlit_CallbackBlock:
 	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -7315,7 +7311,7 @@ ColorBlit2_CallbackBlock:
 	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop

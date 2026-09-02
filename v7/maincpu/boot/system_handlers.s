@@ -1548,7 +1548,7 @@ TempoRingBuf_Consume_Done:
 TempoRingBuf_BytecodeSnippet:
 	.byte 0xf1
 	pop	xbc
-	.byte 0x04
+	max
 	dec	6, w
 	.byte 0x06
 	ldb	e, 129
@@ -3118,13 +3118,9 @@ TaskSched_TCBTemplate:	.ascii "(<=;"
 	extz	xix
 	xor	xwa, xwa
 	xor	xhl, xhl
-	.byte 0x9c
-	nop
-	.byte 0x20
+	ld wa, (xix+256)
 	ld	hl, (xix+2)
-	.byte 0xbb
-	nop
-	.byte 0x50
+	ld (xhl+256), wa
 	ld	(xwa+2), hl
 	ld	(xix+9), 0
 	ld	(xix+10), 0
@@ -4179,10 +4175,7 @@ SeqBuf_TimerEvent_BytecodeBlock:
 	unlk	xiz
 	ret
 	ldw_da	hl, (0x200a9)
-	.byte 0xd2, 0xa5
-	nop
-	push	sr
-	.byte 0xf3
+	cpda16_24 xhl, (131237)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4460,10 +4453,7 @@ SeqBuf_NoteEvent_WriteByte_Data:
 	unlk	xiz
 	ret
 	ldw_da	hl, (0x202c7)
-	.byte 0xd2, 0xc3
-	push	sr
-	push	sr
-	.byte 0xf3
+	cpda16_24 xhl, (131779)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4547,9 +4537,7 @@ SeqBuf_NoteEvent_WriteByte_Block:
 	unlk	xiz
 	ret
 	ldw_da	hl, (0x203d1)
-	.byte 0xd2
-	ld	e, 2
-	.byte 0xf3
+	cpda16_24 xhl, (132045)
 	lds	hl, 0
 	jr	z, 3
 	ldw	hl, 0xffff
@@ -4709,10 +4697,7 @@ RingBuf_CopyPtr_Sub2:
 	ret
 RingBuf_InitStructFields:
 	; --- Sub 3: init XDE struct fields at offsets -10..-2 (26 bytes) ---
-	.byte 0xba, 0xf6
-	push	sr
-	nop
-	nop
+	ldw (xde-10), 0
 	ldw	(xde-8), 0
 	ldw	(xde-4), 0
 	ldw	(xde-6), 0
@@ -4902,7 +4887,7 @@ RingBuf512_ReadAlt_ByteBlock:
 	ldb	l, 220
 	push	xwa
 	swi	7
-	.byte 0x01
+	normal
 	ld	(xde-10), ix
 	ret
 

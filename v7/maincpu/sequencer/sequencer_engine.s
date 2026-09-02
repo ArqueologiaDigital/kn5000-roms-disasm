@@ -376,9 +376,7 @@ SeqPlay_DataBlock_BBE:
 	stdi16	(0xf238), 998
 	calr	39
 	ldw_d16	wa, (0xf238)
-	.byte 0xd1
-	push	xde
-	.byte 0xf2, 0xf0
+	cpda16 xwa, (62010)
 	jr	c, 6
 	inc	1, wa
 	stda16	(0xf23a), wa
@@ -415,9 +413,7 @@ SeqPlay_DataBlock_BBE:
 	stda16	(0x28c3), wa
 	calr	64898
 	ldw_d16	wa, (0xf238)
-	.byte 0xd1
-	push	xsp
-	.byte 0xf2, 0xa0
+	subda16 xwa, (62015)
 	stda16	(9832), wa
 	stda16	(9964), wa
 	ret
@@ -446,9 +442,7 @@ SeqPlay_DataBlock_BBE:
 	stda16	(0x28c3), wa
 	calr	64808
 	ldw_d16	wa, (0xf238)
-	.byte 0xd1
-	push	xsp
-	.byte 0xf2, 0xa0
+	subda16 xwa, (62015)
 	stda16	(9832), wa
 	stda16	(9964), wa
 	ret
@@ -461,10 +455,7 @@ SeqPlay_DataBlock_BBE:
 	inc	1, wa
 	stda16	(0xf23a), wa
 	ldw_d16	wa, (0xf23a)
-	.byte 0xd1
-	push	xwa
-	.byte 0xf2
-	swi	0
+	cpdm16 (62008), xwa
 	ret	c
 	dec	1, wa
 	stda16	(0xf238), wa
@@ -480,10 +471,7 @@ SeqPlay_DataBlock_BBE:
 	dec	1, wa
 	stda16	(0xf23a), wa
 	ldw_d16	wa, (0xf23a)
-	.byte 0xd1
-	push	xwa
-	.byte 0xf2
-	swi	0
+	cpdm16 (62008), xwa
 	ret	c
 	dec	1, wa
 	stda16	(0xf238), wa
@@ -511,9 +499,7 @@ SeqPlay_DataBlock_BBE:
 	stda16	(0x28c3), wa
 	calr	64643
 	ldw_d16	wa, (0xf238)
-	.byte 0xd1
-	push	xsp
-	.byte 0xf2, 0xa0
+	subda16 xwa, (62015)
 	stda16	(9832), wa
 	stda16	(9964), wa
 	jrl	-897
@@ -536,9 +522,7 @@ SeqPlay_DataBlock_BBE:
 	stda16	(0x28c3), wa
 	calr	64583
 	ldw_d16	wa, (0xf238)
-	.byte 0xd1
-	push	xsp
-	.byte 0xf2, 0xa0
+	subda16 xwa, (62015)
 	stda16	(9832), wa
 	.byte 0xf1, 0xec
 	.ascii "&PxCü"
@@ -775,7 +759,7 @@ SeqPlay_SendStopAndClearParts:
 
 	stdi16 (0x28b4), 0
 
-	.byte 0x1d, 0x9e, 0xd6, 0xfd	; call Audio_CheckSubsystemReady (v7 addr)
+	call 16635550
 
 	setda 4, 0x28b3
 
@@ -1370,7 +1354,7 @@ SeqPlay_RestartWithVoiceConfig:
 	call	15999481
 	call	15985128
 	ldw_d16	wa, 1052
-	.byte 0xd1, 0x28, 0x23, 0xf0
+	cpda16 xwa, (9000)
 	jr	nz, 12
 	cpdi8	1051, 0
 	jr	nz, 5
@@ -1972,7 +1956,7 @@ SeqPlay_FindVoicesAndReturn:
 	ret
 
 SeqPlay_InitFreshPlayback:
-	.byte 0x1e, 0x17, 0xf7	; calr SeqAcc_InitPlaybackState (v7 displacement)
+	calr 63255
 
 	ldb_d8 a, (0x28b2)
 
@@ -1992,7 +1976,7 @@ SeqPlay_InitFreshPlayback:
 
 	cpdi16 0x28a8, 0
 
-	.byte 0x76, 0xe0, 0x00	; jrl z, SeqPlay_InitFresh_Return (v7 displacement)
+	jrl z, 224
 
 	stdi16 (8998), 0
 
@@ -6729,15 +6713,15 @@ NotePool_DataBlock_8BA:
 
 	ret	z
 
-	.byte 0xc1, 0xe1, 0xbf, 0x21	; ldb_d8	a, (0xc07d) (v7 patched)
+	ldb_d8 a, (49121)
 
 	cps	a, 5
 
 	ret	nz
 
-	.byte 0xc1, 0xe2, 0xbf, 0x23	; ldb_d8	c, (0xc07e) (v7 patched)
+	ldb_d8 c, (49122)
 
-	.byte 0xc1, 0xe3, 0xbf, 0x21	; ldb_d8	a, (0xc07f) (v7 patched)
+	ldb_d8 a, (49123)
 
 	and	c, a
 
@@ -8282,7 +8266,7 @@ Part_BuildAndSendVoiceCCEvent:
 
 	ld (xwa + 5), 0x7f
 
-	.byte 0x1e, 0x1b, 0x02	; calr Part_CheckAndSetModifiedFlags (v7 displacement)
+	calr 539
 
 	stb_erp A, 0xfb
 
@@ -8292,7 +8276,7 @@ Part_BuildAndSendVoiceCCEvent:
 
 	lds de, 6
 
-	.byte 0x1e, 0xec, 0xe8	; calr ToneVoice_AssignChannel (v7 displacement)
+	calr 59628
 
 	stb_erp A, 0xfb
 
@@ -11689,9 +11673,7 @@ SeqValRange_ReturnOK:
 	swi	3
 	.byte 0x89
 	stb_d8	(0x2878), a
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 SeqVoice_InitAllChannelParams:
@@ -13011,15 +12993,11 @@ SeqPart_PositionUpdateBlock:
 	.byte 0xa9, 0xc1, 0xa1
 	pushw	wa
 	push	xsp
-	.byte 0x01
+	normal
 	jrl	c, 186
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	stb_d8	(9780), a
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	calr	63542
 	ldb_d8	a, (0x287a)
@@ -13036,9 +13014,7 @@ SeqPart_PositionUpdateBlock:
 	pop_f
 	jrl	nc, -16088
 	ldw	ix, 8486
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp a, 251
 	extz	wa
 	extz	hl
 	ld	bc, hl
@@ -13057,9 +13033,7 @@ SeqPart_PositionUpdateBlock:
 	jrl	nc, -16088
 	ld	l, (xiy+40)
 	ldb_d8	a, (9780)
-	.byte 0xc7
-	swi	3
-	.byte 0x99
+	ldb_erp a, 251
 	extz	wa
 	extz	hl
 	ld	bc, hl
@@ -13086,17 +13060,11 @@ SeqPart_PositionUpdateBlock:
 	jr	19
 	sub	wa, bc
 	stda16	(9932), wa
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	.byte 0x89, 0xc1, 0xa1
-	pushw	wa
-	.byte 0xf1
+	inc1b_erp 251
+	stb_erp a, 251
+	cpda8 xbc, (10401)
 	jrl	ule, -186
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 SeqPart_CalcTickRate:
@@ -13645,21 +13613,15 @@ SeqData_VoiceSetupBlock:
 	.byte 0x04
 	calr	141
 	calr	63053
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	inc	6, wa
-	jrl	ugt, -1081
-	.byte 0x89
+	ldb_erp l, 251
+	cpib_erp 251, 0
+	jr z, 123
+	stb_erp a, 251
 	stb_d8	(0x2740), a
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	stda16	(0x287d), wa
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	calr	62017
 	.byte 0xc1
@@ -13688,12 +13650,9 @@ SeqData_VoiceSetupBlock:
 	nop
 	jr	nz, 57
 	ldw_d16	wa, (9778)
-	.byte 0xd1, 0xde
-	ldb	e, 128
+	addda16 xwa, (9694)
 	stda16	(0x287f), wa
-	.byte 0xc7
-	swi	3
-	.byte 0x8b
+	stb_erp c, 251
 	extz	bc
 	ld	wa, bc
 	calr	62354
@@ -13715,9 +13674,7 @@ SeqData_VoiceSetupBlock:
 	nop
 	calr	32
 	calr	12134
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 
 SeqBuf_ClearRange:
@@ -15759,11 +15716,7 @@ PartCtrl_DataBlock_CE1:
 	ldw	hl, 0xffff
 	jr	9
 	ld	(xiz), hl
-	.byte 0xbe
-	push	sr
-	push	sr
-	halt
-	nop
+	ldw (xiz+2), 5
 	lds	hl, 0
 	pop	xiz
 	ret
@@ -15794,11 +15747,7 @@ PartCtrl_DataBlock_CE1:
 	ldw	hl, 0xffff
 	jr	9
 	ld	(xiz), hl
-	.byte 0xbe
-	push	sr
-	push	sr
-	halt
-	nop
+	ldw (xiz+2), 5
 	lds	hl, 0
 	pop	xiz
 	ret
@@ -16251,9 +16200,7 @@ SeqPlay_StopReturn:
 	ld	(xsp+4), xde
 	ld	iz, bc
 	ld	c, a
-	.byte 0xc7
-	swi	3
-	.byte 0xa8
+	ldib_erp 251, 0
 	extz	bc
 	lds	wa, 0
 	calr	63212
@@ -16268,11 +16215,8 @@ SeqPlay_StopReturn:
 	calr	145
 	cp	l, 129
 	jr	nz, 8
-	.byte 0xc7
-	swi	3
-	jr	lt, 30
-	.byte 0xa6
-	nop
+	inc1b_erp 251
+	calr 166
 	jr	19
 	cp	l, 130
 	jr	z, 23
@@ -16282,9 +16226,7 @@ SeqPlay_StopReturn:
 	extz	hl
 	ld	wa, hl
 	calr	65414
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	cp	wa, iz
 	jr	c, -44
@@ -16833,12 +16775,8 @@ PartCtrl_SwapAndRelinkBlock:
 	calr	63003
 	ld	wa, iz
 	calr	63017
-	.byte 0xd7
-	swi	2
-	cp	(xhl-41), de
-	.byte 0xcf
-	swi	7
-	swi	7
+	ld qiz, hl
+	cpw qiz, 65535
 	jr	nz, 70
 	ld	(xsp+8), iz
 	incm	1, (xsp+4)
@@ -16864,8 +16802,7 @@ PartCtrl_SwapAndRelinkBlock:
 	ld	bc, (xsp+8)
 	calr	62929
 	ld	wa, (xsp+4)
-	.byte 0xd1
-	ldw	bc, 0x88f2
+	adddm16 (62001), xwa
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -16884,16 +16821,12 @@ PartCtrl_SwapAndRelinkBlock:
 	ld	(xsp+8), iz
 	ld	wa, iz
 	calr	62901
-	.byte 0xd7
-	swi	2
-	cp	(xhl-41), de
-	.byte 0x88
+	ld qiz, hl
+	ld wa, qiz
 	ld	bc, (xsp+6)
 	calr	62870
 	jr	-114
-	.byte 0xd7
-	swi	2
-	.byte 0x8e
+	ld iz, qiz
 	jrl	-141
 
 PartCtrl_ReadWordRoutine:
@@ -17632,11 +17565,7 @@ SeqEvt_ProcessBlock:
 	calr	60062
 	lda	xwa, (xsp+4)
 	ld	(xwa), hl
-	.byte 0xb8
-	push	sr
-	push	sr
-	halt
-	nop
+	ldw (xwa+2), 5
 	lda	xwa, (xsp+4)
 	calr	65034
 	cp	l, 132
@@ -17649,23 +17578,17 @@ SeqEvt_ProcessBlock:
 	.byte 0x8f
 	push	sr
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, -29
 	ld	hl, (xsp)
 	lda	xsp, (xsp+10)
 	ret
-	.byte 0xb7
-	push	sr
-	nop
-	nop
+	ldw (xsp), 0
 	ld	(xsp+2), 0
 	jr	-16
 	lda	xsp, (xsp-10)
 	ld	(xsp+8), a
-	.byte 0xb7
-	push	sr
-	nop
-	nop
+	ldw (xsp), 0
 	ld	(xsp+2), 1
 	ld	xiy, WidgetData_DrawbarPositionTable_0x1BA
 	lda	xix, (xsp+4)
@@ -17687,11 +17610,7 @@ SeqEvt_ProcessBlock:
 	calr	59952
 	lda	xwa, (xsp+4)
 	ld	(xwa), hl
-	.byte 0xb8
-	push	sr
-	push	sr
-	halt
-	nop
+	ldw (xwa+2), 5
 	lda	xwa, (xsp+4)
 	calr	65042
 	cp	l, 177
@@ -17707,7 +17626,7 @@ SeqEvt_ProcessBlock:
 	.byte 0x8f
 	push	sr
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, -37
 	ld	hl, (xsp)
 	lda	xsp, (xsp+10)
@@ -18717,11 +18636,11 @@ SeqPlay_BufferUpdateBlock:
 	jr	z, 7
 	cpdi8	35996, 134
 	jr	nz, 12
-	.byte 0xd1, 0x22, 0x25, 0xf0
+	cpda16 xwa, (9506)
 	jr	c, 12
 	ldw_d16	wa, 9504
 	jr	14
-	.byte 0xd1, 0x1e, 0x25, 0xf0
+	cpda16 xwa, (9502)
 	jr	nc, 4
 	inc	1, wa
 	jr	4
@@ -20105,7 +20024,7 @@ AppEvent_SubDispatch:
 	lda_24	xix, 14960990
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 16009462
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr 8, xix, wa
 	lda_d16	xiz, 9744
 	lda_d16	xwa, 9746
 	jr	58
@@ -20161,7 +20080,7 @@ AppEvent_SubDispatch:
 	lda_24	xix, 14960974
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 16009643
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr 8, xix, wa
 	lda_d16	xiz, 9744
 	lda_d16	xwa, 9746
 	jr	58
@@ -20205,14 +20124,14 @@ AppEvent_SubDispatch:
 	cp	a, 163
 	jr	nz, 17
 	ldw_d16	wa, 9772
-	.byte 0xd1, 0xd7, 0xf1, 0xa0
+	subda16 xwa, (61911)
 	inc	1, wa
 	stda16	61913, wa
 	jrl	1352
 	cp	a, 161
 	jrl	nz, 1346
 	ldw_d16	wa, 9766
-	.byte 0xd1, 0xdc, 0xf1, 0xa0
+	subda16 xwa, (61916)
 	inc	1, wa
 	stda16	61918, wa
 	jrl	1329
@@ -20355,7 +20274,7 @@ AppEvent_SubDispatch:
 	add	xwa, 14960962
 	ld	wa, (xwa)
 	lda_24	xix, 16010300
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr 8, xix, wa
 	ldb_d8	a, 61929
 	cps	a, 1
 	jrl	ule, 134
@@ -20377,11 +20296,11 @@ AppEvent_SubDispatch:
 	dec	1, wa
 	stda16	9768, wa
 	ldw_d16	wa, 9768
-	.byte 0xd1, 0xea, 0xf1, 0xf8
+	cpdm16 (61930), xwa
 	jr	ule, 4
 	stda16	61930, wa
 	ldw_d16	wa, 9768
-	.byte 0xd1, 0xea, 0xf1, 0xa0
+	subda16 xwa, (61930)
 	inc	1, wa
 	stda16	61932, wa
 	jr	56
@@ -20438,7 +20357,7 @@ AppEvent_SubDispatch:
 	add	xwa, 14960950
 	ld	wa, (xwa)
 	lda_24	xix, 16010594
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr 8, xix, wa
 	ldb_d8	a, 61921
 	cps	a, 1
 	jrl	ule, 134
@@ -20460,11 +20379,11 @@ AppEvent_SubDispatch:
 	dec	1, wa
 	stda16	9774, wa
 	ldw_d16	wa, 9774
-	.byte 0xd1, 0xe2, 0xf1, 0xf8
+	cpdm16 (61922), xwa
 	jr	ule, 4
 	stda16	61922, wa
 	ldw_d16	wa, 9774
-	.byte 0xd1, 0xe2, 0xf1, 0xa0
+	subda16 xwa, (61922)
 	inc	1, wa
 	stda16	61924, wa
 	jr	56
@@ -21703,8 +21622,7 @@ SeqAccomp_EventDispatch:
 	call	ApDeliveryEvent
 	.byte 0xc1
 	ldw	hl, 6404
-	.byte 0x32
-	ldb	c, 0xe1
+	ldw de, 57635
 	.ascii "r) A"
 	retd	0xc000
 	.byte 0x01
@@ -23738,7 +23656,7 @@ MainExe_PatternLoad:
 	ldw_d16	wa, 61938
 	stda16	9778, wa
 	ldw_d16	wa, 9724
-	.byte 0xd1, 0xf2, 0xf1, 0xa0
+	subda16 xwa, (61938)
 	inc	1, wa
 	stda16	9694, wa
 	ldb_d8	a, 61942
@@ -23755,7 +23673,7 @@ MainExe_PatternLoad:
 	ldw_d16	wa, 9758
 	stda16	9778, wa
 	ldw_d16	wa, 9760
-	.byte 0xd1, 0x1e, 0x26, 0xa0
+	subda16 xwa, (9758)
 	inc	1, wa
 	stda16	9694, wa
 	call	16041187
@@ -23774,7 +23692,7 @@ MainExe_RhythmLoad:
 	ldw_d16	wa, 61993
 	stda16	9778, wa
 	ldw_d16	wa, 9722
-	.byte 0xd1, 0x29, 0xf2, 0xa0
+	subda16 xwa, (61993)
 	inc	1, wa
 	stda16	9694, wa
 	.byte 0xc1, 0x2e, 0xf2, 0x19, 0x54, 0x26
@@ -23789,7 +23707,7 @@ MainExe_RhythmLoad:
 	ldw_d16	wa, 9744
 	stda16	9778, wa
 	ldw_d16	wa, 9746
-	.byte 0xd1, 0x10, 0x26, 0xa0
+	subda16 xwa, (9744)
 	inc	1, wa
 	stda16	9694, wa
 	call	16041623
@@ -23801,7 +23719,7 @@ MainExe_RhythmLoad:
 	ldw_d16	wa, 9734
 	stda16	9778, wa
 	ldw_d16	wa, 9736
-	.byte 0xd1, 0x06, 0x26, 0xa0
+	subda16 xwa, (9734)
 	inc	1, wa
 	stda16	9694, wa
 	call	16042080
@@ -23820,7 +23738,7 @@ MainExe_AccompLoad:
 	ldw_d16	wa, 61916
 	stda16	9778, wa
 	ldw_d16	wa, 9766
-	.byte 0xd1, 0xdc, 0xf1, 0xa0
+	subda16 xwa, (61916)
 	inc	1, wa
 	stda16	9694, wa
 	.byte 0xc1, 0xe0, 0xf1, 0x19, 0x50, 0x26
@@ -23835,7 +23753,7 @@ MainExe_AccompLoad:
 	stda16	9778, wa
 	.byte 0xd1, 0xef, 0xf1, 0x19, 0x86, 0x26
 	ldw_d16	wa, 9768
-	.byte 0xd1, 0xea, 0xf1, 0xa0
+	subda16 xwa, (61930)
 	inc	1, wa
 	stda16	9694, wa
 	.byte 0xc1, 0xee, 0xf1, 0x19, 0x82, 0x26
@@ -23888,7 +23806,7 @@ MainExe_InlineByteData:
 	ldw_d16	wa, 61911
 	stda16	9778, wa
 	ldw_d16	wa, 9772
-	.byte 0xd1, 0xd7, 0xf1, 0xa0
+	subda16 xwa, (61911)
 	inc	1, wa
 	stda16	9694, wa
 	stdi8	32422, 255
@@ -23902,7 +23820,7 @@ MainExe_InlineByteData:
 	stda16	9778, wa
 	.byte 0xd1, 0xe7, 0xf1, 0x19, 0x86, 0x26
 	ldw_d16	wa, 9774
-	.byte 0xd1, 0xe2, 0xf1, 0xa0
+	subda16 xwa, (61922)
 	inc	1, wa
 	stda16	9694, wa
 	.byte 0xc1, 0xe6, 0xf1, 0x19, 0x82, 0x26
@@ -24279,7 +24197,7 @@ SeqLoad_ProcessDataBlock:
 	ld	xhl, (xsp+2)
 	sll	xhl, 8
 	ld	(xsp+2), xhl
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	inc	6, xsp
 	ret
 	dec	2, xsp
@@ -25055,11 +24973,8 @@ SeqLoad_ReadPartDataBlock:
 	jrl	198
 	ld	xwa, 2048
 	ld	(xsp+4), xwa
-	.byte 0xbf
-	ldwio	2, 0
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+10), 0
+	ldw (xsp+8), 0
 	ld	c, (xsp+12)
 	extz	bc
 	cps	bc, 0
@@ -26627,7 +26542,7 @@ Portamento_NotifyParams:
 
 	lds de, 3
 
-	.byte 0x1d, 0x30, 0xca, 0xfc	; call SoundParam_NotifyChange (v7 addr)
+	call 16566832
 
 	stb_erp C, 0xfb
 
@@ -28677,9 +28592,7 @@ SeqPart_ByteBlockA95A:
 	extz	wa
 	extz	xwa
 	add	xwa, xbc
-	.byte 0xc1
-	ld	h, (xde)
-	.byte 0xf5
+	cpda8 xiy, (9858)
 	jrl	z, 214
 	ld	e, (xwa)
 	cp	e, 16
@@ -28769,7 +28682,7 @@ SeqPart_ByteBlockA95A:
 	pop_f
 	ldw	de, 7693
 	push	xiz
-	.byte 0x01
+	normal
 	jrl	283
 	ld	e, (xwa)
 	cp	e, 13
@@ -28812,10 +28725,9 @@ SeqPart_ByteBlockA95A:
 	jrl	nz, 191
 	calr	673
 	jrl	185
-	.byte 0xc7
-	swi	3
-	cp	(xbc-57), xhl
-	decm8	1, (xhl-53)
+	ldib_erp 251, 1
+	stb_erp c, 251
+	dec 1, c
 	extz	bc
 	lda_d16	xwa, (0xf1a0)
 	extz	xbc
@@ -28829,21 +28741,15 @@ SeqPart_ByteBlockA95A:
 	jr	nz, 4
 	.byte 0xf1
 	jrl	ugt, -16856
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	extz	wa
 	call	Part_ValidateAndSetupVoiceChannel
 	.byte 0xc1
 	jrl	gt, 16168
 	nop
 	jrl	nz, 129
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	.byte 0xcf
-	rcf
+	inc1b_erp 251
+	cp_erpb 251, 16
 	jr	ule, -62
 	call	SeqPart_PositionUpdateBlock
 	.byte 0xc1
@@ -28851,21 +28757,16 @@ SeqPart_ByteBlockA95A:
 	nop
 	jr	nz, 109
 	stdi8	(9782), 0
-	.byte 0xc7
-	swi	3
-	cp	(xbc-57), xhl
-	.byte 0x89
+	ldib_erp 251, 1
+	stb_erp a, 251
 	stb_d8	(9780), a
-	.byte 0xc7
-	swi	3
-	.byte 0x89
+	stb_erp a, 251
 	stb_d8	(9810), a
 	.byte 0xf1
 	jrl	ugt, -12760
 	jr	z, 35
-	.byte 0xc7
-	swi	3
-	decm8	1, (xhl-53)
+	stb_erp c, 251
+	dec 1, c
 	extz	bc
 	lda_d16	xwa, (0xf1a0)
 	extz	xbc
@@ -28893,21 +28794,15 @@ SeqPart_ByteBlockA95A:
 	nop
 	jr	nz, 4
 	stb_d8	(9782), a
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	.byte 0xcf
-	rcf
+	inc1b_erp 251
+	cp_erpb 251, 16
 	jr	ule, -95
 	.byte 0xc1
 	ldw	iz, 6438
 	jrl	gt, 7720
-	.byte 0x04
+	max
 	nop
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	call	AppEvent_ExtendedHandler_0x7
 	call	SeqVoice_InitReturnZero
@@ -29072,9 +28967,7 @@ SeqPart_DualCopyBit3Check:
 	jp Part_CheckAndReallocVoices
 SeqPart_ByteBlockAD92:
 	ldw_d16	wa, (9778)
-	.byte 0xd1
-	ld	h, (xiz)
-	.byte 0xf0
+	cpda16 xwa, (9862)
 	jrl	ule, -461
 	resda	3, 0x287b
 	stdi8	(0x287a), 0
@@ -29101,9 +28994,8 @@ SeqPart_ByteBlockAD92:
 	.byte 0xd1
 	ld	h, (xiz)
 	pop_f
-	.byte 0x7f
-	pushw	wa
-	extz	wa
+	jrl nc, -10200
+	ccf
 	extz	hl
 	ld	bc, hl
 	call	SeqVoice_SeekToBar
@@ -29123,9 +29015,8 @@ SeqPart_ByteBlockAD92:
 	ldb_d8	a, (9780)
 	.byte 0xd1
 	ldw	de, 6438
-	.byte 0x7f
-	pushw	wa
-	extz	wa
+	jrl nc, -10200
+	ccf
 	extz	hl
 	ld	bc, hl
 	call	SeqVoice_SeekToBar
@@ -29185,8 +29076,8 @@ SeqPart_ByteBlockAD92:
 	push	sr
 	ex_ff
 	pop	xiz
-	.byte 0x26
-	lda_d16	xwa, (0x2830)
+	ldb h, 241
+	ldw wa, 12328
 	.byte 0xb0
 	ex_ff
 	.byte 0xac
@@ -29465,13 +29356,11 @@ SeqPart_ByteBlockB0DE:
 	pushw	wa
 	pop_f
 	pop	xix
-	.byte 0x26
-	ldb_d8	l, (0x2740)
-	.byte 0xd1
-	ldw	de, 6438
-	.byte 0x7f
-	pushw	wa
-	extz	hl
+	ldb h, 193
+	ld xwa, 852567847
+	ldb h, 25
+	jrl nc, -9432
+	ccf
 	ld	wa, hl
 	ld	bc, hl
 	call	SeqVoice_SeekToBar
@@ -29498,8 +29387,7 @@ SeqPart_ByteBlockB0DE:
 	cpdi8	(0x287a), 0
 	jr	nz, 104
 	ldw_d16	wa, (9862)
-	.byte 0xd1
-	ldw	de, 0xf826
+	cpdm16 (9778), xwa
 	jr	z, 78
 	ldb_d8	l, (0x2740)
 	stda16	(0x287f), wa

@@ -3474,7 +3474,7 @@ DrawBitmapFile_Impl_TileRemainder:
 
 
 DrawBitmapFile_Impl_RowCopy:
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call 16713148
 
 	lda xsp, (xsp + 10)
 

@@ -71,7 +71,7 @@ SLDstMem_HandleShow:
 	.byte 0x10, 0x22, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x68
 	.byte 0x13
 SLDstMem_ShowFromBank:
-	.byte 0xc1, 0x5c, 0x89, 0x23	; ldb_d8 c, (0x89f8) (v7 patched)
+	ldb_d8 c, (35164)
 
 	extz bc
 
@@ -337,7 +337,7 @@ SLSrcBankList_FuncBody:
 	ld	a, l
 	ld	c, e
 	add	a, e
-	.byte 0xc2, 0x54, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337812)
 	jr	nc, 25
 	add	c, l
 	stb_d8	35168, c
@@ -383,7 +383,7 @@ SLSrcBankList_FuncBody:
 	ld	c, e
 	ld	a, e
 	inc	1, a
-	.byte 0xc2, 0x54, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337812)
 	jr	nc, 36
 	ldb_da	e, (15337810)
 	ld	l, e
@@ -622,7 +622,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	.byte 0x8f, 0x06, 0x53
 	extz	bc
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	ld	de, (xsp+6)
 	calr	-2127
 	lda_d16	xde, 35057
@@ -700,7 +700,7 @@ SLSrcBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	.byte 0xc2, 0x76, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337846)
 	jr	nc, 25
 	add	c, e
 	stb_d8	35170, c
@@ -745,7 +745,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0x76, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337846)
 	jr	nc, 36
 	ldb_da	e, (15337844)
 	ld	l, e
@@ -1072,7 +1072,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-468
 	ldb_da	c, (15337874)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	jr	78
@@ -1097,7 +1098,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-548
 	ldb_da	c, (15337874)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	calr	-857
@@ -1123,7 +1125,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0x94, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337876)
 	jr	nc, 105
 	ldb_da	e, (15337874)
 	ld	a, e
@@ -1144,7 +1146,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-700
 	ldb_da	c, (15337874)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	jrl	152
@@ -1154,7 +1157,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-738
 	ldb_da	c, (15337874)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	jr	115
@@ -1180,7 +1184,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-814
 	ldb_da	c, (15337874)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	jr	39
@@ -1192,7 +1197,8 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-855
 	ldb_da	c, (15337874)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	calr	-1164
@@ -1318,7 +1324,7 @@ SLSrc_HandleShow:
 	ld	xbc, (xsp+4)
 	ld	xde, xiz
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	calr	-19652
 	jrl	321
 SLSrc_HandleScroll:
@@ -1345,7 +1351,7 @@ SLSrc_ScrollMode5_Dispatch:
 	ld	xbc, (xsp+4)
 	ld	xde, xiz
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	240
 SLSrc_ScrollMode6:
 	cp	xiz, 6
@@ -1548,7 +1554,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	.byte 0xc2, 0xca, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337930)
 	jr	nc, 25
 	add	c, e
 	stb_d8	35174, c
@@ -1596,7 +1602,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0xca, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337930)
 	jr	nc, 36
 	ldb_da	e, (15337928)
 	ld	l, e
@@ -1769,7 +1775,7 @@ SLDstBankList_FuncBody:
 	ld	c, w
 	ld	a, w
 	inc	1, a
-	.byte 0xc2, 0xd0, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337936)
 	jr	nc, 15
 	inc	1, c
 	stb_d8	35176, c
@@ -1894,7 +1900,7 @@ SLDstBankList_FuncBody:
 	.byte 0x8f, 0x04, 0x55
 	ld	e, d
 	extz	de
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	calr	-6180
 	lda_d16	xde, 35120
 	ld	xwa, (xsp+6)
@@ -1938,7 +1944,7 @@ SLDstBankList_FuncBody:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	.byte 0xc2, 0xee, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337966)
 	jr	nc, 25
 	add	c, e
 	stb_d8	35178, c
@@ -1986,7 +1992,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0xee, 0x09, 0xea, 0xf1
+	cpda8_24 xbc, (15337966)
 	jr	nc, 36
 	ldb_da	e, (15337964)
 	ld	l, e
@@ -2268,7 +2274,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-489
 	ldb_da	c, (15338002)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	jr	82
@@ -2295,7 +2302,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-573
 	ldb_da	c, (15338002)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	calr	-4725
@@ -2323,7 +2331,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	.byte 0xc2, 0x14, 0x0a, 0xea, 0xf1
+	cpda8_24 xbc, (15338004)
 	jr	nc, 105
 	ldb_da	e, (15338002)
 	ld	a, e
@@ -2344,7 +2352,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-727
 	ldb_da	c, (15338002)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	jrl	152
@@ -2354,7 +2363,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-765
 	ldb_da	c, (15338002)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	jr	115
@@ -2380,7 +2390,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-841
 	ldb_da	c, (15338002)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	jr	39
@@ -2392,7 +2403,8 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	calr	-882
 	ldb_da	c, (15338002)
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x6c, 0x89
+	pushw 0
+	pushw 35180
 	ld	xwa, (xsp+8)
 	ld	xde, 35172
 	calr	-5034
@@ -2577,7 +2589,7 @@ SLDst_HandleShow:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	-130
 SLDst_HandleConfirm:
 	ldda32	xwa, 33108
@@ -2593,7 +2605,7 @@ SLDst_HandleConfirm:
 	ld	xbc, 29360139
 	lds32	xde, 0
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	-185
 SLDst_HandleScroll:
 	ld	xwa, (xsp+4)
@@ -2630,7 +2642,7 @@ SLDst_HandleScroll:
 	ld	xbc, 29360139
 	lds32	xde, 0
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	ld	xwa, xiz
 	ld	xbc, 29360139
 	lds32	xde, 0
@@ -2720,7 +2732,7 @@ SLDst_ScrollDispatch:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xix, (xhl)
-	.byte 0xb4, 0xe8
+	call (xix)
 	ld	wa, hl
 	lds	bc, 1
 	calr	-23603
@@ -2751,7 +2763,7 @@ SLDst_Scroll_ChildReturn:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	-700
 SLDst_Scroll_SubMode:
 	ldda32	xwa, 33108
@@ -2767,7 +2779,7 @@ SLDst_Scroll_SubMode:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	-754
 SLDst_Scroll_SubMode2:
 	ldda32	xwa, 33108
@@ -2788,7 +2800,7 @@ SLDst_Scroll_SubMode2:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	-824
 SLDst_Scroll_SubMode3:
 	cpdi8	35166, 0
@@ -2805,7 +2817,7 @@ SLDst_Scroll_SubMode3:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	-878
 SLDst_Scroll_SubMode4:
 	ld	xbc, 31784962
@@ -2820,7 +2832,7 @@ SLDst_Scroll_SubMode4:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	-928
 SLDst_Scroll_SubMode5:
 	ld	xbc, (xsp+4)
@@ -2838,7 +2850,7 @@ SLDst_Scroll_SubMode5:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	-989
 SLDst_Scroll_SubMode6:
 	ld	xbc, (xsp+4)
@@ -2856,7 +2868,7 @@ SLDst_Scroll_SubMode6:
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
-	.byte 0xb3, 0xe8
+	call (xhl)
 	jrl	-1051
 SLDst_ReturnCapture:
 	ld xhl, 0xffffffff

@@ -1596,10 +1596,10 @@ SoundGen_ResetBitmapDone:
 
 SeqTrack_ChannelMapIdentity:
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -1608,7 +1608,7 @@ SeqTrack_ChannelMapIdentity:
 	retd	256
 	push	sr
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	15, 10
@@ -3919,10 +3919,10 @@ VoiceParam_NullReturn:
 
 VoiceParam_ChannelMapRemapped:
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	15, 10
@@ -4911,10 +4911,8 @@ VoiceSynth_Algo_MultiPath:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xf4
-	ldb	w, 92
+	ld_rrw wa, xix, iy
+	pop xix
 	srl	xiy, 1
 	push	xiy
 	call	SoundGen_ScalePitchByTempo
@@ -5016,10 +5014,8 @@ VoiceSynth_Algo_MultiStage:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xf4
-	ldb	w, 92
+	ld_rrw wa, xix, iy
+	pop xix
 	srl	xiy, 1
 	push	xiy
 	call	SoundGen_ScalePitchByTempo
@@ -5045,13 +5041,11 @@ VoiceSynth_Algo_MultiStage:
 	swi	0
 	scf
 	push	xsp
-	.byte 0x01
+	normal
 	jr	z, 10
 	ld	xix, SeqTrack_ChannelMapIdentity_0x10
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xec
-	ldb	a, 92
+	ld_rrb a, xix, hl
+	pop xix
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
@@ -5108,10 +5102,8 @@ VoiceSynth_Algo_PitchModulated:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xf4
-	ldb	w, 92
+	ld_rrw wa, xix, iy
+	pop xix
 	srl	xiy, 1
 	push	xiy
 	call	SoundGen_ScalePitchByTempo
@@ -5175,10 +5167,8 @@ VoiceSynth_Algo_PitchShift:
 	sla	iy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xf4
-	ldb	w, 92
+	ld_rrw wa, xix, iy
+	pop xix
 	srl	iy, 1
 	push	xiy
 	call	SoundGen_ScalePitchByTempo
@@ -5276,10 +5266,8 @@ VoiceParam_ReadUpdate_10:
 	sla	iy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xf4
-	ldb	w, 92
+	ld_rrw wa, xix, iy
+	pop xix
 	srl	iy, 1
 	push	xiy
 	call	SoundGen_ScalePitchByTempo
@@ -5353,10 +5341,8 @@ VoiceParam_ReadUpdate_11:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xf4
-	ldb	w, 92
+	ld_rrw wa, xix, iy
+	pop xix
 	srl	xiy, 1
 	push	xiy
 	call	SoundGen_ScalePitchByTempo

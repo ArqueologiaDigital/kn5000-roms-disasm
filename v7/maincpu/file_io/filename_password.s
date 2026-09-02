@@ -257,7 +257,8 @@ FileName_DrawItemLoop:
 	extz	xhl
 	add	xhl, xix
 	inc	1, de
-	.byte 0x0b, 0x06, 0x00, 0x0b, 0x00, 0x00
+	pushw 6
+	pushw 0
 	ld	xwa, xhl
 	call	16289232
 	ld	de, (xsp+6)
@@ -568,7 +569,7 @@ FileName_Navigate_ScrollUp:
 	stda16	(32478), bc
 FileName_Navigate_CheckChanged:
 	ld	wa, (xsp+6)
-	.byte 0xd1, 0xde, 0x7e, 0xf0
+	cpda16 xwa, (32478)
 	jr	z, 74
 	ld	xwa, 6291494
 	ld	xbc, 29360129

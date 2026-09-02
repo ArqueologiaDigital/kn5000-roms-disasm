@@ -660,7 +660,7 @@ SoundGen_InitVoiceLoop:
 	ret
 
 SoundGen_InitVoiceData:
-	.byte 0x04
+	max
 	halt
 	.byte 0x06
 
@@ -1088,16 +1088,17 @@ SMF_WriteChannel_FileUnderflow:
 	pop xbc
 	pop xwa
 	jrl SMF_FlushAndFinalize
+
 SMF_WriteChannel_Continue:
-	djnz16	bc, -46
+	djnz16 bc, -46
 
 	stda32 4376, xix
 
 	cpdi8 (6709), 0
 
-	.byte 0x76, 0x1d, 0x05	; jrl z, SMF_FinishChannelAndGetNextEvent (v7 displacement)
+	jrl z, 1309
 
-	.byte 0x1d, 0x86, 0xad, 0xfd	; call BitMapOut_ComputeRegionDelta (v7 addr)
+	call 16625030
 
 	stdi8 (0x2877), 0
 
@@ -3056,29 +3057,16 @@ FileOpen_StoreNormChar:
 	ld (xde), a
 	cps a, 0
 	jr nz, FileOpen_ScanForColon
+
 FileOpen_MatchDevice:
-	ld	xwa, (xsp+16)
-	push	xwa
-	call	16713667
-	ld	iz, hl
-	extz	xiz
-	ld	xwa, (xsp+28)
-	push	xwa
-	call	16713667
-	inc	8, xsp
-	ld	wa, hl
-	extz	xwa
-	ld	xbc, (xsp+24)
-	ld	(xsp+16), xbc
-	add	(xsp+16), xwa
-	sub	(xsp+16), xiz
-	ld	(xsp+6), 0
-	lda_24	xwa, 254908
-	ld	(xsp+8), xwa
-	ld	a, (xsp+6)
-	extz	wa
-	cpda16_24	xwa, (254942)
-	jr	ge, 44
+	.byte 0xaf, 0x10, 0x20, 0x38, 0x1d, 0xc3, 0x07, 0xff
+	.byte 0xdb, 0x8e, 0xee, 0x12, 0xaf, 0x1c, 0x20, 0x38
+	.byte 0x1d, 0xc3, 0x07, 0xff, 0xef, 0x60, 0xdb, 0x88
+	.byte 0xe8, 0x12, 0xaf, 0x18, 0x21, 0xbf, 0x10, 0x61
+	.byte 0xaf, 0x10, 0x88, 0xaf, 0x10, 0xae, 0xbf, 0x06
+	.byte 0x00, 0x00, 0xf2, 0xbc, 0xe3, 0x03, 0x30, 0xbf
+	.byte 0x08, 0x60, 0x8f, 0x06, 0x21, 0xd8, 0x12, 0xd2
+	.byte 0xde, 0xe3, 0x03, 0xf0, 0x69, 0x2c
 FileOpen_DeviceSearchLoop:
 	.byte 0xaf, 0x08, 0x20, 0xa8, 0x16, 0x20, 0x38, 0xaf
 	.byte 0x10, 0x20, 0x38, 0x1d, 0x58, 0x07, 0xff, 0xef
@@ -3461,14 +3449,10 @@ SeqStep_ByteBlockF002:
 	ret
 	lds	hl, 0
 	ld	xwa, (xsp+4)
-	.byte 0xc5, 0xe0
-	push	xsp
-	nop
+	cp_spib_im 224, 0
 	jr	z, 8
 	inc	1, hl
-	.byte 0xc5, 0xe0
-	push	xsp
-	nop
+	cp_spib_im 224, 0
 	jr	nz, -8
 	pushw	hl
 	ld	xwa, (xsp+6)
@@ -3597,73 +3581,40 @@ SeqStep_FileCloseExit:
 	stiw_da	(0x1e53c), 25
 	ldw	hl, 0xffff
 	jr	119
-	.byte 0xd7
-	swi	2
-	cp	(xwa-41), xde
-	.byte 0xcf
-	rcf
-	nop
+	ld qiz, 0
+	cpw qiz, 16
 	jr	ge, 107
-	.byte 0xd7
-	swi	2
-	or	(xwa-40), d
-	push	sr
+	ld wa, qiz
+	sla wa, 2
 	lda_24	xbc, (0x210b4)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 232
-	.byte 0xe0
+	ld_rrl xwa, xbc, wa
+	or xwa, xwa
 	jr	z, 77
-	.byte 0xd7
-	swi	2
-	or	(xwa-40), d
-	push	sr
+	ld wa, qiz
+	sla wa, 2
 	lda_24	xbc, (0x210b4)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 232
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xwa, xbc, wa
+	cp xwa, 4294967295
 	jr	z, 53
 	ld	xwa, (xsp+4)
 	push	xwa
 	pushw	1
-	.byte 0xd7
-	swi	2
-	or	(xwa-40), d
-	push	sr
+	ld wa, qiz
+	sla wa, 2
 	lda_24	xbc, (0x210b4)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
-	.byte 0xd7
-	swi	2
-	or	(xwa-40), d
-	push	sr
+	ld_rrl xwa, xbc, wa
+	push xwa
+	ld wa, qiz
+	sla wa, 2
 	lda_24	xbc, (0x210b4)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 168
-	ret
-	ldb	w, 168
-	ldb	d, 32
+	ld_rrl xwa, xbc, wa
+	ld xwa, (xwa+14)
+	ld xwa, (xwa+36)
 	call	(xwa)
 	lda	xsp, (xsp+10)
 	or	iz, hl
-	.byte 0xd7
-	swi	2
-	jr	lt, -41
-	swi	2
-	.byte 0xcf
-	rcf
-	nop
+	inc 1, qiz
+	cpw qiz, 16
 	jr	lt, -107
 	ld	hl, iz
 	pop	xiz
@@ -3689,10 +3640,7 @@ SeqStep_FileCloseExit:
 	lda	xsp, (xsp+10)
 	ret
 	ld	xwa, (xsp+4)
-	.byte 0xb8
-	ei	2
-	nop
-	nop
+	ldw (xwa+6), 0
 	ret
 
 SeqStep_FileNopA:
@@ -3805,7 +3753,7 @@ SeqStep_ByteBlockF245:
 	ld	xwa, (xde+18)
 	.byte 0x80
 	push	xsp
-	.byte 0x01
+	normal
 	jr	nz, 11
 	ld	xbc, (xsp+8)
 	ld	xwa, (xde+22)
@@ -4511,10 +4459,7 @@ SeqStep_FileBufferFinal:
 	nop
 	lda_24	xwa, (0x2121a)
 	ld	xiz, xwa
-	.byte 0xbf
-	ei	2
-	nop
-	nop
+	ldw (xsp+6), 0
 	.byte 0x9f, 0x06
 	push	xsp
 	ldwio	0, 0x3a69
@@ -5798,9 +5743,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0x00, 0x80, 0x9f, 0x02, 0x23, 0x4e, 0xef, 0x64
 	.byte 0x0e
 SeqChan_SetupAndCallHelper:
-	.byte 0x0b
-	nop
-	nop
+	pushw 0
 	ld	wa, (xsp+14)
 	pushw	wa
 	ld	xwa, (xsp+12)
@@ -5966,7 +5909,7 @@ SeqChan_TraverseAndProcess:
 	ld	xbc, xwa
 	ld	xwa, (xwa+71)
 	ld	(xbc+22), xwa
-	.byte 0x0b, 0x20, 0x00
+	pushw 32
 	ld	xwa, (xsp+14)
 	push	xwa
 	calr	-1859
@@ -5986,7 +5929,7 @@ SeqChan_TraverseAndProcess:
 	extz	xwa
 	sub	xhl, xwa
 	pushw	hl
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	ld	xwa, (xsp+16)
 	push	xwa
 	calr	-6106
@@ -6050,7 +5993,7 @@ SeqChan_ReadNextFromLoop:
 	ld	(xsp+4), hl
 	.byte 0x9f, 0x04, 0x3f, 0x00, 0x00
 	jrl	nz, 136
-	.byte 0x0b, 0x00, 0x00
+	pushw 0
 	push	xiz
 	calr	-2087
 	inc	6, xsp
@@ -6060,7 +6003,8 @@ SeqChan_ReadNextFromLoop:
 	ld	xwa, (xiz+34)
 	lda	xwa, (xwa+26)
 	ld	(xsp+6), xwa
-	.byte 0x0b, 0xe4, 0x00, 0x0b, 0x2a, 0x50
+	pushw 228
+	pushw 20522
 	lda	xwa, (xsp+14)
 	push	xwa
 	call	16713584
@@ -6069,7 +6013,7 @@ SeqChan_ReadNextFromLoop:
 	push	xwa
 	ld	xwa, (xiz+10)
 	ld	xwa, (xwa+24)
-	.byte 0xb0, 0xe8
+	call (xwa)
 	ld	wa, (xiz+69)
 	ld	(xsp+39), wa
 	lds32	xwa, 0
@@ -6119,11 +6063,8 @@ SeqChan_WritePatchData:
 	sla	bc, 2
 	lda_24	xde, (0x210b4)
 	lds32	xwa, 0
-	.byte 0xf3
-	reti
-	or	xix, xwa
-	jr	f, -18
-	.byte 0x88
+	st_rrl xwa, xde, bc
+	ld xwa, xiz
 	push	xwa
 	call	SeqStep_FreeMemory
 	lda	xsp, (xsp+12)
@@ -6375,7 +6316,7 @@ SeqChan_ByteBlockC:
 	ld	a, (xwa+4)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	calr	-176
 	lda	xsp, (xsp+16)
 	stdi16	35188, 0
@@ -6384,7 +6325,9 @@ SeqChan_ByteBlockC:
 	ld	(xiz+16), 2
 	lds	hl, 0
 	jr	52
-	.byte 0x0b, 0x00, 0x02, 0x0b, 0xe4, 0x00, 0x0b, 0x38, 0x50
+	pushw 512
+	pushw 228
+	pushw 20536
 	push	xiz
 	call	16713148
 	lda	xsp, (xsp+10)
@@ -6396,7 +6339,7 @@ SeqChan_ByteBlockC:
 	ld	a, (xwa+4)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0x03, 0x00
+	pushw 3
 	calr	-246
 	lda	xsp, (xsp+16)
 	pop	xiz
@@ -6447,10 +6390,7 @@ SeqChan_ByteBlockD:
 	jr	z, 15
 	cp	wa, 47
 	jr	nz, 125
-	.byte 0xb1
-	push	sr
-	.byte 0x1f
-	nop
+	ldw (xbc), 31
 	lds	hl, 0
 	jrl	170
 	ld	xwa, (xiz)
@@ -6539,7 +6479,7 @@ SeqChan_ByteBlockD:
 	.byte 0xd2
 	calr	551
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	lt, 4
 	lds	hl, 0
@@ -7329,8 +7269,9 @@ GetMediaType_CheckExtraFormat:
 	cps hl, 0
 	jr nz, GetMediaType_Epilogue
 	ldib_erp 0xfb, 5
+
 GetMediaType_Epilogue:
-	stdi16	35188, 0
+	stdi16 (35188), 0
 
 	ld xwa, (xsp + 2)
 
@@ -7344,7 +7285,7 @@ GetMediaType_Epilogue:
 
 	pushw wa
 
-	.byte 0x1e, 0xd6, 0xf6	; calr FDC_StoreDiskType (v7 displacement)
+	calr 63190
 
 	inc 6, xsp
 
@@ -7473,7 +7414,7 @@ GetVolumeLabel_ScanEntry:
 	jr	z, 65
 	.byte 0xbf, 0x30, 0xcb
 	jr	z, 38
-	.byte 0x0b, 0x0b, 0x00
+	pushw 11
 	lda	xwa, (xsp+38)
 	push	xwa
 	lda_24	xwa, 141088
@@ -8040,7 +7981,7 @@ SndTable_ByteBlock_ReadOps:
 	or	xhl, xix
 	pop	sr
 	push	xsp
-	.byte 0x01
+	normal
 	jr	nz, 6
 	calr	759
 	extz	hl
@@ -8074,10 +8015,7 @@ SndTable_ByteBlock_ReadOps:
 	nop
 	ld	wa, (xsp+4)
 	extz	xwa
-	.byte 0xe2
-	pushw	iz
-	ldb	l, 2
-	.byte 0xf0
+	cpda32_24 xwa, (141102)
 	jrl	ugt, 134
 	lds	wa, 2
 	call	TaskMsg_Receive
@@ -8088,11 +8026,7 @@ SndTable_ByteBlock_ReadOps:
 	nop
 	nop
 	jr	z, 17
-	.byte 0xbe
-	push	sr
-	push	sr
-	swi	6
-	swi	7
+	ldw (xiz+2), 65534
 	ld	xwa, xiz
 	ld	xbc, xwa
 	lds	wa, 3
@@ -8102,15 +8036,8 @@ SndTable_ByteBlock_ReadOps:
 	calr	65336
 	cps	hl, 0
 	jr	z, 21
-	.byte 0xb6
-	push	sr
-	nop
-	nop
-	.byte 0xbe
-	push	sr
-	push	sr
-	swi	6
-	swi	7
+	ldw (xiz), 0
+	ldw (xiz+2), 65534
 	ld	xwa, xiz
 	ld	xbc, xwa
 	lds	wa, 3
@@ -8131,11 +8058,7 @@ SndTable_ByteBlock_ReadOps:
 	ldl_da	xbc, (0x2272e)
 	sub	xbc, xwa
 	ld	(xiz), bc
-	.byte 0xbe
-	push	sr
-	push	sr
-	nop
-	nop
+	ldw (xiz+2), 0
 	ld	xwa, xiz
 	ld	xbc, xwa
 	lds	wa, 3
@@ -8143,13 +8066,10 @@ SndTable_ByteBlock_ReadOps:
 	.byte 0x9f, 0x04
 	push	xwa
 	nop
-	.byte 0x04
+	max
 	ld	wa, (xsp+4)
 	extz	xwa
-	.byte 0xe2
-	pushw	iz
-	ldb	l, 2
-	.byte 0xf0
+	cpda32_24 xwa, (141102)
 	jrl	ule, -134
 	stib_da	(0x2357e), 0
 	call	Show_ScreenGroup_Entry_0x7A
@@ -8959,15 +8879,11 @@ AccChord_ReadChannelKeys:
 	stb_d8	(36004), a
 	stb_d8	(12862), a
 AccChord_CheckUIStateExit:
-	cpdi8	35992, 14
-	jr	z, 26
-	cpdi8	12885, 14
-	jr	nz, 19
-	ldb_d8	a, 52803
-	stb_d8	36006, a
-	ldb_d8	a, 52804
-	stb_d8	36004, a
-	calr	147
+	.byte 0xc1, 0x98, 0x8c, 0x3f, 0x0e, 0x66, 0x1a, 0xc1
+	.byte 0x55, 0x32, 0x3f, 0x0e, 0x6e, 0x13, 0xc1, 0x43
+	.byte 0xce, 0x21, 0xf1, 0xa6, 0x8c, 0x41, 0xc1, 0x44
+	.byte 0xce, 0x21, 0xf1, 0xa4, 0x8c, 0x41, 0x1e, 0x93
+	.byte 0x00
 AccChord_CheckModeAndUpdate:
 	ldb_d8	a, (12920)
 	orda8	xbc, (12921)

@@ -137,7 +137,8 @@ WorldPerc_PatchEntry_000:
 WorldPerc_PatchEntry_001:
 	.byte 0x01, 0x00, 0xff
 WorldPerc_PatchEntry_002:
-	.byte 0x02, 0x00
+	push sr
+	nop
 	swi	7
 WorldPerc_PatchEntry_003:
 	.byte 0x03, 0x00, 0xff
@@ -173,7 +174,8 @@ WorldPerc_PatchEntry_016:
 WorldPerc_PatchEntry_017:
 	.byte 0x11, 0x00, 0xff
 WorldPerc_PatchEntry_018:
-	.byte 0x12, 0x00
+	ccf
+	nop
 	swi	7
 WorldPerc_PatchEntry_019:
 	.byte 0x13, 0x00, 0xff
@@ -209,12 +211,13 @@ WorldPerc_PatchEntry_032:
 WorldPerc_PatchEntry_033:
 	.byte 0x21, 0x00, 0xff
 WorldPerc_PatchEntry_034:
-	.byte 0x22, 0x00
+	ldb b, 0
 	swi	7
 WorldPerc_PatchEntry_035:
 	.byte 0x23, 0x00, 0xff
 WorldPerc_PatchEntry_036:
-	.byte 0x24, 0x00, 0xff
+	ldb d, 0
+	swi 7
 WorldPerc_PatchEntry_037:	aligned_string "%"
 WorldPerc_PatchEntry_038:
 	.byte 0x26, 0x00, 0xff
@@ -225,12 +228,15 @@ WorldPerc_PatchEntry_040:
 WorldPerc_PatchEntry_041:
 	.byte 0x29, 0x00, 0xff
 WorldPerc_PatchEntry_042:
-	.byte 0x2a, 0x00
+	pushw de
+	nop
 	swi	7
 WorldPerc_PatchEntry_043:
 	.byte 0x2b, 0x00, 0xff
 WorldPerc_PatchEntry_044:
-	.byte 0x2c, 0x00, 0xff
+	pushw ix
+	nop
+	swi 7
 WorldPerc_PatchEntry_045:	aligned_string "-"
 WorldPerc_PatchEntry_046:
 	.byte 0x2e, 0x00, 0xff
@@ -246,7 +252,7 @@ WorldPerc_PatchEntry_050:
 WorldPerc_PatchEntry_051:
 	.byte 0x33, 0x00, 0xff
 WorldPerc_PatchEntry_052:
-	.byte 0x34, 0x00, 0xff
+	ldw ix, 65280
 WorldPerc_PatchEntry_053:	aligned_string "5"
 WorldPerc_PatchEntry_054:
 	.byte 0x36, 0x00, 0xff
@@ -257,12 +263,15 @@ WorldPerc_PatchEntry_056:
 WorldPerc_PatchEntry_057:
 	.byte 0x39, 0x00, 0xff
 WorldPerc_PatchEntry_058:
-	.byte 0x3a, 0x00
+	push xde
+	nop
 	swi	7
 WorldPerc_PatchEntry_059:
 	.byte 0x3b, 0x00, 0xff
 WorldPerc_PatchEntry_060:
-	.byte 0x3c, 0x00, 0xff
+	push xix
+	nop
+	swi 7
 WorldPerc_PatchEntry_061:	aligned_string "="
 WorldPerc_PatchEntry_062:
 	.byte 0x3e, 0x00, 0xff
@@ -289,12 +298,15 @@ WorldPerc_PatchEntry_072:
 WorldPerc_PatchEntry_073:
 	.byte 0x49, 0x00, 0xff
 WorldPerc_PatchEntry_074:
-	.byte 0x4a, 0x00
+	popw de
+	nop
 	swi	7
 WorldPerc_PatchEntry_075:
 	.byte 0x4b, 0x00, 0xff
 WorldPerc_PatchEntry_076:
-	.byte 0x4c, 0x00, 0xff
+	popw ix
+	nop
+	swi 7
 WorldPerc_PatchEntry_077:	aligned_string "M"
 WorldPerc_PatchEntry_078:
 	.byte 0x4e, 0x00, 0xff
@@ -321,12 +333,15 @@ WorldPerc_PatchEntry_088:
 WorldPerc_PatchEntry_089:
 	.byte 0x59, 0x00, 0xff
 WorldPerc_PatchEntry_090:
-	.byte 0x5a, 0x00
+	pop xde
+	nop
 	swi	7
 WorldPerc_PatchEntry_091:
 	.byte 0x5b, 0x00, 0xff
 WorldPerc_PatchEntry_092:
-	.byte 0x5c, 0x00, 0xff
+	pop xix
+	nop
+	swi 7
 WorldPerc_PatchEntry_093:	aligned_string "]"
 WorldPerc_PatchEntry_094:
 	.byte 0x5e, 0x00, 0xff
@@ -337,12 +352,13 @@ WorldPerc_PatchEntry_096:
 WorldPerc_PatchEntry_097:
 	.byte 0x61, 0x00, 0xff
 WorldPerc_PatchEntry_098:
-	.byte 0x62, 0x00
+	jr le, 0
 	swi	7
 WorldPerc_PatchEntry_099:
 	.byte 0x63, 0x00, 0xff
 WorldPerc_PatchEntry_100:
-	.byte 0x64, 0x00, 0xff
+	jr ov, 0
+	swi 7
 WorldPerc_PatchEntry_101:	aligned_string "e"
 WorldPerc_PatchEntry_102:
 	.byte 0x66, 0x00, 0xff
@@ -353,12 +369,13 @@ WorldPerc_PatchEntry_104:
 WorldPerc_PatchEntry_105:
 	.byte 0x69, 0x00, 0xff
 WorldPerc_PatchEntry_106:
-	.byte 0x6a, 0x00
+	jr gt, 0
 	swi	7
 WorldPerc_PatchEntry_107:
 	.byte 0x6b, 0x00, 0xff
 WorldPerc_PatchEntry_108:
-	.byte 0x6c, 0x00, 0xff
+	jr nov, 0
+	swi 7
 WorldPerc_PatchEntry_109:	aligned_string "m"
 WorldPerc_PatchEntry_110:
 	.byte 0x6e, 0x00, 0xff
@@ -374,7 +391,7 @@ WorldPerc_PatchEntry_114:
 WorldPerc_PatchEntry_115:
 	.byte 0x73, 0x00, 0xff
 WorldPerc_PatchEntry_116:
-	.byte 0x74, 0x00, 0xff
+	jrl ov, -256
 WorldPerc_PatchEntry_117:	aligned_string "u"
 WorldPerc_PatchEntry_118:
 	.byte 0x76, 0x00, 0xff
@@ -390,7 +407,7 @@ WorldPerc_PatchEntry_122:
 WorldPerc_PatchEntry_123:
 	.byte 0x7b, 0x00, 0xff
 WorldPerc_PatchEntry_124:
-	.byte 0x7c, 0x00, 0xff
+	jrl nov, -256
 WorldPerc_PatchEntry_125:	aligned_string "}"
 WorldPerc_PatchEntry_126:
 	.byte 0x7e, 0x00, 0xff

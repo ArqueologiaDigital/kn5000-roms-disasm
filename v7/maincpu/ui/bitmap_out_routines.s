@@ -2613,7 +2613,7 @@ BitMapOut_RefreshDisplay_Commit:
 
 	ld (xwa), 0xff
 
-	.byte 0xf1, 0x46, 0x90, 0x52	; stda16 (0x90e2), xde (v7 patched)
+	stda16 (36934), de
 
 	ld a, (xix)
 
@@ -2809,7 +2809,7 @@ BitMapOut_ByteData_RenderState:
 	call	16405594
 	cp	xhl, 27263185
 	jr	nz, 59
-	.byte 0x0b, 0x12, 0x00
+	pushw 18
 	call	16713379
 	inc	2, xsp
 	ld	xiz, xhl
@@ -3021,7 +3021,7 @@ BitMapOut_ByteData_WidgetTable:
 
 	push	xiz
 
-	.byte 0xf1, 0xbc, 0x8c, 0x02, 0xff, 0xff	; stdi16	(0x8d58), 0xffff (v7 patched)
+	stdi16 (36028), 65535
 
 	calr	2476
 

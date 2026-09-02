@@ -1290,28 +1290,28 @@ StrTimeSig_2_2:
 	.byte 0x32, 0x2f, 0x32, 0x00
 StrTimeSig_1_2:
 	ldw	bc, 0x322f
-	.byte 0x00			; padding
+	nop
 	ldb	e, 100
-	.byte 0x00			; padding
-	.byte 0xff			; padding
+	nop
+	swi 7
 	aligned_string "%s (%s)"
-	.byte 0x00			; padding
-	.byte 0x00			; padding
+	nop
+	nop
 	jp16	0xa400
 	.byte 0x00			; padding
 	.byte 0xa4, 0x00, 0x55
 	.byte 0x00			; padding
 	jr	f, 0
 	jrl	nz, 0x8200
-	.byte 0x00			; padding
-	.byte 0x00			; padding
-	.byte 0x00			; padding
+	nop
+	nop
+	nop
 	push xwa
-	.byte 0x00			; padding
-	.byte 0x00			; padding
-	.byte 0x00			; padding
+	nop
+	nop
+	nop
 	push xwa
-	.byte 0x00			; padding
+	nop
 	jrl	le, 29185
 	normal
 	.byte 0x72, 0x01
@@ -1668,28 +1668,36 @@ StrTranspose_Minus25:
 	.byte 0x00, 0x00, 0xf8, 0x38, 0x00, 0x00, 0xf9, 0x38
 	.byte 0x00, 0x00
 StrBeat16:
-	.byte 0x31, 0x36, 0x20, 0x00
+	ldw bc, 8246
+	nop
 StrBeat15:	.asciz "15 "
 StrBeat14:
-	.byte 0x31, 0x34, 0x20, 0x00
+	ldw bc, 8244
+	nop
 StrBeat13:	.asciz "13 "
 StrBeat12:
-	.byte 0x31, 0x32, 0x20, 0x00
+	ldw bc, 8242
+	nop
 StrBeat11:	.asciz "11 "
 StrBeat10:
-	.byte 0x31, 0x30, 0x20, 0x00
+	ldw bc, 8240
+	nop
 StrBeat09:	.asciz " 9 "
 StrBeat08:
-	.byte 0x20, 0x38, 0x20, 0x00
+	ldb w, 56
+	ldb w, 0
 StrBeat07:	.asciz " 7 "
 StrBeat06:
-	.byte 0x20, 0x36, 0x20, 0x00
+	ldb w, 54
+	ldb w, 0
 StrBeat05:	.asciz " 5 "
 StrBeat04:
-	.byte 0x20, 0x34, 0x20, 0x00
+	ldb w, 52
+	ldb w, 0
 StrBeat03:	.asciz " 3 "
 StrBeat02:
-	.byte 0x20, 0x32, 0x20, 0x00
+	ldb w, 50
+	ldb w, 0
 StrBeat01:	.asciz " 1 "
 StrBeatOff:
 	.byte 0x4f, 0x46, 0x46, 0x00, 0x00, 0x00
@@ -2200,8 +2208,20 @@ SLOT_NAME_MEMORY_A:	aligned_string "MEMORY A "
 
 MsgBox_AttentionHeader:
 	; Control codes/header
-	.byte 0x1c, 0x00, 0x1c, 0x00, 0x2d, 0x00, 0x2d, 0x00, 0x2d, 0x00, 0x20, 0x00
-	.byte 0x2d, 0x00, 0x27, 0x00, 0x1c, 0x00, 0x00, 0x00
+	call16 7168
+	nop
+	pushw iy
+	nop
+	pushw iy
+	nop
+	pushw iy
+	nop
+	ldb w, 0
+	pushw iy
+	nop
+	ldb l, 0
+	call16 0
+	nop
 	; Localization: Attention (6 languages)
 MSG_ATTENTION_EN:	aligned_string "ATTENTION!"	; English (12 bytes)
 MSG_ATTENTION_DE:	.asciz "ACHTUNG !"	; German (10 bytes)

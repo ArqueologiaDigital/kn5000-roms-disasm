@@ -1975,13 +1975,13 @@ KeyScan_CheckEmptyMarker:
 
 	; --- Normal scan: search array for matching (chain<<8)|param ---
 
-	.byte 0xc1, 0xe1, 0xbf, 0x21	; ldb_d8 a, (0xc07d); param byte (v7 patched)
+	ldb_d8 a, (49121)
 
 	ld l, a
 
 	extz hl
 
-	.byte 0xc1, 0xe4, 0xbf, 0x25	; ldb_d8 e, (0xc080); chain byte (v7 patched)
+	ldb_d8 e, (49124)
 
 	ld c, e
 
@@ -2804,9 +2804,11 @@ UI_PostTimerResetEvent:
 	ld xbc, 0x1c0000e
 	lds32 xde, 0
 	jp ApPostEvent
+
 SeqState_HasModeChanged:
-	ldb_d8	a, 35994
-	cpda8	a, 35996
+	ldb_d8 a, (35994)
+
+	cpda8 xbc, (35996)
 
 	scc16 nz, hl
 

@@ -797,7 +797,8 @@ PsFileNameBox_Confirm_MultiItem:
 	lda	xwa, (xsp+146)
 	ld	xhl, (xhl)
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	jr	17
 PsFileNameBox_Confirm_NewItem:
 	lda_dri XWA, 0xfd, 0x92, 0x00

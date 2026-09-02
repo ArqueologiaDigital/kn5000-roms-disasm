@@ -369,11 +369,7 @@ DrawText_NullTerminate:
 	ret
 
 DrawText_LayoutAndRender_Variant1:
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCC6
 	lda	xix, (xsp+270)
@@ -435,7 +431,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	63234
 	pop	xiz
@@ -444,11 +440,7 @@ DrawText_LayoutAndRender_Variant1:
 	ccf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCCE
 	.byte 0xf3
@@ -516,7 +508,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	63079
 	pop	xiz
@@ -525,11 +517,7 @@ DrawText_LayoutAndRender_Variant1:
 	ccf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCD6
 	lda	xix, (xsp+270)
@@ -592,7 +580,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	62938
 	pop	xiz
@@ -601,11 +589,7 @@ DrawText_LayoutAndRender_Variant1:
 	ccf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCDE
 	.byte 0xf3
@@ -662,7 +646,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	62797
 	pop	xiz
@@ -671,11 +655,7 @@ DrawText_LayoutAndRender_Variant1:
 	ccf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCE6
 	lda	xix, (xsp+270)
@@ -737,7 +717,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	62642
 	pop	xiz
@@ -1063,9 +1043,8 @@ DrawText_LayoutAndRender_Variant1:
 	ld	bc, (xix)
 	extz	xbc
 	div	bc, 40
-	.byte 0xd7, 0xe6
-	or	(xbc-39), h
-	pop	sr
+	ld bc, qbc
+	sll bc, 3
 	ld	(xhl), bc
 	ld	bc, (xde)
 	.byte 0x98
@@ -1094,14 +1073,11 @@ DrawText_LayoutAndRender_Variant1:
 	ld	bc, (xix)
 	extz	xbc
 	div	bc, 40
-	.byte 0xd7, 0xe6
-	or	(xbc-39), h
-	pop	sr
+	ld bc, qbc
+	sll bc, 3
 	ld	(xhl), bc
 	ld	a, (xwa+2)
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	lda	xwa, (xsp+2)
 	ld	bc, (xhl)
@@ -1567,9 +1543,8 @@ ColorBlit_Variant_ByteData:
 	ld	bc, (xhl)
 	extz	xbc
 	div	bc, 40
-	.byte 0xd7, 0xe6
-	or	(xbc-39), h
-	pop	sr
+	ld bc, qbc
+	sll bc, 3
 	ld	(xwa), bc
 	ld	bc, (xde)
 	.byte 0x9b, 0x04, 0x81
@@ -1601,10 +1576,8 @@ ColorBlit_Variant_ByteData:
 	extz	hl
 	add	hl, hl
 	ld	xbc, (xbc+7)
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xec
-	ldw	de, 0x30b7
+	lda_rr xde, xbc, hl
+	lda xwa, (xsp)
 	ld	bc, (xde)
 	ld	(xwa), bc
 	ld	bc, (xde+2)
@@ -2435,7 +2408,7 @@ DisplayBuf_CopyEvenRow:
 
 	push xbc
 
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call 16713148
 
 	lda xsp, (xsp + 10)
 
@@ -2484,7 +2457,7 @@ DisplayBuf_CopyOddRow:
 
 	push xbc
 
-	.byte 0x1d, 0xbc, 0x05, 0xff	; call Mem_Copy (v7 addr)
+	call 16713148
 
 	lda xsp, (xsp + 10)
 
@@ -2633,19 +2606,15 @@ VGA_CRTCTiming_ByteData:
 	swi	2
 	.byte 0x04
 	ld	(xsp+2), xwa
-	.byte 0xc7
-	swi	3
-	cp	(xwa-57), xhl
-	.byte 0x89
+	ldib_erp 251, 0
+	stb_erp a, 251
 	extz	wa
 	ld	xbc, (xsp+2)
 	calr	65361
 	lds32	xwa, 4
 	add	(xsp+2), xwa
-	.byte 0xc7
-	swi	3
-	jr	lt, 104
-	.byte 0xeb
+	inc1b_erp 251
+	jr -21
 	ldw	wa, 964
 	lds	bc, 6
 	calr	65051
@@ -3476,7 +3445,8 @@ PmBank_BankChanged_DrawSlot:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x7a, 0x16
+	pushw 237
+	pushw 5754
 	lda	xwa, (xsp+14)
 	push	xwa
 	call	16712341
@@ -3743,7 +3713,8 @@ PmBank_DrawRegionInfo:
 	lda_24	xbc, 15537838
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x18, 0x17
+	pushw 237
+	pushw 5912
 	lda	xwa, (xsp+20)
 	push	xwa
 	call	16712341
@@ -3766,7 +3737,8 @@ PmBank_DrawRegionInfo:
 	lda	xde, (xsp+8)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf5, 0x00
+	pushw 255
+	pushw 245
 	call	16434877
 	jrl	522
 PmBank_OnPaint:

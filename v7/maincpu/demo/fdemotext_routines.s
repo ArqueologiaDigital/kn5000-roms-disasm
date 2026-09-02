@@ -1153,12 +1153,16 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	.byte 0x0b, 0xe9, 0x00, 0x0b, 0xd6, 0xfd, 0x0b, 0x02, 0x00, 0x0b, 0xf6, 0x47
+	pushw 233
+	pushw 64982
+	pushw 2
+	pushw 18422
 	call	16712341
 	lda	xsp, (xsp+14)
 	jr	13
 	push	xhl
-	.byte 0x0b, 0x02, 0x00, 0x0b, 0xf6, 0x47
+	pushw 2
+	pushw 18422
 	call	16713584
 	inc	8, xsp
 	lda_24	xhl, 149494
@@ -2049,7 +2053,7 @@ Seq_InitVoiceLoop:
 	lda_rr	xbc, xbc, wa
 	lds32	xwa, 0
 	ld	(xbc+20), xwa
-	.byte 0xd7, 0xfa, 0x61
+	inc 1, qiz
 	cpw	qiz, 64
 	jr	lt, -79
 	stw_da	154498, iz

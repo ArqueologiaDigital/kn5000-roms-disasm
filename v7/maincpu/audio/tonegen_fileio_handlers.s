@@ -390,17 +390,13 @@ DSPCfg_InitDispatchData:
 	ld	xde, xbc
 	ld	c, (xde+1)
 	extz	bc
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	wa, 0xa8dc
+	lda_rr xwa, xwa, bc
+	lds ix, 0
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
 	ld	c, (xbc)
 	ld	(xsp+6), c
-	.byte 0xc7
-	swi	0
-	.byte 0x9b
+	ldb_erp c, 248
 	extz	iz
 	ld	l, (xde+2)
 	ld	h, l
@@ -435,16 +431,12 @@ DSPCfg_InitDispatchData:
 	ld	xde, xbc
 	ld	c, (xde+1)
 	extz	bc
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	wa, 0xa8dd
+	lda_rr xwa, xwa, bc
+	lds iy, 0
 	lda	xbc, (xde+3)
 	ld	(xsp+2), xbc
 	ld	c, (xbc)
-	.byte 0xc7
-	swi	0
-	.byte 0x9b
+	ldb_erp c, 248
 	extz	iz
 	ld	l, (xde+2)
 	ld	h, l
@@ -777,7 +769,7 @@ ToneGen_DiffScanCheckEnd:
 
 	cp xhl, xwa
 
-	.byte 0x71, 0x23, 0xff	; jrl lt, ToneGen_DiffScanOuter (v7 displacement)
+	jrl lt, -221
 
 	ld wa, bc
 
@@ -787,7 +779,7 @@ ToneGen_DiffScanCheckEnd:
 
 	ld (xwa), 0xff
 
-	.byte 0xf1, 0x42, 0x90, 0x51	; stda16 (0x90de), xbc (v7 patched)
+	stda16 (36930), bc
 
 	popw iz
 
@@ -1124,8 +1116,7 @@ PanelDisplay_DispatchData:
 	lda_24	xhl, (0x0340e4)
 	lds	bc, 0
 	ldb_spi	a, 236
-	.byte 0xc5
-	cp	xbc, xwa
+	cp_spib a, 232
 	jr	nz, 114
 	inc	1, bc
 	cps	bc, 2
@@ -1135,8 +1126,7 @@ PanelDisplay_DispatchData:
 	lda_24	xhl, (0x0340e6)
 	lds	bc, 0
 	ldb_spi	a, 236
-	.byte 0xc5
-	cp	xbc, xwa
+	cp_spib a, 232
 	jr	nz, 86
 	inc	1, bc
 	cp	bc, 12
@@ -1144,9 +1134,8 @@ PanelDisplay_DispatchData:
 	.asciz "hUB 4="
 	lda_24	xhl, (0x0340f2)
 	lds	bc, 0
-	.byte 0xc5, 0xec
-	ldb	a, 197
-	cp	xbc, xwa
+	ldb_spi a, 236
+	cp_spib a, 232
 	jr	nz, 56
 	inc	1, bc
 	cps	bc, 4
@@ -1155,8 +1144,7 @@ PanelDisplay_DispatchData:
 	lda_24	xhl, (0x0340f6)
 	lds	bc, 0
 	ldb_spi	a, 236
-	.byte 0xc5
-	cp	xbc, xwa
+	cp_spib a, 232
 	jr	nz, 28
 	inc	1, bc
 	cps	bc, 4
@@ -1165,9 +1153,8 @@ PanelDisplay_DispatchData:
 	.asciz "B@4="
 	lda_24	xhl, (0x0340fa)
 	lds	bc, 0
-	.byte 0xc5, 0xec
-	ldb	a, 197
-	cp	xbc, xwa
+	ldb_spi a, 236
+	cp_spib a, 232
 	jr	z, 3
 	lds	hl, 1
 	ret
@@ -1222,13 +1209,13 @@ Encoder_ReadNextEntry:
 
 	lda_dri XIY, 0x07, 0xec, 0xe0
 
-	.byte 0x44, 0xdc, 0x8d, 0x00, 0x00	; ld xix, 0x8e78 (v7 patched)
+	ld xix, 36316
 
 	ldi85
 
 	ldiw
 
-	.byte 0xc1, 0xf0, 0x8d, 0x61	; incdi8 1, (0x8e8c) (v7 patched)
+	incdi8 1, (36336)
 
 	ret
 

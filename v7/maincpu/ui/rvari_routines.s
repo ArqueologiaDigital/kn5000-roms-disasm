@@ -171,7 +171,8 @@ RVari_SelectE_SecondItem_Draw:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x56, 0x16
+	pushw 237
+	pushw 5718
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	16712341
@@ -333,7 +334,8 @@ RVari_SelectO_SecondItem_Draw:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x5a, 0x16
+	pushw 237
+	pushw 5722
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	16712341
@@ -746,7 +748,8 @@ RVari_ConfirmF_Item_Draw:
 	lda_24	xbc, 15537702
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x5e, 0x16
+	pushw 237
+	pushw 5726
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	16712341
@@ -1012,7 +1015,8 @@ RVari_ConfirmE_Item_Draw:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x6e, 0x16
+	pushw 237
+	pushw 5742
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	16712341
@@ -1255,7 +1259,8 @@ RVari_EnumNotifyF_Item_Draw:
 	lda_24	xbc, 15537702
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x72, 0x16
+	pushw 237
+	pushw 5746
 	lda	xwa, (xsp+284)
 	push	xwa
 	call	16712341
@@ -1423,7 +1428,8 @@ RVari_EnumNotifyE_Item_Draw:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x76, 0x16
+	pushw 237
+	pushw 5750
 	lda	xwa, (xsp+282)
 	push	xwa
 	call	16712341

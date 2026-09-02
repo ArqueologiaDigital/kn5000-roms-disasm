@@ -419,7 +419,10 @@ SongBank_EventHandler_Return:
 	ret
 
 CDlikeSwTtl_DispatchData:
-	.byte 0xeb, 0xa8, 0x0e, 0xeb, 0xa8, 0x0e
+	lds32 xhl, 0
+	ret
+	lds32 xhl, 0
+	ret
 	bitda 0, (0x0ce0)
 	jr nz, .Lc_f22901
 	ldb_d8 a, (0x0cdf)

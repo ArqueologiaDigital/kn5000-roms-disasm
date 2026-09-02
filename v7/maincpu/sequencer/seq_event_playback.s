@@ -94,11 +94,11 @@ SeqEvt_ProcessNoteOn:
 
 	ldb_sri W, 0x07, 0xec, 0xf0
 
-	.byte 0xf1, 0x77, 0x7d, 0x63	; stda32 0x7e13, xhl (v7 patched)
+	stda32 (32119), xhl
 
 	ld xhl, xbc
 
-	.byte 0xe1, 0x77, 0x7d, 0x21	; ldda32 xbc, (0x7e13) (v7 patched)
+	ldda32 xbc, (32119)
 
 	xor ix, ix
 
@@ -156,9 +156,9 @@ SeqEvt_WriteNoteOff:
 
 	and a, 0xf0
 
-	.byte 0xc1, 0x6b, 0x7d, 0xe1	; orda8 a, 0x7e07 (v7 patched)
+	orda8 xbc, (32107)
 
-	.byte 0x1e, 0x80, 0x02	; calr SeqEvtBuf_WriteBytePreserve (v7 displacement)
+	calr 640
 
 	ld a, w
 
@@ -1850,11 +1850,10 @@ AccPlay_RunningWithBit0:
 AccPlay_StartNewAccomp:
 	calr AccPlay_InitializeStart
 	jr AccPlay_ContinueMainLoop
+
 AccPlay_CheckPrevRunning:
-	cpdi8	32368, 0
-	jr	z, 5
-	calr	153
-	jr	3
+	.byte 0xc1, 0x70, 0x7e, 0x3f, 0x00, 0x66, 0x05, 0x1e
+	.byte 0x99, 0x00, 0x68, 0x03
 AccPlay_StopSequencer:
 	calr AccPlay_StopIfRunning
 
@@ -2282,13 +2281,15 @@ AccPlay_UnusedCodeFragment:
 	bit	7, a
 	jr	z, -8
 	ret
+
 AccPlay_ExtractVoiceSlot:
-	ldw_d16	hl, 32372
-	calr	1938
+	ldw_d16 hl, (32372)
+
+	calr 1938
 
 	ldb a, 0x83
 
-	.byte 0xd1, 0x76, 0x7e, 0x23	; ldw_d16 xhl, (0x7f12) (v7 patched)
+	ldw_d16 hl, (32374)
 
 	stb_dri A, 0x07, 0xf0, 0xec
 
@@ -2318,29 +2319,17 @@ AccPlay_NoteWithSlot:
 	jr nz, AccPlay_NoteAllocAndWrite
 AccPlay_NoteNoSlotAvail:
 	jp AccPlay_NoteAllocRet
+
 AccPlay_NoteAllocAndWrite:
-	push	xhl
-	push	xix
-	ldb_d8	l, 32412
-	xor	h, h
-	ld	xix, 14967106
-	ld_rrb	a, xix, hl
-	xor	w, w
-	sla	wa, 2
-	ld	hl, wa
-	ld	xix, 16195428
-	ld_rrb	a, xix, hl
-	stb_d8	32184, a
-	inc	1, hl
-	ld_rrb	a, xix, hl
-	stb_d8	32185, a
-	inc	1, hl
-	ld_rrb	a, xix, hl
-	stb_d8	32186, a
-	ldb	a, 144
-	cpdi8	32184, 0
-	jr	z, 2
-	ldb	a, 145
+	.byte 0x3b, 0x3c, 0xc1, 0x9c, 0x7e, 0x27, 0xce, 0xd6
+	.byte 0x44, 0x42, 0x61, 0xe4, 0x00, 0xc3, 0x07, 0xf0
+	.byte 0xec, 0x21, 0xc8, 0xd0, 0xd8, 0xec, 0x02, 0xd8
+	.byte 0x8b, 0x44, 0x64, 0x1f, 0xf7, 0x00, 0xc3, 0x07
+	.byte 0xf0, 0xec, 0x21, 0xf1, 0xb8, 0x7d, 0x41, 0xdb
+	.byte 0x61, 0xc3, 0x07, 0xf0, 0xec, 0x21, 0xf1, 0xb9
+	.byte 0x7d, 0x41, 0xdb, 0x61, 0xc3, 0x07, 0xf0, 0xec
+	.byte 0x21, 0xf1, 0xba, 0x7d, 0x41, 0x21, 0x90, 0xc1
+	.byte 0xb8, 0x7d, 0x3f, 0x00, 0x66, 0x02, 0x21, 0x91
 AccPlay_NoteSetType91:
 	.byte 0x1e, 0x0b, 0x08, 0x1e, 0xa2, 0x07, 0xc1, 0x9b
 	.byte 0x7e, 0x21, 0x1e, 0x01, 0x08, 0x1e, 0x98, 0x07
@@ -2362,9 +2351,30 @@ AccPlay_NoteAllocRet:
 
 AccPlay_NoteParamTable:
 	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x11, 0x00
-	.byte 0x01, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x00, 0x00
+	nop
+	nop
+	nop
+	nop
+	normal
+	nop
+	scf
+	nop
+	normal
+	nop
+	scf
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	normal
+	pop sr
+	nop
+	nop
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x11, 0x11, 0x00
 
@@ -3120,11 +3130,11 @@ MidiSeqBuf_WriteByte:
 
 	push xhl
 
-	.byte 0xd1, 0x74, 0x7e, 0x23	; ldw_d16 xhl, (0x7f10) (v7 patched)
+	ldw_d16 hl, (32372)
 
-	.byte 0x1e, 0xfa, 0xfe	; calr Util_ExtractAndShiftBits (v7 displacement)
+	calr 65274
 
-	.byte 0xd1, 0x76, 0x7e, 0x23	; ldw_d16 xhl, (0x7f12) (v7 patched)
+	ldw_d16 hl, (32374)
 
 	stb_dri A, 0x07, 0xf0, 0xec
 
@@ -3143,9 +3153,9 @@ AccPlay_InitAndStartLoop:
 
 	ldb a, 0x8
 
-	.byte 0x1d, 0xd2, 0xb5, 0xfe	; call MIDI_SendSysExCmd (v7 addr)
+	call 16692690
 
-	.byte 0x1e, 0xd3, 0xf3	; calr AccPlay_MainUpdateLoop (v7 displacement)
+	calr 62419
 
 	ret
 
@@ -4254,7 +4264,7 @@ VocalistGrid_DispatchData:
 	add	xwa, 15200368
 	ld	wa, (xwa)
 	lda_24	xix, 16201364
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr 8, xix, wa
 	ld	wa, (xbc)
 	cp	wa, 16
 	jr	z, 13
@@ -4271,7 +4281,8 @@ VocalistGrid_DispatchData:
 	jr	20
 	inc	1, wa
 	pushw	wa
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0xf8, 0xee
+	pushw 231
+	pushw 61176
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	16712341
@@ -4297,7 +4308,8 @@ VocalistGrid_DispatchData:
 	ld	wa, (xbc)
 	inc	1, wa
 	pushw	wa
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x10, 0xef
+	pushw 231
+	pushw 61200
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	16712341
@@ -4312,7 +4324,8 @@ VocalistGrid_DispatchData:
 	lda_24	xbc, 15199646
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x1c, 0xef
+	pushw 231
+	pushw 61212
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16712341
@@ -4363,7 +4376,8 @@ VocalistGrid_DispatchData:
 	inc	8, xsp
 	jr	18
 	pushw	wa
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x70, 0xef
+	pushw 231
+	pushw 61296
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	16712341
@@ -4396,7 +4410,8 @@ VocalistGrid_DispatchData:
 	lda_24	xwa, 15199626
 	ld_rrl	xwa, xwa, bc
 	push	xwa
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x7c, 0xef
+	pushw 231
+	pushw 61308
 	ld	xwa, (xsp+24)
 	push	xwa
 	call	16712341
@@ -5678,7 +5693,8 @@ SplitPoint_HandleNoteEvt:
 	lda_24	xbc, 15202168
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	.byte 0x0b, 0xe7, 0x00, 0x0b, 0x1a, 0xf8
+	pushw 231
+	pushw 63514
 	ld	xwa, (xde+8)
 	push	xwa
 	call	16712341

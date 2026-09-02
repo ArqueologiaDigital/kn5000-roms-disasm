@@ -1424,7 +1424,7 @@ SongEdit_OverflowCheck:
 
 	cps wa, 4
 
-	.byte 0x79, 0xa5, 0x00	; jrl ge, SongEdit_ReturnOverflow (v7 displacement)
+	jrl ge, 165
 
 	sla wa, 6
 
@@ -2976,7 +2976,8 @@ IvNamingExit_ScreenData:
 	jr	nz, 11
 	ld	xhl, (xhl)
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	jr	15
 	ld	xhl, (xhl)
 	push	xhl
@@ -3479,13 +3480,10 @@ TrAsGrid_LookupTable:
 TrAsGrid_ByteData1:
 	extz	wa
 	lda_24	xde, (NakaWidgetPtrTbl_SmfDp_0x23B8)
-	.byte 0xc3
-	reti
-	or	xwa, xwa
-	ldb	a, 203
-	dec	6, wa
-	push	201
-	exts	l
+	ld_rrb a, xde, wa
+	cps c, 0
+	jr nz, 9
+	cp a, 19
 	jr	nc, 10
 	inc	1, a
 	jr	6
@@ -3576,9 +3574,9 @@ TrAsGridChk_ByteData:
 	rcf
 	push	sr
 	push_a
-	.byte 0x73
-	pushw	wa
-	ld	xwa, 0x0147001c
+	jrl ule, 16424
+	call16 18176
+	normal
 	ld	xbc, 0x01e70006
 	ld	xde, xiz
 	call	MainFuncCall
@@ -3612,7 +3610,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65181
-	.byte 0xd1, 0xd0, 0xf1, 0xeb
+	orddm16 (61904), xhl
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008d
@@ -3628,7 +3626,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65130
-	.byte 0xd1, 0x90, 0xf2, 0xeb
+	orddm16 (62096), xhl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -3637,7 +3635,7 @@ TrAsGridChk_ByteData:
 	extz	de
 	ld	wa, de
 	calr	65103
-	.byte 0xd1, 0x90, 0xf2, 0xeb
+	orddm16 (62096), xhl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -3680,9 +3678,9 @@ TrAsGridChk_ByteData:
 	rcf
 	push	sr
 	push_a
-	.byte 0x73
-	pushw	wa
-	ld	xwa, 0x0147001c
+	jrl ule, 16424
+	call16 18176
+	normal
 	ld	xbc, 0x01e70007
 	ld	xde, xiz
 	call	MainFuncCall
@@ -3717,7 +3715,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64865
 	cpl	hl
-	.byte 0xd1, 0xd0, 0xf1, 0xcb
+	anddm16 (61904), xhl
 	call	GetFocusObject
 	ld	xwa, xhl
 	ld	xbc, 0x01e0008d
@@ -3734,7 +3732,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64813
 	cpl	hl
-	.byte 0xd1, 0x90, 0xf2, 0xcb
+	anddm16 (62096), xhl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -3744,7 +3742,7 @@ TrAsGridChk_ByteData:
 	ld	wa, de
 	calr	64784
 	cpl	hl
-	.byte 0xd1, 0x90, 0xf2, 0xcb
+	anddm16 (62096), xhl
 	ld	xwa, 0x0147001c
 	ld	xbc, 0x01e7000c
 	ld	xde, xiz
@@ -7570,7 +7568,8 @@ NoteEditBox_EventDispatch2:
 	divs	wa, 2
 	add	bc, wa
 	ld	(xix+2), bc
-	.byte 0x0b, 0xe3, 0x00, 0x0b, 0x0c, 0x46
+	pushw 227
+	pushw 17932
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	16713584
@@ -7580,7 +7579,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0xf5, 0x00
+	pushw 251
+	pushw 245
 	call	16436029
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -7620,7 +7620,8 @@ NoteEditBox_EventDispatch2:
 	divs	wa, 2
 	add	bc, wa
 	ld	(xix+2), bc
-	.byte 0x0b, 0xe3, 0x00, 0x0b, 0x10, 0x46
+	pushw 227
+	pushw 17936
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	16713584
@@ -7630,7 +7631,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0xf5, 0x00
+	pushw 251
+	pushw 245
 	jrl	941
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -7740,7 +7742,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	ld	xhl, (xsp+4)
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf5, 0x00
+	pushw 255
+	pushw 245
 	call	16436029
 	inc1b_erp	251
 	cp_erpb	251, 11
@@ -7825,7 +7828,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	ld	xhl, (xsp+4)
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf5, 0x00
+	pushw 255
+	pushw 245
 	call	16436029
 	inc1b_erp	251
 	cp_erpb	251, 8
@@ -7897,7 +7901,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	call	16436029
 	lda	xhl, (xsp+28)
 	lda	xbc, (xhl+2)
@@ -7937,7 +7942,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xff, 0x00
+	pushw 0
+	pushw 255
 	call	16436029
 	jrl	634
 	ld	xwa, (xsp+12)
@@ -7998,13 +8004,15 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf2, 0x00
+	pushw 255
+	pushw 242
 	jr	15
 	lda	xwa, (xsp+28)
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xf2, 0x00, 0x0b, 0xff, 0x00
+	pushw 242
+	pushw 255
 	call	16436029
 	lda	xix, (xsp+28)
 	ldw	(xix), 23
@@ -8046,7 +8054,8 @@ NoteEditBox_EventDispatch2:
 	lda	xde, (xsp+36)
 	lds32	xhl, 3
 	push	xhl
-	.byte 0x0b, 0xf2, 0x00, 0x0b, 0xff, 0x00
+	pushw 242
+	pushw 255
 	call	16436029
 	ldb_da	a, (135318)
 	inc	1, a
@@ -8214,7 +8223,8 @@ NoteEdit_FormatTempo:
 	lda	xsp, (xsp+10)
 	jrl	577
 NoteEdit_FormatTempoString:
-	.byte 0x0b, 0xe3, 0x00, 0x0b, 0x6e, 0x46
+	pushw 227
+	pushw 18030
 	ld	xwa, (xiz+18)
 	push	xwa
 	call	16713584
@@ -8236,7 +8246,7 @@ NoteEdit_FormatTempoString:
 	extz	wa
 	cp	l, 149
 	jr	nz, 31
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	muls	wa, 9
 	lda_24	xbc, 14879046
 	exts	xwa
@@ -9110,7 +9120,7 @@ SndParam_Dispatch:
 	lda_24	xix, 14895072
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 15926271
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr 8, xix, wa
 	ld	xbc, (xsp+62)
 	sla	de, 2
 	cp	xbc, 29360153
@@ -9160,7 +9170,7 @@ SndParam_Dispatch:
 	lda_24	xix, 14895054
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 15926443
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr 8, xix, wa
 	ld	xde, (xsp+62)
 	sla	hl, 2
 	lda_24	xwa, 14894928
@@ -9586,7 +9596,7 @@ EntGridCheck_SendAudioCommand:
 
 	push xwa
 
-	.byte 0x1d, 0x95, 0x02, 0xff	; call Sprintf_Locked (v7 addr)
+	call 16712341
 
 	lda xsp, (xsp + 10)
 
@@ -12127,15 +12137,9 @@ AccIll_Dispatch:
 	cp	xwa, 27
 	jrl	nz, 3047
 	lda	xiy, (xsp+58)
-	.byte 0xb5
-	push	sr
-	ret
-	nop
+	ldw (xiy), 14
 	lda	xde, (xiy+2)
-	.byte 0xb2
-	push	sr
-	pop	xsp
-	nop
+	ldw (xde), 95
 	lda	xhl, (xiy+4)
 	ld	wa, (xiy)
 	add	wa, 160
@@ -12180,15 +12184,9 @@ AccIll_Dispatch:
 	pushw	255
 	jr	100
 	lda	xiy, (xsp+58)
-	.byte 0xb5
-	push	sr
-	.byte 0xae
-	nop
+	ldw (xiy), 174
 	lda	xde, (xiy+2)
-	.byte 0xb2
-	push	sr
-	pop	xsp
-	nop
+	ldw (xde), 95
 	lda	xhl, (xiy+4)
 	ld	wa, (xiy)
 	add	wa, 160
@@ -13703,7 +13701,7 @@ EffectBox_PostFill3Setup:
 	divs	wa, 2
 	add	bc, wa
 	ld	(xsp+316), bc
-	.byte 0x0b, 0x02, 0x00
+	pushw 2
 	ld	wa, iz
 	add	wa, wa
 	extz	xwa
@@ -13720,7 +13718,7 @@ EffectBox_PostFill3Setup:
 	lda	xde, (xsp+38)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xff, 0x00
+	pushw 255
 	ld	xhl, (xsp+10)
 	.byte 0x9b, 0x16, 0x04
 	call	16436029
@@ -13778,7 +13776,7 @@ EffectBox_DrawField1:
 	lda	xde, (xsp+38)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xff, 0x00
+	pushw 255
 	ld	xhl, (xsp+10)
 	.byte 0x9b, 0x16, 0x04
 	call	16436029
@@ -16265,7 +16263,7 @@ DspItem0_SendEffectParam:
 
 	push xwa
 
-	.byte 0x1d, 0x95, 0x02, 0xff	; call Sprintf_Locked (v7 addr)
+	call 16712341
 
 	lda xsp, (xsp + 10)
 

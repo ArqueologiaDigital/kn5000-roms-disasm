@@ -360,7 +360,7 @@ FDC_Validate_Drive_Head:
 
 	ldw wa, 0xfe
 
-	.byte 0x1e, 0x8d, 0x05	; calr FDC_Set_Status (v7 displacement)
+	calr 1421
 
 	ret
 

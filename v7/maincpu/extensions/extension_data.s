@@ -544,7 +544,7 @@ Str_AreYouSure_IT:	aligned_string "Italian"
 	swi	7
 	aligned_string "SIND SIE SICHER?"
 	aligned_string "Are You Sure?"
-	.byte 0x04
+	max
 	ldwio	237, 0x8e00
 	push	237
 	nop
@@ -1063,7 +1063,7 @@ VariationStr_V1:
 	push	xiz
 	nop
 	pushw	iz
-	.byte 0x01
+	normal
 	pop	xiy
 	nop
 	push	sr
@@ -1136,10 +1136,14 @@ TransposeNoteStr_D:
 	swi	7
 TransposeNoteStr_DFlat:	aligned_string "D~a0"
 TransposeNoteStr_C:
-	.byte 0x43
-	ldb	w, 0
-	swi	7
-	aligned_string "(%s%2d, %3d)"
+	ld xhl, 687800352
+	ldb e, 115
+	ldb e, 50
+	jr ov, 44
+	ldb w, 37
+	ldw hl, 10596
+	nop
+	swi 7
 	aligned_string "CHECK BY SINE WAVE"
 	aligned_string "Select the mode by sound button of highest line."
 	aligned_string "CHECK MODE:"
@@ -1156,12 +1160,10 @@ TransposeNoteStr_C:
 	nop
 	.byte 0x56
 	nop
-	.byte 0xae
-	nop
-	.byte 0xdd
+	xor (xiz+256), xiy
 	nop
 	pushw	0x3901
-	.byte 0x01
+	normal
 	aligned_string "DEFAULT"
 	ldb	w, 0x55
 	aligned_string "SER  "
@@ -1169,14 +1171,12 @@ TransposeNoteStr_C:
 	aligned_string "RROR "
 	.byte 0x9c
 	nop
-	.byte 0x9c
+	incm 8, (xix+256)
 	nop
 	jr	f, 0
 	jr	f, 0
-	jr	f, 0
-	.byte 0x9c
+	incm 8, (xix+256)
 	nop
-	jr	f, 0
 	.byte 0xa0
 	nop
 	.byte 0xa7
@@ -1340,9 +1340,13 @@ OctaveDigitStr_0A:
 	ldw	wa, 0x3000
 	nop
 OctaveDigitStr_0B:
-	.byte 0x30
-	nop
-	aligned_string "          "
+	ldw wa, 8192
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 32
+	ldb w, 0
+	swi 7
 	aligned_string "SPLIT<%s%s>"
 	aligned_string "          "
 	aligned_string "SPLIT<%s%s>"
@@ -1956,9 +1960,7 @@ NakaDesc_RVariScreen:	aligned_string "kc^nnnnnn"
 NakaInst_RVariScreen:	aligned_string "VariScreen"
 NakaDesc_VariScreen:	aligned_string ""
 NakaInst_VariScreen:	aligned_string "NormScreen"
-	.byte 0x1c
-	nop
-	.byte 0x84
+	call16 33792
 	pushw	iy
 	.byte 0xed
 	nop
@@ -2185,23 +2187,18 @@ NakaInstTable8_NullTerm:
 	stib_dsp 0x00, 0x00
 	nop
 	nop
-	.byte 0x04, 0xf4
-	pop	sr
-	nop
-	ldio	244, 3
-	nop
+	max
+	stib_dpd 3, 8
+	stib_dpd 3, 60
 
 
-	push	xix
 	nop
 	jr	f, 1
 	push_f
 	nop
 	swi	7
 	swi	7
-	.byte 0x1a
-	nop
-	swi	7
+	jp16 65280
 	swi	7
 	ldio	0, 21
 	.byte 0x01, 0x80
@@ -2236,7 +2233,7 @@ NakaInstTable8_NullTerm:
 	reti
 	nop
 	cpdm8	0xff00, l
-	.byte 0x01
+	normal
 	nop
 	di
 
@@ -2248,9 +2245,7 @@ NakaInstTable8_NullTerm:
 	nop
 	swi	7
 	swi	7
-	.byte 0x1c
-	nop
-	.byte 0x1a
+	call16 6656
 	nop
 	ldio	0, 199
 	nop
@@ -2290,7 +2285,7 @@ NakaInstTable8_NullTerm:
 	cpdm8	0xff00, l
 	zcf
 	nop
-	.byte 0x04
+	max
 	nop
 
 
@@ -2307,9 +2302,7 @@ NakaInstTable8_NullTerm:
 	nop
 	.byte 0x80
 	nop
-	.byte 0x9f
-	nop
-	.byte 0xeb
+	or (xsp+256), hl
 	nop
 	reti
 	nop
@@ -2368,7 +2361,7 @@ NakaInstTable8_NullTerm:
 	cpdm8	0xff00, l
 	ccf
 	nop
-	.byte 0x01
+	normal
 	nop
 
 
@@ -2401,7 +2394,7 @@ NakaInstTable8_NullTerm:
 
 
 	ldw	iy, 0x6000
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	ldb	b, 0
@@ -2414,23 +2407,14 @@ NakaInstTable8_NullTerm:
 	jrl	nc, 16128
 	.byte 0x01, 0xef
 	nop
-	.byte 0xf5
-	nop
-	nop
-	nop
+	stib_dsp 0, 0
 	nop
 	nop
 	incf
-	.byte 0xf4
-	pop	sr
-	nop
-	rcf
-	.byte 0xf4
-	pop	sr
-	nop
+	stib_dpd 3, 16
+	stib_dpd 3, 60
 
 
-	push	xix
 	nop
 	jr	f, 1
 	ldb	a, 0
@@ -2449,7 +2433,7 @@ NakaInstTable8_NullTerm:
 	cpdm8	0xff00, l
 	pop_a
 	nop
-	.byte 0x04
+	max
 	nop
 
 
@@ -2491,8 +2475,7 @@ NakaInstTable8_NullTerm:
 	reti
 	nop
 	cpdm8	0xff00, l
-	.byte 0x17
-	nop
+	ldf 0
 	push	sr
 	nop
 
@@ -2540,7 +2523,7 @@ NakaInstTable8_NullTerm:
 
 
 	ldw	iy, 0x6000
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	pushw	wa
@@ -2558,16 +2541,10 @@ NakaInstTable8_NullTerm:
 	nop
 	nop
 	push_a
-	.byte 0xf4
-	pop	sr
-	nop
-	push_f
-	.byte 0xf4
-	pop	sr
-	nop
+	stib_dpd 3, 24
+	stib_dpd 3, 60
 
 
-	push	xix
 	nop
 	jr	f, 1
 	ldb	l, 0
@@ -2615,9 +2592,9 @@ NakaInstTable8_NullTerm:
 	reti
 	nop
 	cpdm8	0xff00, l
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 
 
@@ -2660,9 +2637,7 @@ NakaInstTable8_NullTerm:
 	nop
 	.byte 0x80
 	nop
-	.byte 0x9f
-	nop
-	.byte 0xeb
+	or (xsp+256), hl
 	nop
 	reti
 	nop
@@ -2694,9 +2669,9 @@ NakaInstTable8_NullTerm:
 	reti
 	nop
 	cpdm8	0xff00, l
-	.byte 0x04
+	max
 	nop
-	.byte 0x04
+	max
 	nop
 
 
@@ -2777,7 +2752,7 @@ NakaInstTable8_NullTerm:
 
 
 	ldw	iy, 0x6000
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	ldw	bc, 0xff00
@@ -2789,14 +2764,10 @@ NakaInstTable8_NullTerm:
 	jrl	nc, 16128
 	.byte 0x01, 0xef
 	nop
-	.byte 0xf5
+	stib_dsp 0, 0
 	nop
 	nop
-	nop
-	nop
-	nop
-	.byte 0x1c, 0xf4
-	pop	sr
+	call16 1012
 	nop
 	ldb	w, 244
 	pop	sr
@@ -2838,7 +2809,7 @@ NakaInstTable8_NullTerm:
 	nop
 	cpdm8	0xff00, l
 	push	0
-	.byte 0x01
+	normal
 	nop
 
 
@@ -2896,7 +2867,7 @@ NakaInstTable8_NullTerm:
 	cpdm8	0xff00, l
 	incf
 	nop
-	.byte 0x04
+	max
 	nop
 
 
@@ -2905,11 +2876,9 @@ NakaInstTable8_NullTerm:
 	jr	f, 1
 	ldw	wa, 0xff00
 	swi	7
-	.byte 0x37
+	ldw sp, 13568
 	nop
-	ldw	iy, 2048
-	nop
-	.byte 0xc7
+	ldio 0, 199
 	nop
 	.byte 0x80
 	nop
@@ -2952,9 +2921,9 @@ NakaInstTable8_NullTerm:
 	swi	7
 	swi	7
 	swi	7
-	.byte 0x37
+	ldw sp, 2048
 	nop
-	ldio	0, 21
+	pop_a
 	.byte 0x01, 0x80
 	nop
 	.long WidgetName_PtrBlock_N1
@@ -2966,7 +2935,7 @@ NakaInstTable8_NullTerm:
 
 
 	ldw	iy, 0x6000
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	push	xde
@@ -2990,12 +2959,10 @@ NakaInstTable8_NullTerm:
 	pop	sr
 	nop
 	pushw	wa
-	.byte 0xf4
-	pop	sr
+	stib_dpd 3, 105
 	nop
 
 
-	jr	ge, 0
 	jr	f, 1
 	push	xbc
 	nop
@@ -3035,13 +3002,12 @@ NakaInstTable8_NullTerm:
 	nop
 	.byte 0xdd
 	nop
-	.byte 0x17
-	nop
+	ldf 0
 	ldb	b, 1
 
 
 	ldw	iy, 0x6000
-	.byte 0x01
+	normal
 	swi	7
 	swi	7
 	push	xiy
@@ -3062,14 +3028,11 @@ NakaInstTable8_NullTerm:
 	nop
 	nop
 	pushw	ix
-	.byte 0xf4
-	pop	sr
-	nop
-	ldw	wa, 1012
+	stib_dpd 3, 48
+	stib_dpd 3, 105
 	nop
 
 
-	jr	ge, 0
 	jr	f, 1
 	push	xix
 	nop
@@ -4378,13 +4341,14 @@ VoiceCtrlR1_Entry_001:
 	nop
 	pushw	0
 	swi	7
-	.byte 0x01, 0x01
+	normal
+	normal
 	reti
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_002:
-	.byte 0x04
+	max
 	nop
 	nop
 	nop
@@ -4406,7 +4370,7 @@ VoiceCtrlR1_Entry_003:
 	popw	wa
 	push	1
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	nop
@@ -4421,13 +4385,15 @@ VoiceCtrlR1_Entry_004:
 	nop
 	.byte 0x91
 	pop	sr
-	.byte 0x04
+	max
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4438,19 +4404,21 @@ VoiceCtrlR1_Entry_005:
 	nop
 	.byte 0x91
 	pop	sr
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_006:
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	.byte 0x93
@@ -4459,27 +4427,31 @@ VoiceCtrlR1_Entry_006:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_007:
 	push	sr
-	.byte 0x01
+	normal
 	nop
 	nop
 	.byte 0x93
 	halt
 	swi	7
-	.byte 0x01
+	normal
 	ldwio	0, 0xff00
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_008:
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	nop
 	.byte 0x93, 0x06
@@ -4487,21 +4459,26 @@ VoiceCtrlR1_Entry_008:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_009:
-	.byte 0x04, 0x01
+	max
+	normal
 	nop
 	nop
 	.byte 0x93, 0x06, 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4515,22 +4492,26 @@ VoiceCtrlR1_Entry_010:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_011:
-	.byte 0x01
+	normal
 	pop	sr
 	nop
 	nop
 	.byte 0x98, 0x01, 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4543,38 +4524,45 @@ VoiceCtrlR1_Entry_012:
 	nop
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_013:
 	nop
-	.byte 0x04
+	max
 	nop
 	nop
 	.byte 0x98
 	pop	sr
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_014:
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	nop
 	.byte 0x98
 	pop	sr
 	jrl	f, 769
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4584,29 +4572,33 @@ VoiceCtrlR1_Entry_015:
 	nop
 	.byte 0x80
 	pop	sr
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_016:
-	.byte 0x01
+	normal
 	ldb	a, 0
 	nop
 	.byte 0x80
 	pop	sr
-	.byte 0x04
+	max
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4618,11 +4610,13 @@ VoiceCtrlR1_Entry_017:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4634,7 +4628,9 @@ VoiceCtrlR1_Entry_018:
 	nop
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4646,7 +4642,9 @@ VoiceCtrlR1_Entry_019:
 	pop	sr
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4657,11 +4655,13 @@ VoiceCtrlR1_Entry_020:
 	.byte 0x80
 	nop
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4671,18 +4671,20 @@ VoiceCtrlR1_Entry_021:
 	nop
 	.byte 0x80
 	nop
-	.byte 0x04
+	max
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_022:
-	.byte 0x01
+	normal
 	ldb	b, 0
 	nop
 	.byte 0x80
@@ -4692,7 +4694,8 @@ VoiceCtrlR1_Entry_022:
 	pop	sr
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	reti
 	halt
 	nop
@@ -4700,7 +4703,7 @@ VoiceCtrlR1_Entry_022:
 	swi	7
 VoiceCtrlR1_Entry_023:
 	nop
-	.byte 0x01
+	normal
 	pop	sr
 	swi	7
 WidgetParam_MidiCC_Program:
@@ -4721,7 +4724,9 @@ VoiceCtrlR1_Entry_024:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4733,10 +4738,13 @@ VoiceCtrlR1_Entry_025:
 	nop
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4752,14 +4760,14 @@ VoiceCtrlR1_Entry_026:
 	pop	sr
 	nop
 	pop	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
 	nop
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	pop	sr
 	swi	7
 WidgetParam_MidiCC_BankSelect:
@@ -4779,7 +4787,9 @@ VoiceCtrlR1_Entry_027:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4789,13 +4799,15 @@ VoiceCtrlR1_Entry_028:
 	nop
 	.byte 0x80
 	push	sr
-	.byte 0x04
+	max
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4808,7 +4820,9 @@ VoiceCtrlR1_Entry_029:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4820,10 +4834,13 @@ VoiceCtrlR1_Entry_030:
 	reti
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4834,11 +4851,13 @@ VoiceCtrlR1_Entry_031:
 	.byte 0x80
 	reti
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4850,7 +4869,9 @@ VoiceCtrlR1_Entry_032:
 	reti
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4860,11 +4881,13 @@ VoiceCtrlR1_Entry_033:
 	nop
 	.byte 0x80
 	ldio	128, 0
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4874,11 +4897,13 @@ VoiceCtrlR1_Entry_034:
 	nop
 	.byte 0x80
 	ldio	4, 0
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4888,11 +4913,13 @@ VoiceCtrlR1_Entry_035:
 	nop
 	.byte 0x80
 	ldio	8, 0
-	.byte 0x01
+	normal
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4902,10 +4929,13 @@ VoiceCtrlR1_Entry_036:
 	nop
 	.byte 0x80
 	ldio	16, 0
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4915,11 +4945,13 @@ VoiceCtrlR1_Entry_037:
 	nop
 	.byte 0x80
 	ldio	1, 0
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4929,11 +4961,13 @@ VoiceCtrlR1_Entry_038:
 	nop
 	.byte 0x80
 	ldio	32, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4943,10 +4977,13 @@ VoiceCtrlR1_Entry_039:
 	nop
 	.byte 0x80
 	ldio	2, 0
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4958,10 +4995,13 @@ VoiceCtrlR1_Entry_040:
 	reti
 	push	sr
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4971,13 +5011,15 @@ VoiceCtrlR1_Entry_041:
 	nop
 	.byte 0x80
 	reti
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -4988,11 +5030,13 @@ VoiceCtrlR1_Entry_042:
 	.byte 0x80
 	push	1
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5002,11 +5046,13 @@ VoiceCtrlR1_Entry_043:
 	nop
 	.byte 0x80, 0x01, 0x04
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5023,7 +5069,9 @@ VoiceCtrlR1_Entry_044:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5035,10 +5083,13 @@ VoiceCtrlR1_Entry_045:
 	.byte 0x99, 0x01
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5055,7 +5106,9 @@ VoiceCtrlR1_Entry_046:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5071,7 +5124,9 @@ VoiceCtrlR1_Entry_047:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5082,13 +5137,15 @@ VoiceCtrlR1_Entry_048:
 	nop
 	.byte 0x99
 	nop
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5105,7 +5162,9 @@ VoiceCtrlR1_Entry_049:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5118,10 +5177,13 @@ VoiceCtrlR1_Entry_050:
 	nop
 	push	sr
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5137,7 +5199,9 @@ VoiceCtrlR1_Entry_051:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5150,11 +5214,13 @@ VoiceCtrlR1_Entry_052:
 	nop
 	.byte 0x04
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5171,7 +5237,9 @@ VoiceCtrlR1_Entry_053:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5186,7 +5254,9 @@ VoiceCtrlR1_Entry_054:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5201,7 +5271,9 @@ VoiceCtrlR1_Entry_055:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5214,10 +5286,13 @@ VoiceCtrlR1_Entry_056:
 	nop
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5233,7 +5308,9 @@ VoiceCtrlR1_Entry_057:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5242,14 +5319,15 @@ VoiceCtrlR1_Entry_058:
 	pushw	wa
 	nop
 	nop
-	.byte 0x99
+	ld wa, (xbc+256)
 	nop
-	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5263,7 +5341,9 @@ VoiceCtrlR1_Entry_059:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5276,7 +5356,9 @@ VoiceCtrlR1_Entry_060:
 	nop
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5291,7 +5373,9 @@ VoiceCtrlR1_Entry_061:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5304,11 +5388,13 @@ VoiceCtrlR1_Entry_062:
 	nop
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5325,7 +5411,9 @@ VoiceCtrlR1_Entry_063:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5336,11 +5424,13 @@ VoiceCtrlR1_Entry_064:
 	nop
 	.byte 0x99, 0x01, 0x01
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5357,7 +5447,9 @@ VoiceCtrlR1_Entry_065:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5369,10 +5461,13 @@ VoiceCtrlR1_Entry_066:
 	.byte 0x99, 0x01
 	push	sr
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5389,7 +5484,9 @@ VoiceCtrlR1_Entry_067:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5400,11 +5497,13 @@ VoiceCtrlR1_Entry_068:
 	nop
 	.byte 0x99, 0x01, 0x04
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5419,7 +5518,9 @@ VoiceCtrlR1_Entry_069:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5433,7 +5534,9 @@ VoiceCtrlR1_Entry_070:
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5444,18 +5547,20 @@ VoiceCtrlR1_Entry_071:
 	nop
 	.byte 0x98
 	reti
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_072:
-	.byte 0x01
+	normal
 	pushw	bc
 	nop
 	nop
@@ -5463,10 +5568,13 @@ VoiceCtrlR1_Entry_072:
 	reti
 	push	sr
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5479,11 +5587,13 @@ VoiceCtrlR1_Entry_073:
 	reti
 	.byte 0x04
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5498,12 +5608,14 @@ VoiceCtrlR1_Entry_074:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceCtrlR1_Entry_075:
-	.byte 0x04
+	max
 	pushw	bc
 	nop
 	nop
@@ -5511,10 +5623,13 @@ VoiceCtrlR1_Entry_075:
 	reti
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5525,11 +5640,13 @@ MidiChParam_Entry_001:
 	nop
 	ld	wa, (xwa+7)
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5541,7 +5658,9 @@ MidiChParam_Entry_002:
 	reti
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5554,11 +5673,13 @@ MidiChParam_Entry_003:
 	reti
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5567,11 +5688,13 @@ MidiChParam_Entry_004:
 	nop
 	.byte 0x98
 	ldio	1, 0
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5581,10 +5704,13 @@ MidiChParam_Entry_005:
 	nop
 	.byte 0x98
 	ldio	2, 0
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5592,11 +5718,13 @@ MidiChParam_Entry_006:
 	ldwio	41, 0
 	.byte 0x98
 	ldio	4, 0
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5605,11 +5733,13 @@ MidiChParam_Entry_007:
 	nop
 	.byte 0x98
 	ldio	8, 0
-	.byte 0x01
+	normal
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5620,10 +5750,13 @@ MidiChParam_Entry_008:
 	nop
 	.byte 0x98
 	ldio	16, 0
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5634,11 +5767,13 @@ MidiChParam_Entry_009:
 	nop
 	ld	wa, (xwa+8)
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5649,10 +5784,12 @@ MidiChParam_Entry_010:
 	nop
 	.byte 0x98
 	ldio	64, 0
-	.byte 0x01
+	normal
 	di
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5661,11 +5798,13 @@ MidiChParam_Entry_011:
 	nop
 	.byte 0x98
 	ldio	128, 0
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5677,11 +5816,13 @@ MidiChParam_Entry_012:
 	.byte 0x98
 	push	1
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5693,10 +5834,13 @@ MidiChParam_Entry_013:
 	.byte 0x98
 	push	2
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5706,27 +5850,31 @@ MidiChParam_Entry_014:
 	nop
 	nop
 	jrl	f, -251
-	.byte 0x01
+	normal
 	rcf
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 MidiChParam_Entry_015:
-	.byte 0x01
+	normal
 	pushw	de
 	nop
 	nop
 	jrl	f, -250
-	.byte 0x01
+	normal
 	rcf
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5737,11 +5885,13 @@ MidiChParam_Entry_016:
 	nop
 	jrl	f, 263
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5752,10 +5902,13 @@ MidiChParam_Entry_017:
 	nop
 	jrl	f, 519
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5766,11 +5919,13 @@ MidiChParam_Entry_018:
 	nop
 	jrl	f, 1031
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5787,7 +5942,9 @@ MidiChParam_Entry_019:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5800,12 +5957,14 @@ MidiChParam_Entry_020:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 MidiChParam_Entry_021:
-	.byte 0x01
+	normal
 	pushw	iy
 	nop
 	nop
@@ -5813,7 +5972,9 @@ MidiChParam_Entry_021:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5826,7 +5987,9 @@ MidiChParam_Entry_022:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5836,15 +5999,17 @@ MidiChParam_Entry_023:
 	nop
 	nop
 	ld	xsp, 0x01000200
-	.byte 0x01
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 MidiChParam_Entry_024:
-	.byte 0x04
+	max
 	pushw	iy
 	nop
 	nop
@@ -5852,7 +6017,9 @@ MidiChParam_Entry_024:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5865,7 +6032,9 @@ MidiChParam_Entry_025:
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5874,10 +6043,12 @@ MidiChParam_Entry_026:
 	nop
 	nop
 	ld	xsp, 0x0b00f003
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5890,7 +6061,9 @@ MidiChParam_Entry_027:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5900,7 +6073,9 @@ MidiChParam_Entry_028:
 	ld	xsp, 0x0300c004
 	di
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5909,10 +6084,12 @@ MidiChParam_Entry_029:
 	nop
 	nop
 	ld	xsp, 0x01001000
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5926,10 +6103,10 @@ MidiChParam_Entry_030:
 	nop
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -5954,7 +6131,9 @@ MidiChParam_Entry_031:
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5967,7 +6146,9 @@ MidiChParam_Entry_032:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5980,7 +6161,9 @@ MidiChParam_Entry_033:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -5993,7 +6176,9 @@ MidiChParam_Entry_034:
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6003,7 +6188,9 @@ MidiChParam_Entry_035:
 	ld	xsp, 0x01004000
 	di
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6016,7 +6203,9 @@ MidiChParam_Entry_036:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6029,7 +6218,9 @@ MidiChParam_Entry_037:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6042,7 +6233,9 @@ MidiChParam_Entry_038:
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6055,7 +6248,9 @@ MidiChParam_Entry_039:
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6065,7 +6260,7 @@ MidiChParam_Entry_040:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	pop	sr
 	nop
@@ -6073,7 +6268,7 @@ MidiChParam_Entry_040:
 	nop
 	swi	7
 MidiChParam_Entry_041:
-	.byte 0x01
+	normal
 	ld	xwa, 0x01b00000
 	jrl	nc, 32512
 	nop
@@ -6098,21 +6293,23 @@ MidiChParam_Entry_042:
 	jrl	nc, 7
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 MidiChParam_Entry_043:
 	pop	sr
 	ld	xwa, 0x700000
-	.byte 0x04
+	max
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6125,7 +6322,9 @@ MidiChParam_Entry_044:
 	jr	f, 1
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6150,11 +6349,13 @@ MidiChParam_Entry_046:
 	nop
 	jr	f, 1
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6163,11 +6364,11 @@ MidiChParam_Entry_047:
 	ld	xwa, 0x02980000
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01
+	normal
 	push	sr
 	push	sr
 	nop
@@ -6178,7 +6379,7 @@ MidiChParam_Entry_048:
 	ld	xwa, 0x02980000
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01
+	normal
 	push	sr
 	push	sr
 	nop
@@ -6189,11 +6390,13 @@ MidiChParam_Entry_049:
 	ld	xwa, 0x0b980000
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6202,7 +6405,9 @@ MidiChParam_Entry_050:
 	ld	xwa, 0x0b980000
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6215,7 +6420,8 @@ MidiChParam_Entry_051:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01
+	normal
+	normal
 	reti
 	nop
 	nop
@@ -6229,14 +6435,14 @@ MidiChParam_Entry_052:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	halt
-	.byte 0x04
+	max
 	nop
 	nop
 	swi	7
 WidgetParam_MidiCC_SysExcl:
-	.byte 0x01
+	normal
 	nop
 	push	sr
 	nop
@@ -6244,7 +6450,7 @@ WidgetParam_MidiCC_SysExcl:
 	nop
 	pop	sr
 	push	sr
-	.byte 0x01
+	normal
 	push	sr
 	push	sr
 	push	sr
@@ -6253,22 +6459,26 @@ MidiChParam_Entry_053:
 	nop
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 MidiChParam_Entry_054:
 	ld	xbc, 0x43000041
-	.byte 0x01
+	normal
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6276,11 +6486,13 @@ MidiChParam_Entry_055:
 	ld	xde, 0x43000041
 	.byte 0x01, 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6293,7 +6505,9 @@ MidiChParam_Entry_056:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6304,7 +6518,9 @@ MidiChParam_Entry_057:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6313,12 +6529,14 @@ MidiChParam_Entry_058:
 	ld	xde, 0x04480000
 	ld	xwa, 0x060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 MidiChParam_Entry_059:
-	.byte 0x01
+	normal
 	ld	xde, 0x03700000
 	swi	7
 	nop
@@ -6333,9 +6551,9 @@ MidiChParam_Entry_059:
 	swi	7
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -6361,11 +6579,11 @@ MidiChParam_Entry_060:
 	nop
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	decf
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -6383,11 +6601,13 @@ MidiChParam_Entry_061:
 	ld	xde, 0x01920000
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6399,7 +6619,8 @@ MidiChParam_Entry_062:
 	.byte 0x80
 	nop
 	nop
-	.byte 0x04, 0x01
+	max
+	normal
 	reti
 	halt
 	nop
@@ -6431,7 +6652,9 @@ MidiChParam_Entry_063:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6444,16 +6667,16 @@ MidiChParam_Entry_064:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
 	nop
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	reti
 	ldio	9, 10
@@ -6464,8 +6687,7 @@ MidiChParam_Entry_064:
 	zcf
 	pop_a
 	ex_ff
-	.byte 0x17
-	push_f
+	ldf 24
 	.byte 0x1a
 	jp	0x1f1d1c
 	.ascii " !#$%&()*+-./12346789;<=?@ABDEFGIJKMNOPRSTUWXY[\\]^`abcefgijklnopqstuwxyz|}~€‚ƒ…†‡ˆŠ‹ŒŽ‘“”•–˜™šœžŸ¡¢"
@@ -6511,7 +6733,7 @@ MidiChParam_Entry_065:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6526,7 +6748,7 @@ MidiChParam_Entry_066:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6541,7 +6763,7 @@ MidiChParam_Entry_067:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6556,7 +6778,7 @@ MidiChParam_Entry_068:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6571,7 +6793,7 @@ MidiChParam_Entry_069:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6586,7 +6808,7 @@ MidiChParam_Entry_070:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6601,7 +6823,7 @@ MidiChParam_Entry_071:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6616,7 +6838,7 @@ MidiChParam_Entry_072:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6631,7 +6853,7 @@ MidiChParam_Entry_073:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6646,7 +6868,7 @@ MidiChParam_Entry_074:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6661,7 +6883,7 @@ MidiChParam_Entry_075:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6679,7 +6901,9 @@ MidiChParam_Entry_076:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6695,7 +6919,9 @@ MidiChParam_Entry_077:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6711,7 +6937,9 @@ MidiChParam_Entry_078:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6727,7 +6955,9 @@ MidiChParam_Entry_079:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6743,7 +6973,9 @@ MidiChParam_Entry_080:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6759,7 +6991,9 @@ MidiChParam_Entry_081:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6773,7 +7007,9 @@ MidiChParam_Entry_082:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6787,7 +7023,7 @@ MidiChParam_Entry_083:
 	nop
 	nop
 	reti
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -6815,10 +7051,10 @@ MidiChParam_Entry_084:
 	swi	6
 	swi	7
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	ei	7
 	ldio	9, 10
@@ -6830,8 +7066,7 @@ MidiChParam_Entry_084:
 	push_a
 	pop_a
 	ex_ff
-	.byte 0x17
-	push_f
+	ldf 24
 	pop_f
 	.byte 0x1a
 	jp	0x1e1d1c
@@ -6852,10 +7087,12 @@ MidiChParam_Entry_085:
 	.byte 0x80
 	incf
 	swi	7
-	.byte 0x01
+	normal
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6872,7 +7109,9 @@ MidiChParam_Entry_086:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6901,7 +7140,9 @@ MidiChParam_Entry_088:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6912,11 +7153,13 @@ MidiChParam_Entry_089:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6926,7 +7169,9 @@ MidiChParam_Entry_090:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -6948,32 +7193,34 @@ MidiChParam_Entry_092:
 	nop
 	nop
 	nop
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 MidiChParam_Entry_093:
 	ld	xwa, 128
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 WidgetParam_MidiCC_Chorus:
 	ld	xwa, 0x7f000100
 	nop
-	.byte 0x01
+	normal
 	swi	7
 MidiChParam_Entry_094:
 	pop	xhl
@@ -6986,7 +7233,9 @@ MidiChParam_Entry_094:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7001,7 +7250,9 @@ MidiChParam_Entry_095:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7011,13 +7262,13 @@ MidiChParam_Entry_096:
 	nop
 	nop
 	nop
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 MidiChParam_Entry_097:
@@ -7045,7 +7296,9 @@ MidiChParam_Entry_098:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7058,7 +7311,9 @@ MidiChParam_Entry_099:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7071,7 +7326,9 @@ MidiChParam_Entry_100:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7096,7 +7353,7 @@ MidiChParam_Entry_102:
 	ld	(xix), 127
 	nop
 	jrl	nc, 0
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -7111,7 +7368,9 @@ MidiChParam_Entry_103:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7133,7 +7392,7 @@ MidiChParam_Entry_104:
 	retd	256
 	push	sr
 	pop	sr
-	.byte 0x04
+	max
 	halt
 	swi	7
 WidgetParam_MidiCC_DspEffect:
@@ -7149,7 +7408,7 @@ MidiChParam_Entry_105:
 	nop
 	nop
 	ld	xix, 0x0f00f001
-	.byte 0x04
+	max
 	nop
 	push	1
 	reti
@@ -7175,7 +7434,7 @@ MidiChParam_Entry_107:
 	nop
 	nop
 	ld	xix, 0x0f00f002
-	.byte 0x04
+	max
 	nop
 	push	1
 	reti
@@ -7191,7 +7450,9 @@ MidiChParam_Entry_108:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7200,10 +7461,12 @@ MidiChParam_Entry_109:
 	nop
 	nop
 	ld	xix, 0x0800f003
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7215,7 +7478,9 @@ MidiChParam_Entry_110:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7224,10 +7489,12 @@ MidiChParam_Entry_111:
 	nop
 	nop
 	ld	xix, 0x0800f004
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7239,7 +7506,9 @@ MidiChParam_Entry_112:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7248,10 +7517,12 @@ VoiceParamEx_Entry_001:
 	nop
 	nop
 	ld	xix, 0x0800f005
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7263,7 +7534,9 @@ VoiceParamEx_Entry_002:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7272,10 +7545,12 @@ VoiceParamEx_Entry_003:
 	nop
 	nop
 	ld	xix, 0x0800f006
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7287,7 +7562,9 @@ VoiceParamEx_Entry_004:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7296,10 +7573,12 @@ VoiceParamEx_Entry_005:
 	nop
 	nop
 	ld	xix, 0x01001007
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7311,7 +7590,9 @@ VoiceParamEx_Entry_006:
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7320,7 +7601,7 @@ VoiceParamEx_Entry_007:
 	.byte 0x84
 	nop
 	nop
-	.byte 0x01
+	normal
 	nop
 	swi	7
 	nop
@@ -7328,7 +7609,9 @@ VoiceParamEx_Entry_007:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7352,38 +7635,44 @@ VoiceParamEx_Entry_009:
 	.byte 0x84
 	nop
 	nop
-	.byte 0x01
+	normal
 	pop	sr
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceParamEx_Entry_010:
 	ldio	132, 0
 	nop
-	.byte 0x01
+	normal
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceParamEx_Entry_011:
 	ldwio	132, 0
-	.byte 0x01
+	normal
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7405,26 +7694,29 @@ VoiceParamEx_Entry_013:
 	ldb	w, 132
 	nop
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceParamEx_Entry_014:
 	ld	xwa, 0x01000084
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 VoiceParamEx_Entry_015:
@@ -7432,13 +7724,15 @@ VoiceParamEx_Entry_015:
 	.byte 0x84
 	nop
 	nop
-	.byte 0x01
+	normal
 	reti
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7447,13 +7741,15 @@ VoiceParamEx_Entry_016:
 	.byte 0x84
 	nop
 	nop
-	.byte 0x01
+	normal
 	halt
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7462,13 +7758,14 @@ VoiceParamEx_Entry_017:
 	.byte 0x84
 	nop
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 VoiceParamEx_Entry_018:
@@ -7489,13 +7786,15 @@ VoiceParamEx_Entry_019:
 	.byte 0x80, 0x84
 	nop
 	nop
-	.byte 0x01
+	normal
 	pushw	127
 	incf
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7503,12 +7802,14 @@ VoiceParamEx_Entry_020:
 	.byte 0x81, 0x84
 	nop
 	nop
-	.byte 0x01
+	normal
 	ldwio	255, 0xff00
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7516,12 +7817,14 @@ VoiceParamEx_Entry_021:
 	.byte 0x82, 0x84
 	nop
 	nop
-	.byte 0x01
+	normal
 	push	127
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7548,7 +7851,7 @@ VoiceParamEx_Entry_023:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -7563,7 +7866,9 @@ VoiceParamEx_Entry_024:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7585,7 +7890,7 @@ VoiceParamEx_Entry_026:
 	nop
 	nop
 	ld	xiy, 0x0f00f001
-	.byte 0x04
+	max
 	nop
 	push	1
 	reti
@@ -7611,7 +7916,7 @@ VoiceParamEx_Entry_028:
 	nop
 	nop
 	ld	xiy, 0x0f00f002
-	.byte 0x04
+	max
 	nop
 	push	1
 	reti
@@ -7627,7 +7932,9 @@ VoiceParamEx_Entry_029:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7636,10 +7943,12 @@ VoiceParamEx_Entry_030:
 	nop
 	nop
 	ld	xiy, 0x0800f003
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7651,7 +7960,9 @@ VoiceParamEx_Entry_031:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7660,10 +7971,12 @@ VoiceParamEx_Entry_032:
 	nop
 	nop
 	ld	xiy, 0x0800f004
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7675,7 +7988,9 @@ VoiceParamEx_Entry_033:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7684,10 +7999,12 @@ VoiceParamEx_Entry_034:
 	nop
 	nop
 	ld	xiy, 0x0800f005
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7699,7 +8016,9 @@ VoiceParamEx_Entry_035:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7708,10 +8027,12 @@ VoiceParamEx_Entry_036:
 	nop
 	nop
 	ld	xiy, 0x0800f006
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7723,7 +8044,9 @@ VoiceParamEx_Entry_037:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7732,10 +8055,12 @@ VoiceParamEx_Entry_038:
 	nop
 	nop
 	ld	xiy, 0x01001007
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7747,7 +8072,9 @@ VoiceParamEx_Entry_039:
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7764,7 +8091,9 @@ VoiceParamEx_Entry_040:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7772,11 +8101,8 @@ VoiceParamEx_Entry_041:
 	.byte 0x01, 0x88
 	nop
 	nop
-	.byte 0xb2
-	push	sr
-	jrl	nc, 32512
-	nop
-	nop
+	ldw (xde), 127
+	jrl nc, 0
 	pop	sr
 	push	sr
 	pop	sr
@@ -7795,7 +8121,9 @@ VoiceParamEx_Entry_042:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7806,11 +8134,13 @@ VoiceParamEx_Entry_043:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7820,18 +8150,17 @@ VoiceParamEx_Entry_044:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceParamEx_Entry_045:
 	pushw	136
 	nop
-	.byte 0xb3
-	push	sr
-	jrl	nc, 32512
-	nop
-	nop
+	ldw (xhl), 127
+	jrl nc, 0
 	swi	7
 	push	sr
 	pop	sr
@@ -7844,26 +8173,28 @@ VoiceParamEx_Entry_046:
 	nop
 	nop
 	push	sr
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceParamEx_Entry_047:
 	ld	xwa, 0x02000088
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 VoiceParamEx_Entry_048:
@@ -7877,7 +8208,9 @@ VoiceParamEx_Entry_048:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7892,7 +8225,9 @@ VoiceParamEx_Entry_049:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7902,13 +8237,13 @@ VoiceParamEx_Entry_050:
 	nop
 	nop
 	push	sr
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 VoiceParamEx_Entry_051:
@@ -7936,7 +8271,9 @@ VoiceParamEx_Entry_052:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7949,7 +8286,9 @@ VoiceParamEx_Entry_053:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7962,7 +8301,9 @@ VoiceParamEx_Entry_054:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -7970,11 +8311,8 @@ VoiceParamEx_Entry_055:
 	.byte 0xb0, 0x89
 	nop
 	nop
-	.byte 0xb1
-	push	sr
-	jrl	nc, 32512
-	nop
-	nop
+	ldw (xbc), 127
+	jrl nc, 0
 	push	sr
 	push	sr
 	pop	sr
@@ -7986,12 +8324,9 @@ VoiceParamEx_Entry_056:
 	.byte 0xb2, 0x89
 	nop
 	nop
-	.byte 0xb4
-	push	sr
-	jrl	nc, 32512
-	nop
-	nop
-	.byte 0x04
+	ldw (xix), 127
+	jrl nc, 0
+	max
 	push	sr
 	pop	sr
 	nop
@@ -8006,7 +8341,9 @@ VoiceParamEx_Entry_057:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8028,7 +8365,7 @@ VoiceParamEx_Entry_059:
 	nop
 	nop
 	ld	xiz, 0x0f00f001
-	.byte 0x04
+	max
 	nop
 	push	1
 	reti
@@ -8054,7 +8391,7 @@ VoiceParamEx_Entry_061:
 	nop
 	nop
 	ld	xiz, 0x0f00f002
-	.byte 0x04
+	max
 	nop
 	push	1
 	reti
@@ -8070,7 +8407,9 @@ VoiceParamEx_Entry_062:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8079,10 +8418,12 @@ VoiceParamEx_Entry_063:
 	nop
 	nop
 	ld	xiz, 0x0800f003
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8094,7 +8435,9 @@ VoiceParamEx_Entry_064:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8103,10 +8446,12 @@ VoiceParamEx_Entry_065:
 	nop
 	nop
 	ld	xiz, 0x0800f004
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8118,7 +8463,9 @@ VoiceParamEx_Entry_066:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8127,10 +8474,12 @@ VoiceParamEx_Entry_067:
 	nop
 	nop
 	ld	xiz, 0x0800f005
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8142,7 +8491,9 @@ VoiceParamEx_Entry_068:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8151,10 +8502,12 @@ VoiceParamEx_Entry_069:
 	nop
 	nop
 	ld	xiz, 0x0800f006
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8166,7 +8519,9 @@ VoiceParamEx_Entry_070:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8175,10 +8530,12 @@ VoiceParamEx_Entry_071:
 	nop
 	nop
 	ld	xiz, 0x01001007
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8190,7 +8547,9 @@ VoiceParamEx_Entry_072:
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8207,7 +8566,9 @@ VoiceParamEx_Entry_073:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8238,7 +8599,9 @@ VoiceParamEx_Entry_075:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8249,11 +8612,13 @@ VoiceParamEx_Entry_076:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8263,7 +8628,9 @@ VoiceParamEx_Entry_077:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8287,26 +8654,28 @@ VoiceParamEx_Entry_079:
 	nop
 	nop
 	pop	sr
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 VoiceParamEx_Entry_080:
 	ld	xwa, 0x0300008c
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 VoiceParamEx_Entry_081:
@@ -8320,7 +8689,9 @@ VoiceParamEx_Entry_081:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8335,7 +8706,9 @@ VoiceParamEx_Entry_082:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8345,13 +8718,13 @@ VoiceParamEx_Entry_083:
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 VoiceParamEx_Entry_084:
@@ -8379,7 +8752,9 @@ VoiceParamEx_Entry_085:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8392,7 +8767,9 @@ PartParam_Entry_001:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8405,7 +8782,9 @@ PartParam_Entry_002:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8434,7 +8813,7 @@ PartParam_Entry_004:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -8446,7 +8825,7 @@ PartParam_Entry_005:
 	.byte 0x90
 	nop
 	nop
-	.byte 0x04
+	max
 	nop
 	swi	7
 	nop
@@ -8454,7 +8833,9 @@ PartParam_Entry_005:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8478,38 +8859,44 @@ PartParam_Entry_007:
 	.byte 0x90
 	nop
 	nop
-	.byte 0x04
+	max
 	pop	sr
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_008:
 	ldio	144, 0
 	nop
-	.byte 0x04
+	max
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_009:
 	ldwio	144, 0
-	.byte 0x04
+	max
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8531,26 +8918,29 @@ PartParam_Entry_011:
 	ldb	w, 144
 	nop
 	nop
-	.byte 0x04, 0x01
+	max
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_012:
 	ld	xwa, 0x04000090
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_013:
@@ -8558,13 +8948,15 @@ PartParam_Entry_013:
 	.byte 0x90
 	nop
 	nop
-	.byte 0x04
+	max
 	reti
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8573,13 +8965,15 @@ PartParam_Entry_014:
 	.byte 0x90
 	nop
 	nop
-	.byte 0x04
+	max
 	halt
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8588,13 +8982,14 @@ PartParam_Entry_015:
 	.byte 0x90
 	nop
 	nop
-	.byte 0x04, 0x04
+	max
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_016:
@@ -8615,13 +9010,15 @@ PartParam_Entry_017:
 	.byte 0x80, 0x90
 	nop
 	nop
-	.byte 0x04
+	max
 	pushw	127
 	incf
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8629,12 +9026,14 @@ PartParam_Entry_018:
 	.byte 0x81, 0x90
 	nop
 	nop
-	.byte 0x04
+	max
 	ldwio	255, 0xff00
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8642,12 +9041,14 @@ PartParam_Entry_019:
 	.byte 0x82, 0x90
 	nop
 	nop
-	.byte 0x04
+	max
 	push	127
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8674,7 +9075,7 @@ PartParam_Entry_021:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -8694,7 +9095,9 @@ PartParam_Entry_022:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8725,7 +9128,9 @@ PartParam_Entry_024:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8736,11 +9141,13 @@ PartParam_Entry_025:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8750,7 +9157,9 @@ PartParam_Entry_026:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8774,26 +9183,28 @@ PartParam_Entry_028:
 	nop
 	nop
 	halt
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_029:
 	ld	xwa, 0x05000094
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_030:
@@ -8807,7 +9218,9 @@ PartParam_Entry_030:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8822,7 +9235,9 @@ PartParam_Entry_031:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8832,13 +9247,13 @@ PartParam_Entry_032:
 	nop
 	nop
 	halt
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_033:
@@ -8866,7 +9281,9 @@ PartParam_Entry_034:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8879,7 +9296,9 @@ PartParam_Entry_035:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8892,7 +9311,9 @@ PartParam_Entry_036:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8921,7 +9342,7 @@ PartParam_Entry_038:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -8940,7 +9361,9 @@ PartParam_Entry_039:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8969,7 +9392,9 @@ PartParam_Entry_041:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8979,11 +9404,13 @@ PartParam_Entry_042:
 	ei	3
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -8993,7 +9420,9 @@ PartParam_Entry_043:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9020,21 +9449,23 @@ PartParam_Entry_045:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_046:
 	ld	xwa, 0x06000098
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_047:
@@ -9047,7 +9478,9 @@ PartParam_Entry_047:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9061,7 +9494,9 @@ PartParam_Entry_048:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9074,9 +9509,9 @@ PartParam_Entry_049:
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_050:
@@ -9103,7 +9538,9 @@ PartParam_Entry_051:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9116,7 +9553,9 @@ PartParam_Entry_052:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9129,7 +9568,9 @@ PartParam_Entry_053:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9156,7 +9597,7 @@ PartParam_Entry_055:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -9176,7 +9617,9 @@ PartParam_Entry_056:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9207,7 +9650,9 @@ PartParam_Entry_058:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9218,11 +9663,13 @@ PartParam_Entry_059:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9232,7 +9679,9 @@ PartParam_Entry_060:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9256,26 +9705,28 @@ PartParam_Entry_062:
 	nop
 	nop
 	reti
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_063:
 	ld	xwa, 0x0700009c
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_064:
@@ -9289,7 +9740,9 @@ PartParam_Entry_064:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9304,7 +9757,9 @@ PartParam_Entry_065:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9314,13 +9769,13 @@ PartParam_Entry_066:
 	nop
 	nop
 	reti
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_067:
@@ -9348,7 +9803,9 @@ PartParam_Entry_068:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9361,7 +9818,9 @@ PartParam_Entry_069:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9374,7 +9833,9 @@ PartParam_Entry_070:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9403,7 +9864,7 @@ PartParam_Entry_072:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -9421,7 +9882,9 @@ PartParam_Entry_073:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9448,7 +9911,9 @@ PartParam_Entry_075:
 	nop
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9457,11 +9922,13 @@ PartParam_Entry_076:
 	nop
 	ldio	3, 128
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9471,7 +9938,9 @@ PartParam_Entry_077:
 	nop
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9498,21 +9967,23 @@ PartParam_Entry_079:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_080:
 	ld	xwa, 0x080000a0
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_081:
@@ -9524,7 +9995,9 @@ PartParam_Entry_081:
 	nop
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9537,7 +10010,9 @@ PartParam_Entry_082:
 	nop
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9551,9 +10026,9 @@ PartParam_Entry_083:
 	jrl	nc, 6
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_084:
@@ -9579,7 +10054,9 @@ PartParam_Entry_085:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9593,7 +10070,9 @@ PartParam_Entry_086:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9605,7 +10084,9 @@ PartParam_Entry_087:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9649,7 +10130,9 @@ PartParam_Entry_090:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9678,7 +10161,9 @@ PartParam_Entry_092:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9688,11 +10173,13 @@ PartParam_Entry_093:
 	push	3
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9703,7 +10190,9 @@ PartParam_Entry_094:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9730,21 +10219,23 @@ PartParam_Entry_096:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_097:
 	ld	xwa, 0x090000a4
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_098:
@@ -9757,7 +10248,9 @@ PartParam_Entry_098:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9771,7 +10264,9 @@ PartParam_Entry_099:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9784,9 +10279,9 @@ PartParam_Entry_100:
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_101:
@@ -9812,7 +10307,9 @@ PartParam_Entry_102:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9827,7 +10324,9 @@ PartParam_Entry_103:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9840,7 +10339,9 @@ PartParam_Entry_104:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9867,7 +10368,7 @@ PartParam_Entry_106:
 	push	127
 	nop
 	jrl	nc, 0
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -9884,7 +10385,9 @@ PartParam_Entry_107:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9911,7 +10414,9 @@ PartParam_Entry_109:
 	ldwio	3, 127
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9919,11 +10424,13 @@ PartParam_Entry_110:
 	ldio	168, 0
 	nop
 	ldwio	3, 128
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9932,7 +10439,9 @@ PartParam_Entry_111:
 	ldwio	8, 127
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9959,21 +10468,23 @@ PartParam_Entry_113:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_114:
 	ld	xwa, 0x0a0000a8
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_115:
@@ -9984,7 +10495,9 @@ PartParam_Entry_115:
 	ldwio	7, 127
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -9996,7 +10509,9 @@ PartParam_Entry_116:
 	ldwio	5, 127
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10009,9 +10524,9 @@ PartParam_Entry_117:
 	jrl	nc, 6
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_118:
@@ -10037,7 +10552,9 @@ PartParam_Entry_119:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10050,7 +10567,9 @@ PartParam_Entry_120:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10063,7 +10582,9 @@ PartParam_Entry_121:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10090,7 +10611,7 @@ PartParam_Entry_123:
 	ldwio	127, 0x7f00
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -10108,7 +10629,9 @@ PartParam_Entry_124:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10135,7 +10658,9 @@ PartParam_Entry_126:
 	nop
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10144,11 +10669,13 @@ PartParam_Entry_127:
 	nop
 	pushw	0x8003
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10158,7 +10685,9 @@ PartParam_Entry_128:
 	nop
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10185,21 +10714,23 @@ PartParam_Entry_130:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_131:
 	ld	xwa, 0x0b0000ac
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_132:
@@ -10211,7 +10742,9 @@ PartParam_Entry_132:
 	nop
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10224,7 +10757,9 @@ PartParam_Entry_133:
 	nop
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10238,9 +10773,9 @@ PartParam_Entry_134:
 	jrl	nc, 6
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_135:
@@ -10266,7 +10801,9 @@ PartParam_Entry_136:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10280,7 +10817,9 @@ PartParam_Entry_137:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10292,7 +10831,9 @@ PartParam_Entry_138:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10317,7 +10858,7 @@ PartParam_Entry_140:
 	.byte 0xb4
 	pushw	127
 	jrl	nc, 0
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -10335,12 +10876,14 @@ PartParam_Entry_141:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_142:
-	.byte 0x01
+	normal
 	ld	(xwa), 0
 	.byte 0xb2
 	incf
@@ -10363,7 +10906,9 @@ PartParam_Entry_143:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10374,11 +10919,13 @@ PartParam_Entry_144:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10388,7 +10935,9 @@ PartParam_Entry_145:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10412,26 +10961,28 @@ PartParam_Entry_147:
 	nop
 	nop
 	incf
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_148:
 	ld	xwa, 0x0c0000b0
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_149:
@@ -10443,7 +10994,9 @@ PartParam_Entry_149:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10456,7 +11009,9 @@ PartParam_Entry_150:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10464,13 +11019,13 @@ PartParam_Entry_151:
 	pop	xiz
 	ld	(xwa), 0
 	incf
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_152:
@@ -10497,7 +11052,9 @@ PartParam_Entry_153:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10509,7 +11066,9 @@ PartParam_Entry_154:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10521,7 +11080,9 @@ PartParam_Entry_155:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10548,7 +11109,7 @@ PartParam_Entry_157:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -10566,12 +11127,14 @@ PartParam_Entry_158:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_159:
-	.byte 0x01
+	normal
 	ld	(xix), 0
 	.byte 0xb2
 	decf
@@ -10594,7 +11157,9 @@ PartParam_Entry_160:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10605,11 +11170,13 @@ PartParam_Entry_161:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10619,7 +11186,9 @@ PartParam_Entry_162:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10643,26 +11212,28 @@ PartParam_Entry_164:
 	nop
 	nop
 	decf
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_165:
 	ld	xwa, 0x0d0000b4
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_166:
@@ -10674,7 +11245,9 @@ PartParam_Entry_166:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10687,7 +11260,9 @@ PartParam_Entry_167:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10695,13 +11270,13 @@ PartParam_Entry_168:
 	pop	xiz
 	ld	(xix), 0
 	decf
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_169:
@@ -10728,7 +11303,9 @@ PartParam_Entry_170:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10740,7 +11317,9 @@ PartParam_Entry_171:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10752,7 +11331,9 @@ PartParam_Entry_172:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10779,7 +11360,7 @@ PartParam_Entry_174:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -10788,10 +11369,7 @@ PartParam_Entry_174:
 	swi	7
 PartParam_Entry_175:
 	nop
-	.byte 0xb8
-	nop
-	nop
-	ret
+	ld (xwa+256), 14
 	nop
 	swi	7
 	nop
@@ -10799,15 +11377,15 @@ PartParam_Entry_175:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_176:
-	.byte 0x01, 0xb8
-	nop
-	nop
-	.byte 0xb2
+	normal
+	ld (xwa+256), 178
 	ret
 	jrl	nc, 32512
 	nop
@@ -10821,16 +11399,15 @@ PartParam_Entry_176:
 	swi	7
 PartParam_Entry_177:
 	reti
-	.byte 0xb8
-	nop
-	nop
-	ret
+	ld (xwa+256), 14
 	pop	sr
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10841,11 +11418,13 @@ PartParam_Entry_178:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10855,7 +11434,9 @@ PartParam_Entry_179:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10879,71 +11460,68 @@ PartParam_Entry_181:
 	nop
 	nop
 	ret
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_182:
 	ld	xwa, 0x0e0000b8
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_183:
 	pop	xhl
-	.byte 0xb8
-	nop
-	nop
-	ret
+	ld (xwa+256), 14
 	reti
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_184:
 	pop	xiy
-	.byte 0xb8
-	nop
-	nop
-	ret
+	ld (xwa+256), 14
 	halt
 	jrl	nc, 32512
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_185:
 	pop	xiz
-	.byte 0xb8
-	nop
-	nop
-	ret
-	.byte 0x04
+	ld (xwa+256), 14
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_186:
@@ -10971,7 +11549,9 @@ PartParam_Entry_187:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10984,7 +11564,9 @@ PartParam_Entry_188:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -10997,7 +11579,9 @@ PartParam_Entry_189:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11026,7 +11610,7 @@ PartParam_Entry_191:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -11035,24 +11619,23 @@ PartParam_Entry_191:
 	swi	7
 PartParam_Entry_192:
 	nop
-	.byte 0xbc
+	ld (xix+256), 15
 	nop
-	nop
-	retd	0xff00
-	nop
-	swi	7
-	nop
+	swi 7
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	nop
+	nop
+	swi	7
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_193:
-	.byte 0x01, 0xbc
-	nop
-	nop
-	.byte 0xb2
+	normal
+	ld (xix+256), 178
 	retd	127
 	jrl	nc, 0
 	pop	sr
@@ -11064,14 +11647,15 @@ PartParam_Entry_193:
 	swi	7
 PartParam_Entry_194:
 	reti
-	.byte 0xbc
+	ld (xix+256), 15
+	pop sr
+	jrl nc, 32512
 	nop
 	nop
-	retd	0x7f03
-	nop
-	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11080,11 +11664,13 @@ PartParam_Entry_195:
 	nop
 	retd	0x8003
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11094,7 +11680,9 @@ PartParam_Entry_196:
 	nop
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11121,62 +11709,63 @@ PartParam_Entry_198:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_199:
 	ld	xwa, 0x0f0000bc
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_200:
 	pop	xhl
-	.byte 0xbc
+	ld (xix+256), 15
+	reti
+	jrl nc, 32512
 	nop
 	nop
-	retd	0x7f07
-	nop
-	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_201:
 	pop	xiy
-	.byte 0xbc
+	ld (xix+256), 15
+	halt
+	jrl nc, 32512
 	nop
 	nop
-	retd	0x7f05
-	nop
-	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 PartParam_Entry_202:
 	pop	xiz
-	.byte 0xbc
-	nop
-	nop
-	retd	0x4004
-	nop
-	jrl	nc, 6
+	ld (xix+256), 15
+	max
+	ld xwa, 425728
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 PartParam_Entry_203:
@@ -11202,7 +11791,9 @@ PartParam_Entry_204:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11216,7 +11807,9 @@ PartParam_Entry_205:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11228,7 +11821,9 @@ PartParam_Entry_206:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11253,7 +11848,7 @@ PartParam_Entry_208:
 	.byte 0xb4
 	retd	127
 	jrl	nc, 0
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -11273,7 +11868,9 @@ PartParam_Entry_209:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	halt
 	swi	7
@@ -11291,7 +11888,7 @@ PartParam_Entry_210:
 	pop	sr
 	nop
 	nop
-	.byte 0x01
+	normal
 	swi	7
 PartParam_Entry_211:
 	reti
@@ -11304,7 +11901,9 @@ PartParam_Entry_211:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11315,11 +11914,13 @@ PartParam_Entry_212:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11329,9 +11930,11 @@ PartParam_Entry_213:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 PartParam_Entry_214:
 	pushw	192
@@ -11342,35 +11945,39 @@ PartParam_Entry_214:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 PartParam_Entry_215:
 	ldb	w, 192
 	nop
 	nop
 	rcf
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x04
+	max
 	swi	7
 PartParam_Entry_216:
 	ld	xwa, 0x100000c0
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 PartParam_Entry_217:
@@ -11384,7 +11991,9 @@ PartParam_Entry_217:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11399,7 +12008,9 @@ PartParam_Entry_218:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11409,13 +12020,13 @@ PartParam_Entry_219:
 	nop
 	nop
 	rcf
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 PartParam_Entry_220:
@@ -11443,7 +12054,9 @@ PartParam_Entry_221:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11456,7 +12069,9 @@ PartParam_Entry_222:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11469,7 +12084,9 @@ PartParam_Entry_223:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11498,7 +12115,7 @@ PartParam_Entry_225:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -11518,7 +12135,9 @@ PartParam_Entry_226:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	halt
 	swi	7
@@ -11536,7 +12155,7 @@ PartParam_Entry_227:
 	pop	sr
 	nop
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_228:
 	reti
@@ -11549,7 +12168,9 @@ ExtPartParam_Entry_228:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11560,11 +12181,13 @@ ExtPartParam_Entry_229:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11574,9 +12197,11 @@ ExtPartParam_Entry_230:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_231:
 	pushw	196
@@ -11587,35 +12212,39 @@ ExtPartParam_Entry_231:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_232:
 	ldb	w, 196
 	nop
 	nop
 	scf
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x04
+	max
 	swi	7
 ExtPartParam_Entry_233:
 	ld	xwa, 0x110000c4
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_234:
@@ -11629,7 +12258,9 @@ ExtPartParam_Entry_234:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11644,7 +12275,9 @@ ExtPartParam_Entry_235:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11654,13 +12287,13 @@ ExtPartParam_Entry_236:
 	nop
 	nop
 	scf
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_237:
@@ -11688,7 +12321,9 @@ ExtPartParam_Entry_238:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11701,7 +12336,9 @@ ExtPartParam_Entry_239:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11714,7 +12351,9 @@ ExtPartParam_Entry_240:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11743,7 +12382,7 @@ ExtPartParam_Entry_242:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -11763,7 +12402,9 @@ ExtPartParam_Entry_243:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	halt
 	swi	7
@@ -11781,7 +12422,7 @@ ExtPartParam_Entry_244:
 	pop	sr
 	nop
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_245:
 	reti
@@ -11794,7 +12435,9 @@ ExtPartParam_Entry_245:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11805,11 +12448,13 @@ ExtPartParam_Entry_246:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11819,9 +12464,11 @@ ExtPartParam_Entry_247:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_248:
 	pushw	200
@@ -11832,35 +12479,39 @@ ExtPartParam_Entry_248:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_249:
 	ldb	w, 200
 	nop
 	nop
 	ccf
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x04
+	max
 	swi	7
 ExtPartParam_Entry_250:
 	ld	xwa, 0x120000c8
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_251:
@@ -11874,7 +12525,9 @@ ExtPartParam_Entry_251:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11889,7 +12542,9 @@ ExtPartParam_Entry_252:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11899,13 +12554,13 @@ ExtPartParam_Entry_253:
 	nop
 	nop
 	ccf
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_254:
@@ -11933,7 +12588,9 @@ ExtPartParam_Entry_255:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11946,7 +12603,9 @@ ExtPartParam_Entry_256:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11959,7 +12618,9 @@ ExtPartParam_Entry_257:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -11988,7 +12649,7 @@ ExtPartParam_Entry_259:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -12008,7 +12669,9 @@ ExtPartParam_Entry_260:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	halt
 	swi	7
@@ -12026,7 +12689,7 @@ ExtPartParam_Entry_261:
 	pop	sr
 	nop
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_262:
 	reti
@@ -12039,7 +12702,9 @@ ExtPartParam_Entry_262:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12050,11 +12715,13 @@ ExtPartParam_Entry_263:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12064,9 +12731,11 @@ ExtPartParam_Entry_264:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_265:
 	pushw	204
@@ -12077,35 +12746,39 @@ ExtPartParam_Entry_265:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_266:
 	ldb	w, 204
 	nop
 	nop
 	zcf
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x04
+	max
 	swi	7
 ExtPartParam_Entry_267:
 	ld	xwa, 0x130000cc
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_268:
@@ -12119,7 +12792,9 @@ ExtPartParam_Entry_268:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12134,7 +12809,9 @@ ExtPartParam_Entry_269:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12144,13 +12821,13 @@ ExtPartParam_Entry_270:
 	nop
 	nop
 	zcf
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_271:
@@ -12178,7 +12855,9 @@ ExtPartParam_Entry_272:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12191,7 +12870,9 @@ ExtPartParam_Entry_273:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12204,7 +12885,9 @@ ExtPartParam_Entry_274:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12233,7 +12916,7 @@ ExtPartParam_Entry_276:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -12253,7 +12936,9 @@ ExtPartParam_Entry_277:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12271,7 +12956,7 @@ ExtPartParam_Entry_278:
 	pop	sr
 	nop
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_279:
 	reti
@@ -12284,7 +12969,9 @@ ExtPartParam_Entry_279:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12295,11 +12982,13 @@ ExtPartParam_Entry_280:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12309,9 +12998,11 @@ ExtPartParam_Entry_281:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_282:
 	pushw	208
@@ -12322,35 +13013,39 @@ ExtPartParam_Entry_282:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_283:
 	ldb	w, 208
 	nop
 	nop
 	push_a
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_284:
 	ld	xwa, 0x140000d0
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_285:
@@ -12364,7 +13059,9 @@ ExtPartParam_Entry_285:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12379,7 +13076,9 @@ ExtPartParam_Entry_286:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12389,13 +13088,13 @@ ExtPartParam_Entry_287:
 	nop
 	nop
 	push_a
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_288:
@@ -12423,7 +13122,9 @@ ExtPartParam_Entry_289:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12436,7 +13137,9 @@ ExtPartParam_Entry_290:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12449,7 +13152,9 @@ ExtPartParam_Entry_291:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12478,7 +13183,7 @@ ExtPartParam_Entry_293:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -12498,7 +13203,9 @@ ExtPartParam_Entry_294:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12529,7 +13236,9 @@ ExtPartParam_Entry_296:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12540,11 +13249,13 @@ ExtPartParam_Entry_297:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12554,9 +13265,11 @@ ExtPartParam_Entry_298:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_299:
 	pushw	212
@@ -12567,7 +13280,9 @@ ExtPartParam_Entry_299:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12576,26 +13291,28 @@ ExtPartParam_Entry_300:
 	nop
 	nop
 	pop_a
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_301:
 	ld	xwa, 0x150000d4
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 ExtPartParam_Entry_302:
@@ -12609,7 +13326,9 @@ ExtPartParam_Entry_302:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12624,7 +13343,9 @@ ExtPartParam_Entry_303:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12634,13 +13355,13 @@ ExtPartParam_Entry_304:
 	nop
 	nop
 	pop_a
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 ExtPartParam_Entry_305:
@@ -12668,7 +13389,9 @@ ExtPartParam_Entry_306:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12681,7 +13404,9 @@ ExtPartParam_Entry_307:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12694,7 +13419,9 @@ ExtPartParam_Entry_308:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12723,7 +13450,7 @@ ExtPartParam_Entry_310:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -12743,7 +13470,9 @@ ExtPartParam_Entry_311:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12774,7 +13503,9 @@ ExtPartParam_Entry_313:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12785,11 +13516,13 @@ ExtPartParam_Entry_314:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12799,9 +13532,11 @@ ExtPartParam_Entry_315:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_316:
 	pushw	216
@@ -12812,7 +13547,9 @@ ExtPartParam_Entry_316:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12821,26 +13558,28 @@ ExtPartParam_Entry_317:
 	nop
 	nop
 	ex_ff
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_318:
 	ld	xwa, 0x160000d8
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 ExtPartParam_Entry_319:
@@ -12854,7 +13593,9 @@ ExtPartParam_Entry_319:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12869,7 +13610,9 @@ ExtPartParam_Entry_320:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12879,13 +13622,13 @@ ExtPartParam_Entry_321:
 	nop
 	nop
 	ex_ff
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	nop
 	swi	7
 ExtPartParam_Entry_322:
@@ -12913,7 +13656,9 @@ ExtPartParam_Entry_323:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12926,7 +13671,9 @@ ExtPartParam_Entry_324:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12939,7 +13686,9 @@ ExtPartParam_Entry_325:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -12968,7 +13717,7 @@ ExtPartParam_Entry_327:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -12987,7 +13736,9 @@ ExtPartParam_Entry_328:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	halt
 	swi	7
@@ -13004,7 +13755,7 @@ ExtPartParam_Entry_329:
 	pop	sr
 	nop
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_330:
 	reti
@@ -13016,34 +13767,40 @@ ExtPartParam_Entry_330:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_331:
 	ldio	220, 0
 	nop
-	.byte 0x17
-	pop	sr
+	ldf 3
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_332:
 	ldwio	220, 0
-	.byte 0x17
-	ldio	127, 0
-	jrl	nc, 0
-	swi	7
-	.byte 0x01, 0x01, 0x01
+	ldf 8
+	jrl nc, 32512
 	nop
-	.byte 0x01
+	nop
+	swi	7
+	normal
+	normal
+	normal
+	nop
+	normal
 	swi	7
 ExtPartParam_Entry_333:
 	pushw	220
@@ -13053,9 +13810,11 @@ ExtPartParam_Entry_333:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_334:
 	ldb	w, 220
@@ -13066,21 +13825,23 @@ ExtPartParam_Entry_334:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x04
+	max
 	swi	7
 ExtPartParam_Entry_335:
 	ld	xwa, 0x170000dc
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_336:
@@ -13093,7 +13854,9 @@ ExtPartParam_Entry_336:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13107,7 +13870,9 @@ ExtPartParam_Entry_337:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13120,9 +13885,9 @@ ExtPartParam_Entry_338:
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_339:
@@ -13143,13 +13908,14 @@ ExtPartParam_Entry_340:
 	xor	(xwa), d
 	nop
 	nop
-	.byte 0x17
-	pushw	127
-	incf
+	ldf 11
+	jrl nc, 3072
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13157,12 +13923,16 @@ ExtPartParam_Entry_341:
 	xor	(xbc), d
 	nop
 	nop
-	.byte 0x17
-	ldwio	255, 0xff00
+	ldf 10
+	swi 7
+	nop
+	swi 7
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13170,12 +13940,14 @@ ExtPartParam_Entry_342:
 	xor	(xde), d
 	nop
 	nop
-	.byte 0x17
-	push	127
-	ldw	ix, 76
+	ldf 9
+	jrl nc, 19508
+	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13202,7 +13974,7 @@ ExtPartParam_Entry_344:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -13222,7 +13994,9 @@ ExtPartParam_Entry_345:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	halt
 	swi	7
@@ -13240,7 +14014,7 @@ ExtPartParam_Entry_346:
 	pop	sr
 	nop
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_347:
 	reti
@@ -13253,7 +14027,9 @@ ExtPartParam_Entry_347:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13264,11 +14040,13 @@ ExtPartParam_Entry_348:
 	pop	sr
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13278,9 +14056,11 @@ ExtPartParam_Entry_349:
 	ldio	127, 0
 	jrl	nc, 0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_350:
 	pushw	224
@@ -13291,35 +14071,39 @@ ExtPartParam_Entry_350:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x01
+	normal
 	swi	7
 ExtPartParam_Entry_351:
 	ldb	w, 224
 	nop
 	nop
 	push_f
-	.byte 0x01
+	normal
 	jrl	nc, -256
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
-	.byte 0x04
+	max
 	swi	7
 ExtPartParam_Entry_352:
 	ld	xwa, 0x180000e0
-	.byte 0x04
+	max
 	ldio	0, 127
 	pop	sr
 	nop
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_353:
@@ -13333,7 +14117,9 @@ ExtPartParam_Entry_353:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13348,7 +14134,9 @@ ExtPartParam_Entry_354:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13358,13 +14146,13 @@ ExtPartParam_Entry_355:
 	nop
 	nop
 	push_f
-	.byte 0x04
+	max
 	ld	xwa, 0x067f00
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	pop	sr
-	.byte 0x01
+	normal
 	push	sr
 	swi	7
 ExtPartParam_Entry_356:
@@ -13392,7 +14180,9 @@ ExtPartParam_Entry_357:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13405,7 +14195,9 @@ ExtPartParam_Entry_358:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13418,7 +14210,9 @@ ExtPartParam_Entry_359:
 	ldw	ix, 76
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13447,7 +14241,7 @@ ExtPartParam_Entry_361:
 	jrl	nc, 32512
 	nop
 	nop
-	.byte 0x04
+	max
 	push	sr
 	pop	sr
 	nop
@@ -13464,7 +14258,9 @@ ExtPartParam_Entry_362:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13473,11 +14269,13 @@ ExtPartParam_Entry_363:
 	nop
 	.byte 0x98, 0x04, 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13488,11 +14286,13 @@ ExtPartParam_Entry_364:
 	nop
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13505,7 +14305,9 @@ ExtPartParam_Entry_365:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13517,7 +14319,9 @@ ExtPartParam_Entry_366:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13529,11 +14333,13 @@ ExtPartParam_Entry_367:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13546,7 +14352,7 @@ ExtPartParam_Entry_368:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -13555,7 +14361,7 @@ ExtPartParam_Entry_368:
 	halt
 	ei	7
 	nop
-	.byte 0x01
+	normal
 	push	sr
 	pop	sr
 	swi	7
@@ -13573,14 +14379,15 @@ ExtPartParam_Entry_369:
 	.byte 0x82, 0x01
 	nop
 	nop
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01
+	normal
+	normal
 	reti
 	nop
 	nop
@@ -13589,13 +14396,16 @@ ExtPartParam_Entry_370:
 	.byte 0x01, 0x82, 0x01
 	nop
 	nop
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13609,7 +14419,9 @@ ExtPartParam_Entry_371:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13620,11 +14432,13 @@ ExtPartParam_Entry_372:
 	nop
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13632,13 +14446,15 @@ ExtPartParam_Entry_373:
 	.byte 0x04, 0x82, 0x01
 	nop
 	nop
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13648,13 +14464,15 @@ ExtPartParam_Entry_374:
 	nop
 	nop
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13665,10 +14483,13 @@ ExtPartParam_Entry_375:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13676,27 +14497,31 @@ ExtPartParam_Entry_376:
 	nop
 	.byte 0x84, 0x01
 	nop
-	.byte 0x01
+	normal
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_377:
 	.byte 0x01, 0x84, 0x01
 	nop
-	.byte 0x01
+	normal
 	decf
 	retd	3840
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13704,11 +14529,13 @@ ExtPartParam_Entry_378:
 	push	sr
 	.byte 0x84, 0x01
 	nop
-	.byte 0x01
+	normal
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13716,28 +14543,30 @@ ExtPartParam_Entry_379:
 	pop	sr
 	.byte 0x84, 0x01
 	nop
-	.byte 0x01
+	normal
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_380:
 	.byte 0x04, 0x84, 0x01
 	nop
-	.byte 0x01
+	normal
 	incf
 	reti
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -13747,27 +14576,34 @@ ExtPartParam_Entry_381:
 	nop
 	.byte 0x86, 0x01
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_382:
 	.byte 0x01, 0x86, 0x01
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13775,13 +14611,15 @@ ExtPartParam_Entry_383:
 	push	sr
 	.byte 0x86, 0x01
 	nop
-	.byte 0x01
+	normal
 	incf
 	ldio	0, 1
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13789,27 +14627,32 @@ ExtPartParam_Entry_384:
 	pop	sr
 	.byte 0x86, 0x01
 	nop
-	.byte 0x01
+	normal
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_385:
 	.byte 0x04, 0x86, 0x01
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13817,29 +14660,34 @@ ExtPartParam_Entry_386:
 	halt
 	.byte 0x86, 0x01
 	nop
-	.byte 0x01
+	normal
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_387:
 	.byte 0x06, 0x86, 0x01
 	nop
-	.byte 0x01
+	normal
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13850,11 +14698,13 @@ ExtPartParam_Entry_388:
 	push	sr
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13867,7 +14717,9 @@ ExtPartParam_Entry_389:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13879,7 +14731,9 @@ ExtPartParam_Entry_390:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13891,11 +14745,13 @@ ExtPartParam_Entry_391:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13908,7 +14764,7 @@ ExtPartParam_Entry_392:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -13919,14 +14775,16 @@ ExtPartParam_Entry_393:
 	.byte 0x8a, 0x01
 	nop
 	push	sr
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13934,13 +14792,16 @@ ExtPartParam_Entry_394:
 	.byte 0x01, 0x8a, 0x01
 	nop
 	push	sr
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13954,7 +14815,9 @@ ExtPartParam_Entry_395:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13965,11 +14828,13 @@ ExtPartParam_Entry_396:
 	push	sr
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13977,13 +14842,15 @@ ExtPartParam_Entry_397:
 	.byte 0x04, 0x8a, 0x01
 	nop
 	push	sr
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -13993,13 +14860,15 @@ ExtPartParam_Entry_398:
 	nop
 	push	sr
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14010,10 +14879,13 @@ ExtPartParam_Entry_399:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14024,11 +14896,13 @@ ExtPartParam_Entry_400:
 	pop	sr
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14041,7 +14915,9 @@ ExtPartParam_Entry_401:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14053,7 +14929,9 @@ ExtPartParam_Entry_402:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14065,11 +14943,13 @@ ExtPartParam_Entry_403:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14082,7 +14962,7 @@ ExtPartParam_Entry_404:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -14093,14 +14973,16 @@ ExtPartParam_Entry_405:
 	.byte 0x8e, 0x01
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14108,13 +14990,16 @@ ExtPartParam_Entry_406:
 	.byte 0x01, 0x8e, 0x01
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14128,7 +15013,9 @@ ExtPartParam_Entry_407:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14139,11 +15026,13 @@ ExtPartParam_Entry_408:
 	pop	sr
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14151,13 +15040,15 @@ ExtPartParam_Entry_409:
 	.byte 0x04, 0x8e, 0x01
 	nop
 	pop	sr
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14167,13 +15058,15 @@ ExtPartParam_Entry_410:
 	nop
 	pop	sr
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14184,10 +15077,13 @@ ExtPartParam_Entry_411:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14195,27 +15091,31 @@ ExtPartParam_Entry_412:
 	nop
 	.byte 0x90, 0x01
 	nop
-	.byte 0x04
+	max
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_413:
 	.byte 0x01, 0x90, 0x01
 	nop
-	.byte 0x04
+	max
 	decf
 	retd	3840
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14223,11 +15123,13 @@ ExtPartParam_Entry_414:
 	push	sr
 	.byte 0x90, 0x01
 	nop
-	.byte 0x04
+	max
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14235,28 +15137,30 @@ ExtPartParam_Entry_415:
 	pop	sr
 	.byte 0x90, 0x01
 	nop
-	.byte 0x04
+	max
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_416:
 	.byte 0x04, 0x90, 0x01
 	nop
-	.byte 0x04
+	max
 	incf
 	reti
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -14266,27 +15170,34 @@ ExtPartParam_Entry_417:
 	nop
 	.byte 0x92, 0x01
 	nop
-	.byte 0x04, 0x04
+	max
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_418:
 	.byte 0x01, 0x92, 0x01
 	nop
-	.byte 0x04, 0x04
+	max
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14294,13 +15205,15 @@ ExtPartParam_Entry_419:
 	push	sr
 	.byte 0x92, 0x01
 	nop
-	.byte 0x04
+	max
 	incf
 	ldio	0, 1
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14308,27 +15221,32 @@ ExtPartParam_Entry_420:
 	pop	sr
 	.byte 0x92, 0x01
 	nop
-	.byte 0x04
+	max
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_421:
 	.byte 0x04, 0x92, 0x01
 	nop
-	.byte 0x04, 0x04
+	max
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14336,29 +15254,34 @@ ExtPartParam_Entry_422:
 	halt
 	.byte 0x92, 0x01
 	nop
-	.byte 0x04
+	max
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 ExtPartParam_Entry_423:
 	.byte 0x06, 0x92, 0x01
 	nop
-	.byte 0x04
+	max
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14369,11 +15292,13 @@ ExtPartParam_Entry_424:
 	halt
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14386,7 +15311,9 @@ ExtPartParam_Entry_425:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14398,7 +15325,9 @@ ExtPartParam_Entry_426:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14410,11 +15339,13 @@ ExtPartParam_Entry_427:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14427,7 +15358,7 @@ ExtPartParam_Entry_428:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -14438,14 +15369,16 @@ ExtPartParam_Entry_429:
 	.byte 0x96, 0x01
 	nop
 	halt
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14453,13 +15386,16 @@ ExtPartParam_Entry_430:
 	.byte 0x01, 0x96, 0x01
 	nop
 	halt
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14473,7 +15409,9 @@ ExtPartParam_Entry_431:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14484,11 +15422,13 @@ ExtPartParam_Entry_432:
 	halt
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14496,13 +15436,15 @@ ExtPartParam_Entry_433:
 	.byte 0x04, 0x96, 0x01
 	nop
 	halt
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14512,13 +15454,15 @@ ExtPartParam_Entry_434:
 	nop
 	halt
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14529,10 +15473,13 @@ ExtPartParam_Entry_435:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14542,11 +15489,13 @@ ExtPartParam_Entry_436:
 	nop
 	ei	13
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14558,7 +15507,9 @@ ExtPartParam_Entry_437:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14569,7 +15520,9 @@ ExtPartParam_Entry_438:
 	ei	13
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14580,11 +15533,13 @@ ExtPartParam_Entry_439:
 	ei	13
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14596,7 +15551,7 @@ ExtPartParam_Entry_440:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -14613,7 +15568,9 @@ ExtPartParam_Entry_441:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14623,10 +15580,13 @@ ExtPartParam_Entry_442:
 	ei	4
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14639,7 +15599,9 @@ ExtPartParam_Entry_443:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14649,11 +15611,13 @@ ExtPartParam_Entry_444:
 	nop
 	ei	12
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14662,11 +15626,13 @@ ExtPartParam_Entry_445:
 	nop
 	ei	4
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14675,13 +15641,15 @@ ExtPartParam_Entry_446:
 	.byte 0x9a, 0x01
 	nop
 	ei	22
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14691,10 +15659,13 @@ ExtPartParam_Entry_447:
 	ei	12
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14705,11 +15676,13 @@ ExtPartParam_Entry_448:
 	reti
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14722,7 +15695,9 @@ ExtPartParam_Entry_449:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14734,7 +15709,9 @@ ExtPartParam_Entry_450:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14746,11 +15723,13 @@ ExtPartParam_Entry_451:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14763,7 +15742,7 @@ ExtPartParam_Entry_452:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -14774,14 +15753,16 @@ ExtPartParam_Entry_453:
 	.byte 0x9e, 0x01
 	nop
 	reti
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14789,13 +15770,16 @@ ExtPartParam_Entry_454:
 	.byte 0x01, 0x9e, 0x01
 	nop
 	reti
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14809,7 +15793,9 @@ SeqMixParam_Entry_001:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14820,11 +15806,13 @@ SeqMixParam_Entry_002:
 	reti
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14832,13 +15820,15 @@ SeqMixParam_Entry_003:
 	.byte 0x04, 0x9e, 0x01
 	nop
 	reti
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14848,13 +15838,15 @@ SeqMixParam_Entry_004:
 	nop
 	reti
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14865,10 +15857,13 @@ SeqMixParam_Entry_005:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14878,11 +15873,13 @@ SeqMixParam_Entry_006:
 	nop
 	ldio	13, 32
 	nop
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14893,7 +15890,9 @@ SeqMixParam_Entry_007:
 	nop
 	retd	0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14906,7 +15905,9 @@ SeqMixParam_Entry_008:
 	.byte 0x01, 0x06
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14916,11 +15917,13 @@ SeqMixParam_Entry_009:
 	nop
 	ldio	13, 128
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14931,7 +15934,7 @@ SeqMixParam_Entry_010:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -14947,7 +15950,9 @@ SeqMixParam_Entry_011:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14956,10 +15961,13 @@ SeqMixParam_Entry_012:
 	nop
 	ldio	4, 16
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14969,11 +15977,13 @@ SeqMixParam_Entry_013:
 	nop
 	ldio	12, 8
 	nop
-	.byte 0x01
+	normal
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14983,11 +15993,13 @@ SeqMixParam_Entry_014:
 	nop
 	ldio	12, 32
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -14996,11 +16008,13 @@ SeqMixParam_Entry_015:
 	nop
 	ldio	4, 32
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15010,11 +16024,13 @@ SeqMixParam_Entry_016:
 	nop
 	ldio	22, 1
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15023,10 +16039,13 @@ SeqMixParam_Entry_017:
 	nop
 	ldio	12, 16
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15036,11 +16055,13 @@ SeqMixParam_Entry_018:
 	nop
 	push	13
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15052,7 +16073,9 @@ SeqMixParam_Entry_019:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15063,7 +16086,9 @@ SeqMixParam_Entry_020:
 	push	13
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15074,11 +16099,13 @@ SeqMixParam_Entry_021:
 	push	13
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15090,7 +16117,7 @@ SeqMixParam_Entry_022:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -15107,7 +16134,9 @@ SeqMixParam_Entry_023:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15117,10 +16146,13 @@ SeqMixParam_Entry_024:
 	push	4
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15133,7 +16165,9 @@ SeqMixParam_Entry_025:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15143,11 +16177,13 @@ SeqMixParam_Entry_026:
 	nop
 	push	12
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15156,11 +16192,13 @@ SeqMixParam_Entry_027:
 	nop
 	push	4
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15169,13 +16207,15 @@ SeqMixParam_Entry_028:
 	.byte 0xa6, 0x01
 	nop
 	push	22
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15185,10 +16225,13 @@ SeqMixParam_Entry_029:
 	push	12
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15197,11 +16240,13 @@ SeqMixParam_Entry_030:
 	.byte 0xa8, 0x01
 	nop
 	ldwio	13, 32
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15211,7 +16256,9 @@ SeqMixParam_Entry_031:
 	ldwio	13, 15
 	retd	0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15223,7 +16270,9 @@ SeqMixParam_Entry_032:
 	.byte 0x01, 0x06
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15232,11 +16281,13 @@ SeqMixParam_Entry_033:
 	.byte 0xa8, 0x01
 	nop
 	ldwio	13, 128
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15246,7 +16297,7 @@ SeqMixParam_Entry_034:
 	ldwio	12, 7
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -15261,7 +16312,9 @@ SeqMixParam_Entry_035:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15269,10 +16322,13 @@ SeqMixParam_Entry_036:
 	.byte 0x01, 0xaa, 0x01
 	nop
 	ldwio	4, 16
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15281,11 +16337,13 @@ SeqMixParam_Entry_037:
 	.byte 0xaa, 0x01
 	nop
 	ldwio	12, 8
-	.byte 0x01
+	normal
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15294,11 +16352,13 @@ SeqMixParam_Entry_038:
 	.byte 0xaa, 0x01
 	nop
 	ldwio	12, 32
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15306,11 +16366,13 @@ SeqMixParam_Entry_039:
 	.byte 0x04, 0xaa, 0x01
 	nop
 	ldwio	4, 32
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15319,11 +16381,13 @@ SeqMixParam_Entry_040:
 	.byte 0xaa, 0x01
 	nop
 	ldwio	22, 1
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15331,10 +16395,13 @@ SeqMixParam_Entry_041:
 	.byte 0x06, 0xaa, 0x01
 	nop
 	ldwio	12, 16
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15344,11 +16411,13 @@ SeqMixParam_Entry_042:
 	nop
 	pushw	8205
 	nop
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15359,7 +16428,9 @@ SeqMixParam_Entry_043:
 	nop
 	retd	0
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15372,7 +16443,9 @@ SeqMixParam_Entry_044:
 	.byte 0x01, 0x06
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15382,11 +16455,13 @@ SeqMixParam_Entry_045:
 	nop
 	pushw	0x800d
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15397,7 +16472,7 @@ SeqMixParam_Entry_046:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -15413,7 +16488,9 @@ SeqMixParam_Entry_047:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15422,10 +16499,13 @@ SeqMixParam_Entry_048:
 	nop
 	pushw	4100
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15435,11 +16515,13 @@ SeqMixParam_Entry_049:
 	nop
 	pushw	2060
 	nop
-	.byte 0x01
+	normal
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15449,11 +16531,13 @@ SeqMixParam_Entry_050:
 	nop
 	pushw	8204
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15462,11 +16546,13 @@ SeqMixParam_Entry_051:
 	nop
 	pushw	8196
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15476,11 +16562,13 @@ SeqMixParam_Entry_052:
 	nop
 	pushw	278
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15489,10 +16577,13 @@ SeqMixParam_Entry_053:
 	nop
 	pushw	4108
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15503,11 +16594,13 @@ SeqMixParam_Entry_054:
 	incf
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15520,7 +16613,9 @@ SeqMixParam_Entry_055:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15532,7 +16627,9 @@ SeqMixParam_Entry_056:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15544,11 +16641,13 @@ SeqMixParam_Entry_057:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15561,7 +16660,7 @@ SeqMixParam_Entry_058:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -15572,14 +16671,16 @@ SeqMixParam_Entry_059:
 	.byte 0xb2, 0x01
 	nop
 	incf
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15587,13 +16688,16 @@ SeqMixParam_Entry_060:
 	.byte 0x01, 0xb2, 0x01
 	nop
 	incf
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15607,7 +16711,9 @@ SeqMixParam_Entry_061:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15618,11 +16724,13 @@ SeqMixParam_Entry_062:
 	incf
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15630,13 +16738,15 @@ SeqMixParam_Entry_063:
 	.byte 0x04, 0xb2, 0x01
 	nop
 	incf
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15646,13 +16756,15 @@ SeqMixParam_Entry_064:
 	nop
 	incf
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15663,10 +16775,13 @@ SeqMixParam_Entry_065:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15677,11 +16792,13 @@ SeqMixParam_Entry_066:
 	decf
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15694,7 +16811,9 @@ SeqMixParam_Entry_067:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15706,7 +16825,9 @@ SeqMixParam_Entry_068:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15718,11 +16839,13 @@ SeqMixParam_Entry_069:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15735,7 +16858,7 @@ SeqMixParam_Entry_070:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -15746,14 +16869,16 @@ SeqMixParam_Entry_071:
 	.byte 0xb6, 0x01
 	nop
 	decf
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15761,13 +16886,16 @@ SeqMixParam_Entry_072:
 	.byte 0x01, 0xb6, 0x01
 	nop
 	decf
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15781,7 +16909,9 @@ SeqMixParam_Entry_073:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15792,11 +16922,13 @@ SeqMixParam_Entry_074:
 	decf
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15804,13 +16936,15 @@ SeqMixParam_Entry_075:
 	.byte 0x04, 0xb6, 0x01
 	nop
 	decf
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15820,13 +16954,15 @@ SeqMixParam_Entry_076:
 	nop
 	decf
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15837,10 +16973,13 @@ SeqMixParam_Entry_077:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15849,23 +16988,27 @@ SeqMixParam_Entry_078:
 	ld	(xwa+1), 14
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 SeqMixParam_Entry_079:
-	.byte 0x01
+	normal
 	ld	(xwa+1), 14
 	decf
 	retd	3840
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15875,7 +17018,9 @@ SeqMixParam_Entry_080:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15885,23 +17030,25 @@ SeqMixParam_Entry_081:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 SeqMixParam_Entry_082:
-	.byte 0x04
+	max
 	ld	(xwa+1), 14
 	incf
 	reti
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -15910,27 +17057,32 @@ SeqMixParam_Entry_082:
 SeqMixParam_Entry_083:
 	nop
 	ld	(xde+1), 14
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 SeqMixParam_Entry_084:
-	.byte 0x01
+	normal
 	ld	(xde+1), 14
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15942,7 +17094,9 @@ SeqMixParam_Entry_085:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15951,24 +17105,28 @@ SeqMixParam_Entry_086:
 	ld	(xde+1), 14
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 SeqMixParam_Entry_087:
-	.byte 0x04
+	max
 	ld	(xde+1), 14
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15976,13 +17134,15 @@ SeqMixParam_Entry_088:
 	halt
 	ld	(xde+1), 14
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -15992,10 +17152,13 @@ SeqMixParam_Entry_089:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16004,23 +17167,27 @@ SeqMixParam_Entry_090:
 	ld	(xix+1), 15
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 SeqMixParam_Entry_091:
-	.byte 0x01
+	normal
 	ld	(xix+1), 15
 	decf
 	retd	3840
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16030,7 +17197,9 @@ SeqMixParam_Entry_092:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16040,23 +17209,25 @@ SeqMixParam_Entry_093:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 SeqMixParam_Entry_094:
-	.byte 0x04
+	max
 	ld	(xix+1), 15
 	incf
 	reti
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -16065,28 +17236,32 @@ SeqMixParam_Entry_094:
 SeqMixParam_Entry_095:
 	nop
 	ld	(xiz+1), 15
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01
+	normal
+	normal
 	reti
 	nop
 	nop
 	swi	7
 SeqMixParam_Entry_096:
-	.byte 0x01
+	normal
 	ld	(xiz+1), 15
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16098,7 +17273,9 @@ SeqMixParam_Entry_097:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16107,24 +17284,28 @@ SeqMixParam_Entry_098:
 	ld	(xiz+1), 15
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
 SeqMixParam_Entry_099:
-	.byte 0x04
+	max
 	ld	(xiz+1), 15
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16132,13 +17313,15 @@ SeqMixParam_Entry_100:
 	halt
 	ld	(xiz+1), 15
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16148,10 +17331,13 @@ SeqMixParam_Entry_101:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16162,11 +17348,13 @@ SeqMixParam_Entry_102:
 	rcf
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16179,7 +17367,9 @@ SeqMixParam_Entry_103:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16191,7 +17381,9 @@ SeqMixParam_Entry_104:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16203,11 +17395,13 @@ SeqMixParam_Entry_105:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16220,7 +17414,7 @@ SeqMixParam_Entry_106:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -16231,14 +17425,15 @@ SeqMixParam_Entry_107:
 	.byte 0xc2, 0x01
 	nop
 	rcf
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01
+	normal
+	normal
 	reti
 	nop
 	nop
@@ -16247,13 +17442,16 @@ SeqMixParam_Entry_108:
 	.byte 0x01, 0xc2, 0x01
 	nop
 	rcf
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16267,7 +17465,9 @@ SeqMixParam_Entry_109:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16278,11 +17478,13 @@ SeqMixParam_Entry_110:
 	rcf
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16290,13 +17492,15 @@ SeqMixParam_Entry_111:
 	.byte 0x04, 0xc2, 0x01
 	nop
 	rcf
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16306,13 +17510,15 @@ SeqMixParam_Entry_112:
 	nop
 	rcf
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16323,10 +17529,13 @@ SeqMixParam_Entry_113:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16337,11 +17546,13 @@ SeqMixParam_Entry_114:
 	scf
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16354,7 +17565,9 @@ SeqMixParam_Entry_115:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16366,7 +17579,9 @@ SeqMixParam_Entry_116:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16378,11 +17593,13 @@ SeqMixParam_Entry_117:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16395,7 +17612,7 @@ SeqMixParam_Entry_118:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -16406,14 +17623,16 @@ SeqMixParam_Entry_119:
 	.byte 0xc6, 0x01
 	nop
 	scf
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16421,13 +17640,16 @@ SeqMixParam_Entry_120:
 	.byte 0x01, 0xc6, 0x01
 	nop
 	scf
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16441,7 +17663,9 @@ SeqMixParam_Entry_121:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16452,11 +17676,13 @@ SeqMixParam_Entry_122:
 	scf
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16464,13 +17690,15 @@ SeqMixParam_Entry_123:
 	.byte 0x04, 0xc6, 0x01
 	nop
 	scf
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16480,13 +17708,15 @@ SeqMixParam_Entry_124:
 	nop
 	scf
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16497,10 +17727,13 @@ SeqMixParam_Entry_125:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16511,11 +17744,13 @@ SeqMixParam_Entry_126:
 	ccf
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16528,7 +17763,9 @@ SeqMixParam_Entry_127:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16540,7 +17777,9 @@ SeqMixParam_Entry_128:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16552,11 +17791,13 @@ SeqMixParam_Entry_129:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16569,7 +17810,7 @@ SeqMixParam_Entry_130:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -16580,14 +17821,16 @@ SeqMixParam_Entry_131:
 	.byte 0xca, 0x01
 	nop
 	ccf
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16595,13 +17838,16 @@ SeqMixParam_Entry_132:
 	.byte 0x01, 0xca, 0x01
 	nop
 	ccf
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16615,7 +17861,9 @@ SeqMixParam_Entry_133:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16626,11 +17874,13 @@ SeqMixParam_Entry_134:
 	ccf
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16638,13 +17888,15 @@ SeqMixParam_Entry_135:
 	.byte 0x04, 0xca, 0x01
 	nop
 	ccf
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16654,13 +17906,15 @@ SeqMixParam_Entry_136:
 	nop
 	ccf
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16671,10 +17925,13 @@ SeqMixParam_Entry_137:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16685,11 +17942,13 @@ SeqMixParam_Entry_138:
 	zcf
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16702,7 +17961,9 @@ SeqMixParam_Entry_139:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16714,7 +17975,9 @@ SeqMixParam_Entry_140:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16726,11 +17989,13 @@ SeqMixParam_Entry_141:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16743,7 +18008,7 @@ SeqMixParam_Entry_142:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -16754,14 +18019,16 @@ SeqMixParam_Entry_143:
 	.byte 0xce, 0x01
 	nop
 	zcf
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16769,13 +18036,16 @@ SeqMixParam_Entry_144:
 	.byte 0x01, 0xce, 0x01
 	nop
 	zcf
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16789,7 +18059,9 @@ SeqMixParam_Entry_145:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16800,11 +18072,13 @@ SeqMixParam_Entry_146:
 	zcf
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16812,13 +18086,15 @@ SeqMixParam_Entry_147:
 	.byte 0x04, 0xce, 0x01
 	nop
 	zcf
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16828,13 +18104,15 @@ SeqMixParam_Entry_148:
 	nop
 	zcf
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16845,10 +18123,13 @@ SeqMixParam_Entry_149:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16859,11 +18140,13 @@ SeqMixParam_Entry_150:
 	push_a
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16876,7 +18159,9 @@ SeqMixParam_Entry_151:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16888,7 +18173,9 @@ SeqMixParam_Entry_152:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16900,11 +18187,13 @@ SeqMixParam_Entry_153:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16917,7 +18206,7 @@ SeqMixParam_Entry_154:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -16928,14 +18217,16 @@ SeqMixParam_Entry_155:
 	.byte 0xd2, 0x01
 	nop
 	push_a
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16943,13 +18234,16 @@ SeqMixParam_Entry_156:
 	.byte 0x01, 0xd2, 0x01
 	nop
 	push_a
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16963,7 +18257,9 @@ SeqMixParam_Entry_157:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16974,11 +18270,13 @@ SeqMixParam_Entry_158:
 	push_a
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -16986,13 +18284,15 @@ SeqMixParam_Entry_159:
 	.byte 0x04, 0xd2, 0x01
 	nop
 	push_a
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17002,13 +18302,15 @@ SeqMixParam_Entry_160:
 	nop
 	push_a
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17019,10 +18321,13 @@ SeqMixParam_Entry_161:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17033,11 +18338,13 @@ SeqMixParam_Entry_162:
 	pop_a
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17050,7 +18357,9 @@ SeqMixParam_Entry_163:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17062,7 +18371,9 @@ SeqMixParam_Entry_164:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17074,11 +18385,13 @@ SeqMixParam_Entry_165:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17091,7 +18404,7 @@ SeqMixParam_Entry_166:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -17102,14 +18415,16 @@ SeqMixParam_Entry_167:
 	.byte 0xd6, 0x01
 	nop
 	pop_a
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17117,13 +18432,16 @@ SeqMixParam_Entry_168:
 	.byte 0x01, 0xd6, 0x01
 	nop
 	pop_a
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17137,7 +18455,9 @@ SeqMixParam_Entry_169:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17148,11 +18468,13 @@ SeqMixParam_Entry_170:
 	pop_a
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17160,13 +18482,15 @@ SeqMixParam_Entry_171:
 	.byte 0x04, 0xd6, 0x01
 	nop
 	pop_a
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17176,13 +18500,15 @@ SeqMixParam_Entry_172:
 	nop
 	pop_a
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17193,10 +18519,13 @@ SeqMixParam_Entry_173:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17207,11 +18536,13 @@ SeqMixParam_Entry_174:
 	ex_ff
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17224,7 +18555,9 @@ SeqMixParam_Entry_175:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17236,7 +18569,9 @@ SeqMixParam_Entry_176:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17248,11 +18583,13 @@ SeqMixParam_Entry_177:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17265,7 +18602,7 @@ SeqMixParam_Entry_178:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -17276,14 +18613,16 @@ SeqMixParam_Entry_179:
 	.byte 0xda, 0x01
 	nop
 	ex_ff
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17291,13 +18630,16 @@ SeqMixParam_Entry_180:
 	.byte 0x01, 0xda, 0x01
 	nop
 	ex_ff
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17311,7 +18653,9 @@ SeqMixParam_Entry_181:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17322,11 +18666,13 @@ SeqMixParam_Entry_182:
 	ex_ff
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17334,13 +18680,15 @@ SeqMixParam_Entry_183:
 	.byte 0x04, 0xda, 0x01
 	nop
 	ex_ff
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17350,13 +18698,15 @@ SeqMixParam_Entry_184:
 	nop
 	ex_ff
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17367,10 +18717,13 @@ SeqMixParam_Entry_185:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17380,11 +18733,13 @@ SeqMixParam_Entry_186:
 	nop
 	ldf	13
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17396,7 +18751,9 @@ SeqMixParam_Entry_187:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17407,7 +18764,9 @@ SeqMixParam_Entry_188:
 	ldf	13
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17418,11 +18777,13 @@ SeqMixParam_Entry_189:
 	ldf	13
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17434,7 +18795,7 @@ SeqMixParam_Entry_190:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -17451,7 +18812,9 @@ SeqMixParam_Entry_191:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17461,10 +18824,13 @@ SeqMixParam_Entry_192:
 	.byte 0x17, 0x04
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17477,7 +18843,9 @@ SeqMixParam_Entry_193:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17487,11 +18855,13 @@ SeqMixParam_Entry_194:
 	nop
 	ldf	12
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17500,11 +18870,13 @@ SeqMixParam_Entry_195:
 	nop
 	.byte 0x17, 0x04
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17513,13 +18885,15 @@ SeqMixParam_Entry_196:
 	.byte 0xde, 0x01
 	nop
 	ldf	22
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17529,10 +18903,13 @@ SeqMixParam_Entry_197:
 	ldf	12
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17543,11 +18920,13 @@ SeqMixParam_Entry_198:
 	push_f
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17560,7 +18939,9 @@ SeqMixParam_Entry_199:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17572,7 +18953,9 @@ SeqMixParam_Entry_200:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17584,11 +18967,13 @@ SeqMixParam_Entry_201:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17601,7 +18986,7 @@ SeqMixParam_Entry_202:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -17612,14 +18997,16 @@ SeqMixParam_Entry_203:
 	.byte 0xe2, 0x01
 	nop
 	push_f
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17627,13 +19014,16 @@ SeqMixParam_Entry_204:
 	.byte 0x01, 0xe2, 0x01
 	nop
 	push_f
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17647,7 +19037,9 @@ SeqMixParam_Entry_205:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17658,11 +19050,13 @@ SeqMixParam_Entry_206:
 	push_f
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17670,13 +19064,15 @@ SeqMixParam_Entry_207:
 	.byte 0x04, 0xe2, 0x01
 	nop
 	push_f
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17686,13 +19082,15 @@ SeqMixParam_Entry_208:
 	nop
 	push_f
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17703,10 +19101,13 @@ SeqMixParam_Entry_209:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17717,11 +19118,13 @@ SeqMixParam_Entry_210:
 	pop_f
 	decf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17734,7 +19137,9 @@ SeqMixParam_Entry_211:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17746,7 +19151,9 @@ SeqMixParam_Entry_212:
 	decf
 	ld	xwa, 0xff060100
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17758,11 +19165,13 @@ SeqMixParam_Entry_213:
 	decf
 	.byte 0x80
 	nop
-	.byte 0x01
+	normal
 	reti
 	swi	7
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17775,7 +19184,7 @@ SeqMixParam_Entry_214:
 	nop
 	jrl	nc, 0
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	halt
 	nop
@@ -17786,14 +19195,16 @@ SeqMixParam_Entry_215:
 	.byte 0xe6, 0x01
 	nop
 	pop_f
-	.byte 0x04
+	max
 	reti
 	nop
 	reti
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17801,13 +19212,16 @@ SeqMixParam_Entry_216:
 	.byte 0x01, 0xe6, 0x01
 	nop
 	pop_f
-	.byte 0x04
+	max
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17821,7 +19235,9 @@ SeqMixParam_Entry_217:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17832,11 +19248,13 @@ SeqMixParam_Entry_218:
 	pop_f
 	incf
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17844,13 +19262,15 @@ SeqMixParam_Entry_219:
 	.byte 0x04, 0xe6, 0x01
 	nop
 	pop_f
-	.byte 0x04
+	max
 	ldb	w, 0
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17860,13 +19280,15 @@ SeqMixParam_Entry_220:
 	nop
 	pop_f
 	ex_ff
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	halt
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17877,10 +19299,13 @@ SeqMixParam_Entry_221:
 	incf
 	rcf
 	nop
-	.byte 0x01, 0x04
+	normal
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17897,7 +19322,9 @@ SeqMixParam_Entry_222:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17906,12 +19333,14 @@ SeqMixParam_Entry_223:
 	push	sr
 	nop
 	popw	wa
-	.byte 0x01
+	normal
 	jrl	nc, 1792
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17923,10 +19352,12 @@ SeqMixParam_Entry_224:
 	popw	wa
 	reti
 	ldw	wa, 768
-	.byte 0x04
+	max
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17942,7 +19373,9 @@ SeqMixParam_Entry_225:
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17956,7 +19389,9 @@ SeqMixParam_Entry_226:
 	pop	sr
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17966,13 +19401,15 @@ SeqMixParam_Entry_227:
 	nop
 	.byte 0x90
 	pop	sr
-	.byte 0x01
+	normal
 	nop
-	.byte 0x01
+	normal
 	nop
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7
@@ -17984,10 +19421,13 @@ SeqMixParam_Entry_228:
 	pop	sr
 	push	sr
 	nop
-	.byte 0x01, 0x01
+	normal
+	normal
 	nop
 	swi	7
-	.byte 0x01, 0x01, 0x01
+	normal
+	normal
+	normal
 	nop
 	nop
 	swi	7

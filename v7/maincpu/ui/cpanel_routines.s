@@ -1008,19 +1008,19 @@ CPanel_LED_PacketHandlers:
 CPanel_LED_HandlePacket2:
 	ldb_sri A, 0x07, 0xf8, 0xf0	; A = event queue byte 1 at (XIZ + IX)
 
-	.byte 0x1e, 0x97, 0x00	; calr ToneGen_IncrementWrap128		; process byte + increment event read ptr (v7 displacement)
+	calr 151
 
 	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 
-	.byte 0x1e, 0x6e, 0x00	; calr CPanel_IncLEDPtr		; increment LED write ptr (IY) (v7 displacement)
+	calr 110
 
 	ldb_sri W, 0x07, 0xf8, 0xf0	; W = event queue byte 2 at (XIZ + IX)
 
-	.byte 0x1e, 0x87, 0x00	; calr ToneGen_IncrementWrap128		; process byte + increment event read ptr (v7 displacement)
+	calr 135
 
 	stb_dri W, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
 
-	.byte 0x1e, 0x5e, 0x00	; calr CPanel_IncLEDPtr		; increment LED write ptr (IY) (v7 displacement)
+	calr 94
 
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 

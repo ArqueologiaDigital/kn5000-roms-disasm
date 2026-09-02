@@ -559,7 +559,7 @@ EffectMode_BackupParamBlock:
 	lda	xsp, (xsp+10)
 	ret
 EffectMode_CopyHoldPedalBits:
-	.byte 0xc1, 0x9c, 0x8c, 0x25	; ldb_d8 e, (0x8d38) (v7 patched)
+	ldb_d8 e, (35996)
 
 	cp e, 0xc0
 
@@ -2961,7 +2961,8 @@ MasterSetup_GetNameB_DrawString:
 	lda	xde, (xsp+12)
 	lds32	xhl, 1
 	push	xhl
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0xf5, 0x00
+	pushw 251
+	pushw 245
 	call	16434877
 	jr	38
 	ld	xwa, (xsp+74)
@@ -5318,7 +5319,8 @@ MstStyle2_GetNameB_DrawString:
 	addda32_24	xwa, (213202)
 	ld	xwa, (xwa)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xd0, 0x0d
+	pushw 237
+	pushw 3536
 	lda	xwa, (xsp+34)
 	push	xwa
 	call	16712341
@@ -5328,7 +5330,8 @@ MstStyle2_GetNameB_DrawString:
 	lda	xde, (xsp+18)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0xf5, 0x00
+	pushw 251
+	pushw 245
 	call	16434877
 	ld	xbc, (xiz+82)
 	ld	xwa, (xiz+78)
@@ -5342,7 +5345,8 @@ MstStyle2_GetNameB_DrawString:
 	dec	1, wa
 	.byte 0x93, 0xf0
 	jr	le, 20
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xd4, 0x0d
+	pushw 237
+	pushw 3540
 	push	xde
 	call	16713584
 	inc	8, xsp
@@ -5400,7 +5404,8 @@ MstStyle2_NameB_Render:
 	lda	xde, (xsp+18)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0xf5, 0x00
+	pushw 251
+	pushw 245
 	call	16434877
 	lda	xbc, (xsp+36)
 	ldw	(xbc), 267
@@ -5420,7 +5425,8 @@ MstStyle2_NameB_Render:
 	lda	xde, (xsp+12)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xfb, 0x00, 0x0b, 0xf5, 0x00
+	pushw 251
+	pushw 245
 	call	16434877
 	lda	xhl, (xsp+36)
 	ldw	(xhl), 145
@@ -5444,7 +5450,8 @@ MstStyle2_NameB_Render:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x00, 0x0e
+	pushw 237
+	pushw 3584
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	16712341
@@ -5454,7 +5461,8 @@ MstStyle2_NameB_Render:
 	lda	xde, (xsp+18)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0xff, 0x00, 0x0b, 0xf7, 0x00
+	pushw 255
+	pushw 247
 	call	16434877
 	jr	20
 MstStyle2_ForwardToChild:
@@ -7021,7 +7029,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xee, 0x11
+	pushw 237
+	pushw 4590
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16712341
@@ -7047,7 +7056,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xf2, 0x11
+	pushw 237
+	pushw 4594
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16712341
@@ -7071,7 +7081,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xf6, 0x11
+	pushw 237
+	pushw 4598
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16712341
@@ -7095,7 +7106,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xfa, 0x11
+	pushw 237
+	pushw 4602
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16712341
@@ -7120,7 +7132,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0xfe, 0x11
+	pushw 237
+	pushw 4606
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16712341
@@ -7144,7 +7157,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x02, 0x12
+	pushw 237
+	pushw 4610
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16712341
@@ -7168,7 +7182,8 @@ FSWAssGrid_EventDispatch:
 	lda_24	xbc, 15535940
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x06, 0x12
+	pushw 237
+	pushw 4614
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	16712341
@@ -7770,7 +7785,8 @@ PmExpFilter_DrawCellBank1:
 	add	bc, wa
 	inc	1, bc
 	ld	(xhl+2), bc
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x08, 0x14
+	pushw 237
+	pushw 5128
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	16713584
@@ -7780,7 +7796,8 @@ PmExpFilter_DrawCellBank1:
 	lda	xde, (xsp+24)
 	lds32	xhl, 0
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xf7, 0x00
+	pushw 0
+	pushw 247
 	jrl	197
 PmExpFilter_DrawCellBank2:
 .Lc_fbb5f9:
@@ -7836,7 +7853,8 @@ PmExpFilter_DrawCellBank2:
 	add	bc, wa
 	inc	1, bc
 	ld	(xhl+2), bc
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x16, 0x14
+	pushw 237
+	pushw 5142
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	16713584
@@ -8720,7 +8738,8 @@ DispTimeSet_EventDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x52, 0x15
+	pushw 237
+	pushw 5458
 	push	xbc
 	call	16712341
 	lda	xsp, (xsp+12)
@@ -8743,7 +8762,8 @@ DispTimeSet_EventDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x56, 0x15
+	pushw 237
+	pushw 5462
 	push	xbc
 	call	16712341
 	lda	xsp, (xsp+12)
@@ -8768,7 +8788,8 @@ DispTimeSet_EventDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x5a, 0x15
+	pushw 237
+	pushw 5466
 	push	xbc
 	call	16712341
 	lda	xsp, (xsp+12)
@@ -8791,7 +8812,8 @@ DispTimeSet_EventDispatch:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x5e, 0x15
+	pushw 237
+	pushw 5470
 	push	xbc
 	call	16712341
 	lda	xsp, (xsp+12)
@@ -8816,7 +8838,8 @@ DispTimeSet_EventDispatch:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x62, 0x15
+	pushw 237
+	pushw 5474
 	push	xix
 	call	16712341
 	lda	xsp, (xsp+12)
@@ -8837,7 +8860,8 @@ DispTimeSet_EventDispatch:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x66, 0x15
+	pushw 237
+	pushw 5478
 	push	xix
 	call	16712341
 	lda	xsp, (xsp+12)
@@ -11259,7 +11283,8 @@ VariScreen_DrawNameString:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x0a, 0x16
+	pushw 237
+	pushw 5642
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	16712341
@@ -11508,7 +11533,8 @@ VariScreen_DrawRightNameString:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x0e, 0x16
+	pushw 237
+	pushw 5646
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	16712341
@@ -11782,7 +11808,8 @@ VariScreen_ConfirmDrawNameAudio:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x1e, 0x16
+	pushw 237
+	pushw 5662
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	16712341
@@ -11994,7 +12021,8 @@ VariScreen_EnumDrawNameAudio:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	.byte 0x0b, 0xed, 0x00, 0x0b, 0x22, 0x16
+	pushw 237
+	pushw 5666
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	16712341

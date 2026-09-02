@@ -1484,7 +1484,7 @@ SndParam4200_Done:
 	pop xiz
 	ret
 SndParam_MaskShiftMerge_8F58:
-	.byte 0xc1, 0xbc, 0x8e, 0x21	; ldb_d8	a, (0x8f58) (v7 patched)
+	ldb_d8 a, (36540)
 
 	and a, 0x07
 
@@ -1921,7 +1921,7 @@ MidiChOut_DetectChanges:
 
 	ldb_d8 a, (1056)
 
-	.byte 0xc1, 0xdf, 0x33, 0xd1	; xorda8 a, 0x347b (v7 patched)
+	xorda8 xbc, (13279)
 
 	bit 2, a
 
@@ -2407,10 +2407,10 @@ VoiceData_ExtendedParamSetup:
 	extz	wa
 	ld	e, c
 	extz	de
-	.byte 0x0b, 0x07, 0x00
+	pushw 7
 	ldw	bc, 12
 	calr	1032
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	ld	a, (xsp+4)
 	extz	wa
 	muls	wa, 26
@@ -2442,7 +2442,7 @@ VoiceData_ExtendedParamSetup:
 	lda_rr	xde, xde, hl
 	ld	e, (xde+22)
 	extz	de
-	.byte 0x0b, 0xff, 0x00
+	pushw 255
 	calr	929
 	inc1b_erp	251
 	cp_erpb	251, 21
@@ -2467,7 +2467,7 @@ VoiceData_ExtendedParamSetup:
 	ld	xwa, (xsp+8)
 	ld_rrb	e, xwa, de
 	extz	de
-	.byte 0x0b, 0xff, 0x00
+	pushw 255
 	ldw	wa, 128
 	calr	843
 	incm8	1, (xsp+2)
@@ -2526,7 +2526,7 @@ VoiceData_ExtendedParamSetup:
 	and	a, 7
 	or	c, a
 	ld	(xde), c
-	.byte 0x0b, 0x09, 0x00
+	pushw 9
 	lda	xwa, (xhl+15)
 	push	xwa
 	lda	xwa, (xix+15)
@@ -2536,7 +2536,7 @@ VoiceData_ExtendedParamSetup:
 	inc1b_erp	251
 	cp_erpb	251, 24
 	jr	c, -77
-	.byte 0x0b, 0x0e, 0x00
+	pushw 14
 	ld	xwa, (xsp+6)
 	lda	xwa, (xwa+944)
 	push	xwa
@@ -2548,7 +2548,7 @@ VoiceData_ExtendedParamSetup:
 	incm8	1, (xsp+2)
 	.byte 0x8f, 0x02, 0x3f, 0x50
 	jrl	c, -151
-	.byte 0xd7, 0xfa, 0x05
+	pop qiz
 	lda	xsp, (xsp+10)
 	ret
 	calr	117
@@ -3081,14 +3081,14 @@ ExtData_ToneParam_AltBody:
 	ldb_d8	a, 37011
 	extz	wa
 	cps	wa, 0
-	.byte 0xb0, 0xf5
+	ret mi
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
 	lda_24	xix, 15577892
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 16547890
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr 8, xix, wa
 	jr	15
 	jr	112
 	jrl	143
@@ -3301,7 +3301,7 @@ ExtData_ToneParam_MultiChannel:
 	extz	wa
 	extz	bc
 	add	bc, wa
-	.byte 0xd1, 0xc7, 0x90, 0xf1
+	cpda16 xbc, (37063)
 	ret	z
 	.byte 0xf1, 0x5d, 0x90, 0xb8
 	ret
@@ -3540,7 +3540,7 @@ MidiChannel_ResetAndConfigure:
 	stdi8	37006, 127
 	ldb_d8	e, 37005
 	extz	de
-	.byte 0x0b, 0x7f, 0x00
+	pushw 127
 	ldw	wa, 176
 	lds	bc, 1
 	call	16624211
@@ -3760,9 +3760,9 @@ CtrlPanel_RefreshIndicatorState:
 
 	ld xwa, xiz
 
-	.byte 0x41, 0xc6, 0x8e, 0x00, 0x00	; ld xbc, 0x8f62 (v7 patched)
+	ld xbc, 36550
 
-	.byte 0x1e, 0x18, 0x00	; calr CtrlPanel_CompareAndUpdateIndicators (v7 displacement)
+	calr 24
 
 	ld xwa, xiz
 
@@ -3774,7 +3774,7 @@ CtrlPanel_RefreshIndicatorState:
 
 	ld xiy, xiz
 
-	.byte 0x44, 0xc6, 0x8e, 0x00, 0x00	; ld xix, 0x8f62 (v7 patched)
+	ld xix, 36550
 
 	ldw bc, 0xb3
 
@@ -4178,7 +4178,7 @@ SwbtWr_CheckBufferOverflow:
 
 	pop	xde
 
-	.byte 0xf1, 0x42, 0x90, 0x02, 0x00, 0x00	; stdi16	(0x90de), 0 (v7 patched)
+	stdi16 (36930), 0
 
 	jrl	1770
 
@@ -5696,7 +5696,7 @@ TempoExpr_CheckHighBitW:
 TempoExpr_WriteAndProcess:
 	stw_dpi WA, 0xf1
 
-	.byte 0xc1, 0x2b, 0x91, 0x21	; ldb_d8 a, (0x91c7) (v7 patched)
+	ldb_d8 a, (37163)
 
 	ldb w, 0xff
 
@@ -6210,9 +6210,9 @@ VoiceMode_ParamHandler_1:
 	ret
 
 AudioSeq_FlushAndTerminate:
-	.byte 0x44, 0xa0, 0xbc, 0x00, 0x00	; ld xix, 0xbd3c (v7 patched)
+	ld xix, 48288
 
-	.byte 0xd1, 0x42, 0x90, 0x23	; ldw_d16 xhl, (0x90de) (v7 patched)
+	ldw_d16 hl, (36930)
 
 	stib_ind 0x07, 0xf0, 0xec, 0xff
 
@@ -6596,11 +6596,11 @@ VoiceParam_ModeDispatch_Table:
 VoiceParam_StoreExpression:
 	extz hl
 
-	.byte 0xc1, 0x2c, 0x91, 0x27	; ldb_d8 l, (0x91c8) (v7 patched)
+	ldb_d8 l, (37164)
 
-	.byte 0x44, 0x36, 0x94, 0x00, 0x00	; ld xix, 0x94d2 (v7 patched)
+	ld xix, 37942
 
-	.byte 0xc1, 0x1b, 0x91, 0x21	; ldb_d8 a, (0x91b7) (v7 patched)
+	ldb_d8 a, (37147)
 
 	set 7, a
 
@@ -6644,11 +6644,11 @@ VoiceParam_ExprDone:
 VoiceParam_StoreVolume:
 	extz hl
 
-	.byte 0xc1, 0x2c, 0x91, 0x27	; ldb_d8 l, (0x91c8) (v7 patched)
+	ldb_d8 l, (37164)
 
-	.byte 0x44, 0xb6, 0x93, 0x00, 0x00	; ld xix, 0x9452 (v7 patched)
+	ld xix, 37814
 
-	.byte 0xc1, 0x1b, 0x91, 0x21	; ldb_d8 a, (0x91b7) (v7 patched)
+	ldb_d8 a, (37147)
 
 	set 7, a
 
@@ -6692,13 +6692,13 @@ VoiceParam_VolDone:
 VoiceParam_StorePan:
 	extz hl
 
-	.byte 0xc1, 0x2c, 0x91, 0x27	; ldb_d8 l, (0x91c8) (v7 patched)
+	ldb_d8 l, (37164)
 
 	sll l, 1
 
-	.byte 0x44, 0xd6, 0x93, 0x00, 0x00	; ld xix, 0x9472 (v7 patched)
+	ld xix, 37846
 
-	.byte 0xd1, 0x1b, 0x91, 0x20	; ldw_d16 xwa, (0x91b7) (v7 patched)
+	ldw_d16 wa, (37147)
 
 	and wa, 0x7f7f
 

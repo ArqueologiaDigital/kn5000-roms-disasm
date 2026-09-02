@@ -2366,7 +2366,7 @@ TextRender_XorMode_DrawPixel:
 	ld wa, (xde)
 	exts xwa
 	.include "display/graphics_text_vga.s"
-	.byte 0x1d, 0x95, 0x02, 0xff	; call Sprintf_Locked (v7 address)
+	call 16712341
 	lda xsp, (xsp + 12)
 
 ChordProc_SendRefreshEvent:

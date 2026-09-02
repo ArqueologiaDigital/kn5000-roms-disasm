@@ -1264,7 +1264,8 @@ DirmdEmu_CaseF:
 	.byte 0xd3, 0xfd, 0x08, 0x01, 0x04
 	ld	iz, (xsp+264)
 	pushw	iz
-	.byte 0x0b, 0xea, 0x00, 0x0b, 0x94, 0x9b
+	pushw 234
+	pushw 39828
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	16712341

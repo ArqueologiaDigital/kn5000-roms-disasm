@@ -2441,7 +2441,7 @@ PdName_SetIndexPlaying:
 
 	exts xde
 
-	.byte 0xe1, 0xa2, 0x83, 0x20	; ldda32 xwa, (0x843e) (v7 patched)
+	ldda32 xwa, (33698)
 
 	ld xbc, 0x1e50002
 
@@ -2966,7 +2966,8 @@ DocFmt_FormatLoop:
 	ld	de, (xsp+2)
 	add	de, iz
 	inc	1, de
-	.byte 0x0b, 0x0c, 0x00, 0x0b, 0x00, 0x00
+	pushw 12
+	pushw 0
 	call	16289232
 	ld	de, iz
 	sll	de, 5
@@ -3144,7 +3145,7 @@ DocName_SetIndexPlaying:
 
 	exts xde
 
-	.byte 0xe1, 0x02, 0x84, 0x20	; ldda32 xwa, (0x849e) (v7 patched)
+	ldda32 xwa, (33794)
 
 	ld xbc, 0x1e50002
 

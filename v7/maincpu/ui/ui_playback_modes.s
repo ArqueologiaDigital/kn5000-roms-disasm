@@ -345,7 +345,7 @@ PlayMode_InitFlagBlock:
 	.byte 0xc1, 0xac
 	pushw	wa
 	push	xiz
-	.byte 0x04
+	max
 	stdi8	(4420), 10
 	ret
 
@@ -508,7 +508,7 @@ SongMode_InitFlagBlock:
 	.byte 0xc1, 0xac
 	pushw	wa
 	push	xiz
-	.byte 0x04
+	max
 	stdi8	(4420), 10
 	ret
 	stdi8	(3380), 0
@@ -663,7 +663,7 @@ PartFormat_InitFlagBlock:
 	.byte 0xc1, 0xac
 	pushw	wa
 	push	xiz
-	.byte 0x04
+	max
 	stdi8	(4420), 10
 	ret
 	stdi8	(3380), 0
@@ -689,7 +689,7 @@ PartFormat_SendStopCommand:
 PartFormat_AbortAndClearBit2:
 	anddi8 (0x28ac), 251
 
-	.byte 0x1d, 0x4d, 0xb9, 0xfe	; call Song_AbortPlayback (v7 addr)
+	call 16693581
 
 	ret
 
@@ -710,7 +710,10 @@ PartFormat_StartReturn:
 	ret
 
 PlayModeStop_InitFlagBlock:
-	.byte 0x0e, 0x0e, 0x0e, 0x0e
+	ret
+	ret
+	ret
+	ret
 	cpdi8 (0x8c9b), 0x76
 	jr z, .Lc_f2093f
 	call PlayModeStop_InitFlagBlock_0x10
@@ -765,7 +768,11 @@ PlayModeStop_SendReturn:
 	ret
 
 PlayModeStop_ClearFlagBlock:
-	.byte 0x0e, 0x0e, 0x0e, 0x0e, 0x0e
+	ret
+	ret
+	ret
+	ret
+	ret
 	cpdi8 (0x8c9a), 0x6c
 	jr nz, .Lc_f209d5
 	stdi8 (0x0d34), 0x00
@@ -1347,7 +1354,7 @@ SqTrAsPsTtl_CaseF:
 	ld	xix, 14811192
 	ld_rrw	wa, xix, wa
 	lda_24	xix, 15863650
-	.byte 0xf3, 0x07, 0xf0, 0xe0, 0xd8
+	jp_rr 8, xix, wa
 	push	xde
 	push	xhl
 	push	xix
@@ -2113,12 +2120,13 @@ CDlikeSwTtl_ShowSongTitle:
 	ld	xbc, 29818896
 	lds32	xde, 0
 	call	16423243
-	.byte 0x0b, 0x0c, 0x00
+	pushw 12
 	call	16291514
 	ld	wa, hl
 	call	16291811
 	push	xhl
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0x1e, 0x1c
+	pushw 0
+	pushw 7198
 	call	16712982
 	lda	xsp, (xsp+10)
 	lda_d16	xbc, 7198

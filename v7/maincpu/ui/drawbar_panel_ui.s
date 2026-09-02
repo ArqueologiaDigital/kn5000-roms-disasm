@@ -54,7 +54,8 @@ AcSendEditSw_EventD:
 	jr	nz, 16
 	lds32	xbc, 0
 	push	xbc
-	.byte 0x0b, 0x00, 0x00, 0x0b, 0xf7, 0x00
+	pushw 0
+	pushw 247
 	ld	xbc, 15204360
 	jr	14
 AcSendEditSw_DrawAlt:
@@ -1550,7 +1551,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x00, 0x02
+	pushw 232
+	pushw 512
 	ld	xwa, (xsp+18)
 	push	xwa
 	call	16712341
@@ -1581,7 +1583,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x06, 0x02
+	pushw 232
+	pushw 518
 	lda	xwa, (xsp+46)
 	push	xwa
 	call	16712341
@@ -1610,7 +1613,8 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xhl
 	.byte 0xaf, 0x1c, 0x80, 0xb0, 0xcf
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x0c, 0x02
+	pushw 232
+	pushw 524
 	lda	xwa, (xsp+44)
 	push	xwa
 	call	16713584
@@ -1619,7 +1623,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x12, 0x02
+	pushw 232
+	pushw 530
 	lda	xwa, (xsp+46)
 	push	xwa
 	call	16712341
@@ -1652,7 +1657,8 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xhl
 	.byte 0xaf, 0x1c, 0x80, 0xb0, 0xcf
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x18, 0x02
+	pushw 232
+	pushw 536
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16713584
@@ -1661,7 +1667,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x1e, 0x02
+	pushw 232
+	pushw 542
 	ld	xwa, (xsp+18)
 	push	xwa
 	call	16712341
@@ -1692,7 +1699,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x24, 0x02
+	pushw 232
+	pushw 548
 	lda	xwa, (xsp+46)
 	push	xwa
 	call	16712341
@@ -1723,7 +1731,8 @@ TtMdCtlMsg_EventDispatch:
 	lda	xbc, (xsp+40)
 	.byte 0xb0, 0xcf
 	jr	z, 15
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x2a, 0x02
+	pushw 232
+	pushw 554
 	push	xbc
 	call	16713584
 	inc	8, xsp
@@ -1731,7 +1740,8 @@ TtMdCtlMsg_EventDispatch:
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x30, 0x02
+	pushw 232
+	pushw 560
 	push	xbc
 	call	16712341
 	lda	xsp, (xsp+10)
@@ -1765,14 +1775,16 @@ TtMdCtlMsg_EventDispatch:
 	ld	xwa, (xiz+14)
 	bit	7, wa
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x36, 0x02
+	pushw 232
+	pushw 566
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16713584
 	inc	8, xsp
 	jr	18
 	push	xwa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x3c, 0x02
+	pushw 232
+	pushw 572
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	16712341
@@ -1795,7 +1807,8 @@ TtMdCtlMsg_EventDispatch:
 	ldw	(xwa), 1
 	ld	xwa, (xde)
 	push	xwa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x42, 0x02
+	pushw 232
+	pushw 578
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	16712341
@@ -1817,14 +1830,16 @@ TtMdCtlMsg_EventDispatch:
 	ld	xwa, (xde)
 	bit	7, wa
 	jr	z, 18
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x48, 0x02
+	pushw 232
+	pushw 584
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	16713584
 	inc	8, xsp
 	jr	18
 	push	xwa
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x4e, 0x02
+	pushw 232
+	pushw 590
 	ld	xwa, (xsp+20)
 	push	xwa
 	call	16712341
@@ -3942,7 +3957,7 @@ SndParam_ResolveOscEntry:
 
 	lds bc, 0
 
-	.byte 0x1d, 0x26, 0xcd, 0xfc	; call SndParam_LookupViaEncode (v7 addr)
+	call 16567590
 
 	ld (xsp + 5), l
 
@@ -3950,7 +3965,7 @@ SndParam_ResolveOscEntry:
 
 	ldw bc, 0x20
 
-	.byte 0x1d, 0x26, 0xcd, 0xfc	; call SndParam_LookupViaEncode (v7 addr)
+	call 16567590
 
 	lda xwa, (xsp + 2)
 
@@ -10199,11 +10214,8 @@ AcWelcomScreen_RenderBytecode:
 	add	xiy, xbc
 	sll	xiy, 2
 	addda32_24	xiy, (0x24786)
-	.byte 0xf3
-	reti
-	.byte 0xe0
-	swi	0
-	ldw	ix, 0xaed9
+	lda_rr xix, xwa, iz
+	lds bc, 6
 	.byte 0x95
 	scf
 	jrl	734
