@@ -152,19 +152,37 @@ problem — but it is not a route to converting v10.
 
 ## ✅★★ ALL THIRTEEN IMAGES ARE AT ZERO VERBATIM DEBT (2026-09-02)
 
-**`prom_b` closed its last 481 bytes. Every gated image now reproduces
-byte-for-byte from real source with nothing handed back through `.incbin`.**
-`make gate-all`: 13/13 byte-identical, 8/8 KN5000 images assembling.
+**`prom_b` closed its last 481 bytes.** `make gate-all`: 13/13 byte-identical,
+8/8 KN5000 images assembling.
 
-| image | verbatim |
-|---|---:|
-| v10, v9, v7 maincpu · v142 subcpu · subcpu boot · table data · custom data · HD-AE5000 | **0** |
-| wsa1 prom_a · prom_b · prom_c · prom_d | **0** |
+⚠⚠ **CORRECTED 2026-09-02. This table previously read "0" for every image and
+claimed every gated image reproduces "with nothing handed back through
+`.incbin`". That was false, and it contradicted this file's own later sections.**
+Live figures, from `scripts/analysis/kn5000_source_coverage.py`:
 
-⚠ **This is a statement about `.incbin`, not about understanding.** Code-as-byte
-and data-as-code remain, and the table_data BMPs are still 318,468 B of
-correctly-represented `.incbin` that the coverage tool counts as debt. Read the
-three-kinds table at the top of this file before quoting "100%".
+| image | verbatim | |
+|---|---:|---|
+| v10, v9 maincpu · v142 subcpu · subcpu boot · custom data · HD-AE5000 | **0** | |
+| wsa1 prom_a · prom_b · prom_c · prom_d | **0** | |
+| table data | 318,468 | six genuine BMPs, deliberately kept as shipped — see below |
+| **maincpu v7** | **120,666** | 272 `romslices/*.bin` transplants: the one real remaining block |
+| **ALL 13** | **439,134** | 96.5% source |
+
+So: **eleven of thirteen images are at zero verbatim debt.** Table data's
+318,468 B is `.incbin` by choice rather than by debt — the bytes are six
+uncompressed Windows BMPs, viewable in any image tool, and a round-trip
+generator would add machinery to discard the artefact Technics's own toolchain
+shipped. **v7's 120,666 B is the only genuine verbatim debt left in the tree.**
+
+★ The lesson is not the arithmetic. A summary table at the top of a document
+disagreed with the document's own body for a day, and it was the *table* that
+got quoted onward — into the docs website and into a session report — because it
+was the part shaped like an answer. When a figure is worth a headline, re-derive
+it from the script rather than from the last thing that said it.
+
+⚠ **And all of this is a statement about `.incbin`, not about understanding.**
+Code-as-byte and data-as-code remain. Read the three-kinds table at the top of
+this file before quoting "100%".
 
 ### The last 481 bytes were DATA, and that is what made them source
 
