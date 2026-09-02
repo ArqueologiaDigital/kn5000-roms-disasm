@@ -1,0 +1,7 @@
+file,line,mnemonic,source,reason
+v10/maincpu/display/scoop_display.s,19467,ldw_da,"	ldw_da xwa, (\ParamC)",old-does-not-assemble
+v10/maincpu/factory_test/test_init.s,30,ldw_da,"	ldw_da xwa, (\ParamC)",old-does-not-assemble
+v7/maincpu/display/scoop_display.s,13581,ldw_da,"	ldw_da xwa, (\ParamC)",old-does-not-assemble
+v7/maincpu/factory_test/test_init.s,30,ldw_da,"	ldw_da xwa, (\ParamC)",old-does-not-assemble
+v9/maincpu/display/scoop_display.s,19551,ldw_da,"	ldw_da xwa, (\ParamC)",old-does-not-assemble
+v9/maincpu/factory_test/test_init.s,30,ldw_da,"	ldw_da xwa, (\ParamC)",old-does-not-assemble

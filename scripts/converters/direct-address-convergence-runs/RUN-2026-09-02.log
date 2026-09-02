@@ -1,0 +1,74 @@
+######## stda16
+manifest files=135 converted lines=7764  diff(add del)=7764 7764
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## cpdi8
+manifest files=141 converted lines=5191  diff(add del)=5191 5191
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## bitda
+manifest files=92 converted lines=3669  diff(add del)=3669 3669
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## ldw_da
+manifest files=101 converted lines=3329  diff(add del)=3329 3329
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## ldl_da
+manifest files=78 converted lines=2924  diff(add del)=2924 2924
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## stdi16
+manifest files=115 converted lines=2652  diff(add del)=2652 2652
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## ldb_da
+manifest files=133 converted lines=2425  diff(add del)=2425 2425
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## stib_da
+manifest files=83 converted lines=1967  diff(add del)=1967 1967
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## stw_da
+manifest files=92 converted lines=1829  diff(add del)=1829 1829
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## anddi8
+manifest files=68 converted lines=1791  diff(add del)=1791 1791
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## stda32
+manifest files=109 converted lines=1780  diff(add del)=1780 1780
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## stiw_da
+manifest files=90 converted lines=1300  diff(add del)=1300 1300
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## ordi8
+manifest files=55 converted lines=1279  diff(add del)=1279 1279
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## cpdi16
+manifest files=104 converted lines=1119  diff(add del)=1119 1119
+PASS: every KN5000 image assembles with the pinned toolchain.
+PASS: every rebuilt ROM is byte-identical.
+PASS: every rebuilt ROM is byte-identical.
+######## stb_da
+manifest files=93 converted lines=1116  diff(add del)=1116 1116
+PASS: every KN5000 image assembles with the pinned toolchain.
+GATE RED after stb_da -- stopping
