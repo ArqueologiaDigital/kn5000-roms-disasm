@@ -26,6 +26,16 @@ tool splits every operand three ways:
       se_c_descriptor_vs_rom.py).  A run inside such a span is untyped data
       with a ready-made type.
 
+  (d) BLOCKED ON A KNOWN DECODER GAP -- the run STARTS with one of the five
+      leading opcode bytes the tlcs900 backend has no encoding for at all,
+      {0x01, 0x04, 0x17, 0x1a, 0x1c} = normal / max / ldf / JP nnnn /
+      CALL nnnn (see scripts/analysis/byte_run_start_enrichment.py and
+      leading_byte_reserved_probe.py).  These CANNOT be converted until lane
+      w10/missinginsns lands the five instructions; forcing them now risks a
+      wrong reading that re-assembles to the same bytes and passes the gate.
+      Reported as a TAG, not a verdict -- the enrichment behind it is a
+      per-image statistic.  --enrichment recomputes it for these two files.
+
   (c) GENUINE BYTE TABLE -- everything else: byte-valued content that `.byte`
       already represents correctly (bitmap rows, single padding/fill bytes,
       string-adjacent tables) and for which no better type is known.
@@ -73,6 +83,16 @@ sys.path.insert(0, os.path.join(ROOT, "scripts", "lanes", "v10se"))
 UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
 ROM = os.path.join(ROOT, "original_ROMs/kn5000_v10_program.rom")
 BASE = 0xE00000
+
+# Leading opcode bytes with no encoding anywhere in tlcs900_backend, which
+# unidasm decodes as real instructions.  Source: the shared tree's
+# scripts/analysis/leading_byte_reserved_probe.py (393,216 operand
+# continuations each) and unmapped_byte_oracle.py.
+BLIND = {0x01: "normal", 0x04: "max", 0x17: "ldf",
+         0x1a: "JP nnnn", 0x1c: "CALL nnnn"}
+# Decodable bytes of similar magnitude -- the control set that makes any
+# blind-byte rate mean something.  Do NOT widen this to all 256 values.
+CONTROL_BYTES = {0x02, 0x03, 0x05, 0x16, 0x1b}
 
 from se_byte_run_census import scan, TARGETS          # noqa: E402
 import se_c_descriptor_vs_rom as cdesc                # noqa: E402
@@ -185,7 +205,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--amap", required=True)
     ap.add_argument("--control", action="store_true")
-    ap.add_argument("--list", choices=["a", "b", "c"])
+    ap.add_argument("--list", choices=["a", "b", "c", "d"])
+    ap.add_argument("--enrichment", action="store_true",
+                    help="blind-vs-control run-start rates for THESE two files")
     ap.add_argument("--json")
     args = ap.parse_args()
 
@@ -221,6 +243,7 @@ def main():
         r["declen"] = dl
         flanked = r["prev_kind"] == "insn" and r["next_kind"] == "insn"
         r["flanked"] = flanked
+        r["first"] = rom[lo - BASE]
         if name is not None and ov == r["nbytes"]:
             r["cls"] = "b"
             r["why"] = "inside byte-exact C descriptor %s%s" % (
@@ -230,6 +253,11 @@ def main():
             r["why"] = ("straddles byte-exact C descriptor %s (%d of %d bytes"
                         " inside)%s" % (name, ov, r["nbytes"],
                                         "" if wired else " (NOT yet in the build)"))
+        elif r["first"] in BLIND:
+            r["cls"] = "d"
+            r["why"] = ("starts with 0x%02X (%s) -- no encoding in the "
+                        "tlcs900 backend; blocked until w10/missinginsns lands"
+                        % (r["first"], BLIND[r["first"]]))
         elif flanked and dl is not None and dl >= r["nbytes"]:
             r["cls"] = "a"
             r["why"] = ("flanked by instructions; unidasm decodes a %d-byte "
@@ -243,7 +271,7 @@ def main():
     # ------------------------------------------------------------ tally
     # BYTE-level, not run-level: a run that straddles a descriptor boundary
     # contributes its inside part to (b) and its outside part to (a)/(c).
-    tot = {c: [0, 0] for c in "abc"}
+    tot = {c: [0, 0] for c in "abcd"}
     for r in mapped:
         inb = r.get("cdesc_bytes", 0)
         rest = r["nbytes"] - inb
@@ -251,8 +279,8 @@ def main():
             tot["b"][0] += 1
             tot["b"][1] += inb
         if rest:
-            k = "a" if r["cls"] == "a" else "c"
-            if r["cls"] == "b":
+            k = r["cls"]
+            if k == "b":
                 k = "c"
             tot[k][0] += 1
             tot[k][1] += rest
@@ -263,6 +291,7 @@ def main():
     print("  %-4s %-38s %6s %8s" % ("cls", "meaning", "runs", "bytes"))
     print("  %-4s %-38s %6d %8d" % ("(a)", "code-as-.byte (unspellable form)", *tot["a"]))
     print("  %-4s %-38s %6d %8d" % ("(b)", "structured data, typed C available", *tot["b"]))
+    print("  %-4s %-38s %6d %8d" % ("(d)", "blocked: run starts on a backend gap", *tot["d"]))
     print("  %-4s %-38s %6d %8d" % ("(c)", "genuine byte table (already right)", *tot["c"]))
     print("  %-4s %-38s %6d %8d" % ("", "TOTAL mapped", len(mapped),
                                     sum(r["nbytes"] for r in mapped)))
@@ -287,6 +316,28 @@ def main():
         c, b, w = seen[n]
         print("      %-28s %2d runs %5d B  %s" % (n, c, b,
                                                   "in build" if w else "NOT in build"))
+
+    if args.enrichment:
+        print()
+        print("RUN-START ENRICHMENT for these two files")
+        print("  method of scripts/analysis/byte_run_start_enrichment.py:")
+        print("  a residue of UNDECODED CODE starts disproportionately with a")
+        print("  byte the backend refuses; a data residue does not.")
+        for t in TARGETS:
+            sel = [r for r in mapped if r["file"] == t]
+            nb = sum(1 for r in sel if r["first"] in BLIND)
+            nc = sum(1 for r in sel if r["first"] in CONTROL_BYTES)
+            n = len(sel)
+            rb, rc = 100.0 * nb / n, 100.0 * nc / n
+            print("    %-24s blind %5.1f%% (%d/%d)   control %5.1f%% (%d/%d)"
+                  "   %.0fx" % (os.path.basename(t), rb, nb, n, rc, nc, n,
+                                (rb / rc) if rc else float("inf")))
+        per = {}
+        for r in mapped:
+            if r["first"] in BLIND:
+                per[r["first"]] = per.get(r["first"], 0) + 1
+        for b in sorted(per):
+            print("      0x%02X %-10s %4d runs" % (b, BLIND[b], per[b]))
 
     if args.control:
         print()
