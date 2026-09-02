@@ -102,7 +102,9 @@ def disassemble(data):
         subprocess.run([os.path.join(LLVM, "llvm-mc"), "-triple=tlcs900",
                         "-filetype=obj", "-o", obj, src], check=True,
                        capture_output=True)
-        out = subprocess.run([os.path.join(LLVM, "llvm-objdump"), "-d", obj],
+        # -z: without it objdump ELIDES runs of zero bytes as "..." and the
+        # segment list silently stops covering the span (it raises below).
+        out = subprocess.run([os.path.join(LLVM, "llvm-objdump"), "-d", "-z", obj],
                              check=True, capture_output=True, text=True).stdout
     segs = []
     pat = re.compile(r"^\s*([0-9a-f]+):\s((?:[0-9a-f]{2} )+)\s*(.*)$")

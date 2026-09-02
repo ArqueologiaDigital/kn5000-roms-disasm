@@ -177,6 +177,7 @@ def main():
         lines, regions = C.parse(path, lm)
         edits = []   # [first_line, last_excl, newlines, bytes, bytedebt, addr]
         blocked = []  # (first_line, last_line, [blind byte values])
+        blockers = {}  # undecodable byte value -> how many times it blocked a span
         stat = dict(conv=0, convb=0, reframed=0, refused=0, refusedb=0, data=0,
                         datab=0, lostsym=0, notround=0,
                         blind=0, blindb=0, absorb=0, absorbb=0, labelcross=0,
@@ -219,6 +220,9 @@ def main():
                     else:
                         stat["refused"] += 1
                         stat["refusedb"] += nb
+                        for x in badhere:
+                            blockers[rom[x - ROM_BASE]] = \
+                                blockers.get(rom[x - ROM_BASE], 0) + 1
                     continue
                 # A span that SWALLOWS a blind byte into an instruction operand
                 # is exactly the reading that would round-trip while being
@@ -352,6 +356,9 @@ def main():
                  stat["blind"], stat["blindb"], stat["absorb"], stat["absorbb"],
                  stat["refused"], stat["lostsym"], stat["notround"],
                  stat["labelcross"], stat["hasascii"], stat["refusedb"]))
+        top = sorted(blockers.items(), key=lambda kv: -kv[1])[:12]
+        print("      undecodable byte values that blocked a span: "
+              + ", ".join("0x%02x x%d" % kv for kv in top))
         grand[0] += stat["conv"]; grand[1] += stat["convb"]
         grand[2] += stat["reframed"]; grand[3] += stat["refusedb"]
         grand[4] += stat["datab"]

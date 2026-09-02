@@ -369,11 +369,7 @@ DrawText_NullTerminate:
 	ret
 
 DrawText_LayoutAndRender_Variant1:
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCC6
 	lda	xix, (xsp+270)
@@ -435,7 +431,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	63234
 	pop	xiz
@@ -444,11 +440,7 @@ DrawText_LayoutAndRender_Variant1:
 	ccf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCCE
 	.byte 0xf3
@@ -516,7 +508,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	63079
 	pop	xiz
@@ -525,11 +517,7 @@ DrawText_LayoutAndRender_Variant1:
 	ccf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCD6
 	lda	xix, (xsp+270)
@@ -592,7 +580,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	62938
 	pop	xiz
@@ -601,11 +589,7 @@ DrawText_LayoutAndRender_Variant1:
 	ccf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCDE
 	.byte 0xf3
@@ -662,7 +646,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	62797
 	pop	xiz
@@ -671,11 +655,7 @@ DrawText_LayoutAndRender_Variant1:
 	ccf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xee
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-274)
 	push	xiz
 	ld	xiy, Str_No_0xCE6
 	lda	xix, (xsp+270)
@@ -737,7 +717,7 @@ DrawText_LayoutAndRender_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	ld	xbc, (xsp+14)
 	calr	62642
 	pop	xiz
@@ -1063,9 +1043,8 @@ DrawText_LayoutAndRender_Variant1:
 	ld	bc, (xix)
 	extz	xbc
 	div	bc, 40
-	.byte 0xd7, 0xe6
-	or	(xbc-39), h
-	pop	sr
+	ld bc, qbc
+	sll bc, 3
 	ld	(xhl), bc
 	ld	bc, (xde)
 	.byte 0x98
@@ -1094,14 +1073,11 @@ DrawText_LayoutAndRender_Variant1:
 	ld	bc, (xix)
 	extz	xbc
 	div	bc, 40
-	.byte 0xd7, 0xe6
-	or	(xbc-39), h
-	pop	sr
+	ld bc, qbc
+	sll bc, 3
 	ld	(xhl), bc
 	ld	a, (xwa+2)
-	.byte 0xc7
-	swi	0
-	.byte 0x99
+	ldb_erp a, 248
 	extz	iz
 	lda	xwa, (xsp+2)
 	ld	bc, (xhl)
@@ -1455,11 +1431,7 @@ DrawFunc_Init_PushFontAndDraw:
 	ret
 
 DrawFunc_Init_Variant1:
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, Str_No_0xE22
@@ -1562,7 +1534,7 @@ DrawFunc_Init_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	calr	60549
 	pop	xiz
 	.byte 0xf3
@@ -1570,11 +1542,7 @@ DrawFunc_Init_Variant1:
 	incf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, Str_No_0xE42
@@ -1620,9 +1588,7 @@ DrawFunc_Init_Variant1:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (Str_No_0xCEE)
-	.byte 0xe3
-	reti
-	ld_spdl	xhl, 224
+	ld_rrl xhl, xbc, wa
 	lda	xwa, (xsp+264)
 	.byte 0xf3
 	swi	5
@@ -1634,7 +1600,7 @@ DrawFunc_Init_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	calr	60387
 	pop	xiz
 	.byte 0xf3
@@ -1642,11 +1608,7 @@ DrawFunc_Init_Variant1:
 	incf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, Str_No_0xE56
@@ -1698,9 +1660,7 @@ DrawFunc_Init_Variant1:
 	extz	wa
 	lda_24	xbc, (Str_No_0xDEE)
 	lds32	xhl, 0
-	.byte 0xc3
-	reti
-	ld_spdl	xsp, 224
+	ld_rrb l, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1711,7 +1671,7 @@ DrawFunc_Init_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	calr	60224
 	pop	xiz
 	.byte 0xf3
@@ -1719,11 +1679,7 @@ DrawFunc_Init_Variant1:
 	incf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	ld	xiy, Str_No_0xE6A
@@ -1816,7 +1772,7 @@ DrawFunc_Init_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	calr	59982
 	pop	xiz
 	.byte 0xf3
@@ -1824,11 +1780,7 @@ DrawFunc_Init_Variant1:
 	incf
 	.byte 0x01, 0x37
 	ret
-	.byte 0xf3
-	swi	5
-	.byte 0xf4
-	swi	6
-	.byte 0x37
+	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
 	.byte 0x45
@@ -1874,9 +1826,7 @@ DrawFunc_Init_Variant1:
 	extz	wa
 	lda_24	xbc, (Str_No_0xDEE)
 	lds32	xhl, 0
-	.byte 0xc3
-	reti
-	ld_spdl	xsp, 224
+	ld_rrb l, xbc, wa
 	lda	xwa, (xsp+264)
 	.byte 0xf3
 	swi	5
@@ -1888,7 +1838,7 @@ DrawFunc_Init_Variant1:
 	.byte 0x04, 0xd2
 	or	(xde), xsp
 	pop	sr
-	.byte 0x04
+	max
 	calr	59835
 	pop	xiz
 	.byte 0xf3
@@ -1969,9 +1919,8 @@ ColorBlit_Variant_ByteData:
 	ld	bc, (xhl)
 	extz	xbc
 	div	bc, 40
-	.byte 0xd7, 0xe6
-	or	(xbc-39), h
-	pop	sr
+	ld bc, qbc
+	sll bc, 3
 	ld	(xwa), bc
 	ld	bc, (xde)
 	.byte 0x9b, 0x04, 0x81
@@ -2003,10 +1952,8 @@ ColorBlit_Variant_ByteData:
 	extz	hl
 	add	hl, hl
 	ld	xbc, (xbc+7)
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xec
-	ldw	de, 0x30b7
+	lda_rr xde, xbc, hl
+	lda xwa, (xsp)
 	ld	bc, (xde)
 	ld	(xwa), bc
 	ld	bc, (xde+2)
@@ -3047,19 +2994,15 @@ VGA_CRTCTiming_ByteData:
 	swi	2
 	.byte 0x04
 	ld	(xsp+2), xwa
-	.byte 0xc7
-	swi	3
-	cp	(xwa-57), xhl
-	.byte 0x89
+	ldib_erp 251, 0
+	stb_erp a, 251
 	extz	wa
 	ld	xbc, (xsp+2)
 	calr	65361
 	lds32	xwa, 4
 	add	(xsp+2), xwa
-	.byte 0xc7
-	swi	3
-	jr	lt, 104
-	.byte 0xeb
+	inc1b_erp 251
+	jr -21
 	ldw	wa, 964
 	lds	bc, 6
 	calr	65051

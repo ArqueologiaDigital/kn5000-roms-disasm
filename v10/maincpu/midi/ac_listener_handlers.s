@@ -1325,19 +1325,10 @@ Data_InOutGridDispatch:
 	jrl	gt, 1762
 	add	bc, bc
 	lda_24	xix, (NakaInst_DIRECT_E7FCE4_0x7A)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	a, 242
-	pushw	ix
-	pop	xhl
-	ldx
-	ldw	ix, 2035
-	.byte 0xf0, 0xe4
-	mul	xwa, xwa
-	nop
-	ldb	a, 0
-	nop
+	ld_rrw bc, xix, bc
+	lda_24 xix, (16210732)
+	jp_rr 8, xix, bc
+	ld xwa, 8448
 	lds	bc, 1
 	lds	de, 1
 	jrl	316
@@ -1400,19 +1391,10 @@ Data_InOutGridDispatch:
 	jrl	gt, 1558
 	add	bc, bc
 	lda_24	xix, (NakaInst_DIRECT_E7FCE4_0x68)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	a, 242
-	swi	0
-	pop	xhl
-	ldx
-	ldw	ix, 2035
-	.byte 0xf0, 0xe4
-	mul	xwa, xwa
-	nop
-	ldb	a, 0
-	nop
+	ld_rrw bc, xix, bc
+	lda_24 xix, (16210936)
+	jp_rr 8, xix, bc
+	ld xwa, 8448
 	ldw	bc, 0xffff
 	lds	de, 1
 	jr	112
@@ -1485,10 +1467,8 @@ Data_InOutGridDispatch:
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda_24	xbc, (NakaInst_OFF_E7FCA2_0x6)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
+	ld_rrl xwa, xbc, wa
+	push xwa
 	push	xde
 	call	Strcpy
 	inc	8, xsp
@@ -1500,10 +1480,8 @@ Data_InOutGridDispatch:
 	ldw	(xbc), 1
 	ld	wa, (xwa)
 	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
+	ld_rrl xwa, xhl, wa
+	push xwa
 	push	xde
 	call	Strcpy
 	inc	8, xsp
@@ -1524,10 +1502,8 @@ Data_InOutGridDispatch:
 	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
+	ld_rrl xwa, xhl, wa
+	push xwa
 	push	xde
 	call	Strcpy
 	inc	8, xsp
@@ -1544,10 +1520,8 @@ Data_InOutGridDispatch:
 	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
+	ld_rrl xwa, xhl, wa
+	push xwa
 	push	xde
 	call	Strcpy
 	inc	8, xsp
@@ -1564,10 +1538,8 @@ Data_InOutGridDispatch:
 	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
+	ld_rrl xwa, xhl, wa
+	push xwa
 	push	xde
 	call	Strcpy
 	inc	8, xsp
@@ -1607,10 +1579,7 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 0x01e0008c
 	jrl	949
-	.byte 0xb1
-	push	sr
-	pop	sr
-	nop
+	ldw (xbc), 3
 	ld	xwa, 0x5000
 	call	SndParam_LookupReadOnly
 	cps	hl, 2
@@ -1634,16 +1603,11 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 0x01e0008c
 	jrl	877
-	.byte 0xb1
-	push	sr
-	halt
-	nop
+	ldw (xbc), 5
 	ld	wa, (xwa)
 	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
+	ld_rrl xwa, xhl, wa
+	push xwa
 	push	xde
 	call	Strcpy
 	inc	8, xsp
@@ -1652,15 +1616,11 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 0x01e0008c
 	jrl	838
-	.byte 0xb1
-	push	sr
-	di
+	ldw (xbc), 6
 	ld	wa, (xiz+4)
 	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
+	ld_rrl xwa, xhl, wa
+	push xwa
 	push	xde
 	call	Strcpy
 	inc	8, xsp
@@ -1669,16 +1629,11 @@ Data_InOutGridDispatch:
 	lda	xde, (xsp+4)
 	ld	xbc, 0x01e0008c
 	jrl	798
-	.byte 0xb1
-	push	sr
-	reti
-	nop
+	ldw (xbc), 7
 	ld	wa, (xiz+4)
 	sla	wa, 2
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
+	ld_rrl xwa, xhl, wa
+	push xwa
 	push	xde
 	call	Strcpy
 	inc	8, xsp
@@ -1694,10 +1649,8 @@ Data_InOutGridDispatch:
 	ldb	a, 217
 	.byte 0xec
 	push	sr
-	.byte 0xe3
-	reti
-	or	xix, xix
-	ldb	w, 56
+	ld_rrl xwa, xhl, bc
+	push xwa
 	push	xde
 	call	Strcpy
 	inc	8, xsp
@@ -1736,10 +1689,8 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (NakaInst_OFF_E7FCA2_0x6)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1753,10 +1704,8 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1770,10 +1719,8 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (ControlMode_Option_Table_0xA)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1887,10 +1834,8 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1904,10 +1849,8 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1921,10 +1864,8 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -1938,10 +1879,8 @@ Data_ParaLoadOptDispatch:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (NakaInst_OFF_WidgetTbl2_0x37E)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
