@@ -102,7 +102,7 @@ SCREENDATA_BINS = $(patsubst %,v10/maincpu/includes/generated/style_ui_screendat
 ACCOMP_NAMES = accomp_section_widget accomp_part_widget accomp_display_full
 ACCOMP_BINS = $(patsubst %,v10/maincpu/includes/generated/%.bin,$(ACCOMP_NAMES))
 
-SE_NAMES = se_drumkit_display se_rhythm_transport_tables se_name_editor se_compare_screen se_parameter_grid se_transport_display se_setup_sel3 se_apply_confirm se_general_edit
+SE_NAMES = se_drumkit_display se_rhythm_transport_tables se_name_editor se_compare_screen se_parameter_grid se_transport_display se_setup_sel3 se_apply_confirm se_general_edit se_setup_editor_full se_setup_sel4
 # Note: se_drumkit_display and se_rhythm_transport_tables are .incbin'd in assembly.
 # The remaining SE files are compiled but awaiting .incbin integration.
 SE_BINS = $(patsubst %,v10/maincpu/includes/generated/%.bin,$(SE_NAMES))
