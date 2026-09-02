@@ -1179,3 +1179,43 @@ single thunk that names it, to entry **96** of a 256-entry table at prom_a
 
 Narrows gap V of `kn7000_mame/notes/WSA1-EMULATION-DISASM-GAPS.md` from a
 subsystem to one table lookup. It does **not** close it.
+
+## WAVE — the PROMBFIN lane, `.incbin` push (2026-09-02)
+
+Target: prom_b's `.incbin` count (the lane's whole debt, per
+`prom_b_byte_run_audit.py` — no `.byte`-dressed remainder exists). Four
+scripts, each verified end to end before touching the source:
+
+    python3 notes/gen_prom_b_dl_shape23_module.py --selftest      # 1,149 B
+    python3 notes/gen_prom_b_dl_closure_gaps_module.py --selftest #   647 B
+    python3 notes/gen_prom_b_dl_shape1_gap_f286f9.py --selftest   #    44 B
+    python3 notes/gen_prom_b_dl_named_tables_module.py --selftest #   394 B
+
+**`gen_prom_b_dl_shape23_module.py`** splices `notes/prom_b_dl_call_shapes.py`'s
+read-only census of shape-2/3 (STACK call) display-list sites: 1,149 bytes,
+all inside 0xF13D34-0xF147AB, attributed interpreter A/B by the CALLING SITE
+(0xF42E00/0xF42E04/0xF42E0C), never guessed from content.
+
+**`gen_prom_b_dl_closure_gaps_module.py`** closes three gaps LEFT BETWEEN those
+records (384/107/156 B) that no call shape names: a plain op/len walk from
+where one verified run ends lands, with zero drift, exactly where the next
+verified run begins, and every opcode used is only valid under interpreter A
+(several exceed interpreter B's 0x0F bound outright).
+
+**`gen_prom_b_dl_shape1_gap_f286f9.py`** is the one shape-1 (ordinary
+committed-scanner) site that was still `.incbin`: 44 bytes at 0xF286F9, four
+records using a handler already committed elsewhere in the file.
+
+**`gen_prom_b_dl_named_tables_module.py`** closes the remaining 394 bytes of
+0xF13D34-0xF147AB: the STRING and ARRAY tables the just-spliced interpreter-B
+records name in their own `+0x07`/`+0x0B` fields (harvested from the committed
+text, never re-typed) — captions ("EFF1"/"EFF2"/"REV ", "OFF"/"ON ",
+"EFFECT 1"/"EFFECT 2"/"REVERB", "PARALLEL"/"SERIAL  ") and coordinate arrays.
+Two bytes at 0xF14530-0xF14531 are left as unattributed `.byte` rather than
+folded into a neighbour's entry count — a stride-1 field names exactly the one
+byte at its own address, nothing past it.
+
+Together these close 0xF13D34-0xF147AB down to its 490-byte leading span
+(0xF13D34-0xF13F1D, still genuinely unexplained) plus the 44-byte shape-1 site
+elsewhere. `.incbin`: 28,247 → 26,013 bytes. Byte gate: `make gate-wsa1` PASS
+after every splice.
