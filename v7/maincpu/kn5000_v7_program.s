@@ -624,7 +624,7 @@ Boot_MainSequence_Trampoline:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog widget
 ; ===========================================================================
 User_didnt_request_flash_mem_update:
-	ldb_d8	a, (1026)
+	ld	a, (1026:16)
 	extz	wa
 	calr	514
 	stiw_da	(65482), 0
@@ -652,7 +652,7 @@ Boot_DisplayScreen:
 	call	16634741
 	stdi8	(1024), 128
 	stiw_da	(65492), 0
-	ldb_d8	a, (1026)
+	ld	a, (1026:16)
 	extz	wa
 	calr	350
 	lds	wa, 4
@@ -660,7 +660,7 @@ Boot_DisplayScreen:
 	calr	325
 	jp	15667739
 Boot_GetButtonComboCode:
-	ldb_d8 l, (1026)
+	ld l, (1026:16)
 	ret
 
 Boot_ClearAllInterruptEnables:
@@ -867,7 +867,7 @@ Boot_ReadFDCStatus:
 	; llvm-mc round-trips these 5 B byte-exact; v9/v10's Boot_ReadFDCStatus is the
 	; identical two instructions, "ldb_d8 l,(0x8e6a) / ret", with only the FDC
 	; status register address shifted (36302 here vs v9/v10's 36458).
-	ldb_d8	l, (36302)
+	ld	l, (36302:16)
 	ret
 	.include "shared/boot_routines.s"
 
@@ -2461,16 +2461,16 @@ MainChordPre_AppendChordSuffix:
 	push	xwa
 	push	xiz
 	call	16713188
-	ldb_d8	a, (36006)
+	ld	a, (36006:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (258808:24)
 	ld_rrl	xbc, xbc, wa
-	ldb_d8	a, (36004)
+	ld	a, (36004:16)
 	extz	wa
 	sla	wa, 2
 	ld_rrl	xbc, xbc, wa
-	ldb_d8	a, (36008)
+	ld	a, (36008:16)
 	extz	wa
 	sla	wa, 2
 	ld_rrl	xbc, xbc, wa
@@ -2592,7 +2592,7 @@ EmptyRoutine_02:
 
 
 CPanel_RX_ProcessOrInit:
-	ldb_d8 a, (0x8cf0)
+	ld a, (0x8cf0:16)
 	and A,0xc0
 	jr z, CPanel_RX_SkipToProcess
 	ld XHL,0x000200ad

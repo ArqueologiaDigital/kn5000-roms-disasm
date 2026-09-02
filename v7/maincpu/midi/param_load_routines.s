@@ -13,7 +13,7 @@ ParaLoadOpt_AudioFlagCheck:
 	ld	(xsp), e
 	ld	(xsp+2), c
 	ld	(xsp+4), a
-	ldb_d8	a, (48282)
+	ld	a, (48282:16)
 	bit	0, a
 	jr	z, 23
 	res	0, a
@@ -134,7 +134,7 @@ ParaLoadOpt_AudioFlagCheck_B:
 	ld	(xsp), e
 	ld	(xsp+2), c
 	ld	(xsp+4), a
-	ldb_d8	a, (48282)
+	ld	a, (48282:16)
 	bit	1, a
 	jr	z, 23
 	res	1, a
@@ -144,7 +144,7 @@ ParaLoadOpt_AudioFlagCheck_B:
 	lds32	xde, 0
 	call	16423243
 ParaLoadOpt_CaseD:
-	ldb_d8	a, (48244)
+	ld	a, (48244:16)
 	bit	7, a
 	jr	z, 31
 	res	7, a
@@ -156,7 +156,7 @@ ParaLoadOpt_CaseD:
 	lds32	xde, 0
 	call	16423243
 ParaLoadOpt_CaseE:
-	ldb_d8	a, (48248)
+	ld	a, (48248:16)
 	bit	7, a
 	jr	z, 30
 	res	7, a
@@ -168,7 +168,7 @@ ParaLoadOpt_CaseE:
 	lds32	xde, 0
 	call	16423243
 ParaLoadOpt_CaseF:
-	ldb_d8	a, (48240)
+	ld	a, (48240:16)
 	bit	7, a
 	jrl	z, 296	; -> 0xF767F9
 	res	7, a

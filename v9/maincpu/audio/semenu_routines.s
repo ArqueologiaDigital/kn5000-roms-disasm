@@ -1035,7 +1035,7 @@ SeMenu_ValidatePartNumber:
 	dec 4, xsp
 	pushw_erp 0xfa
 	ld (xsp + 2), xwa
-	ldb_d8 c, (1629)
+	ld c, (1629:16)
 	cps c, 1
 	jr c, SeMenu_ValidatePartNumber_Default
 	cps c, 4
@@ -1163,7 +1163,7 @@ SeMenu_IsPartEnabled_CheckMask:
 	extz bc
 	lds wa, 1
 	calr SeMenu_BitShiftMask
-	ldb_d8 a, (1630)
+	ld a, (1630:16)
 	and a, l
 	cps a, 0
 	scc16 nz, hl
@@ -1514,33 +1514,33 @@ SeMenu_TransferPartValues_End2:
 SeMenu_TransferPartValues_EndData:
 	cps	a, 1
 	jr	nz, 23
-	ldb_d8	a, (1678)
+	ld	a, (1678:16)
 	cps	a, 1
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
 	stdi8	(1678), 1
-	ldb_d8	a, (1678)
+	ld	a, (1678:16)
 	jr	56
 	cps	a, 0
 	jr	nz, 23
-	ldb_d8	a, (1677)
+	ld	a, (1677:16)
 	cps	a, 1
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
 	stdi8	(1677), 1
-	ldb_d8	a, (1677)
+	ld	a, (1677:16)
 	jr	29
 	cps	a, 2
 	jr	nz, 23
-	ldb_d8	a, (1679)
+	ld	a, (1679:16)
 	cps	a, 1
 	jr	c, 4
 	cps	a, 4
 	jr	ule, 5
 	stdi8	(1679), 1
-	ldb_d8	a, (1679)
+	ld	a, (1679:16)
 	jr	2
 	ldb	a, 1
 	ld	(xbc), a
@@ -1572,7 +1572,7 @@ SeMenu_TransferPartValues_EndData:
 	ret	nz
 	ld	(xwa), 1
 	ret
-	ldb_d8	c, (1685)
+	ld	c, (1685:16)
 	cps	c, 1
 	jr	c, 4
 	cps	c, 6
@@ -1935,7 +1935,7 @@ SeMenu_ResetSubIndex:
 	ret
 
 SeMenu_AdvanceSubIndex:
-	ldb_d8 l, (1684)
+	ld l, (1684:16)
 	inc 1, l
 	stb_d8 (1684), l
 	ret

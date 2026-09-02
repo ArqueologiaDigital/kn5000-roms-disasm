@@ -51,7 +51,7 @@ MidiInit_Stub3:
 
 INTRX0_CLEAR_ERROR_STATE:
 	pushw wa
-	ldb_d8 a, (208)
+	ld a, (208:16)
 	stdi8 (1059), 0
 	anddi8 (1063), 189
 	setda 3, 1063
@@ -63,7 +63,7 @@ INTRX0_CLEAR_ERROR_STATE:
 INTTX0_HANDLER:
 	pushw wa
 	pushw hl
-	ldb_d8 a, (1065)
+	ld a, (1065:16)
 	bit 0, a
 	jr nz, IntTx0_FlagBit0Branch
 	bit 4, a
@@ -115,7 +115,7 @@ IntTx0_DequeueAndSend:
 	stb_d8 (208), l
 
 IntTx0_CheckQueueEmpty:
-	ldb_d8 a, (1065)
+	ld a, (1065:16)
 	and a, 0x1f
 	jr nz, IntTx0_Epilogue
 	call SeqBuf_MidiOut_CheckEmpty
@@ -130,7 +130,7 @@ IntTx0_Epilogue:
 
 INTRX0_HANDLER:
 	pushw wa
-	ldb_d8 a, (209)
+	ld a, (209:16)
 	and a, 0x1c
 	popw wa
 	jrl nz, INTRX0_CLEAR_ERROR_STATE
@@ -141,7 +141,7 @@ INTRX0_HANDLER:
 	push xix
 	push xiy
 	push xiz
-	ldb_d8 a, (208)
+	ld a, (208:16)
 	stdi8 (1061), 0
 	dec 2, xsp
 	ld (xsp), a
@@ -170,7 +170,7 @@ MIDI_RX_BYTE_DISPATCHER:
 	push xiy
 	push xiz
 	calr MIDI_RX_CONTEXT_RESTORE
-	ldb_d8 a, (0xb7df)
+	ld a, (0xb7df:16)
 	bit 7, a
 	jr z, RxDisp_DataByteDispatch
 	cp a, 0xf7
@@ -256,7 +256,7 @@ SysMsg_ClockTransportDispatch:
 	incdi8 1, (1108)
 
 ClkTick_TempoThresholdCheck:
-	ldb_d8 a, (1066)
+	ld a, (1066:16)
 	cp a, 0x70
 	jr ugt, ClkTick_HighTempoLoad
 	cps a, 4
@@ -294,7 +294,7 @@ ClkTick_BeatSubdivCheck:
 	calr MIDI_QUEUE_TRACK_EVENT
 
 ClkTick_PerClockCounters:
-	ldb_d8 a, (1056)
+	ld a, (1056:16)
 	pushw wa
 	and a, 0x5
 	popw wa
@@ -335,27 +335,27 @@ ClkTick_Src2FineBeatCheck:
 	jr nz, ClkTick_Src2ErrorDelta
 	stdi8 (1045), 0
 	incdi8 1, (1046)
-	ldb_d8 a, (0x379b)
+	ld a, (0x379b:16)
 	and a, 0x1f
 	jr z, ClkTick_Src2CoarseOverflow
 	calr MIDI_QUEUE_TRACK_EVENT
 
 ClkTick_Src2CoarseOverflow:
-	ldb_d8 a, (1046)
-	ldb_d8 w, (1075)
+	ld a, (1046:16)
+	ld w, (1075:16)
 	ex_sd16b W, 0x58, 0x04
 	cp a, w
 	jr c, ClkTick_Src2ErrorDelta
 	stdi8 (1046), 0
 	incdi8 1, (1076)
 	incdi8 1, (1077)
-	ldb_d8 a, (1077)
+	ld a, (1077:16)
 	cpda8 a, 0x34d7
 	jr ule, ClkTick_Src2ErrorDelta
 	stdi8 (1077), 0
 
 ClkTick_Src2ErrorDelta:
-	ldb_d8 a, (1045)
+	ld a, (1045:16)
 	ld w, a
 	subda8 a, 1111
 	jr z, ClkTick_Src3ClickCheck
@@ -381,7 +381,7 @@ ClkTick_Src3ClickCheck:
 	jr z, Transport_StopHandler
 	anddi8 (1051), 252
 	incdi8 4, (1051)
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	bitda 0, (1073)
 	jr z, ClkTick_Src3LowerSyncCheck
 	cpda8 a, 1071
@@ -438,9 +438,9 @@ Transport_StopSrc3Snapshot:
 	jr z, Transport_Return
 	stdi8 (1057), 16
 	pushw wa
-	ldb_d8 a, (1045)
+	ld a, (1045:16)
 	stb_d8 (1078), a
-	ldb_d8 a, (1046)
+	ld a, (1046:16)
 	stb_d8 (1079), a
 	popw wa
 
@@ -513,7 +513,7 @@ MIDI_APPLY_STARTUP_TIMING:
 	bitda 0, (1056)
 	jr z, StartTiming_ClearAndReturn
 	stdi8 (1056), 6
-	ldb_d8 a, (1108)
+	ld a, (1108:16)
 	dec 1, a
 	sll a, 2
 	adddm8 1047, a
@@ -562,7 +562,7 @@ Continue_Return:
 AltClk_DisabledClockPath:
 	stdi8 (1066), 0
 	pushw wa
-	ldb_d8 a, (1056)
+	ld a, (1056:16)
 	and a, 0x5
 	popw wa
 	jr z, AltClk_NoSrcFlagPath
@@ -589,9 +589,9 @@ AltClk_StopSrc3Snapshot:
 	jr z, AltClk_Return
 	stdi8 (1057), 12
 	pushw wa
-	ldb_d8 a, (1045)
+	ld a, (1045:16)
 	stb_d8 (1078), a
-	ldb_d8 a, (1046)
+	ld a, (1046:16)
 	stb_d8 (1079), a
 	popw wa
 
@@ -665,7 +665,7 @@ MIDI_QUEUE_EVENT_PAIR:
 	ld hl, (xix - 4)
 	stb_dri A, 0x07, 0xf0, 0xec
 	minc1_16 hl, 0x7ff
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	stb_dri A, 0x07, 0xf0, 0xec
 	minc1_16 hl, 0x7ff
 	ld (xix - 4), hl
@@ -681,7 +681,7 @@ QueuePair_LinearBufWrite:
 	ld hl, (1141:16)
 	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, hl
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	stb_dri A, 0x07, 0xf0, 0xec
 	inc 1, hl
 	stda16 (1141), xhl
@@ -689,7 +689,7 @@ QueuePair_LinearBufWrite:
 
 MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	ld e, a
-	ldb_d8 a, (1059)
+	ld a, (1059:16)
 	ld d, a
 	bitda 0, (1074)
 	jrl nz, SysEx_InProgressByte
@@ -881,7 +881,7 @@ SC0Init_BaudTableReturn:
 	ret
 
 READ_COM_SELECT_SWITCH:
-	ldb_d8 a, (104)
+	ld a, (104:16)
 	srl a, 4
 	ld xix, MidiSerial_OffsetTable
 	ldb_sri A, 0x03, 0xf0, 0xe0
@@ -935,7 +935,7 @@ SC0Init_EnableRegisters:
 	ei 6
 	stdi8 (210), 41
 	stdi8 (209), 0
-	ldb_d8 a, (0xb7dc)
+	ld a, (0xb7dc:16)
 	stb_d8 (211), a
 	stdi8 (234), 93
 	stdi8 (208), 254

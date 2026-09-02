@@ -600,10 +600,10 @@ Demo_SelectionEntryHandler:
 	jrl Banner_Loop_Check
 	cpdi8 (0xc07d), 32
 	ret nz
-	ldb_d8 a, (0xc07f)
+	ld a, (0xc07f:16)
 	and a, 0x13
 	ret z
-	ldb_d8 a, (0xc07e)
+	ld a, (0xc07e:16)
 	and a, 0x13
 	jr z, Demo_SelectEntry_NoNewButton
 	stdi8 (3379), 16
@@ -630,7 +630,7 @@ Demo_SelectEntry_PreSaveCheck:
 	jr Demo_SelectEntry_ExitDispatch
 
 Demo_SelectEntry_CheckVoiceKeys:
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cp a, 0x72
 	jr z, Demo_SelectEntry_SaveVoice
 	cp a, 0x70
@@ -650,10 +650,10 @@ Demo_SelectEntry_ExitDispatch:
 Demo_SelectEntry_ByteTable:
 	bitda	7, (0x2966)
 	ret	nz
-	ldb_d8	a, (1057)
+	ld	a, (1057:16)
 	and	a, 3
 	ret	nz
-	ldb_d8	a, (1115)
+	ld	a, (1115:16)
 	and	a, 3
 	ret	nz
 	cpdi8	(3375), 0
@@ -677,7 +677,7 @@ Demo_SelectEntry_ByteTable:
 	stdi8	(0x8f4e), 4
 	cpdi8	(0x8d38), 228
 	.byte 0xf2, 0x4d, 0x2a, 0xf2, 0xee
-	ldb_d8	a, (0x28a4)
+	ld	a, (0x28a4:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
 	setda	3, 0x28ad
@@ -694,7 +694,7 @@ Demo_SelectEntry_ProcessSongList:
 	jr z, Demo_SelectEntry_ToCountdown
 	bitda 3, (0x28ad)
 	jr z, Demo_SelectEntry_ManualSelect
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	cpda8 a, 4439
 	ret nz
 	calr Demo_PreSetupAndScan
@@ -708,7 +708,7 @@ Demo_SelectEntry_ManualSelect:
 	calr Demo_PreSetupAndScan
 	calr Demo_WaitForDisplayBit
 	calr Banner_Loop_Check
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	cpda8 a, 4439
 	jr z, Demo_SelectEntry_StartAutoPlay
 	cpdi8 (0x8d38), 228
@@ -721,7 +721,7 @@ Demo_SelectEntry_StartAutoPlay:
 	stdi8 (0x8f4e), 4
 	cpdi8 (0x8d38), 228
 	call_24 nz, SeqInit_FinalEvent
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	extz wa
 	call Seq_DispatchEventType6
 	ret
@@ -730,20 +730,20 @@ Demo_SelectEntry_TimerTick:
 	calr Demo_SelectEntry_CheckCPanel
 	cpw_da (0x25b84), 0
 	call_24 nz, Banner_Loop_Check
-	ldb_d8 a, (3375)
+	ld a, (3375:16)
 	cps a, 0
 	ret z
 	dec 1, a
 	stb_d8 (3375), a
 	cp a, 0xa
 	jr nz, Demo_SelectEntry_CheckCountdown
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	extz wa
 	calr Demo_ParseSlideHeader
 	jrl Demo_SelectEntry_PlaySong
 
 Demo_SelectEntry_CheckCountdown:
-	ldb_d8 a, (3375)
+	ld a, (3375:16)
 	cps a, 3
 	jrl z, Demo_SelectEntry_StartPlayback
 	cps a, 1
@@ -758,7 +758,7 @@ Demo_SelectEntry_CheckCPanel:
 	ret
 
 Demo_SelectEntry_Debounce:
-	ldb_d8 a, (3379)
+	ld a, (3379:16)
 	cps a, 0
 	ret z
 	dec 1, a
@@ -778,7 +778,7 @@ Demo_SelectEntry_Debounce:
 Demo_SelectEntry_AfterSongLoad:
 	cpdi8 (0x8d38), 228
 	call_24 nz, SeqInit_FinalEvent
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	extz wa
 	call Seq_DispatchEventType6
 	stdi8 (0x8f4e), 4
@@ -814,7 +814,7 @@ Demo_SelectEntry_UpdateDisplay:
 	ret
 
 Demo_SelectEntry_LoadPattern:
-	ldb_d8 a, (4440)
+	ld a, (4440:16)
 	extz wa
 	add wa, wa
 	lda xbc, (Presentation_TagStrTable_0xA4:24)
@@ -826,7 +826,7 @@ Demo_SelectEntry_DrawSecondary:
 	ret z
 	cpdi8 (0x8d38), 228
 	ret z
-	ldb_d8 a, (4440)
+	ld a, (4440:16)
 	extz wa
 	add wa, wa
 	lda xbc, (Presentation_TagStrTable_0xA5:24)
@@ -837,7 +837,7 @@ Demo_SelectEntry_DrawSecondary:
 Demo_SelectEntry_PlaySong:
 	cpdi8 (0x8d34), 19
 	ret nz
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	extz wa
 	calr Demo_GetPresetBaseForPartAlt
 	ld xwa, xhl
@@ -858,7 +858,7 @@ Demo_SelectEntry_PlaySong:
 	pop xde
 	call SeqTimer_UpdateTempoReg
 	stdi8 (0x8f4e), 6
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	extz wa
 	call Seq_DispatchEventType5
 	ret
@@ -876,7 +876,7 @@ Demo_SelectEntry_StartPlayback:
 
 Audio_WaitForReady:
 	ld xbc, 0xf000
-	ldb_d8 a, (1056)
+	ld a, (1056:16)
 
 Audio_WaitForReady_PollLoop:
 	bit 2, a
@@ -8391,7 +8391,7 @@ InitOp_SkipSetFlag:
 	ret
 
 CancelOperationCleanup:
-	ldb_d8 a, (0x28a7)
+	ld a, (0x28a7:16)
 	bit 2, a
 	jr z, CancelOp_ClearSeq
 	res 2, a
@@ -8408,7 +8408,7 @@ SignalProgressUpdate:
 
 SeqPhase_OperationStateCheck:
 	pushw iz
-	ldb_d8 a, (1068)
+	ld a, (1068:16)
 	bit 7, a
 	jrl z, SeqPhase_PopIzRet
 	res 7, a
@@ -8445,7 +8445,7 @@ SeqPhase_MediaIsValid:
 SeqPhase_CheckEncodedData:
 	cpdi16 0x8502, 0
 	jr z, SeqPhase_PopIzRet
-	ldb_d8 a, (1068)
+	ld a, (1068:16)
 	res 7, a
 	ldb_erp A, 0xf8
 	extz iz
@@ -8719,7 +8719,7 @@ FileIO_ErrorCodeByteBlock:
 	.byte 0xc0
 	sbc	w, w
 	.byte 0xf6
-	ldb_d8	c, (0x8d36)
+	ld	c, (0x8d36:16)
 	cp	c, 16
 	jr	c, 5
 	cp	c, 22
@@ -8841,7 +8841,7 @@ FileIO_ErrorCodeByteBlock:
 	jp	FDemo_LoadRegsAndPostEvent
 
 FileIO_MedleyDispatchByMode:
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cp a, 0x79
 	jr nz, MedleyDisp_ModeSmf
 	lds32 xwa, 0

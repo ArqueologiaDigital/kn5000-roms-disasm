@@ -489,7 +489,7 @@ SwbtWr_QueueMainEvent:
 	call	15673229
 	ld	iz, hl
 	jr	54
-	ldb_d8	a, (49480)
+	ld	a, (49480:16)
 	cps	a, 2
 	jr	z, 16
 	cps	a, 1
@@ -511,7 +511,7 @@ SwbtWr_TrailingBytecode:
 	.byte 0x1d, 0x8d, 0x27, 0xef, 0xbf, 0x02, 0x53, 0x78
 	.byte 0x8e, 0x00
 PreLswLoad:
-	ldb_d8	a, (49480)
+	ld	a, (49480:16)
 	ld	iz, (xsp+8)
 PostLswLoad:
 	.byte 0xc9, 0xd9, 0x66, 0x4c, 0xc9, 0xda, 0x66, 0x04
@@ -634,7 +634,7 @@ BitMapOut_MergeOutputFields:
 	cp IZ,0x0108
 	jrl nc, .Lc_fdb347
 	resda 4, (0x0429)
-	ldb_d8 a, (0x0429)
+	ld a, (0x0429:16)
 	and A,0x1f
 	jr z, .Lc_fdb329
 	bitda 0, (0x0429)
@@ -828,7 +828,7 @@ MidiSysEx_BuildAndSend:
 	call	16712763
 	pop	xiz
 	ret
-	ldb_d8 c, (0xc150)
+	ld c, (0xc150:16)
 	cp C,A
 	ret Z
 	.byte 0xf1, 0x50, 0xc1, 0x41, 0xc9, 0x8b, 0xd9, 0x12
@@ -2582,7 +2582,7 @@ AudioModeChange_Handler:
 	ld BC,WA
 	add BC,0x00e4
 	lda xde, (0xc163:16)
-	ldb_d8 a, (0xfc6a)
+	ld a, (0xfc6a:16)
 	and A,0xff
 	sub A,0x40
 	stb_dri a, 0x07, 0xe8, 0xe4

@@ -403,7 +403,7 @@ Voice_ComputePitch:
 	ld	a, (xbc+26)                             ; FA7F93  ld A,(XBC+0x1a)
 	cps	a, 0                                   ; FA7F96  cp A,0
 	jrl z, Voice_ComputePitch__FA8072                  ; FA7F98  jrl Z,0xfa8072
-	ldb_d8	c, (0x150A)                         ; FA7F9B  ld C,(0x150a)
+	ld	c, (0x150A:16)                         ; FA7F9B  ld C,(0x150a)
 	extz	bc                                    ; FA7F9F  extz BC
 	cp	bc, 64                                  ; FA7FA1  cp BC,0x0040
 	jr z, Voice_ComputePitch__FA8006                   ; FA7FA5  jr Z,0xfa8006

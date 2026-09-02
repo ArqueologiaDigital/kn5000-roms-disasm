@@ -3695,10 +3695,10 @@ PmBank_OnBankChanged:
 	lds32 xde, 0
 	jrl PmBank_SendEventAndDone
 PmBank_DrawRegionInfo:
-	ldb_d8	a, 36074
+	ld	a, (36074:16)
 	extz	wa
 	pushw	wa
-	ldb_d8	c, 36072
+	ld	c, (36072:16)
 	ld	a, c
 	extz	wa
 	div	a, 12

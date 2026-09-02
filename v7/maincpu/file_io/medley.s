@@ -341,7 +341,7 @@ IntMed_CheckPlaying:
 	cps	l, 1
 	jrl	nz, 193
 	stdi8	33890, 1
-	ldb_d8	a, 34816
+	ld	a, (34816:16)
 	cpda8	a, 34814
 	jr	nc, 76
 	lds	iz, 0
@@ -491,7 +491,7 @@ IntMed_AssignOrderLoop:
 	ld	a, (xbc)
 	cp	a, 254
 	jr	nz, 58
-	ldb_d8	a, (34814)
+	ld	a, (34814:16)
 	ld	(xbc), a
 	incdi8	1, (34814)
 	ld	wa, iz
@@ -575,7 +575,7 @@ IntMed_HandleSelectToggle:
 	ld C,(XDE)
 	cp C,0xfe
 	jr nz, .Lc_f91c70
-	ldb_d8 c, (0x87fe)
+	ld c, (0x87fe:16)
 	ld (XDE),C
 	incdi8 1, 0x87fe
 	ld C,(XDE)
@@ -612,7 +612,7 @@ IntMed_RemoveFromOrder:
 	call ApPostEvent
 	ldw (XSP+0x02), 0x0000
 	lds iz, 0
-	ldb_d8 a, (0x87fe)
+	ld a, (0x87fe:16)
 	extz WA
 	cps wa, 0
 	jrl ule, IntMed_Exit
@@ -634,7 +634,7 @@ IntMed_ReorderLoop:
 	.byte 0x99, 0xfa
 IntMed_NextReorder:
 	inc	1, iz
-	ldb_d8	a, (34814)
+	ld	a, (34814:16)
 	extz	wa
 	cp	(xsp+2), wa
 	jr	c, -88
@@ -801,7 +801,7 @@ DiskMed_PlayNextHelper:
 	jrl nz, DiskMed_ReturnZero
 	cpdi8 (0x8462), 0x00
 	jrl z, DiskMed_ReturnZero
-	ldb_d8 a, (0x8800)
+	ld a, (0x8800:16)
 	cpda8 a, (0x87fe)
 	jr nc, DiskMed_ReturnFinished
 	lds iz, 0
@@ -1026,7 +1026,7 @@ DiskSel_CheckFinished:
 	ld	xbc, 29360138
 	lds32	xde, 0
 	call	ApPostEvent
-	ldb_d8	a, (34976)
+	ld	a, (34976:16)
 	cpda8	xbc, (34974)
 	jrl	nc, 324	; -> 0xF92288
 	lds	iz, 0
@@ -1621,11 +1621,11 @@ DiskSel_Exit:
 
 GetPlayState1_Entry:
 GetPlayState1:
-	ldb_d8	l, (34982)
+	ld	l, (34982:16)
 	ret
 GetPlayState2_Entry:
 GetPlayState2:
-	ldb_d8	l, (34984)
+	ld	l, (34984:16)
 	ret
 SmfMedley_RawData:
 	cps a, 0
@@ -1821,7 +1821,7 @@ FmmSmfMedleyFunc:
 	jrl	nz, 1127
 	lds	wa, 0
 	calr	33769
-	ldb_d8	a, (35995)
+	ld	a, (35995:16)
 	stb_d8	(33694), a
 	cp	a, 111
 	jr	z, 5
@@ -1882,7 +1882,7 @@ SmfMed_ShowPlayError:
 	incdi8	1, (33696)
 SmfMed_SetPlaying:
 	stdi8	(33890), 1
-	ldb_d8	a, (34950)
+	ld	a, (34950:16)
 	cpda8	xbc, (34948)
 	jr	nc, 91	; -> 0xF92B0B
 	lds	iz, 0
@@ -1975,7 +1975,7 @@ SmfMed_ClearPlaying:
 	jrl	725
 SmfMed_InitFromDisk:
 	lds32 xde, 0
-	ldb_d8 e, (0x88a8)
+	ld e, (0x88a8:16)
 	ld XWA,0x006c0018
 	ld XBC,0x01e0003b
 	call ApPostEvent
@@ -2028,7 +2028,7 @@ SmfMed_FinishInit:
 	jrl	556
 SmfMed_HandleStop_Entry:
 SmfMed_HandleStop:
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	cp	a, 111
 	jrl	z, 546
 	cp	a, 114
@@ -2115,7 +2115,7 @@ SmfMed_RemoveFromOrder:
 	cp	c, 253
 	jr	ugt, 54
 	ld	(xwa), 255
-	ldb_d8	a, (34948)
+	ld	a, (34948:16)
 	dec	1, a
 	stb_d8	(34948), a
 	lds	iy, 0
@@ -2223,7 +2223,7 @@ SmfMed_CheckContinue:
 	ld XBC,0x01e0009a
 	lds32 xde, 0
 	call ApPostEvent
-	ldb_d8 a, (0x839e)
+	ld a, (0x839e:16)
 	extz WA
 SmfMed_CallPauseMode:
 	call UI_PostModeChangeEvent
@@ -2572,7 +2572,7 @@ FmmPdMedleyFunc:
 	jrl	nz, 940
 	lds	wa, 0
 	call	16297463
-	ldb_d8	a, (35995)
+	ld	a, (35995:16)
 	cp	a, 113
 	jr	nz, 25
 	stdi8	(33890), 0
@@ -2589,7 +2589,7 @@ PdMed_CheckPlayMode:
 	cps	l, 1
 	jrl	nz, 205	; -> 0xF93315
 	stdi8	(33890), 1
-	ldb_d8	c, (34950)
+	ld	c, (34950:16)
 	lda	xwa, (34820:16)
 	cpda8	xhl, (34948)
 	jr	nc, 80	; -> 0xF932AB
@@ -2701,7 +2701,7 @@ PdMed_FinishInit:
 	stda32	(33788), xwa
 	jrl	509
 PdMed_HandleStop:
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	cp	a, 113
 	jrl	z, 499
 	cp	a, 117
@@ -2792,7 +2792,7 @@ PdMed_RemoveFromOrder:
 	cp	c, 253
 	jr	ugt, 54
 	ld	(xhl), 255
-	ldb_d8	a, (34948)
+	ld	a, (34948:16)
 	dec	1, a
 	stb_d8	(34948), a
 	lds	iz, 0
@@ -3288,7 +3288,7 @@ FmmDocMedleyFunc:
 	jrl	nz, 966
 	lds	wa, 0
 	call	16297463
-	ldb_d8	a, (35995)
+	ld	a, (35995:16)
 	cp	a, 112
 	jr	nz, 25
 	stdi8	(33890), 0
@@ -3305,7 +3305,7 @@ DocMed_CheckPlayMode:
 	cps	l, 1
 	jrl	nz, 205	; -> 0xF93AC0
 	stdi8	(33890), 1
-	ldb_d8	c, (34950)
+	ld	c, (34950:16)
 	lda	xwa, (34820:16)
 	cpda8	xhl, (34948)
 	jr	nc, 80	; -> 0xF93A56
@@ -3429,7 +3429,7 @@ DocMed_FinishInit:
 	stda32	(33884), xwa
 	jrl	521
 DocMed_HandleStop:
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	cp	a, 112
 	jrl	z, 511
 	cp	a, 116
@@ -3520,7 +3520,7 @@ DocMed_RemoveFromOrder:
 	cp	c, 253
 	jr	ugt, 54
 	ld	(xhl), 255
-	ldb_d8	a, (34948)
+	ld	a, (34948:16)
 	dec	1, a
 	stb_d8	(34948), a
 	lds	iz, 0

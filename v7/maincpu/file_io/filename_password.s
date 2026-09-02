@@ -194,7 +194,7 @@ SelectMode_StoreMode:
 	ld (xbc), a
 
 SelectMode_Return:
-	ldb_d8	l, (35184)
+	ld	l, (35184:16)
 	extz	hl
 	pop	xiz
 	ret
@@ -388,7 +388,7 @@ FileName_OpLoad:
 	cps	hl, 0
 	jr	z, 19
 	lds32	xde, 0
-	ldb_d8	e, (35184)
+	ld	e, (35184:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29687812
 	jrl	338

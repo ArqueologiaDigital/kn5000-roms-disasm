@@ -184,20 +184,20 @@ VoiceChannel_SelectChannelBank:
 	pop xiy
 	cpdi8 (4323), 0
 	jr nz, VoiceChannel_NullRet
-	ldb_d8 a, (4233)
+	ld a, (4233:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 (4323), 0
 	jr nz, VoiceChannel_NullRet
-	ldb_d8 a, (4234)
+	ld a, (4234:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 (4323), 0
 	jr nz, VoiceChannel_NullRet
-	ldb_d8 a, (4235)
+	ld a, (4235:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
@@ -236,26 +236,26 @@ SoundGen_ClampUpdateVoice:
 	pop xiy
 	cpdi8 (4323), 0
 	jr nz, VoiceChannel_NullRet2
-	ldb_d8 a, (4011)
+	ld a, (4011:16)
 	and a, 0xf
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 (4323), 0
 	jr nz, VoiceChannel_NullRet2
-	ldb_d8 a, (4233)
+	ld a, (4233:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 (4323), 0
 	jr nz, VoiceChannel_NullRet2
-	ldb_d8 a, (4234)
+	ld a, (4234:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
 	cpdi8 (4323), 0
 	jr nz, VoiceChannel_NullRet2
-	ldb_d8 a, (4235)
+	ld a, (4235:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -270,7 +270,7 @@ VoiceChannel_NullRet2:
 
 VoiceChannel_SetParamByte7:
 	call VoiceChannel_GetParamBlock
-	ldb_d8 a, (4013)
+	ld a, (4013:16)
 	ld w, (xiy + 7)
 	and w, 0x80
 	or w, a
@@ -279,7 +279,7 @@ VoiceChannel_SetParamByte7:
 
 VoiceChannel_MergeParamByte5:
 	call VoiceChannel_GetParamBlock
-	ldb_d8 a, (4013)
+	ld a, (4013:16)
 	ld w, (xiy + 5)
 	and w, 0x80
 	or w, a
@@ -319,7 +319,7 @@ SoundGen_LookupReturn:
 
 VoiceChannel_GetParamBlock:
 	xor h, h
-	ldb_d8 l, (4011)
+	ld l, (4011:16)
 	and l, 0xf
 	sla hl, 2
 	cpdi8 (4600), 1
@@ -444,7 +444,7 @@ VoiceChannel_ParamTable1:
 	nop
 	nop
 	call	VoiceChannel_GetParamBlock
-	ldb_d8	a, (4013)
+	ld	a, (4013:16)
 	ld	(xiy+3), a
 	ret
 
@@ -496,7 +496,7 @@ SoundGen_UpdateAndWriteChannel:
 	jrl nz, SoundGen_PopIyRet
 	ld l, c
 	xor h, h
-	ldb_d8 l, (4011)
+	ld l, (4011:16)
 	and l, 0xf
 	xor h, h
 	cpdi16 3932, 0
@@ -534,7 +534,7 @@ SoundGen_ApplyChannelParam:
 	pop xiy
 	cpdi8 (4323), 0
 	jrl nz, SoundGen_PopIyRet
-	ldb_d8 a, (4234)
+	ld a, (4234:16)
 	and a, 0x7f
 	push xiy
 	call SoundGen_UpdateAndRefresh
@@ -620,7 +620,7 @@ SoundGen_InitVoiceLoop:
 	push xiy
 	call SoundGen_CaptureVoiceParams
 	pop xiy
-	ldb_d8 a, (6749)
+	ld a, (6749:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -628,7 +628,7 @@ SoundGen_InitVoiceLoop:
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
-	ldb_d8 a, (6750)
+	ld a, (6750:16)
 	push xiy
 	call SoundGen_UpdateAndRefresh
 	pop xiy
@@ -668,7 +668,7 @@ SndParam_LookupChannelVoice:
 	push xhl
 	cpdi8 (4600), 2
 	jr nz, SndParam_LookupDefault
-	ldb_d8 a, (4011)
+	ld a, (4011:16)
 	and a, 0xf
 	cp a, 0x9
 	jr nz, SndParam_LookupDefault
@@ -686,7 +686,7 @@ SndParam_LookupChannelVoice:
 	ldw_sri BC, 0x07, 0xf0, 0xec
 	ld e, b
 	xor hl, hl
-	ldb_d8 l, (4012)
+	ld l, (4012:16)
 	pushw hl
 	call SndParam_LookupByChannel
 	ld a, l
@@ -706,7 +706,7 @@ SndParam_LookupReturn:
 VoiceChannel_StoreVoiceIdx:
 	push xde
 	xor de, de
-	ldb_d8 e, (4011)
+	ld e, (4011:16)
 	and e, 0xf
 	stda16 (6751), xde
 	pop xde
@@ -718,9 +718,9 @@ VoiceChannel_StoreVoiceIdx:
 	ld bc, (6751:16)
 	mul c, 0x2
 	add xhl, xbc
-	ldb_d8 a, (6746)
+	ld a, (6746:16)
 	ld (xhl), a
-	ldb_d8 a, (6747)
+	ld a, (6747:16)
 	ld (xhl + 1), a
 
 VoiceChannel_StoreVoiceReturn:
@@ -836,10 +836,10 @@ SMF_LoadSoundBankAndPlay:
 	push xix
 	push xde
 	call SetWall_LoadBankToToneGen
-	ldb_d8 a, (4599)
+	ld a, (4599:16)
 	cpda8_24 a, (0xffe3)
 	jr z, SMF_LoadBank_ClearAndPrepare
-	ldb_d8 a, (4599)
+	ld a, (4599:16)
 	stb_da (0x00ffe3), a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
@@ -1046,17 +1046,17 @@ SMF_WaitForReady:
 	ldw wa, 0x58ff
 	stw_dpi WA, 0xf1
 	ldb a, 0x4
-	ldb_d8 w, (1075)
+	ld w, (1075:16)
 	stw_dpi WA, 0xf1
 	ldw wa, 0x1802
 	stw_dpi WA, 0xf1
 	ldb a, 0x8
 	lda_dpi XBC, 0xf0
 	stda32 4376, xix
-	ldb_d8 l, (0xfc62)
+	ld l, (0xfc62:16)
 	xor h, h
 	pushw bc
-	ldb_d8 b, (0xfc63)
+	ld b, (0xfc63:16)
 	and b, 0x1
 	xor c, c
 	or hl, bc
@@ -1125,7 +1125,7 @@ SMF_WriteChannel_Continue:
 SMF_ScanAndProcessChannel:
 	ld xiy, 0xf460
 	xor hl, hl
-	ldb_d8 l, (0x2877)
+	ld l, (0x2877:16)
 	ld c, l
 	ld de, (4325:16)
 	ld a, c
@@ -1168,7 +1168,7 @@ SMF_WriteChannelNoteData:
 	ld a, (xiy + 7)
 	stb_d8 (4332), a
 	anddi8 (0x2877), 15
-	ldb_d8 l, (0x2877)
+	ld l, (0x2877:16)
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1177,7 +1177,7 @@ SMF_WriteChannelNoteData:
 	cpdi8 (4324), 255
 	jrl nz, SMF_WriteNote_AltPath
 	call SMF_ResolveGlobalChannel
-	ldb_d8 a, (6881)
+	ld a, (6881:16)
 	or a, 0xc0
 	ld l, c
 	stb_d8 (6746), l
@@ -1190,10 +1190,10 @@ SMF_WriteChannelNoteData:
 	call SndParam_InitBufferConverge
 	popw de
 	popw bc
-	ldb_d8 a, (6881)
+	ld a, (6881:16)
 	or a, 0xb0
 	xor w, w
-	ldb_d8 l, (6744)
+	ld l, (6744:16)
 	pushw wa
 	pushw bc
 	pushw de
@@ -1218,7 +1218,7 @@ SMF_WriteNote_FileUnderflow1:
 
 SMF_WriteNote_BankSelect:
 	ldb w, 0x20
-	ldb_d8 l, (6743)
+	ld l, (6743:16)
 	pushw bc
 	pushw de
 	call SMF_WriteByteLoop
@@ -1240,9 +1240,9 @@ SMF_WriteNote_FileUnderflow2:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteNote_ProgramChange:
-	ldb_d8 a, (6881)
+	ld a, (6881:16)
 	or a, 0xc0
-	ldb_d8 w, (6745)
+	ld w, (6745:16)
 	and w, 0x7f
 	pushw bc
 	pushw de
@@ -1266,7 +1266,7 @@ SMF_WriteNote_FileUnderflow3:
 
 SMF_WriteNote_AltPath:
 	call SMF_ResolveGlobalChannel
-	ldb_d8 a, (6881)
+	ld a, (6881:16)
 	or a, 0xb0
 	ldb w, 0x0
 	ld l, c
@@ -1293,7 +1293,7 @@ SMF_WriteNote_FileUnderflow4:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteNote_BankSelectLSB:
-	ldb_d8 a, (6881)
+	ld a, (6881:16)
 	or a, 0xb0
 	ldb w, 0x20
 	ld l, d
@@ -1320,7 +1320,7 @@ SMF_WriteNote_FileUnderflow5:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteNote_ProgramNumber:
-	ldb_d8 a, (6881)
+	ld a, (6881:16)
 	or a, 0xc0
 	ld w, c
 	and w, 0x7f
@@ -1345,7 +1345,7 @@ SMF_WriteNote_FileUnderflow6:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteChannelVolume:
-	ldb_d8 a, (6881)
+	ld a, (6881:16)
 	or a, 0xb0
 	ldb w, 0x7
 	ld l, b
@@ -1371,7 +1371,7 @@ SMF_WriteVol_FileUnderflow1:
 
 SMF_WriteVol_Chorus:
 	ldb w, 0x5d
-	ldb_d8 l, (4359)
+	ld l, (4359:16)
 	pushw wa
 	pushw de
 	call SMF_WriteByteLoop
@@ -1420,7 +1420,7 @@ SMF_WriteVol_FileUnderflow3:
 
 SMF_WriteVol_Reverb:
 	ldb w, 0x5b
-	ldb_d8 l, (4332)
+	ld l, (4332:16)
 	and l, 0x7f
 	pushw wa
 	call SMF_WriteByteLoop
@@ -1441,7 +1441,7 @@ SMF_WriteVol_FileUnderflow4:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteVol_PanAndPitch:
-	ldb_d8 l, (0x2877)
+	ld l, (0x2877:16)
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1458,7 +1458,7 @@ SMF_WriteVol_PanAndPitch:
 	pop xix
 	cp hl, 0xffff
 	jrl z, SMF_AdvanceChannelScan
-	ldb_d8 a, (6881)
+	ld a, (6881:16)
 	or a, 0xb0
 	ld c, l
 	ld xiy, 0xf460
@@ -1530,7 +1530,7 @@ SMF_WriteRPN_FileUnderflow3:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_FineTune:
-	ldb_d8 l, (0x2877)
+	ld l, (0x2877:16)
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1632,7 +1632,7 @@ SMF_WriteRPN_FileUnderflow7:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_CoarseTune:
-	ldb_d8 l, (0x2877)
+	ld l, (0x2877:16)
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1729,7 +1729,7 @@ SMF_WriteRPN_FileUnderflow11:
 	jp SMF_FlushAndFinalize
 
 SMF_WriteRPN_Transpose:
-	ldb_d8 l, (0x2877)
+	ld l, (0x2877:16)
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
@@ -1841,7 +1841,7 @@ SMF_EventLoop_ReadDataBytes:
 	inc 1, hl
 	bit 7, a
 	jr z, SMF_EventLoop_ReadDataBytes
-	ldb_d8 a, (4211)
+	ld a, (4211:16)
 	cp a, 0x82
 	jrl z, SMF_IncrementPosition
 	cp a, 0x84
@@ -1896,7 +1896,7 @@ SMF_PolyAftertouch_Dispatch:
 	jr z, SMF_PolyAftertouch_3Byte_CalcTime
 	cps hl, 4
 	jrl nz, SMF_ProcessEventLoop
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
 	push xwa
@@ -1923,7 +1923,7 @@ SMF_PolyAftertouch_4Byte_WriteOutput:
 	or l, h
 	xor h, h
 	pushw wa
-	ldb_d8 w, (4214)
+	ld w, (4214:16)
 	and w, 0x2
 	srl w, 1
 	xor a, a
@@ -1934,7 +1934,7 @@ SMF_PolyAftertouch_4Byte_WriteOutput:
 	jrl SMF_ProcessEventLoop
 
 SMF_PolyAftertouch_3Byte_CalcTime:
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -1957,7 +1957,7 @@ SMF_PolyAftertouch_3Byte_Underflow:
 SMF_PolyAftertouch_3Byte_SendStatus:
 	and a, 0xf
 	or a, 0xd0
-	ldb_d8 w, (4213)
+	ld w, (4213:16)
 	xor l, l
 	call SMF_WriteByteLoop
 	push xwa
@@ -1981,7 +1981,7 @@ SMF_PolyAftertouch_3Byte_Done:
 SMF_ChannelPressure_Handler:
 	cps hl, 3
 	jrl nz, SMF_ProcessEventLoop
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -2005,7 +2005,7 @@ SMF_ChannelPressure_WriteCC:
 	and a, 0xf
 	or a, 0xb0
 	ldb w, 0x1
-	ldb_d8 l, (4213)
+	ld l, (4213:16)
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2028,7 +2028,7 @@ SMF_ChannelPressure_Done:
 SMF_PitchBend_Handler:
 	cps hl, 4
 	jrl nz, SMF_ProcessEventLoop
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -2049,8 +2049,8 @@ SMF_PitchBend_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_PitchBend_WriteCC_MSB:
-	ldb_d8 w, (4213)
-	ldb_d8 l, (4214)
+	ld w, (4213:16)
+	ld l, (4214:16)
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2081,7 +2081,7 @@ SMF_SystemExclusive_Handler:
 	cpib_sri 0x07, 0xf0, 0xec, 0x0f
 	pop xix
 	jrl z, SMF_ProcessEventLoop
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -2105,7 +2105,7 @@ SMF_SystemExclusive_WriteCC_MSB:
 	and a, 0xf
 	or a, 0xb0
 	ldb w, 0xb
-	ldb_d8 l, (4213)
+	ld l, (4213:16)
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2146,7 +2146,7 @@ SMF_NoteOn_FindVoiceSlot:
 	push xde
 	push xhl
 	push xiz
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
 	pop xiz
@@ -2161,7 +2161,7 @@ SMF_NoteOn_FindVoiceSlot:
 SMF_NoteOn_SlotFound:
 	ordi8 4236, 1
 	pushw hl
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
 	popw hl
@@ -2182,9 +2182,9 @@ SMF_NoteOn_SlotFound_Underflow:
 
 SMF_NoteOn_WriteEventBytes:
 	pushw hl
-	ldb_d8 a, (4211)
-	ldb_d8 w, (4213)
-	ldb_d8 l, (4214)
+	ld a, (4211:16)
+	ld w, (4213:16)
+	ld l, (4214:16)
 	call SMF_WriteByteLoop
 	popw hl
 	push xwa
@@ -2207,15 +2207,15 @@ SMF_NoteOn_StoreVoiceData:
 	lda_dri XIX, 0x07, 0xf0, 0xec
 	ldb a, 0x80
 	lda_dpi XBC, 0xf0
-	ldb_d8 a, (4211)
+	ld a, (4211:16)
 	lda_dpi XBC, 0xf0
-	ldb_d8 a, (4213)
+	ld a, (4213:16)
 	lda_dpi XBC, 0xf0
-	ldb_d8 a, (4216)
+	ld a, (4216:16)
 	ldb w, 0x60
 	muls8rr a, w
 	xor hl, hl
-	ldb_d8 l, (4215)
+	ld l, (4215:16)
 	add wa, hl
 	stw_dpi WA, 0xf1
 	jrl SMF_ProcessEventLoop
@@ -2225,7 +2225,7 @@ SMF_ProgramChange_Handler:
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 (4213), 127
 	jrl z, SMF_ProcessEventLoop
-	ldb_d8 a, (4214)
+	ld a, (4214:16)
 	cps a, 0
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 (6709), 0
@@ -2234,7 +2234,7 @@ SMF_ProgramChange_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_ProgramChange_CalcTime:
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	call SMF_CalcTimeDelta
 	call SMF_ProcessChannels
@@ -2257,23 +2257,23 @@ SMF_ProgramChange_Underflow:
 SMF_ProgramChange_ProcessPatch:
 	cpdi8 (4324), 0
 	jrl z, SMF_ProgramChange_DirectWrite
-	ldb_d8 l, (4211)
+	ld l, (4211:16)
 	ld h, l
 	and l, 0x1
 	rrc l
-	ldb_d8 a, (4215)
+	ld a, (4215:16)
 	or l, a
 	stb_d8 (6746), l
-	ldb_d8 l, (4211)
+	ld l, (4211:16)
 	and l, 0x2
 	rrc_i_8 l, 2
-	ldb_d8 a, (4216)
+	ld a, (4216:16)
 	and a, 0x7f
 	or a, l
 	stb_d8 (6747), a
 	push xix
 	xor hl, hl
-	ldb_d8 l, (4213)
+	ld l, (4213:16)
 	ld xix, 0xf1a0
 	ldb_sri L, 0x07, 0xf0, 0xec
 	ld xix, SMF_HeaderConstants_0x52
@@ -2283,10 +2283,10 @@ SMF_ProgramChange_ProcessPatch:
 	ld xwa, 0x1a57
 	call SndParam_InitBufferConverge
 	ldb a, 0xb0
-	ldb_d8 w, (4213)
+	ld w, (4213:16)
 	or a, w
 	xor w, w
-	ldb_d8 l, (6744)
+	ld l, (6744:16)
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2309,7 +2309,7 @@ SMF_ProgramChange_WriteBankMSB_Data:
 	stdi16 (4206), 0
 	stdi8 (4208), 0
 	ldb w, 0x20
-	ldb_d8 l, (6743)
+	ld l, (6743:16)
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2328,10 +2328,10 @@ SMF_ProgramChange_WriteBankLSB_Underflow:
 
 SMF_ProgramChange_WriteBankLSB_Data:
 	ldb a, 0xc0
-	ldb_d8 w, (4213)
+	ld w, (4213:16)
 	and w, 0xf
 	or a, w
-	ldb_d8 w, (6745)
+	ld w, (6745:16)
 	xor l, l
 	call SMF_WriteByteLoop
 	push xwa
@@ -2354,7 +2354,7 @@ SMF_ProgramChange_WriteVolume_Data:
 
 SMF_ProgramChange_DirectWrite:
 	ldb w, 0x0
-	ldb_d8 l, (4211)
+	ld l, (4211:16)
 	and l, 0x1
 	call SMF_SendChannelConfig
 	push xwa
@@ -2376,15 +2376,15 @@ SMF_ProgramChange_SendConfig_Data:
 	stdi16 (4206), 0
 	stdi8 (4208), 0
 	ldb w, 0x20
-	ldb_d8 h, (4211)
+	ld h, (4211:16)
 	and h, 0xc
-	ldb_d8 l, (4214)
+	ld l, (4214:16)
 	srl l, 5
 	and l, 0x3
 	or l, h
 	sla l, 4
 	and l, 0x7f
-	ldb_d8 l, (4216)
+	ld l, (4216:16)
 	and l, 0x7
 	sla l, 4
 	call SMF_SendChannelConfig
@@ -2405,10 +2405,10 @@ SMF_ProgramChange_WritePatch_Underflow:
 
 SMF_ProgramChange_WritePatchByte:
 	ldb a, 0xc0
-	ldb_d8 w, (4213)
+	ld w, (4213:16)
 	and w, 0xf
 	or a, w
-	ldb_d8 w, (4215)
+	ld w, (4215:16)
 	xor l, l
 	call SMF_WriteByteLoop
 	push xwa
@@ -2434,10 +2434,10 @@ SMF_ControlChange_Handler:
 	jrl nz, SMF_ProcessEventLoop
 	cpdi8 (4213), 127
 	jrl z, SMF_ProcessEventLoop_Entry
-	ldb_d8 l, (4214)
-	ldb_d8 a, (4213)
+	ld l, (4214:16)
+	ld a, (4213:16)
 	jrl SMF_ControlChange_ValidateRange
-	ldb_d8 l, (4214)
+	ld l, (4214:16)
 	cp l, 0x7f
 	jrl z, SMF_ProcessEventLoop_Entry
 	and l, 0x1f
@@ -2458,7 +2458,7 @@ SMF_ControlChange_ValidateRange:
 	cp l, 0xb
 	jrl ugt, SMF_ProcessEventLoop
 	ldb a, 0xb0
-	ldb_d8 w, (4213)
+	ld w, (4213:16)
 	and w, 0xf
 	or a, w
 	ldb w, 0x7
@@ -2487,7 +2487,7 @@ SMF_CC_RPN_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_RPN_CalcTime:
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	push xhl
 	call SMF_CalcTimeDelta
@@ -2511,7 +2511,7 @@ SMF_CC_RPN_Underflow:
 
 SMF_CC_RPN_WriteCC101:
 	ldb a, 0xb0
-	ldb_d8 w, (4213)
+	ld w, (4213:16)
 	and w, 0xf
 	or a, w
 	ldb w, 0x65
@@ -2558,8 +2558,8 @@ SMF_CC_RPN_WriteCC100_Underflow:
 
 SMF_CC_RPN_WriteCC6_DataEntry:
 	ldb w, 0x6
-	ldb_d8 l, (4215)
-	ldb_d8 h, (4211)
+	ld l, (4215:16)
+	ld h, (4211:16)
 	and h, 0x1
 	rrc_i_8 h, 2
 	srl l, 1
@@ -2584,7 +2584,7 @@ SMF_CC_RPN_WriteCC6_Underflow:
 
 SMF_CC_RPN_WriteCC38_DataEntryLSB:
 	ldb w, 0x26
-	ldb_d8 l, (4215)
+	ld l, (4215:16)
 	and l, 0x1
 	rrc_i_8 l, 2
 	pushw wa
@@ -2615,7 +2615,7 @@ SMF_CC_PitchBendSens_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_PitchBendSens_CalcTime:
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	pushw hl
 	call SMF_CalcTimeDelta
@@ -2639,7 +2639,7 @@ SMF_CC_PitchBendSens_Underflow:
 
 SMF_CC_PitchBendSens_WriteCC101:
 	ldb a, 0xb0
-	ldb_d8 w, (4213)
+	ld w, (4213:16)
 	and w, 0xf
 	or a, w
 	ldb w, 0x65
@@ -2686,7 +2686,7 @@ SMF_CC_PitchBendSens_WriteCC100_Underflow:
 
 SMF_CC_PitchBendSens_WriteCC6:
 	ldb w, 0x6
-	ldb_d8 l, (4215)
+	ld l, (4215:16)
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2734,7 +2734,7 @@ SMF_CC_Modulation_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Modulation_CalcTime:
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	push xhl
 	call SMF_CalcTimeDelta
@@ -2758,7 +2758,7 @@ SMF_CC_Modulation_Underflow:
 
 SMF_CC_Modulation_WriteCC101:
 	ldb a, 0xb0
-	ldb_d8 w, (4213)
+	ld w, (4213:16)
 	and w, 0xf
 	or a, w
 	ldb w, 0x65
@@ -2805,7 +2805,7 @@ SMF_CC_Modulation_WriteCC100_Underflow:
 
 SMF_CC_Modulation_WriteCC6:
 	ldb w, 0x6
-	ldb_d8 l, (4215)
+	ld l, (4215:16)
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -2853,7 +2853,7 @@ SMF_CC_Pan_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Pan_CalcTime:
-	ldb_d8 c, (4212)
+	ld c, (4212:16)
 	pushw wa
 	push xhl
 	call SMF_CalcTimeDelta
@@ -2877,11 +2877,11 @@ SMF_CC_Pan_Underflow:
 
 SMF_CC_Pan_WriteCC10:
 	ldb a, 0xb0
-	ldb_d8 w, (4213)
+	ld w, (4213:16)
 	and w, 0xf
 	or a, w
 	ldb w, 0xa
-	ldb_d8 l, (4215)
+	ld l, (4215:16)
 	call SMF_WriteByteLoop
 	push xwa
 	push xbc
@@ -2915,7 +2915,7 @@ SMF_CC_Reverb_Handler:
 
 SMF_CC_Reverb_SetupCC93:
 	ldb w, 0x5d
-	ldb_d8 l, (4215)
+	ld l, (4215:16)
 	jr SMF_ProcessTimedEvent_Continue
 
 SMF_CC_Sustain_CheckBits:
@@ -2944,7 +2944,7 @@ SMF_CC_Chorus_Handler:
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Chorus_SetupCC91:
-	ldb_d8 l, (4215)
+	ld l, (4215:16)
 	and l, 0x7f
 	jr SMF_ProcessTimedEvent_Continue
 
@@ -7293,7 +7293,7 @@ SeqByteBlock_ChannelContainer:
 	ld	xwa, (xsp+10)
 	.byte 0xa8
 	ex_ff
-	ldb_d8	w, (2735)
+	ld	w, (2735:16)
 	ld	xwa, (xwa+30)
 	ld	de, (xwa+38)
 	sub	de, bc
@@ -11043,7 +11043,7 @@ Seq_DispatcherTick_Process:
 	call Rhythm_CompareAndTrigger
 	anddi8 (0x32f4), 159
 	call AccTick_Main
-	ldb_d8 a, (0x32f4)
+	ld a, (0x32f4:16)
 	and a, 0x60
 	call Rhythm_SaveState
 	call Seq_RhythmProcessor
@@ -11056,9 +11056,9 @@ Seq_DispatcherTickReturn:
 	ret
 
 SeqTick_ReadControlState:
-	ldb_d8 a, (0xfc5a)
+	ld a, (0xfc5a:16)
 	stb_d8 (0x32f5), a
-	ldb_d8 a, (0xfc5b)
+	ld a, (0xfc5b:16)
 	and a, 0x7f
 	and a, 0x7
 	stb_d8 (0x32f7), a
@@ -11067,11 +11067,11 @@ SeqTick_ReadControlState:
 	nop
 	nop
 	nop
-	ldb_d8 a, (0xfc5d)
+	ld a, (0xfc5d:16)
 	or a, 0xe0
 	srl a, 5
 	stb_d8 (0x32f9), a
-	ldb_d8 w, (0xfc5f)
+	ld w, (0xfc5f:16)
 	xor a, a
 	bit 6, w
 	jr z, SeqCtl_CheckBit6
@@ -11107,22 +11107,22 @@ SeqCtl_CheckBit2:
 	or a, 0x2
 
 SeqCtl_CheckBit3:
-	ldb_d8 w, (0xfc60)
+	ld w, (0xfc60:16)
 	bit 2, w
 	jr z, SeqCtl_StorePedalFlags
 	or a, 0x4
 
 SeqCtl_StorePedalFlags:
 	stb_d8 (0x32ff), a
-	ldb_d8 a, (0xfd99)
+	ld a, (0xfd99:16)
 	and a, 0x1
 	stb_d8 (0x3301), a
-	ldb_d8 a, (0xfc5e)
+	ld a, (0xfc5e:16)
 	and a, 0x10
 	srl a, 4
 	ldb a, 0x0
 	stb_d8 (0x3303), a
-	ldb_d8 a, (0xfc61)
+	ld a, (0xfc61:16)
 	and a, 0x30
 	srl a, 4
 	stb_d8 (0x3305), a
@@ -11136,8 +11136,8 @@ SeqCtl_StoreKeyMask:
 	ret
 
 VoiceParam_ClampAndStore:
-	ldb_d8 l, (0x32f5)
-	ldb_d8 h, (0x32f7)
+	ld l, (0x32f5:16)
+	ld h, (0x32f7:16)
 	calr VoiceParam_ClampAndValidate
 	stb_d8 (0x32f5), l
 	and h, 0x7f
@@ -11201,7 +11201,7 @@ Seq_ReadTempoLookup:
 	ret
 
 Seq_ProcessAllInputState:
-	ldb_d8 a, (0x3283)
+	ld a, (0x3283:16)
 	and a, 0xfe
 	bitda 2, (1054)
 	jr z, Seq_InputState_StoreFlag
@@ -11218,12 +11218,12 @@ Seq_InputState_StoreFlag:
 	calr AudioMode_CopyAccentFlags
 	calr AccPedal_SetFlag13155
 	xor xhl, xhl
-	ldb_d8 l, (0x3280)
+	ld l, (0x3280:16)
 	sla l, 1
 	add xhl, Display_FontPalette_Table_0x1D46
 	ld bc, (xhl)
 	xor hl, hl
-	ldb_d8 l, (0x327f)
+	ld l, (0x327f:16)
 	add bc, hl
 	stda16 (0x327d), xbc
 	stdi8 (0x32e9), 24
@@ -11284,29 +11284,29 @@ AccKey_ScanDone:
 	ret
 
 AccChord_ReadAndStoreKeys:
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	stb_d8 (0x32d9), a
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	stb_d8 (0x32d8), a
-	ldb_d8 a, (0xcee1)
+	ld a, (0xcee1:16)
 	stb_d8 (0x32da), a
-	ldb_d8 a, (0xcede)
+	ld a, (0xcede:16)
 	stb_d8 (0x32d7), a
 	cpdi8 (8968), 0
 	jr z, AccChord_CheckKeyOverride
-	ldb_d8 a, (8962)
+	ld a, (8962:16)
 	stb_d8 (0x32d9), a
-	ldb_d8 a, (8960)
+	ld a, (8960:16)
 	stb_d8 (0x32d8), a
-	ldb_d8 a, (8964)
+	ld a, (8964:16)
 	stb_d8 (0x32da), a
-	ldb_d8 a, (8966)
+	ld a, (8966:16)
 	stb_d8 (0x32d7), a
 
 AccChord_CheckKeyOverride:
 	bitda 1, (0x32d7)
 	jr nz, AccChord_CheckUIState
-	ldb_d8 a, (0x32d9)
+	ld a, (0x32d9:16)
 	stb_d8 (0x32da), a
 
 AccChord_CheckUIState:
@@ -11318,7 +11318,7 @@ AccChord_CheckUIState:
 	jr nz, AccChord_SetDefaultKeys
 
 AccChord_CheckKeyFlags:
-	ldb_d8 a, (1054)
+	ld a, (1054:16)
 	and a, 0x18
 	jr nz, AccChord_CheckUIStateExit
 
@@ -11332,7 +11332,7 @@ AccChord_SetDefaultKeys:
 	stdi8 (0x8d42), 5
 
 AccChord_ReadChannelKeys:
-	ldb_d8 a, (0x34e9)
+	ld a, (0x34e9:16)
 	and a, 0xf
 	inc 1, a
 	stb_d8 (0x32d9), a
@@ -11344,33 +11344,33 @@ AccChord_CheckUIStateExit:
 	jr z, AccChord_CheckModeAndUpdate
 	cpdi8 (0x32f1), 14
 	jr nz, AccChord_CheckModeAndUpdate
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	stb_d8 (0x8d42), a
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	stb_d8 (0x8d40), a
 	calr AccDisplay_RefreshIfDiskActive
 
 AccChord_CheckModeAndUpdate:
-	ldb_d8 a, (0x3314)
+	ld a, (0x3314:16)
 	orda8 a, 0x3315
 	and a, 0x3f
 	jrl z, AccChord_ReadKeysRet
-	ldb_d8 a, (0x32d8)
+	ld a, (0x32d8:16)
 	cps a, 0
 	jr nz, AccChord_ReadKeysRet
-	ldb_d8 a, (0x32dc)
+	ld a, (0x32dc:16)
 	cpda8 a, 0x32d8
 	jr z, AccChord_ReadKeysRet
 	stb_d8 (0x32d8), a
 	stb_d8 (0xcedf), a
 	stb_d8 (0x8d42), a
 	stb_d8 (8960), a
-	ldb_d8 a, (0x32dd)
+	ld a, (0x32dd:16)
 	stb_d8 (0x32d9), a
 	stb_d8 (0xcee0), a
 	stb_d8 (0x8d40), a
 	stb_d8 (8962), a
-	ldb_d8 a, (0x32de)
+	ld a, (0x32de:16)
 	stb_d8 (0x32da), a
 	stb_d8 (0xcee1), a
 	stb_d8 (0x8d44), a
@@ -11380,13 +11380,13 @@ AccChord_CheckModeAndUpdate:
 	stdi8 (0x8d44), 0
 
 AccChord_CompareNoteC:
-	ldb_d8 a, (0x32db)
+	ld a, (0x32db:16)
 	stb_d8 (0x32d7), a
 	stb_d8 (0xcede), a
 	stb_d8 (8966), a
 	call Voice_InitSlotData
 	call Voice_FindAndAllocBestMatch
-	ldb_d8 a, (0xfc5d)
+	ld a, (0xfc5d:16)
 	and a, 0x7
 	cps a, 0
 	jr z, AccChord_ReadKeysRet
@@ -11400,7 +11400,7 @@ AccChord_ReadKeysRet:
 
 AccDisplay_RefreshIfDiskActive:
 	push xwa
-	ldb_d8 a, (0xfc5d)
+	ld a, (0xfc5d:16)
 	and a, 0x7
 	cps a, 0
 	jr z, AccDisplay_RefreshDone
@@ -11414,10 +11414,10 @@ AccState_ReadAccompParams:
 	ldb a, 0x0
 	ei 6
 	stb_d8 (1124), a
-	ldb_d8 a, (1046)
+	ld a, (1046:16)
 	stb_d8 (0x3280), a
-	ldb_d8 a, (1076)
+	ld a, (1076:16)
 	stb_d8 (0x32b4), a
-	ldb_d8 a, (1077)
+	ld a, (1077:16)
 	stb_d8 (0x32b3), a
-	ldb_d8 a, (1045)
+	ld a, (1045:16)

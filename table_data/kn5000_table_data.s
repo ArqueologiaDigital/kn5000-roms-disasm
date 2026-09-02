@@ -3286,7 +3286,7 @@ Boot_DelayLoop__delay_loop:
 ; =============================================================================
 Boot_BlinkLED:
 	incdi8 1, (3080); INC 1, (0x0C08) - LED counter
-	ldb_d8 a, (3080); LD A, (0x0C08)
+	ld a, (3080:16); LD A, (0x0C08)
 	and a, 0x3	; AND A, 0x03 - mask to 0-3
 	cps a, 3	; CP A, 3
 	jr z, Boot_BlinkLED__led_pattern3	; 66 24
@@ -3834,13 +3834,13 @@ LZSS_ReadByte__exit:
 ; -----------------------------------------------------------------------------
 	.org 0x9FC935 - 0x800000, 0xFF
 LZSS_OutputByte:
-	ldb_d8 e, (3126); LD E, (0x0C36) - output index
+	ld e, (3126:16); LD E, (0x0C36) - output index
 	extz de	; EXTZ DE
 	lda xbc, (3082:16); LDA XBC, 0x0C0A - temp buffer
 	extz xde	; EXTZ XDE
 	add xde, xbc	; ADD XDE, XBC
 	ld (xde), a	; LD (XDE), A - store byte
-	ldb_d8 a, (3126); LD A, (0x0C36)
+	ld a, (3126:16); LD A, (0x0C36)
 	ld e, a	; LD E, A
 	inc 1, a	; INC 1, A
 	stb_d8 (3126), a; LD (0x0C36), A
@@ -3865,13 +3865,13 @@ LZSS_OutputByte__not_full:
 ; -----------------------------------------------------------------------------
 	.org 0x9FC974 - 0x800000, 0xFF
 LZSS_OutputByte_Alt:
-	ldb_d8 c, (3126); LD C, (0x0C36)
+	ld c, (3126:16); LD C, (0x0C36)
 	extz bc	; EXTZ BC
 	lda xde, (3086:16); LDA XDE, 0x0C0E
 	extz xbc	; EXTZ XBC
 	add xbc, xde	; ADD XBC, XDE
 	ld (xbc), a	; LD (XBC), A
-	ldb_d8 a, (3126); LD A, (0x0C36)
+	ld a, (3126:16); LD A, (0x0C36)
 	ld c, a	; LD C, A
 	inc 1, a	; INC 1, A
 	stb_d8 (3126), a; LD (0x0C36), A

@@ -25,7 +25,7 @@ SingleLoadModeFunc:
 	stda32	(33050), xde
 	jr	32
 SLMode_HandleShow:
-	ldb_d8	a, 35164
+	ld	a, (35164:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (15336856:24)
@@ -45,7 +45,7 @@ SingleLoadDstBankFunc:
 	stda32	(33054), xde
 	jr	32
 SLDstBank_HandleShow:
-	ldb_d8	a, 35164
+	ld	a, (35164:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (15336946:24)
@@ -71,7 +71,7 @@ SLDstMem_HandleShow:
 	.byte 0x10, 0x22, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x68
 	.byte 0x13
 SLDstMem_ShowFromBank:
-	ldb_d8 c, (35164)
+	ld c, (35164:16)
 
 	extz bc
 
@@ -100,7 +100,7 @@ SingleLoadSrcBankFunc:
 SLSrcBank_HandleShow:
 	ld	xwa, (33062:16)
 	lda	xde, (15336946:24)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	cps	c, 0
 	jr	nz, 17
 	cpdi8	35182, 0
@@ -131,7 +131,7 @@ SingleLoadSrcMemFunc:
 SLSrcMem_HandleShow:
 	ld	xwa, (33066:16)
 	lda	xde, (15336996:24)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	cps	c, 1
 	jr	z, 7
 	cpdi8	35166, 0
@@ -160,7 +160,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+6), xwa
 	lda	xwa, (34994:16)
 	stib_dsp	224, 0
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336946:24)
@@ -171,7 +171,7 @@ SLSrcBankList_FuncBody:
 	ld	xbc, 15337784
 	call	16289030
 	lda	xiz, (34995:16)
-	ldb_d8	a, 35168
+	ld	a, (35168:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	inc	1, a
@@ -197,7 +197,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (34994:16)
 	ld	(xwa+21), 1
 	lda	xiz, (xwa+22)
-	ldb_d8	a, 35168
+	ld	a, (35168:16)
 	extz	wa
 	div8rr	a, c
 	extz	wa
@@ -222,7 +222,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (34994:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336996:24)
@@ -235,7 +235,7 @@ SLSrcBankList_FuncBody:
 	cpdi8	35166, 0
 	jr	nz, 32
 	lda	xiz, (35037:16)
-	ldb_d8	a, 35168
+	ld	a, (35168:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	ld	a, w
@@ -275,7 +275,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
 	lda	xiz, (xwa+64)
-	ldb_d8	a, 35168
+	ld	a, (35168:16)
 	extz	wa
 	call	16293243
 	ld	xbc, xhl
@@ -303,7 +303,7 @@ SLSrcBankList_FuncBody:
 	jrl	nz, 534
 	cpdi8	35182, 0
 	jr	z, 15
-	ldb_d8	a, 35168
+	ld	a, (35168:16)
 	extz	wa
 	.byte 0xc2, 0x52, 0x09, 0xea, 0x51
 	stb_d8	35168, w
@@ -324,7 +324,7 @@ SLSrcBankList_FuncBody:
 	stdi8	33074, 0
 	stdi8	33076, 0
 	jrl	453
-	ldb_d8	e, 35168
+	ld	e, (35168:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
 	jrl	nz, 154
@@ -479,7 +479,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (34994:16)
 	ld	(xwa+21), 1
 	lda	xwa, (xwa+22)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336996:24)
@@ -535,7 +535,7 @@ SLSrcBankList_FuncBody:
 	ld	xiz, xwa
 	lda	xwa, (34994:16)
 	stib_dsp	224, 0
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336946:24)
@@ -549,7 +549,7 @@ SLSrcBankList_FuncBody:
 	ldw	bc, 16
 	calr	-5668
 	lda	xwa, (35015:16)
-	ldb_d8	c, 35170
+	ld	c, (35170:16)
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
@@ -570,7 +570,7 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+6), c
 	ld	(xsp+8), xwa
-	ldb_d8	a, 35170
+	ld	a, (35170:16)
 	extz	wa
 	.byte 0x8f, 0x06, 0x51
 	ld	a, w
@@ -579,7 +579,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (34994:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336996:24)
@@ -618,7 +618,7 @@ SLSrcBankList_FuncBody:
 	jr	39
 	.byte 0x9f, 0x04, 0x3f, 0x04, 0x00
 	jr	c, 36
-	ldb_d8	c, 35170
+	ld	c, (35170:16)
 	extz	bc
 	.byte 0x8f, 0x06, 0x53
 	extz	bc
@@ -636,7 +636,7 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	e, c
 	ld	(xsp+4), xwa
-	ldb_d8	a, 35170
+	ld	a, (35170:16)
 	extz	wa
 	div8rr	a, e
 	ld	c, w
@@ -648,7 +648,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (34994:16)
 	ld	(xwa+63), 3
 	lda	xiz, (xwa+64)
-	ldb_d8	a, 35170
+	ld	a, (35170:16)
 	extz	wa
 	div8rr	a, e
 	extz	wa
@@ -689,7 +689,7 @@ SLSrcBankList_FuncBody:
 	lds32	xwa, 0
 	stda32	33078, xwa
 	jrl	408
-	ldb_d8	l, 35170
+	ld	l, (35170:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
 	jrl	nz, 142
@@ -859,7 +859,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+2), xwa
 	lda	xwa, (34994:16)
 	stib_dsp	224, 0
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336946:24)
@@ -878,7 +878,7 @@ SLSrcBankList_FuncBody:
 	call	16423243
 	ld	a, (xsp)
 	.byte 0x87, 0x81
-	ldb_d8	c, 35172
+	ld	c, (35172:16)
 	cp	c, a
 	jr	nc, 31
 	lda	xwa, (35015:16)
@@ -924,7 +924,7 @@ SLSrcBankList_FuncBody:
 	lda	xwa, (34994:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336996:24)
@@ -938,7 +938,7 @@ SLSrcBankList_FuncBody:
 	jr	nz, 65
 	ld	e, (xsp+4)
 	.byte 0x8f, 0x04, 0x85
-	ldb_d8	c, 35172
+	ld	c, (35172:16)
 	lda	xwa, (35037:16)
 	cp	c, e
 	jr	c, 21
@@ -994,7 +994,7 @@ SLSrcBankList_FuncBody:
 	ld	e, c
 	add	e, c
 	lda	xiz, (xwa+64)
-	ldb_d8	a, 35172
+	ld	a, (35172:16)
 	cp	a, e
 	jr	c, 14
 	sub	a, e
@@ -1046,7 +1046,7 @@ SLSrcBankList_FuncBody:
 	stdi8	33088, 0
 	stdi8	33090, 0
 	jrl	648
-	ldb_d8	l, 35172
+	ld	l, (35172:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 5
 	jrl	nz, 212
@@ -1316,7 +1316,7 @@ SLSrc_HandleShow:
 	ld	xde, 4294967295
 	call	16423243
 	ld	xwa, (33092:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15337878:24)
@@ -1343,7 +1343,7 @@ SLSrc_ScrollMode5_Prev:
 SLSrc_ScrollMode5_Dispatch:
 	call	16423243
 	ld	xwa, (33092:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15337878:24)
@@ -1371,7 +1371,7 @@ SLSrc_ScrollMode6_NoStep:
 SLSrc_ScrollMode6_Dispatch:
 	call	ApPostEvent
 	ld	xwa, (33092:16)
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15337878:24)
@@ -1389,7 +1389,7 @@ SLSrc_ScrollMode7:
 	ld	xde, 4294967295
 	call	ApPostEvent
 	ld	xwa, (33092:16)
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15337878:24)
@@ -1406,7 +1406,7 @@ SLSrc_ScrollMode8:
 	ld	xde, 4294967295
 	call	ApPostEvent
 	ld	xwa, (33092:16)
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15337878:24)
@@ -1419,7 +1419,7 @@ SLSrc_ScrollMode8:
 SLSrc_ScrollMode40:
 	cp	xiz, 40
 	jr	nz, 28	; -> 0xF8FC5B
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15337878:24)
@@ -1446,7 +1446,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+6), xwa
 	lda	xwa, (35078:16)
 	stib_dsp	224, 0
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336946:24)
@@ -1457,7 +1457,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 15337898
 	call	16289030
 	lda	xiz, (35079:16)
-	ldb_d8	a, 35174
+	ld	a, (35174:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	inc	1, a
@@ -1471,7 +1471,7 @@ SLDstBankList_FuncBody:
 	ldw	bc, 16
 	calr	-8510
 	lda	xwa, (35099:16)
-	ldb_d8	c, 35174
+	ld	c, (35174:16)
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
@@ -1498,7 +1498,7 @@ SLDstBankList_FuncBody:
 	lda	xde, (35078:16)
 	ld	(xde+42), 2
 	ld	(xde+63), 3
-	ldb_d8	a, 35164
+	ld	a, (35164:16)
 	extz	wa
 	lda	xhl, (15336996:24)
 	ld	bc, wa
@@ -1524,7 +1524,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 15337924
 	call	16289030
 	lda	xiz, (35121:16)
-	ldb_d8	a, 35174
+	ld	a, (35174:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	ld	a, w
@@ -1539,7 +1539,7 @@ SLDstBankList_FuncBody:
 	ldw	bc, 16
 	calr	-8732
 	lda	xwa, (35141:16)
-	ldb_d8	c, 35174
+	ld	c, (35174:16)
 	extz	bc
 	lds	de, 3
 	calr	-5057
@@ -1574,7 +1574,7 @@ SLDstBankList_FuncBody:
 	lds32	xwa, 0
 	stda32	33096, xwa
 	jrl	160
-	ldb_d8	l, 35174
+	ld	l, (35174:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
 	jrl	nz, 149
@@ -1698,11 +1698,11 @@ SLDstBankList_FuncBody:
 	jrl	nz, -232
 	cpdi8	35166, 0
 	jr	z, 30
-	ldb_d8	a, 35168
+	ld	a, (35168:16)
 	extz	wa
 	div8rr	a, c
 	extz	wa
-	ldb_d8	e, 35174
+	ld	e, (35174:16)
 	extz	de
 	div8rr	e, c
 	extz	de
@@ -1710,9 +1710,9 @@ SLDstBankList_FuncBody:
 	call	16285257
 	exts	xhl
 	jr	18
-	ldb_d8	a, 35168
+	ld	a, (35168:16)
 	extz	wa
-	ldb_d8	c, 35174
+	ld	c, (35174:16)
 	extz	bc
 	call	16285041
 	exts	xhl
@@ -1725,7 +1725,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (35078:16)
 	ld	(xwa+21), 1
 	lda	xwa, (xwa+22)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336996:24)
@@ -1736,7 +1736,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 15337932
 	call	16289030
 	lda	xiz, (35100:16)
-	ldb_d8	a, 35176
+	ld	a, (35176:16)
 	inc	1, a
 	extz	wa
 	lds	bc, 0
@@ -1748,7 +1748,7 @@ SLDstBankList_FuncBody:
 	ldw	bc, 16
 	calr	-9388
 	lda	xiz, (35120:16)
-	ldb_d8	a, 35176
+	ld	a, (35176:16)
 	extz	wa
 	lds	bc, 2
 	lds	de, 0
@@ -1796,7 +1796,7 @@ SLDstBankList_FuncBody:
 	call	16423243
 	ld	xwa, xiz
 	jr	47
-	ldb_d8	w, 35176
+	ld	w, (35176:16)
 	lda	xhl, (35120:16)
 	cp	xde, 8
 	jr	nz, 73
@@ -1838,7 +1838,7 @@ SLDstBankList_FuncBody:
 	jr	-70
 	cp	xde, 10
 	jr	nz, -78
-	ldb_d8	a, 35176
+	ld	a, (35176:16)
 	extz	wa
 	call	16285545
 	exts	xhl
@@ -1850,7 +1850,7 @@ SLDstBankList_FuncBody:
 	ld	xiz, xwa
 	lda	xwa, (35078:16)
 	stib_dsp	224, 0
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336946:24)
@@ -1864,7 +1864,7 @@ SLDstBankList_FuncBody:
 	ldw	bc, 16
 	calr	-9754
 	lda	xwa, (35099:16)
-	ldb_d8	c, 35178
+	ld	c, (35178:16)
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
 	extz	bc
@@ -1888,7 +1888,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (35078:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336996:24)
@@ -1901,7 +1901,7 @@ SLDstBankList_FuncBody:
 	cpdi8	35166, 0
 	jr	nz, 28
 	lda	xiz, (35121:16)
-	ldb_d8	a, 35178
+	ld	a, (35178:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	ld	a, w
@@ -1922,7 +1922,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 15337946
 	call	16288975
 	jr	28
-	ldb_d8	e, 35178
+	ld	e, (35178:16)
 	ld	c, e
 	extz	bc
 	.byte 0x8f, 0x04, 0x53
@@ -1964,7 +1964,7 @@ SLDstBankList_FuncBody:
 	lds32	xwa, 0
 	stda32	33100, xwa
 	jrl	160
-	ldb_d8	l, 35178
+	ld	l, (35178:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
 	jrl	nz, 149
@@ -2088,21 +2088,21 @@ SLDstBankList_FuncBody:
 	jrl	nz, -232
 	cpdi8	35166, 0
 	jr	z, 30
-	ldb_d8	a, 35170
+	ld	a, (35170:16)
 	extz	wa
 	div8rr	a, c
 	add	a, 30
 	extz	wa
-	ldb_d8	e, 35178
+	ld	e, (35178:16)
 	extz	de
 	div8rr	e, c
 	add	e, 30
 	extz	de
 	ld	bc, de
 	jr	12
-	ldb_d8	a, 35170
+	ld	a, (35170:16)
 	extz	wa
-	ldb_d8	c, 35178
+	ld	c, (35178:16)
 	extz	bc
 	call	16285775
 	exts	xhl
@@ -2114,7 +2114,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+2), xwa
 	lda	xwa, (35078:16)
 	stib_dsp	224, 0
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15336946:24)
@@ -2129,7 +2129,7 @@ SLDstBankList_FuncBody:
 	calr	-10585
 	ld	e, (xsp)
 	.byte 0x87, 0x85
-	ldb_d8	c, 35180
+	ld	c, (35180:16)
 	lda	xwa, (35099:16)
 	cp	c, e
 	jr	nc, 13
@@ -2161,7 +2161,7 @@ SLDstBankList_FuncBody:
 	lda	xwa, (35078:16)
 	ld	(xwa+42), 2
 	lda	xwa, (xwa+43)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	ld_rrl	xbc, xde, bc
@@ -2186,7 +2186,7 @@ SLDstBankList_FuncBody:
 	ld	(xbc+42), 2
 	cpdm8	35180, l
 	jr	c, 101
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	ld_rrl	xbc, xde, bc
@@ -2198,7 +2198,7 @@ SLDstBankList_FuncBody:
 	lda	xiz, (35121:16)
 	ld	c, (xsp+4)
 	.byte 0x8f, 0x04, 0x83
-	ldb_d8	a, 35180
+	ld	a, (35180:16)
 	sub	a, c
 	inc	1, a
 	extz	wa
@@ -2213,13 +2213,13 @@ SLDstBankList_FuncBody:
 	lda	xwa, (35141:16)
 	ld	e, (xsp+4)
 	.byte 0x8f, 0x04, 0x85
-	ldb_d8	c, 35180
+	ld	c, (35180:16)
 	sub	c, e
 	extz	bc
 	lds	de, 3
 	calr	-6885
 	jr	90
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	ld_rrl	xbc, xde, bc
@@ -2229,7 +2229,7 @@ SLDstBankList_FuncBody:
 	ld	xbc, 15337998
 	call	16289030
 	lda	xiz, (35121:16)
-	ldb_d8	a, 35180
+	ld	a, (35180:16)
 	extz	wa
 	.byte 0x8f, 0x04, 0x51
 	ld	a, w
@@ -2244,7 +2244,7 @@ SLDstBankList_FuncBody:
 	ldw	bc, 16
 	calr	-10952
 	lda	xwa, (35141:16)
-	ldb_d8	c, 35180
+	ld	c, (35180:16)
 	extz	bc
 	lds	de, 3
 	calr	-7058
@@ -2279,7 +2279,7 @@ SLDstBankList_FuncBody:
 	lds32	xwa, 0
 	stda32	33104, xwa
 	jrl	229
-	ldb_d8	l, 35180
+	ld	l, (35180:16)
 	ld	xwa, (xsp+4)
 	cp	xwa, 7
 	jrl	nz, 218
@@ -2471,20 +2471,20 @@ SLDstBankList_FuncBody:
 	jrl	nz, -372
 	cpdi8	35166, 0
 	jr	z, 28
-	ldb_d8	a, 35172
+	ld	a, (35172:16)
 	extz	wa
 	div8rr	a, e
 	extz	wa
-	ldb_d8	c, 35180
+	ld	c, (35180:16)
 	extz	bc
 	div8rr	c, e
 	extz	bc
 	call	16286237
 	exts	xhl
 	jr	18
-	ldb_d8	a, 35172
+	ld	a, (35172:16)
 	extz	wa
-	ldb_d8	c, 35180
+	ld	c, (35180:16)
 	extz	bc
 	call	16285895
 	exts	xhl
@@ -2612,7 +2612,7 @@ SLDst_HandleShow:
 	lds32	xde, 0
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2628,7 +2628,7 @@ SLDst_HandleConfirm:
 	ld	xde, 4294967295
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2665,7 +2665,7 @@ SLDst_HandleScroll:
 	lds32	xde, 0
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2727,7 +2727,7 @@ SLDst_ScrollMode4_Dispatch:
 	lds32	xde, 0
 	call	ApPostEvent
 	ld	xwa, (33108:16)
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2755,7 +2755,7 @@ SLDst_ScrollDispatch:
 	lds	wa, 0
 	calr	-24213
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2786,7 +2786,7 @@ SLDst_Scroll_ChildReturn:
 	lds32	xde, 1
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2802,7 +2802,7 @@ SLDst_Scroll_SubMode:
 	ld	xde, 4294967295
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2823,7 +2823,7 @@ SLDst_Scroll_SubMode2:
 	lds32	xde, 2
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2840,7 +2840,7 @@ SLDst_Scroll_SubMode3:
 	lds32	xde, 3
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2855,7 +2855,7 @@ SLDst_Scroll_SubMode4:
 	ld	xde, 4294967295
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2873,7 +2873,7 @@ SLDst_Scroll_SubMode5:
 	ld	xde, 4294967295
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2891,7 +2891,7 @@ SLDst_Scroll_SubMode6:
 	ld	xde, 4294967295
 	call	16423243
 	ld	xwa, (33108:16)
-	ldb_d8	c, 35164
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338006:24)
@@ -2936,7 +2936,7 @@ CmpSrc_HandleShow:
 	ld	xde, 4294967295
 	call	ApPostEvent
 	ld	xwa, (33112:16)
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338026:24)
@@ -2955,7 +2955,7 @@ CmpSrc_HandleScroll:
 	lds32	xde, 1
 	call	ApPostEvent
 	ld	xwa, (33112:16)
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338026:24)
@@ -2981,7 +2981,7 @@ CmpSrc_ScrollMode6_NoStep:
 	ld	xde, 4294967295
 	call	ApPostEvent
 	ld	xwa, (33112:16)
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338026:24)
@@ -3000,7 +3000,7 @@ CmpSrc_ScrollMode7:
 	ld	xde, 4294967295
 	call	ApPostEvent
 	ld	xwa, (33112:16)
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338026:24)
@@ -3024,7 +3024,7 @@ CmpSrc_ScrollMode40:
 	ld	xbc, (xsp+4)
 	cp	xbc, 40
 	jr	nz, 28	; -> 0xF9105C
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338026:24)
@@ -3094,7 +3094,7 @@ CmpDst_HandleShow:
 	lds32	xde, 0
 	call	ApPostEvent
 	ld	xwa, (33116:16)
-	ldb_d8	c, (35164)
+	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
 	lda	xde, (15338046:24)
@@ -3129,7 +3129,7 @@ CmpDst_HandleScroll:
 	lds32 xde, 0
 	call ApPostEvent
 	ld xwa, (0x815c:16)
-	ldb_d8 c, (0x895c)
+	ld c, (0x895c:16)
 	extz BC
 	sla BC, 0x02
 	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
@@ -3157,7 +3157,7 @@ CmpDst_ScrollModeA:
 	lds wa, 0
 	calr InitializeOperationState
 	ld xwa, (0x815c:16)
-	ldb_d8 c, (0x895c)
+	ld c, (0x895c:16)
 	extz BC
 	sla BC, 0x02
 	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
@@ -3187,7 +3187,7 @@ CmpDst_ScrollMode7:
 	lds32 xde, 1
 	call ApPostEvent
 	ld xwa, (0x815c:16)
-	ldb_d8 c, (0x895c)
+	ld c, (0x895c:16)
 	extz BC
 	sla BC, 0x02
 	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
@@ -3209,7 +3209,7 @@ CmpDst_ScrollMode8:
 	lds32 xde, 3
 	call ApPostEvent
 	ld xwa, (0x815c:16)
-	ldb_d8 c, (0x895c)
+	ld c, (0x895c:16)
 	extz BC
 	sla BC, 0x02
 	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
@@ -3225,7 +3225,7 @@ CmpDst_ScrollMode8_NoStep:
 	ld XDE,0xffffffff
 	call ApPostEvent
 	ld xwa, (0x815c:16)
-	ldb_d8 c, (0x895c)
+	ld c, (0x895c:16)
 	extz BC
 	sla BC, 0x02
 	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
@@ -3244,7 +3244,7 @@ CmpDst_ScrollMode5:
 	ld XDE,0xffffffff
 	call ApPostEvent
 	ld xwa, (0x815c:16)
-	ldb_d8 c, (0x895c)
+	ld c, (0x895c:16)
 	extz BC
 	sla BC, 0x02
 	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
@@ -3265,7 +3265,7 @@ CmpDst_ScrollMode6:
 	ld XDE,0xffffffff
 	call ApPostEvent
 	ld xwa, (0x815c:16)
-	ldb_d8 c, (0x895c)
+	ld c, (0x895c:16)
 	extz BC
 	sla BC, 0x02
 	lda xde, (Data_SaveLoadMenuTable_0x4E:24)

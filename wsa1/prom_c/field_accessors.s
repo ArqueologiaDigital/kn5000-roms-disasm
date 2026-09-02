@@ -1556,11 +1556,11 @@ NotePool8_LevelFromVelocity__FC3CF4:
 ; --------------------------------------------------------------------------
 NotePool8_Reg00C0_FromPart0Ctrl91And93:
 	pushw	hl                                   ; FC3CFB  push HL
-	ldb_d8	c, (0x1533)                         ; FC3CFC  ld C,(0x1533)
+	ld	c, (0x1533:16)                         ; FC3CFC  ld C,(0x1533)
 	extz	bc                                    ; FC3D00  extz BC
 	ld	hl, bc                                  ; FC3D02  ld HL,BC
 	sll	hl, 8                                  ; FC3D04  sll 0x08,HL
-	ldb_d8	c, (0x1534)                         ; FC3D07  ld C,(0x1534)
+	ld	c, (0x1534:16)                         ; FC3D07  ld C,(0x1534)
 	extz	bc                                    ; FC3D0B  extz BC
 	or	bc, hl                                  ; FC3D0D  or BC,HL
 	ld	wa, bc                                  ; FC3D0F  ld WA,BC
@@ -1590,7 +1590,7 @@ NotePool8_Reg00C0_FromPart0Ctrl91And93:
 ; Unknown:  what bits 11..10 of staging word 0 mean, and what the 0x9B message carries.
 ; --------------------------------------------------------------------------
 NotePool8_Word0Bits_FromPart0Ctrl9B:
-	ldb_d8	c, (0x153C)                         ; FC3D13  ld C,(0x153c)
+	ld	c, (0x153C:16)                         ; FC3D13  ld C,(0x153c)
 	srl	c, 4                                   ; FC3D17  srl 0x04,C
 	cps	c, 5                                   ; FC3D1A  cp C,5
 	jr nz, NotePool8_Word0Bits_FromPart0Ctrl9B__FC3D23                  ; FC3D1C  jr NZ,0xfc3d23

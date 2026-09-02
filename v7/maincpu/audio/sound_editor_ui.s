@@ -5890,7 +5890,7 @@ SeMenu_PopupDialog_Close:
 	jr c, SeMenu_PopupDialog_Close
 
 SeMenu_PopupDialog_Close_Data:
-	ldb_d8	a, (35996)
+	ld	a, (35996:16)
 	cpdm8_24	(134200), xbc
 	jr	nz, 30	; -> 0xF0E9F0
 	cp	a, 32
@@ -6034,7 +6034,7 @@ SeMenu_ListSelector_Draw:
 	jr SeMenu_ListSelector_ScrollDown
 
 SeMenu_ListSelector_HandleInput:
-	ldb_d8	a, (35996)
+	ld	a, (35996:16)
 	cp	c, a
 	jr	nz, 41	; -> 0xF0EB3B
 	cp	a, 32
@@ -6585,7 +6585,7 @@ SeMenu_ShowConfirmDialog_Data:
 	call SeMenu_NameEditor_Setup
 	ldb C, 0x04
 .Lc_f0f0a6:
-	ldb_d8 w, (0x065e)
+	ld w, (0x065e:16)
 	ld A,C
 	sla A, 0x01
 	dec 1,A
@@ -6895,7 +6895,7 @@ SeMenu_PresetManager_Data:
 	call SeMenu_NameEditor_Setup
 	ldb C, 0x04
 .Lc_f0f7b0:
-	ldb_d8 w, (0x065e)
+	ld w, (0x065e:16)
 	ld A,C
 	sla A, 0x01
 	dec 1,A
@@ -6930,7 +6930,7 @@ SeMenu_PresetManager_Data:
 .Lc_f0f816:
 	ldb C, 0x04
 .Lc_f0f818:
-	ldb_d8 w, (0x065e)
+	ld w, (0x065e:16)
 	ld A,C
 	sla A, 0x01
 	dec 1,A
@@ -6959,7 +6959,7 @@ SeMenu_PresetManager_Data:
 	ret
 	stib_da (0x03efa8), 0x00
 	ldb C, 0x02
-	ldb_d8 w, (0x065e)
+	ld w, (0x065e:16)
 	ld A,C
 	sla A, 0x01
 	dec 1,A
@@ -7043,7 +7043,7 @@ SeMenu_PresetBrowser_Data:
 	ret
 	stib_da	257960, 0
 	ldb	c, 4
-	ldb_d8	w, 1630
+	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
 	dec	1, a
@@ -7268,7 +7268,7 @@ SeMenu_Utility_CopyBlock:
 	call	15793078
 	ret
 	stib_da	257960, 0
-	ldb_d8	a, 1632
+	ld	a, (1632:16)
 	and	a, 32
 	jr	z, 36
 	ld	xiy, 15819855
@@ -7350,7 +7350,7 @@ SeMenu_Utility_FormatNumber_Loop:
 	call	15789014
 	ret
 SeMenu_Utility_FormatNumber_End:
-	ldb_d8 a, (0x8c9a)
+	ld a, (0x8c9a:16)
 	stb_d8 (0x0678), a
 	stib_da (0x03efa8), 0x02
 	ld XIY,0x00f1233a
@@ -7488,7 +7488,7 @@ SeMenu_Utility_End:
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_NameEdit_DataBlock1:
-	ldb_d8	a, 1632
+	ld	a, (1632:16)
 	and	a, 15
 	stb_d8	1648, a
 	cp	a, 10
@@ -7499,7 +7499,7 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xix, 15815863
 	call	15789014
 	xor	xwa, xwa
-	ldb_d8	a, 1648
+	ld	a, (1648:16)
 	sla	wa, 3
 	ld	xiz, 15816666
 	add	xiz, xwa
@@ -7509,11 +7509,11 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xiy, 15815336
 	xor	xbc, xbc
 	ld	xiz, 15817383
-	ldb_d8	c, 1648
+	ld	c, (1648:16)
 	sla	bc, 2
 	ld_rrl	xix, xiz, bc
 	call	15789014
-	ldb_d8	a, 1648
+	ld	a, (1648:16)
 	cp	a, 10
 	jr	nz, 7
 	ld	xiy, 15815546
@@ -7522,7 +7522,7 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xix, 15815576
 	call	15789014
 	ld	xiy, 15816762
-	ldb_d8	a, 1648
+	ld	a, (1648:16)
 	cp	a, 10
 	jr	nz, 7
 	ld	xix, 15816818
@@ -7530,7 +7530,7 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xix, 15816829
 	call	15789027
 	xor	xwa, xwa
-	ldb_d8	a, 1648
+	ld	a, (1648:16)
 	sla	wa, 3
 	ld	xiz, 15816829
 	add	xiz, xwa
@@ -7569,7 +7569,7 @@ SeMenu_NameEdit_Return:
 	ret
 SeMenu_NameEdit_CheckBit7:
 	stib_da	(257960), 0
-	ldb_d8	a, (1642)
+	ld	a, (1642:16)
 	and	a, 128
 	jr	nz, 7
 	ld	xiy, 15819996
@@ -7588,7 +7588,7 @@ SeMenu_PatchEdit_DataBlock:
 	jr	nc, 37
 	xor	xbc, xbc
 	ld	xiz, FlashWrite_BlockRef_Type6_0x10
-	ldb_d8	c, (1648)
+	ld	c, (1648:16)
 	sla	bc, 2
 	ld_rrl xiy, xiz, bc
 	jr 21
@@ -7736,7 +7736,7 @@ Data_UnknownBlock:
 	ld XIY,TuningSystem_Handler_Table_0x173
 	ld XIX,TuningSystem_Handler_Table_0x17D
 	call SeMenu_NameEditor_Setup
-	ldb_d8 c, (0x0660)
+	ld c, (0x0660:16)
 	xor B,B
 	sla BC, 0x02
 	ld XIZ,TuningSystem_Handler_Table_0x1E1
@@ -9131,7 +9131,7 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	ld	xwa, (xsp+268)
 	call	16408153
 	ld	xiz, xhl
-	ldb_d8	a, 13395
+	ld	a, (13395:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (14800796:24)
@@ -9227,7 +9227,7 @@ PsCstmCpBnkBox_HandleEvtBC:
 	.byte 0x1d, 0x59, 0x5e, 0xfa, 0x8b, 0x24, 0x3f, 0x00
 	.byte 0x6e, 0x06, 0xc1, 0x1a, 0x39, 0x21, 0x68, 0x04
 PsCstmCpBnkBox_ReadParam2:
-	ldb_d8	a, (14619)
+	ld	a, (14619:16)
 PsCstmCpBnkBox_LookupAndSend:
 	extz	wa
 	sla	wa, 2
@@ -9486,7 +9486,7 @@ AcMemNoBox_HandleEvtBC:
 	ld	xwa, (xsp+268)
 	call	16408153
 	ld	xiz, xhl
-	ldb_d8	a, 13370
+	ld	a, (13370:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (14801788:24)
@@ -9600,7 +9600,7 @@ AcCmpRecBox_HandleEvtBC:
 	ld	xwa, (xsp+12)
 	ld	(xsp+8), xwa
 	ld	e, (xiz+36)
-	ldb_d8	a, (14079)
+	ld	a, (14079:16)
 	and	a, e
 	lda	xhl, (14802184:24)
 	lda	xbc, (xsp+16)
@@ -9617,7 +9617,7 @@ AcCmpRecBox_HandleEvtBC:
 AcCmpRecBox_CheckParam2:
 	ld	xwa, (xsp+4)
 	ld	e, (xwa+37)
-	ldb_d8	a, (13397)
+	ld	a, (13397:16)
 	and	a, e
 	cp	a, e
 	jr	nz, 2
@@ -9690,7 +9690,7 @@ PsCmpQtzBox_HandleEvtBC:
 	call	16400380
 	ld	xwa, xiz
 	call	16408153
-	ldb_d8	a, 13375
+	ld	a, (13375:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (14802214:24)
@@ -9758,7 +9758,7 @@ PsCmpMeasBox_HandleEvtBC:
 	call	16400380
 	ld	xwa, (xsp+264)
 	call	16408153
-	ldb_d8	a, (13376)
+	ld	a, (13376:16)
 	inc	1, a
 	extz	wa
 	pushw	wa
@@ -9826,7 +9826,7 @@ PsCmpMemBox_HandleEvtBC:
 	call	16400380
 	ld	xwa, (xsp+264)
 	call	16408153
-	ldb_d8	a, (14607)
+	ld	a, (14607:16)
 	extz	wa
 	pushw	wa
 	pushw	225
@@ -9995,7 +9995,7 @@ PsNameMemBox_HandleEvtBC:
 	ld	xwa, (xsp+268)
 	call	16408153
 	ld	xiz, xhl
-	ldb_d8	a, 13370
+	ld	a, (13370:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (14802310:24)
@@ -10571,7 +10571,7 @@ PsMspNameBnk_CallInherited:
 PsMspNameBnk_HandleEvtBC:
 	ld	xwa, xiz
 	call	16400380
-	ldb_d8	a, 32418
+	ld	a, (32418:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (14802800:24)
@@ -11372,7 +11372,7 @@ RgpSetBnk_GridCheck_EventEnc:
 	ld (XBC),DE
 	lda XDE, (XSP)
 	ld (XHL+0x04),XDE
-	ldb_d8 a, (0x7ea1)
+	ld a, (0x7ea1:16)
 	sll A, 0x04
 	ldb W, 0x00
 	extz XWA
@@ -11470,7 +11470,7 @@ RgpSetBnkBox_CallInherited:
 RgpSetBnkBox_HandleEvtBC:
 	ld	xwa, xiz
 	call	16400380
-	ldb_d8	a, 32417
+	ld	a, (32417:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (14803664:24)
@@ -11500,7 +11500,7 @@ MspRGrpSetBnkFunc:
 MspRGrpSetBnk_SetToZero:
 	stdi8	(32417), 0
 MspRGrpSetBnk_UpdateLsw:
-	ldb_d8 c, (32417)
+	ld c, (32417:16)
 
 	add c, 0xf
 
@@ -11564,7 +11564,7 @@ MspRgpShowHideFunc:
 	jr	nz, 42
 	or	xde, xde
 	jr	nz, 38
-	ldb_d8	a, (32417)
+	ld	a, (32417:16)
 	cps	a, 1
 	jr	z, 16
 	cps	a, 0
@@ -11785,7 +11785,7 @@ MspRecPadBox_HandleEvtBC:
 	call	16400380
 	ld	xwa, xiz
 	call	16408153
-	ldb_d8	a, (32376)
+	ld	a, (32376:16)
 	cps	a, 5
 	jr	ule, 2
 	dec	6, a
@@ -11851,7 +11851,7 @@ MspPlayModeFunc_DataBlock:
 	inc	8, xsp
 	ld	xhl, (xsp+12)
 	jr	43
-	ldb_d8	a, (1054)
+	ld	a, (1054:16)
 	and	a, 4
 	cps	a, 4
 	scc16	nz, hl
@@ -12738,7 +12738,7 @@ StylCnvStorOkFunc:
 	cp	xbc, 29360135
 	jr	nz, 20
 	lds32	xde, 0
-	ldb_d8	e, (14769)
+	ld	e, (14769:16)
 	ld	xwa, 21233699
 	ld	xbc, 31719472
 	call	16402006

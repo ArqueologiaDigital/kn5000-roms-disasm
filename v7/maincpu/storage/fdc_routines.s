@@ -194,7 +194,7 @@ FDC_COMMAND_DISPATCHER:
 	jp_rr	8, xix, wa
 FDC_CMD_HANDLER_BASE:
 	calr	255
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	ret
 FDC_ReturnZero:
 	ldb l, 0x0
@@ -230,7 +230,7 @@ FDC_NoOpReturn:
 
 FDC_Command5Handler:
 	calr	492
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	ret
 FDC_ValidateTrack:
 	ld	wa, (35242:16)
@@ -275,7 +275,7 @@ FDC_ErrorInvalid:
 
 FDC_ValidExecute:
 	calr	277
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	ret
 FDC_SetupFormatParams:
 	ld	wa, (35242:16)
@@ -332,7 +332,7 @@ FDC_FormatUnknown:
 	calr FDC_Set_Status
 
 FDC_InitStateVars:
-	ldb_d8	a, (35282)
+	ld	a, (35282:16)
 	srl	a, 4
 	and	a, 15
 	stb_d8	(35227), a
@@ -803,7 +803,7 @@ FDC_SetStatus_AlreadySet:
 	nop
 
 FDC_SetStatus_Return:
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	ret
 FDC_ClearStatus_InitTimer:
 	stdi8 (0x8988), 0x00
@@ -863,7 +863,7 @@ FDC_InitSequence_Full:
 	jrl	-2690
 FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin of boot FDC_CmdRecalibrate
 	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate_head.bin"
-	ldb_d8 a, (0x899a)
+	ld a, (0x899a:16)
 	cpda8 a, (0x8a68)
 	ret Z
 	.incbin "includes/romslices/v7_transplant_FDC_CmdRecalibrate_tail.bin"
@@ -1127,7 +1127,7 @@ FDC_Handler_InvalidCommand:
 
 FDC_Handler_ExitStatus:
 	stdi8	(35194), 90
-	ldb_d8	l, (35208)
+	ld	l, (35208:16)
 	exts	hl
 FDC_Handler_Return:
 	pop xiz

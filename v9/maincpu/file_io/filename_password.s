@@ -235,7 +235,7 @@ SelectMode_StoreMode:
 	ld (xbc), a
 
 SelectMode_Return:
-	ldb_d8 l, (0x8a0c)
+	ld l, (0x8a0c:16)
 	extz hl
 	pop xiz
 	ret
@@ -437,7 +437,7 @@ FileName_OpLoad:
 	cps hl, 0
 	jr z, FileName_OpLoad_NoPwd
 	lds32 xde, 0
-	ldb_d8 e, (0x8a0c)
+	ld e, (0x8a0c:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50004
 	jrl FileName_OpDispatch

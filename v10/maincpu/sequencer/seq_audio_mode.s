@@ -14,7 +14,7 @@
 AudioMode_CheckAndUpdateStereo:
 	bitda 3, (0x3284)
 	jr z, AudioMode_CheckDone
-	ldb_d8 a, (0x327f)
+	ld a, (0x327f:16)
 	cp a, 0x5d
 	jr nc, AudioMode_ApplyStereoUpdate
 	cp a, 0x30
@@ -28,22 +28,22 @@ AudioMode_CheckDone:
 	ret
 
 AudioMode_MergeOutputBits:
-	ldb_d8 a, (0x3310)
+	ld a, (0x3310:16)
 	and a, 0xf8
-	ldb_d8 w, (0x32f9)
+	ld w, (0x32f9:16)
 	and w, 0x7
 	or a, w
 	stb_d8 (0x3310), a
 	ret
 
 AudioMode_CopyChannelMode:
-	ldb_d8 a, (0x28b2)
+	ld a, (0x28b2:16)
 	and a, 0x3
 	stb_d8 (0x3335), a
 	ret
 
 AudioMode_CopyAccentFlags:
-	ldb_d8 a, (0x34f1)
+	ld a, (0x34f1:16)
 	and a, 0x3d
 	stb_d8 (0x3362), a
 	ret
@@ -72,7 +72,7 @@ AccPedal_PartOffsetTable:
 AccPedal_ProcessAllChanges:
 	xor wa, wa
 	ld xhl, Display_FontPalette_Table_0x1D58
-	ldb_d8 a, (1075)
+	ld a, (1075:16)
 	bit_dri 0, 0x07, 0xec, 0xe0
 	jrl z, AccPedal_ReadBankAndReturn
 	xor a, a
@@ -140,7 +140,7 @@ AccPedal_ReadBankAndReturn:
 AccVoice_ReadBankAssign:
 	xor wa, wa
 	ld xhl, Display_FontPalette_Table_0x1D58
-	ldb_d8 a, (1075)
+	ld a, (1075:16)
 	ldb_sri A, 0x07, 0xec, 0xe0
 	bitda 0, (0x3283)
 	jr nz, AccVoice_StoreBankAssign
@@ -151,17 +151,17 @@ AccVoice_StoreBankAssign:
 	ret
 
 AccChannel_CompareAndMarkDirty:
-	ldb_d8 a, (0x3314)
+	ld a, (0x3314:16)
 	orda8 a, 0x3315
 	and a, 0x3f
 	jr nz, AccChannel_StoreCurrentState
-	ldb_d8 a, (0x32f5)
+	ld a, (0x32f5:16)
 	cpda8 a, 0x32f6
 	jr nz, AccChannel_MarkDirtyAndSync
-	ldb_d8 a, (0x32f7)
+	ld a, (0x32f7:16)
 	and a, 0x7f
 	and a, 0x7
-	ldb_d8 w, (0x32f8)
+	ld w, (0x32f8:16)
 	and w, 0x7f
 	and w, 0x7
 	cp a, w
@@ -174,9 +174,9 @@ AccChannel_MarkDirtyAndSync:
 	ordi8 0x330c, 1
 
 AccChannel_StoreCurrentState:
-	ldb_d8 a, (0x32f5)
+	ld a, (0x32f5:16)
 	stb_d8 (0x32e7), a
-	ldb_d8 a, (0x32f7)
+	ld a, (0x32f7:16)
 	and a, 0x7f
 	and w, 0x7
 	stb_d8 (0x32e8), a
@@ -203,7 +203,7 @@ AccChannel_SetDirtyDone:
 	ret
 
 AccChannel_CheckActivitySetDirty:
-	ldb_d8 a, (0x3312)
+	ld a, (0x3312:16)
 	orda8 a, 0x3313
 	orda8 a, 0x3316
 	orda8 a, 0x3317
@@ -218,7 +218,7 @@ AccChannel_ActivityCheckDone:
 	ret
 
 AccChannel_CheckPartIndexDirty:
-	ldb_d8 a, (1075)
+	ld a, (1075:16)
 	cps a, 1
 	jr nz, AccChannel_PartIndexDone
 	ordi8 0x3326, 63
@@ -328,7 +328,7 @@ AccVoice_LeftPedal1_Done:
 	ret
 
 AccVoice_CheckChannelSetActive:
-	ldb_d8 a, (0x3314)
+	ld a, (0x3314:16)
 	orda8 a, 0x3315
 	and a, 0x3f
 	jr z, AccVoice_ChannelActiveDone
@@ -353,7 +353,7 @@ AccPitch_CheckTransposeFlags:
 	jr nz, AccPitch_UpdateCheck
 	bitda 6, (0x3281)
 	jr z, AccPitch_UpdateCheck
-	ldb_d8 a, (0x3280)
+	ld a, (0x3280:16)
 	inc 1, a
 	cpda8 a, 1075
 	jr nz, AccPitch_UpdateCheck
@@ -364,7 +364,7 @@ AccPitch_UpdateCheck:
 	jr nz, AccPitch_FinalReturn
 	bitda 7, (0x3281)
 	jr z, AccPitch_FinalReturn
-	ldb_d8 a, (0x3280)
+	ld a, (0x3280:16)
 	inc 1, a
 	cpda8 a, 1075
 	jr nz, AccPitch_FinalReturn
@@ -405,18 +405,18 @@ AccChord_KeyChange1_Done:
 	ret
 
 AccChord_ResolveVoiceAndDispatch:
-	ldb_d8 a, (0x32e5)
-	ldb_d8 w, (0x3327)
+	ld a, (0x32e5:16)
+	ld w, (0x3327:16)
 	and w, 0x3f
 	jr z, AccChord_CheckRange
-	ldb_d8 a, (0x32e7)
+	ld a, (0x32e7:16)
 
 AccChord_CheckRange:
 	cp a, 0x80
 	jrl c, AccChord_NullRet
 	cp a, 0xf0
 	jr c, AccChord_MaskAndContinue
-	ldb_d8 a, (0x33f1)
+	ld a, (0x33f1:16)
 	jr AccChord_DispatchVoiceChange
 
 AccChord_MaskAndContinue:
@@ -517,7 +517,7 @@ AccChord_CheckExtraDirtyBit3:
 	calr Rhythm_QueuePartChangeEvent
 
 AccChord_CheckPitchDirty:
-	ldb_d8 a, (0x3329)
+	ld a, (0x3329:16)
 	and a, 0x3f
 	jr z, AccChord_NullRet
 	bitda 0, (0x32fb)
@@ -539,10 +539,10 @@ AccChord_NullRet:
 	ret
 
 AccChord_CompareAndSetDirty:
-	ldb_d8 a, (0x32d8)
+	ld a, (0x32d8:16)
 	cpda8 a, 0x32dc
 	jr nz, AccChord_SetDirtyBit5
-	ldb_d8 a, (0x32da)
+	ld a, (0x32da:16)
 	cpda8 a, 0x32de
 	jr z, AccChord_CheckZeroChord
 
@@ -558,10 +558,10 @@ AccChord_CompareDone:
 	ret
 
 AccentVoice_DetectAndMarkChange:
-	ldb_d8 a, (0x3305)
+	ld a, (0x3305:16)
 	cpda8 a, 0x3306
 	jr z, AccentVoice_UpdateParamIndex
-	ldb_d8 a, (0x3314)
+	ld a, (0x3314:16)
 	orda8 a, 0x3315
 	and a, 0x3f
 	jr nz, AccentVoice_UpdateParamIndex
@@ -571,20 +571,20 @@ AccentVoice_DetectAndMarkChange:
 	jr nc, AccentVoice_UpdateParamIndex
 	bitda 0, (0x3301)
 	jr z, AccentVoice_CheckModeChange
-	ldb_d8 a, (0x3312)
+	ld a, (0x3312:16)
 	orda8 a, 0x3313
 	and a, 0x3f
 	jr nz, AccentVoice_UpdateParamIndex
 
 AccentVoice_CheckModeChange:
-	ldb_d8 a, (0x3305)
+	ld a, (0x3305:16)
 	and a, 0x3
 	cpda8 a, 0x3338
 	jr z, AccentVoice_UpdateParamIndex
 	ordi8 0x330d, 1
 
 AccentVoice_UpdateParamIndex:
-	ldb_d8 a, (0x3305)
+	ld a, (0x3305:16)
 	and a, 0x3
 	stb_d8 (0x333a), a
 	ret
@@ -603,7 +603,7 @@ AccVoice_ComputeParamOffset:
 	extz xwa
 	add xiy, xwa
 	ld xiy, (xiy)
-	ldb_d8 a, (0x32e6)
+	ld a, (0x32e6:16)
 	extz wa
 	sla wa, 2
 	ld xix, AccVoice_PartOffsetTable2
@@ -650,7 +650,7 @@ AccVoice_SelectAndApplyPatch:
 	jr AccVoice_StorePatchAndLookup
 
 AccVoice_PatchFromDirect:
-	ldb_d8 a, (0x32e5)
+	ld a, (0x32e5:16)
 	and a, 0x7f
 	calr AccPatch_SetVoiceParam
 
@@ -857,11 +857,11 @@ RhythmPart1_ProcessAccentData:
 	call AccentData_ComparePart1
 
 RhythmPart1_CheckAccentData:
-	ldb_d8 a, (0x332c)
+	ld a, (0x332c:16)
 	and a, 0x3
 	jr z, RhythmPart1_WriteDone
-	ldb_d8 e, (0x3246)
-	ldb_d8 d, (0x3247)
+	ld e, (0x3246:16)
+	ld d, (0x3247:16)
 	bitda 0, (0x3283)
 	jr nz, RhythmPart1_ProcessRingBuf
 	ld xhl, 0x3214
@@ -900,7 +900,7 @@ RhythmPart1_WriteDone:
 RhythmAccent_CopyAndUpdateRingBuf:
 	pushw de
 	pushw wa
-	ldb_d8 a, (0x32ec)
+	ld a, (0x32ec:16)
 	stb_d8 (0x342e), a
 	calr RhythmAccent_UpdateRingBufPosition
 	popw wa
@@ -908,7 +908,7 @@ RhythmAccent_CopyAndUpdateRingBuf:
 	ret
 
 RhythmAccent_UpdateRingBufPosition:
-	ldb_d8 a, (0x342e)
+	ld a, (0x342e:16)
 	ei 6
 	subda8 a, 1124
 	jr ugt, RhythmAccent_StorePosition
@@ -923,11 +923,11 @@ RhythmAccent_StorePosition:
 	stb_d8 (0x342e), a
 
 RhythmAccent_AddAndCompare:
-	ldb_d8 w, (1122)
+	ld w, (1122:16)
 	add a, w
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 w, (0x3376)
+	ld w, (0x3376:16)
 	cp a, w
 	jr nc, RhythmAccent_UpdateDone
 	stb_d8 (0x3376), a
@@ -960,17 +960,17 @@ RhythmPart2_ProcessAccentData:
 
 RhythmPart2_LoadAndStore:
 	bitda 2, (0x332c)
-	ldb_d8 e, (0x324d)
-	ldb_d8 d, (0x324e)
-	ldb_d8 a, (0x324f)
+	ld e, (0x324d:16)
+	ld d, (0x324e:16)
+	ld a, (0x324f:16)
 	stb_d8 (0x342f), a
-	ldb_d8 a, (0x3250)
+	ld a, (0x3250:16)
 	stb_d8 (0x3430), a
-	ldb_d8 a, (0x3251)
+	ld a, (0x3251:16)
 	stb_d8 (0x3431), a
-	ldb_d8 a, (0x3252)
+	ld a, (0x3252:16)
 	stb_d8 (0x32c3), a
-	ldb_d8 a, (0x3253)
+	ld a, (0x3253:16)
 	stb_d8 (0x32c7), a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, (0x3283)
@@ -990,13 +990,13 @@ RhythmPart2_ProcessRingBuf:
 	calr RingBuf_AdvanceIndex
 	stb_dri D, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x342f)
+	ld a, (0x342f:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x3430)
+	ld a, (0x3430:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x3431)
+	ld a, (0x3431:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
@@ -1011,11 +1011,11 @@ RhythmPart2_WriteDone:
 AccVoiceReg_StoreParamRecord:
 	ld (xhl), e
 	ld (xhl + 1), d
-	ldb_d8 a, (0x342f)
+	ld a, (0x342f:16)
 	ld (xhl + 2), a
-	ldb_d8 a, (0x3430)
+	ld a, (0x3430:16)
 	ld (xhl + 3), a
-	ldb_d8 a, (0x3431)
+	ld a, (0x3431:16)
 	ld (xhl + 4), a
 	ret
 
@@ -1035,17 +1035,17 @@ AccVoice_LoadRhythmParams_Part3:
 
 RhythmPart3_LoadAndStore:
 	bitda 3, (0x332c)
-	ldb_d8 e, (0x3254)
-	ldb_d8 d, (0x3255)
-	ldb_d8 a, (0x3256)
+	ld e, (0x3254:16)
+	ld d, (0x3255:16)
+	ld a, (0x3256:16)
 	stb_d8 (0x342f), a
-	ldb_d8 a, (0x3257)
+	ld a, (0x3257:16)
 	stb_d8 (0x3430), a
-	ldb_d8 a, (0x3258)
+	ld a, (0x3258:16)
 	stb_d8 (0x3431), a
-	ldb_d8 a, (0x3259)
+	ld a, (0x3259:16)
 	stb_d8 (0x32c4), a
-	ldb_d8 a, (0x325a)
+	ld a, (0x325a:16)
 	stb_d8 (0x32c8), a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, (0x3283)
@@ -1065,13 +1065,13 @@ RhythmPart3_ProcessRingBuf:
 	calr RingBuf_AdvanceIndex
 	stb_dri D, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x342f)
+	ld a, (0x342f:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x3430)
+	ld a, (0x3430:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x3431)
+	ld a, (0x3431:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
@@ -1090,17 +1090,17 @@ AccVoice_LoadRhythmParams_Part4:
 
 RhythmPart4_LoadAndStore:
 	bitda 4, (0x332c)
-	ldb_d8 e, (0x325b)
-	ldb_d8 d, (0x325c)
-	ldb_d8 a, (0x325d)
+	ld e, (0x325b:16)
+	ld d, (0x325c:16)
+	ld a, (0x325d:16)
 	stb_d8 (0x342f), a
-	ldb_d8 a, (0x325e)
+	ld a, (0x325e:16)
 	stb_d8 (0x3430), a
-	ldb_d8 a, (0x325f)
+	ld a, (0x325f:16)
 	stb_d8 (0x3431), a
-	ldb_d8 a, (0x3260)
+	ld a, (0x3260:16)
 	stb_d8 (0x32c5), a
-	ldb_d8 a, (0x3261)
+	ld a, (0x3261:16)
 	stb_d8 (0x32c9), a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, (0x3283)
@@ -1120,13 +1120,13 @@ RhythmPart4_ProcessRingBuf:
 	calr RingBuf_AdvanceIndex
 	stb_dri D, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x342f)
+	ld a, (0x342f:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x3430)
+	ld a, (0x3430:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x3431)
+	ld a, (0x3431:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
@@ -1145,17 +1145,17 @@ AccVoice_LoadRhythmParams_Part5:
 
 RhythmPart5_LoadAndStore:
 	bitda 5, (0x332c)
-	ldb_d8 e, (0x3262)
-	ldb_d8 d, (0x3263)
-	ldb_d8 a, (0x3264)
+	ld e, (0x3262:16)
+	ld d, (0x3263:16)
+	ld a, (0x3264:16)
 	stb_d8 (0x342f), a
-	ldb_d8 a, (0x3265)
+	ld a, (0x3265:16)
 	stb_d8 (0x3430), a
-	ldb_d8 a, (0x3266)
+	ld a, (0x3266:16)
 	stb_d8 (0x3431), a
-	ldb_d8 a, (0x3267)
+	ld a, (0x3267:16)
 	stb_d8 (0x32c6), a
-	ldb_d8 a, (0x3268)
+	ld a, (0x3268:16)
 	stb_d8 (0x32ca), a
 	calr Rhythm_PackVelocityHighBit
 	bitda 0, (0x3283)
@@ -1175,13 +1175,13 @@ RhythmPart5_ProcessRingBuf:
 	calr RingBuf_AdvanceIndex
 	stb_dri D, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x342f)
+	ld a, (0x342f:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x3430)
+	ld a, (0x3430:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
-	ldb_d8 a, (0x3431)
+	ld a, (0x3431:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	calr RingBuf_AdvanceIndex
 	ld (xhl + 4), iy
@@ -1256,11 +1256,11 @@ Rhythm_Send3ByteMsg:
 	stb_d8 (0x33e2), a
 	stb_d8 (0x33e3), w
 	stb_d8 (0x33e4), e
-	ldb_d8 a, (0x33e2)
+	ld a, (0x33e2:16)
 	call Rhythm_SendByte
-	ldb_d8 a, (0x33e3)
+	ld a, (0x33e3:16)
 	call Rhythm_SendByte
-	ldb_d8 a, (0x33e4)
+	ld a, (0x33e4:16)
 	call Rhythm_SendByte
 	ret
 

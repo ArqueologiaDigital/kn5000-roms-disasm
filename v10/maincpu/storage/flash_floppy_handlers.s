@@ -860,7 +860,7 @@ Flash_InitBytecodeBlock:
 	.byte 0xad
 	push	xbc
 	call	DualVoice_ParamLoadDone
-	ldb_d8	a, (0x35b0)
+	ld	a, (0x35b0:16)
 	extz	wa
 	bit	0, wa
 	jr	z, 6
@@ -1001,7 +1001,7 @@ Flash_InitBytecodeBlock:
 	.byte 0xad
 	push	xbc
 	call	DualVoice_ParamLoadDone
-	ldb_d8	a, (0x35b0)
+	ld	a, (0x35b0:16)
 	extz	wa
 	bit	0, wa
 	jr	z, 24
@@ -1077,9 +1077,9 @@ Flash_InitBytecodeBlock:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	64710
-	ldb_d8	l, (3176)
-	ldb_d8	c, (3178)
-	ldb_d8	e, (3180)
+	ld	l, (3176:16)
+	ld	c, (3178:16)
+	ld	e, (3180:16)
 	.byte 0x87
 	push	xsp
 	push	sr
@@ -1103,9 +1103,9 @@ Flash_InitBytecodeBlock:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	64655
-	ldb_d8	a, (3176)
-	ldb_d8	c, (3178)
-	ldb_d8	e, (3180)
+	ld	a, (3176:16)
+	ld	c, (3178:16)
+	ld	e, (3180:16)
 	.byte 0x87
 	push	xsp
 	push	sr
@@ -4732,7 +4732,7 @@ ToneParam_ExtendedOpsBlock:
 	lda	xiy, (xwa)
 	.byte 0xb0
 	call	DualVoice_ParamLoadDone
-	ldb_d8	a, (0x35b0)
+	ld	a, (0x35b0:16)
 	extz	wa
 	bit	0, wa
 	jr	z, 29
@@ -4774,11 +4774,11 @@ ToneParam_ExtendedOpsBlock:
 	ret
 	push	xiz
 	ld	hl, wa
-	ldb_d8	c, (0x34ed)
+	ld	c, (0x34ed:16)
 	ldb_erp c, 251
-	ldb_d8 c, (13550)
+	ld c, (13550:16)
 	ldb_erp c, 250
-	ldb_d8	c, (0x34ef)
+	ld	c, (0x34ef:16)
 	.byte 0xc7
 	swi	1
 	decm	6, (xhl-31)
@@ -4979,7 +4979,7 @@ DualVoice_ParamCompareLoop:
 	add bc, wa
 	ldmm_srib 0x07, 0xe8, 0xe4, 0xad, 0x39
 	call DualVoice_ParamLoadDone
-	ldb_d8 a, (0x35b0)
+	ld a, (0x35b0:16)
 	extz wa
 	bit 0, wa
 	jr z, DualVoice_LoopCheckNext
@@ -5735,7 +5735,7 @@ CmpSetP1_GridCheck_Return:
 ; UI component dispatch table - handles cases 0-7 for grid/focus handling
 ; Offset table at 0xe1cef0 selects which handler to run based on WA value
 UI_COMPONENT_DISPATCH:
-	ldb_d8 a, (0x34d7); Load byte from UI state
+	ld a, (0x34d7:16); Load byte from UI state
 	inc 1, a	; Increment by 1
 	extz wa	; Zero-extend A to WA
 	pushw wa	; Push WA as parameter
@@ -5746,14 +5746,14 @@ UI_COMPONENT_DISPATCH:
 	lda xsp, (xsp + 10)	; Clean up stack (10 bytes)
 	jrl WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE1:
-	ldb_d8 a, (0x34ce); Load byte from UI state
+	ld a, (0x34ce:16); Load byte from UI state
 	srl a, 7	; Shift right logical by 7
 	extz wa	; Zero-extend A to WA
 	sla wa, 2	; Shift left by 2 (multiply by 4)
 	lda xbc, (0x03d9f6:24); Load table address
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0	; Load entry from table
 	push xwa	; Push parameter
-	ldb_d8 a, (0x34d8); Load byte from UI state
+	ld a, (0x34d8:16); Load byte from UI state
 	extz wa	; Zero-extend A to WA
 	sla wa, 2	; Shift left by 2 (multiply by 4)
 	lda xbc, (0x03da0e:24); Load table address
@@ -5766,11 +5766,11 @@ UI_COMPONENT_DISPATCH_CASE1:
 	lda xsp, (xsp + 16)	; Clean up stack (16 bytes)
 	jr WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE2:
-	ldb_d8 c, (0x34e9); Load byte from UI state
+	ld c, (0x34e9:16); Load byte from UI state
 	ld xwa, 0x3d9c6	; Load table address
 	jr UI_COMPONENT_DISPATCH_CASE2_COMMON	; Jump to common code
 UI_COMPONENT_DISPATCH_CASE3:
-	ldb_d8 a, (0x34ea); Load byte from UI state
+	ld a, (0x34ea:16); Load byte from UI state
 	srl a, 4	; Shift right logical by 4
 	and a, 0x1	; Mask to get bit 4
 	ld c, a	; Copy to C
@@ -5787,7 +5787,7 @@ UI_COMPONENT_DISPATCH_CASE4:
 UI_COMPONENT_DISPATCH_CASE5:
 	lds wa, 5	; Load 5
 UI_COMPONENT_DISPATCH_CASE5_COMMON:
-	ldb_d8 c, (0x34ea); Load byte from UI state
+	ld c, (0x34ea:16); Load byte from UI state
 	and a, 0xf	; Mask lower nibble
 	jr z, UI_COMPONENT_DISPATCH_CASE5_SKIP	; Skip shift if zero
 	srla c	; Shift A right by C
@@ -5956,7 +5956,7 @@ GridCheck_ReturnZero:
 	ret
 
 GridCheck_LookupSndParam:
-	ldb_d8 e, (0x34d6)
+	ld e, (0x34d6:16)
 	extz de
 	sla de, 2
 	lda xhl, (RhythmTiming_OffsetTable:24)
@@ -6332,7 +6332,7 @@ S2cMemNoBox_CallInherited:
 S2cMemNoBox_HandleScroll:
 	ld xwa, xiz
 	call InheritedProc
-	ldb_d8 a, (0x398f)
+	ld a, (0x398f:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (StrPanLeft64_0x18:24)
@@ -6519,7 +6519,7 @@ PsS2cTrans_HandleScroll:
 	ld XWA, (xsp + 0x0104)
 	call GetViewInstance
 	ld xiz, xhl
-	ldb_d8 a, (0x398e)
+	ld a, (0x398e:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (PtrTbl_TransposeStrs:24)

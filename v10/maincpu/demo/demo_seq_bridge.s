@@ -466,7 +466,7 @@ SeqInit_LookupDispatchEntry:
 	ret
 
 SeqInit_PostDispatchEvent:
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	extz wa
 	calr SeqInit_LookupDispatchEntry
 	ld xwa, xhl
@@ -552,7 +552,7 @@ PlayMode_SendStopEvent:
 
 ; SqTrSelTtl case G
 SqTrSel_CaseG:
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	extz wa
 	sub wa, 0x6f
 	cps wa, 0
@@ -1047,7 +1047,7 @@ VoiceSlot_AllocNewSlot:
 	pushw wa
 	pushw iz
 	push xix
-	ldb_d8 a, (3822)
+	ld a, (3822:16)
 	dec 1, a
 	ld w, a
 	sla a, 1

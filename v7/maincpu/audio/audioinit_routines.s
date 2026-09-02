@@ -383,7 +383,7 @@ AudioInit_Pan_Reverb_Left:
 AudioInit_Pan_Reverb_CheckMode1:
 	swi	0
 	ld	e, a
-	ldb_d8	a, (49864)
+	ld	a, (49864:16)
 	xorda8	a, (49506)
 	ld	c, a
 AudioInit_Pan_Reverb_CheckMode1b:
@@ -393,16 +393,16 @@ AudioInit_Pan_Reverb_Right:
 AudioInit_Pan_Reverb_CheckTypeED:
 	inc	6, l
 	pushw	de
-	ldb_d8	a, (50072)
+	ld	a, (50072:16)
 	res	7, a
-	ldb_d8	c, (49714)
+	ld	c, (49714:16)
 	res	7, c
 	cp	c, a
 	jr	nz, 18
-	ldb_d8	a, (50073)
+	ld	a, (50073:16)
 	srl	a, 1
 AudioInit_Pan_Reverb_TypeED_Left:
-	ldb_d8	c, (49715)
+	ld	c, (49715:16)
 	srl	c, 1
 AudioInit_Pan_Reverb_Center:
 	cp	c, a

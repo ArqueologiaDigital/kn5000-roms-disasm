@@ -76,7 +76,7 @@ SmfLoad_AbortPartial:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32750)
+	ld	a, (32750:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -104,7 +104,7 @@ SmfLoad_Success:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32750)
+	ld	a, (32750:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -300,7 +300,7 @@ SeqToSong_BuildEntry:
 	ld	xbc, 15337276
 	call	16288975
 	lda	xiz, (32761:16)
-	ldb_d8	a, (34988)
+	ld	a, (34988:16)
 	inc	1, a
 	extz	wa
 	lds	bc, 2
@@ -331,7 +331,7 @@ SeqFromSong_BuildEntry:
 	ld	xbc, 15337288
 	call	16288975
 	lda	xiz, (32893:16)
-	ldb_d8	a, (34988)
+	ld	a, (34988:16)
 	inc	1, a
 	extz	wa
 	lds	bc, 2
@@ -356,7 +356,7 @@ SmfSeqSongNameFunc:
 	stda32	(33020), xde
 	jr	28
 SeqSongName_BuildEntry:
-	ldb_d8	a, (34988)
+	ld	a, (34988:16)
 	extz	wa
 	lds	bc, 0
 	lds	de, 0
@@ -377,7 +377,7 @@ SmfLoadAsFunc:
 	stda32	(33024), xde
 	jr	32
 SmfLoadAs_Apply:
-	ldb_d8	a, 34986
+	ld	a, (34986:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (15337300:24)
@@ -649,9 +649,9 @@ SmfFN_HandleSave:
 	call	16423243
 	lds	wa, 0
 	calr	-12374
-	ldb_d8	a, 34988
+	ld	a, (34988:16)
 	extz	wa
-	ldb_d8	c, 34986
+	ld	c, (34986:16)
 	extz	bc
 	call	16284664
 	ld	(xsp+6), hl
@@ -681,7 +681,7 @@ SmfFN_Save_WriteSlot:
 	calr	-799
 	lda	xwa, (700416:24)
 	lds32	xbc, 0
-	ldb_d8	c, 34988
+	ld	c, (34988:16)
 	sll	xbc, 11
 	add	xwa, xbc
 	.byte 0xf3, 0xe1, 0x00, 0x01, 0x30
@@ -755,11 +755,11 @@ SmfFN_HandleOpen:
 SmfFN_Open_Execute:
 	lds	wa, 0
 	calr	52825
-	ldb_d8	a, (34988)
+	ld	a, (34988:16)
 	extz	wa
-	ldb_d8	c, (34990)
+	ld	c, (34990:16)
 	extz	bc
-	ldb_d8	e, (34992)
+	ld	e, (34992:16)
 	extz	de
 	call	16284750
 	ld	wa, hl
@@ -796,11 +796,11 @@ SmfFN_HandleOpen2:
 	call	16423243
 	lds	wa, 0
 	calr	52683
-	ldb_d8	a, (34988)
+	ld	a, (34988:16)
 	extz	wa
-	ldb_d8	c, (34990)
+	ld	c, (34990:16)
 	extz	bc
-	ldb_d8	e, (34992)
+	ld	e, (34992:16)
 	extz	de
 	call	16284750
 	ld	wa, hl
@@ -931,7 +931,7 @@ SmfFN_SetScrollDir0:
 SmfFN_HandleScrollFlag1:
 	cp	xiz, 21
 	jr	nz, 51
-	ldb_d8	c, (34986)
+	ld	c, (34986:16)
 	ld	a, c
 	inc	1, a
 	cps	a, 3
@@ -984,7 +984,7 @@ SmfFN_SetFlag35140_0:
 	stdi8	(34984), 0
 	jrl	194
 SmfFN_HandleSeqSongNum:
-	ldb_d8	c, (34988)
+	ld	c, (34988:16)
 	ld	a, c
 	inc	1, a
 	cp	xiz, 30

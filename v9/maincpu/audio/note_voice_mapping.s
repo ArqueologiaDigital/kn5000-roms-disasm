@@ -521,7 +521,7 @@ AccNoteOn_AutoPlayNext:
 	inc 1, iz
 
 AccNoteOn_AutoPlayCheck:
-	ldb_d8 a, (0xcc1f)
+	ld a, (0xcc1f:16)
 	extz wa
 	cp iz, wa
 	jr c, AccNoteOn_AutoPlayLoop
@@ -566,7 +566,7 @@ AccNoteOn_MinVelocity_Next:
 	inc 1, iz
 
 AccNoteOn_MinVelocity_Check:
-	ldb_d8 a, (0xcc1f)
+	ld a, (0xcc1f:16)
 	extz wa
 	cp iz, wa
 	jr c, AccNoteOn_FindMinVelocity_Loop
@@ -602,7 +602,7 @@ AccNoteOn_EmitVoiceLoop_Body:
 	inc 1, iz
 
 AccNoteOn_EmitVoiceLoop_Check:
-	ldb_d8 a, (0xcc1f)
+	ld a, (0xcc1f:16)
 	extz wa
 	cp iz, wa
 	jr c, AccNoteOn_EmitVoiceLoop_Body
@@ -2750,7 +2750,7 @@ Voice_FindAndAllocBestMatch:
 	ret
 
 Voice_InitSlotData:
-	ldb_d8 a, (0xcee5)
+	ld a, (0xcee5:16)
 	extz wa
 	stda16 (0xceff), xwa
 	lds de, 0
@@ -2778,7 +2778,7 @@ VoiceSlotInit_Loop:
 	inc 1, de
 
 VoiceSlotInit_Check:
-	ldb_d8 a, (0xcee5)
+	ld a, (0xcee5:16)
 	extz wa
 	cp de, wa
 	jr lt, VoiceSlotInit_Loop
@@ -2815,7 +2815,7 @@ VoiceLinks_SlotLoop:
 	add xbc, (xsp + 6)
 	cp (xbc + 1), 0x0
 	jrl z, VoiceLinks_SkipEmpty
-	ldb_d8 a, (0xe829)
+	ld a, (0xe829:16)
 	ldb_erp A, 0xfb
 	cp a, 0x20
 	jrl z, MidiEvent_NoteLoopAdvance
@@ -3073,14 +3073,14 @@ ProcessNoteEntry_Compare:
 	jr z, MidiEvent_ProcessCC_Continue
 	cpdi8 (0xc363), 255
 	jr z, ProcessNoteEntry_CheckDRAM
-	ldb_d8 l, (0xc363)
+	ld l, (0xc363:16)
 	extz hl
 	jr MidiEvent_ProcessCC_Continue
 
 ProcessNoteEntry_CheckDRAM:
 	cpdi8 (0xc362), 0
 	jr le, ProcessNoteEntry_LoadDRAM2
-	ldb_d8 a, (0xc362)
+	ld a, (0xc362:16)
 	exts wa
 	add wa, hl
 	cp a, 0x7f
@@ -3089,13 +3089,13 @@ ProcessNoteEntry_CheckDRAM:
 	jr MidiEvent_ProcessCC_Continue
 
 ProcessNoteEntry_LoadDRAM:
-	ldb_d8 a, (0xc362)
+	ld a, (0xc362:16)
 	exts wa
 	add hl, wa
 	jr MidiEvent_ProcessCC_Continue
 
 ProcessNoteEntry_LoadDRAM2:
-	ldb_d8 a, (0xc362)
+	ld a, (0xc362:16)
 	exts wa
 	add wa, hl
 	cps a, 0
@@ -3104,7 +3104,7 @@ ProcessNoteEntry_LoadDRAM2:
 	jr MidiEvent_ProcessCC_Continue
 
 ProcessNoteEntry_LoadDRAM3:
-	ldb_d8 a, (0xc362)
+	ld a, (0xc362:16)
 	exts wa
 	add hl, wa
 
@@ -7705,7 +7705,7 @@ AllocNewVoiceEntry_LoadParam:
 	add xbc, (xsp + 12)
 	cp (xbc + 1), 0x0
 	jrl z, AllocNewVoiceEntry_LoadParam3
-	ldb_d8 a, (0xe92f)
+	ld a, (0xe92f:16)
 	ldb_erp A, 0xfb
 	cp a, 0x80
 	jrl z, AllocNewVoiceEntry_LoadParam2
@@ -8707,7 +8707,7 @@ FindEntry_LoadParam:
 	add xbc, (xsp + 12)
 	cp (xbc + 1), 0x0
 	jrl z, FindEntry_LoadParam3
-	ldb_d8 a, (0xe9b1)
+	ld a, (0xe9b1:16)
 	ldb_erp A, 0xfb
 	cp a, 0x20
 	jrl z, FindEntry_LoadParam2
@@ -10560,17 +10560,17 @@ SndParam_UpdateChannelTuning:
 	extz wa
 	lda xhl, (CharMap_ValueData_A:24)
 	ldmm_srib 0x07, 0xec, 0xe0, 0x44, 0xcd
-	ldb_d8 a, (0xcd44)
+	ld a, (0xcd44:16)
 	extz wa
 	add wa, wa
 	lda xhl, (0xe82e:16)
 	ldmm_srib 0x07, 0xec, 0xe0, 0x42, 0xcd
 
 UpdateChannelTuning_LoadDRAM:
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	cpda8 a, 0xcd44
 	jr z, SelectTone_Continue_SetByteFF
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	sla wa, 3
 	lda xhl, (0xc66a:16)
@@ -10582,7 +10582,7 @@ UpdateChannelTuning_LoadDRAM:
 	jr z, UpdateChannelTuning_LoadDRAM2
 	cps e, 0
 	jr nz, UpdateChannelTuning_SetByteFF
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	sla wa, 3
 	lda xbc, (0xc66c:16)
@@ -10590,7 +10590,7 @@ UpdateChannelTuning_LoadDRAM:
 	jr Synth_SelectTone_Continue
 
 UpdateChannelTuning_LoadDRAM2:
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	sla wa, 3
 	lda xbc, (0xc66f:16)
@@ -10598,7 +10598,7 @@ UpdateChannelTuning_LoadDRAM2:
 	jr Synth_SelectTone_Continue
 
 UpdateChannelTuning_LoadDRAM3:
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	sla wa, 3
 	lda xbc, (0xc670:16)
@@ -10609,7 +10609,7 @@ UpdateChannelTuning_SetByteFF:
 	ldb l, 0xff
 
 Synth_SelectTone_Continue:
-	ldb_d8 a, (0xcd42)
+	ld a, (0xcd42:16)
 	extz wa
 	add wa, wa
 	lda xbc, (0xe82e:16)
@@ -12047,7 +12047,7 @@ ReallocVoices_Exit_WriteReg3:
 	lda_dri XWA, 0xfd, 0xa4, 0x00
 	ld xhl, xwa
 	lda xbc, (0xc364:16)
-	ldb_d8 a, (0xc365)
+	ld a, (0xc365:16)
 	ld e, a
 	extz de
 	ld xwa, xhl
@@ -13012,7 +13012,7 @@ SetParam_Return_WriteReg3:
 	stib_ind 0xfd, 0xa7, 0x00, 0xff
 	cpib_sri 0xfd, 0x4a, 0x01, 0x19
 	jr nz, SetParam_Return_LoadAddr
-	ldb_d8 a, (0xc422)
+	ld a, (0xc422:16)
 	stb_dri A, 0xfd, 0x4a, 0x01
 
 SetParam_Return_LoadAddr:
@@ -13092,7 +13092,7 @@ SetParam_Return_WriteReg5:
 	stib_ind 0xfd, 0xa7, 0x00, 0xff
 	cpib_sri 0xfd, 0x4a, 0x01, 0x19
 	jr nz, SetParam_Return_LoadAddr2
-	ldb_d8 a, (0xc422)
+	ld a, (0xc422:16)
 	stb_dri A, 0xfd, 0x4a, 0x01
 
 SetParam_Return_LoadAddr2:
@@ -13989,7 +13989,7 @@ VoiceMap_AllocateSlo_Block2:
 	cp l, 0xff
 	jr z, VoiceMap_AllocateSlo_SetByteFF2
 	stdi8 (0xe9bc), 10
-	ldb_d8 a, (0xceac)
+	ld a, (0xceac:16)
 	cpda8 a, 0xceaa
 	jr nz, VoiceMap_AllocateSlo_Block3
 	ld wa, (0xce24:16)
@@ -14020,13 +14020,13 @@ NoteMap_FindBestMatch:
 	stdi8 (0xe9bc), 0
 	cpdi16 0xce22, 0
 	jr z, CheckVoiceReuse_Block
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	cpda8 a, 0xceae
 	jr nz, NoteMap_CheckVoiceReuse
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	cpda8 a, 0xceb0
 	jr nz, NoteMap_CheckVoiceReuse
-	ldb_d8 a, (0xceac)
+	ld a, (0xceac:16)
 	cpda8 a, 0xceaa
 	jr nz, NoteMap_CheckVoiceReuse
 	cpdi8 (0xceb2), 0
@@ -14063,9 +14063,9 @@ NoteMap_GetVoiceData_Return:
 	ret
 
 NoteMap_GetVoiceData_Entry:
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	stb_d8 (0xceac), c
-	ldb_d8 c, (0xceab)
+	ld c, (0xceab:16)
 	stb_d8 (0xcead), c
 	cpw (xwa), 0x0
 	jr z, GetVoiceData_Entry_Block2
@@ -14120,7 +14120,7 @@ GetVoiceData_Entry_Block2:
 	stdi8 (0xceab), 255
 
 Voice_ReadSearchResult:
-	ldb_d8 l, (0xceaa)
+	ld l, (0xceaa:16)
 	ret
 
 Voice_ResetSearchState:
@@ -14134,7 +14134,7 @@ UIParam_ScanAndCollect:
 	stdi8 (0xceb2), 0
 	cpdi8 (0xceab), 15
 	jr ule, UIParam_SetDefaultCount
-	ldb_d8 a, (0xceab)
+	ld a, (0xceab:16)
 	sub a, 0xf
 	ldb_erp A, 0xfb
 	jr UIParam_CallbackDispatch
@@ -14145,7 +14145,7 @@ UIParam_SetDefaultCount:
 ; UIParam callback dispatch
 UIParam_CallbackDispatch:
 	lda xwa, (xsp + 2)
-	ldb_d8 c, (0xe9be)
+	ld c, (0xe9be:16)
 	extz bc
 	sla bc, 2
 	lda xde, (CharMap_ValueData_B_0x1F2C:24)
@@ -14217,11 +14217,11 @@ SearchVoice_EntryLoop:
 	add xbc, xix
 	ld c, (xbc)
 	ldb_erp C, 0xea
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	stb_erp B, 0xea
 	cp b, c
 	jr gt, SearchVoice_CheckHighBound
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, 0xc
 	ld b, c
 	stb_erp C, 0xea
@@ -14233,7 +14233,7 @@ SearchVoice_OctaveDown:
 	sub_erpb 0xea, 0x0c
 
 SearchVoice_CheckHighBound:
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	stb_erp B, 0xea
 	cp b, c
 	jr gt, SearchVoice_OctaveDown
@@ -14243,7 +14243,7 @@ SearchVoice_OctaveUp:
 	add_erpb 0xea, 0x0c
 
 SearchVoice_CheckLowBound:
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, 0xc
 	ld b, c
 	stb_erp C, 0xea
@@ -14251,7 +14251,7 @@ SearchVoice_CheckLowBound:
 	jr ule, SearchVoice_OctaveUp
 
 SearchVoice_CheckDistance:
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	subb_erp C, 0xea
 	cps c, 2
 	jr ule, SearchVoice_NextEntry
@@ -14391,7 +14391,7 @@ SoundFX_Handler_1:
 	jr z, SoundFX_SetVolumeOffset_Return
 	cpw (xiz), 0x1
 	jr nz, SoundFX_Handler_1_Block
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, (xiz + 5)
 	cp a, 0x8
 	jr ugt, SoundFX_SetVolumeOffset_Return
@@ -14411,7 +14411,7 @@ SoundFX_Handler_1_LoadReg:
 	inc 4, xwa
 	ld xbc, xwa
 	add xbc, xiz
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, (xbc + 1)
 	cp a, 0x8
 	jr ugt, SoundFX_Handler_1_Block2
@@ -14434,10 +14434,10 @@ SoundFX_SetVolumeOffset_Return:
 SoundFX_Handler_2:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14445,7 +14445,7 @@ SoundFX_Handler_2:
 	ld a, l
 	cp a, 0xff
 	jr z, SoundFX_Handler_2_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14455,7 +14455,7 @@ SoundFX_Handler_2:
 	ld l, w
 	ld e, l
 	extz de
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0xc
@@ -14463,7 +14463,7 @@ SoundFX_Handler_2:
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ldw (xiz), 0x1
@@ -14480,10 +14480,10 @@ SoundFX_Handler_2_LoadReg:
 SoundFX_Handler_3:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14491,7 +14491,7 @@ SoundFX_Handler_3:
 	ld a, l
 	cp a, 0xff
 	jr z, SoundFX_Handler_3_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14501,7 +14501,7 @@ SoundFX_Handler_3:
 	ld l, w
 	ld e, l
 	extz de
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0xc
@@ -14509,7 +14509,7 @@ SoundFX_Handler_3:
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ldw (xiz), 0x1
@@ -14526,10 +14526,10 @@ SoundFX_Handler_3_LoadReg:
 SoundFX_Handler_4:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14537,7 +14537,7 @@ SoundFX_Handler_4:
 	ld a, l
 	cp a, 0xff
 	jr z, SoundFX_Handler_4_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14549,7 +14549,7 @@ SoundFX_Handler_4:
 	extz wa
 	ld de, wa
 	add de, de
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x18
@@ -14557,14 +14557,14 @@ SoundFX_Handler_4:
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	ld de, wa
 	add de, de
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x18
@@ -14573,7 +14573,7 @@ SoundFX_Handler_4:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ldw (xiz), 0x2
@@ -14590,10 +14590,10 @@ SoundFX_Handler_4_LoadReg:
 SoundFX_Handler_5:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14601,7 +14601,7 @@ SoundFX_Handler_5:
 	ld a, l
 	cp a, 0xff
 	jrl z, SoundFX_Handler_5_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14613,7 +14613,7 @@ SoundFX_Handler_5:
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
@@ -14621,14 +14621,14 @@ SoundFX_Handler_5:
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
@@ -14637,14 +14637,14 @@ SoundFX_Handler_5:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ld a, l
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
@@ -14653,7 +14653,7 @@ SoundFX_Handler_5:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 2)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 9), a
 	ldw (xiz), 0x3
@@ -14670,10 +14670,10 @@ SoundFX_Handler_5_LoadReg:
 SoundFX_Handler_6:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14681,7 +14681,7 @@ SoundFX_Handler_6:
 	ld a, l
 	cp a, 0xff
 	jrl z, SoundFX_Handler_6_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14693,7 +14693,7 @@ SoundFX_Handler_6:
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
@@ -14701,14 +14701,14 @@ SoundFX_Handler_6:
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
@@ -14717,14 +14717,14 @@ SoundFX_Handler_6:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
@@ -14733,14 +14733,14 @@ SoundFX_Handler_6:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 2)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 9), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
@@ -14749,7 +14749,7 @@ SoundFX_Handler_6:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 3)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 11), a
 	ldw (xiz), 0x4
@@ -14766,10 +14766,10 @@ SoundFX_Handler_6_LoadReg:
 SoundFX_Handler_7:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14777,7 +14777,7 @@ SoundFX_Handler_7:
 	ld a, l
 	cp a, 0xff
 	jrl z, SoundFX_Handler_7_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14789,7 +14789,7 @@ SoundFX_Handler_7:
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
@@ -14797,14 +14797,14 @@ SoundFX_Handler_7:
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
@@ -14813,14 +14813,14 @@ SoundFX_Handler_7:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ld a, l
 	extz wa
 	muls wa, 0x3
 	ld de, wa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x24
@@ -14829,7 +14829,7 @@ SoundFX_Handler_7:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 2)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 9), a
 	ldw (xiz), 0x3
@@ -14846,10 +14846,10 @@ SoundFX_Handler_7_LoadReg:
 SoundFX_Handler_8:
 	push xiz
 	ld xiz, xwa
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	ld e, a
 	extz de
-	ldb_d8 a, (0xcee0)
+	ld a, (0xcee0:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -14857,7 +14857,7 @@ SoundFX_Handler_8:
 	ld a, l
 	cp a, 0xff
 	jrl z, SoundFX_Handler_8_ClearWord
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	subda8 a, 0xcee0
 	add a, l
 	inc 1, a
@@ -14869,7 +14869,7 @@ SoundFX_Handler_8:
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
@@ -14877,14 +14877,14 @@ SoundFX_Handler_8:
 	exts xwa
 	add xwa, xbc
 	ldb_sri C, 0x07, 0xe0, 0xe8
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 5), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
@@ -14893,14 +14893,14 @@ SoundFX_Handler_8:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 1)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 7), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
@@ -14909,14 +14909,14 @@ SoundFX_Handler_8:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 2)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 9), a
 	ld a, l
 	extz wa
 	ld de, wa
 	sla de, 2
-	ldb_d8 a, (0xcedf)
+	ld a, (0xcedf:16)
 	dec 1, a
 	extz wa
 	muls wa, 0x30
@@ -14925,7 +14925,7 @@ SoundFX_Handler_8:
 	add xwa, xbc
 	lda_dri XWA, 0x07, 0xe0, 0xe8
 	ld c, (xwa + 3)
-	ldb_d8 a, (0xceaa)
+	ld a, (0xceaa:16)
 	sub a, c
 	ld (xiz + 11), a
 	ldw (xiz), 0x4
@@ -14941,11 +14941,11 @@ SoundFX_Handler_8_LoadReg:
 
 SoundFX_Handler_9:
 	ldb_da e, (CharMap_ValueData_B_0x1F26)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 5), c
 	ldb_da e, (CharMap_ValueData_B_0x1F27)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 7), c
 	ldw (xwa), 0x2
@@ -14954,11 +14954,11 @@ SoundFX_Handler_9:
 
 SoundFX_Handler_10:
 	ldb_da e, (CharMap_ValueData_B_0x1F28)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 5), c
 	ldb_da e, (CharMap_ValueData_B_0x1F29)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 7), c
 	ldw (xwa), 0x2
@@ -14967,11 +14967,11 @@ SoundFX_Handler_10:
 
 SoundFX_Handler_11:
 	ldb_da e, (CharMap_ValueData_B_0x1F2A)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 5), c
 	ldb_da e, (CharMap_ValueData_B_0x1F2B)
-	ldb_d8 c, (0xceaa)
+	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 7), c
 	ldw (xwa), 0x2
@@ -15337,10 +15337,10 @@ Voice_CheckAndResetSlotState:
 CheckAndResetSlotSta_Block:
 	ordi8_24 (0xcede), 128
 	stib_da (0x00cee4), 0x00
-	ldb_d8 e, (0xfc5f)
+	ld e, (0xfc5f:16)
 	and e, 0x30
 	jr nz, Voice_NullRet2
-	ldb_d8 e, (0xfc60)
+	ld e, (0xfc60:16)
 	and e, 0x30
 	jr nz, Voice_NullRet2
 	ld de, (0xc598:16)
@@ -17079,19 +17079,19 @@ VoiceSlot_CheckAndApply_Data2:
 	jr	10
 	stdi8	(0xceb6), 0
 	stdi8	(0xceb7), 0
-	ldb_d8	a, (0xcec0)
+	ld	a, (0xcec0:16)
 	stb_da	(0xcede), a
-	ldb_d8	a, (0xcec1)
+	ld	a, (0xcec1:16)
 	stb_da	(0xcedf), a
-	ldb_d8	a, (0xcec2)
+	ld	a, (0xcec2:16)
 	stb_da	(0xcee0), a
-	ldb_d8	a, (0xcec3)
+	ld	a, (0xcec3:16)
 	stb_da	(0xcee1), a
-	ldb_d8	a, (0xcec4)
+	ld	a, (0xcec4:16)
 	stb_da	(0xcee2), a
-	ldb_d8	a, (0xcec5)
+	ld	a, (0xcec5:16)
 	stb_da	(0xcee3), a
-	ldb_d8	a, (0xcec6)
+	ld	a, (0xcec6:16)
 	stb_da	(0xcee4), a
 	ld	xiy, 0xceca
 	ld	xix, 0xcee5
@@ -17200,13 +17200,13 @@ NoteDisplay_StoreAnd_LoadReg2:
 	jr NoteDisplay_StoreAnd_Block
 
 NoteDisplay_StoreAnd_LoadDRAM:
-	ldb_d8 a, (0xcee5)
+	ld a, (0xcee5:16)
 	dec 1, a
 	extz wa
 	lda xbc, (0xcee6:16)
 	extz xwa
 	add xwa, xbc
-	ldb_d8 c, (0xcee6)
+	ld c, (0xcee6:16)
 	sub c, (xwa)
 	ld a, c
 	cp a, 0xc
@@ -18816,7 +18816,7 @@ SendEpilogue_Data:
 	lds	iz, 0
 	cp	iz, 12
 	jrl	ge, 999
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	ld	c, a
 	extz	bc
@@ -18856,7 +18856,7 @@ SendEpilogue_Data:
 	lds	iz, 0
 	cp	iz, 12
 	jrl	ge, 880
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	ld	c, a
 	extz	bc
@@ -18882,7 +18882,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 802
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	ld	c, a
 	extz	bc
@@ -18893,7 +18893,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd1e)
+	ld	a, (0xfd1e:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18903,7 +18903,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 738
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	1, a
 	ld	c, a
@@ -18915,7 +18915,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd1f)
+	ld	a, (0xfd1f:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18925,7 +18925,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 672
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	2, a
 	ld	c, a
@@ -18937,7 +18937,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd20)
+	ld	a, (0xfd20:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18947,7 +18947,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 606
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	3, a
 	ld	c, a
@@ -18959,7 +18959,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd21)
+	ld	a, (0xfd21:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18969,7 +18969,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 540
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	4, a
 	ld	c, a
@@ -18981,7 +18981,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd22)
+	ld	a, (0xfd22:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18991,7 +18991,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 474
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	5, a
 	ld	c, a
@@ -19003,7 +19003,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd23)
+	ld	a, (0xfd23:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19013,7 +19013,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 408
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	6, a
 	ld	c, a
@@ -19025,7 +19025,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd24)
+	ld	a, (0xfd24:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19035,7 +19035,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 342
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	7, a
 	ld	c, a
@@ -19047,7 +19047,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd25)
+	ld	a, (0xfd25:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19057,7 +19057,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 276
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	inc	8, a
 	ld	c, a
@@ -19069,7 +19069,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd26)
+	ld	a, (0xfd26:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19079,7 +19079,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 210
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	add	a, 9
 	ld	c, a
@@ -19091,7 +19091,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd27)
+	ld	a, (0xfd27:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19101,7 +19101,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jrl	nz, 143
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	add	a, 10
 	ld	c, a
@@ -19113,7 +19113,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd28)
+	ld	a, (0xfd28:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19123,7 +19123,7 @@ SendEpilogue_Data:
 	call	SndParam_LookupReadOnly
 	cp	hl, 128
 	jr	nz, 78
-	ldb_d8	a, (0xfd1d)
+	ld	a, (0xfd1d:16)
 	and	a, 15
 	add	a, 11
 	ld	c, a
@@ -19135,7 +19135,7 @@ SendEpilogue_Data:
 	ld	wa, bc
 	add	wa, 164
 	ld	bc, wa
-	ldb_d8	a, (0xfd29)
+	ld	a, (0xfd29:16)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -19724,7 +19724,7 @@ PitchReset_ChannelLoop:
 	jr lt, PitchReset_ChannelLoop
 
 PitchReset_CheckExtChannels:
-	ldb_d8 a, (0x379b)
+	ld a, (0x379b:16)
 	and a, 0xf
 	jr z, PitchReset_Flush
 	ldi_erpw 0xfa, 0x10, 0x00
@@ -19905,7 +19905,7 @@ AccSong_ProcessRecord_Loop:
 	jr Acc_PopIzRet
 
 AccSong_ProcessRecord_LoadDRAM:
-	ldb_d8 a, (0xe9e4)
+	ld a, (0xe9e4:16)
 	cps a, 4
 	jr z, AccSong_ProcessRecord_LoadReg2
 	cps a, 3
@@ -20394,7 +20394,7 @@ PlayModeStateMachine_Block4:
 	extz xwa
 	stda32 0xd0a4, xwa
 	lds32 xwa, 0
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	stda32 0xd0a0, xwa
 	ei 0
 	call AccWrap_PlayModeDispatch
@@ -20420,7 +20420,7 @@ PlayModeStateMachine_Prologue:
 	ld (xsp + 4), bc
 	ld (xsp + 6), wa
 	ei 6
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	lds32 xbc, 0
 	ld c, a
 	ld wa, (1052:16)
@@ -21285,7 +21285,7 @@ SeekRecord_PopReturn_Block:
 	lds iz, 2
 
 SeekRecord_PopReturn_LoadDRAM:
-	ldb_d8 a, (0xd09c)
+	ld a, (0xd09c:16)
 	and a, 0xf0
 	cp a, 0xc0
 	jr z, SeekRecord_PopReturn_Block2
@@ -21695,7 +21695,7 @@ SeqPlay_CopyRecordData:
 	incw 1, (xsp + 10)
 
 SeqPlay_CheckStatusByte:
-	ldb_d8 a, (0xec10)
+	ld a, (0xec10:16)
 	and a, 0xf0
 	cp a, 0xc0
 	jr z, SeqPlay_TwoByteMsg
@@ -23210,13 +23210,13 @@ ProcessMidiConverge_LoopCheck:
 	jr c, ProcessMidiConverge_LoopBody
 
 ProcessMidiConverge_LoadDRAM:
-	ldb_d8 a, (0xec03)
+	ld a, (0xec03:16)
 	and a, 0xf0
 	cp a, 0x90
 	jr nz, ToneGen_ValidateRange_Loop
 	cpdi8 (0xec05), 0
 	jr z, ToneGen_ValidateRange_Loop
-	ldb_d8 a, (0xec05)
+	ld a, (0xec05:16)
 	extz wa
 	mul wa, 0x4b
 	extz xwa
@@ -23228,7 +23228,7 @@ ProcessMidiConverge_LoadDRAM:
 	stdi8 (0xec05), 127
 
 ToneGen_ValidateRange_Loop:
-	ldb_d8 a, (0xec03)
+	ld a, (0xec03:16)
 	and a, 0xf0
 	cp a, 0xb0
 	jrl nz, ToneGen_ProcessMidiConverge
@@ -23263,7 +23263,7 @@ VoiceReset_Return_Block:
 	lds iz, 2
 
 VoiceReset_Return_LoadDRAM:
-	ldb_d8 a, (0xd09e)
+	ld a, (0xd09e:16)
 	and a, 0xf0
 	cp a, 0xc0
 	jr z, VoiceReset_Return_Block2
@@ -23552,7 +23552,7 @@ NotifyChangeComplete_Prologue:
 	ld xix, xsp
 	ldw bc, 0x10
 	ldirw
-	ldb_d8 c, (0xe9e4)
+	ld c, (0xe9e4:16)
 	cps c, 4
 	jr z, NotifyChangeComplete_DoGetCurre
 	cps c, 3
@@ -23596,7 +23596,7 @@ ToneGen_RestoreStackReturn:
 ; Used for sequential file record reading during disk operations.
 ; ============================================================================
 FileIO_ReadNextRecord:
-	ldb_d8 a, (0xe9e4)
+	ld a, (0xe9e4:16)
 	cps a, 4
 	jr z, ReadNextRecord_DoLookupB
 	cps a, 3
@@ -23642,7 +23642,7 @@ SndParam_DirectReturn:
 	ret
 
 DirectReturn_LoadDRAM:
-	ldb_d8 a, (0xe9e4)
+	ld a, (0xe9e4:16)
 	cps a, 4
 	jr z, DirectReturn_DoLookupC
 	cps a, 3
@@ -24161,14 +24161,14 @@ CharMap_ActivePreamble:
 	lds bc, 2
 	jp sendCOMM
 CharMap_ActivePreamb_LoadDRAM:
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	cps	a, 0
 	ret	nz
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 15
 	ret	z
 	stdi8	(0xe144), 1
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 15
 	stb_d8	(0xe145), a
 	ld	xde, 0xe144
@@ -25742,7 +25742,7 @@ Param_SignExtendRetu_Block3:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25750,7 +25750,7 @@ Param_SignExtendRetu_Block3:
 	lds wa, 3
 	ldw bc, 0xa
 	call sendCOMM
-	ldb_d8 l, (0xe2bf)
+	ld l, (0xe2bf:16)
 	ret
 
 Param_SignExtendRetu_Block4:
@@ -25763,7 +25763,7 @@ Param_SignExtendRetu_Block4:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25771,7 +25771,7 @@ Param_SignExtendRetu_Block4:
 	lds wa, 3
 	ldw bc, 0xa
 	call sendCOMM
-	ldb_d8 l, (0xe2c9)
+	ld l, (0xe2c9:16)
 	ret
 
 Param_SignExtendRetu_Block5:
@@ -25784,7 +25784,7 @@ Param_SignExtendRetu_Block5:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25792,7 +25792,7 @@ Param_SignExtendRetu_Block5:
 	lds wa, 3
 	ldw bc, 0xa
 	call sendCOMM
-	ldb_d8 l, (0xe2d3)
+	ld l, (0xe2d3:16)
 	ret
 
 SndParam_LookupPartIndex:
@@ -25805,7 +25805,7 @@ SndParam_LookupPartIndex:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25813,7 +25813,7 @@ SndParam_LookupPartIndex:
 	lds wa, 3
 	ldw bc, 0xa
 	call sendCOMM
-	ldb_d8 l, (0xe2dd)
+	ld l, (0xe2dd:16)
 	ret
 
 LookupPartIndex_Compare:
@@ -25884,7 +25884,7 @@ CommPacket_WriteMeasureCount:
 
 CommPacket_WriteMeas_Block:
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ret
 
@@ -25898,7 +25898,7 @@ SendCOMM_VariableLengthPacket:
 	ld (xhl + 4), 0x0
 	ld (xhl + 5), 0x0
 	ld (xhl + 6), e
-	ldb_d8 c, (0xe197)
+	ld c, (0xe197:16)
 	inc 1, c
 	stb_d8 (0xe197), c
 	res 7, c
@@ -25930,7 +25930,7 @@ SendCOMM_VariableLen_Increment:
 	ld bc, de
 	ld xde, xhl
 	call sendCOMM
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	pop xiz
 	ret
@@ -25945,7 +25945,7 @@ COMM_BuildAndSendPacket:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25964,7 +25964,7 @@ BuildAndSendPacket_Block:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x2
 	incdi8 1, (0xe197)
-	ldb_d8 l, (0xe197)
+	ld l, (0xe197:16)
 	res 7, l
 	ld (xde + 7), l
 	ld (xde + 8), a
@@ -25983,7 +25983,7 @@ TmFlash_Return:
 	ld (xde + 5), 0x0
 	ld (xde + 6), 0x1
 	incdi8 1, (0xe197)
-	ldb_d8 a, (0xe197)
+	ld a, (0xe197:16)
 	res 7, a
 	ld (xde + 7), a
 	ld (xde + 8), 0x0
@@ -26099,31 +26099,31 @@ TmFlash_Return_LoadParam2:
 	jr z, TmFlash_Return_LoadDRAM
 	cpw (xsp + 8), 0x0
 	jr nz, CommParam_SetComplete_Return
-	ldb_d8 a, (0xe356)
+	ld a, (0xe356:16)
 	extz wa
 	ld (xbc), wa
 	jr CommParam_SetComplete_Return
 
 TmFlash_Return_LoadDRAM:
-	ldb_d8 a, (0xe357)
+	ld a, (0xe357:16)
 	extz wa
 	ld (xbc), wa
 	jr CommParam_SetComplete_Return
 
 TmFlash_Return_LoadDRAM2:
-	ldb_d8 a, (0xe358)
+	ld a, (0xe358:16)
 	extz wa
 	ld (xbc), wa
 	jr CommParam_SetComplete_Return
 
 TmFlash_Return_LoadDRAM3:
-	ldb_d8 a, (0xe359)
+	ld a, (0xe359:16)
 	extz wa
 	ld (xbc), wa
 	jr CommParam_SetComplete_Return
 
 TmFlash_Return_LoadDRAM4:
-	ldb_d8 a, (0xe35a)
+	ld a, (0xe35a:16)
 	extz wa
 	ld (xbc), wa
 
@@ -26223,7 +26223,7 @@ COMM_SendPartDataBlock:
 	calr CommPort_StatusCheck_Compare
 	cp (xsp + 2), 0x3
 	jr nz, SendPartDataBlock_LoadParam
-	ldb_d8 a, (0xe354)
+	ld a, (0xe354:16)
 	extz wa
 	stw_da (0x03c1b6), xwa
 

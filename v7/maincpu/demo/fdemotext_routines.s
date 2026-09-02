@@ -26,8 +26,8 @@ FDemoText_LookupTableEntry:
 	ret
 FDemoText_ByteData_VoiceProbeA:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 20 of 23 slots byte-identical
-	ldb_d8	c, (49121)
-	ldb_d8	a, (49124)
+	ld	c, (49121:16)
+	ld	a, (49124:16)
 	extz	wa
 	cps	c, 5
 	jr	z, 24
@@ -43,7 +43,7 @@ FDemoText_ByteData_VoiceProbeA:
 	inc	5, xhl
 	cp	(xhl), 0
 	ret	nz
-	ldb_d8	a, (49124)
+	ld	a, (49124:16)
 	extz	wa
 	lda	xbc, (DemoDiskPrompt_English1_0x86:24)
 	ld_rrb	a, xbc, wa
@@ -53,9 +53,9 @@ FDemoText_ByteData_VoiceProbeB:
 	.incbin "includes/romslices/v7_transplant_FDemoText_ByteData_VoiceProbeB.bin"
 FDemoText_ByteData_VoiceProbeC:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 31 of 44 slots byte-identical
-	ldb_d8	e, (49124)
+	ld	e, (49124:16)
 	sub	e, 68
-	ldb_d8	a, (49121)
+	ld	a, (49121:16)
 	extz	wa
 	dec	1, wa
 	cps	wa, 0
@@ -81,7 +81,7 @@ FDemoText_ByteData_VoiceProbeC:
 	.byte 0xe9	; v10 does not spell this byte either
 	nop
 	jr	42
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	and	a, 15
 	jr	z, 19
 	ld	a, e
@@ -89,7 +89,7 @@ FDemoText_ByteData_VoiceProbeC:
 	lda	xbc, (DemoDiskPrompt_English1_0x8E:24)
 	ld_rrb	a, xbc, wa
 	ordm8_24	(149484), xbc
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	and	a, 48
 	ret	z
 	ld	xwa, DemoDiskPrompt_English1_0x92
@@ -308,7 +308,7 @@ FDemoText_UpdateVoiceDisplay_CheckSend:
 	ldb_da a, (0x0247ee)
 	and a, 0x38
 	jr nz, FDemoText_UpdateVoiceDisplay_Done
-	ldb_d8 c, (0xfc26)
+	ld c, (0xfc26:16)
 	cpdm8 0xfc74, c
 	jr z, FDemoText_UpdateVoiceDisplay_Done
 	extz bc
@@ -1129,7 +1129,7 @@ FDemoText_NotifyUIChange:
 	extz	bc
 	ld	xwa, 18688
 	call	16630064
-	ldb_d8	e, (64628)
+	ld	e, (64628:16)
 	extz	de
 	pushw	255
 	ldw	wa, 97

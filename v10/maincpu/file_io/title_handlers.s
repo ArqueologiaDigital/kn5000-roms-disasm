@@ -151,7 +151,7 @@ FmmUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, (0x7f5c)
+	ld a, (0x7f5c:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -183,7 +183,7 @@ FmmUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, (0x7f5c)
+	ld a, (0x7f5c:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -283,7 +283,7 @@ FmmSmfUtility_HandleCancel:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, (0x7f5e)
+	ld a, (0x7f5e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -315,7 +315,7 @@ FmmSmfUtility_HandleSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, (0x7f5e)
+	ld a, (0x7f5e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff

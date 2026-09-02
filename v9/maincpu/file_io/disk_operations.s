@@ -493,11 +493,11 @@ FmmFmt_HandleCancel:
 FmmFmt_HandleProgress:
 	cpdi8 (0x7f6c), 0
 	jrl z, FmmFmt_Return
-	ldb_d8 a, (0x7f6a)
+	ld a, (0x7f6a:16)
 	extz wa
 	cp xde, 0xf
 	jrl z, FmmFmt_HandleAbortFinal
-	ldb_d8 c, (0x84fe)
+	ld c, (0x84fe:16)
 	cp xde, 0xb
 	jrl z, FmmFmt_HandleAbort
 	cp xde, 0xa
@@ -511,7 +511,7 @@ FmmFmt_HandleProgress:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldb_d8 a, (0x7f68)
+	ld a, (0x7f68:16)
 	extz wa
 	call FileIO_ValidateRecord_CheckSize
 	ld iz, hl
@@ -527,7 +527,7 @@ FmmFmt_HandleProgress:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, (0x7f6a)
+	ld a, (0x7f6a:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	stdi8 (0x7f6c), 0
@@ -689,7 +689,7 @@ FmmLoadTtl_StateCancelLoad:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, (0x7f6e)
+	ld a, (0x7f6e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -718,7 +718,7 @@ FmmLoadTtl_StateSuccess:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, (0x7f6e)
+	ld a, (0x7f6e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff

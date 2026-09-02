@@ -422,7 +422,7 @@ WPScan_LoopContinue:
 
 WP_FindNextSlot:
 	pushw iz
-	ldb_d8 a, (0x89f8)
+	ld a, (0x89f8:16)
 	cps a, 4
 	jr nc, WPFind_NotFound
 	ld bc, (0x89f6:16)

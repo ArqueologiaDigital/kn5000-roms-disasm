@@ -175,7 +175,7 @@ FDC_MediaConfigAndRecalibrate__select_format:
 	stdi8 (0x0c4e), 0	; ld (0x0c4e),0x00
 	jrl FDC_MediaConfigAndRecalibrate__done	; jrl T,0xffda68
 FDC_MediaConfigAndRecalibrate__media_dispatch:
-	ldb_d8 a, (0x0c9c)	; ld A,(0x0c9c)
+	ld a, (0x0c9c:16)	; ld A,(0x0c9c)
 	and a, 0x0f	; and A,0x0f - low nibble of the media-type code selects the stanza
 	extz wa	; extz WA
 	cps wa, 0	; cp WA,0
@@ -328,7 +328,7 @@ FDC_ValidateRequest:
 ; -----------------------------------------------------------------------------
 FDC_Validate_FormatParams:
 	calr FDC_SetGeometryForDiskType	; calr 0xffdbad
-	ldb_d8 l, (0x0c52)	; ld L,(0x0c52)
+	ld l, (0x0c52:16)	; ld L,(0x0c52)
 	ret	; ret
 FDC_Validate_AcceptAlways:
 	ldb l, 0	; ld L,0x00
@@ -361,7 +361,7 @@ FDC_Validate_DriveTrackSector__accept:
 	ret	; ret
 FDC_Validate_DriveTrackSector__format_check:
 	calr FDC_ValidateStub	; calr 0xffdcde
-	ldb_d8 l, (0x0c52)	; ld L,(0x0c52)
+	ld l, (0x0c52:16)	; ld L,(0x0c52)
 	ret	; ret
 FDC_Validate_DriveTrackSector__check_track:
 	ld wa, (0x0c74:16)	; ld WA,(0x0c74)
@@ -376,7 +376,7 @@ FDC_Validate_DriveTrackSector__track_ok:
 	cpdi16 (0x0c6e), 2	; cp (0x0c6e),0x0002
 	jr nz, FDC_Validate_DriveTrackSector__check_count	; jr NZ,0xffdb21
 	calr FDC_ValidateHead	; calr 0xffdcbd
-	ldb_d8 l, (0x0c52)	; ld L,(0x0c52)
+	ld l, (0x0c52:16)	; ld L,(0x0c52)
 	ret	; ret
 FDC_Validate_DriveTrackSector__check_count:
 	cpdi16 (0x0c78), 0	; cp (0x0c78),0x0000
@@ -391,7 +391,7 @@ FDC_Validate_DriveTrackSector__check_sector:
 	ldw wa, 0xfe	; ld WA,0x00fe
 	jrl FDC_Error	; jrl T,0xffe231
 FDC_Validate_DriveTrackSector__sector_by_format:
-	ldb_d8 a, (0x0c9a)	; ld A,(0x0c9a)
+	ld a, (0x0c9a:16)	; ld A,(0x0c9a)
 	cps a, 0	; cp A,0
 	jr z, FDC_Validate_DriveTrackSector__max9_check	; jr Z,0xffdb92
 	cps a, 5	; cp A,5
@@ -415,7 +415,7 @@ FDC_Validate_DriveTrackSector__fmt4_wildcard:
 	cpdi8 (0x0c5b), 0xff	; cp (0x0c5b),0xff
 	jr nz, FDC_Validate_DriveTrackSector__max9_check_fmt4	; jr NZ,0xffdb85
 	calr FDC_ValidateHead	; calr 0xffdcbd
-	ldb_d8 l, (0x0c52)	; ld L,(0x0c52)
+	ld l, (0x0c52:16)	; ld L,(0x0c52)
 	ret	; ret
 FDC_Validate_DriveTrackSector__max9_check_fmt4:
 	cpdi8 (0x0c5b), 9	; cp (0x0c5b),0x09
@@ -432,7 +432,7 @@ FDC_Validate_DriveTrackSector__bad_param:
 	jrl FDC_Error	; jrl T,0xffe231
 FDC_Validate_DriveTrackSector__check_head:
 	calr FDC_ValidateHead	; calr 0xffdcbd
-	ldb_d8 l, (0x0c52)	; ld L,(0x0c52)
+	ld l, (0x0c52:16)	; ld L,(0x0c52)
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -502,7 +502,7 @@ FDC_SetGeometryForDiskType__bad_type:
 	ldw wa, 0xfe	; ld WA,0x00fe
 	calr FDC_Error	; calr 0xffe231
 FDC_SetGeometryForDiskType__common:
-	ldb_d8 a, (0x0c9c)	; ld A,(0x0c9c)
+	ld a, (0x0c9c:16)	; ld A,(0x0c9c)
 	srl a, 4	; srl 0x04,A
 	and a, 0x0f	; and A,0x0f
 	stb_d8 (0x0c65), a	; ld (0x0c65),A
@@ -628,7 +628,7 @@ Boot_UpdateDisplay:
 FDC_SetupDMAMode:
 	ld bc, (0x0c4a:16)	; ld BC,(0x0c4a)
 	ldc_cr16 bc, 0x4c	; ldc unknown,BC - DMAC3 = transfer byte count
-	ldb_d8 a, (0x0c56)	; ld A,(0x0c56)
+	ld a, (0x0c56:16)	; ld A,(0x0c56)
 	cp a, 0x4d	; cp A,0x4d
 	jr z, FDC_SetupDMAMode__to_fdc	; jr Z,0xffdd6b
 	cp a, 0xc9	; cp A,0xc9
@@ -1093,11 +1093,11 @@ FDC_IssueCommand__send_normal_cmd:
 	calr FDC_SendParams_Specify	; calr 0xffe106
 	jr FDC_IssueCommand__done	; jr T,0xffe0a8
 FDC_IssueCommand__send_unit_head:
-	ldb_d8 a, (0x0c57)	; ld A,(0x0c57) - build the unit/head parameter byte
+	ld a, (0x0c57:16)	; ld A,(0x0c57) - build the unit/head parameter byte
 	and a, 1	; and A,0x01
 	sll a, 2	; sll 0x02,A
 	ld e, a	; ld E,A
-	ldb_d8 a, (0x0c58)	; ld A,(0x0c58)
+	ld a, (0x0c58:16)	; ld A,(0x0c58)
 	and a, 3	; and A,0x03
 	ld c, a	; ld C,A
 	ld a, e	; ld A,E
@@ -1138,7 +1138,7 @@ FDC_IssueCommand__done:
 ; 0x11/0x19/0x1D/0x1E.  Returns L = 0 when valid, 1 when not.
 ; -----------------------------------------------------------------------------
 FDC_ValidateOpcode:
-	ldb_d8 a, (0x0c56)	; ld A,(0x0c56)
+	ld a, (0x0c56:16)	; ld A,(0x0c56)
 	cp a, 0x4f	; cp A,0x4f
 	jr z, FDC_ValidateOpcode__aux_ok	; jr Z,0xffe0c8
 	cp a, 0x33	; cp A,0x33
@@ -1153,7 +1153,7 @@ FDC_ValidateOpcode__aux_ok:
 	ldb l, 0	; ld L,0x00
 	ret	; ret
 FDC_ValidateOpcode__check_masked:
-	ldb_d8 a, (0x0c56)	; ld A,(0x0c56)
+	ld a, (0x0c56:16)	; ld A,(0x0c56)
 	and a, 0x1f	; and A,0x1f
 	cp a, 0x1e	; cp A,0x1e
 	jr z, FDC_ValidateOpcode__ok	; jr Z,0xffe0f4
@@ -1180,7 +1180,7 @@ FDC_ValidateOpcode__invalid:
 ; FDC_SendParam_ScanSTP - send (0x0C63) & 3 = STP for the scan commands
 ; -----------------------------------------------------------------------------
 FDC_SendParam_ScanSTP:
-	ldb_d8 a, (0x0c63)	; ld A,(0x0c63)
+	ld a, (0x0c63:16)	; ld A,(0x0c63)
 	and a, 3	; and A,0x03
 	extz wa	; extz WA
 	jrl FDC_SendParameterByte	; jrl T,0xffdebb
@@ -1189,20 +1189,20 @@ FDC_SendParam_ScanSTP:
 ; FDC_SendParams_Specify - send SRT<<4|HUT then HLT<<1|ND
 ; -----------------------------------------------------------------------------
 FDC_SendParams_Specify:
-	ldb_d8 a, (0x0c65)	; ld A,(0x0c65)
+	ld a, (0x0c65:16)	; ld A,(0x0c65)
 	sll a, 4	; sll 0x04,A - SRT in the high nibble
 	ld e, a	; ld E,A
-	ldb_d8 a, (0x0c66)	; ld A,(0x0c66)
+	ld a, (0x0c66:16)	; ld A,(0x0c66)
 	and a, 0x0f	; and A,0x0f - HUT in the low nibble
 	ld c, a	; ld C,A
 	ld a, e	; ld A,E
 	or a, c	; or A,C
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c67)	; ld A,(0x0c67)
+	ld a, (0x0c67:16)	; ld A,(0x0c67)
 	sll a, 1	; sll 0x01,A - HLT << 1
 	ld e, a	; ld E,A
-	ldb_d8 a, (0x0c68)	; ld A,(0x0c68) - ND in bit 0
+	ld a, (0x0c68:16)	; ld A,(0x0c68) - ND in bit 0
 	and a, 1	; and A,0x01
 	ld c, a	; ld C,A
 	ld a, e	; ld A,E
@@ -1214,17 +1214,17 @@ FDC_SendParams_Specify:
 ; FDC_SendParams_Format - send N, SC, GPL(format), D for FORMAT TRACK
 ; -----------------------------------------------------------------------------
 FDC_SendParams_Format:
-	ldb_d8 a, (0x0c5c)	; ld A,(0x0c5c)
+	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	and a, 7	; and A,0x07
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c60)	; ld A,(0x0c60) - SC = sectors per track
+	ld a, (0x0c60:16)	; ld A,(0x0c60) - SC = sectors per track
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c61)	; ld A,(0x0c61) - GPL = format gap length
+	ld a, (0x0c61:16)	; ld A,(0x0c61) - GPL = format gap length
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c62)	; ld A,(0x0c62) - D = fill byte (0xE5)
+	ld a, (0x0c62:16)	; ld A,(0x0c62) - D = fill byte (0xE5)
 	extz wa	; extz WA
 	jrl FDC_SendParameterByte	; jrl T,0xffdebb
 
@@ -1232,7 +1232,7 @@ FDC_SendParams_Format:
 ; FDC_SendParam_SeekTrack - send (0x0C64) = target track for SEEK
 ; -----------------------------------------------------------------------------
 FDC_SendParam_SeekTrack:
-	ldb_d8 a, (0x0c64)	; ld A,(0x0c64) - NCN = target track for SEEK
+	ld a, (0x0c64:16)	; ld A,(0x0c64) - NCN = target track for SEEK
 	extz wa	; extz WA
 	jrl FDC_SendParameterByte	; jrl T,0xffdebb
 
@@ -1241,27 +1241,27 @@ FDC_SendParam_SeekTrack:
 ; the scan opcodes 0xD1/0xD9/0xDD)
 ; -----------------------------------------------------------------------------
 FDC_SendParams_ReadWrite:
-	ldb_d8 a, (0x0c59)	; ld A,(0x0c59) - C = track
+	ld a, (0x0c59:16)	; ld A,(0x0c59) - C = track
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c5a)	; ld A,(0x0c5a) - H = head
+	ld a, (0x0c5a:16)	; ld A,(0x0c5a) - H = head
 	and a, 1	; and A,0x01
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c5b)	; ld A,(0x0c5b) - R = starting sector
+	ld a, (0x0c5b:16)	; ld A,(0x0c5b) - R = starting sector
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c5c)	; ld A,(0x0c5c) - N = sector-size code
+	ld a, (0x0c5c:16)	; ld A,(0x0c5c) - N = sector-size code
 	and a, 7	; and A,0x07
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c5d)	; ld A,(0x0c5d) - EOT = last sector of the burst
+	ld a, (0x0c5d:16)	; ld A,(0x0c5d) - EOT = last sector of the burst
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c5e)	; ld A,(0x0c5e) - GPL = read/write gap length
+	ld a, (0x0c5e:16)	; ld A,(0x0c5e) - GPL = read/write gap length
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
-	ldb_d8 a, (0x0c56)	; ld A,(0x0c56) - scan commands take STP instead of DTL
+	ld a, (0x0c56:16)	; ld A,(0x0c56) - scan commands take STP instead of DTL
 	cp a, 0xdd	; cp A,0xdd
 	jr z, FDC_SendParams_ReadWrite__send_stp	; jr Z,0xffe1bb
 	cp a, 0xd9	; cp A,0xd9
@@ -1271,7 +1271,7 @@ FDC_SendParams_ReadWrite:
 FDC_SendParams_ReadWrite__send_stp:
 	jrl FDC_SendParam_ScanSTP	; jrl T,0xffe0fa
 FDC_SendParams_ReadWrite__send_dtl:
-	ldb_d8 a, (0x0c5f)	; ld A,(0x0c5f) - DTL = 0xFF (N nonzero, DTL unused)
+	ld a, (0x0c5f:16)	; ld A,(0x0c5f) - DTL = 0xFF (N nonzero, DTL unused)
 	extz wa	; extz WA
 	calr FDC_SendParameterByte	; calr 0xffdebb
 	ret	; ret
@@ -1372,7 +1372,7 @@ FDC_Error__hook_err36:
 FDC_Error__already_set:
 	nop	; nop
 FDC_Error__return:
-	ldb_d8 l, (0x0c52)	; ld L,(0x0c52)
+	ld l, (0x0c52:16)	; ld L,(0x0c52)
 	ret	; ret
 
 ; -----------------------------------------------------------------------------
@@ -1469,7 +1469,7 @@ FDC_CmdInitialize:
 ; -----------------------------------------------------------------------------
 FDC_CmdRecalibrate:
 	pushw_erp 0xfa	; push QIZ - cmd 1 entry
-	ldb_d8 a, (0x0c64)	; ld A,(0x0c64)
+	ld a, (0x0c64:16)	; ld A,(0x0c64)
 	ldb_erp a, 0xfb	; ld QIZH,A
 	stdi8 (0x0c64), 5	; ld (0x0c64),0x05
 	stdi8 (0x0d32), 0xff	; ld (0x0d32),0xff - recalibrate homes via track 5 first (head-load settling)
@@ -1497,7 +1497,7 @@ FDC_CmdRecalibrate__restore:
 ; Twin: maincpu FDC_CmdSeek (fdc_routines.s dispatch entry 2)
 ; -----------------------------------------------------------------------------
 FDC_CmdSeek:
-	ldb_d8 a, (0x0c64)	; ld A,(0x0c64) - cmd 2 entry
+	ld a, (0x0c64:16)	; ld A,(0x0c64) - cmd 2 entry
 	cpda8 a, (0x0d32)	; cp A,(0x0d32)
 	ret z	; ret Z
 	ldmm8 (0x0d32), (0x0c64)	; ld (0x0d32),(0x0c64)
@@ -1552,7 +1552,7 @@ FDC_CmdReadSectors__retry:
 	calr FDC_CmdSeek	; calr 0xffe31a
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_CmdReadSectors__seek_ok	; jr Z,0xffe3a5
-	ldb_d8 a, (0x0c52)	; ld A,(0x0c52)
+	ld a, (0x0c52:16)	; ld A,(0x0c52)
 	ldb_erp a, 0xf8	; ld IZL,A
 	exts iz	; exts IZ
 	calr FDC_MediaConfigAndRecalibrate	; calr 0xffd8a5
@@ -1611,7 +1611,7 @@ FDC_CmdReadSectors__recover:
 FDC_CmdReadSectors__next_retry:
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
 	decdi8 1, (0x0c96)	; dec 1,(0x0c96)
-	ldb_d8 a, (0x0c96)	; ld A,(0x0c96)
+	ld a, (0x0c96:16)	; ld A,(0x0c96)
 	cps a, 0	; cp A,0
 	jr nz, FDC_CmdReadSectors__check_remaining	; jr NZ,0xffe49f
 	stdi8 (0x0c52), 0x10	; ld (0x0c52),0x10 - error 0x10 = read retries exhausted
@@ -1629,7 +1629,7 @@ FDC_CmdReadSectors__advance:
 	ld (xbc), xwa	; ld (XBC),XWA
 	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
 	stdi8 (0x0c5b), 1	; ld (0x0c5b),0x01
-	ldb_d8 a, (0x0c57)	; ld A,(0x0c57)
+	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
 	stb_d8 (0x0c57), a	; ld (0x0c57),A
 	stb_d8 (0x0c5a), a	; ld (0x0c5a),A
@@ -1661,7 +1661,7 @@ FDC_CmdWriteSectors__retry:
 	calr FDC_CmdSeek	; calr 0xffe31a
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr z, FDC_CmdWriteSectors__seek_ok	; jr Z,0xffe4d8
-	ldb_d8 a, (0x0c52)	; ld A,(0x0c52)
+	ld a, (0x0c52:16)	; ld A,(0x0c52)
 	ldb_erp a, 0xf8	; ld IZL,A
 	exts iz	; exts IZ
 	calr FDC_MediaConfigAndRecalibrate	; calr 0xffd8a5
@@ -1722,7 +1722,7 @@ FDC_CmdWriteSectors__recover:
 	calr FDC_CmdSeek	; calr 0xffe31a
 	ldmm16 (0x0c78), (0x0d40)	; ldw (0x0c78),(0x0d40)
 	decdi8 1, (0x0c96)	; dec 1,(0x0c96)
-	ldb_d8 a, (0x0c96)	; ld A,(0x0c96)
+	ld a, (0x0c96:16)	; ld A,(0x0c96)
 	cps a, 0	; cp A,0
 	jr nz, FDC_CmdWriteSectors__check_remaining	; jr NZ,0xffe5d8
 	stdi8 (0x0c52), 0x20	; ld (0x0c52),0x20 - error 0x20 = write retries exhausted
@@ -1740,7 +1740,7 @@ FDC_CmdWriteSectors__advance:
 	ld (xbc), xwa	; ld (XBC),XWA
 	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
 	stdi8 (0x0c5b), 1	; ld (0x0c5b),0x01
-	ldb_d8 a, (0x0c57)	; ld A,(0x0c57)
+	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
 	stb_d8 (0x0c57), a	; ld (0x0c57),A
 	stb_d8 (0x0c5a), a	; ld (0x0c5a),A
@@ -1789,7 +1789,7 @@ FDC_CmdFormat:
 	calr FDC_CmdRecalibrate	; calr 0xffe2d6
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jrl nz, FDC_CmdFormat__finish	; jrl NZ,0xffe6b6
-	ldb_d8 a, (0x0c9a)	; ld A,(0x0c9a)
+	ld a, (0x0c9a:16)	; ld A,(0x0c9a)
 	cps a, 2	; cp A,2
 	jr z, FDC_CmdFormat__gap_8spt_1024	; jr Z,0xffe64f
 	cps a, 3	; cp A,3
@@ -1823,7 +1823,7 @@ FDC_CmdFormat__track_loop:
 	calr FDC_FormatOneTrack	; calr 0xffe6c9
 	cpdi8 (0x0c52), 0	; cp (0x0c52),0x00
 	jr nz, FDC_CmdFormat__finish	; jr NZ,0xffe6b6
-	ldb_d8 a, (0x0c57)	; ld A,(0x0c57)
+	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
 	stb_d8 (0x0c57), a	; ld (0x0c57),A
 	stb_d8 (0x0c5a), a	; ld (0x0c5a),A
@@ -1835,7 +1835,7 @@ FDC_CmdFormat__track_loop:
 	stb_d8 (0x0c64), a	; ld (0x0c64),A
 	stb_d8 (0x0c40), a	; ld (0x0c40),A
 FDC_CmdFormat__check_more_tracks:
-	ldb_d8 a, (0x0c64)	; ld A,(0x0c64)
+	ld a, (0x0c64:16)	; ld A,(0x0c64)
 	extz wa	; extz WA
 	cpda16 xwa, (0x0d36)	; cp WA,(0x0d36)
 	jr ule, FDC_CmdFormat__track_loop	; jr ULE,0xffe674
@@ -1886,7 +1886,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c59)	; ld A,(0x0c59)
+	ld a, (0x0c59:16)	; ld A,(0x0c59)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
@@ -1896,7 +1896,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c5a)	; ld A,(0x0c5a)
+	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
@@ -1906,7 +1906,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c5b)	; ld A,(0x0c5b)
+	ld a, (0x0c5b:16)	; ld A,(0x0c5b)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
@@ -1916,7 +1916,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c5c)	; ld A,(0x0c5c)
+	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
@@ -1926,7 +1926,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c59)	; ld A,(0x0c59)
+	ld a, (0x0c59:16)	; ld A,(0x0c59)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
@@ -1936,7 +1936,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c5a)	; ld A,(0x0c5a)
+	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	cpdi16 (0x0c74), 0	; cp (0x0c74),0x0000
@@ -1949,7 +1949,7 @@ FDC_BuildFormatFieldBuffer__pair_loop:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c5b)	; ld A,(0x0c5b)
+	ld a, (0x0c5b:16)	; ld A,(0x0c5b)
 	ld (xhl), a	; ld (XHL),A
 	jr FDC_BuildFormatFieldBuffer__next_pair	; jr T,0xffe7e5
 FDC_BuildFormatFieldBuffer__offset_numbering:
@@ -1973,7 +1973,7 @@ FDC_BuildFormatFieldBuffer__next_pair:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c5c)	; ld A,(0x0c5c)
+	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	incdi8 1, (0x0c5b)	; inc 1,(0x0c5b)
@@ -1991,7 +1991,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c59)	; ld A,(0x0c59)
+	ld a, (0x0c59:16)	; ld A,(0x0c59)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
@@ -2001,7 +2001,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	ld hl, wa	; ld HL,WA
 	extz xhl	; extz XHL
 	add xhl, xbc	; add XHL,XBC
-	ldb_d8 a, (0x0c5a)	; ld A,(0x0c5a)
+	ld a, (0x0c5a:16)	; ld A,(0x0c5a)
 	ld (xhl), a	; ld (XHL),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	ld a, e	; ld A,E
@@ -2021,7 +2021,7 @@ FDC_BuildFormatFieldBuffer__odd_tail:
 	ld de, wa	; ld DE,WA
 	extz xde	; extz XDE
 	add xde, xbc	; add XDE,XBC
-	ldb_d8 a, (0x0c5c)	; ld A,(0x0c5c)
+	ld a, (0x0c5c:16)	; ld A,(0x0c5c)
 	ld (xde), a	; ld (XDE),A
 	incdi16 1, (0x0c4a)	; incw 1,(0x0c4a)
 	ret	; ret
@@ -2270,7 +2270,7 @@ FDC_Request__invalid_command:
 	calr FDC_Error	; calr 0xffe231
 FDC_Request__finish:
 	stdi8 (0x0c44), 0x5a	; ld (0x0c44),0x5a - release the busy latch
-	ldb_d8 l, (0x0c52)	; ld L,(0x0c52) - return the sticky status, sign-extended into HL
+	ld l, (0x0c52:16)	; ld L,(0x0c52) - return the sticky status, sign-extended into HL
 	exts hl	; exts HL
 FDC_Request__return:
 	pop xiz	; pop XIZ

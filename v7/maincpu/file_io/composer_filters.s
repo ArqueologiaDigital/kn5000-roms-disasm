@@ -751,7 +751,7 @@ SaveFilter_OpSave:
 	cps	hl, 0
 	jr	z, 18
 	lds32	xde, 0
-	ldb_d8	e, (35184)
+	ld	e, (35184:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29687812
 	jr	44

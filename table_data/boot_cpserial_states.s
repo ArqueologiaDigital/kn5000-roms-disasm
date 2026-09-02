@@ -47,7 +47,7 @@
 ; -----------------------------------------------------------------------------
 BootSerial_State04_TxLineRequest:
 	anddi8	(0x0f66), 0xbf		; PFCR shadow bit 6 low
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	ldio	0xd7, 0x24		; BR1CR
 	ldio	0xe3, 0x07		; INTEAB
@@ -77,10 +77,10 @@ BootSerial_State04_TxLineRequest:
 BootSerial_State0C_TxByteGap:
 	calr	BootSerial_SpinWait10
 	anddi8	(0x0f66), 0xaf
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	anddi8	(0x0f67), 0xaf
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC
 	ldio	0xd7, 0x24		; BR1CR
 	ldio	0xeb, 0xd0		; INTES1
@@ -98,10 +98,10 @@ BootSerial_State0C_TxByteGap:
 BootSerial_State14_TxTail:
 	calr	BootSerial_SpinWait10
 	anddi8	(0x0f66), 0xaf
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	anddi8	(0x0f67), 0xaf
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC
 	ldio	0xd7, 0x24		; BR1CR
 	st_dd8b	a, 0xd4			; dummy SC1BUF write
@@ -124,10 +124,10 @@ BootSerial_State14_TxTail:
 BootSerial_State08_TxFirstByte:
 	ldio	0xd7, 0x14		; BR1CR
 	ordi8	(0x0f67), 0x50
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC mode bits high
 	ordi8	(0x0f66), 0x50
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR mode bits high
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
 	ldio	0xe3, 0x05		; INTEAB
@@ -163,10 +163,10 @@ BootSerial_State08_TxFirstByte__count_set:
 BootSerial_State10_TxNextByte:
 	ldio	0xd7, 0x14		; BR1CR
 	ordi8	(0x0f67), 0x50
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC
 	ordi8	(0x0f66), 0x50
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
 	ldio	0xe3, 0x05		; INTEAB
@@ -208,11 +208,11 @@ BootSerial_State18_TxFrameDone:
 	jr	c, BootSerial_State18_TxFrameDone__go_idle
 	stdi8	(0x0f62), 0x04		; next frame: state 0x04
 	anddi8	(0x0f67), 0xbf
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
 	ordi8	(0x0f66), 0x40
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 high (request line)
 	ldio	0xd7, 0x28		; BR1CR
 	ldio	0xe3, 0x07		; INTEAB
@@ -223,10 +223,10 @@ BootSerial_State18_TxFrameDone:
 	jrl	t, BootSerial_TxIsrEpilogue
 BootSerial_State18_TxFrameDone__go_idle:
 	anddi8	(0x0f66), 0xbf
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 low
 	anddi8	(0x0f67), 0xbf
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
 	ldio	0xe3, 0x05		; INTEAB
 	ldio	0xeb, 0xff		; INTES1
@@ -246,7 +246,7 @@ BootSerial_State18_TxFrameDone__go_idle:
 ; -----------------------------------------------------------------------------
 BootSerial_State20_RxFirstByte:
 	anddi8	(0x0f66), 0x9f
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR: RX pin mode
 	or_sd8b_im 0xd5, 0x01		; SC1CR bit 0 high
 	and_sd8b_im 0xd5, 0xfd		; SC1CR bit 1 low
@@ -316,10 +316,10 @@ BootSerial_State24_RxNextByte__no_advance:
 	anddi8	(0x0f64), 0xfe		; clear RX-active flag
 	stdi8	(0x0f62), 0		; state -> idle
 	anddi8	(0x0f66), 0x9f
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	anddi8	(0x0f67), 0xbf
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC
 	ldio	0xe3, 0x05		; INTEAB
 	ldio	0xeb, 0x0d		; INTES1
@@ -327,7 +327,7 @@ BootSerial_State24_RxNextByte__no_advance:
 	jrl	t, BootSerial_RxIsrEpilogue
 BootSerial_State24_RxNextByte__rearm:
 	anddi8	(0x0f66), 0x9f
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	or_sd8b_im 0xd5, 0x01		; SC1CR bit 0 high
 	and_sd8b_im 0xd5, 0xfd		; SC1CR bit 1 low
@@ -432,11 +432,11 @@ BootSerial_PollTX__have_count:
 	ordi8	(0x0f64), 0x02		; TX-pending flag
 	stdi8	(0x0f62), 0x04		; state 0x04: TX line request
 	anddi8	(0x0f67), 0xbf
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
 	ordi8	(0x0f66), 0x40
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 high (request line)
 	ldio	0xd7, 0x28		; BR1CR
 	and_sd8b_im 0xd6, 0xdf		; SC1MOD bit 5 low
@@ -701,7 +701,7 @@ BootSerial_RxPkt_VarLengthRun__drop_pair:
 	stda16	(0x0f75), iy
 	jrl	t, BootSerial_RxPkt_VarLengthRun__step
 BootSerial_RxPkt_VarLengthRun__decoded:
-	ldb_d8	a, (0x0f6e)		; A = decoded byte
+	ld	a, (0x0f6e:16)		; A = decoded byte
 BootSerial_RxPkt_VarLengthRun__scramble:
 	stb_dri a, 0x07, 0xf8, 0xf0	; LD (XIZ+IX), A
 	calr	BootSerial_CtrlRingAdvanceIX

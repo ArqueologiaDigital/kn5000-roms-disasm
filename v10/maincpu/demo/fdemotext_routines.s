@@ -26,8 +26,8 @@ FDemoText_LookupTableEntry:
 	ret
 
 FDemoText_ByteData_VoiceProbeA:
-	ldb_d8	c, (0xc07d)
-	ldb_d8	a, (0xc080)
+	ld	c, (0xc07d:16)
+	ld	a, (0xc080:16)
 	extz	wa
 	cps	c, 5
 	jr	z, 24
@@ -43,7 +43,7 @@ FDemoText_ByteData_VoiceProbeA:
 	inc	5, xhl
 	cp	(xhl), 0
 	ret	nz
-	ldb_d8	a, (0xc080)
+	ld	a, (0xc080:16)
 	extz	wa
 	lda	xbc, (DemoDiskPrompt_English1_0x86:24)
 	ld_rrb a, xbc, wa
@@ -54,7 +54,7 @@ FDemoText_ByteData_VoiceProbeB:
 	jrl	pl, 16320
 	normal
 	ret	nz
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	res	7, a
 	cps	a, 0
 	ret	z
@@ -63,9 +63,9 @@ FDemoText_ByteData_VoiceProbeB:
 	.byte 0xbe
 	ret
 FDemoText_ByteData_VoiceProbeC:
-	ldb_d8	e, (0xc080)
+	ld	e, (0xc080:16)
 	sub	e, 68
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	extz	wa
 	dec	1, wa
 	cps	wa, 0
@@ -89,7 +89,7 @@ FDemoText_ByteData_VoiceProbeC:
 	.byte 0xe9
 	nop
 	jr	42
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 15
 	jr	z, 19
 	ld	a, e
@@ -97,7 +97,7 @@ FDemoText_ByteData_VoiceProbeC:
 	lda	xbc, (DemoDiskPrompt_English1_0x8E:24)
 	ld_rrb a, xbc, wa
 	ordm8_24 (149484), xbc
-	ldb_d8 a, (49279)
+	ld a, (49279:16)
 	and a, 48
 	ret z
 	ld	xwa, DemoDiskPrompt_English1_0x92
@@ -108,11 +108,11 @@ FDemoText_ByteData_VoiceProbeC:
 
 FDemoText_ProcessVoiceFlags:
 	pushw_erp 0xfa
-	ldb_d8 a, (0x8d46)
+	ld a, (0x8d46:16)
 	bit 6, a
 	jr z, FDemoText_ProcessVoiceFlags_ReadState
 	setda_24 6, (0x0247ee)
-	ldb_d8 a, (0x8d46)
+	ld a, (0x8d46:16)
 	res 6, a
 	stb_d8 (0x8d46), a
 
@@ -342,7 +342,7 @@ FDemoText_UpdateVoiceDisplay_CheckSend:
 	ldb_da a, (0x0247ee)
 	and a, 0x38
 	jr nz, FDemoText_UpdateVoiceDisplay_Done
-	ldb_d8 c, (0xfc26)
+	ld c, (0xfc26:16)
 	cpdm8 0xfc74, c
 	jr z, FDemoText_UpdateVoiceDisplay_Done
 	extz bc
@@ -1163,7 +1163,7 @@ FDemoText_NotifyUIChange:
 	extz bc
 	ld xwa, 0x4900
 	call DSPCfg_WriteParamFull
-	ldb_d8 e, (0xfc74)
+	ld e, (0xfc74:16)
 	extz de
 	pushw 0xff
 	ldw wa, 0x61

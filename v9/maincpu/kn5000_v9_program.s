@@ -624,7 +624,7 @@ Boot_MainSequence_Trampoline:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog widget
 ; ===========================================================================
 User_didnt_request_flash_mem_update:
-	ldb_d8 a, (1026); Load boot combo code
+	ld a, (1026:16); Load boot combo code
 	extz wa
 	calr Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
 	stiw_da (0x00ffca), 0x0000
@@ -654,7 +654,7 @@ Boot_DisplayScreen:
 	call ScreenGroup_Dispatch
 	stdi8 (1024), 128
 	stiw_da (0x00ffd4), 0x0000
-	ldb_d8 a, (1026); Load boot combo code
+	ld a, (1026:16); Load boot combo code
 	extz wa
 	calr Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
 	lds wa, 4
@@ -663,7 +663,7 @@ Boot_DisplayScreen:
 	jp MainLoop
 
 Boot_GetButtonComboCode:
-	ldb_d8 l, (1026)
+	ld l, (1026:16)
 	ret
 
 Boot_ClearAllInterruptEnables:
@@ -877,7 +877,7 @@ FactoryReset_TrailingByte:
 	ret
 
 Boot_ReadFDCStatus:
-	ldb_d8 l, (36458)
+	ld l, (36458:16)
 	ret
 
 ; =============================================================================
@@ -2510,7 +2510,7 @@ MainChordPre:
 	call Malloc
 	ld xiz, xhl
 	ld (xiz), 0x0
-	ldb_d8 a, (36160)
+	ld a, (36160:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (Naka_MemoryC_Screens:24)
@@ -2518,7 +2518,7 @@ MainChordPre:
 	push xwa
 	push xiz
 	call Strcat
-	ldb_d8 a, (36162)
+	ld a, (36162:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (0xecff6a:24)
@@ -2541,16 +2541,16 @@ MainChordPre_AppendChordSuffix:
 	push xwa
 	push xiz
 	call Strcat
-	ldb_d8 a, (36162)
+	ld a, (36162:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x03f2f8:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, (36160)
+	ld a, (36160:16)
 	extz wa
 	sla wa, 2
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	ldb_d8 a, (36164)
+	ld a, (36164:16)
 	extz wa
 	sla wa, 2
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
@@ -2673,7 +2673,7 @@ EmptyRoutine_02:
 
 
 CPanel_RX_ProcessOrInit:
-	ldb_d8 a, (36236)
+	ld a, (36236:16)
 	and a, 0xc0
 	jr z, CPanel_RX_SkipToProcess
 				; if CP_Flags_A.76 != 0:

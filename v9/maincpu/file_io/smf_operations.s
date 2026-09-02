@@ -84,7 +84,7 @@ SmfLoad_AbortPartial:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, (0x808a)
+	ld a, (0x808a:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -113,7 +113,7 @@ SmfLoad_Success:
 	ld xbc, 0x1e0009e
 	lds32 xde, 1
 	call ApPostEvent
-	ldb_d8 a, (0x808a)
+	ld a, (0x808a:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
@@ -318,7 +318,7 @@ SeqToSong_BuildEntry:
 	ld xbc, DiskOp_ChannelCfgTable_0xD0
 	call FileIO_CopyString
 	lda xiz, (0x8095:16)
-	ldb_d8 a, (0x8948)
+	ld a, (0x8948:16)
 	inc 1, a
 	extz wa
 	lds bc, 2
@@ -351,7 +351,7 @@ SeqFromSong_BuildEntry:
 	ld xbc, DiskOp_ChannelCfgTable_0xDC
 	call FileIO_CopyString
 	lda xiz, (0x8119:16)
-	ldb_d8 a, (0x8948)
+	ld a, (0x8948:16)
 	inc 1, a
 	extz wa
 	lds bc, 2
@@ -378,7 +378,7 @@ SmfSeqSongNameFunc:
 	jr SeqSongName_Return
 
 SeqSongName_BuildEntry:
-	ldb_d8 a, (0x8948)
+	ld a, (0x8948:16)
 	extz wa
 	lds bc, 0
 	lds de, 0
@@ -401,7 +401,7 @@ SmfLoadAsFunc:
 	jr SmfLoadAs_Return
 
 SmfLoadAs_Apply:
-	ldb_d8 a, (0x8946)
+	ld a, (0x8946:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (DiskOp_ChannelCfgTable_0xE8:24)
@@ -719,9 +719,9 @@ SmfFN_HandleSave:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldb_d8 a, (0x8948)
+	ld a, (0x8948:16)
 	extz wa
-	ldb_d8 c, (0x8946)
+	ld c, (0x8946:16)
 	extz bc
 	call LoadFileSMF
 	ld (xsp + 6), hl
@@ -752,7 +752,7 @@ SmfFN_Save_WriteSlot:
 	calr TrimAndPadSmfFilename
 	lda xwa, (0x0ab000:24)
 	lds32 xbc, 0
-	ldb_d8 c, (0x8948)
+	ld c, (0x8948:16)
 	sll xbc, 11
 	add xwa, xbc
 	lda_dri XWA, 0xe1, 0x00, 0x01
@@ -828,11 +828,11 @@ SmfFN_HandleOpen:
 SmfFN_Open_Execute:
 	lds wa, 0
 	calr InitializeOperationState
-	ldb_d8 a, (0x8948)
+	ld a, (0x8948:16)
 	extz wa
-	ldb_d8 c, (0x894a)
+	ld c, (0x894a:16)
 	extz bc
-	ldb_d8 e, (0x894c)
+	ld e, (0x894c:16)
 	extz de
 	call LoadFileVariant
 	ld wa, hl
@@ -870,11 +870,11 @@ SmfFN_HandleOpen2:
 	call ApPostEvent
 	lds wa, 0
 	calr InitializeOperationState
-	ldb_d8 a, (0x8948)
+	ld a, (0x8948:16)
 	extz wa
-	ldb_d8 c, (0x894a)
+	ld c, (0x894a:16)
 	extz bc
-	ldb_d8 e, (0x894c)
+	ld e, (0x894c:16)
 	extz de
 	call LoadFileVariant
 	ld wa, hl
@@ -1016,7 +1016,7 @@ SmfFN_SetScrollDir0:
 SmfFN_HandleScrollFlag1:
 	cp xiz, 0x15
 	jr nz, SmfFN_HandleScrollFlag2
-	ldb_d8 c, (0x8946)
+	ld c, (0x8946:16)
 	ld a, c
 	inc 1, a
 	cps a, 3
@@ -1077,7 +1077,7 @@ SmfFN_SetFlag35140_0:
 	jrl SmfFN_UpdateDisplay
 
 SmfFN_HandleSeqSongNum:
-	ldb_d8 c, (0x8948)
+	ld c, (0x8948:16)
 	ld a, c
 	inc 1, a
 	cp xiz, 0x1e

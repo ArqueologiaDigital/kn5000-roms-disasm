@@ -460,11 +460,11 @@ FmmFmt_HandleCancel:
 FmmFmt_HandleProgress:
 	cpdi8	32464, 0
 	jrl	z, 324
-	ldb_d8	a, 32462
+	ld	a, (32462:16)
 	extz	wa
 	cp	xde, 15
 	jrl	z, 295
-	ldb_d8	c, 33890
+	ld	c, (33890:16)
 	cp	xde, 11
 	jrl	z, 222
 	cp	xde, 10
@@ -478,7 +478,7 @@ FmmFmt_HandleProgress:
 	call	16423243
 	lds	wa, 0
 	calr	-3843
-	ldb_d8	a, 32460
+	ld	a, (32460:16)
 	extz	wa
 	call	16288900
 	ld	iz, hl
@@ -494,7 +494,7 @@ FmmFmt_HandleProgress:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, 32462
+	ld	a, (32462:16)
 	extz	wa
 	call	16355459
 	stdi8	32464, 0
@@ -656,7 +656,7 @@ FmmLoadTtl_StateCancelLoad:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32466)
+	ld	a, (32466:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295
@@ -684,7 +684,7 @@ FmmLoadTtl_StateSuccess:
 	ld	xbc, 31457438
 	lds32	xde, 1
 	call	16423243
-	ldb_d8	a, (32466)
+	ld	a, (32466:16)
 	extz	wa
 	call	16355459
 	ld	xwa, 4294967295

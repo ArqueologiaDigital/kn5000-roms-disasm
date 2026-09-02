@@ -371,7 +371,7 @@ WPScan_LoopContinue:
 
 WP_FindNextSlot:
 	pushw	iz
-	ldb_d8	a, (35164)
+	ld	a, (35164:16)
 	cps	a, 4
 	jr	nc, 66
 	ld	bc, (35162:16)

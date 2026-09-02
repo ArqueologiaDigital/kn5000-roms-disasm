@@ -1105,7 +1105,7 @@ SndParam_Widget1_AppendType2:
 	cp	hl, 65535
 	jr	z, 4
 	stb_d8	(208), l
-	ldb_d8	a, (1065)
+	ld	a, (1065:16)
 	and	a, 31
 	jr	nz, 13
 	call	15673385
@@ -1116,7 +1116,7 @@ SndParam_Widget1_AppendType2:
 	popw	wa
 	reti
 	pushw	wa
-	ldb_d8	a, (209)
+	ld	a, (209:16)
 	and	a, 28
 	popw	wa
 	jrl	nz, -191
@@ -1127,7 +1127,7 @@ SndParam_Widget1_AppendType2:
 	push	xix
 	push	xiy
 	push	xiz
-	ldb_d8	a, (208)
+	ld	a, (208:16)
 	stdi8	(1061), 0
 SndParam_Widget1_AppendTail:
 	dec	2, xsp
@@ -1156,7 +1156,7 @@ SndParam_Widget1_CallType3:
 	push	xiy
 	push	xiz
 	calr	1579
-	ldb_d8	a, (46915)
+	ld	a, (46915:16)
 	bit	7, a
 	jr	z, 78
 	cp	a, 247
@@ -1219,7 +1219,7 @@ SndParam_Widget1_CallType3:
 	.byte 0xf1, 0xac, 0x28, 0xcd
 	jr	z, 4
 	incdi8	1, (1108)
-	ldb_d8	a, 1066
+	ld	a, (1066:16)
 	cp	a, 112
 	jr	ugt, 20
 	cps	a, 4
@@ -1247,7 +1247,7 @@ SndParam_Widget1_CallType3:
 	cpdi8	32367, 0
 	jr	z, 3
 	calr	845
-	ldb_d8	a, 1056
+	ld	a, (1056:16)
 	pushw	wa
 	and	a, 5
 	popw	wa
@@ -1280,23 +1280,23 @@ SndParam_Widget1_CallType3:
 	jr	nz, 65
 	stdi8	1045, 0
 	incdi8	1, (1046)
-	ldb_d8	a, 14079
+	ld	a, (14079:16)
 	and	a, 31
 	jr	z, 3
 	calr	719
-	ldb_d8	a, 1046
-	ldb_d8	w, 1075
+	ld	a, (1046:16)
+	ld	w, (1075:16)
 	.byte 0xc1, 0x58, 0x04, 0x30
 	cp	a, w
 	jr	c, 28
 	stdi8	1046, 0
 	incdi8	1, (1076)
 	incdi8	1, (1077)
-	ldb_d8	a, 1077
+	ld	a, (1077:16)
 	cpda8	a, 13371
 	jr	ule, 5
 	stdi8	1077, 0
-	ldb_d8	a, 1045
+	ld	a, (1045:16)
 	ld	w, a
 	subda8	a, 1111
 	jr	z, 37
@@ -1316,7 +1316,7 @@ SndParam_Widget1_CallType3:
 	jr	z, 108
 	.byte 0xc1, 0x1b, 0x04, 0x3c, 0xfc
 	incdi8	4, (1051)
-	ldb_d8	a, 1051
+	ld	a, (1051:16)
 	.byte 0xf1, 0x31, 0x04, 0xc8
 	jr	z, 28
 	cpda8	a, 1071
@@ -1363,9 +1363,9 @@ SndParam_Widget1_CallType3:
 	jr	z, 23
 	stdi8	1057, 16
 	pushw	wa
-	ldb_d8	a, 1045
+	ld	a, (1045:16)
 	stb_d8	1078, a
-	ldb_d8	a, 1046
+	ld	a, (1046:16)
 	stb_d8	1079, a
 	popw	wa
 	ret

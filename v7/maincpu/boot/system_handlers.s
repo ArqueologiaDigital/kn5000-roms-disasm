@@ -387,8 +387,8 @@ INTT1_HANDLER:
 	incdi16 1, (1037)
 	push	sr
 	ei 6
-	ldb_d8 a, (1063)
-	ldb_d8 w, (1062)
+	ld a, (1063:16)
+	ld w, (1062:16)
 	bit 7, a
 	jr z, INTT1_NoOverflow
 	incdi8 1, (1061)
@@ -405,7 +405,7 @@ INTT1_StoreCounters:
 	stb_d8 (1062), w
 	stb_d8 (1063), a
 	pop	sr
-	ldb_d8 a, (1066)
+	ld a, (1066:16)
 	cp a, 0xf1
 	jr ugt, INTT1_CheckScanFlag
 	inc 1, a
@@ -474,9 +474,9 @@ INTT1_CheckAltSeqTimer:
 	bitda 3, (1057)
 	jr z, INTT1_CheckMetroTimer
 	stdi8 (1057), 16
-	ldb_d8 a, (1045)
+	ld a, (1045:16)
 	stb_d8 (1078), a
-	ldb_d8 a, (1046)
+	ld a, (1046:16)
 	stb_d8 (1079), a
 
 INTT1_CheckMetroTimer:
@@ -502,7 +502,7 @@ UIStateMachine_CheckPending:
 
 UIStateMachine_ClearBit3:
 	resda 2, 1043
-	ldb_d8 a, (1041)
+	ld a, (1041:16)
 	inc 1, a
 	cps a, 2
 	jr ule, UIStateMachine_PrimaryDispatch
@@ -545,7 +545,7 @@ UIState1_AlternateExit:
 	jrl UIStateMachine_ExitToScheduler
 
 UI_STATE_2_SUBSTATE:
-	ldb_d8 a, (1042)
+	ld a, (1042:16)
 	and a, 0xf
 	sll a, 2
 	lda xhl, (UI_SUBSTATE_TABLE:24)
@@ -643,7 +643,7 @@ INTTR4_CheckMetroEnable:
 	jr z, INTTR4_CheckSeqEnable
 	push	sr
 	ei 6
-	ldb_d8 a, (1047)
+	ld a, (1047:16)
 	inc 1, a
 	cp a, 0x60
 	jr lt, INTTR4_MetroCounter_Store
@@ -716,7 +716,7 @@ INTTR4_SeqInit_SetEnable:
 INTTR4_MetroBeat_Check:
 	bitda 3, (1056)
 	jr z, INTTR4_SeqBeat_Check
-	ldb_d8 a, (1047)
+	ld a, (1047:16)
 	cps a, 0
 	jr z, INTTR4_MetroBeat_OnBeat
 	cp a, 0x18
@@ -742,9 +742,9 @@ INTTR4_AltSeqBeat_Check:
 	bitda 3, (1057)
 	jr z, INTTR4_MetroQuarter_Check
 	stdi8 (1057), 16
-	ldb_d8 a, (1045)
+	ld a, (1045:16)
 	stb_d8 (1078), a
-	ldb_d8 a, (1046)
+	ld a, (1046:16)
 	stb_d8 (1079), a
 
 INTTR4_MetroQuarter_Check:
@@ -758,7 +758,7 @@ INTTR4_SeqAccum_Update:
 	jr z, INTTR4_SeqAccum_Reset
 	push	sr
 	ei 6
-	ldb_d8 a, (1045)
+	ld a, (1045:16)
 	ld w, a
 	subda8 a, 1111
 	jr z, INTTR4_SeqAccum_Done
@@ -793,7 +793,7 @@ INTTR4_SeqAccum_Reset:
 INTTR4_AltSeqAccum_Update:
 	bitda 2, (1057)
 	jr z, INTTR4_FadeDelay_Check
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	bitda 3, (1073)
 	jr z, INTTR4_AltSeqSync_Check
 	cpdm8 1072, a
@@ -827,7 +827,7 @@ INTTR4_SyncAccum_Update:
 	jr z, INTTR4_SyncAccum_Reset
 	push	sr
 	ei 6
-	ldb_d8 a, (1130)
+	ld a, (1130:16)
 	ld w, a
 	subda8 a, 1138
 	jr z, INTTR4_SyncAccum_Done
@@ -909,7 +909,7 @@ TempoRingBuf_WritePair:
 	stb_dri A, 0x07, 0xf4, 0xec
 	decm 1, (xiy - 2)
 	minc1_16 hl, 0x7ff
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	stb_dri A, 0x07, 0xf4, 0xec
 	minc1_16 hl, 0x7ff
 	decm 1, (xiy - 2)
@@ -926,10 +926,10 @@ TempoRingBuf_WritePair_Enqueue:
 	lda xhl, (1143:16)
 	ld ix, (1141:16)
 	stb_dri A, 0x07, 0xec, 0xf0
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	inc 1, ix
 	stb_dri A, 0x07, 0xec, 0xf0
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	inc 1, ix
 	stda16 (1141), xix
 	popw ix
@@ -938,7 +938,7 @@ TempoRingBuf_WritePair_Enqueue:
 INTTR4_SubTick_Mode:
 	bitda 2, (1057)
 	jr z, INTTR4_SubTick_MetroInc
-	ldb_d8 a, (1051)
+	ld a, (1051:16)
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_MetroInc
@@ -947,7 +947,7 @@ INTTR4_SubTick_Mode:
 INTTR4_SubTick_MetroInc:
 	bitda 2, (1056)
 	jr z, INTTR4_SubTick_SeqInc
-	ldb_d8 a, (1047)
+	ld a, (1047:16)
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_SeqInc
@@ -956,7 +956,7 @@ INTTR4_SubTick_MetroInc:
 INTTR4_SubTick_SeqInc:
 	bitda 2, (1054)
 	jr z, INTTR4_SubTick_PhaseSync
-	ldb_d8 a, (1045)
+	ld a, (1045:16)
 	xor a, 0x3
 	and a, 0x3
 	jr z, INTTR4_SubTick_PhaseSync
@@ -1081,10 +1081,10 @@ MainLoop_AfterBit3Check:
 	jr	z, 4
 	call	16625940
 MainLoop_AfterSeqBuf_DspSysEx:
-	ldb_d8	a, (13265)
+	ld	a, (13265:16)
 	and	a, 3
 	jr	z, 13
-	ldb_d8	a, (12775)
+	ld	a, (12775:16)
 	and	a, 3
 	jr	nz, 4
 	call	16094890
@@ -1590,7 +1590,7 @@ TempoRingBuf_DequeueOne_Done:
 
 SeqEvt_CheckExpiry:
 	anddi8 (0x0422), 0x7f
-	ldb_d8 a, (0xe8f6)
+	ld a, (0xe8f6:16)
 	and A,A
 	jr z, SeqEvt_CheckExpiry_Return
 	dec 1,A
@@ -1606,7 +1606,7 @@ SeqEvt_CheckExpiry_Return:
 SeqTiming_Snapshot:
 	ei 0x06
 	ld wa, (0x0460:16)
-	ldb_d8 l, (0x0462)
+	ld l, (0x0462:16)
 	stda16 (0x045e), wa
 	stb_d8 (0x045d), l
 	.byte 0xd1, 0xd6, 0x32, 0xf0, 0x67, 0x06, 0xf1, 0x60
@@ -1632,7 +1632,7 @@ SeqTiming_Snapshot_Return:
 SyncTiming_Snapshot:
 	ei 0x06
 	ld wa, (0x0470:16)
-	ldb_d8 l, (0x046d)
+	ld l, (0x046d:16)
 	stda16 (0x046e), wa
 	stb_d8 (0x046c), l
 	.byte 0xd1, 0x62, 0x7d, 0xf0, 0x67, 0x06, 0xf1, 0x70
@@ -5770,7 +5770,7 @@ INT0_HandleDataCommand:
 	lda xwa, (1512:16)
 	stda32 1494, xwa
 	ldc_cr32 xwa, 0x20
-	ldb_d8 a, (1508)
+	ld a, (1508:16)
 	and a, 0x1f
 	inc 1, a
 	extz wa
@@ -5824,7 +5824,7 @@ INTTC0_HANDLER:
 	and a, 0xf8
 	set 0, a
 	ld (xbc), a
-	ldb_d8 a, (1506)
+	ld a, (1506:16)
 	cps a, 4
 	jr z, INTTC0_E1_Phase2_Complete
 	cps a, 3
@@ -5833,7 +5833,7 @@ INTTC0_HANDLER:
 	jr z, E1DMA_TransferSetup
 	cps a, 1
 	jr nz, E1DMA_ISR_Epilogue
-	ldb_d8 c, (1508)
+	ld c, (1508:16)
 	ld a, c
 	and a, 0x1f
 	inc 1, a
@@ -7797,7 +7797,7 @@ BusyWait_Loop:
 
 LED_CyclePattern:
 	incdi8 1, (1574)
-	ldb_d8 a, (1574)
+	ld a, (1574:16)
 	and a, 0x3
 	cps a, 3
 	jr z, LED_CyclePattern_Phase3
@@ -8109,13 +8109,13 @@ Parport_ReadByte_Return:
 	ret
 
 Flash_AccumWrite_Byte:
-	ldb_d8 e, (1620)
+	ld e, (1620:16)
 	extz de
 	lda xbc, (1576:16)
 	extz xde
 	add xde, xbc
 	ld (xde), a
-	ldb_d8 a, (1620)
+	ld a, (1620:16)
 	ld e, a
 	inc 1, a
 	stb_d8 (1620), a
@@ -8135,13 +8135,13 @@ Flash_AccumWrite_ByteDone:
 	ret
 
 Flash_AccumWrite_Word:
-	ldb_d8 c, (1620)
+	ld c, (1620:16)
 	extz bc
 	lda xde, (1580:16)
 	extz xbc
 	add xbc, xde
 	ld (xbc), a
-	ldb_d8 a, (1620)
+	ld a, (1620:16)
 	ld c, a
 	inc 1, a
 	stb_d8 (1620), a

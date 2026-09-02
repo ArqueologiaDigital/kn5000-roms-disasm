@@ -4086,10 +4086,10 @@ PmBank_OnBankChanged:
 	jrl PmBank_SendEventAndDone
 
 PmBank_DrawRegionInfo:
-	ldb_d8 a, (0x8d86)
+	ld a, (0x8d86:16)
 	extz wa
 	pushw wa
-	ldb_d8 c, (0x8d84)
+	ld c, (0x8d84:16)
 	ld a, c
 	extz wa
 	div a, 0xc
@@ -4881,12 +4881,12 @@ MainSvariIni:
 	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
-	ldb_d8 a, (0x8d3a)
+	ld a, (0x8d3a:16)
 	extz wa
 	lds bc, 0
 	call SndParam_LookupViaEncode
 	ld (xiz + 3), l
-	ldb_d8 a, (0x8d3a)
+	ld a, (0x8d3a:16)
 	extz wa
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode
@@ -4957,12 +4957,12 @@ MainGetSndGrpName:
 	call Malloc
 	inc 2, xsp
 	ld xiz, xhl
-	ldb_d8 a, (0x8d3a)
+	ld a, (0x8d3a:16)
 	extz wa
 	lds bc, 0
 	call SndParam_LookupViaEncode
 	ld (xsp + 7), l
-	ldb_d8 a, (0x8d3a)
+	ld a, (0x8d3a:16)
 	extz wa
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode

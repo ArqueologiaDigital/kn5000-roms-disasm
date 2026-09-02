@@ -4111,10 +4111,10 @@ MidiPart_DataBlock:
 	jrl	pl, 0x3fc0
 	halt
 	ret	nz
-	ldb_d8	c, (0xc07f)
+	ld	c, (0xc07f:16)
 	bit	6, c
 	ret	z
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, c
 	ret	z
 	.byte 0xc1
@@ -8341,7 +8341,7 @@ IvMesageProc:
 	ld xiz, xwa
 	cp xbc, 0x1e0003a
 	jrl z, IvMessage_GetText
-	ldb_d8 a, (0x7f42)
+	ld a, (0x7f42:16)
 	extz wa
 	cp xbc, 0x1e000b6
 	jrl z, IvMessage_SelectionChange
@@ -8745,7 +8745,7 @@ MsgText_LookupMessage:
 	ret
 
 MsgText_CheckLanguage:
-	ldb_d8 a, (3298)
+	ld a, (3298:16)
 	cps a, 3
 	jr z, MsgText_Lang3
 	cps a, 2

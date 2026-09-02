@@ -198,7 +198,7 @@ Timer_AudioTick_Handler:
 	push xix
 	lds32 xwa, 1
 	adddm32 4160, xwa
-	ldb_d8 a, 61460
+	ld a, (61460:16)
 	ld c, a
 	inc 1, a
 	stb_d8 61460, a
@@ -243,7 +243,7 @@ AudioTick_StoreTick:
 AudioTick_Variant_6:
 	setda 2, 4158
 	stdi8 61460, 0
-	ldb_d8 a, 61462
+	ld a, (61462:16)
 	inc 1, a
 	stb_d8 61462, a
 	cp a, 0x8
@@ -294,7 +294,7 @@ MUTE_AND_HALT:	; 01FBF4
 
 Timer_StatusHelper:
 	jr	t, -3
-	ldb_d8	l, 4154
+	ld	l, (4154:16)
 	extz	hl
 	ret
 
@@ -2763,7 +2763,7 @@ INT0_Standard_Cmd:	; 020ED9h - standard variable-length command
 	lda xwa, (4336:16)	; Standard command buffer
 	stda32 4324, xwa
 	ldc_cr32 xwa, 0x20
-	ldb_d8 a, 4332
+	ld a, (4332:16)
 	and a, 0x1F	; Bits 4-0 = length - 1
 	inc 1, a	; Add 1 for actual length
 	extz wa
@@ -2830,7 +2830,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	push xde
 	push xbc
 	push xwa
-	ldb_d8 a, 4330
+	ld a, (4330:16)
 	cps a, 4
 	jr z, CH0_State4_E1_Done
 	cps a, 3
@@ -2842,7 +2842,7 @@ MICRODMA_CH0_HANDLER:	; 20F1Fh - Channel #0 completion (command dispatch)
 	; State 1: Standard command processing
 	pushw 0x0
 	pushw 0x10F0	; Command buffer address
-	ldb_d8 c, 4332
+	ld c, (4332:16)
 	ld a, c
 	and a, 0x1F
 	inc 1, a	; Length = (byte & 0x1F) + 1
@@ -4868,21 +4868,21 @@ Voice_Manager_PollBank:
 	push xiz
 	incdi8 1, 4392
 	anddi8 4392, 3
-	ldb_d8 a, 4392
+	ld a, (4392:16)
 	extz wa
 	calr ToneGen_Read_Register
-	ldb_d8 a, 4392
+	ld a, (4392:16)
 	extz wa
 	add wa, wa
 	lda xbc, (10550:16)
 	ldw_sri DE, 0x07, 0xE4, 0xE0
 	or de, hl
-	ldb_d8 a, 4392
+	ld a, (4392:16)
 	extz wa
 	ld hl, wa
 	add hl, hl
 	lda xix, (10542:16)
-	ldb_d8 a, 4392
+	ld a, (4392:16)
 	extz wa
 	add wa, wa
 	lda xbc, (10542:16)
@@ -4891,12 +4891,12 @@ Voice_Manager_PollBank:
 	xor (xsp + 4), wa
 	ldw_sri WA, 0x07, 0xF0, 0xEC
 	and (xsp + 4), wa
-	ldb_d8 a, 4392
+	ld a, (4392:16)
 	extz wa
 	add wa, wa
 	lda xbc, (10542:16)
 	stw_dri DE, 0x07, 0xE4, 0xE0
-	ldb_d8 a, 4392
+	ld a, (4392:16)
 	sll a, 4
 	ld (xsp + 8), a
 	extz wa
@@ -4958,7 +4958,7 @@ Voice_Manager_PollBank_Next:
 
 ; Tail: WA = bank, call Voice_AdvanceSlotIterator (0x021BF5), restore and return.
 Voice_Manager_PollBank_Return:
-	ldb_d8 a, 4392
+	ld a, (4392:16)
 	extz wa
 	calr Voice_AdvanceSlotIterator
 	pop xiz
@@ -41440,7 +41440,7 @@ MIDI_Status_NoteOn:
 	ld xwa, xiz
 	calr RingBuf_ReadByte
 	stb_d8 10999, l
-	ldb_d8 a, 10997
+	ld a, (10997:16)
 	cp a, 0xF0
 	jr nc, MIDI_Status_NoteOn_Poly
 	lda xwa, (10996:16)
@@ -42484,7 +42484,7 @@ Voice_Poly_NoteOn:
 
 ; Advances the round-robin index at 0x3B13 and extracts note and velocity from the packet.
 Voice_Poly_NoteOn_RoundRobin:
-	ldb_d8 c, 15123
+	ld c, (15123:16)
 	inc 1, c
 	and c, 0x7
 	stb_d8 15123, c
@@ -42497,7 +42497,7 @@ Voice_Poly_NoteOn_RoundRobin:
 	cpib_erp 0xF9, 0
 	jrl z, Voice_Poly_NoteOn_ReleasePath
 	res_dd8 7, 0x18
-	ldb_d8 a, 15123
+	ld a, (15123:16)
 	extz wa
 	add wa, 0x840
 	stw_da 0x100000, xwa
@@ -42514,7 +42514,7 @@ Voice_Poly_NoteOn_SlotSearch:
 	nop
 	nop
 	res_dd8 7, 0x18
-	ldb_d8 a, 15123
+	ld a, (15123:16)
 	extz wa
 	add wa, 0x800
 	stw_da 0x100000, xwa
@@ -42531,7 +42531,7 @@ Voice_Poly_NoteOn_SlotFound:
 	nop
 	nop
 	nop
-	ldb_d8 a, 15123
+	ld a, (15123:16)
 	ld l, a
 	extz hl
 	stb_erp A, 0xFB
@@ -42552,7 +42552,7 @@ Voice_Poly_NoteOn_SlotFound:
 	add xhl, xix
 	ld xhl, (xhl)
 	call (xhl)
-	ldb_d8 a, 15123
+	ld a, (15123:16)
 	extz wa
 	lda xbc, (15124:16)
 	ld de, wa
@@ -42959,11 +42959,11 @@ DSP_Cmd_LoadEffectPreset:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 10), xwa
-	ldb_d8 a, 17261
+	ld a, (17261:16)
 	extz wa
 	ld bc, wa
 	sll bc, 7
-	ldb_d8 a, 17262
+	ld a, (17262:16)
 	extz wa
 	add wa, bc
 	cp wa, 0x122
@@ -43076,7 +43076,7 @@ DSP_RingBuf_Compare_MatchPath:
 ; Loop condition against (0x436E), then the two result tests. The two "Match"/"Mismatch"
 ; names are the wrong way round; see [UNCERTAIN].
 DSP_RingBuf_Compare_MismatchPath:
-	ldb_d8 a, 17262
+	ld a, (17262:16)
 	extz wa
 	cp iz, wa
 	jr c, DSP_RingBuf_Compare_Loop
@@ -43087,7 +43087,7 @@ DSP_RingBuf_Compare_MismatchPath:
 
 ; HL = (0x436F) -- the "report the header's status byte" exit.
 DSP_RingBuf_Compare_LoopNext:
-	ldb_d8 l, 17263
+	ld l, (17263:16)
 	jr DSP_RingBuf_Compare_Epilogue
 
 ; HL = 0 -- the "identical, suppress" exit.
@@ -43220,7 +43220,7 @@ Audio_Process_DSP_MsgSizeCheck:
 	ld xbc, xwa
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_ReadAndCompare
-	ldb_d8 a, 17257
+	ld a, (17257:16)
 	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x30
 	jrl c, DSP_Cmd2B_SkipAndContinue
@@ -43234,7 +43234,7 @@ Audio_Process_DSP_MsgSizeCheck:
 	and iz, 0xF
 	lda xwa, (17264:16)
 	ld (xsp + 10), xwa
-	ldb_d8 a, 17259
+	ld a, (17259:16)
 	cp a, 0x30
 	jrl z, DSP_Cmd2B_Noop
 	cp a, 0x27
@@ -43277,7 +43277,7 @@ DSP_Cmd2B_AlgoSelect_Continue:
 	stb_erp A, 0xF8
 	ld e, a
 	extz de
-	ldb_d8 a, 17264
+	ld a, (17264:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -43376,10 +43376,10 @@ DSP_Cmd2B_ParamStub7:
 ; Sub-command 0x20: DSP_MixSendConfig(WA = payload[0] at 0x4370, BC = payload[1] at 0x4371,
 ; XDE = 0x4370).
 DSP_Cmd2B_MixSendConfig:
-	ldb_d8 a, 17264
+	ld a, (17264:16)
 	ld e, a
 	extz de
-	ldb_d8 a, 17265
+	ld a, (17265:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -43389,10 +43389,10 @@ DSP_Cmd2B_MixSendConfig:
 
 ; Sub-command 0x22: DSP_ReadVoiceParam5D with the same three arguments.
 DSP_Cmd2B_ReadParam5D:
-	ldb_d8 a, 17264
+	ld a, (17264:16)
 	ld e, a
 	extz de
-	ldb_d8 a, 17265
+	ld a, (17265:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -43402,10 +43402,10 @@ DSP_Cmd2B_ReadParam5D:
 
 ; Sub-command 0x24: DSP_SetVoiceCoefficients with the same three arguments.
 DSP_Cmd2B_SetParam:
-	ldb_d8 a, 17264
+	ld a, (17264:16)
 	ld e, a
 	extz de
-	ldb_d8 a, 17265
+	ld a, (17265:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -43415,10 +43415,10 @@ DSP_Cmd2B_SetParam:
 
 ; Sub-command 0x27: DSP_ReadVoiceParam11 with the same three arguments.
 DSP_Cmd2B_ReadParam11:
-	ldb_d8 a, 17264
+	ld a, (17264:16)
 	ld e, a
 	extz de
-	ldb_d8 a, 17265
+	ld a, (17265:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -43504,13 +43504,13 @@ DSP_CmdHandler_2C:
 	ld xbc, xwa
 	ld xwa, (xsp + 4)
 	calr DSP_RingBuf_ReadAndCompare
-	ldb_d8 a, 17257
+	ld a, (17257:16)
 	ldb_erp A, 0xFB
 	cpib_erp 0xFB, 0
 	jrl nz, CmdHandler2C_SubCmd1
 	cpdi8 17258, 8
 	jrl nz, DSP_Process_ReadNext
-	ldb_d8 a, 17259
+	ld a, (17259:16)
 	extz wa
 	cps wa, 0
 	jrl mi, CmdHandler2C_SubCmd0
@@ -43542,82 +43542,82 @@ CmdHandler2C_JumpDispatch:
 ; "ignore" target DSP_Process_ReadNext), 0x035E13, 0x035E20, 0x035E2D, 0x036033, 0x035E3A,
 ; 0x035E47, 0x035E54, 0x035E61, 0x035E6E -- all named above. Verified by disassembly.
 CmdHandler2C_TableData:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	exts	wa
 	call	166691
 	jrl	596
 ; ★ NEW NAME. Table entry 1: zero-extends (0x4370) and calls DSP_SET_MIXPARAM_45B2 (0x036205).
 CmdHandler2C_Global_MixParamA:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221701
 	jrl	583
 ; ★ NEW NAME. Table entry 2: calls DSP_Set_MixParam_45B4 (0x03621C).
 CmdHandler2C_Global_MixParamB:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221724
 	jrl	570
 ; ★ NEW NAME. Table entry 3: calls ScaleTune_Set_Global_Enabled (0x028D2E).
 CmdHandler2C_Global_MonoMode:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	167214
 	jrl	557
 ; ★ NEW NAME. Table entry 4: SIGN-extends (0x4370) and calls Voice_SetPitchBendRange
 ; (0x028B30).
 CmdHandler2C_Global_BendRange:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	exts	wa
 	call	166704
 	jrl	544
 ; ★ NEW NAME. Table entry 6: calls DSP_Set_MixParam_45B6 (0x036237).
 ; (Table entries 5 and 9 point straight at DSP_Process_ReadNext, i.e. accepted and ignored.)
 CmdHandler2C_Global_MixParamC:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221751
 	jrl	531
 ; ★ NEW NAME. Table entry 7: calls DSP_Set_Value_45B8 (0x036252).
 CmdHandler2C_Global_SetValue45B8:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221778
 	jrl	518
 ; ★ NEW NAME. Table entry 8: calls DSP_Set_Enable_45BA (0x03627A).
 CmdHandler2C_Global_SetEnable45BA:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221818
 	jrl	505
 ; ★ NEW NAME. Table entry 10 (raw sub-command 0x21): calls DSP_Set_CfgWord_4504 (0x0362A2).
 CmdHandler2C_Global_SetValue4504:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221858
 	jrl	492
 ; ★ NEW NAME. Table entry 11 (raw 0x22): calls DSP_Set_CfgWord_453C (0x0362B6).
 CmdHandler2C_Global_SetValue453C:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221878
 	jrl	479
 ; ★ NEW NAME. Table entry 12 (raw 0x23): calls DSP_Set_AlgoType_45B0 (0x0362CA), the one
 ; global setter that re-runs DSP_ApplyAlgoForVoiceType instead of DSP_State_ApplyBuf.
 CmdHandler2C_Global_SetAlgoType:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221898
 	jrl	466
 ; ★ NEW NAME. Table entry 13 (raw 0x24): calls DSP_Set_CfgWord_4574 (0x0362DD).
 CmdHandler2C_Global_SetValue4574:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221917
 	jrl	453
 ; ★ NEW NAME. Table entry 14 (raw 0x25): calls DSP_Set_CfgWord_45AC (0x0362F1).
 CmdHandler2C_Global_SetValue45AC:
-	ldb_d8	a, (17264)
+	ld	a, (17264:16)
 	extz	wa
 	call	221937
 	jrl	440
@@ -43644,7 +43644,7 @@ CmdHandler2C_SubCmd1:
 	and iz, 0xF
 	lda xwa, (17264:16)
 	ld (xsp + 10), xwa
-	ldb_d8 a, 17259
+	ld a, (17259:16)
 	cp a, 0x8
 	jr z, CmdHandler2C_SubCmd5
 	cps a, 6
@@ -43667,10 +43667,10 @@ CmdHandler2C_SubCmd2:
 ; Sub-command 0x04: DSP_Reinit_VoiceSlots(WA = payload[0], BC = payload[1]) followed by
 ; DSP_VoiceState_Dispatch(WA = 0xFF, BC = 0xFF) -- i.e. rebuild every part.
 CmdHandler2C_SubCmd3:
-	ldb_d8 a, 17264
+	ld a, (17264:16)
 	ld e, a
 	extz de
-	ldb_d8 a, 17265
+	ld a, (17265:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -43682,10 +43682,10 @@ CmdHandler2C_SubCmd3:
 
 ; Sub-command 0x06: DSP_VoiceState_Dispatch(WA = payload[0], BC = payload[1]).
 CmdHandler2C_SubCmd4:
-	ldb_d8 a, 17264
+	ld a, (17264:16)
 	ld e, a
 	extz de
-	ldb_d8 a, 17265
+	ld a, (17265:16)
 	ld c, a
 	extz bc
 	ld wa, de
@@ -43722,11 +43722,11 @@ CmdHandler2C_Epilogue:
 ;   anything else : skip.
 ; Like 0x2C, the 0x2D path never sends a reply.
 DSP_CmdHandler_2D:
-	ldb_d8 a, 17257
+	ld a, (17257:16)
 	ldb_erp A, 0xFB
 	cpib_erp 0xFB, 0
 	jrl nz, CmdHandler2D_PathD
-	ldb_d8 a, 17258
+	ld a, (17258:16)
 	ldb_erp A, 0xFB
 	cp_erpb 0xFB, 0x09
 	jr nz, CmdHandler2D_PathA
@@ -43757,7 +43757,7 @@ CmdHandler2D_PathA:
 	ld xwa, (xsp + 10)
 	cp xwa, 0xFFFFFFFF
 	jrl z, DSP_Process_ReadNext
-	ldb_d8 a, 17262
+	ld a, (17262:16)
 	ld c, a
 	extz bc
 	ld xwa, (xsp + 4)
@@ -43799,7 +43799,7 @@ CmdHandler2D_PathD:
 	jr c, CmdHandler2D_EnqueueOrReturn
 	cp_erpb 0xFB, 0x3F
 	jr ugt, CmdHandler2D_EnqueueOrReturn
-	ldb_d8 a, 17264
+	ld a, (17264:16)
 	lds32 xbc, 0
 	ld c, a
 	ld xwa, (xsp + 4)
@@ -43822,7 +43822,7 @@ CmdHandler2D_MsgSizeMatch:
 CmdHandler2D_EnqueueOrReturn:
 	cp_erpb 0xFB, 0x40
 	jr nz, CmdHandler2D_QueuedPath
-	ldb_d8 a, 17264
+	ld a, (17264:16)
 	lds32 xbc, 0
 	ld c, a
 	ld xwa, (xsp + 4)
@@ -57821,7 +57821,7 @@ Keybed_Decode_Event:	; 03D11Fh
 	ldw_da xbc, 0x01f418
 	ld hl, de
 	sub hl, bc
-	ldb_d8 c, 19016
+	ld c, (19016:16)
 	extz bc
 	muls bc, 0x3
 	lda xde, (0x01f420:24)
@@ -57832,7 +57832,7 @@ Keybed_Decode_Event:	; 03D11Fh
 	exts xbc
 	divs xbc, xde
 	ld hl, bc
-	ldb_d8 c, 19016
+	ld c, (19016:16)
 	extz bc
 	muls bc, 0x3
 	lda xde, (0x01f421:24)
@@ -57858,7 +57858,7 @@ Keybed_Decode_Event:	; 03D11Fh
 
 ; Already named.  The black-key correction arm (note%12 in {1,3,6,8,10}).
 Keybed_Vel_BlackKey_Trim:	; 03D1AAh - apply mode-specific pitch offset
-	ldb_d8 c, 19016	; Get tone gen mode
+	ld c, (19016:16)	; Get tone gen mode
 	extz bc
 	muls bc, 0x3	; mode * 3 for table index
 	lda xhl, (0x01f422:24)                  ; Pitch offset table

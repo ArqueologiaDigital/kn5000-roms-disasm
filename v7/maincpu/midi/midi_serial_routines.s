@@ -76,7 +76,7 @@ IntTx0_CheckQueueEmpty:
 	ret
 	stdi8	(1066), 0
 	pushw	wa
-	ldb_d8	a, (1056)
+	ld	a, (1056:16)
 	and	a, 5
 	popw	wa
 IntTx0_Epilogue:
@@ -486,20 +486,20 @@ SysEx_InProgressReturn:
 	swi	5
 	inc	6, b
 	push	xiy
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 25
 	jr	nz, 52
 	cpdi8	38331, 18
 	jr	nz, 45
 	xor	e, e
-	ldb_d8	a, 38298
+	ld	a, (38298:16)
 	cps	a, 2
 	jr	ugt, 10
 	ld	xix, 16577768
 	ld_rr8b	e, xix, a
 	ldw	bc, 2968
 	ldb	d, 192
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
@@ -509,7 +509,7 @@ SysEx_InProgressReturn:
 	nop
 	.byte 0x80, 0x40
 	extz	hl
-	ldb_d8	l, 38350
+	ld	l, (38350:16)
 	cp	l, 31
 	jr	ugt, 50
 	.byte 0xf1, 0x57, 0xfd, 0xcc
@@ -519,16 +519,16 @@ SysEx_InProgressReturn:
 	ld_rrw	bc, xix, hl
 	cp	c, 255
 	jr	z, 26
-	ldb_d8	e, 38298
+	ld	e, (38298:16)
 	ldb	d, 255
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16565737
 	ret
 	extz	hl
-	ldb_d8	l, 38350
+	ld	l, (38350:16)
 	cp	l, 31
 	jr	ugt, 50
 	.byte 0xf1, 0x57, 0xfd, 0xcc
@@ -538,28 +538,28 @@ SysEx_InProgressReturn:
 	ld_rrw	bc, xix, hl
 	cp	c, 255
 	jr	z, 26
-	ldb_d8	d, 38298
+	ld	d, (38298:16)
 	ldb	e, 255
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16565737
 	ret
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 16
 	jr	nz, 52
 	cpdi8	38331, 16
 	jr	nz, 45
 	xor	e, e
-	ldb_d8	a, 38298
+	ld	a, (38298:16)
 	cps	a, 3
 	jr	ugt, 10
 	ld	xix, 16577958
 	ld_rr8b	e, xix, a
 	ldw	bc, 840
 	ldb	d, 7
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
@@ -570,14 +570,14 @@ SysEx_InProgressReturn:
 	push	sr
 	normal
 	pop	sr
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 20
 	jr	nz, 86
 	cpdi8	38331, 17
 	jr	nz, 79
 	ldb	b, 5
 	ldw	de, 64512
-	ldb_d8	a, 38298
+	ld	a, (38298:16)
 	cp	a, 11
 	jr	ugt, 22
 	extz	wa

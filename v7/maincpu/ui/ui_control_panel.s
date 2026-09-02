@@ -1975,13 +1975,13 @@ KeyScan_CheckEmptyMarker:
 
 	; --- Normal scan: search array for matching (chain<<8)|param ---
 
-	ldb_d8 a, (49121)
+	ld a, (49121:16)
 
 	ld l, a
 
 	extz hl
 
-	ldb_d8 e, (49124)
+	ld e, (49124:16)
 
 	ld c, e
 
@@ -2002,11 +2002,11 @@ KeyScan_ScanLoop:
 	add	xde, xwa
 	sll	xde, 8
 	lds32	xwa, 0
-	ldb_d8	a, (49122)
+	ld	a, (49122:16)
 	add	xde, xwa
 	sll	xde, 8
 	lds32	xwa, 0
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	add	xde, xwa
 	ld	xwa, 4294967295
 	ld	xbc, 29360184
@@ -2025,28 +2025,28 @@ KeyScan_AdvanceEntry:
 ;                PartSelect_UpdateDisplayState (activation handler)
 ; =============================================================================
 CtrlPanel_HandleKeyInput:
-	ldb_d8	a, (49121)
+	ld	a, (49121:16)
 	cp	a, 16
 	jr	z, 24
 	cps	a, 0
 	ret	nz
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	and	a, 3
 	ret	z
-	ldb_d8	a, (9954)
+	ld	a, (9954:16)
 	and	a, 3
 	ret	nz
 	jr	25
 CtrlPanel_HandleKey10:
 	call	16635862
 	lds32	xde, 0
-	ldb_d8	e, (35998)
+	ld	e, (35998:16)
 	ld	xwa, 4294967295
 	ld	xbc, 29360175
 	call	16423243
 	ret
 PartSelect_UpdateDisplayState:
-	ldb_d8	a, (64614)
+	ld	a, (64614:16)
 	and	a, 1
 	cps	a, 0
 	scc8	z, e
@@ -2601,7 +2601,7 @@ MainPmanCtrl_SetPartSelectOne:
 MainPmanCtrl_SetPartSelectZero:
 	stdi8	(35998), 0
 MainPmanCtrl_LoadPartSelect:
-	ldb_d8	e, (35998)
+	ld	e, (35998:16)
 MainPmanCtrl_CompareAndUpdate:
 	.byte 0x8f, 0x06, 0xf5, 0x66, 0x0f, 0xda, 0x12, 0x0b
 	.byte 0xff, 0x00, 0x30, 0x90, 0x00, 0x31, 0x10, 0x00
@@ -2621,7 +2621,7 @@ MainTitleControl:
 	jrl	z, 203
 	cp	xbc, 31457451
 	jrl	z, 180
-	ldb_d8	a, 35994
+	ld	a, (35994:16)
 	cp	xbc, 29360147
 	jrl	z, 134
 	cp	xbc, 29360168
@@ -2729,11 +2729,11 @@ CtrlPanel_SelectionReturnZero:
 	ret
 
 GetPartSelect:
-	ldb_d8	l, (35998)
+	ld	l, (35998:16)
 	extz	hl
 	ret
 GetCurrentPartSelect:
-	ldb_d8	l, (35998)
+	ld	l, (35998:16)
 	ret
 UI_PostPartChangeEvent:
 	dec 2, xsp
@@ -2806,7 +2806,7 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ldb_d8 a, (35994)
+	ld a, (35994:16)
 
 	cpda8 xbc, (35996)
 

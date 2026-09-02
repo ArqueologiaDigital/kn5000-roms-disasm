@@ -1941,7 +1941,7 @@ UIState_KeyScan_Dispatch:
 	call Boot_CheckConfigFlag7				; Check key-scan enable (bit 7 of RAM[0x0406])
 	cps hl, 0				; Returns HL=1 if enabled
 	ret z					; Return if scanning disabled
-	ldb_d8 a, (0x8d38); Load current UI state ID
+	ld a, (0x8d38:16); Load current UI state ID
 	extz wa					; Zero-extend to 16-bit
 	sla wa, 2				; state * 4 (pointer table stride)
 	lda xbc, (SSF_PresentationGateTable:24); Base of state->key-map pointer table
@@ -1953,18 +1953,18 @@ UIState_KeyScan_Dispatch:
 	; --- Pass-through path: broadcast any key press ---
 	; Build XDE = (C080 << 24) | (C07D << 16) | (C07E << 8) | C07F
 	lds32	xde, 0
-	ldb_d8 e, (0xc080); chain byte
+	ld e, (0xc080:16); chain byte
 	sll xde, 8				; shift up
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07d); param byte
+	ld a, (0xc07d:16); param byte
 	add xde, xwa				; merge into XDE
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07e); additional key data
+	ld a, (0xc07e:16); additional key data
 	add xde, xwa
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07f); additional key data
+	ld a, (0xc07f:16); additional key data
 	add xde, xwa
 	ld xwa, 0xffffffff			; broadcast target (all handlers)
 	ld xbc, 0x01c00038			; key press event code
@@ -1973,10 +1973,10 @@ KeyScan_CheckEmptyMarker:
 	cpw (xix), 0xffff			; Check for EMPTY marker
 	ret z					; Return if no keys for this state
 	; --- Normal scan: search array for matching (chain<<8)|param ---
-	ldb_d8 a, (0xc07d); param byte
+	ld a, (0xc07d:16); param byte
 	ld l, a
 	extz hl
-	ldb_d8 e, (0xc080); chain byte
+	ld e, (0xc080:16); chain byte
 	ld c, e
 	extz bc
 	sll bc, 8				; BC = chain << 8
@@ -1993,11 +1993,11 @@ KeyScan_ScanLoop:
 	add xde, xwa
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07e)
+	ld a, (0xc07e:16)
 	add xde, xwa
 	sll xde, 8
 	lds32	xwa, 0
-	ldb_d8 a, (0xc07f)
+	ld a, (0xc07f:16)
 	add xde, xwa
 	ld xwa, 0xffffffff			; broadcast target
 	ld xbc, 0x01c00038			; key press event code
@@ -2016,29 +2016,29 @@ KeyScan_AdvanceEntry:
 ;                PartSelect_UpdateDisplayState (activation handler)
 ; =============================================================================
 CtrlPanel_HandleKeyInput:
-	ldb_d8 a, (0xc07d); param byte (key code low)
+	ld a, (0xc07d:16); param byte (key code low)
 	cp a, 0x10				; Check for special key 0x10
 	jr z, CtrlPanel_HandleKey10			; Handle key 0x10
 	cps a, 0				; Check for key 0x00
 	ret nz					; Other keys: return
-	ldb_d8 a, (0xc07f); additional key data
+	ld a, (0xc07f:16); additional key data
 	and a, 0x03				; check bits 1:0
 	ret z					; return if both clear
-	ldb_d8 a, (0x26e2); load activation state
+	ld a, (0x26e2:16); load activation state
 	and a, 0x03				; check bits 1:0
 	ret nz					; return if already active
 	jr PartSelect_UpdateDisplayState				; activate
 CtrlPanel_HandleKey10:
 	call AudioMode_ResetVoiceState				; handler for key 0x10
 	lds32	xde, 0
-	ldb_d8 e, (0x8d3a); load current state
+	ld e, (0x8d3a:16); load current state
 	ld xwa, 0xffffffff			; broadcast target
 	ld xbc, 0x01c0002f			; key event code (different from main handler)
 	call ApPostEvent				; dispatch event
 	ret
 
 PartSelect_UpdateDisplayState:
-	ldb_d8 a, (0xfc66)
+	ld a, (0xfc66:16)
 	and a, 0x1
 	cps a, 0
 	scc8 z, e
@@ -2660,7 +2660,7 @@ MainPmanCtrl_SetPartSelectZero:
 	stdi8 (0x8d3a), 0
 
 MainPmanCtrl_LoadPartSelect:
-	ldb_d8 e, (0x8d3a)
+	ld e, (0x8d3a:16)
 
 MainPmanCtrl_CompareAndUpdate:
 	cp e, (xsp + 6)
@@ -2687,7 +2687,7 @@ MainTitleControl:
 	jrl z, MainTitleCtrl_HandleBA
 	cp xbc, 0x1e000ab
 	jrl z, MainTitleCtrl_HandleAB
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cp xbc, 0x1c00013
 	jrl z, SeqState_DemoModeHandler
 	cp xbc, 0x1c00028
@@ -2821,12 +2821,12 @@ CtrlPanel_SelectionReturnZero:
 	ret
 
 GetPartSelect:
-	ldb_d8 l, (0x8d3a)
+	ld l, (0x8d3a:16)
 	extz hl
 	ret
 
 GetCurrentPartSelect:
-	ldb_d8 l, (0x8d3a)
+	ld l, (0x8d3a:16)
 	ret
 
 UI_PostPartChangeEvent:
@@ -2900,7 +2900,7 @@ UI_PostTimerResetEvent:
 	jp ApPostEvent
 
 SeqState_HasModeChanged:
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cpda8 a, 0x8d38
 	scc16 nz, hl
 	ret

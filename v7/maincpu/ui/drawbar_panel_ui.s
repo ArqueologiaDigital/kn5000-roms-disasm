@@ -7842,7 +7842,7 @@ IvMesageProc:
 	ld	xiz, xwa
 	cp	xbc, 31457338
 	jrl	z, 256
-	ldb_d8	a, 32422
+	ld	a, (32422:16)
 	extz	wa
 	cp	xbc, 31457462
 	jrl	z, 193
@@ -8249,7 +8249,7 @@ MsgText_LookupMessage:
 	ret
 
 MsgText_CheckLanguage:
-	ldb_d8 a, (3298)
+	ld a, (3298:16)
 	cps a, 3
 	jr z, MsgText_Lang3
 	cps a, 2

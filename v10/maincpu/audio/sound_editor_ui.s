@@ -7444,7 +7444,7 @@ SeMenu_PopupDialog_Close:
 	jr c, SeMenu_PopupDialog_Close
 
 SeMenu_PopupDialog_Close_Data:
-	ldb_d8 a, (0x8d38)
+	ld a, (0x8d38:16)
 	cpdm8_24 (0x020c38), a
 	jr nz, SeMenu_ValueEditor_Init
 	cp a, 0x20
@@ -7522,7 +7522,7 @@ SeMenu_ValueEditor_ClampAndStore:
 SeMenu_ValueEditor_Redraw:
 	cp e, 0x10
 	jr nz, SeMenu_ValueEditor_Complete
-	ldb_d8 a, (0x8d38)
+	ld a, (0x8d38:16)
 	cp a, (xbc)
 	jr z, SeMenu_ValueEditor_Cancel
 	jrl SeMenu_ListSelector_ScrollDown
@@ -7594,7 +7594,7 @@ SeMenu_ListSelector_Draw:
 	jr SeMenu_ListSelector_ScrollDown
 
 SeMenu_ListSelector_HandleInput:
-	ldb_d8 a, (0x8d38)
+	ld a, (0x8d38:16)
 	cp c, a
 	jr nz, SeMenu_ListSelector_ScrollDown
 	cp a, 0x20
@@ -7837,17 +7837,17 @@ SeMenu_NameEditor_End:
 	jrl	pl, 16320
 	max
 	jr	nz, 80
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 64
 	jr	z, 71
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 64
 	sla	a, 1
 	.byte 0xc1
 	push	xwa
 	ld	a, (xiy+63)
 	jr	nz, 19
-	ldb_d8	w, (1642)
+	ld	w, (1642:16)
 	and	w, 127
 	or	w, a
 	stb_d8	(1642), w
@@ -7859,7 +7859,7 @@ SeMenu_NameEditor_End:
 	push	xsp
 	push	xde
 	jr	nz, 28
-	ldb_d8	w, (1632)
+	ld	w, (1632:16)
 	and	w, 127
 	or	w, a
 	stb_d8	(1632), w
@@ -8177,7 +8177,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	xix, SeBitmap_EnvCurve5_0x327
 	call	SeMenu_NameEditor_Setup
 	ldb	c, 4
-	ldb_d8	w, (1630)
+	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
 	dec	1, a
@@ -8499,7 +8499,7 @@ SeMenu_ShowConfirmDialog_Data:
 	ld	xix, SeBitmap_EnvCurve5_0xD82
 	call	SeMenu_NameEditor_Setup
 	xor	xwa, xwa
-	ldb_d8	a, (1629)
+	ld	a, (1629:16)
 	sla	wa, 2
 	.byte 0xc1, 0xae, 0x06
 	push	xsp
@@ -8522,7 +8522,7 @@ SeMenu_ShowConfirmDialog_Data:
 	jr	5
 	ld	xiz, 1640
 	xor	xwa, xwa
-	ldb_d8	a, (1629)
+	ld	a, (1629:16)
 	add	xiz, xwa
 	call	SeMenu_ShowConfirmDialog_Data_0x4A9
 	pop	xwa
@@ -8849,7 +8849,7 @@ SeMenu_PresetManager_Data:
 	ld	xix, SeBitmap_EnvCurve5_0x7CA
 	call	SeMenu_NameEditor_Setup
 	ldb	c, 4
-	ldb_d8	w, (1630)
+	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
 	dec	1, a
@@ -8905,7 +8905,7 @@ SeMenu_PresetManager_Data:
 	ldb	c, 2
 	jr	2
 	ldb	c, 4
-	ldb_d8	w, (1630)
+	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
 	dec	1, a
@@ -8955,7 +8955,7 @@ SeMenu_PresetManager_Data:
 	ret
 	stib_da	(0x03efa8), 0
 	ldb	c, 2
-	ldb_d8	w, (1630)
+	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
 	dec	1, a
@@ -9066,7 +9066,7 @@ SeMenu_PresetBrowser_Data:
 	ret
 	stib_da	(0x03efa8), 0
 	ldb	c, 4
-	ldb_d8	w, (1630)
+	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
 	dec	1, a
@@ -9329,7 +9329,7 @@ SeMenu_Utility_CopyBlock:
 	call	SeMenu_CompareAndApply_Data4
 	ret
 	stib_da	(0x03efa8), 0
-	ldb_d8	a, (1632)
+	ld	a, (1632:16)
 	and	a, 32
 	.byte 0x66
 	.ascii "$Eyd"
@@ -9422,7 +9422,7 @@ SeMenu_Utility_FormatNumber_Loop:
 	ret
 SeMenu_Utility_FormatNumber_End:
 	; --- Data setup: load A, store, set flag=2, language-conditional XIX (58 bytes) ---
-	ldb_d8	a, (0x8d36)
+	ld	a, (0x8d36:16)
 	stb_d8	(1656), a
 	stib_da	(0x03efa8), 2
 	ld xiy, 0x00f12364
@@ -9562,7 +9562,7 @@ SeMenu_Utility_End:
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_NameEdit_DataBlock1:
-	ldb_d8	a, (1632)
+	ld	a, (1632:16)
 	and	a, 15
 	stb_d8	(1648), a
 	cp	a, 10
@@ -9573,7 +9573,7 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xix, TuningSystem_Handler_Table_0x209A
 	call	SeMenu_NameEditor_Setup
 	xor	xwa, xwa
-	ldb_d8	a, (1648)
+	ld	a, (1648:16)
 	sla	wa, 3
 	ld	xiz, TuningSystem_Handler_Table_0x23BD
 	add	xiz, xwa
@@ -9583,7 +9583,7 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xiy, TuningSystem_Handler_Table_0x1E8B
 	xor	xbc, xbc
 	ld	xiz, FlashWrite_BlockRef_Type6_0x40
-	ldb_d8	c, (1648)
+	ld	c, (1648:16)
 	sla	bc, 2
 	.byte 0xe3
 	reti
@@ -9592,7 +9592,7 @@ SeMenu_NameEdit_DataBlock1:
 	ldb	d, 29
 	nop
 	cp	xwa, xix
-	ldb_d8	a, (1648)
+	ld	a, (1648:16)
 	cp	a, 10
 	jr	nz, 7
 	ld	xiy, TuningSystem_Handler_Table_0x1F5D
@@ -9601,7 +9601,7 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xix, TuningSystem_Handler_Table_0x1F7B
 	call	SeMenu_NameEditor_Setup
 	ld	xiy, TuningSystem_Handler_Table_0x241D
-	ldb_d8	a, (1648)
+	ld	a, (1648:16)
 	cp	a, 10
 	jr	nz, 7
 	ld	xix, FlashRead_BlockData_Field7
@@ -9609,7 +9609,7 @@ SeMenu_NameEdit_DataBlock1:
 	ld	xix, FlashWrite_BlockHandler_Table
 	call	SeMenu_NameEditor_Draw
 	xor	xwa, xwa
-	ldb_d8	a, (1648)
+	ld	a, (1648:16)
 	sla	wa, 3
 	ld	xiz, FlashWrite_BlockHandler_Table
 	add	xiz, xwa
@@ -9649,7 +9649,7 @@ SeMenu_NameEdit_Return:
 SeMenu_NameEdit_CheckBit7:
 	; --- Helper: conditional XIY based on bit 7 of (0x066a) (32 bytes) ---
 	stib_da	(0x03efa8), 0
-	ldb_d8	a, (1642)
+	ld	a, (1642:16)
 	and a, 0x80
 	jr nz, SeMenu_NameEdit_Bit7Set
 	ld xiy, 0x00f16506
@@ -9668,7 +9668,7 @@ SeMenu_PatchEdit_DataBlock:
 	jr	nc, 37
 	xor	xbc, xbc
 	ld	xiz, FlashWrite_BlockRef_Type6_0x10
-	ldb_d8	c, (1648)
+	ld	c, (1648:16)
 	sla	bc, 2
 	ld_rrl xiy, xiz, bc
 	jr 21
@@ -9851,7 +9851,7 @@ Data_UnknownBlock:
 	ld	xiy, TuningSystem_Handler_Table_0x173
 	ld	xix, TuningSystem_Handler_Table_0x17D
 	call	SeMenu_NameEditor_Setup
-	ldb_d8	c, (1632)
+	ld	c, (1632:16)
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, TuningSystem_Handler_Table_0x1E1
@@ -9978,22 +9978,22 @@ Data_UnknownBlock:
 	call	SeMenu_NameEditor_Draw
 	call	Data_UnknownBlock_0x23D
 	ret
-	ldb_d8	l, (1632)
+	ld	l, (1632:16)
 	cps	l, 1
 	jr	z, 4
 	ldb	l, 17
 	jr	2
 	ldb	l, 16
 	stb_d8	(0x90ea), l
-	ldb_d8	h, (1633)
+	ld	h, (1633:16)
 	dec	1, h
 	stb_d8	(0x90eb), h
-	ldb_d8	a, (0x8d3a)
+	ld	a, (0x8d3a:16)
 	stb_d8	(0x90ec), a
 	ld	xwa, 0x90ea
 	call	SndParam_ApplyProgramChange
-	ldb_d8	a, (0x90ed)
-	ldb_d8	c, (0x90ee)
+	ld	a, (0x90ed:16)
+	ld	c, (0x90ee:16)
 	ld	xde, 0x020c13
 	call	SndParam_ApplyProgramChangeAsync
 	ldb	c, 20
@@ -10154,7 +10154,7 @@ Data_UnknownBlock:
 	call	Data_UnknownBlock_0x46B
 	ret
 	xor	wa, wa
-	ldb_d8	a, (1633)
+	ld	a, (1633:16)
 	div	a, 16
 	ld	xiz, TuningSystem_Handler_Table_0x6FF
 	xor	hl, hl
@@ -15912,7 +15912,7 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	ld XWA, (xsp + 0x010c)
 	call GetViewInstance
 	ld xiz, xhl
-	ldb_d8 a, (0x34ef)
+	ld a, (0x34ef:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (StrBeatOff_0x12:24)
@@ -16013,11 +16013,11 @@ PsCstmCpBnkBox_HandleEvtBC:
 	call GetViewInstance
 	cp (xhl + 36), 0x0
 	jr nz, PsCstmCpBnkBox_ReadParam2
-	ldb_d8 a, (0x39b6)
+	ld a, (0x39b6:16)
 	jr PsCstmCpBnkBox_LookupAndSend
 
 PsCstmCpBnkBox_ReadParam2:
-	ldb_d8 a, (0x39b7)
+	ld a, (0x39b7:16)
 
 PsCstmCpBnkBox_LookupAndSend:
 	extz wa
@@ -16301,7 +16301,7 @@ AcMemNoBox_HandleEvtBC:
 	ld XWA, (xsp + 0x010c)
 	call GetViewInstance
 	ld xiz, xhl
-	ldb_d8 a, (0x34d6)
+	ld a, (0x34d6:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (StrRhySlot_MemoryA_0x2A:24)
@@ -16418,7 +16418,7 @@ AcCmpRecBox_HandleEvtBC:
 	ld xwa, (xsp + 12)
 	ld (xsp + 8), xwa
 	ld e, (xiz + 36)
-	ldb_d8 a, (0x379b)
+	ld a, (0x379b:16)
 	and a, e
 	lda xhl, (StrStyleSect2_A_Vari1_0x8:24)
 	lda xbc, (xsp + 16)
@@ -16436,7 +16436,7 @@ AcCmpRecBox_HandleEvtBC:
 AcCmpRecBox_CheckParam2:
 	ld xwa, (xsp + 4)
 	ld e, (xwa + 37)
-	ldb_d8 a, (0x34f1)
+	ld a, (0x34f1:16)
 	and a, e
 	cp a, e
 	jr nz, AcCmpRecBox_AdjustTable
@@ -16502,7 +16502,7 @@ PsCmpQtzBox_HandleEvtBC:
 	call InheritedProc
 	ld xwa, xiz
 	call GetViewInstance
-	ldb_d8 a, (0x34db)
+	ld a, (0x34db:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (PtrTbl_NotePositionStrs:24)
@@ -16571,7 +16571,7 @@ PsCmpMeasBox_HandleEvtBC:
 	call InheritedProc
 	ld XWA, (xsp + 0x0108)
 	call GetViewInstance
-	ldb_d8 a, (0x34dc)
+	ld a, (0x34dc:16)
 	inc 1, a
 	extz wa
 	pushw wa
@@ -16640,7 +16640,7 @@ PsCmpMemBox_HandleEvtBC:
 	call InheritedProc
 	ld XWA, (xsp + 0x0108)
 	call GetViewInstance
-	ldb_d8 a, (0x39ab)
+	ld a, (0x39ab:16)
 	extz wa
 	pushw wa
 	pushw 0xe1
@@ -16822,7 +16822,7 @@ PsNameMemBox_HandleEvtBC:
 	ld XWA, (xsp + 0x010c)
 	call GetViewInstance
 	ld xiz, xhl
-	ldb_d8 a, (0x34d6)
+	ld a, (0x34d6:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (PtrTbl_StyleVarGroupCodes:24)
@@ -17415,7 +17415,7 @@ PsMspNameBnk_CallInherited:
 PsMspNameBnk_HandleEvtBC:
 	ld xwa, xiz
 	call InheritedProc
-	ldb_d8 a, (0x7f3e)
+	ld a, (0x7f3e:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (PtrTbl_MspCompileBankLabels:24)
@@ -18207,7 +18207,7 @@ RgpSetBnk_GridCheck_EventEnc:
 	ld (xbc), de
 	lda xde, (xsp)
 	ld (xhl + 4), xde
-	ldb_d8 a, (0x7f3d)
+	ld a, (0x7f3d:16)
 	sll a, 4
 	ldb w, 0x0
 	extz xwa
@@ -18308,7 +18308,7 @@ RgpSetBnkBox_CallInherited:
 RgpSetBnkBox_HandleEvtBC:
 	ld xwa, xiz
 	call InheritedProc
-	ldb_d8 a, (0x7f3d)
+	ld a, (0x7f3d:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (StrMsBankLong2_Effect1_0x26:24)
@@ -18344,7 +18344,7 @@ MspRGrpSetBnk_SetToZero:
 	stdi8 (0x7f3d), 0
 
 MspRGrpSetBnk_UpdateLsw:
-	ldb_d8 c, (0x7f3d)
+	ld c, (0x7f3d:16)
 	add c, 0xf
 	extz bc
 	ld xwa, 0x28800
@@ -18396,7 +18396,7 @@ MspRgpShowHideFunc:
 	jr nz, MspRgpShow_ReturnZero
 	or xde, xde
 	jr nz, MspRgpShow_ReturnZero
-	ldb_d8 a, (0x7f3d)
+	ld a, (0x7f3d:16)
 	cps a, 1
 	jr z, MspRgpShowHide_BankSelect1
 	cps a, 0
@@ -18627,7 +18627,7 @@ MspRecPadBox_HandleEvtBC:
 	call InheritedProc
 	ld xwa, xiz
 	call GetViewInstance
-	ldb_d8 a, (0x7f14)
+	ld a, (0x7f14:16)
 	cps a, 5
 	jr ule, AcSndArgGrid_BnkDispatch
 	dec 6, a
@@ -18697,7 +18697,7 @@ MspPlayModeFunc_DataBlock:
 	inc	8, xsp
 	ld	xhl, (xsp+12)
 	jr	43
-	ldb_d8	a, (1054)
+	ld	a, (1054:16)
 	and	a, 4
 	cps	a, 4
 	scc16	nz, hl
@@ -19620,7 +19620,7 @@ StylCnvStorOkFunc:
 	cp xbc, 0x1c00007
 	jr nz, StylCnvStorOkFunc_ReturnZero
 	lds32 xde, 0
-	ldb_d8 e, (0x3a4d)
+	ld e, (0x3a4d:16)
 	ld xwa, 0x1440023
 	ld xbc, 0x1e40030
 	call MainFuncCall

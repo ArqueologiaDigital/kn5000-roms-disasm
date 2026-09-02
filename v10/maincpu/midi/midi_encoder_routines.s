@@ -63,7 +63,7 @@ Encoder_ProcessModwheel:
 	extz wa
 	lda xbc, (ENCODER_LUT_MODWHEEL:24); Lookup table address
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value from table
-	ldb_d8 c, (0x8ee4); Get current value
+	ld c, (0x8ee4:16); Get current value
 	res 7, c	; Clear change flag
 	cp c, a	; Compare with new value
 	ret z	; Return if unchanged
@@ -101,7 +101,7 @@ Encoder_ProcessVolume_NoChange:
 ; Output: HL = clamped and scaled value
 Encoder_ClampScaleAndNormalize:
 	ld l, a
-	ldb_d8 c, (0x8ede); Get minimum limit
+	ld c, (0x8ede:16); Get minimum limit
 	cp l, c	; Compare with limit
 	jr nc, Encoder_PerformScaling	; Skip if >= limit
 	ld l, c	; Clamp to minimum
@@ -114,7 +114,7 @@ Encoder_PerformScaling:
 	ld xwa, xhl
 	ld xbc, 0xec	; Divisor
 	call Math_DivideU32	; Division routine
-	ldb_d8 a, (0x8edc); Get mode value
+	ld a, (0x8edc:16); Get mode value
 	extz wa
 	add wa, wa	; Double for word table index
 	lda xbc, (ENCODER_LUT_BREATH_INDEX:24); Index table
@@ -141,14 +141,14 @@ Encoder_ProcessBreath:
 	extz wa
 	lda xbc, (ENCODER_LUT_BREATH_VALUE:24); Lookup table
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
-	ldb_d8 c, (0x379b); Get system mode flags
+	ld c, (0x379b:16); Get system mode flags
 	and c, 0xf	; Mask relevant bits
 	jr nz, Encoder_ProcessBreath_WithModeAdjustment	; If mode active, process
 	cpdi8 (0x7f0b), 0; Check alternate condition
 	jr z, Encoder_ProcessBreath_SimplePassthrough	; Simple processing if clear
 
 Encoder_ProcessBreath_WithModeAdjustment:
-	ldb_d8 c, (0x8eda); Get breath mode
+	ld c, (0x8eda:16); Get breath mode
 	cps c, 0
 	ret z	; Return if disabled
 	srl a, 1	; Divide by 2
@@ -191,7 +191,7 @@ Encoder_ProcessFoot:
 	extz wa
 	lda xbc, (ENCODER_LUT_FOOT:24); Lookup table
 	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
-	ldb_d8 c, (0x8eea); Get current value
+	ld c, (0x8eea:16); Get current value
 	res 7, c	; Clear change flag
 	cp c, a	; Compare
 	ret z	; Return if unchanged
@@ -237,7 +237,7 @@ Encoder_ReturnDefaultConstant_End:
 ; Encoder_ApplySystemModeSettings - Select processing mode based on system state
 ; Reads mode value from 0xc07d and configures encoder processing accordingly
 Encoder_ApplySystemModeSettings:
-	ldb_d8 a, (0xc07d); Get mode selector
+	ld a, (0xc07d:16); Get mode selector
 	cps a, 6
 	jr z, Encoder_ConfigureRangeLimit	; Jump if mode 6
 	cps a, 5
@@ -245,29 +245,29 @@ Encoder_ApplySystemModeSettings:
 	cps a, 4
 	ret nz	; Return if not mode 4
 	; Mode 4: Configure breath mode
-	ldb_d8 a, (0xc07f)
+	ld a, (0xc07f:16)
 	and a, 0xf	; Mask low nibble
 	ret z	; Return if zero
-	ldb_d8 a, (0xc07e)
+	ld a, (0xc07e:16)
 	and a, 0xf	; Mask low nibble
 	stb_d8 (0x8eda), a; Set breath mode
 	ret
 
 Encoder_ConfigureVolumeMode:
-	ldb_d8 a, (0xc07f)
+	ld a, (0xc07f:16)
 	and a, 0xff	; Full byte check
 	ret z	; Return if zero
-	ldb_d8 a, (0xc07e)
+	ld a, (0xc07e:16)
 	and a, 0xff	; Full byte
 	stb_d8 (0x8edc), a; Set volume mode
 	ret
 
 Encoder_ConfigureRangeLimit:
-	ldb_d8 a, (0xc07f)
+	ld a, (0xc07f:16)
 	res 7, a	; Clear bit 7
 	cps a, 0
 	ret z	; Return if zero
-	ldb_d8 a, (0xc07e)
+	ld a, (0xc07e:16)
 	res 7, a	; Clear bit 7
 	stb_d8 (0x8ede), a; Set range limit
 	ret

@@ -2670,7 +2670,7 @@ sub_FA69FD:
 	sub	bc, bc                                 ; FA6A11  sub BC,BC
 	cp	hl, bc                                  ; FA6A13  cp HL,BC
 	jr z, sub_FA69FD__FA6A3A                   ; FA6A15  jr Z,0xfa6a3a
-	ldb_d8	c, (0x414)                          ; FA6A17  ld C,(0x0414)
+	ld	c, (0x414:16)                          ; FA6A17  ld C,(0x0414)
 	cps	c, 0                                   ; FA6A1B  cp C,0
 	jr z, sub_FA69FD__FA6A3A                   ; FA6A1D  jr Z,0xfa6a3a
 	ld	de, (0x40C:16)                        ; FA6A1F  ld DE,(0x040c)
@@ -2792,7 +2792,7 @@ sub_FA69FD__FA6B10:
 	sub	bc, bc                                 ; FA6B14  sub BC,BC
 	cp	hl, bc                                  ; FA6B16  cp HL,BC
 	jr z, sub_FA69FD__FA6B4A                   ; FA6B18  jr Z,0xfa6b4a
-	ldb_d8	c, (0x41B)                          ; FA6B1A  ld C,(0x041b)
+	ld	c, (0x41B:16)                          ; FA6B1A  ld C,(0x041b)
 	cps	c, 0                                   ; FA6B1E  cp C,0
 	jr z, sub_FA69FD__FA6B41                   ; FA6B20  jr Z,0xfa6b41
 	ld	de, (0x40C:16)                        ; FA6B22  ld DE,(0x040c)

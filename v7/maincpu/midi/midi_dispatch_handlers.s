@@ -82,7 +82,7 @@ MidiCC_Handler_BitManipulation:
 	stda16	38314, de
 	call	16563896
 	ret
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 31
 	jr	ugt, 55
 	xor	w, w
@@ -95,14 +95,14 @@ MidiCC_Handler_BitManipulation:
 	jr	z, 31
 	inc	2, xix
 	ld_rrb	d, xix, hl
-	ldb_d8	e, 38298
-	ldb_d8	a, 38299
+	ld	e, (38298:16)
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16563896
 	ret
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 31
 	jr	ugt, 55
 	xor	w, w
@@ -115,14 +115,14 @@ MidiCC_Handler_BitManipulation:
 	jr	z, 31
 	inc	2, xix
 	ld_rrb	d, xix, hl
-	ldb_d8	e, 38298
-	ldb_d8	a, 38299
+	ld	e, (38298:16)
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16563896
 	ret
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 31
 	jr	ugt, 55
 	xor	w, w
@@ -135,14 +135,14 @@ MidiCC_Handler_BitManipulation:
 	jr	z, 31
 	inc	2, xix
 	ld_rrb	d, xix, hl
-	ldb_d8	e, 38298
-	ldb_d8	a, 38299
+	ld	e, (38298:16)
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16563896
 	ret
-	ldb_d8	l, 38350
+	ld	l, (38350:16)
 	cp	l, 31
 	jrl	ugt, 134
 	extz	hl
@@ -163,7 +163,7 @@ MidiCC_Handler_BitManipulation:
 	.byte 0xf1, 0x57, 0xfd, 0xc8
 	jr	z, 78
 	ldb	b, 11
-	ldb_d8	e, 38298
+	ld	e, (38298:16)
 	cp	e, 12
 	jr	ugt, 67
 	ldb	d, 127
@@ -171,26 +171,26 @@ MidiCC_Handler_BitManipulation:
 	.byte 0xf1, 0x57, 0xfd, 0xc9
 	jr	z, 57
 	ldb	b, 10
-	ldb_d8	e, 38298
+	ld	e, (38298:16)
 	sll	e, 1
 	ldb	d, 255
 	jr	24
 	.byte 0xf1, 0x57, 0xfd, 0xc9
 	jr	z, 38
 	ldb	b, 9
-	ldb_d8	e, 38298
+	ld	e, (38298:16)
 	cp	e, 76
 	jr	ugt, 27
 	cp	e, 52
 	jr	c, 22
 	ldb	d, 127
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16563840
 	ret
-	ldb_d8	l, 38350
+	ld	l, (38350:16)
 	cp	l, 31
 	jr	ugt, 97
 	extz	hl
@@ -207,25 +207,25 @@ MidiCC_Handler_BitManipulation:
 	ldb	b, 10
 	ld	xix, (36950:16)
 	extz	hl
-	ldb_d8	l, 38350
+	ld	l, (38350:16)
 	sll	hl, 2
 	ld_rrl	xix, xix, hl
 	ld	a, (xix+10)
 	res	0, a
-	ldb_d8	e, 38298
+	ld	e, (38298:16)
 	srl	e, 6
 	or	e, a
 	ldb	d, 255
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16563840
 	ret
-	ldb_d8	a, 38298
+	ld	a, (38298:16)
 	set	7, a
 	extz	hl
-	ldb_d8	l, 38350
+	ld	l, (38350:16)
 	sll	hl, 1
 	ld	xix, 38361
 	st_rrb	a, xix, hl
@@ -235,10 +235,10 @@ MidiCC_Handler_BitManipulation:
 	jr	nz, 7
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f
 	ret
-	ldb_d8	a, 38298
+	ld	a, (38298:16)
 	set	7, a
 	extz	hl
-	ldb_d8	l, 38350
+	ld	l, (38350:16)
 	sll	hl, 1
 	ld	xix, 38360
 	st_rrb	a, xix, hl
@@ -249,7 +249,7 @@ MidiCC_Handler_BitManipulation:
 	dec	1, xix
 	.byte 0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f
 	ret
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 31
 	jr	ugt, 44
 	sll	a, 1
@@ -257,15 +257,15 @@ MidiCC_Handler_BitManipulation:
 	ld_rr8w	bc, xix, a
 	cp	c, 255
 	jr	z, 26
-	ldb_d8	e, 38298
+	ld	e, (38298:16)
 	ldb	d, 127
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16563926
 	ret
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 31
 	jr	ugt, 44
 	sll	a, 1
@@ -273,15 +273,15 @@ MidiCC_Handler_BitManipulation:
 	ld_rr8w	bc, xix, a
 	cp	c, 255
 	jr	z, 26
-	ldb_d8	e, 38298
+	ld	e, (38298:16)
 	ldb	d, 127
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16564059
 	ret
-	ldb_d8	a, 38298
+	ld	a, (38298:16)
 	ld	de, (38314:16)
 	xor	e, e
 	cp	a, 64
@@ -291,13 +291,13 @@ MidiCC_Handler_BitManipulation:
 	call	16563692
 	ret
 	ld	e, a
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16564089
 	ret
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 31
 	jr	ugt, 50
 	.byte 0xf1, 0x57, 0xfd, 0xcc
@@ -307,15 +307,15 @@ MidiCC_Handler_BitManipulation:
 	ld_rr8w	bc, xix, a
 	cp	c, 255
 	jr	z, 26
-	ldb_d8	e, 38297
+	ld	e, (38297:16)
 	ldb	d, 255
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16565074
 	ret
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 31
 	jr	ugt, 52
 	.byte 0xf1, 0x57, 0xfd, 0xce
@@ -325,15 +325,15 @@ MidiCC_Handler_BitManipulation:
 	ld_rr8w	bc, xix, a
 	cp	c, 255
 	jr	z, 28
-	ldb_d8	e, 38297
-	ldb_d8	d, 38298
-	ldb_d8	a, 38299
+	ld	e, (38297:16)
+	ld	d, (38298:16)
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
 	call	16563791
 	ret
-	ldb_d8	a, 38350
+	ld	a, (38350:16)
 	cp	a, 31
 	jr	ugt, 50
 	.byte 0xf1, 0x57, 0xfd, 0xcd
@@ -345,9 +345,9 @@ MidiCC_VoiceParam_8:
 	ld_rr8w	bc, xix, a
 	cp	c, 255
 	jr	z, 26
-	ldb_d8	e, 38297
+	ld	e, (38297:16)
 	ldb	d, 127
-	ldb_d8	a, 38299
+	ld	a, (38299:16)
 	stb_d8	38316, a
 	stda16	38312, bc
 	stda16	38314, de
@@ -355,7 +355,7 @@ MidiCC_VoiceParam_8:
 	ret
 	cpdi8	49121, 13
 	jr	nz, 13
-	ldb_d8	a, 49123
+	ld	a, (49123:16)
 	and	a, 255
 	jr	z, 4
 	.byte 0xf1, 0xd0, 0x95, 0xb8
@@ -579,7 +579,7 @@ PanelEvt_CheckFlag7_Dispatch_C:
 	push	sr
 	swi	5
 	nop
-	ldb_d8	a, (38323)
+	ld	a, (38323:16)
 	and	a, 192
 	jr	z, 36
 PanelEvt_CheckFlag7_DoDispatch_C:
@@ -722,7 +722,7 @@ PanelEvt_Dispatch3Entry_A:
 	push	sr
 	ld	xiy, 1224776478
 	ret
-	ldb_d8	a, (36937)
+	ld	a, (36937:16)
 PanelEvt_Dispatch3_TableAndHandlers_A:
 	.byte 0xf1, 0x49, 0x90, 0xcf, 0x6e, 0x07, 0x84, 0x21
 	.byte 0xc9, 0x33, 0x06, 0x6e, 0x3c, 0x45, 0xa0, 0x95
@@ -3612,7 +3612,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	inc	8, xsp
 	ret
 	.byte 0xd7, 0xfa, 0x04
-	ldb_d8	a, 46928
+	ld	a, (46928:16)
 	bit	7, a
 	jr	z, 7
 	stdi8	46932, 1
@@ -3622,7 +3622,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	stdi8	46932, 0
 	jr	5
 	stdi8	46932, 2
-	ldb_d8	a, 46928
+	ld	a, (46928:16)
 	and	a, 63
 	ldb_erp	a, 251
 	stb_d8	46928, a
@@ -3644,7 +3644,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	stb_erp	a, 251
 	stb_d8	46928, a
 	stb_d8	46932, a
-	ldb_d8	a, 46928
+	ld	a, (46928:16)
 	cp	a, 25
 	jr	c, 10
 	cp	a, 27
@@ -3662,13 +3662,13 @@ DSPCfg_VoiceSlotB_ExtractData:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ldb_d8	a, 46928
+	ld	a, (46928:16)
 	extz	wa
 	calr	108
-	ldb_d8	a, 46928
+	ld	a, (46928:16)
 	extz	wa
 	calr	49
-	ldb_d8	a, 46928
+	ld	a, (46928:16)
 	extz	wa
 	calr	137
 	.byte 0xf1, 0x52, 0xb7, 0xc8
@@ -3731,7 +3731,7 @@ DSPCfg_VoiceSlotB_ExtractData:
 	cp	xbc, xde
 	jr	c, -30
 	ret
-	ldb_d8 c, (0xb754)
+	ld c, (0xb754:16)
 	cps c, 2
 	ret Z
 	.byte 0xf1, 0xad, 0xfd, 0x30, 0xcb, 0xd8, 0x66, 0x11
@@ -6391,7 +6391,7 @@ MidiCtrl_ModeSwitchHandler:
 	pop XIX
 	pop XHL
 	pop XDE
-	ldb_d8 a, (0x908c)
+	ld a, (0x908c:16)
 	inc 1,A
 	stb_d8 (0x908c), a
 	cp A,0x0f
@@ -6404,7 +6404,7 @@ MidiCtrl_ApplyModeSwitch:
 	.byte 0x3c, 0x3e, 0x1d, 0xda, 0x8e, 0xfc, 0x5e, 0x5c
 	.byte 0x5b, 0x5a
 MidiCtrl_CheckAltCommand:
-	ldb_d8	a, (37004)
+	ld	a, (37004:16)
 	inc	1, a
 	stb_d8	(37004), a
 	cp	a, 15
@@ -6425,7 +6425,7 @@ MidiCtrl_FullReconfigure:
 	pop XIX
 	pop XHL
 	pop XDE
-	ldb_d8 a, (0x908c)
+	ld a, (0x908c:16)
 	inc 1,A
 	stb_d8 (0x908c), a
 	cp A,0x0f

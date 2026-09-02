@@ -1506,7 +1506,7 @@ InterCPU_RX_Handler__default_cmd:
 	lda xwa, (1310:16)
 	stda32 1298, xwa
 	ldc_cr32 xwa, 0x20	; DMA channel 0 destination
-	ldb_d8 a, (1306)
+	ld a, (1306:16)
 	and a, 0x1F	; Low 5 bits = count - 1
 	inc 1, a
 	extz wa
@@ -1578,7 +1578,7 @@ CMD_Dispatch_Handler:
 	push xde
 	push xbc
 	push xwa
-	ldb_d8 a, (1304)
+	ld a, (1304:16)
 	cps a, 4	; State 4?
 	jr z, CMD_Dispatch_Handler__state4
 	cps a, 3	; State 3?
@@ -1590,7 +1590,7 @@ CMD_Dispatch_Handler:
 	; State 1: Process received data, call handler from table
 	pushw 0x0
 	pushw 0x51E
-	ldb_d8 c, (1306)
+	ld c, (1306:16)
 	ld a, c
 	and a, 0x1F	; Low 5 bits = count
 	inc 1, a
@@ -1671,7 +1671,7 @@ INIT_MEMORY_TEST:
 	jr nz, INIT_MEMORY_TEST__no_error
 	setda 3, 1366
 INIT_MEMORY_TEST__no_error:
-	ldb_d8 a, (1366)
+	ld a, (1366:16)
 	extz wa
 	calr DELAY_ROUTINE	; 0xFF89A9 (3-byte relative call)
 

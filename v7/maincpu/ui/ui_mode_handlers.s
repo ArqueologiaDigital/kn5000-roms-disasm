@@ -132,7 +132,7 @@ SndParam_LoadTransposeValues:
 	ld	hl, wa
 	ret
 EffectMode_TimerCountdown:
-	ldb_d8 a, (0x8cb2)
+	ld a, (0x8cb2:16)
 	cps a, 0
 	ret Z
 	dec	1, a
@@ -151,7 +151,7 @@ EffectMode_TimerCountdown:
 	pop	xhl
 	pop	xde
 EffectMode_TimerCountdown_CheckMode:
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	cp	a, 197
 	jr	z, 10
 	cp	a, 194
@@ -238,7 +238,7 @@ EffectMode_ClampAndLookupPreset:
 	lds wa, 1
 
 EffectMode_ClampAndLookup_Clamped:
-	ldb_d8	c, (35996)
+	ld	c, (35996:16)
 	cp	c, 194
 	jr	z, 5
 	cp	c, 197
@@ -261,7 +261,7 @@ EffectMode_LookupPreset_Compute:
 
 EffectMode_DisplayPresetName:
 	pushw	iz
-	ldb_d8	c, (35996)
+	ld	c, (35996:16)
 	cp	c, 192
 	jr	z, 10
 	cp	c, 194
@@ -384,7 +384,7 @@ EffectMode_UpdateDisplay:
 	push	xiz
 	ld	xiz, xwa
 	calr	389
-	ldb_d8	a, (36022)
+	ld	a, (36022:16)
 	bit	5, a
 	jr	z, 14
 	res	5, a
@@ -559,7 +559,7 @@ EffectMode_BackupParamBlock:
 	lda	xsp, (xsp+10)
 	ret
 EffectMode_CopyHoldPedalBits:
-	ldb_d8 e, (35996)
+	ld e, (35996:16)
 
 	cp e, 0xc0
 
@@ -632,7 +632,7 @@ EffectMode_SetRegion_Apply:
 	ld	(xbc), a
 	or	a, h
 	ld	(xbc), a
-	ldb_d8	a, 35996
+	ld	a, (35996:16)
 	cp	a, 194
 	jr	z, 5
 	cp	a, 197
@@ -767,12 +767,12 @@ EffectMode_ReinitWithFlag:
 
 
 EffectMode_CheckModeAndReinit:
-	ldb_d8	c, (35994)
+	ld	c, (35994:16)
 	cp	c, 120
 	jr	z, 41
 	cp	c, 122
 	jr	z, 36
-	ldb_d8	a, (35992)
+	ld	a, (35992:16)
 	cps	a, 2
 	jr	z, 28
 	cps	a, 1
@@ -810,7 +810,7 @@ SndOutput_ReinitByMode_TypeB:
 	cps	bc, 0
 	jr	z, 21
 	dec	1, bc
-	ldb_d8	a, (36024)
+	ld	a, (36024:16)
 	extz	wa
 	add	bc, wa
 	stda16	(36026), bc
@@ -823,19 +823,19 @@ SndOutput_ReinitByMode_Restore:
 	pop	xiz
 	ret
 SndOutput_ReinitByMode_NotifyParam:
-	ldb_d8	c, (36024)
+	ld	c, (36024:16)
 	inc	1, c
 	extz	bc
 	ld	xwa, 768
 	lds	de, 3
 	call	16566832
-	ldb_d8	a, (36022)
+	ld	a, (36022:16)
 	bit	5, a
 	jr	z, 7
 	set	2, a
 	stb_d8	(36022), a
 SndOutput_ReinitByMode_CheckBit3:
-	ldb_d8	a, (36022)
+	ld	a, (36022:16)
 	bit	3, a
 	ret	z
 	set	1, a
@@ -1506,7 +1506,7 @@ SelfTest_SramAndRom_CheckROM:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ldb_d8	a, (36064)
+	ld	a, (36064:16)
 	cpl	a
 	and	a, 9
 	stb_d8	(36064), a
@@ -1553,17 +1553,17 @@ SelfTest_PopCount_ShiftNext:
 EffectMode_CheckAndDispatch:
 	cpdi8 (0x8c9a), 0xfb
 	jr nz, EffectMode_DispatchUpdate
-	ldb_d8 a, (0x8ce6)
+	ld a, (0x8ce6:16)
 	cps a, 2
 	jr z, EffectMode_ResetDiagMode
-	ldb_d8 a, (0x8ce4)
+	ld a, (0x8ce4:16)
 	bit 0x00,A
 	jr z, EffectMode_CheckAndDispatch_Bit4Clear
 	bit 0x04,A
 	jr nz, EffectMode_DispatchUpdate
 	set 0x04,A
 	stb_d8 (0x8ce4), a
-	ldb_d8 a, (0x8ce6)
+	ld a, (0x8ce6:16)
 	cps a, 1
 	jr z, EffectMode_DispatchUpdate
 	stdi8 (0x8ce6), 0x01
@@ -1575,7 +1575,7 @@ EffectMode_CheckAndDispatch_Bit4Clear:
 	jr	z, 44
 	res	4, a
 	stb_d8	(36068), a
-	ldb_d8	a, (36070)
+	ld	a, (36070:16)
 	cps	a, 0
 	jr	z, 29
 	stdi8	(36070), 0
@@ -1690,7 +1690,7 @@ EffectMode_HandleTimerEvents:
 	call	16355372
 	cps	hl, 0
 	ret	nz
-	ldb_d8	a, (36062)
+	ld	a, (36062:16)
 	cp	a, 150
 	jrl	z, 171
 	cp	a, 120
@@ -1707,7 +1707,7 @@ EffectMode_HandleTimerEvents:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
-	ldb_d8	a, (36062)
+	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
 	stb_d8	(36062), a
@@ -1717,7 +1717,7 @@ EffectMode_TimerEvent_Step1E:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
-	ldb_d8	a, (36062)
+	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
 	stb_d8	(36062), a
@@ -1727,7 +1727,7 @@ EffectMode_TimerEvent_Step3C:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
-	ldb_d8	a, (36062)
+	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
 	stb_d8	(36062), a
@@ -1737,7 +1737,7 @@ EffectMode_TimerEvent_Step5A:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
-	ldb_d8	a, (36062)
+	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
 	stb_d8	(36062), a
@@ -1747,7 +1747,7 @@ EffectMode_TimerEvent_Step78:
 	ld	xbc, 29360129
 	lds32	xde, 0
 	call	16423243
-	ldb_d8	a, (36062)
+	ld	a, (36062:16)
 	inc	1, a
 	inc	1, a
 	stb_d8	(36062), a
@@ -1765,7 +1765,7 @@ EffectMode_TimerEvent_Default:
 	stb_d8	(36062), a
 	ret
 EffectMode_RunDiagSequence:
-	ldb_d8	a, (36062)
+	ld	a, (36062:16)
 	cps	a, 0
 	jr	nz, 115
 	ld	xwa, 16252934
@@ -1801,7 +1801,7 @@ EffectMode_RunDiagSequence:
 	incdi8	1, (36062)
 	ret
 EffectMode_DiagSeq_AnimFrame:
-	ldb_d8	c, (36060)
+	ld	c, (36060:16)
 	cps	c, 0
 	jr	nz, 61	; -> 0xFB7385
 	extz	wa
@@ -1812,7 +1812,7 @@ EffectMode_DiagSeq_AnimFrame:
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	call	ApPostEvent
-	ldb_d8	a, (36062)
+	ld	a, (36062:16)
 	cps	a, 5
 	jr	nz, 7	; -> 0xFB7379
 	stdi8	(36062), 1
@@ -1839,7 +1839,7 @@ EffectMode_ByteData_DiagEvents:
 	pop XIX
 	pop XHL
 	pop XDE
-	ldb_d8 a, (0x8ce0)
+	ld a, (0x8ce0:16)
 	cpl A
 	.byte 0xc7, 0xfb, 0x99, 0xc9, 0xcc, 0x09, 0xd8, 0x12
 	.byte 0x1e, 0x79, 0xf7, 0xc7, 0xfb, 0x89, 0xc9, 0xcc
@@ -1863,7 +1863,7 @@ Voice_EmitNoteWithVelocity:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x41, 0x17, 0x00, 0xe2
 	.byte 0x01, 0xea, 0xa8, 0x1d, 0x4b, 0x99, 0xfa, 0x0e
 EffectMode_ModeChangeTransition:
-	ldb_d8 a, (0x8c9b)
+	ld a, (0x8c9b:16)
 	cpda8 a, (0x8c9a)
 	jrl z, EffectMode_MidiParseLoop
 	calr EffectMode_SetAllLEDs
@@ -1936,7 +1936,7 @@ FDC_CommandAndPostEvent:
 	push XWA
 	call FDC_CommandEntry
 	inc 4,XSP
-	ldb_d8 a, (0x8988)
+	ld a, (0x8988:16)
 	cp A,0xfc
 	jr nz, FDC_PostEvent_Error
 	ld XWA,0xffffffff
@@ -2104,7 +2104,7 @@ BitmapFinpic_ByteData:
 	call	15665005
 	cps	hl, 0
 	ret	z
-	ldb_d8	a, 49124
+	ld	a, (49124:16)
 	cpda8	a, 35998
 	ret	nz
 	cpdi8	49121, 0
@@ -9211,7 +9211,7 @@ NormScreen_InitHandler:
 	call	16408153
 	.byte 0xc2, 0xe6, 0x40, 0x03, 0x3f, 0x00
 	jr	z, 71
-	ldb_d8	a, 36076
+	ld	a, (36076:16)
 	extz	wa
 	bit	0, wa
 	jr	z, 60
@@ -11060,7 +11060,7 @@ GmOnOff_GetBoundsRect:
 	jr GmOnOff_SendAndReturn
 
 GmOnOff_CheckDesign:
-	ldb_d8	c, (36004)
+	ld	c, (36004:16)
 	orda8	c, (36006)
 	orda8	c, (36008)
 	jr	nz, 7
@@ -11130,12 +11130,12 @@ VariScreen_HandleShow:
 	ld	(xsp+24), xhl
 	ld	xwa, (xsp+24)
 	ld	(xsp+4), xwa
-	ldb_d8	a, (35998)
+	ld	a, (35998:16)
 	extz	wa
 	lds	bc, 0
 	call	16567590
 	ld	(xsp+31), l
-	ldb_d8	a, (35998)
+	ld	a, (35998:16)
 	extz	wa
 	ldw	bc, 32
 	call	16567590

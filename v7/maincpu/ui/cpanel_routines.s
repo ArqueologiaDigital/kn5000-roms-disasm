@@ -294,7 +294,7 @@ PanelDet_ProbeRight:
 	jr z, PanelDet_Return
 	ordi8 (0x8cf7), 0x08
 PanelDet_Return:
-	ldb_d8	a, (36087)
+	ld	a, (36087:16)
 	ret
 CPanel_ReadAllButtons:
 	.byte 0x43, 0xad, 0x00, 0x02, 0x00, 0xbb, 0xfc, 0x02
@@ -339,7 +339,7 @@ CPanel_ButtonPollLoop:
 	calr	298
 	calr	65177
 	calr	1650
-	ldb_d8	a, (36281)
+	ld	a, (36281:16)
 	ldb	w, 13
 	bit	7, a
 	jr	nz, 9
@@ -472,7 +472,7 @@ INTTX1_HANDLER:
 	push	xwa
 	push	xhl
 	push	xiy
-	ldb_d8	l, (36078)
+	ld	l, (36078:16)
 	xor	h, h
 	extz	xhl
 	add	xhl, 16530622
@@ -492,7 +492,7 @@ INTRX1_HANDLER:
 	push	xwa
 	push	xhl
 	push	xiy
-	ldb_d8	l, (36078)
+	ld	l, (36078:16)
 	xor	h, h
 	extz	xhl
 	add	xhl, 16530622
@@ -933,7 +933,7 @@ MBytePkt_EncNoEvent:
 	stda16	(36097), iy
 	jrl	67
 MBytePkt_EncWriteResult:
-	ldb_d8	a, (36090)
+	ld	a, (36090:16)
 MBytePkt_WriteEventByte:
 
 c:

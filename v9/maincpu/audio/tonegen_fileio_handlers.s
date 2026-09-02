@@ -677,17 +677,17 @@ SndParam_SyncDisplayBitmap:
 	ret
 
 SoundParam_NotifyMultipleChanges:
-	ldb_d8 c, (0x8e6c)
+	ld c, (0x8e6c:16)
 	extz bc
 	lds32 xwa, 0
 	lds de, 0
 	call SoundParam_NotifyChange
-	ldb_d8 c, (0x8e6e)
+	ld c, (0x8e6e:16)
 	extz bc
 	ld xwa, 0x102
 	lds de, 0
 	call SoundParam_NotifyChange
-	ldb_d8 c, (0x8e70)
+	ld c, (0x8e70:16)
 	extz bc
 	ld xwa, 0x103
 	lds de, 0
@@ -1233,14 +1233,14 @@ Encoder_ScanAndSync:
 
 Encoder_SyncLoop:
 	call MidiCC_SyncForceResync
-	ldb_d8 a, (0x8e8c)
+	ld a, (0x8e8c:16)
 	extz wa
 	muls wa, 0x3
 	ldb_sri A, 0x07, 0xec, 0xe0
 	stb_d8 (0x8e90), a
 	cp a, 0xff
 	jr nz, Encoder_ScanAndSync
-	ldb_d8 a, (0x8e8e)
+	ld a, (0x8e8e:16)
 	extz wa
 	sll wa, 2
 	lda xbc, (0xc039:16)
@@ -1252,7 +1252,7 @@ Encoder_SyncLoop:
 
 Encoder_ReadNextEntry:
 	call MidiCC_SyncForceResync
-	ldb_d8 a, (0x8e8c)
+	ld a, (0x8e8c:16)
 	extz wa
 	muls wa, 0x3
 	lda_dri XIY, 0x07, 0xec, 0xe0
@@ -1264,7 +1264,7 @@ Encoder_ReadNextEntry:
 
 Encoder_PrepareCallback:
 	push xiz
-	ldb_d8 c, (0x8e90)
+	ld c, (0x8e90:16)
 	extz bc
 	sla bc, 2
 	ld xwa, NakaInst_ExtDevice_Screens_0x3452

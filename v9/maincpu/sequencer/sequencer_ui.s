@@ -168,18 +168,18 @@ GmOffSureLang_ReturnZero:
 TrAsSureLangCheck:
 	cp xbc, 0x1e0009f
 	jr nz, TrAsSureLang_ReturnZero
-	ldb_d8 a, (0x2873)
+	ld a, (0x2873:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (NakaWidgetPtrTbl_SmfDp_0x2070:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
-	ldb_d8 a, (4438)
+	ld a, (4438:16)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
-	ldb_d8 a, (3295)
+	ld a, (3295:16)
 	inc 1, a
 	extz wa
 	pushw wa
@@ -2378,7 +2378,7 @@ TrAsGrid_ApplyScrollOffset:
 	lds32 xde, 0
 	call SendEvent
 	ld (xsp + 6), hl
-	ldb_d8 c, (3296)
+	ld c, (3296:16)
 	ld e, c
 	and e, 0x1
 	cps e, 0
@@ -2502,7 +2502,7 @@ TrAsGrid_ApplyScrollOffset2:
 	lds32 xde, 0
 	call SendEvent
 	ld (xsp + 6), hl
-	ldb_d8 c, (3296)
+	ld c, (3296:16)
 	ld e, c
 	and e, 0x1
 	cps e, 0
@@ -2797,7 +2797,7 @@ TrAsGridChk_ByteData:
 	jr	z, 115
 	cps	bc, 1
 	jrl	nz, 1197
-	ldb_d8	a, (0x2873)
+	ld	a, (0x2873:16)
 	extz	wa
 	lds	bc, 0
 	calr	65318
@@ -2901,7 +2901,7 @@ TrAsGridChk_ByteData:
 	jr	z, 115
 	cps	bc, 1
 	jrl	nz, 881
-	ldb_d8	a, (0x2873)
+	ld	a, (0x2873:16)
 	extz	wa
 	lds	bc, 1
 	calr	65002
@@ -4620,7 +4620,7 @@ HelpStsCheck:
 	ldb_da c, (0x0340e4)
 	sll xbc, 2
 	lds32 xwa, 0
-	ldb_d8 a, (0x296e)
+	ld a, (0x296e:16)
 	sll xwa, 2
 	ld xhl, 0x69800
 	add xhl, xwa
@@ -4638,7 +4638,7 @@ HelpStsP2Check:
 	ldb_da c, (0x0340e4)
 	sll xbc, 2
 	lds32 xwa, 0
-	ldb_d8 a, (0x296e)
+	ld a, (0x296e:16)
 	sll xwa, 2
 	lda_dri XWA, 0xe1, 0xc8, 0x00
 	ld xhl, 0x69800
@@ -4657,7 +4657,7 @@ HelpStsP3Check:
 	ldb_da c, (0x0340e4)
 	sll xbc, 2
 	lds32 xwa, 0
-	ldb_d8 a, (0x296e)
+	ld a, (0x296e:16)
 	sll xwa, 2
 	lda_dri XWA, 0xe1, 0x90, 0x01
 	ld xhl, 0x69800
@@ -4676,7 +4676,7 @@ HelpStsP4Check:
 	ldb_da c, (0x0340e4)
 	sll xbc, 2
 	lds32 xwa, 0
-	ldb_d8 a, (0x296e)
+	ld a, (0x296e:16)
 	sll xwa, 2
 	lda_dri XWA, 0xe1, 0x58, 0x02
 	ld xhl, 0x69800
@@ -4892,11 +4892,11 @@ HelpTtlFunc:
 
 HelpTtlFunc_LoadPageCount:
 	lds32 xhl, 0
-	ldb_d8 l, (0x296e)
+	ld l, (0x296e:16)
 	jr HelpTtlFunc_Epilogue
 
 HelpTtlFunc_DecrementPage:
-	ldb_d8 a, (0x296e)
+	ld a, (0x296e:16)
 	extz wa
 	dec 1, wa
 	cps wa, 0
@@ -6650,7 +6650,7 @@ NoteEdit_FormatTempoString:
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
 	call GetTitleNow
-	ldb_d8 a, (0x2786)
+	ld a, (0x2786:16)
 	extz wa
 	cp l, 0x95
 	jr nz, NoteEdit_FormatNoteOther
@@ -6671,13 +6671,13 @@ NoteEdit_FormatNoteOther:
 	ld xwa, ExtDevice_ModeDispatch_Table_0x1A8
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
-	ldb_d8 a, (0x2788)
+	ld a, (0x2788:16)
 	extz wa
 	pushw wa
 	ld xwa, ExtDevice_ModeDispatch_Table_0x1AC
 	jrl NoteEdit_PushFormatAndCopy
 	ld xiz, xde
-	ldb_d8 a, (0x278a)
+	ld a, (0x278a:16)
 	extz wa
 	pushw wa
 	ld xwa, ExtDevice_ModeDispatch_Table_0x1B2
@@ -6760,7 +6760,7 @@ NoteEdit_GateTimeNumeric:
 
 NoteEdit_FormatChordType:
 	ld xiz, xde
-	ldb_d8 a, (0x279e)
+	ld a, (0x279e:16)
 	addda8_24 a, (0x021096)
 	extz wa
 	pushw wa
@@ -6782,7 +6782,7 @@ NoteEdit_FormatChordNotes:
 	lds32 xbc, 0
 	ldb_da c, (0x021096)
 	lds32 xwa, 0
-	ldb_d8 a, (0x279e)
+	ld a, (0x279e:16)
 	add xwa, xbc
 	ld xbc, 0xd
 	call Math_MultiplyAccumulate
@@ -6809,16 +6809,16 @@ NoteEdit_ParamJumpTable:
 	extz	xhl
 	jrl	168
 	lds32	xhl, 0
-	ldb_d8	l, (0x2786)
+	ld	l, (0x2786:16)
 	jrl	159
 	ld	hl, (0x2792:16)
 	extz	xhl
 	jrl	150
 	lds32	xhl, 0
-	ldb_d8	l, (0x2798)
+	ld	l, (0x2798:16)
 	jrl	141
 	lds32	xhl, 0
-	ldb_d8	l, (0x279e)
+	ld	l, (0x279e:16)
 	jrl	132
 
 NoteEdit_GetTempoValue:
@@ -6854,14 +6854,14 @@ NoteEdit_GetTempoValue:
 NoteEdit_FormatNoteNameHigh:
 	ld xiz, xde
 	pushw 0x6
-	ldb_d8 a, (0x2798)
+	ld a, (0x2798:16)
 	inc 1, a
 	jr NoteEdit_CopyNoteName
 
 NoteEdit_FormatNoteNameLow:
 	ld xiz, xde
 	pushw 0x6
-	ldb_d8 a, (0x2798)
+	ld a, (0x2798:16)
 
 NoteEdit_CopyNoteName:
 	extz wa
@@ -13464,14 +13464,14 @@ SqplyFunc_ParamFormatData:
 	jrl	332
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
-	ldb_d8	a, (9010)
+	ld	a, (9010:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5D0
 	jrl	312
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
-	ldb_d8	a, (7528)
+	ld	a, (7528:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5D6
@@ -13842,19 +13842,19 @@ Sqedt_ParamDispatch:
 	ld_rrw hl, xix, hl
 	lda xix, (15944329:24)
 	jp_rr 8, xix, hl
-	ldb_d8	a, (9742)
+	ld	a, (9742:16)
 	jr	34
-	ldb_d8	a, (9756)
+	ld	a, (9756:16)
 	jr	28
-	ldb_d8	a, (0xf1d6)
+	ld	a, (0xf1d6:16)
 	jr	22
-	ldb_d8	a, (0xf1db)
+	ld	a, (0xf1db:16)
 	jr	16
-	ldb_d8	a, (0xf1f1)
+	ld	a, (0xf1f1:16)
 	jr	10
-	ldb_d8	a, (0xf228)
+	ld	a, (0xf228:16)
 	jr	4
-	ldb_d8	a, (9732)
+	ld	a, (9732:16)
 	jrl	961
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -13950,7 +13950,7 @@ Sqedt_ParamDispatch:
 	jrl	1031
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	e, (9740)
+	ld	e, (9740:16)
 	cps	e, 0
 	jr	le, 17
 	exts	de
@@ -13978,7 +13978,7 @@ Sqedt_ParamDispatch:
 	jrl	910
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	e, (9762)
+	ld	e, (9762:16)
 	cps	e, 0
 	jr	le, 10
 	exts	de
@@ -14000,7 +14000,7 @@ Sqedt_ParamDispatch:
 	jrl	910
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	e, (0xf22e)
+	ld	e, (0xf22e:16)
 	cps	e, 0
 	jr	le, 10
 	exts	de
@@ -14024,7 +14024,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	9
-	ldb_d8	a, (0xf1e0)
+	ld	a, (0xf1e0:16)
 	extz	wa
 	muls	wa, 9
 	ld	xbc, ExtDevice_ModeDispatch_Table_0x53E
@@ -14035,7 +14035,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	15
-	ldb_d8	a, (0xf1f6)
+	ld	a, (0xf1f6:16)
 	extz	wa
 	muls	wa, 15
 	ld	xbc, ExtDevice_ModeDispatch_Table_0x55A
@@ -14045,14 +14045,14 @@ Sqedt_ParamDispatch:
 	jrl	834
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	a, (9728)
+	ld	a, (9728:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x5A
 	jrl	767
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	e, (9730)
+	ld	e, (9730:16)
 	ld	a, e
 	exts	wa
 	cps	e, 0
@@ -14079,7 +14079,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xbc)
 	ld	(xwa), 32
 	pushw	9
-	ldb_d8	a, (9750)
+	ld	a, (9750:16)
 	extz	wa
 	muls	wa, 9
 	lda	xde, (Naka_Help_569_E30113_0x833:24)
@@ -14091,7 +14091,7 @@ Sqedt_ParamDispatch:
 	push	xwa
 	call	Strncpy
 	lda	xsp, (xsp+10)
-	ldb_d8	a, (9750)
+	ld	a, (9750:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x76
@@ -14102,7 +14102,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xbc)
 	ld	(xwa), 32
 	pushw	9
-	ldb_d8	a, (9816)
+	ld	a, (9816:16)
 	extz	wa
 	muls	wa, 9
 	lda	xde, (Naka_Help_569_E30113_0x833:24)
@@ -14114,7 +14114,7 @@ Sqedt_ParamDispatch:
 	push	xwa
 	call	Strncpy
 	lda	xsp, (xsp+10)
-	ldb_d8	a, (9816)
+	ld	a, (9816:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x7E
@@ -14126,14 +14126,14 @@ Sqedt_ParamDispatch:
 	jrl	579
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	a, (0xf1d3)
+	ld	a, (0xf1d3:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x86
 	jrl	550
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	a, (0xf1d4)
+	ld	a, (0xf1d4:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x8C
@@ -14143,7 +14143,7 @@ Sqedt_ParamDispatch:
 	jrl	471
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	a, (0xf1d5)
+	ld	a, (0xf1d5:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0x92
@@ -14151,7 +14151,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
-	ldb_d8	a, (0xf1e9)
+	ld	a, (0xf1e9:16)
 	jrl	175
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14173,7 +14173,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
-	ldb_d8	a, (0xf1ee)
+	ld	a, (0xf1ee:16)
 	jr	117
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14187,7 +14187,7 @@ Sqedt_ParamDispatch:
 	jrl	351
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	a, (9770)
+	ld	a, (9770:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0xAA
@@ -14195,7 +14195,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
-	ldb_d8	a, (0xf1e1)
+	ld	a, (0xf1e1:16)
 	jr	56
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
@@ -14215,7 +14215,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	5
-	ldb_d8	a, (0xf1e6)
+	ld	a, (0xf1e6:16)
 	extz	wa
 	muls	wa, 5
 	.byte 0x41
@@ -14237,14 +14237,14 @@ Sqedt_ParamDispatch:
 	jrl	215
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	a, (9776)
+	ld	a, (9776:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_3d_0xC2
 	jrl	245
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	a, (9992)
+	ld	a, (9992:16)
 	extz	wa
 	pushw	wa
 	.byte 0x40
@@ -14261,7 +14261,7 @@ Sqedt_ParamDispatch:
 	.ascii "'!h\""
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	ldb_d8	a, (9994)
+	ld	a, (9994:16)
 	extz	wa
 	pushw	wa
 	ld	xwa, NakaInst_2d_0x6
@@ -14269,7 +14269,7 @@ Sqedt_ParamDispatch:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
-	ldb_d8	a, (9998)
+	ld	a, (9998:16)
 	extz	wa
 	muls	wa, 3
 	ld	xbc, ExtDevice_ModeDispatch_Table_0x4C6
@@ -14283,7 +14283,7 @@ SqedtFunc_Case0:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	pushw 0x6
-	ldb_d8 a, (0x2878)
+	ld a, (0x2878:16)
 	extz wa
 	muls wa, 0x6
 	ld xbc, ExtDevice_ModeDispatch_Table_0x4FC
@@ -14341,7 +14341,7 @@ SqedtFunc_CheckMode:
 	jr StringCopyEpilog
 
 SqedtFunc_CheckMode_CopyParam:
-	ldb_d8 a, (0x286c)
+	ld a, (0x286c:16)
 	extz wa
 	pushw wa
 	ld xwa, NakaInst_2d_0x1C
@@ -15199,7 +15199,7 @@ DspItem0_HandleType2:
 	lds32 xhl, 2
 	jr DspItem0_Epilogue
 	lds32 xwa, 0
-	ldb_d8 a, (0x29aa)
+	ld a, (0x29aa:16)
 	cp xde, xwa
 	scc16 c, hl
 	extz xhl
@@ -15218,7 +15218,7 @@ EffectEdit_ReturnZero:
 	extz xhl
 	jr DspItem0_Epilogue
 	lds32 xhl, 0
-	ldb_d8 l, (0x29aa)
+	ld l, (0x29aa:16)
 	jr DspItem0_Epilogue
 
 ; DspItem0 dispatch target (calls GetTitleNow then falls through to epilogue)

@@ -20,22 +20,22 @@ SeqEvt_InitAndProcess:
 	stdi16 (0x7e04), 72
 	stdi8 (0x7e06), 16
 	stdi8 (0x7e07), 1
-	ldb_d8 a, (0x7e08)
+	ld a, (0x7e08:16)
 	stb_d8 (0x7e0a), a
 	ld xhl, 0x7aec
 	ld xbc, 0x7d6c
 	calr SeqEvt_ProcessReadLoop
-	ldb_d8 a, (0x7e0a)
+	ld a, (0x7e0a:16)
 	stb_d8 (0x7e08), a
 	stdi8 (0x7e07), 2
-	ldb_d8 a, (0x7e09)
+	ld a, (0x7e09:16)
 	stb_d8 (0x7e0a), a
 	ld xhl, 0x7bec
 	ld xbc, 0x7db4
 	calr SeqEvt_ProcessReadLoop
-	ldb_d8 a, (0x7e0a)
+	ld a, (0x7e0a:16)
 	stb_d8 (0x7e09), a
-	ldb_d8 a, (0x7dfd)
+	ld a, (0x7dfd:16)
 	stb_d8 (0x7dfc), a
 	ret
 
@@ -177,7 +177,7 @@ SeqEvt_WriteNoteOff:
 SeqEvt_WriteNoteOnRotating:
 	push xwa
 	xor xwa, xwa
-	ldb_d8 a, (0x7e0a)
+	ld a, (0x7e0a:16)
 	ld xix, SeqEvt_RotationOffsetTable
 	add xix, xwa
 	ld ix, (xix)
@@ -199,7 +199,7 @@ SeqEvt_WriteNoteOnRotating:
 	ld ix, iz
 	pop xwa
 	adddi8 0x7e0a, 2
-	ldb_d8 a, (0x7e0a)
+	ld a, (0x7e0a:16)
 	cpda8 a, 0x7e06
 	jr c, SeqEvt_RotateIndexDone
 	stdi8 (0x7e0a), 0
@@ -388,7 +388,7 @@ SeqEvt_UpdateMinTempo:
 	ld iy, (0x7e11:16)
 	stb_dri A, 0x07, 0xec, 0xf4
 	xor wa, wa
-	ldb_d8 a, (0x7e0e)
+	ld a, (0x7e0e:16)
 	addda16 xwa, 0x7e0f
 	stda16 (0x7e0f), xwa
 	ld ix, wa
@@ -491,7 +491,7 @@ Voice_ReadSlotParams:
 	andda8 a, 0x7e0b
 	orda8 a, 0x7e07
 	calr SeqEvtBuf_WriteBytePreserve
-	ldb_d8 a, (0x7e0c)
+	ld a, (0x7e0c:16)
 	calr SeqEvtBuf_WriteBytePreserve
 	ldb a, 0x0
 	calr SeqEvtBuf_WriteBytePreserve
@@ -1122,7 +1122,7 @@ AccPlay_ContinueMainLoop:
 	calr AccPlay_CheckAndToggle
 
 AccPlay_UpdateStateFlags:
-	ldb_d8 a, (0x7f0b)
+	ld a, (0x7f0b:16)
 	stb_d8 (0x7f0c), a
 	bitda 2, (0x7f15)
 	jr z, AccPlay_DispatchRet
@@ -1160,7 +1160,7 @@ AccPlay_InitializeStart:
 	pop xbc
 	pop xhl
 	pop xwa
-	ldb_d8 a, (1075)
+	ld a, (1075:16)
 	sla a, 1
 	and a, 0x1f
 	or a, 0x80
@@ -1278,7 +1278,7 @@ TempoEvt_ReadAndClassify:
 	jr z, TempoEvt_DispatchEvent
 	cp a, 0x81
 	jr nz, TempoEvt_CheckHighBit
-	ldb_d8 a, (0x7f16)
+	ld a, (0x7f16:16)
 	ld w, a
 	and a, 0x1f
 	and w, 0xe0
@@ -1296,7 +1296,7 @@ TempoEvt_StoreBankParam:
 TempoEvt_CheckHighBit:
 	bit 7, a
 	jr z, TempoEvt_ContinueProcessing
-	ldb_d8 a, (0x7f16)
+	ld a, (0x7f16:16)
 	and a, 0x1f
 	cps a, 1
 	jr nz, TempoEvt_ContinueProcessing
@@ -1305,8 +1305,8 @@ TempoEvt_CheckHighBit:
 	cp a, 0x48
 	jr c, TempoEvt_ContinueProcessing
 	ordi8 0x7f15, 16
-	ldb_d8 a, (0x7e54)
-	ldb_d8 w, (0x7e55)
+	ld a, (0x7e54:16)
+	ld w, (0x7e55:16)
 	jr TempoEvt_DispatchEvent
 
 TempoEvt_ContinueProcessing:
@@ -1398,7 +1398,7 @@ AccPlay_VoiceBankRet:
 	ret
 
 Voice_GetBankEntryPointer:
-	ldb_d8 a, (0x7f14)
+	ld a, (0x7f14:16)
 	cp a, 0xc
 	jr c, Voice_CalcBankOffset
 	ldb a, 0x0
@@ -1466,8 +1466,8 @@ AccPlay_SetupSoundParams:
 	ldb a, 0x17
 	ldb w, 0xff
 	call SwbtWr_QueuePostEvent
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
+	ld a, (0xfd62:16)
+	ld w, (0xfd63:16)
 	cp wa, 0x1ff
 	jr nz, AccPlay_SetupJumpTarget
 	lds wa, 0
@@ -1536,11 +1536,11 @@ AccPlay_AllocateVoiceSlot:
 	stda16 (0x7f10), xwa
 	lds wa, 6
 	stda16 (0x7f12), xwa
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
+	ld a, (0xfd62:16)
+	ld w, (0xfd63:16)
 	ld (xiy + 9), wa
 	xor a, a
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	bit 6, w
 	jr z, AccPlay_CheckReverbFlag
 	or a, 0x1
@@ -1548,14 +1548,14 @@ AccPlay_AllocateVoiceSlot:
 AccPlay_CheckReverbFlag:
 	ld (xiy + 13), a
 	xor a, a
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	bit 3, w
 	jr z, AccPlay_CheckChorusFlag
 	or a, 0x1
 
 AccPlay_CheckChorusFlag:
 	ld (xiy + 14), a
-	ldb_d8 a, (0xfd6a)
+	ld a, (0xfd6a:16)
 	and a, 0x7f
 	ld (xiy + 12), a
 	ret
@@ -1565,11 +1565,11 @@ AccPlay_UpdateBankParams:
 	push xhl
 	push xwa
 	calr Voice_GetBankEntryPointer
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
+	ld a, (0xfd62:16)
+	ld w, (0xfd63:16)
 	ld (xiy + 9), wa
 	xor a, a
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	bit 6, w
 	jr z, AccPlay_UpdateReverbParam
 	or a, 0x1
@@ -1577,14 +1577,14 @@ AccPlay_UpdateBankParams:
 AccPlay_UpdateReverbParam:
 	ld (xiy + 13), a
 	xor a, a
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	bit 3, w
 	jr z, AccPlay_UpdateChorusParam
 	or a, 0x1
 
 AccPlay_UpdateChorusParam:
 	ld (xiy + 14), a
-	ldb_d8 a, (0xfd6a)
+	ld a, (0xfd6a:16)
 	and a, 0x7f
 	ld (xiy + 12), a
 	pop xwa
@@ -1609,7 +1609,7 @@ AccPlay_ExtractVoiceSlot:
 AccPlay_ProcessNoteEvent:
 	lds bc, 5
 	calr MidiSeqBuf_ScanAllEntries
-	ldb_d8 a, (0x7f39)
+	ld a, (0x7f39:16)
 	cps a, 0
 	jr z, AccPlay_NoteNoSlotMatch
 	calr AccPlay_NoteWithSlot
@@ -1634,7 +1634,7 @@ AccPlay_NoteNoSlotAvail:
 AccPlay_NoteAllocAndWrite:
 	push xhl
 	push xix
-	ldb_d8 l, (0x7f38)
+	ld l, (0x7f38:16)
 	xor h, h
 	ld xix, Display_FontPalette_Table_0x12EA
 	ldb_sri A, 0x07, 0xf0, 0xec
@@ -1658,26 +1658,26 @@ AccPlay_NoteAllocAndWrite:
 AccPlay_NoteSetType91:
 	calr MidiSeqBuf_WriteByte
 	calr MidiSeqBuf_AdvancePosition
-	ldb_d8 a, (0x7f37)
+	ld a, (0x7f37:16)
 	calr MidiSeqBuf_WriteByte
 	calr MidiSeqBuf_AdvancePosition
-	ldb_d8 a, (0x7f38)
+	ld a, (0x7f38:16)
 	calr MidiSeqBuf_WriteByte
 	pop xix
 	pop xhl
-	ldb_d8 a, (0x7f38)
+	ld a, (0x7f38:16)
 	or a, 0x80
 	ld (xhl), a
 	ldb a, 0x0
 	ld (xhl + 1), a
-	ldb_d8 a, (0x7f37)
+	ld a, (0x7f37:16)
 	ld (xhl + 2), a
 	ld wa, (0x7f10:16)
 	ld (xhl + 3), wa
 	ld wa, (0x7f12:16)
 	ld (xhl + 5), a
 	calr MidiSeqBuf_AdvancePosition
-	ldb_d8 a, (0x7f39)
+	ld a, (0x7f39:16)
 	calr MidiSeqBuf_WriteByte
 	calr MidiSeqBuf_AdvancePosition
 	ldb a, 0x10
@@ -1688,10 +1688,10 @@ AccPlay_NoteSetType91:
 	calr MidiSeqBuf_AdvancePosition
 	cpdi8 (0x7e54), 0
 	jr z, AccPlay_NoteAllocRet
-	ldb_d8 a, (0x7e55)
+	ld a, (0x7e55:16)
 	calr MidiSeqBuf_WriteByte
 	calr MidiSeqBuf_AdvancePosition
-	ldb_d8 a, (0x7e56)
+	ld a, (0x7e56:16)
 	calr MidiSeqBuf_WriteByte
 	calr MidiSeqBuf_AdvancePosition
 
@@ -1746,7 +1746,7 @@ AccPlay_ScanActiveRet:
 	ret
 
 AccPlay_FindSlotByChannel:
-	ldb_d8 w, (0x7f38)
+	ld w, (0x7f38:16)
 	ld xhl, 0x7e7b
 
 AccPlay_ChannelScanLoop:
@@ -1767,7 +1767,7 @@ AccPlay_ChannelSlotFound:
 	ld (xhl), a
 	ld d, (xhl + 1)
 	ld a, (xhl + 2)
-	ldb_d8 c, (0x7f37)
+	ld c, (0x7f37:16)
 	cp c, a
 	jr nc, AccPlay_CalcNoteOffset
 	add c, 0x60
@@ -1878,7 +1878,7 @@ MidiSeq_HandleProgChange:
 	and a, 0xf0
 	ld (xhl), a
 	xor w, w
-	ldb_d8 a, (0xfd66)
+	ld a, (0xfd66:16)
 	bit 6, a
 	jr z, MidiSeq_ProgChangeSetReverb
 	or w, 0x1
@@ -1960,8 +1960,8 @@ MidiSeq_SustainRet:
 	ret
 
 AccPlay_TrackMeasureChange:
-	ldb_d8 a, (1076)
-	ldb_d8 w, (0x7f34)
+	ld a, (1076:16)
+	ld w, (0x7f34:16)
 	cp a, w
 	jr z, AccPlay_MeasureTrackRet
 	ld hl, (0x7f0e:16)
@@ -2037,11 +2037,11 @@ AccPlay_InitVoiceBankState:
 	calr AccPlay_RestoreVoiceBank
 
 AccPlay_SaveCurrentState:
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
+	ld a, (0xfd62:16)
+	ld w, (0xfd63:16)
 	and w, 0x7f
 	stda16 (0x7f18), xwa
-	ldb_d8 a, (0xfd66)
+	ld a, (0xfd66:16)
 	and a, 0x48
 	xor w, w
 	stda16 (0x7f1a), xwa
@@ -2049,8 +2049,8 @@ AccPlay_SaveCurrentState:
 
 AccPlay_CompareAndSendProg:
 	ld hl, (0x7f18:16)
-	ldb_d8 a, (0xfd62)
-	ldb_d8 w, (0xfd63)
+	ld a, (0xfd62:16)
+	ld w, (0xfd63:16)
 	and w, 0x7f
 	cp wa, hl
 	jr z, AccPlay_CompareReverbState
@@ -2069,7 +2069,7 @@ AccPlay_SendProgChange:
 
 AccPlay_CompareReverbState:
 	ld hl, (0x7f1a:16)
-	ldb_d8 a, (0xfd66)
+	ld a, (0xfd66:16)
 	and a, 0x40
 	xor w, w
 	and l, 0x40
@@ -2088,7 +2088,7 @@ AccPlay_SetReverbValue:
 AccPlay_CompareChorusState:
 	jr AccPlay_ParamMonitorRet
 	ld hl, (0x7f1a:16)
-	ldb_d8 a, (0xfd66)
+	ld a, (0xfd66:16)
 	and a, 0x8
 	xor w, w
 	and l, 0x8
@@ -2157,7 +2157,7 @@ AccPlay_RestoreReverbVal:
 	ldb a, 0xd1
 	call AccompSeq_SendMidiEvent
 	ld a, (xiy + 13)
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	and w, 0xbf
 	bit 0, a
 	jr z, AccPlay_WriteReverbFlag
@@ -2181,7 +2181,7 @@ AccPlay_RestoreChorusVal:
 	ldb a, 0xd1
 	call AccompSeq_SendMidiEvent
 	ld a, (xiy + 14)
-	ldb_d8 w, (0xfd66)
+	ld w, (0xfd66:16)
 	and w, 0xf7
 	bit 0, a
 	jr z, AccPlay_WriteChorusFlag
@@ -2211,41 +2211,41 @@ AccPlay_ClearSlotDone:
 	ret
 
 AccPlay_SaveMuteStates:
-	ldb_d8 a, (0xf9c3)
-	ldb_d8 w, (0xf9dd)
+	ld a, (0xf9c3:16)
+	ld w, (0xf9dd:16)
 	stda16 (0x7f1c), xwa
-	ldb_d8 a, (0xf9f7)
-	ldb_d8 w, (0xfa11)
+	ld a, (0xf9f7:16)
+	ld w, (0xfa11:16)
 	stda16 (0x7f1e), xwa
-	ldb_d8 a, (0xfa2b)
-	ldb_d8 w, (0xfa45)
+	ld a, (0xfa2b:16)
+	ld w, (0xfa45:16)
 	stda16 (0x7f20), xwa
-	ldb_d8 a, (0xfa5f)
-	ldb_d8 w, (0xfa79)
+	ld a, (0xfa5f:16)
+	ld w, (0xfa79:16)
 	stda16 (0x7f22), xwa
-	ldb_d8 a, (0xfa93)
-	ldb_d8 w, (0xfaad)
+	ld a, (0xfa93:16)
+	ld w, (0xfaad:16)
 	stda16 (0x7f24), xwa
-	ldb_d8 a, (0xfac7)
-	ldb_d8 w, (0xfae1)
+	ld a, (0xfac7:16)
+	ld w, (0xfae1:16)
 	stda16 (0x7f26), xwa
-	ldb_d8 a, (0xfafb)
-	ldb_d8 w, (0xfb15)
+	ld a, (0xfafb:16)
+	ld w, (0xfb15:16)
 	stda16 (0x7f28), xwa
-	ldb_d8 a, (0xfb2f)
-	ldb_d8 w, (0xfb49)
+	ld a, (0xfb2f:16)
+	ld w, (0xfb49:16)
 	stda16 (0x7f2a), xwa
-	ldb_d8 a, (0xfb63)
-	ldb_d8 w, (0xfb7d)
+	ld a, (0xfb63:16)
+	ld w, (0xfb7d:16)
 	stda16 (0x7f2c), xwa
-	ldb_d8 a, (0xfb97)
-	ldb_d8 w, (0xfbb1)
+	ld a, (0xfb97:16)
+	ld w, (0xfbb1:16)
 	stda16 (0x7f2e), xwa
-	ldb_d8 a, (0xfbcb)
-	ldb_d8 w, (0xfbe5)
+	ld a, (0xfbcb:16)
+	ld w, (0xfbe5:16)
 	stda16 (0x7f30), xwa
-	ldb_d8 a, (0xfbff)
-	ldb_d8 w, (0xfc19)
+	ld a, (0xfbff:16)
+	ld w, (0xfc19:16)
 	stda16 (0x7f32), xwa
 	ldb a, 0xc0
 	orddm8 0xf9c3, a
@@ -2272,7 +2272,7 @@ AccPlay_SaveMuteStates:
 	orddm8 0xfbe5, a
 	orddm8 0xfbff, a
 	orddm8 0xfc19, a
-	ldb_d8 a, (0xfd6f)
+	ld a, (0xfd6f:16)
 	and a, 0x3f
 	and a, 0xf0
 	stb_d8 (0xfd6f), a
@@ -2285,76 +2285,76 @@ AccPlay_SaveMuteStates:
 
 AccompSeq_QueueAllMutes:
 	ldb e, 0x0
-	ldb_d8 a, (0xf9c3)
+	ld a, (0xf9c3:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x1
-	ldb_d8 a, (0xf9dd)
+	ld a, (0xf9dd:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x2
-	ldb_d8 a, (0xf9f7)
+	ld a, (0xf9f7:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x3
-	ldb_d8 a, (0xfa11)
+	ld a, (0xfa11:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x4
-	ldb_d8 a, (0xfa2b)
+	ld a, (0xfa2b:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x5
-	ldb_d8 a, (0xfa45)
+	ld a, (0xfa45:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x6
-	ldb_d8 a, (0xfa5f)
+	ld a, (0xfa5f:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x7
-	ldb_d8 a, (0xfa79)
+	ld a, (0xfa79:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x8
-	ldb_d8 a, (0xfa93)
+	ld a, (0xfa93:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x9
-	ldb_d8 a, (0xfaad)
+	ld a, (0xfaad:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xa
-	ldb_d8 a, (0xfac7)
+	ld a, (0xfac7:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xb
-	ldb_d8 a, (0xfae1)
+	ld a, (0xfae1:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xc
-	ldb_d8 a, (0xfafb)
+	ld a, (0xfafb:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xd
-	ldb_d8 a, (0xfb15)
+	ld a, (0xfb15:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xe
-	ldb_d8 a, (0xfb2f)
+	ld a, (0xfb2f:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0xf
-	ldb_d8 a, (0xfb49)
+	ld a, (0xfb49:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x10
-	ldb_d8 a, (0xfb63)
+	ld a, (0xfb63:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x11
-	ldb_d8 a, (0xfb7d)
+	ld a, (0xfb7d:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x12
-	ldb_d8 a, (0xfb97)
+	ld a, (0xfb97:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x13
-	ldb_d8 a, (0xfbb1)
+	ld a, (0xfbb1:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x14
-	ldb_d8 a, (0xfbcb)
+	ld a, (0xfbcb:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x15
-	ldb_d8 a, (0xfbe5)
+	ld a, (0xfbe5:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x16
-	ldb_d8 a, (0xfbff)
+	ld a, (0xfbff:16)
 	calr AccompSeq_QueueMuteEvent
 	ldb e, 0x19
-	ldb_d8 a, (0xfc19)
+	ld a, (0xfc19:16)
 	calr AccompSeq_QueueMuteEvent
 	ret
 
@@ -2401,7 +2401,7 @@ AccPlay_RestoreMuteStates:
 	ld wa, (0x7f32:16)
 	stb_d8 (0xfbff), a
 	stb_d8 (0xfc19), w
-	ldb_d8 a, (0xfd6f)
+	ld a, (0xfd6f:16)
 	or a, 0xc0
 	stb_d8 (0xfd6f), a
 	ldb e, 0x17
@@ -3989,7 +3989,7 @@ VocalistPage2_ReturnZero:
 	ret
 
 AccPlay_GetCurrentPart:
-	ldb_d8 l, (0x7f40)
+	ld l, (0x7f40:16)
 	ret
 
 RevSelFunc:

@@ -425,7 +425,7 @@ CDlikeSwTtl_DispatchData:
 	ret
 	bitda 0, (0x0ce0)
 	jr nz, .Lc_f22901
-	ldb_d8 a, (0x0cdf)
+	ld a, (0x0cdf:16)
 	inc 2,A
 	extz WA
 	ld DE,WA
@@ -435,7 +435,7 @@ CDlikeSwTtl_DispatchData:
 	ld XBC,0x01e0008d
 	jr t, .Lc_f2291d
 .Lc_f22901:
-	ldb_d8 a, (0x0cdf)
+	ld a, (0x0cdf:16)
 	dec 6,A
 	extz WA
 	ld DE,WA
@@ -523,7 +523,7 @@ SeqInit_LookupDispatchEntry:
 	ret
 
 SeqInit_PostDispatchEvent:
-	ldb_d8 a, (0x28a4)
+	ld a, (0x28a4:16)
 	extz wa
 	calr SeqInit_LookupDispatchEntry
 	ld xwa, xhl
@@ -604,7 +604,7 @@ PlayMode_SendStopEvent:
 
 ; SqTrSelTtl case G
 SqTrSel_CaseG:
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	extz	wa
 	sub	wa, 111
 	cps	wa, 0
@@ -1105,7 +1105,7 @@ VoiceSlot_AllocNewSlot:
 	pushw wa
 	pushw iz
 	push xix
-	ldb_d8 a, (3822)
+	ld a, (3822:16)
 	dec 1, a
 	ld w, a
 	sla a, 1

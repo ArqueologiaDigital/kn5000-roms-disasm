@@ -1960,7 +1960,7 @@ P7Mixer_SetGainIndex2:
 	stb_d8	(0x1502), c                         ; FADAD1  ld (0x1502),C
 	extz	bc                                    ; FADAD5  extz BC
 	pushw	bc                                   ; FADAD7  push BC
-	ldb_d8	c, (0x1501)                         ; FADAD8  ld C,(0x1501)
+	ld	c, (0x1501:16)                         ; FADAD8  ld C,(0x1501)
 	extz	bc                                    ; FADADC  extz BC
 	pushw	bc                                   ; FADADE  push BC
 	call	0xFA2DCD                              ; FADADF  call 0xfa2dcd

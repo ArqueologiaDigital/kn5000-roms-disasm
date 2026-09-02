@@ -833,7 +833,7 @@ SaveFilter_OpSave:
 	cps hl, 0
 	jr z, SaveFilter_Save_NoPwd
 	lds32 xde, 0
-	ldb_d8 e, (0x8a0c)
+	ld e, (0x8a0c:16)
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c50004
 	jr SaveFilter_DispatchWidget

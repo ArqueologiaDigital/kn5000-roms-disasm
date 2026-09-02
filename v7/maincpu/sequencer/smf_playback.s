@@ -122,7 +122,7 @@ SoundBank_InitTrack_ByteFields:
 	inc	1, iy
 	cps	iy, 7
 	jr	ule, -21
-	ldb_d8	a, 36302
+	ld	a, (36302:16)
 	st_rrb	a, xhl, iy
 	ld	xhl, 20
 	add	xhl, xde
@@ -322,10 +322,10 @@ SMF_SelectBank_AfterReset:
 	push xix
 	push xde
 	call SetWall_LoadBankToToneGen
-	ldb_d8 a, (4599)
+	ld a, (4599:16)
 	cpda8_24 a, (0xffe3)
 	jrl z, SMF_SelectBank_AfterToneLoad
-	ldb_d8 a, (4599)
+	ld a, (4599:16)
 	stb_da (0x00ffe3), a
 	call SoundBank_LoadToWorkRAM
 
@@ -485,7 +485,7 @@ FloppyIO_WaitReadComplete:
 	jp FloppyIO_WaitReadComplete
 
 SMF_AfterFloppyWait:
-	ldb_d8 a, (4600)
+	ld a, (4600:16)
 	call SeqTrack_ClearPartParamBuffers
 	cpdi16 3932, 0
 	jrl z, FloppyIO_ReadAndValidateHeader

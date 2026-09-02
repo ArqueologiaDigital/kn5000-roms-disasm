@@ -66,7 +66,7 @@ EffectMode_ByteData_Block2:
 	jrl	pl, 0x3fc0
 	push	sr
 	ret	nz
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	andda8	a, 0xc07f
 	bit	0, a
 	jrl	z, 145
@@ -74,7 +74,7 @@ EffectMode_ByteData_Block2:
 	ldw	ix, 0x3f8d
 	normal
 	jr	z, 78
-	ldb_d8	a, (0x8d36)
+	ld	a, (0x8d36:16)
 	cp	a, 192
 	jr	z, 40
 	cp	a, 193
@@ -139,7 +139,7 @@ EffectMode_ByteData_Block2:
 	stdi8	(0x8d4e), 0
 	ret
 EffectMode_ByteData_Block3:
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	cps	a, 0
 	jr	nz, 95
 	.byte 0xc1
@@ -177,7 +177,7 @@ EffectMode_ByteData_Block3:
 	ret
 	cps	a, 7
 	jr	nz, 59
-	ldb_d8	a, (0x8d52)
+	ld	a, (0x8d52:16)
 	.byte 0xc9, 0xcc
 	.ascii "(f2@"
 	.byte 0x01, 0x04
@@ -206,10 +206,10 @@ EffectMode_ByteData_Block4:
 	jrl	pl, 0x3fc0
 	pop	sr
 	jr	nz, 68
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 7
 	jr	z, 59
-	ldb_d8	a, (0x8d52)
+	ld	a, (0x8d52:16)
 	and	a, 40
 	jr	z, 50
 	ld	xwa, 1025
@@ -286,7 +286,7 @@ SndParam_LoadTransposeValues:
 	ret
 
 EffectMode_TimerCountdown:
-	ldb_d8 a, (0x8d4e)
+	ld a, (0x8d4e:16)
 	cps a, 0
 	ret z
 	dec 1, a
@@ -306,7 +306,7 @@ EffectMode_TimerCountdown:
 	pop xde
 
 EffectMode_TimerCountdown_CheckMode:
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cp a, 0xc5
 	jr z, EffectMode_TimerCountdown_ResBit7
 	cp a, 0xc2
@@ -407,7 +407,7 @@ EffectMode_ClampAndLookupPreset:
 	lds wa, 1
 
 EffectMode_ClampAndLookup_Clamped:
-	ldb_d8 c, (0x8d38)
+	ld c, (0x8d38:16)
 	cp c, 0xc2
 	jr z, EffectMode_LookupPreset_BankC2C5
 	cp c, 0xc5
@@ -431,7 +431,7 @@ EffectMode_LookupPreset_Compute:
 
 EffectMode_DisplayPresetName:
 	pushw iz
-	ldb_d8 c, (0x8d38)
+	ld c, (0x8d38:16)
 	cp c, 0xc0
 	jr z, EffectMode_DisplayName_ValidMode
 	cp c, 0xc2
@@ -557,7 +557,7 @@ EffectMode_UpdateDisplay:
 	push xiz
 	ld xiz, xwa
 	calr EffectMode_BackupParamBlock
-	ldb_d8 a, (0x8d52)
+	ld a, (0x8d52:16)
 	bit 5, a
 	jr z, EffectMode_UpdateDisplay_NoPatch
 	res 5, a
@@ -735,7 +735,7 @@ EffectMode_BackupParamBlock:
 	ret
 
 EffectMode_CopyHoldPedalBits:
-	ldb_d8 e, (0x8d38)
+	ld e, (0x8d38:16)
 	cp e, 0xc0
 	ret z
 	cp e, 0xc2
@@ -788,7 +788,7 @@ EffectMode_SetRegion_Apply:
 	ld (xbc), a
 	or a, h
 	ld (xbc), a
-	ldb_d8 a, (0x8d38)
+	ld a, (0x8d38:16)
 	cp a, 0xc2
 	jr z, EffectMode_CheckPedalType
 	cp a, 0xc5
@@ -903,12 +903,12 @@ EffectMode_ReinitWithFlag:
 	ret
 
 EffectMode_CheckModeAndReinit:
-	ldb_d8 c, (0x8d36)
+	ld c, (0x8d36:16)
 	cp c, 0x78
 	jr z, SndOutput_ReinitByMode
 	cp c, 0x7a
 	jr z, SndOutput_ReinitByMode
-	ldb_d8 a, (0x8d34)
+	ld a, (0x8d34:16)
 	cps a, 2
 	jr z, SndOutput_ReinitByMode
 	cps a, 1
@@ -948,7 +948,7 @@ SndOutput_ReinitByMode_TypeB:
 	cps bc, 0
 	jr z, SndOutput_ReinitByMode_Restore
 	dec 1, bc
-	ldb_d8 a, (0x8d54)
+	ld a, (0x8d54:16)
 	extz wa
 	add bc, wa
 	stda16 (0x8d56), xbc
@@ -963,20 +963,20 @@ SndOutput_ReinitByMode_Restore:
 	ret
 
 SndOutput_ReinitByMode_NotifyParam:
-	ldb_d8 c, (0x8d54)
+	ld c, (0x8d54:16)
 	inc 1, c
 	extz bc
 	ld xwa, 0x300
 	lds de, 3
 	call SoundParam_NotifyChange
-	ldb_d8 a, (0x8d52)
+	ld a, (0x8d52:16)
 	bit 5, a
 	jr z, SndOutput_ReinitByMode_CheckBit3
 	set 2, a
 	stb_d8 (0x8d52), a
 
 SndOutput_ReinitByMode_CheckBit3:
-	ldb_d8 a, (0x8d52)
+	ld a, (0x8d52:16)
 	bit 3, a
 	ret z
 	set 1, a
@@ -1668,7 +1668,7 @@ SelfTest_SramAndRom_CheckROM:
 	pop xix
 	pop xhl
 	pop xde
-	ldb_d8 a, (0x8d7c)
+	ld a, (0x8d7c:16)
 	cpl a
 	and a, 0x9
 	stb_d8 (0x8d7c), a
@@ -1717,17 +1717,17 @@ SelfTest_PopCount_ShiftNext:
 EffectMode_CheckAndDispatch:
 	cpdi8 (0x8d36), 251
 	jr nz, EffectMode_DispatchUpdate
-	ldb_d8 a, (0x8d82)
+	ld a, (0x8d82:16)
 	cps a, 2
 	jr z, EffectMode_ResetDiagMode
-	ldb_d8 a, (0x8d80)
+	ld a, (0x8d80:16)
 	bit 0, a
 	jr z, EffectMode_CheckAndDispatch_Bit4Clear
 	bit 4, a
 	jr nz, EffectMode_DispatchUpdate
 	set 4, a
 	stb_d8 (0x8d80), a
-	ldb_d8 a, (0x8d82)
+	ld a, (0x8d82:16)
 	cps a, 1
 	jr z, EffectMode_DispatchUpdate
 	stdi8 (0x8d82), 1
@@ -1740,7 +1740,7 @@ EffectMode_CheckAndDispatch_Bit4Clear:
 	jr z, EffectMode_DispatchUpdate
 	res 4, a
 	stb_d8 (0x8d80), a
-	ldb_d8 a, (0x8d82)
+	ld a, (0x8d82:16)
 	cps a, 0
 	jr z, EffectMode_DispatchUpdate
 	stdi8 (0x8d82), 0
@@ -1816,7 +1816,7 @@ EffectMode_HandleTimerEvents:
 	call CtrlPanel_GetSelectionState
 	cps hl, 0
 	ret nz
-	ldb_d8 a, (0x8d7a)
+	ld a, (0x8d7a:16)
 	cp a, 0x96
 	jrl z, EffectMode_TimerEvent_Step96
 	cp a, 0x78
@@ -1833,7 +1833,7 @@ EffectMode_HandleTimerEvents:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	ldb_d8 a, (0x8d7a)
+	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
 	stb_d8 (0x8d7a), a
@@ -1844,7 +1844,7 @@ EffectMode_TimerEvent_Step1E:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	ldb_d8 a, (0x8d7a)
+	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
 	stb_d8 (0x8d7a), a
@@ -1855,7 +1855,7 @@ EffectMode_TimerEvent_Step3C:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	ldb_d8 a, (0x8d7a)
+	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
 	stb_d8 (0x8d7a), a
@@ -1866,7 +1866,7 @@ EffectMode_TimerEvent_Step5A:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	ldb_d8 a, (0x8d7a)
+	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
 	stb_d8 (0x8d7a), a
@@ -1877,7 +1877,7 @@ EffectMode_TimerEvent_Step78:
 	ld xbc, 0x1c00001
 	lds32 xde, 0
 	call ApPostEvent
-	ldb_d8 a, (0x8d7a)
+	ld a, (0x8d7a:16)
 	inc 1, a
 	inc 1, a
 	stb_d8 (0x8d7a), a
@@ -1898,7 +1898,7 @@ EffectMode_TimerEvent_Default:
 	ret
 
 EffectMode_RunDiagSequence:
-	ldb_d8 a, (0x8d7a)
+	ld a, (0x8d7a:16)
 	cps a, 0
 	jr nz, EffectMode_DiagSeq_AnimFrame
 	ld xwa, AudioCtrl_PageHandler_0xB
@@ -1935,7 +1935,7 @@ EffectMode_RunDiagSequence:
 	ret
 
 EffectMode_DiagSeq_AnimFrame:
-	ldb_d8 c, (0x8d78)
+	ld c, (0x8d78:16)
 	cps c, 0
 	jr nz, EffectMode_DiagSeq_DecrementDelay
 	extz wa
@@ -1946,7 +1946,7 @@ EffectMode_DiagSeq_AnimFrame:
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00016
 	call ApPostEvent
-	ldb_d8 a, (0x8d7a)
+	ld a, (0x8d7a:16)
 	cps a, 5
 	jr nz, EffectMode_DiagSeq_IncFrame
 	stdi8 (0x8d7a), 1
@@ -1977,7 +1977,7 @@ EffectMode_ByteData_DiagEvents:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ldb_d8	a, (0x8d7c)
+	ld	a, (0x8d7c:16)
 	cpl	a
 	ldb_erp a, 251
 	and a, 9
@@ -2008,7 +2008,7 @@ EffectMode_ByteData_DiagEvents:
 	call	ApPostEvent
 	pop qiz
 	ret
-	ldb_d8	a, (0x8d37)
+	ld	a, (0x8d37:16)
 	cpda8 xbc, (36150)
 	ret	z
 	ld	xwa, 0x4002
@@ -2030,7 +2030,7 @@ Voice_EmitNoteWithVelocity:
 	ret
 
 EffectMode_ModeChangeTransition:
-	ldb_d8 a, (0x8d37)
+	ld a, (0x8d37:16)
 	cpda8 a, 0x8d36
 	jrl z, EffectMode_MidiParseLoop
 	calr EffectMode_SetAllLEDs
@@ -2105,7 +2105,7 @@ FDC_CommandAndPostEvent:
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
-	ldb_d8	a, (0x8a24)
+	ld	a, (0x8a24:16)
 	cp a, 0xfc
 	jr nz, FDC_PostEvent_Error
 	ld xwa, 0xffffffff
@@ -2274,7 +2274,7 @@ BitmapFinpic_ByteData:
 	call	Boot_CheckConfigFlag7
 	cps	hl, 0
 	ret	z
-	ldb_d8	a, (0xc080)
+	ld	a, (0xc080:16)
 	cpda8 xbc, (36154)
 	ret	nz
 	.byte 0xc1
@@ -9971,7 +9971,7 @@ NormScreen_InitHandler:
 	call GetViewInstance
 	cpib_da (0x0340e6), 0x00
 	jr z, NormScreen_ClearBit
-	ldb_d8 a, (0x8d88)
+	ld a, (0x8d88:16)
 	extz wa
 	bit 0, wa
 	jr z, NormScreen_ClearBit
@@ -11778,7 +11778,7 @@ GmOnOff_GetBoundsRect:
 	jr GmOnOff_SendAndReturn
 
 GmOnOff_CheckDesign:
-	ldb_d8 c, (0x8d40)
+	ld c, (0x8d40:16)
 	orda8 c, 0x8d42
 	orda8 c, 0x8d44
 	jr nz, GmOnOff_SendHideEvent
@@ -11848,12 +11848,12 @@ VariScreen_HandleShow:
 	ld (xsp + 24), xhl
 	ld xwa, (xsp + 24)
 	ld (xsp + 4), xwa
-	ldb_d8 a, (0x8d3a)
+	ld a, (0x8d3a:16)
 	extz wa
 	lds bc, 0
 	call SndParam_LookupViaEncode
 	ld (xsp + 31), l
-	ldb_d8 a, (0x8d3a)
+	ld a, (0x8d3a:16)
 	extz wa
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode
@@ -11950,12 +11950,12 @@ VariScreen_HandlePaint:
 	pushw 0xf7
 	ld xde, FadeTimeStr_Off_0xBA
 	call DrawString
-	ldb_d8 a, (0x8d3a)
+	ld a, (0x8d3a:16)
 	extz wa
 	lds bc, 0
 	call SndParam_LookupViaEncode
 	ld (xsp + 31), l
-	ldb_d8 a, (0x8d3a)
+	ld a, (0x8d3a:16)
 	extz wa
 	ldw bc, 0x20
 	call SndParam_LookupViaEncode

@@ -63,6 +63,29 @@ This is not a theoretical hazard here: a full gate on the finished `ld_sril`
 conversion failed with `invalid .org offset` in `fdc_routines.s` under the
 shared binary and passed 13/13 on the same sources under a pinned one.
 
+## `gate_foil_control.py`
+
+**Question it answers:** can the ROM byte gate still go RED on a line this
+lane rewrote? Every "the gate is green, therefore the conversion is correct"
+claim in this directory rests on that, so the control is committed rather than
+run once from scratch.
+
+    python3 scripts/convergence/gate_foil_control.py
+
+flips one converted line in `subcpu/boot/kn5000_subcpu_boot.s` from
+`(0x120000:24)` to `(0x120001:24)`, rebuilds that one image, and requires the
+gate to report `1 BYTES DIFFER`; then restores the line and requires
+`IDENTICAL`. It leaves the tree as it found it. `--file/--line/--good/--foil/
+--target/--image` point it at any other line for any other lane, and
+`--make-var LLVM_MC=<path>` pins the assembler so the control and the gate it
+vouches for use the same binary.
+
+Result on this lane, 2026-09-02, llvm-mc snapshot sha256 `53c6621d5f6dd3c1`:
+
+    foiled     kn5000_subcpu_boot   1 BYTES DIFFER   rc=1
+    restored   kn5000_subcpu_boot   IDENTICAL        rc=0
+    PASS: the gate can see a wrong byte on a converted line.
+
 ## What it refuses, and why the refusal is right
 
 * **`ld_sril` with displacement `0x0100`** — 189 sites, and the only refusal

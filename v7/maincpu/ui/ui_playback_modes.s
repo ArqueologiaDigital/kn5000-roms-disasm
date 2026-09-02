@@ -1,5 +1,5 @@
 UIStateEvt_VoiceParamHandler:
-	ldb_d8	a, 35994
+	ld	a, (35994:16)
 	cp	a, 142
 	jr	z, 19
 	cp	a, 100
@@ -11,11 +11,11 @@ UIStateEvt_VoiceParamHandler:
 	jp	15860454
 	stdi8	4330, 0
 	jrl	164
-	ldb_d8	a, 49121
+	ld	a, (49121:16)
 	cps	a, 3
 	.byte 0xf2, 0x8a, 0x03, 0xf2, 0xde
-	ldb_d8	a, 49122
-	ldb_d8	w, 49123
+	ld	a, (49122:16)
+	ld	w, (49123:16)
 	cp	w, 255
 	jr	nz, 8
 	.byte 0xc1, 0xea, 0x10, 0x3c, 0xfe
@@ -99,7 +99,7 @@ UIStateEvt_VoiceParamHandler:
 	xor	w, w
 	ret
 SeqPlay_RestoreVoiceState_Return:
-	ldb_d8 a, (0x2878)
+	ld a, (0x2878:16)
 	pushw wa
 	ldb_da a, (0x00ffe3)
 	stb_d8 (0x2878), a
@@ -444,7 +444,7 @@ SeqRestart_CheckAndDispatch:
 	bitda 2, (0x28ac)
 	jr z, SeqRestart_Return
 	ld iz, wa
-	ldb_d8 a, (0xfc5f)
+	ld a, (0xfc5f:16)
 	and a, 0x30
 	ld wa, iz
 	jr nz, SeqRestart_Return
@@ -490,7 +490,7 @@ SeqNotify_Return:
 
 Medley_GetPlaybackStatus:
 	xor hl, hl
-	ldb_d8 l, (4437)
+	ld l, (4437:16)
 	ret
 
 SongMode_InitFlagBlock:
@@ -788,7 +788,7 @@ CDlikeSwitch_NullRet:
 	ret
 
 CDlikeSwitch_PlaybackTimer:
-	ldb_d8 w, (0x1144)
+	ld w, (0x1144:16)
 	cps w, 0
 	jr z, CDlikeTimer_Return
 	dec 1,W
@@ -874,7 +874,7 @@ CDlikeReset_SetTimerFlags:
 
 CDlike_InitModeAndLoadBank:
 	ordi8 (0xb746), 0x40
-	ldb_d8 a, (0xfdad)
+	ld a, (0xfdad:16)
 	stb_d8 (0x0d42), a
 	stdi8 (0x0d34), 0x00
 	stdi8 (0x1144), 0x00
@@ -1340,7 +1340,7 @@ SetWall_ReturnZero:
 	lds32 xhl, 0
 	ret
 SqTrAsPsTtl_CaseF:
-	ldb_d8	a, 35994
+	ld	a, (35994:16)
 	extz	wa
 	sub	wa, 108
 	cps	wa, 0
@@ -1518,7 +1518,7 @@ DkMdlyPly_CheckState:
 	dec	2, xsp
 	push	xiz
 	ld	(xsp+4), wa
-	ldb_d8	a, (35994)
+	ld	a, (35994:16)
 	cp	a, 111
 	jr	z, 15
 	cp	a, 114
@@ -1568,7 +1568,7 @@ DkMdlyPly_Finalize:
 	ret
 
 DisplayMode_DispatchEvents:
-	ldb_d8 a, (0x8c9a)
+	ld a, (0x8c9a:16)
 	extz WA
 	sub WA,0x006f
 	cps wa, 0
@@ -1901,7 +1901,7 @@ DpMdlySmfLyrTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpMdlySmfLyrTtlFunc title dispatch
 DpMdlySmfLyrTtl_Dispatch:
-	ldb_d8	a, (35995)
+	ld	a, (35995:16)
 	cp	a, 108
 	jr	nz, 38
 	cp	a, 118
@@ -2373,7 +2373,7 @@ CDlikeSwTtl_SongConfirmDefault:
 CDlikeSwTtl_SongConfirmJump:
 	jp	16693796
 CDlikeSwTtl_SongConfirmDispatch:
-	ldb_d8 a, (7498)
+	ld a, (7498:16)
 	cps a, 2
 	jr z, CDlikeSwTtl_SongConfirmState2
 	cps a, 1

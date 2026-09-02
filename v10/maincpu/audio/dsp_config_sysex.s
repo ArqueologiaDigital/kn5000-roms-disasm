@@ -1304,7 +1304,7 @@ BitMapOut_MergeOutputFields:
 	ldw wa, 0x98
 	lds bc, 1
 	call AddswbWr
-	ldb_d8 e, (0xfda1)
+	ld e, (0xfda1:16)
 	ld c, e
 	and c, 0xc0
 	ld a, (xsp + 8)
@@ -1383,7 +1383,7 @@ SeqOut_WriteTimedBytes_BufferFull:
 	jr MIDI_SeqProcess_DisableIntReturn
 
 SeqOut_WriteTimedBytes_CompIface:
-	ldb_d8 a, (0xc1e4)
+	ld a, (0xc1e4:16)
 	cps a, 2
 	jr z, SeqOut_WriteTimedBytes_PC2Timing
 	cps a, 1
@@ -1429,7 +1429,7 @@ MidiSeq_ReceiveAndForward:
 	jr MidiSeq_ReceiveAndForward_Exit
 
 MidiSeq_ReceiveAndForward_CompIface:
-	ldb_d8 a, (0xc1e4)
+	ld a, (0xc1e4:16)
 	cps a, 2
 	jr z, MidiSeq_ReceiveAndForward_PC2Forward
 	cps a, 1
@@ -1473,7 +1473,7 @@ MidiSeq_SendMultiByteWithTiming:
 	jrl MidiSeq_SendMultiByte_Exit
 
 MidiSeq_SendMultiByte_CompIface:
-	ldb_d8 a, (0xc1e4)
+	ld a, (0xc1e4:16)
 	ld iz, (xsp + 8)
 	cps a, 1
 	jr z, MidiSeq_SendMultiByte_SerialCountInit
@@ -1677,7 +1677,7 @@ MIDI_BroadcastCC_CommLoop:
 	ret
 
 CompIface_SendActiveSensing:
-	ldb_d8 a, (0xb7e0)
+	ld a, (0xb7e0:16)
 	cps a, 0	; MIDI
 	ret z
 	cps a, 3	;  PC2
@@ -1713,10 +1713,10 @@ MidiOut_RealtimeDispatch_Data:
 	cp	(xwa-80), iz
 	cpdi8	49277, 14
 	ret	nz
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 3
 	ret	z
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 3
 	stb_d8	(0xc1e4), a
 	ret
@@ -1731,7 +1731,7 @@ MidiOut_SerializeRealtimeLoop:
 	cp iz, 0x108
 	jrl nc, MidiOut_FlushBuffer
 	resda 4, 1065
-	ldb_d8 a, (1065)
+	ld a, (1065:16)
 	and a, 0x1f
 	jr z, MidiOut_ReadSysExByte
 	bitda 0, (1065)
@@ -1822,7 +1822,7 @@ MidiThru_Enable:
 	ret
 
 GET_COMPUTER_INTERFACE_SELECTION:
-	ldb_d8 l, (0xb7e0)
+	ld l, (0xb7e0:16)
 	ret
 
 CompIface_ProcessInput:
@@ -2030,7 +2030,7 @@ CompIface_ScaleAndNormalize:
 	ret
 
 CompIface_WriteVolume:
-	ldb_d8 c, (0xc1ec)
+	ld c, (0xc1ec:16)
 	cp c, a
 	ret z
 	stb_d8 (0xc1ec), a
@@ -2063,11 +2063,11 @@ Audio_ConfigureDSP:
 	ldw wa, 0x7f
 	jr CompIface_WriteVolume
 DSPCfg_ProcessInput:
-	ldb_d8 c, (0xc080)
-	ldb_d8 e, (0xc07d)
+	ld c, (0xc080:16)
+	ld e, (0xc07d:16)
 	cp c, 0x48
 	jrl z, DSPCfg_ScaleFactor_Dispatch
-	ldb_d8 a, (0xc07f)
+	ld a, (0xc07f:16)
 	cp c, 0x70
 	jrl z, DSPCfg_CompressorDispatch
 	cp c, 0x98
@@ -2180,7 +2180,7 @@ DSPCfg_SetFadeBit:
 	setda 1, 0xc1f0
 
 DSPCfg_UpdateOutputVolume:
-	ldb_d8 a, (0xc1f0)
+	ld a, (0xc1f0:16)
 	and a, 0x3
 	jr nz, DSPCfg_CheckChorusMuted
 	ldw wa, 0x7f
@@ -2270,12 +2270,12 @@ DSPCfg_ScaleFactor_Update:
 	lds32 xwa, 4
 	call SndParam_LookupReadOnly
 	stda16 (0xc1f6), xhl
-	ldb_d8 a, (0xc1f2)
+	ld a, (0xc1f2:16)
 	extz wa
 	ld bc, hl
 	calr CompIface_ScaleAndNormalize
 	stda16 (0xc1f8), xhl
-	ldb_d8 a, (0xc1f4)
+	ld a, (0xc1f4:16)
 	extz wa
 	ld bc, (0xc1f6:16)
 	calr CompIface_ScaleAndNormalize
@@ -5290,7 +5290,7 @@ AudioModeChange_Handler:
 	stdi8 (0xc200), 255
 	stdi8 (0xc201), 255
 	ordi16 0xc59c, 257
-	ldb_d8 a, (0x8d34)
+	ld a, (0x8d34:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (SystemConfig_PointerTable_0x76:24)
@@ -5332,7 +5332,7 @@ AudioSubsystem_Callback:
 	stdi8 (0xc200), 255
 	stdi8 (0xc201), 255
 	ordi16 0xc59c, 257
-	ldb_d8 a, (0x8d34)
+	ld a, (0x8d34:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (SystemConfig_PointerTable_0x76:24)
@@ -5403,7 +5403,7 @@ AudioDispatch_SetBusyFlag:
 
 ; Audio voice callback dispatch
 AudioVoice_Callback:
-	ldb_d8 a, (0x8d34)
+	ld a, (0x8d34:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (SystemConfig_PointerTable_0x76:24)
@@ -5448,7 +5448,7 @@ AudioVoiceReset_Handler:
 	stdi8 (0xc201), 255
 	ordi16 0xc59c, 257
 	anddi16 0xc594, 0xfffd
-	ldb_d8 a, (0x8d34)
+	ld a, (0x8d34:16)
 	extz wa
 	sla wa, 2
 	lda xbc, (SystemConfig_PointerTable_0x76:24)
@@ -5498,7 +5498,7 @@ AudioMode_ConfigExternal_NoStereo:
 
 AudioMode_ConfigExternal_MergeFlags:
 	resda 2, 0xc1fe
-	ldb_d8 a, (0xfc67)
+	ld a, (0xfc67:16)
 	and a, 0x2
 	ld c, a
 	add a, c
@@ -5518,10 +5518,10 @@ AudioMode_ConfigExternal_Apply:
 UIState_ProcessMidiEvent:
 	cpdi8 (0xc080), 24
 	ret ugt
-	ldb_d8 l, (0xc080)
-	ldb_d8 h, (0xc07d)
-	ldb_d8 e, (0xc07f)
-	ldb_d8 d, (0xc07e)
+	ld l, (0xc080:16)
+	ld h, (0xc07d:16)
+	ld e, (0xc07f:16)
+	ld d, (0xc07e:16)
 	ld a, l
 	extz wa
 	sla wa, 2
@@ -5698,7 +5698,7 @@ UIStateEvt_TransposeUpdate:
 	ld bc, wa
 	add bc, 0xe4
 	lda xde, (0xc1ff:16)
-	ldb_d8 a, (0xfc6a)
+	ld a, (0xfc6a:16)
 	and a, 0xff
 	sub a, 0x40
 	stb_dri A, 0x07, 0xe8, 0xe4
@@ -5721,7 +5721,7 @@ UIStateEvt_TransposeUpdate_Apply:
 
 UIStateEvt_ParamEdit_Data:
 	pushw	iz
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	extz	wa
 	cps	wa, 0
 	jrl	mi, 606
@@ -5732,19 +5732,19 @@ UIStateEvt_ParamEdit_Data:
 	ld_rrw wa, xix, wa
 	lda xix, (16638671:24)
 	jp_rr 8, xix, wa
-	ldb_d8 a, (49279)
+	ld a, (49279:16)
 	and	a, 7
 	jrl	z, 183
 	ld	wa, (0xc598:16)
 	bit	6, wa
 	jr	z, 44
-	ldb_d8	a, (0xfc5e)
+	ld	a, (0xfc5e:16)
 	and	a, 7
 	extz	wa
 	add	wa, wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
 	ld_rrw iz, xbc, wa
-	ldb_d8 a, (64605)
+	ld a, (64605:16)
 	and a, 8
 	extz wa
 	add	wa, wa
@@ -5758,7 +5758,7 @@ UIStateEvt_ParamEdit_Data:
 	cp	wa, 32
 	jr	nz, 25
 	lds	iz, 2
-	ldb_d8	a, (0xfc5d)
+	ld	a, (0xfc5d:16)
 	and	a, 8
 	extz	wa
 	add	wa, wa
@@ -5767,7 +5767,7 @@ UIStateEvt_ParamEdit_Data:
 	reti
 	.byte 0xe4, 0xe0, 0xe6
 	jr	21
-	ldb_d8	a, (0xfc5d)
+	ld	a, (0xfc5d:16)
 	and	a, 15
 	extz	wa
 	add	wa, wa
@@ -5866,19 +5866,19 @@ UIStateEvt_ParamEdit_Data:
 	push	xiz
 	.byte 0x04
 	nop
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 7
 	jrl	z, 258
 	ld	wa, (0xc598:16)
 	bit	6, wa
 	jr	z, 44
-	ldb_d8	a, (0xfc5e)
+	ld	a, (0xfc5e:16)
 	and	a, 7
 	extz	wa
 	add	wa, wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
 	ld_rrw iz, xbc, wa
-	ldb_d8 a, (64605)
+	ld a, (64605:16)
 	and a, 8
 	extz wa
 	add	wa, wa
@@ -5891,7 +5891,7 @@ UIStateEvt_ParamEdit_Data:
 	bit	5, wa
 	jr	z, 25
 	lds	iz, 2
-	ldb_d8	a, (0xfc5d)
+	ld	a, (0xfc5d:16)
 	and	a, 8
 	extz	wa
 	add	wa, wa
@@ -5900,7 +5900,7 @@ UIStateEvt_ParamEdit_Data:
 	reti
 	.byte 0xe4, 0xe0, 0xe6
 	jr	21
-	ldb_d8	a, (0xfc5d)
+	ld	a, (0xfc5d:16)
 	and	a, 15
 	extz	wa
 	add	wa, wa
@@ -5926,7 +5926,7 @@ UIStateEvt_ParamEdit_Data:
 	jr	117
 	stdi8	(0xc5a0), 16
 	jr	110
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 252
 	jr	z, 30
 	.byte 0xf1, 0x84
@@ -5935,7 +5935,7 @@ UIStateEvt_ParamEdit_Data:
 	ld	wa, (0xc596:16)
 	bit	9, wa
 	jr	z, 9
-	ldb_d8	a, (0xfc5f)
+	ld	a, (0xfc5f:16)
 	and	a, 252
 	jr	nz, 0
 	.byte 0xd1, 0x94, 0xc5
@@ -5959,7 +5959,7 @@ UIStateEvt_ParamEdit_Data:
 	.byte 0x04
 	nop
 	jr	39
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 252
 	jr	z, 30
 	.byte 0xf1, 0x84
@@ -5968,7 +5968,7 @@ UIStateEvt_ParamEdit_Data:
 	ld	wa, (0xc596:16)
 	bit	9, wa
 	jr	z, 9
-	ldb_d8	a, (0xfc5f)
+	ld	a, (0xfc5f:16)
 	and	a, 252
 	jr	nz, 0
 	.byte 0xd1, 0x94, 0xc5
@@ -5978,7 +5978,7 @@ UIStateEvt_ParamEdit_Data:
 	popw	iz
 	ret
 UIStateEvt_VolumeMixer_Data:
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	extz	wa
 	cps	wa, 0
 	ret	mi
@@ -5989,7 +5989,7 @@ UIStateEvt_VolumeMixer_Data:
 	ld_rrw wa, xix, wa
 	lda xix, (16639288:24)
 	jp_rr 8, xix, wa
-	ldb_d8 a, (49279)
+	ld a, (49279:16)
 	and	a, 31
 	jr	z, 22
 	.byte 0xc1
@@ -6011,7 +6011,7 @@ UIStateEvt_VolumeMixer_Data:
 	.byte 0x04
 	nop
 	ret
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 31
 	jr	z, 58
 	.byte 0xf1
@@ -6032,7 +6032,7 @@ UIStateEvt_VolumeMixer_Data:
 	.byte 0xe6, 0xf1
 	swi	6
 	.byte 0xc1, 0xb2
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 2
 	ld	c, a
 	add	a, c
@@ -6086,7 +6086,7 @@ UIStateEvt_VolumeMixer_Data:
 	.byte 0x04
 	nop
 	ret
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 255
 	ret	z
 	lds	de, 0
@@ -6108,7 +6108,7 @@ UIStateEvt_VolumeMixer_Data:
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 255
 	sub	a, 64
 	ld	(xhl), a
@@ -6128,7 +6128,7 @@ UIStateEvt_VolumeMixer_Data:
 	.byte 0x04
 	nop
 	ret
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 255
 	ret	z
 	.byte 0xd1, 0x94, 0xc5
@@ -6138,7 +6138,7 @@ UIStateEvt_VolumeMixer_Data:
 	ret
 	ret
 UIStateEvt_EffectSelect_Data:
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	cps	a, 4
 	jrl	z, 270
 	cps	a, 3
@@ -6149,10 +6149,10 @@ UIStateEvt_EffectSelect_Data:
 	jr	z, 99
 	cps	a, 0
 	ret	nz
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 3
 	jr	z, 79
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 3
 	cps	a, 3
 	jr	z, 57
@@ -6162,7 +6162,7 @@ UIStateEvt_EffectSelect_Data:
 	jr	z, 23
 	cps	a, 0
 	jr	nz, 56
-	ldb_d8	a, (0xfd03)
+	ld	a, (0xfd03:16)
 	res	7, a
 	stb_d8	(0xc5a2), a
 	.byte 0xd1, 0x9a, 0xc5
@@ -6191,14 +6191,14 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	res	7, a
 	cps	a, 0
 	ret	z
-	ldb_d8	a, (0xfd02)
+	ld	a, (0xfd02:16)
 	and	a, 3
 	jr	nz, 11
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	res	7, a
 	stb_d8	(0xc5a2), a
 	.byte 0xd1, 0x9a, 0xc5
@@ -6209,14 +6209,14 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 255
 	ret	z
 	.byte 0xf1, 0x50
 	swi	5
 	sbc	w, e
 	.byte 0xf6
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 255
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x124:24)
@@ -6244,10 +6244,10 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 255
 	ret	z
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 255
 	stb_d8	(0xe9c0), a
 	.byte 0xd1, 0x94, 0xc5
@@ -6255,10 +6255,10 @@ UIStateEvt_EffectSelect_Data:
 	.byte 0x04
 	nop
 	ret
-	ldb_d8	a, (0xc07f)
+	ld	a, (0xc07f:16)
 	and	a, 15
 	ret	z
-	ldb_d8	a, (0xc07e)
+	ld	a, (0xc07e:16)
 	and	a, 15
 	stb_d8	(0xe9be), a
 	.byte 0xd1, 0x9a, 0xc5
@@ -6292,7 +6292,7 @@ UIStateEvt_PlayModeGuard_ClearBit:
 
 
 UIStateEvt_ChannelConfig_Data:
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	cp	a, 11
 	jrl	z, 326
 	cp	a, 12
@@ -6333,7 +6333,7 @@ UIStateEvt_ChannelConfig_Data:
 	ld	hl, wa
 	extz	xhl
 	add	xhl, xbc
-	ldb_d8	a, (0xfd04)
+	ld	a, (0xfd04:16)
 	and	a, 255
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x124:24)
@@ -6472,7 +6472,7 @@ UIStateEvt_StubReturn:
 	ret
 	ret
 UIStateEvt_MuteToggle_Data:
-	ldb_d8	a, (0xc07d)
+	ld	a, (0xc07d:16)
 	cp	a, 16
 	ret	nz
 	bitda	0, (0xc07f)

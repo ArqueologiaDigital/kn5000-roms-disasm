@@ -366,7 +366,7 @@ IntMed_CheckPlaying:
 	cps l, 1
 	jrl nz, IntMed_HandleError
 	stdi8 (0x84fe), 1
-	ldb_d8 a, (0x889c)
+	ld a, (0x889c:16)
 	cpda8 a, 0x889a
 	jr nc, IntMed_CheckRepeat
 	lds iz, 0
@@ -524,7 +524,7 @@ IntMed_AssignOrderLoop:
 	ld a, (xbc)
 	cp a, 0xfe
 	jr nz, IntMed_NextAssignSlot
-	ldb_d8 a, (0x889a)
+	ld a, (0x889a:16)
 	ld (xbc), a
 	incdi8 1, (0x889a)
 	ld wa, iz
@@ -610,7 +610,7 @@ IntMed_HandleSelectToggle:
 	ld c, (xde)
 	cp c, 0xfe
 	jr nz, IntMed_RemoveFromOrder
-	ldb_d8 c, (0x889a)
+	ld c, (0x889a:16)
 	ld (xde), c
 	incdi8 1, (0x889a)
 	ld c, (xde)
@@ -647,7 +647,7 @@ IntMed_RemoveFromOrder:
 	call ApPostEvent
 	ldw (xsp + 2), 0x0
 	lds iz, 0
-	ldb_d8 a, (0x889a)
+	ld a, (0x889a:16)
 	extz wa
 	cps wa, 0
 	jrl ule, IntMed_Exit
@@ -684,7 +684,7 @@ IntMed_ReorderLoop:
 
 IntMed_NextReorder:
 	inc 1, iz
-	ldb_d8 a, (0x889a)
+	ld a, (0x889a:16)
 	extz wa
 	cp (xsp + 2), wa
 	jr c, IntMed_ReorderLoop
@@ -862,7 +862,7 @@ DiskMed_PlayNextHelper:
 	jrl nz, DiskMed_ReturnZero
 	cpdi8 (0x84fe), 0
 	jrl z, DiskMed_ReturnZero
-	ldb_d8 a, (0x889c)
+	ld a, (0x889c:16)
 	cpda8 a, 0x889a
 	jr nc, DiskMed_ReturnFinished
 	lds iz, 0
@@ -1112,7 +1112,7 @@ DiskSel_CheckFinished:
 	ld xbc, 0x1c0000a
 	lds32 xde, 0
 	call ApPostEvent
-	ldb_d8 a, (0x893c)
+	ld a, (0x893c:16)
 	cpda8 a, 0x893a
 	jrl nc, DiskSel_CheckRepeat
 	lds iz, 0
@@ -1760,12 +1760,12 @@ DiskSel_Exit:
 
 GetPlayState1_Entry:
 GetPlayState1:
-	ldb_d8 l, (0x8942)
+	ld l, (0x8942:16)
 	ret
 
 GetPlayState2_Entry:
 GetPlayState2:
-	ldb_d8 l, (0x8944)
+	ld l, (0x8944:16)
 	ret
 
 SmfMedley_RawData:
@@ -1999,7 +1999,7 @@ FmmSmfMedleyFunc:
 	jrl nz, SmfMed_Exit
 	lds wa, 0
 	calr InitializeOperationState
-	ldb_d8 a, (0x8d37)
+	ld a, (0x8d37:16)
 	stb_d8 (0x843a), a
 	cp a, 0x6f
 	jr z, SmfMed_CheckNotPlaying
@@ -2068,7 +2068,7 @@ SmfMed_ShowPlayError:
 
 SmfMed_SetPlaying:
 	stdi8 (0x84fe), 1
-	ldb_d8 a, (0x8922)
+	ld a, (0x8922:16)
 	cpda8 a, 0x8920
 	jr nc, SmfMed_CheckRepeat
 	lds iz, 0
@@ -2168,7 +2168,7 @@ SmfMed_ClearPlaying:
 
 SmfMed_InitFromDisk:
 	lds32 xde, 0
-	ldb_d8 e, (0x8944)
+	ld e, (0x8944:16)
 	ld xwa, 0x6c0018
 	ld xbc, 0x1e0003b
 	call ApPostEvent
@@ -2226,7 +2226,7 @@ SmfMed_FinishInit:
 
 SmfMed_HandleStop_Entry:
 SmfMed_HandleStop:
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cp a, 0x6f
 	jrl z, SmfMed_Exit
 	cp a, 0x72
@@ -2345,7 +2345,7 @@ SmfMed_RemoveFromOrder:
 	cp c, 0xfd
 	jr ugt, SmfMed_RefreshAfterSelect
 	ld (xwa), 0xff
-	ldb_d8 a, (0x8920)
+	ld a, (0x8920:16)
 	dec 1, a
 	stb_d8 (0x8920), a
 	lds iy, 0
@@ -2461,7 +2461,7 @@ SmfMed_CheckContinue:
 	ld xbc, 0x1e0009a
 	lds32 xde, 0
 	call ApPostEvent
-	ldb_d8 a, (0x843a)
+	ld a, (0x843a:16)
 	extz wa
 
 SmfMed_CallPauseMode:
@@ -2833,7 +2833,7 @@ FmmPdMedleyFunc:
 	jrl nz, PdMed_Exit
 	lds wa, 0
 	call InitializeOperationState
-	ldb_d8 a, (0x8d37)
+	ld a, (0x8d37:16)
 	cp a, 0x71
 	jr nz, PdMed_CheckPlayMode
 	stdi8 (0x84fe), 0
@@ -2851,7 +2851,7 @@ PdMed_CheckPlayMode:
 	cps l, 1
 	jrl nz, PdMed_HandleError
 	stdi8 (0x84fe), 1
-	ldb_d8 c, (0x8922)
+	ld c, (0x8922:16)
 	lda xwa, (0x88a0:16)
 	cpda8 c, 0x8920
 	jr nc, PdMed_CheckRepeat
@@ -2997,7 +2997,7 @@ PdMed_FinishInit:
 	jrl PdMed_Exit
 
 PdMed_HandleStop:
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cp a, 0x71
 	jrl z, PdMed_Exit
 	cp a, 0x75
@@ -3110,7 +3110,7 @@ PdMed_RemoveFromOrder:
 	cp c, 0xfd
 	jr ugt, PdMed_RefreshAfterSelect
 	ld (xhl), 0xff
-	ldb_d8 a, (0x8920)
+	ld a, (0x8920:16)
 	dec 1, a
 	stb_d8 (0x8920), a
 	lds iz, 0
@@ -3640,7 +3640,7 @@ FmmDocMedleyFunc:
 	jrl nz, DocMed_Exit
 	lds wa, 0
 	call InitializeOperationState
-	ldb_d8 a, (0x8d37)
+	ld a, (0x8d37:16)
 	cp a, 0x70
 	jr nz, DocMed_CheckPlayMode
 	stdi8 (0x84fe), 0
@@ -3658,7 +3658,7 @@ DocMed_CheckPlayMode:
 	cps l, 1
 	jrl nz, DocMed_HandleError
 	stdi8 (0x84fe), 1
-	ldb_d8 c, (0x8922)
+	ld c, (0x8922:16)
 	lda xwa, (0x88a0:16)
 	cpda8 c, 0x8920
 	jr nc, DocMed_CheckRepeat
@@ -3809,7 +3809,7 @@ DocMed_FinishInit:
 	jrl DocMed_Exit
 
 DocMed_HandleStop:
-	ldb_d8 a, (0x8d36)
+	ld a, (0x8d36:16)
 	cp a, 0x70
 	jrl z, DocMed_Exit
 	cp a, 0x74
@@ -3922,7 +3922,7 @@ DocMed_RemoveFromOrder:
 	cp c, 0xfd
 	jr ugt, DocMed_RefreshAfterSelect
 	ld (xhl), 0xff
-	ldb_d8 a, (0x8920)
+	ld a, (0x8920:16)
 	dec 1, a
 	stb_d8 (0x8920), a
 	lds iz, 0

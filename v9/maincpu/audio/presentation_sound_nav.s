@@ -1270,7 +1270,7 @@ DirmdTitleFunc:
 
 ; DirmdEmulator dispatch case F
 DirmdEmu_CaseF:
-	ldb_d8	a, (0x8d38)
+	ld	a, (0x8d38:16)
 	cpda8	a, 0x8d39
 	jr	z, 25
 	ldw	wa, 255
@@ -1389,21 +1389,21 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 DirmdEmu_DefaultCase:
 	bitda 1, (0xe3de)
 	jr z, DirmdEmu_CheckModeChange
-	ldb_d8 a, (0xe3dc)
+	ld a, (0xe3dc:16)
 	extz wa
 	call UI_PostPartChangeEvent
 
 DirmdEmu_CheckModeChange:
 	bitda 7, (0xe3de)
 	jr z, DirmdEmu_CheckSoundCtrl
-	ldb_d8 a, (0xe3dc)
+	ld a, (0xe3dc:16)
 	extz wa
 	call UI_PostModeChangeEvent
 
 DirmdEmu_CheckSoundCtrl:
 	bitda 6, (0xe3de)
 	jr z, DirmdEmu_CheckBit4
-	ldb_d8 a, (0xe3dc)
+	ld a, (0xe3dc:16)
 	extz wa
 	call SoundCtrl_SendCommand
 

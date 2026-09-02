@@ -63,7 +63,7 @@ Encoder_ProcessModwheel:
 	extz	wa
 	lda	xbc, (15573308:24)
 	ld_rrb	a, xbc, wa
-	ldb_d8	c, (36424)
+	ld	c, (36424:16)
 	res	7, c
 	cp	c, a
 	ret	z
@@ -100,7 +100,7 @@ Encoder_ProcessVolume_NoChange:
 ; Output: HL = clamped and scaled value
 Encoder_ClampScaleAndNormalize:
 	ld	l, a
-	ldb_d8	c, (36418)
+	ld	c, (36418:16)
 	cp	l, c
 	jr	nc, 2
 	ld	l, c
@@ -112,7 +112,7 @@ Encoder_PerformScaling:
 	ld	xwa, xhl
 	ld	xbc, 236
 	call	16712763
-	ldb_d8	a, (36416)
+	ld	a, (36416:16)
 	extz	wa
 	add	wa, wa
 	lda	xbc, (15573692:24)
@@ -139,7 +139,7 @@ Encoder_ProcessBreath:
 	.byte 0x23, 0xcb, 0xcc, 0x0f, 0x6e, 0x07, 0xc1, 0x6f
 	.byte 0x7e, 0x3f, 0x00, 0x66, 0x3e
 Encoder_ProcessBreath_WithModeAdjustment:
-	ldb_d8	c, (36414)
+	ld	c, (36414:16)
 	cps	c, 0
 	ret	z
 	srl	a, 1
@@ -180,7 +180,7 @@ Encoder_ProcessFoot:
 	extz	wa
 	lda	xbc, (15574018:24)
 	ld_rrb	a, xbc, wa
-	ldb_d8	c, (36430)
+	ld	c, (36430:16)
 	res	7, c
 	cp	c, a
 	ret	z
@@ -226,25 +226,25 @@ Encoder_ReturnDefaultConstant_End:
 ; Encoder_ApplySystemModeSettings - Select processing mode based on system state
 ; Reads mode value from 0xc07d and configures encoder processing accordingly
 Encoder_ApplySystemModeSettings:
-	ldb_d8	a, (49121)
+	ld	a, (49121:16)
 	cps	a, 6
 	jr	z, 50
 	cps	a, 5
 	jr	z, 25
 	cps	a, 4
 	ret	nz
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	and	a, 15
 	ret	z
-	ldb_d8	a, (49122)
+	ld	a, (49122:16)
 	and	a, 15
 	stb_d8	(36414), a
 	ret
 Encoder_ConfigureVolumeMode:
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	and	a, 255
 	ret	z
-	ldb_d8	a, (49122)
+	ld	a, (49122:16)
 	and	a, 255
 	stb_d8	(36416), a
 	ret
@@ -254,11 +254,11 @@ Encoder_ConfigureRangeLimit:
 	; Encoder_ConfigureRangeLimit instruction-for-instruction (ldb_d8 a,(..) /
 	; res 7,a / cps a,0 / ret z / ...); only the two register addresses differ
 	; from v9/v10's 0xc07f/0xc07e, a real cross-revision shift.
-	ldb_d8	a, (49123)
+	ld	a, (49123:16)
 	res	7, a
 	cps	a, 0
 	ret	z
-	ldb_d8	a, (49122)
+	ld	a, (49122:16)
 	res	7, a
 	stb_d8	(36418), a
 	ret

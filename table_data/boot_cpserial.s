@@ -95,7 +95,7 @@ BootSerial_Init_Nop1:
 ;          boot- or run-time address) -- retained factory/diagnostic code
 ; -----------------------------------------------------------------------------
 BootSerial_ModeSwitch:
-	ldb_d8	a, (0x0f64)
+	ld	a, (0x0f64:16)
 	and	a, 0xc0			; isolate mode field
 	anddi8	(0x0f64), 0x3f		; strip it from the flags byte
 	cps	a, 0
@@ -327,7 +327,7 @@ BootSerial_HandshakeSequence:
 BootSerial_SendTwoBytes_Bitbang:
 	stda16	(0x0fd9), xwa		; frame bytes into TX ring head
 	anddi8	(0x0f67), 0xbf
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC with bit 6 low
 	ldio	0xeb, 0xff		; INTES1
 	ldio	0xf8, 0x22		; INTCLR: INTRX1
@@ -336,20 +336,20 @@ BootSerial_SendTwoBytes_Bitbang:
 	ldio	0xf8, 0x12		; INTCLR
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
 	ordi8	(0x0f66), 0x40
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR with bit 6 high
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
 	anddi8	(0x0f66), 0xbf
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 back low  (clock pulse)
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
 	ordi8	(0x0f67), 0x50
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bits 6:4 pattern 0x50
 	ordi8	(0x0f66), 0x50
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR likewise
 	and_sd8b_im 0xd5, 0xfe		; SC1CR bit 0 low
 	ldio	0xeb, 0xff		; INTES1
@@ -372,10 +372,10 @@ BootSerial_SendTwoBytes_Bitbang:
 	or_sd8b_im 0xd5, 0x01		; pulse SC1CR bit 0
 	and_sd8b_im 0xd5, 0xfd		; SC1CR bit 1 low
 	anddi8	(0x0f66), 0xaf
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; restore PFCR
 	anddi8	(0x0f67), 0xaf
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; restore PFFC
 	ret
 
@@ -565,7 +565,7 @@ BootSerial_TestLoopback__no_resp1:
 	jr	z, BootSerial_TestLoopback__no_resp2
 	ordi8	(0x0f6b), 8
 BootSerial_TestLoopback__no_resp2:
-	ldb_d8	a, (0x0f6b)
+	ld	a, (0x0f6b:16)
 	ret
 
 ; -----------------------------------------------------------------------------
@@ -643,7 +643,7 @@ BootSerial_WaitDeviceIdent__poll:
 	calr	BootSerial_SendFrame
 	calr	BootSerial_TickWait6
 	calr	BootSerial_RX_ParsePackets
-	ldb_d8	a, (0x102d)		; decoded response byte
+	ld	a, (0x102d:16)		; decoded response byte
 	ldb	w, 0x0d
 	bit	7, a
 	jr	nz, BootSerial_WaitDeviceIdent__have
@@ -798,11 +798,11 @@ BootSerial_SendFrame:
 	stdi8	(0x0f62), 4		; state machine -> state 0x04
 	ldio	0xd7, 0x28		; BR1CR
 	anddi8	(0x0f67), 0xbf
-	ldb_d8	a, (0x0f67)
+	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low
 	ordi8	(0x0f66), 0x40
-	ldb_d8	a, (0x0f66)
+	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 high
 	ldio	0xe3, 0x07		; INTEAB
 	ldio	0xf8, 0x12		; INTCLR

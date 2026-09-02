@@ -229,7 +229,7 @@ CtrlPanel_HandlePortCommands:
 	ld	xbc, 29360187
 	call	16421979
 	lds32	xde, 0
-	ldb_d8	e, 49122
+	ld	e, (49122:16)
 	add	xde, 25165824
 	ld	xwa, 4294967295
 	ld	xbc, 29360187
@@ -242,7 +242,7 @@ CtrlPanel_HandleSerialPort:
 	ld	xwa, 4294967295
 	ld	xbc, 29360159
 	call	16421979
-	ldb_d8	a, 49122
+	ld	a, (49122:16)
 	add	a, 16
 	exts	wa
 	sla	wa, 2
@@ -254,7 +254,7 @@ CtrlPanel_HandleSerialPort:
 CtrlPanel_EventType_A8:
 	cps	e, 3
 	jrl	nz, 155
-	ldb_d8	c, 49123
+	ld	c, (49123:16)
 	ld	a, c
 	andda8	a, 49122
 	bit	0, a
@@ -273,7 +273,7 @@ CtrlPanel_A8_CheckRelease:
 CtrlPanel_EventType_AA:
 	cp	e, 17
 	jrl	z, 666
-	ldb_d8	c, 49123
+	ld	c, (49123:16)
 	ld	a, c
 	andda8	a, 49122
 	cps	e, 1
@@ -290,7 +290,7 @@ CtrlPanel_EventType_AA:
 	jr	z, 61
 	cps	e, 5
 	jrl	nz, 671
-	ldb_d8	a, 49123
+	ld	a, (49123:16)
 	andda8	a, 49122
 	bit	0, a
 	jrl	z, 657
@@ -360,7 +360,7 @@ CtrlPanel_AA_0E_PostAndContinue:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_0E_Bit2:
-	ldb_d8	c, (49123)
+	ld	c, (49123:16)
 	ld	a, c
 	andda8	a, (49122)
 	bit	2, a
@@ -380,7 +380,7 @@ CtrlPanel_AA_0E_Bit2Post:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_0E_Bit4:
-	ldb_d8	c, (49123)
+	ld	c, (49123:16)
 	ld	a, c
 	andda8	a, (49122)
 	bit	4, a
@@ -416,7 +416,7 @@ CtrlPanel_AA_04_PostAndContinue:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_04_Bit5:
-	ldb_d8	c, (49123)
+	ld	c, (49123:16)
 	ld	a, c
 	andda8	a, (49122)
 	bit	5, a
@@ -486,7 +486,7 @@ CtrlPanel_AA_01_PostAndContinue:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_01_Bit5:
-	ldb_d8	c, (49123)
+	ld	c, (49123:16)
 	ld	a, c
 	andda8	a, (49122)
 	bit	5, a
@@ -506,7 +506,7 @@ CtrlPanel_AA_01_Bit5Post:
 	call ApPostEvent
 
 CtrlPanel_AA_PanelEvent_01_Bit6:
-	ldb_d8	c, (49123)
+	ld	c, (49123:16)
 	ld	a, c
 	andda8	a, (49122)
 	bit	6, a
@@ -524,7 +524,7 @@ CtrlPanel_AA_01_Bit6Release:
 	jr UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_PanelEvent_11:
-	ldb_d8	c, (49123)
+	ld	c, (49123:16)
 	ld	a, c
 	andda8	a, (49122)
 	jr	z, 17

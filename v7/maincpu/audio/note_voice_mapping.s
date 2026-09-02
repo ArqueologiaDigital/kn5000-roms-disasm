@@ -1145,7 +1145,7 @@ VoiceClaimExt_Slot6_MarkLoop:
 	lds	bc, 2
 	call	16660458
 	ret
-	ldb_d8	a, (52809)
+	ld	a, (52809:16)
 	extz	wa
 VoiceClaimExt_Slot6_MarkCheck:
 	stda16	(52835), wa
@@ -6294,7 +6294,7 @@ ProcessEventDispatch_Prologue:
 SeqEvtBuf_NonNoteDispatchLoop:
 	retd 206
 	swi 7
-	ldb_d8 l, (52750)
+	ld l, (52750:16)
 	ret
 	stdi16 (0xcdca), 0x0000
 	stdi8 (0xce16), 0x00
@@ -6404,10 +6404,10 @@ VoiceMap_AllocateSlot:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ldb_d8	a, (52803)
+	ld	a, (52803:16)
 	ld	e, a
 	extz	de
-	ldb_d8	a, (52804)
+	ld	a, (52804:16)
 	ld	c, a
 	extz	bc
 	ld	wa, de
@@ -6415,7 +6415,7 @@ VoiceMap_AllocateSlot:
 	ld	a, l
 	cp	a, 255
 	jr	z, 66
-	ldb_d8	a, (52750)
+	ld	a, (52750:16)
 	subda8	a, (52804)
 VoiceMap_AllocateSlo_SetByteFF:
 	add	a, l
@@ -6445,7 +6445,7 @@ NoteMap_FindBestMatch:
 	ld	a, l
 	cp	a, 255
 	jr	z, 116
-	ldb_d8	a, (52750)
+	ld	a, (52750:16)
 	subda8	a, (52804)
 	add	a, l
 	inc	1, a
@@ -6457,7 +6457,7 @@ NoteMap_FindBestMatch:
 	extz	wa
 	ld	de, wa
 	add	de, de
-	ldb_d8	a, (52803)
+	ld	a, (52803:16)
 NoteMap_CheckVoiceReuse:
 	dec	1, a
 	extz	wa
@@ -6466,7 +6466,7 @@ NoteMap_CheckVoiceReuse:
 	exts	xwa
 	add	xwa, xbc
 	ld_rrb	c, xwa, de
-	ldb_d8	a, 52750
+	ld	a, (52750:16)
 	sub	a, c
 	ld	(xiz+5), a
 	ld	a, l
@@ -6475,7 +6475,7 @@ CheckVoiceReuse_SetByteFF:
 	ld	de, wa
 	add	de, de
 CheckVoiceReuse_SetByteFF2:
-	ldb_d8	a, (52803)
+	ld	a, (52803:16)
 CheckVoiceReuse_Block:
 	.byte 0xc9, 0x69, 0xd8, 0x12, 0xd8, 0x09, 0x18, 0x00
 	.byte 0xf2, 0x1e, 0x91, 0xee, 0x31, 0xe8, 0x13, 0xe9
@@ -6526,7 +6526,7 @@ UIParam_CallbackDispatch:
 	ld	xbc, 316180943
 	muls	wa, 3
 	ld	de, wa
-	ldb_d8	a, (52803)
+	ld	a, (52803:16)
 	dec	1, a
 	extz	wa
 	muls	wa, 36
@@ -8407,7 +8407,7 @@ SndPart_SetDamperPed_LoadReg:
 	call	16567398
 	cp	hl, 128
 	jrl	nz, 802
-	ldb_d8	a, (64797)
+	ld	a, (64797:16)
 	and	a, 15
 	ld	c, a
 	extz	bc
@@ -8447,7 +8447,7 @@ SndPart_SetCoarseTune:
 	sub	d, w
 	nop
 	ld	bc, wa
-	ldb_d8	a, (64800)
+	ld	a, (64800:16)
 SndPart_SetCoarseTun_LoadReg:
 	.byte 0xd8, 0x12, 0xd8, 0x8a, 0x30, 0x50, 0x00, 0x1e
 	.byte 0x7d, 0x05, 0x78, 0x6e, 0x02, 0x40, 0x81, 0x42
@@ -8458,7 +8458,7 @@ SndPart_SetPitchBendSens:
 SndPart_SetAllSoundOff:
 	pop	xiz
 	push	sr
-	ldb_d8	a, (64797)
+	ld	a, (64797:16)
 	and	a, 15
 	inc	3, a
 MIDI_SendEpilogue:
@@ -8759,7 +8759,7 @@ COMM_SendDataReturn:
 	inc	1, qiz
 	cpw	qiz, 15
 	jr	lt, -28
-	ldb_d8	a, (14079)
+	ld	a, (14079:16)
 	and	a, 15
 	jr	z, 40
 	ldw	qiz, 16
@@ -8873,7 +8873,7 @@ MIDI_SendChannelPressure:
 	jr	ge, 5
 	ldw	hl, 65535
 	jr	67
-	ldb_d8	a, 59678
+	ld	a, (59678:16)
 	cps	a, 4
 	jr	z, 42
 	cps	a, 3
@@ -12088,7 +12088,7 @@ Param_SignExtendRetu_Return:
 	ld (XDE+0x05),0x00
 	ld (XDE+0x06),0x02
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
 	ld	(xde+8), a
@@ -12096,7 +12096,7 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	ldw	bc, 10
 	call	15676106
-	ldb_d8	l, 57891
+	ld	l, (57891:16)
 	ret
 	lda	xde, (57894:16)
 	ld	(xde), 43
@@ -12107,7 +12107,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+5), 0
 	ld	(xde+6), 2
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
 	ld	(xde+8), a
@@ -12115,7 +12115,7 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	ldw	bc, 10
 	call	15676106
-	ldb_d8	l, 57901
+	ld	l, (57901:16)
 	ret
 	lda	xde, (57904:16)
 	ld	(xde), 43
@@ -12126,7 +12126,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+5), 0
 	ld	(xde+6), 2
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
 	ld	(xde+8), a
@@ -12134,7 +12134,7 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	ldw	bc, 10
 	call	15676106
-	ldb_d8	l, 57911
+	ld	l, (57911:16)
 	ret
 	lda	xde, (57914:16)
 	ld	(xde), 43
@@ -12145,7 +12145,7 @@ Param_SignExtendRetu_Return:
 	ld	(xde+5), 0
 	ld	(xde+6), 2
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ld	(xde+7), l
 	ld	(xde+8), a
@@ -12153,7 +12153,7 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	ldw	bc, 10
 	call	15676106
-	ldb_d8	l, 57921
+	ld	l, (57921:16)
 	ret
 	cps	wa, 4
 	jrl	ugt, 130
@@ -12208,7 +12208,7 @@ Param_SignExtendRetu_Return:
 	lds	wa, 3
 	call	15676106
 	incdi8	1, (57595)
-	ldb_d8	l, 57595
+	ld	l, (57595:16)
 	res	7, l
 	ret
 	push XIZ
@@ -12220,7 +12220,7 @@ Param_SignExtendRetu_Return:
 	ld (XHL+0x04),0x00
 	ld (XHL+0x05),0x00
 	ld (XHL+0x06),E
-	ldb_d8 c, (0xe0fb)
+	ld c, (0xe0fb:16)
 	inc 1,C
 	stb_d8 (0xe0fb), c
 	res 0x07,C

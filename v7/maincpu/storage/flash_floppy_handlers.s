@@ -903,7 +903,7 @@ Flash_InitBytecodeBlock:
 	add	bc, wa
 	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x19, 0x11, 0x39
 	call	16133691
-	ldb_d8	a, 13588
+	ld	a, (13588:16)
 	extz	wa
 	bit	0, wa
 	jr	z, 6
@@ -1012,7 +1012,7 @@ Flash_InitBytecodeBlock:
 	add	bc, wa
 	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x19, 0x11, 0x39
 	call	16133691
-	ldb_d8	a, 13588
+	ld	a, (13588:16)
 	extz	wa
 	bit	0, wa
 	jr	z, 24
@@ -1053,9 +1053,9 @@ Flash_InitBytecodeBlock:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	-826
-	ldb_d8	l, 3176
-	ldb_d8	c, 3178
-	ldb_d8	e, 3180
+	ld	l, (3176:16)
+	ld	c, (3178:16)
+	ld	e, (3180:16)
 	.byte 0x87, 0x3f, 0x02
 	jr	z, 26
 	.byte 0x87, 0x3f, 0x00
@@ -1075,9 +1075,9 @@ Flash_InitBytecodeBlock:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	-881
-	ldb_d8	a, 3176
-	ldb_d8	c, 3178
-	ldb_d8	e, 3180
+	ld	a, (3176:16)
+	ld	c, (3178:16)
+	ld	e, (3180:16)
 	.byte 0x87, 0x3f, 0x02
 	jr	z, 14
 	.byte 0x87, 0x3f, 0x00
@@ -3528,7 +3528,7 @@ ToneParam_ExtendedOpsBlock:
 	lds iz, 0
 	resda 0, (0x3514)
 	call DualVoice_ParamLoadDone
-	ldb_d8 a, (0x3514)
+	ld a, (0x3514:16)
 	extz WA
 	bit 0x00,WA
 	jr z, .Lc_f19194
@@ -3618,7 +3618,7 @@ ToneParam_ExtendedOpsBlock:
 	ld IZ,WA
 	setda 0, (0x3435)
 	call 0xf62d45
-	ldb_d8 a, (0x3514)
+	ld a, (0x3514:16)
 	extz WA
 	bit 0x00,WA
 	jr z, .Lc_f19378
@@ -3696,7 +3696,7 @@ DualVoice_ParamCompareLoop:
 	add	bc, wa
 	.byte 0xc3, 0x07, 0xe8, 0xe4, 0x19, 0x11, 0x39
 	call	16133691
-	ldb_d8	a, 13588
+	ld	a, (13588:16)
 	extz	wa
 	bit	0, wa
 	jr	z, 16
@@ -5223,7 +5223,7 @@ CmpSetP1_GridCheck_Return:
 ; UI component dispatch table - handles cases 0-7 for grid/focus handling
 ; Offset table at 0xe1cef0 selects which handler to run based on WA value
 UI_COMPONENT_DISPATCH:
-	ldb_d8	a, (13371)
+	ld	a, (13371:16)
 	inc	1, a
 	extz	wa
 	pushw	wa
@@ -5234,14 +5234,14 @@ UI_COMPONENT_DISPATCH:
 	lda	xsp, (xsp+10)
 	jrl	138
 UI_COMPONENT_DISPATCH_CASE1:
-	ldb_d8	a, (13362)
+	ld	a, (13362:16)
 	srl	a, 7
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (252406:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	ldb_d8	a, (13372)
+	ld	a, (13372:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (252430:24)
@@ -5254,11 +5254,11 @@ UI_COMPONENT_DISPATCH_CASE1:
 	lda	xsp, (xsp+16)
 	jr	79	; -> 0xF1A845
 UI_COMPONENT_DISPATCH_CASE2:
-	ldb_d8	c, (13389)
+	ld	c, (13389:16)
 	ld	xwa, 252358
 	jr	17
 UI_COMPONENT_DISPATCH_CASE3:
-	ldb_d8	a, (13390)
+	ld	a, (13390:16)
 	srl	a, 4
 	and	a, 1
 	ld	c, a
@@ -5814,7 +5814,7 @@ S2cMemNoBox_CallInherited:
 S2cMemNoBox_HandleScroll:
 	ld	xwa, xiz
 	call	16400380
-	ldb_d8	a, 14579
+	ld	a, (14579:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (14799900:24)
@@ -5990,7 +5990,7 @@ PsS2cTrans_HandleScroll:
 	ld	xwa, (xsp+260)
 	call	16408153
 	ld	xiz, xhl
-	ldb_d8	a, 14578
+	ld	a, (14578:16)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (14800280:24)

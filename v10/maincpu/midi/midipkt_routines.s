@@ -292,7 +292,7 @@ MidiPkt_BuildFromConstant:
 	ld (xde), c
 	ld c, (xwa + 7)
 	ld (xde + 1), c
-	ldb_d8 c, (0x8ee4)
+	ld c, (0x8ee4:16)
 	ld (xde + 2), c
 	ld c, (xwa + 8)
 	ld (xde + 3), c
@@ -696,7 +696,7 @@ MidiPkt_EnqueueExtended_Data:
 	ld	bc, (xbc+4)
 	.byte 0x98
 	push	sr
-	ldb_d8	w, (1198)
+	ld	w, (1198:16)
 	ld	a, (xwa+11)
 	and	a, 15
 	jr	z, 2
@@ -950,7 +950,7 @@ MidiPkt_EnqueueControl_3364:
 	and a, (xbc + 2)
 	cps a, 1
 	jr nz, MidiPkt_EnqueueControl_3364_FormatData
-	ldb_d8 c, (0xfc61)
+	ld c, (0xfc61:16)
 	and c, 0x30
 	ld a, (xde + 11)
 	and a, 0xf
@@ -1001,7 +1001,7 @@ MidiPkt_EnqueueControl_3368:
 	ld xwa, MidiPkt_EventType_Table_0x590
 	lds bc, 6
 	call ArpQueue_Enqueue
-	ldb_d8 a, (0xfd99)
+	ld a, (0xfd99:16)
 	and a, 0x1
 	cps a, 1
 	jr nz, MidiPkt_EnqueueControl_3368_NoPedal
@@ -1211,10 +1211,10 @@ MidiPkt_DispatchData_Chan6:
 	pop	xix
 	pop	xhl
 	pop	xde
-	ldb_d8	a, (0xbcfc)
+	ld	a, (0xbcfc:16)
 	extz	wa
 	jp	SysEx_InitiateSend
-	ldb_d8	a, (0x8d36)
+	ld	a, (0x8d36:16)
 	cp	a, 87
 	jr	z, 11
 	cpdi8	(0x8d34), 1
@@ -1251,7 +1251,7 @@ MidiPkt_SendBankSelect_Send:
 	ret
 
 MidiPkt_SysExValidator_Data:
-	ldb_d8	a, (0x8d36)
+	ld	a, (0x8d36:16)
 	cp	a, 108
 	jr	c, 5
 	cp	a, 118
@@ -1281,7 +1281,7 @@ MidiPkt_SysExValidator_Data:
 	pop	xiz
 	ret
 MidiPkt_SysExProcessor_Data:
-	ldb_d8	a, (0x8d36)
+	ld	a, (0x8d36:16)
 	cp	a, 108
 	jr	c, 5
 	cp	a, 118
