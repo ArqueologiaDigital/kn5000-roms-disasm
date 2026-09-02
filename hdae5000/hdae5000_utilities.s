@@ -1460,93 +1460,93 @@ HDAE5000_Str_LyricForeColorCheck:
 	.asciz "LyricForeColorCheck"
 HDAE5000_Str_LyricJumpEditCheck:
 	.asciz "LyricJumpEditCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_BitmapButt01:
 	.asciz "BitmapButt01"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LanguageTextReturn:
 	.asciz "LanguageTextReturn"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_ErrMsgTimerCatchLBN:
 	.asciz "ErrMsgTimerCatchLBN"
 HDAE5000_Str_ErrMsgTimerCatch:
 	.asciz "ErrMsgTimerCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SeparateBassPartCheck:
 	.asciz "SeparateBassPartCheck"
 HDAE5000_Str_SeparateDrumPartCheck:
 	.asciz "SeparateDrumPartCheck"
 HDAE5000_Str_FlsOverWrSwCatch:
 	.asciz "FlsOverWrSwCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_FlsDel2SwCatch:
 	.asciz "FlsDel2SwCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_FlsDel1SwCatch:
 	.asciz "FlsDel1SwCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_AttenCpToMarkSwCatch:
 	.asciz "AttenCpToMarkSwCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_AttenCpToHDSwCatch:
 	.asciz "AttenCpToHDSwCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_AttenHDFormatSwCatch:
 	.asciz "AttenHDFormatSwCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_AttenDelFileSwCatch:
 	.asciz "AttenDelFileSwCatch"
 HDAE5000_Str_AttenDelDirSwCatch:
 	.asciz "AttenDelDirSwCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_FlsFileLoadSwCatch:
 	.asciz "FlsFileLoadSwCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LBNMdBitCheck:
 	.asciz "LBNMdBitCheck"
 HDAE5000_Str_LBNRcmBitCheck:
 	.asciz "LBNRcmBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LBNMspBitCheck:
 	.asciz "LBNMspBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LBNTmBitCheck:
 	.asciz "LBNTmBitCheck"
 HDAE5000_Str_LBNCmpBitCheck:
 	.asciz "LBNCmpBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LBNSqtBitCheck:
 	.asciz "LBNSqtBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LBNPmtBitCheck:
 	.asciz "LBNPmtBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LBNLswBitCheck:
 	.asciz "LBNLswBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_FileLBNNameCheck:
 	.asciz "FileLBNNameCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LBNLoadSwCatch:
 	.asciz "LBNLoadSwCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LBNPage1SwCatch:
 	.asciz "LBNPage1SwCatch"
 HDAE5000_Str_BitmapHdd_icon:
 	.asciz "BitmapHdd_icon"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_DelTlxEditCheck:
 	.asciz "DelTlxEditCheck"
 HDAE5000_Str_DelMdEditCheck:
 	.asciz "DelMdEditCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_DelRcmEditCheck:
 	.asciz "DelRcmEditCheck"
 HDAE5000_Str_DelMspEditCheck:
 	.asciz "DelMspEditCheck"
 HDAE5000_Str_DelTmEditCheck:
 	.asciz "DelTmEditCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_DelCmpEditCheck:
 	.asciz "DelCmpEditCheck"
 HDAE5000_Str_DelSqtEditCheck:
@@ -1559,64 +1559,64 @@ HDAE5000_Str_DelOptNameCheck:
 	.asciz "DelOptNameCheck"
 HDAE5000_Str_DelOptSwEventCatch:
 	.asciz "DelOptSwEventCatch"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SaveOptSwEventCatch:
 	.asciz "SaveOptSwEventCatch"
 HDAE5000_Str_WrConfirmEventCatch:
 	.asciz "WrConfirmEventCatch"
 HDAE5000_Str_CP_FD_DIRNAMECheck:
 	.asciz "CP_FD_DIRNAMECheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_FlsNamingCheck2:
 	.asciz "FlsNamingCheck2"
 HDAE5000_Str_FlsNamingCheck:
 	.asciz "FlsNamingCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_HdTitleEventCatch:
 	.asciz "HdTitleEventCatch"
 HDAE5000_Str_JumpAfterLoadModeEditCheck:
 	.asciz "JumpAfterLoadModeEditCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_LoadByNumberModeEditCheck:
 	.asciz "LoadByNumberModeEditCheck"
 HDAE5000_Str_QuickLoadModeEditCheck:
 	.asciz "QuickLoadModeEditCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_WriteConfirmEditCheck:
 	.asciz "WriteConfirmEditCheck"
 HDAE5000_Str_WriteProtectEditCheck:
 	.asciz "WriteProtectEditCheck"
 HDAE5000_Str_SfxTlxBitCheck:
 	.asciz "SfxTlxBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SfxMdBitCheck:
 	.asciz "SfxMdBitCheck"
 HDAE5000_Str_SfxRcmBitCheck:
 	.asciz "SfxRcmBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SfxMspBitCheck:
 	.asciz "SfxMspBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SfxTmBitCheck:
 	.asciz "SfxTmBitCheck"
 HDAE5000_Str_SfxCmpBitCheck:
 	.asciz "SfxCmpBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SfxSqtBitCheck:
 	.asciz "SfxSqtBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SfxPmtBitCheck:
 	.asciz "SfxPmtBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SfxLswBitCheck:
 	.asciz "SfxLswBitCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_FileOptNameCheck:
 	.asciz "FileOptNameCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SaveOptNameCheck:
 	.asciz "SaveOptNameCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_SeparateOutputModeCheck:
 	.asciz "SeparateOutputModeCheck"
 HDAE5000_Str_PC_DATA_LINK_PAGE:
@@ -1625,10 +1625,10 @@ HDAE5000_Str_HDD_UTIL_PAGE:
 	.asciz "HDD_UTIL_PAGE"
 HDAE5000_Str_HDD_DIRNAMECheck:
 	.asciz "HDD_DIRNAMECheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_HDDNamingCheck:
 	.asciz "HDDNamingCheck"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Str_HardTestPage:
 	.asciz "HardTestPage"
 	.byte 0x00
@@ -1636,6 +1636,6 @@ HDAE5000_ParamStr_ListBox_End:
 	.zero 2
 HDAE5000_ParamStr_ListBox_sel_type:
 	.asciz "sel_type"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_ParamStr_ListBox_en_paradraw:
 	.ascii "en_par"

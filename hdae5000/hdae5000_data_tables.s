@@ -6415,7 +6415,7 @@ HDAE5000_RECORD_COUNT:	; 0x29D97E
 	;           "HDDMENU", class 016A:0002 TtlScreenRProc, 52 bytes,
 	;           box 0,0-319,239, caption "HD-AE5000" at +0x2A.
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 
 HDAE5000_UI_Descriptors:	; 0x29DC14
 	; MISNOMER retained for cross-reference: this is NOT the start of
@@ -7018,7 +7018,7 @@ HDAE5000_UI_Descriptors:	; 0x29DC14
 	.byte 0x01
 	.byte 0x00
 	.byte 0x02
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 
 HDAE5000_UI_Page_Titles:	; 0x29DF8A
 	; MISNOMER retained for cross-reference (the ASL mirror, the symbols
@@ -26222,7 +26222,7 @@ HDAE5000_Credits:	; 0x2A477C
 	.byte 0xff
 	.zero 3
 	.byte 0x01
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 
 HDAE5000_Demo_Data:	; 0x2A5634
 	; MISNOMER retained for cross-reference.  RETRACTED: "Demo song data and
@@ -31425,7 +31425,7 @@ HDAE5000_Dir_Strings:	; 0x2E2500
 	.zero 2
 	.ascii "   :                "
 	.byte 0x09
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 
 HDAE5000_Char_Tables:	; 0x2E2E76
 	; Character set tables
@@ -32242,7 +32242,7 @@ HDAE5000_UI_Icons:	; 0x2E365D
 	.asciz "LANDEU00"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "LANFRA00"
-	.byte 0x00
+	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 
 HDAE5000_Multilingual_Messages:	; 0x2E3704
 	; Trilingual UI messages (EN/DE/FR)

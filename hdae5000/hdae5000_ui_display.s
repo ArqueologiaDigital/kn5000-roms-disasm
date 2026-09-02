@@ -15960,55 +15960,78 @@ HDAE5000_PPORT_Ptrs:	; 295412h
 	.long PPORT_Utility_2
 	.long PPORT_Utility_3
 
+; -----------------------------------------------------------------------------
+; PPORT status/menu string table -- FIXED 24-BYTE RECORD STRIDE, PROVEN BY THE
+; CONSUMER, not just by how the strings happen to be padded.
+;
+; 23 records, 0x29541E-0x29562A(+len): 20 numbered "NN>Description" command
+; strings (22 chars, space-padded, .asciz -> 23B + one closing .byte 0x00 pad
+; = 24B/record), 2 irregular 22-byte flash-result continuations of command 20
+; ("End flash right"/"End flash false", .ascii + a literal 0x09 TAB, two
+; spaces and a NUL instead of the usual pad -- same 22-char field width,
+; different filler bytes), then a final 24-byte "Error : Wrong Dll Ver"
+; record back on the regular pad.
+;
+; EVIDENCE: HDAE5000_Code_2_PartB's PPORT command handlers load a status
+; string via `lda_24 xbc, (0x2954xx/0x2955xx)` before every
+; HDAE5000_Display_String call. There are 23 such literals in this file, one
+; per record, and ALL 23 land exactly on a record start computed
+; independently from these lines' own linked addresses (get_lprobe_addrs.py) --
+; including both irregular 22-byte records and the trailing "Error" one.
+; Reproduce: hdae5000/tools/verify_pport_strings_stride.py (23/23 PASS).
+; This makes each `.byte` below a proven per-record terminator/pad, not
+; unexplained filler: shortening or lengthening any string here (other than
+; swapping its trailing spaces) would desync every one of those 23 call sites.
+; -----------------------------------------------------------------------------
 HDAE5000_PPORT_Strings:	; 29541Eh
 	; PPORT command menu strings (21 null-terminated strings)
 	; Format: "NN>Description" where NN = command number
 	.asciz "01>Send Infos About HD"
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "02>Exit PPORT         "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "03>Read FSB from HD   "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "04>Sending FSB to PC  "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "05>Rcv FSB from PC    "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "06>Writing FSB to HD  "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "07>Load HD to Memory  "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "08>Send data to PC    "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "09>Sending files to PC"
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "10>Rcv data from PC   "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "11>Save memory to HD  "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "12>nothing            "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "13>Rcv data from PC   "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "14>Sending infos to PC"
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "15>nothing            "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "16>Delete files       "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "17>Formating HD       "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "18>Switch HD-motor off"
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "19>nothing            "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.asciz "20>Send XapFile flash "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 	.ascii "20>End flash right"
-	.byte 0x09, 0x20, 0x20, 0x00
+	.byte 0x09, 0x20, 0x20, 0x00          ; 22B record filler: TAB + 2 spaces + NUL (record start 0x2955FE is a direct call-site literal, see header above)
 	.ascii "20>End flash false"
-	.byte 0x09, 0x20, 0x20, 0x00
+	.byte 0x09, 0x20, 0x20, 0x00          ; 22B record filler: TAB + 2 spaces + NUL (record start 0x295614 is a direct call-site literal, see header above)
 	.asciz "Error : Wrong Dll Ver "
-	.byte 0x00
+	.byte 0x00                            ; record terminator (24B stride; see header above)
 
 ; ============================================================================
 ; CODE SECTION 2 PART B (0x295642 - 0x2FFFFF)
@@ -22076,7 +22099,7 @@ HDAE5000_Display_String_Render:	; 0x298622 (cross-reference from Display_Init)
 	.ascii "2.21                    "
 	.ascii "TECHNICS KN5000                                 "
 	.ascii "Juli-Oktober 1996XXXXXXXX"
-	.byte 0x1b, 0x1c, 0x1f
+	.byte 0x1b, 0x1c, 0x1f                ; non-ASCII control bytes inside the confirmed-data version/reference-digit block documented above (0x2999B2-0x299AE6) -- not code, individual meaning not determined
 	.ascii "\"VE \""
 	.ascii "E12345678910111213141516171819202122232425ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw #.-,;:_portuoirutoiurtUPOTRUJRNGERIUT7457890CVNB"
 	lda xsp, (xsp - 74)
