@@ -23,15 +23,21 @@ referring context must be graded separately; that is `--refsites`.
 
 THE NULL
 --------
-`--null` measures the same rate over the three images independently established
-as PURE DATA (`table_data`, `custom_data` IC19, `prom_d`).  A control-transfer
-hit on a data region there can only be a false positive.  The census's
-name-based flag scores 4.7% there; this reference-based flag should score far
-lower if it carries the stronger signal claimed for it.
+The tempting null -- the same rate over the three images established as PURE
+DATA (`table_data`, `custom_data` IC19, `prom_d`) -- is WORTHLESS HERE and this
+script does not offer it.  Those images contain no instruction statements at
+all, so no control transfer can exist in them to be counted: the rate is ZERO
+BY CONSTRUCTION whatever the flag is worth.  That is exactly the defect that
+got the "46x undecodable leading byte" finding retracted, and the pure-data
+columns printed by --census are labelled so nobody reads them as a null.
+
+The real null is in `code_suspect_adjudicate.py --null`: the C-compiled
+`.incbin` regions INSIDE the same code-bearing images, which are data on an
+authority independent of every decoder and framing judgement here.  It scores
+0 of 11,179, with the numeric-transfer confound checked at 0 of 711.
 
 RUN
     python3 scripts/analysis/code_suspect_sites.py --census
-    python3 scripts/analysis/code_suspect_sites.py --null
     python3 scripts/analysis/code_suspect_sites.py --refsites   # per-site detail
     python3 scripts/analysis/code_suspect_sites.py --json out.json
 
@@ -279,11 +285,13 @@ def main():
         b = sum(x["bytes"] for x in s)
         e = sum(1 for x in s if x["nrefs_external"])
         print("  %-10s %8d %10d %8d%s" % (
-            key, len(s), b, e, "   <- PURE-DATA NULL" if key in PURE_DATA else ""))
+            key, len(s), b, e,
+            "   <- 0 BY CONSTRUCTION, not a null: no instructions here"
+            if key in PURE_DATA else ""))
         if key not in PURE_DATA:
             tot_s += len(s)
             tot_b += b
-    print("  %-10s %8d %10d" % ("TOTAL(non-null)", tot_s, tot_b))
+    print("  %-10s %8d %10d" % ("TOTAL", tot_s, tot_b))
     if jsonout:
         json.dump(allsites, open(jsonout, "w"))
         print("  wrote %s" % jsonout)
