@@ -450,6 +450,37 @@ def splice(b, hta, htb):
     lines = raw.decode("utf-8").split("\n")
     per = render(b, hta, htb)
 
+    # A round-1 band header states, for the WHOLE band, that everything not
+    # reachable "stays .incbin".  That is no longer true of these two bands, so
+    # the header is annotated in place rather than left to mislead the reader.
+    BANDS = {
+        "; === COVER-R1 0xF283A7-0xF28802 ===":
+            "; ⚠ AMENDED 2026-09-02 (lane promB5, notes/gen_promB5_spans.py).  Of the 687 B\n"
+            "; this band left `.incbin`, 598 are now typed data -- two bitmaps, eleven\n"
+            "; interpreter-B records and ten operand tables; 44 B more were closed earlier\n"
+            "; by notes/gen_prom_b_dl_shape1_gap_f286f9.py, leaving 45 B at 0xF286CC.\n"
+            "; Round 1 reached each object's FIRST byte through a 32-bit pointer and\n"
+            "; stopped there; the display-list handler that consumes the pointer also\n"
+            "; fixes the object's SIZE, which is what closes them.",
+        "; === COVER-R1 0xF34C6E-0xF34D98 ===":
+            "; ⚠ AMENDED 2026-09-02 (lane promB5, notes/gen_promB5_spans.py): 224 of the 243 B\n"
+            "; this band left `.incbin` are now typed data -- the 16x6 and 16x8 operand\n"
+            "; arrays that the two interpreter-B records just above them point at.  7 B at\n"
+            "; 0xF34C9B remain; the other 12 were closed by gen_prom_b_f34ca2_fix_module.py.",
+    }
+    for anchor, note in BANDS.items():
+        i = [k for k, t in enumerate(lines) if t == anchor]
+        if len(i) != 1:
+            raise SystemExit("expected 1 %r, found %d" % (anchor, len(i)))
+        lines = lines[:i[0] + 1] + note.split("\n") + lines[i[0] + 1:]
+
+    # and the per-span "not converted" markers the round-1 emitter left behind
+    for lo, hi, _it in SPANS:
+        stale = "; --- 0x%06X-0x%06X: not converted ---" % (lo, hi - 1)
+        for k, t in enumerate(lines):
+            if t == stale:
+                lines[k] = ("; --- 0x%06X-0x%06X: CONVERTED 2026-09-02, lane promB5 "
+                            "(notes/gen_promB5_spans.py) ---" % (lo, hi - 1))
     # spans 1 and 2 also replace the round-1 header + the 1 byte it typed
     HEADER_ANCHOR = {
         0xF283A7: "; Data_F283A7 -- 1 bytes, EMITTED AS DATA (not promoted to code).",
