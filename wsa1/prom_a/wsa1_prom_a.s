@@ -38292,7 +38292,8 @@ sub_F96023:   ; entry: prom_b routine directory
 	ld (XIX+0x2c00),0xff                                 ; F96145  f3 f1 00 2c 00 ff
 	stw_da (0x60f000), ix                                ; F9614B  f2 00 f0 60 54
 	ret                                                  ; F96150  0e
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x016151, 0x000021
+IndexTable_F96151:   ; 32 sequential bytes + 0xFF terminator, read by sub_F96062's helper (0xF960FE) via a linear scan against D
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0xff   ; F96151
 sub_F96172:   ; entry: reachable-run entry
 	cps e, 0x00                                          ; F96172  cd d8
 	jr z, .LF9619F                                       ; F96174  66 29
