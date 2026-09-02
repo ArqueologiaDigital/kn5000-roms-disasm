@@ -92,6 +92,9 @@ gate-wsa1:
 	cd wsa1 && python3 scripts/analysis/assert_byte_identical.py
 
 gate-all: gate gate-wsa1
+	@# A stale object compares green forever: assert the assembler is a
+	@# prerequisite of every image before believing either byte gate.
+	python3 scripts/analysis/assert_toolchain_is_a_prerequisite.py
 
 # LLVM build targets (primary)
 llvm-all: rebuilt_ROMs/kn5000_v10_program.llvm.rom rebuilt_ROMs/kn5000_v9_program.llvm.rom rebuilt_ROMs/kn5000_v7_program.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142.llvm.rom rebuilt_ROMs/kn5000_subprogram_v142_compressed.rom rebuilt_ROMs/kn5000_subcpu_boot.llvm.rom rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom rebuilt_ROMs/kn5000_table_data.llvm.rom rebuilt_ROMs/kn5000_custom_data.llvm.rom

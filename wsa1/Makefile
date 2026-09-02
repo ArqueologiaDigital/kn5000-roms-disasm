@@ -72,7 +72,7 @@ images-rewrite:
 
 all: rebuilt_ROMs/wsa1_prom_a.llvm.rom rebuilt_ROMs/wsa1_prom_b.llvm.rom rebuilt_ROMs/wsa1_prom_c.llvm.rom rebuilt_ROMs/wsa1_prom_d.llvm.rom
 
-rebuilt_ROMs/wsa1_prom_a.llvm.o: prom_a/wsa1_prom_a.s $(COMMON_INC) $(KERNEL_SRC) $(MAINCPU_SHARED) $(DSP_SRC)
+rebuilt_ROMs/wsa1_prom_a.llvm.o: prom_a/wsa1_prom_a.s $(COMMON_INC) $(KERNEL_SRC) $(MAINCPU_SHARED) $(DSP_SRC) $(LLVM_MC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_a -o $@ $<
 
@@ -82,7 +82,7 @@ rebuilt_ROMs/wsa1_prom_a.llvm.elf: rebuilt_ROMs/wsa1_prom_a.llvm.o prom_a/prom_a
 rebuilt_ROMs/wsa1_prom_a.llvm.rom: rebuilt_ROMs/wsa1_prom_a.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-rebuilt_ROMs/wsa1_prom_b.llvm.o: prom_b/wsa1_prom_b.s $(COMMON_INC) $(MAINCPU_SHARED)
+rebuilt_ROMs/wsa1_prom_b.llvm.o: prom_b/wsa1_prom_b.s $(COMMON_INC) $(MAINCPU_SHARED) $(LLVM_MC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_b -o $@ $<
 
@@ -92,7 +92,7 @@ rebuilt_ROMs/wsa1_prom_b.llvm.elf: rebuilt_ROMs/wsa1_prom_b.llvm.o prom_b/prom_b
 rebuilt_ROMs/wsa1_prom_b.llvm.rom: rebuilt_ROMs/wsa1_prom_b.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
-rebuilt_ROMs/wsa1_prom_c.llvm.o: $(PROM_C_SRC) $(COMMON_INC) $(KERNEL_SRC) $(DSP_SRC)
+rebuilt_ROMs/wsa1_prom_c.llvm.o: $(PROM_C_SRC) $(COMMON_INC) $(KERNEL_SRC) $(DSP_SRC) $(LLVM_MC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_c -o $@ $<
 
@@ -109,7 +109,7 @@ rebuilt_ROMs/wsa1_prom_c.llvm.rom: rebuilt_ROMs/wsa1_prom_c.llvm.elf
 PROM_D_PARTS = prom_d/tone_database_directory.s prom_d/tone_database_records.s \
                prom_d/tone_database_aux.s
 
-rebuilt_ROMs/wsa1_prom_d.llvm.o: prom_d/wsa1_prom_d.s $(PROM_D_PARTS) $(COMMON_INC)
+rebuilt_ROMs/wsa1_prom_d.llvm.o: prom_d/wsa1_prom_d.s $(PROM_D_PARTS) $(COMMON_INC) $(LLVM_MC)
 	@mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I . -I prom_d -o $@ $<
 
