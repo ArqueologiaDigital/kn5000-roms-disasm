@@ -4,6 +4,24 @@ Result of an eleven-lane parallel push across all 13 gated images. **The byte
 gate is green: 13/13 byte-identical, 8/8 KN5000 images assembling with the
 pinned toolchain**, re-run centrally on `main` after every merge.
 
+## ★ A LEAD NOBODY HAS FOLLOWED: 13 control transfers into IC19's window
+
+The `tier2byte` lane established that **custom_data (IC19) is a pure data ROM**
+— a claim it attacked rather than assumed, because IC19 *is* CPU-fetchable
+(`kn5000.cpp:152`), so the claim is not true by construction. All 206
+references LOAD its address; `llvm-mc` emits 0 instruction statements from its
+source against 36,391 for HD-AE5000; and a spike of proven code scores
+3.39–3.61 inside IC19's own address space against its 1.11 ceiling.
+
+⚠ **But 13 control transfers into IC19's address window DO exist**, in
+`v10/maincpu/sequencer/accompaniment_engine.s` and its v9 twin — and **all 13
+sit inside `.byte`-adjacent misframes**. That lane did not touch them.
+
+Either those 13 are more mis-framed data (the likely reading, and it would
+strengthen the pure-data verdict), or IC19 has an entry path nobody has found.
+Both are worth one lane's attention, and the second would be a significant
+correction. Start from the 13 sites, not from IC19.
+
 ## ⚠⚠ RETRACTED THE SAME DAY: "v10's leftover `.byte` runs are undecoded code"
 
 I measured that v10 starts a `.byte` run with one of `{01,04,17,1a,1c}` — five
