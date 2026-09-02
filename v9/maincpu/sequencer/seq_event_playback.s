@@ -2523,9 +2523,30 @@ AccPlay_NoteAllocRet:
 
 AccPlay_NoteParamTable:
 	.zero 8
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x11, 0x00
-	.byte 0x01, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x00, 0x00
+	nop
+	nop
+	nop
+	nop
+	normal
+	nop
+	scf
+	nop
+	normal
+	nop
+	scf
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	nop
+	normal
+	pop sr
+	nop
+	nop
 	.zero 8
 	.byte 0x00, 0x00, 0x00, 0x00, 0x01, 0x11, 0x11, 0x00
 
@@ -3870,25 +3891,16 @@ VocalistGrid_DispatchData:
 	ld	ix, bc
 	add	ix, wa
 	lda_24	xde, (MidiPart_OctaveStr_m2_0x4)
-	.byte 0xe3
-	reti
-	cp	xwa, xwa
-	ldb	w, 232
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xwa, xde, ix
+	cp xwa, 4294967295
 	jrl	z, 1571
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
-	.byte 0xe3
-	reti
-	or	xix, xwa
-	ldb	w, 217
-	sub	(xbc-38), xde
+	ld_rrl xwa, xde, bc
+	lds bc, 1
+	lds de, 2
 	jr	102
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3905,7 +3917,7 @@ VocalistGrid_DispatchData:
 	ld	(xhl+2), bc
 	.byte 0x93
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	z, 7
 	.byte 0x93
@@ -3920,35 +3932,21 @@ VocalistGrid_DispatchData:
 	ld	ix, bc
 	add	ix, wa
 	lda_24	xde, (MidiPart_OctaveStr_m2_0x4)
-	.byte 0xe3
-	reti
-	cp	xwa, xwa
-	ldb	w, 232
-	.byte 0xcf
-	swi	7
-	swi	7
-	swi	7
-	swi	7
+	ld_rrl xwa, xde, ix
+	cp xwa, 4294967295
 	jrl	z, 1468
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
-	.byte 0xe3
-	reti
-	or	xix, xwa
-	ldb	w, 49
-	swi	7
-	swi	7
+	ld_rrl xwa, xde, bc
+	ldw bc, 65535
 	lds	de, 2
 	call	MainLswAdd
 	jrl	1442
 	ld	(xsp+4), xbc
 	ld	xhl, xiy
-	.byte 0xb5
-	push	sr
-	nop
-	nop
+	ldw (xiy), 0
 	ld	xix, (xsp+8)
 	ld	xiz, xde
 	ld	xiy, xde
@@ -3962,10 +3960,10 @@ VocalistGrid_DispatchData:
 	jr	nz, 4
 	lds	bc, 1
 	jr	19
-	.byte 0xd7, 0xe6
-	incm8	4, (xwa-40)
-	.byte 0xd7, 0xe6
-	ld	wa, (xwa-91)
+	ld wa, qbc
+	inc 4, wa
+	ld qbc, wa
+	ld xwa, (xiy)
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xe6, 0xf0
@@ -3996,14 +3994,9 @@ VocalistGrid_DispatchData:
 	.long MidiPart_ColWidthData
 	ld	wa, (xwa)
 	lda_24	xix, (VocalistGrid_DispatchData_0x160)
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xe0
-	adc	bc, wa
-	ldb	w, 216
-	.byte 0xcf
-	rcf
-	nop
+	jp_rr 8, xix, wa
+	ld wa, (xbc)
+	cp wa, 16
 	jr	z, 13
 	cp	wa, 17
 	jr	nz, 25
@@ -4059,10 +4052,8 @@ VocalistGrid_DispatchData:
 	ld	wa, (xbc)
 	sla	wa, 2
 	lda_24	xbc, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
+	ld_rrl xwa, xbc, wa
+	push xwa
 	pushw	231
 	pushw	0xef1c
 	ld	xwa, (xsp+16)
@@ -4135,28 +4126,21 @@ VocalistGrid_DispatchData:
 	divs	wa, 12
 	sla	wa, 2
 	lda_24	xhl, (MidiPart_OctaveTable)
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	w, 56
+	ld_rrl xwa, xhl, wa
+	push xwa
 	exts	xde
 	divs	de, 12
-	.byte 0xd7
-	ld	xwa, xde
+	ld wa, qde
 	sla	wa, 2
 	lda_24	xde, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	or	xwa, xwa
-	ldb	w, 56
+	ld_rrl xwa, xde, wa
+	push xwa
 	and	bc, 128
 	sra	bc, 7
 	sla	bc, 2
 	lda_24	xwa, (MidiPart_PageStr_1of3_0x50)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	w, 56
+	ld_rrl xwa, xwa, bc
+	push xwa
 	pushw	231
 	pushw	0xef7c
 	ld	xwa, (xsp+24)
@@ -4282,10 +4266,8 @@ VocalistGrid_CheckDispData:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	pushw	231
 	pushw	0xefcc
 	lda	xwa, (xsp+28)
@@ -4361,30 +4343,23 @@ VocalistGrid_CheckDispData:
 	divs	hl, 12
 	sla	hl, 2
 	lda_24	xbc, (MidiPart_OctaveTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xbc, hl
+	push xwa
 	ld	xwa, 0x2d0d
 	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
-	.byte 0xd7
-	ld	xwa, xiz
+	ld wa, qhl
 	sla	wa, 2
 	lda_24	xbc, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
+	ld_rrl xwa, xbc, wa
+	push xwa
 	ld	xwa, 0x2d0e
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (MidiPart_PageStr_1of3_0x50)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	pushw	231
 	pushw	0xf02c
 	lda	xwa, (xsp+36)
@@ -4402,30 +4377,23 @@ VocalistGrid_CheckDispData:
 	divs	hl, 12
 	sla	hl, 2
 	lda_24	xbc, (MidiPart_OctaveTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xbc, hl
+	push xwa
 	ld	xwa, 0x2d11
 	call	SndParam_LookupReadOnly
 	exts	xhl
 	divs	hl, 12
-	.byte 0xd7
-	ld	xwa, xiz
+	ld wa, qhl
 	sla	wa, 2
 	lda_24	xbc, (MidiPart_NoteNameTable)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 56
+	ld_rrl xwa, xbc, wa
+	push xwa
 	ld	xwa, 0x2d12
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda_24	xwa, (MidiPart_PageStr_1of3_0x50)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xwa, hl
+	push xwa
 	pushw	231
 	pushw	0xf034
 	lda	xwa, (xsp+36)

@@ -58,7 +58,7 @@ NakaWidget_SoundMenu_PageControl:
 
 NakaMenuItem_PartSetting:
 	naka_header NAKA_TYPE_MENU_ITEM
-	.byte 0x06, 0x00
+	di
 	.short 0xffff, 0x8
 	.short 0xffff, 0x8
 	.short 0x8, 0x1e
@@ -207,12 +207,12 @@ NakaMenuItem_AcousticIllusion:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	ei	0
-	.byte 0xff			; padding
-	.byte 0xff			; padding
+	swi 7
+	swi 7
 	rcf
-	.byte 0x00			; padding
+	nop
 	ret
-	.byte 0x00			; padding
+	nop
 	ldio	0, 163
 	.byte 0x00			; padding
 	.byte 0xc6
@@ -234,7 +234,7 @@ NakaMenuItem_AcousticIllusion:
 	.byte 0x00			; padding
 	.byte 0x00			; padding
 	incf
-	.byte 0x00			; padding
+	nop
 	.long 0x3e67e
 	.long MenuStr_AcousticIllusion
 	.byte 0x0e, 0x00, 0xa0, 0x01, 0x92, 0x00, 0x00, 0x00
@@ -285,15 +285,15 @@ NakaMenuItem_TechniChord:
 
 	naka_header NAKA_TYPE_MENU_ITEM
 	scf
-	.byte 0x00			; padding
-	.byte 0xff			; padding
-	.byte 0xff			; padding
-	.byte 0xff			; padding
-	.byte 0xff			; padding
+	nop
+	swi 7
+	swi 7
+	swi 7
+	swi 7
 	ccf
-	.byte 0x00			; padding
+	nop
 	ldio	0, 163
-	.byte 0x00			; padding
+	nop
 	jrl	le, 14080
 	normal
 	.byte 0x8b, 0x00, 0xf7

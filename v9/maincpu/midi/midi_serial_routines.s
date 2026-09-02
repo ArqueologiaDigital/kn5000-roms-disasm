@@ -911,14 +911,14 @@ MidiSerial_OffsetTable:
 	nop
 	nop
 	nop
-	.byte 0x00	; MIDI
 	nop
 	nop
 	nop
-	.byte 0x01	; MAC
 	nop
-	.byte 0x02	; PC1
-	.byte 0x03	; PC2
+	normal
+	nop
+	push sr
+	pop sr
 	nop
 
 SC0Init_ClearContextSlots:

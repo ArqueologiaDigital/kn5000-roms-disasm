@@ -401,7 +401,7 @@ def main():
     if args.apply:
         if not R.verify():
             sys.exit("REJECTED: rebuilt image differs from the ROM")
-        print("VERIFIED: rebuilt v10 image is byte-identical to the ROM")
+        print("VERIFIED: rebuilt %s image is byte-identical to the ROM" % R.IMAGE)
 
 
 if __name__ == "__main__":

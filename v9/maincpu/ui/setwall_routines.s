@@ -103,12 +103,8 @@ SetWall_InlineCodeBlock:
 	xor	w, w
 	ldb_d8	a, (3295)
 	ld	iy, wa
-	.byte 0xc3
-	reti
-	cp	xix, xix
-	ldb	a, 201
-	.byte 0xcf
-	decf
+	ld_rrb a, xhl, iy
+	cp a, 13
 	jr	z, 17
 	cp	a, 16
 	jr	z, 12
@@ -612,12 +608,9 @@ SetWall_InlineCodeBlock2:
 	ld	iy, wa
 	push	xde
 	ld	xde, 0xf1a0
-	.byte 0xc3
-	reti
-	cp	xix, xwa
-	ldb	a, 90
-	.byte 0xc1
-	jrl	ule, -3800
+	ld_rrb a, xde, iy
+	pop xde
+	cpda8 xbc, (10355)
 	jr	nz, 4
 	jp	SetWall_InlineCodeBlock2_0x5E
 	ldb_d8	a, (0x2873)
@@ -625,25 +618,15 @@ SetWall_InlineCodeBlock2:
 	ld	iy, wa
 	push	xde
 	ld	xde, SetWall_InlineCodeBlock_0xCD
-	.byte 0xc3
-	reti
-	cp	xix, xwa
-	ldb	c, 193
-	.byte 0xdf
-	incf
-	ldb	a, 216
-	.byte 0x8d
+	ld_rrb c, xde, iy
+	ldb_d8 a, (3295)
+	ld iy, wa
 	ld	xde, 0xf1a0
-	.byte 0xc3
-	reti
-	cp	xix, xwa
-	ldb	a, 216
-	.byte 0x8d
+	ld_rrb a, xde, iy
+	ld iy, wa
 	ld	xde, SetWall_InlineCodeBlock_0xCD
-	.byte 0xc3
-	reti
-	cp	xix, xwa
-	ldb	a, 90
+	ld_rrb a, xde, iy
+	pop xde
 	and	a, c
 	cps	a, 0
 	jr	z, 2
@@ -671,7 +654,7 @@ SetWall_CrossTypeChange:
 SetWall_SlotTypeMap:
 	nop
 	push	sr
-	.byte 0x01
+	normal
 	reti
 	ldio	9, 10
 	pushw	1284
@@ -1937,7 +1920,7 @@ SetWall_InlineCodeBlock3:
 	.byte 0xc1, 0xa7
 	pushw	wa
 	push	xiz
-	.byte 0x04
+	max
 	ldw_da	wa, (0xffec)
 	stda16	(0xf19e), wa
 	push	xix
@@ -1951,11 +1934,10 @@ SetWall_InlineCodeBlock3:
 	xor	bc, bc
 	ldb_d8	c, (0x286b)
 	ldb_d8	a, (0x286c)
-	.byte 0xf3
-	reti
-	.byte 0xf0, 0xe4
-	ld	xbc, 0xcfd961d9
-	ldwio	0, 0xdf61
+	st_rrb a, xix, bc
+	inc 1, bc
+	cp bc, 10
+	jr lt, -33
 	popw	bc
 	pop	xix
 	ret
@@ -2020,13 +2002,9 @@ SetWall_MiscDataAndCode:
 	push	xwa
 	xor	xwa, xwa
 	ldb_d8	a, (0x286b)
-	.byte 0xc2, 0xe3
-	swi	7
-	nop
-	stb_d8	(1902), d
-	.byte 0x50, 0xf2
-	nop
-	nop
+	cpda8_24 xbc, (65507)
+	jr nz, 7
+	ld xix, 62032
 	jr	16
 	ld	xix, 0x0ab000
 	sla	xwa, 11
@@ -2034,12 +2012,9 @@ SetWall_MiscDataAndCode:
 	add	xix, 208
 	xor	xbc, xbc
 	xor	de, de
-	.byte 0xc3
-	reti
-	.byte 0xf0, 0xe8
-	ldb	a, 201
-	ldw	hl, 0x6607
-	decf
+	ld_rrb a, xix, de
+	bit 7, a
+	jr z, 13
 	push	xbc
 	push	xde
 	push	xix
@@ -2070,13 +2045,8 @@ SetWall_MiscDataAndCode:
 	.byte 0xe7
 	ldw	ix, 0xdaa8
 	incm8	1, (xwa-40)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	c, 219
-	.byte 0xcf
-	swi	7
-	swi	7
+	ld_rrw hl, xix, wa
+	cp hl, 65535
 	jr	z, 55
 	push	xhl
 	.byte 0xe7
@@ -2093,7 +2063,7 @@ SetWall_MiscDataAndCode:
 	.byte 0xe7
 	ldw	ix, 0xe761
 	ldw	ix, 7428
-	.byte 0x04
+	max
 	push	sr
 	.byte 0xf2, 0xe7
 	ldw	ix, 0xe105

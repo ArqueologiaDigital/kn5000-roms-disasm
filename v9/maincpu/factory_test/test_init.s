@@ -321,7 +321,7 @@ CreateRunFDOp_Entry:
 	lda xsp, (xsp - 16)
 	lda_24 xwa, (FDTest_String_TestTitleFunc_0xFA)
 	calr FDTest_PrintDiag
-	.byte 0xbf, 0x00, 0x02, 0x00, 0x00	; ldw (xsp + 0), 0x0 (force d8 displacement)
+	ldw (xsp+256), 0
 	ldw (xsp + 6), 0xe0
 	ldw (xsp + 2), 0x0
 	ldw (xsp + 4), 0x0
