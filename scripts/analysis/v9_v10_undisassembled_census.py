@@ -90,6 +90,101 @@ MEASURED 2026-08-22, repo at 43be47d, llvm-mc 21.0.0git, MAME unidasm:
   Correcting for the rule's 82.5% byte-weighted sensitivity puts the true figure
   near 27 KB per revision.
 
+v7 MEASURED 2026-09-02 (lane V7CODE, w2/v7code) -- the debt inventory's own words
+were "v7: NOT MEASURED in this shape", even though TAGS above already listed it and
+a 2026-08-22 run had left a raw 276,423 B figure in the table above with no
+hand-audit or corroboration behind it. This is that missing measurement, done
+properly: --prepare/--census/--judge/--islands run DIRECTLY on v7 (this script
+already treats it as a first-class tag; nothing needed adapting there), plus one
+addition -- calibrate()'s CODE-control sampler assumed every candidate region size
+fits inside SOME >=300 B contiguous CODE run, true for v9/v10 (~48% CODE) but not
+for v7 (~30% CODE, far more fragmented: longest CODE run 5,362 B against a few
+region sizes up to 9,112 B). Fixed by drawing `sz` only from a per-kind USABLE pool
+(sizes with at least one long-enough run/incbin); inert for v9/v10 since their pool
+already equals the full pool.
+
+    python3 v9_v10_undisassembled_census.py --prepare /scratch && --census v7
+    python3 v9_v10_undisassembled_census.py --calibrate v7 --work /scratch
+    python3 v9_v10_undisassembled_census.py --judge v7 --work /scratch
+    python3 v9_v10_undisassembled_census.py --islands v7 --max-island 63 --work /scratch
+
+  --calibrate v7: CODE control fires 71.3% / 79.5% byte-weighted (matches v9's
+  71.3%/82.5% almost exactly -- the rule's SENSITIVITY is stable across images).
+  DATA control (.incbin interiors) fires 15.7% / 11.7% byte-weighted -- v9's was
+  1.0%/0.2%. v7's incbins are noisier for this rule (romslice transplants and
+  other non-C-compiled content score more CODE-like than v9/v10's clang-emitted
+  struct tables do), so a v7 "hit" needs MORE external corroboration than a v9
+  one before it can be trusted, not less.
+
+  --judge v7, before any conversion:
+        1,312 non-.incbin DATA regions >= 64 B, 396,215 B
+        rule fires (CODE-like):  797 regions, 247,603 B  <- confirmed candidate
+        rule silent (DATA-like): 515 regions, 148,612 B  <- not claimed as debt,
+                                 but the rule's ~80% sensitivity means some of
+                                 v7's real code-as-.byte likely still hides here
+        ends EXACTLY on ret/reti/jp: hits 44% vs non-hits 26% (v9: 40% vs 25%,
+                                 same direction, comparable strength)
+
+  --islands v7 --max-island 63 (the <64 B shape judge() cannot see, same
+  definition as v9/v10's "second shape" above -- NB the unbounded default
+  --max-island reported 238,113 B for v7 because v7's small isolated .byte
+  islands are dominated by MULTI-instruction blocks rather than single
+  mis-spelled instructions, which would DOUBLE-COUNT most of the >=64 B judge()
+  regions; --max-island 63 is required to keep the two measurements disjoint):
+        2,268 CODE-flanked runs, 28,219 B raw; first-instruction union 7,365 B
+
+  COMBINED, v7's code-as-.byte debt before this session's conversions:
+        247,603 (confirmed, >=64 B) + 28,219 (short islands) = 275,822 B
+  -- the number nobody had, against v7's already-published 123,927 B VERBATIM
+  debt (a completely different, non-overlapping category: romslices/*.bin
+  transplants, not code spelled as .byte).
+
+  Because v7's DATA-control false-positive rate is ~15x v9's, the 247,603 B
+  figure needed corroboration the byte gate cannot give BEFORE spending any
+  conversion budget on it, so scripts/analysis/v7_judged_call_corroboration.py
+  disassembled the ORIGINAL (unmodified) bytes of all 797 hit regions and
+  checked every absolute `call` target against symbols/maincpu_v7_symbols_
+  reference.txt as it stood before this session touched anything:
+        1,048 distinct absolute call targets, 788 hit / 260 miss = 75% resolve
+        to an already-named routine (v9/v10's own conversion-time check found
+        70%) -- e.g. one region calls 44/44 distinct targets that are ALL
+        pre-existing names (TaskSched_*, SeqBuf_*, TempoRingBuf_*, Vga_*,
+        SwbtWr_*, RhythmBuf_*), the opposite shape from the HD-AE5000 version-
+        string illusion, whose fabricated labels referenced NOTHING external.
+
+  CONVERTED this session, via scripts/converters/convert_region_v7.py (a
+  single-tree adaptation of convert_region.py -- v7 has no v9/v10-style sibling
+  to cross-check bytes against, and the parser was extended to preserve an
+  INTERIOR label instead of aborting, since several of the best-corroborated
+  regions cross a named entry point mid-block):
+        8 regions, 10,890 B addressed, 9,681 B (88.9%) converted to real
+        instructions, 1,209 B left as smaller residual .byte (unmapped
+        mnemonic forms), all in maincpu/display/scoop_display.s and
+        maincpu/audio/sound_editor_ui.s. Re-verified with `verify_converted_
+        call_targets.py --tag v7 --git-diff`: 181 distinct call/calr targets,
+        181 hit / 0 miss = 100% resolve to an already pre-existing name.
+        kn5000_v7_program.llvm.rom stays BYTE-IDENTICAL to original_ROMs/
+        kn5000_v7_program.rom after the conversion (checked with the CURRENT
+        pinned toolchain, not a stale object).
+
+  RESISTED, with reason: two rule-fired regions (0xEF97B6, 1,551 B and
+  0xEFAAB1, 289 B, both maincpu/display/scoop_display.s) reported a byteblob
+  marker SMALLER than the census region (1,535 of 1,551 B and 265 of 289 B) --
+  the region mixes the simple `.byte` run this converter understands with some
+  OTHER directive shape in the same territory-contiguous span. Left untouched
+  rather than guessed at.
+
+  AFTER conversion, --census/--judge v7 (same toolchain, re-verified via a
+  git-stash A/B so the delta is not contaminated by the mid-session LLVM
+  rebuild dbb72df07371 -> ad8129f59880 that happened during this run):
+        rule fires (CODE-like): 789 regions, 236,713 B (-8 regions, -10,890 B,
+                                 exactly the 8 converted regions, zero collateral)
+        rule silent (unchanged): 515 regions, 148,612 B
+        islands (<64 B):         2,456 runs, 29,032 B (+813 B -- a real, expected
+                                 side effect: some small .byte fragments that used
+                                 to sit next to DATA on one side are now flanked by
+                                 the newly-converted CODE on that side too)
+
 Run:
     python3 v9_v10_undisassembled_census.py --prepare  /path/to/scratch
     python3 v9_v10_undisassembled_census.py --census   v9 --work /path/to/scratch
@@ -330,11 +425,27 @@ def calibrate(tag, work, n=300):
         else: i += 1
     inc = [b for b in blobs if b["kind"] == "incbin" and b["size"] >= 300]
     random.seed(11)
+    # v7 ADAPTATION (2026-09-02): v9/v10 are ~48% CODE, so every judged region size
+    # (<=9,112 B there) fits inside SOME >=300 B CODE run.  v7 is only ~30% CODE and
+    # far more fragmented (max contiguous CODE run 5,362 B), so 4 of 1,312 candidate
+    # sizes have NO run long enough and random.choice() on an empty list raised
+    # IndexError.  Fix: draw `sz` only from sizes that have at least one usable run/
+    # incbin, per kind, instead of assuming the unfiltered `sizes` population always
+    # fits. This changes nothing for v9/v10 (their usable pool == the full pool).
+    usable_sizes = {
+        "code": [sz for sz in sizes if any(r[1] - r[0] > sz + 16 for r in runs)],
+        "data": [sz for sz in sizes if any(x["size"] > sz + 8 for x in inc)],
+    }
     for name, kind in (("CODE control (long CODE runs)", "code"),
                        ("DATA control (.incbin interiors)", "data")):
+        pool = usable_sizes[kind]
+        dropped = len(sizes) - len(pool)
+        if dropped:
+            print(f"   [{kind}] {dropped}/{len(sizes)} candidate sizes have no "
+                  f"long-enough run/incbin to sample from; excluded from the pool")
         fire = fb = tb = 0
         for _ in range(n):
-            sz = random.choice(sizes)
+            sz = random.choice(pool)
             if kind == "code":
                 a, b = random.choice([r for r in runs if r[1] - r[0] > sz + 16])
                 s = random.randrange(a + 8, b - sz)

@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 39,216
-#   semantic names ........... 35,594 (90.8%)
-#   positional names ......... 3,622
+#   symbols .................. 39,230
+#   semantic names ........... 35,594 (90.7%)
+#   positional names ......... 3,636
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -637,6 +637,7 @@ GUI_DisplayStructData 00E0CFDE
 GUI_DisplayStructData_0xAD8 00E0DAB6
 GUI_DisplayStructData_0xAE8 00E0DAC6
 GUI_DisplayStructData_0xAF8 00E0DAD6
+EmbeddedPtrTable_v7_gui_display_struct_data_000B00 00E0DADE
 GUI_DisplayStructData_0xB08 00E0DAE6
 GUI_DisplayStructData_0xB18 00E0DAF6
 GUI_DisplayStructData_0xB28 00E0DB06
@@ -3077,6 +3078,7 @@ NakaData_WidgetTables1 00E24056
 NakaHdr_Perf2MeasureBoxData 00E2406E
 NakaHdr_Perf2FileListData 00E24088
 NakaWidgetPtrTbl_SmfDp 00E240B0
+EmbeddedPtrTable_v7_naka_widget_tables_1_001000 00E25056
 NakaWidgetPtrTbl_SmfDp_0x1DA0 00E25E50
 NakaWidgetPtrTbl_SmfDp_0x1FC8 00E26078
 NakaWidgetPtrTbl_SmfDp_0x1FE0 00E26090
@@ -3298,6 +3300,7 @@ MT_GetEffFixString_Name 00E27F8E
 EffectsEditor_GapByte 00E27FA2
 Naka_ReverbScreen_EmptyStr 00E27FA4
 NakaInst_FADE_IN_OUT_SETTING 00E2DB96
+EmbeddedPtrTable_v7_naka_effects_seq_006700 00E2E6A4
 NakaInst_FADE_IN_OUT_SETTING_0x2475 00E3000B
 Naka_Help_563_E300C0 00E300C0
 Naka_Help_564_E300C7 00E300C7
@@ -3305,6 +3308,7 @@ Naka_Help_565_E300CC 00E300CC
 Naka_Help_566_E300E3 00E300E3
 Naka_Help_567_E300EC 00E300EC
 Naka_Help_569_E30113 00E30113
+EmbeddedPtrTable_v7_naka_effects_seq_008600 00E305A4
 Naka_Help_569_E30113_0x82B 00E3093E
 Naka_Help_569_E30113_0x833 00E30946
 Naka_Help_569_E30113_0xCB3 00E30DC6
@@ -3933,6 +3937,7 @@ NakaInst_OFF_Str_0x94 00E4C166
 NakaInst_OFF_Str_0x98 00E4C16A
 NakaInst_OFF_Str_0xB6 00E4C188
 NakaInst_OFF_Str_0xD4 00E4C1A6
+EmbeddedPtrTable_v7_naka_widget_descriptors_024400 00E55260
 Naka_UIStringRef_Table 00E55308
 NakaInst_EmptyFuncName 00E553F8
 NakaInst_RevEqOnOffFunc 00E553FA
@@ -4574,6 +4579,7 @@ Transpose_String_Plus2_0x12 00E806B0
 Transpose_String_Plus2_0x52 00E806F0
 Transpose_String_Plus2_0x58 00E806F6
 Transpose_String_Plus2_0x5E 00E806FC
+EmbeddedPtrTable_v7_naka_widget_tables_2_026400 00E8079E
 NakaObj_FuncData_Null 00E80AE4
 NakaInst_data 00E80AE6
 NakaInst_func 00E80AEC
@@ -4676,6 +4682,7 @@ NakaMenuItem_LeftHold 00E81C58
 NakaMenuItem_TechniChord 00E81C98
 NakaInst_TECHNI_CHORD 00E81CCE
 Naka_KeyScaling_NavTrail 00E82E00
+EmbeddedPtrTable_v7_naka_technichord_part_003E00 00E85ACE
 NakaData_TechniChordStrings 00E85F4E
 TechniChord_StyleDispatch_Table 00E85F76
 NakaInst_TcFanfare 00E85FD8
@@ -5662,6 +5669,7 @@ Data_SaveLoadMenuTable_0x22 00EA0A12
 Data_SaveLoadMenuTable_0x26 00EA0A16
 Data_SaveLoadMenuTable_0x3A 00EA0A2A
 Data_SaveLoadMenuTable_0x4E 00EA0A3E
+EmbeddedPtrTable_v7_naka_technichord_strings_01AB00 00EA0A4E
 Data_SaveLoadMenuTable_0x62 00EA0A52
 Data_SaveLoadMenuTable_0x64 00EA0A54
 PtrTbl_DiskFuncNames 00EA0ACE
@@ -5797,6 +5805,8 @@ NakaInst_AcParaStrBoxProc 00EA146C
 NakaInst_AcTtlJgBoxProc 00EA147E
 NakaInst_PsWindowToggleProc 00EA148E
 NakaInst_PsFileNameBoxProc 00EA14A2
+EmbeddedPtrTable_v7_naka_disk_menu_file_io_005F00 00EA72CC
+EmbeddedPtrTable_v7_naka_disk_menu_file_io_006500 00EA78CC
 NakaInst_WaitWinCtlSmf 00EA7E00
 NakaInst_WaitWinCtlSmf_0x7C8 00EA85C8
 NakaInst_WaitWinCtlSmf_0x88E 00EA868E
@@ -6380,6 +6390,7 @@ Str_InitializeRoot 00EB192A
 Str_InitializeRoot_0x10 00EB193A
 Str_InitializeRoot_0x12 00EB193C
 IconNamePtrTable 00EB1940
+EmbeddedPtrTable_v7_naka_widget_names_charmap_004500 00EB1970
 IconName_Empty 00EB1D3C
 IconName_i173 00EB1D3E
 IconName_i172 00EB1D44
@@ -6556,6 +6567,7 @@ IconName_i2 00EB207E
 IconName_i1 00EB2082
 IconName_i0 00EB2086
 IconName_Default 00EB208A
+EmbeddedPtrTable_v7_naka_widget_names_charmap_004C28 00EB2098
 IconBitmapNamePtrTable 00EB2098
 IconBitmapName_Empty 00EB2498
 IconBitmapName_i173 00EB249A
@@ -7428,6 +7440,7 @@ NakaInst_Kentucky_Blue 00ECF974
 NakaInst_Modern_Hoedown 00ECF986
 NakaInst_Bluegrass_Time 00ECF998
 StyleGroup_LatinWorld_PairTable 00ECF9AA
+EmbeddedPtrTable_v7_naka_style_bitmaps_018800 00ECF9BE
 StyleGroup_LatinWorld_PairTable_0x2FA 00ECFCA4
 StyleGroup_LatinDance_Table 00ECFCA8
 NakaInst_Latin_World 00ECFCF4
@@ -10171,6 +10184,7 @@ SeqCh_FeatureDemoCallbackData 00EEE820
 SeqCh_SystemHandlerData 00EEE900
 MixerPart_NamePtrTable 00EEECC0
 Naka_DrawbarControl_Table 00EEED44
+EmbeddedPtrTable_v7_naka_sequencer_channels_000D00 00EEED78
 MidiPart_ConfigNameTable 00EEEDD4
 Naka_DrawbarSlider_Resources 00EEEFC0
 Naka_DrawbarDisplay_Table1 00EEF350
