@@ -3281,7 +3281,36 @@ Data_F02F52:
 	.byte	0x22, 0x2F, 0xF0, 0x00, 0x36, 0x2F, 0xF0, 0x00, 0x3D, 0x2F, 0xF0, 0x00, 0x44, 0x2F, 0xF0, 0x00	; F02F52  |"/..6/..=/..D/..|
 	.byte	0x4B, 0x2F, 0xF0, 0x00, 0x52, 0x2F, 0xF0, 0x00, 0x03, 0x0C, 0x1A, 0x19, 0xF0	; F02F62  |K/..R/.......|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x002F6F, 0x00002B
+	
+; --- 0xF02F6F-0xF02F75: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x002F6F, 0x000007
+
+; ------------------------------------------------------------------
+; 0xF02F76-0xF02F99 -- 3 display-list records, 36 bytes -- interpreter A
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 7 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01938
+	.short 0x1159
+	.short 0x0003
+	.short 0x000A
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01956
+	.short 0x1749
+	.short 0x0003
+	.short 0x000A
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01974
+	.short 0x1D11
+	.short 0x0003
+	.short 0x000A
 
 ; --------------------------------------------------------------------------
 ; Data_F02F9A -- 24 bytes, EMITTED AS DATA (not promoted to code).
@@ -4785,7 +4814,36 @@ Data_F039ED:
 	.byte	0xED, 0x39, 0xF0, 0x00, 0xF4, 0x39, 0xF0, 0x00, 0xFB, 0x39, 0xF0, 0x00, 0x02, 0x3A, 0xF0, 0x00	; F03A0D  |.9...9...9...:..|
 	.byte	0x09, 0x3A, 0xF0, 0x00, 0x03, 0x0C, 0x1A, 0x19, 0xF0	; F03A1D  |.:.......|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003A26, 0x00002B
+	
+; --- 0xF03A26-0xF03A2C: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003A26, 0x000007
+
+; ------------------------------------------------------------------
+; 0xF03A2D-0xF03A50 -- 3 display-list records, 36 bytes -- interpreter A
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 7 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01938
+	.short 0x115A
+	.short 0x0003
+	.short 0x000A
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01956
+	.short 0x165A
+	.short 0x0003
+	.short 0x000A
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01974
+	.short 0x1B5A
+	.short 0x0003
+	.short 0x000A
 
 ; --------------------------------------------------------------------------
 ; Data_F03A51 -- 141 bytes, EMITTED AS DATA (not promoted to code).
@@ -4828,7 +4886,39 @@ Data_F03A51:
 Data_F03AF3:
 	.byte	0x38, 0x19, 0xF0, 0x00, 0xD4	; F03AF3  |8....|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003AF8, 0x000077
+	
+; --- 0xF03AF8-0xF03B44: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003AF8, 0x00004D
+
+; ------------------------------------------------------------------
+; 0xF03B45-0xF03B6E -- 4 display-list records, 42 bytes -- interpreter A
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 77 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x129A
+	.short 0x0002
+	.short 0x000C
+	.byte 0x17, 0x09	; op 17, 9 bytes -> handler 0xF31A52
+	.short 0x0021
+	.short 0x007A
+	.ascii "1st"
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x174A
+	.short 0x0002
+	.short 0x000C
+	.byte 0x17, 0x09	; op 17, 9 bytes -> handler 0xF31A52
+	.short 0x0021
+	.short 0x0098
+	.ascii "2nd"
 
 ; --------------------------------------------------------------------------
 ; Data_F03B6F -- 119 bytes, EMITTED AS DATA (not promoted to code).
@@ -4853,7 +4943,32 @@ Data_F03B6F:
 	.byte	0x19, 0xF0, 0x00, 0x30, 0x11, 0x02, 0x00, 0x0C, 0x00, 0x20, 0x07, 0x5A, 0x11, 0x32, 0x6E, 0x64	; F03BCF  |...0..... .Z.2nd|
 	.byte	0x03, 0x0C, 0x92, 0x19, 0xF0, 0x00, 0xF8	; F03BDF  |.......|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003BE6, 0x00001F
+	
+; --- 0xF03BE6-0xF03BEA: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003BE6, 0x000005
+
+; ------------------------------------------------------------------
+; 0xF03BEB-0xF03C04 -- 3 display-list records, 26 bytes -- interpreter A
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 5 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1722
+	.ascii "3rd"
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01992
+	.short 0x1CC0
+	.short 0x0002
+	.short 0x000C
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1CEA
+	.ascii "4th"
 
 ; --------------------------------------------------------------------------
 ; Data_F03C05 -- 13 bytes, EMITTED AS DATA (not promoted to code).
@@ -4871,7 +4986,61 @@ Data_F03B6F:
 Data_F03C05:
 	.byte	0xB9, 0x3B, 0xF0, 0x00, 0xB9, 0x3B, 0xF0, 0x00, 0xCC, 0x3B, 0xF0, 0x00, 0xDF	; F03C05  |.;...;...;...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003C12, 0x00006B
+	
+; --- 0xF03C12-0xF03C1C: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003C12, 0x00000B
+
+; ------------------------------------------------------------------
+; 0xF03C1D-0xF03C7C -- 8 display-list records, 96 bytes -- interpreter A
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 11 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x0B68
+	.short 0x0002
+	.short 0x000C
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F0191A
+	.short 0x0B92
+	.short 0x0003
+	.short 0x000A
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x1130
+	.short 0x0002
+	.short 0x000C
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01938
+	.short 0x115A
+	.short 0x0003
+	.short 0x000A
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x16F8
+	.short 0x0002
+	.short 0x000C
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01956
+	.short 0x1722
+	.short 0x0003
+	.short 0x000A
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F019AA
+	.short 0x1CC0
+	.short 0x0002
+	.short 0x000C
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01974
+	.short 0x1CEA
+	.short 0x0003
+	.short 0x000A
 
 ; --------------------------------------------------------------------------
 ; Data_F03C7D -- 24 bytes, EMITTED AS DATA (not promoted to code).
@@ -8320,17 +8489,15 @@ DL_F05501:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F0550B -- 278 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F0550B -- 276 bytes, EMITTED AS DATA (not promoted to code).
+; ⚠ CORRECTED: was declared 278 bytes, 2 bytes too many -- see
+; notes/gen_prom_b_f05621_fix_module.py.  Those 2 bytes (0x17, 0x07) were
+; the op/len header of the display-list record run that starts at 0xF0561F,
+; below, exposed by Data_F0563B's own pointer array naming that address.
 ; Reached from: 0x00F0550B appears as a 32-bit word at 0xF0555B 0xF0555F
 ;               0xF5C5D1 0xF5C5E4; converted code at 0xF5C5D0 0xF5C5E3 loads
 ;               it as a 32-bit immediate.  No routine-directory slot and no
 ;               branch decoded in converted code names it.
-; Measured: 18% printable ASCII; a linear decode runs 137 instructions and
-;           ends `reti`, with 17% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
 Data_F0550B:
 	.byte	0x11, 0x0A, 0xDE, 0x00, 0x44, 0x00, 0xED, 0x00, 0x44, 0x00, 0x12, 0x0A, 0xED, 0x00, 0x44, 0x00	; F0550B  |....D...D.....D.|
@@ -8350,9 +8517,32 @@ Data_F0550B:
 	.byte	0xA3, 0x00, 0xB4, 0x00, 0x46, 0x00, 0x00, 0x0A, 0x5D, 0x00, 0xA3, 0x00, 0xB4, 0x00, 0x65, 0x00	; F055EB  |....F...].....e.|
 	.byte	0x00, 0x0A, 0x5D, 0x00, 0xA3, 0x00, 0xB4, 0x00, 0x84, 0x00, 0x01, 0x0A, 0x5D, 0x00, 0xA3, 0x00	; F055FB  |..].........]...|
 	.byte	0xB4, 0x00, 0xA3, 0x00, 0x6F, 0x55, 0xF0, 0x00, 0x97, 0x55, 0xF0, 0x00, 0xBF, 0x55, 0xF0, 0x00	; F0560B  |....oU...U...U..|
-	.byte	0xE7, 0x55, 0xF0, 0x00, 0x17, 0x07	; F0561B  |.U....|
+	.byte	0xE7, 0x55, 0xF0, 0x00	; F0561B  |.U..|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005621, 0x00001A
+; ------------------------------------------------------------------
+; 0xF0561F-0xF0563A -- 4 display-list records, 28 bytes -- interpreter A
+; The 4th of Data_F0563B's own 4 pointers names 0xF0561F exactly; the other
+; 3 are the record starts this lane's untouched-pool round already found.
+; Formerly the last 2 bytes of Data_F0550B plus a 5-byte unexplained
+; fragment.  Regenerate: python3 notes/gen_prom_b_f05621_fix_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x17, 0x07	; op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0058
+	.short 0x0043
+	.byte 0x10	; character codes below 0x20
+	.byte 0x17, 0x07	; op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0058
+	.short 0x0062
+	.byte 0x10	; character codes below 0x20
+	.byte 0x17, 0x07	; op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0058
+	.short 0x0081
+	.byte 0x10	; character codes below 0x20
+	.byte 0x17, 0x07	; op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0058
+	.short 0x00A0
+	.byte 0x10	; character codes below 0x20
 
 ; --------------------------------------------------------------------------
 ; Data_F0563B -- 16 bytes, EMITTED AS DATA (not promoted to code).
@@ -19543,7 +19733,107 @@ DL_F0D081:
 	.short 0xF0D4
 	.byte 0x00	; operand bytes the handler does not read
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00D4D2, 0x0002CA
+	
+; --- 0xF0D4D2-0xF0D697: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00D4D2, 0x0001C6
+
+; ------------------------------------------------------------------
+; 0xF0D698-0xF0D79B -- 23 display-list records, 260 bytes -- interpreter A
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 454 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x0C, 0x1C	; op 0C, 28 bytes -> handler 0xF31AEB
+	.byte 0x34, 0x24, 0x44, 0xC4, 0x84, 0x84, 0x84, 0x04, 0x04, 0x0C, 0x18, 0x30, 0x60, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x23, 0x05, 0x1D, 0x07, 0x00	; operand bytes the handler does not read
+	.byte 0x1C, 0x15	; op 1C, 21 bytes -> handler 0xF31A52
+	.short 0x0057
+	.short 0x0005
+	.ascii "SYSEX BULK DUMP"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0008
+	.short 0x0008
+	.ascii "MIDI"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0618
+	.byte 0x10	; character codes below 0x20
+	.byte 0x07, 0x13	; op 07, 19 bytes -> handler 0xF31A3A
+	.short 0x061B
+	.ascii " TOTAL KEYBOARD"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0B8F
+	.byte 0x11	; character codes below 0x20
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0BB1
+	.ascii " SEND"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0C30
+	.byte 0x10	; character codes below 0x20
+	.byte 0x07, 0x0A	; op 07, 10 bytes -> handler 0xF31A3A
+	.short 0x0C33
+	.ascii " SOUND"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1248
+	.byte 0x10	; character codes below 0x20
+	.byte 0x07, 0x10	; op 07, 16 bytes -> handler 0xF31A3A
+	.short 0x124B
+	.ascii " COMBINATION"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1860
+	.byte 0x10	; character codes below 0x20
+	.byte 0x07, 0x17	; op 07, 23 bytes -> handler 0xF31A3A
+	.short 0x1863
+	.ascii " SYSTEM,PART & MIDI"
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x000B
+	.short 0x001D
+	.short 0x00EA
+	.short 0x003C
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x000B
+	.short 0x0044
+	.short 0x00EA
+	.short 0x0063
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x000B
+	.short 0x006B
+	.short 0x00EA
+	.short 0x008A
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x000B
+	.short 0x0092
+	.short 0x00EA
+	.short 0x00B1
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0005
+	.short 0x0004
+	.short 0x0022
+	.short 0x0012
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x010B
+	.short 0x0045
+	.short 0x0135
+	.short 0x0058
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x010D
+	.short 0x0047
+	.short 0x0133
+	.short 0x0056
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1E78
+	.byte 0x10	; character codes below 0x20
+	.byte 0x07, 0x0E	; op 07, 14 bytes -> handler 0xF31A3A
+	.short 0x1E7B
+	.ascii " SEQUENCER"
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x000B
+	.short 0x00B9
+	.short 0x00EA
+	.short 0x00D8
 
 ; === END COVER-R1 0xF0D061-0xF0D79C ===
 
@@ -30589,7 +30879,205 @@ Data_F139AB:
 ; --- 0xF13D34-0xF147AB: not converted ---
 
 ; --- 0xF13D34-0xF13F1D: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x013D34, 0x0001EA
+	
+; --- 0xF13D34-0xF13D5F: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x013D34, 0x00002C
+
+; ------------------------------------------------------------------
+; 0xF13D60-0xF13F1D -- 45 display-list records, 446 bytes -- interpreter A
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 44 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x1C, 0x10	; op 1C, 16 bytes -> handler 0xF31A52
+	.short 0x0079
+	.short 0x0005
+	.ascii "DSP EFFECT"
+	.byte 0x17, 0x10	; op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0006
+	.short 0x0007
+	.ascii "SOUND EDIT"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004
+	.short 0x0004
+	.short 0x0044
+	.short 0x0010
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0A
+	.short 0x0034
+	.byte 0x1C, 0x10	; op 1C, 16 bytes -> handler 0xF31A52
+	.short 0x0079
+	.short 0x0005
+	.ascii "DSP EFFECT"
+	.byte 0x17, 0x0C	; op 17, 12 bytes -> handler 0xF31A52
+	.short 0x0006
+	.short 0x0007
+	.ascii "SYSTEM"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004
+	.short 0x0004
+	.short 0x002C
+	.short 0x0010
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0A
+	.short 0x0034
+	.byte 0x1C, 0x10	; op 1C, 16 bytes -> handler 0xF31A52
+	.short 0x0079
+	.short 0x0005
+	.ascii "DSP EFFECT"
+	.byte 0x17, 0x10	; op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0006
+	.short 0x0007
+	.ascii "COMBI.EDIT"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004
+	.short 0x0004
+	.short 0x0044
+	.short 0x0010
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0A
+	.short 0x0034
+	.byte 0x1C, 0x10	; op 1C, 16 bytes -> handler 0xF31A52
+	.short 0x0079
+	.short 0x0005
+	.ascii "DSP EFFECT"
+	.byte 0x17, 0x10	; op 17, 16 bytes -> handler 0xF31A52
+	.short 0x0006
+	.short 0x0007
+	.ascii "SOUND MODE"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004
+	.short 0x0004
+	.short 0x0044
+	.short 0x0010
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0A
+	.short 0x0034
+	.byte 0x1C, 0x10	; op 1C, 16 bytes -> handler 0xF31A52
+	.short 0x0079
+	.short 0x0005
+	.ascii "DSP EFFECT"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0006
+	.short 0x0007
+	.ascii "PART"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0004
+	.short 0x0004
+	.short 0x0020
+	.short 0x0010
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x0A
+	.short 0x0034
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0B17
+	.byte 0x11	; character codes below 0x20
+	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x0B3A
+	.ascii "EFF1"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1157
+	.byte 0x11	; character codes below 0x20
+	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x117A
+	.ascii "EFF2"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1797
+	.byte 0x11	; character codes below 0x20
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x17BB
+	.ascii "REV"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x010B
+	.short 0x0042
+	.short 0x0135
+	.short 0x0055
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x010D
+	.short 0x0044
+	.short 0x0133
+	.short 0x0053
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x010B
+	.short 0x006A
+	.short 0x0135
+	.short 0x007D
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x010D
+	.short 0x006C
+	.short 0x0133
+	.short 0x007B
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0113
+	.short 0x0092
+	.short 0x0135
+	.short 0x00A5
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0115
+	.short 0x0094
+	.short 0x0133
+	.short 0x00A3
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x010B
+	.short 0x006A
+	.short 0x013F
+	.short 0x007D
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0B40
+	.byte 0x10	; character codes below 0x20
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x0B6A
+	.ascii "EQ"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000B
+	.short 0x0044
+	.short 0x0026
+	.short 0x0057
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x000D
+	.short 0x0046
+	.short 0x0024
+	.short 0x0055
+	.byte 0x05, 0x0A	; op 05, 10 bytes -> handler 0xF31A75
+	.short 0x000E
+	.short 0x0047
+	.short 0x0023
+	.short 0x0054
+	.byte 0x17, 0x0D	; op 17, 13 bytes -> handler 0xF31A52
+	.short 0x0009
+	.short 0x00B4
+	.ascii "DYN.CNT"
+	.byte 0x17, 0x0D	; op 17, 13 bytes -> handler 0xF31A52
+	.short 0x0009
+	.short 0x00BE
+	.ascii "TO PARA"
+	.byte 0x17, 0x07	; op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0000
+	.short 0x00BF
+	.byte 0x10	; character codes below 0x20
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0007
+	.short 0x00B1
+	.short 0x0035
+	.short 0x00C7
+	.byte 0x17, 0x07	; op 17, 7 bytes -> handler 0xF31A52
+	.short 0x013A
+	.short 0x0026
+	.byte 0x11	; character codes below 0x20
+	.byte 0x17, 0x0C	; op 17, 12 bytes -> handler 0xF31A52
+	.short 0x0112
+	.short 0x002B
+	.ascii "BYPASS"
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0110
+	.short 0x001E
+	.short 0x0138
+	.short 0x0034
 
 ; ------------------------------------------------------------------
 ; 0xF13F1E-0xF13F31 -- 2 display-list records, 20 bytes -- interpreter A/B
@@ -50222,8 +50710,90 @@ DL_GroupCombiDisplayHoldGr0up:
 	.short 0x00F3
 	.short 0x00CE
 
-; --- 0xF2B8F9-0xF2BA0B: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x02B8F9, 0x000113
+; ------------------------------------------------------------------
+; 0xF2B8F9-0xF2BA0B -- one interpreter-B string-table-readout record (op 0x02,
+; handler 0xF31B21) plus its OWN 65-entry, 4-byte-stride caption table --
+; NOT 3 interpreter-A records, which was this lane's own earlier misframe
+; (see this generator's docstring). The record's +0x07 field names
+; 0xF2B908, the address of the very next byte, and 65 entries of the
+; record's own +0x0B stride (4) exactly fill the rest of this span with
+; zero remainder: 15 + 65*4 = 275, the whole original span.
+; Regenerate: python3 notes/gen_prom_b_f2b8f9_fix_module.py --splice
+; ------------------------------------------------------------------
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x216A	; +0x02 source variable, 16-bit address
+	.byte 0x3F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.long 0x00F2B908	; +0x07 -> XIY: string table
+	.short 0x0004	; +0x0B -> BC: bytes per entry
+	.short 0x0124	; +0x0D -> IX
+; 65 x 4-byte entries, +0x00 of the string table above
+	.ascii "R1 :"	; entry 0
+	.ascii "R2 :"	; entry 1
+	.ascii "   :"	; entry 2
+	.ascii "   :"	; entry 3
+	.ascii "   :"	; entry 4
+	.ascii "   :"	; entry 5
+	.ascii "   :"	; entry 6
+	.ascii "   :"	; entry 7
+	.ascii "U1 :"	; entry 8
+	.ascii "U2 :"	; entry 9
+	.ascii "   :"	; entry 10
+	.ascii "   :"	; entry 11
+	.ascii "   :"	; entry 12
+	.ascii "   :"	; entry 13
+	.ascii "   :"	; entry 14
+	.ascii "   :"	; entry 15
+	.ascii "E1 :"	; entry 16
+	.ascii "   :"	; entry 17
+	.ascii "   :"	; entry 18
+	.ascii "   :"	; entry 19
+	.ascii "   :"	; entry 20
+	.ascii "   :"	; entry 21
+	.ascii "   :"	; entry 22
+	.ascii "   :"	; entry 23
+	.ascii "M1 :"	; entry 24
+	.ascii "M2 :"	; entry 25
+	.ascii "M3 :"	; entry 26
+	.ascii "   :"	; entry 27
+	.ascii "   :"	; entry 28
+	.ascii "   :"	; entry 29
+	.ascii "   :"	; entry 30
+	.ascii "   :"	; entry 31
+	.ascii "RD1:"	; entry 32
+	.ascii "RD2:"	; entry 33
+	.ascii "   :"	; entry 34
+	.ascii "   :"	; entry 35
+	.ascii "   :"	; entry 36
+	.ascii "   :"	; entry 37
+	.ascii "   :"	; entry 38
+	.ascii "   :"	; entry 39
+	.ascii "UD1:"	; entry 40
+	.ascii "UD2:"	; entry 41
+	.ascii "   :"	; entry 42
+	.ascii "   :"	; entry 43
+	.ascii "   :"	; entry 44
+	.ascii "   :"	; entry 45
+	.ascii "   :"	; entry 46
+	.ascii "   :"	; entry 47
+	.ascii "ED1:"	; entry 48
+	.ascii "   :"	; entry 49
+	.ascii "   :"	; entry 50
+	.ascii "   :"	; entry 51
+	.ascii "   :"	; entry 52
+	.ascii "   :"	; entry 53
+	.ascii "   :"	; entry 54
+	.ascii "   :"	; entry 55
+	.ascii "   :"	; entry 56
+	.ascii "   :"	; entry 57
+	.ascii "   :"	; entry 58
+	.ascii "   :"	; entry 59
+	.ascii "   :"	; entry 60
+	.ascii "   :"	; entry 61
+	.ascii "   :"	; entry 62
+	.ascii "   :"	; entry 63
+	.ascii "   :"	; entry 64
 
 ; ------------------------------------------------------------------
 ; 0xF2BA0C-0xF2BB0C -- 26 display-list records, 257 bytes -- interpreter A (25 records) and B (1)
@@ -56837,7 +57407,31 @@ ValueGlyph_Bitmaps:
 ; is NOT reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032709, 0x000113
+		.fill	247, 1, 0x0E	; 0xF32709-0xF327FF `ret` padding (asserted pure 0x0E)
+
+; ------------------------------------------------------------------
+; 0xF32800-0xF3281B -- 4 display-list records, 28 bytes -- interpreter A
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 247 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x0A06
+	.ascii "1st"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x0EDE
+	.ascii "2nd"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x13B6
+	.ascii "3rd"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x18B6
+	.ascii "4th"
 
 ; --------------------------------------------------------------------------
 ; Data_F3281C -- 29 bytes, EMITTED AS DATA (not promoted to code).
@@ -56856,7 +57450,36 @@ Data_F3281C:
 	.byte	0x00, 0x28, 0xF3, 0x00, 0x00, 0x28, 0xF3, 0x00, 0x07, 0x28, 0xF3, 0x00, 0x0E, 0x28, 0xF3, 0x00	; F3281C  |.(...(...(...(..|
 	.byte	0x15, 0x28, 0xF3, 0x00, 0x1C, 0x28, 0xF3, 0x00, 0x03, 0x0C, 0x1A, 0x19, 0xF0	; F3282C  |.(...(.......|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032839, 0x00002B
+	
+; --- 0xF32839-0xF3283F: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032839, 0x000007
+
+; ------------------------------------------------------------------
+; 0xF32840-0xF32863 -- 3 display-list records, 36 bytes -- interpreter A
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 7 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01938
+	.short 0x0EDE
+	.short 0x0003
+	.short 0x000A
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01956
+	.short 0x13B6
+	.short 0x0003
+	.short 0x000A
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F01974
+	.short 0x18B6
+	.short 0x0003
+	.short 0x000A
 
 ; --------------------------------------------------------------------------
 ; Data_F32864 -- 120 bytes, EMITTED AS DATA (not promoted to code).
@@ -57025,7 +57648,45 @@ Data_F32992:
 	.byte	0x4B, 0x29, 0xF3, 0x00, 0x4B, 0x29, 0xF3, 0x00, 0x92, 0x29, 0xF3, 0x00, 0x9C, 0x29, 0xF3, 0x00	; F329E2  |K)..K)...)...)..|
 	.byte	0xA6, 0x29, 0xF3, 0x00, 0xB0, 0x29, 0xF3, 0x00, 0x02, 0x0F, 0xA8, 0x27, 0x80, 0x07	; F329F2  |.)...).....'..|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032A00, 0x000036
+	
+; --- 0xF32A00-0xF32A08: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032A00, 0x000009
+
+; ------------------------------------------------------------------
+; 0xF32A09-0xF32A35 -- 3 display-list records, 45 bytes -- interpreter B
+; NOT reached by any known call shape (reachability.py: prom_b has 0
+; bytes with start evidence) and not named by any converted record's
+; own table field either -- found because a plain op/len walk, starting
+; 9 bytes into this span, lands with ZERO DRIFT exactly on the span's
+; declared end, and every record's length satisfies ITS OWN handler's
+; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
+; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; --splice
+; ------------------------------------------------------------------
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A9	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A6F	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x1277	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AA	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A6F	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x174F	; +0x0D -> IX
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27AB	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A6F	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x1C4F	; +0x0D -> IX
 
 ; --------------------------------------------------------------------------
 ; Data_F32A36 -- 1 bytes, EMITTED AS DATA (not promoted to code).
@@ -70181,7 +70842,97 @@ DL_F3B7C3:
 Data_F3B7CD:
 	.byte	0x03, 0x0B, 0xFA, 0x12, 0x01, 0x00, 0x05	; F3B7CD  |.......|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B7D4, 0x0001C9
+
+; ------------------------------------------------------------------
+; 0xF3B7D4-0xF3B99C -- a 64-entry fixed-stride caption table, 457 bytes:
+; "PART 1".."PART 32" (32 x 7 B) then "1- 1CH".."2-16CH" (32 x 6 B)
+; then a 21-byte tail.  Immediately follows Data_F3B7CD and immediately
+; precedes DL_TrackAssignChangeAttention, both already committed.
+; The header's 8 words are NOT a display-list record (no handler's
+; implied length matches) and their indexing scheme is not established;
+; three of the eight (0x000C, 0x006F, 0x00A5) also appear verbatim in
+; the immediately preceding record, DL_F3B7C3's own 4 words -- recorded
+; as corroboration this is a deliberate field, not padding, without
+; claiming what it selects.  Regenerate: python3
+; notes/gen_prom_b_f3b7d4_module.py --splice
+; ------------------------------------------------------------------
+Table_F3B7D4:
+	.long	0x00F3B7D8	; +0x00 purpose not established
+	.short	0x000C	; +0x04 purpose not established
+	.short	0x006F	; +0x06 purpose not established
+	.short	0x002B	; +0x08 purpose not established
+	.short	0x007E	; +0x0A purpose not established
+	.short	0x000C	; +0x0C purpose not established
+	.short	0x0096	; +0x0E purpose not established
+	.short	0x0031	; +0x10 purpose not established
+	.short	0x00A5	; +0x12 purpose not established
+; 32 x 7-byte "PART n" captions, +0x14
+	.ascii "PART 1 "	; entry 1
+	.ascii "PART 2 "	; entry 2
+	.ascii "PART 3 "	; entry 3
+	.ascii "PART 4 "	; entry 4
+	.ascii "PART 5 "	; entry 5
+	.ascii "PART 6 "	; entry 6
+	.ascii "PART 7 "	; entry 7
+	.ascii "PART 8 "	; entry 8
+	.ascii "PART 9 "	; entry 9
+	.ascii "PART 10"	; entry 10
+	.ascii "PART 11"	; entry 11
+	.ascii "PART 12"	; entry 12
+	.ascii "PART 13"	; entry 13
+	.ascii "PART 14"	; entry 14
+	.ascii "PART 15"	; entry 15
+	.ascii "PART 16"	; entry 16
+	.ascii "PART 17"	; entry 17
+	.ascii "PART 18"	; entry 18
+	.ascii "PART 19"	; entry 19
+	.ascii "PART 20"	; entry 20
+	.ascii "PART 21"	; entry 21
+	.ascii "PART 22"	; entry 22
+	.ascii "PART 23"	; entry 23
+	.ascii "PART 24"	; entry 24
+	.ascii "PART 25"	; entry 25
+	.ascii "PART 26"	; entry 26
+	.ascii "PART 27"	; entry 27
+	.ascii "PART 28"	; entry 28
+	.ascii "PART 29"	; entry 29
+	.ascii "PART 30"	; entry 30
+	.ascii "PART 31"	; entry 31
+	.ascii "PART 32"	; entry 32
+; 32 x 6-byte "<bank>-<channel>CH" captions, +0xF4
+	.ascii "1- 1CH"	; entry 1
+	.ascii "1- 2CH"	; entry 2
+	.ascii "1- 3CH"	; entry 3
+	.ascii "1- 4CH"	; entry 4
+	.ascii "1- 5CH"	; entry 5
+	.ascii "1- 6CH"	; entry 6
+	.ascii "1- 7CH"	; entry 7
+	.ascii "1- 8CH"	; entry 8
+	.ascii "1- 9CH"	; entry 9
+	.ascii "1-10CH"	; entry 10
+	.ascii "1-11CH"	; entry 11
+	.ascii "1-12CH"	; entry 12
+	.ascii "1-13CH"	; entry 13
+	.ascii "1-14CH"	; entry 14
+	.ascii "1-15CH"	; entry 15
+	.ascii "1-16CH"	; entry 16
+	.ascii "2- 1CH"	; entry 17
+	.ascii "2- 2CH"	; entry 18
+	.ascii "2- 3CH"	; entry 19
+	.ascii "2- 4CH"	; entry 20
+	.ascii "2- 5CH"	; entry 21
+	.ascii "2- 6CH"	; entry 22
+	.ascii "2- 7CH"	; entry 23
+	.ascii "2- 8CH"	; entry 24
+	.ascii "2- 9CH"	; entry 25
+	.ascii "2-10CH"	; entry 26
+	.ascii "2-11CH"	; entry 27
+	.ascii "2-12CH"	; entry 28
+	.ascii "2-13CH"	; entry 29
+	.ascii "2-14CH"	; entry 30
+	.ascii "2-15CH"	; entry 31
+	.ascii "2-16CH"	; entry 32
+	.ascii " OFF  -- CH OFFON -- "	; +0x1B4, 21-byte tail
 
 ; === END COVER-R1 0xF3B7CD-0xF3B99D ===
 

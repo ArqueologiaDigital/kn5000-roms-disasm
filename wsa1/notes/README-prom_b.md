@@ -1219,3 +1219,83 @@ Together these close 0xF13D34-0xF147AB down to its 490-byte leading span
 (0xF13D34-0xF13F1D, still genuinely unexplained) plus the 44-byte shape-1 site
 elsewhere. `.incbin`: 28,247 → 26,013 bytes. Byte gate: `make gate-wsa1` PASS
 after every splice.
+
+## WAVE — lane PROMBFINAL, the untouched medium/small pool (2026-09-02)
+
+Target: the largest untouched debt pool named in `notes/DEBT-INVENTORY-2026-09-02.md`
+— roughly 7,600 B of small/medium `.incbin` spans nobody had individually
+re-tested. Result: `.incbin` 12,794 → 10,738 bytes across 85 → 81 spans.
+`python3 notes/prom_b_incbin_debt.py`.
+
+**`gen_prom_b_untouched_pool_module.py`** closes 12 sites (2,220 B of span,
+1,441 B converted) that no known call shape names: a plain op/len walk
+starting somewhere INSIDE a span lands, with zero drift, exactly on the
+span's own end, and every record's length satisfies its OWN handler's
+implied-length rule — not merely `op < bound`, which produced 4 false
+positives during the search (corrected: interpreter attribution and the
+true start offset for each). 0xF32709's leading 247 bytes are a measured,
+pure `0x0E` run, emitted as `.fill` (the ret-padding idiom already used
+elsewhere in this file), immediately followed by 4 genuine records —
+checking the run BEFORE walking is what the tree's own F0DB18 lesson and
+the `[op 0x0E, len 14]` trap both call for. 0xF13D34's 44-byte lead-in was
+re-tested and still does not decode; the 446 bytes after it now close,
+landing on the already-committed `DL_F13F1E`. 0xF283A8-0xF2843D (149 B,
+prom_b's entire reachability STRONG total) was deliberately excluded: its
+only matching handler is the bare-`ret` family, whose length rule is
+vacuous, and MAME's own unidasm renders it as incoherent code from that
+offset — the walk-decodes-into-data pattern, not corroborated code.
+
+⚠ **That same search produced one real misframe, found and fixed the same
+session.** Op 0x20's `("min", 4)` length rule is weak — true of almost any
+length ≥ 4 — and at 0xF2B8F9 it combined with a coincidental start (the
+caption table's own literal bytes happen to read as a plausible op/len
+pair 153 bytes in) to frame 3 fake interpreter-A records that reassembled
+byte-exact and passed the gate. Re-read from the true start: ONE
+interpreter-B string-table-readout record (op 0x02, FIXED-length-15
+handler 0xF31B21) whose own `+0x07` field names the very next byte, and
+whose own `+0x0B` stride (4) divides the remaining 260 bytes into exactly
+65 routing-label entries ("R1 ", "R2 ", "U1 ", ..., "ED1", blank padding)
+with zero remainder — `gen_prom_b_f2b8f9_fix_module.py`. The lesson: a
+"zero-drift landing" is only as strong as the RULE that produced each
+record's length; a FIXED rule with a self-naming pointer field is far
+stronger evidence than a MIN rule landing on a span boundary that a prior
+generator happened to draw.
+
+**`gen_prom_b_f3b7d4_module.py`** closes 0xF3B7D4, 457 bytes, in one piece:
+not a display-list run (no walk lands on the neighbouring already-converted
+`DL_TrackAssignChangeAttention`), but a plain 64-entry caption table —
+"PART 1".."PART 32" (32×7 B) then "1- 1CH".."2-16CH" (32×6 B) — an 8-word
+header (purpose not established) and a 21-byte tail, 20+224+192+21 = 457
+with zero remainder. Three of the header's 8 words also appear verbatim in
+the immediately preceding record `DL_F3B7C3`'s own 4 words: recorded as
+corroboration, not as a claimed indexing scheme.
+
+**`gen_prom_b_f05621_fix_module.py`** finds a 29th instance of the
+recurring oversized-`Data_Fxxxxxx` defect (28 known as of
+`2fd82c82`) through a NEW entry point, since the object-adjacent scan
+reached a fixpoint after round 4: `Data_F0563B`, already committed and
+reachable, is an array of 4 pointers; 3 are this same round's own
+already-converted record starts, and the 4th lands 2 bytes inside
+`Data_F0550B`'s declared tail. Shrinking `Data_F0550B` by those 2 bytes and
+walking from the recovered start gives 4 records instead of 3, landing
+with zero drift on `Data_F0563B` itself.
+
+**Re-tested characterisations, per the lane brief's instruction, and what
+held:** 0xF00C4D (2,995 B), 0xF0033F (1,217 B) — no op/len walk under
+either interpreter lands anywhere inside them under the strict per-handler
+rule, and neither is named by any `.long`/`.short` field anywhere in
+prom_a or prom_b; the "genuinely unreached, no recognised shape" verdict
+holds. 0xF0199E (1,236 B) — NOT font text and NOT display-list records
+(confirmed by the same strict walk finding nothing), but re-examination
+found it IS graphics data: a weak seed exists (`0x00F019AA`, referenced
+four times as the `+0x02` "XIY ptr" field of already-converted op-0x03
+records at, e.g., 0xF03C1D), landing 12 bytes into the span on a small
+symmetric bitmap row (`07 18 20 20 40 40 40 40 20 20 18 07`) that reads as
+an icon glyph, not text. The span does NOT tile cleanly at that 12-byte
+stride throughout, though — most of it is runs of `0x00`/`0xFF`/`0x80`
+separated by short diagonal "staircase" byte sequences characteristic of
+icon/cursor bitmaps with variable-width frames, not a fixed-size icon
+table. No stride was found that accounts for the whole span, so it is
+left `.incbin`, characterised rather than converted: icon/cursor-shaped
+graphics data, not the "no recognised shape at all" the prior audit
+recorded — a correction to log, even though it did not close any bytes.
