@@ -35,6 +35,13 @@ RUN (from the lane worktree root):
 
 The prerequisite is removed first so the cmp cannot certify a stale object.
 
+⚠ AND THE CMP MUST BE ABLE TO FAIL. `--negative-control` assembles the same
+source with the fill VALUE changed to 0xfe, in a temporary copy, and requires
+the result to differ from the dump. Without that, "byte-identical" only says
+the build ran. It fails at byte 1.
+
+    python3 subcpu/boot/tools/convert_erased_fill.py --negative-control
+
 ⚠ latin-1 I/O throughout: these sources are latin-1 and a UTF-8 round trip
 silently corrupts raw high bytes inside `.ascii` literals elsewhere in the
 tree (BRIEF addendum 2026-09-02).
@@ -50,7 +57,46 @@ EXPECT = 98304          # bytes == lines, one byte each
 COMMENT = "\t; Fill first 96KB with 0xFF"
 
 
+def negative_control():
+    """Assemble a copy with the fill value changed and require the built ROM to
+    DIFFER from the dump. A compare that cannot fail certifies nothing."""
+    import shutil
+    import subprocess
+    import tempfile
+    llvm = os.path.expanduser("~/compartilhado/llvm-project/build/bin")
+    orig = open(os.path.join(ROOT, "original_ROMs/kn5000_subcpu_boot.ic30"), "rb").read()
+    with tempfile.TemporaryDirectory(prefix="subboot_nc_") as tmp:
+        d = os.path.join(tmp, "boot")
+        shutil.copytree(os.path.join(ROOT, "subcpu/boot"), d)
+        f = os.path.join(d, "kn5000_subcpu_boot.s")
+        text = open(f, encoding="latin-1").read()
+        if ".fill %d, 1, 0xff" % EXPECT not in text:
+            sys.exit("source does not contain the expected .fill -- run --apply first")
+        open(f, "w", encoding="latin-1").write(
+            text.replace(".fill %d, 1, 0xff" % EXPECT, ".fill %d, 1, 0xfe" % EXPECT))
+        o, e, r = (os.path.join(tmp, x) for x in ("t.o", "t.elf", "t.rom"))
+        subprocess.run([os.path.join(llvm, "llvm-mc"), "-triple=tlcs900",
+                        "-filetype=obj", "-I", d, "-o", o, f],
+                       check=True, capture_output=True)
+        subprocess.run([os.path.join(llvm, "ld.lld"), "-e", "0", "-T",
+                        os.path.join(ROOT, "subcpu/boot/subcpu_boot.ld"),
+                        "-o", e, o], check=True, capture_output=True)
+        subprocess.run([os.path.join(llvm, "llvm-objcopy"), "-O", "binary", e, r],
+                       check=True)
+        built = open(r, "rb").read()
+    if built == orig:
+        print("NEGATIVE CONTROL FAILED -- the compare cannot see a changed fill "
+              "value, so byte-identity proves nothing here")
+        return 1
+    first = next(i for i in range(min(len(built), len(orig))) if built[i] != orig[i])
+    print("NEGATIVE CONTROL OK -- fill value 0xfe makes the build differ from the "
+          "dump at byte %d" % (first + 1))
+    return 0
+
+
 def main():
+    if "--negative-control" in sys.argv:
+        return negative_control()
     apply_ = "--apply" in sys.argv
     text = open(SRC, encoding="latin-1").read()
     lines = text.split("\n")
