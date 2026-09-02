@@ -7,9 +7,9 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 6f456a19f05b (6f456a19f05bf94696728e89e74a53ed62dc9adf)
+Commit: 86332721969d (86332721969de2d2b4c2ac16bc217b5cdee5cca5)
 Date: 2026-09-02
-Subject: [TLCS900] Decode the five leading bytes the disassembler always refused
+Subject: [TLCS900] Model (Xrr+Rn) and the memory-to-memory loads
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # What this pin adds over dbb72df07371, all DECODER-side (no encoding changed,
@@ -470,3 +470,92 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # plus scripts/analysis/assert_images_assemble.py on all 8 KN5000 images, and
 # llvm-lit clean on all 28 TLCS900 MC tests. That the gate is green ACROSS the
 # new diagnostic is the finding: truncation was all the old assembler did.
+
+# UPDATE 14 (2026-09-02): moved to 86332721969d, one commit on top of
+# 7e541b8ddb07, from the lane sent to model the operands behind the 98
+# raw-byte pseudo-instruction names / 22,135 sites of
+# notes/ASSESSMENT-syntax-convergence-2026-09-02.md class 3, and the 274
+# `ld (mem),(nn)` decoder refusals.
+#
+# TWO OPERAND SHAPES MODELLED, no existing encoding changed:
+#
+#   * `(Xrr+Rn)`, the REGISTER-INDEXED operand.  UPDATE 8 made `ld wa,(xix+iz)`
+#     a diagnostic because the index register was being swallowed as an
+#     undefined symbol and the line assembled to the (Xrr+d16) form -- d3 f1 00
+#     00 20 where the ROM has d3 07 f0 f8 20.  It is now a distinct PARSER KIND,
+#     so an index register cannot reach the displacement slot at all: the
+#     confusion is impossible rather than diagnosed.  `ld l, (xde+bc)`,
+#     `ld (xde+bc), xwa`, `lda xde, (xbc+wa)`, `jp t, (xix+bc)`, and the 8-bit
+#     index (mode byte 0x03) and previous-bank index (`(xwa+qiz)`) variants.
+#   * MEMORY-TO-MEMORY, `ld (mem),(nn)` and `ld (nn),(mem)` -- one
+#     register-indirect operand and one 16-bit direct address.
+#
+# ⚠ `ldmi16` AND `ldmw2` ARE THE WRONG INSTRUCTION FOR THEIR BYTES.  Destination
+# sub-opcodes 0x14 and 0x16 are not store-immediate: unidasm reads `b0 14 38 8d`
+# as `ld (XWA),(0x8d38)`, a memory-to-memory move whose trailing field is an
+# ADDRESS.  The real store-immediate is 0x00 (byte) and 0x02 (word).  Both old
+# spellings still emit exactly the bytes they always did -- committed source
+# writes them in 670 places -- but the correct instruction now exists and is
+# what the disassembler prints.
+#
+# ★ AND A SILENT RE-ENCODING CAUGHT BEFORE IT SHIPPED, worth the rule.  The
+#   memory-to-memory address operand was first given the existing `directaddr`
+#   class, which answers true to a BARE IMMEDIATE.  `ldw (xwa), 36152` -- a
+#   store-immediate written in hundreds of places -- immediately started
+#   matching `ldw (mem),(nn)` and moved from b0 02 38 8d to b0 16 38 8d, with
+#   no diagnostic.  A form whose operand must be an ADDRESS has to reject a
+#   VALUE; `daddr16` requires the parentheses, and the lit test guards it.
+#   Adding an operand class is exactly as dangerous as changing an encoding
+#   when the new class overlaps an old one.
+#
+# THREE DECODER DEFECTS FOUND BY THE SAME WORK, all wrong-answer rather than
+# refusal, which is the class a refusal count cannot see:
+#   * LDA with an 8-BIT index fell out of the R+R decoder: `f3 03 f4 e0 35`
+#     (`lda XIY,XIY+A`, v7 sequencer/rhythm_routines.s:461) came back as THREE
+#     instructions -- `<unknown>`, `pop sr`, `st_dpdb e, 224` -- so five bytes
+#     were read as one, one and three.
+#   * a PREVIOUS-BANK index on the LOAD and STORE sides was refused with "no
+#     previous-bank source form exists".  It exists: `c3 07 e0 fa 21` is
+#     `ld A,(XWA+QIZ)`, and three hdae5000 sites carry unidasm's rendering in a
+#     trailing comment already.  19 sites in five images.
+#   * CALL cc,(base+idx) is sub-opcode 0xE0|cc, NOT 0x08|cc.  unidasm prints
+#     `db` for every byte of 0x08-0x17 with this prefix and `call T,XBC+WA` for
+#     0xE8, and mem_prefix_test_sites.py already recorded the destination
+#     table's CALL range as 0xE0-0xEF.  The wrong range also swallowed 0x14 and
+#     0x16 -- reading the SEVEN-byte memory-to-memory move as a FIVE-byte CALL,
+#     which is where UPDATE 13's 16 `ldmm_dri` length errors came from.
+#     `call_rr`'s own encoding is untouched; no source in either tree writes it.
+#
+# ⚠ REFUSED, with evidence: `(Xrr+256)`.  `d3 f9 00 01 19 04 04` is
+# `ldw (0x0404),(XIZ+0x0100)`; it decodes correctly and unidasm agrees, but it
+# cannot be written back, because 256 is the ASSEMBLER'S SENTINEL for "force the
+# 2-byte (Xrr+d8) form with displacement 0" (63ff7d92fb5f).  The sentinel steals
+# a legal displacement -- the 65536 sentinel one width up does not, being
+# outside the field.  Three sites, all already raw bytes in the tree, so nothing
+# is wrong today; what is missing is a spelling.  Recorded rather than patched,
+# because 1,132 committed sites depend on the sentinel's current meaning.
+#
+# Measured, not assumed: scripts/analysis/regindexed_convergence.py rewrites
+# every raw-byte register-indexed site and requires llvm-mc to return the SAME
+# bytes for both spellings; scripts/analysis/memtomem_test_sites.py does the
+# same for the memory-to-memory sites and additionally RE-ASSEMBLES EVERY DECODE
+# and asks unidasm to agree on the OPERATION.
+#
+# ★ THE HEADER PIN ABOVE WAS STALE and is corrected here.  It still named
+#   6f456a19f05b while UPDATE 11, 12 and 13 had moved past it -- those entries
+#   were appended without moving the Branch/Commit lines, so the one field a
+#   reader checks first named a toolchain three commits old.
+#
+# Verified: `make clean`-free full rebuild under `make gate-all` -- 9 KN5000
+# ROMs IDENTICAL, 4 SX-WSA1R ROMs IDENTICAL, and
+# scripts/analysis/assert_images_assemble.py PASS on all 8 KN5000 images, with
+# every image genuinely re-assembled from this toolchain (07db0cc2's fix means
+# the WSA1R objects now really do depend on llvm-mc).  llvm-lit clean on all 30
+# TLCS900 MC tests, two of them new.
+#
+# ⚠ THE GATE RUN WENT RED ON A GREEN TREE, and the cause was the gate.  After
+# both byte gates passed, assert_toolchain_is_a_prerequisite.py exited "no
+# assembler at .../disasm-lanes/llvm-project/build/bin/llvm-mc": it resolved the
+# assembler as ROOT.parent/llvm-project, which is only correct in the main
+# checkout and wrong in every lane worktree.  Fixed, with its foil still going
+# red (0/8 and 0/4 with the prerequisite removed).

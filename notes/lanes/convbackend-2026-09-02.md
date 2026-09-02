@@ -159,3 +159,60 @@ line in the new lit test, not by reasoning.
 Each `--selftest` pins its verdict rule on **synthetic** input, so that a change
 to the tree cannot make it pass or fail for the wrong reason, and each carries a
 foil that must fail.
+
+## Gate
+
+`make gate-all` in this lane's worktree, at `tlcs900_backend@86332721969d`, with
+every image rebuilt from that toolchain (07db0cc2's fix means the WSA1R objects
+really do depend on `llvm-mc` now, so this is not a stale-object comparison):
+
+| | result |
+|---|---|
+| KN5000 ROMs byte-identical | **9/9** |
+| SX-WSA1R ROMs byte-identical | **4/4** |
+| `assert_images_assemble.py` | **PASS**, 8/8 KN5000 images |
+| `llvm-lit llvm/test/MC/TLCS900` | **30/30**, two of them new |
+
+⚠ **The gate run went red on a green tree, and the cause was the gate.** After
+both byte gates had passed, `assert_toolchain_is_a_prerequisite.py` — added
+today — exited `no assembler at .../disasm-lanes/llvm-project/build/bin/llvm-mc`.
+It resolved the assembler as `ROOT.parent/llvm-project`, which holds only in the
+main checkout: a lane tree lives at `~/compartilhado/disasm-lanes/<lane>`, so
+the parent is `disasm-lanes/`. **It would have failed in every lane worktree
+and passed on main**, which is the shape that makes a gate look flaky rather
+than wrong. Fixed to resolve it the way the Makefile does, honouring `LLVM_MC`
+and `PROJECTS_ROOT`; its foil still goes red (0/8 and 0/4 with the prerequisite
+stripped out).
+
+⚠ **That check `os.utime`s the shared `llvm-mc`** — that is how it poses its
+question. So any `gate-all`, anywhere, makes every other lane's objects older
+than the assembler and forces a full rebuild on their next build. That is the
+real cost behind the brief's "gate only what you could have broken".
+
+### Proving the gate can see a change of this kind
+
+A source-byte perturbation is the wrong foil for a lane that changed no source.
+The equivalent here is the prerequisite check's own `--selftest`, which strips
+`$(LLVM_MC)` back out of a scratch copy of each Makefile and requires the count
+to fall to zero: it reports **0/8 and 0/4, "goes red as it must"**. Without
+that, "the gate is green after a toolchain change" would be a claim the gate is
+structurally unable to refute — the exact failure of 2026-09-01, when four
+KN5000 images did not assemble at all and the gate compared week-old objects.
+
+## Not done, and why
+
+* **`incm` → `incw` and `ldda32` → `ld …(…:16)` in the PRINTER**, requested by
+  `notes/TRIAGE-size-form-mnemonics-2026-09-02.md`. `incm` is a one-line change
+  (zero `EmitPriority` on the `InstAlias` at `TLCS900InstrInfo.td`, keeping it
+  parseable). `ldda32` is **not** one line: its operand is `directaddr`, a
+  single MCOperand with nowhere to carry the width, so printing the `:16` needs
+  either a width-carrying direct-address operand or the decoder to emit
+  `LD32rm` with a MEMri direct operand — and the latter cannot work today,
+  because `emitMemPrefix` distinguishes a direct address from a register by
+  `BaseOp.isExpr()`, while the disassembler builds an `Imm`. Both were held
+  back rather than bundled: each would relink the shared `llvm-mc` and
+  invalidate this gate run, and the second needs its own encoding test.
+* **The R+R immediate / bit / ALU sub-opcodes** (`ld (xhl+bc), 0xff`,
+  `bit 3, (xhl+bc)`, `add xix, (xhl+de)`). The operand half is now modelled;
+  these need the instruction definitions on top of it. ~950 sites, named by
+  mnemonic in the census output — the obvious next chunk.
