@@ -292,12 +292,28 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # 94 v7 romslices (46,570 B).
 #
 # ⚠ IT DID NOT UNBLOCK THEM. Those totals are UNCHANGED. Every slice it fixed a
-# form for moved its blocking point deeper into its tail and then hit what reads
-# as a genuine data table. Six single-byte opcodes (0x01, 0x04, 0x17, 0x1a,
-# 0x1c, 0x1f) are CONFIRMED unmapped anywhere in the decoder -- real reserved
-# space, not a gap -- and 0x01 alone accounts for 9,424 B across 8 slices. So
-# "teach llvm-mc to spell it" is NOT the lever for the v7 remainder, and the
-# note in DEBT-INVENTORY that said it was has been corrected.
+# form for moved its blocking point deeper into its tail. Six single-byte
+# opcodes (0x01, 0x04, 0x17, 0x1a, 0x1c, 0x1f) are confirmed to have no decode
+# anywhere in THIS BACKEND -- verified across 393,216 operand continuations
+# each by scripts/analysis/leading_byte_reserved_probe.py, with a foil control.
+#
+# ⚠⚠ CORRECTED SAME DAY. This entry first called those six "real reserved
+# space, not a gap", and concluded that v7's remainder is therefore data and
+# the backend is NOT the lever. THAT IS RETRACTED. MAME's unidasm decodes five
+# of the six as real TLCS-900 instructions this backend has never been taught:
+#     0x01 normal   0x04 max   0x17 ldf   0x1a JP nnnn   0x1c CALL nnnn
+# Two of them are CONTROL FLOW. Only 0x1f is genuinely undefined, and 0x1f
+# gates ZERO slices and ZERO bytes. 21 slices / 16,683 B are blocked by those
+# five missing instructions alone, and the #1 blocker overall -- 0xC1, 14
+# slices / 6,434 B -- is the 16-bit direct-address prefix missing its
+# BITm/SETm/RESm forms. All of it is assembler work, so the backend IS the
+# lever after all. See scripts/analysis/unmapped_byte_oracle.py.
+#
+# ★ THE RULE, which this file's own history now supports eight times over:
+#   NEVER conclude anything about the ROM from a backend refusal without asking
+#   a second decoder. Every UPDATE below records a "the backend cannot do this"
+#   that turned out to be a spelling nobody tried; this was the first time the
+#   wrong inference reached the plan of record instead of just a lane report.
 #
 # ★ WHAT IT DID FIX IS LARGER THAN WHAT IT WAS SENT FOR -- two llvm-mc CRASHES
 #   reachable from any image, and three silent-miscompile-class bugs:
@@ -309,7 +325,10 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #   * the (Xrr)/(Xrr+d8=0) print/encode collapse fixed in 63ff7d92fb5f existed
 #     one width up, for the SRI (Xrr+d16=0) form. Same sentinel, mirrored.
 #   * LD16ri_short (ldw rd, imm16) excluded SP although the hardware encoding
-#     covers it, like PUSH16_short. Added as an asm-only sibling.
+#     covers it, like PUSH16_short. Added as an asm-only sibling. ⚠ This one is
+#     a LOUD REJECTION, not a silent miscompile -- this entry first counted
+#     "three silent-miscompile-class bugs" and there are TWO (the ALU register
+#     substitution and the SRI print/encode collapse).
 #   * ⚠ THE SILENT ONE: the ALU-direct-address family's register encoder used
 #     the instruction's OpSize field -- which names the MEMORY operand's width,
 #     not the register's -- to decide 8-bit sub-register substitution, silently
