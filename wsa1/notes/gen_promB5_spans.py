@@ -310,6 +310,12 @@ def render(b, hta, htb):
                        "; 0xF31DB1), and the run lands exactly on 0x%06X.\n"
                        % (addr, addr + size - 1, len(recs), "" if len(recs) == 1 else "s",
                           size, ev["end"]))
+            out.append("; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed\n"
+                       "; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists\n"
+                       "; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE\n"
+                       "; pointer on the stack.  The framing therefore rests on the length rule\n"
+                       "; plus BOTH endpoints being proven independently -- it starts where the\n"
+                       "; previous object provably ends and lands on an address a pointer names.\n")
             out.append("; ------------------------------------------------------------------\n")
             for p, op, ln, _h in recs:
                 out += V2.render_b(b, p, op, ln, htb)

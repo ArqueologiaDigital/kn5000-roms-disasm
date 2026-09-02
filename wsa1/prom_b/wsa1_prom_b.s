@@ -45738,6 +45738,12 @@ Data_F2843D:
 ; 0xF2844F-0xF284A1 -- 6 interpreter-B display-list records, 83 bytes.
 ; Every length byte equals its handler's implied length (HTBL_B at
 ; 0xF31DB1), and the run lands exactly on 0xF284A2.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x09, 0x0C	; B op 09, 12 bytes -> handler 0xF31C14 -- decimal readout, unsigned, two extra words
 	.short 0x2640	; +0x02 source variable, 16-bit address
@@ -45952,6 +45958,12 @@ DLTable_F28755:
 ; 0xF28765-0xF28790 -- 4 interpreter-B display-list records, 44 bytes.
 ; Every length byte equals its handler's implied length (HTBL_B at
 ; 0xF31DB1), and the run lands exactly on 0xF28791.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x2640	; +0x02 source variable, 16-bit address
@@ -46026,6 +46038,12 @@ DLTable_F287C1:
 ; 0xF287D1-0xF287E1 -- 1 interpreter-B display-list record, 17 bytes.
 ; Every length byte equals its handler's implied length (HTBL_B at
 ; 0xF31DB1), and the run lands exactly on 0xF287E2.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x2647	; +0x02 source variable, 16-bit address
@@ -47989,6 +48007,12 @@ DL_F296CC:
 ; 0xF296D6-0xF296E6 -- 1 interpreter-B display-list record, 17 bytes.
 ; Every length byte equals its handler's implied length (HTBL_B at
 ; 0xF31DB1), and the run lands exactly on 0xF296E7.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
 	.short 0x2250	; +0x02 source variable, 16-bit address
@@ -48021,6 +48045,12 @@ DLTable_F296E7:
 ; 0xF2970F-0xF29724 -- 2 interpreter-B display-list records, 22 bytes.
 ; Every length byte equals its handler's implied length (HTBL_B at
 ; 0xF31DB1), and the run lands exactly on 0xF29725.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x267E	; +0x02 source variable, 16-bit address
@@ -50627,6 +50657,12 @@ DL_SoundGroupMenuReMap1ReMap2:
 ; 0xF2B2E3-0xF2B2F8 -- 2 interpreter-B display-list records, 22 bytes.
 ; Every length byte equals its handler's implied length (HTBL_B at
 ; 0xF31DB1), and the run lands exactly on 0xF2B2F9.
+; ⚠ No `ld XIY / ld XIX / call` site names this run: the committed
+; scanner (scripts/analysis/prom_b_display_lists.py) is blind to lists
+; entered through DisplayListB_RunOne_Stack (0xF3183D), which takes ONE
+; pointer on the stack.  The framing therefore rests on the length rule
+; plus BOTH endpoints being proven independently -- it starts where the
+; previous object provably ends and lands on an address a pointer names.
 ; ------------------------------------------------------------------
 	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
 	.short 0x2674	; +0x02 source variable, 16-bit address
