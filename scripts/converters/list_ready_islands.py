@@ -32,6 +32,9 @@ import fill_verified_islands as fvi
 
 WORK = sys.argv[2] if len(sys.argv) > 2 else os.path.join(REPO, "island-work")
 terr, blobs, rom = fvi.load(TAG, WORK)
+import tempfile
+tmp = tempfile.NamedTemporaryFile(suffix=".bin", delete=False).name
+isl = [b for b in blobs if b["kind"] == "byteblob" and 0 < b["start"]
        and b["end"] < fvi.SIZE and terr[b["start"] - 1] == 1 and terr[b["end"]] == 1]
 accepted = []
 for b in isl:
