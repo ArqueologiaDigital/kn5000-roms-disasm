@@ -8489,17 +8489,15 @@ DL_F05501:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F0550B -- 278 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F0550B -- 276 bytes, EMITTED AS DATA (not promoted to code).
+; ⚠ CORRECTED: was declared 278 bytes, 2 bytes too many -- see
+; notes/gen_prom_b_f05621_fix_module.py.  Those 2 bytes (0x17, 0x07) were
+; the op/len header of the display-list record run that starts at 0xF0561F,
+; below, exposed by Data_F0563B's own pointer array naming that address.
 ; Reached from: 0x00F0550B appears as a 32-bit word at 0xF0555B 0xF0555F
 ;               0xF5C5D1 0xF5C5E4; converted code at 0xF5C5D0 0xF5C5E3 loads
 ;               it as a 32-bit immediate.  No routine-directory slot and no
 ;               branch decoded in converted code names it.
-; Measured: 18% printable ASCII; a linear decode runs 137 instructions and
-;           ends `reti`, with 17% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
 Data_F0550B:
 	.byte	0x11, 0x0A, 0xDE, 0x00, 0x44, 0x00, 0xED, 0x00, 0x44, 0x00, 0x12, 0x0A, 0xED, 0x00, 0x44, 0x00	; F0550B  |....D...D.....D.|
@@ -8519,23 +8517,20 @@ Data_F0550B:
 	.byte	0xA3, 0x00, 0xB4, 0x00, 0x46, 0x00, 0x00, 0x0A, 0x5D, 0x00, 0xA3, 0x00, 0xB4, 0x00, 0x65, 0x00	; F055EB  |....F...].....e.|
 	.byte	0x00, 0x0A, 0x5D, 0x00, 0xA3, 0x00, 0xB4, 0x00, 0x84, 0x00, 0x01, 0x0A, 0x5D, 0x00, 0xA3, 0x00	; F055FB  |..].........]...|
 	.byte	0xB4, 0x00, 0xA3, 0x00, 0x6F, 0x55, 0xF0, 0x00, 0x97, 0x55, 0xF0, 0x00, 0xBF, 0x55, 0xF0, 0x00	; F0560B  |....oU...U...U..|
-	.byte	0xE7, 0x55, 0xF0, 0x00, 0x17, 0x07	; F0561B  |.U....|
-
-	
-; --- 0xF05621-0xF05625: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005621, 0x000005
+	.byte	0xE7, 0x55, 0xF0, 0x00	; F0561B  |.U..|
 
 ; ------------------------------------------------------------------
-; 0xF05626-0xF0563A -- 3 display-list records, 21 bytes -- interpreter A
-; NOT reached by any known call shape (reachability.py: prom_b has 0
-; bytes with start evidence) and not named by any converted record's
-; own table field either -- found because a plain op/len walk, starting
-; 5 bytes into this span, lands with ZERO DRIFT exactly on the span's
-; declared end, and every record's length satisfies ITS OWN handler's
-; implied-length rule (notes/prom_b_dl_length_audit.py), not merely
-; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
+; 0xF0561F-0xF0563A -- 4 display-list records, 28 bytes -- interpreter A
+; The 4th of Data_F0563B's own 4 pointers names 0xF0561F exactly; the other
+; 3 are the record starts this lane's untouched-pool round already found.
+; Formerly the last 2 bytes of Data_F0550B plus a 5-byte unexplained
+; fragment.  Regenerate: python3 notes/gen_prom_b_f05621_fix_module.py
 ; --splice
 ; ------------------------------------------------------------------
+	.byte 0x17, 0x07	; op 17, 7 bytes -> handler 0xF31A52
+	.short 0x0058
+	.short 0x0043
+	.byte 0x10	; character codes below 0x20
 	.byte 0x17, 0x07	; op 17, 7 bytes -> handler 0xF31A52
 	.short 0x0058
 	.short 0x0062
