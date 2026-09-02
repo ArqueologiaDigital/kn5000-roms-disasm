@@ -79,6 +79,7 @@ RUN
     python3 scripts/analysis/code_suspect_adjudicate.py --null
     python3 scripts/analysis/code_suspect_adjudicate.py v7
     python3 scripts/analysis/code_suspect_adjudicate.py v7 --min 32
+    python3 scripts/analysis/code_suspect_adjudicate.py --blockers
     python3 scripts/analysis/code_suspect_adjudicate.py --randomctl 120 \
             --sizes 8,16,24,32,48,64,96,128,192,256
 
@@ -388,10 +389,74 @@ def null():
               "C-compiled region: %d" % (key, n_num, n_in))
 
 
+
+def blockers(keys):
+    """WHAT STOPS THE REGIONS THAT DO NOT FULLY CONVERT?
+
+    Two very different answers hide behind one "not clean":
+
+      * the FIRST instruction at the branch target already fails -- the target
+        is not an instruction start, which is the phantom shape; or
+      * the decode runs past the target and blocks later -- a spelling gap in
+        the llvm backend, which says nothing against the transfer.
+
+    This splits them, and for the second class names the unidasm mnemonic that
+    llvm-mc could not reproduce, so the backend lane has a worklist."""
+    from collections import Counter
+    first_fail, later, forms = [], [], Counter()
+    for key in keys:
+        info = IMG[key]
+        files, labels, refs = C.scan(info["mirror"])
+        syms, R, base = symtab(key), rom(key), info["base"]
+        addrs = sorted(set(syms.values()))
+        for name, places in labels.items():
+            if name not in refs or name not in syms:
+                continue
+            for (rel, li) in places:
+                L = files[rel]
+                fe = C.first_emitting(L, li)
+                if not fe or fe[1] != "data":
+                    continue
+                nb, _e = C.run_extent(L, fe[0])
+                a = syms[name]
+                i = bisect.bisect_right(addrs, a)
+                end = addrs[i] if i < len(addrs) else a + nb
+                if nb:
+                    end = min(end, a + nb)
+                n = end - a
+                if n <= 0 or n > 65536:
+                    continue
+                blob = list(R[a - base:a - base + n])
+                res = CCB.convert_block(blob, base_pc=a)
+                bad = [r for r in res if r[0] is None]
+                if not bad:
+                    continue
+                off = bad[0][1]
+                dec = dict((o, (nn, m)) for (o, nn, m)
+                           in CCB.unidasm_decode(blob, a))
+                mn = dec.get(off, (0, "<undecodable>"))[1].split()[0].lower() \
+                    if off in dec else "<undecodable>"
+                forms[mn] += 1
+                (first_fail if off == 0 else later).append((key, name, n, off, mn))
+    print("BLOCKERS in the control-transfer-targeted population")
+    print("  target is NOT an instruction start (offset 0 fails): %d regions, "
+          "%d B   <- the phantom shape"
+          % (len(first_fail), sum(x[2] for x in first_fail)))
+    print("  decode passes the target, blocks later:              %d regions, "
+          "%d B   <- a backend spelling gap"
+          % (len(later), sum(x[2] for x in later)))
+    print("\n  first-blocking form, by region count:")
+    for m, c in forms.most_common(25):
+        print("    %-22s %5d" % (m, c))
+
+
 def main():
     a = sys.argv[1:]
     if "--null" in a:
         null()
+        return
+    if "--blockers" in a:
+        blockers([x for x in a if x in IMG] or ["v7", "v9", "v10"])
         return
     if "--randomctl" in a:
         n = int(a[a.index("--randomctl") + 1])
