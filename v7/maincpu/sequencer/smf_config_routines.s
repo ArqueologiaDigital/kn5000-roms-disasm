@@ -883,7 +883,7 @@ SMF_DispatchEvent:
 	ld (4008:16), c
 	xor b, b
 	ld iy, bc
-	anddi8 (4331), 254
+	and (4331:16), 254
 	push xix
 	ld xix, 0xf1a0
 	cpib_sri 0x07, 0xf0, 0xf4, 0x0f
@@ -1750,11 +1750,11 @@ SMF_SetupReadPointers:
 	ret
 
 SMF_ResetPlaybackState:
-	anddi8 (4404), 254
-	anddi8 (4404), 253
-	anddi8 (4411), 254
-	anddi8 (4411), 253
-	anddi8 (4404), 251
+	and (4404:16), 254
+	and (4404:16), 253
+	and (4411:16), 254
+	and (4411:16), 253
+	and (4404:16), 251
 	ld (4419:16), 0
 	ordi8 4393, 2
 	xor a, a
@@ -1772,7 +1772,7 @@ SMF_ParseEvents:
 	ld c, (3301:16)
 	ld wa, (0xf19e:16)
 	ld (0x287a:16), 0
-	anddi8 (0x287b), 191
+	and (0x287b:16), 191
 	xor xhl, xhl
 	ld l, (3301:16)
 	ld xix, 0xf1a0
@@ -1785,29 +1785,29 @@ SMF_ParseEvents:
 	jr SMF_Parse_NextChannel
 
 SMF_Parse_ClearAutoFlag:
-	anddi8 (4393), 254
+	and (4393:16), 254
 	xor h, h
 
 SMF_Parse_NextChannel:
 	ld a, (3301:16)
 	inc 1, a
 	calr SMF_ConfigSlot
-	anddi8 (4393), 254
-	anddi8 (4393), 251
+	and (4393:16), 254
+	and (4393:16), 251
 	ld (4419:16), 0
 	incdi8 1, (3301)
 	jr SMF_ParseEvents
 
 SMF_Parse_Complete:
 	ld (3301:16), 0
-	anddi8 (4393), 254
-	anddi8 (4393), 253
-	anddi8 (4393), 251
-	anddi8 (4404), 254
-	anddi8 (4404), 253
-	anddi8 (4411), 254
-	anddi8 (4411), 253
-	anddi8 (4404), 251
+	and (4393:16), 254
+	and (4393:16), 253
+	and (4393:16), 251
+	and (4404:16), 254
+	and (4404:16), 253
+	and (4411:16), 254
+	and (4411:16), 253
+	and (4404:16), 251
 	ld (4419:16), 0
 	ret
 
@@ -1849,7 +1849,7 @@ SMF_ChannelTranslationTable:
 	.fill 8, 1, 0xff
 
 SMF_ConfigSlot:
-	anddi8 (0x287b), 251
+	and (0x287b:16), 251
 	xor w, w
 	ld (0x287a:16), 0
 	ld (0x287d:16), wa
@@ -1942,12 +1942,12 @@ SMF_ConfigSlot_Type80:
 SMF_ConfigSlot_StoreType:
 	pushw wa
 	ld (3310:16), a
-	anddi8 (3310), 2
+	and (3310:16), 2
 	ld a, (3310:16)
 	sla a, 6
 	ld (3310:16), a
 	ld (4395:16), a
-	anddi8 (4395), 1
+	and (4395:16), 1
 	ld a, (4395:16)
 	sla a, 7
 	ld (4395:16), a
@@ -1976,11 +1976,11 @@ SMF_ConfigSlot_ReadDataLoop:
 	pop xiy
 	cp (0x287a:16), 0
 	jrl nz, SMF_ConfigSlot_Return
-	anddi8 (4404), 254
-	anddi8 (4404), 251
-	anddi8 (4404), 253
-	anddi8 (4411), 254
-	anddi8 (4411), 253
+	and (4404:16), 254
+	and (4404:16), 251
+	and (4404:16), 253
+	and (4411:16), 254
+	and (4411:16), 253
 	ld a, (4394:16)
 	cps a, 1
 	jr z, SMF_Config_Format1
@@ -2075,7 +2075,7 @@ SMF_Config_Count5:
 	calr SMF_SlotParam_BankSelectReturn
 	calr SMF_SlotParam_BankLSBReturn
 	calr SMF_SlotParam_NRPN
-	anddi8 (4411), 254
+	and (4411:16), 254
 	jr SMF_Config_PopAndContinue
 
 SMF_Config_Count4:
@@ -2097,7 +2097,7 @@ SMF_Config_Format4or5:
 
 SMF_Config_Format5_Handler:
 	call SMF_SlotParam_Format5Handler
-	anddi8 (4411), 254
+	and (4411:16), 254
 	jr SMF_Config_PopAndContinue
 
 SMF_Config_WriteOutput:
@@ -2138,8 +2138,8 @@ SMF_Config_WriteLoop:
 	jrl SMF_ConfigSlot_WriteAndContinue
 
 SMF_Config_HandleBit1:
-	anddi8 (4404), 253
-	anddi8 (4404), 253
+	and (4404:16), 253
+	and (4404:16), 253
 	jrl SMF_ConfigSlot_AdvanceEvent
 
 SMF_Config_OutputOverride1:
@@ -2224,8 +2224,8 @@ SMF_Config_CallHandler:
 	calr SMF_AdvanceWritePtr
 
 SMF_Config_ClearFlags:
-	anddi8 (4404), 254
-	anddi8 (4404), 251
+	and (4404:16), 254
+	and (4404:16), 251
 	jrl SMF_ConfigSlot_WriteAndContinue
 
 SMF_ConfigSlot_EndOfTrack:
@@ -2812,8 +2812,8 @@ SMF_SlotParam_AftertouchReturn:
 	ret
 
 SMF_SlotParam_PortamentoSwitch:
-	anddi8 (4404), 253
-	anddi8 (4411), 253
+	and (4404:16), 253
+	and (4411:16), 253
 	cp (0x2873:16), 15
 	jr nz, SMF_SlotParam_PortaReturn
 	cp (xiy + 2), 0x12

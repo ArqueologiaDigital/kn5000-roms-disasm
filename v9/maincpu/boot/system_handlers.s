@@ -556,7 +556,7 @@ UI_STATE_0_IDLE:
 	jrl UIStateMachine_ExitToScheduler
 
 UI_STATE_1_PROCESS:
-	anddi8 (1058), 110
+	and (1058:16), 110
 	bit 0, (1042:16)
 	jr nz, UIState1_AlternateExit
 	lda xhl, (1116:16)
@@ -882,7 +882,7 @@ INTTR4_AltSeqAccum_Update:
 	cpdm8 1072, a
 	jr nz, INTTR4_AltSeqSync_Check
 	ld (1054:16), 8
-	anddi8 (1073), 247
+	and (1073:16), 247
 	cpdi16 0x28aa, 0
 	jr z, INTTR4_AltSeqSync_Check
 	ldb a, 0x86
@@ -894,7 +894,7 @@ INTTR4_AltSeqSync_Check:
 	cpdm8 1071, a
 	jr nz, INTTR4_FadeDelay_Check
 	ld (1054:16), 1
-	anddi8 (1073), 254
+	and (1073:16), 254
 	cpdi16 0x28aa, 0
 	jr z, INTTR4_FadeDelay_Check
 	ldb a, 0x85
@@ -1145,7 +1145,7 @@ MainLoop_AfterSeqTick:
 	and a, 0x2c
 	jr z, MainLoop_AfterVoiceReset
 	call SeqMain_InitBuffer
-	anddi8 (1063), 211
+	and (1063:16), 211
 	ei 0
 	call Voice_InitializeAll
 	call MIDI_BroadcastPitchReset
@@ -1531,7 +1531,7 @@ RhythmBuf_Scan_ReturnNoteOn:
 
 RhythmBuf_Scan_ReturnOther:
 	ld (xhl - 6), iy
-	anddi8 (1115), 253
+	and (1115:16), 253
 	scf
 
 RhythmBuf_Scan_Return:
@@ -1620,7 +1620,7 @@ SeqEvt_Scan_ReturnNoteOn:
 
 SeqEvt_Scan_ReturnOther:
 	ld (xhl - 6), iy
-	anddi8 (1115), 253
+	and (1115:16), 253
 	scf
 
 SeqEvt_Scan_Return:
@@ -1711,7 +1711,7 @@ TempoRingBuf_DequeueOne_Done:
 	ret
 
 SeqEvt_CheckExpiry:
-	anddi8 (1058), 127
+	and (1058:16), 127
 	ld a, (0xe9bc:16)
 	and a, a
 	jr z, SeqEvt_CheckExpiry_Return

@@ -877,7 +877,7 @@ SeqPlay_StartWithDisplay:
 	call SeqPlay_CheckStartConditions
 	cp (0xf23d:16), 255
 	jr z, SeqPlay_SetFlagAndMode
-	anddi8 (0xfdad), 251
+	and (0xfdad:16), 251
 	xor a, a
 	jr SeqPlay_QueueDisplayEvent
 
@@ -9738,7 +9738,7 @@ Seq_DispatcherTick_Process:
 	call Seq_ReadTempoLookup
 	calr Seq_ProcessAllInputState
 	call Rhythm_CompareAndTrigger
-	anddi8 (0x3258), 0x9f
+	and (0x3258:16), 0x9f
 	call AccTick_Main
 	ld a, (0x3258:16)
 	and A,0x60

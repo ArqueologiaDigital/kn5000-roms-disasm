@@ -331,7 +331,7 @@ SMF_SelectBank_AfterReset:
 
 SMF_SelectBank_AfterToneLoad:
 	call SMF_InitSequencerState
-	anddi8 (0x28b1), 254
+	and (0x28b1:16), 254
 	pop xde
 	pop xix
 	pop xiz

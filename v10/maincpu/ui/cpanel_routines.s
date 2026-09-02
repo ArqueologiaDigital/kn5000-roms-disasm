@@ -120,7 +120,7 @@ CPanel_InitHardware:
 
 	ordi8 0x8d8c, 64	; CP_Flags_A.6 = 1
 	ld (0x8d8b:16), 0
-	anddi8 (0x8d8c), 252; CP_Flags_A.10 = 00
+	and (0x8d8c:16), 252; CP_Flags_A.10 = 00
 	ldw (0x8dfd:16), 0
 	ldw (0x8dff:16), 0
 	ldw (0x8d9d:16), 0
@@ -192,7 +192,7 @@ CPanel_SendInitSequence:
 
 CPanel_InitLEDBuffer:
 	ld (0x8e01:16), wa
-	anddi8 (0x8d8f), 191
+	and (0x8d8f:16), 191
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
 	ldio 0xeb, 0xff
@@ -206,7 +206,7 @@ CPanel_InitLEDBuffer:
 	st_dd8b A, 0x3e
 	calr DELAY_300_LOOPS
 	calr DELAY_300_LOOPS
-	anddi8 (0x8d8e), 191
+	and (0x8d8e:16), 191
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
 	calr DELAY_300_LOOPS
@@ -237,10 +237,10 @@ CPanel_InitLEDBuffer:
 	calr DELAY_300_LOOPS
 	or_sd8b_im 0xd5, 0x01
 	and_sd8b_im 0xd5, 0xfd
-	anddi8 (0x8d8e), 175
+	and (0x8d8e:16), 175
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
-	anddi8 (0x8d8f), 175
+	and (0x8d8f:16), 175
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
 	ret
@@ -645,12 +645,12 @@ CPanel_SendCommand:
 	ld (0x8e01:16), wa
 	adddi16 0x8dff, 2
 	ordi8 0x8d8c, 2
-	anddi8 (0x8d8c), 254; CP_Flags_A.10 = 2
+	and (0x8d8c:16), 254; CP_Flags_A.10 = 2
 	ld (0x8d8a:16), 4; ROUTINE_1
 	ldio 0xd7, 0x28	; Internal Clock T8 (64/fc)
 	                 ; Divide by 8
 	                 ; fc = 16MHz, so fc/64/8 = 31250
-	anddi8 (0x8d8f), 191; disable CPanel serial ckl
+	and (0x8d8f:16), 191; disable CPanel serial ckl
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
 	and_sd8b_im 0x3c, 0xbf	; PF bit 6: SCLK1 = 0
@@ -676,7 +676,7 @@ INTA_HANDLER:
 	cp (0x8d8b:16), 0
 	jr nz, INTA_HandleCountdown
 
-	anddi8 (0x8d8e), 159
+	and (0x8d8e:16), 159
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
 	or_sd8b_im 0xd5, 0x01	; IOC (bit 0) = 1: Set I/O interface input clock select to SCLK1 pin
@@ -697,7 +697,7 @@ INTA_HandleCountdown:
 INTA_DecrementRXCount:
 	decdi16 1, 0x8d9f
 	ordi8 0x8d92, 64	; CP_Flags_B.6 = 1  ; UNUSED
-	anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0
+	and (0x8d8c:16), 253; CP_Flags_A.1 = 0
 
 INTA_HANDLER_END:
 	pop xwa
@@ -765,7 +765,7 @@ LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 
 
 CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the control panel... (?)
-	anddi8 (0x8d8e), 191
+	and (0x8d8e:16), 191
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
 	ldio 0xd7, 0x24	; Internal Clock T8 (64/fc)
@@ -791,16 +791,16 @@ CPanel_SM_StartTX:	; FC44F9	; Start transmitting command to set LEDs on the cont
 	ldio 0xd7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0
+	and (0x8d8c:16), 253; CP_Flags_A.1 = 0
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_TXDelay1:
 	calr DELAY_10_LOOPS
-	anddi8 (0x8d8e), 175
+	and (0x8d8e:16), 175
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
-	anddi8 (0x8d8f), 175; disable CPanel serial clk and TX pin.
+	and (0x8d8f:16), 175; disable CPanel serial clk and TX pin.
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
 	ldio 0xd7, 0x24	; Internal Clock T8 (64/fc)
@@ -815,10 +815,10 @@ CPanel_SM_TXDelay1:
 
 CPanel_SM_TXDelay2:
 	calr DELAY_10_LOOPS
-	anddi8 (0x8d8e), 175
+	and (0x8d8e:16), 175
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
-	anddi8 (0x8d8f), 175; disable CPanel serial clk and TX pin.
+	and (0x8d8f:16), 175; disable CPanel serial clk and TX pin.
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
 	ldio 0xd7, 0x24	; Internal Clock T8 (64/fc)
@@ -914,7 +914,7 @@ CPanel_SM_TXComplete:
 	cps wa, 2
 	jr c, TXComplete_BufferEmpty
 	ld (0x8d8a:16), 4; ROUTINE_1
-	anddi8 (0x8d8f), 191; disable CPanel serial clk
+	and (0x8d8f:16), 191; disable CPanel serial clk
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
 	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
@@ -932,10 +932,10 @@ CPanel_SM_TXComplete:
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 TXComplete_BufferEmpty:
-	anddi8 (0x8d8e), 191
+	and (0x8d8e:16), 191
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
-	anddi8 (0x8d8f), 191; disable CPanel serial clk
+	and (0x8d8f:16), 191; disable CPanel serial clk
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
 	ldio 0xe3, 0x05
@@ -943,12 +943,12 @@ TXComplete_BufferEmpty:
 	ldio 0xd7, 0x24	; Internal Clock T8 (64/fc)
 	                 ; Divide by 4
 	                 ; fc = 16MHz, so fc/64/4 = 62500
-	anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0
+	and (0x8d8c:16), 253; CP_Flags_A.1 = 0
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 
 CPanel_SM_RXByte1:
-	anddi8 (0x8d8e), 159
+	and (0x8d8e:16), 159
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
 	or_sd8b_im 0xd5, 0x01
@@ -977,7 +977,7 @@ RXByte1_CheckThreshold:
 	jr RXByte1_InspectByte
 
 RXByte1_AdvanceWritePtr:
-	anddi8 (0x8d92), 254; CP_Flags_B.0 = 0
+	and (0x8d92:16), 254; CP_Flags_B.0 = 0
 	incdi16 1, (0x8d9f)
 	cpdi16 0x8d9f, 92
 	jr c, RXByte1_InspectByte
@@ -1014,12 +1014,12 @@ RXByteN_CheckDone:
 	cp (0x8d8b:16), 1
 	jr nz, RXByteN_ContinueRX
 	ld (0x8d8b:16), 0
-	anddi8 (0x8d8c), 254; CP_Flags_A.0 = 0
+	and (0x8d8c:16), 254; CP_Flags_A.0 = 0
 	ld (0x8d8a:16), 0; ROUTINE_0
-	anddi8 (0x8d8e), 159
+	and (0x8d8e:16), 159
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
-	anddi8 (0x8d8f), 191; disable CPanel serial clk
+	and (0x8d8f:16), 191; disable CPanel serial clk
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
 	ldio 0xe3, 0x05
@@ -1028,7 +1028,7 @@ RXByteN_CheckDone:
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
 RXByteN_ContinueRX:
-	anddi8 (0x8d8e), 159
+	and (0x8d8e:16), 159
 	ld a, (0x8d8e:16)
 	st_dd8b A, 0x3e
 	or_sd8b_im 0xd5, 0x01
@@ -1042,7 +1042,7 @@ CPanel_SM_Idle:	; FC47E9		; CPANEL_SERIAL_IDLE_STATE (?)
 	ordi8 0x8d92, 128	; CP_Flags_B.7 = 1
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 
-	anddi8 (0x8d8c), 252; CP_Flags_A.0 = 0
+	and (0x8d8c:16), 252; CP_Flags_A.0 = 0
 						; CP_Flags_A.1 = 0
 	ordi8 0x8d92, 4	; CP_Flags_B.2 = 1  : UNUSED
 	ldio 0xf8, 0x23	; INTTX1: Serial send 1
@@ -1136,7 +1136,7 @@ PollLoop_StartTX:
 	jr c, PollLoop_Return
 	ordi8 0x8d8c, 2	; CP_Flags_A.1 = 1
 	ld (0x8d8a:16), 4; ROUTINE_1
-	anddi8 (0x8d8f), 191; disable CPanel serial clk
+	and (0x8d8f:16), 191; disable CPanel serial clk
 	ld a, (0x8d8f:16)
 	st_dd8b A, 0x3f
 	and_sd8b_im 0x3c, 0xbf	; PF bit 6, (SCLK1 | /CTS1) = 0
@@ -1181,7 +1181,7 @@ CPanel_RX_ProcessWithFlag:
 	jr CPanel_RX_DispatchLoop
 
 CPanel_RX_Process:
-	anddi8 (0x8d8c), 251; CP_Flags_A.2 = 0  ; UNUSED?
+	and (0x8d8c:16), 251; CP_Flags_A.2 = 0  ; UNUSED?
 
 CPanel_RX_DispatchLoop:
 	ld xde, 0x8da1

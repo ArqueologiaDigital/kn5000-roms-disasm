@@ -62,7 +62,7 @@ Handler_INTA:
 	push	xwa
 	cp	(0x0f63:16), 0
 	jr	nz, Handler_INTA__rx_pacing
-	anddi8	(0x0f66), 0x9f		; PFCR shadow: SC1 pins to RX mode
+	and	(0x0f66:16), 0x9f		; PFCR shadow: SC1 pins to RX mode
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR
 	or_sd8b_im 0xd5, 0x01		; SC1CR bit 0 high
@@ -80,7 +80,7 @@ Handler_INTA__rx_pacing:
 Handler_INTA__count_ok:
 	decdi16	1, (0x0f77)
 	ordi8	(0x0f6a), 0x40		; status: INTA seen mid-transfer
-	anddi8	(0x0f64), 0xfd		; clear TX-pending flag
+	and	(0x0f64:16), 0xfd		; clear TX-pending flag
 Handler_INTA__exit:
 	pop	xwa
 	ldio	0xf8, 0x12		; INTCLR: INTA

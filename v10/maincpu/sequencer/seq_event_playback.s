@@ -1118,7 +1118,7 @@ AccPlay_ContinueMainLoop:
 	calr AccPlay_MonitorParamState
 	bit 0, (0x7f35:16)
 	jr z, AccPlay_UpdateStateFlags
-	anddi8 (0x7f35), 254
+	and (0x7f35:16), 254
 	calr AccPlay_CheckAndToggle
 
 AccPlay_UpdateStateFlags:
@@ -1128,7 +1128,7 @@ AccPlay_UpdateStateFlags:
 	jr z, AccPlay_DispatchRet
 	cp (0x8d36:16), 1
 	jr nz, AccPlay_DispatchRet
-	anddi8 (0x7f15), 251
+	and (0x7f15:16), 251
 	ld (0x7f42:16), 15
 	call DrumVoice_NotifyEE
 
@@ -1378,10 +1378,10 @@ AccPlay_StopIfRunning:
 	bit 2, (1056:16)
 	jr nz, AccPlay_StopRet
 	call Seq_DispatcherEntry
-	anddi8 (0x33e8), 254
+	and (0x33e8:16), 254
 	ordi8 0x34cd, 128
 	call Seq_DispatcherEntry
-	anddi8 (0x7f15), 254
+	and (0x7f15:16), 254
 
 AccPlay_StopRet:
 	ret
@@ -2460,7 +2460,7 @@ MidiSeqBuf_ScanLoop:
 	jr nz, MidiSeqBuf_ScanLoop
 	bit 4, (0x7f15:16)
 	jr z, MidiSeqBuf_ScanDone
-	anddi8 (0x7f15), 239
+	and (0x7f15:16), 239
 	ld (xhl + 1), 0x0
 
 MidiSeqBuf_ScanDone:

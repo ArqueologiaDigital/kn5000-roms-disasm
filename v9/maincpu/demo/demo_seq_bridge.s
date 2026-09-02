@@ -1024,7 +1024,7 @@ VoiceSlot_Overflow:
 VoiceSlot_SendErrorAndReset:
 	ldb w, 0x68
 	call MIDI_SendSysExCmd
-	anddi8 (0xe3e2), 111
+	and (0xe3e2:16), 111
 	ld (0x7f42:16), 15
 	ldw (0xe3dc:16), 0x40ee
 	popw bc

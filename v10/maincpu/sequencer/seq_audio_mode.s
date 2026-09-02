@@ -22,7 +22,7 @@ AudioMode_CheckAndUpdateStereo:
 
 AudioMode_ApplyStereoUpdate:
 	call AudioMode_SetStereoFlags
-	anddi8 (0x3284), 247
+	and (0x3284:16), 247
 
 AudioMode_CheckDone:
 	ret
@@ -120,7 +120,7 @@ AccPedal_ApplyChangeMask:
 AccPedal_CheckAuxBit2:
 	bit 2, (0x32ff:16)
 	jr z, AccPedal_ClearAllPedalFlags
-	anddi8 (0xfc60), 251
+	and (0xfc60:16), 251
 	ldb e, 0x48
 	ldb d, 0x5
 	ldb w, 0x0
@@ -234,11 +234,11 @@ AccVoice_ProcessPedalChanges:
 	xor a, a
 	ld (0x3309:16), a
 	ld (0x330b:16), a
-	anddi8 (0x330a), 243
-	anddi8 (0x3327), 192
+	and (0x330a:16), 243
+	and (0x3327:16), 192
 	bit 0, (0x330c:16)
 	jr nz, AccVoice_Pedal0_SetAndCheck
-	anddi8 (0x3326), 192
+	and (0x3326:16), 192
 
 AccVoice_Pedal0_SetAndCheck:
 	ordi8 0x330a, 1
@@ -253,11 +253,11 @@ AccVoice_Pedal0_Done:
 	xor a, a
 	ld (0x3309:16), a
 	ld (0x330b:16), a
-	anddi8 (0x330a), 246
-	anddi8 (0x3327), 192
+	and (0x330a:16), 246
+	and (0x3327:16), 192
 	bit 0, (0x330c:16)
 	jr nz, AccVoice_Pedal1_SetAndCheck
-	anddi8 (0x3326), 192
+	and (0x3326:16), 192
 
 AccVoice_Pedal1_SetAndCheck:
 	ordi8 0x330a, 4
@@ -272,11 +272,11 @@ AccVoice_Pedal1_Done:
 	xor a, a
 	ld (0x3309:16), a
 	ld (0x330b:16), a
-	anddi8 (0x330a), 250
-	anddi8 (0x3327), 192
+	and (0x330a:16), 250
+	and (0x3327:16), 192
 	bit 0, (0x330c:16)
 	jr nz, AccVoice_Pedal2_SetAndCheck
-	anddi8 (0x3326), 192
+	and (0x3326:16), 192
 
 AccVoice_Pedal2_SetAndCheck:
 	ordi8 0x330a, 8
@@ -294,11 +294,11 @@ AccVoice_ProcessLeftPedalChanges:
 	xor a, a
 	ld (0x330a:16), a
 	ld (0x330b:16), a
-	anddi8 (0x3309), 253
-	anddi8 (0x3327), 192
+	and (0x3309:16), 253
+	and (0x3327:16), 192
 	bit 0, (0x330c:16)
 	jr nz, AccVoice_LeftPedal0_SetAndCheck
-	anddi8 (0x3326), 192
+	and (0x3326:16), 192
 
 AccVoice_LeftPedal0_SetAndCheck:
 	ordi8 0x3309, 1
@@ -313,11 +313,11 @@ AccVoice_LeftPedal0_Done:
 	xor a, a
 	ld (0x330a:16), a
 	ld (0x330b:16), a
-	anddi8 (0x3309), 254
-	anddi8 (0x3327), 192
+	and (0x3309:16), 254
+	and (0x3327:16), 192
 	bit 0, (0x330c:16)
 	jr nz, AccVoice_LeftPedal1_SetAndCheck
-	anddi8 (0x3326), 192
+	and (0x3326:16), 192
 
 AccVoice_LeftPedal1_SetAndCheck:
 	ordi8 0x3309, 2
@@ -381,9 +381,9 @@ AccChord_ProcessKeyChanges:
 	xor a, a
 	ld (0x330a:16), a
 	ld (0x3309:16), a
-	anddi8 (0x3327), 192
-	anddi8 (0x330b), 253
-	anddi8 (0x3326), 192
+	and (0x3327:16), 192
+	and (0x330b:16), 253
+	and (0x3326:16), 192
 	ordi8 0x330b, 1
 	calr AccChannel_SetDirtyIfActive
 
@@ -395,9 +395,9 @@ AccChord_KeyChange0_Done:
 	xor a, a
 	ld (0x330a:16), a
 	ld (0x3309:16), a
-	anddi8 (0x3327), 192
-	anddi8 (0x330b), 254
-	anddi8 (0x3326), 192
+	and (0x3327:16), 192
+	and (0x330b:16), 254
+	and (0x3326:16), 192
 	ordi8 0x330b, 2
 	calr AccChannel_SetDirtyIfActive
 
@@ -430,9 +430,9 @@ AccChord_DispatchVoiceChange:
 	jr z, AccChord_CheckVoiceBit2
 	cpda8 c, 0x3364
 	jr z, AccChord_CheckVoiceBit2
-	anddi8 (0x330a), 254
-	anddi8 (0x3327), 192
-	anddi8 (0x32ff), 254
+	and (0x330a:16), 254
+	and (0x3327:16), 192
+	and (0x32ff:16), 254
 	or a, 0x4
 
 AccChord_CheckVoiceBit2:
@@ -441,9 +441,9 @@ AccChord_CheckVoiceBit2:
 	ld xhl, Display_FontPalette_Table_0x1D58
 	bit_dri 0, 0x03, 0xec, 0xe4
 	jr z, AccChord_CheckLeftPedal0
-	anddi8 (0x330a), 251
-	anddi8 (0x3327), 192
-	anddi8 (0x32ff), 253
+	and (0x330a:16), 251
+	and (0x3327:16), 192
+	and (0x32ff:16), 253
 	or a, 0x8
 
 AccChord_CheckLeftPedal0:
@@ -451,9 +451,9 @@ AccChord_CheckLeftPedal0:
 	jr z, AccChord_CheckLeftPedal1
 	cpda8 c, 0x3368
 	jr z, AccChord_CheckLeftPedal1
-	anddi8 (0x3309), 254
-	anddi8 (0x3327), 192
-	anddi8 (0x32fb), 254
+	and (0x3309:16), 254
+	and (0x3327:16), 192
+	and (0x32fb:16), 254
 	or a, 0x40
 
 AccChord_CheckLeftPedal1:
@@ -461,9 +461,9 @@ AccChord_CheckLeftPedal1:
 	jr z, AccChord_CheckKeyChange0
 	cpda8 c, 0x336a
 	jr z, AccChord_CheckKeyChange0
-	anddi8 (0x3309), 253
-	anddi8 (0x3327), 192
-	anddi8 (0x32fb), 253
+	and (0x3309:16), 253
+	and (0x3327:16), 192
+	and (0x32fb:16), 253
 	or a, 0x80
 
 AccChord_CheckKeyChange0:
@@ -471,24 +471,24 @@ AccChord_CheckKeyChange0:
 	jr z, RhythmPart_ProcessBit0
 	cpda8 c, 0x336c
 	jr z, RhythmPart_ProcessBit0
-	anddi8 (0x330b), 254
-	anddi8 (0x32fd), 254
+	and (0x330b:16), 254
+	and (0x32fd:16), 254
 	or a, 0x10
 	bit 0, (0x330c:16)
 	jr nz, RhythmPart_ProcessBit0
-	anddi8 (0x3327), 192
+	and (0x3327:16), 192
 
 RhythmPart_ProcessBit0:
 	bit 1, (0x330b:16)
 	jr z, RhythmPart_ProcessBit1
 	cpda8 c, 0x336e
 	jr z, RhythmPart_ProcessBit1
-	anddi8 (0x330b), 253
-	anddi8 (0x32fd), 253
+	and (0x330b:16), 253
+	and (0x32fd:16), 253
 	or a, 0x20
 	bit 0, (0x330c:16)
 	jr nz, RhythmPart_ProcessBit1
-	anddi8 (0x3327), 192
+	and (0x3327:16), 192
 
 RhythmPart_ProcessBit1:
 	cps a, 0
@@ -506,10 +506,10 @@ AccChord_CheckExtraDirtyBit3:
 	jr z, AccChord_CheckPitchDirty
 	cpda8 c, 0x3366
 	jr z, AccChord_CheckPitchDirty
-	anddi8 (0x330a), 247
-	anddi8 (0x3327), 192
-	anddi8 (0x32ff), 251
-	anddi8 (0xfc5f), 251
+	and (0x330a:16), 247
+	and (0x3327:16), 192
+	and (0x32ff:16), 251
+	and (0xfc5f:16), 251
 	ldb a, 0x0
 	ldb w, 0x0
 	ldb e, 0x48
@@ -524,7 +524,7 @@ AccChord_CheckPitchDirty:
 	jr z, AccChord_CheckPitchLeftPedal1
 	cpda8 c, 0x3368
 	jr z, AccChord_NullRet
-	anddi8 (0x3329), 192
+	and (0x3329:16), 192
 	jr AccChord_NullRet
 
 AccChord_CheckPitchLeftPedal1:
@@ -533,7 +533,7 @@ AccChord_CheckPitchLeftPedal1:
 	ld xhl, Display_FontPalette_Table_0x1D58
 	bit_dri 0, 0x03, 0xec, 0xe4
 	jr z, AccChord_NullRet
-	anddi8 (0x3329), 192
+	and (0x3329:16), 192
 
 AccChord_NullRet:
 	ret
@@ -552,7 +552,7 @@ AccChord_SetDirtyBit5:
 AccChord_CheckZeroChord:
 	cp (0x32dc:16), 0
 	jr nz, AccChord_CompareDone
-	anddi8 (0x32f3), 223
+	and (0x32f3:16), 223
 
 AccChord_CompareDone:
 	ret
@@ -893,7 +893,7 @@ RhythmPart1_ProcessRingBuf:
 	ld (xhl + 1), d
 
 RhythmPart1_WriteDone:
-	anddi8 (0x332c), 252
+	and (0x332c:16), 252
 	call AccVoiceReg_WritePart1
 	ret
 
@@ -1004,7 +1004,7 @@ RhythmPart2_ProcessRingBuf:
 	calr AccVoiceReg_StoreParamRecord
 
 RhythmPart2_WriteDone:
-	anddi8 (0x332c), 251
+	and (0x332c:16), 251
 	call AccVoiceReg_WritePart2
 	ret
 
@@ -1079,7 +1079,7 @@ RhythmPart3_ProcessRingBuf:
 	calr AccVoiceReg_StoreParamRecord
 
 RhythmPart3_WriteDone:
-	anddi8 (0x332c), 247
+	and (0x332c:16), 247
 	call AccVoiceReg_WritePart3
 	ret
 
@@ -1134,7 +1134,7 @@ RhythmPart4_ProcessRingBuf:
 	calr AccVoiceReg_StoreParamRecord
 
 RhythmPart4_WriteDone:
-	anddi8 (0x332c), 239
+	and (0x332c:16), 239
 	call AccVoiceReg_WritePart4
 	ret
 
@@ -1189,7 +1189,7 @@ RhythmPart5_ProcessRingBuf:
 	calr AccVoiceReg_StoreParamRecord
 
 RhythmPart5_WriteDone:
-	anddi8 (0x332c), 223
+	and (0x332c:16), 223
 	call AccVoiceReg_WritePart5
 	ret
 
@@ -1399,7 +1399,7 @@ AccentData_ComparePart1:
 	jr nz, AccentData_Part1_Done
 	cp l, h
 	jr nz, AccentData_Part1_Done
-	anddi8 (0x332c), 252
+	and (0x332c:16), 252
 
 AccentData_Part1_Done:
 	ret
@@ -1415,7 +1415,7 @@ AccentData_ComparePart2:
 	jr nz, AccentData_Part2_Done
 	cp l, h
 	jr nz, AccentData_Part2_Done
-	anddi8 (0x332c), 251
+	and (0x332c:16), 251
 
 AccentData_Part2_Done:
 	ret
@@ -1431,7 +1431,7 @@ AccentData_ComparePart3:
 	jr nz, AccentData_Part3_Done
 	cp l, h
 	jr nz, AccentData_Part3_Done
-	anddi8 (0x332c), 247
+	and (0x332c:16), 247
 
 AccentData_Part3_Done:
 	ret
@@ -1447,7 +1447,7 @@ AccentData_ComparePart4:
 	jr nz, AccentData_Part4_Done
 	cp l, h
 	jr nz, AccentData_Part4_Done
-	anddi8 (0x332c), 239
+	and (0x332c:16), 239
 
 AccentData_Part4_Done:
 	ret
@@ -1463,7 +1463,7 @@ AccentData_ComparePart5:
 	jr nz, AccentData_Part5_Done
 	cp l, h
 	jr nz, AccentData_Part5_Done
-	anddi8 (0x332c), 223
+	and (0x332c:16), 223
 
 AccentData_Part5_Done:
 	ret

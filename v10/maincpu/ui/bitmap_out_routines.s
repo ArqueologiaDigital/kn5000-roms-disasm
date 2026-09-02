@@ -2462,7 +2462,7 @@ BitMapOut_DeltaEncode_Init:
 	jrl BitMapOut_DeltaEncode_CheckBounds
 
 BitMapOut_DeltaEncode_ReadEntry:
-	anddi8 (0x8d46), 252
+	and (0x8d46:16), 252
 	ld wa, iz
 	extz xwa
 	add xwa, xbc

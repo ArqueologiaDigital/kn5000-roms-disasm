@@ -97,7 +97,7 @@ BootSerial_Init_Nop1:
 BootSerial_ModeSwitch:
 	ld	a, (0x0f64:16)
 	and	a, 0xc0			; isolate mode field
-	anddi8	(0x0f64), 0x3f		; strip it from the flags byte
+	and	(0x0f64:16), 0x3f		; strip it from the flags byte
 	cps	a, 0
 	jr	z, BootSerial_ModeSwitch__parse	; mode 0: just re-arm + parse
 	cp	a, 0x40
@@ -249,7 +249,7 @@ BootSerial_FullInit:
 	ld	(0x0f69:16), 0x7d
 	ordi8	(0x0f64), 0x40		; link flag bit 6
 	ld	(0x0f63:16), 0		; INTA mode: next INTA enters RX mode
-	anddi8	(0x0f64), 0xfc		; clear RX/TX active flags
+	and	(0x0f64:16), 0xfc		; clear RX/TX active flags
 	ldw	(0x0fd5:16), 0		; TX send index
 	ldw	(0x0fd7:16), 0		; TX pending count
 	ldw	(0x0f75:16), 0
@@ -326,7 +326,7 @@ BootSerial_HandshakeSequence:
 ; -----------------------------------------------------------------------------
 BootSerial_SendTwoBytes_Bitbang:
 	ld	(0x0fd9:16), wa		; frame bytes into TX ring head
-	anddi8	(0x0f67), 0xbf
+	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC with bit 6 low
 	ldio	0xeb, 0xff		; INTES1
@@ -340,7 +340,7 @@ BootSerial_SendTwoBytes_Bitbang:
 	st_dd8b	a, 0x3e			; PFCR with bit 6 high
 	calr	BootSerial_SpinWait300
 	calr	BootSerial_SpinWait300
-	anddi8	(0x0f66), 0xbf
+	and	(0x0f66:16), 0xbf
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; PFCR bit 6 back low  (clock pulse)
 	calr	BootSerial_SpinWait300
@@ -371,10 +371,10 @@ BootSerial_SendTwoBytes_Bitbang:
 	calr	BootSerial_SpinWait300
 	or_sd8b_im 0xd5, 0x01		; pulse SC1CR bit 0
 	and_sd8b_im 0xd5, 0xfd		; SC1CR bit 1 low
-	anddi8	(0x0f66), 0xaf
+	and	(0x0f66:16), 0xaf
 	ld	a, (0x0f66:16)
 	st_dd8b	a, 0x3e			; restore PFCR
-	anddi8	(0x0f67), 0xaf
+	and	(0x0f67:16), 0xaf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; restore PFFC
 	ret
@@ -794,10 +794,10 @@ BootSerial_SendFrame:
 	ld	(0x0fd9:16), wa		; both frame bytes -> ring head
 	adddi16	(0x0fd7), 2		; two bytes pending
 	ordi8	(0x0f64), 2		; TX-pending flag
-	anddi8	(0x0f64), 0xfe		; clear RX-active flag
+	and	(0x0f64:16), 0xfe		; clear RX-active flag
 	ld	(0x0f62:16), 4		; state machine -> state 0x04
 	ldio	0xd7, 0x28		; BR1CR
-	anddi8	(0x0f67), 0xbf
+	and	(0x0f67:16), 0xbf
 	ld	a, (0x0f67:16)
 	st_dd8b	a, 0x3f			; PFFC bit 6 low
 	and_sd8b_im 0x3c, 0xbf		; PF bit 6 low

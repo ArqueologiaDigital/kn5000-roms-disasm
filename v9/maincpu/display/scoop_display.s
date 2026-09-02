@@ -541,7 +541,7 @@ ParamDigit_CalrData:
 
 ParamDigit_DivideValue:
 	push c
-	anddi8 (4485), 252
+	and (4485:16), 252
 	ld (4481:16), 0
 	ldw (4482:16), 0
 	cps wa, 0
@@ -2070,7 +2070,7 @@ UIState_UpdateMultiRegions:
 
 
 Display_RedrawParameters:
-	anddi8 (3922), 252
+	and (3922:16), 252
 	ldw (3660:16), 0
 	call Display_FillRegion0
 	ld wa, (0x371a:16)
@@ -2117,7 +2117,7 @@ Display_RedrawParams_Ret:
 	ret
 
 Display_RedrawValues:
-	anddi8 (3922), 243
+	and (3922:16), 243
 	call AccPedal_CheckBitAndUpdate
 	ld wa, (0x371a:16)
 	cp wa, 0x3e8
@@ -2173,7 +2173,7 @@ Display_RedrawValues_Ret:
 	ret
 
 Display_RedrawIndicators:
-	anddi8 (3922), 207
+	and (3922:16), 207
 	call Display_FillRegion2
 	ld wa, (0x371a:16)
 	inc 1, wa
@@ -2904,7 +2904,7 @@ Timer_ModeHandler_1:
 	jrl nz, Timer_GuardCallSetup_Ret
 	bit	0, (3927:16)
 	jrl z, Timer_GuardCallSetup
-	anddi8	(3927), 254
+	and	(3927:16), 254
 Timer_GuardCallSetup:
 	call VoiceSlot_TableSetup
 	call Timer_ModeHandler_0_0x13
@@ -5658,7 +5658,7 @@ AccPedal_CallEventSwitch:
 	jp AccPedal_Ret
 
 AccPedal_ClearFlagAndJump:
-	anddi8 (0x287b), 251
+	and (0x287b:16), 251
 	jp AccPedal_LoadModeAndChannel
 
 AccPedal_SendSysExAndReturn:
@@ -5682,7 +5682,7 @@ AccPedal_ScanVoiceSlots:
 	push xix
 	push xiy
 	push xiz
-	anddi8 (3411), 253
+	and (3411:16), 253
 	xor a, a
 	call VoiceSlot_SaveState
 	call MemConfig_VoiceSlotLookup
@@ -5723,7 +5723,7 @@ AccPedal_SetBit2Flag:
 	jp VoiceSlot_ProcessedWordRet
 
 AccPedal_ClearBit2Flag:
-	anddi8 (3411), 253
+	and (3411:16), 253
 	jp VoiceSlot_ProcessedWordRet
 
 AccPedal_RestoreAndReturn:
@@ -6236,7 +6236,7 @@ VoiceCtrl_ParamSetupBytecode:
 	and	e, 1
 	rrc	e
 	ld	(3828:16), a
-	anddi8	(3828), 4
+	and	(3828:16), 4
 	call	TempoRingBuf_ReadByte
 	ld	wa, hl
 	ld	a, (3415:16)
@@ -7657,7 +7657,7 @@ SysEx_PeriodicDispatch:
 	ld xiy, 0xd69
 	cp (xiy), 0x18
 	jrl nz, SysEx_CountdownCheck
-	anddi8 (0xe3e2), 111
+	and (0xe3e2:16), 111
 	pushw wa
 	push xiy
 	ldb w, 0x68
@@ -7699,7 +7699,7 @@ SysEx_ControllerBitCheck:
 	stw_erp DE, 0x3e
 	stb_erp A, 0x3c
 	jrl nc, SysEx_ModeChangeCheck
-	anddi8 (3924), 254
+	and (3924:16), 254
 	call VoiceCtrl_SendNoteOffSequence
 
 SysEx_ModeChangeCheck:
@@ -7722,7 +7722,7 @@ ControllerMode_UpdateFlags:
 	jp SubCPU_CmdCountdownRet
 
 SysEx_FlagClearAndCompare:
-	anddi8 (3926), 253
+	and (3926:16), 253
 	cp (0x8d36:16), 129
 	jrl z, SysEx_DecrementCounter
 	cp (0x8d36:16), 142

@@ -137,7 +137,7 @@ Rhythm_SetupChannel_D7:
 	ld (0x322f:16), a
 	ld a, (0x322b:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xfb
+	and (0x3258:16), 0xfb
 	ordi8 (0x3258), 0x08
 	ld (0x3338:16), 0x04
 	calr RhythmEvt_ProcessNote
@@ -148,7 +148,7 @@ Rhythm_SetupChannel_D4:
 	ld (0x322f:16), a
 	ld a, (0x322c:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf7
+	and (0x3258:16), 0xf7
 	ordi8 (0x3258), 0x04
 	ld (0x3338:16), 0x08
 	calr RhythmEvt_ProcessNote
@@ -159,7 +159,7 @@ Rhythm_SetupChannel_D5:
 	ld (0x322f:16), a
 	ld a, (0x322d:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf3
+	and (0x3258:16), 0xf3
 	ld (0x3338:16), 0x10
 	calr RhythmEvt_ProcessNote
 	ret
@@ -169,7 +169,7 @@ Rhythm_SetupChannel_D6:
 	ld (0x322f:16), a
 	ld a, (0x322e:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf3
+	and (0x3258:16), 0xf3
 	ld (0x3338:16), 0x20
 	calr RhythmEvt_ProcessNote
 	ret
@@ -329,7 +329,7 @@ RhythmEvt_FullDone:
 	ret
 
 Rhythm_CheckVelocityThreshold:
-	anddi8 (0x3258), 0xef
+	and (0x3258:16), 0xef
 	cp A,0x78
 	jr c, Rhythm_VelThreshReturn
 	ordi8 (0x3258), 0x10
@@ -390,7 +390,7 @@ Rhythm_CrossVoice_Apply:
 	ld (0x3398:16), 0x00
 Rhythm_CrossVoice_ClearFlag:
 .Lc_f54c26:
-	anddi8 (0x3257), 0xdf
+	and (0x3257:16), 0xdf
 
 	ret
 
@@ -426,7 +426,7 @@ Rhythm_VelLookA_CheckEmpty:
 .Lc_f54c61:
 	bit 4, (0x3258:16)
 	jr z, Rhythm_VelLookA_CheckRange
-	anddi8 (0x3258), 0xef
+	and (0x3258:16), 0xef
 	ld A,W
 	jr t, Rhythm_VelLookA_Done
 Rhythm_VelLookA_CheckRange:
@@ -540,7 +540,7 @@ Rhythm_VoiceMap_CheckInstr:
 .Lc_f54dc7:
 	bit 4, (0x3258:16)
 	jr z, Rhythm_VoiceMap_CheckBit4
-	anddi8 (0x3258), 0xef
+	and (0x3258:16), 0xef
 	jrl t, Rhythm_VoiceMap_Done
 Rhythm_VoiceMap_CheckBit4:
 	ld	l, (12860:16)
@@ -694,7 +694,7 @@ Rhythm_VelComp_CheckBit4:
 .Lc_f54edf:
 	bit 4, (0x3258:16)
 	jr z, Rhythm_VelComp_ClampInstr
-	anddi8 (0x3258), 0xef
+	and (0x3258:16), 0xef
 	ld A,W
 	jr t, Rhythm_VelComp_Done
 Rhythm_VelComp_ClampInstr:
@@ -747,7 +747,7 @@ Rhythm_DispatchCh_D7:
 	ld (0x322f:16), a
 	ld a, (0x322b:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xfb
+	and (0x3258:16), 0xfb
 	ordi8 (0x3258), 0x08
 	ldb W, 0x97
 	ld XIX,0x00003058
@@ -763,7 +763,7 @@ Rhythm_DispatchCh_D4:
 	ld (0x322f:16), a
 	ld a, (0x322c:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf7
+	and (0x3258:16), 0xf7
 	ordi8 (0x3258), 0x04
 	ldb W, 0x94
 	ld XIX,0x000030a0
@@ -779,7 +779,7 @@ Rhythm_DispatchCh_D5:
 	ld (0x322f:16), a
 	ld a, (0x322d:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf3
+	and (0x3258:16), 0xf3
 	ldb W, 0x95
 	ld XIX,0x000030e8
 Rhythm_DispatchCh_D5_Loop:
@@ -794,7 +794,7 @@ Rhythm_DispatchCh_D6:
 	ld (0x322f:16), a
 	ld a, (0x322e:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xf3
+	and (0x3258:16), 0xf3
 	ldb W, 0x96
 	ld XIX,0x00003130
 Rhythm_DispatchCh_D6_Loop:
@@ -1351,7 +1351,7 @@ Rhythm_TranspMod_Return:
 	ret
 
 Rhythm_TranspMod_ModCheck:
-	anddi8 (0x3349), 0xfe
+	and (0x3349:16), 0xfe
 	ld l, (0x323c:16)
 	cp L,0x30
 	jr c, .Lc_f55706

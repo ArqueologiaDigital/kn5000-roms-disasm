@@ -47,7 +47,7 @@ SeqPlay_FinishFloppyLoadAndStart:
 	call BitMapOut_RenderDisplay
 	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
-	anddi8 (0x28a7), 247
+	and (0x28a7:16), 247
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_InitChannelParams
 	ldw (0xf19c:16), 0
@@ -273,7 +273,7 @@ FloppyIO_ConfigureSwitchboard:
 	cp (4600:16), 0
 	jrl z, FloppyIO_ConfigSwb_Mode0
 	ldb c, 0x0
-	anddi8 (0xfdad), 251
+	and (0xfdad:16), 251
 	ld (0xf23d:16), 0
 	jrl FloppyIO_ConfigSwb_QueueEvent
 
@@ -1462,7 +1462,7 @@ MidiSysEx_AllSoundOff_VoiceLoop:
 MidiSysEx_Cmd_NoteOn:
 	ld iy, (4211:16)
 	and iy, 0xf
-	anddi8 (4211), 240
+	and (4211:16), 240
 	pushw iy
 	call SoundGen_CaptureVoiceParams
 	lds bc, 6
@@ -2205,7 +2205,7 @@ SetWall_ParamOutOfRange:
 SetWall_ParamsValid:
 	xor hl, hl
 	ld (0x287a:16), 0
-	anddi8 (0x287b), 191
+	and (0x287b:16), 191
 	ld a, (0x2877:16)
 	call SetWall_SingleSlotResolve
 	cp (0x287a:16), 0
@@ -4137,7 +4137,7 @@ VoiceChannel_CopyParamBlock:
 	ret
 
 VoiceChannel_UpdateParamSet:
-	anddi8 (0x27d2), 254
+	and (0x27d2:16), 254
 	ld iy, (0x27d6:16)
 	push xix
 	ld xix, 0x17fa
@@ -4171,7 +4171,7 @@ VoiceChannel_ParamSet_Done:
 	ret
 
 ToneGen_ValidateVoiceCh2:
-	anddi8 (0x27d2), 253
+	and (0x27d2:16), 253
 	ld iy, (0x27da:16)
 	push xix
 	ld xix, 0x18fa

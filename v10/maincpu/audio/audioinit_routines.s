@@ -464,7 +464,7 @@ AudioInit_UpdateVoiceBank0:
 	ld a, (0xc5a2:16)
 	res 7, a
 	sla a, 1
-	anddi8 (0xc2c3), 1
+	and (0xc2c3:16), 1
 	orddm8 0xc2c3, a
 	ordi16 0xc59a, 512
 
@@ -477,7 +477,7 @@ AudioInit_UpdateVoiceBank1:
 	ld a, (0xc5a2:16)
 	res 7, a
 	sla a, 1
-	anddi8 (0xc2c7), 1
+	and (0xc2c7:16), 1
 	orddm8 0xc2c7, a
 	ordi16 0xc59a, 512
 
@@ -492,7 +492,7 @@ AudioInit_UpdateVoiceBank2:
 	ld a, (0xc5a2:16)
 	dec 1, a
 	res 7, a
-	anddi8 (0xc2ca), 128
+	and (0xc2ca:16), 128
 	orddm8 0xc2ca, a
 	ordi16 0xc59a, 512
 
@@ -509,7 +509,7 @@ AudioInit_CheckStereoRouting:
 	ld a, (0xc5a2:16)
 	dec 1, a
 	res 7, a
-	anddi8 (0xc2ce), 128
+	and (0xc2ce:16), 128
 	orddm8 0xc2ce, a
 	ordi16 0xc59a, 512
 	jr AudioInit_VoiceStereoCheck
@@ -520,7 +520,7 @@ AudioInit_ClearStereoRouting:
 	cps a, 0
 	jr z, AudioInit_VoiceStereoCheck
 	setda 7, 0xc2ce
-	anddi8 (0xc2ce), 128
+	and (0xc2ce:16), 128
 	ordi16 0xc59a, 512
 
 AudioInit_VoiceStereoCheck:
@@ -532,7 +532,7 @@ AudioInit_VoiceStereoCheck:
 	ld a, (0xc5a2:16)
 	res 7, a
 	sla a, 1
-	anddi8 (0xc2d3), 1
+	and (0xc2d3:16), 1
 	orddm8 0xc2d3, a
 	ordi16 0xc59a, 512
 	jrl AudioInit_UpdateIndicators
@@ -549,7 +549,7 @@ AudioInit_ClearAllVoiceBanks:
 	cps a, 0
 	jr z, AudioInit_ClearBank1Routing
 	setda 7, 0xc2c2
-	anddi8 (0xc2c3), 1
+	and (0xc2c3:16), 1
 	ordi16 0xc59a, 512
 
 AudioInit_ClearBank1Routing:
@@ -558,7 +558,7 @@ AudioInit_ClearBank1Routing:
 	cps a, 0
 	jr z, AudioInit_ClearBank2Routing
 	setda 7, 0xc2c6
-	anddi8 (0xc2c7), 1
+	and (0xc2c7:16), 1
 	ordi16 0xc59a, 512
 
 AudioInit_ClearBank2Routing:
@@ -567,7 +567,7 @@ AudioInit_ClearBank2Routing:
 	cps a, 0
 	jr z, AudioInit_CheckBit2Routing
 	setda 7, 0xc2ca
-	anddi8 (0xc2ca), 128
+	and (0xc2ca:16), 128
 	ordi16 0xc59a, 512
 
 AudioInit_CheckBit2Routing:
@@ -589,7 +589,7 @@ AudioInit_ClearBank3Routing:
 	cps a, 0
 	jr z, AudioInit_UpdateIndicators
 	setda 7, 0xc2ce
-	anddi8 (0xc2ce), 128
+	and (0xc2ce:16), 128
 	ordi16 0xc59a, 512
 
 AudioInit_UpdateIndicators:
@@ -621,11 +621,11 @@ AudioInit_SetDrumMode4:
 	ret
 
 AudioInit_ClearDrumMode:
-	anddi8 (0x8f58), 248
+	and (0x8f58:16), 248
 	ret
 
 AudioInit_ClearDrumModeAlt:
-	anddi8 (0x8f58), 248
+	and (0x8f58:16), 248
 	ret
 
 AudioInit_ClearPartFlags_ByMode:

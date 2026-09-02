@@ -23,7 +23,7 @@ MidiSerial_PumpLoop:
 	ld wa, (xix - 10)
 	cp wa, (xix - 6)
 	jr z, MidiSerial_PumpDone
-	anddi8 (1064), 254
+	and (1064:16), 254
 	call MidiSerial_WaitForData
 	ld a, (0x9634:16)
 	ld (0x9654:16), a
@@ -10914,7 +10914,7 @@ MidiChan_CheckFlags:
 	lds bc, 4
 	lds de, 4
 	calr MIDI_ReadChannelParam
-	anddi8 (1063), 211
+	and (1063:16), 211
 
 MidiChan_EnableAndReturn:
 	ei 0

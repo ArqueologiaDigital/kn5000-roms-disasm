@@ -5838,7 +5838,7 @@ Audio_WriteBankSelectParams:
 	pushw DE
 	bit 7, (0x8e46:16)
 	jr z, .Lc_fc9b2d
-	anddi8 (0x8e46), 0x7f
+	and (0x8e46:16), 0x7f
 	ldw (0x908b:16), 0x00b0
 	ld e, (0x8e46:16)
 	ldb D, 0x7f
@@ -5848,7 +5848,7 @@ BankSelect_CheckChannel1:
 .Lc_fc9b2d:
 	bit 7, (0x8e44:16)
 	jr z, BankSelect_Done
-	anddi8 (0x8e44), 0x7f
+	and (0x8e44:16), 0x7f
 	ldw (0x908b:16), 0x01b0
 	ld e, (0x8e44:16)
 	ldb D, 0x7f
@@ -6356,7 +6356,7 @@ MIDI_SelectTempoExpressionSource:
 	jr z, Tempo_Expression_Bypass
 	cp D,0x88
 	jr z, Tempo_Expression_Bypass
-	anddi8 (0x905d), 0xf3
+	and (0x905d:16), 0xf3
 	jr t, Tempo_ExpressionStore
 TempoSrc_CheckAutoPlay:
 .Lc_fc9fcb:
@@ -6394,7 +6394,7 @@ Mod_SelectExpressionSource:
 	jr z, Tempo_Expression_Bypass
 	cp D,0x88
 	jr z, Tempo_Expression_Bypass
-	anddi8 (0x905d), 0xf3
+	and (0x905d:16), 0xf3
 	jr t, Mod_ExpressionStore
 ModExpr_CheckAutoPlay:
 .Lc_fca01a:

@@ -860,7 +860,7 @@ SMF_LoadBank_ClearAndPrepare:
 SMF_SeekAndPreparePlayback:
 	bit 15, hl
 	jr nz, SMF_RestoreTimerState
-	anddi8 (0x8d88), 254
+	and (0x8d88:16), 254
 	call SMF_CalcFilePosition
 	push xwa
 	push xbc
@@ -901,7 +901,7 @@ SeqPlay_StartWithDisplay:
 	call SeqPlay_CheckStartConditions
 	cp (0xf23d:16), 255
 	jr z, SeqPlay_SetFlagAndMode
-	anddi8 (0xfdad), 251
+	and (0xfdad:16), 251
 	xor a, a
 	jr SeqPlay_QueueDisplayEvent
 
@@ -1167,7 +1167,7 @@ SMF_WriteChannelNoteData:
 	ld (4359:16), a
 	ld a, (xiy + 7)
 	ld (4332:16), a
-	anddi8 (0x2877), 15
+	and (0x2877:16), 15
 	ld l, (0x2877:16)
 	xor h, h
 	push xix
@@ -10973,7 +10973,7 @@ SeqDispatch_InitWithPayload:
 	call AccDemo_Init_Wrap
 
 SeqDispatch_PostInit:
-	anddi8 (0x32f3), 254
+	and (0x32f3:16), 254
 	ret
 
 SeqDispatch_TrampolineBlock:
@@ -11041,7 +11041,7 @@ Seq_DispatcherTick_Process:
 	call Seq_ReadTempoLookup
 	calr Seq_ProcessAllInputState
 	call Rhythm_CompareAndTrigger
-	anddi8 (0x32f4), 159
+	and (0x32f4:16), 159
 	call AccTick_Main
 	ld a, (0x32f4:16)
 	and a, 0x60
@@ -11259,7 +11259,7 @@ AccInput_Return:
 
 AccKey_ScanAndSetDirty:
 	push xbc
-	anddi8 (0x3284), 253
+	and (0x3284:16), 253
 	ldb a, 0x1
 	ld xhl, 0xf1a0
 	xor c, c

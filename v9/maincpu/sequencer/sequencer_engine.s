@@ -20043,12 +20043,12 @@ SeqTimer_FlagsReturn:
 SeqEvent_CaseA:
 	cpdi16 0xf19e, 0
 	jr z, SeqEvent_CaseB
-	anddi8 (0x28a7), 247
+	and (0x28a7:16), 247
 	call SeqAcc_InitPlaybackState
 
 ; SeqEvent dispatch case B
 SeqEvent_CaseB:
-	anddi8 (0x28ac), 223
+	and (0x28ac:16), 223
 	ret
 
 ApEditSyori:

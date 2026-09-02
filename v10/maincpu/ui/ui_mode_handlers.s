@@ -1793,7 +1793,7 @@ EffectMode_RestoreSwbWr_NormalMode:
 	lda xwa, (0xf9b6:16)
 	stib_dsp 0xe0, 0x40
 	andmi8 (xwa), 0x80
-	anddi8 (0xfdb6), 240
+	and (0xfdb6:16), 240
 	ld e, (xwa)
 	extz de
 	pushw 0x7f

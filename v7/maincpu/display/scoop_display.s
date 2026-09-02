@@ -541,7 +541,7 @@ ParamDigit_CalrData:
 
 ParamDigit_DivideValue:
 	push c
-	anddi8 (4485), 252
+	and (4485:16), 252
 	ld (4481:16), 0
 	ldw (4482:16), 0
 	cps wa, 0
@@ -1907,7 +1907,7 @@ UIState_UpdateMultiRegions:
 
 
 Display_RedrawParameters:
-	anddi8 (3922), 252
+	and (3922:16), 252
 
 	ldw (3660:16), 0
 
@@ -1966,7 +1966,7 @@ Display_RedrawParams_Ret:
 	ret
 
 Display_RedrawValues:
-	anddi8 (3922), 243
+	and (3922:16), 243
 
 	.byte 0x1d, 0x93, 0x95, 0xef	; call AccPedal_CheckBitAndUpdate (v7 addr)
 
@@ -2025,7 +2025,7 @@ Display_RedrawValues_Ret:
 	ret
 
 Display_RedrawIndicators:
-	anddi8 (3922), 207
+	and (3922:16), 207
 
 	.byte 0x1d, 0x57, 0x73, 0xef	; call Display_FillRegion2 (v7 addr)
 
@@ -2622,7 +2622,7 @@ ScoopDisp_DispatchTable_Extended:
 	ld (0x10fa:16), 0x01
 	call ScoopParam_ValueTable_0x1DD
 	ld (0x10fa:16), 0x00
-	anddi8 (0xe31c), 0x6f
+	and (0xe31c:16), 0x6f
 	ld (0x7ea6:16), 0x23
 	xor WA,WA
 	ldb A, 0xee
@@ -2670,7 +2670,7 @@ Timer_ModeHandler_1:
 	jrl nz, Timer_GuardCallSetup_Ret
 	bit	0, (3927:16)
 	jrl z, Timer_GuardCallSetup
-	anddi8	(3927), 254
+	and	(3927:16), 254
 Timer_GuardCallSetup:
 	call VoiceSlot_TableSetup
 	call Timer_ModeHandler_0_0x13
@@ -3506,7 +3506,7 @@ ToneParam_HandlerTable_BC:
 	ldb W, 0x01
 	jp ToneParam_HandlerTable_BC_0x9E
 .Lc_ef81dd:
-	anddi8 (0xe31c), 0x6f
+	and (0xe31c:16), 0x6f
 	ld (0x7ea6:16), 0x19
 	xor WA,WA
 	ldb A, 0xee
@@ -4330,7 +4330,7 @@ VoiceSlot_TableSetup:
 	jp VoiceSlot_TableSetup_0xF
 .Lc_ef900f:
 	jp VoiceSlot_TableSetup_0x106
-	anddi8 (0x0dd3), 0xfe
+	and (0x0dd3:16), 0xfe
 	call AccPedal_CheckBitAndUpdate
 	call VoiceState_DataBlock2_0x472
 	xor A,A
@@ -4483,7 +4483,7 @@ AccPedal_CallEventSwitch:
 	ld (0x0d5d:16), a
 	jp AccPedal_Ret
 AccPedal_ClearFlagAndJump:
-	anddi8 (0x287b), 251
+	and (0x287b:16), 251
 	jp AccPedal_LoadModeAndChannel
 
 AccPedal_SendSysExAndReturn:
@@ -4507,7 +4507,7 @@ AccPedal_ScanVoiceSlots:
 	push xix
 	push xiy
 	push xiz
-	anddi8 (3411), 253
+	and (3411:16), 253
 	xor a, a
 	call VoiceSlot_SaveState
 	call MemConfig_VoiceSlotLookup
@@ -4548,7 +4548,7 @@ AccPedal_SetBit2Flag:
 	jp VoiceSlot_ProcessedWordRet
 
 AccPedal_ClearBit2Flag:
-	anddi8 (3411), 253
+	and (3411:16), 253
 	jp VoiceSlot_ProcessedWordRet
 
 AccPedal_RestoreAndReturn:
@@ -5902,7 +5902,7 @@ ClockConfig_Handler_0:
 	ld (0x3673:16), 0x00
 	call DisplayStr_StyleSectionNames_0x69
 	ld (0x0d55:16), 0xff
-	anddi8 (0x0f57), 0xfe
+	and (0x0f57:16), 0xfe
 	ld (0x0d36:16), 0x00
 	ld a, (0x8c9b:16)
 	.incbin "includes/romslices/v7_transplant_ClockConfig_Handler_0_tail.bin"
@@ -5910,7 +5910,7 @@ SysEx_PeriodicDispatch:
 	ld XIY,0x00000d69
 	cp (XIY),0x18
 	jrl nz, SysEx_CountdownCheck
-	anddi8 (0xe31c), 0x6f
+	and (0xe31c:16), 0x6f
 	pushw wa
 	push XIY
 	ldb W, 0x68
@@ -5951,7 +5951,7 @@ SysEx_ControllerBitCheck:
 	stw_erp DE, 0x3e
 	stb_erp A, 0x3c
 	jrl nc, SysEx_ModeChangeCheck
-	anddi8 (3924), 254
+	and (3924:16), 254
 	call VoiceCtrl_SendNoteOffSequence
 
 SysEx_ModeChangeCheck:
@@ -5973,7 +5973,7 @@ ControllerMode_UpdateFlags:
 	ordi8 (0x0f56), 0x02
 	jp SubCPU_CmdCountdownRet
 SysEx_FlagClearAndCompare:
-	anddi8 (3926), 253
+	and (3926:16), 253
 
 	.byte 0xc1, 0x9a, 0x8c, 0x3f, 0x81	; cpdi8 (0x8d36), 129 (v7 patched)
 

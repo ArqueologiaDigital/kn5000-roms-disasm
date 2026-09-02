@@ -2039,8 +2039,8 @@ CompIface_WriteVolume:
 	ret
 
 Audio_ConfigureDSP:
-	anddi8 (0xc1f0), 243
-	anddi8 (0xc1f0), 252
+	and (0xc1f0:16), 243
+	and (0xc1f0:16), 252
 	ld xwa, 0x40c0
 	lds bc, 0
 	lds de, 1
@@ -2229,7 +2229,7 @@ DSPCfg_CompParam_SubType7:
 	call SndParam_LookupReadOnly
 	and hl, 0x1
 	sla hl, 4
-	anddi8 (0xc1f0), 239
+	and (0xc1f0:16), 239
 	orddm16 0xc1f0, xhl
 
 DSPCfg_CompParam_Bit1:
@@ -2239,7 +2239,7 @@ DSPCfg_CompParam_Bit1:
 	call SndParam_LookupReadOnly
 	and hl, 0x1
 	sla hl, 5
-	anddi8 (0xc1f0), 223
+	and (0xc1f0:16), 223
 	orddm16 0xc1f0, xhl
 
 DSPCfg_CompParam_Bit2:
@@ -2249,7 +2249,7 @@ DSPCfg_CompParam_Bit2:
 	call SndParam_LookupReadOnly
 	and hl, 0x1
 	sla hl, 6
-	anddi8 (0xc1f0), 191
+	and (0xc1f0:16), 191
 	orddm16 0xc1f0, xhl
 	ret
 

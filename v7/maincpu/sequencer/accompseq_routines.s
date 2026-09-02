@@ -17,7 +17,7 @@ AccompSeq_ManualMidiEntry1:
 
 AccompSeq_PeriodicMain:
 	calr AccompSeq_CaptureTimerState
-	anddi8 (0x7db7), 0xdf
+	and (0x7db7:16), 0xdf
 	calr AccompSeq_CheckChannelActive
 	bit 5, (0x7db7:16)
 	jr nz, AccompSeq_PeriodicReturn
@@ -716,8 +716,8 @@ AccompSeq_ResolveCh_Done:
 	ret
 
 AccompSeq_CheckVelocityFlags:
-	anddi8 (0x3349), 0xfd
-	anddi8 (0x3349), 0xfb
+	and (0x3349:16), 0xfd
+	and (0x3349:16), 0xfb
 	cp A,0x78
 	jr c, .Lc_f6dfb2
 	ordi8 (0x3349), 0x04
@@ -748,7 +748,7 @@ AccompSeq_CheckVelFlagsExtended:
 	ld a, (0x7dbf:16)
 	ld (0x334b:16), a
 	popw wa
-	anddi8 (0x3349), 0xfb
+	and (0x3349:16), 0xfb
 	cp A,0x78
 	jr c, .Lc_f6dff5
 	ordi8 (0x3349), 0x04
@@ -793,7 +793,7 @@ AccompSeq_FadeOut_Active:
 	ld (0x7dd4:16), wa
 	cp WA,0xffff
 	jr nz, AccompSeq_FadeOut_Periodic
-	anddi8 (0x7d88), 0x7f
+	and (0x7d88:16), 0x7f
 	call AccompSeq_StopSequence
 	jr t, AccompSeq_FadeOut_Return
 AccompSeq_FadeOut_Periodic:
@@ -983,12 +983,12 @@ AccompSeq_UpdatePosition:
 	cp (0x7db6:16), 0x00
 	jr nz, .Lc_f6e215
 	ld xwa, (0x7dc9:16)
-	anddi8 (0x7dd1), 0xfe
+	and (0x7dd1:16), 0xfe
 	jr t, AccompSeq_UpdatePos_Store
 AccompSeq_UpdatePos_Part2:
 .Lc_f6e215:
 	ld xwa, (0x7dcd:16)
-	anddi8 (0x7dd1), 0xfe
+	and (0x7dd1:16), 0xfe
 
 
 
@@ -1260,7 +1260,7 @@ AccompSeq_InitMidi_Return:
 	ret
 
 AccompSeq_InitPlayState:
-	anddi8 (0x7d88), 0x7f
+	and (0x7d88:16), 0x7f
 	xor WA,WA
 	ei 0x06
 	ld (0x0468:16), wa
@@ -1392,7 +1392,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	ld a, (0xbfe2:16)
 	bit 0x07,A
 	jr nz, .Lc_f6e66d
-	anddi8 (0x7dde), 0xfe
+	and (0x7dde:16), 0xfe
 	jr t, .Lc_f6e6a9
 .Lc_f6e66d:
 	ordi8 (0x7dde), 0x01
@@ -1486,7 +1486,7 @@ AccompSeq_CleanupSequence:
 	and A,0x03
 	cps a, 0
 	jr z, .Lc_f6e748
-	anddi8 (0x7d88), 0x7f
+	and (0x7d88:16), 0x7f
 	ordi8 (0x041f), 0x08
 	ld a, (0x7d88:16)
 	and A,0xfc
@@ -1494,8 +1494,8 @@ AccompSeq_CleanupSequence:
 	calr AccompSeq_SendAllOff
 AccompSeq_Cleanup_ClearFlags:
 .Lc_f6e748:
-	anddi8 (0x7dd2), 0xfe
-	anddi8 (0x7dd3), 0xfe
+	and (0x7dd2:16), 0xfe
+	and (0x7dd3:16), 0xfe
 
 	ret
 
@@ -1545,9 +1545,9 @@ AccompSeq_SendAllOff_Loop2:
 AccompSeq_MidiFilterCodeBlock:
 	.incbin "includes/romslices/v7_transplant_AccompSeq_MidiFilterCodeBlock.bin"
 AccompSeq_ProcessChordChange:
-	anddi8 (0x7dd2), 0xfe
-	anddi8 (0x7dd3), 0xfe
-	anddi8 (0x7dc3), 0xfc
+	and (0x7dd2:16), 0xfe
+	and (0x7dd3:16), 0xfe
+	and (0x7dc3:16), 0xfc
 	pushw hl
 	calr AccompSeq_CompareChord
 	popw hl

@@ -140,7 +140,7 @@ AccStyle_CheckRecordReturn:
 	ret
 
 AccStyle_DetectChanges:
-	anddi8 (0x329f), 0xfe
+	and (0x329f:16), 0xfe
 	bit 0, (0x31e7:16)
 	jrl nz, AccStyle_DetectChanges_CompareParams
 	bit 1, (0x31e7:16)
@@ -155,17 +155,17 @@ AccStyle_DetectChanges_Init:
 	call AccompVoice_BulkReadRegisters
 	call Rhythm_SendChanPressure
 	calr Rhythm_SendResetMsg
-	anddi8 (0x3278), 0xc0
-	anddi8 (0x3279), 0xc0
-	anddi8 (0x3276), 0xc0
-	anddi8 (0x3277), 0xc0
-	anddi8 (0x327a), 0xc0
-	anddi8 (0x327b), 0xc0
-	anddi8 (0x327c), 0xc0
-	anddi8 (0x32c1), 0xc0
-	anddi8 (0x328a), 0xc0
-	anddi8 (0x328b), 0xc0
-	anddi8 (0x31e8), 0xe7
+	and (0x3278:16), 0xc0
+	and (0x3279:16), 0xc0
+	and (0x3276:16), 0xc0
+	and (0x3277:16), 0xc0
+	and (0x327a:16), 0xc0
+	and (0x327b:16), 0xc0
+	and (0x327c:16), 0xc0
+	and (0x32c1:16), 0xc0
+	and (0x328a:16), 0xc0
+	and (0x328b:16), 0xc0
+	and (0x31e8:16), 0xe7
 	xor A,A
 	ld (0x326d:16), a
 	ld (0x326e:16), a
@@ -175,12 +175,12 @@ AccStyle_DetectChanges_Init:
 	ld (0x3272:16), a
 	ld (0x3273:16), a
 	ld (0x328f:16), 0x00
-	anddi8 (0x33d4), 0x02
-	anddi8 (0x328d), 0xc0
+	and (0x33d4:16), 0x02
+	and (0x328d:16), 0xc0
 	ld a, (0xfc5f:16)
 	and A,0xfc
 	jr z, AccStyle_DetectChanges_QueueDone
-	anddi8 (0xfc5f), 0x03
+	and (0xfc5f:16), 0x03
 	ldb A, 0x00
 	ldb W, 0x00
 	ldb D, 0x05
@@ -189,7 +189,7 @@ AccStyle_DetectChanges_Init:
 AccStyle_DetectChanges_QueueDone:
 	bit 2, (0xfc60:16)
 	jr z, AccStyle_DetectChanges_MarkDirty
-	anddi8 (0xfc60), 251
+	and (0xfc60:16), 251
 	ldb a, 0x0
 	ldb w, 0x0
 	ldb d, 0x6
@@ -254,8 +254,8 @@ AccStyle_DetectChanges_ClearFlags:
 	ld (0x32b8:16), 0x00
 	ld (0x32b9:16), 0x00
 	ld (0x32c3:16), 0x00
-	anddi8 (0x32bb), 0xfc
-	anddi8 (0x32c5), 0x78
+	and (0x32bb:16), 0xfc
+	and (0x32c5:16), 0x78
 
 	ret
 
@@ -263,7 +263,7 @@ AccStyle_DetectChanges_ClearFlags:
 
 AccStyle_ApplyChanges:
 	calr AccStyle_ResetAllVoiceState
-	anddi8 (0x31e7), 0xfb
+	and (0x31e7:16), 0xfb
 	ld (0x0462:16), 0x00
 	calr AccBuf_ResetAllPositions
 	call AccompVoice_BulkReadRegisters
@@ -568,13 +568,13 @@ AccStyle_UseSecondary_Resolve:
 	bit 0, (0x3263:16)
 	jr z, .Lc_f55eb2
 	ordi8 (0x327a), 0x3f
-	anddi8 (0x327b), 0xc0
-	anddi8 (0x327c), 0xc0
+	and (0x327b:16), 0xc0
+	and (0x327c:16), 0xc0
 	jr t, AccStyle_UseSecondary_Return
 AccStyle_UseSecondary_Mode3:
 .Lc_f55eb2:
-	anddi8 (0x327a), 0xc0
-	anddi8 (0x327b), 0xc0
+	and (0x327a:16), 0xc0
+	and (0x327b:16), 0xc0
 	ordi8 (0x327c), 0x3f
 
 
@@ -601,9 +601,9 @@ AccPart_ResetAndCopyTuning:
 	calr AccPart_InitPositionsAndBase
 	call AccTuning_CopyAllPartsFromStyle
 	ordi8 (0x3290), 0x3f
-	anddi8 (0x327a), 0xc0
-	anddi8 (0x327b), 0xc0
-	anddi8 (0x327c), 0xc0
+	and (0x327a:16), 0xc0
+	and (0x327b:16), 0xc0
+	and (0x327c:16), 0xc0
 	ret
 AccBuf_ResetAllPositions:
 	ld	xhl, 10744
@@ -1126,7 +1126,7 @@ AccVoice_ProcessAllSixParts:
 	ret
 
 AccVoice_SavePartState1:
-	anddi8 (0x3258), 0xfc
+	and (0x3258:16), 0xfc
 	ld (0x3251:16), 0x00
 	ldb A, 0x01
 	ld (0x3338:16), a
@@ -1415,7 +1415,7 @@ AccVoice_ActivatePart:
 	cp A,0x3f
 	jr nz, AccVoice_ActivatePart_Return
 	ordi8 (0x31e7), 0x04
-	anddi8 (0x328e), 0xc0
+	and (0x328e:16), 0xc0
 AccVoice_ActivatePart_Return:
 	ret
 
@@ -1747,7 +1747,7 @@ AccPedal_DirA_Apply:
 .Lc_f56a02:
 	ld a, (0x3339:16)
 	call AccVoice_ComputeParamAddr
-	anddi8 (0x326d), 0xfc
+	and (0x326d:16), 0xfc
 
 	ret
 
@@ -1940,7 +1940,7 @@ AccKbd1_RingBufReturn:
 	ret
 
 AccKbd1_CheckEligible:
-	anddi8 (0x3345), 0xfe
+	and (0x3345:16), 0xfe
 	bit 0, (0x3342:16)
 	jr z, AccKbd1_CheckReturn
 	bit 0, (0x32c6:16)
@@ -2087,7 +2087,7 @@ AccKbd1_ProcessNotes:
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
 	call RhythmPart1_ProcessAccentData
-	anddi8 (0x3290), 0xfe
+	and (0x3290:16), 0xfe
 AccKbd1_ProcessReturn:
 	ret
 
@@ -2239,7 +2239,7 @@ AccKbd2_ProcessEntry:
 	calr AccKbd2_RestoreState
 
 AccKbd2_SaveState:
-	anddi8 (0x3258), 0xfc
+	and (0x3258:16), 0xfc
 	ld (0x3251:16), 0x00
 	ldb A, 0x02
 	ld (0x3338:16), a
@@ -2282,7 +2282,7 @@ AccKbd2_RingBufReturn:
 	ret
 
 AccKbd2_CheckEligible:
-	anddi8 (0x3345), 0xfe
+	and (0x3345:16), 0xfe
 	cp (0x3249:16), 0x80
 	jr nc, AccKbd2_CheckReturn
 	bit 1, (0x3342:16)
@@ -2309,7 +2309,7 @@ AccKbd2_ProcessNotes:
 	jr nz, AccKbd2_ProcessReturn
 	calr AccKbd2_ScanSlots
 	calr AccKbd2_DrainRingBuf
-	anddi8 (0x3290), 0xfd
+	and (0x3290:16), 0xfd
 AccKbd2_ProcessReturn:
 	ret
 
@@ -2464,7 +2464,7 @@ AccCh1_ProcessEntry:
 	ret
 
 AccCh1_SaveState:
-	anddi8 (0x3258), 0xfc
+	and (0x3258:16), 0xfc
 	ld (0x3251:16), 0x00
 	ldb A, 0x04
 	ld (0x3338:16), a
@@ -2591,7 +2591,7 @@ AccCh1_NoteOnEntry:
 	ld (0x322f:16), a
 	ld a, (0x322b:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xfb
+	and (0x3258:16), 0xfb
 	ordi8 (0x3258), 0x08
 	ld XHL,0x00002bf8
 	ld IY,(XHL+0x04)
@@ -2601,7 +2601,7 @@ AccCh1_NoteOnReturn:
 	ret
 
 AccCh1_CheckEligible:
-	anddi8 (0x3345), 0xfe
+	and (0x3345:16), 0xfe
 	bit 2, (0x32c6:16)
 	jr nz, AccCh1_CheckReturn
 	bit 1, (0x326b:16)
@@ -2825,7 +2825,7 @@ AccCh1_ProcessNotes:
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
 	call RhythmPart2_ProcessAccentData
-	anddi8 (0x3290), 0xfb
+	and (0x3290:16), 0xfb
 AccCh1_ProcessReturn:
 	ret
 
@@ -2874,7 +2874,7 @@ AccCh2_ProcessEntry:
 	ret
 
 AccCh2_SaveState:
-	anddi8 (0x3258), 0xfc
+	and (0x3258:16), 0xfc
 	ld (0x3251:16), 0x00
 	ldb A, 0x08
 	ld (0x3338:16), a
@@ -2914,7 +2914,7 @@ AccCh2_NoteOnEntry:
 	ld a, (0x322c:16)
 	ld (0x3230:16), a
 	ordi8 (0x3258), 0x04
-	anddi8 (0x3258), 0xf7
+	and (0x3258:16), 0xf7
 	ld XHL,0x00002cf8
 	ld IY,(XHL+0x04)
 	ld BC,(XHL+0x02)
@@ -2923,7 +2923,7 @@ AccCh2_NoteOnReturn:
 	ret
 
 AccCh2_CheckEligible:
-	anddi8 (0x3345), 0xfe
+	and (0x3345:16), 0xfe
 	bit 3, (0x3342:16)
 	jr z, AccCh2_CheckReturn
 	bit 3, (0x32c6:16)
@@ -2993,7 +2993,7 @@ AccCh2_ProcessNotes:
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
 	call AccVoice_LoadRhythmParams_Part3
-	anddi8 (0x3290), 0xf7
+	and (0x3290:16), 0xf7
 AccCh2_ProcessReturn:
 	ret
 
@@ -3042,7 +3042,7 @@ AccCh3_ProcessEntry:
 	ret
 
 AccCh3_SaveState:
-	anddi8 (0x3258), 0xfc
+	and (0x3258:16), 0xfc
 	ld (0x3251:16), 0x00
 	ldb A, 0x10
 	ld (0x3338:16), a
@@ -3081,8 +3081,8 @@ AccCh3_NoteOnEntry:
 	ld (0x322f:16), a
 	ld a, (0x322d:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xfb
-	anddi8 (0x3258), 0xf7
+	and (0x3258:16), 0xfb
+	and (0x3258:16), 0xf7
 	ld XHL,0x00002df8
 	ld IY,(XHL+0x04)
 	ld BC,(XHL+0x02)
@@ -3091,7 +3091,7 @@ AccCh3_NoteOnReturn:
 	ret
 
 AccCh3_CheckEligible:
-	anddi8 (0x3345), 0xfe
+	and (0x3345:16), 0xfe
 	bit 4, (0x3342:16)
 	jr z, AccCh3_CheckReturn
 	bit 4, (0x32c6:16)
@@ -3161,7 +3161,7 @@ AccCh3_ProcessNotes:
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
 	call AccVoice_LoadRhythmParams_Part4
-	anddi8 (0x3290), 0xef
+	and (0x3290:16), 0xef
 AccCh3_ProcessReturn:
 	ret
 
@@ -3210,7 +3210,7 @@ AccCh4_ProcessEntry:
 	ret
 
 AccCh4_SaveState:
-	anddi8 (0x3258), 0xfc
+	and (0x3258:16), 0xfc
 	ld (0x3251:16), 0x00
 	ldb A, 0x20
 	ld (0x3338:16), a
@@ -3249,8 +3249,8 @@ AccCh4_NoteOnEntry:
 	ld (0x322f:16), a
 	ld a, (0x322e:16)
 	ld (0x3230:16), a
-	anddi8 (0x3258), 0xfb
-	anddi8 (0x3258), 0xf7
+	and (0x3258:16), 0xfb
+	and (0x3258:16), 0xf7
 	ld XHL,0x00002ef8
 	ld IY,(XHL+0x04)
 	ld BC,(XHL+0x02)
@@ -3259,7 +3259,7 @@ AccCh4_NoteOnReturn:
 	ret
 
 AccCh4_CheckEligible:
-	anddi8 (0x3345), 0xfe
+	and (0x3345:16), 0xfe
 	bit 5, (0x3342:16)
 	jr z, AccCh4_CheckReturn
 	bit 5, (0x32c6:16)
@@ -3329,7 +3329,7 @@ AccCh4_ProcessNotes:
 	ld a, (0x33a0:16)
 	ld (0x3250:16), a
 	call AccVoice_LoadRhythmParams_Part5
-	anddi8 (0x3290), 0xdf
+	and (0x3290:16), 0xdf
 AccCh4_ProcessReturn:
 	ret
 
@@ -3500,7 +3500,7 @@ AccTick_Main:
 	bit 7, (0x3290:16)
 	jr z, .Lc_f57c79
 	call Rhythm_ProcessAllPartsAndLoad
-	anddi8 (0x3290), 0x7f
+	and (0x3290:16), 0x7f
 AccTick_AfterSync:
 .Lc_f57c79:
 	call AccVoice_ProcessAllSixParts
@@ -3861,7 +3861,7 @@ AccSeq_DualPartReturn:
 AccSeq_PatternScanner:
 	ld iy, (0x333c:16)
 	ld iz, (0x333a:16)
-	anddi8 (0x3258), 0xfe
+	and (0x3258:16), 0xfe
 
 	xor bc, bc
 
@@ -4184,7 +4184,7 @@ AccVoice_SetupAll_Dispatch:
 	ret
 
 AccVoice_SetupKbd1:
-	anddi8 (0x320f), 0x0f
+	and (0x320f:16), 0x0f
 	cp (0x3249:16), 0x80
 	jr nc, AccVoice_SetupKbd1_Free
 	ld (0x3338:16), 0x01
@@ -4202,7 +4202,7 @@ AccVoice_SetupKbd1_Return:
 	ret
 
 AccVoice_SetupKbd2:
-	anddi8 (0x3210), 0x0f
+	and (0x3210:16), 0x0f
 	cp (0x3249:16), 0x80
 	jr nc, AccVoice_SetupKbd2_Free
 	ld (0x3338:16), 0x02
@@ -4220,7 +4220,7 @@ AccVoice_SetupKbd2_Return:
 	ret
 
 AccVoice_SetupAcc1:
-	anddi8 (0x3211), 0x0f
+	and (0x3211:16), 0x0f
 	cp (0x3249:16), 0x80
 	jr nc, AccVoice_SetupAcc1_Free
 	ld (0x3338:16), 0x04
@@ -4238,7 +4238,7 @@ AccVoice_SetupAcc1_Return:
 	ret
 
 AccVoice_SetupAcc2:
-	anddi8 (0x3212), 0x0f
+	and (0x3212:16), 0x0f
 	cp (0x3249:16), 0x80
 	jr nc, AccVoice_SetupAcc2_Free
 	ld (0x3338:16), 0x08
@@ -4256,7 +4256,7 @@ AccVoice_SetupAcc2_Return:
 	ret
 
 AccVoice_SetupAcc3:
-	anddi8 (0x3213), 0x0f
+	and (0x3213:16), 0x0f
 	cp (0x3249:16), 0x80
 	jr nc, AccVoice_SetupAcc3_Free
 	ld (0x3338:16), 0x10
@@ -4274,7 +4274,7 @@ AccVoice_SetupAcc3_Return:
 	ret
 
 AccVoice_SetupAcc4:
-	anddi8 (0x3214), 0x0f
+	and (0x3214:16), 0x0f
 	cp (0x3249:16), 0x80
 	jr nc, AccVoice_SetupAcc4_Free
 	ld (0x3338:16), 0x20
@@ -4292,12 +4292,12 @@ AccVoice_SetupAcc4_Return:
 	ret
 
 AccVoice_ResetAll:
-	anddi8 (0x320f), 0x0f
-	anddi8 (0x3210), 0x0f
-	anddi8 (0x3211), 0x0f
-	anddi8 (0x3212), 0x0f
-	anddi8 (0x3213), 0x0f
-	anddi8 (0x3214), 0x0f
+	and (0x320f:16), 0x0f
+	and (0x3210:16), 0x0f
+	and (0x3211:16), 0x0f
+	and (0x3212:16), 0x0f
+	and (0x3213:16), 0x0f
+	and (0x3214:16), 0x0f
 	cp (0x3249:16), 0x80
 	jr c, AccVoice_Reset_UseStyle
 	bit 0, (0x32c7:16)
@@ -4368,7 +4368,7 @@ AccVoice_Reassign:
 	call AccPatch_SetVoiceParam
 	cpda8 a, (0x32c8)
 	jr z, AccVoice_Reassign_MatchA
-	anddi8 (0xfc5f), 0xfb
+	and (0xfc5f:16), 0xfb
 	ldb E, 0x48
 	ldb D, 0x05
 	ldb W, 0x00
@@ -4393,7 +4393,7 @@ AccVoice_Reassign_Mode3:
 	call AccPatch_SetVoiceParam
 	cpda8 a, (0x32ca)
 	jr z, AccVoice_Reassign_MatchB
-	anddi8 (0xfc60), 0xfb
+	and (0xfc60:16), 0xfb
 	ldb E, 0x48
 	ldb D, 0x06
 	ldb W, 0x00
@@ -4428,12 +4428,12 @@ AccVoice_Reassign_Return:
 	ret
 
 AccVoice_SplitPointSetup:
-	anddi8 (0x320f), 0x0f
-	anddi8 (0x3210), 0x0f
-	anddi8 (0x3211), 0x0f
-	anddi8 (0x3212), 0x0f
-	anddi8 (0x3213), 0x0f
-	anddi8 (0x3214), 0x0f
+	and (0x320f:16), 0x0f
+	and (0x3210:16), 0x0f
+	and (0x3211:16), 0x0f
+	and (0x3212:16), 0x0f
+	and (0x3213:16), 0x0f
+	and (0x3214:16), 0x0f
 	cp (0x3249:16), 0x80
 	jr c, AccVoice_Split_UseStyle
 	bit 0, (0x32c7:16)
@@ -4494,7 +4494,7 @@ AccVoice_SplitReassign:
 	call AccPatch_SetVoiceParam
 	cpda8 a, (0x32cc)
 	jr z, AccVoice_SplitReassign_MatchFwd
-	anddi8 (0xfc5f), 0xbf
+	and (0xfc5f:16), 0xbf
 	ldb E, 0x48
 	ldb D, 0x05
 	ldb W, 0x00
@@ -4568,12 +4568,12 @@ AccInit_AllPartPositions:
 	ldw	(12781:16), 6
 	ret
 AccVoice_ThirdLayer:
-	anddi8 (0x320f), 0x0f
-	anddi8 (0x3210), 0x0f
-	anddi8 (0x3211), 0x0f
-	anddi8 (0x3212), 0x0f
-	anddi8 (0x3213), 0x0f
-	anddi8 (0x3214), 0x0f
+	and (0x320f:16), 0x0f
+	and (0x3210:16), 0x0f
+	and (0x3211:16), 0x0f
+	and (0x3212:16), 0x0f
+	and (0x3213:16), 0x0f
+	and (0x3214:16), 0x0f
 	cp (0x3249:16), 0x80
 	jr c, AccVoice_ThirdLayer_Style
 	bit 0, (0x32c7:16)
@@ -4629,7 +4629,7 @@ AccVoice_ThirdLayerReassign:
 	call AccPatch_SetVoiceParam
 	cpda8 a, (0x32d0)
 	jr z, AccVoice_ThirdReassign_MatchFwd
-	anddi8 (0xfc5f), 0xef
+	and (0xfc5f:16), 0xef
 	ldb E, 0x48
 	ldb D, 0x05
 	ldb W, 0x00
@@ -5030,8 +5030,8 @@ AccVoice_SetupByteData:
 	.byte 0x7a, 0x61, 0xf5, 0x1d, 0xcc, 0x68, 0xf5, 0xf1
 	.byte 0xf5, 0x31, 0x50, 0x0e
 AccFlags_Aggregate:
-	anddi8 (0x328a), 0xc0
-	anddi8 (0x328b), 0xc0
+	and (0x328a:16), 0xc0
+	and (0x328b:16), 0xc0
 	calr AccBuf_ResetAll4Positions
 	bit 0, (0x3272:16)
 	jr z, AccFlags_BuildIndex
@@ -5184,7 +5184,7 @@ AccNote_FlushAll:
 	call AccVoice_LoadRhythmParams_Part3
 	call AccVoice_LoadRhythmParams_Part4
 	call AccVoice_LoadRhythmParams_Part5
-	anddi8 (0x3290), 0xc0
+	and (0x3290:16), 0xc0
 AccNote_FlushReturn:
 	ret
 
@@ -5500,7 +5500,7 @@ AccTuning_Init:
 	jr t, AccTuning_Init_Epilogue
 AccTuning_Init_NoTuning:
 .Lc_f59640:
-	anddi8 (0x32f5), 0xfe
+	and (0x32f5:16), 0xfe
 	call AccTuning_LEDOff
 	ld a, (0x32f5:16)
 	ld (0x32f6:16), a
@@ -5512,7 +5512,7 @@ AccTuning_Init_Epilogue:
 AccTuning_DisableIfNoStyle:
 	cp (0x3249:16), 0x80
 	jr c, AccTuning_DisableReturn
-	anddi8 (0x32f5), 0xfe
+	and (0x32f5:16), 0xfe
 	call AccTuning_LEDOff
 AccTuning_DisableReturn:
 	ret
@@ -6315,43 +6315,43 @@ AccPedal_SustainOn_SetMask:
 .Lc_f59ed3:
 	cp (0x905c:16), 0x7f
 	jr nz, .Lc_f59ee9
-	anddi8 (0xfc5f), 0xfb
-	anddi8 (0x33e6), 0xfb
-	anddi8 (0x33e4), 0xfb
+	and (0xfc5f:16), 0xfb
+	and (0x33e6:16), 0xfb
+	and (0x33e4:16), 0xfb
 AccPedal_SustainOn_Update64607:
 .Lc_f59ee9:
 	ordi8 (0x33e5), 0x04
 	ordi8 (0x33e7), 0x04
 	bit 3, (0xfc5f:16)
 	jr z, .Lc_f59f12
-	anddi8 (0xfc5f), 0xf7
-	anddi8 (0x33e4), 0xf7
+	and (0xfc5f:16), 0xf7
+	and (0x33e4:16), 0xf7
 	ordi8 (0x33e5), 0x08
-	anddi8 (0x33e6), 0xf7
+	and (0x33e6:16), 0xf7
 	ordi8 (0x33e7), 0x08
 AccPedal_SustainOn_Post:
 .Lc_f59f12:
 	bit 2, (0xfc60:16)
 	jr z, AccPedal_SustainOn_Finalize
-	anddi8 (0xfc60), 0xfb
-	anddi8 (0x33e8), 0xfb
+	and (0xfc60:16), 0xfb
+	and (0x33e8:16), 0xfb
 	ordi8 (0x33e9), 0x04
-	anddi8 (0x33ea), 0xfb
+	and (0x33ea:16), 0xfb
 	ordi8 (0x33eb), 0x04
 AccPedal_SustainOn_Finalize:
 	bit 6, (0xfc5f:16)
 	jr z, AccPedal_SustainOn_CheckAlt
-	anddi8 (0xfc5f), 191
+	and (0xfc5f:16), 191
 
 AccPedal_SustainOn_CheckAlt:
 	bit 7, (0xfc5f:16)
 	jr z, AccPedal_SustainOn_AltRoute
-	anddi8 (0xfc5f), 127
+	and (0xfc5f:16), 127
 
 AccPedal_SustainOn_AltRoute:
 	cp (0x905c:16), 0x7f
 	jr z, AccPedal_SustainOn_Return
-	anddi8 (0x33d4), 0xfb
+	and (0x33d4:16), 0xfb
 AccPedal_SustainOn_Return:
 	ret
 
@@ -6362,12 +6362,12 @@ AccPedal_SustainOff_Padding:
 AccPedal_SustainOff:
 	bit 2, (0x33d4:16)
 	jr z, .Lc_f59f61
-	anddi8 (0x33d4), 0xfb
+	and (0x33d4:16), 0xfb
 AccPedal_SustainOff_Clear:
 .Lc_f59f61:
 	cp (0x905c:16), 0x7f
 	jr z, AccPedal_SustainOff_Return
-	anddi8 (0xfc5f), 0xfb
+	and (0xfc5f:16), 0xfb
 AccPedal_SustainOff_Return:
 	ret
 
@@ -6389,43 +6389,43 @@ AccPedal_ExprOn_SetMask:
 .Lc_f59f93:
 	cp (0x905c:16), 0x7f
 	jr nz, .Lc_f59fa9
-	anddi8 (0xfc60), 0xfb
-	anddi8 (0x33ea), 0xfb
-	anddi8 (0x33e8), 0xfb
+	and (0xfc60:16), 0xfb
+	and (0x33ea:16), 0xfb
+	and (0x33e8:16), 0xfb
 AccPedal_ExprOn_Update64607:
 .Lc_f59fa9:
 	ordi8 (0x33e9), 0x04
 	ordi8 (0x33eb), 0x04
 	bit 3, (0xfc5f:16)
 	jr z, .Lc_f59fd2
-	anddi8 (0xfc5f), 0xf7
-	anddi8 (0x33e4), 0xf7
+	and (0xfc5f:16), 0xf7
+	and (0x33e4:16), 0xf7
 	ordi8 (0x33e5), 0x08
-	anddi8 (0x33e6), 0xf7
+	and (0x33e6:16), 0xf7
 	ordi8 (0x33e7), 0x08
 AccPedal_ExprOn_Post:
 .Lc_f59fd2:
 	bit 2, (0xfc5f:16)
 	jr z, AccPedal_ExprOn_Finalize
-	anddi8 (0xfc5f), 0xfb
-	anddi8 (0x33e4), 0xfb
+	and (0xfc5f:16), 0xfb
+	and (0x33e4:16), 0xfb
 	ordi8 (0x33e5), 0x04
-	anddi8 (0x33e6), 0xfb
+	and (0x33e6:16), 0xfb
 	ordi8 (0x33e7), 0x04
 AccPedal_ExprOn_Finalize:
 	bit 6, (0xfc5f:16)
 	jr z, AccPedal_ExprOn_CheckAlt
-	anddi8 (0xfc5f), 191
+	and (0xfc5f:16), 191
 
 AccPedal_ExprOn_CheckAlt:
 	bit 7, (0xfc5f:16)
 	jr z, AccPedal_ExprOn_AltRoute
-	anddi8 (0xfc5f), 127
+	and (0xfc5f:16), 127
 
 AccPedal_ExprOn_AltRoute:
 	cp (0x905c:16), 0x7f
 	jr z, AccPedal_ExprOn_Return
-	anddi8 (0x33d4), 0xfe
+	and (0x33d4:16), 0xfe
 AccPedal_ExprOn_Return:
 	ret
 
@@ -6436,12 +6436,12 @@ AccPedal_ExprOff_Padding:
 AccPedal_ExprOff:
 	bit 0, (0x33d4:16)
 	jr z, .Lc_f5a021
-	anddi8 (0x33d4), 0xfe
+	and (0x33d4:16), 0xfe
 AccPedal_ExprOff_Clear:
 .Lc_f5a021:
 	cp (0x905c:16), 0x7f
 	jr z, AccPedal_ExprOff_Return
-	anddi8 (0xfc60), 0xfb
+	and (0xfc60:16), 0xfb
 AccPedal_ExprOff_Return:
 	ret
 
@@ -6460,16 +6460,16 @@ AccPedal_SostenutoOn:
 	ordi8 (0x33e6), 0x10
 	bit 5, (0xfc5f:16)
 	jr z, AccPedal_SostenutoOn_SetMask
-	anddi8 (0xfc5f), 0xdf
+	and (0xfc5f:16), 0xdf
 AccPedal_SostenutoOn_SetMask:
 	bit 6, (0xfc5f:16)
 	jr z, AccPedal_SostenutoOn_Update
-	anddi8 (0xfc5f), 191
+	and (0xfc5f:16), 191
 
 AccPedal_SostenutoOn_Update:
 	bit 7, (0xfc5f:16)
 	jr z, AccPedal_SostenutoOn_Post
-	anddi8 (0xfc5f), 127
+	and (0xfc5f:16), 127
 
 AccPedal_SostenutoOn_Post:
 	.byte 0xf1, 0x5f, 0xfc, 0xca, 0x66, 0x19, 0xc1, 0x5f
@@ -6496,11 +6496,11 @@ AccPedal_SostenutoOff_Padding:
 AccPedal_SostenutoOff:
 	bit 4, (0x33d4:16)
 	jr z, AccPedal_SostenutoOff_Return
-	anddi8 (0x33d4), 0xef
+	and (0x33d4:16), 0xef
 	ordi8 (0x33e5), 0x10
-	anddi8 (0x33e4), 0xef
+	and (0x33e4:16), 0xef
 	ordi8 (0x33e7), 0x10
-	anddi8 (0x33e6), 0xef
+	and (0x33e6:16), 0xef
 AccPedal_SostenutoOff_Return:
 	ret
 
@@ -6519,16 +6519,16 @@ AccPedal_SoftOn:
 	ordi8 (0x33e6), 0x20
 	bit 4, (0xfc5f:16)
 	jr z, AccPedal_SoftOn_SetMask
-	anddi8 (0xfc5f), 0xef
+	and (0xfc5f:16), 0xef
 AccPedal_SoftOn_SetMask:
 	bit 6, (0xfc5f:16)
 	jr z, AccPedal_SoftOn_Update
-	anddi8 (0xfc5f), 191
+	and (0xfc5f:16), 191
 
 AccPedal_SoftOn_Update:
 	bit 7, (0xfc5f:16)
 	jr z, AccPedal_SoftOn_Post
-	anddi8 (0xfc5f), 127
+	and (0xfc5f:16), 127
 
 AccPedal_SoftOn_Post:
 	.byte 0xf1, 0x5f, 0xfc, 0xca, 0x66, 0x19, 0xc1, 0x5f
@@ -6555,11 +6555,11 @@ AccPedal_SoftOff_Padding:
 AccPedal_SoftOff:
 	bit 5, (0x33d4:16)
 	jr z, AccPedal_SoftOff_Return
-	anddi8 (0x33d4), 0xdf
+	and (0x33d4:16), 0xdf
 	ordi8 (0x33e5), 0x20
-	anddi8 (0x33e4), 0xdf
+	and (0x33e4:16), 0xdf
 	ordi8 (0x33e7), 0x20
-	anddi8 (0x33e6), 0xdf
+	and (0x33e6:16), 0xdf
 AccPedal_SoftOff_Return:
 	ret
 
@@ -6578,11 +6578,11 @@ AccPedal_HoldOn:
 	ordi8 (0x33e6), 0x40
 	bit 4, (0xfc5f:16)
 	jr z, AccPedal_HoldOn_SetMask
-	anddi8 (0xfc5f), 0xef
+	and (0xfc5f:16), 0xef
 AccPedal_HoldOn_SetMask:
 	bit 5, (0xfc5f:16)
 	jr z, AccPedal_HoldOn_Update
-	anddi8 (0xfc5f), 223
+	and (0xfc5f:16), 223
 
 AccPedal_HoldOn_Update:
 	.byte 0xf1, 0x5f, 0xfc, 0xca, 0x66, 0x19, 0xc1, 0x5f
@@ -6602,7 +6602,7 @@ AccPedal_HoldOn_Finalize:
 AccPedal_HoldOn_CheckAlt:
 	bit 7, (0xfc5f:16)
 	jr z, AccPedal_HoldOn_Return
-	anddi8 (0xfc5f), 127
+	and (0xfc5f:16), 127
 
 AccPedal_HoldOn_Return:
 	ret
@@ -6614,11 +6614,11 @@ AccPedal_HoldOff_Padding:
 AccPedal_HoldOff:
 	bit 6, (0x33d4:16)
 	jr z, AccPedal_HoldOff_Return
-	anddi8 (0x33d4), 0xbf
+	and (0x33d4:16), 0xbf
 	ordi8 (0x33e5), 0x40
-	anddi8 (0x33e4), 0xbf
+	and (0x33e4:16), 0xbf
 	ordi8 (0x33e7), 0x40
-	anddi8 (0x33e6), 0xbf
+	and (0x33e6:16), 0xbf
 AccPedal_HoldOff_Return:
 	ret
 
@@ -6640,53 +6640,53 @@ AccPedal_DamperOn_SetMask:
 .Lc_f5a2ab:
 	cp (0x905c:16), 0x7f
 	jr nz, .Lc_f5a2c1
-	anddi8 (0xfc5f), 0xf7
-	anddi8 (0x33e6), 0xf7
-	anddi8 (0x33e4), 0xf7
+	and (0xfc5f:16), 0xf7
+	and (0x33e6:16), 0xf7
+	and (0x33e4:16), 0xf7
 AccPedal_DamperOn_Update:
 .Lc_f5a2c1:
 	ordi8 (0x33e5), 0x08
 	ordi8 (0x33e7), 0x08
 	bit 2, (0xfc5f:16)
 	jr z, .Lc_f5a2ea
-	anddi8 (0xfc5f), 0xfb
-	anddi8 (0x33e4), 0xfb
+	and (0xfc5f:16), 0xfb
+	and (0x33e4:16), 0xfb
 	ordi8 (0x33e5), 0x04
-	anddi8 (0x33e6), 0xfb
+	and (0x33e6:16), 0xfb
 	ordi8 (0x33e7), 0x04
 AccPedal_DamperOn_Post:
 .Lc_f5a2ea:
 	bit 2, (0xfc60:16)
 	jr z, AccPedal_DamperOn_Finalize
-	anddi8 (0xfc60), 0xfb
-	anddi8 (0x33e8), 0xfb
+	and (0xfc60:16), 0xfb
+	and (0x33e8:16), 0xfb
 	ordi8 (0x33e9), 0x04
-	anddi8 (0x33ea), 0xfb
+	and (0x33ea:16), 0xfb
 	ordi8 (0x33eb), 0x04
 AccPedal_DamperOn_Finalize:
 	bit 6, (0xfc5f:16)
 	jr z, AccPedal_DamperOn_CheckAlt
-	anddi8 (0xfc5f), 191
+	and (0xfc5f:16), 191
 
 AccPedal_DamperOn_CheckAlt:
 	bit 7, (0xfc5f:16)
 	jr z, AccPedal_DamperOn_AltRoute
-	anddi8 (0xfc5f), 127
+	and (0xfc5f:16), 127
 
 AccPedal_DamperOn_AltRoute:
 	bit 4, (0xfc5f:16)
 	jr z, AccPedal_DamperOn_Apply
-	anddi8 (0xfc5f), 239
+	and (0xfc5f:16), 239
 
 AccPedal_DamperOn_Apply:
 	bit 5, (0xfc5f:16)
 	jr z, AccPedal_DamperOn_FinalCheck
-	anddi8 (0xfc5f), 223
+	and (0xfc5f:16), 223
 
 AccPedal_DamperOn_FinalCheck:
 	cp (0x905c:16), 0x7f
 	jr z, AccPedal_DamperOn_Return
-	anddi8 (0x33d4), 0xf7
+	and (0x33d4:16), 0xf7
 AccPedal_DamperOn_Return:
 	ret
 
@@ -6697,12 +6697,12 @@ AccPedal_DamperOff_Padding:
 AccPedal_DamperOff:
 	bit 3, (0x33d4:16)
 	jr z, .Lc_f5a34f
-	anddi8 (0x33d4), 0xf7
+	and (0x33d4:16), 0xf7
 AccPedal_DamperOff_Clear:
 .Lc_f5a34f:
 	cp (0x905c:16), 0x7f
 	jr z, AccPedal_DamperOff_Return
-	anddi8 (0xfc5f), 0xf7
+	and (0xfc5f:16), 0xf7
 AccPedal_DamperOff_Return:
 	ret
 
@@ -6721,11 +6721,11 @@ AccPedal_PortamentoOn:
 	ordi8 (0x33e6), 0x80
 	bit 4, (0xfc5f:16)
 	jr z, AccPedal_PortamentoOn_SetMask
-	anddi8 (0xfc5f), 0xef
+	and (0xfc5f:16), 0xef
 AccPedal_PortamentoOn_SetMask:
 	bit 5, (0xfc5f:16)
 	jr z, AccPedal_PortamentoOn_Update
-	anddi8 (0xfc5f), 223
+	and (0xfc5f:16), 223
 
 AccPedal_PortamentoOn_Update:
 	.byte 0xf1, 0x5f, 0xfc, 0xca, 0x66, 0x19, 0xc1, 0x5f
@@ -6745,7 +6745,7 @@ AccPedal_PortamentoOn_Finalize:
 AccPedal_PortamentoOn_CheckAlt:
 	bit 6, (0xfc5f:16)
 	jr z, AccPedal_PortamentoOn_Return
-	anddi8 (0xfc5f), 191
+	and (0xfc5f:16), 191
 
 AccPedal_PortamentoOn_Return:
 	ret
@@ -6816,7 +6816,7 @@ AccAutoPlay_NoteDispatch_Process:
 	jr nz, AccAutoPlay_NoteDispatch_Return
 	bit 0, (0x33fc:16)
 	jr z, AccAutoPlay_NoteDispatch_Return
-	anddi8 (0x28b3), 0xf7
+	and (0x28b3:16), 0xf7
 	call 0xfdd69e
 AccAutoPlay_NoteDispatch_Return:
 	ret
@@ -7041,8 +7041,8 @@ AccAutoPlay_Trigger_Activate:
 	cpdi16 (0x33fe), 0x0000
 	jr z, .Lc_f5a662
 	calr AccAutoPlay_SeqHandoff
-	anddi8 (0x33fc), 0xfe
-	anddi8 (0x33fd), 0xfe
+	and (0x33fc:16), 0xfe
+	and (0x33fd:16), 0xfe
 	ldw (0x33fe:16), 0x0000
 	jr t, AccAutoPlay_ModeAvail_Padding
 AccAutoPlay_Trigger_Configure:
@@ -7129,7 +7129,7 @@ AccAutoPlay_SetConfig_Return:
 	ret
 
 AccAutoPlay_Configure:
-	anddi8 (0x33d2), 0x1f
+	and (0x33d2:16), 0x1f
 	cp (0x36ff:16), 0x00
 	jr nz, .Lc_f5a74f
 	cpdi16 (0x28a8), 0x0000
@@ -7208,7 +7208,7 @@ AccAutoPlay_Periodic_Return:
 	ret
 
 AccAutoPlay_Disable:
-	anddi8 (0xfc5f), 253
+	and (0xfc5f:16), 253
 
 	ldb w, 0x2
 
@@ -7237,12 +7237,12 @@ AccAutoPlay_SubModeA:
 	jr z, .Lc_f5a827
 	bit 1, (0x31e7:16)
 	jr z, .Lc_f5a827
-	anddi8 (0x33d1), 0xef
+	and (0x33d1:16), 0xef
 	ordi8 (0x33d1), 0x01
 	jr t, AccAutoPlay_SubModeA_Return
 AccAutoPlay_SubModeA_Check:
 .Lc_f5a827:
-	anddi8 (0x33d1), 0xef
+	and (0x33d1:16), 0xef
 	ordi8 (0x33d1), 0x04
 	jr t, AccAutoPlay_SubModeA_Return
 AccAutoPlay_SubModeA_Apply:
@@ -7252,9 +7252,9 @@ AccAutoPlay_SubModeA_Apply:
 	jr z, AccAutoPlay_SubModeA_Return
 	bit 0x03,A
 	jr z, AccAutoPlay_SubModeA_Return
-	anddi8 (0x0420), 0xf7
-	anddi8 (0x041e), 0xf7
-	anddi8 (0x33d1), 0xef
+	and (0x0420:16), 0xf7
+	and (0x041e:16), 0xf7
+	and (0x33d1:16), 0xef
 	ordi8 (0x33d1), 0x08
 AccAutoPlay_SubModeA_Return:
 	ret
@@ -7272,12 +7272,12 @@ AccAutoPlay_SubModeB:
 	jr z, .Lc_f5a87c
 	bit 1, (0x31e7:16)
 	jr z, .Lc_f5a87c
-	anddi8 (0x33d1), 0xef
+	and (0x33d1:16), 0xef
 	ordi8 (0x33d1), 0x02
 	jr t, AccAutoPlay_SubModeB_Return
 AccAutoPlay_SubModeB_Check:
 .Lc_f5a87c:
-	anddi8 (0x33d1), 0xef
+	and (0x33d1:16), 0xef
 	ordi8 (0x33d1), 0x04
 	jr t, AccAutoPlay_SubModeB_Return
 AccAutoPlay_SubModeB_Apply:
@@ -7287,10 +7287,10 @@ AccAutoPlay_SubModeB_Apply:
 	jr z, AccAutoPlay_SubModeB_Return
 	bit 0x03,A
 	jr z, AccAutoPlay_SubModeB_Return
-	anddi8 (0x0420), 0xf7
-	anddi8 (0x041e), 0xf7
-	anddi8 (0x0421), 0xf7
-	anddi8 (0x33d1), 0xef
+	and (0x0420:16), 0xf7
+	and (0x041e:16), 0xf7
+	and (0x0421:16), 0xf7
+	and (0x33d1:16), 0xef
 	ordi8 (0x33d1), 0x08
 AccAutoPlay_SubModeB_Return:
 	ret
@@ -7306,7 +7306,7 @@ AccAutoPlay_SeqHandoff:
 	jr nz, AccAutoPlay_SeqHandoff_Return
 	bit 2, (0x041e:16)
 	jr z, AccAutoPlay_SeqHandoff_Return
-	anddi8 (0x33d1), 0xf7
+	and (0x33d1:16), 0xf7
 	ordi8 (0x33d1), 0x10
 	cpdi16 (0xf19e), 0x0000
 	jr nz, AccAutoPlay_SeqHandoff_Process
@@ -7417,7 +7417,7 @@ AccAutoPlay_DeferredAction:
 	jr z, AccAutoPlay_Deferred_Return
 	bit 0, (0x33d1:16)
 	jr z, .Lc_f5a9a9
-	anddi8 (0x33d1), 0xee
+	and (0x33d1:16), 0xee
 	ordi8 (0x33d1), 0x08
 	ei 0x06
 	calr AccPlayMode_StartAccPlayFull
@@ -7428,7 +7428,7 @@ AccAutoPlay_Deferred_Process:
 .Lc_f5a9a9:
 	bit 1, (0x33d1:16)
 	jr z, AccAutoPlay_Deferred_Return
-	anddi8 (0x33d1), 0xed
+	and (0x33d1:16), 0xed
 	ordi8 (0x33d1), 0x08
 	ei 0x06
 	calr AccPlayMode_StartPlay
@@ -7786,7 +7786,7 @@ AccTempo_ClearPositions_Loop:
 	ld (1076:16), a
 	ld (1077:16), a
 	ei 0
-	anddi8 (0x28a6), 254
+	and (0x28a6:16), 254
 	ret
 
 AccTempo_ClearSubPos:
@@ -8105,12 +8105,12 @@ AccReplay_FullStop:
 	or A,C
 	cps a, 0
 	jr z, .Lc_f5aef4
-	anddi8 (0xfc5f), 0xf3
+	and (0xfc5f:16), 0xf3
 	lds wa, 0
 	ldb D, 0x05
 	ldb E, 0x48
 	call SysEx_ApplyVoiceParam_49
-	anddi8 (0xfc60), 0xfb
+	and (0xfc60:16), 0xfb
 	lds wa, 0
 	ldb D, 0x06
 	ldb E, 0x48
@@ -8125,7 +8125,7 @@ AccReplay_Stop_ClearPedals:
 	ld (0x33dd:16), 0x00
 AccReplay_Stop_ResetPosition:
 .Lc_f5af0c:
-	anddi8 (0x0437), 0x07
+	and (0x0437:16), 0x07
 	ld a, (0x0437:16)
 	cpda8 a, (0x0433)
 	jr c, .Lc_f5af2b
@@ -8241,8 +8241,8 @@ AccPos_ClearOnStart_Padding:
 	nop
 	cp (0x8c98:16), 0x13
 	jr nz, .Lc_f5b023
-	anddi8 (0x33de), 0xfd
-	anddi8 (0x28a6), 0xfe
+	and (0x33de:16), 0xfd
+	and (0x28a6:16), 0xfe
 	jr t, .Lc_f5b041
 .Lc_f5b023:
 	bit 1, (0x33de:16)
@@ -8253,13 +8253,13 @@ AccPos_ClearOnStart_Padding:
 	jr nz, .Lc_f5b041
 	ld (0x33dd:16), 0x00
 	calr AccReplay_FullStop
-	anddi8 (0x33de), 0xfd
+	and (0x33de:16), 0xfd
 .Lc_f5b041:
 	ret
 	.byte 0x00, 0x00
 AccFlags_SyncTo64607:
 	ld e, (1056:16)
-	anddi8 (0xfc5f), 254
+	and (0xfc5f:16), 254
 	bit 2, e
 	jr z, AccFlags_Sync_Process
 	ordi8 0xfc5f, 1
@@ -9075,7 +9075,7 @@ AccDir_CheckRightHandState:
 	jr nz, AccDir_Finalize
 	bit 0x01,A
 	jr z, AccDir_Finalize
-	anddi8 (0x3403), 0xf6
+	and (0x3403:16), 0xf6
 	ld (0x340a:16), 0x00
 AccDir_Finalize:
 	calr AccDir_AdjustDirection
@@ -9108,7 +9108,7 @@ AccDir_ReadState_StoreFlags:
 	ld a, (0xfd99:16)
 	bit 0x00,A
 	jr nz, AccDir_ReadState_Ret
-	anddi8 (0x3403), 0xf6
+	and (0x3403:16), 0xf6
 AccDir_ReadState_Ret:
 	ret
 
@@ -9140,7 +9140,7 @@ AccDir_AdjustDirection:
 	jp_24 z, (AccDir_Adjust_Ret)
 	bit 0, (0x3403:16)
 	jr z, AccDir_Adjust_LeftHand
-	anddi8 (0x3403), 0xfe
+	and (0x3403:16), 0xfe
 	cp (0x3408:16), 0x80
 	jr nc, AccDir_Adjust_LeftHand
 	ld w, (0xfd99:16)
@@ -9156,7 +9156,7 @@ AccDir_AdjustDirection:
 	ldb A, 0x00
 AccDir_Adjust_RightDec:
 	sll a, 4
-	anddi8 (0xfc61), 207
+	and (0xfc61:16), 207
 	orddm8 0xfc61, a
 	calr AccDir_DispatchEvent
 
@@ -9169,7 +9169,7 @@ AccDir_Adjust_LeftHand:
 	.byte 0x61, 0xc9, 0xdc, 0x67, 0x02, 0x21, 0x03
 AccDir_Adjust_LeftInc:
 	sll a, 4
-	anddi8 (0xfc61), 207
+	and (0xfc61:16), 207
 	orddm8 0xfc61, a
 	calr AccDir_DispatchEvent
 
@@ -9227,8 +9227,8 @@ AccDir_Periodic_CheckCountdown:
 	jr ugt, AccDir_Periodic_Ret
 AccDir_Periodic_DisableAndReset:
 .Lc_f5bb2f:
-	anddi8 (0x31e8), 0xef
-	anddi8 (0x31e8), 0xfb
+	and (0x31e8:16), 0xef
+	and (0x31e8:16), 0xfb
 	call 0xfdd7c0
 
 
@@ -9839,7 +9839,7 @@ AccStyle_ModeEnter:
 	ld (0x32f2:16), 0x00
 	ld (0x32f3:16), 0x00
 	ld (0x3303:16), 0x00
-	anddi8 (0x3335), 0xfe
+	and (0x3335:16), 0xfe
 	cpdi16 (0xf19e), 0x0000
 	jr z, .Lc_f5c281
 	call SeqAcc_SetIndicator_PB
@@ -9872,15 +9872,15 @@ AccStyle_ModeExit:
 	ld (0x32f2:16), 0x00
 	ld (0x32f3:16), 0x00
 	ld (0x3303:16), 0x00
-	anddi8 (0x3431), 0xf7
+	and (0x3431:16), 0xf7
 	bit 0, (0x3335:16)
 	jr z, .Lc_f5c2c6
-	anddi8 (0x3335), 0xfe
+	and (0x3335:16), 0xfe
 	call AccWrap_PlayModeDispatch
 	call SeqAcc_RestorePlaybackState
 AccStyle_ModeExit_ClearFlags:
 .Lc_f5c2c6:
-	anddi8 (0x3337), 0xfc
+	and (0x3337:16), 0xfc
 	call PartSelect_UpdateDisplayState
 
 
@@ -9970,7 +9970,7 @@ AccVoiceReg_WritePart3_StoreBit4:
 
 	and w, 0x7f
 
-	anddi8 (0xfb57), 128
+	and (0xfb57:16), 128
 
 	orddm8 0xfb57, w
 
@@ -9980,7 +9980,7 @@ AccVoiceReg_WritePart3_StoreBit4:
 
 	and a, 0x40
 
-	anddi8 (0xfb5a), 191
+	and (0xfb5a:16), 191
 
 	orddm8 0xfb5a, a
 
@@ -10010,7 +10010,7 @@ AccVoiceReg_WritePart4_StoreBit4:
 
 	and w, 0x7f
 
-	anddi8 (0xfb71), 128
+	and (0xfb71:16), 128
 
 	orddm8 0xfb71, w
 
@@ -10020,7 +10020,7 @@ AccVoiceReg_WritePart4_StoreBit4:
 
 	and a, 0x40
 
-	anddi8 (0xfb74), 191
+	and (0xfb74:16), 191
 
 	orddm8 0xfb74, a
 
@@ -10050,7 +10050,7 @@ AccVoiceReg_WritePart5_StoreBit4:
 
 	and w, 0x7f
 
-	anddi8 (0xfb8b), 128
+	and (0xfb8b:16), 128
 
 	orddm8 0xfb8b, w
 
@@ -10060,7 +10060,7 @@ AccVoiceReg_WritePart5_StoreBit4:
 
 	and a, 0x40
 
-	anddi8 (0xfb8e), 191
+	and (0xfb8e:16), 191
 
 	orddm8 0xfb8e, a
 
@@ -10090,7 +10090,7 @@ AccVoiceReg_WritePart2_StoreBit4:
 
 	and w, 0x7f
 
-	anddi8 (0xfba5), 128
+	and (0xfba5:16), 128
 
 	orddm8 0xfba5, w
 
@@ -10100,7 +10100,7 @@ AccVoiceReg_WritePart2_StoreBit4:
 
 	and a, 0x40
 
-	anddi8 (0xfba8), 191
+	and (0xfba8:16), 191
 
 	orddm8 0xfba8, a
 
@@ -10124,7 +10124,7 @@ AccVoiceReg_WritePart1:
 	ld w, (0x3179:16)
 	and W,0x7f
 	ld (0xfbbe:16), a
-	anddi8 (0xfbbf), 0x80
+	and (0xfbbf:16), 0x80
 	orddm8 0xfbbf, w
 	ldb L, 0x01
 	calr AccVoiceState_DispatchChange
@@ -10367,13 +10367,13 @@ AccDemo_Init:
 	calr AccDemo_LoadVariationData
 	calr Demo_LoadVariationC_Data
 	ldw (0x3438:16), 0x00be
-	anddi8 (0x3257), 0xfe
+	and (0x3257:16), 0xfe
 	bit 7, (0x3435:16)
 	jr nz, .Lc_f5ca46
 	call AccWidget_DispatchTable
 AccDemo_Init_ConfigTimers:
 .Lc_f5ca46:
-	anddi8 (0x3435), 0x7f
+	and (0x3435:16), 0x7f
 	ld (0x391a:16), 0x00
 	ld (0x391b:16), 0x0a
 
@@ -11736,7 +11736,7 @@ RhythmProc_StyleChange_Init:
 .Lc_f5e896:
 	bit 2, (0x3431:16)
 	jr z, RhythmProc_StyleChange_Ret
-	anddi8 (0x3431), 0xfb
+	and (0x3431:16), 0xfb
 	calr AccPatch_InitCurrentSlot
 	calr AccPatch_UpdateAllChains
 	call RhythmPatInit_LoadParams
@@ -11762,7 +11762,7 @@ RhythmProc_PlayMode_SendTempo:
 .Lc_f5e8d7:
 	bit 1, (0x3433:16)
 	jr z, .Lc_f5e90d
-	anddi8 (0x3433), 0xfd
+	and (0x3433:16), 0xfd
 	ld a, (0x3433:16)
 	and A,0x0c
 	cps a, 0
@@ -12361,13 +12361,13 @@ RhythmProc_RhythmEdit_Ret:
 RhythmProc_CheckVoiceChange:
 	bit 1, (0x3432:16)
 	jr z, .Lc_f5ed34
-	anddi8 (0x3432), 0xfd
+	and (0x3432:16), 0xfd
 	calr AccPatch_SetVoiceAndInit
 RhythmProc_CheckVoiceUpdate:
 .Lc_f5ed34:
 	bit 0, (0x3432:16)
 	jr z, RhythmProc_VoiceUpdate_Ret
-	anddi8 (0x3432), 0xfe
+	and (0x3432:16), 0xfe
 	calr RhythmProc_UpdateVoiceSentinels
 RhythmProc_VoiceUpdate_Ret:
 	ret
@@ -12600,7 +12600,7 @@ RhythmProc_CheckRepeatFlag:
 	jr nz, RhythmProc_RepeatFlag_Ret
 	bit 1, (0x3437:16)
 	jr z, RhythmProc_RepeatFlag_Ret
-	anddi8 (0x3437), 0xfd
+	and (0x3437:16), 0xfd
 	ld XIY,0x00094800
 	add XIY,0x00000000
 	add XIY,0x00000010
@@ -12750,7 +12750,7 @@ AccPatch_ReadRepeatBit:
 	ld A,(XIX)
 	bit 0x00,A
 	jr nz, .Lc_f5f14e
-	anddi8 (0x3437), 0xfe
+	and (0x3437:16), 0xfe
 	jr t, AccPatch_SetRepeatBit_Done
 AccPatch_SetRepeatBitOn:
 .Lc_f5f14e:
@@ -14097,7 +14097,7 @@ __pad_F602CB:
 	nop
 
 AccPatch_ResumeSequencePlayback:
-	anddi8 (0x3561), 0xfe
+	and (0x3561:16), 0xfe
 	calr AccPatch_PrepareSequencePlayback
 	ld wa, (0x3542:16)
 	ld (0x3576:16), wa
@@ -15893,7 +15893,7 @@ TempoRingBuf_PeekByte:
 	ret
 
 AccPlayback_InitOrUpdate:
-	anddi8 (0x3434), 0xef
+	and (0x3434:16), 0xef
 	ld a, (0x36ff:16)
 	and A,0x7f
 	.byte 0xc1, 0x74, 0x34, 0xf1, 0x66, 0x0c, 0xc9, 0xcc
@@ -16953,7 +16953,7 @@ __pad_F61D76:
 	nop
 
 AccPlayback_ReadEventLoop:
-	anddi8 (0x3434), 0x7f
+	and (0x3434:16), 0x7f
 AccPlayback_ReadEvt_CheckEmpty:
 	call AccPatch_CheckEmpty
 	cps wa, 0
@@ -17512,8 +17512,8 @@ AccBit5_CheckBit5Active:
 	jrl t, FlagClear_Exit
 AccBit5_InitAndScan:
 .Lc_f61f0d:
-	anddi8 (0x3434), 0xdf
-	anddi8 (0x3433), 0x7f
+	and (0x3434:16), 0xdf
+	and (0x3433:16), 0x7f
 	ld wa, (0x3478:16)
 	ld (0x33cf:16), wa
 	ld (0x35be:16), wa
@@ -17637,7 +17637,7 @@ __pad_F62498:
 	nop
 
 ToneGen_InitPlaybackState:
-	anddi8 (0x3434), 0xbf
+	and (0x3434:16), 0xbf
 	ld a, (0x36ff:16)
 	and A,0x1f
 	cps a, 0
@@ -17688,7 +17688,7 @@ __pad_F62502:
 AccPlayback_ProcessTempoAdvance:
 	bit 2, (0x3677:16)
 	jr z, AccPlayback_TempoAdv_Return
-	anddi8 (0x3434), 0xdf
+	and (0x3434:16), 0xdf
 	calr ToneGen_CalcTempo
 	calr ToneGen_AdvanceByTempo
 	calr AccPlayback_CalcTimingPosition
@@ -17697,7 +17697,7 @@ AccPlayback_ProcessTempoAdvance:
 	ld (0x3676:16), 0x04
 	ld (0x367b:16), 0xff
 	ld (0xe31a:16), 0x10
-	anddi8 (0x3677), 0xfb
+	and (0x3677:16), 0xfb
 AccPlayback_TempoAdv_Return:
 	ret
 
@@ -20802,7 +20802,7 @@ DrumKitInit_Setup:
 	.byte 0xf1, 0x5f, 0xfc, 0xcb
 	jr	z, 15
 DrumKitInit_ClearAssignFlags:
-	anddi8 (0xfc5f), 243
+	and (0xfc5f:16), 243
 
 	ldb d, 0x5
 
@@ -20863,13 +20863,13 @@ DrumKitExit_CheckState1:
 .Lc_f64737:
 	cp (0x8c98:16), 0x01
 	jr z, .Lc_f64743
-	anddi8 (0x8cec), 0xfe
+	and (0x8cec:16), 0xfe
 DrumKitExit_ClearFlags:
 .Lc_f64743:
-	anddi8 (0x28a7), 0xfb
-	anddi8 (0xe31c), 0xfe
-	anddi8 (0xe31c), 0xf7
-	anddi8 (0xe31c), 0xdf
+	and (0x28a7:16), 0xfb
+	and (0xe31c:16), 0xfe
+	and (0xe31c:16), 0xf7
+	and (0xe31c:16), 0xdf
 	ld (0x3455:16), 0x00
 	ld (0x36ff:16), 0x00
 	push XWA
@@ -20889,12 +20889,12 @@ DrumKitExit_ClearFlags:
 	pop XWA
 	bit 6, (0x3431:16)
 	jr z, DrumKitExit_PostRestore
-	anddi8 (0x3431), 0xbf
+	and (0x3431:16), 0xbf
 	ld a, (0x348f:16)
 	ld (0xfc5a:16), a
 	ld a, (0x3490:16)
 	and A,0x7f
-	anddi8 (0xfc5b), 0x80
+	and (0xfc5b:16), 0x80
 	.byte 0xc1, 0x5b, 0xfc, 0xe9, 0x1e, 0x87, 0x00
 DrumKitExit_PostRestore:
 	call AccWrap_PlayModeDispatch
@@ -20954,7 +20954,7 @@ DrumKit_ValidateBank_Return:
 
 DrumKit_StoreAndSendBank:
 	ld (0xfc5a:16), l
-	anddi8 (0xfc5b), 128
+	and (0xfc5b:16), 128
 	ldb h, 0x0
 	call PartCtrl_WriteProgramChange
 	ld xix, 0xff92
@@ -21196,7 +21196,7 @@ RhythmPatInit_Entry:
 	jr t, .Lc_f64a0a
 RhythmPatInit_Cleanup:
 .Lc_f64a0a:
-	anddi8 (0xe31c), 0x9e
+	and (0xe31c:16), 0x9e
 
 	ret
 

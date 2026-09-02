@@ -2792,7 +2792,7 @@ SndParam_MaskShiftMerge_8F58:
 	ld	a, (0x8f58:16)
 	and a, 0x07
 	sla	a, 4
-	anddi8	(0x8f1c), 143
+	and	(0x8f1c:16), 143
 	orddm8	0x8f1c, a
 	ret
 SndParam_DecrLookup_Via0300:
@@ -7999,7 +7999,7 @@ Audio_WriteBankSelectParams:
 	pushw de
 	bit 7, (0x8ee2:16)
 	jr z, BankSelect_CheckChannel1
-	anddi8 (0x8ee2), 127
+	and (0x8ee2:16), 127
 	ldw (0x9127:16), 176
 	ld e, (0x8ee2:16)
 	ldb d, 0x7f
@@ -8009,7 +8009,7 @@ Audio_WriteBankSelectParams:
 BankSelect_CheckChannel1:
 	bit 7, (0x8ee0:16)
 	jr z, BankSelect_Done
-	anddi8 (0x8ee0), 127
+	and (0x8ee0:16), 127
 	ldw (0x9127:16), 432
 	ld e, (0x8ee0:16)
 	ldb d, 0x7f
@@ -8069,7 +8069,7 @@ SeqTimer_RoundUp:
 	call SeqData_DispatchLoop_Done
 
 SeqTimer_ClearFlag:
-	anddi8 (0x90f9), 239
+	and (0x90f9:16), 239
 	pop xhl
 	pop xde
 	pop xbc
@@ -8541,7 +8541,7 @@ MIDI_SelectTempoExpressionSource:
 	jr z, Tempo_Expression_Bypass
 	cp d, 0x88
 	jr z, Tempo_Expression_Bypass
-	anddi8 (0x90f9), 243
+	and (0x90f9:16), 243
 	jr Tempo_ExpressionStore
 
 TempoSrc_CheckAutoPlay:
@@ -8578,7 +8578,7 @@ Mod_SelectExpressionSource:
 	jr z, Tempo_Expression_Bypass
 	cp d, 0x88
 	jr z, Tempo_Expression_Bypass
-	anddi8 (0x90f9), 243
+	and (0x90f9:16), 243
 	jr Mod_ExpressionStore
 
 ModExpr_CheckAutoPlay:
@@ -8707,7 +8707,7 @@ TempoRing_ValidateState:
 	jr nz, MIDI_ParamValidation_ReturnNoOp
 	cp (xix - 7), 0x0
 	jr nz, MIDI_ParamValidation_ReturnNoOp
-	anddi8 (0x91c0), 183
+	and (0x91c0:16), 183
 
 MIDI_ParamValidation_ReturnNoOp:
 	ret

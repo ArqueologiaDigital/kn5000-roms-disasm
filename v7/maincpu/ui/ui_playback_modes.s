@@ -136,9 +136,9 @@ PlayMode_TeardownAndRestore:
 	; --- Teardown: load/store/clear flags ---
 	ld	wa, (0x2875:16)
 	ld	(0xf19e:16), wa
-	anddi8	(0x28a7), 251
+	and	(0x28a7:16), 251
 	ordi8	0x28b3, 16
-	anddi8	(0x28a7), 247
+	and	(0x28a7:16), 247
 	ret
 PartLookup_NullRet:
 	ret
@@ -329,7 +329,7 @@ Part_ValidateCallAndClear:
 	call FileIO_MedleyDispatchByMode
 
 DispatchHandler_ClearActiveFlag:
-	anddi8 (3381), 254
+	and (3381:16), 254
 	ret
 
 PlayMode_InitFlagBlock:
@@ -412,7 +412,7 @@ PlayCheck_Return:
 
 PlayMode_DispatchAndClearBit2:
 	call AccWrap_PlayModeDispatch
-	anddi8 (0x28ac), 251
+	and (0x28ac:16), 251
 	ret
 
 PlayMode_StartAndSendCommand:
@@ -532,7 +532,7 @@ SongMode_SendStopCommand:
 	ret
 
 SongMode_AbortAndClearBit2:
-	anddi8 (0x28ac), 251
+	and (0x28ac:16), 251
 
 	call	16693581
 
@@ -687,7 +687,7 @@ PartFormat_SendStopCommand:
 	ret
 
 PartFormat_AbortAndClearBit2:
-	anddi8 (0x28ac), 251
+	and (0x28ac:16), 251
 
 	call 16693581
 
@@ -743,7 +743,7 @@ PlayModeStop_SendStopCmd:
 	ret
 
 PlayMode_StopAndAbort:
-	anddi8 (0x28ac), 251
+	and (0x28ac:16), 251
 
 	.byte 0x1d, 0xfd, 0x2a, 0xf2	; call PlayMode_SendStopEvent (v7 addr)
 
@@ -801,8 +801,8 @@ CDlikeSwitch_PlaybackTimer:
 	jr t, CDlikeSwTtl_StorePlaybackMode
 CDlikeTimer_ResetAccompaniment:
 	pushw wa
-	anddi8 (0x28b2), 249
-	anddi8 (0x28a7), 247
+	and (0x28b2:16), 249
+	and (0x28a7:16), 247
 	call Seq_ResetAndRestartAccompaniment
 	popw wa
 	jr CDlikeSwTtl_StorePlaybackMode
@@ -925,8 +925,8 @@ CDlikeBankLoad_Return:
 
 CDlike_ExitModeAndRestore:
 	call PlayMode_CheckAndAbort
-	anddi8 (0xb746), 0xbf
-	anddi8 (0x28ac), 0xfb
+	and (0xb746:16), 0xbf
+	and (0x28ac:16), 0xfb
 	ld (0x1144:16), 0x00
 	bit 2, (0x0d42:16)
 	jr z, .Lc_f20b61
@@ -965,7 +965,7 @@ SongBank_SaveAndReload:
 	ld (0x2871:16), wa
 	call SongBank_LoadToWorkArea
 	call SongBank_CheckAccompanimentMode
-	anddi8 (0x28b1), 254
+	and (0x28b1:16), 254
 	ret
 
 SongBank_LoadToWorkArea:
@@ -990,7 +990,7 @@ SongBank_CheckAccompanimentMode:
 	jr z, SongBank_EnableAccompaniment
 	bit 2, (0xfdad:16)
 	jr z, SongBank_CheckBassMode
-	anddi8 (0xfdad), 251
+	and (0xfdad:16), 251
 	xor a, a
 	jr SongBank_SendAccompEvent
 
@@ -1010,7 +1010,7 @@ SongBank_SendAccompEvent:
 SongBank_CheckBassMode:
 	cp (0xf24b:16), 255
 	jr z, SongBank_EnableBassMode
-	anddi8 (0xfdad), 254
+	and (0xfdad:16), 254
 	xor a, a
 	jr SongBank_SendBassEvent
 

@@ -17,7 +17,7 @@ AccompSeq_ManualMidiEntry1:
 
 AccompSeq_PeriodicMain:
 	calr AccompSeq_CaptureTimerState
-	anddi8 (0x7e53), 223
+	and (0x7e53:16), 223
 	calr AccompSeq_CheckChannelActive
 	bit 5, (0x7e53:16)
 	jr nz, AccompSeq_PeriodicReturn
@@ -134,7 +134,7 @@ AccompSeq_IncrementTickCounter:
 
 AccompSeq_InitEventDispatch:
 	ldb a, 0x9
-	anddi8 (0x7e53), 252
+	and (0x7e53:16), 252
 
 AccompSeq_EventDispatchLoop:
 	bit 0, (0x7e53:16)
@@ -366,11 +366,11 @@ AccompSeq_PartTransitionDone:
 AccompSeq_StopPart:
 	cp (0x7e52:16), 1
 	jr z, AccompSeq_StopPartCh2
-	anddi8 (0x7e24), 254
+	and (0x7e24:16), 254
 	jr AccompSeq_CheckRestart
 
 AccompSeq_StopPartCh2:
-	anddi8 (0x7e24), 253
+	and (0x7e24:16), 253
 
 AccompSeq_CheckRestart:
 	ordi8 0x7e53, 1
@@ -754,8 +754,8 @@ AccompSeq_ResolveCh_Done:
 	ret
 
 AccompSeq_CheckVelocityFlags:
-	anddi8 (0x33e5), 253
-	anddi8 (0x33e5), 251
+	and (0x33e5:16), 253
+	and (0x33e5:16), 251
 	cp a, 0x78
 	jr c, AccompSeq_VelFlags_CheckProgram
 	ordi8 0x33e5, 4
@@ -787,7 +787,7 @@ AccompSeq_CheckVelFlagsExtended:
 	ld a, (0x7e5b:16)
 	ld (0x33e7:16), a
 	popw wa
-	anddi8 (0x33e5), 251
+	and (0x33e5:16), 251
 	cp a, 0x78
 	jr c, AccompSeq_ExtVelFlags_CheckProg
 	ordi8 0x33e5, 4
@@ -833,7 +833,7 @@ AccompSeq_FadeOut_Active:
 	ld (0x7e70:16), wa
 	cp wa, 0xffff
 	jr nz, AccompSeq_FadeOut_Periodic
-	anddi8 (0x7e24), 127
+	and (0x7e24:16), 127
 	call AccompSeq_StopSequence
 	jr AccompSeq_FadeOut_Return
 
@@ -945,8 +945,8 @@ AccompSeq_ManualMidi_SetChannel:
 	ld (0xc07e:16), a
 
 AccompSeq_ManualMidi_ClearFlags:
-	anddi8 (0x7f15), 253
-	anddi8 (0x7f15), 247
+	and (0x7f15:16), 253
+	and (0x7f15:16), 247
 	ret
 
 AccompSeq_LargeCodeBlock1:
@@ -1036,12 +1036,12 @@ AccompSeq_UpdatePosition:
 	cp (0x7e52:16), 0
 	jr nz, AccompSeq_UpdatePos_Part2
 	ld xwa, (0x7e65:16)
-	anddi8 (0x7e6d), 254
+	and (0x7e6d:16), 254
 	jr AccompSeq_UpdatePos_Store
 
 AccompSeq_UpdatePos_Part2:
 	ld xwa, (0x7e69:16)
-	anddi8 (0x7e6d), 254
+	and (0x7e6d:16), 254
 
 AccompSeq_UpdatePos_Store:
 	ld (0x7e44:16), wa
@@ -1353,7 +1353,7 @@ AccompSeq_InitMidi_Return:
 	ret
 
 AccompSeq_InitPlayState:
-	anddi8 (0x7e24), 127
+	and (0x7e24:16), 127
 	xor wa, wa
 	ei 6
 	ld (1128:16), wa
@@ -1609,7 +1609,7 @@ AccompSeq_CleanupSequence:
 	and a, 0x3
 	cps a, 0
 	jr z, AccompSeq_Cleanup_ClearFlags
-	anddi8 (0x7e24), 127
+	and (0x7e24:16), 127
 	ordi8 1055, 8
 	ld a, (0x7e24:16)
 	and a, 0xfc
@@ -1617,8 +1617,8 @@ AccompSeq_CleanupSequence:
 	calr AccompSeq_SendAllOff
 
 AccompSeq_Cleanup_ClearFlags:
-	anddi8 (0x7e6e), 254
-	anddi8 (0x7e6f), 254
+	and (0x7e6e:16), 254
+	and (0x7e6f:16), 254
 	ret
 
 AccompSeq_SendAllOff:
@@ -1785,9 +1785,9 @@ AccompSeq_MidiFilterCodeBlock:
 	nop
 
 AccompSeq_ProcessChordChange:
-	anddi8 (0x7e6e), 254
-	anddi8 (0x7e6f), 254
-	anddi8 (0x7e5f), 252
+	and (0x7e6e:16), 254
+	and (0x7e6f:16), 254
+	and (0x7e5f:16), 252
 	pushw hl
 	calr AccompSeq_CompareChord
 	popw hl
@@ -1840,7 +1840,7 @@ AccompSeq_ChordChange_CheckOverride:
 	ordi8 0x7e6f, 1
 
 AccompSeq_ChordChange_ApplyOverride:
-	anddi8 (0x7e5f), 253
+	and (0x7e5f:16), 253
 	call AccompSeq_SetupChannels
 
 AccompSeq_ChordChange_Return:
@@ -1955,7 +1955,7 @@ AccompSeq_ParseSequenceData:
 	lds bc, 0
 	ld d, (0x7e64:16)
 	ld e, (0x7e63:16)
-	anddi8 (0x7e53), 254
+	and (0x7e53:16), 254
 
 AccompSeq_SeqParse_Loop:
 	bit 0, (0x7e53:16)

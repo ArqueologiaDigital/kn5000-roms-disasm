@@ -4867,7 +4867,7 @@ Voice_Manager_PollBank:
 	dec 6, xsp
 	push xiz
 	incdi8 1, 4392
-	anddi8 4392, 3
+	and (4392:16), 3
 	ld a, (4392:16)
 	extz wa
 	calr ToneGen_Read_Register

@@ -53,7 +53,7 @@ INTRX0_CLEAR_ERROR_STATE:
 	pushw wa
 	ld a, (208:16)
 	ld (1059:16), 0
-	anddi8 (1063), 189
+	and (1063:16), 189
 	setda 3, 1063
 	ld (1074:16), 0
 	incdi8 1, (0xb7de)
@@ -180,7 +180,7 @@ MIDI_RX_BYTE_DISPATCHER:
 
 RxDisp_StatusByte:
 	ld (1059:16), a
-	anddi8 (1063), 189
+	and (1063:16), 189
 	bit 0, (1074:16)
 	jr z, RxDisp_SaveContextAndReturn
 	bit 1, (1074:16)
@@ -196,7 +196,7 @@ RxDisp_StatusByte:
 
 RxDisp_ClearSysExState:
 	ld (1059:16), 0
-	anddi8 (1074), 204
+	and (1074:16), 204
 	jr RxDisp_SaveContextAndReturn
 
 RxDisp_SysExError:
@@ -283,7 +283,7 @@ ClkTick_WriteTimingReg:
 ClkTick_BeatSubdivCheck:
 	bit 2, (1055:16)
 	jr z, ClkTick_PerClockCounters
-	anddi8 (1130), 252
+	and (1130:16), 252
 	incdi8 4, (1130)
 	cp (1130:16), 96
 	jr nz, ClkTick_PerClockCounters
@@ -319,7 +319,7 @@ ClkTick_Src1CoarseUpdate:
 ClkTick_Src2ClickIncrement:
 	bit 2, a
 	jr z, ClkTick_Src2FineBeatCheck
-	anddi8 (1047), 252
+	and (1047:16), 252
 	incdi8 4, (1047)
 	cp (1047:16), 96
 	jr nz, ClkTick_Src2FineBeatCheck
@@ -329,7 +329,7 @@ ClkTick_Src2ClickIncrement:
 ClkTick_Src2FineBeatCheck:
 	bit 2, (1054:16)
 	jr z, ClkTick_Src2ErrorDelta
-	anddi8 (1045), 252
+	and (1045:16), 252
 	incdi8 4, (1045)
 	cp (1045:16), 96
 	jr nz, ClkTick_Src2ErrorDelta
@@ -379,7 +379,7 @@ ClkTick_Src2ErrorWriteback:
 ClkTick_Src3ClickCheck:
 	bit 2, (1057:16)
 	jr z, Transport_StopHandler
-	anddi8 (1051), 252
+	and (1051:16), 252
 	incdi8 4, (1051)
 	ld a, (1051:16)
 	bit 0, (1073:16)
@@ -553,7 +553,7 @@ Continue_SetRunning:
 Continue_ClearPositionAndSetSrc1:
 	ld (1076:16), 0
 	ld (1077:16), 0
-	anddi8 (0x28a6), 254
+	and (0x28a6:16), 254
 	ld (1054:16), 6
 
 Continue_Return:
@@ -767,7 +767,7 @@ ChanDisp_EnqueueThreeBytes:
 	pushw de
 	call SeqMain_WriteByte
 	inc 2, xsp
-	anddi8 (1063), 189
+	and (1063:16), 189
 
 ChanDisp_NoteOnZeroReturn:
 	ret

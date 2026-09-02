@@ -22,7 +22,7 @@ AudioMode_CheckAndUpdateStereo:
 AudioMode_ApplyStereoUpdate:
 .Lc_f5336e:
 	call 0xfdd7c0
-	anddi8 (0x31e8), 0xf7
+	and (0x31e8:16), 0xf7
 
 
 
@@ -213,11 +213,11 @@ AccVoice_ProcessPedalChanges:
 	xor A,A
 	ld (0x326d:16), a
 	ld (0x326f:16), a
-	anddi8 (0x326e), 0xf3
-	anddi8 (0x328b), 0xc0
+	and (0x326e:16), 0xf3
+	and (0x328b:16), 0xc0
 	bit 0, (0x3270:16)
 	jr nz, .Lc_f53596
-	anddi8 (0x328a), 0xc0
+	and (0x328a:16), 0xc0
 AccVoice_Pedal0_SetAndCheck:
 .Lc_f53596:
 	ordi8 (0x326e), 0x01
@@ -232,11 +232,11 @@ AccVoice_Pedal0_Done:
 	xor A,A
 	ld (0x326d:16), a
 	ld (0x326f:16), a
-	anddi8 (0x326e), 0xf6
-	anddi8 (0x328b), 0xc0
+	and (0x326e:16), 0xf6
+	and (0x328b:16), 0xc0
 	bit 0, (0x3270:16)
 	jr nz, .Lc_f535cc
-	anddi8 (0x328a), 0xc0
+	and (0x328a:16), 0xc0
 AccVoice_Pedal1_SetAndCheck:
 .Lc_f535cc:
 	ordi8 (0x326e), 0x04
@@ -251,11 +251,11 @@ AccVoice_Pedal1_Done:
 	xor A,A
 	ld (0x326d:16), a
 	ld (0x326f:16), a
-	anddi8 (0x326e), 0xfa
-	anddi8 (0x328b), 0xc0
+	and (0x326e:16), 0xfa
+	and (0x328b:16), 0xc0
 	bit 0, (0x3270:16)
 	jr nz, .Lc_f53602
-	anddi8 (0x328a), 0xc0
+	and (0x328a:16), 0xc0
 AccVoice_Pedal2_SetAndCheck:
 .Lc_f53602:
 	ordi8 (0x326e), 0x08
@@ -275,11 +275,11 @@ AccVoice_ProcessLeftPedalChanges:
 	xor A,A
 	ld (0x326e:16), a
 	ld (0x326f:16), a
-	anddi8 (0x326d), 0xfd
-	anddi8 (0x328b), 0xc0
+	and (0x326d:16), 0xfd
+	and (0x328b:16), 0xc0
 	bit 0, (0x3270:16)
 	jr nz, .Lc_f53639
-	anddi8 (0x328a), 0xc0
+	and (0x328a:16), 0xc0
 AccVoice_LeftPedal0_SetAndCheck:
 .Lc_f53639:
 	ordi8 (0x326d), 0x01
@@ -294,11 +294,11 @@ AccVoice_LeftPedal0_Done:
 	xor A,A
 	ld (0x326e:16), a
 	ld (0x326f:16), a
-	anddi8 (0x326d), 0xfe
-	anddi8 (0x328b), 0xc0
+	and (0x326d:16), 0xfe
+	and (0x328b:16), 0xc0
 	bit 0, (0x3270:16)
 	jr nz, .Lc_f5366f
-	anddi8 (0x328a), 0xc0
+	and (0x328a:16), 0xc0
 AccVoice_LeftPedal1_SetAndCheck:
 .Lc_f5366f:
 	ordi8 (0x326d), 0x02
@@ -361,9 +361,9 @@ AccChord_ProcessKeyChanges:
 	xor A,A
 	ld (0x326e:16), a
 	ld (0x326d:16), a
-	anddi8 (0x328b), 0xc0
-	anddi8 (0x326f), 0xfd
-	anddi8 (0x328a), 0xc0
+	and (0x328b:16), 0xc0
+	and (0x326f:16), 0xfd
+	and (0x328a:16), 0xc0
 	ordi8 (0x326f), 0x01
 	calr AccChannel_SetDirtyIfActive
 AccChord_KeyChange0_Done:
@@ -375,9 +375,9 @@ AccChord_KeyChange0_Done:
 	xor A,A
 	ld (0x326e:16), a
 	ld (0x326d:16), a
-	anddi8 (0x328b), 0xc0
-	anddi8 (0x326f), 0xfe
-	anddi8 (0x328a), 0xc0
+	and (0x328b:16), 0xc0
+	and (0x326f:16), 0xfe
+	and (0x328a:16), 0xc0
 	ordi8 (0x326f), 0x02
 	calr AccChannel_SetDirtyIfActive
 AccChord_KeyChange1_Done:
@@ -477,7 +477,7 @@ AccChord_CheckZeroChord:
 .Lc_f538b9:
 	cp (0x3240:16), 0x00
 	jr nz, AccChord_CompareDone
-	anddi8 (0x3257), 0xdf
+	and (0x3257:16), 0xdf
 AccChord_CompareDone:
 	ret
 
@@ -1083,7 +1083,7 @@ RhythmPart2_ProcessRingBuf:
 	calr AccVoiceReg_StoreParamRecord
 RhythmPart2_WriteDone:
 .Lc_f53d08:
-	anddi8 (0x3290), 0xfb
+	and (0x3290:16), 0xfb
 	call AccVoiceReg_WritePart2
 
 	ret
@@ -1160,7 +1160,7 @@ RhythmPart3_ProcessRingBuf:
 	calr AccVoiceReg_StoreParamRecord
 RhythmPart3_WriteDone:
 .Lc_f53de0:
-	anddi8 (0x3290), 0xf7
+	and (0x3290:16), 0xf7
 	call AccVoiceReg_WritePart3
 
 	ret
@@ -1218,7 +1218,7 @@ RhythmPart4_ProcessRingBuf:
 	calr AccVoiceReg_StoreParamRecord
 RhythmPart4_WriteDone:
 .Lc_f53e91:
-	anddi8 (0x3290), 0xef
+	and (0x3290:16), 0xef
 	call AccVoiceReg_WritePart4
 
 	ret
@@ -1276,7 +1276,7 @@ RhythmPart5_ProcessRingBuf:
 	calr AccVoiceReg_StoreParamRecord
 RhythmPart5_WriteDone:
 .Lc_f53f42:
-	anddi8 (0x3290), 0xdf
+	and (0x3290:16), 0xdf
 	call AccVoiceReg_WritePart5
 
 	ret
@@ -1475,7 +1475,7 @@ AccentData_ComparePart1:
 	jr nz, AccentData_Part1_Done
 	cp L,H
 	jr nz, AccentData_Part1_Done
-	anddi8 (0x3290), 0xfc
+	and (0x3290:16), 0xfc
 AccentData_Part1_Done:
 	ret
 
@@ -1490,7 +1490,7 @@ AccentData_ComparePart2:
 	jr nz, AccentData_Part2_Done
 	cp L,H
 	jr nz, AccentData_Part2_Done
-	anddi8 (0x3290), 0xfb
+	and (0x3290:16), 0xfb
 AccentData_Part2_Done:
 	ret
 
@@ -1505,7 +1505,7 @@ AccentData_ComparePart3:
 	jr nz, AccentData_Part3_Done
 	cp L,H
 	jr nz, AccentData_Part3_Done
-	anddi8 (0x3290), 0xf7
+	and (0x3290:16), 0xf7
 AccentData_Part3_Done:
 	ret
 
@@ -1520,7 +1520,7 @@ AccentData_ComparePart4:
 	jr nz, AccentData_Part4_Done
 	cp L,H
 	jr nz, AccentData_Part4_Done
-	anddi8 (0x3290), 0xef
+	and (0x3290:16), 0xef
 AccentData_Part4_Done:
 	ret
 
@@ -1535,7 +1535,7 @@ AccentData_ComparePart5:
 	jr nz, AccentData_Part5_Done
 	cp L,H
 	jr nz, AccentData_Part5_Done
-	anddi8 (0x3290), 0xdf
+	and (0x3290:16), 0xdf
 AccentData_Part5_Done:
 	ret
 

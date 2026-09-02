@@ -667,7 +667,7 @@ SetWall_SlotTypeMap:
 	ret
 
 SetWall_CrossType_Validate:
-	anddi8 (0x2879), 252
+	and (0x2879:16), 252
 	call SetWall_ParserInit
 	ld a, (3301:16)
 	cp a, 0xf
@@ -676,7 +676,7 @@ SetWall_CrossType_Validate:
 	cp a, 0x13
 	jrl ugt, SetWall_CrossType_Reset
 	ld (0x287a:16), 0
-	anddi8 (0x287b), 191
+	and (0x287b:16), 191
 	xor hl, hl
 	ld l, (3301:16)
 	push xde
@@ -697,7 +697,7 @@ SetWall_CrossType_Validate:
 	jr SetWall_CrossType_CheckDest
 
 SetWall_CrossType_ClearBit0:
-	anddi8 (0x2879), 254
+	and (0x2879:16), 254
 
 SetWall_CrossType_CheckDest:
 	cp (0x2873:16), 12
@@ -706,7 +706,7 @@ SetWall_CrossType_CheckDest:
 	jr SetWall_CrossType_MapLookup
 
 SetWall_CrossType_ClearBit1:
-	anddi8 (0x2879), 253
+	and (0x2879:16), 253
 
 SetWall_CrossType_MapLookup:
 	xor h, h
@@ -730,7 +730,7 @@ SetWall_CrossType_Reset:
 	xor a, a
 	call Part_InitVoiceDefaults
 	popw wa
-	anddi8 (0x2879), 252
+	and (0x2879:16), 252
 	ret
 
 SetWall_SlotOrderTable:
@@ -754,7 +754,7 @@ SetWall_SlotBitUpdate:
 	ret
 
 SetWall_ParsePatternStream:
-	anddi8 (0x287b), 251
+	and (0x287b:16), 251
 	xor w, w
 	ld (0x287a:16), 0
 	ld (0x287d:16), wa
@@ -908,7 +908,7 @@ SetWall_ParseStream_TypeB0:
 	sll c, 5
 	ld (4340:16), c
 	ld (3310:16), a
-	anddi8 (3310), 2
+	and (3310:16), 2
 	pushw bc
 	ldb c, 0x6
 
@@ -1129,7 +1129,7 @@ SetWall_ParseB0ControlChange:
 	ld a, (4340:16)
 	cp a, 0x48
 	jr z, SetWall_B0CC_Type48
-	anddi8 (0x289d), 251
+	and (0x289d:16), 251
 	ld l, (0x2873:16)
 	xor h, h
 	push xde
@@ -1162,12 +1162,12 @@ SetWall_ParseB0ControlChange:
 
 SetWall_B0CC_BankSelect:
 	ordi8 0x289d, 1
-	anddi8 (3389), 254
+	and (3389:16), 254
 	ld (3388:16), a
 	jrl SetWall_B0CC_Return
 
 SetWall_B0CC_ClearFlags:
-	anddi8 (0x289d), 250
+	and (0x289d:16), 250
 	jrl SetWall_B0CC_Return
 	jrl SetWall_B0CC_Return
 
@@ -1181,7 +1181,7 @@ SetWall_B0CC_Type48:
 	pop xde
 	cps a, 5
 	jr nz, SetWall_B0CC_Type48_Check12
-	anddi8 (0x289d), 254
+	and (0x289d:16), 254
 	call SetWall_AdvanceStreamPos
 	cp (0x287a:16), 0
 	jr nz, SetWall_B0CC_Return
@@ -1198,7 +1198,7 @@ SetWall_B0CC_Type48:
 	and a, 0xfc
 	stb_erp A, 0x3c
 	jr nz, SetWall_B0CC_Type48_SetFlag
-	anddi8 (0x289d), 251
+	and (0x289d:16), 251
 	jr SetWall_B0CC_Return
 
 SetWall_B0CC_Type48_SetFlag:
@@ -1206,7 +1206,7 @@ SetWall_B0CC_Type48_SetFlag:
 	jr SetWall_B0CC_Return
 
 SetWall_B0CC_Type48_Check12:
-	anddi8 (0x289d), 251
+	and (0x289d:16), 251
 	cp (0x2873:16), 12
 	jr nz, SetWall_B0CC_ClearFlags
 	push xde
@@ -1534,7 +1534,7 @@ SetWall_SingleSlot_Return:
 
 SetWall_DualPassScanner:
 	push_sd16w 0xaf, 0x28
-	anddi8 (0x287b), 223
+	and (0x287b:16), 223
 	ld a, (1075:16)
 	ld (0x288e:16), a
 	bit 2, (0x287b:16)
@@ -1543,7 +1543,7 @@ SetWall_DualPassScanner:
 	call SetWall_SingleSlotResolve
 	cp (0x287a:16), 0
 	jr z, SetWall_DualPass_InitLoop
-	anddi8 (0x287b), 251
+	and (0x287b:16), 251
 	ld (0x287a:16), 0
 	jrl SetWall_DualPass_Done
 
@@ -1800,7 +1800,7 @@ SetWall_Replay_Done:
 	ret
 
 SetWall_SendPanelCtrl:
-	anddi8 (0xfdad), 254
+	and (0xfdad:16), 254
 	xor a, a
 	ldb w, 0x1
 	ldb e, 0x91
@@ -2109,7 +2109,7 @@ SetWall_SyncToneGenToDRAM:
 	ld (0xf231:16), wa
 	ld wa, (0xf19e:16)
 	ld (0x00ffec:24), wa
-	anddi8 (0x28a5), 254
+	and (0x28a5:16), 254
 	cps wa, 0
 	jr z, SetWall_Sync_CheckPanelBit
 	ordi8 0x28a5, 1
@@ -2120,7 +2120,7 @@ SetWall_Sync_CheckPanelBit:
 	jr z, SetWall_Sync_PanelOff
 	bit 2, (0xfdad:16)
 	jr z, SetWall_Sync_FinalUpdate
-	anddi8 (0xfdad), 251
+	and (0xfdad:16), 251
 	xor a, a
 	jr SetWall_Sync_PostEvent
 
@@ -2142,9 +2142,9 @@ SetWall_Sync_FinalUpdate:
 	ld (4596:16), 1
 	call BitMapOut_RenderDisplay
 	ld (4596:16), 1
-	anddi8 (0x28a7), 247
+	and (0x28a7:16), 247
 	call SeqPlay_CheckStartConditions
-	anddi8 (0x28b1), 254
+	and (0x28b1:16), 254
 	call Audio_CheckSubsystemReady
 	ret
 
