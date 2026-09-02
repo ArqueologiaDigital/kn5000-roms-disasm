@@ -1,0 +1,98 @@
+{
+ "kn5000_v10_program": {
+  "sites": 276621,
+  "reloc_excluded": 66399,
+  "errors": {
+   "Could not find incbin file 'X'": 3818
+  },
+  "SAME_MNEMONIC": 187611,
+  "DIFF_MNEMONIC": 89006,
+  "UNIDASM_DB": 4
+ },
+ "kn5000_v9_program": {
+  "sites": 299782,
+  "reloc_excluded": 66409,
+  "errors": {
+   "Could not find incbin file 'X'": 3791
+  },
+  "SAME_MNEMONIC": 208194,
+  "DIFF_MNEMONIC": 91584,
+  "UNIDASM_DB": 4
+ },
+ "kn5000_v7_program": {
+  "sites": 228962,
+  "reloc_excluded": 41406,
+  "errors": {
+   "Could not find incbin file 'X'": 3780
+  },
+  "SAME_MNEMONIC": 164038,
+  "DIFF_MNEMONIC": 64924
+ },
+ "kn5000_subprogram_v142": {
+  "sites": 39201,
+  "reloc_excluded": 6277,
+  "errors": {},
+  "SAME_MNEMONIC": 29691,
+  "DIFF_MNEMONIC": 9510
+ },
+ "kn5000_subcpu_boot": {
+  "sites": 1129,
+  "reloc_excluded": 229,
+  "errors": {},
+  "DIFF_MNEMONIC": 453,
+  "SAME_MNEMONIC": 676
+ },
+ "hd-ae5000_v2_06i": {
+  "sites": 30399,
+  "reloc_excluded": 4886,
+  "errors": {
+   "Could not find incbin file 'X'": 10
+  },
+  "SAME_MNEMONIC": 19841,
+  "DIFF_MNEMONIC": 10558
+ },
+ "kn5000_table_data": {
+  "sites": 4839,
+  "reloc_excluded": 1443,
+  "errors": {
+   "Could not find incbin file 'X'": 301
+  },
+  "DIFF_MNEMONIC": 2627,
+  "SAME_MNEMONIC": 2212
+ },
+ "kn5000_custom_data": {
+  "sites": 0,
+  "reloc_excluded": 0,
+  "errors": {
+   "Could not find incbin file 'X'": 11
+  }
+ },
+ "wsa1_prom_a": {
+  "sites": 99772,
+  "reloc_excluded": 17171,
+  "errors": {},
+  "SAME_MNEMONIC": 69974,
+  "DIFF_MNEMONIC": 29798
+ },
+ "wsa1_prom_b": {
+  "sites": 62400,
+  "reloc_excluded": 8,
+  "errors": {},
+  "SAME_MNEMONIC": 45093,
+  "DIFF_MNEMONIC": 17307
+ },
+ "wsa1_prom_c": {
+  "sites": 70380,
+  "reloc_excluded": 6267,
+  "errors": {},
+  "SAME_MNEMONIC": 52281,
+  "DIFF_MNEMONIC": 18099
+ },
+ "wsa1_prom_d": {
+  "sites": 0,
+  "reloc_excluded": 0,
+  "errors": {
+   "Could not find include file 'X'": 3
+  }
+ }
+}

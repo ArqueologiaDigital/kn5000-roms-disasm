@@ -1,0 +1,189 @@
+unidasm vocabulary : 112 names
+backend vocabulary : 730 names
+tree .macro names  : 147
+
+tracked .s files  : 547
+
+bucket          sites    names    files
+NATIVE        1034935       71      326
+SYNTHETIC      265116      459      303
+MACRO           16922      113       77
+UNKNOWN           163        4        4
+TOTAL         1317136      647      340
+
+SYNTHETIC sites whose stem IS a unidasm mnemonic: 64685 of 265116 (24.4%)
+
+RAW-BYTE-OPERAND pseudo-instructions in use: 98 names, 22135 sites
+  (these cannot be reached by ANY rename -- the operand is not modelled)
+   lda_dri                  5184
+   extpfx3                  3271
+   ldb_sri                  2209
+   stb_dri                  1105
+   ld_sril3                 1040
+   ldw_sri                   847
+   inc1b_erp                 845
+   link32                    807
+   jp_ind                    769
+   stib_ind                  589
+   stl_dri                   547
+   extpfx5                   481
+
+top 40 SYNTHETIC mnemonics by call sites:
+mnemonic                  sites  files stem native?
+cps                       19261    247 NO
+lds                       18564    222 NO
+ldb_d8                    17406    170 NO
+ldb                       16138    212 NO
+lds32                     14239    180 NO
+lda_24                    13885    201 yes
+stdi8                     10895    177 NO
+stb_d8                     9064    149 NO
+ldw_d16                    8946    142 yes
+stda16                     7764    135 NO
+lda_d16                    6559    123 yes
+ld_sril                    6034     59 yes
+cpdi8                      5191    141 NO
+lda_dri                    5184    126 yes
+ldda32                     4991    104 NO
+stb_erp                    4471    126 NO
+bitda                      3669     92 NO
+ldw_da                     3335    102 yes
+extpfx3                    3271     18 NO
+cpw                        3251    154 NO
+ldl_da                     2924     78 NO
+stdi16                     2652    115 NO
+ldb_da                     2425    133 NO
+ldio                       2354    104 NO
+ldb_erp                    2226    121 NO
+ldb_sri                    2209    109 NO
+stib_da                    1967     83 NO
+stw_da                     1829     92 NO
+anddi8                     1791     68 NO
+stda32                     1780    109 NO
+incm                       1535    120 NO
+stiw_da                    1300     90 NO
+ordi8                      1279     55 NO
+stw_erp                    1274    103 NO
+ldib_erp                   1194     80 NO
+cpdi16                     1119    104 NO
+stb_da                     1116     93 NO
+ldwio                      1111     76 NO
+stb_dri                    1105     89 NO
+ld_sril3                   1040    113 yes
+
+wrote notes/syntax-convergence-probes/out/mnemonic_census.csv
+
+llvm-mc  sha256 c13a8a9a0100a38c  (llvm-project HEAD 1f75e04f774a)
+unidasm  sha256 0b7e910a6883f31a
+kn5000_v10_program         sites= 276621 reloc_excl= 66399  DIFF_MNEMONIC=89006 SAME_MNEMONIC=187611 UNIDASM_DB=4
+kn5000_v9_program          sites= 299782 reloc_excl= 66409  DIFF_MNEMONIC=91584 SAME_MNEMONIC=208194 UNIDASM_DB=4
+kn5000_v7_program          sites= 228962 reloc_excl= 41406  DIFF_MNEMONIC=64924 SAME_MNEMONIC=164038
+kn5000_subprogram_v142     sites=  39201 reloc_excl=  6277  DIFF_MNEMONIC=9510 SAME_MNEMONIC=29691
+kn5000_subcpu_boot         sites=   1129 reloc_excl=   229  DIFF_MNEMONIC=453 SAME_MNEMONIC=676
+hd-ae5000_v2_06i           sites=  30399 reloc_excl=  4886  DIFF_MNEMONIC=10558 SAME_MNEMONIC=19841
+kn5000_table_data          sites=   4839 reloc_excl=  1443  DIFF_MNEMONIC=2627 SAME_MNEMONIC=2212
+kn5000_custom_data         sites=      0 reloc_excl=     0  
+wsa1_prom_a                sites=  99772 reloc_excl= 17171  DIFF_MNEMONIC=29798 SAME_MNEMONIC=69974
+wsa1_prom_b                sites=  62400 reloc_excl=     8  DIFF_MNEMONIC=17307 SAME_MNEMONIC=45093
+wsa1_prom_c                sites=  70380 reloc_excl=  6267  DIFF_MNEMONIC=18099 SAME_MNEMONIC=52281
+wsa1_prom_d                sites=      0 reloc_excl=     0  
+
+re-assembly test: 133689 distinct unidasm spellings covering 1113477 sites
+verdict                 spellings      sites
+UNI_ASSEMBLES_SAME          35523     692958
+UNI_ASSEMBLES_DIFF          25547     246857
+UNI_REJECTS                 13337     108771
+UNI_RELOC                     136       5575
+UNI_BRANCH_TARGET           59146      59316
+UNI_PCREL                       0          0
+
+unidasm text               distinct texts= 133690  ambiguous texts=   134  sites under them=    3172
+this tree's LLVM text      distinct texts=  89917  ambiguous texts=     0  sites under them=       0
+
+wrote notes/syntax-convergence-probes/out/oracle_ab_*.csv
+
+cause           spellings      sites
+ADDR_WIDTH          17103      81858
+SHORT_FORM           6101      98209
+OTHER                2343      66790
+TOTAL               25547     246857
+
+top OTHER by tree mnemonic:
+   cps                 19263
+   lds                 19241
+   pushw               15048
+   ldw                  5828
+   stdi16               2128
+   stiw_da              1135
+   cpdi16               1028
+   ldirw93               939
+   ldmw2                 473
+   ldir83                368
+   extpfx3               340
+   cp_erpw               173
+   ordi16                166
+   extpfx5               135
+   ldi85                  92
+   stiw_ind               81
+   cpw                    72
+   ldi_erpw               61
+   call16                 48
+   adddi16                41
+
+wrote notes/syntax-convergence-probes/out/diff_causes_other.csv
+
+llvm-mc sha256 c13a8a9a0100a38c
+sites reachable by a width annotation: 19089 spellings, 89225 sites
+after width       spellings      sites
+NOW_CORRECT           17103      81858
+STILL_WRONG            1464       5999
+STILL_REJECTS           522       1368
+RELOC                     0          0
+
+tree mnemonics fully reachable this way: 71
+   ldb_d8              17406
+   stdi8               10896
+   stb_d8               9064
+   ldw_d16              8948
+   stda16               7764
+   cpdi8                5191
+   ldda32               4991
+   bitda                3669
+   anddi8               1791
+   stda32               1780
+   ordi8                1279
+   resda                 867
+   cpda8                 804
+   setda                 703
+   cpda16                666
+   bit_dd8               520
+   incdi8                494
+   set_dd8               436
+   res_dd8               380
+   incdi16               379
+
+wrote notes/syntax-convergence-probes/out/native_convergence_fixed.csv
+
+== UNIDASM_DB : 6 distinct (bytes, mnemonic, image) : 8 sites
+   f06308         call_dd8     99             kn5000_v10_program       x2
+        ./v9/maincpu/audio/semenu_routines.s:4668:	call_dd8 99
+        ./v9/maincpu/audio/semenu_routines.s:4675:	call_dd8 99
+        ./v10/maincpu/audio/semenu_routines.s:4668:	call_dd8 99
+        ./v10/maincpu/audio/semenu_routines.s:4675:	call_dd8 99
+   f06308         call_dd8     99             kn5000_v9_program        x2
+        ./v9/maincpu/audio/semenu_routines.s:4668:	call_dd8 99
+        ./v9/maincpu/audio/semenu_routines.s:4675:	call_dd8 99
+        ./v10/maincpu/audio/semenu_routines.s:4668:	call_dd8 99
+        ./v10/maincpu/audio/semenu_routines.s:4675:	call_dd8 99
+   cb13           exts         c              kn5000_v10_program       x1
+        ./v9/maincpu/audio/sound_editor_ui.s:11427:	exts	c
+        ./v10/maincpu/audio/sound_editor_ui.s:11269:	exts	c
+   cf13           exts         l              kn5000_v10_program       x1
+        ./v9/maincpu/audio/note_voice_mapping.s:18042:	exts	l
+        ./v10/maincpu/audio/note_voice_mapping.s:17886:	exts	l
+   cb13           exts         c              kn5000_v9_program        x1
+        ./v9/maincpu/audio/sound_editor_ui.s:11427:	exts	c
+        ./v10/maincpu/audio/sound_editor_ui.s:11269:	exts	c
+   cf13           exts         l              kn5000_v9_program        x1
+        ./v9/maincpu/audio/note_voice_mapping.s:18042:	exts	l
+        ./v10/maincpu/audio/note_voice_mapping.s:17886:	exts	l
