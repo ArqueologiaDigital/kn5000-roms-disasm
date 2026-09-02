@@ -2712,13 +2712,10 @@ TrAsGrid_LookupTable:
 TrAsGrid_ByteData1:
 	extz	wa
 	lda_24	xde, (NakaWidgetPtrTbl_SmfDp_0x23B8)
-	.byte 0xc3
-	reti
-	or	xwa, xwa
-	ldb	a, 203
-	dec	6, wa
-	push	201
-	exts	l
+	ld_rrb a, xde, wa
+	cps c, 0
+	jr nz, 9
+	cp a, 19
 	jr	nc, 10
 	inc	1, a
 	jr	6
@@ -2809,9 +2806,9 @@ TrAsGridChk_ByteData:
 	rcf
 	push	sr
 	push_a
-	.byte 0x73
-	pushw	wa
-	ld	xwa, 0x0147001c
+	jrl ule, 16424
+	call16 18176
+	normal
 	ld	xbc, 0x01e70006
 	ld	xde, xiz
 	call	MainFuncCall
@@ -2913,9 +2910,9 @@ TrAsGridChk_ByteData:
 	rcf
 	push	sr
 	push_a
-	.byte 0x73
-	pushw	wa
-	ld	xwa, 0x0147001c
+	jrl ule, 16424
+	call16 18176
+	normal
 	ld	xbc, 0x01e70007
 	ld	xde, xiz
 	call	MainFuncCall
@@ -5892,10 +5889,8 @@ NoteEditBox_EventDispatch2:
 	extz	bc
 	sla	bc, 3
 	lda_24	xde, (NakaInst_NO_OPERATION_0x208)
-	.byte 0xf3
-	reti
-	or	xix, xwa
-	ldw	de, 8594
+	lda_rr xde, xde, bc
+	ld bc, (xde)
 	ld	(xwa), bc
 	lda	xhl, (xwa+2)
 	ld	bc, (xde+2)
@@ -5931,12 +5926,9 @@ NoteEditBox_EventDispatch2:
 	extz	wa
 	sla	wa, 3
 	lda_24	xbc, (NakaInst_NO_OPERATION_0x208)
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xe0
-	ldw	bc, 665
-	ldb	w, 178
-	.byte 0x50
+	lda_rr xbc, xbc, wa
+	ld wa, (xbc+2)
+	ld (xde), wa
 	ld	hl, (xix)
 	.byte 0x99, 0x04, 0x83
 	lda	xwa, (xix+4)
@@ -5988,12 +5980,9 @@ NoteEditBox_EventDispatch2:
 	extz	wa
 	sla	wa, 3
 	lda_24	xbc, (NakaInst_NO_OPERATION_0x208)
-	.byte 0xf3
-	reti
-	.byte 0xe4, 0xe0
-	ldw	bc, 665
-	ldb	w, 178
-	.byte 0x50
+	lda_rr xbc, xbc, wa
+	ld wa, (xbc+2)
+	ld (xde), wa
 	ld	hl, (xix)
 	.byte 0x99, 0x04, 0x83
 	lda	xwa, (xix+4)
@@ -6069,22 +6058,15 @@ NoteEditBox_EventDispatch2:
 	ld	(xsp+8), hl
 	.byte 0xbf
 	ldwio	2, 1
-	.byte 0xc7
-	swi	3
-	cp	(xwa-57), xhl
-	.byte 0x89
+	ldib_erp 251, 0
+	stb_erp a, 251
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, (NakaInst_NO_OPERATION_0x250)
-	.byte 0xd3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	.byte 0x1c, 0x50
+	ld_rrw wa, xbc, wa
+	ld (xsp+28), wa
 	lds32	xde, 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8d
+	stb_erp e, 251
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8005d
@@ -6094,14 +6076,8 @@ NoteEditBox_EventDispatch2:
 	lds32	xwa, 0
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
-	.byte 0xb8
-	push	sr
-	push	sr
-	ldb	w, 0
-	.byte 0xb8
-	ei	2
-	pushw	hl
-	nop
+	ldw (xwa+2), 32
+	ldw (xwa+6), 43
 	.byte 0xc7
 	swi	3
 	dec	6, wa
@@ -6122,20 +6098,13 @@ NoteEditBox_EventDispatch2:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
-	.byte 0xbf
-	ldwio	2, 2
+	ldw (xsp+10), 2
 	jr	41
 	lds32	xwa, 3
 	ld	(xsp+4), xwa
 	lda	xwa, (xsp+28)
-	.byte 0xb8
-	push	sr
-	push	sr
-	ldb	a, 0
-	.byte 0xb8
-	ei	2
-	pushw	de
-	nop
+	ldw (xwa+2), 33
+	ldw (xwa+6), 42
 	.byte 0x9f
 	ldwio	4, 0xe30b
 	nop
@@ -6170,13 +6139,9 @@ NoteEditBox_EventDispatch2:
 	pushw	255
 	pushw	245
 	call	DrawStringLeftJustify
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	divs	l, 119
-	push_a
-	swi	7
+	inc1b_erp 251
+	cp_erpb 251, 11
+	jrl c, -236
 	jrl	1219
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -6186,22 +6151,15 @@ NoteEditBox_EventDispatch2:
 	ld	(xsp+8), hl
 	.byte 0xbf
 	ldwio	2, 1
-	.byte 0xc7
-	swi	3
-	cp	(xwa-57), xhl
-	.byte 0x89
+	ldib_erp 251, 0
+	stb_erp a, 251
 	extz	wa
 	add	wa, wa
 	lda_24	xbc, (NakaInst_NO_OPERATION_0x268)
-	.byte 0xd3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 191
-	.byte 0x1c, 0x50
+	ld_rrw wa, xbc, wa
+	ld (xsp+28), wa
 	lds32	xde, 0
-	.byte 0xc7
-	swi	3
-	.byte 0x8d
+	stb_erp e, 251
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
 	ld	xbc, 0x01e8005d
@@ -6214,9 +6172,7 @@ NoteEditBox_EventDispatch2:
 	jr	z, 68
 	lds32	xwa, 0
 	ld	(xsp+4), xwa
-	.byte 0xb1
-	push	sr
-	ldb	h, 0
+	ldw (xbc), 38
 	.byte 0xb4
 	push	sr
 	ldw	bc, 0xc700
@@ -6237,15 +6193,11 @@ NoteEditBox_EventDispatch2:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incm	1, (xsp+8)
-	.byte 0xbf
-	ldwio	2, 2
+	ldw (xsp+10), 2
 	jr	33
 	lds32	xwa, 3
 	ld	(xsp+4), xwa
-	.byte 0xb1
-	push	sr
-	pushw	wa
-	nop
+	ldw (xbc), 40
 	.byte 0xb4
 	push	sr
 	ldw	bc, 0x9f00
@@ -6281,13 +6233,9 @@ NoteEditBox_EventDispatch2:
 	pushw	255
 	pushw	245
 	call	DrawStringLeftJustify
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	mul	l, 119
-	push_f
-	swi	7
+	inc1b_erp 251
+	cp_erpb 251, 8
+	jrl c, -232
 	jrl	956
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -6306,14 +6254,9 @@ NoteEditBox_EventDispatch2:
 	call	ApFuncCall
 	jrl	906
 	lda	xix, (xsp+28)
-	.byte 0xb4
-	push	sr
-	halt
-	nop
+	ldw (xix), 5
 	lda	xbc, (xix+2)
-	.byte 0xb1
-	push	sr
-	jr	ule, 0
+	ldw (xbc), 99
 	lda	xde, (xix+4)
 	ld	wa, (xix)
 	add	wa, 16
@@ -6349,9 +6292,7 @@ NoteEditBox_EventDispatch2:
 	ld	(xde+18), xbc
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	cp	xwa, xbc
 	jr	c, -8
 	ld	xwa, (xsp+12)
@@ -6368,15 +6309,9 @@ NoteEditBox_EventDispatch2:
 	call	DrawStringLeftJustify
 	lda	xhl, (xsp+28)
 	lda	xbc, (xhl+2)
-	.byte 0xb1
-	push	sr
-	.byte 0x9b
-	nop
+	ldw (xbc), 155
 	lda	xde, (xhl+6)
-	.byte 0xb2
-	push	sr
-	.byte 0xa1
-	nop
+	ldw (xde), 161
 	ld	wa, (xhl+4)
 	.byte 0x93
 	or	(xwa), xwa
@@ -6426,17 +6361,12 @@ NoteEditBox_EventDispatch2:
 	ld	(xwa+18), xbc
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
-	.byte 0xf5, 0xe0
-	nop
-	nop
+	stib_dsp 224, 0
 	cp	xwa, xbc
 	jr	c, -8
 	stib_da	(0x021096), 0
 	lda	xix, (xsp+28)
-	.byte 0xb4
-	push	sr
-	push	sr
-	nop
+	ldw (xix), 2
 	lda	xde, (xix+4)
 	ld	wa, (xix)
 	add	wa, 24
@@ -6473,9 +6403,7 @@ NoteEditBox_EventDispatch2:
 	call	ApFuncCall
 	lda	xbc, (xsp+24)
 	ldb_da	a, (0x021096)
-	.byte 0xc1
-	ld	xsp, (xwa)
-	.byte 0xf1
+	cpda8 xbc, (10144)
 	jr	nz, 17
 	lda	xwa, (xsp+28)
 	lda	xde, (xsp+36)
@@ -6492,10 +6420,7 @@ NoteEditBox_EventDispatch2:
 	pushw	255
 	call	DrawStringLeftJustify
 	lda	xix, (xsp+28)
-	.byte 0xb4
-	push	sr
-	.byte 0x17
-	nop
+	ldw (xix), 23
 	lda	xde, (xix+4)
 	ld	wa, (xix)
 	add	wa, 70
@@ -7607,7 +7532,7 @@ SndParam_Dispatch:
 	push	sr
 	.byte 0x52, 0x91
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jrl	nz, 1331
 	ld	wa, de
@@ -7633,18 +7558,14 @@ SndParam_Dispatch:
 	cp	xbc, 0x01c00019
 	jr	nz, 16
 	lda_24	xbc, (ExtDevice_ModeDispatch_Table_0x278)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe8
-	ldb	w, 217
-	sub	(xix-38), xix
+	ld_rrl xwa, xbc, de
+	lds bc, 4
+	lds de, 4
 	jr	14
 	lda_24	xbc, (ExtDevice_ModeDispatch_Table_0x278)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe8
-	ldb	w, 217
-	sub	(xbc-38), xix
+	ld_rrl xwa, xbc, de
+	lds bc, 1
+	lds de, 4
 	call	MainLswAdd
 	jrl	1244
 	ld	xwa, 0x01480002
@@ -7673,7 +7594,7 @@ SndParam_Dispatch:
 	push	sr
 	.byte 0x53, 0x91
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jrl	nz, 1159
 	ld	wa, hl
@@ -7729,10 +7650,7 @@ SndParam_Dispatch:
 	.byte 0x01
 	nop
 	lda	xde, (xhl+2)
-	.byte 0xb2
-	push	sr
-	nop
-	nop
+	ldw (xde), 0
 	lda_24	xix, (ExtDevice_ModeDispatch_Table_0x278)
 	ld	xiz, (xsp+58)
 	jr	18
@@ -10644,15 +10562,9 @@ AccIll_Dispatch:
 	cp	xwa, 27
 	jrl	nz, 3047
 	lda	xiy, (xsp+58)
-	.byte 0xb5
-	push	sr
-	ret
-	nop
+	ldw (xiy), 14
 	lda	xde, (xiy+2)
-	.byte 0xb2
-	push	sr
-	pop	xsp
-	nop
+	ldw (xde), 95
 	lda	xhl, (xiy+4)
 	ld	wa, (xiy)
 	add	wa, 160
@@ -10697,15 +10609,9 @@ AccIll_Dispatch:
 	pushw	255
 	jr	100
 	lda	xiy, (xsp+58)
-	.byte 0xb5
-	push	sr
-	.byte 0xae
-	nop
+	ldw (xiy), 174
 	lda	xde, (xiy+2)
-	.byte 0xb2
-	push	sr
-	pop	xsp
-	nop
+	ldw (xde), 95
 	lda	xhl, (xiy+4)
 	ld	wa, (xiy)
 	add	wa, 160
@@ -13620,7 +13526,7 @@ SqplyFunc_ParamFormatData:
 	jr	nz, 11
 	.byte 0xd1
 	ldb	w, 37
-	.byte 0x04
+	max
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5FE
 	jr	9
 	.byte 0xd1, 0x1c
@@ -13634,7 +13540,7 @@ SqplyFunc_ParamFormatData:
 	jr	nz, 11
 	.byte 0xd1
 	ldb	b, 37
-	.byte 0x04
+	max
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x60A
 	jr	9
 	.byte 0xd1
@@ -13933,16 +13839,9 @@ Sqedt_ParamDispatch:
 	jr	gt, 58
 	add	hl, hl
 	lda_24	xix, (NakaInst_2d_0xC0)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	.byte 0x89
-	popw	de
-	.byte 0xf3
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (15944329)
+	jp_rr 8, xix, hl
 	ldb_d8	a, (9742)
 	jr	34
 	ldb_d8	a, (9756)
@@ -13967,15 +13866,9 @@ Sqedt_ParamDispatch:
 	jr	gt, 88
 	add	hl, hl
 	lda_24	xix, (NakaInst_2d_0xB0)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	muls	xde, xiz
-	.byte 0xf3
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (15944414)
+	jp_rr 8, xix, hl
 	.byte 0xd1
 	rcf
 	ldb	h, 4
@@ -14018,16 +13911,9 @@ Sqedt_ParamDispatch:
 	jr	gt, 88
 	add	hl, hl
 	lda_24	xix, (NakaInst_2d_0xA0)
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xec
-	ldb	c, 242
-	.byte 0x56
-	popw	hl
-	.byte 0xf3
-	ldw	ix, 2035
-	.byte 0xf0
-	cps	xix, 0
+	ld_rrw hl, xix, hl
+	lda_24 xix, (15944534)
+	jp_rr 8, xix, hl
 	.byte 0xd1
 	ccf
 	ldb	h, 4
@@ -14035,7 +13921,7 @@ Sqedt_ParamDispatch:
 	jr	64
 	.byte 0xd1
 	ldb	w, 38
-	.byte 0x04
+	max
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6A4
 	jr	53
 	.byte 0xd1
@@ -14271,7 +14157,7 @@ Sqedt_ParamDispatch:
 	ld	(xsp+4), xwa
 	.byte 0xd1
 	cp	xbc, xde
-	.byte 0x04
+	max
 	ld	xwa, NakaInst_3d_0x98
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -14293,7 +14179,7 @@ Sqedt_ParamDispatch:
 	ld	(xsp+4), xwa
 	.byte 0xd1
 	cp	xbc, xsp
-	.byte 0x04
+	max
 	ld	xwa, NakaInst_3d_0xA4
 	push	xwa
 	ld	xwa, (xsp+10)

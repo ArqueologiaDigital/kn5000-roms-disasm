@@ -72,7 +72,7 @@ EffectMode_ByteData_Block2:
 	jrl	z, 145
 	.byte 0xc1
 	ldw	ix, 0x3f8d
-	.byte 0x01
+	normal
 	jr	z, 78
 	ldb_d8	a, (0x8d36)
 	cp	a, 192
@@ -1979,17 +1979,13 @@ EffectMode_ByteData_DiagEvents:
 	pop	xde
 	ldb_d8	a, (0x8d7c)
 	cpl	a
-	.byte 0xc7
-	swi	3
-	and	(xbc-55), ix
-	push	216
-	ccf
+	ldb_erp a, 251
+	and a, 9
+	extz wa
 	calr	63353
-	.byte 0xc7
-	swi	3
-	and	(xbc-55), d
-	push	110
-	ret
+	stb_erp a, 251
+	and a, 9
+	jr nz, 14
 	ld	xwa, SeqStep_FileSectorPopReturn_0x35E
 	ld	xbc, 0x1c00001
 	lds32	xde, 0
@@ -2000,10 +1996,8 @@ EffectMode_ByteData_DiagEvents:
 	ld	xbc, 0x1c00001
 	lds32	xde, 0
 	jr	32
-	.byte 0xc7
-	swi	3
-	ldw	hl, 0x6600
-	ret
+	bit_erpb 251, 0
+	jr z, 14
 	ld	xwa, SeqStep_FileSectorPopReturn_0x364
 	ld	xbc, 0x1c00001
 	lds32	xde, 0
@@ -2012,13 +2006,10 @@ EffectMode_ByteData_DiagEvents:
 	ld	xbc, 0x1c00001
 	lds32	xde, 0
 	call	ApPostEvent
-	.byte 0xd7
-	swi	2
-	halt
+	pop qiz
 	ret
 	ldb_d8	a, (0x8d37)
-	.byte 0xc1
-	ldw	iz, 0xf18d
+	cpda8 xbc, (36150)
 	ret	z
 	ld	xwa, 0x4002
 	ldw	bc, 128
@@ -2284,9 +2275,7 @@ BitmapFinpic_ByteData:
 	cps	hl, 0
 	ret	z
 	ldb_d8	a, (0xc080)
-	.byte 0xc1
-	push	xde
-	.byte 0x8d, 0xf1
+	cpda8 xbc, (36154)
 	ret	nz
 	.byte 0xc1
 	jrl	pl, 0x3fc0
@@ -6710,7 +6699,7 @@ TchSensGrid_EventDispatch:
 	jrl	168
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 16
 	cps	de, 5
@@ -6721,7 +6710,7 @@ TchSensGrid_EventDispatch:
 	jrl	146
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jrl	nz, 652
 	cps	de, 6
@@ -6744,7 +6733,7 @@ TchSensGrid_EventDispatch:
 	ld	(xwa+2), de
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 16
 	cps	de, 1
@@ -6755,7 +6744,7 @@ TchSensGrid_EventDispatch:
 	jr	66
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 16
 	cps	de, 4
@@ -6766,7 +6755,7 @@ TchSensGrid_EventDispatch:
 	jr	44
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 16
 	cps	de, 5
@@ -6777,7 +6766,7 @@ TchSensGrid_EventDispatch:
 	jr	22
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jrl	nz, 528
 	cps	de, 6
@@ -6856,10 +6845,7 @@ TchSensGrid_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb1
-	push	sr
-	halt
-	nop
+	ldw (xbc), 5
 	ld	(xhl), xiz
 	.byte 0x94, 0x04
 	pushw	237
@@ -6879,9 +6865,7 @@ TchSensGrid_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb1
-	push	sr
-	di
+	ldw (xbc), 6
 	ld	(xhl), xiz
 	.byte 0x94, 0x04
 	pushw	237
@@ -7258,7 +7242,7 @@ FSWAssGrid_EventDispatch:
 	ld	(xwa+2), de
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 68
 	cps	de, 2
@@ -7278,17 +7262,14 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x2886
 	lds	de, 2
 	jrl	997
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 68
 	cps	de, 3
@@ -7308,17 +7289,14 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x2888
 	lds	de, 2
 	jrl	923
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 68
 	cps	de, 4
@@ -7338,17 +7316,14 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x288a
 	lds	de, 2
 	jrl	849
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 68
 	cps	de, 5
@@ -7368,17 +7343,14 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x288c
 	lds	de, 2
 	jrl	775
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 68
 	cps	de, 6
@@ -7398,17 +7370,14 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x288e
 	lds	de, 2
 	jrl	701
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 68
 	cps	de, 7
@@ -7428,17 +7397,14 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x2890
 	lds	de, 2
 	jrl	627
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jrl	nz, 1794
 	cp	de, 8
@@ -7458,11 +7424,8 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x2880
 	lds	de, 2
 	jrl	549
@@ -7480,7 +7443,7 @@ FSWAssGrid_EventDispatch:
 	ld	(xwa+2), de
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 67
 	cps	de, 2
@@ -7500,17 +7463,14 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x2886
 	lds	de, 2
 	jrl	439
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 67
 	cps	de, 3
@@ -7530,17 +7490,14 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x2888
 	lds	de, 2
 	jrl	366
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 67
 	cps	de, 4
@@ -7560,17 +7517,14 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x288a
 	lds	de, 2
 	jrl	293
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 67
 	cps	de, 5
@@ -7590,17 +7544,14 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x288c
 	lds	de, 2
 	jrl	220
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 67
 	cps	de, 6
@@ -7620,17 +7571,14 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x288e
 	lds	de, 2
 	jrl	147
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 66
 	cps	de, 7
@@ -7650,17 +7598,14 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x2890
 	lds	de, 2
 	jr	75
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jrl	nz, 1242
 	cp	de, 8
@@ -7680,11 +7625,8 @@ FSWAssGrid_EventDispatch:
 	dec	1, l
 	extz	hl
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x298)
-	.byte 0xc3
-	reti
-	.byte 0xe4, 0xec
-	ldb	c, 217
-	ccf
+	ld_rrb c, xbc, hl
+	extz bc
 	ld	xwa, 0x2880
 	lds	de, 2
 	call	MainLswPut
@@ -7699,11 +7641,7 @@ FSWAssGrid_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb8
-	push	sr
-	push	sr
-	push	sr
-	nop
+	ldw (xwa+2), 2
 	ld	(xwa+4), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7711,10 +7649,8 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x2B8)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xbc, hl
+	push xwa
 	pushw	237
 	pushw	4590
 	lda	xwa, (xsp+12)
@@ -7737,11 +7673,7 @@ FSWAssGrid_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xbb
-	push	sr
-	push	sr
-	pop	sr
-	nop
+	ldw (xhl+2), 3
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7749,10 +7681,8 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x2B8)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xbc, hl
+	push xwa
 	pushw	237
 	pushw	4594
 	lda	xwa, (xsp+12)
@@ -7783,10 +7713,8 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x2B8)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xbc, hl
+	push xwa
 	pushw	237
 	pushw	4598
 	lda	xwa, (xsp+12)
@@ -7805,11 +7733,7 @@ FSWAssGrid_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xbb
-	push	sr
-	push	sr
-	halt
-	nop
+	ldw (xhl+2), 5
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7817,10 +7741,8 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x2B8)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xbc, hl
+	push xwa
 	pushw	237
 	pushw	4602
 	lda	xwa, (xsp+12)
@@ -7840,9 +7762,7 @@ FSWAssGrid_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb6
-	push	sr
-	di
+	ldw (xiz), 6
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7850,10 +7770,8 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x2B8)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xbc, hl
+	push xwa
 	pushw	237
 	pushw	4606
 	lda	xwa, (xsp+12)
@@ -7876,10 +7794,7 @@ FSWAssGrid_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb6
-	push	sr
-	reti
-	nop
+	ldw (xiz), 7
 	ld	(xbc), xiy
 	ld	wa, (xix)
 	extz	wa
@@ -7887,10 +7802,8 @@ FSWAssGrid_EventDispatch:
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x2B8)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xbc, hl
+	push xwa
 	pushw	237
 	pushw	4610
 	lda	xwa, (xsp+12)
@@ -7909,20 +7822,16 @@ FSWAssGrid_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb6
-	push	sr
-	ldio	0, 177
-	jr	mi, -108
-	ldb	w, 216
-	ccf
+	ldw (xiz), 8
+	ld (xbc), xiy
+	ld wa, (xix)
+	extz wa
 	calr	647
 	extz	hl
 	sla	hl, 2
 	lda_24	xbc, (Str_StoreTotalSetting_DE_0x2B8)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xec
-	ldb	w, 56
+	ld_rrl xwa, xbc, hl
+	push xwa
 	pushw	237
 	pushw	4614
 	lda	xwa, (xsp+12)
@@ -9463,7 +9372,7 @@ DispTimeSet_EventDispatch:
 	jrl	509
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 37
 	cps	de, 4
@@ -9484,7 +9393,7 @@ DispTimeSet_EventDispatch:
 	jrl	466
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 40
 	cps	de, 5
@@ -9505,7 +9414,7 @@ DispTimeSet_EventDispatch:
 	jrl	420
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 40
 	cps	de, 6
@@ -9526,7 +9435,7 @@ DispTimeSet_EventDispatch:
 	jrl	374
 	.byte 0x90
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jrl	nz, 1199
 	cps	de, 7
@@ -9560,7 +9469,7 @@ DispTimeSet_EventDispatch:
 	ld	(xiy+2), iz
 	.byte 0x95
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 43
 	cps	iz, 2
@@ -9581,7 +9490,7 @@ DispTimeSet_EventDispatch:
 	jrl	240
 	.byte 0x95
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 43
 	cps	iz, 3
@@ -9602,7 +9511,7 @@ DispTimeSet_EventDispatch:
 	jrl	191
 	.byte 0x95
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 40
 	cps	iz, 4
@@ -9623,7 +9532,7 @@ DispTimeSet_EventDispatch:
 	jrl	145
 	.byte 0x95
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 42
 	cps	iz, 5
@@ -9649,7 +9558,7 @@ DispTimeSet_EventDispatch:
 	lda	xix, (xwa+14)
 	.byte 0x95
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jr	nz, 35
 	cps	iz, 6
@@ -9669,7 +9578,7 @@ DispTimeSet_EventDispatch:
 	jr	41
 	.byte 0x95
 	push	xsp
-	.byte 0x01
+	normal
 	nop
 	jrl	nz, 866
 	cps	iz, 7
@@ -9697,11 +9606,7 @@ DispTimeSet_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb8
-	push	sr
-	push	sr
-	push	sr
-	nop
+	ldw (xwa+2), 2
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
@@ -9728,11 +9633,7 @@ DispTimeSet_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb8
-	push	sr
-	push	sr
-	pop	sr
-	nop
+	ldw (xwa+2), 3
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
@@ -9792,11 +9693,7 @@ DispTimeSet_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb8
-	push	sr
-	push	sr
-	halt
-	nop
+	ldw (xwa+2), 5
 	lda	xbc, (xsp+30)
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
@@ -9826,9 +9723,7 @@ DispTimeSet_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb0
-	push	sr
-	di
+	ldw (xwa), 6
 	ld	(xbc), xix
 	ld	xwa, (xiy)
 	sll	xwa, 2
@@ -9853,10 +9748,7 @@ DispTimeSet_EventDispatch:
 	push	sr
 	.byte 0x01
 	nop
-	.byte 0xb0
-	push	sr
-	reti
-	nop
+	ldw (xwa), 7
 	ld	(xbc), xix
 	ld	xwa, (xiy)
 	sll	xwa, 2

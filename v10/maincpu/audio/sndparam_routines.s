@@ -557,8 +557,8 @@ SndParam_ResolveWidgetEx_Data:
 	inc	3, wa
 	extz	xwa
 	div	wa, 2047
-	.byte 0xd7, 0xe2
-	add	(xix-36), a
+	ld ix, qwa
+	ld bc, ix
 	extz	xbc
 	sll	xbc, 3
 	ld	xwa, 0x034100
@@ -773,8 +773,8 @@ SndParam_ResolveWidgetVariant2_Data:
 	inc	3, wa
 	extz	xwa
 	div	wa, 2047
-	.byte 0xd7, 0xe2
-	add	(xix-36), a
+	ld ix, qwa
+	ld bc, ix
 	extz	xbc
 	sll	xbc, 3
 	ld	xwa, 0x034100
@@ -1021,11 +1021,8 @@ SndParam_RegisterEntry_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xhl, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	or	xwa, xix
-	ldb	c, 235
-	.byte 0xe3
+	ld_rrl xhl, xhl, wa
+	or xhl, xhl
 	jrl	z, 187
 	ld	a, (xde+7)
 	ldb_erp	a, 240
@@ -1064,12 +1061,10 @@ SndParam_RegisterEntry_Data:
 	lda	xiy, (xde+5)
 	ld	a, (xiy)
 	extz	wa
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	iz, 8326
-	.byte 0xc7, 0xe7
-	ld	hl, (xwa-124)
+	lda_rr xiz, xhl, wa
+	ld w, (xiz)
+	ldb_erp w, 231
+	ld c, (xix)
 	ldb_erp	c, 230
 	stb_erp	a, 230
 	and	a, b
@@ -1079,10 +1074,8 @@ SndParam_RegisterEntry_Data:
 	ld	(xiz), w
 	ld	a, (xiy)
 	extz	wa
-	.byte 0xf3
-	reti
-	or	xwa, xix
-	ldw	hl, 9091
+	lda_rr xhl, xhl, wa
+	ld c, (xhl)
 	orb_erp	c, 230
 	ld	(xhl), c
 	ld	xwa, (xsp+8)
@@ -1118,13 +1111,9 @@ SndParam_RegisterEntryAlt_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xix, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 191
-	push	sr
-	jr	f, -24
-	.byte 0xe0
+	ld_rrl xwa, xix, wa
+	ld (xsp+2), xwa
+	or xwa, xwa
 	jrl	z, 156
 	ld	a, (xde+7)
 	ldb_erp	a, 240
@@ -1176,10 +1165,8 @@ SndParam_RegisterEntryAlt_Data:
 	add	c, c
 	ldb	c, 217
 	ccf
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	hl, 8579
+	lda_rr xhl, xwa, bc
+	ld a, (xhl)
 	orb_erp	a, 230
 	ld	(xhl), a
 	ld	(xiy), a
@@ -1290,8 +1277,8 @@ SndParam_RegisterMultiField_Data:
 	exts	xiz
 	add	xiz, xwa
 	ld	w, (xiz)
-	.byte 0xc7, 0xee
-	ld	bc, (xwa-124)
+	ldb_erp w, 238
+	ld a, (xix)
 	ld	l, a
 	and	l, h
 	cpl	a
@@ -1336,11 +1323,8 @@ SndParam_RegisterBitfield_Data:
 	extz	bc
 	sla	bc, 2
 	lda_24	xix, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	h, 238
-	.byte 0xe6
+	ld_rrl xiz, xix, bc
+	or xiz, xiz
 	jrl	z, 143
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9710
@@ -1361,11 +1345,8 @@ SndParam_RegisterBitfield_Data:
 	ld	c, (xwa+11)
 	sla	c, 2
 	lda_24	xiy, (Naka_SubDispatch_B_Table_0x4)
-	.byte 0xe3
-	pop	sr
-	.byte 0xf4, 0xe4
-	ldb	e, 234
-	zcf
+	ld_rr8l xiy, xiy, c
+	exts xde
 	add	xde, xde
 	add	xde, xiy
 	ld	de, (xde)
@@ -1379,7 +1360,7 @@ SndParam_RegisterBitfield_Data:
 	jr	z, 63
 	.byte 0x9f, 0x04
 	push	xsp
-	.byte 0x04
+	max
 	nop
 	jr	z, 2
 	ld	(xbc), de
@@ -1420,12 +1401,9 @@ SndParam_RegisterLinked_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xix, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 183
-	jr	f, -24
-	.byte 0xe0
+	ld_rrl xwa, xix, wa
+	ld (xsp), xwa
+	or xwa, xwa
 	jrl	z, 237
 	ld	a, (xhl+7)
 	ld	c, a
@@ -1454,9 +1432,8 @@ SndParam_RegisterLinked_Data:
 	ld	(xix), a
 	ldib_erp	230, 1
 	jr	26
-	.byte 0xc7, 0xe6
-	inc	6, wa
-	pop_a
+	cpib_erp 230, 0
+	jr z, 21
 	ld	c, (xhl+6)
 	ld	a, (xhl+9)
 	and	a, 15
@@ -1505,10 +1482,8 @@ SndParam_RegisterLinked_Data:
 	ld	c, (xix)
 	extz	bc
 	ld	xwa, (xsp)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	ix, 9092
+	lda_rr xix, xwa, bc
+	ld c, (xix)
 	orb_erp	c, 230
 	ld	(xix), c
 	ld	xwa, (xsp+12)
@@ -1562,11 +1537,8 @@ SndParam_RegisterLinked2_Data:
 	cp	a, 255
 	jr	z, 10
 	sla	a, 2
-	.byte 0xe3
-	pop	sr
-	.byte 0xe4, 0xe0
-	ldb	e, 104
-	push	sr
+	ld_rr8l xiy, xbc, a
+	jr 2
 	ld	xiy, (xbc)
 	extz	hl
 	ld	xix, xiy
@@ -1599,11 +1571,9 @@ SndParam_RegisterLinked2_Data:
 	cp	bc, wa
 	jr	ge, 9
 	ld	xwa, (xhl)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	l, 104
-	pushw	0x89d8
+	ld_rrb l, xwa, bc
+	jr 11
+	ld bc, wa
 	dec	1, bc
 	ld	xwa, (xhl)
 	.byte 0xc3
@@ -1642,8 +1612,8 @@ SndParam_RegisterLinked2_Data:
 	exts	xiz
 	add	xiz, xwa
 	ld	w, (xiz)
-	.byte 0xc7, 0xee
-	ld	bc, (xwa-127)
+	ldb_erp w, 238
+	ld a, (xbc)
 	ld	l, a
 	and	l, h
 	cpl	a
@@ -1689,11 +1659,8 @@ SndParam_RegisterSimple_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	h, 238
-	.byte 0xe6
+	ld_rrl xiz, xbc, wa
+	or xiz, xiz
 	jr	z, 114
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9734
@@ -1762,11 +1729,8 @@ SndParam_RegisterChained_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	h, 238
-	.byte 0xe6
+	ld_rrl xiz, xbc, wa
+	or xiz, xiz
 	jrl	z, 222
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x974c
@@ -1776,11 +1740,8 @@ SndParam_RegisterChained_Data:
 	ld	(xsp+10), xwa
 	ld	a, (xwa)
 	extz	wa
-	.byte 0xf3
-	reti
-	swi	0
-	.byte 0xe0
-	ldw	ix, 8580
+	lda_rr xix, xiz, wa
+	ld a, (xix)
 	ldb_erp	a, 234
 	extz	wa
 	ld	(xsp+4), wa
@@ -1793,11 +1754,11 @@ SndParam_RegisterChained_Data:
 	extz	wa
 	ld	qwa, wa
 	and	wa, bc
-	.byte 0xd7, 0xe2
-	ld	bc, (xwa-123)
-	.byte 0xd7, 0xe2
-	and	(xbc-55), d
-	retd	614
+	ld qwa, wa
+	ld a, (xiy)
+	ld bc, qwa
+	and a, 15
+	jr z, 2
 	.byte 0xd9
 	swi	5
 	add	bc, de
@@ -1842,11 +1803,8 @@ SndParam_RegisterChained_Data:
 	ld	xwa, (xsp+10)
 	ld	a, (xwa)
 	extz	wa
-	.byte 0xf3
-	reti
-	swi	0
-	.byte 0xe0
-	ldw	hl, 8579
+	lda_rr xhl, xiz, wa
+	ld a, (xhl)
 	or	a, e
 	ld	(xhl), a
 	ld	(xbc), a
@@ -1881,11 +1839,8 @@ SndParam_RegisterChained2_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	h, 238
-	.byte 0xe6
+	ld_rrl xiz, xbc, wa
+	or xiz, xiz
 	jrl	z, 212
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9758
@@ -1895,14 +1850,10 @@ SndParam_RegisterChained2_Data:
 	ld	(xsp+8), xwa
 	ld	a, (xwa)
 	extz	wa
-	.byte 0xf3
-	reti
-	swi	0
-	.byte 0xe0
-	ldw	ix, 8580
-	.byte 0xc7, 0xee
-	or	(xbc-57), iz
-	.byte 0x8b
+	lda_rr xix, xiz, wa
+	ld a, (xix)
+	ldb_erp a, 238
+	stb_erp c, 238
 	extz	bc
 	lda	xiy, (xde+9)
 	lda	xwa, (xde+6)
@@ -1912,11 +1863,11 @@ SndParam_RegisterChained2_Data:
 	extz	wa
 	ld	qwa, wa
 	and	wa, bc
-	.byte 0xd7, 0xe2
-	ld	bc, (xwa-123)
-	.byte 0xd7, 0xe2
-	and	(xbc-55), d
-	retd	614
+	ld qwa, wa
+	ld a, (xiy)
+	ld bc, qwa
+	and a, 15
+	jr z, 2
 	.byte 0xd9
 	swi	5
 	add	bc, hl
@@ -1961,11 +1912,8 @@ SndParam_RegisterChained2_Data:
 	ld	xwa, (xsp+8)
 	ld	a, (xwa)
 	extz	wa
-	.byte 0xf3
-	reti
-	swi	0
-	.byte 0xe0
-	ldw	hl, 8579
+	lda_rr xhl, xiz, wa
+	ld a, (xhl)
 	or	a, e
 	ld	(xhl), a
 	ld	(xbc), a
@@ -1995,12 +1943,9 @@ SndParam_RegisterComplex_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 183
-	jr	f, -24
-	.byte 0xe0
+	ld_rrl xwa, xbc, wa
+	ld (xsp), xwa
+	or xwa, xwa
 	jrl	z, 251
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9764
@@ -2055,16 +2000,12 @@ SndParam_RegisterComplex_Data:
 	ld	l, (xwa)
 	extz	hl
 	ld	xwa, (xsp)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xec
-	ldb	a, 199
-	.byte 0xea
-	incm	4, (xbc-15)
-	.byte 0x97
-	ldw	ix, 1724
-	ldw	hl, 0xeac7
-	add	(xiy-51), a
+	ld_rrb a, xwa, hl
+	ldb_erp a, 234
+	lda_d16 xix, (38756)
+	lda xhl, (xix+6)
+	stb_erp e, 234
+	ld a, e
 	ld	(xhl), a
 	ld	a, (xiy+9)
 	and	a, 15
@@ -2073,8 +2014,8 @@ SndParam_RegisterComplex_Data:
 	swi	6
 	ld	a, (xiy+10)
 	xor	a, d
-	.byte 0xc7, 0xeb
-	incm	6, (xbc-19)
+	ldb_erp a, 235
+	inc 6, xiy
 	ld	w, (xiy)
 	ld	d, w
 	andb_erp	d, 235
@@ -2098,7 +2039,7 @@ SndParam_RegisterComplex_Data:
 	.byte 0xe0, 0xe4
 	ld	xiy, 0x06890a68
 	push	xsp
-	.byte 0x01
+	normal
 	jr	nz, 4
 	ld	a, (xiy)
 	ld	(xhl), a
@@ -2125,11 +2066,8 @@ SndParam_NotifyQuick_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 232
-	.byte 0xe0
+	ld_rrl xwa, xbc, wa
+	or xwa, xwa
 	jr	z, 44
 	ld	xwa, xiz
 	calr	62655
@@ -2166,12 +2104,9 @@ SndParam_RegisterDual_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 183
-	jr	f, -24
-	.byte 0xe0
+	ld_rrl xwa, xbc, wa
+	ld (xsp), xwa
+	or xwa, xwa
 	jrl	z, 275
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9774
@@ -2186,13 +2121,9 @@ SndParam_RegisterDual_Data:
 	ld	l, (xwa)
 	ld	h, l
 	ld	xwa, (xsp)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	a, 199
-	.byte 0xee
-	or	(xbc-57), iz
-	.byte 0xc6
+	ld_rrb a, xwa, bc
+	ldb_erp a, 238
+	andb_erp h, 238
 	ld	c, h
 	ld	h, (xde+9)
 	ld	a, h
@@ -2206,11 +2137,8 @@ SndParam_RegisterDual_Data:
 	cp	a, 255
 	jr	z, 10
 	sla	a, 2
-	.byte 0xe3
-	pop	sr
-	.byte 0xe4, 0xe0
-	ldb	e, 104
-	push	sr
+	ld_rr8l xiy, xbc, a
+	jr 2
 	ld	xiy, (xbc)
 	ld	a, w
 	extz	wa
@@ -2247,25 +2175,20 @@ SndParam_RegisterDual_Data:
 	cp	bc, wa
 	jr	ge, 9
 	ld	xwa, (xde)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	e, 104
-	pushw	0x89d8
+	ld_rrb e, xwa, bc
+	jr 11
+	ld bc, wa
 	dec	1, bc
 	ld	xwa, (xde)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe4
-	ldb	e, 199
-	ld	xde, xiz
+	ld_rrb e, xwa, bc
+	stb_erp b, 238
 	stb_erp	a, 238
 	ldb_erp	a, 230
 	cpl	l
 	stb_erp	a, 230
 	and	a, l
-	.byte 0xc7, 0xe6
-	add	(xbc-50), bc
+	ldb_erp a, 230
+	ld a, h
 	and	a, 15
 	jr	z, 2
 	.byte 0xcd
@@ -2282,11 +2205,10 @@ SndParam_RegisterDual_Data:
 	ld	l, (xwa)
 	extz	hl
 	ld	xwa, (xsp)
-	.byte 0xc7, 0xe6, 0x8b, 0xf3
-	reti
-	.byte 0xe0, 0xec
-	ld	xhl, 0xca89e6c7
-	.byte 0xf1
+	stb_erp c, 230
+	st_rrb c, xwa, hl
+	stb_erp a, 230
+	cp a, b
 	jr	z, 32
 	ld	xwa, (xsp+12)
 	ld	a, (xwa)
@@ -2312,11 +2234,8 @@ SndParam_RegisterOffset_Data:
 	extz	wa
 	sla	wa, 2
 	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
-	.byte 0xe3
-	reti
-	.byte 0xe4, 0xe0
-	ldb	w, 232
-	.byte 0xe0
+	ld_rrl xwa, xbc, wa
+	or xwa, xwa
 	jrl	z, 141
 	ld	xiy, Naka_ToshiParam_Table_0x6BC
 	ld	xix, 0x9780
@@ -2405,10 +2324,8 @@ SndParam_RegisterWide_Data:
 	ld	c, (xwa)
 	extz	bc
 	ld	xwa, (xsp+4)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	ix, 0x2784
+	lda_rr xix, xwa, bc
+	ld l, (xix)
 	ld	c, l
 	extz	bc
 	ld	(xsp+8), bc
@@ -2479,10 +2396,8 @@ SndParam_RegisterWide_Data:
 	ld	c, (xiy)
 	extz	bc
 	ld	xwa, (xsp+4)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	ix, 9092
+	lda_rr xix, xwa, bc
+	ld c, (xix)
 	or	c, l
 	ld	(xix), c
 	ld	(xde), c
@@ -2606,7 +2521,7 @@ SndParam_DecodeFieldAlt_Data:
 	pop	sr
 	.byte 0xe4, 0xe0
 	ldb	a, 137
-	.byte 0x01
+	normal
 	ldx
 	jr	nz, 4
 	lds32	xwa, 3
@@ -2736,11 +2651,9 @@ SndParam_BatchUpdate_Data:
 	push	xiz
 	ld	(xsp+20), bc
 	ld	(xsp+22), xwa
-	.byte 0xc7
-	swi	2
-	cp	(xwa-57), xbc
-	cp	(xwa-57), xhl
-	.byte 0xa8
+	ldib_erp 250, 0
+	ldib_erp 249, 0
+	ldib_erp 251, 0
 	ld	xwa, 8705
 	calr	59613
 	ld	wa, (xsp+20)
@@ -2761,57 +2674,36 @@ SndParam_BatchUpdate_Data:
 	ld	c, (xbc)
 	extz	bc
 	add	bc, bc
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	a, 217
-	scc8	nc, d
-	nop
+	ld_rrw bc, xix, bc
+	and bc, 127
 	ld	(xwa+4), c
 	call	SndParam_FetchOscTableEntry
 	lda	xbc, (xsp+10)
 	ld	a, (xbc+1)
-	.byte 0xc7
-	swi	2
-	cp	(xbc-57), de
-	ldw	wa, 0xc907
-	.byte 0xef
-	reti
-	.byte 0xc7
-	swi	1
-	ld	bc, (xbc-127)
-	.byte 0xc7
-	swi	3
-	cp	(xbc-57), hl
-	ldw	hl, 0x6607
-	jr	c, -57
-	swi	3
-	ldw	wa, 0xc707
-	swi	2
-	jr	lt, 104
-	pop	xiz
+	ldb_erp a, 250
+	res_erpb 250, 7
+	srl a, 7
+	ldb_erp a, 249
+	ld a, (xbc)
+	ldb_erp a, 251
+	bit_erpb 251, 7
+	jr z, 103
+	res_erpb 251, 7
+	inc1b_erp 250
+	jr 94
 	ld	a, (xbc)
 	extz	wa
 	add	wa, wa
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe0
-	ldb	w, 216
-	neg	d
-	nop
+	ld_rrw wa, xix, wa
+	and wa, 7
 	sll	a, 4
-	.byte 0xc7
-	swi	2
-	cp	(xbc-57), bc
-	cp	(xwa-57), xhl
-	.byte 0x9c
+	ldb_erp a, 250
+	ldib_erp 249, 0
+	ldb_erp d, 251
 	bit	7, d
 	jr	z, 62
-	.byte 0xc7
-	swi	3
-	ldw	wa, 0xc707
-	swi	1
-	.byte 0xa9
+	res_erpb 251, 7
+	ldib_erp 249, 1
 	jr	53
 	lda	xwa, (xsp+4)
 	ld	e, (xbc)
@@ -2820,12 +2712,8 @@ SndParam_BatchUpdate_Data:
 	ld	c, (xbc)
 	extz	bc
 	add	bc, bc
-	.byte 0xd3
-	reti
-	.byte 0xf0, 0xe4
-	ldb	a, 217
-	scc8	nc, d
-	nop
+	ld_rrw bc, xix, bc
+	and bc, 127
 	ld	(xwa+4), c
 	call	SndParam_ComputeVoiceIndex
 	lda	xbc, (xsp+4)

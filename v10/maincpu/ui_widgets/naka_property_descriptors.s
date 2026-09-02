@@ -161,7 +161,8 @@ StrDesc_PsParaListBox:
 StrVal_Empty_PsParaList:	aligned_string ""
 StrFld_ParaList_SelNum:		aligned_string "sel_num"
 StrFld_ParaList_Row:
-	.byte 0x72, 0x6f, 0x77, 0x00		; padding
+	jrl le, 30575
+	nop
 StrFld_ParaList_Column:		aligned_string "column"
 StrFld_ParaList_FontColor:	aligned_string "fontcolor"
 StrFld_ParaList_Font:
@@ -217,155 +218,174 @@ StrDesc_PsStylCnvVer:
 StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long AcMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_AcMemNoBox
 	.long StrEmpty_AcMemNoBox
 	.long StrDesc_Empty_0
 	.long AcCmpRecBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb h, 0
+	push sr
+	nop
 	.long StrName_AcCmpRecBox
 	.long StrPrefix_AcCmpRecBox
 	.long StrDesc_RecordBits
 	.long PsCmpQtzBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsCmpQtzBox
 	.long StrEmpty_PsCmpQtzBox
 	.long StrDesc_Empty_1
 	.long PsCmpMeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsCmpMeasBox
 	.long StrEmpty_PsCmpMeasBox
 	.long StrDesc_Empty_2
 	.long PsCmpMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsCmpMemBox
 	.long StrEmpty_PsCmpMemBox
 	.long StrDesc_Empty_3
 	.long AcS2cMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_AcS2cMemNoBox
 	.long StrEmpty_AcS2cMemNoBox
 	.long StrDesc_Empty_4
 	.long PsS2cFmeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsS2cFmeasBox
 	.long StrEmpty_PsS2cFmeasBox
 	.long StrDesc_Empty_5
 	.long PsS2cLmeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsS2cLmeasBox
 	.long StrEmpty_PsS2cLmeasBox
 	.long StrDesc_Empty_6
 	.long PsSeqSongNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsSeqSongNoBox
 	.long StrEmpty_PsSeqSongNoBox
 	.long StrDesc_Empty_7
 	.long PsS2cTransBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsS2cTransBox
 	.long StrEmpty_PsS2cTransBox
 	.long StrDesc_Empty_8
 	.long PsCstmCpBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb h, 0
+	push sr
+	nop
 	.long StrName_PsCstmCpBnkBox
 	.long StrPrefix_PsCstmCpBnkBox
 	.long StrDesc_BankPair_0
 	.long PsCstmCpSwBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb h, 0
+	push sr
+	nop
 	.long StrName_PsCstmCpSwBox
 	.long StrPrefix_PsCstmCpSwBox
 	.long StrDesc_BankPair_1
 	.long PsCtmAttStrBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsCtmAttStrBox
 	.long StrEmpty_PsCtmAttStrBox
 	.long StrDesc_RamField
 	.long AcCmpMdBoxProc
 	naka_header NAKA_TYPE_0x15
-	.byte 0x34, 0x00
-	.byte 0x02, 0x00
+	ldw ix, 512
+	nop
 	.long StrName_AcCmpMdBox
 	.long StrPrefix_AcCmpMdBox
 	.long StrDesc_RamNamePair
 	.long AcApcMdBoxProc
 	naka_header NAKA_TYPE_0x15
-	.byte 0x34, 0x00
-	.byte 0x02, 0x00
+	ldw ix, 512
+	nop
 	.long StrName_AcApcMdBox
 	.long StrPrefix_AcApcMdBox
 	.long StrDesc_ApcDataPair
 	.long AcMspBnkSlBoxProc
 	naka_header NAKA_TYPE_0x15
-	.byte 0x34, 0x00
-	.byte 0x02, 0x00
+	ldw ix, 512
+	nop
 	.long StrName_AcMspBnkSlBox
 	.long StrPrefix_AcMspBnkSlBox
 	.long StrDesc_MspBnkPair_0
 	.long PsMspBnkNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb h, 0
+	push sr
+	nop
 	.long StrName_PsMspBnkNameBox
 	.long StrPrefix_PsMspBnkNameBox
 	.long StrDesc_MspBnkPair_1
 	.long AcCmpTempoBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_AcCmpTempoBox
 	.long StrEmpty_AcCmpTempoBox
 	.long StrDesc_Empty_9
 	.long PsCmpCpFGrpBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsCmpCpFGrpBox
 	.long StrEmpty_PsCmpCpFGrpBox
 	.long StrDesc_Empty_10
 	.long PsCmpCpFVariBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsCmpCpFVariBox
 	.long StrEmpty_PsCmpCpFVariBox
 	.long StrDesc_Empty_11
 	.long PsCmpCpFPtnBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsCmpCpFPtnBox
 	.long StrEmpty_PsCmpCpFPtnBox
 	.long StrDesc_Empty_12
 	.long PsNameMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsNameMemBox
 	.long StrEmpty_PsNameMemBox
 	.long StrDesc_Empty_13
@@ -377,8 +397,9 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long GridProperty_Config_Table
 	.long PsRgpSetBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsRgpSetBnkBox
 	.long StrEmpty_PsRgpSetBnkBox
 	.long StrDesc_Empty_14
@@ -390,43 +411,49 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long GridProperty_AltConfig_Table
 	.long PsMspMeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsMspMeasBox
 	.long StrEmpty_PsMspMeasBox
 	.long StrDesc_Empty_15
 	.long PsMspMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsMspMemBox
 	.long StrEmpty_PsMspMemBox
 	.long StrDesc_Empty_16
 	.long PsMspRecPadBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsMspRecPadBox
 	.long StrEmpty_PsMspRecPadBox
 	.long StrDesc_Empty_17
 	.long PsMspRecBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsMspRecBnkBox
 	.long StrEmpty_PsMspRecBnkBox
 	.long StrDesc_Empty_18
 	.long PsMspNameBnkProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsMspNameBnk
 	.long StrEmpty_PsMspNameBnk
 	.long StrDesc_Empty_19
 	.long PsCstmCpNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x26, 0x00
-	.byte 0x02, 0x00
+	ldb h, 0
+	push sr
+	nop
 	.long StrName_PsCstmCpNameBox
 	.long NakaInst_AcApcToggle_0x0C
 	.long StrDesc_CstmCpNameBox
@@ -450,15 +477,17 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_PsParaListBox
 	.long PsSCTxtBoxProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	ldb d, 0
+	nop
+	nop
 	.long StrName_PsSCTxtBox
 	.long StrEmpty_PsSCTxtBox
 	.long StrFld_ParaList_Font_0x06
 	.long PsSCTxtBox2Proc
 	naka_header NAKA_TYPE_0x65
-	.byte 0x26, 0x00
-	.byte 0x00, 0x00
+	ldb h, 0
+	nop
+	nop
 	.long StrName_PsSCTxtBox2
 	.long StrEmpty_PsSCTxtBox2
 	.long StrDesc_PsSCTxtBox2
@@ -500,10 +529,12 @@ NakaDesc_VwVariBox_DataPtrs:
 StrEmpty_PsStylCnvVer:	aligned_string ""
 StrName_PsStylCnvVer:	aligned_string "PsStylCnvVer"
 StrPrefix_S2cGridBox:
-	.byte 0x58, 0x58, 0x6a, 0x00
+	pop xwa
+	pop xwa
+	jr gt, 0
 	aligned_string "S2cGridBox"
-	.byte 0x00			; padding
-	.byte 0xff			; padding
+	nop
+	swi 7
 StrName_CmpNameMenuBox:		aligned_string "CmpNameMenuBox"
 StrExtra_Yajirushi_JpChars:	aligned_string "^GBBB"
 StrName_YajirushiBox:		aligned_string "Yajirushi"
@@ -516,10 +547,14 @@ StrName_PsSCTxtBox:		aligned_string "PsSCTxtBox"
 StrExtra_ParaList_JpChars:	.asciz "c^AAn"
 StrName_PsParaListBox:		aligned_string "PsParaListBox"
 StrPrefix_AcSndArgGrid:
-	.byte 0x58, 0x58, 0x6a, 0x00
+	pop xwa
+	pop xwa
+	jr gt, 0
 StrName_AcSndArgGridBox:	aligned_string "AcSndArgGridBox"
 StrPrefix_AcApcToggle:
-	.byte 0x6a, 0x46, 0x00, 0xff		; padding
+	jr gt, 70
+	nop
+	swi 7
 	aligned_string "AcApcToggle"
 	.byte 0x43, 0x00
 StrName_PsCstmCpNameBox:	aligned_string "PsCstmCpNameBox"
@@ -534,12 +569,16 @@ StrName_PsMspMemBox:		aligned_string "PsMspMemBox"
 StrEmpty_PsMspMeasBox:		aligned_string ""
 StrName_PsMspMeasBox:		aligned_string "PsMspMeasBox"
 StrPrefix_AcEasyCmpGrid:
-	.byte 0x58, 0x58, 0x6a, 0x00
+	pop xwa
+	pop xwa
+	jr gt, 0
 StrName_AcEasyCmpGridBox:	aligned_string "AcEasyCmpGridBox"
 StrEmpty_PsRgpSetBnkBox:	aligned_string ""
 StrName_PsRgpSetBnkBox:		aligned_string "PsRgpSetBnkBox"
 StrPrefix_AcCmpSetGrid:
-	.byte 0x58, 0x58, 0x6a, 0x00
+	pop xwa
+	pop xwa
+	jr gt, 0
 StrName_AcCmpSetGridBox:	aligned_string "AcCmpSetGridBox"
 StrEmpty_PsNameMemBox:		aligned_string ""
 StrName_PsNameMemBox:		aligned_string "PsNameMemBox"

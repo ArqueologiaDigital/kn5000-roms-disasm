@@ -19,10 +19,10 @@ EvtEffDraw_PtrTable:
 	.long EvtName_EqLineDraw
 	.long EvtName_EqStrDraw
 	.long EvtName_GraphDraw
-	.byte 0x00			; padding
-	.byte 0x00			; padding
-	.byte 0x00			; padding
-	.byte 0x00			; padding
+	nop
+	nop
+	nop
+	nop
 EvtName_GraphDraw:	aligned_string "EV_GRAPHDRAW"
 EvtName_EqStrDraw:	aligned_string "EV_EQSTRDRAW"
 EvtName_EqLineDraw:	aligned_string "EV_EQLINEDRAW"

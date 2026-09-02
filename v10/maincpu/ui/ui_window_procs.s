@@ -283,8 +283,7 @@ WndEvt_EventCodeDispatch:
 	ldw_da	wa, (0x0274d8)
 	ld	bc, wa
 	inc	1, bc
-	.byte 0xd2, 0xd6
-	jrl	ov, -3838
+	cpda16_24 xbc, (160982)
 	jrl	nc, 2200
 	inc	1, wa
 	stw_da	(0x0274d8), wa
@@ -543,10 +542,7 @@ WndEvt_EventCodeDispatch:
 	jrl	1389
 	ldw_da	iz, (0x0274d6)
 	dec	1, iz
-	.byte 0xd2
-	scc16	ov, wa
-	push	sr
-	.byte 0xf6
+	cpda16_24 xiz, (160984)
 	jr	ule, 47
 	lda_24	xde, (0x0274b0)
 	ld	bc, iz
@@ -565,10 +561,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	dec	1, iz
 	dec	1, xbc
-	.byte 0xd2
-	scc16	ov, wa
-	push	sr
-	.byte 0xf6
+	cpda16_24 xiz, (160984)
 	jr	ugt, -31
 	ldw_da	wa, (0x0274d8)
 	extz	xwa
@@ -587,8 +580,7 @@ WndEvt_EventCodeDispatch:
 	ld	xbc, 0x01e00080
 	jrl	1267
 	ldw_da	iz, (0x0274d8)
-	.byte 0xd2, 0xd6
-	jrl	ov, -2558
+	cpda16_24 xiz, (160982)
 	jr	nc, 47
 	lda_24	xde, (0x0274b0)
 	ld	bc, iz
@@ -607,8 +599,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	.byte 0xd2, 0xd6
-	jrl	ov, -2558
+	cpda16_24 xiz, (160982)
 	jr	c, -34
 	ldw_da	wa, (0x0274d6)
 	dec	1, wa
@@ -627,9 +618,8 @@ WndEvt_EventCodeDispatch:
 	ld	xwa, (xsp+50)
 	ld	xbc, 0x01e00080
 	jrl	1149
-	.byte 0xd7
-	swi	2
-	sub	(xwa-34), xwa
+	ld qiz, 0
+	lds iz, 0
 	ldw_da	de, (0x0274d6)
 	cps	de, 0
 	jr	ule, 28
@@ -641,15 +631,11 @@ WndEvt_EventCodeDispatch:
 	add	xix, xbc
 	.byte 0x84, 0xf1
 	jr	nz, 9
-	.byte 0xd7
-	swi	2
-	jr	lt, -34
-	jr	lt, -38
-	.byte 0xf6
+	inc 1, qiz
+	inc 1, iz
+	cp iz, de
 	jr	c, -21
-	.byte 0xd7
-	swi	2
-	.byte 0x88
+	ld wa, qiz
 	cp	wa, de
 	jrl	z, 1103
 	.byte 0xbf, 0x04
@@ -674,9 +660,7 @@ WndEvt_EventCodeDispatch:
 	inc	1, iz
 	cp	iz, de
 	jr	c, -25
-	.byte 0xd7
-	swi	2
-	.byte 0x88
+	ld wa, qiz
 	ld	(xsp+6), wa
 	ld	wa, (xsp+4)
 	add	(xsp+6), wa
@@ -685,9 +669,7 @@ WndEvt_EventCodeDispatch:
 	pushw	de
 	call	Malloc
 	ld	(xsp+10), xhl
-	.byte 0xd7
-	swi	2
-	.byte 0x88
+	ld wa, qiz
 	extz	xwa
 	ld	xbc, 0x0274b0
 	add	xbc, xwa
@@ -755,8 +737,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	.byte 0xd2, 0xd6
-	jrl	ov, -2558
+	cpda16_24 xiz, (160982)
 	jr	c, -21
 	ld	xwa, 22
 	ld	xbc, 0x01c0000f
@@ -783,8 +764,7 @@ WndEvt_EventCodeDispatch:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	.byte 0xd2, 0xd6
-	jrl	ov, -2558
+	cpda16_24 xiz, (160982)
 	jr	c, -21
 	ld	xwa, 22
 	ld	xbc, 0x01e00080
@@ -2003,17 +1983,14 @@ EditSw_ByteData:
 	nop
 	nop
 	jr	nz, 12
-	.byte 0xb4
-	push	sr
-	swi	6
-	swi	7
+	ldw (xix), 65534
 	ld	de, (xbc+2)
 	sub	de, wa
 	ld	(xix+2), de
 	.byte 0x91
 	push	xsp
 	push	xsp
-	.byte 0x01
+	normal
 	jr	nz, 16
 	ldw	de, 318
 	sub de, (xsp+0x06)	; F9CA23 (sub de,(xsp+0x06))
@@ -4324,7 +4301,7 @@ DrawDesignBox_QueueCallback:
 	ld	de, (xwa+14)
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -7398,11 +7375,7 @@ ClipBlit_Replace_CalcVRAMAddr:
 	sll xbc, 2
 	add xbc, xde
 	sll xbc, 6
-	.byte 0xf3
-	reti
-	.byte 0xe4
-	swi	2
-	.byte 0x33
+	lda_rrq xhl, xbc, qiz
 	lda_24	xwa, (0x043c00)
 	add xwa, xhl
 	ld (xsp + 16), xwa
@@ -7638,7 +7611,7 @@ ColorBlit_CallbackBlock:
 	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -7940,7 +7913,7 @@ ColorBlit2_CallbackBlock:
 	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -8239,7 +8212,7 @@ ColorBlit2_LargeCodeBlock:
 	stb_da	(0x03efaa), a
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -8278,7 +8251,7 @@ ColorBlit2_LargeCodeBlock:
 	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -8299,14 +8272,9 @@ ColorBlit2_LargeCodeBlock:
 	jrl	z, 381
 	cps	a, 0
 	jrl	nz, 722
-	.byte 0xbf
-	ei	2
-	nop
-	nop
+	ldw (xsp+6), 0
 	jrl	351
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+8), 0
 	jrl	321
 	lda	xwa, (xsp+18)
 	ld	(xsp+10), xwa
@@ -8469,14 +8437,9 @@ ColorBlit2_LargeCodeBlock:
 	cp	(xsp+6), bc
 	jrl	c, -365
 	jrl	346
-	.byte 0xbf
-	ei	2
-	nop
-	nop
+	ldw (xsp+6), 0
 	jrl	149
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+8), 0
 	jr	120
 	lda	xde, (xsp+18)
 	ld	xwa, (xsp+28)
@@ -8546,14 +8509,9 @@ ColorBlit2_LargeCodeBlock:
 	cp	(xsp+6), bc
 	jrl	c, -163
 	jrl	172
-	.byte 0xbf
-	ei	2
-	nop
-	nop
+	ldw (xsp+6), 0
 	jrl	150
-	.byte 0xbf
-	ldio	2, 0
-	nop
+	ldw (xsp+8), 0
 	jr	121
 	lda	xde, (xsp+18)
 	ld	xwa, (xsp+28)
@@ -8638,7 +8596,7 @@ ColorBlit2_LargeCodeBlock:
 	stb_da	(0x03efaa), a
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -8683,7 +8641,7 @@ ColorBlit2_LargeCodeBlock:
 	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -8798,7 +8756,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x8f
 	push_a
 	push	xsp
-	.byte 0x01
+	normal
 	jrl	z, 801
 	.byte 0x8f
 	push_a
@@ -9017,8 +8975,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xix, xwa
 	.byte 0x9f
 	ld	xde, 0x6600f53f
-	.byte 0x1c, 0x84
-	push	xix
+	call16 15492
 	jr	f, -37
 	and	(xwa-40), d
 	.byte 0x9f
@@ -9101,8 +9058,7 @@ ColorBlit2_LargeCodeBlock:
 	add	xiy, xwa
 	.byte 0x9f
 	ld	xde, 0x6600f53f
-	.byte 0x1c, 0x85
-	push	xix
+	call16 15493
 	jr	f, -37
 	and	(xwa-40), d
 	.byte 0x9f
@@ -9487,7 +9443,7 @@ ColorBlit2_LargeCodeBlock:
 	stb_da	(0x03efaa), a
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -9532,7 +9488,7 @@ ColorBlit2_LargeCodeBlock:
 	stb_da	(0x03efaa), c
 	.byte 0xd2
 	popw	iz
-	.byte 0x04
+	max
 	pop	sr
 	push	xsp
 	nop
@@ -9625,7 +9581,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x8f
 	push_f
 	push	xsp
-	.byte 0x01
+	normal
 	jrl	ugt, 235
 	ldb_da	a, (0x03efaa)
 	cps	a, 2
@@ -9757,7 +9713,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x8f
 	push_f
 	push	xsp
-	.byte 0x01
+	normal
 	jrl	ugt, 235
 	ldb_da	a, (0x03efaa)
 	cps	a, 2
@@ -9908,7 +9864,7 @@ ColorBlit2_LargeCodeBlock:
 	.byte 0x8f
 	push_f
 	push	xsp
-	.byte 0x01
+	normal
 	jrl	ugt, 192
 	ldb_da	a, (0x03efaa)
 	ldb_erp	a, 240
@@ -9919,16 +9875,12 @@ ColorBlit2_LargeCodeBlock:
 	add	xhl, xwa
 	sll	xhl, 6
 	lda_24	xde, (0x043c00)
-	.byte 0xc7, 0xf0
-	scc16	z, de
-	.byte 0x8c
-	nop
-	.byte 0xc7, 0xf0
-	inc	6, bc
-	jrl	ule, -3897
-	scc16	nz, wa
-	.byte 0x93
-	nop
+	cpib_erp 240, 2
+	jrl z, 140
+	cpib_erp 240, 1
+	jr z, 115
+	cpib_erp 240, 0
+	jrl nz, 147
 	ld	xiz, xbc
 	ld	iy, (xsp+50)
 	ld	wa, (xbc)
