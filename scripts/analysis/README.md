@@ -152,3 +152,30 @@ all 0xff) retyped as `.fill` (erased flash, not code, despite a clean decode),
 (`v7_no_source_bytes.py`). The 34 CODE-labelled, 25,425 B bucket is otherwise
 blocked by the same tlcs900-backend spelling gap already known from v7's
 general code-as-`.byte` debt.
+
+## Added 2026-09-02 (lane MISSINGINSNS, full-disassembly push)
+
+The five leading opcode bytes with no decode anywhere in tlcs900_backend --
+0x01 `normal`, 0x04 `max`, 0x17 `ldf`, 0x1a `jp nnnn`, 0x1c `call nnnn` -- were
+taught to the disassembler in tlcs900_backend@6f456a19f05b. These two scripts
+are the before/after evidence, and they also **retract the reading that
+motivated the work**: `byte_run_start_enrichment.py`'s 46x ratio is not
+evidence that v10's `.byte` residue is code. Its header now carries the
+correction; the ratio is measured against a control that is pinned near zero by
+construction wherever a region was force-disassembled linearly.
+
+| script | question it answers |
+|---|---|
+| `blind_run_decode_census.py` | Given a run's own bytes, how far does the decoder get -- and is "it decodes" worth anything on an opcode space this dense? Scores every `.byte` run that starts with one of the five against two nulls, the SAME BYTES SHUFFLED and uniform random of the same length, stratified by run length because the mean run is ~2.5 B and a shuffle of a 2-byte run is barely a null. v10: 0 B of 8,503 decoded before, 6,687 B (78.6%) after, 2,810/3,395 runs (82.8%) end-to-end clean -- **against a shuffle null of 82.1%**. |
+| `blind_byte_rom_sites.py` | Where do these bytes occur in the committed dumps, and is any site CODE? Boundary agreement with an independent decoder plus shape filters (no `db`, no nop runs, no byte ramps, no repeating table rows). `--check` re-reads the ten offsets quoted by `llvm/test/MC/TLCS900/missing-leading-bytes.s` from the dumps so the test's provenance is verifiable. ⚠ Across six images **no site survives as code**; every one is a ramp, mask table, pointer table, string or parameter block. |
+
+    python3 scripts/analysis/blind_run_decode_census.py v10/maincpu
+    LLVM_MC=/path/to/baseline/llvm-mc \
+        python3 scripts/analysis/blind_run_decode_census.py v10/maincpu   # before
+    python3 scripts/analysis/blind_byte_rom_sites.py --check
+    python3 scripts/analysis/blind_byte_rom_sites.py --rom kn5000_v10
+
+Result: a decoder blind spot closed (it was silent -- a tool that cannot
+disassemble a region reports nothing there), 26/26 TLCS900 MC lit tests green,
+13/13 images still byte-identical. **No v10 bytes were converted and none
+should be on this evidence.**
