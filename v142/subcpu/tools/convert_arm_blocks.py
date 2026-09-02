@@ -30,7 +30,8 @@ WHAT IS CHECKED, BEYOND THE BYTE GATE
        that same decode, excluding degenerate self/next targets. Across the
        four converted blocks that is 10 informative targets, 10 on a
        boundary, at ~2.8x the boundary density -- i.e. the framing is
-       self-consistent, not merely re-assemblable.
+       self-consistent, not merely re-assemblable. Reproduced, after the
+       fact and from the ROM, by v142/subcpu/tools/arm_block_evidence.py.
 
     3. ARM BOUNDARIES. A computed-jump arm block has SEVERAL entry points,
        one per arm, and a linear framing is only right if every arm entry

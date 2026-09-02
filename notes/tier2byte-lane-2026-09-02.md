@@ -111,11 +111,22 @@ gate-all` is green: **13/13 byte-identical**, 9 KN5000 + 4 WSA1R.
 
 ### The framing evidence, which the gate cannot give
 
-The four arm blocks carry **33 interior arm labels and comments**, placed by
-hand long before this lane, and every one lands on an instruction boundary of
-the decode. A control over the known-data runs of `subcpu_data_tables.s` shows
-the check discriminates: of three decodable runs with interior labels, **two
-had a label off-boundary**.
+The four arm blocks carry interior arm labels and comments placed by hand long
+before this lane, and every one lands on an instruction boundary of the decode:
+**12/12 counted by unique address**, and **10/10 informative in-block branch
+targets** land on a boundary too, at ~2.8× the boundary density. A control over
+the known-data `.byte` runs of `subcpu_data_tables.s` shows the check
+discriminates: of the **9 runs that decode end to end, 6 have a mark
+off-boundary**.
+
+⚠ An earlier version of this note and of the converter's commit message said
+"33 interior labels", counting source LINES (a label, its comment and a blank
+at the same address counted three times). The reproducible figure is 12 unique
+addresses; the committed script is
+`v142/subcpu/tools/arm_block_evidence.py`. The same script also corrects the
+control, first quoted from a scratch one-liner as "2 of 3".
+
+    python3 v142/subcpu/tools/arm_block_evidence.py
 
 ### ⚠ "The toolchain blocks this" was wrong before it was written
 
