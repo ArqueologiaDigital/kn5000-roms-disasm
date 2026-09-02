@@ -11,7 +11,15 @@ source as well, or are they actually data?
 > anywhere.** `prom_b` now carries **0 `.incbin`**, so all thirteen gated images
 > are at zero verbatim debt.
 >
->     grep -ac '\.incbin' wsa1/prom_b/wsa1_prom_b.s      # 0
+>     grep -ac '^[[:space:]]*\.incbin' wsa1/prom_b/wsa1_prom_b.s   # 0
+>
+> ⚠ **Anchor the pattern to the start of the line.** `grep -ac '\.incbin'`
+> returns **322** on this file — and every one of those is the word `.incbin`
+> appearing inside a COMMENT, because the conversions documented themselves by
+> saying what each region used to be. Zero are directives. This is the same
+> defect that once had a coverage tool reporting 313,076 B of debt twice over
+> from `.incbin` mentions in dead comments; it is very easy to re-introduce, and
+> I nearly published the unanchored command in this very document.
 >
 > The answer below is therefore demonstrated, not argued. Lane `res03a` also
 > typed 359 B of adjacent walk-extent `.byte` in the same pass.
