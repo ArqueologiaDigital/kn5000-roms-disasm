@@ -58908,32 +58908,226 @@ DL_UserKitSoundEditSoundToneSelect:
 	.short 0x0133
 	.short 0x00A8
 
-; === COVER-R1 0xF33F01-0xF341B6 ===
-; 0xF33F01-0xF341B5, coverage round 1: 1 of this span's 693 bytes are
-; reachable -- 0 as CODE (an entry point in the routine directory, or a branch
-; prom_b's own converted instructions decode) in 0 runs, and 1 as DATA (only a
-; `.long` or a 32-bit immediate names it) in 1 run.  Everything else here is
-; NOT reachable and stays `.incbin`.  Regenerate: python3
-; notes/gen_prom_b_cover_round1.py --splice
+; --- 0xF33F01-0xF33FFF: 255 bytes of 0x0E fill (ret padding), not a
+; display list -- a naive op/len walk from here decodes as 44 bogus
+; [op 0x0E, len 14] records because 0x0E happens to be a valid
+; opcode; measuring the run of the single repeated byte instead
+; shows it is pure filler.  notes/gen_prom_b_f33f01_module.py
+	.fill 255, 1, 0x0E
 
-; --------------------------------------------------------------------------
-; Data_F33F01 -- 1 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F33F01 appears as a 32-bit word at 0xF5BF5C; converted
-;               code at 0xF5BF5B loads it as a 32-bit immediate.  No routine-
-;               directory slot and no branch decoded in converted code names
-;               it.
-; Measured: 0% printable ASCII; a linear decode runs 1 instructions and ends
-;           `ret`, with 0% of the bytes in spellings llvm-mc will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F33F01:
-	.byte	0x0E	; F33F01  |.|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x033F02, 0x0002B4
-
-; === END COVER-R1 0xF33F01-0xF341B6 ===
+; ------------------------------------------------------------------
+; 0xF34000-0xF341B5 -- 27 display-list records, 438 bytes -- interpreter A
+; the fill run above stops dead here; DL.walk() lands with ZERO
+; DRIFT on 0xF341B6, the ALREADY CALL-VERIFIED start of DL_F341B6
+; (see its own header below: "entered at: 0xF341B6").
+; ------------------------------------------------------------------
+DL_F34000:
+	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
+	.long 0x00FF12F6
+	.short 0x1805
+	.short 0xF34D
+	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x1B, 0x18	; character codes below 0x20
+	.ascii "M"
+	.byte 0xF3, 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00, 0x05, 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F7
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00	; character codes below 0x20
+	.ascii "#"
+	.byte 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F8
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00	; character codes below 0x20
+	.ascii "A"
+	.byte 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F9
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00	; character codes below 0x20
+	.ascii "_"
+	.byte 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12FA
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00	; character codes below 0x20
+	.ascii "}"
+	.byte 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12FB
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00, 0x9B, 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12FC
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00, 0xB9, 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12FD
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00, 0xD7, 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12FE
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00, 0x05, 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12FF
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00	; character codes below 0x20
+	.ascii "#"
+	.byte 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x1300
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00	; character codes below 0x20
+	.ascii "A"
+	.byte 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x1301
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00	; character codes below 0x20
+	.ascii "_"
+	.byte 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x1302
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00	; character codes below 0x20
+	.ascii "}"
+	.byte 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x1303
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00, 0x9B, 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x1304
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00, 0xB9, 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x1305
+	.byte 0xFF, 0x00, 0x17, 0x88	; character codes below 0x20
+	.ascii "N"
+	.byte 0xF3, 0x00, 0x03, 0x00, 0xD7, 0x00	; character codes below 0x20
+	.ascii "5"
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x17	; character codes below 0x20
+	.ascii "nL"
+	.byte 0xF3, 0x00, 0x04, 0x00, 0x02, 0x00	; character codes below 0x20
+	.ascii "\""
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x17	; character codes below 0x20
+	.ascii "nL"
+	.byte 0xF3, 0x00, 0x04, 0x00	; character codes below 0x20
+	.ascii " "
+	.byte 0x00	; character codes below 0x20
+	.ascii "\""
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x17	; character codes below 0x20
+	.ascii "nL"
+	.byte 0xF3, 0x00, 0x04, 0x00	; character codes below 0x20
+	.ascii ">"
+	.byte 0x00	; character codes below 0x20
+	.ascii "\""
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x17	; character codes below 0x20
+	.ascii "nL"
+	.byte 0xF3, 0x00, 0x04, 0x00	; character codes below 0x20
+	.ascii "\\"
+	.byte 0x00	; character codes below 0x20
+	.ascii "\""
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x17	; character codes below 0x20
+	.ascii "nL"
+	.byte 0xF3, 0x00, 0x04, 0x00	; character codes below 0x20
+	.ascii "z"
+	.byte 0x00	; character codes below 0x20
+	.ascii "\""
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x17	; character codes below 0x20
+	.ascii "nL"
+	.byte 0xF3, 0x00, 0x04, 0x00, 0x98, 0x00	; character codes below 0x20
+	.ascii "\""
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x17	; character codes below 0x20
+	.ascii "nL"
+	.byte 0xF3, 0x00, 0x04, 0x00, 0xB6, 0x00	; character codes below 0x20
+	.ascii "\""
+	.byte 0x00	; character codes below 0x20
+	.byte 0x07, 0x11	; op 07, 17 bytes -> handler 0xF31A3A
+	.short 0x12F6
+	.byte 0xFF, 0x00, 0x17	; character codes below 0x20
+	.ascii "nL"
+	.byte 0xF3, 0x00, 0x04, 0x00, 0xD4, 0x00	; character codes below 0x20
+	.ascii "\""
+	.byte 0x00	; character codes below 0x20
+	.byte 0x0E, 0x08	; op 0E, 8 bytes -> handler 0xF31A9F
+	.short 0x03C0
+	.short 0x001E
+	.short 0x0009
 
 ; ------------------------------------------------------------------
 ; 0xF341B6-0xF34255 -- 16 display-list records, 160 bytes -- interpreter A
