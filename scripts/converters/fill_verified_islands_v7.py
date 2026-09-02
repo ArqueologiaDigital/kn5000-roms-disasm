@@ -193,6 +193,40 @@ def collect_span(lines, start_idx, size):
     return collected, n_lines, values
 
 
+def find_jump_table_labels(v7_root):
+    """2026-09-02 FINDING: three earlier conversions this session were
+    genuine DATA, not code -- each byte-verified and gate-clean, so no
+    byte-level check (context tiling, table-tail, near-uniform,
+    whole-span/values round-trip) could ever have caught them. All three
+    shared one shape: `lda_24 xix, (LABEL)` immediately followed by
+    `jp_ind ...` -- "load this table's address, jump into a generic
+    dispatcher that reads entries from it". A tree-wide scan for that
+    exact shape found ~190 such labels; every one still `.byte` elsewhere
+    in this tree is a real jump/dispatch table by construction. Scanning
+    for it ONCE here and refusing any candidate whose immediately-
+    preceding label (the line just above its first `.byte` line -- NOT
+    captured by inject()'s own per-blob `labels` field, which only
+    covers labels INSIDE the byte run, never the one introducing it)
+    appears in this set closes the gap the byte-level checks cannot see.
+    This is necessarily incomplete -- a table referenced only through a
+    register-computed address, not a literal `lda_24 ..., (NAME)`, would
+    not show up here -- so it raises confidence, it does not replace
+    reading the diff."""
+    import glob
+    labels = set()
+    lda_re = re.compile(r'lda(?:_24|_d16)?\s+\w+,\s*\(?([A-Za-z_][A-Za-z0-9_]*)\)?')
+    for path in glob.glob(os.path.join(v7_root, '**', '*.s'), recursive=True):
+        try:
+            lines = open(path, encoding='latin-1').read().split('\n')
+        except OSError:
+            continue
+        for i, line in enumerate(lines):
+            m = lda_re.search(line)
+            if m and i + 1 < len(lines) and 'jp_ind' in lines[i + 1]:
+                labels.add(m.group(1))
+    return labels
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--work', required=True)
@@ -224,6 +258,10 @@ def main():
 
     terr, blobs, rom = load('v7', a.work)
     tmp = tempfile.NamedTemporaryFile(suffix=".bin", delete=False).name
+    jump_table_labels = find_jump_table_labels(str(REPO / 'v7'))
+    print(f"   ({len(jump_table_labels):,} labels identified tree-wide as "
+          f"lda+jp_ind jump-table targets -- candidates immediately under "
+          f"one of these are refused regardless of any other check)")
 
     isl_all = sorted(
         (b for b in blobs if b["kind"] == "byteblob" and 0 < b["start"]
@@ -241,6 +279,7 @@ def main():
     counts = {}
     table_tail_rejects = 0
     uniform_rejects = 0
+    jump_table_rejects = 0
     for b in isl:
         if os.path.basename(b["file"]) in excluded_names:
             excluded_count += 1
@@ -249,6 +288,18 @@ def main():
         raw = rom[b["start"]:b["end"]]
         if is_near_uniform_run(raw):
             uniform_rejects += 1
+            continue
+        preceding_label = None
+        p7_peek = REPO / 'v7' / b["file"]
+        try:
+            peek_lines = p7_peek.read_text(encoding='latin-1').split('\n')
+            s0 = peek_lines[b["line"] - 2].strip() if b["line"] >= 2 else ''
+            if s0.endswith(':') and not s0.startswith('.'):
+                preceding_label = s0[:-1]
+        except (OSError, IndexError):
+            pass
+        if preceding_label and preceding_label in jump_table_labels:
+            jump_table_rejects += 1
             continue
         fr, ok = bounds_from_context(rom, terr, b["start"], b["end"], tmp)
         key = (fr, ok)
@@ -265,6 +316,8 @@ def main():
               f"excluded files: {sorted(excluded_names)})")
     print(f"   ({uniform_rejects} rejected outright as a near-uniform byte "
           f"run -- see is_near_uniform_run, never reaches unidasm)")
+    print(f"   ({jump_table_rejects} rejected because the immediately preceding "
+          f"label is a known lda+jp_ind jump-table target)")
     print(f"   (of the tiling ones, {table_tail_rejects} also rejected as a "
           f"likely DATA-record tail -- see looks_like_a_table_tail)")
     print(f"=> {len(accepted):,} context-verified candidates (no reframing needed)")
