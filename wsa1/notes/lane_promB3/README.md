@@ -5,7 +5,7 @@ The scripts behind every number this lane reported. Run from `wsa1/`.
 | script | question it answers | command |
 |---|---|---|
 | `xref_scan.py` | Does anything in the four WSA1R images hold a little-endian 3- or 4-byte value pointing INTO a given address range? A span whose interior is named by a stored pointer is data reached by dereference, and the pointer's own record says how wide the entries are. | `python3 notes/lane_promB3/xref_scan.py 0xF0D4D2 0xF0D698` |
-| `gen_promB3_spans.py` | What is in the spans `0xF0D4D2+454`, `0xF0D7E2+442`, `0xF2B422+338`, `0xF2BB0D+523`, and what says so? Emits them as typed data and checks every framing claim. | `python3 notes/lane_promB3/gen_promB3_spans.py --selftest` (46 checks, 0 failures)<br>`--render` prints `Bitmap_F0D5BF_80x24` as pixels<br>`--show` prints the assembly<br>`--splice` writes it into `prom_b/wsa1_prom_b.s` |
+| `gen_promB3_spans.py` | What is in the spans `0xF0D4D2+454`, `0xF0D7E2+442`, `0xF2B422+338`, `0xF2BB0D+523`, and what says so? Emits them as typed data and checks every framing claim. | `python3 notes/lane_promB3/gen_promB3_spans.py --selftest` (71 checks, 0 failures)<br>`--render` prints `Bitmap_F0D5BF_80x24` as pixels<br>`--show` prints the assembly<br>`--splice` writes it into `prom_b/wsa1_prom_b.s` |
 
 ## What the numbers mean
 

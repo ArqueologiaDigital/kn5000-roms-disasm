@@ -63,6 +63,28 @@ def rom():
     return open(os.path.join(ROOT, ROM), "rb").read()
 
 
+def rom_a():
+    return open(os.path.join(ROOT, "original_ROMs/wsa1_prom_a.ic12"), "rb").read()
+
+
+# Every prom_a address quoted in the headers this module emits, as
+# (address, opcode, immediate).  0x45/0x44/0x46 are `ld XIY/XIX/XIZ,imm32`.
+# A comment that cites an address nobody re-checks is how stale prose starts.
+PROM_A_CITATIONS = [
+    (0xF99BDB, 0x45, 0x00F0D942), (0xF99CFA, 0x45, 0x00F0D96E),
+    (0xF99C61, 0x45, 0x00F0D7E2), (0xF99C66, 0x44, 0x00F0D82E),
+    (0xF99C71, 0x44, 0x00F0D81B),
+    (0xF99C1F, 0x45, 0x00F0D99A), (0xF99C49, 0x45, 0x00F0D99A),
+    (0xF928C3, 0x45, 0x00F2B42F), (0xF928CC, 0x45, 0x00F2B43A),
+    (0xF933D4, 0x45, 0x00F2B4C5), (0xF93433, 0x45, 0x00F2B4C5),
+    (0xF93E64, 0x45, 0x00F2B4C5), (0xF93EC3, 0x45, 0x00F2B4C5),
+    (0xF934CB, 0x46, 0x00F2B510), (0xF93EF0, 0x46, 0x00F2B510),
+    (0xF92A06, 0x45, 0x00F2BB0D), (0xF92A36, 0x45, 0x00F2BB0D),
+    (0xF929D1, 0x44, 0x00F2BB0D), (0xF929F8, 0x44, 0x00F2BB0D),
+    (0xF92A2D, 0x44, 0x00F2BB0D), (0xF92A4A, 0x44, 0x00F2BB0D),
+]
+
+
 def at(b, a, n):
     return b[a - B_BASE:a - B_BASE + n]
 
@@ -578,6 +600,16 @@ def main():
                             (0xF2B422, 0xF2B574, [13, 11, 11, 128, 11, 64, 40, 60]),
                             (0xF2BB0D, 0xF2BD18, [11, 512])):
             check("0x%06X pieces sum to the span" % s, sum(parts), e - s)
+        # every prom_a address the emitted headers cite
+        a = rom_a()
+        for addr, opc, imm in PROM_A_CITATIONS:
+            o = addr - 0xF80000
+            check("prom_a 0x%06X `ld X%s,0x%08X`" % (addr, {0x45: "IY", 0x44: "IX", 0x46: "IZ"}[opc], imm),
+                  (a[o], int.from_bytes(a[o + 1:o + 5], "little")), (opc, imm))
+        t = 0xF8E9C6 - 0xF80000
+        for svc, h in ((3, 0xF8EDB4), (7, 0xF8F130)):
+            check("swi 7 service %d handler" % svc,
+                  "0x%06X" % int.from_bytes(a[t + svc * 4:t + svc * 4 + 4], "little"), "0x%06X" % h)
         print("FAILURES: %d" % len(FAIL))
         return 1 if FAIL else 0
 
