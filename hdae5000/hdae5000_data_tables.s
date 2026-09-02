@@ -26906,13 +26906,16 @@ HDAE5000_Lang_Codes:	; 0x2E5B80
 	.asciz "}"
 	.asciz "}"
 	.asciz "D"
-	.byte 0xaa, 0x00, 0xb0
-	ei	16
-	reti
-	.byte 0xa2, 0x05
-	pushw bc
-	push	sr
-	.byte 0xc5, 0x02, 0x3b, 0x05
+	; 0x2E5BD2-0x2E5BDF (14 B): CONFIRMED DATA, not code -- was disassembled as
+	; "ei 16 / reti / pushw bc / push sr" chained by no label and reached by no
+	; call or jump anywhere in the tree (checked across every .s file).  It sits
+	; between two single-character .asciz entries above and the .asciz "rb" /
+	; "TESTTEST.TLX" pair below, both of which ARE genuine lda_24 targets
+	; (hdae5000_ui_display.s:3799-3800) -- i.e. real string constants read as
+	; addresses immediately either side of this span, with nothing pointing
+	; inside it.  Left as an undecoded numeric field; a plain .byte run rather
+	; than fake mnemonics is the honest way to spell "unknown data".
+	.byte 0xaa, 0x00, 0xb0, 0x06, 0x10, 0x07, 0xa2, 0x05, 0x29, 0x02, 0xc5, 0x02, 0x3b, 0x05
 	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 	.asciz "TESTTEST.TLX"
