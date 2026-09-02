@@ -757,6 +757,14 @@ def emit():
     return out
 
 
+LABEL_RE = re.compile(r'^([A-Za-z_][A-Za-z0-9_]*):')
+
+
+def block_labels(lines):
+    return set(m.group(1) for m in
+               (LABEL_RE.match(l) for l in lines) if m)
+
+
 def splice():
     spans, _t = check_record()
     ok, msg = verify(spans)
@@ -776,6 +784,25 @@ def splice():
             j = i
             while j < len(src) and src[j] != end:
                 j += 1
+            # ★ GUARD (added 2026-09-02, lane promB2).  This branch replaces a
+            # WHOLE COVER-R1 block with this file's own emission.  The
+            # "nothing was touched" guard below collects converted lines from
+            # OUTSIDE the markers, so it is blind to work another pass spliced
+            # INSIDE one -- and reverting such work to `.incbin` leaves the byte
+            # gate green, so nothing else would notice either.  0xF0033F-
+            # 0xF007FF and 0xF0199E-0xF01E71 are exactly that case today.
+            # Refuse rather than clobber: a label present in the block but not
+            # in the replacement is work this file did not write.
+            lost = sorted(block_labels(src[i:j + 1]) - block_labels(byspan[lo][1]))
+            if lost and "--force" not in sys.argv:
+                raise SystemExit(
+                    "refusing to re-splice 0x%06X-0x%06X: the block holds %d "
+                    "label(s) this file's emission does not write, so replacing "
+                    "it would silently discard them -- %s%s.  Re-derive this "
+                    "file's span record against the CURRENT source, or pass "
+                    "--force if the loss is meant."
+                    % (lo, hi, len(lost), ", ".join(lost[:8]),
+                       " ..." if len(lost) > 8 else ""))
             out += byspan[lo][1]
             done.add(lo)
             i = j + 1
