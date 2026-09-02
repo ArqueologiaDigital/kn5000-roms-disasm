@@ -439,13 +439,29 @@ say("    here reads the wave ROM, so 'waveform' is the register's role, not a")
 say("    measured spectrum.")
 
 # ---------------------------------------------------------------------------
+# What scripts/analysis/gen_prom_d_asm.py was audited against.  If any of this
+# moves, the emitter refuses rather than writing prose the image no longer
+# supports.
+AUDITED_DRAWBAR = dict(
+    stride=6, radix=9, ncombo=729, nwave=959, wave_lo=0x8A, wave_hi=0x448,
+    mask=0x0FFF, sel_mask=0x30, bass_fold=24, tones=[88, 89],
+    pool=[(0x44B26, 4374), (0x45C3C, 4374), (0x46D52, 24)],
+    coarse=[-12, 12, 7, 0],
+)
+
 DRAWBAR = dict(
     desc_at=DESC_AT, pool_at=POOL_AT, block_end=BLOCK_END,
     descs=DESCS, pool=POOL, stride=STRIDE, radix=C9, ncombo=NCOMBO,
     mask=MASK, sel_mask=SEL_MASK, elems=ELEMS,
     tones=DRAWBAR_TONES, wave_lo=LO, wave_hi=HI, nwave=len(WAVES),
     pitch_vals=PITCH, bass_fold=BASS,
+    coarse=[r["coarse"] for r in ELEMS[:4]],
 )
+
+AUDIT = dict(stride=STRIDE, radix=C9, ncombo=NCOMBO, nwave=len(WAVES),
+             wave_lo=LO, wave_hi=HI, mask=MASK, sel_mask=SEL_MASK,
+             bass_fold=BASS, tones=list(DRAWBAR_TONES), pool=list(POOL),
+             coarse=[r["coarse"] for r in ELEMS[:4]])
 
 if __name__ == "__main__":
     say("")

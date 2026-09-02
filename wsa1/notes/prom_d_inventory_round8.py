@@ -271,6 +271,10 @@ R5 = _load("_r8_r5", "notes/prom_d_understanding_round5.py")
 R6 = _load("_r8_r6", "notes/prom_d_understanding_round6.py")
 R7 = _load("_r8_r7", "notes/prom_d_finish_round7.py")
 R2 = _load("_r8_r2", "notes/prom_d_structures_round2.py")
+# ⚠ WAVE 14.  Slot +0x70's pool objects are no longer positional; the audit
+# needs the reader-derived geometry to grade them, and takes it from the one
+# place that measures it rather than re-typing 6 and 9.
+R14 = _load("_r8_r14", "notes/prom_d_drawbar_chain.py")
 R4 = _load("_r8_r4", "notes/prom_d_understanding_round4.py")
 sys.stdout = _stdout
 sys.argv = _ARGV
@@ -1395,7 +1399,10 @@ _AUDIT_GRADES = collections.Counter()
 # 779 -> 771.  Every move of this pair so far has been a PROMOTION, and the
 # constant is updated in the same commit as the rule that moved it, which is
 # what stops the assembly quoting a number no measurement produces any more.
-AUDITED_R9 = {"DERIVED": 2894, "ADDRESS": 771, "REFUTED": 0, "RESIDUE": 0}
+# ⚠ RE-ANCHORED IN WAVE 14: three labels moved ADDRESS -> DERIVED when
+# notes/prom_d_drawbar_chain.py found slot +0x70's reader.  Was
+# {"DERIVED": 2894, "ADDRESS": 771, ...}.
+AUDITED_R9 = {"DERIVED": 2897, "ADDRESS": 768, "REFUTED": 0, "RESIDUE": 0}
 
 
 def boundary_stem(names, lim=4):
@@ -1711,6 +1718,31 @@ def audit_labels(rename=None):
                             % (r["ecount"], r["esize"]))
                 put(l.name, "DERIVED" if ok else "REFUTED", "descriptor pool object",
                     "descriptor %d's own LE32 offset 0x%05X; %s" % (i, off or 0, join))
+                done = True
+                break
+            m = re.match(r"^(\d{3})_ComboTable$", suf)
+            if m:
+                # ★ WAVE 14.  These three were graded ADDRESS with "role NOT
+                # established" until notes/prom_d_drawbar_chain.py found their
+                # reader.  The offset is still the descriptor's own LE32; what
+                # is DERIVED now is the geometry, and it comes from prom_c:
+                # `mul WA,0x0006` at 0xFA82C2 is the record stride and
+                # sub_FC355B's `mul BC,0x0051`/`mul IY,0x0009` is the base-9
+                # index whose space is exactly the 729-record objects' length.
+                i = int(m.group(1))
+                off = recs[i][2]
+                nrec = (l.end - a) // R14.DRAWBAR["stride"]
+                ok = (i < H and off and a == off
+                      and (l.end - a) % R14.DRAWBAR["stride"] == 0)
+                put(l.name, "DERIVED" if ok else "REFUTED",
+                    "descriptor pool object",
+                    "descriptor %d's own LE32 offset 0x%05X; %d records of %d B "
+                    "(prom_c 0xFA82C2), index space %s"
+                    % (i, off or 0, nrec, R14.DRAWBAR["stride"],
+                       "%d^3 = %d (sub_FC355B)"
+                       % (R14.DRAWBAR["radix"], R14.DRAWBAR["ncombo"])
+                       if nrec == R14.DRAWBAR["ncombo"]
+                       else "0..%d, raw (prom_c 0xFA82CC)" % (nrec - 1)))
                 done = True
                 break
             m = re.match(r"^Pool_([AB])(\d{3})$", suf)

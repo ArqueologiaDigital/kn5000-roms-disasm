@@ -1332,8 +1332,25 @@ def q9():
           str(perc))
     nameless = build_nameless_reasons()
     refused = [k for k, v in nameless.items() if v[0] == "NAMELESS-REFUSED"]
-    check("Q9c  slot +0x70's three pool objects are still framed and still refused",
-          len(refused) == 3, ", ".join(sorted(refused)))
+    # ⚠ CORRECTED IN WAVE 14.  This check asserted that slot +0x70's three pool
+    # objects are STILL framed and STILL refused, and it was right for five
+    # rounds: nothing had found a reader that says what they are.
+    # notes/prom_d_drawbar_chain.py found one -- Voice_StageRegs_0040_B, whose
+    # `mul WA,0x0006` at 0xFA82C2 and base-9 index at 0xFC355B make each object
+    # a 9x9x9 drawbar-combination table -- so the refusal is LIFTED, and the
+    # check is rewritten to say so rather than left to fail.  It stays
+    # falsifiable: the objects must be present under their derived names.
+    # ⚠ AND THE REFUSAL IS ROUND 6'S, FROZEN.  R6.classify() runs over the
+    # ROUND-5 denominator, which by design does not move when a later wave
+    # promotes a label, so these three stay "refused" there for ever -- that is
+    # a fact about round 6, not about today's file.  What today's file says is
+    # checked separately, against the emitted labels.
+    combo = [l.name for l in LABS if l.name.endswith("_ComboTable")]
+    check("Q9c  slot +0x70's three pool objects are NAMED TODAY (round 6 still "
+          "refuses them, on its frozen round-5 set)",
+          len(refused) == 3 and len(combo) == 3,
+          "round 6: %d refused; today: %s"
+          % (len(refused), ", ".join(sorted(combo))))
     say("")
     say("  ★ AND THE ONE REFUSAL THIS ROUND COULD HAVE WEAKENED AND DID NOT: the 161")
     say("    perc catalogue names still transfer through maps that agree in only")

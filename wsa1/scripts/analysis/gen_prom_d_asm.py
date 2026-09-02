@@ -182,6 +182,30 @@ if PERC_OVERLAP != _R5.AUDITED_PERC:
              "audited as %s.  Re-audit with notes/prom_d_understanding_round5.py."
              % (PERC_OVERLAP, _R5.AUDITED_PERC))
 # ---------------------------------------------------------------------------
+# ★ WAVE 14.  What the +0x70 pools ARE.  notes/prom_d_drawbar_chain.py answers
+# the question rounds 2-5 all left open, and it answers it FROM THE READER: the
+# 6-byte stride is prom_c's literal `mul WA,0x0006` at 0xFA82C2 and the 729 is
+# its base-9 index `n2*81 + n1*9 + n0` at 0xFC355B, over three 0..8 nibbles that
+# sub_FC28B5 lifts out of the element block at 0xFC28F3/0xFC28FA.  Nothing here
+# is a stride found in the bytes.  This emitter refuses to run if any of it
+# moved.
+# ---------------------------------------------------------------------------
+_spec14 = _ilu.spec_from_file_location(
+    "prom_d_drawbar_chain",
+    os.path.join(ROOT, "notes", "prom_d_drawbar_chain.py"))
+_R14 = _ilu.module_from_spec(_spec14)
+_saved_argv, sys.argv = sys.argv, ["prom_d_drawbar_chain", "--quiet"]
+try:
+    _spec14.loader.exec_module(_R14)
+finally:
+    sys.argv = _saved_argv
+DRAWBAR = _R14.DRAWBAR
+if _R14.AUDIT != _R14.AUDITED_DRAWBAR:
+    sys.exit("REFUSING TO EMIT: the slot +0x70 drawbar chain is now %s; audited "
+             "as %s.  Re-audit with notes/prom_d_drawbar_chain.py."
+             % (_R14.AUDIT, _R14.AUDITED_DRAWBAR))
+
+# ---------------------------------------------------------------------------
 # ★ WAVE 7 ROUND 6.  notes/prom_d_understanding_round6.py classifies ALL 614 of
 # the labels round 5 left framed, and finds that 301 of them CAN be named after
 # all -- by a mechanism round 5 ran and got a zero from.  Round 5 asked whether a
@@ -2605,9 +2629,12 @@ DESC_HDR = [
     "    descriptor  +0x00  1 B    tag",
     "                +0x01  LE32   file offset of part A   (0 = none)",
     "                +0x05  LE32   file offset of part B",
-    "                +0x09  1 B    unidentified",
-    "                +0x0A  LE16   unidentified",
-    "                +0x0C  LE16   unidentified",
+    "                +0x09  1 B    unidentified -- sub_FA73EB arg 2 (0xFA818C)",
+    "                +0x0A  LE16   unidentified -- sub_FA73EB arg 3 (0xFA818C)",
+    "                +0x0C  LE16   ★ the BASE PITCH: sub_FA814C reads it with",
+    "                               `ld DE,(XWA+0x0C)` at 0xFA8160 through",
+    "                               voice[+0x1F] and the sum lands in",
+    "                               voice[+0x06], the pitch.  WAVE 14.",
     "",
     "Every non-null offset lands past the array and inside the block, and the",
     "SMALLEST of them is exactly where the array ends -- that is what proves the",
@@ -2619,24 +2646,123 @@ DESC_HDR = [
     "⚠ ROUND 2 ENDED HERE with 'NO field inside a descriptor, a part A or a part",
     "B is identified'.  That sentence is now WRONG for three of them and is",
     "corrected rather than left standing: see THE INDEX CHAIN below, which",
-    "identifies tag bit 7 and the ROLE of both offsets.  It is still true of the",
-    "descriptor's +0x09/+0x0A/+0x0B/+0x0C and of every byte inside an element.",
+    "identifies tag bit 7 and the ROLE of both offsets.  ⚠ AND CORRECTED AGAIN IN",
+    "WAVE 14: +0x0C is the base pitch (above), and at slot +0x70 every field of",
+    "an element is placed as well.  What is still unidentified is +0x09/+0x0A,",
+    "and every byte of an element at slots +0x30 and +0x38.",
 ]
 
 
 def chain_hdr(slot):
     """The round-4 index chain, stated with the counts that prove it."""
     if slot not in CHAIN:
+        d = DRAWBAR
+        e = d["elems"][:4]
         return ["",
-                "⚠ THE INDEX CHAIN DOES NOT REACH THIS BLOCK.  Its descriptors carry",
-                "no part-A offset at all (all four are 0), so the curve -> stage 2 ->",
-                "element chain that names the pool objects at slots +0x30 and +0x38",
-                "cannot even start here.  These pool objects therefore keep a",
-                "POSITIONAL name.  notes/prom_d_understanding_round4.py Q4a.",
-                "⚠ RE-MEASURED, NOT RESTATED, in round 5 Q4a: through round 2's own",
-                "segmentation this block still has 0 part-A objects, so the refusal",
-                "is not a sentence that was copied forward.  It stays a refusal, and",
-                "raising prom_d's content score is not a reason to weaken it."]
+                "★★ WAVE 14 -- WHAT THESE POOLS ARE.  This banner used to say THE",
+                "INDEX CHAIN DOES NOT REACH THIS BLOCK and leave the objects with a",
+                "positional name and a 'role NOT established'.  That was true of the",
+                "curve -> stage 2 -> element chain, which needs a part A and finds",
+                "four nulls -- and it was the wrong chain.  This block has a DIFFERENT",
+                "reader and a different chain, and every step of it below is an",
+                "instruction operand re-decoded from prom_c's ROM at the address",
+                "cited.  notes/prom_d_drawbar_chain.py, %d checks with two nulls."
+                % 65,
+                "",
+                "  A pool object is a %d x %d x %d TABLE OF DRAWBAR COMBINATIONS:"
+                % (d["radix"], d["radix"], d["radix"]),
+                "  %d records of %d bytes, one per setting of THREE drawbars of %d"
+                % (d["ncombo"], d["stride"], d["radix"]),
+                "  positions each, giving the composite waveform, the level trim and",
+                "  the octave transpose for that combination.",
+                "",
+                "  stage 1  tone record +0x10 bits 7:6 == 0x40 marks a DRAWBAR tone.",
+                "           0xFB47F3 `ld A,(XIY+0x10)` / `and A,0xC0` picks the arm in",
+                "           sub_FB47C4; MidiNote_OnByPartMode tests the same field at",
+                "           0xFB3877 and routes 0x40 to VoiceRegs_Stage_B.  Exactly %d"
+                % len(d["tones"]),
+                "           of the 274 tone records carry it: %s, the two Drawbar"
+                % ", ".join("0x%02X" % t for t in d["tones"]),
+                "           records immediately above this block.",
+                "  stage 2  each of the tone's four element blocks carries THREE",
+                "           NIBBLES at +0x02/+0x03.  sub_FC28B5 packs them --",
+                "           0xFC28F3 `ld C,(XWA+0x02)`, 0xFC28FA `ld C,(XWA+0x03)` /",
+                "           `sll 8`, 0xFC2906 `and DE,0x%04X` -- into RAM 0x00DC0E +"
+                % d["mask"],
+                "           23*part + 2*element, which is the LIVE drawbar setting.",
+                "           All %d nibbles in both tones are 0..%d, the radix; over"
+                % (3 * len(e) * len(d["tones"]), d["radix"] - 1),
+                "           ordinary elements the same test passes only 57.7%.",
+                "  stage 3  bits 5:4 of that SAME byte +0x03 pick one of the four",
+                "           descriptors -- 0xFC2983 `ld C,(XWA+0x03)` / `and C,0x%02X` /"
+                % d["sel_mask"],
+                "           `srl 4,C` in DrawbarPreset_GetDescriptor, which multiplies",
+                "           by the directory's own stride word +0xEC (14) and parks the",
+                "           descriptor where voice[+0x1F] is loaded from (0xFB2078,",
+                "           0xFB20F4).  Element i selects descriptor i, in both tones.",
+                "  stage 4  Voice_StageRegs_0040_B takes the descriptor's PART B alone",
+                "           -- 0xFA8278 `ld XBC,(XDE+0x1F)`, 0xFA827B `ld XWA,(XBC+0x05)`,",
+                "           0xFA8281 `add XIX,(0x00D7ED)` -- converts the three nibbles",
+                "           to a linear index with sub_FC355B's base %d,"
+                % d["radix"],
+                "           `mul BC,0x0051` (81) at 0xFC356E and `mul IY,0x0009` at",
+                "           0xFC357D, i.e. n2*81 + n1*9 + n0, and indexes the table with",
+                "           `mul WA,0x0006` at 0xFA82C2 and again at 0xFA82D0.",
+                "",
+                "★ THE STRIDE AND THE RADIX ARE THE READER'S, NOT THE POOL'S.  %d has"
+                % (d["ncombo"] * d["stride"]),
+                "%d divisors and any of them would reproduce these bytes, so a stride"
+                % 15,
+                "swept out of the data would have proved nothing.  6 and 9 are `ld`",
+                "and `mul` operands in prom_c.",
+                "",
+                "★ AND THE CODOMAIN CLOSES, the way the +0x30 chain's joins do: the",
+                "wave field of the two %d-record tables takes EXACTLY the contiguous"
+                % d["ncombo"],
+                "interval [0x%03X,0x%03X] -- %d values, no gap, nothing outside, and the"
+                % (d["wave_lo"], d["wave_hi"], d["nwave"]),
+                "two tables partition it (0x%03X..0x%03X, then 0x%03X..0x%03X)."
+                % (d["wave_lo"], 0x27C, 0x27D, d["wave_hi"]),
+                "",
+                "★ KEYBOARD FOLDBACK, and it lands on the right elements.  prom_c",
+                "folds the drawbar digits before the base-%d conversion: sub_FC3407"
+                % d["radix"],
+                "(element 0) merges the two low digits BELOW note %d -- 0xFC3427"
+                % d["bass_fold"],
+                "`ld IY,(XWA+0x3BCF)` / `srl 8` is the note number, 0xFC3440",
+                "`cp HL,0x0024` is the threshold -- while sub_FC3480 (elements 1 and 2)",
+                "folds the HIGH digit down in 12-semitone steps above note 96",
+                "(0xFC34AD `sub BC,0x000C`, 0xFC34BC `cp DE,0x0054`).  The elements'",
+                "own coarse transposes are %s semitones: the element that folds"
+                % ", ".join("%+d" % c for c in d["coarse"]),
+                "at the BASS end is the one transposed DOWN and the two that fold at",
+                "the TREBLE end are the two transposed UP.  Nothing arranged that.",
+                "",
+                "★ AND THE TABLE PRECOMPUTES THE SAME FOLD.  Field +0x04 is non-zero",
+                "in exactly the cells whose low digit is 0, and only ever 0x0C00 or",
+                "0x1800 = one or two octaves in the pitch word's note<<8 units.",
+                "",
+                "★ THE LEVEL TRIM IS A MONOTONE MIXING SURFACE.  Read signed, as",
+                "0xFAB66B `exts WA` reads it, descriptor 0's cube is non-decreasing on",
+                "ALL 243 axis-parallel lines and descriptors 1/2's on 164 with a worst",
+                "backward step of 3 in a 128-wide range -- rounding, not structure.",
+                "Null: the wave field is monotone on 240 of the same 486 lines.",
+                "",
+                "⚠ WHAT IS STILL NOT ESTABLISHED.  That the nine values are 'the nine",
+                "Hammond drawbars': what is measured is four elements, transposes",
+                "%s, three 0..%d nibbles each.  The FOOTAGE reading"
+                % (", ".join("%+d" % c for c in d["coarse"]), d["radix"] - 1),
+                "(-12 = 16', 0 = 8', +7 = 5 1/3', +12 = 4') is an inference from the",
+                "intervals and is marked as one.  Nor what descriptor 3's %d-record"
+                % (d["pool"][2][1] // d["stride"]),
+                "table selects: its element takes prom_c's h >= 3 arm at 0xFA82CC,",
+                "where the slot word is used RAW with no base-%d conversion, so an"
+                % d["radix"],
+                "index space of 0..%d is exactly the right size and nothing says what"
+                % (d["pool"][2][1] // d["stride"] - 1),
+                "the four choices are.  Nor descriptor +0x09/+0x0A -- arguments 2 and 3",
+                "of sub_FA73EB at 0xFA818C.  +0x0C IS placed: 0xFA8160",
+                "`ld DE,(XWA+0x0C)` makes it the base pitch."]
     rows = CHAIN[slot]
     n = len(rows)
     e6 = sum(1 for r in rows.values() if r["esize"] == 6)
@@ -2781,9 +2907,18 @@ def chain_hdr(slot):
 def desc_hdr(slot):
     """DESC_HDR plus the one line that differs per block: is it READ?"""
     if _R3.readers(slot):
-        return DESC_HDR + ["⚠ And no field is identified even though the block "
-                           "IS reached: see the Evidence",
-                           "line below, which pins the ARRAY STRIDE and nothing else."]
+        if slot in CHAIN:
+            return DESC_HDR + ["⚠ And no field is identified even though the block "
+                               "IS reached: see the Evidence",
+                               "line below, which pins the ARRAY STRIDE and nothing "
+                               "else."]
+        # ★ WAVE 14: at slot +0x70 the reader DOES say what the fields are, and
+        # the sentence above -- written when it did not -- would now be false.
+        return DESC_HDR + ["★ AND AT THIS SLOT THE READER SAYS WHAT THE FIELDS "
+                           "ARE.  The Evidence line",
+                           "below pins the ARRAY STRIDE; THE INDEX CHAIN further "
+                           "down pins the element",
+                           "stride, the index, and every field of an element."]
     return DESC_HDR + ["⚠ And no prom_c instruction that reads THIS block has been "
                        "found; the Evidence",
                        "note below states what that leaves standing and what it does not."]
@@ -2794,6 +2929,8 @@ def desc_pool_labels(slot):
     H, P, recs = DESC[slot]
     lab = {}
     pts = sorted({o for t, o1, o2, b9, w10, w12 in recs for o in (o1, o2) if o})
+    HERE_END = NEXT[S(slot)]
+    nxt = {pts[k]: pts[k + 1] for k in range(len(pts) - 1)}
     owner = {}
     for i, (t, o1, o2, b9, w10, w12) in enumerate(recs):
         if o1:
@@ -2807,12 +2944,24 @@ def desc_pool_labels(slot):
         shared = sum(1 for _t, a1, a2, _b, _w, _v in recs
                      if (a1 if kind == "A" else a2) == p)
         if ch is None or i not in ch:
-            # ⚠ slot +0x70 has no part-A object at all, so round 4's chain cannot
-            # start there.  Those objects keep a POSITIONAL name and say so.
-            note = "part %s of descriptor %d -- role NOT established" % (kind, i)
+            # ★ WAVE 14.  Slot +0x70 has no part-A object at all, so round 4's
+            # curve -> stage 2 -> element chain cannot start there -- and for
+            # three rounds that left these objects with a POSITIONAL name and a
+            # "role NOT established".  They are not positional any more: the
+            # reader is Voice_StageRegs_0040_B, which takes part B alone, and
+            # notes/prom_d_drawbar_chain.py derives the whole shape from it.
+            n = (nxt.get(p, HERE_END) - p) // DRAWBAR["stride"]
+            if n == DRAWBAR["ncombo"]:
+                note = ("descriptor %d: %d records of %d B = %d^3 drawbar "
+                        "settings, 0..%d each"
+                        % (i, n, DRAWBAR["stride"], DRAWBAR["radix"],
+                           DRAWBAR["radix"] - 1))
+            else:
+                note = ("descriptor %d: %d records of %d B -- element %d takes "
+                        "prom_c's h >= 3 arm" % (i, n, DRAWBAR["stride"], i))
             if shared > 1:
                 note += " (shared by %d descriptors)" % shared
-            lab[p] = ("%s_Pool_%s%03d" % (base, kind, i), note)
+            lab[p] = ("%s_%03d_ComboTable" % (base, i), note)
             continue
         r = ch[i]
         if kind == "A":
@@ -2876,6 +3025,45 @@ def mk_desc_block(slot, extra):
             W("")
             W("; %s -- file 0x%05X..0x%05X (%d bytes)" % (name, p, e - 1, e - p))
             W("; %s" % note)
+            if name.endswith("_ComboTable"):
+                d = DRAWBAR
+                n = (e - p) // d["stride"]
+                if n == d["ncombo"]:
+                    W("; index = n2*%d + n1*%d + n0, each digit 0..%d -- prom_c's"
+                      % (d["radix"] ** 2, d["radix"], d["radix"] - 1))
+                    W("; sub_FC355B (`mul BC,0x0051` 0xFC356E, `mul IY,0x0009`")
+                    W("; 0xFC357D), the digits being the element block's +0x02/+0x03")
+                    W("; nibbles after keyboard foldback.")
+                else:
+                    W("; index arrives RAW from the slot record -- prom_c takes the")
+                    W("; h >= 3 arm at 0xFA82CC, with no base-%d conversion, so the"
+                      % d["radix"])
+                    W("; index space is 0..%d.  What the %d choices ARE is NOT"
+                      % (n - 1, n))
+                    W("; established.")
+                W(";")
+                W("; struct DrawbarCombo {           /* %d B; stride from prom_c"
+                  % d["stride"])
+                W(";                                    `mul WA,0x0006` 0xFA82C2 */")
+                W(";     uint16_t wave;              /* +0x00 -> RAM 0x00D760 ->")
+                W(";                                    TG register chan+0x0040;")
+                W(";                                    4-bit bank | 12-bit payload */")
+                W(";     uint8_t  level_override;    /* +0x02 bit 7 = present, bits")
+                W(";                                    6..4 = level; read by")
+                W(";                                    Voice_StageLevel_Reg0080 at")
+                W(";                                    0xFA7DE5.  0 in every record")
+                W(";                                    of this block. */")
+                W(";     int8_t   level_trim;        /* +0x03 sign-extended at")
+                W(";                                    0xFAB66B and summed into")
+                W(";                                    voice[+0x0D] -> register")
+                W(";                                    0x0080 */")
+                W(";     uint16_t pitch_offset;      /* +0x04 -> RAM 0x005A4F, which")
+                W(";                                    Voice_PitchAddZoneOffset_AB")
+                W(";                                    adds to the note pitch at")
+                W(";                                    0xFA8330; 0x0C00 = 12")
+                W(";                                    semitones */")
+                W("; };")
+                W("; notes/prom_d_drawbar_chain.py Q2, Q3, Q7.")
             if ch is not None and name.endswith("_CurveStepToElem"):
                 r = ch[int(name.split("_")[-2])]
                 sharers = sorted(k for k, q in ch.items() if q["a_at"] == p)
@@ -3272,11 +3460,15 @@ region(S(0x38), 0x446B4, mk_desc_block(0x38, [
 ]))
 region(S(0x70), NEXT[S(0x70)], mk_desc_block(0x70, [
     "A DIFFERENT record class: tag 0x92 in all four, part A null in all four, and",
-    "the four part-B offsets name only THREE objects -- 4374, 4374 and 24 bytes,",
-    "the first two being 729 rows of 6.  A column census over the first object",
-    "picks period 6 (3 near-constant columns) over 4, 5, 7 and 8 (0 each).",
-    "⚠ Tag 0x92 has bit 7 SET yet every object is a multiple of 6, so the bit-7",
-    "rule stated on slot +0x30 is NOT claimed for this block.",
+    "the four part-B offsets name only THREE objects -- %d, %d and %d bytes,"
+    % (DRAWBAR["pool"][0][1], DRAWBAR["pool"][1][1], DRAWBAR["pool"][2][1]),
+    "the first two being %d rows of %d.  The row size is NOT a period picked out"
+    % (DRAWBAR["ncombo"], DRAWBAR["stride"]),
+    "of the bytes: it is `mul WA,0x0006` in prom_c's Voice_StageRegs_0040_B, the",
+    "routine that reads these objects.  See THE INDEX CHAIN below.",
+    "★ Tag 0x92 has bit 6 CLEAR and bit 7 SET, which is the two-bit table's",
+    "6-byte row -- so the element size agrees with the reader as well.  (The",
+    "one-bit rule stated on slot +0x30 predicts 8 here and is still not claimed.)",
 ]))
 region(0x2B2AC, S(0x74), emit_drumkits)
 region(S(0x74), NEXT[S(0x74)], mk_notemap(0x74))
@@ -3334,6 +3526,33 @@ HEADER = '''\t.text
 ; how the hardware reads it.  (⚠ the older argument from bank statistics is kept
 ; in prom_d/prom_d.ld but DOWNGRADED there: round 3 Q8 shows it does not
 ; discriminate -- prom_c is a code ROM and scores like prom_d on it.)
+;
+; ★ "DATA ONLY" WAS ATTACKED ON 2026-09-02 AND HELD.  A falsification lane took
+; the claim that this image contains no code as something to BREAK, because the
+; way it could be false is invisible to the byte gate: code typed as data
+; re-assembles to the same bytes.  55 checks,
+; notes/prom_cd_falsification_2026_09_02.py, summarised in
+; notes/FINDINGS-prom_cd-falsification.md:
+;
+;   * this image IS on a CPU bus -- wsa1.cpp maps it .rom() in CPU 2's program
+;     space -- so "no code" is a real claim and not a tautology;
+;   * none of prom_c's 33 vectors lands in it (null: all 33 land in prom_c);
+;   * exactly ONE prom_c instruction literal falls in its window, the base
+;     itself (null: the same scanner finds many in two other windows);
+;   * prom_c's BYTES hold no pointer table into it -- 741 LE32 words in its
+;     window against 901 and 675 in windows with NO DEVICE, and 1977 in prom_c's
+;     own, so it is at address-space noise while prom_c is enriched;
+;   * llvm-mc emits ZERO instruction statements from this source and 76,647 from
+;     prom_c's;
+;   * and its BYTES do not behave like code: branch-target coherence normalised
+;     by boundary density scores 0.29-1.16 here, against 0.81-1.34 for prom_c
+;     data and 2.42-3.09 for prom_c code.  Splicing 8 KiB of real prom_c code in
+;     scores 2.58, which is how the test is shown to be able to fail.
+;
+; ⚠ THE REACH OF THAT LAST TEST IS ABOUT 2 KiB.  A shorter routine would evade
+; it, and file 0x26000-0x2BFFF (ToneDB_EnvDescTable) has too few branches in its
+; decode to be scored at all.  Those 24 KiB are the part of this image least
+; attacked.
 ;
 ; ⚠ What is still open is which PHYSICAL PART this is.  The base fixes the
 ; address the firmware reads it at, not the device.
