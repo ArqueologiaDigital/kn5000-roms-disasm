@@ -71,6 +71,8 @@ RUN
 rebuilt ROM sizes.
 """
 import argparse
+import bisect
+import collections
 import io
 import json
 import os
@@ -132,6 +134,7 @@ def flatten(key):
     size = os.path.getsize(os.path.join(ROOT, img["rom"]))
     kinds = bytearray(size)
     starts = bytearray(size)
+    instrs = []                 # [(offset, nbytes, statement text)] in emission order
     labels, order, pos = {}, [], 0
     for line in out.stdout.split("\n"):
         s = line.strip()
@@ -144,6 +147,13 @@ def flatten(key):
                 starts[pos] = 1
             for i in range(pos, min(pos + n, size)):
                 kinds[i] = 1
+            # ⚠ An operand that is a SYMBOL shows up in -show-encoding as an
+            # `A` placeholder byte.  Recording that is what makes it safe to
+            # rewrite symbols when porting: without it, `ldb c, 210` gets its
+            # `c` replaced by the address of a v10 label that happens to be
+            # called `c`.  (It exists.  It cost one debugging round.)
+            reloc = "A" in enc.group(1)
+            instrs.append((pos, n, line.split(";")[0].rstrip(), reloc))
             pos += n
             continue
         m = LABEL.match(s)
@@ -179,7 +189,7 @@ def flatten(key):
         raise SystemExit("%s: flatten consumed %d bytes, ROM is %d -- refusing "
                          "to report from an unreconciled walk" % (key, pos, size))
     order.sort()
-    _FLAT[key] = (kinds, starts, labels, order, size)
+    _FLAT[key] = (kinds, starts, labels, order, size, instrs)
     return _FLAT[key]
 
 
@@ -254,11 +264,11 @@ def label_spans(order, size):
 
 def adjudicate(nm, off, n, twin_keys, thresh):
     """-> dict verdict for one v7 span."""
-    k7, s7, l7, o7, sz7 = flatten("v7")
+    k7, s7, l7, o7, sz7 = flatten("v7")[:5]
     rom7 = ROMS["v7"]
     chosen, why = None, "no twin symbol"
     for tk in twin_keys:
-        kt, st, lt, ot, szt = flatten(tk)
+        kt, st, lt, ot, szt = flatten(tk)[:5]
         if nm not in lt:
             continue
         idx = [i for i, (o, x) in enumerate(ot) if x == nm]
@@ -279,7 +289,7 @@ def adjudicate(nm, off, n, twin_keys, thresh):
     if chosen is None:
         return dict(name=nm, off=off, n=n, verdict="REFUSED", why=why)
     tk, toff = chosen
-    kt, st, lt, ot, szt = flatten(tk)
+    kt, st, lt, ot, szt = flatten(tk)[:5]
     tstarts_src = set(i - toff for i in range(toff, toff + n) if st[i])
     tblob = ROMS[tk][toff:toff + n]
     tdec, tref, ttext, tpos = decode(tblob)
@@ -323,7 +333,7 @@ def analyse(min_size, twin_keys=("v10", "v9"), thresh=0.98):
     for k in ("v7",) + tuple(twin_keys):
         sys.stderr.write("flattening %s ...\n" % k)
         flatten(k)
-    k7, s7, l7, o7, sz7 = flatten("v7")
+    k7, s7, l7, o7, sz7 = flatten("v7")[:5]
     res, stats = [], dict(total=0, bytes_total=0, pass_=0, bytes_pass=0)
     for nm, off, n in label_spans(o7, sz7):
         if n < min_size:
@@ -382,6 +392,36 @@ def render(r, addr_to_name):
     return out
 
 
+_ELFSYMS = {}
+
+
+def elf_symbols(key):
+    """name -> address, from the LINKED image.
+
+    ⚠ Not the same set as flatten()'s labels: `.set NAME, OTHER + n` defines a
+    symbol that never appears as `NAME:` in any source line, and this tree uses
+    that heavily (`shared/positional_labels.s`).  A round-trip harness that
+    knows only the label set leaves such a name undefined, assembles it as 0,
+    and reports a byte difference that is its own fault -- which is exactly what
+    happened to `lda_24 xbc, (MixerPartTable_Start_0x80)`."""
+    if key in _ELFSYMS:
+        return _ELFSYMS[key]
+    out = subprocess.run([os.path.join(os.path.dirname(MC), "llvm-nm"),
+                          "--defined-only",
+                          os.path.join(ROOT, IMAGES[key]["elf"])],
+                         capture_output=True, text=True, check=True).stdout
+    d = {}
+    for line in out.split("\n"):
+        parts = line.split()
+        if len(parts) == 3:
+            try:
+                d[parts[2]] = int(parts[0], 16)
+            except ValueError:
+                pass
+    _ELFSYMS[key] = d
+    return d
+
+
 def roundtrip(lines, blob, addr_to_name):
     """Assemble the rendered text on its own and require the ORIGINAL bytes.
 
@@ -400,6 +440,9 @@ def roundtrip(lines, blob, addr_to_name):
     for a, nm in addr_to_name.items():
         if nm in used:
             name_to_addr[nm] = a
+    for nm, a in elf_symbols("v7").items():
+        if nm in used:
+            name_to_addr.setdefault(nm, a)
     text = "".join(".set %s, 0x%X\n" % (n, a) for n, a in name_to_addr.items())
     text += ".text\n" + "\n".join(lines) + "\n"
     with tempfile.TemporaryDirectory() as td:
@@ -462,7 +505,7 @@ def apply_spans(linemap_path, min_size, thresh):
     if bad:
         sys.exit("REFUSED: the line map does not describe this source tree")
     res, st = analyse(min_size, thresh=thresh)
-    k7, s7, l7, o7, sz7 = flatten("v7")
+    k7, s7, l7, o7, sz7 = flatten("v7")[:5]
     addr_to_name = {}
     for nm, off in l7.items():
         if not nm.startswith("."):
@@ -565,6 +608,265 @@ def verify_v7():
     return open(binf, "rb").read() == ROMS["v7"]
 
 
+
+# --------------------------------------------------------------- PORT MODE
+# ★ WHY A SECOND MODE EXISTS, AND WHAT IT FIXES
+#
+# The five gates above adjudicate v7 by DECODING it and comparing the decode to
+# the twin.  That makes the whole method hostage to the DISASSEMBLER, and the
+# disassembler is the weaker half of this backend.  The largest single
+# embedded-in-code entry in the census -- v7 `AudioCtrl_DataBlock`, 7,134 B --
+# is refused at gate C for exactly that reason, and the reason is worth stating
+# precisely because it is NOT a framing doubt:
+#
+#     llvm-mc ENCODES `add bc, (xsp+6)` to 9f 06 81 correctly.
+#     llvm-objdump DECODES 0x9f as <unknown>, skips it, and reads `06 81` as
+#     `ei 1`.
+#
+# So v10's source is right, the independent decode is wrong, and gate C scores
+# the disagreement against v10.  (⚠ Checked in both directions before being
+# called a gap -- "the toolchain cannot spell it" has been wrong repeatedly in
+# this project, so the encode was run as well as the decode.)
+#
+# PORT MODE takes the twin's SOURCE framing instead of a decode of it.  The
+# twin's span must be covered end to end by instruction statements; those
+# statements give an exact length sequence, which is walked over v7's bytes:
+#
+#   * slot bytes IDENTICAL to the twin's  -> reuse the twin's own statement,
+#     with any symbol operand rewritten to the address it had in the twin (the
+#     bytes are identical, so the value is identical), then re-symbolised
+#     against a v7 label at that same address if one is defined.
+#   * slot bytes DIFFER                   -> decode that slot alone and require
+#     the decode to consume exactly the slot; otherwise the slot stays `.byte`.
+#
+# Everything is then assembled as one block and required to reproduce v7's
+# bytes exactly, so a wrong length sequence or a mis-substituted symbol cannot
+# survive.
+IDENT = re.compile(r'[A-Za-z_][\w.$]*')
+
+
+_BYPOS = {}
+
+
+def twin_slots(tk, toff, n):
+    """The twin's own framing of [toff, toff+n), as [(off, len, text)].
+
+    `text` is the twin's statement for an INSTRUCTION slot and None for a byte
+    the twin does not spell as one -- the twin's own residue, which stays
+    `.byte` here too rather than being invented.  Returns None only if an
+    instruction would run past the span's end, which would mean the two images
+    do not agree about where the span ends after all."""
+    if tk not in _BYPOS:
+        _BYPOS[tk] = {o: (ln, txt, rl) for o, ln, txt, rl in flatten(tk)[5]}
+    bypos = _BYPOS[tk]
+    out, pos = [], toff
+    while pos < toff + n:
+        if pos in bypos:
+            ln, txt, rl = bypos[pos]
+            if pos + ln > toff + n:
+                return None
+            out.append((pos - toff, ln, txt, rl))
+            pos += ln
+        else:
+            out.append((pos - toff, 1, None, False))
+            pos += 1
+    return out
+
+
+def port_span(nm, off, n, twin_keys=("v10", "v9")):
+    """-> dict verdict.  Same gate A as above; then the twin's framing is
+    PORTED rather than reproduced by decoding."""
+    k7, s7, l7, o7, sz7 = flatten("v7")[:5]
+    chosen, why = None, "no twin symbol"
+    for tk in twin_keys:
+        kt, st, lt, ot, szt = flatten(tk)[:5]
+        if nm not in lt:
+            continue
+        idx = [i for i, (o, x) in enumerate(ot) if x == nm]
+        if not idx:
+            continue
+        i = idx[0]
+        toff = ot[i][0]
+        tend = ot[i + 1][0] if i + 1 < len(ot) else szt
+        if tend - toff != n:
+            why = "twin %s span is %d B, v7's is %d" % (tk, tend - toff, n)
+            continue
+        slots = twin_slots(tk, toff, n)
+        if slots is None:
+            why = "twin %s span is not covered end to end by instructions" % tk
+            continue
+        chosen = (tk, toff, slots)
+        break
+    if chosen is None:
+        return dict(name=nm, off=off, n=n, verdict="REFUSED", why=why)
+    tk, toff, slots = chosen
+    # ★★ THE GATE THAT PORT MODE CANNOT DO WITHOUT, added after it was caught
+    # producing 342 spans whose MEDIAN byte agreement with the twin was ZERO.
+    #
+    # Gate A only says the two labels are the same distance apart.  Two spans of
+    # equal length whose bytes have nothing in common are not the same routine;
+    # porting a length sequence onto them frames v7 by a coincidence of label
+    # spacing.  The whole-span round trip cannot object -- it only proves the
+    # emission reproduces v7's bytes, which any framing that decodes will.
+    #
+    # The five-gate passes ran at 69-98 % byte agreement; the floor here is set
+    # well below that (0.60) so it excludes the coincidences without demanding
+    # the versions be near-identical.
+    n_same = sum(1 for a, b in zip(ROMS["v7"][off:off + n], ROMS[tk][toff:toff + n])
+                 if a == b)
+    if n_same < 0.60 * n:
+        return dict(name=nm, off=off, n=n, verdict="REFUSED",
+                    why="byte agreement with twin %s is only %.0f%% -- same span "
+                        "length, different code" % (tk, 100.0 * n_same / n))
+    tlabels = flatten(tk)[2]
+    tname_to_addr = {x: BASE + a for x, a in tlabels.items()}
+    v7addr_to_name = {}
+    for x, a in l7.items():
+        if not x.startswith("."):
+            v7addr_to_name.setdefault(BASE + a, x)
+    blob7 = ROMS["v7"][off:off + n]
+    blobT = ROMS[tk][toff:toff + n]
+    lines, reused, redecoded, bytes_byte = [], 0, 0, 0
+    for (o, ln, txt, rl) in slots:
+        b7 = blob7[o:o + ln]
+        bT = blobT[o:o + ln]
+        if txt is None:
+            # the twin does not spell this byte either -- do not invent one
+            lines.append("\t.byte 0x%02x\t; %s does not spell this byte either"
+                         % (b7[0], tk))
+            bytes_byte += ln
+            continue
+        if b7 == bT:
+            lines.append(port_text(txt, rl, tname_to_addr, v7addr_to_name))
+            reused += 1
+            continue
+        starts, ref, text, pos = decode(b7)
+        if pos == ln and len(text) == 1 and text[0][1] == ln and text[0][2]:
+            lines.append("\t" + symbolise(text[0][2], v7addr_to_name))
+            redecoded += 1
+        else:
+            lines.append("\t.byte " + ", ".join("0x%02x" % x for x in b7)
+                         + "\t; differs from %s here and llvm-objdump cannot "
+                           "read it" % tk)
+            bytes_byte += ln
+    # ⚠ AND A SECOND FLOOR, on the RESULT rather than the input: a span where
+    # most slots had to be re-decoded or left as `.byte` has not really been
+    # framed by the twin, whatever its byte agreement.
+    if reused < 0.60 * len(slots):
+        return dict(name=nm, off=off, n=n, verdict="REFUSED",
+                    why="only %d of %d slots are byte-identical to twin %s"
+                        % (reused, len(slots), tk))
+    ok, err = roundtrip(lines, blob7, v7addr_to_name)
+    if not ok:
+        return dict(name=nm, off=off, n=n, verdict="REFUSED",
+                    why="port round trip: " + err)
+    return dict(name=nm, off=off, n=n, verdict="PASS", twin=tk, lines=lines,
+                reused=reused, redecoded=redecoded, bytes_byte=bytes_byte,
+                slots=len(slots))
+
+
+def port_text(txt, has_reloc, tname_to_addr, v7addr_to_name):
+    """The twin's statement, with any SYMBOL operand carried across by ADDRESS.
+
+    A name means a different address in v7, so it cannot be copied as text.
+    The slot's bytes are identical in both images, so the encoded value is the
+    twin's symbol address; that address is re-named with v7's own label if one
+    is defined there, and otherwise written numerically."""
+    if not has_reloc:
+        return txt if txt.startswith("\t") else "\t" + txt
+    head, _, tail = txt.partition("\t") if "\t" in txt else (txt, "", "")
+    def sub(m):
+        w = m.group(0)
+        a = tname_to_addr.get(w)
+        if a is None:
+            return w
+        return v7addr_to_name.get(a) or ("0x%X" % a)
+    return "\t" + (head + "\t" + IDENT.sub(sub, tail) if tail else head).strip("\t")
+
+
+def apply_port(linemap_path, min_size):
+    lm = load_linemap(linemap_path)
+    load_roms()
+    checked, bad = guard_linemap(lm)
+    print("line-map guard: %d `.byte` lines checked against the ROM, %d disagree"
+          % (checked, bad))
+    if bad:
+        sys.exit("REFUSED: the line map does not describe this source tree")
+    for k in ("v7", "v9", "v10"):
+        sys.stderr.write("flattening %s ...\n" % k)
+        flatten(k)
+    k7, s7, l7, o7, sz7 = flatten("v7")[:5]
+    where = {}
+    for rel, m in lm.items():
+        for ln, addr in m.items():
+            where.setdefault(addr, []).append((rel, ln))
+    cands = [(nm, o, n) for nm, o, n in label_spans(o7, sz7)
+             if n >= min_size and sum(k7[o:o + n]) <= 0.02 * n]
+    edits, done, conv, left = {}, 0, 0, 0
+    quality = []
+    refusals = collections.Counter()
+    for nm, off, n in sorted(cands, key=lambda x: -x[2]):
+        r = port_span(nm, off, n)
+        if r["verdict"] != "PASS":
+            refusals[r["why"].split(":")[0].split(",")[0][:44]] += 1
+            continue
+        lo, hi = BASE + off, BASE + off + n
+        rels = {rel for a in range(lo, hi) for rel, ln in where.get(a, [])}
+        if len(rels) != 1:
+            refusals["%d source files claim the bytes" % len(rels)] += 1
+            continue
+        rel = rels.pop()
+        m = lm[rel]
+        lns = sorted(ln for ln, a in m.items() if lo <= a < hi)
+        src = io.open(os.path.join(ROOT, rel), encoding="latin-1").read().split("\n")
+        byte_lns = [ln for ln in lns if BYTELINE.match(src[ln - 1])]
+        if not byte_lns:
+            refusals["no `.byte` lines in range"] += 1
+            continue
+        first, last = byte_lns[0], byte_lns[-1]
+        block = src[first - 1:last]
+        emitted = 0
+        for x in block:
+            mm = BYTELINE.match(x)
+            if mm:
+                emitted += len([t for t in mm.group(1).split(",") if t.strip()])
+        if emitted != n or m[first] != lo or not all(
+                BYTELINE.match(x) or not x.strip() or x.strip().startswith(";")
+                for x in block):
+            refusals["block does not match the span"] += 1
+            continue
+        comments = [x for x in block if x.strip().startswith(";")]
+        head = ["\t; framing ported from %s's source for the same label "
+                "(same span length, statement for statement); "
+                "%d of %d slots byte-identical" % (r["twin"], r["reused"], r["slots"])]
+        edits.setdefault(rel, []).append((first, last + 1, comments + head + r["lines"]))
+        done += 1
+        conv += n - r["bytes_byte"]
+        left += r["bytes_byte"]
+        quality.append(r["reused"] / float(r["slots"]))
+    for rel, es in edits.items():
+        path = os.path.join(ROOT, rel)
+        src = io.open(path, encoding="latin-1").read().split("\n")
+        for f, l, new in sorted(es, key=lambda x: -x[0]):
+            src = src[:f - 1] + new + src[l - 1:]
+        io.open(path, "w", encoding="latin-1").write("\n".join(src))
+    print("\nported %d spans in %d files: %d B now instructions, %d B still `.byte`"
+          % (done, len(edits), conv, left))
+    if quality:
+        quality.sort()
+        print("  slots byte-identical to the twin, per ported span: "
+              "min %.2f  median %.2f  max %.2f"
+              % (quality[0], quality[len(quality) // 2], quality[-1]))
+    for k, v in refusals.most_common(12):
+        print("  refused: %-46s %4d" % (k, v))
+    if not verify_v7():
+        for rel in edits:
+            subprocess.run(["git", "checkout", "--", rel], cwd=ROOT)
+        sys.exit("REJECTED: rebuilt v7 is not byte-identical; edits rolled back")
+    print("VERIFIED: rebuilt v7 image is byte-identical to the ROM")
+    return 0
+
+
 def toolchain():
     return subprocess.run(["git", "-C", os.path.expanduser("~/compartilhado/llvm-project"),
                            "log", "-1", "--format=%h (%H)"],
@@ -579,17 +881,23 @@ def main():
     ap.add_argument("--thresh", type=float, default=0.98)
     ap.add_argument("--apply", default="",
                     help="path to a v7 line map (v10_line_address_map.py --image v7); rewrite every passing span and verify byte-identity")
+    ap.add_argument("--port", default="",
+                    help="path to a v7 line map; PORT the twin's own source "
+                         "framing instead of decoding v7 (see PORT MODE)")
     ap.add_argument("--selftest", action="store_true")
     a = ap.parse_args()
     if a.selftest:
         return selftest()
+    if a.port:
+        print("toolchain: %s" % toolchain())
+        return apply_port(a.port, a.min)
     if a.apply:
         print("toolchain: %s" % toolchain())
         return apply_spans(a.apply, a.min, a.thresh)
     if a.emit:
         load_roms()
         flatten("v7")
-        k7, s7, l7, o7, sz7 = flatten("v7")
+        k7, s7, l7, o7, sz7 = flatten("v7")[:5]
         hit = [(nm, o, n) for nm, o, n in label_spans(o7, sz7) if nm == a.emit]
         if not hit:
             sys.exit("no v7 label span named %s" % a.emit)
@@ -635,7 +943,7 @@ def selftest():
     load_roms()
     for k in IMAGES:
         ck("%s ROM loaded" % k, len(ROMS[k]) == 2097152)
-    kinds, starts, labels, order, size = flatten("v10")
+    kinds, starts, labels, order, size = flatten("v10")[:5]
     ck("v10 flatten reconciles to the ROM size", True, "%d B" % size)
     ck("v10 flatten found labels", len(labels) > 1000, str(len(labels)))
     s, r, t, p = decode(bytes([0x11, 0x11, 0x11]))
@@ -652,15 +960,35 @@ def selftest():
     ck("random 2 KiB is not fully accounted for", len(r2) > 0,
        "refusals %d" % len(r2))
     # AudioCtrl_DataBlock: the worked example the lane report cites
-    k7, s7, l7, o7, sz7 = flatten("v7")
+    k7, s7, l7, o7, sz7 = flatten("v7")[:5]
     hit = [(nm, o, n) for nm, o, n in label_spans(o7, sz7)
            if nm == "AudioCtrl_DataBlock"]
     ck("v7 AudioCtrl_DataBlock is a 7134 B span", hit and hit[0][2] == 7134,
        str(hit))
     if hit:
         r = adjudicate(*hit[0], twin_keys=("v10", "v9"), thresh=0.98)
-        ck("AudioCtrl_DataBlock passes all five gates",
-           r["verdict"] == "PASS", r.get("why", ""))
+        # ⚠ It is REFUSED by the decode-based gates, and that is the right
+        # answer for them: llvm-objdump cannot read 0x9f (`add bc, (xsp+6)`,
+        # which llvm-mc encodes fine), so an independent decode disagrees with
+        # v10's correct source at ~4% of instruction starts.
+        ck("AudioCtrl_DataBlock is refused by the decode-based gates",
+           r["verdict"] == "REFUSED" and "gate C" in r.get("why", ""),
+           r.get("why", ""))
+        r = port_span(*hit[0])
+        ck("AudioCtrl_DataBlock passes PORT mode", r["verdict"] == "PASS",
+           str(r.get("why", ""))[:90])
+    # ★ THE NULL FOR PORT MODE.  `AccMidi_DispatchLoop` is 67 B in both v7 and
+    # v10 and shares NOT ONE BYTE with its twin: same label, same span length,
+    # different code.  408 of 1,756 same-length twin spans are like it.  If this
+    # check ever passes, port mode is framing v7 by a coincidence of label
+    # spacing -- which it did, for 342 spans, before the agreement floor existed.
+    hit2 = [(nm, o, n) for nm, o, n in label_spans(o7, sz7)
+            if nm == "AccMidi_DispatchLoop"]
+    if hit2:
+        r = port_span(*hit2[0])
+        ck("a same-length twin span with no byte agreement is REFUSED",
+           r["verdict"] == "REFUSED" and "byte agreement" in r.get("why", ""),
+           str(r.get("why", ""))[:90])
     print("\n%s (%d failures)" % ("PASS" if not f else "FAIL", f))
     return 1 if f else 0
 
