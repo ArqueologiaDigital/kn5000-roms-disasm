@@ -5939,7 +5939,7 @@ SysEx_ControllerBitCheck:
 	jrl z, SysEx_ModeChangeCheck
 	ld c, (3925:16)
 	add c, 0x5
-	ldl_da xwa, (0x02749a)
+	ld xwa, (0x02749a:24)
 	orda32_24 xwa, (0x02749e)
 	stda32 4560, xwa
 	ldb_erp A, 0x3c

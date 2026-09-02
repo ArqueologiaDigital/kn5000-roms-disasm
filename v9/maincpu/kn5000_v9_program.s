@@ -581,7 +581,7 @@ Boot_FlashAndExtensions:
 BootInit_SeqAndPanel:
 	call Seq_FullInit
 	ei 0
-	ldl_da xhl, (CPanel_InitDispatchTable)
+	ld xhl, (CPanel_InitDispatchTable:24)
 	call (xhl)
 	call CPanel_ScanButtons
 	ld (1026:16), l
@@ -1653,7 +1653,7 @@ Voice_FactoryPresetData:
 	cp	wa, de
 	jr	nz, 54
 	jr	105
-	ldl_da	xiy, (197714)
+	ld	xiy, (197714:24)
 	ld	de, (xhl)
 	exts	xde
 	ld	wa, (xhl+2)

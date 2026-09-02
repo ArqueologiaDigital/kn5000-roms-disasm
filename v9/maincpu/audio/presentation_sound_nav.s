@@ -369,7 +369,7 @@ GetDialFocus:
 	ret
 
 GetDialFocus_Active:
-	ldl_da xhl, (0x03ef6a)
+	ld xhl, (0x03ef6a:24)
 	ret
 
 SetDialUp:
@@ -1845,7 +1845,7 @@ AcNamingWindowProc:
 	jrl nz, WndScroll_InitWindowProc
 
 AcNaming_CheckDefaultWidget:
-	ldl_da xwa, (0x0274d2)
+	ld xwa, (0x0274d2:24)
 	or xwa, xwa
 	jr nz, AcNaming_InitScrollState
 	ld xwa, 0x1200005
@@ -1854,7 +1854,7 @@ AcNaming_CheckDefaultWidget:
 AcNaming_InitScrollState:
 	stiw_da (0x0274d8), 0x0000
 	stiw_da (0x0274da), 0x0000
-	ldl_da xwa, (0x0274d2)
+	ld xwa, (0x0274d2:24)
 	ld xbc, 0x1e0007c
 	lds32 xde, 0
 	call ApFuncCall
@@ -1864,7 +1864,7 @@ AcNaming_InitScrollState:
 	stiw_da (0x0274d6), 0x0020
 
 AcNaming_QueryCharSet:
-	ldl_da xwa, (0x0274d2)
+	ld xwa, (0x0274d2:24)
 	ld xbc, 0x1e00084
 	lds32 xde, 0
 	call ApFuncCall

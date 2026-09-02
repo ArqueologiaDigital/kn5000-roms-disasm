@@ -806,14 +806,14 @@ MIDI_SendSysExFromW:
 SoundEvt_ShortPacketHandler:
 	ld	(3923:16), 0
 	.byte 0xc1
-	ldl_da	xwa, (0x083ee3)
+	ld	xwa, (0x083ee3:24)
 	normal
 	call	SoundEvt_LongPacketHandler_0x11
 	ret
 SoundEvt_LongPacketHandler:
 	ld	(3923:16), 0
 	.byte 0xc1
-	ldl_da	xwa, (0x083ee3)
+	ld	xwa, (0x083ee3:24)
 	push	sr
 	call	SoundEvt_LongPacketHandler_0x11
 	ret
@@ -7712,7 +7712,7 @@ SysEx_ControllerBitCheck:
 	jrl z, SysEx_ModeChangeCheck
 	ld c, (3925:16)
 	add c, 0x5
-	ldl_da xwa, (0x02749a)
+	ld xwa, (0x02749a:24)
 	orda32_24 xwa, (0x02749e)
 	stda32 4560, xwa
 	ldb_erp A, 0x3c

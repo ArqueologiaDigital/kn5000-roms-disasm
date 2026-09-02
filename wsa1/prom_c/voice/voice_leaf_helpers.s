@@ -3850,7 +3850,7 @@ Voice_GetOctaveShift:
 	ld	bc, hl                                  ; FA72F4  ld BC,HL
 	and	bc, 1                                  ; FA72F6  and BC,0x0001
 	jr z, Voice_GetOctaveShift__FA7366                   ; FA72FA  jr Z,0xfa7366
-	ldl_da	xbc, (0xD7F1)                       ; FA72FC  ld XBC,(0x00d7f1)
+	ld	xbc, (0xD7F1:24)                       ; FA72FC  ld XBC,(0x00d7f1)
 	ld	xwa, (xbc+0x6C)                         ; FA7301  ld XWA,(XBC+0x6c)
 	ld	xix, xwa                                ; FA7304  ld XIX,XWA
 	ld	iy, (xiz+8)                             ; FA7306  ld IY,(XIZ+0x08)
@@ -3867,7 +3867,7 @@ Voice_GetOctaveShift:
 	ld	c, (xwa)                                ; FA7327  ld C,(XWA)
 	extz	bc                                    ; FA7329  extz BC
 	ld	de, bc                                  ; FA732B  ld DE,BC
-	ldl_da	xwa, (0xD7F1)                       ; FA732D  ld XWA,(0x00d7f1)
+	ld	xwa, (0xD7F1:24)                       ; FA732D  ld XWA,(0x00d7f1)
 	ld	xiy, (xwa+0xA8)                         ; FA7332  ld XIY,(XWA+0x00a8)
 	ld	xix, xiy                                ; FA7337  ld XIX,XIY
 	ld	bc, hl                                  ; FA7339  ld BC,HL

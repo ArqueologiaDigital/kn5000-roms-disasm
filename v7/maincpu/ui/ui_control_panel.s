@@ -3772,15 +3772,15 @@ GroupBox_HandleCursorNav:
 	jr z, GroupBox_CursorNav_AddLsw
 	cp xwa, 0x0
 	jr ge, GroupBox_CursorNav_LoadPositive
-	ldl_da xwa, (0x03ef56)
-	ldl_da xbc, (0x03ef5e)
-	ldl_da xde, (0x03ef66)
+	ld xwa, (0x03ef56:24)
+	ld xbc, (0x03ef5e:24)
+	ld xde, (0x03ef66:24)
 	jr GroupBox_CursorNav_SendAndTitle
 
 GroupBox_CursorNav_LoadPositive:
-	ldl_da xwa, (0x03ef52)
-	ldl_da xbc, (0x03ef5a)
-	ldl_da xde, (0x03ef62)
+	ld xwa, (0x03ef52:24)
+	ld xbc, (0x03ef5a:24)
+	ld xde, (0x03ef62:24)
 
 GroupBox_CursorNav_SendAndTitle:
 	call SendEvent

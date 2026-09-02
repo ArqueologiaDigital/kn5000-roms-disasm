@@ -38,7 +38,7 @@
 Boot_sbrk:
 	or	xwa, xwa
 	jr	nz, Boot_sbrk__alloc
-	ldl_da	xhl, (0x00999c)		; size 0: report bytes remaining
+	ld	xhl, (0x00999c:24)		; size 0: report bytes remaining
 	ret
 Boot_sbrk__alloc:
 	cpdm32_24 (0x00999c), xwa	; enough left?
@@ -46,7 +46,7 @@ Boot_sbrk__alloc:
 	ld	xhl, 0xffffffff		; arena exhausted
 	ret
 Boot_sbrk__fits:
-	ldl_da	xhl, (0x009998)		; XHL = current pointer
+	ld	xhl, (0x009998:24)		; XHL = current pointer
 	addl_da	(0x009998), xwa
 	subdm32_24 (0x00999c), xwa
 	ret
@@ -76,7 +76,7 @@ Boot_malloc:
 	srl wa, 1
 	ld iz, wa
 	add iz, iz		; IZ = size rounded up to even
-	ldl_da xhl, (0x0099a0)	; XHL = free-list head
+	ld xhl, (0x0099a0:24)	; XHL = free-list head
 	jr t, Boot_malloc__scan_test
 Boot_malloc__scan_loop:
 	cp (xhl + 4), iz	; block size >= request?
@@ -380,7 +380,7 @@ Boot_free:
 	or xde, xde
 	jrl z, Boot_free__exit	; free(NULL) is a no-op
 	dec 6, xde		; data pointer -> block header
-	ldl_da xwa, (0x0099a0)
+	ld xwa, (0x0099a0:24)
 	or xwa, xwa
 	jr nz, Boot_free__scan_init
 	lds32 xwa, 0		; empty list: block becomes the only entry
@@ -413,7 +413,7 @@ Boot_free__scan_done:
 	jr nz, Boot_free__insert_head
 	ld xwa, (xwa)
 	ld (xde), xwa		; block->next = head->next
-	ldl_da xwa, (0x0099a0)
+	ld xwa, (0x0099a0:24)
 	ld hl, (xwa + 4)
 	inc 6, hl
 	ld wa, (xbc)
@@ -482,7 +482,7 @@ Boot_free_DeadTail9998:
 	jr nz, Boot_free_DeadTail9998__insert_head
 	ld xwa, (xwa)
 	ld (xde), xwa
-	ldl_da xwa, (0x009998)	; sbrk state block, NOT the 0x0099A0 list head
+	ld xwa, (0x009998:24)	; sbrk state block, NOT the 0x0099A0 list head
 	ld hl, (xwa + 4)
 	inc 6, hl
 	ld wa, (xbc)

@@ -9,7 +9,7 @@
 ; =============================================================================
 
 	lda xde, (0x0274b0:24)
-	ldl_da xhl, (0x0274e4)
+	ld xhl, (0x0274e4:24)
 	lds32 xbc, 0
 
 WndScroll_CopyLoop:
@@ -30,7 +30,7 @@ WndScroll_InitBuffer:
 	ld xbc, xde
 	add xbc, xwa
 	ld (xbc), 0x0
-	ldl_da xwa, (0x0274d2)
+	ld xwa, (0x0274d2:24)
 	ld xbc, 0x1e0003a
 	call ApFuncCall
 
@@ -251,7 +251,7 @@ WndEvt_DispatchByEventCode:
 	ld xde, (xsp + 42)
 	calr WindowProc
 	ld xwa, (xsp + 42)
-	ldl_da xbc, (0x0274e4)
+	ld xbc, (0x0274e4:24)
 	dec 1, xwa
 	cp xwa, 0x0
 	jrl c, UIDialog_ReturnZeroJmp
@@ -458,7 +458,7 @@ WndEvt_EventCodeDispatch:
 	extz	xbc
 	ld	xde, xwa
 	add	xde, xbc
-	ldl_da	xwa, (0x0274e4)
+	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
 	ld	(xde), a
 	jr	11
@@ -519,7 +519,7 @@ WndEvt_EventCodeDispatch:
 	jr	nz, 18
 	ld	xbc, 0x0274b0
 	add	xbc, xwa
-	ldl_da	xwa, (0x0274e4)
+	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
 	ld	(xbc), a
 	jr	9
@@ -568,7 +568,7 @@ WndEvt_EventCodeDispatch:
 	lda	xde, (0x0274b0:24)
 	ld	xbc, xde
 	add	xbc, xwa
-	ldl_da	xwa, (0x0274e4)
+	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	xwa, 22
@@ -607,7 +607,7 @@ WndEvt_EventCodeDispatch:
 	lda	xde, (0x0274b0:24)
 	ld	xbc, xde
 	add	xbc, xwa
-	ldl_da	xwa, (0x0274e4)
+	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	xwa, 22
@@ -646,7 +646,7 @@ WndEvt_EventCodeDispatch:
 	cps	de, 0
 	jr	ule, 37
 	lda	xbc, (0x0274b0:24)
-	ldl_da	xwa, (0x0274e4)
+	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
 	ld	hl, de
 	sub	hl, iz
@@ -707,7 +707,7 @@ WndEvt_EventCodeDispatch:
 	nop
 	jr	ule, 31
 	lda	xde, (0x0274b0:24)
-	ldl_da	xhl, (0x0274e4)
+	ld	xhl, (0x0274e4:24)
 	lds32	xbc, 0
 	ld	xwa, xbc
 	ld	xix, xde
@@ -727,7 +727,7 @@ WndEvt_EventCodeDispatch:
 	cp	iz, wa
 	jr	nc, 35
 	lda	xde, (0x0274b0:24)
-	ldl_da	xhl, (0x0274e4)
+	ld	xhl, (0x0274e4:24)
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, xbc
@@ -1024,7 +1024,7 @@ WndScroll_ClampPageCount:
 	jr nz, WndScroll_CheckSPMarker
 	cp (xwa + 1), 0x50
 	jr nz, WndScroll_CheckSPMarker
-	ldl_da xwa, (0x0274e4)
+	ld xwa, (0x0274e4:24)
 	lds32 xde, 0
 	ld e, (xwa)
 	ld xwa, (xsp + 50)
@@ -6025,7 +6025,7 @@ DrawFunc_Epilogue74:
 Gfx_ImageDecodeByteData:
 	dec	4, xsp
 	push	xiz
-	ldl_da	xbc, (0x030452)
+	ld	xbc, (0x030452:24)
 	ld	(xsp+4), xbc
 	ld	ix, (xwa+2)
 	jr	59
@@ -6898,7 +6898,7 @@ CaptureLcd:
 	ld xwa, 0x100
 	ld (xbc + 32), xwa
 	ld (xbc + 36), xwa
-	ldl_da xwa, (0x03044a)
+	ld xwa, (0x03044a:24)
 	push xwa
 	pushw 0xea
 	pushw 0xae50
@@ -6926,7 +6926,7 @@ CaptureLcd:
 	cp xhl, 0x28
 	jrl nz, FileIO_ClosePath
 	lds iz, 0
-	ldl_da xwa, (0x03ef94)
+	ld xwa, (0x03ef94:24)
 	or xwa, xwa
 	jr z, CaptureLcd_WritePaletteNoOr94
 
@@ -8295,7 +8295,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	a, (xwa)
 	ld	(xsp+2), a
 	ld	(xsp+4), 0
-	ldl_da	xhl, (0x030452)
+	ld	xhl, (0x030452:24)
 	ld	xwa, (xsp+14)
 	ld	wa, (xwa)
 	exts	xwa
@@ -9070,7 +9070,7 @@ ColorBlit2_LargeCodeBlock:
 	extz	wa
 	cp	wa, hl
 	.ascii "n6h7"
-	ldl_da	xiz, (0x030452)
+	ld	xiz, (0x030452:24)
 	ld	hl, (xix)
 	exts	xhl
 	ld	wa, (xix+2)
@@ -9623,7 +9623,7 @@ ColorBlit2_LargeCodeBlock:
 	cp	wa, bc
 	jr	nz, 55
 	jrl	141
-	ldl_da	xix, (0x030452)
+	ld	xix, (0x030452:24)
 	ld	bc, (xiy)
 	exts	xbc
 	ld	wa, (xiy+2)
@@ -9755,7 +9755,7 @@ ColorBlit2_LargeCodeBlock:
 	cp	wa, bc
 	jr	nz, 55
 	jrl	141
-	ldl_da	xix, (0x030452)
+	ld	xix, (0x030452:24)
 	ld	bc, (xiy)
 	exts	xbc
 	ld	wa, (xiy+2)
@@ -9907,7 +9907,7 @@ ColorBlit2_LargeCodeBlock:
 	cp	wa, de
 	jr	nz, 54
 	jr	95
-	ldl_da	xiy, (0x030452)
+	ld	xiy, (0x030452:24)
 	ld	de, (xiz)
 	exts	xde
 	ld	wa, (xiz+2)

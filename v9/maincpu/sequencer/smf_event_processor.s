@@ -10384,7 +10384,7 @@ SndTable_ByteBlock_ReadOps:
 	push	xsp
 	nop
 	jr	nz, 48
-	ldl_da	xbc, (0x2357a)
+	ld	xbc, (0x2357a:24)
 	push	xbc
 	pushw	1024
 	pushw	1
@@ -10395,7 +10395,7 @@ SndTable_ByteBlock_ReadOps:
 	jr	lt, 3
 	lds	hl, 0
 	ret
-	ldl_da	xwa, (0x2357a)
+	ld	xwa, (0x2357a:24)
 	ld	wa, (xwa+6)
 	and	wa, 0x7fff
 	jr	nz, 3
@@ -10417,20 +10417,20 @@ SndTable_ByteBlock_ReadOps:
 	dec	2, xsp
 	push	xiz
 	stib_da	(0x2357e), 1
-	ldl_da	xwa, (0x3e3e8)
+	ld	xwa, (0x3e3e8:24)
 	stl_da	(0x2272e), xwa
-	ldl_da	xwa, (0x3e3ee)
+	ld	xwa, (0x3e3ee:24)
 	ldw	(xwa+2), 0
-	ldl_da	xwa, (0x3e3ee)
+	ld	xwa, (0x3e3ee:24)
 	.byte 0xf3, 0xe1
 	ei	4
 	push	sr
 	nop
 	nop
-	ldl_da	xbc, (0x3e3ee)
+	ld	xbc, (0x3e3ee:24)
 	lds	wa, 2
 	call	TaskMsg_Send
-	ldl_da	xwa, (0x3e3ee)
+	ld	xwa, (0x3e3ee:24)
 	lda	xwa, (xwa+1028)
 	ld	xbc, xwa
 	lds	wa, 2
@@ -10475,13 +10475,13 @@ SndTable_ByteBlock_ReadOps:
 	.byte 0x04
 	ld	wa, (xsp+4)
 	extz	xwa
-	ldl_da	xbc, (0x2272e)
+	ld	xbc, (0x2272e:24)
 	sub	xbc, xwa
 	cp	xbc, 1024
 	jr	ugt, 14
 	ld	wa, (xsp+4)
 	extz	xwa
-	ldl_da	xbc, (0x2272e)
+	ld	xbc, (0x2272e:24)
 	sub	xbc, xwa
 	ld	(xiz), bc
 	ldw (xiz+2), 0
@@ -10523,16 +10523,16 @@ TaskBuf_ReadNextByte:
 	stl_da (0x023582), xhl
 	ld wa, (xhl)
 	stw_da (0x023580), xwa
-	ldl_da xwa, (0x023582)
+	ld xwa, (0x023582:24)
 	inc 4, xwa
 	stl_da (0x023586), xwa
 
 TaskBuf_CheckPendingData:
-	ldl_da xwa, (0x023582)
+	ld xwa, (0x023582:24)
 	cpw (xwa + 2), 0x0
 	jr z, TaskBuf_EmptyAndReturn
 	stib_da (0x02358a), 0x02
-	ldl_da xwa, (0x023582)
+	ld xwa, (0x023582:24)
 	ld hl, (xwa + 2)
 	jr TaskBuf_PopIzRet
 
@@ -10544,7 +10544,7 @@ TaskBuf_EmptyAndReturn:
 	jr TaskBuf_PopIzRet
 
 TaskBuf_ReadAndDecrement:
-	ldl_da xbc, (0x023586)
+	ld xbc, (0x023586:24)
 	lds32 xwa, 1
 	addl_da 0x023586, xwa
 	ld a, (xbc)
@@ -10552,7 +10552,7 @@ TaskBuf_ReadAndDecrement:
 	extz iz
 	subdi16_24 (0x23580), 1
 	jr nz, TaskBuf_ReturnByte
-	ldl_da xwa, (0x023582)
+	ld xwa, (0x023582:24)
 	cpw (xwa), 0x400
 	jr z, TaskBuf_SendBufferFull
 	stib_da (0x02358a), 0x02
@@ -10560,7 +10560,7 @@ TaskBuf_ReadAndDecrement:
 	jr TaskBuf_PopIzRet
 
 TaskBuf_SendBufferFull:
-	ldl_da xbc, (0x023582)
+	ld xbc, (0x023582:24)
 	lds wa, 2
 	call TaskMsg_Send
 
@@ -10588,9 +10588,9 @@ FDC_DrainQueue2_Loop:
 	jr nz, FDC_DrainQueue2_Loop
 
 FDC_DrainQueue2_Done:
-	ldl_da xwa, (0x023582)
+	ld xwa, (0x023582:24)
 	ldw (xwa + 2), 0xffff
-	ldl_da xbc, (0x023582)
+	ld xbc, (0x023582:24)
 	lds wa, 2
 	call TaskMsg_Send
 	cpib_da (0x02357e), 0x00
@@ -10628,7 +10628,7 @@ FDC_DrainQueue2B_Loop:
 FDC_DrainCloseFile:
 	cpib_da (0x03e3ec), 0x00
 	ret nz
-	ldl_da xwa, (0x02357a)
+	ld xwa, (0x02357a:24)
 	push xwa
 	call FileClose
 	inc 4, xsp
@@ -10646,7 +10646,7 @@ SndTable_LookupA:
 	call FileOpen
 	inc 8, xsp
 	stl_da (0x02357a), xhl
-	ldl_da xwa, (0x02357a)
+	ld xwa, (0x02357a:24)
 	or xwa, xwa
 	jr nz, SndTable_LookupA_GotFile
 	stib_da (0x02358a), 0x02
@@ -10654,7 +10654,7 @@ SndTable_LookupA:
 	ret
 
 SndTable_LookupA_GotFile:
-	ldl_da xwa, (0x02357a)
+	ld xwa, (0x02357a:24)
 	ld xwa, (xwa + 71)
 	stl_da (0x03e3e8), xwa
 	lds wa, 2

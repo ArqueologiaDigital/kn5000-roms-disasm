@@ -447,14 +447,14 @@ sub_F00108:
 	ld	xwa, (12288:16)	; F0010E  ld XWA,(0x3000)
 	cp	xwa, 0	; F00112  cp XWA,0x00000000
 	jr	z, 23	; F00118  jr Z,0xf00131
-	ldl_da	xwa, (6304798)	; F0011A  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F0011A  ld XWA,(0x60341e)
 	cp	xwa, 0	; F0011F  cp XWA,0x00000000
 	jr	z, 5	; F00125  jr Z,0xf0012c
 	calr	225	; F00127  calr 0xf0020b
 	jr	23	; F0012A  jr T,0xf00143
 	calr	269	; F0012C  calr 0xf0023c
 	jr	18	; F0012F  jr T,0xf00143
-	ldl_da	xwa, (6304798)	; F00131  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F00131  ld XWA,(0x60341e)
 	cp	xwa, 0	; F00136  cp XWA,0x00000000
 	jr	z, 5	; F0013C  jr Z,0xf00143
 	calr	255	; F0013E  calr 0xf00240
@@ -463,14 +463,14 @@ sub_F00108:
 	ld	xwa, (12288:16)	; F00145  ld XWA,(0x3000)
 	cp	xwa, 0	; F00149  cp XWA,0x00000000
 	jr	z, 23	; F0014F  jr Z,0xf00168
-	ldl_da	xwa, (6304798)	; F00151  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F00151  ld XWA,(0x60341e)
 	cp	xwa, 0	; F00156  cp XWA,0x00000000
 	jr	z, 5	; F0015C  jr Z,0xf00163
 	calr	28	; F0015E  calr 0xf0017d
 	jr	23	; F00161  jr T,0xf0017a
 	calr	74	; F00163  calr 0xf001b0
 	jr	18	; F00166  jr T,0xf0017a
-	ldl_da	xwa, (6304798)	; F00168  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F00168  ld XWA,(0x60341e)
 	cp	xwa, 0	; F0016D  cp XWA,0x00000000
 	jr	z, 5	; F00173  jr Z,0xf0017a
 	calr	61	; F00175  calr 0xf001b5
@@ -1422,7 +1422,7 @@ sub_F00800:
 	ret	; F009A7  ret
 	m_and_mi8 MB16, 0x20d4, 0x3f	; F009A8  and (0x20d4),0x3f
 	ret	; F009AD  ret
-	ldl_da	xix, (6311941)	; F009AE  ld XIX,(0x605005)
+	ld	xix, (6311941:24)	; F009AE  ld XIX,(0x605005)
 	m_ld_rm MBD+r4, 0x00, 1	; F009B3  ld A,(XIX+0x00)
 	cp	a, 144	; F009B6  cp A,0x90
 	jr	nz, 10	; F009B9  jr NZ,0xf009c5
@@ -1495,7 +1495,7 @@ sub_F00800:
 	jr	2	; F00AA0  jr T,0xf00aa4
 	ldb	a, 1	; F00AA2  ld A,0x01
 	ret	; F00AA4  ret
-	ldl_da	xiy, (6311941)	; F00AA5  ld XIY,(0x605005)
+	ld	xiy, (6311941:24)	; F00AA5  ld XIY,(0x605005)
 	ld	w, (xiy+2)	; F00AAA  ld W,(XIY+0x02)
 	ld	a, (xiy+3)	; F00AAD  ld A,(XIY+0x03)
 	inc	4, xiy	; F00AB0  inc 4,XIY
@@ -68369,7 +68369,7 @@ sub_F36E21:		; <- T_F41250
 	ld	bc, (2560:24)	; F36E2C  ld BC,(0x000a00)
 	and	bc, 4	; F36E31  and BC,0x0004
 	jrl	z, 335	; F36E35  jrl Z,0xf36f87
-	ldl_da	xbc, (2563)	; F36E38  ld XBC,(0x000a03)
+	ld	xbc, (2563:24)	; F36E38  ld XBC,(0x000a03)
 	cp	xbc, 393216	; F36E3D  cp XBC,0x00060000
 	jr	ge, 98	; F36E43  jr GE,0xf36ea7
 	sub	xbc, 262144	; F36E45  sub XBC,0x00040000
@@ -68403,7 +68403,7 @@ sub_F36E21:		; <- T_F41250
 	call	16004212	; F36E9A  call 0xf43474
 	add	xsp, 18	; F36E9E  add XSP,0x00000012
 	jrl	214	; F36EA4  jrl T,0xf36f7d
-	ldl_da	xbc, (2563)	; F36EA7  ld XBC,(0x000a03)
+	ld	xbc, (2563:24)	; F36EA7  ld XBC,(0x000a03)
 	sub	xbc, 393216	; F36EAC  sub XBC,0x00060000
 	ld	(xiz-4), xbc	; F36EB2  ld (XIZ+0xfc),XBC
 	ld	xix, xbc	; F36EB5  ld XIX,XBC
@@ -69951,7 +69951,7 @@ sub_F379AB:		; <- T_F41258
 	pushw	0	; F37B9A  push 0x0000
 	call	16004208	; F37B9D  call 0xf43470
 	jrl	355	; F37BA1  jrl T,0xf37d07
-	ldl_da	xbc, (2563)	; F37BA4  ld XBC,(0x000a03)
+	ld	xbc, (2563:24)	; F37BA4  ld XBC,(0x000a03)
 	sub	xbc, 393216	; F37BA9  sub XBC,0x00060000
 	ld	(xiz-20), xbc	; F37BAF  ld (XIZ+0xec),XBC
 	ld	xix, xbc	; F37BB2  ld XIX,XBC
@@ -70199,11 +70199,11 @@ sub_F37DB4:
 	ld	(xix+3), 4	; F37DC7  ld (XIX+0x03),0x04
 	ld	(xix+4), 0	; F37DCB  ld (XIX+0x04),0x00
 	ld	(xix+5), 17	; F37DCF  ld (XIX+0x05),0x11
-	ldl_da	xbc, (2563)	; F37DD3  ld XBC,(0x000a03)
+	ld	xbc, (2563:24)	; F37DD3  ld XBC,(0x000a03)
 	and	xbc, 2080768	; F37DD8  and XBC,0x001fc000
 	sra	xbc, 14	; F37DDE  sra 0x0e,XBC
 	ld	(xix+6), c	; F37DE1  ld (XIX+0x06),C
-	ldl_da	xbc, (2563)	; F37DE4  ld XBC,(0x000a03)
+	ld	xbc, (2563:24)	; F37DE4  ld XBC,(0x000a03)
 	and	xbc, 16256	; F37DE9  and XBC,0x00003f80
 	sra	xbc, 7	; F37DEF  sra 0x07,XBC
 	ld	(xix+7), c	; F37DF2  ld (XIX+0x07),C
@@ -70737,7 +70737,7 @@ sub_F389A2:
 	ret	; F38A5D  ret
 	link XIZ,0x0000	; F38A5E  link XIZ,0x0000
 	push	xix	; F38A62  push XIX
-	ldl_da	xix, (6352920)	; F38A63  ld XIX,(0x60f018)
+	ld	xix, (6352920:24)	; F38A63  ld XIX,(0x60f018)
 	ldb	c, 4	; F38A68  ld C,0x04
 	m_mul MBD+r6, 0x08, 3	; F38A6A  mul BC,(XIZ+0x08)
 	extz	xbc	; F38A6D  extz XBC
@@ -84632,7 +84632,7 @@ sub_F440C4:		; <- T_F4400C
 	calr	6710	; F440D1  calr 0xf45b0a
 	calr	6302	; F440D4  calr 0xf45975
 	stdi16	(13650), 1	; F440D7  ld (0x3552),0x0001
-	ldl_da	xwa, (6304798)	; F440DD  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F440DD  ld XWA,(0x60341e)
 	stda32	(13836), xwa	; F440E2  ld (0x360c),XWA
 	calr	4932	; F440E6  calr 0xf4542d
 	m_bit 0, MD16, 0x34d3	; F440E9  bit 0,(0x34d3)
@@ -85204,7 +85204,7 @@ sub_F44582:		; <- T_F409C8
 	inc	1, c	; F44612  inc 1,C
 	cp	c, 17	; F44614  cp C,0x11
 	jr	ule, -48	; F44617  jr ULE,0xf445e9
-	ldl_da	xwa, (6304798)	; F44619  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44619  ld XWA,(0x60341e)
 	stda32	(13490), xwa	; F4461E  ld (0x34b2),XWA
 	ret	; F44622  ret
 
@@ -85261,7 +85261,7 @@ sub_F44623:
 sub_F4466D:
 	bit_dd8	7, 165	; F4466D  bit 7,(0xa5)
 	jrl	z, 263	; F44670  jrl Z,0xf4477a
-	ldl_da	xwa, (6304798)	; F44673  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44673  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44678  cp XWA,0x00000000
 	jrl	z, 249	; F4467E  jrl Z,0xf4477a
 	bit_dd8	2, 150	; F44681  bit 2,(0x96)
@@ -85563,7 +85563,7 @@ sub_F44903:
 sub_F4491C:
 	m_bit 0, MD16, 0x34d2	; F4491C  bit 0,(0x34d2)
 	jr	z, 27	; F44920  jr Z,0xf4493d
-	ldl_da	xwa, (6304798)	; F44922  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44922  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44927  cp XWA,0x00000000
 	jr	z, 9	; F4492D  jr Z,0xf44938
 	bit_dd8	2, 149	; F4492F  bit 2,(0x95)
@@ -85669,7 +85669,7 @@ sub_F44964:
 	jr	z, 33	; F44A05  jr Z,0xf44a28
 	m_bit 1, MD16, 0x34d9	; F44A07  bit 1,(0x34d9)
 	jr	nz, 13	; F44A0B  jr NZ,0xf44a1a
-	ldl_da	xwa, (6304798)	; F44A0D  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44A0D  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44A12  cp XWA,0x00000000
 	jr	z, 9	; F44A18  jr Z,0xf44a23
 	m_and_mi8 MB16, 0x34d4, 0xf7	; F44A1A  and (0x34d4),0xf7
@@ -85698,7 +85698,7 @@ sub_F44964:
 ; --------------------------------------------------------------------------
 sub_F44A3B:
 	calr	239	; F44A3B  calr 0xf44b2d
-	ldl_da	xwa, (6304798)	; F44A3E  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44A3E  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44A43  cp XWA,0x00000000
 	jr	z, 9	; F44A49  jr Z,0xf44a54
 	m_bit 1, MD16, 0x345a	; F44A4B  bit 1,(0x345a)
@@ -85816,7 +85816,7 @@ sub_F44AEE:		; <- T_F40AC4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F44B2D:		; <- T_F40AAC
-	ldl_da	xwa, (6304798)	; F44B2D  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44B2D  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44B32  cp XWA,0x00000000
 	jr	nz, 12	; F44B38  jr NZ,0xf44b46
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F44B3A  and (0x34bb),0xf7
@@ -86248,7 +86248,7 @@ sub_F44E8E:		; <- T_F40AA0
 	ld	(14138:16), iz	; F44EC0  ld (0x373a),IZ
 	bit_dd8	2, 150	; F44EC4  bit 2,(0x96)
 	jrl	nz, 156	; F44EC7  jrl NZ,0xf44f66
-	ldl_da	xwa, (6304798)	; F44ECA  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44ECA  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44ECF  cp XWA,0x00000000
 	jrl	nz, 142	; F44ED5  jrl NZ,0xf44f66
 	xor	xwa, xwa	; F44ED8  xor XWA,XWA
@@ -86263,7 +86263,7 @@ sub_F44E8E:		; <- T_F40AA0
 	xor	xwa, xwa	; F44EFA  xor XWA,XWA
 	stda32	(14136), xwa	; F44EFC  ld (0x3738),XWA
 	jr	100	; F44F00  jr T,0xf44f66
-	ldl_da	xwa, (6304798)	; F44F02  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44F02  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44F07  cp XWA,0x00000000
 	jr	nz, 42	; F44F0D  jr NZ,0xf44f39
 	xor	xwa, xwa	; F44F0F  xor XWA,XWA
@@ -86332,7 +86332,7 @@ sub_F44F67:		; <- T_F40ABC
 	ld	(14138:16), iz	; F44F99  ld (0x373a),IZ
 	bit_dd8	2, 150	; F44F9D  bit 2,(0x96)
 	jrl	nz, 153	; F44FA0  jrl NZ,0xf4503c
-	ldl_da	xwa, (6304798)	; F44FA3  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44FA3  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44FA8  cp XWA,0x00000000
 	jrl	nz, 139	; F44FAE  jrl NZ,0xf4503c
 	xor	xwa, xwa	; F44FB1  xor XWA,XWA
@@ -86347,7 +86347,7 @@ sub_F44F67:		; <- T_F40ABC
 	xor	xwa, xwa	; F44FD3  xor XWA,XWA
 	stda32	(14136), xwa	; F44FD5  ld (0x3738),XWA
 	jr	97	; F44FD9  jr T,0xf4503c
-	ldl_da	xwa, (6304798)	; F44FDB  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F44FDB  ld XWA,(0x60341e)
 	cp	xwa, 0	; F44FE0  cp XWA,0x00000000
 	jr	nz, 42	; F44FE6  jr NZ,0xf45012
 	xor	xwa, xwa	; F44FE8  xor XWA,XWA
@@ -86506,7 +86506,7 @@ sub_F45119:
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F45119  and (0x34bb),0xf7
 	calr	2153	; F4511E  calr 0xf4598a
 	call	15994036	; F45121  call 0xf40cb4
-	ldl_da	xwa, (6304798)	; F45125  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F45125  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4512A  cp XWA,0x00000000
 	jr	z, 72	; F45130  jr Z,0xf4517a
 	call	16000376	; F45132  call 0xf42578
@@ -86617,7 +86617,7 @@ sub_F451E6:		; <- T_F409D0
 	ldio	147, 0	; F45234  ld (0x93),0x00
 	ldb_da	a, (6311936)	; F45237  ld A,(0x605000)
 	ld	(13400:16), a	; F4523C  ld (0x3458),A
-	ldl_da	xwa, (6304798)	; F45240  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F45240  ld XWA,(0x60341e)
 	cp	xwa, 0	; F45245  cp XWA,0x00000000
 	jr	z, 7	; F4524B  jr Z,0xf45254
 	m_or_mi8 MB16, 0x34d4, 0x18	; F4524D  or (0x34d4),0x18
@@ -86697,7 +86697,7 @@ sub_F452D3:		; <- T_F409D4
 	cpl	qwa	; F452DA  cpl QWA
 	m_and_mr ML16, 0x3008, 0	; F452DD  and (0x3008),XWA
 	m_and_mr ML16, 0x300c, 0	; F452E1  and (0x300c),XWA
-	ldl_da	xwa, (6304798)	; F452E5  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F452E5  ld XWA,(0x60341e)
 	cp	xwa, 0	; F452EA  cp XWA,0x00000000
 	jr	nz, 18	; F452F0  jr NZ,0xf45304
 	xor	xwa, xwa	; F452F2  xor XWA,XWA
@@ -86845,7 +86845,7 @@ sub_F453E9:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4542D:		; <- T_F409E0
-	ldl_da	xwa, (6304798)	; F4542D  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F4542D  ld XWA,(0x60341e)
 	cp	xwa, 0	; F45432  cp XWA,0x00000000
 	jr	z, 10	; F45438  jr Z,0xf45444
 	bit_dd8	2, 150	; F4543A  bit 2,(0x96)
@@ -86866,7 +86866,7 @@ sub_F4542D:		; <- T_F409E0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45445:		; <- T_F409E4
-	ldl_da	xwa, (6304798)	; F45445  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F45445  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4544A  cp XWA,0x00000000
 	jr	z, 3	; F45450  jr Z,0xf45455
 	calr	1738	; F45452  calr 0xf45b1f
@@ -86992,7 +86992,7 @@ sub_F45489:		; <- T_F409F4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F454A6:		; <- T_F409F8
-	ldl_da	xwa, (6304798)	; F454A6  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F454A6  ld XWA,(0x60341e)
 	stda32	(12304), xwa	; F454AB  ld (0x3010),XWA
 	calr	282	; F454AF  calr 0xf455cc
 	ret	; F454B2  ret
@@ -87343,7 +87343,7 @@ sub_F456EC:		; <- T_F40A24
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F456F0:
-	ldl_da	xwa, (6304798)	; F456F0  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F456F0  ld XWA,(0x60341e)
 	cp	xwa, 0	; F456F5  cp XWA,0x00000000
 	jr	nz, 99	; F456FB  jr NZ,0xf45760
 	ld	xwa, (12288:16)	; F456FD  ld XWA,(0x3000)
@@ -87669,7 +87669,7 @@ sub_F4598A:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F459AA:
-	ldl_da	xwa, (6304798)	; F459AA  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F459AA  ld XWA,(0x60341e)
 	cp	xwa, 0	; F459AF  cp XWA,0x00000000
 	jr	z, 5	; F459B5  jr Z,0xf459bc
 	calr	31	; F459B7  calr 0xf459d9
@@ -88983,7 +88983,7 @@ sub_F47807:		; <- T_F40B50
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F47816:
-	ldl_da	xwa, (6304798)	; F47816  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F47816  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4781B  cp XWA,0x00000000
 	jr	z, 15	; F47821  jr Z,0xf47832
 	ld	xwa, (12296:16)	; F47823  ld XWA,(0x3008)
@@ -89159,7 +89159,7 @@ sub_F479AD:
 	xor	bc, bc	; F479B4  xor BC,BC
 	ld	(13471:16), c	; F479B6  ld (0x349f),C
 	ld	c, (13471:16)	; F479BA  ld C,(0x349f)
-	ldl_da	xwa, (6304798)	; F479BE  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F479BE  ld XWA,(0x60341e)
 	m_and_rm ML16, 0x3008, 0	; F479C3  and XWA,(0x3008)
 	cp	c, 16	; F479C7  cp C,0x10
 	jr	nc, 13	; F479CA  jr NC,0xf479d9
@@ -89279,7 +89279,7 @@ sub_F47A73:
 	stdi16	(13280), 65535	; F47A7F  ld (0x33e0),0xffff
 	ld	(13471:16), 0	; F47A85  ld (0x349f),0x00
 	ld	c, (13471:16)	; F47A8A  ld C,(0x349f)
-	ldl_da	xwa, (6304798)	; F47A8E  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F47A8E  ld XWA,(0x60341e)
 	m_and_rm ML16, 0x3008, 0	; F47A93  and XWA,(0x3008)
 	cp	c, 16	; F47A97  cp C,0x10
 	jr	nc, 13	; F47A9A  jr NC,0xf47aa9
@@ -90495,7 +90495,7 @@ sub_F48464:		; <- T_F40B5C
 	ld	(13650:16), wa	; F4847C  ld (0x3552),WA
 	m_or_mi8 MB16, 0x2095, 0x10	; F48480  or (0x2095),0x10
 	calr	593	; F48485  calr 0xf486d9
-	ldl_da	xwa, (6304798)	; F48488  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F48488  ld XWA,(0x60341e)
 	push	xwa	; F4848D  push XWA
 	ld	xwa, 4294967295	; F4848E  ld XWA,0xffffffff
 	stl_da	(6304798), xwa	; F48493  ld (0x60341e),XWA
@@ -90802,7 +90802,7 @@ sub_F48707:		; <- T_F40B70
 	pushw	wa	; F4870B  push WA
 	ld	wa, (13858:16)	; F4870C  ld WA,(0x3622)
 	ld	(13650:16), wa	; F48710  ld (0x3552),WA
-	ldl_da	xwa, (6304798)	; F48714  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F48714  ld XWA,(0x60341e)
 	push	xwa	; F48719  push XWA
 	ld	xwa, 4294967295	; F4871A  ld XWA,0xffffffff
 	stl_da	(6304798), xwa	; F4871F  ld (0x60341e),XWA
@@ -90967,7 +90967,7 @@ DiskFile_CheckSignature:		; <- T_F43430
 	lda	xiy, (16026624:24)	; F48C24  lda XIY,0xf48c00
 	lda	xix, (xiz-58)	; F48C29  lda XIX,XIZ+0xc6
 	m_ldirw MWI+r5	; F48C2C  ldirw
-	ldl_da	xbc, (16026640)	; F48C2E  ld XBC,(0xf48c10)
+	ld	xbc, (16026640:24)	; F48C2E  ld XBC,(0xf48c10)
 	ld	(xiz-36), xbc	; F48C33  ld (XIZ+0xdc),XBC
 	ld	(10368:16), 38	; F48C36  ld (0x2880),0x26
 	push	xde	; F48C3B  push XDE
@@ -96786,7 +96786,7 @@ sub_F4CA64:		; <- T_F414B8
 	ldb_da	a, (6304976)	; F4CA64  ld A,(0x6034d0)
 	ld	(13834:16), a	; F4CA69  ld (0x360a),A
 	stib_da	(6304976), 0	; F4CA6D  ld (0x6034d0),0x00
-	ldl_da	xwa, (6304977)	; F4CA73  ld XWA,(0x6034d1)
+	ld	xwa, (6304977:24)	; F4CA73  ld XWA,(0x6034d1)
 	stda32	(13836), xwa	; F4CA78  ld (0x360c),XWA
 	xor	xwa, xwa	; F4CA7C  xor XWA,XWA
 	stl_da	(6304977), xwa	; F4CA7E  ld (0x6034d1),XWA
@@ -98636,7 +98636,7 @@ sub_F4E390:		; <- T_F40D6C
 	m_rd_stcf_a RW+r2	; F4E3B7  stcf A,DE
 	stw_da	(6304800), de	; F4E3B9  ld (0x603420),DE
 	call	15994384	; F4E3BE  call 0xf40e10
-	ldl_da	xwa, (6304798)	; F4E3C2  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F4E3C2  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E3C7  cp XWA,0x00000000
 	jr	nz, 19	; F4E3CD  jr NZ,0xf4e3e2
 	bit_dd8	2, 148	; F4E3CF  bit 2,(0x94)
@@ -98648,7 +98648,7 @@ sub_F4E390:		; <- T_F40D6C
 	pushw	bc	; F4E3DC  push BC
 	call	15993256	; F4E3DD  call 0xf409a8
 	popw	bc	; F4E3E1  pop BC
-	ldl_da	xwa, (6304798)	; F4E3E2  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F4E3E2  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E3E7  cp XWA,0x00000000
 	jr	nz, 12	; F4E3ED  jr NZ,0xf4e3fb
 	m_cp_mi8 MB16, 0x2078, 0x08	; F4E3EF  cp (0x2078),0x08
@@ -98688,7 +98688,7 @@ sub_F4E390:		; <- T_F40D6C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4E426:		; <- T_F40D60
-	ldl_da	xwa, (6304798)	; F4E426  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F4E426  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E42B  cp XWA,0x00000000
 	jr	nz, 11	; F4E431  jr NZ,0xf4e43e
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F4E433  and (0x34bb),0xf7
@@ -98729,7 +98729,7 @@ sub_F4E426:		; <- T_F40D60
 ; --------------------------------------------------------------------------
 sub_F4E478:		; <- T_F40D68
 	ld	c, (14134:16)	; F4E478  ld C,(0x3736)
-	ldl_da	xwa, (6304798)	; F4E47C  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F4E47C  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E481  cp XWA,0x00000000
 	jr	nz, 10	; F4E487  jr NZ,0xf4e493
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F4E489  and (0x34bb),0xf7
@@ -98883,7 +98883,7 @@ sub_F4E525:		; <- T_F40CBC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4E545:
-	ldl_da	xwa, (6304798)	; F4E545  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F4E545  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4E54A  cp XWA,0x00000000
 	jr	z, 28	; F4E550  jr Z,0xf4e56e
 	bit_dd8	2, 150	; F4E552  bit 2,(0x96)
@@ -99052,7 +99052,7 @@ BitWeight_F4E5FC:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4EC00:		; <- T_F40CE0
-	ldl_da	xwa, (6304798)	; F4EC00  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F4EC00  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4EC05  cp XWA,0x00000000
 	jr	z, 23	; F4EC0B  jr Z,0xf4ec24
 	ld	xwa, (12288:16)	; F4EC0D  ld XWA,(0x3000)
@@ -99469,7 +99469,7 @@ sub_F4EEAD:		; <- T_F40D04
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4EEBC:		; <- T_F40D08
-	ldl_da	xwa, (6304798)	; F4EEBC  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F4EEBC  ld XWA,(0x60341e)
 	cp	xwa, 0	; F4EEC1  cp XWA,0x00000000
 	jr	z, 15	; F4EEC7  jr Z,0xf4eed8
 	bit_dd8	2, 150	; F4EEC9  bit 2,(0x96)
@@ -99738,7 +99738,7 @@ sub_F4F02E:
 	push	xix	; F4F031  push XIX
 	push	xhl	; F4F032  push XHL
 	push	xde	; F4F033  push XDE
-	ldl_da	xiy, (6352920)	; F4F034  ld XIY,(0x60f018)
+	ld	xiy, (6352920:24)	; F4F034  ld XIY,(0x60f018)
 	ld	l, (xiz+8)	; F4F039  ld L,(XIZ+0x08)
 	extz	hl	; F4F03C  extz HL
 	sla	hl, 2	; F4F03E  sla 0x02,HL
@@ -111851,7 +111851,7 @@ sub_F57286:
 	ld	xwa, (13836:16)	; F572A5  ld XWA,(0x360c)
 	m_cp_mi8 MB16, 0x3626, 0x00	; F572A9  cp (0x3626),0x00
 	jr	z, 5	; F572AE  jr Z,0xf572b5
-	ldl_da	xwa, (6299393)	; F572B0  ld XWA,(0x601f01)
+	ld	xwa, (6299393:24)	; F572B0  ld XWA,(0x601f01)
 	stl_da	(6304798), xwa	; F572B5  ld (0x60341e),XWA
 	call	15995320	; F572BA  call 0xf411b8
 	pop	xwa	; F572BE  pop XWA
@@ -112131,7 +112131,7 @@ sub_F573BA:
 	m_cp_mi8 MB16, 0x3626, 0x01	; F573BA  cp (0x3626),0x01
 	jr	z, 22	; F573BF  jr Z,0xf573d7
 	ld	(13862:16), 1	; F573C1  ld (0x3626),0x01
-	ldl_da	xwa, (6299393)	; F573C6  ld XWA,(0x601f01)
+	ld	xwa, (6299393:24)	; F573C6  ld XWA,(0x601f01)
 	stl_da	(6304798), xwa	; F573CB  ld (0x60341e),XWA
 	call	15995320	; F573D0  call 0xf411b8
 	calr	1	; F573D4  calr 0xf573d8
@@ -112415,7 +112415,7 @@ sub_F57433:
 ; --------------------------------------------------------------------------
 sub_F57443:
 	push	xwa	; F57443  push XWA
-	ldl_da	xwa, (6304798)	; F57444  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F57444  ld XWA,(0x60341e)
 	stda32	(13836), xwa	; F57449  ld (0x360c),XWA
 	pop	xwa	; F5744D  pop XWA
 	call	15995320	; F5744E  call 0xf411b8
@@ -131731,7 +131731,7 @@ BStore_Workspace_LoadFromBank:
 	ld	xix, 6304768	; F64B54  ld XIX,0x00603400
 	ldw	bc, 3072	; F64B59  ld BC,0x0c00
 	m_ldir MBI+r5	; F64B5C  ldir
-	ldl_da	xwa, (6304798)	; F64B5E  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F64B5E  ld XWA,(0x60341e)
 	stda32	(13836), xwa	; F64B63  ld (0x360c),XWA
 	ld	wa, (3627:16)	; F64B67  ld WA,(0x0e2b)
 	stw_da	(6304952), wa	; F64B6B  ld (0x6034b8),WA
@@ -133304,7 +133304,7 @@ sub_F66020:		; <- T_F42BB0
 	jr	z, 1	; F66028  jr Z,0xf6602b
 	ret	; F6602A  ret
 	ld	(3520:16), 0	; F6602B  ld (0x0dc0),0x00
-	ldl_da	xwa, (6304798)	; F66030  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F66030  ld XWA,(0x60341e)
 	stda32	(12304), xwa	; F66035  ld (0x3010),XWA
 	ld	a, (3075:16)	; F66039  ld A,(0x0c03)
 	inc	1, a	; F6603D  inc 1,A
@@ -134008,7 +134008,7 @@ sub_F664AE:		; <- T_F42BBC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F664D5:		; <- T_F42BC4
-	ldl_da	xwa, (6304798)	; F664D5  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F664D5  ld XWA,(0x60341e)
 	stda32	(12304), xwa	; F664DA  ld (0x3010),XWA
 	ld	a, (8314:16)	; F664DE  ld A,(0x207a)
 	m_cp_rm MB16, 0x207b, 1	; F664E2  cp A,(0x207b)
@@ -152853,7 +152853,7 @@ sub_F6F4A3:
 	stw_da	(6304952), wa	; F6F4DA  ld (0x6034b8),WA
 	ld	wa, (3629:16)	; F6F4DF  ld WA,(0x0e2d)
 	stw_da	(6304954), wa	; F6F4E3  ld (0x6034ba),WA
-	ldl_da	xwa, (6304798)	; F6F4E8  ld XWA,(0x60341e)
+	ld	xwa, (6304798:24)	; F6F4E8  ld XWA,(0x60341e)
 	stda32	(13836), xwa	; F6F4ED  ld (0x360c),XWA
 	ret	; F6F4F1  ret
 

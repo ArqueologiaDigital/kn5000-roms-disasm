@@ -145,7 +145,7 @@ sub_FA7E2C:
 	add	bc, 0x82                               ; FA7E44  add BC,0x0082
 	extz	xix                                   ; FA7E48  extz XIX
 	extpfx5 0xE3, 0x07, 0xF0, 0xE4, 0x20       ; FA7E4A  ld XWA,(XIX+BC)
-	ldl_da	xbc, (0xF2F3)                       ; FA7E4F  ld XBC,(0x00f2f3)
+	ld	xbc, (0xF2F3:24)                       ; FA7E4F  ld XBC,(0x00f2f3)
 	sub	xbc, xwa                               ; FA7E54  sub XBC,XWA
 	ld	(xiz-4), xbc                            ; FA7E56  ld (XIZ+0xfc),XBC
 	jrl z, sub_FA7E2C__FA7EC5                  ; FA7E59  jrl Z,0xfa7ec5
@@ -200,7 +200,7 @@ sub_FA7E2C__FA7EC5:
 	add	bc, 0x82                               ; FA7ECD  add BC,0x0082
 	extz	xbc                                   ; FA7ED1  extz XBC
 	add	bc, ix                                 ; FA7ED3  add BC,IX
-	ldl_da	xwa, (0xF2F3)                       ; FA7ED5  ld XWA,(0x00f2f3)
+	ld	xwa, (0xF2F3:24)                       ; FA7ED5  ld XWA,(0x00f2f3)
 	ld	(xbc), xwa                              ; FA7EDA  ld (XBC),XWA
 	pop	xix                                    ; FA7EDC  pop XIX
 	popw	de                                    ; FA7EDD  pop DE
@@ -706,13 +706,13 @@ Voice_SelectKeyZone_Reg0040:
 	extz	xbc                                   ; FA81A4  extz XBC
 	ld	xwa, (xbc+31)                           ; FA81A6  ld XWA,(XBC+0x1f)
 	ld	(xiz-8), xwa                            ; FA81A9  ld (XIZ+0xf8),XWA
-	ldl_da	xix, (0xD7ED)                       ; FA81AC  ld XIX,(0x00d7ed)
+	ld	xix, (0xD7ED:24)                       ; FA81AC  ld XIX,(0x00d7ed)
 	cp	xwa, xix                                ; FA81B1  cp XWA,XIX
 	jr ule, Voice_SelectKeyZone_Reg0040__FA81BC                 ; FA81B3  jr ULE,0xfa81bc
-	ldl_da	xix, (0xD7ED)                       ; FA81B5  ld XIX,(0x00d7ed)
+	ld	xix, (0xD7ED:24)                       ; FA81B5  ld XIX,(0x00d7ed)
 	jr Voice_SelectKeyZone_Reg0040__FA81C1                      ; FA81BA  jr T,0xfa81c1
 Voice_SelectKeyZone_Reg0040__FA81BC:
-	ldl_da	xix, (0xD80D)                       ; FA81BC  ld XIX,(0x00d80d)
+	ld	xix, (0xD80D:24)                       ; FA81BC  ld XIX,(0x00d80d)
 Voice_SelectKeyZone_Reg0040__FA81C1:
 	ld	xbc, (xiz-8)                            ; FA81C1  ld XBC,(XIZ+0xf8)
 	ld	xwa, (xbc+1)                            ; FA81C4  ld XWA,(XBC+0x01)
@@ -832,7 +832,7 @@ Voice_StageRegs_0040_B:
 	ld	xbc, (xde+31)                           ; FA8278  ld XBC,(XDE+0x1f)
 	ld	xwa, (xbc+5)                            ; FA827B  ld XWA,(XBC+0x05)
 	ld	(xiz-4), xwa                            ; FA827E  ld (XIZ+0xfc),XWA
-	ldl_da	xix, (0xD7ED)                       ; FA8281  ld XIX,(0x00d7ed)
+	ld	xix, (0xD7ED:24)                       ; FA8281  ld XIX,(0x00d7ed)
 	add	xix, xwa                               ; FA8286  add XIX,XWA
 	ld	h, (xde+3)                              ; FA8288  ld H,(XDE+0x03)
 	cps	h, 0                                   ; FA828B  cp H,0
@@ -7848,7 +7848,7 @@ sub_FAB5A5__FAB61F:
 	exts	wa                                    ; FAB66B  exts WA
 	extpfx3 0x9E, 0xFA, 0x80                   ; FAB66D  add WA,(XIZ+0xfa)
 	ld	(xiz-8), wa                             ; FAB670  ld (XIZ+0xf8),WA
-	ldl_da	xbc, (0xD7F1)                       ; FAB673  ld XBC,(0x00d7f1)
+	ld	xbc, (0xD7F1:24)                       ; FAB673  ld XBC,(0x00d7f1)
 	ld	iy, (xbc+0xE0)                          ; FAB678  ld IY,(XBC+0x00e0)
 	add	wa, iy                                 ; FAB67D  add WA,IY
 	ld	(xiz-10), wa                            ; FAB67F  ld (XIZ+0xf6),WA
@@ -7972,7 +7972,7 @@ sub_FAB6D5__FAB742:
 	exts	wa                                    ; FAB76D  exts WA
 	ld	hl, wa                                  ; FAB76F  ld HL,WA
 	add	hl, ix                                 ; FAB771  add HL,IX
-	ldl_da	xbc, (0xD7F1)                       ; FAB773  ld XBC,(0x00d7f1)
+	ld	xbc, (0xD7F1:24)                       ; FAB773  ld XBC,(0x00d7f1)
 	ld	wa, (xbc+0xE0)                          ; FAB778  ld WA,(XBC+0x00e0)
 	ld	ix, wa                                  ; FAB77D  ld IX,WA
 	add	ix, hl                                 ; FAB77F  add IX,HL

@@ -1347,7 +1347,7 @@ LcdTest_Done:
 Test_Video_RAM_IC207:
 	dec 2, xsp
 	ld (xsp), a
-	ldl_da xhl, (WidgetStyleDataTable)
+	ld xhl, (WidgetStyleDataTable:24)
 	call (xhl)
 	stiw_da (0x1a0000), 0x5a5a; VRAM self-test pattern 1
 	calr DramTest_Loop
@@ -2262,7 +2262,7 @@ SysIniNoFunc:
 	ret
 
 SysIniYesFunc:
-	ldl_da xde, (0x0340de)
+	ld xde, (0x0340de:24)
 	ld xwa, 0x142000a
 	ld xbc, 0x1e20013
 	call MainFuncCall
@@ -2411,7 +2411,7 @@ MasterSetup_DialTurn_ScrollUp:
 	inc	8, xsp
 	jr	23
 MasterSetup_ScrollUp_Overflow:
-	ldl_da	xwa, (15443092)
+	ld	xwa, (15443092:24)
 	push	xwa
 	push	xbc
 	call	16713584
@@ -5603,7 +5603,7 @@ MstGrid2_CellSelect:
 	add	xwa, xbc
 	add	xwa, xwa
 	ld	(xsp+16), xwa
-	ldl_da	xwa, (213210)
+	ld	xwa, (213210:24)
 	add	(xsp+16), xwa
 	ld	xwa, (xsp+8)
 	ld	xbc, (xwa+98)

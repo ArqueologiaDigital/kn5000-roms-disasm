@@ -16763,10 +16763,10 @@ AccPatch_ReadModeFlags:
 	jr AccPatch_SetFlagExit
 
 AccPatch_ReadModeFlags_Active:
-	ldl_da xwa, (0x02749a)
+	ld xwa, (0x02749a:24)
 	orda32_24 xwa, (0x02749e)
 	stda32 4560, xwa
-	ldl_da xwa, (0x02749e)
+	ld xwa, (0x02749e:24)
 	stda32 0x39e0, xwa
 	ld xwa, (4560:16)
 	and xwa, 0x200

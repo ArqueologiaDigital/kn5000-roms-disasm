@@ -445,14 +445,14 @@ sub_FC35DB:
 	extpfx3 0xBC, 0x16, 0xCF                   ; FC3600  bit 7,(XIX+0x16)
 	jr z, sub_FC35DB__FC3614                   ; FC3603  jr Z,0xfc3614
 	ei	6                                       ; FC3605  ei 0x06
-	ldl_da	xbc, (0xF2F3)                       ; FC3607  ld XBC,(0x00f2f3)
+	ld	xbc, (0xF2F3:24)                       ; FC3607  ld XBC,(0x00f2f3)
 	ld	(xix+18), xbc                           ; FC360C  ld (XIX+0x12),XBC
 	ei	0                                       ; FC360F  ei 0x00
 	jrl sub_FC35DB__FC3699                     ; FC3611  jrl T,0xfc3699
 sub_FC35DB__FC3614:
 	ei	6                                       ; FC3614  ei 0x06
 	ld	xbc, (xix+18)                           ; FC3616  ld XBC,(XIX+0x12)
-	ldl_da	xwa, (0xF2F3)                       ; FC3619  ld XWA,(0x00f2f3)
+	ld	xwa, (0xF2F3:24)                       ; FC3619  ld XWA,(0x00f2f3)
 	sub	xwa, xbc                               ; FC361E  sub XWA,XBC
 	ld	(xiz-4), xwa                            ; FC3620  ld (XIZ+0xfc),XWA
 	ei	0                                       ; FC3623  ei 0x00
@@ -1111,7 +1111,7 @@ sub_FC39FA:
 	pushw	hl                                   ; FC39FE  push HL
 	pushw	de                                   ; FC39FF  push DE
 	push	xix                                   ; FC3A00  push XIX
-	ldl_da	xbc, (0xFE150F)                     ; FC3A01  ld XBC,(0xfe150f)
+	ld	xbc, (0xFE150F:24)                     ; FC3A01  ld XBC,(0xfe150f)
 	ld	xix, xbc                                ; FC3A06  ld XIX,XBC
 	ldb	h, 0                                   ; FC3A08  ld H,0x00
 sub_FC39FA__FC3A0A:
@@ -1119,7 +1119,7 @@ sub_FC39FA__FC3A0A:
 	extz	bc                                    ; FC3A0C  extz BC
 	extz	xbc                                   ; FC3A0E  extz XBC
 	ld	(xiz-16), xbc                           ; FC3A10  ld (XIZ+0xf0),XBC
-	ldl_da	xwa, (0xFE151F)                     ; FC3A13  ld XWA,(0xfe151f)
+	ld	xwa, (0xFE151F:24)                     ; FC3A13  ld XWA,(0xfe151f)
 	add	xwa, xbc                               ; FC3A18  add XWA,XBC
 	ld	l, (xwa)                                ; FC3A1A  ld L,(XWA)
 	add	xbc, xix                               ; FC3A1C  add XBC,XIX
@@ -1246,7 +1246,7 @@ sub_FC3B24:
 	pushw	hl                                   ; FC3B28  push HL
 	pushw	de                                   ; FC3B29  push DE
 	push	xix                                   ; FC3B2A  push XIX
-	ldl_da	xbc, (0xFE150F)                     ; FC3B2B  ld XBC,(0xfe150f)
+	ld	xbc, (0xFE150F:24)                     ; FC3B2B  ld XBC,(0xfe150f)
 	ld	xix, xbc                                ; FC3B30  ld XIX,XBC
 	ldb	h, 0                                   ; FC3B32  ld H,0x00
 sub_FC3B24__FC3B34:
@@ -1254,7 +1254,7 @@ sub_FC3B24__FC3B34:
 	extz	bc                                    ; FC3B36  extz BC
 	extz	xbc                                   ; FC3B38  extz XBC
 	ld	(xiz-20), xbc                           ; FC3B3A  ld (XIZ+0xec),XBC
-	ldl_da	xwa, (0xFE151F)                     ; FC3B3D  ld XWA,(0xfe151f)
+	ld	xwa, (0xFE151F:24)                     ; FC3B3D  ld XWA,(0xfe151f)
 	add	xwa, xbc                               ; FC3B42  add XWA,XBC
 	ld	l, (xwa)                                ; FC3B44  ld L,(XWA)
 	add	xbc, xix                               ; FC3B46  add XBC,XIX

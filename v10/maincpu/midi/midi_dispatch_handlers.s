@@ -12669,7 +12669,7 @@ MidiSysEx_ProcessBlock:
 	push	xhl
 	push	xix
 	push	xiz
-	ldl_da	xhl, (SoundProgram_DispatchTable_0x888)
+	ld	xhl, (SoundProgram_DispatchTable_0x888:24)
 	call	(xhl)
 	call	MidiMsg_ParseChannelStream
 	call	SeqTimer_UpdateTempoReg
@@ -12716,7 +12716,7 @@ MidiSysEx_ProcessBlock:
 	push	xhl
 	push	xix
 	push	xiz
-	ldl_da	xhl, (WidgetData_CharsetMappingTable_0x8)
+	ld	xhl, (WidgetData_CharsetMappingTable_0x8:24)
 	call	(xhl)
 	pop	xiz
 	pop	xix

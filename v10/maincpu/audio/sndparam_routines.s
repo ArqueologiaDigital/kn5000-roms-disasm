@@ -2467,7 +2467,7 @@ SndParam_EncodeFieldSub_Data:
 	extz	hl
 	ret
 SndParam_ClampReverbTime:
-	ldl_da	xwa, (Naka_MainDispatch_Table_0xF70)
+	ld	xwa, (Naka_MainDispatch_Table_0xF70:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2535,7 +2535,7 @@ SndParam_DecodeFieldAlt_Data:
 	extz	hl
 	ret
 SndParam_ClampDelayTime:
-	ldl_da	xwa, (Naka_MainDispatch_Table_0xF70)
+	ld	xwa, (Naka_MainDispatch_Table_0xF70:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40

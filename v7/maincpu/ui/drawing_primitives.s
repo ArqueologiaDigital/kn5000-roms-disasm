@@ -1112,7 +1112,7 @@ DrawBox_Impl_FillRowLoop:
 	.byte 0xbf, 0x02, 0x60, 0xde, 0x61, 0xaf, 0x0e, 0x20
 	.byte 0x98, 0x06, 0xf6, 0x62, 0xdb, 0x68, 0x49
 DrawBox_Impl_PatternSetup:
-	ldl_da xwa, (0x030452)
+	ld xwa, (0x030452:24)
 	ld (xsp + 6), xwa
 	ld xwa, (xsp + 14)
 	ld wa, (xwa)
@@ -1973,7 +1973,7 @@ DrawWall_DoCopy:
 
 	push xiz
 
-	ldl_da xiz, (0x030452)
+	ld xiz, (0x030452:24)
 
 	lda xwa, (0x043c00:24)
 

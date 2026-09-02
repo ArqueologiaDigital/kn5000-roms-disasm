@@ -6845,7 +6845,7 @@ SeMenu_CopyWriteUpdate_Data:
 	push_f
 	and	(xbc), xbc
 	jr	ge, -57
-	ldl_da	xsp, (0x028f99)
+	ld	xsp, (0x028f99:24)
 	dec	1, l
 	lda	xbc, (xsp+6)
 	ld	xix, xbc

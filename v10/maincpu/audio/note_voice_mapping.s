@@ -24990,7 +24990,7 @@ Param_SignExtendRetu_Return:
 	ret
 
 Param_SignExtendRetu_Block:
-	ldl_da xwa, (SoundData_CategoryDescPtr)
+	ld xwa, (SoundData_CategoryDescPtr:24)
 	stda32 0xe14e, xwa
 	ret
 
@@ -28194,12 +28194,12 @@ Sprintf_Unlocked:
 	lda	xsp, (xsp+12)
 	ret
 Sprintf_OutputCallback:
-	ldl_da	xbc, (0x3c21c)
+	ld	xbc, (0x3c21c:24)
 	lds32	xwa, 1
 	addl_da	0x3c21c, xwa
 	ld	wa, (xsp+4)
 	ld	(xbc), a
-	ldl_da	xwa, (0x3c21c)
+	ld	xwa, (0x3c21c:24)
 	ld	(xwa), 0
 	ret
 
@@ -28211,7 +28211,7 @@ Free:
 	call TaskSched_WaitForEvent
 	ld xbc, (xsp + 4)
 	dec 6, xbc
-	ldl_da xwa, (0x03d52c)
+	ld xwa, (0x03d52c:24)
 	or xwa, xwa
 	jr nz, Free_Block
 	lds32 xwa, 0
@@ -28221,7 +28221,7 @@ Free:
 	jp TaskSched_SignalEvent
 
 Free_Block:
-	ldl_da xix, (0x03d52c)
+	ld xix, (0x03d52c:24)
 	ld xde, xix
 	or xix, xix
 	jr z, Free_Compare2
@@ -28250,17 +28250,17 @@ Free_LoadReg:
 	jr nz, Free_OrBits
 	cpda32_24 xwa, (0x3d52c)
 	jr nz, Free_Block2
-	ldl_da xwa, (0x03d52c)
+	ld xwa, (0x03d52c:24)
 	ld xwa, (xwa)
 	ld (xbc), xwa
-	ldl_da xwa, (0x03d52c)
+	ld xwa, (0x03d52c:24)
 	ld wa, (xwa + 4)
 	inc 6, wa
 	add (xbc + 4), wa
 	jr Free_Block3
 
 Free_Block2:
-	ldl_da xwa, (0x03d52c)
+	ld xwa, (0x03d52c:24)
 	ld (xbc), xwa
 
 Free_Block3:
@@ -28773,7 +28773,7 @@ Malloc:
 	add (xsp + 8), wa
 	lds wa, 1
 	call TaskSched_WaitForEvent
-	ldl_da xiz, (0x03d52c)
+	ld xiz, (0x03d52c:24)
 	or xiz, xiz
 	jr z, Malloc_OrBits
 
@@ -28908,7 +28908,7 @@ Strcpy_LoadReg:
 Heap_Alloc:
 	or xwa, xwa
 	jr nz, Heap_Alloc_Block
-	ldl_da xhl, (0x03d528)
+	ld xhl, (0x03d528:24)
 	ret
 
 Heap_Alloc_Block:
@@ -28926,7 +28926,7 @@ Heap_Alloc_Block:
 ; counter (at address 251176). Called by Heap_Alloc after size check passes.
 ; ============================================================================
 Heap_Grow:
-	ldl_da xhl, (0x03d524)
+	ld xhl, (0x03d524:24)
 	addl_da 0x03d524, xwa
 	subdm32_24 (0x3d528), xwa
 	ret

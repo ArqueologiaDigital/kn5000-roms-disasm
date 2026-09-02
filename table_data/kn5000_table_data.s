@@ -1282,7 +1282,7 @@ Boot_SkipFDCCheck:
 	jr z, Boot_PrepareJump
 
 	; === Bring up the boot CP-serial link ===
-	ldl_da xhl, (0xffec6e)	; BootSerial_InitVectorTable[0] -> BootSerial_Init
+	ld xhl, (0xffec6e:24)	; BootSerial_InitVectorTable[0] -> BootSerial_Init
 	call (xhl)
 
 	; === Probe the device on the CP-serial link ===
@@ -2122,7 +2122,7 @@ Flash_ReadID_32bit:
 	stl_da (0x815554), xwa; LD (815554h), XWA
 
 	; Read manufacturer ID from base address
-	ldl_da xwa, (0x800000); LD XWA, (800000h)
+	ld xwa, (0x800000:24); LD XWA, (800000h)
 	ld (xsp + 4), xwa	; LD (XSP+04h), XWA - save mfr ID
 
 	; Read device ID from base+4
@@ -3638,7 +3638,7 @@ HDAE5000_InitializeParallelPort__program_flash:
 
 	; === Check "hkt_" signature, remap CS2 and jump into the Program ROM ===
 	stib_da (0x160000), 0x07	; LD (0x160000), 0x07 - select HDAE5000 bank 7
-	ldl_da xwa, (0x2fffc0)	; LD XWA, (0x2FFFC0) - signature dword
+	ld xwa, (0x2fffc0:24)	; LD XWA, (0x2FFFC0) - signature dword
 	cp xwa, 0x5F746B68	; CP XWA, 0x5F746B68 - ASCII "hkt_"
 	jr z, HDAE5000_InitializeParallelPort__handoff	; 66 05
 	popw_erp 0xFA	; POP QIZ

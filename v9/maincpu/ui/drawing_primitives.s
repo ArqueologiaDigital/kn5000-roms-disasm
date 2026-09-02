@@ -1119,7 +1119,7 @@ DrawBox_Impl_FillRowLoop:
 	jr DrawBox_Impl_SetChangeRect
 
 DrawBox_Impl_PatternSetup:
-	ldl_da xwa, (0x030452)
+	ld xwa, (0x030452:24)
 	ld (xsp + 6), xwa
 	ld xwa, (xsp + 14)
 	ld wa, (xwa)
@@ -2099,7 +2099,7 @@ DrawWall_Deferred:
 DrawWall_DoCopy:
 	lda xsp, (xsp - 12)
 	push xiz
-	ldl_da xiz, (0x030452)
+	ld xiz, (0x030452:24)
 	lda xwa, (0x043c00:24)
 	ld (xsp + 4), xwa
 	pushw 0x9600

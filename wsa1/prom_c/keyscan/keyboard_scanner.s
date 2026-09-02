@@ -181,7 +181,7 @@ KeyScan_ReadEvent:
 	link32 0xEE, 0x0C, 0xFA, 0xFF          ; F9973D  link XIZ,0xfffa   [llvm-mc cannot encode this]
 	cpib_da 0x00F329, 0x00                 ; F99741  cp (0x00f329),0x00   [llvm-mc cannot encode this]
 	jr nz, KeyScan_ReadEvent__F99762                       ; F99747  jr NZ,0xf99762
-	ldl_da	xbc, (0xF2F3)                   ; F99749  ld XBC,(0x00f2f3)
+	ld	xbc, (0xF2F3:24)                   ; F99749  ld XBC,(0x00f2f3)
 	cp	xbc, 0x3E8                          ; F9974E  cp XBC,0x000003e8
 	jr ule, KeyScan_ReadEvent__F9975C                      ; F99754  jr ULE,0xf9975c
 	stib_da	(0xF329), 1                    ; F99756  ld (0x00f329),0x01

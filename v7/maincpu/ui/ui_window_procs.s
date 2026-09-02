@@ -9,7 +9,7 @@
 ; =============================================================================
 
 	lda xde, (0x0274b0:24)
-	ldl_da xhl, (0x0274e4)
+	ld xhl, (0x0274e4:24)
 	lds32 xbc, 0
 
 WndScroll_CopyLoop:
@@ -30,7 +30,7 @@ WndScroll_InitBuffer:
 	ld xbc, xde
 	add xbc, xwa
 	ld (xbc), 0x0
-	ldl_da xwa, (0x0274d2)
+	ld xwa, (0x0274d2:24)
 	ld xbc, 0x1e0003a
 	call ApFuncCall
 
@@ -297,7 +297,7 @@ WndEvt_DispatchByEventCode:
 	ld xde, (xsp + 42)
 	calr WindowProc
 	ld xwa, (xsp + 42)
-	ldl_da xbc, (0x0274e4)
+	ld xbc, (0x0274e4:24)
 	dec 1, xwa
 	cp xwa, 0x0
 	jrl c, UIDialog_ReturnZeroJmp
@@ -520,7 +520,7 @@ WndEvt_EventCodeDispatch:
 	extz	xbc
 	ld	xde, xwa
 	add	xde, xbc
-	ldl_da	xwa, (160996)
+	ld	xwa, (160996:24)
 	ld	a, (xwa)
 	ld	(xde), a
 	jr	11
@@ -585,7 +585,7 @@ WndEvt_EventCodeDispatch:
 	jr	nz, 18
 	ld	xbc, 160944
 	add	xbc, xwa
-	ldl_da	xwa, (160996)
+	ld	xwa, (160996:24)
 	ld	a, (xwa)
 	ld	(xbc), a
 	jr	9
@@ -634,7 +634,7 @@ WndEvt_EventCodeDispatch:
 	lda	xde, (160944:24)
 	ld	xbc, xde
 	add	xbc, xwa
-	ldl_da	xwa, (160996)
+	ld	xwa, (160996:24)
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	xwa, 22
@@ -673,7 +673,7 @@ WndEvt_EventCodeDispatch:
 	lda	xde, (160944:24)
 	ld	xbc, xde
 	add	xbc, xwa
-	ldl_da	xwa, (160996)
+	ld	xwa, (160996:24)
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	xwa, 22
@@ -714,7 +714,7 @@ WndEvt_EventCodeDispatch:
 	cps	de, 0
 	jr	ule, 37
 	lda	xbc, (160944:24)
-	ldl_da	xwa, (160996)
+	ld	xwa, (160996:24)
 	ld	a, (xwa)
 	ld	hl, de
 	sub	hl, iz
@@ -779,7 +779,7 @@ WndEvt_EventCodeDispatch:
 	nop
 	jr	ule, 31
 	lda	xde, (160944:24)
-	ldl_da	xhl, (160996)
+	ld	xhl, (160996:24)
 	lds32	xbc, 0
 	ld	xwa, xbc
 	ld	xix, xde
@@ -807,7 +807,7 @@ WndEvt_EventCodeDispatch:
 	cp	iz, wa
 	jr	nc, 35
 	lda	xde, (160944:24)
-	ldl_da	xhl, (160996)
+	ld	xhl, (160996:24)
 	ld	bc, iz
 	extz	xbc
 	ld	xwa, xbc
@@ -1102,7 +1102,7 @@ WndScroll_ClampPageCount:
 	jr nz, WndScroll_CheckSPMarker
 	cp (xwa + 1), 0x50
 	jr nz, WndScroll_CheckSPMarker
-	ldl_da xwa, (0x0274e4)
+	ld xwa, (0x0274e4:24)
 	lds32 xde, 0
 	ld e, (xwa)
 	ld xwa, (xsp + 50)
@@ -6046,7 +6046,7 @@ DrawFunc_Epilogue74:
 Gfx_ImageDecodeByteData:
 	dec	4, xsp
 	push	xiz
-	ldl_da	xbc, (0x030452)
+	ld	xbc, (0x030452:24)
 	ld	(xsp+4), xbc
 	ld	ix, (xwa+2)
 	jr	59

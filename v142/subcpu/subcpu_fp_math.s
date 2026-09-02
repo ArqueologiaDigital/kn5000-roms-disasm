@@ -1795,7 +1795,7 @@ __jrt_nop_03E0A5:
 ; program's writable DRAM image. The identical hook appears at 0x03E0FB for singles.
 ; (The alias symbol __jrt_nop_03E0A5 refers to the same address.)
 FP_DP_Encode_NormCheck:
-	ldl_da xbc, 0x00f428
+	ld xbc, (0x00f428:24)
 	or xbc, xbc
 	mri_d2 0xB1, 0xEE
 	ret
@@ -1850,7 +1850,7 @@ FP_SP_Encode_Overflow:
 FP_SP_Encode_Overflow_Store:
 	stiw_da 0x040c22, 0x0022
 	ld (xwa), xde
-	ldl_da xbc, 0x00f428
+	ld xbc, (0x00f428:24)
 	or xbc, xbc
 	mri_d2 0xB1, 0xEE
 	ret

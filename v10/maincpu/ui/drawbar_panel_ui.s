@@ -4646,7 +4646,7 @@ IvSdpart_OK:
 	ld xde, 0x8
 	call SendEvent
 	stiw_da (0x03e99c), 0x0008
-	ldl_da xwa, (MixerPartTable_Start_0x128)
+	ld xwa, (MixerPartTable_Start_0x128:24)
 	ld xbc, 0x1c00001
 	lds32 xde, 5
 	jrl IvSdpart_DispatchEvent
@@ -10704,7 +10704,7 @@ AcWelcomScreen_Activate_Setup:
 	jrl z, AcWelcomScreen_ReturnHandled
 	call PaletteBankRotate
 	stiw_da (0x024784), 0x0001
-	ldl_da xbc, (0x024786)
+	ld xbc, (0x024786:24)
 	ld xwa, 0x1c0000e
 	push xwa
 	lds32 xwa, 0
@@ -10727,7 +10727,7 @@ AcWelcomScreen_Select:
 	add xwa, xwa
 	add xwa, xbc
 	sll xwa, 2
-	ldl_da xbc, (0x024786)
+	ld xbc, (0x024786:24)
 	add xwa, xbc
 	ld xbc, xwa
 	ld hl, (xwa + 8)
@@ -10920,7 +10920,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	ldl_da	xbc, (0x24786)
+	ld	xbc, (0x24786:24)
 	add	xde, xbc
 	.byte 0x9a
 	ldio	63, 12
@@ -11023,7 +11023,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	ldl_da	xwa, (0x24786)
+	ld	xwa, (0x24786:24)
 	add	xbc, xwa
 	.byte 0x99
 	ldio	63, 12
@@ -11041,7 +11041,7 @@ AcWelcomScreen_RenderBytecode:
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	ldl_da	xbc, (0x24786)
+	ld	xbc, (0x24786:24)
 	add	xde, xbc
 	.byte 0x9a
 	ldwio	4, 0xf70b
@@ -12717,7 +12717,7 @@ AudioCtrl_DataBlock:
 	exts	xwa
 	divs	wa, 8
 	.byte 0xd7
-	ldl_da	xwa, (0x49a8b)
+	ld	xwa, (0x49a8b:24)
 	.byte 0x92
 	xor	(xwa), xwa
 	.byte 0x8c
@@ -14159,7 +14159,7 @@ AudioCtrl_DataBlock:
 	ld	wa, (xsp+10)
 	calr	60680
 	ld	(xsp+6), hl
-	ldl_da	xwa, (MixerPartTable_Start_0x104)
+	ld	xwa, (MixerPartTable_Start_0x104:24)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+6)
 	exts	xde
@@ -14243,7 +14243,7 @@ AudioCtrl_DataBlock:
 	ld	wa, bc
 	calr	60452
 	ld	(xsp+6), hl
-	ldl_da	xwa, (MixerPartTable_Start_0x104)
+	ld	xwa, (MixerPartTable_Start_0x104:24)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+6)
 	exts	xde
@@ -14377,7 +14377,7 @@ AudioCtrl_DataBlock:
 	ld	wa, bc
 	calr	60078
 	ld	(xsp+6), hl
-	ldl_da	xwa, (MixerPartTable_Start_0x104)
+	ld	xwa, (MixerPartTable_Start_0x104:24)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+6)
 	exts	xde

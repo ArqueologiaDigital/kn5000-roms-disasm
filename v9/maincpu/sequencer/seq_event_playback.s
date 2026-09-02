@@ -4572,7 +4572,7 @@ PsHarm_DrawActiveBox:
 	lda xix, (xde + 22)
 	cp xhl, 0x5
 	jr nz, PsHarm_DrawActiveLabel
-	ldl_da xde, (MidiPart_ColWidthData_0x42)
+	ld xde, (MidiPart_ColWidthData_0x42:24)
 	ld xhl, (xix)
 	push xhl
 	pushw 0xff
@@ -4611,7 +4611,7 @@ PsHarm_DrawInactiveBox:
 	lda xix, (xde + 22)
 	cp xhl, 0x5
 	jr nz, PsHarm_DrawInactiveLabel
-	ldl_da xde, (MidiPart_ColWidthData_0x42)
+	ld xde, (MidiPart_ColWidthData_0x42:24)
 	ld xhl, (xix)
 	push xhl
 	pushw 0xff

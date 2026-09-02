@@ -129,7 +129,7 @@ FDemo_DisplayResourceData:
 	lda	xbc, (0xfd800:24)
 	sub	xbc, xhl
 	ld	xix, xbc
-	ldl_da	xde, (0x25b7e)
+	ld	xde, (0x25b7e:24)
 	ld	xbc, xde
 	sub	xbc, xhl
 	add	xbc, xwa
@@ -247,7 +247,7 @@ Seq_StartWithFullInit:
 	stw_da (0x025b7c), xde
 	cps de, 0
 	jr lt, ApPreControl_ReturnNull
-	ldl_da xwa, (0x0248c4)
+	ld xwa, (0x0248c4:24)
 	lds bc, 0
 	calr FDemoText_ProcessTextMarkup
 	jr ApPreControl_ReturnNull
@@ -358,7 +358,7 @@ FDemo_LinkedListSearch:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	ldl_da xiz, (0x880008)
+	ld xiz, (0x880008:24)
 	ld xwa, (xiz + 16)
 	or xwa, xwa
 	jr z, FDemo_LinkedListSearchFound
@@ -1573,7 +1573,7 @@ FileIO_ReadHeaderAt4:
 	call FileIO_ReadByte
 	cps hl, 0
 	jr lt, FileIO_ReadHdr4_Fail
-	ldl_da xwa, (Presentation_TagTableEnd_0x47)
+	ld xwa, (Presentation_TagTableEnd_0x47:24)
 	ld a, (xwa)
 	cp l, a
 	jr z, FileIO_ReadHdr4_Success
@@ -5270,35 +5270,35 @@ GetDiskSize_Return:
 
 GetEncodedFreeSpaceData:
 	lda xwa, (0x025d6c:24)
-	ldl_da xbc, (SeqFileTypeCode_Lsw_0x4)
+	ld xbc, (SeqFileTypeCode_Lsw_0x4:24)
 	cp xbc, (xwa)
 	jr nz, GetEncoded_Return
 	lda xbc, (xwa + 4)
 	call GetDiskFreeSpace
 
 GetEncoded_Return:
-	ldl_da xhl, (0x025d6c)
+	ld xhl, (0x025d6c:24)
 	ret
 
 FileIO_GetDiskFreeSpace:
 	lda xwa, (0x025d6c:24)
 	lda xbc, (xwa + 4)
 	call GetDiskFreeSpace
-	ldl_da xhl, (0x025d6c)
+	ld xhl, (0x025d6c:24)
 	ret
 
 FileIO_ResetCurrentRecord:
-	ldl_da xwa, (SeqFileTypeCode_Lsw_0x4)
+	ld xwa, (SeqFileTypeCode_Lsw_0x4:24)
 	stl_da (0x025d6c), xwa
 	ret
 
 FileIO_GetDiskRecordPtr:
 	lda xwa, (0x025d6c:24)
 	lda xbc, (xwa + 4)
-	ldl_da xde, (SeqFileTypeCode_Lsw_0x8)
+	ld xde, (SeqFileTypeCode_Lsw_0x8:24)
 	cp xde, (xbc)
 	call_24 z, GetDiskFreeSpace
-	ldl_da xhl, (0x025d70)
+	ld xhl, (0x025d70:24)
 	ret
 
 FileIO_SearchAndLoadFile:
@@ -7966,7 +7966,7 @@ FileIO_FindNextMatch:
 	push xiz
 	stl_dri XBC, 0xfd, 0x0e, 0x01
 	ld xiz, xwa
-	ldl_da xwa, (0x027416)
+	ld xwa, (0x027416:24)
 	lda xbc, (xsp + 4)
 	call _findnext
 	cps hl, 0
@@ -7975,7 +7975,7 @@ FileIO_FindNextMatch:
 	ld XWA, (xsp + 0x010e)
 	lds32 xbc, 0
 	ld (xwa), xbc
-	ldl_da xwa, (0x027416)
+	ld xwa, (0x027416:24)
 	call _findclose
 	ld xwa, 0xffffffff
 	stl_da (0x027416), xwa
@@ -8013,7 +8013,7 @@ FileIO_SearchStringMatch:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 	ldw hl, 0xffff
-	ldl_da xwa, (0x027416)
+	ld xwa, (0x027416:24)
 	cp xwa, 0x0
 	jr ge, SearchMatch_HasHandle
 	ld xwa, xiz
@@ -8044,7 +8044,7 @@ SearchMatch_Return:
 FileIO_ExtractBasename:
 	lda xhl, (0x025cec:24)
 	ld (xhl), 0x0
-	ldl_da xwa, (0x027416)
+	ld xwa, (0x027416:24)
 	cp xwa, 0x0
 	ret lt
 	ldb_da c, (0x027412)

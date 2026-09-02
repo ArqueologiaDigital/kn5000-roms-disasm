@@ -6523,7 +6523,7 @@ HDAE5000_Detect:
 	stl_da (0x80aaa8), xwa
 	ld xwa, 0x900090
 	stl_da (0x815554), xwa
-	ldl_da xwa, (0x800000)
+	ld xwa, (0x800000:24)
 	ld (xsp + 4), xwa
 	ld xwa, 0x800000
 	ld xiz, (xwa + 4)

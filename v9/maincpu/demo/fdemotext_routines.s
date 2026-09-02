@@ -2036,7 +2036,7 @@ FDemoText_ByteData_LayoutEngine:
 	ld	bc, iz
 	sla	bc, 2
 	lda	xde, (0x024fd8:24)
-	ldl_da	xwa, (0x0249d4)
+	ld	xwa, (0x0249d4:24)
 	st_rrl xwa, xde, bc
 	lds hl, 0
 	pop xiz
@@ -2926,11 +2926,11 @@ Seq_CopyPtrLoop:
 	jr Seq_StoreResultAddr
 
 Seq_UseFallbackAddr:
-	ldl_da xwa, (0x0249d0)
+	ld xwa, (0x0249d0:24)
 	stl_da (0x0249cc), xwa
 
 Seq_StoreResultAddr:
-	ldl_da xwa, (0x0249cc)
+	ld xwa, (0x0249cc:24)
 	stl_da (0x0249d4), xwa
 	ret
 
@@ -3091,17 +3091,17 @@ Seq_NamedResource_Epilogue:
 FDemoText_ProcessMarkupLoop:
 	pushw iz
 	ld iz, wa
-	ldl_da xwa, (0x0249cc)
+	ld xwa, (0x0249cc:24)
 	stl_da (0x0249d4), xwa
 	cp (xwa), 0x0
 	jr z, FDemoText_MarkupDone
 
 FDemoText_MarkupLoop:
-	ldl_da xwa, (0x0249d4)
+	ld xwa, (0x0249d4:24)
 	ld bc, iz
 	calr FDemoText_ProcessTextMarkup
 	stl_da (0x0249d4), xhl
-	ldl_da xwa, (0x0249d4)
+	ld xwa, (0x0249d4:24)
 	cp (xwa), 0x0
 	jr nz, FDemoText_MarkupLoop
 

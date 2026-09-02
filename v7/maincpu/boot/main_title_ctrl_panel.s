@@ -185,7 +185,7 @@ CtrlPanel_CheckButtonRelease:
 	anddm32_24 (0x02749e), xwa
 
 CtrlPanel_DispatchCombinedState:
-	ldl_da xwa, (0x02749e)
+	ld xwa, (0x02749e:24)
 	andda32_24 xwa, (0x02749a)
 	stl_da (0x0274a2), xwa
 	cp xwa, 0x1100
@@ -296,7 +296,7 @@ CtrlPanel_EventType_AA:
 	jrl	z, 657
 	bit	1, a
 	jrl	z, 651
-	ldl_da	xwa, (160912)
+	ld	xwa, (160912:24)
 	cp	xwa, 1
 	jrl	nz, 637
 	call	16776933

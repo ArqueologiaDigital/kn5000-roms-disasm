@@ -246,7 +246,7 @@ CtrlPanel_CheckButtonRelease:
 	anddm32_24 (0x02749e), xwa
 
 CtrlPanel_DispatchCombinedState:
-	ldl_da xwa, (0x02749e)
+	ld xwa, (0x02749e:24)
 	andda32_24 xwa, (0x02749a)
 	stl_da (0x0274a2), xwa
 	cp xwa, 0x1100
@@ -362,7 +362,7 @@ CtrlPanel_EventType_AA:
 	jrl z, UIEvent_Epilogue
 	bit 1, a
 	jrl z, UIEvent_Epilogue
-	ldl_da xwa, (0x027490)
+	ld xwa, (0x027490:24)
 	cp xwa, 0x1
 	jrl nz, UIEvent_Epilogue
 	call Get_Firmware_Version

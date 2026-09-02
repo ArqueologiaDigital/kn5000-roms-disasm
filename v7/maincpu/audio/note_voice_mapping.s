@@ -13267,7 +13267,7 @@ TmFlash_WriteRoutine:
 	call	15670909
 	ld	xbc, (xsp+4)
 	dec	6, xbc
-	ldl_da	xwa, (251180)
+	ld	xwa, (251180:24)
 	or	xwa, xwa
 	jr	nz, 15
 	lds32	xwa, 0
@@ -13275,7 +13275,7 @@ TmFlash_WriteRoutine:
 	stl_da	251180, xbc
 	lds	wa, 1
 	jp	15670698
-	ldl_da	xix, (251180)
+	ld	xix, (251180:24)
 	ld	xde, xix
 	or	xix, xix
 	jr	z, 12
@@ -13298,15 +13298,15 @@ TmFlash_WriteRoutine:
 	jr	nz, 49
 	cpda32_24	xwa, (251180)
 	jr	nz, 24
-	ldl_da	xwa, (251180)
+	ld	xwa, (251180:24)
 	ld	xwa, (xwa)
 	ld	(xbc), xwa
-	ldl_da	xwa, (251180)
+	ld	xwa, (251180:24)
 	ld	wa, (xwa+4)
 	inc	6, wa
 	add	(xbc+4), wa
 	jr	7
-	ldl_da	xwa, (251180)
+	ld	xwa, (251180:24)
 	ld	(xbc), xwa
 	stl_da	251180, xbc
 	lds	wa, 1
@@ -13581,7 +13581,7 @@ Free_LoadReg:
 	ret
 	or	xwa, xwa
 	jr	nz, 6
-	ldl_da	xhl, (251176)
+	ld	xhl, (251176:24)
 	ret
 	cpdm32_24	(251176), xwa
 Free_Block2:
@@ -13589,7 +13589,7 @@ Free_Block2:
 	ld	xhl, 4294967295
 Free_Block3:
 	ret
-	ldl_da	xhl, (251172)
+	ld	xhl, (251172:24)
 	addl_da	(251172), xwa
 Free_OrBits:
 	subdm32_24	(251176), xwa
