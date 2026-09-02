@@ -200,6 +200,10 @@ S1_BITMAP = """
 ;      columns and the diagonals advance one pixel per row across every column
 ;      boundary.  `python3 notes/lane_promB3/gen_promB3_spans.py --render`
 ;      prints it; one column more or fewer shears it into noise.
+;   What is NOT claimed: that one blit draws all ten columns.  Service 3
+;   writes BC columns at consecutive destination x, so two adjacent narrower
+;   blits would put the same bytes in the same order and look the same on
+;   screen.  The BYTE LAYOUT is what the argument above fixes.
 ;   Nothing holds a pointer to 0xF0D5BF, so WHO draws it is not established.
 ; ------------------------------------------------------------------
 """
