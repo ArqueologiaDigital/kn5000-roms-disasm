@@ -184,7 +184,7 @@ it, can a reader say what these bytes represent?**
 | # | region | why it fails |
 |---|---|---|
 | 11 | `v7 midi/midi_dispatch_handlers.s:6907` `SeqAlt_NibbleSearch_DecLoop`, 8 B | not data at all — undecoded code under a routine name |
-| 20 | `prom_b 0x077836` `Data_F77836`, 415 B | its own header says *"415 bytes this block could not split. No content rule framed it … emitted as bytes rather than guessed"* — an admission my phrase list did not catch |
+| 20 | `prom_b 0x077836` `Data_F77836`, 415 B | its own header says *"415 bytes this block could not split. No content rule framed it … emitted as bytes rather than guessed"* — an admission my phrase list did not catch. ✅ **CLEARED 2026-09-02**: 33 B SMF template + 66 B word table + 316 B code (§9) |
 | 35 | `v10 ui_widgets/widget_descriptors.s:401` `NakaInst_OFF_Str`, **37,262 B** | the label names a three-byte string; the region is 37 KB (see §5) |
 
 **A further 8 of 40 (20 %) pass only at a coarse granularity** — the label or
@@ -326,15 +326,15 @@ Regenerate with `--targets N`. Largest 40:
 
 | image | range | bytes | label(s) | why | shape |
 |---|---|---:|---|---|---|
-| prom_b | 0x01EAB0-0x024DC0 | 25,360 | `Font_Svc1C_16x16` … `Font_Svc1F_*` | self-admitted | glyph |
+| prom_b | 0x01EAB0-0x024DC0 | 25,360 | `Font_Svc1C_16x16` … `Font_Svc1F_*` | **NARROWED 2026-09-02** | glyph |
 | prom_a | 0x06B5C4-0x06F746 | 16,770 | `DrumKitNames` | self-admitted | text |
 | prom_a | 0x078000-0x07A580 | 9,600 | `SplashImage_DitherA` | self-admitted | bitmap |
 | prom_b | 0x006800-0x008CD8 | 9,432 | `ScaleTuningOff` … `SoundCodeByGroupMember` | self-admitted | ptr-table, text |
-| **prom_d** | **0x044B26-0x046D6A** | **8,772** | `DrawbarPreset_EnvDescTable_Pool_B000/B001` | **no-explanation** | — |
+| prom_d | 0x044B26-0x046D6A | 8,772 | ~~`DrawbarPreset_EnvDescTable_Pool_B000/B001`~~ → `*_ComboTable` | ~~no-explanation~~ ✅ **CLOSED 2026-09-02** | 9×9×9 drawbar-combination tables — see §8.1 |
 | table data | 0x057914-0x05959D | 7,305 | `ToneDB_EnvDescTable` | self-admitted | — |
 | v7 | 0x1804E2-0x1820C0 | 7,134 | `AudioCtrl_DataBlock` | embedded-in-code | — |
-| prom_b | 0x078029-0x0799E8 | 6,591 | `Data_F78029` … `Bitmap_F799D0` | no-explanation + self-admitted | bitmap, text |
-| prom_b | 0x07669D-0x0779D5 | 4,920 | `Data_F7669D` … `Data_F77836` | self-admitted | **MIDI**, ptr-table |
+| prom_b | 0x078029-0x0799E8 | 6,591 | ~~`Data_F78029` … `Bitmap_F799D0`~~ → `DLGlyph_*` | ~~no-explanation~~ **CLOSED**, see §8.3 | bitmap (**not** text) |
+| prom_b | 0x07669D-0x0779D5 | 4,920 | ~~`Data_F7669D` … `Data_F77836`~~ | ✅ **CLEARED 2026-09-02** | SMF export template + writer code — see §9 |
 | prom_b | 0x04FF61-0x0511C7 | 4,710 | `LinkTable_F4FF61` | self-admitted | — |
 | v7 | 0x10D7E7-0x10E905 | 4,382 | `.Lc_f0d7e3` | embedded-in-code | — |
 | prom_d | 0x01C8CF-0x01D965 | 4,246 | `PercInst_Template_Silent` … `ToneDB_ToneIndexMapA` | self-admitted | ptr-table |
@@ -367,21 +367,109 @@ Regenerate with `--targets N`. Largest 40:
 | v7 | 0x17860D-0x178CFE | 1,777 | `PmemOutLGridCheck_JumpTable` | embedded-in-code | — |
 | prom_b | 0x074FCF-0x075685 | 1,718 | `Data_F74FCF` … `Data_F75675` | self-admitted | ptr-table |
 
+### ✅ Closed and narrowed since this list was written (2026-09-02)
+
+**Target 3, `prom_b 0x078029-0x0799E8` — CLOSED.** The two competing framings
+were mutually exclusive (parsing the pointer-bounded objects as records gets
+1 of 121), and the 72-byte glyph grid wins on two independent measurements that
+agree: the array ends exactly on the grid — `0xF7A1A0 − 0xF78028 = 8,568 =
+119 × 72`, remainder 0 — and 119 is separately the highest glyph index the UI
+ever requests. 119 icons converted over 8,568 B; the `text` hint does not
+survive. ⚠ `PtrTable_F003F9` is now the open question and is **sharper**: one
+table of 216 slots (not the tree's "181 + 35"), shaped 18 × 12, describing a
+real twelve-screen structure whose objects are not where it says — and the
+**third of four** tables in `0xF0033F-0xF007FF` to fail identically. Take all
+four together. `wsa1/notes/gen_prom_b_f78028_icon_sheet.py`.
+
+**`prom_b 0x01EAB0-0x024DC0` (25,360 B) — NARROWED, not closed.** The pixels
+were never the open question: all twelve faces were already exported. The
+headers' actual admission is the **encoding**, and the ordering half is now
+CONFIRMED — 72 adjacent pairs of set A are dictionary words against a shuffle
+null of 24.8 ± 4.8, with 0 of 10,000 permutations reaching it (9.9 sd), and
+distance-2..8 controls on the null. **The source-text half is REFUTED**: there
+is no Japanese text in the four images, proved with a plant test that moves
+prom_a from 4 to 54 hits. So the codes were assigned by walking a document that
+is not in this ROM. ★ And the service manual explains why the faces are
+unreferenced at all: the SX-WSA1**R** lists eighteen areas and **Japan is not
+among them** — `R` is the export suffix, and the domestic SX-WSA1 shares the
+source. Still open: the source text itself (try the floppy filesystem and any
+compressed region), set A `0x38`, and `Font_Svc06` `0xB0`/`0xBC`.
+
 **The three worth a lane first**, because they are the only large ranges where
 nobody can say anything at all:
 
-1. **`prom_d 0x044B26-0x046D6A`, 8,772 B — `DrawbarPreset_EnvDescTable_Pool_B000`
+1. ~~**`prom_d 0x044B26-0x046D6A`, 8,772 B — `DrawbarPreset_EnvDescTable_Pool_B000`
    and `_B001`.** Two 4,374-byte pools reached from `_Desc000..003`'s `+0x05`
    field. Their own header says *"part B of descriptor 0 — role NOT
    established"*. This is the largest range in the tree with a genuine
-   no-explanation verdict.
+   no-explanation verdict.~~
+   **CLOSED 2026-09-02 by lane RQ-PROMD.** Each 4,374-byte pool is a **9×9×9
+   table of drawbar combinations**: 729 six-byte records giving the composite
+   waveform, level trim and octave transpose for one setting of three organ
+   drawbars of 9 positions each. Nothing was typed from the byte shape — 4,374
+   has 15 divisors and any of them reproduces these bytes. Both the stride and
+   the radix are prom_c operands:
+
+   | fact | where it comes from |
+   |---|---|
+   | record stride 6 | `mul WA,0x0006` at `0xFA82C2` and `0xFA82D0`, `Voice_StageRegs_0040_B` |
+   | index = `n2*81 + n1*9 + n0` | `sub_FC355B`: `mul BC,0x0051` at `0xFC356E`, `mul IY,0x0009` at `0xFC357D` |
+   | the three digits | `sub_FC28B5` packs element bytes `+0x02`/`+0x03` with `and DE,0x0FFF` at `0xFC2906` |
+   | which of the 4 descriptors | the same byte `+0x03`, bits 5:4 — `and C,0x30` at `0xFC2986` |
+   | who takes this path | tone record `+0x10` bits 7:6 == `0x40` — exactly 2 of 274 records, the two `<<< Drawbar n>>>` |
+
+   Two joins close it the way the `+0x30` chain's do: all 24 nibbles of both
+   tones' elements are 0..8, the radix (null: 57.7 % over 523 ordinary
+   elements), and the two cubes' wave field is **exactly the contiguous interval
+   `[0x08A,0x448]`** — 959 values, no gap, nothing outside, the two tables
+   partitioning it. prom_c's keyboard **foldback** arms also land where the
+   transposes say they should: the element that folds at the bass end
+   (`cp HL,0x0024`, `0xFC3440`) is the one transposed −12, and the two that fold
+   at the treble end (`cp DE,0x0054`, `0xFC34BC`) are the two transposed +12 and
+   +7. Evidence: `wsa1/notes/prom_d_drawbar_chain.py`, 65 checks, two nulls;
+   the record's C struct is in the banner in `wsa1/prom_d/tone_database_aux.s`.
+   **Still refused:** descriptor `+0x09`/`+0x0A`, what descriptor 3's 4-record
+   table selects, and the footage reading (−12 = 16′, 0 = 8′, +7 = 5⅓′, +12 = 4′)
+   which is an inference from the intervals and marked as one.
 2. **`v7 0x1804E2-0x1820C0`, 7,134 B — `AudioCtrl_DataBlock`**, and the rest of
    the `embedded-in-code` column. 222,810 B sitting between decoded routines
    under routine names: this is v7/v9/v10's known code-as-`.byte` debt located
    range by range, and converting it is a *disassembly* job, not a data job.
-3. **`prom_b 0x078029-0x0799E8`, 6,591 B**, the 121-object bitmap sheet whose
-   index at `PtrTable_F003F9` is understood and whose *contents* are not — the
-   header says so in as many words.
+3. ~~**`prom_b 0x078029-0x0799E8`, 6,591 B**, the 121-object bitmap sheet whose
+   index at `PtrTable_F003F9` is understood and whose *contents* are not.~~
+   **CLOSED 2026-09-02 by lane RQ-SHEET, and it closed the other way round from
+   how it was posed.** The *contents* are understood — the span is part of the
+   UI icon sheet at `0xF78028`, **119 cells of 24x24** on the 72-byte grid
+   `DLHandler_Glyph24x24` (`0xF31ACE`) computes, now 119 `DLGlyph_*` cells in
+   `wsa1/prom_b/wsa1_prom_b.s` with a PNG each. It is the **index** that is not
+   understood: `PtrTable_F003F9` is not this sheet's index and not
+   `DisplayList_FC4000`'s either. Evidence, both directions, with a control:
+
+   | test | observed | chance |
+   |---|---:|---:|
+   | the sheet ends exactly on the grid | `0xF7A1A0 - 0xF78028 = 8568 = 119*72`, rem **0** | 1 in 72 |
+   | highest op-`0x23` record index, independently | **118** → 119 cells | — |
+   | `PtrTable_F003F9` targets in the sheet that are on the grid | **1** of 121 | 1.7 |
+   | its targets on a proven `DisplayList_FC4000` record boundary | **3** of 24 | 1.8 |
+   | immediates equal to `0xF003F9` in the four images | **0** | — |
+   | CONTROL: the live table at `0xF00340`, targets starting `EE 0C` | **25** of 26 | 3.8 % |
+
+   **What goes back on the list, sharper:** `PtrTable_F003F9` is ONE table of
+   **216 slots** (`0xF003F9-0xF00758`, 864 B — the tree's old "181 + 35" cut is
+   not structural), shaped **18 columns × 12 rows**: column 17 zero in every
+   row, columns 13/14 the `0x00FDB10E` filler in every row, columns 15/16 always
+   descending, and the target-to-target delta nearly constant *down* a column
+   (column 15 = 52 B in six successive rows, then 32 in three). Rows 0-9 point
+   into the icon sheet, rows 10-11 into prom_a `0xFC4082-0xFC4454`. So it
+   describes a real 12-screen × 18-field structure whose objects are not, in
+   this build, where it says they are. Reproduce with
+   `python3 wsa1/notes/gen_prom_b_f78028_icon_sheet.py --evidence --layout
+   --selftest`; narrative in `wsa1/notes/FINDINGS-image-files.md` §8.
+
+   ⚠ The `text` shape hint the census attached to this range does not survive:
+   the only ASCII in the neighbourhood is `DLB_BlankField_8`'s eight spaces at
+   `0xF78020-0xF78027`, which were already `.ascii` and are *below* the range.
+   Nothing inside `0xF78028-0xF7A19F` is text; it is 8,568 bytes of pixels.
 
 ---
 
@@ -423,9 +511,18 @@ at file offset 0x77836:
     00 FF 03 0F  57 53 41 20 20 20 20 …                 meta 0x03 track name "WSA    "
 
 **The `MTrk` length field is zero**, which is exactly why no walker ever framed
-it: a conformant reader consumes nothing and stops. The block is 415 bytes of
-real MIDI events after that. This is the single most convertible unknown in the
-tree and the first thing a MIDI lane should take.
+it: a conformant reader consumes nothing and stops.
+
+⚠ **RESOLVED 2026-09-02, and the guess above was wrong.** It is *not* "415 bytes
+of real MIDI events": it is a 33-byte EXPORT TEMPLATE — the file's opening,
+which the writer copies into its output buffer before emitting events at run
+time — followed by an unrelated 66-byte word table and 316 bytes of code. The
+zero length is a placeholder that 0xF7789A backfills from a byte count once the
+track is closed. The whole 4,920-byte range is now real source: 4,186 bytes of
+code in six spans, 352 of typed data, 382 of `.byte` rows standing in for
+instructions llvm-mc cannot encode. Evidence and 87 checks:
+`wsa1/notes/FINDINGS-prom_b-smf-writer.md` and
+`wsa1/notes/gen_prom_b_smf_writer_module.py --selftest`.
 
 ---
 
