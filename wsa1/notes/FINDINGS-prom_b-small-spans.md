@@ -179,4 +179,14 @@ record boundary into the tree that the byte gate would happily certify.
 prom_b's whole `.incbin` debt went from 71 spans / 10,664 B to 33 / 9,853 B.
 Measured by `scripts/analysis/prom_b_small_span_classify.py` (`--all` for the
 whole-image figure).  The byte gate is green in this worktree, and was shown to
-go RED on a deliberate one-byte poison of a converted `.long`.
+go RED on a deliberate one-byte poison of a converted `.long`:
+
+    # in wsa1/, change the entry this lane emitted at 0xF05105
+    sed -i 's/0x00F050DD\t; F05105  entry 5/0x00F050DE\t; F05105  entry 5/' \
+        prom_b/wsa1_prom_b.s
+    make all && python3 scripts/analysis/assert_byte_identical.py
+    # -> DIFFERS  wsa1_prom_b.ic13: 1 byte(s), first at 0x5105   /  FAIL
+    # then put the DD back and rebuild.
+
+A gate that cannot go red on the change under test certifies nothing, and this
+tree has been burned by exactly that before.
