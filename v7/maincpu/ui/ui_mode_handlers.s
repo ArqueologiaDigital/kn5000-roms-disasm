@@ -12639,5 +12639,288 @@ RVari_Select:
 	.byte 0xd9, 0xf0, 0x6e, 0x08, 0xbf, 0x0a, 0x00, 0x00
 	.byte 0xbf, 0x0c, 0x00, 0x07
 RVari_Select_CheckSameBank:
-	.incbin "includes/romslices/v7_fix_rvari_select_checksamebank.bin"
+	ld	xwa, (xiz+64)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	wa, qwa
+	lda_24	xbc, (15531432)
+	ld_rrb	a, xbc, wa
+	extz	wa
+	call	16369274
+	ld	xwa, (xiz+64)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	wa, qwa
+	lda_24	xbc, (15531432)
+	ld_rrb	a, xbc, wa
+	extz	wa
+	lda	xbc, (xsp+532)
+	call	16360742
+	lda	xde, (xsp+536)
+	lda	xbc, (xsp+534)
+	ld	wa, (xbc)
+	sub	wa, 15
+	ld	(xde+2), wa
+	ld	wa, (xbc)
+	add	wa, 16
+	ld	(xde+6), wa
+	ldw	(xde), 163
+	ldw	(xde+4), 190
+	decm	8, (xbc)
+	ld	xwa, (xiz+64)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	wa, qwa
+	sla	wa, 2
+	lda_24	xbc, (15537702)
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	pushw	237
+	pushw	5710
+	lda	xwa, (xsp+28)
+	push	xwa
+	call	16712341
+	lda	xsp, (xsp+12)
+	lda	xhl, (xsp+536)
+	lda	xbc, (xsp+532)
+	lda	xde, (xsp+20)
+	lds32	xwa, 3
+	push	xwa
+	ld	a, (xsp+14)
+	extz	wa
+	pushw	wa
+	ld	a, (xsp+18)
+	extz	wa
+	pushw	wa
+	ld	xwa, xhl
+	call	16436029
+	lda	xhl, (xsp+532)
+	lda	xde, (xhl+2)
+	ld	wa, (xde)
+	add	wa, 12
+	ld	(xde), wa
+	lda	xbc, (xsp+536)
+	sub	wa, 15
+	ld	(xbc+2), wa
+	ld	wa, (xde)
+	add	wa, 16
+	ld	(xbc+6), wa
+	ldw	(xbc), 183
+	ldw	(xbc+4), 331
+	lda	xde, (xsp+276)
+	lds32	xwa, 1
+	push	xwa
+	ld	a, (xsp+14)
+	extz	wa
+	pushw	wa
+	ld	a, (xsp+18)
+	extz	wa
+	pushw	wa
+	ld	xwa, xbc
+	ld	xbc, xhl
+	call	16436029
+	ld	xwa, (xiz+60)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	wa, qwa
+	lda_24	xbc, (15531432)
+	ld_rrb	a, xbc, wa
+	extz	wa
+	lda	xbc, (xsp+532)
+	call	16360742
+	lda	xwa, (xsp+536)
+	lda	xde, (xsp+534)
+	ld	bc, (xde)
+	sub	bc, 15
+	ld	(xwa+2), bc
+	ld	bc, (xde)
+	add	bc, 16
+	ld	(xwa+6), bc
+	ldw	(xwa), 163
+	ldw	(xwa+4), 311
+	ldw	bc, 193
+	lds	de, 7
+	call	16437580
+	ld	xwa, (xiz+56)
+	ld	wa, (xwa)
+	extz	wa
+	ld	xbc, (xiz+60)
+	ld	bc, (xbc)
+	extz	bc
+	call	16104563
+	extz	xhl
+	pushw	13
+	push	xhl
+	lda	xwa, (xsp+282)
+	push	xwa
+	call	16713148
+	lda	xsp, (xsp+10)
+	ld	(xsp+289), 0
+	ld	xwa, (xiz+60)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	wa, qwa
+	lda_24	xbc, (15531432)
+	ld_rrb	a, xbc, wa
+	extz	wa
+	call	16369274
+	ld	xwa, (xiz+60)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	wa, qwa
+	lda_24	xbc, (15531432)
+	ld_rrb	a, xbc, wa
+	extz	wa
+	lda	xbc, (xsp+532)
+	call	16360742
+	lda	xde, (xsp+536)
+	lda	xbc, (xsp+534)
+	ld	wa, (xbc)
+	sub	wa, 15
+	ld	(xde+2), wa
+	ld	wa, (xbc)
+	add	wa, 16
+	ld	(xde+6), wa
+	ldw	(xde), 163
+	ldw	(xde+4), 190
+	decm	8, (xbc)
+	ld	xwa, (xiz+60)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	ld	wa, qwa
+	sla	wa, 2
+	lda_24	xbc, (15537702)
+	ld_rrl	xwa, xbc, wa
+	push	xwa
+	pushw	237
+	pushw	5714
+	lda	xwa, (xsp+28)
+	push	xwa
+	call	16712341
+	lda	xsp, (xsp+12)
+	lda	xwa, (xsp+536)
+	lda	xbc, (xsp+532)
+	lda	xde, (xsp+20)
+	lds32	xhl, 3
+	push	xhl
+	pushw	0
+	pushw	7
+	call	16436029
+	lda	xbc, (xsp+532)
+	lda	xhl, (xbc+2)
+	ld	de, (xhl)
+	add	de, 12
+	ld	(xhl), de
+	lda	xwa, (xsp+536)
+	sub	de, 15
+	ld	(xwa+2), de
+	ld	de, (xhl)
+	add	de, 16
+	ld	(xwa+6), de
+	ldw	(xwa), 183
+	ldw	(xwa+4), 331
+	lda	xde, (xsp+276)
+	lds32	xhl, 1
+	push	xhl
+	pushw	0
+	pushw	7
+	call	16436029
+	ld	xwa, (xiz+64)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	lda_24	xbc, (15531436)
+	ld_rrb	a, xbc, wa
+	extz	wa
+	lda	xbc, (xsp+532)
+	call	16360742
+	lda	xwa, (xsp+536)
+	lda	xde, (xsp+534)
+	ld	bc, (xde)
+	sub	bc, 15
+	ld	(xwa+2), bc
+	ld	bc, (xde)
+	add	bc, 16
+	ld	(xwa+6), bc
+	ldw	(xwa), 8
+	ldw	(xwa+4), 156
+	lds	bc, 0
+	ldw	de, 245
+	call	16437580
+	lda	xwa, (xsp+536)
+	lda	xbc, (xsp+532)
+	lda	xhl, (xbc+2)
+	ld	de, (xhl)
+	sub	de, 15
+	ld	(xwa+2), de
+	ld	de, (xhl)
+	add	de, 16
+	ld	(xwa+6), de
+	ldw	(xwa), 45
+	ldw	(xwa+4), 172
+	ld	xde, (xiz+64)
+	ld	de, (xde)
+	srl	e, 2
+	extz	de
+	sla	de, 2
+	lda_24	xhl, (15531476)
+	ld_rrl	xde, xhl, de
+	lds32	xhl, 1
+	push	xhl
+	pushw	255
+	pushw	247
+	call	16436029
+	ld	xwa, (xiz+60)
+	ld	wa, (xwa)
+	exts	xwa
+	divs	wa, 4
+	lda_24	xbc, (15531436)
+	ld_rrb	a, xbc, wa
+	extz	wa
+	lda	xbc, (xsp+532)
+	call	16360742
+	lda	xwa, (xsp+536)
+	lda	xde, (xsp+534)
+	ld	bc, (xde)
+	sub	bc, 15
+	ld	(xwa+2), bc
+	ld	bc, (xde)
+	add	bc, 16
+	ld	(xwa+6), bc
+	ldw	(xwa), 8
+	ldw	(xwa+4), 156
+	ldw	bc, 193
+	lds	de, 7
+	call	16437580
+	lda	xwa, (xsp+536)
+	lda	xbc, (xsp+532)
+	lda	xhl, (xbc+2)
+	ld	de, (xhl)
+	sub	de, 15
+	ld	(xwa+2), de
+	ld	de, (xhl)
+	add	de, 16
+	ld	(xwa+6), de
+	ldw	(xwa), 45
+	ldw	(xwa+4), 172
+	ld	xde, (xiz+60)
+	ld	de, (xde)
+	srl	e, 2
+	extz	de
+	sla	de, 2
+	lda_24	xhl, (15531476)
+	ld_rrl	xde, xhl, de
+	lds32	xhl, 1
+	push	xhl
+	pushw	0
+	pushw	247
+	call	16436029
+	jrl	2173
 	.include "ui/rvari_routines.s"
