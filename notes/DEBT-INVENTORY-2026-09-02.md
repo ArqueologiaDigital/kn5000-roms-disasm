@@ -171,11 +171,14 @@ require the original bytes).
    slices fail a disassemble/re-assemble round trip**. Its price tag is
    unknown, unlike the encode leg's.
 
-6. ⚠ **A latent ENCODER ambiguity found while refusing (5).** `ST_RRW` and
-   `ST_RRL` are documented as encoding **byte-identically to `ST_RRB`** — the
-   size adjustment in `TLCS900MCCodeEmitter.cpp` only applies when
-   `Opcode < 0xF0`, and this family's prefix is fixed at `0xF3`. If that is
-   real, the three sizes are indistinguishable from bytes alone, a decoder
-   cannot be written without guessing, and the ENCODER may be losing size
-   information today. Needs hardware-verified ground truth before anyone
-   writes the decoder.
+6. ~~A latent ENCODER ambiguity~~ — **RETRACTED. There is no collision.**
+   `ST_RRB`/`ST_RRW`/`ST_RRL` encode distinctly: the trailing byte is `0x41`,
+   `0x50`, `0x60` respectively, confirmed with `llvm-mc --show-encoding`. The
+   collision was real once and was fixed on 2026-08-22 by `1b9432474daa`,
+   eleven days before this entry claimed it was open — the claim came from
+   reading the emitter's `Opcode < 0xF0` guard without checking the bytes, and
+   `TLCS900InstrInfo.td` already spells these sub-opcodes out per size for
+   exactly that reason. A full audit of all 22 call sites of that guard found
+   **no other instance**: two formats have no live instantiations, those fixed
+   below `0xF0` get the size adjustment by construction, and every family at or
+   above it already spells its sub-opcode per size.
