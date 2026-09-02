@@ -49,3 +49,20 @@ run each with no arguments (or `-h`-shaped usage on error) to see it, or read it
   make rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom
   cmp rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom original_ROMs/hd-ae5000_v2_06i.ic4
   ```
+
+- **`data_as_code_census.py`** -- finishes the census
+  `notes/DEBT-INVENTORY-2026-09-02.md` records as **PARTIAL** for this image: which
+  regions are written in the source as instructions but are really DATA? The primary test is
+  decoder-independent and is the one that settled `HDAE5000_RECORD_TABLE` -- *who reads the
+  region*. Every maximal LABELLED span of instruction lines is classified CALLED (some source
+  control transfer resolves into it), ADDR-ONLY (nothing branches in, but something loads an
+  address inside it -- the RECORD_TABLE signature) or UNREFERENCED, and the last two are then
+  tested for structured-data content and for the absence of any flow-terminating instruction.
+  Every test's false-positive rate is measured on this image's own proven-code regions, and
+  `--selftest` requires both known instances -- the 6,356 B record table and the 309 B version
+  string -- to fire, because a detector that cannot see the cases it generalises measures
+  nothing (the first version of the content test could see neither).
+  ```
+  python3 hdae5000/tools/data_as_code_census.py --selftest
+  python3 hdae5000/tools/data_as_code_census.py --list 30
+  ```
