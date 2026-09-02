@@ -93,7 +93,9 @@ import re
 import subprocess
 import sys
 import tempfile
-from collections import defaultdict
+from collections import defaultdict, Counter
+
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))          # scripts/analysis
 REPO = os.path.dirname(os.path.dirname(HERE))                # repo root
@@ -302,7 +304,22 @@ def flatten(tag):
             pad += n
             pos += n
         elif d == "org":
-            t = int(rest.split(",")[0].strip(), 0) - base
+            # ⚠ BUG FIXED 2026-09-02: the operand is a SECTION-RELATIVE
+            # offset (matching `pos` units directly), NOT an absolute VMA --
+            # confirmed against v7's own two `.org` directives (`.org 0,
+            # 255` at the top and `.org 2096768, 255` near the end, where
+            # 2096768 = 0x1FFA00 is 384 B short of v7's own 2 MiB LENGTH,
+            # exactly a fill-to-near-end-of-ROM idiom) and against both
+            # scripts/analysis/v10_data_as_code_census.py's `.org` handling
+            # and wsa1/notes/data_as_code_audit.py's (this file's own
+            # porting source), neither of which subtracts a base here.
+            # Subtracting `base` (as an early version of this port did)
+            # produced a huge negative target for every non-zero-based
+            # image, silently turning every `.org` into a no-op and
+            # undercounting v7 by 55,570 B, v142 by 1,024 B, subboot by
+            # 28,259 B and table_data by 56,868 B -- caught by --selftest's
+            # own "code+data+pad == pos == declared LENGTH" check (#1).
+            t = int(rest.split(",")[0].strip(), 0)
             if t > pos:
                 pad += t - pos
                 pos = t
@@ -347,11 +364,110 @@ def code_regions(code):
     return regions
 
 
+# ⚠⚠ THE FRAGMENTATION TRAP, measured directly in this tree's own HD-AE5000
+# calibration case. No `m_bit`/`m_chg`/`m_set`/`m_pop`-style WSA1 `_mem`
+# macro family exists here (checked by --selftest) -- but a DIFFERENT and, on
+# this evidence, more common fragmentation source does: a single byte-exact
+# instruction the ORIGINAL disassembly-to-source conversion could decode but
+# could not spell in llvm-mc syntax, left as a raw `.byte` with the decoded
+# mnemonic in a comment. Confirmed at hdae5000_data_tables.s:87, dead centre
+# of the HDAE5000_RECORD_TABLE calibration span itself: `.byte 0x96, 0x97
+# ; adc SP,(XIZ)`. Two bytes with no `; encoding:` line chop the ONE
+# documented 6,356 B span into dozens of separate `code_regions()` pieces --
+# exactly the shape --selftest caught (checking #3b: expected n=6356, got a
+# fragment of 68). notes/DEBT-INVENTORY-2026-09-02.md's own "where the next
+# pass should aim" item 5 says this is a live, tree-wide gap
+# (`decodeERPPrefix()` stubbed for ~20 forms, "33 of 34 v7 code slices fail a
+# disassemble/re-assemble round trip"), so it is not an HD-AE5000 oddity.
+#
+# THE FIX, using an INDEPENDENT decode authority rather than a length guess
+# (ported from wsa1/notes/data_as_code_audit.py's gap_is_clean_code(), same
+# reasoning): ask unidasm (MAME's TLCS-900 decoder, the same authority
+# notes/reachability_kn5000.py already trusts) whether the gap's raw ROM
+# bytes decode, end to end with no truncation or illegal opcode, into real
+# instructions. If they do, the gap is a spelling limitation and the two
+# flanking regions are MERGED before anything is judged reached/unreached;
+# if not, it is left alone as a real region boundary. Capped well below the
+# smallest finding this audit would ever report on its own terms, so the cap
+# can never rescue a genuine data span by accident.
+GAP_BRIDGE_CAP = 16     # bytes; MIN_SIGNAL_BYTES (16) is the floor below
+UNIDASM = os.path.expanduser("~/compartilhado/kn7000_mame_build/unidasm")
+UNI_LINE = re.compile(r'^\s*([0-9a-f]{6,8}):\s+((?:[0-9a-f]{2} )+)\s*(.*)$')
+_UNI_BOUND = {}
+
+
+def unidasm_boundaries(tag):
+    """{addr: (len, mnemonic)} from ONE linear unidasm decode of the whole
+    image (the same one-shot optimisation notes/reachability_kn5000.py's own
+    predecode uses). Used ONLY to classify short gaps below; never to walk
+    control flow -- unidasm's TLCS900 core has its own known blind spots
+    (register-indexed SriRR*, ~20 decodeERPPrefix() forms) and this tool
+    must never inherit them as if they were evidence of "reached"."""
+    if tag in _UNI_BOUND:
+        return _UNI_BOUND[tag]
+    raw = rom_bytes(tag)
+    base = RUNTIME_BASE[tag]
+    with tempfile.NamedTemporaryFile(suffix=".bin", delete=False) as f:
+        f.write(raw)
+        tmp = f.name
+    try:
+        out = subprocess.run([UNIDASM, tmp, "-arch", "tlcs900", "-basepc", hex(base)],
+                              capture_output=True, text=True).stdout
+    finally:
+        os.unlink(tmp)
+    bound = {}
+    for ln in out.splitlines():
+        m = UNI_LINE.match(ln)
+        if m:
+            bound.setdefault(int(m.group(1), 16),
+                              (len(m.group(2).split()), m.group(3).strip()))
+    _UNI_BOUND[tag] = bound
+    return bound
+
+
+def gap_is_clean_code(tag, start, length):
+    """True if the independent unidasm decode covers [start, start+length)
+    with an unbroken chain of instructions landing EXACTLY on the far edge,
+    and none of them is the decoder's illegal-opcode marker."""
+    if length <= 0:
+        return True
+    if length > GAP_BRIDGE_CAP:
+        return False
+    bound = unidasm_boundaries(tag)
+    a, end = start, start + length
+    while a < end:
+        e = bound.get(a)
+        if not e:
+            return False
+        ln, mnem = e
+        if ln <= 0 or not mnem or mnem.startswith("???") or "illegal" in mnem.lower():
+            return False
+        a += ln
+    return a == end
+
+
+def merge_gaps(tag, code, regions):
+    """Merge adjacent code regions across any gap gap_is_clean_code() proves
+    is a spelling-limited real instruction rather than genuine data."""
+    if not regions:
+        return regions
+    out = [regions[0]]
+    for r in regions[1:]:
+        ps, pe, pn, plast = out[-1]
+        s, e, n, last = r
+        gap = s - pe
+        if gap_is_clean_code(tag, pe, gap):
+            out[-1] = (ps, e, pn + n, last)
+        else:
+            out.append(r)
+    return out
+
+
 # A short (<= MAX_BRIDGE_GAP) gap between two code regions does not break
 # control flow unless the LAST instruction before it truly ends flow
-# (ret/reti/retd/halt/swi, or an unconditional jp/jr/jrl). No `_mem`-macro
-# fragmentation exists in this tree (see --selftest), so this simple
-# fallthrough-only bridge is the whole story here, unlike wsa1's.
+# (ret/reti/retd/halt/swi, or an unconditional jp/jr/jrl). The residual net
+# for whatever merge_gaps() does NOT absorb (a genuinely illegal-decoding
+# short gap, or one over GAP_BRIDGE_CAP).
 MAX_BRIDGE_GAP = 8
 FLOW_END_MNEM = ("ret", "reti", "retd", "halt", "swi")
 FLOW_MAYBE_END_MNEM = ("jp", "jr", "jrl")
@@ -452,10 +568,20 @@ def build_reference_index():
 
 
 # --------------------------------------------------------------- signals
+# ⚠ PERFORMANCE: these three signals run once per CODE region, and this
+# tree has ~25,000 of them (17,033 in v9 alone). The straightforward
+# per-byte Python loops this was first written with (ported verbatim from
+# wsa1/notes/data_as_code_audit.py, which only ever sees ~6,000 regions
+# across four SMALLER images) measured out at several CPU-minutes here --
+# --selftest alone calls analyse_all() three times. Rewritten below to use
+# Counter (C-implemented) and numpy; every one is checked against the
+# original pure-Python formula in --selftest (#6) so the speedup cannot
+# silently change a single score.
 def printable_ratio(b):
     if not b:
         return 0.0
-    return sum(1 for c in b if 0x20 <= c <= 0x7e) / len(b)
+    arr = np.frombuffer(b, dtype=np.uint8)
+    return float(np.count_nonzero((arr >= 0x20) & (arr <= 0x7e))) / len(b)
 
 
 def dominant_byte_ratio(b):
@@ -467,10 +593,7 @@ def dominant_byte_ratio(b):
     tree)."""
     if not b:
         return 0.0
-    counts = {}
-    for c in b:
-        counts[c] = counts.get(c, 0) + 1
-    return max(counts.values()) / len(b)
+    return Counter(b).most_common(1)[0][1] / len(b)
 
 
 DOMINANT_BYTE_CAP = 0.45
@@ -485,9 +608,10 @@ def periodicity_score(b):
     n = len(b)
     if n < 16:
         return 0.0, 0
+    arr = np.frombuffer(b, dtype=np.uint8)
     best = (0.0, 0)
     for p in [p for p in PERIODS if p < n // 3]:
-        matches = sum(1 for i in range(p, n) if b[i] == b[i - p])
+        matches = int(np.count_nonzero(arr[p:] == arr[:n - p]))
         score = matches / (n - p)
         if score > best[0]:
             best = (score, p)
@@ -498,16 +622,33 @@ ASCII_HIGH = 0.60
 PERIOD_HIGH = 0.40
 
 
-def is_island(start, end, labels, branch_targets):
-    for name, addr in labels.items():
-        if start <= addr < end:
-            for src_tag, src_addr, _k in branch_targets.get(addr, ()):
-                if not (start <= src_addr < end):
-                    return False
+def is_island(start, end, sorted_label_addrs, branch_targets):
+    """True if no label strictly inside [start, end) is ever the target of a
+    branch whose SOURCE is outside the region. `sorted_label_addrs` is a
+    SORTED list of every label address in the image (see the
+    ⚠ PERFORMANCE note below classify_region for why this is not just
+    `labels.values()` re-sorted on every call)."""
+    import bisect
+    lo = bisect.bisect_left(sorted_label_addrs, start)
+    hi = bisect.bisect_left(sorted_label_addrs, end)
+    for addr in sorted_label_addrs[lo:hi]:
+        for src_tag, src_addr, _k in branch_targets.get(addr, ()):
+            if not (start <= src_addr < end):
+                return False
     return True
 
 
-def classify_region(tag, start, end, labels, branch_targets, addr_refs,
+# ⚠ PERFORMANCE: is_island() used to take the full `labels` dict and scan
+# EVERY label on every call -- O(regions x labels) per image. v9 alone has
+# 17,033 regions x 36,083 labels = ~614 MILLION iterations for that one
+# signal; measured (via cProfile-free timing: 175.6s for one analyse_all()
+# call, and --selftest calls it three times) as the dominant cost in this
+# script, an order of magnitude past periodicity_score's cost (the other
+# per-region signal, already independently sped up with numpy -- see
+# above). classify_region() and analyse_all() below now build ONE sorted
+# address list per image (not per region) and is_island() bisects into it,
+# turning the label side of the cost into O(log labels) per region.
+def classify_region(tag, start, end, sorted_label_addrs, branch_targets, addr_refs,
                      fallthrough=False):
     raw = rom_bytes(tag)
     off = start - RUNTIME_BASE[tag]
@@ -515,7 +656,7 @@ def classify_region(tag, start, end, labels, branch_targets, addr_refs,
     direct = bool(branch_targets.get(start))
     reached = direct or fallthrough
     addr_only = bool(addr_refs.get(start)) and not reached
-    island = is_island(start, end, labels, branch_targets)
+    island = is_island(start, end, sorted_label_addrs, branch_targets)
     ratio = printable_ratio(b)
     pscore, pperiod = periodicity_score(b)
     dom = dominant_byte_ratio(b)
@@ -548,12 +689,13 @@ def analyse_all():
     out = {}
     for tag, _s, _e, _b, _sz, _g in IMAGES:
         code, labels, _w, _d, _p, _pos = get_flat(tag)
-        regions = code_regions(code)
+        sorted_label_addrs = sorted(set(labels.values()))
+        regions = merge_gaps(tag, code, code_regions(code))
         bridge = bridge_map(code, regions)
         direct_idx = {i for i, (s, _e, _n, _l) in enumerate(regions)
                       if branch_targets.get(s)}
         reached_idx = resolve_fallthrough_reached(regions, bridge, direct_idx)
-        rows = [classify_region(tag, s, e, labels, branch_targets, addr_refs,
+        rows = [classify_region(tag, s, e, sorted_label_addrs, branch_targets, addr_refs,
                                  fallthrough=(i in reached_idx and i not in direct_idx))
                 for i, (s, e, _n, _l) in enumerate(regions)]
         out[tag] = rows
@@ -701,7 +843,7 @@ def selftest():
     off = fake_start - RUNTIME_BASE[fake_tag]
     raw[off:off + len(CALIBRATION_STRING)] = CALIBRATION_STRING
     _ROM_CACHE[fake_tag] = bytes(raw)
-    r = classify_region(fake_tag, fake_start, fake_end, {}, defaultdict(list), defaultdict(list))
+    r = classify_region(fake_tag, fake_start, fake_end, [], defaultdict(list), defaultdict(list))
     check("planted version-string-shaped region is flagged HIGH",
           r["confidence"] == "high",
           "ascii=%.2f period=%.2f confidence=%s" % (r["ascii_ratio"], r["period_score"], r["confidence"]))
@@ -749,6 +891,68 @@ def selftest():
     score, period = periodicity_score(tiled)
     check("a 4-byte-tiled string scores >= 0.9 at period 4",
           score >= 0.9 and period == 4, "score=%.2f period=%d" % (score, period))
+
+    # 6. THE NUMPY REWRITE, checked against the ORIGINAL pure-Python formula
+    #    (the one wsa1/notes/data_as_code_audit.py still uses) on a handful
+    #    of realistic byte strings -- printable text, a periodic table, a
+    #    degenerate NOP-padding run, and real ROM bytes from a genuine
+    #    reached region. This exists because the rewrite was a real
+    #    correctness risk taken for a real reason: the pure-Python version
+    #    measured at 175.6s for a SINGLE analyse_all() call (this script's
+    #    own IMAGES are ~4x wsa1's total code-region count), and
+    #    --selftest alone calls it three times -- so an unverified rewrite
+    #    would have traded a slow-but-checkable tool for a fast-but-unproven
+    #    one.
+    def ref_printable_ratio(b):
+        if not b:
+            return 0.0
+        return sum(1 for c in b if 0x20 <= c <= 0x7e) / len(b)
+
+    def ref_dominant_byte_ratio(b):
+        if not b:
+            return 0.0
+        counts = {}
+        for c in b:
+            counts[c] = counts.get(c, 0) + 1
+        return max(counts.values()) / len(b)
+
+    def ref_periodicity_score(b):
+        b = b[:PERIOD_CAP]
+        n = len(b)
+        if n < 16:
+            return 0.0, 0
+        best = (0.0, 0)
+        for p in [p for p in PERIODS if p < n // 3]:
+            matches = sum(1 for i in range(p, n) if b[i] == b[i - p])
+            score = matches / (n - p)
+            if score > best[0]:
+                best = (score, p)
+        return best
+
+    import random
+    random.seed(2026)
+    samples = [
+        b"Technics Software section    M. Kitajima" * 3,
+        bytes([1, 2, 3, 4] * 50 + [9]),
+        bytes([0x00] * 300 + [0x01, 0x02] * 10),
+        bytes(random.randrange(256) for _ in range(500)),
+        b"",
+        b"\x00",
+        rom_bytes("hdae5000")[0x29C0AA:0x29C0AA + 6356],   # the real calibration span
+        rom_bytes("v9")[0x000000:0x001000],                 # real ROM bytes, some image
+    ]
+    numpy_ok = True
+    for i, samp in enumerate(samples):
+        a1, a2 = printable_ratio(samp), ref_printable_ratio(samp)
+        b1, b2 = dominant_byte_ratio(samp), ref_dominant_byte_ratio(samp)
+        c1, c2 = periodicity_score(samp), ref_periodicity_score(samp)
+        same = (abs(a1 - a2) < 1e-9 and abs(b1 - b2) < 1e-9 and c1 == c2)
+        numpy_ok = numpy_ok and same
+        if not same:
+            print("      sample %d MISMATCH: printable %r/%r dominant %r/%r period %r/%r"
+                  % (i, a1, a2, b1, b2, c1, c2))
+    check("numpy printable_ratio/dominant_byte_ratio/periodicity_score "
+          "match the original pure-Python formula on %d samples" % len(samples), numpy_ok)
 
     print("SELFTEST", "PASS" if ok else "FAIL")
     return 0 if ok else 1
