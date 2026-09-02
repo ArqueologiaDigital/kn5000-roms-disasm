@@ -81,9 +81,17 @@ TREES = [
 
 
 def planned_assembler_runs(makefile_dir, assembler, makefile=None):
-    """Count assembler invocations `make -n all` plans, with `assembler` fresh."""
-    os.utime(assembler, None)
-    cmd = ["make", "-n", "all", f"LLVM_MC={assembler}"]
+    """Count assembler invocations `make -n all` plans, with `assembler` fresh.
+
+    ⚠ Uses make's `-W` (what-if) flag rather than touching the file. An earlier
+    version called os.utime() on the assembler, which is SHARED: running this
+    check bumped the real binary's mtime, so every lane worktree's next build
+    rebuilt all thirteen images from scratch. A read-only check must not make
+    other people's work more expensive -- and `-W` asks make exactly the
+    question we want ("what would you do if this file were newer?") without
+    writing anything at all.
+    """
+    cmd = ["make", "-n", "-W", str(assembler), "all", f"LLVM_MC={assembler}"]
     if makefile is not None:
         cmd[1:1] = ["-f", str(makefile)]
     out = subprocess.run(
