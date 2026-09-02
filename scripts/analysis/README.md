@@ -170,8 +170,10 @@ construction wherever a region was force-disassembled linearly.
 | `blind_byte_rom_sites.py` | Where do these bytes occur in the committed dumps, and is any site CODE? Boundary agreement with an independent decoder plus shape filters (no `db`, no nop runs, no byte ramps, no repeating table rows). `--check` re-reads the ten offsets quoted by `llvm/test/MC/TLCS900/missing-leading-bytes.s` from the dumps so the test's provenance is verifiable. ⚠ Across six images **no site survives as code**; every one is a ramp, mask table, pointer table, string or parameter block. |
 
     python3 scripts/analysis/blind_run_decode_census.py v10/maincpu
-    LLVM_MC=/path/to/baseline/llvm-mc \
-        python3 scripts/analysis/blind_run_decode_census.py v10/maincpu   # before
+    # the `before` column: build a baseline llvm-mc from the PREVIOUS pin,
+    # tlcs900_backend@58fb7f2afaed, copy it aside, restore, then
+    LLVM_MC=/path/to/58fb7f2afaed/llvm-mc \
+        python3 scripts/analysis/blind_run_decode_census.py v10/maincpu
     python3 scripts/analysis/blind_byte_rom_sites.py --check
     python3 scripts/analysis/blind_byte_rom_sites.py --rom kn5000_v10
 

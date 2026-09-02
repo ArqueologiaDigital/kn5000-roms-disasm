@@ -54,6 +54,31 @@ refusal.  A run with no refusal at all is FULLY CLEAN.  No padding is added, so
 a run whose last instruction would overrun the end counts that tail as a
 refusal -- deliberately: the run's bytes are all the evidence there is.
 
+RESULT 2026-09-02, v10/maincpu, across tlcs900_backend@6f456a19f05b
+(regenerate before quoting; other lanes are converting)
+
+                     runs   bytes   clean prefix   fully clean
+    BEFORE  real     3395    8503        0 (0.0%)     0 ( 0.0%)
+            shuffled 3395    8503      655 (7.7%)    15 ( 0.4%)
+    AFTER   real     3395    8503     6687(78.6%)  2810 (82.8%)
+            shuffled 3395    8503     5835(68.6%)  2788 (82.1%)
+            random   3395    8503     2489(29.3%)   821 (24.2%)
+
+★ THE FIX IS REAL -- 0 B decoded to 6,687 B -- AND THE CODE HYPOTHESIS IS NOT.
+Real and shuffled are 82.8% vs 82.1%: the runs carry no instruction structure
+beyond their byte frequency. The mean run is 2.5 B, so most of that mass is
+1-3 byte fragments where a shuffle is barely a null; in the 96 runs of >= 12 B
+a gap does open (38.5% vs 17.7% fully clean), but inspecting the longest of
+those shows the structure is DATA regularity -- `04 00 00 00 08 00 00 00 10 00
+00 00 ...` power-of-two masks, 4-byte pointer tables, index ramps.
+
+⚠ THE `BEFORE` COLUMN NEEDS A BASELINE BINARY. Build one by checking out
+tlcs900_backend@58fb7f2afaed's TLCS900Disassembler.cpp, `ninja llvm-mc`, copying
+the binary aside, then restoring -- and point LLVM_MC at the copy. Do not
+approximate it by filtering the five bytes out in Python: the old decoder SKIPS
+a refused byte and resumes, so the byte spans differ and a simulation would
+quietly report the wrong clean-prefix.
+
 RUN
     python3 scripts/analysis/blind_run_decode_census.py [root ...]
     default root: v10/maincpu
