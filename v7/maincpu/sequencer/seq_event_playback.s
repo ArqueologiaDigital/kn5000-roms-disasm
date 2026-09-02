@@ -1845,7 +1845,7 @@ AccPlay_MainDispatch:
 	jr z, AccPlay_CheckPrevRunning
 	cp (0x7e70:16), 0x00
 	jr z, AccPlay_StartNewAccomp
-	bitda 0, (0x7e6f)
+	bit 0, (0x7e6f:16)
 	jr z, AccPlay_RunningWithBit0
 	calr AccPlay_DispatchSeqStart
 	jr t, AccPlay_ContinueMainLoop
@@ -1941,7 +1941,7 @@ AccPlay_MainUpdateLoop:
 	push XIX
 	push XIY
 	push XIZ
-	bitda 2, (0x7e79)
+	bit 2, (0x7e79:16)
 	jr z, .Lc_f71b3c
 	call AccSeq_PostEvent9E_Enable
 AccPlay_PostEvent9E_Enable:
@@ -1949,7 +1949,7 @@ AccPlay_PostEvent9E_Enable:
 	xor WA,WA
 	ldb A, 0x01
 	call UI_PostPartChangeEvent
-	bitda 2, (0x7e79)
+	bit 2, (0x7e79:16)
 	jr z, AccPlay_PostEvent9E_Disable
 	call AccSeq_PostEvent9E_Disable
 AccPlay_PostEvent9E_Disable:
@@ -1977,7 +1977,7 @@ AccPlay_SetIndicatorAndRet:
 
 
 AccPlay_DispatchSeqStart:
-	bitda 2, (0x0420)
+	bit 2, (0x0420:16)
 	jr nz, AccPlay_DispatchSeqRet
 	call Seq_DispatcherEntry
 	ordi8 (0x334c), 0x01
@@ -1988,12 +1988,12 @@ AccPlay_DispatchSeqRet:
 	ret
 
 AccPlay_HandleStopState:
-	bitda 2, (0x7d83)
+	bit 2, (0x7d83:16)
 	jr nz, .Lc_f71b94
 	jp AccPlay_PostLoopCleanup
 AccPlay_CheckResumeState:
 .Lc_f71b94:
-	bitda 2, (0x7d87)
+	bit 2, (0x7d87:16)
 	jr nz, TempoEvt_ProcessLoop
 	calr AccPlay_ProcessVoiceBank
 	call CountAvailableVoiceSlots
@@ -3176,9 +3176,9 @@ AccPlay_ToggleCodeFragment:
 .Lc_f7273d:
 	ret
 AccPlay_CheckAndToggle:
-	bitda 1, (0x7e6f)
+	bit 1, (0x7e6f:16)
 	jr z, AccPlay_ToggleRet
-	bitda 2, (0x041f)
+	bit 2, (0x041f:16)
 	jr nz, AccPlay_ToggleRestart
 	call AccWrap_PlayModeStartAccPlay
 	lds wa, 0
@@ -3196,7 +3196,7 @@ AccPlay_ToggleRet:
 	ret
 
 AccPlay_StopAndReset:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr nz, AccPlay_StopResetRet
 	lds wa, 0
 	ld (1047:16), a

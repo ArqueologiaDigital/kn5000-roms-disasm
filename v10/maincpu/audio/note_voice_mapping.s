@@ -10992,7 +10992,7 @@ CollectEnabledVoices_CheckMem2:
 	extz de
 	ld xwa, xhl
 	call NoteMap_AddEntry
-	bitda 0, (0xc1fe)
+	bit 0, (0xc1fe:16)
 	jr z, CollectEnabledVoices_TestBit1
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11010,7 +11010,7 @@ CollectEnabledVoices_CheckMem2:
 	call NoteMap_AddEntry
 
 CollectEnabledVoices_TestBit1:
-	bitda 1, (0xc1fe)
+	bit 1, (0xc1fe:16)
 	jr z, CollectEnabledVoices_TestBit2
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11028,7 +11028,7 @@ CollectEnabledVoices_TestBit1:
 	call NoteMap_AddEntry
 
 CollectEnabledVoices_TestBit2:
-	bitda 2, (0xc1fe)
+	bit 2, (0xc1fe:16)
 	jrl z, NoteMap_VoiceAssign_Finalize
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11051,7 +11051,7 @@ CollectEnabledVoices_CheckMem3:
 	jrl z, NoteMap_VoiceAssign_Finalize
 	cpib_sri 0xfd, 0xee, 0x01, 0xff
 	jrl nz, NoteMap_VoiceAssign_Finalize
-	bitda 0, (0xc364)
+	bit 0, (0xc364:16)
 	jr z, CollectEnabledVoices_TestBit12
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11069,7 +11069,7 @@ CollectEnabledVoices_CheckMem3:
 	call NoteMap_AddEntry
 
 CollectEnabledVoices_TestBit12:
-	bitda 1, (0xc364)
+	bit 1, (0xc364:16)
 	jr z, CollectEnabledVoices_TestBit22
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11087,7 +11087,7 @@ CollectEnabledVoices_TestBit12:
 	call NoteMap_AddEntry
 
 CollectEnabledVoices_TestBit22:
-	bitda 2, (0xc364)
+	bit 2, (0xc364:16)
 	jr z, CollectEnabledVoices_WriteReg
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11603,7 +11603,7 @@ ReallocEnabledVoices_CheckMem2:
 	extz de
 	ld xwa, xhl
 	call NoteMap_UpdateEntry
-	bitda 0, (0xc1fe)
+	bit 0, (0xc1fe:16)
 	jr z, ReallocEnabledVoices_TestBit1
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11621,7 +11621,7 @@ ReallocEnabledVoices_CheckMem2:
 	call NoteMap_UpdateEntry
 
 ReallocEnabledVoices_TestBit1:
-	bitda 1, (0xc1fe)
+	bit 1, (0xc1fe:16)
 	jr z, ReallocEnabledVoices_TestBit2
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11639,7 +11639,7 @@ ReallocEnabledVoices_TestBit1:
 	call NoteMap_UpdateEntry
 
 ReallocEnabledVoices_TestBit2:
-	bitda 2, (0xc1fe)
+	bit 2, (0xc1fe:16)
 	jrl z, ReallocEnabledVoices_Block
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11662,7 +11662,7 @@ ReallocEnabledVoices_CheckMem3:
 	jrl z, NoteMap_ReallocVoices_Exit
 	cpib_sri 0xfd, 0xee, 0x01, 0xff
 	jrl nz, NoteMap_ReallocVoices_Exit
-	bitda 0, (0xc364)
+	bit 0, (0xc364:16)
 	jr z, ReallocEnabledVoices_TestBit12
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11680,7 +11680,7 @@ ReallocEnabledVoices_CheckMem3:
 	call NoteMap_UpdateEntry
 
 ReallocEnabledVoices_TestBit12:
-	bitda 1, (0xc364)
+	bit 1, (0xc364:16)
 	jr z, ReallocEnabledVoices_TestBit22
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11698,7 +11698,7 @@ ReallocEnabledVoices_TestBit12:
 	call NoteMap_UpdateEntry
 
 ReallocEnabledVoices_TestBit22:
-	bitda 2, (0xc364)
+	bit 2, (0xc364:16)
 	jr z, ReallocEnabledVoices_WriteReg
 	lda xwa, (xsp + 2)
 	ld xhl, xwa
@@ -11919,7 +11919,7 @@ ReallocVoices_Exit_CheckEnd:
 ReallocVoices_Exit_Compare:
 	cps a, 0
 	jrl nz, ReallocVoices_Exit_WriteReg4
-	bitda 4, (0xc488)
+	bit 4, (0xc488:16)
 	jrl z, ReallocVoices_Exit_WriteReg4
 	stib_ind 0xfd, 0xa6, 0x00, 0x00
 	stib_ind 0xfd, 0xa7, 0x00, 0x01
@@ -11931,7 +11931,7 @@ ReallocVoices_Exit_Compare:
 	call NoteMap_AssignAllVoiceLinks
 	cp (0xc365:16), 255
 	jrl nz, ReallocVoices_Exit_CheckDRAM
-	bitda 0, (0xc364)
+	bit 0, (0xc364:16)
 	jr z, ReallocVoices_Exit_TestBit1
 	lda xwa, (xsp)
 	ld xhl, xwa
@@ -11949,7 +11949,7 @@ ReallocVoices_Exit_Compare:
 	call NoteMap_UpdateEntry
 
 ReallocVoices_Exit_TestBit1:
-	bitda 1, (0xc364)
+	bit 1, (0xc364:16)
 	jr z, ReallocVoices_Exit_TestBit2
 	lda xwa, (xsp)
 	ld xhl, xwa
@@ -11967,7 +11967,7 @@ ReallocVoices_Exit_TestBit1:
 	call NoteMap_UpdateEntry
 
 ReallocVoices_Exit_TestBit2:
-	bitda 2, (0xc364)
+	bit 2, (0xc364:16)
 	jr z, ReallocVoices_Exit_TestBit3
 	lda xwa, (xsp)
 	ld xhl, xwa
@@ -11985,7 +11985,7 @@ ReallocVoices_Exit_TestBit2:
 	call NoteMap_UpdateEntry
 
 ReallocVoices_Exit_TestBit3:
-	bitda 3, (0xc364)
+	bit 3, (0xc364:16)
 	jrl z, ReallocVoices_Exit_Block
 	lda xwa, (xsp)
 	ld xhl, xwa
@@ -12021,7 +12021,7 @@ ReallocVoices_Exit_WriteReg2:
 	jr NoteMap_StoreAndRet
 
 ReallocVoices_Exit_TestBit32:
-	bitda 3, (0xc364)
+	bit 3, (0xc364:16)
 	jr z, ReallocVoices_Exit_WriteReg3
 	lda xwa, (xsp)
 	ld xhl, xwa
@@ -20209,7 +20209,7 @@ PlayModeStateMachine_DoPlayMode:
 	jr ugt, PlayModeStateMachine_Block3
 
 PlayModeStateMachine_TestBit2:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr nz, PlayModeStateMachine_Block3
 	inc 1, xwa
 	cp xwa, 0x7ffe
@@ -20247,7 +20247,7 @@ PlayModeStateMachine_Block4:
 	ret ugt
 
 PlayModeStateMachine_TestBit22:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	ret nz
 	inc 1, xwa
 	cp xwa, 0x7ffe
@@ -20313,7 +20313,7 @@ PlayModeStateMachine_LoadParam:
 	ret
 
 SeqPlay_BusyWaitLoop:
-	bitda 0, (1074)
+	bit 0, (1074:16)
 	jr nz, SeqPlay_BusyWaitLoop
 	ret
 

@@ -7,11 +7,11 @@
 ; =============================================================================
 
 Rhythm_CompareAndTrigger:
-	bitda 0, (0x3283)
+	bit 0, (0x3283:16)
 	jrl z, Rhythm_SaveNoteState
-	bitda 6, (0x28ac)
+	bit 6, (0x28ac:16)
 	jr z, Rhythm_CompareAndTriggerNotes
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr z, Rhythm_CompareAndTriggerNotes
 	ld a, (0x327f:16)
 	cp a, 0x12
@@ -21,7 +21,7 @@ Rhythm_CompareAndTrigger:
 	jrl Rhythm_SaveNoteState
 
 Rhythm_CompareAndTriggerNotes:
-	bitda 1, (0x32d7)
+	bit 1, (0x32d7:16)
 	jr nz, Rhythm_CompareNoteA_Only
 	ld a, (0x32d8:16)
 	ld w, (0x32d9:16)
@@ -245,9 +245,9 @@ RhythmEvt_NoteOn91:
 RhythmEvt_ApplyTranspose:
 	ldb_sri A, 0x07, 0xec, 0xf4
 	calr Rhythm_CheckVelocityThreshold
-	bitda 4, (0x32f4)
+	bit 4, (0x32f4:16)
 	jr nz, RhythmEvt_PostProcess
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, RhythmEvt_ApplyNoteRange
 	calr Rhythm_CrossVoiceCorrect
 
@@ -289,9 +289,9 @@ RhythmEvt_FullLoop:
 	call RingBuf_AdvanceIndex
 	ldb_sri A, 0x07, 0xec, 0xf4
 	calr Rhythm_CheckVelocityThreshold
-	bitda 4, (0x32f4)
+	bit 4, (0x32f4:16)
 	jr nz, RhythmEvt_Full90_PostTransp
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, RhythmEvt_Full90_PostRange
 	calr Rhythm_CrossVoiceCorrect
 
@@ -325,9 +325,9 @@ RhythmEvt_Full91:
 	call RingBuf_AdvanceIndex
 	ldb_sri A, 0x07, 0xec, 0xf4
 	calr Rhythm_CheckVelocityThreshold
-	bitda 4, (0x32f4)
+	bit 4, (0x32f4:16)
 	jr nz, RhythmEvt_Full91_PostTransp
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, RhythmEvt_Full91_PostRange
 	calr Rhythm_CrossVoiceCorrect
 
@@ -387,16 +387,16 @@ Rhythm_AdvanceDone:
 	ret
 
 Rhythm_CrossVoiceCorrect:
-	bitda 0, (0x32d7)
+	bit 0, (0x32d7:16)
 	jr nz, Rhythm_CrossVoice_Apply
-	bitda 1, (0x32d7)
+	bit 1, (0x32d7:16)
 	jr nz, Rhythm_CrossVoice_Apply
 	ld w, (0x3316:16)
 	orda8 w, 0x3317
 	orda8 w, 0x3318
 	and w, 0x3f
 	jr nz, Rhythm_CrossVoice_ClearFlag
-	bitda 5, (0x32f3)
+	bit 5, (0x32f3:16)
 	jr z, Rhythm_CrossVoice_ClearFlag
 
 Rhythm_CrossVoice_Apply:
@@ -419,7 +419,7 @@ Rhythm_CrossVoice_ClearFlag:
 	ret
 
 Rhythm_NoteRangeCheck:
-	bitda 0, (0x32d7)
+	bit 0, (0x32d7:16)
 	jr z, Rhythm_NoteRangeReturn
 	push xiy
 	ld w, a
@@ -448,7 +448,7 @@ Rhythm_VelocityLookup_A:
 	jr Rhythm_VelLookA_Done
 
 Rhythm_VelLookA_CheckEmpty:
-	bitda 4, (0x32f4)
+	bit 4, (0x32f4:16)
 	jr z, Rhythm_VelLookA_CheckRange
 	anddi8 (0x32f4), 239
 	ld a, w
@@ -462,12 +462,12 @@ Rhythm_VelLookA_CheckRange:
 
 Rhythm_VelLookA_SelectTable:
 	ld xiy, Rhythm_InstrMapTable_Default
-	bitda 2, (0x32f4)
+	bit 2, (0x32f4:16)
 	jr z, Rhythm_VelLookA_CheckBit3
 	ld xiy, Rhythm_InstrMapTable_Default_0x31
 
 Rhythm_VelLookA_CheckBit3:
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, Rhythm_VelLookA_TableLookup
 	ld xiy, Rhythm_InstrMapTable_Default_0x62
 
@@ -517,7 +517,7 @@ Rhythm_InstrMapTable_Default:
 
 Rhythm_TransposeNote:
 	ld a, (0x32d9:16)
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, Rhythm_Transp_CheckZero
 	ld a, (0x32da:16)
 
@@ -558,7 +558,7 @@ Rhythm_Transp_WrapLoop:
 
 Rhythm_Transp_FinalCheck:
 	ld a, w
-	bitda 0, (0x332d)
+	bit 0, (0x332d:16)
 	jr z, Rhythm_Transp_Done
 	cpda8 a, 0x332e
 	jr nc, Rhythm_Transp_Done
@@ -577,7 +577,7 @@ Rhythm_VoiceMapLookup:
 	jrl Rhythm_VoiceMap_Done
 
 Rhythm_VoiceMap_CheckInstr:
-	bitda 4, (0x32f4)
+	bit 4, (0x32f4:16)
 	jr z, Rhythm_VoiceMap_CheckBit4
 	anddi8 (0x32f4), 239
 	jrl Rhythm_VoiceMap_Done
@@ -590,7 +590,7 @@ Rhythm_VoiceMap_CheckBit4:
 
 Rhythm_VoiceMap_ClampInstr:
 	ld xiy, Rhythm_PitchShiftTable_Default
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, Rhythm_VoiceMap_SelectTable
 	ld xiy, Rhythm_PitchShiftTable_Default_0x31
 
@@ -630,12 +630,12 @@ Rhythm_VoiceMap_ApplyBase:
 
 Rhythm_VoiceMap_Inst2Clamp:
 	ld xiy, Rhythm_InstrMapTable_Default
-	bitda 2, (0x32f4)
+	bit 2, (0x32f4:16)
 	jr z, Rhythm_VoiceMap_Inst2Bit2
 	ld xiy, Rhythm_InstrMapTable_Default_0x31
 
 Rhythm_VoiceMap_Inst2Bit2:
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, Rhythm_VoiceMap_Inst2Bit3
 	ld xiy, Rhythm_InstrMapTable_Default_0x62
 
@@ -743,7 +743,7 @@ Rhythm_VelocityCompute:
 	jr Rhythm_VelComp_Done
 
 Rhythm_VelComp_CheckBit4:
-	bitda 4, (0x32f4)
+	bit 4, (0x32f4:16)
 	jr z, Rhythm_VelComp_ClampInstr
 	anddi8 (0x32f4), 239
 	ld a, w
@@ -757,7 +757,7 @@ Rhythm_VelComp_ClampInstr:
 
 Rhythm_VelComp_SelectTable:
 	ld xiy, Rhythm_VelocityTable_A
-	bitda 2, (0x32f4)
+	bit 2, (0x32f4:16)
 	jr z, Rhythm_VelComp_Lookup
 	ld xiy, Rhythm_VelocityTable_A_0x31
 
@@ -954,9 +954,9 @@ Rhythm_MatchedPhrase_NonNote:
 
 Rhythm_MatchedPhrase_Process:
 	calr Rhythm_CheckVelocityThreshold
-	bitda 4, (0x32f4)
+	bit 4, (0x32f4:16)
 	jr nz, Rhythm_MatchedPhrase_Output
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, Rhythm_MatchedPhrase_PostRange
 	calr Rhythm_CrossVoiceCorrect
 
@@ -976,9 +976,9 @@ Rhythm_MismatchedPhrase:
 	pushw wa
 	ld a, (xix + 6)
 	calr Rhythm_CheckVelocityThreshold
-	bitda 4, (0x32f4)
+	bit 4, (0x32f4:16)
 	jr nz, Rhythm_Mismatch90_Output
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, Rhythm_Mismatch90_PostRange
 	calr Rhythm_CrossVoiceCorrect
 
@@ -1001,9 +1001,9 @@ Rhythm_MismatchOther:
 	ld (0x3434:16), a
 	ld a, (xix + 8)
 	calr Rhythm_CheckVelocityThreshold
-	bitda 4, (0x32f4)
+	bit 4, (0x32f4:16)
 	jr nz, Rhythm_MismatchOther_Output
-	bitda 3, (0x32f4)
+	bit 3, (0x32f4:16)
 	jr z, Rhythm_MismatchOther_PostRange
 	calr Rhythm_CrossVoiceCorrect
 
@@ -1275,7 +1275,7 @@ Rhythm_SaveState_CheckFx:
 	ld a, (0x330b:16)
 	and a, 0x3
 	jr nz, Rhythm_SaveState_FxActive
-	bitda 0, (0x330c)
+	bit 0, (0x330c:16)
 	jr z, Rhythm_SaveState_ClearFx
 
 Rhythm_SaveState_FxActive:
@@ -1502,9 +1502,9 @@ Rhythm_VoiceAssign_SaveShadow:
 	ret
 
 Rhythm_SeqResetCheck:
-	bitda 2, (0x34cf)
+	bit 2, (0x34cf:16)
 	jr z, Rhythm_SeqReset_UpdateFlags
-	bitda 4, (0x34cf)
+	bit 4, (0x34cf:16)
 	jr nz, Rhythm_SeqReset_UpdateFlags
 	ld l, (0x379b:16)
 	xor h, h
@@ -1543,12 +1543,12 @@ Rhythm_TransposeWithMod:
 	jr z, Rhythm_TranspMod_Return
 	cp (0x32d9:16), 0
 	jr z, Rhythm_TranspMod_Return
-	bitda 2, (0x33e5)
+	bit 2, (0x33e5:16)
 	jr nz, Rhythm_TranspMod_Return
-	bitda 1, (0x33e5)
+	bit 1, (0x33e5:16)
 	jr z, Rhythm_TranspMod_ApplyBoth
 	calr Rhythm_TranspMod_ModCheck
-	bitda 0, (0x33e5)
+	bit 0, (0x33e5:16)
 	jr nz, Rhythm_TranspMod_Return
 
 Rhythm_TranspMod_ApplyBoth:

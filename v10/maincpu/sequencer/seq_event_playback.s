@@ -1092,7 +1092,7 @@ AccPlay_MainDispatch:
 	jr z, AccPlay_CheckPrevRunning
 	cp (0x7f0c:16), 0
 	jr z, AccPlay_StartNewAccomp
-	bitda 0, (0x7f0b)
+	bit 0, (0x7f0b:16)
 	jr z, AccPlay_RunningWithBit0
 	calr AccPlay_DispatchSeqStart
 	jr AccPlay_ContinueMainLoop
@@ -1116,7 +1116,7 @@ AccPlay_StopSequencer:
 
 AccPlay_ContinueMainLoop:
 	calr AccPlay_MonitorParamState
-	bitda 0, (0x7f35)
+	bit 0, (0x7f35:16)
 	jr z, AccPlay_UpdateStateFlags
 	anddi8 (0x7f35), 254
 	calr AccPlay_CheckAndToggle
@@ -1124,7 +1124,7 @@ AccPlay_ContinueMainLoop:
 AccPlay_UpdateStateFlags:
 	ld a, (0x7f0b:16)
 	ld (0x7f0c:16), a
-	bitda 2, (0x7f15)
+	bit 2, (0x7f15:16)
 	jr z, AccPlay_DispatchRet
 	cp (0x8d36:16), 1
 	jr nz, AccPlay_DispatchRet
@@ -1205,7 +1205,7 @@ AccPlay_MainUpdateLoop:
 	push xix
 	push xiy
 	push xiz
-	bitda 2, (0x7f15)
+	bit 2, (0x7f15:16)
 	jr z, AccPlay_PostEvent9E_Enable
 	call AccSeq_PostEvent9E_Enable
 
@@ -1213,7 +1213,7 @@ AccPlay_PostEvent9E_Enable:
 	xor wa, wa
 	ldb a, 0x1
 	call UI_PostPartChangeEvent
-	bitda 2, (0x7f15)
+	bit 2, (0x7f15:16)
 	jr z, AccPlay_PostEvent9E_Disable
 	call AccSeq_PostEvent9E_Disable
 
@@ -1235,7 +1235,7 @@ AccPlay_SetIndicatorAndRet:
 	ret
 
 AccPlay_DispatchSeqStart:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr nz, AccPlay_DispatchSeqRet
 	call Seq_DispatcherEntry
 	ordi8 0x33e8, 1
@@ -1247,12 +1247,12 @@ AccPlay_DispatchSeqRet:
 	ret
 
 AccPlay_HandleStopState:
-	bitda 2, (0x7e1f)
+	bit 2, (0x7e1f:16)
 	jr nz, AccPlay_CheckResumeState
 	jp AccPlay_PostLoopCleanup
 
 AccPlay_CheckResumeState:
-	bitda 2, (0x7e23)
+	bit 2, (0x7e23:16)
 	jr nz, TempoEvt_ProcessLoop
 	calr AccPlay_ProcessVoiceBank
 	call CountAvailableVoiceSlots
@@ -1274,7 +1274,7 @@ TempoEvt_ReadAndClassify:
 	and w, 0xf0
 	ld (0x7e54:16), a
 	ld (0x7e55:16), w
-	bitda 7, (0x7f16)
+	bit 7, (0x7f16:16)
 	jr z, TempoEvt_DispatchEvent
 	cp a, 0x81
 	jr nz, TempoEvt_CheckHighBit
@@ -1373,9 +1373,9 @@ AccPlay_PostLoopCleanup:
 	ret
 
 AccPlay_StopIfRunning:
-	bitda 0, (0x7f15)
+	bit 0, (0x7f15:16)
 	jr z, AccPlay_StopRet
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr nz, AccPlay_StopRet
 	call Seq_DispatcherEntry
 	anddi8 (0x33e8), 254
@@ -2458,7 +2458,7 @@ MidiSeqBuf_ScanLoop:
 	dec 1, bc
 	cps bc, 0
 	jr nz, MidiSeqBuf_ScanLoop
-	bitda 4, (0x7f15)
+	bit 4, (0x7f15:16)
 	jr z, MidiSeqBuf_ScanDone
 	anddi8 (0x7f15), 239
 	ld (xhl + 1), 0x0
@@ -2572,9 +2572,9 @@ AccPlay_ToggleCodeFragment:
 	ret
 
 AccPlay_CheckAndToggle:
-	bitda 1, (0x7f0b)
+	bit 1, (0x7f0b:16)
 	jr z, AccPlay_ToggleRet
-	bitda 2, (1055)
+	bit 2, (1055:16)
 	jr nz, AccPlay_ToggleRestart
 	call AccWrap_PlayModeStartAccPlay
 	lds wa, 0
@@ -2594,7 +2594,7 @@ AccPlay_ToggleRet:
 	ret
 
 AccPlay_StopAndReset:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr nz, AccPlay_StopResetRet
 	lds wa, 0
 	ld (1047:16), a

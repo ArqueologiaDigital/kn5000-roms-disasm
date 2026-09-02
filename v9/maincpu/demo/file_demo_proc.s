@@ -339,7 +339,7 @@ FDemo_MultiGuardCheck:
 	jr nz, Banner_ReturnZero
 	cp	(3375:16), 0
 	jr nz, Banner_ReturnZero
-	bitda	3, (0x28ad)
+	bit	3, (0x28ad:16)
 	jr nz, Banner_ReturnZero
 	lds	hl, 1
 	ret
@@ -574,7 +574,7 @@ DemoMode_Initialize:
 	call SeqBuf_Init
 	ldw wa, 0x22
 	call CtrlPanel_SetIndicatorLED
-	bitda 0, (0x28a5)
+	bit 0, (0x28a5:16)
 	jr z, FDemo_PostBannerCheck
 	ldmm_sd24w 0xec, 0xff, 0x00, 0x9e, 0xf1
 
@@ -648,7 +648,7 @@ Demo_SelectEntry_ExitDispatch:
 	ret
 
 Demo_SelectEntry_ByteTable:
-	bitda	7, (0x2966)
+	bit	7, (0x2966:16)
 	ret	nz
 	ld	a, (1057:16)
 	and	a, 3
@@ -662,11 +662,11 @@ Demo_SelectEntry_ByteTable:
 	ret	nz
 	cp	(0x8d34:16), 19
 	ret	nz
-	bitda	0, (0xc07e)
+	bit	0, (0xc07e:16)
 	ret	z
 	cpdi16	0x28b4, 0
 	jr	nz, 6
-	bitda	0, (0x3283)
+	bit	0, (0x3283:16)
 	jr	z, 52
 	resda	3, 0x28ad
 	cp	(0x8d38:16), 228
@@ -692,7 +692,7 @@ Demo_SelectEntry_ByteTable:
 Demo_SelectEntry_ProcessSongList:
 	cpdi16 0x28b4, 0
 	jr z, Demo_SelectEntry_ToCountdown
-	bitda 3, (0x28ad)
+	bit 3, (0x28ad:16)
 	jr z, Demo_SelectEntry_ManualSelect
 	ld a, (0x28a4:16)
 	cpda8 a, 4439
@@ -782,7 +782,7 @@ Demo_SelectEntry_AfterSongLoad:
 	extz wa
 	call Seq_DispatchEventType6
 	ld (0x8f4e:16), 4
-	bitda 3, (0x28ad)
+	bit 3, (0x28ad:16)
 	ret z
 	cp (0x8d38:16), 228
 	jr z, Demo_SelectEntry_CheckSongCount
@@ -822,7 +822,7 @@ Demo_SelectEntry_LoadPattern:
 	ret
 
 Demo_SelectEntry_DrawSecondary:
-	bitda 3, (0x28ad)
+	bit 3, (0x28ad:16)
 	ret z
 	cp (0x8d38:16), 228
 	ret z
@@ -1086,13 +1086,13 @@ Demo_LookupPartTableEntry:
 
 Demo_WaitForDisplayBit:
 	ld xwa, NakaData_RomEnd
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	ret z
 
 Demo_WaitForDisplayBit_Loop:
 	sub xwa, 0x1
 	ret z
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr nz, Demo_WaitForDisplayBit_Loop
 	ret
 
@@ -8413,9 +8413,9 @@ SeqPhase_OperationStateCheck:
 	jrl z, SeqPhase_PopIzRet
 	res 7, a
 	ld (1068:16), a
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jrl nz, SeqPhase_PopIzRet
-	bitda 2, (1055)
+	bit 2, (1055:16)
 	jrl nz, SeqPhase_PopIzRet
 	lds wa, 0
 	calr InitializeOperationState

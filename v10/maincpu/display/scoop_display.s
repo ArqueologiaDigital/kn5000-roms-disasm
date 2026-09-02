@@ -94,7 +94,7 @@ Display_UpdateRegion0_Check:
 	jr z, Display_UpdateRegion0_NoChange
 
 Display_UpdateRegion0_Changed:
-	bitda 0, (3927)
+	bit 0, (3927:16)
 	jrl nz, Display_UpdateRegion0_NoChange
 	call Display_RedrawStatusBar
 	ld a, (3429:16)
@@ -521,10 +521,10 @@ UIRender_DescriptorTable2:
 
 ParamDigit_ExtractAndFormat:
 	calr ParamDigit_DivideValue
-	bitda 1, (4485)
+	bit 1, (4485:16)
 	jr nz, ParamDigit_ExtractDone
 	ld (4481:16), 32
-	bitda 0, (4485)
+	bit 0, (4485:16)
 	jr nz, ParamDigit_ExtractDone
 	ld (4482:16), 32
 
@@ -2378,7 +2378,7 @@ Display_TitleString_Mode5:
 	jrl z, TitleString_MaskAndFormat
 	cps a, 7
 	jrl nz, TitleString_NullRet
-	bitda 4, (3770)
+	bit 4, (3770:16)
 	jrl z, TitleString_NullRet
 	ld a, (3769:16)
 	and a, 0x30
@@ -2890,7 +2890,7 @@ ScoopDisp_DispatchTable_Extended:
 	ret
 
 Display_DirtyRegionDispatch:
-	bitda 3, (3411)
+	bit 3, (3411:16)
 	jrl z, Timer_ModeDispatch_Return
 	call Display_ResetDirtyFlags
 ; Timer mode dispatch
@@ -2927,7 +2927,7 @@ Timer_ModeHandler_1:
 	call SeqState_HasModeChanged
 	cps	hl, 0
 	jrl nz, Timer_GuardCallSetup_Ret
-	bitda	0, (3927)
+	bit	0, (3927:16)
 	jrl z, Timer_GuardCallSetup
 	anddi8	(3927), 254
 Timer_GuardCallSetup:
@@ -5651,7 +5651,7 @@ VoiceSlot_TableSetup:
 	ret
 
 AccPedal_CheckBitAndUpdate:
-	bitda 0, (3412)
+	bit 0, (3412:16)
 	jrl z, AccPedal_ClearFlagAndJump
 	ordi8 0x287b, 4
 
@@ -6230,7 +6230,7 @@ VoiceCtrl_ParamSetupBytecode:
 	ld	a, (3415:16)
 	inc	1, a
 	ld	(xiy+1), a
-	bitda	1, (3529)
+	bit	1, (3529:16)
 	jrl	z, 3
 	ormi8	(xiy), 2
 	ld	(xiy+4), 0
@@ -7706,9 +7706,9 @@ SysEx_DecrementAndCheck:
 	call SysInit_SendAllNotesAndReset
 
 SysEx_ControllerBitCheck:
-	bitda 3, (3411)
+	bit 3, (3411:16)
 	jrl z, ControllerMode_UpdateFlags
-	bitda 0, (3924)
+	bit 0, (3924:16)
 	jrl z, SysEx_ModeChangeCheck
 	ld c, (3925:16)
 	add c, 0x5
@@ -16263,7 +16263,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 ; Updates the top status bar area with current mode, tempo, and status info.
 ;=============================================================================
 Display_RedrawStatusBar:
-	bitda 0, (3927)
+	bit 0, (3927:16)
 	jrl nz, Scoop_Return
 	cp (0x8d38:16), 138
 	jrl nz, Scoop_Return
@@ -16709,7 +16709,7 @@ Scoop_Selection_End:
 	ret
 
 Display_RedrawSidePanel:
-	bitda 0, (3927)
+	bit 0, (3927:16)
 	jrl nz, Scoop_SidePanel_End
 	cp (0x8d38:16), 138
 	jrl nz, Scoop_SidePanel_End
@@ -17100,7 +17100,7 @@ Scoop_EventHandler_MenuSwitch:
 	call SetWall_ParserInit
 	popw wa
 	ld (0x287a:16), 0
-	bitda 2, (0x287b)
+	bit 2, (0x287b:16)
 	jr nz, Scoop_EventHandler_MenuSwitch_Mode1
 	xor de, de
 	ld wa, (3299:16)

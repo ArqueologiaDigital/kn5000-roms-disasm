@@ -1387,32 +1387,32 @@ DirmdEmulator_Dispatch:	.ascii ":;<>"
 
 ; DirmdEmulator default/fallthrough case
 DirmdEmu_DefaultCase:
-	bitda 1, (0xe3de)
+	bit 1, (0xe3de:16)
 	jr z, DirmdEmu_CheckModeChange
 	ld a, (0xe3dc:16)
 	extz wa
 	call UI_PostPartChangeEvent
 
 DirmdEmu_CheckModeChange:
-	bitda 7, (0xe3de)
+	bit 7, (0xe3de:16)
 	jr z, DirmdEmu_CheckSoundCtrl
 	ld a, (0xe3dc:16)
 	extz wa
 	call UI_PostModeChangeEvent
 
 DirmdEmu_CheckSoundCtrl:
-	bitda 6, (0xe3de)
+	bit 6, (0xe3de:16)
 	jr z, DirmdEmu_CheckBit4
 	ld a, (0xe3dc:16)
 	extz wa
 	call SoundCtrl_SendCommand
 
 DirmdEmu_CheckBit4:
-	bitda 4, (0xe3de)
+	bit 4, (0xe3de:16)
 	call_24 nz, UI_PostRefreshEvent
-	bitda 4, (0xe3e0)
+	bit 4, (0xe3e0:16)
 	call_24 nz, UI_PostTimerResetEvent
-	bitda 3, (0xe3e2)
+	bit 3, (0xe3e2:16)
 	jr z, DirmdEmu_ClearAllFlags
 	lds wa, 1
 	call UI_PostEvent_0x6E

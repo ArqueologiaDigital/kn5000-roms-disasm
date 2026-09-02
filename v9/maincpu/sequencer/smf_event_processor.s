@@ -144,10 +144,10 @@ VoiceChannel_UpdateWithPitch:
 	push xiy
 	call SoundGen_CaptureVoiceParams
 	ldb a, 0xb0
-	bitda 7, (4235)
+	bit 7, (4235:16)
 	jr z, VoiceChannel_ApplyPitchFlags
 	or a, 0x2
-	bitda 7, (4234)
+	bit 7, (4234:16)
 	jr z, VoiceChannel_ApplyPitchFlags
 	or a, 0x1
 
@@ -468,7 +468,7 @@ SoundGen_CaptureAndBuildParams:
 	cps c, 1
 	jr nz, SoundGen_UpdateAndWriteChannel
 	or a, 0x2
-	bitda 7, (4234)
+	bit 7, (4234:16)
 	jr z, SoundGen_UpdateAndWriteChannel
 	or a, 0x1
 
@@ -605,7 +605,7 @@ SoundGen_InitAllVoiceChannels:
 	push xiy
 	ld (6749:16), 176
 	ld (6750:16), 154
-	bitda 7, (6750)
+	bit 7, (6750:16)
 	jr nz, SoundGen_SetInitFlags
 	jp SoundGen_InitLoopStart
 
@@ -886,7 +886,7 @@ SMF_Seek_WritePosition:
 	pop xwa
 
 SMF_RestoreTimerState:
-	bitda 0, (0x28a5)
+	bit 0, (0x28a5:16)
 	jr z, SMF_SeekReturn
 	ldw_da xwa, (0x00ffec)
 	ld (0xf19e:16), wa
@@ -971,7 +971,7 @@ SMF_FoundActiveChannel:
 	ldw_da xwa, (0x00ffec)
 	ld (4325:16), wa
 	ld (4324:16), 255
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr nz, SMF_InitChannelScan
 	ld (4324:16), 0
 
@@ -2230,7 +2230,7 @@ SMF_ProgramChange_Handler:
 	jrl nz, SMF_ProcessEventLoop
 	cp (6709:16), 0
 	jr z, SMF_ProgramChange_CalcTime
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl z, SMF_ProcessEventLoop
 
 SMF_ProgramChange_CalcTime:
@@ -2483,7 +2483,7 @@ SMF_ControlChange_ValidateRange:
 SMF_CC_RPN_Handler:
 	cp (6709:16), 0
 	jrl z, SMF_CC_RPN_CalcTime
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_RPN_CalcTime:
@@ -2611,7 +2611,7 @@ SMF_CC_RPN_Done:
 SMF_CC_PitchBendSens_Handler:
 	cp (6709:16), 0
 	jrl z, SMF_CC_PitchBendSens_CalcTime
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_PitchBendSens_CalcTime:
@@ -2730,7 +2730,7 @@ SMF_CC_PitchBendSens_Done:
 SMF_CC_Modulation_Handler:
 	cp (6709:16), 0
 	jrl z, SMF_CC_Modulation_CalcTime
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Modulation_CalcTime:
@@ -2849,7 +2849,7 @@ SMF_CC_Modulation_Done:
 SMF_CC_Pan_Handler:
 	cp (6709:16), 0
 	jr z, SMF_CC_Pan_CalcTime
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Pan_CalcTime:
@@ -2910,7 +2910,7 @@ SMF_CC_Portamento_CheckBit3:
 SMF_CC_Reverb_Handler:
 	cp (6709:16), 0
 	jr z, SMF_CC_Reverb_SetupCC93
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Reverb_SetupCC93:
@@ -2924,7 +2924,7 @@ SMF_CC_Sustain_CheckBits:
 	jrl z, SMF_ProcessEventLoop
 	cp (6709:16), 0
 	jr z, SMF_CC_Sustain_SetCC64Value
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Sustain_SetCC64Value:
@@ -2940,7 +2940,7 @@ SMF_CC_Chorus_Handler:
 	ldb l, 0x0
 	cp (6709:16), 0
 	jr z, SMF_CC_Chorus_SetupCC91
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl z, SMF_ProcessEventLoop
 
 SMF_CC_Chorus_SetupCC91:
@@ -2951,7 +2951,7 @@ SMF_CC_Chorus_SetupCC91:
 SMF_CC_Volume_Handler:
 	cp (6709:16), 0
 	jr z, SMF_ProcessTimedEvent_Entry
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl z, SMF_ProcessEventLoop
 
 	.include "sequencer/smf_config_routines.s"
@@ -11127,7 +11127,7 @@ SeqCtl_StorePedalFlags:
 	srl a, 4
 	ld (0x3305:16), a
 	xor a, a
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr nz, SeqCtl_StoreKeyMask
 	or a, 0x3f
 
@@ -11203,7 +11203,7 @@ Seq_ReadTempoLookup:
 Seq_ProcessAllInputState:
 	ld a, (0x3283:16)
 	and a, 0xfe
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr z, Seq_InputState_StoreFlag
 	or a, 0x1
 
@@ -11227,10 +11227,10 @@ Seq_InputState_StoreFlag:
 	add bc, hl
 	ld (0x327d:16), bc
 	ld (0x32e9:16), 24
-	bitda 0, (0x3283)
+	bit 0, (0x3283:16)
 	jr z, AccInput_CheckRecordMode
 	call AccTuning_DisableIfNoStyle
-	bitda 0, (0x3363)
+	bit 0, (0x3363:16)
 	jr nz, AccInput_ProcessWithPedal
 	calr AccPedal_ProcessAllChanges
 
@@ -11240,7 +11240,7 @@ AccInput_ProcessWithPedal:
 	calr AccVoice_ProcessLeftPedalChanges
 	calr AccPitch_CheckTransposeFlags
 	calr AccChord_ProcessKeyChanges
-	bitda 0, (0x3363)
+	bit 0, (0x3363:16)
 	jr z, AccInput_CompareAndCheck
 	calr AccChord_ResolveVoiceAndDispatch
 
@@ -11304,7 +11304,7 @@ AccChord_ReadAndStoreKeys:
 	ld (0x32d7:16), a
 
 AccChord_CheckKeyOverride:
-	bitda 1, (0x32d7)
+	bit 1, (0x32d7:16)
 	jr nz, AccChord_CheckUIState
 	ld a, (0x32d9:16)
 	ld (0x32da:16), a
@@ -11326,7 +11326,7 @@ AccChord_SetDefaultKeys:
 	ld (0x32d7:16), 0
 	ld (0x32d8:16), 1
 	ld (0x8d42:16), 1
-	bitda 4, (0x34ea)
+	bit 4, (0x34ea:16)
 	jr z, AccChord_ReadChannelKeys
 	ld (0x32d8:16), 5
 	ld (0x8d42:16), 5
@@ -11390,7 +11390,7 @@ AccChord_CompareNoteC:
 	and a, 0x7
 	cps a, 0
 	jr z, AccChord_ReadKeysRet
-	bitda 1, (0x3284)
+	bit 1, (0x3284:16)
 	jr z, AccChord_ReadKeysRet
 	call BitMapOut_CheckDiskAndApply
 	jr AccChord_ReadKeysRet

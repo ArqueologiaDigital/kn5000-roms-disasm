@@ -324,11 +324,11 @@ MidiPkt_BuildZeroData:
 
 MidiPkt_ProcessEventQueue:
 	push xiz
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiPkt_ProcessEventQueue_Done
-	bitda 3, (0xfd56)
+	bit 3, (0xfd56:16)
 	jr z, MidiPkt_ProcessEventQueue_Done
-	bitda 0, (0xb7e7)
+	bit 0, (0xb7e7:16)
 	jr nz, MidiPkt_ProcessEventQueue_Done
 	lda xbc, (0xbd3c:16)
 	ld wa, (0x90e0:16)

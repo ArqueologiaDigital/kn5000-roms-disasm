@@ -573,7 +573,7 @@ EffectMode_CopyHoldPedalBits:
 
 	ret z
 
-	bitda 2, (1056)
+	bit 2, (1056:16)
 
 	ret z
 
@@ -1400,7 +1400,7 @@ SelfTest_WaitBitLoop_Copy:
 	jr z, SelfTest_WaitDone_CountBits
 
 SelfTest_WaitBitLoop_Check:
-	bitda 7, (1568)
+	bit 7, (1568:16)
 	jr nz, SelfTest_WaitBitLoop_Copy
 
 SelfTest_WaitDone_CountBits:

@@ -19,7 +19,7 @@ INTT2_HANDLER:
 NMI_HANDLER:
 	stiw_da (0x00ffca), 0x0000
 	calr NMI_StorePayloadChecksums
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr z, NMI_SetPowerOffCode_A5A5
 	stiw_da (0x00ffcc), 0x5a5a
 	jr NMI_ClearGuardAndHalt
@@ -412,12 +412,12 @@ INTT1_StoreCounters:
 
 INTT1_CheckScanFlag:
 	ld (1066:16), a
-	bitda 2, (0xfd50)
+	bit 2, (0xfd50:16)
 	jrl nz, INTT1_UpdateAlternateTimers
 	incdi8 1, (1050)
-	bitda 0, (1056)
+	bit 0, (1056:16)
 	jr nz, INTT1_CheckTickOverflow
-	bitda 5, (1056)
+	bit 5, (1056:16)
 	jr nz, INTT1_CheckTickCount
 	ld (1050:16), 0
 	jp UIStateMachine_DispatchEntry
@@ -430,9 +430,9 @@ INTT1_CheckTickCount:
 INTT1_CheckMidiSync:
 	cp (0x8c98:16), 0x13
 	jr z, UIState_DispatchBranch
-	bitda 2, (0xfd52)
+	bit 2, (0xfd52:16)
 	jr z, UIState_DispatchBranch
-	bitda 2, (0xfd50)
+	bit 2, (0xfd50:16)
 	jr nz, UIState_DispatchBranch
 	push SR
 	ei 0x06
@@ -447,13 +447,13 @@ INTT1_CheckTickOverflow:
 	jr ule, UIStateMachine_DispatchEntry
 	ld (1056:16), 6
 	resda 0, 1139
-	bitda 0, (1054)
+	bit 0, (1054:16)
 	jr z, INTT1_CheckAltSeqOverflow
 	ld (1054:16), 6
 	resda 0, 1139
 
 INTT1_CheckAltSeqOverflow:
-	bitda 0, (1057)
+	bit 0, (1057:16)
 	jr z, INTT1_CheckMidiSyncGate
 	ld (1057:16), 6
 	resda 0, 1139
@@ -466,12 +466,12 @@ INTT1_SkipToDispatch:
 	jr UIStateMachine_DispatchEntry
 
 INTT1_UpdateAlternateTimers:
-	bitda 3, (1054)
+	bit 3, (1054:16)
 	jr z, INTT1_CheckAltSeqTimer
 	ld (1054:16), 16
 
 INTT1_CheckAltSeqTimer:
-	bitda 3, (1057)
+	bit 3, (1057:16)
 	jr z, INTT1_CheckMetroTimer
 	ld (1057:16), 16
 	ld a, (1045:16)
@@ -480,7 +480,7 @@ INTT1_CheckAltSeqTimer:
 	ld (1079:16), a
 
 INTT1_CheckMetroTimer:
-	bitda 3, (1056)
+	bit 3, (1056:16)
 	jr z, UIStateMachine_DispatchEntry
 	ld (1056:16), 16
 	jrl INTT1_CheckMidiSync
@@ -488,7 +488,7 @@ INTT1_CheckMetroTimer:
 UIStateMachine_DispatchEntry:
 	lda xhl, (1055:16)
 	ld a, (xhl)
-	bitda 2, (0xfd50)
+	bit 2, (0xfd50:16)
 	jr nz, UIStateMachine_CheckPending
 	bit 0, a
 	jr z, UIStateMachine_CheckPending
@@ -531,7 +531,7 @@ UI_STATE_0_IDLE:
 
 UI_STATE_1_PROCESS:
 	anddi8 (1058), 110
-	bitda 0, (1042)
+	bit 0, (1042:16)
 	jr nz, UIState1_AlternateExit
 	lda xhl, (1116:16)
 	cp (xhl), 0x0
@@ -621,7 +621,7 @@ INTTR4_HANDLER:
 	ld (xhl), 0x0
 
 INTTR4_TickWrapped:
-	bitda 2, (0xfd50)
+	bit 2, (0xfd50:16)
 	jr z, INTTR4_CheckSyncEnable
 	jp INTTR4_SubTick_Mode
 
@@ -639,7 +639,7 @@ INTTR4_SyncCounter2_Done:
 	pop	sr
 
 INTTR4_CheckMetroEnable:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr z, INTTR4_CheckSeqEnable
 	push	sr
 	ei 6
@@ -668,7 +668,7 @@ INTTR4_SeqTick_CheckBeat:
 	.byte 0x21, 0xc1, 0x3b, 0x34, 0xf1, 0x63, 0x05, 0xf1
 	.byte 0x35, 0x04, 0x00, 0x00
 INTTR4_CheckAltSeqEnable:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr z, INTTR4_MetroPhaseSync
 	incdi8 1, (1051)
 	cp (1051:16), 96
@@ -680,15 +680,15 @@ INTTR4_CheckAltSeqEnable:
 	calr TempoRingBuf_Write
 
 INTTR4_MetroPhaseSync:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr z, INTTR4_SeqAutoStart
-	bitda 0, (1054)
+	bit 0, (1054:16)
 	jr z, INTTR4_MetroSync_CheckAltSeq
 	ld (1054:16), 6
 	resda 0, 1139
 
 INTTR4_MetroSync_CheckAltSeq:
-	bitda 0, (1057)
+	bit 0, (1057:16)
 	jr z, INTTR4_MetroSync_Done
 	ld (1057:16), 6
 	resda 0, 1139
@@ -714,7 +714,7 @@ INTTR4_SeqInit_SetEnable:
 	ld (1054:16), 134
 
 INTTR4_MetroBeat_Check:
-	bitda 3, (1056)
+	bit 3, (1056:16)
 	jr z, INTTR4_SeqBeat_Check
 	ld a, (1047:16)
 	cps a, 0
@@ -734,12 +734,12 @@ INTTR4_MetroBeat_OnBeat:
 	.byte 0x02, 0x06, 0x06, 0xc1, 0x29, 0x04, 0x3e, 0x08
 	.byte 0x1d, 0xa1, 0xf1, 0xfc, 0x03
 INTTR4_SeqBeat_Check:
-	bitda 3, (1054)
+	bit 3, (1054:16)
 	jr z, INTTR4_AltSeqBeat_Check
 	ld (1054:16), 16
 
 INTTR4_AltSeqBeat_Check:
-	bitda 3, (1057)
+	bit 3, (1057:16)
 	jr z, INTTR4_MetroQuarter_Check
 	ld (1057:16), 16
 	ld a, (1045:16)
@@ -754,7 +754,7 @@ INTTR4_MetroQuarter_Check:
 	.byte 0x06, 0xc1, 0x29, 0x04, 0x3e, 0x01, 0x1d, 0xa1
 	.byte 0xf1, 0xfc, 0x03
 INTTR4_SeqAccum_Update:
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr z, INTTR4_SeqAccum_Reset
 	push	sr
 	ei 6
@@ -791,10 +791,10 @@ INTTR4_SeqAccum_Reset:
 	ld	(13018:16), a
 	ld	(1111:16), a
 INTTR4_AltSeqAccum_Update:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr z, INTTR4_FadeDelay_Check
 	ld a, (1051:16)
-	bitda 3, (1073)
+	bit 3, (1073:16)
 	jr z, INTTR4_AltSeqSync_Check
 	cpdm8 1072, a
 	jr nz, INTTR4_AltSeqSync_Check
@@ -806,7 +806,7 @@ INTTR4_AltSeqAccum_Update:
 	calr TempoRingBuf_WritePair
 
 INTTR4_AltSeqSync_Check:
-	bitda 0, (1073)
+	bit 0, (1073:16)
 	jr z, INTTR4_FadeDelay_Check
 	cpdm8 1071, a
 	jr nz, INTTR4_FadeDelay_Check
@@ -823,7 +823,7 @@ INTTR4_FadeDelay_Check:
 	decdi8 1, 1126
 
 INTTR4_SyncAccum_Update:
-	bitda 2, (1055)
+	bit 2, (1055:16)
 	jr z, INTTR4_SyncAccum_Reset
 	push	sr
 	ei 6
@@ -866,7 +866,7 @@ INTTR4_Return:
 	reti
 
 TempoRingBuf_Write:
-	bitda 0, (1113)
+	bit 0, (1113:16)
 	jr nz, TempoRingBuf_Write_Enqueue
 	pushw wa
 	ld wa, (xiy - 2)
@@ -897,7 +897,7 @@ TempoRingBuf_Write_Return:
 	ret
 
 TempoRingBuf_WritePair:
-	bitda 0, (1113)
+	bit 0, (1113:16)
 	jr nz, TempoRingBuf_WritePair_Enqueue
 	cpw_da (0x1e751), 2
 	jr c, TempoRingBuf_WritePair_ClearPending
@@ -936,7 +936,7 @@ TempoRingBuf_WritePair_Enqueue:
 	ret
 
 INTTR4_SubTick_Mode:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr z, INTTR4_SubTick_MetroInc
 	ld a, (1051:16)
 	xor a, 0x3
@@ -945,7 +945,7 @@ INTTR4_SubTick_Mode:
 	incdi8 1, (1051)
 
 INTTR4_SubTick_MetroInc:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr z, INTTR4_SubTick_SeqInc
 	ld a, (1047:16)
 	xor a, 0x3
@@ -954,7 +954,7 @@ INTTR4_SubTick_MetroInc:
 	incdi8 1, (1047)
 
 INTTR4_SubTick_SeqInc:
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr z, INTTR4_SubTick_PhaseSync
 	ld a, (1045:16)
 	xor a, 0x3
@@ -963,15 +963,15 @@ INTTR4_SubTick_SeqInc:
 	incdi8 1, (1045)
 
 INTTR4_SubTick_PhaseSync:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr z, INTTR4_SubTick_ToAccum
-	bitda 0, (1054)
+	bit 0, (1054:16)
 	jr z, INTTR4_SubTick_PhaseSync_AltSeq
 	ld (1054:16), 6
 	resda 0, 1139
 
 INTTR4_SubTick_PhaseSync_AltSeq:
-	bitda 0, (1057)
+	bit 0, (1057:16)
 	jr z, INTTR4_SubTick_ToAccum
 	ld (1057:16), 6
 	resda 0, 1139
@@ -1135,7 +1135,7 @@ MainLoop_AfterMidiPoll2:
 	.byte 0x3e, 0xfb, 0x1d, 0x74, 0x06, 0xfd
 MainLoop_AfterBitmapTimer:
 	ei 0
-	bitda 7, (1068)
+	bit 7, (1068:16)
 	jr z, MainLoop_SequencerPhase
 	call SeqPhase_OperationStateCheck
 
@@ -1160,7 +1160,7 @@ Seq_TickWrapper:
 SeqTick_CheckActive:
 	bitm 0, (xiy)
 	jr z, SeqTick_Dispatch
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr nz, SeqTick_Return
 
 SeqTick_Dispatch:
@@ -1288,7 +1288,7 @@ RhythmBuf_DispatchWrap:
 
 Seq_EventProcessingTick:
 	call 0xfdff18
-	bitda 7, (0x0422)
+	bit 7, (0x0422:16)
 	jr nz, .Lc_ef1486
 	calr SeqEvt_CheckExpiry
 SeqEvtTick_ProcessTimers:
@@ -1335,7 +1335,7 @@ SwbtWr_ReinitOutputBank_Return:
 	ret
 
 RhythmBuf_ProcessEvents:
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr z, RhythmBuf_ProcessLoop
 	calr SeqTiming_Snapshot
 
@@ -1423,7 +1423,7 @@ RhythmBuf_Scan_Return:
 	ret
 
 SeqEvt_ProcessBuffer:
-	bitda 2, (1055)
+	bit 2, (1055:16)
 	jr z, SeqEvt_ProcessBuffer_Main
 	calr SyncTiming_Snapshot
 
@@ -1510,7 +1510,7 @@ SeqEvt_CallTimingHelper:
 	ret
 
 SeqEvt_ProcessTimedEvents:
-	bitda 5, (0x28ac)
+	bit 5, (0x28ac:16)
 	jr z, SeqEvt_ProcessTimedEvents_Idle
 	call SeqEvent_CaseA
 	calr Seq_TickWrapper
@@ -1811,7 +1811,7 @@ TaskSched_ScreenGroupTable_End:
 	jr	-2
 
 INTT3_PriorityAdjust:
-	bitda 0, (1158)
+	bit 0, (1158:16)
 	jr nz, INTT3_PriorityAdjust_Active
 	ldb a, 0x5
 	ldb c, 0x2

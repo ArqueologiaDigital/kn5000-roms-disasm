@@ -554,7 +554,7 @@ Demo_SelectEntry_ByteTable:
 Demo_SelectEntry_ProcessSongList:
 	cpdi16 (0x28b4), 0x0000
 	jr z, Demo_SelectEntry_ToCountdown
-	bitda 3, (0x28ad)
+	bit 3, (0x28ad:16)
 	jr z, Demo_SelectEntry_ManualSelect
 	ld a, (0x28a4:16)
 	cpda8 a, (0x1157)
@@ -669,7 +669,7 @@ Demo_SelectEntry_LoadPattern:
 	ret
 
 Demo_SelectEntry_DrawSecondary:
-	bitda 3, (0x28ad)
+	bit 3, (0x28ad:16)
 
 	ret z
 
@@ -938,13 +938,13 @@ Demo_LookupPartTableEntry:
 	ret
 Demo_WaitForDisplayBit:
 	ld xwa, NakaData_RomEnd
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	ret z
 
 Demo_WaitForDisplayBit_Loop:
 	sub xwa, 0x1
 	ret z
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr nz, Demo_WaitForDisplayBit_Loop
 	ret
 
@@ -8132,9 +8132,9 @@ SeqPhase_OperationStateCheck:
 	jrl z, SeqPhase_PopIzRet
 	res 0x07,A
 	ld (0x042c:16), a
-	bitda 2, (0x0420)
+	bit 2, (0x0420:16)
 	jrl nz, SeqPhase_PopIzRet
-	bitda 2, (0x041f)
+	bit 2, (0x041f:16)
 	jrl nz, SeqPhase_PopIzRet
 	lds wa, 0
 	calr InitializeOperationState

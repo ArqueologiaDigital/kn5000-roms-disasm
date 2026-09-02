@@ -13,7 +13,7 @@ MidiSerial_RetStub:
 	ret
 
 MidiSerial_ProcessInput:
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiSerial_Return
 	call SeqMain_SaveWritePos
 	stdi16 (0x90de), 0
@@ -1109,9 +1109,9 @@ UIState_DisplayUpdate_BitmapHandler:
 	.byte 0x88
 	ret
 MIDI_DispatchCC:
-	bitda 0, (0xb7e7)
+	bit 0, (0xb7e7:16)
 	jr nz, MidiCC_DispatchCleanupRet
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiCC_DispatchCleanupRet
 	ld (0x964c:16), bc
 	ld (0x964e:16), de
@@ -1132,9 +1132,9 @@ MidiCC_DispatchStubRet:
 	ret
 
 PanelEvt_CheckFlag7_Dispatch_A:
-	bitda 7, (0x90e5)
+	bit 7, (0x90e5:16)
 	jr nz, PanelEvt_CheckFlag7_DoDispatch_A
-	bitda 6, (0xf9c3)
+	bit 6, (0xf9c3:16)
 	jr nz, PanelEvt_CheckFlag7_Ret_A
 
 PanelEvt_CheckFlag7_DoDispatch_A:
@@ -1146,9 +1146,9 @@ PanelEvt_CheckFlag7_Ret_A:
 	ret
 
 PanelEvt_CheckFlag7_Dispatch_B:
-	bitda 7, (0x90e5)
+	bit 7, (0x90e5:16)
 	jr nz, PanelEvt_CheckFlag7_DoDispatch_B
-	bitda 6, (0xf9dd)
+	bit 6, (0xf9dd:16)
 	jr nz, PanelEvt_CheckFlag7_Ret_B
 
 PanelEvt_CheckFlag7_DoDispatch_B:
@@ -1160,9 +1160,9 @@ PanelEvt_CheckFlag7_Ret_B:
 	ret
 
 PanelEvt_CheckFlag7_Dispatch_C:
-	bitda 7, (0x90e5)
+	bit 7, (0x90e5:16)
 	jr nz, PanelEvt_CheckFlag7_DoDispatch_C
-	bitda 6, (0xf9f7)
+	bit 6, (0xf9f7:16)
 	jr nz, PanelEvt_CheckFlag7_Ret_C
 
 PanelEvt_CheckFlag7_DoDispatch_C:
@@ -1180,7 +1180,7 @@ PanelEvt_UnconditionalDispatch:
 	ret
 
 PanelEvt_CheckFlag6_Dispatch:
-	bitda 6, (0xfd53)
+	bit 6, (0xfd53:16)
 	jr z, PanelEvt_CheckFlag6_Ret
 	ld xiy, PanelEvt_DispatchTable
 	ldb a, 0xf
@@ -1192,7 +1192,7 @@ PanelEvt_CheckFlag6_Ret:
 PanelEvt_CheckChanZero_Dispatch:
 	cp (0x964d:16), 0
 	jr PanelEvt_CheckChanZero_DoDispatch
-	bitda 6, (0xfd50)
+	bit 6, (0xfd50:16)
 	jr z, PanelEvt_CheckChanZero_Ret
 
 PanelEvt_CheckChanZero_DoDispatch:
@@ -1691,7 +1691,7 @@ MidiCC_ChannelDispatch_Ctrl40:
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl40_ConfigExit
-	bitda 0, (0xfd59)
+	bit 0, (0xfd59:16)
 	jr z, BitMask_Ctrl40_ConfigExit
 	xor e, e
 	ldb w, 0x28
@@ -1722,7 +1722,7 @@ MidiCC_ChannelDispatch_SpecialCh1:
 	cps l, 1
 	jr nz, MidiCC_ChannelDispatch_SpecialCh1_Ret
 	ld xix, 0xfc19
-	bitda 3, (0xfd58)
+	bit 3, (0xfd58:16)
 	jr z, MidiCC_ChannelDispatch_SpecialCh1_Ret
 	ld e, (0x964e:16)
 	ldb w, 0x3
@@ -1741,10 +1741,10 @@ MidiCC_ChannelDispatch_CtrlFlags:
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0xffffffff
 	jr z, PanelEvent_NullRet
-	bitda 6, (0xfd57)
+	bit 6, (0xfd57:16)
 	jr z, PanelEvent_NullRet
 	ld a, (0x90e5:16)
-	bitda 7, (0x90e5)
+	bit 7, (0x90e5:16)
 	jr nz, MidiCC_ChannelDispatch_BuildPacket
 	ld a, (xix)
 	bit 6, a
@@ -1774,7 +1774,7 @@ MidiCC_ChannelDispatch_Ctrl1:
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl1_ConfigExit
-	bitda 1, (0xfd58)
+	bit 1, (0xfd58:16)
 	jr z, BitMask_Ctrl1_ConfigExit
 	ld e, (0x964e:16)
 	ldb w, 0x1
@@ -1793,7 +1793,7 @@ MidiCC_ChannelDispatch_Ctrl3:
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl3_ConfigExit
-	bitda 3, (0xfd58)
+	bit 3, (0xfd58:16)
 	jr z, BitMask_Ctrl3_ConfigExit
 	ld e, (0x964e:16)
 	ldb w, 0x3
@@ -1812,10 +1812,10 @@ MidiCC_ChannelDispatch_CtrlFlags2:
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0xffffffff
 	jr z, PanelEvent_NullRet2
-	bitda 5, (0xfd57)
+	bit 5, (0xfd57:16)
 	jr z, PanelEvent_NullRet2
 	ld a, (0x90e5:16)
-	bitda 7, (0x90e5)
+	bit 7, (0x90e5:16)
 	jr nz, MidiCC_ChannelDispatch_BuildPacket2
 	ld a, (xix)
 	bit 6, a
@@ -1843,7 +1843,7 @@ MidiCC_ChannelDispatch_Ctrl0:
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl0_ConfigExit
-	bitda 0, (0xfd58)
+	bit 0, (0xfd58:16)
 	jr z, BitMask_Ctrl0_ConfigExit
 	ld e, (0x964e:16)
 	ldb w, 0x0
@@ -1973,7 +1973,7 @@ MidiCC_ChannelDispatch_MultiHandler:
 MidiChannel_ConfigureController:
 	pushw bc
 	ld a, (0x90e5:16)
-	bitda 7, (0x90e5)
+	bit 7, (0x90e5:16)
 	jr nz, MidiChanCfg_SetupParams
 	ld a, (xix)
 	bit 6, a
@@ -2033,12 +2033,12 @@ FileData_ProcessWithLookup:
 	ret
 
 MidiCC_ChannelDispatch_DualSend:
-	bitda 4, (0xfd57)
+	bit 4, (0xfd57:16)
 	jr z, FileData_DispatchExit
-	bitda 7, (0xfd58)
+	bit 7, (0xfd58:16)
 	jr z, FileData_DispatchExit
 	ld a, (0x90e5:16)
-	bitda 7, (0x90e5)
+	bit 7, (0x90e5:16)
 	jr nz, MidiCC_DualSend_SetupParams
 	ld a, (xix)
 	bit 6, a
@@ -9859,7 +9859,7 @@ SndParam_ApplyAllBlocks:
 	ld a, (0xb7ec:16)
 	extz wa
 	calr SndParam_ApplyModeSpecific
-	bitda 0, (0xb7ee)
+	bit 0, (0xb7ee:16)
 	jr nz, SoundParam_UpdateCleanupRet
 	lds wa, 3
 	call BitMapOut_GetRenderMode_CheckBit3
@@ -10900,7 +10900,7 @@ MIDI_ProcessChannelPair:
 	calr MidiChan_CheckTimeout
 
 MidiChan_CheckSysExFlag:
-	bitda 5, (0xbd18)
+	bit 5, (0xbd18:16)
 	jrl z, MidiChan_ReadNextByte
 
 MidiChan_ParseVoiceDone:
@@ -12910,7 +12910,7 @@ MidiChan_EnableAndReturn:
 
 MidiChan_CheckTimeout:
 	ldw de, 0x9c4
-	bitda 2, (0xbd18)
+	bit 2, (0xbd18:16)
 	jr z, MidiChan_ApplyTimeout
 	ldw de, 0x3e8
 
@@ -13211,7 +13211,7 @@ MidiChan_ClearAllStates:
 	jrl MidiSeq_ApplyPendingParams
 
 MidiChan_SetStateMode:
-	bitda 6, (0xbd18)
+	bit 6, (0xbd18:16)
 	jr z, MidiChan_SetStateMode2
 	ld (0xbd36:16), 1
 	ldb a, 0x1
@@ -13229,7 +13229,7 @@ MidiChan_CompareAndFlag:
 	ret
 
 MidiChan_SetVoiceBaseState:
-	bitda 6, (0xbd18)
+	bit 6, (0xbd18:16)
 	jr z, MidiChan_SetBaseState128
 	ld (0xbd00:16), 128
 	ret
@@ -13254,7 +13254,7 @@ MidiSeq_UpdateAllParams:
 	ret
 
 MidiSeq_SyncToneStates_Upper:
-	bitda 6, (0xbd18)
+	bit 6, (0xbd18:16)
 	jr z, MidiSeq_SyncToneStates_Lower
 	resda 7, 0xbd00
 	ldmm8 0xbd02, 0xbd00
@@ -13274,7 +13274,7 @@ MidiSeq_SyncToneStates_Lower:
 	ret
 
 MidiSeq_UpdateToneParam:
-	bitda 6, (0xbd18)
+	bit 6, (0xbd18:16)
 	jr z, MidiSeq_UpdateToneParam_Lower
 	ld xwa, (0xbcb4:16)
 	lds bc, 3
@@ -13309,7 +13309,7 @@ MidiSeq_UpdateVolumeScale:
 	lda xwa, (0xbd1c:16)
 	bitm 7, (xwa)
 	ret nz
-	bitda 6, (0xbd18)
+	bit 6, (0xbd18:16)
 	jr z, MidiSeq_VolScale_Lower
 	lda xbc, (0xbcbc:16)
 	ld xde, (xbc + 8)
@@ -13332,7 +13332,7 @@ MidiSeq_VolScale_SetActive:
 	ret
 
 MidiSeq_ComputeExpression:
-	bitda 6, (0xbd18)
+	bit 6, (0xbd18:16)
 	jr z, MidiSeq_Expression_Lower
 	lda xwa, (0xbcbc:16)
 	ld xde, (xwa + 8)
@@ -13379,7 +13379,7 @@ MidiSeq_Expression_Lower:
 
 MidiSeq_CheckSyncDirty:
 	lda xbc, (0xbd1c:16)
-	bitda 6, (0xbd18)
+	bit 6, (0xbd18:16)
 	jr z, MidiSeq_CheckSyncDirty_Lower
 	ld a, (0xbd00:16)
 	cpda8 a, 0xbd02
@@ -13446,9 +13446,9 @@ MidiSeq_PartLookup_Data:
 	jp	SoundCtrl_SendCommand
 
 MidiSeq_ApplyPendingParams:
-	bitda 6, (0xbd1c)
+	bit 6, (0xbd1c:16)
 	ret z
-	bitda 6, (0xbd18)
+	bit 6, (0xbd18:16)
 	jr z, MidiSeq_ApplyParams_Lower
 	ld a, (0xbd00:16)
 	res 7, a
@@ -13890,7 +13890,7 @@ ArpChord_ProcessAndDispatch:
 	call SeqAlt_ProcessAndFinalize
 ArpChord_DispatchAndLoop:
 	calr MidiTable_DispatchHelper
-	bitda	4, (0xbd18)
+	bit	4, (0xbd18:16)
 	jr nz, ArpChord_CheckPlaybackDone
 ArpChord_FinalizePass:
 	calr	1913
@@ -13922,7 +13922,7 @@ MidiTable_DispatchHelper:
 	ret
 MidiTable_FlushArpNotes:
 	; --- Helper 2: conditional A-based 3-way pointer selection (56 bytes) ---
-	bitda	7, (0xbd18)
+	bit	7, (0xbd18:16)
 	ret z
 	call ArpQueue_SwapBuffers
 	ld	xwa, (0xbcac:16)
@@ -14544,7 +14544,7 @@ MidiSysEx_ProcessBlock:
 	pop	xhl
 	pop	xde
 	ret
-	bitda	7, (0xbd1a)
+	bit	7, (0xbd1a:16)
 	ret	z
 	calr	65431
 	calr	17
@@ -14554,7 +14554,7 @@ MidiSysEx_ProcessBlock:
 	calr	5
 	resda	7, 0xbd1a
 	ret
-	bitda	4, (0xbd1a)
+	bit	4, (0xbd1a:16)
 	ret	z
 	setda	0, 4330
 	ret
@@ -14573,13 +14573,13 @@ MidiSysEx_ProcessBlock:
 	ld	xix, xsp
 	lds	bc, 3
 	ldirw
-	bitda	6, (0xbd1a)
+	bit	6, (0xbd1a:16)
 	jr	z, 7
 	calr	65501
 	resda	6, 0xbd1a
 	inc	6, xsp
 	ret
-	bitda	5, (0xbd1a)
+	bit	5, (0xbd1a:16)
 	ret	z
 	resda	0, 0x32f3
 	push	xde
@@ -14593,7 +14593,7 @@ MidiSysEx_ProcessBlock:
 	pop	xde
 	resda	5, 0xbd1a
 	ret
-	bitda	4, (0xbd1a)
+	bit	4, (0xbd1a:16)
 	ret	z
 	push	xde
 	push	xhl
@@ -14610,7 +14610,7 @@ MidiSysEx_ProcessBlock:
 	resda	4, 0xbd1a
 	ret
 	ret
-	bitda	2, (0xbd1a)
+	bit	2, (0xbd1a:16)
 	ret	z
 	push	xde
 	push	xhl
@@ -15190,11 +15190,11 @@ MidiCtrl_FullReconfigure:
 	pop xde
 	ld a, (0xfc5f:16)
 	ldb_erp A, 0xfb
-	bitda 2, (0xc07e)
+	bit 2, (0xc07e:16)
 	jr z, MidiCtrl_RenderAndProcess
 	calr SoundMode_RetStub_E
 	calr SoundMode_FullRenderUpdate
-	bitda 0, (4330)
+	bit 0, (4330:16)
 	jr nz, SoundMode_ProcessToneAndParams
 	ld a, (0x8d36:16)
 	cp a, 0x76
@@ -16028,7 +16028,7 @@ SeqData_DispatchLoop_Done:
 	call AccWrap_ReturnZero
 	cp hl, 0xffff
 	jr z, ArpQueue_Flush_Return
-	bitda 0, (0xb7e7)
+	bit 0, (0xb7e7:16)
 	jr nz, ArpQueue_Flush_Return
 	cp (0x8d36:16), 87
 	jr z, ArpQueue_Flush_Return
@@ -16117,7 +16117,7 @@ SeqData_FormatOutput_CaseB:
 
 
 SeqData_FormatOutput_CaseC:
-	bitda	4, (0xfd50)
+	bit	4, (0xfd50:16)
 	ret	nz
 	ld	xwa, (0xbc54:16)
 	lda	xwa, (xwa+14)

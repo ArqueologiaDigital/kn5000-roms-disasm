@@ -151,7 +151,7 @@ Audio_System_Init:	; 01FACBh
 	ei 0	; Enable interrupts
 
 Audio_Main_Loop:
-	bitda 5, 4158
+	bit 5, (4158:16)
 	jr z, AudioLoop_UnmuteAfterBoot
 	resda 5, 4158
 
@@ -166,7 +166,7 @@ AudioLoop_UnmuteAfterBoot:
 	set_dd8 0, 0x38	; unmute (?) (here I'm assuming "MUTE" it is an active low signal)
 
 AudioLoop_CheckPeriodicReinit:
-	bitda 1, 4158
+	bit 1, (4158:16)
 	jr z, AudioLoop_CallProcessors
 	resda 1, 4158
 	call Cmd_Check_E2_Pending

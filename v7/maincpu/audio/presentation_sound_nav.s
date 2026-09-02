@@ -1362,32 +1362,32 @@ DirmdEmulator_Dispatch:
 	pop	xhl
 	pop	xde
 DirmdEmu_DefaultCase:
-	bitda 1, (0xe318)
+	bit 1, (0xe318:16)
 	jr z, .Lc_f9ab49
 	ld a, (0xe316:16)
 	extz WA
 	call UI_PostPartChangeEvent
 DirmdEmu_CheckModeChange:
 .Lc_f9ab49:
-	bitda 7, (0xe318)
+	bit 7, (0xe318:16)
 	jr z, .Lc_f9ab59
 	ld a, (0xe316:16)
 	extz WA
 	call UI_PostModeChangeEvent
 DirmdEmu_CheckSoundCtrl:
 .Lc_f9ab59:
-	bitda 6, (0xe318)
+	bit 6, (0xe318:16)
 	jr z, .Lc_f9ab69
 	ld a, (0xe316:16)
 	extz WA
 	call SoundCtrl_SendCommand
 DirmdEmu_CheckBit4:
 .Lc_f9ab69:
-	bitda 4, (0xe318)
+	bit 4, (0xe318:16)
 	call_24 nz, (UI_PostRefreshEvent)
-	bitda 4, (0xe31a)
+	bit 4, (0xe31a:16)
 	call_24 nz, (UI_PostTimerResetEvent)
-	bitda 3, (0xe31c)
+	bit 3, (0xe31c:16)
 	jr z, DirmdEmu_ClearAllFlags
 	lds wa, 1
 	call UI_PostEvent_0x6E

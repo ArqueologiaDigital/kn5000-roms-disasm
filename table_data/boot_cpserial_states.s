@@ -302,7 +302,7 @@ BootSerial_State24_RxNextByte:
 	ld	xiy, 0x0f79		; RX serial ring
 	addda16	xiy, 0x0f77
 	ld	(xiy), a
-	bitda	0, (0x0f6a)		; overflow latched?
+	bit	0, (0x0f6a:16)		; overflow latched?
 	jr	nz, BootSerial_State24_RxNextByte__no_advance
 	incdi16	1, (0x0f77)
 	cpdi16	(0x0f77), 0x005c
@@ -415,9 +415,9 @@ BootSerial_PollTX__encode:
 	jr	z, BootSerial_PollTX__line_busy
 	bit_dd8	5, 0x38			; PE bit 5 must be low
 	jr	nz, BootSerial_PollTX__line_busy
-	bitda	1, (0x0f64)		; TX-pending flag clear?
+	bit	1, (0x0f64:16)		; TX-pending flag clear?
 	jr	nz, BootSerial_PollTX__line_busy
-	bitda	0, (0x0f64)		; RX-active flag clear?
+	bit	0, (0x0f64:16)		; RX-active flag clear?
 	jr	nz, BootSerial_PollTX__line_busy
 	ld	wa, (0x0fd7:16)
 	subda16	xwa, 0x0fd5		; pending - sent
@@ -710,7 +710,7 @@ BootSerial_RxPkt_VarLengthRun__scramble:
 	ex8_ri	xhl, a			; scramble mode: swap into buffer,
 	xor	a, (xhl)		; A = old ^ new
 	inc	1, hl
-	bitda	4, (0x0f64)		; collapse sentinel armed?
+	bit	4, (0x0f64:16)		; collapse sentinel armed?
 	jr	z, BootSerial_RxPkt_VarLengthRun__store_mixed
 	cps	a, 0
 	jr	nz, BootSerial_RxPkt_VarLengthRun__store_mixed

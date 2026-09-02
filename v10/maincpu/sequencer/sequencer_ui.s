@@ -2348,7 +2348,7 @@ TrAsGrid_InitDispatch:
 	call SendEvent
 	or xhl, xhl
 	jrl z, TrAsGrid_HandleOtherEvent
-	bitda 0, (3296)
+	bit 0, (3296:16)
 	jr nz, TrAsGrid_ScrollDown
 	call GetFocusObject
 	ld xwa, xhl
@@ -2440,7 +2440,7 @@ TrAsGrid_HandleOtherEvent:
 	call SendEvent
 	or xhl, xhl
 	jrl z, TrAsGrid_ReturnZero
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jrl nz, TrAsGrid_ReturnZero
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
@@ -2472,7 +2472,7 @@ TrAsGrid_HandleOtherEvent:
 	call SendEvent
 	or xhl, xhl
 	jrl z, TrAsGrid_HandleOtherEvent2
-	bitda 0, (3296)
+	bit 0, (3296:16)
 	jr nz, TrAsGrid_ScrollDown2
 	call GetFocusObject
 	ld xwa, xhl
@@ -2564,7 +2564,7 @@ TrAsGrid_HandleOtherEvent2:
 	call SendEvent
 	or xhl, xhl
 	jrl z, TrAsGrid_ReturnZero
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jrl nz, TrAsGrid_ReturnZero
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
@@ -2602,7 +2602,7 @@ TrAsGrid_GetWidgetLabel:
 	jr TrAsGrid_CopyLabel
 
 TrAsGrid_GetDirectionLabel:
-	bitda 0, (3296)
+	bit 0, (3296:16)
 	jr nz, TrAsGrid_DirectionLabel2
 	ld xwa, NakaWidgetPtrTbl_SmfDp_0x2332
 	jr TrAsGrid_PushLabelAddr
@@ -2628,7 +2628,7 @@ TrAsGrid_HandleSelectEvent:
 	ld xwa, (xsp + 8)
 	cp xwa, 0x8f
 	jrl nz, TrAsGrid_ReturnZero
-	bitda 0, (3296)
+	bit 0, (3296:16)
 	jr nz, TrAsGrid_DeselectCell
 	ldw wa, 0x8
 	calr TrAsGrid_LookupByteTable
@@ -2832,7 +2832,7 @@ TrAsGridChk_ByteData:
 	ld	xbc, 0x01e0008d
 	call	SendEvent
 	jrl	1087
-	bitda	0, (3296)
+	bit	0, (3296:16)
 	jr	nz, 8
 	dec	2, e
 	extz	de
@@ -2852,7 +2852,7 @@ TrAsGridChk_ByteData:
 	ld	xbc, 0x01e7000a
 	ld	xde, xiz
 	jrl	412
-	bitda	0, (3296)
+	bit	0, (3296:16)
 	jr	nz, 27
 	dec	2, e
 	extz	de
@@ -2936,7 +2936,7 @@ TrAsGridChk_ByteData:
 	ld	xbc, 0x01e0008d
 	call	SendEvent
 	jrl	771
-	bitda	0, (3296)
+	bit	0, (3296:16)
 	jr	nz, 8
 	dec	2, e
 	extz	de
@@ -2957,7 +2957,7 @@ TrAsGridChk_ByteData:
 	ld	xbc, 0x01e7000a
 	ld	xde, xiz
 	jr	95
-	bitda	0, (3296)
+	bit	0, (3296:16)
 	jr	nz, 29
 	dec	2, e
 	extz	de
@@ -3022,7 +3022,7 @@ TrAsGridChk_HandleResizeEvent:
 	jr TrAsGridChk_Part1_SendAudio
 
 TrAsGridChk_Part1_AdjustDown:
-	bitda 0, (3296)
+	bit 0, (3296:16)
 	jr nz, TrAsGridChk_Part1_AdjustUp
 	dec 2, a
 	extz wa
@@ -3051,7 +3051,7 @@ TrAsGridChk_Part1_SendAudio:
 	jrl TrAsGridChk_DispatchAndReturn
 
 TrAsGridChk_Part2_Start:
-	bitda 0, (3296)
+	bit 0, (3296:16)
 	jr nz, TrAsGridChk_Part2_UpDir
 	dec 2, a
 	extz wa
@@ -3152,7 +3152,7 @@ TrAsGridChk_Part2_Finish:
 	jrl TrAsGridChk_DispatchAndReturn
 
 TrAsGridChk_Part3_Start:
-	bitda 0, (3296)
+	bit 0, (3296:16)
 	jr nz, TrAsGridChk_Part3_UpDir
 	dec 2, a
 	extz wa
@@ -3401,7 +3401,7 @@ AcDemoSong_HandleResize:
 	calr VoiceConfig_ScreenTypeDispatch
 	cp (3375:16), 0
 	jr nz, AcCurrentSongBox_RetZero
-	bitda 3, (0x28ad)
+	bit 3, (0x28ad:16)
 	jr z, AcDemoSong_SetupDisplay
 	cpdm8 4439, l
 	jr nz, AcCurrentSongBox_RetZero
@@ -4406,7 +4406,7 @@ InitializeKubo:
 AutoPunchTtlRqFunc:
 	cp xbc, 0x1c00007
 	jr nz, IvRealRecCheck_ReturnZero
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr nz, IvRealRecCheck_ReturnZero
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00015
@@ -5225,7 +5225,7 @@ IvPunchExit_CheckSendEvent:
 	call SendEvent
 	or xhl, xhl
 	jr z, IvPunchExit_PrepareInherited
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr nz, IvPunchExit_PrepareInherited
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00015
@@ -5279,7 +5279,7 @@ IvAutoPunchExit_CheckSendEvent:
 	jr z, IvAutoPunchExit_PrepareInherited
 	cpdi16 0x28a8, 0
 	jr z, IvAutoPunchExit_PostSceneEvent
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr nz, IvAutoPunchExit_PrepareInherited
 
 IvAutoPunchExit_PostSceneEvent:
@@ -7178,7 +7178,7 @@ PlaySong_ReturnZero:
 PlySngSel2Func:
 	cp xbc, 0x1c00007
 	jr nz, EntGrid_InitDispatch
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr nz, EntGrid_InitDispatch
 	ld xwa, 0x810012
 	ld xbc, 0x1c00002
@@ -8488,7 +8488,7 @@ SqplyVal_UpScroll_Mode2:
 	ld xwa, (xsp + 60)
 	cp xwa, 0x2
 	jrl nz, SqplyVal_ReturnZero
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jrl nz, SqplyVal_ReturnZero
 	ld xwa, 0x1480003
 	ld xbc, 0x1e80014
@@ -8550,7 +8550,7 @@ SqplyVal_DownScroll_Mode2:
 	ld xwa, (xsp + 60)
 	cp xwa, 0x2
 	jrl nz, SqplyVal_ReturnZero
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jrl nz, SqplyVal_ReturnZero
 	ld xwa, 0x1480003
 	ld xbc, 0x1e80015

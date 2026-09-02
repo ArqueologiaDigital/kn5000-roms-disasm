@@ -1269,7 +1269,7 @@ PlayHalt_SkipSetFlag:
 	inc	2, xsp
 	ret
 PlayStandBy:
-	bitda 2, (10407)
+	bit 2, (10407:16)
 	jr z, PlayStandBy_SkipClearFlag
 	resda 2, 10407
 

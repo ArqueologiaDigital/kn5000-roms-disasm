@@ -94,7 +94,7 @@ Display_UpdateRegion0_Check:
 	jr z, Display_UpdateRegion0_NoChange
 
 Display_UpdateRegion0_Changed:
-	bitda 0, (3927)
+	bit 0, (3927:16)
 	jrl nz, Display_UpdateRegion0_NoChange
 	call Display_RedrawStatusBar
 	ld a, (3429:16)
@@ -521,10 +521,10 @@ UIRender_DescriptorTable2:
 
 ParamDigit_ExtractAndFormat:
 	calr ParamDigit_DivideValue
-	bitda 1, (4485)
+	bit 1, (4485:16)
 	jr nz, ParamDigit_ExtractDone
 	ld (4481:16), 32
-	bitda 0, (4485)
+	bit 0, (4485:16)
 	jr nz, ParamDigit_ExtractDone
 	ld (4482:16), 32
 
@@ -2214,7 +2214,7 @@ Display_TitleString_Mode5:
 	jrl z, TitleString_MaskAndFormat
 	cps a, 7
 	jrl nz, TitleString_NullRet
-	bitda 4, (3770)
+	bit 4, (3770:16)
 	jrl z, TitleString_NullRet
 	ld a, (3769:16)
 	and a, 0x30
@@ -2631,7 +2631,7 @@ ScoopDisp_DispatchTable_Extended:
 	ret
 	.incbin "includes/romslices/v7_transplant_ScoopDisp_DispatchTable_Extended_tail_tail.bin"
 Display_DirtyRegionDispatch:
-	bitda 3, (3411)
+	bit 3, (3411:16)
 	jrl z, Timer_ModeDispatch_Return
 	call Display_ResetDirtyFlags
 ; Timer mode dispatch
@@ -2668,7 +2668,7 @@ Timer_ModeHandler_1:
 	call SeqState_HasModeChanged
 	cps	hl, 0
 	jrl nz, Timer_GuardCallSetup_Ret
-	bitda	0, (3927)
+	bit	0, (3927:16)
 	jrl z, Timer_GuardCallSetup
 	anddi8	(3927), 254
 Timer_GuardCallSetup:
@@ -2860,7 +2860,7 @@ Timer_ParamLoadAndCompare:
 .Lc_ef7a12:
 	ldb W, 0x00
 	call Timer_ParamCompareAlt_0x2A
-	bitda 5, (0x0d54)
+	bit 5, (0x0d54:16)
 	jrl nz, .Lc_ef7a28
 .Lc_ef7a1f:
 	ld (0x0d55:16), 0xff
@@ -2875,7 +2875,7 @@ Timer_ParamCompareAlt:
 	ld (0x0dd0:16), 0xff
 	ldb W, 0x01
 	call Timer_ParamCompareAlt_0x2A
-	bitda 5, (0x0d54)
+	bit 5, (0x0d54:16)
 	jrl nz, .Lc_ef7a52
 	ld (0x0d55:16), 0xff
 	jp Timer_ParamCompareAlt_0x29
@@ -4325,7 +4325,7 @@ DMA_StoreFlagAndReturn:
 
 
 VoiceSlot_TableSetup:
-	bitda 0, (0x0dd3)
+	bit 0, (0x0dd3:16)
 	jrl z, .Lc_ef900f
 	jp VoiceSlot_TableSetup_0xF
 .Lc_ef900f:
@@ -4400,7 +4400,7 @@ VoiceSlot_TableSetup:
 	call VoiceSlot_TableSetup_0x2E0
 	call VoiceSlot_TableSetup_0x40F
 	call Display_UpdateRegion1
-	bitda 0, (0x0f57)
+	bit 0, (0x0f57:16)
 	jrl nz, .Lc_ef910a
 	call Display_UpdateRegion4
 .Lc_ef910a:
@@ -4452,7 +4452,7 @@ VoiceSlot_TableSetup:
 	xor A,A
 	.incbin "includes/romslices/v7_transplant_VoiceSlot_TableSetup_tail.bin"
 AccPedal_CheckBitAndUpdate:
-	bitda 0, (3412)
+	bit 0, (3412:16)
 	jrl z, AccPedal_ClearFlagAndJump
 	ordi8 0x287b, 4
 
@@ -5442,7 +5442,7 @@ ScoopParam_ValueTable:
 	.incbin "includes/romslices/v7_transplant_ScoopParam_ValueTable_tail_head.bin"
 	call 0xefa77d
 	call 0xefa79a
-	bitda 3, (0x0d53)
+	bit 3, (0x0d53:16)
 	jrl z, .Lc_efa2ef
 	call PortConfig_SetupBytecode_0x34
 	cp (0x0d65:16), 0x00
@@ -5933,9 +5933,9 @@ SysEx_DecrementAndCheck:
 	call SysInit_SendAllNotesAndReset
 
 SysEx_ControllerBitCheck:
-	bitda 3, (3411)
+	bit 3, (3411:16)
 	jrl z, ControllerMode_UpdateFlags
-	bitda 0, (3924)
+	bit 0, (3924:16)
 	jrl z, SysEx_ModeChangeCheck
 	ld c, (3925:16)
 	add c, 0x5
@@ -10737,7 +10737,7 @@ StringData_EffectLabel:	.ascii "EFFECT "
 StringData_APCModeNames:
 	.incbin "includes/romslices/v7_transplant_StringData_APCModeNames.bin"
 Display_RedrawStatusBar:
-	bitda 0, (0x0f57)
+	bit 0, (0x0f57:16)
 	jrl nz, Scoop_Return
 	cp (0x8c9c:16), 0x8a
 	jrl nz, Scoop_Return
@@ -11223,7 +11223,7 @@ Scoop_Selection_End:
 	ret
 
 Display_RedrawSidePanel:
-	bitda 0, (3927)
+	bit 0, (3927:16)
 
 	.byte 0x7e, 0xaf, 0x00	; jrl nz, Scoop_SidePanel_End (v7 displacement)
 
@@ -11620,7 +11620,7 @@ Scoop_EventHandler_MenuSwitch:
 	call SetWall_ParserInit
 	popw wa
 	ld (0x287a:16), 0
-	bitda 2, (0x287b)
+	bit 2, (0x287b:16)
 	jr nz, Scoop_EventHandler_MenuSwitch_Mode1
 	xor de, de
 	ld wa, (3299:16)

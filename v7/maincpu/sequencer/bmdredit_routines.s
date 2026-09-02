@@ -512,7 +512,7 @@ BmDrEdit_CheckTempoData:
 	cp	a, 152
 	ret	nz
 BmDrEdit_CheckTempoData_ReadyToProcess:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	ret nz
 	cpdi16 0xf231, 0
 	jr z, BmDrEdit_ClearNoteAndRefresh
@@ -615,7 +615,7 @@ BmDrEdit_DelayReturn:
 
 BmDrEdit_AllocateNoteSlot:
 	ldw ix, 0x8
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr z, BmDrEdit_AllocateNote_Search
 	lds ix, 1
 
@@ -688,7 +688,7 @@ BmDrEdit_CheckNoteType_NotDrum:
 	ret
 
 BmDrEdit_SaveSequencerState:
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr z, BmDrEdit_SaveSeqState_SetMode95
 	ldw wa, 0x98
 	jr BmDrEdit_SaveSeqState_Apply
@@ -710,7 +710,7 @@ BmDrEdit_SaveSeqState_Apply:
 
 
 BmDrEdit_CheckScrollBusy:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_ScrollRight
 	cp (0x295d:16), 0
 	jr z, BmDrEdit_ScrollRight
@@ -730,7 +730,7 @@ BmDrEdit_ScrollRight_Done:
 	ret
 
 BmDrEdit_CheckScrollBusyAlt:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_ScrollLeft
 	cp (0x295d:16), 0
 	jr z, BmDrEdit_ScrollLeft
@@ -759,7 +759,7 @@ BmDrEdit_ScrollReset:
 	ret
 
 BmDrEdit_PitchScrollUp_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_PitchScrollUp
 	cp (0x295d:16), 1
 	ret nz
@@ -776,7 +776,7 @@ BmDrEdit_PitchScrollUp:
 	jrl BmDrEdit_SetFeedbackTimer
 
 BmDrEdit_PitchScrollDown_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_PitchScrollDown
 	cp (0x295d:16), 1
 	ret nz
@@ -793,28 +793,28 @@ BmDrEdit_PitchScrollDown:
 	jrl BmDrEdit_SetFeedbackTimer
 
 BmDrEdit_VelocityUp_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_VelocityUp_Dispatch
 	cp (0x295d:16), 2
 	ret nz
 
 BmDrEdit_VelocityUp_Dispatch:
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	ret z
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr nz, BmDrEdit_DecrementVelocity
 	jr BmDrEdit_IncrementVelocity
 
 BmDrEdit_VelocityDown_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_VelocityDown_Dispatch
 	cp (0x295d:16), 2
 	ret nz
 
 BmDrEdit_VelocityDown_Dispatch:
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	ret z
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr nz, BmDrEdit_IncrementVelocity
 	jr BmDrEdit_DecrementVelocity
 
@@ -824,7 +824,7 @@ BmDrEdit_IncrementVelocity:
 	ret nc
 	inc 1, a
 	ld (0x2786:16), a
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	call_24 nz, BmDrEdit_DrumVoiceUp
 	calr BmDrEdit_UpdateVelocityDisplay
 	call NoteEditSy_SendScrollCmd3
@@ -839,7 +839,7 @@ BmDrEdit_DecrementVelocity:
 	ret z
 	dec 1, a
 	ld (0x2786:16), a
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	call_24 nz, BmDrEdit_DrumVoiceDown
 	calr BmDrEdit_UpdateVelocityDisplay
 	call NoteEditSy_SendScrollCmd3
@@ -849,21 +849,21 @@ BmDrEdit_DecrementVelocity:
 	ret
 
 BmDrEdit_GateOrVelocityUp:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	ret nz
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr nz, BmDrEdit_IncrementGateTime
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	ret z
 	calr BmDrEdit_IncrementVelocityValue
 	ret
 
 BmDrEdit_GateOrVelocityDown:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	ret nz
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr nz, BmDrEdit_DecrementGateTime
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	ret z
 	calr BmDrEdit_DecrementVelocityValue
 	ret
@@ -903,7 +903,7 @@ BmDrEdit_DecrementVelocityValue:
 	jp NoteEditSy_SendVelocityCmd
 
 BmDrEdit_DurationUp_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_DurationUp_Dispatch
 	cp (0x295d:16), 3
 	ret nz
@@ -912,7 +912,7 @@ BmDrEdit_DurationUp_Dispatch:
 	jr BmDrEdit_IncrementDuration
 
 BmDrEdit_DurationDown_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_DurationDown_Dispatch
 	cp (0x295d:16), 3
 	ret nz
@@ -921,7 +921,7 @@ BmDrEdit_DurationDown_Dispatch:
 	jr BmDrEdit_DecrementDuration
 
 BmDrEdit_IncrementDuration:
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr z, BmDrEdit_IncrementDuration_Global
 	ld wa, (0x278c:16)
 	cp wa, 0x2fff
@@ -944,7 +944,7 @@ BmDrEdit_IncrementDuration_Global:
 	jp NoteEditSy_SendScrollCmd8
 
 BmDrEdit_DecrementDuration:
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr z, BmDrEdit_DecrementDuration_Global
 	ld wa, (0x278c:16)
 	cps wa, 0
@@ -983,7 +983,7 @@ BmDrEdit_DecrementDuration_Send:
 	jp NoteEditSy_SendScrollCmd8
 
 BmDrEdit_ModeScrollUp:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	ret nz
 	ld wa, (0x2792:16)
 	cp wa, 0x60
@@ -993,7 +993,7 @@ BmDrEdit_ModeScrollUp:
 	jp NoteEditSy_SendModeScrollCmd
 
 BmDrEdit_ModeScrollDown:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	ret nz
 	ld wa, (0x2792:16)
 	cps wa, 0
@@ -1144,7 +1144,7 @@ BmDrEdit_SelectChannel_Loop:
 BmDrEdit_SelectChannel_TestBit:
 	andda16_24 xbc, (0xffec)
 	jr z, BmDrEdit_SelectChannel_NotFound
-	bitda 0, (0x2776)
+	bit 0, (0x2776:16)
 	jr z, BmDrEdit_SelectChannel_NotFound
 	stb_erp C, 0xfb
 	inc 1, c
@@ -1194,7 +1194,7 @@ BmDrEdit_AlignGrid_Store:
 
 BmDrEdit_CompareVelocity:
 	push xiz
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr z, BmDrEdit_CompareVelocity_Equal
 	ld iz, (0x28af:16)
 	ld wa, (9830:16)
@@ -1435,7 +1435,7 @@ BmDrEdit_CheckAndSelectChannel:
 BmDrEdit_FindNoteInSlots:
 	pushw iz
 	ldw iy, 0x8
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr z, BmDrEdit_FindNote_SetupLoop
 	lds iy, 1
 
@@ -1529,7 +1529,7 @@ BmDrEdit_CalcBeatFromGridPos:
 BmDrEdit_ByteData_NoteCoordTable:
 	.incbin "includes/romslices/v7_transplant_BmDrEdit_ByteData_NoteCoordTable.bin"
 BmDrEdit_ChordScrollUp_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_ChordScrollUp
 	cp (0x295d:16), 4
 	ret nz
@@ -1546,7 +1546,7 @@ BmDrEdit_ChordScrollUp:
 	ret
 
 BmDrEdit_ChordScrollDown_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_ChordScrollDown
 	cp (0x295d:16), 4
 	ret nz
@@ -1591,7 +1591,7 @@ BmDrEdit_PitchWrap_UpdateDisplay:
 	jrl BmDrEdit_SetFeedbackTimer
 
 BmDrEdit_PitchWrap_CheckEnd:
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jrl z, BmDrEdit_NavigatePrevPage
 	cps wa, 1
 	ret z
@@ -1668,7 +1668,7 @@ BmDrEdit_InsertNoteEvent:
 	jr BmDrEdit_RefreshAfterInsert
 
 BmDrEdit_SendWidgetCmd:
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	ret z
 	jp NoteEditSy_SendWidgetCmdE
 
@@ -1695,7 +1695,7 @@ BmDrEdit_NavigatePrevPage:
 BmDrEdit_RefreshAfterInsert:
 	calr BmDrEdit_AlignDisplayGrid
 	calr BmDrEdit_InsertNoteSequence
-	bitda 2, (0x295f)
+	bit 2, (0x295f:16)
 	jr z, BmDrEdit_RefreshAfterInsert_CheckFull
 	ldw wa, 0xd0
 	call SeqData_SetErrorCode
@@ -1713,7 +1713,7 @@ BmDrEdit_RefreshAfterInsert_CheckFull:
 
 BmDrEdit_SetupScrollRegion:
 	ld xde, xwa
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr z, BmDrEdit_SetupScrollRegion_MelodicMode
 	ld wa, (0x279e:16)
 	ld (xde), a
@@ -1801,7 +1801,7 @@ BmDrEdit_SetRecordingFlag:
 	.byte 0xf1, 0xec, 0x8c, 0xb8
 	jr	24
 BmDrEdit_CheckDrumModeEntry:
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jrl z, BmDrEdit_FlagDisplayUpdate
 	ld a, (0x295b:16)
 	bit 0, a
@@ -1957,7 +1957,7 @@ BmDrEdit_CleanupCommon:
 
 BmDrEdit_InsertNotesFromSlots:
 	pushw iz
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr z, BmDrEdit_InsertNotesFromSlots_MelodicInit
 	ldmm8 0x2960, 0x2786
 	ldmm8 0x2961, 0x2748
@@ -2191,7 +2191,7 @@ BmDrEdit_LoadAndDisplayNotes:
 	calr NoteEdit_UpdateScrollAndDisplay
 	call NoteEditSy_SendWidgetCmd0
 	calr NoteEdit_SendScrollCmds
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	ret z
 	calr BmDrEdit_SendMetronomeNoteOn
 	ret
@@ -2229,7 +2229,7 @@ BmDrEdit_NavigateAndDisplayNotes:
 	calr NoteEdit_UpdateScrollAndDisplay
 	call NoteEditSy_SendWidgetCmd0
 	calr NoteEdit_SendScrollCmds
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	ret z
 	calr BmDrEdit_SendMetronomeNoteOn
 	ret
@@ -2299,7 +2299,7 @@ EditChannel_LoadVoiceParams:
 
 BmDrEdit_DelayAction_SetupAndWalk:
 	dec 4, xsp
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr z, BmDrEdit_DelayAction_UpdateDisplay
 	calr ReadSeqData_StoreParams
 	calr BmDrEdit_SetupAndWalkToNote
@@ -2323,7 +2323,7 @@ BmDrEdit_DelayAction_PlayClick:
 	jrl Metronome_PlayClick
 
 BmDrEdit_DelayAction_CheckCountError:
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr z, BmDrEdit_DelayAction_UpdateScroll
 	calr BmDrEdit_CountMeasuresInit
 	cp (0x287a:16), 0
@@ -2373,7 +2373,7 @@ BmDrEdit_PitchScrollOverflow:
 	jr c, BmDrEdit_PitchOverflow_CheckNextPage
 	mul c, 0x60
 	ld (0x279a:16), bc
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jrl z, BmDrEdit_NavigateAndLoadPosition
 	calr BmDrEdit_CalcTickPosition
 	ld (0x295c:16), 0
@@ -2416,7 +2416,7 @@ NoteEditSy_CallFarRoutine:
 
 BmDrEdit_AdjustViewAndInsert:
 	dec 4, xsp
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jrl nz, BmDrEdit_AdjustViewReturn
 	calr BmDrEdit_SaveEditState
 	ldmm16 0x279c, 0x279a
@@ -2425,7 +2425,7 @@ BmDrEdit_AdjustViewAndInsert:
 	mul a, 0x60
 	cpdm16 0x279a, xwa
 	call_24 c, BmDrEdit_CalcBeatMeasure
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr nz, BmDrEdit_WalkTrackLoop
 	calr BmDrEdit_LoadAndCheckNote
 	call SeqData_ReadNextByte
@@ -2442,10 +2442,10 @@ BmDrEdit_AdjustViewAndInsert:
 	sub wa, (xsp)
 	cpda16 xwa, 0x279a
 	jr ule, BmDrEdit_AdjustView_InitAndNavigate
-	bitda 1, (0x295f)
+	bit 1, (0x295f:16)
 	jr z, BmDrEdit_WalkTrackLoop
 	calr BmDrEdit_InsertNoteSequence
-	bitda 2, (0x295f)
+	bit 2, (0x295f:16)
 	jr nz, BmDrEdit_AdjustView_RefreshDisplay
 	jr BmDrEdit_AdjustViewPath
 
@@ -2457,7 +2457,7 @@ BmDrEdit_WalkTrackLoop:
 	bit 1, a
 	jr z, BmDrEdit_AdjustView_CheckCoords
 	calr BmDrEdit_InsertNoteSequence
-	bitda 2, (0x295f)
+	bit 2, (0x295f:16)
 	jr z, BmDrEdit_AdjustViewPath
 
 BmDrEdit_AdjustView_RefreshDisplay:
@@ -2497,13 +2497,13 @@ BmDrEdit_LoadAndCheckNote:
 	cps l, 0
 	jr z, BmDrEdit_AdvanceToVisibleNote
 	calr BmDrEdit_WalkTrackForward
-	bitda 1, (0x295f)
+	bit 1, (0x295f:16)
 	jr z, BmDrEdit_AdvanceToVisibleNote
 	jr BmDrEdit_WalkReturn
 
 BmDrEdit_LoadNote_WalkTrack:
 	calr BmDrEdit_WalkTrackForward
-	bitda 1, (0x295f)
+	bit 1, (0x295f:16)
 	jr nz, BmDrEdit_WalkReturn
 
 BmDrEdit_AdvanceToVisibleNote:
@@ -2515,7 +2515,7 @@ BmDrEdit_AdvanceToVisibleNote:
 	cpda16 xwa, 0x279c
 	jr ugt, BmDrEdit_WalkReturn
 	calr BmDrEdit_WalkTrackForward
-	bitda 1, (0x295f)
+	bit 1, (0x295f:16)
 	jr z, BmDrEdit_AdvanceToVisibleNote
 
 BmDrEdit_WalkReturn:
@@ -2762,16 +2762,16 @@ BmDrEdit_CheckAndReportScanError:
 
 BmDrEdit_NavigateBackwardWithEdit:
 	dec 4, xsp
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jrl nz, BmDrEdit_NavigateReturn
 	calr BmDrEdit_SaveEditState
 	ldmm16 0x279c, 0x279a
 	calr BmDrEdit_AlignGridBackward
 	calr BmDrEdit_CalcBeatMeasure
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr nz, BmDrEdit_NavigateAfterEdit
 	calr BmDrEdit_ScanAfterModify
-	bitda 3, (0x295f)
+	bit 3, (0x295f:16)
 	jr z, BmDrEdit_NavEdit_CheckPosition
 	cpdi16 0x2744, 1
 	jr z, BmDrEdit_ResetToFirstEvent
@@ -2820,7 +2820,7 @@ BmDrEdit_CheckCurrentNoteMatch:
 
 BmDrEdit_NavigateAfterEdit:
 	calr BmDrEdit_WalkAndScanAfterEdit
-	bitda 3, (0x295f)
+	bit 3, (0x295f:16)
 	jr z, BmDrEdit_NavEdit_CalcCoords
 	cpdi16 0x2744, 1
 	jr z, BmDrEdit_ResetToFirstEvent
@@ -2914,15 +2914,15 @@ BmDrEdit_WalkScan_Return:
 	ret
 
 BmDrEdit_PostModeChange96:
-	bitda 7, (0x2746)
+	bit 7, (0x2746:16)
 	ret nz
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	ret nz
 	ldw wa, 0x96
 	jp UI_PostModeChangeEvent
 
 BmDrEdit_DrumVoiceUp_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_DrumVoiceUp_ClearFlag
 	cp (0x295d:16), 5
 	ret nz
@@ -2932,7 +2932,7 @@ BmDrEdit_DrumVoiceUp_ClearFlag:
 	jr BmDrEdit_DrumVoiceUp
 
 BmDrEdit_DrumVoiceUp:
-	bitda 7, (0x2746)
+	bit 7, (0x2746:16)
 	ret nz
 	ld wa, (0x27a0:16)
 	cp wa, 0xb
@@ -2957,7 +2957,7 @@ BmDrEdit_DrumVoiceUp_UpdateDisplay:
 	ld	(10589:16), 5
 	jp	16635550
 BmDrEdit_DrumVoiceDown_Check:
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr z, BmDrEdit_DrumVoiceDown_ClearFlag
 	cp (0x295d:16), 5
 	ret nz
@@ -2967,7 +2967,7 @@ BmDrEdit_DrumVoiceDown_ClearFlag:
 	jr BmDrEdit_DrumVoiceDown
 
 BmDrEdit_DrumVoiceDown:
-	bitda 7, (0x2746)
+	bit 7, (0x2746:16)
 	ret nz
 	ld wa, (0x27a0:16)
 	cps wa, 0
@@ -2992,7 +2992,7 @@ BmDrEdit_DrumVoiceDown_UpdateDisplay:
 	ld	(10589:16), 5
 	jp	16635550
 BmDrEdit_CalcTrackPosition:
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	ret z
 	ld wa, (0x279e:16)
 	addda16 xwa, 0x27a0
@@ -3000,9 +3000,9 @@ BmDrEdit_CalcTrackPosition:
 	ret
 
 BmDrEdit_PostModeChange99:
-	bitda 7, (0x2746)
+	bit 7, (0x2746:16)
 	ret nz
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	ret nz
 	ldw wa, 0x99
 	jp UI_PostModeChangeEvent
@@ -3402,9 +3402,9 @@ BmDrEdit_FinalizePartTransfer:
 
 BmDrEdit_DeleteNoteAtCursor:
 	push xiz
-	bitda 7, (0x295c)
+	bit 7, (0x295c:16)
 	jr nz, BmDrEdit_DeleteNote_PopIzRet
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr z, BmDrEdit_DeleteNote_PopIzRet
 	ld a, (0x2965:16)
 	inc 1, a
@@ -3461,7 +3461,7 @@ BmDrEdit_ScanChannel_SelectLoop:
 	calr BmDrEdit_CheckAndSelectChannel
 	ld a, (0x2965:16)
 	inc 1, a
-	bitda 2, (0x287b)
+	bit 2, (0x287b:16)
 	jr z, BmDrEdit_ScanChannel_UseChannel
 	ld a, l
 
@@ -3625,7 +3625,7 @@ BmDrEdit_FindNextPage_Return:
 
 BmDrEdit_AdjustScrollToView:
 	dec 4, xsp
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr nz, NoteEditSy_ScrollComplete_Return
 	ldmm8 0x27ca, 0x2798
 
@@ -3746,7 +3746,7 @@ BmDrEdit_ProcessVoiceSection:
 	ld (xsp + 8), a
 	call SeqVoice_SetDefaultParams
 	ld (0x287a:16), 0
-	bitda 2, (0x287b)
+	bit 2, (0x287b:16)
 	jr nz, BmDrEdit_ProcessVoice_WithState
 	ld c, (1075:16)
 	extz bc
@@ -3840,12 +3840,12 @@ BmDrEdit_MultiSong_Return:
 	ret
 
 NoteEdit_SendScrollCmds:
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr nz, BmDrEdit_SendScrollCmds_DrumMode
 	jr BmDrEdit_SendScrollCmds_MelodicNoteOff
 
 BmDrEdit_SendScrollCmds_MelodicNoteOff:
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr nz, BmDrEdit_SendScrollCmds_MelodicNoteOn
 	call NoteEditSy_SendScrollCmd8
 	jr BmDrEdit_SendScrollCmds_CommonMelodicEnd
@@ -3862,7 +3862,7 @@ BmDrEdit_SendScrollCmds_CommonMelodicEnd:
 	jp NoteEditSy_SendModeScrollCmd
 
 BmDrEdit_SendScrollCmds_DrumMode:
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jr nz, BmDrEdit_SendScrollCmds_DrumNoteOn
 	call NoteEditSy_SendVelocityCmd
 	jr BmDrEdit_SendScrollCmds_CommonDrumEnd
@@ -3884,7 +3884,7 @@ NoteEdit_UpdateScrollAndDisplay:
 	ret nc
 	jrl NoteEditSy_UpdateAllWidgets
 	sub a, c
-	bitda 0, (0x2742)
+	bit 0, (0x2742:16)
 	jr z, BmDrEdit_UpdateDisplay_MelodicOffset
 	ldb c, 0xb
 	sub c, a
@@ -4289,7 +4289,7 @@ BmDrEdit_PopIzRet:
 BmDrEdit_PrepareSecondaryNoteDisplay:
 	dec 4, xsp
 	pushw iz
-	bitda 0, (0x295f)
+	bit 0, (0x295f:16)
 	jrl z, BmDrEdit_SecondaryNote_PopIzReturn
 	calr BmDrEdit_SaveEditState
 	ldmm16 0x280c, 0x276a

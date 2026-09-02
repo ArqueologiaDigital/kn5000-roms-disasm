@@ -606,9 +606,9 @@ CPanel_WaitTXReady_Poll:
 	jr z, CPanel_WaitTXReady_Timeout
 	bit_dd8 5, 0x38	; PE.5 = state of INTA pin == 0
 	jr nz, CPanel_WaitTXReady_Timeout
-	bitda 1, (0x8d8c)
+	bit 1, (0x8d8c:16)
 	jr nz, CPanel_WaitTXReady_Timeout
-	bitda 0, (0x8d8c)
+	bit 0, (0x8d8c:16)
 	jr nz, CPanel_WaitTXReady_Timeout
 	jr CPanel_WaitTXReady_BufferCheck
 
@@ -1002,7 +1002,7 @@ CPanel_SM_RXByteN:
 	ld xiy, 0x8da1
 	addda16 xiy, 0x8d9f
 	ld (xiy), a
-	bitda 0, (0x8d92); CP_Flags_B.0
+	bit 0, (0x8d92:16); CP_Flags_B.0
 	jr nz, RXByteN_CheckDone
 	incdi16 1, (0x8d9f)
 	cpdi16 0x8d9f, 92
@@ -1117,9 +1117,9 @@ PollLoop_CheckTXReady:
 	jr z, PollLoop_BusyRetry
 	bit_dd8 5, 0x38	; PE.5 = state of INTA pin
 	jr nz, PollLoop_BusyRetry
-	bitda 1, (0x8d8c)
+	bit 1, (0x8d8c:16)
 	jr nz, PollLoop_BusyRetry
-	bitda 0, (0x8d8c)
+	bit 0, (0x8d8c:16)
 	jr nz, PollLoop_BusyRetry
 
 	; Only reaches here when (CPANEL_TX_RX_FLAGS), CP_Flags_A.10 == 00:
@@ -1373,7 +1373,7 @@ c:
 	mrib2 0x83, 0x31
 	xor a, (xhl)
 	inc 1, hl
-	bitda 4, (0x8d8c); This is never set ?!
+	bit 4, (0x8d8c:16); This is never set ?!
 	jr z, MBytePkt_CommitAndContinue
 	cps a, 0
 	jr nz, MBytePkt_CommitAndContinue

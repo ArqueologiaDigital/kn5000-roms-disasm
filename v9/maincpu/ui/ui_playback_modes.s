@@ -299,7 +299,7 @@ PlaybackDispatch_NullRet:
 
 
 PlaybackMode_DispatchByType:
-	bitda 0, (3381)
+	bit 0, (3381:16)
 	jrl z, DispatchHandler_ClearActiveFlag
 	cp (0x8d36:16), 122
 	jr z, PlaybackDisp_Type122_Play
@@ -434,7 +434,7 @@ PlayMode_CheckAndDispatch:
 	ld (3380:16), 0
 	ld (4420:16), 0
 	call PlayMode_DispatchAndClearBit2
-	bitda 2, (3394)
+	bit 2, (3394:16)
 	jr z, PlayMode_SendModeCommand
 	jr PlayMode_SendModeCommand
 
@@ -491,7 +491,7 @@ SongMode_PostEvtRetZero:
 	ret
 
 SeqRestart_CheckAndDispatch:
-	bitda 2, (0x28ac)
+	bit 2, (0x28ac:16)
 	jr z, SeqRestart_Return
 	ld iz, wa
 	ld a, (0xfc5f:16)
@@ -502,7 +502,7 @@ SeqRestart_CheckAndDispatch:
 	ldw bc, 0xf000
 
 SeqRestart_WaitBit2Loop:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr z, SeqRestart_DispatchAndNotify
 	nop
 	nop
@@ -517,7 +517,7 @@ SeqRestart_Return:
 	ret
 
 SeqRestart_SendPlaybackNotify:
-	bitda 2, (0x28ac)
+	bit 2, (0x28ac:16)
 	jr z, SeqNotify_Return
 	ld (4437:16), 1
 	cp (0x8d36:16), 122
@@ -571,7 +571,7 @@ SongMode_CheckAndDispatch:
 	ld (3380:16), 0
 	ld (4420:16), 0
 	call SongMode_AbortAndClearBit2
-	bitda 2, (3394)
+	bit 2, (3394:16)
 	jr z, SongMode_SendStopCommand
 	jr SongMode_SendStopCommand
 
@@ -724,7 +724,7 @@ PartFormat_CheckAndDispatch:
 	ld (3380:16), 0
 	ld (4420:16), 0
 	call PartFormat_AbortAndClearBit2
-	bitda 2, (3394)
+	bit 2, (3394:16)
 	jr z, PartFormat_SendStopCommand
 	jr PartFormat_SendStopCommand
 
@@ -790,7 +790,7 @@ PlayMode_StopAbortRetZero:
 	ld (3380:16), 0
 	ld (4420:16), 0
 	call PlayMode_StopAndAbort
-	bitda 2, (3394)
+	bit 2, (3394:16)
 	jr z, PlayModeStop_SendStopCmd
 	jr PlayModeStop_SendStopCmd
 
@@ -918,7 +918,7 @@ CDlike_ResetPlaybackState:
 	ld (1051:16), a
 	ld (1048:16), wa
 	ld (1047:16), a
-	bitda 1, (0x28a7)
+	bit 1, (0x28a7:16)
 	jr z, CDlikeReset_SetTimerFlags
 	ld (1054:16), 1
 	ld (1045:16), 0
@@ -989,7 +989,7 @@ CDlike_ExitModeAndRestore:
 	anddi8 (0xb7e2), 191
 	anddi8 (0x28ac), 251
 	ld (4420:16), 0
-	bitda 2, (3394)
+	bit 2, (3394:16)
 	jr z, CDlikeExit_CheckPlaybackType
 	jr CDlikeExit_CheckPlaybackType
 
@@ -1051,14 +1051,14 @@ SongBank_LoadToWorkArea:
 SongBank_CheckAccompanimentMode:
 	cp (0xf23d:16), 255
 	jr z, SongBank_EnableAccompaniment
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr z, SongBank_CheckBassMode
 	anddi8 (0xfdad), 251
 	xor a, a
 	jr SongBank_SendAccompEvent
 
 SongBank_EnableAccompaniment:
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr nz, SongBank_CheckBassMode
 	ordi8 0xfdad, 4
 	ldb a, 0x4

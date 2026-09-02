@@ -1291,7 +1291,7 @@ PlayHalt_SkipSetFlag:
 	ret
 
 PlayStandBy:
-	bitda 2, (10407)
+	bit 2, (10407:16)
 	jr z, PlayStandBy_SkipClearFlag
 	resda 2, 10407
 
@@ -2529,7 +2529,7 @@ MainChordPre:
 	lda xsp, (xsp + 18)
 	cp (36164:16), 0
 	jr z, MainChordPre_EmptyChordStr
-	bitda 1, (52958)
+	bit 1, (52958:16)
 	jr z, MainChordPre_EmptyChordStr
 	ld xwa, 0xed1c96
 	jr MainChordPre_AppendChordSuffix

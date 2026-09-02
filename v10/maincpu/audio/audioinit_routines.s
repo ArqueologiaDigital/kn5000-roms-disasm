@@ -51,12 +51,12 @@ AudioInit_AfterModeSet:
 AudioInit_SetDefaultLevels:
 	ld (0xc2ba:16), 255
 	ld (0xc2bb:16), 255
-	bitda 5, (0xf9f7)
+	bit 5, (0xf9f7:16)
 	jr nz, AudioInit_CheckBit5_FD07
 	ld (0xc204:16), 2
 
 AudioInit_CheckBit5_FD07:
-	bitda 5, (0xfbb1)
+	bit 5, (0xfbb1:16)
 	jr nz, AudioInit_CheckBit5_FBF1
 	ld (0xc218:16), 22
 
@@ -78,7 +78,7 @@ AudioInit_CheckMixFlagsAlt:
 	ld wa, (0xc596:16)
 	and wa, 0x7
 	jr nz, AudioInit_CheckBit2Mode
-	bitda 2, (0xc1fe)
+	bit 2, (0xc1fe:16)
 	jr z, AudioInit_RouteAndPan
 
 AudioInit_CheckBit2Mode:
@@ -235,12 +235,12 @@ AudioInit_AfterGroupModeSet:
 AudioInit_SetGroupLevels:
 	ld (0xc2ba:16), 255
 	ld (0xc2bb:16), 255
-	bitda 5, (0xf9f7)
+	bit 5, (0xf9f7:16)
 	jr nz, AudioInit_CheckGroupBit5_FD07
 	ld (0xc204:16), 2
 
 AudioInit_CheckGroupBit5_FD07:
-	bitda 5, (0xfbb1)
+	bit 5, (0xfbb1:16)
 	jr nz, AudioInit_CheckGroupBit5_FBF1
 	ld (0xc218:16), 22
 
@@ -288,12 +288,12 @@ AudioInit_AfterGroup51ModeSet:
 AudioInit_SetGroup51Levels:
 	ld (0xc2ba:16), 255
 	ld (0xc2bb:16), 255
-	bitda 5, (0xf9f7)
+	bit 5, (0xf9f7:16)
 	jr nz, AudioInit_CheckG51Bit5_FD07
 	ld (0xc204:16), 2
 
 AudioInit_CheckG51Bit5_FD07:
-	bitda 5, (0xfbb1)
+	bit 5, (0xfbb1:16)
 	jr nz, AudioInit_CheckG51Bit5_FBF1
 	ld (0xc218:16), 22
 
@@ -364,7 +364,7 @@ AudioInit_DrumSaveReturn:
 AudioInit_VoiceParamCtrl:
 	dec 6, xsp
 	ldb c, 0x0
-	bitda 0, (0xfd53)
+	bit 0, (0xfd53:16)
 	jr z, AudioInit_CheckVoiceParamState
 	set 1, c
 
@@ -420,7 +420,7 @@ AudioInit_VoiceParamDone:
 
 AudioInit_DrumRoutingCheck:
 	lds de, 0
-	bitda 2, (0xc1fe)
+	bit 2, (0xc1fe:16)
 	jr nz, AudioInit_ProcessVoiceAssign
 	ld wa, (0xc598:16)
 	and wa, 0x6
@@ -497,7 +497,7 @@ AudioInit_UpdateVoiceBank2:
 	ordi16 0xc59a, 512
 
 AudioInit_CheckStereoRouting:
-	bitda 3, (0xc1fe)
+	bit 3, (0xc1fe:16)
 	jr z, AudioInit_ClearStereoRouting
 	ld a, (0xc5a2:16)
 	dec 1, a
@@ -666,7 +666,7 @@ AudioInit_SetPartMasks_Loop:
 	jr c, AudioInit_SetPartMasks_Loop
 
 AudioInit_CheckGlobalFlag6:
-	bitda 6, (0xfd53)
+	bit 6, (0xfd53:16)
 	jr z, AudioInit_ClearVoiceGroupFlags
 	setda 5, 0xc342
 	setda 5, 0xc344
@@ -684,7 +684,7 @@ AudioInit_ClearVoiceGroupFlags:
 	ordi16 0xc59c, 8
 
 AudioInit_CheckVoiceFlag6:
-	bitda 6, (0xfd50)
+	bit 6, (0xfd50:16)
 	jr z, AudioInit_ClearAuxVoiceFlag
 	setda 5, 0xc34a
 	jr AudioInit_CheckReverbFlag
@@ -694,7 +694,7 @@ AudioInit_ClearAuxVoiceFlag:
 	ordi16 0xc59c, 8
 
 AudioInit_CheckReverbFlag:
-	bitda 7, (0xfd53)
+	bit 7, (0xfd53:16)
 	jr z, AudioInit_ClearReverbFlag
 	setda 5, 0xc354
 	ret
@@ -1095,7 +1095,7 @@ AudioInit_ChannelLoop_Done:
 	ordi16 0xc598, 1
 
 AudioInit_SetChangedFlag:
-	bitda 3, (0x28b3)
+	bit 3, (0x28b3:16)
 	jr z, AudioInit_CheckExternalBit3
 	anddi16 0xc598, 0xfdff
 
@@ -1338,7 +1338,7 @@ AudioInit_ConfigureVoiceRouting:
 	ld a, (0xfc60:16)
 	and a, 0xfc
 	jr nz, AudioInit_Routing_SetOverrideFlag
-	bitda 5, (0xf9f7)
+	bit 5, (0xf9f7:16)
 	jrl nz, AudioInit_Routing_SkipToEnd
 	ld (0xc204:16), 2
 	jrl AudioInit_Routing_Done
@@ -1348,7 +1348,7 @@ AudioInit_Routing_SetOverrideFlag:
 	jrl AudioInit_Routing_Done
 
 AudioInit_Routing_CheckSplitMode:
-	bitda 1, (0xfc5f)
+	bit 1, (0xfc5f:16)
 	jr z, AudioInit_Routing_NoSplit
 	ld a, (0xfc5f:16)
 	and a, 0xfc
@@ -1356,12 +1356,12 @@ AudioInit_Routing_CheckSplitMode:
 	ld a, (0xfc60:16)
 	and a, 0xfc
 	jr nz, AudioInit_Routing_SplitOverride
-	bitda 5, (0xf9f7)
+	bit 5, (0xf9f7:16)
 	jr nz, AudioInit_Routing_SplitCheckAux
 	ld (0xc204:16), 2
 
 AudioInit_Routing_SplitCheckAux:
-	bitda 5, (0xfbb1)
+	bit 5, (0xfbb1:16)
 	jrl nz, AudioInit_Routing_SkipToEnd
 	ld (0xc218:16), 22
 	jrl AudioInit_Routing_Done
@@ -1377,12 +1377,12 @@ AudioInit_Routing_NoSplit:
 	ld a, (0xfc60:16)
 	and a, 0xfc
 	jr nz, AudioInit_Routing_CheckTypeEDFlags
-	bitda 5, (0xf9f7)
+	bit 5, (0xf9f7:16)
 	jr nz, AudioInit_Routing_NoSplitCheckAux
 	ld (0xc204:16), 2
 
 AudioInit_Routing_NoSplitCheckAux:
-	bitda 5, (0xfbb1)
+	bit 5, (0xfbb1:16)
 	jrl nz, AudioInit_Routing_Done
 	ld (0xc218:16), 22
 	jrl AudioInit_Routing_Done
@@ -1391,12 +1391,12 @@ AudioInit_Routing_CheckTypeEDFlags:
 	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr nz, AudioInit_Routing_TypeED_Override
-	bitda 5, (0xf9f7)
+	bit 5, (0xf9f7:16)
 	jr nz, AudioInit_Routing_TypeED_CheckAux
 	ld (0xc204:16), 2
 
 AudioInit_Routing_TypeED_CheckAux:
-	bitda 5, (0xfbb1)
+	bit 5, (0xfbb1:16)
 	jrl nz, AudioInit_Routing_Done
 	ld (0xc218:16), 22
 	jrl AudioInit_Routing_Done
@@ -1406,7 +1406,7 @@ AudioInit_Routing_TypeED_Override:
 	jrl AudioInit_Routing_Done
 
 AudioInit_Routing_NoGroupAB:
-	bitda 5, (0xf9f7)
+	bit 5, (0xf9f7:16)
 	jr nz, AudioInit_Routing_SimpleAssign
 	ld (0xc204:16), 2
 
@@ -1431,7 +1431,7 @@ AudioInit_Routing_CheckMixMode:
 	ld wa, (0xc596:16)
 	bit 9, wa
 	jrl nz, AudioInit_Routing_Done
-	bitda 1, (0xfc5f)
+	bit 1, (0xfc5f:16)
 	jr nz, AudioInit_Routing_Done
 	ld a, (0xfc5f:16)
 	and a, 0xfc
@@ -1439,12 +1439,12 @@ AudioInit_Routing_CheckMixMode:
 	ld a, (0xfc60:16)
 	and a, 0xfc
 	jr nz, AudioInit_Routing_MixFCBits
-	bitda 5, (0xfbe5)
+	bit 5, (0xfbe5:16)
 	jr nz, AudioInit_Routing_MixCheckAux
 	ld (0xc217:16), 21
 
 AudioInit_Routing_MixCheckAux:
-	bitda 5, (0xfbb1)
+	bit 5, (0xfbb1:16)
 	jr nz, AudioInit_Routing_Done
 	ld (0xc218:16), 22
 	jr AudioInit_Routing_Done
@@ -1453,12 +1453,12 @@ AudioInit_Routing_MixFCBits:
 	ld wa, (0xc598:16)
 	and wa, 0x60
 	jr nz, AudioInit_Routing_Done
-	bitda 5, (0xfbe5)
+	bit 5, (0xfbe5:16)
 	jr nz, AudioInit_Routing_MixFCCheckAux
 	ld (0xc217:16), 21
 
 AudioInit_Routing_MixFCCheckAux:
-	bitda 5, (0xfbb1)
+	bit 5, (0xfbb1:16)
 	jr nz, AudioInit_Routing_Done
 	ld (0xc218:16), 22
 
@@ -1495,7 +1495,7 @@ AudioInit_ConfigurePanning:
 	ret nz
 	cp (0xc1ff:16), 255
 	jr nz, AudioInit_Pan_CheckMode0
-	bitda 0, (0xc1fe)
+	bit 0, (0xc1fe:16)
 	jr nz, AudioInit_Pan_SetStereoLeft
 
 AudioInit_Pan_CheckMode0:
@@ -1509,7 +1509,7 @@ AudioInit_Pan_SetStereoLeft:
 AudioInit_Pan_CheckMode1:
 	cp (0xc1ff:16), 255
 	jr nz, AudioInit_Pan_CheckMode1b
-	bitda 1, (0xc1fe)
+	bit 1, (0xc1fe:16)
 	jr nz, AudioInit_Pan_SetStereoRight
 
 AudioInit_Pan_CheckMode1b:
@@ -1543,7 +1543,7 @@ AudioInit_Pan_CheckReverbChannel:
 	jr ule, AudioInit_Pan_Reverb_CopyFromMain
 	cp (0xc1ff:16), 255
 	jr nz, AudioInit_Pan_Reverb_CheckMode0
-	bitda 0, (0xc1fe)
+	bit 0, (0xc1fe:16)
 	jr nz, AudioInit_Pan_Reverb_Left
 
 AudioInit_Pan_Reverb_CheckMode0:
@@ -1557,7 +1557,7 @@ AudioInit_Pan_Reverb_Left:
 AudioInit_Pan_Reverb_CheckMode1:
 	cp (0xc1ff:16), 255
 	jr nz, AudioInit_Pan_Reverb_CheckMode1b
-	bitda 1, (0xc1fe)
+	bit 1, (0xc1fe:16)
 	jr nz, AudioInit_Pan_Reverb_Right
 
 AudioInit_Pan_Reverb_CheckMode1b:
@@ -1598,13 +1598,13 @@ AudioInit_CheckStereoMode:
 	ld wa, (0xc596:16)
 	bit 11, wa
 	ret z
-	bitda 0, (0xc1fe)
+	bit 0, (0xc1fe:16)
 	jr z, AudioInit_Stereo_CheckBit1
 	ld (0xc200:16), 0
 	jr AudioInit_Stereo_CheckBit3
 
 AudioInit_Stereo_CheckBit1:
-	bitda 1, (0xc1fe)
+	bit 1, (0xc1fe:16)
 	jr z, AudioInit_Stereo_Default
 	ld (0xc200:16), 1
 	jr AudioInit_Stereo_CheckBit3
@@ -1613,7 +1613,7 @@ AudioInit_Stereo_Default:
 	ld (0xc200:16), 255
 
 AudioInit_Stereo_CheckBit3:
-	bitda 3, (0xc1fe)
+	bit 3, (0xc1fe:16)
 	ret z
 	ld (0xc201:16), 0
 	ret
@@ -1893,9 +1893,9 @@ AudioInit_CompareVoiceConfig:
 	lds wa, 2
 	lds bc, 1
 	calr AudioInit_QueueCommand
-	bitda 3, (0xc364)
+	bit 3, (0xc364:16)
 	ret z
-	bitda 3, (0xc1fe)
+	bit 3, (0xc1fe:16)
 	ret nz
 	pushw 0x8
 	lds wa, 2
@@ -2002,7 +2002,7 @@ AudioInit_VoiceCompare_NotBothFF:
 	and a, c
 	and a, 0xf8
 	ld l, a
-	bitda 7, (0xc2ce)
+	bit 7, (0xc2ce:16)
 	jr z, AudioInit_VoiceCompare_BuildCmd
 	ld a, (0xc434:16)
 	res 7, a

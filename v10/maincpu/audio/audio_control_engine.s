@@ -1769,7 +1769,7 @@ Encoder_CheckTimerDelta:
 	jr Encoder_ProcessUpdate
 
 Encoder_CheckBitAndProcess:
-	bitda 0, (0x8ec6)
+	bit 0, (0x8ec6:16)
 	jr nz, Encoder_IncrementAndDispatch
 
 Encoder_ProcessUpdate:
@@ -2682,14 +2682,14 @@ SndParam_GuardedNibbleSet_ViaReg0103:
 	; --- Routine 3: complex bit checks, and (xiz+0x0e), set 0 in A (59 bytes) ---
 	push xiz
 	lda	xiz, (0x8f18:16)
-	bitda	2, (1054)
+	bit	2, (1054:16)
 	jr nz, MidiCtrl_PopIzRet
 	ld xwa, 0x00028103
 	call SndParam_LookupReadOnly
 	cps	hl, 0
 	jr nz, MidiCtrl_PopIzRet
 	andmi8	(xiz+14), 240
-	bitda	2, (1057)
+	bit	2, (1057:16)
 	jr z, MidiCtrl_PopIzRet
 	lds32	xwa, 1
 	call SndParam_LookupReadOnly
@@ -3172,7 +3172,7 @@ CtrlPanel_BitManip_Ret:
 CtrlPanel_SyncBit0_From8F5C:
 	; --- Sub 3: set/res bit 0 at (0x8f1d) based on bit 0 of (0x8f5c) (16 bytes) ---
 	lda	xwa, (0x8f1d:16)
-	bitda	0, (0x8f5c)
+	bit	0, (0x8f5c:16)
 	jr z, CtrlPanel_ResBit0_8F5C
 	setm	0, (xwa)
 	ret
@@ -3271,7 +3271,7 @@ CtrlPanel_GuardedNibbleSet_8F4E:
 	; --- Sub 9: guarded nibble set/res at (XIZ+0x0e) via (0x8f4e) lookup (76 bytes) ---
 	push xiz
 	lda	xiz, (0x8f18:16)
-	bitda	2, (1054)
+	bit	2, (1054:16)
 	jr nz, CtrlPanel_BitOp_Cleanup
 	ld xwa, 0x00028103
 	call SndParam_LookupReadOnly
@@ -3483,7 +3483,7 @@ MidiChannel_ProcessOutputState:
 	calr MidiChOut_DetectChanges
 	lda xde, (xiz + 14)
 	ld c, (0x8e76:16)
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr nz, MidiChOut_CheckHWState
 	ld a, c
 	bit 1, c
@@ -3536,7 +3536,7 @@ MidiChannel_CleanupRet:
 	ret
 
 MidiChOut_DetectChanges:
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	ret nz
 	ld a, (1056:16)
 	xorda8 a, 0x347b
@@ -3555,9 +3555,9 @@ MidiChannel_ScanPending:
 	ld a, (0x8f4a:16)
 	and a, 0x3
 	jr nz, MidiScan_PopIzRet
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr nz, MidiScan_PopIzRet
-	bitda 2, (0x28a7)
+	bit 2, (0x28a7:16)
 	jr nz, MidiScan_AltPathCheck
 	ld xwa, 0x28103
 	call SndParam_LookupReadOnly
@@ -3574,7 +3574,7 @@ MidiChannel_ScanPending:
 	jr MidiScan_PopIzRet
 
 MidiScan_CheckBit2InAddr1057:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr nz, MidiScan_PopIzRet
 
 MidiScan_ClearAndReturn:
@@ -3582,7 +3582,7 @@ MidiScan_ClearAndReturn:
 	jr MidiScan_PopIzRet
 
 MidiScan_AltPathCheck:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr nz, MidiScan_PopIzRet
 	andmi8 (xiz + 14), 0xf0
 
@@ -5607,7 +5607,7 @@ MidiChannel_ResetAndConfigure:
 	ld a, (0x8ee4:16)
 	set 7, a
 	ld (0x8ee0:16), a
-	bitda 7, (0x8ee4)
+	bit 7, (0x8ee4:16)
 	ret z
 	calr Audio_FlushPendingBankSelects
 	ld (0x9127:16), 176
@@ -6841,7 +6841,7 @@ ToneGen_DispatchStartVoice:
 	pushw_erp 0xfa
 	cp (0xc07d:16), 3
 	jr nz, ToneGen_Dispatch_Return
-	bitda 0, (0xc07f)
+	bit 0, (0xc07f:16)
 	jr z, ToneGen_Dispatch_Return
 	ldw wa, 0x90
 	calr VoiceData_LookupPtrByIndex
@@ -7880,9 +7880,9 @@ MIDI_ClearGuardAndDispatchCC:
 	ld (0x90e5:16), 0
 
 MIDI_DispatchCC_Guarded:
-	bitda 0, (0xb7e7)
+	bit 0, (0xb7e7:16)
 	jr nz, MidiGuarded_Return
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiGuarded_Return
 	push xwa
 	push xbc
@@ -7997,7 +7997,7 @@ MIDI_SetupChannelParams:
 
 Audio_WriteBankSelectParams:
 	pushw de
-	bitda 7, (0x8ee2)
+	bit 7, (0x8ee2:16)
 	jr z, BankSelect_CheckChannel1
 	anddi8 (0x8ee2), 127
 	stdi16 (0x9127), 176
@@ -8007,7 +8007,7 @@ Audio_WriteBankSelectParams:
 	calr SwbtWr_WriteVoiceParam_PreserveRegs
 
 BankSelect_CheckChannel1:
-	bitda 7, (0x8ee0)
+	bit 7, (0x8ee0:16)
 	jr z, BankSelect_Done
 	anddi8 (0x8ee0), 127
 	stdi16 (0x9127), 432
@@ -8021,7 +8021,7 @@ BankSelect_Done:
 	ret
 
 SeqTimer_UpdateTempoReg:
-	bitda 2, (0xfd50)
+	bit 2, (0xfd50:16)
 	jr nz, SeqTimer_Return
 	push xiz
 	push xwa
@@ -8062,9 +8062,9 @@ SeqTimer_AdjustForMode4:
 
 SeqTimer_RoundUp:
 	ld (146:16), de; LD (TREG5L), DE
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, SeqTimer_ClearFlag
-	bitda 4, (0x90f9)
+	bit 4, (0x90f9:16)
 	jr nz, SeqTimer_ClearFlag
 	call SeqData_DispatchLoop_Done
 
@@ -8111,7 +8111,7 @@ RegisterBit_Manipulate_Table:
 	.long RegBitManip_Handler_4
 	.long RegBitManip_Handler_4
 RegBitManip_Handler_1:
-	bitda	0, (0xfc69)
+	bit	0, (0xfc69:16)
 	jr	nz, 3
 RegBitManip_Handler_3:
 	and	w, 0xfd
@@ -8193,7 +8193,7 @@ RegBitManip_Handler_4:
 
 MIDI_ParamValidate_CheckBit2:
 	xor hl, hl
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr nz, MidiParamValid_CheckW78
 	cp a, 0xf0
 	jr nc, MidiParamValid_SetInvalid
@@ -8545,14 +8545,14 @@ MIDI_SelectTempoExpressionSource:
 	jr Tempo_ExpressionStore
 
 TempoSrc_CheckAutoPlay:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr z, Tempo_ExpressionStore
 	ld wa, (0x28a8:16)
 	setda 2, 0x90f9
 	jr Tempo_ExpressionStore
 
 Tempo_Expression_Bypass:
-	bitda 0, (0x28c5)
+	bit 0, (0x28c5:16)
 	jr z, Tempo_ExpressionStore
 	ld wa, (0x28aa:16)
 	jr Tempo_ExpressionStore
@@ -8587,7 +8587,7 @@ ModExpr_CheckAutoPlay:
 	ld wa, (0x28a8:16)
 	setda 2, 0x90f9
 	jr Mod_ExpressionStore
-	bitda 0, (0x28c5)
+	bit 0, (0x28c5:16)
 	jr z, Mod_ExpressionStore
 	ld wa, (0x28aa:16)
 	jr Mod_ExpressionStore
@@ -9235,7 +9235,7 @@ VoiceMode4_SetupChannelAndWrite:
 VoiceMode4_CheckPart0:
 	cp (0x915b:16), 0
 	jr nz, MidiCtrl_DispatchHandler
-	bitda 3, (0xfd50)
+	bit 3, (0xfd50:16)
 	jrl nz, MidiCtrl_NullRet
 
 ; MIDI controller dispatch handler
@@ -9911,7 +9911,7 @@ VoiceNote_StoreBankSelect:
 	ld e, (0x91b7:16)
 	extz hl
 	ld l, (0x91c8:16)
-	bitda 7, (0x28ad)
+	bit 7, (0x28ad:16)
 
 	; LD SP, (XBC)
 	; BIT 7, (28ADh)
@@ -9950,9 +9950,9 @@ VoiceNote_SetupCCParams:
 	jr MIDI_VoiceNote_CtrlExit
 
 VoiceNote_CheckBankSelect:
-	bitda 7, (0x28ad)
+	bit 7, (0x28ad:16)
 	jr nz, VoiceNote_ApplyBankSelect
-	bitda 7, (0x28ae)
+	bit 7, (0x28ae:16)
 	jr z, VoiceNote_CtrlDone
 
 VoiceNote_ApplyBankSelect:
@@ -9960,7 +9960,7 @@ VoiceNote_ApplyBankSelect:
 	set 7, a
 	ld (0x8ee0:16), a
 	call Audio_WriteBankSelectParams
-	bitda 7, (0x28ad)
+	bit 7, (0x28ad:16)
 	jr z, MIDI_VoiceNote_CtrlExit
 	resda 7, 0x28ad
 
@@ -10097,7 +10097,7 @@ MidiNote_VelocityHandler_Table:
 MidiNoteVel_Handler_0:
 	ldw	bc, 5249
 	xor	de, de
-	bitda	7, (0x91cf)
+	bit	7, (0x91cf:16)
 	jr	z, 2
 	inc	1, e
 	call	MIDI_DispatchCC_Guarded
@@ -10117,7 +10117,7 @@ MidiNoteVel_Handler_0:
 MidiNoteVel_Handler_1:
 	ldw	bc, 5249
 	xor	d, d
-	bitda	7, (0x915d)
+	bit	7, (0x915d:16)
 	jr	z, 2
 	ldb	d, 1
 	ld	e, (0x915e:16)
@@ -10960,9 +10960,9 @@ MidiStream_LoadPedalNext:
 	ret
 
 MidiStream_ProcessRxBuffer:
-	bitda 0, (0xb7e7)
+	bit 0, (0xb7e7:16)
 	jr nz, MidiStream_ProcessDone
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiStream_ProcessDone
 	stdi16 (0x9133), 0
 
@@ -11209,7 +11209,7 @@ MidiStream_CmdPedalNotify:
 	; --- Routine 2: conditional E/D setup, dec E, call FCA1FE (36 bytes) ---
 	cp	(0x8d34:16), 14
 	jr z, MidiStream_CmdPedalDone
-	bitda	3, (0xfd50)
+	bit	3, (0xfd50:16)
 	jr z, MidiStream_CmdPedalDone
 	and e, 0x7f
 	jr z, MidiStream_CmdPedalDone

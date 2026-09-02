@@ -2308,13 +2308,13 @@ Scoop_Compare_GreaterThan:
 	jrl Scoop_ProcessCompareLoop
 
 Scoop_Compare_BitTest:
-	bitda 0, (0x27d2)
+	bit 0, (0x27d2:16)
 	jrl z, Scoop_Compare_Bit1Test
 	call ToneGen_AdvanceVoiceLoop
 	jrl Scoop_ProcessCompareLoop
 
 Scoop_Compare_Bit1Test:
-	bitda 1, (0x27d2)
+	bit 1, (0x27d2:16)
 	jrl z, Scoop_Compare_ValueCompare
 	call VoiceChannel_FindNextLoop
 	jrl Scoop_ProcessCompareLoop
@@ -3045,7 +3045,7 @@ MidiEvent_HandleProgramChangeA:
 	ld iy, (4011:16)
 	and iy, 0xf
 	extz xiy
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl nz, MidiPgmChg_CheckModeA
 	call VoiceChannel_ApplyParamByMode
 	ld (4323:16), 0
@@ -3762,7 +3762,7 @@ MidiEvent_HandleProgramChangeB:
 	ld iy, (4237:16)
 	call SoundGen_ClampVoiceIndexMin1
 	and iy, 0xf
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jrl nz, MidiPgmChg_CheckModeB
 	call VoiceChannel_ApplyParamByMode
 	ld (4323:16), 0
@@ -4206,7 +4206,7 @@ ToneGen_ValidateCh2_Done:
 
 VoiceChannel_FindNextLoop:
 	call VoiceChannel_FindNextValid
-	bitda 0, (0x27d2)
+	bit 0, (0x27d2:16)
 	jr z, VoiceChannel_FindNextLoop
 	ret
 
@@ -4251,14 +4251,14 @@ Scoop_Equal_Done:
 
 ToneGen_AdvanceVoiceLoop:
 	call ToneGen_AdvanceAndValidateVoice
-	bitda 1, (0x27d2)
+	bit 1, (0x27d2:16)
 	jr z, ToneGen_AdvanceVoiceLoop
 	ret
 
 VoiceChannel_FindNextValid:
 	ld xhl, (4349:16)
 	stb_dri C, 0x07, 0xec, 0xf0
-	bitda 0, (0x27d2)
+	bit 0, (0x27d2:16)
 	jr nz, VoiceChannel_ValidateAndLoop
 	call VoiceChannel_AdvanceIndex
 	ld xhl, (4349:16)
@@ -4490,7 +4490,7 @@ VoiceSynth_DataEntry_PtrTable:
 	.byte 0x0b, 0x1a, 0x00, 0x00
 
 VoiceSynth_HandlePan:
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jr nz, VoiceSynth_Pan_SetDirection
 	call VoiceChannel_SetPanDirection
 	ld (4323:16), 0
@@ -4515,7 +4515,7 @@ VoiceSynth_HandleNop43:
 	ret
 
 VoiceSynth_HandleReverb:
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jr nz, VoiceSynth_Reverb_SetParams
 	call VoiceChannel_SetParamByte7
 	ld (4323:16), 0
@@ -4529,7 +4529,7 @@ VoiceSynth_Reverb_SetParams:
 	ret
 
 VoiceSynth_HandleChorus:
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jr nz, VoiceSynth_Chorus_SetParams
 	call VoiceChannel_MergeParamByte5
 	ld (4323:16), 0
@@ -4931,7 +4931,7 @@ VoiceParam_DataEntry_Done:
 	ret
 
 VoiceParam_HandlePan:
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jr nz, VoiceParam_Pan_SetDirection
 	call VoiceChannel_SetPanDirection
 	ld (4323:16), 0
@@ -4950,7 +4950,7 @@ VoiceParam_Pan_StoreAndUpdate:
 	ret
 
 VoiceParam_HandleReverb:
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jr nz, VoiceParam_Reverb_SetParams
 	call VoiceChannel_SetParamByte7
 	ld (4323:16), 0
@@ -4964,7 +4964,7 @@ VoiceParam_Reverb_SetParams:
 	ret
 
 VoiceParam_HandleChorus:
-	bitda 0, (4236)
+	bit 0, (4236:16)
 	jr nz, VoiceParam_Chorus_SetParams
 	call VoiceChannel_MergeParamByte5
 	ld (4323:16), 0
@@ -4980,7 +4980,7 @@ VoiceParam_Chorus_SetParams:
 ToneGen_AdvanceAndValidateVoice:
 	ld xhl, (4349:16)
 	stb_dri B, 0x07, 0xec, 0xf0
-	bitda 1, (0x27d2)
+	bit 1, (0x27d2:16)
 	jr nz, ToneGen_ValidateVoiceLoop
 	call VoiceChannel_AdvanceIndex
 	ld xhl, (4349:16)
@@ -5110,7 +5110,7 @@ VoiceSynth_Algo_ChannelConfig:
 	ret
 VoiceSynth_Algo_ConditionalUpdate:
 	; --- Main routine: bit test, store, conditional call (49 bytes) ---
-	bitda	0, (4236)
+	bit	0, (4236:16)
 	jr nz, VoiceSynth_ConditionalUpdate_SetParams
 	call VoiceChannel_ParamTable1_0x80
 	ld	(4323:16), 0

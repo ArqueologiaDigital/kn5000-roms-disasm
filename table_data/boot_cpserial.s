@@ -743,9 +743,9 @@ BootSerial_WaitTxIdle__outer:
 	jr	z, BootSerial_WaitTxIdle__busy
 	bit_dd8	5, 0x38			; PE bit 5 must be low
 	jr	nz, BootSerial_WaitTxIdle__busy
-	bitda	1, (0x0f64)		; TX-pending flag clear?
+	bit	1, (0x0f64:16)		; TX-pending flag clear?
 	jr	nz, BootSerial_WaitTxIdle__busy
-	bitda	0, (0x0f64)		; RX-active flag clear?
+	bit	0, (0x0f64:16)		; RX-active flag clear?
 	jr	nz, BootSerial_WaitTxIdle__busy
 	jr	BootSerial_WaitTxIdle__check_tx
 BootSerial_WaitTxIdle__busy:

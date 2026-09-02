@@ -15,7 +15,7 @@
 SeqStep_NoteDispatch:
 	dec 4, xsp
 	push xiz
-	bitda 0, (0x287b)
+	bit 0, (0x287b:16)
 	jrl z, SeqStep_NoteExit
 	ldmw2 (xsp + 4), 0x28af
 	ldmw2 (xsp + 6), 0x2666
@@ -199,12 +199,12 @@ SeqStep_EventProcess:
 SeqStep_EventPosManage:
 	ld (9824:16), 0
 	ld (9826:16), 0
-	bitda 0, (0x287b)
+	bit 0, (0x287b:16)
 	jrl nz, SeqStep_EventPosConsumeAdvance
 	jrl SeqStep_EventExit
-	bitda 0, (9824)
+	bit 0, (9824:16)
 	jr z, SeqStep_EventPosCheck
-	bitda 0, (9826)
+	bit 0, (9826:16)
 	call_24 z, SeqStep_DecrementPos
 
 SeqStep_EventPosCheck:
@@ -307,7 +307,7 @@ SeqStep_EventPosConsumeAdvance:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 SeqStep_EventPosFinish:
-	bitda	0, (0x271e)
+	bit	0, (0x271e:16)
 	jrl	z, -285
 	jr	56
 
@@ -322,9 +322,9 @@ SeqStep_EventPosExit:
 	jr nz, SeqStep_EventStorePos
 	cp l, 0x5f
 	jr ugt, SeqStep_EventStorePos
-	bitda 0, (9824)
+	bit 0, (9824:16)
 	jr z, SeqStep_EventPosComplete
-	bitda 0, (9826)
+	bit 0, (9826:16)
 	call_24 z, SeqStep_DecrementPos
 
 SeqStep_EventPosComplete:
@@ -374,7 +374,7 @@ SeqStep_EventStorePos:
 
 SeqStep_EventSetState:
 	ldb l, 0x0
-	bitda 0, (0x271e)
+	bit 0, (0x271e:16)
 	jr nz, SeqStep_EventAdvancePos
 	call SeqData_ReadNextByte
 	add l, 0x60
@@ -434,7 +434,7 @@ SeqStep_DeleteEvent:
 	ld a, (9740:16)
 	bit 7, a
 	jrl nz, SeqStep_DeletePopReturn
-	bitda 0, (0x287b)
+	bit 0, (0x287b:16)
 	jrl nz, SeqStep_DeleteDone
 	calr SeqStep_InsertEvent
 	jrl SeqStep_DeleteExitRestore
@@ -1264,7 +1264,7 @@ SeqStep_EventAdvance:
 	push xiz
 	ldmw2 (xsp + 4), 0x28af
 	ld iz, (9830:16)
-	bitda 0, (0x287b)
+	bit 0, (0x287b:16)
 	jr z, SeqStep_EventAdvanceRead
 	ldmm16 0x28af, 0x273c
 	ldmm16 9830, 0x273e
@@ -1927,7 +1927,7 @@ SeqStep_BoundaryFinal:
 	ret
 
 SeqStep_SkipIfLeftFlag:
-	bitda 0, (0x2879)
+	bit 0, (0x2879:16)
 	jr z, SeqStep_SkipIfLeftDone
 	call PartCtrl_AdvanceReadPos
 	cp (0x287a:16), 0
@@ -2324,7 +2324,7 @@ SeqStep_ProcessC0Ext:
 	jr SeqStep_ProcessC0ExtFinal
 
 SeqStep_ProcessC0ExtCheck:
-	bitda 1, (4393)
+	bit 1, (4393:16)
 	jr nz, SeqStep_ProcessC0ExtProcess
 	ld wa, (0x288b:16)
 	ldw_erp WA, 0xfa
@@ -2387,7 +2387,7 @@ SeqStep_ProcessB0Ext:
 	and a, 0x2
 	sll a, 6
 	ld (3310:16), a
-	bitda 1, (4393)
+	bit 1, (4393:16)
 	jr nz, SeqStep_ProcessB0ExtSkip
 	ld wa, (0x288b:16)
 	ldw_erp WA, 0xfa
@@ -2429,7 +2429,7 @@ SeqStep_ProcessB0ExtDone:
 	ld a, (3387:16)
 	cp a, 0xff
 	jr z, SeqStep_ProcessB0ExtReturn
-	bitda 1, (4393)
+	bit 1, (4393:16)
 	jr nz, SeqStep_ProcessB0ExtReturn
 	ld (xsp + 6), a
 
@@ -2468,7 +2468,7 @@ SeqStep_ProcessB0ExtComplete:
 SeqStep_ProcessB0ExtCleanup:
 	cp (xsp + 4), 0x3
 	jr nz, SeqStep_ProcessB0ExtDone
-	bitda 1, (4393)
+	bit 1, (4393:16)
 	jr nz, SeqStep_ProcessB0ExtReturn
 	ldmi16 (xsp + 6), 0xd3c
 	jr SeqStep_ProcessB0ExtReturn
@@ -2535,7 +2535,7 @@ SeqStep_PlaybackDecrCount:
 SeqStep_PlaybackCheckFill:
 	bit_erpb 0xfb, 0x04
 	jr z, SeqStep_PlaybackCheckBeat
-	bitda 0, (0x28c5)
+	bit 0, (0x28c5:16)
 	jr z, SeqStep_PlaybackCheckBeat
 
 SeqStep_PlaybackCallFill:
@@ -2567,7 +2567,7 @@ SeqStep_PlaybackCheck10408:
 SeqStep_PlaybackCheckFill2:
 	bit_erpb 0xfb, 0x04
 	jr z, SeqStep_PlaybackCheckBeat2
-	bitda 0, (0x28c5)
+	bit 0, (0x28c5:16)
 	jr z, SeqStep_PlaybackCheckBeat2
 
 SeqStep_PlaybackCallExtFill:
@@ -2595,7 +2595,7 @@ SeqStep_PlaybackCheckTiming:
 	jr nz, SeqStep_PlaybackCallPattern
 	cpdi16 0x28b4, 0
 	jr z, SeqStep_PlaybackNoAction
-	bitda 0, (0x28c5)
+	bit 0, (0x28c5:16)
 	jr z, SeqStep_PlaybackNoAction
 
 SeqStep_PlaybackCallPattern:

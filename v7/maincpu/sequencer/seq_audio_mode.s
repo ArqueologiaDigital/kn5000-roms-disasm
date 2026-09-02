@@ -12,7 +12,7 @@
 	ret
 
 AudioMode_CheckAndUpdateStereo:
-	bitda 3, (0x31e8)
+	bit 3, (0x31e8:16)
 	jr z, AudioMode_CheckDone
 	ld a, (0x31e3:16)
 	cp A,0x5d
@@ -206,16 +206,16 @@ AccChannel_PartIndexDone:
 	ret
 
 AccVoice_ProcessPedalChanges:
-	bitda 0, (0x3263)
+	bit 0, (0x3263:16)
 	jr z, .Lc_f535a1
-	bitda 0, (0x3264)
+	bit 0, (0x3264:16)
 	jr nz, .Lc_f535a1
 	xor A,A
 	ld (0x326d:16), a
 	ld (0x326f:16), a
 	anddi8 (0x326e), 0xf3
 	anddi8 (0x328b), 0xc0
-	bitda 0, (0x3270)
+	bit 0, (0x3270:16)
 	jr nz, .Lc_f53596
 	anddi8 (0x328a), 0xc0
 AccVoice_Pedal0_SetAndCheck:
@@ -225,16 +225,16 @@ AccVoice_Pedal0_SetAndCheck:
 	calr AccVoice_CheckChannelSetActive
 AccVoice_Pedal0_Done:
 .Lc_f535a1:
-	bitda 1, (0x3263)
+	bit 1, (0x3263:16)
 	jr z, .Lc_f535d7
-	bitda 1, (0x3264)
+	bit 1, (0x3264:16)
 	jr nz, .Lc_f535d7
 	xor A,A
 	ld (0x326d:16), a
 	ld (0x326f:16), a
 	anddi8 (0x326e), 0xf6
 	anddi8 (0x328b), 0xc0
-	bitda 0, (0x3270)
+	bit 0, (0x3270:16)
 	jr nz, .Lc_f535cc
 	anddi8 (0x328a), 0xc0
 AccVoice_Pedal1_SetAndCheck:
@@ -244,16 +244,16 @@ AccVoice_Pedal1_SetAndCheck:
 	calr AccVoice_CheckChannelSetActive
 AccVoice_Pedal1_Done:
 .Lc_f535d7:
-	bitda 2, (0x3263)
+	bit 2, (0x3263:16)
 	jr z, AccVoice_Pedal2_Done
-	bitda 2, (0x3264)
+	bit 2, (0x3264:16)
 	jr nz, AccVoice_Pedal2_Done
 	xor A,A
 	ld (0x326d:16), a
 	ld (0x326f:16), a
 	anddi8 (0x326e), 0xfa
 	anddi8 (0x328b), 0xc0
-	bitda 0, (0x3270)
+	bit 0, (0x3270:16)
 	jr nz, .Lc_f53602
 	anddi8 (0x328a), 0xc0
 AccVoice_Pedal2_SetAndCheck:
@@ -268,16 +268,16 @@ AccVoice_Pedal2_Done:
 	ret
 
 AccVoice_ProcessLeftPedalChanges:
-	bitda 0, (0x325f)
+	bit 0, (0x325f:16)
 	jr z, .Lc_f53644
-	bitda 0, (0x3260)
+	bit 0, (0x3260:16)
 	jr nz, .Lc_f53644
 	xor A,A
 	ld (0x326e:16), a
 	ld (0x326f:16), a
 	anddi8 (0x326d), 0xfd
 	anddi8 (0x328b), 0xc0
-	bitda 0, (0x3270)
+	bit 0, (0x3270:16)
 	jr nz, .Lc_f53639
 	anddi8 (0x328a), 0xc0
 AccVoice_LeftPedal0_SetAndCheck:
@@ -287,16 +287,16 @@ AccVoice_LeftPedal0_SetAndCheck:
 	calr AccVoice_CheckChannelSetActive
 AccVoice_LeftPedal0_Done:
 .Lc_f53644:
-	bitda 1, (0x325f)
+	bit 1, (0x325f:16)
 	jr z, AccVoice_LeftPedal1_Done
-	bitda 1, (0x3260)
+	bit 1, (0x3260:16)
 	jr nz, AccVoice_LeftPedal1_Done
 	xor A,A
 	ld (0x326e:16), a
 	ld (0x326f:16), a
 	anddi8 (0x326d), 0xfe
 	anddi8 (0x328b), 0xc0
-	bitda 0, (0x3270)
+	bit 0, (0x3270:16)
 	jr nz, .Lc_f5366f
 	anddi8 (0x328a), 0xc0
 AccVoice_LeftPedal1_SetAndCheck:
@@ -330,9 +330,9 @@ AccVoice_BitsCheckDone:
 	ret
 
 AccPitch_CheckTransposeFlags:
-	bitda 6, (0x33d4)
+	bit 6, (0x33d4:16)
 	jr nz, .Lc_f536c0
-	bitda 6, (0x31e5)
+	bit 6, (0x31e5:16)
 	jr z, .Lc_f536c0
 	ld a, (0x31e4:16)
 	inc 1,A
@@ -341,9 +341,9 @@ AccPitch_CheckTransposeFlags:
 	ordi8 (0x328d), 0x3f
 AccPitch_UpdateCheck:
 .Lc_f536c0:
-	bitda 7, (0x33d4)
+	bit 7, (0x33d4:16)
 	jr nz, AccPitch_FinalReturn
-	bitda 7, (0x31e5)
+	bit 7, (0x31e5:16)
 	jr z, AccPitch_FinalReturn
 	ld a, (0x31e4:16)
 	inc 1,A
@@ -354,9 +354,9 @@ AccPitch_FinalReturn:
 	ret
 
 AccChord_ProcessKeyChanges:
-	bitda 0, (0x3261)
+	bit 0, (0x3261:16)
 	jr z, .Lc_f5370b
-	bitda 0, (0x3262)
+	bit 0, (0x3262:16)
 	jr nz, .Lc_f5370b
 	xor A,A
 	ld (0x326e:16), a
@@ -368,9 +368,9 @@ AccChord_ProcessKeyChanges:
 	calr AccChannel_SetDirtyIfActive
 AccChord_KeyChange0_Done:
 .Lc_f5370b:
-	bitda 1, (0x3261)
+	bit 1, (0x3261:16)
 	jr z, AccChord_KeyChange1_Done
-	bitda 1, (0x3262)
+	bit 1, (0x3262:16)
 	jr nz, AccChord_KeyChange1_Done
 	xor A,A
 	ld (0x326e:16), a
@@ -493,7 +493,7 @@ AccentVoice_DetectAndMarkChange:
 	jr nc, AccentVoice_UpdateParamIndex
 	cp (0x3249:16), 0x80
 	jr nc, AccentVoice_UpdateParamIndex
-	bitda 0, (0x3265)
+	bit 0, (0x3265:16)
 	jr z, .Lc_f538fe
 	ld a, (0x3276:16)
 	orda8 a, (0x3277)
@@ -889,7 +889,7 @@ Rhythm_ProcessAllPartsAndLoad:
 	calr AccVoice_LoadRhythmParams_Part3
 	calr AccVoice_LoadRhythmParams_Part4
 	calr AccVoice_LoadRhythmParams_Part5
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr nz, Rhythm_ProcessAllDone
 	call AccVoice_LoadAllChannelParams
 Rhythm_ProcessAllDone:
@@ -909,7 +909,7 @@ RhythmPart_CopyData:
 
 
 RhythmPart1_ProcessAccentData:
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr z, .Lc_f53b8c
 	call AccentData_ComparePart1
 RhythmPart1_CheckAccentData:
@@ -919,7 +919,7 @@ RhythmPart1_CheckAccentData:
 	jr z, RhythmPart1_WriteDone
 	ld e, (0x31aa:16)
 	ld d, (0x31ab:16)
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr nz, .Lc_f53baf
 	ld XHL,0x00003178
 	ld (XHL),E
@@ -1033,12 +1033,12 @@ RingBuf_IndexOK:
 	ret
 
 RhythmPart2_ProcessAccentData:
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr z, .Lc_f53c6b
 	call AccentData_ComparePart2
 RhythmPart2_LoadAndStore:
 .Lc_f53c6b:
-	bitda 2, (0x3290)
+	bit 2, (0x3290:16)
 	ld e, (0x31b1:16)
 	ld d, (0x31b2:16)
 	ld a, (0x31b3:16)
@@ -1052,7 +1052,7 @@ RhythmPart2_LoadAndStore:
 	ld a, (0x31b7:16)
 	ld (0x322b:16), a
 	calr Rhythm_PackVelocityHighBit
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr nz, .Lc_f53cb2
 	ld XHL,0x0000317d
 	calr AccVoiceReg_StoreParamRecord
@@ -1110,12 +1110,12 @@ Rhythm_VelocityPackDone:
 	ret
 
 AccVoice_LoadRhythmParams_Part3:
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr z, .Lc_f53d43
 	call AccentData_ComparePart3
 RhythmPart3_LoadAndStore:
 .Lc_f53d43:
-	bitda 3, (0x3290)
+	bit 3, (0x3290:16)
 	ld e, (0x31b8:16)
 	ld d, (0x31b9:16)
 	ld a, (0x31ba:16)
@@ -1129,7 +1129,7 @@ RhythmPart3_LoadAndStore:
 	ld a, (0x31be:16)
 	ld (0x322c:16), a
 	calr Rhythm_PackVelocityHighBit
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr nz, .Lc_f53d8a
 	ld XHL,0x00003182
 	calr AccVoiceReg_StoreParamRecord
@@ -1168,12 +1168,12 @@ RhythmPart3_WriteDone:
 
 
 AccVoice_LoadRhythmParams_Part4:
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr z, .Lc_f53df4
 	call AccentData_ComparePart4
 RhythmPart4_LoadAndStore:
 .Lc_f53df4:
-	bitda 4, (0x3290)
+	bit 4, (0x3290:16)
 	ld e, (0x31bf:16)
 	ld d, (0x31c0:16)
 	ld a, (0x31c1:16)
@@ -1187,7 +1187,7 @@ RhythmPart4_LoadAndStore:
 	ld a, (0x31c5:16)
 	ld (0x322d:16), a
 	calr Rhythm_PackVelocityHighBit
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr nz, .Lc_f53e3b
 	ld XHL,0x00003187
 	calr AccVoiceReg_StoreParamRecord
@@ -1226,12 +1226,12 @@ RhythmPart4_WriteDone:
 
 
 AccVoice_LoadRhythmParams_Part5:
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr z, .Lc_f53ea5
 	call AccentData_ComparePart5
 RhythmPart5_LoadAndStore:
 .Lc_f53ea5:
-	bitda 5, (0x3290)
+	bit 5, (0x3290:16)
 	ld e, (0x31c6:16)
 	ld d, (0x31c7:16)
 	ld a, (0x31c8:16)
@@ -1245,7 +1245,7 @@ RhythmPart5_LoadAndStore:
 	ld a, (0x31cc:16)
 	ld (0x322e:16), a
 	calr Rhythm_PackVelocityHighBit
-	bitda 0, (0x31e7)
+	bit 0, (0x31e7:16)
 	jr nz, .Lc_f53eec
 	ld XHL,0x0000318c
 	calr AccVoiceReg_StoreParamRecord

@@ -2117,7 +2117,7 @@ MidiChannel_ProcessOutputState:
 	calr MidiChOut_DetectChanges
 	lda xde, (xiz + 0x0e)
 	ld c, (0x8dda:16)
-	bitda 2, (0x041e)
+	bit 2, (0x041e:16)
 	jr nz, .Lc_fc726a
 	ld A,C
 	bit 0x01,C
@@ -2164,7 +2164,7 @@ MidiChannel_CleanupRet:
 	ret
 
 MidiChOut_DetectChanges:
-	bitda 2, (1054)
+	bit 2, (1054:16)
 
 	ret nz
 
@@ -2193,9 +2193,9 @@ MidiChannel_ScanPending:
 	ld a, (0x8eae:16)
 	and A,0x03
 	jr nz, MidiScan_PopIzRet
-	bitda 2, (0x041e)
+	bit 2, (0x041e:16)
 	jr nz, MidiScan_PopIzRet
-	bitda 2, (0x28a7)
+	bit 2, (0x28a7:16)
 	jr nz, MidiScan_AltPathCheck
 	ld XWA,0x00028103
 	call 0xfccc66
@@ -2211,7 +2211,7 @@ MidiChannel_ScanPending:
 	ld (XBC),A
 	jr t, MidiScan_PopIzRet
 MidiScan_CheckBit2InAddr1057:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr nz, MidiScan_PopIzRet
 
 MidiScan_ClearAndReturn:
@@ -2219,7 +2219,7 @@ MidiScan_ClearAndReturn:
 	jr MidiScan_PopIzRet
 
 MidiScan_AltPathCheck:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr nz, MidiScan_PopIzRet
 	andmi8 (xiz + 14), 0xf0
 
@@ -4045,7 +4045,7 @@ MidiChannel_ResetAndConfigure:
 	ld a, (0x8e48:16)
 	set 0x07,A
 	ld (0x8e44:16), a
-	bitda 7, (0x8e48)
+	bit 7, (0x8e48:16)
 	ret Z
 	calr	3085
 	ld	(37003:16), 176
@@ -5723,9 +5723,9 @@ MIDI_LoadParamsAndDispatchCC:
 MIDI_ClearGuardAndDispatchCC:
 	ld	(36937:16), 0
 MIDI_DispatchCC_Guarded:
-	bitda 0, (0xb74b)
+	bit 0, (0xb74b:16)
 	jr nz, MidiGuarded_Return
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiGuarded_Return
 	push XWA
 	push XBC
@@ -5836,7 +5836,7 @@ MIDI_SetupChannelParams:
 
 Audio_WriteBankSelectParams:
 	pushw DE
-	bitda 7, (0x8e46)
+	bit 7, (0x8e46:16)
 	jr z, .Lc_fc9b2d
 	anddi8 (0x8e46), 0x7f
 	stdi16 (0x908b), 0x00b0
@@ -5846,7 +5846,7 @@ Audio_WriteBankSelectParams:
 	calr SwbtWr_WriteVoiceParam_PreserveRegs
 BankSelect_CheckChannel1:
 .Lc_fc9b2d:
-	bitda 7, (0x8e44)
+	bit 7, (0x8e44:16)
 	jr z, BankSelect_Done
 	anddi8 (0x8e44), 0x7f
 	stdi16 (0x908b), 0x01b0
@@ -5859,7 +5859,7 @@ BankSelect_Done:
 	ret
 
 SeqTimer_UpdateTempoReg:
-	bitda 2, (0xfd50)
+	bit 2, (0xfd50:16)
 	jr nz, SeqTimer_Return
 	push xiz
 	push xwa
@@ -5951,7 +5951,7 @@ RegisterBit_Manipulate_Table:
 	.long RegBitManip_Handler_4
 	.long RegBitManip_Handler_4
 RegBitManip_Handler_1:
-	bitda	0, (0xfc69)
+	bit	0, (0xfc69:16)
 	jr	nz, 3
 RegBitManip_Handler_3:
 	and	w, 0xfd
@@ -6037,7 +6037,7 @@ RegBitManip_Handler_4:
 	ret
 MIDI_ParamValidate_CheckBit2:
 	xor hl, hl
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr nz, MidiParamValid_CheckW78
 	cp a, 0xf0
 	jr nc, MidiParamValid_SetInvalid
@@ -6360,13 +6360,13 @@ MIDI_SelectTempoExpressionSource:
 	jr t, Tempo_ExpressionStore
 TempoSrc_CheckAutoPlay:
 .Lc_fc9fcb:
-	bitda 2, (0x0421)
+	bit 2, (0x0421:16)
 	jr z, Tempo_ExpressionStore
 	ld wa, (0x28a8:16)
 	setda 2, (0x905d)
 	jr t, Tempo_ExpressionStore
 Tempo_Expression_Bypass:
-	bitda 0, (0x28c5)
+	bit 0, (0x28c5:16)
 	jr z, Tempo_ExpressionStore
 	ld wa, (0x28aa:16)
 	jr Tempo_ExpressionStore
@@ -7410,9 +7410,9 @@ VoiceNote_SetupCCParams:
 	call	16554376
 	jr	37
 VoiceNote_CheckBankSelect:
-	bitda 7, (0x28ad)
+	bit 7, (0x28ad:16)
 	jr nz, VoiceNote_ApplyBankSelect
-	bitda 7, (0x28ae)
+	bit 7, (0x28ae:16)
 	jr z, VoiceNote_CtrlDone
 VoiceNote_ApplyBankSelect:
 	ld	a, (37057:16)
@@ -7897,9 +7897,9 @@ MidiStream_LoadPedalNext:
 	ret
 
 MidiStream_ProcessRxBuffer:
-	bitda 0, (0xb74b)
+	bit 0, (0xb74b:16)
 	jr nz, MidiStream_ProcessDone
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiStream_ProcessDone
 	stdi16 (0x9097), 0x0000
 MidiStream_DispatchLoop:

@@ -19,7 +19,7 @@ AccompSeq_PeriodicMain:
 	calr AccompSeq_CaptureTimerState
 	anddi8 (0x7e53), 223
 	calr AccompSeq_CheckChannelActive
-	bitda 5, (0x7e53)
+	bit 5, (0x7e53:16)
 	jr nz, AccompSeq_PeriodicReturn
 	calr AccompSeq_FadeOutTick
 	call AccPlay_Entry
@@ -54,12 +54,12 @@ AccompSeq_SaveTimerSnapshot:
 	ret
 
 AccompSeq_CheckChannelActive:
-	bitda 2, (0x7e1f)
+	bit 2, (0x7e1f:16)
 	jr nz, AccompSeq_SetupChannel1
 	jp AccompSeq_ChannelSetupDone
 
 AccompSeq_SetupChannel1:
-	bitda 0, (0x7e24)
+	bit 0, (0x7e24:16)
 	jr z, AccompSeq_SetupChannel2
 	ld (0x7e52:16), 0
 	ld xwa, 0x7aec
@@ -87,7 +87,7 @@ AccompSeq_SetupChannel1:
 	ld (0x7e2c:16), wa
 
 AccompSeq_SetupChannel2:
-	bitda 1, (0x7e24)
+	bit 1, (0x7e24:16)
 	jr z, AccompSeq_ChannelSetupDone
 	ld (0x7e52:16), 1
 	ld xwa, 0x7bec
@@ -137,7 +137,7 @@ AccompSeq_InitEventDispatch:
 	anddi8 (0x7e53), 252
 
 AccompSeq_EventDispatchLoop:
-	bitda 0, (0x7e53)
+	bit 0, (0x7e53:16)
 	jr z, AccompSeq_DispatchByOpcode
 	jp AccompSeq_EventDispatchDone
 
@@ -192,7 +192,7 @@ AccompSeq_SetTimePending:
 	jr AccompSeq_EventDispatchLoop
 
 AccompSeq_HandleEndMarker:
-	bitda 1, (0x7e53)
+	bit 1, (0x7e53:16)
 	jr z, AccompSeq_EndMarkerCalcTime
 	ordi8 0x7e53, 1
 	jr AccompSeq_EventDispatchLoop
@@ -290,7 +290,7 @@ AccompSeq_VRAMHelperData:
 ResolveVRAMAddressForVoice:
 	cp (0x7e25:16), 128
 	jr c, AccompSeq_ResolveVRAMFallback
-	bitda 0, (0x7e6d)
+	bit 0, (0x7e6d:16)
 	jr nz, AccompSeq_ResolveVRAMFallback
 	ld wa, (0x7e42:16)
 	and xwa, 0xfff
@@ -344,7 +344,7 @@ AccompSeq_ReadPatternTimeSig:
 	ret
 
 AccompSeq_HandlePartTransition:
-	bitda 3, (0x7e27)
+	bit 3, (0x7e27:16)
 	jr z, AccompSeq_StopPart
 	cp (0x7e52:16), 1
 	jr z, AccompSeq_TransitionChannel2
@@ -711,7 +711,7 @@ AccompSeq_ProcessNoteOn5:
 	jr nz, AccompSeq_NoteOn5_Return
 	ld a, (0x7e56:16)
 	and a, 0x7f
-	bitda 0, (0x7e57)
+	bit 0, (0x7e57:16)
 	jr z, AccompSeq_NoteOn5_StoreProgram
 	or a, 0x80
 
@@ -821,12 +821,12 @@ AccompSeq_AdvanceBuf_Return:
 	ret
 
 AccompSeq_FadeOutTick:
-	bitda 2, (0x7e1f)
+	bit 2, (0x7e1f:16)
 	jr nz, AccompSeq_FadeOut_Active
 	jr AccompSeq_FadeOut_Return
 
 AccompSeq_FadeOut_Active:
-	bitda 7, (0x7e24)
+	bit 7, (0x7e24:16)
 	jr z, AccompSeq_FadeOut_Return
 	ld wa, (0x7e70:16)
 	dec 1, wa
@@ -847,7 +847,7 @@ AccompSeq_FadeOut_Return:
 	ret
 
 AccompSeq_FadeOutApplyVol:
-	bitda 0, (0x7e24)
+	bit 0, (0x7e24:16)
 	jr z, AccompSeq_FadeOut_Ch2Volume
 	ld l, (0x7e72:16)
 	xor h, h
@@ -864,7 +864,7 @@ AccompSeq_FadeOutApplyVol:
 	call AccompSeq_SendMidiEvent
 
 AccompSeq_FadeOut_Ch2Volume:
-	bitda 1, (0x7e24)
+	bit 1, (0x7e24:16)
 	jr z, AccompSeq_FadeOut_ChReturn
 	ld l, (0x7e73:16)
 	xor h, h
@@ -884,7 +884,7 @@ AccompSeq_FadeOut_ChReturn:
 	ret
 
 AccompSeq_PortaFadeOut:
-	bitda 7, (0x7e24)
+	bit 7, (0x7e24:16)
 	jr z, AccompSeq_PortaFade_Return
 	ld w, (0x7e54:16)
 	cp w, 0xd0
@@ -1228,7 +1228,7 @@ AccompSeq_LoadParams_Alt:
 	ld (0x7e2e:16), wa
 
 AccompSeq_LoadParams_OverrideCheck:
-	bitda 0, (0x7e5f)
+	bit 0, (0x7e5f:16)
 	jr z, AccompSeq_LoadParams_Return
 	ld wa, (0x7e2c:16)
 	ldw_erp WA, 0xe2
@@ -1266,7 +1266,7 @@ AccompSeq_InitMidiEvents:
 	ldw_erp WA, 0xe2
 	ld wa, (0x7e2a:16)
 	ld xiy, xwa
-	bitda 0, (0x7e27)
+	bit 0, (0x7e27:16)
 	jr z, AccompSeq_InitMidi_Ch2
 	ld wa, (xiy + 9)
 	ld e, w
@@ -1308,7 +1308,7 @@ AccompSeq_InitMidi_Ch1Chorus:
 	calr AccompSeq_WriteMidiToBuffer
 
 AccompSeq_InitMidi_Ch2:
-	bitda 1, (0x7e27)
+	bit 1, (0x7e27:16)
 	jr z, AccompSeq_InitMidi_Return
 	ld wa, (xiy + 25)
 	ld e, w
@@ -1359,7 +1359,7 @@ AccompSeq_InitPlayState:
 	ld (1128:16), wa
 	ld (1130:16), a
 	ld (1138:16), a
-	bitda 2, (1055)
+	bit 2, (1055:16)
 	jr nz, AccompSeq_InitPlay_SetCounters
 	ordi8 1055, 1
 
@@ -1458,7 +1458,7 @@ AccompSeq_OutputEvent:
 	jr nz, AccompSeq_Output_CheckManual
 
 AccompSeq_Output_CheckFilter:
-	bitda 3, (0x7f15)
+	bit 3, (0x7f15:16)
 	jr nz, AccompSeq_Output_CheckManual
 	pushw wa
 	pushw hl
@@ -1467,7 +1467,7 @@ AccompSeq_Output_CheckFilter:
 	popw wa
 
 AccompSeq_Output_CheckManual:
-	bitda 1, (0x7f15)
+	bit 1, (0x7f15:16)
 	jr nz, AccompSeq_Output_Return
 	call MidiPkt_SendControlPair
 
@@ -1543,9 +1543,9 @@ AccompSeq_AllNotesOffImpl:
 	and a, 0x3
 	cps a, 0
 	jr z, AccompSeq_AllNotesOff_Send
-	bitda 2, (0x7e27)
+	bit 2, (0x7e27:16)
 	jr z, AccompSeq_AllNotesOff_Stop
-	bitda 7, (0x7e24)
+	bit 7, (0x7e24:16)
 	jr nz, AccompSeq_AllNotesOff_Stop
 	stdi16 (0x7e70), 2048
 	ordi8 0x7e24, 128
@@ -1832,9 +1832,9 @@ AccompSeq_ChordChange_Reinit:
 	calr AccompSeq_ReinitPart
 
 AccompSeq_ChordChange_CheckOverride:
-	bitda 1, (0x7e5f)
+	bit 1, (0x7e5f:16)
 	jr nz, AccompSeq_ChordChange_ApplyOverride
-	bitda 0, (0x7e5f)
+	bit 0, (0x7e5f:16)
 	jr z, AccompSeq_ChordChange_Return
 	ordi8 0x7e6e, 1
 	ordi8 0x7e6f, 1
@@ -1847,9 +1847,9 @@ AccompSeq_ChordChange_Return:
 	ret
 
 AccompSeq_CompareChord:
-	bitda 0, (0x3283)
+	bit 0, (0x3283:16)
 	jr z, AccompSeq_CompareChord_Return
-	bitda 2, (0x28b2)
+	bit 2, (0x28b2:16)
 	jr nz, AccompSeq_CompareChord_Return
 	ld (0x7e60:16), l
 	ld (0x7e61:16), h
@@ -1897,7 +1897,7 @@ AccompSeq_SetupChannels:
 	ld (1138:16), c
 	ld (1128:16), wa
 	ei 0
-	bitda 0, (0x7e24)
+	bit 0, (0x7e24:16)
 	jr z, AccompSeq_SetupCh2
 	ld (0x7e52:16), 0
 	ld xwa, 0x7e40
@@ -1923,7 +1923,7 @@ AccompSeq_SetupChannels:
 	ld (0x7e2c:16), wa
 
 AccompSeq_SetupCh2:
-	bitda 1, (0x7e24)
+	bit 1, (0x7e24:16)
 	jr z, AccompSeq_SetupCh_Return
 	ld (0x7e52:16), 1
 	ld xwa, 0x7e41
@@ -1958,7 +1958,7 @@ AccompSeq_ParseSequenceData:
 	anddi8 (0x7e53), 254
 
 AccompSeq_SeqParse_Loop:
-	bitda 0, (0x7e53)
+	bit 0, (0x7e53:16)
 	jr z, AccompSeq_SeqParse_Dispatch
 	jp AccompSeq_SeqParse_Return
 
@@ -2069,7 +2069,7 @@ AccompSeq_SeqParse_ProgChg_SetCh:
 	ld e, (xiy)
 	and e, 0xf
 	ld (0x7e57:16), e
-	bitda 0, (0x7e56)
+	bit 0, (0x7e56:16)
 	jr z, AccompSeq_SeqParse_ProgChg_Flags
 	or e, 0x10
 
@@ -2083,7 +2083,7 @@ AccompSeq_SeqParse_ProgChg_Flags:
 	ld xiy, (0x7e48:16)
 	ld a, (0x7e55:16)
 	and a, 0x7f
-	bitda 0, (0x7e56)
+	bit 0, (0x7e56:16)
 	jr z, AccompSeq_SeqParse_ProgChg_Store
 	or a, 0x80
 

@@ -1697,7 +1697,7 @@ BitMapOut_DetectChanges:
 	ld (XBC),A
 BitMapOut_DetectChanges_CheckMode:
 .Lc_fb4e26:
-	bitda 5, (0x8dda)
+	bit 5, (0x8dda:16)
 	jr nz, .Lc_fb4e34
 	calr BitMapOut_GetRenderMode
 	bit 0x00,L
@@ -1898,7 +1898,7 @@ BitMapOut_DeltaEncode_CheckBounds:
 	extz XWA
 	add XWA,(XSP+0x08)
 	ld (XWA),0xff
-	bitda 2, (0x8caa)
+	bit 2, (0x8caa:16)
 	jr nz, BitMapOut_DeltaEncode_StoreShortLen
 	ld (0x9046:16), hl
 	jr t, BitMapOut_DeltaEncode_Return
@@ -1910,17 +1910,17 @@ BitMapOut_DeltaEncode_Return:
 	ret
 
 BitMapOut_DispatchIOChanges:
-	bitda 7, (0xf9c4)
+	bit 7, (0xf9c4:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port0
-	bitda 7, (0xf9c7)
+	bit 7, (0xf9c7:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port3
-	bitda 7, (0xf9de)
+	bit 7, (0xf9de:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port1
-	bitda 7, (0xf9e1)
+	bit 7, (0xf9e1:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port4
-	bitda 7, (0xf9f8)
+	bit 7, (0xf9f8:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port2
-	bitda 7, (0xf9fb)
+	bit 7, (0xf9fb:16)
 	ret nz
 	calr BitMapOut_ApplyIOChange_Port5
 	ret

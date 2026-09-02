@@ -11474,7 +11474,7 @@ INTRX1_HANDLER:	; 1F736
 	jr Serial1_RX_Exit
 
 Serial1_RX_NoError:	; 01F74Fh
-	bitda 2, 4148	; Check if RX enabled
+	bit 2, (4148:16)	; Check if RX enabled
 	jr z, Serial1_RX_Exit
 	ld xwa, 0xE00	; Ring buffer descriptor at 0x0E00
 	calr SAVE_BYTE_TO_RING_BUFFER
@@ -11503,7 +11503,7 @@ INTTX1_HANDLER:	; 01F765h
 	push xde
 	push xbc
 	push xwa
-	bitda 0, 4148	; Check sync flag
+	bit 0, (4148:16)	; Check sync flag
 	jr z, Serial1_TX_Normal
 	resda 0, 4148
 	ldio 0xD4, 0xFE	; Send sync byte
@@ -11517,7 +11517,7 @@ Serial1_TX_Normal:	; 01F77Bh
 	st_dd8b L, 0xD4	; Send byte
 
 Serial1_TX_CheckEmpty:	; 01F78Ch
-	bitda 0, 4148
+	bit 0, (4148:16)
 	jr nz, Serial1_TX_Exit
 	ld xwa, 0x1016
 	calr RING_BUFFER_HAS_OVERRUN
@@ -11695,7 +11695,7 @@ Serial1_DataTransmit_Loop:
 	jr z, Serial1_TX_Done
 
 Serial1_TX_LoopBody:
-	bitda 2, 4148
+	bit 2, (4148:16)
 	jr nz, Serial1_TX_ViaRingBuf
 	ld xwa, (xsp + 6)
 	ldb_spi C, 0xE0

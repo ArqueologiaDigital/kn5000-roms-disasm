@@ -703,7 +703,7 @@ __jrt_nop_FF840C:
 MAIN_LOOP:
 	resda 6, 1278	; Clear ready flag
 MAIN_LOOP__wait_loop:
-	bitda 6, (1278); Check if payload ready
+	bit 6, (1278:16); Check if payload ready
 	jr z, MAIN_LOOP__check_status
 	ei 6	; Enable interrupt level 6
 	call PAYLOAD_ENTRY	; Call payload at 0x0400 (4-byte encoding)

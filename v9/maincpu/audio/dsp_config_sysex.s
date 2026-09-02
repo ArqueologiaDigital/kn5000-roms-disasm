@@ -1727,10 +1727,10 @@ MidiOut_SerializeRealtimeLoop:
 	ld a, (1065:16)
 	and a, 0x1f
 	jr z, MidiOut_ReadSysExByte
-	bitda 0, (1065)
+	bit 0, (1065:16)
 	jr z, MidiOut_CheckStart
 	resda 0, 1065
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiOut_SerializeRealtimeLoop
 	ld wa, iz
 	inc 1, iz
@@ -1742,10 +1742,10 @@ MidiOut_SerializeRealtimeLoop:
 
 MidiOut_CheckStart:
 	lda xwa, (0xc0d2:16)
-	bitda 1, (1065)
+	bit 1, (1065:16)
 	jr z, MidiOut_CheckContinue
 	resda 1, 1065
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiOut_SerializeRealtimeLoop
 	ld bc, iz
 	inc 1, iz
@@ -1755,10 +1755,10 @@ MidiOut_CheckStart:
 	jr MidiOut_SerializeRealtimeLoop
 
 MidiOut_CheckContinue:
-	bitda 2, (1065)
+	bit 2, (1065:16)
 	jr z, MidiOut_CheckStop
 	resda 2, 1065
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, MidiOut_SerializeRealtimeLoop
 	ld bc, iz
 	inc 1, iz
@@ -1768,10 +1768,10 @@ MidiOut_CheckContinue:
 	jr MidiOut_SerializeRealtimeLoop
 
 MidiOut_CheckStop:
-	bitda 3, (1065)
+	bit 3, (1065:16)
 	jr z, MidiOut_SerializeRealtimeLoop
 	resda 3, 1065
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jrl nz, MidiOut_SerializeRealtimeLoop
 	ld bc, iz
 	inc 1, iz
@@ -1819,29 +1819,29 @@ GET_COMPUTER_INTERFACE_SELECTION:
 	ret
 
 CompIface_ProcessInput:
-	bitda 3, (0xc1f0)
+	bit 3, (0xc1f0:16)
 	jrl z, CompIface_RampControl
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr z, CompIface_FilterBySource
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr z, CompIface_FilterBySource
-	bitda 4, (0xc1f0)
+	bit 4, (0xc1f0:16)
 	jr z, CompIface_CheckUpDown
-	bitda 5, (0xc1f0)
+	bit 5, (0xc1f0:16)
 	jr z, CompIface_CheckUpDown
 	cpdi16 0x28a8, 0
 	jr nz, CompIface_SetPedalBit
 	jr CompIface_CallFilterA
 
 CompIface_CheckUpDown:
-	bitda 4, (0xc1f0)
+	bit 4, (0xc1f0:16)
 	jr z, CompIface_RampDown
 	call AccWrap_PlayModeStartPlay
 	setda 7, 0x34cd
 	jr CompIface_PostProcess
 
 CompIface_RampDown:
-	bitda 5, (0xc1f0)
+	bit 5, (0xc1f0:16)
 	jr z, CompIface_PostProcess
 	cpdi16 0x28a8, 0
 	jr z, CompIface_RampDown_Start
@@ -1852,17 +1852,17 @@ CompIface_RampDown_Start:
 	jr CompIface_CallSync
 
 CompIface_FilterBySource:
-	bitda 2, (1054)
+	bit 2, (1054:16)
 	jr z, CompIface_FromSource2
-	bitda 4, (0xc1f0)
+	bit 4, (0xc1f0:16)
 	jr z, CompIface_PostProcess
 	call AccWrap_PlayModeDispatch
 	jr CompIface_PostProcess
 
 CompIface_FromSource2:
-	bitda 2, (1057)
+	bit 2, (1057:16)
 	jr z, CompIface_PostProcess
-	bitda 5, (0xc1f0)
+	bit 5, (0xc1f0:16)
 	jr z, CompIface_PostProcess
 	call SeqState_GetFlags
 	and hl, 0x7
@@ -1885,7 +1885,7 @@ CompIface_CallSync:
 
 CompIface_PostProcess:
 	call AccompSeq_StopSequence
-	bitda 6, (0xc1f0)
+	bit 6, (0xc1f0:16)
 	ret z
 	ld wa, (1033:16)
 	subda16 xwa, 0xc1ea
@@ -1904,7 +1904,7 @@ CompIface_RampControl:
 	ld wa, (1033:16)
 	ld bc, wa
 	subda16 xbc, 0xc1ea
-	bitda 0, (0xc1f0)
+	bit 0, (0xc1f0:16)
 	jr z, CompIface_RampDown_Apply
 	cp bc, 0xf
 	ret c
@@ -1936,7 +1936,7 @@ CompIface_RampUp_Clamp:
 	ret
 
 CompIface_RampDown_Apply:
-	bitda 1, (0xc1f0)
+	bit 1, (0xc1f0:16)
 	ret z
 	cp bc, 0xf
 	ret c
@@ -1968,7 +1968,7 @@ CompIface_RampDown_Clamp:
 	ret
 
 CompIface_ResetPedal:
-	bitda 2, (0xc1f0)
+	bit 2, (0xc1f0:16)
 	ret z
 	resda 2, 0xc1f0
 	ldw wa, 0x4d
@@ -2070,37 +2070,37 @@ DSPCfg_ProcessInput:
 	ld c, a
 	and a, 0xc0
 	ret z
-	bitda 0, (0xc1f0)
+	bit 0, (0xc1f0:16)
 	jr z, DSPCfg_Chorus_Active
 	bit 7, c
 	jr z, DSPCfg_Reverb_CheckSustain
-	bitda 7, (0xc07e)
+	bit 7, (0xc07e:16)
 	jr nz, DSPCfg_Reverb_CheckSustain
 	resda 0, 0xc1f0
 
 DSPCfg_Reverb_CheckSustain:
-	bitda 6, (0xc07f)
+	bit 6, (0xc07f:16)
 	jrl z, DSPCfg_UpdateOutputVolume
-	bitda 6, (0xc07e)
+	bit 6, (0xc07e:16)
 	jrl z, DSPCfg_UpdateOutputVolume
 	resda 0, 0xc1f0
 	jrl DSPCfg_SetFadeBit
 
 DSPCfg_Chorus_Active:
-	bitda 2, (0xc1f0)
+	bit 2, (0xc1f0:16)
 	jr z, DSPCfg_FadeOut_Active
 	bit 7, c
 	jr z, DSPCfg_Chorus_CheckSustain
-	bitda 7, (0xc07e)
+	bit 7, (0xc07e:16)
 	jr nz, DSPCfg_Chorus_CheckSustain
 	resda 2, 0xc1f0
 	ldw wa, 0x4d
 	call CtrlPanel_SetIndicatorLED
 
 DSPCfg_Chorus_CheckSustain:
-	bitda 6, (0xc07f)
+	bit 6, (0xc07f:16)
 	jrl z, DSPCfg_UpdateOutputVolume
-	bitda 6, (0xc07e)
+	bit 6, (0xc07e:16)
 	jrl z, DSPCfg_UpdateOutputVolume
 	resda 2, 0xc1f0
 	ldw wa, 0x4d
@@ -2111,29 +2111,29 @@ DSPCfg_Chorus_CheckSustain:
 	jrl DSPCfg_UpdateOutputVolume
 
 DSPCfg_FadeOut_Active:
-	bitda 1, (0xc1f0)
+	bit 1, (0xc1f0:16)
 	jr z, DSPCfg_EQ_Active
 	bit 7, c
 	jr z, DSPCfg_FadeOut_CheckSustain
-	bitda 7, (0xc07e)
+	bit 7, (0xc07e:16)
 	jr z, DSPCfg_FadeOut_CheckSustain
 	setda 0, 0xc1f0
 	resda 1, 0xc1f0
 
 DSPCfg_FadeOut_CheckSustain:
-	bitda 6, (0xc07f)
+	bit 6, (0xc07f:16)
 	jr z, DSPCfg_UpdateOutputVolume
-	bitda 6, (0xc07e)
+	bit 6, (0xc07e:16)
 	jr nz, DSPCfg_UpdateOutputVolume
 	resda 1, 0xc1f0
 	jr DSPCfg_UpdateOutputVolume
 
 DSPCfg_EQ_Active:
-	bitda 3, (0xc1f0)
+	bit 3, (0xc1f0:16)
 	jr z, DSPCfg_Idle_EnableChorus
 	bit 7, c
 	jr z, DSPCfg_EQ_CheckSustain
-	bitda 7, (0xc07e)
+	bit 7, (0xc07e:16)
 	jr z, DSPCfg_EQ_CheckSustain
 	setda 0, 0xc1f0
 	resda 3, 0xc1f0
@@ -2141,9 +2141,9 @@ DSPCfg_EQ_Active:
 	call CtrlPanel_SetIndicatorLED
 
 DSPCfg_EQ_CheckSustain:
-	bitda 6, (0xc07f)
+	bit 6, (0xc07f:16)
 	jr z, DSPCfg_UpdateOutputVolume
-	bitda 6, (0xc07e)
+	bit 6, (0xc07e:16)
 	jr nz, DSPCfg_UpdateOutputVolume
 	resda 3, 0xc1f0
 	ldw wa, 0x4e
@@ -2153,7 +2153,7 @@ DSPCfg_EQ_CheckSustain:
 DSPCfg_Idle_EnableChorus:
 	bit 7, c
 	jr z, DSPCfg_Idle_CheckSustain
-	bitda 7, (0xc07e)
+	bit 7, (0xc07e:16)
 	jr z, DSPCfg_Idle_CheckSustain
 	setda 2, 0xc1f0
 	ldw wa, 0x4d
@@ -2164,9 +2164,9 @@ DSPCfg_Idle_EnableChorus:
 	calr CompIface_WriteVolume
 
 DSPCfg_Idle_CheckSustain:
-	bitda 6, (0xc07f)
+	bit 6, (0xc07f:16)
 	jr z, DSPCfg_UpdateOutputVolume
-	bitda 6, (0xc07e)
+	bit 6, (0xc07e:16)
 	jr z, DSPCfg_UpdateOutputVolume
 
 DSPCfg_SetFadeBit:
@@ -2180,7 +2180,7 @@ DSPCfg_UpdateOutputVolume:
 	calr CompIface_WriteVolume
 
 DSPCfg_CheckChorusMuted:
-	bitda 2, (0xc1f0)
+	bit 2, (0xc1f0:16)
 	ret z
 	lds wa, 0
 	calr CompIface_WriteVolume
@@ -2233,7 +2233,7 @@ DSPCfg_CompParam_SubType7:
 	orddm16 0xc1f0, xhl
 
 DSPCfg_CompParam_Bit1:
-	bitda 1, (0xc07f)
+	bit 1, (0xc07f:16)
 	jr z, DSPCfg_CompParam_Bit2
 	ld xwa, 0x2a11
 	call SndParam_LookupReadOnly
@@ -2243,7 +2243,7 @@ DSPCfg_CompParam_Bit1:
 	orddm16 0xc1f0, xhl
 
 DSPCfg_CompParam_Bit2:
-	bitda 2, (0xc07f)
+	bit 2, (0xc07f:16)
 	ret z
 	ld xwa, 0x2a12
 	call SndParam_LookupReadOnly
@@ -5273,7 +5273,7 @@ AudioInit_ProcessModeChange:
 	ret z
 	call Audio_CheckInitStatus
 	anddi16 0xc594, 0xfffb
-	bitda 1, (0xfc67)
+	bit 1, (0xfc67:16)
 	jr z, AudioModeChange_Handler
 	ld wa, (0xc594:16)
 	bit 4, wa
@@ -5315,7 +5315,7 @@ Audio_CheckSubsystemReady:
 	ld wa, (0xc598:16)
 	and wa, 0x60
 	call_24 z, AudioInit_RefreshToneBank
-	bitda 1, (0xfc67)
+	bit 1, (0xfc67:16)
 	jr z, AudioSubsystem_Callback
 	ld wa, (0xc594:16)
 	bit 4, wa
@@ -5366,7 +5366,7 @@ Audio_InitDispatchReturn:
 	ld wa, (0xc598:16)
 	bit 2, wa
 	jr z, AudioDispatch_SetAccMode
-	bitda 0, (0x28b2)
+	bit 0, (0x28b2:16)
 	jr z, AudioDispatch_SetAccMode
 
 AudioDispatch_ClearAccFlags:
@@ -5389,7 +5389,7 @@ AudioDispatch_SetTimerBase:
 	ld (0xc5a0:16), 16
 
 AudioDispatch_CheckStereoMode:
-	bitda 1, (0xfc67)
+	bit 1, (0xfc67:16)
 	jr z, AudioVoice_Callback
 	ld wa, (0xc594:16)
 	bit 4, wa
@@ -5422,7 +5422,7 @@ AudioVoice_SkipToDispatch:
 	jp AudioInit_DispatchChanges
 
 AudioMode_SetStereoFlags:
-	bitda 0, (0xfc69)
+	bit 0, (0xfc69:16)
 	ret z
 	ordi16 0xc596, 128
 	ordi16 0xc594, 4
@@ -5430,7 +5430,7 @@ AudioMode_SetStereoFlags:
 	ret
 
 AudioMode_ResetVoiceState:
-	bitda 1, (0xfc67)
+	bit 1, (0xfc67:16)
 	jr z, AudioVoiceReset_Handler
 	ld wa, (0xc594:16)
 	bit 4, wa
@@ -5477,17 +5477,17 @@ AudioMode_ConfigureExternal:
 
 AudioMode_ConfigExternal_Off:
 	anddi16 0xc594, 0xffef
-	bitda 0, (0xfc66)
+	bit 0, (0xfc66:16)
 	jr z, AudioMode_ConfigExternal_CheckBit1
 	setda 0, 0xc1fe
 
 AudioMode_ConfigExternal_CheckBit1:
-	bitda 1, (0xfc66)
+	bit 1, (0xfc66:16)
 	jr z, AudioMode_ConfigExternal_CheckStereo
 	setda 1, 0xc1fe
 
 AudioMode_ConfigExternal_CheckStereo:
-	bitda 1, (0xfc67)
+	bit 1, (0xfc67:16)
 	jr z, AudioMode_ConfigExternal_NoStereo
 	ordi16 0xc596, 32
 	jr AudioMode_ConfigExternal_MergeFlags
@@ -6274,7 +6274,7 @@ UIStateEvt_PlayModeGuard_Data:
 	; --- Guard/dispatch: check flags, set/clear bits, conditional calls (54 bytes) ---
 	cp	(0xc07d:16), 2
 	ret nz
-	bitda	6, (0xc07e)
+	bit	6, (0xc07e:16)
 	jr z, UIStateEvt_PlayModeGuard_ClearBit
 	ordi16	0xc596, 8192
 	ret
@@ -6477,9 +6477,9 @@ UIStateEvt_MuteToggle_Data:
 	ld	a, (0xc07d:16)
 	cp	a, 16
 	ret	nz
-	bitda	0, (0xc07f)
+	bit	0, (0xc07f:16)
 	ret	z
-	bitda	0, (0xc07e)
+	bit	0, (0xc07e:16)
 	jr	z, 8
 	ordi16	0xc594, 1
 	jr	6

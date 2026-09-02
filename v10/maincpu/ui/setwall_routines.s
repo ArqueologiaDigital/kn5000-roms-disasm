@@ -132,7 +132,7 @@ SetWall_InlineCodeBlock:
 	swi	7
 
 SetWall_EventHandler:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr z, SetWall_EventHandler_Active
 	jp SetWall_Return
 
@@ -290,7 +290,7 @@ SetWall_InitCallSequences:
 	ret
 
 SetWall_SlotSetup:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr z, SetWall_SlotSetup_Active
 	jp SetWall_SlotSetup_Return
 
@@ -320,7 +320,7 @@ SetWall_SlotSetup_Return:
 	ret
 
 SetWall_SlotUpdate:
-	bitda 2, (1056)
+	bit 2, (1056:16)
 	jr z, SetWall_SlotUpdate_Active
 	jp SetWall_SlotUpdate_Return
 
@@ -349,7 +349,7 @@ SetWall_ACSlotChange:
 	jr nz, SetWall_ACSlot_IndexChange
 
 SetWall_ACSlot_CheckPanel:
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr z, SetWall_ACSlot_NoPanel
 	cp (3390:16), 3
 	jr nz, SetWall_ACSlot_PanelChange
@@ -814,7 +814,7 @@ SetWall_ParseStream_Advance:
 	jrl SetWall_ParseStream_Return
 
 SetWall_ParseStream_CheckD1D2:
-	bitda 0, (0x2879)
+	bit 0, (0x2879:16)
 	jr nz, SetWall_ParseStream_Advance
 
 SetWall_ParseStream_ReadEvent:
@@ -845,7 +845,7 @@ SetWall_ParseStream_TypeC0:
 	and a, 0x3
 	stb_erp A, 0x3c
 	jr nz, SetWall_ParseStream_Advance
-	bitda 1, (4393)
+	bit 1, (4393:16)
 	jr nz, SetWall_ParseStream_TypeC0_Loop
 	push xiz
 	ld xiz, (4349:16)
@@ -916,7 +916,7 @@ SetWall_ParseStream_B0_ShiftLoop:
 	sla_sd16b 0xee, 0x0c
 	djnz8 c, SetWall_ParseStream_B0_ShiftLoop
 	popw bc
-	bitda 1, (4393)
+	bit 1, (4393:16)
 	jr nz, SetWall_ParseStream_B0_Iter
 	push xiz
 	ld xiz, (4349:16)
@@ -937,9 +937,9 @@ SetWall_ParseStream_B0_ShiftLoop:
 	pop xiz
 	cp (0x287a:16), 0
 	jrl nz, SetWall_ParseStream_Return
-	bitda 0, (0x289d)
+	bit 0, (0x289d:16)
 	jr nz, SetWall_ParseStream_B0_Iter
-	bitda 2, (0x289d)
+	bit 2, (0x289d:16)
 	jrl nz, SetWall_ParseStream_ReadEvent
 	jrl SetWall_ParseStream_Advance
 
@@ -949,7 +949,7 @@ SetWall_ParseStream_B0_Iter:
 SetWall_ParseStream_B0_ByteLoop:
 	cps c, 0
 	jr nz, SetWall_ParseStream_B0_Byte1
-	bitda 0, (3389)
+	bit 0, (3389:16)
 	jr z, SetWall_ParseStream_B0_Write
 	and a, 0xfc
 	jr SetWall_ParseStream_B0_Write
@@ -968,7 +968,7 @@ SetWall_ParseStream_B0_Byte1:
 SetWall_ParseStream_B0_Byte3:
 	cps c, 3
 	jr nz, SetWall_ParseStream_B0_Byte4
-	bitda 1, (4393)
+	bit 1, (4393:16)
 	jr nz, SetWall_ParseStream_B0_Write
 	ld a, (3388:16)
 	jr SetWall_ParseStream_B0_Write
@@ -978,7 +978,7 @@ SetWall_ParseStream_B0_Byte4:
 	jr nz, SetWall_ParseStream_B0_Write
 	cp (3387:16), 255
 	jr z, SetWall_ParseStream_B0_Write
-	bitda 1, (4393)
+	bit 1, (4393:16)
 	jr nz, SetWall_ParseStream_B0_Write
 	ld a, (3387:16)
 
@@ -1537,7 +1537,7 @@ SetWall_DualPassScanner:
 	anddi8 (0x287b), 223
 	ld a, (1075:16)
 	ld (0x288e:16), a
-	bitda 2, (0x287b)
+	bit 2, (0x287b:16)
 	jrl z, SetWall_DualPass_Done
 	ld a, (0x288d:16)
 	call SetWall_SingleSlotResolve
@@ -1683,9 +1683,9 @@ SetWall_SkipEvents_Return:
 
 SetWall_ReplayScanner:
 	push_sd16w 0xaf, 0x28
-	bitda 2, (0x287b)
+	bit 2, (0x287b:16)
 	jrl z, SetWall_Replay_Done
-	bitda 5, (0x287b)
+	bit 5, (0x287b:16)
 	jrl nz, SetWall_Replay_Done
 	xor hl, hl
 	ld xhl, (0x2897:16)
@@ -2118,14 +2118,14 @@ SetWall_Sync_CheckPanelBit:
 	call SeqTimer_PostTempoUpdate
 	cp (0xf23d:16), 255
 	jr z, SetWall_Sync_PanelOff
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr z, SetWall_Sync_FinalUpdate
 	anddi8 (0xfdad), 251
 	xor a, a
 	jr SetWall_Sync_PostEvent
 
 SetWall_Sync_PanelOff:
-	bitda 2, (0xfdad)
+	bit 2, (0xfdad:16)
 	jr nz, SetWall_Sync_FinalUpdate
 	ordi8 0xfdad, 4
 	ldb a, 0x4

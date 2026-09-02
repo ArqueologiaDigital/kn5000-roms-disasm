@@ -676,9 +676,9 @@ BitMapOut_Snapshot_PostProcess:
 	pop xhl
 	pop xde
 	calr BitMapOut_DetectChanges
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, BitMapOut_Snapshot_CheckActive
-	bitda 1, (0xfd2c)
+	bit 1, (0xfd2c:16)
 	call_24 nz, BitMapOut_DispatchIOChanges
 
 BitMapOut_Snapshot_CheckActive:
@@ -686,7 +686,7 @@ BitMapOut_Snapshot_CheckActive:
 	call SndParam_LookupReadOnly
 	cps hl, 1
 	jr nz, BitMapOut_Snapshot_SetFlags
-	bitda 6, (0xfd9e)
+	bit 6, (0xfd9e:16)
 	call_24 z, MidiSysEx_SendAllParams
 
 BitMapOut_Snapshot_SetFlags:
@@ -925,7 +925,7 @@ BitMapOut_RestoreVoiceFields:
 	resm 7, (xwa)
 	resm 7, (xwa + 1)
 	resm 7, (xwa + 2)
-	bitda 3, (0x8d52)
+	bit 3, (0x8d52:16)
 	jr z, BitMapOut_RestoreFields_PostCheck
 	ld c, (xiy)
 	res 4, c
@@ -2435,7 +2435,7 @@ BitMapOut_DetectChanges:
 	ld (xbc), a
 
 BitMapOut_DetectChanges_CheckMode:
-	bitda 5, (0x8e76)
+	bit 5, (0x8e76:16)
 	jr nz, BitMapOut_DetectChanges_UseShortList
 	calr BitMapOut_GetRenderMode
 	bit 0, l
@@ -2623,7 +2623,7 @@ BitMapOut_DeltaEncode_CheckBounds:
 	extz xwa
 	add xwa, (xsp + 8)
 	ld (xwa), 0xff
-	bitda 2, (0x8d46)
+	bit 2, (0x8d46:16)
 	jr nz, BitMapOut_DeltaEncode_StoreShortLen
 	ld (0x90e2:16), hl
 	jr BitMapOut_DeltaEncode_Return
@@ -2637,17 +2637,17 @@ BitMapOut_DeltaEncode_Return:
 	ret
 
 BitMapOut_DispatchIOChanges:
-	bitda 7, (0xf9c4)
+	bit 7, (0xf9c4:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port0
-	bitda 7, (0xf9c7)
+	bit 7, (0xf9c7:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port3
-	bitda 7, (0xf9de)
+	bit 7, (0xf9de:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port1
-	bitda 7, (0xf9e1)
+	bit 7, (0xf9e1:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port4
-	bitda 7, (0xf9f8)
+	bit 7, (0xf9f8:16)
 	call_24 z, BitMapOut_ApplyIOChange_Port2
-	bitda 7, (0xf9fb)
+	bit 7, (0xf9fb:16)
 	ret nz
 	calr BitMapOut_ApplyIOChange_Port5
 	ret
@@ -2872,7 +2872,7 @@ BitMapOut_DeltaEncode_TypeDefaultB:
 	res 7, a
 	cp a, w
 	jrl z, BitMapOut_DeltaEncode_HelperReturn
-	bitda 0, (0x8d46)
+	bit 0, (0x8d46:16)
 	jrl nz, BitMapOut_DeltaEncode_HelperReturn
 	ld de, hl
 	inc 1, hl
@@ -3072,7 +3072,7 @@ BitMapOut_DeltaEncode_Type48Loop:
 	res 7, a
 	cp a, c
 	jrl z, BitMapOut_DeltaEncode_Type48Return
-	bitda 0, (0x8d46)
+	bit 0, (0x8d46:16)
 	jrl nz, BitMapOut_DeltaEncode_Type48Return
 	ld bc, hl
 	inc 1, hl

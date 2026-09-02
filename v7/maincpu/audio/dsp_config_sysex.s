@@ -637,10 +637,10 @@ BitMapOut_MergeOutputFields:
 	ld a, (0x0429:16)
 	and A,0x1f
 	jr z, .Lc_fdb329
-	bitda 0, (0x0429)
+	bit 0, (0x0429:16)
 	jr z, .Lc_fdb2cc
 	resda 0, (0x0429)
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fdb297
 	ld WA,IZ
 	inc 1,IZ
@@ -651,10 +651,10 @@ BitMapOut_MergeOutputFields:
 	jr t, .Lc_fdb297
 .Lc_fdb2cc:
 	lda xwa, (0xc036:16)
-	bitda 1, (0x0429)
+	bit 1, (0x0429:16)
 	jr z, .Lc_fdb2ed
 	resda 1, (0x0429)
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fdb297
 	ld BC,IZ
 	inc 1,IZ
@@ -663,10 +663,10 @@ BitMapOut_MergeOutputFields:
 	ld (XBC),0xfa
 	jr t, .Lc_fdb297
 .Lc_fdb2ed:
-	bitda 2, (0x0429)
+	bit 2, (0x0429:16)
 	jr z, .Lc_fdb30a
 	resda 2, (0x0429)
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fdb297
 	ld BC,IZ
 	inc 1,IZ
@@ -675,10 +675,10 @@ BitMapOut_MergeOutputFields:
 	ld (XBC),0xfb
 	jr t, .Lc_fdb297
 .Lc_fdb30a:
-	bitda 3, (0x0429)
+	bit 3, (0x0429:16)
 	jr z, .Lc_fdb297
 	resda 3, (0x0429)
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jrl nz, .Lc_fdb297
 	ld BC,IZ
 	inc 1,IZ
@@ -783,7 +783,7 @@ MidiSeq_SendMultiByte_PC2SendLoop:
 MidiSeq_SendMultiByte_PC2NextByte:
 	.byte 0x4e, 0x00, 0xd9, 0xa9, 0xda, 0xa8, 0x1d, 0xb7
 	.byte 0x71, 0xfc, 0x0e
-	bitda 2, (0xc154)
+	bit 2, (0xc154:16)
 MidiSeq_SendMultiByte_SerialCountInit:
 	ret Z
 	resda 2, (0xc154)
@@ -2539,7 +2539,7 @@ DSPCfg_EventType51:
 	ld wa, (0xc4fc:16)
 	bit 0x02,WA
 	jr z, .Lc_fdd756
-	bitda 0, (0x28b2)
+	bit 0, (0x28b2:16)
 	jr z, .Lc_fdd756
 .Lc_fdd741:
 	anddi16 (0xc4fa), 0xfdff

@@ -412,9 +412,9 @@ MidiCC_VoiceParam_12:
 	.byte 0x45, 0xeb, 0x85, 0xec, 0x61, 0xc8, 0x61, 0xc1
 	.byte 0xd2, 0x95, 0x61, 0xc1, 0xd2, 0x95, 0x3f, 0x20
 	.byte 0x6e, 0x88, 0x0e
-	bitda 0, (0xb74b)
+	bit 0, (0xb74b:16)
 	jr nz, .Lc_fcfdb9
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fcfdb9
 	ld (0x95b0:16), bc
 	ld (0x95b2:16), de
@@ -5116,7 +5116,7 @@ SeqVoice_DispatchProcess_Data:
 	.byte 0x81, 0xed, 0xc1, 0x27, 0x04, 0x3c, 0xd3, 0x06
 	.byte 0x00, 0x0e
 	ldw DE, 0x09c4
-	bitda 2, (0xbc7c)
+	bit 2, (0xbc7c:16)
 	jr z, .Lc_fd68fc
 	ldw DE, 0x03e8
 .Lc_fd68fc:
@@ -7274,11 +7274,11 @@ VoiceParam_MultiMode_StubRet:
 VoiceParam_AssSwb_MultiBlock_Data:
 	.incbin "includes/romslices/v7_transplant_VoiceParam_AssSwb_MultiBlock_Data_head.bin"
 	push XIZ
-	bitda 4, (0xfd50)
+	bit 4, (0xfd50:16)
 	jr nz, .Lc_fd989b
-	bitda 3, (0xfd56)
+	bit 3, (0xfd56:16)
 	jr z, .Lc_fd989b
-	bitda 0, (0xb74b)
+	bit 0, (0xb74b:16)
 	jr nz, .Lc_fd989b
 	lda xbc, (0xbca0:16)
 	ld wa, (0x9044:16)

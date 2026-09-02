@@ -147,7 +147,7 @@ SelectPasswordMode:
 	call CheckAnySlotHasData
 	cps l, 0
 	jr z, .Lc_f8c6c1
-	bitda 7, (0x8971)
+	bit 7, (0x8971:16)
 	jr nz, .Lc_f8c6c1
 	lds_erpb 0xfa, 1
 SelectMode_CheckSaveAvail:
@@ -159,7 +159,7 @@ SelectMode_CheckSaveAvail:
 	call CheckSlotIndexValid
 	cps l, 0
 	jr z, SelectMode_DetermineMode
-	bitda 6, (0x8971)
+	bit 6, (0x8971:16)
 	jr nz, SelectMode_DetermineMode
 	lds_erpb 0xfb, 1
 SelectMode_DetermineMode:
