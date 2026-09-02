@@ -102,9 +102,10 @@ SCREENDATA_BINS = $(patsubst %,v10/maincpu/includes/generated/style_ui_screendat
 ACCOMP_NAMES = accomp_section_widget accomp_part_widget accomp_display_full
 ACCOMP_BINS = $(patsubst %,v10/maincpu/includes/generated/%.bin,$(ACCOMP_NAMES))
 
-SE_NAMES = se_drumkit_display se_rhythm_transport_tables se_name_editor se_compare_screen se_parameter_grid se_transport_display se_setup_sel3 se_apply_confirm se_general_edit
-# Note: se_drumkit_display and se_rhythm_transport_tables are .incbin'd in assembly.
-# The remaining SE files are compiled but awaiting .incbin integration.
+SE_NAMES = se_drumkit_display se_rhythm_transport_tables se_name_editor se_compare_screen se_parameter_grid se_transport_display se_setup_sel3 se_apply_confirm se_general_edit se_setup_ctrl_full se_setup_ctrl_list se_setup_env se_setup_labels se_setup_nav_full se_setup_params_full se_setup_rhythm se_setup_sel1 se_setup_sel2 se_setup_sel_rects se_setup_transport se_setup_waveform
+# Every name above is .incbin'd by assembly; se_apply_confirm and
+# se_setup_editor_full/se_setup_sel4 land in storage/flash_floppy_handlers.s,
+# the rest in audio/sound_editor_ui.s.
 SE_BINS = $(patsubst %,v10/maincpu/includes/generated/%.bin,$(SE_NAMES))
 SE_LINK_LD = v10/maincpu/audio/sound_editor_screens/se_screens_link.ld
 ACCOMP_LINK_LD = v10/maincpu/sequencer/accomp_screens/accomp_screens_link.ld
