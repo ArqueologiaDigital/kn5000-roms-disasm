@@ -1160,4 +1160,42 @@ DisplaySmfSequenceList:
 	lds iz, 0
 
 DispSeqList_LoopBody:
-	.incbin "includes/romslices/v7_fix_dispseqlist_loopbody.bin"
+	ld	de, iz
+	sll	de, 5
+	lda_d16	xbc, (33904)
+	extz	xde
+	add	xde, xbc
+	stb_erp	a, 248
+	ld	(xde), a
+	ld	wa, (xsp+2)
+	add	wa, iz
+	call	16297264
+	ld	xbc, xhl
+	ld	wa, iz
+	sll	wa, 5
+	lds	de, 1
+	add	de, wa
+	lda_d16	xhl, (33904)
+	ld	wa, de
+	extz	xwa
+	add	xwa, xhl
+	ld	de, (xsp+2)
+	add	de, iz
+	inc	1, de
+	pushw	12
+	pushw	1
+	call	16289232
+	ld	de, iz
+	sll	de, 5
+	lda_d16	xbc, (33904)
+	extz	xde
+	add	xde, xbc
+	ld	xwa, (xsp+4)
+	ld	xbc, 29360143
+	call	16423243
+	inc	1, iz
+	cp	iz, 10
+	jr	lt, -98
+	popw	iz
+	inc	6, xsp
+	ret	

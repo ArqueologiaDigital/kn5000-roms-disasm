@@ -9013,7 +9013,10 @@ AccDir_Periodic_Ret:
 	ret
 
 AccDir_JumpTable:
-	.incbin "includes/romslices/v7_transplant_AccDir_JumpTable.bin"
+	nop
+	nop
+	call	16104266
+	ret
 AccProcess_Entry:
 	call AccProcess_TimerCompare
 	ret
