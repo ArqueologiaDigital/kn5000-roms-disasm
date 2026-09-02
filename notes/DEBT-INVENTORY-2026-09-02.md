@@ -130,6 +130,32 @@ require the original bytes).
    largest genuine block is v7's 123,927 B of romslice transplants.
 2. The v9/v10 misframed islands (~14,727 B each), the largest measured
    code-as-`.byte` debt.
-3. Teach the LLVM backend to encode the forms it can already decode; that alone
-   unblocks 976 B in the subcpu payload.
+3. ~~Teach the LLVM backend to encode the forms it can already decode~~ —
+   **PARTLY DONE 2026-09-02, and the picture changed.** Two decoder bugs fixed
+   (`ad8129f59880`), one of them a SILENT MISCOMPILE: the ROM's
+   `bf 04 02 01 00` disassembled to text that re-encoded as `bf 04 14 01 00`,
+   accepted with no diagnostic. **569 B unblocked and measured** — the three
+   `DSP_Bytecode_Op01/02/03` handlers now round-trip byte-exact, 203
+   instructions. Of the ~407 B TaskEvent/FIFO/TaskSched figure, only **14 B**
+   is proven; the lane refused to round up, and the rest fails for a different
+   cause. **The 569 B are now CONVERTIBLE and nobody has converted them** —
+   that is the cheapest remaining win in the tree.
 4. Measure v7's code-as-`.byte` debt — the one image with no census in that shape.
+
+5. ★ **The DECODE leg, which is now the bigger half.** The disassembler has
+   *zero* support for two whole families the assembler encodes fine:
+   the register-indexed `SriRR*` group (`st_rrb`, `ld_rr*`, `lda_rr`, …) has no
+   case anywhere in `TLCS900Disassembler.cpp`, and `decodeERPPrefix()` is a
+   literal stub returning `Fail` for ~20 mnemonics. This is why 312 B stayed
+   invisible to every automated audit for months, and why **33 of 34 v7 code
+   slices fail a disassemble/re-assemble round trip**. Its price tag is
+   unknown, unlike the encode leg's.
+
+6. ⚠ **A latent ENCODER ambiguity found while refusing (5).** `ST_RRW` and
+   `ST_RRL` are documented as encoding **byte-identically to `ST_RRB`** — the
+   size adjustment in `TLCS900MCCodeEmitter.cpp` only applies when
+   `Opcode < 0xF0`, and this family's prefix is fixed at `0xF3`. If that is
+   real, the three sizes are indistinguishable from bytes alone, a decoder
+   cannot be written without guessing, and the ENCODER may be losing size
+   information today. Needs hardware-verified ground truth before anyone
+   writes the decoder.
