@@ -11646,8 +11646,8 @@ Serial1_F5_BaudRate_Switch:
 	ret
 
 Audio_CheckQueuedData_Send:
-	ldda32 xwa, 4140
-	ldda32 xbc, 4160
+	ld xwa, (4140:16)
+	ld xbc, (4160:16)
 	ld xde, xbc
 	sub xde, xwa
 	cp xde, 0x87

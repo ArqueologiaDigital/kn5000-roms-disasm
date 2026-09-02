@@ -600,14 +600,14 @@ FDC_DMA_Setup_Exit:
 FDC_Setup_DMA_Ack_Dest:
 	ld xhl, 0x120000
 	ldc_cr32 xhl, 0x0c
-	ldda32 xhl, (0x8a4c)
+	ld xhl, (0x8a4c:16)
 	ldc_cr32 xhl, 0x2c
 	ldb a, 0x0
 	ldc_cr8 a, 0x4e
 	jr FDC_Port_Reset_Or_Noop
 
 FDC_Setup_DMA_Src_Ack:
-	ldda32 xhl, (0x8a4c)
+	ld xhl, (0x8a4c:16)
 	ldc_cr32 xhl, 0x0c
 	ld xhl, 0x120000
 	ldc_cr32 xhl, 0x2c
@@ -2272,7 +2272,7 @@ FDC_ByteTransfer_PIO:
 	cps	wa, 3
 	ret	nz
 	ldb_da	c, (0x120000)
-	ldda32	xhl, (0x8a4e)
+	ld	xhl, (0x8a4e:16)
 	ld	(xhl), c
 	inc	1, xhl
 	stda32	0x8a4e, xhl
@@ -2284,7 +2284,7 @@ FDC_ByteTransfer_PIO:
 	calr	61988
 	calr	62000
 	ret
-	ldda32	xhl, (0x8a4e)
+	ld	xhl, (0x8a4e:16)
 	ld	c, (xhl)
 	stb_da	(0x120000), c
 	inc	1, xhl

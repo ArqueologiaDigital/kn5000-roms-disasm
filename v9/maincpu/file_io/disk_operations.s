@@ -58,7 +58,7 @@ FCopy_HandleExecute:
 	pushw 0x6
 	pushw 0x0
 	call FileIO_ReadHeader_ParseLoop
-	ldda32 xwa, (0x7f60)
+	ld xwa, (0x7f60:16)
 	ld xbc, 0x1c0000f
 	ld xde, 0x850c
 	call ApPostEvent
@@ -105,7 +105,7 @@ FCopy_Scroll_Apply:
 	pushw 0x6
 	pushw 0x0
 	call FileIO_ReadHeader_ParseLoop
-	ldda32 xwa, (0x7f60)
+	ld xwa, (0x7f60:16)
 	ld xbc, 0x1c0000f
 	ld xde, 0x850c
 	jr FCopy_DispatchFA9D58

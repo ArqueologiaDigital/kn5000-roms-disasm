@@ -19,7 +19,7 @@ FDemoText_ReturnNull:
 FDemoText_LookupTableEntry:
 	extz	wa
 	sla	wa, 2
-	ldda32	xbc, (36950)
+	ld	xbc, (36950:16)
 	exts	xwa
 	add	xwa, xbc
 	ld	xhl, (xwa)

@@ -3126,7 +3126,7 @@ Boot_WaitFDCReady__wfdc_poll:
 
 	; Timeout handling
 Boot_WaitFDCReady__wfdc_timeout_check:
-	ldda32 xwa, (3072); LD XWA, (0x0C00)
+	ld xwa, (3072:16); LD XWA, (0x0C00)
 	cp xwa, 0x1F4	; CP XWA, 0x000001F4 (500)
 	jr ule, Boot_WaitFDCReady__wfdc_continue	; 63 13
 
@@ -3782,7 +3782,7 @@ HDAE5000_ReinitPPI_ProgramPayload__ppi_wait_loop:
 ; -----------------------------------------------------------------------------
 LZSS_ReadByte:
 	pushw iz	; PUSH IZ
-	ldda32 xwa, (3108); LD XWA, (0x0C24) - current position
+	ld xwa, (3108:16); LD XWA, (0x0C24) - current position
 	cpda32 xwa, 3104	; CP XWA, (0x0C20) - compare with expected size
 	jr c, LZSS_ReadByte__not_eof	; JR C, .not_eof
 	ldw hl, 0xFFFF	; LD HL, 0xFFFF - return EOF
@@ -3816,7 +3816,7 @@ LZSS_ReadByte__read_sectors:
 	lda_24 xwa, (0x0099a4); LDA XWA, 0x0099A4
 	stda32 3116, xwa	; LD (0x0C2C), XWA - reset buffer pointer
 LZSS_ReadByte__read_byte:
-	ldda32 xwa, (3116); LD XWA, (0x0C2C) - get buffer pointer
+	ld xwa, (3116:16); LD XWA, (0x0C2C) - get buffer pointer
 	stb_dpi A, 0xE0	; LDA XBC, XWA+ (post-increment read)
 	stda32 3116, xwa	; LD (0x0C2C), XWA - save updated pointer
 	ld l, (xbc)	; LD L, (XBC) - read byte into L
@@ -3847,7 +3847,7 @@ LZSS_OutputByte:
 	cps e, 3	; CP E, 3 - check if 4 bytes buffered
 	jr nz, LZSS_OutputByte__not_full	; JR NZ, .not_full
 	; Flush 4-byte buffer to destination
-	ldda32 xwa, (3112); LD XWA, (0x0C28) - dest ptr
+	ld xwa, (3112:16); LD XWA, (0x0C28) - dest ptr
 	stb_dpi B, 0xE2	; LDA XDE, XWA+ (post-increment)
 	stda32 3112, xwa	; LD (0x0C28), XWA
 	ld xbc, (xbc)	; LD XBC, (XBC) - load 4 bytes from buffer
@@ -3877,7 +3877,7 @@ LZSS_OutputByte_Alt:
 	stb_d8 (3126), a; LD (0x0C36), A
 	cps c, 1	; CP C, 1
 	jr nz, LZSS_OutputByte_Alt__not_full	; JR NZ, .not_full
-	ldda32 xwa, (3128); LD XWA, (0x0C38)
+	ld xwa, (3128:16); LD XWA, (0x0C38)
 	stb_dpi A, 0xE1	; LDA XBC, XWA+
 	stda32 3128, xwa	; LD (0x0C38), XWA
 	ld de, (xde)	; LD DE, (XDE)
@@ -3944,7 +3944,7 @@ LZSS_ParseHeader__read_more:
 	stdi16 (3120), 42; LD (0x0C30), 0x002A
 	stdi16 (3122), 200; LD (0x0C32), 0x00C8
 	; Check if already at target size
-	ldda32 xwa, (3108); LD XWA, (0x0C24)
+	ld xwa, (3108:16); LD XWA, (0x0C24)
 	cpda32 xwa, 3104	; CP XWA, (0x0C20)
 	jr nc, LZSS_ParseHeader__done	; JR NC, .exit (already done)
 	; Copy remaining raw bytes
@@ -3953,7 +3953,7 @@ LZSS_ParseHeader__decompress_loop:
 	extz hl	; EXTZ HL
 	ld wa, hl	; LD WA, HL
 	calr LZSS_OutputByte_Alt	; CALR LZSS_OutputByte_Alt
-	ldda32 xwa, (3108); LD XWA, (0x0C24)
+	ld xwa, (3108:16); LD XWA, (0x0C24)
 	cpda32 xwa, 3104	; CP XWA, (0x0C20)
 	jr c, LZSS_ParseHeader__decompress_loop	; JR C, .decompress_loop
 LZSS_ParseHeader__done:
@@ -3988,11 +3988,11 @@ LZSS_Decompress:
 	lds32 xwa, 0	; LD XWA, 0
 	stda32 3108, xwa	; LD (0x0C24), XWA - window fill index
 LZSS_Decompress__prefill_loop:
-	ldda32 xwa, (3108); LD XWA, (0x0C24)
+	ld xwa, (3108:16); LD XWA, (0x0C24)
 	ld xbc, (xsp + 16)	; LD XBC, (XSP+0x10) - window base
 	add xbc, xwa	; ADD XBC, XWA
 	ld (xbc), 0x0	; LD (XBC), 0x00
-	ldda32 xwa, (3108); LD XWA, (0x0C24)
+	ld xwa, (3108:16); LD XWA, (0x0C24)
 	inc 1, xwa	; INC 1, XWA
 	stda32 3108, xwa	; LD (0x0C24), XWA
 	cp xwa, 0xFEE	; CP XWA, 0x00000FEE
@@ -4057,7 +4057,7 @@ LZSS_Decompress__read_header_loop:
 	adddm32 3104, xhl	; ADD (0x0C20), XHL
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	extz xhl	; EXTZ XHL
-	ldda32 xwa, (3104); LD XWA, (0x0C20)
+	ld xwa, (3104:16); LD XWA, (0x0C20)
 	add xwa, xhl	; ADD XWA, XHL
 	stda32 3104, xwa	; LD (0x0C20), XWA
 	cpdm32 3108, xwa	; CP (0x0C24), XWA
@@ -4168,7 +4168,7 @@ LZSS_Decompress__copy_loop:
 
 LZSS_Decompress__check_done:
 	; === Check if decompression complete ===
-	ldda32 xwa, (3108); LD XWA, (0x0C24)
+	ld xwa, (3108:16); LD XWA, (0x0C24)
 	cpda32 xwa, 3104	; CP XWA, (0x0C20)
 	jrl c, LZSS_Decompress__decompress_loop	; JRL C, .decompress_loop
 

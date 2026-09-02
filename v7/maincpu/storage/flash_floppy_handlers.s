@@ -705,16 +705,16 @@ NoteEvent_LoadSoundGenParams:
 	lda xix, (xsp + 16)
 	ldw bc, 0x80
 	ldirw
-	ldda32 xix, (3186)
+	ld xix, (3186:16)
 	ld xiy, MSP_Default_Signature1
 	ldw bc, 0x30
 	ldirw
-	ldda32 xwa, (3186)
+	ld xwa, (3186:16)
 	ld xiy, MSP_Default_VoiceEnable
 	lda_dri XIX, 0xe1, 0xc0, 0x13
 	ldw bc, 0x20
 	ldirw
-	ldda32 xbc, (3186)
+	ld xbc, (3186:16)
 	ld xwa, 0xba0
 	add xbc, xwa
 	ld xwa, xbc
@@ -728,7 +728,7 @@ NoteEvent_CopyVoiceParamsLoop:
 	lda xwa, (xwa + 32)
 	cp xwa, xde
 	jr ule, NoteEvent_CopyVoiceParamsLoop
-	ldda32 xwa, (3186)
+	ld xwa, (3186:16)
 	lda_dri XWA, 0xe1, 0x40, 0x0c
 	ld xde, xwa
 	lda_dri XWA, 0xe1, 0xe0, 0x06
@@ -757,7 +757,7 @@ NoteEvent_CopyExtParamsInner:
 	lda xbc, (xwa + 8)
 	ld (xsp + 12), xbc
 	lda xhl, (xwa + 10)
-	ldda32 xwa, (3186)
+	ld xwa, (3186:16)
 	lda xwa, (xwa + 96)
 	lds de, 4
 
@@ -867,7 +867,7 @@ Flash_InitBytecodeBlock:
 	lda_24	xbc, 14770428
 	ld_rrb	a, xbc, wa
 	ld	(xsp+6), a
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	stda32	14610, xwa
 	ldib_erp	251, 0
 	ld	c, (xsp+6)
@@ -883,9 +883,9 @@ Flash_InitBytecodeBlock:
 	inc1b_erp	251
 	cp_erpb	251, 10
 	jr	c, -43
-	ldda32	xwa, 3182
+	ld	xwa, (3182:16)
 	stda32	14610, xwa
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	stda32	14614, xwa
 	.byte 0xf1, 0x14, 0x35, 0xb0
 	ldib_erp	251, 0
@@ -965,8 +965,8 @@ Flash_InitBytecodeBlock:
 	ld	a, (xsp+10)
 	extz	wa
 	calr	5189
-	ldda32	xix, 3186
-	ldda32	xiy, 3182
+	ld	xix, (3186:16)
+	ld	xiy, (3182:16)
 	ldw	bc, 46080
 	.byte 0x95, 0x11
 	ld	a, (xsp+12)
@@ -974,7 +974,7 @@ Flash_InitBytecodeBlock:
 	lda_24	xbc, 14770428
 	ld_rrb	a, xbc, wa
 	ld	(xsp+6), a
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	stda32	14610, xwa
 	ldib_erp	251, 0
 	ld	c, (xsp+10)
@@ -994,7 +994,7 @@ Flash_InitBytecodeBlock:
 	extz	wa
 	calr	320
 	stda32	14610, xhl
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	stda32	14614, xwa
 	.byte 0xf1, 0x14, 0x35, 0xb0
 	ldib_erp	251, 0
@@ -1017,7 +1017,7 @@ Flash_InitBytecodeBlock:
 	bit	0, wa
 	jr	z, 24
 	ld	(xsp+8), 1
-	ldda32	xwa, 14614
+	ld	xwa, (14614:16)
 	stda32	14610, xwa
 	.byte 0xc1, 0x11, 0x39, 0x19, 0x10, 0x39
 	call	16116212
@@ -1032,8 +1032,8 @@ Flash_InitBytecodeBlock:
 	jr	nz, 55
 	.byte 0x98, 0x02, 0x3f, 0xff, 0xff
 	jr	nz, 48
-	ldda32	xix, 3182
-	ldda32	xiy, 3186
+	ld	xix, (3182:16)
+	ld	xiy, (3186:16)
 	ldw	bc, 46080
 	.byte 0x95, 0x11, 0x8f, 0x02, 0x3f, 0x02
 	jr	nz, 15
@@ -1092,8 +1092,8 @@ Flash_InitBytecodeBlock:
 	ret
 	jrl	-1298
 PartGrid_ColumnDispatch:
-	ldda32 xhl, (3182)
-	ldda32 xbc, (3186)
+	ld xhl, (3182:16)
+	ld xbc, (3186:16)
 	cp a, 0x1e
 	jr nc, PartGrid_CopyHLtoBC
 	cp a, 0xa
@@ -1113,19 +1113,19 @@ PartGrid_ColumnDispatch:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PartGrid_ColumnJumpTable:
-	ldda32	xhl, (3190)
+	ld	xhl, (3190:16)
 	jr	38
-	ldda32	xhl, (3194)
+	ld	xhl, (3194:16)
 	jr	32
-	ldda32	xhl, (3198)
+	ld	xhl, (3198:16)
 	jr	26
-	ldda32	xhl, (3202)
+	ld	xhl, (3202:16)
 	jr	20
-	ldda32	xhl, (3206)
+	ld	xhl, (3206:16)
 	jr	14
-	ldda32	xhl, (3210)
+	ld	xhl, (3210:16)
 	jr	8
-	ldda32	xhl, (3214)
+	ld	xhl, (3214:16)
 	jr	t, 0x02
 
 PartGrid_CopyHLtoBC:
@@ -1436,7 +1436,7 @@ NoteEvent_Store:
 
 NoteEventBuffer_CopyToSlot:
 	ld c, a
-	ldda32 xwa, (3186)
+	ld xwa, (3186:16)
 	extz bc
 	dec 1, bc
 	cps bc, 0
@@ -1452,19 +1452,19 @@ NoteEventBuffer_CopyToSlot:
 ; Selects destination buffer pointer based on case, then copies 46080 bytes
 ; Offset table at 0xe16128
 NOTE_EVENT_DISPATCH_1:
-	ldda32 xbc, (3190); Case 0: Load dest pointer
+	ld xbc, (3190:16); Case 0: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ldda32 xbc, (3194); Case 1: Load dest pointer
+	ld xbc, (3194:16); Case 1: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ldda32 xbc, (3198); Case 2: Load dest pointer
+	ld xbc, (3198:16); Case 2: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ldda32 xbc, (3202); Case 3: Load dest pointer
+	ld xbc, (3202:16); Case 3: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ldda32 xbc, (3206); Case 4: Load dest pointer
+	ld xbc, (3206:16); Case 4: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ldda32 xbc, (3210); Case 5: Load dest pointer
+	ld xbc, (3210:16); Case 5: Load dest pointer
 	jr NOTE_EVENT_COPY_COMMON
-	ldda32 xbc, (3214); Case 6: Load dest pointer (falls through)
+	ld xbc, (3214:16); Case 6: Load dest pointer (falls through)
 NOTE_EVENT_COPY_COMMON:	; F1717D - Common handler
 	ld xiy, xbc	; XIY = destination pointer
 	ld xix, xwa	; XIX = source pointer
@@ -1481,7 +1481,7 @@ NoteEventBuffer_Store:
 	ld a, (xsp + 8)
 	extz wa
 	calr PartGrid_ColumnDispatch_Default
-	ldda32 xwa, (3186)
+	ld xwa, (3186:16)
 	ld (xsp), xwa
 	ld a, (xsp + 8)
 	extz wa
@@ -1498,11 +1498,11 @@ NoteEventBuffer_Store:
 ; Note event dispatch table 2
 ; 7 cases (WA 0-6), offset table at 0xe16136
 NOTE_EVENT_DISPATCH_2:
-	ldda32 xwa, (3190)
+	ld xwa, (3190:16)
 	ld (xsp + 4), xwa
 	jrl Flash_WriteSectorWithMirrorCopy
 NOTE_EVENT_DISPATCH_2b:
-	ldda32 xwa, (3194)
+	ld xwa, (3194:16)
 	ld (xsp + 4), xwa
 
 Flash_SectorWriteExecute:
@@ -1534,19 +1534,19 @@ Flash_CopyMirrorLoop:
 	sub xde, 0x9800
 	lds wa, 1
 	jr Flash_EraseAndWriteFinal
-	ldda32 xwa, (3198)
+	ld xwa, (3198:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
-	ldda32 xwa, (3202)
+	ld xwa, (3202:16)
 	ld (xsp + 4), xwa
 	jr Flash_SectorWriteExecute
-	ldda32 xwa, (3206)
+	ld xwa, (3206:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
-	ldda32 xwa, (3210)
+	ld xwa, (3210:16)
 	ld (xsp + 4), xwa
 	jr Flash_SectorWriteExecute
-	ldda32 xwa, (3214)
+	ld xwa, (3214:16)
 	ld (xsp + 4), xwa
 	jr Flash_WriteSectorWithMirrorCopy
 
@@ -1589,7 +1589,7 @@ Flash_EraseAndWriteFinal:
 	ret
 
 Flash_StoreBaseAndInitAccPatch:
-	ldda32	xwa, (3186)
+	ld	xwa, (3186:16)
 	stda32	(14610), xwa
 	jp	16166403
 Flash_ExtendedOpsBlock:
@@ -1627,7 +1627,7 @@ Flash_ExtendedOpsBlock:
 	cpw (XIX), 0xffff
 	jr z, .Lc_f173a6
 	ldb L, 0x00
-	ldda32 xbc, (0x0c92)
+	ld xbc, (0x0c92:16)
 .Lc_f17377:
 	ld A,L
 	extz WA
@@ -1667,7 +1667,7 @@ Flash_ExtendedOpsBlock:
 	ld E,L
 	extz DE
 	add DE,0x0010
-	ldda32 xwa, (0x0c92)
+	ld xwa, (0x0c92:16)
 	ldb_dri a, 0x07, 0xe0, 0xe8
 	cps a, 0
 	jr z, .Lc_f173e0
@@ -2099,30 +2099,30 @@ Flash_ExtendedOpsBlock:
 	.byte 0xf3, 0x07, 0xe8, 0xe0, 0x02, 0x00, 0x00, 0xce
 	.byte 0x61, 0xcf, 0x61, 0xcf, 0xcf, 0x32, 0x67, 0xc2
 	.byte 0x0e
-	ldda32 xix, (0x0c96)
-	ldda32 xiy, (0x0c92)
+	ld xix, (0x0c96:16)
+	ld xiy, (0x0c92:16)
 	ldw BC, 0x8000
 	ldirw
-	ldda32 xix, (0x0c96)
+	ld xix, (0x0c96:16)
 	ld XIY,MSP_Default_Sequencer
 	ldw BC, 0x0008
 	ldirw
-	ldda32 xwa, (0x0c96)
+	ld xwa, (0x0c96:16)
 	ld XIY,MSP_Default_SeqReserved
 	lda xix, (xwa + 0x10)
 	ldw BC, 0x0020
 	ldirw
-	ldda32 xwa, (0x0c96)
+	ld xwa, (0x0c96:16)
 	ld XIY,MSP_Default_SeqReserved_0x40
 	lda xix, (xwa + 0x50)
 	ldw BC, 0x0008
 	ldirw
-	ldda32 xbc, (0x0c96)
-	ldda32 xde, (0x0c92)
+	ld xbc, (0x0c96:16)
+	ld xde, (0x0c92:16)
 	lds wa, 1
 	jp Flash_EraseSectorAndWrite
 	ldb L, 0x00
-	ldda32 xde, (0x0c92)
+	ld xde, (0x0c92:16)
 	ldb B, 0x00
 	cps a, 0
 	jr nz, .Lc_f17f68
@@ -2176,7 +2176,7 @@ VoiceParam_SubtractBase:
 VoiceParam_AddOffset:
 	extz de
 	add hl, de
-	ldda32 xwa, (3222)
+	ld xwa, (3222:16)
 	stb_dri C, 0x07, 0xe0, 0xec
 	ret
 
@@ -2522,8 +2522,8 @@ SlotTable_Insert1850_Next:
 
 Flash_WriteBackSlotTable:
 	pushw_erp 0xfa
-	ldda32 xix, (3222)
-	ldda32 xiy, (3218)
+	ld xix, (3222:16)
+	ld xiy, (3218:16)
 	ldw bc, 0x8000
 	ldirw
 	lda_d16 xwa, (1850)
@@ -2557,8 +2557,8 @@ Flash_WriteBackSlot_Loop:
 	jr c, Flash_WriteBackSlot_Loop
 
 Flash_WriteBackSlot_Erase:
-	ldda32 xbc, (3222)
-	ldda32 xde, (3218)
+	ld xbc, (3222:16)
+	ld xde, (3218:16)
 	lds wa, 1
 	call Flash_EraseSectorAndWrite
 	popw_erp 0xfa
@@ -2714,7 +2714,7 @@ Flash_SlotUpdateOpsBlock:
 	cp (XWA+0x02),0x4b
 	jrl nz, .Lc_f187bf
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x46)
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2724,7 +2724,7 @@ Flash_SlotUpdateOpsBlock:
 	lds wa, 1
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x4a)
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2734,7 +2734,7 @@ Flash_SlotUpdateOpsBlock:
 	lds wa, 2
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x4e)
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2744,7 +2744,7 @@ Flash_SlotUpdateOpsBlock:
 	lds wa, 3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x52)
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2754,7 +2754,7 @@ Flash_SlotUpdateOpsBlock:
 	lds wa, 4
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x56)
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2764,7 +2764,7 @@ Flash_SlotUpdateOpsBlock:
 	lds wa, 5
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x5a)
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2774,7 +2774,7 @@ Flash_SlotUpdateOpsBlock:
 	lds wa, 6
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x5e)
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
@@ -2783,19 +2783,19 @@ Flash_SlotUpdateOpsBlock:
 	jr lt, .Lc_f187bb
 	lds wa, 7
 	calr NoteEventBuffer_Store
-	ldda32 xix, (0x0c96)
-	ldda32 xiy, (0x0c92)
+	ld xix, (0x0c96:16)
+	ld xiy, (0x0c92:16)
 	ldw BC, 0x8000
 	ldirw
-	ldda32 xwa, (0x0c96)
+	ld xwa, (0x0c96:16)
 	ld XBC,0x0000f400
 	call FileIO_ReadBlock
 	call FileIO_ReturnError
 	ld IZ,HL
 	cps iz, 0
 	jr lt, .Lc_f187bb
-	ldda32 xbc, (0x0c96)
-	ldda32 xde, (0x0c92)
+	ld xbc, (0x0c96:16)
+	ld xde, (0x0c92:16)
 	lds wa, 1
 	call Flash_EraseSectorAndWrite
 	call 0xfefeaf
@@ -2815,7 +2815,7 @@ Flash_SlotUpdateOpsBlock:
 	lda	xix, (xsp+16)
 	ldw	bc, 512
 	.byte 0x95, 0x11
-	ldda32	xbc, 3190
+	ld	xbc, (3190:16)
 	lds32	xhl, 0
 	ld	l, (xbc+46)
 	ld	a, (xbc+47)
@@ -2829,7 +2829,7 @@ Flash_SlotUpdateOpsBlock:
 	sll	xix, 4
 	ld	xwa, (xsp+12)
 	ld	(xwa), xix
-	ldda32	xde, 3194
+	ld	xde, (3194:16)
 	lds32	xhl, 0
 	ld	l, (xde+46)
 	ld	a, (xde+47)
@@ -2842,7 +2842,7 @@ Flash_SlotUpdateOpsBlock:
 	sll	xix, 4
 	ld	xwa, (xsp+8)
 	ld	(xwa), xix
-	ldda32	xde, 3198
+	ld	xde, (3198:16)
 	lds32	xhl, 0
 	ld	l, (xde+46)
 	ld	a, (xde+47)
@@ -2855,7 +2855,7 @@ Flash_SlotUpdateOpsBlock:
 	sll	xix, 4
 	ld	xwa, (xsp+4)
 	ld	(xwa), xix
-	ldda32	xde, 3202
+	ld	xde, (3202:16)
 	lds32	xhl, 0
 	ld	l, (xde+46)
 	ld	a, (xde+47)
@@ -2866,7 +2866,7 @@ Flash_SlotUpdateOpsBlock:
 	add	xix, xhl
 	sll	xix, 4
 	ld	(xde), xix
-	ldda32	xix, 3206
+	ld	xix, (3206:16)
 	lds32	xhl, 0
 	ld	l, (xix+46)
 	ld	a, (xix+47)
@@ -2877,7 +2877,7 @@ Flash_SlotUpdateOpsBlock:
 	add	xix, xhl
 	sll	xix, 4
 	ld	(xiy), xix
-	ldda32	xix, 3210
+	ld	xix, (3210:16)
 	lds32	xhl, 0
 	ld	l, (xix+46)
 	ld	a, (xix+47)
@@ -2888,7 +2888,7 @@ Flash_SlotUpdateOpsBlock:
 	add	xix, xhl
 	sll	xix, 4
 	ld	(xiz), xix
-	ldda32	xix, 3214
+	ld	xix, (3214:16)
 	lds32	xhl, 0
 	ld	l, (xix+46)
 	ld	a, (xix+47)
@@ -2932,7 +2932,7 @@ Flash_SlotUpdateOpsBlock:
 	jrl	lt, 296
 	lds	wa, 1
 	calr	-6169
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	lds32	xde, 0
 	ld	e, (xwa+46)
 	lds32	xbc, 0
@@ -2946,7 +2946,7 @@ Flash_SlotUpdateOpsBlock:
 	jrl	lt, 256
 	lds	wa, 2
 	calr	-6209
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	lds32	xde, 0
 	ld	e, (xwa+46)
 	lds32	xbc, 0
@@ -2960,7 +2960,7 @@ Flash_SlotUpdateOpsBlock:
 	jrl	lt, 216
 	lds	wa, 3
 	calr	-6249
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	lds32	xde, 0
 	ld	e, (xwa+46)
 	lds32	xbc, 0
@@ -2974,7 +2974,7 @@ Flash_SlotUpdateOpsBlock:
 	jrl	lt, 176
 	lds	wa, 4
 	calr	-6289
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	lds32	xde, 0
 	ld	e, (xwa+46)
 	lds32	xbc, 0
@@ -2988,7 +2988,7 @@ Flash_SlotUpdateOpsBlock:
 	jrl	lt, 136
 	lds	wa, 5
 	calr	-6329
-	ldda32	xhl, 3186
+	ld	xhl, (3186:16)
 	lds32	xde, 0
 	ld	e, (xhl+46)
 	lds32	xbc, 0
@@ -3003,7 +3003,7 @@ Flash_SlotUpdateOpsBlock:
 	jr	lt, 95
 	lds	wa, 6
 	calr	-6370
-	ldda32	xhl, 3186
+	ld	xhl, (3186:16)
 	lds32	xde, 0
 	ld	e, (xhl+46)
 	lds32	xbc, 0
@@ -3018,7 +3018,7 @@ Flash_SlotUpdateOpsBlock:
 	jr	lt, 54
 	lds	wa, 7
 	calr	-6411
-	ldda32	xhl, 3186
+	ld	xhl, (3186:16)
 	lds32	xde, 0
 	ld	e, (xhl+46)
 	lds32	xbc, 0
@@ -3031,7 +3031,7 @@ Flash_SlotUpdateOpsBlock:
 	call	16287669
 	cps	hl, 0
 	jr	lt, 13
-	ldda32	xwa, 3218
+	ld	xwa, (3218:16)
 	ld	xbc, 62464
 	call	16288283
 	call	16287669
@@ -3061,7 +3061,7 @@ FloppyDisk_LoadNoteEvents:
 	cp (XWA+0x02),0x4b
 	jrl nz, Floppy_SetHLFF9A_RetZero
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x46)
 	ld XIX,(XSP+0x0406)
 	call (XIX)
@@ -3073,7 +3073,7 @@ FloppyDisk_LoadNoteEvents:
 	lds wa, 1
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x4a)
 	ld XIX,(XSP+0x0406)
 	call (XIX)
@@ -3085,7 +3085,7 @@ FloppyDisk_LoadNoteEvents:
 	lds wa, 2
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x4e)
 	ld XIX,(XSP+0x0406)
 	call (XIX)
@@ -3097,7 +3097,7 @@ FloppyDisk_LoadNoteEvents:
 	lds wa, 3
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x52)
 	ld XIX,(XSP+0x0406)
 	call (XIX)
@@ -3109,7 +3109,7 @@ FloppyDisk_LoadNoteEvents:
 	lds wa, 4
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x56)
 	ld XIX,(XSP+0x0406)
 	call (XIX)
@@ -3121,7 +3121,7 @@ FloppyDisk_LoadNoteEvents:
 	lds wa, 5
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x5a)
 	ld XIX,(XSP+0x0406)
 	call (XIX)
@@ -3133,7 +3133,7 @@ FloppyDisk_LoadNoteEvents:
 	lds wa, 6
 	calr NoteEventBuffer_Store
 	calr NoteEvent_LoadSoundGenParams
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	ld XBC,(XSP+0x5e)
 	ld XIX,(XSP+0x0406)
 	call (XIX)
@@ -3144,11 +3144,11 @@ FloppyDisk_LoadNoteEvents:
 	jr lt, FloppyCtrl_LoadIzAndContinue
 	lds wa, 7
 	calr NoteEventBuffer_Store
-	ldda32 xix, (0x0c96)
-	ldda32 xiy, (0x0c92)
+	ld xix, (0x0c96:16)
+	ld xiy, (0x0c92:16)
 	ldw BC, 0x8000
 	ldirw
-	ldda32 xwa, (0x0c96)
+	ld xwa, (0x0c96:16)
 	ld XIX,(XSP+0x0406)
 	ld XBC,0x0000f400
 	call (XIX)
@@ -3157,8 +3157,8 @@ FloppyDisk_LoadNoteEvents:
 	ld IZ,HL
 	cps iz, 0
 	jr lt, FloppyCtrl_LoadIzAndContinue
-	ldda32 xbc, (0x0c96)
-	ldda32 xde, (0x0c92)
+	ld xbc, (0x0c96:16)
+	ld xde, (0x0c92:16)
 	lds wa, 1
 	call Flash_EraseSectorAndWrite
 	call 0xfefeaf
@@ -3186,7 +3186,7 @@ FloppyDisk_ComputeToneParams:
 	lda xix, (xsp + 16)
 	ldw bc, 0x200
 	ldirw
-	ldda32 xbc, (3190)
+	ld xbc, (3190:16)
 	lds32 xhl, 0
 	ld l, (xbc + 46)
 	ld a, (xbc + 47)
@@ -3200,7 +3200,7 @@ FloppyDisk_ComputeToneParams:
 	sll xix, 4
 	ld xwa, (xsp + 12)
 	ld (xwa), xix
-	ldda32 xde, (3194)
+	ld xde, (3194:16)
 	lds32 xhl, 0
 	ld l, (xde + 46)
 	ld a, (xde + 47)
@@ -3213,7 +3213,7 @@ FloppyDisk_ComputeToneParams:
 	sll xix, 4
 	ld xwa, (xsp + 8)
 	ld (xwa), xix
-	ldda32 xde, (3198)
+	ld xde, (3198:16)
 	lds32 xhl, 0
 	ld l, (xde + 46)
 	ld a, (xde + 47)
@@ -3226,7 +3226,7 @@ FloppyDisk_ComputeToneParams:
 	sll xix, 4
 	ld xwa, (xsp + 4)
 	ld (xwa), xix
-	ldda32 xde, (3202)
+	ld xde, (3202:16)
 	lds32 xhl, 0
 	ld l, (xde + 46)
 	ld a, (xde + 47)
@@ -3237,7 +3237,7 @@ FloppyDisk_ComputeToneParams:
 	add xix, xhl
 	sll xix, 4
 	ld (xde), xix
-	ldda32 xix, (3206)
+	ld xix, (3206:16)
 	lds32 xhl, 0
 	ld l, (xix + 46)
 	ld a, (xix + 47)
@@ -3248,7 +3248,7 @@ FloppyDisk_ComputeToneParams:
 	add xix, xhl
 	sll xix, 4
 	ld (xiy), xix
-	ldda32 xix, (3210)
+	ld xix, (3210:16)
 	lds32 xhl, 0
 	ld l, (xix + 46)
 	ld a, (xix + 47)
@@ -3259,7 +3259,7 @@ FloppyDisk_ComputeToneParams:
 	add xix, xhl
 	sll xix, 4
 	ld (xiz), xix
-	ldda32 xix, (3214)
+	ld xix, (3214:16)
 	lds32 xhl, 0
 	ld l, (xix + 46)
 	ld a, (xix + 47)
@@ -3309,7 +3309,7 @@ FloppyDisk_CopyNoteBuffers:
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 1
 	calr NoteEventBuffer_CopyToSlot
-	ldda32 xwa, (3186)
+	ld xwa, (3186:16)
 	lds32 xde, 0
 	ld e, (xwa + 46)
 	lds32 xbc, 0
@@ -3325,7 +3325,7 @@ FloppyDisk_CopyNoteBuffers:
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 2
 	calr NoteEventBuffer_CopyToSlot
-	ldda32 xwa, (3186)
+	ld xwa, (3186:16)
 	lds32 xde, 0
 	ld e, (xwa + 46)
 	lds32 xbc, 0
@@ -3341,7 +3341,7 @@ FloppyDisk_CopyNoteBuffers:
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 3
 	calr NoteEventBuffer_CopyToSlot
-	ldda32 xwa, (3186)
+	ld xwa, (3186:16)
 	lds32 xde, 0
 	ld e, (xwa + 46)
 	lds32 xbc, 0
@@ -3357,7 +3357,7 @@ FloppyDisk_CopyNoteBuffers:
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 4
 	calr NoteEventBuffer_CopyToSlot
-	ldda32 xwa, (3186)
+	ld xwa, (3186:16)
 	lds32 xde, 0
 	ld e, (xwa + 46)
 	lds32 xbc, 0
@@ -3373,7 +3373,7 @@ FloppyDisk_CopyNoteBuffers:
 	jrl lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 5
 	calr NoteEventBuffer_CopyToSlot
-	ldda32 xhl, (3186)
+	ld xhl, (3186:16)
 	lds32 xde, 0
 	ld e, (xhl + 46)
 	lds32 xbc, 0
@@ -3390,7 +3390,7 @@ FloppyDisk_CopyNoteBuffers:
 	jr lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 6
 	calr NoteEventBuffer_CopyToSlot
-	ldda32 xhl, (3186)
+	ld xhl, (3186:16)
 	lds32 xde, 0
 	ld e, (xhl + 46)
 	lds32 xbc, 0
@@ -3407,7 +3407,7 @@ FloppyDisk_CopyNoteBuffers:
 	jr lt, FloppyCtrl_PopIzStoreRet
 	lds wa, 7
 	calr NoteEventBuffer_CopyToSlot
-	ldda32 xhl, (3186)
+	ld xhl, (3186:16)
 	lds32 xde, 0
 	ld e, (xhl + 46)
 	lds32 xbc, 0
@@ -3422,7 +3422,7 @@ FloppyDisk_CopyNoteBuffers:
 	call (xix)
 	cps hl, 0
 	jr lt, FloppyCtrl_PopIzStoreRet
-	ldda32 xwa, (3218)
+	ld xwa, (3218:16)
 	ld_sril XIX, (xsp + 0x0414)
 	ld xbc, 0xf400
 	call (xix)
@@ -3532,11 +3532,11 @@ ToneParam_ExtendedOpsBlock:
 	extz WA
 	bit 0x00,WA
 	jr z, .Lc_f19194
-	ldda32 xwa, (0x3916)
+	ld xwa, (0x3916:16)
 	stda32 (0x3912), xwa
 	ldmm8 0x3910, 0x3911
 	call AccPatch_InitFromSlotIndex
-	ldda32 xwa, (0x0c72)
+	ld xwa, (0x0c72:16)
 	stda32 (0x3912), xwa
 	ldw IZ, 0xff95
 .Lc_f19194:
@@ -3548,17 +3548,17 @@ ToneParam_ExtendedOpsBlock:
 .Lc_f1919c:
 	ld WA,DE
 	add WA,0x0060
-	ldda32 xbc, (0x0c6e)
+	ld xbc, (0x0c6e:16)
 	lda_dri xbc, 0x07, 0xe4, 0xe0
 	ld (XBC+0x22),0x40
 	ld BC,WA
-	ldda32 xwa, (0x0c6e)
+	ld xwa, (0x0c6e:16)
 	lda_dri xwa, 0x07, 0xe0, 0xe4
 	ld (XWA+0x2a),0x0c
-	ldda32 xwa, (0x0c6e)
+	ld xwa, (0x0c6e:16)
 	lda_dri xwa, 0x07, 0xe0, 0xe4
 	ld (XWA+0x32),0x74
-	ldda32 xwa, (0x0c6e)
+	ld xwa, (0x0c6e:16)
 	lda_dri xwa, 0x07, 0xe0, 0xe4
 	ld (XWA+0x3a),0x40
 	inc 1,L
@@ -3658,7 +3658,7 @@ DualVoice_LoadAndScan:
 	lda_24	xbc, 14770428
 	ld_rrb	a, xbc, wa
 	ld	(xsp+8), a
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	stda32	14610, xwa
 	ldib_erp	251, 0
 DualVoice_AccPatchLoop:
@@ -3675,9 +3675,9 @@ DualVoice_AccPatchLoop:
 	inc1b_erp	251
 	cp_erpb	251, 10
 	jr	c, -43
-	ldda32	xwa, 3182
+	ld	xwa, (3182:16)
 	stda32	14610, xwa
-	ldda32	xwa, 3186
+	ld	xwa, (3186:16)
 	stda32	14614, xwa
 	.byte 0xf1, 0x14, 0x35, 0xb0
 	ldib_erp	251, 0
@@ -3747,7 +3747,7 @@ DualVoice_WriteBackSlots:
 
 FileHdr_ValidateSignature:
 	calr FileHdr_InitBasePointer
-	ldda32 xwa, (3226)
+	ld xwa, (3226:16)
 	ld l, (xwa)
 	ld e, (xwa + 1)
 	ld c, (xwa + 2)
@@ -3794,7 +3794,7 @@ FileHdr_InitBasePointer:
 	ret
 
 ToneData_SetupCopyPointers:
-	ldda32 xbc, (3226)
+	ld xbc, (3226:16)
 	lda_dri XBC, 0xe5, 0x00, 0x01
 	ld xwa, xbc
 	lda_dri XBC, 0xe5, 0x00, 0x02
@@ -3806,7 +3806,7 @@ ToneData_ZeroFillLoop:
 
 	lda_24 xwa, (Composer_SettingsBlock)
 	ld xbc, xwa
-	ldda32 xde, (3226)
+	ld xde, (3226:16)
 	lda xhl, (xwa + 6)
 
 ToneData_CopyBlock1_Loop:
@@ -3816,7 +3816,7 @@ ToneData_CopyBlock1_Loop:
 	jr c, ToneData_CopyBlock1_Loop
 	lda_24 xhl, (Composer_SettingsBlock_0x60)
 	ld xbc, xhl
-	ldda32 xwa, (3226)
+	ld xwa, (3226:16)
 	lda xde, (xwa + 16)
 	lda xhl, (xhl + 16)
 
@@ -3827,7 +3827,7 @@ ToneData_CopyBlock2_Loop:
 	jr c, ToneData_CopyBlock2_Loop
 	lda_24 xhl, (MSP_Default_PartBankMap)
 	ld xbc, xhl
-	ldda32 xwa, (3226)
+	ld xwa, (3226:16)
 	lda_dri XDE, 0xe1, 0x00, 0x02
 	lda xhl, (xhl + 64)
 
@@ -3838,7 +3838,7 @@ ToneData_CopyBlock3_Loop:
 	jr c, ToneData_CopyBlock3_Loop
 	lda_24 xhl, (Composer_SettingsBlock_0x80)
 	ld xbc, xhl
-	ldda32 xwa, (3226)
+	ld xwa, (3226:16)
 	lda_dri XDE, 0xe1, 0x40, 0x02
 	lda xhl, (xhl + 64)
 
@@ -3849,7 +3849,7 @@ ToneData_CopyBlock4_Loop:
 	jr c, ToneData_CopyBlock4_Loop
 	lda_24 xhl, (Composer_SettingsBlock_0xC0)
 	ld xbc, xhl
-	ldda32 xwa, (3226)
+	ld xwa, (3226:16)
 	lda_dri XDE, 0xe1, 0x80, 0x02
 	lda xhl, (xhl + 64)
 
@@ -3858,7 +3858,7 @@ ToneData_CopyBlock5_Loop:
 	lda_dpi XBC, 0xe8
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock5_Loop
-	ldda32 xwa, (3226)
+	ld xwa, (3226:16)
 	lda xbc, (xwa + 32)
 	lds32 xde, 0
 
@@ -3867,7 +3867,7 @@ ToneData_ScanRegionLoop:
 	jr nz, ToneData_AdvanceRegion
 	lda_24 xiy, (Composer_SettingsBlock_0x70)
 	ld xhl, xiy
-	ldda32 xwa, (3226)
+	ld xwa, (3226:16)
 	lda xwa, (xwa + 32)
 	ld xix, xde
 	add xix, xwa

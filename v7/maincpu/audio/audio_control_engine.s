@@ -5754,7 +5754,7 @@ MIDI_WriteVoiceParamCC:
 	xor	h, h
 	ld	l, c
 	sla	hl, 2
-	ldda32	xix, (36950)
+	ld	xix, (36950:16)
 	ld_rrl	xix, xix, hl
 	cp	xix, 37066
 	jr	z, 33	; -> 0xFC9A97
@@ -5789,7 +5789,7 @@ MIDI_WriteVoiceParamDirect:
 	xor	h, h
 	ld	l, c
 	sla	hl, 2
-	ldda32	xix, (36950)
+	ld	xix, (36950:16)
 	ld_rrl	xix, xix, hl
 	cp	xix, 37066
 	jr	z, 33	; -> 0xFC9AEB
@@ -6070,7 +6070,7 @@ MidiStream_ProcessEventBuffer:
 	add XIX,XWA
 	stda32 (0x9125), xix
 MidiStream_NextEvent:
-	ldda32	xix, (37157)
+	ld	xix, (37157:16)
 	ld_spiw	wa, 241
 	cp	a, 255
 	jr	z, 76
@@ -6218,7 +6218,7 @@ MidiStream_ProcessSeqBuffer:
 	add XIX,XWA
 	stda32 (0x9125), xix
 MidiSeqBuf_NextEvent:
-	ldda32	xix, (37157)
+	ld	xix, (37157:16)
 	ld_spiw	wa, 241
 	cp	a, 255
 	jr	z, 89
@@ -6429,7 +6429,7 @@ MidiStream_ProcessTempoRingBuf:
 	add XIX,XWA
 	stda32 (0x9125), xix
 TempoRing_NextEvent:
-	ldda32	xix, (37157)
+	ld	xix, (37157:16)
 	ld_spiw	wa, 241
 	cp	a, 255
 	jr	z, 103
@@ -6495,7 +6495,7 @@ TempoRing_ProcessorTable:
 	.byte 0x00, 0x2e, 0xa1, 0xfc, 0x00, 0x2e, 0xa1, 0xfc
 	.byte 0x00, 0x0e
 TempoRing_ValidateState:
-	ldda32 xix, (0x9125)
+	ld xix, (0x9125:16)
 	cp XIX,0x0000bca4
 	jr z, MIDI_ParamValidation_ReturnNoOp
 	ldw_d16 bc, (0x9121)
@@ -6863,7 +6863,7 @@ VoiceMode_ParamHandler_4:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, 36950
+	ld	xix, (36950:16)
 	ld_rrl	xix, xix, hl
 	cp	xix, 4294967295
 	jrl	z, 456
@@ -7187,7 +7187,7 @@ VoiceMode_ParamHandler_0:
 	jr	nc, 3
 	set	7, a
 VoiceMode0_UpdateTempoAndWrite:
-	ldda32 xix, (0xfc62)
+	ld xix, (0xfc62:16)
 
 	and w, 0x1
 
@@ -7646,13 +7646,13 @@ AudioCtrl_SaveAllRegs:
 	stda32	(37043), xiz
 	ret
 AudioCtrl_RestoreAllRegs:
-	ldda32	xwa, (37019)
-	ldda32	xbc, (37023)
-	ldda32	xde, (37027)
-	ldda32	xhl, (37031)
-	ldda32	xix, (37035)
-	ldda32	xiy, (37039)
-	ldda32	xiz, (37043)
+	ld	xwa, (37019:16)
+	ld	xbc, (37023:16)
+	ld	xde, (37027:16)
+	ld	xhl, (37031:16)
+	ld	xix, (37035:16)
+	ld	xiy, (37039:16)
+	ld	xiz, (37043:16)
 	ret
 VoiceMode_ParamConfigTables:
 	.incbin "includes/romslices/v7_transplant_VoiceMode_ParamConfigTables.bin"
@@ -7959,7 +7959,7 @@ MidiStream_HandleNoteCC:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (36950)
+	ld	xix, (36950:16)
 	ld_rrl	xix, xix, hl
 	ld	wa, (xix)
 	stda16	(36942), wa
@@ -7993,7 +7993,7 @@ MidiStream_HandlePgmChange:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (36950)
+	ld	xix, (36950:16)
 	ld_rrl	xix, xix, hl
 	ld	l, b
 	ld_rr8b	e, xix, l
@@ -8017,7 +8017,7 @@ MidiStream_HandleChanPressure:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (36950)
+	ld	xix, (36950:16)
 	ld_rrl	xix, xix, hl
 	ld	l, b
 	ld_rr8b	e, xix, l

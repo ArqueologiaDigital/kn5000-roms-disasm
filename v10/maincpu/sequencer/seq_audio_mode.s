@@ -644,7 +644,7 @@ AccVoice_LookupWithOffset:
 AccVoice_SelectAndApplyPatch:
 	cpdi8 (0x32e5), 128
 	jr nc, AccVoice_PatchFromDirect
-	ldda32 xiy, (0x32ce)
+	ld xiy, (0x32ce:16)
 	calr AccStyle_ReadVoiceParam
 	stb_d8 (0x32ef), w
 	jr AccVoice_StorePatchAndLookup

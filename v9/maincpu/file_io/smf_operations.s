@@ -262,7 +262,7 @@ SaveFN_HandleActivate:
 	call FileIO_CopyString
 	lda_d16 xwa, (0x8851)
 	call FileIO_GetRecordType_Extended
-	ldda32 xwa, (0x808c)
+	ld xwa, (0x808c:16)
 	ld xbc, 0x1c0000f
 	ld xde, 0x8850
 	jr SaveFN_SendEvent
@@ -326,7 +326,7 @@ SeqToSong_BuildEntry:
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_BuildFilePath
-	ldda32 xwa, (0x8090)
+	ld xwa, (0x8090:16)
 	ld xbc, 0x1c0000f
 	ld xde, 0x8094
 	call ApPostEvent
@@ -359,7 +359,7 @@ SeqFromSong_BuildEntry:
 	ld xbc, xhl
 	ld xwa, xiz
 	call FileIO_BuildFilePath
-	ldda32 xwa, (0x8114)
+	ld xwa, (0x8114:16)
 	ld xbc, 0x1c0000f
 	ld xde, 0x8118
 	call ApPostEvent
@@ -384,7 +384,7 @@ SeqSongName_BuildEntry:
 	lds de, 0
 	calr BuildSlotLabel
 	ld xde, xhl
-	ldda32 xwa, (0x8198)
+	ld xwa, (0x8198:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 
@@ -406,7 +406,7 @@ SmfLoadAs_Apply:
 	sla wa, 2
 	lda_24 xbc, (DiskOp_ChannelCfgTable_0xE8)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
-	ldda32 xwa, (0x819c)
+	ld xwa, (0x819c:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 
@@ -543,7 +543,7 @@ FmmSmfFileNameFunc:
 	ld (xsp + 28), xbc
 	ld (xsp + 32), xwa
 	ld xde, (xsp + 28)
-	ldda32 xwa, (0x81a0)
+	ld xwa, (0x81a0:16)
 	ld xbc, (xsp + 28)
 	cp xbc, 0x1c00018
 	jrl z, SmfFN_NavSetup
@@ -586,7 +586,7 @@ SmfFN_JumpTable:
 	divs	wa, 10
 	ld	de, qwa
 	exts	xde
-	ldda32	xwa, (0x81a0)
+	ld	xwa, (0x81a0:16)
 	ld	xbc, 0x01e50002
 	jrl	1929
 
@@ -1141,7 +1141,7 @@ SmfFN_HandleMedleyConfirm:
 	jr nz, SmfFN_UpdateDisplay
 	cpdi16 0x81ae, 0
 	jr z, SmfFN_UpdateDisplay
-	ldda32 xwa, (0x81a4)
+	ld xwa, (0x81a4:16)
 	or xwa, xwa
 	jr z, SmfFN_UpdateDisplay
 	ld xbc, 0x1c0000a
@@ -1163,7 +1163,7 @@ SmfFN_RefreshIfChanged:
 	divs wa, 0xa
 	stw_erp DE, 0xe2
 	exts xde
-	ldda32 xwa, (0x81a0)
+	ld xwa, (0x81a0:16)
 	ld xbc, 0x1e50002
 	call ApPostEvent
 	ldw_d16 xbc, (0x81ac)
@@ -1172,7 +1172,7 @@ SmfFN_RefreshIfChanged:
 	ld de, (xsp + 4)
 	exts xde
 	divs de, 0xa
-	ldda32 xwa, (0x81a0)
+	ld xwa, (0x81a0:16)
 	cp de, bc
 	jr nz, SmfFN_RedrawPage
 	ld bc, (xsp + 4)
@@ -1195,7 +1195,7 @@ SmfFN_RefreshIfChanged:
 	ld de, wa
 	extz xde
 	add xde, xbc
-	ldda32 xwa, (0x81a0)
+	ld xwa, (0x81a0:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	jr SmfFN_UpdateFilenameField
@@ -1241,7 +1241,7 @@ SmfFN_WriteFilenameField:
 	calr SaveFileNameSmfFunc
 
 SmfFN_SendOkState:
-	ldda32 xwa, (0x81a0)
+	ld xwa, (0x81a0:16)
 	ld xbc, 0x1c50001
 	lds32 xde, 0
 	jr SmfFN_DispatchFinalEvent
@@ -1261,7 +1261,7 @@ SmfFN_SendOkState:
 	divs wa, 0xa
 	stw_erp DE, 0xe2
 	exts xde
-	ldda32 xwa, (0x81a0)
+	ld xwa, (0x81a0:16)
 	ld xbc, 0x1e50002
 
 SmfFN_DispatchFinalEvent:

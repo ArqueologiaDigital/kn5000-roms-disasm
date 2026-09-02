@@ -301,7 +301,7 @@ FileIO_BytecodeData:
 	cpl	wa
 	cpl	qwa
 	.byte 0xe1, 0x84, 0x8e, 0xc8
-	ldda32	xwa, 36488
+	ld	xwa, (36488:16)
 	and	xwa, xhl
 	jr	z, 2
 	.byte 0xb1, 0xb9
@@ -330,7 +330,7 @@ FileIO_BytecodeData:
 	cpl	wa
 	cpl	qwa
 	.byte 0xe1, 0x88, 0x8e, 0xc8
-	ldda32	xwa, 36484
+	ld	xwa, (36484:16)
 	and	xwa, xhl
 	jr	z, 2
 	.byte 0xb1, 0xb8
@@ -7947,7 +7947,7 @@ MIDI_WriteVoiceParamCC:
 	xor h, h
 	ld l, c
 	sla hl, 2
-	ldda32 xix, (0x90f2)
+	ld xix, (0x90f2:16)
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0x9166
 	jr z, MidiWriteVoice_Done
@@ -7984,7 +7984,7 @@ MIDI_WriteVoiceParamDirect:
 	xor h, h
 	ld l, c
 	sla hl, 2
-	ldda32 xix, (0x90f2)
+	ld xix, (0x90f2:16)
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0x9166
 	jr z, MidiWriteDirect_Done
@@ -8262,7 +8262,7 @@ MidiStream_ProcessEventBuffer:
 	stda32 0x91c1, xix
 
 MidiStream_NextEvent:
-	ldda32 xix, (0x91c1)
+	ld xix, (0x91c1:16)
 	ld_spiw WA, 0xf1
 	cp a, 0xff
 	jr z, MidiStream_BufferDone
@@ -8423,7 +8423,7 @@ MidiStream_ProcessSeqBuffer:
 	stda32 0x91c1, xix
 
 MidiSeqBuf_NextEvent:
-	ldda32 xix, (0x91c1)
+	ld xix, (0x91c1:16)
 	ld_spiw WA, 0xf1
 	cp a, 0xff
 	jr z, MidiSeqBuf_Done
@@ -8646,7 +8646,7 @@ MidiStream_ProcessTempoRingBuf:
 	stda32 0x91c1, xix
 
 TempoRing_NextEvent:
-	ldda32 xix, (0x91c1)
+	ld xix, (0x91c1:16)
 	ld_spiw WA, 0xf1
 	cp a, 0xff
 	jr z, TempoRing_Done
@@ -8716,7 +8716,7 @@ TempoRing_ProcessorTable:
 	.byte 0x00, 0x0e
 
 TempoRing_ValidateState:
-	ldda32 xix, (0x91c1)
+	ld xix, (0x91c1:16)
 	cp xix, 0xbd40
 	jr z, MIDI_ParamValidation_ReturnNoOp
 	ldw_d16 xbc, (0x91bd)
@@ -8740,7 +8740,7 @@ TempoCC_TransmitBytecodeBlock:
 	stw_dpi	wa, 241
 	ldw_d16	wa, (0x91bd)
 	stw_dpi	wa, 241
-	ldda32	xiy, (0x90f2)
+	ld	xiy, (0x90f2:16)
 	extz	wa
 	sll	wa, 2
 	ld_rrl xiy, xiy, wa
@@ -9210,7 +9210,7 @@ VoiceMode_ParamHandler_4:
 	extz hl
 	ld l, c
 	sll hl, 2
-	ldda32 xix, (0x90f2)
+	ld xix, (0x90f2:16)
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	cp xix, 0xffffffff
 	jrl z, MidiCtrl_NullRet
@@ -9474,7 +9474,7 @@ VoiceMode3_DispatchTable:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, 37106
+	ld	xix, (37106:16)
 	ld_rrl	xix, xix, hl
 	cp	xix, 4294967295
 	jr	z, 114
@@ -9758,7 +9758,7 @@ VoiceMode_ParamHandler_0:
 	set 7, a
 
 VoiceMode0_UpdateTempoAndWrite:
-	ldda32 xix, (0xfc62)
+	ld xix, (0xfc62:16)
 	and w, 0x1
 	andmi16 (xix), 0xfe00
 	or (xix), wa
@@ -10302,13 +10302,13 @@ AudioCtrl_SaveAllRegs:
 	ret
 
 AudioCtrl_RestoreAllRegs:
-	ldda32 xwa, (0x9137)
-	ldda32 xbc, (0x913b)
-	ldda32 xde, (0x913f)
-	ldda32 xhl, (0x9143)
-	ldda32 xix, (0x9147)
-	ldda32 xiy, (0x914b)
-	ldda32 xiz, (0x914f)
+	ld xwa, (0x9137:16)
+	ld xbc, (0x913b:16)
+	ld xde, (0x913f:16)
+	ld xhl, (0x9143:16)
+	ld xix, (0x9147:16)
+	ld xiy, (0x914b:16)
+	ld xiz, (0x914f:16)
 	ret
 
 VoiceMode_ParamConfigTables:
@@ -11023,7 +11023,7 @@ MidiStream_HandleNoteCC:
 	extz	hl
 	ld l, c
 	sll	hl, 2
-	ldda32	xix, (0x90f2)
+	ld	xix, (0x90f2:16)
 	ld_rrl	xix, xix, hl
 	ld wa, (xix)
 	stda16	(0x90ea), wa
@@ -11057,7 +11057,7 @@ MidiStream_HandlePgmChange:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x90f2)
+	ld	xix, (0x90f2:16)
 	ld_rrl xix, xix, hl
 	ld l, b
 	ld_rr8b e, xix, l
@@ -11081,7 +11081,7 @@ MidiStream_HandleChanPressure:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x90f2)
+	ld	xix, (0x90f2:16)
 	ld_rrl xix, xix, hl
 	ld l, b
 	ld_rr8b e, xix, l
@@ -11094,7 +11094,7 @@ MidiStream_HandleSysMsg:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x90f2)
+	ld	xix, (0x90f2:16)
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xec
@@ -11323,7 +11323,7 @@ MidiStream_ExtendedDispatch:
 	xor	h, h
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x90f2)
+	ld	xix, (0x90f2:16)
 	ld_rrl xix, xix, hl
 	cp xix, 4294967295
 	jr	z, 78
@@ -11366,7 +11366,7 @@ MidiStream_ExtendedDispatch:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x90f2)
+	ld	xix, (0x90f2:16)
 	ld_rrl xix, xix, hl
 	cp xix, 4294967295
 	jr	z, 39
@@ -11392,7 +11392,7 @@ MidiStream_ExtendedDispatch:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x90f2)
+	ld	xix, (0x90f2:16)
 	ld_rrl xix, xix, hl
 	cp xix, 4294967295
 	jr	z, 47
@@ -11427,7 +11427,7 @@ MidiStream_ExtendedDispatch:
 	xor	h, h
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x90f2)
+	ld	xix, (0x90f2:16)
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xec
@@ -11648,7 +11648,7 @@ MidiStream_HandleRunningStatus:
 	extz	hl
 	ldb_d8	l, (0x915b)
 	sll	hl, 2
-	ldda32	xix, (0x90f2)
+	ld	xix, (0x90f2:16)
 	.byte 0xe3
 	reti
 	.byte 0xf0, 0xec

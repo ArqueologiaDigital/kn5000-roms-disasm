@@ -1933,7 +1933,7 @@ BmDrEdit_PopIzAndReturn:
 
 BmDrEdit_CleanupDrumMode:
 	ldmm16 0x2796, 0x2792
-	ldda32 xwa, (7504)
+	ld xwa, (7504:16)
 	push xwa
 	call Free
 	inc 4, xsp

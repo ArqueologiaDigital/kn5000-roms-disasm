@@ -160,7 +160,7 @@ Audio_Main_Loop:
 ; kicked here -- so once it passes 1000 ticks this simply sets PE bit 0 (SFR 0x38), the bit
 ; MUTE_AND_HALT (0x01FBF4) clears, and every later pass re-sets an already-set bit.
 AudioLoop_UnmuteAfterBoot:
-	ldda32 xwa, 4160
+	ld xwa, (4160:16)
 	cp xwa, 0x3E8
 	jr ule, AudioLoop_CheckPeriodicReinit
 	set_dd8 0, 0x38	; unmute (?) (here I'm assuming "MUTE" it is an active low signal)
@@ -4979,10 +4979,10 @@ Voice_Manager_PollBank_Return:
 ; *** BUG-RELEVANT: this returning 0 is how 'stops allocating voices' manifests; it is
 ; silent - the caller just writes 0xFF into the slot and no error is reported. ***
 Voice_Find_Candidate:
-	ldda32 xde, 4933
+	ld xde, (4933:16)
 	or xde, xde
 	jr z, Voice_Find_Candidate_Walk
-	ldda32 xhl, 4933
+	ld xhl, (4933:16)
 	ret
 
 ; Set up the walk: XDE = 0x112D+0x1E2 = 0x130F (global pool-head array), XHL = local array at (*XWA)+2, bail out immediately if the list is empty (first byte 0xFF).
@@ -5251,11 +5251,11 @@ Voice_Allocate_Nodes_UpdateLists:
 	ld xbc, (xsp + 4)
 	lds de, 0
 	calr Voice_List_MoveToPartList
-	ldda32 xwa, 4393
+	ld xwa, (4393:16)
 	or xwa, xwa
 	jr z, Voice_Allocate_Nodes_SetGlobalHead
 	ld xwa, xiz
-	ldda32 xbc, 4393
+	ld xbc, (4393:16)
 	calr DList_Relink_Adjacent_Offsets16
 	jr Voice_Allocate_Nodes_AdvancePriority
 
@@ -7680,7 +7680,7 @@ Voice_Env_UpdateVelocityCounters:
 	extz bc
 	muls bc, 0x11F
 	lda_24 xde, 0x041481
-	ldda32 xhl, 4160
+	ld xhl, (4160:16)
 	sub_sril_rm XHL, 0x07, 0xE8, 0xE4
 	jrl z, Voice_Env_UpdateVelocity_Store
 	cp xhl, 0x19
@@ -7741,7 +7741,7 @@ Voice_Env_UpdateVelocity_Store:
 	muls wa, 0x11F
 	ld bc, wa
 	lda_24 xde, 0x041481
-	ldda32 xwa, 4160
+	ld xwa, (4160:16)
 	stl_dri XWA, 0x07, 0xE8, 0xE4
 	ret
 
@@ -8545,7 +8545,7 @@ WaveSel_StageB_Store_Reg040_Return:
 ; signed result is stored in the global word at 0x041366 that
 ; Voice_Pitch_BendType_Fixed reads. Single caller 0x02C940.
 Voice_Vol_ScaleVelocityWord:
-	ldda32 xbc, 4160
+	ld xbc, (4160:16)
 	ld xwa, xbc
 	call FP_MulAccum64
 	srl xhl, 2
@@ -23175,7 +23175,7 @@ Voice_Slot_ApplyPortamentoDelta:
 	bit_dri 7, 0xF9, 0x18, 0x01
 	jr z, Voice_Slot_ApplyPortamentoDelta_BranchA
 	ei 6
-	ldda32 xwa, 4160
+	ld xwa, (4160:16)
 	stl_dri XWA, 0xF9, 0x14, 0x01
 	ei 0
 	jrl Voice_Slot_ApplyPortamentoDelta_Exit
@@ -23183,7 +23183,7 @@ Voice_Slot_ApplyPortamentoDelta:
 ; part+0x118 bit 7 clear: compute elapsed = tick(0x001040) - part+0x114 under mask level 6.
 Voice_Slot_ApplyPortamentoDelta_BranchA:
 	ei 6
-	ldda32 xwa, 4160
+	ld xwa, (4160:16)
 	ld (xsp + 4), xwa
 	ld_sril XWA, (xiz + 0x0114)
 	sub (xsp + 4), xwa
@@ -23258,7 +23258,7 @@ Voice_Slot_ApplyPitchJitter:
 	pushw iz
 	ld (xsp + 2), xwa
 	ei 6
-	ldda32 xwa, 4160
+	ld xwa, (4160:16)
 	ld iz, wa
 	and iz, 0x7
 	ei 0
@@ -51056,13 +51056,13 @@ DSP_State_ApplyBuf:
 
 ; Join point: a buffer has been obtained (from either queue); copy, flag, and post it.
 DSP_State_ApplyBuf_DoCopy:
-	ldda32 xix, 19002
+	ld xix, (19002:16)
 	ld xiy, xiz
 	ldw bc, 0x91
 	ldirw
-	ldda32 xwa, 19002
+	ld xwa, (19002:16)
 	stiw_ind 0xE1, 0x20, 0x01, 0x01, 0x00
-	ldda32 xbc, 19002
+	ld xbc, (19002:16)
 	lds wa, 2
 	call TaskMsgQ_Send
 	pop xiz
@@ -51080,11 +51080,11 @@ DSP_State_LoadAndApplyAll:
 	ld xix, xde
 	ldw bc, 0x91
 	ldirw
-	ldda32 xwa, 19006
+	ld xwa, (19006:16)
 	stiw_ind 0xE1, 0x20, 0x01, 0x01, 0x00
-	ldda32 xwa, 19006
+	ld xwa, (19006:16)
 	call DSP_State_ApplyAll
-	ldda32 xwa, 19006
+	ld xwa, (19006:16)
 	stiw_ind 0xE1, 0x20, 0x01, 0x00, 0x00
 	ret
 

@@ -19001,35 +19001,35 @@ SendEpilogue_Data:
 
 Song_SendPartDataBlocks:
 	pushw iz
-	ldda32 xwa, (0xcfb4)
+	ld xwa, (0xcfb4:16)
 	cp xwa, 0xffffffff
 	jr z, SendPartDataBlocks_LoadDRAM
 	lds wa, 0
 	call COMM_SendPartDataBlock
 
 SendPartDataBlocks_LoadDRAM:
-	ldda32 xwa, (0xcfb8)
+	ld xwa, (0xcfb8:16)
 	cp xwa, 0xffffffff
 	jr z, SendPartDataBlocks_LoadDRAM2
 	lds wa, 1
 	call COMM_SendPartDataBlock
 
 SendPartDataBlocks_LoadDRAM2:
-	ldda32 xwa, (0xcfbc)
+	ld xwa, (0xcfbc:16)
 	cp xwa, 0xffffffff
 	jr z, SendPartDataBlocks_LoadDRAM3
 	lds wa, 4
 	call COMM_SendPartDataBlock
 
 SendPartDataBlocks_LoadDRAM3:
-	ldda32 xwa, (0xcfc0)
+	ld xwa, (0xcfc0:16)
 	cp xwa, 0xffffffff
 	jr z, SendPartDataBlocks_LoadDRAM4
 	lds wa, 2
 	call COMM_SendPartDataBlock
 
 SendPartDataBlocks_LoadDRAM4:
-	ldda32 xwa, (0xcfc4)
+	ld xwa, (0xcfc4:16)
 	cp xwa, 0xffffffff
 	jr z, SendPartDataBlocks_Block
 	lds wa, 3
@@ -20225,9 +20225,9 @@ PlayModeStateMachine_Block3:
 PlayModeStateMachine_DoPlayMode2:
 	call AccWrap_PlayModeStart
 	ei 6
-	ldda32 xwa, (0xd0a4)
+	ld xwa, (0xd0a4:16)
 	stda16 (1052), xwa
-	ldda32 xwa, (0xd0a0)
+	ld xwa, (0xd0a0:16)
 	stb_d8 (1051), a
 	ei 0
 	ret
@@ -20851,7 +20851,7 @@ ConfigureBanks_LoadAddr2:
 	ld xbc, xiz
 	add xbc, xwa
 	ld (xbc), 0x0
-	ldda32 xwa, (0xe9e7)
+	ld xwa, (0xe9e7:16)
 	or xwa, xwa
 	jrl z, FileIO_SeekRecord_LoopDone
 	ld xwa, (xsp + 4)
@@ -21583,7 +21583,7 @@ SeqPlay_StoreByte:
 
 SeqPlay_ReadRecord_Entry:
 	stiw_ind 0xfd, 0x0e, 0x01, 0x00, 0x00
-	ldda32 xwa, (0xe9f5)
+	ld xwa, (0xe9f5:16)
 	ld (xsp + 6), xwa
 	ldw_d16 xwa, (0xe9e5)
 	bit 4, wa
@@ -22013,23 +22013,23 @@ RecordReadOK_Block11:
 RecordReadOK_Block12:
 	lda_d16 xde, (0xe9eb)
 	ld xbc, 0x28
-	ldda32 xwa, (0xe9eb)
+	ld xwa, (0xe9eb:16)
 	cp xwa, 0x28
 	jr ule, RecordReadOK_LoadReg5
-	ldda32 xbc, (0xe9eb)
+	ld xbc, (0xe9eb:16)
 
 RecordReadOK_LoadReg5:
 	ld (xde), xbc
 	lda_d16 xde, (0xe9eb)
 	ld xbc, 0x12c
-	ldda32 xwa, (0xe9eb)
+	ld xwa, (0xe9eb:16)
 	cp xwa, 0x12c
 	jr nc, RecordReadOK_LoadReg6
-	ldda32 xbc, (0xe9eb)
+	ld xbc, (0xe9eb:16)
 
 RecordReadOK_LoadReg6:
 	ld (xde), xbc
-	ldda32 xwa, (0xe9eb)
+	ld xwa, (0xe9eb:16)
 	ld bc, wa
 	lds32 xwa, 4
 	lds de, 3
@@ -22554,7 +22554,7 @@ Dispatch_Data:
 	lds32	xhl, 0
 	ret
 	push	xiz
-	ldda32	xbc, (0xe9eb)
+	ld	xbc, (0xe9eb:16)
 	or	xbc, xbc
 	jrl	z, 137
 	ld	e, (xwa)
@@ -22573,7 +22573,7 @@ Dispatch_Data:
 	ld	a, e
 	add	xiz, xwa
 	ld	xwa, xiz
-	ldda32	xbc, (0xe9eb)
+	ld	xbc, (0xe9eb:16)
 	call	Math_MultiplyAccumulate
 	ld	xiz, xhl
 	ld	xwa, xiz
@@ -22960,7 +22960,7 @@ MidiRealtime_Process_Prologue:
 	ld (xsp + 2), xwa
 
 ToneGen_ProcessMidiConverge:
-	ldda32 xwa, (0xebfd)
+	ld xwa, (0xebfd:16)
 	cp xwa, (xsp + 2)
 	jrl ugt, VoiceReset_Return_RestoreReg
 	cpdi16 0xec01, 0
@@ -24037,7 +24037,7 @@ CharMap_ActivePreamb_Prologue:
 	ld xwa, 0x4c
 
 CharMap_ActivePreamb_LoadDRAM2:
-	ldda32 xde, (0xe14e)
+	ld xde, (0xe14e:16)
 	add xde, xwa
 	extz xbc
 	add xbc, (xde)
@@ -24057,14 +24057,14 @@ CharMap_ActivePreamb_Compare:
 	ld xwa, 0x44
 
 CharMap_ActivePreamb_LoadDRAM3:
-	ldda32 xde, (0xe14e)
+	ld xde, (0xe14e:16)
 	add xde, xwa
 	add xbc, (xde)
 	ld l, (xbc)
 	jr CharMap_ActivePreamb_Increment
 
 CharMap_ActivePreamb_LoadDRAM4:
-	ldda32 xwa, (0xe14e)
+	ld xwa, (0xe14e:16)
 	add xbc, (xwa + 60)
 	ld l, (xbc)
 
@@ -24239,7 +24239,7 @@ StoreDRAMInit_LoadParam2:
 	retd 0x4
 
 StoreDRAMInit_LoadDRAM:
-	ldda32 xhl, (0xe14e)
+	ld xhl, (0xe14e:16)
 	ld xde, (xhl + 4)
 	dec 1, xde
 	lds32 xix, 0
@@ -24419,7 +24419,7 @@ ApplyProgramChangeAs_SetByte:
 	jr ApplyProgramChangeAs_Return
 
 ApplyProgramChangeAs_LoadDRAM:
-	ldda32 xwa, (0xe14e)
+	ld xwa, (0xe14e:16)
 	ld xwa, (xwa + 4)
 	ld l, a
 
@@ -24427,7 +24427,7 @@ ApplyProgramChangeAs_Return:
 	ret
 
 ApplyProgramChangeAs_LoadDRAM2:
-	ldda32 xhl, (0xe14e)
+	ld xhl, (0xe14e:16)
 	add xhl, xbc
 	ld xix, (xhl)
 	ld c, (xwa + 4)
@@ -24489,7 +24489,7 @@ FetchOscTableEntry_Prologue:
 	ld (xsp + 4), xbc
 	ld xiz, xwa
 	calr ApplyProgramChangeAs_DoLookupRe
-	ldda32 xbc, (0xe14e)
+	ld xbc, (0xe14e:16)
 	ld xwa, (xbc + 8)
 	ld e, a
 	cp (xiz), l
@@ -24553,7 +24553,7 @@ ApplyProgramChange_Epilogue:
 	ret
 
 ApplyProgramChange_LoadDRAM:
-	ldda32 xhl, (0xe14e)
+	ld xhl, (0xe14e:16)
 	add xhl, xbc
 	ld xix, (xhl)
 	ld c, (xwa + 4)
@@ -24621,12 +24621,12 @@ SndParam_LookupOscEnvelope:
 	lda xbc, (xiz + 2)
 	cp hl, 0xf0
 	jr lt, LookupOscEnvelope_LoadDRAM
-	ldda32 xwa, (0xe14e)
+	ld xwa, (0xe14e:16)
 	ld xhl, (xwa + 48)
 	jr LookupOscEnvelope_LoadReg2
 
 LookupOscEnvelope_LoadDRAM:
-	ldda32 xwa, (0xe14e)
+	ld xwa, (0xe14e:16)
 	ld xde, (xwa + 28)
 	lds32 xwa, 0
 	ld a, (xbc)
@@ -24650,7 +24650,7 @@ LookupOscEnvelope_LoadReg:
 	jr LookupOscEnvelope_LoadReg3
 
 LookupOscEnvelope_LoadDRAM2:
-	ldda32 xwa, (0xe14e)
+	ld xwa, (0xe14e:16)
 	ld xhl, (xwa + 48)
 	lda xbc, (xiz + 2)
 
@@ -24715,7 +24715,7 @@ SndParam_CheckAndApplyMode:
 	ret
 
 SndParam_LookupFromPointerTable:
-	ldda32 xix, (0xe14e)
+	ld xix, (0xe14e:16)
 	add xix, 0x38
 	ld xiy, (xix)
 	ld l, a
@@ -24739,7 +24739,7 @@ SndParam_LookupByPartAndNote:
 	dec 6, xsp
 	push xiz
 	ld e, c
-	ldda32 xbc, (0xe14e)
+	ld xbc, (0xe14e:16)
 	ld xiz, (xbc + 52)
 	lda xbc, (xsp + 4)
 	ld (xbc + 3), a
@@ -24775,7 +24775,7 @@ SndParam_LookupAndDispatch:
 	jr z, SndParam_ReturnResult
 	cp (xsp + 4), 0x78
 	jr nz, SndParam_ApplyMaskAndCheck
-	ldda32 xwa, (0xe14e)
+	ld xwa, (0xe14e:16)
 	ld xbc, (xwa + 48)
 	ld a, (xsp + 6)
 	extz wa
@@ -25464,29 +25464,29 @@ Param_SignExtendRetu_Data:
 	push	xiz
 	stda32	0xe193, xwa
 	ld	(xwa), 240
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+1), 80
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+2), 44
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+3), 4
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+4), 0
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+5), 17
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	calr	64132
 	ld	(xsp+4), hl
 	ld	wa, (xsp+4)
 	exts	xwa
 	add	xwa, xwa
-	ldda32	xbc, (0xe193)
+	ld	xbc, (0xe193:16)
 	add	xbc, xwa
 	add	xbc, 12
 	ld	xiz, xbc
 	inc	1, xiz
 	ld	(xbc), 0
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	bc, (xsp+4)
 	add	bc, bc
 	add	bc, 13

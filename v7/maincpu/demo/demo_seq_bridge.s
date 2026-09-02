@@ -190,7 +190,7 @@ SeqSongNameFunc:
 	stda16 (7120), xwa
 	ld de, wa
 	extz xde
-	ldda32 xwa, (7116)
+	ld xwa, (7116:16)
 	ld xbc, 0x1e70003
 	call ApPostEvent
 	jrl SongBank_ReturnZero
@@ -204,7 +204,7 @@ SeqSongName_RefreshLoop:
 	lds de, 1
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
-	ldda32 xwa, (7116)
+	ld xwa, (7116:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	inc 1, iz
@@ -237,7 +237,7 @@ SongBank_StoreCurrentSong:
 	cp iz, de
 	jr z, SongBank_ReturnZero
 	extz xde
-	ldda32 xwa, (7116)
+	ld xwa, (7116:16)
 	ld xbc, 0x1e70003
 	call ApPostEvent
 	ld wa, iz
@@ -245,7 +245,7 @@ SongBank_StoreCurrentSong:
 	lds de, 1
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
-	ldda32 xwa, (7116)
+	ld xwa, (7116:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	ldw_d16 xbc, (7120)
@@ -253,7 +253,7 @@ SongBank_StoreCurrentSong:
 	lds de, 1
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
-	ldda32 xwa, (7116)
+	ld xwa, (7116:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	stb_erp A, 0xf8
@@ -345,7 +345,7 @@ SeqSongMemoryFunc:
 	stda16 (7196), xwa
 	ld de, wa
 	extz xde
-	ldda32 xwa, (7192)
+	ld xwa, (7192:16)
 	ld xbc, 0x1e70003
 	jrl SeqSongMem_PostAndReturn
 
@@ -358,7 +358,7 @@ SeqSongMem_RefreshLoop:
 	lds de, 0
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
-	ldda32 xwa, (7192)
+	ld xwa, (7192:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	inc 1, iz
@@ -391,7 +391,7 @@ SongBank_EventCompare:
 	cp iz, de
 	jr z, SongBank_EventHandler_Return
 	extz xde
-	ldda32 xwa, (7192)
+	ld xwa, (7192:16)
 	ld xbc, 0x1e70003
 	call ApPostEvent
 	ld wa, iz
@@ -399,7 +399,7 @@ SongBank_EventCompare:
 	lds de, 0
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
-	ldda32 xwa, (7192)
+	ld xwa, (7192:16)
 	ld xbc, 0x1c0000f
 	call ApPostEvent
 	ldw_d16 xbc, (7196)
@@ -407,7 +407,7 @@ SongBank_EventCompare:
 	lds de, 0
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
-	ldda32 xwa, (7192)
+	ld xwa, (7192:16)
 	ld xbc, 0x1c0000f
 
 SeqSongMem_PostAndReturn:
@@ -724,7 +724,7 @@ DispatchHandler_CallSlotResolve:
 DispatchHandler_StoreNodePtr:
 	ld xhl, 0x110a
 	push xde
-	ldda32 xde, (7514)
+	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
 	ret
@@ -732,13 +732,13 @@ DispatchHandler_StoreNodePtr:
 DispatchHandler_InitAllSlots:
 	ld xhl, 0x110a
 	push xde
-	ldda32 xde, (7514)
+	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
 	lds iy, 1
 	call SeqNode_ResolveSlotPtr
 	stdi16 (0xf22f), 1
-	ldda32 xiy, (4349)
+	ld xiy, (4349:16)
 	xor xhl, xhl
 	lds de, 2
 	ldw_d16 xbc, (0x286d)
@@ -800,16 +800,16 @@ DispatchHandler_ResolveSlot:
 	push xde
 	ld xhl, 0x110a
 	push xde
-	ldda32 xde, (7514)
+	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
 	ldw_d16 xiy, (0xf22f)
 	cp iy, 0xffff
 	jr z, DispatchResolve_ReturnFail
-	ldda32 xde, (4349)
+	ld xde, (4349:16)
 	push xde
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld wa, (xhl + 3)
 	stda16 (0xf22f), xwa
 	ld ix, iy
@@ -817,13 +817,13 @@ DispatchHandler_ResolveSlot:
 	jr z, DispatchResolve_MarkCurrent
 	ld iy, wa
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ldw (xhl + 1), 0x0
 
 DispatchResolve_MarkCurrent:
 	ld iy, ix
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ormi8 (xhl), 0x80
 	decdi16 1, 0xf231
 	pop xde
@@ -840,7 +840,7 @@ DispatchResolve_ReturnFail:
 SeqNode_InsertAtPosition:
 	ld xhl, 0x110a
 	push xde
-	ldda32 xde, (7514)
+	ld xde, (7514:16)
 	ld (xhl), xde
 	pop xde
 	stda16 (3302), xwa
@@ -848,7 +848,7 @@ SeqNode_InsertAtPosition:
 	stda16 (0xf22f), xiy
 	xor wa, wa
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld ix, (xhl + 1)
 	ld de, ix
 	cps ix, 0
@@ -857,13 +857,13 @@ SeqNode_InsertAtPosition:
 	ldw (xhl + 1), 0x0
 	call SeqNode_ResolveSlotPtr
 	ld ix, iy
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld iy, (xhl + 3)
 
 SeqNodeInsert_TraverseNext:
 	call SeqNode_ResolveSlotPtr
 	ld ix, iy
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld iy, (xhl + 3)
 	cp iy, 0xffff
 	jr z, SeqNodeInsert_LinkHead
@@ -878,7 +878,7 @@ SeqNodeInsert_UnmarkAndCount:
 
 SeqNodeInsert_LinkPrev:
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld (xhl + 1), de
 
 SeqNodeInsert_LinkHead:
@@ -888,19 +888,19 @@ SeqNodeInsert_LinkHead:
 	ld iy, de
 	call SeqNode_ResolveSlotPtr
 	popw iy
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld (xhl + 3), iy
 
 SeqNodeInsert_Finalize:
 	ld iy, ix
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	andmi8 (xhl), 0x7f
 	ld (xhl + 5), 0x82
 	ld (xhl + 3), bc
 	ld iy, bc
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld (xhl + 1), ix
 	inc 1, wa
 	adddm16 0xf231, xwa
@@ -909,7 +909,7 @@ SeqNodeInsert_Finalize:
 SeqNodeInsert_EmptyList:
 	call SeqNode_ResolveSlotPtr
 	ld ix, iy
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld iy, (xhl + 3)
 	cp iy, 0xffff
 	jr nz, SeqNodeInsert_UnmarkAndCount
@@ -1037,7 +1037,7 @@ VoiceSlot_Overflow:
 	ldto_lerp XIX, 0x38
 	sla iz, 1
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ldw (xhl + 3), 0xffff
 	stda16 (0x289f), xiy
 	ld wa, iy
@@ -1048,7 +1048,7 @@ VoiceSlot_Overflow:
 	stw_dri WA, 0x07, 0xf0, 0xf8
 	ld iy, de
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ld (xhl + 3), wa
 	popw de
 	push xwa
@@ -1122,7 +1122,7 @@ VoiceSlot_AllocNewSlot:
 	popw iz
 	popw wa
 	call SeqNode_ResolveSlotPtr
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	ldw (xhl + 1), 0x0
 	ldw (xhl + 3), 0xffff
 	jrl VoiceSlot_ScanLoop

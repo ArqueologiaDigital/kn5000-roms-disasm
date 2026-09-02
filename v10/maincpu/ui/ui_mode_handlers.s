@@ -638,7 +638,7 @@ EffectMode_UpdateBitFlags:
 	ld a, (xhl)
 	and a, 0x20
 	ld (xsp + 6), a
-	ldda32 xwa, (0x8d60)
+	ld xwa, (0x8d60:16)
 	ld (xsp + 8), xwa
 	lds iy, 0
 	jr EffectMode_UpdateBitFlags_Loop

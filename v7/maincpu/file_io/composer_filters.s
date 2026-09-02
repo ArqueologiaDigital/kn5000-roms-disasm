@@ -102,13 +102,13 @@ CompLoad_HandleSelection:
 	cps	hl, 0
 	jr	lt, 16
 	exts	xhl
-	ldda32	xwa, (32480)
+	ld	xwa, (32480:16)
 	ld	xbc, 31784962
 	ld	xde, xhl
 	jrl	463
 CompLoad_Selection_Negative:
 	stdi16	(32484), 0
-	ldda32	xwa, (32480)
+	ld	xwa, (32480:16)
 	ld	xbc, 31784962
 	lds32	xde, 0
 	jrl	443
@@ -154,7 +154,7 @@ CompLoad_DrawItem_Continue:
 	lda_d16	xbc, (33904)
 	extz	xde
 	add	xde, xbc
-	ldda32	xwa, (32480)
+	ld	xwa, (32480:16)
 	ld	xbc, 29360143
 	call	16423243
 	inc	1, iz
@@ -252,7 +252,7 @@ CompLoad_UpdateDisplay:
 	call	16290296
 	ldw_d16	de, (32484)
 	exts	xde
-	ldda32	xwa, (32480)
+	ld	xwa, (32480:16)
 	ld	xbc, 31784962
 	call	16423243
 	ld	de, (xsp+2)
@@ -260,7 +260,7 @@ CompLoad_UpdateDisplay:
 	lda_d16	xbc, (33904)
 	extz	xde
 	add	xde, xbc
-	ldda32	xwa, (32480)
+	ld	xwa, (32480:16)
 	ld	xbc, 29360143
 	call	16423243
 	ldw_d16	de, (32484)
@@ -268,7 +268,7 @@ CompLoad_UpdateDisplay:
 	lda_d16	xbc, (33904)
 	extz	xde
 	add	xde, xbc
-	ldda32	xwa, (32480)
+	ld	xwa, (32480:16)
 	ld	xbc, 29360143
 CompLoad_DispatchWidget:
 	call ApPostEvent
@@ -474,7 +474,7 @@ LoadFilter_UpdateDisplay:
 	sla	wa, 4
 	lda_d16	xbc, 32490
 	lda_rr	xde, xbc, wa
-	ldda32	xwa, 32486
+	ld	xwa, (32486:16)
 	ld	xbc, 29360143
 	call	16423243
 	jrl	185
@@ -680,7 +680,7 @@ SaveFilter_UpdateDisplay:
 	sla	wa, 4
 	lda_d16	xbc, 32622
 	lda_rr	xde, xbc, wa
-	ldda32	xwa, 32618
+	ld	xwa, (32618:16)
 	ld	xbc, 29360143
 	jrl	270
 SaveFilter_SelectAll:
@@ -733,7 +733,7 @@ SaveFilter_DeselectAll_Loop:
 	lda_d16	xbc, 32622
 	extz	xde
 	add	xde, xbc
-	ldda32	xwa, 32618
+	ld	xwa, (32618:16)
 	ld	xbc, 29360143
 	call	16423243
 	incw	1, (xsp)

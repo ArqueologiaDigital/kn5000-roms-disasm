@@ -464,7 +464,7 @@ EffectMode_UpdateBitFlags:
 	ld	a, (xhl)
 	and	a, 32
 	ld	(xsp+6), a
-	ldda32	xwa, (36036)
+	ld	xwa, (36036:16)
 	ld	(xsp+8), xwa
 	lds	iy, 0
 	jr	40

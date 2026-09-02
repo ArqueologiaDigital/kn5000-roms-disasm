@@ -9468,7 +9468,7 @@ SendSinglePacket_LoadReg:
 	.byte 0x30, 0xee, 0x89, 0xe8, 0x81
 SendSinglePacket_DoGetPlayS:
 	ld	(xbc), 0
-	ldda32	xwa, (59681)
+	ld	xwa, (59681:16)
 	or	xwa, xwa
 	jrl	z, 255
 	ld	xwa, (xsp+4)
@@ -9879,7 +9879,7 @@ SeekRecord_Done_DoLookupRe:
 	.byte 0xaf, 0x02, 0xf0
 	jr	lt, -41
 	ldw	(xsp+270), 0
-	ldda32	xwa, 59695
+	ld	xwa, (59695:16)
 	ld	(xsp+6), xwa
 	ldw_d16	wa, 59679
 	bit	4, wa
@@ -10451,7 +10451,7 @@ Epilogue_Block:
 	lds32	xhl, 0
 	ret
 	push	xiz
-	ldda32	xbc, (59685)
+	ld	xbc, (59685:16)
 	or	xbc, xbc
 	jrl	z, 137
 Epilogue_Prologue2:
@@ -11088,7 +11088,7 @@ SndParam_StoreAndReturn:
 	.byte 0x8f, 0x02, 0x3f, 0x0f
 	jr	nz, 5
 	ld	xwa, 76
-	ldda32	xde, 57522
+	ld	xde, (57522:16)
 	add	xde, xwa
 	extz	xbc
 	.byte 0xa2, 0x81
@@ -11102,12 +11102,12 @@ SndParam_StoreAndReturn:
 	.byte 0x8f, 0x02, 0x3f, 0x14
 	jr	nz, 17
 	ld	xwa, 68
-	ldda32	xde, 57522
+	ld	xde, (57522:16)
 	add	xde, xwa
 	.byte 0xa2, 0x81
 	ld	l, (xbc)
 	jr	9
-	ldda32	xwa, 57522
+	ld	xwa, (57522:16)
 	.byte 0xa8, 0x3c, 0x81
 	ld	l, (xbc)
 	inc	4, xsp
@@ -11333,12 +11333,12 @@ StoreAndAdvance_Prologue:
 	jr	13
 	ldb	l, 137
 	jr	9
-	ldda32	xwa, (57522)
+	ld	xwa, (57522:16)
 StoreAndAdvance_LoopBody:
 	ld	xwa, (xwa+4)
 	ld	l, a
 	ret
-	ldda32	xhl, (57522)
+	ld	xhl, (57522:16)
 	add	xhl, xbc
 	ld	xix, (xhl)
 StoreAndAdvance_LoopCheck:
@@ -11514,7 +11514,7 @@ StoreDRAMInit_ReadBuf3:
 	dec	6, xsp
 	push	xiz
 	ld	e, c
-	ldda32	xbc, (57522)
+	ld	xbc, (57522:16)
 StoreDRAMInit_LoadParam:
 	ld	xiz, (xbc+52)
 	lda	xbc, (xsp+4)

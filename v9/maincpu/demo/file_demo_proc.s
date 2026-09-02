@@ -1078,7 +1078,7 @@ Voice_CopyPreset:
 Demo_LookupPartTableEntry:
 	extz wa
 	sla wa, 2
-	ldda32 xbc, (0x90f2)
+	ld xbc, (0x90f2:16)
 	exts xwa
 	add xwa, xbc
 	ld xhl, (xwa)
@@ -4104,7 +4104,7 @@ FileIO_OpenMode_Return:
 	ret
 
 FileIO_CloseHandle:
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	or xwa, xwa
 	jr z, FileIO_CloseHandle_Done
 	push xwa
@@ -4194,7 +4194,7 @@ FileIO_CopyOpen_Return:
 	ret
 
 FileIO_ReadByte:
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	or xwa, xwa
 	jr z, FileIO_ReadByte_NoHandle
 	push xwa
@@ -4226,7 +4226,7 @@ FileIO_ReadByte_Extended:
 FileIO_ReadByte_BufferHit:
 	pushw iz
 	lds iz, 0
-	ldda32 xbc, (0x7f44)
+	ld xbc, (0x7f44:16)
 	or xbc, xbc
 	jr z, FileIO_SeekAndRead_Error
 	push xbc
@@ -4236,7 +4236,7 @@ FileIO_ReadByte_BufferHit:
 	inc 6, xsp
 	cps hl, 0
 	jr ge, FileIO_SeekAndRead_Return
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	ld wa, (xwa + 6)
 	res 15, wa
 	cp wa, 0x1f
@@ -4270,7 +4270,7 @@ FileIO_ReadBlock:
 	ldw (xsp + 4), 0x0
 	lds32 xwa, 0
 	ld (xsp + 6), xwa
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	or xwa, xwa
 	jr z, FileIO_WriteBlock_LoopNext
 	ld (xsp + 14), xbc
@@ -4286,7 +4286,7 @@ FileIO_ReadBlock_Loop:
 
 FileIO_ReadBlock_Done:
 	ld (xsp + 10), xiz
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	push xwa
 	ld wa, iz
 	pushw wa
@@ -4308,7 +4308,7 @@ FileIO_ReadBlock_Done:
 	jr FileIO_WriteBlock_Error
 
 FileIO_WriteBlock_NoHandle:
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	ld wa, (xwa + 6)
 	bit 15, wa
 	jr z, FileIO_WriteBlock_CheckResult
@@ -4351,7 +4351,7 @@ FileIO_WriteByte_Impl:
 	ld (xsp + 14), xbc
 	ld (xsp + 18), xwa
 	ldw (xsp + 4), 0x0
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	or xwa, xwa
 	jr z, FileIO_FlushAndClose
 	ld xwa, (xsp + 14)
@@ -4368,7 +4368,7 @@ FileIO_WriteByte_NoHandle:
 
 FileIO_WriteByte_Return:
 	ld (xsp + 6), xiz
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	push xwa
 	ld wa, iz
 	pushw wa
@@ -4380,7 +4380,7 @@ FileIO_WriteByte_Return:
 	exts xhl
 	cp xhl, xiz
 	jr ge, FileIO_FlushBuffer_Return
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	ld wa, (xwa + 6)
 	res 15, wa
 	cp wa, 0x1f
@@ -4428,7 +4428,7 @@ FileIO_CheckHandle:
 	ret
 
 FileIO_SeekAndReadBlock:
-	ldda32 xde, (0x7f44)
+	ld xde, (0x7f44:16)
 	or xde, xde
 	jr z, FileIO_SeekRead_NoHandle
 	pushw bc
@@ -4457,7 +4457,7 @@ FileIO_SeekRead_Extended:
 FileIO_SeekRead_ExtReturn:
 	pushw iz
 	lds iz, 0
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	or xwa, xwa
 	jr z, FileIO_SeekWrite_NoHandle
 	push xwa
@@ -4481,7 +4481,7 @@ FileIO_SeekWriteBlock:
 	ret
 
 FileIO_SeekWriteBlock_Impl:
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	or xwa, xwa
 	jr z, FileIO_SeekWriteBlock_NoHandle
 	push xwa
@@ -4617,7 +4617,7 @@ FileIO_ParseHeader_Return:
 	lda xsp, (xsp + 12)
 	cp hl, iz
 	jr z, FileIO_ParseHeader_ReadFields
-	ldda32 xwa, (0x7f44)
+	ld xwa, (0x7f44:16)
 	ld wa, (xwa + 6)
 	res 15, wa
 	cp wa, 0x1f

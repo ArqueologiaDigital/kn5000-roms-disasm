@@ -21,7 +21,7 @@ SysEx_ClampVoiceIndex8_DoLookup:
 SysEx_ApplyToSlot4B_Data:
 	dec	2, xsp
 	push	xiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -76,7 +76,7 @@ SysEx_ClampVoiceIndex128_DoLookup:
 SysEx_ApplyToSlot49_Data:
 	dec	2, xsp
 	push	xiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -133,7 +133,7 @@ SysEx_ClampVoiceIndex8_49_DoLookup:
 SysEx_ApplyToSlot49_Format_Data:
 	dec	2, xsp
 	push	xiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 11
 	call	SeqData_ReadFieldByIndex
 	ld	(xsp+4), l
@@ -874,11 +874,11 @@ SwbtWr_DispatchLoop_Init:
 	stdi16 (0xc07b), 0
 
 SwbtWr_DispatchLoop:
-	ldda32 xiy, (0xc089)
+	ld xiy, (0xc089:16)
 	addda16 xiy, 0xc07b
 	cp (xiy), 0xff
 	jr z, SwbtWr_DispatchLoop_PostCallbacks
-	ldda32 xix, (0xc081)
+	ld xix, (0xc081:16)
 	xor hl, hl
 	ld l, (xiy)
 	stb_d8 (0xc080), l
@@ -930,7 +930,7 @@ SwbtWr_DispatchLoop_NextEvent:
 	jrl SwbtWr_DispatchLoop
 
 SwbtWr_DispatchLoop_PostCallbacks:
-	ldda32 xix, (0xc085)
+	ld xix, (0xc085:16)
 
 SwbtWr_PostCallback_Loop:
 	cpw (xix), 0xffff

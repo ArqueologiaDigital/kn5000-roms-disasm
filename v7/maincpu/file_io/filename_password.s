@@ -221,13 +221,13 @@ FmmFileNameFunc:
 	cps	hl, 0
 	jr	lt, 15
 	exts	xhl
-	ldda32	xwa, (32470)
+	ld	xwa, (32470:16)
 	ld	xbc, 31784962
 	ld	xde, xhl
 	jr	17
 FileName_ListSelect_Negative:
 	stdi16	(32478), 0
-	ldda32	xwa, (32470)
+	ld	xwa, (32470:16)
 	ld	xbc, 31784962
 	lds32	xde, 0
 FileName_ListSelect_Forward:
@@ -266,7 +266,7 @@ FileName_DrawItemLoop:
 	lda_d16	xbc, 33904
 	extz	xde
 	add	xde, xbc
-	ldda32	xwa, 32470
+	ld	xwa, (32470:16)
 	ld	xbc, 29360143
 	call	16423243
 	incw	1, (xsp+6)
@@ -603,7 +603,7 @@ FileName_UpdateDisplay:
 	stdi8	(35164), 4
 	ldw_d16	de, (32478)
 	exts	xde
-	ldda32	xwa, (32470)
+	ld	xwa, (32470:16)
 	ld	xbc, 31784962
 	call	ApPostEvent
 	ld	de, (xsp+4)
@@ -611,7 +611,7 @@ FileName_UpdateDisplay:
 	lda_d16	xbc, (33904)
 	extz	xde
 	add	xde, xbc
-	ldda32	xwa, (32470)
+	ld	xwa, (32470:16)
 	ld	xbc, 29360143
 	call	ApPostEvent
 	ldw_d16	de, (32478)
@@ -619,7 +619,7 @@ FileName_UpdateDisplay:
 	lda_d16	xbc, (33904)
 	extz	xde
 	add	xde, xbc
-	ldda32	xwa, (32470)
+	ld	xwa, (32470:16)
 	ld	xbc, 29360143
 	call	ApPostEvent
 	ldw	(xsp+6), 0
@@ -653,7 +653,7 @@ FileName_UpdateButtons_Check:
 	call FileIO_FormatName_Loop
 
 FileName_CheckCallback:
-	ldda32	xwa, 32474
+	ld	xwa, (32474:16)
 	or	xwa, xwa
 	jrl	z, 200
 	cpdi8	35994, 103
@@ -683,13 +683,13 @@ FileName_Callback_SetFilter:
 FileName_Callback_Send:
 	ld	de, iz
 	extz	xde
-	ldda32	xwa, (32474)
+	ld	xwa, (32474:16)
 	ld	xbc, 31784961
 	jr	118
 FileName_Callback_Simple:
 	call	16289600
 	extz	xhl
-	ldda32	xwa, (32474)
+	ld	xwa, (32474:16)
 	ld	xbc, 31784961
 	ld	xde, xhl
 	jr	99
@@ -722,13 +722,13 @@ FileName_Register_SetFilter:
 FileName_Register_Send:
 	ld	de, iz
 	extz	xde
-	ldda32	xwa, (32474)
+	ld	xwa, (32474:16)
 	ld	xbc, 31784961
 	jr	17
 FileName_Register_Simple:
 	call	16289600
 	extz	xhl
-	ldda32	xwa, (32474)
+	ld	xwa, (32474:16)
 	ld	xbc, 31784961
 	ld	xde, xhl
 FileName_DispatchWidget:

@@ -5464,7 +5464,7 @@ Audio_DMA_Transfer_CheckSize:
 	ret ule
 
 Audio_DMA_Transfer_ByteLoop:
-	ldda32 xwa, (1498)
+	ld xwa, (1498:16)
 	stb_dpi A, 0xe0
 	stda32 1498, xwa
 	ld a, (xbc)
@@ -6920,7 +6920,7 @@ SLIDE_Decompress_4K_Continue:
 	jrl c, SLIDE_Decompress_4K_MainLoop
 
 SLIDE_Decompress_4K_Done:
-	ldda32	xwa, (1570)
+	ld	xwa, (1570:16)
 	push	xwa
 	call	16712469
 	inc	4, xsp
@@ -7052,7 +7052,7 @@ SLIDE_Decompress_8K_Continue:
 	jrl c, SLIDE_Decompress_8K_MainLoop
 
 SLIDE_Decompress_8K_Done:
-	ldda32	xwa, (1570)
+	ld	xwa, (1570:16)
 	push	xwa
 	call	16712469
 	inc	4, xsp
@@ -7644,7 +7644,7 @@ Flash_BurnWithProgress:
 	jr nz, FlashBurn_Done
 
 FlashBurn_ProgressLoop:
-	ldda32 xwa, (1033)
+	ld xwa, (1033:16)
 	cp xwa, 0x1f4
 	jr ule, FlashBurn_CheckDone
 	inc 8, iz
@@ -8063,7 +8063,7 @@ Parport_WaitDataReady:
 
 Parport_ReadNextByte:
 	pushw iz
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	cpda32 xwa, 1598
 	jr c, Parport_ReadByte_FromBuffer
 	ldw hl, 0xffff
@@ -8098,7 +8098,7 @@ Parport_RefillBuffer_Loop:
 	stda32 1610, xwa
 
 Parport_ReadByte_Emit:
-	ldda32 xwa, (1610)
+	ld xwa, (1610:16)
 	stb_dpi A, 0xe0
 	stda32 1610, xwa
 	ld l, (xbc)
@@ -8121,7 +8121,7 @@ Flash_AccumWrite_Byte:
 	stb_d8 (1620), a
 	cps e, 3
 	jr nz, Flash_AccumWrite_ByteDone
-	ldda32 xwa, (1606)
+	ld xwa, (1606:16)
 	stb_dpi B, 0xe2
 	stda32 1606, xwa
 	ld xbc, (xbc)
@@ -8147,7 +8147,7 @@ Flash_AccumWrite_Word:
 	stb_d8 (1620), a
 	cps c, 1
 	jr nz, Flash_AccumWrite_WordDone
-	ldda32 xwa, (1622)
+	ld xwa, (1622:16)
 	stb_dpi A, 0xe1
 	stda32 1622, xwa
 	ld de, (xde)
@@ -8208,7 +8208,7 @@ LZSS_Decompress_StreamHeaderBytes:
 	jr c, LZSS_Decompress_StreamHeaderBytes
 	stdi16 (1614), 42
 	stdi16 (1616), 200
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	cpda32 xwa, 1598
 	jr nc, LZSS_Decompress_ReturnOK
 
@@ -8217,7 +8217,7 @@ LZSS_Decompress_StreamData:
 	extz hl
 	ld wa, hl
 	calr Flash_AccumWrite_Word
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	cpda32 xwa, 1598
 	jr c, LZSS_Decompress_StreamData
 
@@ -8241,11 +8241,11 @@ LZ_Decompress_Init:
 	lds32	xwa, 0
 	stda32	(1602), xwa
 LZ_Decompress_ClearRing:
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	ld xbc, (xsp + 16)
 	add xbc, xwa
 	ld (xbc), 0x0
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	inc 1, xwa
 	stda32 1602, xwa
 	cp xwa, 0xfee
@@ -8300,7 +8300,7 @@ LZ_Decompress_ReadSizeField:
 	adddm32 1598, xhl
 	calr Parport_ReadNextByte
 	extz xhl
-	ldda32 xwa, (1598)
+	ld xwa, (1598:16)
 	add xwa, xhl
 	stda32 1598, xwa
 	cpdm32 1602, xwa
@@ -8384,7 +8384,7 @@ LZ_Decompress_CopyMatchLoop:
 	jr ule, LZ_Decompress_CopyMatchLoop
 
 LZ_Decompress_LoopCheck:
-	ldda32 xwa, (1602)
+	ld xwa, (1602:16)
 	cpda32 xwa, 1598
 	jrl c, LZ_Decompress_MainLoop
 

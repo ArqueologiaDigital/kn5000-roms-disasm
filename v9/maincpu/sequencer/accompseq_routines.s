@@ -455,7 +455,7 @@ AccompSeq_Parse_Type90:
 	jr AccompSeq_Parse_Done
 
 AccompSeq_Parse_Type90_Large:
-	ldda32 xhl, (0x7e4c)
+	ld xhl, (0x7e4c:16)
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	calr AccompSeq_ProcessNoteOn6
@@ -476,7 +476,7 @@ AccompSeq_Parse_Type91_Impl:
 	jr AccompSeq_Parse_Type91_Done
 
 AccompSeq_Parse_Type91_CalcSize:
-	ldda32 xhl, (0x7e4c)
+	ld xhl, (0x7e4c:16)
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	calr AccompSeq_ProcessNoteOn8
@@ -504,7 +504,7 @@ AccompSeq_Parse_Fallthrough:
 	jr AccompSeq_Parse_TypeC0_Done
 
 AccompSeq_Parse_TypeC0_CalcSize:
-	ldda32 xhl, (0x7e4c)
+	ld xhl, (0x7e4c:16)
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	calr AccompSeq_ProcessNotePorta
@@ -521,7 +521,7 @@ AccompSeq_Parse_TypeC0_Impl:
 	jr AccompSeq_Parse_Return
 
 AccompSeq_Parse_TypeC0_Finalize:
-	ldda32 xhl, (0x7e4c)
+	ld xhl, (0x7e4c:16)
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
 	calr AccompSeq_ProcessNoteOn5
@@ -548,7 +548,7 @@ AccompSeq_ReadParams:
 	ret
 
 AccompSeq_CalcEventSize:
-	ldda32 xhl, (0x7e4c)
+	ld xhl, (0x7e4c:16)
 	ld wa, (xhl + 6)
 	cp wa, (xhl + 4)
 	jr c, AccompSeq_CalcSize_Negative
@@ -574,7 +574,7 @@ AccompSeq_CalcSize_Store:
 	ret
 
 AccompSeq_ResetCounters:
-	ldda32 xhl, (0x7e4c)
+	ld xhl, (0x7e4c:16)
 	ldw (xhl + 256), 0xa
 	ldw (xhl + 2), 0xff
 	ldw (xhl + 4), 0xa
@@ -681,7 +681,7 @@ AccompSeq_ProcessNotePorta:
 	jr nz, AccompSeq_NotePorta_Done
 	ldb_d8 a, (0x7e57)
 	push xiy
-	ldda32 xiy, (0x7e74)
+	ld xiy, (0x7e74:16)
 	ld (xiy), a
 	pop xiy
 
@@ -717,7 +717,7 @@ AccompSeq_ProcessNoteOn5:
 
 AccompSeq_NoteOn5_StoreProgram:
 	push xiy
-	ldda32 xiy, (0x7e48)
+	ld xiy, (0x7e48:16)
 	ld (xiy), a
 	pop xiy
 
@@ -762,7 +762,7 @@ AccompSeq_CheckVelocityFlags:
 
 AccompSeq_VelFlags_CheckProgram:
 	push xiy
-	ldda32 xiy, (0x7e48)
+	ld xiy, (0x7e48:16)
 	ld w, (xiy)
 	cp w, 0xf0
 	jr c, AccompSeq_VelFlags_CallDispatch
@@ -794,7 +794,7 @@ AccompSeq_CheckVelFlagsExtended:
 
 AccompSeq_ExtVelFlags_CheckProg:
 	push xiy
-	ldda32 xiy, (0x7e48)
+	ld xiy, (0x7e48:16)
 	ld w, (xiy)
 	cp w, 0xf0
 	jr c, AccompSeq_ExtVelFlags_Dispatch
@@ -1035,12 +1035,12 @@ AccompSeq_LargeCodeBlock1:
 AccompSeq_UpdatePosition:
 	cpdi8 (0x7e52), 0
 	jr nz, AccompSeq_UpdatePos_Part2
-	ldda32 xwa, (0x7e65)
+	ld xwa, (0x7e65:16)
 	anddi8 (0x7e6d), 254
 	jr AccompSeq_UpdatePos_Store
 
 AccompSeq_UpdatePos_Part2:
-	ldda32 xwa, (0x7e69)
+	ld xwa, (0x7e69:16)
 	anddi8 (0x7e6d), 254
 
 AccompSeq_UpdatePos_Store:
@@ -2080,7 +2080,7 @@ AccompSeq_SeqParse_ProgChg_Flags:
 	calr AccompSeq_AdvancePosition
 	calr AccompSeq_AdvancePosition
 	push xiy
-	ldda32 xiy, (0x7e48)
+	ld xiy, (0x7e48:16)
 	ldb_d8 a, (0x7e55)
 	and a, 0x7f
 	bitda 0, (0x7e56)
@@ -2120,7 +2120,7 @@ AccompSeq_SeqParse_CtrlChg_SetCh:
 	jr nz, AccompSeq_SeqParse_CtrlChg_Loop
 	ldb_d8 a, (0x7e56)
 	push xiy
-	ldda32 xiy, (0x7e74)
+	ld xiy, (0x7e74:16)
 	ld (xiy), a
 	pop xiy
 
@@ -2128,10 +2128,10 @@ AccompSeq_SeqParse_CtrlChg_Loop:
 	jp AccompSeq_SeqParse_Loop
 
 AccompSeq_SeqParse_TempoReset:
-	ldda32 xwa, (0x7e65)
+	ld xwa, (0x7e65:16)
 	cpdi8 (0x7e52), 0
 	jr z, AccompSeq_SeqParse_TempoStore
-	ldda32 xwa, (0x7e69)
+	ld xwa, (0x7e69:16)
 
 AccompSeq_SeqParse_TempoStore:
 	stda16 (0x7e44), xwa
