@@ -286,8 +286,91 @@ None of the five Japanese tables is indexed by a standard encoding.
   need, numbered in whatever order they were collected.
 
 So a code in these tables is meaningful only against a mapping that prom_a does
-not contain. ⚠ **Anything that wants to read WSA1 Japanese strings needs that
-mapping, and it has not been found.**
+not contain.
+
+### 5.1 ✅ The kanji mapping now exists — read off the glyphs (2026-09-02)
+
+`notes/fonts-kanji/kanji_transcription.txt` gives all **224** ideographs of set
+A and all **43** of set B, character by character, in code order. It was not
+decoded from anything: every cell was **read by eye** from the lossless contact
+sheets `prom_b/images/fonts/Font_Svc1A_16x16.png` and `Font_Svc1F_16x16.png`.
+
+⚠ **Grade that for what it is.** This is human OCR of a 16x16 bitmap. One cell
+(set A `0x38`) could not be settled at all and is written `〓`; a handful of
+others are ranked readings, not facts — `0xDF` is 滅 rather than 減 only because
+the cell has 火 where set B's `0x38` has 口. Treat a single character as a
+proposal. ★ But the errors are **noise, not bias**: a misread character can
+only break a word that is really there, never invent one, so every statistic
+below is a *lower bound*.
+
+Two shape checks it passes: the transcription has exactly 224 and 43 entries,
+matching the ROM's defined-cell counts derived independently by
+`notes/font_layout_check.py`; and no character appears in both faces, which is
+what the ROM's own **zero shared bitmaps** between the two sets requires.
+
+### 5.2 ★★ The order is the TEXT'S order — measured, with a computed null
+
+`prom_b/images/fonts/README.md` noticed by eye that adjacent cells keep forming
+compound words — 状態, 心配, 故障, 工場, 出荷, 電源, 鍵盤 — and proposed that the
+private encoding numbers the kanji **in the order some text first needed them**.
+That was a hypothesis with no test attached. It now has one, and it **passes**:
+
+    python3 scripts/analysis/kanji_order_hypothesis.py
+
+| | set A (224 cells) | set B (43 cells) |
+|---|---:|---:|
+| adjacent code pairs that are dictionary words | **72** | 6 |
+| shuffle null, 10,000 permutations of the SAME characters | 24.8 ± 4.8 | 2.6 ± 1.5 |
+| permutations reaching the observed count | **0 / 10,000** | 410 / 10,000 |
+| distance from the null | **9.9 sd** | 2.2 sd |
+
+★ The null is **computed, not assumed**, and it is the null that matters: these
+224 characters are the kanji of a technical manual, which pair up far more
+readily than random kanji would, and shuffling them holds that constant while
+destroying only the ORDER. A second, within-data control counts pairs at
+distance 2 through 8 — the hypothesis predicts nothing about those — and they
+sit on the null throughout (18–28 against 24.8).
+
+The oracle is EDICT2 reduced to the 3,679 two-kanji headwords writable in this
+alphabet (`notes/fonts-kanji/wordlist_2char.txt`). It knows nothing about this
+ROM and is applied identically to the real order, to the controls and to all
+10,000 shuffles.
+
+★ Set B is the same effect at 43 cells (希望, 説明, 便利, 情報) and does **not**
+reach significance on its own — reported because a weak result is a result.
+
+**What this establishes and what it does not.** It establishes that the codes
+were assigned by walking Japanese *running text* and giving each new ideograph
+the next free number: nothing else makes 状態 land on `0x13`-`0x14` and 工場出荷
+on `0x1E`-`0x21`. It does **not** identify the text, and §5.3 shows why it
+cannot be identified from these ROMs.
+
+### 5.3 The two faces are an ACCRETION, and so is the Latin one
+
+Reading the set in order shows a document being consumed: 工場出荷 (`0x1E`-`0x21`)
+is a four-character compound spanning a row boundary, and the vocabulary is
+manual prose — 故障, 欠陥, 洗, 豊富, 優 — not button labels. Set B then looks
+like a **second batch**, collected after set A was closed: it is disjoint, it
+carries 説明, 詳, 便利, 情報, and its own adjacency effect points the same way.
+
+★ The same habit is visible in the **Latin** face and nobody had noticed. Above
+`0x7F`, `Font_Svc06_8x14` is not latin-1, not CP437 and not CP850 — it is a
+sequence of per-language *runs*: German `0x80`-`0x86` (Ä Ö Ü ä ö ü ß), musical
+and arrow symbols `0x87`-`0x91` (♮ ♭ ♯ ♩ ♪ and five arrows), French `0x99`-`0xA7`
+(Ç ç ô à â è ê ë ù ü û ï î), more symbols `0xA8`-`0xAE`, one blank cell at
+`0xAF`, and then **Spanish** `0xB0`-`0xBC` (Á É Ñ á ó ú ñ í ì ¿ …). A block
+appended after a gap is a block added later. See §5.4.
+
+### 5.4 ✅ `Font_Svc06`'s codes `0xB0`-`0xBC` are the SPANISH set
+
+The service's header asked *"Unknown: what indexes codes 0xB0-0xBC"*. Rendered,
+they are Á É Ñ á ó ú ñ í ì ¿ and two cells whose reading is not settled — the
+`Ñ`/`ñ` pair and the inverted question mark make the language unambiguous.
+They are **not** at their latin-1 code points (¿ is `0xBB` here, `0xBF` there;
+Á is `0xB1` here, `0xC1` there) and the offsets are not a constant shift, so
+this is a private extension, appended for a market rather than adopted from a
+standard. What *indexes* them is therefore whatever built the localised
+strings — the same answer, and the same gap, as for the kanji.
 
 ---
 
@@ -317,8 +400,48 @@ survive it, and this note picks neither:
 * the Japanese faces are **not used by this firmware revision at all**, and the
   data ships unreferenced.
 
-Deciding between them needs prom_b's UI code, which is another lane's territory
-and 13.8% converted.
+### 6.1 ✅ There is NO Japanese text in any of the four images (2026-09-02)
+
+That pair can now be separated from the other end. A call site is hard to find;
+**a sentence is not**, because unlike the ideographs the kana encoding is fully
+known (§4.2). If this firmware ever draws Japanese, the bytes are in a ROM.
+
+    python3 scripts/analysis/japanese_text_census.py --selftest
+    python3 scripts/analysis/japanese_text_census.py --all --dict-test
+
+Every maximal run of bytes in `0x10`-`0x66` is decoded through the real kana
+layout and scored against a 151,357-word EDICT2 kana list. The control holds
+the runs fixed and varies **only the mapping**, scoring them again under 200
+random bijections of the same 87 codes onto the same 87 kana:
+
+| image | runs | real map | permuted-map null | permutations >= real |
+|---|---:|---:|---|---:|
+| prom_a | 373 | 4 | 1.6 ± 2.8 | 24 / 200 |
+| prom_b | 523 | 64 | 21.6 ± 23.1 | 9 / 200 |
+| prom_c | 147 | 3 | 10.8 ± 52.6 | 18 / 200 |
+| prom_d | 281 | 10 | 5.8 ± 6.6 | 43 / 200 |
+
+The real layout is **indistinguishable from a random one** — on prom_c it scores
+*below* the mean. There is no Japanese text.
+
+★ **And the instrument was shown to work before its silence was believed.**
+`--selftest` plants four real sentences, encoded in this ROM's own private
+encoding, among decoys (ascending index tables, constant padding, an impossible
+yōon) and asserts all four are recovered and every decoy refused.
+`--plant 20` writes twenty sentences into the images and re-runs the whole
+dictionary test: prom_a goes 4 → 54 and 24/200 → **0/200**. Roughly 280 kana —
+a small fraction of any localised UI — is enough to separate. So the absence is
+measured, not assumed.
+
+⚠ What it does not cover: text that is **compressed** in the ROM, or text loaded
+from **disk**. Both remain open, and the second is a live possibility for a
+machine with a floppy drive.
+
+**Where that leaves §6:** the second reading is now much the stronger. Run-time
+script selection would still need Japanese strings somewhere, and there are
+none — so on this firmware revision the five Japanese faces, 21,120 bytes, ship
+as **unreferenced data**. Whoever built them was working from a document the
+ROM does not carry.
 
 ---
 
@@ -341,7 +464,15 @@ problem or is an accident of the build is **not established**.
 
 ## 8. What is still open
 
-* **The encoding tables.** §5. The single most valuable thing to find next.
+* ~~**The encoding tables.** §5.~~ ✅ **Set A's 224 and set B's 43 ideographs
+  are transcribed** (§5.1) and the ordering is established as text-driven
+  (§5.2). What is still missing is the **text itself**, and §6.1 shows it is
+  not in these four images. Next: the floppy filesystem, and any compressed
+  region of prom_b/c/d.
+* The kana faces' code points are known; the KANJI codes are now known as
+  glyphs. A *reverse* mapping (Unicode -> code) good enough to render a
+  Japanese string would need the two unsettled cells resolved — set A `0x38`,
+  and `Font_Svc06`'s `0xB0` and `0xBC`.
 * **Any caller at all.** §6. Until one exists, the `HL` argument of the text
   services still has no established meaning — it is multiplied by `BC` once into
   `IZ` and never used again.
@@ -372,3 +503,6 @@ problem or is an accident of the build is **not established**.
 | `notes/render_font.py` | one glyph, large |
 | `notes/swi7_call_sites.py` | who calls which service, with a measured noise floor |
 | `notes/prom_a_byte_checks.py` | the blitter comparison and the service/font wiring |
+| `scripts/analysis/kanji_order_hypothesis.py` | is the private kanji order the order of the text it came from? (§5.2) |
+| `scripts/analysis/japanese_text_census.py` | is there any Japanese text in the four images? (§6.1) |
+| `scripts/build/wsa1_fonts.py` | the twelve faces <-> PNG contact sheets, round-trip |

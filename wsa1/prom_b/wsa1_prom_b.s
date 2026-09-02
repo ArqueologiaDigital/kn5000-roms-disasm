@@ -45937,7 +45937,19 @@ PtrTable_F1B34D:
 ;   and steps 14 bytes per glyph; 17 of its codes above 0x7F are a plain
 ;   letter's bitmap with an accent in rows 0-1, byte for byte
 ;   (FINDINGS-fonts.md sec.2).
-; Unknown: what indexes codes 0xB0-0xBC.
+; Answered 2026-09-02: codes 0xB0-0xBC are the SPANISH accented set --
+;   A-acute, E-acute, N-tilde, a-acute, o-acute, u-acute, n-tilde,
+;   i-acute, i-grave, inverted question mark, and two cells not settled.
+;   They are NOT at their latin-1 code points (inverted question mark is
+;   0xBB here and 0xBF there; A-acute 0xB1 here and 0xC1 there) and the
+;   offsets are not a constant shift, so this is a private extension.
+;   Above 0x7F the whole face is per-language RUNS appended in turn:
+;   German 0x80-0x86, music and arrow symbols 0x87-0x91, French
+;   0x99-0xA7, more symbols 0xA8-0xAE, one blank cell at 0xAF, then
+;   Spanish 0xB0-0xBC.  A block after a gap is a block added later.
+;   FINDINGS-fonts.md sec.5.4.
+; Unknown: what INDEXES them is still whatever built the localised
+;   strings -- the same gap as for the ideographs.
 ; Entry count: 200 = (0xF1BEF0 - 0xF1B400) / 14, exact.
 ; --------------------------------------------------------------------------
 Font_Svc06_8x14:
@@ -47402,8 +47414,27 @@ Font_Svc19_16x16:
 ;   structurally: the same firmware carries hiragana and katakana at these
 ;   metrics. What IS checked is that all 224 bitmaps are distinct and share
 ;   none with set B or with either kana face.
-; Unknown: the encoding, and why the firmware keeps two disjoint ideograph
-;   sets.
+; Encoding, 2026-09-02: ALL 224 ideographs are now transcribed, character
+;   by character, in notes/fonts-kanji/kanji_transcription.txt.  (They
+;   cannot be written here: this source is latin-1.)  That also settles
+;   the 'kanji' identification above -- they are read, not guessed.
+;   The transcription is HUMAN OCR of a 16x16 bitmap, so grade a single
+;   character as a proposal; one cell, 0x38, is not settled at all.
+; ORDER, and this one is measured: the codes were assigned by walking
+;   Japanese running text and numbering each new ideograph as it was
+;   first met.  72 adjacent code pairs are dictionary words against a
+;   shuffle null of 24.8 +/- 4.8 over 10,000 permutations of the same
+;   224 characters -- 9.9 sd, 0 of 10,000 reach it -- while distance-2
+;   to distance-8 controls sit on the null.  Hence 0x13-0x14 = JOUTAI
+;   (state) and 0x1E-0x21 = KOUJOU SHUKKA (factory shipment), a
+;   four-character compound across a row boundary.
+;   python3 scripts/analysis/kanji_order_hypothesis.py
+; Unknown: the TEXT that order came from.  It is not in any of the four
+;   images: scripts/analysis/japanese_text_census.py finds no Japanese
+;   kana anywhere, under a test that recovers planted sentences.
+;   Also still unknown why the firmware keeps two disjoint sets --
+;   though set B looks like a second batch collected after this one was
+;   closed.  FINDINGS-fonts.md sec.5 and 6.1.
 ; Entry count: 240 = (0xF24640 - 0xF22840) / 32, exact.
 ; --------------------------------------------------------------------------
 Font_Svc1A_16x16:
@@ -47654,7 +47685,13 @@ Font_Svc1A_16x16:
 ; Role: Ideographs, set B, 16 x 16. 43 defined cells, 0x10-0x3A.
 ; Evidence: prom_a loads 0x00F24640 at 0xF8F277; disjointness from set A is
 ;   checked by notes/font_layout_check.py.
-; Unknown: same as set A.
+; Encoding, 2026-09-02: all 43 are transcribed in
+;   notes/fonts-kanji/kanji_transcription.txt.  The same ordering test
+;   points the same way here -- 6 adjacent pairs are dictionary words
+;   against a null of 2.6 +/- 1.5 -- but at 43 cells that is p = 0.04
+;   and NOT conclusive on its own.  Recorded because a weak result is
+;   still a result.  FINDINGS-fonts.md sec.5.2.
+; Unknown: same as set A -- the text.
 ; Entry count: 60 = (0xF24DC0 - 0xF24640) / 32, exact.
 ; --------------------------------------------------------------------------
 Font_Svc1F_16x16:

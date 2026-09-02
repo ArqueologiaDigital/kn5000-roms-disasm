@@ -25214,6 +25214,20 @@ LCD_Svc_21_DrawText16x24:
 ;          cannot say -- the mapping lives in whatever built the strings.
 ;          "Set A" is this disassembly's label for it, not a name the firmware
 ;          uses.  ⚠ No caller is traced.
+; UPDATE 2026-09-02, lane rq-fonts: the encoding is no longer opaque.
+;          All 224 ideographs are transcribed in
+;          notes/fonts-kanji/kanji_transcription.txt (they cannot be written
+;          in this source, which is latin-1), and the ORDER is measured: the
+;          codes were assigned by walking Japanese running text and numbering
+;          each new ideograph on first use.  72 adjacent code pairs are
+;          dictionary words against a shuffle null of 24.8 +/- 4.8 over
+;          10,000 permutations of the same characters, 9.9 sd, 0 of 10,000
+;          reaching it; distance-2..8 controls sit on the null.
+;            python3 scripts/analysis/kanji_order_hypothesis.py
+;          The TEXT itself is still missing, and it is not in these four
+;          images: scripts/analysis/japanese_text_census.py finds no Japanese
+;          kana in any of them, under a test that recovers planted sentences
+;          and refuses decoys.  FINDINGS-fonts.md sec.5 and 6.1.
 ; ---------------------------------------------------------------------
 LCD_Svc_1A_DrawKanjiSetA16x16:
 	and BC,BC                                     ; F8F229  d9 c1
@@ -25264,6 +25278,13 @@ LCD_Svc_1A_DrawKanjiSetA16x16:
 ;          ideograph a code is.  ⚠ Why the firmware keeps TWO disjoint kanji
 ;          sets rather than one is not established.  "Set B" is this
 ;          disassembly's label.  ⚠ No caller is traced.
+; UPDATE 2026-09-02, lane rq-fonts: all 43 ideographs are transcribed in
+;          notes/fonts-kanji/kanji_transcription.txt.  Set B reads like a
+;          SECOND BATCH collected after set A was closed -- it is disjoint,
+;          and the same ordering test points the same way (6 adjacent pairs
+;          are dictionary words against a null of 2.6 +/- 1.5) but at 43
+;          cells that is p = 0.04 and not conclusive alone.
+;          FINDINGS-fonts.md sec.5.2.
 ; ---------------------------------------------------------------------
 LCD_Svc_1F_DrawKanjiSetB16x16:
 	and BC,BC                                     ; F8F25B  d9 c1
