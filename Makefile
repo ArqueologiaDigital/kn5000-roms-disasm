@@ -703,7 +703,7 @@ TABLEDATA_SRC = $(wildcard table_data/*.s table_data/*/*.s)
 CUSTOMDATA_SRC = $(wildcard custom_data/*.s custom_data/*/*.s)
 
 # --- Maincpu ---
-rebuilt_ROMs/kn5000_v10_program.llvm.o: $(V10_SRC) original_ROMs/kn5000_v10_program.rom $(C_DATA_BINS) indexed-images $(LLVM_MC)
+rebuilt_ROMs/kn5000_v10_program.llvm.o: $(V10_SRC) original_ROMs/kn5000_v10_program.rom $(C_DATA_BINS) indexed-images $(INDEXED_IMAGE_SRC) $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v10/maincpu -o $@ v10/maincpu/kn5000_v10_program.s
 
@@ -714,7 +714,7 @@ rebuilt_ROMs/kn5000_v10_program.llvm.rom: rebuilt_ROMs/kn5000_v10_program.llvm.e
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- V9 Maincpu ---
-rebuilt_ROMs/kn5000_v9_program.llvm.o: $(V9_SRC) original_ROMs/kn5000_v9_program.rom $(V9_C_DATA_BINS) indexed-images $(LLVM_MC)
+rebuilt_ROMs/kn5000_v9_program.llvm.o: $(V9_SRC) original_ROMs/kn5000_v9_program.rom $(V9_C_DATA_BINS) indexed-images $(INDEXED_IMAGE_SRC) $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v9/maincpu -o $@ v9/maincpu/kn5000_v9_program.s
 
@@ -739,7 +739,7 @@ rebuilt_ROMs/kn5000_v9_program.llvm.rom: rebuilt_ROMs/kn5000_v9_program.llvm.elf
 v7-extract-bins: $(V7_C_DATA_BINS)
 	python3 scripts/build/apply_v7_c_divergence.py
 
-rebuilt_ROMs/kn5000_v7_program.llvm.o: $(V7_SRC) v7-extract-bins indexed-images $(LLVM_MC)
+rebuilt_ROMs/kn5000_v7_program.llvm.o: $(V7_SRC) v7-extract-bins indexed-images $(INDEXED_IMAGE_SRC) $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I v7/maincpu -o $@ v7/maincpu/kn5000_v7_program.s
 
@@ -840,6 +840,20 @@ style-midi:
 verify-style-midi:
 	python3 scripts/build/style_to_midi.py verify
 
+# ⚠ THE PNG SOURCES MUST BE REAL PREREQUISITES OF THE OBJECTS.
+# `indexed-images`, `hdae5000-images` and `tabledata-images` produce many .bin
+# files under generated/ and name none of them, exactly like `style-events` did.
+# `.SECONDARY:` is declared with no prerequisites, so every target is
+# intermediate and make reports "does not exist / no need to remake" for a bare
+# rule name -- MEASURED 2026-09-02 on style-events, where a one-note edit that
+# really moved ROM byte 0x1409 printed IDENTICAL and exited 0.
+# Enumerating every generated .bin here would be brittle, so instead the OBJECTS
+# depend on the PNG and palette SOURCES: touch a committed image and the object
+# is out of date, the phony rule regenerates the .bin, and the gate can see it.
+INDEXED_IMAGE_SRC  := $(shell find v10/maincpu/images -name '*.png' 2>/dev/null)
+TABLEDATA_IMAGE_SRC:= $(shell find table_data/images  -name '*.png' 2>/dev/null)
+HDAE_IMAGE_SRC     := $(shell find hdae5000/images    -name '*.png' 2>/dev/null)
+
 indexed-images:
 	python3 scripts/build/indexed_images.py build
 	python3 scripts/build/mono_images.py build
@@ -855,7 +869,7 @@ tabledata-images: indexed-images
 	python3 scripts/build/font_images.py build
 	python3 scripts/build/mono_images.py build
 
-rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o: $(HDAE_SRC) hdae5000-images $(LLVM_MC)
+rebuilt_ROMs/hd-ae5000_v2_06i.llvm.o: $(HDAE_SRC) hdae5000-images $(HDAE_IMAGE_SRC) $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I hdae5000 -o $@ hdae5000/hd-ae5000_v2_06i.s
 
@@ -866,7 +880,7 @@ rebuilt_ROMs/hd-ae5000_v2_06i.llvm.rom: rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf
 	$(LLVM_OBJCOPY) -O binary $< $@
 
 # --- Table data ---
-rebuilt_ROMs/kn5000_table_data.llvm.o: $(TABLEDATA_SRC) $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED) $(STALE_HELP_DUPLICATE) tabledata-images $(STYLE_EVENT_BINS) $(LLVM_MC)
+rebuilt_ROMs/kn5000_table_data.llvm.o: $(TABLEDATA_SRC) $(DEMO_PRESET_COMPRESSED) $(HELP_DB_COMPRESSED) $(STALE_HELP_DUPLICATE) tabledata-images $(TABLEDATA_IMAGE_SRC) $(INDEXED_IMAGE_SRC) $(STYLE_EVENT_BINS) $(LLVM_MC)
 	mkdir -p rebuilt_ROMs
 	$(LLVM_MC) -triple=tlcs900 -filetype=obj -I table_data -o $@ table_data/kn5000_table_data.s
 
