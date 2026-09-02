@@ -251,3 +251,30 @@ python3 notes/gen_prom_b_display_lists_v2.py --lo 0x00000 --hi 0x31800
 The last one is the emitter that produced the record listings now in
 `prom_b/wsa1_prom_b.s`; it renders A records with text identical to the committed
 emitter's, so a diff against the old output is exactly the B records.
+
+## UPDATE 2026-09-02 — the four "data the failing site points into" neighbourhoods are now source
+
+Lane promB5 converted the six `.incbin` spans of prom_b it owned (1,115 bytes:
+`0xF283A7`, `0xF2843D`, `0xF28725`, `0xF296D6`, `0xF2B2E3`, `0xF34CB8`), and three
+of them are exactly the neighbourhoods this document dissected above. The
+structure it emitted was derived independently — from the referring records'
+pointers and the entry size each handler fixes — and it agrees with the reading
+above in every detail:
+
+* `0xF28725`, `0xF28735`, `0xF28745`, `0xF28755` and `0xF28791`, `0xF287A1`,
+  `0xF287B1`, `0xF287C1` are eight arrays of **2 entries × 8 bytes**, the second
+  four named by a further four opcode-03 records at `0xF28765`. `0xF287C1` — the
+  failing A site's start — is the eighth array's first byte, so "inside data a
+  neighbouring record points at" is now literally what the source says.
+* `0xF2970F` and `0xF2971A` are two opcode-03 records running to `0xF29725`,
+  where their 8 × 8-byte array begins and runs to `DL_F29765`. `0xF29710`, the
+  failing B site's start, is the second byte of the first of them.
+* `0xF283A7` and `0xF2843D` are not records at all: they are the 5×30 and 2×9
+  **bitmaps** that 32 and 17 interpreter-A opcode-03 records draw.
+
+⚠ One sentence in "What merging costs" above is now stale: the four good records
+at `0xF286F9` are **no longer `.incbin`** — `notes/gen_prom_b_dl_shape1_gap_f286f9.py`
+spliced them earlier. The cost merging *had* is described correctly; the
+consequence has since been paid off.
+
+Reproduce: `python3 notes/gen_promB5_spans.py --selftest`.
