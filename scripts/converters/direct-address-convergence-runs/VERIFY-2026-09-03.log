@@ -3,6 +3,7 @@ assembler /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap
   sha256 850b013e0e8f14d9a90b95ff1995a858ad8575b8c35a8749970b47ffc613f1a1
 changed .s files: 242
 changed lines: 51030   files not line-for-line: 0
+trailing comments on changed lines: 12480 before, 12480 after, 0 text mismatches
 
 old mnemonic verified
 stdi8         10895

@@ -1,4 +1,4 @@
-# Direct-address convergence — the run of 2026-09-02
+# Direct-address convergence — the run of 2026-09-03
 
 Produced by `scripts/converters/run_direct_address_convergence.sh`, which is
 the recipe; these are its outputs, kept because their numbers are quoted in the
@@ -6,9 +6,9 @@ sixteen family commits and in the lane report.
 
 | file | the question it answers |
 |---|---|
-| `RUN-2026-09-02.log` | how many sites and files each family converted, and what the byte gate said after each one |
-| `refused-2026-09-02.csv` | every site the converter would NOT rewrite, with the reason — six, all `ldw_da xwa, (\ParamC)` inside `.macro` bodies, which cannot be assembled in isolation and so cannot be certified per-site |
-| `VERIFY-2026-09-02.log` | `verify_direct_address_convergence.py --base 8851285e` — all 51,030 changed lines re-checked from git under ONE assembler, after the fact |
+| `RUN-2026-09-03.log` | how many sites and files each family converted, and what the byte gate said after each one |
+| `refused-2026-09-03.csv` | every site the converter would NOT rewrite, with the reason — six, all `ldw_da xwa, (\ParamC)` inside `.macro` bodies, which cannot be assembled in isolation and so cannot be certified per-site |
+| `VERIFY-2026-09-03.log` | `verify_direct_address_convergence.py --base e6e075f4` — all 51,030 changed lines re-checked from git under ONE assembler, after the fact |
 
 Regenerate with:
 
@@ -34,3 +34,13 @@ rejecting `ldw (0xe0b4:16), 0`. Even the coordinator's *snapshot* copy at
 (`53c6621d5f6dd3c1` -> `850b013e0e8f14d9`). So the verify log names the sha256
 of the binary it actually opened, and that is the number to quote — not the
 git commit, which did not move at all.
+
+## ⚠ This is the SECOND run of the same 16 families
+
+The first, on base `8851285e`, converted the identical 51,030 sites and gated
+green — and then `main` moved 24 commits (two whole lanes merged) while it was
+running, so it was regenerated from scratch on `e6e075f4` rather than rebased.
+That is the point of committing the driver: a mechanical, per-site-verified
+conversion is cheaper to re-run on a new base than to merge, and re-running it
+also re-verifies it against whatever the backend has become in the meantime.
+The two runs produced the same counts, mnemonic for mnemonic.

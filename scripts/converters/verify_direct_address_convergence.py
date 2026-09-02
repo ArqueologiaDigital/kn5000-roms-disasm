@@ -114,12 +114,26 @@ def main():
             continue
         for i, (a, b) in enumerate(zip(ol, nl)):
             if a != b:
-                pairs.append((f, i + 1, strip_comment(a), strip_comment(b), a))
+                pairs.append((f, i + 1, strip_comment(a), strip_comment(b), a, b))
 
     print("changed lines: %d   files not line-for-line: %d"
           % (len(pairs), len(skipped)))
     for f, why in skipped:
         print("   SKIPPED %s (%s)" % (f, why))
+
+    # ⚠ A rename must move the MNEMONIC and nothing else.  These sources carry
+    # the project's entire semantic record in trailing comments, so count them
+    # on both sides and require the text to be identical -- a rewrite that
+    # dropped or mangled a comment would still pass the byte gate.
+    def comment(line):
+        return line.split(";", 1)[1] if ";" in line else None
+    cbefore = sum(comment(p[4]) is not None for p in pairs)
+    cafter = sum(comment(p[5]) is not None for p in pairs)
+    cbad = [p for p in pairs if comment(p[4]) != comment(p[5])]
+    print("trailing comments on changed lines: %d before, %d after, "
+          "%d text mismatches" % (cbefore, cafter, len(cbad)))
+    for p in cbad[:10]:
+        print("   %s:%d\n     %r\n     %r" % (p[0], p[1], p[4], p[5]))
 
     foreign = [p for p in pairs
                if (p[2].split() or [""])[0] not in OLD_MNEMONICS]
@@ -154,6 +168,9 @@ def main():
         for (c, o, n) in bad[:20]:
             print("   %s:%d\n     old %-40s %s\n     new %-40s %s"
                   % (c[0], c[1], c[2], o, c[3], n))
+        return 1
+    if cbad:
+        print("\nFAIL: %d changed line(s) lost or altered a comment" % len(cbad))
         return 1
     if skipped or foreign:
         print("\nINCOMPLETE: %d file(s) skipped, %d foreign line(s)."
