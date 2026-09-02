@@ -20,6 +20,20 @@ This tool splits every `.byte` run in
   (c) BYTETABLE -- genuine byte-valued tables.  `.byte` is already right; these
                    are NOT debt and converting them would be noise.
 
+and CROSSES all three with a fourth, orthogonal tag:
+
+  (d) BLIND-START -- the run's first byte is one of {0x01, 0x04, 0x17, 0x1a,
+                   0x1c}, which the pinned tlcs900_backend cannot decode at all
+                   but MAME's unidasm reads as normal / max / ldf / JP nnnn /
+                   CALL nnnn.  A conversion pass leaves behind what its decoder
+                   refused, so across a whole image an excess of these starts is
+                   evidence of undecoded CODE
+                   (see scripts/analysis/byte_run_start_enrichment.py).
+                   ⚠ It is a tag, NOT a class: it does not license converting a
+                   run, and until the backend gains those five instructions any
+                   attempt would have to find some OTHER reading that
+                   round-trips -- data-as-code arriving from the far side.
+
 HOW IT DECIDES
 --------------
 Addresses come from `scripts/analysis/address_line_map.py`, which self-tests
@@ -74,11 +88,32 @@ already labels, using the SAME reference index:
 `--control` prints both rates and names the offenders.  A number from this tool
 should never be quoted without them.
 
+THE BUCKET-(d) CONTROL, AND WHY THIS FILE READS AS DATA
+-------------------------------------------------------
+A raw blind-start count means nothing on its own: 0x01 and 0x04 are common data
+values.  The instrument is the CONTROL SET {0x02, 0x03, 0x05, 0x16, 0x1b} --
+decodable bytes of the same magnitude.  For v10/maincpu as a whole the split is
+19.3% blind against 0.4% control, a 46.5x enrichment.  For THIS FILE alone it is
+10.9% blind against 5.1% control -- 2.1x, under the enrichment script's own 3x
+threshold, i.e. "reads as data".  So widget_dispatch.s is NOT where v10's
+undecoded-code residue lives; the concentrations are extension_data.s (58.3%),
+sound_editor_ui.s (15.9%) and accompaniment_engine.s (15.1%).
+
+And this file's residual blind starts are a CONFOUND, not a residue.  65 of its
+74 blind-start runs begin with 0x01, and they sit at a regular cadence inside
+the DisplayScript_Node_* / WidgetParam_Entry_* arrays, which are SIX-byte
+records `{u16 tag, u32 pointer}`: the 0x01 is the low byte of a record tag, and
+the run boundary in front of it was manufactured by an interposed `.long` for
+the previous record's pointer.  `--list BLIND` shows them.  No blind-start run
+in this file is a call/jump target, none is fall-through reachable, and none
+lands in the CODE or STRUCT class.
+
 RUN
     python3 scripts/analysis/v10_widget_dispatch_byte_triage.py
     python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --control
     python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --selfcheck
     python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --list CODE
+    python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --list BLIND
     python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --json out.json
 
 Set AMAP_CACHE=<file> to cache the address map between runs (it is rebuilt from
@@ -106,6 +141,17 @@ CALLJUMP = {"call", "calr", "jp", "jr", "jrl", "djnz", "ljp", "lcall"}
 # Instructions after which execution does NOT continue to the next address.
 TERMINATOR = {"ret", "retd", "reti", "retn", "jp", "jr", "jrl", "halt", "swi"}
 PTR_DIRS = (".long", ".word", ".short", ".int", ".quad")
+# Leading bytes with NO decode in the pinned tlcs900_backend that unidasm reads
+# as real TLCS-900 instructions, and a decodable control set of comparable
+# magnitude.  See scripts/analysis/byte_run_start_enrichment.py.
+BLIND_START = {0x01: "normal", 0x04: "max", 0x17: "ldf",
+               0x1a: "jp nnnn", 0x1c: "call nnnn"}
+CONTROL_START = {0x02, 0x03, 0x05, 0x16, 0x1b}
+# Macros defined in v10/maincpu/shared/macros.s that emit DATA, not code.  They
+# have no leading dot, so a naive parser calls them instructions and then thinks
+# the region after them is fall-through reachable -- which manufactured a CODE
+# verdict for the byte table that follows `aligned_string "0123456789ABCDEF"`.
+DATA_MACROS = {"aligned_string", "naka_header", "addr24"}
 TEXT_DIRS = (".ascii", ".asciz", ".string")
 
 
@@ -125,6 +171,9 @@ def parse_line(ln):
     m = re.match(r"^(\.[a-z_0-9]+)\b", code)
     if m:
         return m.group(1), lab
+    m = re.match(r"^([A-Za-z_][\w]*)\b", code)
+    if m and m.group(1) in DATA_MACROS:
+        return ".macro-data", lab
     return "INSN", lab
 
 
@@ -369,6 +418,9 @@ def classify(r, rom, refidx):
     ev["wordtab"], ev["wordtab_n"] = wordtab_score(b, a0)
     ev["text"], ev["textrun"] = text_score(b)
     ev["unref"] = not kinds
+    ev["start"] = b[0] if b else None
+    ev["blind"] = ev["start"] in BLIND_START
+    ev["ctrlstart"] = ev["start"] in CONTROL_START
 
     if "CALLJUMP" in kinds:
         return "CODE", "rule1: label is a call/jump target", ev
@@ -453,6 +505,8 @@ def main():
                     "class": cls, "why": why, "labels": r["labels"],
                     "ref_kinds": ev["ref_kinds"], "ref_sites": ev["ref_sites"],
                     "fall": ev["fall"], "unref": ev["unref"],
+                    "start": ev["start"], "blind": ev["blind"],
+                    "ctrlstart": ev["ctrlstart"],
                     "ptrtab": round(ev["ptrtab"], 3), "text": round(ev["text"], 3),
                     "textrun": ev["textrun"], "wordtab": round(ev["wordtab"], 3)})
     if "--json" in a:
@@ -460,9 +514,11 @@ def main():
     if "--list" in a:
         want = a[a.index("--list") + 1]
         for o in sorted(out, key=lambda o: -o["size"]):
-            if o["class"] == want:
-                print("0x%06X %6d B  lines %5d-%-5d  refs=%-16s %-52s %s"
+            if (o["blind"] if want == "BLIND" else o["class"] == want):
+                print("0x%06X %6d B  lines %5d-%-5d  start=0x%02x refs=%-12s "
+                      "%-46s %s"
                       % (o["addr"], o["size"], o["l0"], o["l1"],
+                         o["start"] if o["start"] is not None else 0,
                          ",".join(o["ref_kinds"]) or "-", o["why"],
                          ",".join(o["labels"][:2])))
         return
@@ -477,7 +533,27 @@ def main():
     print()
     print("  (a) CODE      = real instructions still spelled as .byte  -> DEBT")
     print("  (b) STRUCT    = wants .long/.word/.ascii                  -> DEBT")
+    print("      STRUCT is what the RULES PROPOSE.  Every remaining STRUCT run")
+    print("      here is in SoundEffect_Dispatch_Table (0xEEAFC8-0xEEB960) and")
+    print("      was REFUSED by hand: its words read equally well as 16-bit")
+    print("      codes or as pairs of byte fields, and nothing in the tree")
+    print("      settles the width.  See the converter's header.")
     print("  (c) BYTETABLE = byte-valued table, .byte is correct       -> NOT debt")
+    nb = sum(1 for o in out if o["blind"])
+    nc = sum(1 for o in out if o["ctrlstart"])
+    print("  (d) BLIND-START tag -- crosses the three classes, does not replace them:")
+    print("      %d of %d runs (%.1f%%) start with one of {01,04,17,1a,1c};"
+          % (nb, len(out), 100.0 * nb / len(out)))
+    print("      %d (%.1f%%) start with the decodable control set {02,03,05,16,1b}."
+          % (nc, 100.0 * nc / len(out)))
+    print("      enrichment %.1fx -- v10/maincpu as a whole is 46.5x.  Under the"
+          % (nb / nc if nc else float("inf")))
+    print("      enrichment script's 3x threshold this file reads as DATA.")
+    for k in ("CODE", "STRUCT", "BYTETABLE"):
+        n = sum(1 for o in out if o["class"] == k and o["blind"])
+        b_ = sum(o["size"] for o in out if o["class"] == k and o["blind"])
+        print("        %-10s %4d blind-start runs, %6d bytes" % (k, n, b_))
+    print()
     unref = sum(r["size"] for r in out if r["unref"])
     print()
     print("  %d bytes (%.1f%%) sit in runs whose label NOTHING in v10 references."

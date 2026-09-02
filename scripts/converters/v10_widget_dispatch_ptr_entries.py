@@ -60,6 +60,15 @@ WHAT WAS PROPOSED AND REFUSED (do not "fix" these later without new evidence)
   * CharMap_ValueData_B 0xEE8ED8 onwards (7,656 B).  Small integers 0x03..0x11;
     a genuine byte table.
 
+STEP 2: ONE CODE MISFRAME INSIDE A CHARACTER MAP
+------------------------------------------------
+`CharMap_Mode5Forward` is a sparse one-byte-per-slot character map (entries
+0x25..0x53, holes 0xFF).  At 0xEEC5C8 the tree spells three of its slots as an
+instruction, `ldw hl, 0xff34` -- bytes `33 34 ff`, sitting between `... 31 ff
+25` and `2d 36 37 38 39 ...`.  It is byte-exact, so the gate cannot object, and
+it is the reason the triage script's fall-through rule reported a CODE verdict
+for the 21 bytes that follow it.  Step 2 restores those three bytes to `.byte`.
+
 RUN
     python3 scripts/converters/v10_widget_dispatch_ptr_entries.py --dry-run
     python3 scripts/converters/v10_widget_dispatch_ptr_entries.py
@@ -164,13 +173,24 @@ def main():
         new[x["line"] - 1] = "\n".join(out)
         nlines += 1
 
-    print("%d source lines -> %d `.long` entries, %d bytes typed" % (nlines, nwords, nbytes))
+    # ---- step 2: the charmap code misframe (see the header) ----------------
+    MISFRAME = ("\tldw\thl, 0xff34", "\t.byte 0x33, 0x34, 0xff")
+    nmis = 0
+    for i, ln in enumerate(new):
+        if ln == MISFRAME[0]:
+            new[i] = MISFRAME[1]
+            nmis += 1
+    assert nmis <= 1, "expected at most one charmap misframe, found %d" % nmis
+
+    print("%d source lines -> %d `.long` entries, %d bytes typed; "
+          "%d charmap code misframe(s) restored to .byte"
+          % (nlines, nwords, nbytes, nmis))
     if dry:
         for i, (o, n) in enumerate(zip(src, new), 1):
             if o != n:
                 print("  %5d: %-46s ->  %s" % (i, o.strip(), n.replace("\n", " | ").strip()))
         return
-    if nlines:
+    if nlines or nmis:
         tmp = path + ".tmp"
         open(tmp, "w", encoding="latin-1").write("\n".join(new))
         os.replace(tmp, path)
