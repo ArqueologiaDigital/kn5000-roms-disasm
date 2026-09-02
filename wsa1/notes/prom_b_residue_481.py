@@ -62,6 +62,31 @@ stride is exactly the "wrong start frames fake records" hazard. A conversion
 still needs the referring code, per span. The point here is that the remaining
 question is a TYPING question, not a DECODING one.
 
+⚠ UPDATE 2026-09-02 -- NINE OF THE SIXTEEN ARE NOW SOURCE
+---------------------------------------------------------
+The prediction above held, twice, and by the route this script named: "a
+conversion still needs the referring code, per span."
+
+  * lane res3xx closed five spans, 106 B -- 0xF286CC, 0xF32A00, 0xF34350,
+    0xF3A443, 0xF3B656 (notes/gen_prom_b_res3xx_spans.py);
+  * lane res03a closed the whole 0xF03Axx family, four spans, 110 B --
+    0xF03A26, 0xF03ADE, 0xF03AF8, 0xF03BE6
+    (notes/gen_prom_b_f039ed_selector_blocks.py).
+
+For the 0xF03Axx four the referring code turned out to be a `djnz` loop
+around `ld XIZ,<table>` / `ld XIY,(XIZ+BC)` / `ld XIX,(XIZ+BC+4)`:
+0xF039ED-0xF03C94 is eight instances of `<display lists><selector table of
+N+2 LE32 entries>`, six of whose tables are named by already-converted code.
+That fixed every record boundary from OUTSIDE the spans -- which is exactly
+what the "WHAT THIS SCRIPT DOES *NOT* CLAIM" section below asked for.
+
+So the residue is **265 bytes in 7 spans**, not 481 in 16. The pointer
+statistic and its null below are still computed over the ORIGINAL sixteen,
+because that is the population the finding was about; closed rows are marked.
+`--selftest` now also reads the source and refuses to pass if a span it calls
+closed still carries an `.incbin`, or if one it calls open does not -- so this
+table cannot go stale in silence.
+
 RUN
     python3 notes/prom_b_residue_481.py            # evidence table + null
     python3 notes/prom_b_residue_481.py --selftest # asserts the claims above
@@ -82,6 +107,25 @@ SPANS = [
     (0x003ADE, 21), (0x034350, 17), (0x004D14, 15), (0x005CEC, 12),
     (0x032A00,  9), (0x003A26,  7), (0x003BE6,  5), (0x03B656,  5),
 ]
+
+# ⚠ Closed since this script was written -- see the UPDATE in the docstring.
+# These offsets stay in SPANS above because the pointer/ASCII/null statistics
+# are a statement about those 481 bytes and that statement has not changed;
+# what changed is that nine of them are now typed source in the tree.
+CLOSED = {
+    # lane res3xx, notes/gen_prom_b_res3xx_spans.py
+    0x0286CC: "res3xx: the table is 384 B, measured from the record that names it",
+    0x032A00: "res3xx",
+    0x034350: "res3xx",
+    0x03A443: "res3xx",
+    0x03B656: "res3xx: advance (+1) and extent (handler's highest read) differ",
+    # lane res03a, notes/gen_prom_b_f039ed_selector_blocks.py
+    0x003A26: "res03a: block 1 list 1's op-03 record, 0xF03A21-0xF03A2C",
+    0x003ADE: "res03a: tail of 0xF03AD9, all of 0xF03AE5, head of 0xF03AF1",
+    0x003AF8: "res03a: tail of 0xF03AF1, lists 3-4 and the table of block 3",
+    0x003BE6: "res03a: tail of block 6 list 3's op-03 record at 0xF03BDF",
+}
+S_FILE = "prom_b/wsa1_prom_b.s"
 
 
 def load():
@@ -128,10 +172,17 @@ def main():
         total_ptr += len(p)
         with_ptr += 1 if p else 0
         tgt = ", ".join(f"+{i}->0x{v:06X}({d:+d})" for i, v, d in p[:3])
-        print(f"0x{base:06X}  {ln:4d}  {ascii_frac(b)*100:4.0f}%  {len(p):4d}  {tgt}")
+        mark = "  CLOSED: " + CLOSED[off] if off in CLOSED else ""
+        print(f"0x{base:06X}  {ln:4d}  {ascii_frac(b)*100:4.0f}%  {len(p):4d}  "
+              f"{tgt}{mark}")
 
-    print(f"\n{sum(l for _, l in SPANS)} B in {len(SPANS)} spans; "
-          f"{total_ptr} in-range LE32 pointers in {with_ptr} of them")
+    closed_b = sum(l for o, l in SPANS if o in CLOSED)
+    print(f"\n{sum(l for _, l in SPANS)} B in {len(SPANS)} spans as first "
+          f"measured; {total_ptr} in-range LE32 pointers in {with_ptr} of them")
+    print(f"STILL VERBATIM TODAY: "
+          f"{sum(l for _, l in SPANS) - closed_b} B in "
+          f"{len(SPANS) - len(CLOSED)} spans "
+          f"({closed_b} B in {len(CLOSED)} closed 2026-09-02)")
     rate = null_pointer_rate()
     print(f"NULL: uniform-random bytes of the same lengths give {rate:.3f} "
           f"in-range pointers per span")
@@ -167,6 +218,27 @@ def main():
             if len(set(b)) == 1:
                 fails.append(f"0x{BASE+off:06X} is a uniform run -- it is "
                              f"filler, not data, and should be .fill")
+        # ⚠ THE TABLE ABOVE IS A CLAIM ABOUT THE TREE, SO CHECK THE TREE.
+        # Without this the CLOSED set is a comment that ages badly: a later
+        # lane closing another span, or one of these being reverted, would
+        # leave a green run stating a false total.  It has already happened
+        # once -- five spans were closed by lane res3xx while this script went
+        # on printing "481 B in 16 spans" and passing.
+        try:
+            src = open(S_FILE, encoding="utf-8").read()
+        except OSError as exc:
+            fails.append(f"cannot read {S_FILE}: {exc}")
+            src = None
+        if src is not None:
+            for off, _ln in SPANS:
+                present = f", 0x{off:06X}, 0x" in src
+                if off in CLOSED and present:
+                    fails.append(f"0x{BASE+off:06X} is listed CLOSED but still "
+                                 f"has an .incbin in {S_FILE}")
+                if off not in CLOSED and not present:
+                    fails.append(f"0x{BASE+off:06X} is listed open but has no "
+                                 f".incbin in {S_FILE} -- a lane closed it; "
+                                 f"add it to CLOSED and restate the total")
         print("\nSELFTEST: " + ("PASS" if not fails else "FAIL"))
         for f in fails:
             print("  " + f)
