@@ -11577,95 +11577,14 @@ SeBitmap_EnvCurve5:
 	pop	sr
 	swi	7
 	swi	7
-	jp	778
-	push	sr
-	nop
-	push	xwa
-	.byte 0x01
-	pop	sr
-	nop
-	.byte 0x1c
-	rcf
-	jr	nz, 0
-	halt
-	nop
-	.byte 0x53
-	.ascii "OUND EDIT"
-	.byte 0x06
-	pushw	1440
-	rcf
-	ldb	w, 87
-	.byte 0x52
-	popw	bc
-	.byte 0x54
-	ld	xiy, 0x0bdf0506
-	scf
-	ei	5
-	ldio	12, 16
-	ei	13
-	.byte 0x1f
-	incf
-	.ascii "EASY EDIT"
-	.byte 0x06
-	retd	3287
-	.byte 0x54
-	.ascii "ONE SELECT"
-	ei	5
-	ldx
-	scf
-	scf
-	ei	5
-	swi	0
-	scf
-	rcf
-	ei	13
-	.byte 0x77
-	ccf
-	.ascii "AMPLITUDE"
-	ei	14
-	.byte 0x86
-	ccf
-	.byte 0x54
-	popw	sp
-	popw	iz
-	.ascii "E LAYER"
-	.byte 0x06
-	pushw 0x1786
-	ld	xix, 0x54494749
-	ld	xbc, 0xbf05064c
-	ldf	17
-	ei	5
-	push	xwa
-	push_f
-	rcf
-	.byte 0x06
-	push	103
-	push_f
-	.byte 0x50
-	popw	bc
-	.byte 0x54
-	ld	xhl, 0x930a0648
-	pop_f
-	.ascii "EFFECT"
-	ei	5
-	swi	7
-	call	0x050611
-	.byte 0x50
-	calr	1552
-	ldwio	127, 0x461e
-	popw	bc
-	popw	ix
-	.byte 0x54
-	ld	xiy, 0xde0e0652
-	.byte 0x1e, 0x43
-	.ascii "ONTROLLER"
-	push	10
-	incf
-	nop
-	.byte 0x1f
+; se_setup_waveform: 206 bytes -- screen layout data, base 0xF1115E
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_waveform.c)
+	.incbin "includes/generated/se_setup_waveform.bin"
+; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
+;     supersedes their verdicts but not the record of them: ---
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF1121D-0xF11236 (25 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=15 near SeBitmap_EnvCurve5_0x19A+181
-	.byte 0x00, 0x3c, 0x00, 0x32, 0x00, 0x09, 0x0a, 0x0e, 0x00, 0x21, 0x00, 0x3a
-	.byte 0x00, 0x30, 0x00, 0x22, 0x0a, 0xae, 0x00, 0x3e, 0x00, 0x34, 0x01, 0x63
+	; head of the next record, split off at se_setup_waveform's proven end
+	.byte 0x22, 0x0a, 0xae, 0x00, 0x3e, 0x00, 0x34, 0x01, 0x63
 	.byte 0x00
 	.byte 0x01
 	ldwio	15, 0x4100
@@ -12633,220 +12552,12 @@ SeBitmap_EnvCurve5:
 	pop_f
 	.byte 0xf1
 	nop
-	.byte 0x1c
-	pushw	140
-	halt
-	nop
-	.byte 0x50
-	popw	bc
-	.byte 0x54
-	ld	xhl, 0x06101748
-	nop
-	reti
-	nop
-	.byte 0x53
-	popw	sp
-	.ascii "UND EDIT"
-	.byte 0x06
-	push	139
-	.byte 0x06
-	.ascii "ENV "
-	scf
-	.byte 0x06
-	pushw	3033
-	.byte 0x50
-	popw	bc
-	.byte 0x54
-	ld	xhl, 0x06112048
-	push	43
-	scf
-	.ascii "LF0 "
-	scf
-	push	10
-	.byte 0x04
-	nop
-	.byte 0x04
-	nop
-	ld	xix, 0x09001000
-	ldwio	20, 9473
-	nop
-	ldw	ix, 0x3601
-	nop
-	push	10
-	.byte 0x04, 0x01
-	ld	xbc, 0x5e013400
-	nop
-	push	10
-	push_a
-	.byte 0x01
-	jr	ge, 0
-	ldw	ix, 0x7a01
-	nop
-	.byte 0x01
-	ldwio	32, 0x3d01
-	nop
-	ldb	l, 1
-	push	xiy
-	nop
-	.byte 0x01
-	ldwio	33, 0x3e01
-	nop
-	ldb	h, 1
-	push	xiz
-	nop
-	.byte 0x01
-	ldwio	34, 0x3f01
-	nop
-	ldb	e, 1
-	push	xsp
-	nop
-	.byte 0x01
-	ldwio	34, 0x6001
-	nop
-	ldb	e, 1
-	jr	f, 0
-	.byte 0x01
-	ldwio	33, 0x6101
-	nop
-	ldb	h, 1
-	jr	lt, 0
-	.byte 0x01
-	ldwio	32, 0x6201
-	nop
-	ldb	l, 1
-	jr	le, 0
-	push	10
-	ldb	c, 1
-	ldw	iz, 9216
-	.byte 0x01
-	ld	xbc, 0x230a0900
-	.byte 0x01
-	pop	xiz
-	nop
-	ldb	d, 1
-	jr	ge, 0
-	ldb	c, 5
-	reti
-	.byte 0x86
+; se_setup_params_full: 471 bytes -- screen layout data, base 0xF11964
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_params_full.c)
+	.incbin "includes/generated/se_setup_params_full.bin"
+; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
+;     supersedes their verdicts but not the record of them: ---
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11A18-0xF11A37 (31 B), unreached CODE-territory, was disassembled as 16 plausible-but-dead instruction lines; per=100% dist=13 near SeBitmap_EnvCurve5_0x986+196
-	.byte 0x00, 0x05, 0x0a, 0x16, 0x01, 0x27, 0x00, 0x32, 0x01, 0x34, 0x00, 0x05
-	.byte 0x0a, 0x0e, 0x01, 0x43, 0x00, 0x32, 0x01, 0x5c, 0x00, 0x05, 0x0a, 0x16
-	.byte 0x01, 0x6b, 0x00, 0x32, 0x01, 0x78, 0x00
-	.byte 0x17
-	push	49
-	nop
-	.byte 0x37
-	nop
-	popw	hl
-	ld	xiy, 0x5b091759
-	nop
-	.byte 0x37
-	nop
-	ld	xix, 0x0a172d45
-	.byte 0x84
-	nop
-	.byte 0x37
-	nop
-	.byte 0x54
-	popw	sp
-	popw	iz
-	ld	xiy, 0xb61117
-	.byte 0x37
-	nop
-	.ascii "KEY SCALING"
-	.byte 0x17
-	pushw	49
-	ld	xwa, 0x49485300
-	ld	xiz, 0x5b0a1754
-	nop
-	ld	xwa, 0x4e555400
-	ld	xiy, 0x840b17
-	ld	xwa, 0x41435300
-	popw	ix
-	ld	xiy, 0x0c300506
-	rcf
-	.byte 0x17
-	retd	187
-	pop	xsp
-	nop
-	.ascii "OCT-SHIFT"
-	ei	5
-	swi	0
-	scf
-	rcf
-	ldf	17
-	ld	(xiz), 135
-	nop
-	.ascii "RIGHT SPLIT"
-	ei	5
-	.byte 0x94, 0x17, 0x8d
-	ei	5
-	jrl	f, 4119
-	ei	5
-	.byte 0x97, 0x17, 0xa9, 0x17
-	incf
-	zcf
-	.byte 0x01, 0xac
-	nop
-	ld	xhl, 0x4f535255
-	.byte 0x52, 0x17
-	rcf
-	.byte 0xba
-	nop
-	.byte 0xaf
-	nop
-	.ascii "LEFT SPLIT"
-	ei	5
-	push	xwa
-	call	0x050610
-	.byte 0xd4
-	call	0x05068e
-	sub	(xsp+29), xbc
-	.byte 0x17
-	push	51
-	nop
-	.byte 0xd1
-	nop
-	popw	hl
-	ld	xiy, 0x520c1759
-	nop
-	.byte 0xd1
-	nop
-	.ascii "DETUNE"
-	.byte 0x17
-	pushw	125
-	.byte 0xd1
-	nop
-	.byte 0x53
-	ld	xhl, 0x17454c41
-	pushw	205
-	.byte 0xd1
-	nop
-	.byte 0x56
-	ld	xbc, 0x0645554c
-	halt
-	.byte 0x17
-	ldb	b, 141
-	ei	5
-	.byte 0x1c
-	ldb	b, 141
-	ei	5
-	ldb	a, 34
-	.byte 0x8d
-	ei	5
-	pushw	hl
-	ldb	b, 141
-	ei	5
-	ld	xhl, (xsp)
-	.byte 0x8e
-	ei	5
-	add	(xix+35), xiz
-	ei	5
-	.byte 0xb1
-	ldb	c, 142
-	ei	5
-	.byte 0xbb
-	ldb	c, 142
 	ldb	b, 10
 	pushw	0x3300
 	nop
@@ -13116,25 +12827,11 @@ SeBitmap_EnvCurve5:
 	jr	ge, 0
 	ldw	ix, 0x7a01
 	nop
-	ldb	c, 5
-	jr	ule, -124
-	nop
-	jp	0xd60a
-	ld	xiz, 0xe1010700
-	nop
-	jp	0x9e0a
-	ld	xiz, 0xa100d200
-	nop
-	.byte 0x17
-	pushw	226
-	jrl	le, 21504
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0xe80b1748
-	nop
-	jrl	ugt, 17152
-	.byte 0x55, 0x52, 0x56
-	ld	xiy, Bitmap_1bit_Completed_0x15C
+; se_setup_labels: 47 bytes -- screen layout data, base 0xF11D41
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_labels.c)
+	.incbin "includes/generated/se_setup_labels.bin"
+	; head of the next record, split off at se_setup_labels's proven end
+	.byte 0x22, 0x0a, 0xe0, 0x00
 	ld	xiz, 0x6c010600
 	nop
 	.byte 0x01
@@ -13280,57 +12977,9 @@ SeBitmap_EnvCurve5:
 	.byte 0xa8
 	nop
 	jr	z, 0
-	.byte 0x06
-	pushw 0x0110
-	.byte 0x50
-	ld	xbc, 0x2f314547
-	ldw	de, 2839
-	ld	xhl, 0x4c003e00
-	ld	xiy, 0x174c4556
-	pushw	115
-	push	xiz
-	nop
-	.byte 0x54
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0xa30b1748
-	nop
-	push	xiz
-	nop
-	ld	xhl, 0x45565255
-	.byte 0x17
-	pushw	78
-	.byte 0xd1
-	nop
-	popw	ix
-	ld	xiy, 0x174c4556
-	pushw	124
-	.byte 0xd1
-	nop
-	.byte 0x54
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0xa50b1748
-	nop
-	.byte 0xd1
-	nop
-	ld	xhl, 0x45565255
-	ei	5
-	jp	0x068d22
-	halt
-	ldb	a, 34
-	.byte 0x8d
-	ei	5
-	ldb	h, 34
-	.byte 0x8d
-	ei	5
-	add	(xhl+35), xiz
-	ei	5
-	.byte 0xb1
-	ldb	c, 142
-	ei	5
-	.byte 0xb6
-	ldb	c, 142
+; se_setup_env: 107 bytes -- screen layout data, base 0xF11E96
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_env.c)
+	.incbin "includes/generated/se_setup_env.bin"
 	ldb	b, 10
 	pushw	0x3500
 	nop
@@ -13417,79 +13066,9 @@ SeBitmap_EnvCurve5:
 	nop
 	ldw	de, 0x5c01
 	nop
-	.byte 0x06
-	pushw	272
-	.ascii "PAGE2/2"
-	ldf	16
-	jrl	z, 15872
-	nop
-	popw	hl
-	.byte 0x45
-	pop	xbc
-	.ascii " FOLLOW"
-	ldf	7
-	ld	xde, 0x30008200
-	ldf	7
-	pop	xiy
-	nop
-	.byte 0x82
-	nop
-	ldw	bc, 1815
-	jrl	gt, -32256
-	nop
-	ldw	de, 1815
-	.byte 0x96
-	nop
-	.byte 0x82
-	nop
-	ldw	hl, 1815
-	ld	(xde), 130
-	nop
-	ldw	ix, 1815
-	.byte 0xce
-	nop
-	.byte 0x82
-	nop
-	ldw	iy, 1815
-	.byte 0xea
-	nop
-	.byte 0x82
-	nop
-	ldw	iz, 2839
-	.byte 0x56
-	nop
-	.byte 0xd1
-	nop
-	.byte 0x53
-	popw	ix
-	popw	sp
-	.byte 0x50
-	ld	xiy, 0xa10b17
-	.byte 0xd1
-	nop
-	.ascii "RANGE "
-	ei	155
-	.ascii "\"-- "
-	.byte 0x06
-	ld	xde, (xwa)
-	pushw	iy
-	pushw	iy
-	reti
-	halt
-	popw	ix
-	ldb	d, 18
-	reti
-	halt
-	.byte 0x51
-	ldb	d, 18
-	reti
-	halt
-	.byte 0x56
-	ldb	d, 18
-	reti
-	halt
-	pop	xhl
-	ldb	d, 18
+; se_screen_f11f83: 130 bytes -- screen layout data, base 0xF11F83
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f11f83.c)
+	.incbin "includes/generated/se_screen_f11f83.bin"
 	ldb	b, 10
 	pushw	sp
 	nop
@@ -13902,138 +13481,12 @@ SeBitmap_EnvCurve5:
 	nop
 	ldb	d, 1
 	jr	ge, 0
-	ldb	c, 5
-	ldb	a, 134
-	nop
-	halt
-	ldwio	22, 9985
-	nop
-	ldw	de, 0x3401
-	nop
-	halt
-	ldwio	14, 0x4301
-	nop
-	ldw	de, 0x5c01
-	nop
-	halt
-	ldwio	22, 0x6b01
-	nop
-	ldw	de, 0x7801
-	nop
-	.byte 0x06
-	ldio	136, 21
-	popw	iy
-	ldw	wa, 0x4544
-	ei	6
-	ret
-	push_f
-	ldb	w, 17
-	halt
-	ldwio	252, 0x9500
-	nop
-	ldw	ix, 0xa601
-	nop
-	halt
-	ldwio	14, 0x4301
-	nop
-	ldw	de, 0x5c01
-	nop
-	.byte 0x06
-	pushw 0x0110
-	.byte 0x50
-	ld	xbc, 0x2f314547
-	ldw	de, 3351
-	.byte 0x43
-	nop
-	.byte 0x1e
-	nop
-	.ascii "FILTER:"
-	ldf	12
-	.byte 0xd5
-	nop
-	jr	le, 0
-	ld	xhl, 0x464f5455
-	ld	xiz, 0x430f17
-	jr	nov, 0
-	.ascii "EQUALIZER"
-	.byte 0x17
-	ldwio	221, 0xb000
-	nop
-	ld	xiz, 0x06514552
-	.byte 0x0a
-	pushw	sp
-	.byte 0x1e
-	.ascii "FILTER"
-	.byte 0x06, 0x0a
-	.byte 0x43, 0x1e
-	.ascii "EQUALI "
-	halt
-	popw	bc
-	calr	1626
-	ei	74
-	calr	21061
-	ldf	12
-	di
-	.byte 0xd1
-	nop
-	.ascii "CUTOFF"
-	.byte 0x17
-	ldwio	52, 0xd100
-	nop
-	.byte 0x52
-	ld	xiy, 0x0b174f53
-	pop	xbc
-	nop
-	.byte 0xd1
-	nop
-	.byte 0x54
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0x7d0b1748
-	nop
-	.byte 0xd1
-	nop
-	ld	xhl, 0x45565255
-	.byte 0x17
-	pushw	202
-	.byte 0xd1
-	nop
-	.byte 0x52
-	ld	xbc, 0x1745474e
-	ldwio	244, 0xd100
-	nop
-	ld	xiz, 0x17514552
-	ldwio	24, 0xd101
-	nop
-	ld	xsp, 0x064e4941
-	halt
-	.byte 0x8c
-	ldb	b, 75
-	ei	5
-	.byte 0xa9
-	ldb	b, 75
-	ei	6
-	ld	de, (xbc)
-	jr	ov, 66
-	ei	6
-	.byte 0xad
+; se_setup_nav_full: 293 bytes -- screen layout data, base 0xF12341
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_nav_full.c)
+	.incbin "includes/generated/se_setup_nav_full.bin"
+; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
+;     supersedes their verdicts but not the record of them: ---
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF12440-0xF12454 (20 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=67% dist=9 near SeBitmap_EnvCurve5_0x13C3+175
-	.byte 0x22, 0x64, 0x42, 0x07, 0x05, 0x42, 0x24, 0x12, 0x07, 0x05, 0x47, 0x24
-	.byte 0x12, 0x07, 0x05, 0x4c, 0x24, 0x12, 0x07, 0x05
-	.byte 0x51
-	ldb	d, 18
-	reti
-	halt
-	pop	xhl
-	ldb	d, 18
-	reti
-	halt
-	jr	f, 36
-	ccf
-	reti
-	halt
-	jr	mi, 36
-	ccf
 	ldb	b, 10
 	ld	xde, 0xe9002700
 	nop
@@ -14114,67 +13567,9 @@ SeBitmap_EnvCurve5:
 	popw	bc
 	.byte 0x47
 	.ascii "H PASS -12dB"
-	ldf	20
-	jr	pl, 0
-	.byte 0x1e
-	nop
-	.ascii "LOW PASS -12dB"
-	ldf	13
-	ld	xhl, 0x46004300
-	popw	bc
-	popw	ix
-	.byte 0x54
-	ld	xiy, 0x0c173a52
-	.byte 0xd3
-	nop
-	.byte 0x87
-	nop
-	ld	xhl, 0x464f5455
-	ld	xiz, 0x1e390a06
-	ld	xiz, 0x45544c49
-	.byte 0x52, 0x17
-	incf
-	.byte 0x56
-	nop
-	.byte 0xd1
-	nop
-	.ascii "CUTOFF"
-	.byte 0x17
-	ldwio	132, 0xd100
-	nop
-	.byte 0x52
-	ld	xiy, 0x0b174f53
-	.byte 0xa9
-	nop
-	.byte 0xd1
-	nop
-	.byte 0x54
-	popw	sp
-	.byte 0x55
-	ld	xhl, 0xcd0b1748
-	nop
-	.byte 0xd1
-	nop
-	ld	xhl, 0x45565255
-	ei	5
-	ld	de, (xiz)
-	popw	hl
-	ei	6
-	incm	4, (xhl+34)
-	ld	xde, 0x244c0507
-	ccf
-	reti
-	halt
-	.byte 0x51
-	ldb	d, 18
-	reti
-	halt
-	.byte 0x56
-	ldb	d, 18
-	reti
-	halt
-	pop	xhl
-	ldb	d, 18
+; se_setup_ctrl_list: 130 bytes -- screen layout data, base 0xF124F3
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_ctrl_list.c)
+	.incbin "includes/generated/se_setup_ctrl_list.bin"
 	ldb	b, 10
 	ld	xde, 0xe9004c00
 	nop
@@ -14743,156 +14138,11 @@ SeBitmap_EnvCurve5:
 	nop
 	.byte 0xe9
 	nop
-	push	sr
-	retd	1646
-	retd	8192
-	.byte 0xd4
-	pushw	de
-	stdi8	(256), 216
-	incf
-	push	sr
-	retd	0
-	nop
-	nop
-	ldb	w, 243
-	pushw	2
-	decf
-	nop
-	.byte 0xda
-	incf
-	push	sr
-	retd	1647
-	retd	8192
-	.byte 0xd4
-	pushw	de
-	stdi8	(256), 216
-	scf
-	push	sr
-	retd	0
-	nop
-	nop
-	ldb	w, 3
-	incf
-	push	sr
-	nop
-	decf
-	nop
-	.byte 0xda
-	scf
-	push	sr
-	retd	1648
-	retd	8192
-	.byte 0xd4
-	pushw	de
-	stdi8	(256), 216
-	ex_ff
-	push	sr
-	retd	0
-	nop
-	nop
-	ldb	w, 19
-	incf
-	push	sr
-	nop
-	decf
-	nop
-	.byte 0xda
-	ex_ff
-	push	sr
-	retd	1649
-	retd	8192
-	.byte 0xd4
-	pushw	de
-	stdi8	(256), 216
-	jp	3842
-	nop
-	nop
-	nop
-	ldb	w, 35
-	incf
-	push	sr
-	nop
-	decf
-	nop
-	.byte 0xda
-	jp	0x620a00
-	.byte 0x06
-	jrl	nc, 8192
-	link	xbc, 1283
-	pushw	1635
-	swi	7
-	nop
-	ldb	w, 238
-	incf
-	push	sr
-	nop
-	halt
-	pushw	1636
-	swi	7
-	nop
-	ldb	w, 242
-	incf
-	push	sr
-	nop
-	nop
-	ldwio	101, 0x7f06
-	nop
-	ldb	w, 233
-	scf
-	pop	sr
-	halt
-	pushw	1638
-	swi	7
-	nop
-	ldb	w, 238
-	scf
-	push	sr
-	nop
-	halt
-	pushw	1639
-	swi	7
-	nop
-	ldb	w, 242
-	scf
-	push	sr
-	nop
-	nop
-	ldwio	104, 0x7f06
-	nop
-	ldb	w, 233
-	ex_ff
-	pop	sr
-	halt
-	pushw	1641
-	swi	7
-	nop
-	ldb	w, 238
-	ex_ff
-	push	sr
-	nop
-	halt
-	pushw	1642
-	swi	7
-	nop
-	ldb	w, 242
-	ex_ff
-	push	sr
-	nop
-	nop
-	ldwio	107, 0x7f06
-	nop
-	ldb	w, 233
-	jp	0x0b0503
-	jr	nov, 6
-	swi	7
-	nop
-	ldb	w, 238
-	jp	0x050002
-	pushw	1645
-	swi	7
-	nop
-	ldb	w, 242
-	jp	0x030002
+; se_screen_f129d1: 248 bytes -- screen layout data, base 0xF129D1
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f129d1.c)
+	.incbin "includes/generated/se_screen_f129d1.bin"
+	; head of the next record, split off at se_screen_f129d1's proven end
+	.byte 0x03
 	pushw	1629
 	retd	1280
 ; ** RE-FRAMED 2026-08-30 (lane B4). Was CODE territory. It is a chain of
@@ -14937,7 +14187,9 @@ SeBitmap_EnvCurve5:
 	.long 0x00f12a2b
 	.long 0x00f12a49
 	; 0xF12B49: record, type 0x1b, length 0x0a
-	.byte 0x1b, 0x0a, 0x0d, 0x00, 0x49, 0x00, 0x33, 0x01, 0xc5, 0x00	; |....I.3...|
+; se_setup_sel1: 10 bytes -- screen layout data, base 0xF12B49
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel1.c)
+	.incbin "includes/generated/se_setup_sel1.bin"
 	; 0xF12B53: five 8-byte cells
 	.byte 0x0d, 0x00, 0x49, 0x00, 0x33, 0x01, 0x65, 0x00	; |..I.3.e.|
 	.byte 0x0d, 0x00, 0x49, 0x00, 0x33, 0x01, 0x65, 0x00	; |..I.3.e.|
@@ -14952,7 +14204,11 @@ SeBitmap_EnvCurve5:
 	.incbin "includes/generated/se_drumkit_display.bin"
 	.ascii "A:B:C:D:E:F:G:H:I:J:K:L:M:N:O:P:Q:R:S:U:V:W:X:Y:Z:"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF12D01-0xF12D11 (16 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=75% dist=7 near SeBitmap_EnvCurve5_0x1BB8+379
-	.byte 0x1b, 0x0a, 0x3d, 0x00, 0x76, 0x00, 0xfc, 0x00, 0xb4, 0x00, 0x3d, 0x00
+; se_setup_sel2: 10 bytes -- screen layout data, base 0xF12D01
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel2.c)
+	.incbin "includes/generated/se_setup_sel2.bin"
+	; head of the next record, split off at se_setup_sel2's proven end
+	.byte 0x3d, 0x00
 	.byte 0x76, 0x00, 0xfc, 0x00
 	.byte 0x84
 	nop
@@ -14984,14 +14240,11 @@ SeBitmap_EnvCurve5:
 	nop
 	swi	4
 	nop
-	ld	(xix), 2
-	retd	1656
-	reti
-	nop
-	ldb	w, 66
-	pushw	iy
-	stdi8	(1536), 8
-	push_f
+	; tail of the record before se_screen_f12d33, split off at its proven boundary
+	.byte 0xb4, 0x00
+; se_screen_f12d33: 15 bytes -- screen layout data, base 0xF12D33
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f12d33.c)
+	.incbin "includes/generated/se_screen_f12d33.bin"
 	.ascii "LPF+EQHPF+EQLPF24 HPF24  BPF   THRU "
 ; se_general_edit: 96 bytes (7 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_general_edit.c)
@@ -15847,69 +15100,11 @@ TuningSystem_Handler_Table:
 	.ascii "6 F6 FŒ6G6 Aˆ6A6 Bˆ6B6 C7 Dˆ7D7 Eˆ7E7 F7 FŒ7G7 Aˆ7A7 Bˆ7B7 C8 Dˆ8D8 E"
 	mul8_rid8 xwa, 0x38, e
 	.ascii "8 F8 FŒ8G8  65.4 69.3 73.4 77.8 82.4 87.3 92.5 98.0103.8110.0116.5123.5130.8138.6146.8155.6164.8174.6185.0196.0207.6220.0233.1246.9261.6277.2293.6311.1329.6349.2370.0392.0415.3440.0466.1493.8523.2554.3587.3622.2659.2698.4739.9783.9830.5879.9932.2987.71.05K1.11K1.17K1.24K1.32K1.40K1.48K1.57K1.66K1.76K1.86K1.98K2.09K2.22K2.35K2.49K2.64K2.79K2.96K3.14K3.32K3.52K3.73K3.95K4.19K4.43K4.70K4.98K5.27K5.59K5.92K6.27K6.64K7.04K7.46K7.90K8.37K8.87K9.40K9.96K10.5K11.2K11.8K12.5K13.3K14.1K14.9K15.8K16.7K17.7K18.8K19.9K21.1K 22K  23K  24K  25K  26K  27K  28K  29K  30K  31K  32K  33K  34K  35K  36K  37K  38K  39K  40K  41K  42K  43K  44K  45K  46K  47K  48K "
-	.byte 0x06, 0x0b, 0x10, 0x01, 0x50
-	.ascii "AGE3/3"
-	ldf	13
-	push xbc
-	nop
-	push xiz
-	nop
-	.byte 0x54, 0x52
-	popw bc
-	ld	xsp, 0x17524547
-	pushw 134
-	push xiz
-	nop
-	ld	xix, 0x59414c45
-	ldf	13
-	ld	(xiy), 62
-	nop
-	.byte 0x50
-	ld	xbc, 0x4e494e4e
-	ld	xsp, 0x0c300506
-	rcf
-	ei	5
-	swi	0
-	scf
-	rcf
-	ei	5
-	jrl	f, 4119
-	ldf	12
-	ldx
-	nop
-	.byte 0x9e, 0x00
-	.ascii "REVERB"
-	ldf	11
-	swi	2
-	nop
-	.byte 0xa8, 0x00, 0x44
-	ld	xiy, 0x06485450
-	halt
-	push xwa
-	call	0x0d1710
-	ldb	l, 0
-	.byte 0xd1, 0x00, 0x54, 0x52
-	popw bc
-	ld	xsp, 0x17524547
-	pushw 124
-	.byte 0xd1, 0x00
-	ld	xix, 0x59414c45
-	ldf	13
-	.byte 0xb8, 0x00, 0xd1
-	nop
-	.byte 0x50
-	ld	xbc, 0x4e494e4e
-	ld	xsp, TextInput_Prop_NullTerm_0x1
-	.byte 0xd1, 0x00
-	.ascii "REVERB"
-	.byte 0x17
-	.byte 0x0b, 0x12, 0x01, 0xd1, 0x00, 0x44, 0x45, 0x50
-	.byte 0x54, 0x48, 0x06, 0x05, 0x17, 0x22, 0x8d, 0x06
-	.byte 0x05, 0x21, 0x22, 0x8d, 0x06, 0x05, 0x2a, 0x22
-	.byte 0x8d, 0x06, 0x05, 0x31, 0x22, 0x8d, 0x06, 0x05
-	.byte 0xa7, 0x23, 0x8e, 0x06, 0x05, 0xb1, 0x23, 0x8e
-	.byte 0x06, 0x05, 0xba, 0x23, 0x8e, 0x06, 0x05, 0xc1
-	.byte 0x23, 0x8e, 0x22, 0x0a, 0x0b, 0x00, 0x38, 0x00
+; se_setup_rhythm: 191 bytes -- screen layout data, base 0xF13F72
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_rhythm.c)
+	.incbin "includes/generated/se_setup_rhythm.bin"
+	; head of the next record, split off at se_setup_rhythm's proven end
+	.byte 0x22, 0x0a, 0x0b, 0x00, 0x38, 0x00
 	.byte 0xe6, 0x00, 0xca, 0x00, 0x22, 0x0a, 0xf2, 0x00
 	.byte 0x9a, 0x00, 0x21, 0x01, 0xca, 0x00, 0x22, 0x0a
 	.byte 0x31, 0x00, 0xda, 0x00, 0x46, 0x00, 0xee, 0x00
@@ -15972,34 +15167,11 @@ TuningSystem_Handler_Table:
 	.byte 0x1f
 	normal
 	.byte 0xc8, 0x00
-	push 10
-	ld	xiy, 0xfb00cc00
-	nop
-	.byte 0xe9, 0x00
-	ei	0x0d
-	.byte 0xbd, 0x04, 0x4b, 0x45
-	.ascii "Y LAYER"
-	.byte 0x17
-	.byte 0x07, 0x39, 0x00, 0x2a, 0x00, 0x30, 0x17, 0x07
-	.byte 0x54, 0x00, 0x2a, 0x00, 0x31, 0x17, 0x07, 0x71
-	.byte 0x00, 0x2a, 0x00, 0x32, 0x17, 0x07, 0x8d, 0x00
-	.byte 0x2a, 0x00, 0x33, 0x17, 0x07, 0xa9, 0x00, 0x2a
-	.byte 0x00, 0x34, 0x17, 0x07, 0xc5, 0x00, 0x2a, 0x00
-	.byte 0x35, 0x17, 0x07, 0xe1, 0x00, 0x2a, 0x00, 0x36
-	.byte 0x09, 0x0a, 0x27, 0x00, 0x62, 0x00, 0xf6, 0x00
-	.byte 0x63, 0x00, 0x09, 0x0a, 0x27, 0x00, 0x81, 0x00
-	.byte 0xf6, 0x00, 0x82, 0x00, 0x09, 0x0a, 0x27, 0x00
-	.byte 0xa0, 0x00, 0xf6, 0x00, 0xa1, 0x00, 0x09, 0x0a
-	.byte 0x27, 0x00, 0xbf, 0x00, 0xf6, 0x00, 0xc0, 0x00
-	.byte 0x05, 0x0a, 0x06, 0x01, 0x44, 0x00, 0x32, 0x01
-	.byte 0x5e, 0x00, 0x06, 0x12, 0x5b, 0x05, 0x56, 0x45
-	.ascii "LOCITY LAYER"
-	.byte 0x17, 0x07, 0x2d, 0x00
-	.byte 0x32, 0x00, 0x30, 0x17, 0x08, 0x5b, 0x00, 0x32
-	.byte 0x00, 0x33, 0x32, 0x17, 0x08, 0x8a, 0x00, 0x32
-	.byte 0x00, 0x36, 0x34, 0x17, 0x08, 0xba, 0x00, 0x32
-	.byte 0x00, 0x39, 0x36, 0x17, 0x09, 0xe4, 0x00, 0x33
-	.byte 0x00, 0x31, 0x32, 0x37, 0x11, 0x0a, 0x30, 0x00
+; se_screen_f140ef: 180 bytes -- screen layout data, base 0xF140EF
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_screen_f140ef.c)
+	.incbin "includes/generated/se_screen_f140ef.bin"
+	; head of the next record, split off at se_screen_f140ef's proven end
+	.byte 0x11, 0x0a, 0x30, 0x00
 	.byte 0x3d, 0x00, 0xf0, 0x00, 0x3d, 0x00, 0x09, 0x0a
 	.byte 0x30, 0x00, 0x62, 0x00, 0xf0, 0x00, 0x63, 0x00
 	.byte 0x09, 0x0a, 0x30, 0x00, 0x81, 0x00, 0xf0, 0x00
@@ -16244,65 +15416,13 @@ TuningSystem_Handler_Table:
 	.byte 0xf1, 0x00, 0xba, 0x47, 0xf1, 0x00, 0xc5, 0x47
 	.byte 0xf1, 0x00, 0xd0, 0x47, 0xf1, 0x00, 0xd0, 0x47
 	.byte 0xf1, 0x00, 0xd0, 0x47, 0xf1, 0x00, 0xd0, 0x47
-	.byte 0xf1, 0x00, 0x1c, 0x10, 0x72, 0x00, 0x05, 0x00
-	.ascii "C0NTR0LLER"
-	.byte 0x17, 0x10, 0x06, 0x00, 0x07, 0x00
-	.ascii "SOUND EDIT"
-	push 10
-	max
-	nop
-	max
-	nop
-	ld	xix, 0x23001000
-	halt
-	pop xsp
-	.byte 0x83, 0x00
-	ldb	c, 5
-	pop xsp
-	.byte 0x83, 0x00
-	reti
-	ei	31
-	pushw 0x5f5f
-	reti
-	halt
-	jr	t, 11
-	rcf
-	reti
-	halt
-	.byte 0x8f, 0x0b, 0x11
-	reti
-	ei	191
-	rcf
-	pop xsp
-	pop xsp
-	reti
-	halt
-	.byte 0xa8, 0x11, 0x10
-	reti
-	halt
-	.byte 0xcf, 0x11
-	scf
-	ldf	11
-	ldwio	0, 134
-	ld	xbc, 0x52455446
-	ldf	11
-	pushw iz
-	nop
-	.byte 0x86, 0x00, 0x54
-	popw sp
-	.byte 0x55
-	ld	xhl, 0x67090648
-	.byte 0x20
-	ld	xix, 0x48545045
-	ei	0x0c
-	popw	hl
-	.ascii "!FUNCTION"
-	.byte 0x07, 0x05, 0x1e, 0x24, 0x12, 0x07, 0x05
-	.byte 0x51, 0x24, 0x12, 0x07, 0x05, 0x57, 0x24, 0x12
-	.byte 0x07, 0x05, 0x5c, 0x24, 0x12, 0x09, 0x0a, 0x4b
-	.byte 0x00, 0x48, 0x00, 0x2c, 0x01, 0x5b, 0x00, 0x09
-	.byte 0x0a, 0x4b, 0x00, 0x6c, 0x00, 0x2c, 0x01, 0x7f
-	.byte 0x00, 0x22, 0x0a, 0x13, 0x00, 0xcc, 0x00, 0x5d
+	; tail of the record before se_setup_ctrl_full, split off at its proven boundary
+	.byte 0xf1, 0x00
+; se_setup_ctrl_full: 167 bytes -- screen layout data, base 0xF14809
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_ctrl_full.c)
+	.incbin "includes/generated/se_setup_ctrl_full.bin"
+	; head of the next record, split off at se_setup_ctrl_full's proven end
+	.byte 0x22, 0x0a, 0x13, 0x00, 0xcc, 0x00, 0x5d
 	.byte 0x00, 0xe7, 0x00, 0x09, 0x0a, 0x75, 0x00, 0xcc
 	.byte 0x00, 0xa4, 0x00, 0xe9, 0x00, 0x02, 0x0a, 0xbc
 	.byte 0x00, 0x48, 0x00, 0xbc, 0x00, 0x5b, 0x00, 0x02
@@ -16319,22 +15439,11 @@ TuningSystem_Handler_Table:
 	.ascii "o 1ST 2ND"
 	.byte 0x09, 0x0a, 0xb5, 0x00, 0xcc, 0x00, 0xf4
 	.byte 0x00, 0xe9, 0x00, 0x05, 0x0a, 0xb6, 0x00, 0xdb
-	.byte 0x00, 0xf3, 0x00, 0xe8, 0x00, 0x06, 0x0b, 0x10
-	.byte 0x01
-	.ascii "PAGE2/2"
-	.byte 0x06, 0x16, 0x66, 0x0e
-	.ascii "SUSTAIN PEDAL MODE"
-	.byte 0x06, 0x05
-	.byte 0x79, 0x0e, 0x3a, 0x06, 0x09, 0x36, 0x11, 0x47
-	.byte 0x4c, 0x49, 0x44, 0x45
-	.byte 0x06, 0x05, 0x49, 0x11
-	.byte 0x3a, 0x17, 0x18, 0x26, 0x00, 0xd1, 0x00, 0x53
-	.ascii "USTAIN PEDAL MODE"
-	.byte 0x17, 0x0b, 0xcc, 0x00, 0xd1, 0x00, 0x47
-	.byte 0x4c, 0x49, 0x44, 0x45
-	.byte 0x06, 0x05, 0x1c, 0x22
-	.byte 0x8d, 0x06, 0x05, 0x2b, 0x22, 0x8d, 0x06, 0x05
-	.byte 0xac, 0x23, 0x8e, 0x06, 0x05, 0xbb, 0x23, 0x8e
+	; tail of the record before se_setup_transport, split off at its proven boundary
+	.byte 0x00, 0xf3, 0x00, 0xe8, 0x00
+; se_setup_transport: 107 bytes -- screen layout data, base 0xF1493C
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_transport.c)
+	.incbin "includes/generated/se_setup_transport.bin"
 	.byte 0x22, 0x0a, 0x21, 0x00, 0x4e, 0x00, 0x18, 0x01
 	.byte 0x84, 0x00, 0x22, 0x0a, 0x59, 0x00, 0xda, 0x00
 	.long NakaInst_Param_Field48
@@ -16356,11 +15465,11 @@ TuningSystem_Handler_Table:
 	popw	de
 	.byte 0xf1, 0x00, 0xf7, 0x49, 0xf1, 0x00, 0x06, 0x4a, 0xf1, 0x00, 0x15, 0x4a, 0xf1, 0x00, 0x24, 0x4a, 0xf1, 0x00, 0x15, 0x4a, 0xf1, 0x00, 0x24, 0x4a, 0xf1, 0x00, 0x33, 0x4a, 0xf1, 0x00, 0x4f
 	.ascii "FF ON---INV-------------PITCH BEND   AMP ENV SUST FILTER CUTOFFPTCH LFO1 DEPPTCH LFO2 DEPPTCH LFO3 DEPPTCH LFO4 DEPAMP LFO1 DEP AMP LFO2 DEP AMP LFO3 DEP AMP LFO4 DEP FLT LFO1 DEP FLT LFO2 DEP FLT LFO3 DEP FLT LFO4 DEP PTCH LFO1 SPDPTCH LFO2 SPDPTCH LFO3 SPDPTCH LFO4 SPDAMP LFO1 SPD AMP LFO2 SPD AMP LFO3 SPD AMP LFO4 SPD FLT LFO1 SPD FLT LFO2 SPD FLT LFO3 SPD FLT LFO4 SPD            28           29           30           31           32           33           34           35           36           37           38           39           40           41           42           43           44           45           46           47           48           49           50           51           52           53           54           55           56           57           58           59           60           61           62           63"
-	.byte 0x05, 0x0a, 0x4d, 0x00, 0x4a
-	.byte 0x00, 0x2a, 0x01, 0x59, 0x00, 0x05, 0x0a, 0x4d
-	.byte 0x00, 0x6e, 0x00, 0x2a, 0x01, 0x7d, 0x00, 0x05
-	.byte 0x0a, 0x4d, 0x00, 0x8d, 0x00, 0x2a, 0x01, 0x9c
-	.byte 0x00, 0x4d, 0x00, 0x4a, 0x00, 0xba, 0x00, 0x59
+; se_setup_sel_rects: 30 bytes -- screen layout data, base 0xF14DD2
+; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel_rects.c)
+	.incbin "includes/generated/se_setup_sel_rects.bin"
+	; head of the next record, split off at se_setup_sel_rects's proven end
+	.byte 0x4d, 0x00, 0x4a, 0x00, 0xba, 0x00, 0x59
 	.byte 0x00, 0x4d, 0x00, 0x4a, 0x00, 0xba, 0x00, 0x59
 	.byte 0x00, 0xbe, 0x00, 0x4a, 0x00, 0x2a, 0x01, 0x59
 	.byte 0x00, 0x4d, 0x00, 0x8d, 0x00, 0xba, 0x00, 0x9c
