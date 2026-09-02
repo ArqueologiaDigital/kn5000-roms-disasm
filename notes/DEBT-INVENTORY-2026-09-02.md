@@ -141,6 +141,48 @@ weak *pointer* to suspect framing, never a verdict, and never a byte count.
 a decoder that cannot see a byte reports nothing there rather than reporting a
 problem — but it is not a route to converting v10.
 
+## ✅★★ ALL THIRTEEN IMAGES ARE AT ZERO VERBATIM DEBT (2026-09-02)
+
+**`prom_b` closed its last 481 bytes. Every gated image now reproduces
+byte-for-byte from real source with nothing handed back through `.incbin`.**
+`make gate-all`: 13/13 byte-identical, 8/8 KN5000 images assembling.
+
+| image | verbatim |
+|---|---:|
+| v10, v9, v7 maincpu · v142 subcpu · subcpu boot · table data · custom data · HD-AE5000 | **0** |
+| wsa1 prom_a · prom_b · prom_c · prom_d | **0** |
+
+⚠ **This is a statement about `.incbin`, not about understanding.** Code-as-byte
+and data-as-code remain, and the table_data BMPs are still 318,468 B of
+correctly-represented `.incbin` that the coverage tool counts as debt. Read the
+three-kinds table at the top of this file before quoting "100%".
+
+### The last 481 bytes were DATA, and that is what made them source
+
+Asked whether prom_b's residue could be source or was "actually data", the
+answer was that the alternative is false: **all sixteen spans are data, and
+being data is what makes them writable.** Not one was undecoded code.
+
+Evidence and the full account: `notes/FINDINGS-prom_b-last-481-bytes-RESOLVED.md`,
+script `wsa1/notes/prom_b_residue_481.py --selftest`. 22 embedded pointers into
+prom_b's own range against a null of **0.003 per span** from random bytes of the
+same lengths.
+
+★ **The instrument that unlocked most of them, and it arrived last:** a display
+list is entered as `ld XIY,<start> / ld XIX,<end> / call 0xF417F0` (A) or
+`0xF417F4` (B), so **a list's first byte and its exclusive end are two 32-bit
+constants in code this tree already disassembles**:
+
+    grep -an 'ld XI[XY],0x00f0' <converted sources>
+
+Three findings outlive the bytes: **advance ≠ extent** (a length disagreeing
+with its handler can be a deliberate list terminator, not a misframe);
+**measure an object from the thing that names it**, never from an `.incbin`
+boundary cut by a superseded walk; and one region's layout came off the `djnz`
+loop that walks it — entry 0 duplicates entry 1 because the loop counts down to
+1 and never reads entry 0, a property of the reader that is invisible in the
+data.
+
 ## ★★ SX-WSA1R: 13,206 B → 481 B in one push (2026-09-02)
 
 **Three of the four SX-WSA1R images are at ZERO verbatim debt. The fourth,

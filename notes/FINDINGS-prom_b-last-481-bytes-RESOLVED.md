@@ -4,22 +4,20 @@
 zero verbatim debt — 481 bytes in 16 `.incbin` spans. Can those be described as
 source as well, or are they actually data?
 
-> ## ⚠ STATUS: the answer is now DEMONSTRATED — 481 B → 88 B
+> ## ✅ RESOLVED — 481 B → 0. All sixteen spans are source.
 >
-> This document was written when the residue was **16 spans / 481 bytes**. Three
-> lanes have since closed 14 of the 16, **entirely as typed data, with no
-> instruction emitted anywhere** — which is the answer below, proved by doing it
-> rather than argued.
+> Written when the residue was **16 spans / 481 bytes**. Four lanes closed
+> **every one of them, entirely as typed data, with no instruction emitted
+> anywhere.** `prom_b` now carries **0 `.incbin`**, so all thirteen gated images
+> are at zero verbatim debt.
 >
-> **2026-09-02: 2 spans / 88 bytes remain** — `0xF02FFE` (+44) and `0xF13D34`
-> (+44). Re-derive before quoting:
+>     grep -ac '\.incbin' wsa1/prom_b/wsa1_prom_b.s      # 0
 >
->     grep -ac '\.incbin' wsa1/prom_b/wsa1_prom_b.s
+> The answer below is therefore demonstrated, not argued. Lane `res03a` also
+> typed 359 B of adjacent walk-extent `.byte` in the same pass.
 >
-> Lane `res03a` also typed 359 B of adjacent walk-extent `.byte` in the same
-> pass. Specifics in this file about spans now closed are superseded; the
-> reasoning around them is why they are kept, and the corrections are appended
-> at the end.
+> ⚠ Two per-span descriptions below were WRONG and are corrected at the end —
+> including one where I named the wrong kind of object entirely.
 
 **Answer: they are data — every one of the sixteen — and being data is exactly
 what makes them writable as source.** Nothing here is undecoded program text.
@@ -313,3 +311,43 @@ gate's message against a **CPU address** while the gate speaks in **file
 offsets**, so it reported "does not name it" for four of five perturbations that
 had in fact been named: **a checker's own units are part of what has to be
 checked.**
+
+### ⚠ `0xF02FFE` is not "pointer + LE16 coordinate quads" — I named the wrong object
+
+It is the **`+0x07` pointer FIELD of the interpreter-B record at `0xF02FF7`**,
+together with the operand array that pointer names. Round 1 had typed the
+record's first 7 bytes as `Data_F02FF7` and left its **last 4 bytes** — the tail
+of the pointer itself — inside the `.incbin`. So the span was not a table with a
+pointer in front of it; it was *the second half of a pointer* plus its target.
+
+Everything about it came from outside the bytes: the record's length byte 11 is
+handler `0xF31B57`'s implied length; **entry size 8 is the handler's own**
+`sla 0x03,HL`; the count is fixed by the extent ending on a proven display-list
+start; and the four fields are X0/Y0/X1/Y1, established elsewhere by the clamp
+constants 319/239. Entries [0] and [1] are identical — the same idiom as three
+sibling arrays named by byte-identical records.
+
+### `0xF13D34` — six records, four bitmaps, and two nulls that mattered
+
+Six interpreter-A `03 0C` records name **four** bitmaps, and all six carry
+`BC=2, HL=12` → 24 B each. 4 × 24 = 96 tiles `0xF13D00–0xF13D5F` exactly.
+Column-major on all four by edge density; `0xF13D00` draws a closed 16×12 circle.
+
+★ **Its own selftest caught it asserting a false anchor** — it had claimed
+`0xF13D60` was a call-site start; it is not, and the real anchor is a 45-record
+op/len walk landing with zero drift. And its pointer scan reports that widening
+the window by 16 bytes admits **six false hits**, each straddling real
+instructions. Both are in the committed script rather than smoothed away.
+
+### ★ The refusal that was measured rather than asserted
+
+That lane's span begins 4 bytes inside a bitmap whose surrounding `.byte` run is
+owned by another module. It could have moved that boundary — and it measured
+the objection instead of waving at it: re-emitting with the boundary moved
+changes **exactly 6 lines of 9,831**, all six being those four bytes. It
+declined anyway, for a narrower and better reason: four other modules import
+that layout and the probe bypasses their checks. The change is one line,
+de-risked, and left named for whoever wants it.
+
+That is what a good refusal looks like — the cost of proceeding quantified, and
+the reason for stopping specific enough to act on.
