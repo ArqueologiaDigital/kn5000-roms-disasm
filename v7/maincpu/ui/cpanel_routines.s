@@ -944,7 +944,7 @@ MBytePkt_LoopTail:
 CPanel_RX_SyncPacket:
 	ldb_sri A, 0x07, 0xe8, 0xf4
 
-	.byte 0x1e, 0xf0, 0x00	; calr CPanel_IncRXPtr (v7 displacement)
+	calr	240
 
 	ldb_sri A, 0x07, 0xe8, 0xf4
 
