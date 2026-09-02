@@ -29486,7 +29486,240 @@ DL_F13F1E:
 	.ascii "BYPASS"
 
 ; --- 0xF13F32-0xF140B1: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x013F32, 0x000180
+
+; ------------------------------------------------------------------
+; 0xF13F32-0xF140B1 -- 38 display-list records, 384 bytes -- interpreter A
+; NOT reached by any known call shape (1/2/3): found because the plain
+; op/len walk from the end of the verified run before it lands, with
+; ZERO DRIFT, exactly on the start of the verified run after it, and
+; every opcode used resolves to a documented interpreter-A handler --
+; several (0x11/0x17/0x1B/0x20/0x22) exceed interpreter B's 0x0F bound,
+; which rules B out by construction, not by guess.  This is the middle
+; of one interpreter-A list whose known call sites only named its ends.
+; Regenerate: python3 notes/gen_prom_b_dl_closure_gaps_module.py --splice
+; ------------------------------------------------------------------
+DL_F13F32:
+	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
+	.short 0x10C7
+	.ascii "BYPASS"
+DL_F13F3C:
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0500
+	.byte 0x10	; character codes below 0x20
+DL_F13F41:
+	.byte 0x20, 0x0F	; op 20, 15 bytes -> handler 0xF31A3A
+	.short 0x0502
+	.ascii "ALGORITHM :"
+DL_F13F50:
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F13D00
+	.short 0x0E4B
+	.short 0x0002
+	.short 0x000C
+DL_F13F5C:
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F13D00
+	.short 0x1439
+	.short 0x0002
+	.short 0x000C
+DL_F13F68:
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0053
+	.short 0x0043
+	.short 0x009C
+	.short 0x0058
+DL_F13F72:
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0055
+	.short 0x0045
+	.short 0x007A
+	.short 0x0056
+DL_F13F7C:
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x007D
+	.short 0x0045
+	.short 0x009A
+	.short 0x0056
+DL_F13F86:
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x003D
+	.short 0x006A
+	.short 0x0064
+	.short 0x007B
+DL_F13F90:
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x00A3
+	.short 0x0091
+	.short 0x00E5
+	.short 0x00A6
+DL_F13F9A:
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x00A5
+	.short 0x0093
+	.short 0x00C2
+	.short 0x00A4
+DL_F13FA4:
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x00C5
+	.short 0x0093
+	.short 0x00E3
+	.short 0x00A4
+DL_F13FAE:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0019
+	.short 0x004E
+	.short 0x0055
+	.short 0x004E
+DL_F13FB8:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x007A
+	.short 0x004E
+	.short 0x007D
+	.short 0x004E
+DL_F13FC2:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x009A
+	.short 0x004E
+	.short 0x00E0
+	.short 0x004E
+DL_F13FCC:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0019
+	.short 0x0073
+	.short 0x003D
+	.short 0x0073
+DL_F13FD6:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0064
+	.short 0x0073
+	.short 0x008E
+	.short 0x0073
+DL_F13FE0:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x008C
+	.short 0x0098
+	.short 0x0090
+	.short 0x0098
+DL_F13FEA:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x008D
+	.short 0x0099
+	.short 0x008F
+	.short 0x0099
+DL_F13FF4:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x009C
+	.short 0x0098
+	.short 0x00A0
+	.short 0x0098
+DL_F13FFE:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x009D
+	.short 0x0099
+	.short 0x009F
+	.short 0x0099
+DL_F14008:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0019
+	.short 0x009B
+	.short 0x00A5
+	.short 0x009B
+DL_F14012:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00C2
+	.short 0x009B
+	.short 0x00C5
+	.short 0x009B
+DL_F1401C:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00E3
+	.short 0x009B
+	.short 0x00FB
+	.short 0x009B
+DL_F14026:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0050
+	.short 0x004C
+	.short 0x0050
+	.short 0x0050
+DL_F14030:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0051
+	.short 0x004D
+	.short 0x0051
+	.short 0x004F
+DL_F1403A:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x008E
+	.short 0x0073
+	.short 0x008E
+	.short 0x0080
+DL_F14044:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x008E
+	.short 0x008D
+	.short 0x008E
+	.short 0x009B
+DL_F1404E:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x009E
+	.short 0x004E
+	.short 0x009E
+	.short 0x005A
+DL_F14058:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x009E
+	.short 0x0067
+	.short 0x009E
+	.short 0x009B
+DL_F14062:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00DE
+	.short 0x004C
+	.short 0x00DE
+	.short 0x0050
+DL_F1406C:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00DF
+	.short 0x004D
+	.short 0x00DF
+	.short 0x004F
+DL_F14076:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00F9
+	.short 0x0099
+	.short 0x00F9
+	.short 0x009D
+DL_F14080:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00FA
+	.short 0x009A
+	.short 0x00FA
+	.short 0x009C
+DL_F1408A:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x008D
+	.short 0x0073
+	.short 0x00E0
+	.short 0x0073
+DL_F14094:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00DE
+	.short 0x0071
+	.short 0x00DE
+	.short 0x0075
+DL_F1409E:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00DF
+	.short 0x0072
+	.short 0x00DF
+	.short 0x0074
+DL_F140A8:
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x0074
+	.short 0x0059
+	.short 0x0078
+	.short 0x0072
 
 ; ------------------------------------------------------------------
 ; 0xF140B2-0xF14167 -- 19 display-list records, 182 bytes -- interpreter A/B
@@ -29585,7 +29818,82 @@ DL_F140E4:
 	.short 0x00E8
 
 ; --- 0xF14168-0xF141D2: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x014168, 0x00006B
+
+; ------------------------------------------------------------------
+; 0xF14168-0xF141D2 -- 13 display-list records, 107 bytes -- interpreter A
+; NOT reached by any known call shape (1/2/3): found because the plain
+; op/len walk from the end of the verified run before it lands, with
+; ZERO DRIFT, exactly on the start of the verified run after it, and
+; every opcode used resolves to a documented interpreter-A handler --
+; several (0x11/0x17/0x1B/0x20/0x22) exceed interpreter B's 0x0F bound,
+; which rules B out by construction, not by guess.  This is the middle
+; of one interpreter-A list whose known call sites only named its ends.
+; Regenerate: python3 notes/gen_prom_b_dl_closure_gaps_module.py --splice
+; ------------------------------------------------------------------
+DL_F14168:
+	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
+	.short 0x0699
+	.ascii "TYPE :"
+DL_F14172:
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x0037
+	.short 0x001E
+	.short 0x0107
+	.short 0x003E
+DL_F1417C:
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0037
+	.short 0x0044
+	.short 0x0109
+	.short 0x00C7
+DL_F14186:
+	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x200F
+	.ascii "ITEM"
+DL_F1418E:
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x2024
+	.ascii "VALUE"
+DL_F14197:
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x21C9
+	.byte 0x8D	; character codes below 0x20
+DL_F1419C:
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x21DE
+	.byte 0x8D	; character codes below 0x20
+DL_F141A1:
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x2359
+	.byte 0x8E	; character codes below 0x20
+DL_F141A6:
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x236E
+	.byte 0x8E	; character codes below 0x20
+DL_F141AB:
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x0005
+	.short 0x00DA
+	.short 0x0091
+	.short 0x00EC
+DL_F141B5:
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x00AF
+	.short 0x00DA
+	.short 0x0138
+	.short 0x00EC
+DL_F141BF:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x0005
+	.short 0x00E3
+	.short 0x0091
+	.short 0x00E3
+DL_F141C9:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00AF
+	.short 0x00E3
+	.short 0x0138
+	.short 0x00E3
 
 ; ------------------------------------------------------------------
 ; 0xF141D3-0xF1428C -- 22 display-list records, 186 bytes -- interpreter A/B
@@ -29685,7 +29993,107 @@ DL_F141D3:
 	.short 0x00E7
 
 ; --- 0xF1428D-0xF14328: not converted ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x01428D, 0x00009C
+
+; ------------------------------------------------------------------
+; 0xF1428D-0xF14328 -- 15 display-list records, 156 bytes -- interpreter A
+; NOT reached by any known call shape (1/2/3): found because the plain
+; op/len walk from the end of the verified run before it lands, with
+; ZERO DRIFT, exactly on the start of the verified run after it, and
+; every opcode used resolves to a documented interpreter-A handler --
+; several (0x11/0x17/0x1B/0x20/0x22) exceed interpreter B's 0x0F bound,
+; which rules B out by construction, not by guess.  This is the middle
+; of one interpreter-A list whose known call sites only named its ends.
+; Regenerate: python3 notes/gen_prom_b_dl_closure_gaps_module.py --splice
+; ------------------------------------------------------------------
+DL_F1428D:
+	.byte 0x11, 0x0A	; op 11, 10 bytes -> handler 0xF31A75
+	.short 0x003F
+	.short 0x006F
+	.short 0x00E4
+	.short 0x006F
+DL_F14297:
+	.byte 0x1B, 0x0A	; op 1B, 10 bytes -> handler 0xF31A75
+	.short 0x003F
+	.short 0x0055
+	.short 0x00E4
+	.short 0x008A
+DL_F142A1:
+	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
+	.short 0x000D
+	.short 0x0032
+	.short 0x0105
+	.short 0x00B9
+DL_F142AB:
+	.byte 0x17, 0x0C	; op 17, 12 bytes -> handler 0xF31A52
+	.short 0x002C
+	.short 0x00B2
+	.ascii "DIRECT"
+DL_F142B7:
+	.byte 0x22, 0x0A	; op 22, 10 bytes -> handler 0xF31A75
+	.short 0x0009
+	.short 0x0032
+	.short 0x0105
+	.short 0x00C5
+DL_F142C1:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x00A3
+	.short 0x00AF
+	.short 0x00E0
+	.short 0x00AF
+DL_F142CB:
+	.byte 0x01, 0x0A	; op 01, 10 bytes -> handler 0xF31A75
+	.short 0x000F
+	.short 0x00BB
+	.short 0x00E0
+	.short 0x00BB
+DL_F142D5:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x0019
+	.short 0x004E
+	.short 0x0019
+	.short 0x00BB
+DL_F142DF:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00A3
+	.short 0x00AF
+	.short 0x00A3
+	.short 0x00BB
+DL_F142E9:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00DE
+	.short 0x00AD
+	.short 0x00DE
+	.short 0x00B1
+DL_F142F3:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00DF
+	.short 0x00AE
+	.short 0x00DF
+	.short 0x00B0
+DL_F142FD:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00DE
+	.short 0x00B9
+	.short 0x00DE
+	.short 0x00BD
+DL_F14307:
+	.byte 0x02, 0x0A	; op 02, 10 bytes -> handler 0xF31A75
+	.short 0x00DF
+	.short 0x00BA
+	.short 0x00DF
+	.short 0x00BC
+DL_F14311:
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F13D18
+	.short 0x0B6C
+	.short 0x0002
+	.short 0x000C
+DL_F1431D:
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE
+	.long 0x00F13D18
+	.short 0x1774
+	.short 0x0002
+	.short 0x000C
 
 ; ------------------------------------------------------------------
 ; 0xF14329-0xF143BF -- 18 display-list records, 151 bytes -- interpreter A/B
