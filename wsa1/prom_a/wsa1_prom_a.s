@@ -54448,7 +54448,4686 @@ sub_FA14C6:   ; entry: reachable-run entry
 ; Framing that as instructions passes the byte gate and is still wrong.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
-	.incbin "original_ROMs/wsa1_prom_a.ic12", 0x0215CC, 0x003E34
+sub_FA15CC:
+	stdi8 (0x2540), 0x01                                 ; FA15CC  f1 40 25 00 01
+	lda_24 xbc, (0xfa2faf)                               ; FA15D1  f2 af 2f fa 31
+	push XBC                                             ; FA15D6  39
+	call 0xf42e08                                        ; FA15D7  1d 08 2e f4
+	lda_24 xbc, (0xfa2f64)                               ; FA15DB  f2 64 2f fa 31
+	push XBC                                             ; FA15E0  39
+	call 0xf42e0c                                        ; FA15E1  1d 0c 2e f4
+	inc 0,XSP                                            ; FA15E5  ef 60
+	ret                                                  ; FA15E7  0e
+; ---------------------------------------------------------------------
+; ByteTable6_FA15E8 -- 6 bytes, kind=byte_table_6
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C061
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable6_FA15E8:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00                                  ; FA15E8
+; ---------------------------------------------------------------------
+; Descriptor9_FA15EE -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C0F7
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA15EE:
+	.byte 0x00, 0x07, 0x00, 0x06, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA15EE
+; ---------------------------------------------------------------------
+; Descriptor9_FA15F7 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C106
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA15F7:
+	.byte 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA15F7
+; ---------------------------------------------------------------------
+; Descriptor9_FA1600 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C1A3
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1600:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1600
+; ---------------------------------------------------------------------
+; Descriptor9_FA1609 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C1B2
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1609:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1609
+; ---------------------------------------------------------------------
+; Descriptor9_FA1612 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C290
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1612:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1612
+; ---------------------------------------------------------------------
+; Descriptor9_FA161B -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C29F
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA161B:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA161B
+; ---------------------------------------------------------------------
+; Descriptor9_FA1624 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C41A
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1624:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1624
+; ---------------------------------------------------------------------
+; Descriptor9_FA162D -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C429
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA162D:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA162D
+; ---------------------------------------------------------------------
+; Descriptor9_FA1636 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D440
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1636:
+	.byte 0x00, 0x07, 0x00, 0x03, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1636
+; ---------------------------------------------------------------------
+; Descriptor9_FA163F -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D4D3
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA163F:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA163F
+; ---------------------------------------------------------------------
+; Descriptor9_FA1648 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D55C
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1648:
+	.byte 0x00, 0x0f, 0x00, 0x08, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1648
+; ---------------------------------------------------------------------
+; Descriptor9_FA1651 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D56B
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1651:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1651
+; ---------------------------------------------------------------------
+; Descriptor9_FA165A -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D57A
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA165A:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA165A
+; ---------------------------------------------------------------------
+; Descriptor9_FA1663 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E001
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1663:
+	.byte 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1663
+; ---------------------------------------------------------------------
+; Descriptor9_FA166C -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E094
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA166C:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA166C
+; ---------------------------------------------------------------------
+; Descriptor9_FA1675 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E11D
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1675:
+	.byte 0x00, 0x0f, 0x00, 0x08, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1675
+; ---------------------------------------------------------------------
+; Descriptor9_FA167E -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E12C
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA167E:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA167E
+; ---------------------------------------------------------------------
+; Descriptor9_FA1687 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E13B
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1687:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1687
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1690 -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C0D5
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1690:
+	.byte 0xea, 0xc0, 0xf9, 0x00, 0x96, 0xc1, 0xf9, 0x00, 0x83, 0xc2, 0xf9, 0x00, 0x83, 0xc2, 0xf9, 0x00  ; FA1690
+	.byte 0x33, 0xc3, 0xf9, 0x00, 0xa5, 0xc3, 0xf9, 0x00, 0x0d, 0xc4, 0xf9, 0x00, 0x0d, 0xc4, 0xf9, 0x00  ; FA16A0
+	.byte 0xbd, 0xc4, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA16B0
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xd9, 0xc4, 0xf9, 0x00  ; FA16C0
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA16D0
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA16E0
+; ---------------------------------------------------------------------
+; ByteTable8_FA16EC -- 8 bytes, kind=byte_table_8
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C1D9, 0xF9C2C5
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable8_FA16EC:
+	.byte 0x00, 0x01, 0x08, 0x09, 0x20, 0x28, 0x29, 0x10                      ; FA16EC
+; ---------------------------------------------------------------------
+; ByteTable3_FA16F4 -- 3 bytes, kind=byte_table_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C23E, 0xF9C2FF
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable3_FA16F4:
+	.byte 0x00, 0x08, 0x10                                                    ; FA16F4
+; ---------------------------------------------------------------------
+; ByteTable3_FA16F7 -- 3 bytes, kind=byte_table_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C44F, 0xF9C489
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable3_FA16F7:
+	.byte 0x18, 0x19, 0x1a                                                    ; FA16F7
+; ---------------------------------------------------------------------
+; ByteTable12_FA16FA -- 12 bytes, kind=byte_table_12
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C928
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable12_FA16FA:
+	.byte 0x40, 0x53, 0x00, 0x00, 0x50, 0x55, 0x00, 0x00, 0x60, 0x57, 0x00, 0x00  ; FA16FA
+; ---------------------------------------------------------------------
+; ByteTable12_FA1706 -- 12 bytes, kind=byte_table_12
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C99F
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable12_FA1706:
+	.byte 0x90, 0x59, 0x00, 0x00, 0xa0, 0x5b, 0x00, 0x00, 0xb0, 0x5d, 0x00, 0x00  ; FA1706
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1712 -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9CA20
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1712:
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1712
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1722
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x35, 0xca, 0xf9, 0x00, 0x5c, 0xca, 0xf9, 0x00, 0x83, 0xca, 0xf9, 0x00  ; FA1732
+	.byte 0xaa, 0xca, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xbd, 0xca, 0xf9, 0x00  ; FA1742
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1752
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1762
+; ---------------------------------------------------------------------
+; HandlerTable23_FA176E -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9CB66
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA176E:
+	.byte 0x95, 0xcb, 0xf9, 0x00, 0xb4, 0xcb, 0xf9, 0x00, 0xd3, 0xcb, 0xf9, 0x00, 0xf2, 0xcb, 0xf9, 0x00  ; FA176E
+	.byte 0x2a, 0xcc, 0xf9, 0x00, 0x49, 0xcc, 0xf9, 0x00, 0x68, 0xcc, 0xf9, 0x00, 0x87, 0xcc, 0xf9, 0x00  ; FA177E
+	.byte 0xa6, 0xcc, 0xf9, 0x00, 0x88, 0xcd, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA178E
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xa2, 0xcd, 0xf9, 0x00  ; FA179E
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA17AE
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA17BE
+; ---------------------------------------------------------------------
+; ByteTable5_FA17CA -- 5 bytes, kind=byte_table_5
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9CD28, 0xF9CE44
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable5_FA17CA:
+	.byte 0x08, 0x09, 0x18, 0x19, 0x1a                                        ; FA17CA
+; ---------------------------------------------------------------------
+; HandlerTable23_FA17CF -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9CFCE
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA17CF:
+	.byte 0xfd, 0xcf, 0xf9, 0x00, 0x1c, 0xd0, 0xf9, 0x00, 0x3b, 0xd0, 0xf9, 0x00, 0x5a, 0xd0, 0xf9, 0x00  ; FA17CF
+	.byte 0x92, 0xd0, 0xf9, 0x00, 0xb1, 0xd0, 0xf9, 0x00, 0xd0, 0xd0, 0xf9, 0x00, 0xef, 0xd0, 0xf9, 0x00  ; FA17DF
+	.byte 0x0e, 0xd1, 0xf9, 0x00, 0xf0, 0xd1, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA17EF
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x0a, 0xd2, 0xf9, 0x00  ; FA17FF
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA180F
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA181F
+; ---------------------------------------------------------------------
+; ByteTable4_FA182B -- 4 bytes, kind=byte_table_4
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D190, 0xF9D2AC
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable4_FA182B:
+	.byte 0x08, 0x18, 0x19, 0x1a                                              ; FA182B
+; ---------------------------------------------------------------------
+; HandlerTable23_FA182F -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D41E
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA182F:
+	.byte 0xad, 0xd4, 0xf9, 0x00, 0xcb, 0xd4, 0xf9, 0x00, 0x4a, 0xd5, 0xf9, 0x00, 0x4a, 0xd5, 0xf9, 0x00  ; FA182F
+	.byte 0xf7, 0xd6, 0xf9, 0x00, 0x15, 0xd7, 0xf9, 0x00, 0x5e, 0xd7, 0xf9, 0x00, 0x5e, 0xd7, 0xf9, 0x00  ; FA183F
+	.byte 0x2b, 0xd8, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xc1, 0xd8, 0xf9, 0x00, 0xde, 0xd8, 0xf9, 0x00  ; FA184F
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xfa, 0xd8, 0xf9, 0x00  ; FA185F
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA186F
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA187F
+; ---------------------------------------------------------------------
+; ByteTable5_FA188B -- 5 bytes, kind=byte_table_5
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D504, 0xF9D5A9
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable5_FA188B:
+	.byte 0x00, 0x01, 0x08, 0x09, 0x10                                        ; FA188B
+; ---------------------------------------------------------------------
+; ByteTable2_FA1890 -- 2 bytes, kind=byte_table_2
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9DAAB, 0xF9DB78
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable2_FA1890:
+	.byte 0x08, 0x09                                                          ; FA1890
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1892 -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9DFDF
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1892:
+	.byte 0x6e, 0xe0, 0xf9, 0x00, 0x8c, 0xe0, 0xf9, 0x00, 0x0b, 0xe1, 0xf9, 0x00, 0x0b, 0xe1, 0xf9, 0x00  ; FA1892
+	.byte 0xb8, 0xe2, 0xf9, 0x00, 0xd6, 0xe2, 0xf9, 0x00, 0x1f, 0xe3, 0xf9, 0x00, 0x1f, 0xe3, 0xf9, 0x00  ; FA18A2
+	.byte 0xec, 0xe3, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x82, 0xe4, 0xf9, 0x00, 0xb4, 0xe4, 0xf9, 0x00  ; FA18B2
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xd0, 0xe4, 0xf9, 0x00  ; FA18C2
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA18D2
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA18E2
+; ---------------------------------------------------------------------
+; HandlerTable23_FA18EE -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EC01
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA18EE:
+	.byte 0x16, 0xec, 0xf9, 0x00, 0x16, 0xec, 0xf9, 0x00, 0x16, 0xec, 0xf9, 0x00, 0x16, 0xec, 0xf9, 0x00  ; FA18EE
+	.byte 0x3f, 0xec, 0xf9, 0x00, 0x3f, 0xec, 0xf9, 0x00, 0x3f, 0xec, 0xf9, 0x00, 0x3f, 0xec, 0xf9, 0x00  ; FA18FE
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA190E
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xbd, 0xec, 0xf9, 0x00  ; FA191E
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA192E
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA193E
+; ---------------------------------------------------------------------
+; HandlerTable23_FA194A -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EDB5
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA194A:
+	.byte 0xca, 0xed, 0xf9, 0x00, 0xca, 0xed, 0xf9, 0x00, 0xca, 0xed, 0xf9, 0x00, 0xca, 0xed, 0xf9, 0x00  ; FA194A
+	.byte 0xf3, 0xed, 0xf9, 0x00, 0xf3, 0xed, 0xf9, 0x00, 0xf3, 0xed, 0xf9, 0x00, 0xf3, 0xed, 0xf9, 0x00  ; FA195A
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA196A
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x34, 0xee, 0xf9, 0x00  ; FA197A
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA198A
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA199A
+; ---------------------------------------------------------------------
+; HandlerTable23_FA19A6 -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EEF3
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA19A6:
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x08, 0xef, 0xf9, 0x00, 0x08, 0xef, 0xf9, 0x00  ; FA19A6
+	.byte 0x08, 0xef, 0xf9, 0x00, 0x08, 0xef, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA19B6
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA19C6
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x18, 0xef, 0xf9, 0x00  ; FA19D6
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA19E6
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA19F6
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1A02 -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9F020
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1A02:
+	.byte 0x57, 0xf0, 0xf9, 0x00, 0x76, 0xf0, 0xf9, 0x00, 0x2b, 0xf1, 0xf9, 0x00, 0x4a, 0xf1, 0xf9, 0x00  ; FA1A02
+	.byte 0x69, 0xf1, 0xf9, 0x00, 0xf8, 0xf1, 0xf9, 0x00, 0x17, 0xf2, 0xf9, 0x00, 0x36, 0xf2, 0xf9, 0x00  ; FA1A12
+	.byte 0x55, 0xf2, 0xf9, 0x00, 0x0b, 0xf3, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1A22
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x25, 0xf3, 0xf9, 0x00  ; FA1A32
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1A42
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1A52
+; ---------------------------------------------------------------------
+; ByteTable16_FA1A5E -- 16 bytes, kind=byte_table_16
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9F28A, 0xF9F2D4
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable16_FA1A5E:
+	.byte 0xd0, 0x5e, 0x00, 0x00, 0xd0, 0x5e, 0x00, 0x00, 0x60, 0x5f, 0x00, 0x00, 0xf0, 0x5f, 0x00, 0x00  ; FA1A5E
+; ---------------------------------------------------------------------
+; ByteTable4_FA1A6E -- 4 bytes, kind=byte_table_4
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9F374, 0xF9F384
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable4_FA1A6E:
+	.byte 0x00, 0x40, 0x41, 0x42                                              ; FA1A6E
+; ---------------------------------------------------------------------
+; ByteTable16_FA1A72 -- 16 bytes, kind=byte_table_16
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9F1BC, 0xF9F598
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable16_FA1A72:
+	.byte 0xe0, 0x5e, 0x00, 0x00, 0xe0, 0x5e, 0x00, 0x00, 0x70, 0x5f, 0x00, 0x00, 0x00, 0x60, 0x00, 0x00  ; FA1A72
+; ---------------------------------------------------------------------
+; Descriptor9_FA1A82 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C34B
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1A82:
+	.byte 0x00, 0x03, 0x00, 0x02, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1A82
+; ---------------------------------------------------------------------
+; Descriptor9_FA1A8B -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C3BD
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1A8B:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1A8B
+; ---------------------------------------------------------------------
+; Descriptor9_FA1A94 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C376
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1A94:
+	.byte 0x00, 0x03, 0x00, 0x02, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1A94
+; ---------------------------------------------------------------------
+; Descriptor9_FA1A9D -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9C3E3
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1A9D:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1A9D
+; ---------------------------------------------------------------------
+; Descriptor9_FA1AA6 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9CB7B
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1AA6:
+	.byte 0x00, 0x07, 0x00, 0x04, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1AA6
+; ---------------------------------------------------------------------
+; Descriptor9_FA1AAF -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9CC11
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1AAF:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1AAF
+; ---------------------------------------------------------------------
+; Descriptor9_FA1AB8 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9CFE3
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1AB8:
+	.byte 0x00, 0x03, 0x00, 0x03, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1AB8
+; ---------------------------------------------------------------------
+; Descriptor9_FA1AC1 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D079
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1AC1:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1AC1
+; ---------------------------------------------------------------------
+; Descriptor9_FA1ACA -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D6A2
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1ACA:
+	.byte 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1ACA
+; ---------------------------------------------------------------------
+; Descriptor9_FA1AD3 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D7AD, 0xF9D7F0
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1AD3:
+	.byte 0x00, 0x0f, 0x00, 0x08, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1AD3
+; ---------------------------------------------------------------------
+; Descriptor9_FA1ADC -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D78F, 0xF9D7D3
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1ADC:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1ADC
+; ---------------------------------------------------------------------
+; Descriptor9_FA1AE5 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D734
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1AE5:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1AE5
+; ---------------------------------------------------------------------
+; Descriptor9_FA1AEE -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9D80E
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1AEE:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1AEE
+; ---------------------------------------------------------------------
+; Descriptor9_FA1AF7 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E263
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1AF7:
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1AF7
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B00 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E36E, 0xF9E3B1
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B00:
+	.byte 0x00, 0x0f, 0x00, 0x08, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1B00
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B09 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E350, 0xF9E394
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B09:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1B09
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B12 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E2F5
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B12:
+	.byte 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1B12
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B1B -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9E3CF
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B1B:
+	.byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1B1B
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B24 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EC16
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B24:
+	.byte 0x00, 0x07, 0x00, 0x06, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1B24
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B2D -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EC74
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B2D:
+	.byte 0x02, 0x0f, 0x00, 0x02, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1B2D
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B36 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EC7C
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B36:
+	.byte 0x02, 0xf0, 0x04, 0x02, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1B36
+; ---------------------------------------------------------------------
+; Descriptor3_FA1B3F -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EC8D
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1B3F:
+	.byte 0x05, 0x04, 0x01                                                    ; FA1B3F
+; ---------------------------------------------------------------------
+; Descriptor3_FA1B42 -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EC95
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1B42:
+	.byte 0x05, 0x02, 0x01                                                    ; FA1B42
+; ---------------------------------------------------------------------
+; Descriptor3_FA1B45 -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EC9D
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1B45:
+	.byte 0x05, 0x01, 0x01                                                    ; FA1B45
+; ---------------------------------------------------------------------
+; Descriptor3_FA1B48 -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9ECA5
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1B48:
+	.byte 0x05, 0x08, 0x01                                                    ; FA1B48
+; ---------------------------------------------------------------------
+; Descriptor3_FA1B4B -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9ECAD
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1B4B:
+	.byte 0x05, 0x10, 0x01                                                    ; FA1B4B
+; ---------------------------------------------------------------------
+; Descriptor3_FA1B4E -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EDCA
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1B4E:
+	.byte 0x00, 0x01, 0x01                                                    ; FA1B4E
+; ---------------------------------------------------------------------
+; Descriptor3_FA1B51 -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EE03
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1B51:
+	.byte 0x00, 0x01, 0x00                                                    ; FA1B51
+; ---------------------------------------------------------------------
+; Descriptor3_FA1B54 -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EE1A
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1B54:
+	.byte 0x00, 0x02, 0x00                                                    ; FA1B54
+; ---------------------------------------------------------------------
+; Descriptor3_FA1B57 -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9EF08
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1B57:
+	.byte 0x09, 0x01, 0x01                                                    ; FA1B57
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B5A -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9F035
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B5A:
+	.byte 0x00, 0x03, 0x00, 0x03, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1B5A
+; ---------------------------------------------------------------------
+; ByteTable9_FA1B63 -- 9 bytes, kind=byte_table_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9F0AB, 0xF9F0E9
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable9_FA1B63:
+	.byte 0x00, 0x0f, 0x00, 0x0b, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1B63
+; ---------------------------------------------------------------------
+; ByteTable9_FA1B6C -- 9 bytes, kind=byte_table_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9F0C7, 0xF9F107
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable9_FA1B6C:
+	.byte 0x00, 0x7f, 0x00, 0x74, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1B6C
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B75 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9F19B, 0xF9F1D1
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B75:
+	.byte 0x00, 0x7f, 0x00, 0x7f, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1B75
+; ---------------------------------------------------------------------
+; ByteTable4_FA1B7E -- 4 bytes, kind=byte_table_4
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0E55
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable4_FA1B7E:
+	.byte 0x00, 0x00, 0x00, 0x7f                                              ; FA1B7E
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B82 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA14EF
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B82:
+	.byte 0x00, 0x07, 0x00, 0x06, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1B82
+; ---------------------------------------------------------------------
+; Descriptor9_FA1B8B -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA1552
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1B8B:
+	.byte 0x00, 0x07, 0x00, 0x06, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1B8B
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1B94 -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xF9FF13
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1B94:
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1B94
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1BA4
+	.byte 0x28, 0xff, 0xf9, 0x00, 0x4f, 0xff, 0xf9, 0x00, 0x76, 0xff, 0xf9, 0x00, 0x9d, 0xff, 0xf9, 0x00  ; FA1BB4
+	.byte 0xd6, 0xff, 0xf9, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xfd, 0xff, 0xf9, 0x00  ; FA1BC4
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1BD4
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1BE4
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1BF0 -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA00FD
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1BF0:
+	.byte 0x12, 0x01, 0xfa, 0x00, 0x44, 0x01, 0xfa, 0x00, 0x59, 0x01, 0xfa, 0x00, 0x6e, 0x01, 0xfa, 0x00  ; FA1BF0
+	.byte 0x83, 0x01, 0xfa, 0x00, 0x98, 0x01, 0xfa, 0x00, 0xad, 0x01, 0xfa, 0x00, 0xc2, 0x01, 0xfa, 0x00  ; FA1C00
+	.byte 0xd7, 0x01, 0xfa, 0x00, 0xf5, 0x01, 0xfa, 0x00, 0x0c, 0x02, 0xfa, 0x00, 0x23, 0x02, 0xfa, 0x00  ; FA1C10
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x41, 0x02, 0xfa, 0x00  ; FA1C20
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1C30
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1C40
+; ---------------------------------------------------------------------
+; ByteTable16_FA1C4C -- 16 bytes, kind=byte_table_16
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0061, 0xFA0351
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable16_FA1C4C:
+	.byte 0x00, 0x40, 0x41, 0x42, 0x03, 0x04, 0x05, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x80, 0x80  ; FA1C4C
+; ---------------------------------------------------------------------
+; ByteTable79_FA1C5C -- 79 bytes, kind=byte_table_79
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA02FB, 0xFA0319
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable79_FA1C5C:
+	.byte 0xc0, 0xc0, 0xc1, 0xc3, 0xc4, 0xc6, 0xc8, 0xca, 0xcb, 0xcd, 0xcf, 0xd0, 0xd2, 0xd4, 0xd6, 0xd7  ; FA1C5C
+	.byte 0xd9, 0xdb, 0xdc, 0xde, 0xe0, 0xe2, 0xe3, 0xe5, 0xe7, 0xe8, 0xea, 0xec, 0xed, 0xef, 0xf1, 0xf3  ; FA1C6C
+	.byte 0xf4, 0xf6, 0xf8, 0xf9, 0xfb, 0xfd, 0xfe, 0x00, 0x02, 0x03, 0x05, 0x07, 0x08, 0x0a, 0x0c, 0x0d  ; FA1C7C
+	.byte 0x0f, 0x11, 0x12, 0x14, 0x16, 0x17, 0x19, 0x1b, 0x1c, 0x1e, 0x20, 0x21, 0x23, 0x25, 0x26, 0x28  ; FA1C8C
+	.byte 0x2a, 0x2b, 0x2d, 0x2f, 0x30, 0x32, 0x33, 0x35, 0x37, 0x38, 0x3a, 0x3c, 0x3d, 0x3e, 0x3f  ; FA1C9C
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1CAB -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA07BB
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1CAB:
+	.byte 0xeb, 0x07, 0xfa, 0x00, 0xeb, 0x07, 0xfa, 0x00, 0xeb, 0x07, 0xfa, 0x00, 0xeb, 0x07, 0xfa, 0x00  ; FA1CAB
+	.byte 0x50, 0x08, 0xfa, 0x00, 0x50, 0x08, 0xfa, 0x00, 0x50, 0x08, 0xfa, 0x00, 0x50, 0x08, 0xfa, 0x00  ; FA1CBB
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1CCB
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x89, 0x0a, 0xfa, 0x00  ; FA1CDB
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1CEB
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1CFB
+; ---------------------------------------------------------------------
+; ByteTable9_FA1D07 -- 9 bytes, kind=byte_table_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0709, 0xFA0DDA
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable9_FA1D07:
+	.byte 0x00, 0x3d, 0x50, 0x41, 0x50, 0x44, 0x50, 0x49, 0x50                ; FA1D07
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1D10 -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA07D6
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1D10:
+	.byte 0x14, 0x08, 0xfa, 0x00, 0x14, 0x08, 0xfa, 0x00, 0x14, 0x08, 0xfa, 0x00, 0x14, 0x08, 0xfa, 0x00  ; FA1D10
+	.byte 0x91, 0x08, 0xfa, 0x00, 0x91, 0x08, 0xfa, 0x00, 0x8f, 0x09, 0xfa, 0x00, 0x8f, 0x09, 0xfa, 0x00  ; FA1D20
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1D30
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x89, 0x0a, 0xfa, 0x00  ; FA1D40
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1D50
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1D60
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1D6C -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0EFD
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1D6C:
+	.byte 0x12, 0x0f, 0xfa, 0x00, 0x12, 0x0f, 0xfa, 0x00, 0x12, 0x0f, 0xfa, 0x00, 0x12, 0x0f, 0xfa, 0x00  ; FA1D6C
+	.byte 0x70, 0x0f, 0xfa, 0x00, 0x70, 0x0f, 0xfa, 0x00, 0x70, 0x0f, 0xfa, 0x00, 0x70, 0x0f, 0xfa, 0x00  ; FA1D7C
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1D8C
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0xea, 0x0f, 0xfa, 0x00  ; FA1D9C
+	.byte 0x0d, 0x10, 0xfa, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1DAC
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1DBC
+; ---------------------------------------------------------------------
+; ByteTable9_FA1DC8 -- 9 bytes, kind=byte_table_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA1041, 0xFA10B2
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable9_FA1DC8:
+	.byte 0x15, 0x16, 0x17, 0x18, 0x11, 0x12, 0x02, 0x04, 0x05                ; FA1DC8
+; ---------------------------------------------------------------------
+; ByteTable11_FA1DD1 -- 11 bytes, kind=byte_table_11
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA1070, 0xFA10F8
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable11_FA1DD1:
+	.byte 0x00, 0x01, 0x02, 0x04, 0x0b, 0x40, 0x10, 0x11, 0x12, 0x13, 0x81    ; FA1DD1
+; ---------------------------------------------------------------------
+; ByteTable5_FA1DDC -- 5 bytes, kind=byte_table_5
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA108B, 0xFA113F
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable5_FA1DDC:
+	.byte 0x00, 0x40, 0x88, 0x89, 0x90                                        ; FA1DDC
+; ---------------------------------------------------------------------
+; PtrTable3_FA1DE1 -- 12 bytes, kind=pointer_table_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA12BC
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+PtrTable3_FA1DE1:
+	.byte 0x60, 0x13, 0xfa, 0x00, 0xda, 0x13, 0xfa, 0x00, 0x28, 0x14, 0xfa, 0x00  ; FA1DE1
+; ---------------------------------------------------------------------
+; HandlerTable23_FA1DED -- 92 bytes, kind=handler_table_23
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA12F0
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+HandlerTable23_FA1DED:
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1DED
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1DFD
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x05, 0x13, 0xfa, 0x00, 0x1e, 0x13, 0xfa, 0x00  ; FA1E0D
+	.byte 0x37, 0x13, 0xfa, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x47, 0x13, 0xfa, 0x00  ; FA1E1D
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1E2D
+	.byte 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00, 0x70, 0x2c, 0xf4, 0x00  ; FA1E3D
+; ---------------------------------------------------------------------
+; Descriptor9_FA1E49 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0441
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1E49:
+	.byte 0x00, 0x07, 0x00, 0x04, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1E49
+; ---------------------------------------------------------------------
+; ByteTable18_FA1E52 -- 18 bytes, kind=byte_table_18
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA011B
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable18_FA1E52:
+	.byte 0x00, 0x10, 0x04, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00, 0x00, 0xff, 0x00, 0x4e, 0x01, 0x04, 0x0a  ; FA1E52
+	.byte 0x00, 0x00                                                          ; FA1E62
+; ---------------------------------------------------------------------
+; Descriptor9_FA1E64 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA04B5
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1E64:
+	.byte 0x00, 0x7f, 0x00, 0x64, 0x1c, 0x04, 0x0a, 0x00, 0x00                ; FA1E64
+; ---------------------------------------------------------------------
+; Descriptor9_FA1E6D -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA04C0
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1E6D:
+	.byte 0x01, 0x80, 0x07, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1E6D
+; ---------------------------------------------------------------------
+; Descriptor9_FA1E76 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA04C8
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1E76:
+	.byte 0x00, 0x0f, 0x00, 0x0e, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1E76
+; ---------------------------------------------------------------------
+; Descriptor9_FA1E7F -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA04E2
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1E7F:
+	.byte 0x01, 0x0f, 0x00, 0x0b, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1E7F
+; ---------------------------------------------------------------------
+; Descriptor9_FA1E88 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0294, 0xFA02BA
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1E88:
+	.byte 0x00, 0xff, 0x00, 0xe4, 0x1c, 0x04, 0x0a, 0x00, 0x00                ; FA1E88
+; ---------------------------------------------------------------------
+; Descriptor9_FA1E91 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA07EB
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1E91:
+	.byte 0x00, 0x03, 0x00, 0x03, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1E91
+; ---------------------------------------------------------------------
+; Descriptor9_FA1E9A -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0868
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1E9A:
+	.byte 0x00, 0x0f, 0x00, 0x09, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1E9A
+; ---------------------------------------------------------------------
+; Descriptor9_FA1EA3 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0870
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1EA3:
+	.byte 0x02, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x00                ; FA1EA3
+; ---------------------------------------------------------------------
+; Descriptor9_FA1EAC -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0878
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1EAC:
+	.byte 0x05, 0xff, 0x00, 0x0a, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1EAC
+; ---------------------------------------------------------------------
+; Descriptor9_FA1EB5 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0880
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1EB5:
+	.byte 0x06, 0x7f, 0x00, 0x7f, 0x00, 0x04, 0x0a, 0x00, 0x00                ; FA1EB5
+; ---------------------------------------------------------------------
+; Descriptor9_FA1EBE -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0814
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1EBE:
+	.byte 0x00, 0x07, 0x00, 0x05, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1EBE
+; ---------------------------------------------------------------------
+; Descriptor3_FA1EC7 -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA08D7, 0xFA09D5
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1EC7:
+	.byte 0x00, 0x08, 0x00                                                    ; FA1EC7
+; ---------------------------------------------------------------------
+; Descriptor3_FA1ECA -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA08F0, 0xFA09EE
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1ECA:
+	.byte 0x00, 0x10, 0x00                                                    ; FA1ECA
+; ---------------------------------------------------------------------
+; ByteTable9_FA1ECD -- 9 bytes, kind=byte_table_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0909, 0xFA0925
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable9_FA1ECD:
+	.byte 0x00, 0xff, 0x00, 0x80, 0x00, 0x04, 0x0a, 0x00, 0x00                ; FA1ECD
+; ---------------------------------------------------------------------
+; ByteTable9_FA1ED6 -- 9 bytes, kind=byte_table_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0A07, 0xFA0A22
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+ByteTable9_FA1ED6:
+	.byte 0x00, 0x7f, 0x00, 0x7f, 0x01, 0x04, 0x0a, 0x00, 0x00                ; FA1ED6
+; ---------------------------------------------------------------------
+; Descriptor9_FA1EDF -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA1013
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1EDF:
+	.byte 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1EDF
+; ---------------------------------------------------------------------
+; Descriptor9_FA1EE8 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0F24
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1EE8:
+	.byte 0x00, 0x0f, 0x00, 0x08, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1EE8
+; ---------------------------------------------------------------------
+; Descriptor3_FA1EF1 -- 3 bytes, kind=descriptor_3
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0F4A
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor3_FA1EF1:
+	.byte 0x00, 0x01, 0x01                                                    ; FA1EF1
+; ---------------------------------------------------------------------
+; Descriptor9_FA1EF4 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0F37
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1EF4:
+	.byte 0x00, 0x10, 0x04, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1EF4
+; ---------------------------------------------------------------------
+; Descriptor9_FA1EFD -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0F84
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1EFD:
+	.byte 0x00, 0x0f, 0x00, 0x0a, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1EFD
+; ---------------------------------------------------------------------
+; Descriptor9_FA1F06 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0FA4
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1F06:
+	.byte 0x00, 0x07, 0x00, 0x04, 0x00, 0x01, 0x01, 0x00, 0x00                ; FA1F06
+; ---------------------------------------------------------------------
+; Descriptor9_FA1F0F -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0FD0
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1F0F:
+	.byte 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1F0F
+; ---------------------------------------------------------------------
+; Descriptor9_FA1F18 -- 9 bytes, kind=descriptor_9
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): named at 0xFA0FD8
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+Descriptor9_FA1F18:
+	.byte 0x00, 0x02, 0x01, 0x01, 0x00, 0x01, 0x01, 0x01, 0x00                ; FA1F18
+; ---------------------------------------------------------------------
+; DisplayList_FA1F21 -- 298 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA1F21:
+	.byte 0x20, 0x08, 0xfd, 0x11, 0x54, 0x45, 0x53, 0x54, 0x23, 0x05, 0x30, 0xe1, 0x10, 0x1c, 0x0c, 0x8d  ; FA1F21
+	.byte 0x00, 0x05, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x10, 0xa5, 0x05, 0x54, 0x55, 0x4e  ; FA1F31
+	.byte 0x45, 0x20, 0x26, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x45, 0x20, 0x0b, 0xb8, 0x05, 0x49, 0x4e, 0x49  ; FA1F41
+	.byte 0x54, 0x49, 0x41, 0x4c, 0x17, 0x07, 0x00, 0x00, 0x26, 0x00, 0x10, 0x17, 0x07, 0x3a, 0x01, 0x26  ; FA1F51
+	.byte 0x00, 0x11, 0x20, 0x0e, 0xa5, 0x0a, 0x43, 0x30, 0x4e, 0x54, 0x52, 0x30, 0x4c, 0x4c, 0x45, 0x52  ; FA1F61
+	.byte 0x20, 0x0a, 0xd5, 0x0c, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x06, 0x0f, 0xd0, 0x0b, 0x52, 0x45  ; FA1F71
+	.byte 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x45, 0x44, 0x49, 0x54, 0x17, 0x07, 0x00, 0x00, 0x4d, 0x00, 0x10  ; FA1F81
+	.byte 0x17, 0x07, 0x3a, 0x01, 0x4d, 0x00, 0x11, 0x20, 0x0f, 0xd0, 0x10, 0x53, 0x30, 0x55, 0x4e, 0x44  ; FA1F91
+	.byte 0x2f, 0x43, 0x30, 0x4d, 0x42, 0x49, 0x20, 0x0b, 0x00, 0x13, 0x4d, 0x41, 0x4e, 0x41, 0x47, 0x45  ; FA1FA1
+	.byte 0x52, 0x17, 0x07, 0x3a, 0x01, 0x74, 0x00, 0x11, 0x20, 0x09, 0xed, 0x17, 0x4d, 0x49, 0x58, 0x45  ; FA1FB1
+	.byte 0x52, 0x20, 0x0d, 0x00, 0x18, 0x44, 0x52, 0x55, 0x4d, 0x53, 0x20, 0x4d, 0x41, 0x50, 0x17, 0x07  ; FA1FC1
+	.byte 0x00, 0x00, 0x9b, 0x00, 0x10, 0x17, 0x07, 0x3a, 0x01, 0x9b, 0x00, 0x11, 0x20, 0x0c, 0x00, 0x1d  ; FA1FD1
+	.byte 0x4d, 0x41, 0x49, 0x4e, 0x20, 0x4f, 0x55, 0x54, 0x20, 0x0d, 0x30, 0x1f, 0x45, 0x51, 0x55, 0x41  ; FA1FE1
+	.byte 0x4c, 0x49, 0x5a, 0x45, 0x52, 0x20, 0x0e, 0x05, 0x1e, 0x44, 0x53, 0x50, 0x20, 0x45, 0x46, 0x46  ; FA1FF1
+	.byte 0x45, 0x43, 0x54, 0x17, 0x07, 0x00, 0x00, 0xc2, 0x00, 0x10, 0x17, 0x07, 0x3a, 0x01, 0xc2, 0x00  ; FA2001
+	.byte 0x11, 0x23, 0x05, 0x06, 0x36, 0x00, 0x23, 0x05, 0x07, 0xb1, 0x04, 0x23, 0x05, 0x09, 0xc9, 0x0a  ; FA2011
+	.byte 0x23, 0x05, 0x05, 0xf9, 0x16, 0x23, 0x05, 0x0a, 0x11, 0x1d, 0x23, 0x05, 0x0c, 0xd4, 0x04, 0x23  ; FA2021
+	.byte 0x05, 0x0d, 0xec, 0x0a, 0x23, 0x05, 0x0e, 0x04, 0x11, 0x23, 0x05, 0x0f, 0x1c, 0x17, 0x23, 0x05  ; FA2031
+	.byte 0x69, 0x34, 0x1d, 0x17, 0x07, 0x00, 0x00, 0x74, 0x00, 0x10          ; FA2041
+; ---------------------------------------------------------------------
+; DisplayList_FA204B -- 37 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as A records between 0xFA204B and 0xFA2070
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA204B:
+	.byte 0x20, 0x11, 0xbd, 0x10, 0x30, 0x56, 0x45, 0x52, 0x41, 0x4c, 0x4c, 0x20, 0x54, 0x30, 0x55, 0x43  ; FA204B
+	.byte 0x48, 0x20, 0x0f, 0xed, 0x12, 0x53, 0x45, 0x4e, 0x53, 0x49, 0x54, 0x49, 0x56, 0x49, 0x54, 0x59  ; FA205B
+	.byte 0x23, 0x05, 0x08, 0xe1, 0x10                                        ; FA206B
+; ---------------------------------------------------------------------
+; DisplayList_FA2070 -- 335 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2070:
+	.byte 0x23, 0x05, 0x07, 0x30, 0x00, 0x1c, 0x12, 0x5f, 0x00, 0x05, 0x00, 0x54, 0x55, 0x4e, 0x45, 0x20  ; FA2070
+	.byte 0x26, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x45, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53  ; FA2080
+	.byte 0x54, 0x45, 0x4d, 0x07, 0x05, 0x4c, 0x05, 0x8d, 0x07, 0x05, 0x77, 0x05, 0xa9, 0x20, 0x18, 0xe3  ; FA2090
+	.byte 0x06, 0x4d, 0x41, 0x53, 0x54, 0x45, 0x52, 0x20, 0x54, 0x55, 0x4e, 0x45, 0x20, 0x20, 0x20, 0x20  ; FA20A0
+	.byte 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x0b, 0xf8, 0x06, 0x34, 0x20, 0x20, 0x2e, 0x20, 0x48, 0x7a  ; FA20B0
+	.byte 0x20, 0x08, 0x92, 0x08, 0x49, 0x54, 0x45, 0x4d, 0x20, 0x18, 0xa3, 0x0a, 0x4b, 0x45, 0x59, 0x20  ; FA20C0
+	.byte 0x54, 0x52, 0x41, 0x4e, 0x53, 0x50, 0x4f, 0x53, 0x45, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a  ; FA20D0
+	.byte 0x07, 0x05, 0x8c, 0x0b, 0x8e, 0x07, 0x05, 0x8f, 0x0b, 0xa9, 0x20, 0x18, 0x63, 0x0e, 0x4b, 0x45  ; FA20E0
+	.byte 0x59, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x49, 0x4e, 0x47, 0x20, 0x4d, 0x4f, 0x44, 0x45, 0x20, 0x20  ; FA20F0
+	.byte 0x20, 0x3a, 0x07, 0x05, 0x7c, 0x11, 0x8d, 0x07, 0x05, 0xa7, 0x11, 0x11, 0x20, 0x18, 0x23, 0x12  ; FA2100
+	.byte 0x54, 0x4f, 0x54, 0x41, 0x4c, 0x20, 0x4b, 0x45, 0x59, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x49, 0x4e  ; FA2110
+	.byte 0x47, 0x20, 0x20, 0x3a, 0x20, 0x09, 0xc2, 0x14, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x20, 0x18, 0xe3  ; FA2120
+	.byte 0x15, 0x4b, 0x45, 0x59, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x49, 0x4e, 0x47, 0x20, 0x53, 0x48, 0x49  ; FA2130
+	.byte 0x46, 0x54, 0x20, 0x20, 0x3a, 0x07, 0x05, 0xbc, 0x17, 0x8e, 0x07, 0x05, 0xbf, 0x17, 0x11, 0x20  ; FA2140
+	.byte 0x0c, 0x77, 0x18, 0x5b, 0x4b, 0x45, 0x59, 0x3a, 0x20, 0x20, 0x5d, 0x09, 0x0a, 0x04, 0x00, 0x04  ; FA2150
+	.byte 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x08, 0x00, 0x1e, 0x00, 0x06, 0x01, 0xab, 0x00, 0x09  ; FA2160
+	.byte 0x0a, 0x12, 0x01, 0x1e, 0x00, 0x35, 0x01, 0x31, 0x00, 0x09, 0x0a, 0x14, 0x01, 0x20, 0x00, 0x33  ; FA2170
+	.byte 0x01, 0x2f, 0x00, 0x09, 0x0a, 0x12, 0x01, 0x45, 0x00, 0x35, 0x01, 0x58, 0x00, 0x09, 0x0a, 0x14  ; FA2180
+	.byte 0x01, 0x47, 0x00, 0x33, 0x01, 0x56, 0x00, 0x09, 0x0a, 0x12, 0x01, 0x6c, 0x00, 0x35, 0x01, 0x7f  ; FA2190
+	.byte 0x00, 0x09, 0x0a, 0x14, 0x01, 0x6e, 0x00, 0x33, 0x01, 0x7d, 0x00, 0x09, 0x0a, 0x12, 0x01, 0x93  ; FA21A0
+	.byte 0x00, 0x35, 0x01, 0xa6, 0x00, 0x09, 0x0a, 0x14, 0x01, 0x95, 0x00, 0x33, 0x01, 0xa4, 0x00  ; FA21B0
+; ---------------------------------------------------------------------
+; DisplayList_FA21BF -- 87 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA21BF:
+	.byte 0x00, 0x0a, 0x4c, 0x26, 0xff, 0x00, 0x20, 0xf9, 0x06, 0x02, 0x00, 0x0a, 0x4d, 0x26, 0xff, 0x00  ; FA21BF
+	.byte 0x20, 0xfc, 0x06, 0x01, 0x05, 0x0b, 0xb2, 0x78, 0x7f, 0x00, 0x20, 0xb8, 0x0a, 0x02, 0x40, 0x02  ; FA21CF
+	.byte 0x0f, 0xa3, 0x78, 0x80, 0x07, 0x20, 0x16, 0x22, 0xfa, 0x00, 0x05, 0x00, 0x78, 0x0e, 0x02, 0x0f  ; FA21DF
+	.byte 0x92, 0x26, 0x0f, 0x00, 0x20, 0x20, 0x22, 0xfa, 0x00, 0x08, 0x00, 0x38, 0x12, 0x05, 0x0b, 0xa3  ; FA21EF
+	.byte 0x78, 0x0f, 0x00, 0x20, 0xf8, 0x15, 0x02, 0x00, 0x02, 0x0f, 0xa3, 0x78, 0x0f, 0x00, 0x06, 0xa0  ; FA21FF
+	.byte 0x22, 0xfa, 0x00, 0x02, 0x00, 0x7c, 0x18                            ; FA220F
+; ---------------------------------------------------------------------
+; OperandTable_FA2216 -- 10 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA21DE: strings w=5 n<=2, cut to 0xFA2220 [w=5 max=10]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2216:
+	.byte 0x54, 0x4f, 0x54, 0x41, 0x4c, 0x53, 0x4f, 0x55, 0x4e, 0x44          ; FA2216
+; ---------------------------------------------------------------------
+; OperandTable_FA2220 -- 128 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA21ED: strings w=8 n<=16, cut to 0xFA22A0 [w=8 max=128]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2220:
+	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52, 0x41, 0x4e, 0x44, 0x4f, 0x4d, 0x20, 0x20  ; FA2220
+	.byte 0x50, 0x49, 0x41, 0x4e, 0x4f, 0x20, 0x20, 0x20, 0x4f, 0x52, 0x43, 0x48, 0x53, 0x54, 0x52, 0x41  ; FA2230
+	.byte 0x50, 0x59, 0x54, 0x48, 0x41, 0x47, 0x52, 0x4e, 0x57, 0x52, 0x4b, 0x4d, 0x49, 0x53, 0x54, 0x52  ; FA2240
+	.byte 0x4b, 0x52, 0x4e, 0x42, 0x45, 0x52, 0x47, 0x52, 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x31  ; FA2250
+	.byte 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x32, 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x33  ; FA2260
+	.byte 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x34, 0x41, 0x52, 0x41, 0x42, 0x49, 0x43, 0x20, 0x35  ; FA2270
+	.byte 0x53, 0x4c, 0x45, 0x4e, 0x44, 0x52, 0x4f, 0x20, 0x50, 0x45, 0x4c, 0x4f, 0x47, 0x20, 0x20, 0x20  ; FA2280
+	.byte 0x55, 0x53, 0x45, 0x52, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x20, 0x20, 0x20  ; FA2290
+; ---------------------------------------------------------------------
+; OperandTable_FA22A0 -- 32 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA2207: strings w=2 n<=16, cut to 0xFA22C0 [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA22A0:
+	.byte 0x43, 0x20, 0x44, 0x88, 0x44, 0x20, 0x45, 0x88, 0x45, 0x20, 0x46, 0x20, 0x47, 0x88, 0x47, 0x20  ; FA22A0
+	.byte 0x41, 0x88, 0x41, 0x20, 0x42, 0x88, 0x42, 0x20, 0x43, 0x20, 0x43, 0x20, 0x43, 0x20, 0x43, 0x20  ; FA22B0
+; ---------------------------------------------------------------------
+; DisplayList_FA22C0 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA22C0:
+	.byte 0x03, 0x0b, 0x90, 0x26, 0x07, 0x00, 0x05, 0xcb, 0x22, 0xfa, 0x00    ; FA22C0
+; ---------------------------------------------------------------------
+; OperandTable_FA22CB -- 64 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA22C0: 8-byte x8 max, cut to 0xFA230B [w=8 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA22CB:
+	.byte 0x09, 0x00, 0x2a, 0x00, 0x05, 0x01, 0x37, 0x00, 0x09, 0x00, 0x42, 0x00, 0x05, 0x01, 0x4f, 0x00  ; FA22CB
+	.byte 0x09, 0x00, 0x5a, 0x00, 0x05, 0x01, 0x67, 0x00, 0x09, 0x00, 0x72, 0x00, 0x05, 0x01, 0x7f, 0x00  ; FA22DB
+	.byte 0x09, 0x00, 0x8a, 0x00, 0x05, 0x01, 0x97, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA22EB
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA22FB
+; ---------------------------------------------------------------------
+; DisplayList_FA230B -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA230B:
+	.byte 0x1b, 0x0a, 0x09, 0x00, 0x2a, 0x00, 0x05, 0x01, 0x97, 0x00          ; FA230B
+; ---------------------------------------------------------------------
+; DisplayList_FA2315 -- 310 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2315:
+	.byte 0x07, 0x05, 0x1a, 0x24, 0x12, 0x07, 0x05, 0x1f, 0x24, 0x12, 0x07, 0x05, 0x24, 0x24, 0x12, 0x07  ; FA2315
+	.byte 0x05, 0x29, 0x24, 0x12, 0x07, 0x05, 0x2e, 0x24, 0x12, 0x07, 0x05, 0x33, 0x24, 0x12, 0x07, 0x05  ; FA2325
+	.byte 0x38, 0x24, 0x12, 0x07, 0x05, 0x3d, 0x24, 0x12, 0x09, 0x0a, 0x0b, 0x00, 0xbb, 0x00, 0x1c, 0x00  ; FA2335
+	.byte 0xe6, 0x00, 0x01, 0x0a, 0x24, 0x00, 0xbb, 0x00, 0x3c, 0x01, 0xbb, 0x00, 0x01, 0x0a, 0x34, 0x00  ; FA2345
+	.byte 0xd0, 0x00, 0x85, 0x00, 0xd0, 0x00, 0x01, 0x0a, 0xac, 0x00, 0xd0, 0x00, 0x25, 0x01, 0xd0, 0x00  ; FA2355
+	.byte 0x01, 0x0a, 0x0b, 0x00, 0xd1, 0x00, 0x1c, 0x00, 0xd1, 0x00, 0x01, 0x0a, 0x35, 0x00, 0xd1, 0x00  ; FA2365
+	.byte 0x85, 0x00, 0xd1, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xd1, 0x00, 0x25, 0x01, 0xd1, 0x00, 0x01, 0x0a  ; FA2375
+	.byte 0x24, 0x00, 0xe6, 0x00, 0x3d, 0x01, 0xe6, 0x00, 0x01, 0x0a, 0x25, 0x00, 0xe7, 0x00, 0x3d, 0x01  ; FA2385
+	.byte 0xe7, 0x00, 0x02, 0x0a, 0x24, 0x00, 0xbb, 0x00, 0x24, 0x00, 0xe6, 0x00, 0x02, 0x0a, 0x34, 0x00  ; FA2395
+	.byte 0xbb, 0x00, 0x34, 0x00, 0xd0, 0x00, 0x02, 0x0a, 0x4c, 0x00, 0xd0, 0x00, 0x4c, 0x00, 0xe7, 0x00  ; FA23A5
+	.byte 0x02, 0x0a, 0x5c, 0x00, 0xbb, 0x00, 0x5c, 0x00, 0xd1, 0x00, 0x02, 0x0a, 0x74, 0x00, 0xd0, 0x00  ; FA23B5
+	.byte 0x74, 0x00, 0xe7, 0x00, 0x02, 0x0a, 0x84, 0x00, 0xbb, 0x00, 0x84, 0x00, 0xd1, 0x00, 0x02, 0x0a  ; FA23C5
+	.byte 0x85, 0x00, 0xbb, 0x00, 0x85, 0x00, 0xd1, 0x00, 0x02, 0x0a, 0x9c, 0x00, 0xbb, 0x00, 0x9c, 0x00  ; FA23D5
+	.byte 0xe7, 0x00, 0x02, 0x0a, 0xac, 0x00, 0xbb, 0x00, 0xac, 0x00, 0xd0, 0x00, 0x02, 0x0a, 0xc4, 0x00  ; FA23E5
+	.byte 0xd0, 0x00, 0xc4, 0x00, 0xe7, 0x00, 0x02, 0x0a, 0xd4, 0x00, 0xbb, 0x00, 0xd4, 0x00, 0xd1, 0x00  ; FA23F5
+	.byte 0x02, 0x0a, 0xec, 0x00, 0xd0, 0x00, 0xec, 0x00, 0xe7, 0x00, 0x02, 0x0a, 0xfc, 0x00, 0xbb, 0x00  ; FA2405
+	.byte 0xfc, 0x00, 0xd1, 0x00, 0x02, 0x0a, 0x14, 0x01, 0xd0, 0x00, 0x14, 0x01, 0xe7, 0x00, 0x02, 0x0a  ; FA2415
+	.byte 0x24, 0x01, 0xbb, 0x00, 0x24, 0x01, 0xd1, 0x00, 0x02, 0x0a, 0x25, 0x01, 0xbb, 0x00, 0x25, 0x01  ; FA2425
+	.byte 0xd1, 0x00, 0x02, 0x0a, 0x3c, 0x01, 0xbb, 0x00, 0x3c, 0x01, 0xe7, 0x00, 0x02, 0x0a, 0x3d, 0x01  ; FA2435
+	.byte 0xbc, 0x00, 0x3d, 0x01, 0xe7, 0x00                                  ; FA2445
+; ---------------------------------------------------------------------
+; DisplayList_FA244B -- 30 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA244B:
+	.byte 0x02, 0x0f, 0x92, 0x26, 0x0f, 0x00, 0x07, 0x69, 0x24, 0xfa, 0x00, 0x01, 0x00, 0x2a, 0x1e, 0x02  ; FA244B
+	.byte 0x0f, 0x92, 0x26, 0x0f, 0x00, 0x07, 0x69, 0x24, 0xfa, 0x00, 0x01, 0x00, 0x9a, 0x21  ; FA245B
+; ---------------------------------------------------------------------
+; OperandTable_FA2469 -- 16 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA244B: strings w=1 n<=16, cut to 0xFA2479 [w=1 max=16]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2469:
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0xa9, 0xa9  ; FA2469
+; ---------------------------------------------------------------------
+; DisplayList_FA2479 -- 143 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2479:
+	.byte 0x05, 0x0b, 0x40, 0x26, 0xff, 0x00, 0x07, 0x75, 0x21, 0x03, 0x80, 0x05, 0x0b, 0x41, 0x26, 0xff  ; FA2479
+	.byte 0x00, 0x07, 0x07, 0x1e, 0x03, 0x80, 0x05, 0x0b, 0x42, 0x26, 0xff, 0x00, 0x07, 0x7a, 0x21, 0x03  ; FA2489
+	.byte 0x80, 0x05, 0x0b, 0x43, 0x26, 0xff, 0x00, 0x07, 0x0c, 0x1e, 0x03, 0x80, 0x05, 0x0b, 0x44, 0x26  ; FA2499
+	.byte 0xff, 0x00, 0x07, 0x7f, 0x21, 0x03, 0x80, 0x05, 0x0b, 0x45, 0x26, 0xff, 0x00, 0x07, 0x84, 0x21  ; FA24A9
+	.byte 0x03, 0x80, 0x05, 0x0b, 0x46, 0x26, 0xff, 0x00, 0x07, 0x16, 0x1e, 0x03, 0x80, 0x05, 0x0b, 0x47  ; FA24B9
+	.byte 0x26, 0xff, 0x00, 0x07, 0x89, 0x21, 0x03, 0x80, 0x05, 0x0b, 0x48, 0x26, 0xff, 0x00, 0x07, 0x1b  ; FA24C9
+	.byte 0x1e, 0x03, 0x80, 0x05, 0x0b, 0x49, 0x26, 0xff, 0x00, 0x07, 0x8e, 0x21, 0x03, 0x80, 0x05, 0x0b  ; FA24D9
+	.byte 0x4a, 0x26, 0xff, 0x00, 0x07, 0x20, 0x1e, 0x03, 0x80, 0x05, 0x0b, 0x4b, 0x26, 0xff, 0x00, 0x07  ; FA24E9
+	.byte 0x93, 0x21, 0x03, 0x80, 0x03, 0x0b, 0x90, 0x26, 0x10, 0x04, 0x05, 0x08, 0x25, 0xfa, 0x00  ; FA24F9
+; ---------------------------------------------------------------------
+; OperandTable_FA2508 -- 16 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA24FD: 8-byte x2 max, cut to 0xFA2518 [w=8 max=16]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2508:
+	.byte 0x0c, 0x00, 0xbc, 0x00, 0x1b, 0x00, 0xd0, 0x00, 0x0c, 0x00, 0xd2, 0x00, 0x1b, 0x00, 0xe5, 0x00  ; FA2508
+; ---------------------------------------------------------------------
+; DisplayList_FA2518 -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as A records between 0xFA2518 and 0xFA2522
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2518:
+	.byte 0x1b, 0x0a, 0x0b, 0x00, 0xbb, 0x00, 0x1c, 0x00, 0xe6, 0x00          ; FA2518
+; ---------------------------------------------------------------------
+; DisplayList_FA2522 -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2522:
+	.byte 0x1b, 0x0a, 0x0b, 0x00, 0xbb, 0x00, 0x1c, 0x00, 0xe6, 0x00          ; FA2522
+; ---------------------------------------------------------------------
+; DisplayList_FA252C -- 255 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA252C:
+	.byte 0x23, 0x05, 0x08, 0x2f, 0x00, 0x1c, 0x17, 0x58, 0x00, 0x05, 0x00, 0x54, 0x4f, 0x55, 0x43, 0x48  ; FA252C
+	.byte 0x20, 0x53, 0x45, 0x4e, 0x53, 0x49, 0x54, 0x49, 0x56, 0x49, 0x54, 0x59, 0x17, 0x0c, 0x07, 0x00  ; FA253C
+	.byte 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x1b, 0xa6, 0x0a, 0x56, 0x45, 0x4c, 0x4f  ; FA254C
+	.byte 0x43, 0x49, 0x54, 0x59, 0x20, 0x43, 0x55, 0x52, 0x56, 0x45, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA255C
+	.byte 0x20, 0x20, 0x3a, 0x20, 0x1b, 0x66, 0x0e, 0x56, 0x45, 0x4c, 0x4f, 0x43, 0x49, 0x54, 0x59, 0x20  ; FA256C
+	.byte 0x4f, 0x46, 0x46, 0x53, 0x45, 0x54, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x1b  ; FA257C
+	.byte 0x66, 0x13, 0x41, 0x46, 0x54, 0x45, 0x52, 0x20, 0x54, 0x4f, 0x55, 0x43, 0x48, 0x20, 0x43, 0x55  ; FA258C
+	.byte 0x52, 0x56, 0x45, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x1b, 0x26, 0x17, 0x41, 0x46, 0x54  ; FA259C
+	.byte 0x45, 0x52, 0x20, 0x54, 0x4f, 0x55, 0x43, 0x48, 0x20, 0x54, 0x48, 0x52, 0x45, 0x53, 0x48, 0x4f  ; FA25AC
+	.byte 0x4c, 0x44, 0x20, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20, 0x09, 0x24, 0x20  ; FA25BC
+	.byte 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07  ; FA25CC
+	.byte 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92  ; FA25DC
+	.byte 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04  ; FA25EC
+	.byte 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x20, 0x00, 0x32, 0x00, 0x20, 0x01, 0xb2  ; FA25FC
+	.byte 0x00, 0x01, 0x0a, 0x20, 0x00, 0x72, 0x00, 0x20, 0x01, 0x72, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3  ; FA260C
+	.byte 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00  ; FA261C
+; ---------------------------------------------------------------------
+; DisplayList_FA262B -- 40 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA262B:
+	.byte 0x00, 0x0a, 0x5a, 0x7f, 0x0f, 0x00, 0x20, 0xc0, 0x0a, 0x01, 0x00, 0x0a, 0x5c, 0x7f, 0x7f, 0x00  ; FA262B
+	.byte 0x20, 0x7e, 0x0e, 0x03, 0x00, 0x0a, 0x5f, 0x7f, 0xff, 0x00, 0x20, 0x7f, 0x13, 0x02, 0x00, 0x0a  ; FA263B
+	.byte 0x60, 0x7f, 0x7f, 0x00, 0x20, 0x3e, 0x17, 0x03                      ; FA264B
+; ---------------------------------------------------------------------
+; DisplayList_FA2653 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2653:
+	.byte 0x03, 0x0b, 0x93, 0x26, 0x03, 0x00, 0x05, 0x5e, 0x26, 0xfa, 0x00    ; FA2653
+; ---------------------------------------------------------------------
+; OperandTable_FA265E -- 32 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA2653: 8-byte x4 max, cut to 0xFA267E [w=8 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA265E:
+	.byte 0x21, 0x00, 0x42, 0x00, 0x1f, 0x01, 0x4f, 0x00, 0x21, 0x00, 0x5a, 0x00, 0x1f, 0x01, 0x67, 0x00  ; FA265E
+	.byte 0x21, 0x00, 0x7a, 0x00, 0x1f, 0x01, 0x87, 0x00, 0x21, 0x00, 0x92, 0x00, 0x1f, 0x01, 0x9f, 0x00  ; FA266E
+; ---------------------------------------------------------------------
+; DisplayList_FA267E -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA267E:
+	.byte 0x1b, 0x0a, 0x21, 0x00, 0x42, 0x00, 0x1f, 0x01, 0x9f, 0x00          ; FA267E
+; ---------------------------------------------------------------------
+; DisplayList_FA2688 -- 592 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as A records between 0xFA2688 and 0xFA28D8
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2688:
+	.byte 0x23, 0x05, 0x09, 0x2f, 0x00, 0x07, 0x15, 0xfc, 0x00, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f, 0x4c  ; FA2688
+	.byte 0x4c, 0x45, 0x52, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x0b, 0x10, 0x01, 0x50, 0x41  ; FA2698
+	.byte 0x47, 0x45, 0x20, 0x2f, 0x32, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45  ; FA26A8
+	.byte 0x4d, 0x20, 0x18, 0xe2, 0x06, 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52, 0x45, 0x41, 0x54, 0x4f, 0x52  ; FA26B8
+	.byte 0x20, 0x20, 0x20, 0x20, 0x58, 0x28, 0x20, 0x29, 0x3a, 0x20, 0x09, 0x71, 0x09, 0x59, 0x28, 0x20  ; FA26C8
+	.byte 0x29, 0x3a, 0x20, 0x18, 0x22, 0x0d, 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f  ; FA26D8
+	.byte 0x4c, 0x4c, 0x45, 0x52, 0x20, 0x58, 0x28, 0x20, 0x29, 0x3a, 0x20, 0x09, 0xb1, 0x0f, 0x59, 0x28  ; FA26E8
+	.byte 0x20, 0x29, 0x3a, 0x20, 0x18, 0x22, 0x12, 0x4d, 0x4f, 0x44, 0x55, 0x4c, 0x41, 0x54, 0x49, 0x4f  ; FA26F8
+	.byte 0x4e, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x18, 0xa2, 0x14, 0x4d  ; FA2708
+	.byte 0x4f, 0x44, 0x55, 0x4c, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2718
+	.byte 0x20, 0x20, 0x3a, 0x20, 0x18, 0x22, 0x17, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f, 0x4c, 0x20, 0x50  ; FA2728
+	.byte 0x45, 0x44, 0x41, 0x4c, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x18, 0xa2, 0x19, 0x46  ; FA2738
+	.byte 0x4f, 0x4f, 0x54, 0x20, 0x53, 0x57, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2748
+	.byte 0x20, 0x20, 0x3a, 0x20, 0x18, 0x22, 0x1c, 0x46, 0x4f, 0x4f, 0x54, 0x20, 0x53, 0x57, 0x20, 0x32  ; FA2758
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49  ; FA2768
+	.byte 0x54, 0x45, 0x4d, 0x20, 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21  ; FA2778
+	.byte 0x8d, 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e  ; FA2788
+	.byte 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00  ; FA2798
+	.byte 0x3a, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a  ; FA27A8
+	.byte 0x08, 0x00, 0x22, 0x00, 0x38, 0x01, 0xc7, 0x00, 0x01, 0x0a, 0x82, 0x00, 0x30, 0x00, 0x86, 0x00  ; FA27B8
+	.byte 0x30, 0x00, 0x01, 0x0a, 0x82, 0x00, 0x40, 0x00, 0x86, 0x00, 0x40, 0x00, 0x01, 0x0a, 0x82, 0x00  ; FA27C8
+	.byte 0x58, 0x00, 0x86, 0x00, 0x58, 0x00, 0x01, 0x0a, 0x82, 0x00, 0x68, 0x00, 0x86, 0x00, 0x68, 0x00  ; FA27D8
+	.byte 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00  ; FA27E8
+	.byte 0x3c, 0x01, 0xe3, 0x00, 0x02, 0x0a, 0x82, 0x00, 0x30, 0x00, 0x82, 0x00, 0x40, 0x00, 0x02, 0x0a  ; FA27F8
+	.byte 0x82, 0x00, 0x58, 0x00, 0x82, 0x00, 0x68, 0x00, 0x01, 0x0a, 0x96, 0x00, 0x31, 0x00, 0xa0, 0x00  ; FA2808
+	.byte 0x31, 0x00, 0x00, 0x0a, 0x96, 0x00, 0x31, 0x00, 0x98, 0x00, 0x2f, 0x00, 0x00, 0x0a, 0x96, 0x00  ; FA2818
+	.byte 0x31, 0x00, 0x98, 0x00, 0x33, 0x00, 0x00, 0x0a, 0x9e, 0x00, 0x2f, 0x00, 0xa0, 0x00, 0x31, 0x00  ; FA2828
+	.byte 0x00, 0x0a, 0x9e, 0x00, 0x33, 0x00, 0xa0, 0x00, 0x31, 0x00, 0x02, 0x0a, 0x9b, 0x00, 0x3c, 0x00  ; FA2838
+	.byte 0x9b, 0x00, 0x46, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x3c, 0x00, 0x9d, 0x00, 0x3e, 0x00, 0x00, 0x0a  ; FA2848
+	.byte 0x9b, 0x00, 0x3c, 0x00, 0x99, 0x00, 0x3e, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x46, 0x00, 0x99, 0x00  ; FA2858
+	.byte 0x44, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x46, 0x00, 0x9d, 0x00, 0x44, 0x00, 0x01, 0x0a, 0x96, 0x00  ; FA2868
+	.byte 0x59, 0x00, 0xa0, 0x00, 0x59, 0x00, 0x00, 0x0a, 0x96, 0x00, 0x59, 0x00, 0x98, 0x00, 0x57, 0x00  ; FA2878
+	.byte 0x00, 0x0a, 0x96, 0x00, 0x59, 0x00, 0x98, 0x00, 0x5b, 0x00, 0x00, 0x0a, 0xa0, 0x00, 0x59, 0x00  ; FA2888
+	.byte 0x9e, 0x00, 0x5b, 0x00, 0x00, 0x0a, 0xa0, 0x00, 0x59, 0x00, 0x9e, 0x00, 0x57, 0x00, 0x02, 0x0a  ; FA2898
+	.byte 0x9b, 0x00, 0x64, 0x00, 0x9b, 0x00, 0x6e, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x64, 0x00, 0x99, 0x00  ; FA28A8
+	.byte 0x66, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x64, 0x00, 0x9d, 0x00, 0x66, 0x00, 0x00, 0x0a, 0x9b, 0x00  ; FA28B8
+	.byte 0x6e, 0x00, 0x99, 0x00, 0x6c, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x6e, 0x00, 0x9d, 0x00, 0x6c, 0x00  ; FA28C8
+; ---------------------------------------------------------------------
+; DisplayList_FA28D8 -- 200 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA28D8:
+	.byte 0x23, 0x05, 0x09, 0x2f, 0x00, 0x07, 0x15, 0xfc, 0x00, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f, 0x4c  ; FA28D8
+	.byte 0x4c, 0x45, 0x52, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x0b, 0x10, 0x01, 0x50, 0x41  ; FA28E8
+	.byte 0x47, 0x45, 0x20, 0x2f, 0x32, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45  ; FA28F8
+	.byte 0x4d, 0x20, 0x1b, 0x26, 0x0d, 0x46, 0x4f, 0x4f, 0x54, 0x20, 0x53, 0x57, 0x31, 0x20, 0x50, 0x4f  ; FA2908
+	.byte 0x4c, 0x41, 0x52, 0x49, 0x54, 0x59, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x1b, 0x26, 0x12  ; FA2918
+	.byte 0x46, 0x4f, 0x4f, 0x54, 0x20, 0x53, 0x57, 0x32, 0x20, 0x50, 0x4f, 0x4c, 0x41, 0x52, 0x49, 0x54  ; FA2928
+	.byte 0x59, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20  ; FA2938
+	.byte 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde  ; FA2948
+	.byte 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x05, 0x00  ; FA2958
+	.byte 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00  ; FA2968
+	.byte 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x20, 0x00, 0x42, 0x00  ; FA2978
+	.byte 0x20, 0x01, 0x92, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a  ; FA2988
+	.byte 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00                      ; FA2998
+; ---------------------------------------------------------------------
+; DisplayList_FA29A0 -- 298 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA29A0:
+	.byte 0x23, 0x05, 0x09, 0x2f, 0x00, 0x07, 0x15, 0xfc, 0x00, 0x43, 0x4f, 0x4e, 0x54, 0x52, 0x4f, 0x4c  ; FA29A0
+	.byte 0x4c, 0x45, 0x52, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00  ; FA29B0
+	.byte 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x18, 0xb2, 0x0e, 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52  ; FA29C0
+	.byte 0x45, 0x41, 0x54, 0x4f, 0x52, 0x20, 0x20, 0x20, 0x20, 0x58, 0x28, 0x20, 0x29, 0x3a, 0x20, 0x09  ; FA29D0
+	.byte 0x41, 0x11, 0x59, 0x28, 0x20, 0x29, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20  ; FA29E0
+	.byte 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde  ; FA29F0
+	.byte 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x05, 0x00  ; FA2A00
+	.byte 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00  ; FA2A10
+	.byte 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x08, 0x00, 0x54, 0x00  ; FA2A20
+	.byte 0x38, 0x01, 0x84, 0x00, 0x01, 0x0a, 0x82, 0x00, 0x62, 0x00, 0x86, 0x00, 0x62, 0x00, 0x01, 0x0a  ; FA2A30
+	.byte 0x82, 0x00, 0x72, 0x00, 0x86, 0x00, 0x72, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00, 0x94, 0x00  ; FA2A40
+	.byte 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00, 0x02, 0x0a, 0x82, 0x00  ; FA2A50
+	.byte 0x62, 0x00, 0x82, 0x00, 0x72, 0x00, 0x01, 0x0a, 0x96, 0x00, 0x63, 0x00, 0xa0, 0x00, 0x63, 0x00  ; FA2A60
+	.byte 0x00, 0x0a, 0x96, 0x00, 0x63, 0x00, 0x98, 0x00, 0x61, 0x00, 0x00, 0x0a, 0x96, 0x00, 0x63, 0x00  ; FA2A70
+	.byte 0x98, 0x00, 0x65, 0x00, 0x00, 0x0a, 0x9e, 0x00, 0x61, 0x00, 0xa0, 0x00, 0x63, 0x00, 0x00, 0x0a  ; FA2A80
+	.byte 0x9e, 0x00, 0x65, 0x00, 0xa0, 0x00, 0x63, 0x00, 0x02, 0x0a, 0x9b, 0x00, 0x6e, 0x00, 0x9b, 0x00  ; FA2A90
+	.byte 0x78, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x6e, 0x00, 0x9d, 0x00, 0x70, 0x00, 0x00, 0x0a, 0x9b, 0x00  ; FA2AA0
+	.byte 0x6e, 0x00, 0x99, 0x00, 0x70, 0x00, 0x00, 0x0a, 0x9b, 0x00, 0x78, 0x00, 0x99, 0x00, 0x76, 0x00  ; FA2AB0
+	.byte 0x00, 0x0a, 0x9b, 0x00, 0x78, 0x00, 0x9d, 0x00, 0x76, 0x00          ; FA2AC0
+; ---------------------------------------------------------------------
+; DisplayList_FA2ACA -- 30 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as B records between 0xFA2ACA and 0xFA2AE8
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2ACA:
+	.byte 0x02, 0x0f, 0x40, 0x26, 0xff, 0x00, 0x20, 0xc3, 0x2b, 0xfa, 0x00, 0x10, 0x00, 0xc6, 0x0e, 0x02  ; FA2ACA
+	.byte 0x0f, 0x41, 0x26, 0xff, 0x00, 0x20, 0xc3, 0x2b, 0xfa, 0x00, 0x10, 0x00, 0x46, 0x11  ; FA2ADA
+; ---------------------------------------------------------------------
+; DisplayList_FA2AE8 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2AE8:
+	.byte 0x03, 0x0b, 0xf1, 0x26, 0x01, 0x00, 0x05, 0xf3, 0x2a, 0xfa, 0x00    ; FA2AE8
+; ---------------------------------------------------------------------
+; OperandTable_FA2AF3 -- 16 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA2AE8: 8-byte x2 max, cut to 0xFA2B03 [w=8 max=16]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2AF3:
+	.byte 0x09, 0x00, 0x5b, 0x00, 0x37, 0x01, 0x6a, 0x00, 0x09, 0x00, 0x6b, 0x00, 0x37, 0x01, 0x7a, 0x00  ; FA2AF3
+; ---------------------------------------------------------------------
+; DisplayList_FA2B03 -- 175 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as AB records between 0xFA2B03 and 0xFA2BB2
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2B03:
+	.byte 0x1b, 0x0a, 0x09, 0x00, 0x5b, 0x00, 0x37, 0x01, 0x7a, 0x00, 0x02, 0x0f, 0x40, 0x26, 0xff, 0x00  ; FA2B03
+	.byte 0x20, 0xc3, 0x2b, 0xfa, 0x00, 0x10, 0x00, 0xf6, 0x06, 0x02, 0x0f, 0x41, 0x26, 0xff, 0x00, 0x20  ; FA2B13
+	.byte 0xc3, 0x2b, 0xfa, 0x00, 0x10, 0x00, 0x76, 0x09, 0x02, 0x0f, 0x42, 0x26, 0xff, 0x00, 0x20, 0xc3  ; FA2B23
+	.byte 0x2b, 0xfa, 0x00, 0x10, 0x00, 0x36, 0x0d, 0x02, 0x0f, 0x43, 0x26, 0xff, 0x00, 0x20, 0xc3, 0x2b  ; FA2B33
+	.byte 0xfa, 0x00, 0x10, 0x00, 0xb6, 0x0f, 0x02, 0x0f, 0x44, 0x26, 0xff, 0x00, 0x20, 0xc3, 0x2b, 0xfa  ; FA2B43
+	.byte 0x00, 0x10, 0x00, 0x36, 0x12, 0x02, 0x0f, 0x45, 0x26, 0xff, 0x00, 0x20, 0xc3, 0x2b, 0xfa, 0x00  ; FA2B53
+	.byte 0x10, 0x00, 0xb6, 0x14, 0x02, 0x0f, 0x46, 0x26, 0xff, 0x00, 0x20, 0xc3, 0x2b, 0xfa, 0x00, 0x10  ; FA2B63
+	.byte 0x00, 0x36, 0x17, 0x02, 0x0f, 0x47, 0x26, 0xff, 0x00, 0x20, 0xc3, 0x2c, 0xfa, 0x00, 0x10, 0x00  ; FA2B73
+	.byte 0xb6, 0x19, 0x02, 0x0f, 0x48, 0x26, 0xff, 0x00, 0x20, 0xc3, 0x2c, 0xfa, 0x00, 0x10, 0x00, 0x36  ; FA2B83
+	.byte 0x1c, 0x02, 0x0f, 0x12, 0x7f, 0x01, 0x00, 0x20, 0x43, 0x2d, 0xfa, 0x00, 0x01, 0x00, 0x18, 0x0d  ; FA2B93
+	.byte 0x02, 0x0f, 0x12, 0x7f, 0x02, 0x01, 0x20, 0x43, 0x2d, 0xfa, 0x00, 0x01, 0x00, 0x18, 0x12  ; FA2BA3
+; ---------------------------------------------------------------------
+; DisplayList_FA2BB2 -- 15 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2BB2:
+	.byte 0x02, 0x0f, 0xf0, 0x26, 0x01, 0x00, 0x20, 0xc1, 0x2b, 0xfa, 0x00, 0x01, 0x00, 0x14, 0x01  ; FA2BB2
+; ---------------------------------------------------------------------
+; OperandTable_FA2BC1 -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA2BB2: strings w=1 n<=2, cut to 0xFA2BC3 [w=1 max=2]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2BC1:
+	.byte 0x31, 0x32                                                          ; FA2BC1
+; ---------------------------------------------------------------------
+; OperandTable_FA2BC3 -- 384 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA2ACA: strings w=16 n<=256, R6: 24 entries are printable, entry 24 is not, so the table ends at 0xFA2D43 [w=16 max=4096]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2BC3:
+	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2BC3
+	.byte 0x4d, 0x4f, 0x44, 0x55, 0x4c, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x31, 0x28, 0x23, 0x20, 0x31, 0x29  ; FA2BD3
+	.byte 0x4d, 0x4f, 0x44, 0x55, 0x4c, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x32, 0x28, 0x23, 0x20, 0x32, 0x29  ; FA2BE3
+	.byte 0x43, 0x54, 0x52, 0x4c, 0x2e, 0x50, 0x45, 0x44, 0x41, 0x4c, 0x20, 0x28, 0x23, 0x20, 0x34, 0x29  ; FA2BF3
+	.byte 0x45, 0x58, 0x50, 0x52, 0x45, 0x53, 0x53, 0x49, 0x4f, 0x4e, 0x20, 0x28, 0x23, 0x31, 0x31, 0x29  ; FA2C03
+	.byte 0x48, 0x4f, 0x4c, 0x44, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x28, 0x23, 0x36, 0x34, 0x29  ; FA2C13
+	.byte 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52, 0x45, 0x41, 0x54, 0x2e, 0x58, 0x28, 0x23, 0x31, 0x36, 0x29  ; FA2C23
+	.byte 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52, 0x45, 0x41, 0x54, 0x2e, 0x59, 0x28, 0x23, 0x31, 0x37, 0x29  ; FA2C33
+	.byte 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x54, 0x52, 0x4c, 0x2e, 0x20, 0x58, 0x28, 0x23, 0x31, 0x38, 0x29  ; FA2C43
+	.byte 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x54, 0x52, 0x4c, 0x2e, 0x20, 0x59, 0x28, 0x23, 0x31, 0x39, 0x29  ; FA2C53
+	.byte 0x41, 0x46, 0x54, 0x45, 0x52, 0x20, 0x54, 0x4f, 0x55, 0x43, 0x48, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2C63
+	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2C73
+	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2C83
+	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2C93
+	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2CA3
+	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2CB3
+	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2CC3
+	.byte 0x48, 0x4f, 0x4c, 0x44, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x28, 0x23, 0x36, 0x34, 0x29  ; FA2CD3
+	.byte 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x2f, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x20, 0x49, 0x4e, 0x43, 0x20  ; FA2CE3
+	.byte 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x2f, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x20, 0x44, 0x45, 0x43, 0x20  ; FA2CF3
+	.byte 0x53, 0x54, 0x41, 0x52, 0x54, 0x2f, 0x53, 0x54, 0x4f, 0x50, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2D03
+	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2D13
+	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2D23
+	.byte 0x4e, 0x4f, 0x20, 0x41, 0x53, 0x53, 0x49, 0x47, 0x4e, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2D33
+; ---------------------------------------------------------------------
+; OperandTable_FA2D43 -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA2B94: strings w=1 n<=2, cut to 0xFA2D45 [w=1 max=2]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2D43:
+	.byte 0x2b, 0x2d                                                          ; FA2D43
+; ---------------------------------------------------------------------
+; DisplayList_FA2D45 -- 22 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): records 0xFA2D45-0xFA2D5B, ended by a pointer one of them carries
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2D45:
+	.byte 0x03, 0x0b, 0xf1, 0x26, 0x0f, 0x00, 0x05, 0x5b, 0x2d, 0xfa, 0x00, 0x03, 0x0b, 0xf1, 0x26, 0x10  ; FA2D45
+	.byte 0x04, 0x05, 0xdb, 0x2d, 0xfa, 0x00                                  ; FA2D55
+; ---------------------------------------------------------------------
+; OperandTable_FA2D5B -- 128 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA2D45: 8-byte x16 max, cut to 0xFA2DDB [w=8 max=128]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2D5B:
+	.byte 0x09, 0x00, 0x2a, 0x00, 0x37, 0x01, 0x37, 0x00, 0x09, 0x00, 0x3a, 0x00, 0x37, 0x01, 0x47, 0x00  ; FA2D5B
+	.byte 0x09, 0x00, 0x52, 0x00, 0x37, 0x01, 0x5f, 0x00, 0x09, 0x00, 0x62, 0x00, 0x37, 0x01, 0x6f, 0x00  ; FA2D6B
+	.byte 0x09, 0x00, 0x72, 0x00, 0x37, 0x01, 0x7f, 0x00, 0x09, 0x00, 0x82, 0x00, 0x37, 0x01, 0x8f, 0x00  ; FA2D7B
+	.byte 0x09, 0x00, 0x92, 0x00, 0x37, 0x01, 0x9f, 0x00, 0x09, 0x00, 0xa2, 0x00, 0x37, 0x01, 0xaf, 0x00  ; FA2D8B
+	.byte 0x09, 0x00, 0xb2, 0x00, 0x37, 0x01, 0xbf, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA2D9B
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA2DAB
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA2DBB
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA2DCB
+; ---------------------------------------------------------------------
+; OperandTable_FA2DDB -- 16 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA2D50: 8-byte x2 max, cut to 0xFA2DEB [w=8 max=16]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2DDB:
+	.byte 0x21, 0x00, 0x51, 0x00, 0x1f, 0x01, 0x60, 0x00, 0x21, 0x00, 0x71, 0x00, 0x1f, 0x01, 0x80, 0x00  ; FA2DDB
+; ---------------------------------------------------------------------
+; DisplayList_FA2DEB -- 20 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as A records between 0xFA2DEB and 0xFA2DFF
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2DEB:
+	.byte 0x1b, 0x0a, 0x09, 0x00, 0x2a, 0x00, 0x37, 0x01, 0xbf, 0x00, 0x1b, 0x0a, 0x21, 0x00, 0x51, 0x00  ; FA2DEB
+	.byte 0x1f, 0x01, 0x80, 0x00                                              ; FA2DFB
+; ---------------------------------------------------------------------
+; DisplayList_FA2DFF -- 344 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2DFF:
+	.byte 0x23, 0x05, 0x0c, 0x34, 0x00, 0x1c, 0x0d, 0x7e, 0x00, 0x05, 0x00, 0x49, 0x4e, 0x49, 0x54, 0x49  ; FA2DFF
+	.byte 0x41, 0x4c, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x07, 0x2a  ; FA2E0F
+	.byte 0x11, 0x04, 0x52, 0x65, 0x73, 0x65, 0x74, 0x20, 0x74, 0x68, 0x65, 0x20, 0x74, 0x6f, 0x74, 0x61  ; FA2E1F
+	.byte 0x6c, 0x20, 0x6f, 0x72, 0x20, 0x69, 0x6e, 0x64, 0x69, 0x76, 0x69, 0x64, 0x75, 0x61, 0x6c, 0x20  ; FA2E2F
+	.byte 0x73, 0x65, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x07, 0x24, 0x59, 0x07, 0x74, 0x6f, 0x20, 0x74  ; FA2E3F
+	.byte 0x68, 0x65, 0x20, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61, 0x6c, 0x20, 0x66, 0x61, 0x63, 0x74  ; FA2E4F
+	.byte 0x6f, 0x72, 0x79, 0x20, 0x73, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x73, 0x07, 0x26, 0xa1, 0x0a  ; FA2E5F
+	.byte 0x65, 0x78, 0x63, 0x65, 0x70, 0x74, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x61, 0x6e, 0x64  ; FA2E6F
+	.byte 0x20, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x61, 0x72, 0x65  ; FA2E7F
+	.byte 0x61, 0x2e, 0x07, 0x05, 0x57, 0x11, 0x11, 0x20, 0x06, 0x7b, 0x11, 0x4f, 0x4b, 0x07, 0x09, 0xe2  ; FA2E8F
+	.byte 0x0e, 0x54, 0x4f, 0x54, 0x41, 0x4c, 0x07, 0x10, 0xdd, 0x11, 0x50, 0x41, 0x52, 0x54, 0x20, 0x53  ; FA2E9F
+	.byte 0x45, 0x54, 0x54, 0x49, 0x4e, 0x47, 0x07, 0x0a, 0xd5, 0x14, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d  ; FA2EAF
+	.byte 0x07, 0x10, 0xcd, 0x17, 0x4d, 0x49, 0x44, 0x49, 0x20, 0x53, 0x45, 0x54, 0x54, 0x49, 0x4e, 0x47  ; FA2EBF
+	.byte 0x07, 0x0a, 0xc5, 0x1a, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x07, 0x0d, 0xbd, 0x1d, 0x44, 0x52  ; FA2ECF
+	.byte 0x55, 0x4d, 0x53, 0x20, 0x4d, 0x41, 0x50, 0x07, 0x0d, 0xb5, 0x20, 0x53, 0x45, 0x51, 0x55, 0x45  ; FA2EDF
+	.byte 0x4e, 0x43, 0x45, 0x52, 0x07, 0x05, 0x6c, 0x17, 0x8d, 0x07, 0x05, 0x97, 0x17, 0x11, 0x07, 0x05  ; FA2EEF
+	.byte 0xd4, 0x1d, 0x8e, 0x07, 0x05, 0xd7, 0x1d, 0x11, 0x0a, 0x0a, 0x3b, 0x00, 0x57, 0x00, 0xe7, 0x00  ; FA2EFF
+	.byte 0xe4, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x0c, 0x01  ; FA2F0F
+	.byte 0x6a, 0x00, 0x34, 0x01, 0x7d, 0x00, 0x09, 0x0a, 0x0e, 0x01, 0x6c, 0x00, 0x32, 0x01, 0x7b, 0x00  ; FA2F1F
+	.byte 0x09, 0x0a, 0x14, 0x01, 0x92, 0x00, 0x34, 0x01, 0xa5, 0x00, 0x09, 0x0a, 0x16, 0x01, 0x94, 0x00  ; FA2F2F
+	.byte 0x32, 0x01, 0xa3, 0x00, 0x09, 0x0a, 0x14, 0x01, 0xba, 0x00, 0x34, 0x01, 0xcd, 0x00, 0x09, 0x0a  ; FA2F3F
+	.byte 0x16, 0x01, 0xbc, 0x00, 0x32, 0x01, 0xcb, 0x00                      ; FA2F4F
+; ---------------------------------------------------------------------
+; DisplayList_FA2F57 -- 13 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2F57:
+	.byte 0x07, 0x0d, 0xb5, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA2F57
+; ---------------------------------------------------------------------
+; DisplayList_FA2F64 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2F64:
+	.byte 0x03, 0x0b, 0xf2, 0x26, 0x07, 0x00, 0x05, 0x6f, 0x2f, 0xfa, 0x00    ; FA2F64
+; ---------------------------------------------------------------------
+; OperandTable_FA2F6F -- 64 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA2F64: 8-byte x8 max, cut to 0xFA2FAF [w=8 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA2F6F:
+	.byte 0x4f, 0x00, 0x5d, 0x00, 0x79, 0x00, 0x6c, 0x00, 0x67, 0x00, 0x70, 0x00, 0xc9, 0x00, 0x7f, 0x00  ; FA2F6F
+	.byte 0x67, 0x00, 0x83, 0x00, 0x99, 0x00, 0x92, 0x00, 0x67, 0x00, 0x96, 0x00, 0xc9, 0x00, 0xa5, 0x00  ; FA2F7F
+	.byte 0x67, 0x00, 0xa9, 0x00, 0x99, 0x00, 0xb8, 0x00, 0x67, 0x00, 0xbc, 0x00, 0xb1, 0x00, 0xcb, 0x00  ; FA2F8F
+	.byte 0x67, 0x00, 0xcf, 0x00, 0xb1, 0x00, 0xde, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA2F9F
+; ---------------------------------------------------------------------
+; DisplayList_FA2FAF -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2FAF:
+	.byte 0x1b, 0x0a, 0x4f, 0x00, 0x5d, 0x00, 0xc9, 0x00, 0xde, 0x00          ; FA2FAF
+; ---------------------------------------------------------------------
+; DisplayList_FA2FB9 -- 118 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA2FB9:
+	.byte 0x23, 0x05, 0x0c, 0x34, 0x00, 0x1c, 0x0d, 0x7e, 0x00, 0x05, 0x00, 0x49, 0x4e, 0x49, 0x54, 0x49  ; FA2FB9
+	.byte 0x41, 0x4c, 0x06, 0x1e, 0x9b, 0x0d, 0x55, 0x73, 0x69, 0x6e, 0x67, 0x20, 0x49, 0x6e, 0x69, 0x74  ; FA2FC9
+	.byte 0x69, 0x61, 0x6c, 0x20, 0x53, 0x65, 0x74, 0x74, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x69, 0x6c, 0x6c  ; FA2FD9
+	.byte 0x06, 0x1c, 0xe3, 0x10, 0x72, 0x65, 0x70, 0x6c, 0x61, 0x63, 0x65, 0x20, 0x61, 0x6e, 0x79, 0x20  ; FA2FE9
+	.byte 0x63, 0x75, 0x72, 0x72, 0x65, 0x6e, 0x74, 0x20, 0x64, 0x61, 0x74, 0x61, 0x06, 0x1d, 0x2b, 0x14  ; FA2FF9
+	.byte 0x77, 0x69, 0x74, 0x68, 0x20, 0x74, 0x68, 0x65, 0x20, 0x6f, 0x72, 0x69, 0x67, 0x69, 0x6e, 0x61  ; FA3009
+	.byte 0x6c, 0x20, 0x66, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x79, 0x06, 0x0d, 0x73, 0x17, 0x73, 0x65, 0x74  ; FA3019
+	.byte 0x74, 0x69, 0x6e, 0x67, 0x73, 0x21                                  ; FA3029
+; ---------------------------------------------------------------------
+; DisplayList_FA302F -- 119 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA302F:
+	.byte 0x06, 0x09, 0x7b, 0x11, 0x59, 0x45, 0x53, 0x20, 0x11, 0x06, 0x09, 0xbb, 0x17, 0x4e, 0x4f, 0x20  ; FA302F
+	.byte 0x20, 0x11, 0x09, 0x0a, 0x14, 0x01, 0x6a, 0x00, 0x34, 0x01, 0x7d, 0x00, 0x09, 0x0a, 0x16, 0x01  ; FA303F
+	.byte 0x6c, 0x00, 0x32, 0x01, 0x7b, 0x00, 0x09, 0x0a, 0x14, 0x01, 0x92, 0x00, 0x34, 0x01, 0xa5, 0x00  ; FA304F
+	.byte 0x09, 0x0a, 0x16, 0x01, 0x94, 0x00, 0x32, 0x01, 0xa3, 0x00, 0x01, 0x0a, 0x2e, 0x00, 0x4a, 0x00  ; FA305F
+	.byte 0xd0, 0x00, 0x4a, 0x00, 0x01, 0x0a, 0x2e, 0x00, 0x4b, 0x00, 0xd0, 0x00, 0x4b, 0x00, 0x0a, 0x0a  ; FA306F
+	.byte 0x07, 0x00, 0x2f, 0x00, 0xff, 0x00, 0xcc, 0x00, 0x08, 0x0e, 0x16, 0x09, 0x41, 0x54, 0x54, 0x45  ; FA307F
+	.byte 0x4e, 0x54, 0x49, 0x30, 0x4e, 0x21, 0x08, 0x11, 0x5b, 0x1b, 0x41, 0x72, 0x65, 0x20, 0x59, 0x6f  ; FA308F
+	.byte 0x75, 0x20, 0x53, 0x75, 0x72, 0x65, 0x3f                            ; FA309F
+; ---------------------------------------------------------------------
+; DisplayList_FA30A6 -- 379 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA30A6:
+	.byte 0x23, 0x05, 0x0d, 0x31, 0x00, 0x1c, 0x11, 0x68, 0x00, 0x06, 0x00, 0x52, 0x45, 0x2d, 0x4d, 0x41  ; FA30A6
+	.byte 0x50, 0x20, 0x45, 0x44, 0x49, 0x54, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54  ; FA30B6
+	.byte 0x45, 0x4d, 0x07, 0x05, 0x50, 0x05, 0x10, 0x20, 0x06, 0x7a, 0x05, 0x4f, 0x4b, 0x07, 0x05, 0x9f  ; FA30C6
+	.byte 0x05, 0x11, 0x08, 0x05, 0x7b, 0x15, 0x8a, 0x07, 0x05, 0xc1, 0x21, 0x8d, 0x07, 0x05, 0xc6, 0x21  ; FA30D6
+	.byte 0x8d, 0x07, 0x05, 0xce, 0x21, 0x8d, 0x07, 0x05, 0xd6, 0x21, 0x8d, 0x07, 0x05, 0xdb, 0x21, 0x8d  ; FA30E6
+	.byte 0x07, 0x05, 0xe3, 0x21, 0x8d, 0x07, 0x05, 0x51, 0x23, 0x8e, 0x07, 0x05, 0x56, 0x23, 0x8e, 0x07  ; FA30F6
+	.byte 0x05, 0x5e, 0x23, 0x8e, 0x07, 0x05, 0x66, 0x23, 0x8e, 0x07, 0x05, 0x6b, 0x23, 0x8e, 0x07, 0x05  ; FA3106
+	.byte 0x73, 0x23, 0x8e, 0x20, 0x08, 0x58, 0x20, 0x42, 0x41, 0x4e, 0x4b, 0x20, 0x09, 0x5d, 0x20, 0x47  ; FA3116
+	.byte 0x52, 0x4f, 0x55, 0x50, 0x20, 0x08, 0x6d, 0x20, 0x42, 0x41, 0x4e, 0x4b, 0x20, 0x09, 0x72, 0x20  ; FA3126
+	.byte 0x47, 0x52, 0x4f, 0x55, 0x50, 0x0a, 0x0a, 0x0b, 0x00, 0x38, 0x00, 0x94, 0x00, 0xcb, 0x00, 0x0a  ; FA3136
+	.byte 0x0a, 0xab, 0x00, 0x38, 0x00, 0x34, 0x01, 0xcb, 0x00, 0x0a, 0x0a, 0x01, 0x00, 0xda, 0x00, 0x18  ; FA3146
+	.byte 0x00, 0xec, 0x00, 0x0a, 0x0a, 0x29, 0x00, 0xda, 0x00, 0x40, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0x59  ; FA3156
+	.byte 0x00, 0xda, 0x00, 0x8f, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xa9, 0x00, 0xda, 0x00, 0xc0, 0x00, 0xec  ; FA3166
+	.byte 0x00, 0x0a, 0x0a, 0xd1, 0x00, 0xda, 0x00, 0xe8, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0x01, 0x01, 0xda  ; FA3176
+	.byte 0x00, 0x37, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09  ; FA3186
+	.byte 0x0a, 0x0b, 0x00, 0x1e, 0x00, 0x25, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00, 0x20, 0x00, 0x23  ; FA3196
+	.byte 0x00, 0x2f, 0x00, 0x09, 0x0a, 0xd3, 0x00, 0x1e, 0x00, 0x35, 0x01, 0x31, 0x00, 0x09, 0x0a, 0xd5  ; FA31A6
+	.byte 0x00, 0x20, 0x00, 0x33, 0x01, 0x2f, 0x00, 0x01, 0x0a, 0x0b, 0x00, 0x49, 0x00, 0x96, 0x00, 0x49  ; FA31B6
+	.byte 0x00, 0x01, 0x0a, 0xab, 0x00, 0x49, 0x00, 0x36, 0x01, 0x49, 0x00, 0x01, 0x0a, 0x0b, 0x00, 0x5a  ; FA31C6
+	.byte 0x00, 0x96, 0x00, 0x5a, 0x00, 0x01, 0x0a, 0xab, 0x00, 0x5a, 0x00, 0x36, 0x01, 0x5a, 0x00, 0x01  ; FA31D6
+	.byte 0x0a, 0x01, 0x00, 0xe3, 0x00, 0x1a, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0x29, 0x00, 0xe3, 0x00, 0x42  ; FA31E6
+	.byte 0x00, 0xe3, 0x00, 0x01, 0x0a, 0x59, 0x00, 0xe3, 0x00, 0x91, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xa9  ; FA31F6
+	.byte 0x00, 0xe3, 0x00, 0xc2, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xd1, 0x00, 0xe3, 0x00, 0xea, 0x00, 0xe3  ; FA3206
+	.byte 0x00, 0x01, 0x0a, 0x01, 0x01, 0xe3, 0x00, 0x39, 0x01, 0xe3, 0x00    ; FA3216
+; ---------------------------------------------------------------------
+; DisplayList_FA3221 -- 15 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3221:
+	.byte 0x20, 0x0f, 0x93, 0x05, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x2f, 0x43, 0x4f, 0x4d, 0x42, 0x49  ; FA3221
+; ---------------------------------------------------------------------
+; DisplayList_FA3230 -- 360 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as B records between 0xFA3230 and 0xFA3398
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3230:
+	.byte 0x02, 0x0f, 0xf3, 0x26, 0x01, 0x00, 0x20, 0xcf, 0x33, 0xfa, 0x00, 0x05, 0x00, 0x64, 0x20, 0x02  ; FA3230
+	.byte 0x0f, 0xf3, 0x26, 0x01, 0x00, 0x20, 0xcf, 0x33, 0xfa, 0x00, 0x05, 0x00, 0x79, 0x20, 0x02, 0x0f  ; FA3240
+	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x40, 0x29, 0x00, 0x00, 0x10, 0x00, 0x0a, 0x0c, 0x02, 0x0f, 0x00  ; FA3250
+	.byte 0x00, 0x00, 0x00, 0x20, 0x50, 0x29, 0x00, 0x00, 0x10, 0x00, 0xda, 0x0e, 0x02, 0x0f, 0x00, 0x00  ; FA3260
+	.byte 0x00, 0x00, 0x20, 0x60, 0x29, 0x00, 0x00, 0x10, 0x00, 0xe2, 0x10, 0x02, 0x0f, 0x00, 0x00, 0x00  ; FA3270
+	.byte 0x00, 0x20, 0x70, 0x29, 0x00, 0x00, 0x10, 0x00, 0xea, 0x12, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00  ; FA3280
+	.byte 0x20, 0x80, 0x29, 0x00, 0x00, 0x10, 0x00, 0xf2, 0x14, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20  ; FA3290
+	.byte 0x90, 0x29, 0x00, 0x00, 0x10, 0x00, 0xfa, 0x16, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xa0  ; FA32A0
+	.byte 0x29, 0x00, 0x00, 0x10, 0x00, 0x02, 0x19, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xb0, 0x29  ; FA32B0
+	.byte 0x00, 0x00, 0x10, 0x00, 0x0a, 0x1b, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xc0, 0x29, 0x00  ; FA32C0
+	.byte 0x00, 0x10, 0x00, 0x12, 0x1d, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xd0, 0x29, 0x00, 0x00  ; FA32D0
+	.byte 0x10, 0x00, 0x1e, 0x0c, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xe0, 0x29, 0x00, 0x00, 0x10  ; FA32E0
+	.byte 0x00, 0xee, 0x0e, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xf0, 0x29, 0x00, 0x00, 0x10, 0x00  ; FA32F0
+	.byte 0xf6, 0x10, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x2a, 0x00, 0x00, 0x10, 0x00, 0xfe  ; FA3300
+	.byte 0x12, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x10, 0x2a, 0x00, 0x00, 0x10, 0x00, 0x06, 0x15  ; FA3310
+	.byte 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x20, 0x2a, 0x00, 0x00, 0x10, 0x00, 0x0e, 0x17, 0x02  ; FA3320
+	.byte 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x30, 0x2a, 0x00, 0x00, 0x10, 0x00, 0x16, 0x19, 0x02, 0x0f  ; FA3330
+	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x40, 0x2a, 0x00, 0x00, 0x10, 0x00, 0x1e, 0x1b, 0x02, 0x0f, 0x00  ; FA3340
+	.byte 0x00, 0x00, 0x00, 0x20, 0x50, 0x2a, 0x00, 0x00, 0x10, 0x00, 0x26, 0x1d, 0x02, 0x0f, 0xf4, 0x26  ; FA3350
+	.byte 0x07, 0x00, 0x07, 0xd9, 0x33, 0xfa, 0x00, 0x0c, 0x00, 0x3c, 0x09, 0x02, 0x0f, 0xfa, 0x26, 0x03  ; FA3360
+	.byte 0x00, 0x07, 0x5d, 0x34, 0xfa, 0x00, 0x0c, 0x00, 0x50, 0x09, 0x02, 0x0f, 0xf7, 0x26, 0x0f, 0x00  ; FA3370
+	.byte 0x07, 0x39, 0x34, 0xfa, 0x00, 0x0c, 0x00, 0x3c, 0x09, 0x02, 0x0f, 0xfd, 0x26, 0x03, 0x00, 0x07  ; FA3380
+	.byte 0x5d, 0x34, 0xfa, 0x00, 0x0c, 0x00, 0x50, 0x09                      ; FA3390
+; ---------------------------------------------------------------------
+; DisplayList_FA3398 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3398:
+	.byte 0x03, 0x0b, 0xf3, 0x26, 0x01, 0x00, 0x05, 0x8d, 0x34, 0xfa, 0x00    ; FA3398
+; ---------------------------------------------------------------------
+; DisplayList_FA33A3 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA33A3:
+	.byte 0x03, 0x0b, 0xf6, 0x26, 0x07, 0x00, 0x05, 0xa7, 0x34, 0xfa, 0x00    ; FA33A3
+; ---------------------------------------------------------------------
+; DisplayList_FA33AE -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA33AE:
+	.byte 0x03, 0x0b, 0xfc, 0x26, 0x07, 0x00, 0x05, 0xf1, 0x34, 0xfa, 0x00    ; FA33AE
+; ---------------------------------------------------------------------
+; DisplayList_FA33B9 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA33B9:
+	.byte 0x03, 0x0b, 0xf9, 0x26, 0x07, 0x00, 0x05, 0xa7, 0x34, 0xfa, 0x00    ; FA33B9
+; ---------------------------------------------------------------------
+; DisplayList_FA33C4 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA33C4:
+	.byte 0x03, 0x0b, 0xff, 0x26, 0x07, 0x00, 0x05, 0xf1, 0x34, 0xfa, 0x00    ; FA33C4
+; ---------------------------------------------------------------------
+; OperandTable_FA33CF -- 10 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA3230: strings w=5 n<=2, cut to 0xFA33D9 [w=5 max=10]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA33CF:
+	.byte 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x43, 0x4f, 0x4d, 0x42, 0x49          ; FA33CF
+; ---------------------------------------------------------------------
+; OperandTable_FA33D9 -- 96 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA335C: strings w=12 n<=8, cut to 0xFA3439 [w=12 max=96]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA33D9:
+	.byte 0x20, 0x20, 0x20, 0x52, 0x4f, 0x4d, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52  ; FA33D9
+	.byte 0x4f, 0x4d, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20  ; FA33E9
+	.byte 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x20, 0x20  ; FA33F9
+	.byte 0x20, 0x52, 0x4f, 0x4d, 0x20, 0x44, 0x52, 0x55, 0x4d, 0x53, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52  ; FA3409
+	.byte 0x20, 0x31, 0x20, 0x44, 0x52, 0x55, 0x4d, 0x53, 0x55, 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x44  ; FA3419
+	.byte 0x52, 0x55, 0x4d, 0x53, 0x20, 0x20, 0x20, 0x45, 0x58, 0x54, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20  ; FA3429
+; ---------------------------------------------------------------------
+; OperandTable_FA3439 -- 36 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA337A: strings w=12 n<=16, cut to 0xFA345D [w=12 max=192]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA3439:
+	.byte 0x20, 0x20, 0x20, 0x52, 0x4f, 0x4d, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55  ; FA3439
+	.byte 0x53, 0x45, 0x52, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x45, 0x58, 0x54, 0x20, 0x31  ; FA3449
+	.byte 0x20, 0x20, 0x20, 0x20                                              ; FA3459
+; ---------------------------------------------------------------------
+; OperandTable_FA345D -- 48 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA336B: strings w=12 n<=4, cut to 0xFA348D [w=12 max=48]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA345D:
+	.byte 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45  ; FA345D
+	.byte 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50  ; FA346D
+	.byte 0x20, 0x33, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA347D
+; ---------------------------------------------------------------------
+; OperandTable_FA348D -- 16 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA3398: 8-byte x2 max, cut to 0xFA349D [w=8 max=16]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA348D:
+	.byte 0xd6, 0x00, 0x21, 0x00, 0x00, 0x01, 0x2f, 0x00, 0x08, 0x01, 0x21, 0x00, 0x32, 0x01, 0x2f, 0x00  ; FA348D
+; ---------------------------------------------------------------------
+; DisplayList_FA349D -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA349D:
+	.byte 0x1b, 0x0a, 0xd6, 0x00, 0x21, 0x00, 0x32, 0x01, 0x2e, 0x00          ; FA349D
+; ---------------------------------------------------------------------
+; OperandTable_FA34A7 -- 64 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA33A3: 8-byte x8 max, cut to 0xFA34E7 [w=8 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA34A7:
+	.byte 0x0c, 0x00, 0x5e, 0x00, 0x93, 0x00, 0x69, 0x00, 0x0c, 0x00, 0x6b, 0x00, 0x93, 0x00, 0x76, 0x00  ; FA34A7
+	.byte 0x0c, 0x00, 0x78, 0x00, 0x93, 0x00, 0x83, 0x00, 0x0c, 0x00, 0x85, 0x00, 0x93, 0x00, 0x90, 0x00  ; FA34B7
+	.byte 0x0c, 0x00, 0x92, 0x00, 0x93, 0x00, 0x9d, 0x00, 0x0c, 0x00, 0x9f, 0x00, 0x93, 0x00, 0xaa, 0x00  ; FA34C7
+	.byte 0x0c, 0x00, 0xac, 0x00, 0x93, 0x00, 0xb7, 0x00, 0x0c, 0x00, 0xb9, 0x00, 0x93, 0x00, 0xc4, 0x00  ; FA34D7
+; ---------------------------------------------------------------------
+; DisplayList_FA34E7 -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA34E7:
+	.byte 0x1b, 0x0a, 0x0c, 0x00, 0x5e, 0x00, 0x93, 0x00, 0xc4, 0x00          ; FA34E7
+; ---------------------------------------------------------------------
+; OperandTable_FA34F1 -- 64 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA33AE: 8-byte x8 max, cut to 0xFA3531 [w=8 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA34F1:
+	.byte 0xac, 0x00, 0x5e, 0x00, 0x33, 0x01, 0x69, 0x00, 0xac, 0x00, 0x6b, 0x00, 0x33, 0x01, 0x76, 0x00  ; FA34F1
+	.byte 0xac, 0x00, 0x78, 0x00, 0x33, 0x01, 0x83, 0x00, 0xac, 0x00, 0x85, 0x00, 0x33, 0x01, 0x90, 0x00  ; FA3501
+	.byte 0xac, 0x00, 0x92, 0x00, 0x33, 0x01, 0x9d, 0x00, 0xac, 0x00, 0x9f, 0x00, 0x33, 0x01, 0xaa, 0x00  ; FA3511
+	.byte 0xac, 0x00, 0xac, 0x00, 0x33, 0x01, 0xb7, 0x00, 0xac, 0x00, 0xb9, 0x00, 0x33, 0x01, 0xc4, 0x00  ; FA3521
+; ---------------------------------------------------------------------
+; DisplayList_FA3531 -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3531:
+	.byte 0x1b, 0x0a, 0xac, 0x00, 0x5e, 0x00, 0x33, 0x01, 0xc4, 0x00          ; FA3531
+; ---------------------------------------------------------------------
+; DisplayList_FA353B -- 317 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA353B:
+	.byte 0x23, 0x05, 0x0e, 0x2f, 0x00, 0x07, 0x1d, 0xfb, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x2f, 0x43  ; FA353B
+	.byte 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x4d, 0x41, 0x4e, 0x41, 0x47  ; FA354B
+	.byte 0x45, 0x52, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x0f  ; FA355B
+	.byte 0x6b, 0x0b, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x0a, 0x4b  ; FA356B
+	.byte 0x0d, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x17, 0x07, 0x00, 0x00, 0x4d, 0x00, 0x10, 0x20, 0x0d  ; FA357B
+	.byte 0x7f, 0x0b, 0x44, 0x41, 0x54, 0x41, 0x20, 0x4c, 0x4f, 0x41, 0x44, 0x20, 0x0a, 0x5f, 0x0d, 0x46  ; FA358B
+	.byte 0x49, 0x4c, 0x54, 0x45, 0x52, 0x17, 0x07, 0x3a, 0x01, 0x4d, 0x00, 0x11, 0x20, 0x0f, 0xab, 0x11  ; FA359B
+	.byte 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x2e, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x0a, 0x8b, 0x13, 0x4e  ; FA35AB
+	.byte 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x17, 0x07, 0x00, 0x00, 0x74, 0x00, 0x10, 0x20, 0x12, 0xaf, 0x12  ; FA35BB
+	.byte 0x4d, 0x45, 0x4d, 0x4f, 0x52, 0x59, 0x20, 0x50, 0x52, 0x4f, 0x54, 0x45, 0x43, 0x54, 0x17, 0x07  ; FA35CB
+	.byte 0x3a, 0x01, 0x74, 0x00, 0x11, 0x20, 0x0e, 0xdb, 0x18, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x43  ; FA35DB
+	.byte 0x4f, 0x50, 0x59, 0x17, 0x07, 0x00, 0x00, 0x9b, 0x00, 0x10, 0x20, 0x0e, 0xef, 0x18, 0x53, 0x4f  ; FA35EB
+	.byte 0x55, 0x4e, 0x44, 0x20, 0x4d, 0x55, 0x54, 0x45, 0x17, 0x07, 0x3a, 0x01, 0x9b, 0x00, 0x11, 0x20  ; FA35FB
+	.byte 0x0f, 0x53, 0x1e, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x08  ; FA360B
+	.byte 0x33, 0x20, 0x43, 0x4f, 0x50, 0x59, 0x17, 0x07, 0x00, 0x00, 0xc2, 0x00, 0x10, 0x0a, 0x0a, 0x0b  ; FA361B
+	.byte 0x00, 0x44, 0x00, 0x98, 0x00, 0x63, 0x00, 0x0a, 0x0a, 0xab, 0x00, 0x44, 0x00, 0x32, 0x01, 0x63  ; FA362B
+	.byte 0x00, 0x0a, 0x0a, 0x0b, 0x00, 0x6c, 0x00, 0x98, 0x00, 0x8b, 0x00, 0x0a, 0x0a, 0xab, 0x00, 0x6c  ; FA363B
+	.byte 0x00, 0x32, 0x01, 0x8b, 0x00, 0x0a, 0x0a, 0x0b, 0x00, 0x94, 0x00, 0x98, 0x00, 0xb3, 0x00, 0x0a  ; FA364B
+	.byte 0x0a, 0xab, 0x00, 0x94, 0x00, 0x32, 0x01, 0xb3, 0x00, 0x0a, 0x0a, 0x0b, 0x00, 0xbc, 0x00, 0x98  ; FA365B
+	.byte 0x00, 0xdb, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00  ; FA366B
+; ---------------------------------------------------------------------
+; DisplayList_FA3678 -- 24 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3678:
+	.byte 0x1c, 0x18, 0x3b, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x47, 0x52, 0x4f, 0x55  ; FA3678
+	.byte 0x50, 0x20, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47                      ; FA3688
+; ---------------------------------------------------------------------
+; DisplayList_FA3690 -- 80 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3690:
+	.byte 0x1c, 0x18, 0x3b, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x47, 0x52, 0x4f, 0x55  ; FA3690
+	.byte 0x50, 0x20, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59  ; FA36A0
+	.byte 0x53, 0x54, 0x45, 0x4d, 0x07, 0x05, 0x50, 0x05, 0x10, 0x20, 0x09, 0x7a, 0x05, 0x57, 0x52, 0x49  ; FA36B0
+	.byte 0x54, 0x45, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x0b, 0x00  ; FA36C0
+	.byte 0x1e, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00, 0x20, 0x00, 0x3b, 0x00, 0x2f, 0x00  ; FA36D0
+; ---------------------------------------------------------------------
+; DisplayList_FA36E0 -- 154 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA36E0:
+	.byte 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x0a, 0x6f, 0x05  ; FA36E0
+	.byte 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x07, 0x05, 0x9f, 0x05, 0x11, 0x07, 0x05, 0xc9, 0x21, 0x8d  ; FA36F0
+	.byte 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x20  ; FA3700
+	.byte 0x08, 0x5f, 0x20, 0x42, 0x41, 0x4e, 0x4b, 0x20, 0x09, 0x74, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50  ; FA3710
+	.byte 0x0a, 0x0a, 0xee, 0x00, 0x1c, 0x00, 0x33, 0x01, 0x32, 0x00, 0x0a, 0x0a, 0x03, 0x00, 0x38, 0x00  ; FA3720
+	.byte 0x3c, 0x01, 0xc6, 0x00, 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a  ; FA3730
+	.byte 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00  ; FA3740
+	.byte 0x12, 0x00, 0x01, 0x0a, 0x03, 0x00, 0x4d, 0x00, 0x3e, 0x01, 0x4d, 0x00, 0x01, 0x0a, 0x05, 0x00  ; FA3750
+	.byte 0xe3, 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00  ; FA3760
+	.byte 0x02, 0x0a, 0x9e, 0x00, 0x4d, 0x00, 0x9e, 0x00, 0xc8, 0x00          ; FA3770
+; ---------------------------------------------------------------------
+; DisplayList_FA377A -- 112 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA377A:
+	.byte 0x20, 0x07, 0x71, 0x0d, 0x31, 0x2e, 0x20, 0x20, 0x07, 0x79, 0x0f, 0x32, 0x2e, 0x20, 0x20, 0x07  ; FA377A
+	.byte 0x81, 0x11, 0x33, 0x2e, 0x20, 0x20, 0x07, 0x89, 0x13, 0x34, 0x2e, 0x20, 0x20, 0x07, 0x91, 0x15  ; FA378A
+	.byte 0x35, 0x2e, 0x20, 0x20, 0x07, 0x99, 0x17, 0x36, 0x2e, 0x20, 0x20, 0x07, 0xa1, 0x19, 0x37, 0x2e  ; FA379A
+	.byte 0x20, 0x20, 0x07, 0xa9, 0x1b, 0x38, 0x2e, 0x20, 0x20, 0x07, 0x85, 0x0d, 0x39, 0x2e, 0x20, 0x20  ; FA37AA
+	.byte 0x07, 0x8c, 0x0f, 0x31, 0x4f, 0x2e, 0x20, 0x07, 0x94, 0x11, 0x31, 0x31, 0x2e, 0x20, 0x07, 0x9c  ; FA37BA
+	.byte 0x13, 0x31, 0x32, 0x2e, 0x20, 0x07, 0xa4, 0x15, 0x31, 0x33, 0x2e, 0x20, 0x07, 0xac, 0x17, 0x31  ; FA37CA
+	.byte 0x34, 0x2e, 0x20, 0x07, 0xb4, 0x19, 0x31, 0x35, 0x2e, 0x20, 0x07, 0xbc, 0x1b, 0x31, 0x36, 0x2e  ; FA37DA
+; ---------------------------------------------------------------------
+; DisplayList_FA37EA -- 26 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA37EA:
+	.byte 0x02, 0x0f, 0x95, 0x26, 0x07, 0x00, 0x07, 0xf4, 0x38, 0xfa, 0x00, 0x0c, 0x00, 0x96, 0x09, 0x03  ; FA37EA
+	.byte 0x0b, 0x96, 0x26, 0x0f, 0x00, 0x05, 0x54, 0x39, 0xfa, 0x00          ; FA37FA
+; ---------------------------------------------------------------------
+; DisplayList_FA3804 -- 240 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3804:
+	.byte 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x40, 0x29, 0x00, 0x00, 0x10, 0x00, 0x73, 0x0d, 0x02  ; FA3804
+	.byte 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x50, 0x29, 0x00, 0x00, 0x10, 0x00, 0x7b, 0x0f, 0x02, 0x0f  ; FA3814
+	.byte 0x00, 0x00, 0x00, 0x00, 0x20, 0x60, 0x29, 0x00, 0x00, 0x10, 0x00, 0x83, 0x11, 0x02, 0x0f, 0x00  ; FA3824
+	.byte 0x00, 0x00, 0x00, 0x20, 0x70, 0x29, 0x00, 0x00, 0x10, 0x00, 0x8b, 0x13, 0x02, 0x0f, 0x00, 0x00  ; FA3834
+	.byte 0x00, 0x00, 0x20, 0x80, 0x29, 0x00, 0x00, 0x10, 0x00, 0x93, 0x15, 0x02, 0x0f, 0x00, 0x00, 0x00  ; FA3844
+	.byte 0x00, 0x20, 0x90, 0x29, 0x00, 0x00, 0x10, 0x00, 0x9b, 0x17, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00  ; FA3854
+	.byte 0x20, 0xa0, 0x29, 0x00, 0x00, 0x10, 0x00, 0xa3, 0x19, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20  ; FA3864
+	.byte 0xb0, 0x29, 0x00, 0x00, 0x10, 0x00, 0xab, 0x1b, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xc0  ; FA3874
+	.byte 0x29, 0x00, 0x00, 0x10, 0x00, 0x87, 0x0d, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xd0, 0x29  ; FA3884
+	.byte 0x00, 0x00, 0x10, 0x00, 0x8f, 0x0f, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xe0, 0x29, 0x00  ; FA3894
+	.byte 0x00, 0x10, 0x00, 0x97, 0x11, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0xf0, 0x29, 0x00, 0x00  ; FA38A4
+	.byte 0x10, 0x00, 0x9f, 0x13, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x00, 0x2a, 0x00, 0x00, 0x10  ; FA38B4
+	.byte 0x00, 0xa7, 0x15, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x10, 0x2a, 0x00, 0x00, 0x10, 0x00  ; FA38C4
+	.byte 0xaf, 0x17, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x20, 0x2a, 0x00, 0x00, 0x10, 0x00, 0xb7  ; FA38D4
+	.byte 0x19, 0x02, 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x30, 0x2a, 0x00, 0x00, 0x10, 0x00, 0xbf, 0x1b  ; FA38E4
+; ---------------------------------------------------------------------
+; OperandTable_FA38F4 -- 96 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA37EA: strings w=12 n<=8, cut to 0xFA3954 [w=12 max=96]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA38F4:
+	.byte 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55  ; FA38F4
+	.byte 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50  ; FA3904
+	.byte 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x32, 0x20, 0x20  ; FA3914
+	.byte 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x33, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3924
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3934
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3944
+; ---------------------------------------------------------------------
+; OperandTable_FA3954 -- 128 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA37F9: 8-byte x16 max, cut to 0xFA39D4 [w=8 max=128]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA3954:
+	.byte 0x04, 0x00, 0x55, 0x00, 0x9d, 0x00, 0x60, 0x00, 0x04, 0x00, 0x62, 0x00, 0x9d, 0x00, 0x6d, 0x00  ; FA3954
+	.byte 0x04, 0x00, 0x6f, 0x00, 0x9d, 0x00, 0x7a, 0x00, 0x04, 0x00, 0x7c, 0x00, 0x9d, 0x00, 0x87, 0x00  ; FA3964
+	.byte 0x04, 0x00, 0x89, 0x00, 0x9d, 0x00, 0x94, 0x00, 0x04, 0x00, 0x96, 0x00, 0x9d, 0x00, 0xa1, 0x00  ; FA3974
+	.byte 0x04, 0x00, 0xa3, 0x00, 0x9d, 0x00, 0xae, 0x00, 0x04, 0x00, 0xb0, 0x00, 0x9d, 0x00, 0xbb, 0x00  ; FA3984
+	.byte 0x9f, 0x00, 0x55, 0x00, 0x3b, 0x01, 0x60, 0x00, 0x9f, 0x00, 0x62, 0x00, 0x3b, 0x01, 0x6d, 0x00  ; FA3994
+	.byte 0x9f, 0x00, 0x6f, 0x00, 0x3b, 0x01, 0x7a, 0x00, 0x9f, 0x00, 0x7c, 0x00, 0x3b, 0x01, 0x87, 0x00  ; FA39A4
+	.byte 0x9f, 0x00, 0x89, 0x00, 0x3b, 0x01, 0x94, 0x00, 0x9f, 0x00, 0x96, 0x00, 0x3b, 0x01, 0xa1, 0x00  ; FA39B4
+	.byte 0x9f, 0x00, 0xa3, 0x00, 0x3b, 0x01, 0xae, 0x00, 0x9f, 0x00, 0xb0, 0x00, 0x3b, 0x01, 0xbb, 0x00  ; FA39C4
+; ---------------------------------------------------------------------
+; DisplayList_FA39D4 -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA39D4:
+	.byte 0x1b, 0x0a, 0x04, 0x00, 0x55, 0x00, 0x3b, 0x01, 0xbb, 0x00          ; FA39D4
+; ---------------------------------------------------------------------
+; DisplayList_FA39DE -- 30 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA39DE:
+	.byte 0x1c, 0x1e, 0x33, 0x00, 0x05, 0x00, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f  ; FA39DE
+	.byte 0x4e, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47  ; FA39EE
+; ---------------------------------------------------------------------
+; DisplayList_FA39FC -- 86 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA39FC:
+	.byte 0x1c, 0x1e, 0x33, 0x00, 0x05, 0x00, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f  ; FA39FC
+	.byte 0x4e, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x17, 0x0c  ; FA3A0C
+	.byte 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x07, 0x05, 0x50, 0x05, 0x10, 0x20  ; FA3A1C
+	.byte 0x09, 0x7a, 0x05, 0x57, 0x52, 0x49, 0x54, 0x45, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00  ; FA3A2C
+	.byte 0x12, 0x00, 0x09, 0x0a, 0x0b, 0x00, 0x1e, 0x00, 0x3d, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00  ; FA3A3C
+	.byte 0x20, 0x00, 0x3b, 0x00, 0x2f, 0x00                                  ; FA3A4C
+; ---------------------------------------------------------------------
+; DisplayList_FA3A52 -- 26 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3A52:
+	.byte 0x02, 0x0f, 0x98, 0x26, 0x03, 0x00, 0x07, 0x6c, 0x3a, 0xfa, 0x00, 0x0c, 0x00, 0x96, 0x09, 0x03  ; FA3A52
+	.byte 0x0b, 0x99, 0x26, 0x0f, 0x00, 0x05, 0x54, 0x39, 0xfa, 0x00          ; FA3A62
+; ---------------------------------------------------------------------
+; OperandTable_FA3A6C -- 48 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA3A52: strings w=12 n<=4, cut to 0xFA3A9C [w=12 max=48]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA3A6C:
+	.byte 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45  ; FA3A6C
+	.byte 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50  ; FA3A7C
+	.byte 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x52, 0x45, 0x2d, 0x4d, 0x41, 0x50, 0x20, 0x33, 0x20, 0x20  ; FA3A8C
+; ---------------------------------------------------------------------
+; DisplayList_FA3A9C -- 268 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as A records between 0xFA3A9C and 0xFA3BA8
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3A9C:
+	.byte 0x1c, 0x10, 0x62, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x43, 0x4f, 0x50, 0x59  ; FA3A9C
+	.byte 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x07, 0x05, 0x50, 0x05  ; FA3AAC
+	.byte 0x10, 0x20, 0x06, 0x7a, 0x05, 0x4f, 0x4b, 0x08, 0x05, 0x7b, 0x15, 0x8a, 0x07, 0x05, 0xc4, 0x21  ; FA3ABC
+	.byte 0x8d, 0x07, 0x05, 0xce, 0x21, 0x8d, 0x07, 0x05, 0xe3, 0x21, 0x8d, 0x07, 0x05, 0x54, 0x23, 0x8e  ; FA3ACC
+	.byte 0x07, 0x05, 0x5e, 0x23, 0x8e, 0x07, 0x05, 0x73, 0x23, 0x8e, 0x20, 0x08, 0x5b, 0x20, 0x42, 0x41  ; FA3ADC
+	.byte 0x4e, 0x4b, 0x20, 0x09, 0x64, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20, 0x09, 0x79, 0x20, 0x47  ; FA3AEC
+	.byte 0x52, 0x4f, 0x55, 0x50, 0x0a, 0x0a, 0x0b, 0x00, 0x38, 0x00, 0x94, 0x00, 0xcb, 0x00, 0x0a, 0x0a  ; FA3AFC
+	.byte 0xab, 0x00, 0x38, 0x00, 0x34, 0x01, 0xcb, 0x00, 0x0a, 0x0a, 0x09, 0x00, 0xda, 0x00, 0x3f, 0x00  ; FA3B0C
+	.byte 0xec, 0x00, 0x0a, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x8f, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0x01, 0x01  ; FA3B1C
+	.byte 0xda, 0x00, 0x37, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00  ; FA3B2C
+	.byte 0x09, 0x0a, 0x0b, 0x00, 0x1e, 0x00, 0x25, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00, 0x20, 0x00  ; FA3B3C
+	.byte 0x23, 0x00, 0x2f, 0x00, 0x01, 0x0a, 0x0b, 0x00, 0x49, 0x00, 0x96, 0x00, 0x49, 0x00, 0x01, 0x0a  ; FA3B4C
+	.byte 0xab, 0x00, 0x49, 0x00, 0x36, 0x01, 0x49, 0x00, 0x01, 0x0a, 0x09, 0x00, 0xe3, 0x00, 0x41, 0x00  ; FA3B5C
+	.byte 0xe3, 0x00, 0x01, 0x0a, 0x59, 0x00, 0xe3, 0x00, 0x91, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0x01, 0x01  ; FA3B6C
+	.byte 0xe3, 0x00, 0x39, 0x01, 0xe3, 0x00, 0x07, 0x05, 0xd9, 0x21, 0x8d, 0x07, 0x05, 0x69, 0x23, 0x8e  ; FA3B7C
+	.byte 0x20, 0x08, 0x70, 0x20, 0x42, 0x41, 0x4e, 0x4b, 0x0a, 0x0a, 0xb1, 0x00, 0xda, 0x00, 0xe7, 0x00  ; FA3B8C
+	.byte 0xec, 0x00, 0x01, 0x0a, 0xb1, 0x00, 0xe3, 0x00, 0xe9, 0x00, 0xe3, 0x00  ; FA3B9C
+; ---------------------------------------------------------------------
+; DisplayList_FA3BA8 -- 41 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3BA8:
+	.byte 0x20, 0x10, 0x92, 0x05, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x2f, 0x53, 0x49, 0x4e, 0x47, 0x4c, 0x45  ; FA3BA8
+	.byte 0x07, 0x05, 0x9f, 0x05, 0x11, 0x09, 0x0a, 0xcb, 0x00, 0x1e, 0x00, 0x35, 0x01, 0x31, 0x00, 0x09  ; FA3BB8
+	.byte 0x0a, 0xcd, 0x00, 0x20, 0x00, 0x33, 0x01, 0x2f, 0x00                ; FA3BC8
+; ---------------------------------------------------------------------
+; DisplayList_FA3BD1 -- 104 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3BD1:
+	.byte 0x1c, 0x10, 0x62, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x43, 0x4f, 0x50, 0x59  ; FA3BD1
+	.byte 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x09, 0x0a, 0x04, 0x00  ; FA3BE1
+	.byte 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x06, 0x1b, 0x64, 0x0e, 0x54, 0x68, 0x65, 0x20, 0x6d, 0x65  ; FA3BF1
+	.byte 0x6d, 0x6f, 0x72, 0x79, 0x20, 0x74, 0x6f, 0x20, 0x77, 0x68, 0x69, 0x63, 0x68, 0x20, 0x79, 0x6f  ; FA3C01
+	.byte 0x75, 0x06, 0x17, 0xac, 0x11, 0x61, 0x72, 0x65, 0x20, 0x63, 0x6f, 0x70, 0x79, 0x69, 0x6e, 0x67  ; FA3C11
+	.byte 0x20, 0x77, 0x69, 0x6c, 0x6c, 0x20, 0x62, 0x65, 0x06, 0x10, 0xf4, 0x14, 0x6f, 0x76, 0x65, 0x72  ; FA3C21
+	.byte 0x77, 0x72, 0x69, 0x74, 0x74, 0x65, 0x6e, 0x2e                      ; FA3C31
+; ---------------------------------------------------------------------
+; DisplayList_FA3C39 -- 103 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3C39:
+	.byte 0x1c, 0x0c, 0x7a, 0x00, 0x05, 0x00, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x21, 0x07, 0x28, 0x72, 0x08  ; FA3C39
+	.byte 0x49, 0x74, 0x20, 0x69, 0x73, 0x20, 0x69, 0x6d, 0x70, 0x6f, 0x73, 0x73, 0x69, 0x62, 0x6c, 0x65  ; FA3C49
+	.byte 0x20, 0x74, 0x6f, 0x20, 0x63, 0x6f, 0x70, 0x79, 0x20, 0x61, 0x20, 0x44, 0x72, 0x75, 0x6d, 0x20  ; FA3C59
+	.byte 0x4b, 0x69, 0x74, 0x2e, 0x07, 0x26, 0x22, 0x0d, 0x50, 0x6c, 0x65, 0x61, 0x73, 0x65, 0x20, 0x73  ; FA3C69
+	.byte 0x65, 0x6c, 0x65, 0x63, 0x74, 0x20, 0x61, 0x20, 0x53, 0x6f, 0x75, 0x6e, 0x64, 0x20, 0x6f, 0x74  ; FA3C79
+	.byte 0x68, 0x65, 0x72, 0x20, 0x74, 0x68, 0x61, 0x6e, 0x20, 0x61, 0x07, 0x0d, 0xd2, 0x11, 0x44, 0x72  ; FA3C89
+	.byte 0x75, 0x6d, 0x20, 0x4b, 0x69, 0x74, 0x2e                            ; FA3C99
+; ---------------------------------------------------------------------
+; DisplayList_FA3CA0 -- 30 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as B records between 0xFA3CA0 and 0xFA3CBE
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3CA0:
+	.byte 0x02, 0x0f, 0x9b, 0x26, 0x07, 0x00, 0x07, 0xd4, 0x3c, 0xfa, 0x00, 0x0c, 0x00, 0x3c, 0x09, 0x02  ; FA3CA0
+	.byte 0x0f, 0xa0, 0x26, 0x01, 0x00, 0x07, 0x75, 0x40, 0xfa, 0x00, 0x0c, 0x00, 0x50, 0x09  ; FA3CB0
+; ---------------------------------------------------------------------
+; DisplayList_FA3CBE -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3CBE:
+	.byte 0x03, 0x0b, 0x9e, 0x26, 0x07, 0x00, 0x05, 0x3f, 0x3e, 0xfa, 0x00    ; FA3CBE
+; ---------------------------------------------------------------------
+; DisplayList_FA3CC9 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3CC9:
+	.byte 0x03, 0x0b, 0xa3, 0x26, 0x07, 0x00, 0x05, 0x89, 0x3e, 0xfa, 0x00    ; FA3CC9
+; ---------------------------------------------------------------------
+; OperandTable_FA3CD4 -- 96 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4041: strings w=12 n<=16, cut to 0xFA3D34 [w=12 max=192]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA3CD4:
+	.byte 0x20, 0x20, 0x20, 0x52, 0x4f, 0x4d, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x52  ; FA3CD4
+	.byte 0x4f, 0x4d, 0x20, 0x32, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20  ; FA3CE4
+	.byte 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x20, 0x20  ; FA3CF4
+	.byte 0x20, 0x20, 0x20, 0x45, 0x58, 0x54, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3D04
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3D14
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA3D24
+; ---------------------------------------------------------------------
+; DisplayList_FA3D34 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3D34:
+	.byte 0x03, 0x0b, 0x9a, 0x26, 0x01, 0x00, 0x05, 0x3f, 0x3d, 0xfa, 0x00    ; FA3D34
+; ---------------------------------------------------------------------
+; OperandTable_FA3D3F -- 16 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA3D34: 8-byte x2 max, cut to 0xFA3D4F [w=8 max=16]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA3D3F:
+	.byte 0xce, 0x00, 0x21, 0x00, 0xf8, 0x00, 0x2e, 0x00, 0x00, 0x01, 0x21, 0x00, 0x32, 0x01, 0x2e, 0x00  ; FA3D3F
+; ---------------------------------------------------------------------
+; DisplayList_FA3D4F -- 120 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3D4F:
+	.byte 0x02, 0x0f, 0x9f, 0x26, 0x0f, 0x00, 0x20, 0x40, 0x29, 0x00, 0x00, 0x10, 0x00, 0x22, 0x0d, 0x02  ; FA3D4F
+	.byte 0x0f, 0x9f, 0x26, 0x0f, 0x00, 0x20, 0x50, 0x29, 0x00, 0x00, 0x10, 0x00, 0x52, 0x0f, 0x02, 0x0f  ; FA3D5F
+	.byte 0x9f, 0x26, 0x0f, 0x00, 0x20, 0x60, 0x29, 0x00, 0x00, 0x10, 0x00, 0x82, 0x11, 0x02, 0x0f, 0x9f  ; FA3D6F
+	.byte 0x26, 0x0f, 0x00, 0x20, 0x70, 0x29, 0x00, 0x00, 0x10, 0x00, 0xb2, 0x13, 0x02, 0x0f, 0x9f, 0x26  ; FA3D7F
+	.byte 0x0f, 0x00, 0x20, 0x80, 0x29, 0x00, 0x00, 0x10, 0x00, 0xe2, 0x15, 0x02, 0x0f, 0x9f, 0x26, 0x0f  ; FA3D8F
+	.byte 0x00, 0x20, 0x90, 0x29, 0x00, 0x00, 0x10, 0x00, 0x12, 0x18, 0x02, 0x0f, 0x9f, 0x26, 0x0f, 0x00  ; FA3D9F
+	.byte 0x20, 0xa0, 0x29, 0x00, 0x00, 0x10, 0x00, 0x42, 0x1a, 0x02, 0x0f, 0x9f, 0x26, 0x0f, 0x00, 0x20  ; FA3DAF
+	.byte 0xb0, 0x29, 0x00, 0x00, 0x10, 0x00, 0x72, 0x1c                      ; FA3DBF
+; ---------------------------------------------------------------------
+; DisplayList_FA3DC7 -- 120 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3DC7:
+	.byte 0x02, 0x0f, 0xa4, 0x26, 0x0f, 0x00, 0x20, 0x00, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x36, 0x0d, 0x02  ; FA3DC7
+	.byte 0x0f, 0xa4, 0x26, 0x0f, 0x00, 0x20, 0x10, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x66, 0x0f, 0x02, 0x0f  ; FA3DD7
+	.byte 0xa4, 0x26, 0x0f, 0x00, 0x20, 0x20, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x96, 0x11, 0x02, 0x0f, 0xa4  ; FA3DE7
+	.byte 0x26, 0x0f, 0x00, 0x20, 0x30, 0xa0, 0x60, 0x00, 0x10, 0x00, 0xc6, 0x13, 0x02, 0x0f, 0xa4, 0x26  ; FA3DF7
+	.byte 0x0f, 0x00, 0x20, 0x40, 0xa0, 0x60, 0x00, 0x10, 0x00, 0xf6, 0x15, 0x02, 0x0f, 0xa4, 0x26, 0x0f  ; FA3E07
+	.byte 0x00, 0x20, 0x50, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x26, 0x18, 0x02, 0x0f, 0xa4, 0x26, 0x0f, 0x00  ; FA3E17
+	.byte 0x20, 0x60, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x56, 0x1a, 0x02, 0x0f, 0xa4, 0x26, 0x0f, 0x00, 0x20  ; FA3E27
+	.byte 0x70, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x86, 0x1c                      ; FA3E37
+; ---------------------------------------------------------------------
+; OperandTable_FA3E3F -- 64 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA3CBE: 8-byte x8 max, cut to 0xFA3E7F [w=8 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA3E3F:
+	.byte 0x0b, 0x00, 0x53, 0x00, 0x93, 0x00, 0x5e, 0x00, 0x0b, 0x00, 0x61, 0x00, 0x93, 0x00, 0x6c, 0x00  ; FA3E3F
+	.byte 0x0b, 0x00, 0x6f, 0x00, 0x93, 0x00, 0x7a, 0x00, 0x0b, 0x00, 0x7d, 0x00, 0x93, 0x00, 0x88, 0x00  ; FA3E4F
+	.byte 0x0b, 0x00, 0x8b, 0x00, 0x93, 0x00, 0x96, 0x00, 0x0b, 0x00, 0x99, 0x00, 0x93, 0x00, 0xa4, 0x00  ; FA3E5F
+	.byte 0x0b, 0x00, 0xa7, 0x00, 0x93, 0x00, 0xb2, 0x00, 0x0b, 0x00, 0xb5, 0x00, 0x93, 0x00, 0xc0, 0x00  ; FA3E6F
+; ---------------------------------------------------------------------
+; DisplayList_FA3E7F -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3E7F:
+	.byte 0x1b, 0x0a, 0x0a, 0x00, 0x53, 0x00, 0x93, 0x00, 0xc0, 0x00          ; FA3E7F
+; ---------------------------------------------------------------------
+; OperandTable_FA3E89 -- 64 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA3CC9: 8-byte x8 max, cut to 0xFA3EC9 [w=8 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA3E89:
+	.byte 0xac, 0x00, 0x53, 0x00, 0x33, 0x01, 0x5e, 0x00, 0xac, 0x00, 0x61, 0x00, 0x33, 0x01, 0x6c, 0x00  ; FA3E89
+	.byte 0xac, 0x00, 0x6f, 0x00, 0x33, 0x01, 0x7a, 0x00, 0xac, 0x00, 0x7d, 0x00, 0x33, 0x01, 0x88, 0x00  ; FA3E99
+	.byte 0xac, 0x00, 0x8b, 0x00, 0x33, 0x01, 0x96, 0x00, 0xac, 0x00, 0x99, 0x00, 0x33, 0x01, 0xa4, 0x00  ; FA3EA9
+	.byte 0xac, 0x00, 0xa7, 0x00, 0x33, 0x01, 0xb2, 0x00, 0xac, 0x00, 0xb5, 0x00, 0x33, 0x01, 0xc0, 0x00  ; FA3EB9
+; ---------------------------------------------------------------------
+; DisplayList_FA3EC9 -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3EC9:
+	.byte 0x1b, 0x0a, 0xac, 0x00, 0x53, 0x00, 0x33, 0x01, 0xc0, 0x00          ; FA3EC9
+; ---------------------------------------------------------------------
+; DisplayList_FA3ED3 -- 396 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as AB records between 0xFA3ED3 and 0xFA405F
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA3ED3:
+	.byte 0x1c, 0x10, 0x62, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x43, 0x4f, 0x50, 0x59  ; FA3ED3
+	.byte 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x07, 0x05, 0x50, 0x05  ; FA3EE3
+	.byte 0x10, 0x20, 0x06, 0x7a, 0x05, 0x4f, 0x4b, 0x08, 0x05, 0x7b, 0x15, 0x8a, 0x07, 0x05, 0xc1, 0x21  ; FA3EF3
+	.byte 0x8d, 0x07, 0x05, 0xc6, 0x21, 0x8d, 0x07, 0x05, 0xce, 0x21, 0x8d, 0x07, 0x05, 0xdb, 0x21, 0x8d  ; FA3F03
+	.byte 0x07, 0x05, 0xe3, 0x21, 0x8d, 0x07, 0x05, 0x51, 0x23, 0x8e, 0x07, 0x05, 0x56, 0x23, 0x8e, 0x07  ; FA3F13
+	.byte 0x05, 0x5e, 0x23, 0x8e, 0x07, 0x05, 0x6b, 0x23, 0x8e, 0x07, 0x05, 0x73, 0x23, 0x8e, 0x20, 0x08  ; FA3F23
+	.byte 0x58, 0x20, 0x42, 0x41, 0x4e, 0x4b, 0x20, 0x09, 0x5d, 0x20, 0x47, 0x52, 0x4f, 0x55, 0x50, 0x20  ; FA3F33
+	.byte 0x09, 0x64, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x09, 0x72, 0x20, 0x47, 0x52, 0x4f, 0x55  ; FA3F43
+	.byte 0x50, 0x20, 0x09, 0x79, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x0a, 0x0a, 0x0b, 0x00, 0x38, 0x00  ; FA3F53
+	.byte 0x94, 0x00, 0xcb, 0x00, 0x0a, 0x0a, 0xab, 0x00, 0x38, 0x00, 0x34, 0x01, 0xcb, 0x00, 0x0a, 0x0a  ; FA3F63
+	.byte 0x01, 0x00, 0xda, 0x00, 0x18, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0x29, 0x00, 0xda, 0x00, 0x40, 0x00  ; FA3F73
+	.byte 0xec, 0x00, 0x0a, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x8f, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xd1, 0x00  ; FA3F83
+	.byte 0xda, 0x00, 0xe8, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0x01, 0x01, 0xda, 0x00, 0x37, 0x01, 0xec, 0x00  ; FA3F93
+	.byte 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x0b, 0x00, 0x1e, 0x00  ; FA3FA3
+	.byte 0x25, 0x00, 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00, 0x20, 0x00, 0x23, 0x00, 0x2f, 0x00, 0x01, 0x0a  ; FA3FB3
+	.byte 0x0b, 0x00, 0x49, 0x00, 0x96, 0x00, 0x49, 0x00, 0x01, 0x0a, 0xab, 0x00, 0x49, 0x00, 0x36, 0x01  ; FA3FC3
+	.byte 0x49, 0x00, 0x01, 0x0a, 0x0b, 0x00, 0x5a, 0x00, 0x96, 0x00, 0x5a, 0x00, 0x01, 0x0a, 0xab, 0x00  ; FA3FD3
+	.byte 0x5a, 0x00, 0x36, 0x01, 0x5a, 0x00, 0x01, 0x0a, 0x01, 0x00, 0xe3, 0x00, 0x1a, 0x00, 0xe3, 0x00  ; FA3FE3
+	.byte 0x01, 0x0a, 0x29, 0x00, 0xe3, 0x00, 0x42, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0x59, 0x00, 0xe3, 0x00  ; FA3FF3
+	.byte 0x91, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xd1, 0x00, 0xe3, 0x00, 0xea, 0x00, 0xe3, 0x00, 0x01, 0x0a  ; FA4003
+	.byte 0x01, 0x01, 0xe3, 0x00, 0x39, 0x01, 0xe3, 0x00, 0x07, 0x05, 0xd6, 0x21, 0x8d, 0x07, 0x05, 0x66  ; FA4013
+	.byte 0x23, 0x8e, 0x20, 0x08, 0x6d, 0x20, 0x42, 0x41, 0x4e, 0x4b, 0x0a, 0x0a, 0xa9, 0x00, 0xda, 0x00  ; FA4023
+	.byte 0xc0, 0x00, 0xec, 0x00, 0x01, 0x0a, 0xa9, 0x00, 0xe3, 0x00, 0xc2, 0x00, 0xe3, 0x00, 0x02, 0x0f  ; FA4033
+	.byte 0x9b, 0x26, 0x0f, 0x00, 0x07, 0xd4, 0x3c, 0xfa, 0x00, 0x0c, 0x00, 0x3c, 0x09, 0x02, 0x0f, 0xa0  ; FA4043
+	.byte 0x26, 0x01, 0x00, 0x07, 0x75, 0x40, 0xfa, 0x00, 0x0c, 0x00, 0x50, 0x09  ; FA4053
+; ---------------------------------------------------------------------
+; DisplayList_FA405F -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA405F:
+	.byte 0x03, 0x0b, 0x9d, 0x26, 0x07, 0x00, 0x05, 0xa7, 0x34, 0xfa, 0x00    ; FA405F
+; ---------------------------------------------------------------------
+; DisplayList_FA406A -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA406A:
+	.byte 0x03, 0x0b, 0xa2, 0x26, 0x07, 0x00, 0x05, 0xf1, 0x34, 0xfa, 0x00    ; FA406A
+; ---------------------------------------------------------------------
+; OperandTable_FA4075 -- 24 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA3CAF: strings w=12 n<=2, cut to 0xFA408D [w=12 max=24]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4075:
+	.byte 0x20, 0x20, 0x20, 0x55, 0x53, 0x45, 0x52, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x55  ; FA4075
+	.byte 0x53, 0x45, 0x52, 0x20, 0x32, 0x20, 0x20, 0x20                      ; FA4085
+; ---------------------------------------------------------------------
+; DisplayList_FA408D -- 22 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA408D:
+	.byte 0x1c, 0x16, 0x41, 0x00, 0x05, 0x00, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49, 0x4f  ; FA408D
+	.byte 0x4e, 0x20, 0x43, 0x4f, 0x50, 0x59                                  ; FA409D
+; ---------------------------------------------------------------------
+; DisplayList_FA40A3 -- 158 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as AB records between 0xFA40A3 and 0xFA4141
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA40A3:
+	.byte 0x20, 0x09, 0x64, 0x20, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x20, 0x09, 0x79, 0x20, 0x43, 0x4f, 0x4d  ; FA40A3
+	.byte 0x42, 0x49, 0x1c, 0x16, 0x41, 0x00, 0x05, 0x00, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54  ; FA40B3
+	.byte 0x49, 0x4f, 0x4e, 0x20, 0x43, 0x4f, 0x50, 0x59, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59  ; FA40C3
+	.byte 0x53, 0x54, 0x45, 0x4d, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x06, 0x1b  ; FA40D3
+	.byte 0x64, 0x0e, 0x54, 0x68, 0x65, 0x20, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x20, 0x74, 0x6f, 0x20  ; FA40E3
+	.byte 0x77, 0x69, 0x74, 0x63, 0x68, 0x20, 0x79, 0x6f, 0x75, 0x06, 0x17, 0xac, 0x11, 0x61, 0x72, 0x65  ; FA40F3
+	.byte 0x20, 0x63, 0x6f, 0x70, 0x79, 0x69, 0x6e, 0x67, 0x20, 0x77, 0x69, 0x6c, 0x6c, 0x20, 0x62, 0x65  ; FA4103
+	.byte 0x06, 0x10, 0xf4, 0x14, 0x6f, 0x76, 0x65, 0x72, 0x77, 0x72, 0x69, 0x74, 0x74, 0x65, 0x6e, 0x2e  ; FA4113
+	.byte 0x02, 0x0f, 0x06, 0x27, 0x03, 0x00, 0x07, 0x39, 0x34, 0xfa, 0x00, 0x0c, 0x00, 0x3c, 0x09, 0x02  ; FA4123
+	.byte 0x0f, 0x0b, 0x27, 0x00, 0x00, 0x07, 0x6c, 0x3a, 0xfa, 0x00, 0x0c, 0x00, 0x50, 0x09  ; FA4133
+; ---------------------------------------------------------------------
+; DisplayList_FA4141 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4141:
+	.byte 0x03, 0x0b, 0x09, 0x27, 0x07, 0x00, 0x05, 0x3f, 0x3e, 0xfa, 0x00    ; FA4141
+; ---------------------------------------------------------------------
+; DisplayList_FA414C -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA414C:
+	.byte 0x03, 0x0b, 0x0e, 0x27, 0x07, 0x00, 0x05, 0x89, 0x3e, 0xfa, 0x00    ; FA414C
+; ---------------------------------------------------------------------
+; DisplayList_FA4157 -- 120 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4157:
+	.byte 0x02, 0x0f, 0x0a, 0x27, 0x0f, 0x00, 0x20, 0x40, 0x29, 0x00, 0x00, 0x10, 0x00, 0x22, 0x0d, 0x02  ; FA4157
+	.byte 0x0f, 0x0a, 0x27, 0x0f, 0x00, 0x20, 0x50, 0x29, 0x00, 0x00, 0x10, 0x00, 0x52, 0x0f, 0x02, 0x0f  ; FA4167
+	.byte 0x0a, 0x27, 0x0f, 0x00, 0x20, 0x60, 0x29, 0x00, 0x00, 0x10, 0x00, 0x82, 0x11, 0x02, 0x0f, 0x0a  ; FA4177
+	.byte 0x27, 0x0f, 0x00, 0x20, 0x70, 0x29, 0x00, 0x00, 0x10, 0x00, 0xb2, 0x13, 0x02, 0x0f, 0x0a, 0x27  ; FA4187
+	.byte 0x0f, 0x00, 0x20, 0x80, 0x29, 0x00, 0x00, 0x10, 0x00, 0xe2, 0x15, 0x02, 0x0f, 0x0a, 0x27, 0x0f  ; FA4197
+	.byte 0x00, 0x20, 0x90, 0x29, 0x00, 0x00, 0x10, 0x00, 0x12, 0x18, 0x02, 0x0f, 0x0a, 0x27, 0x0f, 0x00  ; FA41A7
+	.byte 0x20, 0xa0, 0x29, 0x00, 0x00, 0x10, 0x00, 0x42, 0x1a, 0x02, 0x0f, 0x0a, 0x27, 0x0f, 0x00, 0x20  ; FA41B7
+	.byte 0xb0, 0x29, 0x00, 0x00, 0x10, 0x00, 0x72, 0x1c                      ; FA41C7
+; ---------------------------------------------------------------------
+; DisplayList_FA41CF -- 120 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA41CF:
+	.byte 0x02, 0x0f, 0x0f, 0x27, 0x0f, 0x00, 0x20, 0x00, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x36, 0x0d, 0x02  ; FA41CF
+	.byte 0x0f, 0x0f, 0x27, 0x0f, 0x00, 0x20, 0x10, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x66, 0x0f, 0x02, 0x0f  ; FA41DF
+	.byte 0x0f, 0x27, 0x0f, 0x00, 0x20, 0x20, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x96, 0x11, 0x02, 0x0f, 0x0f  ; FA41EF
+	.byte 0x27, 0x0f, 0x00, 0x20, 0x30, 0xa0, 0x60, 0x00, 0x10, 0x00, 0xc6, 0x13, 0x02, 0x0f, 0x0f, 0x27  ; FA41FF
+	.byte 0x0f, 0x00, 0x20, 0x40, 0xa0, 0x60, 0x00, 0x10, 0x00, 0xf6, 0x15, 0x02, 0x0f, 0x0f, 0x27, 0x0f  ; FA420F
+	.byte 0x00, 0x20, 0x50, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x26, 0x18, 0x02, 0x0f, 0x0f, 0x27, 0x0f, 0x00  ; FA421F
+	.byte 0x20, 0x60, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x56, 0x1a, 0x02, 0x0f, 0x0f, 0x27, 0x0f, 0x00, 0x20  ; FA422F
+	.byte 0x70, 0xa0, 0x60, 0x00, 0x10, 0x00, 0x86, 0x1c                      ; FA423F
+; ---------------------------------------------------------------------
+; DisplayList_FA4247 -- 30 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as B records between 0xFA4247 and 0xFA4265
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4247:
+	.byte 0x02, 0x0f, 0x06, 0x27, 0x03, 0x00, 0x07, 0x39, 0x34, 0xfa, 0x00, 0x0c, 0x00, 0x3c, 0x09, 0x02  ; FA4247
+	.byte 0x0f, 0x0b, 0x27, 0x03, 0x00, 0x07, 0x6c, 0x3a, 0xfa, 0x00, 0x0c, 0x00, 0x50, 0x09  ; FA4257
+; ---------------------------------------------------------------------
+; DisplayList_FA4265 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4265:
+	.byte 0x03, 0x0b, 0x08, 0x27, 0x07, 0x00, 0x05, 0xa7, 0x34, 0xfa, 0x00    ; FA4265
+; ---------------------------------------------------------------------
+; DisplayList_FA4270 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4270:
+	.byte 0x03, 0x0b, 0x0d, 0x27, 0x07, 0x00, 0x05, 0xf1, 0x34, 0xfa, 0x00    ; FA4270
+; ---------------------------------------------------------------------
+; DisplayList_FA427B -- 334 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA427B:
+	.byte 0x1c, 0x16, 0x3d, 0x00, 0x05, 0x00, 0x44, 0x41, 0x54, 0x41, 0x20, 0x4c, 0x4f, 0x41, 0x44, 0x20  ; FA427B
+	.byte 0x46, 0x49, 0x4c, 0x54, 0x45, 0x52, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54  ; FA428B
+	.byte 0x45, 0x4d, 0x20, 0x0b, 0x04, 0x05, 0x4f, 0x56, 0x45, 0x52, 0x41, 0x4c, 0x4c, 0x20, 0x15, 0x4e  ; FA429B
+	.byte 0x08, 0x45, 0x46, 0x46, 0x45, 0x43, 0x54, 0x20, 0x26, 0x20, 0x4f, 0x55, 0x54, 0x50, 0x55, 0x54  ; FA42AB
+	.byte 0x20, 0x3a, 0x20, 0x15, 0xce, 0x0a, 0x52, 0x2e, 0x54, 0x2e, 0x43, 0x52, 0x45, 0x41, 0x54, 0x4f  ; FA42BB
+	.byte 0x52, 0x20, 0x31, 0x5f, 0x36, 0x20, 0x3a, 0x20, 0x0f, 0x64, 0x0e, 0x43, 0x4f, 0x4d, 0x42, 0x49  ; FA42CB
+	.byte 0x4e, 0x41, 0x54, 0x49, 0x4f, 0x4e, 0x20, 0x15, 0xae, 0x11, 0x4f, 0x43, 0x54, 0x41, 0x56, 0x45  ; FA42DB
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x15, 0x2e, 0x14, 0x4d  ; FA42EB
+	.byte 0x49, 0x44, 0x49, 0x20, 0x53, 0x45, 0x54, 0x54, 0x49, 0x4e, 0x47, 0x20, 0x20, 0x20, 0x20, 0x3a  ; FA42FB
+	.byte 0x20, 0x15, 0xae, 0x16, 0x4b, 0x45, 0x59, 0x26, 0x56, 0x45, 0x4c, 0x20, 0x4c, 0x41, 0x59, 0x45  ; FA430B
+	.byte 0x52, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x15, 0x2e, 0x19, 0x4d, 0x41, 0x49, 0x4e, 0x20, 0x4f, 0x55  ; FA431B
+	.byte 0x54, 0x20, 0x45, 0x51, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x15, 0xae, 0x1b, 0x4b, 0x45  ; FA432B
+	.byte 0x59, 0x20, 0x53, 0x43, 0x41, 0x4c, 0x49, 0x4e, 0x47, 0x20, 0x20, 0x20, 0x20, 0x20, 0x3a, 0x20  ; FA433B
+	.byte 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20, 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45  ; FA434B
+	.byte 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07  ; FA435B
+	.byte 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x14, 0x00, 0x1a, 0x00, 0x25, 0x01, 0xc2, 0x00, 0x0a, 0x0a  ; FA436B
+	.byte 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01  ; FA437B
+	.byte 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x01, 0x0a, 0x14, 0x00  ; FA438B
+	.byte 0x2f, 0x00, 0x27, 0x01, 0x2f, 0x00, 0x01, 0x0a, 0x14, 0x00, 0x56, 0x00, 0x27, 0x01, 0x56, 0x00  ; FA439B
+	.byte 0x01, 0x0a, 0x14, 0x00, 0x6b, 0x00, 0x27, 0x01, 0x6b, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00  ; FA43AB
+	.byte 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad, 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00  ; FA43BB
+; ---------------------------------------------------------------------
+; DisplayList_FA43C9 -- 105 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA43C9:
+	.byte 0x02, 0x0f, 0xe4, 0x7e, 0x0f, 0x00, 0x20, 0x87, 0x44, 0xfa, 0x00, 0x0b, 0x00, 0x60, 0x08, 0x02  ; FA43C9
+	.byte 0x0f, 0xe4, 0x7e, 0xf0, 0x04, 0x20, 0xb3, 0x44, 0xfa, 0x00, 0x0b, 0x00, 0xe0, 0x0a, 0x02, 0x0f  ; FA43D9
+	.byte 0x07, 0x7f, 0x04, 0x02, 0x20, 0xdf, 0x44, 0xfa, 0x00, 0x03, 0x00, 0xc0, 0x11, 0x02, 0x0f, 0x07  ; FA43E9
+	.byte 0x7f, 0x02, 0x01, 0x20, 0xdf, 0x44, 0xfa, 0x00, 0x03, 0x00, 0x40, 0x14, 0x02, 0x0f, 0x07, 0x7f  ; FA43F9
+	.byte 0x01, 0x00, 0x20, 0xdf, 0x44, 0xfa, 0x00, 0x03, 0x00, 0xc0, 0x16, 0x02, 0x0f, 0x07, 0x7f, 0x08  ; FA4409
+	.byte 0x03, 0x20, 0xdf, 0x44, 0xfa, 0x00, 0x03, 0x00, 0x40, 0x19, 0x02, 0x0f, 0x07, 0x7f, 0x10, 0x04  ; FA4419
+	.byte 0x20, 0xdf, 0x44, 0xfa, 0x00, 0x03, 0x00, 0xc0, 0x1b                ; FA4429
+; ---------------------------------------------------------------------
+; DisplayList_FA4432 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4432:
+	.byte 0x03, 0x0b, 0xa5, 0x26, 0x07, 0x00, 0x05, 0x3d, 0x44, 0xfa, 0x00    ; FA4432
+; ---------------------------------------------------------------------
+; OperandTable_FA443D -- 64 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA4432: 8-byte x8 max, cut to 0xFA447D [w=8 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA443D:
+	.byte 0x15, 0x00, 0x34, 0x00, 0x24, 0x01, 0x3f, 0x00, 0x15, 0x00, 0x44, 0x00, 0x24, 0x01, 0x4f, 0x00  ; FA443D
+	.byte 0x15, 0x00, 0x70, 0x00, 0x24, 0x01, 0x7b, 0x00, 0x15, 0x00, 0x80, 0x00, 0x24, 0x01, 0x8b, 0x00  ; FA444D
+	.byte 0x15, 0x00, 0x90, 0x00, 0x24, 0x01, 0x9b, 0x00, 0x15, 0x00, 0xa0, 0x00, 0x24, 0x01, 0xab, 0x00  ; FA445D
+	.byte 0x15, 0x00, 0xb0, 0x00, 0x24, 0x01, 0xbb, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA446D
+; ---------------------------------------------------------------------
+; DisplayList_FA447D -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA447D:
+	.byte 0x1b, 0x0a, 0x15, 0x00, 0x34, 0x00, 0x24, 0x01, 0xbb, 0x00          ; FA447D
+; ---------------------------------------------------------------------
+; OperandTable_FA4487 -- 44 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA43C9: strings w=11 n<=16, cut to 0xFA44B3 [w=11 max=176]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4487:
+	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x43, 0x4f, 0x4d, 0x42, 0x49  ; FA4487
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x26, 0x43, 0x4f, 0x4d, 0x42  ; FA4497
+	.byte 0x49, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA44A7
+; ---------------------------------------------------------------------
+; OperandTable_FA44B3 -- 44 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA43D8: strings w=11 n<=16, cut to 0xFA44DF [w=11 max=176]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA44B3:
+	.byte 0x4f, 0x46, 0x46, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x43, 0x4f, 0x4d, 0x42, 0x49  ; FA44B3
+	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x26, 0x43, 0x4f, 0x4d, 0x42  ; FA44C3
+	.byte 0x49, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA44D3
+; ---------------------------------------------------------------------
+; OperandTable_FA44DF -- 3 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA43E7: strings w=3 n<=2, cut to 0xFA44E2 [w=3 max=6]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA44DF:
+	.byte 0x4f, 0x4e, 0x20                                                    ; FA44DF
+; ---------------------------------------------------------------------
+; OperandTable_FA44E2 -- 6 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA458F: strings w=3 n<=2, cut to 0xFA44E8 [w=3 max=6]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA44E2:
+	.byte 0x4f, 0x46, 0x46, 0x4f, 0x4e, 0x20                                  ; FA44E2
+; ---------------------------------------------------------------------
+; DisplayList_FA44E8 -- 167 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA44E8:
+	.byte 0x1c, 0x14, 0x4b, 0x00, 0x05, 0x00, 0x4d, 0x45, 0x4d, 0x4f, 0x52, 0x59, 0x20, 0x50, 0x52, 0x4f  ; FA44E8
+	.byte 0x54, 0x45, 0x43, 0x54, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d  ; FA44F8
+	.byte 0x07, 0x13, 0xf0, 0x0d, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA4508
+	.byte 0x20, 0x20, 0x3a, 0x07, 0x13, 0xb8, 0x13, 0x43, 0x4f, 0x4d, 0x42, 0x49, 0x4e, 0x41, 0x54, 0x49  ; FA4518
+	.byte 0x4f, 0x4e, 0x20, 0x20, 0x20, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45, 0x4d, 0x20, 0x09  ; FA4528
+	.byte 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0xde, 0x21  ; FA4538
+	.byte 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x07, 0x05, 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0x14, 0x00, 0x45  ; FA4548
+	.byte 0x00, 0x15, 0x01, 0x9e, 0x00, 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x0a  ; FA4558
+	.byte 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e  ; FA4568
+	.byte 0x00, 0x12, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3, 0x00, 0x94, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0xad  ; FA4578
+	.byte 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00                            ; FA4588
+; ---------------------------------------------------------------------
+; DisplayList_FA458F -- 30 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA458F:
+	.byte 0x02, 0x0f, 0xd6, 0x7f, 0x01, 0x00, 0x07, 0xe2, 0x44, 0xfa, 0x00, 0x03, 0x00, 0x01, 0x0e, 0x02  ; FA458F
+	.byte 0x0f, 0xd6, 0x7f, 0x02, 0x01, 0x07, 0xe2, 0x44, 0xfa, 0x00, 0x03, 0x00, 0xc9, 0x13  ; FA459F
+; ---------------------------------------------------------------------
+; DisplayList_FA45AD -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA45AD:
+	.byte 0x03, 0x0b, 0xa6, 0x26, 0x01, 0x00, 0x05, 0xb8, 0x45, 0xfa, 0x00    ; FA45AD
+; ---------------------------------------------------------------------
+; OperandTable_FA45B8 -- 16 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA45AD: 8-byte x2 max, cut to 0xFA45C8 [w=8 max=16]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA45B8:
+	.byte 0x15, 0x00, 0x58, 0x00, 0x14, 0x01, 0x65, 0x00, 0x15, 0x00, 0x7d, 0x00, 0x14, 0x01, 0x8a, 0x00  ; FA45B8
+; ---------------------------------------------------------------------
+; DisplayList_FA45C8 -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA45C8:
+	.byte 0x1b, 0x0a, 0x15, 0x00, 0x58, 0x00, 0x14, 0x01, 0x8a, 0x00          ; FA45C8
+; ---------------------------------------------------------------------
+; DisplayList_FA45D2 -- 226 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA45D2:
+	.byte 0x1c, 0x10, 0x62, 0x00, 0x05, 0x00, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20, 0x4d, 0x55, 0x54, 0x45  ; FA45D2
+	.byte 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x07, 0x26, 0x53, 0x05  ; FA45E2
+	.byte 0x49, 0x66, 0x20, 0x79, 0x6f, 0x75, 0x20, 0x77, 0x61, 0x6e, 0x74, 0x20, 0x68, 0x65, 0x6c, 0x64  ; FA45F2
+	.byte 0x20, 0x6e, 0x6f, 0x74, 0x65, 0x73, 0x20, 0x74, 0x6f, 0x20, 0x63, 0x6f, 0x6e, 0x74, 0x69, 0x6e  ; FA4602
+	.byte 0x75, 0x65, 0x07, 0x25, 0x73, 0x08, 0x73, 0x6f, 0x75, 0x6e, 0x64, 0x69, 0x6e, 0x67, 0x20, 0x77  ; FA4612
+	.byte 0x68, 0x65, 0x6e, 0x20, 0x79, 0x6f, 0x75, 0x20, 0x63, 0x68, 0x61, 0x6e, 0x67, 0x65, 0x20, 0x53  ; FA4622
+	.byte 0x6f, 0x75, 0x6e, 0x64, 0x20, 0x6f, 0x72, 0x07, 0x10, 0x93, 0x0b, 0x43, 0x6f, 0x6d, 0x62, 0x69  ; FA4632
+	.byte 0x6e, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x2e, 0x07, 0x1f, 0xb3, 0x0e, 0x50, 0x6c, 0x65, 0x61, 0x73  ; FA4642
+	.byte 0x65, 0x20, 0x74, 0x75, 0x72, 0x6e, 0x20, 0x6f, 0x66, 0x66, 0x20, 0x53, 0x6f, 0x75, 0x6e, 0x64  ; FA4652
+	.byte 0x20, 0x4d, 0x75, 0x74, 0x65, 0x2e, 0x07, 0x10, 0x8c, 0x16, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x20  ; FA4662
+	.byte 0x4d, 0x55, 0x54, 0x45, 0x20, 0x3a, 0x07, 0x05, 0xd4, 0x21, 0x8d, 0x07, 0x05, 0x64, 0x23, 0x8e  ; FA4672
+	.byte 0x20, 0x0a, 0x42, 0x20, 0x4f, 0x4e, 0x2f, 0x4f, 0x46, 0x46, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00  ; FA4682
+	.byte 0x2e, 0x00, 0x12, 0x00, 0x0a, 0x0a, 0x50, 0x00, 0x78, 0x00, 0xf0, 0x00, 0xb4, 0x00, 0x0a, 0x0a  ; FA4692
+	.byte 0x50, 0x00, 0xda, 0x00, 0xf0, 0x00, 0xec, 0x00, 0x01, 0x0a, 0x50, 0x00, 0xe3, 0x00, 0xf0, 0x00  ; FA46A2
+	.byte 0xe3, 0x00                                                          ; FA46B2
+; ---------------------------------------------------------------------
+; DisplayList_FA46B4 -- 15 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA46B4:
+	.byte 0x02, 0x0f, 0x0b, 0x7f, 0x01, 0x00, 0x07, 0xdf, 0x44, 0xfa, 0x00, 0x03, 0x00, 0x99, 0x16  ; FA46B4
+; ---------------------------------------------------------------------
+; DisplayList_FA46C3 -- 239 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA46C3:
+	.byte 0x23, 0x05, 0x0f, 0x31, 0x00, 0x1c, 0x0f, 0x67, 0x00, 0x05, 0x00, 0x44, 0x52, 0x55, 0x4d, 0x53  ; FA46C3
+	.byte 0x20, 0x4d, 0x41, 0x50, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d  ; FA46D3
+	.byte 0x20, 0x05, 0xec, 0x04, 0x3a, 0x20, 0x07, 0x2b, 0x05, 0x4d, 0x41, 0x50, 0x07, 0x05, 0x50, 0x05  ; FA46E3
+	.byte 0x10, 0x20, 0x0a, 0x5b, 0x07, 0x4e, 0x41, 0x4d, 0x49, 0x4e, 0x47, 0x07, 0x05, 0xc4, 0x21, 0x8d  ; FA46F3
+	.byte 0x07, 0x05, 0xd1, 0x21, 0x8d, 0x07, 0x05, 0xe0, 0x21, 0x8d, 0x07, 0x05, 0x54, 0x23, 0x8e, 0x07  ; FA4703
+	.byte 0x05, 0x61, 0x23, 0x8e, 0x07, 0x05, 0x70, 0x23, 0x8e, 0x20, 0x0d, 0x58, 0x20, 0x44, 0x52, 0x55  ; FA4713
+	.byte 0x4d, 0x53, 0x20, 0x4d, 0x41, 0x50, 0x20, 0x08, 0x67, 0x20, 0x4e, 0x4f, 0x54, 0x45, 0x20, 0x09  ; FA4723
+	.byte 0x76, 0x20, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x0a, 0x0a, 0x0e, 0x00, 0x1d, 0x00, 0x54, 0x00, 0x3c  ; FA4733
+	.byte 0x00, 0x0a, 0x0a, 0x66, 0x00, 0x1b, 0x00, 0x36, 0x01, 0xcb, 0x00, 0x0a, 0x0a, 0x09, 0x00, 0xda  ; FA4743
+	.byte 0x00, 0x3f, 0x00, 0xec, 0x00, 0x0a, 0x0a, 0x56, 0x00, 0xda, 0x00, 0xbf, 0x00, 0xec, 0x00, 0x0a  ; FA4753
+	.byte 0x0a, 0xce, 0x00, 0xda, 0x00, 0x37, 0x01, 0xec, 0x00, 0x09, 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e  ; FA4763
+	.byte 0x00, 0x12, 0x00, 0x01, 0x0a, 0x66, 0x00, 0x2b, 0x00, 0x38, 0x01, 0x2b, 0x00, 0x01, 0x0a, 0x09  ; FA4773
+	.byte 0x00, 0xe3, 0x00, 0x41, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0x56, 0x00, 0xe3, 0x00, 0xc1, 0x00, 0xe3  ; FA4783
+	.byte 0x00, 0x01, 0x0a, 0xce, 0x00, 0xe3, 0x00, 0x39, 0x01, 0xe3, 0x00, 0x02, 0x0a, 0x84, 0x00, 0x2b  ; FA4793
+	.byte 0x00, 0x84, 0x00, 0xcd, 0x00, 0x02, 0x0a, 0xac, 0x00, 0x2b, 0x00, 0xac, 0x00, 0xcd, 0x00  ; FA47A3
+; ---------------------------------------------------------------------
+; DisplayList_FA47B2 -- 76 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA47B2:
+	.byte 0x23, 0x05, 0x0f, 0x31, 0x00, 0x1c, 0x0f, 0x67, 0x00, 0x05, 0x00, 0x44, 0x52, 0x55, 0x4d, 0x53  ; FA47B2
+	.byte 0x20, 0x4d, 0x41, 0x50, 0x17, 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d  ; FA47C2
+	.byte 0x07, 0x05, 0x50, 0x05, 0x10, 0x20, 0x09, 0x7a, 0x05, 0x57, 0x52, 0x49, 0x54, 0x45, 0x09, 0x0a  ; FA47D2
+	.byte 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x09, 0x0a, 0x0b, 0x00, 0x1e, 0x00, 0x3d, 0x00  ; FA47E2
+	.byte 0x31, 0x00, 0x09, 0x0a, 0x0d, 0x00, 0x20, 0x00, 0x3b, 0x00, 0x2f, 0x00  ; FA47F2
+; ---------------------------------------------------------------------
+; DisplayList_FA47FE -- 131 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA47FE:
+	.byte 0x1c, 0x0c, 0x7a, 0x00, 0x05, 0x00, 0x45, 0x52, 0x52, 0x4f, 0x52, 0x21, 0x07, 0x2a, 0x71, 0x08  ; FA47FE
+	.byte 0x49, 0x74, 0x20, 0x69, 0x73, 0x20, 0x69, 0x6d, 0x70, 0x6f, 0x73, 0x73, 0x69, 0x62, 0x6c, 0x65  ; FA480E
+	.byte 0x20, 0x74, 0x6f, 0x20, 0x73, 0x65, 0x74, 0x20, 0x61, 0x20, 0x64, 0x72, 0x75, 0x6d, 0x20, 0x6d  ; FA481E
+	.byte 0x61, 0x70, 0x20, 0x66, 0x6f, 0x72, 0x07, 0x22, 0x21, 0x0d, 0x61, 0x20, 0x53, 0x6f, 0x75, 0x6e  ; FA482E
+	.byte 0x64, 0x20, 0x6f, 0x74, 0x68, 0x65, 0x72, 0x20, 0x74, 0x68, 0x61, 0x6e, 0x20, 0x61, 0x20, 0x44  ; FA483E
+	.byte 0x72, 0x75, 0x6d, 0x20, 0x4b, 0x69, 0x74, 0x2e, 0x07, 0x2b, 0xd1, 0x11, 0x50, 0x6c, 0x65, 0x61  ; FA484E
+	.byte 0x73, 0x65, 0x20, 0x73, 0x65, 0x6c, 0x65, 0x63, 0x74, 0x20, 0x61, 0x20, 0x44, 0x72, 0x75, 0x6d  ; FA485E
+	.byte 0x20, 0x4b, 0x69, 0x74, 0x20, 0x61, 0x6e, 0x64, 0x20, 0x74, 0x72, 0x79, 0x20, 0x61, 0x67, 0x61  ; FA486E
+	.byte 0x69, 0x6e, 0x2e                                                    ; FA487E
+; ---------------------------------------------------------------------
+; DisplayList_FA4881 -- 510 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): frames as B records between 0xFA4881 and 0xFA4A7F
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4881:
+	.byte 0x02, 0x0f, 0x02, 0x27, 0x03, 0x00, 0x20, 0x33, 0x4b, 0xfa, 0x00, 0x06, 0x00, 0xe6, 0x04, 0x02  ; FA4881
+	.byte 0x0f, 0x00, 0x00, 0x00, 0x00, 0x20, 0x40, 0x29, 0x00, 0x00, 0x10, 0x00, 0xee, 0x04, 0x00, 0x0a  ; FA4891
+	.byte 0x40, 0x26, 0x7f, 0x00, 0x20, 0x65, 0x07, 0x03, 0x00, 0x0a, 0x41, 0x26, 0x7f, 0x00, 0x20, 0x6d  ; FA48A1
+	.byte 0x09, 0x03, 0x00, 0x0a, 0x42, 0x26, 0x7f, 0x00, 0x20, 0x75, 0x0b, 0x03, 0x00, 0x0a, 0x43, 0x26  ; FA48B1
+	.byte 0x7f, 0x00, 0x20, 0x7d, 0x0d, 0x03, 0x00, 0x0a, 0x44, 0x26, 0x7f, 0x00, 0x20, 0x85, 0x0f, 0x03  ; FA48C1
+	.byte 0x00, 0x0a, 0x45, 0x26, 0x7f, 0x00, 0x20, 0x8d, 0x11, 0x03, 0x00, 0x0a, 0x46, 0x26, 0x7f, 0x00  ; FA48D1
+	.byte 0x20, 0x95, 0x13, 0x03, 0x00, 0x0a, 0x47, 0x26, 0x7f, 0x00, 0x20, 0x9d, 0x15, 0x03, 0x00, 0x0a  ; FA48E1
+	.byte 0x48, 0x26, 0x7f, 0x00, 0x20, 0xa5, 0x17, 0x03, 0x00, 0x0a, 0x49, 0x26, 0x7f, 0x00, 0x20, 0xad  ; FA48F1
+	.byte 0x19, 0x03, 0x00, 0x0a, 0x4a, 0x26, 0x7f, 0x00, 0x20, 0xb5, 0x1b, 0x03, 0x00, 0x0a, 0x4b, 0x26  ; FA4901
+	.byte 0x7f, 0x00, 0x20, 0xbd, 0x1d, 0x03, 0x02, 0x0f, 0x20, 0x2a, 0x0f, 0x00, 0x20, 0x4b, 0x4b, 0xfa  ; FA4911
+	.byte 0x00, 0x02, 0x00, 0x69, 0x07, 0x02, 0x0f, 0x20, 0x2a, 0x0f, 0x00, 0x20, 0x4d, 0x4b, 0xfa, 0x00  ; FA4921
+	.byte 0x02, 0x00, 0x71, 0x09, 0x02, 0x0f, 0x20, 0x2a, 0x0f, 0x00, 0x20, 0x4f, 0x4b, 0xfa, 0x00, 0x02  ; FA4931
+	.byte 0x00, 0x79, 0x0b, 0x02, 0x0f, 0x20, 0x2a, 0x0f, 0x00, 0x20, 0x51, 0x4b, 0xfa, 0x00, 0x02, 0x00  ; FA4941
+	.byte 0x81, 0x0d, 0x02, 0x0f, 0x20, 0x2a, 0x0f, 0x00, 0x20, 0x53, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0x89  ; FA4951
+	.byte 0x0f, 0x02, 0x0f, 0x20, 0x2a, 0x0f, 0x00, 0x20, 0x55, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0x91, 0x11  ; FA4961
+	.byte 0x02, 0x0f, 0x20, 0x2a, 0x0f, 0x00, 0x20, 0x57, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0x99, 0x13, 0x02  ; FA4971
+	.byte 0x0f, 0x20, 0x2a, 0x0f, 0x00, 0x20, 0x59, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xa1, 0x15, 0x02, 0x0f  ; FA4981
+	.byte 0x20, 0x2a, 0x0f, 0x00, 0x20, 0x5b, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xa9, 0x17, 0x02, 0x0f, 0x20  ; FA4991
+	.byte 0x2a, 0x0f, 0x00, 0x20, 0x5d, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xb1, 0x19, 0x02, 0x0f, 0x20, 0x2a  ; FA49A1
+	.byte 0x0f, 0x00, 0x20, 0x5f, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xb9, 0x1b, 0x02, 0x0f, 0x20, 0x2a, 0x0f  ; FA49B1
+	.byte 0x00, 0x20, 0x61, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xc1, 0x1d, 0x02, 0x0f, 0x40, 0x2a, 0x0f, 0x00  ; FA49C1
+	.byte 0x20, 0x7d, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0x6b, 0x07, 0x02, 0x0f, 0x41, 0x2a, 0x0f, 0x00, 0x20  ; FA49D1
+	.byte 0x7d, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0x73, 0x09, 0x02, 0x0f, 0x42, 0x2a, 0x0f, 0x00, 0x20, 0x7d  ; FA49E1
+	.byte 0x4b, 0xfa, 0x00, 0x02, 0x00, 0x7b, 0x0b, 0x02, 0x0f, 0x43, 0x2a, 0x0f, 0x00, 0x20, 0x7d, 0x4b  ; FA49F1
+	.byte 0xfa, 0x00, 0x02, 0x00, 0x83, 0x0d, 0x02, 0x0f, 0x44, 0x2a, 0x0f, 0x00, 0x20, 0x7d, 0x4b, 0xfa  ; FA4A01
+	.byte 0x00, 0x02, 0x00, 0x8b, 0x0f, 0x02, 0x0f, 0x45, 0x2a, 0x0f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00  ; FA4A11
+	.byte 0x02, 0x00, 0x93, 0x11, 0x02, 0x0f, 0x46, 0x2a, 0x0f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00, 0x02  ; FA4A21
+	.byte 0x00, 0x9b, 0x13, 0x02, 0x0f, 0x47, 0x2a, 0x0f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00, 0x02, 0x00  ; FA4A31
+	.byte 0xa3, 0x15, 0x02, 0x0f, 0x48, 0x2a, 0x0f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xab  ; FA4A41
+	.byte 0x17, 0x02, 0x0f, 0x49, 0x2a, 0x0f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xb3, 0x19  ; FA4A51
+	.byte 0x02, 0x0f, 0x4a, 0x2a, 0x0f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xbb, 0x1b, 0x02  ; FA4A61
+	.byte 0x0f, 0x4b, 0x2a, 0x0f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xc3, 0x1d  ; FA4A71
+; ---------------------------------------------------------------------
+; DisplayList_FA4A7F -- 180 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4A7F:
+	.byte 0x02, 0x0f, 0x50, 0x2a, 0x7f, 0x00, 0x20, 0x00, 0xa0, 0x60, 0x00, 0x0d, 0x00, 0x6e, 0x07, 0x02  ; FA4A7F
+	.byte 0x0f, 0x51, 0x2a, 0x7f, 0x00, 0x20, 0x00, 0xa0, 0x60, 0x00, 0x0d, 0x00, 0x76, 0x09, 0x02, 0x0f  ; FA4A8F
+	.byte 0x52, 0x2a, 0x7f, 0x00, 0x20, 0x00, 0xa0, 0x60, 0x00, 0x0d, 0x00, 0x7e, 0x0b, 0x02, 0x0f, 0x53  ; FA4A9F
+	.byte 0x2a, 0x7f, 0x00, 0x20, 0x00, 0xa0, 0x60, 0x00, 0x0d, 0x00, 0x86, 0x0d, 0x02, 0x0f, 0x54, 0x2a  ; FA4AAF
+	.byte 0x7f, 0x00, 0x20, 0x00, 0xa0, 0x60, 0x00, 0x0d, 0x00, 0x8e, 0x0f, 0x02, 0x0f, 0x55, 0x2a, 0x7f  ; FA4ABF
+	.byte 0x00, 0x20, 0x00, 0xa0, 0x60, 0x00, 0x0d, 0x00, 0x96, 0x11, 0x02, 0x0f, 0x56, 0x2a, 0x7f, 0x00  ; FA4ACF
+	.byte 0x20, 0x00, 0xa0, 0x60, 0x00, 0x0d, 0x00, 0x9e, 0x13, 0x02, 0x0f, 0x57, 0x2a, 0x7f, 0x00, 0x20  ; FA4ADF
+	.byte 0x00, 0xa0, 0x60, 0x00, 0x0d, 0x00, 0xa6, 0x15, 0x02, 0x0f, 0x58, 0x2a, 0x7f, 0x00, 0x20, 0x00  ; FA4AEF
+	.byte 0xa0, 0x60, 0x00, 0x0d, 0x00, 0xae, 0x17, 0x02, 0x0f, 0x59, 0x2a, 0x7f, 0x00, 0x20, 0x00, 0xa0  ; FA4AFF
+	.byte 0x60, 0x00, 0x0d, 0x00, 0xb6, 0x19, 0x02, 0x0f, 0x5a, 0x2a, 0x7f, 0x00, 0x20, 0x00, 0xa0, 0x60  ; FA4B0F
+	.byte 0x00, 0x0d, 0x00, 0xbe, 0x1b, 0x02, 0x0f, 0x5b, 0x2a, 0x7f, 0x00, 0x20, 0x00, 0xa0, 0x60, 0x00  ; FA4B1F
+	.byte 0x0d, 0x00, 0xc6, 0x1d                                              ; FA4B2F
+; ---------------------------------------------------------------------
+; OperandTable_FA4B33 -- 24 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4881: strings w=6 n<=4, cut to 0xFA4B4B [w=6 max=24]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B33:
+	.byte 0x4e, 0x4f, 0x52, 0x4d, 0x41, 0x4c, 0x55, 0x53, 0x45, 0x52, 0x31, 0x20, 0x55, 0x53, 0x45, 0x52  ; FA4B33
+	.byte 0x32, 0x20, 0x55, 0x53, 0x45, 0x52, 0x33, 0x20                      ; FA4B43
+; ---------------------------------------------------------------------
+; OperandTable_FA4B4B -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4DB8: strings w=2 n<=32, cut to 0xFA4B4D [w=2 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B4B:
+	.byte 0x43, 0x20                                                          ; FA4B4B
+; ---------------------------------------------------------------------
+; OperandTable_FA4B4D -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4926: strings w=2 n<=16, cut to 0xFA4B4F [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B4D:
+	.byte 0x44, 0x88                                                          ; FA4B4D
+; ---------------------------------------------------------------------
+; OperandTable_FA4B4F -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4935: strings w=2 n<=16, cut to 0xFA4B51 [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B4F:
+	.byte 0x44, 0x20                                                          ; FA4B4F
+; ---------------------------------------------------------------------
+; OperandTable_FA4B51 -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4944: strings w=2 n<=16, cut to 0xFA4B53 [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B51:
+	.byte 0x45, 0x88                                                          ; FA4B51
+; ---------------------------------------------------------------------
+; OperandTable_FA4B53 -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4953: strings w=2 n<=16, cut to 0xFA4B55 [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B53:
+	.byte 0x45, 0x20                                                          ; FA4B53
+; ---------------------------------------------------------------------
+; OperandTable_FA4B55 -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4962: strings w=2 n<=16, cut to 0xFA4B57 [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B55:
+	.byte 0x46, 0x20                                                          ; FA4B55
+; ---------------------------------------------------------------------
+; OperandTable_FA4B57 -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4971: strings w=2 n<=16, cut to 0xFA4B59 [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B57:
+	.byte 0x46, 0x8c                                                          ; FA4B57
+; ---------------------------------------------------------------------
+; OperandTable_FA4B59 -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4980: strings w=2 n<=16, cut to 0xFA4B5B [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B59:
+	.byte 0x47, 0x20                                                          ; FA4B59
+; ---------------------------------------------------------------------
+; OperandTable_FA4B5B -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA498F: strings w=2 n<=16, cut to 0xFA4B5D [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B5B:
+	.byte 0x41, 0x88                                                          ; FA4B5B
+; ---------------------------------------------------------------------
+; OperandTable_FA4B5D -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA499E: strings w=2 n<=16, cut to 0xFA4B5F [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B5D:
+	.byte 0x41, 0x20                                                          ; FA4B5D
+; ---------------------------------------------------------------------
+; OperandTable_FA4B5F -- 2 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA49AD: strings w=2 n<=16, cut to 0xFA4B61 [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B5F:
+	.byte 0x42, 0x88                                                          ; FA4B5F
+; ---------------------------------------------------------------------
+; OperandTable_FA4B61 -- 28 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA49BC: strings w=2 n<=16, cut to 0xFA4B7D [w=2 max=32]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B61:
+	.byte 0x42, 0x20, 0x43, 0x20, 0x44, 0x88, 0x44, 0x20, 0x45, 0x88, 0x45, 0x20, 0x46, 0x20, 0x46, 0x8c  ; FA4B61
+	.byte 0x47, 0x20, 0x41, 0x88, 0x41, 0x20, 0x42, 0x88, 0x42, 0x20, 0x4f, 0x46  ; FA4B71
+; ---------------------------------------------------------------------
+; OperandTable_FA4B7D -- 34 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4DC7: strings w=2 n<=32, cut to 0xFA4B9F [w=2 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4B7D:
+	.byte 0x2d, 0x32, 0x2d, 0x31, 0x20, 0x30, 0x20, 0x31, 0x20, 0x32, 0x20, 0x33, 0x20, 0x34, 0x20, 0x35  ; FA4B7D
+	.byte 0x20, 0x36, 0x20, 0x37, 0x20, 0x38, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20  ; FA4B8D
+	.byte 0x46, 0x20                                                          ; FA4B9D
+; ---------------------------------------------------------------------
+; DisplayList_FA4B9F -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4B9F:
+	.byte 0x03, 0x0b, 0x03, 0x27, 0x0f, 0x00, 0x05, 0xaa, 0x4b, 0xfa, 0x00    ; FA4B9F
+; ---------------------------------------------------------------------
+; OperandTable_FA4BAA -- 128 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA4B9F: 8-byte x16 max, cut to 0xFA4C2A [w=8 max=128]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4BAA:
+	.byte 0x67, 0x00, 0x2e, 0x00, 0x35, 0x01, 0x39, 0x00, 0x67, 0x00, 0x3b, 0x00, 0x35, 0x01, 0x46, 0x00  ; FA4BAA
+	.byte 0x67, 0x00, 0x48, 0x00, 0x35, 0x01, 0x53, 0x00, 0x67, 0x00, 0x55, 0x00, 0x35, 0x01, 0x60, 0x00  ; FA4BBA
+	.byte 0x67, 0x00, 0x62, 0x00, 0x35, 0x01, 0x6d, 0x00, 0x67, 0x00, 0x6f, 0x00, 0x35, 0x01, 0x7a, 0x00  ; FA4BCA
+	.byte 0x67, 0x00, 0x7c, 0x00, 0x35, 0x01, 0x87, 0x00, 0x67, 0x00, 0x89, 0x00, 0x35, 0x01, 0x94, 0x00  ; FA4BDA
+	.byte 0x67, 0x00, 0x96, 0x00, 0x35, 0x01, 0xa1, 0x00, 0x67, 0x00, 0xa3, 0x00, 0x35, 0x01, 0xae, 0x00  ; FA4BEA
+	.byte 0x67, 0x00, 0xb0, 0x00, 0x35, 0x01, 0xbb, 0x00, 0x67, 0x00, 0xbd, 0x00, 0x35, 0x01, 0xc8, 0x00  ; FA4BFA
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA4C0A
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA4C1A
+; ---------------------------------------------------------------------
+; DisplayList_FA4C2A -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4C2A:
+	.byte 0x1b, 0x0a, 0x67, 0x00, 0x2e, 0x00, 0x35, 0x01, 0xc8, 0x00          ; FA4C2A
+; ---------------------------------------------------------------------
+; DisplayList_FA4C34 -- 229 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4C34:
+	.byte 0x23, 0x05, 0x30, 0x36, 0x00, 0x1c, 0x0a, 0x8d, 0x00, 0x05, 0x00, 0x54, 0x45, 0x53, 0x54, 0x17  ; FA4C34
+	.byte 0x0c, 0x07, 0x00, 0x08, 0x00, 0x53, 0x59, 0x53, 0x54, 0x45, 0x4d, 0x20, 0x08, 0x7f, 0x05, 0x54  ; FA4C44
+	.byte 0x45, 0x53, 0x54, 0x20, 0x05, 0x8d, 0x05, 0x3a, 0x20, 0x08, 0x8f, 0x09, 0x4d, 0x4f, 0x44, 0x45  ; FA4C54
+	.byte 0x20, 0x05, 0x9d, 0x09, 0x3a, 0x20, 0x08, 0x5b, 0x0d, 0x4e, 0x4f, 0x54, 0x45, 0x20, 0x0c, 0x63  ; FA4C64
+	.byte 0x0d, 0x56, 0x45, 0x4c, 0x4f, 0x43, 0x49, 0x54, 0x59, 0x20, 0x07, 0xaf, 0x11, 0x31, 0x73, 0x74  ; FA4C74
+	.byte 0x20, 0x05, 0xb6, 0x11, 0x3a, 0x20, 0x07, 0xcf, 0x14, 0x32, 0x6e, 0x64, 0x20, 0x05, 0xd6, 0x14  ; FA4C84
+	.byte 0x3a, 0x20, 0x07, 0xef, 0x17, 0x33, 0x72, 0x64, 0x20, 0x05, 0xf6, 0x17, 0x3a, 0x20, 0x07, 0x0f  ; FA4C94
+	.byte 0x1b, 0x34, 0x74, 0x68, 0x20, 0x05, 0x16, 0x1b, 0x3a, 0x20, 0x08, 0x0f, 0x20, 0x49, 0x54, 0x45  ; FA4CA4
+	.byte 0x4d, 0x07, 0x05, 0xc9, 0x21, 0x8d, 0x07, 0x05, 0x59, 0x23, 0x8e, 0x0a, 0x0a, 0x14, 0x00, 0x1a  ; FA4CB4
+	.byte 0x00, 0x25, 0x01, 0xc2, 0x00, 0x0a, 0x0a, 0x05, 0x00, 0xda, 0x00, 0x92, 0x00, 0xec, 0x00, 0x09  ; FA4CC4
+	.byte 0x0a, 0x04, 0x00, 0x04, 0x00, 0x2e, 0x00, 0x12, 0x00, 0x01, 0x0a, 0x14, 0x00, 0x34, 0x00, 0x27  ; FA4CD4
+	.byte 0x01, 0x34, 0x00, 0x01, 0x0a, 0x14, 0x00, 0x36, 0x00, 0x27, 0x01, 0x36, 0x00, 0x01, 0x0a, 0x14  ; FA4CE4
+	.byte 0x00, 0x4c, 0x00, 0x27, 0x01, 0x4c, 0x00, 0x01, 0x0a, 0x14, 0x00, 0x4e, 0x00, 0x27, 0x01, 0x4e  ; FA4CF4
+	.byte 0x00, 0x01, 0x0a, 0x14, 0x00, 0x66, 0x00, 0x27, 0x01, 0x66, 0x00, 0x01, 0x0a, 0x05, 0x00, 0xe3  ; FA4D04
+	.byte 0x00, 0x94, 0x00, 0xe3, 0x00                                        ; FA4D14
+; ---------------------------------------------------------------------
+; DisplayList_FA4D19 -- 39 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4D19:
+	.byte 0x20, 0x09, 0x24, 0x20, 0x56, 0x41, 0x4c, 0x55, 0x45, 0x07, 0x05, 0xde, 0x21, 0x8d, 0x07, 0x05  ; FA4D19
+	.byte 0x6e, 0x23, 0x8e, 0x0a, 0x0a, 0xad, 0x00, 0xda, 0x00, 0x3a, 0x01, 0xec, 0x00, 0x01, 0x0a, 0xad  ; FA4D29
+	.byte 0x00, 0xe3, 0x00, 0x3c, 0x01, 0xe3, 0x00                            ; FA4D39
+; ---------------------------------------------------------------------
+; DisplayList_FA4D40 -- 80 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4D40:
+	.byte 0x20, 0x08, 0x1f, 0x20, 0x4e, 0x4f, 0x54, 0x45, 0x20, 0x0c, 0x28, 0x20, 0x56, 0x45, 0x4c, 0x4f  ; FA4D40
+	.byte 0x43, 0x49, 0x54, 0x59, 0x07, 0x05, 0xd9, 0x21, 0x8d, 0x07, 0x05, 0x69, 0x23, 0x8e, 0x07, 0x05  ; FA4D50
+	.byte 0xe3, 0x21, 0x8d, 0x07, 0x05, 0x73, 0x23, 0x8e, 0x0a, 0x0a, 0xb1, 0x00, 0xda, 0x00, 0xe7, 0x00  ; FA4D60
+	.byte 0xec, 0x00, 0x0a, 0x0a, 0x01, 0x01, 0xda, 0x00, 0x37, 0x01, 0xec, 0x00, 0x01, 0x0a, 0xb1, 0x00  ; FA4D70
+	.byte 0xe3, 0x00, 0xe9, 0x00, 0xe3, 0x00, 0x01, 0x0a, 0x01, 0x01, 0xe3, 0x00, 0x39, 0x01, 0xe3, 0x00  ; FA4D80
+; ---------------------------------------------------------------------
+; DisplayList_FA4D90 -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4D90:
+	.byte 0x1b, 0x0a, 0xad, 0x00, 0xcd, 0x00, 0x3f, 0x01, 0xef, 0x00          ; FA4D90
+; ---------------------------------------------------------------------
+; DisplayList_FA4D9A -- 190 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4D9A:
+	.byte 0x02, 0x0f, 0xa7, 0x26, 0x08, 0x03, 0x20, 0xe2, 0x44, 0xfa, 0x00, 0x03, 0x00, 0x90, 0x05, 0x02  ; FA4D9A
+	.byte 0x0f, 0xa7, 0x26, 0x10, 0x04, 0x20, 0x58, 0x4e, 0xfa, 0x00, 0x04, 0x00, 0xa0, 0x09, 0x02, 0x0f  ; FA4DAA
+	.byte 0x40, 0x29, 0x1f, 0x00, 0x20, 0x4b, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xbb, 0x11, 0x02, 0x0f, 0x50  ; FA4DBA
+	.byte 0x29, 0x1f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xbd, 0x11, 0x00, 0x0a, 0xa9, 0x26  ; FA4DCA
+	.byte 0x7f, 0x00, 0x20, 0xc6, 0x11, 0x03, 0x02, 0x0f, 0x41, 0x29, 0x1f, 0x00, 0x20, 0x4b, 0x4b, 0xfa  ; FA4DDA
+	.byte 0x00, 0x02, 0x00, 0xdb, 0x14, 0x02, 0x0f, 0x51, 0x29, 0x1f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00  ; FA4DEA
+	.byte 0x02, 0x00, 0xdd, 0x14, 0x00, 0x0a, 0xab, 0x26, 0x7f, 0x00, 0x20, 0xe6, 0x14, 0x03, 0x02, 0x0f  ; FA4DFA
+	.byte 0x42, 0x29, 0x1f, 0x00, 0x20, 0x4b, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xfb, 0x17, 0x02, 0x0f, 0x52  ; FA4E0A
+	.byte 0x29, 0x1f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00, 0x02, 0x00, 0xfd, 0x17, 0x00, 0x0a, 0xad, 0x26  ; FA4E1A
+	.byte 0x7f, 0x00, 0x20, 0x06, 0x18, 0x03, 0x02, 0x0f, 0x43, 0x29, 0x1f, 0x00, 0x20, 0x4b, 0x4b, 0xfa  ; FA4E2A
+	.byte 0x00, 0x02, 0x00, 0x1b, 0x1b, 0x02, 0x0f, 0x53, 0x29, 0x1f, 0x00, 0x20, 0x7d, 0x4b, 0xfa, 0x00  ; FA4E3A
+	.byte 0x02, 0x00, 0x1d, 0x1b, 0x00, 0x0a, 0xaf, 0x26, 0x7f, 0x00, 0x20, 0x26, 0x1b, 0x03  ; FA4E4A
+; ---------------------------------------------------------------------
+; OperandTable_FA4E58 -- 8 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B02 at 0xFA4DA9: strings w=4 n<=2, cut to 0xFA4E60 [w=4 max=8]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4E58:
+	.byte 0x4d, 0x4f, 0x4e, 0x4f, 0x50, 0x4f, 0x4c, 0x59                      ; FA4E58
+; ---------------------------------------------------------------------
+; DisplayList_FA4E60 -- 11 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4E60:
+	.byte 0x03, 0x0b, 0xa7, 0x26, 0x07, 0x00, 0x05, 0x6b, 0x4e, 0xfa, 0x00    ; FA4E60
+; ---------------------------------------------------------------------
+; OperandTable_FA4E6B -- 64 bytes, kind=operand_table
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): B03 at 0xFA4E60: 8-byte x8 max, cut to 0xFA4EAB [w=8 max=64]
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+OperandTable_FA4E6B:
+	.byte 0x15, 0x00, 0x22, 0x00, 0x24, 0x01, 0x2d, 0x00, 0x15, 0x00, 0x3c, 0x00, 0x24, 0x01, 0x47, 0x00  ; FA4E6B
+	.byte 0x15, 0x00, 0x70, 0x00, 0x24, 0x01, 0x7b, 0x00, 0x15, 0x00, 0x84, 0x00, 0x24, 0x01, 0x8f, 0x00  ; FA4E7B
+	.byte 0x15, 0x00, 0x98, 0x00, 0x24, 0x01, 0xa3, 0x00, 0x15, 0x00, 0xac, 0x00, 0x24, 0x01, 0xb7, 0x00  ; FA4E8B
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00  ; FA4E9B
+; ---------------------------------------------------------------------
+; DisplayList_FA4EAB -- 10 bytes, kind=display_list
+;
+; Boundary evidence (notes/prom_a_fa1404_identify.py, function solve(),
+; asserted by its own --selftest): call site
+; Coverage only: this round reproduces the bytes and states the object
+; TYPE the layout tool proved; it does not interpret the payload. See
+; notes/FINDINGS-prom_a-round3-modules.md §4 for the module overview
+; (SYSTEM menu: TUNE & SCALE, CONTROLLER ASSIGN, RE-MAP EDIT, MIXER, ...)
+; and notes/prom_a_fa1404_identify.py --fine for the full object list.
+; ---------------------------------------------------------------------
+DisplayList_FA4EAB:
+	.byte 0x1b, 0x0a, 0x15, 0x00, 0x22, 0x00, 0x24, 0x01, 0xb7, 0x00          ; FA4EAB
+	ldw (xbc+0x04), 0x4c98                               ; FA4EB5  b9 04 02 98 4c
+	jrl .LFA4FF4                                         ; FA4EBA  78 37 01
+	.byte 0xc1, 0x29, 0x22, 0x3f, 0x01                   ; FA4EBD  c1 29 22 3f 01   cp (0x2229),0x01
+	jrl nz, .LFA4FAA                                     ; FA4EC2  7e e5 00
+	ld XBC,0x00ec0000                                    ; FA4EC5  41 00 00 ec 00
+	ld (xiz-8), xbc                                      ; FA4ECA  be f8 61
+	ldb a, 0x10                                          ; FA4ECD  21 10
+	.byte 0xc1, 0x27, 0x27, 0x41                         ; FA4ECF  c1 27 27 41   mul WA,(0x2727)
+	extz XWA                                             ; FA4ED3  e8 12
+	add XWA,0x00000200                                   ; FA4ED5  e8 c8 00 02 00 00
+	add XBC,XWA                                          ; FA4EDB  e8 81
+	ld XWA,(XIZ+0x08)                                    ; FA4EDD  ae 08 20
+	ld (XWA),XBC                                         ; FA4EE0  b0 61
+	ldb c, 0x10                                          ; FA4EE2  23 10
+	.byte 0xc1, 0x37, 0x27, 0x43                         ; FA4EE4  c1 37 27 43   mul BC,(0x2737)
+	extz XBC                                             ; FA4EE8  e9 12
+	add XBC,0x00000200                                   ; FA4EEA  e9 c8 00 02 00 00
+	.byte 0xae, 0xf8, 0x81                               ; FA4EF0  ae f8 81   add XBC,(XIZ+0xf8)
+	ld XWA,(XIZ+0x08)                                    ; FA4EF3  ae 08 20
+	ld (XWA+0x06),XBC                                    ; FA4EF6  b8 06 61
+	ld XBC,(XIZ+0x08)                                    ; FA4EF9  ae 08 21
+	ldw (xbc+0x04), 0x10                                 ; FA4EFC  b9 04 02 10 00
+	ld XBC,0x0000000a                                    ; FA4F01  41 0a 00 00 00
+	add (XIZ+0x08),XBC                                   ; FA4F06  ae 08 89
+	ld XIX,0x00ec0300                                    ; FA4F09  44 00 03 ec 00
+	ldw_d16 wa, (0x2727)                                 ; FA4F0E  d1 27 27 20
+	extz WA                                              ; FA4F12  d8 12
+	mul WA,0x1600                                        ; FA4F14  d8 08 00 16
+	add XWA,XIX                                          ; FA4F18  ec 80
+	ld (xiz-4), xwa                                      ; FA4F1A  be fc 60
+	.byte 0xc1, 0x37, 0x27, 0x3f, 0x0b                   ; FA4F1D  c1 37 27 3f 0b   cp (0x2737),0x0b
+	jr z, .LFA4F46                                       ; FA4F22  66 22
+	ld XIY,(XIZ+0x08)                                    ; FA4F24  ae 08 25
+	ld (XIY),XWA                                         ; FA4F27  b5 60
+	ldw_d16 bc, (0x2737)                                 ; FA4F29  d1 37 27 21
+	extz BC                                              ; FA4F2D  d9 12
+	mul BC,0x1600                                        ; FA4F2F  d9 08 00 16
+	add XBC,XIX                                          ; FA4F33  ec 81
+	ld XWA,(XIZ+0x08)                                    ; FA4F35  ae 08 20
+	ld (XWA+0x06),XBC                                    ; FA4F38  b8 06 61
+	ld XBC,(XIZ+0x08)                                    ; FA4F3B  ae 08 21
+	ldw (xbc+0x04), 0x1600                               ; FA4F3E  b9 04 02 00 16
+	jrl .LFA4FF4                                         ; FA4F43  78 ae 00
+.LFA4F46:
+	ld XBC,(XIZ+0x08)                                    ; FA4F46  ae 08 21
+	ld xwa, (xiz-4)                                      ; FA4F49  ae fc 20
+	ld (XBC),XWA                                         ; FA4F4C  b1 60
+	ldw_d16 bc, (0x2737)                                 ; FA4F4E  d1 37 27 21
+	extz BC                                              ; FA4F52  d9 12
+	mul BC,0x1600                                        ; FA4F54  d9 08 00 16
+	add XBC,XIX                                          ; FA4F58  ec 81
+	ld XWA,(XIZ+0x08)                                    ; FA4F5A  ae 08 20
+	ld (XWA+0x06),XBC                                    ; FA4F5D  b8 06 61
+	ld XBC,(XIZ+0x08)                                    ; FA4F60  ae 08 21
+	ldw (xbc+0x04), 0x0b00                               ; FA4F63  b9 04 02 00 0b
+	ld XBC,(XIZ+0x08)                                    ; FA4F68  ae 08 21
+	add XBC,0x0000000a                                   ; FA4F6B  e9 c8 0a 00 00 00
+	ld (xiz-8), xbc                                      ; FA4F71  be f8 61
+	ldw_d16 wa, (0x2727)                                 ; FA4F74  d1 27 27 20
+	extz WA                                              ; FA4F78  d8 12
+	mul WA,0x1600                                        ; FA4F7A  d8 08 00 16
+	add XWA,0x00000b00                                   ; FA4F7E  e8 c8 00 0b 00 00
+	add XWA,XIX                                          ; FA4F84  ec 80
+	ld (XBC),XWA                                         ; FA4F86  b1 60
+	ldw_d16 bc, (0x2737)                                 ; FA4F88  d1 37 27 21
+	extz BC                                              ; FA4F8C  d9 12
+	mul BC,0x1600                                        ; FA4F8E  d9 08 00 16
+	add XBC,0x00000b00                                   ; FA4F92  e9 c8 00 0b 00 00
+	add XBC,XIX                                          ; FA4F98  ec 81
+	ld xwa, (xiz-8)                                      ; FA4F9A  ae f8 20
+	ld (XWA+0x06),XBC                                    ; FA4F9D  b8 06 61
+	ld xbc, (xiz-8)                                      ; FA4FA0  ae f8 21
+	ldw (xbc+0x04), 0x0b00                               ; FA4FA3  b9 04 02 00 0b
+	jr .LFA4FF4                                          ; FA4FA8  68 4a
+.LFA4FAA:
+	ld XIX,0x00ec0300                                    ; FA4FAA  44 00 03 ec 00
+	ld C,D                                               ; FA4FAF  cc 8b
+	extz BC                                              ; FA4FB1  d9 12
+	mul BC,0x02c0                                        ; FA4FB3  d9 08 c0 02
+	ld (xiz-8), xbc                                      ; FA4FB7  be f8 61
+	ld A,L                                               ; FA4FBA  cf 89
+	extz WA                                              ; FA4FBC  d8 12
+	mul WA,0x1600                                        ; FA4FBE  d8 08 00 16
+	add XWA,XBC                                          ; FA4FC2  e9 80
+	add XWA,XIX                                          ; FA4FC4  ec 80
+	ld XBC,(XIZ+0x08)                                    ; FA4FC6  ae 08 21
+	ld (XBC),XWA                                         ; FA4FC9  b1 60
+	ldw_d16 bc, (0x2738)                                 ; FA4FCB  d1 38 27 21
+	extz BC                                              ; FA4FCF  d9 12
+	mul BC,0x02c0                                        ; FA4FD1  d9 08 c0 02
+	ld (xiz-12), xbc                                     ; FA4FD5  be f4 61
+	ldw_d16 wa, (0x2737)                                 ; FA4FD8  d1 37 27 20
+	extz WA                                              ; FA4FDC  d8 12
+	mul WA,0x1600                                        ; FA4FDE  d8 08 00 16
+	add XWA,XBC                                          ; FA4FE2  e9 80
+	add XWA,XIX                                          ; FA4FE4  ec 80
+	ld XBC,(XIZ+0x08)                                    ; FA4FE6  ae 08 21
+	ld (XBC+0x06),XWA                                    ; FA4FE9  b9 06 60
+	ld XBC,(XIZ+0x08)                                    ; FA4FEC  ae 08 21
+	ldw (xbc+0x04), 0x02c0                               ; FA4FEF  b9 04 02 c0 02
+.LFA4FF4:
+	pop XIX                                              ; FA4FF4  5c
+	popw de                                              ; FA4FF5  4a
+	popw hl                                              ; FA4FF6  4b
+	unlk XIZ                                             ; FA4FF7  ee 0d
+	ret                                                  ; FA4FF9  0e
+	link XIZ,0x0000                                      ; FA4FFA  ee 0c 00 00
+	pushw hl                                             ; FA4FFE  2b
+	push XIX                                             ; FA4FFF  3c
+	ld H,(XIZ+0x0a)                                      ; FA5000  8e 0a 26
+	ld BC,(XIZ+0x08)                                     ; FA5003  9e 08 21
+	extz BC                                              ; FA5006  d9 12
+	cps bc, 0x00                                         ; FA5008  d9 d8
+	jr z, .LFA501C                                       ; FA500A  66 10
+	cps bc, 0x01                                         ; FA500C  d9 d9
+	jr z, .LFA5065                                       ; FA500E  66 55
+	cps bc, 0x02                                         ; FA5010  d9 da
+	jr z, .LFA5056                                       ; FA5012  66 42
+	cps bc, 0x03                                         ; FA5014  d9 db
+	jrl z, .LFA509E                                      ; FA5016  76 85 00
+	jrl .LFA50AD                                         ; FA5019  78 91 00
+.LFA501C:
+	cp H,0x08                                            ; FA501C  ce cf 08
+	jr nc, .LFA503B                                      ; FA501F  6f 1a
+	ld XIX,0x00e80000                                    ; FA5021  44 00 00 e8 00
+	ld C,H                                               ; FA5026  ce 8b
+	extz BC                                              ; FA5028  d9 12
+	mul BC,0x1648                                        ; FA502A  d9 08 48 16
+	add XBC,0x00000090                                   ; FA502E  e9 c8 90 00 00 00
+	add XBC,XIX                                          ; FA5034  ec 81
+	ld XIY,XBC                                           ; FA5036  e9 8d
+	jrl .LFA50B3                                         ; FA5038  78 78 00
+.LFA503B:
+	ld XIX,0x00e90000                                    ; FA503B  44 00 00 e9 00
+	ld C,H                                               ; FA5040  ce 8b
+	extz BC                                              ; FA5042  d9 12
+	dec 0,BC                                             ; FA5044  d9 68
+	mul BC,0x1648                                        ; FA5046  d9 08 48 16
+	add XBC,0x00000090                                   ; FA504A  e9 c8 90 00 00 00
+	add XBC,XIX                                          ; FA5050  ec 81
+	ld XIY,XBC                                           ; FA5052  e9 8d
+	jr .LFA50B3                                          ; FA5054  68 5d
+.LFA5056:
+	ld XBC,0x00e80000                                    ; FA5056  41 00 00 e8 00
+	add XBC,0x0000b2d0                                   ; FA505B  e9 c8 d0 b2 00 00
+	ld XIY,XBC                                           ; FA5061  e9 8d
+	jr .LFA50B3                                          ; FA5063  68 4e
+.LFA5065:
+	cp H,0x08                                            ; FA5065  ce cf 08
+	jr nc, .LFA5083                                      ; FA5068  6f 19
+	ld XIX,0x00ea0000                                    ; FA506A  44 00 00 ea 00
+	ld C,H                                               ; FA506F  ce 8b
+	extz BC                                              ; FA5071  d9 12
+	mul BC,0x1648                                        ; FA5073  d9 08 48 16
+	add XBC,0x00000090                                   ; FA5077  e9 c8 90 00 00 00
+	add XBC,XIX                                          ; FA507D  ec 81
+	ld XIY,XBC                                           ; FA507F  e9 8d
+	jr .LFA50B3                                          ; FA5081  68 30
+.LFA5083:
+	ld XIX,0x00eb0000                                    ; FA5083  44 00 00 eb 00
+	ld C,H                                               ; FA5088  ce 8b
+	extz BC                                              ; FA508A  d9 12
+	dec 0,BC                                             ; FA508C  d9 68
+	mul BC,0x1648                                        ; FA508E  d9 08 48 16
+	add XBC,0x00000090                                   ; FA5092  e9 c8 90 00 00 00
+	add XBC,XIX                                          ; FA5098  ec 81
+	ld XIY,XBC                                           ; FA509A  e9 8d
+	jr .LFA50B3                                          ; FA509C  68 15
+.LFA509E:
+	ld XBC,0x00ea0000                                    ; FA509E  41 00 00 ea 00
+	add XBC,0x0000b2d0                                   ; FA50A3  e9 c8 d0 b2 00 00
+	ld XIY,XBC                                           ; FA50A9  e9 8d
+	jr .LFA50B3                                          ; FA50AB  68 06
+.LFA50AD:
+	sub XBC,XBC                                          ; FA50AD  e9 a1
+	dec 1,XBC                                            ; FA50AF  e9 69
+	ld XIY,XBC                                           ; FA50B1  e9 8d
+.LFA50B3:
+	pop XIX                                              ; FA50B3  5c
+	popw hl                                              ; FA50B4  4b
+	unlk XIZ                                             ; FA50B5  ee 0d
+	ret                                                  ; FA50B7  0e
+	ld XIY,XBC                                           ; FA50B8  e9 8d
+	pop XIX                                              ; FA50BA  5c
+	popw hl                                              ; FA50BB  4b
+	unlk XIZ                                             ; FA50BC  ee 0d
+	ret                                                  ; FA50BE  0e
+	calr sub_FA528D                                      ; FA50BF  1e cb 01
+	ld XIX,XIY                                           ; FA50C2  ed 8c
+	ld C,D                                               ; FA50C4  cc 8b
+	extz BC                                              ; FA50C6  d9 12
+	mul BC,0x02c9                                        ; FA50C8  d9 08 c9 02
+	add XIY,XBC                                          ; FA50CC  e9 85
+	ld XBC,(XIZ+0x08)                                    ; FA50CE  ae 08 21
+	ld (XBC),XIY                                         ; FA50D1  b1 65
+	push 0x00                                            ; FA50D3  09 00
+	.byte 0xc1, 0x37, 0x27, 0x04                         ; FA50D5  c1 37 27 04   push (0x2737)
+	push 0x00                                            ; FA50D9  09 00
+	.byte 0xc1, 0x36, 0x27, 0x04                         ; FA50DB  c1 36 27 04   push (0x2736)
+	calr sub_FA528D                                      ; FA50DF  1e ab 01
+	ld XIX,XIY                                           ; FA50E2  ed 8c
+	ldw_d16 bc, (0x2738)                                 ; FA50E4  d1 38 27 21
+	extz BC                                              ; FA50E8  d9 12
+	mul BC,0x02c9                                        ; FA50EA  d9 08 c9 02
+	add XIY,XBC                                          ; FA50EE  e9 85
+	ld XBC,(XIZ+0x08)                                    ; FA50F0  ae 08 21
+	ld (XBC+0x06),XIY                                    ; FA50F3  b9 06 65
+	ld XBC,(XIZ+0x08)                                    ; FA50F6  ae 08 21
+	ldw (xbc+0x04), 0x02c9                               ; FA50F9  b9 04 02 c9 02
+	inc 0,XSP                                            ; FA50FE  ef 60
+	jrl .LFA5287                                         ; FA5100  78 84 01
+	pushw hl                                             ; FA5103  2b
+	push 0x00                                            ; FA5104  09 00
+	.byte 0xc1, 0x28, 0x27, 0x04                         ; FA5106  c1 28 27 04   push (0x2728)
+	calr sub_FA528D                                      ; FA510A  1e 80 01
+	ld XIX,XIY                                           ; FA510D  ed 8c
+	ld C,D                                               ; FA510F  cc 8b
+	extz BC                                              ; FA5111  d9 12
+	extz XBC                                             ; FA5113  e9 12
+	sll xbc, 0x00                                        ; FA5115  e9 ee 00
+	add XIY,XBC                                          ; FA5118  e9 85
+	ld XBC,(XIZ+0x08)                                    ; FA511A  ae 08 21
+	ld (XBC),XIY                                         ; FA511D  b1 65
+	push 0x00                                            ; FA511F  09 00
+	.byte 0xc1, 0x37, 0x27, 0x04                         ; FA5121  c1 37 27 04   push (0x2737)
+	push 0x00                                            ; FA5125  09 00
+	.byte 0xc1, 0x36, 0x27, 0x04                         ; FA5127  c1 36 27 04   push (0x2736)
+	calr sub_FA528D                                      ; FA512B  1e 5f 01
+	ld XIX,XIY                                           ; FA512E  ed 8c
+	ldw_d16 bc, (0x2738)                                 ; FA5130  d1 38 27 21
+	extz BC                                              ; FA5134  d9 12
+	extz XBC                                             ; FA5136  e9 12
+	sll xbc, 0x00                                        ; FA5138  e9 ee 00
+	add XIY,XBC                                          ; FA513B  e9 85
+	ld XBC,(XIZ+0x08)                                    ; FA513D  ae 08 21
+	ld (XBC+0x06),XIY                                    ; FA5140  b9 06 65
+	inc 0,XSP                                            ; FA5143  ef 60
+	ld XBC,(XIZ+0x08)                                    ; FA5145  ae 08 21
+	ldw (xbc+0x04), 0x4c98                               ; FA5148  b9 04 02 98 4c
+	jrl .LFA5287                                         ; FA514D  78 37 01
+	.byte 0xc1, 0x29, 0x22, 0x3f, 0x01                   ; FA5150  c1 29 22 3f 01   cp (0x2229),0x01
+	jrl nz, .LFA523D                                     ; FA5155  7e e5 00
+	ld XBC,0x00ec0000                                    ; FA5158  41 00 00 ec 00
+	ld (xiz-8), xbc                                      ; FA515D  be f8 61
+	ldb a, 0x10                                          ; FA5160  21 10
+	.byte 0xc1, 0x27, 0x27, 0x41                         ; FA5162  c1 27 27 41   mul WA,(0x2727)
+	extz XWA                                             ; FA5166  e8 12
+	add XWA,0x00000200                                   ; FA5168  e8 c8 00 02 00 00
+	add XBC,XWA                                          ; FA516E  e8 81
+	ld XWA,(XIZ+0x08)                                    ; FA5170  ae 08 20
+	ld (XWA),XBC                                         ; FA5173  b0 61
+	ldb c, 0x10                                          ; FA5175  23 10
+	.byte 0xc1, 0x37, 0x27, 0x43                         ; FA5177  c1 37 27 43   mul BC,(0x2737)
+	extz XBC                                             ; FA517B  e9 12
+	add XBC,0x00000200                                   ; FA517D  e9 c8 00 02 00 00
+	.byte 0xae, 0xf8, 0x81                               ; FA5183  ae f8 81   add XBC,(XIZ+0xf8)
+	ld XWA,(XIZ+0x08)                                    ; FA5186  ae 08 20
+	ld (XWA+0x06),XBC                                    ; FA5189  b8 06 61
+	ld XBC,(XIZ+0x08)                                    ; FA518C  ae 08 21
+	ldw (xbc+0x04), 0x10                                 ; FA518F  b9 04 02 10 00
+	ld XBC,0x0000000a                                    ; FA5194  41 0a 00 00 00
+	add (XIZ+0x08),XBC                                   ; FA5199  ae 08 89
+	ld XIX,0x00ec0300                                    ; FA519C  44 00 03 ec 00
+	ldw_d16 wa, (0x2727)                                 ; FA51A1  d1 27 27 20
+	extz WA                                              ; FA51A5  d8 12
+	mul WA,0x1600                                        ; FA51A7  d8 08 00 16
+	add XWA,XIX                                          ; FA51AB  ec 80
+	ld (xiz-4), xwa                                      ; FA51AD  be fc 60
+	.byte 0xc1, 0x37, 0x27, 0x3f, 0x0b                   ; FA51B0  c1 37 27 3f 0b   cp (0x2737),0x0b
+	jr z, .LFA51D9                                       ; FA51B5  66 22
+	ld XIY,(XIZ+0x08)                                    ; FA51B7  ae 08 25
+	ld (XIY),XWA                                         ; FA51BA  b5 60
+	ldw_d16 bc, (0x2737)                                 ; FA51BC  d1 37 27 21
+	extz BC                                              ; FA51C0  d9 12
+	mul BC,0x1600                                        ; FA51C2  d9 08 00 16
+	add XBC,XIX                                          ; FA51C6  ec 81
+	ld XWA,(XIZ+0x08)                                    ; FA51C8  ae 08 20
+	ld (XWA+0x06),XBC                                    ; FA51CB  b8 06 61
+	ld XBC,(XIZ+0x08)                                    ; FA51CE  ae 08 21
+	ldw (xbc+0x04), 0x1600                               ; FA51D1  b9 04 02 00 16
+	jrl .LFA5287                                         ; FA51D6  78 ae 00
+.LFA51D9:
+	ld XBC,(XIZ+0x08)                                    ; FA51D9  ae 08 21
+	ld xwa, (xiz-4)                                      ; FA51DC  ae fc 20
+	ld (XBC),XWA                                         ; FA51DF  b1 60
+	ldw_d16 bc, (0x2737)                                 ; FA51E1  d1 37 27 21
+	extz BC                                              ; FA51E5  d9 12
+	mul BC,0x1600                                        ; FA51E7  d9 08 00 16
+	add XBC,XIX                                          ; FA51EB  ec 81
+	ld XWA,(XIZ+0x08)                                    ; FA51ED  ae 08 20
+	ld (XWA+0x06),XBC                                    ; FA51F0  b8 06 61
+	ld XBC,(XIZ+0x08)                                    ; FA51F3  ae 08 21
+	ldw (xbc+0x04), 0x0b00                               ; FA51F6  b9 04 02 00 0b
+	ld XBC,(XIZ+0x08)                                    ; FA51FB  ae 08 21
+	add XBC,0x0000000a                                   ; FA51FE  e9 c8 0a 00 00 00
+	ld (xiz-8), xbc                                      ; FA5204  be f8 61
+	ldw_d16 wa, (0x2727)                                 ; FA5207  d1 27 27 20
+	extz WA                                              ; FA520B  d8 12
+	mul WA,0x1600                                        ; FA520D  d8 08 00 16
+	add XWA,0x00000b00                                   ; FA5211  e8 c8 00 0b 00 00
+	add XWA,XIX                                          ; FA5217  ec 80
+	ld (XBC),XWA                                         ; FA5219  b1 60
+	ldw_d16 bc, (0x2737)                                 ; FA521B  d1 37 27 21
+	extz BC                                              ; FA521F  d9 12
+	mul BC,0x1600                                        ; FA5221  d9 08 00 16
+	add XBC,0x00000b00                                   ; FA5225  e9 c8 00 0b 00 00
+	add XBC,XIX                                          ; FA522B  ec 81
+	ld xwa, (xiz-8)                                      ; FA522D  ae f8 20
+	ld (XWA+0x06),XBC                                    ; FA5230  b8 06 61
+	ld xbc, (xiz-8)                                      ; FA5233  ae f8 21
+	ldw (xbc+0x04), 0x0b00                               ; FA5236  b9 04 02 00 0b
+	jr .LFA5287                                          ; FA523B  68 4a
+.LFA523D:
+	ld XIX,0x00ec0300                                    ; FA523D  44 00 03 ec 00
+	ld C,D                                               ; FA5242  cc 8b
+	extz BC                                              ; FA5244  d9 12
+	mul BC,0x02c0                                        ; FA5246  d9 08 c0 02
+	ld (xiz-8), xbc                                      ; FA524A  be f8 61
+	ld A,L                                               ; FA524D  cf 89
+	extz WA                                              ; FA524F  d8 12
+	mul WA,0x1600                                        ; FA5251  d8 08 00 16
+	add XWA,XBC                                          ; FA5255  e9 80
+	add XWA,XIX                                          ; FA5257  ec 80
+	ld XBC,(XIZ+0x08)                                    ; FA5259  ae 08 21
+	ld (XBC),XWA                                         ; FA525C  b1 60
+	ldw_d16 bc, (0x2738)                                 ; FA525E  d1 38 27 21
+	extz BC                                              ; FA5262  d9 12
+	mul BC,0x02c0                                        ; FA5264  d9 08 c0 02
+	ld (xiz-12), xbc                                     ; FA5268  be f4 61
+	ldw_d16 wa, (0x2737)                                 ; FA526B  d1 37 27 20
+	extz WA                                              ; FA526F  d8 12
+	mul WA,0x1600                                        ; FA5271  d8 08 00 16
+	add XWA,XBC                                          ; FA5275  e9 80
+	add XWA,XIX                                          ; FA5277  ec 80
+	ld XBC,(XIZ+0x08)                                    ; FA5279  ae 08 21
+	ld (XBC+0x06),XWA                                    ; FA527C  b9 06 60
+	ld XBC,(XIZ+0x08)                                    ; FA527F  ae 08 21
+	ldw (xbc+0x04), 0x02c0                               ; FA5282  b9 04 02 c0 02
+.LFA5287:
+	pop XIX                                              ; FA5287  5c
+	popw de                                              ; FA5288  4a
+	popw hl                                              ; FA5289  4b
+	unlk XIZ                                             ; FA528A  ee 0d
+	ret                                                  ; FA528C  0e
+sub_FA528D:
+	link XIZ,0x0000                                      ; FA528D  ee 0c 00 00
+	pushw hl                                             ; FA5291  2b
+	push XIX                                             ; FA5292  3c
+	ld H,(XIZ+0x0a)                                      ; FA5293  8e 0a 26
+	ld BC,(XIZ+0x08)                                     ; FA5296  9e 08 21
+	extz BC                                              ; FA5299  d9 12
+	cps bc, 0x00                                         ; FA529B  d9 d8
+	jr z, .LFA52AF                                       ; FA529D  66 10
+	cps bc, 0x01                                         ; FA529F  d9 d9
+	jr z, .LFA52F8                                       ; FA52A1  66 55
+	cps bc, 0x02                                         ; FA52A3  d9 da
+	jr z, .LFA52E9                                       ; FA52A5  66 42
+	cps bc, 0x03                                         ; FA52A7  d9 db
+	jrl z, .LFA5331                                      ; FA52A9  76 85 00
+	jrl .LFA5340                                         ; FA52AC  78 91 00
+.LFA52AF:
+	cp H,0x08                                            ; FA52AF  ce cf 08
+	jr nc, .LFA52CE                                      ; FA52B2  6f 1a
+	ld XIX,0x00e80000                                    ; FA52B4  44 00 00 e8 00
+	ld C,H                                               ; FA52B9  ce 8b
+	extz BC                                              ; FA52BB  d9 12
+	mul BC,0x1648                                        ; FA52BD  d9 08 48 16
+	add XBC,0x00000090                                   ; FA52C1  e9 c8 90 00 00 00
+	add XBC,XIX                                          ; FA52C7  ec 81
+	ld XIY,XBC                                           ; FA52C9  e9 8d
+	jrl .LFA5346                                         ; FA52CB  78 78 00
+.LFA52CE:
+	ld XIX,0x00e90000                                    ; FA52CE  44 00 00 e9 00
+	ld C,H                                               ; FA52D3  ce 8b
+	extz BC                                              ; FA52D5  d9 12
+	dec 0,BC                                             ; FA52D7  d9 68
+	mul BC,0x1648                                        ; FA52D9  d9 08 48 16
+	add XBC,0x00000090                                   ; FA52DD  e9 c8 90 00 00 00
+	add XBC,XIX                                          ; FA52E3  ec 81
+	ld XIY,XBC                                           ; FA52E5  e9 8d
+	jr .LFA5346                                          ; FA52E7  68 5d
+.LFA52E9:
+	ld XBC,0x00e80000                                    ; FA52E9  41 00 00 e8 00
+	add XBC,0x0000b2d0                                   ; FA52EE  e9 c8 d0 b2 00 00
+	ld XIY,XBC                                           ; FA52F4  e9 8d
+	jr .LFA5346                                          ; FA52F6  68 4e
+.LFA52F8:
+	cp H,0x08                                            ; FA52F8  ce cf 08
+	jr nc, .LFA5316                                      ; FA52FB  6f 19
+	ld XIX,0x00ea0000                                    ; FA52FD  44 00 00 ea 00
+	ld C,H                                               ; FA5302  ce 8b
+	extz BC                                              ; FA5304  d9 12
+	mul BC,0x1648                                        ; FA5306  d9 08 48 16
+	add XBC,0x00000090                                   ; FA530A  e9 c8 90 00 00 00
+	add XBC,XIX                                          ; FA5310  ec 81
+	ld XIY,XBC                                           ; FA5312  e9 8d
+	jr .LFA5346                                          ; FA5314  68 30
+.LFA5316:
+	ld XIX,0x00eb0000                                    ; FA5316  44 00 00 eb 00
+	ld C,H                                               ; FA531B  ce 8b
+	extz BC                                              ; FA531D  d9 12
+	dec 0,BC                                             ; FA531F  d9 68
+	mul BC,0x1648                                        ; FA5321  d9 08 48 16
+	add XBC,0x00000090                                   ; FA5325  e9 c8 90 00 00 00
+	add XBC,XIX                                          ; FA532B  ec 81
+	ld XIY,XBC                                           ; FA532D  e9 8d
+	jr .LFA5346                                          ; FA532F  68 15
+.LFA5331:
+	ld XBC,0x00ea0000                                    ; FA5331  41 00 00 ea 00
+	add XBC,0x0000b2d0                                   ; FA5336  e9 c8 d0 b2 00 00
+	ld XIY,XBC                                           ; FA533C  e9 8d
+	jr .LFA5346                                          ; FA533E  68 06
+.LFA5340:
+	sub XBC,XBC                                          ; FA5340  e9 a1
+	dec 1,XBC                                            ; FA5342  e9 69
+	ld XIY,XBC                                           ; FA5344  e9 8d
+.LFA5346:
+	pop XIX                                              ; FA5346  5c
+	popw hl                                              ; FA5347  4b
+	unlk XIZ                                             ; FA5348  ee 0d
+	ret                                                  ; FA534A  0e
+	ld XIY,XBC                                           ; FA534B  e9 8d
+	jr .LFA5364                                          ; FA534D  68 15
+	ld XBC,0x00ea0000                                    ; FA534F  41 00 00 ea 00
+	add XBC,0x0000b2d0                                   ; FA5354  e9 c8 d0 b2 00 00
+	ld XIY,XBC                                           ; FA535A  e9 8d
+	jr .LFA5364                                          ; FA535C  68 06
+	sub XBC,XBC                                          ; FA535E  e9 a1
+	dec 1,XBC                                            ; FA5360  e9 69
+	ld XIY,XBC                                           ; FA5362  e9 8d
+.LFA5364:
+	pop XIX                                              ; FA5364  5c
+	popw hl                                              ; FA5365  4b
+	unlk XIZ                                             ; FA5366  ee 0d
+	ret                                                  ; FA5368  0e
+
+; 0xFA5369-0xFA53FF -- 151 bytes of 0x0E (RET), module padding.
+; Checked byte by byte, not sampled: notes/gen_prom_a_block.py refuses to
+; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
+	.fill 151, 1, 0x0E
 
 ; ==============================================================================
 ; 0xFA5400-0xFA5417 -- the MIDI module's entry-thunk table
