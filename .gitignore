@@ -54,6 +54,10 @@ custom_data/includes/section_*.bin
 # `python3 scripts/analysis/v10_data_as_code_census.py --census --fresh`
 notes/v10-data-as-code/cache.pkl
 
+# v10dac2_line_probe.py's address->(file,line) map (lane V10DAC2, 2026-09-02):
+# regenerable in ~10s by `python3 scripts/analysis/v10dac2_line_probe.py --build`
+notes/v10-data-as-code/line_probe_cache.json
+
 # v9_v10_undisassembled_census.py scratch work directory (a full v7/v9/v10
 # copy plus rebuilt ROMs/ELFs/pickles -- several hundred MB, regenerate with
 # --prepare, never commit)

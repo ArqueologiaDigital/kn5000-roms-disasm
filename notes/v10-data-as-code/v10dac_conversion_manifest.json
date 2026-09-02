@@ -1679,128 +1679,6 @@
     16873,
     16885
    ]
-  }
- ],
- "excluded": [
-  {
-   "addr_lo": "0xED11EE",
-   "addr_hi": "0xED1226",
-   "size": 56,
-   "loc": "CtrlAssignStr_Off+18",
-   "per": "100",
-   "dist": "4",
-   "ascii": "75",
-   "reason": "20 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xED1552",
-   "addr_hi": "0xED1582",
-   "size": 48,
-   "loc": "FadeTimeStr_Off+8",
-   "per": "100",
-   "dist": "4",
-   "ascii": "75",
-   "reason": "20 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xED1CBF",
-   "addr_hi": "0xED1CD2",
-   "size": 19,
-   "loc": "KeyScaleNoteStr_G_0x18+37",
-   "per": "67",
-   "dist": "9",
-   "ascii": "32",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xED37EF",
-   "addr_hi": "0xED380A",
-   "size": 27,
-   "loc": "NakaInst_MainVariSet+935",
-   "per": "100",
-   "dist": "12",
-   "ascii": "52",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xED382F",
-   "addr_hi": "0xED384A",
-   "size": 27,
-   "loc": "NakaInst_MainVariSet+999",
-   "per": "100",
-   "dist": "14",
-   "ascii": "48",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xED39D7",
-   "addr_hi": "0xED39F2",
-   "size": 27,
-   "loc": "NakaInst_MainVariSet+1423",
-   "per": "100",
-   "dist": "12",
-   "ascii": "70",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xED3A13",
-   "addr_hi": "0xED3A32",
-   "size": 31,
-   "loc": "NakaInst_MainVariSet+1483",
-   "per": "100",
-   "dist": "15",
-   "ascii": "65",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xED3A37",
-   "addr_hi": "0xED3A52",
-   "size": 27,
-   "loc": "NakaInst_MainVariSet+1519",
-   "per": "100",
-   "dist": "13",
-   "ascii": "59",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xED3A77",
-   "addr_hi": "0xED3A92",
-   "size": 27,
-   "loc": "NakaInst_MainVariSet+1583",
-   "per": "100",
-   "dist": "13",
-   "ascii": "59",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xEDA675",
-   "addr_hi": "0xEDA68D",
-   "size": 24,
-   "loc": "Protocol_values_for_LED_rows_0x56+9",
-   "per": "100",
-   "dist": "6",
-   "ascii": "88",
-   "reason": "8 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xEDA696",
-   "addr_hi": "0xEDA6AE",
-   "size": 24,
-   "loc": "Protocol_values_for_LED_rows_0x56+42",
-   "per": "100",
-   "dist": "6",
-   "ascii": "88",
-   "reason": "8 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xEDA6B7",
-   "addr_hi": "0xEDA6CF",
-   "size": 24,
-   "loc": "Protocol_values_for_LED_rows_0x56+75",
-   "per": "100",
-   "dist": "6",
-   "ascii": "88",
-   "reason": "8 matches (no unique context)"
   },
   {
    "addr_lo": "0xEDA6D8",
@@ -1810,8 +1688,1140 @@
    "per": "100",
    "dist": "11",
    "ascii": "81",
-   "reason": "8 matches (no unique context)"
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3961,
+    3981
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
   },
+  {
+   "addr_lo": "0xEDA6B7",
+   "addr_hi": "0xEDA6CF",
+   "size": 24,
+   "loc": "Protocol_values_for_LED_rows_0x56+75",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3935,
+    3951
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xEDA696",
+   "addr_hi": "0xEDA6AE",
+   "size": 24,
+   "loc": "Protocol_values_for_LED_rows_0x56+42",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3909,
+    3925
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xEDA675",
+   "addr_hi": "0xEDA68D",
+   "size": 24,
+   "loc": "Protocol_values_for_LED_rows_0x56+9",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    3883,
+    3899
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xED3A77",
+   "addr_hi": "0xED3A92",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+1583",
+   "per": "100",
+   "dist": "13",
+   "ascii": "59",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2919,
+    2940
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xED3A37",
+   "addr_hi": "0xED3A52",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+1519",
+   "per": "100",
+   "dist": "13",
+   "ascii": "59",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2877,
+    2898
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xED3A13",
+   "addr_hi": "0xED3A32",
+   "size": 31,
+   "loc": "NakaInst_MainVariSet+1483",
+   "per": "100",
+   "dist": "15",
+   "ascii": "65",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2848,
+    2871
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xED39D7",
+   "addr_hi": "0xED39F2",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+1423",
+   "per": "100",
+   "dist": "12",
+   "ascii": "70",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2810,
+    2831
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xED382F",
+   "addr_hi": "0xED384A",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+999",
+   "per": "100",
+   "dist": "14",
+   "ascii": "48",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2529,
+    2548
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xED37EF",
+   "addr_hi": "0xED380A",
+   "size": 27,
+   "loc": "NakaInst_MainVariSet+935",
+   "per": "100",
+   "dist": "12",
+   "ascii": "52",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    2478,
+    2497
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xED1552",
+   "addr_hi": "0xED1582",
+   "size": 48,
+   "loc": "FadeTimeStr_Off+8",
+   "per": "100",
+   "dist": "4",
+   "ascii": "75",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    1083,
+    1118
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xED11EE",
+   "addr_hi": "0xED1226",
+   "size": 56,
+   "loc": "CtrlAssignStr_Off+18",
+   "per": "100",
+   "dist": "4",
+   "ascii": "75",
+   "file": "extensions/extension_data.s",
+   "lines_0indexed": [
+    872,
+    913
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF14388",
+   "addr_hi": "0xF143A5",
+   "size": 29,
+   "loc": "TuningSystem_Handler_Table_0xE1F+290",
+   "per": "100",
+   "dist": "9",
+   "ascii": "72",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    16199,
+    16215
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF140D1",
+   "addr_hi": "0xF140E1",
+   "size": 16,
+   "loc": "TuningSystem_Handler_Table_0x71F+1387",
+   "per": "83",
+   "dist": "7",
+   "ascii": "75",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    16047,
+    16054
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF127AA",
+   "addr_hi": "0xF127CB",
+   "size": 33,
+   "loc": "SeBitmap_EnvCurve5_0x1743+153",
+   "per": "64",
+   "dist": "13",
+   "ascii": "52",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    14512,
+    14534
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF120E6",
+   "addr_hi": "0xF12105",
+   "size": 31,
+   "loc": "SeBitmap_EnvCurve5_0x10B6+98",
+   "per": "69",
+   "dist": "12",
+   "ascii": "45",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    13655,
+    13677
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF11B94",
+   "addr_hi": "0xF11BA7",
+   "size": 19,
+   "loc": "SeBitmap_EnvCurve5_0x986+576",
+   "per": "100",
+   "dist": "9",
+   "ascii": "84",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    12938,
+    12945
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF11A18",
+   "addr_hi": "0xF11A37",
+   "size": 31,
+   "loc": "SeBitmap_EnvCurve5_0x986+196",
+   "per": "100",
+   "dist": "13",
+   "ascii": "61",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    12759,
+    12774
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF1173F",
+   "addr_hi": "0xF11750",
+   "size": 17,
+   "loc": "SeBitmap_EnvCurve5_0x612+351",
+   "per": "71",
+   "dist": "8",
+   "ascii": "76",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    12299,
+    12304
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF116D5",
+   "addr_hi": "0xF116EC",
+   "size": 23,
+   "loc": "SeBitmap_EnvCurve5_0x612+245",
+   "per": "100",
+   "dist": "10",
+   "ascii": "78",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    12238,
+    12247
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF10E80",
+   "addr_hi": "0xF10E96",
+   "size": 22,
+   "loc": "SeBitmap_EnvCurve3+66",
+   "per": "100",
+   "dist": "2",
+   "ascii": "86",
+   "file": "audio/sound_editor_ui.s",
+   "lines_0indexed": [
+    11301,
+    11322
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF15F8F",
+   "addr_hi": "0xF15FA0",
+   "size": 17,
+   "loc": "FlashWrite_BlockRef_Type6_0x295+617",
+   "per": "71",
+   "dist": "8",
+   "ascii": "76",
+   "file": "storage/flash_floppy_handlers.s",
+   "lines_0indexed": [
+    837,
+    842
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF15F25",
+   "addr_hi": "0xF15F3C",
+   "size": 23,
+   "loc": "FlashWrite_BlockRef_Type6_0x295+511",
+   "per": "100",
+   "dist": "10",
+   "ascii": "78",
+   "file": "storage/flash_floppy_handlers.s",
+   "lines_0indexed": [
+    767,
+    776
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF15E71",
+   "addr_hi": "0xF15E84",
+   "size": 19,
+   "loc": "FlashWrite_BlockRef_Type6_0x295+331",
+   "per": "71",
+   "dist": "9",
+   "ascii": "37",
+   "file": "storage/flash_floppy_handlers.s",
+   "lines_0indexed": [
+    676,
+    684
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF6A561",
+   "addr_hi": "0xF6A579",
+   "size": 24,
+   "loc": "AccScreen_DataBlock_0x18C+79",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    34536,
+    34552
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF6A540",
+   "addr_hi": "0xF6A558",
+   "size": 24,
+   "loc": "AccScreen_DataBlock_0x18C+46",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    34510,
+    34526
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF6A51F",
+   "addr_hi": "0xF6A537",
+   "size": 24,
+   "loc": "AccScreen_DataBlock_0x18C+13",
+   "per": "100",
+   "dist": "6",
+   "ascii": "88",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    34484,
+    34500
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF5D2E1",
+   "addr_hi": "0xF5D300",
+   "size": 31,
+   "loc": "Demo_StyleRhythmData_0x274+161",
+   "per": "100",
+   "dist": "2",
+   "ascii": "74",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    12396,
+    12418
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF5C2A7",
+   "addr_hi": "0xF5C2D8",
+   "size": 49,
+   "loc": "AccVoice_IndexedTableLookup_BaseOffsets_0x2+287",
+   "per": "100",
+   "dist": "2",
+   "ascii": "100",
+   "file": "sequencer/accompaniment_engine.s",
+   "lines_0indexed": [
+    10880,
+    10928
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xF71872",
+   "addr_hi": "0xF718AA",
+   "size": 56,
+   "loc": "Voice_NoteChannelTable2_0x2+702",
+   "per": "79",
+   "dist": "10",
+   "ascii": "86",
+   "file": "sequencer/seq_event_playback.s",
+   "lines_0indexed": [
+    1242,
+    1295
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFC977B",
+   "addr_hi": "0xFC9795",
+   "size": 26,
+   "loc": "VoiceParam_CompareAndUpdate+96",
+   "per": "67",
+   "dist": "15",
+   "ascii": "35",
+   "file": "audio/audio_control_engine.s",
+   "lines_0indexed": [
+    6751,
+    6759
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFC972C",
+   "addr_hi": "0xFC9746",
+   "size": 26,
+   "loc": "VoiceParam_CompareAndUpdate+17",
+   "per": "67",
+   "dist": "15",
+   "ascii": "31",
+   "file": "audio/audio_control_engine.s",
+   "lines_0indexed": [
+    6720,
+    6728
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD263C",
+   "addr_hi": "0xFD265B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+301",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5421,
+    5447
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2614",
+   "addr_hi": "0xFD2633",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+261",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5388,
+    5411
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD25BC",
+   "addr_hi": "0xFD25DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+173",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5326,
+    5352
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2594",
+   "addr_hi": "0xFD25B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+133",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5293,
+    5316
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD253C",
+   "addr_hi": "0xFD255B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5231,
+    5257
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2514",
+   "addr_hi": "0xFD2533",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5198,
+    5221
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD24BC",
+   "addr_hi": "0xFD24DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xDA8+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5136,
+    5162
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2494",
+   "addr_hi": "0xFD24B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xDA8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5103,
+    5126
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD243C",
+   "addr_hi": "0xFD245B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xD28+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5041,
+    5067
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2414",
+   "addr_hi": "0xFD2433",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xD28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    5008,
+    5031
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD23BC",
+   "addr_hi": "0xFD23DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xCA8+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4946,
+    4972
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2394",
+   "addr_hi": "0xFD23B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xCA8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4913,
+    4936
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD233C",
+   "addr_hi": "0xFD235B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xC28+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4864,
+    4890
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2314",
+   "addr_hi": "0xFD2333",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xC28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4831,
+    4854
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD22BC",
+   "addr_hi": "0xFD22DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xBA8+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4782,
+    4808
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2294",
+   "addr_hi": "0xFD22B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xBA8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4749,
+    4772
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD223C",
+   "addr_hi": "0xFD225B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xB28+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4700,
+    4726
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2214",
+   "addr_hi": "0xFD2233",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xB28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4667,
+    4690
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2194",
+   "addr_hi": "0xFD21B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xAA8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4602,
+    4625
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD213C",
+   "addr_hi": "0xFD215B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xA28+45",
+   "per": "74",
+   "dist": "9",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4553,
+    4579
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2114",
+   "addr_hi": "0xFD2133",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0xA28+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4520,
+    4543
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD20BC",
+   "addr_hi": "0xFD20DB",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x9A8+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4471,
+    4497
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2094",
+   "addr_hi": "0xFD20B3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x9A8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4438,
+    4461
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD203C",
+   "addr_hi": "0xFD205B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x928+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4389,
+    4415
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD2014",
+   "addr_hi": "0xFD2033",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x928+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4356,
+    4379
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1FBC",
+   "addr_hi": "0xFD1FCF",
+   "size": 19,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x8A8+45",
+   "per": "73",
+   "dist": "6",
+   "ascii": "63",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4324,
+    4342
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1F94",
+   "addr_hi": "0xFD1FB3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x8A8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4291,
+    4314
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1F3C",
+   "addr_hi": "0xFD1F4F",
+   "size": 19,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x828+45",
+   "per": "73",
+   "dist": "6",
+   "ascii": "63",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4259,
+    4277
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1F14",
+   "addr_hi": "0xFD1F33",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x828+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4226,
+    4249
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1E94",
+   "addr_hi": "0xFD1EB3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x7A8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4161,
+    4184
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1E14",
+   "addr_hi": "0xFD1E33",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x728+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4096,
+    4119
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1D94",
+   "addr_hi": "0xFD1DB3",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x6A8+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    4031,
+    4054
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1D3C",
+   "addr_hi": "0xFD1D5B",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x628+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3989,
+    4015
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1D14",
+   "addr_hi": "0xFD1D33",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x628+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3956,
+    3979
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1CBB",
+   "addr_hi": "0xFD1CDA",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x5A7+45",
+   "per": "74",
+   "dist": "9",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3899,
+    3925
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1C93",
+   "addr_hi": "0xFD1CB2",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x5A7+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3866,
+    3889
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1C3B",
+   "addr_hi": "0xFD1C5A",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x527+45",
+   "per": "67",
+   "dist": "9",
+   "ascii": "55",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3810,
+    3836
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1C13",
+   "addr_hi": "0xFD1C32",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x527+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3777,
+    3800
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1BBB",
+   "addr_hi": "0xFD1BCF",
+   "size": 20,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x4A7+45",
+   "per": "69",
+   "dist": "7",
+   "ascii": "60",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3738,
+    3757
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1B93",
+   "addr_hi": "0xFD1BB2",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x4A7+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3705,
+    3728
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1B3B",
+   "addr_hi": "0xFD1B5A",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x427+45",
+   "per": "74",
+   "dist": "9",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3649,
+    3675
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1B13",
+   "addr_hi": "0xFD1B32",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x427+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3616,
+    3639
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1ABB",
+   "addr_hi": "0xFD1ADA",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x3A7+45",
+   "per": "74",
+   "dist": "9",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3560,
+    3586
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  },
+  {
+   "addr_lo": "0xFD1A93",
+   "addr_hi": "0xFD1AB2",
+   "size": 31,
+   "loc": "PanelEvt_Handler_4_DualValueCheck_0x3A7+5",
+   "per": "74",
+   "dist": "10",
+   "ascii": "65",
+   "file": "midi/midi_dispatch_handlers.s",
+   "lines_0indexed": [
+    3527,
+    3550
+   ],
+   "resolved_by": "v10dac2_line_probe.py (address-anchored assembler probe, lane V10DAC2)"
+  }
+ ],
+ "excluded": [
   {
    "addr_lo": "0xEF2EC0",
    "addr_hi": "0xEF2EDA",
@@ -1861,26 +2871,6 @@
    "dist": "14",
    "ascii": "30",
    "reason": "excluded: exact-name is branch target elsewhere; manual: same routine family as DisplayMode_Handler_3"
-  },
-  {
-   "addr_lo": "0xEF8E1D",
-   "addr_hi": "0xEF8E31",
-   "size": 20,
-   "loc": "DisplayMode_Handler_3_0x612+16",
-   "per": "71",
-   "dist": "14",
-   "ascii": "35",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xEF8E64",
-   "addr_hi": "0xEF8E78",
-   "size": 20,
-   "loc": "DisplayMode_Handler_3_0x65A+15",
-   "per": "71",
-   "dist": "14",
-   "ascii": "35",
-   "reason": "2 matches (no unique context)"
   },
   {
    "addr_lo": "0xEF9554",
@@ -1953,16 +2943,6 @@
    "reason": "excluded: exact-name is branch target elsewhere"
   },
   {
-   "addr_lo": "0xEFE6CB",
-   "addr_hi": "0xEFE6E0",
-   "size": 21,
-   "loc": "SubCPU_ToneParamRet_0x9D1+57",
-   "per": "100",
-   "dist": "15",
-   "ascii": "38",
-   "reason": "0 matches (no unique context)"
-  },
-  {
    "addr_lo": "0xF006F1",
    "addr_hi": "0xF00701",
    "size": 16,
@@ -1981,56 +2961,6 @@
    "dist": "15",
    "ascii": "52",
    "reason": "excluded: exact-name is branch target elsewhere"
-  },
-  {
-   "addr_lo": "0xF0446E",
-   "addr_hi": "0xF04483",
-   "size": 21,
-   "loc": "Scoop_SoundEditorData_0xEB+1539",
-   "per": "67",
-   "dist": "14",
-   "ascii": "29",
-   "reason": "5 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF0450E",
-   "addr_hi": "0xF04523",
-   "size": 21,
-   "loc": "Scoop_SoundEditorData_0xEB+1699",
-   "per": "67",
-   "dist": "14",
-   "ascii": "29",
-   "reason": "5 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF045AE",
-   "addr_hi": "0xF045C3",
-   "size": 21,
-   "loc": "Scoop_SoundEditorData_0xEB+1859",
-   "per": "67",
-   "dist": "14",
-   "ascii": "29",
-   "reason": "5 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF04665",
-   "addr_hi": "0xF0467A",
-   "size": 21,
-   "loc": "Scoop_SoundEditorData_0xEB+2042",
-   "per": "67",
-   "dist": "15",
-   "ascii": "29",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF0471C",
-   "addr_hi": "0xF04731",
-   "size": 21,
-   "loc": "Scoop_SoundEditorData_0xEB+2225",
-   "per": "67",
-   "dist": "15",
-   "ascii": "29",
-   "reason": "2 matches (no unique context)"
   },
   {
    "addr_lo": "0xF08AFB",
@@ -2081,136 +3011,6 @@
    "dist": "14",
    "ascii": "57",
    "reason": "excluded: exact-name is branch target elsewhere"
-  },
-  {
-   "addr_lo": "0xF10E80",
-   "addr_hi": "0xF10E96",
-   "size": 22,
-   "loc": "SeBitmap_EnvCurve3+66",
-   "per": "100",
-   "dist": "2",
-   "ascii": "86",
-   "reason": "4 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF116D5",
-   "addr_hi": "0xF116EC",
-   "size": 23,
-   "loc": "SeBitmap_EnvCurve5_0x612+245",
-   "per": "100",
-   "dist": "10",
-   "ascii": "78",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF1173F",
-   "addr_hi": "0xF11750",
-   "size": 17,
-   "loc": "SeBitmap_EnvCurve5_0x612+351",
-   "per": "71",
-   "dist": "8",
-   "ascii": "76",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF11A18",
-   "addr_hi": "0xF11A37",
-   "size": 31,
-   "loc": "SeBitmap_EnvCurve5_0x986+196",
-   "per": "100",
-   "dist": "13",
-   "ascii": "61",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF11B94",
-   "addr_hi": "0xF11BA7",
-   "size": 19,
-   "loc": "SeBitmap_EnvCurve5_0x986+576",
-   "per": "100",
-   "dist": "9",
-   "ascii": "84",
-   "reason": "3 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF120E6",
-   "addr_hi": "0xF12105",
-   "size": 31,
-   "loc": "SeBitmap_EnvCurve5_0x10B6+98",
-   "per": "69",
-   "dist": "12",
-   "ascii": "45",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF127AA",
-   "addr_hi": "0xF127CB",
-   "size": 33,
-   "loc": "SeBitmap_EnvCurve5_0x1743+153",
-   "per": "64",
-   "dist": "13",
-   "ascii": "52",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF140D1",
-   "addr_hi": "0xF140E1",
-   "size": 16,
-   "loc": "TuningSystem_Handler_Table_0x71F+1387",
-   "per": "83",
-   "dist": "7",
-   "ascii": "75",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF14388",
-   "addr_hi": "0xF143A5",
-   "size": 29,
-   "loc": "TuningSystem_Handler_Table_0xE1F+290",
-   "per": "100",
-   "dist": "9",
-   "ascii": "72",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF15E71",
-   "addr_hi": "0xF15E84",
-   "size": 19,
-   "loc": "FlashWrite_BlockRef_Type6_0x295+331",
-   "per": "71",
-   "dist": "9",
-   "ascii": "37",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF15F25",
-   "addr_hi": "0xF15F3C",
-   "size": 23,
-   "loc": "FlashWrite_BlockRef_Type6_0x295+511",
-   "per": "100",
-   "dist": "10",
-   "ascii": "78",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF15F8F",
-   "addr_hi": "0xF15FA0",
-   "size": 17,
-   "loc": "FlashWrite_BlockRef_Type6_0x295+617",
-   "per": "71",
-   "dist": "8",
-   "ascii": "76",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF16B58",
-   "addr_hi": "0xF16B68",
-   "size": 16,
-   "loc": "Flash_InitBytecodeBlock+141",
-   "per": "75",
-   "dist": "10",
-   "ascii": "50",
-   "reason": "0 matches (no unique context)"
   },
   {
    "addr_lo": "0xF1715B",
@@ -2363,16 +3163,6 @@
    "reason": "excluded (manual review): same pattern: `jp AccWrap_JumpTable_0x14/0x15` to real named targets -- a real trampoline table"
   },
   {
-   "addr_lo": "0xF5C2A7",
-   "addr_hi": "0xF5C2D8",
-   "size": 49,
-   "loc": "AccVoice_IndexedTableLookup_BaseOffsets_0x2+287",
-   "per": "100",
-   "dist": "2",
-   "ascii": "100",
-   "reason": "10 matches (no unique context)"
-  },
-  {
    "addr_lo": "0xF5C577",
    "addr_hi": "0xF5C59F",
    "size": 40,
@@ -2381,46 +3171,6 @@
    "dist": "10",
    "ascii": "42",
    "reason": "excluded (manual review): real jump-trampoline table: entries are `jp NAMED_LABEL` to genuine functions (AccStyle_IndexedLookup, AccStyle_SC0ByteSelect...), not data"
-  },
-  {
-   "addr_lo": "0xF5D2E1",
-   "addr_hi": "0xF5D300",
-   "size": 31,
-   "loc": "Demo_StyleRhythmData_0x274+161",
-   "per": "100",
-   "dist": "2",
-   "ascii": "74",
-   "reason": "4 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF6A51F",
-   "addr_hi": "0xF6A537",
-   "size": 24,
-   "loc": "AccScreen_DataBlock_0x18C+13",
-   "per": "100",
-   "dist": "6",
-   "ascii": "88",
-   "reason": "8 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF6A540",
-   "addr_hi": "0xF6A558",
-   "size": 24,
-   "loc": "AccScreen_DataBlock_0x18C+46",
-   "per": "100",
-   "dist": "6",
-   "ascii": "88",
-   "reason": "8 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF6A561",
-   "addr_hi": "0xF6A579",
-   "size": 24,
-   "loc": "AccScreen_DataBlock_0x18C+79",
-   "per": "100",
-   "dist": "6",
-   "ascii": "88",
-   "reason": "8 matches (no unique context)"
   },
   {
    "addr_lo": "0xF6B4B2",
@@ -2433,16 +3183,6 @@
    "reason": "excluded: exact-name is branch target elsewhere"
   },
   {
-   "addr_lo": "0xF71872",
-   "addr_hi": "0xF718AA",
-   "size": 56,
-   "loc": "Voice_NoteChannelTable2_0x2+702",
-   "per": "79",
-   "dist": "10",
-   "ascii": "86",
-   "reason": "2 matches (no unique context)"
-  },
-  {
    "addr_lo": "0xF83DEF",
    "addr_hi": "0xF83E0D",
    "size": 30,
@@ -2453,16 +3193,6 @@
    "reason": "excluded: indirect jp/call within 40 lines of label def"
   },
   {
-   "addr_lo": "0xF85A1B",
-   "addr_hi": "0xF85A2E",
-   "size": 19,
-   "loc": "FDemoText_ByteData_LayoutEngine+754",
-   "per": "86",
-   "dist": "10",
-   "ascii": "16",
-   "reason": "0 matches (no unique context)"
-  },
-  {
    "addr_lo": "0xF8FE19",
    "addr_hi": "0xF8FE2B",
    "size": 18,
@@ -2471,26 +3201,6 @@
    "dist": "14",
    "ascii": "28",
    "reason": "excluded (manual review): manual read: real prologue (dec 6,xsp/push xiz/ld (xsp+4),c/...) continuing into more real-looking code after a single stray escape byte -- looks like a misframed island, not data"
-  },
-  {
-   "addr_lo": "0xF97771",
-   "addr_hi": "0xF97785",
-   "size": 20,
-   "loc": "FDC_CMD_EXEC+141",
-   "per": "75",
-   "dist": "12",
-   "ascii": "45",
-   "reason": "2 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xF978A4",
-   "addr_hi": "0xF978B8",
-   "size": 20,
-   "loc": "FDC_CMD_EXEC+448",
-   "per": "75",
-   "dist": "12",
-   "ascii": "45",
-   "reason": "2 matches (no unique context)"
   },
   {
    "addr_lo": "0xFA0E51",
@@ -2603,476 +3313,6 @@
    "reason": "excluded (manual review): manual read: coherent switch-style code (successive `cp c,N / ret z` comparisons), looks like real bytecode dispatch, not data"
   },
   {
-   "addr_lo": "0xFC972C",
-   "addr_hi": "0xFC9746",
-   "size": 26,
-   "loc": "VoiceParam_CompareAndUpdate+17",
-   "per": "67",
-   "dist": "15",
-   "ascii": "31",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFC977B",
-   "addr_hi": "0xFC9795",
-   "size": 26,
-   "loc": "VoiceParam_CompareAndUpdate+96",
-   "per": "67",
-   "dist": "15",
-   "ascii": "35",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFCEBFC",
-   "addr_hi": "0xFCEC0D",
-   "size": 17,
-   "loc": "SndParam_BatchUpdate_Data+189",
-   "per": "100",
-   "dist": "15",
-   "ascii": "29",
-   "reason": "0 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1A93",
-   "addr_hi": "0xFD1AB2",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x3A7+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1ABB",
-   "addr_hi": "0xFD1ADA",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x3A7+45",
-   "per": "74",
-   "dist": "9",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1B13",
-   "addr_hi": "0xFD1B32",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x427+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1B3B",
-   "addr_hi": "0xFD1B5A",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x427+45",
-   "per": "74",
-   "dist": "9",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1B93",
-   "addr_hi": "0xFD1BB2",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x4A7+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1BBB",
-   "addr_hi": "0xFD1BCF",
-   "size": 20,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x4A7+45",
-   "per": "69",
-   "dist": "7",
-   "ascii": "60",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1C13",
-   "addr_hi": "0xFD1C32",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x527+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1C3B",
-   "addr_hi": "0xFD1C5A",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x527+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1C93",
-   "addr_hi": "0xFD1CB2",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x5A7+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1CBB",
-   "addr_hi": "0xFD1CDA",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x5A7+45",
-   "per": "74",
-   "dist": "9",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1D14",
-   "addr_hi": "0xFD1D33",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x628+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1D3C",
-   "addr_hi": "0xFD1D5B",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x628+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1D94",
-   "addr_hi": "0xFD1DB3",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x6A8+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1E14",
-   "addr_hi": "0xFD1E33",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x728+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1E94",
-   "addr_hi": "0xFD1EB3",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x7A8+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1F14",
-   "addr_hi": "0xFD1F33",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x828+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1F3C",
-   "addr_hi": "0xFD1F4F",
-   "size": 19,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x828+45",
-   "per": "73",
-   "dist": "6",
-   "ascii": "63",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1F94",
-   "addr_hi": "0xFD1FB3",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x8A8+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD1FBC",
-   "addr_hi": "0xFD1FCF",
-   "size": 19,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x8A8+45",
-   "per": "73",
-   "dist": "6",
-   "ascii": "63",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2014",
-   "addr_hi": "0xFD2033",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x928+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD203C",
-   "addr_hi": "0xFD205B",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x928+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2094",
-   "addr_hi": "0xFD20B3",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x9A8+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD20BC",
-   "addr_hi": "0xFD20DB",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0x9A8+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2114",
-   "addr_hi": "0xFD2133",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xA28+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD213C",
-   "addr_hi": "0xFD215B",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xA28+45",
-   "per": "74",
-   "dist": "9",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2194",
-   "addr_hi": "0xFD21B3",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xAA8+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2214",
-   "addr_hi": "0xFD2233",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xB28+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD223C",
-   "addr_hi": "0xFD225B",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xB28+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2294",
-   "addr_hi": "0xFD22B3",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xBA8+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD22BC",
-   "addr_hi": "0xFD22DB",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xBA8+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2314",
-   "addr_hi": "0xFD2333",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xC28+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD233C",
-   "addr_hi": "0xFD235B",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xC28+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2394",
-   "addr_hi": "0xFD23B3",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xCA8+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD23BC",
-   "addr_hi": "0xFD23DB",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xCA8+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2414",
-   "addr_hi": "0xFD2433",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xD28+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD243C",
-   "addr_hi": "0xFD245B",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xD28+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2494",
-   "addr_hi": "0xFD24B3",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xDA8+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD24BC",
-   "addr_hi": "0xFD24DB",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xDA8+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2514",
-   "addr_hi": "0xFD2533",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+5",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD253C",
-   "addr_hi": "0xFD255B",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+45",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2594",
-   "addr_hi": "0xFD25B3",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+133",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD25BC",
-   "addr_hi": "0xFD25DB",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+173",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD2614",
-   "addr_hi": "0xFD2633",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+261",
-   "per": "74",
-   "dist": "10",
-   "ascii": "65",
-   "reason": "24 matches (no unique context)"
-  },
-  {
-   "addr_lo": "0xFD263C",
-   "addr_hi": "0xFD265B",
-   "size": 31,
-   "loc": "PanelEvt_Handler_4_DualValueCheck_0xE28+301",
-   "per": "67",
-   "dist": "9",
-   "ascii": "55",
-   "reason": "24 matches (no unique context)"
-  },
-  {
    "addr_lo": "0xFD4DFA",
    "addr_hi": "0xFD4E10",
    "size": 22,
@@ -3091,16 +3331,6 @@
    "dist": "12",
    "ascii": "14",
    "reason": "excluded (manual review): manual read: coherent bit-manipulation and NakaInst_SoundConfig_LookupTable indexed-copy code nearby -- real code, not data"
-  },
-  {
-   "addr_lo": "0xFDBCC1",
-   "addr_hi": "0xFDBCD1",
-   "size": 16,
-   "loc": null,
-   "per": null,
-   "dist": null,
-   "ascii": null,
-   "reason": "0 matches (no unique context)"
   },
   {
    "addr_lo": "0xFE9413",
@@ -3141,6 +3371,156 @@
    "dist": "11",
    "ascii": "26",
    "reason": "excluded: exact-name is branch target elsewhere"
+  },
+  {
+   "addr_lo": "0xED1CBF",
+   "addr_hi": "0xED1CD2",
+   "size": 19,
+   "loc": "KeyScaleNoteStr_G_0x18+37",
+   "per": "67",
+   "dist": "9",
+   "ascii": "32",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: surrounding lines (extension_data.s ~1575-1610) are riddled with stray .byte escapes interleaved with valid-looking instructions (0xa2,0xb8,0xbb,0x37,0xc6,0xd5 88 ...) -- the misframed-islands signature (DEBT-INVENTORY-2026-09-02.md), not a clean data-as-code region. Left for whichever lane owns that category."
+  },
+  {
+   "addr_lo": "0xEF8E1D",
+   "addr_hi": "0xEF8E31",
+   "size": 20,
+   "loc": "DisplayMode_Handler_3_0x612+16",
+   "per": "71",
+   "dist": "14",
+   "ascii": "35",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: contains `call VoiceSlot_ReadCurrentParams` and `call VoiceSlot_FlagCheck`, both real named routines, in an otherwise coherent conditional-branch sequence -- real code, consistent with the sibling DisplayMode_Handler_3_0x399 already excluded as real code (register-indirect dispatch target)."
+  },
+  {
+   "addr_lo": "0xEF8E64",
+   "addr_hi": "0xEF8E78",
+   "size": 20,
+   "loc": "DisplayMode_Handler_3_0x65A+15",
+   "per": "71",
+   "dist": "14",
+   "ascii": "35",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: identical content to DisplayMode_Handler_3_0x612+16 (same two named calls VoiceSlot_ReadCurrentParams / VoiceSlot_FlagCheck) -- real code."
+  },
+  {
+   "addr_lo": "0xEFE6CB",
+   "addr_hi": "0xEFE6E0",
+   "size": 21,
+   "loc": "SubCPU_ToneParamRet_0x9D1+57",
+   "per": "100",
+   "dist": "15",
+   "ascii": "38",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: `call OscScope_RenderBlock_0x3F` then `call OscScope_RenderBlock_0x50`, bookended by ret/ret -- two real named calls, real code."
+  },
+  {
+   "addr_lo": "0xF0446E",
+   "addr_hi": "0xF04483",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+1539",
+   "per": "67",
+   "dist": "14",
+   "ascii": "29",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: `call SeMenu_LoadPartParam` / `call SeMenu_SetupPartDisplay_End_0x219`, real named calls -- real code. Identical template repeats at 4 other offsets in this same file (+1699,+1859,+2042,+2225), all excluded for the same reason."
+  },
+  {
+   "addr_lo": "0xF0450E",
+   "addr_hi": "0xF04523",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+1699",
+   "per": "67",
+   "dist": "14",
+   "ascii": "29",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: same real-code template as +1539 (two named calls to SeMenu_LoadPartParam / SeMenu_SetupPartDisplay_End_0x219)."
+  },
+  {
+   "addr_lo": "0xF045AE",
+   "addr_hi": "0xF045C3",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+1859",
+   "per": "67",
+   "dist": "14",
+   "ascii": "29",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: same real-code template as +1539."
+  },
+  {
+   "addr_lo": "0xF04665",
+   "addr_hi": "0xF0467A",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+2042",
+   "per": "67",
+   "dist": "15",
+   "ascii": "29",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: same real-code template as +1539."
+  },
+  {
+   "addr_lo": "0xF0471C",
+   "addr_hi": "0xF04731",
+   "size": 21,
+   "loc": "Scoop_SoundEditorData_0xEB+2225",
+   "per": "67",
+   "dist": "15",
+   "ascii": "29",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: same real-code template as +1539."
+  },
+  {
+   "addr_lo": "0xF16B58",
+   "addr_hi": "0xF16B68",
+   "size": 16,
+   "loc": "Flash_InitBytecodeBlock+141",
+   "per": "75",
+   "dist": "10",
+   "ascii": "50",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: surrounding lines (flash_floppy_handlers.s ~1596-1650) are riddled with stray .byte escapes interleaved with a real named call (`call AccPatch_InitFromSlotIndex`) -- the misframed-islands signature, not a clean data-as-code region."
+  },
+  {
+   "addr_lo": "0xF85A1B",
+   "addr_hi": "0xF85A2E",
+   "size": 19,
+   "loc": "FDemoText_ByteData_LayoutEngine+754",
+   "per": "86",
+   "dist": "10",
+   "ascii": "16",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: despite the \"ByteData\" name, the surrounding lines (fdemotext_routines.s ~1824-2140) are riddled with stray .byte escapes interleaved with instructions (0xf3, 0xda, 0x52, 0xf3/reti, 0x8e, 0x37, 0xf2, 0xe6) -- the misframed-islands signature, not a clean data-as-code region."
+  },
+  {
+   "addr_lo": "0xF97771",
+   "addr_hi": "0xF97785",
+   "size": 20,
+   "loc": "FDC_CMD_EXEC+141",
+   "per": "75",
+   "dist": "12",
+   "ascii": "45",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: `lda_d16 xwa,(0x8a4a) / decm 1,(xwa) / ld wa,(xwa) / cps wa,0 / jr z,18 / lda_d16 xwa,(0x8a48) / incm 1,(xwa) / ld wa,(xwa)` is a coherent, meaningful decrement-one-counter/increment-another idiom over two real fixed addresses, repeated verbatim at a second offset (+448) in the same file -- reads as a real, reused inline routine, not data. No named call, but the identical repeat of meaningful multi-operand logic outweighs that."
+  },
+  {
+   "addr_lo": "0xF978A4",
+   "addr_hi": "0xF978B8",
+   "size": 20,
+   "loc": "FDC_CMD_EXEC+448",
+   "per": "75",
+   "dist": "12",
+   "ascii": "45",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: byte-identical to FDC_CMD_EXEC+141, same real-code evidence."
+  },
+  {
+   "addr_lo": "0xFCEBFC",
+   "addr_hi": "0xFCEC0D",
+   "size": 17,
+   "loc": "SndParam_BatchUpdate_Data+189",
+   "per": "100",
+   "dist": "15",
+   "ascii": "29",
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: `call SndParam_ComputeVoiceIndex`, a real named call -- real code."
+  },
+  {
+   "addr_lo": "0xFDBCC1",
+   "addr_hi": "0xFDBCD1",
+   "size": 16,
+   "loc": null,
+   "per": null,
+   "dist": null,
+   "ascii": null,
+   "reason": "lane V10DAC2 address-probe locate succeeded (see scripts/analysis/v10dac2_line_probe.py), but excluded on further evidence: manual read: `call CtrlPanel_SetIndicatorLED`, a real named call, in a coherent reset-bit/load/call/set-bit/ret sequence -- real code."
   }
  ]
 }
