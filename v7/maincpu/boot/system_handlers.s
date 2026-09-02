@@ -6760,7 +6760,7 @@ SLIDE_Decompress_4K_Init:
 
 	pushw 0x1000
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -6892,7 +6892,7 @@ SLIDE_Decompress_8K_Init:
 
 	pushw 0x2000
 
-	.byte 0x1d, 0xa3, 0x06, 0xff	; call Malloc (v7 addr)
+	call	16713379
 
 	inc 2, xsp
 
@@ -7093,7 +7093,7 @@ FDC_SetupSectorParams:
 
 	ld xbc, 0x12
 
-	.byte 0x1d, 0x3b, 0x04, 0xff	; call Math_DivideU32 (v7 addr)
+	call	16712763
 
 	lda_d16 xiz, (1582)
 
@@ -7117,7 +7117,7 @@ FDC_SetupSectorParams:
 
 	ld xbc, 0x12
 
-	.byte 0x1d, 0x35, 0x04, 0xff	; call DivMod32 (v7 addr)
+	call	16712757
 
 	inc 1, xhl
 
