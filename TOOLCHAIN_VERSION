@@ -7,9 +7,9 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 975a2c17d683 (975a2c17d683be783e00219e3e28cc0bb8dcb28f)
+Commit: 63ff7d92fb5f (63ff7d92fb5f0289e8106c043f596167cac062dc)
 Date: 2026-09-02
-Subject: [TLCS900] Corroborate the ERP/SriRR decoders with real v10 + WSA1R bytes
+Subject: [TLCS900] Disambiguate the (Xrr) vs explicit (Xrr+d8=0) print collision
 Repository: /home/fsanches/compartilhado/llvm-project
 
 # What this pin adds over dbb72df07371, all DECODER-side (no encoding changed,
@@ -23,12 +23,20 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #                   stub returning Fail). ~30 mnemonics the assembler had
 #                   always encoded correctly.
 #   * 975a2c17d683  54 lit regression tests built from real ROM bytes.
+#   * 63ff7d92fb5f  the (Xrr) vs (Xrr+d8=0) print collision. The printer
+#                   rendered a zero displacement as nothing, so both encodings
+#                   printed identically and reassembly always took the shorter.
+#                   Fixed decoder-side by emitting a Disp==256 sentinel the
+#                   ENCODER had supported since the initial commit and nothing
+#                   had ever produced. No existing spelling changed -- verified
+#                   by cmp on assembled objects, not --show-encoding.
 #
 # ⚠ These gaps were SILENT: a tool that cannot disassemble a region reports
 # nothing there rather than reporting a problem, which is why they hid 312 B of
 # real code from every automated audit for months.
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 975a2c17d683  [TLCS900] Corroborate the ERP/SriRR decoders with real v10 + WSA1R bytes
 #   Commit: dbb72df07371  [TLCS900] A regression guard for the SX-WSA1R's sound-code C7 forms
 #   Commit: 4149d0474bf8  [TLCS900] The last KN5000 sound forms, and an inverted 8-bit index address
 #   Commit: 95f7f2d40428  [TLCS900] Refuse an immediate or an index register that does not fit

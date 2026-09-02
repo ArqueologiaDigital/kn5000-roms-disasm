@@ -181,6 +181,16 @@ require the original bytes).
   denominator.
 * custom data IC19: **39.6%** proven erased or zero fill.
 
+## ⚠ A silent spelling trap in natural memory syntax
+
+Found 2026-09-02 and NOT fixed. The natural-syntax encoder treats `(reg+N)` as
+SIGNED, so writing a raw disp8 byte of 0x80 or above as its positive value
+silently selects the wrong 5-byte d16 encoding: `(xde+0x97)` produces wrong
+bytes while `(xde-105)` produces the right ones. No diagnostic either way. This
+blocks 3 of the 68 forced-mnemonic sites from retirement and will bite anyone
+converting `_rid8` spellings by hand. Documented in
+`scripts/analysis/census_rid8_zero_disp.py`.
+
 ## Where the next pass should aim
 
 1. ~~A round-trip generator for table_data's six BMPs~~ — **DONE, as a refusal:
