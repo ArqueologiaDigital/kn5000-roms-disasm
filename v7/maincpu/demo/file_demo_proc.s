@@ -605,7 +605,7 @@ Demo_SelectEntry_CheckCPanel:
 
 	ret nz
 
-	.byte 0x1e, 0x01, 0x00	; calr Demo_SelectEntry_Debounce (v7 displacement)
+	calr	1
 
 	ret
 Demo_SelectEntry_Debounce:

@@ -63,7 +63,7 @@ SmfLoad_CheckSlotCount:
 
 	ldw wa, 0x61
 
-	.byte 0x78, 0xe3, 0x00	; jrl SmfLoad_CallHandler (v7 displacement)
+	jrl	227
 
 
 

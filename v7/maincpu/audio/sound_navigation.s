@@ -169,7 +169,7 @@ Sound_Navigate_Init:
 
 	ld bc, (xsp + 8)
 
-	.byte 0x1e, 0x2b, 0x01	; calr GetSoundBankCount (v7 displacement)
+	calr	299
 
 	ld (xsp + 6), hl
 

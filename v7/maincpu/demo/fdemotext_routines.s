@@ -769,7 +769,7 @@ FDemoText_ProbeVoiceType:
 
 	extz wa
 
-	.byte 0x1e, 0xc9, 0xf7	; calr FDemoText_LookupTableEntry (v7 displacement)
+	calr	-2103
 
 	lda xbc, (xsp)
 
@@ -1103,7 +1103,7 @@ FDemoText_NotifyUI_Done:
 FDemoText_RefreshFullDisplay:
 	ordi8_24 (0x0247ee), 7
 
-	.byte 0x1e, 0xf8, 0xf5	; calr FDemoText_ProcessVoiceFlags (v7 displacement)
+	calr	-2568
 
 	push xde
 
@@ -1576,7 +1576,7 @@ FDemoText_ProcessMarkup_CopyAndRender:
 
 	ld bc, (xsp + 84)
 
-	.byte 0x1e, 0xf8, 0x00	; calr FDemoText_TextDispatch (v7 displacement)
+	calr	248
 
 	ld xwa, (xsp + 16)
 

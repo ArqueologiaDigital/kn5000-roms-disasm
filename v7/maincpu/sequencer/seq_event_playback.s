@@ -162,11 +162,11 @@ SeqEvt_WriteNoteOff:
 
 	ld a, w
 
-	.byte 0x1e, 0x7b, 0x02	; calr SeqEvtBuf_WriteBytePreserve (v7 displacement)
+	calr	635
 
 	ldb a, 0x0
 
-	.byte 0x1e, 0x76, 0x02	; calr SeqEvtBuf_WriteBytePreserve (v7 displacement)
+	calr	630
 
 	ret
 
