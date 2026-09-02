@@ -23120,6 +23120,15 @@ ZeroInitData_F8E773:   ; 9 B, all zero -- LDIR source named by the
 ;   only 5 of the 17 values land on an instruction boundary, about what
 ;   chance gives here.  `AddrTable` names the record SHAPE (LE32 in-image
 ;   addresses), not a role; what they address is unknown.
+;
+; ⚠ WHERE THE SECOND TABLE'S LABEL GOES IS A CHOICE, NOT A MEASUREMENT.  The
+;   detector's run starts at 0xF8E7A1 and its first two entries are zeros, so the
+;   nine zero bytes at 0xF8E7A0 could be residue OR two NULL table slots plus one
+;   pad byte.  For the FIRST table the same question has an answer: the init
+;   routine at 0xF8E74B names its nine-byte LDIR source by address (0xF8E773) and
+;   count (9), which forces 0xF8E77C.  For the second there is no such witness,
+;   and 0xF8E7A9 is chosen only to mirror it.  The bytes are identical either
+;   way; only the label moves.
 ; ---------------------------------------------------------------------
 AddrTable_F8E77C:   ; 8 entries
 	.long 0x00f8e68b   ; F8E77C  [0]
@@ -42133,6 +42142,11 @@ sub_F98ADE:   ; entry: prom_b routine directory
 ;   * Not code: a linear decode has 37 undecodable bytes starting at
 ;     0xF98DE5 itself, and no branch/call/jp operand in this file lands
 ;     inside the span.
+;   * The span does NOT open mid-object.  Scanned from 0xF98C00 -- 485 bytes
+;     earlier, and at every byte offset, not only 4-aligned ones -- the detector
+;     still reports the run beginning at 0xF98DE5 and nowhere sooner; the word at
+;     0xF98DE1 is 0x0E0DEE5B, the `pop XHL / unlk XIZ / ret` that closes the
+;     routine above.  The `.incbin` boundary and the table boundary coincide.
 ;
 ; ★ THE 3 LEFTOVER BYTES.  539 = 4*134 + 3.  `49 f9 f2` are the low three bytes
 ; of 0x00F2F949, which IS a display-list record start like the 32 above.

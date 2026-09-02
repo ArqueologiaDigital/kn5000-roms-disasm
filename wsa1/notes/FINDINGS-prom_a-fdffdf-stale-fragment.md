@@ -98,3 +98,25 @@ tree, and every form that needs one falls back to `.byte`. That inflates the
 would change the emitted text of blocks other lanes are working on;
 `gen_prom_a_fdffdf_fragment.py` works around it by including
 `include/tlcs900_mem_ops.inc` directly in its own verifier.
+
+## It is NOT the image tail, and NOT a vector table, checksum or filler
+
+The lane brief described this span as sitting "at the very end of the image".
+It does not. prom_a is 512 KiB linked at 0xF80000-0xFFFFFF; 0xFDFFDF is file
+offset 0x5FFDF, with 128 KiB of image after it. What it sits at the end of is
+the 0xFD bank, and 0xFE0000 is the next module's first `jp` veneer.
+
+For the record, each alternative was checked and eliminated:
+
+* **Vector table** -- no. The TLCS-900 vectors live at the top of the image
+  (the SWI7 vector this tree already documents is at 0xFFFF1C), not here, and
+  nothing in these 33 bytes is a table of 4-byte addresses: the pointer-shaped
+  run detector finds no run in them.
+* **Checksum** -- no. The bytes are not a constant, not a repeated word, and
+  31 of 33 of them are byte-identical to a routine prologue that occurs 26
+  times elsewhere; a checksum would not be.
+* **Filler** -- no. prom_a's filler is runs of 0x0E (`ret`), verified byte by
+  byte wherever this tree emits `.fill`; there is no 0x0E in this span at all.
+
+It is linker slack holding the middle of a stale object, which is a fourth
+category, and the only one consistent with a 94% match to live code elsewhere.

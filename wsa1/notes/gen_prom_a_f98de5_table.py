@@ -261,6 +261,11 @@ def emit():
     L.append(";   * Not code: a linear decode has 37 undecodable bytes starting at")
     L.append(";     0x%06X itself, and no branch/call/jp operand in this file lands" % LO)
     L.append(";     inside the span.")
+    L.append(';   * The span does NOT open mid-object.  Scanned from 0xF98C00 -- 485 bytes')
+    L.append(';     earlier, and at every byte offset, not only 4-aligned ones -- the detector')
+    L.append(';     still reports the run beginning at 0xF98DE5 and nowhere sooner; the word at')
+    L.append(';     0xF98DE1 is 0x0E0DEE5B, the `pop XHL / unlk XIZ / ret` that closes the')
+    L.append(';     routine above.  The `.incbin` boundary and the table boundary coincide.')
     L.append(";")
     L.append("; ★ THE 3 LEFTOVER BYTES.  539 = 4*%d + 3.  `%s` are the low three bytes"
              % (N, " ".join("%02x" % x for x in F["tail"])))
