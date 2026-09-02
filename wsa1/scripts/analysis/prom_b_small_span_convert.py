@@ -28,7 +28,8 @@ walk's extent is not the object's extent, so it cut fixed-stride arrays in the
 middle of an entry.  16 spans are the tail of a 4-byte POINTER ARRAY, 8 are the
 tail of an 8-byte (4 x 16-bit) RECORD ARRAY, 7 are a routine's `ret` trailer and
 4 are whole routines.  The classification is produced by the companion tool
-`prom_b_small_span_classify.py`.
+`prom_b_small_span_classify.py`.  38 spans / 811 B were converted and 17 / 551 B
+refused.
 
 KINDS
 -----
@@ -55,8 +56,13 @@ KINDS
   DLTAIL    the tail of ONE display-list record whose leading byte(s) the
             previous object absorbed.  CHECK: op < 0x24, the length byte, and
             the record landing exactly on the next proven object.
+  DLMIX     interpreter records with an 8-byte-entry array between them.  CHECK:
+            --probe-refusals finds exactly ONE record/array decomposition of the
+            span, and the array's base is named by the +0x07 field of the record
+            immediately in front of it.
   REFUSE    not established; the span keeps its `.incbin` and the reason is
-            printed by --verdicts.
+            printed by --verdicts.  --probe-refusals is the search that says so:
+            it finds no decomposition at all for any of the 17.
 """
 import os
 import re
