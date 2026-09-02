@@ -416,3 +416,57 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # So this commit is still right -- five real TLCS-900/H instructions that
 # unidasm decodes and this backend refused are now readable, and a decoder blind
 # spot is silent by nature. It is NOT a route to converting v10's residue.
+
+# UPDATE 13 (2026-09-02): e4326acd28aa turns the last silent branch truncation
+# into a diagnostic. JR, JRcc and DJNZ take the RAW DISPLACEMENT FIELD and
+# masked a constant operand with `& 0xFF`, so `jr 99832` assembled to
+# [0x68,0xf8] and branched somewhere else entirely with no error. JRL and CALR
+# never had this defect -- they emit through emitImmediate, which has carried
+# the check since 95f7f2d40428 -- so the reported scope of three mnemonics was
+# really one, plus DJNZ for consistency.
+#
+# ⚠ MEASURED BEFORE CHANGING ANYTHING, per UPDATE 8's precedent. 36 operands in
+# 6 files did not fit the field (scripts/analysis/branch_displacement_field_audit.py,
+# which also rewrites them under --apply):
+#   * 34 are the displacement SIGN-EXTENDED TO 24 BITS by the disassembly that
+#     produced the line -- `jr c, 16777183` for -33 -- the same mistake
+#     95f7f2d40428 found in 31 `jrl` operands. Truncating moves no byte.
+#   * ⚠⚠ 2 are a TARGET ADDRESS, and that is the more serious finding.
+#     wsa1/prom_a wrote `jr T,0xfe434d` at FE42FE and `jr ULE,0xfe525a` at
+#     FE51FE. Both produced the RIGHT byte only because the instruction ends at
+#     a 0x...00 boundary, so the target's low byte happens to BE the
+#     displacement. Relocate either routine by one byte and the source silently
+#     assembles a branch to the wrong place, with the byte gate green
+#     throughout. Neither the gate nor any decode probe can see this class; only
+#     a field-range census can.
+#   * 0 of the 278 `djnz` sites pass a bare number.
+#
+# ★ AND THE FOUR ROUND-TRIP ASYMMETRIES ARE ALL DECODE-SIDE, WITH THE SPELLING
+#   ALREADY PRESENT. `ldir85`, `bitm 7,(xhl+1)`, `pushw (xiz+4)` and
+#   `pushw (xix+32)` each encode the ROM's exact bytes and always did; the
+#   decoder had the wrong table. Fixed by a parallel lane in 1f75e04f774a and
+#   b3814f8f7b11. ⚠ THE `ldir` REFUSAL RECORDED EARLIER WAS RIGHT: reaching for
+#   the native spelling would have moved bytes at 827 of 849 sites
+#   (tools/spelling-probes/README-ldir.md); the correct fix was to teach the
+#   DECODER the base-register field, which moves none.
+#
+# ★ THE POPULATION, which is the number that was missing: over EVERY real
+#   instruction in all 13 committed images -- 1,323,980 of them, boundaries
+#   taken from `llvm-mc --show-encoding` over the tree's own sources, so nothing
+#   is framed by guess -- 472 print a text that re-encodes to different bytes
+#   and 16 consume the wrong number of bytes. 488 sites, 51 distinct forms,
+#   0.037%. scripts/analysis/decode_encode_asymmetry_sweep.py, at
+#   tlcs900_backend@d5ed58d05518. ⚠ Their SHAPE is not the sample's: ~340 are
+#   one printer/parser pair for the SRI (Xrr+d16) operand, ~120 are the
+#   don't-care-bits pattern UPDATE 11 already refused as a non-defect, and all
+#   16 length errors are one `ldmm_dri` family in v10.
+#
+# ⚠ A DECODE FIGURE IS A PROPERTY OF THE BUILD. The toolchain moved six times
+# during this lane and once linked a binary whose `jr` neither truncated nor
+# diagnosed -- matching neither source state. Re-linking fixed it. Every number
+# above names its commit; do not compare figures across a rebuild.
+#
+# Verified: `make gate-all` -- 9 KN5000 and 4 SX-WSA1R ROMs, all IDENTICAL,
+# plus scripts/analysis/assert_images_assemble.py on all 8 KN5000 images, and
+# llvm-lit clean on all 28 TLCS900 MC tests. That the gate is green ACROSS the
+# new diagnostic is the finding: truncation was all the old assembler did.
