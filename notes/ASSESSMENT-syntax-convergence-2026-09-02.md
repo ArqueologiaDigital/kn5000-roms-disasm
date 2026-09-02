@@ -328,3 +328,69 @@ premise in §2 needs re-examining before any of this is acted on.
    regression, and here the gate can prove it did not.
 5. Leave the raw-byte pseudo-instructions alone until their operands are
    modelled in the backend, deliberately, with an encoding test each.
+
+---
+
+# STATUS after the first convergence push (2026-09-03)
+
+Four lanes, all merged, `make gate-all` green after every family:
+**13/13 byte-identical, 8/8 assembling, toolchain-prerequisite 8/8 + 4/4.**
+
+| bucket | before | after | |
+|---|---:|---:|---|
+| NATIVE | 1,034,935 | **1,152,209** | +117,274 |
+| SYNTHETIC | 265,116 | **147,842** | **−44.2%** |
+| MACRO | 16,922 | 16,922 | untouched this push |
+| distinct synthetic names | 459 | **438** | |
+
+Measured by `notes/syntax-convergence-probes/mnemonic_census.py`.
+
+## What each lane established, beyond its count
+
+* **direct-address** (51,030 sites + conv-size's `ldda32` 4,991 = the family
+  closed at 56,021): the free portion §1.3 predicted, and it was free.
+* **displacement** (61,678 of 61,894): five of its six mnemonics were **not**
+  displacement forms at all — `ldb_d8`'s suffix is the *data* size. Reading the
+  encoder rather than the suffix is what caught it.
+* **size/form** (6,526 of 88,141): the rest are **genuine form selectors** where
+  the mnemonic chooses between two legal encodings. `cps` → `cp a, 4` moves
+  `c9 dc` to `c9 cf 04`. A blanket rename would have produced 19,261 silently
+  wrong instructions **that still assemble**.
+* **backend** (19,765 of 22,136 class-3 sites): the class no rename could reach,
+  because the operand was not modelled. Now modelled.
+
+## The residue, and it is not all the same kind
+
+**147,842 sites remain, and they divide by what it would take to move them:**
+
+1. **~9,748 sites over 66 names are the same shape as work already done** —
+   ALU-direct, `set`/`res`-direct, inc/dec-direct, `stl_da`, `cpib_da`,
+   `cpw_da`. `scripts/converters/run_direct_address_convergence.sh` converts
+   them once their entries are added to `MAP`. This is the next slice and it is
+   mechanical.
+2. **~78,364 need a backend feature, not a rename** — the three named in
+   `notes/TRIAGE-size-form-mnemonics-2026-09-02.md`: an immediate field width
+   (52,064 sites), a way to name the shorter alternative encoding (19,603), and
+   a `PrevGR8` register class (6,697). Features A and B are one parser change.
+3. **~2,371 class-3 sites the backend lane refused with evidence** — the
+   `(Xrr+256)` sentinel, the bank-relative base register, the R+R sub-opcodes,
+   the ERP families.
+
+★ **The three buckets are not interchangeable, and a single "sites remaining"
+number hides that.** One is an afternoon's mechanical work; one needs the
+backend to learn something; one is refused for stated reasons. Quote the split.
+
+## ⚠ Two corrections this push forced on the toolchain discipline
+
+* **Quote the binary's sha256, not only the commit.** The shared `llvm-mc`
+  re-linked five times behind an unchanging `7e541b8ddb07`, and one of those
+  links **parsed `ld a,(0x120000:24)` while rejecting `ldw (0xe0b4:16), 0`** —
+  turning two already-gated families red with nothing in the tree changed.
+* **The WSA1R images were certifiable-stale.** Their Makefile never named the
+  assembler as a prerequisite, so a toolchain change rebuilt 0 of 4. Fixed in
+  `07db0cc2`; `assert_toolchain_is_a_prerequisite.py` now guards it inside
+  `gate-all`.
+
+Neither is a fact about TLCS-900 syntax. Both decide whether any figure above
+means anything, which is why they are recorded here rather than only in the
+lane notes.
