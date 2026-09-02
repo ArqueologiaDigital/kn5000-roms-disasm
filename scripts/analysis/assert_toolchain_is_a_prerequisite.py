@@ -20,6 +20,14 @@ HOW IT DECIDES
 
     This is a dry run -- it builds nothing and changes no object.
 
+⚠ IT DOES TOUCH THE SHARED ASSEMBLER
+    `os.utime` on llvm-mc is how the check poses its question, and llvm-mc is
+    one binary shared by every lane.  After a `make gate-all` anywhere, every
+    other worktree's objects are older than the assembler and its next build
+    rebuilds everything.  That is a cost, not a correctness problem, but it is
+    why `gate-all` is expensive for a lane that changed nothing outside wsa1 --
+    see the brief's "gate only what you could have broken".
+
 RUN
     python3 scripts/analysis/assert_toolchain_is_a_prerequisite.py
     python3 scripts/analysis/assert_toolchain_is_a_prerequisite.py --selftest
@@ -37,6 +45,33 @@ import sys
 import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
+
+
+def _pinned_assembler():
+    """Where the Makefile says the assembler is.
+
+    ⚠ `ROOT.parent / "llvm-project"` is WRONG IN EVERY LANE WORKTREE.  A lane
+    tree lives at ~/compartilhado/disasm-lanes/<lane>, so its parent is
+    `disasm-lanes/`, and this check died with "no assembler at
+    .../disasm-lanes/llvm-project/build/bin/llvm-mc" -- after both byte gates
+    had already passed.  It only ever worked from the main checkout, which is
+    the one place the assumption holds.  Resolve it the way the Makefile does
+    (`PROJECTS_ROOT ?= $(HOME)/compartilhado`), and keep the old guess as the
+    last fallback so a differently-laid-out checkout still works.
+    """
+    env = os.environ.get("LLVM_MC")
+    if env:
+        return pathlib.Path(env)
+    projects = os.environ.get("PROJECTS_ROOT")
+    candidates = []
+    if projects:
+        candidates.append(pathlib.Path(projects) / "llvm-project/build/bin/llvm-mc")
+    candidates.append(pathlib.Path.home() / "compartilhado/llvm-project/build/bin/llvm-mc")
+    candidates.append(ROOT.parent / "llvm-project/build/bin/llvm-mc")
+    for c in candidates:
+        if c.exists():
+            return c
+    return candidates[-1]
 
 # (label, makefile dir, how many images that Makefile builds)
 TREES = [
@@ -73,14 +108,8 @@ def main():
                          "prerequisite removed")
     args = ap.parse_args()
 
-    # NOT ROOT.parent: a lane worktree lives under disasm-lanes/, so that
-    # resolves to disasm-lanes/llvm-project and the check fails for every lane.
-    # Mirror the Makefile's own default instead -- PROJECTS_ROOT ?= $(HOME)/
-    # compartilhado -- and honour PROJECTS_ROOT if the caller overrode it.
-    projects_root = pathlib.Path(
-        os.environ.get("PROJECTS_ROOT", pathlib.Path.home() / "compartilhado"))
-    assembler = pathlib.Path(
-        args.assembler or projects_root / "llvm-project/build/bin/llvm-mc")
+    assembler = pathlib.Path(args.assembler) if args.assembler \
+        else _pinned_assembler()
     if not assembler.exists():
         sys.exit(f"no assembler at {assembler}")
 
