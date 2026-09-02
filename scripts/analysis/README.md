@@ -152,3 +152,37 @@ all 0xff) retyped as `.fill` (erased flash, not code, despite a clean decode),
 (`v7_no_source_bytes.py`). The 34 CODE-labelled, 25,425 B bucket is otherwise
 blocked by the same tlcs900-backend spelling gap already known from v7's
 general code-as-`.byte` debt.
+
+## lane_v10storage_byte_split.py
+
+*What question does it answer?* Of the `.byte` operands in
+`v10/maincpu/{storage,ui,factory_test,file_io,boot,demo}`, which are real code
+still spelled as data, which are `.byte` sitting inside instructions that
+nothing reaches (so the surrounding "code" is the suspect part), and which are
+data already correctly represented?
+
+    python3 scripts/analysis/lane_v10storage_byte_split.py --control
+    python3 scripts/analysis/lane_v10storage_byte_split.py
+    python3 scripts/analysis/lane_v10storage_byte_split.py --detail ui
+
+`--control` is the important one: it measures both error rates of the rule on
+ground truth. "Code-flanked" alone has a 94.5% false-positive rate against
+0xF15907-0xF1612F, a span proven to be a record stream; adding the
+call-corroboration term takes that to 0.0%, at 66.2% sensitivity on blocks
+something branches to by name.
+
+## lane_v10storage_record_stream_evidence.py
+
+*What question does it answer?* Is 0xF15907-0xF1612F in
+`storage/flash_floppy_handlers.s` code, or a `[flags:u8][len:u8]` record stream?
+Six chain closures, 44/44 in-span pointers, 12/12 external `.set` addresses,
+against a 1.0% measured null.
+
+    python3 scripts/analysis/lane_v10storage_record_stream_evidence.py
+
+## adjudicate_groupbox_ssf_marker.py
+
+*What question does it answer?* Is 0xF98697 -- the only self-tagged "still
+undecoded" region left in the tree -- actually undecoded?
+
+    python3 scripts/analysis/adjudicate_groupbox_ssf_marker.py
