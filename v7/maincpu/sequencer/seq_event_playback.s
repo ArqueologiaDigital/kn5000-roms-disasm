@@ -16,8 +16,8 @@ SeqEvt_EntryPoint2:
 
 SeqEvt_InitAndProcess:
 	ld	(32097:16), 95
-	stdi16	(32102), 9
-	stdi16	(32104), 72
+	ldw	(32102:16), 9
+	ldw	(32104:16), 72
 	ld	(32106:16), 16
 	ld	(32107:16), 1
 	ld	a, (32108:16)
@@ -396,9 +396,9 @@ SeqEvt_RotationOffsetTable:
 	.byte 0x24, 0x00, 0x2d, 0x00, 0x36, 0x00, 0x3f, 0x00
 
 SeqEvt_InitVoiceScan:
-	stdi16	(32100), 65375
-	stdi16	(32102), 9
-	stdi16	(32104), 72
+	ldw	(32100:16), 65375
+	ldw	(32102:16), 9
+	ldw	(32104:16), 72
 	ld	(32107:16), 1
 	ld	xhl, 31952
 	calr	24
@@ -1882,7 +1882,7 @@ AccPlay_InitializeStart:
 	calr AccPlay_SetupSoundParams
 	call 0xfdd726
 	calr AccPlay_SaveMuteStates
-	stdi16 (0x7e72), 0xfffe
+	ldw (0x7e72:16), 0xfffe
 	ld (0x7e98:16), 0x00
 	push XWA
 	push XHL

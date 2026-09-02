@@ -41,7 +41,7 @@ UIStateEvt_VoiceParamHandler:
 	call	15672365
 	ld	(1073:16), 0
 	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10
-	stdi16	61854, 0
+	ldw	(61854:16), 0
 	.byte 0xc1, 0xa5, 0x28, 0x3c, 0xfe
 	ldb	a, 76
 	call	16544114
@@ -56,7 +56,7 @@ UIStateEvt_VoiceParamHandler:
 	call	15672365
 	ld	(1073:16), 0
 	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10
-	stdi16	61854, 0
+	ldw	(61854:16), 0
 	ld	(4596:16), 0
 	call	15976648
 	ret
@@ -235,13 +235,13 @@ Part_LookupParam:
 	ret
 Part_ValidateAndActivate:
 	; --- Validation: check range, optionally call ---
-	stdi16	(0x287f), 1
-	stdi16	(3383), 0
+	ldw	(0x287f:16), 1
+	ldw	(3383:16), 0
 	cp	(3424:16), 0
 	jr z, PartValidate_Done
 	cp	(3424:16), 16
 	jr ugt, PartValidate_Done
-	stdi16	(4360), 0
+	ldw	(4360:16), 0
 	xor	wa, wa
 	ldb a, 0x8a
 	call UI_PostModeChangeEvent
@@ -890,8 +890,8 @@ CDlike_InitModeAndLoadBank:
 	call SqTrAs_InitWall
 	ld wa, (0xf19e:16)
 	ld (0x2875:16), wa
-	stdi16 (0xf19e), 0x0000
-	stdi16 (0x2314), 0x0000
+	ldw (0xf19e:16), 0x0000
+	ldw (0x2314:16), 0x0000
 	ld XIY,0x0000f9a0
 	ld XIX,0x0003cf04
 	ldw BC, 0x0310
@@ -918,7 +918,7 @@ CDlikeBankLoad_CheckSavedState:
 	ldir85
 	cp (6882:16), 1
 	jr nz, CDlikeBankLoad_Return
-	stdi16 (0xf19e), 0
+	ldw (0xf19e:16), 0
 
 CDlikeBankLoad_Return:
 	ret

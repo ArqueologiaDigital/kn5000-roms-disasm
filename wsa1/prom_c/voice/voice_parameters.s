@@ -1812,7 +1812,7 @@ sub_FA888C__FA8973:
 	ld	bc, (xiz+8)                             ; FA8983  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA8986  extz XBC
 	ld	(xbc+65), hl                            ; FA8988  ld (XBC+0x41),HL
-	stdi16	(0x5A51), 0                         ; FA898B  ld (0x5a51),0x0000
+	ldw	(0x5A51:16), 0                         ; FA898B  ld (0x5a51),0x0000
 sub_FA888C__FA8991:
 	pop	xix                                    ; FA8991  pop XIX
 	popw	de                                    ; FA8992  pop DE
@@ -1935,7 +1935,7 @@ sub_FA8997__FA8A45:
 	ld	wa, (xiz+8)                             ; FA8A65  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FA8A68  extz XWA
 	ld	(xwa+65), bc                            ; FA8A6A  ld (XWA+0x41),BC
-	stdi16	(0x5A51), 0                         ; FA8A6D  ld (0x5a51),0x0000
+	ldw	(0x5A51:16), 0                         ; FA8A6D  ld (0x5a51),0x0000
 	pop	xix                                    ; FA8A73  pop XIX
 	popw	de                                    ; FA8A74  pop DE
 	pop	xhl                                    ; FA8A75  pop XHL
@@ -2108,7 +2108,7 @@ sub_FA8A79__FA8BAA:
 	extz	xbc                                   ; FA8BC9  extz XBC
 	ld	wa, (xiz-2)                             ; FA8BCB  ld WA,(XIZ+0xfe)
 	ld	(xbc+65), wa                            ; FA8BCE  ld (XBC+0x41),WA
-	stdi16	(0x5A51), 0                         ; FA8BD1  ld (0x5a51),0x0000
+	ldw	(0x5A51:16), 0                         ; FA8BD1  ld (0x5a51),0x0000
 	pop	xix                                    ; FA8BD7  pop XIX
 	popw	de                                    ; FA8BD8  pop DE
 	pop	xhl                                    ; FA8BD9  pop XHL
@@ -2494,7 +2494,7 @@ sub_FA8D9B__FA8E15:
 	ld	bc, (xiz+8)                             ; FA8E33  ld BC,(XIZ+0x08)
 	extz	xbc                                   ; FA8E36  extz XBC
 	ld	(xbc+65), ix                            ; FA8E38  ld (XBC+0x41),IX
-	stdi16	(0x5A51), 0                         ; FA8E3B  ld (0x5a51),0x0000
+	ldw	(0x5A51:16), 0                         ; FA8E3B  ld (0x5a51),0x0000
 	pop	xix                                    ; FA8E41  pop XIX
 	popw	de                                    ; FA8E42  pop DE
 	pop	xhl                                    ; FA8E43  pop XHL
@@ -2591,7 +2591,7 @@ sub_FA8E47__FA8EC1:
 	ld	wa, (xiz+8)                             ; FA8EE3  ld WA,(XIZ+0x08)
 	extz	xwa                                   ; FA8EE6  extz XWA
 	ld	(xwa+65), bc                            ; FA8EE8  ld (XWA+0x41),BC
-	stdi16	(0x5A51), 0                         ; FA8EEB  ld (0x5a51),0x0000
+	ldw	(0x5A51:16), 0                         ; FA8EEB  ld (0x5a51),0x0000
 	pop	xix                                    ; FA8EF1  pop XIX
 	popw	de                                    ; FA8EF2  pop DE
 	pop	xhl                                    ; FA8EF3  pop XHL
@@ -2729,7 +2729,7 @@ sub_FA8EF7__FA8FD7:
 	extz	xbc                                   ; FA8FF6  extz XBC
 	ld	wa, (xiz-2)                             ; FA8FF8  ld WA,(XIZ+0xfe)
 	ld	(xbc+65), wa                            ; FA8FFB  ld (XBC+0x41),WA
-	stdi16	(0x5A51), 0                         ; FA8FFE  ld (0x5a51),0x0000
+	ldw	(0x5A51:16), 0                         ; FA8FFE  ld (0x5a51),0x0000
 	pop	xix                                    ; FA9004  pop XIX
 	popw	de                                    ; FA9005  pop DE
 	pop	xhl                                    ; FA9006  pop XHL

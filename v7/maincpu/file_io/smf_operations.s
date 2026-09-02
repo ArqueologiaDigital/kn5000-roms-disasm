@@ -545,7 +545,7 @@ SmfFN_JumpTable:
 	ld	(33040:16), hl
 	cps	hl, 0
 	jr	ge, 26
-	stdi16	33040, 0
+	ldw	(33040:16), 0
 	jr	18
 	ld	wa, (33896:16)
 	ld	(33040:16), wa

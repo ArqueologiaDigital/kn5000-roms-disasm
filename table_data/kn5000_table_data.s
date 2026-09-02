@@ -3941,8 +3941,8 @@ LZSS_ParseHeader__read_more:
 	cps iz, 6	; CP IZ, 6
 	jr c, LZSS_ParseHeader__read_more	; JR C, .read_more
 	; Set display coordinates for progress indicator
-	stdi16 (3120), 42; LD (0x0C30), 0x002A
-	stdi16 (3122), 200; LD (0x0C32), 0x00C8
+	ldw (3120:16), 42; LD (0x0C30), 0x002A
+	ldw (3122:16), 200; LD (0x0C32), 0x00C8
 	; Check if already at target size
 	ld xwa, (3108:16); LD XWA, (0x0C24)
 	cpda32 xwa, 3104	; CP XWA, (0x0C20)
@@ -4010,8 +4010,8 @@ LZSS_Decompress__prefill_loop:
 	stda32 3116, xwa	; LD (0x0C2C), XWA
 	ld xwa, 0x800000	; LD XWA, 0x00800000 - source ROM base
 	stda32 3112, xwa	; LD (0x0C28), XWA
-	stdi16 (3120), 50; LD (0x0C30), 0x0032 - display X
-	stdi16 (3122), 180; LD (0x0C32), 0x00B4 - display Y
+	ldw (3120:16), 50; LD (0x0C30), 0x0032 - display X
+	ldw (3122:16), 180; LD (0x0C32), 0x00B4 - display Y
 	ldw wa, 0x32	; LD WA, 0x0032
 	ldw bc, 0xB4	; LD BC, 0x00B4
 	lds de, 6	; LD DE, 6
@@ -4020,7 +4020,7 @@ LZSS_Decompress__prefill_loop:
 	; === Read expected decompressed size (3 bytes, little-endian) ===
 	ld xwa, 0x3E8	; LD XWA, 0x000003E8 - initial guess
 	stda32 3104, xwa	; LD (0x0C20), XWA
-	stdi16 (3124), 36; LD (0x0C34), 0x0024
+	ldw (3124:16), 36; LD (0x0C34), 0x0024
 
 	; === Pre-read 4 sectors for initial buffer fill ===
 	ldiw_erp 0xFA, 0	; LD QIZ, 0

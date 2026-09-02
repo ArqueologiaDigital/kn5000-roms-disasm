@@ -1871,7 +1871,7 @@ AudioInit_FlushQueue_LoopNext:
 	jrl c, VoiceEvent_TypeDispatch
 
 VoiceEvtHandler_Done:
-	stdi16 (0xc4ca), 0
+	ldw (0xc4ca:16), 0
 	popw iz
 	ret
 
@@ -2789,7 +2789,7 @@ VoiceSlotInit_Check:
 	lda xwa, (0xc1fe:16)
 	lds bc, 1
 	call NoteMap_AllocateVoice
-	stdi16 (0xceff), 0
+	ldw (0xceff:16), 0
 	ret
 
 NoteMap_AssignAllVoiceLinks:
@@ -5576,7 +5576,7 @@ AllocVoice_Done_LoadIter:
 	ld xwa, xiz
 	lds bc, 2
 	calr NoteMap_AssignVoiceParams
-	stdi16 (0xce66), 0
+	ldw (0xce66:16), 0
 	ld (0xceb2:16), 0
 
 NoteMap_AllocVoiceEntry_Continue:
@@ -5719,7 +5719,7 @@ ProcessNoteEvent_LoadFromStack3:
 	ld_sril XWA, (xsp + 0x00a6)
 	lds bc, 2
 	calr NoteMap_AssignVoiceParams
-	stdi16 (0xce66), 0
+	ldw (0xce66:16), 0
 	ld (0xceb2:16), 0
 
 NoteMap_LookupAllocAndStore:
@@ -14120,7 +14120,7 @@ Voice_ReadSearchResult:
 	ret
 
 Voice_ResetSearchState:
-	stdi16 (0xce66), 0
+	ldw (0xce66:16), 0
 	ld (0xceb2:16), 0
 	ret
 
@@ -19164,10 +19164,10 @@ COMM_SendDataReturn:
 	stda32 0xcfc0, xwa
 	ld xwa, 0xffffffff
 	stda32 0xcfc4, xwa
-	stdi16 (0xcfc8), 0xffff
-	stdi16 (0xcfca), 0xffff
-	stdi16 (0xcfcc), 0xffff
-	stdi16 (0xcfce), 0xffff
+	ldw (0xcfc8:16), 0xffff
+	ldw (0xcfca:16), 0xffff
+	ldw (0xcfcc:16), 0xffff
+	ldw (0xcfce:16), 0xffff
 	lds de, 0
 	cp de, 0x18
 	ret gt
@@ -20175,9 +20175,9 @@ AccWrap_PlayModeStateMachine:
 	jr z, PlayModeStateMachine_Block
 	cps wa, 6
 	ret nz
-	stdi16 (0xd09a), 30
+	ldw (0xd09a:16), 30
 	ei 6
-	stdi16 (1052), 0
+	ldw (1052:16), 0
 	ld (1051:16), 0
 	ei 0
 	ret
@@ -20191,7 +20191,7 @@ PlayModeStateMachine_Block:
 	resda 2, 0x28b2
 	resda 3, 0x28a7
 	ei 6
-	stdi16 (1052), 0
+	ldw (1052:16), 0
 	ld (1051:16), 0
 	ei 0
 	jp AccWrap_PlayModeStart
@@ -20199,7 +20199,7 @@ PlayModeStateMachine_Block:
 PlayModeStateMachine_Block2:
 	cpdi16 0xd09a, 0
 	jr le, PlayModeStateMachine_DoPlayMode
-	stdi16 (0xd09a), 0
+	ldw (0xd09a:16), 0
 	ret
 
 PlayModeStateMachine_DoPlayMode:
@@ -20217,7 +20217,7 @@ PlayModeStateMachine_TestBit2:
 
 PlayModeStateMachine_Block3:
 	ei 6
-	stdi16 (1052), 0
+	ldw (1052:16), 0
 	ld (1051:16), 0
 	ei 0
 	ret
@@ -20279,7 +20279,7 @@ PlayModeStateMachine_Prologue:
 	decdi16 1, 0xec0e
 	cps wa, 0
 	jr ge, PlayModeStateMachine_LoadParam
-	stdi16 (0xec0e), 6
+	ldw (0xec0e:16), 6
 	inc 1, xiz
 	ei 6
 	ld xwa, xiz
@@ -20736,8 +20736,8 @@ SeqInit_ConfigureBanks:
 	pop xiz
 
 ConfigureBanks_Send:
-	stdi16 (0xeaf9), 0
-	stdi16 (0xebfb), 0
+	ldw (0xeaf9:16), 0
+	ldw (0xebfb:16), 0
 	call Audio_SendEventPostCmd
 	lds hl, 0
 	ret
@@ -21315,7 +21315,7 @@ SongFile_DecodeMidiEvent:
 	jrl SeqPlay_Epilogue
 
 DecodeMidiEvent_Block:
-	stdi16 (0xebfb), 0
+	ldw (0xebfb:16), 0
 
 DecodeMidiEvent_Block2:
 	cpdi16 0xeaf9, 0
@@ -21332,7 +21332,7 @@ DecodeMidiEvent_Block2:
 
 DecodeMidiEvent_Send:
 	call Audio_SendEventPostCmd
-	stdi16 (0xeaf9), 0
+	ldw (0xeaf9:16), 0
 
 DecodeMidiEvent_LoadDRAM:
 	ld wa, (0xe9e5:16)
@@ -21626,7 +21626,7 @@ SeqPlay_CheckSysExMarker:
 	jr SeqPlay_CopyToMidiBuffer
 
 SeqVoice_InitZeroPath:
-	stdi16 (0xeaf9), 0
+	ldw (0xeaf9:16), 0
 
 SeqPlay_CopyToMidiBuffer:
 	ld wa, (xsp + 10)
@@ -21668,7 +21668,7 @@ SeqPlay_CopyToMidiBuffer:
 
 SeqPlay_SendEvent:
 	call Audio_SendEventPostCmd
-	stdi16 (0xeaf9), 0
+	ldw (0xeaf9:16), 0
 
 SeqPlay_CheckMidiBuffer:
 	cpdi16 0xebfb, 0
@@ -21684,7 +21684,7 @@ SeqPlay_CheckMidiBuffer:
 	jr SeqPlay_Epilogue
 
 SeqPlay_ClearMidiCount:
-	stdi16 (0xebfb), 0
+	ldw (0xebfb:16), 0
 
 SeqPlay_SetSuccess:
 	lds hl, 0
@@ -21869,7 +21869,7 @@ RecordReadOK_NextIter:
 	jr ule, RecordReadOK_Block6
 
 RecordReadOK_Block7:
-	stdi16 (0xe9ef), 384
+	ldw (0xe9ef:16), 384
 	calr FileIO_ReadNextRecord
 	ld wa, hl
 	cps wa, 0
@@ -22124,7 +22124,7 @@ Epilogue_LoadIter:
 Epilogue_Block:
 	lds32 xwa, 0
 	stda32 0xebfd, xwa
-	stdi16 (0xec01), 0
+	ldw (0xec01:16), 0
 	lds hl, 0
 	popw iz
 	ret
@@ -22718,7 +22718,7 @@ ToneGen_PopIzStackReturn:
 
 ToneGen_ReadFileRecord:
 	push xiz
-	stdi16 (0xe9ef), 480
+	ldw (0xe9ef:16), 480
 	calr FileIO_ReadNextRecord
 	ld wa, hl
 	cps wa, 0
@@ -22772,7 +22772,7 @@ ToneGen_ResetAndInitBanks:
 	ld (4330:16), 1
 	lds wa, 1
 	calr SoundParam_InitDefaultBanks
-	stdi16 (4597), 0x8078
+	ldw (4597:16), 0x8078
 	lds32 xwa, 4
 	ldw bc, 0x76
 	lds de, 3
@@ -23027,11 +23027,11 @@ ProcessMidiConverge_Block:
 	jr nz, ProcessMidiConverge_Block3
 
 ProcessMidiConverge_Block2:
-	stdi16 (0xec01), 2
+	ldw (0xec01:16), 2
 	jr ProcessMidiConverge_InitVal
 
 ProcessMidiConverge_Block3:
-	stdi16 (0xec01), 3
+	ldw (0xec01:16), 3
 
 ProcessMidiConverge_InitVal:
 	lds iz, 1
@@ -23082,7 +23082,7 @@ ToneGen_ValidateRange_Loop:
 	jrl ToneGen_ProcessMidiConverge
 
 ToneGen_VoiceReset_Return:
-	stdi16 (0xec01), 0
+	ldw (0xec01:16), 0
 	lds32 xwa, 0
 	stda32 0xebfd, xwa
 
@@ -23508,7 +23508,7 @@ DirectReturn_DoLookupC:
 	calr FileIO_InitTrackSlots
 
 SndParam_StoreAndReturn:
-	stdi16 (4597), 120
+	ldw (4597:16), 120
 	ret
 
 StoreAndReturn_Block:
@@ -23517,23 +23517,23 @@ StoreAndReturn_Block:
 	stda32 0xe9e7, xwa
 	lds32 xwa, 0
 	stda32 0xe9f5, xwa
-	stdi16 (0xe9e5), 0
+	ldw (0xe9e5:16), 0
 	lds32 xwa, 0
 	stda32 0xe9eb, xwa
-	stdi16 (0xe9ef), 0
-	stdi16 (0xe9f1), 0
+	ldw (0xe9ef:16), 0
+	ldw (0xe9f1:16), 0
 	lds32 xwa, 0
 	stda32 0xebfd, xwa
-	stdi16 (0xec01), 0
+	ldw (0xec01:16), 0
 	ld (0xe9c4:16), 0
 	calr FileIO_InitTrackSlots
 	calr SysexRingBuf_Init
 	jrl MidiRingBuf_Init
 
 FileIO_InitTrackSlots:
-	stdi16 (0xd0a8), 0
-	stdi16 (0xd0aa), 0
-	stdi16 (0xd0ac), 2047
+	ldw (0xd0a8:16), 0
+	ldw (0xd0aa:16), 0
+	ldw (0xd0ac:16), 2047
 	lds de, 0
 	jr InitTrackSlots_LoopCheck
 
@@ -23565,7 +23565,7 @@ InitTrackSlots_LoadDRAM:
 	decdi16 1, 0xd0ac
 	cpdi16 0xd0a8, 2047
 	jr nz, InitTrackSlots_IncDRAM
-	stdi16 (0xd0a8), 0
+	ldw (0xd0a8:16), 0
 	jr InitTrackSlots_InitVal
 
 InitTrackSlots_IncDRAM:
@@ -23594,7 +23594,7 @@ RingBuffer_ReadByte_LoadDRAM:
 	incdi16 1, (0xd0ac)
 	cpdi16 0xd0aa, 2047
 	jr nz, RingBuffer_ReadByte_IncDRAM
-	stdi16 (0xd0aa), 0
+	ldw (0xd0aa:16), 0
 	jr RingBuffer_ReadByte_Return
 
 RingBuffer_ReadByte_IncDRAM:
@@ -23682,9 +23682,9 @@ SndParam_PopStackReturn:
 	ret
 
 SysexRingBuf_Init:
-	stdi16 (0xd8ae), 0
-	stdi16 (0xd8b0), 0
-	stdi16 (0xd8b2), 2047
+	ldw (0xd8ae:16), 0
+	ldw (0xd8b0:16), 0
+	ldw (0xd8b2:16), 2047
 	lds de, 0
 	jr SysexRingBuf_ClearCheck
 
@@ -23716,7 +23716,7 @@ SysexRingBuf_StoreAndAdvance:
 	decdi16 1, 0xd8b2
 	cpdi16 0xd8ae, 2047
 	jr nz, SysexRingBuf_IncrementWrite
-	stdi16 (0xd8ae), 0
+	ldw (0xd8ae:16), 0
 	jr SysexRingBuf_WriteSuccess
 
 SysexRingBuf_IncrementWrite:
@@ -23745,7 +23745,7 @@ SysexRingBuf_ReadAndAdvance:
 	incdi16 1, (0xd8b2)
 	cpdi16 0xd8b0, 2047
 	jr nz, SysexRingBuf_IncrementRead
-	stdi16 (0xd8b0), 0
+	ldw (0xd8b0:16), 0
 	jr SysexRingBuf_ReadReturn
 
 SysexRingBuf_IncrementRead:
@@ -23831,9 +23831,9 @@ SysexRingBuf_WriteBytesReturn:
 	ret
 
 MidiRingBuf_Init:
-	stdi16 (0xe0b4), 0
-	stdi16 (0xe0b6), 0
-	stdi16 (0xe0b8), 127
+	ldw (0xe0b4:16), 0
+	ldw (0xe0b6:16), 0
+	ldw (0xe0b8:16), 127
 	lds de, 0
 	jr MidiRingBuf_ClearCheck
 
@@ -23865,7 +23865,7 @@ MidiRingBuf_StoreAndAdvance:
 	decdi16 1, 0xe0b8
 	cpdi16 0xe0b4, 127
 	jr nz, StoreAndAdvance_IncDRAM
-	stdi16 (0xe0b4), 0
+	ldw (0xe0b4:16), 0
 	jr StoreAndAdvance_InitVal
 
 StoreAndAdvance_IncDRAM:
@@ -23894,7 +23894,7 @@ StoreAndAdvance_LoadDRAM2:
 	incdi16 1, (0xe0b8)
 	cpdi16 0xe0b6, 127
 	jr nz, StoreAndAdvance_IncDRAM2
-	stdi16 (0xe0b6), 0
+	ldw (0xe0b6:16), 0
 	jr StoreAndAdvance_Return2
 
 StoreAndAdvance_IncDRAM2:

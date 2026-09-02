@@ -1411,7 +1411,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	jr z, .Lc_f6e6a6
 	bit 7, (0x7d88:16)
 	jr nz, .Lc_f6e6a6
-	stdi16 (0x7dd4), 0x0800
+	ldw (0x7dd4:16), 0x0800
 	ordi8 (0x7d88), 0x80
 	jr t, .Lc_f6e6a9
 .Lc_f6e6a6:
@@ -1427,7 +1427,7 @@ AccompSeq_AllNotesOffImpl:
 	jr z, AccompSeq_AllNotesOff_Stop
 	bit 7, (0x7d88:16)
 	jr nz, AccompSeq_AllNotesOff_Stop
-	stdi16 (0x7dd4), 0x0800
+	ldw (0x7dd4:16), 0x0800
 	ordi8 (0x7d88), 0x80
 	jr t, AccompSeq_AllNotesOff_Send
 AccompSeq_AllNotesOff_Stop:

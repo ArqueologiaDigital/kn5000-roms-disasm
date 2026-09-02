@@ -687,7 +687,7 @@ DispatchHandler_InitAllSlots:
 	pop xde
 	lds iy, 1
 	call SeqNode_ResolveSlotPtr
-	stdi16 (0xf22f), 1
+	ldw (0xf22f:16), 1
 	ld xiy, (4349:16)
 	xor xhl, xhl
 	lds de, 2
@@ -863,7 +863,7 @@ SeqNodeInsert_EmptyList:
 	ld iy, (xhl + 3)
 	cp iy, 0xffff
 	jr nz, SeqNodeInsert_UnmarkAndCount
-	stdi16 (3302), 0
+	ldw (3302:16), 0
 	ld iy, ix
 	andmi8 (xhl), 0x7f
 	jr SeqNodeInsert_LinkPrev
@@ -1026,7 +1026,7 @@ VoiceSlot_SendErrorAndReset:
 	call MIDI_SendSysExCmd
 	anddi8 (0xe3e2), 111
 	ld (0x7f42:16), 15
-	stdi16 (0xe3dc), 0x40ee
+	ldw (0xe3dc:16), 0x40ee
 	popw bc
 	ret
 

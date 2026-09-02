@@ -128,7 +128,7 @@ PostReset_InitAudio:
 	ld (xbc), a
 	calr Audio_InitRingBuffers
 	ei 0
-	stdi16 4156, 0
+	ldw (4156:16), 0
 	jr __jrt_nop_01FACB
 __jrt_nop_01FACB:
 
@@ -177,7 +177,7 @@ AudioLoop_CheckPeriodicReinit:
 	ld (61458:16), wa
 	cp bc, 0xA
 	jr lt, AudioLoop_DecrementDelay
-	stdi16 61458, 0
+	ldw (61458:16), 0
 
 AudioLoop_DecrementDelay:
 	cps iz, 0
@@ -2933,21 +2933,21 @@ Cmd_Check_DMA_Timeout:	; 020FD9h
 	jr Cmd_DMA_Save_Count
 
 Cmd_DMA_Reset_Counter:	; 020FEFh
-	stdi16 61466, 0	; Reset stuck counter
+	ldw (61466:16), 0	; Reset stuck counter
 
 Cmd_DMA_Save_Count:	; 020FF5h
 	ld (61468:16), wa	; Save current count
 	jr Cmd_DMA_Check_Stuck
 
 Cmd_DMA_Idle:	; 020FFBh
-	stdi16 61466, 0
+	ldw (61466:16), 0
 
 Cmd_DMA_Check_Stuck:	; 021001h
 	ld wa, (61466:16)
 	cp wa, 0xA	; Stuck for 10 iterations?
 	ret ule
 	; Timeout recovery - abort stuck DMA
-	stdi16 61466, 0
+	ldw (61466:16), 0
 	ld (256:16), 0	; Stop DMA
 	ld (4330:16), 0
 	set_dd8 1, 0x34	; SSTAT1 - timeout recovery: force ready state after DMA abort
@@ -6169,7 +6169,7 @@ WaveSel_Emit_ZoneRecord_S13:
 	ormi16 (xwa + 1), 0x3000
 	ld wa, (xbc)
 	stw_da 0x0451ce, xwa
-	stdi16 10558, 0
+	ldw (10558:16), 0
 	ret
 
 ; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x0A.
@@ -6187,7 +6187,7 @@ WaveSel_Emit_ZoneRecord_S10:
 	ormi16 (xwa + 1), 0x1000
 	ld wa, (xbc)
 	stw_da 0x0451ce, xwa
-	stdi16 10558, 0
+	ldw (10558:16), 0
 	ret
 
 ; EMIT A KEY-ZONE PARAMETER RECORD OF STRIDE 0x06.
@@ -6227,7 +6227,7 @@ WaveSel_Emit_ZoneRecord_S4:
 	ld (xwa + 15), xbc
 	ld wa, (xbc)
 	stw_da 0x0451ce, xwa
-	stdi16 10558, 0
+	ldw (10558:16), 0
 	ret
 
 ; SATURATE A SIGNED 16-BIT PITCH VALUE TO [0, 0x7FFF].
@@ -9269,7 +9269,7 @@ Voice_PitchPack_Mode3_AltPath:
 	ld (xwa + 66), bc
 	ld xwa, (xsp + 6)
 	ld (xwa + 68), iz
-	stdi16 10560, 0
+	ldw (10560:16), 0
 
 ; Restore and return.
 Voice_PitchPack_Mode3_Return:
@@ -9337,7 +9337,7 @@ Voice_PitchPack_Mode4_Finalize:
 	set 7, hl
 	ld xwa, (xsp + 4)
 	ld (xwa + 68), hl
-	stdi16 10560, 0
+	ldw (10560:16), 0
 	pop xiz
 	inc 4, xsp
 	ret
@@ -9432,7 +9432,7 @@ Voice_PitchPack_Mode5_Finalize:
 	ld xwa, (xsp + 8)
 	ld bc, (xsp + 6)
 	ld (xwa + 68), bc
-	stdi16 10560, 0
+	ldw (10560:16), 0
 	pop xiz
 	inc 8, xsp
 	ret
@@ -9586,7 +9586,7 @@ Voice_PitchPack_RouteC:
 	ld (xwa + 66), bc
 	ld xwa, (xsp + 4)
 	ld (xwa + 68), hl
-	stdi16 10560, 0
+	ldw (10560:16), 0
 	pop xiz
 	inc 4, xsp
 	ret
@@ -9622,7 +9622,7 @@ Voice_PitchPack_RouteD:
 	set 7, hl
 	ld xwa, (xsp + 4)
 	ld (xwa + 68), hl
-	stdi16 10560, 0
+	ldw (10560:16), 0
 	pop xiz
 	inc 4, xsp
 	ret
@@ -9665,7 +9665,7 @@ Voice_PitchPack_RouteE:
 	ld (xwa + 66), bc
 	ld xwa, (xsp + 6)
 	ld (xwa + 68), hl
-	stdi16 10560, 0
+	ldw (10560:16), 0
 	pop xiz
 	inc 6, xsp
 	ret
@@ -41099,7 +41099,7 @@ DSP_System_Init_Clear2_Loop:
 ; ★ Resets the MIDI event ring (write 0x2B0D, read 0x2B0F, count 0x2B11 all zero) and reads
 ; the SFR-0x44 bit-3 strap.
 DSP_System_Init_Vars:
-	stdi16 11025, 0	; Clear DSP control variable
+	ldw (11025:16), 0	; Clear DSP control variable
 	lds wa, 0
 	ld (11023:16), wa	; Clear control variable
 	ld (11021:16), wa	; Clear control variable
@@ -42659,7 +42659,7 @@ DSP_StoreBufferCount:
 ; the boot path (kn5000_subprogram_v142.s:148) after the primary DSP is initialised. The name
 ; is a slight misnomer -- the block is the ring for BOTH DSPs' command traffic, not DSP2 state.
 DSP2_Init:
-	stdi16 15204, 0
+	ldw (15204:16), 0
 	lds wa, 0
 	ld (15202:16), wa
 	ld (15200:16), wa
@@ -42794,8 +42794,8 @@ CmdHandler60_StreamSizeA:
 
 ; Stream complete: (0x448A) = 0, (0x448C) = 0, then enqueue. One of the two clear sites.
 CmdHandler60_StreamSizeB:
-	stdi16 17546, 0
-	stdi16 17548, 0
+	ldw (17546:16), 0
+	ldw (17548:16), 0
 	jr DSP_EnqueueOrReturn
 
 ; Stream header: only accepted when count == 0x20 exactly (otherwise StateReset). Computes
@@ -42815,13 +42815,13 @@ CmdHandler60_StreamSizeC:
 	inc 8, wa
 	ld (17544:16), wa
 	adddi16 17546, 32
-	stdi16 17548, 1
+	ldw (17548:16), 1
 	jr DSP_EnqueueOrReturn
 
 ; Malformed opening chunk: (0x448A) = 0, (0x448C) = 0. The other clear site.
 DSP_CmdHandler_StateReset:
-	stdi16 17546, 0
-	stdi16 17548, 0
+	ldw (17546:16), 0
+	ldw (17548:16), 0
 
 ; IX = 0; if count == 0 return HL = 0, else fall into the enqueue loop.
 DSP_EnqueueOrReturn:
@@ -43190,7 +43190,7 @@ DSP_Process_NextCmd:
 	decm 1, (xwa + 2)
 	ld xwa, (xsp + 4)
 	incw 1, (xwa + 4)
-	stdi16 17548, 1
+	ldw (17548:16), 1
 	jrl DSP_Process_Exit
 
 ; The real header decode and dispatch, despite the name (the size was already checked).
@@ -43935,12 +43935,12 @@ DSP_ApplyAlgoForVoiceType_TypeF:
 ; ★ Does NOT clear 0x4488/0x448A/0x448C, so a DSP reset does not clear the consumer wedge.
 DSP_Reset:
 	pushw iz
-	stdi16 17840, 1
-	stdi16 17842, 0
-	stdi16 17844, 0
-	stdi16 17846, 0
-	stdi16 17848, 0
-	stdi16 17850, 0
+	ldw (17840:16), 1
+	ldw (17842:16), 0
+	ldw (17844:16), 0
+	ldw (17846:16), 0
+	ldw (17848:16), 0
+	ldw (17850:16), 0
 	ld wa, (17842:16)
 	ld bc, (17844:16)
 	ld de, (17846:16)
@@ -43951,7 +43951,7 @@ DSP_Reset:
 	ldirw
 	lda xwa, (17550:16)
 	call DSP_State_LoadAndApplyAll
-	stdi16 17554, 0
+	ldw (17554:16), 0
 	call DSP_State_DmaLoadPresets
 	ld iz, (61478:16)
 	ld wa, iz
@@ -44021,12 +44021,12 @@ DSP_SlotState_DisplayRestore_Epilogue:
 DSP_ApplyConfig:
 	cp e, 0xFF
 	jr nz, DSP_ApplyConfig_ActivePath
-	stdi16 17550, 1
+	ldw (17550:16), 1
 	jr DSP_ApplyConfig_InactivePath
 
 ; (0x448E) = 0 -- "this is a real change".
 DSP_ApplyConfig_ActivePath:
-	stdi16 17550, 0
+	ldw (17550:16), 0
 
 ; The slot switch.
 DSP_ApplyConfig_InactivePath:
@@ -44172,7 +44172,7 @@ DSP_Set_Value_45B8:
 	ld	(17848:16), wa
 	cpdi16	(17850), 0
 	ret	z
-	stdi16	(17550), 0
+	ldw	(17550:16), 0
 	ldmm16	17738, 17848
 	lda	xwa, (17550:16)
 	call	233009
@@ -44187,18 +44187,18 @@ DSP_Set_Enable_45BA:
 	ld	c, a
 	extz	bc
 	ld	(17850:16), bc
-	stdi16	(17550), 0
+	ldw	(17550:16), 0
 	cps	a, 0
 	jr	z, 8
 	ldmm16	17738, 17848
 	jr	6
-	stdi16	(17738), 0
+	ldw	(17738:16), 0
 	lda	xwa, (17550:16)
 	jp	233009
 ; ★ NEW NAME. (0x448E) = 0 ; (0x4504) = WA ; tail-jump DSP_State_ApplyBuf(0x448E).
 ; 0x4504 = 0x4496 + 0x6E = slot 1 record + 0x36. CmdHandler2C global sub-command 0x21.
 DSP_Set_CfgWord_4504:
-	stdi16	(17550), 0
+	ldw	(17550:16), 0
 	extz	wa
 	ld	(17668:16), wa
 	lda	xwa, (17550:16)
@@ -44206,7 +44206,7 @@ DSP_Set_CfgWord_4504:
 ; ★ NEW NAME. Same shape, target (0x453C) = 0x4496 + 0xA6 = slot 2 record + 0x36.
 ; CmdHandler2C global sub-command 0x22.
 DSP_Set_CfgWord_453C:
-	stdi16	(17550), 0
+	ldw	(17550:16), 0
 	extz	wa
 	ld	(17724:16), wa
 	lda	xwa, (17550:16)
@@ -44216,14 +44216,14 @@ DSP_Set_CfgWord_453C:
 ; that goes through the algorithm path rather than straight to DSP_State_ApplyBuf.
 ; CmdHandler2C global sub-command 0x23.
 DSP_Set_AlgoType_45B0:
-	stdi16	(17550), 0
+	ldw	(17550:16), 0
 	extz	wa
 	ld	(17840:16), wa
 	ld	wa, (17558:16)
 	jrl	-593
 ; ★ NEW NAME. Target (0x4574) = 0x4496 + 0xDE = slot 3 record + 0x36. Global sub-command 0x24.
 DSP_Set_CfgWord_4574:
-	stdi16	(17550), 0
+	ldw	(17550:16), 0
 	extz	wa
 	ld	(17780:16), wa
 	lda	xwa, (17550:16)
@@ -44234,7 +44234,7 @@ DSP_Set_CfgWord_4574:
 ; sub-commands 0x21..0x25 set that one word for slots 1,2,-,3,4 respectively. Slot 0's
 ; equivalent is not exposed here.
 DSP_Set_CfgWord_45AC:
-	stdi16	(17550), 0
+	ldw	(17550:16), 0
 	extz	wa
 	ld	(17836:16), wa
 	lda	xwa, (17550:16)
@@ -46565,12 +46565,12 @@ DSP_AlgoChange_CheckAndFlag:
 
 ; (0x493E) = 1.
 DSP_AlgoChange_NoChange:
-	stdi16 18750, 1
+	ldw (18750:16), 1
 	ret
 
 ; (0x493E) = 0.
 DSP_AlgoChange_FlagAndClear:
-	stdi16 18750, 0
+	ldw (18750:16), 0
 	ret
 
 ; ALREADY NAMED -- doc header only. Entry XWA = live config buffer.
@@ -47069,7 +47069,7 @@ CalcSampleAddr:
 DSP_State_ApplyAll:
 	push xiz
 	ld xiz, xwa
-	stdi16 17864, 0
+	ldw (17864:16), 0
 	ld xwa, xiz
 	calr DSP_Config_ClampLimits
 	ld xwa, xiz
@@ -47265,7 +47265,7 @@ EFF_SlotActive_Epilogue:
 EFF_DSPLink_ResetFlags:
 	cpdi16 18750, 1
 	jr nz, EFF_DSPLink_ResetFlags_LoopNext
-	stdi16 18746, 1
+	ldw (18746:16), 1
 	lds de, 1
 	cps de, 2
 	ret nc

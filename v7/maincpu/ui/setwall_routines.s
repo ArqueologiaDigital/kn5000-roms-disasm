@@ -795,7 +795,7 @@ SetWall_ParsePatternStream:
 	xor w, w
 	ld (0x287a:16), 0
 	ld (0x287d:16), wa
-	stdi16 (0x287f), 1
+	ldw (0x287f:16), 1
 	call SetWall_SlotResolve
 	cp (0x287a:16), 0
 	jr z, SetWall_ParseStream_Init
@@ -1066,7 +1066,7 @@ SetWall_ParserInit:
 	ld (0x28a2:16), iy
 	ld xiy, (7514:16)
 	stda32 3304, xiy
-	stdi16 (3376), 0
+	ldw (3376:16), 0
 	ld (0x289e:16), 15
 	pop xiy
 	ret
@@ -1396,7 +1396,7 @@ SetWall_BankInit:
 	pop xde
 	lds iy, 1
 	call SetWall_ResolveStreamPtr
-	stdi16 (0xf22f), 1
+	ldw (0xf22f:16), 1
 	ld xiy, (4349:16)
 	xor xhl, xhl
 	lds de, 2
@@ -1505,7 +1505,7 @@ SetWall_FullReset_ClearCtrl:
 	inc 1, bc
 	cp bc, 0xa
 	jrl c, SetWall_FullReset_SlotLoop
-	stdi16 (0xf19e), 0
+	ldw (0xf19e:16), 0
 	stiw_da (0x00ffec), 0x0000
 	ld (0xf24b:16), 0
 	ld xix, 0xcef
@@ -1523,7 +1523,7 @@ SetWall_FullReset_ClearGlobal2:
 	djnz8 b, SetWall_FullReset_ClearGlobal2
 	ld (0xf24b:16), 0
 	call SetWall_SendPanelCtrl
-	stdi16 (0x2875), 0
+	ldw (0x2875:16), 0
 	stiw_da (0x00ffec), 0x0000
 	ret
 

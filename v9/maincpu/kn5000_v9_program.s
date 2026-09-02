@@ -1421,7 +1421,7 @@ Voice_InitBankTables_SlotLoop:
 	ldirw
 	dec 1, a
 	jr nz, Voice_InitBankTables_SlotLoop
-	stdi16 (32280), 57
+	ldw (32280:16), 57
 	ret
 
 	.include "audio/voice_bank_defaults.s"
@@ -2682,8 +2682,8 @@ CPanel_RX_ProcessOrInit:
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
 	ei 6
-	stdi16 (36253), 0
-	stdi16 (36255), 0
+	ldw (36253:16), 0
+	ldw (36255:16), 0
 	ordi8 36242, 1	; CP_Flags_B.0 = 1
 	ei 0
 	jr CPanel_RX_Return

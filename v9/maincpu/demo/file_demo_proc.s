@@ -4071,7 +4071,7 @@ FileIO_OpenWithMode:
 	jr nz, FileIO_OpenMode_Success
 	cp (xiz), 0x72
 	jr nz, FileIO_OpenMode_CheckWrite
-	stdi16 (0x7f48), 0xfffe
+	ldw (0x7f48:16), 0xfffe
 	ldw hl, 0xfffe
 	jr FileIO_OpenMode_Return
 
@@ -4080,22 +4080,22 @@ FileIO_OpenMode_CheckWrite:
 	jr nz, FileIO_OpenMode_UnknownMode
 	cpw_da (0x1e53c), 31
 	jr nz, FileIO_OpenMode_WriteMaxFiles
-	stdi16 (0x7f48), 0xfff5
+	ldw (0x7f48:16), 0xfff5
 	ldw hl, 0xfff5
 	jr FileIO_OpenMode_Return
 
 FileIO_OpenMode_WriteMaxFiles:
-	stdi16 (0x7f48), 0xfffd
+	ldw (0x7f48:16), 0xfffd
 	ldw hl, 0xfffd
 	jr FileIO_OpenMode_Return
 
 FileIO_OpenMode_UnknownMode:
-	stdi16 (0x7f48), 0xffff
+	ldw (0x7f48:16), 0xffff
 	ldw hl, 0xffff
 	jr FileIO_OpenMode_Return
 
 FileIO_OpenMode_Success:
-	stdi16 (0x7f48), 0
+	ldw (0x7f48:16), 0
 	ld hl, (0x7f48:16)
 
 FileIO_OpenMode_Return:
@@ -8331,12 +8331,12 @@ InitWPNav_ClampEnd:
 	ret
 
 ResetProgressIndication:
-	stdi16 (0x8500), 0xffff
-	stdi16 (0x8502), 0xffff
-	stdi16 (0x8504), 0xffff
-	stdi16 (0x8506), 0xffff
-	stdi16 (0x8508), 0xffff
-	stdi16 (0x850a), 0xffff
+	ldw (0x8500:16), 0xffff
+	ldw (0x8502:16), 0xffff
+	ldw (0x8504:16), 0xffff
+	ldw (0x8506:16), 0xffff
+	ldw (0x8508:16), 0xffff
+	ldw (0x850a:16), 0xffff
 	call FileIO_InitRecordTable
 	ld xiy, BankStr_Memory_0xA
 	ld xix, 0x8a0c

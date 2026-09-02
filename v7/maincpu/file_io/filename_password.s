@@ -226,7 +226,7 @@ FmmFileNameFunc:
 	ld	xde, xhl
 	jr	17
 FileName_ListSelect_Negative:
-	stdi16	(32478), 0
+	ldw	(32478:16), 0
 	ld	xwa, (32470:16)
 	ld	xbc, 31784962
 	lds32	xde, 0

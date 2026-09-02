@@ -65,7 +65,7 @@ ToneGen_DispatchAndLinkBlock:
 	ld (xhl + 1), bc
 	ldw (xhl + 3), 0xffff
 	ld (0x28af:16), wa
-	stdi16 (9830), 5
+	ldw (9830:16), 5
 	pop xiy
 	pop xix
 	ret
@@ -898,7 +898,7 @@ SMF_InitPlaybackState:
 	pushw wa
 	cpdi16 0xf19c, 0
 	jr z, SMF_InitChannelState
-	stdi16 (6699), 9
+	ldw (6699:16), 9
 	jrl SMF_PopReturn
 
 SMF_InitChannelState:
@@ -938,7 +938,7 @@ SMF_LoopNextChannel:
 	jr ule, SMF_ScanChannelLoop
 
 SMF_SetStatusAndJump:
-	stdi16 (6699), 47
+	ldw (6699:16), 47
 	jrl SMF_Finalize_PopReturn
 
 SMF_FoundActiveChannel:
@@ -972,7 +972,7 @@ SMF_FindFirstActiveChannel:
 	inc 1, c
 	cp c, 0xf
 	jr ule, SMF_FindFirstActiveChannel
-	stdi16 (6699), 3
+	ldw (6699:16), 3
 	jrl SMF_Finalize_RestoreAndPlay
 
 SMF_SetupActiveChannel:
@@ -983,7 +983,7 @@ SMF_SetupActiveChannel:
 	ldw_sri HL, 0x07, 0xe8, 0xec
 	pop xde
 	ld (0x28af:16), hl
-	stdi16 (9830), 5
+	ldw (9830:16), 5
 	ld xiy, SMF_HeaderConstants_0x4
 	ld xix, 0x13fa
 	lds bc, 7
@@ -1008,7 +1008,7 @@ SMF_SetupActiveChannel:
 	ldw bc, 0x10
 	ldir85
 	stda32 4376, xix
-	stdi16 (4206), 0
+	ldw (4206:16), 0
 	ld (4208:16), 0
 	ld xiy, 0x106e
 	ld xix, (4376:16)
@@ -1787,9 +1787,9 @@ SMF_FinishChannelAndGetNextEvent:
 	ld (3944:16), a
 
 SMF_ResetEventTimers:
-	stdi16 (3946), 0
-	stdi16 (3938), 0
-	stdi16 (3940), 0
+	ldw (3946:16), 0
+	ldw (3938:16), 0
+	ldw (3940:16), 0
 
 ; ============================================================================
 ; SMF_ProcessEventLoop - Process MIDI events from sequence data
@@ -1868,7 +1868,7 @@ SMF_MetaTiming_ApplyMultiplier:
 	stw_erp DE, 0xe2
 	adddm16 3938, xwa
 	ld (3940:16), de
-	stdi16 (3946), 0
+	ldw (3946:16), 0
 	jrl SMF_ProcessEventLoop
 
 SMF_PolyAftertouch_Dispatch:
@@ -2285,7 +2285,7 @@ SMF_ProgramChange_WriteBankMSB_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_ProgramChange_WriteBankMSB_Data:
-	stdi16 (4206), 0
+	ldw (4206:16), 0
 	ld (4208:16), 0
 	ldb w, 0x20
 	ld l, (6743:16)
@@ -2352,7 +2352,7 @@ SMF_ProgramChange_SendConfig_Underflow:
 	jp SMF_FlushAndFinalize
 
 SMF_ProgramChange_SendConfig_Data:
-	stdi16 (4206), 0
+	ldw (4206:16), 0
 	ld (4208:16), 0
 	ldb w, 0x20
 	ld h, (4211:16)
@@ -7122,7 +7122,7 @@ SeqChan_ByteBlockC:
 	jr	nz, 83
 	.byte 0x9f, 0x10, 0x3f, 0x01, 0x00
 	jr	nz, 76
-	stdi16	35188, 65535
+	ldw	(35188:16), 65535
 	push	xiz
 	.byte 0x0b, 0x01, 0x00, 0x0b, 0x01, 0x00, 0x0b, 0x00, 0x00, 0x0b, 0x00, 0x00
 	ld	xwa, (xsp+20)
@@ -7132,7 +7132,7 @@ SeqChan_ByteBlockC:
 	pushw 3
 	calr	-176
 	lda	xsp, (xsp+16)
-	stdi16	35188, 0
+	ldw	(35188:16), 0
 	cps	hl, 0
 	jr	nz, 8
 	ld	(xiz+16), 2
@@ -8301,7 +8301,7 @@ GetMediaType_SetupReadCmd:
 	ldw (XSP+0x10), 0x0001
 	ld XWA,(XSP+0x02)
 	ld (XSP+0x12),XWA
-	stdi16 (0x8974), 0xffff
+	ldw (0x8974:16), 0xffff
 	lds_erpb 0xfb, 0
 	call Check_for_Floppy_Disk_Change
 	cps l, 0
@@ -8407,7 +8407,7 @@ GetMediaType_CheckExtraFormat:
 	ldib_erp 0xfb, 5
 
 GetMediaType_Epilogue:
-	stdi16 (35188), 0
+	ldw (35188:16), 0
 
 	ld xwa, (xsp + 2)
 

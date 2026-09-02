@@ -139,7 +139,7 @@ BootSerial_State08_TxFirstByte:
 	incdi16	1, (0x0fd5)
 	cpdi16	(0x0fd5), 0x003c
 	jr	c, BootSerial_State08_TxFirstByte__no_wrap
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 BootSerial_State08_TxFirstByte__no_wrap:
 	ld	(0x0f63:16), 0x02		; default: 2-byte frame
 	ld	a, (xiy)
@@ -178,7 +178,7 @@ BootSerial_State10_TxNextByte:
 	incdi16	1, (0x0fd5)
 	cpdi16	(0x0fd5), 0x003c
 	jr	c, BootSerial_State10_TxNextByte__no_wrap
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 BootSerial_State10_TxNextByte__no_wrap:
 	decdi8	1, (0x0f63)
 	cp	(0x0f63:16), 0x01
@@ -275,7 +275,7 @@ BootSerial_State20_RxFirstByte__room:
 	incdi16	1, (0x0f77)
 	cpdi16	(0x0f77), 0x005c
 	jr	c, BootSerial_State20_RxFirstByte__counted
-	stdi16	(0x0f77), 0
+	ldw	(0x0f77:16), 0
 BootSerial_State20_RxFirstByte__counted:
 	ld	(0x0f63:16), 0x02		; default: 2-byte frame
 	and	a, 0x3f
@@ -307,7 +307,7 @@ BootSerial_State24_RxNextByte:
 	incdi16	1, (0x0f77)
 	cpdi16	(0x0f77), 0x005c
 	jr	c, BootSerial_State24_RxNextByte__no_advance
-	stdi16	(0x0f77), 0
+	ldw	(0x0f77:16), 0
 BootSerial_State24_RxNextByte__no_advance:
 	decdi8	1, (0x0f63)
 	cp	(0x0f63:16), 0x01

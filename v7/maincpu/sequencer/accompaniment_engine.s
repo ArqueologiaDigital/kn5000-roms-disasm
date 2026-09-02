@@ -1473,7 +1473,7 @@ AccPart_ResolveStyleAddr:
 	call AccVoice_ResolveParamAddr
 	calr AccPart_GetFreeVoiceAddr
 	ld (0x333a:16), wa
-	stdi16 (0x333c), 0x0006
+	ldw (0x333c:16), 0x0006
 	jr t, AccPart_ResolveStyle_Return
 AccPart_ResolveStyle_Bound:
 	ld	xiy, (12850:16)
@@ -1516,7 +1516,7 @@ AccPart_ResolveWithPedal_DirB:
 	call	16070940
 	calr	152
 	ld	(13114:16), wa
-	stdi16	(13116), 6
+	ldw	(13116:16), 6
 	jr	14
 AccPart_ResolveWithPedal_Bound:
 	calr	507
@@ -4197,7 +4197,7 @@ AccVoice_SetupKbd1_Free:
 	ld	(13112:16), 1
 	call	16083049
 	ld	(12795:16), wa
-	stdi16	(12779), 6
+	ldw	(12779:16), 6
 AccVoice_SetupKbd1_Return:
 	ret
 
@@ -4215,7 +4215,7 @@ AccVoice_SetupKbd2_Free:
 	ld	(13112:16), 2
 	call	16083049
 	ld	(12797:16), wa
-	stdi16	(12781), 6
+	ldw	(12781:16), 6
 AccVoice_SetupKbd2_Return:
 	ret
 
@@ -4233,7 +4233,7 @@ AccVoice_SetupAcc1_Free:
 	ld	(13112:16), 4
 	call	16083049
 	ld	(12799:16), wa
-	stdi16	(12783), 6
+	ldw	(12783:16), 6
 AccVoice_SetupAcc1_Return:
 	ret
 
@@ -4251,7 +4251,7 @@ AccVoice_SetupAcc2_Free:
 	ld	(13112:16), 8
 	call	16083049
 	ld	(12801:16), wa
-	stdi16	(12785), 6
+	ldw	(12785:16), 6
 AccVoice_SetupAcc2_Return:
 	ret
 
@@ -4269,7 +4269,7 @@ AccVoice_SetupAcc3_Free:
 	ld	(13112:16), 16
 	call	16083049
 	ld	(12803:16), wa
-	stdi16	(12787), 6
+	ldw	(12787:16), 6
 AccVoice_SetupAcc3_Return:
 	ret
 
@@ -4287,7 +4287,7 @@ AccVoice_SetupAcc4_Free:
 	ld	(13112:16), 32
 	call	16083049
 	ld	(12805:16), wa
-	stdi16	(12789), 6
+	ldw	(12789:16), 6
 AccVoice_SetupAcc4_Return:
 	ret
 
@@ -4545,27 +4545,27 @@ AccInit_AllPartPositions:
 	ld	(13112:16), 1
 	call	16083049
 	ld	(12795:16), wa
-	stdi16	(12779), 6
+	ldw	(12779:16), 6
 	ld	(13112:16), 4
 	call	16083049
 	ld	(12799:16), wa
-	stdi16	(12783), 6
+	ldw	(12783:16), 6
 	ld	(13112:16), 8
 	call	16083049
 	ld	(12801:16), wa
-	stdi16	(12785), 6
+	ldw	(12785:16), 6
 	ld	(13112:16), 16
 	call	16083049
 	ld	(12803:16), wa
-	stdi16	(12787), 6
+	ldw	(12787:16), 6
 	ld	(13112:16), 32
 	call	16083049
 	ld	(12805:16), wa
-	stdi16	(12789), 6
+	ldw	(12789:16), 6
 	ld	(13112:16), 2
 	call	16083049
 	ld	(12797:16), wa
-	stdi16	(12781), 6
+	ldw	(12781:16), 6
 	ret
 AccVoice_ThirdLayer:
 	anddi8 (0x320f), 0x0f
@@ -6938,7 +6938,7 @@ AccAutoPlay_ZoneTrack_Store:
 
 	calr 39
 
-	stdi16 (14412), 0
+	ldw (14412:16), 0
 
 	ld bc, (xix + 256)
 
@@ -7043,7 +7043,7 @@ AccAutoPlay_Trigger_Activate:
 	calr AccAutoPlay_SeqHandoff
 	anddi8 (0x33fc), 0xfe
 	anddi8 (0x33fd), 0xfe
-	stdi16 (0x33fe), 0x0000
+	ldw (0x33fe:16), 0x0000
 	jr t, AccAutoPlay_ModeAvail_Padding
 AccAutoPlay_Trigger_Configure:
 .Lc_f5a662:
@@ -8282,15 +8282,15 @@ AccFlags_Sync_Padding:
 	nop
 
 AccTiming_InitAllParts:
-	stdi16	(13016), 65375
-	stdi16	(13024), 6
-	stdi16	(13026), 48
+	ldw	(13016:16), 65375
+	ldw	(13024:16), 6
+	ldw	(13026:16), 48
 	ld	xbc, 12280
 	calr	1139
 	ld	xbc, 12328
 	calr	1131
-	stdi16	(13024), 9
-	stdi16	(13026), 72
+	ldw	(13024:16), 9
+	ldw	(13026:16), 72
 	ld	(13040:16), 7
 	ld	xbc, 12376
 	calr	2041
@@ -9843,7 +9843,7 @@ AccStyle_ModeEnter:
 	cpdi16 (0xf19e), 0x0000
 	jr z, .Lc_f5c281
 	call SeqAcc_SetIndicator_PB
-	stdi16 (0xf19e), 0x0000
+	ldw (0xf19e:16), 0x0000
 	call 0xfdd69e
 	ordi8 (0x3335), 0x01
 AccStyle_ModeEnter_SetFlags:
@@ -10366,7 +10366,7 @@ AccDemo_Init:
 	calr AccDemo_LoadFillIn
 	calr AccDemo_LoadVariationData
 	calr Demo_LoadVariationC_Data
-	stdi16 (0x3438), 0x00be
+	ldw (0x3438:16), 0x00be
 	anddi8 (0x3257), 0xfe
 	bit 7, (0x3435:16)
 	jr nz, .Lc_f5ca46
@@ -11620,7 +11620,7 @@ AccPatch_InitCurrentSlotPointer:
 
 	ld (13686:16), hl
 
-	stdi16 (13688), 6
+	ldw (13688:16), 6
 
 	ret
 AccPatch_SlotScanByteData:
@@ -13607,7 +13607,7 @@ AccPatch_InitSlotAlt_Valid:
 
 	ld (13686:16), hl
 
-	stdi16 (13688), 6
+	ldw (13688:16), 6
 
 	ret
 
@@ -13711,8 +13711,8 @@ AccPatch_SeqDispatch_RunNotes:
 	call	16125806
 	cps	wa, 0
 	jr	z, 70
-	stdi16	13678, 0
-	stdi16	13682, 0
+	ldw	(13678:16), 0
+	ldw	(13682:16), 0
 	ld	(13667:16), 0
 	calr	1832
 	cpdi16	13678, 0
@@ -13724,7 +13724,7 @@ AccPatch_SeqDispatch_RunNotes:
 	calr	3031
 	calr	3327
 	calr	3551
-	stdi16	13678, 0
+	ldw	(13678:16), 0
 AccPatch_SeqDispatch_CheckQueued:
 	cpdi16	13682, 0
 	jr	z, 3
@@ -14103,7 +14103,7 @@ AccPatch_ResumeSequencePlayback:
 	ld (0x3576:16), wa
 	ld wa, (0x3544:16)
 	ld (0x3578:16), wa
-	stdi16 (0x356e), 0x0000
+	ldw (0x356e:16), 0x0000
 AccPatch_ResumeSeq_ComparePos:
 	ld wa, (0x3576:16)
 	.byte 0xd1, 0x46, 0x35, 0xf0, 0x6e, 0x10, 0xd1, 0x78
@@ -14159,7 +14159,7 @@ AccPatch_ResumeSeq_HandleMarker:
 	cpdi16	13678, 0
 	jr	z, 9
 	calr	31
-	stdi16	13678, 0
+	ldw	(13678:16), 0
 AccPatch_ResumeSeq_LoopBack:
 	jrl AccPatch_ResumeSeq_ComparePos
 
@@ -14405,17 +14405,17 @@ AccPatch_ProcessSeqEvt_SkipDLoop:
 	jrl AccPatch_ProcessSequenceEvents
 
 AccPatch_ProcessSeqEvt_SetSize:
-	stdi16	13678, 8
+	ldw	(13678:16), 8
 	cp	(13917:16), 145
 	jr	z, 6
-	stdi16	13678, 6
+	ldw	(13678:16), 6
 AccPatch_ProcessSeqEvt_StoreAndPrep:
 	ld	wa, (13918:16)
 	ld	(13634:16), wa
 	ld	wa, (13920:16)
 	ld	(13636:16), wa
 	calr	64951
-	stdi16	(13678), 0
+	ldw	(13678:16), 0
 	calr	64911
 	jrl	-212
 AccPatch_ProcessSeqEvt_InitSlot:
@@ -14517,7 +14517,7 @@ AccPatch_UpdatePlayback:
 	calr AccPatch_InitSlotAndCopyData
 	calr AccPatch_AdvancePlayPos
 	calr AccPatch_AdvanceAllSteps
-	stdi16 (0x356e), 0x0000
+	ldw (0x356e:16), 0x0000
 AccPatch_UpdatePlayback_CheckQueue:
 .Lc_f602be:
 	cpdi16 (0x3572), 0x0000
@@ -14845,7 +14845,7 @@ AccPatch_SeqAdvStep_ScanLoop:
 
 AccPatch_SeqAdvStep_StorePos:
 	ld	(13686:16), hl
-	stdi16	(13688), 6
+	ldw	(13688:16), 6
 	ret
 __pad_F609EE:
 	nop
@@ -14970,7 +14970,7 @@ AccPatch_SlotCopyDataBlock:
 	cps	bc, 0
 	jr	nz, -12	; -> 0xF6069F
 	ret
-	stdi16	(13684), 0
+	ldw	(13684:16), 0
 	ld	xix, 13838
 	addda16	xix, (13684)
 	calr	664
@@ -14979,7 +14979,7 @@ AccPatch_SlotCopyDataBlock:
 	ld	(13684:16), wa
 	cpda16	xwa, (13682)
 	jr	c, -30	; -> 0xF606B2
-	stdi16	(13682), 0
+	ldw	(13682:16), 0
 	ret
 AccPatch_InitSlotAndCopyData:
 	lds32 xhl, 0
@@ -15181,7 +15181,7 @@ AccPatch_DispatchQueued_Loop:
 	sub	xwa, 13838
 	cpda16	xwa, (13682)
 	jr	c, -23	; -> 0xF60936
-	stdi16	(13682), 0
+	ldw	(13682:16), 0
 	ret
 __pad_F60D58:
 	nop
@@ -15924,7 +15924,7 @@ AccPlayback_InitTimingVars:
 	ld	(13408:16), a
 	ld	(13407:16), a
 	ld	(13994:16), a
-	stdi16	13995, 1
+	ldw	(13995:16), 1
 	calr	189
 	call	16116102
 	call	16120765
@@ -17286,7 +17286,7 @@ ToneGen_ProcessVoiceSlots:
 	calr ToneGen_GetSlotIndex
 	ld (0x33cf:16), hl
 	calr ToneGen_CalcBufferAddr
-	stdi16 (0x33ad), 0x0006
+	ldw (0x33ad:16), 0x0006
 	ld a, (0x345e:16)
 	ld w, (0x343d:16)
 	.byte 0xc8, 0x49, 0xc9, 0x8c, 0xc1, 0x5f, 0x34, 0x21
@@ -18288,10 +18288,10 @@ ToneGen_StepWithBoundsCheck:
 	jr z, ToneGen_SeqAdvanceMain
 	ld XIY,0x000035ce
 	ld A,(XIY)
-	stdi16 (0x356e), 0x0006
+	ldw (0x356e:16), 0x0006
 	cp A,0x90
 	jr z, ToneGen_StepBounds_Return
-	stdi16 (0x356e), 0x0008
+	ldw (0x356e:16), 0x0008
 ToneGen_StepBounds_Return:
 	ld	wa, (13432:16)
 	ld	(13263:16), wa
@@ -21685,8 +21685,8 @@ DrumVoice_Handler6:
 	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0xc1, 0x1c, 0xe3
 	.byte 0x3e, 0x01
 DrumVoice_Handler6_Code:
-	stdi16	(58142), 1927
-	stdi16	(58142), 1670
+	ldw	(58142:16), 1927
+	ldw	(58142:16), 1670
 	ld	xiy, 608256
 	add	xiy, 16
 	ld	a, (xiy)
@@ -22778,7 +22778,7 @@ Tempo_EditBPMApply:
 	jr	nc, 84
 	cp	bc, 989
 	jr	c, 8
-	stdi16	14574, 999
+	ldw	(14574:16), 999
 	jr	38
 	add	bc, 10
 	ld	(14574:16), bc
@@ -22788,7 +22788,7 @@ Tempo_EditBPMApply:
 	jr	ule, 54
 	cp	bc, 10
 	jr	ugt, 8
-	stdi16	14574, 1
+	ldw	(14574:16), 1
 	jr	8
 	sub	bc, 10
 	ld	(14574:16), bc
@@ -22818,7 +22818,7 @@ Tempo_EditBPMApply:
 	jr	nc, 93
 	cp	bc, 989
 	jr	c, 11
-	stdi16	14576, 999
+	ldw	(14576:16), 999
 	ldw	wa, 999
 	jr	46
 	add	bc, 10
@@ -22830,7 +22830,7 @@ Tempo_EditBPMApply:
 	jr	ule, 58
 	cp	bc, 10
 	jr	ugt, 10
-	stdi16	14576, 1
+	ldw	(14576:16), 1
 	lds	wa, 1
 	jr	12
 	sub	bc, 10
@@ -23399,7 +23399,7 @@ Part_StoreVoiceTableIndex:
 	mul	wa, 5
 	add	wa, bc
 	ld	(14564:16), wa
-	stdi16	(14568), 6
+	ldw	(14568:16), 6
 	ret
 SetWall_StoreAndResolve:
 	ld (0x287f:16), wa
@@ -23648,7 +23648,7 @@ VoiceTable_AdvanceReadPos:
 	extz	wa
 	add	wa, bc
 	ld	(14562:16), wa
-	stdi16	(14566), 5
+	ldw	(14566:16), 5
 VoiceTable_AdvRead_Done:
 	jr VoiceTable_ResolveReadAddr
 
@@ -23721,7 +23721,7 @@ VoiceTable_AdvWrite_LinkEntry:
 
 	ld (14564:16), bc
 
-	stdi16 (14568), 6
+	ldw (14568:16), 6
 
 	setm 7, (xde)
 
@@ -24979,7 +24979,7 @@ AccVoice_SetupSlots_DataBlock:
 	sll	bc, 1
 	ld_rrw	hl, xix, bc
 	ld	(13686:16), hl
-	stdi16	(13688), 6
+	ldw	(13688:16), 6
 	ret
 	ldb	c, 0
 	ld	(14389:16), c
@@ -30075,7 +30075,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	(xiy+3), de
 	ld	de, (14504:16)
 	ld	(xix+1), de
-	stdi16	14512, 0
+	ldw	(14512:16), 0
 	.byte 0x9c, 0x03, 0x3f, 0xff, 0xff
 	jr	z, 61
 	ld	de, (14512:16)
@@ -30085,7 +30085,7 @@ AccPatch_VoiceAssignDataBlock:
 	ld	de, (14506:16)
 	ld	(xix+3), de
 	add	xix, 256
-	stdi16	14512, 255
+	ldw	(14512:16), 255
 	jr	-40
 	ld	de, (14506:16)
 	dec	1, de
@@ -30119,8 +30119,8 @@ AccPatch_VoiceAssignDataBlock:
 	pop	xiz
 	ret
 	ld	(14516:16), 0
-	stdi16	14548, 0
-	stdi16	14550, 150
+	ldw	(14548:16), 0
+	ldw	(14550:16), 150
 	calr	1581
 	calr	1579
 	cp	(14516:16), 132
@@ -30478,7 +30478,7 @@ AccPatch_VoiceAssignDataBlock:
 	.byte 0xf1, 0xb4, 0x38, 0xcf
 	jr	nz, 52
 	djnz8	a, -14
-	stdi16	14548, 0
+	ldw	(14548:16), 0
 	xor	xbc, xbc
 	ld	bc, (14552:16)
 	srl	bc, 2
@@ -31327,7 +31327,7 @@ StylCnvModlTtlFunc:
 	ld	(18494:16), 0
 	ld	xwa, 14991666
 	call	16296216
-	stdi16	(14822), 0
+	ldw	(14822:16), 0
 	lds	iz, 0
 StylCnvModl_ScanMatchingModels:
 	ld	bc, iz
@@ -31378,7 +31378,7 @@ StylCnvModl_PadStoreChar:
 	jr c, StylCnvModl_PadOuterLoop
 
 StylCnvModl_InitListDisplay:
-	stdi16	(15464), 0
+	ldw	(15464:16), 0
 	ld	xwa, 1114114
 	ld	xbc, 31719471
 	lds32	xde, 0
@@ -31736,7 +31736,7 @@ StylCnvCnvtTtlFunc:
 	jrl	nz, 599
 	ld	(18494:16), 0
 	calr	64013
-	stdi16	(14822), 0
+	ldw	(14822:16), 0
 	lds	iz, 0
 StylCnvCnvt_ScanMatchingStyles:
 	ld	bc, iz
@@ -31784,7 +31784,7 @@ StylCnvCnvt_PadStoreChar:
 	jr c, StylCnvCnvt_PadOuterLoop
 
 StylCnvCnvt_InitListDisplay:
-	stdi16	(15464), 0
+	ldw	(15464:16), 0
 	ld	xwa, 1179650
 	ld	xbc, 31719471
 	lds32	xde, 0
@@ -31987,7 +31987,7 @@ StylCnvSelTtlFunc:
 	cp	xde, 2
 	jrl	nz, 441
 	calr	63344
-	stdi16	(15464), 0
+	ldw	(15464:16), 0
 	ld	xwa, 1376258
 	ld	xbc, 31719471
 	lds32	xde, 0
@@ -33233,7 +33233,7 @@ StylCnv_FinalizeAndCheckStatus:
 
 StylCnv_Multi_InitAndClear:
 	calr	59598
-	stdi16	(14822), 0
+	ldw	(14822:16), 0
 	lda	xbc, (xsp+18)
 	ld	xwa, xbc
 	lda	xbc, (xbc+100)

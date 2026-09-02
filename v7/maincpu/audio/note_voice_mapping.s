@@ -2347,7 +2347,7 @@ NoteMap_UpdateEntry:
 	.byte 0x03, 0x05, 0x68, 0x12, 0xee, 0x88, 0xd9, 0xaa
 	.byte 0x1e, 0x71, 0x06
 NoteMap_FallbackAllocEmit:
-	stdi16	(52682), 0
+	ldw	(52682:16), 0
 	ld	(52758:16), 0
 	ld	a, (xsp+4)
 	ld	e, a
@@ -6296,7 +6296,7 @@ SeqEvtBuf_NonNoteDispatchLoop:
 	swi 7
 	ld l, (52750:16)
 	ret
-	stdi16 (0xcdca), 0x0000
+	ldw (0xcdca:16), 0x0000
 	ld (0xce16:16), 0x00
 	ret
 	.byte 0xbf, 0xbc, 0x37, 0xd7, 0xfa, 0x04, 0xf1, 0x16
@@ -10049,7 +10049,7 @@ DecodeMidiEvent_LoadParam2:
 	inc	1, iz
 	cps	iz, 3
 	jr	ule, -19
-	stdi16	(59689), 384
+	ldw	(59689:16), 384
 	calr	3549
 	ld	wa, hl
 	cps	wa, 0
@@ -10627,7 +10627,7 @@ Dispatch_Data:
 	.byte 0xc9, 0xcf, 0xb0, 0x7e, 0xd7, 0xfe, 0xc1, 0x3e
 	.byte 0xeb, 0x3f, 0x07, 0x7e, 0xcf, 0xfe, 0xf1, 0x3f
 	.byte 0xeb, 0x00, 0x7f, 0x78, 0xc7, 0xfe
-	stdi16 (0xeb3b), 0x0000
+	ldw (0xeb3b:16), 0x0000
 	lds32 xwa, 0
 	stda32 (0xeb37), xwa
 	popw iz
@@ -10831,23 +10831,23 @@ ProcessMidiConverge_LoopBody:
 	inc	8, xbc
 	lds32	xwa, 0
 	stda32	(59695), xwa
-	stdi16	(59679), 0
+	ldw	(59679:16), 0
 	lds32	xwa, 0
 	stda32	(59685), xwa
 ProcessMidiConverge_LoopCheck:
-	stdi16	(59689), 0
+	ldw	(59689:16), 0
 ProcessMidiConverge_LoadDRAM:
-	stdi16	59691, 0
+	ldw	(59691:16), 0
 	lds32	xwa, 0
 	stda32	60215, xwa
-	stdi16	60219, 0
+	ldw	(60219:16), 0
 	ld	(59646:16), 0
 	calr	6
 	calr	304
 	jrl	589
-	stdi16 (0xd00c), 0x0000
-	stdi16 (0xd00e), 0x0000
-	stdi16 (0xd010), 0x07ff
+	ldw (0xd00c:16), 0x0000
+	ldw (0xd00e:16), 0x0000
+	ldw (0xd010:16), 0x07ff
 	lds de, 0
 	jr t, .Lc_fed8d3
 	.byte 0xda
@@ -10944,7 +10944,7 @@ SoundParam_InitDefaultBanks:
 	decdi16 1, 0xd816
 	cpdi16 (0xd812), 0x07ff
 	jr nz, .Lc_feda38
-	stdi16 (0xd812), 0x0000
+	ldw (0xd812:16), 0x0000
 	jr t, .Lc_feda3c
 .Lc_feda38:
 	incdi16 1, 0xd812
@@ -10967,7 +10967,7 @@ SoundParam_InitDefaultBanks:
 	incdi16 1, 0xd816
 	cpdi16 (0xd814), 0x07ff
 	jr nz, .Lc_feda72
-	stdi16 (0xd814), 0x0000
+	ldw (0xd814:16), 0x0000
 	jr t, .Lc_feda76
 .Lc_feda72:
 	incdi16 1, 0xd814

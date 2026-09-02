@@ -65,7 +65,7 @@ SMF_IncrementPosition:
 	stw_erp DE, 0xe2
 	adddm16 3938, xwa
 	ld (3940:16), de
-	stdi16 (3946), 0
+	ldw (3946:16), 0
 	pop xde
 	pop xwa
 	ldb c, 0x0
@@ -132,7 +132,7 @@ SMF_FinalizeAndStartPlayback:
 	stb_da (0x00ffe3), a
 	call SoundBank_LoadToWorkRAM
 	call SeqPlay_StartWithDisplay
-	stdi16 (6699), 2
+	ldw (6699:16), 2
 
 SMF_Finalize_PopReturn:
 	jr SMF_PopReturn
@@ -847,8 +847,8 @@ SMF_ProcessCh_Next:
 	call SMF_SortOutputQueue
 
 SMF_ProcessCh_Finalize:
-	stdi16 (3938), 0
-	stdi16 (3940), 0
+	ldw (3938:16), 0
+	ldw (3940:16), 0
 	ret
 
 SMF_SendChannelConfig:
@@ -1005,7 +1005,7 @@ SMF_HandleEventType:
 	ldw_sri HL, 0x07, 0xe8, 0xec
 	pop xde
 	ld (0x28af:16), hl
-	stdi16 (9830), 5
+	ldw (9830:16), 5
 	calr SMF_GetNextEvent
 
 SMF_EventType_Switch:
@@ -1239,8 +1239,8 @@ SMF_PartAssignTable:
 	.byte 0xff, 0x0c, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 
 SMF_EncodeTimeDelta:
-	stdi16 (4206), 0
-	stdi16 (4208), 0
+	ldw (4206:16), 0
+	ldw (4208:16), 0
 	cp (4231:16), 0
 	jr nz, SMF_Encode_LargeValue
 	cpdi16 4229, 127
@@ -1595,8 +1595,8 @@ SMF_UpdateTempo_Finalize:
 	sub bc, wa
 	ld (4229:16), bc
 	calr SMF_EncodeTimeDelta
-	stdi16 (3938), 0
-	stdi16 (3940), 0
+	ldw (3938:16), 0
+	ldw (3940:16), 0
 	ret
 
 SMF_CalcFilePosition:
@@ -1853,7 +1853,7 @@ SMF_ConfigSlot:
 	xor w, w
 	ld (0x287a:16), 0
 	ld (0x287d:16), wa
-	stdi16 (0x287f), 1
+	ldw (0x287f:16), 1
 	call SetWall_SlotResolve
 	cp (0x287a:16), 0
 	jr z, SMF_ConfigSlot_Setup
@@ -1925,19 +1925,19 @@ SMF_ConfigSlot_AdvanceEvent:
 	jr SMF_ConfigSlot_DefaultHandler
 
 SMF_ConfigSlot_TypeB0:
-	stdi16 (4402), 5
+	ldw (4402:16), 5
 	jr SMF_ConfigSlot_StoreType
 
 SMF_ConfigSlot_TypeC0:
-	stdi16 (4402), 4
+	ldw (4402:16), 4
 	jr SMF_ConfigSlot_StoreType
 
 SMF_ConfigSlot_TypeD2:
-	stdi16 (4402), 2
+	ldw (4402:16), 2
 	jr SMF_ConfigSlot_StoreType
 
 SMF_ConfigSlot_Type80:
-	stdi16 (4402), 3
+	ldw (4402:16), 3
 
 SMF_ConfigSlot_StoreType:
 	pushw wa
@@ -2264,7 +2264,7 @@ SMF_ConfigSlot_CodeBlock:
 	ld	(10362:16), 2
 	jr	12
 	stda32	(10369), xhl
-	stdi16	(4417), 5
+	ldw	(4417:16), 5
 	lds	iy, 5
 	pop	xwa
 	pop	xhl

@@ -41,8 +41,8 @@ FCopy_ScrollDown_Clamp:
 	ld	(32458:16), hl
 	jrl	551
 FCopy_ScrollNeg_Reset:
-	stdi16	(32456), 0
-	stdi16	(32458), 1
+	ldw	(32456:16), 0
+	ldw	(32458:16), 1
 	jrl	536
 FCopy_HandleExecute:
 	ld	(33904:16), 0

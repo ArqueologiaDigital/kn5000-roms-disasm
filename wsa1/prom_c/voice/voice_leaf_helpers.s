@@ -4161,7 +4161,7 @@ KeyZone_Stage_Reg0040_Stride6A:
 	extpfx5 0x9B, 0x01, 0x3E, 0x00, 0x60       ; FA74C5  or (XHL+0x01),0x6000
 	ld	bc, (xix)                               ; FA74CA  ld BC,(XIX)
 	stw_da	(0xD760), bc                        ; FA74CC  ld (0x00d760),BC
-	stdi16	(0x5A4F), 0                         ; FA74D1  ld (0x5a4f),0x0000
+	ldw	(0x5A4F:16), 0                         ; FA74D1  ld (0x5a4f),0x0000
 	pushw	0                                    ; FA74D7  push 0x0000
 	ld	c, (xix+5)                              ; FA74DA  ld C,(XIX+0x05)
 	pushw	bc                                   ; FA74DD  push BC
@@ -4266,7 +4266,7 @@ KeyZone_Stage_Reg0040_Stride4:
 	ld	(xhl+1), bc                             ; FA754C  ld (XHL+0x01),BC
 	ld	bc, (xix)                               ; FA754F  ld BC,(XIX)
 	stw_da	(0xD760), bc                        ; FA7551  ld (0x00d760),BC
-	stdi16	(0x5A4F), 0                         ; FA7556  ld (0x5a4f),0x0000
+	ldw	(0x5A4F:16), 0                         ; FA7556  ld (0x5a4f),0x0000
 	pushw	0                                    ; FA755C  push 0x0000
 	pushw	0                                    ; FA755F  push 0x0000
 	pushw	0                                    ; FA7562  push 0x0000

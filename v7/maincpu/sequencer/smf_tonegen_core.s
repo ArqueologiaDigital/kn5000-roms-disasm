@@ -14,10 +14,10 @@ Sequencer_ResetAfterFloppyIO:
 	xor wa, wa
 	ld (0xf19e:16), wa
 	stw_da (0x00ffec), xwa
-	stdi16 (0xf19c), 0
+	ldw (0xf19c:16), 0
 	cpdi16 6699, 49
 	jrl z, SeqPlay_ReadyStateTransition
-	stdi16 (6699), 31
+	ldw (6699:16), 31
 	jrl SeqPlay_ReadyStateTransition
 
 SeqPlay_ResetAndStop:
@@ -26,7 +26,7 @@ SeqPlay_ResetAndStop:
 	xor wa, wa
 	ld (0xf19e:16), wa
 	stw_da (0x00ffec), xwa
-	stdi16 (0xf19c), 0
+	ldw (0xf19c:16), 0
 	push xhl
 	ld xhl, (6701:16)
 	ld (6699:16), hl
@@ -34,7 +34,7 @@ SeqPlay_ResetAndStop:
 	jrl SeqPlay_ReadyStateTransition
 
 SeqPlay_SetState48AndFloppyReady:
-	stdi16 (6699), 48
+	ldw (6699:16), 48
 
 SeqPlay_FloppyReady:
 	call FloppyIO_ReturnReady
@@ -42,7 +42,7 @@ SeqPlay_FloppyReady:
 
 SeqPlay_FinishFloppyLoadAndStart:
 	call VoiceChannels_LoadPartMapAndInitPan
-	stdi16 (0x1a2b), 0x0001
+	ldw (0x1a2b:16), 0x0001
 	call SeqPlay_DelayLoop_Outer
 	call 0xfdadae
 	ld wa, (0x00ffec:24)
@@ -50,7 +50,7 @@ SeqPlay_FinishFloppyLoadAndStart:
 	anddi8 (0x28a7), 0xf7
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_InitChannelParams
-	stdi16 (0xf19c), 0x0000
+	ldw (0xf19c:16), 0x0000
 	call 0xfdd69e
 SeqPlay_ReadyStateTransition:
 	call SeqStep_PlaybackNop
@@ -478,7 +478,7 @@ SeqTrack_DispatchPart_Done:
 	ret
 
 SeqTrack_ComputeTempoScaling:
-	stdi16 (3946), 0
+	ldw (3946:16), 0
 	sla iy, 1
 	push xix
 	ld xix, 0xfae
@@ -1000,7 +1000,7 @@ VoiceChannels_LoadPartMap_Mode1:
 	ld xix, 0xf1a0
 	ldw bc, 0x10
 	ldir85
-	stdi16 (0xf290), 0xffff
+	ldw (0xf290:16), 0xffff
 	call VoiceChannels_InitPanFromPreset
 	ret
 
@@ -1147,7 +1147,7 @@ SMF_MTrk_CompareSignature:
 	cp_spib A, 0xf4
 	jrl z, SMF_MTrk_SignatureMatch
 	ld (3830:16), 255
-	stdi16 (6699), 49
+	ldw (6699:16), 49
 	jrl SMF_NullRet
 
 SMF_MTrk_SignatureMatch:

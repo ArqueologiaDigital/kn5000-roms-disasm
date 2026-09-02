@@ -130,7 +130,7 @@ WPLoad_HandleSelection:
 	ld (0x81b4:16), hl
 	cps hl, 0
 	jr ge, WPLoad_Selection_Positive
-	stdi16 (0x81b4), 0
+	ldw (0x81b4:16), 0
 
 WPLoad_Selection_Positive:
 	ld wa, (0x81b4:16)
@@ -325,7 +325,7 @@ WP_ScanAvailability:
 	push xiz
 	call CheckFileSystemStatus
 	ldw_erp HL, 0xfa
-	stdi16 (0x89f6), 0
+	ldw (0x89f6:16), 0
 	lds iz, 0
 
 WPScan_LoopBody:

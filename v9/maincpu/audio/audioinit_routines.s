@@ -347,8 +347,8 @@ AudioInit_MixFallbackDefault:
 	jrl AudioInit_ConfigStereoVoice
 
 AudioInit_DrumSaveReturn:
-	stdi16 (0xc5a4), 0
-	stdi16 (0xc5a6), 0
+	ldw (0xc5a4:16), 0
+	ldw (0xc5a6:16), 0
 	push xde
 	push xhl
 	push xix
@@ -707,7 +707,7 @@ AudioInit_ClearReverbFlag:
 Audio_CheckInitStatus:
 	dec 2, xsp
 	ldw (xsp), 0x0
-	stdi16 (0xc598), 0
+	ldw (0xc598:16), 0
 	ld (0xc59e:16), 255
 	ld hl, (0xf19e:16)
 	orda16 xhl, 3409
@@ -1576,7 +1576,7 @@ AudioInit_Stereo_CheckBit3:
 	ret
 
 AudioInit_DispatchChanges:
-	stdi16 (0xc4ca), 0
+	ldw (0xc4ca:16), 0
 	ld wa, (0xc59c:16)
 	and wa, 0x188
 	call_24 nz, AudioInit_ComparePartStates
@@ -1655,8 +1655,8 @@ AudioInit_Dispatch_Finalize:
 	ld xix, 0xc364
 	ldw bc, 0xb3
 	ldirw
-	stdi16 (0xc59c), 0
-	stdi16 (0xc59a), 0
+	ldw (0xc59c:16), 0
+	ldw (0xc59a:16), 0
 	ret
 
 AudioInit_QueueCommand:
@@ -1667,7 +1667,7 @@ AudioInit_QueueCommand:
 	cpdi16 0xc4ca, 49
 	jr c, AudioInit_QueueCommand_Write
 	call VoiceEvent_HandlerTable
-	stdi16 (0xc4ca), 0
+	ldw (0xc4ca:16), 0
 
 AudioInit_QueueCommand_Write:
 	ld wa, (0xc4ca:16)

@@ -269,7 +269,7 @@ FmmFileNameFunc:
 	jr FileName_ListSelect_Forward
 
 FileName_ListSelect_Negative:
-	stdi16 (0x7f7a), 0
+	ldw (0x7f7a:16), 0
 	ld xwa, (0x7f72:16)
 	ld xbc, 0x1e50002
 	lds32 xde, 0

@@ -121,10 +121,10 @@ CPanel_InitHardware:
 	ordi8 0x8d8c, 64	; CP_Flags_A.6 = 1
 	ld (0x8d8b:16), 0
 	anddi8 (0x8d8c), 252; CP_Flags_A.10 = 00
-	stdi16 (0x8dfd), 0
-	stdi16 (0x8dff), 0
-	stdi16 (0x8d9d), 0
-	stdi16 (0x8d9f), 0
+	ldw (0x8dfd:16), 0
+	ldw (0x8dff:16), 0
+	ldw (0x8d9d:16), 0
+	ldw (0x8d9f:16), 0
 
 	calr DELAY_6_TICKS
 
@@ -133,7 +133,7 @@ CPanel_InitHardware:
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
-	stdi16 (0x8dfd), 0
+	ldw (0x8dfd:16), 0
 	calr DELAY_3000_LOOPS
 
 	calr CPanel_SendInitSequence
@@ -148,7 +148,7 @@ CPanel_SendInitSequence:
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
-	stdi16 (0x8dfd), 0
+	ldw (0x8dfd:16), 0
 	calr DELAY_3000_LOOPS
 
 	ldb a, 0x1d
@@ -156,7 +156,7 @@ CPanel_SendInitSequence:
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
-	stdi16 (0x8dfd), 0
+	ldw (0x8dfd:16), 0
 	calr DELAY_3000_LOOPS
 	calr DELAY_3000_LOOPS
 
@@ -165,7 +165,7 @@ CPanel_SendInitSequence:
 	calr CPanel_SendCommand
 	calr DELAY_3000_LOOPS
 
-	stdi16 (0x8dfd), 0
+	ldw (0x8dfd:16), 0
 	calr DELAY_3000_LOOPS
 	calr DELAY_3000_LOOPS
 
@@ -183,8 +183,8 @@ CPanel_SendInitSequence:
 	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
 	ldio 0xf8, 0x12	; INTA Pin
 	ldio 0xe3, 0x05
-	stdi16 (0x8d9d), 0
-	stdi16 (0x8d9f), 0
+	ldw (0x8d9d:16), 0
+	ldw (0x8d9f:16), 0
 	ordi8 0x8d92, 1	; CP_Flags_B.0 = 1
 	ei 0
 	ret
@@ -423,8 +423,8 @@ CPanel_PanelDetection:
 	ld (0x8d93:16), 0
 	calr CPanel_WaitTXReady
 	ei 6
-	stdi16 (0x8d9d), 0
-	stdi16 (0x8d9f), 0
+	ldw (0x8d9d:16), 0
+	ldw (0x8d9f:16), 0
 	ordi8 0x8d92, 1	; CP_Flags_B.0 = 1
 	ei 0
 	ldb a, 0x20	; my guess: 20 = 001 00000 where 001 = left-panel mcu
@@ -439,8 +439,8 @@ CPanel_PanelDetection:
 PanelDet_ProbeRight:
 	calr CPanel_WaitTXReady
 	ei 6
-	stdi16 (0x8d9d), 0
-	stdi16 (0x8d9f), 0
+	ldw (0x8d9d:16), 0
+	ldw (0x8d9f:16), 0
 	ordi8 0x8d92, 1	; CP_Flags_B.0 = 1
 	ei 0
 	ldb a, 0xe0	; my guess: E0 = 111 00000 where 111 = right-panel mcu
@@ -508,8 +508,8 @@ CPanel_PollStartup:
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
 	ei 6
-	stdi16 (0x8d9d), 0
-	stdi16 (0x8d9f), 0
+	ldw (0x8d9d:16), 0
+	ldw (0x8d9f:16), 0
 	ordi8 0x8d92, 1	; CP_Flags_B.0 = 1
 	ei 0
 
@@ -540,10 +540,10 @@ CPanel_EncoderCheck:
 	ldw (xhl - 8), 0x0
 	ldw (xhl - 2), 0x80
 	ei 6
-	stdi16 (0x8dfd), 0
-	stdi16 (0x8dff), 0
-	stdi16 (0x8d9d), 0
-	stdi16 (0x8d9f), 0
+	ldw (0x8dfd:16), 0
+	ldw (0x8dff:16), 0
+	ldw (0x8d9d:16), 0
+	ldw (0x8d9f:16), 0
 	ordi8 0x8d92, 1	; CP_Flags_B.0 = 1
 	ei 0
 	ret
@@ -640,8 +640,8 @@ WaitTX_ConfigAndReturn:
 
 CPanel_SendCommand:
 	ei 6
-	stdi16 (0x8dfd), 0
-	stdi16 (0x8dff), 0
+	ldw (0x8dfd:16), 0
+	ldw (0x8dff:16), 0
 	ld (0x8e01:16), wa
 	adddi16 0x8dff, 2
 	ordi8 0x8d8c, 2
@@ -692,7 +692,7 @@ INTA_HandleCountdown:
 	cpdi16 0x8d9f, 0
 	jr nz, INTA_DecrementRXCount
 
-	stdi16 (0x8d9f), 92
+	ldw (0x8d9f:16), 92
 
 INTA_DecrementRXCount:
 	decdi16 1, 0x8d9f
@@ -853,7 +853,7 @@ CPanel_SM_SendByte1:
 	incdi16 1, (0x8dfd)
 	cpdi16 0x8dfd, 60
 	jr c, SendByte1_InspectByte
-	stdi16 (0x8dfd), 0
+	ldw (0x8dfd:16), 0
 
 SendByte1_InspectByte:
 	ld (0x8d8b:16), 2
@@ -890,7 +890,7 @@ CPanel_SM_SendByteN:
 	incdi16 1, (0x8dfd)
 	cpdi16 0x8dfd, 60
 	jr c, SendByteN_CheckDone
-	stdi16 (0x8dfd), 0
+	ldw (0x8dfd:16), 0
 
 SendByteN_CheckDone:
 	decdi8 1, 0x8d8b
@@ -981,7 +981,7 @@ RXByte1_AdvanceWritePtr:
 	incdi16 1, (0x8d9f)
 	cpdi16 0x8d9f, 92
 	jr c, RXByte1_InspectByte
-	stdi16 (0x8d9f), 0
+	ldw (0x8d9f:16), 0
 
 RXByte1_InspectByte:
 	ld (0x8d8b:16), 2
@@ -1007,7 +1007,7 @@ CPanel_SM_RXByteN:
 	incdi16 1, (0x8d9f)
 	cpdi16 0x8d9f, 92
 	jr c, RXByteN_CheckDone
-	stdi16 (0x8d9f), 0
+	ldw (0x8d9f:16), 0
 
 RXByteN_CheckDone:
 	decdi8 1, 0x8d8b

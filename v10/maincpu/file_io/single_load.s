@@ -3529,7 +3529,7 @@ CmpSingleLoadFileFunc:
 	ld (0x8200:16), hl
 	cps hl, 0
 	jr ge, CmpFile_Selection_Clamp
-	stdi16 (0x8200), 0
+	ldw (0x8200:16), 0
 
 CmpFile_Selection_Clamp:
 	ld xwa, (0x81fc:16)

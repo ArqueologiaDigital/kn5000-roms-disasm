@@ -16,7 +16,7 @@ MidiSerial_ProcessInput:
 	bit 4, (0xfd50:16)
 	jr nz, MidiSerial_Return
 	call SeqMain_SaveWritePos
-	stdi16 (0x90de), 0
+	ldw (0x90de:16), 0
 
 MidiSerial_PumpLoop:
 	ld xix, 0x1f37b
@@ -16041,13 +16041,13 @@ SeqData_DispatchLoop_Done:
 	ld wa, (0xbd3a:16)
 	cp wa, 0x28
 	jr nc, SeqData_FormatOutput
-	stdi16 (0xbd3a), 40
+	ldw (0xbd3a:16), 40
 	jr SeqData_FormatOutput_Loop
 
 SeqData_FormatOutput:
 	cp wa, 0x12c
 	jr ule, SeqData_FormatOutput_Loop
-	stdi16 (0xbd3a), 300
+	ldw (0xbd3a:16), 300
 
 SeqData_FormatOutput_Loop:
 	lda xwa, (xsp)
@@ -16102,7 +16102,7 @@ SeqData_FormatOutput_CaseA:
 	calr SeqData_FormatOutput_CaseB
 	ret
 SeqData_FormatOutput_CaseB:
-	stdi16	(0x90de), 0
+	ldw	(0x90de:16), 0
 	push xde
 	push xhl
 	push xix

@@ -1529,7 +1529,7 @@ AccompSeq_WriteMidi_CodeBlock:
 	ldb	d, 126
 	dec	6, l
 	decf
-	stdi16	(0x7e70), 2048
+	ldw	(0x7e70:16), 2048
 	.byte 0xc1
 	ldb	d, 126
 	push	xiz
@@ -1547,7 +1547,7 @@ AccompSeq_AllNotesOffImpl:
 	jr z, AccompSeq_AllNotesOff_Stop
 	bit 7, (0x7e24:16)
 	jr nz, AccompSeq_AllNotesOff_Stop
-	stdi16 (0x7e70), 2048
+	ldw (0x7e70:16), 2048
 	ordi8 0x7e24, 128
 	jr AccompSeq_AllNotesOff_Send
 

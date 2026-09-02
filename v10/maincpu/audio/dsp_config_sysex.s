@@ -846,7 +846,7 @@ SwbtWr_ProcessAll_CompactDone:
 	sub xix, 0xbd3c
 	ld (0x90de:16), ix
 	ld (0xbf39:16), 255
-	stdi16 (0x90e2), 0
+	ldw (0x90e2:16), 0
 	ret
 
 SwbtWr_InitBank1:
@@ -880,7 +880,7 @@ SwbtWr_InitBank3:
 	ret
 
 SwbtWr_DispatchLoop_Init:
-	stdi16 (0xc07b), 0
+	ldw (0xc07b:16), 0
 
 SwbtWr_DispatchLoop:
 	ld xiy, (0xc089:16)

@@ -43,8 +43,8 @@ FCopy_ScrollDown_Clamp:
 	jrl FCopy_Return
 
 FCopy_ScrollNeg_Reset:
-	stdi16 (0x7f64), 0
-	stdi16 (0x7f66), 1
+	ldw (0x7f64:16), 0
+	ldw (0x7f66:16), 1
 	jrl FCopy_Return
 
 FCopy_HandleExecute:

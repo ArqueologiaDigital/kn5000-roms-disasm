@@ -3909,7 +3909,7 @@ BitMapOut_ByteData_WidgetTable:
 	push	xhl
 	push	xix
 	push	xiz
-	stdi16	(0x8d58), 0xffff
+	ldw	(0x8d58:16), 0xffff
 	calr	2476
 	pop	xiz
 	pop	xix
@@ -3927,7 +3927,7 @@ BitMapOut_ApplyPatch_SkipHeader:
 	ld a, (0x8d5c:16)
 	cp a, 0x80
 	jr c, BitMapOut_ApplyPatch_Execute
-	stdi16 (0x8d56), 0
+	ldw (0x8d56:16), 0
 	jr BitMapOut_ApplyPatch_Done
 
 BitMapOut_ApplyPatch_Execute:

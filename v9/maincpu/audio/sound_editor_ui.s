@@ -9293,8 +9293,8 @@ SeMenu_CompareAndApply_Data6:
 	ld	xix, SeBitmap_EnvCurve5_0x108A
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_CompareAndApply_Data4
-	stdi16	(1734), 56
-	stdi16	(1736), 139
+	ldw	(1734:16), 56
+	ldw	(1736:16), 139
 	call	SeMenu_ShowConfirmDialog_Data_0x1F6
 	stib_da	(0x03efa8), 0
 	ld	xiy, SeMenu_CompareScreen_DataTable_0x141
@@ -9370,8 +9370,8 @@ SeMenu_Utility_FillBlock:
 	ld	xix, SeBitmap_EnvCurve5_0x12BA
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_PresetManager_Save
-	stdi16	(1734), 56
-	stdi16	(1736), 139
+	ldw	(1734:16), 56
+	ldw	(1736:16), 139
 	call	SeMenu_ShowConfirmDialog_Data_0x1F6
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
@@ -10265,8 +10265,8 @@ SeMenu_FxEdit_Init:
 	ld	xiy, TuningSystem_Handler_Table_0xCA8
 	ld	xix, TuningSystem_Handler_Table_0xCB2
 	call	SeMenu_NameEditor_Setup
-	stdi16	(1734), 47
-	stdi16	(1736), 51
+	ldw	(1734:16), 47
+	ldw	(1736:16), 51
 	call	SeMenu_ShowConfirmDialog_Data_0x1F6
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
@@ -10333,8 +10333,8 @@ SeMenu_FilterEdit_Init:
 	ld	xix, SeBitmap_EnvCurve5_0x1A03
 	call	SeMenu_NameEditor_Setup
 	call	SeMenu_PresetManager_Save
-	stdi16	(1734), 56
-	stdi16	(1736), 139
+	ldw	(1734:16), 56
+	ldw	(1736:16), 139
 	call	SeMenu_ShowConfirmDialog_Data_0x1F6
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A

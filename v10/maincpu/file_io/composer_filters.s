@@ -134,7 +134,7 @@ CompLoad_HandleSelection:
 	jrl CompLoad_DispatchWidget
 
 CompLoad_Selection_Negative:
-	stdi16 (0x7f80), 0
+	ldw (0x7f80:16), 0
 	ld xwa, (0x7f7c:16)
 	ld xbc, 0x1e50002
 	lds32 xde, 0

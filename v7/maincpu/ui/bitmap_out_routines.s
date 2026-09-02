@@ -3138,7 +3138,7 @@ BitMapOut_ByteData_WidgetTable:
 
 	push	xiz
 
-	stdi16 (36028), 65535
+	ldw (36028:16), 65535
 
 	calr	2476
 
@@ -3164,7 +3164,7 @@ BitMapOut_ApplyPatch_SkipHeader:
 	ld	a, (36032:16)
 	cp	a, 128
 	jr	c, 8
-	stdi16	(36026), 0
+	ldw	(36026:16), 0
 	jr	55
 BitMapOut_ApplyPatch_Execute:
 	lds iz, 0

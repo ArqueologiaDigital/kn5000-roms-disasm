@@ -107,7 +107,7 @@ CompLoad_HandleSelection:
 	ld	xde, xhl
 	jrl	463
 CompLoad_Selection_Negative:
-	stdi16	(32484), 0
+	ldw	(32484:16), 0
 	ld	xwa, (32480:16)
 	ld	xbc, 31784962
 	lds32	xde, 0

@@ -59,7 +59,7 @@ EffectMode_CopyVoiceParams_Done:
 
 
 EffectMode_ByteData_Block1:
-	stdi16	(36028), 65535
+	ldw	(36028:16), 65535
 	jrl	648
 EffectMode_ByteData_Block2:
 	.incbin "includes/romslices/v7_transplant_EffectMode_ByteData_Block2.bin"
@@ -181,8 +181,8 @@ EffectMode_CheckTransposeChanged:
 	.byte 0xd1, 0xbc, 0x8c, 0xf3, 0xb0, 0xf6, 0xf1, 0xbc
 	.byte 0x8c, 0x53, 0x78, 0x40, 0xf6
 EffectMode_TransposeInvalid:
-	stdi16	(36028), 65535
-	stdi16	(36026), 0
+	ldw	(36028:16), 65535
+	ldw	(36026:16), 0
 	ret
 EffectMode_ProcessPresetChange:
 	dec	4, xsp
@@ -804,7 +804,7 @@ SndOutput_ReinitByMode_TypeB:
 	ld	iz, (36028:16)
 	ld	wa, (36026:16)
 	ld	qiz, wa
-	stdi16	(36028), 65535
+	ldw	(36028:16), 65535
 	calr	64171
 	ld	bc, (36026:16)
 	cps	bc, 0

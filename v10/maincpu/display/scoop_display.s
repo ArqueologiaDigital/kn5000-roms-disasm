@@ -543,7 +543,7 @@ ParamDigit_DivideValue:
 	push c
 	anddi8 (4485), 252
 	ld (4481:16), 0
-	stdi16 (4482), 0
+	ldw (4482:16), 0
 	cps wa, 0
 	jr z, ParamUpdate_AddAndStore
 	xor c, c
@@ -640,7 +640,7 @@ ScoopDisp_BytecodeBlock1:
 ChannelFilter_InitAndApply:
 	call ChannelFilter_SetMode
 	call ChannelFilter_ApplyWrapper
-	stdi16 (4360), 0
+	ldw (4360:16), 0
 	ret
 
 ChannelFilter_SetMode:
@@ -733,7 +733,7 @@ Display_InitScreenLayout:
 	call Display_CallMenuInit
 	calr Display_InitParamLoader2
 	call Display_UpdateDirtyRegions
-	stdi16	(4360), 0
+	ldw	(4360:16), 0
 	ret
 Display_InitParamLoader1:
 	; --- Param loader 1: C=0, A=0x0c, A=0x10, call FB1536 ---
@@ -2096,7 +2096,7 @@ UIState_UpdateMultiRegions:
 
 Display_RedrawParameters:
 	anddi8 (3922), 252
-	stdi16 (3660), 0
+	ldw (3660:16), 0
 	call Display_FillRegion0
 	ld wa, (0x371a:16)
 	cps wa, 1
@@ -2717,7 +2717,7 @@ PerfMode_Handler_EvtB:
 	cp	(xiy), wa
 	jrl	z, 10
 	call	SysEx_BytecodeDispatcher
-	stdi16	(4360), 0
+	ldw	(4360:16), 0
 	call	Display_UpdateDirtyRegions
 	ret
 	ld	a, (0xc07e:16)
@@ -4205,7 +4205,7 @@ ToneParam_HandlerTable_BC:
 	dec	1, wa
 	ld	(3435:16), wa
 	jp	ToneParam_HandlerTable_BC_0x41C
-	stdi16	(3435), 0xffff
+	ldw	(3435:16), 0xffff
 	ld	a, (3654:16)
 	ld	(3822:16), a
 	ret
@@ -4816,7 +4816,7 @@ DisplayMode_Handler_3:
 	ld	w, (0xfb3c:16)
 	call	ScoopDisp_BytecodeBlock1_0x4D
 	ret
-	stdi16	(3824), 1
+	ldw	(3824:16), 1
 	ld	(3571:16), 2
 	call	DisplayMode_Handler_3_0x4C9
 	call	Display_BytecodeBlock_F_0x2A2
@@ -5483,7 +5483,7 @@ VoiceSlot_TableSetup:
 	push	xsp
 	pop	sr
 	jrl	ugt, 10
-	stdi16	(3660), 0
+	ldw	(3660:16), 0
 	jp	VoiceSlot_TableSetup_0x40E
 	ld	(3666:16), 4
 	ld	wa, (0x371a:16)
@@ -6894,7 +6894,7 @@ ScoopParam_ValueTable:
 	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
 	ld	(61854:16), de
 	.byte 0xd7, 0x3e, 0x8a
-	stdi16	61854, 0
+	ldw	(61854:16), 0
 	.byte 0xc7, 0x3c, 0x99, 0xd7, 0x3e, 0x9a
 	ld	de, (10357:16)
 	ld	a, c
@@ -6902,7 +6902,7 @@ ScoopParam_ValueTable:
 	.byte 0xda, 0x2c, 0xc7, 0x3c, 0x89
 	ld	(10357:16), de
 	.byte 0xd7, 0x3e, 0x8a
-	stdi16	3928, 65535
+	ldw	(3928:16), 65535
 	call	16637551
 	call	15717118
 	cps	w, 0
@@ -7214,12 +7214,12 @@ PortConfig_Handler_0:
 	push	xsp
 	swi	7
 	jrl	z, 133
-	stdi16	(3660), 0
-	stdi16	(3662), 1
-	stdi16	(3664), 0
+	ldw	(3660:16), 0
+	ldw	(3662:16), 1
+	ldw	(3664:16), 0
 	call	PortConfig_Handler_0_0xC0
 	ld	(3702:16), 1
-	stdi16	(3703), 0
+	ldw	(3703:16), 0
 	xor	l, l
 	ld	a, (1075:16)
 	cps	a, 4
@@ -7227,7 +7227,7 @@ PortConfig_Handler_0:
 	ld	l, a
 	ldb	a, 4
 	sub	l, 4
-	stdi16	(3664), 1
+	ldw	(3664:16), 1
 	ld	(3666:16), 0
 	ld	(3667:16), a
 	ld	(3668:16), l
@@ -10036,12 +10036,12 @@ VoiceSlot_ReadCurrentParams:
 	ret
 
 VoiceSlot_FlagCheck:
-	stdi16 (3573), 1
+	ldw (3573:16), 1
 	call VoiceSlot_FlagCheckDone
 	ret
 
 VoiceSlot_FlagCheckBody:
-	stdi16 (3573), 2
+	ldw (3573:16), 2
 	call VoiceSlot_FlagCheckDone
 	ret
 
@@ -10339,7 +10339,7 @@ VoiceSlot_FinalRetZ:
 	ld	iy, (xhl+3)
 	cp	iy, 0xffff
 	jrl	nz, -112
-	stdi16	(3302), 0
+	ldw	(3302:16), 0
 	ld	iy, ix
 	.byte 0x83
 	push	xix
@@ -12592,7 +12592,7 @@ SubCPU_ToneParamRet:
 	sla	xwa, 35
 	pop	xde
 	ld	(0x28bf:16), hl
-	stdi16	(0x28c1), 5
+	ldw	(0x28c1:16), 5
 	.byte 0xc1, 0xc8
 	ret
 	push	xsp
@@ -12821,7 +12821,7 @@ SubCPU_ToneParamRet:
 	decf
 	push	xiz
 	.byte 0x01
-	stdi16	(9920), 0
+	ldw	(9920:16), 0
 	call	VoiceSlot_TableSetup
 	jp	SubCPU_ToneParamRet_0x4BC
 	.byte 0xc1, 0x57
@@ -12848,7 +12848,7 @@ SubCPU_ToneParamRet:
 	decf
 	push	xiz
 	.byte 0x01
-	stdi16	(9920), 0
+	ldw	(9920:16), 0
 	call	VoiceSlot_TableSetup
 	ret
 	.byte 0xc1, 0xbe
@@ -12904,7 +12904,7 @@ SubCPU_ToneParamRet:
 	nop
 	call	StringData_APCModeNames_0x713
 	jp	SubCPU_ToneParamRet_0x5E9
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	ld	a, (3765:16)
 	cp	a, 130
 	jrl	z, 14
@@ -12998,7 +12998,7 @@ SubCPU_ToneParamRet:
 	nop
 	jrl	nz, 356
 	call	SubCPU_ToneParamRet_0xA1F
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	ld	a, (3766:16)
 	ld	(3952:16), a
 	call	VoiceBank_ProcessCommand
@@ -13072,7 +13072,7 @@ SubCPU_ToneParamRet:
 	nop
 	ldb	a, 48
 	ld	(3952:16), a
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	SubCPU_ToneParamRet_0x777
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	.byte 0xc1, 0xf6
@@ -13088,7 +13088,7 @@ SubCPU_ToneParamRet:
 	nop
 	ldb	a, 48
 	ld	(3952:16), a
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	SubCPU_ToneParamRet_0x777
 	call	DisplayStr_BytecodeBlock_A
 	.byte 0xc1, 0xf6
@@ -13529,7 +13529,7 @@ OscScope_UpdateDisplay:
 	call	DisplayStr_BytecodeBlock_A_0x53
 	popw	bc
 	djnz16	bc, -9
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	OscScope_RefreshLoop_0x3F
 	ld	wa, (3778:16)
 	ldb	l, 96
@@ -13551,7 +13551,7 @@ OscScope_UpdateDisplay:
 	popw	bc
 	djnz16	bc, -9
 	call	DisplayStr_BytecodeBlock_A_0x120
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	ld	(3952:16), 0
 	jp	OscScope_RefreshLoop_0x3F
 OscScope_RefreshLoop:
@@ -15919,7 +15919,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	z, 19
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	ld	(3952:16), 48
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9B1
 	call	DisplayStr_BytecodeBlock_A
 	xor	wa, wa
@@ -15938,7 +15938,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	.byte 0x81
 	jrl	z, 19
 	call	DisplayStr_BytecodeBlock_A_0xCD
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	ld	(3952:16), 48
 	jp	StringData_APCModeNames_0x9B1
 	call	DisplayStr_BytecodeBlock_A
@@ -15975,11 +15975,11 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	nz, 19
 	call	DisplayStr_BytecodeBlock_A_0x53
 	ld	(3952:16), 0
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
 	call	DisplayStr_BytecodeBlock_A_0x120
 	ld	(3952:16), 48
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9B1
 	sub	wa, hl
 	ld	(3778:16), wa
@@ -15998,7 +15998,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	ld	de, (3778:16)
 	sub	de, wa
 	ld	(3778:16), de
-	stdi16	(3952), 0
+	ldw	(3952:16), 0
 	pushw	bc
 	call	DisplayStr_BytecodeBlock_A_0x53
 	popw	bc
@@ -16031,7 +16031,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	nz, 19
 	call	DisplayStr_BytecodeBlock_A_0x53
 	ld	(3952:16), 48
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
 	.byte 0xc1, 0xbb
 	ret
@@ -16052,7 +16052,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jp	StringData_APCModeNames_0x9AD
 	call	DisplayStr_BytecodeBlock_A_0x53
 	ld	(3952:16), 48
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
 	sub	hl, wa
 	cp	hl, 96
@@ -16064,7 +16064,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	z, 19
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	ld	(3952:16), 48
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9B1
 	ld	wa, hl
 	ldb	l, 96
@@ -16101,7 +16101,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	jp	StringData_APCModeNames_0x92C
 	call	DisplayStr_BytecodeBlock_A
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
 	.byte 0xc1, 0xb5
 	ret
@@ -16110,7 +16110,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	z, 19
 	call	DisplayStr_BytecodeBlock_A_0xCD
 	ld	(3952:16), 48
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9B1
 	call	DisplayStr_BytecodeBlock_A_0x120
 	call	DisplayStr_BytecodeBlock_A_0x1A4
@@ -16121,7 +16121,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jrl	nz, 19
 	call	DisplayStr_BytecodeBlock_A
 	ld	(3952:16), 48
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	StringData_APCModeNames_0x9AD
 	.byte 0xc1, 0xbb
 	ret
@@ -16142,7 +16142,7 @@ StringData_APCModeNames:	.ascii "APC OFF         BASIC           ADVANCED 1     
 	jp	StringData_APCModeNames_0x9AD
 	call	DisplayStr_BytecodeBlock_A
 	ld	(3952:16), 48
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	call	VoiceBank_ProcessCommand
 	ret
 	call	DisplayStr_BytecodeBlock_A_0xCD
@@ -17780,7 +17780,7 @@ Scoop_CurveUpdate_DrawSegment:
 	ld iy, (xhl + 3)
 	cp iy, 0xffff
 	jr nz, Scoop_SpecialMode_ValueSend_Part2
-	stdi16 (3302), 0
+	ldw (3302:16), 0
 	ld iy, ix
 	andmi8 (xhl), 0x7f
 	jr Scoop_SpecialMode_ValueSend_Part3

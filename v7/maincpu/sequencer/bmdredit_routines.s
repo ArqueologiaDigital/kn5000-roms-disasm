@@ -478,12 +478,12 @@ BmDrEdit_CalcSecondaryPos_ClampSize:
 	ret
 
 BmDrEdit_InitDisplayParams:
-	stdi16 (0x2794), 48
-	stdi16 (0x2796), 48
-	stdi16 (0x2790), 38
+	ldw (0x2794:16), 48
+	ldw (0x2796:16), 48
+	ldw (0x2790:16), 38
 	ld (0x2798:16), 5
-	stdi16 (0x279e), 40
-	stdi16 (0x27a0), 5
+	ldw (0x279e:16), 40
+	ldw (0x27a0:16), 5
 	ld (0x278a:16), 100
 	ret
 
@@ -751,8 +751,8 @@ BmDrEdit_ScrollLeft_Done:
 
 BmDrEdit_ScrollReset:
 	call NoteEditSy_SendScrollCmd0
-	stdi16 (0x279a), 0
-	stdi16 (0x2782), 0
+	ldw (0x279a:16), 0
+	ldw (0x2782:16), 0
 	ld (0x2784:16), 0
 	ld (0x295c:16), 130
 	ld (0x295d:16), 0
@@ -949,7 +949,7 @@ BmDrEdit_DecrementDuration:
 	ld wa, (0x278c:16)
 	cps wa, 0
 	jr nz, BmDrEdit_DecrementDuration_Clamp
-	stdi16 (0x278c), 1
+	ldw (0x278c:16), 1
 	jr BmDrEdit_DecrementDuration_Update
 
 BmDrEdit_DecrementDuration_Clamp:
@@ -970,7 +970,7 @@ BmDrEdit_DecrementDuration_Global:
 	ld wa, (0x278e:16)
 	cps wa, 0
 	jr nz, BmDrEdit_DecrementDuration_GlobalClamp
-	stdi16 (0x278e), 1
+	ldw (0x278e:16), 1
 	jr BmDrEdit_DecrementDuration_Send
 
 BmDrEdit_DecrementDuration_GlobalClamp:
@@ -998,7 +998,7 @@ BmDrEdit_ModeScrollDown:
 	ld wa, (0x2792:16)
 	cps wa, 0
 	jr nz, BmDrEdit_ModeScrollDown_Clamp
-	stdi16 (0x2792), 48
+	ldw (0x2792:16), 48
 	jr BmDrEdit_ModeScrollDown_Send
 
 BmDrEdit_ModeScrollDown_Clamp:
@@ -1050,7 +1050,7 @@ BmDrEdit_ScanToEnd_CheckNextSong:
 
 BmDrEdit_ScanToEnd_AdvanceSong:
 	ld (0x28af:16), hl
-	stdi16 (9830), 255
+	ldw (9830:16), 255
 
 BmDrEdit_ScanToEnd_CheckEndMark:
 	call SeqData_ReadNextByte
@@ -1069,7 +1069,7 @@ BmDrEdit_LoadAlternateState:
 
 BmDrEdit_LoadAlternateAndCountNotes:
 	calr BmDrEdit_LoadAlternateState
-	stdi16 (0x2772), 0
+	ldw (0x2772:16), 0
 
 BmDrEdit_CountNotesLoop:
 	call SeqData_ReadNextByte
@@ -1682,7 +1682,7 @@ BmDrEdit_NavigatePrevPage:
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_ScanChannelEvents
 	incdi16 1, (0x2744)
-	stdi16 (0x2782), 0
+	ldw (0x2782:16), 0
 	ld (0x2784:16), 0
 	calr BmDrEdit_LoadAlternatePosition
 	calr BmDrEdit_BuildVoiceList
@@ -1766,7 +1766,7 @@ BmDrEdit_InitCommon:
 	pushw iz
 	cpdi16 0x2792, 0
 	jr nz, BmDrEdit_InitCommon_CheckSongActive
-	stdi16 (0x2792), 48
+	ldw (0x2792:16), 48
 BmDrEdit_InitCommon_CheckSongActive:
 	ld	a, (35994:16)
 	cpda8	a, 35995
@@ -1823,7 +1823,7 @@ BmDrEdit_CopyStepCount:
 	jrl BmDrEdit_InitPlayback
 
 BmDrEdit_InitFirstStep:
-	stdi16 (0x2744), 1
+	ldw (0x2744:16), 1
 	cpdi16 0xf231, 0
 	jrl z, BmDrEdit_RefreshAndReturn
 	call Part_ProcessAndDecrementVoice
@@ -1862,7 +1862,7 @@ BmDrEdit_InitFirstStep:
 	lds de, 5
 	call Part_WriteByte_Indexed
 	ld (0x28af:16), iz
-	stdi16 (9830), 5
+	ldw (9830:16), 5
 	calr BmDrEdit_InsertStepEntry
 	incdi16 1, (9830)
 	calr BmDrEdit_InsertStepEntry
@@ -1876,7 +1876,7 @@ BmDrEdit_InitPlayback:
 	calr BmDrEdit_SelectChannelAndLoadPos
 	cp (0x287a:16), 0
 	jr z, BmDrEdit_ResetAndScanNotes
-	stdi16 (0x2744), 1
+	ldw (0x2744:16), 1
 	calr BmDrEdit_SelectChannelAndLoadPos
 	cp (0x287a:16), 0
 	jr z, BmDrEdit_ResetAndScanNotes
@@ -1886,13 +1886,13 @@ BmDrEdit_RefreshAndReturn:
 	jr BmDrEdit_PopIzAndReturn
 
 BmDrEdit_ResetAndScanNotes:
-	stdi16 (0x279a), 0
+	ldw (0x279a:16), 0
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_CalcTrackPosition
 	calr BmDrEdit_SaveAndFindNote
 	calr BmDrEdit_CheckNoteAtPosition
 	calr BmDrEdit_SetupAndWalkToNote
-	stdi16 (0x2782), 0
+	ldw (0x2782:16), 0
 	ld (0x2784:16), 0
 	calr BmDrEdit_ScanChannelEvents
 
@@ -1939,9 +1939,9 @@ BmDrEdit_CleanupCommon:
 
 	ordm16_24 (0xffec), xwa
 
-	stdi16 (3407), 0
+	ldw (3407:16), 0
 
-	stdi16 (3409), 0
+	ldw (3409:16), 0
 
 	ldmm16 9832, 0x2744
 
@@ -2092,7 +2092,7 @@ BmDrEdit_ValidateSteps_CheckCount:
 	calr BmDrEdit_CountMeasuresAndValidate
 	cpdi16 0x2772, 0
 	ret nz
-	stdi16 (0x2772), 2
+	ldw (0x2772:16), 2
 
 BmDrEdit_ValidateSteps_InsertLoop:
 	calr EditChannel_LoadVoiceParams
@@ -2117,7 +2117,7 @@ BmDrEdit_SeekToPartVoice:
 	cp hl, 0xffff
 	ret z
 	ld (0x28af:16), hl
-	stdi16 (9830), 5
+	ldw (9830:16), 5
 	cp (0x287a:16), 0
 	jr z, BmDrEdit_SeekVoice_CountAndInsert
 	ldw wa, 0xb7
@@ -2271,7 +2271,7 @@ BmDrEdit_NavigateToPrevAndDisplay:
 	calr BmDrEdit_LoadAlternateState
 	calr BmDrEdit_ScanChannelEvents
 	incdi16 1, (0x2744)
-	stdi16 (0x2782), 0
+	ldw (0x2782:16), 0
 	ld (0x2784:16), 0
 	calr BmDrEdit_LoadAlternatePosition
 	calr BmDrEdit_BuildVoiceList
@@ -2395,7 +2395,7 @@ BmDrEdit_PitchOverflow_IncrementBeat:
 	jr BmDrEdit_PitchOverflow_UpdateDisplay
 
 BmDrEdit_PitchOverflow_NextPage:
-	stdi16 (0x2782), 0
+	ldw (0x2782:16), 0
 	incdi16 1, (0x2744)
 	ld (0x2784:16), 0
 	call NoteEditSy_SendScrollCmd0
@@ -2737,7 +2737,7 @@ BmDrEdit_CountMeasuresAndValidate:
 	call SeqData_SetErrorCode
 
 BmDrEdit_CountMeasures_Init:
-	stdi16 (0x2772), 0
+	ldw (0x2772:16), 0
 
 BmDrEdit_CountMeasures_Loop:
 	call SeqData_ReadNextByte
@@ -3725,7 +3725,7 @@ BmDrEdit_CheckAndAdvancePage:
 	cp (xwa), 0x0
 	jr z, BmDrEdit_AdvancePage_IncrementBeat
 	incdi16 1, (0x2744)
-	stdi16 (0x2782), 0
+	ldw (0x2782:16), 0
 	jr BmDrEdit_AdvancePage_CalcOffset
 
 BmDrEdit_AdvancePage_IncrementBeat:
@@ -4075,7 +4075,7 @@ BmDrEdit_InitScanEventPositions:
 	ld (0x2760:16), 0
 	cpdi16 0x2782, 0
 	jr z, BmDrEdit_SyncSeek_ReadNext
-	stdi16 (0x2772), 0
+	ldw (0x2772:16), 0
 
 BmDrEdit_SyncSeek_ReadLoop:
 	call SeqData_ReadNextByte
@@ -4175,7 +4175,7 @@ BmDrEdit_SeekFwd_CheckStep:
 	jrl BmDrEdit_CalcStorePos
 
 BmDrEdit_SeekFwd_InitCountLoop:
-	stdi16 (0x2772), 0
+	ldw (0x2772:16), 0
 	ldib_erp 0xfb, 0
 
 BmDrEdit_SeekFwd_ReadLoop:

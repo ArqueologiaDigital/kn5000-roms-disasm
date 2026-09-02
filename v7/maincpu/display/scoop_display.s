@@ -543,7 +543,7 @@ ParamDigit_DivideValue:
 	push c
 	anddi8 (4485), 252
 	ld (4481:16), 0
-	stdi16 (4482), 0
+	ldw (4482:16), 0
 	cps wa, 0
 	jr z, ParamUpdate_AddAndStore
 	xor c, c
@@ -640,7 +640,7 @@ ScoopDisp_BytecodeBlock1:
 ChannelFilter_InitAndApply:
 	call ChannelFilter_SetMode
 	call ChannelFilter_ApplyWrapper
-	stdi16 (4360), 0
+	ldw (4360:16), 0
 	ret
 
 ChannelFilter_SetMode:
@@ -733,7 +733,7 @@ Display_InitScreenLayout:
 	call Display_CallMenuInit
 	calr Display_InitParamLoader2
 	call Display_UpdateDirtyRegions
-	stdi16	(4360), 0
+	ldw	(4360:16), 0
 	ret
 Display_InitParamLoader1:
 	; --- Param loader 1: C=0, A=0x0c, A=0x10, call FB1536 ---
@@ -1909,7 +1909,7 @@ UIState_UpdateMultiRegions:
 Display_RedrawParameters:
 	anddi8 (3922), 252
 
-	stdi16 (3660), 0
+	ldw (3660:16), 0
 
 	.byte 0x1d, 0x43, 0x73, 0xef	; call Display_FillRegion0 (v7 addr)
 
@@ -2520,7 +2520,7 @@ PerfMode_Handler_EvtB:
 	cp	(xiy), wa
 	jrl	z, 10
 	call	15706801
-	stdi16	4360, 0
+	ldw	(4360:16), 0
 	call	15686412
 	ret
 	ld	a, (49122:16)
@@ -4166,14 +4166,14 @@ DisplayMode_Handler_3:
 	ld	w, (64316:16)
 	call	15687441
 	ret
-	stdi16 (0x0ef0), 0x0001
+	ldw (0x0ef0:16), 0x0001
 	ld (0x0df3:16), 0x02
 	call DisplayMode_Handler_3_0x4C9
 	call Display_BytecodeBlock_F_0x2A2
 	call Display_UpdateRegion3
 	ordi8 (0xe31c), 0x08
 	ret
-	stdi16 (0x0ef0), 0xffff
+	ldw (0x0ef0:16), 0xffff
 	ld (0x0df3:16), 0x02
 	call DisplayMode_Handler_3_0x4C9
 	call Display_BytecodeBlock_F_0x2A2
@@ -5713,12 +5713,12 @@ PortConfig_Handler_0:
 	call	15725762
 	cp	(10430:16), 255
 	jrl	z, 133
-	stdi16	3660, 0
-	stdi16	3662, 1
-	stdi16	3664, 0
+	ldw	(3660:16), 0
+	ldw	(3662:16), 1
+	ldw	(3664:16), 0
 	call	15705595
 	ld	(3702:16), 1
-	stdi16	3703, 0
+	ldw	(3703:16), 0
 	xor	l, l
 	ld	a, (1075:16)
 	cps	a, 4
@@ -5726,7 +5726,7 @@ PortConfig_Handler_0:
 	ld	l, a
 	ldb	a, 4
 	sub	l, 4
-	stdi16	3664, 1
+	ldw	(3664:16), 1
 	ld	(3666:16), 0
 	ld	(3667:16), a
 	ld	(3668:16), l
@@ -7359,12 +7359,12 @@ VoiceSlot_ReadCurrentParams:
 	ret
 
 VoiceSlot_FlagCheck:
-	stdi16 (3573), 1
+	ldw (3573:16), 1
 	call VoiceSlot_FlagCheckDone
 	ret
 
 VoiceSlot_FlagCheckBody:
-	stdi16 (3573), 2
+	ldw (3573:16), 2
 	call VoiceSlot_FlagCheckDone
 	ret
 
@@ -7628,7 +7628,7 @@ VoiceSlot_FinalRetZ:
 	ld	iy, (xhl+3)
 	cp	iy, 65535
 	jrl	nz, -112
-	stdi16	3302, 0
+	ldw	(3302:16), 0
 	ld	iy, ix
 	.byte 0x83, 0x3c, 0x7f
 	jp	15713800
@@ -8964,7 +8964,7 @@ OscScope_UpdateDisplay:
 	call	DisplayStr_BytecodeBlock_A_0x53
 	popw	bc
 	djnz16	bc, -9
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	jp	OscScope_RefreshLoop_0x3F
 	ld	wa, (3778:16)
 	ldb	l, 96
@@ -8986,7 +8986,7 @@ OscScope_UpdateDisplay:
 	popw	bc
 	djnz16	bc, -9
 	call	DisplayStr_BytecodeBlock_A_0x120
-	stdi16	(3778), 0
+	ldw	(3778:16), 0
 	ld	(3952:16), 0
 	jp	OscScope_RefreshLoop_0x3F
 OscScope_RefreshLoop:

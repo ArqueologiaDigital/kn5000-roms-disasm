@@ -121,8 +121,8 @@ BootSerial_ModeSwitch__apply:
 	ldw	(xhl - 8), 0		; tail (0x9882) = 0
 	ldw	(xhl - 2), 0x80		; wrap size (0x9888) = 0x80
 	ei	6			; mask serial interrupts
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ei	0
 BootSerial_ModeSwitch__parse:
 	calr	BootSerial_RX_ParsePackets
@@ -250,16 +250,16 @@ BootSerial_FullInit:
 	ordi8	(0x0f64), 0x40		; link flag bit 6
 	ld	(0x0f63:16), 0		; INTA mode: next INTA enters RX mode
 	anddi8	(0x0f64), 0xfc		; clear RX/TX active flags
-	stdi16	(0x0fd5), 0		; TX send index
-	stdi16	(0x0fd7), 0		; TX pending count
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0fd5:16), 0		; TX send index
+	ldw	(0x0fd7:16), 0		; TX pending count
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	calr	BootSerial_TickWait6
 	ldb	a, 0x1f			; opening frame (0x1f, 0xda)
 	ldb	w, 0xda
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
 	calr	BootSerial_HandshakeSequence
 	ret
@@ -278,20 +278,20 @@ BootSerial_HandshakeSequence:
 	ldb	w, 0x1a
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
 	ldb	a, 0x1d			; frame (0x1d, 0x00)
 	ldb	w, 0x00
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
 	calr	BootSerial_SpinWait3000
 	ldb	a, 0xdd			; frame (0xdd, 0x03)
 	ldb	w, 0x03
 	calr	BootSerial_SendFrame
 	calr	BootSerial_SpinWait3000
-	stdi16	(0x0fd5), 0
+	ldw	(0x0fd5:16), 0
 	calr	BootSerial_SpinWait3000
 	calr	BootSerial_SpinWait3000
 	ldb	a, 0x1e			; frame (0x1e, 0x80)
@@ -307,8 +307,8 @@ BootSerial_HandshakeSequence:
 	and_sd8b_im 0xd6, 0xdf		; SC1MOD &= ~0x20
 	ldio	0xf8, 0x12		; INTCLR
 	ldio	0xe3, 0x05		; INTEAB
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ei	0
 	ret
 
@@ -544,8 +544,8 @@ Boot_ClassifyDeviceID__ret:
 BootSerial_TestLoopback:
 	ld	(0x0f6b:16), 0
 	calr	BootSerial_WaitTxIdle
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ldb	a, 0x20			; test frame (0x20, 0x00)
 	ldb	w, 0x00
 	calr	BootSerial_SendFrame
@@ -555,8 +555,8 @@ BootSerial_TestLoopback:
 	ordi8	(0x0f6b), 1
 BootSerial_TestLoopback__no_resp1:
 	calr	BootSerial_WaitTxIdle
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ldb	a, 0xe0			; test frame (0xe0, 0x00)
 	ldb	w, 0x00
 	calr	BootSerial_SendFrame
@@ -633,8 +633,8 @@ BootSerial_WaitDeviceIdent:
 	ldw	(xhl - 8), 0
 	ldw	(xhl - 2), 0x80
 	ei	6
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ei	0
 BootSerial_WaitDeviceIdent__poll:
 	calr	BootSerial_WaitTxIdle
@@ -661,10 +661,10 @@ BootSerial_WaitDeviceIdent__have:
 	ldw	(xhl - 8), 0
 	ldw	(xhl - 2), 0x80
 	ei	6
-	stdi16	(0x0fd5), 0
-	stdi16	(0x0fd7), 0
-	stdi16	(0x0f75), 0
-	stdi16	(0x0f77), 0
+	ldw	(0x0fd5:16), 0
+	ldw	(0x0fd7:16), 0
+	ldw	(0x0f75:16), 0
+	ldw	(0x0f77:16), 0
 	ei	0
 	ret
 
@@ -789,8 +789,8 @@ BootSerial_WaitTxIdle__exit:
 ; -----------------------------------------------------------------------------
 BootSerial_SendFrame:
 	ei	6
-	stdi16	(0x0fd5), 0		; TX send index = 0
-	stdi16	(0x0fd7), 0		; TX pending count = 0
+	ldw	(0x0fd5:16), 0		; TX send index = 0
+	ldw	(0x0fd7:16), 0		; TX pending count = 0
 	ld	(0x0fd9:16), wa		; both frame bytes -> ring head
 	adddi16	(0x0fd7), 2		; two bytes pending
 	ordi8	(0x0f64), 2		; TX-pending flag

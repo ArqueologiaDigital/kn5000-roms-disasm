@@ -573,7 +573,7 @@ SmfFN_JumpTable:
 	ld	(0x81ac:16), hl
 	cps	hl, 0
 	jr	ge, 26
-	stdi16	(0x81ac), 0
+	ldw	(0x81ac:16), 0
 	jr	18
 	ld	wa, (0x8504:16)
 	ld	(0x81ac:16), wa

@@ -64,7 +64,7 @@ UIStateEvt_VoiceParamHandler:
 	pushw	wa
 	push	xiz
 	rcf
-	stdi16	(0xf19e), 0
+	ldw	(0xf19e:16), 0
 	.byte 0xc1, 0xa5
 	pushw	wa
 	push	xix
@@ -85,7 +85,7 @@ UIStateEvt_VoiceParamHandler:
 	pushw	wa
 	push	xiz
 	rcf
-	stdi16	(0xf19e), 0
+	ldw	(0xf19e:16), 0
 	ld	(4596:16), 0
 	call	SeqPlay_CheckStartConditions
 	ret
@@ -282,13 +282,13 @@ Part_LookupParam:
 	ret
 Part_ValidateAndActivate:
 	; --- Validation: check range, optionally call ---
-	stdi16	(0x287f), 1
-	stdi16	(3383), 0
+	ldw	(0x287f:16), 1
+	ldw	(3383:16), 0
 	cp	(3424:16), 0
 	jr z, PartValidate_Done
 	cp	(3424:16), 16
 	jr ugt, PartValidate_Done
-	stdi16	(4360), 0
+	ldw	(4360:16), 0
 	xor	wa, wa
 	ldb a, 0x8a
 	call UI_PostModeChangeEvent
@@ -950,8 +950,8 @@ CDlike_InitModeAndLoadBank:
 	call SqTrAs_InitWall
 	ld wa, (0xf19e:16)
 	ld (0x2875:16), wa
-	stdi16 (0xf19e), 0
-	stdi16 (8980), 0
+	ldw (0xf19e:16), 0
+	ldw (8980:16), 0
 	ld xiy, 0xf9a0
 	ld xix, 0x3cf04
 	ldw bc, 0x310
@@ -979,7 +979,7 @@ CDlikeBankLoad_CheckSavedState:
 	ldir85
 	cp (6882:16), 1
 	jr nz, CDlikeBankLoad_Return
-	stdi16 (0xf19e), 0
+	ldw (0xf19e:16), 0
 
 CDlikeBankLoad_Return:
 	ret

@@ -881,7 +881,7 @@ TempoRingBuf_Write:
 
 TempoRingBuf_Write_Dequeue:
 	popw wa
-	stdi16 (1141), 0
+	ldw (1141:16), 0
 	jr TempoRingBuf_Write_Return
 
 TempoRingBuf_Write_Enqueue:
@@ -918,7 +918,7 @@ TempoRingBuf_WritePair:
 	pop	sr
 
 TempoRingBuf_WritePair_ClearPending:
-	stdi16 (1141), 0
+	ldw (1141:16), 0
 	ret
 
 TempoRingBuf_WritePair_Enqueue:
@@ -1319,7 +1319,7 @@ SwbtWr_ReinitBothBanks:
 	call 0xfdaafa
 	call 0xfdab19
 	ld (0xbca0:16), 0xff
-	stdi16 (0x9042), 0x0000
+	ldw (0x9042:16), 0x0000
 SwbtWr_ReinitBothBanks_Return:
 	ret
 ; SwbtWr_ReinitOutputBank - Reinitialize the output tone generator bank
@@ -1330,7 +1330,7 @@ SwbtWr_ReinitOutputBank:
 	jr z, SwbtWr_ReinitOutputBank_Return
 	call 0xfdab19
 	ld (0xbca0:16), 0xff
-	stdi16 (0x9042), 0x0000
+	ldw (0x9042:16), 0x0000
 SwbtWr_ReinitOutputBank_Return:
 	ret
 
@@ -1539,7 +1539,7 @@ TempoRingBuf_Consume_Loop:
 
 TempoRingBuf_Consume_Done:
 	resda 0, 1113
-	stdi16 (1141), 0
+	ldw (1141:16), 0
 	ei 0
 	popw hl
 	pop xix
@@ -5410,7 +5410,7 @@ InterCPU_E2_WaitAck:
 	ld (xhl + 4), xde
 	ld (xhl + 8), bc
 	stda32 1498, xhl
-	stdi16 (1502), 10
+	ldw (1502:16), 10
 	calr Audio_DMA_Transfer
 	ld (1504:16), 0
 	setda 7, 1568
@@ -5537,7 +5537,7 @@ E1Bulk_WaitAck:
 	ld (xhl + 4), bc
 	ld (xwa + 4), bc
 	stda32 1498, xwa
-	stdi16 (1502), 6
+	ldw (1502:16), 6
 	calr Audio_DMA_Transfer
 	ld (1504:16), 1
 	cp (1504:16), 1
@@ -5911,14 +5911,14 @@ E1DMA_ISR_BytecodeBlock:
 	jr	nz, 6
 	incdi16	1, (58052)
 	jr	6
-	stdi16	(58052), 0
+	ldw	(58052:16), 0
 	ld	(58054:16), wa
 	jr	6
-	stdi16	(58052), 0
+	ldw	(58052:16), 0
 	ld	wa, (58052:16)
 	cp	wa, 10
 	ret	ule
-	stdi16	(58052), 0
+	ldw	(58052:16), 0
 	ld	(256:16), 0
 	ld	(1506:16), 0
 	set_dd8	1, 104
@@ -8206,8 +8206,8 @@ LZSS_Decompress_StreamHeaderBytes:
 	inc 1, iz
 	cps iz, 6
 	jr c, LZSS_Decompress_StreamHeaderBytes
-	stdi16 (1614), 42
-	stdi16 (1616), 200
+	ldw (1614:16), 42
+	ldw (1616:16), 200
 	ld xwa, (1602:16)
 	cpda32 xwa, 1598
 	jr nc, LZSS_Decompress_ReturnOK
@@ -8259,15 +8259,15 @@ LZ_Decompress_ClearRing:
 	stda32 1610, xwa
 	ld xwa, 0x800000
 	stda32 1606, xwa
-	stdi16 (1614), 50
-	stdi16 (1616), 180
+	ldw (1614:16), 50
+	ldw (1616:16), 180
 	ldw wa, 0x32
 	ldw bc, 0xb4
 	lds de, 6
 	call VRAM_FillRect
 	ld xwa, 0x3e8
 	stda32 1598, xwa
-	stdi16 (1618), 36
+	ldw (1618:16), 36
 	ldiw_erp 0xfa, 0
 
 LZ_Decompress_ReadTracks:

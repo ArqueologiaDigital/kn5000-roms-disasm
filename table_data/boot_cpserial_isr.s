@@ -76,7 +76,7 @@ Handler_INTA:
 Handler_INTA__rx_pacing:
 	cpdi16	(0x0f77), 0
 	jr	nz, Handler_INTA__count_ok
-	stdi16	(0x0f77), 0x005c	; reload with the RX ring size
+	ldw	(0x0f77:16), 0x005c	; reload with the RX ring size
 Handler_INTA__count_ok:
 	decdi16	1, (0x0f77)
 	ordi8	(0x0f6a), 0x40		; status: INTA seen mid-transfer

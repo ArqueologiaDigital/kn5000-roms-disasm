@@ -59,7 +59,7 @@ EffectMode_CopyVoiceParams_Done:
 
 
 EffectMode_ByteData_Block1:
-	stdi16	(0x8d58), 0xffff
+	ldw	(0x8d58:16), 0xffff
 	jrl	648
 EffectMode_ByteData_Block2:
 	.byte 0xc1
@@ -334,8 +334,8 @@ EffectMode_CheckTransposeChanged:
 	jrl BitMapOut_ApplyPatch_SkipHeader
 
 EffectMode_TransposeInvalid:
-	stdi16 (0x8d58), 0xffff
-	stdi16 (0x8d56), 0
+	ldw (0x8d58:16), 0xffff
+	ldw (0x8d56:16), 0
 	ret
 
 EffectMode_ProcessPresetChange:
@@ -942,7 +942,7 @@ SndOutput_ReinitByMode_TypeB:
 	ld iz, (0x8d58:16)
 	ld wa, (0x8d56:16)
 	ldw_erp WA, 0xfa
-	stdi16 (0x8d58), 0xffff
+	ldw (0x8d58:16), 0xffff
 	calr EffectMode_CheckTransposeChanged
 	ld bc, (0x8d56:16)
 	cps bc, 0

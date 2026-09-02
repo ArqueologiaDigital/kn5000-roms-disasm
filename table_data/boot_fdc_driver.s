@@ -201,49 +201,49 @@ FDC_MediaConfigAndRecalibrate__media_dispatch:
 ; -----------------------------------------------------------------------------
 FDC_MediaStanza_Type0:
 	ld (0x0c9a:16), 0	; ld (0x0c9a),0x00
-	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
+	ldw (0x0c50:16), 0	; ld (0x0c50),0x0000
 	ldib_erp 0xfb, 0	; ld QIZH,0
 	lds wa, 2	; ld WA,2
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type1:
 	ld (0x0c9a:16), 0	; ld (0x0c9a),0x00
-	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
+	ldw (0x0c50:16), 0	; ld (0x0c50),0x0000
 	ldi_erpb 0xfb, 0xc0	; ld QIZH,0xc0
 	lds wa, 2	; ld WA,2
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type2:
 	ld (0x0c9a:16), 2	; ld (0x0c9a),0x02
-	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
+	ldw (0x0c50:16), 0	; ld (0x0c50),0x0000
 	ldi_erpb 0xfb, 0x40	; ld QIZH,0x40
 	lds wa, 0	; ld WA,0
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type3:
 	ld (0x0c9a:16), 3	; ld (0x0c9a),0x03
-	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
+	ldw (0x0c50:16), 0	; ld (0x0c50),0x0000
 	ldi_erpb 0xfb, 0x40	; ld QIZH,0x40
 	lds wa, 0	; ld WA,0
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type4:
 	ld (0x0c9a:16), 4	; ld (0x0c9a),0x04
-	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
+	ldw (0x0c50:16), 0	; ld (0x0c50),0x0000
 	ldib_erp 0xfb, 0	; ld QIZH,0
 	lds wa, 2	; ld WA,2
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Type5:
 	ld (0x0c9a:16), 5	; ld (0x0c9a),0x05
-	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
+	ldw (0x0c50:16), 0	; ld (0x0c50),0x0000
 	ldib_erp 0xfb, 0	; ld QIZH,0
 	lds wa, 2	; ld WA,2
 	calr FDC_SaveCommand	; calr 0xffd7fa
 	jr FDC_MediaStanza_Submit	; jr T,0xffda36
 FDC_MediaStanza_Default:
 	ld (0x0c9a:16), 0	; ld (0x0c9a),0x00
-	stdi16 (0x0c50), 0	; ld (0x0c50),0x0000
+	ldw (0x0c50:16), 0	; ld (0x0c50),0x0000
 	ldib_erp 0xfb, 0	; ld QIZH,0
 	lds wa, 2	; ld WA,2
 	calr FDC_SaveCommand	; calr 0xffd7fa
@@ -469,10 +469,10 @@ FDC_SetGeometryForDiskType__geom_2dd9:
 	ld (0x0c60:16), 9	; ld (0x0c60),0x09
 	ld (0x0c5e:16), 0x1b	; ld (0x0c5e),0x1b
 	ld (0x0c61:16), 0x54	; ld (0x0c61),0x54
-	stdi16 (0x0d34), 0x4f	; ld (0x0d34),0x004f
-	stdi16 (0x0d36), 0x50	; ld (0x0d36),0x0050
-	stdi16 (0x0d38), 9	; ld (0x0d38),0x0009
-	stdi16 (0x0d3a), 0x0a	; ld (0x0d3a),0x000a
+	ldw (0x0d34:16), 0x4f	; ld (0x0d34),0x004f
+	ldw (0x0d36:16), 0x50	; ld (0x0d36),0x0050
+	ldw (0x0d38:16), 9	; ld (0x0d38),0x0009
+	ldw (0x0d3a:16), 0x0a	; ld (0x0d3a),0x000a
 	jr FDC_SetGeometryForDiskType__common	; jr T,0xffdc7c
 FDC_SetGeometryForDiskType__geom_2dd8_1024:
 	ld (0x0c5c:16), 3	; ld (0x0c5c),0x03
@@ -481,10 +481,10 @@ FDC_SetGeometryForDiskType__geom_2dd8_1024:
 	ld (0x0c60:16), 8	; ld (0x0c60),0x08
 	ld (0x0c5e:16), 0x53	; ld (0x0c5e),0x53
 	ld (0x0c61:16), 0x74	; ld (0x0c61),0x74
-	stdi16 (0x0d34), 0x4c	; ld (0x0d34),0x004c
-	stdi16 (0x0d36), 0x4d	; ld (0x0d36),0x004d
-	stdi16 (0x0d38), 8	; ld (0x0d38),0x0008
-	stdi16 (0x0d3a), 9	; ld (0x0d3a),0x0009
+	ldw (0x0d34:16), 0x4c	; ld (0x0d34),0x004c
+	ldw (0x0d36:16), 0x4d	; ld (0x0d36),0x004d
+	ldw (0x0d38:16), 8	; ld (0x0d38),0x0008
+	ldw (0x0d3a:16), 9	; ld (0x0d3a),0x0009
 	jr FDC_SetGeometryForDiskType__common	; jr T,0xffdc7c
 FDC_SetGeometryForDiskType__geom_2hd18:
 	ld (0x0c5c:16), 2	; ld (0x0c5c),0x02
@@ -493,10 +493,10 @@ FDC_SetGeometryForDiskType__geom_2hd18:
 	ld (0x0c60:16), 0x12	; ld (0x0c60),0x12
 	ld (0x0c5e:16), 0x1b	; ld (0x0c5e),0x1b
 	ld (0x0c61:16), 0x6c	; ld (0x0c61),0x6c
-	stdi16 (0x0d34), 0x4f	; ld (0x0d34),0x004f
-	stdi16 (0x0d36), 0x50	; ld (0x0d36),0x0050
-	stdi16 (0x0d38), 0x12	; ld (0x0d38),0x0012
-	stdi16 (0x0d3a), 0x13	; ld (0x0d3a),0x0013
+	ldw (0x0d34:16), 0x4f	; ld (0x0d34),0x004f
+	ldw (0x0d36:16), 0x50	; ld (0x0d36),0x0050
+	ldw (0x0d38:16), 0x12	; ld (0x0d38),0x0012
+	ldw (0x0d3a:16), 0x13	; ld (0x0d3a),0x0013
 	jr FDC_SetGeometryForDiskType__common	; jr T,0xffdc7c
 FDC_SetGeometryForDiskType__bad_type:
 	ldw wa, 0xfe	; ld WA,0x00fe
@@ -1563,16 +1563,16 @@ FDC_CmdReadSectors__seek_ok:
 	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
 	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
 	jr ule, FDC_CmdReadSectors__save_position	; jr ULE,0xffe3b5
-	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
+	ldw (0x0c76:16), 1	; ld (0x0c76),0x0001
 FDC_CmdReadSectors__save_position:
 	ldmm16 (0x0d3e), (0x0c76)	; ldw (0x0d3e),(0x0c76)
-	stdi16 (0x0c4a), 0	; ld (0x0c4a),0x0000
+	ldw (0x0c4a:16), 0	; ld (0x0c4a),0x0000
 	cp (0x0c9a:16), 2	; cp (0x0c9a),0x02 - media format 2 uses 1024-byte sectors
 	jr nz, FDC_CmdReadSectors__sector_512	; jr NZ,0xffe3d0
-	stdi16 (0x0c4c), 0x0400	; ld (0x0c4c),0x0400
+	ldw (0x0c4c:16), 0x0400	; ld (0x0c4c),0x0400
 	jr FDC_CmdReadSectors__count_burst	; jr T,0xffe3d6
 FDC_CmdReadSectors__sector_512:
-	stdi16 (0x0c4c), 0x0200	; ld (0x0c4c),0x0200
+	ldw (0x0c4c:16), 0x0200	; ld (0x0c4c),0x0200
 FDC_CmdReadSectors__count_burst:
 	ldmm16 (0x0d40), (0x0c78)	; ldw (0x0d40),(0x0c78)
 	lds iz, 1	; ld IZ,1
@@ -1627,7 +1627,7 @@ FDC_CmdReadSectors__advance:
 	extz xwa	; extz XWA
 	add xwa, (xbc)	; add XWA,(XBC)
 	ld (xbc), xwa	; ld (XBC),XWA
-	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
+	ldw (0x0c76:16), 1	; ld (0x0c76),0x0001
 	ld (0x0c5b:16), 1	; ld (0x0c5b),0x01
 	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
@@ -1672,16 +1672,16 @@ FDC_CmdWriteSectors__seek_ok:
 	ld wa, (0x0c76:16)	; ld WA,(0x0c76)
 	cpda16 xwa, (0x0d3a)	; cp WA,(0x0d3a)
 	jr ule, FDC_CmdWriteSectors__save_position	; jr ULE,0xffe4e8
-	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
+	ldw (0x0c76:16), 1	; ld (0x0c76),0x0001
 FDC_CmdWriteSectors__save_position:
 	ldmm16 (0x0d3e), (0x0c76)	; ldw (0x0d3e),(0x0c76)
-	stdi16 (0x0c4a), 0	; ld (0x0c4a),0x0000
+	ldw (0x0c4a:16), 0	; ld (0x0c4a),0x0000
 	cp (0x0c9a:16), 2	; cp (0x0c9a),0x02
 	jr nz, FDC_CmdWriteSectors__sector_512	; jr NZ,0xffe503
-	stdi16 (0x0c4c), 0x0400	; ld (0x0c4c),0x0400 - media format 2 uses 1024-byte sectors
+	ldw (0x0c4c:16), 0x0400	; ld (0x0c4c),0x0400 - media format 2 uses 1024-byte sectors
 	jr FDC_CmdWriteSectors__count_burst	; jr T,0xffe509
 FDC_CmdWriteSectors__sector_512:
-	stdi16 (0x0c4c), 0x0200	; ld (0x0c4c),0x0200
+	ldw (0x0c4c:16), 0x0200	; ld (0x0c4c),0x0200
 FDC_CmdWriteSectors__count_burst:
 	ldmm16 (0x0d40), (0x0c78)	; ldw (0x0d40),(0x0c78)
 	lds iz, 1	; ld IZ,1
@@ -1738,7 +1738,7 @@ FDC_CmdWriteSectors__advance:
 	extz xwa	; extz XWA
 	add xwa, (xbc)	; add XWA,(XBC)
 	ld (xbc), xwa	; ld (XBC),XWA
-	stdi16 (0x0c76), 1	; ld (0x0c76),0x0001
+	ldw (0x0c76:16), 1	; ld (0x0c76),0x0001
 	ld (0x0c5b:16), 1	; ld (0x0c5b),0x01
 	ld a, (0x0c57:16)	; ld A,(0x0c57)
 	xor a, 1	; xor A,0x01
@@ -1871,7 +1871,7 @@ FDC_FormatOneTrack:
 ; -----------------------------------------------------------------------------
 FDC_BuildFormatFieldBuffer:
 	ld (0x0c5b:16), 1	; ld (0x0c5b),0x01
-	stdi16 (0x0c4a), 0	; ld (0x0c4a),0x0000
+	ldw (0x0c4a:16), 0	; ld (0x0c4a),0x0000
 	ld ix, (0x0d38:16)	; ld IX,(0x0d38)
 	srl ix, 1	; srl 0x01,IX
 	ldb e, 0	; ld E,0x00

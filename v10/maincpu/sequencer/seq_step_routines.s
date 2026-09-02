@@ -1602,7 +1602,7 @@ SeqStep_WalkReadNext:
 
 SeqStep_WalkUpdatePos:
 	ld (0x28bf:16), hl
-	stdi16 (0x28c1), 255
+	ldw (0x28c1:16), 255
 	jr SeqStep_WalkAdvanceDone
 
 SeqStep_WalkAdvancePos:
@@ -1697,7 +1697,7 @@ SeqStep_PrepareReadBack:
 	ld wa, (0x28af:16)
 	call PartCtrl_ReadWord_Off1
 	ld (0x28af:16), hl
-	stdi16 (9830), 255
+	ldw (9830:16), 255
 	jr SeqStep_PrepareDone
 
 SeqStep_PrepareCheck:
@@ -2705,7 +2705,7 @@ SeqStep_FindAndCompactEntry:
 SeqStep_FindAndCompact:
 	dec 4, xsp
 	pushw iz
-	stdi16 (0xf1ce), 0x4d80
+	ldw (0xf1ce:16), 0x4d80
 	ldw wa, 0x4d8
 	calr SeqStep_SearchBackward
 	ld (xsp + 2), hl
@@ -2952,13 +2952,13 @@ SeqStep_RebuildPartChain:
 	ld (xsp + 2), wa
 	cpw (xsp + 2), 0x4d8
 	jr ule, SeqStep_RebuildLoop
-	stdi16 (0xf231), 0
-	stdi16 (0xf22f), 0xffff
+	ldw (0xf231:16), 0
+	ldw (0xf22f:16), 0xffff
 	jrl SeqStep_RebuildReturn
 
 SeqStep_RebuildLoop:
 	mrdw5 0x9f, 0x02, 0x19, 0x2f, 0xf2
-	stdi16 (0xf231), 0
+	ldw (0xf231:16), 0
 	ld wa, (xsp + 2)
 	lds bc, 0
 	call PartCtrl_SetClearBit7
@@ -3052,8 +3052,8 @@ SeqStep_ByteBlockEA5F:
 	ld	(62023:16), 0
 	ld	wa, (62024:16)
 	stw_da	65516, wa
-	stdi16	62024, 0
-	stdi16	9832, 1
+	ldw	(62024:16), 0
+	ldw	(9832:16), 1
 	.byte 0xf1, 0xa7, 0x28, 0xb3
 	jrl	-813
 

@@ -772,7 +772,7 @@ MIDI_ProcessVoiceAssignment:
 	srl	a, 4
 	cp	a, 15
 	jr	nz, 8
-	stdi16	(36396), 500
+	ldw	(36396:16), 500
 	jr	24
 MIDI_ValidateParam:
 	cpdi16	36396, 0
@@ -1122,7 +1122,7 @@ MIDI_ProcessChangedChannels:
 	jr z, .Lc_fc6863
 	ld XBC,ENCODER_LUT_MODWHEEL_0x3C6
 	calr DispatchBitmaskHandlers
-	stdi16 (0x8e9e), 0x0000
+	ldw (0x8e9e:16), 0x0000
 MidiChanged_ProcessGroup2:
 .Lc_fc6863:
 	ld wa, (0x8ea4:16)
@@ -1131,7 +1131,7 @@ MidiChanged_ProcessGroup2:
 	jr z, .Lc_fc687d
 	ld XBC,ENCODER_LUT_MODWHEEL_0x3FC
 	calr DispatchBitmaskHandlers
-	stdi16 (0x8ea2), 0x0000
+	ldw (0x8ea2:16), 0x0000
 MidiChanged_ProcessGroup3:
 .Lc_fc687d:
 	ld wa, (0x8ea8:16)
@@ -1140,7 +1140,7 @@ MidiChanged_ProcessGroup3:
 	jr z, .Lc_fc6897
 	ld XBC,ENCODER_LUT_MODWHEEL_0x43E
 	calr DispatchBitmaskHandlers
-	stdi16 (0x8ea6), 0x0000
+	ldw (0x8ea6:16), 0x0000
 MidiChanged_ProcessGroup4:
 .Lc_fc6897:
 	ld wa, (0x8eac:16)
@@ -1149,7 +1149,7 @@ MidiChanged_ProcessGroup4:
 	ret Z
 	ld XBC,ENCODER_LUT_MODWHEEL_0x48C
 	calr DispatchBitmaskHandlers
-	stdi16 (0x8eaa), 0x0000
+	ldw (0x8eaa:16), 0x0000
 	ret
 MidiChannel_DispatchChanged:
 	cp (0x8c9a:16), 0xfb
@@ -2384,11 +2384,11 @@ FindBit_ShiftLoop:
 Audio_InitAllDefaults:
 	ld	(49053:16), 255
 	ld	(48288:16), 255
-	stdi16	(36930), 0
-	stdi16	(36932), 0
+	ldw	(36930:16), 0
+	ldw	(36932:16), 0
 	ld	(48797:16), 255
-	stdi16	(36934), 0
-	stdi16	(37015), 0
+	ldw	(36934:16), 0
+	ldw	(37015:16), 0
 	ld	(36959:16), 255
 	ld	(37137:16), 255
 	ld	(37145:16), 255
@@ -3200,7 +3200,7 @@ Audio_MainPeriodicUpdate:
 	resda 1, (0x905d)
 	ret
 Audio_SyncBufferPositions:
-	stdi16 (0x9097), 0x0000
+	ldw (0x9097:16), 0x0000
 	ldmm16 0x9044, 0x9042
 	jr t, .Lc_fc7d51
 FileIO_OperationDispatch:
@@ -3223,7 +3223,7 @@ FileIO_OperationDispatch:
 	pop XIX
 	pop XHL
 	pop XDE
-	stdi16 (0x9044), 0x0000
+	ldw (0x9044:16), 0x0000
 FileIO_ProcessRemainingOps:
 .Lc_fc7d51:
 	lda xbc, (0xbf9d:16)
@@ -4685,7 +4685,7 @@ SwbtWr_FlushAndAppendParams:
 	pop XIX
 	pop XHL
 	pop XDE
-	stdi16 (0x9042), 0x0000
+	ldw (0x9042:16), 0x0000
 SwbtWr_FlushDone:
 	calr SwbtWr_AppendFixedParamBlock
 	ret
@@ -4713,7 +4713,7 @@ SwbtWr_CheckBufferOverflow:
 
 	pop	xde
 
-	stdi16 (36930), 0
+	ldw (36930:16), 0
 
 	jrl	1770
 
@@ -4731,7 +4731,7 @@ SwbtWr_WriteParamBlock:
 	pop XIX
 	pop XHL
 	pop XDE
-	stdi16 (0x9042), 0x0000
+	ldw (0x9042:16), 0x0000
 SwbtWr_WriteParamBlock_Body:
 .Lc_fc8ef4:
 	jrl t, SwbtWr_AppendFixedParamBlock
@@ -5839,7 +5839,7 @@ Audio_WriteBankSelectParams:
 	bit 7, (0x8e46:16)
 	jr z, .Lc_fc9b2d
 	anddi8 (0x8e46), 0x7f
-	stdi16 (0x908b), 0x00b0
+	ldw (0x908b:16), 0x00b0
 	ld e, (0x8e46:16)
 	ldb D, 0x7f
 	ld (0x908d:16), de
@@ -5849,7 +5849,7 @@ BankSelect_CheckChannel1:
 	bit 7, (0x8e44:16)
 	jr z, BankSelect_Done
 	anddi8 (0x8e44), 0x7f
-	stdi16 (0x908b), 0x01b0
+	ldw (0x908b:16), 0x01b0
 	ld e, (0x8e44:16)
 	ldb D, 0x7f
 	ld (0x908d:16), de
@@ -6337,7 +6337,7 @@ TempoExpr_Done:
 	ret
 
 Audio_ProcessAllMidiStreams:
-	stdi16	(36932), 0
+	ldw	(36932:16), 0
 	calr	64769
 	calr	65164
 	calr	84
@@ -7901,7 +7901,7 @@ MidiStream_ProcessRxBuffer:
 	jr nz, MidiStream_ProcessDone
 	bit 4, (0xfd50:16)
 	jr nz, MidiStream_ProcessDone
-	stdi16 (0x9097), 0x0000
+	ldw (0x9097:16), 0x0000
 MidiStream_DispatchLoop:
 	ld XIX,0x0000bf9d
 	ld hl, (0x9097:16)

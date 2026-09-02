@@ -3918,15 +3918,15 @@ FileIO_OpenMode_CheckWrite:
 	.byte 0x7e, 0x02, 0xf5, 0xff, 0x33, 0xf5, 0xff, 0x68
 	.byte 0x20
 FileIO_OpenMode_WriteMaxFiles:
-	stdi16	(32428), 65533
+	ldw	(32428:16), 65533
 	ldw	hl, 65533
 	jr	21
 FileIO_OpenMode_UnknownMode:
-	stdi16	(32428), 65535
+	ldw	(32428:16), 65535
 	ldw	hl, 65535
 	jr	10
 FileIO_OpenMode_Success:
-	stdi16	(32428), 0
+	ldw	(32428:16), 0
 	ld	hl, (32428:16)
 FileIO_OpenMode_Return:
 	pop xiz
@@ -8057,12 +8057,12 @@ InitWPNav_ClampEnd:
 	ret
 
 ResetProgressIndication:
-	stdi16 (0x8464), 0xffff
-	stdi16 (0x8466), 0xffff
-	stdi16 (0x8468), 0xffff
-	stdi16 (0x846a), 0xffff
-	stdi16 (0x846c), 0xffff
-	stdi16 (0x846e), 0xffff
+	ldw (0x8464:16), 0xffff
+	ldw (0x8466:16), 0xffff
+	ldw (0x8468:16), 0xffff
+	ldw (0x846a:16), 0xffff
+	ldw (0x846c:16), 0xffff
+	ldw (0x846e:16), 0xffff
 	call FileIO_InitRecordTable
 	ld XIY,BankStr_Memory_0xA
 	ld XIX,0x00008970

@@ -101,7 +101,7 @@ WPLoad_HandleSelection:
 	ld	(33048:16), hl
 	cps	hl, 0
 	jr	ge, 6
-	stdi16	(33048), 0
+	ldw	(33048:16), 0
 WPLoad_Selection_Positive:
 	ld	wa, (33048:16)
 	exts	xwa
@@ -285,7 +285,7 @@ WP_ScanAvailability:
 	push	xiz
 	call	16289841
 	ld	qiz, hl
-	stdi16	(35162), 0
+	ldw	(35162:16), 0
 	lds	iz, 0
 WPScan_LoopBody:
 	ld bc, iz

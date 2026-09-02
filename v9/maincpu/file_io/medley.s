@@ -35,7 +35,7 @@ FmmSeqSongNameFunc:
 	stda32 0x82d4, xde
 	cp (0x84fe:16), 0
 	jr nz, SeqName_SendCurrentIndex
-	stdi16 (0x82d8), 0
+	ldw (0x82d8:16), 0
 
 SeqName_SendCurrentIndex:
 	ld de, (0x82d8:16)
@@ -1385,7 +1385,7 @@ DiskSel_StoreWindowPtr:
 	jrl DiskSel_PostEvent
 
 DiskSel_DefaultIndex:
-	stdi16 (0x83de), 0
+	ldw (0x83de:16), 0
 	ld xwa, (0x83da:16)
 	ld xbc, 0x1e50002
 	lds32 xde, 0
@@ -2548,7 +2548,7 @@ FmmPdFileNameFunc:
 	ld (0x8442:16), hl
 	cps hl, 0
 	jr ge, PdName_UpdateIndex
-	stdi16 (0x8442), 0
+	ldw (0x8442:16), 0
 
 PdName_UpdateIndex:
 	ld wa, (0x8442:16)
@@ -3355,7 +3355,7 @@ FmmDocFileNameFunc:
 	ld (0x84a2:16), hl
 	cps hl, 0
 	jr ge, DocName_UpdateIndex
-	stdi16 (0x84a2), 0
+	ldw (0x84a2:16), 0
 
 DocName_UpdateIndex:
 	ld wa, (0x84a2:16)
@@ -3759,7 +3759,7 @@ DocMed_CheckInit:
 	jr nz, DocMed_InitState
 
 DocMed_InitFromDisk:
-	stdi16 (0x8504), 0xffff
+	ldw (0x8504:16), 0xffff
 	ld xwa, 0x600026
 	ld xbc, 0x1c00001
 	lds32 xde, 5

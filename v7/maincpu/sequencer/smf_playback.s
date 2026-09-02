@@ -409,7 +409,7 @@ SMF_InitSequencerState:
 	ld xwa, (6701:16)
 	cp xwa, xbc
 	jrl lt, SeqPlay_ResetAndStop
-	stdi16 (6699), 1
+	ldw (6699:16), 1
 	ld xwa, 0x13fa
 	stda32 4376, xwa
 	push xwa
@@ -439,7 +439,7 @@ SMF_ReadMThd_ByteLoop:
 	jrl SMF_ReadMThd_Start
 
 SMF_ReadMThd_Mismatch:
-	stdi16 (6699), 49
+	ldw (6699:16), 49
 	jrl SeqPlay_FloppyReady
 
 SMF_ReadMThd_Matched:
@@ -470,7 +470,7 @@ SMF_ReadMThd_Matched:
 	ld (3936:16), a
 	cpdi16 3936, 0
 	jrl nz, FloppyIO_WaitReadComplete
-	stdi16 (6699), 48
+	ldw (6699:16), 48
 	jrl SeqPlay_FloppyReady
 
 FloppyIO_WaitReadComplete:
@@ -517,7 +517,7 @@ SMF_ReadMTrk_ByteLoop:
 	popw bc
 	cp_spib A, 0xf4
 	jrl z, SMF_ReadMTrk_Matched
-	stdi16 (6699), 49
+	ldw (6699:16), 49
 	jrl SeqPlay_FloppyReady
 
 SMF_ReadMTrk_Matched:

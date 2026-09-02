@@ -643,7 +643,7 @@ MIDI_QUEUE_TRACK_EVENT:
 
 QueueTrack_FifoWriteOrClear:
 	popw wa
-	stdi16 (1141), 0
+	ldw (1141:16), 0
 	ret
 
 QueueTrack_LinearBufWrite:
@@ -673,7 +673,7 @@ MIDI_QUEUE_EVENT_PAIR:
 	pop	sr
 
 QueuePair_FifoFullReturn:
-	stdi16 (1141), 0
+	ldw (1141:16), 0
 	ret
 
 QueuePair_LinearBufWrite:
@@ -863,18 +863,18 @@ SC0Init_StandardBaudTable:
 	call Get_Region_Code
 	cps l, 4
 	jr z, SC0Init_AlternateBaudTable
-	stdi16 (0xb7d4), 0x7a12
-	stdi16 (0xb7d6), 0x28b0
-	stdi16 (0xb7d8), 4166
-	stdi16 (0xb7da), 1000
+	ldw (0xb7d4:16), 0x7a12
+	ldw (0xb7d6:16), 0x28b0
+	ldw (0xb7d8:16), 4166
+	ldw (0xb7da:16), 1000
 	ld (0xb7dc:16), 8; BR0CR: clk=fc/4/8 = 500kHz (baudrate for MIDI ?!)
 	jr SC0Init_BaudTableReturn
 
 SC0Init_AlternateBaudTable:
-	stdi16 (0xb7d4), 0x5b8d
-	stdi16 (0xb7d6), 7812
-	stdi16 (0xb7d8), 3125
-	stdi16 (0xb7da), 750
+	ldw (0xb7d4:16), 0x5b8d
+	ldw (0xb7d6:16), 7812
+	ldw (0xb7d8:16), 3125
+	ldw (0xb7da:16), 750
 	ld (0xb7dc:16), 6; BR0CR: clk=fc/4/6 = 666.6kHz (baudrate for MIDI ?!)
 
 SC0Init_BaudTableReturn:
