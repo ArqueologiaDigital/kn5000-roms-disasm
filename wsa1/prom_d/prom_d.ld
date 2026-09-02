@@ -92,6 +92,32 @@
  * runs the SAME scanner over the neighbouring window 0xE80000-0xEFFFFF and
  * finds 15 literals, so the zero above is an absence and not a broken scanner.
  *
+ * ★ AND THAT STATED LIMIT WAS CLOSED ON 2026-09-02, from the BYTES.  A
+ * falsification lane scanned prom_c's whole image -- data included, at every
+ * alignment -- for LE32 words in 0x00F00000-0x00F7FFFF, which is what a jump or
+ * pointer table into this image would have to be made of.  It found 741.  The
+ * SAME scanner over two windows with NO DEVICE IN THEM finds 901 (0xD00000) and
+ * 675 (0xE00000), and over prom_c's own window 1977.  So prom_c's window is
+ * enriched, this one is at address-space noise, and there is no pointer table
+ * into prom_d anywhere in prom_c.  ORIGIN 0 survives the search that could have
+ * overturned it on the side round 5 could not reach.
+ * notes/prom_cd_falsification_2026_09_02.py Q4;
+ * notes/FINDINGS-prom_cd-falsification.md.
+ *
+ * ★ AND "DATA ONLY" ITSELF WAS ATTACKED, not restated.  The header of this
+ * image says nothing in it executes.  The way that could be FALSE is code
+ * nobody framed -- typed as `.byte`, re-assembling to the same bytes, invisible
+ * to the gate.  Q6 of the same script decodes every 8 KiB and 2 KiB window and
+ * scores branch-target coherence normalised by boundary density, calibrated on
+ * prom_c windows whose code/data status is the ASSEMBLER'S (a DWARF line-table
+ * census: 76,647 instruction statements in prom_c, 0 in prom_d).  prom_c code
+ * scores 2.42-3.09, prom_c data 0.81-1.34, and prom_d 0.29-1.16 across all 38
+ * scorable windows -- below the data controls, never near the code band.
+ * Splicing 8 KiB of real prom_c code in scores 2.58, so the test can see what it
+ * reports absent.  ⚠ ITS REACH IS ~2 KiB: a shorter routine would evade it, and
+ * prom_d 0x26000-0x2BFFF (ToneDB_EnvDescTable) has too few branches to score at
+ * all.
+ *
  * ⚠ WHAT IS STILL OPEN: which PHYSICAL PART this is.  The evidence above fixes
  * the ADDRESS the firmware reads it at, not the device; the erased tail
  * (0x50B09..0x7FFEF is one unbroken 0xFF run of 0x2F4E7 bytes, the only 0xFF run

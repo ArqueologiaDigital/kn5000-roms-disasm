@@ -39,6 +39,33 @@
 ; in prom_d/prom_d.ld but DOWNGRADED there: round 3 Q8 shows it does not
 ; discriminate -- prom_c is a code ROM and scores like prom_d on it.)
 ;
+; ★ "DATA ONLY" WAS ATTACKED ON 2026-09-02 AND HELD.  A falsification lane took
+; the claim that this image contains no code as something to BREAK, because the
+; way it could be false is invisible to the byte gate: code typed as data
+; re-assembles to the same bytes.  55 checks,
+; notes/prom_cd_falsification_2026_09_02.py, summarised in
+; notes/FINDINGS-prom_cd-falsification.md:
+;
+;   * this image IS on a CPU bus -- wsa1.cpp maps it .rom() in CPU 2's program
+;     space -- so "no code" is a real claim and not a tautology;
+;   * none of prom_c's 33 vectors lands in it (null: all 33 land in prom_c);
+;   * exactly ONE prom_c instruction literal falls in its window, the base
+;     itself (null: the same scanner finds many in two other windows);
+;   * prom_c's BYTES hold no pointer table into it -- 741 LE32 words in its
+;     window against 901 and 675 in windows with NO DEVICE, and 1977 in prom_c's
+;     own, so it is at address-space noise while prom_c is enriched;
+;   * llvm-mc emits ZERO instruction statements from this source and 76,647 from
+;     prom_c's;
+;   * and its BYTES do not behave like code: branch-target coherence normalised
+;     by boundary density scores 0.29-1.16 here, against 0.81-1.34 for prom_c
+;     data and 2.42-3.09 for prom_c code.  Splicing 8 KiB of real prom_c code in
+;     scores 2.58, which is how the test is shown to be able to fail.
+;
+; ⚠ THE REACH OF THAT LAST TEST IS ABOUT 2 KiB.  A shorter routine would evade
+; it, and file 0x26000-0x2BFFF (ToneDB_EnvDescTable) has too few branches in its
+; decode to be scored at all.  Those 24 KiB are the part of this image least
+; attacked.
+;
 ; ⚠ What is still open is which PHYSICAL PART this is.  The base fixes the
 ; address the firmware reads it at, not the device.
 ;
