@@ -811,3 +811,26 @@ call site does not repeat at a data structure's stride. All eleven headers now r
 **NO LOCATED CALLER**; the live scan is empty and `--selftest` asserts it stays empty.
 The largest casualty is `sub_F9BE3A`, the 8,573-byte double-precision routine, which two notes
 described as *"called once from 0xF95B01"*.
+
+### `prom_c_dev104_regmap_checks.py`
+**"For the device at CPU 2's 0x00104000: what is the per-channel register map, which staging
+word feeds each register, and out of which record field?"**
+
+```
+python3 notes/prom_c_dev104_regmap_checks.py            # print all 12 sections
+python3 notes/prom_c_dev104_regmap_checks.py --selftest # assert; exit 1 on any failure
+```
+
+Twelve sections over `original_ROMs/wsa1_prom_c.ic28`, no `.s` file and no unidasm text.
+`Dev104_WriteAllChanRegs` writes **19 registers, `block*0x40 + chan`, value = struct word
+2*block**, block 0 LAST; the five small accessors touch exactly **eight blocks 0x00C0..0x0280,
+all 0x40 apart**; the whole image holds **nine** `0x00104000` literals and **no read-back**.
+The 19 staging words are filled by **24 stores** — 20 in `Dev104_PackStagingStruct`, 3 in
+`sub_FC49AD`, 1 in `sub_FC4AED`.
+
+★ **It also asserts a correction.** `notes/prom_c_dev10c_field_sources.py --dev104` reports
+0xFC5522, 0xFC55AF, 0xFC55C5 and 0xFC5657 as struct writes. **They are not**: all four load
+their base from the absolute global `0x00E086`, so they write the 37-byte record, not the
+struct. Consequences: the packer writes **15** struct offsets by its own instructions (not 16),
+`+0x1D` is **not a struct offset at all**, and `+0x16` **is** written by the packer
+(0xFC51AA, the literal `0xFF00`) against the round-6 note that says it is not.
