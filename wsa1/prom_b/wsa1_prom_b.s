@@ -48467,6 +48467,13 @@ DLTable_F284A2:
 
 ; --------------------------------------------------------------------------
 ; Data_F28522 -- 426 bytes, EMITTED AS DATA (not promoted to code).
+; ⚠ SUPERSEDED 2026-09-02 (lane res3xx): 426 was the reachability walk's
+;   extent, and it is 42 bytes TOO LONG.  The record at 0xF28468 that
+;   names 0x00F28522 declares 3 bytes per entry and mask 0x7F, i.e. 128
+;   entries = 384 bytes, ending at 0xF286A1.  The 42 bytes that used to
+;   be tacked on here are a display-list record and its string table and
+;   are now framed as such below.  So: 384 bytes, and the `stays
+;   `.incbin`` sentence below no longer holds for this span.
 ; Reached from: 0x00F28522 appears as a 32-bit word at 0xF2846F 0xF29AE5
 ;               0xF29AF6 0xF29B07 0xF29B18 +4 more.  No routine-directory slot
 ;               and no branch decoded in converted code names it.
@@ -48502,11 +48509,98 @@ Data_F28522:
 	.byte	0x52, 0x34, 0x38, 0x52, 0x34, 0x39, 0x52, 0x35, 0x30, 0x52, 0x35, 0x31, 0x52, 0x35, 0x32, 0x52	; F28672  |R48R49R50R51R52R|
 	.byte	0x35, 0x33, 0x52, 0x35, 0x34, 0x52, 0x35, 0x35, 0x52, 0x35, 0x36, 0x52, 0x35, 0x37, 0x52, 0x35	; F28682  |53R54R55R56R57R5|
 	.byte	0x38, 0x52, 0x35, 0x39, 0x52, 0x36, 0x30, 0x52, 0x36, 0x31, 0x52, 0x36, 0x32, 0x52, 0x36, 0x33	; F28692  |8R59R60R61R62R63|
-	.byte	0x07, 0x11, 0x45, 0x26, 0x07, 0x00, 0x17, 0xB3, 0x86, 0xF2, 0x00, 0x03, 0x00, 0x23, 0x01, 0xE2	; F286A2  |..E&.........#..|
-	.byte	0x00, 0x50, 0x54, 0x31, 0x50, 0x54, 0x32, 0x50, 0x54, 0x33, 0x50, 0x54, 0x34, 0x50, 0x54, 0x35	; F286B2  |.PT1PT2PT3PT4PT5|
-	.byte	0x50, 0x54, 0x36, 0x50, 0x54, 0x37, 0x50, 0x54, 0x38, 0x07	; F286C2  |PT6PT7PT8.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0286CC, 0x00002D
+; ------------------------------------------------------------------
+; 0xF286A2-0xF286F8 -- 3 display-list records and their 3 string tables,
+; 87 bytes -- interpreter B.  Formerly the last 42 bytes of Data_F28522
+; plus the 45-byte `.incbin` that followed it.
+;
+; BOTH ENDS ARE FIXED FROM OUTSIDE THE BYTES, not from a stride read off
+; them:
+;   * LEFT -- the framed opcode-07 record at 0xF28468 carries
+;     `.long 0x00F28522`, `BC = 3` (bytes per entry) and mask 0x7F, so the
+;     string table it names is 128 x 3 = 384 bytes and ENDS at 0xF286A1.
+;   * RIGHT -- DL_F286F9 is an established display-list start (prom_a call
+;     site 0xF90FBB, notes/prom_b_dl_call_shapes.py).
+; In between, each record's own +7 pointer lands on the byte immediately
+; after that record, and (mask >> shift) + 1 entries of the +0x0B width
+; run exactly up to the next record:
+;     0xF286A2 + 17 + 24 + 17 + 6 + 17 + 6 = 0xF286F9, no slack anywhere.
+;
+; This is the neighbourhood notes/FINDINGS-ui-display-list-interpreter-b.md
+; already described as `record, its table, record, its table` while it was
+; still `.incbin`.  The layout below is that description, emitted.
+; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest
+; ------------------------------------------------------------------
+DL_F286A2:
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2645	; +0x02 source variable, 16-bit address
+	.byte 0x07	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F286B3	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x0123	; +0x0D -> (0x2530)
+	.short 0x00E2	; +0x0F -> (0x2532)
+
+; ------------------------------------------------------------------
+; DLTable_F286B3 -- 8 entries of 3 bytes (24 bytes).
+; Referenced by interpreter-B display-list record 0xF286A2, whose +7
+; pointer lands here and whose handler fixes the entry size.  8 entries is both
+; the EXTENT (24 / 3) and the record's (mask >> shift) + 1 bound.
+; ------------------------------------------------------------------
+DLTable_F286B3:
+	.ascii "PT1"	; [0]
+	.ascii "PT2"	; [1]
+	.ascii "PT3"	; [2]
+	.ascii "PT4"	; [3]
+	.ascii "PT5"	; [4]
+	.ascii "PT6"	; [5]
+	.ascii "PT7"	; [6]
+	.ascii "PT8"	; [7]
+
+DL_F286CB:
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2644	; +0x02 source variable, 16-bit address
+	.byte 0x20	; +0x04 AND mask
+	.byte 0x05	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F286DC	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x00FA	; +0x0D -> (0x2530)
+	.short 0x00E2	; +0x0F -> (0x2532)
+
+; ------------------------------------------------------------------
+; DLTable_F286DC -- 2 entries of 3 bytes (6 bytes).
+; Referenced by interpreter-B display-list record 0xF286CB, whose +7
+; pointer lands here and whose handler fixes the entry size.  2 entries is both
+; the EXTENT (6 / 3) and the record's (mask >> shift) + 1 bound.
+; ------------------------------------------------------------------
+DLTable_F286DC:
+	.ascii "ON "	; [0]
+	.ascii "OFF"	; [1]
+
+DL_F286E2:
+	.byte 0x07, 0x11	; B op 07, 17 bytes -> handler 0xF31B39 -- string-table readout with two extra words
+	.short 0x2646	; +0x02 source variable, 16-bit address
+	.byte 0x01	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x17	; +0x06 swi 7 function
+	.long 0x00F286F3	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x00AA	; +0x0D -> (0x2530)
+	.short 0x00E2	; +0x0F -> (0x2532)
+
+; ------------------------------------------------------------------
+; DLTable_F286F3 -- 2 entries of 3 bytes (6 bytes).
+; Referenced by interpreter-B display-list record 0xF286E2, whose +7
+; pointer lands here and whose handler fixes the entry size.  2 entries is both
+; the EXTENT (6 / 3) and the record's (mask >> shift) + 1 bound.
+; ------------------------------------------------------------------
+DLTable_F286F3:
+	.ascii "OFF"	; [0]
+	.ascii "ON "	; [1]
+
 
 ; ------------------------------------------------------------------
 ; 0xF286F9-0xF28724 -- 4 display-list records, 44 bytes -- interpreter A
@@ -60996,6 +61090,11 @@ DL_F32987:
 
 ; --------------------------------------------------------------------------
 ; Data_F32992 -- 110 bytes, EMITTED AS DATA (not promoted to code).
+; ⚠ SUPERSEDED 2026-09-02 (lane res3xx): 110 is 6 bytes too long.  The
+;   last 6 bytes are the head of the opcode-02 record at 0xF329FA, which
+;   the pointer array at 0xF32A36 names and 0xF09AE1 runs; it is framed
+;   below.  So: 104 bytes, and the `stays `.incbin`` sentence below no
+;   longer holds for this span.
 ; Reached from: 0x00F32992 appears as a 32-bit word at 0xF329D2 0xF329EA
 ;               0xF5D42F 0xF5D693; converted code at 0xF5D42E 0xF5D692 loads
 ;               it as a 32-bit immediate.  No routine-directory slot and no
@@ -61014,11 +61113,33 @@ Data_F32992:
 	.byte	0x18, 0x29, 0xF3, 0x00, 0x22, 0x29, 0xF3, 0x00, 0x2C, 0x29, 0xF3, 0x00, 0x36, 0x29, 0xF3, 0x00	; F329C2  |.)..")..,)..6)..|
 	.byte	0x92, 0x29, 0xF3, 0x00, 0x9C, 0x29, 0xF3, 0x00, 0xA6, 0x29, 0xF3, 0x00, 0xB0, 0x29, 0xF3, 0x00	; F329D2  |.)...)...)...)..|
 	.byte	0x4B, 0x29, 0xF3, 0x00, 0x4B, 0x29, 0xF3, 0x00, 0x92, 0x29, 0xF3, 0x00, 0x9C, 0x29, 0xF3, 0x00	; F329E2  |K)..K)...)...)..|
-	.byte	0xA6, 0x29, 0xF3, 0x00, 0xB0, 0x29, 0xF3, 0x00, 0x02, 0x0F, 0xA8, 0x27, 0x80, 0x07	; F329F2  |.)...).....'..|
+	.byte	0xA6, 0x29, 0xF3, 0x00, 0xB0, 0x29, 0xF3, 0x00	; F329F2  |.)...)..|
 
-	
-; --- 0xF32A00-0xF32A08: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x032A00, 0x000009
+; ------------------------------------------------------------------
+; 0xF329FA-0xF32A08 -- 1 display-list record, 15 bytes -- interpreter B.
+; Formerly the last 6 bytes of Data_F32992 plus the 9-byte `.incbin`
+; that followed it.
+;
+; THE START IS NAMED BY CODE, not by a stride: entries 1 and 2 of the
+; LE32 pointer array at 0xF32A36 hold 0x00F329FA (entry 3 holds
+; 0x00F32A09, the record run framed just below).  0xF09AE1 indexes that
+; array -- `sla 0x02,WA / add XIY,XWA / ld XIY,(XIY)` -- and calls
+; T_F41830 -> 0xF31AEC DisplayListB_RunOne, which sets XIX = XIY + 1 and
+; so runs EXACTLY ONE record at the loaded address.  prom_b 0xF5D488
+; loads that array (`ld XIY,0x00f32a36`).
+; The record's 15-byte extent is handler 0xF31B21's, and it ends exactly
+; on 0xF32A09.  Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest
+; ------------------------------------------------------------------
+DL_F329FA:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x27A8	; +0x02 source variable, 16-bit address
+	.byte 0x80	; +0x04 AND mask
+	.byte 0x07	; +0x05 right shift, low 3 bits
+	.byte 0x20	; +0x06 swi 7 function
+	.long 0x00F32A6F	; +0x07 -> XIY: string table
+	.short 0x0007	; +0x0B -> BC: bytes per entry
+	.short 0x0D4F	; +0x0D -> IX
+
 
 ; ------------------------------------------------------------------
 ; 0xF32A09-0xF32A35 -- 3 display-list records, 45 bytes -- interpreter B
@@ -64185,10 +64306,42 @@ DL_F34256:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3434C:
-	.byte	0x02, 0x0F, 0xF6, 0x12	; F3434C  |....|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034350, 0x000011
+; ------------------------------------------------------------------
+; 0xF3434C-0xF34360 -- 1 display-list record and its string table,
+; 21 bytes -- interpreter B.  Formerly Data_F3434C (4 bytes) plus the
+; 17-byte `.incbin` that followed it.
+;
+; THE START IS NAMED BY CODE: prom_b 0xF55CA6 and 0xF55D57 both do
+; `ld XIY,0x00f3434c`, then reach T_F417F8 -> 0xF31B21 -- the opcode-02
+; handler itself -- with that XIY (via sub_F55C44).  So this address is
+; a record start on the firmware's own say-so, and the handler fixes the
+; extent at 15 bytes.  Its +7 lands on 0xF3435B, the byte right after it.
+; THE END IS NAMED BY CODE TOO: DL_F34361 is `ld XIY,0x00f34361` at
+; prom_b 0xF55D45, so the table is exactly 2 entries of 3 bytes.
+; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest
+; ------------------------------------------------------------------
+DL_F3434C:
+	.byte 0x02, 0x0F	; B op 02, 15 bytes -> handler 0xF31B21 -- string-table readout: HL = extracted value = entry index
+	.short 0x12F6	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x07	; +0x06 swi 7 function
+	.long 0x00F3435B	; +0x07 -> XIY: string table
+	.short 0x0003	; +0x0B -> BC: bytes per entry
+	.short 0x053E	; +0x0D -> IX
+
+; ------------------------------------------------------------------
+; DLTable_F3435B -- 2 entries of 3 bytes (6 bytes).
+; Referenced by interpreter-B display-list record 0xF3434C, whose +7
+; pointer lands here and whose handler fixes the entry size.  2 entries is the
+; EXTENT (6 / 3), bounded by DL_F34361; the record's mask 0xFF would
+; allow up to 256.
+; ------------------------------------------------------------------
+DLTable_F3435B:
+	.ascii " -1"	; [0]
+	.ascii " -2"	; [1]
+
 
 ; === END COVER-R1 0xF34256-0xF34361 ===
 
@@ -72098,10 +72251,43 @@ Data_F3A433:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3A43E:
-	.byte	0x08, 0x0B, 0xF8, 0x12, 0xFF	; F3A43E  |.....|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A443, 0x00001E
+; ------------------------------------------------------------------
+; 0xF3A43E-0xF3A460 -- 1 display-list record and its parameter array,
+; 35 bytes -- interpreter B.  Formerly Data_F3A43E (5 bytes) plus the
+; 30-byte `.incbin` that followed it.
+;
+; THE START IS NAMED BY CODE: prom_b 0xF7E775 does
+; `ld XIY,0x00f3a43e` / `call 0xf41820`, and T_F41820 is `jp 0xF31B57`,
+; the opcode-03/08 handler -- the record is handed to its handler
+; directly, with no interpreter loop to mis-frame it.  Its neighbour
+; Data_F3A433 goes to the same handler from 0xF7E77E.
+; BOTH records carry `.long 0x00F3A449`; handler 0xF31B57 does
+; `sla 0x03,HL` and reads (XIX+0/2/4/6), so entries are 8 bytes.
+; THE END is DL_F3A461, a display-list start loaded by 7 `ld XIY`
+; sites, so the array is exactly 3 entries.
+; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest
+; ------------------------------------------------------------------
+DL_F3A43E:
+	.byte 0x08, 0x0B	; B op 08, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x12F8	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x1B	; +0x06 swi 7 function
+	.long 0x00F3A449	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; ------------------------------------------------------------------
+; DLTable_F3A449 -- 3 entries of 8 bytes (24 bytes).
+; Referenced by interpreter-B display-list record 0xF3A43E, whose +7
+; pointer lands here and whose handler fixes the entry size.  3 entries is the
+; EXTENT (24 / 8), bounded by DL_F3A461; the records' mask 0xFF would
+; allow up to 256.  Records 0xF3A433 and 0xF3A43E share this array.
+; ------------------------------------------------------------------
+DLTable_F3A449:
+	.short 0x0013, 0x0021, 0x00EF, 0x0037	; [0]
+	.short 0x0013, 0x0044, 0x00EF, 0x005B	; [1]
+	.short 0x0013, 0x0067, 0x00EF, 0x007D	; [2]
+
 
 ; === END COVER-R1 0xF3A433-0xF3A461 ===
 
@@ -74280,10 +74466,42 @@ DL_F3B611:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3B651:
-	.byte	0x00, 0x0B, 0x40, 0x26, 0xFF	; F3B651  |..@&.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03B656, 0x000005
+; ------------------------------------------------------------------
+; 0xF3B651-0xF3B65A -- 1 display-list record, 10 bytes -- interpreter B.
+; Formerly Data_F3B651 (5 bytes) plus the 5-byte `.incbin` after it.
+;
+; ⚠ THE ONE RECORD IN THE IMAGE WHOSE ADVANCE BYTE OVER-DECLARES.
+; Lane promB6 left the question: as op 0x00 with length 11 this record
+; would end at 0xF3B65C, yet the next record demonstrably starts at
+; 0xF3B65B.  So EITHER op 0x00 does not carry its length at +1, OR
+; DL_F3B65B's start is off by one.  It is NEITHER, and the handler
+; settles it:
+;   * op 0x00 DOES carry its advance at +1.  The interpreter reads +1
+;     for every opcode without looking at the opcode -- 0xF31B15
+;     `ld A,(XIY+0x01)` then `add XIY,XWA`.
+;   * DL_F3B65B is not off by one.  prom_b 0xF7E79E passes 0xF3B65B as
+;     XIX -- the list's exclusive end -- in the same breath as
+;     `ld XIY,0x00f3b651` at 0xF7E799.
+; ADVANCE and EXTENT are simply different numbers.  Handler 0xF31BA1's
+; highest read is +9 (`ld C,(XIY+0x09)`), so the DATA this record
+; occupies is 10 bytes, 0xF3B651-0xF3B65A.  The advance byte says 11.
+; The over-declaration is inert: XIY lands on 0xF3B65C, past XIX, and
+; the loop test `cp XIX,XIY / jr ULE` ends the list -- the machine draws
+; the record and stops.
+; The other edge is an immediate too: 0xF3B651 is the XIX of the
+; interpreter-A call at 0xF7E8C3, i.e. the exclusive end of DL_F3B611.
+; Verify: python3 notes/gen_prom_b_res3xx_spans.py --selftest
+; ------------------------------------------------------------------
+DL_F3B651:
+	.byte 0x00, 0x0B	; B op 00, 10 bytes of data, advance byte says 11 -> handler 0xF31BA1 -- decimal readout, unsigned (0xF8BCAF via T_F41AF0)
+	.short 0x2640	; +0x02 source variable, 16-bit address
+	.byte 0xFF	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x06	; +0x06 swi 7 function
+	.short 0x00C4	; +0x07 -> IX
+	.byte 0x02	; +0x09 digit count: 3 -> 0x2661, 2 -> 0x2662, else 0x2663
+
 
 
 ; ------------------------------------------------------------------

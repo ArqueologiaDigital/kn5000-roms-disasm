@@ -1365,3 +1365,63 @@ framed from the right instead — walking 15-byte `op 02` records backward from
 `0xF3DCBB` after exactly 24 and no further, the preceding byte `0x2A` being
 past the `0x24` opcode bound. Maximal and self-terminating, but weaker
 provenance than the other four spans, and recorded as such.
+
+## LANE res3xx (2026-09-02) — five of the last sixteen residue spans
+
+### `gen_prom_b_res3xx_spans.py` — 106 B, and one open question closed
+**"Can `0xF286CC`+45, `0xF32A00`+9, `0xF34350`+17, `0xF3A443`+30 and
+`0xF3B656`+5 be typed without inventing a record shape from the bytes?"**
+Yes. All five are interpreter-B display-list records and the operand tables
+their `+0x07` pointers name — 158 B of typed data once the neighbouring
+`Data_` objects that had over-run into them are shortened. Nothing is emitted
+as an instruction.
+
+    python3 notes/gen_prom_b_res3xx_spans.py --selftest   # 64 assertions
+    python3 notes/gen_prom_b_res3xx_spans.py --emit
+    python3 notes/gen_prom_b_res3xx_spans.py --splice
+
+`notes/FINDINGS-prom_b-last-481-bytes.md` warns that typing a residue span from
+a stride read off its own bytes is the "wrong start frames fake records" hazard,
+and that the byte gate cannot object to it. So the boundary for each of the five
+comes from outside the span, and `--selftest` asserts it against the ROM:
+
+* `0xF3434C`, `0xF3A43E` and `0xF3A433` are loaded into XIY by converted code
+  and handed **straight to one handler** — `T_F417F8` → `0xF31B21` and
+  `T_F41820`/`T_F4181C` → `0xF31B57` — with no interpreter loop that could
+  mis-frame them.
+* `0xF329FA` is entries 1 and 2 of the LE32 pointer array at `0xF32A36`, which
+  `0xF09AE1` indexes and runs through `T_F41830` → `0xF31AEC`
+  `DisplayListB_RunOne` (XIX = XIY + 1: exactly one record).
+* `0xF286A2` is where the string table of the **framed** record at `0xF28468`
+  stops: that record declares 3 bytes per entry and mask `0x7F`, so 128 × 3 =
+  384 B ending at `0xF286A1`. `Data_F28522` was declared 426 B — 42 too many,
+  not one. (Lane promB5 had it as one, measuring to the `.incbin` edge rather
+  than to the table.)
+* Each far end is an already-framed display-list start, so the tiling has to
+  close with no slack, and it does: `0xF286A2` + 17 + 24 + 17 + 6 + 17 + 6 =
+  `0xF286F9`.
+
+Two `Data_` extents were the reachability walk's, not the objects', and are
+shortened with the old wording kept and marked superseded in place:
+`Data_F28522` 426 → 384 B, `Data_F32992` 110 → 104 B.
+
+**The `0xF3B651` question, settled from the handler.** Lane promB6 left it
+precisely: as op `0x00` length 11 the record ends at `0xF3B65C`, yet the next
+record demonstrably starts at `0xF3B65B` — so either op `0x00` does not carry
+its length at `+1`, or `DL_F3B65B` is off by one. **Neither.** Op `0x00` does
+carry its advance at `+1`; the interpreter reads `+1` for every opcode without
+looking at the opcode (`ld A,(XIY+0x01)` at `0xF31B15`, then `add XIY,XWA`).
+And `DL_F3B65B` is not off by one; prom_b `0xF7E79E` passes `0xF3B65B` as XIX,
+the list's exclusive end, beside `ld XIY,0x00f3b651` at `0xF7E799`.
+**ADVANCE and EXTENT are different numbers.** Handler `0xF31BA1`'s highest read
+is `+9`, so the record occupies 10 bytes, `0xF3B651-0xF3B65A`; its advance byte
+says 11. It is the only record in the image that over-declares (83 other
+interpreter-B op-00 records in the source say 10), and the over-declaration is
+inert — XIY lands on `0xF3B65C`, past XIX, and `cp XIX,XIY / jr ULE` ends the
+list. The machine draws the record and stops.
+
+Gate: `make gate-wsa1` green, 4 images. Shown able to fail — perturbing the
+`+0x09` digit-count byte this lane emitted gives
+`DIFFERS wsa1_prom_b.ic13: 1 byte(s), first at 0x3B65A`, then restores to green.
+
+prom_b's verbatim residue: **481 B in 16 spans → 375 B in 11 spans.**
