@@ -5632,6 +5632,13 @@ DL_F02FED:
 	.short 0x00C5
 
 ; === COVER-R1 0xF02FF7-0xF0302A ===
+; ⚠ AMENDED 2026-09-02 (lane res02f, notes/gen_res02f_spans.py).  The 44 B
+; this band left `.incbin` are now typed data: four of them are the +0x07
+; POINTER FIELD of the record round 1 typed as Data_F02FF7, and the other 40
+; are the 5 x 8-byte operand array that pointer names.  Round 1 reached the
+; record's first byte and stopped 4 bytes short of its end; the handler that
+; consumes the pointer, 0xF31B57, fixes both the record's length and the
+; array's entry size.  This band is now at ZERO `.incbin` bytes.
 ; 0xF02FF7-0xF03029, coverage round 1: 7 of this span's 51 bytes are reachable
 ; -- 0 as CODE (an entry point in the routine directory, or a branch prom_b's
 ; own converted instructions decode) in 0 runs, and 7 as DATA (only a `.long`
@@ -5639,23 +5646,84 @@ DL_F02FED:
 ; reachable and stays `.incbin`.  Regenerate: python3
 ; notes/gen_prom_b_cover_round1.py --splice
 
-; --------------------------------------------------------------------------
-; Data_F02FF7 -- 7 bytes, EMITTED AS DATA (not promoted to code).
-; Reached from: 0x00F02FF7 appears as a 32-bit word at 0xF5BB99 0xF5BBA2;
-;               converted code at 0xF5BB98 0xF5BBA1 loads it as a 32-bit
-;               immediate.  No routine-directory slot and no branch decoded in
-;               converted code names it.
-; Measured: 14% printable ASCII; a linear decode runs 3 instructions and ends
-;           `retd 0x0500`, with 0% of the bytes in spellings llvm-mc will not
-;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
-; --------------------------------------------------------------------------
-Data_F02FF7:
-	.byte	0x03, 0x0B, 0xA3, 0x27, 0x0F, 0x00, 0x05	; F02FF7  |...'...|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x002FFE, 0x00002C
+; ==== round-1 header, KEPT VERBATIM and SUPERSEDED below (lane res02f, 2026-09-02) ====
+; | ; --------------------------------------------------------------------------
+; | ; Data_F02FF7 -- 7 bytes, EMITTED AS DATA (not promoted to code).
+; | ; Reached from: 0x00F02FF7 appears as a 32-bit word at 0xF5BB99 0xF5BBA2;
+; | ;               converted code at 0xF5BB98 0xF5BBA1 loads it as a 32-bit
+; | ;               immediate.  No routine-directory slot and no branch decoded in
+; | ;               converted code names it.
+; | ; Measured: 14% printable ASCII; a linear decode runs 3 instructions and ends
+; | ;           `retd 0x0500`, with 0% of the bytes in spellings llvm-mc will not
+; | ;           encode.
+; | ; ⚠ The extent is the reachability walk's, not the object's; the rest of
+; | ;   this span is unreachable and stays `.incbin`.  Why this is data and
+; | ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; | ; --------------------------------------------------------------------------
+; | Data_F02FF7:
+; | 	.byte	0x03, 0x0B, 0xA3, 0x27, 0x0F, 0x00, 0x05	; F02FF7  |...'...|
+; ==== end of the superseded round-1 header ====
+
+; ------------------------------------------------------------------
+; DL_F02FF7 -- ONE interpreter-B display-list record, 11 bytes, and the
+; 40-byte operand array it names.  Together they tile 0xF02FF7-0xF03029 and
+; end on 0xF0302A, the first byte of the interpreter-B display list below.
+;
+; ⚠ SUPERSEDES the round-1 header kept above, which gave this object 7
+;   bytes and said "the extent is the reachability walk's, not the
+;   object's".  The extent IS the object's.  Round 1 stopped at +0x07 --
+;   the record's own pointer FIELD -- so four bytes of the record went
+;   into the `.incbin` with the array behind it.  Its "a linear decode
+;   runs 3 instructions and ends `retd 0x0500`" was a decode of a record
+;   header; nothing calls or branches here.
+;   (lane res02f, 2026-09-02, notes/gen_res02f_spans.py)
+;
+; HOW THIS RECORD IS RUN.  0xF5BB93-0xF5BBA9 in UiPaint_Ordinals is
+;     ld XIY,0x00F02FED / ld XIX,0x00F02FF7 / call 0xF417F0  <- interpreter A
+;     ld XIY,0x00F02FF7 / call 0xF4181C                      <- THIS record
+; and T_F4181C is `jp 0xF31B57`, a jump straight into the op-0x03 handler,
+; so the record is handed to its handler with no opcode dispatch at all.
+; That also answers what UiPaint_Ordinals' own header records as open:
+; "what thunk T_F4181C does with 0xF02FF7 after the last paint".
+; ------------------------------------------------------------------
+DL_F02FF7:		; renamed from Data_F02FF7 -- nothing referenced that label
+	.byte 0x03, 0x0B	; B op 03, 11 bytes -> handler 0xF31B57 -- four words of entry[value] -> (0x2530..0x2536)
+	.short 0x27A3	; +0x02 source variable, 16-bit address
+	.byte 0x0F	; +0x04 AND mask
+	.byte 0x00	; +0x05 right shift, low 3 bits
+	.byte 0x05	; +0x06 swi 7 function
+	.long 0x00F03002	; +0x07 -> XIX: array of 8-byte entries, indexed by the value
+
+; ------------------------------------------------------------------
+; DLTable_F03002 -- 5 entries of 8 bytes (40 bytes).
+; Referenced by the display-list record 0xF02FF7 directly above, whose +0x07
+; pointer lands here and whose handler fixes the entry size: 0xF31B57 does
+; `sla 0x03,HL` on the extracted bit-field before `add XIX,XHL`, so the
+; entries are 8 bytes.  5 entries is the EXTENT (40 / 8); the record's
+; (mask >> shift) + 1 = 16 is only an upper bound on the index.
+; The four words of the selected entry go to (0x2530), (0x2532), (0x2534),
+; (0x2536) = X0, Y0, X1, Y1 -- those four addresses are established in
+; notes/FINDINGS-display-controller.md by the clamp constants 319 and 239 --
+; and then `swi 7` runs with A = the record's +0x06 = 0x05.
+; So X0 and X1 are the constant columns and Y0/Y1 are the stepping ones:
+; five extents 26 wide and 13 tall, 37 rows apart, all in the SAME x range
+; 8..34 that DL_F02FED (op 0x1B = LCD_Svc_1B_EraseRect, named in prom_a --
+; notes/FINDINGS-prom_b-graphics-veneers.md) clears over the whole y range
+; 0x49..0xC5 immediately before this record runs.  ⚠ What service 0x05
+; itself draws into that extent is NOT asserted here; the tree records it
+; as "a rectangle is the obvious reading and is not asserted"
+; (notes/FINDINGS-ui-display-list.md).  Entries [0] and [1] are identical,
+; exactly as in the sibling 5 x 8 arrays DLTable_F031C9/F031F1/F03219,
+; which three byte-identical op-0x03 records name from the list at
+; 0xF030E6.
+; ------------------------------------------------------------------
+DLTable_F03002:
+	.short 0x0008, 0x0049, 0x0022, 0x0056	; [0] X0=8 Y0=73 X1=34 Y1=86
+	.short 0x0008, 0x0049, 0x0022, 0x0056	; [1] X0=8 Y0=73 X1=34 Y1=86
+	.short 0x0008, 0x006E, 0x0022, 0x007B	; [2] X0=8 Y0=110 X1=34 Y1=123
+	.short 0x0008, 0x0093, 0x0022, 0x00A0	; [3] X0=8 Y0=147 X1=34 Y1=160
+	.short 0x0008, 0x00B8, 0x0022, 0x00C5	; [4] X0=8 Y0=184 X1=34 Y1=197
 
 ; === END COVER-R1 0xF02FF7-0xF0302A ===
 
@@ -33514,12 +33582,142 @@ Data_F139AB:
 	.byte	0x20, 0x40, 0xC1, 0x40, 0x40, 0x20, 0x20, 0x18, 0x07, 0x80, 0x60, 0x30, 0x50, 0x88, 0x0F, 0x08	; F13D1B  [880..895]
 	.byte	0x08, 0x10, 0x10, 0x60, 0x80, 0x00, 0x00, 0x03, 0x0E	; F13D2B  [896..904]
 
-; --- 0xF13D34-0xF147AB: not converted ---
+; --- 0xF13D34-0xF147AB: CONVERTED.  0xF13D34-0xF13D5F by lane res02f 2026-09-02
+; (notes/gen_res02f_spans.py) was the last `.incbin` anywhere in this range. ---
 
-; --- 0xF13D34-0xF13F1D: not converted ---
+; --- 0xF13D34-0xF13F1D: CONVERTED.  0xF13D34-0xF13D5F by lane res02f 2026-09-02
+; (notes/gen_res02f_spans.py); 0xF13D60-0xF13F1D was already the display list below. ---
 	
-; --- 0xF13D34-0xF13D5F: not converted -- decodes as neither interpreter's records and is not a uniform fill ---
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x013D34, 0x00002C
+; --- 0xF13D34-0xF13D5F: CONVERTED 2026-09-02, lane res02f (notes/gen_res02f_spans.py).  The round-1 reason -- "decodes as neither
+; interpreter's records and is not a uniform fill" -- was true and beside the point: these are the PICTURES records draw. ---
+
+; ------------------------------------------------------------------
+; 0xF13D34-0xF13D5F -- the TAIL of the bitmap at 0xF13D30 and the WHOLE bitmap
+; at 0xF13D48.  Four 16 x 12 bitmaps sit here back to back and tile
+; 0xF13D00-0xF13D5F:
+;
+;   0xF13D00  BC=2 HL=12 -> 24 bytes, named by the op-0x03 records 0xF13F50 0xF13F5C
+;   0xF13D18  BC=2 HL=12 -> 24 bytes, named by the op-0x03 records 0xF14311 0xF1431D
+;   0xF13D30  BC=2 HL=12 -> 24 bytes, named by the op-0x03 record 0xF14556
+;   0xF13D48  BC=2 HL=12 -> 24 bytes, named by the op-0x03 record 0xF1454A
+;
+; Every one of those six records is `03 0C` -> handler 0xF31ABE, which
+; takes +2 = the pointer, +8 = BC = bytes per column and +0x0A = HL = rows
+; and issues `swi 7` fn 3 = draw bitmap, so each object is BC * HL bytes --
+; the rule lane promB5 proved for the op-0x03 bitmaps at 0xF283A7/0xF2843D.
+; All four are BC=2, HL=12 = 24 bytes; four of them land EXACTLY on
+; 0xF13D60, the first byte of the interpreter-A display list below.
+;
+; ⚠ 0xF13D60 IS NOT A CALL-SITE START -- nothing in the image passes it to
+;   an interpreter, as that list's own header says.  Its anchor is the
+;   op/len walk: 45 records from 0xF13D60, every length byte equal to its
+;   handler's implied length, landing on 0xF13F1E with zero drift.  The
+;   same walk started at 0xF13D34, 0xF13D38, 0xF13D48 or 0xF13D5C fails on
+;   its FIRST record, which is the null for that anchor.
+;
+; ⚠ AND THE NULL FOR THE POINTER SCAN.  Six 32-bit words in prom_b land in
+;   0xF13D00-0xF13D5F and all six are the +2 field of one of those records.
+;   Widen the window sixteen bytes DOWN and six MORE appear -- all in
+;   prom_a, all reading 0xF13CFF, and every one straddling three
+;   instructions (`link XIZ,0xffee` = `ee 0c ee ff`, `push XIX` = `3c`,
+;   `lda_d16 XIX,(0x2900)` = `f1 00 29 34`).  So a raw 4-byte pointer scan
+;   over code produces false positives at that rate, and the test used
+;   here is the RECORD test -- opcode < 0x24, handler 0xF31ABE, length
+;   byte 12 -- never the pointer value on its own.
+;
+; ⚠ SUPERSEDES the round-1 refusal kept above -- "decodes as neither
+;   interpreter's records and is not a uniform fill".  Both halves are
+;   true and neither is the point: these bytes are not records, they are
+;   the PICTURES that records draw.
+;
+; ⚠ THE SPAN STARTS FOUR BYTES INSIDE THE 0xF13D30 BITMAP, and this lane
+;   did NOT move that boundary.  0xF13D30-0xF13D33 is the last four bytes
+;   of the `.byte` run of Data_F139AB above, which
+;   notes/gen_prom_b_f0ea9f_module.py emits from its LAYOUT entry
+;   `("data", 0xF139AB, 0x0389)` and whose `--checks` asserts that LAYOUT
+;   covers 0xF0EA9F-0xF13D33 exactly.  Closing the bitmap is a one-line
+;   change -- `LO, HI = 0xF0EA9F, 0xF13D34` in
+;   notes/prom_b_f0ea9f_layout.py becomes 0xF13D30, and that module's last
+;   LAYOUT size 0x0389 becomes 0x0385 -- but it re-runs that module's whole
+;   code walk, and the module is not this lane's to regenerate.
+;
+; BYTE ORDER: COLUMN-major, byte column c and row r at +c*12+r.  An
+; INFERENCE, and it changes no byte: the emitted bytes are the ROM's, in
+; ROM order, either way.  It is quantified as 4-neighbour edge density,
+; column-major against row-major:
+;   0xF13D00  0.258 column-major   0.292 row-major
+;   0xF13D18  0.275 column-major   0.312 row-major
+;   0xF13D30  0.149 column-major   0.208 row-major
+;   0xF13D48  0.112 column-major   0.152 row-major
+; and column-major is the reading in which 0xF13D00 draws a closed circle.
+;
+; The four pictures, column-major.  The first two are outside this span
+; (they are inside Data_F139AB's `.byte` run above) and are drawn here
+; because they are the same object family and fix the reading:
+;
+;   0xF13D00:
+;     .....####.......
+;     ...##....##.....
+;     ..#.......##....
+;     ..#......#.#....
+;     .#......#...#...
+;     .#.....#....#...
+;     .#..........#...
+;     .#..........#...
+;     ..#........#....
+;     ..#........#....
+;     ...##....##.....
+;     .....####.......
+;
+;   0xF13D18:
+;     .....####.......
+;     ...##....##.....
+;     ..#.......##....
+;     ..#......#.#....
+;     .#......#...#...
+;     ##.....#....####
+;     .#..........#...
+;     .#..........#...
+;     ..#........#....
+;     ..#........#....
+;     ...##....##.....
+;     .....####.......
+;
+;   0xF13D30:
+;     ...........###..
+;     .........###....
+;     ......###.......
+;     ....###.........
+;     .###.......###..
+;     ####.......#####
+;     .###.......###..
+;     ................
+;     ................
+;     ................
+;     ................
+;     ................
+;
+;   0xF13D48:
+;     ................
+;     ................
+;     ................
+;     ................
+;     .###.......###..
+;     ################
+;     .###.......###..
+;     ................
+;     ................
+;     ................
+;     ................
+;     ................
+; ------------------------------------------------------------------
+; 0xF13D30's column 0, rows 4..11 -- rows 0..3 are the last four bytes of
+; the `.byte` run above and are NOT relabelled here (see the ⚠ above).
+	.byte	0x70, 0xF0, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00	; F13D34  column 0, rows 4..11
+	.byte	0x1C, 0x70, 0x80, 0x00, 0x1C, 0x1F, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00	; F13D3C  column 1, rows 0..11
+Data_F13D48:		; the 2 x 12 bitmap the record at 0xF1454A draws
+	.byte	0x00, 0x00, 0x00, 0x00, 0x70, 0xFF, 0x70, 0x00, 0x00, 0x00, 0x00, 0x00	; F13D48  column 0, rows 0..11
+	.byte	0x00, 0x00, 0x00, 0x00, 0x1C, 0xFF, 0x1C, 0x00, 0x00, 0x00, 0x00, 0x00	; F13D54  column 1, rows 0..11
 
 ; ------------------------------------------------------------------
 ; 0xF13D60-0xF13F1D -- 45 display-list records, 446 bytes -- interpreter A
