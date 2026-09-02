@@ -3663,10 +3663,11 @@ DL_F03133:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
+; ABSORBED 2026-09-02 -- see notes/gen_prom_b_tiny_records_batch.py: this object plus
+; the .incbin that followed it is ONE interpreter-A record (verified against
+; the ROM's own handler table, exactly one interpreter's implied-length rule fits).
 Data_F0315F:
-	.byte	0x02, 0x0A, 0x05, 0x01, 0x74, 0x00, 0x05	; F0315F  |....t..|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x003166, 0x000003
+	.byte 0x02, 0x0A, 0x05, 0x01, 0x74, 0x00, 0x05, 0x01, 0x97, 0x00	; A op 02, 10 bytes -> handler HTBL_A[2]
 
 ; === END COVER-R1 0xF03107-0xF03169 ===
 
@@ -6244,10 +6245,11 @@ DL_F04650:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
+; ABSORBED 2026-09-02 -- see notes/gen_prom_b_tiny_records_batch.py: this object plus
+; the .incbin that followed it is ONE interpreter-A record (verified against
+; the ROM's own handler table, exactly one interpreter's implied-length rule fits).
 Data_F04668:
-	.byte	0x05	; F04668  |.|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x004669, 0x000009
+	.byte 0x05, 0x0A, 0x0E, 0x01, 0x43, 0x00, 0x32, 0x01, 0x5C, 0x00	; A op 05, 10 bytes -> handler HTBL_A[5]
 
 ; === END COVER-R1 0xF04574-0xF04672 ===
 
@@ -7751,10 +7753,11 @@ Data_F04FFD:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
+; ABSORBED 2026-09-02 -- see notes/gen_prom_b_tiny_records_batch.py: this object plus
+; the .incbin that followed it is ONE interpreter-A record (verified against
+; the ROM's own handler table, exactly one interpreter's implied-length rule fits).
 Data_F05031:
-	.byte	0x1B, 0x0A, 0x0D, 0x00	; F05031  |....|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x005035, 0x000006
+	.byte 0x1B, 0x0A, 0x0D, 0x00, 0x4C, 0x00, 0xD2, 0x00, 0xC8, 0x00	; A op 1B, 10 bytes -> handler HTBL_A[0x1B]
 
 ; --------------------------------------------------------------------------
 ; Data_F0503B -- 40 bytes, EMITTED AS DATA (not promoted to code).
@@ -62766,10 +62769,11 @@ DL_F351A7:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
+; ABSORBED 2026-09-02 -- see notes/gen_prom_b_tiny_records_batch.py: this object plus
+; the .incbin that followed it is ONE interpreter-B record (verified against
+; the ROM's own handler table, exactly one interpreter's implied-length rule fits).
 Data_F351F9:
-	.byte	0x02, 0x0F, 0xF6, 0x12	; F351F9  |....|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0351FD, 0x00000B
+	.byte 0x02, 0x0F, 0xF6, 0x12, 0xFF, 0x00, 0x07, 0x5B, 0x43, 0xF3, 0x00, 0x03, 0x00, 0xB8, 0x05	; B op 02, 15 bytes -> handler HTBL_B[2]
 
 ; === END COVER-R1 0xF351F9-0xF35208 ===
 
@@ -68109,10 +68113,11 @@ DL_F3A0D1:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
+; ABSORBED 2026-09-02 -- see notes/gen_prom_b_tiny_records_batch.py: this object plus
+; the .incbin that followed it is ONE interpreter-B record (verified against
+; the ROM's own handler table, exactly one interpreter's implied-length rule fits).
 Data_F3A0D9:
-	.byte	0x03, 0x0B, 0xF6, 0x12, 0xFF	; F3A0D9  |.....|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A0DE, 0x000006
+	.byte 0x03, 0x0B, 0xF6, 0x12, 0xFF, 0x00, 0x05, 0x4F, 0xA1, 0xF3, 0x00	; B op 03, 11 bytes -> handler HTBL_B[3]
 
 ; --------------------------------------------------------------------------
 ; Data_F3A0E4 -- 5 bytes, EMITTED AS DATA (not promoted to code).
@@ -68459,10 +68464,11 @@ DL_F3A429:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
+; ABSORBED 2026-09-02 -- see notes/gen_prom_b_tiny_records_batch.py: this object plus
+; the .incbin that followed it is ONE interpreter-B record (verified against
+; the ROM's own handler table, exactly one interpreter's implied-length rule fits).
 Data_F3A433:
-	.byte	0x03, 0x0B, 0xF6, 0x12, 0xFF	; F3A433  |.....|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x03A438, 0x000006
+	.byte 0x03, 0x0B, 0xF6, 0x12, 0xFF, 0x00, 0x05, 0x49, 0xA4, 0xF3, 0x00	; B op 03, 11 bytes -> handler HTBL_B[3]
 
 ; --------------------------------------------------------------------------
 ; Data_F3A43E -- 5 bytes, EMITTED AS DATA (not promoted to code).
