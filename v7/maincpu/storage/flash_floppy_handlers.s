@@ -5952,7 +5952,7 @@ PsSeqSongNoBoxProc:
 PsSeqSongNo_HandleScroll:
 	ld	xwa, xiz
 	call	16400380
-	ldb_da	a, (65507)
+	ld	a, (65507:24)
 	inc	1, a
 	extz	wa
 	pushw	wa

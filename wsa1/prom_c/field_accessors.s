@@ -1847,7 +1847,7 @@ NotePool8_NoteOnOff:
 	jr ule, NotePool8_NoteOnOff__FC3E20                 ; FC3E1C  jr ULE,0xfc3e20
 	ldb	l, 0                                   ; FC3E1E  ld L,0x00
 NotePool8_NoteOnOff__FC3E20:
-	ldb_da	c, (0xE005)                         ; FC3E20  ld C,(0x00e005)
+	ld	c, (0xE005:24)                         ; FC3E20  ld C,(0x00e005)
 	inc	1, c                                   ; FC3E25  inc 1,C
 	and	c, 7                                   ; FC3E27  and C,0x07
 	stb_da	(0xE005), c                         ; FC3E2A  ld (0x00e005),C
@@ -4180,7 +4180,7 @@ Dev104_PackStagingStruct__FC4F4B:
 	ld	a, (xbc+23)                             ; FC4F59  ld A,(XBC+0x17)
 	exts	wa                                    ; FC4F5C  exts WA
 	ld	hl, wa                                  ; FC4F5E  ld HL,WA
-	ldb_da	d, (0xE088)                         ; FC4F60  ld D,(0x00e088)
+	ld	d, (0xE088:24)                         ; FC4F60  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC4F65  cp WA,0
 	jr nz, Dev104_PackStagingStruct__FC4F70                  ; FC4F67  jr NZ,0xfc4f70
 	ldw (xiz-8), 0x0000                        ; FC4F69  ld (XIZ+0xf8),0x0000
@@ -4260,7 +4260,7 @@ Dev104_PackStagingStruct__FC4FFE:
 	ld	c, (xwa+34)                             ; FC5016  ld C,(XWA+0x22)
 	exts	bc                                    ; FC5019  exts BC
 	ld	hl, bc                                  ; FC501B  ld HL,BC
-	ldb_da	d, (0xE088)                         ; FC501D  ld D,(0x00e088)
+	ld	d, (0xE088:24)                         ; FC501D  ld D,(0x00e088)
 	cps	bc, 0                                  ; FC5022  cp BC,0
 	jr nz, Dev104_PackStagingStruct__FC502D                  ; FC5024  jr NZ,0xfc502d
 	ldw (xiz-12), 0x0000                       ; FC5026  ld (XIZ+0xf4),0x0000
@@ -4334,7 +4334,7 @@ Dev104_PackStagingStruct__FC50BB:
 	muls	xbc, xhl                              ; FC50BE  muls XBC,HL
 	add	xbc, 0xFDF7E0                          ; FC50C0  add XBC,0x00fdf7e0
 	ld	hl, (xbc)                               ; FC50C6  ld HL,(XBC)
-	ldb_da	a, (0xE089)                         ; FC50C8  ld A,(0x00e089)
+	ld	a, (0xE089:24)                         ; FC50C8  ld A,(0x00e089)
 	and	a, 1                                   ; FC50CD  and A,0x01
 	jr z, Dev104_PackStagingStruct__FC510D                   ; FC50D0  jr Z,0xfc510d
 	ld	xbc, (xiz+8)                            ; FC50D2  ld XBC,(XIZ+0x08)
@@ -4375,7 +4375,7 @@ Dev104_PackStagingStruct__FC513E:
 	ld	a, (xbc+36)                             ; FC5146  ld A,(XBC+0x24)
 	exts	wa                                    ; FC5149  exts WA
 	ld	hl, wa                                  ; FC514B  ld HL,WA
-	ldb_da	d, (0xE088)                         ; FC514D  ld D,(0x00e088)
+	ld	d, (0xE088:24)                         ; FC514D  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC5152  cp WA,0
 	jr nz, Dev104_PackStagingStruct__FC515B                  ; FC5154  jr NZ,0xfc515b
 	ldw	hl, 0                                  ; FC5156  ld HL,0x0000
@@ -4485,7 +4485,7 @@ Dev104_PackStagingStruct__FC5249:
 	ld	a, (xbc+24)                             ; FC5251  ld A,(XBC+0x18)
 	exts	wa                                    ; FC5254  exts WA
 	ld	hl, wa                                  ; FC5256  ld HL,WA
-	ldb_da	d, (0xE088)                         ; FC5258  ld D,(0x00e088)
+	ld	d, (0xE088:24)                         ; FC5258  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC525D  cp WA,0
 	jr nz, Dev104_PackStagingStruct__FC5266                  ; FC525F  jr NZ,0xfc5266
 	ldw	hl, 0                                  ; FC5261  ld HL,0x0000
@@ -4521,7 +4521,7 @@ Dev104_PackStagingStruct__FC5290:
 	ld	iy, (xwa+26)                            ; FC529F  ld IY,(XWA+0x1a)
 	ld	hl, bc                                  ; FC52A2  ld HL,BC
 	add	hl, iy                                 ; FC52A4  add HL,IY
-	ldb_da	c, (0xE08C)                         ; FC52A6  ld C,(0x00e08c)
+	ld	c, (0xE08C:24)                         ; FC52A6  ld C,(0x00e08c)
 	extz	bc                                    ; FC52AB  extz BC
 	extz	xbc                                   ; FC52AD  extz XBC
 	add	xbc, 0xFDFF96                          ; FC52AF  add XBC,0x00fdff96
@@ -4641,7 +4641,7 @@ Dev104_PackStagingStruct__FC53BF:
 	ld	a, (xbc+35)                             ; FC53C7  ld A,(XBC+0x23)
 	exts	wa                                    ; FC53CA  exts WA
 	ld	hl, wa                                  ; FC53CC  ld HL,WA
-	ldb_da	d, (0xE088)                         ; FC53CE  ld D,(0x00e088)
+	ld	d, (0xE088:24)                         ; FC53CE  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC53D3  cp WA,0
 	jr nz, Dev104_PackStagingStruct__FC53DC                  ; FC53D5  jr NZ,0xfc53dc
 	ldw	hl, 0                                  ; FC53D7  ld HL,0x0000
@@ -4677,7 +4677,7 @@ Dev104_PackStagingStruct__FC5406:
 	ld	iy, (xwa+28)                            ; FC5415  ld IY,(XWA+0x1c)
 	ld	hl, bc                                  ; FC5418  ld HL,BC
 	add	hl, iy                                 ; FC541A  add HL,IY
-	ldb_da	c, (0xE08C)                         ; FC541C  ld C,(0x00e08c)
+	ld	c, (0xE08C:24)                         ; FC541C  ld C,(0x00e08c)
 	extz	bc                                    ; FC5421  extz BC
 	extz	xbc                                   ; FC5423  extz XBC
 	add	xbc, 0xFDFF96                          ; FC5425  add XBC,0x00fdff96
@@ -4850,7 +4850,7 @@ Dev104_PackStagingStruct__FC55E0:
 	ld	a, (xbc+16)                             ; FC55E8  ld A,(XBC+0x10)
 	exts	wa                                    ; FC55EB  exts WA
 	ld	hl, wa                                  ; FC55ED  ld HL,WA
-	ldb_da	d, (0xE088)                         ; FC55EF  ld D,(0x00e088)
+	ld	d, (0xE088:24)                         ; FC55EF  ld D,(0x00e088)
 	cps	wa, 0                                  ; FC55F4  cp WA,0
 	jr nz, Dev104_PackStagingStruct__FC55FD                  ; FC55F6  jr NZ,0xfc55fd
 	ldw	hl, 0                                  ; FC55F8  ld HL,0x0000

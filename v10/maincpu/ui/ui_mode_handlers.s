@@ -8613,7 +8613,7 @@ PmExpFilter_FallbackForward:
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
-	ldb_da a, (0x0340e2)
+	ld a, (0x0340e2:24)
 	cps a, 2
 	jr nz, PmExpFilter_CheckAdvBank
 	cp hl, 0xa
@@ -8799,7 +8799,7 @@ PmExpFilter_EventDispatch:
 	ld	(xwa+2), de
 	cpw	(xwa), 1
 	jrl	nz, 619
-	ldb_da	c, (0x340e2)
+	ld	c, (0x340e2:24)
 	ld	wa, de
 	sla	wa, 2
 	dec	8, wa
@@ -8845,7 +8845,7 @@ PmExpFilter_EventDispatch:
 	dec	8, wa
 	cpw	(xbc), 1
 	jrl	nz, 488
-	ldb_da	c, (0x340e2)
+	ld	c, (0x340e2:24)
 	cps	c, 2
 	jr	z, 33
 	cps	c, 1
@@ -8869,7 +8869,7 @@ PmExpFilter_EventDispatch:
 	lds	de, 2
 	call	MainLswAdd
 	jrl	413
-	ldb_da	a, (0x340e2)
+	ld	a, (0x340e2:24)
 	cps	a, 2
 	jr	z, 103
 	cps	a, 1
@@ -8971,7 +8971,7 @@ PmExpFilterCheck_CellDecode:
 	sla bc, 2
 	cpw (xhl), 0x1
 	jrl nz, SeqLoad_StoreReturnZero
-	ldb_da l, (0x0340e2)
+	ld l, (0x0340e2:24)
 	dec 8, bc
 	cps l, 2
 	jr z, PmExpFilterCheck_AltDecode
@@ -9781,7 +9781,7 @@ DispTimeSetCheck_CellDecode:
 	jr nz, DispTimeSetCheck_TryRow3
 	cpw (xwa), 0x2
 	jr nz, DispTimeSetCheck_TryRow3
-	ldb_da a, (0x0340e6)
+	ld a, (0x0340e6:24)
 	extz wa
 	sla wa, 2
 	lda xde, (ParamStr_Table_03:24)
@@ -9804,7 +9804,7 @@ DispTimeSetCheck_TryRow3:
 	jr nz, DispTimeSetCheck_TryRow4
 	cpw (xwa), 0x3
 	jr nz, DispTimeSetCheck_TryRow4
-	ldb_da a, (0x0340e8)
+	ld a, (0x0340e8:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
@@ -9825,7 +9825,7 @@ DispTimeSetCheck_TryRow4:
 	jr nz, DispTimeSetCheck_TryRow5
 	cpw (xwa), 0x4
 	jr nz, DispTimeSetCheck_TryRow5
-	ldb_da a, (0x0340ea)
+	ld a, (0x0340ea:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
@@ -9846,7 +9846,7 @@ DispTimeSetCheck_TryRow5:
 	jr nz, DispTimeSetCheck_TryRow6
 	cpw (xwa), 0x5
 	jr nz, DispTimeSetCheck_TryRow6
-	ldb_da a, (0x0340ec)
+	ld a, (0x0340ec:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
@@ -9867,7 +9867,7 @@ DispTimeSetCheck_TryRow6:
 	jr nz, DispTimeSetCheck_TryRow7
 	cpw (xwa), 0x6
 	jr nz, DispTimeSetCheck_TryRow7
-	ldb_da a, (0x0340ee)
+	ld a, (0x0340ee:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
@@ -9888,7 +9888,7 @@ DispTimeSetCheck_TryRow7:
 	jr nz, DispTimeSet_ReturnZero
 	cpw (xwa), 0x7
 	jr nz, DispTimeSet_ReturnZero
-	ldb_da a, (0x0340f0)
+	ld a, (0x0340f0:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0

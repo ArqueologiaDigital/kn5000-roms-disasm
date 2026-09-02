@@ -3283,7 +3283,7 @@ SMF_SetupRead_Return:
 	ld (0xf19e:16), wa
 	ld xix, 0xab000
 	xor xhl, xhl
-	ldb_da l, (0x00ffe3)
+	ld l, (0x00ffe3:24)
 	sla xhl, 11
 	add xix, xhl
 	ld xiy, 0xf180

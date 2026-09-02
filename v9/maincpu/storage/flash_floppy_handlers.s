@@ -7298,7 +7298,7 @@ PsSeqSongNoBoxProc:
 PsSeqSongNo_HandleScroll:
 	ld xwa, xiz
 	call InheritedProc
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	pushw wa

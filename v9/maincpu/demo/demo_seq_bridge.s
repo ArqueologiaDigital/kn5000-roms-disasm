@@ -144,7 +144,7 @@ SeqSongNameFunc:
 	cp xbc, 0x1e70002
 	jrl nz, SongBank_ReturnZero
 	stda32 7116, xde
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	extz wa
 	ld (7120:16), wa
 	ld de, wa
@@ -300,7 +300,7 @@ SeqSongMemoryFunc:
 	cp xbc, 0x1e70002
 	jrl nz, SongBank_EventHandler_Return
 	stda32 7192, xde
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	extz wa
 	ld (7196:16), wa
 	ld de, wa
@@ -488,7 +488,7 @@ SeqRecPlay_EnableRecordOnly:
 	lds32 xde, 1
 	call ApPostEvent
 	lds32 xde, 0
-	ldb_da e, (0x021094)
+	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
 	ld xbc, 0x1e000a7
 	jp ApPostEvent
@@ -501,7 +501,7 @@ SeqRecPlay_EnablePlayOnly:
 	lds32 xde, 0
 	call ApPostEvent
 	lds32 xde, 0
-	ldb_da e, (0x021094)
+	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
 	ld xbc, 0x1e000a7
 	jp ApPostEvent
@@ -514,7 +514,7 @@ SeqRecPlay_DisableBoth:
 	lds32 xde, 0
 	call ApPostEvent
 	lds32 xde, 0
-	ldb_da e, (0x021094)
+	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
 	ld xbc, 0x1e000a7
 	jp ApPostEvent

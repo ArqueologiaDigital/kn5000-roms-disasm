@@ -11004,7 +11004,7 @@ SeqVoice_FindChannelSetup:
 	ld (xsp + 8), 0x1
 
 SeqPosAdv_CheckEndMark:
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	cp a, (xsp + 8)
 	jr nz, SeqPosAdv_CheckBarEnd
@@ -12974,14 +12974,14 @@ Part_WriteWordAndByte:
 	extz de
 	lds wa, 0
 	calr Part_WriteByte_Indexed
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	ld bc, (0x287d:16)
 	extz bc
 	ld de, iz
 	calr Part_WriteWord_Indexed
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	ld bc, (0x287d:16)
@@ -22399,7 +22399,7 @@ SeqAccomp_StopNotifyDeliver:
 
 SngSelSyori:
 	pushw_erp 0xfa
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	ldb_erp A, 0xfb
 	cp xbc, 0x1c00018
 	jr z, SngSel_HandleNextSong
@@ -22420,7 +22420,7 @@ SngSel_HandlePrevSong:
 	jr	nc, 96
 	stb_erp	a, 251
 	ld	(7500:16), a
-	ldb_da	a, (65507)
+	ld	a, (65507:24)
 	inc	1, a
 	ld	(7502:16), a
 	call	15859883
@@ -22436,7 +22436,7 @@ SngSel_HandleNextSong:
 	jr	z, 49
 	stb_erp	a, 251
 	ld	(7500:16), a
-	ldb_da	a, (65507)
+	ld	a, (65507:24)
 	dec	1, a
 	ld	(7502:16), a
 	call	15859883
@@ -22453,7 +22453,7 @@ SeqAcc_ResetAndReinit:
 	call SeqAcc_InitPlaybackState
 
 SeqAcc_CheckLoopAndSendEvent:
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	cpb_erp A, 0xfb
 	jr z, NoteEditSy_UpScrollTable
 	ld xwa, (0x29c6:16)
@@ -23552,7 +23552,7 @@ MainExe_Handle90:
 	ld	(10362:16), 0
 	call	16029308
 	call	15997352
-	ldb_da	a, (65507)
+	ld	a, (65507:24)
 	cpda8	a, 10360
 	jr	nz, 13
 	ldw	(10357:16), 0
@@ -23977,7 +23977,7 @@ HelpLang_DispatchDataBlock:
 	ld	(10608:16), a
 	cp	(35996:16), 231
 	ret	nz
-	ldb_da	e, (213220)
+	ld	e, (213220:24)
 	ld	c, (10606:16)
 	extz	bc
 	cps	e, 5
@@ -24063,7 +24063,7 @@ HelpLang_PostEvent:
 
 HelpLang_SetFlashAndLoadSlide:
 	ld (0x2970:16), 255
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	sll a, 2
 	ldb w, 0x0
 	extz xwa
@@ -24073,7 +24073,7 @@ HelpLang_SetFlashAndLoadSlide:
 	jr HelpLang_ParseSlideHeader
 
 HelpLang_LoadSlide:
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	sll a, 2
 	ldb w, 0x0
 	extz xwa
@@ -24160,7 +24160,7 @@ SeqLoad_PostSetPositions:
 
 SeqLoad_PostCheckAutoAccomp:
 	calr SeqLoad_CheckAutoAccompFlag
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	extz wa
 	call SeqData_CopyBlockToBuffer
 	calr SeqLoad_InitPartPanPresets
@@ -24190,7 +24190,7 @@ SeqLoad_AltSetPositions:
 
 SeqLoad_AltCheckAutoAccomp:
 	calr SeqLoad_CheckAutoAccompFlag
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	extz wa
 	call SeqData_CopyBlockToBuffer
 	calr SeqLoad_InitPartPanPresets
@@ -24201,7 +24201,7 @@ SeqSavePre:
 	push xiz
 	call SeqStep_ReinitPartTable
 	ld xiz, xhl
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	extz wa
 	call SeqData_CopyBlockToBuffer
 	lds wa, 1
@@ -24278,7 +24278,7 @@ SeqLoad_ProcessDataBlock:
 	ld	(xsp+2), a
 	.byte 0xd2, 0xec, 0xff, 0x00, 0x19, 0x9e, 0xf1
 	call	16635550
-	ldb_da	a, (65507)
+	ld	a, (65507:24)
 	extz	wa
 	call	15995901
 	ld	a, (xsp+2)
@@ -24287,7 +24287,7 @@ SeqLoad_ProcessDataBlock:
 	ld	a, (xsp+2)
 	stb_da	65507, a
 	call	15988735
-	ldb_da	a, (65507)
+	ld	a, (65507:24)
 	extz	wa
 	call	15995901
 	ld	iz, (61902:16)
@@ -24527,28 +24527,28 @@ SeqSave_PreparePartData:
 	dec 6,XSP
 	push XIZ
 	ld (XSP+0x08),A
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	cp A,(XSP+0x08)
 	jr nz, SeqSave_CopyBlockAndInit
 	.byte 0xd2, 0xec, 0xff, 0x00, 0x19, 0x9e, 0xf1, 0x1d
 	.byte 0x9e, 0xd6, 0xfd
 SeqSave_CopyBlockAndInit:
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	extz wa
 	call SeqData_CopyBlockToBuffer
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	ldw bc, 0xc7
 	lds de, 0
 	call Part_WriteByte
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	ldw bc, 0x1e
 	call Part_ReadWord
 	ld de, hl
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	ldw bc, 0xc8
@@ -27425,7 +27425,7 @@ SeqVoice_InitPartVoiceLoop:
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x10
 	jr ule, SeqVoice_InitPartVoiceLoop
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	cpda8 a, 0x2878
 	jr nz, SeqVoice_InitChannelAndParams
 	ld (0xf24b:16), 0
@@ -27510,28 +27510,28 @@ SeqPart_InitSlots:
 
 SeqPart_InitFinish:
 	call SeqVoice_InitReturnZero
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	ld c, (0x2877:16)
 	extz bc
 	lds de, 0
 	call Part_SetClearVoiceBit7
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	ld c, (0x2877:16)
 	extz bc
 	ldw de, 0xffff
 	call Part_WriteVoiceWord
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	ld c, (0x2877:16)
 	extz bc
 	ldw de, 0xffff
 	call Part_WriteWord_Indexed
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	ld c, (0x2877:16)

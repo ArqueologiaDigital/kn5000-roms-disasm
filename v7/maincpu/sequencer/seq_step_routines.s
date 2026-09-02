@@ -1241,7 +1241,7 @@ SeqStep_VoiceReassignDone:
 	ld c, (9992:16)
 	ld a, c
 	dec 1, a
-	ldb_da e, (0x00ffe3)
+	ld e, (0x00ffe3:24)
 	cp a, e
 	jr nz, SeqStep_VoiceReassignReturn
 	ldib_erp 0xf9, 0
@@ -2987,10 +2987,10 @@ SeqStep_ByteBlockEA5F:
 SeqStep_ReinitPartTable:
 	dec 6, xsp
 	push xiz
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	extz wa
 	call SeqData_CopyBlockToBuffer
-	ldb_da e, (0x00ffe3)
+	ld e, (0x00ffe3:24)
 	extz de
 	lds wa, 1
 	ldw bc, 0xc7
@@ -3005,7 +3005,7 @@ SeqStep_ReinitPartTable:
 	ld wa, (0xf22f:16)
 	ldw_erp WA, 0xfa
 	ldmw2 (xsp + 8), 0xf231
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	extz wa
 	call VoicePreset_LoadAndInitPan
 	ld (0xf1ce:16), iz

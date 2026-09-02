@@ -568,7 +568,7 @@ MidiIn_ParseRingAndDispatch__FB07A3:
 	ld	xbc, (xiz-12)                           ; FB07EB  ld XBC,(XIZ+0xf4)
 	decm	4, (xbc)                              ; FB07EE  decw 4,(XBC)
 	dec	4, de                                  ; FB07F0  dec 4,DE
-	ldb_da	h, (0xD7D5)                         ; FB07F2  ld H,(0x00d7d5)
+	ld	h, (0xD7D5:24)                         ; FB07F2  ld H,(0x00d7d5)
 	lda	xbc, (0xD7D4:24)                       ; FB07F7  lda XBC,0x00d7d4
 	push	xbc                                   ; FB07FC  push XBC
 	cp	h, 0xF0                                 ; FB07FD  cp H,0xf0
@@ -1352,10 +1352,10 @@ VoiceParams_Compute_A:
 	extz	xhl                                   ; FB0E8B  extz XHL
 	ld	xbc, (xhl+0x1523)                       ; FB0E8D  ld XBC,(XHL+0x1523)
 	ld	e, (xbc+18)                             ; FB0E92  ld E,(XBC+0x12)
-	ldb_da	c, (0xFE12AD)                       ; FB0E95  ld C,(0xfe12ad)
+	ld	c, (0xFE12AD:24)                       ; FB0E95  ld C,(0xfe12ad)
 	and	c, e                                   ; FB0E9A  and C,E
 	ld	(xiz-8), c                              ; FB0E9C  ld (XIZ+0xf8),C
-	ldb_da	a, (0xFE12B1)                       ; FB0E9F  ld A,(0xfe12b1)
+	ld	a, (0xFE12B1:24)                       ; FB0E9F  ld A,(0xfe12b1)
 	pushw	wa                                   ; FB0EA4  push WA
 	pushw	bc                                   ; FB0EA5  push BC
 	call	0xFCB23C                              ; FB0EA6  call 0xfcb23c
@@ -1491,7 +1491,7 @@ VoiceParams_Compute_A__FB0ED5:
 	add	xwa, 0xFDF6E4                          ; FB1024  add XWA,0x00fdf6e4
 	ld	bc, (xwa)                               ; FB102A  ld BC,(XWA)
 	ld	(xhl+52), bc                            ; FB102C  ld (XHL+0x34),BC
-	ldb_da	c, (0xFE12A9)                       ; FB102F  ld C,(0xfe12a9)
+	ld	c, (0xFE12A9:24)                       ; FB102F  ld C,(0xfe12a9)
 	set	7, c                                   ; FB1034  set 0x07,C
 	ld	(xiz-34), c                             ; FB1037  ld (XIZ+0xde),C
 	ld	xbc, (xiz+8)                            ; FB103A  ld XBC,(XIZ+0x08)
@@ -1542,10 +1542,10 @@ VoiceParams_Compute_A__FB10AA:
 	extz	xhl                                   ; FB10AA  extz XHL
 	ld	xbc, (xhl+0x1523)                       ; FB10AC  ld XBC,(XHL+0x1523)
 	ld	e, (xbc+18)                             ; FB10B1  ld E,(XBC+0x12)
-	ldb_da	c, (0xFE12AD)                       ; FB10B4  ld C,(0xfe12ad)
+	ld	c, (0xFE12AD:24)                       ; FB10B4  ld C,(0xfe12ad)
 	and	c, e                                   ; FB10B9  and C,E
 	ld	(xiz-8), c                              ; FB10BB  ld (XIZ+0xf8),C
-	ldb_da	a, (0xFE12B1)                       ; FB10BE  ld A,(0xfe12b1)
+	ld	a, (0xFE12B1:24)                       ; FB10BE  ld A,(0xfe12b1)
 	pushw	wa                                   ; FB10C3  push WA
 	pushw	bc                                   ; FB10C4  push BC
 	call	0xFCB23C                              ; FB10C5  call 0xfcb23c
@@ -1676,7 +1676,7 @@ VoiceParams_Compute_A__FB10F4:
 	add	xwa, 0xFDF6E4                          ; FB1233  add XWA,0x00fdf6e4
 	ld	bc, (xwa)                               ; FB1239  ld BC,(XWA)
 	ld	(xhl+52), bc                            ; FB123B  ld (XHL+0x34),BC
-	ldb_da	c, (0xFE12A9)                       ; FB123E  ld C,(0xfe12a9)
+	ld	c, (0xFE12A9:24)                       ; FB123E  ld C,(0xfe12a9)
 	set	7, c                                   ; FB1243  set 0x07,C
 	ld	(xiz-32), c                             ; FB1246  ld (XIZ+0xe0),C
 	ld	xbc, (xiz+8)                            ; FB1249  ld XBC,(XIZ+0x08)
@@ -1735,10 +1735,10 @@ VoiceParams_Compute_A__FB12B6:
 	extz	xhl                                   ; FB12D3  extz XHL
 	ld	xbc, (xhl+0x1523)                       ; FB12D5  ld XBC,(XHL+0x1523)
 	ld	e, (xbc+18)                             ; FB12DA  ld E,(XBC+0x12)
-	ldb_da	c, (0xFE12AE)                       ; FB12DD  ld C,(0xfe12ae)
+	ld	c, (0xFE12AE:24)                       ; FB12DD  ld C,(0xfe12ae)
 	and	c, e                                   ; FB12E2  and C,E
 	ld	(xiz-8), c                              ; FB12E4  ld (XIZ+0xf8),C
-	ldb_da	a, (0xFE12B2)                       ; FB12E7  ld A,(0xfe12b2)
+	ld	a, (0xFE12B2:24)                       ; FB12E7  ld A,(0xfe12b2)
 	pushw	wa                                   ; FB12EC  push WA
 	pushw	bc                                   ; FB12ED  push BC
 	call	0xFCB23C                              ; FB12EE  call 0xfcb23c
@@ -1917,7 +1917,7 @@ VoiceParams_Compute_A__FB131D:
 	ld	wa, (xiz-28)                            ; FB14DE  ld WA,(XIZ+0xe4)
 	extz	xwa                                   ; FB14E1  extz XWA
 	ld	(xwa+0x78), bc                          ; FB14E3  ld (XWA+0x78),BC
-	ldb_da	c, (0xFE12AA)                       ; FB14E6  ld C,(0xfe12aa)
+	ld	c, (0xFE12AA:24)                       ; FB14E6  ld C,(0xfe12aa)
 	set	7, c                                   ; FB14EB  set 0x07,C
 	ld	(xiz-38), c                             ; FB14EE  ld (XIZ+0xda),C
 	ld	xbc, (xiz+8)                            ; FB14F1  ld XBC,(XIZ+0x08)
@@ -1970,10 +1970,10 @@ VoiceParams_Compute_A__FB1566:
 	extz	xhl                                   ; FB1566  extz XHL
 	ld	xbc, (xhl+0x1523)                       ; FB1568  ld XBC,(XHL+0x1523)
 	ld	e, (xbc+18)                             ; FB156D  ld E,(XBC+0x12)
-	ldb_da	c, (0xFE12AE)                       ; FB1570  ld C,(0xfe12ae)
+	ld	c, (0xFE12AE:24)                       ; FB1570  ld C,(0xfe12ae)
 	and	c, e                                   ; FB1575  and C,E
 	ld	(xiz-8), c                              ; FB1577  ld (XIZ+0xf8),C
-	ldb_da	a, (0xFE12B2)                       ; FB157A  ld A,(0xfe12b2)
+	ld	a, (0xFE12B2:24)                       ; FB157A  ld A,(0xfe12b2)
 	pushw	wa                                   ; FB157F  push WA
 	pushw	bc                                   ; FB1580  push BC
 	call	0xFCB23C                              ; FB1581  call 0xfcb23c
@@ -2154,7 +2154,7 @@ VoiceParams_Compute_A__FB15B0:
 	ld	wa, (xiz-30)                            ; FB1778  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB177B  extz XWA
 	ld	(xwa+0x78), bc                          ; FB177D  ld (XWA+0x78),BC
-	ldb_da	c, (0xFE12AA)                       ; FB1780  ld C,(0xfe12aa)
+	ld	c, (0xFE12AA:24)                       ; FB1780  ld C,(0xfe12aa)
 	set	7, c                                   ; FB1785  set 0x07,C
 	ld	(xiz-40), c                             ; FB1788  ld (XIZ+0xd8),C
 	ld	xbc, (xiz+8)                            ; FB178B  ld XBC,(XIZ+0x08)
@@ -2209,10 +2209,10 @@ VoiceParams_Compute_A__FB17FD:
 	extz	xbc                                   ; FB1808  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB180A  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB180F  ld E,(XWA+0x12)
-	ldb_da	a, (0xFE12AF)                       ; FB1812  ld A,(0xfe12af)
+	ld	a, (0xFE12AF:24)                       ; FB1812  ld A,(0xfe12af)
 	and	a, e                                   ; FB1817  and A,E
 	ld	(xiz-8), a                              ; FB1819  ld (XIZ+0xf8),A
-	ldb_da	w, (0xFE12B3)                       ; FB181C  ld W,(0xfe12b3)
+	ld	w, (0xFE12B3:24)                       ; FB181C  ld W,(0xfe12b3)
 	push	0                                     ; FB1821  push 0x00
 	push	w                                     ; FB1823  push W
 	pushw	wa                                   ; FB1825  push WA
@@ -2397,7 +2397,7 @@ VoiceParams_Compute_A__FB185E:
 	ld	wa, (xiz-30)                            ; FB1A44  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1A47  extz XWA
 	ld	(xwa+0xBC), bc                          ; FB1A49  ld (XWA+0x00bc),BC
-	ldb_da	c, (0xFE12AB)                       ; FB1A4E  ld C,(0xfe12ab)
+	ld	c, (0xFE12AB:24)                       ; FB1A4E  ld C,(0xfe12ab)
 	set	7, c                                   ; FB1A53  set 0x07,C
 	ld	(xiz-40), c                             ; FB1A56  ld (XIZ+0xd8),C
 	ld	xbc, (xiz+8)                            ; FB1A59  ld XBC,(XIZ+0x08)
@@ -2452,10 +2452,10 @@ VoiceParams_Compute_A__FB1ACF:
 	extz	xbc                                   ; FB1ADA  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB1ADC  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB1AE1  ld E,(XWA+0x12)
-	ldb_da	a, (0xFE12B0)                       ; FB1AE4  ld A,(0xfe12b0)
+	ld	a, (0xFE12B0:24)                       ; FB1AE4  ld A,(0xfe12b0)
 	and	a, e                                   ; FB1AE9  and A,E
 	ld	(xiz-8), a                              ; FB1AEB  ld (XIZ+0xf8),A
-	ldb_da	w, (0xFE12B4)                       ; FB1AEE  ld W,(0xfe12b4)
+	ld	w, (0xFE12B4:24)                       ; FB1AEE  ld W,(0xfe12b4)
 	push	0                                     ; FB1AF3  push 0x00
 	push	w                                     ; FB1AF5  push W
 	pushw	wa                                   ; FB1AF7  push WA
@@ -2640,7 +2640,7 @@ VoiceParams_Compute_A__FB1B30:
 	ld	wa, (xiz-30)                            ; FB1D16  ld WA,(XIZ+0xe2)
 	extz	xwa                                   ; FB1D19  extz XWA
 	extpfx5 0xF3, 0xE1, 0x00, 0x01, 0x51       ; FB1D1B  ld (XWA+0x0100),BC
-	ldb_da	c, (0xFE12AC)                       ; FB1D20  ld C,(0xfe12ac)
+	ld	c, (0xFE12AC:24)                       ; FB1D20  ld C,(0xfe12ac)
 	set	7, c                                   ; FB1D25  set 0x07,C
 	ld	(xiz-40), c                             ; FB1D28  ld (XIZ+0xd8),C
 	ld	xbc, (xiz+8)                            ; FB1D2B  ld XBC,(XIZ+0x08)
@@ -3138,10 +3138,10 @@ VoiceParams_Compute_B:
 	extz	xbc                                   ; FB21A5  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB21A7  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB21AC  ld E,(XWA+0x12)
-	ldb_da	a, (0xFE12AD)                       ; FB21AF  ld A,(0xfe12ad)
+	ld	a, (0xFE12AD:24)                       ; FB21AF  ld A,(0xfe12ad)
 	and	a, e                                   ; FB21B4  and A,E
 	ld	(xiz-12), a                             ; FB21B6  ld (XIZ+0xf4),A
-	ldb_da	w, (0xFE12B1)                       ; FB21B9  ld W,(0xfe12b1)
+	ld	w, (0xFE12B1:24)                       ; FB21B9  ld W,(0xfe12b1)
 	push	0                                     ; FB21BE  push 0x00
 	push	w                                     ; FB21C0  push W
 	pushw	wa                                   ; FB21C2  push WA
@@ -3262,10 +3262,10 @@ VoiceParams_Compute_B__FB22FE:
 	extz	xbc                                   ; FB2309  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB230B  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB2310  ld E,(XWA+0x12)
-	ldb_da	a, (0xFE12AE)                       ; FB2313  ld A,(0xfe12ae)
+	ld	a, (0xFE12AE:24)                       ; FB2313  ld A,(0xfe12ae)
 	and	a, e                                   ; FB2318  and A,E
 	ld	(xiz-10), a                             ; FB231A  ld (XIZ+0xf6),A
-	ldb_da	w, (0xFE12B2)                       ; FB231D  ld W,(0xfe12b2)
+	ld	w, (0xFE12B2:24)                       ; FB231D  ld W,(0xfe12b2)
 	push	0                                     ; FB2322  push 0x00
 	push	w                                     ; FB2324  push W
 	pushw	wa                                   ; FB2326  push WA
@@ -3391,10 +3391,10 @@ VoiceParams_Compute_B__FB2475:
 	extz	xbc                                   ; FB2480  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB2482  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB2487  ld E,(XWA+0x12)
-	ldb_da	a, (0xFE12AF)                       ; FB248A  ld A,(0xfe12af)
+	ld	a, (0xFE12AF:24)                       ; FB248A  ld A,(0xfe12af)
 	and	a, e                                   ; FB248F  and A,E
 	ld	(xiz-10), a                             ; FB2491  ld (XIZ+0xf6),A
-	ldb_da	w, (0xFE12B3)                       ; FB2494  ld W,(0xfe12b3)
+	ld	w, (0xFE12B3:24)                       ; FB2494  ld W,(0xfe12b3)
 	push	0                                     ; FB2499  push 0x00
 	push	w                                     ; FB249B  push W
 	pushw	wa                                   ; FB249D  push WA
@@ -3529,10 +3529,10 @@ VoiceParams_Compute_B__FB2607:
 	extz	xbc                                   ; FB2612  extz XBC
 	ld	xwa, (xbc+0x1523)                       ; FB2614  ld XWA,(XBC+0x1523)
 	ld	e, (xwa+18)                             ; FB2619  ld E,(XWA+0x12)
-	ldb_da	a, (0xFE12B0)                       ; FB261C  ld A,(0xfe12b0)
+	ld	a, (0xFE12B0:24)                       ; FB261C  ld A,(0xfe12b0)
 	and	a, e                                   ; FB2621  and A,E
 	ld	(xiz-10), a                             ; FB2623  ld (XIZ+0xf6),A
-	ldb_da	w, (0xFE12B4)                       ; FB2626  ld W,(0xfe12b4)
+	ld	w, (0xFE12B4:24)                       ; FB2626  ld W,(0xfe12b4)
 	push	0                                     ; FB262B  push 0x00
 	push	w                                     ; FB262D  push W
 	pushw	wa                                   ; FB262F  push WA

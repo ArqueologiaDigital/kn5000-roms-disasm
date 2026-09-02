@@ -273,7 +273,7 @@ BmDrEdit_CalcNotePosition:
 	addda16 xwa, 0x27f8
 	sub bc, wa
 	ld (0x2808:16), bc
-	ldb_da a, (0x0210a8)
+	ld a, (0x0210a8:24)
 	subdm8 0x2806, a
 	call GetTitleNow
 	cp xhl, 0x1a00095
@@ -409,7 +409,7 @@ BmDrEdit_RenderSecondaryHoriz:
 	srl wa, 2
 	addda16 xwa, 0x27c2
 	ld (0x27c4:16), wa
-	ldb_da a, (0x0210b0)
+	ld a, (0x0210b0:24)
 	extz wa
 	add wa, wa
 	lda xbc, (NakaInst_NO_OPERATION_0x19A:24)
@@ -428,7 +428,7 @@ BmDrEdit_RenderSecondaryVert:
 	srl wa, 2
 	addda16 xwa, 0x27c2
 	ld (0x27c4:16), wa
-	ldb_da a, (0x0210b0)
+	ld a, (0x0210b0:24)
 	extz wa
 	add wa, wa
 	lda xbc, (NakaInst_NO_OPERATION_0x1D4:24)

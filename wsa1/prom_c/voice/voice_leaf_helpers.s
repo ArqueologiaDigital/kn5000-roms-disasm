@@ -2534,7 +2534,7 @@ Dev10C_PollBankAndRetire:
 	pushw	de                                   ; FA68E1  push DE
 	push	xix                                   ; FA68E2  push XIX
 	incdi8_24	1, (0x87CF)                      ; FA68E3  inc 1,(0x0087cf)
-	ldb_da	h, (0x87CF)                         ; FA68E8  ld H,(0x0087cf)
+	ld	h, (0x87CF:24)                         ; FA68E8  ld H,(0x0087cf)
 	and	h, 3                                   ; FA68ED  and H,0x03
 	stb_da	(0x87CF), h                         ; FA68F0  ld (0x0087cf),H
 	ld	c, h                                    ; FA68F5  ld C,H
@@ -2564,7 +2564,7 @@ Dev10C_PollBankAndRetire:
 	extpfx3 0xAE, 0xEC, 0x85                   ; FA693B  add XIY,(XIZ+0xec)
 	ld	bc, (xiz-22)                            ; FA693E  ld BC,(XIZ+0xea)
 	ld	(xiy), bc                               ; FA6941  ld (XIY),BC
-	ldb_da	d, (0x87CF)                         ; FA6943  ld D,(0x0087cf)
+	ld	d, (0x87CF:24)                         ; FA6943  ld D,(0x0087cf)
 	ld	c, d                                    ; FA6948  ld C,D
 	sll	c, 4                                   ; FA694A  sll 0x04,C
 	ld	d, c                                    ; FA694D  ld D,C

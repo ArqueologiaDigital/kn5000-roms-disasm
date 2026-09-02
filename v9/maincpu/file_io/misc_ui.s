@@ -469,7 +469,7 @@ WaitingFunc:
 	jr WaitingFunc_Return
 
 WaitingFunc_DrawMessage:
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (DiskWarning_ConfirmStrings_0xA6C:24)

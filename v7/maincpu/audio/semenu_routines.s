@@ -53,7 +53,7 @@ SeMenu_LoadObjectPtr_Data:
 	ret
 
 SeMenu_LoadMasterPtr:
-	ldb_da	c, (35998)
+	ld	c, (35998:24)
 	ld	(xwa), c
 	ret
 SeMenu_FlushDisplayObj:
@@ -5679,7 +5679,7 @@ SeMenu_OrPartConfig:
 
 SeMenu_OrPartConfig_Data:
 	.incbin "includes/romslices/v7_transplant_SeMenu_OrPartConfig_Data_head.bin"
-	ldb_da l, (0x00e31c)
+	ld l, (0x00e31c:24)
 	and L,0x08
 	ret
 SeMenu_StoreParamByte:

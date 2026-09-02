@@ -3555,7 +3555,7 @@ HDAE5000_InitializeParallelPort:
 	calr Boot_DelayLoop	; CALR Boot_DelayLoop
 	stib_da (0x160004), 0x00; LD (0x160004), 0x00 - LEDs off
 HDAE5000_InitializeParallelPort__ppi_wait_loop:
-	ldb_da a, (0x160002)	; LD A, (0x160002) - poll PPI Port B handshake
+	ld a, (0x160002:24)	; LD A, (0x160002) - poll PPI Port B handshake
 	extz wa	; EXTZ WA
 	bit 0, wa	; BIT 0, WA - HDAE5000 ready when bit 0 clears
 	jr nz, HDAE5000_InitializeParallelPort__ppi_wait_loop	; 6e f4
@@ -3734,7 +3734,7 @@ HDAE5000_ReinitPPI_ProgramPayload:
 	calr Boot_DelayLoop
 	stib_da (0x160004), 0x00	; LD (0x160004), 0x00 - LEDs off
 HDAE5000_ReinitPPI_ProgramPayload__ppi_wait_loop:
-	ldb_da a, (0x160002)	; LD A, (0x160002) - poll PPI Port B handshake
+	ld a, (0x160002:24)	; LD A, (0x160002) - poll PPI Port B handshake
 	extz wa	; EXTZ WA
 	bit 0, wa	; BIT 0, WA - HDAE5000 ready when bit 0 clears
 	jr nz, HDAE5000_ReinitPPI_ProgramPayload__ppi_wait_loop	; 6e f4
@@ -4539,7 +4539,7 @@ VGA_FinalizeInitialization:
 ; Returns: L = status byte from 0x110008
 ; -----------------------------------------------------------------------------
 FDC_ReadStatus:
-	ldb_da l, (0x110008); LD L, (0x110008)
+	ld l, (0x110008:24); LD L, (0x110008)
 	ret	; 0e
 
 ; -----------------------------------------------------------------------------
@@ -4548,7 +4548,7 @@ FDC_ReadStatus:
 ; Returns: L = data byte from 0x11000A
 ; -----------------------------------------------------------------------------
 FDC_ReadData:
-	ldb_da l, (0x11000a); LD L, (0x11000A)
+	ld l, (0x11000a:24); LD L, (0x11000A)
 	ret	; 0e
 
 ; -----------------------------------------------------------------------------

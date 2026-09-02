@@ -207,7 +207,7 @@ sub_F9915C__exit:
 ; --------------------------------------------------------------------------
 Serial0_Init:
 	ldio	TRUN, 0x80
-	ldb_da	c, 0x00FFFFEF
+	ld	c, (0x00FFFFEF:24)
 	srl	c, 1
 	and	c, 0x0F
 	st_dd8b	c, BR0CR
@@ -215,7 +215,7 @@ Serial0_Init:
 	ldio	SC0MOD, 0x29
 	ei	6
 	stiw_da	0x00F2F9, 0x0002
-	ldb_da	c, 0x00F2F7
+	ld	c, (0x00F2F7:24)
 	and	c, 0x8F
 	or	c, 0x50
 	stb_da	0x00F2F7, c
@@ -224,7 +224,7 @@ Serial0_Init:
 	stb_da	0x00F2F7, c
 	ldw	bc, INTES0
 	exts	xbc
-	ldb_da	a, 0x00F2F7
+	ld	a, (0x00F2F7:24)
 	ld	(xbc), a
 	ei	0
 	ret

@@ -1586,7 +1586,7 @@ Voice_FactoryPresetData:
 	jrl	206
 	cp	(xsp+24), 1
 	jrl	ugt, 196
-	ldb_da	l, (257962)
+	ld	l, (257962:24)
 	ld	xwa, (xsp+34)
 	ld	wa, (xwa)
 	exts	xwa
@@ -1703,7 +1703,7 @@ Voice_FactoryPresetData:
 	calr	38931
 	cps	hl, 0
 	jr	z, 29
-	ldb_da	a, (257960)
+	ld	a, (257960:24)
 	stb_da	(257962), a
 	cpw_da	(197710), 0
 	jr	z, 51
@@ -1722,7 +1722,7 @@ Voice_FactoryPresetData:
 	ldirw
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	ldb_da	c, (257960)
+	ld	c, (257960:24)
 	ld	(xwa+14), c
 	calr	38403
 	pop	xiz
@@ -1839,7 +1839,7 @@ DrawText_QueueOrDirect:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, DrawText_QueueDeferred
-	ldb_da a, (0x03efa8)
+	ld a, (0x03efa8:24)
 	stb_da (0x03efaa), a
 	cpw_da (197710), 0
 	jrl z, DrawText_PopAndReturn
@@ -2158,7 +2158,7 @@ TextRender_ScanLineLoop:
 	ldw (xsp + 24), 0x8
 
 TextRender_SelectDrawMode:
-	ldb_da a, (0x03efaa)
+	ld a, (0x03efaa:24)
 	cps a, 2
 	jrl z, TextRender_XorMode_Init
 	cps a, 1
@@ -2731,7 +2731,7 @@ Debug_SWI_JumpTable:
 	ret
 
 Get_Firmware_Version:
-	ldb_da l, (FIRMWARE_VERSION)
+	ld l, (FIRMWARE_VERSION:24)
 	ret
 
 ROM_PaddingFF:

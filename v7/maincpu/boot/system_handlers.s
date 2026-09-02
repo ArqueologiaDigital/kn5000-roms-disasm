@@ -136,7 +136,7 @@ SubCPU_Payload_Verify_Fail_Entry:
 ; ===========================================================================
 SubCPU_Payload_GetErrorFlag:
 SubCPU_Payload_GetErrorFlag_Entry:
-	ldb_da l, (0x01e53e)
+	ld l, (0x01e53e:24)
 	exts hl
 	ret
 
@@ -5728,7 +5728,7 @@ INT0_ReadLatch:
 	ret nz
 	push xwa
 	push xbc
-	ldb_da a, (0x140000)	; THE LATCH READ (0xEF3513).  0x18 bytes after the
+	ld a, (0x140000:24)	; THE LATCH READ (0xEF3513).  0x18 bytes after the
 				; MSTAT1 test at ISR entry and 0x87 bytes before
 				; MSTAT1 is lowered at 0xEF359A, with neither gate
 				; re-checked and no DI in between -- see the
@@ -8054,7 +8054,7 @@ HDAE5000_Parport_Setup:
 	stib_da (0x160004), 0x00
 
 Parport_WaitDataReady:
-	ldb_da a, (0x160002)
+	ld a, (0x160002:24)
 	extz wa
 	bit 0, wa
 	jr nz, Parport_WaitDataReady

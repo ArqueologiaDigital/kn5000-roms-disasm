@@ -7527,7 +7527,7 @@ ColorBlit:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, ColorBlit_Deferred
-	ldb_da a, (0x03efa8)
+	ld a, (0x03efa8:24)
 	stb_da (0x03efaa), a
 	cpw_da (0x03044e), 0
 	jr z, ColorBlit_Return
@@ -7548,7 +7548,7 @@ ColorBlit_Deferred:
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
-	ldb_da c, (0x03efa8)
+	ld c, (0x03efa8:24)
 	ld (xwa + 14), c
 	calr DisplayCmd_DequeueAndExecute
 
@@ -7608,7 +7608,7 @@ ColorBlit_ClampBottom:
 	ld ix, (xhl)
 	cp bc, 0xf7
 	jrl z, ColorBlit_PopReturn
-	ldb_da e, (0x03efaa)
+	ld e, (0x03efaa:24)
 	cps e, 2
 	jrl z, ColorBlit_Mode2_Entry
 	cps e, 1
@@ -7829,7 +7829,7 @@ ColorBlit2:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, ColorBlit2_Deferred
-	ldb_da a, (0x03efa8)
+	ld a, (0x03efa8:24)
 	stb_da (0x03efaa), a
 	cpw_da (0x03044e), 0
 	jr z, ColorBlit2_Return
@@ -7850,7 +7850,7 @@ ColorBlit2_Deferred:
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
-	ldb_da c, (0x03efa8)
+	ld c, (0x03efa8:24)
 	ld (xwa + 14), c
 	calr DisplayCmd_DequeueAndExecute
 
@@ -7910,7 +7910,7 @@ ColorBlit2_ClampBottom:
 	ld ix, (xhl)
 	cp bc, 0xf7
 	jrl z, ColorBlit2_PopReturn
-	ldb_da e, (0x03efaa)
+	ld e, (0x03efaa:24)
 	cps e, 2
 	jrl z, ColorBlit2_Mode2_Entry
 	cps e, 1

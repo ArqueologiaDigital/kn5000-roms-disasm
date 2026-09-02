@@ -7573,7 +7573,7 @@ ColorBlit:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, ColorBlit_Deferred
-	ldb_da a, (0x03efa8)
+	ld a, (0x03efa8:24)
 	stb_da (0x03efaa), a
 	cpw_da (0x03044e), 0
 	jr z, ColorBlit_Return
@@ -7594,7 +7594,7 @@ ColorBlit_Deferred:
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
-	ldb_da c, (0x03efa8)
+	ld c, (0x03efa8:24)
 	ld (xwa + 14), c
 	calr DisplayCmd_DequeueAndExecute
 
@@ -7654,7 +7654,7 @@ ColorBlit_ClampBottom:
 	ld ix, (xhl)
 	cp bc, 0xf7
 	jrl z, ColorBlit_PopReturn
-	ldb_da e, (0x03efaa)
+	ld e, (0x03efaa:24)
 	cps e, 2
 	jrl z, ColorBlit_Mode2_Entry
 	cps e, 1
@@ -7875,7 +7875,7 @@ ColorBlit2:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032
 	cps hl, 0
 	jr z, ColorBlit2_Deferred
-	ldb_da a, (0x03efa8)
+	ld a, (0x03efa8:24)
 	stb_da (0x03efaa), a
 	cpw_da (0x03044e), 0
 	jr z, ColorBlit2_Return
@@ -7896,7 +7896,7 @@ ColorBlit2_Deferred:
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
-	ldb_da c, (0x03efa8)
+	ld c, (0x03efa8:24)
 	ld (xwa + 14), c
 	calr DisplayCmd_DequeueAndExecute
 
@@ -7956,7 +7956,7 @@ ColorBlit2_ClampBottom:
 	ld ix, (xhl)
 	cp bc, 0xf7
 	jrl z, ColorBlit2_PopReturn
-	ldb_da e, (0x03efaa)
+	ld e, (0x03efaa:24)
 	cps e, 2
 	jrl z, ColorBlit2_Mode2_Entry
 	cps e, 1
@@ -8208,7 +8208,7 @@ ColorBlit2_LargeCodeBlock:
 	calr	43484
 	cps	hl, 0
 	jr	z, 32
-	ldb_da	a, (0x03efa8)
+	ld	a, (0x03efa8:24)
 	stb_da	(0x03efaa), a
 	.byte 0xd2
 	popw	iz
@@ -8237,7 +8237,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xwa+12), xbc
 	ld	bc, (xsp+4)
 	ld	(xwa+16), bc
-	ldb_da	c, (0x03efa8)
+	ld	c, (0x03efa8:24)
 	ld	(xwa+18), c
 	calr	42947
 	pop	xiz
@@ -8265,7 +8265,7 @@ ColorBlit2_LargeCodeBlock:
 	ld	(xsp+22), de
 	ld	(xsp+24), xbc
 	ld	(xsp+28), xwa
-	ldb_da	a, (0x03efaa)
+	ld	a, (0x03efaa:24)
 	cps	a, 2
 	jrl	z, 560
 	cps	a, 1
@@ -8592,7 +8592,7 @@ ColorBlit2_LargeCodeBlock:
 	calr	42583
 	cps	hl, 0
 	jr	z, 32
-	ldb_da	a, (0x03efa8)
+	ld	a, (0x03efa8:24)
 	stb_da	(0x03efaa), a
 	.byte 0xd2
 	popw	iz
@@ -8627,7 +8627,7 @@ ColorBlit2_LargeCodeBlock:
 	rcf
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	ldb_da	c, (0x03efa8)
+	ld	c, (0x03efa8:24)
 	ld	(xwa+14), c
 	calr	42040
 	pop	xiz
@@ -8723,7 +8723,7 @@ ColorBlit2_LargeCodeBlock:
 	rcf
 	.byte 0x95
 	rcf
-	ldb_da	a, (0x03efaa)
+	ld	a, (0x03efaa:24)
 	ld	(xsp+20), a
 	lda	xwa, (0x043c00:24)
 	ld	(xsp+38), xwa
@@ -9439,7 +9439,7 @@ ColorBlit2_LargeCodeBlock:
 	calr	40558
 	cps	hl, 0
 	jr	z, 32
-	ldb_da	a, (0x03efa8)
+	ld	a, (0x03efa8:24)
 	stb_da	(0x03efaa), a
 	.byte 0xd2
 	popw	iz
@@ -9474,7 +9474,7 @@ ColorBlit2_LargeCodeBlock:
 	rcf
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	ldb_da	c, (0x03efa8)
+	ld	c, (0x03efa8:24)
 	ld	(xwa+14), c
 	calr	40015
 	pop	xiz
@@ -9583,7 +9583,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xsp
 	normal
 	jrl	ugt, 235
-	ldb_da	a, (0x03efaa)
+	ld	a, (0x03efaa:24)
 	cps	a, 2
 	jrl	z, 184
 	cps	a, 1
@@ -9715,7 +9715,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xsp
 	normal
 	jrl	ugt, 235
-	ldb_da	a, (0x03efaa)
+	ld	a, (0x03efaa:24)
 	cps	a, 2
 	jrl	z, 184
 	cps	a, 1
@@ -9866,7 +9866,7 @@ ColorBlit2_LargeCodeBlock:
 	push	xsp
 	normal
 	jrl	ugt, 192
-	ldb_da	a, (0x03efaa)
+	ld	a, (0x03efaa:24)
 	ldb_erp	a, 240
 	ld	wa, (xbc+2)
 	exts	xwa

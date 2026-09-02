@@ -7961,7 +7961,7 @@ PmExpFilter_FallbackForward:
 	ld xbc, 0x1e0008f
 	lds32 xde, 0
 	call SendEvent
-	ldb_da a, (0x0340e2)
+	ld a, (0x0340e2:24)
 	cps a, 2
 	jr nz, PmExpFilter_CheckAdvBank
 	cp hl, 0xa
@@ -8148,7 +8148,7 @@ PmExpFilter_EventDispatch:
 	ld	(xwa+2), de
 	cpw	(xwa), 1
 	jrl	nz, 619
-	ldb_da	c, (213218)
+	ld	c, (213218:24)
 	ld	wa, de
 	sla	wa, 2
 	dec	8, wa
@@ -8195,7 +8195,7 @@ PmExpFilter_EventDispatch:
 	dec	8, wa
 	cpw	(xbc), 1
 	jrl	nz, 488
-	ldb_da	c, (213218)
+	ld	c, (213218:24)
 	cps	c, 2
 	jr	z, 33
 	cps	c, 1
@@ -8219,7 +8219,7 @@ PmExpFilter_EventDispatch:
 	lds	de, 2
 	call	MainLswAdd
 	jrl	413
-	ldb_da	a, (213218)
+	ld	a, (213218:24)
 	cps	a, 2
 	jr	z, 103
 	cps	a, 1
@@ -9024,7 +9024,7 @@ DispTimeSetCheck_CellDecode:
 	jr nz, .Lc_fbc3fb
 	cpw (XWA), 0x0002
 	jr nz, .Lc_fbc3fb
-	ldb_da a, (0x0340e6)
+	ld a, (0x0340e6:24)
 	extz WA
 	sla WA, 0x02
 	lda xde, (ParamStr_Table_03:24)
@@ -9047,7 +9047,7 @@ DispTimeSetCheck_TryRow3:
 	jr nz, .Lc_fbc43b
 	cpw (XWA), 0x0003
 	jr nz, .Lc_fbc43b
-	ldb_da a, (0x0340e8)
+	ld a, (0x0340e8:24)
 	extz WA
 	sla WA, 0x02
 	ldl_dri xwa, 0x07, 0xe8, 0xe0
@@ -9068,7 +9068,7 @@ DispTimeSetCheck_TryRow4:
 	jr nz, .Lc_fbc476
 	cpw (XWA), 0x0004
 	jr nz, .Lc_fbc476
-	ldb_da a, (0x0340ea)
+	ld a, (0x0340ea:24)
 	extz WA
 	sla WA, 0x02
 	ldl_dri xwa, 0x07, 0xe8, 0xe0
@@ -9089,7 +9089,7 @@ DispTimeSetCheck_TryRow5:
 	jr nz, .Lc_fbc4b0
 	cpw (XWA), 0x0005
 	jr nz, .Lc_fbc4b0
-	ldb_da a, (0x0340ec)
+	ld a, (0x0340ec:24)
 	extz WA
 	sla WA, 0x02
 	ldl_dri xwa, 0x07, 0xe8, 0xe0
@@ -9110,7 +9110,7 @@ DispTimeSetCheck_TryRow6:
 	jr nz, .Lc_fbc4ea
 	cpw (XWA), 0x0006
 	jr nz, .Lc_fbc4ea
-	ldb_da a, (0x0340ee)
+	ld a, (0x0340ee:24)
 	extz WA
 	sla WA, 0x02
 	ldl_dri xwa, 0x07, 0xe8, 0xe0
@@ -9131,7 +9131,7 @@ DispTimeSetCheck_TryRow7:
 	jr nz, DispTimeSet_ReturnZero
 	cpw (XWA), 0x0007
 	jr nz, DispTimeSet_ReturnZero
-	ldb_da a, (0x0340f0)
+	ld a, (0x0340f0:24)
 	extz WA
 	sla WA, 0x02
 	ldl_dri xwa, 0x07, 0xe8, 0xe0

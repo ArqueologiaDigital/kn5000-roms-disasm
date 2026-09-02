@@ -147,7 +147,7 @@ UIStateEvt_VoiceParamHandler:
 SeqPlay_RestoreVoiceState_Return:
 	ld a, (0x2878:16)
 	pushw wa
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	ld (0x2878:16), a
 	call SeqVoice_InitEntry
 	popw wa
@@ -972,7 +972,7 @@ CDlikeBankLoad_CheckSavedState:
 	ld xiy, 0xf180
 	ld xix, 0xab000
 	xor xwa, xwa
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	sla xwa, 11
 	add xix, xwa
 	ldw bc, 0x800
@@ -1033,7 +1033,7 @@ SongBank_SaveAndReload:
 
 SongBank_LoadToWorkArea:
 	xor xwa, xwa
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	sla xwa, 11
 	ld xiy, 0xab000
 	add xiy, xwa
@@ -2129,7 +2129,7 @@ NameGetFuncCall_Dispatch:
 	lda	xwa, (6888:16)
 	ld	(xwa+16), 0
 	push	xwa
-	ldb_da	a, (0xffe3)
+	ld	a, (0xffe3:24)
 	inc	1, a
 	extz	wa
 	pushw	wa

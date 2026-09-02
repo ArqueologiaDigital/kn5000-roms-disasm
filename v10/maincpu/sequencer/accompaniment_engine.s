@@ -26917,7 +26917,7 @@ TimeSig_DisplayStrings:	.ascii "(1/2)+0  "
 	ldw iz, 8589
 	cpda8	a, 36151
 	ret	z
-	ldb_da	a, (0xffe3)
+	ld	a, (0xffe3:24)
 	inc	1, a
 	ld	(0x3989:16), a
 	ld	wa, (0x398a:16)
@@ -37344,7 +37344,7 @@ FloppyState_Dispatch:
 	push xiz
 
 StyleConv_DispatchSoundMemState:
-	ldb_da a, (0x0ffc00)
+	ld a, (0x0ffc00:24)
 	cps a, 0
 	jr nz, StylCnvDisp_CheckFE
 	cpdi16 0x48ac, 1
@@ -37393,7 +37393,7 @@ StylCnvDisp_Type1_CopyPath:
 	jr StylCnvDisp_CopyAndFinalize
 
 StylCnvDisp_Type2_CheckSubtype:
-	ldb_da a, (0x0ffc01)
+	ld a, (0x0ffc01:24)
 	cp a, 0x40
 	jrl z, StylCnv_Type4_Init
 	cp a, 0x80

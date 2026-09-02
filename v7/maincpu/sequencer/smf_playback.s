@@ -378,7 +378,7 @@ SoundBank_LoadToWorkRAM:
 	ld wa, (0xf231:16)
 	ld (0x2871:16), wa
 	xor xwa, xwa
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	sla xwa, 11
 	ld xiy, 0xab000
 	add xiy, xwa

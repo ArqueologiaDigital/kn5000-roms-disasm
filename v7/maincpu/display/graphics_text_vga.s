@@ -1116,7 +1116,7 @@ DrawText_LayoutAndRender_Variant1:
 	ld	(xbc+4), de
 	ld	wa, (xwa+8)
 	ld	(xbc+6), wa
-	ldb_da	a, (0x03efa8)
+	ld	a, (0x03efa8:24)
 	.byte 0xc7
 	swi	3
 	sub	(xbc-14), wa
@@ -1502,7 +1502,7 @@ ColorBlit_PalSave_SkipShift:
 	ld (xwa + 4), bc
 	ld bc, (xde + 6)
 	ld (xwa + 6), bc
-	ldb_da c, (0x03efa8)
+	ld c, (0x03efa8:24)
 	ldb_erp C, 0xfb
 	stib_da (0x03efa8), 0x01
 	ld bc, (0x03efa4:24)

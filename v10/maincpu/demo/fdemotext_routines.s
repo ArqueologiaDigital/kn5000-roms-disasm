@@ -120,7 +120,7 @@ FDemoText_ProcessVoiceFlags_ReadState:
 	call Boot_CheckConfigFlag7
 	cps hl, 0
 	jrl z, FDemoText_ProcessOutput_ClearAll
-	ldb_da a, (0x0247ee)
+	ld a, (0x0247ee:24)
 	bit 6, a
 	jr z, FDemoText_ProcessVoiceFlags_CheckBits
 	set 7, a
@@ -172,7 +172,7 @@ FDemoText_ProcessChannels_Loop:
 	extz wa
 	lda xbc, (DemoDiskPrompt_English1_0x86:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
-	ldb_da e, (0x0247ee)
+	ld e, (0x0247ee:24)
 	and c, e
 	jr z, FDemoText_ProcessChannel_CheckMask
 	lda xbc, (DemoDiskPrompt_English1_0x8A:24)
@@ -219,7 +219,7 @@ FDemoText_ProcessChannel_CheckMask:
 
 FDemoText_ProcessOutputChannels:
 	lda xhl, (DemoDiskPrompt_English1_0x92:24)
-	ldb_da c, (0x0247ec)
+	ld c, (0x0247ec:24)
 	bit 6, c
 	jr z, FDemoText_ProcessOutput_CheckFlags
 	stb_erp E, 0xfb
@@ -240,7 +240,7 @@ FDemoText_ProcessOutput_CheckFlags:
 	jr z, FDemoText_ProcessOutput_NextCh
 	lda xbc, (DemoDiskPrompt_English1_0x8E:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
-	ldb_da e, (0x0247ec)
+	ld e, (0x0247ec:24)
 	and c, e
 	jr z, FDemoText_ProcessOutput_AltUpdate
 	calr FDemoText_SendVoiceParams
@@ -339,7 +339,7 @@ FDemoText_UpdateVoiceDisplay:
 	call AddswbWr
 
 FDemoText_UpdateVoiceDisplay_CheckSend:
-	ldb_da a, (0x0247ee)
+	ld a, (0x0247ee:24)
 	and a, 0x38
 	jr nz, FDemoText_UpdateVoiceDisplay_Done
 	ld c, (0xfc26:16)
@@ -360,7 +360,7 @@ FDemoText_SyncVoicePreset:
 	ld (xsp + 6), a
 	lda xwa, (0xfc74:16)
 	ld (xsp + 2), xwa
-	ldb_da a, (0x0247ee)
+	ld a, (0x0247ee:24)
 	and a, 0x38
 	jr z, FDemoText_SyncPreset_DirectCopy
 	ldib_erp 0xfb, 0
@@ -522,14 +522,14 @@ FDemoText_ParseControlMessage:
 	jr nz, FDemoText_ParseCtrl_SecondHalf
 	lds wa, 6
 	call DemoMenu_BuildItemWorkspace
-	ldb_da a, (0x020c39)
+	ld a, (0x020c39:24)
 	srl a, 4
 	and a, 0xf
 	ld c, a
 	extz bc
 	lds wa, 2
 	call DemoMenu_BuildItemWorkspace
-	ldb_da c, (0x020c39)
+	ld c, (0x020c39:24)
 	and c, 0xf
 	extz bc
 	lds wa, 0
@@ -538,14 +538,14 @@ FDemoText_ParseControlMessage:
 FDemoText_ParseCtrl_Type82:
 	ldw wa, 0x8
 	call DemoMenu_BuildItemWorkspace
-	ldb_da a, (0x020c39)
+	ld a, (0x020c39:24)
 	srl a, 4
 	and a, 0xf
 	ld c, a
 	extz bc
 	lds wa, 5
 	call DemoMenu_BuildItemWorkspace
-	ldb_da c, (0x020c39)
+	ld c, (0x020c39:24)
 	and c, 0xf
 	extz bc
 	lds wa, 3
@@ -565,14 +565,14 @@ FDemoText_ParseCtrl_SecondHalf:
 	extz bc
 	lds wa, 7
 	call DemoMenu_BuildItemWorkspace
-	ldb_da a, (0x020c39)
+	ld a, (0x020c39:24)
 	srl a, 4
 	and a, 0xf
 	ld c, a
 	extz bc
 	lds wa, 4
 	call DemoMenu_BuildItemWorkspace
-	ldb_da c, (0x020c39)
+	ld c, (0x020c39:24)
 	and c, 0xf
 	extz bc
 	lds wa, 1
@@ -584,7 +584,7 @@ FDemoText_ParseCtrl_FormatC3:
 	extz bc
 	ldw wa, 0xa
 	call DemoMenu_BuildItemWorkspace
-	ldb_da a, (0x020c39)
+	ld a, (0x020c39:24)
 	srl a, 1
 	and a, 0x1
 	ld c, a

@@ -8643,7 +8643,7 @@ SeMenu_WaveformSelect_Apply:
 	stib_da	(0x03efa8), 0
 	ld	xiz, TuningSystem_Handler_Table_0x1E73
 	xor	xwa, xwa
-	ldb_da	a, (0x0340e4)
+	ld	a, (0x0340e4:24)
 	sla	wa, 2
 	add	xiz, xwa
 	ld	xiy, (xiz)

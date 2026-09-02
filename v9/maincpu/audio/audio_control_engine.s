@@ -383,7 +383,7 @@ FileIO_BytecodeData:
 	cp	a, 19
 	jr	nz, 14
 	jrl	244
-	ldb_da	a, (14235)
+	ld	a, (14235:24)
 	and	a, 31
 	jrl	z, 233
 	ldb	b, 0
@@ -668,7 +668,7 @@ FileIO_BytecodeData:
 	jr	nz, 24
 	ld	(xiz), 72
 	ld	(xiz+1), 3
-	ldb_da	a, (65480)
+	ld	a, (65480:24)
 	ld	(xiz+2), a
 	ld	(xiz+3), 7
 	ld	xwa, xiz

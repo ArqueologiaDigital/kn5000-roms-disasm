@@ -14940,11 +14940,11 @@ SoundFX_Handler_8_LoadReg:
 	ret
 
 SoundFX_Handler_9:
-	ldb_da e, (CharMap_ValueData_B_0x1F26)
+	ld e, (CharMap_ValueData_B_0x1F26:24)
 	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 5), c
-	ldb_da e, (CharMap_ValueData_B_0x1F27)
+	ld e, (CharMap_ValueData_B_0x1F27:24)
 	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 7), c
@@ -14953,11 +14953,11 @@ SoundFX_Handler_9:
 	ret
 
 SoundFX_Handler_10:
-	ldb_da e, (CharMap_ValueData_B_0x1F28)
+	ld e, (CharMap_ValueData_B_0x1F28:24)
 	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 5), c
-	ldb_da e, (CharMap_ValueData_B_0x1F29)
+	ld e, (CharMap_ValueData_B_0x1F29:24)
 	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 7), c
@@ -14966,11 +14966,11 @@ SoundFX_Handler_10:
 	ret
 
 SoundFX_Handler_11:
-	ldb_da e, (CharMap_ValueData_B_0x1F2A)
+	ld e, (CharMap_ValueData_B_0x1F2A:24)
 	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 5), c
-	ldb_da e, (CharMap_ValueData_B_0x1F2B)
+	ld e, (CharMap_ValueData_B_0x1F2B:24)
 	ld c, (0xceaa:16)
 	sub c, e
 	ld (xwa + 7), c
@@ -15523,7 +15523,7 @@ VoiceSlot_StoreParams_LoadReg5:
 	ld l, a
 	ld xiz, VoiceSlot_StoreParams_Data_0xC
 	ldb_sri A, 0x07, 0xf8, 0xec
-	ldb_da l, (0x00cee6)
+	ld l, (0x00cee6:24)
 	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ldb_sri W, 0x07, 0xf8, 0xec
 	anddi8_24 (0xcede), 127
@@ -15620,7 +15620,7 @@ ComputeNoteBitPositi_Data:
 
 ComputeNoteBitPositi_StoreDRAM:
 	ld (0xcefd:16), de
-	ldb_da c, (0x00cee5)
+	ld c, (0x00cee5:24)
 	xor b, b
 
 ComputeNoteBitPositi_Block:
@@ -15678,7 +15678,7 @@ PitchCalc_FindBitPosition_OrBits:
 	jr PitchCalc_FindBitPosition_TestBit11
 
 Voice_PitchCalcStep:
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	dec 1, l
 	xor h, h
 	ld xiz, 0xcee6
@@ -15722,8 +15722,8 @@ VoiceSlot_CompareAndUpdate:
 VoiceSlot_CompareAndUpdate_Compare:
 	cps w, 0
 	jr nz, VoiceSlot_CompareAndUpdate_TestBit24
-	ldb_da a, (0x00cee2)
-	ldb_da w, (0x00cee3)
+	ld a, (0x00cee2:24)
+	ld w, (0x00cee3:24)
 	jr VoiceSlot_CompareAndUpdate_Block2
 
 VoiceSlot_CompareAndUpdate_TestBit24:
@@ -15737,7 +15737,7 @@ VoiceSlot_CompareAndUpdate_TestBit24:
 	jr VoiceSlot_CompareAndUpdate_Block3
 
 VoiceSlot_CompareAndUpdate_Block:
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	xor h, h
 	dec 1, hl
 	ld xiz, 0xcee6
@@ -15765,7 +15765,7 @@ VoiceSlot_CompareAndUpdate_Return:
 Voice_UpdateNoteBitmap:
 	push xix
 	push xiz
-	ldb_da c, (0x00cee5)
+	ld c, (0x00cee5:24)
 	ld b, c
 	calr Voice_ComputeNoteBitPosition
 	ld xiy, SoundEffect_Dispatch_Table_0x103C
@@ -15790,7 +15790,7 @@ VoiceSlot_LoadResult_LoadReg:
 	ret
 
 VoiceSlot_LoadResult_Data:
-	ldb_da	c, (0xcee5)
+	ld	c, (0xcee5:24)
 	ld	b, c
 	calr	65025
 	ld	xiy, SoundEffect_Dispatch_Table_0x103C
@@ -15822,7 +15822,7 @@ VoiceSlot_LoadResult_Block:
 
 VoiceSlot_LoadResult_SetByte:
 	ldb a, 0x1
-	ldb_da l, (0x00cee6)
+	ld l, (0x00cee6:24)
 	xor h, h
 	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ldb_sri W, 0x07, 0xf8, 0xec
@@ -15834,7 +15834,7 @@ VoiceSlot_LoadResult_Block2:
 
 VoiceSlot_LoadResult_Data2:
 	ldb	a, 1
-	ldb_da	l, (0xcee5)
+	ld	l, (0xcee5:24)
 	xor	h, h
 	dec	1, hl
 	ld	xiz, 0xcee6
@@ -15872,7 +15872,7 @@ VoiceSlot_LoadResult_TestBit24:
 	calr Voice_LookupNoteAndComputePitch
 	cps w, 0
 	jr nz, VoiceSlot_LoadResult_Compare
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	xor h, h
 	dec 1, hl
 	extz hl
@@ -15881,7 +15881,7 @@ VoiceSlot_LoadResult_TestBit24:
 	ld c, (xiz)
 	ldfr_lerp XIZ, 0x30
 	ldb_erp C, 0x34
-	ldb_da a, (0x00cee5)
+	ld a, (0x00cee5:24)
 	dec 1, a
 	cps a, 2
 	jr ugt, VoiceSlot_LoadResult_Block4
@@ -15898,8 +15898,8 @@ VoiceSlot_LoadResult_Block4:
 VoiceSlot_LoadResult_Compare:
 	cps w, 0
 	jr nz, VoiceSlot_LoadResult_Block5
-	ldb_da a, (0x00cee2)
-	ldb_da w, (0x00cee3)
+	ld a, (0x00cee2:24)
+	ld w, (0x00cee3:24)
 	jr VoiceSlot_LoadResult_Block6
 
 VoiceSlot_LoadResult_Block5:
@@ -16165,12 +16165,12 @@ NoteBuffer_CompactEn_Compare:
 NoteBuffer_CompactEn_Increment:
 	inc 2, iy
 	djnz xbc, NoteBuffer_CompactEn_Compare
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	xor h, h
 	dec 1, hl
 	ld xiz, 0xcee6
 	ldb_sri A, 0x07, 0xf8, 0xec
-	ldb_da w, (0x00cf34)
+	ld w, (0x00cf34:24)
 	sub a, w
 	cps a, 7
 	jr c, NoteBuffer_NullRet
@@ -16181,7 +16181,7 @@ NoteBuffer_NullRet:
 	ret
 
 Voice_LookupNoteAndComputePitch:
-	ldb_da c, (0x00cee5)
+	ld c, (0x00cee5:24)
 	ld b, c
 	pushw bc
 	calr Voice_ComputeNoteBitPosition
@@ -16200,7 +16200,7 @@ Voice_LookupNoteAndComputePitch:
 LookupNoteAndCompute_Block:
 	cpw_da (0xcf2f), 0
 	jr nz, NoteDisplay_SetBounds
-	ldb_da c, (0x00cee5)
+	ld c, (0x00cee5:24)
 	ldb b, 0x3
 
 LookupNoteAndCompute_Prologue:
@@ -16223,7 +16223,7 @@ LookupNoteAndCompute_Prologue:
 	jr LookupNoteAndCompute_Prologue
 
 NoteDisplay_LookupEntry:
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	xor h, h
 	dec 1, hl
 	ld xiz, 0xcee6
@@ -16232,13 +16232,13 @@ NoteDisplay_LookupEntry:
 	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
 	ldb_sri W, 0x07, 0xf8, 0xec
 	dec 1, w
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	ld xiz, 0xcee6
 	stb_dri W, 0x07, 0xf8, 0xec
 	incdi8_24 1, (0xcee5)
 
 NoteDisplay_SetBounds:
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	ld h, l
 
 NoteDisplay_ScanLoop:
@@ -16263,7 +16263,7 @@ NoteDisplay_ScanLoop:
 	jr NoteDisplay_ScanLoop
 
 NoteDisplay_FoundEntry:
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	dec 1, l
 	xor h, h
 	ld xiz, 0xcee6
@@ -16284,9 +16284,9 @@ NoteDisplay_StoreBoundsReturn:
 	ret
 
 NoteDisplay_AlternateLookup:
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	xor h, h
-	ldb_da a, (0x00cf34)
+	ld a, (0x00cf34:24)
 	ld xiz, 0xcee6
 	stb_dri A, 0x07, 0xf8, 0xec
 	ld bc, hl
@@ -16308,7 +16308,7 @@ NoteDisplay_AlternateLookup:
 	jr nz, Voice_ZeroInitConverge
 	cps w, 0
 	jr nz, Voice_ZeroInitConverge
-	ldb_da l, (0x00cf34)
+	ld l, (0x00cf34:24)
 	add l, w
 	xor h, h
 	ld xiz, VoiceSlot_CheckAndApply_Data_0xD
@@ -16361,11 +16361,11 @@ NoteDisplay_LookupBitmap:
 	xor hl, hl
 	cpw_da (0xcf2f), 0
 	jr z, NoteDisplay_LookupFromCurrent
-	ldb_da l, (0x00cf34)
+	ld l, (0x00cf34:24)
 	jr NoteDisplay_LookupFromTable
 
 NoteDisplay_LookupFromCurrent:
-	ldb_da l, (0x00cee5)
+	ld l, (0x00cee5:24)
 	dec 1, hl
 	ld xiz, 0xcee6
 	ldb_sri L, 0x07, 0xf8, 0xec
@@ -16433,9 +16433,9 @@ VoiceSlot_Epilogue_Block2:
 	calr Voice_InitPartAllocState
 	calr VoiceSlot_IterateAlloc_TestBit24
 	ordi16_24 (0xcf01), 0xff00
-	ldb_da a, (0x00cedf)
+	ld a, (0x00cedf:24)
 	stb_da (0x00cee2), a
-	ldb_da a, (0x00cee0)
+	ld a, (0x00cee0:24)
 	stb_da (0x00cee3), a
 	ret
 
@@ -16487,7 +16487,7 @@ InitPartAllocState_Block4:
 InitPartAllocState_TestBit242:
 	bitda_24 4, (0xcede)
 	jrl nz, InitPartAllocState_Return
-	ldb_da l, (0x00cedf)
+	ld l, (0x00cedf:24)
 	xor h, h
 	dec 1, hl
 	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
@@ -16498,7 +16498,7 @@ InitPartAllocState_TestBit242:
 	ldw_sri BC, 0x07, 0xf8, 0xec
 	inc 2, hl
 	ldw_sri DE, 0x07, 0xf8, 0xec
-	ldb_da l, (0x00cee0)
+	ld l, (0x00cee0:24)
 	dec 1, l
 	add c, l
 	add b, l
@@ -16519,7 +16519,7 @@ InitPartAllocState_TestBit242:
 	sla hl, 1
 	or_sriw_rm WA, 0x07, 0xf8, 0xec
 	ld xiy, 0xcee6
-	ldb_da c, (0x00cee5)
+	ld c, (0x00cee5:24)
 	xor b, b
 	add iy, bc
 	dec 1, iy
@@ -16540,11 +16540,11 @@ InitPartAllocState_OrBits:
 	xor hl, hl
 	bitda_24 1, (0xcede)
 	jr z, InitPartAllocState_Block5
-	ldb_da l, (0x00cee1)
+	ld l, (0x00cee1:24)
 	jr VoiceSlot_SetPitchParams_LoadReg
 
 InitPartAllocState_Block5:
-	ldb_da l, (0x00cee0)
+	ld l, (0x00cee0:24)
 	jr VoiceSlot_SetPitchParams
 VoiceSlot_SetPitchParams:
 
@@ -16559,7 +16559,7 @@ VoiceSlot_SetPitchParams_LoadReg:
 VoiceSlot_SetPitchParams_TestBit24:
 	bitda_24 1, (0xcede)
 	jr z, VoiceSlot_IterateAlloc_Block
-	ldb_da l, (0x00cedf)
+	ld l, (0x00cedf:24)
 	xor h, h
 	dec 1, hl
 	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
@@ -16570,10 +16570,10 @@ VoiceSlot_SetPitchParams_TestBit24:
 	ld xiy, VoiceSlot_CheckAndApply_Data_0xBA
 	ld xix, 0xcef2
 	sla hl, 2
-	ldb_da d, (0x00cee1)
+	ld d, (0x00cee1:24)
 	dec 1, d
 	add d, 0x30
-	ldb_da e, (0x00cee0)
+	ld e, (0x00cee0:24)
 	dec 1, e
 	add e, 0x30
 	ld a, d
@@ -16606,7 +16606,7 @@ VoiceSlot_IterateAlloc_NextIter:
 	jr VoiceSlot_IterateAlloc_Return
 
 VoiceSlot_IterateAlloc_Block:
-	ldb_da l, (0x00cedf)
+	ld l, (0x00cedf:24)
 	xor h, h
 	dec 1, hl
 	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
@@ -16616,7 +16616,7 @@ VoiceSlot_IterateAlloc_Block:
 	ld xiy, VoiceSlot_CheckAndApply_Data_0xBA
 	ld xix, 0xcef2
 	sla hl, 2
-	ldb_da e, (0x00cee0)
+	ld e, (0x00cee0:24)
 	dec 1, e
 	add e, 0x30
 
@@ -16632,7 +16632,7 @@ VoiceSlot_IterateAlloc_Return:
 	ret
 
 VoiceSlot_IterateAlloc_Block2:
-	ldb_da l, (0x00cedf)
+	ld l, (0x00cedf:24)
 	xor h, h
 	dec 1, hl
 	ld xiz, VoiceSlot_CheckAndApply_Data_0x91
@@ -16644,7 +16644,7 @@ VoiceSlot_IterateAlloc_Block2:
 	inc 2, hl
 	ldw_sri DE, 0x07, 0xf8, 0xec
 	ld xiz, VoiceSlot_CheckAndApply_Data
-	ldb_da l, (0x00cee0)
+	ld l, (0x00cee0:24)
 	ldb_sri L, 0x03, 0xf8, 0xec
 	add l, 0xc
 	add c, l
@@ -16682,7 +16682,7 @@ VoiceSlot_IterateAlloc_Return2:
 VoiceSlot_IterateAlloc_LoadReg:
 	ld xiy, 0xcee6
 	ld xix, 0xcf5f
-	ldb_da c, (0x00cee5)
+	ld c, (0x00cee5:24)
 	xor b, b
 	ld (xix + 256), bc
 
@@ -16699,9 +16699,9 @@ VoiceSlot_IterateAlloc_LoadReg2:
 VoiceSlot_IterateAlloc_TestBit24:
 	bitda_24 0, (0xcede)
 	jr nz, VoiceSlot_IterateAlloc_Block6
-	ldb_da a, (0x00cedf)
-	ldb_da w, (0x00cee0)
-	ldb_da l, (0x00cee1)
+	ld a, (0x00cedf:24)
+	ld w, (0x00cee0:24)
+	ld l, (0x00cee1:24)
 	cpda8 a, 0x8d42
 	jr nz, VoiceSlot_IterateAlloc_StoreDRAM
 	cpda8 w, 0x8d40
@@ -17006,17 +17006,17 @@ VoiceSlot_CheckAndApply_Data2:
 	.ascii "89;:<=>Â"
 	or	iz, 8448
 	ld	(0xcec0:16), a
-	ldb_da	a, (0xcedf)
+	ld	a, (0xcedf:24)
 	ld	(0xcec1:16), a
-	ldb_da	a, (0xcee0)
+	ld	a, (0xcee0:24)
 	ld	(0xcec2:16), a
-	ldb_da	a, (0xcee1)
+	ld	a, (0xcee1:24)
 	ld	(0xcec3:16), a
-	ldb_da	a, (0xcee2)
+	ld	a, (0xcee2:24)
 	ld	(0xcec4:16), a
-	ldb_da	a, (0xcee3)
+	ld	a, (0xcee3:24)
 	ld	(0xcec5:16), a
-	ldb_da	a, (0xcee4)
+	ld	a, (0xcee4:24)
 	ld	(0xcec6:16), a
 	ld	xiy, 0xcee5
 	ld	xix, 0xceca
@@ -17042,8 +17042,8 @@ VoiceSlot_CheckAndApply_Data2:
 	jr	14
 	cps	w, 0
 	jr	nz, 10
-	ldb_da	a, (0xcee2)
-	ldb_da	w, (0xcee3)
+	ld	a, (0xcee2:24)
+	ld	w, (0xcee3:24)
 	.byte 0xf2
 	or	iz, 0xce00
 	jr	nz, 18
@@ -17056,7 +17056,7 @@ VoiceSlot_CheckAndApply_Data2:
 	push	xiz
 	ld	c, (xde+110)
 	jr	28
-	ldb_da	l, (0xcee5)
+	ld	l, (0xcee5:24)
 	xor	h, h
 	dec	1, hl
 	ld	xiz, 0xcee6
@@ -17068,13 +17068,13 @@ VoiceSlot_CheckAndApply_Data2:
 	calr	63771
 	jr	3
 	calr	63823
-	ldb_da	a, (0xcedf)
+	ld	a, (0xcedf:24)
 	ld	(0xceb6:16), a
-	ldb_da	a, (0xcee0)
+	ld	a, (0xcee0:24)
 	ld	(0xceb7:16), a
-	ldb_da	a, (0xcee1)
+	ld	a, (0xcee1:24)
 	ld	(0xceb8:16), a
-	ldb_da	a, (0xcede)
+	ld	a, (0xcede:24)
 	ld	(0xceb9:16), a
 	jr	10
 	ld	(0xceb6:16), 0

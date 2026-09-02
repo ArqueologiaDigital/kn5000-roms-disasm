@@ -1995,16 +1995,16 @@ sub_F9ADB5__F9AE48:
 	ld	xbc, (xiz-8)                            ; F9AE4D  ld XBC,(XIZ+0xf8)
 	cp	xbc, xix                                ; F9AE50  cp XBC,XIX
 	jr nc, sub_F9ADB5__F9AEB2                  ; F9AE52  jr NC,0xf9aeb2
-	ldb_da	c, (0x861C)                         ; F9AE54  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AE54  ld C,(0x00861c)
 	pushw	bc                                   ; F9AE59  push BC
 	pushw	1                                    ; F9AE5A  push 0x0001
 	calr (0xF9A163 - 0xF9AE60)                 ; F9AE5D  calr 0xf9a163
-	ldb_da	c, (0x861C)                         ; F9AE60  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AE60  ld C,(0x00861c)
 	pop	xiy                                    ; F9AE65  pop XIY
 	pushw	bc                                   ; F9AE66  push BC
 	pushw	1                                    ; F9AE67  push 0x0001
 	calr (0xF9A4B0 - 0xF9AE6D)                 ; F9AE6A  calr 0xf9a4b0
-	ldb_da	c, (0x861C)                         ; F9AE6D  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AE6D  ld C,(0x00861c)
 	pop	xiy                                    ; F9AE72  pop XIY
 	pushw	bc                                   ; F9AE73  push BC
 	pushw	96                                   ; F9AE74  push 0x0060
@@ -2026,7 +2026,7 @@ sub_F9ADB5__F9AE48:
 	calr (0xF9E1AC - 0xF9AEA2)                 ; F9AE9F  calr 0xf9e1ac
 	popw	bc                                    ; F9AEA2  pop BC
 sub_F9ADB5__F9AEA3:
-	ldb_da	c, (0x861C)                         ; F9AEA3  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AEA3  ld C,(0x00861c)
 	pushw	bc                                   ; F9AEA8  push BC
 	pushw	3                                    ; F9AEA9  push 0x0003
 	calr (0xF9A163 - 0xF9AEAF)                 ; F9AEAC  calr 0xf9a163
@@ -2058,16 +2058,16 @@ sub_F9ADB5__F9AEB2:
 ; --------------------------------------------------------------------------
 sub_F9AEB6:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9AEB6  link XIZ,0xffec
-	ldb_da	c, (0x861C)                         ; F9AEBA  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AEBA  ld C,(0x00861c)
 	pushw	bc                                   ; F9AEBF  push BC
 	pushw	0                                    ; F9AEC0  push 0x0000
 	calr (0xF9A31A - 0xF9AEC6)                 ; F9AEC3  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AEC6  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AEC6  ld C,(0x00861c)
 	pop	xiy                                    ; F9AECB  pop XIY
 	pushw	bc                                   ; F9AECC  push BC
 	pushw	0                                    ; F9AECD  push 0x0000
 	calr (0xF9A31A - 0xF9AED3)                 ; F9AED0  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AED3  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AED3  ld C,(0x00861c)
 	pop	xiy                                    ; F9AED8  pop XIY
 	pushw	bc                                   ; F9AED9  push BC
 	ld	bc, (0x8616:24)                        ; F9AEDA  ld BC,(0x008616)
@@ -2077,7 +2077,7 @@ sub_F9AEB6:
 	add	bc, 16                                 ; F9AEE9  add BC,0x0010
 	pushw	bc                                   ; F9AEED  push BC
 	calr (0xF9A31A - 0xF9AEF1)                 ; F9AEEE  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AEF1  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AEF1  ld C,(0x00861c)
 	pop	xiy                                    ; F9AEF6  pop XIY
 	pushw	bc                                   ; F9AEF7  push BC
 	ld	bc, (0x8616:24)                        ; F9AEF8  ld BC,(0x008616)
@@ -2086,7 +2086,7 @@ sub_F9AEB6:
 	and	bc, 0xF0                               ; F9AF03  and BC,0x00f0
 	pushw	bc                                   ; F9AF07  push BC
 	calr (0xF9A31A - 0xF9AF0B)                 ; F9AF08  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AF0B  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AF0B  ld C,(0x00861c)
 	pop	xiy                                    ; F9AF10  pop XIY
 	pushw	bc                                   ; F9AF11  push BC
 	pushw	0                                    ; F9AF12  push 0x0000
@@ -2111,12 +2111,12 @@ sub_F9AEB6:
 	push	xbc                                   ; F9AF47  push XBC
 	call	0xFCA661                              ; F9AF48  call 0xfca661
 	ld	(xiz-4), xiy                            ; F9AF4C  ld (XIZ+0xfc),XIY
-	ldb_da	c, (0x861C)                         ; F9AF4F  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AF4F  ld C,(0x00861c)
 	pop	xwa                                    ; F9AF54  pop XWA
 	pushw	bc                                   ; F9AF55  push BC
 	pushw	10                                   ; F9AF56  push 0x000a
 	calr (0xF9A31A - 0xF9AF5C)                 ; F9AF59  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AF5C  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AF5C  ld C,(0x00861c)
 	pop	xiy                                    ; F9AF61  pop XIY
 	pushw	bc                                   ; F9AF62  push BC
 	pushw	25                                   ; F9AF63  push 0x0019
@@ -2127,7 +2127,7 @@ sub_F9AEB6:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9AF76  ld C,IYL
 	pushw	bc                                   ; F9AF79  push BC
 	calr (0xF9A31A - 0xF9AF7D)                 ; F9AF7A  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AF7D  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AF7D  ld C,(0x00861c)
 	pop	xiy                                    ; F9AF82  pop XIY
 	pushw	bc                                   ; F9AF83  push BC
 	pushw	17                                   ; F9AF84  push 0x0011
@@ -2138,7 +2138,7 @@ sub_F9AEB6:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9AF97  ld C,IYL
 	pushw	bc                                   ; F9AF9A  push BC
 	calr (0xF9A31A - 0xF9AF9E)                 ; F9AF9B  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AF9E  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AF9E  ld C,(0x00861c)
 	pop	xiy                                    ; F9AFA3  pop XIY
 	pushw	bc                                   ; F9AFA4  push BC
 	ld	xiy, (xiz-4)                            ; F9AFA5  ld XIY,(XIZ+0xfc)
@@ -2147,7 +2147,7 @@ sub_F9AEB6:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9AFB1  ld C,IYL
 	pushw	bc                                   ; F9AFB4  push BC
 	calr (0xF9A31A - 0xF9AFB8)                 ; F9AFB5  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AFB8  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AFB8  ld C,(0x00861c)
 	pop	xiy                                    ; F9AFBD  pop XIY
 	pushw	bc                                   ; F9AFBE  push BC
 	ld	xiy, (xiz-4)                            ; F9AFBF  ld XIY,(XIZ+0xfc)
@@ -2181,16 +2181,16 @@ sub_F9AEB6:
 ; --------------------------------------------------------------------------
 sub_F9AFDC:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9AFDC  link XIZ,0xfffc
-	ldb_da	c, (0x861C)                         ; F9AFE0  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AFE0  ld C,(0x00861c)
 	pushw	bc                                   ; F9AFE5  push BC
 	pushw	0                                    ; F9AFE6  push 0x0000
 	calr (0xF9A31A - 0xF9AFEC)                 ; F9AFE9  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AFEC  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AFEC  ld C,(0x00861c)
 	pop	xiy                                    ; F9AFF1  pop XIY
 	pushw	bc                                   ; F9AFF2  push BC
 	pushw	0                                    ; F9AFF3  push 0x0000
 	calr (0xF9A31A - 0xF9AFF9)                 ; F9AFF6  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9AFF9  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9AFF9  ld C,(0x00861c)
 	pop	xiy                                    ; F9AFFE  pop XIY
 	pushw	bc                                   ; F9AFFF  push BC
 	ld	bc, (0x8616:24)                        ; F9B000  ld BC,(0x008616)
@@ -2200,7 +2200,7 @@ sub_F9AFDC:
 	add	bc, 16                                 ; F9B00F  add BC,0x0010
 	pushw	bc                                   ; F9B013  push BC
 	calr (0xF9A31A - 0xF9B017)                 ; F9B014  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B017  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B017  ld C,(0x00861c)
 	pop	xiy                                    ; F9B01C  pop XIY
 	pushw	bc                                   ; F9B01D  push BC
 	ld	bc, (0x8616:24)                        ; F9B01E  ld BC,(0x008616)
@@ -2209,7 +2209,7 @@ sub_F9AFDC:
 	and	bc, 0xF0                               ; F9B029  and BC,0x00f0
 	pushw	bc                                   ; F9B02D  push BC
 	calr (0xF9A31A - 0xF9B031)                 ; F9B02E  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B031  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B031  ld C,(0x00861c)
 	pop	xiy                                    ; F9B036  pop XIY
 	pushw	bc                                   ; F9B037  push BC
 	pushw	0                                    ; F9B038  push 0x0000
@@ -2218,12 +2218,12 @@ sub_F9AFDC:
 	extpfx3 0x9E, 0x0A, 0x04                   ; F9B041  pushw (XIZ+0x0a)
 	call	0xFCAB29                              ; F9B044  call 0xfcab29
 	ld	(xiz-4), xiy                            ; F9B048  ld (XIZ+0xfc),XIY
-	ldb_da	c, (0x861C)                         ; F9B04B  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B04B  ld C,(0x00861c)
 	pop	xwa                                    ; F9B050  pop XWA
 	pushw	bc                                   ; F9B051  push BC
 	pushw	10                                   ; F9B052  push 0x000a
 	calr (0xF9A31A - 0xF9B058)                 ; F9B055  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B058  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B058  ld C,(0x00861c)
 	pop	xiy                                    ; F9B05D  pop XIY
 	pushw	bc                                   ; F9B05E  push BC
 	pushw	17                                   ; F9B05F  push 0x0011
@@ -2234,7 +2234,7 @@ sub_F9AFDC:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B072  ld C,IYL
 	pushw	bc                                   ; F9B075  push BC
 	calr (0xF9A31A - 0xF9B079)                 ; F9B076  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B079  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B079  ld C,(0x00861c)
 	pop	xiy                                    ; F9B07E  pop XIY
 	pushw	bc                                   ; F9B07F  push BC
 	ld	xiy, (xiz-4)                            ; F9B080  ld XIY,(XIZ+0xfc)
@@ -2243,7 +2243,7 @@ sub_F9AFDC:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B08C  ld C,IYL
 	pushw	bc                                   ; F9B08F  push BC
 	calr (0xF9A31A - 0xF9B093)                 ; F9B090  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B093  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B093  ld C,(0x00861c)
 	pop	xiy                                    ; F9B098  pop XIY
 	pushw	bc                                   ; F9B099  push BC
 	ld	xiy, (xiz-4)                            ; F9B09A  ld XIY,(XIZ+0xfc)
@@ -2252,7 +2252,7 @@ sub_F9AFDC:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B0A6  ld C,IYL
 	pushw	bc                                   ; F9B0A9  push BC
 	calr (0xF9A31A - 0xF9B0AD)                 ; F9B0AA  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B0AD  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B0AD  ld C,(0x00861c)
 	pop	xiy                                    ; F9B0B2  pop XIY
 	pushw	bc                                   ; F9B0B3  push BC
 	ld	xiy, (xiz-4)                            ; F9B0B4  ld XIY,(XIZ+0xfc)
@@ -2290,11 +2290,11 @@ sub_F9B0D1:
 	extpfx3 0x9E, 0x08, 0x04                   ; F9B0D8  pushw (XIZ+0x08)
 	call	0xFCAB29                              ; F9B0DB  call 0xfcab29
 	ld	(xiz-4), xiy                            ; F9B0DF  ld (XIZ+0xfc),XIY
-	ldb_da	c, (0x861C)                         ; F9B0E2  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B0E2  ld C,(0x00861c)
 	pushw	bc                                   ; F9B0E7  push BC
 	pushw	10                                   ; F9B0E8  push 0x000a
 	calr (0xF9A31A - 0xF9B0EE)                 ; F9B0EB  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B0EE  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B0EE  ld C,(0x00861c)
 	pop	xiy                                    ; F9B0F3  pop XIY
 	pushw	bc                                   ; F9B0F4  push BC
 	pushw	17                                   ; F9B0F5  push 0x0011
@@ -2305,7 +2305,7 @@ sub_F9B0D1:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B108  ld C,IYL
 	pushw	bc                                   ; F9B10B  push BC
 	calr (0xF9A31A - 0xF9B10F)                 ; F9B10C  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B10F  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B10F  ld C,(0x00861c)
 	pop	xiy                                    ; F9B114  pop XIY
 	pushw	bc                                   ; F9B115  push BC
 	ld	xiy, (xiz-4)                            ; F9B116  ld XIY,(XIZ+0xfc)
@@ -2314,7 +2314,7 @@ sub_F9B0D1:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B122  ld C,IYL
 	pushw	bc                                   ; F9B125  push BC
 	calr (0xF9A31A - 0xF9B129)                 ; F9B126  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B129  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B129  ld C,(0x00861c)
 	pop	xiy                                    ; F9B12E  pop XIY
 	pushw	bc                                   ; F9B12F  push BC
 	ld	xiy, (xiz-4)                            ; F9B130  ld XIY,(XIZ+0xfc)
@@ -2323,7 +2323,7 @@ sub_F9B0D1:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B13C  ld C,IYL
 	pushw	bc                                   ; F9B13F  push BC
 	calr (0xF9A31A - 0xF9B143)                 ; F9B140  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B143  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B143  ld C,(0x00861c)
 	pop	xiy                                    ; F9B148  pop XIY
 	pushw	bc                                   ; F9B149  push BC
 	ld	xiy, (xiz-4)                            ; F9B14A  ld XIY,(XIZ+0xfc)
@@ -2360,16 +2360,16 @@ sub_F9B0D1:
 ; --------------------------------------------------------------------------
 sub_F9B167:
 	link32 0xEE, 0x0C, 0xEC, 0xFF              ; F9B167  link XIZ,0xffec
-	ldb_da	c, (0x861C)                         ; F9B16B  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B16B  ld C,(0x00861c)
 	pushw	bc                                   ; F9B170  push BC
 	pushw	8                                    ; F9B171  push 0x0008
 	calr (0xF9A31A - 0xF9B177)                 ; F9B174  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B177  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B177  ld C,(0x00861c)
 	pop	xiy                                    ; F9B17C  pop XIY
 	pushw	bc                                   ; F9B17D  push BC
 	pushw	1                                    ; F9B17E  push 0x0001
 	calr (0xF9A31A - 0xF9B184)                 ; F9B181  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B184  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B184  ld C,(0x00861c)
 	pop	xiy                                    ; F9B189  pop XIY
 	pushw	bc                                   ; F9B18A  push BC
 	ld	bc, (0x8614:24)                        ; F9B18B  ld BC,(0x008614)
@@ -2378,7 +2378,7 @@ sub_F9B167:
 	and	bc, 15                                 ; F9B196  and BC,0x000f
 	pushw	bc                                   ; F9B19A  push BC
 	calr (0xF9A31A - 0xF9B19E)                 ; F9B19B  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B19E  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B19E  ld C,(0x00861c)
 	pop	xiy                                    ; F9B1A3  pop XIY
 	pushw	bc                                   ; F9B1A4  push BC
 	ld	bc, (0x8614:24)                        ; F9B1A5  ld BC,(0x008614)
@@ -2388,7 +2388,7 @@ sub_F9B167:
 	inc	8, bc                                  ; F9B1B4  inc 0,BC
 	pushw	bc                                   ; F9B1B6  push BC
 	calr (0xF9A31A - 0xF9B1BA)                 ; F9B1B7  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B1BA  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B1BA  ld C,(0x00861c)
 	pop	xiy                                    ; F9B1BF  pop XIY
 	pushw	bc                                   ; F9B1C0  push BC
 	pushw	33                                   ; F9B1C1  push 0x0021
@@ -2413,12 +2413,12 @@ sub_F9B167:
 	push	xbc                                   ; F9B1F6  push XBC
 	call	0xFCA661                              ; F9B1F7  call 0xfca661
 	ld	(xiz-4), xiy                            ; F9B1FB  ld (XIZ+0xfc),XIY
-	ldb_da	c, (0x861C)                         ; F9B1FE  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B1FE  ld C,(0x00861c)
 	pop	xwa                                    ; F9B203  pop XWA
 	pushw	bc                                   ; F9B204  push BC
 	pushw	10                                   ; F9B205  push 0x000a
 	calr (0xF9A31A - 0xF9B20B)                 ; F9B208  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B20B  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B20B  ld C,(0x00861c)
 	pop	xiy                                    ; F9B210  pop XIY
 	pushw	bc                                   ; F9B211  push BC
 	pushw	25                                   ; F9B212  push 0x0019
@@ -2429,7 +2429,7 @@ sub_F9B167:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B225  ld C,IYL
 	pushw	bc                                   ; F9B228  push BC
 	calr (0xF9A31A - 0xF9B22C)                 ; F9B229  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B22C  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B22C  ld C,(0x00861c)
 	pop	xiy                                    ; F9B231  pop XIY
 	pushw	bc                                   ; F9B232  push BC
 	pushw	17                                   ; F9B233  push 0x0011
@@ -2440,7 +2440,7 @@ sub_F9B167:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B246  ld C,IYL
 	pushw	bc                                   ; F9B249  push BC
 	calr (0xF9A31A - 0xF9B24D)                 ; F9B24A  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B24D  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B24D  ld C,(0x00861c)
 	pop	xiy                                    ; F9B252  pop XIY
 	pushw	bc                                   ; F9B253  push BC
 	ld	xiy, (xiz-4)                            ; F9B254  ld XIY,(XIZ+0xfc)
@@ -2449,7 +2449,7 @@ sub_F9B167:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B260  ld C,IYL
 	pushw	bc                                   ; F9B263  push BC
 	calr (0xF9A31A - 0xF9B267)                 ; F9B264  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B267  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B267  ld C,(0x00861c)
 	pop	xiy                                    ; F9B26C  pop XIY
 	pushw	bc                                   ; F9B26D  push BC
 	ld	xiy, (xiz-4)                            ; F9B26E  ld XIY,(XIZ+0xfc)
@@ -2482,16 +2482,16 @@ sub_F9B167:
 ; --------------------------------------------------------------------------
 sub_F9B28B:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B28B  link XIZ,0xfffc
-	ldb_da	c, (0x861C)                         ; F9B28F  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B28F  ld C,(0x00861c)
 	pushw	bc                                   ; F9B294  push BC
 	pushw	8                                    ; F9B295  push 0x0008
 	calr (0xF9A31A - 0xF9B29B)                 ; F9B298  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B29B  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B29B  ld C,(0x00861c)
 	pop	xiy                                    ; F9B2A0  pop XIY
 	pushw	bc                                   ; F9B2A1  push BC
 	pushw	1                                    ; F9B2A2  push 0x0001
 	calr (0xF9A31A - 0xF9B2A8)                 ; F9B2A5  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B2A8  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B2A8  ld C,(0x00861c)
 	pop	xiy                                    ; F9B2AD  pop XIY
 	pushw	bc                                   ; F9B2AE  push BC
 	ld	bc, (0x8614:24)                        ; F9B2AF  ld BC,(0x008614)
@@ -2500,7 +2500,7 @@ sub_F9B28B:
 	and	bc, 15                                 ; F9B2BA  and BC,0x000f
 	pushw	bc                                   ; F9B2BE  push BC
 	calr (0xF9A31A - 0xF9B2C2)                 ; F9B2BF  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B2C2  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B2C2  ld C,(0x00861c)
 	pop	xiy                                    ; F9B2C7  pop XIY
 	pushw	bc                                   ; F9B2C8  push BC
 	ld	bc, (0x8614:24)                        ; F9B2C9  ld BC,(0x008614)
@@ -2510,7 +2510,7 @@ sub_F9B28B:
 	inc	8, bc                                  ; F9B2D8  inc 0,BC
 	pushw	bc                                   ; F9B2DA  push BC
 	calr (0xF9A31A - 0xF9B2DE)                 ; F9B2DB  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B2DE  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B2DE  ld C,(0x00861c)
 	pop	xiy                                    ; F9B2E3  pop XIY
 	pushw	bc                                   ; F9B2E4  push BC
 	pushw	33                                   ; F9B2E5  push 0x0021
@@ -2542,7 +2542,7 @@ sub_F9B2EE:
 	extpfx3 0x9E, 0x0A, 0x04                   ; F9B2EE  pushw (XIZ+0x0a)
 	call	0xFCAB29                              ; F9B2F1  call 0xfcab29
 	ld	(xiz-4), xiy                            ; F9B2F5  ld (XIZ+0xfc),XIY
-	ldb_da	c, (0x861C)                         ; F9B2F8  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B2F8  ld C,(0x00861c)
 	pop	xwa                                    ; F9B2FD  pop XWA
 	pushw	bc                                   ; F9B2FE  push BC
 	pushw	10                                   ; F9B2FF  push 0x000a
@@ -2570,7 +2570,7 @@ sub_F9B2EE:
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
 sub_F9B305:
-	ldb_da	c, (0x861C)                         ; F9B305  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B305  ld C,(0x00861c)
 	pop	xiy                                    ; F9B30A  pop XIY
 	pushw	bc                                   ; F9B30B  push BC
 	pushw	17                                   ; F9B30C  push 0x0011
@@ -2581,7 +2581,7 @@ sub_F9B305:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B31F  ld C,IYL
 	pushw	bc                                   ; F9B322  push BC
 	calr (0xF9A31A - 0xF9B326)                 ; F9B323  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B326  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B326  ld C,(0x00861c)
 	pop	xiy                                    ; F9B32B  pop XIY
 ; --------------------------------------------------------------------------
 ; sub_F9B32C -- 0xF9B32C..0xF9B37D (82 bytes)
@@ -2613,7 +2613,7 @@ sub_F9B32C:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B339  ld C,IYL
 	pushw	bc                                   ; F9B33C  push BC
 	calr (0xF9A31A - 0xF9B340)                 ; F9B33D  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B340  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B340  ld C,(0x00861c)
 	pop	xiy                                    ; F9B345  pop XIY
 	pushw	bc                                   ; F9B346  push BC
 	ld	xiy, (xiz-4)                            ; F9B347  ld XIY,(XIZ+0xfc)
@@ -2622,7 +2622,7 @@ sub_F9B32C:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B353  ld C,IYL
 	pushw	bc                                   ; F9B356  push BC
 	calr (0xF9A31A - 0xF9B35A)                 ; F9B357  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B35A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B35A  ld C,(0x00861c)
 	pop	xiy                                    ; F9B35F  pop XIY
 	pushw	bc                                   ; F9B360  push BC
 	ld	xiy, (xiz-4)                            ; F9B361  ld XIY,(XIZ+0xfc)
@@ -2680,11 +2680,11 @@ sub_F9B37E:
 	push	xbc                                   ; F9B3B1  push XBC
 	call	0xFCA661                              ; F9B3B2  call 0xfca661
 	ld	(xiz-4), xiy                            ; F9B3B6  ld (XIZ+0xfc),XIY
-	ldb_da	c, (0x861C)                         ; F9B3B9  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B3B9  ld C,(0x00861c)
 	pushw	bc                                   ; F9B3BE  push BC
 	pushw	10                                   ; F9B3BF  push 0x000a
 	calr (0xF9A31A - 0xF9B3C5)                 ; F9B3C2  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B3C5  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B3C5  ld C,(0x00861c)
 	pop	xiy                                    ; F9B3CA  pop XIY
 	pushw	bc                                   ; F9B3CB  push BC
 	pushw	25                                   ; F9B3CC  push 0x0019
@@ -2695,7 +2695,7 @@ sub_F9B37E:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B3DF  ld C,IYL
 	pushw	bc                                   ; F9B3E2  push BC
 	calr (0xF9A31A - 0xF9B3E6)                 ; F9B3E3  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B3E6  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B3E6  ld C,(0x00861c)
 	pop	xiy                                    ; F9B3EB  pop XIY
 	pushw	bc                                   ; F9B3EC  push BC
 	pushw	17                                   ; F9B3ED  push 0x0011
@@ -2706,7 +2706,7 @@ sub_F9B37E:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B400  ld C,IYL
 	pushw	bc                                   ; F9B403  push BC
 	calr (0xF9A31A - 0xF9B407)                 ; F9B404  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B407  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B407  ld C,(0x00861c)
 	pop	xiy                                    ; F9B40C  pop XIY
 	pushw	bc                                   ; F9B40D  push BC
 	ld	xiy, (xiz-4)                            ; F9B40E  ld XIY,(XIZ+0xfc)
@@ -2715,7 +2715,7 @@ sub_F9B37E:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B41A  ld C,IYL
 	pushw	bc                                   ; F9B41D  push BC
 	calr (0xF9A31A - 0xF9B421)                 ; F9B41E  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B421  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B421  ld C,(0x00861c)
 	pop	xiy                                    ; F9B426  pop XIY
 	pushw	bc                                   ; F9B427  push BC
 	ld	xiy, (xiz-4)                            ; F9B428  ld XIY,(XIZ+0xfc)
@@ -2750,16 +2750,16 @@ sub_F9B37E:
 ; --------------------------------------------------------------------------
 sub_F9B445:
 	link32 0xEE, 0x0C, 0xFC, 0xFF              ; F9B445  link XIZ,0xfffc
-	ldb_da	c, (0x861C)                         ; F9B449  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B449  ld C,(0x00861c)
 	pushw	bc                                   ; F9B44E  push BC
 	pushw	8                                    ; F9B44F  push 0x0008
 	calr (0xF9A31A - 0xF9B455)                 ; F9B452  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B455  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B455  ld C,(0x00861c)
 	pop	xiy                                    ; F9B45A  pop XIY
 	pushw	bc                                   ; F9B45B  push BC
 	pushw	1                                    ; F9B45C  push 0x0001
 	calr (0xF9A31A - 0xF9B462)                 ; F9B45F  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B462  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B462  ld C,(0x00861c)
 	pop	xiy                                    ; F9B467  pop XIY
 	pushw	bc                                   ; F9B468  push BC
 	ld	bc, (0x8618:24)                        ; F9B469  ld BC,(0x008618)
@@ -2768,7 +2768,7 @@ sub_F9B445:
 	and	bc, 15                                 ; F9B474  and BC,0x000f
 	pushw	bc                                   ; F9B478  push BC
 	calr (0xF9A31A - 0xF9B47C)                 ; F9B479  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B47C  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B47C  ld C,(0x00861c)
 	pop	xiy                                    ; F9B481  pop XIY
 	pushw	bc                                   ; F9B482  push BC
 	ld	bc, (0x8618:24)                        ; F9B483  ld BC,(0x008618)
@@ -2778,7 +2778,7 @@ sub_F9B445:
 	inc	8, bc                                  ; F9B492  inc 0,BC
 	pushw	bc                                   ; F9B494  push BC
 	calr (0xF9A31A - 0xF9B498)                 ; F9B495  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B498  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B498  ld C,(0x00861c)
 	pop	xiy                                    ; F9B49D  pop XIY
 	pushw	bc                                   ; F9B49E  push BC
 	pushw	37                                   ; F9B49F  push 0x0025
@@ -2794,12 +2794,12 @@ sub_F9B445:
 	push	xiy                                   ; F9B4BD  push XIY
 	call	0xFCAB29                              ; F9B4BE  call 0xfcab29
 	ld	(xiz-4), xiy                            ; F9B4C2  ld (XIZ+0xfc),XIY
-	ldb_da	c, (0x861C)                         ; F9B4C5  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B4C5  ld C,(0x00861c)
 	pop	xwa                                    ; F9B4CA  pop XWA
 	pushw	bc                                   ; F9B4CB  push BC
 	pushw	10                                   ; F9B4CC  push 0x000a
 	calr (0xF9A31A - 0xF9B4D2)                 ; F9B4CF  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B4D2  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B4D2  ld C,(0x00861c)
 	pop	xiy                                    ; F9B4D7  pop XIY
 	pushw	bc                                   ; F9B4D8  push BC
 	pushw	17                                   ; F9B4D9  push 0x0011
@@ -2810,7 +2810,7 @@ sub_F9B445:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B4EC  ld C,IYL
 	pushw	bc                                   ; F9B4EF  push BC
 	calr (0xF9A31A - 0xF9B4F3)                 ; F9B4F0  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B4F3  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B4F3  ld C,(0x00861c)
 	pop	xiy                                    ; F9B4F8  pop XIY
 	pushw	bc                                   ; F9B4F9  push BC
 	ld	xiy, (xiz-4)                            ; F9B4FA  ld XIY,(XIZ+0xfc)
@@ -2819,7 +2819,7 @@ sub_F9B445:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B506  ld C,IYL
 	pushw	bc                                   ; F9B509  push BC
 	calr (0xF9A31A - 0xF9B50D)                 ; F9B50A  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B50D  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B50D  ld C,(0x00861c)
 	pop	xiy                                    ; F9B512  pop XIY
 	pushw	bc                                   ; F9B513  push BC
 	ld	xiy, (xiz-4)                            ; F9B514  ld XIY,(XIZ+0xfc)
@@ -2828,7 +2828,7 @@ sub_F9B445:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9B520  ld C,IYL
 	pushw	bc                                   ; F9B523  push BC
 	calr (0xF9A31A - 0xF9B527)                 ; F9B524  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9B527  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9B527  ld C,(0x00861c)
 	pop	xiy                                    ; F9B52C  pop XIY
 	pushw	bc                                   ; F9B52D  push BC
 	ld	xiy, (xiz-4)                            ; F9B52E  ld XIY,(XIZ+0xfc)
@@ -9117,18 +9117,18 @@ sub_F9F765__F9F805:
 sub_F9F765__F9F80A:
 	cpw (xiz-4), 0x0000                        ; F9F80A  cp (XIZ+0xfc),0x0000
 	jr z, sub_F9F765__F9F847                   ; F9F80F  jr Z,0xf9f847
-	ldb_da	c, (0x861C)                         ; F9F811  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9F811  ld C,(0x00861c)
 	pushw	bc                                   ; F9F816  push BC
 	pushw	1                                    ; F9F817  push 0x0001
 	calr (0xF9A163 - 0xF9F81D)                 ; F9F81A  calr 0xf9a163
 	stw_da	(0x8612), wa                        ; F9F81D  ld (0x008612),WA
-	ldb_da	c, (0x861C)                         ; F9F822  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9F822  ld C,(0x00861c)
 	pop	xiy                                    ; F9F827  pop XIY
 	pushw	bc                                   ; F9F828  push BC
 	pushw	1                                    ; F9F829  push 0x0001
 	calr (0xF9A4B0 - 0xF9F82F)                 ; F9F82C  calr 0xf9a4b0
 	stw_da	(0x8612), wa                        ; F9F82F  ld (0x008612),WA
-	ldb_da	c, (0x861C)                         ; F9F834  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9F834  ld C,(0x00861c)
 	pop	xiy                                    ; F9F839  pop XIY
 	pushw	bc                                   ; F9F83A  push BC
 	pushw	96                                   ; F9F83B  push 0x0060
@@ -9191,7 +9191,7 @@ sub_F9F765__F9F847:
 	inc	8, xsp                                 ; F9F8C7  inc 0,XSP
 	push	xiy                                   ; F9F8C9  push XIY
 	calr (0xF9B0D1 - 0xF9F8CD)                 ; F9F8CA  calr 0xf9b0d1
-	ldb_da	c, (0x861C)                         ; F9F8CD  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9F8CD  ld C,(0x00861c)
 	pop	xiy                                    ; F9F8D2  pop XIY
 	pushw	bc                                   ; F9F8D3  push BC
 	pushw	3                                    ; F9F8D4  push 0x0003
@@ -9373,17 +9373,17 @@ sub_F9F9FA:
 	extpfx3 0x9E, 0x0A, 0x48                   ; F9FA27  muls XWA,(XIZ+0x0a)
 	add	bc, wa                                 ; F9FA2A  add BC,WA
 	ld	(xiz-12), bc                            ; F9FA2C  ld (XIZ+0xf4),BC
-	ldb_da	a, (0x861C)                         ; F9FA2F  ld A,(0x00861c)
+	ld	a, (0x861C:24)                         ; F9FA2F  ld A,(0x00861c)
 	inc	8, xsp                                 ; F9FA34  inc 0,XSP
 	pushw	wa                                   ; F9FA36  push WA
 	pushw	1                                    ; F9FA37  push 0x0001
 	calr (0xF9A163 - 0xF9FA3D)                 ; F9FA3A  calr 0xf9a163
-	ldb_da	c, (0x861C)                         ; F9FA3D  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FA3D  ld C,(0x00861c)
 	pop	xiy                                    ; F9FA42  pop XIY
 	pushw	bc                                   ; F9FA43  push BC
 	pushw	0                                    ; F9FA44  push 0x0000
 	calr (0xF9A4B0 - 0xF9FA4A)                 ; F9FA47  calr 0xf9a4b0
-	ldb_da	c, (0x861C)                         ; F9FA4A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FA4A  ld C,(0x00861c)
 	pop	xiy                                    ; F9FA4F  pop XIY
 	pushw	bc                                   ; F9FA50  push BC
 	ld	c, (xiz-12)                             ; F9FA51  ld C,(XIZ+0xf4)
@@ -9393,16 +9393,16 @@ sub_F9F9FA:
 	pop	xiy                                    ; F9FA5B  pop XIY
 	extpfx7 0xD2, 0x40, 0x86, 0x00, 0x3F, 0x63, 0x00 ; F9FA5C  cp (0x008640),0x0063
 	jr z, sub_F9F9FA__F9FAC2                   ; F9FA63  jr Z,0xf9fac2
-	ldb_da	c, (0x861C)                         ; F9FA65  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FA65  ld C,(0x00861c)
 	pushw	bc                                   ; F9FA6A  push BC
 	pushw	0                                    ; F9FA6B  push 0x0000
 	calr (0xF9A31A - 0xF9FA71)                 ; F9FA6E  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FA71  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FA71  ld C,(0x00861c)
 	pop	xiy                                    ; F9FA76  pop XIY
 	pushw	bc                                   ; F9FA77  push BC
 	pushw	0                                    ; F9FA78  push 0x0000
 	calr (0xF9A31A - 0xF9FA7E)                 ; F9FA7B  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FA7E  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FA7E  ld C,(0x00861c)
 	pop	xiy                                    ; F9FA83  pop XIY
 	pushw	bc                                   ; F9FA84  push BC
 	ld	bc, (0x8616:24)                        ; F9FA85  ld BC,(0x008616)
@@ -9411,7 +9411,7 @@ sub_F9F9FA:
 	and	bc, 15                                 ; F9FA90  and BC,0x000f
 	pushw	bc                                   ; F9FA94  push BC
 	calr (0xF9A31A - 0xF9FA98)                 ; F9FA95  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FA98  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FA98  ld C,(0x00861c)
 	pop	xiy                                    ; F9FA9D  pop XIY
 	pushw	bc                                   ; F9FA9E  push BC
 	ld	bc, (0x8616:24)                        ; F9FA9F  ld BC,(0x008616)
@@ -9420,7 +9420,7 @@ sub_F9F9FA:
 	and	bc, 0xF0                               ; F9FAAA  and BC,0x00f0
 	pushw	bc                                   ; F9FAAE  push BC
 	calr (0xF9A31A - 0xF9FAB2)                 ; F9FAAF  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FAB2  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FAB2  ld C,(0x00861c)
 	pop	xiy                                    ; F9FAB7  pop XIY
 	pushw	bc                                   ; F9FAB8  push BC
 	pushw	0                                    ; F9FAB9  push 0x0000
@@ -9428,26 +9428,26 @@ sub_F9F9FA:
 	pop	xiy                                    ; F9FABF  pop XIY
 	jr sub_F9F9FA__F9FB03                      ; F9FAC0  jr T,0xf9fb03
 sub_F9F9FA__F9FAC2:
-	ldb_da	c, (0x861C)                         ; F9FAC2  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FAC2  ld C,(0x00861c)
 	pushw	bc                                   ; F9FAC7  push BC
 	pushw	0                                    ; F9FAC8  push 0x0000
 	calr (0xF9A31A - 0xF9FACE)                 ; F9FACB  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FACE  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FACE  ld C,(0x00861c)
 	pop	xiy                                    ; F9FAD3  pop XIY
 	pushw	bc                                   ; F9FAD4  push BC
 	pushw	0                                    ; F9FAD5  push 0x0000
 	calr (0xF9A31A - 0xF9FADB)                 ; F9FAD8  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FADB  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FADB  ld C,(0x00861c)
 	pop	xiy                                    ; F9FAE0  pop XIY
 	pushw	bc                                   ; F9FAE1  push BC
 	pushw	32                                   ; F9FAE2  push 0x0020
 	calr (0xF9A31A - 0xF9FAE8)                 ; F9FAE5  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FAE8  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FAE8  ld C,(0x00861c)
 	pop	xiy                                    ; F9FAED  pop XIY
 	pushw	bc                                   ; F9FAEE  push BC
 	pushw	0                                    ; F9FAEF  push 0x0000
 	calr (0xF9A31A - 0xF9FAF5)                 ; F9FAF2  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FAF5  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FAF5  ld C,(0x00861c)
 	pop	xiy                                    ; F9FAFA  pop XIY
 	pushw	bc                                   ; F9FAFB  push BC
 	pushw	0                                    ; F9FAFC  push 0x0000
@@ -9456,26 +9456,26 @@ sub_F9F9FA__F9FAC2:
 sub_F9F9FA__F9FB03:
 	cpw (xiz+10), 0x0000                       ; F9FB03  cp (XIZ+0x0a),0x0000
 	jr nz, sub_F9F9FA__F9FB4D                  ; F9FB08  jr NZ,0xf9fb4d
-	ldb_da	c, (0x861C)                         ; F9FB0A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB0A  ld C,(0x00861c)
 	pushw	bc                                   ; F9FB0F  push BC
 	pushw	8                                    ; F9FB10  push 0x0008
 	calr (0xF9A31A - 0xF9FB16)                 ; F9FB13  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FB16  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB16  ld C,(0x00861c)
 	pop	xiy                                    ; F9FB1B  pop XIY
 	pushw	bc                                   ; F9FB1C  push BC
 	pushw	0                                    ; F9FB1D  push 0x0000
 	calr (0xF9A31A - 0xF9FB23)                 ; F9FB20  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FB23  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB23  ld C,(0x00861c)
 	pop	xiy                                    ; F9FB28  pop XIY
 	pushw	bc                                   ; F9FB29  push BC
 	pushw	0x80                                 ; F9FB2A  push 0x0080
 	calr (0xF9A31A - 0xF9FB30)                 ; F9FB2D  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FB30  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB30  ld C,(0x00861c)
 	pop	xiy                                    ; F9FB35  pop XIY
 	pushw	bc                                   ; F9FB36  push BC
 	pushw	0xB4                                 ; F9FB37  push 0x00b4
 	calr (0xF9A31A - 0xF9FB3D)                 ; F9FB3A  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FB3D  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB3D  ld C,(0x00861c)
 	pop	xiy                                    ; F9FB42  pop XIY
 	pushw	bc                                   ; F9FB43  push BC
 	pushw	7                                    ; F9FB44  push 0x0007
@@ -9483,7 +9483,7 @@ sub_F9F9FA__F9FB03:
 	pop	xiy                                    ; F9FB4A  pop XIY
 	jr sub_F9F9FA__F9FBA5                      ; F9FB4B  jr T,0xf9fba5
 sub_F9F9FA__F9FB4D:
-	ldb_da	c, (0x861C)                         ; F9FB4D  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB4D  ld C,(0x00861c)
 	pushw	bc                                   ; F9FB52  push BC
 	ld	bc, (xiz-12)                            ; F9FB53  ld BC,(XIZ+0xf4)
 	sra	bc, 7                                  ; F9FB56  sra 0x07,BC
@@ -9491,7 +9491,7 @@ sub_F9F9FA__F9FB4D:
 	add	bc, 12                                 ; F9FB5D  add BC,0x000c
 	pushw	bc                                   ; F9FB61  push BC
 	calr (0xF9A31A - 0xF9FB65)                 ; F9FB62  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FB65  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB65  ld C,(0x00861c)
 	pop	xiy                                    ; F9FB6A  pop XIY
 	pushw	bc                                   ; F9FB6B  push BC
 	ld	bc, (xiz-12)                            ; F9FB6C  ld BC,(XIZ+0xf4)
@@ -9499,19 +9499,19 @@ sub_F9F9FA__F9FB4D:
 	and	bc, 1                                  ; F9FB72  and BC,0x0001
 	pushw	bc                                   ; F9FB76  push BC
 	calr (0xF9A31A - 0xF9FB7A)                 ; F9FB77  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FB7A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB7A  ld C,(0x00861c)
 	pop	xiy                                    ; F9FB7F  pop XIY
 	pushw	bc                                   ; F9FB80  push BC
 	ld	bc, (xiz-12)                            ; F9FB81  ld BC,(XIZ+0xf4)
 	add	bc, bc                                 ; F9FB84  add BC,BC
 	pushw	bc                                   ; F9FB86  push BC
 	calr (0xF9A31A - 0xF9FB8A)                 ; F9FB87  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FB8A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB8A  ld C,(0x00861c)
 	pop	xiy                                    ; F9FB8F  pop XIY
 	pushw	bc                                   ; F9FB90  push BC
 	pushw	4                                    ; F9FB91  push 0x0004
 	calr (0xF9A31A - 0xF9FB97)                 ; F9FB94  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FB97  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FB97  ld C,(0x00861c)
 	pop	xiy                                    ; F9FB9C  pop XIY
 	pushw	bc                                   ; F9FB9D  push BC
 	pushw	7                                    ; F9FB9E  push 0x0007
@@ -9560,34 +9560,34 @@ sub_F9FBA9:
 	extpfx3 0x9E, 0x0A, 0x48                   ; F9FBD6  muls XWA,(XIZ+0x0a)
 	add	bc, wa                                 ; F9FBD9  add BC,WA
 	ld	(xiz-12), bc                            ; F9FBDB  ld (XIZ+0xf4),BC
-	ldb_da	a, (0x861C)                         ; F9FBDE  ld A,(0x00861c)
+	ld	a, (0x861C:24)                         ; F9FBDE  ld A,(0x00861c)
 	inc	8, xsp                                 ; F9FBE3  inc 0,XSP
 	pushw	wa                                   ; F9FBE5  push WA
 	pushw	1                                    ; F9FBE6  push 0x0001
 	calr (0xF9A163 - 0xF9FBEC)                 ; F9FBE9  calr 0xf9a163
-	ldb_da	c, (0x861C)                         ; F9FBEC  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FBEC  ld C,(0x00861c)
 	pop	xiy                                    ; F9FBF1  pop XIY
 	pushw	bc                                   ; F9FBF2  push BC
 	pushw	0                                    ; F9FBF3  push 0x0000
 	calr (0xF9A4B0 - 0xF9FBF9)                 ; F9FBF6  calr 0xf9a4b0
-	ldb_da	c, (0x861C)                         ; F9FBF9  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FBF9  ld C,(0x00861c)
 	pop	xiy                                    ; F9FBFE  pop XIY
 	pushw	bc                                   ; F9FBFF  push BC
 	ld	c, (xiz-12)                             ; F9FC00  ld C,(XIZ+0xf4)
 	pushw	bc                                   ; F9FC03  push BC
 	incw	1, (xiz-12)                           ; F9FC04  incw 1,(XIZ+0xf4)
 	calr (0xF9A4B0 - 0xF9FC0A)                 ; F9FC07  calr 0xf9a4b0
-	ldb_da	c, (0x861C)                         ; F9FC0A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FC0A  ld C,(0x00861c)
 	pop	xiy                                    ; F9FC0F  pop XIY
 	pushw	bc                                   ; F9FC10  push BC
 	pushw	8                                    ; F9FC11  push 0x0008
 	calr (0xF9A31A - 0xF9FC17)                 ; F9FC14  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FC17  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FC17  ld C,(0x00861c)
 	pop	xiy                                    ; F9FC1C  pop XIY
 	pushw	bc                                   ; F9FC1D  push BC
 	pushw	1                                    ; F9FC1E  push 0x0001
 	calr (0xF9A31A - 0xF9FC24)                 ; F9FC21  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FC24  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FC24  ld C,(0x00861c)
 	pop	xiy                                    ; F9FC29  pop XIY
 	pushw	bc                                   ; F9FC2A  push BC
 	ld	bc, (0x8614:24)                        ; F9FC2B  ld BC,(0x008614)
@@ -9596,7 +9596,7 @@ sub_F9FBA9:
 	and	bc, 15                                 ; F9FC36  and BC,0x000f
 	pushw	bc                                   ; F9FC3A  push BC
 	calr (0xF9A31A - 0xF9FC3E)                 ; F9FC3B  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FC3E  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FC3E  ld C,(0x00861c)
 	pop	xiy                                    ; F9FC43  pop XIY
 	pushw	bc                                   ; F9FC44  push BC
 	ld	bc, (0x8616:24)                        ; F9FC45  ld BC,(0x008616)
@@ -9606,7 +9606,7 @@ sub_F9FBA9:
 	inc	8, bc                                  ; F9FC54  inc 0,BC
 	pushw	bc                                   ; F9FC56  push BC
 	calr (0xF9A31A - 0xF9FC5A)                 ; F9FC57  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FC5A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FC5A  ld C,(0x00861c)
 	pop	xiy                                    ; F9FC5F  pop XIY
 	pushw	bc                                   ; F9FC60  push BC
 	pushw	33                                   ; F9FC61  push 0x0021
@@ -9614,26 +9614,26 @@ sub_F9FBA9:
 	pop	xiy                                    ; F9FC67  pop XIY
 	cpw (xiz+10), 0x0000                       ; F9FC68  cp (XIZ+0x0a),0x0000
 	jr nz, sub_F9FBA9__F9FCB2                  ; F9FC6D  jr NZ,0xf9fcb2
-	ldb_da	c, (0x861C)                         ; F9FC6F  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FC6F  ld C,(0x00861c)
 	pushw	bc                                   ; F9FC74  push BC
 	pushw	8                                    ; F9FC75  push 0x0008
 	calr (0xF9A31A - 0xF9FC7B)                 ; F9FC78  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FC7B  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FC7B  ld C,(0x00861c)
 	pop	xiy                                    ; F9FC80  pop XIY
 	pushw	bc                                   ; F9FC81  push BC
 	pushw	0                                    ; F9FC82  push 0x0000
 	calr (0xF9A31A - 0xF9FC88)                 ; F9FC85  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FC88  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FC88  ld C,(0x00861c)
 	pop	xiy                                    ; F9FC8D  pop XIY
 	pushw	bc                                   ; F9FC8E  push BC
 	pushw	0x80                                 ; F9FC8F  push 0x0080
 	calr (0xF9A31A - 0xF9FC95)                 ; F9FC92  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FC95  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FC95  ld C,(0x00861c)
 	pop	xiy                                    ; F9FC9A  pop XIY
 	pushw	bc                                   ; F9FC9B  push BC
 	pushw	0xB4                                 ; F9FC9C  push 0x00b4
 	calr (0xF9A31A - 0xF9FCA2)                 ; F9FC9F  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FCA2  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FCA2  ld C,(0x00861c)
 	pop	xiy                                    ; F9FCA7  pop XIY
 	pushw	bc                                   ; F9FCA8  push BC
 	pushw	8                                    ; F9FCA9  push 0x0008
@@ -9641,7 +9641,7 @@ sub_F9FBA9:
 	pop	xiy                                    ; F9FCAF  pop XIY
 	jr sub_F9FBA9__F9FD0A                      ; F9FCB0  jr T,0xf9fd0a
 sub_F9FBA9__F9FCB2:
-	ldb_da	c, (0x861C)                         ; F9FCB2  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FCB2  ld C,(0x00861c)
 	pushw	bc                                   ; F9FCB7  push BC
 	ld	bc, (xiz-12)                            ; F9FCB8  ld BC,(XIZ+0xf4)
 	sra	bc, 7                                  ; F9FCBB  sra 0x07,BC
@@ -9649,7 +9649,7 @@ sub_F9FBA9__F9FCB2:
 	add	bc, 12                                 ; F9FCC2  add BC,0x000c
 	pushw	bc                                   ; F9FCC6  push BC
 	calr (0xF9A31A - 0xF9FCCA)                 ; F9FCC7  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FCCA  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FCCA  ld C,(0x00861c)
 	pop	xiy                                    ; F9FCCF  pop XIY
 	pushw	bc                                   ; F9FCD0  push BC
 	ld	bc, (xiz-12)                            ; F9FCD1  ld BC,(XIZ+0xf4)
@@ -9657,19 +9657,19 @@ sub_F9FBA9__F9FCB2:
 	and	bc, 1                                  ; F9FCD7  and BC,0x0001
 	pushw	bc                                   ; F9FCDB  push BC
 	calr (0xF9A31A - 0xF9FCDF)                 ; F9FCDC  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FCDF  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FCDF  ld C,(0x00861c)
 	pop	xiy                                    ; F9FCE4  pop XIY
 	pushw	bc                                   ; F9FCE5  push BC
 	ld	bc, (xiz-12)                            ; F9FCE6  ld BC,(XIZ+0xf4)
 	add	bc, bc                                 ; F9FCE9  add BC,BC
 	pushw	bc                                   ; F9FCEB  push BC
 	calr (0xF9A31A - 0xF9FCEF)                 ; F9FCEC  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FCEF  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FCEF  ld C,(0x00861c)
 	pop	xiy                                    ; F9FCF4  pop XIY
 	pushw	bc                                   ; F9FCF5  push BC
 	pushw	4                                    ; F9FCF6  push 0x0004
 	calr (0xF9A31A - 0xF9FCFC)                 ; F9FCF9  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FCFC  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FCFC  ld C,(0x00861c)
 	pop	xiy                                    ; F9FD01  pop XIY
 	pushw	bc                                   ; F9FD02  push BC
 	pushw	8                                    ; F9FD03  push 0x0008
@@ -9731,31 +9731,31 @@ sub_F9FD0E__F9FD4C:
 	cps	bc, 1                                  ; F9FD55  cp BC,1
 	jr z, sub_F9FD0E__F9FD47                   ; F9FD57  jr Z,0xf9fd47
 sub_F9FD0E__F9FD59:
-	ldb_da	c, (0x861C)                         ; F9FD59  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FD59  ld C,(0x00861c)
 	pushw	bc                                   ; F9FD5E  push BC
 	pushw	1                                    ; F9FD5F  push 0x0001
 	calr (0xF9A163 - 0xF9FD65)                 ; F9FD62  calr 0xf9a163
-	ldb_da	c, (0x861C)                         ; F9FD65  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FD65  ld C,(0x00861c)
 	pop	xiy                                    ; F9FD6A  pop XIY
 	pushw	bc                                   ; F9FD6B  push BC
 	pushw	1                                    ; F9FD6C  push 0x0001
 	calr (0xF9A4B0 - 0xF9FD72)                 ; F9FD6F  calr 0xf9a4b0
-	ldb_da	c, (0x861C)                         ; F9FD72  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FD72  ld C,(0x00861c)
 	pop	xiy                                    ; F9FD77  pop XIY
 	pushw	bc                                   ; F9FD78  push BC
 	pushw	96                                   ; F9FD79  push 0x0060
 	calr (0xF9A4B0 - 0xF9FD7F)                 ; F9FD7C  calr 0xf9a4b0
-	ldb_da	c, (0x861C)                         ; F9FD7F  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FD7F  ld C,(0x00861c)
 	pop	xiy                                    ; F9FD84  pop XIY
 	pushw	bc                                   ; F9FD85  push BC
 	pushw	0                                    ; F9FD86  push 0x0000
 	calr (0xF9A31A - 0xF9FD8C)                 ; F9FD89  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FD8C  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FD8C  ld C,(0x00861c)
 	pop	xiy                                    ; F9FD91  pop XIY
 	pushw	bc                                   ; F9FD92  push BC
 	pushw	0                                    ; F9FD93  push 0x0000
 	calr (0xF9A31A - 0xF9FD99)                 ; F9FD96  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FD99  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FD99  ld C,(0x00861c)
 	pop	xiy                                    ; F9FD9E  pop XIY
 	pushw	bc                                   ; F9FD9F  push BC
 	ld	bc, (xiz-4)                             ; F9FDA0  ld BC,(XIZ+0xfc)
@@ -9764,7 +9764,7 @@ sub_F9FD0E__F9FD59:
 	add	bc, 16                                 ; F9FDAA  add BC,0x0010
 	pushw	bc                                   ; F9FDAE  push BC
 	calr (0xF9A31A - 0xF9FDB2)                 ; F9FDAF  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FDB2  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FDB2  ld C,(0x00861c)
 	pop	xiy                                    ; F9FDB7  pop XIY
 	pushw	bc                                   ; F9FDB8  push BC
 	ld	bc, (xiz-4)                             ; F9FDB9  ld BC,(XIZ+0xfc)
@@ -9772,7 +9772,7 @@ sub_F9FD0E__F9FD59:
 	and	bc, 0xF0                               ; F9FDBF  and BC,0x00f0
 	pushw	bc                                   ; F9FDC3  push BC
 	calr (0xF9A31A - 0xF9FDC7)                 ; F9FDC4  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FDC7  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FDC7  ld C,(0x00861c)
 	pop	xiy                                    ; F9FDCC  pop XIY
 	pushw	bc                                   ; F9FDCD  push BC
 	pushw	0                                    ; F9FDCE  push 0x0000
@@ -9797,12 +9797,12 @@ sub_F9FD0E__F9FD59:
 	push	xbc                                   ; F9FE03  push XBC
 	call	0xFCA661                              ; F9FE04  call 0xfca661
 	ld	(xiz-8), xiy                            ; F9FE08  ld (XIZ+0xf8),XIY
-	ldb_da	c, (0x861C)                         ; F9FE0B  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FE0B  ld C,(0x00861c)
 	pop	xwa                                    ; F9FE10  pop XWA
 	pushw	bc                                   ; F9FE11  push BC
 	pushw	10                                   ; F9FE12  push 0x000a
 	calr (0xF9A31A - 0xF9FE18)                 ; F9FE15  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FE18  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FE18  ld C,(0x00861c)
 	pop	xiy                                    ; F9FE1D  pop XIY
 	pushw	bc                                   ; F9FE1E  push BC
 	pushw	25                                   ; F9FE1F  push 0x0019
@@ -9813,7 +9813,7 @@ sub_F9FD0E__F9FD59:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FE32  ld C,IYL
 	pushw	bc                                   ; F9FE35  push BC
 	calr (0xF9A31A - 0xF9FE39)                 ; F9FE36  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FE39  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FE39  ld C,(0x00861c)
 	pop	xiy                                    ; F9FE3E  pop XIY
 	pushw	bc                                   ; F9FE3F  push BC
 	pushw	17                                   ; F9FE40  push 0x0011
@@ -9824,7 +9824,7 @@ sub_F9FD0E__F9FD59:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FE53  ld C,IYL
 	pushw	bc                                   ; F9FE56  push BC
 	calr (0xF9A31A - 0xF9FE5A)                 ; F9FE57  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FE5A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FE5A  ld C,(0x00861c)
 	pop	xiy                                    ; F9FE5F  pop XIY
 	pushw	bc                                   ; F9FE60  push BC
 	ld	xiy, (xiz-8)                            ; F9FE61  ld XIY,(XIZ+0xf8)
@@ -9833,7 +9833,7 @@ sub_F9FD0E__F9FD59:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FE6D  ld C,IYL
 	pushw	bc                                   ; F9FE70  push BC
 	calr (0xF9A31A - 0xF9FE74)                 ; F9FE71  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FE74  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FE74  ld C,(0x00861c)
 	pop	xiy                                    ; F9FE79  pop XIY
 	pushw	bc                                   ; F9FE7A  push BC
 	ld	xiy, (xiz-8)                            ; F9FE7B  ld XIY,(XIZ+0xf8)
@@ -9843,7 +9843,7 @@ sub_F9FD0E__F9FD59:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FE8D  ld C,IYL
 	pushw	bc                                   ; F9FE90  push BC
 	calr (0xF9A31A - 0xF9FE94)                 ; F9FE91  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FE94  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FE94  ld C,(0x00861c)
 	pop	xiy                                    ; F9FE99  pop XIY
 	pushw	bc                                   ; F9FE9A  push BC
 	pushw	3                                    ; F9FE9B  push 0x0003
@@ -9901,31 +9901,31 @@ sub_F9FEA5__F9FEE3:
 	cps	bc, 1                                  ; F9FEEC  cp BC,1
 	jr z, sub_F9FEA5__F9FEDE                   ; F9FEEE  jr Z,0xf9fede
 sub_F9FEA5__F9FEF0:
-	ldb_da	c, (0x861C)                         ; F9FEF0  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FEF0  ld C,(0x00861c)
 	pushw	bc                                   ; F9FEF5  push BC
 	pushw	1                                    ; F9FEF6  push 0x0001
 	calr (0xF9A163 - 0xF9FEFC)                 ; F9FEF9  calr 0xf9a163
-	ldb_da	c, (0x861C)                         ; F9FEFC  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FEFC  ld C,(0x00861c)
 	pop	xiy                                    ; F9FF01  pop XIY
 	pushw	bc                                   ; F9FF02  push BC
 	pushw	1                                    ; F9FF03  push 0x0001
 	calr (0xF9A4B0 - 0xF9FF09)                 ; F9FF06  calr 0xf9a4b0
-	ldb_da	c, (0x861C)                         ; F9FF09  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FF09  ld C,(0x00861c)
 	pop	xiy                                    ; F9FF0E  pop XIY
 	pushw	bc                                   ; F9FF0F  push BC
 	pushw	96                                   ; F9FF10  push 0x0060
 	calr (0xF9A4B0 - 0xF9FF16)                 ; F9FF13  calr 0xf9a4b0
-	ldb_da	c, (0x861C)                         ; F9FF16  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FF16  ld C,(0x00861c)
 	pop	xiy                                    ; F9FF1B  pop XIY
 	pushw	bc                                   ; F9FF1C  push BC
 	pushw	0                                    ; F9FF1D  push 0x0000
 	calr (0xF9A31A - 0xF9FF23)                 ; F9FF20  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FF23  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FF23  ld C,(0x00861c)
 	pop	xiy                                    ; F9FF28  pop XIY
 	pushw	bc                                   ; F9FF29  push BC
 	pushw	0                                    ; F9FF2A  push 0x0000
 	calr (0xF9A31A - 0xF9FF30)                 ; F9FF2D  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FF30  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FF30  ld C,(0x00861c)
 	pop	xiy                                    ; F9FF35  pop XIY
 	pushw	bc                                   ; F9FF36  push BC
 	ld	bc, (xiz-4)                             ; F9FF37  ld BC,(XIZ+0xfc)
@@ -9934,7 +9934,7 @@ sub_F9FEA5__F9FEF0:
 	add	bc, 16                                 ; F9FF41  add BC,0x0010
 	pushw	bc                                   ; F9FF45  push BC
 	calr (0xF9A31A - 0xF9FF49)                 ; F9FF46  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FF49  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FF49  ld C,(0x00861c)
 	pop	xiy                                    ; F9FF4E  pop XIY
 	pushw	bc                                   ; F9FF4F  push BC
 	ld	bc, (xiz-4)                             ; F9FF50  ld BC,(XIZ+0xfc)
@@ -9942,7 +9942,7 @@ sub_F9FEA5__F9FEF0:
 	and	bc, 0xF0                               ; F9FF56  and BC,0x00f0
 	pushw	bc                                   ; F9FF5A  push BC
 	calr (0xF9A31A - 0xF9FF5E)                 ; F9FF5B  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FF5E  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FF5E  ld C,(0x00861c)
 	pop	xiy                                    ; F9FF63  pop XIY
 	pushw	bc                                   ; F9FF64  push BC
 	pushw	0                                    ; F9FF65  push 0x0000
@@ -9951,12 +9951,12 @@ sub_F9FEA5__F9FEF0:
 	extpfx3 0x9E, 0x08, 0x04                   ; F9FF6E  pushw (XIZ+0x08)
 	call	0xFCAB29                              ; F9FF71  call 0xfcab29
 	ld	(xiz-8), xiy                            ; F9FF75  ld (XIZ+0xf8),XIY
-	ldb_da	c, (0x861C)                         ; F9FF78  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FF78  ld C,(0x00861c)
 	pop	xwa                                    ; F9FF7D  pop XWA
 	pushw	bc                                   ; F9FF7E  push BC
 	pushw	10                                   ; F9FF7F  push 0x000a
 	calr (0xF9A31A - 0xF9FF85)                 ; F9FF82  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FF85  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FF85  ld C,(0x00861c)
 	pop	xiy                                    ; F9FF8A  pop XIY
 	pushw	bc                                   ; F9FF8B  push BC
 	pushw	17                                   ; F9FF8C  push 0x0011
@@ -9967,7 +9967,7 @@ sub_F9FEA5__F9FEF0:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FF9F  ld C,IYL
 	pushw	bc                                   ; F9FFA2  push BC
 	calr (0xF9A31A - 0xF9FFA6)                 ; F9FFA3  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FFA6  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FFA6  ld C,(0x00861c)
 	pop	xiy                                    ; F9FFAB  pop XIY
 	pushw	bc                                   ; F9FFAC  push BC
 	ld	xiy, (xiz-8)                            ; F9FFAD  ld XIY,(XIZ+0xf8)
@@ -9976,7 +9976,7 @@ sub_F9FEA5__F9FEF0:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FFB9  ld C,IYL
 	pushw	bc                                   ; F9FFBC  push BC
 	calr (0xF9A31A - 0xF9FFC0)                 ; F9FFBD  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FFC0  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FFC0  ld C,(0x00861c)
 	pop	xiy                                    ; F9FFC5  pop XIY
 	pushw	bc                                   ; F9FFC6  push BC
 	ld	xiy, (xiz-8)                            ; F9FFC7  ld XIY,(XIZ+0xf8)
@@ -9985,7 +9985,7 @@ sub_F9FEA5__F9FEF0:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FFD3  ld C,IYL
 	pushw	bc                                   ; F9FFD6  push BC
 	calr (0xF9A31A - 0xF9FFDA)                 ; F9FFD7  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FFDA  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FFDA  ld C,(0x00861c)
 	pop	xiy                                    ; F9FFDF  pop XIY
 	pushw	bc                                   ; F9FFE0  push BC
 	ld	xiy, (xiz-8)                            ; F9FFE1  ld XIY,(XIZ+0xf8)
@@ -9995,7 +9995,7 @@ sub_F9FEA5__F9FEF0:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; F9FFF3  ld C,IYL
 	pushw	bc                                   ; F9FFF6  push BC
 	calr (0xF9A31A - 0xF9FFFA)                 ; F9FFF7  calr 0xf9a31a
-	ldb_da	c, (0x861C)                         ; F9FFFA  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; F9FFFA  ld C,(0x00861c)
 	pop	xiy                                    ; F9FFFF  pop XIY
 	pushw	bc                                   ; FA0000  push BC
 	pushw	3                                    ; FA0001  push 0x0003
@@ -14572,10 +14572,10 @@ P7Mixer_RequestGain:
 ; Unknown:  nothing outstanding.
 ; --------------------------------------------------------------------------
 P7Mixer_SendGainIfChanged:
-	ldb_da	c, (0xF3B3)                         ; FA2DEC  ld C,(0x00f3b3)
+	ld	c, (0xF3B3:24)                         ; FA2DEC  ld C,(0x00f3b3)
 	extpfx5 0xC2, 0xB5, 0xF3, 0x00, 0xF3       ; FA2DF1  cp C,(0x00f3b5)
 	jr nz, P7Mixer_SendGainIfChanged__FA2E04                  ; FA2DF6  jr NZ,0xfa2e04
-	ldb_da	a, (0xF3B4)                         ; FA2DF8  ld A,(0x00f3b4)
+	ld	a, (0xF3B4:24)                         ; FA2DF8  ld A,(0x00f3b4)
 	extpfx5 0xC2, 0xB6, 0xF3, 0x00, 0xF1       ; FA2DFD  cp A,(0x00f3b6)
 	jr z, P7Mixer_SendGainIfChanged__FA2E2C                   ; FA2E02  jr Z,0xfa2e2c
 P7Mixer_SendGainIfChanged__FA2E04:
@@ -14586,9 +14586,9 @@ P7Mixer_SendGainIfChanged__FA2E04:
 	extz	bc                                    ; FA2E11  extz BC
 	pushw	bc                                   ; FA2E13  push BC
 	calr (0xFA2E2D - 0xFA2E17)                 ; FA2E14  calr 0xfa2e2d
-	ldb_da	c, (0xF3B3)                         ; FA2E17  ld C,(0x00f3b3)
+	ld	c, (0xF3B3:24)                         ; FA2E17  ld C,(0x00f3b3)
 	stb_da	(0xF3B5), c                         ; FA2E1C  ld (0x00f3b5),C
-	ldb_da	a, (0xF3B4)                         ; FA2E21  ld A,(0x00f3b4)
+	ld	a, (0xF3B4:24)                         ; FA2E21  ld A,(0x00f3b4)
 	stb_da	(0xF3B6), a                         ; FA2E26  ld (0x00f3b6),A
 	pop	xiy                                    ; FA2E2B  pop XIY
 P7Mixer_SendGainIfChanged__FA2E2C:
@@ -14631,12 +14631,12 @@ P7Mixer_SendGain:
 	calr (0xFA30B8 - 0xFA2E49)                 ; FA2E46  calr 0xfa30b8
 	ld	(xiz-10), xiy                           ; FA2E49  ld (XIZ+0xf6),XIY
 	stiw_da	(0x861C), 1                        ; FA2E4C  ld (0x00861c),0x0001
-	ldb_da	c, (0x861C)                         ; FA2E53  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2E53  ld C,(0x00861c)
 	pop	xwa                                    ; FA2E58  pop XWA
 	pushw	bc                                   ; FA2E59  push BC
 	pushw	1                                    ; FA2E5A  push 0x0001
 	call	0xF9A163                              ; FA2E5D  call 0xf9a163
-	ldb_da	c, (0x861C)                         ; FA2E61  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2E61  ld C,(0x00861c)
 	pop	xiy                                    ; FA2E66  pop XIY
 	pushw	bc                                   ; FA2E67  push BC
 	ld	bc, (xiz-6)                             ; FA2E68  ld BC,(XIZ+0xfa)
@@ -14644,24 +14644,24 @@ P7Mixer_SendGain:
 	and	bc, 1                                  ; FA2E6E  and BC,0x0001
 	pushw	bc                                   ; FA2E72  push BC
 	call	0xF9A31A                              ; FA2E73  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2E77  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2E77  ld C,(0x00861c)
 	pop	xiy                                    ; FA2E7C  pop XIY
 	pushw	bc                                   ; FA2E7D  push BC
 	ld	bc, (xiz-6)                             ; FA2E7E  ld BC,(XIZ+0xfa)
 	and	bc, 0xFF                               ; FA2E81  and BC,0x00ff
 	pushw	bc                                   ; FA2E85  push BC
 	call	0xF9A31A                              ; FA2E86  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2E8A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2E8A  ld C,(0x00861c)
 	pop	xiy                                    ; FA2E8F  pop XIY
 	pushw	bc                                   ; FA2E90  push BC
 	pushw	0                                    ; FA2E91  push 0x0000
 	call	0xF9A31A                              ; FA2E94  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2E98  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2E98  ld C,(0x00861c)
 	pop	xiy                                    ; FA2E9D  pop XIY
 	pushw	bc                                   ; FA2E9E  push BC
 	pushw	0                                    ; FA2E9F  push 0x0000
 	call	0xF9A31A                              ; FA2EA2  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2EA6  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2EA6  ld C,(0x00861c)
 	pop	xiy                                    ; FA2EAB  pop XIY
 	pushw	bc                                   ; FA2EAC  push BC
 	ld	bc, (xiz-2)                             ; FA2EAD  ld BC,(XIZ+0xfe)
@@ -14670,7 +14670,7 @@ P7Mixer_SendGain:
 	and	bc, 0xFF                               ; FA2EB7  and BC,0x00ff
 	pushw	bc                                   ; FA2EBB  push BC
 	call	0xF9A31A                              ; FA2EBC  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2EC0  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2EC0  ld C,(0x00861c)
 	pop	xiy                                    ; FA2EC5  pop XIY
 	pushw	bc                                   ; FA2EC6  push BC
 	ld	bc, (xiz-2)                             ; FA2EC7  ld BC,(XIZ+0xfe)
@@ -14678,17 +14678,17 @@ P7Mixer_SendGain:
 	and	bc, 0xFF                               ; FA2ECD  and BC,0x00ff
 	pushw	bc                                   ; FA2ED1  push BC
 	call	0xF9A31A                              ; FA2ED2  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2ED6  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2ED6  ld C,(0x00861c)
 	pop	xiy                                    ; FA2EDB  pop XIY
 	pushw	bc                                   ; FA2EDC  push BC
 	pushw	0                                    ; FA2EDD  push 0x0000
 	call	0xF9A31A                              ; FA2EE0  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2EE4  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2EE4  ld C,(0x00861c)
 	pop	xiy                                    ; FA2EE9  pop XIY
 	pushw	bc                                   ; FA2EEA  push BC
 	pushw	10                                   ; FA2EEB  push 0x000a
 	call	0xF9A31A                              ; FA2EEE  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2EF2  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2EF2  ld C,(0x00861c)
 	pop	xiy                                    ; FA2EF7  pop XIY
 	pushw	bc                                   ; FA2EF8  push BC
 	pushw	25                                   ; FA2EF9  push 0x0019
@@ -14699,7 +14699,7 @@ P7Mixer_SendGain:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA2F0C  ld C,IYL
 	pushw	bc                                   ; FA2F0F  push BC
 	call	0xF9A31A                              ; FA2F10  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2F14  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2F14  ld C,(0x00861c)
 	pop	xiy                                    ; FA2F19  pop XIY
 	pushw	bc                                   ; FA2F1A  push BC
 	pushw	17                                   ; FA2F1B  push 0x0011
@@ -14710,7 +14710,7 @@ P7Mixer_SendGain:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA2F2E  ld C,IYL
 	pushw	bc                                   ; FA2F31  push BC
 	call	0xF9A31A                              ; FA2F32  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2F36  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2F36  ld C,(0x00861c)
 	pop	xiy                                    ; FA2F3B  pop XIY
 	pushw	bc                                   ; FA2F3C  push BC
 	ld	xiy, (xiz-10)                           ; FA2F3D  ld XIY,(XIZ+0xf6)
@@ -14719,7 +14719,7 @@ P7Mixer_SendGain:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA2F49  ld C,IYL
 	pushw	bc                                   ; FA2F4C  push BC
 	call	0xF9A31A                              ; FA2F4D  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2F51  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2F51  ld C,(0x00861c)
 	pop	xiy                                    ; FA2F56  pop XIY
 	pushw	bc                                   ; FA2F57  push BC
 	ld	xiy, (xiz-10)                           ; FA2F58  ld XIY,(XIZ+0xf6)
@@ -14729,18 +14729,18 @@ P7Mixer_SendGain:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA2F6A  ld C,IYL
 	pushw	bc                                   ; FA2F6D  push BC
 	call	0xF9A31A                              ; FA2F6E  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2F72  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2F72  ld C,(0x00861c)
 	pop	xiy                                    ; FA2F77  pop XIY
 	pushw	bc                                   ; FA2F78  push BC
 	pushw	3                                    ; FA2F79  push 0x0003
 	call	0xF9A163                              ; FA2F7C  call 0xf9a163
 	stiw_da	(0x861C), 2                        ; FA2F80  ld (0x00861c),0x0002
-	ldb_da	c, (0x861C)                         ; FA2F87  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2F87  ld C,(0x00861c)
 	pop	xiy                                    ; FA2F8C  pop XIY
 	pushw	bc                                   ; FA2F8D  push BC
 	pushw	1                                    ; FA2F8E  push 0x0001
 	call	0xF9A163                              ; FA2F91  call 0xf9a163
-	ldb_da	c, (0x861C)                         ; FA2F95  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2F95  ld C,(0x00861c)
 	pop	xiy                                    ; FA2F9A  pop XIY
 	pushw	bc                                   ; FA2F9B  push BC
 	ld	bc, (xiz-6)                             ; FA2F9C  ld BC,(XIZ+0xfa)
@@ -14748,24 +14748,24 @@ P7Mixer_SendGain:
 	and	bc, 1                                  ; FA2FA2  and BC,0x0001
 	pushw	bc                                   ; FA2FA6  push BC
 	call	0xF9A31A                              ; FA2FA7  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2FAB  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2FAB  ld C,(0x00861c)
 	pop	xiy                                    ; FA2FB0  pop XIY
 	pushw	bc                                   ; FA2FB1  push BC
 	ld	bc, (xiz-6)                             ; FA2FB2  ld BC,(XIZ+0xfa)
 	and	bc, 0xFF                               ; FA2FB5  and BC,0x00ff
 	pushw	bc                                   ; FA2FB9  push BC
 	call	0xF9A31A                              ; FA2FBA  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2FBE  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2FBE  ld C,(0x00861c)
 	pop	xiy                                    ; FA2FC3  pop XIY
 	pushw	bc                                   ; FA2FC4  push BC
 	pushw	0                                    ; FA2FC5  push 0x0000
 	call	0xF9A31A                              ; FA2FC8  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2FCC  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2FCC  ld C,(0x00861c)
 	pop	xiy                                    ; FA2FD1  pop XIY
 	pushw	bc                                   ; FA2FD2  push BC
 	pushw	0                                    ; FA2FD3  push 0x0000
 	call	0xF9A31A                              ; FA2FD6  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2FDA  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2FDA  ld C,(0x00861c)
 	pop	xiy                                    ; FA2FDF  pop XIY
 	pushw	bc                                   ; FA2FE0  push BC
 	ld	bc, (xiz-4)                             ; FA2FE1  ld BC,(XIZ+0xfc)
@@ -14774,7 +14774,7 @@ P7Mixer_SendGain:
 	and	bc, 0xFF                               ; FA2FEB  and BC,0x00ff
 	pushw	bc                                   ; FA2FEF  push BC
 	call	0xF9A31A                              ; FA2FF0  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA2FF4  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA2FF4  ld C,(0x00861c)
 	pop	xiy                                    ; FA2FF9  pop XIY
 	pushw	bc                                   ; FA2FFA  push BC
 	ld	bc, (xiz-4)                             ; FA2FFB  ld BC,(XIZ+0xfc)
@@ -14782,17 +14782,17 @@ P7Mixer_SendGain:
 	and	bc, 0xFF                               ; FA3001  and BC,0x00ff
 	pushw	bc                                   ; FA3005  push BC
 	call	0xF9A31A                              ; FA3006  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA300A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA300A  ld C,(0x00861c)
 	pop	xiy                                    ; FA300F  pop XIY
 	pushw	bc                                   ; FA3010  push BC
 	pushw	0                                    ; FA3011  push 0x0000
 	call	0xF9A31A                              ; FA3014  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA3018  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA3018  ld C,(0x00861c)
 	pop	xiy                                    ; FA301D  pop XIY
 	pushw	bc                                   ; FA301E  push BC
 	pushw	10                                   ; FA301F  push 0x000a
 	call	0xF9A31A                              ; FA3022  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA3026  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA3026  ld C,(0x00861c)
 	pop	xiy                                    ; FA302B  pop XIY
 	pushw	bc                                   ; FA302C  push BC
 	pushw	25                                   ; FA302D  push 0x0019
@@ -14803,7 +14803,7 @@ P7Mixer_SendGain:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA3040  ld C,IYL
 	pushw	bc                                   ; FA3043  push BC
 	call	0xF9A31A                              ; FA3044  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA3048  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA3048  ld C,(0x00861c)
 	pop	xiy                                    ; FA304D  pop XIY
 	pushw	bc                                   ; FA304E  push BC
 	pushw	17                                   ; FA304F  push 0x0011
@@ -14814,7 +14814,7 @@ P7Mixer_SendGain:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA3062  ld C,IYL
 	pushw	bc                                   ; FA3065  push BC
 	call	0xF9A31A                              ; FA3066  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA306A  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA306A  ld C,(0x00861c)
 	pop	xiy                                    ; FA306F  pop XIY
 	pushw	bc                                   ; FA3070  push BC
 	ld	xiy, (xiz-10)                           ; FA3071  ld XIY,(XIZ+0xf6)
@@ -14823,7 +14823,7 @@ P7Mixer_SendGain:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA307D  ld C,IYL
 	pushw	bc                                   ; FA3080  push BC
 	call	0xF9A31A                              ; FA3081  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA3085  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA3085  ld C,(0x00861c)
 	pop	xiy                                    ; FA308A  pop XIY
 	pushw	bc                                   ; FA308B  push BC
 	ld	xiy, (xiz-10)                           ; FA308C  ld XIY,(XIZ+0xf6)
@@ -14833,7 +14833,7 @@ P7Mixer_SendGain:
 	extpfx3 0xC7, 0xF4, 0x8B                   ; FA309E  ld C,IYL
 	pushw	bc                                   ; FA30A1  push BC
 	call	0xF9A31A                              ; FA30A2  call 0xf9a31a
-	ldb_da	c, (0x861C)                         ; FA30A6  ld C,(0x00861c)
+	ld	c, (0x861C:24)                         ; FA30A6  ld C,(0x00861c)
 	pop	xiy                                    ; FA30AB  pop XIY
 	pushw	bc                                   ; FA30AC  push BC
 	pushw	3                                    ; FA30AD  push 0x0003
@@ -15818,23 +15818,23 @@ P7Units_ReloadForGroup__FA3811:
 	lda	xwa, (0xFD26B8:24)                     ; FA38C6  lda XWA,0xfd26b8
 	push	xwa                                   ; FA38CB  push XWA
 	call	0xF9A646                              ; FA38CC  call 0xf9a646
-	ldb_da	c, (0x8586)                         ; FA38D0  ld C,(0x008586)
+	ld	c, (0x8586:24)                         ; FA38D0  ld C,(0x008586)
 	xor	c, 0xFF                                ; FA38D5  xor C,0xff
 	stb_da	(0x85D4), c                         ; FA38D8  ld (0x0085d4),C
-	ldb_da	c, (0x85A0)                         ; FA38DD  ld C,(0x0085a0)
+	ld	c, (0x85A0:24)                         ; FA38DD  ld C,(0x0085a0)
 	xor	c, 0xFF                                ; FA38E2  xor C,0xff
 	stb_da	(0x85EE), c                         ; FA38E5  ld (0x0085ee),C
 	inc	8, xsp                                 ; FA38EA  inc 0,XSP
 	inc	2, xsp                                 ; FA38EC  inc 2,XSP
 	pushw	2                                    ; FA38EE  push 0x0002
 	calr (0xFA4940 - 0xFA38F4)                 ; FA38F1  calr 0xfa4940
-	ldb_da	c, (0x8584)                         ; FA38F4  ld C,(0x008584)
+	ld	c, (0x8584:24)                         ; FA38F4  ld C,(0x008584)
 	xor	c, 0xFF                                ; FA38F9  xor C,0xff
 	stb_da	(0x85D2), c                         ; FA38FC  ld (0x0085d2),C
-	ldb_da	c, (0x859E)                         ; FA3901  ld C,(0x00859e)
+	ld	c, (0x859E:24)                         ; FA3901  ld C,(0x00859e)
 	xor	c, 0xFF                                ; FA3906  xor C,0xff
 	stb_da	(0x85EC), c                         ; FA3909  ld (0x0085ec),C
-	ldb_da	c, (0x85B8)                         ; FA390E  ld C,(0x0085b8)
+	ld	c, (0x85B8:24)                         ; FA390E  ld C,(0x0085b8)
 	xor	c, 0xFF                                ; FA3913  xor C,0xff
 	stb_da	(0x8606), c                         ; FA3916  ld (0x008606),C
 	popw	bc                                    ; FA391B  pop BC
@@ -15908,23 +15908,23 @@ P7Units_ReloadForGroup__FA391F:
 	lda	xwa, (0xFD26B8:24)                     ; FA39D4  lda XWA,0xfd26b8
 	push	xwa                                   ; FA39D9  push XWA
 	call	0xF9A646                              ; FA39DA  call 0xf9a646
-	ldb_da	c, (0x8586)                         ; FA39DE  ld C,(0x008586)
+	ld	c, (0x8586:24)                         ; FA39DE  ld C,(0x008586)
 	xor	c, 0xFF                                ; FA39E3  xor C,0xff
 	stb_da	(0x85D4), c                         ; FA39E6  ld (0x0085d4),C
-	ldb_da	c, (0x85A0)                         ; FA39EB  ld C,(0x0085a0)
+	ld	c, (0x85A0:24)                         ; FA39EB  ld C,(0x0085a0)
 	xor	c, 0xFF                                ; FA39F0  xor C,0xff
 	stb_da	(0x85EE), c                         ; FA39F3  ld (0x0085ee),C
 	inc	8, xsp                                 ; FA39F8  inc 0,XSP
 	inc	2, xsp                                 ; FA39FA  inc 2,XSP
 	pushw	2                                    ; FA39FC  push 0x0002
 	calr (0xFA4940 - 0xFA3A02)                 ; FA39FF  calr 0xfa4940
-	ldb_da	c, (0x8584)                         ; FA3A02  ld C,(0x008584)
+	ld	c, (0x8584:24)                         ; FA3A02  ld C,(0x008584)
 	xor	c, 0xFF                                ; FA3A07  xor C,0xff
 	stb_da	(0x85D2), c                         ; FA3A0A  ld (0x0085d2),C
-	ldb_da	c, (0x859E)                         ; FA3A0F  ld C,(0x00859e)
+	ld	c, (0x859E:24)                         ; FA3A0F  ld C,(0x00859e)
 	xor	c, 0xFF                                ; FA3A14  xor C,0xff
 	stb_da	(0x85EC), c                         ; FA3A17  ld (0x0085ec),C
-	ldb_da	c, (0x85B8)                         ; FA3A1C  ld C,(0x0085b8)
+	ld	c, (0x85B8:24)                         ; FA3A1C  ld C,(0x0085b8)
 	xor	c, 0xFF                                ; FA3A21  xor C,0xff
 	stb_da	(0x8606), c                         ; FA3A24  ld (0x008606),C
 	popw	bc                                    ; FA3A29  pop BC
@@ -17760,7 +17760,7 @@ sub_FA4A0D__FA4B37:
 	jr z, sub_FA4A0D__FA4B58                   ; FA4B3B  jr Z,0xfa4b58
 	pushw	0                                    ; FA4B3D  push 0x0000
 	calr (0xFA2C5E - 0xFA4B43)                 ; FA4B40  calr 0xfa2c5e
-	ldb_da	c, (0x8584)                         ; FA4B43  ld C,(0x008584)
+	ld	c, (0x8584:24)                         ; FA4B43  ld C,(0x008584)
 	xor	c, 0xFF                                ; FA4B48  xor C,0xff
 	stb_da	(0x85D2), c                         ; FA4B4B  ld (0x0085d2),C
 	popw	bc                                    ; FA4B50  pop BC
@@ -17815,7 +17815,7 @@ sub_FA4A0D__FA4BCD:
 	jr z, sub_FA4A0D__FA4BEE                   ; FA4BD1  jr Z,0xfa4bee
 	pushw	2                                    ; FA4BD3  push 0x0002
 	calr (0xFA2C5E - 0xFA4BD9)                 ; FA4BD6  calr 0xfa2c5e
-	ldb_da	c, (0x85B8)                         ; FA4BD9  ld C,(0x0085b8)
+	ld	c, (0x85B8:24)                         ; FA4BD9  ld C,(0x0085b8)
 	xor	c, 0xFF                                ; FA4BDE  xor C,0xff
 	stb_da	(0x8606), c                         ; FA4BE1  ld (0x008606),C
 	popw	bc                                    ; FA4BE6  pop BC
@@ -17966,7 +17966,7 @@ sub_FA4CE5__FA4CF8:
 	jr z, sub_FA4CE5__FA4D2F                   ; FA4D12  jr Z,0xfa4d2f
 	pushw	2                                    ; FA4D14  push 0x0002
 	calr (0xFA2C5E - 0xFA4D1A)                 ; FA4D17  calr 0xfa2c5e
-	ldb_da	c, (0x85B8)                         ; FA4D1A  ld C,(0x0085b8)
+	ld	c, (0x85B8:24)                         ; FA4D1A  ld C,(0x0085b8)
 	xor	c, 0xFF                                ; FA4D1F  xor C,0xff
 	stb_da	(0x8606), c                         ; FA4D22  ld (0x008606),C
 	popw	bc                                    ; FA4D27  pop BC
@@ -18770,7 +18770,7 @@ P7Units_ServiceTask__FA54E3:
 	jr P7Units_ServiceTask__FA54E3                      ; FA54EF  jr T,0xfa54e3
 P7Units_ServiceTask__FA54F1:
 	ei	6                                       ; FA54F1  ei 0x06
-	ldb_da	c, (0xF35F)                         ; FA54F3  ld C,(0x00f35f)
+	ld	c, (0xF35F:24)                         ; FA54F3  ld C,(0x00f35f)
 	extpfx5 0xC2, 0x60, 0xF3, 0x00, 0xF3       ; FA54F8  cp C,(0x00f360)
 	jr z, P7Units_ServiceTask__FA5509                   ; FA54FD  jr Z,0xfa5509
 	stb_da	(0xF360), c                         ; FA54FF  ld (0x00f360),C
@@ -18845,7 +18845,7 @@ P7Units_ResolveProgramsAndReload:
 	lda	xiy, (0x7EB2:24)                       ; FA5560  lda XIY,0x007eb2
 	ldw	bc, 13                                 ; FA5565  ld BC,0x000d
 	extpfx2 0x95, 0x11                         ; FA5568  ldirw
-	ldb_da	a, (0x856E)                         ; FA556A  ld A,(0x00856e)
+	ld	a, (0x856E:24)                         ; FA556A  ld A,(0x00856e)
 	ld	(xiz-2), a                              ; FA556F  ld (XIZ+0xfe),A
 	cp	a, 0x7F                                 ; FA5572  cp A,0x7f
 	jr ule, P7Units_ResolveProgramsAndReload__FA557B                 ; FA5575  jr ULE,0xfa557b
@@ -18857,7 +18857,7 @@ P7Units_ResolveProgramsAndReload__FA557B:
 	add	xbc, 0xFDC551                          ; FA5582  add XBC,0x00fdc551
 	ld	a, (xbc)                                ; FA5588  ld A,(XBC)
 	stb_da	(0x8586), a                         ; FA558A  ld (0x008586),A
-	ldb_da	c, (0x8588)                         ; FA558F  ld C,(0x008588)
+	ld	c, (0x8588:24)                         ; FA558F  ld C,(0x008588)
 	ld	(xiz-2), c                              ; FA5594  ld (XIZ+0xfe),C
 	cp	c, 0x7F                                 ; FA5597  cp C,0x7f
 	jr ule, P7Units_ResolveProgramsAndReload__FA55A0                 ; FA559A  jr ULE,0xfa55a0
@@ -18869,7 +18869,7 @@ P7Units_ResolveProgramsAndReload__FA55A0:
 	add	xbc, 0xFDC551                          ; FA55A7  add XBC,0x00fdc551
 	ld	a, (xbc)                                ; FA55AD  ld A,(XBC)
 	stb_da	(0x85A0), a                         ; FA55AF  ld (0x0085a0),A
-	ldb_da	c, (0x85A2)                         ; FA55B4  ld C,(0x0085a2)
+	ld	c, (0x85A2:24)                         ; FA55B4  ld C,(0x0085a2)
 	ld	(xiz-2), c                              ; FA55B9  ld (XIZ+0xfe),C
 	cp	c, 0x7F                                 ; FA55BC  cp C,0x7f
 	jr ule, P7Units_ResolveProgramsAndReload__FA55C5                 ; FA55BF  jr ULE,0xfa55c5
@@ -18885,17 +18885,17 @@ P7Units_ResolveProgramsAndReload__FA55C5:
 	stw_da	(0x860A), bc                        ; FA55DE  ld (0x00860a),BC
 	ld	bc, (0x7ECF:24)                        ; FA55E3  ld BC,(0x007ecf)
 	stw_da	(0x860C), bc                        ; FA55E8  ld (0x00860c),BC
-	ldb_da	c, (0x7E97)                         ; FA55ED  ld C,(0x007e97)
+	ld	c, (0x7E97:24)                         ; FA55ED  ld C,(0x007e97)
 	cps	c, 0                                   ; FA55F2  cp C,0
 	jr z, P7Units_ResolveProgramsAndReload__FA55FC                   ; FA55F4  jr Z,0xfa55fc
 	stib_da	(0x7E97), 0                        ; FA55F6  ld (0x007e97),0x00
 P7Units_ResolveProgramsAndReload__FA55FC:
-	ldb_da	c, (0x7EB1)                         ; FA55FC  ld C,(0x007eb1)
+	ld	c, (0x7EB1:24)                         ; FA55FC  ld C,(0x007eb1)
 	cps	c, 0                                   ; FA5601  cp C,0
 	jr z, P7Units_ResolveProgramsAndReload__FA560B                   ; FA5603  jr Z,0xfa560b
 	stib_da	(0x7EB1), 0                        ; FA5605  ld (0x007eb1),0x00
 P7Units_ResolveProgramsAndReload__FA560B:
-	ldb_da	c, (0x7ECB)                         ; FA560B  ld C,(0x007ecb)
+	ld	c, (0x7ECB:24)                         ; FA560B  ld C,(0x007ecb)
 	cps	c, 0                                   ; FA5610  cp C,0
 	jr z, P7Units_ResolveProgramsAndReload__FA561A                   ; FA5612  jr Z,0xfa561a
 	stib_da	(0x7ECB), 0                        ; FA5614  ld (0x007ecb),0x00
@@ -18905,13 +18905,13 @@ P7Units_ResolveProgramsAndReload__FA561A:
 	stiw_da	(0xF356), 0                        ; FA5623  ld (0x00f356),0x0000
 	stiw_da	(0xF358), 0                        ; FA562A  ld (0x00f358),0x0000
 	calr (0xFA5177 - 0xFA5634)                 ; FA5631  calr 0xfa5177
-	ldb_da	c, (0x8586)                         ; FA5634  ld C,(0x008586)
+	ld	c, (0x8586:24)                         ; FA5634  ld C,(0x008586)
 	extz	bc                                    ; FA5639  extz BC
 	ld	(xiz-4), bc                             ; FA563B  ld (XIZ+0xfc),BC
 	jr P7Units_ResolveProgramsAndReload__FA5656                      ; FA563E  jr T,0xfa5656
 P7Units_ResolveProgramsAndReload__FA5640:
-	ldb_da	h, (0x85BE)                         ; FA5640  ld H,(0x0085be)
-	ldb_da	c, (0x8570)                         ; FA5645  ld C,(0x008570)
+	ld	h, (0x85BE:24)                         ; FA5640  ld H,(0x0085be)
+	ld	c, (0x8570:24)                         ; FA5645  ld C,(0x008570)
 	cp	c, h                                    ; FA564A  cp C,H
 	jr z, P7Units_ResolveProgramsAndReload__FA5654                   ; FA564C  jr Z,0xfa5654
 	stib_da	(0x85D4), 53                       ; FA564E  ld (0x0085d4),0x35
@@ -18928,13 +18928,13 @@ P7Units_ResolveProgramsAndReload__FA5656:
 	cp	bc, 55                                  ; FA566B  cp BC,0x0037
 	jr z, P7Units_ResolveProgramsAndReload__FA5640                   ; FA566F  jr Z,0xfa5640
 P7Units_ResolveProgramsAndReload__FA5671:
-	ldb_da	c, (0x85A0)                         ; FA5671  ld C,(0x0085a0)
+	ld	c, (0x85A0:24)                         ; FA5671  ld C,(0x0085a0)
 	extz	bc                                    ; FA5676  extz BC
 	ld	(xiz-6), bc                             ; FA5678  ld (XIZ+0xfa),BC
 	jr P7Units_ResolveProgramsAndReload__FA5693                      ; FA567B  jr T,0xfa5693
 P7Units_ResolveProgramsAndReload__FA567D:
-	ldb_da	h, (0x85D8)                         ; FA567D  ld H,(0x0085d8)
-	ldb_da	c, (0x858A)                         ; FA5682  ld C,(0x00858a)
+	ld	h, (0x85D8:24)                         ; FA567D  ld H,(0x0085d8)
+	ld	c, (0x858A:24)                         ; FA5682  ld C,(0x00858a)
 	cp	c, h                                    ; FA5687  cp C,H
 	jr z, P7Units_ResolveProgramsAndReload__FA5691                   ; FA5689  jr Z,0xfa5691
 	stib_da	(0x85EE), 53                       ; FA568B  ld (0x0085ee),0x35
@@ -18951,13 +18951,13 @@ P7Units_ResolveProgramsAndReload__FA5693:
 	cp	bc, 55                                  ; FA56A8  cp BC,0x0037
 	jr z, P7Units_ResolveProgramsAndReload__FA567D                   ; FA56AC  jr Z,0xfa567d
 P7Units_ResolveProgramsAndReload__FA56AE:
-	ldb_da	c, (0x85BA)                         ; FA56AE  ld C,(0x0085ba)
+	ld	c, (0x85BA:24)                         ; FA56AE  ld C,(0x0085ba)
 	extz	bc                                    ; FA56B3  extz BC
 	ld	(xiz-8), bc                             ; FA56B5  ld (XIZ+0xf8),BC
 	jr P7Units_ResolveProgramsAndReload__FA56D0                      ; FA56B8  jr T,0xfa56d0
 P7Units_ResolveProgramsAndReload__FA56BA:
-	ldb_da	h, (0x85F2)                         ; FA56BA  ld H,(0x0085f2)
-	ldb_da	c, (0x85A4)                         ; FA56BF  ld C,(0x0085a4)
+	ld	h, (0x85F2:24)                         ; FA56BA  ld H,(0x0085f2)
+	ld	c, (0x85A4:24)                         ; FA56BF  ld C,(0x0085a4)
 	cp	c, h                                    ; FA56C4  cp C,H
 	jr z, P7Units_ResolveProgramsAndReload__FA56CE                   ; FA56C6  jr Z,0xfa56ce
 	stib_da	(0x8608), 53                       ; FA56C8  ld (0x008608),0x35
@@ -18985,21 +18985,21 @@ P7Units_ResolveProgramsAndReload__FA56EB:
 	calr (0xFA4E97 - 0xFA5706)                 ; FA5703  calr 0xfa4e97
 	popw	bc                                    ; FA5706  pop BC
 	ei	6                                       ; FA5707  ei 0x06
-	ldb_da	c, (0xF361)                         ; FA5709  ld C,(0x00f361)
+	ld	c, (0xF361:24)                         ; FA5709  ld C,(0x00f361)
 	stb_da	(0xF35D), c                         ; FA570E  ld (0x00f35d),C
 	ei	0                                       ; FA5713  ei 0x00
 	cpib_da 0x00F35D, 0x01                     ; FA5715  cp (0x00f35d),0x01
 	jr ule, P7Units_ResolveProgramsAndReload__FA5723                 ; FA571B  jr ULE,0xfa5723
 	stib_da	(0xF35D), 1                        ; FA571D  ld (0x00f35d),0x01
 P7Units_ResolveProgramsAndReload__FA5723:
-	ldb_da	c, (0xF35D)                         ; FA5723  ld C,(0x00f35d)
+	ld	c, (0xF35D:24)                         ; FA5723  ld C,(0x00f35d)
 	extpfx5 0xC2, 0x5E, 0xF3, 0x00, 0xF3       ; FA5728  cp C,(0x00f35e)
 	jr z, P7Units_ResolveProgramsAndReload__FA5734                   ; FA572D  jr Z,0xfa5734
 	pushw	bc                                   ; FA572F  push BC
 	calr (0xFA3802 - 0xFA5733)                 ; FA5730  calr 0xfa3802
 	popw	bc                                    ; FA5733  pop BC
 P7Units_ResolveProgramsAndReload__FA5734:
-	ldb_da	c, (0xF35D)                         ; FA5734  ld C,(0x00f35d)
+	ld	c, (0xF35D:24)                         ; FA5734  ld C,(0x00f35d)
 	stb_da	(0xF35E), c                         ; FA5739  ld (0x00f35e),C
 	ld	(xiz-1), 1                              ; FA573E  ld (XIZ+0xff),0x01
 	ldb	c, 26                                  ; FA5742  ld C,0x1a

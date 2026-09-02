@@ -19,11 +19,11 @@
 ; =============================================================================
 
 FDC_Read_Status:
-	ldb_da l, (0x110008)
+	ld l, (0x110008:24)
 	ret
 
 FDC_Read_Data:
-	ldb_da l, (0x11000a)
+	ld l, (0x11000a:24)
 	ret
 
 ; --- FDC_Send_Command: Write command byte to FDC data register ---

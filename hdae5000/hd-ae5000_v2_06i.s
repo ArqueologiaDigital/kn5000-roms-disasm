@@ -3856,7 +3856,7 @@ HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 .Lppi_wait_high:
 	bitda_24 4, (1441792); bit 4, (0x160000) — check ACK
 	jr z, .Lppi_wait_high		; wait until bit 4 set
-	ldb_da a, (0x160000); ld A, (0x160000) — read port A
+	ld a, (0x160000:24); ld A, (0x160000) — read port A
 	and a, 0x0f			; mask low nibble
 	ld e, a				; save low nibble in E
 	; --- High nibble phase ---
@@ -3876,7 +3876,7 @@ HDAE5000_PPI_Transfer_Byte:	; 0x282BA5 (130 bytes)
 	jr nz, .Lppi_wait_low		; wait until bit 4 clear
 	; --- Reassemble and verify ---
 	ld c, e				; C = low nibble
-	ldb_da a, (0x160000); ld A, (0x160000) — read port A
+	ld a, (0x160000:24); ld A, (0x160000) — read port A
 	and a, 0x0f			; mask low nibble (high nibble of result)
 	sll a, 4			; shift left 4 to high position
 	or a, c				; combine with low nibble

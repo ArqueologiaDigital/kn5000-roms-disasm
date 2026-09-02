@@ -2102,7 +2102,7 @@ MdPresetOKFunc:
 	jrl z, MdPresetOK_Slot4Path
 	cps l, 3
 	jrl z, MdPresetOK_Slot3Path
-	ldb_da a, (0x024756)
+	ld a, (0x024756:24)
 	cps l, 2
 	jr z, MdPresetOK_CheckSlotB
 	cps l, 1
@@ -2239,7 +2239,7 @@ MainMpst_ReturnZero:
 	ret
 
 MainMpst_ReadPresetIndex:
-	ldb_da l, (0x024758)
+	ld l, (0x024758:24)
 	ret
 
 TtMdExc:

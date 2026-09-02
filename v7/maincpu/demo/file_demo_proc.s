@@ -785,8 +785,8 @@ Voice_LoadVoiceTable_Loop:
 	push xhl
 	push xix
 	push xiz
-	ldb_da w, (0x025b88)
-	ldb_da a, (0x025b86)
+	ld w, (0x025b88:24)
+	ld a, (0x025b86:24)
 	call MidiStream_HandlePartSelect
 	pop xiz
 	pop xix
@@ -805,8 +805,8 @@ Voice_LoadVoiceTable_Loop:
 	push xhl
 	push xix
 	push xiz
-	ldb_da w, (0x025b88)
-	ldb_da a, (0x025b86)
+	ld w, (0x025b88:24)
+	ld a, (0x025b86:24)
 	call MidiStream_HandlePartSelect
 	pop xiz
 	pop xix
@@ -4899,7 +4899,7 @@ FileIO_GetRecordAttr_Return:
 	ret
 
 FileIO_GetRecordAttr_Default:
-	ldb_da l, (0x0272d0)
+	ld l, (0x0272d0:24)
 	ret
 
 FileIO_SetModeFlag_Writing:
@@ -5062,14 +5062,14 @@ InitRecordTable_ExtLoop:
 	ret
 
 GetDiskSizeInfo:
-	ldb_da a, (SeqFileTypeCode_Lsw_0x4E)
+	ld a, (SeqFileTypeCode_Lsw_0x4E:24)
 	cpda8_24 a, (0x25db6)
 	jr nz, GetDiskSize_Return
 	call GetMediaType
 	stb_da (0x025db6), l
 
 GetDiskSize_Return:
-	ldb_da l, (0x025db6)
+	ld l, (0x025db6:24)
 	ret
 
 GetEncodedFreeSpaceData:
@@ -5136,7 +5136,7 @@ SearchLoad_Return:
 	ret
 
 ValidateFileSelectionIndex:
-	ldb_da c, (0x025db6)
+	ld c, (0x025db6:24)
 	cps c, 2
 	jr z, ValidateSelection_CheckRange
 	cps c, 3
@@ -5679,7 +5679,7 @@ IdxRecLookup_Return:
 
 
 ValidateFileRange:
-	ldb_da c, (0x025db6)
+	ld c, (0x025db6:24)
 	cps c, 2
 	jr z, ValidateFileRange_CheckLower
 	cps c, 3
@@ -6933,7 +6933,7 @@ TrimFormat_Done:
 	ret
 
 DetectFileType:
-	ldb_da l, (0x025db6)
+	ld l, (0x025db6:24)
 	cps l, 6
 	jr z, DetectType_KnownType
 	cps l, 7
@@ -6971,7 +6971,7 @@ DetectType_TryOpen:
 
 DetectType_TrimAndReturn:
 	calr TrimAndFormatFilename
-	ldb_da l, (0x025db6)
+	ld l, (0x025db6:24)
 	extz hl
 	ret
 
@@ -6999,7 +6999,7 @@ DetectType_NotFound:
 	ret
 
 ValidateFileRangeAlt:
-	ldb_da c, (0x025db6)
+	ld c, (0x025db6:24)
 	cps c, 6
 	jr z, ValidateRangeAlt_CheckType
 	cps c, 7
@@ -7507,7 +7507,7 @@ BuildIndex_ScanLoop:
 	jr BuildIndex_CheckComma
 
 BuildIndex_CheckSubEntry:
-	ldb_da c, (0x027412)
+	ld c, (0x027412:24)
 	exts bc
 	sla bc, 5
 	addw_erp BC, 0xfa
@@ -7533,7 +7533,7 @@ BuildIndex_CheckComma:
 	jr lt, BuildIndex_CheckSubEntry
 
 FileIO_StoreIndexedEntry:
-	ldb_da a, (0x027412)
+	ld a, (0x027412:24)
 	exts wa
 	sla wa, 5
 	addw_erp WA, 0xfa
@@ -7617,10 +7617,10 @@ FileIO_FindFirstMatch:
 	ld XWA, (xsp + 0x0110)
 	lds32 xbc, 0
 	ld (xwa), xbc
-	ldb_da a, (0x027414)
+	ld a, (0x027414:24)
 	exts wa
 	ld (xsp + 4), wa
-	ldb_da a, (0x027412)
+	ld a, (0x027412:24)
 	exts wa
 	cp (xsp + 4), wa
 	jrl ge, FindFirst_NotFound
@@ -7672,7 +7672,7 @@ FindFirst_StoreResult:
 
 FindFirst_NextIndex:
 	incw 1, (xsp + 4)
-	ldb_da a, (0x027412)
+	ld a, (0x027412:24)
 	exts wa
 	cp (xsp + 4), wa
 	jrl lt, FindFirst_BuildPathLoop
@@ -7747,7 +7747,7 @@ FileIO_SearchStringMatch:
 	jr SearchMatch_FirstSearch
 
 SearchMatch_HasHandle:
-	ldb_da a, (0x027414)
+	ld a, (0x027414:24)
 	cpda8_24 a, (0x27412)
 	jr ge, SearchMatch_Return
 	ld xwa, xiz
@@ -7773,10 +7773,10 @@ FileIO_ExtractBasename:
 	ld xwa, (0x027416:24)
 	cp xwa, 0x0
 	ret lt
-	ldb_da c, (0x027412)
+	ld c, (0x027412:24)
 	cps c, 0
 	ret le
-	ldb_da a, (0x027414)
+	ld a, (0x027414:24)
 	cp a, c
 	ret ge
 	exts wa
@@ -7841,7 +7841,7 @@ NormalizePath_CheckLoop:
 	ret
 
 FileIO_ValidateModeAndRange:
-	ldb_da c, (0x025db6)
+	ld c, (0x025db6:24)
 	cps c, 2
 	jr z, ValidateMode_CheckRange
 	cps c, 3
@@ -8451,7 +8451,7 @@ FileIO_ErrorCodeByteBlock:
 	call	16355459
 	calr	-924
 	ret
-	ldb_da	a, (213234)
+	ld	a, (213234:24)
 	cp	(35992:16), 1
 	jr	nz, 75
 	.byte 0xf1, 0x20, 0x04, 0xca
@@ -8465,7 +8465,7 @@ FileIO_ErrorCodeByteBlock:
 	ret	nc
 	lds	wa, 6
 	call	16355414
-	ldb_da	a, (213234)
+	ld	a, (213234:24)
 	extz	wa
 	lda	xbc, (15336786:24)
 	ld_rrb	a, xbc, wa

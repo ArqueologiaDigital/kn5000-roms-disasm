@@ -5549,7 +5549,7 @@ IvIntReminderProc:
 
 IvIntReminder_GetInterval:
 	lds32 xhl, 0
-	ldb_da l, (0x0340e6)
+	ld l, (0x0340e6:24)
 	ret
 
 IvIntCompleteProc:
@@ -5567,7 +5567,7 @@ IvIntCompleteProc:
 
 IvIntComplete_GetInterval:
 	lds32 xhl, 0
-	ldb_da l, (0x0340e8)
+	ld l, (0x0340e8:24)
 	ret
 
 IvIntErrorProc:
@@ -5585,7 +5585,7 @@ IvIntErrorProc:
 
 IvIntError_GetInterval:
 	lds32 xhl, 0
-	ldb_da l, (0x0340ec)
+	ld l, (0x0340ec:24)
 	ret
 
 IvIntVariProc:
@@ -5641,7 +5641,7 @@ IvIntVari_ReturnZero:
 
 IvIntVari_GetInterval:
 	lds32 xhl, 0
-	ldb_da l, (0x0340ee)
+	ld l, (0x0340ee:24)
 
 IvIntVari_Return:
 	pop xiz
@@ -5663,7 +5663,7 @@ IvIntEasySetProc:
 
 IvIntEasySet_GetInterval:
 	lds32 xhl, 0
-	ldb_da l, (0x0340f0)
+	ld l, (0x0340f0:24)
 	ret
 
 IvIntWelcomeProc:
@@ -8245,7 +8245,7 @@ AcTrkSw_ShowHide:
 	ld xbc, 0x1e0009f
 	lds32 xde, 0
 	call ApFuncCall
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	extz wa
 	sla wa, 2
 	ld_sril3 XDE, 0x07, 0xec, 0xe0

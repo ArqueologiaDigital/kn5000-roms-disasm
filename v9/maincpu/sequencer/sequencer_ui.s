@@ -183,7 +183,7 @@ TrAsSureLangCheck:
 	inc 1, a
 	extz wa
 	pushw wa
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (NakaWidgetPtrTbl_SmfDp_0x1DA0:24)
@@ -894,7 +894,7 @@ LyricsFile_ValidateAndInsert:
 	stib_da (0x020f6f), 0x00
 
 LyricsFile_CheckFirstByte:
-	ldb_da e, (0x020f4e)
+	ld e, (0x020f4e:24)
 	cps e, 0
 	jrl z, LyricsBox_PopIzRet
 	lda xhl, (0x020cbe:24)
@@ -2748,7 +2748,7 @@ TrAsGrid_NotDrumType:
 	ret
 
 TrAsGrid_CheckCurrentCell:
-	ldb_da a, (0x021082)
+	ld a, (0x021082:24)
 	cp a, 0xe
 	jr z, TrAsGrid_IsDrumType
 	cp a, 0xd
@@ -3018,7 +3018,7 @@ TrAsGridChk_HandleResizeEvent:
 	ld bc, wa
 	cp bc, hl
 	jr nz, TrAsGridChk_Part1_AdjustDown
-	ldb_da l, (0x021082)
+	ld l, (0x021082:24)
 	jr TrAsGridChk_Part1_SendAudio
 
 TrAsGridChk_Part1_AdjustDown:
@@ -3464,7 +3464,7 @@ AcCurSong_CallInherited:
 AcCurSongName_HandleFocusGained:
 	ld xwa, xiz
 	call InheritedProc
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	pushw wa
@@ -3743,7 +3743,7 @@ MuteChSet_Dispatch:
 MuteChSet_ParamCheck:
 	cpib_da (0x021088), 0x01
 	jr nz, MuteChSetFunc_Exit
-	ldb_da a, (0x02108a)
+	ld a, (0x02108a:24)
 	extz wa
 	calr SqAftSet_LookupTableEntry
 	ld xwa, 0x147001c
@@ -3799,14 +3799,14 @@ SMFMuteOnOffFunc:
 	cp xbc, 0x1e70017
 	jr nz, SMFMuteOnOff_Enable
 	lds32 xhl, 0
-	ldb_da l, (0x021088)
+	ld l, (0x021088:24)
 	ret
 
 SMFMuteOnOff_Enable:
 	cp xde, 0x1
 	jr nz, SMFMuteOnOff_Disable
 	stib_da (0x021088), 0x01
-	ldb_da a, (0x02108a)
+	ld a, (0x02108a:24)
 	extz wa
 	calr SqAftSet_LookupTableEntry
 	ld xwa, 0x147001c
@@ -4541,7 +4541,7 @@ AcPanicEditSw_SetMode3:
 	setda_24 3, (0x02109e)
 
 UI_CheckDisplayModeAndDispatch:
-	ldb_da c, (0x02109e)
+	ld c, (0x02109e:24)
 	ld a, c
 	and a, 0x3
 	jr z, AcPanicEditSw_HandleFocusLost
@@ -4617,7 +4617,7 @@ HelpStsCheck:
 	cp xbc, 0x1e0009f
 	jr nz, HelpStsCheck_ReturnZero
 	lds32 xbc, 0
-	ldb_da c, (0x0340e4)
+	ld c, (0x0340e4:24)
 	sll xbc, 2
 	lds32 xwa, 0
 	ld a, (0x296e:16)
@@ -4635,7 +4635,7 @@ HelpStsP2Check:
 	cp xbc, 0x1e0009f
 	jr nz, HelpStsP2Check_ReturnZero
 	lds32 xbc, 0
-	ldb_da c, (0x0340e4)
+	ld c, (0x0340e4:24)
 	sll xbc, 2
 	lds32 xwa, 0
 	ld a, (0x296e:16)
@@ -4654,7 +4654,7 @@ HelpStsP3Check:
 	cp xbc, 0x1e0009f
 	jr nz, HelpStsP3Check_ReturnZero
 	lds32 xbc, 0
-	ldb_da c, (0x0340e4)
+	ld c, (0x0340e4:24)
 	sll xbc, 2
 	lds32 xwa, 0
 	ld a, (0x296e:16)
@@ -4673,7 +4673,7 @@ HelpStsP4Check:
 	cp xbc, 0x1e0009f
 	jr nz, HelpStsP4Check_ReturnZero
 	lds32 xbc, 0
-	ldb_da c, (0x0340e4)
+	ld c, (0x0340e4:24)
 	sll xbc, 2
 	lds32 xwa, 0
 	ld a, (0x296e:16)
@@ -5498,7 +5498,7 @@ AcIndexWideToggleFunc:
 	cp xbc, 0x1e8006f
 	jr nz, AcIndexToggleFunc_ReturnZero
 	lds32 xhl, 0
-	ldb_da l, (0x0340e4)
+	ld l, (0x0340e4:24)
 	ret
 
 AcIndexToggleFunc_StoreAndPost:
@@ -6372,7 +6372,7 @@ NoteEditBox_EventDispatch2:
 	add	wa, 24
 	ld	(xde), wa
 	lda	xbc, (xix+2)
-	ldb_da	a, (0x021096)
+	ld	a, (0x021096:24)
 	mul	a, 10
 	add	a, 57
 	extz	wa
@@ -6402,7 +6402,7 @@ NoteEditBox_EventDispatch2:
 	ld	xbc, 0x01e8006c
 	call	ApFuncCall
 	lda	xbc, (xsp+24)
-	ldb_da	a, (0x021096)
+	ld	a, (0x021096:24)
 	cpda8 xbc, (10144)
 	jr	nz, 17
 	lda	xwa, (xsp+28)
@@ -6426,7 +6426,7 @@ NoteEditBox_EventDispatch2:
 	add	wa, 70
 	ld	(xde), wa
 	lda	xbc, (xix+2)
-	ldb_da	a, (0x021096)
+	ld	a, (0x021096:24)
 	mul	a, 10
 	add	a, 57
 	extz	wa
@@ -6463,7 +6463,7 @@ NoteEditBox_EventDispatch2:
 	pushw	242
 	pushw	255
 	call	DrawStringLeftJustify
-	ldb_da	a, (0x021096)
+	ld	a, (0x021096:24)
 	inc	1, a
 	stb_da	(0x021096), a
 	cp	a, 11
@@ -6780,7 +6780,7 @@ NoteEdit_FormatChordNotes:
 	ld xiz, xde
 	pushw 0xa
 	lds32 xbc, 0
-	ldb_da c, (0x021096)
+	ld c, (0x021096:24)
 	lds32 xwa, 0
 	ld a, (0x279e:16)
 	add xwa, xbc
@@ -7083,7 +7083,7 @@ SngSelFunc_HandleEvent47:
 	ld xwa, (xiz + 18)
 	push xwa
 	call Strcpy
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	inc 1, a
 	extz wa
 	pushw wa
@@ -7111,7 +7111,7 @@ SngSelFunc_HandleEvent47:
 
 SngSelFunc_LoadTitleCount:
 	lds32 xhl, 0
-	ldb_da l, (0x00ffe3)
+	ld l, (0x00ffe3:24)
 	jr ReturnTitleOrZero
 
 SngSelFunc_GetTitleIndex:
@@ -13634,7 +13634,7 @@ SqplyFunc_HandleGetValue:
 
 SqplyFunc_GetValueDispatch:
 	lds32 xhl, 0
-	ldb_da l, (0x02109c)
+	ld l, (0x02109c:24)
 	jrl SqplyFunc_Epilogue
 	lda xhl, (9832:16)
 	jr SqplyFunc_GetValueReturn
@@ -13772,7 +13772,7 @@ SqplyFunc_HandlePartQuery:
 
 SqplyFunc_PartQueryDispatch:
 	ldb	l, 1
-	ldb_da	a, (0x02109c)
+	ld	a, (0x02109c:24)
 	cp	a, l
 	scc16	z, hl
 	extz	xhl
@@ -14392,7 +14392,7 @@ SqedtFunc_ModeD:
 	calr SqedtFunc_StateChainB
 	jrl SqedtFunc_Epilogue12
 	lds32 xhl, 0
-	ldb_da l, (0x02109c)
+	ld l, (0x02109c:24)
 	jrl SqedtFunc_Epilogue12
 	stb_da (0x02109c), a
 
@@ -14523,7 +14523,7 @@ SqedtFunc_SignExtend:
 ; Sequencer format dispatch A
 SeqFormat_DispatchA:
 	ldb	l, 0
-	ldb_da	a, (0x02109c)
+	ld	a, (0x02109c:24)
 	cp	a, l
 	scc16	z, hl
 	extz	xhl
@@ -14539,12 +14539,12 @@ SeqFormat_DispatchA:
 	ldb	l, 6
 	jr	-34
 	lds32	xhl, 0
-	ldb_da	l, (0x03e2dc)
+	ld	l, (0x03e2dc:24)
 	jrl	206
 	stb_da	(0x03e2dc), a
 	jrl	-366
 	lds32	xhl, 0
-	ldb_da	l, (0x03e2de)
+	ld	l, (0x03e2de:24)
 	jrl	188
 	stb_da	(0x03e2de), a
 	jrl	-384
@@ -14581,7 +14581,7 @@ SeqFormat_DispatchA:
 	ld	xbc, (xsp+8)
 	sub	xbc, xwa
 	lds32	xwa, 0
-	ldb_da	a, (0x03e2dc)
+	ld	a, (0x03e2dc:24)
 	cp	xwa, xbc
 	scc16	z, hl
 	extz	xhl
@@ -14592,7 +14592,7 @@ SeqFormat_DispatchA:
 	ld	xbc, (xsp+8)
 	sub	xbc, xwa
 	lds32	xwa, 0
-	ldb_da	a, (0x03e2de)
+	ld	a, (0x03e2de:24)
 	cp	xwa, xbc
 	scc16	z, hl
 	extz	xhl
@@ -14933,7 +14933,7 @@ DspItem0CngFunc:
 	jrl z, DspItem0_DispatchTarget
 	cp xix, 0x1e00046
 	jrl z, DspItem0_HandleType2
-	ldb_da l, (0x021098)
+	ld l, (0x021098:24)
 	lda xwa, (0x2978:16)
 	ld (xsp + 4), xwa
 	ld c, l
@@ -15028,7 +15028,7 @@ DspItem0_DisplayEffectName:
 ; -----------------------------------------------------------------------------
 DspItem0_DisplayParamNames:
 	pushw 0x11
-	ldb_da a, (0x021098)
+	ld a, (0x021098:24)
 	extz wa
 	add wa, (xsp + 20)
 	lda xbc, (0x29ac:16)
@@ -15063,7 +15063,7 @@ DspItem0_DisplayParamNames:
 ; -----------------------------------------------------------------------------
 DspItem0_DisplayParamValues:
 	pushw 0x2
-	ldb_da a, (0x021098)
+	ld a, (0x021098:24)
 	extz wa
 	add wa, (xsp + 20)
 	lda xbc, (0x29ac:16)
@@ -15210,7 +15210,7 @@ EffectEdit_ReturnZero:
 	lds32 xhl, 0
 	jr DspItem0_Epilogue
 	lds32 xhl, 0
-	ldb_da l, (0x02109a)
+	ld l, (0x02109a:24)
 	jr DspItem0_Epilogue
 	stb_da (0x021098), e
 	jr EffectEdit_ReturnZero

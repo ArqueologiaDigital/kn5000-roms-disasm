@@ -688,7 +688,7 @@ SmfFN_Save_WriteSlot:
 	lda	xbc, (xsp+8)
 	ldw	de, 16
 	call	16288997
-	ldb_da	a, (65507)
+	ld	a, (65507:24)
 	cpda8	a, 34988
 	jr	nz, 20
 	lda	xwa, (61824:24)

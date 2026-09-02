@@ -4175,7 +4175,7 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	; Look up a file entry in the filesystem
 	; Part 1: 9 lookup blocks — read byte, lookup table, call handler
 	; Block 1: address 0x22ABE8, command 0x007F01CF
-	ldb_da xwa, (0x22abe8)
+	ld a, (0x22abe8:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x2e1e14:24)
@@ -4187,7 +4187,7 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	ld xbc, 0x01c0000f
 	call (xhl)
 	; Block 2: address 0x22ABE9, command 0x007F01D0
-	ldb_da xwa, (0x22abe9)
+	ld a, (0x22abe9:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x2e1e14:24)
@@ -4199,7 +4199,7 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	ld xbc, 0x01c0000f
 	call (xhl)
 	; Block 3: address 0x22ABEA, command 0x007F01D1
-	ldb_da xwa, (0x22abea)
+	ld a, (0x22abea:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x2e1e14:24)
@@ -4211,7 +4211,7 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	ld xbc, 0x01c0000f
 	call (xhl)
 	; Block 4: address 0x22ABEB, command 0x007F01D2
-	ldb_da xwa, (0x22abeb)
+	ld a, (0x22abeb:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x2e1e14:24)
@@ -4223,7 +4223,7 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	ld xbc, 0x01c0000f
 	call (xhl)
 	; Block 5: address 0x22ABEC, command 0x007F01D3
-	ldb_da xwa, (0x22abec)
+	ld a, (0x22abec:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x2e1e14:24)
@@ -4235,7 +4235,7 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	ld xbc, 0x01c0000f
 	call (xhl)
 	; Block 6: address 0x22ABED, command 0x007F01D4
-	ldb_da xwa, (0x22abed)
+	ld a, (0x22abed:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x2e1e14:24)
@@ -4247,7 +4247,7 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	ld xbc, 0x01c0000f
 	call (xhl)
 	; Block 7: address 0x22ABEE, command 0x007F01D5
-	ldb_da xwa, (0x22abee)
+	ld a, (0x22abee:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x2e1e14:24)
@@ -4259,7 +4259,7 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	ld xbc, 0x01c0000f
 	call (xhl)
 	; Block 8: address 0x22ABEF, command 0x007F01D6
-	ldb_da xwa, (0x22abef)
+	ld a, (0x22abef:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x2e1e14:24)
@@ -4271,7 +4271,7 @@ HDAE5000_FS_Entry_Lookup:	; 0x28A2F0 (739 bytes)
 	ld xbc, 0x01c0000f
 	call (xhl)
 	; Block 9: address 0x22ABF0, command 0x007F01E9 (tail call)
-	ldb_da xwa, (0x22abf0)
+	ld a, (0x22abf0:24)
 	extz wa
 	sla wa, 2
 	lda xbc, (0x2e1e14:24)

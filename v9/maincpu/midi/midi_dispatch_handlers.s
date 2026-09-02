@@ -15522,7 +15522,7 @@ TGReg_WriteCC11_Check:
 	ret
 
 SoundMode_SetReverbType:
-	ldb_da a, (0x0340f8)
+	ld a, (0x0340f8:24)
 	cps a, 3
 	jr z, SoundMode_ReverbType3
 	cps a, 2
@@ -15547,7 +15547,7 @@ SoundParam_SyncAndReturn:
 	jp SndParam_ApplyAndSync
 
 SoundMode_SetChorusType:
-	ldb_da a, (0x0340f9)
+	ld a, (0x0340f9:24)
 	cps a, 3
 	jr z, SoundMode_ChorusType3
 	cps a, 2

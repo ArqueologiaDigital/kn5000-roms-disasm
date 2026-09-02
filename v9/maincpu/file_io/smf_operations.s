@@ -759,7 +759,7 @@ SmfFN_Save_WriteSlot:
 	lda xbc, (xsp + 8)
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	cpda8 a, 0x8948
 	jr nz, SmfFN_Save_Finish
 	lda xwa, (0x00f180:24)

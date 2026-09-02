@@ -1471,7 +1471,7 @@ InterCPU_RX_Handler:
 	push xwa
 	bit_dd8 2, 0x34	; Check serial status
 	jr nz, InterCPU_RX_Handler__exit
-	ldb_da a, (0x120000); Read command from main CPU
+	ld a, (0x120000:24); Read command from main CPU
 	ld (1306:16), a; Save received byte
 	cp a, 0xE1	; Command E1?
 	jr nz, InterCPU_RX_Handler__not_e1

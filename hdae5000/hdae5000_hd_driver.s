@@ -400,7 +400,7 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	lda xwa, (0x22ada6:24); f2 a6 ad 22 30
 	push xwa				; 38
 	call HDAE5000_MemCopy				; 1d 9f ae 29 — MemCopy
-	ldb_da xwa, (0x229d99); c2 99 9d 22 21 — ld a, (0x229d99)
+	ld a, (0x229d99:24); c2 99 9d 22 21 — ld a, (0x229d99)
 	extz wa					; d8 12
 	sla wa, 2				; d8 ec 02
 	lda xbc, (0x2e1e3c:24); f2 3c 1e 2e 31
@@ -423,7 +423,7 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	lda xwa, (0x22adba:24); f2 ba ad 22 30
 	push xwa				; 38
 	call HDAE5000_MemCopy				; 1d 9f ae 29 — MemCopy
-	ldb_da xwa, (0x229d9a); c2 9a 9d 22 21 — ld a, (0x229d9a)
+	ld a, (0x229d9a:24); c2 9a 9d 22 21 — ld a, (0x229d9a)
 	extz wa					; d8 12
 	sla wa, 2				; d8 ec 02
 	lda xbc, (0x2e1e3c:24); f2 3c 1e 2e 31
@@ -446,7 +446,7 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	lda xwa, (0x22adec:24); f2 ec ad 22 30
 	push xwa				; 38
 	call HDAE5000_MemCopy				; 1d 9f ae 29 — MemCopy
-	ldb_da xwa, (0x229daa); c2 aa 9d 22 21 — ld a, (0x229daa)
+	ld a, (0x229daa:24); c2 aa 9d 22 21 — ld a, (0x229daa)
 	extz wa					; d8 12
 	pushw wa                                ; push wa (compact 16-bit)
 	pushw 0x002e
@@ -466,7 +466,7 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	lda xwa, (0x22ae1e:24); f2 1e ae 22 30
 	push xwa				; 38
 	call HDAE5000_MemCopy				; 1d 9f ae 29 — MemCopy
-	ldb_da xwa, (0x229da9); c2 a9 9d 22 21 — ld a, (0x229da9)
+	ld a, (0x229da9:24); c2 a9 9d 22 21 — ld a, (0x229da9)
 	extz wa					; d8 12
 	pushw wa                                ; push wa (compact 16-bit)
 	pushw 0x002e
@@ -486,7 +486,7 @@ HDAE5000_HD_Read_Identify:	; 0x2832F3 (1051 bytes)
 	lda xwa, (0x22add1:24); f2 d1 ad 22 30
 	push xwa				; 38
 	call HDAE5000_MemCopy				; 1d 9f ae 29 — MemCopy
-	ldb_da xwa, (0x229dab); c2 ab 9d 22 21 — ld a, (0x229dab)
+	ld a, (0x229dab:24); c2 ab 9d 22 21 — ld a, (0x229dab)
 	extz wa					; d8 12
 	pushw wa                                ; push wa (compact 16-bit)
 	pushw 0x002e
@@ -706,7 +706,7 @@ HDAE5000_HDAETitleFunc:
 
 	; === Case 9: check cylinder count, set disk capacity ===
 .Lri_case9:					; 0x283649
-	ldb_da xwa, (0x229da9); c2 a9 9d 22 21 — ld a, (0x229da9)
+	ld a, (0x229da9:24); c2 a9 9d 22 21 — ld a, (0x229da9)
 	cps a, 3				; c9 db
 	jr z, .Lri_case9_cyl3			; 66 xx
 	cps a, 2				; c9 da
@@ -3016,7 +3016,7 @@ HDAE5000_HD_Wait_Ready:	; 0x284F4C (138 bytes)
 HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	; Check HD status flags at 0x22B2F4, 0x23A0A0
 	; Part 1: Main status check — dispatch on disk state byte at 0x22B2F4
-	ldb_da xwa, (0x22b2f4); ld A, (0x22B2F4)
+	ld a, (0x22b2f4:24); ld A, (0x22B2F4)
 	extz wa
 	ld xbc, (0x23a1a2:24); ld XBC, (0x23A1A2)
 	ld xbc, (xbc + 0x0e88)             ; ld XBC, (XBC + 0x0E88)
@@ -3024,7 +3024,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	call (xhl)			; callback
 	cpib_da (0x23a0a2), 0x00; cp (0x23A0A2), 0
 	jr z, .LHD_SC__skip_a2
-	ldb_da xwa, (0x23a0a2); ld A, (0x23A0A2)
+	ld a, (0x23a0a2:24); ld A, (0x23A0A2)
 	dec 1, a
 	extz wa
 	lds bc, 0
@@ -3034,7 +3034,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 .LHD_SC__skip_a2:
 	cpib_da (0x23a0a4), 0x00; cp (0x23A0A4), 0
 	jr z, .LHD_SC__dispatch
-	ldb_da xwa, (0x23a0a4); ld A, (0x23A0A4)
+	ld a, (0x23a0a4:24); ld A, (0x23A0A4)
 	dec 1, a
 	extz wa
 	lds bc, 0
@@ -3042,7 +3042,7 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 	calr HDAE5000_HD_Wait_Ready
 	stib_da (0x23a0a4), 0x00; (0x23A0A4) = 0
 .LHD_SC__dispatch:
-	ldb_da xwa, (0x22b2f4); re-read state byte
+	ld a, (0x22b2f4:24); re-read state byte
 	cps a, 3
 	jr z, .LHD_SC__state3
 	cps a, 2
@@ -3055,59 +3055,59 @@ HDAE5000_HD_Status_Check:	; 0x284FD6 (782 bytes)
 .LHD_SC__state1:			; state=1: process A0A0, copy to A0A2
 	cpib_da (0x23a0a0), 0x00
 	ret z
-	ldb_da xwa, (0x23a0a0)
+	ld a, (0x23a0a0:24)
 	dec 1, a
 	extz wa
 	lds bc, 1
 	lds de, 0
 	calr HDAE5000_HD_Wait_Ready
-	ldb_da xwa, (0x23a0a0)
+	ld a, (0x23a0a0:24)
 	stb_da (0x23a0a2), a; (0x23A0A2) = A
 	ret
 .LHD_SC__state2:			; state=2: process A0A0+A09E
 	cpib_da (0x23a0a0), 0x00
 	jr z, .LHD_SC__s2_check_9e
-	ldb_da xwa, (0x23a0a0)
+	ld a, (0x23a0a0:24)
 	dec 1, a
 	extz wa
 	lds bc, 1
 	lds de, 0
 	calr HDAE5000_HD_Wait_Ready
-	ldb_da xwa, (0x23a0a0)
+	ld a, (0x23a0a0:24)
 	stb_da (0x23a0a2), a
 .LHD_SC__s2_check_9e:
 	cpib_da (0x23a09e), 0x00
 	ret z
-	ldb_da xwa, (0x23a09e)
+	ld a, (0x23a09e:24)
 	dec 1, a
 	extz wa
 	lds bc, 1
 	lds de, 0
 	calr HDAE5000_HD_Wait_Ready
-	ldb_da xwa, (0x23a09e)
+	ld a, (0x23a09e:24)
 	stb_da (0x23a0a4), a
 	ret
 .LHD_SC__state3:			; state=3: process A0A0 (DE=2) + A09E (DE=1)
 	cpib_da (0x23a0a0), 0x00
 	jr z, .LHD_SC__s3_check_9e
-	ldb_da xwa, (0x23a0a0)
+	ld a, (0x23a0a0:24)
 	dec 1, a
 	extz wa
 	lds bc, 1
 	lds de, 2
 	calr HDAE5000_HD_Wait_Ready
-	ldb_da xwa, (0x23a0a0)
+	ld a, (0x23a0a0:24)
 	stb_da (0x23a0a2), a
 .LHD_SC__s3_check_9e:
 	cpib_da (0x23a09e), 0x00
 	ret z
-	ldb_da xwa, (0x23a09e)
+	ld a, (0x23a09e:24)
 	dec 1, a
 	extz wa
 	lds bc, 1
 	lds de, 1
 	calr HDAE5000_HD_Wait_Ready
-	ldb_da xwa, (0x23a09e)
+	ld a, (0x23a09e:24)
 	stb_da (0x23a0a4), a
 	ret
 	;
@@ -3476,7 +3476,7 @@ HDAE5000_SaveOptNameCheck:
 HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 ; LHCM: 0x28541C (3728 bytes)
 
-	ldb_da	a, (0x22AA4E)
+	ld	a, (0x22AA4E:24)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (0x2e2922:24)
@@ -3487,7 +3487,7 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	ld	xwa, 0x007f0196
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	ldb_da	a, (0x22AA4F)
+	ld	a, (0x22AA4F:24)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (0x2e2922:24)
@@ -3498,7 +3498,7 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	ld	xwa, 0x007f0197
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	ldb_da	a, (0x22AA50)
+	ld	a, (0x22AA50:24)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (0x2e2922:24)
@@ -3509,7 +3509,7 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	ld	xwa, 0x007f0198
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	ldb_da	a, (0x22AA51)
+	ld	a, (0x22AA51:24)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (0x2e2922:24)
@@ -3520,7 +3520,7 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	ld	xwa, 0x007f0194
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	ldb_da	a, (0x22AA52)
+	ld	a, (0x22AA52:24)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (0x2e2922:24)
@@ -3531,7 +3531,7 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	ld	xwa, 0x007f0199
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	ldb_da	a, (0x22AA53)
+	ld	a, (0x22AA53:24)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (0x2e2922:24)
@@ -3542,7 +3542,7 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	ld	xwa, 0x007f019a
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	ldb_da	a, (0x22AA54)
+	ld	a, (0x22AA54:24)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (0x2e2922:24)
@@ -3553,7 +3553,7 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	ld	xwa, 0x007f019b
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	ldb_da	a, (0x22AA55)
+	ld	a, (0x22AA55:24)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (0x2e2922:24)
@@ -3564,7 +3564,7 @@ HDAE5000_HD_Config_Manager:	; 0x28541C (3728 bytes)
 	ld	xwa, 0x007f019c
 	ld	xbc, 0x01c0000f
 	call	(xhl)
-	ldb_da	a, (0x22AA56)
+	ld	a, (0x22AA56:24)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (0x2e2922:24)
@@ -4437,7 +4437,7 @@ HDAE5000_WriteProtectEditCheck:
 	lds32	xhl, 1
 	jr t, .LHCM_5f1a                       ; [68 10] jr T,0x285f1a
 .LHCM_5f0a:
-	ldb_da	a, (0x229D99)
+	ld	a, (0x229D99:24)
 	extz wa                                 ; extz WA
 	calr	0x5344
 	lds32	xhl, 0
@@ -5111,7 +5111,7 @@ HDAE5000_HD_CHS_Calculate:	; 0x2865DE (1098 bytes)
 	pushw wa                                ; push wa (compact)
 	call 0x29ac3b
 	inc 0, xsp			; dealloc 4 bytes
-	ldb_da xwa, (0x22ad9c); A = current count
+	ld a, (0x22ad9c:24); A = current count
 	extz wa
 	ld bc, wa
 	inc 2, bc			; BC = count + 2

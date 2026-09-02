@@ -339,16 +339,16 @@ SLSrcBankList_FuncBody:
 	push	234
 	.byte 0x51
 	ld	(0x89fc:16), w
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	65044
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	65219
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	65140
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	65369
 	lds32	xwa, 0
@@ -366,7 +366,7 @@ SLSrcBankList_FuncBody:
 	ld	xix, xbc
 	cp	xbc, 0x01c00017
 	jr	nz, 43
-	ldb_da	l, (PtrTbl_DrumKitNames_0x7A)
+	ld	l, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	a, l
 	ld	c, e
 	add	a, e
@@ -374,24 +374,24 @@ SLSrcBankList_FuncBody:
 	jr	nc, 25
 	add	c, l
 	ld	(0x89fc:16), c
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	64928
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	jr	42
 	cp	xix, 0x01c00018
 	jr	nz, 47
 	ld	a, e
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	cp	e, c
 	jr	c, 36
 	sub	a, c
 	ld	(0x89fc:16), a
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	64884
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	65059
 	ld	(0x81d0:16), 1
@@ -418,7 +418,7 @@ SLSrcBankList_FuncBody:
 	inc	1, a
 	cpda8_24 xbc, (15337812)
 	jr	nc, 36
-	ldb_da	e, (PtrTbl_DrumKitNames_0x7A)
+	ld	e, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -429,7 +429,7 @@ SLSrcBankList_FuncBody:
 	jr	nc, 67
 	inc	1, c
 	ld	(0x89fc:16), c
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	jr	44
 	cp	xhl, 0x01c00018
@@ -437,7 +437,7 @@ SLSrcBankList_FuncBody:
 	ld	c, e
 	cps	e, 0
 	jr	z, 38
-	ldb_da	e, (PtrTbl_DrumKitNames_0x7A)
+	ld	e, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
@@ -446,7 +446,7 @@ SLSrcBankList_FuncBody:
 	jr	z, 21
 	dec	1, c
 	ld	(0x89fc:16), c
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	64892
 	ld	(0x81ce:16), 1
@@ -487,7 +487,7 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 15
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	64685
 	ld	(0x81d0:16), 0
@@ -496,7 +496,7 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 15
-	ldb_da	c, (PtrTbl_DrumKitNames_0x7A)
+	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	xwa, xiz
 	calr	64902
 	ld	(0x81ce:16), 0
@@ -736,7 +736,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), xde
 	ld	xde, xbc
 	ld	xiz, xwa
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	cp	xde, 0x01c00018
 	jr	z, 51
 	cp	xde, 0x01c00017
@@ -745,10 +745,10 @@ SLSrcBankList_FuncBody:
 	jrl	nz, 447
 	ld	xwa, xiz
 	calr	65182
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	xwa, xiz
 	calr	65053
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	xwa, xiz
 	calr	65377
 	lds32	xwa, 0
@@ -761,7 +761,7 @@ SLSrcBankList_FuncBody:
 	ld	xix, xde
 	cp	xde, 0x01c00017
 	jr	nz, 43
-	ldb_da	e, (PtrTbl_DrumKitNames_0x9C)
+	ld	e, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	a, e
 	ld	c, l
 	add	a, l
@@ -769,24 +769,24 @@ SLSrcBankList_FuncBody:
 	jr	nc, 25
 	add	c, e
 	ld	(0x89fe:16), c
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	xwa, xiz
 	calr	64974
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	xwa, xiz
 	jr	42
 	cp	xix, 0x01c00018
 	jr	nz, 42
 	ld	a, l
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	cp	l, c
 	jr	c, 31
 	sub	a, c
 	ld	(0x89fe:16), a
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	xwa, xiz
 	calr	64930
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	xwa, xiz
 	calr	65039
 	ld	(0x81d6:16), 1
@@ -812,7 +812,7 @@ SLSrcBankList_FuncBody:
 	inc	1, a
 	cpda8_24 xbc, (15337846)
 	jr	nc, 36
-	ldb_da	e, (PtrTbl_DrumKitNames_0x9C)
+	ld	e, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -823,7 +823,7 @@ SLSrcBankList_FuncBody:
 	jr	nc, 67
 	inc	1, c
 	ld	(0x89fe:16), c
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	xwa, xiz
 	jr	44
 	cp	xix, 0x01c00018
@@ -831,7 +831,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	cps	l, 0
 	jr	z, 38
-	ldb_da	e, (PtrTbl_DrumKitNames_0x9C)
+	ld	e, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
@@ -840,7 +840,7 @@ SLSrcBankList_FuncBody:
 	jr	z, 21
 	dec	1, c
 	ld	(0x89fe:16), c
-	ldb_da	c, (PtrTbl_DrumKitNames_0x9C)
+	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
 	ld	xwa, xiz
 	calr	64877
 	ld	(0x81d6:16), 1
@@ -1110,7 +1110,7 @@ SLSrcBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), xde
 	ld	xiz, xwa
-	ldb_da	e, (Str_AllOption_EA0980_0x12)
+	ld	e, (Str_AllOption_EA0980_0x12:24)
 	cp	xbc, 0x01c00018
 	jr	z, 73
 	cp	xbc, 0x01c00017
@@ -1120,13 +1120,13 @@ SLSrcBankList_FuncBody:
 	ld	xwa, xiz
 	ld	c, e
 	calr	64999
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	65184
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	65105
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	65367
 	lds32	xwa, 0
@@ -1141,7 +1141,7 @@ SLSrcBankList_FuncBody:
 	ld	xde, xbc
 	cp	xbc, 0x01c00017
 	jr	nz, 72
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	w, c
 	add	w, c
 	ld	a, l
@@ -1153,13 +1153,13 @@ SLSrcBankList_FuncBody:
 	ld	(0x8a00:16), a
 	jr	4
 	ld	(0x8a00:16), w
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	64883
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	65068
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1168,7 +1168,7 @@ SLSrcBankList_FuncBody:
 	cp	xde, 0x01c00018
 	jr	nz, 83
 	ld	c, l
-	ldb_da	e, (Str_AllOption_EA0980_0x12)
+	ld	e, (Str_AllOption_EA0980_0x12:24)
 	cp	l, e
 	jr	c, 72
 	ld	a, e
@@ -1179,13 +1179,13 @@ SLSrcBankList_FuncBody:
 	ld	(0x8a00:16), c
 	jr	4
 	ld	(0x8a00:16), e
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	64803
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	64988
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1215,7 +1215,7 @@ SLSrcBankList_FuncBody:
 	inc	1, a
 	cpda8_24 xbc, (15337876)
 	jr	nc, 105
-	ldb_da	e, (Str_AllOption_EA0980_0x12)
+	ld	e, (Str_AllOption_EA0980_0x12:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
@@ -1230,10 +1230,10 @@ SLSrcBankList_FuncBody:
 	jrl	nc, 198
 	inc	1, c
 	ld	(0x8a00:16), c
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	64836
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1241,10 +1241,10 @@ SLSrcBankList_FuncBody:
 	jrl	152
 	inc	1, c
 	ld	(0x8a00:16), c
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	64798
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1255,7 +1255,7 @@ SLSrcBankList_FuncBody:
 	ld	c, l
 	cps	l, 0
 	jr	z, 109
-	ldb_da	e, (Str_AllOption_EA0980_0x12)
+	ld	e, (Str_AllOption_EA0980_0x12:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
@@ -1268,10 +1268,10 @@ SLSrcBankList_FuncBody:
 	jr	z, 84
 	dec	1, c
 	ld	(0x8a00:16), c
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	64722
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1281,10 +1281,10 @@ SLSrcBankList_FuncBody:
 	jr	ule, 43
 	dec	1, c
 	ld	(0x8a00:16), c
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	64681
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1338,7 +1338,7 @@ SLSrcBankList_FuncBody:
 	push	xsp
 	nop
 	jr	z, 15
-	ldb_da	c, (Str_AllOption_EA0980_0x12)
+	ld	c, (Str_AllOption_EA0980_0x12:24)
 	ld	xwa, xiz
 	calr	64705
 	ld	(0x81dc:16), 0
@@ -1677,7 +1677,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+4), xde
 	ld	xde, xbc
 	ld	xiz, xwa
-	ldb_da	c, (Str_AllOption_EA09B2_0x16)
+	ld	c, (Str_AllOption_EA09B2_0x16:24)
 	cp	xde, 0x01c00018
 	jr	z, 41
 	cp	xde, 0x01c00017
@@ -1686,7 +1686,7 @@ SLDstBankList_FuncBody:
 	jrl	nz, 184
 	ld	xwa, xiz
 	calr	65123
-	ldb_da	c, (Str_AllOption_EA09B2_0x16)
+	ld	c, (Str_AllOption_EA09B2_0x16:24)
 	ld	xwa, xiz
 	calr	65275
 	lds32	xwa, 0
@@ -1699,7 +1699,7 @@ SLDstBankList_FuncBody:
 	ld	xix, xde
 	cp	xde, 0x01c00017
 	jr	nz, 43
-	ldb_da	e, (Str_AllOption_EA09B2_0x16)
+	ld	e, (Str_AllOption_EA09B2_0x16:24)
 	ld	a, e
 	ld	c, l
 	add	a, l
@@ -1707,24 +1707,24 @@ SLDstBankList_FuncBody:
 	jr	nc, 25
 	add	c, e
 	ld	(0x8a02:16), c
-	ldb_da	c, (Str_AllOption_EA09B2_0x16)
+	ld	c, (Str_AllOption_EA09B2_0x16:24)
 	ld	xwa, xiz
 	calr	65044
-	ldb_da	c, (Str_AllOption_EA09B2_0x16)
+	ld	c, (Str_AllOption_EA09B2_0x16:24)
 	ld	xwa, xiz
 	jr	42
 	cp	xix, 0x01c00018
 	jr	nz, 37
 	ld	a, l
-	ldb_da	c, (Str_AllOption_EA09B2_0x16)
+	ld	c, (Str_AllOption_EA09B2_0x16:24)
 	cp	l, c
 	jr	c, 26
 	sub	a, c
 	ld	(0x8a02:16), a
-	ldb_da	c, (Str_AllOption_EA09B2_0x16)
+	ld	c, (Str_AllOption_EA09B2_0x16:24)
 	ld	xwa, xiz
 	calr	65000
-	ldb_da	c, (Str_AllOption_EA09B2_0x16)
+	ld	c, (Str_AllOption_EA09B2_0x16:24)
 	ld	xwa, xiz
 	calr	65152
 	ld	xwa, (0x81e4:16)
@@ -1753,7 +1753,7 @@ SLDstBankList_FuncBody:
 	inc	1, a
 	cpda8_24 xbc, (15337930)
 	jr	nc, 36
-	ldb_da	e, (Str_AllOption_EA09B2_0x16)
+	ld	e, (Str_AllOption_EA09B2_0x16:24)
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -1764,7 +1764,7 @@ SLDstBankList_FuncBody:
 	jr	nc, 62
 	inc	1, c
 	ld	(0x8a02:16), c
-	ldb_da	c, (Str_AllOption_EA09B2_0x16)
+	ld	c, (Str_AllOption_EA09B2_0x16:24)
 	ld	xwa, xiz
 	jr	44
 	cp	xix, 0x01c00018
@@ -1772,7 +1772,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	cps	l, 0
 	jr	z, 33
-	ldb_da	e, (Str_AllOption_EA09B2_0x16)
+	ld	e, (Str_AllOption_EA09B2_0x16:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
@@ -1781,7 +1781,7 @@ SLDstBankList_FuncBody:
 	jr	z, 16
 	dec	1, c
 	ld	(0x8a02:16), c
-	ldb_da	c, (Str_AllOption_EA09B2_0x16)
+	ld	c, (Str_AllOption_EA09B2_0x16:24)
 	ld	xwa, xiz
 	calr	64983
 	ld	xwa, (0x81e4:16)
@@ -2091,7 +2091,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+4), xde
 	ld	xde, xbc
 	ld	xiz, xwa
-	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
+	ld	c, (Str_AllOption_EA09B2_0x3A:24)
 	cp	xde, 0x01c00018
 	jr	z, 41
 	cp	xde, 0x01c00017
@@ -2100,7 +2100,7 @@ SLDstBankList_FuncBody:
 	jrl	nz, 184
 	ld	xwa, xiz
 	calr	65174
-	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
+	ld	c, (Str_AllOption_EA09B2_0x3A:24)
 	ld	xwa, xiz
 	calr	65283
 	lds32	xwa, 0
@@ -2113,7 +2113,7 @@ SLDstBankList_FuncBody:
 	ld	xix, xde
 	cp	xde, 0x01c00017
 	jr	nz, 43
-	ldb_da	e, (Str_AllOption_EA09B2_0x3A)
+	ld	e, (Str_AllOption_EA09B2_0x3A:24)
 	ld	a, e
 	ld	c, l
 	add	a, l
@@ -2121,24 +2121,24 @@ SLDstBankList_FuncBody:
 	jr	nc, 25
 	add	c, e
 	ld	(0x8a06:16), c
-	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
+	ld	c, (Str_AllOption_EA09B2_0x3A:24)
 	ld	xwa, xiz
 	calr	65095
-	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
+	ld	c, (Str_AllOption_EA09B2_0x3A:24)
 	ld	xwa, xiz
 	jr	42
 	cp	xix, 0x01c00018
 	jr	nz, 37
 	ld	a, l
-	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
+	ld	c, (Str_AllOption_EA09B2_0x3A:24)
 	cp	l, c
 	jr	c, 26
 	sub	a, c
 	ld	(0x8a06:16), a
-	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
+	ld	c, (Str_AllOption_EA09B2_0x3A:24)
 	ld	xwa, xiz
 	calr	65051
-	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
+	ld	c, (Str_AllOption_EA09B2_0x3A:24)
 	ld	xwa, xiz
 	calr	65160
 	ld	xwa, (0x81e8:16)
@@ -2167,7 +2167,7 @@ SLDstBankList_FuncBody:
 	inc	1, a
 	cpda8_24 xbc, (15337966)
 	jr	nc, 36
-	ldb_da	e, (Str_AllOption_EA09B2_0x3A)
+	ld	e, (Str_AllOption_EA09B2_0x3A:24)
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -2178,7 +2178,7 @@ SLDstBankList_FuncBody:
 	jr	nc, 62
 	inc	1, c
 	ld	(0x8a06:16), c
-	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
+	ld	c, (Str_AllOption_EA09B2_0x3A:24)
 	ld	xwa, xiz
 	jr	44
 	cp	xix, 0x01c00018
@@ -2186,7 +2186,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	cps	l, 0
 	jr	z, 33
-	ldb_da	e, (Str_AllOption_EA09B2_0x3A)
+	ld	e, (Str_AllOption_EA09B2_0x3A:24)
 	ld	a, c
 	extz	wa
 	div8rr	a, e
@@ -2195,7 +2195,7 @@ SLDstBankList_FuncBody:
 	jr	z, 16
 	dec	1, c
 	ld	(0x8a06:16), c
-	ldb_da	c, (Str_AllOption_EA09B2_0x3A)
+	ld	c, (Str_AllOption_EA09B2_0x3A:24)
 	ld	xwa, xiz
 	calr	64991
 	ld	xwa, (0x81e8:16)
@@ -2430,7 +2430,7 @@ SLDstBankList_FuncBody:
 	push	xiz
 	ld	(xsp+4), xde
 	ld	xiz, xwa
-	ldb_da	e, (Data_SaveLoadMenuTable_0x22)
+	ld	e, (Data_SaveLoadMenuTable_0x22:24)
 	cp	xbc, 0x01c00018
 	jr	z, 43
 	cp	xbc, 0x01c00017
@@ -2440,7 +2440,7 @@ SLDstBankList_FuncBody:
 	ld	xwa, xiz
 	ld	c, e
 	calr	65010
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	xwa, xiz
 	calr	65133
 	lds32	xwa, 0
@@ -2454,7 +2454,7 @@ SLDstBankList_FuncBody:
 	ld	xde, xbc
 	cp	xbc, 0x01c00017
 	jr	nz, 72
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	w, c
 	add	w, c
 	ld	a, l
@@ -2466,13 +2466,13 @@ SLDstBankList_FuncBody:
 	ld	(0x8a08:16), a
 	jr	4
 	ld	(0x8a08:16), w
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	xwa, xiz
 	calr	64924
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	xwa, xiz
 	calr	65047
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2481,7 +2481,7 @@ SLDstBankList_FuncBody:
 	cp	xde, 0x01c00018
 	jr	nz, 77
 	ld	c, l
-	ldb_da	e, (Data_SaveLoadMenuTable_0x22)
+	ld	e, (Data_SaveLoadMenuTable_0x22:24)
 	cp	l, e
 	jr	c, 66
 	ld	a, e
@@ -2494,13 +2494,13 @@ SLDstBankList_FuncBody:
 	cp	c, a
 	jr	c, 4
 	ld	(0x8a08:16), e
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	xwa, xiz
 	calr	64840
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	xwa, xiz
 	calr	64963
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2550,10 +2550,10 @@ SLDstBankList_FuncBody:
 	jrl	nc, 193
 	inc	1, c
 	ld	(0x8a08:16), c
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	xwa, xiz
 	calr	64809
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2561,10 +2561,10 @@ SLDstBankList_FuncBody:
 	jrl	152
 	inc	1, c
 	ld	(0x8a08:16), c
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	xwa, xiz
 	calr	64771
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2575,7 +2575,7 @@ SLDstBankList_FuncBody:
 	ld	c, l
 	cps	l, 0
 	jr	z, 104
-	ldb_da	e, (Data_SaveLoadMenuTable_0x22)
+	ld	e, (Data_SaveLoadMenuTable_0x22:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
@@ -2588,10 +2588,10 @@ SLDstBankList_FuncBody:
 	jr	z, 79
 	dec	1, c
 	ld	(0x8a08:16), c
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	xwa, xiz
 	calr	64695
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2601,10 +2601,10 @@ SLDstBankList_FuncBody:
 	jr	ule, 38
 	dec	1, c
 	ld	(0x8a08:16), c
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	ld	xwa, xiz
 	calr	64654
-	ldb_da	c, (Data_SaveLoadMenuTable_0x22)
+	ld	c, (Data_SaveLoadMenuTable_0x22:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)

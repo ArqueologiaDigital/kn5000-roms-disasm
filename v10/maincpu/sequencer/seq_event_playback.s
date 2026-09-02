@@ -4425,7 +4425,7 @@ StsAreYouSure_ReturnZero:
 	ret
 
 GMOKFunc:
-	ldb_da l, (0x0340ea)
+	ld l, (0x0340ea:24)
 	cps l, 2
 	jr z, GMOK_ConfirmDialog
 	cps l, 1

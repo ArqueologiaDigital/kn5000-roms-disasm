@@ -571,7 +571,7 @@ Analog_ScanAndReport:
 	ld	c, (xiz-5)                              ; F98AA2  ld C,(XIZ+0xfb)
 	stb_da	(0xE2E5), c                         ; F98AA5  ld (0x00e2e5),C
 	stib_da	(0xE2E9), 0xB0                     ; F98AAA  ld (0x00e2e9),0xb0
-	ldb_da	c, (0xE2E5)                         ; F98AB0  ld C,(0x00e2e5)
+	ld	c, (0xE2E5:24)                         ; F98AB0  ld C,(0x00e2e5)
 	stb_da	(0xE2EA), c                         ; F98AB5  ld (0x00e2ea),C
 	lda	xbc, (0xE2E9:24)                       ; F98ABA  lda XBC,0x00e2e9
 	push	xbc                                   ; F98ABF  push XBC
@@ -599,7 +599,7 @@ Analog_ScanAndReport__chan2:
 	ld	c, (xiz-5)                              ; F98AF4  ld C,(XIZ+0xfb)
 	stb_da	(0xE2E7), c                         ; F98AF7  ld (0x00e2e7),C
 	stib_da	(0xE2E9), 0xB1                     ; F98AFC  ld (0x00e2e9),0xb1
-	ldb_da	c, (0xE2E7)                         ; F98B02  ld C,(0x00e2e7)
+	ld	c, (0xE2E7:24)                         ; F98B02  ld C,(0x00e2e7)
 	stb_da	(0xE2EA), c                         ; F98B07  ld (0x00e2ea),C
 	lda	xbc, (0xE2E9:24)                       ; F98B0C  lda XBC,0x00e2e9
 	push	xbc                                   ; F98B11  push XBC
@@ -866,7 +866,7 @@ MAIN__midi_done:
 	call	0xF9997E
 	inc	8, xsp
 MAIN__bit4:
-	ldb_da	c, 0x007ED1
+	ld	c, (0x007ED1:24)
 	and	c, 0x10
 	srl	c, 4
 	cps	c, 0
@@ -900,7 +900,7 @@ MAIN__timer_expired:
 MAIN__reenable:
 	ei	0
 MAIN__bit5:
-	ldb_da	c, 0x007ED1
+	ld	c, (0x007ED1:24)
 	and	c, 0x20
 	srl	c, 5
 	cps	c, 0
@@ -908,7 +908,7 @@ MAIN__bit5:
 	resda_24 5, 0x007ED1
 	calr	(0xF98A75 - 0xF98C8A)
 MAIN__bit3:
-	ldb_da	c, 0x007ED1
+	ld	c, (0x007ED1:24)
 	and	c, 0x08
 	srl	c, 3
 	cps	c, 0

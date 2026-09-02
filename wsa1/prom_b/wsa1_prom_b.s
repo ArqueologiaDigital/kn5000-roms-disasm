@@ -1271,7 +1271,7 @@ sub_F00800:
 	ei	6	; F00800  ei 0x06
 	ld_sd8b	a, 150	; F00802  ld A,(0x96)
 	di	; F00805  ei 0x00
-	ldb_da	w, (6311962)	; F00807  ld W,(0x60501a)
+	ld	w, (6311962:24)	; F00807  ld W,(0x60501a)
 	stb_da	(6311962), a	; F0080C  ld (0x60501a),A
 	and	a, 4	; F00811  and A,0x04
 	and	w, 4	; F00814  and W,0x04
@@ -1291,7 +1291,7 @@ sub_F00800:
 	cp	xwa, 0	; F00837  cp XWA,0x00000000
 	jr	z, 85	; F0083D  jr Z,0xf00894
 	ei	6	; F0083F  ei 0x06
-	ldb_da	a, (6311938)	; F00841  ld A,(0x605002)
+	ld	a, (6311938:24)	; F00841  ld A,(0x605002)
 	stb_da	(6311953), a	; F00846  ld (0x605011),A
 	ld_sd8b	a, 140	; F0084B  ld A,(0x8c)
 	stb_da	(6311954), a	; F0084E  ld (0x605012),A
@@ -1312,7 +1312,7 @@ sub_F00800:
 	m_bit 2, MD24, 0x605018	; F00880  bit 2,(0x605018)
 	jr	z, 3	; F00885  jr Z,0xf0088a
 	calr	595	; F00887  calr 0xf00add
-	ldb_da	a, (6311959)	; F0088A  ld A,(0x605017)
+	ld	a, (6311959:24)	; F0088A  ld A,(0x605017)
 	stb_da	(6311960), a	; F0088F  ld (0x605018),A
 	ret	; F00894  ret
 	ld	wa, (13650:16)	; F00895  ld WA,(0x3552)
@@ -1399,7 +1399,7 @@ sub_F00800:
 	ld	xwa, 0	; F00963  ld XWA,0x00000000
 	ld	wa, bc	; F00968  ld WA,BC
 	ld	xbc, 0	; F0096A  ld XBC,0x00000000
-	ldb_da	c, (6311936)	; F0096F  ld C,(0x605000)
+	ld	c, (6311936:24)	; F0096F  ld C,(0x605000)
 	div	xwa, xbc	; F00974  div XWA,BC
 	srl	xwa, 0	; F00976  srl 0x00,XWA
 	cps	wa, 0	; F00979  cp WA,0
@@ -1433,9 +1433,9 @@ sub_F00800:
 	jr	nz, 67	; F009C8  jr NZ,0xf00a0d
 	m_cp_mi8 MB24, 0x605015, 0x00	; F009CA  cp (0x605015),0x00
 	jr	nz, 10	; F009D0  jr NZ,0xf009dc
-	ldb_da	a, (6311936)	; F009D2  ld A,(0x605000)
+	ld	a, (6311936:24)	; F009D2  ld A,(0x605000)
 	stb_da	(6311937), a	; F009D7  ld (0x605001),A
-	ldb_da	a, (6311937)	; F009DC  ld A,(0x605001)
+	ld	a, (6311937:24)	; F009DC  ld A,(0x605001)
 	sub	a, 1	; F009E1  sub A,0x01
 	m_cp_rm MB24, 0x605015, 1	; F009E4  cp A,(0x605015)
 	jr	ule, 13	; F009E9  jr ULE,0xf009f8
@@ -1459,7 +1459,7 @@ sub_F00800:
 	incdi8_24	1, (6311956)	; F00A2B  inc 1,(0x605014)
 	ret	; F00A30  ret
 	ldb	a, 0	; F00A31  ld A,0x00
-	ldb_da	c, (6311956)	; F00A33  ld C,(0x605014)
+	ld	c, (6311956:24)	; F00A33  ld C,(0x605014)
 	cpdm8_24	(6311953), c	; F00A38  cp (0x605011),C
 	jr	z, 53	; F00A3D  jr Z,0xf00a74
 	cpdm8_24	(6311953), c	; F00A3F  cp (0x605011),C
@@ -1479,14 +1479,14 @@ sub_F00800:
 	ldb	a, 1	; F00A6E  ld A,0x01
 	jr	0	; F00A70  jr T,0xf00a72
 	jr	48	; F00A72  jr T,0xf00aa4
-	ldb_da	c, (6311957)	; F00A74  ld C,(0x605015)
+	ld	c, (6311957:24)	; F00A74  ld C,(0x605015)
 	cpdm8_24	(6311954), c	; F00A79  cp (0x605012),C
 	jr	z, 11	; F00A7E  jr Z,0xf00a8b
 	cpdm8_24	(6311954), c	; F00A80  cp (0x605012),C
 	jr	c, 2	; F00A85  jr C,0xf00a89
 	ldb	a, 1	; F00A87  ld A,0x01
 	jr	25	; F00A89  jr T,0xf00aa4
-	ldb_da	c, (6311958)	; F00A8B  ld C,(0x605016)
+	ld	c, (6311958:24)	; F00A8B  ld C,(0x605016)
 	cpdm8_24	(6311955), c	; F00A90  cp (0x605013),C
 	jr	z, 11	; F00A95  jr Z,0xf00aa2
 	cpdm8_24	(6311955), c	; F00A97  cp (0x605013),C
@@ -1533,7 +1533,7 @@ sub_F00800:
 	ld	xiz, 15731528	; F00B23  ld XIZ,0x00f00b48
 	stl_da	(6311941), xiz	; F00B28  ld (0x605005),XIZ
 	ei	6	; F00B2D  ei 0x06
-	ldb_da	a, (6311936)	; F00B2F  ld A,(0x605000)
+	ld	a, (6311936:24)	; F00B2F  ld A,(0x605000)
 	stb_da	(6311937), a	; F00B34  ld (0x605001),A
 	stib_da	(6311938), 0	; F00B39  ld (0x605002),0x00
 	ldio	140, 0	; F00B3F  ld (0x8c),0x00
@@ -68398,7 +68398,7 @@ sub_F36E21:		; <- T_F41250
 	pushw	wa	; F36E8D  push WA
 	ld	wa, (2948:24)	; F36E8E  ld WA,(0x000b84)
 	pushw	wa	; F36E93  push WA
-	ldb_da	a, (2947)	; F36E94  ld A,(0x000b83)
+	ld	a, (2947:24)	; F36E94  ld A,(0x000b83)
 	pushw	wa	; F36E99  push WA
 	call	16004212	; F36E9A  call 0xf43474
 	add	xsp, 18	; F36E9E  add XSP,0x00000012
@@ -68444,7 +68444,7 @@ sub_F36E21:		; <- T_F41250
 	calr	64971	; F36F1F  calr 0xf36ced
 	ld	bc, (2950:24)	; F36F22  ld BC,(0x000b86)
 	stw_da	(2569), bc	; F36F27  ld (0x000a09),BC
-	ldb_da	a, (2954)	; F36F2C  ld A,(0x000b8a)
+	ld	a, (2954:24)	; F36F2C  ld A,(0x000b8a)
 	pushw	wa	; F36F31  push WA
 	call	16004236	; F36F32  call 0xf4348c
 	inc	8, xsp	; F36F36  inc 0,XSP
@@ -68458,7 +68458,7 @@ sub_F36E21:		; <- T_F41250
 	calr	64931	; F36F47  calr 0xf36ced
 	ld	bc, (2950:24)	; F36F4A  ld BC,(0x000b86)
 	stw_da	(2569), bc	; F36F4F  ld (0x000a09),BC
-	ldb_da	a, (2954)	; F36F54  ld A,(0x000b8a)
+	ld	a, (2954:24)	; F36F54  ld A,(0x000b8a)
 	pushw	wa	; F36F59  push WA
 	call	16004232	; F36F5A  call 0xf43488
 	pushw	48	; F36F5E  push 0x0030
@@ -68466,7 +68466,7 @@ sub_F36E21:		; <- T_F41250
 	pushw	bc	; F36F66  push BC
 	ld	bc, (2948:24)	; F36F67  ld BC,(0x000b84)
 	pushw	bc	; F36F6C  push BC
-	ldb_da	c, (2947)	; F36F6D  ld C,(0x000b83)
+	ld	c, (2947:24)	; F36F6D  ld C,(0x000b83)
 	pushw	bc	; F36F72  push BC
 	call	16004220	; F36F73  call 0xf4347c
 	add	xsp, 20	; F36F77  add XSP,0x00000014
@@ -70207,7 +70207,7 @@ sub_F37DB4:
 	and	xbc, 16256	; F37DE9  and XBC,0x00003f80
 	sra	xbc, 7	; F37DEF  sra 0x07,XBC
 	ld	(xix+7), c	; F37DF2  ld (XIX+0x07),C
-	ldb_da	c, (2563)	; F37DF5  ld C,(0x000a03)
+	ld	c, (2563:24)	; F37DF5  ld C,(0x000a03)
 	res	7, c	; F37DFA  res 0x07,C
 	ld	(xix+8), c	; F37DFD  ld (XIX+0x08),C
 	ld	(xix+9), 0	; F37E00  ld (XIX+0x09),0x00
@@ -70246,22 +70246,22 @@ sub_F37E1C:		; <- T_F41264
 	and	bc, 256	; F37E38  and BC,0x0100
 	inc	6, xsp	; F37E3C  inc 6,XSP
 	jr	z, 24	; F37E3E  jr Z,0xf37e58
-	ldb_da	c, (2827)	; F37E40  ld C,(0x000b0b)
+	ld	c, (2827:24)	; F37E40  ld C,(0x000b0b)
 	srl	c, 4	; F37E45  srl 0x04,C
 	ld	(xiy), c	; F37E48  ld (XIY),C
 	inc	1, xix	; F37E4A  inc 1,XIX
-	ldb_da	c, (2827)	; F37E4C  ld C,(0x000b0b)
+	ld	c, (2827:24)	; F37E4C  ld C,(0x000b0b)
 	and	c, 15	; F37E51  and C,0x0f
 	ld	(xix), c	; F37E54  ld (XIX),C
 	jr	33	; F37E56  jr T,0xf37e79
 	ld	bc, (2560:24)	; F37E58  ld BC,(0x000a00)
 	and	bc, 512	; F37E5D  and BC,0x0200
 	jr	z, 26	; F37E61  jr Z,0xf37e7d
-	ldb_da	c, (2828)	; F37E63  ld C,(0x000b0c)
+	ld	c, (2828:24)	; F37E63  ld C,(0x000b0c)
 	srl	c, 4	; F37E68  srl 0x04,C
 	ld	(xix), c	; F37E6B  ld (XIX),C
 	inc	1, xix	; F37E6D  inc 1,XIX
-	ldb_da	c, (2828)	; F37E6F  ld C,(0x000b0c)
+	ld	c, (2828:24)	; F37E6F  ld C,(0x000b0c)
 	and	c, 15	; F37E74  and C,0x0f
 	ld	(xix), c	; F37E77  ld (XIX),C
 	inc	1, xix	; F37E79  inc 1,XIX
@@ -84645,7 +84645,7 @@ sub_F440C4:		; <- T_F4400C
 	call	15995320	; F44103  call 0xf411b8
 	stib_da	(6304982), 0	; F44107  ld (0x6034d6),0x00
 	calr	51	; F4410D  calr 0xf44143
-	ldb_da	a, (6304981)	; F44110  ld A,(0x6034d5)
+	ld	a, (6304981:24)	; F44110  ld A,(0x6034d5)
 	ld	(13834:16), a	; F44115  ld (0x360a),A
 	ld	xwa, (13836:16)	; F44119  ld XWA,(0x360c)
 	push	xwa	; F4411D  push XWA
@@ -84669,7 +84669,7 @@ sub_F440C4:		; <- T_F4400C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F44131:		; <- T_F40AC8
-	ldb_da	a, (6304983)	; F44131  ld A,(0x6034d7)
+	ld	a, (6304983:24)	; F44131  ld A,(0x6034d7)
 	stb_da	(6311936), a	; F44136  ld (0x605000),A
 	st_dd8b	a, 195	; F4413B  ld (0xc3),A
 	ld	(3555:16), a	; F4413E  ld (0x0de3),A
@@ -84897,7 +84897,7 @@ sub_F442DA:
 	push	xix	; F442DA  push XIX
 	ld	xhl, 6304819	; F442DB  ld XHL,0x00603433
 	xor	iy, iy	; F442E0  xor IY,IY
-	ldb_da	a, (6304967)	; F442E2  ld A,(0x6034c7)
+	ld	a, (6304967:24)	; F442E2  ld A,(0x6034c7)
 	and	a, 2	; F442E7  and A,0x02
 	jr	nz, 12	; F442EA  jr NZ,0xf442f8
 	ld	xix, 16015538	; F442EC  ld XIX,0x00f460b2
@@ -85231,7 +85231,7 @@ sub_F44623:
 	jr	z, 47	; F4463B  jr Z,0xf4466c
 	m_cp_mi16 MW16, 0x3552, 0x8001	; F4463D  cp (0x3552),0x8001
 	jr	nz, 39	; F44643  jr NZ,0xf4466c
-	ldb_da	a, (6311936)	; F44645  ld A,(0x605000)
+	ld	a, (6311936:24)	; F44645  ld A,(0x605000)
 	dec	1, a	; F4464A  dec 1,A
 	m_cp_rm MB8, 0x8c, 1	; F4464C  cp A,(0x8c)
 	jr	nz, 27	; F4464F  jr NZ,0xf4466c
@@ -85871,7 +85871,7 @@ sub_F44B95:
 	ldb	c, 17	; F44BAA  ld C,0x11
 	stw_dpi	wa, 241	; F44BAC  ld (XIX+),WA
 	djnz16	bc, -6	; F44BAF  djnz BC,0xf44bac
-	ldb_da	a, (6311936)	; F44BB2  ld A,(0x605000)
+	ld	a, (6311936:24)	; F44BB2  ld A,(0x605000)
 	ld	(13400:16), a	; F44BB7  ld (0x3458),A
 	ldw	(13398:16), 0	; F44BBB  ld (0x3456),0x0000
 	m_bit 1, MD16, 0x34d9	; F44BC1  bit 1,(0x34d9)
@@ -86095,7 +86095,7 @@ sub_F44CEA:
 	m_bit 1, MD16, 0x34d9	; F44D7F  bit 1,(0x34d9)
 	jr	z, 5	; F44D83  jr Z,0xf44d8a
 	m_or_mi8 MB16, 0x34d9, 0x80	; F44D85  or (0x34d9),0x80
-	ldb_da	a, (6311938)	; F44D8A  ld A,(0x605002)
+	ld	a, (6311938:24)	; F44D8A  ld A,(0x605002)
 	ld	(13401:16), a	; F44D8F  ld (0x3459),A
 	ret	; F44D93  ret
 
@@ -86615,7 +86615,7 @@ sub_F451E6:		; <- T_F409D0
 	m_and_mi8 MB16, 0x34bb, 0xf7	; F4522B  and (0x34bb),0xf7
 	ldwio	145, 0	; F45230  ld (0x91),0x0000
 	ldio	147, 0	; F45234  ld (0x93),0x00
-	ldb_da	a, (6311936)	; F45237  ld A,(0x605000)
+	ld	a, (6311936:24)	; F45237  ld A,(0x605000)
 	ld	(13400:16), a	; F4523C  ld (0x3458),A
 	ld	xwa, (6304798:24)	; F45240  ld XWA,(0x60341e)
 	cp	xwa, 0	; F45245  cp XWA,0x00000000
@@ -87390,7 +87390,7 @@ sub_F456F0:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F45761:
-	ldb_da	a, (6304983)	; F45761  ld A,(0x6034d7)
+	ld	a, (6304983:24)	; F45761  ld A,(0x6034d7)
 	ld	(14169:16), a	; F45766  ld (0x3759),A
 	ld	wa, (13650:16)	; F4576A  ld WA,(0x3552)
 	cp	wa, 32770	; F4576E  cp WA,0x8002
@@ -88139,7 +88139,7 @@ sub_F45D19:		; <- T_F40A2C
 	jr	c, -23	; F45D42  jr C,0xf45d2d
 	ld	xhl, 6304819	; F45D44  ld XHL,0x00603433
 	xor	iy, iy	; F45D49  xor IY,IY
-	ldb_da	a, (6304967)	; F45D4B  ld A,(0x6034c7)
+	ld	a, (6304967:24)	; F45D4B  ld A,(0x6034c7)
 	and	a, 2	; F45D50  and A,0x02
 	jr	nz, 12	; F45D53  jr NZ,0xf45d61
 	ld	xix, 16015538	; F45D55  ld XIX,0x00f460b2
@@ -88275,7 +88275,7 @@ sub_F45D9B:
 sub_F45E14:
 	ld	xhl, 6304819	; F45E14  ld XHL,0x00603433
 	xor	iy, iy	; F45E19  xor IY,IY
-	ldb_da	a, (6304967)	; F45E1B  ld A,(0x6034c7)
+	ld	a, (6304967:24)	; F45E1B  ld A,(0x6034c7)
 	and	a, 2	; F45E20  and A,0x02
 	jr	nz, 12	; F45E23  jr NZ,0xf45e31
 	ld	xix, 16015538	; F45E25  ld XIX,0x00f460b2
@@ -94004,7 +94004,7 @@ sub_F4A8F0:
 	inc	1, wa	; F4A8F6  inc 1,WA
 	m_sub_rm MW16, 0x3622, 0	; F4A8F8  sub WA,(0x3622)
 	xor	bc, bc	; F4A8FC  xor BC,BC
-	ldb_da	c, (6311936)	; F4A8FE  ld C,(0x605000)
+	ld	c, (6311936:24)	; F4A8FE  ld C,(0x605000)
 	mul	xwa, xbc	; F4A903  mul XWA,BC
 	ld	(14066:16), wa	; F4A905  ld (0x36f2),WA
 	ret	; F4A909  ret
@@ -95173,7 +95173,7 @@ sub_F4B295:
 	ld	wa, (13860:16)	; F4B297  ld WA,(0x3624)
 	inc	1, wa	; F4B29B  inc 1,WA
 	xor	bc, bc	; F4B29D  xor BC,BC
-	ldb_da	c, (6311936)	; F4B29F  ld C,(0x605000)
+	ld	c, (6311936:24)	; F4B29F  ld C,(0x605000)
 	mul	xwa, xbc	; F4B2A4  mul XWA,BC
 	ld	(14068:16), wa	; F4B2A6  ld (0x36f4),WA
 	ret	; F4B2AA  ret
@@ -96783,7 +96783,7 @@ sub_F4CA2A:		; <- T_F414BC
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F4CA64:		; <- T_F414B8
-	ldb_da	a, (6304976)	; F4CA64  ld A,(0x6034d0)
+	ld	a, (6304976:24)	; F4CA64  ld A,(0x6034d0)
 	ld	(13834:16), a	; F4CA69  ld (0x360a),A
 	stib_da	(6304976), 0	; F4CA6D  ld (0x6034d0),0x00
 	ld	xwa, (6304977:24)	; F4CA73  ld XWA,(0x6034d1)
@@ -97856,14 +97856,14 @@ sub_F4D6F6:		; <- T_F40C60
 	xor	de, de	; F4D707  xor DE,DE
 	ld	wa, (3157:16)	; F4D709  ld WA,(0x0c55)
 	xor	bc, bc	; F4D70D  xor BC,BC
-	ldb_da	c, (6304983)	; F4D70F  ld C,(0x6034d7)
+	ld	c, (6304983:24)	; F4D70F  ld C,(0x6034d7)
 	ld	qwa, de	; F4D714  ld QWA,DE
 	div	xwa, xbc	; F4D717  div XWA,BC
 	ld	de, qwa	; F4D719  ld DE,QWA
 	ld	c, e	; F4D71C  ld C,E
 	ld	de, wa	; F4D71E  ld DE,WA
 	inc	1, de	; F4D720  inc 1,DE
-	ldb_da	a, (6304983)	; F4D722  ld A,(0x6034d7)
+	ld	a, (6304983:24)	; F4D722  ld A,(0x6034d7)
 	jr	46	; F4D727  jr T,0xf4d757
 	ld	(3357:16), w	; F4D729  ld (0x0d1d),W
 	call	16001008	; F4D72D  call 0xf427f0
@@ -99755,7 +99755,7 @@ sub_F4F02E:
 	and	h, 127	; F4F063  and H,0x7f
 	m_ld_rm MBD+r5, 0x00, 7	; F4F066  ld L,(XIY+0x00)
 	and	l, 127	; F4F069  and L,0x7f
-	ldb_da	a, (10080)	; F4F06C  ld A,(0x002760)
+	ld	a, (10080:24)	; F4F06C  ld A,(0x002760)
 	stb_da	(6352925), a	; F4F071  ld (0x60f01d),A
 	ld	w, (xiy+61)	; F4F076  ld W,(XIY+0x3d)
 	ld	l, (xiy+59)	; F4F079  ld L,(XIY+0x3b)
@@ -99764,14 +99764,14 @@ sub_F4F02E:
 	stb_da	(10082), l	; F4F084  ld (0x002762),L
 	stb_da	(10083), h	; F4F089  ld (0x002763),H
 	ld	a, l	; F4F08E  ld A,L
-	ldb_da	b, (10080)	; F4F090  ld B,(0x002760)
+	ld	b, (10080:24)	; F4F090  ld B,(0x002760)
 	call	15994908	; F4F095  call 0xf4101c
 	stb_da	(10084), a	; F4F099  ld (0x002764),A
 	extz	wa	; F4F09E  extz WA
 	ld	ix, wa	; F4F0A0  ld IX,WA
 	ldw	iy, 0	; F4F0A2  ld IY,0x0000
 	pop	w	; F4F0A5  pop W
-	ldb_da	l, (10083)	; F4F0A7  ld L,(0x002763)
+	ld	l, (10083:24)	; F4F0A7  ld L,(0x002763)
 	extz	hl	; F4F0AC  extz HL
 	ld	de, hl	; F4F0AE  ld DE,HL
 	push	w	; F4F0B0  push W
@@ -99799,7 +99799,7 @@ sub_F4F02E:
 	jr	3	; F4F0EE  jr T,0xf4f0f3
 	ldw	ix, 15	; F4F0F0  ld IX,0x000f
 	ldw	iy, 0	; F4F0F3  ld IY,0x0000
-	ldb_da	e, (10082)	; F4F0F6  ld E,(0x002762)
+	ld	e, (10082:24)	; F4F0F6  ld E,(0x002762)
 	extz	de	; F4F0FB  extz DE
 	ld	hl, de	; F4F0FD  ld HL,DE
 	push	w	; F4F0FF  push W
@@ -99810,7 +99810,7 @@ sub_F4F02E:
 	cp	de, hl	; F4F109  cp DE,HL
 	jrl	nz, 204	; F4F10B  jrl NZ,0xf4f1da
 	ld	xix, 16052851	; F4F10E  ld XIX,0x00f4f273
-	ldb_da	l, (10081)	; F4F113  ld L,(0x002761)
+	ld	l, (10081:24)	; F4F113  ld L,(0x002761)
 	xor	de, de	; F4F118  xor DE,DE
 	mx_cp_rm MXB, ra_IX, ra_DE, 7	; F4F11A  cp L,(XIX+DE)
 	jr	z, 4	; F4F11F  jr Z,0xf4f125
@@ -99842,8 +99842,8 @@ sub_F4F02E:
 	dec	1, c	; F4F168  dec 1,C
 	stb_da	(10082), c	; F4F16A  ld (0x002762),C
 	ld	a, c	; F4F16F  ld A,C
-	ldb_da	w, (10081)	; F4F171  ld W,(0x002761)
-	ldb_da	b, (10080)	; F4F176  ld B,(0x002760)
+	ld	w, (10081:24)	; F4F171  ld W,(0x002761)
+	ld	b, (10080:24)	; F4F176  ld B,(0x002760)
 	call	15994908	; F4F17B  call 0xf4101c
 	pop	w	; F4F17F  pop W
 	stb_da	(10083), a	; F4F181  ld (0x002763),A
@@ -99872,9 +99872,9 @@ sub_F4F02E:
 	m_cp_mi8 MB24, 0x002761, 0x10	; F4F1E4  cp (0x002761),0x10
 	jr	nz, 30	; F4F1EA  jr NZ,0xf4f20a
 	push	w	; F4F1EC  push W
-	ldb_da	a, (10082)	; F4F1EE  ld A,(0x002762)
-	ldb_da	w, (10081)	; F4F1F3  ld W,(0x002761)
-	ldb_da	b, (10080)	; F4F1F8  ld B,(0x002760)
+	ld	a, (10082:24)	; F4F1EE  ld A,(0x002762)
+	ld	w, (10081:24)	; F4F1F3  ld W,(0x002761)
+	ld	b, (10080:24)	; F4F1F8  ld B,(0x002760)
 	call	15994908	; F4F1FD  call 0xf4101c
 	pop	w	; F4F201  pop W
 	stb_da	(10083), a	; F4F203  ld (0x002763),A
@@ -99894,15 +99894,15 @@ sub_F4F02E:
 	stib_da	(10083), 0	; F4F237  ld (0x002763),0x00
 	jr	5	; F4F23D  jr T,0xf4f244
 	stb_da	(10083), e	; F4F23F  ld (0x002763),E
-	ldb_da	e, (10080)	; F4F244  ld E,(0x002760)
+	ld	e, (10080:24)	; F4F244  ld E,(0x002760)
 	ldb	d, 0	; F4F249  ld D,0x00
-	ldb_da	a, (10081)	; F4F24B  ld A,(0x002761)
-	ldb_da	w, (10081)	; F4F250  ld W,(0x002761)
+	ld	a, (10081:24)	; F4F24B  ld A,(0x002761)
+	ld	w, (10081:24)	; F4F250  ld W,(0x002761)
 	call	15994688	; F4F255  call 0xf40f40
-	ldb_da	e, (10080)	; F4F259  ld E,(0x002760)
+	ld	e, (10080:24)	; F4F259  ld E,(0x002760)
 	ldb	d, 0	; F4F25E  ld D,0x00
-	ldb_da	a, (10082)	; F4F260  ld A,(0x002762)
-	ldb_da	w, (10083)	; F4F265  ld W,(0x002763)
+	ld	a, (10082:24)	; F4F260  ld A,(0x002762)
+	ld	w, (10083:24)	; F4F265  ld W,(0x002763)
 	call	15994688	; F4F26A  call 0xf40f40
 	pop	xde	; F4F26E  pop XDE
 	pop	xhl	; F4F26F  pop XHL
@@ -109482,7 +109482,7 @@ sub_F56492:
 	incdi8_24	1, (6304983)	; F564C9  inc 1,(0x6034d7)
 	jr	6	; F564CE  jr T,0xf564d6
 	stib_da	(6304983), 1	; F564D0  ld (0x6034d7),0x01
-	ldb_da	a, (6304983)	; F564D6  ld A,(0x6034d7)
+	ld	a, (6304983:24)	; F564D6  ld A,(0x6034d7)
 	stb_da	(6311936), a	; F564DB  ld (0x605000),A
 	st_dd8b	a, 195	; F564E0  ld (0xc3),A
 	ld	(13400:16), a	; F564E3  ld (0x3458),A
@@ -126163,7 +126163,7 @@ sub_F60B22:		; <- T_F42704
 	ld	a, (3356:16)	; F60B38  ld A,(0x0d1c)
 	m_cp_mi8 MB16, 0x0d4a, 0x00	; F60B3C  cp (0x0d4a),0x00
 	jrl	z, 5	; F60B41  jrl Z,0xf60b49
-	ldb_da	a, (6304983)	; F60B44  ld A,(0x6034d7)
+	ld	a, (6304983:24)	; F60B44  ld A,(0x6034d7)
 	ld	(3555:16), a	; F60B49  ld (0x0de3),A
 	ret	; F60B4D  ret
 
@@ -129751,7 +129751,7 @@ sub_F6360E:		; <- T_F427A0
 sub_F6364D:		; <- T_F427A4
 	m_push MW16, 0x345c	; F6364D  pushw (0x345c)
 	m_and_mi8 MB16, 0x0c8a, 0xdf	; F63651  and (0x0c8a),0xdf
-	ldb_da	a, (6304983)	; F63656  ld A,(0x6034d7)
+	ld	a, (6304983:24)	; F63656  ld A,(0x6034d7)
 	ld	(3356:16), a	; F6365B  ld (0x0d1c),A
 	m_bit 2, MD16, 0x0c8a	; F6365F  bit 2,(0x0c8a)
 	jrl	z, 222	; F63663  jrl Z,0xf63744
@@ -129823,7 +129823,7 @@ sub_F6364D:		; <- T_F427A4
 	call	16136235	; F6372B  call 0xf6382b
 	jr	19	; F6372F  jr T,0xf63744
 	ld	(3402:16), 0	; F63731  ld (0x0d4a),0x00
-	ldb_da	a, (6304983)	; F63736  ld A,(0x6034d7)
+	ld	a, (6304983:24)	; F63736  ld A,(0x6034d7)
 	ld	(3356:16), a	; F6373B  ld (0x0d1c),A
 	m_or_mi8 MB16, 0x0c8a, 0x20	; F6373F  or (0x0c8a),0x20
 	m_popw MD16, 0x345c	; F63744  popw (0x345c)
@@ -142737,7 +142737,7 @@ sub_F6AD5F:
 	push	xix	; F6AD73  push XIX
 	m_ldir MBI+r5	; F6AD74  ldir
 	pop	xix	; F6AD76  pop XIX
-	ldb_da	a, (6304983)	; F6AD77  ld A,(0x6034d7)
+	ld	a, (6304983:24)	; F6AD77  ld A,(0x6034d7)
 	cps	a, 0	; F6AD7C  cp A,0
 	jr	z, 2	; F6AD7E  jr Z,0xf6ad82
 	dec	1, a	; F6AD80  dec 1,A
@@ -146812,7 +146812,7 @@ sub_F6CC6E:
 	jr	nz, 25	; F6CD56  jr NZ,0xf6cd71
 	ld	(3829:16), 5	; F6CD58  ld (0x0ef5),0x05
 	call	16003504	; F6CD5D  call 0xf431b0
-	ldb_da	a, (6304983)	; F6CD61  ld A,(0x6034d7)
+	ld	a, (6304983:24)	; F6CD61  ld A,(0x6034d7)
 	dec	1, a	; F6CD66  dec 1,A
 	pushw	wa	; F6CD68  push WA
 	calr	8	; F6CD69  calr 0xf6cd74
@@ -154352,11 +154352,11 @@ sub_F70008:
 	calr	4550	; F70085  calr 0xf7124e
 	pop	xhl	; F70088  pop XHL
 	ldb	a, 192	; F70089  ld A,0xc0
-	ldb_da	w, (6352916)	; F7008B  ld W,(0x60f014)
+	ld	w, (6352916:24)	; F7008B  ld W,(0x60f014)
 	and	w, 128	; F70090  and W,0x80
 	rlc	w	; F70093  rlc 0x01,W
 	or	a, w	; F70096  or A,W
-	ldb_da	w, (6352917)	; F70098  ld W,(0x60f015)
+	ld	w, (6352917:24)	; F70098  ld W,(0x60f015)
 	and	w, 128	; F7009D  and W,0x80
 	.byte 0xC8, 0xE8, 0x02	; F700A0  rlc 0x02,W   [llvm-mc cannot encode this]
 	or	a, w	; F700A3  or A,W
@@ -154403,14 +154403,14 @@ sub_F70008:
 	pop	xhl	; F700FE  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F700FF  cp (0x1238),0x00
 	jrl	nz, 233	; F70104  jrl NZ,0xf701f0
-	ldb_da	a, (6352916)	; F70107  ld A,(0x60f014)
+	ld	a, (6352916:24)	; F70107  ld A,(0x60f014)
 	and	a, 127	; F7010C  and A,0x7f
 	push	xiy	; F7010F  push XIY
 	calr	3783	; F70110  calr 0xf70fda
 	pop	xiy	; F70113  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F70114  cp (0x1238),0x00
 	jrl	nz, 212	; F70119  jrl NZ,0xf701f0
-	ldb_da	a, (6352917)	; F7011C  ld A,(0x60f015)
+	ld	a, (6352917:24)	; F7011C  ld A,(0x60f015)
 	and	a, 127	; F70121  and A,0x7f
 	push	xiy	; F70124  push XIY
 	calr	3762	; F70125  calr 0xf70fda
@@ -154543,8 +154543,8 @@ sub_F701F1:
 	push	xiy	; F7023F  push XIY
 	call	15994884	; F70240  call 0xf41004
 	pop	xiy	; F70244  pop XIY
-	ldb_da	l, (6352916)	; F70245  ld L,(0x60f014)
-	ldb_da	h, (6352917)	; F7024A  ld H,(0x60f015)
+	ld	l, (6352916:24)	; F70245  ld L,(0x60f014)
+	ld	h, (6352917:24)	; F7024A  ld H,(0x60f015)
 	ld	(xiy+2), l	; F7024F  ld (XIY+0x02),L
 	ld	(xiy+3), h	; F70252  ld (XIY+0x03),H
 	jr	63	; F70255  jr T,0xf70296
@@ -158320,11 +158320,11 @@ sub_F71E89:
 	calr	2219	; F71F1A  calr 0xf727c8
 	pop	xhl	; F71F1D  pop XHL
 	ldb	a, 192	; F71F1E  ld A,0xc0
-	ldb_da	w, (6352916)	; F71F20  ld W,(0x60f014)
+	ld	w, (6352916:24)	; F71F20  ld W,(0x60f014)
 	and	w, 128	; F71F25  and W,0x80
 	rlc	w	; F71F28  rlc 0x01,W
 	or	a, w	; F71F2B  or A,W
-	ldb_da	w, (6352917)	; F71F2D  ld W,(0x60f015)
+	ld	w, (6352917:24)	; F71F2D  ld W,(0x60f015)
 	and	w, 128	; F71F32  and W,0x80
 	.byte 0xC8, 0xE8, 0x02	; F71F35  rlc 0x02,W   [llvm-mc cannot encode this]
 	or	a, w	; F71F38  or A,W
@@ -158369,14 +158369,14 @@ sub_F71E89:
 	pop	xhl	; F71F8E  pop XHL
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71F8F  cp (0x1238),0x00
 	jrl	nz, 229	; F71F94  jrl NZ,0xf7207c
-	ldb_da	a, (6352916)	; F71F97  ld A,(0x60f014)
+	ld	a, (6352916:24)	; F71F97  ld A,(0x60f014)
 	and	a, 127	; F71F9C  and A,0x7f
 	push	xiy	; F71F9F  push XIY
 	calr	61495	; F71FA0  calr 0xf70fda
 	pop	xiy	; F71FA3  pop XIY
 	m_cp_mi8 MB16, 0x1238, 0x00	; F71FA4  cp (0x1238),0x00
 	jrl	nz, 208	; F71FA9  jrl NZ,0xf7207c
-	ldb_da	a, (6352917)	; F71FAC  ld A,(0x60f015)
+	ld	a, (6352917:24)	; F71FAC  ld A,(0x60f015)
 	and	a, 127	; F71FB1  and A,0x7f
 	push	xiy	; F71FB4  push XIY
 	call	16191450	; F71FB5  call 0xf70fda
@@ -161928,7 +161928,7 @@ Smf_WriteFile:
 	ldw	wa, 22783	; F73A89  ld WA,0x58ff
 	stw_dpi	wa, 241	; F73A8C  ld (XIX+),WA
 	ldb	a, 4	; F73A8F  ld A,0x04
-	ldb_da	w, (6304983)	; F73A91  ld W,(0x6034d7)
+	ld	w, (6304983:24)	; F73A91  ld W,(0x6034d7)
 	stw_dpi	wa, 241	; F73A96  ld (XIX+),WA
 	ldw	wa, 6146	; F73A99  ld WA,0x1802
 	stw_dpi	wa, 241	; F73A9C  ld (XIX+),WA
@@ -162048,7 +162048,7 @@ Smf_WriteFile:
 	ld	a, (3184:16)	; F73BE7  ld A,(0x0c70)
 	or	a, 176	; F73BEB  or A,0xb0
 	xor	w, w	; F73BEE  xor W,W
-	ldb_da	l, (6352917)	; F73BF0  ld L,(0x60f015)
+	ld	l, (6352917:24)	; F73BF0  ld L,(0x60f015)
 	pushw	wa	; F73BF5  push WA
 	pushw	bc	; F73BF6  push BC
 	pushw	de	; F73BF7  push DE
@@ -162059,7 +162059,7 @@ Smf_WriteFile:
 	m_cp_mi8 MB16, 0x1238, 0x03	; F73BFF  cp (0x1238),0x03
 	jrl	nz, 3029	; F73C04  jrl NZ,0xf747dc
 	ldb	w, 32	; F73C07  ld W,0x20
-	ldb_da	l, (6352916)	; F73C09  ld L,(0x60f014)
+	ld	l, (6352916:24)	; F73C09  ld L,(0x60f014)
 	pushw	bc	; F73C0E  push BC
 	pushw	de	; F73C0F  push DE
 	call	16206533	; F73C10  call 0xf74ac5
@@ -162069,7 +162069,7 @@ Smf_WriteFile:
 	jrl	nz, 3006	; F73C1B  jrl NZ,0xf747dc
 	ld	a, (3184:16)	; F73C1E  ld A,(0x0c70)
 	or	a, 192	; F73C22  or A,0xc0
-	ldb_da	w, (6352918)	; F73C25  ld W,(0x60f016)
+	ld	w, (6352918:24)	; F73C25  ld W,(0x60f016)
 	and	w, 127	; F73C2A  and W,0x7f
 	pushw	bc	; F73C2D  push BC
 	pushw	de	; F73C2E  push DE
@@ -162572,7 +162572,7 @@ Smf_WriteFile:
 	ld	w, (4506:16)	; F741CA  ld W,(0x119a)
 	or	a, w	; F741CE  or A,W
 	xor	w, w	; F741D0  xor W,W
-	ldb_da	l, (6352917)	; F741D2  ld L,(0x60f015)
+	ld	l, (6352917:24)	; F741D2  ld L,(0x60f015)
 	pushw	wa	; F741D7  push WA
 	call	16206533	; F741D8  call 0xf74ac5
 	popw	wa	; F741DC  pop WA
@@ -162581,7 +162581,7 @@ Smf_WriteFile:
 	ldw	(4499:16), 0	; F741E5  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F741EB  ld (0x1195),0x00
 	ldb	w, 32	; F741F0  ld W,0x20
-	ldb_da	l, (6352916)	; F741F2  ld L,(0x60f014)
+	ld	l, (6352916:24)	; F741F2  ld L,(0x60f014)
 	call	16206533	; F741F7  call 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F741FB  cp (0x1238),0x03
 	jrl	nz, 1497	; F74200  jrl NZ,0xf747dc
@@ -162589,7 +162589,7 @@ Smf_WriteFile:
 	ld	w, (4506:16)	; F74205  ld W,(0x119a)
 	and	w, 15	; F74209  and W,0x0f
 	or	a, w	; F7420C  or A,W
-	ldb_da	w, (6352918)	; F7420E  ld W,(0x60f016)
+	ld	w, (6352918:24)	; F7420E  ld W,(0x60f016)
 	xor	l, l	; F74213  xor L,L
 	calr	2221	; F74215  calr 0xf74ac5
 	m_cp_mi8 MB16, 0x1238, 0x03	; F74218  cp (0x1238),0x03
@@ -164548,7 +164548,7 @@ sub_F75685:
 	ldw	wa, 22783	; F7571E  ld WA,0x58ff
 	stw_dpi	wa, 241	; F75721  ld (XIX+),WA
 	ldb	a, 4	; F75724  ld A,0x04
-	ldb_da	w, (6304983)	; F75726  ld W,(0x6034d7)
+	ld	w, (6304983:24)	; F75726  ld W,(0x6034d7)
 	stw_dpi	wa, 241	; F7572B  ld (XIX+),WA
 	ldw	wa, 6146	; F7572E  ld WA,0x1802
 	stw_dpi	wa, 241	; F75731  ld (XIX+),WA
@@ -164656,7 +164656,7 @@ sub_F75685:
 	ld	a, (3184:16)	; F75855  ld A,(0x0c70)
 	or	a, 176	; F75859  or A,0xb0
 	xor	w, w	; F7585C  xor W,W
-	ldb_da	l, (6352917)	; F7585E  ld L,(0x60f015)
+	ld	l, (6352917:24)	; F7585E  ld L,(0x60f015)
 	pushw	wa	; F75863  push WA
 	pushw	bc	; F75864  push BC
 	pushw	de	; F75865  push DE
@@ -164665,7 +164665,7 @@ sub_F75685:
 	popw	bc	; F7586B  pop BC
 	popw	wa	; F7586C  pop WA
 	ldb	w, 32	; F7586D  ld W,0x20
-	ldb_da	l, (6352916)	; F7586F  ld L,(0x60f014)
+	ld	l, (6352916:24)	; F7586F  ld L,(0x60f014)
 	pushw	bc	; F75874  push BC
 	pushw	de	; F75875  push DE
 	call	16212586	; F75876  call 0xf7626a
@@ -164673,7 +164673,7 @@ sub_F75685:
 	popw	bc	; F7587B  pop BC
 	ld	a, (3184:16)	; F7587C  ld A,(0x0c70)
 	or	a, 192	; F75880  or A,0xc0
-	ldb_da	w, (6352918)	; F75883  ld W,(0x60f016)
+	ld	w, (6352918:24)	; F75883  ld W,(0x60f016)
 	and	w, 127	; F75888  and W,0x7f
 	pushw	bc	; F7588B  push BC
 	pushw	de	; F7588C  push DE
@@ -165114,20 +165114,20 @@ sub_F75685:
 	and	w, 15	; F75D3F  and W,0x0f
 	or	a, w	; F75D42  or A,W
 	xor	w, w	; F75D44  xor W,W
-	ldb_da	l, (6352917)	; F75D46  ld L,(0x60f015)
+	ld	l, (6352917:24)	; F75D46  ld L,(0x60f015)
 	pushw	wa	; F75D4B  push WA
 	call	16212586	; F75D4C  call 0xf7626a
 	popw	wa	; F75D50  pop WA
 	ldw	(4499:16), 0	; F75D51  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F75D57  ld (0x1195),0x00
 	ldb	w, 32	; F75D5C  ld W,0x20
-	ldb_da	l, (6352916)	; F75D5E  ld L,(0x60f014)
+	ld	l, (6352916:24)	; F75D5E  ld L,(0x60f014)
 	call	16212586	; F75D63  call 0xf7626a
 	ldb	a, 192	; F75D67  ld A,0xc0
 	ld	w, (4506:16)	; F75D69  ld W,(0x119a)
 	and	w, 15	; F75D6D  and W,0x0f
 	or	a, w	; F75D70  or A,W
-	ldb_da	w, (6352918)	; F75D72  ld W,(0x60f016)
+	ld	w, (6352918:24)	; F75D72  ld W,(0x60f016)
 	xor	l, l	; F75D77  xor L,L
 	calr	1262	; F75D79  calr 0xf7626a
 	jrl	-685	; F75D7C  jrl T,0xf75ad2
@@ -167378,7 +167378,7 @@ sub_F76E74:
 	ldw	wa, 22783	; F76F0D  ld WA,0x58ff
 	stw_dpi	wa, 241	; F76F10  ld (XIX+),WA
 	ldb	a, 4	; F76F13  ld A,0x04
-	ldb_da	w, (6304983)	; F76F15  ld W,(0x6034d7)
+	ld	w, (6304983:24)	; F76F15  ld W,(0x6034d7)
 	stw_dpi	wa, 241	; F76F1A  ld (XIX+),WA
 	ldw	wa, 6146	; F76F1D  ld WA,0x1802
 	stw_dpi	wa, 241	; F76F20  ld (XIX+),WA
@@ -167479,7 +167479,7 @@ sub_F76E74:
 	ld	a, (3184:16)	; F77030  ld A,(0x0c70)
 	or	a, 176	; F77034  or A,0xb0
 	xor	w, w	; F77037  xor W,W
-	ldb_da	l, (6352917)	; F77039  ld L,(0x60f015)
+	ld	l, (6352917:24)	; F77039  ld L,(0x60f015)
 	pushw	wa	; F7703E  push WA
 	pushw	bc	; F7703F  push BC
 	pushw	de	; F77040  push DE
@@ -167488,7 +167488,7 @@ sub_F76E74:
 	popw	bc	; F77046  pop BC
 	popw	wa	; F77047  pop WA
 	ldb	w, 32	; F77048  ld W,0x20
-	ldb_da	l, (6352916)	; F7704A  ld L,(0x60f014)
+	ld	l, (6352916:24)	; F7704A  ld L,(0x60f014)
 	pushw	bc	; F7704F  push BC
 	pushw	de	; F77050  push DE
 	call	16218581	; F77051  call 0xf779d5
@@ -167496,7 +167496,7 @@ sub_F76E74:
 	popw	bc	; F77056  pop BC
 	ld	a, (3184:16)	; F77057  ld A,(0x0c70)
 	or	a, 192	; F7705B  or A,0xc0
-	ldb_da	w, (6352918)	; F7705E  ld W,(0x60f016)
+	ld	w, (6352918:24)	; F7705E  ld W,(0x60f016)
 	and	w, 127	; F77063  and W,0x7f
 	pushw	bc	; F77066  push BC
 	pushw	de	; F77067  push DE
@@ -167929,20 +167929,20 @@ sub_F76E74:
 	and	w, 15	; F774F8  and W,0x0f
 	or	a, w	; F774FB  or A,W
 	xor	w, w	; F774FD  xor W,W
-	ldb_da	l, (6352917)	; F774FF  ld L,(0x60f015)
+	ld	l, (6352917:24)	; F774FF  ld L,(0x60f015)
 	pushw	wa	; F77504  push WA
 	call	16218581	; F77505  call 0xf779d5
 	popw	wa	; F77509  pop WA
 	ldw	(4499:16), 0	; F7750A  ld (0x1193),0x0000
 	ld	(4501:16), 0	; F77510  ld (0x1195),0x00
 	ldb	w, 32	; F77515  ld W,0x20
-	ldb_da	l, (6352916)	; F77517  ld L,(0x60f014)
+	ld	l, (6352916:24)	; F77517  ld L,(0x60f014)
 	call	16218581	; F7751C  call 0xf779d5
 	ldb	a, 192	; F77520  ld A,0xc0
 	ld	w, (4506:16)	; F77522  ld W,(0x119a)
 	and	w, 15	; F77526  and W,0x0f
 	or	a, w	; F77529  or A,W
-	ldb_da	w, (6352918)	; F7752B  ld W,(0x60f016)
+	ld	w, (6352918:24)	; F7752B  ld W,(0x60f016)
 	xor	l, l	; F77530  xor L,L
 	calr	1184	; F77532  calr 0xf779d5
 	jrl	-685	; F77535  jrl T,0xf7728b
@@ -172206,13 +172206,13 @@ SongStore_BitMask32:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7AFD8:
-	ldb_da	a, (6304857)	; F7AFD8  ld A,(0x603459)
+	ld	a, (6304857:24)	; F7AFD8  ld A,(0x603459)
 	ld	(3091:16), a	; F7AFDD  ld (0x0c13),A
 	ld	(4854:16), a	; F7AFE1  ld (0x12f6),A
-	ldb_da	a, (6304858)	; F7AFE5  ld A,(0x60345a)
+	ld	a, (6304858:24)	; F7AFE5  ld A,(0x60345a)
 	ld	(3092:16), a	; F7AFEA  ld (0x0c14),A
 	ld	(4855:16), a	; F7AFEE  ld (0x12f7),A
-	ldb_da	a, (6304859)	; F7AFF2  ld A,(0x60345b)
+	ld	a, (6304859:24)	; F7AFF2  ld A,(0x60345b)
 	ld	(3093:16), a	; F7AFF7  ld (0x0c15),A
 	ld	(4856:16), a	; F7AFFB  ld (0x12f8),A
 	ret	; F7AFFF  ret
@@ -172522,7 +172522,7 @@ sub_F7B162:		; <- T_F42978
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B1D1:
-	ldb_da	a, (6304860)	; F7B1D1  ld A,(0x60345c)
+	ld	a, (6304860:24)	; F7B1D1  ld A,(0x60345c)
 	ld	(3091:16), a	; F7B1D6  ld (0x0c13),A
 	ld	(3541:16), a	; F7B1DA  ld (0x0dd5),A
 	ld	(4854:16), a	; F7B1DE  ld (0x12f6),A
@@ -172907,7 +172907,7 @@ sub_F7B3E0:		; <- T_F429A0
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B457:
-	ldb_da	a, (6304865)	; F7B457  ld A,(0x603461)
+	ld	a, (6304865:24)	; F7B457  ld A,(0x603461)
 	ld	(3091:16), a	; F7B45C  ld (0x0c13),A
 	ld	(3118:16), a	; F7B460  ld (0x0c2e),A
 	ld	(4854:16), a	; F7B464  ld (0x12f6),A
@@ -172925,7 +172925,7 @@ sub_F7B457:
 	inc	1, wa	; F7B495  inc 1,WA
 	stw_da	(6304868), wa	; F7B497  ld (0x603464),WA
 	ld	(3100:16), wa	; F7B49C  ld (0x0c1c),WA
-	ldb_da	a, (6304870)	; F7B4A0  ld A,(0x603466)
+	ld	a, (6304870:24)	; F7B4A0  ld A,(0x603466)
 	ld	(3094:16), a	; F7B4A5  ld (0x0c16),A
 	ld	(4859:16), a	; F7B4A9  ld (0x12fb),A
 	m_and_mi8 MB16, 0x0c35, 0xfd	; F7B4AD  and (0x0c35),0xfd
@@ -173447,7 +173447,7 @@ sub_F7B771:		; <- T_F429D4
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7B852:
-	ldb_da	a, (6304871)	; F7B852  ld A,(0x603467)
+	ld	a, (6304871:24)	; F7B852  ld A,(0x603467)
 	cp	a, 127	; F7B857  cp A,0x7f
 	jr	nz, 4	; F7B85A  jr NZ,0xf7b860
 	m_set 2, MD16, 0x0c35	; F7B85C  set 2,(0x0c35)
@@ -173468,7 +173468,7 @@ sub_F7B852:
 	inc	1, wa	; F7B899  inc 1,WA
 	stw_da	(6304874), wa	; F7B89B  ld (0x60346a),WA
 	ld	(3100:16), wa	; F7B8A0  ld (0x0c1c),WA
-	ldb_da	a, (6304876)	; F7B8A4  ld A,(0x60346c)
+	ld	a, (6304876:24)	; F7B8A4  ld A,(0x60346c)
 	ld	(3092:16), a	; F7B8A9  ld (0x0c14),A
 	ld	(3552:16), a	; F7B8AD  ld (0x0de0),A
 	ld	(4859:16), a	; F7B8B1  ld (0x12fb),A
@@ -173998,7 +173998,7 @@ sub_F7BB92:		; <- T_F42A04
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BC73:
-	ldb_da	a, (6304879)	; F7BC73  ld A,(0x60346f)
+	ld	a, (6304879:24)	; F7BC73  ld A,(0x60346f)
 	cp	a, 127	; F7BC78  cp A,0x7f
 	jr	nz, 4	; F7BC7B  jr NZ,0xf7bc81
 	m_set 3, MD16, 0x0c35	; F7BC7D  set 3,(0x0c35)
@@ -174019,7 +174019,7 @@ sub_F7BC73:
 	inc	1, wa	; F7BCBA  inc 1,WA
 	stw_da	(6304882), wa	; F7BCBC  ld (0x603472),WA
 	ld	(3100:16), wa	; F7BCC1  ld (0x0c1c),WA
-	ldb_da	a, (6304884)	; F7BCC5  ld A,(0x603474)
+	ld	a, (6304884:24)	; F7BCC5  ld A,(0x603474)
 	ld	(3092:16), a	; F7BCCA  ld (0x0c14),A
 	ld	(3124:16), a	; F7BCCE  ld (0x0c34),A
 	ld	(4859:16), a	; F7BCD2  ld (0x12fb),A
@@ -174413,7 +174413,7 @@ sub_F7BEF4:		; <- T_F42900
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7BF74:
-	ldb_da	a, (6304945)	; F7BF74  ld A,(0x6034b1)
+	ld	a, (6304945:24)	; F7BF74  ld A,(0x6034b1)
 	ld	(3091:16), a	; F7BF79  ld (0x0c13),A
 	ld	(4854:16), a	; F7BF7D  ld (0x12f6),A
 	ld	wa, (6304946:24)	; F7BF81  ld WA,(0x6034b2)
@@ -174430,12 +174430,12 @@ sub_F7BF74:
 	inc	1, wa	; F7BFAE  inc 1,WA
 	stw_da	(6304948), wa	; F7BFB0  ld (0x6034b4),WA
 	ld	(3100:16), wa	; F7BFB5  ld (0x0c1c),WA
-	ldb_da	a, (6304950)	; F7BFB9  ld A,(0x6034b6)
+	ld	a, (6304950:24)	; F7BFB9  ld A,(0x6034b6)
 	ld	(3094:16), a	; F7BFBE  ld (0x0c16),A
-	ldb_da	a, (6304956)	; F7BFC2  ld A,(0x6034bc)
+	ld	a, (6304956:24)	; F7BFC2  ld A,(0x6034bc)
 	ld	(3102:16), a	; F7BFC7  ld (0x0c1e),A
 	ld	(3108:16), a	; F7BFCB  ld (0x0c24),A
-	ldb_da	a, (6304957)	; F7BFCF  ld A,(0x6034bd)
+	ld	a, (6304957:24)	; F7BFCF  ld A,(0x6034bd)
 	ld	(3103:16), a	; F7BFD4  ld (0x0c1f),A
 	m_and_mi8 MB16, 0x0c35, 0xdf	; F7BFD8  and (0x0c35),0xdf
 	m_cp_mi8 MB16, 0x0c13, 0x11	; F7BFDD  cp (0x0c13),0x11
@@ -174461,7 +174461,7 @@ sub_F7BFEA:		; <- T_F42908
 	jr	z, 9	; F7BFF2  jr Z,0xf7bffd
 	ld	(4927:16), a	; F7BFF4  ld (0x133f),A
 	ld	(10368:16), 255	; F7BFF8  ld (0x2880),0xff
-	ldb_da	a, (6304887)	; F7BFFD  ld A,(0x603477)
+	ld	a, (6304887:24)	; F7BFFD  ld A,(0x603477)
 	ld	(3126:16), a	; F7C002  ld (0x0c36),A
 	inc	1, a	; F7C006  inc 1,A
 	ld	(3109:16), a	; F7C008  ld (0x0c25),A
@@ -174481,7 +174481,7 @@ sub_F7BFEA:		; <- T_F42908
 	stw_da	(6304890), wa	; F7C03F  ld (0x60347a),WA
 	ld	(3130:16), wa	; F7C044  ld (0x0c3a),WA
 	xor	wa, wa	; F7C048  xor WA,WA
-	ldb_da	a, (6304892)	; F7C04A  ld A,(0x60347c)
+	ld	a, (6304892:24)	; F7C04A  ld A,(0x60347c)
 	ld	(3127:16), a	; F7C04F  ld (0x0c37),A
 	ld	(4859:16), a	; F7C053  ld (0x12fb),A
 	ld	(3513:16), 1	; F7C057  ld (0x0db9),0x01
@@ -174659,7 +174659,7 @@ sub_F7C13E:		; <- T_F42934
 	ld	(3110:16), wa	; F7C15B  ld (0x0c26),WA
 	ld	wa, (3130:16)	; F7C15F  ld WA,(0x0c3a)
 	stw_da	(6304890), wa	; F7C163  ld (0x60347a),WA
-	ldb_da	a, (6304892)	; F7C168  ld A,(0x60347c)
+	ld	a, (6304892:24)	; F7C168  ld A,(0x60347c)
 	ld	(3127:16), a	; F7C16D  ld (0x0c37),A
 	ld	(8318:16), 0	; F7C171  ld (0x207e),0x00
 	m_or_mi8 MB16, 0x2071, 0x10	; F7C176  or (0x2071),0x10
@@ -174718,7 +174718,7 @@ sub_F7C17D:		; <- T_F4292C
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F7C1C1:
-	ldb_da	a, (6304887)	; F7C1C1  ld A,(0x603477)
+	ld	a, (6304887:24)	; F7C1C1  ld A,(0x603477)
 	inc	1, a	; F7C1C6  inc 1,A
 	ldb	l, 1	; F7C1C8  ld L,0x01
 	ldb	h, 17	; F7C1CA  ld H,0x11
@@ -174972,12 +174972,12 @@ sub_F7C326:		; <- T_F42930
 	ld	(8318:16), 1	; F7C332  ld (0x207e),0x01
 	m_or_mi8 MB16, 0x2071, 0x10	; F7C337  or (0x2071),0x10
 	jrl	114	; F7C33C  jrl T,0xf7c3b1
-	ldb_da	a, (6304887)	; F7C33F  ld A,(0x603477)
+	ld	a, (6304887:24)	; F7C33F  ld A,(0x603477)
 	m_bit 4, MD16, 0x0c35	; F7C344  bit 4,(0x0c35)
 	jr	z, 4	; F7C348  jr Z,0xf7c34e
 	ldb	a, 127	; F7C34A  ld A,0x7f
 	jr	7	; F7C34C  jr T,0xf7c355
-	ldb_da	a, (6304887)	; F7C34E  ld A,(0x603477)
+	ld	a, (6304887:24)	; F7C34E  ld A,(0x603477)
 	inc	1, a	; F7C353  inc 1,A
 	ld	(3184:16), a	; F7C355  ld (0x0c70),A
 	ld	wa, (6304888:24)	; F7C359  ld WA,(0x603478)
@@ -181284,7 +181284,7 @@ sub_F7E788:
 	jr	nz, 28	; F7E7B6  jr NZ,0xf7e7d4
 	calr	228	; F7E7B8  calr 0xf7e89f
 	calr	271	; F7E7BB  calr 0xf7e8cd
-	ldb_da	l, (6304852)	; F7E7BE  ld L,(0x603454)
+	ld	l, (6304852:24)	; F7E7BE  ld L,(0x603454)
 	xor	a, a	; F7E7C3  xor A,A
 	calr	138	; F7E7C5  calr 0xf7e852
 	ld	xhl, 6304819	; F7E7C8  ld XHL,0x00603433
@@ -181293,7 +181293,7 @@ sub_F7E788:
 	jr	26	; F7E7D2  jr T,0xf7e7ee
 	calr	223	; F7E7D4  calr 0xf7e8b6
 	calr	281	; F7E7D7  calr 0xf7e8f3
-	ldb_da	l, (6304853)	; F7E7DA  ld L,(0x603455)
+	ld	l, (6304853:24)	; F7E7DA  ld L,(0x603455)
 	ldb	a, 8	; F7E7DF  ld A,0x08
 	calr	110	; F7E7E1  calr 0xf7e852
 	ld	xhl, 6304827	; F7E7E4  ld XHL,0x0060343b

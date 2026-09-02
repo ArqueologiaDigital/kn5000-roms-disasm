@@ -7084,7 +7084,7 @@ CheckAndResetSlotSta_LoadDRAM:
 	ld	xde, 272498894
 	ret
 	ldb	a, 1
-	ldb_da	l, (52809)
+	ld	l, (52809:24)
 	xor	h, h
 	dec	1, hl
 CheckAndResetSlotSta_LoadDRAM2:
@@ -7346,9 +7346,9 @@ VoiceSlot_LoadResult_Data2:
 	popw bc
 	stb_da (52809), c
 	ret
-	ldb_da l, (0x00ce49)
+	ld l, (0x00ce49:24)
 	xor H,H
-	ldb_da a, (0x00ce98)
+	ld a, (0x00ce98:24)
 	ld XIZ,0x0000ce4a
 	.byte 0xf3, 0x07, 0xf8, 0xec, 0x41, 0xdb, 0x89, 0xd9
 	.byte 0x61, 0xcb, 0x8a, 0x1e, 0x6c, 0xf9, 0xda, 0x8b
@@ -7500,10 +7500,10 @@ NoteBuffer_CompactEn_Block2:
 	xor HL,HL
 	bitda_24 1, (0x00ce42)
 	jr z, .Lc_fe999b
-	ldb_da l, (0x00ce45)
+	ld l, (0x00ce45:24)
 	jr t, .Lc_fe99a2
 .Lc_fe999b:
-	ldb_da l, (0x00ce44)
+	ld l, (0x00ce44:24)
 	jr t, .Lc_fe99a2
 .Lc_fe99a2:
 	.byte 0x46, 0x7a
@@ -7519,7 +7519,7 @@ NoteBuffer_CompactEn_Increment:
 	ret
 	bitda_24 1, (0x00ce42)
 	jr z, .Lc_fe9a32
-	ldb_da l, (0x00ce43)
+	ld l, (0x00ce43:24)
 	xor H,H
 	dec 1,HL
 	ld XIZ,0x00fe9c0b
@@ -7591,7 +7591,7 @@ NoteDisplay_AlternateLookup:
 	ret
 	ld XIY,0x0000ce4a
 	ld XIX,0x0000cec3
-	ldb_da c, (0x00ce49)
+	ld c, (0x00ce49:24)
 	xor B,B
 	.byte 0xbc, 0x00, 0x51, 0x85, 0x20, 0x21, 0x40, 0xbc
 	.byte 0x04, 0x50, 0xdd, 0x61, 0xdc, 0x61, 0xdc, 0x61

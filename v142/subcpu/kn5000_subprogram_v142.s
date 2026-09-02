@@ -2729,7 +2729,7 @@ INT0_HANDLER:	; 20E86
 	push xwa
 	bit_dd8 2, 0x34	; MSTAT0 - test if Main CPU is currently sending data
 	jr nz, INT0_Exit
-	ldb_da a, 0x120000
+	ld a, (0x120000:24)
 	ld (4332:16), a
 	cp a, 0xE1
 	jr nz, INT0_Check_E2
@@ -7787,7 +7787,7 @@ Voice_Env_VelocityDispatch_c1:
 
 ; Case 0, config bit3 clear: predicate = bit0 of the 0x04134B config byte.
 Voice_Env_VelocityDispatch_c0_NoBit3:
-	ldb_da a, 0x04134b
+	ld a, (0x04134b:24)
 	extz wa
 	calr BitTest_Bit0_L
 	jr Voice_Env_VelocityDispatch_Gate
@@ -7801,7 +7801,7 @@ Voice_Env_VelocityDispatch_c1_Bit1:
 
 ; Case 1, bit3 clear: predicate = BitTest_Mode2_L of the config byte.
 Voice_Env_VelocityDispatch_c1_NoBit3:
-	ldb_da a, 0x04134b
+	ld a, (0x04134b:24)
 	extz wa
 	calr BitTest_Mode2_L
 	jr Voice_Env_VelocityDispatch_Gate
@@ -7883,7 +7883,7 @@ Voice_Env_ApplyVelocity_Type2:
 
 ; Case 0, bit4 clear: predicate = bit0 of the 0x04134B config byte.
 Voice_Env_Type2_c0_NoBit4:
-	ldb_da a, 0x04134b
+	ld a, (0x04134b:24)
 	extz wa
 	calr BitTest_Bit0_L
 	jr Voice_Env_Type2_Gate
@@ -7897,7 +7897,7 @@ Voice_Env_Type2_c1:
 
 ; Case 1, bit4 clear: predicate = BitTest_Mode2_L of the config byte.
 Voice_Env_Type2_c1_NoBit4:
-	ldb_da a, 0x04134b
+	ld a, (0x04134b:24)
 	extz wa
 	calr BitTest_Mode2_L
 	jr Voice_Env_Type2_Gate
@@ -11578,7 +11578,7 @@ Level_Build_Reg0C0:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
 	jr z, Level_Build_Reg0C0_ZeroCoarse
-	ldb_da c, 0x04134c
+	ld c, (0x04134c:24)
 	cps c, 6
 	jr nz, Level_Build_Reg0C0_UseCoarse
 	lds de, 0
@@ -11634,7 +11634,7 @@ Level_Build_Reg0C0_CheckExpr:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
 	jr z, Level_Build_Reg0C0_NoExpr
-	ldb_da c, 0x04134c
+	ld c, (0x04134c:24)
 	cps c, 6
 	jr z, Level_Build_Reg0C0_FullExpr
 	cps c, 5
@@ -11676,7 +11676,7 @@ Voice_ComputePitchBend2:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
 	jr z, Voice_ComputePitchBend2_ZeroCoarse
-	ldb_da c, 0x04134c
+	ld c, (0x04134c:24)
 	cps c, 6
 	jr nz, Voice_ComputePitchBend2_UseCoarse
 	lds de, 0
@@ -11724,7 +11724,7 @@ Voice_ComputePitchBend2_CheckExpr:
 	ld xbc, (xwa + 35)
 	cp (xbc + 18), 0x0
 	jr z, Voice_ComputePitchBend2_NoExpr
-	ldb_da c, 0x04134c
+	ld c, (0x04134c:24)
 	cps c, 6
 	jr z, Voice_ComputePitchBend2_FullExpr
 	cps c, 5
@@ -11893,7 +11893,7 @@ Voice_Build_GateCommand_CheckExpr:
 	ld xwa, (xiz + 35)
 	cp (xwa + 18), 0x0
 	jr z, Voice_Build_GateCommand_NoExpr
-	ldb_da a, 0x04134c
+	ld a, (0x04134c:24)
 	cps a, 6
 	jr z, Voice_Build_GateCommand_FullExpr
 	cps a, 5
@@ -11959,7 +11959,7 @@ Voice_Build_GateCommand_NoPartial:
 	ld xwa, (xiz + 35)
 	cp (xwa + 18), 0x0
 	jr z, Voice_Build_GateCommand_NoPartial_NoExpr
-	ldb_da a, 0x04134c
+	ld a, (0x04134c:24)
 	cps a, 6
 	jr z, Voice_Build_GateCommand_NoPartial_FullExpr
 	cps a, 5
@@ -12802,7 +12802,7 @@ Voice_Calc_LevelPair_Full_CheckBit11:
 	ld wa, (xwa + 1)
 	bit 11, wa
 	jr z, Voice_Calc_LevelPair_Full_OscTablePath
-	ldb_da a, 0x0118b3
+	ld a, (0x0118b3:24)
 	extz wa
 	ld iz, wa
 	jrl Voice_Calc_LevelPair_Full_CheckMax
@@ -15408,7 +15408,7 @@ Pitch_Bend_Ramp_Tick:
 	bit 11, wa
 	jr z, Pitch_Bend_Ramp_Tick_Bit12
 	incdi16_24 1, 267100
-	ldb_da a, 0x011c7c
+	ld a, (0x011c7c:24)
 	exts wa
 	add wa, wa
 	stw_da 0x04135a, xwa
@@ -18551,7 +18551,7 @@ ScaleTune_Set_Global_Mode:
 	ret
 
 ScaleTune_Get_Global_Mode:
-	ldb_da l, 0x04134d
+	ld l, (0x04134d:24)
 	ret
 
 ; A = packed rhythm-mode byte from a SysEx message.  Decodes it into the 0x04135E block:
@@ -30129,7 +30129,7 @@ VoiceParam_CustomTone_Apply_Catalog94:
 VoiceAlloc_CheckAndInit:
 	dec 2, xsp
 	ld (xsp), a
-	ldb_da a, 0x0451a4
+	ld a, (0x0451a4:24)
 	cp a, (xsp)
 	jrl nz, VoiceAlloc_CheckAndInit_Return
 	cp (xsp), 0x2
@@ -30488,7 +30488,7 @@ Audio_Cmd_ToneEdit_Op0B_Alt:
 ; initialisation at 0x034C3B, and 0x0451A5 is never read anywhere in the ROM.  Everything
 ; gated on VoiceAlloc_CheckAndInit is inert until this opcode arrives.
 Audio_Cmd_ToneEdit_Op0D_SelectPart:
-	ldb_da	a, 283044
+	ld	a, (283044:24)
 	stb_da	283045, a
 	ld	a, (xiz+1)
 	stb_da	283044, a
@@ -33119,15 +33119,15 @@ DSP_AdjustVoiceParams:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld (xsp + 10), xwa
-	ldb_da a, 0x0451a6
+	ld a, (0x0451a6:24)
 	sla a, 2
 	exts wa
 	ld (xsp + 4), wa
-	ldb_da a, 0x0451ab
+	ld a, (0x0451ab:24)
 	sla a, 2
 	exts wa
 	ld (xsp + 6), wa
-	ldb_da a, 0x0451ac
+	ld a, (0x0451ac:24)
 	sla a, 2
 	exts wa
 	ld (xsp + 8), wa
@@ -33284,7 +33284,7 @@ DSP_AdjustVoiceParams_ReverbChorus:
 DSP_AdjustVoiceParams_Vibrato:
 	cpib_da 0x0451a7, 0xf5
 	jr z, DSP_AdjustVoiceParams_Filter
-	ldb_da a, 0x0451a7
+	ld a, (0x0451a7:24)
 	sla a, 1
 	ld c, a
 	exts bc
@@ -33301,7 +33301,7 @@ DSP_AdjustVoiceParams_Vibrato:
 	ld xwa, (xwa + 6)
 	stb_erp C, 0xF8
 	ld (xwa + 43), c
-	ldb_da a, 0x0451a7
+	ld a, (0x0451a7:24)
 	sla a, 1
 	ld c, a
 	exts bc
@@ -33322,7 +33322,7 @@ DSP_AdjustVoiceParams_Vibrato:
 ; The 0x0451A8 and 0x0451A9 adjustments; the latter is a read-modify-write that preserves
 ; the top two bits of patch+0x2E / patch+0x3E.
 DSP_AdjustVoiceParams_Filter:
-	ldb_da a, 0x0451a8
+	ld a, (0x0451a8:24)
 	sla a, 1
 	ld c, a
 	exts bc
@@ -33339,7 +33339,7 @@ DSP_AdjustVoiceParams_Filter:
 	ld xwa, (xwa + 6)
 	stb_erp C, 0xF8
 	ld (xwa + 44), c
-	ldb_da a, 0x0451a8
+	ld a, (0x0451a8:24)
 	sla a, 1
 	ld c, a
 	exts bc
@@ -33362,7 +33362,7 @@ DSP_AdjustVoiceParams_Filter:
 	and a, 0x3F
 	ldb_erp A, 0xF8
 	extz iz
-	ldb_da a, 0x0451a9
+	ld a, (0x0451a9:24)
 	sla a, 1
 	exts wa
 	add wa, iz
@@ -33383,7 +33383,7 @@ DSP_AdjustVoiceParams_Filter:
 	and a, 0x3F
 	ldb_erp A, 0xF8
 	extz iz
-	ldb_da a, 0x0451a9
+	ld a, (0x0451a9:24)
 	sla a, 1
 	exts wa
 	add wa, iz
@@ -40165,10 +40165,10 @@ Voice_ActiveFlag_CheckAndLoad:
 	ldw_sri WA, 0x07, 0xE4, 0xE0
 	bit 0, wa
 	jr z, Voice_ActiveFlag_ActivePath
-	ldb_da a, 0x0451a4
+	ld a, (0x0451a4:24)
 	cp a, (xsp + 2)
 	jr nz, Voice_ActiveFlag_ActivePath
-	ldb_da a, 0x0451a6
+	ld a, (0x0451a6:24)
 	sla a, 2
 	ld (xsp), a
 
@@ -40344,7 +40344,7 @@ DSP_SlotParam_Write_Slot0:
 	muls wa, 0x11F
 	ld bc, wa
 	lda xde, (0x0413d0:24)
-	ldb_da a, 0x0451a7
+	ld a, (0x0451a7:24)
 	sla a, 1
 	stb_dri A, 0x07, 0xE8, 0xE4
 	ret
@@ -40372,7 +40372,7 @@ DSP_SlotParam_Write_Slot1:
 	muls wa, 0x11F
 	ld bc, wa
 	lda xde, (0x0413d1:24)
-	ldb_da a, 0x0451a8
+	ld a, (0x0451a8:24)
 	sla a, 1
 	stb_dri A, 0x07, 0xE8, 0xE4
 	ret
@@ -40400,7 +40400,7 @@ DSP_SlotParam_Write_Slot2:
 	muls wa, 0x11F
 	ld bc, wa
 	lda xde, (0x0413d2:24)
-	ldb_da a, 0x0451a9
+	ld a, (0x0451a9:24)
 	sla a, 1
 	stb_dri A, 0x07, 0xE8, 0xE4
 	ret
@@ -40428,7 +40428,7 @@ DSP_SlotParam_Write_Slot3:
 	muls wa, 0x11F
 	ld bc, wa
 	lda xde, (0x0413d3:24)
-	ldb_da a, 0x0451ab
+	ld a, (0x0451ab:24)
 	sla a, 2
 	stb_dri A, 0x07, 0xE8, 0xE4
 	ret
@@ -40456,7 +40456,7 @@ DSP_SlotParam_Write_Slot4:
 	muls wa, 0x11F
 	ld bc, wa
 	lda xde, (0x0413d4:24)
-	ldb_da a, 0x0451ac
+	ld a, (0x0451ac:24)
 	sla a, 2
 	stb_dri A, 0x07, 0xE8, 0xE4
 	ret
@@ -42313,7 +42313,7 @@ DSP_GetEffectRouting:
 	lds hl, 0
 	cpib_da 0x041377, 0x00
 	jr z, DSP_GetEffectRouting_Path
-	ldb_da a, 0x041377
+	ld a, (0x041377:24)
 	extz wa
 	sll wa, 8
 	or hl, wa
@@ -42322,7 +42322,7 @@ DSP_GetEffectRouting:
 DSP_GetEffectRouting_Path:
 	cpib_da 0x04137a, 0x00
 	ret z
-	ldb_da a, 0x041377
+	ld a, (0x041377:24)
 	extz wa
 	or hl, wa
 	ret

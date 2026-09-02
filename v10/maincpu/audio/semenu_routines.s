@@ -52,7 +52,7 @@ SeMenu_LoadObjectPtr_Data:
 	ret
 
 SeMenu_LoadMasterPtr:
-	ldb_da c, (0x008d3a)
+	ld c, (0x008d3a:24)
 	ld (xwa), c
 	ret
 

@@ -32226,7 +32226,7 @@ FloppyState_Dispatch:
 	push xiz
 
 StyleConv_DispatchSoundMemState:
-	ldb_da a, (0x0ffc00)
+	ld a, (0x0ffc00:24)
 	cps a, 0
 	jr nz, StylCnvDisp_CheckFE
 	cpdi16 (0x4810), 0x0001
@@ -32272,7 +32272,7 @@ StylCnvDisp_Type1_CopyPath:
 	jr StylCnvDisp_CopyAndFinalize
 
 StylCnvDisp_Type2_CheckSubtype:
-	ldb_da	a, (1047553)
+	ld	a, (1047553:24)
 	cp	a, 64
 	jrl	z, 346
 	cp	a, 128

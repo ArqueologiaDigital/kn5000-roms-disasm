@@ -25,7 +25,7 @@ ParaLoadOpt_AudioFlagCheck:
 
 ; ParaLoadOpt case A
 ParaLoadOpt_CaseA:
-	ldb_da a, (0x02475c)
+	ld a, (0x02475c:24)
 	cp a, (xsp + 2)
 	jr z, ParaLoadOpt_CaseB
 	ld a, (xsp + 2)
@@ -37,7 +37,7 @@ ParaLoadOpt_CaseA:
 
 ; ParaLoadOpt case B
 ParaLoadOpt_CaseB:
-	ldb_da a, (0x02475e)
+	ld a, (0x02475e:24)
 	cp a, (xsp)
 	jr z, ParaLoadOpt_CaseC
 	ld a, (xsp)
@@ -49,7 +49,7 @@ ParaLoadOpt_CaseB:
 
 ; ParaLoadOpt case C
 ParaLoadOpt_CaseC:
-	ldb_da a, (0x02475a)
+	ld a, (0x02475a:24)
 	cp a, (xsp + 4)
 	jrl z, MidiFunc_SendEvtReturnAlt
 	ld a, (xsp + 4)

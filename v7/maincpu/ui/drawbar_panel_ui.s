@@ -1135,7 +1135,7 @@ PmemOutL_GridCheck:
 	jr z, PmemOutL_BitCheckDisplay
 	cps wa, 0
 	jrl nz, PmemOutGrid_ReturnZero
-	ldb_da c, (0x024772)
+	ld c, (0x024772:24)
 	ld A,C
 	and A,0x07
 	inc 1,A
@@ -1157,7 +1157,7 @@ PmemOutL_GridCheck:
 	jr t, PmemOutL_GridCheck_Return
 PmemOutL_BitCheckDisplay:
 	lds32 xwa, 0
-	ldb_da a, (0x024772)
+	ld a, (0x024772:24)
 	ld xbc, xwa
 	sll xbc, 4
 	sub xbc, xwa
@@ -1185,7 +1185,7 @@ PmemOutL_StrCopyAndDispatch:
 	ld	xbc, 31457420
 	jr	43
 PmemOutL_ColumnParamDisplay:
-	ldb_da c, (0x024774)
+	ld c, (0x024774:24)
 
 	extz bc
 
@@ -1293,11 +1293,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1327,11 +1327,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1354,11 +1354,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1409,11 +1409,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1448,11 +1448,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1477,11 +1477,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1527,11 +1527,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, xbc
 	ld	xiz, xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1567,11 +1567,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1599,11 +1599,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1643,11 +1643,11 @@ TtMdCtlMsg_EventDispatch:
 	ld	xwa, (xsp+24)
 	ldw	(xwa), 0
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1683,11 +1683,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1715,11 +1715,11 @@ TtMdCtlMsg_EventDispatch:
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xwa, 0
-	ldb_da	a, (149362)
+	ld	a, (149362:24)
 	ld	xbc, xwa
 	sll	xbc, 4
 	sub	xbc, xwa
@@ -1754,11 +1754,11 @@ TtMdCtlMsg_EventDispatch:
 	ld	xwa, (xsp+20)
 	ld	(xsp+20), xwa
 	lds32	xwa, 0
-	ldb_da	a, (149364)
+	ld	a, (149364:24)
 	ld	xbc, 26
 	call	16712319
 	lds32	xbc, 0
-	ldb_da	c, (149362)
+	ld	c, (149362:24)
 	ld	xwa, xbc
 	sll	xwa, 4
 	sub	xwa, xbc
@@ -1865,13 +1865,13 @@ CtlMsgGrid_EventHandler:
 	jrl nz, TtMdCtlMsg_ReturnZero2
 	ld IZ,(XHL)
 	lds32 xwa, 0
-	ldb_da a, (0x024774)
+	ld a, (0x024774:24)
 	ld XBC,0x0000001a
 	call 0xff027f
 	cps iz, 2
 	jrl z, CtlMsg_ComputeAndCheck
 	lds32 xbc, 0
-	ldb_da c, (0x024772)
+	ld c, (0x024772:24)
 	ld XWA,XBC
 	sll XWA, 0x04
 	sub XWA,XBC
@@ -1936,7 +1936,7 @@ CtlMsg_ComputeAndCheck:
 	lda xbc, (xwa + 0x11)
 	sub XBC,0x0000f9a0
 	lds32 xwa, 0
-	ldb_da a, (0x024772)
+	ld a, (0x024772:24)
 	ld XDE,XWA
 	sll XDE, 0x04
 	sub XDE,XWA
@@ -2047,7 +2047,7 @@ AcCtlMsgGrid_Init:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xbc, (xwa + 74)
-	ldb_da a, (0x024776)
+	ld a, (0x024776:24)
 	extz wa
 	ld (xbc), wa
 	ld xwa, (xsp + 32)
@@ -2475,7 +2475,7 @@ CtlMsgGridCheck_JumpTable:
 	jrl	nz, 357
 	ld	bc, wa
 	sla	bc, 2
-	ldb_da	a, (149366)
+	ld	a, (149366:24)
 	extz	wa
 	muls	wa, 36
 	ld	de, wa
@@ -2502,7 +2502,7 @@ CtlMsgGridCheck_JumpTable:
 	jrl	nz, 274
 	ld	bc, wa
 	sla	bc, 2
-	ldb_da	a, (149366)
+	ld	a, (149366:24)
 	extz	wa
 	muls	wa, 36
 	ld	de, wa
@@ -2517,7 +2517,7 @@ CtlMsgGridCheck_JumpTable:
 	ldw	(xhl), 1
 	ld	xde, xbc
 	ldw	(xbc), 0
-	ldb_da	a, (149366)
+	ld	a, (149366:24)
 	extz	wa
 	muls	wa, 36
 	ld	ix, wa
@@ -2568,7 +2568,7 @@ MidiSetup_TtlDispatch:
 	jr nz, CtlMsgGrid_ReturnZero
 	ld DE,(XDE)
 	sla DE, 0x02
-	ldb_da a, (0x024776)
+	ld a, (0x024776:24)
 	extz WA
 	muls WA,0x0024
 	ld BC,WA
@@ -2684,7 +2684,7 @@ MidiSetup_TtlCase3:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xbc, (xwa + 74)
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz wa
 	ld (xbc), wa
 	ld xwa, (xsp + 32)
@@ -2780,7 +2780,7 @@ MidiPart_StorePartIndex:
 	ld xbc, 0x1e0008e
 	ld xde, 0xffff0002
 	call SendEvent
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz wa
 	muls wa, 0xa
 	lda xbc, (NakaInst_ON_E80168_0x298:24)
@@ -2813,7 +2813,7 @@ MidiPart_StoreAndNotify:
 	ld xbc, 0x1e0008e
 	ld xde, 0xffff0002
 	call SendEvent
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz wa
 	muls wa, 0xa
 	lda xbc, (NakaInst_ON_E80168_0x298:24)
@@ -2882,7 +2882,7 @@ MidiPart_AutoDec_StorePart:
 	ld wa, (xwa)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	extz bc
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz wa
 	muls wa, 0xa
 	add wa, bc
@@ -2918,7 +2918,7 @@ MidiPart_Part2ColumnNav:
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ld bc, iz
 	sub bc, wa
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz wa
 	muls wa, 0xa
 	add wa, bc
@@ -2940,7 +2940,7 @@ MidiPart_GenericColumnNav:
 	call SendEvent
 	ld bc, iz
 	dec 1, bc
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz wa
 	muls wa, 0xa
 	add wa, bc
@@ -3028,7 +3028,7 @@ MidiPart_AutoInc_StorePart:
 	ld xbc, 0x1e0008e
 	ld xde, 0xffff0002
 	call SendEvent
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz wa
 	muls wa, 0xa
 	lda xbc, (NakaInst_ON_E80168_0x298:24)
@@ -3061,7 +3061,7 @@ MidiPart_Part2ColumnNavUp:
 	lda xbc, (NakaInst_ON_E80168_0x2C6:24)
 	ldw_sri BC, 0x07, 0xe4, 0xe0
 	add bc, iz
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz wa
 	muls wa, 0xa
 	add wa, bc
@@ -3083,7 +3083,7 @@ MidiPart_GenericColumnNavUp:
 	call SendEvent
 	ld bc, iz
 	inc 1, bc
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz wa
 	muls wa, 0xa
 	add wa, bc
@@ -3253,7 +3253,7 @@ MidiSetup_EventHandler:
 	ld BC,(XBC)
 	muls BC,0x000c
 	sub BC,0x0018
-	ldb_da a, (0x024778)
+	ld a, (0x024778:24)
 	extz WA
 	muls WA,0x0060
 	add WA,BC
@@ -8012,7 +8012,7 @@ PleaseWait_Confirm:
 PleaseWait_GetText:
 	ld XWA,(XSP+0x08)
 	ld (XSP+0x04),XWA
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	extz WA
 	sla WA, 0x02
 	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5A2:24)
@@ -8040,7 +8040,7 @@ PleaseWait_BuildScrollStr:
 	exts xwa
 	divs xwa, xix
 	stw_erp HL, 0xe2
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	extz wa
 	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5A2:24)
 	sla wa, 2
@@ -8085,7 +8085,7 @@ CheckLanguage:
 	jr z, CheckLang_GetTextStr
 	cp xbc, 0x1c00007
 	jr nz, CheckLang_ReturnZero
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	bit 7, de
 	jr z, CheckLang_Increment
 	ld c, a
@@ -8095,7 +8095,7 @@ CheckLanguage:
 	stb_da (0x0340e4), c
 
 CheckLang_SkipLang4:
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	cps a, 4
 	jr nz, LanguageSelectEventReturn
 	dec 1, a
@@ -8110,7 +8110,7 @@ CheckLang_Increment:
 	stb_da (0x0340e4), c
 
 CheckLang_SkipLang4Up:
-	ldb_da a, (0x0340e4)
+	ld a, (0x0340e4:24)
 	cps a, 4
 	jr nz, LanguageSelectEventReturn
 	inc 1, a
@@ -8124,7 +8124,7 @@ LanguageSelectEventReturn:
 	jr CheckLang_ReturnZero
 
 CheckLang_GetTextStr:
-	ldb_da	a, (213220)
+	ld	a, (213220:24)
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (15325254:24)
@@ -14459,7 +14459,7 @@ IvDrawbar_Init_Part03:
 	jr IvDrawbar_Init_DispatchLoadVals
 
 IvDrawbar_Init_CheckDualMode:
-	ldb_da a, (0x0205f2)
+	ld a, (0x0205f2:24)
 	bit 0, a
 	jr z, IvDrawbar_Init_SetupMode
 	res 0, a

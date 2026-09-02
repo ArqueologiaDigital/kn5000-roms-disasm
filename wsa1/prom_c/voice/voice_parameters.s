@@ -6720,7 +6720,7 @@ Voice_StageRegs_0800_B_ModeLt3__FAAD21:
 	ld	wa, (xbc+1)                             ; FAAD26  ld WA,(XBC+0x01)
 	and	wa, 0x800                              ; FAAD29  and WA,0x0800
 	jr z, Voice_StageRegs_0800_B_ModeLt3__FAAD3B                   ; FAAD2D  jr Z,0xfaad3b
-	ldb_da	a, (0xFDEF8E)                       ; FAAD2F  ld A,(0xfdef8e)
+	ld	a, (0xFDEF8E:24)                       ; FAAD2F  ld A,(0xfdef8e)
 	extz	wa                                    ; FAAD34  extz WA
 	ld	hl, wa                                  ; FAAD36  ld HL,WA
 	jrl Voice_StageRegs_0800_B_ModeLt3__FAAE4C                     ; FAAD38  jrl T,0xfaae4c

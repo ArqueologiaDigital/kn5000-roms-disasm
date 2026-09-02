@@ -2292,7 +2292,7 @@ FDC_PIO_ReadTransfer:
 	jr z, FDC_PIO_WriteTransfer	; jr Z,0xffea8a
 	cps wa, 3	; cp WA,3
 	ret nz	; ret NZ
-	ldb_da c, (0x120000)	; ld C,(0x120000) - read one byte from the FDC DMA-acknowledge port
+	ld c, (0x120000:24)	; ld C,(0x120000) - read one byte from the FDC DMA-acknowledge port
 	ld xhl, (0x0c7c:16)	; ld XHL,(0x0c7c) - NOTE: pointer kept at 0x0C7C = +2 into the 32-bit buffer field at 0x0C7A; the maincpu twin has the same +2 quirk (0x8A4E vs buffer at 0x8A4C) -- apparent shared latent defect; the DMA path is what ships
 	ld (xhl), c	; ld (XHL),C
 	inc 1, xhl	; inc 1,XHL

@@ -248,7 +248,7 @@ INT0_HANDLER__cmd_E7_armed:
 ; --------------- command 0xE6 AND every unlisted byte -----------------
 INT0_HANDLER__cmd_E6_or_other:
 	stib_da 0x00F32D, 0x01                     ; F99CCF  f2 2d f3 00 00 01   transfer state := 1
-	ldb_da c, 0x008518                         ; F99CD5  c2 18 85 00 23   the command byte INT0_HANDLER saved
+	ld c, (0x008518:24)                         ; F99CD5  c2 18 85 00 23   the command byte INT0_HANDLER saved
 	and c, 0x1f                                ; F99CDA  cb cc 1f   low 5 bits ...
 	extz bc                                    ; F99CDD  d9 12
 	inc 1, bc                                  ; F99CDF  d9 61   ... + 1 = the payload length
@@ -442,12 +442,12 @@ INTTC3_HANDLER__jumptable:
 INTTC3_HANDLER__state1_generic:
 	lda xbc, (0x008548:24)                       ; F99D6F  f2 48 85 00 31
 	push xbc                                   ; F99D74  39   arg2 (XSP+6): the buffer the payload landed in
-	ldb_da a, 0x008518                         ; F99D75  c2 18 85 00 21   the command byte INT0_HANDLER saved
+	ld a, (0x008518:24)                         ; F99D75  c2 18 85 00 21   the command byte INT0_HANDLER saved
 	and a, 0x1f                                ; F99D7A  c9 cc 1f
 	extz wa                                    ; F99D7D  d8 12
 	inc 1, wa                                  ; F99D7F  d8 61
 	pushw wa                                   ; F99D81  28   arg1 (XSP+4): (cmd & 0x1F) + 1 = payload length
-	ldb_da w, 0x008518                         ; F99D82  c2 18 85 00 20
+	ld w, (0x008518:24)                         ; F99D82  c2 18 85 00 20
 	srl w, 5                                   ; F99D87  c8 ef 05   the top 3 bits = the message class, 0..7
 	ld c, w                                    ; F99D8A  c8 8b
 	mul c, 4                                   ; F99D8C  cb 08 04   x 4: these are 32-bit pointers

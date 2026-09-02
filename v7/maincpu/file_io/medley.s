@@ -3645,7 +3645,7 @@ SetSongSlotValue:
 	add xhl, xde
 	add xhl, 0x1c
 	ld (xhl), bc
-	ldb_da e, (0x00ffe3)
+	ld e, (0x00ffe3:24)
 	extz de
 	cp de, wa
 	ret nz
@@ -4355,7 +4355,7 @@ PasswordText_Exit:
 CheckPasswordText:
 	cp xbc, 0x1e0009f
 	jr nz, CheckPwd_Exit
-	ldb_da a, (0x02748e)
+	ld a, (0x02748e:24)
 	cps a, 2
 	jr z, CheckPwd_Type2
 	cps a, 1

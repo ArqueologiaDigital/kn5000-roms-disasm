@@ -334,7 +334,7 @@ SetWall_SlotUpdate_Return:
 
 SetWall_DataBlock1:
 	ld	(0x7f42:16), 0
-	ldb_da	a, (0xffe3)
+	ld	a, (0xffe3:24)
 	ld	(3391:16), a
 	ret
 	ret
@@ -1234,7 +1234,7 @@ SetWall_EventOutput:
 	stw_dri WA, 0x07, 0xe8, 0xec
 	xor xwa, xwa
 	ld xiz, 0xab000
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	sla xwa, 11
 	add xiz, xwa
 	ld xde, 0x98
@@ -1974,7 +1974,7 @@ SetWall_MiscDataAndCode:
 	.byte 0x85
 	scf
 	xor	xwa, xwa
-	ldb_da	a, (0xffe3)
+	ld	a, (0xffe3:24)
 	sla	xwa, 11
 	ld	xix, 0x0ab000
 	add	xix, xwa
@@ -2096,7 +2096,7 @@ SetWall_SyncToneGenToDRAM:
 	ld wa, (0xf231:16)
 	ld (0x2871:16), wa
 	xor xwa, xwa
-	ldb_da a, (0x00ffe3)
+	ld a, (0x00ffe3:24)
 	sla xwa, 11
 	ld xiy, 0xab000
 	add xiy, xwa
@@ -2153,7 +2153,7 @@ SetWall_LoadBankToToneGen:
 	ld (0xf19e:16), wa
 	ld xix, 0xab000
 	xor xhl, xhl
-	ldb_da l, (0x00ffe3)
+	ld l, (0x00ffe3:24)
 	sla xhl, 11
 	add xix, xhl
 	ld xiy, 0xf180

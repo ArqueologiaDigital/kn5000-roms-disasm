@@ -3221,7 +3221,7 @@ FileOpen_PopulateStruct:
 	ld (xiz + 18), xwa
 	ld a, (xsp + 6)
 	ld (xiz), a
-	ldb_da a, (0x03e2e2)
+	ld a, (0x03e2e2:24)
 	ld (xiz + 1), a
 	ld (xiz + 2), 0xd
 	ld a, (xsp + 4)
@@ -8724,14 +8724,14 @@ FDC_StoreDiskType:
 
 FDC_ClearDiskChangeStatus:
 	stiw_da	(0x3e3e6), 0
-	ldb_da	a, (0x3e3e4)
+	ld	a, (0x3e3e4:24)
 	stb_da	(0x3e3e2), a
 	ret
 	ld	hl, (0x3e3e6:24)
 	ret
 
 FDC_ReadDiskType:
-	ldb_da l, (0x03e3e4)
+	ld l, (0x03e3e4:24)
 	ret
 
 format_FD:

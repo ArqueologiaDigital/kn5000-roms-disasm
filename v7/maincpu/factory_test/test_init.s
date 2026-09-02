@@ -599,7 +599,7 @@ LoadExtROM_JumpEntry:
 	jp (xhl)
 
 GetAprStatus_Entry:
-	ldb_da l, (0x03dd04)
+	ld l, (0x03dd04:24)
 	ret
 
 LoadXaprInit_Entry:
