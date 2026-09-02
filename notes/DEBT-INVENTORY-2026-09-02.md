@@ -215,9 +215,21 @@ from the recovered boundary, which then lands with **zero drift** on a neighbour
 that is already call-site documented or already converted. That zero-drift
 landing is the corroboration; without it the shrink would be a guess.
 
-**1,890 B recovered in prom_b this way.** Nobody has looked for the same shape
-in prom_a, v10 or the KN5000 data images, and the generating pass was not
-prom_b-specific.
+**1,890 B recovered in prom_b this way**, plus two further instances found
+2026-09-02 (`Data_F02F52`, `Data_F3281C`, identical shape: 29 B declared against
+a real 24 B pointer table, each freeing a 48-byte span that frames as 4 records
+and lands exactly on an already-committed label). Detector:
+`wsa1/scripts/analysis/sizing_defect_hunt.py`, validated by reproducing all
+three original fixes from their pre-fix source, null 2.10% for the walk alone.
+
+⚠ **THE OTHER IMAGES ARE NOT KNOWN TO BE CLEAN — THEY ARE UNSEARCHABLE BY THIS
+METHOD.** The hunt reported 0 hits in prom_a, prom_c, prom_d, v7, v9, v10,
+table_data and custom_data, and the reason is NOT that they were checked and
+found sound: **none of them contains a `; Label -- N bytes` reachability object
+at all.** That labelling convention is produced only by prom_b's own coverage
+generator. So the detector had nothing to search, and a zero here means "no
+foothold", not "no defect". Finding the equivalent shape elsewhere needs a
+different signature derived from how those images declare object extents.
 
 ## Where the next pass should aim
 
