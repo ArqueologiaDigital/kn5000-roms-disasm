@@ -152,3 +152,34 @@ all 0xff) retyped as `.fill` (erased flash, not code, despite a clean decode),
 (`v7_no_source_bytes.py`). The 34 CODE-labelled, 25,425 B bucket is otherwise
 blocked by the same tlcs900-backend spelling gap already known from v7's
 general code-as-`.byte` debt.
+
+## `tier2_byte_split_census.py` — the three-way `.byte` split (lane TIER2BYTE)
+
+**Question answered:** in the four images that
+`scripts/analysis/kn5000_source_coverage.py` reports at **100.0 % source with
+zero verbatim debt** — `v142/subcpu`, `subcpu/boot`, `custom_data` and
+`hdae5000` — how many of the bytes emitted by a `.byte`/`.hword`/`.short`/
+`.word`/`.long`/`.quad` directive are **(a)** real code still spelled as data,
+**(b)** structured data that should be typed, and **(c)** genuine byte tables
+that are already correct?  The coverage tool counts `.incbin` and is blind to
+all three.
+
+Addresses come from the pinned assembler, never from a parser: every source
+line gets a zero-size probe label, the image is rebuilt, the build is asserted
+byte-identical to the original dump, and `llvm-nm` supplies the address map.
+The tool aborts rather than print a number from an unverified build.
+
+```
+python3 scripts/analysis/tier2_byte_split_census.py --selftest   # address maps reconstruct each declared LENGTH
+python3 scripts/analysis/tier2_byte_split_census.py --report     # the per-image three-way split
+python3 scripts/analysis/tier2_byte_split_census.py --control    # FP(a) FP(a2) FP(a3) FP(b) + TP(a) TP(b)
+python3 scripts/analysis/tier2_byte_split_census.py --report --image hdae5000 --list a
+```
+
+`--control` is not optional reading.  The byte gate cannot adjudicate any of
+this — every classification here re-assembles to the same bytes — so the
+classifier's own error rate is the only quality signal.  Four negative controls
+(proven text, hand-annotated jump tables, the PNG-derived bitmap assets, proven
+called code) and two positive ones (so a detector cannot pass by never firing)
+are drawn from these same four images.  The script's module docstring lists
+five named failure modes and which control measures each.

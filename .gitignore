@@ -77,3 +77,6 @@ island-work/
 # nature as island-work/ above, just scoped to one tag): rebuild with
 # `python3 scripts/analysis/census_one_image.py v7`, never commit.
 census-work/
+
+# tier2byte lane: address-map/decode cache for scripts/analysis/tier2_byte_split_census.py
+.tier2cache/
