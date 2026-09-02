@@ -326,7 +326,7 @@ Regenerate with `--targets N`. Largest 40:
 
 | image | range | bytes | label(s) | why | shape |
 |---|---|---:|---|---|---|
-| prom_b | 0x01EAB0-0x024DC0 | 25,360 | `Font_Svc1C_16x16` … `Font_Svc1F_*` | self-admitted | glyph |
+| prom_b | 0x01EAB0-0x024DC0 | 25,360 | `Font_Svc1C_16x16` … `Font_Svc1F_*` | **NARROWED 2026-09-02** | glyph |
 | prom_a | 0x06B5C4-0x06F746 | 16,770 | `DrumKitNames` | self-admitted | text |
 | prom_a | 0x078000-0x07A580 | 9,600 | `SplashImage_DitherA` | self-admitted | bitmap |
 | prom_b | 0x006800-0x008CD8 | 9,432 | `ScaleTuningOff` … `SoundCodeByGroupMember` | self-admitted | ptr-table, text |
@@ -366,6 +366,34 @@ Regenerate with `--targets N`. Largest 40:
 | v7 | 0x185325-0x185A4C | 1,831 | `FDemoText_ByteData_LayoutEngine` | embedded-in-code | text |
 | v7 | 0x17860D-0x178CFE | 1,777 | `PmemOutLGridCheck_JumpTable` | embedded-in-code | — |
 | prom_b | 0x074FCF-0x075685 | 1,718 | `Data_F74FCF` … `Data_F75675` | self-admitted | ptr-table |
+
+### ✅ Closed and narrowed since this list was written (2026-09-02)
+
+**Target 3, `prom_b 0x078029-0x0799E8` — CLOSED.** The two competing framings
+were mutually exclusive (parsing the pointer-bounded objects as records gets
+1 of 121), and the 72-byte glyph grid wins on two independent measurements that
+agree: the array ends exactly on the grid — `0xF7A1A0 − 0xF78028 = 8,568 =
+119 × 72`, remainder 0 — and 119 is separately the highest glyph index the UI
+ever requests. 119 icons converted over 8,568 B; the `text` hint does not
+survive. ⚠ `PtrTable_F003F9` is now the open question and is **sharper**: one
+table of 216 slots (not the tree's "181 + 35"), shaped 18 × 12, describing a
+real twelve-screen structure whose objects are not where it says — and the
+**third of four** tables in `0xF0033F-0xF007FF` to fail identically. Take all
+four together. `wsa1/notes/gen_prom_b_f78028_icon_sheet.py`.
+
+**`prom_b 0x01EAB0-0x024DC0` (25,360 B) — NARROWED, not closed.** The pixels
+were never the open question: all twelve faces were already exported. The
+headers' actual admission is the **encoding**, and the ordering half is now
+CONFIRMED — 72 adjacent pairs of set A are dictionary words against a shuffle
+null of 24.8 ± 4.8, with 0 of 10,000 permutations reaching it (9.9 sd), and
+distance-2..8 controls on the null. **The source-text half is REFUTED**: there
+is no Japanese text in the four images, proved with a plant test that moves
+prom_a from 4 to 54 hits. So the codes were assigned by walking a document that
+is not in this ROM. ★ And the service manual explains why the faces are
+unreferenced at all: the SX-WSA1**R** lists eighteen areas and **Japan is not
+among them** — `R` is the export suffix, and the domestic SX-WSA1 shares the
+source. Still open: the source text itself (try the floppy filesystem and any
+compressed region), set A `0x38`, and `Font_Svc06` `0xB0`/`0xBC`.
 
 **The three worth a lane first**, because they are the only large ranges where
 nobody can say anything at all:
