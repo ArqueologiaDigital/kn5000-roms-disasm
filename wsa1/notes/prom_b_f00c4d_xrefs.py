@@ -20,7 +20,11 @@ THE TWO INSTRUMENTS
      notes/asm_source.py, so `.include`d parts are not missed), scanned for a
      hex address in 0xF00C00-0xF017FF.  This sees what the tree has already
      decoded, including operands that only appear in the `; ADDR  <mame text>`
-     decode comments.
+     decode comments.  TWO EXCLUSIONS, both stated in source_hits() and both
+     counted and printed rather than applied silently: whole-line COMMENTS
+     (prose about the range is not a reference into it) and lines whose own
+     `; ADDR` is inside the range (the cluster's own internal branches cannot
+     be evidence that anything reaches it).
   2. ROM BYTES.  Every 32-bit little-endian word and every 24-bit little-endian
      byte triple in prom_a and prom_b, for a value in the same range.  This sees
      what the tree has NOT decoded -- the 24-bit operand of a `jp`/`call`, a
@@ -53,16 +57,45 @@ BANNER = "coverage round 1"
 CTRL_SRC = 0xF40ED4        # called from prom_b's own converted code
 
 
+WHOLE_LINE_COMMENT = re.compile(r'^\s*;')
+
+
 def source_hits(lo, hi):
+    """(file, line, text) for every CODE line of the four images whose text names
+    an address in [lo,hi) -- including the `; ADDR  <mame text>` decode comment
+    that trails an instruction, which is where prom_b's operands are legible.
+
+    ⚠ WHOLE-LINE COMMENTS ARE EXCLUDED, and that is not a convenience.  Prose
+    ABOUT a range is not a reference INTO it, and once a range is converted its
+    own header block names it dozens of times: the module block this script
+    supports made a self-scan report 86 "references", every one of them a line
+    of its own documentation.  A census that counts its own subject's name is
+    measuring the wrong thing.  Returns the prose count separately so the
+    exclusion is visible rather than silent.
+    """
     rx = re.compile(r'0x([0-9a-fA-F]{6})')
-    out = []
+    own = re.compile(r';\s*([0-9A-F]{6})\s')
+    out, prose, inside = [], 0, 0
     for src, _rom, _b in IMAGES:
         for i, ln in enumerate(image_lines(ROOT, src)):
+            if not rx.search(ln):
+                continue
+            # ⚠ A LINE THAT LIVES IN THE RANGE CANNOT BE EVIDENCE THAT SOMETHING
+            # REACHES IT.  Once the cluster is converted its own 54 internal
+            # branches decode as `jr T,0xf0102e` and would be counted as
+            # references to itself.  N1 asks about the world OUTSIDE it.
+            m0 = own.search(ln)
+            if m0 and lo <= int(m0.group(1), 16) < hi:
+                inside += 1
+                continue
             for m in rx.finditer(ln):
                 v = int(m.group(1), 16)
                 if lo <= v < hi:
-                    out.append((src, i + 1, ln.strip()))
-    return out
+                    if WHOLE_LINE_COMMENT.match(ln):
+                        prose += 1
+                    else:
+                        out.append((src, i + 1, ln.strip()))
+    return out, prose, inside
 
 
 def rom_hits(lo, hi):
@@ -128,7 +161,7 @@ def covering_line(src, addr):
 
 def main():
     print("POSITIVE CONTROLS -- a zero here means the instrument is broken")
-    cs = source_hits(CTRL_SRC, CTRL_SRC + 1)
+    cs, _, _ = source_hits(CTRL_SRC, CTRL_SRC + 1)
     print("  source scan sees 0x%06X                       %d hits" % (CTRL_SRC, len(cs)))
     reach = rom_hits(0xF00000, 0xF00C00)
     nj = sum(1 for h in reach if h[3] == "jpcal")
@@ -138,8 +171,13 @@ def main():
     ok = len(cs) > 0 and nj > 0
 
     print("\nREFERENCES INTO 0x%06X-0x%06X" % (LO, HI - 1))
-    sh = [h for h in source_hits(LO, HI) if BANNER not in h[2]]
-    print("  from converted source:                          %d" % len(sh))
+    sh_all, prose, inside = source_hits(LO, HI)
+    sh = [h for h in sh_all if BANNER not in h[2]]
+    print("  from converted source (code lines):             %d" % len(sh))
+    print("    (%d further mentions are whole-line COMMENTS -- this module's own"
+          " documentation and the round-1 banner talking ABOUT the range, not"
+          " into it; %d further lines LIVE in the range -- its own internal"
+          " branches)" % (prose, inside))
     for s_, n, t in sh[:20]:
         print("      %s:%d  %s" % (s_, n, t[:110]))
     rh = rom_hits(LO, HI)

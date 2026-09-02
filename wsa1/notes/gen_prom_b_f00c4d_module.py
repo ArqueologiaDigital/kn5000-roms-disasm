@@ -99,8 +99,10 @@ ways, and both should be on the record before anyone reads a semantic into it.
   N2  ITS CALL TARGETS ARE NOT prom_a ENTRY POINTS.  The code makes 24-bit
       absolute calls to 34 distinct addresses in 0xFDA6FC-0xFDDA7B -- prom_a's
       window -- plus two to 0xF41ED4 in prom_b's own routine directory; the two
-      arrays name 155 more, 0xFC4480-0xFDED77.  prom_a has four `.incbin` spans
-      left, so its instruction boundaries there are known.  Only 14 of the 34
+      arrays name 155 more, 0xFC4480-0xFDED77.  prom_a has 2,542 bytes of `.incbin`
+      left in the whole image and the window these targets fall in,
+      0xFDA000-0xFDEFFF, is 20,372 of 20,480 bytes on INSTRUCTION lines and 101
+      on data lines -- so its boundaries there are framed, not guessed.  Only 14 of the 34
       call targets and 58 of the 155 array targets land on one.  A search over
       every constant offset in -2048..+2048 finds no shift that fixes it: the
       best is 79 of 155 at +1936, barely above the 58 that offset 0 already
@@ -166,7 +168,13 @@ everything it is about to print -- through the same include the image uses --
 and refuses, without printing, unless the result equals the 2,995 ROM bytes.
 Then run the real gate:
 
-    python3 scripts/analysis/assert_byte_identical.py
+    make gate-wsa1            # from the repository root: 4 images
+
+★ AND SHOW THE GATE CAN SEE THIS EDIT.  A green gate certifies nothing until it
+  has been made to go red on the change in question.
+  notes/prom_b_f00c4d_gate_perturbation.sh flips one byte in EACH of the four
+  sub-regions in turn and requires a failure at that address: 0xC4E, 0xCC9,
+  0x14EE, 0x17FF, then green again on restore.
 
 RUN
   python3 notes/gen_prom_b_f00c4d_module.py             # the assembly
@@ -332,6 +340,31 @@ def branch_targets(rows):
 
 
 # ------------------------------------------------- prom_a instruction starts
+def prom_a_window_coverage(lo=0xFDA000, hi=0xFDF000):
+    """(instruction bytes, data-directive bytes, window size) for a window of
+    prom_a, from its own `; ADDR  hh hh hh` comments.
+
+    ⚠ THIS IS N2's PREMISE AND HAS TO BE MEASURED.  "the target is not an
+    instruction start in prom_a" means nothing if prom_a's framing there is
+    mostly guesswork or mostly data.  It is neither: the window is 99.5%
+    instruction lines.
+    """
+    rx = re.compile(r';\s*([0-9A-F]{6})\s+((?:[0-9a-f]{2}\s*)+)$')
+    dat = re.compile(r'^\.(byte|long|short|word|ascii|asciz|fill|zero|incbin)\b')
+    ins = dbytes = 0
+    for ln in open(SRC_A, encoding="latin-1"):
+        m = rx.search(ln.rstrip("\n"))
+        if not m:
+            continue
+        a, n = int(m.group(1), 16), len(m.group(2).split())
+        if lo <= a < hi:
+            if dat.match(ln.strip()):
+                dbytes += n
+            else:
+                ins += n
+    return ins, dbytes, hi - lo
+
+
 def prom_a_starts():
     """Every address prom_a's converted source calls the start of a line, taken
     from its own `; ADDR  hh hh hh` comment -- the tree's record of where prom_a's
@@ -604,6 +637,10 @@ def selftest():
        xr.stdout.strip().splitlines()[-1] if xr.stdout.strip() else xr.stderr[:80])
     con_c = sum(1 for t in calls if t in starts)
     con_p = sum(1 for t in ptrs if t in starts)
+    ins, dat, win = prom_a_window_coverage()
+    ck("N2 premise: prom_a 0xFDA000-0xFDEFFF is framed, not guessed",
+       ins > 0.99 * win, "%d of %d bytes on instruction lines, %d on data lines"
+       % (ins, win, dat))
     ck("N2 call targets are mostly NOT prom_a instruction starts",
        con_c < len(calls), "%d of %d land on one" % (con_c, len(calls)))
     ck("N2 array targets likewise", con_p < len(ptrs), "%d of %d" % (con_p, len(ptrs)))
