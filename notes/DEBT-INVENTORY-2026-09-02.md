@@ -37,14 +37,30 @@ v7 alone holds 275,822 B of it — more than the 225,670 B of real verbatim debt
 across all thirteen images put together. Every "95%+ source" figure ever quoted
 here came from an instrument that could not see it.
 
-## Verbatim debt: 544,138 B counted, but ⚠ only 225,670 B is real
+## Verbatim debt: 501,506 B counted, ⚠ only 183,038 B is real
 
-The tool reports 544,138 B of 12,386,304 (95.6% source). **318,468 B of that is
+**Figures refreshed 2026-09-02 from a live `kn5000_source_coverage.py` run — do
+not quote this file without re-running it, it drifts within hours while lanes
+convert.**
+
+The tool reports 501,506 B of 12,386,304 (96.0% source). **318,468 B of that is
 the six table_data BMPs, which are the genuine shipped artefact in their best
-form — see below. Subtracting them leaves 225,670 B, i.e. 98.2% source.**
-Quote 225,670; the 544,138 figure counts a correctly-represented asset as debt
+form — see below. Subtracting them leaves 183,038 B, i.e. 98.5% source.**
+Quote 183,038; the headline counts a correctly-represented asset as debt
 because the tool classifies by MECHANISM (`.incbin` with no generator) rather
 than by whether anything is actually unknown.
+
+### Priority images (owner's standing order: v10 and the WSA1R first)
+
+| image | verbatim | code-as-`.byte` |
+|---|---:|---|
+| **KN5000 v10** | **0** ✅ | ~22,785 B, confirmed-region backlog CLOSED |
+| **wsa1/prom_c** | **0** ✅ | 0 — survived falsification |
+| **wsa1/prom_d** | **0** ✅ | 0 — survived falsification |
+| wsa1/prom_a | 15,722 B | none (audited clean) |
+| wsa1/prom_b | 26,013 B | none (audited clean) |
+
+Deprioritised: v7 (123,733 B verbatim, 275,822 B code-as-`.byte`), v9.
 
     python3 scripts/analysis/kn5000_source_coverage.py
 
