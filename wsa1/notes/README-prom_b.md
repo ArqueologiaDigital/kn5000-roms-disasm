@@ -1419,14 +1419,30 @@ words reading `0xF13CFF`, each straddling `link XIZ,0xffee` / `push XIX` /
 positives at that rate, so the test used is the record test (opcode < `0x24`,
 handler `0xF31ABE`, length byte 12), never the pointer value alone.
 
-**Refused, and why.** The span starts four bytes INSIDE the `0xF13D30` bitmap.
-`0xF13D30-0xF13D33` is the tail of `Data_F139AB`'s `.byte` run, which
-`gen_prom_b_f0ea9f_module.py` emits from `("data", 0xF139AB, 0x0389)` and whose
-`--checks` asserts that LAYOUT covers `0xF0EA9F-0xF13D33` exactly. Closing the
-bitmap is a one-line change — `LO, HI` in `prom_b_f0ea9f_layout.py` from
-`0xF13D34` to `0xF13D30`, and that size from `0x0389` to `0x0385` — but it
-re-runs that module's whole code walk, so it is left named rather than done
-here. The bitmap is emitted as its span-visible tail with the whole picture in
+**Refused, and why — with the fear measured rather than asserted.** The span
+starts four bytes INSIDE the `0xF13D30` bitmap. `0xF13D30-0xF13D33` is the tail
+of `Data_F139AB`'s `.byte` run, which `gen_prom_b_f0ea9f_module.py` emits from
+`("data", 0xF139AB, 0x0389)` and whose `--checks` asserts that LAYOUT covers
+`0xF0EA9F-0xF13D33` exactly. Closing the bitmap is a one-line change — `LO, HI`
+in `prom_b_f0ea9f_layout.py` from `0xF13D34` to `0xF13D30`, and that size from
+`0x0389` to `0x0385`.
+
+The obvious objection is that this re-runs that module's whole code walk, which
+is the failure the byte gate cannot see. **It does not.**
+`res02f_f0ea9f_hi_shift_probe.py` emits the module both ways and the two differ
+in exactly SIX lines, all six being the four bytes themselves — `21141 → 21137`
+twice, `Data_F139AB` `905 → 901`, its printable preview, and the last `.byte`
+line. **81 segments and 23 unsplit `.byte` runs both ways**; not one label,
+instruction or segment boundary moves.
+
+    python3 notes/res02f_f0ea9f_hi_shift_probe.py --diff   # ~6 min, two emissions
+
+What actually stopped this lane is narrower, and is written down so it can be
+closed: `prom_b_f0ea9f_layout` is imported by four other modules
+(`gen_prom_b_f6d002_module`, `prom_b_f067a6_layout`, `prom_b_f4f000_layout`,
+`prom_b_f4f000_verify`), and the probe calls `emit()` directly so it never runs
+that module's `--checks`. Neither was measured; neither is this lane's. Until
+then the bitmap is emitted as its span-visible tail, with the whole picture in
 the header.
 
 Gate: `make gate-wsa1` green, and shown RED at `0x3014` and at `0x13D59` by

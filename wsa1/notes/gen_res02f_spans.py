@@ -73,16 +73,27 @@ BYTE ORDER OF THE BITMAPS -- an inference, and it changes no byte
     ordering, so this is an inference; it affects only the picture in the
     comment.
 
-WHAT THIS LANE REFUSED
+WHAT THIS LANE REFUSED, AND THE MEASUREMENT THAT DE-RISKS IT
     The span at 0xF13D34 starts FOUR BYTES INSIDE the bitmap at 0xF13D30.
     Those four bytes are the tail of the `.byte` run of `Data_F139AB`, which
     notes/gen_prom_b_f0ea9f_module.py emits from `("data", 0xF139AB, 0x0389)`
     and whose `--checks` asserts its LAYOUT covers 0xF0EA9F-0xF13D33 exactly
-    (`LO, HI` in notes/prom_b_f0ea9f_layout.py).  Moving the boundary is a
-    one-line change there, but it re-runs that module's whole code walk and the
-    module is not this lane's.  So the bitmap at 0xF13D30 is emitted as its
-    span-visible TAIL, with the whole picture in the header, and the one-line
-    change is left named and ready.
+    (`LO, HI` in notes/prom_b_f0ea9f_layout.py).  So the bitmap at 0xF13D30 is
+    emitted here as its span-visible TAIL, with the whole picture in the header.
+
+    ⚠ The reason is NOT that the shift is dangerous to that module's code walk.
+    That was measured, and it is not: notes/res02f_f0ea9f_hi_shift_probe.py
+    emits the module twice, once with `LY.HI = 0xF13D34` and once with
+    0xF13D30, and the two differ in exactly SIX lines, all six being the four
+    bytes themselves (21141 -> 21137, `Data_F139AB` 905 -> 901, its printable
+    preview, and the last `.byte` line).  Both emissions have 81 segments and
+    23 unsplit `.byte` runs; not one label, instruction or boundary moves.
+
+    What stopped this lane is narrower and is stated so it can be closed:
+    `prom_b_f0ea9f_layout` is imported by FOUR other modules
+    (gen_prom_b_f6d002_module, prom_b_f067a6_layout, prom_b_f4f000_layout,
+    prom_b_f4f000_verify), and the probe bypasses `--checks`.  Those two things
+    were not measured, and neither belongs to this lane.
 
 RUN
     python3 notes/gen_res02f_spans.py --selftest  # every claim above, re-derived
@@ -353,8 +364,19 @@ def render_span2(b, hta):
                ";   covers 0xF0EA9F-0xF13D33 exactly.  Closing the bitmap is a one-line\n"
                ";   change -- `LO, HI = 0xF0EA9F, 0xF13D34` in\n"
                ";   notes/prom_b_f0ea9f_layout.py becomes 0xF13D30, and that module's last\n"
-               ";   LAYOUT size 0x0389 becomes 0x0385 -- but it re-runs that module's whole\n"
-               ";   code walk, and the module is not this lane's to regenerate.\n")
+               ";   LAYOUT size 0x0389 becomes 0x0385.\n")
+    out.append(";\n")
+    out.append(";   ⚠ AND THE FEAR THAT IT RE-RUNS THAT MODULE'S CODE WALK WAS MEASURED\n"
+               ";     AND IS UNFOUNDED.  notes/res02f_f0ea9f_hi_shift_probe.py emits the\n"
+               ";     module twice, with HI at 0xF13D34 and at 0xF13D30, and the two\n"
+               ";     differ in exactly SIX lines -- all six being the four bytes\n"
+               ";     themselves (21141 -> 21137 bytes, Data_F139AB 905 -> 901, its\n"
+               ";     printable preview, and the last `.byte` line).  81 segments and 23\n"
+               ";     unsplit `.byte` runs BOTH ways; not one label, instruction or\n"
+               ";     boundary moves.  What is still unmeasured, and is the actual reason\n"
+               ";     this stayed undone, is the FOUR other modules that import\n"
+               ";     prom_b_f0ea9f_layout, and the module's own `--checks`, which the\n"
+               ";     probe bypasses.  Neither is this lane's to change.\n")
     out.append(";\n")
     out.append("; BYTE ORDER: COLUMN-major, byte column c and row r at +c*12+r.  An\n"
                "; INFERENCE, and it changes no byte: the emitted bytes are the ROM's, in\n"

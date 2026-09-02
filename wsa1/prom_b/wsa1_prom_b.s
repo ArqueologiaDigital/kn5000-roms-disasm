@@ -33638,8 +33638,19 @@ Data_F139AB:
 ;   covers 0xF0EA9F-0xF13D33 exactly.  Closing the bitmap is a one-line
 ;   change -- `LO, HI = 0xF0EA9F, 0xF13D34` in
 ;   notes/prom_b_f0ea9f_layout.py becomes 0xF13D30, and that module's last
-;   LAYOUT size 0x0389 becomes 0x0385 -- but it re-runs that module's whole
-;   code walk, and the module is not this lane's to regenerate.
+;   LAYOUT size 0x0389 becomes 0x0385.
+;
+;   ⚠ AND THE FEAR THAT IT RE-RUNS THAT MODULE'S CODE WALK WAS MEASURED
+;     AND IS UNFOUNDED.  notes/res02f_f0ea9f_hi_shift_probe.py emits the
+;     module twice, with HI at 0xF13D34 and at 0xF13D30, and the two
+;     differ in exactly SIX lines -- all six being the four bytes
+;     themselves (21141 -> 21137 bytes, Data_F139AB 905 -> 901, its
+;     printable preview, and the last `.byte` line).  81 segments and 23
+;     unsplit `.byte` runs BOTH ways; not one label, instruction or
+;     boundary moves.  What is still unmeasured, and is the actual reason
+;     this stayed undone, is the FOUR other modules that import
+;     prom_b_f0ea9f_layout, and the module's own `--checks`, which the
+;     probe bypasses.  Neither is this lane's to change.
 ;
 ; BYTE ORDER: COLUMN-major, byte column c and row r at +c*12+r.  An
 ; INFERENCE, and it changes no byte: the emitted bytes are the ROM's, in
