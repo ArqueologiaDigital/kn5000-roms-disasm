@@ -21030,13 +21030,34 @@ DrumVoice_Handler1:
 DrumVoice_Handler2:
 	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler2.bin"
 DrumVoice_Handler3:
-	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler3.bin"
+	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0xc8, 0x33, 0x07
+	.byte 0x6e, 0x07, 0xc1, 0x4e, 0x34, 0x3e, 0x10, 0x68
+	.byte 0x05, 0xc1, 0x4e, 0x34
+DrumVoice_Handler3_Code:
+	push	xix
+	and	xbc, xsp
+	ldw	iz, 15924
+	push	sr	
+	ret	
 DrumVoice_Handler5:
 	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler5.bin"
 DrumVoice_Handler4:
 	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler4.bin"
 DrumVoice_Handler6:
-	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler6.bin"
+	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0xc1, 0x1c, 0xe3
+	.byte 0x3e, 0x01
+DrumVoice_Handler6_Code:
+	stdi16	(58142), 1927
+	stdi16	(58142), 1670
+	ld	xiy, 608256
+	add	xiy, 16
+	ld	a, (xiy)
+	bit	0, a
+	jr	nz, 9
+	calr	722
+	calr	63352
+	calr	804
+	ret	
 DrumVoice_Handler7:
 	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler7.bin"
 DrumVoice_NotifyEE:
@@ -24690,7 +24711,68 @@ CmpSetTtl_DynamicLookup:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpSetTtlFunc title dispatch 2
 CmpSetTtl_Dispatch2:
-	.incbin "includes/romslices/v7_transplant_CmpSetTtl_Dispatch2.bin"
+	.asciz ":;<> "
+CmpSetTtl_Dispatch2_Code:
+	call	16145736
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	78
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ldb	w, 128
+	call	16145736
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	62
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ldb	w, 0
+	call	16145771
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	46
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ldb	w, 128
+	call	16145771
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	30
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ldb	w, 0
+	call	16145833
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jr	14
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	ldb	w, 128
+	call	16145833
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
 CmpReal_ReturnZero:
 	lds32 xhl, 0
 	ret
@@ -25146,7 +25228,27 @@ CmpBksl_STtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpBksl_STtlFunc title dispatch
 CmpBkslSTtl_Dispatch:
-	.incbin "includes/romslices/v7_transplant_CmpBkslSTtl_Dispatch.bin"
+	.ascii ":;<>"
+CmpBkslSTtl_Dispatch_Code:
+	call	16140770
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	stdi8	(32422), 0
+	jrl	334
+	stdi8	(13424), 0
+	jrl	326
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	16140770
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jrl	311
 CmpBkslSTtl_DirectMode:
 	ld xwa, xde
 	cp xde, 0x4
@@ -25350,7 +25452,69 @@ CmpNcpTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; CmpNcpTtlFunc title dispatch
 CmpNcpTtl_Dispatch:
-	.incbin "includes/romslices/v7_transplant_CmpNcpTtl_Dispatch.bin"
+	.ascii ":;<>"
+CmpNcpTtl_Dispatch_Code:
+	call	16142625
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	ldb_d8	a, (14820)
+	cps	a, 1
+	jr	z, 22
+	cps	a, 0
+	jrl	nz, 1482
+	lds	wa, 1
+	call	16355608
+	lds	wa, 2
+	call	16355680
+	ldw	wa, 130
+	jr	95
+	lds	wa, 1
+	call	16355608
+	lds	wa, 6
+	call	16355680
+	ldw	wa, 134
+	jr	78
+	lds	wa, 0
+	call	16355608
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	16142746
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	jrl	1427
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
+	call	16142625
+	pop	xiz
+	pop	xix
+	pop	xhl
+	pop	xde
+	ldb_d8	a, (14820)
+	cps	a, 1
+	jr	z, 22
+	cps	a, 0
+	jrl	nz, 1402
+	lds	wa, 1
+	call	16355608
+	lds	wa, 2
+	call	16355680
+	ldw	wa, 130
+	jr	15
+	lds	wa, 1
+	call	16355608
+	lds	wa, 6
+	call	16355680
+	ldw	wa, 134
+	call	16355660
+	jrl	1363
 CmpNcpTtl_SpecialMode7:
 	cp xde, 0xb
 	jr ule, CmpNcpTtl_TableDispatch
@@ -27176,7 +27340,15 @@ AccSeq_PostEvent9E_Disable:
 	lds32 xde, 0
 	jp ApPostEvent
 AccSeq_DcModeDataBlock:
-	.incbin "includes/romslices/v7_transplant_AccSeq_DcModeDataBlock.bin"
+	.byte 0xc1, 0x9c
+AccSeq_DcModeDataBlock_Code:
+	xor	(xix+63), d
+	ret	nz
+	ld	xwa, 14417925
+	ld	xbc, 29360143
+	lds32	xde, 0
+	call	16423418
+	ret	
 SndArgTtl_SubA:
 SndArgModeFunc:
 	cp xbc, 0x1c00013
@@ -28129,7 +28301,15 @@ AccScreen_BeatDisplay_Draw:
 	ret
 
 AccScreen_BeatDataBlock:
-	.incbin "includes/romslices/v7_transplant_AccScreen_BeatDataBlock.bin"
+	.byte 0xc1, 0x76, 0x36, 0x3f, 0x04, 0x6e, 0x19, 0xc1
+	.byte 0x78, 0x36, 0x19, 0x1f, 0x39, 0xc1
+AccScreen_BeatDataBlock_Code:
+	jrl	ge, 6454
+	ldb	w, 57
+	ld	xiy, 16165229
+	ld	xix, 16165259
+	calr	64014
+	ret	
 AccScreen_DrawInit_StackWrap:
 	ld xwa, AccScreen_DrawInit_Body
 	push xwa
