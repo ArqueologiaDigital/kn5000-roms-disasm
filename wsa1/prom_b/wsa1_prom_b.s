@@ -61639,10 +61639,15 @@ DL_RealtimeRecordSongMeasureQuantiTimeSigMasterClear:
 ;   this span is unreachable and stays `.incbin`.  Why this is data and
 ;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F34968:
-	.byte	0x0E	; F34968  |.|
-
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x034969, 0x000007
+; ABSORBED 2026-09-02 -- see notes/gen_prom_b_f34968_fix_module.py: this
+; 1 B object plus the 7 B .incbin that followed it is ONE interpreter-A
+; op-0x0E record (handler 0xF31A9F, fixed 8 B, verified against the ROM's
+; own handler table), the record immediately before the already-named
+; DL_CycleMasterS0ngMeasureTimeSig list right after it.
+	.byte 0x0E, 0x08	; op 0E, 8 bytes -> handler 0xF31A9F
+	.short 0x0000
+	.short 0x0028
+	.short 0x00F0
 
 ; === END COVER-R1 0xF34968-0xF34970 ===
 
