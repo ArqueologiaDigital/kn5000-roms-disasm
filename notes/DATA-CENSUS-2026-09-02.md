@@ -278,11 +278,16 @@ at 44.62 %.
 
 ---
 
-## 7. Three defects the reconciliation caught while this tool was written
+## 7. Four defects found while building this tool, and what found each
 
-Each one is a reason the run **aborts** on a non-zero delta rather than warning.
+Only the first was caught by the reconciliation — which is the argument for the
+reconciliation being a hard abort rather than a warning. **The other three were
+caught by reading the audit sample by hand, and every one of them would have
+passed every automated check in this tool**, including the byte gate: none of
+them moves a byte, they only move the *attribution* of bytes.
 
-1. **`.include` stole its target's first bytes.** Several markers share an
+1. **`.include` stole its target's first bytes.** *(caught by the reconciliation:
+   a −36 B delta on prom_d.)* Several markers share an
    address whenever a line emits nothing there, and an `.include` marker sits at
    the same address as the first line of the file it pulls in. Marker index is
    *not* emission order — files are walked alphabetically, so an included file's
@@ -290,10 +295,11 @@ Each one is a reason the run **aborts** on a non-zero delta rather than warning.
    36 B to three `.include` lines. Fixed by keeping only the *emitting* entry of
    each address group.
 2. **A label on the same line as its directive was credited to the previous
-   label.** `Bitmap_1bit_Illegal_Disk: .incbin "…"` is one line, and there are
-   thousands of that shape. Found by the audit sample, which reported a 616 B
-   bitmap as `SLIDE_STRING_2`.
-3. **A banner propagated down through every later object in the file.** A run of
+   label.** *(caught by the audit sample.)* `Bitmap_1bit_Illegal_Disk: .incbin "…"` is one line, and there are
+   thousands of that shape; the sample reported a 616 B bitmap as
+   `SLIDE_STRING_2`, which is the label of the object above it.
+3. **A banner propagated down through every later object in the file.**
+   *(caught by the audit sample.)* A run of
    1-bit bitmaps was being credited to a "DMA ISR event router" header belonging
    to a table far above them. A header is now credited only if it ends within 6
    lines of the object's own label. **This fix, together with defect 2, moved
@@ -301,7 +307,7 @@ Each one is a reason the run **aborts** on a non-zero delta rather than warning.
    unanchored header rule overstates the evidence-backed figure by more than a
    megabyte.
 
-A fourth, less dangerous: merging `.zero 30` with three `.fill n,1,0xFF` runs
+4. *(caught by the audit sample.)* Less dangerous, but the same shape: merging `.zero 30` with three `.fill n,1,0xFF` runs
 produced one 73,556 B "non-uniform fill" region that then fell through to the
 data grader. Fill directives are no longer merged.
 
