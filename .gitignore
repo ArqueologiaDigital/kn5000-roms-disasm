@@ -83,3 +83,8 @@ census-work/
 scripts/analysis/.amap_v10.json
 # tier2byte lane: address-map/decode cache for scripts/analysis/tier2_byte_split_census.py
 .tier2cache/
+
+# rq-codeshape lane: regenerable adjudication output (recipe in
+# notes/data-census-2026-09-02/README-rq-codeshape.md)
+code_suspect_v*.json
+code_shape_shortlist.json

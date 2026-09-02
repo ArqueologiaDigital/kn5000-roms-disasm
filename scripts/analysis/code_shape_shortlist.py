@@ -52,6 +52,7 @@ actually decoded, so the coverage claim cannot be rounded up.
 
 RUN
     python3 scripts/analysis/code_shape_shortlist.py                # census only
+    python3 scripts/analysis/code_shape_shortlist.py --refkind
     python3 scripts/analysis/code_shape_shortlist.py --decode --top 150
 
 TOOLCHAIN.  `--decode` uses the shared, mutable llvm build; this lane's figures
@@ -157,7 +158,68 @@ def decode_rank(sites, key, top):
     return done
 
 
+
+def refkind():
+    """PARTITION THE FLAGGED BYTES BY WHAT KIND OF REFERENCE THEY HAVE.
+
+    The project's standing rule, from six jump-table conversions reverted by
+    hand: *if every reference LOADS AN ADDRESS and nothing calls or jumps in,
+    it is data.*  This applies it to the whole code-shaped population, which
+    turns out to be the single strongest de-rating signal available -- stronger
+    than the name, and free.
+
+    Three classes, in descending evidential value:
+
+      CTRL-TARGETED          a control transfer names the label.  Null: 0 of
+                             11,179 C-compiled data regions
+                             (code_suspect_adjudicate.py --null).  These are
+                             population 2 and are graded there.
+      address-taken only     the label is used elsewhere, but never as the
+                             operand of a call/jp/jr/jrl/djnz.  The
+                             jump-table shape.
+      no reference anywhere  no evidence in either direction.
+
+    Worked check on the largest non-table-named members of the middle class:
+    WndEvt_EventCodeDispatch, CmpNcpTtl_Dispatch2, Sqedt_ParamDispatch,
+    Data_InOutGridDispatch, VocalistGrid_CheckDispData, NameGetFuncCall_Dispatch,
+    Data_ParaLoadOptDispatch, CstmCpTtl_Dispatch2, SeqAccomp_SubHandlerA --
+    every one is referenced EXACTLY ONCE, by `lda_24`, and the instruction after
+    that load is `jp_ind`.  They are jump-table bases."""
+    from collections import Counter
+    IDENT = re.compile(r'\b([A-Za-z_][\w.$]{2,})\b')
+    allsites = enumerate_sites()
+    grand = Counter()
+    print("CODE-SHAPED LITERAL BYTES, BY REFERENCE KIND")
+    for key, mirror in MIRRORS:
+        files, labels, refs = C.scan(mirror)
+        used = set()
+        for _rel, L in files.items():
+            for ln in L:
+                c = C.strip_comment(ln).strip()
+                m = C.LABEL_RE.match(c)
+                body = c[m.end():].strip() if m else c
+                if body:
+                    used.update(IDENT.findall(body))
+        t = Counter()
+        for x in allsites[key]:
+            if x["kind"] != "lit":
+                continue
+            k = ("CTRL-TARGETED" if x["targeted"]
+                 else "address-taken only" if x["label"] in used
+                 else "no reference anywhere")
+            t[k] += x["bytes"]
+            grand[k] += x["bytes"]
+        print("  %-11s %s" % (key, dict(sorted(t.items()))))
+    tot = sum(grand.values())
+    print("\n  %-24s %10s %7s" % ("class", "bytes", "share"))
+    for k in ("CTRL-TARGETED", "address-taken only", "no reference anywhere"):
+        print("  %-24s %10d %6.1f%%" % (k, grand[k], 100.0 * grand[k] / tot))
+
+
 def main():
+    if "--refkind" in sys.argv:
+        refkind()
+        return
     top = int(sys.argv[sys.argv.index("--top") + 1]) if "--top" in sys.argv else 150
     allsites = enumerate_sites()
     print("CODE-SHAPED LABELS HEADING A DATA RUN")

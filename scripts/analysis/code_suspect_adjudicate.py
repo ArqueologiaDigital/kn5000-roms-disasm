@@ -393,15 +393,24 @@ def null():
 def blockers(keys):
     """WHAT STOPS THE REGIONS THAT DO NOT FULLY CONVERT?
 
-    Two very different answers hide behind one "not clean":
+    Two very different answers hide behind one "not clean", and only one of
+    them says anything against the transfer:
 
-      * the FIRST instruction at the branch target already fails -- the target
-        is not an instruction start, which is the phantom shape; or
-      * the decode runs past the target and blocks later -- a spelling gap in
-        the llvm backend, which says nothing against the transfer.
+      * unidasm -- a decoder wholly independent of this tree's llvm backend --
+        emits `db` (a raw data byte) where the branch target is.  THAT is the
+        phantom shape: the target is not the start of any instruction.
+      * unidasm decodes a real mnemonic there and llvm-mc cannot reassemble
+        it.  That is a BACKEND SPELLING GAP and is evidence about the
+        toolchain, not about the transfer.
 
-    This splits them, and for the second class names the unidasm mnemonic that
-    llvm-mc could not reproduce, so the backend lane has a worklist."""
+    ⚠ Do not conflate the two.  An earlier version of this section counted
+    "the first llvm-mc failure is at offset 0" as the phantom shape and got
+    199 regions / 6,543 B -- but the blocking forms were `bit`, `cp`, `res`,
+    `and`, `or`: perfectly real TLCS-900 instructions llvm cannot yet spell.
+    Framing a toolchain gap as evidence against the data would have inverted
+    the verdict on a fifth of the population.
+
+    The mnemonic census at the end is the backend lane's worklist."""
     from collections import Counter
     first_fail, later, forms = [], [], Counter()
     for key in keys:
@@ -437,14 +446,24 @@ def blockers(keys):
                 mn = dec.get(off, (0, "<undecodable>"))[1].split()[0].lower() \
                     if off in dec else "<undecodable>"
                 forms[mn] += 1
-                (first_fail if off == 0 else later).append((key, name, n, off, mn))
+                undec = mn in ("db", "<undecodable>", ".db")
+                # unidasm's own verdict at the TARGET, independent of llvm
+                mn0 = dec.get(0, (0, "<undecodable>"))[1].split()[0].lower() \
+                    if 0 in dec else "<undecodable>"
+                if mn0 in ("db", "<undecodable>", ".db"):
+                    first_fail.append((key, name, n, off, mn))
+                else:
+                    later.append((key, name, n, off, mn, undec))
     print("BLOCKERS in the control-transfer-targeted population")
-    print("  target is NOT an instruction start (offset 0 fails): %d regions, "
-          "%d B   <- the phantom shape"
-          % (len(first_fail), sum(x[2] for x in first_fail)))
-    print("  decode passes the target, blocks later:              %d regions, "
-          "%d B   <- a backend spelling gap"
-          % (len(later), sum(x[2] for x in later)))
+    print("  PHANTOM SHAPE -- unidasm emits a raw data byte AT the branch")
+    print("  target, so the target is not an instruction start:")
+    print("      %d regions, %d B" % (len(first_fail), sum(x[2] for x in first_fail)))
+    print("  BACKEND SPELLING GAP -- unidasm decodes a real instruction at the")
+    print("  target; llvm-mc cannot reassemble something in the run:")
+    print("      %d regions, %d B" % (len(later), sum(x[2] for x in later)))
+    deep = [x for x in later if x[5]]
+    print("      of those, the FIRST blocker is itself undecodable rather than")
+    print("      unspellable: %d regions" % len(deep))
     print("\n  first-blocking form, by region count:")
     for m, c in forms.most_common(25):
         print("    %-22s %5d" % (m, c))

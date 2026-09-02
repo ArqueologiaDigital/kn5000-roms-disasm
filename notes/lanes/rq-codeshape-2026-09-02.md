@@ -129,29 +129,80 @@ the norm, not a warning. `refrun` is the one that separates.
 
 ### 3b. What blocks the regions that do not convert
 
-Two very different things hide behind "does not decode clean", and they point
-in opposite directions:
-
-    target is NOT an instruction start (offset 0 fails)   106 regions,    304 B
-    decode passes the target, blocks later                298 regions, 20,247 B
-
-**Not one of the 106 is 32 B or larger**; they are the 1–3 byte `res`/`set`/
-`bit` forms in v9 and v10 that the source *already annotates in line* with the
-correct mnemonic and the note `[not in LLVM]` — 48 of the 71 v9+v10 sites say
-so literally. Those are a known backend spelling gap, not a misclassification,
-and no lane can convert them without a backend change.
-
-The other 298 decode past the branch target and block later, with a median
-83 % of their bytes converting. A transfer whose target decodes for dozens of
-bytes and then hits a spelling gap is not a phantom.
-
     python3 scripts/analysis/code_suspect_adjudicate.py --blockers
+
+Two very different things hide behind "does not decode clean", and only one of
+them says anything against the transfer. The discriminator is **unidasm** — a
+decoder wholly independent of this tree's llvm backend — asked what it sees
+**at the branch target**:
+
+    PHANTOM SHAPE: unidasm emits a raw data byte at the target,
+    so the target is not an instruction start          14 regions,     18 B
+    BACKEND SPELLING GAP: unidasm decodes a real
+    instruction there; llvm-mc cannot reassemble
+    something in the run                              390 regions, 20,533 B
+
+⚠ **An earlier cut of this section got it wrong and is worth recording.** It
+counted "llvm-mc's first failure is at offset 0" as the phantom shape and got
+**199 regions / 6,543 B** — but the blocking forms were `bit`, `cp`, `res`,
+`and`, `or`: perfectly real TLCS-900 instructions llvm cannot yet spell.
+Framing a toolchain gap as evidence against the data would have inverted the
+verdict on a fifth of the population. The corrected test asks a decoder that
+has no stake in the llvm backend.
+
+First-blocking form, by region count — this is the backend lane's worklist:
+
+    bit 74 · cp 65 · res 54 · and 36 · or 35 · ld 25 · push 24 · set 17
+    add 14 · db 14 · call 10 · sub 7 · ldw 6 · pushw 6 · ldirw 3 · ex 2
+    div 2 · jp 2 · ldc 2 · ldir 1 · tset 1 · ldiw 1 · lda 1 · srl 1 · pop 1
+
+### 3b-2. And the 14 "phantoms" are not phantoms either — they are misframes
+
+The 14 are **7 distinct sites, each appearing in both the v9 and v10 twin
+trees**, and every one is a 1–2 byte `.byte` run that is the **head of a longer
+instruction the source splits with a label**. Widening the decode window:
+
+    SetWall_JumpStubData        0xF1EE11  region 2 B  ->  and (0x0ce0),0xfe   5 B
+    VoiceSlot_StatusRet         0xEFC7B2  region 1 B  ->  cp  (0x0d65),0x00   5 B
+    CtrlPanelGuard_ClearNibble  0xFC78BF  region 1 B  ->  and (XWA),0xf0      3 B
+    FDC_CmdRecalibrate          0xF97652  region 1 B  ->  push QIZ            3 B
+    FDC_STATUS_COPY             0xF97C54  region 1 B  ->  ld (0x8a24),(0x8a26) 6 B
+    FDC_INTERRUPT_HANDLER       0xF97C7C  region 1 B  ->  push QIZ            3 B
+    AccAutoPlay_Configure_Done  0xF5ABAF  region 2 B  ->  and (0x3499),0xfe   5 B
+
+`ui/setwall_routines.s` shows the shape exactly:
+
+    SetWall_JumpStubData:
+        .byte 0xc1, 0xe0
+        incf
+        push    xix
+        swi     6
+
+`incf`, `push xix` and `swi 6` are decoded **from inside the operand bytes of
+the `and`**. The ROM still rebuilds byte-identically — the bytes are right and
+only the framing is wrong, which is precisely the class of error the byte gate
+cannot see. The `call SetWall_JumpStubData` that targets `0xF1EE11` lands on the
+real instruction start, so the transfer is genuine and the region is code.
+
+⚠ **Not fixed by this lane, deliberately.** Repairing them is a RE-FRAMING of
+v9 and v10, not a data→code conversion; it would rewrite following lines that
+already carry symbolic call targets, and the gate is silent either way. Handed
+off with the correct decode above so the owning lane can do it with the right
+resync check.
 
 ### 3c. Verdict
 
-**80 v7 regions / 2,955 B pass fully** (clean decode + round-trip), against the
-0.8 % random-byte null. The rest are backend-blocked, not misjudged. **No
-phantom control transfer was found anywhere in the 484.**
+**80 v7 regions / 2,955 B pass fully** (clean decode + per-instruction
+round-trip), against the 0.8 % random-byte null. **No phantom control transfer
+was found anywhere in the 484.** The 390 that do not convert are held up by
+named llvm spelling gaps at a median 83 % of their bytes convertible; the 14
+that looked like phantoms are misframes of real code.
+
+That is a stronger result than the brief expected, and it is worth stating why:
+the flag is a *reference*, and a reference in this tree is a symbol the
+force-disassembly resolved to an address. The IC19 phantoms were different in
+kind — they were transfers named by a *numeric* address inside a byte run that
+was itself mis-framed. This population has none of that shape.
 
 ## 4. What was converted, and its corroboration
 
@@ -165,11 +216,34 @@ phantom control transfer was found anywhere in the 484.**
   conversion introduces: **17 exact label hits, 9 landing on a real instruction
   boundary, 0 uncorroborated**.
 
+### Debt before and after, measured by something that did not do the conversion
+
+    python3 scripts/analysis/byte_literal_debt.py v7/maincpu --rev ec98912f
+    python3 scripts/analysis/byte_literal_debt.py v7/maincpu
+
+    v7/maincpu at ec98912f (before)   293,594 B spelled as `.byte` literals
+    v7/maincpu after                  291,128 B
+    difference                          2,466 B
+
+Equal to the converter's own tally, computed from the source by counting
+`.byte` OPERANDS rather than trusting the tool under test. (Directive counts
+are the wrong instrument — the brief is explicit about that — so this counts
+bytes. It is a `.byte`-literal figure only: `.word`/`.ascii`/`.zero`/`.incbin`
+are excluded on purpose and it must be quoted as such.)
+
 Not converted, with reasons:
 
     10  refused by the new rewind guard (see §5)
-     3  refrun < 8 -- FDC_Format2DD_TrackBody, AccVoice_ScanForD3,
-        Rhythm_Transp_WrapCheck. Clean decodes, weak referrers; left as leads.
+     3  refrun < 8 -- FDC_Format2DD_TrackBody (41 B, `jr ule`),
+        AccVoice_ScanForD3 (32 B, `jr`), Rhythm_Transp_WrapCheck (7 B, two
+        referrers: `jr` and `jr z`). All three decode clean and all three sit in
+        plainly coherent code -- `Rhythm_Transp_WrapCheck`'s referrer reads
+        `sub a, 0xc / add w, a / bit 7, w / jr z, Rhythm_Transp_WrapCheck /
+        add w, 0xc`, an octave-wrap check. Their `refrun` is low only because
+        the surrounding routine is itself bounded by unconverted `.byte` runs,
+        which is a property of the tree's current state and not of the evidence.
+        The threshold of 8 is deliberately conservative; these are leads for the
+        next pass, not rejections.
      3  symbol-derived extent shorter than the source run they begin, so a
         partial conversion would need the run (or the .incbin) split first:
         VoiceSlot_StatusRet (96 of 2,268 B), SeqChLoad_SetupAndCopy (38 of 161),
@@ -239,6 +313,34 @@ hand.
 address-taken nine times from a handler table that is perfectly good code. A
 table-shaped name lowers the rank; only a decode plus a reference decides.
 
+### The stronger de-rating signal is the REFERENCE KIND, not the name
+
+    python3 scripts/analysis/code_shape_shortlist.py --refkind
+
+    class                         bytes   share
+    CTRL-TARGETED                  8,582    2.6%
+    address-taken only            99,911   30.0%
+    no reference anywhere        224,930   67.5%
+
+(Measured AFTER this lane's 64 conversions, so v7's CTRL-TARGETED figure is
+8,538 B rather than the 9,374 B it was before.)
+
+**Only 2.6 % of the code-shaped flag's bytes carry the reference evidence that
+the other population has.** Thirty per cent are address-taken and never called
+or jumped into — the project's standing rule for that shape is *data*. And
+two thirds have no reference of any kind, so the flag is the ONLY thing said
+about them and there is nothing to corroborate it with.
+
+Worked check on the largest non-table-named members of the middle class, all
+v7: `WndEvt_EventCodeDispatch` (1,527 B), `CmpNcpTtl_Dispatch2` (1,311 B),
+`Sqedt_ParamDispatch` (1,210 B), `Data_InOutGridDispatch` (1,096 B),
+`VocalistGrid_CheckDispData` (709 B), `NameGetFuncCall_Dispatch` (697 B),
+`Data_ParaLoadOptDispatch` (656 B), `CstmCpTtl_Dispatch2` (591 B),
+`SeqAccomp_SubHandlerA` (504 B). **Every one is referenced exactly once, by
+`lda_24`, and the instruction after that load is `jp_ind`.** They are
+jump-table bases. So the top of the population survives the table-NAME filter
+and is caught by the reference filter instead — which is why both are applied.
+
 ### And a chunk of the flag's own null is visible here
 
 `prom_d` — one of the three images the census uses as its pure-data null, and
@@ -257,13 +359,16 @@ available. Everything outside that is screened by name and size alone.
 
 ## 7. What the next lane should take
 
-1. **The 298 backend-blocked control-transfer-targeted regions, 20,247 B, at a
+1. **The 390 backend-blocked control-transfer-targeted regions, 20,533 B, at a
    median 83 % convertible.** They are the highest-confidence undecoded code in
-   the tree — every one is a branch or call target with a hard-zero null — and
-   they are blocked on named llvm spelling gaps, not on judgement.
-   `--blockers` prints the form census.
+   the tree — every one is a branch or call target, and the flag has a
+   hard-zero false-positive rate on 11,179 certified data regions — and they
+   are blocked on *named* llvm spelling gaps, not on judgement. `--blockers`
+   prints the form census; `bit`, `cp` and `res` alone gate 193 of them.
 2. **The 3 extent-shorter-than-run regions** need an `.incbin` or `.byte`-run
    split first (`scripts/converters/README-incbin-range-splits.md`).
-3. **`min_start_line` should probably become mandatory** for every caller of
+3. **The 7 misframed 1-2 byte sites of §3b-2**, in both v9 and v10, with the
+   correct decode already written out. A re-framing, not a conversion.
+4. **`min_start_line` should probably become mandatory** for every caller of
    `convert_interrupted_region*.process()`, not optional. This lane left it
    optional to avoid changing other lanes' behaviour mid-push.
