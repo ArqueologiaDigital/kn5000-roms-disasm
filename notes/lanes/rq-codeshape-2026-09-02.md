@@ -364,13 +364,67 @@ code-shaped labels over 19,814 B**, the largest single contributor to the WSA1
 total. Those are certain false positives, and they are the flag's 4.7 % floor
 made concrete rather than left as a percentage.
 
+### The ranked shortlist
+
+    python3 scripts/analysis/code_shape_shortlist.py --decode --top 70 --maxext 1024
+
+210 runs / 33,567 B decoded and round-tripped. **19 runs / 2,708 B come back
+fully clean** — 9.0 % of the regions decoded, against the 0.8 % random-byte
+null, and well below the control-transfer population's 80/484 = 16.5 %. That
+gap is the point: the same decode test, applied to a population without
+reference evidence, finds far less.
+
+**Tier 1 — clean decode AND taken by a `.long`/`.word` pointer.** This is the
+project's own documented exception (a routine address-taken nine times from a
+handler table is real code), and it is the strongest evidence available short
+of a control transfer:
+
+    v7   SendEpilogue_Data                  0x00FEAF0E   589 B   (table-named)
+    v7   EtmenuTitleFunc                    0x00F46FEB   158 B
+    v9   DisplayScript_Node_AnimStep07_15   0x00EE41EE    60 B
+    v10  DisplayScript_Node_AnimStep07_15   0x00EE41EE    60 B   (same region)
+    v7   MemConfig_Handler_3                0x00EFB0A9    31 B   (has interior
+                                                                 positional labels
+                                                                 at +31 and +66)
+
+The pointer-taken population as a whole is 2,028 runs / 24,171 B across the
+three images and is mostly undecoded — it is the obvious next batch.
+
+**Tier 2 — clean decode, no reference of any kind.** Convertible on the decode
+alone, with nothing to corroborate it:
+
+    v7   AssSwb_SwapEntriesAndDispatch      0x00FDCEFC   391 B
+    v7   HdaeRom_AltCheckResult             0x00FEAA12   215 B
+    v7   AcInOutGrid_ScrollUp_CheckAlt      0x00F754BB   185 B
+    v7   IvSdtecd1Proc                      0x00F7E49D   157 B
+
+**Tier 3 — DE-RANKED, and the biggest clean region is in it.**
+`CstmCpTtl_Dispatch2` (`0x00F68F0C`, 591 B) decodes and round-trips 100 % and is
+referenced **exactly once, by `lda_24`**, with `jp_ind` after the load. It is a
+jump-table base by every structural sign, and it is the largest clean region in
+the whole shortlist. Converting on the decode alone would have been the
+seventh reverted jump table.
+
 ### Coverage, stated honestly
 
-See the shortlist output for the ranked table and for how many bytes of the
-flagged population were actually decoded. **Most of the 542,405 B was not
-examined**: the population is 26,853 regions averaging 20 B, and this lane
-decoded only the largest runs of the three images where a linked address is
-available. Everything outside that is screened by name and size alone.
+**Most of the 542,405 B was not examined, and the shape of what was missed
+matters.**
+
+    runs <=   64 B   4,924 runs    76,882 B   23.0% of the literal bytes
+    runs <=  256 B   5,622 runs   151,695 B   45.4%
+    runs <= 1024 B   5,685 runs   184,401 B   55.2%
+    ALL              5,702 runs   334,259 B
+
+**Seventeen runs hold 44.8 % of the bytes**, and the decode cap of 1,024 B
+excludes all of them. They are `FeatureDemo_FileEntry6` (73,580 B),
+`HDAE5000_Init_Data_End` (24,268 B) and the dispatch tables. They are ranked by
+reference kind and name only — but the reference test settles them: the largest
+are `lda_24`-only.
+
+Of the 334,259 B this lane re-derived (itself 62 % of the census's 542,405 B,
+the rest being regions whose governing label is code-shaped but which do not
+begin at it), **33,567 B — 10.1 % — was actually decoded.** Everything else is
+screened, not adjudicated.
 
 ## 7. What the next lane should take
 
@@ -390,10 +444,15 @@ available. Everything outside that is screened by name and size alone.
    For the fully-clean regions the whole run tiles exactly and that risk does
    not exist. Fix the spelling gaps first, then re-run the clean gate.
 
-2. **The 3 extent-shorter-than-run regions** need an `.incbin` or `.byte`-run
+2. **The 2,028 pointer-taken code-shaped runs, 24,171 B**, of which only a
+   handful have been decoded. Tier 1 of §6 is the seam: `.long`-taken plus a
+   clean decode is the strongest evidence in this population, and it is the one
+   the project has already validated once.
+
+3. **The 3 extent-shorter-than-run regions** need an `.incbin` or `.byte`-run
    split first (`scripts/converters/README-incbin-range-splits.md`).
-3. **The 7 misframed 1-2 byte sites of §3b-2**, in both v9 and v10, with the
+4. **The 7 misframed 1-2 byte sites of §3b-2**, in both v9 and v10, with the
    correct decode already written out. A re-framing, not a conversion.
-4. **`min_start_line` should probably become mandatory** for every caller of
+5. **`min_start_line` should probably become mandatory** for every caller of
    `convert_interrupted_region*.process()`, not optional. This lane left it
    optional to avoid changing other lanes' behaviour mid-push.

@@ -1,0 +1,241 @@
+CODE-SHAPED LABELS HEADING A DATA RUN
+  image         runs      bytes | table-named      bytes  (literal runs only)
+  v7            3557     139361 |         325      43116
+  v9             893      25800 |         134      20671
+  v10            548      26472 |         135      21069
+  hdae5000        59      28016 |           8        904
+  v142            42       1006 |          17        292
+  subboot          2         48 |           1         32
+  wsa1           558      38876 |         453      26492
+  tabledata       12      73844 |           5        120
+  customdata       0          0 |           0          0
+  TOTAL                  333423 |                 112696  (33.8% of bytes are table-named)
+
+  `.incbin` of a C-compiled bin is excluded from the literal count:
+  it is DATA on an authority independent of this tree's framing, and
+  the flag firing on it is a pure false positive by construction.
+    v7            452 code-shaped labels on C-compiled regions
+    v9            452 code-shaped labels on C-compiled regions
+    v10           452 code-shaped labels on C-compiled regions
+    tabledata       3 code-shaped labels on C-compiled regions
+
+RANKED SHORTLIST (top 70 literal runs per image, decoded)
+  img   label                                  addr  extent    rt% clean  tgtd table
+  v7    SeqPlay_ComputeOffsets             00F40E13     287  96.2%    no   YES     -
+  v7    CPanel_InitHardware                00FC372A     180  87.8%    no   YES     -
+  v7    CstmCpTtl_Dispatch2                00F68F0C     591 100.0%   yes     -     -
+  v7    AssSwb_SwapEntriesAndDispatch      00FDCEFC     391 100.0%   yes     -     -
+  v7    HdaeRom_AltCheckResult             00FEAA12     215 100.0%   yes     -     -
+  v7    MemConfig_Handler_3                00EFB0A9      31 100.0%   yes     -     -
+  v7    AcInOutGrid_ScrollUp_CheckAlt      00F754BB     185 100.0%   yes     -     -
+  v7    EtmenuTitleFunc                    00F46FEB     158 100.0%   yes     -     -
+  v7    IvSdtecd1Proc                      00F7E49D     157 100.0%   yes     -     -
+  v9    CDlikeSwTtl_DispatchData           00F22901       6 100.0%   yes     -     -
+  v10   CDlikeSwTtl_DispatchData           00F22901       6 100.0%   yes     -     -
+  v9    DisplayScript_Node_AnimStep07_15   00EE41EE      60 100.0%   yes     -     -
+  v10   DisplayScript_Node_AnimStep07_15   00EE41EE      60 100.0%   yes     -     -
+  v7    SendEpilogue_Data                  00FEAF0E     589 100.0%   yes     -   tbl
+  v7    Naka_SubDispatch_B_Table           00EE0198       4 100.0%   yes     -   tbl
+  v9    Naka_SubDispatch_B_Table           00EE0198       4 100.0%   yes     -   tbl
+  v10   Naka_SubDispatch_B_Table           00EE0198       4 100.0%   yes     -   tbl
+  v7    DSPCfg_ApplyParamStructFull        00FDCE02     197 100.0%   yes     -   tbl
+  v7    PanelEvt_Dispatch6_TableAndHandler 00FD04BF       1 100.0%   yes     -   tbl
+  v10   VoiceMode3_DispatchTable           00FCB024       1 100.0%   yes     -   tbl
+  v9    MidiStream_CmdJumpTable            00FCCA5D      48 100.0%   yes     -   tbl
+  v7    VocalistGrid_CheckDispData         00F738E5     709  94.1%    no     -     -
+  v7    NameGetFuncCall_Dispatch           00F2154E     697  78.5%    no     -     -
+  v7    DSPCfg_Data_ParamDispatch          00FDC920     457  95.6%    no     -     -
+  v7    Data_ParaLoadOptDispatch           00F75B64     656  94.5%    no     -     -
+  v7    SeqChan_InitChannelState           00F50F4E     653  84.4%    no     -     -
+  v7    ExtData_VoiceParam_DispatchBytecod 00FC6D4E     578  81.7%    no     -     -
+  v7    ExtData_ToneParam_DispatchHandler  00FC7D77     506  85.8%    no     -     -
+  v7    SeqAccomp_SubHandlerA              00F45DD3     504  82.9%    no     -     -
+  v7    MidiSysEx_ProcessBlock             00FD7D80     378  92.6%    no     -     -
+  v7    PmExpFilter_EventDispatch          00FBB9A8     460  87.4%    no     -     -
+  v7    FindEntry_LoadParam                00FE51DF     420  97.4%    no     -     -
+  v7    SndParam_ProcessEntry              00FEA4CA     409  81.7%    no     -     -
+  v7    TempoCC_TransmitBytecodeBlock      00FCA159     376  93.4%    no     -     -
+  v7    MidiCC_ChannelDispatch_MultiHandle 00FD083A     290  94.1%    no     -     -
+  v7    MidiSysMsg_Dispatch                00FED2BD     283  98.2%    no     -     -
+  v9    WidgetParam_Entry_018              00EE491A      36  80.6%    no     -     -
+  v10   WidgetParam_Entry_018              00EE491A      36  80.6%    no     -     -
+  v7    SoundFX_Handler_6                  00FE8CC0     244  59.8%    no     -     -
+  v7    SoundFX_Handler_8                  00FE8E8C     244  88.1%    no     -     -
+  v7    ProcessEventDispatch_LoadIter      00FE8252     242  89.7%    no     -     -
+  v9    WidgetParam_Entry_011              00EE473A     222  82.0%    no     -     -
+  v10   WidgetParam_Entry_011              00EE473A     222  82.0%    no     -     -
+  v10   MidiChParam_Entry_064              00EDC54E     220  59.5%    no     -     -
+  v7    RVariScreenProc                    00FBED4D     219  98.2%    no     -     -
+  v7    ExtData_Voice_FullHandler          00FC84E8     209  87.1%    no     -     -
+  v7    AllocNewVoiceEntry_LoadParam3      00FE4A47     209  85.2%    no     -     -
+  v7    BuildNoteOn_VoiceLoop              00FE4E73     205  94.1%    no     -     -
+  v7    SeqPerformance_EventDispatch       00FE85F3     205  86.8%    no     -     -
+  v7    SoundFX_Handler_7                  00FE8DBC     200  83.5%    no     -     -
+  v7    AccProcess_InlinedCode             00F5BB4A     191  90.1%    no     -     -
+  v7    CPanel_InitLEDBuffer               00FC3856     189  68.8%    no     -     -
+  v7    FileData_LoadAndParseType3_Error   00FD42ED     187  64.2%    no     -     -
+  v7    LookupVoice_InstrScanEntries       00FE44C3     186  88.2%    no     -     -
+  v7    PerfMode_VolumeParam_Process       00EF69FB     111  94.6%    no     -     -
+  v7    FindEntry_LoadParam3               00FE539A     169  91.7%    no     -     -
+  v7    SynthVoice_WriteLoop               00FE5790     169  92.3%    no     -     -
+  v7    DataBuf_Data_FormatDispatch        00FD4F4D     166  92.8%    no     -     -
+  v7    LookupVoice_ScanEntries            00FE43EF     165  91.5%    no     -     -
+  v7    VoiceLinks_SlotLoop                00FE19A7     160  93.8%    no     -     -
+  v7    ScanEmitMidi_VoiceLoop             00FE4D2B     160  93.8%    no     -     -
+  v9    WidgetParam_Entry_000              00EE4530     126  82.5%    no     -     -
+  v10   WidgetParam_Entry_000              00EE4530     126  82.5%    no     -     -
+  v10   Str_FactoryResetDesc_EN3                  -       -     -%    no     -     -
+  v9    Str_FactoryResetDesc_EN3                  -       -     -%    no     -     -
+  v10   StrCmpModeFunc                            -       -     -%    no     -     -
+  v10   NoteStepDisplayData                00E1CDDE      56  92.9%    no     -     -
+  v9    WidgetParam_Entry_006              00EE464A      96  84.4%    no     -     -
+  v10   WidgetParam_Entry_006              00EE464A      96  84.4%    no     -     -
+  v10   MidiChParam_Entry_084              00EDC78A      82  53.7%    no     -     -
+  v10   SubCPU_ToneDispatch                00EFDB40      80  81.2%    no     -     -
+  v9    DisplayScript_Node_Loop12          00EE36A2      78  75.6%    no     -     -
+  v9    DisplayScript_Node_AnimStep07_0C   00EE3DAA      78  82.1%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1D_A 00EE3E52      78  84.6%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1D_B 00EE3EFA      78  87.2%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1D_C 00EE3FA2      78  79.5%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1D_D 00EE404A      78  84.6%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1D_E 00EE40F2      78  78.2%    no     -     -
+  v10   DisplayScript_Node_Loop12          00EE36A2      78  75.6%    no     -     -
+  v10   DisplayScript_Node_AnimStep07_0C   00EE3DAA      78  82.1%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1D_A 00EE3E52      78  84.6%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1D_B 00EE3EFA      78  87.2%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1D_C 00EE3FA2      78  79.5%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1D_D 00EE404A      78  84.6%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1D_E 00EE40F2      78  78.2%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1B_E 00EE3C8A      72  88.9%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1B_H 00EE3EB2      72  73.6%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1B_J 00EE4002      72  81.9%    no     -     -
+  v9    WidgetParam_Entry_002              00EE45BA      72  79.2%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1B_E 00EE3C8A      72  88.9%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1B_H 00EE3EB2      72  73.6%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1B_J 00EE4002      72  81.9%    no     -     -
+  v10   WidgetParam_Entry_002              00EE45BA      72  79.2%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1B_B 00EE3ADA      66  80.3%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1B_D 00EE3C2A      66  86.4%    no     -     -
+  v9    DisplayScript_Node_AnimStep01_1B_L 00EE422A      66  98.5%    no     -     -
+  v9    WidgetParam_Entry_014              00EE4860      66  84.8%    no     -     -
+  v9    WidgetParam_Entry_017              00EE48D8      66  68.2%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1B_B 00EE3ADA      66  80.3%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1B_D 00EE3C2A      66  86.4%    no     -     -
+  v10   DisplayScript_Node_AnimStep01_1B_L 00EE422A      66  98.5%    no     -     -
+  v10   WidgetParam_Entry_014              00EE4860      66  84.8%    no     -     -
+  v10   WidgetParam_Entry_017              00EE48D8      66  68.2%    no     -     -
+  v9    MSG_INSERT_STYLE_CONVERT_EN        00E1EE44      38  76.3%    no     -     -
+  v10   MSG_INSERT_STYLE_CONVERT_EN        00E1EE44      38  76.3%    no     -     -
+  v9    MSG_INSERT_STYLE_CONVERT_EN2       00E1EEF6      38  76.3%    no     -     -
+  v10   MSG_INSERT_STYLE_CONVERT_EN2       00E1EEF6      38  76.3%    no     -     -
+  v9    WidgetParam_Entry_013              00EE482A      54  88.9%    no     -     -
+  v10   WidgetParam_Entry_013              00EE482A      54  88.9%    no     -     -
+  v9    HamaList_EntryStr_Empty                   -       -     -%    no     -     -
+  v9    WidgetParam_Entry_003              00EE4602      48  83.3%    no     -     -
+  v9    WidgetParam_Entry_008              00EE46C2      48  85.4%    no     -     -
+  v9    WidgetParam_Entry_009              00EE46F2      48  93.8%    no     -     -
+  v7    ToneKit_VoiceDispatch_Table        00EE6048     396  23.5%    no     -   tbl
+  v9    ToneKit_VoiceDispatch_Table        00EE6048     396  23.5%    no     -   tbl
+  v10   ToneKit_VoiceDispatch_Table        00EE6048     396  23.5%    no     -   tbl
+  v7    Naka_EventHandler_Table            00EE86D0     768  63.4%    no     -   tbl
+  v9    Naka_EventHandler_Table            00EE86D0     768  63.4%    no     -   tbl
+  v10   Naka_EventHandler_Table            00EE86D0     768  63.4%    no     -   tbl
+  v7    MT_FuncName_PtrTable               00E275FA     480  47.7%    no     -   tbl
+  v9    MT_FuncName_PtrTable               00E275FA     480  47.7%    no     -   tbl
+  v10   MT_FuncName_PtrTable               00E275FA     480  47.7%    no     -   tbl
+  v7    AllocCheckNoteOn_Data              00FE27F9     454  90.1%    no     -   tbl
+  v7    AudioInit_VoiceDispatch_Table      00EE8CF8     124  79.8%    no     -   tbl
+  v9    AudioInit_VoiceDispatch_Table      00EE8CF8     124  90.3%    no     -   tbl
+  v10   AudioInit_VoiceDispatch_Table      00EE8CF8     124  90.3%    no     -   tbl
+  v7    SeqChan_CommandDispatch_Table      00EE2D6C     156  62.8%    no     -   tbl
+  v9    SeqChan_CommandDispatch_Table      00EE2D6C     156  87.2%    no     -   tbl
+  v10   SeqChan_CommandDispatch_Table      00EE2D6C     156  87.2%    no     -   tbl
+  v7    VoiceSlot_CheckAndApply_Data       00FE9F94      13  69.2%    no     -   tbl
+  v10   VoiceSlot_CheckAndApply_Data       00FEA349      13  92.3%    no     -   tbl
+  v7    SndParam_BatchUpdate_Data          00FCE788     310  97.1%    no     -   tbl
+  v7    AudioInit_VoiceRoutingTable        00FDF269     248  86.3%    no     -   tbl
+  v9    AudioInit_VoiceRoutingTable        00FDF61E     248  52.0%    no     -   tbl
+  v7    SndParam_RegisterEntry_Data        00FCD7C7     245  91.8%    no     -   tbl
+  v7    ArpQueue_ProcessAndSort_Data       00FD66DC     231  93.9%    no     -   tbl
+  v7    SndParam_RegisterEntryAlt_Data     00FCD8BC     214  89.7%    no     -   tbl
+  v7    HdaeRom_AltTableEntry9             00FEAC5B     213  97.2%    no     -   tbl
+  v7    BitMapOut_RestoreFull_CheckEnd     00FB4348     194  86.1%    no     -   tbl
+  v7    AssSwb_ProcessLoop_Data            00FD6E34     194  86.6%    no     -   tbl
+  v7    SeqData_SubDispatch_Table          00EE2F8C     156  97.4%    no     -   tbl
+  v9    SeqData_SubDispatch_Table          00EE2F8C     156  82.1%    no     -   tbl
+  v10   SeqData_SubDispatch_Table          00EE2F8C     156  82.1%    no     -   tbl
+  v7    SeqVoice_CheckAndRet_Data          00FEB8A1      74  97.3%    no     -   tbl
+  v7    DbgStr_NakaProcName_Table          00E20320     184  39.1%    no     -   tbl
+  v9    DbgStr_NakaProcName_Table          00E20320     184  39.1%    no     -   tbl
+  v10   DbgStr_NakaProcName_Table          00E20320     184  39.1%    no     -   tbl
+  v7    HdaeRom_TableEntry2                00FEA824     169  81.7%    no     -   tbl
+  v7    CharMap_ModeDispatchTable          00EF02EF     168  59.5%    no     -   tbl
+  v9    CharMap_ModeDispatchTable          00EF0319     168  59.5%    no     -   tbl
+  v10   CharMap_ModeDispatchTable          00EF0319     168  59.5%    no     -   tbl
+  v7    Dispatch_Data                      00FED421     166  96.4%    no     -   tbl
+  v7    AccPart_VoiceParamDispatchTable    00F560A2     160  88.8%    no     -   tbl
+  v9    AccPart_VoiceParamDispatchTable    00F564A6     160  95.6%    no     -   tbl
+  v10   AccPart_VoiceParamDispatchTable    00F564A6     160  95.6%    no     -   tbl
+  v9    PtrTbl_FuncNameStrs                00E1CB02     148   5.4%    no     -   tbl
+  v10   PtrTbl_FuncNameStrs                00E1CB02     148   5.4%    no     -   tbl
+  v9    RhythmPatInit_KitIndexTable        00F64E95     138  84.8%    no     -   tbl
+  v10   RhythmPatInit_KitIndexTable        00F64E95     138  84.8%    no     -   tbl
+  v9    PerfMode_DispatchTable_B           00EF745A     128  50.0%    no     -   tbl
+  v9    PerfMode_DispatchTable_C           00EF74F5     128  50.0%    no     -   tbl
+  v10   ScoopDisp_DispatchTable_Small      00EF62A7     128  54.7%    no     -   tbl
+  v10   PerfMode_DispatchTable_B           00EF745A     128  50.0%    no     -   tbl
+  v10   PerfMode_DispatchTable_C           00EF74F5     128  50.0%    no     -   tbl
+  v9    ScoopDisp_DispatchTable_Small      00EF62A7     124  54.8%    no     -   tbl
+  v9    PerfMode_DispatchTable_A           00EF73C3     124  54.0%    no     -   tbl
+  v10   PerfMode_DispatchTable_A           00EF73C3     124  54.0%    no     -   tbl
+  v9    AccompStyle_ConfigDispatch_Table   00EE7676      96  79.2%    no     -   tbl
+  v9    FlashWrite_BlockHandler_Table      00F158A7      96   2.1%    no     -   tbl
+  v10   AccompStyle_ConfigDispatch_Table   00EE7676      96  79.2%    no     -   tbl
+  v10   FlashWrite_BlockHandler_Table      00F158A7      96   2.1%    no     -   tbl
+  v10   ProcNameStr_NormScreenProc                -       -     -%    no     -   tbl
+  v9    PerfMode_ParamHandler_Table        00EF63BD      76  56.6%    no     -   tbl
+  v9    PerfMode_JumpTable_Extended        00EF6423      76  48.7%    no     -   tbl
+  v10   PerfMode_ParamHandler_Table        00EF63BD      76  56.6%    no     -   tbl
+  v10   PerfMode_JumpTable_Extended        00EF6423      76  48.7%    no     -   tbl
+  v9    RecordMode_SetupDispatch_Table     00EE770E      72  86.1%    no     -   tbl
+  v10   RecordMode_SetupDispatch_Table     00EE770E      72  86.1%    no     -   tbl
+  v9    MidiMenu_NakaProcName_Table        00E55DF2      68  52.9%    no     -   tbl
+  v9    PtrTbl_DiskFuncNames               00EA0ACE      50  40.0%    no     -   tbl
+  v9    VoiceEdit_ParamDispatch_Table      00EE7632      68  58.8%    no     -   tbl
+  v9    Rhythm_SeqResetTable               00F55A8C      68  85.3%    no     -   tbl
+  v10   MidiMenu_NakaProcName_Table        00E55DF2      68  52.9%    no     -   tbl
+  v10   PtrTbl_DiskFuncNames               00EA0ACE      50  40.0%    no     -   tbl
+  v10   VoiceEdit_ParamDispatch_Table      00EE7632      68  58.8%    no     -   tbl
+  v10   Rhythm_SeqResetTable               00F55A8C      68  85.3%    no     -   tbl
+  v9    OscScope_HandlerTable              00EFE765      64   7.8%    no     -   tbl
+  v9    MidiSerial_CmdJumpTable            00FCFA67      64  51.6%    no     -   tbl
+  v9    PanelEvt_DispatchTable             00FD0609      64  82.8%    no     -   tbl
+  v9    Naka_SubDispatch_A_Table           00EE0158      40  60.0%    no     -   tbl
+  v9    AccFlags_JumpTable                 00F59517      64  40.6%    no     -   tbl
+  v9    VoiceParam_ReadUpdate_Table        00F256B9      64  87.5%    no     -   tbl
+  v10   OscScope_HandlerTable              00EFE765      64   7.8%    no     -   tbl
+  v10   MidiSerial_CmdJumpTable            00FCFA67      64  51.6%    no     -   tbl
+  v10   PanelEvt_DispatchTable             00FD0609      64  82.8%    no     -   tbl
+  v10   Naka_SubDispatch_A_Table           00EE0158      40  60.0%    no     -   tbl
+  v10   AccFlags_JumpTable                 00F59517      64  40.6%    no     -   tbl
+  v10   VoiceParam_ReadUpdate_Table        00F256B9      64  87.5%    no     -   tbl
+  v9    TuningSystem_Handler_Table         00F13447      60  90.0%    no     -   tbl
+  v9    DrumVoice_DispatchTable            00F652BB      60  56.7%    no     -   tbl
+  v10   TuningSystem_Handler_Table         00F13447      60  90.0%    no     -   tbl
+  v10   DrumVoice_DispatchTable            00F652BB      60  56.7%    no     -   tbl
+  v9    PerfMode_SetupDispatch_Table       00EE75FA      56  87.5%    no     -   tbl
+  v10   PerfMode_SetupDispatch_Table       00EE75FA      56  87.5%    no     -   tbl
+  v9    Data_DiskFuncPtrTbl_EA0B12         00EA0B12      52  36.5%    no     -   tbl
+  v10   Data_DiskFuncPtrTbl_EA0B12         00EA0B12      52  36.5%    no     -   tbl
+  v9    MainPmanCtrl_DispatchTable         00F991B1      49  91.8%    no     -   tbl
+  v10   MainPmanCtrl_DispatchTable         00F991B1      49  91.8%    no     -   tbl
+  v9    Hama_ModeInit_Table                00E1F032      48  54.2%    no     -   tbl
+  v9    MidiStream_StatusJumpTable         00FCC8CC      48  87.5%    no     -   tbl
+
+  decoded 33567 B of the flagged literal population (10.1% of 333423 B),
+  being the largest 70 runs per image of at most 1024 B each -- runs
+  above that cap were NOT decoded and are ranked by reference kind
+  and name only.
+  clean+round-trip: 19 runs, 2708 B  (random-byte null at these lengths: 0.8%)
+  wrote code_shape_shortlist.json
+EXIT=0

@@ -116,7 +116,7 @@ def enumerate_sites():
     return out
 
 
-def decode_rank(sites, key, top):
+def decode_rank(sites, key, top, maxext=1024):
     """Decode the largest `top` literal runs of one image and attach the
     clean/round-trip verdict.  Address from the linked image's symbol table,
     guarded against the source's own stated bytes exactly as
@@ -125,7 +125,13 @@ def decode_rank(sites, key, top):
     addrs = sorted(set(syms.values()))
     files = {}
     root = os.path.join(ROOT, A.IMG[key]["mirror"])
-    cand = sorted([s for s in sites if s["kind"] == "lit"],
+    # Cap the extent decoded per region.  Round-tripping is one llvm-mc
+    # process per instruction, so a 73 KB run costs ~25,000 of them and the
+    # whole budget goes to a handful of regions that the REFERENCE test has
+    # already settled (the largest are `lda_24`-only jump-table bases).  The
+    # cap is stated in the report so the coverage figure cannot be read as
+    # covering the big ones.
+    cand = sorted([s for s in sites if s["kind"] == "lit" and s["bytes"] <= maxext],
                   key=lambda s: -s["bytes"])[:top]
     done = 0
     for s in cand:
@@ -247,8 +253,10 @@ def main():
     if "--decode" not in sys.argv:
         return
     decoded = 0
+    maxext = int(sys.argv[sys.argv.index("--maxext") + 1]) \
+        if "--maxext" in sys.argv else 1024
     for key in ("v7", "v9", "v10"):
-        decoded += decode_rank(allsites[key], key, top)
+        decoded += decode_rank(allsites[key], key, top, maxext)
     rows = [s for key in ("v7", "v9", "v10") for s in allsites[key]
             if s.get("verdict")]
     rows.sort(key=lambda s: (not s["targeted"], s.get("verdict") != "clean",
@@ -266,8 +274,12 @@ def main():
                "YES" if s["targeted"] else "-",
                "tbl" if s["tablename"] else "-"))
     clean = [s for s in rows if s.get("clean")]
-    print("\n  decoded %d B of the flagged literal population (%.1f%% of %d B)"
+    print("\n  decoded %d B of the flagged literal population (%.1f%% of %d B),"
           % (decoded, 100.0 * decoded / max(1, tot), tot))
+    print("  being the largest %d runs per image of at most %d B each -- runs"
+          % (top, maxext))
+    print("  above that cap were NOT decoded and are ranked by reference kind")
+    print("  and name only.")
     print("  clean+round-trip: %d runs, %d B  (random-byte null at these "
           "lengths: 0.8%%)" % (len(clean), sum(s["extent"] for s in clean)))
     json.dump(allsites, open(os.path.join(ROOT, "code_shape_shortlist.json"), "w"),

@@ -13,11 +13,15 @@ so they are only comparable with a re-run at the same toolchain commit.
 | `grade-484-sites.txt` | For every data region whose heading label is the target of a `call`/`calr`/`jp`/`jr`/`jrl`/`djnz` in v7, v9 and v10: its address, extent, what fraction of its bytes decode AND round-trip byte-exact, and `refrun` — how many consecutive instruction lines the referring transfer sits inside, which is the phantom discriminator. **Taken BEFORE this lane's 64 conversions**, so it is the population that was adjudicated, not what is left. | `python3 scripts/analysis/code_suspect_adjudicate.py v7 v9 v10` at `ec98912f` |
 | `blockers.txt` | Of the regions that do not fully convert, how many have a branch target that is not an instruction start at all (the phantom shape, decided by **unidasm**, a decoder independent of this tree's llvm backend), and how many are held up by a spelling gap llvm-mc has — with the blocking mnemonics named, which makes it the backend lane's worklist. Taken AFTER the conversion. | `python3 scripts/analysis/code_suspect_adjudicate.py --blockers` |
 
+| `code-shape-shortlist.txt` | Of the 542,405 B "code-shaped label" flag: how many bytes it really is under a strict "label heads the run" rule, how much of it is self-labelled tables, and a decoded ranked table of the largest runs of at most 1,024 B. **Only 10.1 % of the population was decoded** and the report says so in its own footer. | `python3 scripts/analysis/code_shape_shortlist.py --decode --top 70 --maxext 1024` |
+
 ## Regenerate
 
     make rebuilt_ROMs/kn5000_v7_program.llvm.rom       # and v9 / v10
     python3 scripts/analysis/code_suspect_adjudicate.py v7 v9 v10   # ~6 min
     python3 scripts/analysis/code_suspect_adjudicate.py --blockers  # ~6 min
+    python3 scripts/analysis/code_shape_shortlist.py --refkind      # seconds
+    python3 scripts/analysis/code_shape_shortlist.py --decode --top 70 --maxext 1024
 
 Both figures drift as lanes convert: a region that becomes instructions leaves
 the population. Re-run rather than quoting these files months from now.
