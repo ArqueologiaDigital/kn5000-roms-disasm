@@ -89,6 +89,25 @@ than by whether anything is actually unknown.
 
 Deprioritised: v7 (123,733 B verbatim, 275,822 B code-as-`.byte`), v9.
 
+★ **Both WSA1R verdicts were attacked a SECOND time on 2026-09-02, by a lane
+that set out to break them, and both held** — see
+`wsa1/notes/FINDINGS-prom_cd-falsification.md`,
+`python3 wsa1/notes/prom_cd_falsification_2026_09_02.py` (55 checks). What is
+new is the direction: this attacked **code typed as DATA**, the inverse of the
+hazard this table usually tracks, which the byte gate is equally blind to. The
+instrument is branch-target coherence normalised by boundary density, calibrated
+on prom_c windows labelled code/data by the assembler's own DWARF line-table
+census (76,647 instruction statements in prom_c, **0** in prom_d), and spiked
+with real prom_c code to prove it can fail. prom_c code scores 2.42–3.09,
+prom_c data 0.81–1.34, prom_d 0.29–1.16 over every scorable window.
+
+⚠ Two limits are on the record rather than buried: the test's reach is a
+**contiguous ~2 KiB routine** — anything shorter would evade it — and
+prom_d 0x26000–0x2BFFF (`ToneDB_EnvDescTable`) has too few branches to score at
+all. The `.fill` totals (prom_c 129,216 B, prom_d 193,767 B) were re-derived
+from byte VALUES, by rebuilding each image with every fill value XORed 0xFF and
+diffing against the dump.
+
     python3 scripts/analysis/kn5000_source_coverage.py
 
 Zero verbatim debt: subcpu v142, subcpu boot, custom data, HD-AE5000,
