@@ -179,3 +179,25 @@ Result: a decoder blind spot closed (it was silent -- a tool that cannot
 disassemble a region reports nothing there), 26/26 TLCS900 MC lit tests green,
 13/13 images still byte-identical. **No v10 bytes were converted and none
 should be on this evidence.**
+
+### v7 blocked-slice movement across the same LLVM commit
+
+`v7_offset_blockers.py` was re-run after the five bytes were taught to the
+decoder. `v7_blocker_delta.py` diffs the two runs and refuses to print a
+headline without the honest bottom line:
+
+| script | question it answers |
+|---|---|
+| `v7_blocker_delta.py` | What did a backend change do to v7's 94 NO_OFFSET_FOUND slices? Prints total blocked bytes before/after, the bytes that cleared the specific gate, where each of those slices now stops instead, and which slices newly reach CLEAN. ⚠ Built so the trap `v7_offset_blockers.py` warns about cannot be reported as progress. |
+
+    python3 scripts/analysis/v7_offset_blockers.py
+    python3 scripts/analysis/v7_blocker_delta.py \
+        scripts/analysis/v7_offset_blockers.pre-6f456a19f05b.json
+
+Result: **21 slices / 16,683 B cleared the five-byte gate and the total blocked
+bytes did not move at all — 45,454 B before, 45,454 B after.** Every one of the
+21 stopped a few bytes later on a different form (0x53 grew 622 -> 8,602 B,
+0x55 0 -> 3,075 B, 0xc1 6,434 -> 7,612 B). Two slices, 136 B, newly round-trip
+CLEAN; both are in `v7/maincpu/display/scoop_display.s` and neither was
+converted, because a clean round trip is not evidence of code (random bytes
+round-trip clean 24% of the time — `blind_run_decode_census.py`).
