@@ -608,7 +608,431 @@ sub_F002F4:
 	di	; F0033C  ei 0x00
 	ret	; F0033E  ret
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00033F, 0x0004C1
+; ============================================================================
+; 0xF0033F-0xF007FF -- FOUR TABLES OF 4-BYTE LITTLE-ENDIAN POINTERS,
+; AND THE THREE SHORT BYTE OBJECTS BETWEEN THEM
+; ============================================================================
+;
+; 1,217 bytes.  DATA: 0 `call nnn` / `jp nnn` operands in any of the four
+; ROM images land in this span, and 0 routine-directory slots point in.
+;
+; ⚠ THE COVER-R1 BANNER ABOVE STILL APPLIES AND IS NOT WITHDRAWN: nothing
+; the round-1 walk decoded reaches here, so the span is not CODE.  What is
+; withdrawn is `unreachable, therefore leave it verbatim'.  Data is typed
+; from what REFERENCES it, and every object below is bounded that way.
+;
+; 290 consecutive 4-byte little-endian words are each 0x00000000, the
+; repeated sentinel 0x00FDB10E, or an address in the 1 MiB CS2 window
+; 0xF00000-0xFFFFFF -- in a 16 MiB address space, and 290 in a row.
+;
+; ⚠ THE PHASE IS NOT CONSTANT ACROSS THE SPAN, which is why one alignment
+; never fit it: scored across the whole span the four byte phases give 222,
+; 51, 42 and 6 of ~303.  These are FOUR runs at THREE phases, because the
+; byte objects at 0xF003CC (45 B) and 0xF00759 (9 B) are both odd-length.
+;
+; 0x00FDB10E means ABSENT.  It fills 82 of the 290 slots and is NOT an
+; instruction boundary in prom_a: it lands inside `lda xbc,(xiz-12)` at
+; 0xFDB10C (be f4 31).  It cannot be entered and cannot start an object.
+;
+; Re-derive all of it with
+;     python3 notes/gen_prom_b_f0033f_f0199e.py --evidence
+; ============================================================================
+
+	.byte 0x00	; F0033F  pad: the byte after the `ret` at 0xF0033E,
+			;          aligning the table below to a 4-byte boundary
+
+; --------------------------------------------------------------------------
+; PtrTable_F00340 -- 35 slots, A ROUTINE VECTOR TABLE
+; Evidence: 25 of the 26 distinct targets begin with the byte pair `EE 0C` --
+;           `link XIZ,0x0000`, the stack-frame prologue prom_a's transcription
+;           spells that way over a hundred times.  Null: that pair occurs at 28
+;           of the 744 byte positions in 0xF01200-0xF014E8 (3.8%), so 25 of 26
+;           is not chance.  The odd one out is slot [0], 0xF01200, which begins
+;           `C9 D8`.
+; ⚠ Its target block 0xF01200-0xF014E8 is STILL `.incbin` (the span at file
+;   0x000C4D+0x000BB3).  These are 25 proven entry points for whoever converts
+;   it; this file converts the TABLE, not the routines.
+; Unknown: what the routines do, and what selects a slot.  No reader for this
+;          table has been found -- 0x00F00340 is not a 32-bit word anywhere in
+;          the four images -- so the index is presumably computed.
+; --------------------------------------------------------------------------
+PtrTable_F00340:
+	.long 0x00F01200	; F00340  [  0]
+	.long 0x00F0125F	; F00344  [  1]
+	.long 0x00F01274	; F00348  [  2]
+	.long 0x00F01289	; F0034C  [  3]
+	.long 0x00FDB10E	; F00350  [  4]  absent (sentinel)
+	.long 0x00F0129E	; F00354  [  5]
+	.long 0x00F012B3	; F00358  [  6]
+	.long 0x00F012C8	; F0035C  [  7]
+	.long 0x00F012D9	; F00360  [  8]
+	.long 0x00F01305	; F00364  [  9]
+	.long 0x00F01331	; F00368  [ 10]
+	.long 0x00F01355	; F0036C  [ 11]
+	.long 0x00FDB10E	; F00370  [ 12]  absent (sentinel)
+	.long 0x00FDB10E	; F00374  [ 13]  absent (sentinel)
+	.long 0x00F01391	; F00378  [ 14]
+	.long 0x00F01379	; F0037C  [ 15]
+	.long 0x00000000	; F00380  [ 16]  empty
+	.long 0x00FDB10E	; F00384  [ 17]  absent (sentinel)
+	.long 0x00F013B1	; F00388  [ 18]
+	.long 0x00F013C6	; F0038C  [ 19]
+	.long 0x00F013DB	; F00390  [ 20]
+	.long 0x00F013F0	; F00394  [ 21]
+	.long 0x00F01405	; F00398  [ 22]
+	.long 0x00F0141A	; F0039C  [ 23]
+	.long 0x00F0142F	; F003A0  [ 24]
+	.long 0x00F01444	; F003A4  [ 25]
+	.long 0x00F01462	; F003A8  [ 26]
+	.long 0x00F01486	; F003AC  [ 27]
+	.long 0x00F0149E	; F003B0  [ 28]
+	.long 0x00F014B6	; F003B4  [ 29]
+	.long 0x00FDB10E	; F003B8  [ 30]  absent (sentinel)
+	.long 0x00FDB10E	; F003BC  [ 31]  absent (sentinel)
+	.long 0x00F014CE	; F003C0  [ 32]
+	.long 0x00FDB10E	; F003C4  [ 33]  absent (sentinel)
+	.long 0x00000000	; F003C8  [ 34]  empty
+
+; --------------------------------------------------------------------------
+; Data_F003CC -- 45 bytes, EMITTED AS DATA.  ⚠ SHAPE NOT ESTABLISHED.
+; Evidence: it is bounded on both sides -- the pointer run above ends at
+;           0xF003CB and the one below begins at 0xF003F9 -- and its own
+;           content is small ascending indices, not addresses.  Nothing
+;           names it and no consumer has been found.
+; Measured: three groups separated by zero padding, printed one per line
+;           below.  The line breaks are a READING and are not proven; the
+;           bytes are the ROM's.  The third group is 13 bytes, not the 16
+;           the first two are, so `three 16-byte rows' is WRONG and is not
+;           claimed.
+; --------------------------------------------------------------------------
+Data_F003CC:
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F003CC  00-05, then zero padding
+	.byte 0x06, 0x07, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F003DC  06-0C, then zero padding
+	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16	; F003EC  00-05 then 10-16
+
+; --------------------------------------------------------------------------
+; PtrTable_F003F9 -- 181 slots, THE INDEX OF THE 0xF78029 BITMAP SHEET
+; ★ THIS TABLE IS ALREADY LOAD-BEARING IN THIS TREE.  The banner at
+;   `0xF78029-0xF7A3FF -- A 121-OBJECT BITMAP SHEET, INDEXED FROM prom_b
+;   0xF003F9' bounds all 120 bounded objects there by abutment of these
+;   entries, and notes/gen_prom_b_f78029_module.py read them straight out of
+;   the ROM because the address was inside an `.incbin`.  It no longer is.
+; Evidence: 121 of the slots are a distinct address in 0xF7828A-0xF799E8, 50
+;           are the sentinel and 10 are zero; slot 181 leaves that range, which
+;           is where this run is cut.
+; ⚠ The cut at 181 is a statement about the TARGETS, not about how the firmware
+;   indexes them: no reader for either run has been found.  The two runs are
+;   labelled separately because their target sets do not overlap at all.
+; Unknown: what the 121 images depict -- see the 0xF78029 banner, which says so
+;          at length.  Nothing is guessed here either.
+; --------------------------------------------------------------------------
+PtrTable_F003F9:
+	.long 0x00F7828A	; F003F9  [  0]
+	.long 0x00F78346	; F003FD  [  1]
+	.long 0x00F78402	; F00401  [  2]
+	.long 0x00F784B2	; F00405  [  3]
+	.long 0x00FDB10E	; F00409  [  4]  absent (sentinel)
+	.long 0x00F78562	; F0040D  [  5]
+	.long 0x00F785FC	; F00411  [  6]
+	.long 0x00F78697	; F00415  [  7]
+	.long 0x00F78732	; F00419  [  8]
+	.long 0x00F7875F	; F0041D  [  9]
+	.long 0x00F78783	; F00421  [ 10]
+	.long 0x00F787BE	; F00425  [ 11]
+	.long 0x00F78818	; F00429  [ 12]
+	.long 0x00FDB10E	; F0042D  [ 13]  absent (sentinel)
+	.long 0x00FDB10E	; F00431  [ 14]  absent (sentinel)
+	.long 0x00F78872	; F00435  [ 15]
+	.long 0x00F7884B	; F00439  [ 16]
+	.long 0x00000000	; F0043D  [ 17]  empty
+	.long 0x00F788A6	; F00441  [ 18]
+	.long 0x00F788CA	; F00445  [ 19]
+	.long 0x00F788EE	; F00449  [ 20]
+	.long 0x00F78906	; F0044D  [ 21]
+	.long 0x00FDB10E	; F00451  [ 22]  absent (sentinel)
+	.long 0x00F7891E	; F00455  [ 23]
+	.long 0x00F7892F	; F00459  [ 24]
+	.long 0x00F78940	; F0045D  [ 25]
+	.long 0x00F78951	; F00461  [ 26]
+	.long 0x00F78962	; F00465  [ 27]
+	.long 0x00F78973	; F00469  [ 28]
+	.long 0x00F78984	; F0046D  [ 29]
+	.long 0x00F789DE	; F00471  [ 30]
+	.long 0x00FDB10E	; F00475  [ 31]  absent (sentinel)
+	.long 0x00FDB10E	; F00479  [ 32]  absent (sentinel)
+	.long 0x00F78A16	; F0047D  [ 33]
+	.long 0x00F789EF	; F00481  [ 34]
+	.long 0x00000000	; F00485  [ 35]  empty
+	.long 0x00FDB10E	; F00489  [ 36]  absent (sentinel)
+	.long 0x00FDB10E	; F0048D  [ 37]  absent (sentinel)
+	.long 0x00F78A4A	; F00491  [ 38]
+	.long 0x00F78A6E	; F00495  [ 39]
+	.long 0x00F78A92	; F00499  [ 40]
+	.long 0x00F78AAA	; F0049D  [ 41]
+	.long 0x00FDB10E	; F004A1  [ 42]  absent (sentinel)
+	.long 0x00FDB10E	; F004A5  [ 43]  absent (sentinel)
+	.long 0x00F78AC2	; F004A9  [ 44]
+	.long 0x00F78AEF	; F004AD  [ 45]
+	.long 0x00F78B13	; F004B1  [ 46]
+	.long 0x00F78B4E	; F004B5  [ 47]
+	.long 0x00F78BA8	; F004B9  [ 48]
+	.long 0x00FDB10E	; F004BD  [ 49]  absent (sentinel)
+	.long 0x00FDB10E	; F004C1  [ 50]  absent (sentinel)
+	.long 0x00F78C02	; F004C5  [ 51]
+	.long 0x00F78BDB	; F004C9  [ 52]
+	.long 0x00000000	; F004CD  [ 53]  empty
+	.long 0x00FDB10E	; F004D1  [ 54]  absent (sentinel)
+	.long 0x00FDB10E	; F004D5  [ 55]  absent (sentinel)
+	.long 0x00F78C36	; F004D9  [ 56]
+	.long 0x00F78C5A	; F004DD  [ 57]
+	.long 0x00F78C7E	; F004E1  [ 58]
+	.long 0x00F78C96	; F004E5  [ 59]
+	.long 0x00FDB10E	; F004E9  [ 60]  absent (sentinel)
+	.long 0x00FDB10E	; F004ED  [ 61]  absent (sentinel)
+	.long 0x00F78CAE	; F004F1  [ 62]
+	.long 0x00F78CBF	; F004F5  [ 63]
+	.long 0x00F78CD0	; F004F9  [ 64]
+	.long 0x00F78CE1	; F004FD  [ 65]
+	.long 0x00F78D3B	; F00501  [ 66]
+	.long 0x00FDB10E	; F00505  [ 67]  absent (sentinel)
+	.long 0x00FDB10E	; F00509  [ 68]  absent (sentinel)
+	.long 0x00F78D73	; F0050D  [ 69]
+	.long 0x00F78D4C	; F00511  [ 70]
+	.long 0x00000000	; F00515  [ 71]  empty
+	.long 0x00FDB10E	; F00519  [ 72]  absent (sentinel)
+	.long 0x00F78DA7	; F0051D  [ 73]
+	.long 0x00F78E4C	; F00521  [ 74]
+	.long 0x00F78E68	; F00525  [ 75]
+	.long 0x00F78F09	; F00529  [ 76]
+	.long 0x00F78F9B	; F0052D  [ 77]
+	.long 0x00F78FB3	; F00531  [ 78]
+	.long 0x00FDB10E	; F00535  [ 79]  absent (sentinel)
+	.long 0x00F78FCB	; F00539  [ 80]
+	.long 0x00F78FF8	; F0053D  [ 81]
+	.long 0x00F7901C	; F00541  [ 82]
+	.long 0x00F79057	; F00545  [ 83]
+	.long 0x00F790A7	; F00549  [ 84]
+	.long 0x00FDB10E	; F0054D  [ 85]  absent (sentinel)
+	.long 0x00FDB10E	; F00551  [ 86]  absent (sentinel)
+	.long 0x00F79101	; F00555  [ 87]
+	.long 0x00F790DA	; F00559  [ 88]
+	.long 0x00000000	; F0055D  [ 89]  empty
+	.long 0x00FDB10E	; F00561  [ 90]  absent (sentinel)
+	.long 0x00FDB10E	; F00565  [ 91]  absent (sentinel)
+	.long 0x00FDB10E	; F00569  [ 92]  absent (sentinel)
+	.long 0x00FDB10E	; F0056D  [ 93]  absent (sentinel)
+	.long 0x00FDB10E	; F00571  [ 94]  absent (sentinel)
+	.long 0x00FDB10E	; F00575  [ 95]  absent (sentinel)
+	.long 0x00FDB10E	; F00579  [ 96]  absent (sentinel)
+	.long 0x00FDB10E	; F0057D  [ 97]  absent (sentinel)
+	.long 0x00F79135	; F00581  [ 98]
+	.long 0x00F79162	; F00585  [ 99]
+	.long 0x00F79186	; F00589  [100]
+	.long 0x00F791C1	; F0058D  [101]
+	.long 0x00F7921B	; F00591  [102]
+	.long 0x00FDB10E	; F00595  [103]  absent (sentinel)
+	.long 0x00FDB10E	; F00599  [104]  absent (sentinel)
+	.long 0x00F79275	; F0059D  [105]
+	.long 0x00F7924E	; F005A1  [106]
+	.long 0x00000000	; F005A5  [107]  empty
+	.long 0x00FDB10E	; F005A9  [108]  absent (sentinel)
+	.long 0x00FDB10E	; F005AD  [109]  absent (sentinel)
+	.long 0x00F792A9	; F005B1  [110]
+	.long 0x00F79334	; F005B5  [111]
+	.long 0x00F793AF	; F005B9  [112]
+	.long 0x00F7944F	; F005BD  [113]
+	.long 0x00FDB10E	; F005C1  [114]  absent (sentinel)
+	.long 0x00FDB10E	; F005C5  [115]  absent (sentinel)
+	.long 0x00F794CA	; F005C9  [116]
+	.long 0x00F794E8	; F005CD  [117]
+	.long 0x00F7950C	; F005D1  [118]
+	.long 0x00F79538	; F005D5  [119]
+	.long 0x00F7955C	; F005D9  [120]
+	.long 0x00FDB10E	; F005DD  [121]  absent (sentinel)
+	.long 0x00FDB10E	; F005E1  [122]  absent (sentinel)
+	.long 0x00F79598	; F005E5  [123]
+	.long 0x00F79580	; F005E9  [124]
+	.long 0x00000000	; F005ED  [125]  empty
+	.long 0x00F795B8	; F005F1  [126]
+	.long 0x00F795D1	; F005F5  [127]
+	.long 0x00F795EA	; F005F9  [128]
+	.long 0x00F79603	; F005FD  [129]
+	.long 0x00F7961C	; F00601  [130]
+	.long 0x00F79635	; F00605  [131]
+	.long 0x00F7964E	; F00609  [132]
+	.long 0x00FDB10E	; F0060D  [133]  absent (sentinel)
+	.long 0x00F79667	; F00611  [134]
+	.long 0x00F79678	; F00615  [135]
+	.long 0x00F796A4	; F00619  [136]
+	.long 0x00F796D0	; F0061D  [137]
+	.long 0x00F796FE	; F00621  [138]
+	.long 0x00FDB10E	; F00625  [139]  absent (sentinel)
+	.long 0x00FDB10E	; F00629  [140]  absent (sentinel)
+	.long 0x00F79744	; F0062D  [141]
+	.long 0x00F7972C	; F00631  [142]
+	.long 0x00000000	; F00635  [143]  empty
+	.long 0x00FDB10E	; F00639  [144]  absent (sentinel)
+	.long 0x00F79764	; F0063D  [145]
+	.long 0x00F79779	; F00641  [146]
+	.long 0x00F7978E	; F00645  [147]
+	.long 0x00F797A3	; F00649  [148]
+	.long 0x00FDB10E	; F0064D  [149]  absent (sentinel)
+	.long 0x00F797B8	; F00651  [150]
+	.long 0x00F797CD	; F00655  [151]
+	.long 0x00F797E2	; F00659  [152]
+	.long 0x00F797F3	; F0065D  [153]
+	.long 0x00F7981F	; F00661  [154]
+	.long 0x00F7984B	; F00665  [155]
+	.long 0x00F7986F	; F00669  [156]
+	.long 0x00FDB10E	; F0066D  [157]  absent (sentinel)
+	.long 0x00FDB10E	; F00671  [158]  absent (sentinel)
+	.long 0x00F798AB	; F00675  [159]
+	.long 0x00F79893	; F00679  [160]
+	.long 0x00000000	; F0067D  [161]  empty
+	.long 0x00FDB10E	; F00681  [162]  absent (sentinel)
+	.long 0x00F798CB	; F00685  [163]
+	.long 0x00F798E0	; F00689  [164]
+	.long 0x00F798F5	; F0068D  [165]
+	.long 0x00F7990A	; F00691  [166]
+	.long 0x00F7991F	; F00695  [167]
+	.long 0x00F79934	; F00699  [168]
+	.long 0x00F79949	; F0069D  [169]
+	.long 0x00F7995E	; F006A1  [170]
+	.long 0x00F7997C	; F006A5  [171]
+	.long 0x00F799A0	; F006A9  [172]
+	.long 0x00F799B8	; F006AD  [173]
+	.long 0x00F799D0	; F006B1  [174]
+	.long 0x00FDB10E	; F006B5  [175]  absent (sentinel)
+	.long 0x00FDB10E	; F006B9  [176]  absent (sentinel)
+	.long 0x00F799E8	; F006BD  [177]
+	.long 0x00FDB10E	; F006C1  [178]  absent (sentinel)
+	.long 0x00000000	; F006C5  [179]  empty
+	.long 0x00FDB10E	; F006C9  [180]  absent (sentinel)
+
+; --------------------------------------------------------------------------
+; PtrTable_F006CD -- 35 slots -> prom_a's DisplayList_FC4000
+; Evidence: 24 distinct targets, all in 0xFC4082-0xFC4454, which prom_a's
+;           source already carries as DisplayList_FC4000 (2,095 bytes of
+;           DSP-effect / SOUND EDIT label text).  0 of the 24 is an instruction
+;           boundary there -- correct, since 0 of that region's 979 addresses
+;           is one: prom_a frames it as data too.  11 slots are the sentinel.
+; Unknown: what selects a slot.  No reader found.
+; --------------------------------------------------------------------------
+PtrTable_F006CD:
+	.long 0x00FC4082	; F006CD  [  0]
+	.long 0x00FDB10E	; F006D1  [  1]  absent (sentinel)
+	.long 0x00FC4097	; F006D5  [  2]
+	.long 0x00FC40A9	; F006D9  [  3]
+	.long 0x00FC40BE	; F006DD  [  4]
+	.long 0x00FC40D3	; F006E1  [  5]
+	.long 0x00FC40F7	; F006E5  [  6]
+	.long 0x00FDB10E	; F006E9  [  7]  absent (sentinel)
+	.long 0x00FC411B	; F006ED  [  8]
+	.long 0x00FC415C	; F006F1  [  9]
+	.long 0x00FC419D	; F006F5  [ 10]
+	.long 0x00FDB10E	; F006F9  [ 11]  absent (sentinel)
+	.long 0x00FDB10E	; F006FD  [ 12]  absent (sentinel)
+	.long 0x00FDB10E	; F00701  [ 13]  absent (sentinel)
+	.long 0x00FC423D	; F00705  [ 14]
+	.long 0x00FC4225	; F00709  [ 15]
+	.long 0x00000000	; F0070D  [ 16]  empty
+	.long 0x00FDB10E	; F00711  [ 17]  absent (sentinel)
+	.long 0x00FC4269	; F00715  [ 18]
+	.long 0x00FDB10E	; F00719  [ 19]  absent (sentinel)
+	.long 0x00FC427E	; F0071D  [ 20]
+	.long 0x00FC4290	; F00721  [ 21]
+	.long 0x00FC42A5	; F00725  [ 22]
+	.long 0x00FC42BA	; F00729  [ 23]
+	.long 0x00FC42DE	; F0072D  [ 24]
+	.long 0x00FC4302	; F00731  [ 25]
+	.long 0x00FC4338	; F00735  [ 26]
+	.long 0x00FC4379	; F00739  [ 27]
+	.long 0x00FC43BA	; F0073D  [ 28]
+	.long 0x00FC43FB	; F00741  [ 29]
+	.long 0x00FDB10E	; F00745  [ 30]  absent (sentinel)
+	.long 0x00FDB10E	; F00749  [ 31]  absent (sentinel)
+	.long 0x00FC4454	; F0074D  [ 32]
+	.long 0x00FC443C	; F00751  [ 33]
+	.long 0x00000000	; F00755  [ 34]  empty
+
+; --------------------------------------------------------------------------
+; Data_F00759 -- 9 bytes: the eight powers of two, then one 0x00
+; Evidence: bounded by the pointer runs on either side.  The values are
+;           0x01 0x02 0x04 0x08 0x10 0x20 0x40 0x80 -- a single-bit mask
+;           per index, the shape a bit-numbered lookup has.  The trailing
+;           0x00 is what restores the 4-byte phase for the run below.
+; Unknown: what indexes it.  No reader found.
+; --------------------------------------------------------------------------
+Data_F00759:
+	.byte 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80	; F00759  1 << 0 .. 1 << 7
+	.byte 0x00	; F00761  phase pad
+
+; --------------------------------------------------------------------------
+; PtrTable_F00762 -- 39 slots -> prom_a 0xFE28B2-0xFE2F8C
+; Evidence: 21 distinct targets, all inside a 1,755-byte prom_a window; 16
+;           slots are the sentinel and 2 are zero.  The SLOTS are pointers on
+;           the same 290-word test as the rest of the span.
+; ⚠ WHAT THE TARGETS ARE IS NOT ESTABLISHED.  prom_a's current transcription
+;   frames 0xFE28B2-0xFE2F8C as CODE, but only 6 of the 21 targets land on an
+;   instruction boundary there -- against 35.7% of ALL addresses in that range,
+;   i.e. BELOW chance.  So this table lends prom_a's framing no support, and no
+;   claim is made here about whether that region is code or data.  A prom_a
+;   lane should look: 21 pointers into a span is what an object index looks
+;   like, and 6/21 is what a misframe looks like.
+; --------------------------------------------------------------------------
+PtrTable_F00762:
+	.long 0x00FDB10E	; F00762  [  0]  absent (sentinel)
+	.long 0x00FE28B2	; F00766  [  1]
+	.long 0x00FE2947	; F0076A  [  2]
+	.long 0x00FDB10E	; F0076E  [  3]  absent (sentinel)
+	.long 0x00FE29BB	; F00772  [  4]
+	.long 0x00FE2A43	; F00776  [  5]
+	.long 0x00FE2AB1	; F0077A  [  6]
+	.long 0x00FDB10E	; F0077E  [  7]  absent (sentinel)
+	.long 0x00FE2B23	; F00782  [  8]
+	.long 0x00FE2B34	; F00786  [  9]
+	.long 0x00FE2B5D	; F0078A  [ 10]
+	.long 0x00FE2B86	; F0078E  [ 11]
+	.long 0x00FE2BAF	; F00792  [ 12]
+	.long 0x00FDB10E	; F00796  [ 13]  absent (sentinel)
+	.long 0x00FDB10E	; F0079A  [ 14]  absent (sentinel)
+	.long 0x00FE2BCB	; F0079E  [ 15]
+	.long 0x00FDB10E	; F007A2  [ 16]  absent (sentinel)
+	.long 0x00000000	; F007A6  [ 17]  empty
+	.long 0x00FDB10E	; F007AA  [ 18]  absent (sentinel)
+	.long 0x00FE2BE3	; F007AE  [ 19]
+	.long 0x00FE2D92	; F007B2  [ 20]
+	.long 0x00FE2D14	; F007B6  [ 21]
+	.long 0x00FDB10E	; F007BA  [ 22]  absent (sentinel)
+	.long 0x00FDB10E	; F007BE  [ 23]  absent (sentinel)
+	.long 0x00FDB10E	; F007C2  [ 24]  absent (sentinel)
+	.long 0x00FDB10E	; F007C6  [ 25]  absent (sentinel)
+	.long 0x00FE2E6E	; F007CA  [ 26]
+	.long 0x00FE2EAA	; F007CE  [ 27]
+	.long 0x00FE2ED3	; F007D2  [ 28]
+	.long 0x00FE2EFC	; F007D6  [ 29]
+	.long 0x00FE2F43	; F007DA  [ 30]
+	.long 0x00FDB10E	; F007DE  [ 31]  absent (sentinel)
+	.long 0x00FDB10E	; F007E2  [ 32]  absent (sentinel)
+	.long 0x00FE2F6C	; F007E6  [ 33]
+	.long 0x00FDB10E	; F007EA  [ 34]  absent (sentinel)
+	.long 0x00000000	; F007EE  [ 35]  empty
+	.long 0x00FDB10E	; F007F2  [ 36]  absent (sentinel)
+	.long 0x00FDB10E	; F007F6  [ 37]  absent (sentinel)
+	.long 0x00FE2F8C	; F007FA  [ 38]
+
+; --------------------------------------------------------------------------
+; Data_F007FE -- 2 bytes.  ⚠ NOT IDENTIFIED.
+; Evidence: they complete no 4-byte slot (the run above ends at 0xF007FD)
+;           and they are not a plausible slot themselves.  They sit
+;           immediately below sub_F00800, which starts on the 0x800
+;           boundary, so `padding to the module boundary' fits -- but the
+;           image's filler byte is 0x0E and only the first of the two is,
+;           so that is a guess and is not asserted.
+; --------------------------------------------------------------------------
+Data_F007FE:
+	.byte 0x0E, 0x30	; F007FE  purpose unknown
+
 
 ; --------------------------------------------------------------------------
 ; sub_F00800
@@ -1158,7 +1582,449 @@ Data_F0191A:
 	.byte	0x40, 0x2A, 0x55, 0x22, 0x41, 0x22, 0x41, 0x22, 0x07, 0x18, 0x20, 0x27, 0x4F, 0x4F, 0x4F, 0x4F	; F0198A  |@*U"A"A".. 'OOOO|
 	.byte	0x27, 0x20, 0x18, 0x07	; F0199A  |' ..|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00199E, 0x0004D4
+; ============================================================================
+; 0xF0199E-0xF01E71 -- ONE ICON PAGE, ONE WHOLE 12x16 ICON, AND SIX 40x40
+; BITMAPS THE 0xF5BECE BLITTER DRAWS
+; ============================================================================
+;
+; 1,236 bytes.  DATA: 0 `call nnn` / `jp nnn` operands in any of the four
+; ROM images land in this span, and 0 routine-directory slots point in.
+;
+; ★★ THE SIX 200-BYTE OBJECTS ARE PINNED BY CONVERTED CODE IN THIS FILE.
+; 0xF5BECE-0xF5BEFA reads, in this transcription:
+;
+;       ld XIZ,0x00f5befb      ; the selector table's base
+;       xor W,W / sll 0x02,WA  ; index * 4
+;       ld XIY,(XIZ+WA)        ; XIY = table[index] -- the source bitmap
+;       ld WA,(0x2350) / div A,0x08 / ld HL,(0x2352) / mul L,0x28
+;       add HL,WA / ld IX,HL   ; destination = y*40 + x/8
+;       ld BC,0x0005           ; 5 pages
+;       ld HL,0x0028           ; 40 columns
+;       ld A,0x03 / swi 7      ; blit
+;
+; 5 * 40 = 200, which is exactly the stride between the seven selector
+; entries' six distinct targets, and the six objects tile 0xF019C2-0xF01E71
+; with no gap and no remainder.  Rendered as 5 pages of 40 columns (a byte
+; is one column, MSB the top row of its page) each is a framed 40x40 box
+; holding one monotone rising curve -- see below, and `--render`.
+;
+; ⚠ THE SELECTOR TABLE AT 0xF5BEFB IS ITSELF STILL MIS-FRAMED AS CODE in
+;   this file (`cp XWA,(XDE+0x1d)`, `nop`, and four rows marked `[llvm-mc
+;   cannot encode this]`).  It is 28 bytes = 7 * 4 and every word is one of
+;   the six addresses below.  It is OUTSIDE this span and is deliberately
+;   NOT touched here.
+;
+; ★ THE 24-BYTE ICON GRID IS PINNED BY TEN EXTERNAL REFERENCES.  0x00F019AA
+; appears as a 32-bit word ten times in the display-list region, and
+; 0x00F0191A -- Data_F0191A above -- six times.  Their difference is 144 =
+; 6 * 24, and 0xF019C2 is 0xF0191A + 7 * 24, so the grid ends exactly where
+; the curves begin.  A 24-byte cell rendered as 12 columns * 2 pages is a
+; 12x16 icon; the last two cells are a filled and a hollow circle.
+;
+; ⚠ Data_F0191A above is 132 bytes = 5.5 cells, because its extent is the
+; round-1 REACHABILITY walk's and not an object's -- its own header says so.
+; The icon starting at 0xF01992 therefore has its upper page inside
+; Data_F0191A and its lower page here.  Data_F0191A is NOT re-cut by this
+; pass: it is not part of any `.incbin` span and re-cutting it is a
+; separate change with its own evidence.
+;
+; Re-derive all of it with
+;     python3 notes/gen_prom_b_f0033f_f0199e.py --evidence --render
+; ============================================================================
+
+; --------------------------------------------------------------------------
+; Bitmap_F0199E -- 12 bytes: the LOWER page of the 12x16 icon at 0xF01992,
+;                  whose upper page is the last 12 bytes of Data_F0191A.
+; Evidence: the 24-byte grid above; 0xF01992 = 0xF0191A + 5 * 24.
+; Rendered (12 columns, this page only -- rows 8-15 of the icon):
+;     #..######..#
+;     .#..####..#.
+;     .#........#.
+;     ..##....##..
+;     ....####....
+;     ............
+;     ............
+;     ............
+; --------------------------------------------------------------------------
+Bitmap_F0199E:
+	.byte 0x80, 0x60, 0x10, 0x90, 0xC8, 0xC8, 0xC8, 0xC8, 0x90, 0x10, 0x60, 0x80	; F0199E  page 1 of the icon at 0xF01992
+
+; --------------------------------------------------------------------------
+; Bitmap_F019AA -- 24 bytes, one whole 12x16 icon (12 columns, 2 pages)
+; Evidence: 0x00F019AA is named as a 32-bit word ten times in the display-
+;           list region (0xF03ACF 0xF03AE7 0xF03AFF 0xF03B17 0xF03B81
+;           0xF03B96 0xF03C1F 0xF03C37 0xF03C4F 0xF03C67), which is what
+;           pins the grid.  The next object, 0xF019C2, bounds it.
+; Rendered:
+;     ............
+;     ....####....
+;     ..##....##..
+;     .#........#.
+;     .#........#.
+;     #..........#
+;     #..........#
+;     #..........#
+;     #..........#
+;     .#........#.
+;     .#........#.
+;     ..##....##..
+;     ....####....
+;     ............
+;     ............
+;     ............
+; --------------------------------------------------------------------------
+Bitmap_F019AA:
+	.byte 0x07, 0x18, 0x20, 0x20, 0x40, 0x40, 0x40, 0x40, 0x20, 0x20, 0x18, 0x07	; F019AA  page 0 (rows 0-7)
+	.byte 0x80, 0x60, 0x10, 0x10, 0x08, 0x08, 0x08, 0x08, 0x10, 0x10, 0x60, 0x80	; F019B6  page 1 (rows 8-15)
+
+; --------------------------------------------------------------------------
+; Bitmap_F019C2 -- 200 bytes, 40 columns * 5 pages = 40x40
+; Evidence: selector slots [3], [6] at 0xF5BEFB name it; the blitter at
+;           0xF5BEF1 is handed BC=5 pages, HL=40 columns.
+; Rendered:
+;     #######################################.
+;     #...........................#########.##
+;     #....................#######..........##
+;     #.................###.................##
+;     #...............##....................##
+;     #.............##......................##
+;     #............#........................##
+;     #..........##.........................##
+;     #.........##..........................##
+;     #........##...........................##
+;     #.......##............................##
+;     #......##.............................##
+;     #......#..............................##
+;     #.....#...............................##
+;     #....#................................##
+;     #....#................................##
+;     #...#.................................##
+;     #...#.................................##
+;     #..#..................................##
+;     #..#..................................##
+;     #..#..................................##
+;     #.#...................................##
+;     #.#...................................##
+;     #.#...................................##
+;     #.#...................................##
+;     #.#...................................##
+;     #.#...................................##
+;     #.#...................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     #.....................................##
+;     ########################################
+;     ..######################################
+; --------------------------------------------------------------------------
+Bitmap_F019C2:
+	.byte 0xFF, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x81, 0x81, 0x82, 0x84, 0x84, 0x88, 0x88, 0x90, 0x90	; F019C2  page 0, columns 0-19
+	.byte 0x90, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xA0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0x80, 0xFF, 0x7F	; F019D6  page 0, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x03, 0x04, 0x18, 0x30, 0x60, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F019EA  page 1, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F019FE  page 1, columns 20-39
+	.byte 0xFF, 0x00, 0x07, 0x38, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01A12  page 2, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01A26  page 2, columns 20-39
+	.byte 0xFF, 0x0F, 0xF0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01A3A  page 3, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01A4E  page 3, columns 20-39
+	.byte 0xFE, 0xFA, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03	; F01A62  page 4, columns 0-19
+	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xFF, 0xFF	; F01A76  page 4, columns 20-39
+
+; --------------------------------------------------------------------------
+; Bitmap_F01A8A -- 200 bytes, 40 columns * 5 pages = 40x40
+; Evidence: selector slot [5] at 0xF5BEFB names it; the blitter at
+;           0xF5BEF1 is handed BC=5 pages, HL=40 columns.
+; Rendered:
+;     #######################################.
+;     #................................#######
+;     #............................####.....##
+;     #.........................###.........##
+;     #.......................##............##
+;     #.....................##..............##
+;     #...................##................##
+;     #.................##..................##
+;     #................#....................##
+;     #..............##.....................##
+;     #.............#.......................##
+;     #............#........................##
+;     #...........#.........................##
+;     #..........#..........................##
+;     #.........#...........................##
+;     #........#............................##
+;     #.......#.............................##
+;     #.......#.............................##
+;     #......#..............................##
+;     #.....#...............................##
+;     #....#................................##
+;     #....#................................##
+;     #...#.................................##
+;     #...#.................................##
+;     #...#.................................##
+;     #..#..................................##
+;     #..#..................................##
+;     #..#..................................##
+;     #.#...................................##
+;     #.#...................................##
+;     #.#...................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ##....................................##
+;     ########################################
+;     ..######################################
+; --------------------------------------------------------------------------
+Bitmap_F01A8A:
+	.byte 0xFF, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x81, 0x81	; F01A8A  page 0, columns 0-19
+	.byte 0x82, 0x82, 0x84, 0x84, 0x88, 0x88, 0x90, 0x90, 0x90, 0xA0, 0xA0, 0xA0, 0xA0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xFF, 0x7F	; F01A9E  page 0, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x40, 0x80, 0x00, 0x00	; F01AB2  page 1, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01AC6  page 1, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x03, 0x0C, 0x10, 0x20, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01ADA  page 2, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01AEE  page 2, columns 20-39
+	.byte 0xFF, 0x01, 0x0E, 0x70, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01B02  page 3, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01B16  page 3, columns 20-39
+	.byte 0xFE, 0xFE, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03	; F01B2A  page 4, columns 0-19
+	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xFF, 0xFF	; F01B3E  page 4, columns 20-39
+
+; --------------------------------------------------------------------------
+; Bitmap_F01B52 -- 200 bytes, 40 columns * 5 pages = 40x40
+; Evidence: selector slot [4] at 0xF5BEFB names it; the blitter at
+;           0xF5BEF1 is handed BC=5 pages, HL=40 columns.
+; Rendered:
+;     #######################################.
+;     #....................................###
+;     #.................................###.##
+;     #...............................##....##
+;     #.............................##......##
+;     #..........................###........##
+;     #.........................##..........##
+;     #........................##...........##
+;     #......................###............##
+;     #.....................##..............##
+;     #....................##...............##
+;     #...................##................##
+;     #.................###.................##
+;     #................##...................##
+;     #...............##....................##
+;     #..............##.....................##
+;     #.............##......................##
+;     #............##.......................##
+;     #...........##........................##
+;     #...........#.........................##
+;     #..........##.........................##
+;     #.........##..........................##
+;     #........##...........................##
+;     #.......##............................##
+;     #.......#.............................##
+;     #......##.............................##
+;     #.....##..............................##
+;     #....##...............................##
+;     #....#................................##
+;     #....#................................##
+;     #...#.................................##
+;     #...#.................................##
+;     #..#..................................##
+;     #..#..................................##
+;     #.#...................................##
+;     #.#...................................##
+;     #.#...................................##
+;     ##....................................##
+;     ########################################
+;     ..######################################
+; --------------------------------------------------------------------------
+Bitmap_F01B52:
+	.byte 0xFF, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80	; F01B52  page 0, columns 0-19
+	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x81, 0x83, 0x86, 0x84, 0x84, 0x88, 0x88, 0x90, 0x90, 0xA0, 0xA0, 0xA0, 0xC0, 0xFF, 0x7F	; F01B66  page 0, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x06, 0x0C, 0x08	; F01B7A  page 1, columns 0-19
+	.byte 0x18, 0x30, 0x60, 0xC0, 0x80, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01B8E  page 1, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x06, 0x0C, 0x38, 0x60, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00	; F01BA2  page 2, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01BB6  page 2, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x03, 0x1C, 0x30, 0x60, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01BCA  page 3, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01BDE  page 3, columns 20-39
+	.byte 0xFE, 0x06, 0x3B, 0xC3, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03	; F01BF2  page 4, columns 0-19
+	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xFF, 0xFF	; F01C06  page 4, columns 20-39
+
+; --------------------------------------------------------------------------
+; Bitmap_F01C1A -- 200 bytes, 40 columns * 5 pages = 40x40
+; Evidence: selector slot [2] at 0xF5BEFB names it; the blitter at
+;           0xF5BEF1 is handed BC=5 pages, HL=40 columns.
+; Rendered:
+;     #######################################.
+;     #....................................###
+;     #...................................#.##
+;     #...................................#.##
+;     #...................................#.##
+;     #..................................#..##
+;     #..................................#..##
+;     #.................................#...##
+;     #.................................#...##
+;     #................................#....##
+;     #................................#....##
+;     #...............................##....##
+;     #..............................##.....##
+;     #.............................##......##
+;     #.............................#.......##
+;     #............................##.......##
+;     #...........................##........##
+;     #..........................##.........##
+;     #.........................##..........##
+;     #.........................#...........##
+;     #........................##...........##
+;     #.......................##............##
+;     #......................##.............##
+;     #.....................##..............##
+;     #....................##...............##
+;     #...................##................##
+;     #.................###.................##
+;     #................##...................##
+;     #...............##....................##
+;     #..............##.....................##
+;     #............###......................##
+;     #...........##........................##
+;     #..........##.........................##
+;     #........###..........................##
+;     #......##.............................##
+;     #....##...............................##
+;     #.###.................................##
+;     ##....................................##
+;     ########################################
+;     ..######################################
+; --------------------------------------------------------------------------
+Bitmap_F01C1A:
+	.byte 0xFF, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80	; F01C1A  page 0, columns 0-19
+	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x81, 0x86, 0xB8, 0xC0, 0xFF, 0x7F	; F01C2E  page 0, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01C42  page 1, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x07, 0x0C, 0x18, 0x70, 0x80, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01C56  page 1, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01C6A  page 2, columns 0-19
+	.byte 0x00, 0x00, 0x01, 0x03, 0x06, 0x0C, 0x38, 0x60, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01C7E  page 2, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x02, 0x06, 0x0C, 0x18, 0x30, 0x20	; F01C92  page 3, columns 0-19
+	.byte 0x60, 0xC0, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01CA6  page 3, columns 20-39
+	.byte 0xFE, 0x06, 0x0B, 0x0B, 0x0B, 0x13, 0x13, 0x23, 0x23, 0x43, 0x43, 0xC3, 0x83, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03	; F01CBA  page 4, columns 0-19
+	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xFF, 0xFF	; F01CCE  page 4, columns 20-39
+
+; --------------------------------------------------------------------------
+; Bitmap_F01CE2 -- 200 bytes, 40 columns * 5 pages = 40x40
+; Evidence: selector slot [1] at 0xF5BEFB names it; the blitter at
+;           0xF5BEF1 is handed BC=5 pages, HL=40 columns.
+; Rendered:
+;     #######################################.
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #...................................#.##
+;     #...................................#.##
+;     #...................................#.##
+;     #..................................#..##
+;     #..................................#..##
+;     #..................................#..##
+;     #.................................#...##
+;     #.................................#...##
+;     #.................................#...##
+;     #................................#....##
+;     #................................#....##
+;     #...............................#.....##
+;     #..............................#......##
+;     #.............................#.......##
+;     #.............................#.......##
+;     #............................#........##
+;     #...........................#.........##
+;     #..........................#..........##
+;     #.........................#...........##
+;     #........................#............##
+;     #.......................#.............##
+;     #.....................##..............##
+;     #....................#................##
+;     #..................##.................##
+;     #................##...................##
+;     #..............##.....................##
+;     #............##.......................##
+;     #.........###.........................##
+;     #.....####............................##
+;     ######................................##
+;     ########################################
+;     ..######################################
+; --------------------------------------------------------------------------
+Bitmap_F01CE2:
+	.byte 0xFF, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80	; F01CE2  page 0, columns 0-19
+	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xFF, 0xFF, 0x7F	; F01CF6  page 0, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01D0A  page 1, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x1C, 0xE0, 0x00, 0xFF, 0xFF	; F01D1E  page 1, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01D32  page 2, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x06, 0x08, 0x10, 0x60, 0x80, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01D46  page 2, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01	; F01D5A  page 3, columns 0-19
+	.byte 0x01, 0x02, 0x04, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01D6E  page 3, columns 20-39
+	.byte 0xFE, 0x06, 0x07, 0x07, 0x07, 0x07, 0x0B, 0x0B, 0x0B, 0x0B, 0x13, 0x13, 0x13, 0x23, 0x23, 0x43, 0x43, 0x83, 0x83, 0x03	; F01D82  page 4, columns 0-19
+	.byte 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xFF, 0xFF	; F01D96  page 4, columns 20-39
+
+; --------------------------------------------------------------------------
+; Bitmap_F01DAA -- 200 bytes, 40 columns * 5 pages = 40x40
+; Evidence: selector slot [0] at 0xF5BEFB names it; the blitter at
+;           0xF5BEF1 is handed BC=5 pages, HL=40 columns.
+; Rendered:
+;     #######################################.
+;     #.....................................##
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #....................................###
+;     #...................................#.##
+;     #...................................#.##
+;     #...................................#.##
+;     #...................................#.##
+;     #...................................#.##
+;     #...................................#.##
+;     #...................................#.##
+;     #..................................#..##
+;     #..................................#..##
+;     #..................................#..##
+;     #.................................#...##
+;     #.................................#...##
+;     #................................#....##
+;     #................................#....##
+;     #...............................#.....##
+;     #..............................#......##
+;     #.............................##......##
+;     #............................##.......##
+;     #...........................##........##
+;     #..........................##.........##
+;     #.........................##..........##
+;     #........................#............##
+;     #......................##.............##
+;     #....................##...............##
+;     #.................###.................##
+;     #..........#######....................##
+;     #.#########...........................##
+;     ########################################
+;     ..######################################
+; --------------------------------------------------------------------------
+Bitmap_F01DAA:
+	.byte 0xFF, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80	; F01DAA  page 0, columns 0-19
+	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0xBF, 0xFF, 0x7F	; F01DBE  page 0, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01DD2  page 1, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1F, 0xE0, 0xFF, 0xFF	; F01DE6  page 1, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01DFA  page 2, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x06, 0x38, 0xC0, 0x00, 0xFF, 0xFF	; F01E0E  page 2, columns 20-39
+	.byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00	; F01E22  page 3, columns 0-19
+	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03, 0x06, 0x0C, 0x18, 0x30, 0x40, 0x80, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF	; F01E36  page 3, columns 20-39
+	.byte 0xFE, 0x02, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x07, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x0B, 0x13, 0x13	; F01E4A  page 4, columns 0-19
+	.byte 0x13, 0x23, 0x23, 0x43, 0x43, 0x83, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xFF, 0xFF	; F01E5E  page 4, columns 20-39
+
 
 ; === END COVER-R1 0xF0191A-0xF01E72 ===
 
