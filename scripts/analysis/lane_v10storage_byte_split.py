@@ -20,19 +20,28 @@ three ways:
                      instruction would DEEPEN the error while passing the gate
   (c) TYPED DATA     `.byte` flanked by data; already correctly represented,
                      or structured data that could be typed further
-  (d) DECODER GAP    a run STARTING with one of {0x01, 0x04, 0x17, 0x1a, 0x1c},
-                     five leading opcodes tlcs900_backend cannot decode but
-                     unidasm reads as real instructions (normal / max / ldf /
-                     JP nnnn / CALL nnnn).  Reported as an overlay on (a)/(b),
-                     not a fourth disjoint bucket, because the blind first byte
-                     says the DECODER refused -- it does not say whether the
-                     region is code.  ⚠ MEASURED HERE: in the pre-conversion
+  (d) BLIND-START    a run STARTING with one of {0x01, 0x04, 0x17, 0x1a, 0x1c}.
+                     ⚠ RETRACTED AS EVIDENCE, 2026-09-02, and kept only as a
+                     MIS-FRAMING smell.  These were briefly read as "real
+                     instructions the backend cannot decode"; they are not.
+                     All five already ASSEMBLE -- only the decoder lacked them
+                     -- and with the decoder taught them, 82.8% of v10's
+                     blind-starting runs decode clean against 82.1% for a
+                     SHUFFLE of the same bytes: no instruction structure at all.
+                     The ratio was structurally confounded: after a linear
+                     force-disassembly pass a `.byte` run begins at exactly the
+                     refused byte, so a DECODABLE control byte can almost never
+                     start one, pinning the control near zero by construction.
+                     See notes/DEBT-INVENTORY-2026-09-02.md (a4e94fcb).
+                     ★ THIS LANE MEASURED THE SAME THING INDEPENDENTLY, BEFORE
+                     THE RETRACTION: in the pre-conversion
                      storage/flash_floppy_handlers.s, 63 of the file's 80
                      blind-starting runs (79%) sat inside 0xF15907-0xF1612F,
-                     which this lane proved is a record stream.  Zero control-
-                     byte runs sat there.  So a blind first byte tracks "the
-                     decoder gave up here", in real code and in a data region
-                     wrongly framed as code alike.
+                     proven here to be a record stream, and ZERO control-byte
+                     runs sat there.  Typing that span as data -- converting
+                     nothing into an instruction -- took the file from
+                     80/757 = 10.6% to 29/577 = 5.0%.  A high blind rate means
+                     FRAMED WRONGLY, in either direction, and cannot say which.
 
 HOW EACH RUN IS JUDGED
   FLANKING    the emitting source line immediately before and after the run.
@@ -328,7 +337,7 @@ def main():
     print("THREE-WAY SPLIT of .byte operands, v10/maincpu/{%s}" % ",".join(dirs))
     print()
     hdr = (f"{'dir':<14}{'(a) code-debt':>15}{'(b) suspect':>14}"
-           f"{'(c) typed data':>16}{'(d) decoder gap':>18}")
+           f"{'(c) typed data':>16}{'(d) blind-start':>18}")
     print(hdr)
     print("-" * len(hdr))
     for d in dirs:
@@ -341,7 +350,9 @@ def main():
     print(f"{'(runs)':<14}{tot['a_code_debt_runs']:>15}{tot['b_suspect_runs']:>14}"
           f"{tot['c_typed_data_runs']:>16}{tot['d_decoder_gap_runs']:>18}")
     print()
-    print("(d) OVERLAPS (a)/(b)/(c) -- it is not a fourth column of the total.")
+    print("(d) OVERLAPS (a)/(b)/(c) -- not a fourth column of the total, and")
+    print("    RETRACTED as evidence: it is a mis-framing smell only. See the")
+    print("    module docstring and notes/DEBT-INVENTORY-2026-09-02.md.")
     print()
     print(f"grand total {sum(tot[k] for k in ('a_code_debt','b_suspect','c_typed_data'))}"
           f" .byte operands")

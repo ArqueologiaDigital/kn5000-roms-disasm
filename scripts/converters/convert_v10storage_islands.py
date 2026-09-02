@@ -22,14 +22,16 @@ QUESTION IT ANSWERS
     that fail the walk are REFUSED and counted, not converted.
 
     ★ REFUSED ON PURPOSE: a run whose first byte is one of
-      {0x01, 0x04, 0x17, 0x1a, 0x1c}.  Those five leading opcodes have no decode
-      anywhere in tlcs900_backend but are real TLCS-900 instructions per unidasm
-      (normal / max / ldf / JP nnnn / CALL nnnn); see
-      scripts/analysis/byte_run_start_enrichment.py.  Forcing one now would
-      either fail or -- worse -- succeed by finding some OTHER reading that
-      round-trips and passes the byte gate.  They are counted as bucket (d),
-      blocked on a known decoder gap, and left alone until the backend gains
-      the five instructions.
+      {0x01, 0x04, 0x17, 0x1a, 0x1c}.  ⚠ NOT for the reason first given here.
+      These were briefly thought to be instructions blocked in the toolchain;
+      that was RETRACTED on 2026-09-02 (notes/DEBT-INVENTORY-2026-09-02.md,
+      a4e94fcb) -- all five already assembled, only the DECODER lacked them, and
+      with the decoder taught them 82.8% of v10's blind-starting runs decode
+      clean against 82.1% for a shuffle of the same bytes.  The refusal stands
+      on the corrected reading: such a run carries no instruction structure and
+      is most likely DATA that a linear force-disassembly pass broke at the byte
+      it could not consume.  Turning it into an instruction would deepen a
+      data-as-code error while passing the byte gate.  Counted, not converted.
 
     ★ Nothing is renamed and no comment is removed; only `.byte` lines change.
 
@@ -132,8 +134,8 @@ def main():
                     stats["refused_stale_map_bytes"] += nb
                     continue
                 if ROM[a - BASE] in BLIND:
-                    stats["refused_decoder_gap"] += 1
-                    stats["refused_decoder_gap_bytes"] += nb
+                    stats["refused_blind_start"] += 1
+                    stats["refused_blind_start_bytes"] += nb
                     continue
                 n, text = decode(a)
                 if n != nb:
@@ -162,8 +164,8 @@ def main():
                 stats["converted"] += 1
                 stats["converted_bytes"] += nb
 
-    for k in ("converted", "converted_bytes", "refused_decoder_gap",
-              "refused_decoder_gap_bytes", "refused_stale_map",
+    for k in ("converted", "converted_bytes", "refused_blind_start",
+              "refused_blind_start_bytes", "refused_stale_map",
               "refused_stale_map_bytes", "refused_unspellable",
               "refused_unspellable_bytes", "refused_anchor_walk",
               "refused_anchor_walk_bytes", "refused_no_anchor",

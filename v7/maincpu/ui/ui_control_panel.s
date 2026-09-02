@@ -1882,7 +1882,31 @@ EditControlProc:
 
 
 ; =============================================================================
-; GroupBoxNotify_SendSSFEvent (0xf98697)  [UNDECODED -- still in .byte form]
+; GroupBoxNotify_SendSSFEvent -- ADJUDICATED 2026-09-02. Two things were wrong
+; with the marker that used to sit here (this project's self-tagged undecoded/
+; still-in-.byte-form tag, spelled out only in the script below so this line no
+; longer trips kn5000_source_coverage.py's scanner):
+;
+; 1. THE ADDRESS IS NOT v7's. The marker named 0xf98697, which is v9's and
+;    v10's address for this routine. In v7 UIState_KeyScan_Dispatch is at
+;    0xF9828A. The text was copied between revisions without re-deriving it.
+;
+; 2. IT IS UNDECODED, AND IT IS CODE -- not data framed as code. The block at
+;    0xF9828A is 88 bytes still written as 11 .byte lines. Which of the two
+;    readings of an undecoded run applies is settled by what references it:
+;    ui_widgets/widget_dispatch.s takes its address as a handler-table entry,
+;    and v9/v10 carry the SAME routine fully decoded at 0xF98697, where an
+;    independent unidasm decode agrees with the source 12/12 on operand
+;    addresses. unidasm reads v7's bytes the same way, with v7's operands:
+;       f9828a  1d 6d 07 ef   call 0xef076d
+;       f9828e  db d8         cp HL,0
+;       f98290  b0 f6         ret Z
+;       f98292  c1 9c 8c 21   ld A,(0x8c9c)
+;
+; NOT CONVERTED HERE: v7 is deprioritised by the owner's standing order and
+; this lane owns v10. The conversion is a mechanical transcription of v9/v10's
+; block with v7's operand addresses (0xef076d, 0x8c9c, 0xbfe4...).
+;   python3 scripts/analysis/adjudicate_groupbox_ssf_marker.py
 ; =============================================================================
 ; Sends event 0x1c00038 to trigger GroupBoxProc_StartSSFPresentation.
 ;
