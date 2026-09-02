@@ -1,0 +1,6 @@
+llvm-mc  sha256 c13a8a9a0100a38c  (llvm-project HEAD 1f75e04f774a)
+unidasm  sha256 0b7e910a6883f31a
+kn5000_subprogram_v142     sites=  39201 reloc_excl=  6277  DIFF_MNEMONIC=8176 LEN_DIFFER=5601 SAME_MNEMONIC=25424
+kn5000_subcpu_boot         sites=   1129 reloc_excl=   229  DIFF_MNEMONIC=399 LEN_DIFFER=162 SAME_MNEMONIC=568
+
+re-assembly test: 6802 distinct unidasm spellings covering 40330 sites

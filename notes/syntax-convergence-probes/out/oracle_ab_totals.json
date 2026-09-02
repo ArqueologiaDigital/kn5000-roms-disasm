@@ -1,0 +1,25 @@
+{
+ "llvm_mc_sha256": "c13a8a9a0100a38cf6729bc4fe0019535653ff0754a56d7b3ccfa4ea3c45989c",
+ "llvm_project_head": "1f75e04f774aa6d5df88c02699fd4e2b5dbf2b93",
+ "unidasm_sha256": "0b7e910a6883f31aafe1c86a4fa12eda189baaeab2095b2de66e63a3c14f67a4",
+ "reassembly_spellings": {
+  "UNI_ASSEMBLES_SAME": 35523,
+  "UNI_REJECTS": 13337,
+  "UNI_ASSEMBLES_DIFF": 25547,
+  "UNI_RELOC": 136,
+  "UNI_BRANCH_TARGET": 59146
+ },
+ "reassembly_sites": {
+  "UNI_ASSEMBLES_SAME": 692958,
+  "UNI_REJECTS": 108771,
+  "UNI_ASSEMBLES_DIFF": 246857,
+  "UNI_RELOC": 5575,
+  "UNI_BRANCH_TARGET": 59316
+ },
+ "unidasm_distinct_texts": 133690,
+ "unidasm_ambiguous_texts": 134,
+ "unidasm_ambiguous_sites": 3172,
+ "llvm_distinct_texts": 89917,
+ "llvm_ambiguous_texts": 0,
+ "llvm_ambiguous_sites": 0
+}

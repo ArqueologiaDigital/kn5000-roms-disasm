@@ -1,0 +1,9 @@
+# Regenerated in ~2 minutes by
+#   python3 notes/syntax-convergence-probes/oracle_ab.py \
+#       --out notes/syntax-convergence-probes/out
+# oracle_ab_sites.csv is 74 MB (one row per instruction site, 1.11 M rows) and
+# oracle_ab_reassembly.csv is the uncompressed form of the .gz committed beside
+# it.  Neither is worth carrying in git; every number quoted from them is in
+# RUN.log, in the .json totals, and in the committed .gz.
+oracle_ab_sites.csv
+oracle_ab_reassembly.csv
