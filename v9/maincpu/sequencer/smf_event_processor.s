@@ -7020,7 +7020,7 @@ SeqByteBlock_ChannelContainer:
 	.byte 0xb8
 	pop	sr
 	inc	6, a
-	.byte 0x17, 0x9f
+	ldf	0x9f
 	push_a
 	.byte 0x04
 	pushw	0

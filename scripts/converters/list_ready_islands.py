@@ -40,6 +40,8 @@ accepted = []
 for b in isl:
     fr, ok = fvi.bounds_from_context(rom, terr, b["start"], b["end"], tmp)
     if fr == "ONE_INSN" or (fr == "MULTI" and ok):
+        if fvi.looks_like_a_table_tail(rom, b["end"], tmp):
+            continue  # 2026-09-02: see fill_verified_islands.py's docstring
         accepted.append(b)
 
 ready = []

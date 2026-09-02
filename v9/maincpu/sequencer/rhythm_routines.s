@@ -1585,5 +1585,6 @@ Rhythm_TranspMod_WrapDone:
 	ret
 
 Rhythm_TailPadding:
-	.byte 0x1d, 0x37, 0x34, 0xf5, 0x0e
+	call	16069687
+	ret
 

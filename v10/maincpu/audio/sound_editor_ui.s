@@ -7648,7 +7648,7 @@ SeMenu_CopyWriteUpdate_Data:
 	or	xwa, xwa
 	push	xsp
 	ldb	w, 110
-	.byte 0x17, 0xc7
+	ldf	0xc7
 	swi	1
 	jr	lt, -57
 	swi	2

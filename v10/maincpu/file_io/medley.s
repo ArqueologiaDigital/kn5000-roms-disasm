@@ -4087,8 +4087,13 @@ CheckSongSlotHasData:
 
 SongSlot_RawData_Start:
 SongSlot_RawData:
-	.byte 0x2e, 0xd9, 0x8e, 0x1e, 0xd5, 0xff, 0xde, 0xf3
-	.byte 0xdb, 0x76, 0x4e, 0x0e
+	pushw	iz
+	ld	iz, bc
+	calr	-43
+	cp	hl, iz
+	scc	z, hl
+	popw	iz
+	ret
 
 FindFirstEmptySlot_Entry:
 FindFirstEmptySlot:
