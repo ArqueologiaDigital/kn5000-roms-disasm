@@ -43901,7 +43901,37 @@ Data_F28522:
 	.byte	0x00, 0x50, 0x54, 0x31, 0x50, 0x54, 0x32, 0x50, 0x54, 0x33, 0x50, 0x54, 0x34, 0x50, 0x54, 0x35	; F286B2  |.PT1PT2PT3PT4PT5|
 	.byte	0x50, 0x54, 0x36, 0x50, 0x54, 0x37, 0x50, 0x54, 0x38, 0x07	; F286C2  |PT6PT7PT8.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0286CC, 0x000136
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x0286CC, 0x00002D
+
+; ------------------------------------------------------------------
+; 0xF286F9-0xF28724 -- 4 display-list records, 44 bytes -- interpreter A
+; the one remaining shape-1 site notes/prom_b_dl_call_shapes.py found
+; still `.incbin` (site 0xF90FBB in prom_a).  Regenerate:
+; python3 notes/gen_prom_b_dl_shape1_gap_f286f9.py --splice
+; ------------------------------------------------------------------
+DL_F286F9:
+	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
+	.long 0x00012640
+	.short 0x251B
+	.short 0xF287
+	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
+	.long 0x00012640
+	.short 0x351B
+	.short 0xF287
+	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
+	.long 0x00012640
+	.short 0x4505
+	.short 0xF287
+	.byte 0x00	; operand bytes the handler does not read
+	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
+	.long 0x00012640
+	.short 0x5505
+	.short 0xF287
+	.byte 0x00	; operand bytes the handler does not read
+
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x028725, 0x0000DD
 
 ; === END COVER-R1 0xF283A7-0xF28802 ===
 
