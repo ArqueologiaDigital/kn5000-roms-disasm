@@ -22,6 +22,26 @@ represented source.  This script splits those operands three ways:
                         debt.  Counting it as debt is the error this script
                         exists to avoid.
 
+and one cross-cutting tag, reported as a fourth bucket:
+
+  (d) BLOCKED        -- the run STARTS with one of the five leading bytes the
+                        pinned tlcs900 backend cannot decode at all --
+                        {0x01 normal, 0x04 max, 0x17 ldf, 0x1a JP nnnn,
+                        0x1c CALL nnnn} (leading_byte_reserved_probe.py over
+                        393,216 operand continuations each; unidasm decodes
+                        all five, so they are BACKEND GAPS, not reserved
+                        silicon).  `byte_run_start_enrichment.py` measures v10
+                        starting runs with one of those 19.2% of the time
+                        against 0.4% for decodable bytes of the same
+                        magnitude, with all four WSA1R images flat -- so a
+                        blind start RAISES THE PRIOR that a run is undecoded
+                        code.  ⚠ It does not adjudicate one, and a blocked run
+                        must NOT be forced into instructions until lane
+                        w10/missinginsns lands those five: a wrong reading
+                        that re-assembles to the same bytes passes the byte
+                        gate.  The tag is reported CROSSED with (a)/(b)/(c),
+                        never instead of it.
+
 METHOD
 ------
 Unit of analysis = a maximal RUN of consecutive `.byte` source lines (blank and
@@ -88,6 +108,8 @@ RUN
     python3 scripts/analysis/seq_byte_operand_triage.py --amap /tmp/amap.json
     # 3. the control
     python3 scripts/analysis/seq_byte_operand_triage.py --amap /tmp/amap.json --control
+    # 4. the runs blocked on the five missing instructions
+    python3 scripts/analysis/seq_byte_operand_triage.py --amap /tmp/amap.json --blocked
     # optional: per-run detail
     python3 scripts/analysis/seq_byte_operand_triage.py --amap /tmp/amap.json --json out.json
 """
@@ -107,6 +129,14 @@ ELF = os.path.join(ROOT, "rebuilt_ROMs", "kn5000_v10_program.llvm.elf")
 NM = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-nm")
 MANIFEST = os.path.join(ROOT, "notes", "v10-data-as-code",
                         "v10dac_conversion_manifest.json")
+
+# Leading bytes with no decode anywhere in the pinned backend.  See the (d)
+# bucket note above and scripts/analysis/byte_run_start_enrichment.py.
+BLIND_LEAD = {0x01: "normal", 0x04: "max", 0x17: "ldf",
+              0x1a: "JP nnnn", 0x1c: "CALL nnnn"}
+# The control set that instrument scores the blind set against: decodable,
+# similar magnitude.  Kept here so this script can report the same contrast.
+CONTROL_LEAD = {0x02, 0x03, 0x05, 0x16, 0x1b}
 
 BRANCH_MNEMONICS = {
     "call", "calr", "call_24", "jp", "jp_24", "jr", "jrl", "djnz", "djnz8",
@@ -306,6 +336,8 @@ def classify(run, refs, sym_addrs, addr_to_names):
     run["labels"] = names[:3]
     run["cls"] = cls
     run["why"] = why
+    run["blind"] = BLIND_LEAD.get(b[0]) if b else None
+    run["ctrl_lead"] = bool(b) and b[0] in CONTROL_LEAD
     return run
 
 
@@ -347,6 +379,8 @@ def main():
     ap.add_argument("--json")
     ap.add_argument("--control", action="store_true")
     ap.add_argument("--list", choices=["a", "b", "c"])
+    ap.add_argument("--blocked", action="store_true",
+                    help="list every run tagged (d) BLOCKED with its blocking byte")
     args = ap.parse_args()
 
     amap = load_amap(args.amap)
@@ -369,11 +403,23 @@ def main():
     by_cls = Counter()
     by_file = defaultdict(Counter)
     noaddr = 0
+    blind_cross = Counter()
+    blind_lead = Counter()
+    n_runs_blind = n_runs_ctrl = 0
     for r in runs:
         by_cls[r["cls"]] += r["n"]
         by_file[r["file"]][r["cls"]] += r["n"]
         if r["addr_lo"] is None:
             noaddr += r["n"]
+        if r["blind"]:
+            blind_cross[r["cls"]] += r["n"]
+            blind_lead[r["bytes"][0]] += 1
+            n_runs_blind += 1
+        if r["ctrl_lead"]:
+            n_runs_ctrl += 1
+    isl = [r for r in runs if r["island"]]
+    isl_blind = sum(1 for r in isl if r["blind"])
+    isl_ctrl = sum(1 for r in isl if r["ctrl_lead"])
     total = sum(by_cls.values())
     NAME = {"a": "(a) CODE-AS-BYTE", "b": "(b) UNTYPED-DATA", "c": "(c) BYTE-TABLE-OK"}
     print("v10/maincpu/sequencer -- .byte operand triage")
@@ -387,6 +433,35 @@ def main():
         cc = by_file[f]
         print("%-46s %7d %7d %7d" % (f.replace("v10/maincpu/sequencer/", ""),
                                      cc["a"], cc["b"], cc["c"]))
+
+    print()
+    print("(d) BLOCKED -- runs starting with an undecodable leading byte")
+    print("  %d of %d runs (%.1f%%) start with one of {01,04,17,1a,1c};"
+          % (n_runs_blind, len(runs), 100.0 * n_runs_blind / len(runs)))
+    print("  %d of %d runs (%.1f%%) start with the control set {02,03,05,16,1b}"
+          % (n_runs_ctrl, len(runs), 100.0 * n_runs_ctrl / len(runs)))
+    if n_runs_ctrl:
+        print("  enrichment over control: %.1fx" % (n_runs_blind / n_runs_ctrl))
+    print("  blocked operands by structural class: " + ", ".join(
+        "%s=%d" % (c, blind_cross[c]) for c in "abc"))
+    print("  blocking byte: " + ", ".join(
+        "0x%02x %s x%d" % (b, BLIND_LEAD[b], n) for b, n in blind_lead.most_common()))
+
+    print("  ISLAND-ONLY (runs wedged between two instructions -- the only")
+    print("  population where the enrichment argument's premise holds, since a")
+    print("  run this lane MADE by typing a data region has a leading byte the")
+    print("  decoder never chose): %d/%d blind (%.1f%%) vs %d/%d control (%.1f%%)"
+          % (isl_blind, len(isl), 100.0 * isl_blind / max(1, len(isl)),
+             isl_ctrl, len(isl), 100.0 * isl_ctrl / max(1, len(isl))))
+
+    if args.blocked:
+        print()
+        for r in sorted(runs, key=lambda x: -x["n"]):
+            if r["blind"]:
+                print("%6d B  cls=%s  0x%06X  %s:%d-%d  %s  blocked by 0x%02x (%s)"
+                      % (r["n"], r["cls"], r["addr_lo"] or 0, r["file"],
+                         r["line_lo"], r["line_hi"], (r["labels"] or ["?"])[0],
+                         r["bytes"][0], r["blind"]))
 
     if args.list:
         print()
