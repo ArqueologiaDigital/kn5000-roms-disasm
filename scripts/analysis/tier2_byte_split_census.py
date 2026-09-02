@@ -195,6 +195,7 @@ MIN_FILL = 16             # bytes; below this a uniform run is a plain field
 MIN_ASCII_RUN = 8         # consecutive printable bytes
 MIN_ASCII_FRAC = 0.60     # of the run
 MIN_PTRS = 4              # consecutive valid 4-byte pointers
+MIN_PTR_COVER = 0.50      # of the run the pointer chain must cover
 MIN_AUTOCORR = 0.80       # record-stride autocorrelation
 AUTOCORR_MARGIN = 0.15    # over the best non-multiple stride
 MIN_CODE_CONTROL = 32     # bytes; size floor for a control code region
@@ -406,7 +407,15 @@ def is_trivial(mnemonic):
 
 
 # ------------------------------------------------------------------- runs
-LINE_DIR = re.compile(r'^\s*\.([A-Za-z_0-9]+)\b')
+# ⚠ A LABEL AND A DIRECTIVE SHARE A LINE 795 TIMES in these four images
+# (`DSP_AlgoChannel_SelectorByte5:\t.byte 0xff`; 790 of them in
+# hdae5000_data_tables.s alone). The first version of this regex required the
+# directive to start the line, so every one of those bytes was (i) missing
+# from the census population, (ii) a run boundary that split real runs in
+# two, and (iii) indistinguishable from an INSTRUCTION to the FALLIN test --
+# which is how a 1,973 B slice of `DSP_AlgoChannel_SelectorRecords`, a
+# documented 12 x 6-byte selector table, came out as (a) REAL CODE.
+LINE_DIR = re.compile(r'^\s*(?:[A-Za-z_.$][A-Za-z0-9_.$]*:\s*)?\.([A-Za-z_0-9]+)\b')
 
 
 def collect(tag):
@@ -595,10 +604,19 @@ def struct_signal(data):
                 best_run = max(best_run, cur)
             else:
                 cur = 0
-        if best_run >= MIN_PTRS:
+        # ⚠ COVERAGE, not just a foothold. The first version fired on ANY 4
+        # consecutive in-range words, and reported a 6,367 B run as a pointer
+        # table on the strength of 16 bytes -- the "single-record walk hit
+        # with no second signal" false-positive shape
+        # notes/DEBT-INVENTORY-2026-09-02.md warns about. It is especially
+        # dangerous for the v1.42 payload, whose image starts at 0x400: any
+        # run of 16-bit values with zero upper halves reads as a chain of
+        # "valid addresses". The chain must now carry at least half the run.
+        if best_run >= MIN_PTRS and 4 * best_run >= max(16, MIN_PTR_COVER * n):
             vals = [int.from_bytes(data[o:o + 4], "little") for o in range(0, n - 3, 4)]
             if len(set(vals)) > 1:
-                return "PTRTAB", "%d consecutive in-image 32-bit addresses" % best_run
+                return "PTRTAB", "%d consecutive in-image 32-bit addresses (%d of %d B)" % (
+                    best_run, 4 * best_run, n)
     # periodic records
     if n >= 32:
         def ac(s):
