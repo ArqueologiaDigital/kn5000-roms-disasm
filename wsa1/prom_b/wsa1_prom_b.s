@@ -18729,7 +18729,7 @@ DL_F0D04B:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F0D061 -- 34 bytes, EMITTED AS DATA (not promoted to code).
+; Data_F0D061 -- 32 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F0D061 appears as a 32-bit word at 0xF0D052 0xF0D05D.  No
 ;               routine-directory slot and no branch decoded in converted code
 ;               names it.
@@ -18742,9 +18742,462 @@ DL_F0D04B:
 Data_F0D061:
 	.byte	0x31, 0x00, 0x32, 0x00, 0xF1, 0x00, 0x3F, 0x00, 0x31, 0x00, 0x44, 0x00, 0xF1, 0x00, 0x51, 0x00	; F0D061  |1.2...?.1.D...Q.|
 	.byte	0x31, 0x00, 0x56, 0x00, 0xF1, 0x00, 0x63, 0x00, 0x31, 0x00, 0x68, 0x00, 0xF1, 0x00, 0x75, 0x00	; F0D071  |1.V...c.1.h...u.|
-	.byte	0x23, 0x05	; F0D081  |#.|
 
-	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00D083, 0x000719
+
+; ------------------------------------------------------------------
+; 0xF0D081-0xF0D4D1 -- 129 display-list records, 1105 bytes -- interpreter A
+; RECOVERED FROM A 2-BYTE OBJECT-BOUNDARY ERROR: Data_F0D061 (above)
+; used to include these 2 bytes (op 0x23, len 5) as array padding; the
+; walk from here lands with ZERO DRIFT on 129 consecutive record
+; boundaries, ending exactly where op 0x98 (over the 0x24 bound, a
+; different object) begins.  notes/gen_prom_b_f0d081_module.py
+; ------------------------------------------------------------------
+DL_F0D081:
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x1C
+	.short 0x0008
+	.byte 0x1C, 0x0A	; op 1C, 10 bytes -> handler 0xF31A52
+	.short 0x0060
+	.short 0x0005
+	.ascii "MIDI"
+	.byte 0x1C, 0x0D	; op 1C, 13 bytes -> handler 0xF31A52
+	.short 0x0097
+	.short 0x0005
+	.ascii "PRESETS"
+	.byte 0x20, 0x0B	; op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110
+	.ascii "PAGE1/2"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0008
+	.short 0x0008
+	.ascii "MIDI"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0577
+	.byte 0x11	; character codes below 0x20
+	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
+	.short 0x057D
+	.ascii "MASTER"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x058D
+	.ascii "SLAVE"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x059C
+	.ascii "OK"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x0970
+	.ascii "->"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0973
+	.ascii "Organ"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0979
+	.ascii "type1"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x0BF0
+	.ascii "->"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0BF3
+	.ascii "Organ"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0BF9
+	.ascii "type2"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x0E70
+	.ascii "->"
+	.byte 0x20, 0x0C	; op 20, 12 bytes -> handler 0xF31A3A
+	.short 0x0E73
+	.ascii "Keyboard"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0E7C
+	.ascii "type1"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x10F0
+	.ascii "->"
+	.byte 0x20, 0x0C	; op 20, 12 bytes -> handler 0xF31A3A
+	.short 0x10F3
+	.ascii "Keyboard"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x10FC
+	.ascii "type2"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x117C
+	.byte 0x8D	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x11CF
+	.byte 0xA9	; character codes below 0x20
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1370
+	.ascii "->"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1373
+	.ascii "PR"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x1376
+	.ascii "Piano"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x137C
+	.ascii "type1"
+	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
+	.short 0x13DC
+	.ascii "KN3000"
+	.byte 0x20, 0x0C	; op 20, 12 bytes -> handler 0xF31A3A
+	.short 0x1634
+	.ascii "Keyboard"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x15F0
+	.ascii "->"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x15F3
+	.ascii "PR"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x15F6
+	.ascii "Piano"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x15FC
+	.ascii "type2"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x17BC
+	.byte 0x8E	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x17E7
+	.byte 0xA9	; character codes below 0x20
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1870
+	.ascii "->"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1873
+	.ascii "PX "
+	.byte 0x20, 0x0D	; op 20, 13 bytes -> handler 0xF31A3A
+	.short 0x1876
+	.ascii "Piano    "
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1AF0
+	.ascii "->"
+	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
+	.short 0x1AF3
+	.ascii "SOUND "
+	.byte 0x20, 0x0B	; op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x1AF9
+	.ascii "MODULE "
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1D70
+	.ascii "->"
+	.byte 0x20, 0x0D	; op 20, 13 bytes -> handler 0xF31A3A
+	.short 0x1D73
+	.ascii "External "
+	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x1D7C
+	.ascii "SEQ."
+	.byte 0x20, 0x0B	; op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x2381
+	.ascii "WITHOUT"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x2389
+	.ascii "APC"
+	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x2396
+	.ascii "WITH"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x239B
+	.ascii "APC"
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x0004
+	.short 0x0033
+	.short 0x010C
+	.short 0x00D0
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x0025
+	.short 0x00DB
+	.short 0x0042
+	.short 0x00ED
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x00CD
+	.short 0x00DB
+	.short 0x00EA
+	.short 0x00ED
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0005
+	.short 0x0004
+	.short 0x0022
+	.short 0x0012
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x011B
+	.short 0x001E
+	.short 0x0135
+	.short 0x0031
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x011D
+	.short 0x0020
+	.short 0x0133
+	.short 0x002F
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0008
+	.short 0x0038
+	.short 0x0078
+	.short 0x00CC
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0112
+	.short 0x006C
+	.short 0x0135
+	.short 0x007F
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114
+	.short 0x006E
+	.short 0x0133
+	.short 0x007D
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0016
+	.short 0x007C
+	.short 0x006B
+	.short 0x009A
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0112
+	.short 0x0093
+	.short 0x0135
+	.short 0x00A6
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114
+	.short 0x0095
+	.short 0x0133
+	.short 0x00A4
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1870
+	.ascii "->"
+	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
+	.short 0x1873
+	.ascii "SOUND "
+	.byte 0x20, 0x0B	; op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x1879
+	.ascii "MODULE "
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1AF0
+	.ascii "->"
+	.byte 0x20, 0x0D	; op 20, 13 bytes -> handler 0xF31A3A
+	.short 0x1AF3
+	.ascii "External "
+	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x1AFC
+	.ascii "SEQ."
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1D70
+	.ascii "  "
+	.byte 0x20, 0x0C	; op 20, 12 bytes -> handler 0xF31A3A
+	.short 0x1D73
+	.ascii "        "
+	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x1D7C
+	.ascii "    "
+	.byte 0x23, 0x05	; op 23, 5 bytes -> handler 0xF31ACE
+	.byte 0x1C
+	.short 0x0008
+	.byte 0x1C, 0x0A	; op 1C, 10 bytes -> handler 0xF31A52
+	.short 0x0060
+	.short 0x0005
+	.ascii "MIDI"
+	.byte 0x1C, 0x0D	; op 1C, 13 bytes -> handler 0xF31A52
+	.short 0x0097
+	.short 0x0005
+	.ascii "PRESETS"
+	.byte 0x20, 0x0B	; op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x0110
+	.ascii "PAGE2/2"
+	.byte 0x17, 0x0A	; op 17, 10 bytes -> handler 0xF31A52
+	.short 0x0008
+	.short 0x0008
+	.ascii "MIDI"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x0577
+	.byte 0x11	; character codes below 0x20
+	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
+	.short 0x057D
+	.ascii "MASTER"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x058D
+	.ascii "SLAVE"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x059C
+	.ascii "OK"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0961
+	.ascii "Organ"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0967
+	.ascii "type1"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x0970
+	.ascii "->"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0BE1
+	.ascii "Organ"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0BE7
+	.ascii "type2"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x0BF0
+	.ascii "->"
+	.byte 0x20, 0x0C	; op 20, 12 bytes -> handler 0xF31A3A
+	.short 0x0E61
+	.ascii "Keyboard"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x0E6A
+	.ascii "type1"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x0E70
+	.ascii "->"
+	.byte 0x20, 0x0C	; op 20, 12 bytes -> handler 0xF31A3A
+	.short 0x10E1
+	.ascii "Keyboard"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x10EA
+	.ascii "type2"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x10F0
+	.ascii "->"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x117C
+	.byte 0x8D	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x11CF
+	.byte 0xA9	; character codes below 0x20
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1361
+	.ascii "PR"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x1364
+	.ascii "Piano"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x136A
+	.ascii "type1"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1370
+	.ascii "->"
+	.byte 0x20, 0x0A	; op 20, 10 bytes -> handler 0xF31A3A
+	.short 0x13EE
+	.ascii "KN3000"
+	.byte 0x20, 0x0C	; op 20, 12 bytes -> handler 0xF31A3A
+	.short 0x1646
+	.ascii "Keyboard"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x15E1
+	.ascii "PR"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x15E4
+	.ascii "Piano"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x15EA
+	.ascii "type2"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x15F0
+	.ascii "->"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x17BC
+	.byte 0x8E	; character codes below 0x20
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x17E7
+	.byte 0xA9	; character codes below 0x20
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1861
+	.ascii "PX"
+	.byte 0x20, 0x09	; op 20, 9 bytes -> handler 0xF31A3A
+	.short 0x1864
+	.ascii "Piano"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1870
+	.ascii "->"
+	.byte 0x07, 0x05	; op 07, 5 bytes -> handler 0xF31A3A
+	.short 0x1A9D
+	.ascii "."
+	.byte 0x20, 0x0C	; op 20, 12 bytes -> handler 0xF31A3A
+	.short 0x1AE1
+	.ascii "External"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x1AEA
+	.ascii "SEQ"
+	.byte 0x20, 0x06	; op 20, 6 bytes -> handler 0xF31A3A
+	.short 0x1AF0
+	.ascii "->"
+	.byte 0x20, 0x0B	; op 20, 11 bytes -> handler 0xF31A3A
+	.short 0x2381
+	.ascii "WITHOUT"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x2389
+	.ascii "APC"
+	.byte 0x20, 0x08	; op 20, 8 bytes -> handler 0xF31A3A
+	.short 0x2396
+	.ascii "WITH"
+	.byte 0x20, 0x07	; op 20, 7 bytes -> handler 0xF31A3A
+	.short 0x239B
+	.ascii "APC"
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x0004
+	.short 0x0033
+	.short 0x010C
+	.short 0x00D0
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x0025
+	.short 0x00DB
+	.short 0x0042
+	.short 0x00ED
+	.byte 0x0A, 0x0A	; op 0A, 10 bytes -> handler 0xF31A75
+	.short 0x00CD
+	.short 0x00DB
+	.short 0x00EA
+	.short 0x00ED
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0005
+	.short 0x0004
+	.short 0x0022
+	.short 0x0012
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x011B
+	.short 0x001E
+	.short 0x0135
+	.short 0x0031
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x011D
+	.short 0x0020
+	.short 0x0133
+	.short 0x002F
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0098
+	.short 0x0038
+	.short 0x0108
+	.short 0x00CC
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0112
+	.short 0x006C
+	.short 0x0135
+	.short 0x007F
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114
+	.short 0x006E
+	.short 0x0133
+	.short 0x007D
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x00A6
+	.short 0x007C
+	.short 0x00FB
+	.short 0x009A
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0112
+	.short 0x0093
+	.short 0x0135
+	.short 0x00A6
+	.byte 0x09, 0x0A	; op 09, 10 bytes -> handler 0xF31A75
+	.short 0x0114
+	.short 0x0095
+	.short 0x0133
+	.short 0x00A4
+	.byte 0x08, 0x0B	; op 08, 11 bytes -> handler 0xF31A3A
+	.short 0x2721
+	.byte 0xFF, 0x00, 0x1B, 0xD2, 0xD4, 0xF0, 0x00	; character codes below 0x20
+	.byte 0x03, 0x0B	; op 03, 11 bytes -> handler 0xF31ABE
+	.long 0x00FF2720
+	.short 0xD205
+	.short 0xF0D4
+	.byte 0x00	; operand bytes the handler does not read
+
+	.incbin "original_ROMs/wsa1_prom_b.ic13", 0x00D4D2, 0x0002CA
 
 ; === END COVER-R1 0xF0D061-0xF0D79C ===
 
