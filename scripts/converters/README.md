@@ -59,3 +59,20 @@ tell a genuine short instruction from a coincidental one that happens to tile to
 the exact length. ⚠ Even so, tiling is not proof that the bytes are code: a
 wrong frame reproduces the same bytes and the gate cannot object. Corroborate
 with call targets before converting.
+
+## `v10_widget_dispatch_ptr_entries.py`
+
+**Question:** which of the `.byte` runs in `v10/maincpu/ui_widgets/widget_dispatch.s`
+are entries of a 4-byte-strided pointer table, and can therefore be typed as
+`.long` byte-exactly?
+
+    python3 scripts/converters/v10_widget_dispatch_ptr_entries.py --dry-run
+    python3 scripts/converters/v10_widget_dispatch_ptr_entries.py
+
+The automatic rule proposes ~1.8 KB; hand review accepted 688 B in five windows
+and refused the rest, and the script's header records both, with the evidence
+for each window's element width. The most important refusal:
+`WidgetParam_Entry_*` / `DisplayScript_Node_*` are SIX-byte `{u16 tag, u32
+pointer}` records, and the tree's existing `.long AudioInit_PartConfig_CheckCarry`
+at 0xEE45D0 already straddles a record boundary -- byte-exact, invisible to the
+gate, and a warning against typing more of that region.

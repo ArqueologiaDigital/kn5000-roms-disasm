@@ -152,3 +152,46 @@ all 0xff) retyped as `.fill` (erased flash, not code, despite a clean decode),
 (`v7_no_source_bytes.py`). The 34 CODE-labelled, 25,425 B bucket is otherwise
 blocked by the same tlcs900-backend spelling gap already known from v7's
 general code-as-`.byte` debt.
+
+## Added 2026-09-02 (lane V10DISPATCH, full-disassembly push wave 2)
+
+`v10/maincpu/ui_widgets/widget_dispatch.s` holds 25,211 `.byte` operands --
+roughly a quarter of v10's entire `.byte` total, and the largest single
+concentration in the image. `kn5000_source_coverage.py` reports v10 as 0 bytes
+of verbatim debt because it counts `.incbin`; it cannot see any of this. But a
+`.byte` count is not automatically debt either: a run that really is a
+byte-valued table is already correctly represented.
+
+| script | question it answers |
+|---|---|
+| `v10_widget_dispatch_byte_triage.py` | Of those 25,211 operands, how many are (a) real code still spelled as `.byte`, (b) structured data that wants `.long`/`.word`/`.ascii`, (c) a genuine byte table that is already correct -- and (d), crossing all three, how many runs start with a byte the pinned backend cannot decode? Locates every run in the ROM via `address_line_map.py`, then decides on what REFERENCES it: a `call`/`jp`/`jr` naming the label means code; only the address being stored or loaded means data. |
+
+    python3 scripts/analysis/v10_widget_dispatch_byte_triage.py
+    python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --control
+    python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --selfcheck
+    python3 scripts/analysis/v10_widget_dispatch_byte_triage.py --list BLIND
+
+`--control` is not optional before quoting a number. It scores the deciding rule
+against two corpora the tree already labels: 3,834 labels spelled as
+`.ascii`/`.asciz`/`.incbin` (0.08% false positives -- 3 offenders, named) and
+29,915 spelled as instructions (81.9% recall, so 18.1% false negatives, and CODE
+is therefore a LOWER bound). `--selfcheck` exists because the first version of
+the run model silently dropped every label-only line, so no run carried a label
+and the deciding rule could never fire at all.
+
+Result: **0 bytes of code, 416 B of proposed-but-refused structured data, 24,110
+B of genuine byte table.** Nothing in the file is a named call or jump target,
+and `--codebound` puts a ceiling on it from the other side: at most 3,044 B of
+the remaining 24,526 could be code at all, and only 359 B of that both decodes
+and ends in a terminator (tlcs900_backend 58fb7f2afaed -- ⚠ the bound moves with
+the DECODER: an earlier build the same day gave 1,445 B / 111 B, so regenerate
+it and name the backend commit rather than quoting a remembered number). 688 B
+of pointer-table entries were typed as `.long`
+(`scripts/converters/v10_widget_dispatch_ptr_entries.py`) and one 3-byte code
+misframe inside a character map was restored to `.byte`.
+
+⚠ The blind-start signal from `byte_run_start_enrichment.py` does NOT reproduce
+inside this file: 10.9% blind against 5.1% control is 2.1x, under that script's
+own 3x threshold, against 46.5x for v10/maincpu as a whole. 65 of the 74
+blind-start runs begin with 0x01, which is the low byte of a record tag in the
+six-byte `{u16 tag, u32 pointer}` arrays -- a confound, not a residue.
