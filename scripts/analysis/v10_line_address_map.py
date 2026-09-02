@@ -58,15 +58,19 @@ def main():
     ap.add_argument("files", nargs="+", help="paths relative to repo root")
     ap.add_argument("--out", required=True)
     ap.add_argument("--scratch", default=None)
+    ap.add_argument("--image", default="v10", choices=("v7", "v9", "v10"),
+                    help="which maincpu image the files belong to; the "
+                         "same .byte-island defect exists in all three")
     args = ap.parse_args()
 
     scratch = args.scratch or os.path.join(
         os.environ.get("TMPDIR", "/tmp"), "v10linemap")
-    tree = os.path.join(scratch, "v10")
+    img = args.image
+    tree = os.path.join(scratch, img)
     if os.path.exists(tree):
         shutil.rmtree(tree)
     os.makedirs(scratch, exist_ok=True)
-    shutil.copytree(os.path.join(ROOT, "v10"), tree, symlinks=True)
+    shutil.copytree(os.path.join(ROOT, img), tree, symlinks=True)
 
     tags = {}
     for idx, rel in enumerate(args.files):
@@ -81,14 +85,15 @@ def main():
     inc = os.path.join(tree, "maincpu")
     subprocess.run([os.path.join(LLVM, "llvm-mc"), "-triple=tlcs900",
                     "-filetype=obj", "-I", inc, "-o", obj,
-                    os.path.join(inc, "kn5000_v10_program.s")],
+                    os.path.join(inc, "kn5000_%s_program.s" % img)],
                    check=True, cwd=ROOT, stderr=subprocess.DEVNULL)
     subprocess.run([os.path.join(LLVM, "ld.lld"), "-e", "0", "-T",
                     os.path.join(inc, "maincpu.ld"), "-o", elf, obj], check=True)
     subprocess.run([os.path.join(LLVM, "llvm-objcopy"), "-O", "binary", elf, rom],
                    check=True)
 
-    ref = open(os.path.join(ROOT, "original_ROMs/kn5000_v10_program.rom"), "rb").read()
+    ref = open(os.path.join(ROOT, "original_ROMs/kn5000_%s_program.rom" % img),
+                   "rb").read()
     if open(rom, "rb").read() != ref:
         sys.exit("REJECTED: instrumented image is not byte-identical to the ROM")
 
