@@ -65,6 +65,10 @@ BYTE ORDER OF THE TWO BITMAPS -- an inference, and it changes no byte
 RUN
     python3 notes/gen_promB5_spans.py --selftest   # every claim above, re-derived
     python3 notes/gen_promB5_spans.py --census     # .incbin bytes left in the six spans
+    # ... and on any older revision of the source, which is how the BEFORE
+    # figure of 1,115 B in the lane report was obtained:
+    #   git show 92b8e6d6:wsa1/prom_b/wsa1_prom_b.s > /tmp/before.s
+    #   python3 notes/gen_promB5_spans.py --census /tmp/before.s
     python3 notes/gen_promB5_spans.py --asm        # the text, to stdout
     python3 notes/gen_promB5_spans.py --splice     # write it into prom_b/wsa1_prom_b.s
 """
@@ -529,7 +533,9 @@ def main():
     if "--selftest" in sys.argv:
         return selftest(b, hta, htb)
     if "--census" in sys.argv:
-        got = census()
+        j = sys.argv.index("--census")
+        path = sys.argv[j + 1] if len(sys.argv) > j + 1 else None
+        got = census(path)
         tot = 0
         for lo, hi, _it in SPANS:
             n = got.get(lo, 0)
