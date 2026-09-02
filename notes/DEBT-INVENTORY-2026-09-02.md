@@ -231,7 +231,7 @@ from the recovered boundary, which then lands with **zero drift** on a neighbour
 that is already call-site documented or already converted. That zero-drift
 landing is the corroboration; without it the shrink would be a guess.
 
-★ **28 KNOWN INSTANCES AS OF 2026-09-02, all in prom_b** — 3 original fixes
+★ **29 KNOWN INSTANCES AS OF 2026-09-02, all in prom_b** — 3 original fixes
 (1,890 B), 2 found by the detector, and 23 more across three further rounds
 (2,071 B). This is not a handful of slips; it is a systematic property of one
 coverage-generation pass, and **~3,961 B has been recovered from it so far**.
@@ -256,6 +256,27 @@ at all.** That labelling convention is produced only by prom_b's own coverage
 generator. So the detector had nothing to search, and a zero here means "no
 foothold", not "no defect". Finding the equivalent shape elsewhere needs a
 different signature derived from how those images declare object extents.
+
+## ⚠ A wrong START frames fake records that pass the gate
+
+Demonstrated 2026-09-02 by a lane on its own work, which is why it is worth
+recording rather than warning about abstractly.
+
+Searching prom_b's untouched span pool, a first pass accepted op `0x20`'s weak
+`("min", 4)` length rule together with a coincidental starting offset, and
+framed **three entirely fake records out of a caption table's own bytes** at
+`0xF2B8F9`. The result reassembled **byte-exact** and passed `make gate-wsa1`.
+
+It was caught only by re-deriving the start from independent structure: reading
+from the true start yields ONE interpreter-B record whose own `+0x07`/`+0x0B`
+fields self-name the adjacent 65-entry table. Correcting it closed 153 B more
+than the false framing had.
+
+**The generalisable point: a walk that begins at the wrong offset produces
+plausible records indefinitely, and every byte-level check passes.** The
+defence is not a better length rule — it is requiring the start to be fixed by
+something outside the walk (a call site, a pointer landing on it, a record that
+names the next structure), exactly as the FC4000 and 0xFDE74C closures did.
 
 ## ⚠ No converter has a structural defence against a uniform fill
 
