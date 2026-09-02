@@ -64,6 +64,37 @@ sys.path.insert(0, str(REPO / 'scripts' / 'converters'))
 sys.path.insert(0, str(REPO / 'scripts' / 'analysis'))
 from convert_interrupted_region import build_replacement  # noqa: E402
 from fill_verified_islands import bounds_from_context, looks_like_a_table_tail, load  # noqa: E402
+import subprocess
+LLVM_MC = "/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc"
+ENCODING_RE = re.compile(r'[;#]\s*encoding:\s*\[([^\]]*)\]')
+
+
+def verify_whole_span_roundtrip(new_lines, raw_bytes):
+    """Assemble every emitted instruction line in ORDER and check the
+    concatenated encoded bytes equal raw_bytes EXACTLY -- length included.
+    build_replacement's own remaining==0 only proves no line was left as a
+    .byte fallback; it does not prove the emitted instructions, decoded
+    from unidasm's own instruction boundaries with no trailing context,
+    actually span the WHOLE candidate (see the 2026-09-02 finding in this
+    file's caller -- a short buffer's last instruction can be silently
+    dropped by unidasm instead of decoded or flagged). This is the same
+    check verify_roundtrip() in convert_code_bytes.py already does per
+    INSTRUCTION, extended to the whole multi-instruction block."""
+    insns = [l.strip() for l in new_lines if l.strip() and not l.strip().endswith(':')]
+    if not insns:
+        return len(raw_bytes) == 0
+    try:
+        out = subprocess.run([LLVM_MC, '--triple=tlcs900', '--show-encoding'],
+                             input='\n'.join(insns) + '\n', capture_output=True,
+                             text=True, timeout=10).stdout
+    except Exception:
+        return False
+    got = []
+    for line in out.splitlines():
+        m = ENCODING_RE.search(line)
+        if m:
+            got.extend(int(v, 16) for v in re.findall(r'0x([0-9a-fA-F]{2})', m.group(1)))
+    return got == list(raw_bytes)
 
 BASE, SIZE = 0xE00000, 2097152
 BYTE_RE = re.compile(r'^\s*\.byte\s+((?:0x[0-9a-fA-F]{2}\s*,?\s*)+)\s*$')
@@ -127,20 +158,39 @@ def is_near_uniform_run(raw, byte_frac=0.4, min_len=3):
 
 
 def collect_span(lines, start_idx, size):
+    """Returns (collected_byte_count, n_lines_consumed, collected_byte_VALUES).
+    The values are the caller's job to check against the census blob's own
+    ROM-derived bytes before writing anything -- see the 2026-09-02 finding
+    in main(): a blob's recorded (start, end) ROM address and its recorded
+    (file, line) can independently be WRONG for each other (a mismatch
+    between index_{tag}.json, built by inject()'s pure text scan, and
+    {tag}.marks.txt, built from `llvm-nm`'s symbol addresses -- root cause
+    not fully chased down, but the effect is unambiguous: one committed
+    instance had start/end pointing at a 16 B span 135 B away from the
+    line/file it claimed, byte-identical in COUNT to the true span at that
+    line but completely different in CONTENT). Matching byte COUNT alone,
+    which is all this function used to report, cannot detect that -- only
+    comparing the actual VALUES against the blob's own `raw` can, and nothing
+    upstream of this function (bounds_from_context, looks_like_a_table_tail,
+    is_near_uniform_run, verify_whole_span_roundtrip) checks this, because
+    all of them work from `rom[start:end]` as ground truth and never touch
+    the source file's line-based text at all until this point."""
     i = start_idx
     collected = 0
     n_lines = 0
+    values = []
     while i < len(lines):
         m = BYTE_RE.match(lines[i]) or BYTE_RE_CALL_ADDR_COMMENT.match(lines[i])
         if not m:
             break
         vals = re.findall(r'0x([0-9a-fA-F]{2})', m.group(1))
+        values.extend(int(v, 16) for v in vals)
         collected += len(vals)
         n_lines += 1
         i += 1
         if collected == size:
             break
-    return collected, n_lines
+    return collected, n_lines, values
 
 
 def main():
@@ -223,6 +273,7 @@ def main():
         accepted = accepted[:a.limit]
 
     ready = []
+    whole_span_rejects = 0
     for b in accepted:
         raw = rom[b["start"]:b["end"]]
         try:
@@ -230,9 +281,40 @@ def main():
         except Exception:
             continue
         if remaining == 0:
+            if not verify_whole_span_roundtrip(new_lines, raw):
+                # 2026-09-02 FINDING: build_replacement's remaining==0 does
+                # NOT guarantee the emitted instructions cover the whole
+                # span -- convert_code_bytes.convert_block segments raw
+                # bytes using UNIDASM's OWN instruction boundaries, run on
+                # the CANDIDATE'S BYTES ALONE with no trailing context ('
+                # bounds_from_context gives unidasm 24 B of lookahead;
+                # convert_block gives it none). If the last instruction in
+                # the span needs more bytes than remain in that short
+                # buffer, unidasm can silently emit NOTHING for the tail --
+                # not even a None-mnemonic placeholder -- so `results`
+                # covers fewer bytes than len(raw) while still reporting
+                # remaining==0 (zero UNDECODED bytes, as opposed to zero
+                # MISSING bytes). Caught here on
+                # maincpu/file_io/medley.s:3290 (DocMed_CheckRepeat, 16 B):
+                # 4 instructions decoded totalling 14 B, 2 B of the
+                # original span silently dropped -- gate failure at ROM
+                # offset 1653335 traced it back to exactly this hunk. This
+                # is a latent defect in the SHARED convert_code_bytes.py /
+                # convert_interrupted_region.build_replacement used by
+                # every conversion tool in this tree, not specific to
+                # islands; scoped-fixing it here (whole-span re-assembly
+                # against the ORIGINAL bytes, the same discipline
+                # verify_roundtrip() already applies per-instruction) is
+                # this lane's responsibility for what it emits, not a fix
+                # to the shared module itself.
+                whole_span_rejects += 1
+                continue
             ready.append((b, new_lines))
     print(f"=> {len(ready):,} fully spellable by llvm-mc "
           f"({sum(b['size'] for b, _ in ready):,} B)")
+    if whole_span_rejects:
+        print(f"   ({whole_span_rejects} more rejected by verify_whole_span_roundtrip "
+              f"-- build_replacement silently dropped trailing bytes)")
 
     if not a.apply:
         for b, nl in ready[:20]:
@@ -254,9 +336,28 @@ def main():
         for b, nl in items:
             addr, size = b["start"], b["size"]
             start_idx = b["line"] - 1
-            collected, n_lines = collect_span(lines_self, start_idx, size)
+            collected, n_lines, values = collect_span(lines_self, start_idx, size)
             if collected != size:
                 print(f"SKIP {relpath}:{b['line']} -- collected {collected}B, expected {size}B")
+                continue
+            expected_values = list(rom[b["start"]:b["end"]])
+            if values != expected_values:
+                # 2026-09-02 FINDING (see collect_span's docstring): the
+                # blob's (start,end) ROM address and its (file,line) source
+                # position can independently be WRONG for each other -- same
+                # byte COUNT at this line, but DIFFERENT VALUES than what
+                # the ROM actually holds at the address this blob claims.
+                # Applying here would silently overwrite unrelated, correct
+                # bytes with instructions decoded from a DIFFERENT address's
+                # content -- caught concretely at maincpu/file_io/medley.s
+                # DocMed_CheckRepeat (line 3290): blob claimed ROM address
+                # 0xF93ADD (16 B), but line 3290's own bytes matched ROM
+                # address 0xF93A56 instead, 135 B away -- byte gate failure
+                # traced directly back to this exact mismatch. Never trust
+                # byte COUNT alone; always compare the VALUES too.
+                print(f"SKIP {relpath}:{b['line']} -- {size}B collected but VALUES "
+                      f"mismatch the blob's own ROM address {BASE+b['start']:#x} "
+                      f"(line/address desync -- see collect_span docstring)")
                 continue
             end_idx = start_idx + n_lines
             lines_self[start_idx:end_idx] = nl
