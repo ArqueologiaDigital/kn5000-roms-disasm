@@ -395,6 +395,37 @@ conversion is ever found wrong.
 ⚠ Note the shape: the 86% aggregate is true and hides this. Quote the gradient,
 not the average.
 
+## v7 islands: the whole population has been worked once
+
+At commit `0d642c00` the population was **7,496 islands / 44,766 B** (up from
+2,268 when first briefed, then 6,854 — region conversions keep creating them).
+All 7,496 were classified across 12 gated slices. **566 B was kept.**
+
+That ratio is the point, not a disappointment. Where the rest went:
+
+| outcome | count |
+|---|---:|
+| table-tail rejects | 2,111 |
+| near-uniform-run rejects | 1,044 |
+| refused at write time by the VALUES-mismatch guard | most of 260 spellable |
+| jump-table-label rejects | 3 |
+| **kept** | **566 B** |
+
+Corroboration on what was kept: **22 distinct call targets, 22 corroborated** —
+12 exact-label hits and 10 landing on a genuine instruction boundary inside
+another named routine.
+
+⚠ **Two bad conversions still got past every automated guard** and were reverted
+only because someone read the diff: a 2-byte zero field below a guard's
+min-length floor, and a 34-byte chain containing an implausible `srl xsp, 98` —
+the same shape a previous lane had to revert by hand. Both round-trip
+byte-exact. **Reading the shape is not yet replaceable by a check.**
+
+⚠ Flagged, not acted on: one enclosing label (`CmpBkslSTtl_FillIn4`) is itself a
+jump-table base — loaded via `lda_24` then `jp_ind` elsewhere. The converted
+candidate sits well after it, but the label's whole pre-existing body deserves a
+look.
+
 ## Where the next pass should aim
 
 1. ~~A round-trip generator for table_data's six BMPs~~ — **DONE, as a refusal:
